@@ -80,7 +80,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ") Then
 				n_I\IsHalloween = True
-				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
+				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
 				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
 				EntityTexture(n\OBJ2, TexFestive)
@@ -90,7 +90,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			; ~ On New Year set cookie texture
 			If (Left(CurrentDate(), 7) = "01 Jan ") Then
 				n_I\IsNewYear = True
-				TexFestive = LoadTexture_Strict("GFX\npcs\scp_173_NY.png")
+				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
 				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
 				EntityTexture(n\OBJ2, TexFestive)
@@ -125,7 +125,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Speed = GetINIFloat(NPCsFile, "SCP-106", "Speed") / 100.0
 			
-			Tex = LoadTexture_Strict("GFX\npcs\scp_106_eyes.png", 1, DeleteAllTextures)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures)
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.03, 0.03)
 			EntityTexture(n\OBJ2, Tex)
@@ -348,7 +348,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			EntityFX(n\OBJ, 1)
 			
-			Tex = LoadTexture_Strict("GFX\npcs\scp_860_2_eyes.png", 1 + 2, DeleteAllTextures)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_860_2_eyes.png", 1 + 2, DeleteAllTextures)
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.1, 0.1)
 			EntityTexture(n\OBJ2, Tex)
@@ -529,13 +529,13 @@ Function CreateNPCAsset%(n.NPCs)
 			EndIf
 			
 			If I_035\Sad <> 0 Then
-				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_sad.b3d")
+				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
 				If Save Then
 					RotateEntity(n\OBJ2, Pitch, Yaw, Roll)
 					PositionEntity(n\OBJ2, x, y, z)
 				EndIf
 			Else
-				n\OBJ2 = LoadMesh_Strict("GFX\npcs\scp_035_smile.b3d")
+				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
 			EndIf
 			Temp = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
@@ -579,7 +579,7 @@ Function RemoveNPC%(n.NPCs)
 	Delete(n)
 End Function
 
-Global TakeOffTimer#
+Global RemoveHazmatTimer#, Remove714Timer#
 
 Function UpdateNPCs%()
 	CatchErrors("Uncaught (UpdateNPCs)")
@@ -1510,10 +1510,10 @@ Function UpdateNPCs%()
 					EndIf
 					n\DropSpeed = 0.0
 					If n\SoundCHN <> 0 Then
-						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+						StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					EndIf
 					If n\SoundCHN2 <> 0 Then
-						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+						StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					EndIf
 					PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 					ResetEntity(n\Collider)
@@ -1524,8 +1524,10 @@ Function UpdateNPCs%()
 								If PlayerRoom\Adjacent[i] <> Null Then
 									For j = 0 To MaxRoomAdjacents - 1
 										If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-											TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
-											Exit
+											If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
+												TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+												Exit
+											EndIf
 										EndIf
 									Next
 									Exit
@@ -1574,38 +1576,43 @@ Function UpdateNPCs%()
 									
 									If Dist < 0.25 Then
 										If wi\HazmatSuit > 0 Then
-											TakeOffTimer = Min(TakeOffTimer + (fps\Factor[0] * 1.5), 500.0)
-											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
+											RemoveHazmatTimer = Min(RemoveHazmatTimer + (fps\Factor[0] * 1.5), 1460.0)
+											If RemoveHazmatTimer > 100.0 And RemoveHazmatTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
-											ElseIf TakeOffTimer >= 500.0
-												For i = 0 To MaxItemAmount - 1
-													If Inventory(i) <> Null Then
-														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") And wi\HazmatSuit <> 3 Then
-															If Inventory(i)\State2 < 3.0 Then
-																Inventory(i)\State2 = Inventory(i)\State2 + 1.0
-																TakeOffTimer = 250.0
-																me\CameraShake = 2.0
-															Else
-																RemoveItem(Inventory(i))
-																wi\HazmatSuit = 0
-																PlaySound_Strict(PickSFX[2])
-																CreateMsg(GetLocalString("msg", "suit.destoryed"))
-																TakeOffTimer = 0.0
-															EndIf
-															Exit
+											ElseIf RemoveHazmatTimer >= 500.0
+												For i = 0 To 3
+													If RemoveHazmatTimer > 500.0 + (i * 240.0) And RemoveHazmatTimer - (fps\Factor[0] * 1.5) <= 500.0 + (i * 240.0) Then
+														me\CameraShake = 2.0
+														If i = 3 Then
+															For i = 0 To MaxItemAmount - 1
+																If Inventory(i) <> Null Then
+																	If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
+																		wi\HazmatSuit = 0 : DropItem(Inventory(i))
+																		CreateMsg(GetLocalString("msg", "hazmat.forceremoved"))
+																		Exit
+																	EndIf
+																EndIf
+															Next
 														EndIf
 													EndIf
 												Next
 											EndIf
 										ElseIf I_714\Using Then
-											TakeOffTimer = Min(TakeOffTimer + (fps\Factor[0] * 1.5), 500.0)
-											If TakeOffTimer > 100.0 And TakeOffTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
+											me\BlurTimer = me\BlurTimer + fps\Factor[0] * 2.5
+											Remove714Timer = Min(Remove714Timer + (fps\Factor[0] * 1.5), 500.0)
+											
+											If Remove714Timer > 100.0 And Remove714Timer - fps\Factor[0] * 1.5 <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
-											ElseIf TakeOffTimer >= 500.0
-												I_714\Using = False
-												PlaySound_Strict(PickSFX[3])
-												CreateMsg(GetLocalString("msg", "ring.forceremoved"))
-												TakeOffTimer = 0.0
+											ElseIf Remove714Timer >= 500.0
+												For i = 0 To MaxItemAmount - 1
+													If Inventory(i) <> Null Then
+														If Inventory(i)\ItemTemplate\TempName = "scp714" Then
+															I_714\Using = False : DropItem(Inventory(i))
+															CreateMsg(GetLocalString("msg", "ring.forceremoved"))
+															Exit
+														EndIf
+													EndIf
+												Next
 											EndIf
 										Else
 											me\CurrCameraZoom = 20.0
@@ -1631,7 +1638,8 @@ Function UpdateNPCs%()
 											EndIf										
 										EndIf
 									Else
-										If TakeOffTimer > 0.0 Then TakeOffTimer = Max(TakeOffTimer - fps\Factor[0], 0.0)
+										RemoveHazmatTimer = Max(RemoveHazmatTimer - fps\Factor[0], 0.0)
+										Remove714Timer = Max(Remove714Timer - fps\Factor[0], 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
@@ -1794,9 +1802,7 @@ Function UpdateNPCs%()
 								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 							ElseIf n\Idle = 0
 								If n\SoundCHN <> 0 Then
-									If ChannelPlaying(n\SoundCHN) Then
-										StopChannel(n\SoundCHN)
-									EndIf
+									StopChannel(n\SoundCHN) : n\SoundCHN = 0
 								EndIf
 								If PlayerInReachableRoom(True) And InFacility = 1 Then ; ~ Player is in a room where SCP-049 can teleport to
 									If Rand(1, 3 - SelectedDifficulty\OtherFactors) = 1 Then
@@ -3912,27 +3918,27 @@ Function UpdateNPCs%()
 									Select Rand(6)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9661"))
+											CreateMsg(GetLocalString("msg", "966_1"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9662"))
+											CreateMsg(GetLocalString("msg", "966_2"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9663"))
+											CreateMsg(GetLocalString("msg", "966_3"))
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9664"))
+											CreateMsg(GetLocalString("msg", "966_4"))
 											;[End Block]
 										Case 5
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9665"))
+											CreateMsg(GetLocalString("msg", "966_5"))
 											;[End Block]
 										Case 6
 											;[Block]
-											CreateMsg(GetLocalString("msg", "9666"))
+											CreateMsg(GetLocalString("msg", "966_6"))
 											;[End Block]
 									End Select
 									n\Reload = 70.0 * 20.0
@@ -4008,24 +4014,24 @@ Function UpdateNPCs%()
 									If n\State3 < 900.0 Then
 										me\BlurTimer = Float(((Sin(MilliSecs2() / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
-										If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 And Dist < 256.0 Then
+										If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 And Dist < 256.0 Then
 											If me\StaminaEffect < 1.5 Then
 												Select Rand(4)
 													Case 1
 														;[Block]
-														CreateMsg(GetLocalString("msg", "966.sleep1"))
+														CreateMsg(GetLocalString("msg", "966.sleep_1"))
 														;[End Block]
 													Case 2
 														;[Block]
-														CreateMsg(GetLocalString("msg", "966.sleep2"))
+														CreateMsg(GetLocalString("msg", "966.sleep_2"))
 														;[End Block]
 													Case 3
 														;[Block]
-														CreateMsg(GetLocalString("msg", "966.sleep3"))
+														CreateMsg(GetLocalString("msg", "966.sleep_3"))
 														;[End Block]
 													Case 4
 														;[Block]
-														CreateMsg(GetLocalString("msg", "966.sleep4"))
+														CreateMsg(GetLocalString("msg", "966.sleep_4"))
 														;[End Block]
 												End Select
 											EndIf

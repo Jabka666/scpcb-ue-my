@@ -169,7 +169,8 @@ Function SaveGame%(File$)
 	
 	WriteFloat(f, MTFTimer)
 	
-	WriteFloat(f, TakeOffTimer)
+	WriteFloat(f, Remove714Timer)
+	WriteFloat(f, RemoveHazmatTimer)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -661,7 +662,8 @@ Function LoadGame%(File$)
 	
 	MTFTimer = ReadFloat(f)
 	
-	TakeOffTimer = ReadFloat(f)
+	Remove714Timer = ReadFloat(f)
+	RemoveHazmatTimer = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -671,7 +673,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted25"))
+	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -782,7 +784,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted1"))
+	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -911,7 +913,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted2"))
+	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1058,7 +1060,7 @@ Function LoadGame%(File$)
 		Next		
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted3"))
+	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -1547,7 +1549,8 @@ Function LoadGameQuick%(File$)
 	
 	MTFTimer = ReadFloat(f)
 	
-	TakeOffTimer = ReadFloat(f)
+	Remove714Timer = ReadFloat(f)
+	RemoveHazmatTimer = ReadFloat(f)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -1556,7 +1559,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted25"))
+	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1671,7 +1674,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted1"))
+	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -1779,7 +1782,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted2"))
+	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Temp = ReadInt(f)
 	
@@ -1825,7 +1828,7 @@ Function LoadGameQuick%(File$)
 		Next		
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted3"))
+	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -2089,7 +2092,7 @@ Function LoadGameQuick%(File$)
 				xTemp = EntityX(r\Objects[13], True)
 				zTemp = EntityZ(r\Objects[13], True)
 				FreeEntity(r\Objects[13])
-				r\Objects[13] = LoadMesh_Strict("GFX\map\gateawall1.b3d", r\OBJ)
+				r\Objects[13] = LoadMesh_Strict("GFX\Map\gateawall1.b3d", r\OBJ)
 				PositionEntity(r\Objects[13], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)
 				EntityColor(r\Objects[13], 25.0, 25.0, 25.0)
 				EntityType(r\Objects[13], HIT_MAP)
@@ -2097,7 +2100,7 @@ Function LoadGameQuick%(File$)
 				xTemp = EntityX(r\Objects[14], True)
 				zTemp = EntityZ(r\Objects[14], True)
 				FreeEntity(r\Objects[14])
-				r\Objects[14] = LoadMesh_Strict("GFX\map\gateawall2.b3d", r\OBJ)
+				r\Objects[14] = LoadMesh_Strict("GFX\Map\gateawall2.b3d", r\OBJ)
 				PositionEntity(r\Objects[14], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)	
 				EntityColor(r\Objects[14], 25.0, 25.0, 25.0)
 				EntityType(r\Objects[14], HIT_MAP)
@@ -2116,9 +2119,9 @@ Function LoadGameQuick%(File$)
 			EndIf
 		ElseIf r\RoomTemplate\Name = "cont1_035"
 			If I_035\Sad <> 0 Then
-				Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
+				Tex = LoadTexture_Strict("GFX\Map\Textures\label035_sad.png")
 			Else
-				Tex = LoadTexture_Strict("GFX\map\textures\label035_smile.png")
+				Tex = LoadTexture_Strict("GFX\Map\Textures\label035_smile.png")
 			EndIf
 			
 			For i = 2 To CountSurfaces(r\Objects[9])

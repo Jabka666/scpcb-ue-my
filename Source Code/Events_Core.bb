@@ -555,7 +555,7 @@ Function QuickLoadEvents%()
 				ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
 				SpriteViewMode(ForestNPC, 4)
 				EntityFX(ForestNPC, 1 + 8)
-				ForestNPCTex = LoadAnimTexture_Strict("GFX\npcs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
+				ForestNPCTex = LoadAnimTexture_Strict("GFX\NPCs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
 				ForestNPCData[0] = 0.0
 				EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
 				ForestNPCData[1] = 0.0
@@ -576,17 +576,17 @@ Function QuickLoadEvents%()
 			If e\EventState = 0.0 Then
 				If e\EventStr = "Load0" Then
 					QuickLoadPercent = 10
-					e\room\Objects[0] = LoadMesh_Strict("GFX\map\dimension1499\1499plane.b3d")
+					e\room\Objects[0] = LoadMesh_Strict("GFX\Map\dimension1499\1499plane.b3d")
 					HideEntity(e\room\Objects[0])
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
 					QuickLoadPercent = 30
-					I_1499\Sky = CreateSky("GFX\map\textures\1499sky")
+					I_1499\Sky = CreateSky("GFX\Map\Textures\1499sky")
 					e\EventStr = 1
 				Else
 					If Int(e\EventStr) < 16 Then
 						QuickLoadPercent = QuickLoadPercent + 2
-						e\room\Objects[Int(e\EventStr)] = LoadRMesh("GFX\map\dimension1499\dimension_1499_object(" + (Int(e\EventStr)) + ").rmesh", Null)
+						e\room\Objects[Int(e\EventStr)] = LoadRMesh("GFX\Map\dimension1499\dimension_1499_object(" + (Int(e\EventStr)) + ").rmesh", Null)
 						ScaleEntity(e\room\Objects[Int(e\EventStr)], RoomScale, RoomScale, RoomScale)
 						HideEntity(e\room\Objects[Int(e\EventStr)])
 						e\EventStr = Int(e\EventStr) + 1
@@ -1999,7 +1999,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 3.24 Then
 						If e\EventState = 0.0 Then
-							GiveAchievement(Achv789J)
+							GiveAchievement(Achv789_J)
 							e\SoundCHN = PlaySound2(ButtGhostSFX, Camera, e\room\Objects[0])
 							e\EventState = 1.0
 						Else
@@ -2228,7 +2228,7 @@ Function UpdateEvents%()
 						
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null Then
-								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 										HasBatteryFor895 = True
 										Exit
@@ -2236,7 +2236,7 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 						Next
-						If CoffinDistance < 4.0 And HasBatteryFor895 And (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
+						If CoffinDistance < 4.0 And HasBatteryFor895 And (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
@@ -2265,7 +2265,7 @@ Function UpdateEvents%()
 									EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
 												Inventory(i)\State2 = 2.0
 												Exit
@@ -2281,7 +2281,7 @@ Function UpdateEvents%()
 									EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
 												Inventory(i)\State2 = 1.0
 												Exit
@@ -2293,7 +2293,7 @@ Function UpdateEvents%()
 								EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null Then
-										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "supernvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 											Inventory(i)\State2 = 0.0
 											Exit
 										EndIf
@@ -2874,7 +2874,7 @@ Function UpdateEvents%()
 					If e\EventState3 = 0.0 Then
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
 						e\room\NPC[0]\State = 3.0
-						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
+						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
 						SetNPCFrame(e\room\NPC[0], 40.0)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 						e\EventState3 = 1.0
@@ -4017,7 +4017,7 @@ Function UpdateEvents%()
 					If (Not e\room\Objects[2]) Then
 						e\room\Objects[2] =	CopyEntity(n_I\NPCModelID[NPC_DUCK_MODEL])
 						ScaleEntity(e\room\Objects[2], 0.07, 0.07, 0.07)
-						Tex = LoadTexture_Strict("GFX\npcs\duck(3).png")
+						Tex = LoadTexture_Strict("GFX\NPCs\duck(3).png")
 						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(e\room\Objects[2], Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
@@ -4276,6 +4276,8 @@ Function UpdateEvents%()
 							n_I\Curr096\State = 5.0
 							StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 							
+							If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
+							
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 						EndIf
 					Else
@@ -4318,6 +4320,8 @@ Function UpdateEvents%()
 					Temp = UpdateLever(e\room\Objects[1]) ; ~ Power switch
 					x = UpdateLever(e\room\Objects[3]) ; ~ Fuel pump
 					z = UpdateLever(e\room\Objects[5]) ; ~ Generator
+					
+					If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
 					
 					; ~ Fuel pump on
 					If x Then
@@ -4562,7 +4566,7 @@ Function UpdateEvents%()
 								;[Block]
 								If n_I\Curr173 <> Null Then
 									If (Not n_I\IsHalloween) Then
-										Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png")
+										Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
 										If opt\Atmosphere Then TextureBlend(Tex, 5)
 										EntityTexture(n_I\Curr173\OBJ, Tex)
 										EntityTexture(n_I\Curr173\OBJ2, Tex)
@@ -4708,7 +4712,7 @@ Function UpdateEvents%()
 						If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
 							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
-							If me\BlurTimer >= 1500.0 Then 
+							If me\BlurTimer >= 1500.0 Then
 								Kill(False)
 								msg\DeathMsg = GetLocalString("death", "939.gas")
 							EndIf
@@ -4892,7 +4896,7 @@ Function UpdateEvents%()
 							
 							UpdateRedLight(e\room\Objects[3], 100, 50)
 							
-							If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
+							If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 								If EntityVisible(e\room\Objects[2], Camera) Then 							
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[3], 10.0, e\EventState3 / (86.0 * 70.0))
 									
@@ -4919,24 +4923,24 @@ Function UpdateEvents%()
 										If e\EventState3 > 70.0 * 1.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 1.0 Then
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"))
 										ElseIf e\EventState3 > 70.0 * 13.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 13.0
-											CreateMsg(GetLocalString("msg", "0121"))
+											CreateMsg(GetLocalString("msg", "012_1"))
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech2.ogg"))
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 31.0
-											Tex = LoadTexture_Strict("GFX\map\textures\scp_012(2).png")
+											Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(2).png")
 											If opt\Atmosphere Then TextureBlend(Tex, 5)
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg(GetLocalString("msg", "0122"))
+											CreateMsg(GetLocalString("msg", "012_2"))
 											me\Injuries = Max(me\Injuries, 1.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(3, 4) + ".ogg"))
 										ElseIf e\EventState3 > 70.0 * 49.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 49.0
-											CreateMsg(GetLocalString("msg", "0123"))
+											CreateMsg(GetLocalString("msg", "012_3"))
 											InjurePlayer(0.3)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"))
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 63.0
-											Tex = LoadTexture_Strict("GFX\map\textures\scp_012(3).png")
+											Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(3).png")
 											If opt\Atmosphere Then TextureBlend(Tex, 5)
 											EntityTexture(e\room\Objects[4], Tex)	
 											DeleteSingleTextureEntryFromCache(Tex)
@@ -4944,12 +4948,12 @@ Function UpdateEvents%()
 											InjurePlayer(0.5)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"))
 										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 74.0
-											Tex = LoadTexture_Strict("GFX\map\textures\scp_012(4).png")
+											Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(4).png")
 											If opt\Atmosphere Then TextureBlend(Tex, 5)
 											EntityTexture(e\room\Objects[4], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
-											CreateMsg(GetLocalString("msg", "0126"))
+											CreateMsg(GetLocalString("msg", "012_4"))
 											InjurePlayer(0.8)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
 											If (Not me\Crouch) Then SetCrouch(True)
@@ -5379,7 +5383,7 @@ Function UpdateEvents%()
 										e\EventState2 = Min(e\EventState2 + (fps\Factor[0] / 6000.0), 1.0)
 										e\EventState3 = CurveValue(e\EventState2, e\EventState3, 50.0)
 										
-										If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
+										If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then
 											me\Sanity = me\Sanity - (fps\Factor[0] * 1.1)
 											me\BlurTimer = Sin(MilliSecs2() / 10.0) * Abs(me\Sanity)
 										EndIf
@@ -5416,7 +5420,7 @@ Function UpdateEvents%()
 							e\EventState3 = Max(e\EventState3 - (fps\Factor[0] / 100.0), 0.0)
 						EndIf
 						
-						If e\EventState3 > 0.0 And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then 
+						If e\EventState3 > 0.0 And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then 
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 10.0, e\EventState3)
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
@@ -6346,7 +6350,7 @@ Function UpdateEvents%()
 			Case e_cont2_1123
 				;[Block]
 				If PlayerRoom = e\room Then
-					If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 3 Then
+					If (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 0.81 Lor e\EventState > 0.0 Then
 							If e\EventState = 0.0 Then me\BlurTimer = 1000.0
 							me\CameraShake = 1.0
@@ -6700,7 +6704,7 @@ Function UpdateEvents%()
 							EndIf
 						Else
 							If (Not e\room\Objects[2]) Then
-								Local GlassTex% = LoadTexture_Strict("GFX\map\textures\glass.png", 1 + 2)
+								Local GlassTex% = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 								
 								e\room\Objects[2] = CreateSprite()
 								EntityTexture(e\room\Objects[2], GlassTex)
@@ -7243,7 +7247,7 @@ Function UpdateEvents%()
 									e\EventState = 3.0	
 									PlaySound_Strict(e\Sound2)
 									
-									CreateMsg(GetLocalString("msg", "1048a"))
+									CreateMsg(GetLocalString("msg", "1048a_1"))
 								Else
 									e\EventState = 4.0
 									e\EventState3 = 70.0 * 30.0
@@ -7263,34 +7267,34 @@ Function UpdateEvents%()
 									Select Rand(3)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a1"))
+											CreateMsg(GetLocalString("msg", "1048a_2"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a2"))
+											CreateMsg(GetLocalString("msg", "1048a_3"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a3"))
+											CreateMsg(GetLocalString("msg", "1048a_4"))
 											;[End Block]
 									End Select
 								ElseIf e\EventState2 > 600.0 And e\EventState2 - fps\Factor[0] <= 600.0
 									Select Rand(4)
 										Case 1
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a4"))
+											CreateMsg(GetLocalString("msg", "1048a_5"))
 											;[End Block]
 										Case 2
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a5"))
+											CreateMsg(GetLocalString("msg", "1048a_6"))
 											;[End Block]
 										Case 3
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a6"))
+											CreateMsg(GetLocalString("msg", "1048a_7"))
 											;[End Block]
 										Case 4
 											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a7"))
+											CreateMsg(GetLocalString("msg", "1048a_8"))
 											;[End Block]
 									End Select
 								EndIf
@@ -7332,7 +7336,7 @@ Function UpdateEvents%()
 				If e\room\Dist < 10.0 And e\room\Dist > 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
 					e\room\NPC[0]\State = 8.0
-					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
+					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)	
 					
@@ -7613,9 +7617,9 @@ Function UpdateEvents%()
 												ShouldCreateItem = True
 											EndIf
 											;[End Block]
-										Case "gasmask", "gasmask3", "supergasmask", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+										Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 											;[Block]
-											If itt\TempName = "gasmask" Lor itt\TempName = "gasmask3" Lor itt\TempName = "supergasmask" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "hazmatsuit2" Lor itt\TempName = "hazmatsuit3" And Rand(2) = 1 Then
+											If itt\TempName = "gasmask" Lor itt\TempName = "finegasmask" Lor itt\TempName = "veryfinegasmask" Lor itt\TempName = "gasmask148" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "veryfinehazmatsuit" Lor itt\TempName = "hazmatsuit148" And Rand(2) = 1 Then
 												ShouldCreateItem = True
 											EndIf
 											;[End Block]
@@ -7687,7 +7691,7 @@ Function UpdateEvents%()
 									Else
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 										me\LightFlash = 5.0
-										CreateMsg(GetLocalString("msg", "1162"))
+										CreateMsg(GetLocalString("msg", "1162_1"))
 									EndIf
 									Exit
 								EndIf
@@ -7715,7 +7719,7 @@ Function UpdateEvents%()
 								Else
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(1, 4) + ".ogg"))
 									me\LightFlash = 5.0
-									CreateMsg(GetLocalString("msg", "11622"))
+									CreateMsg(GetLocalString("msg", "1162_2"))
 								EndIf
 								e\EventState2 = 0.0
 							EndIf
@@ -8176,7 +8180,7 @@ Function UpdateEvents%()
 					EndIf
 						
 					If InteractObject(e\room\Objects[1], 0.49) Then
-						CreateMsg(GetLocalString("msg", "freeze"))
+						CreateMsg(GetLocalString("msg", "breeze"))
 						me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 						me\Bloodloss = 0.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
@@ -8494,7 +8498,7 @@ Function UpdateDimension106%()
 										FreeEntity(Pvt)
 										
 										If (Not me\Terminated) Then
-											msg\DeathMsg = GetLocalString("death", "106")
+											msg\DeathMsg = GetLocalString("death", "106_1")
 											
 											PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
 											me\Terminated = True
@@ -8517,7 +8521,7 @@ Function UpdateDimension106%()
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = GetLocalString("msg", "1062")
+									msg\DeathMsg = GetLocalString("msg", "106_2")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
@@ -8812,7 +8816,7 @@ Function UpdateDimension106%()
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not me\Terminated) Then 
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = GetLocalString("msg", "1062")
+									msg\DeathMsg = GetLocalString("msg", "106_2")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
@@ -9046,7 +9050,7 @@ Function UpdateDimension1499%()
 						e\room\NPC.NPCs[0] = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2308.0 * RoomScale)
 						e\room\NPC[0]\PrevState = 2 : e\room\NPC[0]\Angle = 270.0
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\NPC[0]\Angle, 0.0)
-						Tex = LoadTexture_Strict("GFX\npcs\scp_1499_1_king.png")
+						Tex = LoadTexture_Strict("GFX\NPCs\scp_1499_1_king.png")
 						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(e\room\NPC[0]\OBJ, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
@@ -9335,14 +9339,14 @@ Function UpdateEndings%()
 						e\room\NPC[1] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 						e\room\NPC[1]\State = 0.0 : e\room\NPC[1]\State2 = 10.0
 						
-						e\room\Objects[0] = LoadMesh_Strict("GFX\map\exit1terrain.b3d", e\room\OBJ)
+						e\room\Objects[0] = LoadMesh_Strict("GFX\Map\exit1terrain.b3d", e\room\OBJ)
 						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale, True)
 						RotateEntity(e\room\Objects[0], 0.0, e\room\Angle, 0.0, True)
 						PositionEntity(e\room\Objects[0], e\room\x + 4356.0 * RoomScale, e\room\y - 1017.0 * RoomScale, e\room\z + 2588.0 * RoomScale, True)
 						
 						RenderLoading(60, GetLocalString("loading", "ending"))
 						
-						Sky = CreateSky("GFX\map\textures\sky")
+						Sky = CreateSky("GFX\Map\Textures\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
 						
 						ResetEntity(me\Collider)
@@ -9556,7 +9560,7 @@ Function UpdateEndings%()
 						
 						If e\EventState > 70.0 * 26.5 Then
 							If e\EventState3 = 0.0 Then
-								e\room\Objects[7] = LoadMesh_Strict("GFX\npcs\scp_682_arm.b3d")
+								e\room\Objects[7] = LoadMesh_Strict("GFX\NPCs\scp_682_arm.b3d")
 								ScaleEntity(e\room\Objects[7], 0.15, 0.15, 0.15)
 								Temp = (Min(((EntityDistance(e\room\NPC[3]\Collider, me\Collider) / RoomScale) - 3000.0) / 4.0, 1000.0) + 1408.0) * RoomScale
 								PositionEntity(e\room\Objects[7], EntityX(e\room\NPC[3]\Collider), e\room\y + 1408.0 * RoomScale, EntityZ(e\room\NPC[3]\Collider))
@@ -9676,22 +9680,22 @@ Function UpdateEndings%()
 						
 						RenderLoading(30, GetLocalString("loading", "ending"))
 						
-						Sky = CreateSky("GFX\map\textures\sky")
+						Sky = CreateSky("GFX\Map\Textures\sky")
 						RotateEntity(Sky, 0.0, e\room\Angle, 0.0)
 						
 						RenderLoading(60, GetLocalString("loading", "ending"))
 						
-						e\room\Objects[0] = LoadRMesh("GFX\map\gate_a_tunnel.rmesh", Null)
+						e\room\Objects[0] = LoadRMesh("GFX\Map\gate_a_tunnel.rmesh", Null)
 						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
 						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
 						EntityType(e\room\Objects[0], HIT_MAP)
 						EntityPickMode(e\room\Objects[0], 3)
 						EntityParent(e\room\Objects[0], e\room\OBJ)
 						
-						e\room\Objects[9] = LoadMesh_Strict("GFX\map\Props\lightgunbase.b3d")
+						e\room\Objects[9] = LoadMesh_Strict("GFX\Map\Props\lightgunbase.b3d")
 						PositionEntity(e\room\Objects[9], e\room\x + (2624.0 * RoomScale), e\room\y + (992.0 * RoomScale), e\room\z + (6157.0 * RoomScale))
 						ScaleEntity(e\room\Objects[9], RoomScale, RoomScale, RoomScale)
-						e\room\Objects[10] = LoadMesh_Strict("GFX\map\Props\lightgun.b3d")
+						e\room\Objects[10] = LoadMesh_Strict("GFX\Map\Props\lightgun.b3d")
 						PositionEntity(e\room\Objects[10], e\room\x + (2614.0 * RoomScale), e\room\y + (1280.0 * RoomScale), e\room\z + (5981.0 * RoomScale), True)
 						ScaleEntity(e\room\Objects[10], RoomScale, RoomScale, RoomScale)
 						EntityParent(e\room\Objects[10], e\room\Objects[9])
@@ -9926,7 +9930,7 @@ Function UpdateEndings%()
 									
 									If Abs(EntityY(me\Collider) - EntityY(e\room\Objects[11], True)) < 1.0 Then
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[11], True), EntityZ(me\Collider), EntityZ(e\room\Objects[11], True)) < 49.0 Then
-											e\room\Objects[12] = LoadAnimMesh_Strict("GFX\npcs\CI.b3d")
+											e\room\Objects[12] = LoadAnimMesh_Strict("GFX\NPCs\CI.b3d")
 											
 											Local Temp2# = 0.55 / MeshWidth(e\room\Objects[12])
 											
@@ -10170,9 +10174,9 @@ Function Update035Label%(OBJ%)
 	Local SF%, b%, t1%, Name$
 	
 	If I_035\Sad <> 0 Then
-		Tex = LoadTexture_Strict("GFX\map\textures\label035_sad.png")
+		Tex = LoadTexture_Strict("GFX\Map\Textures\label035_sad.png")
 	Else
-		Tex = LoadTexture_Strict("GFX\map\textures\label035_smile.png")
+		Tex = LoadTexture_Strict("GFX\Map\Textures\label035_smile.png")
 	EndIf
 	If opt\Atmosphere Then TextureBlend(Tex, 5)
 	For i = 2 To CountSurfaces(OBJ)

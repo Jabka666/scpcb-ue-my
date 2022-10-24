@@ -85,7 +85,7 @@ Else
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
-Const VersionNumber$ = "1.0.3"
+Const VersionNumber$ = "1.0.4"
 
 AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
@@ -127,29 +127,29 @@ Global CanSave% = True
 
 If opt\PlayStartup Then PlayStartupVideos()
 
-Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
+Global CursorIMG% = LoadImage_Strict("GFX\Menu\cursor.png")
 CursorIMG = ScaleImage2(CursorIMG, MenuScale, MenuScale)
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
 Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
 LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
 
-InitLoadingScreens("LoadingScreens\loading_screens.ini")
+InitLoadingScreens(LoadingScreensFile)
 
 ; ~ For some reason, Blitz3D doesn't load fonts that have filenames that
 ; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
-fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16)
-fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\fonts\\Courier New.ttf", 52)
-fo\FontID[Font_Digital] = LoadFont_Strict("GFX\fonts\DS-Digital.ttf", 20)
-fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\fonts\DS-Digital.ttf", 60)
-fo\FontID[Font_Journal] = LoadFont_Strict("GFX\fonts\Journal.ttf", 58)
-fo\FontID[Font_Console] = LoadFont_Strict("GFX\fonts\Andale Mono.ttf", 16)
+fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 16)
+fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\\Courier New.ttf", 52)
+fo\FontID[Font_Digital] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 20)
+fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 60)
+fo\FontID[Font_Journal] = LoadFont_Strict("GFX\Fonts\Journal.ttf", 58)
+fo\FontID[Font_Console] = LoadFont_Strict("GFX\Fonts\Andale Mono.ttf", 16)
 
 SetFont(fo\FontID[Font_Default_Big])
 
-Global BlinkMeterIMG% = LoadImage_Strict("GFX\blink_meter(1).png")
+Global BlinkMeterIMG% = LoadImage_Strict("GFX\HUD\blink_meter(1).png")
 BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
 
 RenderLoading(0, GetLocalString("loading", "core.main"))
@@ -490,7 +490,7 @@ Function UpdateConsole%()
 					Select StrTemp
 						Case "1", ""
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help1.1"))
+							CreateConsoleMsg(GetLocalString("console", "help_1.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
@@ -510,13 +510,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- money")
 							CreateConsoleMsg("- debughud")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg(GetLocalString("console", "help1.2"))
+							CreateConsoleMsg(GetLocalString("console", "help_1.2"))
 							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "2"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help2.1"))
+							CreateConsoleMsg(GetLocalString("console", "help_2.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- reset096")
 							CreateConsoleMsg("- reset372")
@@ -535,13 +535,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- disablenuke")
 							CreateConsoleMsg("- resetfunds")
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg(GetLocalString("console", "help2.2"))
+							CreateConsoleMsg(GetLocalString("console", "help_2.2"))
 							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "3"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help3.1"))
+							CreateConsoleMsg(GetLocalString("console", "help_3.1"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
 							CreateConsoleMsg("- camerafog [near] [far]")
@@ -1018,7 +1018,7 @@ Function UpdateConsole%()
 					;[Block]
 					n_I\IsHalloween = (Not n_I\IsHalloween)
 					If n_I\IsHalloween Then
-						Tex = LoadTexture_Strict("GFX\npcs\scp_173_H.png", 1)
+						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
@@ -1026,7 +1026,7 @@ Function UpdateConsole%()
 						CreateConsoleMsg(GetLocalString("console", "halloween.on"))
 					Else
 						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
-						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
+						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
@@ -1038,7 +1038,7 @@ Function UpdateConsole%()
 					;[Block]
 					n_I\IsNewYear = (Not n_I\IsNewYear)
 					If n_I\IsNewYear Then
-						Tex = LoadTexture_Strict("GFX\npcs\scp_173_NY.png", 1)
+						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
@@ -1046,7 +1046,7 @@ Function UpdateConsole%()
 						CreateConsoleMsg(GetLocalString("console", "newyear.on"))
 					Else
 						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
-						Tex2 = LoadTexture_Strict("GFX\npcs\scp_173.png", 1)
+						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
@@ -1377,19 +1377,19 @@ Function UpdateConsole%()
 					Select Rand(4)
 						Case 1
 							;[Block]
-							msg\DeathMsg = ""
+							msg\DeathMsg = GetLocalString("death", "kill_1")
 							;[End Block]
 						Case 2
 							;[Block]
-							msg\DeathMsg = Format(GetLocalString("death", "kill2"), SubjectName)
+							msg\DeathMsg = Format(GetLocalString("death", "kill_2"), SubjectName)
 							;[End Block]
 						Case 3
 							;[Block]
-							msg\DeathMsg = GetLocalString("death", "kill3")
+							msg\DeathMsg = GetLocalString("death", "kill_3")
 							;[End Block]
 						Case 4
 							;[Block]
-							msg\DeathMsg = Format(GetLocalString("death", "kill4"), SubjectName)
+							msg\DeathMsg = Format(GetLocalString("death", "kill_4"), SubjectName)
 							;[End Block]
 					End Select
 					;[End Block]
@@ -1569,16 +1569,16 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "codes"
 					;[Block]
-					CreateConsoleMsg(GetLocalString("console", "codes1"))
+					CreateConsoleMsg(GetLocalString("console", "codes_1"))
 					CreateConsoleMsg("")
-					CreateConsoleMsg(Format(GetLocalString("console", "codes2"), CODE_DR_MAYNARD))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes3"), CODE_DR_HARP))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes4"), CODE_DR_L))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes5"), CODE_O5_COUNCIL))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes6"), CODE_MAINTENANCE_TUNNELS))
-					CreateConsoleMsg(Format(GetLocalString("console", "codes7"), CODE_CONT1_035))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_2"), CODE_DR_MAYNARD))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_3"), CODE_DR_HARP))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_4"), CODE_DR_L))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_5"), CODE_O5_COUNCIL))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_6"), CODE_MAINTENANCE_TUNNELS))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_7"), CODE_CONT1_035))
 					CreateConsoleMsg("")
-					CreateConsoleMsg(GetLocalString("console", "codes8"))
+					CreateConsoleMsg(GetLocalString("console", "codes_8"))
 					;[End Block]
 				Default
 					;[Block]
@@ -2367,7 +2367,7 @@ Function UpdateGame%()
 						EndIf
 					EndIf
 				EndIf
-				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "hazmatsuit2" And W <> "hazmatsuit3") Lor V = 0.0 Lor V = 100.0
+				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0
 					If InvOpen Then
 						StopMouseMovement()
 					Else
@@ -3167,7 +3167,7 @@ Function UpdateMouseLook%()
 	
 	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
 		If (Not I_714\Using) And PlayerRoom\RoomTemplate\Name <> "dimension_106" Then
-			If wi\GasMask = 2 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
+			If wi\GasMask = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 		EndIf
 		If (Not me\Terminated) Then
 			If (Not ChannelPlaying(BreathCHN)) Then
@@ -3179,22 +3179,24 @@ Function UpdateMouseLook%()
 		
 		If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
 		
-		If ChannelPlaying(BreathCHN) Then
-			wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
-		Else
-			If wi\GasMask = 2 Lor I_1499\Using = 2 Then
-				If me\CurrSpeed > 0.0 And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
-					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 0.2), 100.0)
+		If wi\GasMask <> 2 Then
+			If ChannelPlaying(BreathCHN) Then
+				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
+			Else
+				If wi\GasMask = 3 Lor I_1499\Using = 2 Then
+					If me\CurrSpeed > 0.0 And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
+						wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 0.2), 100.0)
+					Else
+						wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
+					EndIf
 				Else
 					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 				EndIf
-			Else
-				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 			EndIf
-		EndIf
-		If wi\GasMaskFogTimer > 0.0 Then
-			If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
-			EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+			If wi\GasMaskFogTimer > 0.0 Then
+				If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
+				EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+			EndIf
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
@@ -3312,7 +3314,7 @@ Function UpdateFog%()
 					Exit
 				EndIf
 			Next
-		ElseIf PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0) Then
+		ElseIf (PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale)  Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale) Then
 			CurrFogColor = FogColorHCZ
 		ElseIf forest_event <> Null
 			If forest_event\EventState = 1.0 Then
@@ -3404,6 +3406,7 @@ Function UpdateGUI%()
 			PointEntity(Camera, d_I\ClosestButton)
 			FreeEntity(Pvt)
 			
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((60.0) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
 			ProjY = ProjectedY()
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
@@ -3761,11 +3764,11 @@ Function UpdateGUI%()
 			If (Not mo\MouseDown1) Then
 				If MouseSlot = 66 Then
 					Select SelectedItem\ItemTemplate\TempName
-						Case "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+						Case "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 							;[Block]
 							CreateHintMsg(GetLocalString("msg", "takeoff"))
 							;[End Block]
-						Case "scp1499", "super1499"
+						Case "scp1499", "fine1499"
 							;[Block]
 							If I_1499\Using > 0 Then
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
@@ -3774,7 +3777,7 @@ Function UpdateGUI%()
 								InvOpen = False
 							EndIf
 							;[End Block]
-						Case "gasmask", "gasmask3", "supergasmask"
+						Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 							;[Block]
 							If wi\GasMask > 0 Then
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
@@ -3792,7 +3795,7 @@ Function UpdateGUI%()
 								InvOpen = False
 							EndIf
 							;[End Block] 
-						Case "nvg", "supernvg", "finenvg"
+						Case "nvg", "veryfinenvg", "finenvg"
 							;[Block]
 							If wi\NightVision > 0 Then
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
@@ -3936,16 +3939,20 @@ Function UpdateGUI%()
 								EndIf
 								SelectedItem = Null
 								;[End Block]
-							Case "badbat"
+							Case "coarsebat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav", "nav310"
+									Case "nav"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]		
+								  Case "nav310"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
+										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
@@ -3965,7 +3972,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
-									Case "nvg", "supernvg"
+									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
@@ -3975,6 +3982,10 @@ Function UpdateGUI%()
 									Case "finenvg"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										;[End Block]
+									Case "veryfinenvg"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -3999,12 +4010,16 @@ Function UpdateGUI%()
 							Case "bat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav", "nav310"
+									Case "nav"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
+										;[End Block]
+									Case "nav310"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -4025,7 +4040,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
-									Case "nvg", "supernvg"
+									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
@@ -4035,6 +4050,10 @@ Function UpdateGUI%()
 									Case "finenvg"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										;[End Block]
+									Case "veryfinenvg"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4059,9 +4078,16 @@ Function UpdateGUI%()
 							Case "finebat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav", "nav310"
+									Case "nav"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
+										;[End Block]
+									Case "nav310"
+										;[Block]
+										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = Rnd(200.0)
+										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -4082,13 +4108,20 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.no"))	
 										;[End Block]
-									Case "nvg", "supernvg"
+									Case "nvg"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case "finenvg"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										;[End Block]
+									Case "veryfinenvg"
+										;[Block]
+										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = Rnd(200.0)
+										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4107,15 +4140,19 @@ Function UpdateGUI%()
 										;[End Block]
 								End Select
 								;[End Block]
-							Case "superbat", "killbat"
+							Case "veryfinebat", "killbat"
 								;[Block]
 								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav", "nav310"
+									Case "nav"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(1000.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
+										;[End Block]
+									Case "nav310"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nav.bat.nofit"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -4136,7 +4173,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
-									Case "nvg", "supernvg"
+									Case "nvg"
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
@@ -4146,6 +4183,10 @@ Function UpdateGUI%()
 									Case "finenvg"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										;[End Block]
+									Case "veryfinenvg"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4191,7 +4232,7 @@ Function UpdateGUI%()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
-				Case "nvg", "supernvg", "finenvg"
+				Case "nvg", "veryfinenvg", "finenvg"
 					;[Block]
 					If (Not PreventItemOverlapping(False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -4199,7 +4240,7 @@ Function UpdateGUI%()
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 1, GetLocalString("misc", "twonvg")) Then Return
 								;[End Block]
-							Case "supernvg"
+							Case "veryfinenvg"
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 2, GetLocalString("misc", "twonvg")) Then Return
 								;[End Block]
@@ -4228,7 +4269,7 @@ Function UpdateGUI%()
 										;[Block]
 										wi\NightVision = 1
 										;[End Block]
-									Case "supernvg"
+									Case "veryfinenvg"
 										;[Block]
 										wi\NightVision = 2
 										;[End Block]
@@ -4323,7 +4364,7 @@ Function UpdateGUI%()
 								;[Block]
 								me\Injuries = Max(0.0, me\Injuries - Rnd(0.5, 3.5))
 								me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 100.0))
-								CreateMsg(GetLocalString("msg", "better"))
+								CreateMsg(GetLocalString("msg", "better_1"))
 								;[End Block]
 							Case 4
 								;[Block]
@@ -4387,12 +4428,12 @@ Function UpdateGUI%()
 							Else
 								me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 20.0))
 								If me\Injuries >= 2.5 Then
-									CreateMsg(GetLocalString("msg", "aid.toobad"))
+									CreateMsg(GetLocalString("msg", "aid.toobad_1"))
 									me\Injuries = Max(2.5, me\Injuries - Rnd(0.3, 0.7))
 								ElseIf me\Injuries > 1.0
 									me\Injuries = Max(0.5, me\Injuries - Rnd(0.5, 1.0))
 									If me\Injuries > 1.0 Then
-										CreateMsg(GetLocalString("msg", "aid.toobad2"))
+										CreateMsg(GetLocalString("msg", "aid.toobad_2"))
 									Else
 										CreateMsg(GetLocalString("msg", "aid.stop"))
 									EndIf
@@ -4496,7 +4537,7 @@ Function UpdateGUI%()
 				Case "scp1025"
 					;[Block]
 					If SelectedItem\State3 = 0.0 Then
-						If (Not I_714\Using) And wi\GasMask <> 3 And wi\HazmatSuit <> 3 Then
+						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 							If SelectedItem\State = 7.0 Then
 								If I_008\Timer = 0.0 Then I_008\Timer = 1.0
 							Else
@@ -4594,7 +4635,7 @@ Function UpdateGUI%()
 					me\StaminaEffect = 0.5
 					me\StaminaEffectTimer = 20.0
 					
-					CreateMsg(GetLocalString("msg", "syringe"))
+					CreateMsg(GetLocalString("msg", "syringe_1"))
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -4604,7 +4645,7 @@ Function UpdateGUI%()
 					me\StaminaEffect = Rnd(0.5, 0.8)
 					me\StaminaEffectTimer = Rnd(20.0, 30.0)
 					
-					CreateMsg(GetLocalString("msg", "syringe2"))
+					CreateMsg(GetLocalString("msg", "syringe_2"))
 					
 					RemoveItem(SelectedItem)
 					;[End Block]
@@ -4616,17 +4657,17 @@ Function UpdateGUI%()
 							me\HealTimer = Rnd(40.0, 60.0)
 							me\StaminaEffect = 0.1
 							me\StaminaEffectTimer = 30.0
-							CreateMsg(GetLocalString("msg", "syringe3"))
+							CreateMsg(GetLocalString("msg", "syringe_3"))
 							;[End Block]
 						Case 2
 							;[Block]
 							chs\SuperMan = True
-							CreateMsg(GetLocalString("msg", "syringe4"))
+							CreateMsg(GetLocalString("msg", "syringe_4"))
 							;[End Block]
 						Case 3
 							;[Block]
 							me\VomitTimer = 30.0
-							CreateMsg(GetLocalString("msg", "syringe5"))
+							CreateMsg(GetLocalString("msg", "syringe_5"))
 							;[End Block]
 					End Select
 					
@@ -4974,27 +5015,27 @@ Function UpdateGUI%()
 						Select Rand(6)
 							Case 1
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette1"))
+								CreateMsg(GetLocalString("msg", "cigarette_1"))
 								;[End Block]
 							Case 2
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette2"))
+								CreateMsg(GetLocalString("msg", "cigarette_2"))
 								;[End Block]
 							Case 3
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette3"))
+								CreateMsg(GetLocalString("msg", "cigarette_3"))
 								;[End Block]
 							Case 4
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette4"))
+								CreateMsg(GetLocalString("msg", "cigarette_4"))
 								;[End Block]
 							Case 5
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette5"))
+								CreateMsg(GetLocalString("msg", "cigarette_5"))
 								;[End Block]
 							Case 6
 								;[Block]
-								CreateMsg(GetLocalString("msg", "cigarette6"))
+								CreateMsg(GetLocalString("msg", "cigarette_6"))
 								;[End Block]
 						End Select
 						RemoveItem(SelectedItem)
@@ -5003,13 +5044,13 @@ Function UpdateGUI%()
 				Case "scp420j"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420j.yeah"))
 							me\Injuries = Max(me\Injuries - 0.5, 0.0)
 							me\BlurTimer = 500.0
-							GiveAchievement(Achv420J)
+							GiveAchievement(Achv420_J)
 							PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
 						EndIf
 						RemoveItem(SelectedItem)
@@ -5018,7 +5059,7 @@ Function UpdateGUI%()
 				Case "joint"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420j.dead"))
@@ -5031,7 +5072,7 @@ Function UpdateGUI%()
 				Case "scp420s"
 					;[Block]
 					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420s"))
@@ -5053,7 +5094,7 @@ Function UpdateGUI%()
 					EndIf
 					SelectedItem = Null	
 					;[End Block]
-				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+				Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
 					If wi\BallisticVest = 0 Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
@@ -5070,7 +5111,7 @@ Function UpdateGUI%()
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 								If SelectedItem\ItemTemplate\TempName = "hazmatsuit" Then
 									wi\HazmatSuit = 1
-								ElseIf SelectedItem\ItemTemplate\TempName = "hazmatsuit2"
+								ElseIf SelectedItem\ItemTemplate\TempName = "veryfinehazmatsuit"
 									wi\HazmatSuit = 2
 								Else
 									wi\HazmatSuit = 3
@@ -5115,7 +5156,7 @@ Function UpdateGUI%()
 						SelectedItem = Null
 					EndIf
 					;[End Block]
-				Case "gasmask", "supergasmask", "gasmask3"
+				Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 					;[Block]
 					If (Not PreventItemOverlapping(True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -5123,13 +5164,17 @@ Function UpdateGUI%()
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 1, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
-							Case "supergasmask"
+							Case "finegasmask"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 2, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
-							Case "gasmask3"
+							Case "veryfinegasmask"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 3, GetLocalString("misc", "twomask")) Then Return
+								;[End Block]
+							Case "gasmask148"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 4, "gas masks") Then Return
 								;[End Block]
 						End Select
 						
@@ -5150,15 +5195,20 @@ Function UpdateGUI%()
 										CreateMsg(GetLocalString("msg", "mask.on"))
 										wi\GasMask = 1
 										;[End Block]
-									Case "supergasmask"
+									Case "finegasmask"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on.easy"))
 										wi\GasMask = 2
 										;[End Block]
-									Case "gasmask3"
+									Case "veryfinegasmask"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "mask.on.easy"))
+										wi\GasMask = 3
+										;[End Block]
+									Case "gasmask148"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on"))
-										wi\GasMask = 3
+										wi\GasMask = 4
 										;[End Block]
 								End Select
 							EndIf
@@ -5181,7 +5231,7 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp1499", "super1499"
+				Case "scp1499", "fine1499"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -5189,7 +5239,7 @@ Function UpdateGUI%()
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 1, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
-							Case "super1499"
+							Case "fine1499"
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 2, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
@@ -5212,7 +5262,7 @@ Function UpdateGUI%()
 										CreateMsg(GetLocalString("msg", "mask.on"))
 										I_1499\Using = 1
 										;[End Block]
-									Case "super1499"
+									Case "fine1499"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on.easy"))
 										I_1499\Using = 2
@@ -5344,7 +5394,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "syringeinf"
 					;[Block]
-					CreateMsg(GetLocalString("msg", "syringe6"))
+					CreateMsg(GetLocalString("msg", "syringe_6"))
 					
 					me\VomitTimer = 70.0 * 1.0
 					
@@ -5445,7 +5495,7 @@ Function UpdateGUI%()
 			
 			If mo\MouseHit2 Then
 				Select SelectedItem\ItemTemplate\TempName
-					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3", "helmet"
+					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 						;[Block]
 						SelectedItem\State = 0.0
 						;[End Block]
@@ -5456,14 +5506,14 @@ Function UpdateGUI%()
 							DropItem(SelectedItem, False)
 						EndIf
 						;[End Block]
-					Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+					Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 						;[Block]
 						SelectedItem\State = 0.0
 						If wi\HazmatSuit = 0 Then
 							DropItem(SelectedItem, False)
 						EndIf
 						;[End Block]
-					Case "nvg", "supernvg", "finenvg", "scramble", "scp1025"
+					Case "nvg", "veryfinenvg", "finenvg", "scramble", "scp1025"
 						;[Block]
 						SelectedItem\State3 = 0.0
 						;[End Block]
@@ -5487,11 +5537,11 @@ Function UpdateGUI%()
 	For it.Items = Each Items
 		If it <> SelectedItem Then
 			Select it\ItemTemplate\TempName
-				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "hazmatsuit2", "hazmatsuit3", "scp1499", "super1499", "gasmask", "supergasmask", "gasmask3", "helmet"
+				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 					;[Block]
 					it\State = 0.0
 					;[End Block]
-				Case "nvg", "supernvg", "finenvg", "scramble", "scp1025"
+				Case "nvg", "veryfinenvg", "finenvg", "scramble", "scp1025"
 					;[Block]
 					it\State3 = 0.0
 					;[End Block]
@@ -5554,7 +5604,7 @@ Function RenderHUD%()
 	If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Then
 		Color(200, 0, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 2 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2
+	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2
 		Color(0, 200, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	EndIf
@@ -5585,151 +5635,151 @@ Function RenderDebugHUD%()
 		Case 1
 			;[Block]
 			Text(x, y, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\Name))
-			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
+			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom Then
-					Text(x, y + (40 * MenuScale), Format(Format(GetLocalString("console", "debug1.event"), ev\EventName, "{0}"), ev\EventID, "{1}"))
-					Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug1.state1"), ev\EventState))
-					Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug1.state2"), ev\EventState2))
-					Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug1.state3"), ev\EventState3))
-					Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug1.state4"), ev\EventState4))
-					Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug1.str"), ev\EventStr))
+					Text(x, y + (40 * MenuScale), Format(Format(GetLocalString("console", "debug_1.event"), ev\EventName, "{0}"), ev\EventID, "{1}"))
+					Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_1.state_1"), ev\EventState))
+					Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_1.state_2"), ev\EventState2))
+					Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_1.state_3"), ev\EventState3))
+					Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_1.state_4"), ev\EventState4))
+					Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_1.str"), ev\EventStr))
 					Exit
 				EndIf
 			Next
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
-				Text(x, y + (180 * MenuScale), Format(Format(GetLocalString("console", "debug1.chunkxyz"), (Int((EntityX(me\Collider) + 20) / 40)), "{0}"), (Int((EntityZ(me\Collider) + 20) / 40)), "{1}"))
+				Text(x, y + (180 * MenuScale), Format(Format(GetLocalString("console", "debug_1.chunkxyz"), (Int((EntityX(me\Collider) + 20) / 40)), "{0}"), (Int((EntityZ(me\Collider) + 20) / 40)), "{1}"))
 				
 				Local CH_Amount% = 0
 				
 				For ch.Chunk = Each Chunk
 					CH_Amount = CH_Amount + 1
 				Next
-				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug1.currchunk"), CH_Amount))
+				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_1.currchunk"), CH_Amount))
 			Else
-				Text(x, y + (200 * MenuScale), Format(Format(Format(GetLocalString("console", "debug1.currroom"), PlayerRoom\x, "{0}"), PlayerRoom\y, "{1}"), PlayerRoom\z, "{2}"))
+				Text(x, y + (200 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.currroom"), PlayerRoom\x, "{0}"), PlayerRoom\y, "{1}"), PlayerRoom\z, "{2}"))
 			EndIf
 			
 			If sc_I\SelectedMonitor <> Null Then
-				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug1.currmon"), sc_I\SelectedMonitor\ScrOBJ))
+				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), sc_I\SelectedMonitor\ScrOBJ))
 			Else
-				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug1.currmon"), "Null"))
+				Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), "Null"))
 			EndIf
 			
 			If SelectedItem <> Null Then
-				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug1.currbtn"), SelectedItem\ItemTemplate\Name))
+				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), SelectedItem\ItemTemplate\Name))
 			Else
-				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug1.currbtn"), "Null"))
+				Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), "Null"))
 			EndIf
 			
-			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug1.currflo"), PlayerElevatorFloor))
-			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug1.roomflo"), ToElevatorFloor))
+			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), PlayerElevatorFloor))
+			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.roomflo"), ToElevatorFloor))
 			If PlayerInsideElevator Then
-				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug1.inelev"), "True"))
+				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "True"))
 			Else
-				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug1.inelev"), "False"))
+				Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "False"))
 			EndIf
 			
-			Text(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-			Text(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024))), (TotalVidMem() / 1024)))
-			Text(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024))), (TotalPhys() / 1024)))
-			Text(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug1.triamo"), CurrTrisAmount))
-			Text(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug1.acttex"), ActiveTextures()))
+			Text(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+			Text(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024))), (TotalVidMem() / 1024)))
+			Text(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024))), (TotalPhys() / 1024)))
+			Text(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
+			Text(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
 			;[End Block]
 		Case 2
 			;[Block]
-			Text(x, y, Format(Format(Format(GetLocalString("console", "debug2.ppos"), FloatToString(EntityX(me\Collider), 1), "{0}"), FloatToString(EntityY(me\Collider), 1), "{1}"), FloatToString(EntityZ(me\Collider), 1), "{2}"))
-			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug2.proa"), FloatToString(EntityPitch(me\Collider), 1), "{0}"), FloatToString(EntityYaw(me\Collider), 1), "{1}"), FloatToString(EntityRoll(me\Collider), 1), "{2}"))
+			Text(x, y, Format(Format(Format(GetLocalString("console", "debug_2.ppos"), FloatToString(EntityX(me\Collider), 1), "{0}"), FloatToString(EntityY(me\Collider), 1), "{1}"), FloatToString(EntityZ(me\Collider), 1), "{2}"))
+			Text(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_2.proa"), FloatToString(EntityPitch(me\Collider), 1), "{0}"), FloatToString(EntityYaw(me\Collider), 1), "{1}"), FloatToString(EntityRoll(me\Collider), 1), "{2}"))
 			
-			Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug2.injuries"), me\Injuries))
-			Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug2.bloodloss"), me\Bloodloss))
+			Text(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_2.injuries"), me\Injuries))
+			Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.bloodloss"), me\Bloodloss))
 			
-			Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug2.blur"), me\BlurTimer))
-			Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug2.blink"), me\LightBlink))
-			Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug2.flash"), me\LightFlash))
+			Text(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_2.blur"), me\BlurTimer))
+			Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_2.blink"), me\LightBlink))
+			Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.flash"), me\LightFlash))
 			
-			Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug2.freq"), me\BLINKFREQ))
-			Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug2.timer"), me\BlinkTimer))
-			Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug2.effect"), me\BlinkEffect))
-			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug2.efftim"), me\BlinkEffectTimer))
-			Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug2.eyeirr"), me\EyeIrritation))
+			Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_2.freq"), me\BLINKFREQ))
+			Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_2.timer"), me\BlinkTimer))
+			Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.effect"), me\BlinkEffect))
+			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.efftim"), me\BlinkEffectTimer))
+			Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_2.eyeirr"), me\EyeIrritation))
 			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "eyestuck"), me\EyeStuck))
 			
 			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "stamina"), me\Stamina))
-			Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug2.stameff"), me\StaminaEffect))
-			Text(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug2.stamtimer"), me\StaminaEffectTimer))
+			Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_2.stameff"), me\StaminaEffect))
+			Text(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.stamtimer"), me\StaminaEffectTimer))
 			
-			Text(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug2.deaf"), me\DeafTimer))
+			Text(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.deaf"), me\DeafTimer))
 			
 			If me\Terminated Then
-				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug2.terminated"), "True"))
+				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug_2.terminated"), "True"))
 			Else
-				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug2.terminated"), "False"))
+				Text(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug_2.terminated"), "False"))
 			EndIf
 			
-			Text(x + (380 * MenuScale), y + (20 * MenuScale), Format(GetLocalString("console", "debug2.death"), me\DeathTimer))
-			Text(x + (380 * MenuScale), y + (40 * MenuScale), Format(GetLocalString("console", "debug2.fall"), me\FallTimer))
+			Text(x + (380 * MenuScale), y + (20 * MenuScale), Format(GetLocalString("console", "debug_2.death"), me\DeathTimer))
+			Text(x + (380 * MenuScale), y + (40 * MenuScale), Format(GetLocalString("console", "debug_2.fall"), me\FallTimer))
 			
-			Text(x + (380 * MenuScale), y + (80 * MenuScale), Format(GetLocalString("console", "debug2.heal"), me\HealTimer))
+			Text(x + (380 * MenuScale), y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.heal"), me\HealTimer))
 			
-			Text(x + (380 * MenuScale), y + (120 * MenuScale), Format(GetLocalString("console", "debug2.heartbeat"), me\HeartBeatTimer))
+			Text(x + (380 * MenuScale), y + (120 * MenuScale), Format(GetLocalString("console", "debug_2.heartbeat"), me\HeartBeatTimer))
 			
-			Text(x + (380 * MenuScale), y + (160 * MenuScale), Format(GetLocalString("console", "debug2.explosion"), me\ExplosionTimer))
+			Text(x + (380 * MenuScale), y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.explosion"), me\ExplosionTimer))
 			
-			Text(x + (380 * MenuScale), y + (200 * MenuScale), Format(GetLocalString("console", "debug2.speed"), me\CurrSpeed))
+			Text(x + (380 * MenuScale), y + (200 * MenuScale), Format(GetLocalString("console", "debug_2.speed"), me\CurrSpeed))
 			
-			Text(x + (380 * MenuScale), y + (240 * MenuScale), Format(GetLocalString("console", "debug2.camshake"), me\CameraShakeTimer))
-			Text(x + (380 * MenuScale), y + (260 * MenuScale), Format(GetLocalString("console", "debug2.camzoom"), me\CurrCameraZoom))
+			Text(x + (380 * MenuScale), y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.camshake"), me\CameraShakeTimer))
+			Text(x + (380 * MenuScale), y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.camzoom"), me\CurrCameraZoom))
 			
-			Text(x + (380 * MenuScale), y + (300 * MenuScale), Format(GetLocalString("console", "debug2.vomit"), me\VomitTimer))
+			Text(x + (380 * MenuScale), y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.vomit"), me\VomitTimer))
 			
 			If me\Playable Then
-				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug2.playable"), "True"))
+				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "True"))
 			Else
-				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug2.playable"), "False"))
+				Text(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "False"))
 			EndIf
 			
-			Text(x + (380 * MenuScale), y + (380 * MenuScale), Format(GetLocalString("console", "debug2.refitems"), me\RefinedItems))
-			Text(x + (380 * MenuScale), y + (400 * MenuScale), Format(GetLocalString("console", "debug2.funds"), me\Funds))
+			Text(x + (380 * MenuScale), y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
+			Text(x + (380 * MenuScale), y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
 			;[End Block]
 		Case 3
 			;[Block]
 			If n_I\Curr049 <> Null Then
-				Text(x, y, Format(Format(Format(GetLocalString("console", "debug3.049pos"), FloatToString(EntityX(n_I\Curr049\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr049\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr049\OBJ), 2), "{2}"))
-				Text(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug3.049idle"), n_I\Curr049\Idle))
-				Text(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug3.049state"), n_I\Curr049\State))
+				Text(x, y, Format(Format(Format(GetLocalString("console", "debug_3.049pos"), FloatToString(EntityX(n_I\Curr049\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr049\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr049\OBJ), 2), "{2}"))
+				Text(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_3.049idle"), n_I\Curr049\Idle))
+				Text(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.049state"), n_I\Curr049\State))
 			EndIf
 			If n_I\Curr096 <> Null Then
-				Text(x, y + (60 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.096pos"), FloatToString(EntityX(n_I\Curr096\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr096\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr096\OBJ), 2), "{2}"))
-				Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug3.096idle"), n_I\Curr096\Idle))
-				Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug3.096state"), n_I\Curr096\State))
+				Text(x, y + (60 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.096pos"), FloatToString(EntityX(n_I\Curr096\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr096\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr096\OBJ), 2), "{2}"))
+				Text(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_3.096idle"), n_I\Curr096\Idle))
+				Text(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_3.096state"), n_I\Curr096\State))
 			EndIf
 			If n_I\Curr106 <> Null Then
-				Text(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
-				Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug3.106idle"), n_I\Curr106\Idle))
-				Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug3.106state"), n_I\Curr106\State))
+				Text(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
+				Text(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_3.106idle"), n_I\Curr106\Idle))
+				Text(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_3.106state"), n_I\Curr106\State))
 			EndIf
 			If n_I\Curr173 <> Null Then
-				Text(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
-				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug3.173idle"), n_I\Curr173\Idle))
-				Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug3.173state"), n_I\Curr173\State))
+				Text(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
+				Text(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_3.173idle"), n_I\Curr173\Idle))
+				Text(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_3.173state"), n_I\Curr173\State))
 			EndIf
 			
-			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug3.pill"), I_500\Taken))
+			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_3.pill"), I_500\Taken))
 			
-			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug3.008"), I_008\Timer))
-			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug3.409"), I_409\Timer))
-			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug3.427"), Int(I_427\Timer / 70.0)))
+			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
+			Text(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
+			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.427"), Int(I_427\Timer / 70.0)))
 			For i = 0 To 7
-				Text(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
+				Text(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			
 			If I_005\ChanceToSpawn = 1 Then
-				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.chamber"))
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
 			ElseIf I_005\ChanceToSpawn >= 2 And I_005\ChanceToSpawn =< 4
-				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.409"))
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.409"))
 			ElseIf I_005\ChanceToSpawn >= 5 And I_005\ChanceToSpawn =< 10
-				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug3.005.maynard"))
+				Text(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			;[End Block]
 	End Select
@@ -5759,7 +5809,7 @@ Function RenderGUI%()
 						If (Not e\Img) Then
 							If (ChannelPlaying(e\SoundCHN)) Then StopChannel(e\SoundCHN)
 							If Rand(30) = 1 Then PlaySound_Strict(e\Sound2)
-							e\Img = LoadImage_Strict("GFX\kneel_mortal.png")
+							e\Img = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
 							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
 						Else
 							DrawImage(e\Img, mo\Viewport_Center_X - (Rand(390, 310) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
@@ -5793,7 +5843,7 @@ Function RenderGUI%()
 		DrawImage(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
 	EndIf
 	
-	If ClosestItem <> Null And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
+	If ClosestItem <> Null And (Not me\Terminated) And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
 		YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
 		If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
 		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
@@ -5979,23 +6029,27 @@ Function RenderGUI%()
 						;[Block]
 						If wi\GasMask = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "supergasmask"
+					Case "veryfinegasmask"
 						;[Block]
 						If wi\GasMask = 2 Then ShouldDrawRect = True
 						;[End Block]
-					Case "gasmask3"
+					Case "veryfinegasmask"
 						;[Block]
 						If wi\GasMask = 3 Then ShouldDrawRect = True
+						;[End Block]
+					Case "gasmask148"
+						;[Block]
+						If wi\GasMask = 4 Then ShouldDrawRect = True
 						;[End Block]
 					Case "hazmatsuit"
 						;[Block]
 						If wi\HazmatSuit = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "hazmatsuit2"
+					Case "veryfinehazmatsuit"
 						;[Block]
 						If wi\HazmatSuit = 2 Then ShouldDrawRect = True
 						;[End Block]
-					Case "hazmatsuit3"
+					Case "hazmatsuit148"
 						;[Block]"
 						If wi\HazmatSuit = 3 Then ShouldDrawRect = True	
 						;[End Block]
@@ -6019,7 +6073,7 @@ Function RenderGUI%()
 						;[Block]
 						If wi\NightVision = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "supernvg"
+					Case "veryfinenvg"
 						;[Block]
 						If wi\NightVision = 2 Then ShouldDrawRect = True
 						;[End Block]
@@ -6035,7 +6089,7 @@ Function RenderGUI%()
 						;[Block]
 						If I_1499\Using = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "super1499"
+					Case "fine1499"
 						;[Block]
 						If I_1499\Using = 2 Then ShouldDrawRect = True
 						;[End Block]
@@ -6093,7 +6147,7 @@ Function RenderGUI%()
 	Else
 		If SelectedItem <> Null Then
 			Select SelectedItem\ItemTemplate\TempName
-				Case "nvg", "supernvg", "finenvg"
+				Case "nvg", "veryfinenvg", "finenvg"
 					;[Block]
 					If (Not PreventItemOverlapping(False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -6101,7 +6155,7 @@ Function RenderGUI%()
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
 								;[End Block]
-							Case "supernvg"
+							Case "veryfinenvg"
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
 								;[End Block]
@@ -6153,7 +6207,7 @@ Function RenderGUI%()
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\note_Maynard.png")
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\note_Maynard.png")
 								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
@@ -6186,7 +6240,7 @@ Function RenderGUI%()
 							Case "Document SCP-035"
 								;[Block]
 								If I_035\Sad <> 0 Then
-									SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\doc_035_sad.png")
+									SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\doc_035_sad.png")
 								Else
 									SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 								EndIf
@@ -6206,7 +6260,7 @@ Function RenderGUI%()
 					;[Block]
 					GiveAchievement(Achv1025)
 					If (Not SelectedItem\ItemTemplate\Img) Then
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -6296,7 +6350,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "hazmatsuit", "hazmatsuit2", "hazmatsuit3"
+				Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
 					If wi\BallisticVest = 0 Then
 						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
@@ -6320,7 +6374,7 @@ Function RenderGUI%()
 					
 					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
-				Case "gasmask", "supergasmask", "gasmask3"
+				Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 					;[Block]
 					If (Not PreventItemOverlapping(True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -6328,13 +6382,17 @@ Function RenderGUI%()
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 1, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
-							Case "supergasmask"
+							Case "finegasmask"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 2, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
-							Case "gasmask3"
+							Case "veryfinegasmask"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 3, GetLocalString("misc", "twomask")) Then Return
+								;[End Block]
+							Case "gasmask148"
+								;[Block]
+								If IsDoubleItem(wi\GasMask, 4, "gas masks") Then Return
 								;[End Block]
 						End Select
 						
@@ -6523,7 +6581,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp1499", "super1499"
+				Case "scp1499", "fine1499"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, True)) Then
 						Select SelectedItem\ItemTemplate\TempName
@@ -6531,7 +6589,7 @@ Function RenderGUI%()
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 1, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
-							Case "super1499"
+							Case "fine1499"
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 2, GetLocalString("misc", "twomask")) Then Return
 								;[End Block]
@@ -7682,7 +7740,7 @@ Function UpdateEnding%()
 		StopBreathSound() : me\Stamina = 100.0
 		
 		If (Not me\EndingScreen) Then
-			me\EndingScreen = LoadImage_Strict("GFX\menu\ending_screen.png")
+			me\EndingScreen = LoadImage_Strict("GFX\Menu\ending_screen.png")
 			me\EndingScreen = ScaleImage2(me\EndingScreen, MenuScale, MenuScale)
 			
 			ShouldPlay = 23
@@ -7855,11 +7913,11 @@ Function InitCredits%()
 	Local File% = OpenFile_Strict("Credits.txt")
 	Local l$
 	
-	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 21)
-	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 35)
+	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 21)
+	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 35)
 	
 	If (Not me\CreditsScreen) Then
-		me\CreditsScreen = LoadImage_Strict("GFX\menu\credits_screen.png")
+		me\CreditsScreen = LoadImage_Strict("GFX\Menu\credits_screen.png")
 		me\CreditsScreen = ScaleImage2(me\CreditsScreen, MenuScale, MenuScale)
 	EndIf
 	
@@ -8045,6 +8103,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Delete(wi)
 	wi.WearableItems = New WearableItems
+	
+	RemoveHazmatTimer = 0.0
+	Remove714Timer = 0.0
 	
 	Delete(I_005)
 	I_005.SCP005 = New SCP005
@@ -8638,7 +8699,7 @@ Function UpdateMTF%()
 			Next
 			
 			If entrance <> Null Then 
-				If me\Zone = 2 Then
+				If me\Zone = 2 And PlayerRoom\RoomTemplate\Name <> "cont1_895" Then
 					If PlayerInReachableRoom() Then
 						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 					EndIf
@@ -8876,7 +8937,7 @@ Function Update008%()
 			
 			If I_008\Timer > 20.0 And PrevI008Timer <= 20.0 Then
 				If I_008\Revert Then
-					CreateMsg(GetLocalString("msg", "better2"))
+					CreateMsg(GetLocalString("msg", "better_2"))
 				Else
 					CreateMsg(GetLocalString("msg", "feverish"))
 				EndIf
@@ -9020,27 +9081,27 @@ Function Update409%()
 		
 		If I_409\Timer > 40.0 And PrevI409Timer <= 40.0 Then
 			If I_409\Revert Then
-				CreateMsg(GetLocalString("msg", "409legs"))
+				CreateMsg(GetLocalString("msg", "409legs_1"))
 			Else
-				CreateMsg(GetLocalString("msg", "409legs2"))
+				CreateMsg(GetLocalString("msg", "409legs_2"))
 			EndIf
 		ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
 			If I_409\Revert Then
-				CreateMsg(GetLocalString("msg", "409abdomen"))
+				CreateMsg(GetLocalString("msg", "409abdomen_1"))
 			Else
-				CreateMsg(GetLocalString("msg", "409abdomen2"))
+				CreateMsg(GetLocalString("msg", "409abdomen_2"))
 			EndIf
 		ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
 			If I_409\Revert Then
-				CreateMsg(GetLocalString("msg", "409arms"))
+				CreateMsg(GetLocalString("msg", "409arms_1"))
 			Else
-				CreateMsg(GetLocalString("msg", "409arms2"))
+				CreateMsg(GetLocalString("msg", "409arms_2"))
 			EndIf
 		ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
 			If I_409\Revert Then
-				CreateMsg(GetLocalString("msg", "409head"))
+				CreateMsg(GetLocalString("msg", "409head_1"))
 			Else
-				CreateMsg(GetLocalString("msg", "409head"))
+				CreateMsg(GetLocalString("msg", "409head_2"))
 			EndIf
 		ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
 			If (Not I_409\Revert) Then
@@ -9176,7 +9237,7 @@ Function UpdateLeave1499%()
 				Next
 				For it.Items = Each Items
 					it\DistTimer = 0.0
-					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "super1499" Then
+					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "fine1499" Then
 						If EntityY(it\Collider) >= EntityY(r1499\OBJ) - 5.0 Then
 							PositionEntity(it\Collider, I_1499\PrevX, I_1499\PrevY + (EntityY(it\Collider) - EntityY(r1499\OBJ)), I_1499\PrevZ)
 							ResetEntity(it\Collider)
