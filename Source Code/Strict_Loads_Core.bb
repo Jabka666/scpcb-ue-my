@@ -403,7 +403,7 @@ Function LoadTexture_Cache%(File$, Flags% = 1)
 	Return(Tmp)
 End Function
 
-Function ExecFile_Strict_Strict%(File$)
+Function ExecFile_Strict%(File$)
 	If FileType(lang\LanguagePath + File) = 1 Then 
 		ExecFile(lang\LanguagePath + File)
 	Else
