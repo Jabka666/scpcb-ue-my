@@ -1,6 +1,6 @@
 ; ~ The main file of the game
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
-; ~ SCP - Containment Breach Ultimate Edition v1.0.3
+; ~ SCP - Containment Breach Ultimate Edition v1.0.4
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ This is a modification of the game "SCP - Containment Breach"
 ; ~ The mod is developed by the "Ultimate Edition Team" (https://www.moddb.com/company/ultimate-edition-team)
@@ -37,6 +37,7 @@ Function SetLanguage%(Language$)
 	IniWriteBuffer_(lang\LanguagePath + LanguageFile, 1)
 	IniWriteBuffer_(lang\LanguagePath + SubtitlesFile, 1)
 	IniWriteBuffer_(lang\LanguagePath + AchievementsFile, 1)
+	IniWriteBuffer_(lang\LanguagePath + LoadingScreensFile, 1)
 	opt\Language = Language
 End Function
 
@@ -60,6 +61,7 @@ Global lang.Language = New Language
 IniWriteBuffer_(LanguageFile, 1)
 IniWriteBuffer_(SubtitlesFile, 1)
 IniWriteBuffer_(AchievementsFile, 1)
+IniWriteBuffer_(LoadingScreensFile, 1)
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"

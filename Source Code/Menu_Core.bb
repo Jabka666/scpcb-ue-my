@@ -2081,7 +2081,7 @@ End Type
 Function InitLoadingScreens%(File$)
 	Local TemporaryString$, i%
 	Local ls.LoadingScreens
-	Local f% = OpenFile(File)
+	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
@@ -2093,16 +2093,16 @@ Function InitLoadingScreens%(File$)
 			ls\ID = LoadingScreenAmount
 			
 			ls\Title = TemporaryString
-			ls\ImgPath = GetINIString(File, TemporaryString, "ImgPath")
+			ls\ImgPath = GetFileLocalString(File, TemporaryString, "ImgPath", "")
 			
 			For i = 0 To 4
-				ls\Txt[i] = GetINIString(File, TemporaryString, "Desc" + (i + 1))
+				ls\Txt[i] = GetFileLocalString(File, TemporaryString, "Desc" + (i + 1))
 				If ls\Txt[i] <> "" Then ls\TxtAmount = ls\TxtAmount + 1
 			Next
 			
-			ls\DisableBackground = GetINIInt(File, TemporaryString, "DisableBackground")
+			ls\DisableBackground = Int(GetFileLocalString(File, TemporaryString, "DisableBackground", 0))
 			
-			Select GetINIString(File, TemporaryString, "Align X")
+			Select GetFileLocalString(File, TemporaryString, "Align X")
 				Case "Left"
 					;[Block]
 					ls\AlignX = -1
@@ -2117,7 +2117,7 @@ Function InitLoadingScreens%(File$)
 					;[End Block]
 			End Select 
 			
-			Select GetINIString(File, TemporaryString, "Align Y")
+			Select GetFileLocalString(File, TemporaryString, "Align Y")
 				Case "Top", "Up"
 					;[Block]
 					ls\AlignY = -1
