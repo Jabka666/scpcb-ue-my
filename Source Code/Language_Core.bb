@@ -4,6 +4,7 @@ Type ListLanguage
 	Field Author$
 	Field LastModify$
 	Field Flag$
+	Field FlagImg%
 	Field Full%
 End Type
 
@@ -28,9 +29,10 @@ Function LanguageSelector%()
 				lan\ID = ParseDomainTXT(l, "id") ; ~ Language ID of localization
 				lan\Author = ParseDomainTXT(l, "author") ; ~ Author of translation
 				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
-				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
+				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit
 			EndIf
@@ -71,7 +73,7 @@ Function LanguageSelector%()
 			For lan.ListLanguage = Each ListLanguage
 				Color(1, 0, 0)
 				If lan\Full Then
-					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
 				Else
 					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 2, y - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
 				EndIf
@@ -103,7 +105,7 @@ Function LanguageSelector%()
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
 				If lan\Full Then
-					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, lan\FlagImg)
 				Else
 					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
 				EndIf
@@ -132,7 +134,7 @@ Function LanguageSelector%()
 			If SelectedLanguage\ID = opt\Language Then
 				; ~ Just save this line, okay?
 			ElseIf SelectedLanguage\Name = "English"
-				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
+				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 					AppTitle(GetLocalString("language", "title"))
@@ -142,7 +144,7 @@ Function LanguageSelector%()
 					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 140, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
 						DeleteFolder("Localization\" + SelectedLanguage\ID)
 					EndIf
-					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "setting"), ButtonImages, 2) Then
+					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 						AppTitle(GetLocalString("language", "title"))
