@@ -134,7 +134,7 @@ End Function
 
 Function GetINIString2$(File$, Start%, Parameter$, DefaultValue$ = "")
 	Local TemporaryString$ = ""
-	Local f% = ReadFile(File)
+	Local f% = ReadFile_Strict(File)
 	Local n% = 0
 	
 	While (Not Eof(f))
@@ -182,7 +182,7 @@ End Function
 
 Function GetINISectionLocation%(File$, Section$, SetInput294% = False)
 	Local Temp%
-	Local f% = ReadFile(File)
+	Local f% = ReadFile_Strict(File)
 	
 	Section = Lower(Section)
 	
@@ -210,7 +210,7 @@ End Function
 
 Function INI_FileToString$(INI_sFilename$)
 	Local INI_sString$ = ""
-	Local INI_lFileHandle% = ReadFile(INI_sFilename)
+	Local INI_lFileHandle% = ReadFile_Strict(INI_sFilename)
 	
 	If INI_lFileHandle <> 0 Then
 		While (Not Eof(INI_lFileHandle))
