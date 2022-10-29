@@ -17,7 +17,7 @@ Function LanguageSelector%()
 	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
 	Local lan.ListLanguage
-	Local File% = OpenFile_Strict(BasePath + "temp.txt")
+	Local File% = OpenFile(BasePath + "temp.txt")
 	Local l$
 	
 	If File <> 0 Then

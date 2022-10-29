@@ -625,7 +625,7 @@ Function LoadMaterials%(File$)
 	Local TemporaryString$
 	Local mat.Materials = Null
 	Local StrTemp$ = ""
-	Local f% = OpenFile_Strict(File)
+	Local f% = OpenFile(File)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
@@ -1268,7 +1268,7 @@ Function LoadEntities%()
 		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvName", "a" + Str(i) + ",AchvName")
 		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvDesc", "a" + Str(i) + ",AchvDesc")
 		
-		Local Image$ = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvImage", "a" + Str(i) + ",AchvImage") 
+		Local Image$ = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvImage", "a" + Str(i) + ",AchvImage")
 		
 		achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + Image + ".png")
 		achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)

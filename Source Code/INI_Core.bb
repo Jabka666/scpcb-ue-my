@@ -40,7 +40,7 @@ Function UpdateINIFile$(File$)
 	If ini = Null Then Return
 	If ini\Bank <> 0 Then FreeBank(ini\Bank)
 	
-	Local f% = ReadFile_Strict(ini\Name)
+	Local f% = ReadFile(ini\Name)
 	Local FileSize_% = 1
 	
 	While FileSize_ < FileSize(ini\Name)
@@ -134,7 +134,7 @@ End Function
 
 Function GetINIString2$(File$, Start%, Parameter$, DefaultValue$ = "")
 	Local TemporaryString$ = ""
-	Local f% = ReadFile_Strict(File)
+	Local f% = ReadFile(File)
 	Local n% = 0
 	
 	While (Not Eof(f))
@@ -182,7 +182,7 @@ End Function
 
 Function GetINISectionLocation%(File$, Section$, SetInput294% = False)
 	Local Temp%
-	Local f% = ReadFile_Strict(File)
+	Local f% = ReadFile(File)
 	
 	Section = Lower(Section)
 	
@@ -210,7 +210,7 @@ End Function
 
 Function INI_FileToString$(INI_sFilename$)
 	Local INI_sString$ = ""
-	Local INI_lFileHandle% = ReadFile_Strict(INI_sFilename)
+	Local INI_lFileHandle% = ReadFile(INI_sFilename)
 	
 	If INI_lFileHandle <> 0 Then
 		While (Not Eof(INI_lFileHandle))

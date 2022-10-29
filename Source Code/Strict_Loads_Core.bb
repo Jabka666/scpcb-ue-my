@@ -372,11 +372,7 @@ Function LoadTexture_Cache%(File$, Flags% = 1)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "texture.notfound"), File))
-		Tmp = LoadTexture(File, Flags)
-		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "animtexture.failed.load"), File))
-	EndIf
+	If (Not Tmp) Then Tmp = LoadTexture(File, Flags)
 	Return(Tmp)
 End Function
 

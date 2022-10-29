@@ -516,7 +516,7 @@ Function LoadGame%(File$)
 	
 	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
-	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
+	Local f% = ReadFile(SavePath + File + "\save.cb")
 	
 	me\DropSpeed = 0.0
 	
@@ -1369,7 +1369,7 @@ Function LoadGameQuick%(File$)
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
 	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
-	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
+	Local f% = ReadFile(SavePath + File + "\save.cb")
 	
 	GameSaved = True
 	me\Zombie = False
@@ -2196,7 +2196,7 @@ Function LoadAchievementsFile%()
 	
 	Local File$
 	
-	File = OpenFile_Strict(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	achv\Achievement[AchvKeter] = ReadByte(File)
 	CloseFile(File)
 End Function
@@ -2226,7 +2226,7 @@ Function LoadSavedGames%()
 	
 	While File <> ""
 		If FileType(SavePath + File) = 2 Then 
-			Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
+			Local f% = ReadFile(SavePath + File + "\save.cb")
 			
 			newsv.Save = New Save
 			newsv\Name = File
@@ -2307,7 +2307,7 @@ Function LoadSavedMaps%()
 				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
 					SavedMaps(i) = File
 					If Right(File, 6) = "cbmap2" Then
-						Local f% = ReadFile_Strict(MapCreatorPath + File)
+						Local f% = ReadFile(MapCreatorPath + File)
 						
 						SavedMapsAuthor(i) = ReadLine(f)
 						CloseFile(f)
@@ -2331,7 +2331,7 @@ Function LoadMap%(File$)
 	Local f%, x%, y%, Name$, Angle%, Prob#
 	Local RoomAmount%, ForestPieceAmount%, MTPieceAmount%, i%
 	
-	f = ReadFile_Strict(File)
+	f = ReadFile(File)
 	
 	If CurrMapGrid <> Null Then
 		Delete(CurrMapGrid) : CurrMapGrid = Null

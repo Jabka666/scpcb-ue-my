@@ -2081,7 +2081,7 @@ End Type
 Function InitLoadingScreens%(File$)
 	Local TemporaryString$, i%
 	Local ls.LoadingScreens
-	Local f% = OpenFile_Strict(File)
+	Local f% = OpenFile(File)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
@@ -3500,7 +3500,7 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	If Right(MapName, 6) = "cbmap2" Then
 		Txt[0] = Left(ConvertToUTF8(MapName), Len(ConvertToUTF8(MapName)) - 7)
 		
-		Local f% = OpenFile_Strict("Map Creator\Maps\" + MapName)
+		Local f% = OpenFile("Map Creator\Maps\" + MapName)
 		Local Author$ = ConvertToUTF8(ReadLine(f))
 		Local Descr$ = ConvertToUTF8(ReadLine(f))
 		
