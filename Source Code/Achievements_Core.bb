@@ -27,7 +27,7 @@ Function GiveAchievement%(AchvName%, ShowMessage% = True)
 	If achv\Achievement[AchvName] <> True Then
 		achv\Achievement[AchvName] = True
 		If opt\AchvMsgEnabled And ShowMessage Then
-			Local AchievementName$ = GetFileLocalString(AchievementsFile, "a" + AchvName, "AchvName", "a" + AchvName + ",AchvName")
+			Local AchievementName$ = GetFileLocalString(AchievementsFile, "a" + AchvName, "AchvName")
 			
 			CreateAchievementMsg(AchvName, AchievementName)
 		EndIf
