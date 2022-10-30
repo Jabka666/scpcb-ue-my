@@ -1521,6 +1521,7 @@ Function InitStats%()
 	me\Playable = True : me\SelectedEnding = -1
 	
 	HideDistance = 17.0
+	CanSave = 2
 	as\Timer = 70.0 * 120.0
 	
 	If opt\DebugMode Then
@@ -1528,6 +1529,8 @@ Function InitStats%()
 	Else
 		ClearCheats()
 	EndIf
+	
+	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
 	LoadAchievementsFile()
 End Function

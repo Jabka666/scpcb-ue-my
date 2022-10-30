@@ -123,7 +123,7 @@ SeedRnd(MilliSecs2())
 Global WireFrameState%
 
 Global GameSaved%
-Global CanSave% = True
+Global CanSave%
 
 If opt\PlayStartup Then PlayStartupVideos()
 
@@ -2165,7 +2165,6 @@ Function UpdateGame%()
 			If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then
 				HideDistance = 17.0
 			EndIf
-			CanSave = True
 			UpdateFog()
 			UpdateDistanceTimer()
 			UpdateDeaf()
@@ -2397,50 +2396,34 @@ Function UpdateGame%()
 		EndIf
 		
 		If KeyHit(key\SAVE) Then
-			If SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
-				If (Not CanSave) Lor QuickLoadPercent > -1 Then
-					RN = PlayerRoom\RoomTemplate\Name
-					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
-						CreateHintMsg(GetLocalString("save", "failed.location"))
-					Else
-						CreateHintMsg(GetLocalString("save", "failed.now"))
-						If QuickLoadPercent > -1 Then
-							CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
+			If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then
+				If QuickLoadPercent > -1 Then CanSave = 0
+				If CanSave = 0 Then ; ~ Scripted location
+					CreateHintMsg(GetLocalString("save", "failed.now"))
+				ElseIf CanSave = 1 ; ~ Endings / Intro location
+					CreateHintMsg(GetLocalString("save", "failed.location"))
+				Else ; ~ Can save
+					If SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
+						If as\Timer <= 70.0 * 5.0 Then
+							CancelAutoSave()
+						Else
+							SaveGame(CurrSave\Name)
 						EndIf
-					EndIf
-				Else
-					If as\Timer <= 70.0 * 5.0 Then
-						CancelAutoSave()
 					Else
-						SaveGame(CurrSave\Name)
+						If SelectedScreen = Null And sc_I\SelectedMonitor = Null Then
+							CreateHintMsg(GetLocalString("save", "failed.screen"))
+						Else
+							SaveGame(CurrSave\Name)
+						EndIf
 					EndIf
 				EndIf
-			ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-				If SelectedScreen = Null And sc_I\SelectedMonitor = Null Then
-					CreateHintMsg(GetLocalString("save", "failed.screen"))
-				Else
-					RN = PlayerRoom\RoomTemplate\Name
-					If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a"
-						CreateHintMsg(GetLocalString("save", "failed.location"))
-					ElseIf (Not CanSave) Lor QuickLoadPercent > -1
-						CreateHintMsg(GetLocalString("save", "failed.now"))
-						If QuickLoadPercent > -1 Then
-							CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
-						EndIf
-					Else
-						If SelectedScreen <> Null Then
-							GameSaved = False
-							me\Playable = True
-							me\DropSpeed = 0.0
-						EndIf
-						SaveGame(CurrSave\Name)
-					EndIf
-				EndIf
+				If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
+				CanSave = 2
 			Else
 				CreateHintMsg(GetLocalString("save", "disable"))
 			EndIf
 		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
-			If (msg\HintTxt <> GetLocalString("save", "saved") And msg\HintTxt <> GetLocalString("save", "failed.location") And msg\HintTxt <> GetLocalString("save", "failed.now")) Lor msg\HintTimer <= 0.0 Then
+			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then
 				CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
 			EndIf
 			If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
@@ -7060,11 +7043,9 @@ Function UpdateMenu%()
 			Local QuitButton% = 85
 			
 			If SelectedDifficulty\SaveType = SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
-				Local RN$ = PlayerRoom\RoomTemplate\Name
 				Local AbleToSave% = True
 				
-				If RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a" Then AbleToSave = False
-				If (Not CanSave) Then AbleToSave = False
+				If CanSave < 2 Then AbleToSave = False
 				If AbleToSave Then
 					QuitButton = 160
 					If UpdateMainMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit")) Then
@@ -7609,7 +7590,7 @@ Function RenderMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
+					Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
 					Text(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 					If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 						RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
@@ -8074,7 +8055,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	HideDistance = 0.0
 	
-	GameSaved = 0
+	GameSaved = False
+	CanSave = 0
 	
 	NullSelectedStuff()
 	

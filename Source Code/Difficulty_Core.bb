@@ -25,8 +25,8 @@ Const ESOTERIC% = 4
 ; ~ Save Types ID Constants
 ;[Block]
 Const SAVE_ANYWHERE% = 0
-Const SAVE_ON_QUIT% = 1
-Const SAVE_ON_SCREENS% = 2
+Const SAVE_ON_SCREENS% = 1
+Const SAVE_ON_QUIT% = 2
 Const NO_SAVES% = 3
 ;[End Block]
 

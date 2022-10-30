@@ -503,7 +503,7 @@ Function SaveGame%(File$)
 			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
 		Else
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
-			If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
+			as\Timer = 70.0 * 120.0
 		EndIf
 		CreateHintMsg(GetLocalString("save", "saved"))
 	EndIf
@@ -2158,19 +2158,19 @@ End Type
 Global as.AutoSave = New AutoSave
 
 Function UpdateAutoSave%()
-	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor (Not CanSave) Lor (Not me\Playable) Lor me\Zombie Then
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 2 Lor (Not me\Playable) Lor me\Zombie Then
 		CancelAutoSave()
 		Return
 	EndIf
 	
 	If as\Timer <= 0.0 Then
-		SaveGame(CurrSave\Name + "_" + as\Amount)
 		as\Amount = as\Amount + 1
 		If as\Amount >= 5 Then as\Amount = 0
+		SaveGame(CurrSave\Name + "_" + as\Amount)
 	Else
 		as\Timer = as\Timer - fps\Factor[0]
 		If as\Timer <= 70.0 * 5.0 Then
-			CreateHintMsg(Format(GetLocalString("save", "autosave.in"),Str(Int(Ceil(as\Timer) / 70.0))))
+			CreateHintMsg(Format(GetLocalString("save", "autosave.in"), Str(Int(Ceil(as\Timer) / 70.0))))
 		EndIf
 	EndIf
 End Function
@@ -2179,7 +2179,7 @@ Function CancelAutoSave%()
 	If as\Timer <= 70.0 * 5.0 Then
 		CreateHintMsg(GetLocalString("save", "autosave.canceled"))
 	EndIf
-	If as\Timer <> 70.0 * 120.0 Then as\Timer = 70.0 * 120.0
+	as\Timer = 70.0 * 120.0
 End Function
 
 Function SaveAchievementsFile%()

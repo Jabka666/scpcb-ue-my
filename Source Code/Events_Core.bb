@@ -886,6 +886,7 @@ Function UpdateEvents%()
 				;[Block]
 				If (Not me\Terminated) And e\EventState2 = 0.0 Then
 					me\Zone = 0
+					CanSave = 1
 					If e\EventState3 > 0.0 Then
 						ShouldPlay = 13
 						; ~ Slow the player down to match his speed to the guards
@@ -1987,12 +1988,7 @@ Function UpdateEvents%()
 					e\EventState2 = 1.0
 				EndIf
 				
-				If PlayerRoom <> e\room Then
-					CanSave = True
-					RemoveEvent(e)
-				Else
-					CanSave = False
-				EndIf	
+				If PlayerRoom <> e\room Then RemoveEvent(e)
 				;[End Block]
 			Case e_butt_ghost
 				;[Block]
@@ -6363,7 +6359,7 @@ Function UpdateEvents%()
 					EndIf
 					; ~ The event is started when the player picks up SCP-1123 (in Items.bb/UpdateItems())
 					If e\EventState > 0.0 Then
-						CanSave = False
+						CanSave = 0
 					EndIf
 					If e\EventState = 1.0 Then
 						; ~ Saving me\Injuries and me\Bloodloss, so that the player won't be healed automatically
@@ -6492,7 +6488,6 @@ Function UpdateEvents%()
 					ElseIf e\EventState = 7.0
 						PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(me\Collider)
-						CanSave = True
 						me\LightFlash = 6.0
 						me\BlurTimer = 500.0
 						me\Injuries = me\PrevInjuries
@@ -9368,7 +9363,7 @@ Function UpdateEndings%()
 					Else
 						UpdateSky(Sky)
 						
-						CanSave = False
+						CanSave = 1
 						
 						For r.Rooms = Each Rooms
 							HideEntity(r\OBJ)
@@ -9723,7 +9718,7 @@ Function UpdateEndings%()
 					Else
 						UpdateSky(Sky)
 						
-						CanSave = False
+						CanSave = 1
 						
 						For r.Rooms = Each Rooms
 							HideEntity(r\OBJ)
