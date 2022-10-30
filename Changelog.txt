@@ -9,6 +9,8 @@ General:
 
 - Finally made the «Bright mode» similar to original game.
 
+- Converted .ini files to UTF-8 format.
+
 Rooms:
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
 
@@ -29,6 +31,8 @@ Items:
 
 Menu:
 - Added degree symbol for FOV value.
+
+- Tiny improvement for difficulties color.
 
 - Removed extra spacing in credits.
 
@@ -53,6 +57,7 @@ Bug fixes:
 - Fixed SCP-049 removing a hazmat suit and SCP-714 at the same time.
 - Fixed position of the SCP-895 pivot attracting player's camera while wearing night vision goggles.
 - Fixed "ACCESS CODE" string going out of button image on different resolutions.
+- Fixed autosave option text color when option is disabled.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

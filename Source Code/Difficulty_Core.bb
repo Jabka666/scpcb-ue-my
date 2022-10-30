@@ -60,7 +60,7 @@ difficulties[EUCLID]\AggressiveNPCs = False
 difficulties[EUCLID]\InventorySlots = 6
 difficulties[EUCLID]\SaveType = SAVE_ON_SCREENS
 difficulties[EUCLID]\OtherFactors = NORMAL
-SetDifficultyColor(EUCLID, 200, 200, 0)
+SetDifficultyColor(EUCLID, 200, 200, 50)
 
 difficulties[KETER] = New Difficulty
 difficulties[KETER]\Name = GetLocalString("menu", "new.keter")
@@ -69,7 +69,7 @@ difficulties[KETER]\AggressiveNPCs = True
 difficulties[KETER]\InventorySlots = 4
 difficulties[KETER]\SaveType = SAVE_ON_QUIT
 difficulties[KETER]\OtherFactors = HARD
-SetDifficultyColor(KETER, 200, 0, 0)
+SetDifficultyColor(KETER, 200, 50, 50)
 
 difficulties[APOLLYON] = New Difficulty
 difficulties[APOLLYON]\Name = GetLocalString("menu", "new.apollyon")
