@@ -146,6 +146,17 @@
 		ZiYueCommentary
 		Snoe
 
+*Translators
+
+		Chinese Simplified localization,
+by "ZiYueCommentary"
+
+		Russian localization,
+by "CreatorMasters" and "Jabka"
+
+		French localization,
+by "EpicDasherFR"
+
 *Mod Testers
 
 		Alexey Krasnov ("TaskeWSH")
