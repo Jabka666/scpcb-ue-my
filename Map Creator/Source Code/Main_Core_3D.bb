@@ -189,14 +189,14 @@ Global PrevTime% = MilliSecs()
 Global ElapsedTime#
 
 Function CatchErrors(Location$)
-	InitErrorMsgs(7)
+	InitErrorMsgs(7, True)
 	SetErrorMsg(0, "An error occured in SCP:CB Ultimate Edition Map Creator" + ". Engine version: " + SystemProperty("blitzversion") + Chr(10))
 	SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
 	SetErrorMsg(2, "CPU: " + GetEnv("PROCESSOR_IDENTIFIER") + " (Arch: " + GetEnv("PROCESSOR_ARCHITECTURE") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)" + Chr(10))
 	SetErrorMsg(3, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)" + Chr(10))
 	SetErrorMsg(4, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
 	SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
-	SetErrorMsg(6, "Error located in: " + Location + Chr(10) + Chr(10) + "Please take a screenshot of this error and send it to us!") 
+	SetErrorMsg(6, "Error located in: " + Location + Chr(10) + "Caught exception: _CaughtError_" + Chr(10) + Chr(10) + "Please take a screenshot of this error and send it to us!") 
 End Function
 
 Repeat

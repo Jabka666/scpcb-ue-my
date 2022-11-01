@@ -2100,7 +2100,7 @@ Function InitLoadingScreens%(File$)
 				If ls\Txt[i] <> "" Then ls\TxtAmount = ls\TxtAmount + 1
 			Next
 			
-			ls\DisableBackground = Int(GetFileLocalString(File, TemporaryString, "DisableBackground", 0))
+			ls\DisableBackground = StringToBoolean((GetFileLocalString(File, TemporaryString, "DisableBackground", 0)))
 			
 			Select GetFileLocalString(File, TemporaryString, "Align X")
 				Case "Left"

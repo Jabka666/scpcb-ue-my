@@ -30,11 +30,7 @@ MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
 MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 
 Global SplitSpace$
-If Int(GetLocalString("global", "splitwithspace")) Then
-	SplitSpace = " " 
-Else 
-	SplitSpace = ""
-EndIf
+If StringToBoolean(GetLocalString("global", "splitwithspace")) Then SplitSpace = " " Else SplitSpace = ""
 
 Type Mouse
 	Field MouseHit1%, MouseHit2%
@@ -319,6 +315,9 @@ Function CreateConsoleMultiMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = Fal
 End Function
 
 Function UpdateConsole%()
+	
+	SetFont 0
+	Text 0,0,0
 	If (Not opt\CanOpenConsole) Then
 		ConsoleOpen = False
 		Return
@@ -1982,18 +1981,19 @@ End Type
 
 Global I_Zone.MapZones = New MapZones
 
-InitErrorMsgs(11)
+InitErrorMsgs(12, True)
 SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
 
 SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
 SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "os"), SystemProperty("os"), "{0}"), (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32), "{1}"), SystemProperty("osbuild"), "{2}"))
 SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
 SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
-SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}") + Chr(10))
 
-SetErrorMsg(10, Chr(10) + GetLocalString("error", "shot")) 
+SetErrorMsg(10, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
+SetErrorMsg(11, Chr(10) + GetLocalString("error", "shot")) 
 
 Function CatchErrors%(Location$)
+	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
 	SetErrorMsg(9, Format(GetLocalString("error", "error"), Location))
 End Function
 
