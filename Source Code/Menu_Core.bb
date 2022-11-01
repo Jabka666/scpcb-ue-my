@@ -310,8 +310,6 @@ Function UpdateMainMenu%()
 						
 						If UpdateMainMenuTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i])) Then SelectedDifficulty = difficulties[i]
 						
-						If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
-						
 						If PrevSelectedDifficulty <> SelectedDifficulty Then
 							If PrevSelectedDifficulty = difficulties[ESOTERIC] Then
 								mm\ShouldDeleteGadgets = True
@@ -1667,7 +1665,7 @@ Function RenderMainMenu%()
 							
 							y = y + (30 * MenuScale)
 							
-							Color(255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
+							Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
 							Text(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
@@ -2093,16 +2091,16 @@ Function InitLoadingScreens%(File$)
 			ls\ID = LoadingScreenAmount
 			
 			ls\Title = TemporaryString
-			ls\ImgPath = GetFileLocalString(File, TemporaryString, "ImgPath", "")
+			ls\ImgPath = GetFileLocalString(File, TemporaryString, "ImgPath")
 			
-			For i = 0 To 4
+			For i = 0 To 3
 				ls\Txt[i] = GetFileLocalString(File, TemporaryString, "Desc" + (i + 1))
 				If ls\Txt[i] <> "" Then ls\TxtAmount = ls\TxtAmount + 1
 			Next
 			
 			ls\DisableBackground = StringToBoolean((GetFileLocalString(File, TemporaryString, "DisableBackground", 0)))
 			
-			Select GetFileLocalString(File, TemporaryString, "Align X")
+			Select GetFileLocalString(File, TemporaryString, "AlignX")
 				Case "Left"
 					;[Block]
 					ls\AlignX = -1
@@ -2117,7 +2115,7 @@ Function InitLoadingScreens%(File$)
 					;[End Block]
 			End Select 
 			
-			Select GetFileLocalString(File, TemporaryString, "Align Y")
+			Select GetFileLocalString(File, TemporaryString, "AlignY")
 				Case "Top", "Up"
 					;[Block]
 					ls\AlignY = -1

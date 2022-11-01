@@ -25,8 +25,8 @@ Const ESOTERIC% = 4
 ; ~ Save Types ID Constants
 ;[Block]
 Const SAVE_ANYWHERE% = 0
-Const SAVE_ON_QUIT% = 1
-Const SAVE_ON_SCREENS% = 2
+Const SAVE_ON_SCREENS% = 1
+Const SAVE_ON_QUIT% = 2
 Const NO_SAVES% = 3
 ;[End Block]
 
@@ -60,7 +60,7 @@ difficulties[EUCLID]\AggressiveNPCs = False
 difficulties[EUCLID]\InventorySlots = 6
 difficulties[EUCLID]\SaveType = SAVE_ON_SCREENS
 difficulties[EUCLID]\OtherFactors = NORMAL
-SetDifficultyColor(EUCLID, 200, 200, 0)
+SetDifficultyColor(EUCLID, 200, 200, 50)
 
 difficulties[KETER] = New Difficulty
 difficulties[KETER]\Name = GetLocalString("menu", "new.keter")
@@ -69,7 +69,7 @@ difficulties[KETER]\AggressiveNPCs = True
 difficulties[KETER]\InventorySlots = 4
 difficulties[KETER]\SaveType = SAVE_ON_QUIT
 difficulties[KETER]\OtherFactors = HARD
-SetDifficultyColor(KETER, 200, 0, 0)
+SetDifficultyColor(KETER, 200, 50, 50)
 
 difficulties[APOLLYON] = New Difficulty
 difficulties[APOLLYON]\Name = GetLocalString("menu", "new.apollyon")
@@ -89,7 +89,7 @@ difficulties[ESOTERIC]\SaveType = SAVE_ANYWHERE
 difficulties[ESOTERIC]\OtherFactors = EASY
 SetDifficultyColor(ESOTERIC, 200, 50, 200)
 
-SelectedDifficulty = difficulties[SAFE]
+SelectedDifficulty = difficulties[EUCLID]
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

@@ -1265,10 +1265,10 @@ Function LoadEntities%()
 	QuickLoadIcon = ScaleImage2(QuickLoadIcon, MenuScale, MenuScale)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
-		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvName", "a" + Str(i) + ",AchvName")
-		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvDesc", "a" + Str(i) + ",AchvDesc")
+		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvName")
+		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvDesc")
 		
-		Local Image$ = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvImage", "a" + Str(i) + ",AchvImage")
+		Local Image$ = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvImage")
 		
 		achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + Image + ".png")
 		achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
@@ -1521,6 +1521,7 @@ Function InitStats%()
 	me\Playable = True : me\SelectedEnding = -1
 	
 	HideDistance = 17.0
+	CanSave = 2
 	as\Timer = 70.0 * 120.0
 	
 	If opt\DebugMode Then
@@ -1528,6 +1529,8 @@ Function InitStats%()
 	Else
 		ClearCheats()
 	EndIf
+	
+	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
 	LoadAchievementsFile()
 End Function
