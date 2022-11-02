@@ -315,9 +315,6 @@ Function CreateConsoleMultiMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = Fal
 End Function
 
 Function UpdateConsole%()
-	
-	SetFont 0
-	Text 0,0,0
 	If (Not opt\CanOpenConsole) Then
 		ConsoleOpen = False
 		Return
