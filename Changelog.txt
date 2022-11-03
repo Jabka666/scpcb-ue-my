@@ -6,6 +6,7 @@ General:
 - Added a hitbox in "room2_servers_hcz" preventing SCP-096 to be triggered through the bloody windows.
 - Added some folders organization.
 - Added language selection.
+- Added new console messages.
 
 - Finally made the «Bright mode» similar to original game.
 
@@ -58,6 +59,7 @@ Bug fixes:
 - Fixed position of the SCP-895 pivot attracting player's camera while wearing night vision goggles.
 - Fixed "ACCESS CODE" string going out of button image on different resolutions.
 - Fixed autosave option text color when option is disabled.
+- Fixed an issue caused SCP-106's collider to linger while using «disable106» command.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.
@@ -344,10 +346,10 @@ General:
 - Added anisotropic filtering.
 - Added support for resolutions of up to 4k.
 - Added Unicode support.
-- Added subtitles.
-- Added FOV.
+- Added subtitles feature.
+- Added FOV feature.
 - Added warning startup video.
-- Added Apollyon difficulty.
+- Added «Apollyon» difficulty.
 - Added extreme difficulty factor.
 - Added screenshot key.
 - Added auto save option.
@@ -356,7 +358,7 @@ General:
 - Added ability to erase words faster.
 - Added inventory size scaling with difficulty and custom inventory options.
 
-- Removed Antialiased Text.
+- Removed Antialiased Text feature.
 
 - Renamed most files.
 
@@ -576,7 +578,6 @@ Map Creator:
 - Sorted rooms by zones.
 
 Bug Fixes:
-
 - Fixed a sound for big containment doors locked by SCP-079.
 - Fixed appearing of the gas from SCP-035's containment chamber in Maintenance Tunnels.
 - Fixes for SCP-1048-A:
