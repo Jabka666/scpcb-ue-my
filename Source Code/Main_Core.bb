@@ -954,6 +954,8 @@ Function UpdateConsole%()
 					n_I\Curr106\Idle = 1
 					n_I\Curr106\State = 200000.0
 					n_I\Curr106\Contained = True
+					HideEntity(n_I\Curr106\Collider)
+					HideEntity(n_I\Curr106\OBJ)
 					;[End Block]
 				Case "enable106"
 					;[Block]
