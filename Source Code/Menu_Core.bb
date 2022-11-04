@@ -2187,7 +2187,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		LoadingScreenText = 0
 		InitLoadingTextColor(255, 255, 255)
 		
-		Temp = Rand(1, LoadingScreenAmount)
+		Temp = Rand(LoadingScreenAmount)
 		For ls.LoadingScreens = Each LoadingScreens
 			If ls\ID = Temp Then
 				If (Not ls\Img) Then
@@ -2333,7 +2333,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			StrTemp = SelectedLoadingScreen\Txt[0]
 			Temp = Int(Len(SelectedLoadingScreen\Txt[0]) - Rand(5))
 			For i = 0 To Rand(10, 15)
-				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
+				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
 			Next		
 			SetFont(fo\FontID[Font_Default])
 			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)		

@@ -940,7 +940,7 @@ Function LoadEvents%()
 	
 	CreateEvent("room2_2_lcz", "room2_2_lcz", 0, 1.0)
 	
-	CreateEvent("room2_elevator", "room2_elevator", Rand(1, 2))
+	CreateEvent("room2_elevator", "room2_elevator", Rand(2))
 	
 	CreateEvent("room3_storage", "room3_storage", 0)
 	
@@ -1002,13 +1002,13 @@ Function LoadEvents%()
 	CreateEvent("door_closing", "room3_2_hcz", 0, 0.1)	
 	
 	If Rand(2) = 1 Then
-		CreateEvent("106_victim", "room3_lcz", Rand(1, 2))
+		CreateEvent("106_victim", "room3_lcz", Rand(2))
 		CreateEvent("106_sinkhole", "room3_2_lcz", Rand(2, 3))
 	Else
-		CreateEvent("106_victim", "room3_2_lcz", Rand(1, 2))
+		CreateEvent("106_victim", "room3_2_lcz", Rand(2))
 		CreateEvent("106_sinkhole", "room3_lcz", Rand(2, 3))
 	EndIf
-	CreateEvent("106_sinkhole", "room4_lcz", Rand(1, 2))
+	CreateEvent("106_sinkhole", "room4_lcz", Rand(2))
 	
 	CreateEvent("cont1_079", "cont1_079", 0)	
 	
