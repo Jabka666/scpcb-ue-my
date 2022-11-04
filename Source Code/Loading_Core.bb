@@ -940,7 +940,7 @@ Function LoadEvents%()
 	
 	CreateEvent("room2_2_lcz", "room2_2_lcz", 0, 1.0)
 	
-	CreateEvent("room2_elevator", "room2_elevator", Rand(2))
+	CreateEvent("room2_elevator", "room2_elevator", Rand(1, 2))
 	
 	CreateEvent("room3_storage", "room3_storage", 0)
 	
@@ -1002,13 +1002,13 @@ Function LoadEvents%()
 	CreateEvent("door_closing", "room3_2_hcz", 0, 0.1)	
 	
 	If Rand(2) = 1 Then
-		CreateEvent("106_victim", "room3_lcz", Rand(2))
+		CreateEvent("106_victim", "room3_lcz", Rand(1, 2))
 		CreateEvent("106_sinkhole", "room3_2_lcz", Rand(2, 3))
 	Else
-		CreateEvent("106_victim", "room3_2_lcz", Rand(2))
+		CreateEvent("106_victim", "room3_2_lcz", Rand(1, 2))
 		CreateEvent("106_sinkhole", "room3_lcz", Rand(2, 3))
 	EndIf
-	CreateEvent("106_sinkhole", "room4_lcz", Rand(2))
+	CreateEvent("106_sinkhole", "room4_lcz", Rand(1, 2))
 	
 	CreateEvent("cont1_079", "cont1_079", 0)	
 	
@@ -1213,390 +1213,6 @@ Function LoadWayPoints%(LoadingStart% = 55)
 				EntityParent(tLine, w\OBJ)
 			EndIf
 		Next
-	Next
-End Function
-
-Global SoundEmitter%
-Global TempSounds%[10]
-Global TempSoundCHN%
-Global TempSoundIndex% = 0
-
-; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Global Music$[30]
-
-Music[0] = "LightContainmentZone"
-Music[1] = "HeavyContainmentZone"
-Music[2] = "EntranceZone"
-Music[3] = "PD"
-Music[4] = "Cont_079"
-Music[5] = "Gate_B1"
-Music[6] = "Gate_B2"
-Music[7] = "Room3_storage"
-Music[8] = "Cont_049"
-Music[9] = "Cont_860_1"
-Music[10] = "106Chase"
-Music[11] = "Menu"
-Music[12] = "860_2Chase"
-Music[13] = "Cont_173_Intro"
-Music[14] = "Using178"
-Music[15] = "PDTrench"
-Music[16] = "Cont_205"
-Music[17] = "Gate_A"
-Music[18] = "1499"
-Music[19] = "1499_1Chase"
-Music[20] = "049Chase"
-Music[21] = "..\Ending\MenuBreath"
-Music[22] = "Cont_914"
-Music[23] = "Ending"
-Music[24] = "Credits"
-Music[25] = "SaveMeFrom"
-Music[26] = "Cont_106"
-Music[27] = "Cont_035"
-Music[28] = "Cont_409"
-Music[29] = "MaintenanceTunnels"
-
-Global MusicCHN%
-MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)
-
-Global NowPlaying% = 2, ShouldPlay% = 11
-Global CurrMusic% = True
-
-Dim OpenDoorSFX%(5, 2), CloseDoorSFX%(3, 2)
-Global BigDoorErrorSFX%[3]
-
-Global KeyCardSFX1% 
-Global KeyCardSFX2% 
-Global ScannerSFX1%
-Global ScannerSFX2%
-
-Global DoorBudgeSFX1%
-Global DoorBudgeSFX2%
-Global DoorLockSFX%
-
-Global OpenDoorFastSFX%
-Global CautionSFX% 
-
-Global NuclearSirenSFX%
-
-Global CameraSFX% 
-
-Global StoneDragSFX% 
-
-Global GunshotSFX% 
-Global Gunshot2SFX% 
-Global Gunshot3SFX% 
-Global BulletHitSFX% 
-
-Global TeslaIdleSFX% 
-Global TeslaActivateSFX% 
-Global TeslaPowerUpSFX% 
-Global TeslaShockSFX%
-
-Global MagnetUpSFX%, MagnetDownSFX%
-Global FemurBreakerSFX%
-Global EndBreathCHN%
-Global EndBreathSFX%
-
-Global CrouchSFX%
-
-Global DecaySFX%[5]
-
-Global BurstSFX% 
-
-Global HissSFX%
-
-Global RustleSFX%[6]
-
-Global Use914SFX%
-Global Death914SFX% 
-
-Global DripSFX%[4]
-
-Global KnobSFX%[2]
-
-Global LeverSFX%, LightSFX% 
-Global ButtGhostSFX% 
-
-Dim RadioSFX%(2, 8) 
-
-Global RadioSquelch% 
-Global RadioStatic% 
-Global RadioStatic895%
-Global RadioBuzz% 
-
-Global SCRAMBLESFX%
-Global SCRAMBLECHN%
-
-Global NVGSFX%[2]
-
-Global LowBatterySFX%[2]
-Global LowBatteryCHN%[2]
-
-Global ElevatorBeepSFX%, ElevatorMoveSFX% 
-
-Global PickSFX%[4]
-
-Global AmbientSFXCHN%, CurrAmbientSFX%
-Global AmbientSFXAmount%[6]
-
-Dim AmbientSFX%(5, 15)
-
-Global OldManSFX%[9]
-
-Global Scp173SFX%[3]
-
-Global HorrorSFX%[20]
-
-Global MissSFX%
-
-Global IntroSFX%[12]
-
-Global AlarmSFX%[4]
-
-Global CommotionState%[25]
-
-Global HeartBeatSFX% 
-
-Global VomitSFX%
-
-Dim BreathSFX%(1, 4)
-Global BreathCHN%
-
-Global BreathGasRelaxedSFX%
-Global BreathGasRelaxedCHN%
-
-Global NeckSnapSFX%[3]
-
-Global DamageSFX%[14]
-
-Global MTFSFX%[2]
-
-Global CoughSFX%[3]
-Global CoughCHN%, VomitCHN%
-
-Global MachineSFX% 
-Global ApacheSFX%
-
-Global CurrStepSFX%
-Dim StepSFX%(2, 1, 7) ; ~ (Normal / Metal, Walk / Run, ID)
-
-Global Step2SFX%[15]
-
-Global VehicleSFX%[2]
-
-Global ExplosionSFX%
-
-Global RadioCHN%[7]
-
-Global IntercomStreamCHN%
-
-Global PlayCustomMusic% = False, CustomMusic% = 0
-
-Global UserTrackCheck% = 0, UserTrackCheck2% = 0
-Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
-Global UserTrackName$[256]
-
-Function LoadSounds%()
-	Local i%
-	
-	RenderLoading(45, GetLocalString("loading", "sounds"))
-	
-	For i = 0 To 2
-		OpenDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorOpen" + (i + 1) + ".ogg") ; ~ Also one-sided door
-		CloseDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorClose" + (i + 1) + ".ogg") ; ~ Also one-sided door
-		OpenDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + (i + 1) + ".ogg")
-		CloseDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + (i + 1) + ".ogg")
-		OpenDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Open" + (i + 1) + ".ogg")
-		CloseDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Close" + (i + 1) + ".ogg")
-		OpenDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + (i + 1) + ".ogg")
-		CloseDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + (i + 1) + ".ogg")
-		OpenDoorSFX(OFFICE_DOOR, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + (i + 1) + ".ogg")
-		OpenDoorSFX(WOODEN_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + (i + 1) + ".ogg")
-		BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + (i + 1) + ".ogg")
-	Next
-	
-	KeyCardSFX1 = LoadSound_Strict("SFX\Interact\KeyCardUse1.ogg")
-	KeyCardSFX2 = LoadSound_Strict("SFX\Interact\KeyCardUse2.ogg")
-	ScannerSFX1 = LoadSound_Strict("SFX\Interact\ScannerUse1.ogg")
-	ScannerSFX2 = LoadSound_Strict("SFX\Interact\ScannerUse2.ogg")
-	
-	DoorBudgeSFX1 = LoadSound_Strict("SFX\Interact\DoorBudge1.ogg")
-	DoorBudgeSFX2 = LoadSound_Strict("SFX\Interact\DoorBudge2.ogg")
-	
-	DoorLockSFX = LoadSound_Strict("SFX\Interact\DoorLock.ogg")
-	
-	OpenDoorFastSFX = LoadSound_Strict("SFX\Door\DoorOpenFast.ogg")
-	CautionSFX = LoadSound_Strict("SFX\Room\LockroomSiren.ogg")
-	
-	CameraSFX = LoadSound_Strict("SFX\General\Camera.ogg") 
-	
-	StoneDragSFX = LoadSound_Strict("SFX\SCP\173\StoneDrag.ogg")
-	
-	GunshotSFX = LoadSound_Strict("SFX\General\Gunshot.ogg")
-	Gunshot2SFX = LoadSound_Strict("SFX\General\Gunshot2.ogg")
-	Gunshot3SFX = LoadSound_Strict("SFX\General\BulletMiss.ogg")
-	BulletHitSFX = LoadSound_Strict("SFX\General\BulletHit.ogg")
-	
-	TeslaIdleSFX = LoadSound_Strict("SFX\Room\Tesla\Idle.ogg")
-	TeslaActivateSFX = LoadSound_Strict("SFX\Room\Tesla\WindUp.ogg")
-	TeslaPowerUpSFX = LoadSound_Strict("SFX\Room\Tesla\PowerUp.ogg")
-	TeslaShockSFX = LoadSound_Strict("SFX\Room\Tesla\Shock.ogg")
-	
-	MagnetUpSFX = LoadSound_Strict("SFX\Room\106Chamber\MagnetUp.ogg") 
-	MagnetDownSFX = LoadSound_Strict("SFX\Room\106Chamber\MagnetDown.ogg")
-	
-	For i = 0 To 3
-		DecaySFX[i] = LoadSound_Strict("SFX\SCP\106\Decay" + i + ".ogg")
-	Next
-	
-	BurstSFX = LoadSound_Strict("SFX\Room\TunnelBurst.ogg")
-	
-	HissSFX = LoadSound_Strict("SFX\General\Hiss.ogg")
-	
-	For i = 0 To 5
-		RustleSFX[i] = LoadSound_Strict("SFX\SCP\372\Rustle" + i + ".ogg")
-	Next
-	
-	Death914SFX = LoadSound_Strict("SFX\SCP\914\PlayerDeath.ogg") 
-	Use914SFX = LoadSound_Strict("SFX\SCP\914\PlayerUse.ogg")
-	MachineSFX = LoadSound_Strict("SFX\SCP\914\Refining.ogg")
-	
-	For i = 0 To 3
-		DripSFX[i] = LoadSound_Strict("SFX\Character\D9341\BloodDrip" + i + ".ogg")
-	Next
-	
-	LeverSFX = LoadSound_Strict("SFX\Interact\LeverFlip.ogg") 
-	
-	LightSFX = LoadSound_Strict("SFX\General\LightSwitch.ogg")
-	
-	ButtGhostSFX = LoadSound_Strict("SFX\SCP\Joke\789J.ogg")
-	
-	RadioSFX(1, 0) = LoadSound_Strict("SFX\Radio\RadioAlarm.ogg")
-	RadioSFX(1, 1) = LoadSound_Strict("SFX\Radio\RadioAlarm2.ogg")
-	For i = 0 To 8
-		RadioSFX(2, i) = LoadSound_Strict("SFX\Radio\SCPRadio" + i + ".ogg")
-	Next
-	RadioSquelch = LoadSound_Strict("SFX\Radio\Squelch.ogg")
-	RadioStatic = LoadSound_Strict("SFX\Radio\Static.ogg")
-	RadioStatic895 = LoadSound_Strict("SFX\Radio\Static895.ogg")
-	RadioBuzz = LoadSound_Strict("SFX\Radio\Buzz.ogg")
-	
-	ElevatorBeepSFX = LoadSound_Strict("SFX\General\Elevator\Beep.ogg") 
-	ElevatorMoveSFX = LoadSound_Strict("SFX\General\Elevator\Moving.ogg") 
-	
-	For i = 0 To 3
-		PickSFX[i] = LoadSound_Strict("SFX\Interact\PickItem" + i + ".ogg")
-	Next
-	
-	; ~ 0 = Light Containment Zone
-	; ~ 1 = Heavy Containment Zone
-	; ~ 2 = Entrance Zone
-	; ~ 3 = General
-	; ~ 4 = Pre-Breach
-	; ~ 5 = SCP-860-1
-	AmbientSFXAmount[0] = 8 
-	AmbientSFXAmount[1] = 11
-	AmbientSFXAmount[2] = 12
-	AmbientSFXAmount[3] = 15 
-	AmbientSFXAmount[4] = 5
-	AmbientSFXAmount[5] = 10
-	
-	For i = 0 To 2
-		OldManSFX[i] = LoadSound_Strict("SFX\SCP\106\Corrosion" + (i + 1) + ".ogg")
-	Next
-	OldManSFX[3] = LoadSound_Strict("SFX\SCP\106\Laugh.ogg")
-	OldManSFX[4] = LoadSound_Strict("SFX\SCP\106\Breathing.ogg")
-	OldManSFX[5] = LoadSound_Strict("SFX\Room\PocketDimension\Enter.ogg")
-	For i = 0 To 2
-		OldManSFX[i + 6] = LoadSound_Strict("SFX\SCP\106\WallDecay" + (i + 1) + ".ogg")
-	Next
-	
-	For i = 0 To 2
-		Scp173SFX[i] = LoadSound_Strict("SFX\SCP\173\Rattle" + (i + 1) + ".ogg")
-	Next
-	
-	For i = 0 To 11
-		HorrorSFX[i] = LoadSound_Strict("SFX\Horror\Horror" + i + ".ogg")
-	Next
-	For i = 14 To 15
-		HorrorSFX[i] = LoadSound_Strict("SFX\Horror\Horror" + i + ".ogg")
-	Next
-	
-	For i = 5 To 7
-		IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Bang" + (i - 4) + ".ogg")
-	Next
-	For i = 8 To 10
-		IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Light" + (i - 7) + ".ogg")
-	Next
-	IntroSFX[11] = LoadSound_Strict("SFX\Room\Intro\173Vent.ogg")
-	
-	For i = 0 To 3
-		AlarmSFX[i] = LoadSound_Strict("SFX\Alarm\Alarm" + (i + 1) + ".ogg")
-	Next
-	
-	HeartBeatSFX = LoadSound_Strict("SFX\Character\D9341\HeartBeat.ogg")
-	
-	For i = 0 To 4
-		BreathSFX(0, i) = LoadSound_Strict("SFX\Character\D9341\Breath" + i + ".ogg")
-		BreathSFX(1, i) = LoadSound_Strict("SFX\Character\D9341\Breath" + i + "Gas.ogg")
-	Next
-	
-	For i = 0 To 2
-		NeckSnapSFX[i] = LoadSound_Strict("SFX\SCP\173\NeckSnap" + (i + 1) + ".ogg")
-	Next
-	
-	For i = 0 To 13
-		DamageSFX[i] = LoadSound_Strict("SFX\Character\D9341\Damage" + (i + 1) + ".ogg")
-	Next
-	
-	For i = 0 To 2
-		CoughSFX[i] = LoadSound_Strict("SFX\Character\D9341\Cough" + (i + 1) + ".ogg")
-	Next
-	
-	ApacheSFX = LoadSound_Strict("SFX\Character\Apache\Propeller.ogg")
-	
-	For i = 0 To 7
-		StepSFX(0, 0, i) = LoadSound_Strict("SFX\Step\Step" + (i + 1) + ".ogg")
-		StepSFX(1, 0, i) = LoadSound_Strict("SFX\Step\StepMetal" + (i + 1) + ".ogg")
-		StepSFX(0, 1, i) = LoadSound_Strict("SFX\Step\Run" + (i + 1) + ".ogg")
-		StepSFX(1, 1, i) = LoadSound_Strict("SFX\Step\RunMetal" + (i + 1) + ".ogg")
-		If i < 3 Then
-			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
-		EndIf
-	Next
-	For i = 0 To 2
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
-	Next
-	For i = 3 To 5
-		Step2SFX[i] = LoadSound_Strict("SFX\Character\MTF\Step" + (i - 2) + ".ogg")
-	Next
-	For i = 6 To 12
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\SCP\StepMetal" + (i - 5) + ".ogg")
-	Next
-	For i = 13 To 14
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepFluid" + (i - 12) + ".ogg")
-	Next
-	
-	VehicleSFX[0] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
-	VehicleSFX[1] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
-	
-	MissSFX = LoadSound_Strict("SFX\General\Miss.ogg")
-	
-	BreathGasRelaxedSFX = LoadSound_Strict("SFX\Character\D9341\BreathGasRelaxed.ogg")
-	
-	CrouchSFX = LoadSound_Strict("SFX\Character\D9341\Crouch.ogg")
-	
-	SCRAMBLESFX = LoadSound_Strict("SFX\General\SCRAMBLE.ogg")
-	
-	NVGSFX[0] = LoadSound_Strict("SFX\General\NVGOn.ogg")
-	NVGSFX[1] = LoadSound_Strict("SFX\General\NVGOff.ogg")
-	
-	For i = 0 To 1
-		LowBatterySFX[i] = LoadSound_Strict("SFX\General\LowBattery" + (i + 1) + ".ogg")
-	Next
-	
-	For i = 0 To 1
-		KnobSFX[i] = LoadSound_Strict("SFX\Room\914Chamber\Knob" + (i + 1) + ".ogg")
 	Next
 End Function
 
@@ -1862,7 +1478,7 @@ Function LoadEntities%()
 					UserTrackName[UserTrackMusicAmount] = File
 					UserTrackMusicAmount = UserTrackMusicAmount + 1
 				EndIf
-				FreeSound(Test) : Test = 0
+				FreeSound(Test)
 			EndIf
 		Forever
 		CloseDir(Dir)
@@ -1901,7 +1517,7 @@ Function LoadEntities%()
 	CatchErrors("LoadEntities")
 End Function
 
-Function InitOtherStuff%()
+Function InitStats%()
 	me\Playable = True : me\SelectedEnding = -1
 	
 	HideDistance = 17.0
@@ -1929,12 +1545,12 @@ Function InitNewGame%()
 	LoadEntities()
 	LoadSounds()
 	
-	InitOtherStuff()
+	InitStats()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount - 1)
 	
-	RenderLoading(50, GetLocalString("loading", "stuff"))
+	RenderLoading(50, GetLocalString("loading", "stats"))
 	
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0 : me\Funds = Rand(0, 6)
 	
@@ -2104,7 +1720,7 @@ Function InitLoadGame%()
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x#, z#
 	
-	InitOtherStuff()
+	InitStats()
 	LoadWayPoints()
 	
 	For d.Doors = Each Doors

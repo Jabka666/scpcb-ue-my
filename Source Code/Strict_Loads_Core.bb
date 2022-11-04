@@ -112,8 +112,6 @@ Function PlaySound_Strict%(SoundHandle%)
 End Function
 
 Function LoadSound_Strict%(File$)
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	
 	Local snd.Sound
 	
 	snd.Sound = New Sound
@@ -128,6 +126,7 @@ Function LoadSound_Strict%(File$)
 	EndIf
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then 
+			If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 			snd\InternalHandle = LoadSound(snd\Name)
 		EndIf
 	EndIf
@@ -163,7 +162,8 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	Local st.Stream = New Stream
 	
-	st\CHN = PlayMusic_Strict(File, CustomMode + TwoD)
+	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
+	st\CHN = PlayMusic(File, CustomMode + TwoD)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg(Format(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File, "{0}"), st\CHN, "{1}"))
@@ -389,32 +389,9 @@ Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextur
 	Return(Tmp) 
 End Function
 
-Function PlayMusic_Strict%(File$, Mode_% = Mode)
-	Local Tmp%
-	
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "music.notfound"), File))
-		Tmp = PlayMusic(File, Mode_)
-		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "music.failed.load"), File))
-	EndIf
-End Function
-
 Function ExecFile_Strict%(File$)
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	ExecFile(File)
-End Function
-
-Function OpenMovie_Strict%(File$)
-	Local Tmp%
-	
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "movie.notfound"), File))
-		Tmp = OpenMovie(File)
-		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "movie.failed.load"), File))
-	EndIf
-	Return(Tmp) 
 End Function
 
 Function OpenFile_Strict%(File$)

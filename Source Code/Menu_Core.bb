@@ -130,7 +130,7 @@ Function UpdateMainMenu%()
 			ShouldPlay = 66
 		ElseIf ShouldPlay = 66
 			If (Not ChannelPlaying(EndBreathCHN)) Then
-				FreeSound_Strict(EndBreathSFX) : EndBreathSFX = 0
+				FreeSound_Strict(EndBreathSFX)
 				ShouldPlay = 11
 			EndIf
 		Else
@@ -680,8 +680,10 @@ Function UpdateMainMenu%()
 											EndIf
 										Next
 										If snd\InternalHandle <> 0 Then
-											FreeSound(snd\InternalHandle) : snd\InternalHandle = 0 : snd\ReleaseTime = 0
+											FreeSound(snd\InternalHandle)
+											snd\InternalHandle = 0
 										EndIf
+										snd\ReleaseTime = 0
 									Next
 								Else
 									For snd.Sound = Each Sound
@@ -722,7 +724,7 @@ Function UpdateMainMenu%()
 											If Test <> 0 Then
 												UserTrackCheck2 = UserTrackCheck2 + 1
 											EndIf
-											FreeSound(Test) : Test = 0
+											FreeSound(Test)
 										EndIf
 									Forever
 									CloseDir(Dir)
@@ -1663,7 +1665,7 @@ Function RenderMainMenu%()
 							
 							y = y + (30 * MenuScale)
 							
-							Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
+							Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
 							Text(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then
 								RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
@@ -2056,7 +2058,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 	PutINIValue(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
 	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	PutINIValue(OptionFile, "Global", "Display Mode", opt\DisplayMode)
-	PutINIValue(OptionFile, "Global", "Language", opt\Language)
 	
 	For i = 0 To 2
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
@@ -2186,7 +2187,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		LoadingScreenText = 0
 		InitLoadingTextColor(255, 255, 255)
 		
-		Temp = Rand(LoadingScreenAmount)
+		Temp = Rand(1, LoadingScreenAmount)
 		For ls.LoadingScreens = Each LoadingScreens
 			If ls\ID = Temp Then
 				If (Not ls\Img) Then
@@ -2332,7 +2333,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			StrTemp = SelectedLoadingScreen\Txt[0]
 			Temp = Int(Len(SelectedLoadingScreen\Txt[0]) - Rand(5))
 			For i = 0 To Rand(10, 15)
-				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
+				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(1, Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
 			Next		
 			SetFont(fo\FontID[Font_Default])
 			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)		
@@ -2722,7 +2723,7 @@ Function UpdateInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
 	Local Length% = Len(aString)
 	
-	If (CursorPos < 0) And (CursorPos <> -1) Then CursorPos = Length
+	If (CursorPos < 0) And (CursorPos <> - 1) Then CursorPos = Length
 	If CursorPos < 0 Then CursorPos = 0
 	
 	If KeyHit(210) Then InsertMode = Not InsertMode ; ~ Insert key
