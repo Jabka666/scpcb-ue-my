@@ -674,20 +674,17 @@ Function UpdateMainMenu%()
 									For snd.Sound = Each Sound
 										For i = 0 To 31
 											If snd\Channels[i] <> 0 Then
-												If ChannelPlaying(snd\Channels[i]) Then
-													StopChannel(snd\Channels[i])
-												EndIf
+												StopChannel(snd\Channels[i])
 											EndIf
 										Next
 										If snd\InternalHandle <> 0 Then
-											FreeSound(snd\InternalHandle)
-											snd\InternalHandle = 0
+											FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 										EndIf
 										snd\ReleaseTime = 0
 									Next
 								Else
 									For snd.Sound = Each Sound
-										If snd\InternalHandle = 0 Then snd\InternalHandle = LoadSound(snd\Name)
+										If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
 									Next
 								EndIf
 								opt\PrevEnableSFXRelease = opt\EnableSFXRelease

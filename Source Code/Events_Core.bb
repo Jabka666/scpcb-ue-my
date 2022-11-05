@@ -4763,22 +4763,17 @@ Function UpdateEvents%()
 							EndIf
 							
 							If (Not e\room\RoomDoors[4]\Open) Then
-								If UpdateLever(e\room\Levers[0])
-									e\room\RoomDoors[4]\Open = True
-									If e\Sound2 <> 0 Then 
-										FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+								For i = 0 To 1
+									If UpdateLever(e\room\Levers[i]) Then
+										e\room\RoomDoors[4]\Open = True
+										If e\Sound2 <> 0 Then 
+											FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+										EndIf
+										e\Sound2 = LoadSound_Strict("SFX\Door\Door2Open1_dist.ogg")
+										e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\RoomDoors[4]\OBJ, 400.0)
+										Exit
 									EndIf
-									e\Sound2 = LoadSound_Strict("SFX\Door\Door2Open1_dist.ogg")
-									e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\RoomDoors[4]\OBJ, 400.0)
-								EndIf
-								If UpdateLever(e\room\Levers[1])
-									e\room\RoomDoors[4]\Open = True
-									If e\Sound2 <> 0 Then 
-										FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-									EndIf
-									e\Sound2 = LoadSound_Strict("SFX\Door\Door2Open1_dist.ogg")
-									e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\RoomDoors[4]\OBJ, 400.0)
-								EndIf
+								Next
 							EndIf
 							
 							UpdateLever(e\room\Levers[0], e\room\RoomDoors[4]\Open)
@@ -5826,14 +5821,13 @@ Function UpdateEvents%()
 								If SoundTransmission Then
 									UpdateButton(e\room\Objects[4])
 									If d_I\ClosestButton = e\room\Objects[4] And mo\MouseHit1 Then
+										If e\SoundCHN2 <> 0 Then
+											If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
+										EndIf 
+										FemurBreakerSFX = LoadSound_Strict("SFX\Room\106Chamber\FemurBreaker.ogg")
+										e\SoundCHN2 = PlaySound_Strict(FemurBreakerSFX)
+										
 										e\EventState = 1.0 ; ~ Start the femur breaker
-										If SoundTransmission = True Then ; ~ Only play sounds if transmission is on
-											If e\SoundCHN2 <> 0 Then
-												If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
-											EndIf 
-											FemurBreakerSFX = LoadSound_Strict("SFX\Room\106Chamber\FemurBreaker.ogg")
-											e\SoundCHN2 = PlaySound_Strict(FemurBreakerSFX)
-										EndIf
 									EndIf
 								EndIf
 							ElseIf e\EventState = 1.0 ; ~ Bone was broken
@@ -6898,12 +6892,7 @@ Function UpdateEvents%()
 									EntityParent(de\OBJ, e\room\OBJ)
 								EndIf
 								
-								If e\EventState > 400.0 Then
-									If e\Sound <> 0 Then 
-										FreeSound_Strict(e\Sound) : e\Sound = 0
-									EndIf
-									RemoveEvent(e)
-								EndIf								
+								If e\EventState > 400.0 Then RemoveEvent(e)
 							EndIf
 						EndIf
 					EndIf
@@ -6962,10 +6951,7 @@ Function UpdateEvents%()
 						If e\EventState + fps\Factor[0] >= 70.0 * 17.0 Then LoadEventSound(e, "SFX\SCP\682\Roar.ogg") : e\SoundCHN = PlaySound_Strict(e\Sound)
 						If e\EventState > (70.0 * 17.0) - (70.0 * 3.0) Then me\BigCameraShake = 0.5
 						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\BigCameraShake = 2.0
-						If e\EventState < 70.0 * 1.0 Then 
-							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) 
-							RemoveEvent(e)
-						EndIf
+						If e\EventState < 70.0 * 1.0 Then  RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]

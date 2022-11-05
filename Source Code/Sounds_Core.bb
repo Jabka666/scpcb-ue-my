@@ -454,9 +454,9 @@ Function KillSounds%()
 	If opt\EnableSFXRelease Then
 		For snd.Sound = Each Sound
 			If snd\InternalHandle <> 0 Then
-				FreeSound_Strict(snd\InternalHandle) : snd\InternalHandle = 0
-				snd\ReleaseTime = 0
+				FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 			EndIf
+			snd\ReleaseTime = 0
 		Next
 	EndIf
 	
