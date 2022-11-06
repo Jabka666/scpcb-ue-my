@@ -109,7 +109,7 @@ Function UpdateMainMenu%()
 	
 	Local sv.Save, snd.Sound
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%, g%
-	Local Dir%, File$, Test%
+	Local File$, Test%
 	
 	While fps\Accumulator > 0.0
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
@@ -711,13 +711,20 @@ Function UpdateMainMenu%()
 									UserTrackCheck = 0
 									UserTrackCheck2 = 0
 									
-									Dir = ReadDir("SFX\Radio\UserTracks\")
+									Local DirPath$ = "SFX\Radio\UserTracks\"
+									
+									If FileType(DirPath) <> 2 Then
+										CreateDir(DirPath)
+									EndIf
+									
+									Local Dir% = ReadDir(DirPath)
+									
 									Repeat
 										File = NextFile(Dir)
 										If File = "" Then Exit
-										If FileType("SFX\Radio\UserTracks\" + File) = 1 Then
+										If FileType(DirPath + File) = 1 Then
 											UserTrackCheck = UserTrackCheck + 1
-											Test = LoadSound("SFX\Radio\UserTracks\" + File)
+											Test = LoadSound(DirPath + File)
 											If Test <> 0 Then
 												UserTrackCheck2 = UserTrackCheck2 + 1
 											EndIf
@@ -2095,37 +2102,10 @@ Function InitLoadingScreens%(File$)
 				If ls\Txt[i] <> "" Then ls\TxtAmount = ls\TxtAmount + 1
 			Next
 			
-			ls\DisableBackground = StringToBoolean((GetFileLocalString(File, TemporaryString, "DisableBackground", 0)))
+			ls\DisableBackground = GetFileLocalString(File, TemporaryString, "DisableBackground")
 			
-			Select GetFileLocalString(File, TemporaryString, "AlignX")
-				Case "Left"
-					;[Block]
-					ls\AlignX = -1
-					;[End Block]
-				Case "Middle", "Center"
-					;[Block]
-					ls\AlignX = 0
-					;[End Block]
-				Case "Right" 
-					;[Block]
-					ls\AlignX = 1
-					;[End Block]
-			End Select 
-			
-			Select GetFileLocalString(File, TemporaryString, "AlignY")
-				Case "Top", "Up"
-					;[Block]
-					ls\AlignY = -1
-					;[End Block]
-				Case "Middle", "Center"
-					;[Block]
-					ls\AlignY = 0
-					;[End Block]
-				Case "Bottom", "Down"
-					;[Block]
-					ls\AlignY = 1
-					;[End Block]
-			End Select 			
+			ls\AlignX = Int(GetFileLocalString(File, TemporaryString, "AlignX"))
+			ls\AlignY = Int(GetFileLocalString(File, TemporaryString, "AlignY"))
 		EndIf
 	Wend
 	

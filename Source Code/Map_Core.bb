@@ -2318,10 +2318,12 @@ Function UpdateDoors%()
 							;[End Block]
 						Case OFFICE_DOOR, WOODEN_DOOR
 							;[Block]
-							d\OpenState = CurveValue(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
-							RotateEntity(d\OBJ, 0.0, d\room\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
-							If d\DoorType = OFFICE_DOOR Then
-								Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
+							If d\room <> Null Then
+								d\OpenState = CurveValue(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
+								RotateEntity(d\OBJ, 0.0, d\room\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+								If d\DoorType = OFFICE_DOOR Then
+									Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
+								EndIf
 							EndIf
 							;[End Block]
 						Case ONE_SIDED_DOOR
@@ -2623,11 +2625,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			If State < 0.0 Then
 				State = State - fps\Factor[0]
 				If PlayerInsideElevator Then
-					If (Not door1\SoundCHN2) Then
-						door1\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
-					Else
-						If (Not ChannelPlaying(door1\SoundCHN2)) Then door1\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
-					EndIf
+					If (Not ChannelPlaying(door1\SoundCHN2)) Then door1\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 					
 					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 					
@@ -2741,11 +2739,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			Else
 				State = State + fps\Factor[0]
 				If PlayerInsideElevator Then
-					If (Not door2\SoundCHN2) Then
-						door2\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
-					Else
-						If (Not ChannelPlaying(door2\SoundCHN2)) Then door2\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
-					EndIf
+					If (Not ChannelPlaying(door2\SoundCHN2)) Then door2\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 					
 					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 					
@@ -3093,8 +3087,8 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True)
 		DoorType = DEFAULT_DOOR
 	EndIf
 	
-	Local SoundOpen% = OpenDoorSFX(d\DoorType, SoundRand)
-	Local SoundClose% = CloseDoorSFX(d\DoorType, SoundRand)
+	Local SoundOpen% = OpenDoorSFX(DoorType, SoundRand)
+	Local SoundClose% = CloseDoorSFX(DoorType, SoundRand)
 	
 	If d\Locked = 2 Then SoundOpen = BigDoorErrorSFX[Rand(0, 2)]
 	
@@ -3456,11 +3450,7 @@ Function UpdateSecurityCams%()
 											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 											If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX[1])
 											sc\PlayerState = 2
-											If (Not sc\SoundCHN) Then
-												sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
-											Else
-												If (Not ChannelPlaying(sc\SoundCHN)) Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
-											EndIf
+											If (Not ChannelPlaying(sc\SoundCHN)) Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
 											If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 										EndIf	
 										me\BlurTimer = 1000.0
@@ -3494,10 +3484,7 @@ Function UpdateSecurityCams%()
 							If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
 								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 							Else
-								If (Not sc\SoundCHN) Then
-									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
-									If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
-								ElseIf (Not ChannelPlaying(sc\SoundCHN))
+								If (Not ChannelPlaying(sc\SoundCHN)) Then
 									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
 									If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
 								EndIf
@@ -7900,7 +7887,7 @@ Function IsRoomAdjacent%(this.Rooms, that.Rooms)
 	Return(False)
 End Function
 
-Dim MapRoom$(ROOM4, 0)
+Dim MapRoom$(0, 0)
 
 Function SetRoom%(RoomName$, RoomType%, RoomPosition%, MinPos%, MaxPos%) ; ~ Place a room without overwriting others
 	Local Looped%, CanPlace%
@@ -8417,7 +8404,7 @@ Function CreateMap%()
 	MaxRooms = Max(MaxRooms, Room3Amount[0] + Room3Amount[1] + Room3Amount[2] + 1)
 	MaxRooms = Max(MaxRooms, Room4Amount[0] + Room4Amount[1] + Room4Amount[2] + 1)
 	
-	Dim MapRoom$(ROOM4, MaxRooms)
+	Dim MapRoom$(ROOM4 + 1, MaxRooms + 1)
 	
 	; ~ [LIGHT CONTAINMENT ZONE]
 	

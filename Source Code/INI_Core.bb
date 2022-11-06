@@ -101,17 +101,6 @@ Function GetFileLocalString$(File$, Name$, Key_$, DefaultValue$ = "")
 	Return(IniGetBufferString_(lang\LanguagePath + File, Name, Key_, IniGetBufferString_(File, Name, Key_, DefaultValue)))
 End Function
 
-Function StringToBoolean%(Boolean$, DefaultValue% = False)
-	Select Boolean
-		Case "true", "True", "1"
-			Return True
-		Case "false", "False", "0"
-			Return False
-		Default 
-			Return DefaultValue
-	End Select
-End Function
-
 Function GetLocalString$(Section$, Parameter$)
 	Return(GetFileLocalString(LanguageFile, Section, Parameter, Section + "," + Parameter))
 End Function

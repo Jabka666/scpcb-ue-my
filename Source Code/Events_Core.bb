@@ -838,11 +838,7 @@ Function UpdateEvents%()
 					EndIf
 					
 					If e\EventState < 2000.0 Then
-						If (Not e\SoundCHN) Then
-							e\SoundCHN = PlaySound_Strict(AlarmSFX[0])
-						Else
-							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(AlarmSFX[0])
-						EndIf
+						If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(AlarmSFX[0])
 					EndIf
 					
 					If e\EventState3 < 11.0 Then
@@ -1350,11 +1346,6 @@ Function UpdateEvents%()
 								e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 								e\room\NPC[0]\Angle = 180.0
 								
-								If ChannelPlaying(e\room\NPC[7]\SoundCHN) Then StopChannel(e\room\NPC[7]\SoundCHN)
-								If e\room\NPC[7]\Sound <> 0 Then
-									FreeSound_Strict(e\room\NPC[7]\Sound) : e\room\NPC[7]\Sound = 0	
-								EndIf
-								
 								For i = 5 To 7 Step 2
 									If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 								Next
@@ -1593,7 +1584,7 @@ Function UpdateEvents%()
 							
 							If IntroSFX[3] <> 0 Then
 								If (EntityVisible(n_I\Curr173\OBJ, Camera) And EntityInView(n_I\Curr173\OBJ, Camera)) Lor (EntityVisible(n_I\Curr173\OBJ2, Camera) And EntityInView(n_I\Curr173\OBJ2, Camera)) Then
-									CreateHintMsg(GetLocalString("msg", "blink"))
+									CreateHintMsg(Format(GetLocalString("msg", "blink"), key\BLINK))
 									PlaySound_Strict(IntroSFX[3])
 									FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
 								EndIf
@@ -1702,7 +1693,6 @@ Function UpdateEvents%()
 								PositionEntity(me\Collider, Max(EntityX(me\Collider), EntityX(e\room\OBJ) + 352.0 * RoomScale), EntityY(me\Collider), EntityZ(me\Collider))
 							ElseIf e\EventState >= 10440.0 And e\EventState - fps\Factor[0] < 10440.0
 								OpenCloseDoor(e\room\RoomDoors[1])
-								PlaySound_Strict(IntroSFX[3])
 							ElseIf e\EventState >= 10740.0 And e\EventState - fps\Factor[0] < 10740.0
 								If e\Sound <> 0 Then
 									FreeSound_Strict(e\Sound) : e\Sound = 0
@@ -1927,7 +1917,7 @@ Function UpdateEvents%()
 												ShouldPlay = 0
 												
 												For i = 0 To 4
-													If IntroSFX[i] <> 0 Then FreeSound_Strict(IntroSFX[i])
+													If IntroSFX[i] <> 0 Then FreeSound_Strict(IntroSFX[i]) : IntroSFX[i] = 0
 												Next
 												
 												r\NPC[0] = e\room\NPC[0]
@@ -1980,10 +1970,6 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					EndIf
-					
-					For i = 0 To 4
-						If IntroSFX[i] <> 0 Then FreeSound_Strict(IntroSFX[i]) : IntroSFX[i] = 0
-					Next
 					
 					e\EventState2 = 1.0
 				EndIf
@@ -2941,11 +2927,8 @@ Function UpdateEvents%()
 							If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
 							UpdateRedLight(e\room\Objects[4], 1500, 800)
 							
-							If (Not e\SoundCHN) Then ; ~ Humming when the player isn't close
-								e\SoundCHN = PlaySound2(TeslaIdleSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-							Else
-								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound2(TeslaIdleSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-							EndIf
+							; ~ Humming when the player isn't close
+							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound2(TeslaIdleSFX, Camera, e\room\Objects[3], 4.0, 0.5)
 							
 							For i = 0 To 2
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(300.0 * RoomScale) Then
@@ -4989,12 +4972,12 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else
+						If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 						If e\Sound <> 0 Then
-							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN)
 							FreeSound_Strict(e\Sound) : e\Sound = 0
 						EndIf
+						If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 						If e\Sound2 <> 0 Then
-							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 							FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 						EndIf
 					EndIf
@@ -5644,11 +5627,7 @@ Function UpdateEvents%()
 							PlaySound_Strict(LoadTempSound("SFX\Character\MTF\049_2\TargetTerminated.ogg"))
 							RemoveEvent(e)
 						Else
-							If (Not e\SoundCHN) Then
-								e\SoundCHN = PlaySound_Strict(e\Sound)
-							Else
-								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
-							EndIf
+							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
 						EndIf
 					EndIf
 				EndIf
@@ -5808,10 +5787,6 @@ Function UpdateEvents%()
 							
 							If e\EventState = 0.0 Then 
 								If SoundTransmission And Rand(100) = 1 Then
-									If (Not e\SoundCHN2) Then
-										LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(6) + ".ogg", 1)
-										e\SoundCHN2 = PlaySound_Strict(e\Sound2)								
-									EndIf
 									If (Not ChannelPlaying(e\SoundCHN2)) Then
 										LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(6) + ".ogg", 1)
 										e\SoundCHN2 = PlaySound_Strict(e\Sound2)
@@ -5832,10 +5807,6 @@ Function UpdateEvents%()
 								EndIf
 							ElseIf e\EventState = 1.0 ; ~ Bone was broken
 								If SoundTransmission And e\EventState3 < 2000.0 Then 
-									If (Not e\SoundCHN2) Then 
-										LoadEventSound(e, "SFX\Character\LureSubject\Sniffling.ogg", 1)
-										e\SoundCHN2 = PlaySound_Strict(e\Sound2)								
-									EndIf
 									If (Not ChannelPlaying(e\SoundCHN2)) Then
 										LoadEventSound(e, "SFX\Character\LureSubject\Sniffling.ogg", 1)
 										e\SoundCHN2 = PlaySound_Strict(e\Sound2)
@@ -6501,11 +6472,9 @@ Function UpdateEvents%()
 						Next
 						GiveAchievement(Achv1123)
 						
+						If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
 						If e\Sound2 <> 0 Then
-							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2)
-							If e\Sound2 <> 0 Then
-								FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-							EndIf
+							FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 						EndIf
 						
 						If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
@@ -10085,6 +10054,31 @@ Function UpdateEndings%()
 End Function
 
 Function RemoveEvent%(e.Events)
+	If e\SoundCHN <> 0 Then
+		If (Not e\SoundCHN_IsStream) Then
+			StopChannel(e\SoundCHN)
+		Else
+			StopStream_Strict(e\SoundCHN)
+		EndIf
+		e\SoundCHN = 0
+	EndIf
+	If e\SoundCHN2 <> 0 Then
+		If (Not e\SoundCHN2_IsStream) Then
+			StopChannel(e\SoundCHN2)
+		Else
+			StopStream_Strict(e\SoundCHN2)
+		EndIf
+		e\SoundCHN2 = 0
+	EndIf
+	If e\SoundCHN3 <> 0 Then
+		If (Not e\SoundCHN3_IsStream) Then
+			StopChannel(e\SoundCHN3)
+		Else
+			StopStream_Strict(e\SoundCHN3)
+		EndIf
+		e\SoundCHN3 = 0
+	EndIf
+	
 	If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 	If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0

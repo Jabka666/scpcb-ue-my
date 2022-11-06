@@ -112,6 +112,8 @@ Function PlaySound_Strict%(SoundHandle%)
 End Function
 
 Function LoadSound_Strict%(File$)
+	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
+	
 	Local snd.Sound
 	
 	snd.Sound = New Sound
@@ -126,7 +128,6 @@ Function LoadSound_Strict%(File$)
 	EndIf
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then 
-			If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 			snd\InternalHandle = LoadSound(snd\Name)
 		EndIf
 	EndIf

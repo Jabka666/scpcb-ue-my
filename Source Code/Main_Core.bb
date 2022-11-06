@@ -30,7 +30,11 @@ MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
 MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 
 Global SplitSpace$
-If StringToBoolean(GetLocalString("global", "splitwithspace")) Then SplitSpace = " " Else SplitSpace = ""
+If GetLocalString("global", "splitwithspace") Then
+	SplitSpace = " "
+Else
+	SplitSpace = ""
+EndIf
 
 Type Mouse
 	Field MouseHit1%, MouseHit2%
@@ -2653,11 +2657,7 @@ End Function
 Function UpdateCough%(Chance_%)
 	If (Not me\Terminated) Then 
 		If Rand(Chance_) = 1 Then
-			If (Not CoughCHN) Then
-				CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-			Else
-				If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
-			EndIf
+			If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
 		EndIf
 	EndIf
 End Function
@@ -4748,11 +4748,11 @@ Function UpdateGUI%()
 									ResumeChannel(RadioCHN[1])
 									If (Not ChannelPlaying(RadioCHN[1])) Then
 										If RadioState[1] >= 5.0 Then
-											RadioCHN[1] = PlaySound_Strict(RadioSFX(1, 1))	
+											RadioCHN[1] = PlaySound_Strict(RadioSFX(0, 1))	
 											RadioState[1] = 0.0
 										Else
 											RadioState[1] = RadioState[1] + 1.0	
-											RadioCHN[1] = PlaySound_Strict(RadioSFX(1, 0))	
+											RadioCHN[1] = PlaySound_Strict(RadioSFX(0, 0))	
 										EndIf
 									EndIf
 									;[End Block]
@@ -4765,9 +4765,9 @@ Function UpdateGUI%()
 										RadioState[2] = RadioState[2] + 1.0
 										If RadioState[2] = 17.0 Then RadioState[2] = 1.0
 										If Floor(RadioState[2] / 2.0) = Ceil(RadioState[2] / 2.0) Then
-											RadioCHN[2] = PlaySound_Strict(RadioSFX(2, Int(RadioState[2] / 2.0)))	
+											RadioCHN[2] = PlaySound_Strict(RadioSFX(1, Int(RadioState[2] / 2.0)))	
 										Else
-											RadioCHN[2] = PlaySound_Strict(RadioSFX(2, 0))
+											RadioCHN[2] = PlaySound_Strict(RadioSFX(1, 0))
 										EndIf
 									EndIf 
 									;[End Block]

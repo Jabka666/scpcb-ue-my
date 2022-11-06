@@ -561,7 +561,6 @@ Function RemoveNPC%(n.NPCs)
 		EndIf
 		n\SoundCHN = 0
 	EndIf
-	
 	If n\SoundCHN2 <> 0 Then
 		If (Not n\SoundCHN2_IsStream) Then
 			StopChannel(n\SoundCHN2)
@@ -2144,9 +2143,9 @@ Function UpdateNPCs%()
 					; ~ The NPC was killed
 					If n\SoundCHN <> 0 Then
 						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-						If n\Sound <> 0 Then
-							FreeSound_Strict(n\Sound) : n\Sound = 0
-						EndIf
+					EndIf
+					If n\Sound <> 0 Then
+						FreeSound_Strict(n\Sound) : n\Sound = 0
 					EndIf
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
@@ -3867,13 +3866,7 @@ Function UpdateNPCs%()
 				
 				If n\State > 1.0 Then
 					If (Not n\Sound) Then n\Sound = LoadSound_Strict("SFX\SCP\066\Rolling.ogg")
-					If n\SoundCHN <> 0 Then
-						If ChannelPlaying(n\SoundCHN) Then
-							n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 20.0)
-						EndIf
-					Else
-						n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
-					EndIf
+					If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
 				EndIf
 				
 				If n\State3 > 0.0 Then
@@ -4818,9 +4811,9 @@ Function UpdateNPCs%()
 					; ~ The NPC was killed
 					If n\SoundCHN <> 0 Then
 						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-						If n\Sound <> 0 Then
-							FreeSound_Strict(n\Sound) : n\Sound = 0
-						EndIf
+					EndIf
+					If n\Sound <> 0 Then
+						FreeSound_Strict(n\Sound) : n\Sound = 0
 					EndIf
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
 				EndIf
@@ -7359,6 +7352,6 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#2F2#2F6#2FA#2FE#414#417#4ED#645#64D#895#8F1#8F4#8F6#C0B#C0D#C8F#C91#E85#121F#1221
-;~B#1234#1236#130C#1585#1588#183E#1841#1971#1974
+;~B#2F1#2F5#2F9#2FD#413#416#4EC#644#64C#894#8F0#8F3#8F5#C0A#C0C#C8E#C90#E84#1218#121A
+;~B#122D#122F#1305#157E#1581#1837#183A#196A#196D
 ;~C#Blitz3D
