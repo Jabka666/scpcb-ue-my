@@ -819,12 +819,16 @@ Function UpdateConsole%()
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
 					chs\NoClipSpeed = Float(StrTemp)
+					
+					CreateConsoleMsg(Format(GetLocalString("console", "fly.speed"), StrTemp))
 					;[End Block]
 				Case "injure"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
 					me\Injuries = Float(StrTemp)
+					
+					CreateConsoleMsg(Format(GetLocalString("console", "inj"), StrTemp))
 					;[End Block]
 				Case "cls", "clear"
 					;[Block]
@@ -835,16 +839,21 @@ Function UpdateConsole%()
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
 					I_008\Timer = Float(StrTemp)
+					
+					CreateConsoleMsg(Format(GetLocalString("console", "infect"), StrTemp))
 					;[End Block]
 				Case "crystal"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
 					I_409\Timer = Float(StrTemp)
+					
+					CreateConsoleMsg(Format(GetLocalString("console", "crystal"), StrTemp))
 					;[End Block]
 				Case "heal"
 					;[Block]
 					ResetNegativeStats()
+					CreateConsoleMsg(GetLocalString("console", "heal"))
 					;[End Block]
 				Case "teleport", "tp"
 					;[Block]
@@ -916,7 +925,7 @@ Function UpdateConsole%()
 					
 					WireFrame(WireFrameState)
 					;[End Block]
-				Case "reset096"
+				Case "reset096", "r096"
 					;[Block]
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType096 Then
@@ -928,8 +937,9 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
+					CreateConsoleMsg(GetLocalString("console", "r096"))
 					;[End Block]
-				Case "reset372" 
+				Case "reset372", "r372"
 					;[Block]				
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType372 Then
@@ -938,37 +948,42 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
+					CreateConsoleMsg(GetLocalString("console", "r372"))
 					;[End Block]
-				Case "disable173"
+				Case "disable173", "dis173"
 					;[Block]
 					n_I\Curr173\Idle = 3 ; ~ This phenominal comment is brought to you by PolyFox. His absolute wisdom in this fatigue of knowledge brought about a new era of SCP-173 state checks.
 					HideEntity(n_I\Curr173\OBJ)
 					HideEntity(n_I\Curr173\OBJ2)
 					HideEntity(n_I\Curr173\Collider)
+					CreateConsoleMsg(GetLocalString("console", "dis173"))
 					;[End Block]
-				Case "enable173"
+				Case "enable173", "en173"
 					;[Block]
 					n_I\Curr173\Idle = 0
 					ShowEntity(n_I\Curr173\OBJ)
 					ShowEntity(n_I\Curr173\OBJ2)
 					ShowEntity(n_I\Curr173\Collider)
+					CreateConsoleMsg(GetLocalString("console", "en173"))
 					;[End Block]
-				Case "disable106"
+				Case "disable106", "dis106"
 					;[Block]
 					n_I\Curr106\Idle = 1
 					n_I\Curr106\State = 200000.0
 					n_I\Curr106\Contained = True
 					HideEntity(n_I\Curr106\Collider)
 					HideEntity(n_I\Curr106\OBJ)
+					CreateConsoleMsg(GetLocalString("console", "dis106"))
 					;[End Block]
-				Case "enable106"
+				Case "enable106", "en106"
 					;[Block]
 					n_I\Curr106\Idle = 0
 					n_I\Curr106\Contained = False
 					ShowEntity(n_I\Curr106\Collider)
 					ShowEntity(n_I\Curr106\OBJ)
+					CreateConsoleMsg(GetLocalString("console", "en106"))
 					;[End Block]
-				Case "disable966"
+				Case "disable966", "dis966"
 					;[Block]
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType966 Then
@@ -978,8 +993,9 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
+					CreateConsoleMsg(GetLocalString("console", "dis966"))
 					;[End Block]
-				Case "enable966"
+				Case "enable966", "en966"
 					;[Block]
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType966 Then
@@ -989,29 +1005,33 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
+					CreateConsoleMsg(GetLocalString("console", "en966"))
 					;[End Block]
-				Case "disable049" 
+				Case "disable049", "dis049"
 					;[Block]
 					If n_I\Curr049 <> Null Then
 						n_I\Curr049\Idle = 1
 						HideEntity(n_I\Curr049\Collider)
 						HideEntity(n_I\Curr049\OBJ)
 					EndIf
+					CreateConsoleMsg(GetLocalString("console", "dis049"))
 					;[End Block]
-				Case "enable049"
+				Case "enable049", "en049"
 					;[Block]
 					If n_I\Curr049 <> Null Then
 						n_I\Curr049\Idle = 0
 						ShowEntity(n_I\Curr049\Collider)
 						ShowEntity(n_I\Curr049\OBJ)
 					EndIf
+					CreateConsoleMsg(GetLocalString("console", "en049"))
 					;[End Block]
-				Case "106retreat"
+				Case "106retreat", "106r"
 					;[Block]
 					If n_I\Curr106\State <= 0.0 Then
 						n_I\Curr106\State = Rnd(22000.0, 27000.0)
 						PositionEntity(n_I\Curr106\Collider, 0.0, 500.0, 0.0)
 						ResetEntity(n_I\Curr106\Collider)
+						CreateConsoleMsg(GetLocalString("console", "106r"))
 					Else
 						CreateConsoleMsg(GetLocalString("console", "106r.failed"), 255, 150, 0)
 					EndIf
@@ -1146,7 +1166,7 @@ Function UpdateConsole%()
 					Select StrTemp
 						Case "on", "1", "true"
 							;[Block]
-							chs\NoBlink = True		
+							chs\NoBlink = True
 							;[End Block]
 						Case "off", "0", "false"
 							;[Block]
@@ -1568,6 +1588,7 @@ Function UpdateConsole%()
 				Case "resetfunds"
 					;[Block]
 					me\Funds = Rand(6)
+					CreateConsoleMsg(GetLocalString("console", "funds"))
 					;[End Block]
 				Case "codes"
 					;[Block]

@@ -153,6 +153,7 @@ Const Mode% = 2
 Const TwoD% = 8192
 
 Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
+	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	If FileType(File) <> 1 Then
 		CreateConsoleMsg(Format(GetLocalString("runerr", "sound.notfound"), File))
 		If opt\ConsoleOpening And opt\CanOpenConsole Then
@@ -163,7 +164,6 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	Local st.Stream = New Stream
 	
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
 	
 	If st\CHN = -1 Then
@@ -393,6 +393,18 @@ End Function
 Function ExecFile_Strict%(File$)
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	ExecFile(File)
+End Function
+
+Function OpenMovie_Strict%(File$)
+	Local Tmp%
+	
+	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
+	If (Not Tmp) Then
+		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "movie.notfound"), File))
+		Tmp = OpenMovie(File)
+		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "movie.failed.load"), File))
+	EndIf
+	Return(Tmp) 
 End Function
 
 Function OpenFile_Strict%(File$)

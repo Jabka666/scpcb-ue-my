@@ -478,13 +478,7 @@ Function PlayStartupVideos%()
 				;[End Block]
 		End Select
 		
-		Local Movie% = OpenMovie(MovieFile + ".wmv")
-		
-		If (Not Movie) Then
-			PutINIValue(OptionFile, "Advanced", "Play Startup Videos", 0)
-			RuntimeError(Format(GetLocalString("runerr", "movie"), MovieFile))
-		EndIf
-		
+		Local Movie% = OpenMovie_Strict(MovieFile + ".wmv")
 		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume, 0)
 		
 		Repeat

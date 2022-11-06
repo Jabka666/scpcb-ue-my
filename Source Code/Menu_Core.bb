@@ -2700,7 +2700,7 @@ Function UpdateInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
 	Local Length% = Len(aString)
 	
-	If (CursorPos < 0) And (CursorPos <> - 1) Then CursorPos = Length
+	If (CursorPos < 0) And (CursorPos <> -1) Then CursorPos = Length
 	If CursorPos < 0 Then CursorPos = 0
 	
 	If KeyHit(210) Then InsertMode = Not InsertMode ; ~ Insert key
