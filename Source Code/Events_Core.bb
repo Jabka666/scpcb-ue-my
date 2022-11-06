@@ -2210,7 +2210,7 @@ Function UpdateEvents%()
 						
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null Then
-								If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "veryfinenvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg")) Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Then
 										HasBatteryFor895 = True
 										Exit
@@ -2247,7 +2247,7 @@ Function UpdateEvents%()
 									EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "veryfinenvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg")) Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
 												Inventory(i)\State2 = 2.0
 												Exit
@@ -2263,7 +2263,7 @@ Function UpdateEvents%()
 									EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null Then
-											If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+											If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "veryfinenvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg")) Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
 												Inventory(i)\State2 = 1.0
 												Exit
@@ -2275,7 +2275,7 @@ Function UpdateEvents%()
 								EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null Then
-										If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+										If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "veryfinenvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg")) Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 											Inventory(i)\State2 = 0.0
 											Exit
 										EndIf
