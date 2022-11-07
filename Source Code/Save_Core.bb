@@ -2262,7 +2262,7 @@ Function DeleteGame(sv.Save)
 	Delete(sv)
 End Function
 
-Const MapCreatorPath$ = "Map Creator\Maps\"
+Const CustomMapsPath$ = "Map Creator\Maps\"
 
 Function LoadSavedMaps%()
 	CatchErrors("Uncaught (LoadSavedMaps)")
@@ -2275,15 +2275,15 @@ Function LoadSavedMaps%()
 	Next
 	SavedMapsAmount = 0
 	
-	If FileType(MapCreatorPath) <> 2 Then
-		CreateDir(MapCreatorPath)
+	If FileType(CustomMapsPath) <> 2 Then
+		CreateDir(CustomMapsPath)
 	EndIf
-	Dir = ReadDir(MapCreatorPath)
+	Dir = ReadDir(CustomMapsPath)
 	Repeat
 		File = NextFile(Dir)
 		
 		If File = "" Then Exit
-		If FileType(CurrentDir() + MapCreatorPath + File) = 1 Then 
+		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then 
 			If File <> "." And File <> ".." Then
 				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
 					SavedMapsAmount = SavedMapsAmount + 1
@@ -2297,17 +2297,17 @@ Function LoadSavedMaps%()
 	Dim SavedMapsAuthor$(SavedMapsAmount)
 	
 	i = 0
-	Dir = ReadDir(MapCreatorPath) 
+	Dir = ReadDir(CustomMapsPath) 
 	Repeat
 		File = NextFile(Dir)
 		
 		If File = "" Then Exit
-		If FileType(CurrentDir() + MapCreatorPath + File) = 1 Then 
+		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then 
 			If File <> "." And File <> ".." Then
 				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
 					SavedMaps(i) = File
 					If Right(File, 6) = "cbmap2" Then
-						Local f% = ReadFile(MapCreatorPath + File)
+						Local f% = ReadFile(CustomMapsPath + File)
 						
 						SavedMapsAuthor(i) = ReadLine(f)
 						CloseFile(f)

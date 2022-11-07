@@ -1957,7 +1957,7 @@ Function InitNewGame%()
 	If SelectedMap = "" Then
 		CreateMap()
 	Else
-		LoadMap("Map Creator\Maps\" + SelectedMap)
+		LoadMap(CustomMapsPath + SelectedMap)
 	EndIf
 	
 	LoadWayPoints()

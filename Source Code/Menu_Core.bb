@@ -525,7 +525,7 @@ Function UpdateMainMenu%()
 							y = 376 * MenuScale
 							
 							If UpdateMainMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "yes"), False) Then
-								DeleteFile(CurrentDir() + MapCreatorPath + SelectedMapActionMsg)
+								DeleteFile(CurrentDir() + CustomMapsPath + SelectedMapActionMsg)
 								SelectedMapActionMsg = ""
 								LoadSavedMaps()
 								mm\ShouldDeleteGadgets = True
@@ -3465,7 +3465,7 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	Local fY# = y + (6.0 * MenuScale)
 	Local fW# = Width - (12.0 * MenuScale)
 	Local fH# = Height - (12.0 * MenuScale)
-	Local Lines% = 0
+	Local Lines% = 0, Temp%
 	
 	SetFont(fo\FontID[Font_Default])
 	Color(255, 255, 255)
@@ -3475,7 +3475,7 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	If Right(MapName, 6) = "cbmap2" Then
 		Txt[0] = Left(ConvertToUTF8(MapName), Len(ConvertToUTF8(MapName)) - 7)
 		
-		Local f% = OpenFile("Map Creator\Maps\" + MapName)
+		Local f% = OpenFile(CustomMapsPath + MapName)
 		Local Author$ = ConvertToUTF8(ReadLine(f))
 		Local Descr$ = ConvertToUTF8(ReadLine(f))
 		
@@ -3513,15 +3513,17 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 		Txt[3] = GetLocalString("creator", "ramount.unknown")
 	EndIf
 	If HasForest Then
-		Txt[4] = GetLocalString("creator", "forest.yes")
+		Temp = "Yes"
 	Else
-		Txt[4] = GetLocalString("creator", "forest.no")
+		Temp = "No"
 	EndIf
+	Txt[4] = Format(GetLocalString("creator", "forest"), Temp)
 	If HasMT Then
-		Txt[5] = GetLocalString("creator", "tunnel.yes")
+		Temp = "Yes"
 	Else
-		Txt[5] = GetLocalString("creator", "tunnel.no")
+		Temp = "No"
 	EndIf
+	Txt[5] = Format(GetLocalString("creator", "mt"), Temp)
 	
 	Lines = GetLineAmount(Txt[2], fW, fH)
 	RenderFrame(x, y, Width, (StringHeight(Txt[0]) * 6) + StringHeight(Txt[2]) * Lines + (5 * MenuScale))
