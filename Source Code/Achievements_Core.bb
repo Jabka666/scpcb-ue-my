@@ -1,4 +1,4 @@
-Const MAXACHIEVEMENTS% = 41
+Const MAXACHIEVEMENTS% = 42
 
 Type Achievements
 	Field Achievement%[MAXACHIEVEMENTS]
@@ -14,13 +14,13 @@ Global UsedConsole%
 
 ; ~ Achievements ID Constants
 ;[Block]
-Const Achv005% = 0, Achv008% = 1, Achv012% = 2, Achv035% = 3, Achv049% = 4, Achv055% = 5,  Achv079% = 6, Achv096% = 7, Achv106% = 8
-Const Achv148% = 9, Achv205% = 10, Achv294% = 11, Achv372% = 12, Achv409% = 13, Achv420_J% = 14, Achv427% = 15, Achv500% = 16, Achv513% = 17
-Const Achv714% = 18, Achv789_J% = 19, Achv860% = 20, Achv895% = 21, Achv914% = 22, Achv939% = 23, Achv966% = 24, Achv970% = 25
-Const Achv1025% = 26, Achv1048% = 27, Achv1123% = 28, Achv1162_ARC% = 29, Achv1499% = 30
+Const Achv005% = 0, Achv008% = 1, Achv012% = 2, Achv035% = 3, Achv049% = 4, Achv055% = 5, Achv066% = 6, Achv079% = 7, Achv096% = 8, Achv106% = 9
+Const Achv148% = 10, Achv205% = 11, Achv294% = 12, Achv372% = 13, Achv409% = 14, Achv420_J% = 15, Achv427% = 16, Achv500% = 17, Achv513% = 18
+Const Achv714% = 19, Achv789_J% = 20, Achv860% = 21, Achv895% = 22, Achv914% = 23, Achv939% = 24, Achv966% = 25, Achv970% = 26
+Const Achv1025% = 27, Achv1048% = 28, Achv1123% = 29, Achv1162_ARC% = 30, Achv1499% = 31
 
-Const AchvConsole% = 31, AchvHarp% = 32, AchvKeter% = 33, AchvKeyCard6% = 34, AchvMaynard% = 35, AchvOmni% = 36
-Const AchvO5% = 37, AchvPD% = 38, AchvSNAV% = 39, AchvTesla% = 40
+Const AchvConsole% = 32, AchvHarp% = 33, AchvKeter% = 34, AchvKeyCard6% = 35, AchvMaynard% = 36, AchvOmni% = 37
+Const AchvO5% = 38, AchvPD% = 39, AchvSNAV% = 40, AchvTesla% = 41
 ;[End Block]
 
 Function GiveAchievement%(AchvName%, ShowMessage% = True)

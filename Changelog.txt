@@ -6,6 +6,7 @@ General:
 - Added a hitbox in "room2_servers_hcz" preventing SCP-096 to be triggered through the bloody windows.
 - Added some folders organization.
 - Added language selection.
+- Added SCP-066 achievement.
 
 - Finally made the «Bright mode» similar to original game.
 

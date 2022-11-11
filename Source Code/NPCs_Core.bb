@@ -3758,7 +3758,10 @@ Function UpdateNPCs%()
 						
 						If Rand(700) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\066\Eric" + Rand(3) + ".ogg"), Camera, n\Collider, 8.0)
 						
-						If Dist < 1.0 + PowTwo(n\LastDist) Then n\State = Rand(2.0, 3.0)
+						If Dist < 1.0 + PowTwo(n\LastDist) Then
+							n\State = Rand(2.0, 3.0)
+							GiveAchievement(Achv066)
+						EndIf
 						;[End Block]
 					Case 2.0 ; ~ Rolls towards the player and make a sound, and then escape	
 						;[Block]
@@ -7352,6 +7355,4 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#2F1#2F5#2F9#2FD#413#416#4EC#644#64C#894#8F0#8F3#8F5#C0A#C0C#C8E#C90#E84#1218#121A
-;~B#122D#122F#1305#157E#1581#1837#183A#196A#196D
 ;~C#Blitz3D
