@@ -1624,7 +1624,7 @@ End Function
 
 Function RenderConsole%()
 	If (Not opt\CanOpenConsole) Then Return
-		
+	
 	If ConsoleOpen Then
 		Local cm.ConsoleMsg
 		Local InBar%, InBox%
@@ -2005,7 +2005,7 @@ End Type
 
 Global I_Zone.MapZones = New MapZones
 
-InitErrorMsgs(12, True)
+InitErrorMsgs(12)
 SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
 
 SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
