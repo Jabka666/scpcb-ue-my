@@ -887,7 +887,7 @@ Function UpdateEvents%()
 						If e\EventState3 < 170.0 Then
 							If e\EventState3 = 1.0 Then
 								PositionEntity(Camera, x, y, z)
-								If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
+								HideEntity(me\Collider)
 								PositionEntity(me\Collider, x, 0.302, z)
 								RotateEntity(Camera, -70.0, 0.0, 0.0)								
 								
@@ -949,7 +949,7 @@ Function UpdateEvents%()
 								Else
 									PositionEntity(me\Collider, EntityX(me\Collider), 0.302, EntityZ(me\Collider))
 									ResetEntity(me\Collider)
-									If EntityHidden(me\Collider) Then ShowEntity(me\Collider)
+									ShowEntity(me\Collider)
 									me\DropSpeed = 0.0
 									me\Playable = True
 									
@@ -4079,12 +4079,13 @@ Function UpdateEvents%()
 								EntityParent(de\OBJ, e\room\OBJ)
 							Next
 							
-							n_I\Curr096\State = 5.0
 							StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 							
-							If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
+							ShowEntity(e\room\Objects[8])
 							
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
+							
+							n_I\Curr096\State = 5.0
 						EndIf
 					Else
 						If e\EventState >= 70.0 * 40.0 And e\EventState - fps\Factor[0] < 70.0 * 40.0 Then ; ~ Open them again to let the player in
@@ -7788,7 +7789,7 @@ Function UpdateEvents%()
 				If e\EventState = 2.0 Then
 					If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-					If (Not EntityHidden(I_1499\Sky)) Then HideEntity(I_1499\Sky)
+					HideEntity(I_1499\Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1 Then RemoveNPC(n)
@@ -8827,7 +8828,7 @@ Function UpdateDimension1499%()
 				If e\EventState = 2.0 Then
 					If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-					If (Not EntityHidden(I_1499\Sky)) Then HideEntity(I_1499\Sky)
+					HideEntity(I_1499\Sky)
 					HideChunks()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1 Then RemoveNPC(n)
@@ -9278,7 +9279,7 @@ Function UpdateEndings%()
 									
 									PlaySound_Strict(HorrorSFX[5])
 									PlaySound_Strict(DecaySFX[0])
-								ElseIf n_I\Curr106\State < 0.0
+								ElseIf n_I\Curr106\State =< 0.0
 									If (Not EntityHidden(n_I\Curr106\OBJ2)) Then HideEntity(n_I\Curr106\OBJ2)
 									n_I\Curr106\PathTimer = 70.0 * 100.0
 									

@@ -7753,30 +7753,34 @@ Function UpdateRooms%()
 		EndIf
 		
 		If Hide Then
-			HideEntity(r\OBJ)
-			HideProps(r)
+			If (Not EntityHidden(r\OBJ)) Then
+				HideEntity(r\OBJ)
+				HideProps(r)
+			EndIf
 		Else
-			ShowEntity(r\OBJ)
-			ShowProps(r)
-			
-			For i = 0 To MaxRoomLights - 1
-				If r\Lights[i] <> 0 Then
-					Dist = EntityDistanceSquared(Camera, r\Lights[i])
-					If Dist < PowTwo(HideDistance) Then TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
-				Else
-					Exit
-				EndIf
-			Next
-			If r\TriggerBoxAmount > 0 Then
-				For i = 0 To r\TriggerBoxAmount - 1
-					If chs\DebugHUD <> 0 Then
-						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
-						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.2)
+			If EntityHidden(r\OBJ) Then
+				ShowEntity(r\OBJ)
+				ShowProps(r)
+				
+				For i = 0 To MaxRoomLights - 1
+					If r\Lights[i] <> 0 Then
+						Dist = EntityDistanceSquared(Camera, r\Lights[i])
+						If Dist < PowTwo(HideDistance) Then TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
 					Else
-						EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 255)
-						EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
+						Exit
 					EndIf
 				Next
+				If r\TriggerBoxAmount > 0 Then
+					For i = 0 To r\TriggerBoxAmount - 1
+						If chs\DebugHUD <> 0 Then
+							EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
+							EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.2)
+						Else
+							EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 255)
+							EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
+						EndIf
+					Next
+				EndIf
 			EndIf
 		EndIf
 	Next
