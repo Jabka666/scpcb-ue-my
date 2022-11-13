@@ -4488,7 +4488,7 @@ Function UpdateGUI%()
 						
 						If GetINIInt2(SCP294File, Loc, "Lethal")
 							msg\DeathMsg = GetINIString2(SCP294File, Loc, "Death Message")
-							If GetINIInt2(SCP294File, Loc, "Lethal") Then Kill()
+							Kill()
 						EndIf
 						me\BlurTimer = Max(GetINIInt2(SCP294File, Loc, "Blur") * 70.0, 0.0)
 						If me\VomitTimer = 0.0 Then
