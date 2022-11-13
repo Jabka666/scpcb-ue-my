@@ -1422,12 +1422,12 @@ Function UpdateNPCs%()
 										If EntityVisible(me\Collider, n\Collider) Then 
 											n\LastSeen = 1
 										Else
-											HideEntity(n\Collider)
+											If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider)
 											EntityPick(n\Collider, 1.5)
 											If PickedEntity() <> 0 Then
 												n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
 											EndIf
-											ShowEntity(n\Collider)
+											If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
 										EndIf
 										n\State3 = MilliSecs2() + 3000.0
 									EndIf
@@ -3062,10 +3062,12 @@ Function UpdateNPCs%()
 					; ~ The NPC was killed
 					AnimateNPC(n, 515.0, 551.0, 0.15, False)
 					If n\Frame >= 550.0 Then
-						HideEntity(n\OBJ)
-						HideEntity(n\Collider)
-						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+						If (Not EntityHidden(n\OBJ)) Then
+							HideEntity(n\OBJ)
+							HideEntity(n\Collider)
+							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+						EndIf
 					EndIf
 				EndIf
 				
@@ -3973,10 +3975,10 @@ Function UpdateNPCs%()
 										EndIf
 									Else
 										If MilliSecs2() > n\State2 And Dist < 256.0 Then
-											HideEntity(n\Collider) 
+											If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider) 
 											EntityPick(n\Collider, 1.5)
 											If PickedEntity() <> 0 Then n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
-											ShowEntity(n\Collider)
+											If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
 											
 											n\State2 = MilliSecs2() + 1000
 											
@@ -4130,10 +4132,10 @@ Function UpdateNPCs%()
 									If n\Target = Null Then
 										If Rand(200) = 1 Then n\Angle = n\Angle + Rnd(-45.0, 45.0)
 										
-										HideEntity(n\Collider)
+										If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider)
 										EntityPick(n\Collider, 1.5)
 										If PickedEntity() <> 0 Then n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
-										ShowEntity(n\Collider)
+										If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
 									Else
 										n\Angle = EntityYaw(n\Collider) + DeltaYaw(n\Collider, n\Target\Collider)
 										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 2.25 Then
@@ -5646,11 +5648,11 @@ Function UpdateMTFUnit%(n.NPCs)
 							
 							n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
 							
-							HideEntity(n\Collider)
+							If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider)
 							TurnEntity(n\Collider, 0.0, 180.0, 0.0)
 							EntityPick(n\Collider, 1.0)
 							If PickedEntity() <> 0 Then n\State3 = (-70.0) * 2.0
-							ShowEntity(n\Collider)
+							If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
 							TurnEntity(n\Collider, 0.0, 180.0, 0.0)
 						ElseIf n\State3 < 0.0
 							n\State3 = Min(n\State3 + fps\Factor[0], 0.0)

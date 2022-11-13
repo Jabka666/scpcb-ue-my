@@ -3528,7 +3528,7 @@ Function UpdateGUI%()
 		Next
 		
 		If mo\MouseHit1 Then mo\DoubleClickSlot = IsMouseOn
-			
+		
 		If SelectedItem <> Null Then
 			If (Not mo\MouseDown1) Then
 				If MouseSlot = 66 Then

@@ -943,9 +943,11 @@ Function UpdateEvents%()
 									; ~ I'm sorry you have to see this
 									RotateEntity(Camera, (-70.0) + 70.0 * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0) + Sin(e\EventState3 * 12.857) * 5.0, (-60.0) * Max((e\EventState3 - 10.0) / 4.0, 0.0), Sin(e\EventState3 * 25.7) * 8.0)
 									PositionEntity(Camera, x, y, z)
-									If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
-									PositionEntity(me\Collider, x, 0.302, z)	
-									me\DropSpeed = 0.0
+									If (Not EntityHidden(me\Collider)) Then
+										HideEntity(me\Collider)
+										PositionEntity(me\Collider, x, 0.302, z)	
+										me\DropSpeed = 0.0
+									EndIf
 								Else
 									PositionEntity(me\Collider, EntityX(me\Collider), 0.302, EntityZ(me\Collider))
 									ResetEntity(me\Collider)
@@ -2881,7 +2883,6 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					EndIf
-					
 					TriggerTeslaGateOnNPCs(e)
 				Else
 					If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
@@ -5855,9 +5856,9 @@ Function UpdateEvents%()
 						n_I\Curr106\Idle = 1
 						
 						For r.Rooms = Each Rooms
-							HideEntity(r\OBJ)
+							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 						Next
-						ShowEntity(e\room\OBJ)
+						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 						
 						UpdateForest(fr)
 						
@@ -7984,9 +7985,9 @@ Function UpdateDimension106%()
 			
 			If PlayerRoom = e\room Then
 				For r.Rooms = Each Rooms
-					HideEntity(r\OBJ)
+					If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 				Next
-				ShowEntity(e\room\OBJ)
+				If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 				
 				PlayerFallingPickDistance = 0.0
 				CurrStepSFX = 1
@@ -8542,7 +8543,7 @@ Function UpdateDimension106%()
 					UpdateRooms()
 				EndIf
 			Else
-				HideEntity(e\room\OBJ)
+				If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
 				e\EventState = 0.0
 				e\EventState3 = 0.0
 				e\EventState2 = PD_StartRoom
@@ -8693,9 +8694,9 @@ Function UpdateDimension1499%()
 				CameraRange(Camera, 0.05, 90.0)
 				
 				For r.Rooms = Each Rooms
-					HideEntity(r\OBJ)
+					If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 				Next
-				ShowEntity(e\room\OBJ)
+				If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 				If QuickLoadPercent = 100 Lor QuickLoadPercent = -1 Then
 					UpdateChunks(e\room, 15)
 					If EntityHidden(I_1499\Sky) Then ShowEntity(I_1499\Sky)
@@ -8903,9 +8904,9 @@ Function UpdateEndings%()
 						CanSave = 1
 						
 						For r.Rooms = Each Rooms
-							HideEntity(r\OBJ)
+							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 						Next
-						ShowEntity(e\room\OBJ)
+						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 						
 						If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
 							If e\room\NPC[0]\State = 2.0 Then
@@ -9157,7 +9158,7 @@ Function UpdateEndings%()
 						EndIf
 					EndIf
 				Else
-					HideEntity(e\room\OBJ)
+					If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
 				EndIf
 				;[End Block]
 			Case e_gate_a
@@ -9246,9 +9247,9 @@ Function UpdateEndings%()
 						CanSave = 1
 						
 						For r.Rooms = Each Rooms
-							HideEntity(r\OBJ)
+							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 						Next
-						ShowEntity(e\room\OBJ)
+						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
 						
 						ShouldPlay = 17
 						
@@ -9611,7 +9612,7 @@ Function UpdateEndings%()
 						EndIf
 					EndIf
 				Else
-					HideEntity(e\room\OBJ)
+					If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
 				EndIf
 				;[End Block]
 		End Select
