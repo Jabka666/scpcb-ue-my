@@ -25,42 +25,42 @@ End Type
 
 Function CheckForPropModel%(File$)
 	Local Path$ = "GFX\Map\Props\"
-	Local Format$ = ".b3d"
+	Local FileFormat$ = ".b3d"
 	
 	Select File
-		Case Path + "button" + Format
+		Case Path + "button" + FileFormat
 			;[Block]
 			Return(CopyEntity(d_I\ButtonModelID[BUTTON_DEFAULT]))
 			;[End Block]
-		Case Path + "buttonkeycard" + Format
+		Case Path + "buttonkeycard" + FileFormat
 			;[Block]
 			Return(CopyEntity(d_I\ButtonModelID[BUTTON_KEYCARD]))
 			;[End Block]
-		Case Path + "door01" + Format
+		Case Path + "door01" + FileFormat
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_DEFAULT_MODEL]))
 			;[End Block]
-		Case Path + "contdoorleft" + Format
+		Case Path + "contdoorleft" + FileFormat
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_1]))
 			;[End Block]
-		Case Path + "contdoorright" + Format
+		Case Path + "contdoorright" + FileFormat
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_2]))
 			;[End Block]
-		Case Path + "doorframe" + Format
+		Case Path + "doorframe" + FileFormat
 			;[Block]
 			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL]))
 			;[End Block]
-		Case Path + "contdoorframe" + Format
+		Case Path + "contdoorframe" + FileFormat
 			;[Block]
 			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_BIG_FRAME_MODEL]))
 			;[End Block]
-		Case Path + "leverbase" + Format
+		Case Path + "leverbase" + FileFormat
 			;[Block]
 			Return(CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL]))
 			;[End Block]
-		Case Path + "leverhandle" + Format
+		Case Path + "leverhandle" + FileFormat
 			;[Block]
 			Return(CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL]))
 			;[End Block]

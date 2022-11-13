@@ -541,7 +541,6 @@ Function UpdateConsole%()
 							;[Block]
 							CreateConsoleMsg(GetLocalString("console", "help_3.1"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMsg("- playmusic [clip + .wav / .ogg]")
 							CreateConsoleMsg("- camerafog [near] [far]")
 							CreateConsoleMsg("- spawn [npc type] [state]")
 							CreateConsoleMsg("- injure [value]")
@@ -741,13 +740,6 @@ Function UpdateConsole%()
 							CreateConsoleMsg(GetLocalString("console", "help.weed.title"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.weed"))
-							CreateConsoleMsg("******************************")
-							;[End Block]
-						Case "playmusic"
-							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.pm.title"))
-							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.pm"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "infect"
@@ -1413,27 +1405,6 @@ Function UpdateConsole%()
 							;[End Block]
 					End Select
 					;[End Block]
-				Case "playmusic"
-					;[Block]
-					; ~ I think this might be broken since the FMod library streaming was added -- Mark
-					If Instr(ConsoleInput, " ") <> 0 Then
-						StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					Else
-						StrTemp = ""
-					EndIf
-					
-					If StrTemp <> "" Then
-						PlayCustomMusic = True
-						If CustomMusic <> 0 Then FreeSound_Strict(CustomMusic) : CustomMusic = 0
-						If MusicCHN <> 0 Then StopChannel(MusicCHN) : MusicCHN = 0
-						CustomMusic = LoadSound_Strict("SFX\Music\Custom\" + StrTemp)
-						If (Not CustomMusic) Then PlayCustomMusic = False
-					Else
-						PlayCustomMusic = False
-						If CustomMusic <> 0 Then FreeSound_Strict(CustomMusic) : CustomMusic = 0
-						If MusicCHN <> 0 Then StopChannel(MusicCHN) : MusicCHN = 0
-					EndIf
-					;[End Block]
 				Case "tele"
 					;[Block]
 					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
@@ -1994,7 +1965,7 @@ End Type
 
 Global I_Zone.MapZones = New MapZones
 
-InitErrorMsgs(12)
+InitErrorMsgs(12, True)
 SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
 
 SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))

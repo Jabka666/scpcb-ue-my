@@ -82,14 +82,26 @@ Function LoadEventSound%(e.Events, File$, Number% = 0)
 		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 		e\Sound = LoadSound_Strict(File)
 		Return(e\Sound)
-	ElseIf Number = 1 Then
+	ElseIf Number = 1
 		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 		e\Sound2 = LoadSound_Strict(File)
 		Return(e\Sound2)
-	ElseIf Number = 2 Then
+	ElseIf Number = 2
 		If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
 		e\Sound3 = LoadSound_Strict(File)
 		Return(e\Sound3)
+	EndIf
+End Function
+
+Function LoadNPCSound%(n.NPCs, File$, Number% = 0)
+	If Number = 0 Then
+		If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+		n\Sound = LoadSound_Strict(File)
+		Return(n\Sound)
+	ElseIf Number = 1
+		If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+		n\Sound2 = LoadSound_Strict(File)
+		Return(n\Sound2)
 	EndIf
 End Function
 
