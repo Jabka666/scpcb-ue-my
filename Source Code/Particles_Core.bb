@@ -136,9 +136,7 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 	End Select
 	
 	For r.Rooms = Each Rooms
-		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then
-			e\room = r
-		EndIf
+		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then e\room = r
 	Next
 	
 	Return(e)
@@ -230,5 +228,4 @@ Function UpdateDust%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~B#B2
 ;~C#Blitz3D

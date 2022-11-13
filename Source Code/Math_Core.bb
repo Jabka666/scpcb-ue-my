@@ -135,11 +135,7 @@ Function ScaledMouseY#()
 End Function
 
 Function MouseOn%(x%, y%, Width%, Height%)
-	If ScaledMouseX() > x And ScaledMouseX() < x + Width Then
-		If ScaledMouseY() > y And ScaledMouseY() < y + Height Then
-			Return(True)
-		EndIf
-	EndIf
+	If (ScaledMouseX() > x And ScaledMouseX() < x + Width) And (ScaledMouseY() > y And ScaledMouseY() < y + Height) Then Return(True)
 	Return(False)
 End Function
 
@@ -377,9 +373,9 @@ Function CheckTriggers$()
 	Else
 		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
 			If chs\DebugHUD <> 0 Then
-				EntityAlpha(PlayerRoom\Triggerboxes[i]\OBJ, 0.2)
+				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
 			Else
-				EntityAlpha(PlayerRoom\Triggerboxes[i]\OBJ, 0.0)
+				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)
  			EndIf
 			
 			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX Then

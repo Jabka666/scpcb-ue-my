@@ -141,9 +141,7 @@ Function LanguageSelector%()
 				EndIf
 			ElseIf FileType("Localization\" + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language Then
-					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 140, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
-						DeleteFolder("Localization\" + SelectedLanguage\ID)
-					EndIf
+					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 140, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then DeleteFolder("Localization\" + SelectedLanguage\ID)
 					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
@@ -158,14 +156,9 @@ Function LanguageSelector%()
 				EndIf
 			EndIf
 		Else
-			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then 
-				ExecFile_Strict("https://gist.github.com/ZiYueCommentary/97424394a0daf69d3a1220253b0a1cbb#file-ue-contribute-md")
-			EndIf
+			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://gist.github.com/ZiYueCommentary/97424394a0daf69d3a1220253b0a1cbb#file-ue-contribute-md")
 		EndIf
-		
-		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages) Then 
-			Exit
-		EndIf
+		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages) Then  Exit
 		
 		Flip()
 	Forever
@@ -259,15 +252,13 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 	Local Pushed% = False
 	
 	Color(50, 50, 50)
-	If (Not Disabled) Then 
-		If MouseX() > x And MouseX() < x + Width Then
-			If MouseY() > y And MouseY() < y + Height Then
-				If MouseDown(1) Then
-					Pushed = True
-					Color(30, 30, 30)
-				Else
-					Color(100, 100, 100)
-				EndIf
+	If (Not Disabled) Then
+		If MouseOn(x, y, Width, Height)
+			If mo\MouseDown1 Then
+				Pushed = True
+				Color(30, 30, 30)
+			Else
+				Color(100, 100, 100)
 			EndIf
 		EndIf
 	EndIf

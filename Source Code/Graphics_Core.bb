@@ -233,7 +233,7 @@ Function UpdateWorld2%()
 	If wi\SCRAMBLE And HasBattery <> 0 Then
 		If (Not ChannelPlaying(SCRAMBLECHN)) Then SCRAMBLECHN = PlaySound_Strict(SCRAMBLESFX)
 	Else
-		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
+		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 	EndIf
 	
 	If fps\Factor[0] > 0.0 Then
@@ -504,9 +504,7 @@ Wend
 Function GetScreenshot%()
 	Local x%, y%
 	
-	If FileType("Screenshots\") <> 2 Then
-		CreateDir("Screenshots")
-	EndIf
+	If FileType("Screenshots\") <> 2 Then CreateDir("Screenshots")
 	
 	Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
 	

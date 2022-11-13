@@ -19,9 +19,7 @@ Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = De
 	For tic.TextureInCache = Each TextureInCache
 		If tic\TexName <> "CreateTexture" Then
 			If StripPath(TexName) = tic\TexName Then
-				If tic\TexDeleteType < DeleteType Then
-					tic\TexDeleteType = DeleteType
-				EndIf
+				If tic\TexDeleteType < DeleteType Then tic\TexDeleteType = DeleteType
 				Return(tic\Tex)
 			EndIf
 		EndIf
@@ -31,9 +29,7 @@ Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = De
 	tic.TextureInCache = New TextureInCache
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
-	If (Not tic\Tex) Then
-		tic\Tex = LoadTexture_Cache(CurrPath, TexFlags)
-	EndIf
+	If (Not tic\Tex) Then tic\Tex = LoadTexture_Cache(CurrPath, TexFlags)
 	Return(tic\Tex)
 End Function
 
@@ -44,9 +40,7 @@ Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Heig
 	For tic.TextureInCache = Each TextureInCache
 		If tic\TexName <> "CreateTexture" Then
 			If StripPath(TexName) = tic\TexName Then
-				If tic\TexDeleteType < DeleteType Then
-					tic\TexDeleteType = DeleteType
-				EndIf
+				If tic\TexDeleteType < DeleteType Then tic\TexDeleteType = DeleteType
 				Return(tic\Tex)
 			EndIf
 		EndIf
@@ -56,9 +50,7 @@ Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Heig
 	tic.TextureInCache = New TextureInCache
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
-	If (Not tic\Tex) Then
-		tic\Tex = LoadAnimTexture(CurrPath, TexFlags, Width, Height, FirstFrame, Count)
-	EndIf
+	If (Not tic\Tex) Then tic\Tex = LoadAnimTexture(CurrPath, TexFlags, Width, Height, FirstFrame, Count)
 	Return(tic\Tex)
 End Function
 
@@ -109,9 +101,8 @@ Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
 		Temp1s = Name
 	EndIf
 	
-	If Instr(Temp1s, "_lm") <> 0 Then ; ~ Texture is a lightmap
-		Return(2)
-	EndIf
+	; ~ Texture is a lightmap
+	If Instr(Temp1s, "_lm") <> 0 Then Return(2)
 	
 	For mat.Materials = Each Materials
 		If mat\Name = Temp1s Then

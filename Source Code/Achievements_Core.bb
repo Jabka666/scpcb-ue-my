@@ -42,9 +42,7 @@ Function AchievementTooltip%(AchvNo%)
 	Local Width% = StringWidth(achv\AchievementStrings[AchvNo])
 	
 	SetFont(fo\FontID[Font_Default])
-	If StringWidth(achv\AchievementDescs[AchvNo]) > Width Then
-		Width = StringWidth(achv\AchievementDescs[AchvNo])
-	EndIf
+	If StringWidth(achv\AchievementDescs[AchvNo]) > Width Then Width = StringWidth(achv\AchievementDescs[AchvNo])
 	Width = Width + (20 * MenuScale)
 	
 	Local Height% = 38 * Scale

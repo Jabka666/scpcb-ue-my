@@ -52,8 +52,6 @@ End Function
 Function ShowSubtitles%(Name$)
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
-	If (Not opt\EnableSubtitles) Then Return
-	
 	Local sub.Subtitles, CurrSub.Subtitles
 	Local Person% = Int(GetFileLocalString(SubtitlesFile, Name, "Person"))
 	Local LinesAmount% = Int(GetFileLocalString(SubtitlesFile, Name, "LinesAmount"))

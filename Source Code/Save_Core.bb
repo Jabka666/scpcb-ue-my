@@ -458,9 +458,7 @@ Function SaveGame%(File$)
 			WriteByte(f, 66)
 		EndIf
 		
-		If it\ItemTemplate\IsAnim <> 0 Then
-			WriteFloat(f, AnimTime(it\Model))
-		EndIf
+		If it\ItemTemplate\IsAnim <> 0 Then WriteFloat(f, AnimTime(it\Model))
 		WriteByte(f, it\InvSlots)
 		WriteInt(f, it\ID)
 		If it\ItemTemplate\InvImg = it\InvImg Then 
@@ -851,19 +849,12 @@ Function LoadGame%(File$)
 			If r\mt <> Null Then ; ~ Remove the old grid content
 				For x = 0 To MTGridSize - 1
 					For y = 0 To MTGridSize - 1
-						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then
-							FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
-						EndIf
-						If r\mt\waypoints[x + (y * MTGridSize)] <> Null Then
-							RemoveWaypoint(r\mt\waypoints[x + (y * MTGridSize)])
-							r\mt\waypoints[x + (y * MTGridSize)] = Null
-						EndIf
+						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
+						If r\mt\waypoints[x + (y * MTGridSize)] <> Null Then RemoveWaypoint(r\mt\waypoints[x + (y * MTGridSize)]) : r\mt\waypoints[x + (y * MTGridSize)] = Null
 					Next
 				Next
 				For x = 0 To 6
-					If r\mt\Meshes[x] <> 0 Then
-						FreeEntity(r\mt\Meshes[x]) : r\mt\Meshes[x] = 0
-					EndIf
+					If r\mt\Meshes[x] <> 0 Then FreeEntity(r\mt\Meshes[x]) : r\mt\Meshes[x] = 0
 				Next
 				Delete(r\mt) : r\mt = Null
 			EndIf
@@ -1138,36 +1129,38 @@ Function LoadGame%(File$)
 		FindForestEvent(e)
 		
 		; ~ Reset e_dimension_1499
-		If e\EventID = e_dimension_1499 Then
-			If e\EventState > 0.0 Then
-				e\EventState = 0.0
-				e\EventStr = ""
-				HideChunks()
-				DeleteChunks()
-				For n.NPCs = Each NPCs
-					If n\NPCType = NPCType1499_1
-						If n\InFacility = 0
-							RemoveNPC(n)
+		Select e\EventID
+			Case e_dimension_1499
+				;[Block]
+				If e\EventState > 0.0 Then
+					e\EventState = 0.0
+					e\EventStr = ""
+					HideChunks()
+					DeleteChunks()
+					For n.NPCs = Each NPCs
+						If n\NPCType = NPCType1499_1
+							If n\InFacility = 0
+								RemoveNPC(n)
+							EndIf
 						EndIf
-					EndIf
-				Next
-				
-				Local du.Dummy1499_1
-				
-				For du.Dummy1499_1 = Each Dummy1499_1
-					Delete(du)
-				Next
-			EndIf
-		; ~ Reset the forest event to make it loading properly
-		ElseIf e\EventID = e_cont2_860_1
-			e\EventStr = ""
-		ElseIf e\EventID = e_cont1_205
-			e\EventStr = ""
-		ElseIf e\EventID = e_cont1_106
-			If e\EventState2 = 0.0 Then
-				PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), -1280.0 * RoomScale, EntityZ(e\room\Objects[6], True), True)
-			EndIf
-		EndIf
+					Next
+					
+					Local du.Dummy1499_1
+					
+					For du.Dummy1499_1 = Each Dummy1499_1
+						Delete(du)
+					Next
+				EndIf
+				;[End Block]
+			Case e_cont2_860_1, e_cont1_205
+				;[Block]
+				e\EventStr = ""
+				;[End Block]
+			Case e_cont1_106
+				;[Block]
+				If e\EventState2 = 0.0 Then PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), (-1280.0) * RoomScale, EntityZ(e\room\Objects[6], True), True)
+				;[End Block]
+		End Select
 	Next
 	
 	Local it.Items
@@ -1326,13 +1319,13 @@ Function LoadGame%(File$)
 				If EntityZ(do\FrameOBJ, True) = r\z Then
 					If EntityX(do\FrameOBJ, True) = r\x + 4.0 Then
 						r\AdjDoor[0] = do
-					ElseIf EntityX(do\FrameOBJ, True) = r\x - 4.0 Then
+					ElseIf EntityX(do\FrameOBJ, True) = r\x - 4.0
 						r\AdjDoor[2] = do
 					EndIf
 				ElseIf EntityX(do\FrameOBJ, True) = r\x Then
 					If EntityZ(do\FrameOBJ, True) = r\z + 4.0 Then
 						r\AdjDoor[3] = do
-					ElseIf EntityZ(do\FrameOBJ, True) = r\z - 4.0 Then
+					ElseIf EntityZ(do\FrameOBJ, True) = r\z - 4.0
 						r\AdjDoor[1] = do
 					EndIf
 				EndIf
@@ -1347,14 +1340,10 @@ Function LoadGame%(File$)
 	EndIf
 	
 	If me\Collider <> 0 Then
-		If PlayerRoom <> Null Then
-			ShowEntity(PlayerRoom\OBJ)
-		EndIf
+		If PlayerRoom <> Null Then ShowEntity(PlayerRoom\OBJ)
 		ShowEntity(me\Collider)
 		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
-		If PlayerRoom <> Null Then
-			HideEntity(PlayerRoom\OBJ)
-		EndIf
+		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
 	EndIf
 	
 	UpdateTimer = 0.0
@@ -1704,9 +1693,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 		
 		For r.Rooms = Each Rooms
-			If r\x = x And r\z = z Then
-				Exit
-			EndIf
+			If r\x = x And r\z = z Then Exit
 		Next
 		
 		For x = 0 To MaxRoomNPCs - 1
@@ -1742,19 +1729,12 @@ Function LoadGameQuick%(File$)
 			If r\mt <> Null Then
 				For x = 0 To MTGridSize - 1
 					For y = 0 To MTGridSize - 1
-						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then
-							FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
-						EndIf
-						If r\mt\waypoints[x + (y * MTGridSize)] <> Null Then
-							RemoveWaypoint(r\mt\waypoints[x + (y * MTGridSize)])
-							r\mt\waypoints[x + (y * MTGridSize)] = Null
-						EndIf
+						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
+						If r\mt\waypoints[x + (y * MTGridSize)] <> Null Then RemoveWaypoint(r\mt\waypoints[x + (y * MTGridSize)]) : r\mt\waypoints[x + (y * MTGridSize)] = Null
 					Next
 				Next
 				For x = 0 To 6
-					If r\mt\Meshes[x] <> 0 Then
-						FreeEntity(r\mt\Meshes[x]) : r\mt\Meshes[x] = 0
-					EndIf
+					If r\mt\Meshes[x] <> 0 Then FreeEntity(r\mt\Meshes[x]) : r\mt\Meshes[x] = 0
 				Next
 				Delete(r\mt) : r\mt = Null
 			EndIf
@@ -1908,18 +1888,21 @@ Function LoadGameQuick%(File$)
 		e\EventStr = ReadString(f)
 		FindForestEvent(e)
 		
-		If e\EventID = e_cont1_173 Then
-			; ~ A hacky fix for the case that the intro objects aren't loaded when they should
-			; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
-			If (Not e\room\Objects[0]) Then
-				e\room\Objects[0] = CreatePivot()
-				e\room\Objects[1] = CreatePivot()
-			EndIf
-		ElseIf e\EventID = e_cont2_860_1 Then
-			If e\EventState = 1.0 Then
-				ShowEntity(e\room\fr\Forest_Pivot)
-			EndIf
-		EndIf
+		Select e\EventID
+			Case e_cont1_173
+				;[Block]
+				; ~ A hacky fix for the case that the intro objects aren't loaded when they should
+				; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
+				If (Not e\room\Objects[0]) Then
+					e\room\Objects[0] = CreatePivot()
+					e\room\Objects[1] = CreatePivot()
+				EndIf
+				;[End Block]
+			Case e_cont2_860_1
+				;[Block]
+				If e\EventState = 1.0 Then ShowEntity(e\room\fr\Forest_Pivot)
+				;[End Block]
+		End Select
 	Next
 	
 	Local it.Items
@@ -2052,14 +2035,10 @@ Function LoadGameQuick%(File$)
 	CloseFile(f)
 	
 	If me\Collider <> 0 Then
-		If PlayerRoom <> Null Then
-			ShowEntity(PlayerRoom\OBJ)
-		EndIf
+		If PlayerRoom <> Null Then ShowEntity(PlayerRoom\OBJ)
 		ShowEntity(me\Collider)
 		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
-		If PlayerRoom <> Null Then
-			HideEntity(PlayerRoom\OBJ)
-		EndIf
+		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
 	EndIf
 	
 	UpdateTimer = 0.0
@@ -2070,75 +2049,82 @@ Function LoadGameQuick%(File$)
 	
 	If Sky <> 0 Then FreeEntity(Sky) : Sky = 0
 	For r.Rooms = Each Rooms
-		If r\RoomTemplate\Name = "gate_a" Then
-			If r\Objects[0] <> 0 Then
-				FreeEntity(r\Objects[0]) : r\Objects[0] = 0
-				
-				xTemp = EntityX(r\Objects[9], True)
-				zTemp = EntityZ(r\Objects[9], True)
-				FreeEntity(r\Objects[9]) : r\Objects[9] = 0
-				
-				r\Objects[10] = 0 ; ~ r\Objects[10] is already deleted because it is a parent object to r\Objects[9] which is already deleted a line before
-				
-				; ~ Readding this object, as it is originally inside the "FillRoom" function but gets deleted when it loads Gate A
-				r\Objects[9] = CreatePivot()
-				PositionEntity(r\Objects[9], xTemp, r\y + 992.0 * RoomScale, zTemp, True)
-				EntityParent(r\Objects[9], r\OBJ)
-				
-				; ~ The Gate A wall pieces
-				xTemp = EntityX(r\Objects[13], True)
-				zTemp = EntityZ(r\Objects[13], True)
-				FreeEntity(r\Objects[13])
-				r\Objects[13] = LoadMesh_Strict("GFX\Map\gateawall1.b3d", r\OBJ)
-				PositionEntity(r\Objects[13], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)
-				EntityColor(r\Objects[13], 25.0, 25.0, 25.0)
-				EntityType(r\Objects[13], HIT_MAP)
-				
-				xTemp = EntityX(r\Objects[14], True)
-				zTemp = EntityZ(r\Objects[14], True)
-				FreeEntity(r\Objects[14])
-				r\Objects[14] = LoadMesh_Strict("GFX\Map\gateawall2.b3d", r\OBJ)
-				PositionEntity(r\Objects[14], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)	
-				EntityColor(r\Objects[14], 25.0, 25.0, 25.0)
-				EntityType(r\Objects[14], HIT_MAP)
-			EndIf
-			If r\Objects[12] <> 0 Then
-				FreeEntity(r\Objects[12]) : r\Objects[12] = 0
-				FreeEntity(r\Objects[17]) : r\Objects[17] = 0
-			EndIf
-		ElseIf r\RoomTemplate\Name = "gate_b" Then
-			If r\Objects[0] <> 0 Then
-				xTemp = EntityX(r\Objects[0], True)
-				zTemp = EntityZ(r\Objects[0], True)
-				FreeEntity(r\Objects[0]) : r\Objects[0] = 0
-				r\Objects[0] = CreatePivot(r\OBJ)
-				PositionEntity(r\Objects[0], xTemp, r\y - 1017.0 * RoomScale, zTemp, True)
-			EndIf
-		ElseIf r\RoomTemplate\Name = "cont1_035"
-			If I_035\Sad <> 0 Then
-				Tex = LoadTexture_Strict("GFX\Map\Textures\label035_sad.png")
-			Else
-				Tex = LoadTexture_Strict("GFX\Map\Textures\label035_smile.png")
-			EndIf
-			
-			For i = 2 To CountSurfaces(r\Objects[9])
-				SF = GetSurface(r\Objects[9], i)
-				b = GetSurfaceBrush(SF)
-				If b <> 0 Then
-					t1 = GetBrushTexture(b, 0)
-					If t1 <> 0 Then
-						Name = StripPath(TextureName(t1))
-						If Lower(Name) <> "cable_black.jpg"
-							BrushTexture(b, Tex, 0, 0)
-							PaintSurface(SF, b)
-						EndIf
-						If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
-					EndIf
-					FreeBrush(b)
+		Select r\RoomTemplate\Name
+			Case "gate_a"
+				;[Block]
+				If r\Objects[0] <> 0 Then
+					FreeEntity(r\Objects[0]) : r\Objects[0] = 0
+					
+					xTemp = EntityX(r\Objects[9], True)
+					zTemp = EntityZ(r\Objects[9], True)
+					FreeEntity(r\Objects[9]) : r\Objects[9] = 0
+					
+					r\Objects[10] = 0 ; ~ r\Objects[10] is already deleted because it is a parent object to r\Objects[9] which is already deleted a line before
+					
+					; ~ Readding this object, as it is originally inside the "FillRoom" function but gets deleted when it loads Gate A
+					r\Objects[9] = CreatePivot()
+					PositionEntity(r\Objects[9], xTemp, r\y + 992.0 * RoomScale, zTemp, True)
+					EntityParent(r\Objects[9], r\OBJ)
+					
+					; ~ The Gate A wall pieces
+					xTemp = EntityX(r\Objects[13], True)
+					zTemp = EntityZ(r\Objects[13], True)
+					FreeEntity(r\Objects[13])
+					r\Objects[13] = LoadMesh_Strict("GFX\Map\gateawall1.b3d", r\OBJ)
+					PositionEntity(r\Objects[13], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)
+					EntityColor(r\Objects[13], 25.0, 25.0, 25.0)
+					EntityType(r\Objects[13], HIT_MAP)
+					
+					xTemp = EntityX(r\Objects[14], True)
+					zTemp = EntityZ(r\Objects[14], True)
+					FreeEntity(r\Objects[14])
+					r\Objects[14] = LoadMesh_Strict("GFX\Map\gateawall2.b3d", r\OBJ)
+					PositionEntity(r\Objects[14], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)	
+					EntityColor(r\Objects[14], 25.0, 25.0, 25.0)
+					EntityType(r\Objects[14], HIT_MAP)
 				EndIf
-			Next
-			DeleteSingleTextureEntryFromCache(Tex)
-		EndIf
+				If r\Objects[12] <> 0 Then
+					FreeEntity(r\Objects[12]) : r\Objects[12] = 0
+					FreeEntity(r\Objects[17]) : r\Objects[17] = 0
+				EndIf
+				;[End Block]
+			Case "gate_b"
+				;[Block]
+				If r\Objects[0] <> 0 Then
+					xTemp = EntityX(r\Objects[0], True)
+					zTemp = EntityZ(r\Objects[0], True)
+					FreeEntity(r\Objects[0]) : r\Objects[0] = 0
+					r\Objects[0] = CreatePivot(r\OBJ)
+					PositionEntity(r\Objects[0], xTemp, r\y - 1017.0 * RoomScale, zTemp, True)
+				EndIf
+				;[End Block]
+			Case "cont1_035"
+				;[Block]
+				If I_035\Sad <> 0 Then
+					Tex = LoadTexture_Strict("GFX\Map\Textures\label035_sad.png")
+				Else
+					Tex = LoadTexture_Strict("GFX\Map\Textures\label035_smile.png")
+				EndIf
+				
+				For i = 2 To CountSurfaces(r\Objects[9])
+					SF = GetSurface(r\Objects[9], i)
+					b = GetSurfaceBrush(SF)
+					If b <> 0 Then
+						t1 = GetBrushTexture(b, 0)
+						If t1 <> 0 Then
+							Name = StripPath(TextureName(t1))
+							If Lower(Name) <> "cable_black.jpg"
+								BrushTexture(b, Tex, 0, 0)
+								PaintSurface(SF, b)
+							EndIf
+							If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+						EndIf
+						FreeBrush(b)
+					EndIf
+				Next
+				DeleteSingleTextureEntryFromCache(Tex)
+				;[End Block]
+		End Select
 	Next
 	
 	; ~ Resetting some stuff (those get changed when going to the endings)
@@ -2166,16 +2152,12 @@ Function UpdateAutoSave%()
 		SaveGame(CurrSave\Name + "_" + as\Amount)
 	Else
 		as\Timer = as\Timer - fps\Factor[0]
-		If as\Timer <= 70.0 * 5.0 Then
-			CreateHintMsg(Format(GetLocalString("save", "autosave.in"), Str(Int(Ceil(as\Timer) / 70.0))))
-		EndIf
+		If as\Timer <= 70.0 * 5.0 Then CreateHintMsg(Format(GetLocalString("save", "autosave.in"), Str(Int(Ceil(as\Timer) / 70.0))))
 	EndIf
 End Function
 
 Function CancelAutoSave%()
-	If as\Timer <= 70.0 * 5.0 Then
-		CreateHintMsg(GetLocalString("save", "autosave.canceled"))
-	EndIf
+	If as\Timer <= 70.0 * 5.0 Then CreateHintMsg(GetLocalString("save", "autosave.canceled"))
 	as\Timer = 70.0 * 120.0
 End Function
 
@@ -2275,9 +2257,7 @@ Function LoadSavedMaps%()
 	Next
 	SavedMapsAmount = 0
 	
-	If FileType(CustomMapsPath) <> 2 Then
-		CreateDir(CustomMapsPath)
-	EndIf
+	If FileType(CustomMapsPath) <> 2 Then CreateDir(CustomMapsPath)
 	Dir = ReadDir(CustomMapsPath)
 	Repeat
 		File = NextFile(Dir)
@@ -2285,9 +2265,7 @@ Function LoadSavedMaps%()
 		If File = "" Then Exit
 		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then 
 			If File <> "." And File <> ".." Then
-				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
-					SavedMapsAmount = SavedMapsAmount + 1
-				EndIf
+				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then SavedMapsAmount = SavedMapsAmount + 1
 			EndIf
 		EndIf 
 	Forever 
@@ -2333,9 +2311,7 @@ Function LoadMap%(File$)
 	
 	f = ReadFile(File)
 	
-	If CurrMapGrid <> Null Then
-		Delete(CurrMapGrid) : CurrMapGrid = Null
-	EndIf
+	If CurrMapGrid <> Null Then Delete(CurrMapGrid) : CurrMapGrid = Null
 	CurrMapGrid = New MapGrid
 	
 	CoffinDistance = 100.0
@@ -2409,9 +2385,7 @@ Function LoadMap%(File$)
 		
 		Local fr.Forest
 		
-		If ForestRoom <> Null Then
-			fr.Forest = New Forest
-		EndIf
+		If ForestRoom <> Null Then fr.Forest = New Forest
 		
 		; ~ Forest rooms
 		For i = 0 To ForestPieceAmount - 1
@@ -2476,9 +2450,7 @@ Function LoadMap%(File$)
 			EndIf
 		Next
 		
-		If MTRoom <> Null Then
-			MTRoom\mt = New MTGrid
-		EndIf
+		If MTRoom <> Null Then MTRoom\mt = New MTGrid
 		
 		; ~ Maintenance tunnels rooms
 		For i = 0 To MTPieceAmount - 1
@@ -2488,15 +2460,9 @@ Function LoadMap%(File$)
 			
 			Angle = ReadByte(f)
 			
-			If Angle <> 1.0 And Angle <> 3.0 Then
-				Angle = Angle + 2.0
-			EndIf
-			If Name = "maintenance tunnel corner" Lor Name = "maintenance tunnel t-shaped room" Then
-				Angle = Angle + 3.0
-			EndIf
-			If Angle > 3.0 Then
-				Angle = (Angle Mod 4.0)
-			EndIf
+			If Angle <> 1.0 And Angle <> 3.0 Then Angle = Angle + 2.0
+			If Name = "maintenance tunnel corner" Lor Name = "maintenance tunnel t-shaped room" Then Angle = Angle + 3.0
+			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
 			
 			x = (MTGridSize - 1) - x
 			

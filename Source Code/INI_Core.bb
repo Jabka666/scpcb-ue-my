@@ -261,9 +261,7 @@ Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 		If INI_sTemp <> "" Then
 			If Left(INI_sTemp, 1) = "[" And Right(INI_sTemp, 1) = "]" Then
 				; ~ Process SECTION
-				If INI_sCurrentSection = INI_sUpperSection And (Not INI_bWrittenKey) Then
-					INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
-				EndIf
+				If INI_sCurrentSection = INI_sUpperSection And (Not INI_bWrittenKey) Then INI_bWrittenKey = INI_CreateKey(INI_lFileHandle, INI_sKey, INI_sValue)
 				INI_sCurrentSection = Upper(INI_CreateSection(INI_lFileHandle, INI_sTemp))
 				If INI_sCurrentSection = INI_sUpperSection Then INI_bSectionFound = True
 			Else
@@ -304,9 +302,7 @@ Function StripFileName$(File$)
 	If Len(File) > 0 Then
 		For i = 1 To Len(File)
 			mi = Mid(File, i, 1)
-			If mi = "\" Lor mi = "/" Then
-				LastSlash = i
-			EndIf
+			If mi = "\" Lor mi = "/" Then LastSlash = i
 		Next
 	EndIf
 	Return(Left(File, LastSlash))
