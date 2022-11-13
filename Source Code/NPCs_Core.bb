@@ -1499,8 +1499,8 @@ Function UpdateNPCs%()
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
 					n\DropSpeed = 0.0
-					If n\SoundCHN <> 0 Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If n\SoundCHN2 <> 0 Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 					ResetEntity(n\Collider)
 				Else
@@ -1784,7 +1784,7 @@ Function UpdateNPCs%()
 								
 								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 							ElseIf n\Idle = 0
-								If n\SoundCHN <> 0 Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+								If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 								If PlayerInReachableRoom(True) And InFacility = 1 Then ; ~ Player is in a room where SCP-049 can teleport to
 									If Rand(3 - SelectedDifficulty\OtherFactors) = 1 Then
 										TeleportCloser(n)
@@ -2108,9 +2108,7 @@ Function UpdateNPCs%()
 					If n\State > 1.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 				Else
 					; ~ The NPC was killed
-					If n\SoundCHN <> 0 Then
-						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-					EndIf
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
@@ -3066,7 +3064,7 @@ Function UpdateNPCs%()
 					If n\Frame >= 550.0 Then
 						HideEntity(n\OBJ)
 						HideEntity(n\Collider)
-						If n\SoundCHN <> 0 Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					EndIf
 				EndIf
@@ -4644,9 +4642,7 @@ Function UpdateNPCs%()
 					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 				Else
 					; ~ The NPC was killed
-					If n\SoundCHN <> 0 Then
-						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-					EndIf
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
 				EndIf
@@ -4757,12 +4753,8 @@ Function UpdateMTFUnit%(n.NPCs)
 	If n\IsDead Then
 		n\BlinkTimer = -1.0
 		SetNPCFrame(n, 532.0)
-		If n\SoundCHN <> 0 Then
-			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-		EndIf
-		If n\SoundCHN2 <> 0 Then
-			If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
-		EndIf
+		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
 	Else
 		n\MaxGravity = 0.03
 		
@@ -6438,7 +6430,7 @@ Function TriggerTeslaGateOnNPCs%(e.Events)
 				For i = 0 To 2
 					If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(300.0 * RoomScale) Then
 						me\SndVolume = Max(8.0, me\SndVolume)
-						StopChannel(e\SoundCHN)
+						StopChannel(e\SoundCHN) : e\SoundCHN = 0
 						e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
 						If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 						e\EventState = 1.0

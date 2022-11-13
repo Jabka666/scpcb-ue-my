@@ -4605,29 +4605,39 @@ Function UpdateGUI%()
 							Next
 							If ChannelPlaying(RadioCHN[6]) Then PauseChannel(RadioCHN[6])
 							
-							ResumeChannel(RadioCHN[5])
-							If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic)
+							If (Not ChannelPlaying(RadioCHN[5])) Then
+								RadioCHN[5] = PlaySound_Strict(RadioStatic)
+								ResumeChannel(RadioCHN[5])
+							EndIf
 						ElseIf CoffinDistance < 8.0
 							For i = 0 To 4
 								If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 							Next
 							If ChannelPlaying(RadioCHN[6]) Then PauseChannel(RadioCHN[6])
 							
-							ResumeChannel(RadioCHN[5])
-							If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic895)	
+							If (Not ChannelPlaying(RadioCHN[5])) Then
+								ResumeChannel(RadioCHN[5])
+								RadioCHN[5] = PlaySound_Strict(RadioStatic895)
+							EndIf
 						Else
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
 									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
 									
-									ResumeChannel(RadioCHN[0])
 									If (Not opt\EnableUserTracks) Then
-										If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
+										If (Not ChannelPlaying(RadioCHN[0])) Then
+											ResumeChannel(RadioCHN[0])
+											RadioCHN[0] = PlaySound_Strict(RadioStatic)
+										EndIf
 									ElseIf UserTrackMusicAmount < 1
-										If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
+										If (Not ChannelPlaying(RadioCHN[0])) Then
+											ResumeChannel(RadioCHN[0])
+											RadioCHN[0] = PlaySound_Strict(RadioStatic)
+										EndIf
 									Else
 										If (Not ChannelPlaying(RadioCHN[0])) Then
+											ResumeChannel(RadioCHN[0])
 											If (Not UserTrackFlag) Then
 												If opt\UserTrackMode Then
 													If RadioState[0] < (UserTrackMusicAmount - 1)
@@ -4671,8 +4681,8 @@ Function UpdateGUI%()
 									;[Block]
 									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
 									
-									ResumeChannel(RadioCHN[1])
 									If (Not ChannelPlaying(RadioCHN[1])) Then
+										ResumeChannel(RadioCHN[1])
 										If RadioState[1] >= 5.0 Then
 											RadioCHN[1] = PlaySound_Strict(RadioSFX(0, 1))	
 											RadioState[1] = 0.0
@@ -4686,8 +4696,8 @@ Function UpdateGUI%()
 									;[Block]
 									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
 									
-									ResumeChannel(RadioCHN[2])
 									If (Not ChannelPlaying(RadioCHN[2])) Then
+										ResumeChannel(RadioCHN[2])
 										RadioState[2] = RadioState[2] + 1.0
 										If RadioState[2] = 17.0 Then RadioState[2] = 1.0
 										If Floor(RadioState[2] / 2.0) = Ceil(RadioState[2] / 2.0) Then
@@ -4701,8 +4711,10 @@ Function UpdateGUI%()
 									;[Block]
 									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
 									
-									ResumeChannel(RadioCHN[3])
-									If (Not ChannelPlaying(RadioCHN[3])) Then RadioCHN[3] = PlaySound_Strict(RadioStatic)
+									If (Not ChannelPlaying(RadioCHN[3])) Then
+										ResumeChannel(RadioCHN[3])
+										RadioCHN[3] = PlaySound_Strict(RadioStatic)
+									EndIf
 									
 									If MTFTimer > 0.0 Then 
 										RadioState[3] = RadioState[3] + Max(Rand(-10, 1), 0.0)
@@ -4770,11 +4782,13 @@ Function UpdateGUI%()
 									;[Block]
 									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
 									
-									ResumeChannel(RadioCHN[6])
-									If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)									
+									If (Not ChannelPlaying(RadioCHN[6])) Then
+										ResumeChannel(RadioCHN[6])
+										RadioCHN[6] = PlaySound_Strict(RadioStatic)
+									EndIf
 									
-									ResumeChannel(RadioCHN[4])
-									If (Not ChannelPlaying(RadioCHN[4])) Then 
+									If (Not ChannelPlaying(RadioCHN[4])) Then
+										ResumeChannel(RadioCHN[4])
 										If (Not RemoteDoorOn) And RadioState[8] = 0 Then
 											RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"))	
 											RadioState[8] = 1
@@ -4870,16 +4884,20 @@ Function UpdateGUI%()
 									;[End Block]
 								Case 5
 									;[Block]
-									ResumeChannel(RadioCHN[5])
-									If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic)
+									If (Not ChannelPlaying(RadioCHN[5])) Then
+										ResumeChannel(RadioCHN[5])
+										RadioCHN[5] = PlaySound_Strict(RadioStatic)
+									EndIf
 									;[End Block]
 							End Select 
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio" Then
 								If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
 								
-								ResumeChannel(RadioCHN[0])
-								If (Not ChannelPlaying(RadioCHN[0])) Then RadioCHN[0] = PlaySound_Strict(RadioStatic)
+								If (Not ChannelPlaying(RadioCHN[0])) Then
+									ResumeChannel(RadioCHN[0])
+									RadioCHN[0] = PlaySound_Strict(RadioStatic)
+								EndIf
 								RadioState[6] = RadioState[6] + fps\Factor[0]
 								Temp = Mid(Str(CODE_DR_MAYNARD), RadioState[8] + 1.0, 1)
 								If RadioState[6] - fps\Factor[0] <= RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0 Then
@@ -4897,10 +4915,10 @@ Function UpdateGUI%()
 									If KeyHit(i) Then
 										If SelectedItem\State2 <> i - 2 Then
 											PlaySound_Strict(RadioSquelch)
-											If RadioCHN[Int(SelectedItem\State2)] <> 0 Then PauseChannel(RadioCHN[Int(SelectedItem\State2)])
+											PauseChannel(RadioCHN[Int(SelectedItem\State2)])
 										EndIf
 										SelectedItem\State2 = i - 2
-										If RadioCHN[SelectedItem\State2] <> 0 Then ResumeChannel(RadioCHN[SelectedItem\State2])
+										ResumeChannel(RadioCHN[SelectedItem\State2])
 									EndIf
 								Next
 							EndIf
@@ -4908,11 +4926,7 @@ Function UpdateGUI%()
 						
 						If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio" Then
 							If SelectedItem\State <= 20.0 And ((MilliSecs2() Mod 800) < 200) Then
-								If (Not LowBatteryCHN[0]) Then
-									LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
-								ElseIf (Not ChannelPlaying(LowBatteryCHN[0])) Then
-									LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
-								EndIf
+								If (Not LowBatteryCHN[0]) Then LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 							EndIf
 						EndIf
 					EndIf
@@ -5423,14 +5437,10 @@ Function UpdateGUI%()
 			EndIf
 		Else
 			For i = 0 To 6
-				If RadioCHN[i] <> 0 Then 
-					If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
-				EndIf
+				If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 			Next
 			
-			If LowBatteryCHN[0] <> 0 Then
-				If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0]) : LowBatteryCHN[0] = 0
-			EndIf
+			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0]) : LowBatteryCHN[0] = 0
 		EndIf		
 	EndIf
 	
@@ -5707,7 +5717,7 @@ Function RenderGUI%()
 				If e\EventState2 = PD_ThroneRoom Then
 					If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
 						If (Not e\Img) Then
-							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
+							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							If Rand(30) = 1 Then PlaySound_Strict(e\Sound2)
 							e\Img = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
 							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
@@ -5717,7 +5727,7 @@ Function RenderGUI%()
 						EndIf
 					Else
 						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
-						If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						StopChannel(e\SoundCHN) : e\SoundCHN = 0
 					EndIf
 				EndIf
 				Exit
@@ -8446,9 +8456,7 @@ Function Use427%()
 			EndIf
 		Else
 			For i = 0 To 1
-				If I_427\SoundCHN[i] <> 0 Then
-					If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
-				EndIf
+				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
 			Next
 		EndIf
 	Else

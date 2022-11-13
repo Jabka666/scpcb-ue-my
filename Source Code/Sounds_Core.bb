@@ -68,7 +68,7 @@ Function PlayMTFSound%(SoundHandle%, n.NPCs)
 				Case "radio", "fineradio", "18vradio"
 					;[Block]
 					If SoundHandle <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3])) Then
-						If RadioCHN[3] <> 0 Then StopChannel(RadioCHN[3])
+						StopChannel(RadioCHN[3])
 						RadioCHN[3] = PlaySound_Strict(SoundHandle)
 					EndIf
 					;[End Block]
@@ -191,24 +191,24 @@ Function PauseSounds%()
 	Next	
 	
 	For d.Doors = Each Doors
-		If d\SoundCHN <> 0 Then PauseChannel(d\SoundCHN)
-		If d\SoundCHN2 <> 0 Then PauseChannel(d\SoundCHN2)
+		PauseChannel(d\SoundCHN)
+		PauseChannel(d\SoundCHN2)
 	Next
 	
-	If AmbientSFXCHN <> 0 Then PauseChannel(AmbientSFXCHN)
-	If BreathCHN <> 0 Then PauseChannel(BreathCHN)
-	If BreathGasRelaxedCHN <> 0 Then PauseChannel(BreathGasRelaxedCHN)
-	If VomitCHN <> 0 Then PauseChannel(VomitCHN)
-	If CoughCHN <> 0 Then PauseChannel(CoughCHN)
-	If SCRAMBLECHN <> 0 Then PauseChannel(SCRAMBLECHN)
+	PauseChannel(AmbientSFXCHN)
+	PauseChannel(BreathCHN)
+	PauseChannel(BreathGasRelaxedCHN)
+	PauseChannel(VomitCHN)
+	PauseChannel(CoughCHN)
+	PauseChannel(SCRAMBLECHN)
 	
 	For i = 0 To 1
-		If LowBatteryCHN[i] <> 0 Then PauseChannel(LowBatteryCHN[i])
+		PauseChannel(LowBatteryCHN[i])
 	Next
 	
 	; ~ TODO:
 	;For i = 0 To 6
-	;	If RadioCHN[i] <> 0 Then PauseChannel(RadioCHN[i])
+	;	PauseChannel(RadioCHN[i])
 	;Next
 	
 	If IntercomStreamCHN <> 0 Then SetStreamPaused_Strict(IntercomStreamCHN, True)
@@ -260,24 +260,24 @@ Function ResumeSounds%()
 	Next	
 	
 	For d.Doors = Each Doors
-		If d\SoundCHN <> 0 Then ResumeChannel(d\SoundCHN)
-		If d\SoundCHN2 <> 0 Then ResumeChannel(d\SoundCHN2)
+		ResumeChannel(d\SoundCHN)
+		ResumeChannel(d\SoundCHN2)
 	Next
 	
-	If AmbientSFXCHN <> 0 Then ResumeChannel(AmbientSFXCHN)
-	If BreathCHN <> 0 Then ResumeChannel(BreathCHN)
-	If BreathGasRelaxedCHN <> 0 Then ResumeChannel(BreathGasRelaxedCHN)
-	If VomitCHN <> 0 Then ResumeChannel(VomitCHN)
-	If CoughCHN <> 0 Then ResumeChannel(CoughCHN)
-	If SCRAMBLECHN <> 0 Then ResumeChannel(SCRAMBLECHN)
+	ResumeChannel(AmbientSFXCHN)
+	ResumeChannel(BreathCHN)
+	ResumeChannel(BreathGasRelaxedCHN)
+	ResumeChannel(VomitCHN)
+	ResumeChannel(CoughCHN)
+	ResumeChannel(SCRAMBLECHN)
 	
 	For i = 0 To 1
-		If LowBatteryCHN[i] <> 0 Then ResumeChannel(LowBatteryCHN[i])
+		ResumeChannel(LowBatteryCHN[i])
 	Next
 	
 	; ~ TODO:
 	;For i = 0 To 6
-	;	If RadioCHN[i] <> 0 Then ResumeChannel(RadioCHN[i])
+	;	ResumeChannel(RadioCHN[i])
 	;Next
 	
 	If IntercomStreamCHN <> 0 Then SetStreamPaused_Strict(IntercomStreamCHN, False)
@@ -338,23 +338,23 @@ Function KillSounds%()
 	Next
 	
 	For d.Doors = Each Doors
-		If d\SoundCHN <> 0 Then StopChannel(d\SoundCHN) : d\SoundCHN = 0
-		If d\SoundCHN2 <> 0 Then StopChannel(d\SoundCHN2) : d\SoundCHN2 = 0
+		StopChannel(d\SoundCHN) : d\SoundCHN = 0
+		StopChannel(d\SoundCHN2) : d\SoundCHN2 = 0
 	Next
 	
-	If AmbientSFXCHN <> 0 Then StopChannel(AmbientSFXCHN) : AmbientSFXCHN = 0
-	If BreathCHN <> 0 Then StopChannel(BreathCHN) : BreathCHN = 0
-	If BreathGasRelaxedCHN <> 0 Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
-	If VomitCHN <> 0 Then StopChannel(VomitCHN) : VomitCHN = 0
-	If CoughCHN <> 0 Then StopChannel(CoughCHN) : CoughCHN = 0
-	If SCRAMBLECHN <> 0 Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+	StopChannel(AmbientSFXCHN) : AmbientSFXCHN = 0
+	StopChannel(BreathCHN) : BreathCHN = 0
+	StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+	StopChannel(VomitCHN) : VomitCHN = 0
+	StopChannel(CoughCHN) : CoughCHN = 0
+	StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 	
 	For i = 0 To 1
-		If LowBatteryCHN[i] <> 0 Then StopChannel(LowBatteryCHN[i]) : LowBatteryCHN[i] = 0
+		StopChannel(LowBatteryCHN[i]) : LowBatteryCHN[i] = 0
 	Next
 		
 	For i = 0 To 6
-		If RadioCHN[i] <> 0 Then StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
+		StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
 	Next
 	
 	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
@@ -368,7 +368,7 @@ Function KillSounds%()
 	
 	For snd.Sound = Each Sound
 		For i = 0 To 31
-			If snd\Channels[i] <> 0 Then StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
+			StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
 		Next
 	Next
 	
@@ -376,8 +376,8 @@ Function KillSounds%()
 End Function
 
 Function StopBreathSound%()
-	If BreathCHN <> 0 Then StopChannel(BreathCHN) : BreathCHN = 0
-	If BreathGasRelaxedCHN <> 0 Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+	If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN) : BreathCHN = 0
+	If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 End Function
 
 Function GetStepSound%(Entity%)
