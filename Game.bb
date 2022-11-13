@@ -34,10 +34,11 @@ End Function
 Function SetLanguage%(Language$)
 	lang\CurrentLanguage = Language
 	lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
-	IniWriteBuffer_(lang\LanguagePath + LanguageFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + SubtitlesFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + AchievementsFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + LoadingScreensFile, 1)
+	IniWriteBuffer_(lang\LanguagePath + LanguageFile, True)
+	IniWriteBuffer_(lang\LanguagePath + SubtitlesFile, True)
+	IniWriteBuffer_(lang\LanguagePath + AchievementsFile, True)
+	IniWriteBuffer_(lang\LanguagePath + LoadingScreensFile, True)
+	IniWriteBuffer_(lang\LanguagePath + SCP294File, True)
 	opt\Language = Language
 End Function
 
@@ -52,10 +53,11 @@ If FileType(GetEnv("AppData") + "\scpcb-ue\Data\options.ini") <> 1 Then WriteFil
 
 Global lang.Language = New Language
 
-IniWriteBuffer_(LanguageFile, 1)
-IniWriteBuffer_(SubtitlesFile, 1)
-IniWriteBuffer_(AchievementsFile, 1)
-IniWriteBuffer_(LoadingScreensFile, 1)
+IniWriteBuffer_(LanguageFile, True)
+IniWriteBuffer_(SubtitlesFile, True)
+IniWriteBuffer_(AchievementsFile, True)
+IniWriteBuffer_(LoadingScreensFile, True)
+IniWriteBuffer_(SCP294File, True)
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"

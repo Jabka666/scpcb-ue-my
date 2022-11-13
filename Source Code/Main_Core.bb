@@ -4474,55 +4474,54 @@ Function UpdateGUI%()
 				Case "cup"
 					;[Block]
 					If CanUseItem(False, True) Then
-						StrTemp = Trim(Lower(SelectedItem\Name))
-						If Left(StrTemp, 6) = "cup of" Then
-							StrTemp = Right(StrTemp, Len(StrTemp) - 7)
-						ElseIf Left(StrTemp, 8) = "a cup of" 
-							StrTemp = Right(StrTemp, Len(StrTemp) - 9)
+						Local DrinkName$ = Trim(Lower(SelectedItem\Name))
+						
+						If Left(DrinkName, 6) = "cup of" Then
+							DrinkName = Right(DrinkName, Len(DrinkName) - 7)
+						ElseIf Left(DrinkName, 8) = "a cup of" 
+							DrinkName = Right(DrinkName, Len(DrinkName) - 9)
 						EndIf
 						
-						Local Loc% = GetINISectionLocation(SCP294File, StrTemp)
-						
-						StrTemp = GetINIString2(SCP294File, Loc, "Message")
+						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Message")
 						If StrTemp <> "" Then CreateMsg(StrTemp)
 						
-						If GetINIInt2(SCP294File, Loc, "Lethal")
-							msg\DeathMsg = GetINIString2(SCP294File, Loc, "Death Message")
-							If GetINIInt2(SCP294File, Loc, "Lethal") Then Kill()
+						If Int(GetFileLocalString(SCP294File, DrinkName, "Lethal"))
+							msg\DeathMsg = GetFileLocalString(SCP294File, DrinkName, "Death Message")
+							Kill()
 						EndIf
-						me\BlurTimer = Max(GetINIInt2(SCP294File, Loc, "Blur") * 70.0, 0.0)
+						me\BlurTimer = Max(Int(GetFileLocalString(SCP294File, DrinkName, "Blur")) * 70.0, 0.0)
 						If me\VomitTimer = 0.0 Then
-							me\VomitTimer = GetINIInt2(SCP294File, Loc, "Vomit")
+							me\VomitTimer = Int(GetFileLocalString(SCP294File, DrinkName, "Vomit"))
 						Else
-							me\VomitTimer = Min(me\VomitTimer, GetINIInt2(SCP294File, Loc, "Vomit"))
+							me\VomitTimer = Min(me\VomitTimer, Int(GetFileLocalString(SCP294File, DrinkName, "Vomit")))
 						EndIf
-						me\CameraShakeTimer = GetINIString2(SCP294File, Loc, "Camera Shake")
-						me\Injuries = Max(me\Injuries + GetINIInt2(SCP294File, Loc, "Damage"), 0.0)
-						me\Bloodloss = Max(me\Bloodloss + GetINIInt2(SCP294File, Loc, "Blood Loss"), 0.0)
-						StrTemp =  GetINIString2(SCP294File, Loc, "Sound")
+						me\CameraShakeTimer = GetFileLocalString(SCP294File, DrinkName, "Camera Shake")
+						me\Injuries = Max(me\Injuries + Int(GetFileLocalString(SCP294File, DrinkName, "Damage")), 0.0)
+						me\Bloodloss = Max(me\Bloodloss + Int(GetFileLocalString(SCP294File, DrinkName, "Blood Loss")), 0.0)
+						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Sound")
 						If StrTemp <> "" Then PlaySound_Strict(LoadTempSound(StrTemp))
-						If GetINIInt2(SCP294File, Loc, "Stomach Ache") Then I_1025\State[3] = 1.0
+						If Int(GetFileLocalString(SCP294File, DrinkName, "Stomach Ache")) Then I_1025\State[3] = 1.0
 						
-						If GetINIInt2(SCP294File, Loc, "Infection") Then I_008\Timer = I_008\Timer + 1.0
+						If Int(GetFileLocalString(SCP294File, DrinkName, "Infection")) Then I_008\Timer = I_008\Timer + 0.001
 						
-						If GetINIInt2(SCP294File, Loc, "Crystallization") Then I_409\Timer = I_409\Timer + 1.0
+						If Int(GetFileLocalString(SCP294File, DrinkName, "Crystallization")) Then I_409\Timer = I_409\Timer + 0.001
 						
 						If me\DeathTimer = 0.0 Then
-							me\DeathTimer = GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0
+							me\DeathTimer = Int(GetFileLocalString(SCP294File, DrinkName, "Death Timer")) * 70.0
 						Else
-							me\DeathTimer = Min(me\DeathTimer, GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0)
+							me\DeathTimer = Min(me\DeathTimer, Int(GetFileLocalString(SCP294File, DrinkName, "Death Timer")) * 70.0)
 						EndIf
 						
 						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
-						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect")
+						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Blink Effect")
 						If StrTemp <> "" Then me\BlinkEffect = Float(StrTemp) ^ SelectedItem\State
-						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect Timer")
+						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Blink Effect Timer")
 						If StrTemp <> "" Then me\BlinkEffectTimer = Float(StrTemp) * SelectedItem\State
-						StrTemp = GetINIString2(SCP294File, Loc, "Stamina Effect")
+						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Stamina Effect")
 						If StrTemp <> "" Then me\StaminaEffect = Float(StrTemp) ^ SelectedItem\State
-						StrTemp = GetINIString2(SCP294File, Loc, "Stamina Effect Timer")
+						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Stamina Effect Timer")
 						If StrTemp <> "" Then me\StaminaEffectTimer = Float(StrTemp) * SelectedItem\State
-						StrTemp = GetINIString2(SCP294File, Loc, "Refuse Message")
+						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Refuse Message")
 						If StrTemp <> "" Then
 							CreateMsg(StrTemp)
 						Else
@@ -8296,19 +8295,16 @@ Function Update294%()
 			I_294\ToInput = I_294\ToInput + StrTemp
 			
 			If Temp And I_294\ToInput <> "" Then ; ~ Dispense
-				I_294\ToInput = Trim(Lower(I_294\ToInput))
+				I_294\ToInput = Trim(I_294\ToInput)
 				If Left(I_294\ToInput, Min(7, Len(I_294\ToInput))) = "cup of " Then
 					I_294\ToInput = Right(I_294\ToInput, Len(I_294\ToInput) - 7)
 				ElseIf Left(I_294\ToInput, Min(9, Len(I_294\ToInput))) = "a cup of " 
 					I_294\ToInput = Right(I_294\ToInput, Len(I_294\ToInput) - 9)
 				EndIf
 				
-				If I_294\ToInput <> "" Then
-					Local Loc% = GetINISectionLocation(SCP294File, I_294\ToInput, True)
-				EndIf
-				
-				If Loc > 0 Then
-					StrTemp = GetINIString2(SCP294File, Loc, "Dispense Sound")
+				; ~ TODO: FIND A WAY TO CHECK DIFFERENT DRINK NAMES (SECTIONS USING "|" SYMBOL)
+				If IniBufferSectionExist(SCP294File, I_294\ToInput) Then
+					StrTemp = GetFileLocalString(SCP294File, I_294\ToInput, "Dispense Sound")
 					If StrTemp = "" Then
 						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
 					Else
@@ -8340,12 +8336,12 @@ Function Update294%()
 						EndIf
 					EndIf
 					
-					If GetINIInt2(SCP294File, Loc, "Explosion") Then 
+					If Int(GetFileLocalString(SCP294File, I_294\ToInput, "Explosion")) Then 
 						me\ExplosionTimer = 135.0
-						msg\DeathMsg = GetINIString2(SCP294File, Loc, "Death Message")
+						msg\DeathMsg = GetFileLocalString(SCP294File, I_294\ToInput, "Death Message")
 					EndIf
 					
-					StrTemp = GetINIString2(SCP294File, Loc, "Color")
+					StrTemp = GetFileLocalString(SCP294File, I_294\ToInput, "Color")
 					
 					Sep1 = Instr(StrTemp, ", ", 1)
 					Sep2 = Instr(StrTemp, ", ", Sep1 + 1)
@@ -8353,8 +8349,8 @@ Function Update294%()
 					G = Trim(Mid(StrTemp, Sep1 + 1, Sep2 - Sep1 - 1))
 					B = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
 					
-					Alpha = Float(GetINIString2(SCP294File, Loc, "Alpha", 1.0))
-					Glow = GetINIInt2(SCP294File, Loc, "Glow")
+					Alpha = Float(GetFileLocalString(SCP294File, I_294\ToInput, "Alpha", 1.0))
+					Glow = Int(GetFileLocalString(SCP294File, I_294\ToInput, "Glow"))
 					If Glow Then Alpha = -Alpha
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
