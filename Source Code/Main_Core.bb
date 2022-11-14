@@ -3215,7 +3215,7 @@ Global CurrAmbientColorR#, CurrAmbientColorG#, CurrAmbientColorB#
 
 Const ZoneColorChangeSpeed# = 50.0
 
-Function SetZoneColor$(FogColor$, AmbientColor$ = AmbientColorLCZ)
+Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
 	CurrFogColor = FogColor
 	CurrAmbientColor = AmbientColor
 End Function

@@ -261,7 +261,6 @@ Function RenderWorld2%(Tween#)
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		CreateMsg(CurrAmbientColorR)
 		AmbientLight(CurrAmbientColorR, CurrAmbientColorG, CurrAmbientColorB)
 	EndIf
 	
