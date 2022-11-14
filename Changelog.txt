@@ -7,6 +7,7 @@ General:
 - Added some folders organization.
 - Added language selection.
 - Added SCP-066 achievement.
+- Added new color effects depending on player zone.
 
 - Finally made the «Bright mode» similar to original game.
 

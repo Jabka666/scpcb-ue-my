@@ -1895,7 +1895,7 @@ Function LoadEntities%()
 	CatchErrors("LoadEntities")
 End Function
 
-Function InitStats%()
+Function InitOtherStuff%()
 	me\Playable = True : me\SelectedEnding = -1
 	
 	HideDistance = 17.0
@@ -1923,7 +1923,7 @@ Function InitNewGame%()
 	LoadEntities()
 	LoadSounds()
 	
-	InitStats()
+	InitOtherStuff()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
@@ -2090,7 +2090,7 @@ Function InitLoadGame%()
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x#, z#
 	
-	InitStats()
+	InitOtherStuff()
 	LoadWayPoints()
 	
 	For d.Doors = Each Doors

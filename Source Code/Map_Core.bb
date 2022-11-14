@@ -255,7 +255,7 @@ Function RenderRoomLights%(Cam%)
 											If Alpha > 0.0 Then
 												If EntityHidden(r\LightSprites2[i]) Then ShowEntity(r\LightSprites2[i])
 												EntityOrder(r\LightSprites2[i], -1)
-												EntityAlpha(r\LightSprites2[i], Max(3.0 * (BRIGHTNESS / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
+												EntityAlpha(r\LightSprites2[i], Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
 												
 												Random = Rnd(0.36, 0.4)
 												ScaleSprite(r\LightSprites2[i], Random, Random)

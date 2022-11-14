@@ -247,8 +247,6 @@ Function UpdateWorld2%()
 	EndIf
 End Function
 
-Const BRIGHTNESS# = 30.0
-
 Global CurrTrisAmount%
 
 Function RenderWorld2%(Tween#)
@@ -259,11 +257,12 @@ Function RenderWorld2%(Tween#)
 	CameraProjMode(Camera, 1)
 	
 	If wi\NightVision > 0 And wi\NightVision < 3 Then
-		AmbientLight(Min(BRIGHTNESS * 2.0, 255.0), Min(BRIGHTNESS * 2.0, 255.0), Min(BRIGHTNESS * 2.0, 255.0))
+		AmbientLight(Min(CurrAmbientColorR * 2.0, 255.0), Min(CurrAmbientColorG * 2.0, 255.0), Min(CurrAmbientColorB * 2.0, 255.0))
 	ElseIf wi\NightVision = 3
 		AmbientLight(255.0, 255.0, 255.0)
 	ElseIf PlayerRoom <> Null
-		AmbientLight(BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
+		CreateMsg(CurrAmbientColorR)
+		AmbientLight(CurrAmbientColorR, CurrAmbientColorG, CurrAmbientColorB)
 	EndIf
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)

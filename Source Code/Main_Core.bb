@@ -2143,7 +2143,7 @@ Function UpdateGame%()
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
 			If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then HideDistance = 17.0
-			UpdateFog()
+			UpdateZoneColor()
 			UpdateDistanceTimer()
 			UpdateDeaf()
 			UpdateEmitters()
@@ -3203,7 +3203,24 @@ Const FogColorForestChase$ = "032044054"
 
 Global CurrFogColorR#, CurrFogColorG#, CurrFogColorB#
 
-Function UpdateFog%()
+; ~ Ambient Color Constants
+;[Block]
+Const AmbientColorLCZ$ = "030030030"
+Const AmbientColorHCZ$ = "030023023"
+Const AmbientColorEZ$ = "023023030"
+;[End Block]
+
+Global CurrFogColor$, CurrAmbientColor$
+Global CurrAmbientColorR#, CurrAmbientColorG#, CurrAmbientColorB#
+
+Const ZoneColorChangeSpeed# = 50.0
+
+Function SetZoneColor$(FogColor$, AmbientColor$ = AmbientColorLCZ)
+	CurrFogColor = FogColor
+	CurrAmbientColor = AmbientColor
+End Function
+
+Function UpdateZoneColor%()
 	Local r.Rooms, e.Events
 	Local i%
 	
@@ -3229,40 +3246,36 @@ Function UpdateFog%()
 		Next
 	Next
 	
-	Local CurrFogColor$ = ""
+	CurrFogColor$ = ""
+	CurrAmbientColor$ = ""
 	
 	If PlayerRoom <> Null Then
 		If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale Then
-			CurrFogColor = FogColorStorageTunnels
+			SetZoneColor(FogColorStorageTunnels)
 		ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
-			CurrFogColor = FogColorOutside
+			SetZoneColor(FogColorOutside)
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
-			CurrFogColor = FogColorDimension_1499
+			SetZoneColor(FogColorDimension_1499)
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
 			For e.Events = Each Events
 				If e\EventID = e_dimension_106 Then
 					If e\EventState2 = PD_TrenchesRoom Lor e\EventState2 = PD_TowerRoom Then
-						CurrFogColor = FogColorPDTrench
+						SetZoneColor(FogColorPDTrench)
 					ElseIf e\EventState2 = PD_FakeTunnelRoom
-						CurrFogColor = FogColorHCZ
+						SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 					Else
-						CurrFogColor = FogColorPD
+						SetZoneColor(FogColorPD)
 					EndIf
 					Exit
 				EndIf
 			Next
 		ElseIf (PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale)  Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale) Then
-			CurrFogColor = FogColorHCZ
+			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 		ElseIf forest_event <> Null
 			If forest_event\EventState = 1.0 Then
+				SetZoneColor(FogColorForest)
 				If forest_event\room\NPC[0] <> Null Then
-					If forest_event\room\NPC[0]\State >= 2.0 Then
-						CurrFogColor = FogColorForestChase
-					Else
-						CurrFogColor = FogColorForest
-					EndIf
-				Else
-					CurrFogColor = FogColorForest
+					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 				EndIf
 			EndIf
 		EndIf
@@ -3271,25 +3284,29 @@ Function UpdateFog%()
 		Select me\Zone
 			Case 0
 				;[Block]
-				CurrFogColor = FogColorLCZ
+				SetZoneColor(FogColorLCZ, AmbientColorLCZ)
 				;[End Block]
 			Case 1
 				;[Block]
-				CurrFogColor = FogColorHCZ
+				SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 				;[End Block]
 			Case 2
 				;[Block]
-				CurrFogColor = FogColorEZ
+				SetZoneColor(FogColorEZ, AmbientColorEZ)
 				;[End Block]
 		End Select
 	EndIf
 	
-	CurrFogColorR = CurveValue(Left(CurrFogColor, 3), CurrFogColorR, 50.0)
-	CurrFogColorG = CurveValue(Mid(CurrFogColor, 4, 3), CurrFogColorG, 50.0)
-	CurrFogColorB = CurveValue(Right(CurrFogColor, 3), CurrFogColorB, 50.0)
+	CurrFogColorR = CurveValue(Left(CurrFogColor, 3), CurrFogColorR, ZoneColorChangeSpeed)
+	CurrFogColorG = CurveValue(Mid(CurrFogColor, 4, 3), CurrFogColorG, ZoneColorChangeSpeed)
+	CurrFogColorB = CurveValue(Right(CurrFogColor, 3), CurrFogColorB, ZoneColorChangeSpeed)
 	
 	CameraFogColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
 	CameraClsColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
+	
+	CurrAmbientColorR = CurveValue(Left(CurrAmbientColor, 3), CurrAmbientColorR, ZoneColorChangeSpeed)
+	CurrAmbientColorG = CurveValue(Mid(CurrAmbientColor, 4, 3), CurrAmbientColorG, ZoneColorChangeSpeed)
+	CurrAmbientColorB = CurveValue(Right(CurrAmbientColor, 3), CurrAmbientColorB, ZoneColorChangeSpeed)
 End Function
 
 Function UpdateGUI%()
