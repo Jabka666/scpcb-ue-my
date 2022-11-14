@@ -19,6 +19,7 @@ Rooms:
 - Batteries on the map are now randomized.
 
 - Improved SCP-096's containment chamber design.
+- Improved «room1_archive» room's design.
 
 - Tiny corrections for rooms description.
 
