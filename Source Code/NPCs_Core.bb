@@ -3065,7 +3065,7 @@ Function UpdateNPCs%()
 						If (Not EntityHidden(n\OBJ)) Then
 							HideEntity(n\OBJ)
 							HideEntity(n\Collider)
-							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+							StopChannel(n\SoundCHN) : n\SoundCHN = 0
 							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 						EndIf
 					EndIf
