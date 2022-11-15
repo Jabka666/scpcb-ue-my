@@ -7762,14 +7762,6 @@ Function UpdateRooms%()
 				ShowEntity(r\OBJ)
 				ShowProps(r)
 				
-				For i = 0 To MaxRoomLights - 1
-					If r\Lights[i] <> 0 Then
-						Dist = EntityDistanceSquared(Camera, r\Lights[i])
-						If Dist < PowTwo(HideDistance) Then TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
-					Else
-						Exit
-					EndIf
-				Next
 				If r\TriggerBoxAmount > 0 Then
 					For i = 0 To r\TriggerBoxAmount - 1
 						If chs\DebugHUD <> 0 Then
@@ -7782,6 +7774,14 @@ Function UpdateRooms%()
 					Next
 				EndIf
 			EndIf
+			For i = 0 To MaxRoomLights - 1
+				If r\Lights[i] <> 0 Then
+					Dist = EntityDistanceSquared(Camera, r\Lights[i])
+					If Dist < PowTwo(HideDistance) Then TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)						
+				Else
+					Exit
+				EndIf
+			Next
 		EndIf
 	Next
 	
