@@ -1697,7 +1697,6 @@ Function LoadEntities%()
 	ClsColor(0, 0, 0)
 	Cls()
 	SetBuffer(BackBuffer())
-	AmbientLightRoomVal = 0
 	
 	CreateBlurImage()
 	CameraProjMode(ArkBlurCam, 0)
@@ -1898,9 +1897,11 @@ End Function
 Function InitOtherStuff%()
 	me\Playable = True : me\SelectedEnding = -1
 	
+	opt\CameraFogFar = 6.0
+	opt\CameraFogNear = 0.1
 	HideDistance = 17.0
+	
 	CanSave = 2
-	as\Timer = 70.0 * 120.0
 	
 	If opt\DebugMode Then
 		InitCheats()
@@ -1908,6 +1909,7 @@ Function InitOtherStuff%()
 		ClearCheats()
 	EndIf
 	
+	as\Timer = 70.0 * 120.0
 	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
 	LoadAchievementsFile()

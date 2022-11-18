@@ -4832,7 +4832,7 @@ Function UpdateMTFUnit%(n.NPCs)
 												y = 0.1
 												z = EntityZ(r\OBJ, True) + 1692.0 * RoomScale
 												Exit
-											ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And FoundChamber Then
+											ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And FoundChamber
 												n\PathX = EntityX(r\OBJ, True) + 4736.0 * RoomScale
 												n\PathZ = EntityZ(r\OBJ, True) + 1692.0 * RoomScale
 												Exit
@@ -4841,7 +4841,7 @@ Function UpdateMTFUnit%(n.NPCs)
 												n_I\Curr173\Target = Null
 												LoadNPCSound(n, "SFX\Character\MTF\173\Cont" + Rand(4) + ".ogg")
 												PlayMTFSound(n\Sound, n)
-												PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
+												If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
 												Exit
 											EndIf
 										EndIf
@@ -4868,7 +4868,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							EndIf
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-					ElseIf (n\PathTimer <= 70.0 * 2.5) And (n\MTFLeader = Null) Then
+					ElseIf n\PathTimer <= 70.0 * 2.5 And n\MTFLeader = Null
 						n\PathTimer = n\PathTimer - fps\Factor[0]
 						n\CurrSpeed = 0.0
 						If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -4883,7 +4883,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
-						ElseIf n\PathStatus = 1 Then
+						ElseIf n\PathStatus = 1
 							If n\Path[n\PathLocation] = Null Then
 								If n\PathLocation > 19 Then
 									n\PathLocation = 0 : n\PathStatus = 0
@@ -4938,7 +4938,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 								FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 								n\CurrSpeed = 0.0
-							ElseIf EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 1.0 Then
+							ElseIf EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 1.0
 								PointEntity(n\Collider, n\MTFLeader\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								
@@ -5219,7 +5219,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						If n\PathTimer <= 0.0 Then ; ~ Update path
 							n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
 							n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6 seconds
-						ElseIf n\PathTimer <= 70.0 * 2.5 Then
+						ElseIf n\PathTimer <= 70.0 * 2.5
 							n\PathTimer = n\PathTimer - fps\Factor[0]
 							n\CurrSpeed = 0.0
 							If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -5234,7 +5234,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 								RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
-							ElseIf n\PathStatus = 1 Then
+							ElseIf n\PathStatus = 1
 								If n\Path[n\PathLocation] = Null Then
 									If n\PathLocation > 19 Then
 										n\PathLocation = 0 : n\PathStatus = 0
@@ -5303,7 +5303,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetlost" + Rand(3) + ".ogg"), n)
 							If MTFCameraCheckTimer = 0.0 Then
 								If Rand(15 - (7 * SelectedDifficulty\AggressiveNPCs)) = 1 ; ~ Maybe change this to another chance -- ENDSHN
-									PlayAnnouncement("SFX\Character\MTF\AnnouncCameraCheck.ogg")
+									If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraCheck.ogg")
 									MTFCameraCheckTimer = fps\Factor[0]
 								EndIf
 							EndIf
@@ -5494,7 +5494,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							If n\PathTimer <= 0.0 Then ; ~ Update path
 								n\PathStatus = FindPath(n, EntityX(n_I\Curr173\Collider, True), EntityY(n_I\Curr173\Collider, True) + 0.1, EntityZ(n_I\Curr173\Collider, True))
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6 seconds
-							ElseIf n\PathTimer <= 70.0 * 2.5 Then
+							ElseIf n\PathTimer <= 70.0 * 2.5
 								n\PathTimer = n\PathTimer - fps\Factor[0]
 								n\CurrSpeed = 0.0
 								If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -5834,7 +5834,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							EndIf
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-					ElseIf n\PathTimer <= 70.0 * 2.5 And n\MTFLeader = Null Then
+					ElseIf n\PathTimer <= 70.0 * 2.5 And n\MTFLeader = Null
 						n\PathTimer = n\PathTimer - fps\Factor[0]
 						n\CurrSpeed = 0.0
 						FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
@@ -5847,7 +5847,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
-						ElseIf n\PathStatus = 1 Then
+						ElseIf n\PathStatus = 1
 							If n\Path[n\PathLocation] = Null Then
 								If n\PathLocation > 19 Then
 									n\PathLocation = 0 : n\PathStatus = 0
@@ -5878,7 +5878,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							If n\MTFLeader = Null Then
 								FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 								n\CurrSpeed = 0.0
-							ElseIf EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 1.0 Then
+							ElseIf EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 1.0
 								PointEntity(n\Collider, n\MTFLeader\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								
@@ -6193,7 +6193,7 @@ Function TeleportCloser%(n.NPCs)
 	If closestWaypoint <> Null Then
 		If n\InFacility <> 1 Lor SelectedDifficulty\AggressiveNPCs Then
 			ShouldTeleport = True
-		ElseIf EntityY(closestWaypoint\OBJ, True) <= 7.0 And EntityY(closestWaypoint\OBJ, True) >= -10.0 Then
+		ElseIf EntityY(closestWaypoint\OBJ, True) <= 7.0 And EntityY(closestWaypoint\OBJ, True) >= -10.0
 			ShouldTeleport = True
 		EndIf
 		

@@ -9,6 +9,8 @@ General:
 - Added SCP-066 achievement.
 - Added new color effects depending on player zone.
 
+- Removed "Playmusic" console command.
+
 - Finally made the «Bright mode» similar to original game.
 
 - Converted .ini files to UTF-8 format.
@@ -31,6 +33,8 @@ Items:
 - Renamed some console item names.
 
 - Tiny battery rebalance for SCRAMBLE Gear.
+
+- Nerfed NVG fog distance from 30 to 17.
 
 Menu:
 - Added degree symbol for FOV value.
@@ -62,6 +66,9 @@ Bug fixes:
 - Fixed "ACCESS CODE" string going out of button image on different resolutions.
 - Fixed autosave option text color when option is disabled.
 - Fixed an issue caused SCP-106's collider to linger while using «disable106» command.
+- Fixed "disable/enable966" console command not hiding/showing all SCP-966 instances.
+- Fixed "ThreatAnnouncPossession.ogg" not playing at all.
+- Fixed battery messages and sounds playing even if the game is paused.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

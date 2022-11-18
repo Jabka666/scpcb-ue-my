@@ -89,7 +89,11 @@ difficulties[ESOTERIC]\SaveType = SAVE_ANYWHERE
 difficulties[ESOTERIC]\OtherFactors = EASY
 SetDifficultyColor(ESOTERIC, 200, 50, 200)
 
-SelectedDifficulty = difficulties[EUCLID]
+If opt\DebugMode Then
+	SelectedDifficulty = difficulties[SAFE]
+Else
+	SelectedDifficulty = difficulties[EUCLID]
+EndIf
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

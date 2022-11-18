@@ -978,7 +978,6 @@ Function UpdateConsole%()
 							n\State = -1.0
 							HideEntity(n\Collider)
 							HideEntity(n\OBJ)
-							Exit
 						EndIf
 					Next
 					CreateConsoleMsg(GetLocalString("console", "dis966"))
@@ -990,7 +989,6 @@ Function UpdateConsole%()
 							n\State = 0.0
 							ShowEntity(n\Collider)
 							If wi\NightVision > 0 Then ShowEntity(n\OBJ)
-							Exit
 						EndIf
 					Next
 					CreateConsoleMsg(GetLocalString("console", "en966"))
@@ -3161,21 +3159,16 @@ Function UpdateMouseLook%()
 	If wi\NightVision > 0 Lor wi\SCRAMBLE Then
 		If EntityHidden(t\OverlayID[4]) Then ShowEntity(t\OverlayID[4])
 		If wi\NightVision = 2 Then
-			EntityColor(t\OverlayID[4], 0.0, 100.0, 255.0)
-			AmbientLightRooms(15)
+			EntityColor(t\OverlayID[4], 0.0, 100.0, 200.0)
 		ElseIf wi\NightVision = 3
-			EntityColor(t\OverlayID[4], 255.0, 0.0, 0.0)
-			AmbientLightRooms(15)
+			EntityColor(t\OverlayID[4], 200.0, 0.0, 0.0)
 		ElseIf wi\NightVision = 1
-			EntityColor(t\OverlayID[4], 0.0, 255.0, 0.0)
-			AmbientLightRooms(15)
+			EntityColor(t\OverlayID[4], 0.0, 200.0, 0.0)
 		Else
-			EntityColor(t\OverlayID[4], 128.0, 128.0, 128.0)
-			AmbientLightRooms(0)
+			EntityColor(t\OverlayID[4], 100.0, 100.0, 100.0)
 		EndIf
 		EntityTexture(t\OverlayID[0], t\OverlayTextureID[12])
 	Else
-		AmbientLightRooms(0)
 		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
 		EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
 	EndIf
@@ -4054,7 +4047,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])	
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(200.0)
+										Inventory(MouseSlot)\State = Rnd(2000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "scramble"
@@ -4086,7 +4079,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "nav310"
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nav.bat.nofit"))
+										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
 									Case "navulti", "nav300"
 										;[Block]
@@ -4120,7 +4113,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "veryfinenvg"
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case "scramble"
 										;[Block]
@@ -4210,7 +4203,7 @@ Function UpdateGUI%()
 										;[End Block]
 								End Select
 								opt\StoredCameraFogFar = opt\CameraFogFar
-								opt\CameraFogFar = 30.0
+								opt\CameraFogFar = HideDistance
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[0])
 							EndIf
 							SelectedItem\State3 = 0.0
@@ -4940,8 +4933,11 @@ Function UpdateGUI%()
 						EndIf
 						
 						If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio" Then
-							If SelectedItem\State <= 20.0 And ((MilliSecs2() Mod 800) < 200) Then
-								If (Not LowBatteryCHN[0]) Then LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
+							If SelectedItem\State <= 20.0 Then
+								UpdateBatteryTimer()
+								If BatMsgTimer >= 70.0 * 1.0 Then
+									If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
+								EndIf
 							EndIf
 						EndIf
 					EndIf
@@ -5159,11 +5155,10 @@ Function UpdateGUI%()
 					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
 					
 					If SelectedItem\State > 0.0 Then
-						If SelectedItem\State <= 20.0 And ((MilliSecs2() Mod 800) < 200) Then
-							If (Not LowBatteryCHN[0]) Then
-								LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
-							ElseIf (Not ChannelPlaying(LowBatteryCHN[0])) Then
-								LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
+						If SelectedItem\State <= 20.0 Then
+							UpdateBatteryTimer()
+							If BatMsgTimer >= 70.0 * 1.0 Then
+								If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 							EndIf
 						EndIf
 					EndIf
@@ -6404,7 +6399,7 @@ Function RenderGUI%()
 							Else
 								Color(30, 30, 30)
 							EndIf
-							If ((MilliSecs2() Mod 800) < 200) Then
+							If (MilliSecs2() Mod 800) < 200 Then ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS2
 								If Offline Then Text(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), "MAP DATABASE OFFLINE")
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
@@ -7909,8 +7904,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	RoomTempID = 0
 	
-	HideDistance = 0.0
-	
 	GameSaved = False
 	CanSave = 0
 	
@@ -7932,12 +7925,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	; ~ Just remove the Type and create again
 	Delete(me)
 	me.Player = New Player
-	
-	If wi\NightVision > 0 Then
-		opt\CameraFogFar = opt\StoredCameraFogFar
-	Else
-		opt\CameraFogFar = 6.0
-	EndIf
 	
 	Delete(wi)
 	wi.WearableItems = New WearableItems
@@ -7983,13 +7970,15 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	MTFTimer = 0.0
 	
-	ConsoleInput = ""
-	ConsoleOpen = False
-	
 	Delete(as)
 	as.AutoSave = New AutoSave
 	
 	ShouldPlay = 0
+	
+	opt\CameraFogFar = 0.0
+	opt\CameraFogNear = 0.0
+	opt\StoredCameraFogFar = 0.0
+	HideDistance = 0.0
 	
 	LightVolume = 0.0
 	CurrFogColorR = 0.0
@@ -8000,13 +7989,24 @@ Function NullGame%(PlayButtonSFX% = True)
 	CurrAmbientColorB = 0.0
 	CurrFogColor = ""
 	CurrAmbientColor = ""
+	
 	SecondaryLightOn = True
 	PrevSecondaryLightOn = True
 	RemoteDoorOn = True
+	
 	SoundTransmission = False
+	
+	BatMsgTimer = 0.0
 	
 	Delete(msg)
 	msg.Messages = New Messages
+	
+	ConsoleInput = ""
+	ConsoleOpen = False
+	
+	For c.ConsoleMsg = Each ConsoleMsg
+		Delete(c)
+	Next
 	
 	For sub.Subtitles = Each Subtitles
 		Delete(sub)
@@ -8025,12 +8025,13 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	
 	For i = 0 To MaxItemAmount - 1
-		If Inventory(i) <> Null Then Inventory(i) = Null
+		Inventory(i) = Null
 	Next
 	ItemAmount = 0
 	MaxItemAmount = 0
+	SelectedItem = Null
 	
-	If SelectedItem <> Null Then SelectedItem = Null
+	Dim Inventory.Items(0)
 	
 	Delete(bk)
 	bk.BrokenDoor = New BrokenDoor
@@ -8079,16 +8080,12 @@ Function NullGame%(PlayButtonSFX% = True)
 		Delete(de)
 	Next
 	
+	ForestNPC = 0
+	ForestNPCTex = 0
+	
 	For n.NPCs = Each NPCs
 		Delete(n)
 	Next
-	
-	For c.ConsoleMsg = Each ConsoleMsg
-		Delete(c)
-	Next
-	
-	ForestNPC = 0
-	ForestNPCTex = 0
 	
 	For e.Events = Each Events
 		Delete(e)
@@ -8163,7 +8160,7 @@ Function Update294%()
 			
 			Temp = False
 			
-			If yTemp >= 0 And yTemp < 5 And xTemp >= 0 And xTemp < 10 Then
+			If (yTemp >= 0 And yTemp < 5) And (xTemp >= 0 And xTemp < 10) Then
 				PlaySound_Strict(ButtonSFX)
 				
 				StrTemp = ""
@@ -8596,11 +8593,11 @@ Function UpdateCameraCheck%()
 		MTFCameraCheckTimer = 0.0
 		If (Not me\Detected) Then
 			If MTFCameraCheckDetected Then
-				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(2) + ".ogg")
+				If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(2) + ".ogg")
 				me\Detected = True
 				MTFCameraCheckTimer = 70.0 * 60.0
 			Else
-				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
+				If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
 			EndIf
 		EndIf
 		MTFCameraCheckDetected = False

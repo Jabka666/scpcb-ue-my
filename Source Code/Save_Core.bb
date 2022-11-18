@@ -838,7 +838,7 @@ Function LoadGame%(File$)
 			ID = ReadByte(f)
 			If ID = 2 Then
 				Exit
-			ElseIf ID = 1 Then
+			ElseIf ID = 1
 				RotateEntity(r\Levers[x], 78.0, EntityYaw(r\Levers[x]), 0.0)
 			Else
 				RotateEntity(r\Levers[x], -78.0, EntityYaw(r\Levers[x]), 0.0)
@@ -894,7 +894,7 @@ Function LoadGame%(File$)
 			Else
 				PlaceMapCreatorForest(r\fr, lX, lY, lZ, r)
 			EndIf
-		ElseIf r\fr <> Null Then ; ~ Remove the old forest
+		ElseIf r\fr <> Null ; ~ Remove the old forest
 			DestroyForest(r\fr)
 			Delete(r\fr) : r\fr = Null
 		EndIf
@@ -1128,7 +1128,6 @@ Function LoadGame%(File$)
 		e\EventStr = ReadString(f)
 		FindForestEvent(e)
 		
-		; ~ Reset e_dimension_1499
 		Select e\EventID
 			Case e_dimension_1499
 				;[Block]
@@ -1138,10 +1137,8 @@ Function LoadGame%(File$)
 					HideChunks()
 					DeleteChunks()
 					For n.NPCs = Each NPCs
-						If n\NPCType = NPCType1499_1
-							If n\InFacility = 0
-								RemoveNPC(n)
-							EndIf
+						If n\NPCType = NPCType1499_1 Then
+							If n\InFacility = 0 Then RemoveNPC(n)
 						EndIf
 					Next
 					
@@ -1301,7 +1298,7 @@ Function LoadGame%(File$)
 						r\Adjacent[2] = r2
 						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
 					EndIf
-				ElseIf r2\x = r\x Then
+				ElseIf r2\x = r\x
 					If r2\z = r\z - 8.0 Then
 						r\Adjacent[1] = r2
 						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
@@ -1322,7 +1319,7 @@ Function LoadGame%(File$)
 					ElseIf EntityX(do\FrameOBJ, True) = r\x - 4.0
 						r\AdjDoor[2] = do
 					EndIf
-				ElseIf EntityX(do\FrameOBJ, True) = r\x Then
+				ElseIf EntityX(do\FrameOBJ, True) = r\x
 					If EntityZ(do\FrameOBJ, True) = r\z + 4.0 Then
 						r\AdjDoor[3] = do
 					ElseIf EntityZ(do\FrameOBJ, True) = r\z - 4.0
@@ -1712,7 +1709,7 @@ Function LoadGameQuick%(File$)
 			ID = ReadByte(f)
 			If ID = 2 Then
 				Exit
-			ElseIf ID = 1 Then
+			ElseIf ID = 1
 				RotateEntity(r\Levers[x], 78.0, EntityYaw(r\Levers[x]), 0.0)
 			Else
 				RotateEntity(r\Levers[x], -78.0, EntityYaw(r\Levers[x]), 0.0)
@@ -1750,7 +1747,7 @@ Function LoadGameQuick%(File$)
 			Local lX# = ReadFloat(f)
 			Local lY# = ReadFloat(f)
 			Local lZ# = ReadFloat(f)
-		ElseIf r\fr <> Null Then ; ~ Remove the old forest
+		ElseIf r\fr <> Null ; ~ Remove the old forest
 			DestroyForest(r\fr)
 			Delete(r\fr) : r\fr = Null
 		EndIf
@@ -2364,7 +2361,7 @@ Function LoadMap%(File$)
 						FindForestEvent(e)
 						e\room = r   
 					EndIf
-				ElseIf Prob = 0.0 And Name <> "" Then
+				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
 					e\EventName = Name
 					e\EventID = FindEventID(Name)
@@ -2539,7 +2536,7 @@ Function LoadMap%(File$)
 						FindForestEvent(e)
 						e\room = r   
 					EndIf
-				ElseIf Prob = 0.0 And Name <> "" Then
+				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
 					e\EventName = Name
 					e\EventID = FindEventID(Name)

@@ -298,16 +298,13 @@ Function RenderRoomLights%(Cam%)
 	Next
 End Function
 
-Global AmbientLightRoomTex%, AmbientLightRoomVal%
+Global AmbientLightRoomTex%
 
-Function AmbientLightRooms%(Value% = 0)
-	If Value = AmbientLightRoomVal Then Return
-	AmbientLightRoomVal = Value
-	
+Function AmbientLightRooms%()
 	Local OldBuffer% = BackBuffer() ; ~ Probably shouldn't make assumptions here but who cares, why wouldn't it use the BackBuffer()
 	
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
-	ClsColor(Value, Value, Value)
+	ClsColor(CurrAmbientColorR, CurrAmbientColorG, CurrAmbientColorB)
 	Cls()
 	ClsColor(0, 0, 0)
 	SetBuffer(OldBuffer)

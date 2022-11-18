@@ -2956,9 +2956,7 @@ Function UpdateEvents%()
 							e\EventState3 = e\EventState3 - fps\Factor[0]
 						EndIf
 					Else
-						If e\EventState2 >= 70.0 * 92.0 And e\EventState2 - fps\Factor[0] < 70.0 * 92.0
-							PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(3) + ".ogg")
-						EndIf
+						If e\EventState2 >= 70.0 * 92.0 And e\EventState2 - fps\Factor[0] < 70.0 * 92.0 Then PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(3) + ".ogg")
 						e\EventState2 = Max(e\EventState2 - fps\Factor[0], 0.0)
 					EndIf					
 				EndIf
@@ -5916,7 +5914,7 @@ Function UpdateEvents%()
 						Next
 						
 						CameraRange(Camera, RoomScale, 8.5)
-						CameraFogRange(Camera, 0.5, 8.0)
+						CameraFogRange(Camera, 0.05, 8.0)
 					Else
 						If (Not n_I\Curr106\Contained) Then n_I\Curr106\Idle = 0
 						If fr\Forest_Pivot <> 0 Then

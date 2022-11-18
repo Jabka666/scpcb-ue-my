@@ -182,6 +182,13 @@ Function RenderGamma%()
 	EntityAlpha(FresizeImage, 1.0)
 End Function
 
+Global BatMsgTimer#
+
+Function UpdateBatteryTimer%()
+	BatMsgTimer = BatMsgTimer + fps\Factor[0]
+	If BatMsgTimer >= 70.0 * 1.5 Then BatMsgTimer = 0.0
+End Function
+
 Function UpdateWorld2%()
 	Local np.NPCs
 	Local i%
@@ -236,13 +243,10 @@ Function UpdateWorld2%()
 		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 	EndIf
 	
-	If fps\Factor[0] > 0.0 Then
-		If HasBattery = 1 And ((MilliSecs2() Mod 800) < 200) Then
-			If (Not LowBatteryCHN[1]) Then
-				LowBatteryCHN[1] = PlaySound_Strict(LowBatterySFX[1])
-			ElseIf (Not ChannelPlaying(LowBatteryCHN[1]))
-				LowBatteryCHN[1] = PlaySound_Strict(LowBatterySFX[1])
-			EndIf
+	If HasBattery = 1 Then
+		UpdateBatteryTimer()
+		If BatMsgTimer >= 70.0 * 1.0 Then
+			If (Not ChannelPlaying(LowBatteryCHN[1])) Then LowBatteryCHN[1] = PlaySound_Strict(LowBatterySFX[1])
 		EndIf
 	EndIf
 End Function
@@ -256,11 +260,10 @@ Function RenderWorld2%(Tween#)
 	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(Camera, 1)
 	
-	If wi\NightVision > 0 And wi\NightVision < 3 Then
-		AmbientLight(Min(CurrAmbientColorR * 2.0, 255.0), Min(CurrAmbientColorG * 2.0, 255.0), Min(CurrAmbientColorB * 2.0, 255.0))
-	ElseIf wi\NightVision = 3
-		AmbientLight(255.0, 255.0, 255.0)
-	ElseIf PlayerRoom <> Null
+	AmbientLightRooms()
+	If wi\NightVision > 0 Then
+		AmbientLight(200.0, 200.0, 200.0)
+	Else
 		AmbientLight(CurrAmbientColorR, CurrAmbientColorG, CurrAmbientColorB)
 	EndIf
 	
@@ -370,7 +373,7 @@ Function RenderWorld2%(Tween#)
 		Else ; ~ SCRAMBLE
 			Color(255, 255, 255)
 		EndIf
-		For l = 0 To Min(Floor((Power + 50) * 0.01), 11)
+		For l = 0 To Min(Floor((Power + 50) * 0.01), 11.0)
 			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((l * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
 		Next
 		DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale))
@@ -382,8 +385,8 @@ Function RenderWorld2%(Tween#)
 	RenderWorld()
 	CameraProjMode(ArkBlurCam, 0)
 	
-	If fps\Factor[0] > 0.0 Then
-		If HasBattery = 1 And ((MilliSecs2() Mod 800) < 400)
+	If HasBattery = 1 Then
+		If BatMsgTimer >= 70.0 * 1.0 Then
 			Color(255, 0, 0)
 			SetFont(fo\FontID[Font_Digital])
 			
