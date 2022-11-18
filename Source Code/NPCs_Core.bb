@@ -557,22 +557,18 @@ Function RemoveNPC%(n.NPCs)
 	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
 	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
 	
-	If n\SoundCHN <> 0 Then
-		If (Not n\SoundCHN_IsStream) Then
-			StopChannel(n\SoundCHN)
-		Else
-			StopStream_Strict(n\SoundCHN)
-		EndIf
-		n\SoundCHN = 0
+	If n\SoundCHN_IsStream Then
+		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
+	Else
+		StopChannel(n\SoundCHN)
 	EndIf
-	If n\SoundCHN2 <> 0 Then
-		If (Not n\SoundCHN2_IsStream) Then
-			StopChannel(n\SoundCHN2)
-		Else
-			StopStream_Strict(n\SoundCHN2)
-		EndIf
-		n\SoundCHN2 = 0
+	n\SoundCHN = 0
+	If n\SoundCHN2_IsStream Then
+		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
+	Else
+		StopChannel(n\SoundCHN2)
 	EndIf
+	n\SoundCHN2 = 0
 	
 	FreeEntity(n\Collider) : n\Collider = 0	
 	FreeEntity(n\OBJ) : n\OBJ = 0
@@ -3320,9 +3316,7 @@ Function UpdateNPCs%()
 										n\State3 = n\State3 + fps\Factor[0]
 										If Rnd(5000.0) < n\State3 Then
 											Temp = True
-											If n\SoundCHN <> 0 Then
-												If ChannelPlaying(n\SoundCHN) Then Temp = False
-											EndIf
+											If ChannelPlaying(n\SoundCHN) Then Temp = False
 											If Temp Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider)
 										EndIf
 									Else

@@ -921,9 +921,7 @@ Function UpdateConsole%()
 						If n\NPCType = NPCType096 Then
 							n\State = 0.0
 							StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-							If n\SoundCHN2 <> 0
-								StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
-							EndIf
+							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
 							Exit
 						EndIf
 					Next
@@ -8156,7 +8154,7 @@ Function Update294%()
 	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[5]) / 2)
 	
 	Temp = True
-	If PlayerRoom\SoundCHN <> 0 Then Temp = False
+	If ChannelPlaying(PlayerRoom\SoundCHN) Then Temp = False
 	
 	If Temp Then
 		If mo\MouseHit1 Then
@@ -8431,7 +8429,7 @@ Function Render294%()
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	Temp = True
-	If PlayerRoom\SoundCHN <> 0 Then Temp = False
+	If ChannelPlaying(PlayerRoom\SoundCHN) Then Temp = False
 	
 	Text(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	

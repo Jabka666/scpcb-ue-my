@@ -1502,17 +1502,15 @@ Function UpdateEvents%()
 								e\EventState3 = 1.0
 							EndIf
 						ElseIf e\EventState < 10000.0
-							If e\SoundCHN <> 0 Then 
-								If ChannelPlaying(e\SoundCHN) Then
-									e\room\NPC[6]\State = 6.0
-									If AnimTime(e\room\NPC[6]\OBJ) >= 325.0 Then
-										Animate2(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 326.0, 328.0, 0.02, False)
-									Else
-										Animate2(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 320.0, 328.0, 0.05, False)
-									EndIf
+							If ChannelPlaying(e\SoundCHN) Then
+								e\room\NPC[6]\State = 6.0
+								If AnimTime(e\room\NPC[6]\OBJ) >= 325.0 Then
+									Animate2(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 326.0, 328.0, 0.02, False)
 								Else
-									Animate2(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 328.0, 320.0, -0.02, False)
+									Animate2(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 320.0, 328.0, 0.05, False)
 								EndIf
+							Else
+								Animate2(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 328.0, 320.0, -0.02, False)
 							EndIf
 							
 							If IntroSFX[3] <> 0 Then
@@ -4097,12 +4095,10 @@ Function UpdateEvents%()
 						EndIf
 						
 						If PlayerRoom = e\room Then
-							If e\SoundCHN <> 0 Then
-								If ChannelPlaying(e\SoundCHN) Then 
-									me\LightBlink = Rnd(0.5, 6.0)
-									If Rand(50) = 1 Then PlaySound2(IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
-								EndIf
-							EndIf						
+							If ChannelPlaying(e\SoundCHN) Then 
+								me\LightBlink = Rnd(0.5, 6.0)
+								If Rand(50) = 1 Then PlaySound2(IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
+							EndIf
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 Then ; ~ Lock the player inside
 								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.3 Then 
@@ -4818,9 +4814,7 @@ Function UpdateEvents%()
 					ElseIf e\EventState > 0.0
 						ShouldPlay = 27
 						
-						If e\room\NPC[0]\SoundCHN <> 0 Then
-							If ChannelPlaying(e\room\NPC[0]\SoundCHN) Then e\room\NPC[0]\SoundCHN = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0)
-						EndIf
+						If ChannelPlaying(e\room\NPC[0]\SoundCHN) Then e\room\NPC[0]\SoundCHN = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0)
 						
 						If e\EventState = 1.0 Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 1.44 
@@ -6137,16 +6131,12 @@ Function UpdateEvents%()
 					ElseIf e\EventState = 6.0
 						PointEntity(e\room\NPC[0]\Collider, me\Collider)
 						AnimateNPC(e\room\NPC[0], 75.0, 128.0, 0.04, True)	
-						If e\room\NPC[0]\Sound <> 0 Then 
-							If e\room\NPC[0]\SoundCHN <> 0 Then
-								If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then 
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Gunshot.ogg"))
-									FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
-									e\EventState = 7.0
-								EndIf
-							EndIf
-							If e\room\NPC[0]\Sound <> 0 Then e\room\NPC[0]\SoundCHN = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 7.0)
+						If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then 
+							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Gunshot.ogg"))
+							If e\room\NPC[0]\Sound <> 0 Then FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
+							e\EventState = 7.0
 						EndIf
+						If e\room\NPC[0]\Sound <> 0 Then e\room\NPC[0]\SoundCHN = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 7.0)
 					ElseIf e\EventState = 7.0
 						PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(me\Collider)
@@ -6668,7 +6658,7 @@ Function UpdateEvents%()
 									
 									Local Rotation# = Floor(EntityRoll(e\room\Objects[1]))
 									
-									If e\SoundCHN2 <> 0 Then e\SoundCHN2 = 0
+									e\SoundCHN2 = 0
 									If (Rotation > -94.0 And Rotation < -86.0) Lor (Rotation > -44.0 And Rotation < -36.0) Lor (Rotation > -4.0 And Rotation < 4.0) Lor (Rotation > 36.0 And Rotation < 44.0) Lor (Rotation > 86.0 And Rotation < 94.0) Then
 										If (Not e\SoundCHN) Then e\SoundCHN = PlaySound2(KnobSFX[Rand(0, 1)], Camera, e\room\Objects[1], 2.0, 0.5)
 									Else
@@ -6705,8 +6695,8 @@ Function UpdateEvents%()
 							Setting = VERYFINE
 						EndIf
 						RotateEntity(e\room\Objects[1], 0.0, 0.0, CurveValue(Angle, EntityRoll(e\room\Objects[1]), 20.0))
-						If (Not e\SoundCHN2) Then
-							If Angle = -90.0 Lor Angle = -40.0 Lor Angle = -1.0 Lor Angle = 0.0 Lor Angle = 40.0 Lor Angle = 90.0 Then e\SoundCHN2 = PlaySound2(KnobSFX[Rand(0, 1)], Camera, e\room\Objects[1], 2.0, 0.5)
+						If Angle = -90.0 Lor Angle = -40.0 Lor Angle = -1.0 Lor Angle = 0.0 Lor Angle = 40.0 Lor Angle = 90.0 Then
+							If (Not e\SoundCHN2) Then e\SoundCHN2 = PlaySound2(KnobSFX[Rand(0, 1)], Camera, e\room\Objects[1], 2.0, 0.5)
 						EndIf
 					EndIf
 					
@@ -9622,30 +9612,24 @@ Function UpdateEndings%()
 End Function
 
 Function RemoveEvent%(e.Events)
-	If e\SoundCHN <> 0 Then
-		If (Not e\SoundCHN_IsStream) Then
-			StopChannel(e\SoundCHN)
-		Else
-			StopStream_Strict(e\SoundCHN)
-		EndIf
-		e\SoundCHN = 0
+	If e\SoundCHN_IsStream Then
+		If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN)
+	Else
+		StopChannel(e\SoundCHN)
 	EndIf
-	If e\SoundCHN2 <> 0 Then
-		If (Not e\SoundCHN2_IsStream) Then
-			StopChannel(e\SoundCHN2)
-		Else
-			StopStream_Strict(e\SoundCHN2)
-		EndIf
-		e\SoundCHN2 = 0
+	e\SoundCHN = 0
+	If e\SoundCHN2_IsStream Then
+		If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2)
+	Else
+		StopChannel(e\SoundCHN2)
 	EndIf
-	If e\SoundCHN3 <> 0 Then
-		If (Not e\SoundCHN3_IsStream) Then
-			StopChannel(e\SoundCHN3)
-		Else
-			StopStream_Strict(e\SoundCHN3)
-		EndIf
-		e\SoundCHN3 = 0
+	e\SoundCHN2 = 0
+	If e\SoundCHN3_IsStream Then
+		If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3)
+	Else
+		StopChannel(e\SoundCHN3)
 	EndIf
+	e\SoundCHN3 = 0
 	
 	If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0

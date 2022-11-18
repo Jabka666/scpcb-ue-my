@@ -15,7 +15,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 			ChannelPan(SoundCHN, PanValue)
 		EndIf
 	Else
-		If SoundCHN <> 0 Then ChannelVolume(SoundCHN, 0.0)
+		If ChannelPlaying(SoundCHN) Then ChannelVolume(SoundCHN, 0.0)
 	EndIf
 	Return(SoundCHN)
 End Function
@@ -32,30 +32,28 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 		ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume * opt\MasterVolume)
 		ChannelPan(SoundCHN, PanValue)
 	Else
-		If SoundCHN <> 0 Then ChannelVolume(SoundCHN, 0.0)
+		If ChannelPlaying(SoundCHN) Then ChannelVolume(SoundCHN, 0.0)
 	EndIf
 	Return(SoundCHN)
 End Function
 
 Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, SFXVolume% = True)
-	If SoundCHN <> 0 Then
-		If ChannelPlaying(SoundCHN) Then
-			Range = Max(Range, 1.0)
+	If ChannelPlaying(SoundCHN) Then
+		Range = Max(Range, 1.0)
+		
+		If Volume > 0.0 Then
+			Local Dist# = EntityDistance(Cam, Entity) / Range
 			
-			If Volume > 0.0 Then
-				Local Dist# = EntityDistance(Cam, Entity) / Range
+			If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
+				Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 				
-				If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
-					Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-					
-					ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * opt\SFXVolume * opt\MasterVolume)))
-					ChannelPan(SoundCHN, PanValue)
-				Else
-					ChannelVolume(SoundCHN, 0.0)
-				EndIf
+				ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * opt\SFXVolume * opt\MasterVolume)))
+				ChannelPan(SoundCHN, PanValue)
 			Else
 				ChannelVolume(SoundCHN, 0.0)
 			EndIf
+		Else
+			ChannelVolume(SoundCHN, 0.0)
 		EndIf
 	EndIf
 End Function
@@ -150,43 +148,33 @@ Function PauseSounds%()
 	Local i%
 	
 	For e.Events = Each Events
-		If e\SoundCHN <> 0 Then
-			If (Not e\SoundCHN_IsStream) Then
-				PauseChannel(e\SoundCHN)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN, True)
-			EndIf
+		If e\SoundCHN_IsStream Then
+			If e\SoundCHN <> 0 Then SetStreamPaused_Strict(e\SoundCHN, True)
+		Else
+			PauseChannel(e\SoundCHN)
 		EndIf
-		If e\SoundCHN2 <> 0 Then
-			If (Not e\SoundCHN2_IsStream) Then
-				PauseChannel(e\SoundCHN2)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN2, True)
-			EndIf
+		If e\SoundCHN2_IsStream Then
+			If e\SoundCHN2 <> 0 Then SetStreamPaused_Strict(e\SoundCHN2, True)
+		Else
+			PauseChannel(e\SoundCHN2)
+		EndIf
+		If e\SoundCHN3_IsStream Then
+			If e\SoundCHN3 <> 0 Then SetStreamPaused_Strict(e\SoundCHN3, True)
+		Else
+			PauseChannel(e\SoundCHN3)
 		EndIf	
-		If e\SoundCHN3 <> 0 Then
-			If (Not e\SoundCHN3_IsStream) Then
-				PauseChannel(e\SoundCHN3)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN3, True)
-			EndIf
-		EndIf		
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\SoundCHN <> 0 Then
-			If (Not n\SoundCHN_IsStream)
-				PauseChannel(n\SoundCHN)
-			Else
-				SetStreamPaused_Strict(n\SoundCHN, True)
-			EndIf
+		If n\SoundCHN_IsStream Then
+			If n\SoundCHN <> 0 Then SetStreamPaused_Strict(n\SoundCHN, True)
+		Else
+			PauseChannel(n\SoundCHN)
 		EndIf
-		If n\SoundCHN2 <> 0 Then
-			If (Not n\SoundCHN2_IsStream)
-				PauseChannel(n\SoundCHN2)
-			Else
-				SetStreamPaused_Strict(n\SoundCHN2, True)
-			EndIf
+		If n\SoundCHN2_IsStream Then
+			If n\SoundCHN2 <> 0 Then SetStreamPaused_Strict(n\SoundCHN2, True)
+		Else
+			PauseChannel(n\SoundCHN2)
 		EndIf
 	Next	
 	
@@ -219,43 +207,33 @@ Function ResumeSounds%()
 	Local i%
 	
 	For e.Events = Each Events
-		If e\SoundCHN <> 0 Then
-			If (Not e\SoundCHN_IsStream) Then
-				ResumeChannel(e\SoundCHN)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN, False)
-			EndIf
+		If e\SoundCHN_IsStream Then
+			If e\SoundCHN <> 0 Then SetStreamPaused_Strict(e\SoundCHN, False)
+		Else
+			ResumeChannel(e\SoundCHN)
 		EndIf
-		If e\SoundCHN2 <> 0 Then
-			If (Not e\SoundCHN2_IsStream) Then
-				ResumeChannel(e\SoundCHN2)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN2, False)
-			EndIf
+		If e\SoundCHN2_IsStream Then
+			If e\SoundCHN2 <> 0 Then SetStreamPaused_Strict(e\SoundCHN2, False)
+		Else
+			ResumeChannel(e\SoundCHN2)
 		EndIf
-		If e\SoundCHN3 <> 0 Then
-			If (Not e\SoundCHN3_IsStream) Then
-				ResumeChannel(e\SoundCHN3)
-			Else
-				SetStreamPaused_Strict(e\SoundCHN3, False)
-			EndIf
-		EndIf	
+		If e\SoundCHN3_IsStream Then
+			If e\SoundCHN3 <> 0 Then SetStreamPaused_Strict(e\SoundCHN3, False)
+		Else
+			ResumeChannel(e\SoundCHN3)
+		EndIf
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\SoundCHN <> 0 Then
-			If (Not n\SoundCHN_IsStream)
-				ResumeChannel(n\SoundCHN)
-			Else
-				SetStreamPaused_Strict(n\SoundCHN, False)
-			EndIf
+		If n\SoundCHN_IsStream Then
+			If n\SoundCHN <> 0 Then SetStreamPaused_Strict(n\SoundCHN, False)
+		Else
+			ResumeChannel(n\SoundCHN)
 		EndIf
-		If n\SoundCHN2 <> 0 Then
-			If (Not n\SoundCHN2_IsStream)
-				ResumeChannel(n\SoundCHN2)
-			Else
-				SetStreamPaused_Strict(n\SoundCHN2, False)
-			EndIf
+		If n\SoundCHN2_IsStream Then
+			If n\SoundCHN2 <> 0 Then SetStreamPaused_Strict(n\SoundCHN2, False)
+		Else
+			ResumeChannel(n\SoundCHN2)
 		EndIf
 	Next	
 	
@@ -292,48 +270,33 @@ Function KillSounds%()
 	Next
 	
 	For e.Events = Each Events
-		If e\SoundCHN <> 0 Then
-			If (Not e\SoundCHN_IsStream) Then
-				StopChannel(e\SoundCHN)
-			Else
-				StopStream_Strict(e\SoundCHN)
-			EndIf
-			e\SoundCHN = 0
+		If e\SoundCHN_IsStream Then
+			If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN)
+		Else
+			StopChannel(e\SoundCHN)
 		EndIf
-		If e\SoundCHN2 <> 0 Then
-			If (Not e\SoundCHN2_IsStream) Then
-				StopChannel(e\SoundCHN2)
-			Else
-				StopStream_Strict(e\SoundCHN2)
-			EndIf
-			e\SoundCHN2 = 0
-		EndIf	
-		If e\SoundCHN3 <> 0 Then
-			If (Not e\SoundCHN3_IsStream) Then
-				StopChannel(e\SoundCHN3)
-			Else
-				StopStream_Strict(e\SoundCHN3)
-			EndIf
-			e\SoundCHN3 = 0
-		EndIf	
+		If e\SoundCHN2_IsStream Then
+			If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2)
+		Else
+			StopChannel(e\SoundCHN2)
+		EndIf
+		If e\SoundCHN3_IsStream Then
+			If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3)
+		Else
+			StopChannel(e\SoundCHN3)
+		EndIf
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\SoundCHN <> 0 Then
-			If (Not n\SoundCHN_IsStream) Then
-				StopChannel(n\SoundCHN)
-			Else
-				StopStream_Strict(n\SoundCHN)
-			EndIf
-			n\SoundCHN = 0
+		If n\SoundCHN_IsStream Then
+			If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
+		Else
+			StopChannel(n\SoundCHN)
 		EndIf
-		If n\SoundCHN2 <> 0 Then
-			If (Not n\SoundCHN2_IsStream) Then
-				StopChannel(n\SoundCHN2)
-			Else
-				StopStream_Strict(n\SoundCHN2)
-			EndIf
-			n\SoundCHN = 0
+		If n\SoundCHN2_IsStream Then
+			If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
+		Else
+			StopChannel(n\SoundCHN2)
 		EndIf
 	Next
 	
@@ -445,14 +408,14 @@ Function UpdateStreamSounds%()
 	If fps\Factor[0] > 0.0 Then
 		If IntercomStreamCHN <> 0 Then SetStreamVolume_Strict(IntercomStreamCHN, opt\SFXVolume * opt\MasterVolume)
 		For e.Events = Each Events
-			If e\SoundCHN <> 0 Then
-				If e\SoundCHN_IsStream Then SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)
+			If e\SoundCHN_IsStream Then
+				If e\SoundCHN <> 0 Then SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)
 			EndIf
-			If e\SoundCHN2 <> 0 Then
-				If e\SoundCHN2_IsStream Then SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
+			If e\SoundCHN2_IsStream Then
+				If e\SoundCHN2 <> 0 Then SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
 			EndIf
-			If e\SoundCHN3 <> 0 Then
-				If e\SoundCHN3_IsStream Then SetStreamVolume_Strict(e\SoundCHN3, opt\SFXVolume * opt\MasterVolume)
+			If e\SoundCHN3_IsStream Then
+				If e\SoundCHN3 <> 0 Then SetStreamVolume_Strict(e\SoundCHN3, opt\SFXVolume * opt\MasterVolume)
 			EndIf
 		Next
 	EndIf
@@ -464,14 +427,14 @@ Function UpdateStreamSounds%()
 			If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
 			If RN <> "dimension_1499" Then
 				For e.Events = Each Events
-					If e\SoundCHN <> 0 Then
-						If e\SoundCHN_IsStream Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+					If e\SoundCHN_IsStream Then
+						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 					EndIf
-					If e\SoundCHN2 <> 0 Then
-						If e\SoundCHN2_IsStream Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
+					If e\SoundCHN2_IsStream Then
+						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
 					EndIf
-					If e\SoundCHN3 <> 0 Then
-						If e\SoundCHN3_IsStream Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
+					If e\SoundCHN3_IsStream Then
+						If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
 					EndIf
 				Next
 			EndIf
