@@ -8568,17 +8568,16 @@ Function UpdateMTF%()
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
 			If PlayerInReachableRoom() Then
-				; ~ If the player has an SCP in their inventory play special voice line.
+				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(3) + ".ogg")
+				; ~ If the player has an SCP in their inventory play special voice line
 				For i = 0 To MaxItemAmount - 1
 					If Inventory(i) <> Null Then
 						If (Left(Inventory(i)\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-093")
 							PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
-							MTFTimer = 25000.0
 							Exit
 						EndIf
 					EndIf
 				Next
-				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(3) + ".ogg")
 			EndIf
 			MTFTimer = 25000.0
 		ElseIf MTFTimer >= 25000.0 And MTFTimer <= 25000.0 + (70.0 * 60.0)

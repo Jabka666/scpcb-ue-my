@@ -1233,9 +1233,7 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 							
-							If e\room\NPC[5]\State = 11.0
-								UpdateSoundOrigin(e\room\NPC[5]\SoundCHN2, Camera, e\room\NPC[5]\Collider)
-							EndIf
+							If e\room\NPC[5]\State = 11.0 Then UpdateSoundOrigin(e\room\NPC[5]\SoundCHN2, Camera, e\room\NPC[5]\Collider)
 							
 							If e\room\NPC[3]\State <> 11.0 Then
 								If Dist < PowTwo(Min(Max(4.0 - e\room\NPC[3]\State3 * 0.05, 1.5), 4.0)) Then
