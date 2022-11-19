@@ -5706,8 +5706,6 @@ Function RenderDebugHUD%()
 	SetFont(fo\FontID[Font_Default])
 End Function
 
-Global InvImgSize% = (64 * MenuScale) / 2
-
 Function RenderGUI%()
 	CatchErrors("Uncaught (RenderGUI)")
 	
@@ -5860,6 +5858,7 @@ Function RenderGUI%()
 	Local ClosedInv%
 	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
 	Local INVENTORY_GFX_SPACING% = 35 * MenuScale
+	Local InvImgSize% = (64 * MenuScale) / 2
 	
 	If OtherOpen <> Null Then
 		PrevOtherOpen = OtherOpen

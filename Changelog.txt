@@ -69,6 +69,7 @@ Bug fixes:
 - Fixed "disable/enable966" console command not hiding/showing all SCP-966 instances.
 - Fixed "ThreatAnnouncPossession.ogg" not playing at all.
 - Fixed battery messages and sounds playing even if the game is paused.
+- Fixed SCP-1025 not being in player's focus while reading (no darkness effect).
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

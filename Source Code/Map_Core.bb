@@ -2261,7 +2261,7 @@ Function UpdateDoors%()
 										EndIf							
 									EndIf
 									FreeEntity(Temp)
-								EndIf							
+								EndIf
 							EndIf
 						EndIf
 					EndIf
