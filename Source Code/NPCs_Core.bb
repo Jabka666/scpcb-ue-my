@@ -2762,8 +2762,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType372
 				;[Block]
-				RN = PlayerRoom\RoomTemplate\Name
-				If RN <> "dimension_106" And RN <> "dimension_1499" Then 
+				If PlayerInReachableRoom() Then
 					If n\Idle Then
 						If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 						If Rand(50) = 1 And (me\BlinkTimer < -5.0 And me\BlinkTimer > -15.0) Then
@@ -6884,15 +6883,19 @@ Function NPCSpeedChange%(n.NPCs)
 	End Select
 End Function
 
-Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False)
+Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	Local e.Events
 	Local RN$ = PlayerRoom\RoomTemplate\Name
 	
 	; ~ Player is in these rooms, returning false
-	If RN = "dimension_106" Lor RN = "dimension_1499" Lor RN = "cont1_173_intro" Lor RN = "gate_b" Lor RN = "gate_a" Then Return(False)
+	If RN = "dimension_106" Lor RN = "dimension_1499" Lor (RN = "cont1_173_intro" And (Not Intro)) Lor RN = "gate_b" Lor RN = "gate_a" Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
 	If forest_event <> Null Then
 		If forest_event\EventState = 1.0 Then Return(False)
+	EndIf
+	; ~ Player is inside the fake world, returning false
+	If skull_event <> Null Then
+		If skull_event\EventState > 0.0 Then Return(False)
 	EndIf
 	
 	If (Not CanSpawnIn049Chamber) Then

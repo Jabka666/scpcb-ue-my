@@ -2026,6 +2026,7 @@ Function UpdateGame%()
 	
 	Local e.Events, ev.Events, r.Rooms
 	Local i%, TempStr$
+	Local RN$ = PlayerRoom\RoomTemplate\Name
 	
 	If SelectedMap = "" Then
 		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
@@ -2073,11 +2074,11 @@ Function UpdateGame%()
 			me\RestoreSanity = True
 			ShouldEntitiesFall = True
 			
-			If PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then UpdateSecurityCams()
-			
-			ShouldPlay = Min(me\Zone, 2.0)
-			
-			If PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then 
+			If PlayerInReachableRoom(False, True) Then
+				UpdateSecurityCams()
+				
+				ShouldPlay = Min(me\Zone, 2.0)
+				
 				If Rand(1500) = 1 Then
 					For i = 0 To 5
 						If AmbientSFX(i, CurrAmbientSFX) <> 0 Then
@@ -2089,7 +2090,7 @@ Function UpdateGame%()
 					
 					If Rand(3) = 1 Then me\Zone = 3
 					
-					If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then 
+					If RN = "cont1_173_intro" Then 
 						me\Zone = 4
 					ElseIf forest_event <> Null
 						If forest_event\EventState = 1.0 Then
@@ -2124,12 +2125,8 @@ Function UpdateGame%()
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
 				If Rand(50000) = 3 Then
-					Local RN$ = PlayerRoom\RoomTemplate\Name
-					
-					If RN <> "cont2_860_1" And RN <> "cont2_1123" And RN <> "cont1_173_intro" And RN <> "dimension_1499" And RN <> "dimension_106" Then
-						me\LightBlink = Rnd(1.0, 2.0)
-						PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"))
-					EndIf 
+					me\LightBlink = Rnd(1.0, 2.0)
+					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"))
 				EndIf
 			EndIf
 			
@@ -2138,27 +2135,27 @@ Function UpdateGame%()
 			
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
-			If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then HideDistance = 17.0
+			If RN <> "gate_b" And RN <> "gate_a" Then HideDistance = 17.0
 			UpdateZoneColor()
 			UpdateDistanceTimer()
 			UpdateDeaf()
 			UpdateEmitters()
-			If PlayerRoom\RoomTemplate\Name = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
+			If RN = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 			UpdateMouseLook()
 			UpdateMoving()
 			UpdateVomit()
 			InFacility = CheckForPlayerInFacility()
 			CurrStepSFX = 0
-			If PlayerRoom\RoomTemplate\Name = "dimension_1499"
+			If RN = "dimension_1499" Then
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
 				UpdateLeave1499()
-			ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
+			ElseIf RN = "dimension_106"
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			Else
 				UpdateDoors()
 				UpdateScreens()
 				UpdateRoomLights()
-				If PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
+				If RN = "gate_b" Lor RN = "gate_a" Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
 					UpdateRooms()
@@ -2235,7 +2232,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select 
 					me\BlinkTimer = me\BLINKFREQ
-					If PlayerRoom\RoomTemplate\Name <> "room3_storage" Lor EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = Max(me\BlurTimer - Rnd(0.0, 150.0), 0.0)
+					If RN <> "room3_storage" Lor EntityY(me\Collider) > (-4100.0) * RoomScale Then me\BlurTimer = Max(me\BlurTimer - Rnd(0.0, 150.0), 0.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
@@ -2347,20 +2344,18 @@ Function UpdateGame%()
 			EndIf
 		EndIf
 		
-		If PlayerRoom <> Null Then
-			If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Then
-				For e.Events = Each Events
-					If e\EventID = e_cont1_173_intro Then
-						If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
-							If InvOpen Then
-								CreateHintMsg(GetLocalString("msg", "doc.click"))
-								e\EventState3 = 50.0
-								Exit
-							EndIf
+		If RN = "cont1_173_intro" Then
+			For e.Events = Each Events
+				If e\EventID = e_cont1_173_intro Then
+					If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
+						If InvOpen Then
+							CreateHintMsg(GetLocalString("msg", "doc.click"))
+							e\EventState3 = 50.0
+							Exit
 						EndIf
 					EndIf
-				Next
-			EndIf
+				EndIf
+			Next
 		EndIf
 		
 		If KeyHit(key\SAVE) Then
@@ -2439,7 +2434,7 @@ Function UpdateGame%()
 End Function
 
 Function RenderGame%()
-	If fps\Factor[0] > 0.0 And PlayerRoom\RoomTemplate\Name <> "dimension_1499" Then RenderSecurityCams()
+	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
 	
@@ -3240,37 +3235,36 @@ Function UpdateZoneColor%()
 	CurrFogColor$ = ""
 	CurrAmbientColor$ = ""
 	
-	If PlayerRoom <> Null Then
-		If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale Then
-			SetZoneColor(FogColorStorageTunnels)
-		ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
-			SetZoneColor(FogColorOutside)
-		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
-			SetZoneColor(FogColorDimension_1499)
-		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
-			For e.Events = Each Events
-				If e\EventID = e_dimension_106 Then
-					If e\EventState2 = PD_TrenchesRoom Lor e\EventState2 = PD_TowerRoom Then
-						SetZoneColor(FogColorPDTrench)
-					ElseIf e\EventState2 = PD_FakeTunnelRoom
-						SetZoneColor(FogColorHCZ, AmbientColorHCZ)
-					Else
-						SetZoneColor(FogColorPD)
-					EndIf
-					Exit
+	If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale Then
+		SetZoneColor(FogColorStorageTunnels)
+	ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
+		SetZoneColor(FogColorOutside)
+	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
+		SetZoneColor(FogColorDimension_1499)
+	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
+		For e.Events = Each Events
+			If e\EventID = e_dimension_106 Then
+				If e\EventState2 = PD_TrenchesRoom Lor e\EventState2 = PD_TowerRoom Then
+					SetZoneColor(FogColorPDTrench)
+				ElseIf e\EventState2 = PD_FakeTunnelRoom
+					SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+				Else
+					SetZoneColor(FogColorPD)
 				EndIf
-			Next
-		ElseIf (PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale)  Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale) Then
-			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
-		ElseIf forest_event <> Null
-			If forest_event\EventState = 1.0 Then
-				SetZoneColor(FogColorForest)
-				If forest_event\room\NPC[0] <> Null Then
-					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
-				EndIf
+				Exit
+			EndIf
+		Next
+	ElseIf (PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale)  Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale) Then
+		SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+	ElseIf forest_event <> Null
+		If forest_event\EventState = 1.0 Then
+			SetZoneColor(FogColorForest)
+			If forest_event\room\NPC[0] <> Null Then
+				If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 			EndIf
 		EndIf
 	EndIf
+	
 	If CurrFogColor = "" Then
 		Select me\Zone
 			Case 0
@@ -6347,12 +6341,7 @@ Function RenderGUI%()
 					
 					Local NavWorks% = True
 					
-					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
-						NavWorks = False
-					ElseIf forest_event <> Null
-						If forest_event\EventState = 1.0 Then NavWorks = False
-					EndIf
-					
+					If (Not PlayerInReachableRoom()) Then NavWorks = False
 					If (Not NavWorks) Then
 						If (MilliSecs2() Mod 800) < 200 Then
 							Color(200, 0, 0)
@@ -8538,7 +8527,7 @@ Function UpdateMTF%()
 			Next
 			
 			If entrance <> Null Then 
-				If me\Zone = 2 And PlayerRoom\RoomTemplate\Name <> "cont1_895" Then
+				If me\Zone = 2 And (EntityY(me\Collider) > -1.0 And EntityY(me\Collider) < 1.0) Then
 					If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 					
 					MTFTimer = fps\Factor[0]
@@ -8739,13 +8728,7 @@ Function Update008%()
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect% = True
 	
-	
-	If PlayerRoom\RoomTemplate\Name = "dimension_1499" Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
-		TeleportForInfect = False
-	ElseIf forest_event <> Null
-		If forest_event\EventState = 1.0 Then TeleportForInfect = False
-	EndIf
-	
+	If (Not PlayerInReachableRoom()) Then TeleportForInfect = False
 	If I_008\Timer > 0.0 Then
 		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
 		If I_008\Timer < 93.0 Then

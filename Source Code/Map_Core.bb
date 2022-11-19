@@ -7685,32 +7685,30 @@ Function UpdateRooms%()
 	
 	Local FoundNewPlayerRoom% = False
 	
-	If PlayerRoom <> Null Then
-		If Abs(EntityY(me\Collider) - EntityY(PlayerRoom\OBJ)) < 1.5 Then
-			x = Abs(PlayerRoom\x - EntityX(me\Collider, True))
-			If x < 4.0 Then
-				z = Abs(PlayerRoom\z - EntityZ(me\Collider, True))
-				If z < 4.0 Then FoundNewPlayerRoom = True
-			EndIf
-			
-			If (Not FoundNewPlayerRoom) Then ; ~ It's likely that an adjacent room is the new player room, check for that
-				For i = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\Adjacent[i] <> Null Then
-						x = Abs(PlayerRoom\Adjacent[i]\x - EntityX(me\Collider, True))
-						If x < 4.0 Then
-							z = Abs(PlayerRoom\Adjacent[i]\z - EntityZ(me\Collider, True))
-							If z < 4.0 Then
-								FoundNewPlayerRoom = True
-								PlayerRoom = PlayerRoom\Adjacent[i]
-								Exit
-							EndIf
+	If Abs(EntityY(me\Collider) - EntityY(PlayerRoom\OBJ)) < 1.5 Then
+		x = Abs(PlayerRoom\x - EntityX(me\Collider, True))
+		If x < 4.0 Then
+			z = Abs(PlayerRoom\z - EntityZ(me\Collider, True))
+			If z < 4.0 Then FoundNewPlayerRoom = True
+		EndIf
+		
+		If (Not FoundNewPlayerRoom) Then ; ~ It's likely that an adjacent room is the new player room, check for that
+			For i = 0 To MaxRoomAdjacents - 1
+				If PlayerRoom\Adjacent[i] <> Null Then
+					x = Abs(PlayerRoom\Adjacent[i]\x - EntityX(me\Collider, True))
+					If x < 4.0 Then
+						z = Abs(PlayerRoom\Adjacent[i]\z - EntityZ(me\Collider, True))
+						If z < 4.0 Then
+							FoundNewPlayerRoom = True
+							PlayerRoom = PlayerRoom\Adjacent[i]
+							Exit
 						EndIf
 					EndIf
-				Next
-			EndIf
-		Else
-			FoundNewPlayerRoom = True ; ~ PlayerRoom stays the same when you're high up, or deep down
+				EndIf
+			Next
 		EndIf
+	Else
+		FoundNewPlayerRoom = True ; ~ PlayerRoom stays the same when you're high up, or deep down
 	EndIf
 	
 	For r.Rooms = Each Rooms
@@ -7784,38 +7782,36 @@ Function UpdateRooms%()
 	
 	TempLightVolume = Max(TempLightVolume / 4.5, 1.0)
 	
-	If PlayerRoom <> Null Then
-		CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
-		PlayerRoom\Found = True
-		
-		EntityAlpha(GetChild(PlayerRoom\OBJ, 2), 1.0)
-		ShowAlphaProps(PlayerRoom)
-		For i = 0 To MaxRoomAdjacents - 1
-			If PlayerRoom\Adjacent[i] <> Null Then
-				If PlayerRoom\AdjDoor[i] <> Null Then
-					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
-						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
-						HideAlphaProps(PlayerRoom\Adjacent[i])
-					ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
-						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
-						HideAlphaProps(PlayerRoom\Adjacent[i])
-					Else
-						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 1.0)
-						ShowAlphaProps(PlayerRoom\Adjacent[i])
+	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
+	PlayerRoom\Found = True
+	
+	EntityAlpha(GetChild(PlayerRoom\OBJ, 2), 1.0)
+	ShowAlphaProps(PlayerRoom)
+	For i = 0 To MaxRoomAdjacents - 1
+		If PlayerRoom\Adjacent[i] <> Null Then
+			If PlayerRoom\AdjDoor[i] <> Null Then
+				If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
+					EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
+					HideAlphaProps(PlayerRoom\Adjacent[i])
+				ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
+					EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
+					HideAlphaProps(PlayerRoom\Adjacent[i])
+				Else
+					EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 1.0)
+					ShowAlphaProps(PlayerRoom\Adjacent[i])
+				EndIf
+			EndIf
+			
+			For j = 0 To MaxRoomAdjacents - 1
+				If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+					If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
+						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
+						HideAlphaProps(PlayerRoom\Adjacent[i]\Adjacent[j])
 					EndIf
 				EndIf
-				
-				For j = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
-							EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
-							HideAlphaProps(PlayerRoom\Adjacent[i]\Adjacent[j])
-						EndIf
-					EndIf
-				Next
-			EndIf
-		Next
-	EndIf
+			Next
+		EndIf
+	Next
 	
 	CatchErrors("UpdateRooms")
 End Function

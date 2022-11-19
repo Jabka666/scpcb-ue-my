@@ -11,6 +11,7 @@ Type Events
 End Type 
 
 Global forest_event.Events
+Global skull_event.Events
 
 ; ~ Events ID Constants
 ;[Block]
@@ -396,6 +397,10 @@ Function FindForestEvent%(e.Events)
 		Case e_cont2_860_1
 			;[Block]
 			forest_event = e
+			;[End Block]
+		Case e_cont2_1123
+			;[Block]
+			skull_event = e
 			;[End Block]
 	End Select
 End Function
@@ -938,7 +943,7 @@ Function UpdateEvents%()
 										y = (y + 0.2) + (0.302 + 0.6 - (y + 0.2)) * Max((e\EventState3 - 10.0) / 4.0, 0.0) 
 									EndIf
 									
-									z = z + (EntityZ(e\room\OBJ) + 104.0 * RoomScale - z) * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0)
+									z = z + (EntityZ(e\room\OBJ) + (104.0 * RoomScale) - z) * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0)
 									
 									; ~ I'm sorry you have to see this
 									RotateEntity(Camera, (-70.0) + 70.0 * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0) + Sin(e\EventState3 * 12.857) * 5.0, (-60.0) * Max((e\EventState3 - 10.0) / 4.0, 0.0), Sin(e\EventState3 * 25.7) * 8.0)
@@ -5587,14 +5592,9 @@ Function UpdateEvents%()
 					EndIf
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[9], e\room\Objects[10], e)
 				Else
-					If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
+					If (Not PlayerInReachableRoom()) Then
 						If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 						If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3) : e\SoundCHN3 = 0
-					ElseIf forest_event <> Null
-						If forest_event\EventState = 1.0 Then
-							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-							If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3) : e\SoundCHN3 = 0
-						EndIf
 					EndIf
 				EndIf
 				;[End Block]
@@ -6004,11 +6004,8 @@ Function UpdateEvents%()
 						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 0.81 Lor e\EventState > 0.0 Then
 							If e\EventState = 0.0 Then me\BlurTimer = 1000.0
 							me\CameraShake = 1.0
-							If (Not e\Sound2) Then
-								e\Sound2 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
-							Else
-								e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, me\Collider, 4.0, 4.0)
-							EndIf
+							If (Not e\Sound2) Then e\Sound2 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
+							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, me\Collider, 4.0, 4.0)
 						EndIf
 					EndIf
 					; ~ The event is started when the player picks up SCP-1123 (in Items.bb/UpdateItems())
@@ -6145,7 +6142,7 @@ Function UpdateEvents%()
 						If (Not me\Crouch) Then SetCrouch(True)
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null Then
-								If Inventory(i)\ItemTemplate\Name = "Leaflet"
+								If Inventory(i)\ItemTemplate\Name = "Leaflet" Then
 									RemoveItem(Inventory(i))
 									Exit
 								EndIf
@@ -6572,7 +6569,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room Then e\EventState = 70.0 * Rnd(50.0, 100.0)
-				ElseIf PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "cont2_860_1" And PlayerRoom\RoomTemplate\Name <> "cont2_1123" And PlayerRoom\RoomTemplate\Name <> "dimension_1499" 
+				ElseIf PlayerInReachableRoom()
 					e\EventState = e\EventState - fps\Factor[0]
 					
 					If e\EventState < 70.0 * 17.0 Then
