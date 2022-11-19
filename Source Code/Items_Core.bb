@@ -13,6 +13,7 @@ Type ItemTemplates
 	Field OBJ%, OBJPath$
 	Field InvImg%, InvImg2%, InvImgPath$
 	Field ImgPath$, Img%
+	Field ImgWidth%, ImgHeight%
 	Field IsAnim%
 	Field Scale#
 	Field Tex%, TexPath$

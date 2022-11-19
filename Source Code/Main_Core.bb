@@ -5706,6 +5706,8 @@ Function RenderDebugHUD%()
 	SetFont(fo\FontID[Font_Default])
 End Function
 
+Global InvImgSize% = (64 * MenuScale) / 2
+
 Function RenderGUI%()
 	CatchErrors("Uncaught (RenderGUI)")
 	
@@ -5908,9 +5910,9 @@ Function RenderGUI%()
 		If SelectedItem <> Null Then
 			If mo\MouseDown1 Then
 				If MouseSlot = 66 Then
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), ScaledMouseY() - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
 				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), ScaledMouseY() - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
 				EndIf
 			EndIf
 		EndIf
@@ -6043,9 +6045,9 @@ Function RenderGUI%()
 		If SelectedItem <> Null Then
 			If mo\MouseDown1 Then
 				If MouseSlot = 66 Then
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), ScaledMouseY() - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
 				ElseIf SelectedItem <> Inventory(MouseSlot)
-					DrawImage(SelectedItem\InvImg, ScaledMouseX() - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), ScaledMouseY() - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+					DrawImage(SelectedItem\InvImg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
 				EndIf
 			EndIf
 		EndIf
@@ -6072,7 +6074,7 @@ Function RenderGUI%()
 								;[End Block]
 						End Select
 						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6084,12 +6086,12 @@ Function RenderGUI%()
 					;[End Block]
 				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "hand3", "25ct", "scp005", "key", "coin", "mastercard"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
 					If me\Bloodloss <> 0.0 Lor me\Injuries <> 0.0 Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6159,9 +6161,11 @@ Function RenderGUI%()
 								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								;[End Block]
 						End Select
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2))
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 				Case "scp1025"
 					;[Block]
@@ -6169,11 +6173,12 @@ Function RenderGUI%()
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
-						
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2))
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
@@ -6184,13 +6189,15 @@ Function RenderGUI%()
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img)
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
 					StrTemp = ""
 					
-					x = opt\GraphicWidth - ImageWidth(SelectedItem\ItemTemplate\Img)
-					y = opt\GraphicHeight - ImageHeight(SelectedItem\ItemTemplate\Img)
+					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth
+					y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 					
@@ -6260,7 +6267,7 @@ Function RenderGUI%()
 				Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
 					If wi\BallisticVest = 0 Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6272,7 +6279,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "vest", "finevest"
 					;[Block]
-					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+					DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					
 					Width = 300 * MenuScale
 					Height = 20 * MenuScale
@@ -6303,7 +6310,7 @@ Function RenderGUI%()
 								;[End Block]
 						End Select
 						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6318,18 +6325,20 @@ Function RenderGUI%()
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
 					Local NAV_WIDTH% = 287 * MenuScale
 					Local NAV_HEIGHT% = 256 * MenuScale
 					
-					x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2) + (20.0 * MenuScale)
-					y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85 * MenuScale)
+					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20.0 * MenuScale)
+					y = opt\GraphicHeight - ((SelectedItem\ItemTemplate\ImgHeight * 2) * (0.4 * MenuScale)) - (85 * MenuScale)
 					
 					Local PlayerX%, PlayerZ%
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, x - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + (85 * MenuScale))
+					DrawImage(SelectedItem\ItemTemplate\Img, x - SelectedItem\ItemTemplate\ImgWidth, y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale))
 					
 					SetFont(fo\FontID[Font_Digital])
 					
@@ -6358,8 +6367,8 @@ Function RenderGUI%()
 							
 							SetBuffer(ImageBuffer(t\ImageID[7]))
 							
-							Local xx% = x - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2)
-							Local yy% = y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2) + (85 * MenuScale)
+							Local xx% = x - SelectedItem\ItemTemplate\ImgWidth
+							Local yy% = y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale)
 							
 							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
 							
@@ -6391,8 +6400,8 @@ Function RenderGUI%()
 							EndIf
 							Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 							
-							x = opt\GraphicWidth - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2) + (20.0 * MenuScale)
-							y = opt\GraphicHeight - (ImageHeight(SelectedItem\ItemTemplate\Img) * (0.4 * MenuScale)) - (85.0 * MenuScale)
+							x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20.0 * MenuScale)
+							y = opt\GraphicHeight - ((SelectedItem\ItemTemplate\ImgHeight * 2) * (0.4 * MenuScale)) - (85.0 * MenuScale)
 							
 							If Offline Then 
 								Color(100, 0, 0)
@@ -6502,7 +6511,7 @@ Function RenderGUI%()
 								;[End Block]
 						End Select
 						
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6517,16 +6526,17 @@ Function RenderGUI%()
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
-						
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\Img) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\Img) / 2))
+					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 				Case "helmet"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, False, True)) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
@@ -6539,7 +6549,7 @@ Function RenderGUI%()
 				Case "scramble"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
-						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - (ImageWidth(SelectedItem\ItemTemplate\InvImg) / 2), mo\Viewport_Center_Y - (ImageHeight(SelectedItem\ItemTemplate\InvImg) / 2))
+						DrawImage(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
 						Height = 20 * MenuScale
