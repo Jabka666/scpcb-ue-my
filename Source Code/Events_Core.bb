@@ -943,11 +943,9 @@ Function UpdateEvents%()
 									; ~ I'm sorry you have to see this
 									RotateEntity(Camera, (-70.0) + 70.0 * Min(Max((e\EventState3 - 3.0) / 5.0, 0.0), 1.0) + Sin(e\EventState3 * 12.857) * 5.0, (-60.0) * Max((e\EventState3 - 10.0) / 4.0, 0.0), Sin(e\EventState3 * 25.7) * 8.0)
 									PositionEntity(Camera, x, y, z)
-									If (Not EntityHidden(me\Collider)) Then
-										HideEntity(me\Collider)
-										PositionEntity(me\Collider, x, 0.302, z)	
-										me\DropSpeed = 0.0
-									EndIf
+									If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
+									PositionEntity(me\Collider, x, 0.302, z)
+									me\DropSpeed = 0.0
 								Else
 									PositionEntity(me\Collider, EntityX(me\Collider), 0.302, EntityZ(me\Collider))
 									ResetEntity(me\Collider)
