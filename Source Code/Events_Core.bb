@@ -6020,7 +6020,7 @@ Function UpdateEvents%()
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 						FreeEntity(e\room\NPC[0]\OBJ) : e\room\NPC[0]\OBJ = 0
 						e\room\NPC[0]\OBJ = CopyEntity(n_I\NPCModelID[NPC_NAZI_MODEL])
-						Scale = GetINIFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
+						Scale = IniGetFloat(NPCsFile, "Class D", "Scale") / MeshWidth(e\room\NPC[0]\OBJ)
 						ScaleEntity(e\room\NPC[0]\OBJ, Scale, Scale, Scale)
 						
 						PositionEntity(me\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), True)
@@ -8633,7 +8633,7 @@ Function UpdateDimension1499%()
 										Exit
 									EndIf
 								Next
-								Scale = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
+								Scale = IniGetFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
 								du\Anim = Rand(False, True)
@@ -8652,7 +8652,7 @@ Function UpdateDimension1499%()
 										Exit
 									EndIf
 								Next
-								Scale = GetINIFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
+								Scale = IniGetFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
 								du\Anim = Rand(False, True)

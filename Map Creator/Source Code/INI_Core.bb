@@ -55,7 +55,7 @@ Function UpdateINIFile$(File$)
 	CloseFile(f)
 End Function
 
-Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
+Function IniGetString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Local TemporaryString$ = ""
 	Local ini.INIFile = Null
 	Local k.INIFile
@@ -97,8 +97,8 @@ Function GetINIString$(File$, Section$, Parameter$, DefaultValue$ = "")
 	Return(DefaultValue)
 End Function
 
-Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
-	Local StrTemp$ = GetINIString(File, Section, Parameter, DefaultValue)
+Function IniGetInt%(File$, Section$, Parameter$, DefaultValue% = 0)
+	Local StrTemp$ = IniGetString(File, Section, Parameter, DefaultValue)
 	
 	Select StrTemp
 		Case "True"
@@ -116,8 +116,8 @@ Function GetINIInt%(File$, Section$, Parameter$, DefaultValue% = 0)
 	End Select
 End Function
 
-Function GetINIFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0)
-	Return(Float(GetINIString(File, Section, Parameter, DefaultValue)))
+Function IniGetFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0)
+	Return(Float(IniGetString(File, Section, Parameter, DefaultValue)))
 End Function
 
 Function INI_FileToString$(INI_sFilename$)
@@ -144,7 +144,7 @@ Function INI_CreateKey%(INI_lFileHandle%, INI_sKey$, INI_sValue$)
 	Return(True)
 End Function
 
-Function PutINIValue%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
+Function IniWriteString%(File$, INI_sSection$, INI_sKey$, INI_sValue$)
 	; ~ Returns: True (Success) or False (Failed)
 	INI_sSection = "[" + Trim(INI_sSection) + "]"
 	
@@ -226,25 +226,25 @@ Global opt.Options = New Options
 Function LoadOptionsINI()
 	; ~ [3-D SCENE]
 
-	opt\FogR = GetINIInt(OptionFileMC, "3-D Scene", "BG Color R", 0)
+	opt\FogR = IniGetInt(OptionFileMC, "3-D Scene", "BG Color R", 0)
 	
-	opt\FogG = GetINIInt(OptionFileMC, "3-D Scene", "BG Color G", 0)
+	opt\FogG = IniGetInt(OptionFileMC, "3-D Scene", "BG Color G", 0)
 	
-	opt\FogB = GetINIInt(OptionFileMC, "3-D Scene", "BG Color B", 0)
+	opt\FogB = IniGetInt(OptionFileMC, "3-D Scene", "BG Color B", 0)
 	
-	opt\CursorR% = GetINIInt(OptionFileMC, "3-D Scene", "Cursor Color R", 255)
+	opt\CursorR% = IniGetInt(OptionFileMC, "3-D Scene", "Cursor Color R", 255)
 	
-	opt\CursorG% = GetINIInt(OptionFileMC, "3-D Scene", "Cursor Color G", 0)
+	opt\CursorG% = IniGetInt(OptionFileMC, "3-D Scene", "Cursor Color G", 0)
 	
-	opt\CursorB% = GetINIInt(OptionFileMC, "3-D Scene", "Cursor Color B", 0)
+	opt\CursorB% = IniGetInt(OptionFileMC, "3-D Scene", "Cursor Color B", 0)
 	
-	opt\VSync = GetINIInt(OptionFileMC, "3-D Scene", "VSync", True)
+	opt\VSync = IniGetInt(OptionFileMC, "3-D Scene", "VSync", True)
 	
-	opt\ShowFPS = GetINIInt(OptionFileMC, "3-D Scene", "Show FPS", False)
+	opt\ShowFPS = IniGetInt(OptionFileMC, "3-D Scene", "Show FPS", False)
 	
-	opt\CamRange = GetINIFloat(OptionFileMC, "3-D Scene", "Camera Range", 50.0)
+	opt\CamRange = IniGetFloat(OptionFileMC, "3-D Scene", "Camera Range", 50.0)
 	
-	opt\Events% = GetINIInt(OptionFileMC, "General", "Events_Default", True)
+	opt\Events% = IniGetInt(OptionFileMC, "General", "Events_Default", True)
 End Function
 
 ;~IDEal Editor Parameters:

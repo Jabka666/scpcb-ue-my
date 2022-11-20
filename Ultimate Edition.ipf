@@ -33,4 +33,5 @@
  AbsPath="\Source Code\Strict_Loads_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Subtitles_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Texture_Cache_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
+ AbsPath="\Source Code\IniControler.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
 </Files>
