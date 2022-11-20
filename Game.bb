@@ -9,6 +9,8 @@
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 
+Include "Source Code\IniControler.bb"
+
 Type Language
 	Field CurrentLanguage$
 	Field LanguagePath$
@@ -18,6 +20,7 @@ Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"
 Const AchievementsFile$ = "Data\Achievements.ini"
 Const LoadingScreensFile$ = "LoadingScreens\loading_screens.ini"
+Const SCP1499ChunksFile$ = "Data\1499chunks.ini" ; ~ Unable to localize
 
 Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not exist
 	Local InitErrorStr$ = ""
@@ -34,11 +37,11 @@ End Function
 Function SetLanguage%(Language$)
 	lang\CurrentLanguage = Language
 	lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
-	IniWriteBuffer_(lang\LanguagePath + LanguageFile, True)
-	IniWriteBuffer_(lang\LanguagePath + SubtitlesFile, True)
-	IniWriteBuffer_(lang\LanguagePath + AchievementsFile, True)
-	IniWriteBuffer_(lang\LanguagePath + LoadingScreensFile, True)
-	IniWriteBuffer_(lang\LanguagePath + SCP294File, True)
+	IniWriteBuffer(lang\LanguagePath + LanguageFile)
+	IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
+	IniWriteBuffer(lang\LanguagePath + AchievementsFile)
+	IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
+	IniWriteBuffer(lang\LanguagePath + SCP294File)
 	opt\Language = Language
 End Function
 
@@ -48,23 +51,21 @@ CheckForDlls()
 If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
 ; ~ Second, create a folder inside "scpcb-ue" folder
 If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
-; ~ After, put the "options.ini" file to the latest created folder
-If FileType(GetEnv("AppData") + "\scpcb-ue\Data\options.ini") <> 1 Then WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\options.ini")
 
 Global lang.Language = New Language
 
-IniWriteBuffer_(LanguageFile, True)
-IniWriteBuffer_(SubtitlesFile, True)
-IniWriteBuffer_(AchievementsFile, True)
-IniWriteBuffer_(LoadingScreensFile, True)
-IniWriteBuffer_(SCP294File, True)
+IniWriteBuffer(LanguageFile)
+IniWriteBuffer(SubtitlesFile)
+IniWriteBuffer(AchievementsFile)
+IniWriteBuffer(LoadingScreensFile)
+IniWriteBuffer(SCP1499ChunksFile)
+IniWriteBuffer(SCP294File)
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
 
 LoadOptionsINI()
-
-SetLanguage(GetINIString(OptionFile, "Global", "Language"))
+SetLanguage(opt\Language)
 
 Include "Source Code\Main_Core.bb"
 

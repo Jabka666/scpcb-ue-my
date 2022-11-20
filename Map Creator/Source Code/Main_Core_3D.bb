@@ -628,12 +628,12 @@ Function LoadRoomTemplates(File$)
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			If TemporaryString <> "room ambience" Then
-				StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
+				StrTemp = IniGetString(File, TemporaryString, "Mesh Path")
 				
 				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
 				rt\Name = Lower(TemporaryString)
 				
-				StrTemp = GetINIString(File, TemporaryString, "Shape")
+				StrTemp = IniGetString(File, TemporaryString, "Shape")
 				
 				Select StrTemp
 					Case "room1", "1"
@@ -659,7 +659,7 @@ Function LoadRoomTemplates(File$)
 				End Select
 				
 				For i = 0 To 4
-					rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
+					rt\Zone[i] = IniGetInt(File, TemporaryString, "Zone" + (i + 1))
 				Next
 			EndIf
 		EndIf

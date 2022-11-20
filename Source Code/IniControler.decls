@@ -1,6 +1,6 @@
 ; IniControler - A part of BlitzToolBox
 ; Write & Read ini file.
-; v1.03 2022.10.3
+; v1.06 2022.11.12
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 .lib "IniControler.dll"
@@ -14,6 +14,13 @@ IniGetAllBuffer%():"_IniGetAllBuffer@0"
 IniSetBuffer(path$, buffer%):"_IniSetBuffer@8"
 IniSetAllBuffer(buffer%):"_IniSetAllBuffer@4"
 IniBufferKeyExist%(path$, section$, key$):"_IniBufferKeyExist@12"
+IniCreateSection(path$, section$):"_IniCreateSection@8"
+IniRemoveBufferKey(path$, section$, key$):"_IniRemoveBufferKey@12"
+IniRemoveBufferSection(path$, section$):"_IniRemoveBufferSection@8"
+IniSetExportBufferValue(buffer%, section$, key$, value$):"_IniSetExportBufferValue@16"
+
+; Custom for scpcb-ue, require custom unordered map edition for scpcb-ue.
+FindSCP294Drink_$(file$, drink$):"_FindSCP294Drink@8"
 
 ; they have default parameters so you need include "IniControler.bb"
 IniWriteBuffer_(path$, clearPrevious%):"_IniWriteBuffer@8"
@@ -28,19 +35,13 @@ IniWriteInt_(path$, section$, key$, value%, updateBuffer%):"_IniWriteInt@20"
 IniWriteFloat_(path$, section$, key$, value#, updateBuffer%):"_IniWriteFloat@20"
 IniSectionExist_%(path$, section$, allowBuffer%):"_IniSectionExist@12"
 IniKeyExist_%(path$, section$, key$, allowBuffer%):"_IniKeyExist@16"
-
-; Header File :DDD
-.lib " "
-
-IniWriteBuffer(path$, clearPrevious%)
-IniGetString$(path$, section$, key$, defaultValue$, allowBuffer%)
-IniGetInt%(path$, section$, key$, defaultValue%, allowBuffer%)
-IniGetFloat#(path$, section$, key$, defaultValue#, allowBuffer%)
-IniGetBufferString$(path$, section$, key$, defaultValue$)
-IniGetBufferInt%(path$, section$, key$, defaultValue%)
-IniGetBufferFloat#(path$, section$, key$, defaultValue#)
-IniWriteString(path$, section$, key$, value$, updateBuffer%)
-IniWriteInt(path$, section$, key$, value%, updateBuffer%)
-IniWriteFloat(path$, section$, key$, value#, updateBuffer%)
-IniSectionExist%(path$, section$, allowBuffer%)
-IniKeyExist%(path$, section$, key$, allowBuffer%)
+IniExportJson_(path$, json$, isMin%, stringOnly%, allowBuffer%):"_IniExportJson@20"
+IniBufferExportJson_(path$, json$, isMin%, stringOnly%):"_IniBufferExportJson@16"
+IniExportHtml_(path$, html$, isMin%, isList%, allowBuffer%):"_IniExportHtml@20"
+IniBufferExportHtml_(path$, html$, isMin%, isList%):"_IniBufferExportHtml@16"
+IniExportXml_(path$, xml$, isMin%, allowBuffer%):"_IniExportXml@16"
+IniBufferExportXml_(path$, xml$, isMin%):"_IniBufferExportXml@12"
+IniRemoveKey_(path$, section$, key$, updateBuffer%):"_IniRemoveKey@16"
+IniRemoveSection_(path$, section$, updateBuffer%):"_IniRemoveSection@12"
+IniExportIni_(path$, ini$, isMin%, allowBuffer%):"_IniExportIni@16"
+IniBufferExportIni_(path$, ini$, isMin%):"_IniBufferExportIni@12"

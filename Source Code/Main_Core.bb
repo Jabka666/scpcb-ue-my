@@ -141,7 +141,7 @@ InitLoadingScreens(LoadingScreensFile)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
 fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 16)
-fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\\Courier New.ttf", 52)
+fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 52)
 fo\FontID[Font_Digital] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 20)
 fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 60)
 fo\FontID[Font_Journal] = LoadFont_Strict("GFX\Fonts\Journal.ttf", 58)
@@ -1983,7 +1983,6 @@ End Function
 
 Repeat
 	Cls()
-	
 	Local ElapsedMilliSecs%
 	
 	fps\CurrTime = MilliSecs2()
@@ -2143,7 +2142,7 @@ Function UpdateGame%()
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
 			If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then HideDistance = 17.0
-			UpdateFog()
+			UpdateZoneColor()
 			UpdateDistanceTimer()
 			UpdateDeaf()
 			UpdateEmitters()
@@ -3203,7 +3202,24 @@ Const FogColorForestChase$ = "032044054"
 
 Global CurrFogColorR#, CurrFogColorG#, CurrFogColorB#
 
-Function UpdateFog%()
+; ~ Ambient Color Constants
+;[Block]
+Const AmbientColorLCZ$ = "030030030"
+Const AmbientColorHCZ$ = "030023023"
+Const AmbientColorEZ$ = "023023030"
+;[End Block]
+
+Global CurrFogColor$, CurrAmbientColor$
+Global CurrAmbientColorR#, CurrAmbientColorG#, CurrAmbientColorB#
+
+Const ZoneColorChangeSpeed# = 50.0
+
+Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
+	CurrFogColor = FogColor
+	CurrAmbientColor = AmbientColor
+End Function
+
+Function UpdateZoneColor%()
 	Local r.Rooms, e.Events
 	Local i%
 	
@@ -3229,40 +3245,36 @@ Function UpdateFog%()
 		Next
 	Next
 	
-	Local CurrFogColor$ = ""
+	CurrFogColor$ = ""
+	CurrAmbientColor$ = ""
 	
 	If PlayerRoom <> Null Then
 		If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale Then
-			CurrFogColor = FogColorStorageTunnels
+			SetZoneColor(FogColorStorageTunnels)
 		ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
-			CurrFogColor = FogColorOutside
+			SetZoneColor(FogColorOutside)
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
-			CurrFogColor = FogColorDimension_1499
+			SetZoneColor(FogColorDimension_1499)
 		ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
 			For e.Events = Each Events
 				If e\EventID = e_dimension_106 Then
 					If e\EventState2 = PD_TrenchesRoom Lor e\EventState2 = PD_TowerRoom Then
-						CurrFogColor = FogColorPDTrench
+						SetZoneColor(FogColorPDTrench)
 					ElseIf e\EventState2 = PD_FakeTunnelRoom
-						CurrFogColor = FogColorHCZ
+						SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 					Else
-						CurrFogColor = FogColorPD
+						SetZoneColor(FogColorPD)
 					EndIf
 					Exit
 				EndIf
 			Next
 		ElseIf (PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale)  Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale) Then
-			CurrFogColor = FogColorHCZ
+			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 		ElseIf forest_event <> Null
 			If forest_event\EventState = 1.0 Then
+				SetZoneColor(FogColorForest)
 				If forest_event\room\NPC[0] <> Null Then
-					If forest_event\room\NPC[0]\State >= 2.0 Then
-						CurrFogColor = FogColorForestChase
-					Else
-						CurrFogColor = FogColorForest
-					EndIf
-				Else
-					CurrFogColor = FogColorForest
+					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 				EndIf
 			EndIf
 		EndIf
@@ -3271,25 +3283,29 @@ Function UpdateFog%()
 		Select me\Zone
 			Case 0
 				;[Block]
-				CurrFogColor = FogColorLCZ
+				SetZoneColor(FogColorLCZ, AmbientColorLCZ)
 				;[End Block]
 			Case 1
 				;[Block]
-				CurrFogColor = FogColorHCZ
+				SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 				;[End Block]
 			Case 2
 				;[Block]
-				CurrFogColor = FogColorEZ
+				SetZoneColor(FogColorEZ, AmbientColorEZ)
 				;[End Block]
 		End Select
 	EndIf
 	
-	CurrFogColorR = CurveValue(Left(CurrFogColor, 3), CurrFogColorR, 50.0)
-	CurrFogColorG = CurveValue(Mid(CurrFogColor, 4, 3), CurrFogColorG, 50.0)
-	CurrFogColorB = CurveValue(Right(CurrFogColor, 3), CurrFogColorB, 50.0)
+	CurrFogColorR = CurveValue(Left(CurrFogColor, 3), CurrFogColorR, ZoneColorChangeSpeed)
+	CurrFogColorG = CurveValue(Mid(CurrFogColor, 4, 3), CurrFogColorG, ZoneColorChangeSpeed)
+	CurrFogColorB = CurveValue(Right(CurrFogColor, 3), CurrFogColorB, ZoneColorChangeSpeed)
 	
 	CameraFogColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
 	CameraClsColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
+	
+	CurrAmbientColorR = CurveValue(Left(CurrAmbientColor, 3), CurrAmbientColorR, ZoneColorChangeSpeed)
+	CurrAmbientColorG = CurveValue(Mid(CurrAmbientColor, 4, 3), CurrAmbientColorG, ZoneColorChangeSpeed)
+	CurrAmbientColorB = CurveValue(Right(CurrAmbientColor, 3), CurrAmbientColorB, ZoneColorChangeSpeed)
 End Function
 
 Function UpdateGUI%()
@@ -4443,7 +4459,7 @@ Function UpdateGUI%()
 				Case "ticket"
 					;[Block]
 					If SelectedItem\State = 0.0 Then
-						CreateMsg(Chr(34) + "Hey, I remember this movie!" + Chr(34))
+						CreateMsg(GetLocalString("msg", "ticket"))
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5) + ".ogg"))
 						SelectedItem\State = 1.0
 					EndIf
@@ -4474,54 +4490,53 @@ Function UpdateGUI%()
 				Case "cup"
 					;[Block]
 					If CanUseItem(False, True) Then
-						Local DrinkName$ = Trim(Lower(SelectedItem\Name))
-						
-						If Left(DrinkName, 6) = "cup of" Then
-							DrinkName = Right(DrinkName, Len(DrinkName) - 7)
-						ElseIf Left(DrinkName, 8) = "a cup of" 
-							DrinkName = Right(DrinkName, Len(DrinkName) - 9)
+						StrTemp = Trim(SelectedItem\Name)
+						If Lower(Left(StrTemp, 6)) = "cup of" Then
+							StrTemp = Right(StrTemp, Len(StrTemp) - 7)
+						ElseIf Lower(Left(StrTemp, 8)) = "a cup of" 
+							StrTemp = Right(StrTemp, Len(StrTemp) - 9)
 						EndIf
 						
-						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Message")
+						StrTemp = GetFileLocalString(SCP294File, StrTemp, "Message")
 						If StrTemp <> "" Then CreateMsg(StrTemp)
 						
-						If Int(GetFileLocalString(SCP294File, DrinkName, "Lethal"))
-							msg\DeathMsg = GetFileLocalString(SCP294File, DrinkName, "Death Message")
+						If StringToBoolean(GetFileLocalString(SCP294File, StrTemp, "Lethal"))
+							msg\DeathMsg = GetFileLocalString(SCP294File, StrTemp, "Death Message")
 							Kill()
 						EndIf
-						me\BlurTimer = Max(Int(GetFileLocalString(SCP294File, DrinkName, "Blur")) * 70.0, 0.0)
+						me\BlurTimer = Max(Int(GetFileLocalString(SCP294File, StrTemp, "Blur")) * 70.0, 0.0)
 						If me\VomitTimer = 0.0 Then
-							me\VomitTimer = Int(GetFileLocalString(SCP294File, DrinkName, "Vomit"))
+							me\VomitTimer = Int(GetFileLocalString(SCP294File, StrTemp, "Vomit"))
 						Else
-							me\VomitTimer = Min(me\VomitTimer, Int(GetFileLocalString(SCP294File, DrinkName, "Vomit")))
+							me\VomitTimer = Min(me\VomitTimer, Int(GetFileLocalString(SCP294File, StrTemp, "Vomit")))
 						EndIf
-						me\CameraShakeTimer = GetFileLocalString(SCP294File, DrinkName, "Camera Shake")
-						me\Injuries = Max(me\Injuries + Int(GetFileLocalString(SCP294File, DrinkName, "Damage")), 0.0)
-						me\Bloodloss = Max(me\Bloodloss + Int(GetFileLocalString(SCP294File, DrinkName, "Blood Loss")), 0.0)
-						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Sound")
+						me\CameraShakeTimer = GetFileLocalString(SCP294File, StrTemp, "Camera Shake")
+						me\Injuries = Max(me\Injuries + Int(GetFileLocalString(SCP294File, StrTemp, "Damage")), 0.0)
+						me\Bloodloss = Max(me\Bloodloss + Int(GetFileLocalString(SCP294File, StrTemp, "Blood Loss")), 0.0)
+						StrTemp =  GetFileLocalString(SCP294File, StrTemp, "Sound")
 						If StrTemp <> "" Then PlaySound_Strict(LoadTempSound(StrTemp))
-						If Int(GetFileLocalString(SCP294File, DrinkName, "Stomach Ache")) Then I_1025\State[3] = 1.0
+						If StringToBoolean(GetFileLocalString(SCP294File, StrTemp, "Stomach Ache")) Then I_1025\State[3] = 1.0
 						
-						If Int(GetFileLocalString(SCP294File, DrinkName, "Infection")) Then I_008\Timer = I_008\Timer + 0.001
+						If StringToBoolean(GetFileLocalString(SCP294File, StrTemp, "Infection")) Then I_008\Timer = I_008\Timer + 1.0
 						
-						If Int(GetFileLocalString(SCP294File, DrinkName, "Crystallization")) Then I_409\Timer = I_409\Timer + 0.001
+						If StringToBoolean(GetFileLocalString(SCP294File, StrTemp, "Crystallization")) Then I_409\Timer = I_409\Timer + 1.0
 						
 						If me\DeathTimer = 0.0 Then
-							me\DeathTimer = Int(GetFileLocalString(SCP294File, DrinkName, "Death Timer")) * 70.0
+							me\DeathTimer = Int(GetFileLocalString(SCP294File, StrTemp, "Death Timer")) * 70.0
 						Else
-							me\DeathTimer = Min(me\DeathTimer, Int(GetFileLocalString(SCP294File, DrinkName, "Death Timer")) * 70.0)
+							me\DeathTimer = Min(me\DeathTimer, Int(GetFileLocalString(SCP294File, StrTemp, "Death Timer")) * 70.0)
 						EndIf
 						
 						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
-						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Blink Effect")
+						StrTemp = GetFileLocalString(SCP294File, StrTemp, "Blink Effect")
 						If StrTemp <> "" Then me\BlinkEffect = Float(StrTemp) ^ SelectedItem\State
-						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Blink Effect Timer")
+						StrTemp = GetFileLocalString(SCP294File, StrTemp, "Blink Effect Timer")
 						If StrTemp <> "" Then me\BlinkEffectTimer = Float(StrTemp) * SelectedItem\State
-						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Stamina Effect")
+						StrTemp = GetFileLocalString(SCP294File, StrTemp, "Stamina Effect")
 						If StrTemp <> "" Then me\StaminaEffect = Float(StrTemp) ^ SelectedItem\State
-						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Stamina Effect Timer")
+						StrTemp = GetFileLocalString(SCP294File, StrTemp, "Stamina Effect Timer")
 						If StrTemp <> "" Then me\StaminaEffectTimer = Float(StrTemp) * SelectedItem\State
-						StrTemp = GetFileLocalString(SCP294File, DrinkName, "Refuse Message")
+						StrTemp = GetFileLocalString(SCP294File, StrTemp, "Refuse Message")
 						If StrTemp <> "" Then
 							CreateMsg(StrTemp)
 						Else
@@ -7979,6 +7994,11 @@ Function NullGame%(PlayButtonSFX% = True)
 	CurrFogColorR = 0.0
 	CurrFogColorG = 0.0
 	CurrFogColorB = 0.0
+	CurrAmbientColorR = 0.0
+	CurrAmbientColorG = 0.0
+	CurrAmbientColorB = 0.0
+	CurrFogColor = ""
+	CurrAmbientColor = ""
 	SecondaryLightOn = True
 	PrevSecondaryLightOn = True
 	RemoteDoorOn = True
@@ -8302,9 +8322,12 @@ Function Update294%()
 					I_294\ToInput = Right(I_294\ToInput, Len(I_294\ToInput) - 9)
 				EndIf
 				
-				; ~ TODO: FIND A WAY TO CHECK DIFFERENT DRINK NAMES (SECTIONS USING "|" SYMBOL)
-				If IniBufferSectionExist(SCP294File, I_294\ToInput) Then
-					StrTemp = GetFileLocalString(SCP294File, I_294\ToInput, "Dispense Sound")
+				If I_294\ToInput <> "" Then
+					Local Drink$ = FindSCP294Drink(I_294\ToInput, True)
+				EndIf
+				
+				If Drink <> "Null" Then
+					StrTemp = GetFileLocalString(SCP294File, Drink, "Dispense Sound")
 					If StrTemp = "" Then
 						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
 					Else
@@ -8336,12 +8359,12 @@ Function Update294%()
 						EndIf
 					EndIf
 					
-					If Int(GetFileLocalString(SCP294File, I_294\ToInput, "Explosion")) Then 
+					If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Explosion")) Then 
 						me\ExplosionTimer = 135.0
-						msg\DeathMsg = GetFileLocalString(SCP294File, I_294\ToInput, "Death Message")
+						msg\DeathMsg = GetFileLocalString(SCP294File, Drink, "Death Message")
 					EndIf
 					
-					StrTemp = GetFileLocalString(SCP294File, I_294\ToInput, "Color")
+					StrTemp = GetFileLocalString(SCP294File, Drink, "Color")
 					
 					Sep1 = Instr(StrTemp, ", ", 1)
 					Sep2 = Instr(StrTemp, ", ", Sep1 + 1)
@@ -8349,13 +8372,13 @@ Function Update294%()
 					G = Trim(Mid(StrTemp, Sep1 + 1, Sep2 - Sep1 - 1))
 					B = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
 					
-					Alpha = Float(GetFileLocalString(SCP294File, I_294\ToInput, "Alpha", 1.0))
-					Glow = Int(GetFileLocalString(SCP294File, I_294\ToInput, "Glow"))
+					Alpha = Float(GetFileLocalString(SCP294File, Drink, "Alpha", 1.0))
+					Glow = GetFileLocalString(SCP294File, Drink, "Glow")
 					If Glow Then Alpha = -Alpha
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
-					it\Name = "Cup of " + I_294\ToInput
-					it\DisplayName = Format(GetLocalString("item", "cupof"), I_294\ToInput)
+					it\Name = "Cup of " + Drink
+					it\DisplayName = Format(GetLocalString("items", "cupof"), I_294\ToInput)
 					EntityType(it\Collider, HIT_ITEM)
 				Else
 					; ~ Out of range

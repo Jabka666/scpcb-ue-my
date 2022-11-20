@@ -634,15 +634,15 @@ Function LoadMaterials%(File$)
 			mat.Materials = New Materials
 			mat\Name = Lower(TemporaryString)
 			If opt\BumpEnabled Then
-				StrTemp = GetINIString(File, TemporaryString, "bump")
+				StrTemp = IniGetString(File, TemporaryString, "bump")
 				If StrTemp <> "" Then 
 					mat\Bump =  LoadTexture_Strict(StrTemp, 256)
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
-			mat\StepSound = (GetINIInt(File, TemporaryString, "stepsound") + 1)
-			mat\IsDiffuseAlpha = GetINIInt(File, TemporaryString, "transparent")
-			mat\UseMask = GetINIInt(File, TemporaryString, "masked")
+			mat\StepSound = (IniGetInt(File, TemporaryString, "stepsound") + 1)
+			mat\IsDiffuseAlpha = IniGetInt(File, TemporaryString, "transparent")
+			mat\UseMask = IniGetInt(File, TemporaryString, "masked")
 		EndIf
 	Wend
 	
@@ -1895,7 +1895,7 @@ Function LoadEntities%()
 	CatchErrors("LoadEntities")
 End Function
 
-Function InitStats%()
+Function InitOtherStuff%()
 	me\Playable = True : me\SelectedEnding = -1
 	
 	HideDistance = 17.0
@@ -1923,7 +1923,7 @@ Function InitNewGame%()
 	LoadEntities()
 	LoadSounds()
 	
-	InitStats()
+	InitOtherStuff()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
@@ -2090,7 +2090,7 @@ Function InitLoadGame%()
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x#, z#
 	
-	InitStats()
+	InitOtherStuff()
 	LoadWayPoints()
 	
 	For d.Doors = Each Doors
