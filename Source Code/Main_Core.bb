@@ -8315,7 +8315,7 @@ Function Update294%()
 			I_294\ToInput = I_294\ToInput + StrTemp
 			
 			If Temp And I_294\ToInput <> "" Then ; ~ Dispense
-				I_294\ToInput = Trim(Lower(I_294\ToInput))
+				I_294\ToInput = Trim(I_294\ToInput)
 				If Left(I_294\ToInput, Min(7, Len(I_294\ToInput))) = "cup of " Then
 					I_294\ToInput = Right(I_294\ToInput, Len(I_294\ToInput) - 7)
 				ElseIf Left(I_294\ToInput, Min(9, Len(I_294\ToInput))) = "a cup of " 

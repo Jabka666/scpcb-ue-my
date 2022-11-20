@@ -23,7 +23,8 @@ Function StringToBoolean%(String_$, DefaultValue% = False)
 			Return True
 		Case "False", "false", "0"
 			Return False
-		Default 			Return DefaultValue
+		Default 
+			Return DefaultValue
 	End Select
 End Function
 
