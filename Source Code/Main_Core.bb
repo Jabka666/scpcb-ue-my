@@ -141,7 +141,7 @@ InitLoadingScreens(LoadingScreensFile)
 ; ~ As a workaround, I moved the files and renamed them so they
 ; ~ Can load without FastText
 fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 16)
-fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\\Courier New.ttf", 52)
+fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 52)
 fo\FontID[Font_Digital] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 20)
 fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 60)
 fo\FontID[Font_Journal] = LoadFont_Strict("GFX\Fonts\Journal.ttf", 58)
@@ -8527,7 +8527,7 @@ Function UpdateMTF%()
 			Next
 			
 			If entrance <> Null Then 
-				If me\Zone = 2 And (EntityY(me\Collider) > -1.0 And EntityY(me\Collider) < 1.0) Then
+				If me\Zone = 2 Then
 					If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 					
 					MTFTimer = fps\Factor[0]
