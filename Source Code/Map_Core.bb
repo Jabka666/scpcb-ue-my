@@ -1504,12 +1504,12 @@ Function LoadRoomTemplates%(File$)
 		If Left(TemporaryString, 1) = "[" Then
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			If TemporaryString <> "room ambience" Then
-				StrTemp = GetINIString(File, TemporaryString, "Mesh Path")
+				StrTemp = IniGetString(File, TemporaryString, "Mesh Path")
 				
 				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
 				rt\Name = Lower(TemporaryString)
 				
-				StrTemp = GetINIString(File, TemporaryString, "Shape")
+				StrTemp = IniGetString(File, TemporaryString, "Shape")
 				
 				Select StrTemp
 					Case "room1", "1"
@@ -1535,20 +1535,20 @@ Function LoadRoomTemplates%(File$)
 				End Select
 				
 				For i = 0 To 4
-					rt\Zone[i] = GetINIInt(File, TemporaryString, "Zone" + (i + 1))
+					rt\Zone[i] = IniGetInt(File, TemporaryString, "Zone" + (i + 1))
 				Next
 				
-				rt\Commonness = Max(Min(GetINIInt(File, TemporaryString, "Commonness"), 100), 0)
-				rt\Large = GetINIInt(File, TemporaryString, "Large")
-				rt\DisableDecals = GetINIInt(File, TemporaryString, "Disabledecals")
-				rt\DisableOverlapCheck = GetINIInt(File, TemporaryString, "DisableOverlapCheck")
+				rt\Commonness = Max(Min(IniGetInt(File, TemporaryString, "Commonness"), 100), 0)
+				rt\Large = IniGetInt(File, TemporaryString, "Large")
+				rt\DisableDecals = IniGetInt(File, TemporaryString, "Disabledecals")
+				rt\DisableOverlapCheck = IniGetInt(File, TemporaryString, "DisableOverlapCheck")
 			EndIf
 		EndIf
 	Wend
 	
 	i = 0
 	Repeat
-		StrTemp = GetINIString(File, "room ambience", "Ambience" + i)
+		StrTemp = IniGetString(File, "room ambience", "Ambience" + i)
 		If StrTemp = "" Then Exit
 		
 		RoomAmbience[i] = LoadSound_Strict(StrTemp)
@@ -4642,10 +4642,14 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			it.Items = CreateItem("Cup", "cup", r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
-			EntityParent(it\Collider, r\OBJ) : it\Name = it\DisplayName = GetLocalString("item", "cuporange")
+			EntityParent(it\Collider, r\OBJ)
+			it\Name = FindSCP294Drink("Orange Juice")
+			it\DisplayName = GetLocalString("items", "cuporange")
 			
 			it.Items = CreateItem("Cup", "cup", r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
-			EntityParent(it\Collider, r\OBJ) : it\Name = it\DisplayName = GetLocalString("item", "cupcoffee")
+			EntityParent(it\Collider, r\OBJ)
+			it\Name = FindSCP294Drink("Coffee Drink")
+			it\DisplayName = GetLocalString("items", "cupcoffee")
 			
 			it.Items = CreateItem("Empty Cup", "emptycup", r\x - 540.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 124.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -7557,7 +7561,8 @@ Function FillRoom%(r.Rooms)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Cup", "cup", r\x - 100.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
-			it\Name = "Cup of Water"
+			it\Name	= FindSCP294Drink("Water")
+			it\DisplayName = GetLocalString("items", "cupwater")
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Empty Cup", "emptycup", r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
@@ -7587,7 +7592,8 @@ Function FillRoom%(r.Rooms)
 			
 			If Rand(4) = 1 Then
 				it.Items = CreateItem("Cup", "cup", r\x + 880.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
-				it\Name = "Cup of Coffee"
+				it\Name = FindSCP294Drink("Coffee Drink")
+				it\DisplayName = GetLocalString("items", "cupcoffee")
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
@@ -8875,7 +8881,7 @@ Function SetChunkDataValues%()
 	
 	For i = 0 To 63
 		For j = 0 To 63
-			CHUNKDATA[i + (j * 64)] = Rand(0, GetINIInt("Data\1499chunks.ini", "general", "count"))
+			CHUNKDATA[i + (j * 64)] = Rand(0, IniGetInt("Data\1499chunks.ini", "general", "count"))
 		Next
 	Next
 	
@@ -8891,25 +8897,22 @@ End Type
 
 Function CreateChunkParts%(r.Rooms)
 	Local chp.ChunkPart, chp2.ChunkPart
-	Local File$ = "Data\1499chunks.ini"
-	Local ChunkAmount% = GetINIInt(File, "general", "count")
+	Local ChunkAmount% = IniGetInt(SCP1499ChunksFile, "general", "count")
 	Local i%, StrTemp$, j%
 	
 	StrTemp = ""
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
 	For i = 0 To ChunkAmount
-		Local Loc% = GetINISectionLocation(File, "chunk" + i)
-		
-		If Loc > 0 Then
-			StrTemp = GetINIString2(File, Loc, "count")
+		If IniSectionExist(SCP1499ChunksFile, "chunk" + i) Then
+			StrTemp = IniGetString(SCP1499ChunksFile, "chunk" + i, "count")
 			chp.ChunkPart = New ChunkPart
 			chp\Amount = Int(StrTemp)
 			For j = 0 To Int(StrTemp)
-				Local OBJ_ID% = GetINIString2(File, Loc, "obj" + j)
-				Local x$ = GetINIString2(File, Loc, "obj" + j + "-x")
-				Local z$ = GetINIString2(File, Loc, "obj" + j + "-z")
-				Local Yaw$ = GetINIString2(File, Loc, "obj" + j + "-yaw")
+				Local OBJ_ID% = IniGetString(SCP1499ChunksFile, "chunk" + i, "obj" + j)
+				Local x$ = IniGetString(SCP1499ChunksFile, "chunk" + i, "obj" + j + "-x")
+				Local z$ = IniGetString(SCP1499ChunksFile, "chunk" + i, "obj" + j + "-z")
+				Local Yaw$ = IniGetString(SCP1499ChunksFile, "chunk" + i, "obj" + j + "-yaw")
 				
 				chp\OBJ[j] = CopyEntity(r\Objects[OBJ_ID])
 				If Lower(Yaw) = "random"
@@ -8955,7 +8958,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	ch\IsSpawnChunk = IsSpawnChunk
 	
 	If OBJ > -1 Then
-		ch\Amount = GetINIInt("Data\1499chunks.ini", "chunk" + OBJ, "count")
+		ch\Amount = IniGetInt("Data\1499chunks.ini", "chunk" + OBJ, "count")
 		For chp.ChunkPart = Each ChunkPart
 			If chp\ID = OBJ
 				For i = 0 To ch\Amount
@@ -8986,7 +8989,7 @@ Function UpdateChunks%(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	x = (-ChunkMaxDistance) + (ChunkX * 40.0)
 	z = (-ChunkMaxDistance) + (ChunkZ * 40.0)
 	
-	Local CurrChunkData% = 0, MaxChunks% = GetINIInt("Data\1499chunks.ini", "general", "count")
+	Local CurrChunkData% = 0, MaxChunks% = IniGetInt("Data\1499chunks.ini", "general", "count")
 	
 	Repeat
 		Local ChunkFound% = False
