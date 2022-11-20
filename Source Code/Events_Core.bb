@@ -637,11 +637,11 @@ Function UpdateEvents%()
 		Select e\EventID
 			Case e_cont1_173
 				;[Block]
-				If e\room\RoomDoors[5] = Null Then
+				If e\room\RoomDoors[3] = Null Then
 					For i = 0 To MaxRoomAdjacents - 1
 						If e\room\AdjDoor[i] <> Null Then
-							e\room\RoomDoors[5] = e\room\AdjDoor[i]
-							e\room\RoomDoors[5]\Open = True
+							e\room\RoomDoors[3] = e\room\AdjDoor[i]
+							e\room\RoomDoors[3]\Open = True
 							Exit
 						EndIf
 					Next
@@ -731,7 +731,7 @@ Function UpdateEvents%()
 					If e\EventState >= 500.0 Then
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState2 = 0.0 Then
-							If e\EventState > 900.0 And e\room\RoomDoors[5]\Open Then
+							If e\EventState > 900.0 And e\room\RoomDoors[3]\Open Then
 								If e\EventState - fps\Factor[0] <= 900.0 Then 
 									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
 									ResetEntity(n_I\Curr173\Collider)
@@ -791,7 +791,7 @@ Function UpdateEvents%()
 									
 									If e\room\NPC[2]\State <> 1.0 And (Not me\Terminated) Then
 										If EntityZ(e\room\NPC[2]\Collider) < e\room\z - 1150.0 * RoomScale Then
-											e\room\RoomDoors[5]\Open = False
+											e\room\RoomDoors[3]\Open = False
 											me\LightBlink = 3.0
 											PlaySound_Strict(IntroSFX[Rand(8, 10)])
 											me\BlinkTimer = -10.0
@@ -816,12 +816,12 @@ Function UpdateEvents%()
 									e\room\NPC[2]\State = 0.0
 									e\room\NPC[2]\State3 = 0.0
 								EndIf
-								If e\room\NPC[2]\State = 1.0 Then e\room\RoomDoors[5]\Open = True
+								If e\room\NPC[2]\State = 1.0 Then e\room\RoomDoors[3]\Open = True
 							Else
 								If e\room\NPC[2]\State <> 1.0 Then
 									If EntityX(me\Collider) < (e\room\x + 1384.0 * RoomScale) Then e\EventState = Max(e\EventState, 900.0)
 									
-									If e\room\RoomDoors[5]\OpenState = 0.0 Then
+									If e\room\RoomDoors[3]\OpenState = 0.0 Then
 										For i = 1 To 2
 											If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
 										Next
@@ -4553,8 +4553,8 @@ Function UpdateEvents%()
 								e\room\NPC[2]\PrevState = 16
 								; ~ Instance # 4
 								PositionEntity(e\room\NPC[3]\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True) + 0.2, EntityZ(e\room\Objects[6], True)) 
-								ResetEntity(e\room\NPC[3]\Collider)                                                                                                            
-								e\room\NPC[3]\State = 2.0                                                                                                                        
+								ResetEntity(e\room\NPC[3]\Collider)
+								e\room\NPC[3]\State = 2.0
 								e\room\NPC[3]\State2 = 7.0
 								e\room\NPC[3]\PrevState = 7.0
 								
@@ -5844,9 +5844,9 @@ Function UpdateEvents%()
 						n_I\Curr106\Idle = 1
 						
 						For r.Rooms = Each Rooms
-							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
+							HideRoomsNoColl(r)
 						Next
-						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
+						ShowRoomsNoColl(e\room)
 						
 						UpdateForest(fr)
 						
@@ -6335,6 +6335,7 @@ Function UpdateEvents%()
 								Local GlassTex% = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 								
 								e\room\Objects[2] = CreateSprite()
+								e\room\HideObject[2] = False
 								EntityTexture(e\room\Objects[2], GlassTex)
 								SpriteViewMode(e\room\Objects[2], 2)
 								ScaleSprite(e\room\Objects[2], 182.0 * RoomScale * 0.5, 192.0 * RoomScale * 0.5)
@@ -7966,9 +7967,9 @@ Function UpdateDimension106%()
 			
 			If PlayerRoom = e\room Then
 				For r.Rooms = Each Rooms
-					If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
+					HideRoomsNoColl(r)
 				Next
-				If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
+				ShowRoomsNoColl(e\room)
 				
 				PlayerFallingPickDistance = 0.0
 				CurrStepSFX = 1
@@ -8675,9 +8676,9 @@ Function UpdateDimension1499%()
 				CameraRange(Camera, 0.05, 90.0)
 				
 				For r.Rooms = Each Rooms
-					If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
+					HideRoomsNoColl(r)
 				Next
-				If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
+				ShowRoomsNoColl(e\room)
 				If QuickLoadPercent = 100 Lor QuickLoadPercent = -1 Then
 					UpdateChunks(e\room, 15)
 					If EntityHidden(I_1499\Sky) Then ShowEntity(I_1499\Sky)
@@ -8885,9 +8886,9 @@ Function UpdateEndings%()
 						CanSave = 1
 						
 						For r.Rooms = Each Rooms
-							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
+							HideRoomsNoColl(r)
 						Next
-						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
+						ShowRoomsNoColl(e\room)
 						
 						If e\EventState < 2.0 And me\SelectedEnding = -1 Then 
 							If e\room\NPC[0]\State = 2.0 Then
@@ -9174,9 +9175,9 @@ Function UpdateEndings%()
 						Next
 						
 						If n_I\Curr106\Contained Then
-							e\room\RoomDoors[2]\Locked = 1
+							e\room\RoomDoors[0]\Locked = 1
 							
-							PositionEntity(e\room\NPC[5]\Collider, EntityX(e\room\Objects[15], True) + (i - 6) * 0.2, EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True) + (i - 6) * 0.2, True)
+							PositionEntity(e\room\NPC[5]\Collider, EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True), True)
 							ResetEntity(e\room\NPC[5]\Collider)
 						EndIf
 						
@@ -9191,7 +9192,7 @@ Function UpdateEndings%()
 						PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
 						ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
 						EntityType(e\room\Objects[0], HIT_MAP)
-						EntityPickMode(e\room\Objects[0], 3)
+						EntityPickMode(e\room\Objects[0], 2)
 						EntityParent(e\room\Objects[0], e\room\OBJ)
 						
 						e\room\Objects[9] = LoadMesh_Strict("GFX\Map\Props\lightgunbase.b3d")
@@ -9228,9 +9229,9 @@ Function UpdateEndings%()
 						CanSave = 1
 						
 						For r.Rooms = Each Rooms
-							If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
+							HideRoomsNoColl(r)
 						Next
-						If EntityHidden(e\room\OBJ) Then ShowEntity(e\room\OBJ)
+						ShowRoomsNoColl(e\room)
 						
 						ShouldPlay = 17
 						
@@ -9385,7 +9386,7 @@ Function UpdateEndings%()
 														p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + Rnd(0.4, 0.9), EntityZ(n_I\Curr106\OBJ), 0.006, -0.002, 40.0)
 														p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 														RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0) 	
-													Next										
+													Next
 												EndIf
 											EndIf
 										EndIf
@@ -9409,7 +9410,7 @@ Function UpdateEndings%()
 											e\room\NPC[5]\Sound = LoadSound_Strict("SFX\Character\MTF\ThereHeIs1.ogg")
 											PlaySound2(e\room\NPC[5]\Sound, Camera, e\room\NPC[5]\Collider, 25.0)
 											
-											e\room\RoomDoors[2]\Open = True
+											e\room\RoomDoors[0]\Open = True
 											
 											For i = 2 To 4
 												RemoveNPC(e\room\NPC[i]) : e\room\NPC[i] = Null
@@ -9486,7 +9487,7 @@ Function UpdateEndings%()
 										TurnEntity(e\room\Objects[14], 0.0, (Sin(e\EventState3 - 50.0) * 0.85) * fps\Factor[0], 0.0, True)
 										
 										For i = 5 To 8
-											PositionEntity(e\room\NPC[i]\Collider, CurveValue(EntityX(e\room\RoomDoors[2]\FrameOBJ, True), EntityX(e\room\NPC[i]\Collider, True), 50.0), EntityY(e\room\NPC[i]\Collider, True), CurveValue(EntityZ(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(e\room\NPC[i]\Collider, True), 50.0), True)
+											PositionEntity(e\room\NPC[i]\Collider, CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[i]\Collider, True), 50.0), EntityY(e\room\NPC[i]\Collider, True), CurveValue(EntityZ(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(e\room\NPC[i]\Collider, True), 50.0), True)
 											ResetEntity(e\room\NPC[i]\Collider)
 										Next
 									EndIf

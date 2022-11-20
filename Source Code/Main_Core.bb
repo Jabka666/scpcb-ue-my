@@ -8527,7 +8527,7 @@ Function UpdateMTF%()
 			Next
 			
 			If entrance <> Null Then 
-				If me\Zone = 2 And (EntityY(me\Collider) > -1.0 And EntityY(me\Collider) < 1.0) Then
+				If me\Zone = 2 Then
 					If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 					
 					MTFTimer = fps\Factor[0]

@@ -98,37 +98,260 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	Return(p)
 End Function
 
-Function HideProps%(room.Rooms)
-	Local p.Props
+; ~ TODO: Split into one function and make more optimizations
+;============
+Function HideRoomsNoColl%(room.Rooms)
+	Local i%, j%
+	Local p.Props, d.Doors, sc.SecurityCams
 	
-	For p.Props = Each Props
-		If p\room = room Then HideEntity(p\OBJ)
-	Next
+	If (Not EntityHidden(room\OBJ)) Then
+		For p.Props = Each Props
+			If p\room = room Then HideEntity(p\OBJ)
+		Next
+		
+		For d.Doors = Each Doors
+			If d <> Null Then
+				If d\room = room Then
+					HideEntity(d\OBJ)
+					If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
+					For j = 0 To 1
+						If d\Buttons[j] <> 0 Then HideEntity(d\Buttons[j])
+						If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
+					Next
+					HideEntity(d\FrameOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For sc.SecurityCams = Each SecurityCams
+			If sc\room = room Then
+				HideEntity(sc\BaseOBJ)
+				HideEntity(sc\CameraOBJ)
+				If sc\Screen Then
+					HideEntity(sc\MonitorOBJ)
+					HideEntity(sc\ScrOverlay)
+					HideEntity(sc\ScrOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For i = 0 To MaxRoomObjects - 1
+			If room\Objects[i] <> 0 Then
+				If room\HideObject[i] Then ShowEntity(room\Objects[i])
+			Else
+				Exit
+			EndIf
+		Next
+		
+		HideEntity(room\OBJ)
+	EndIf
 End Function
 
-Function ShowProps%(room.Rooms)
-	Local p.Props
+Function ShowRoomsNoColl%(room.Rooms)
+	Local i%, j%
+	Local p.Props, d.Doors, sc.SecurityCams
 	
-	For p.Props = Each Props
-		If p\room = room Then ShowEntity(p\OBJ)
-	Next
+	If EntityHidden(room\OBJ) Then
+		For p.Props = Each Props
+			If p\room = room Then ShowEntity(p\OBJ)
+		Next
+		
+		For d.Doors = Each Doors
+			If d <> Null Then
+				If d\room = room Then
+					ShowEntity(d\OBJ)
+					If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
+					For j = 0 To 1
+						If d\Buttons[j] <> 0 Then ShowEntity(d\Buttons[j])
+						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
+					Next
+					ShowEntity(d\FrameOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For sc.SecurityCams = Each SecurityCams
+			If sc\room = room Then
+				ShowEntity(sc\BaseOBJ)
+				ShowEntity(sc\CameraOBJ)
+				If sc\Screen Then
+					ShowEntity(sc\MonitorOBJ)
+					ShowEntity(sc\ScrOverlay)
+					ShowEntity(sc\ScrOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For i = 0 To MaxRoomObjects - 1
+			If room\Objects[i] <> 0 Then
+				If room\HideObject[i] Then ShowEntity(room\Objects[i])
+			Else
+				Exit
+			EndIf
+		Next
+		
+		If room\TriggerBoxAmount > 0 Then
+			For i = 0 To room\TriggerBoxAmount - 1
+				If chs\DebugHUD <> 0 Then
+					EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
+					EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
+				Else
+					EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
+					EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
+				EndIf
+			Next
+		EndIf
+		
+		ShowEntity(room\OBJ)
+	EndIf
 End Function
 
-Function HideAlphaProps%(room.Rooms)
-	Local p.Props
+Function HideRoomsColl%(room.Rooms)
+	Local i%, j%, k%
+	Local p.Props, d.Doors, sc.SecurityCams
 	
 	For p.Props = Each Props
 		If p\room = room Then EntityAlpha(p\OBJ, 0.0)
 	Next
+	
+	For d.Doors = Each Doors
+		If d\room = room Then
+			; ~ What the fuck is this? I really "like" how the adjacent door system works. Fuck this shit, I'm out -- Jabka
+			d\ToHide = True
+			For i = 0 To MaxRoomAdjacents - 1
+				If PlayerRoom\AdjDoor[i] <> Null Then
+					If d = PlayerRoom\AdjDoor[i] Then d\ToHide = False
+				EndIf
+				If PlayerRoom\Adjacent[i] <> Null Then
+					For j = 0 To MaxRoomAdjacents - 1
+						If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
+							If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then d\ToHide = False
+						EndIf
+						If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+							For k = 0 To MaxRoomAdjacents - 1 
+								If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
+									If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then d\ToHide = False
+								EndIf
+							Next
+						EndIf
+					Next
+				EndIf
+			Next
+			If d\ToHide Then
+				EntityAlpha(d\OBJ, 0.0)
+				If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
+				For j = 0 To 1
+					If d\Buttons[j] <> 0 Then EntityAlpha(d\Buttons[j], 0.0)
+					If d\ElevatorPanel[j] <> 0 Then
+						; ~ Hide anyway because player's collider cannot interact with this object
+						If (Not EntityHidden(d\ElevatorPanel[j])) Then HideEntity(d\ElevatorPanel[j])
+					EndIf
+				Next
+				EntityAlpha(d\FrameOBJ, 0.0)
+			EndIf
+		EndIf
+	Next
+	
+	; ~ Hide anyway because most of them can't be contacted
+	For sc.SecurityCams = Each SecurityCams
+		If sc\room = room Then
+			If (Not EntityHidden(sc\BaseOBJ)) Then
+				HideEntity(sc\BaseOBJ)
+				HideEntity(sc\CameraOBJ)
+				If sc\Screen Then
+					HideEntity(sc\MonitorOBJ)
+					HideEntity(sc\ScrOverlay)
+					HideEntity(sc\ScrOBJ)
+				EndIf
+			EndIf
+		EndIf
+	Next
+	
+	; ~ Hide anyway because most of them can't be contacted
+	For i = 0 To MaxRoomObjects - 1
+		If room\Objects[i] <> 0 Then
+			If room\HideObject[i] Then
+				If (Not EntityHidden(room\Objects[i])) Then HideEntity(room\Objects[i])
+			EndIf
+		Else
+			Exit
+		EndIf
+	Next
+	
+	EntityAlpha(GetChild(room\OBJ, 2), 0.0)
 End Function
 
-Function ShowAlphaProps%(room.Rooms)
-	Local p.Props
+Function ShowRoomsColl%(room.Rooms)
+	Local i%, j%, k%
+	Local p.Props, d.Doors, sc.SecurityCams
 	
 	For p.Props = Each Props
 		If p\room = room Then EntityAlpha(p\OBJ, 1.0)
 	Next
+	
+	For d.Doors = Each Doors
+		If d\room = room Then
+			d\ToHide = True
+			For i = 0 To MaxRoomAdjacents - 1
+				If PlayerRoom\AdjDoor[i] <> Null Then
+					If d = PlayerRoom\AdjDoor[i] Then d\ToHide = False
+				EndIf
+				If PlayerRoom\Adjacent[i] <> Null Then
+					For j = 0 To MaxRoomAdjacents - 1
+						If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
+							If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then d\ToHide = False
+						EndIf
+						If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+							For k = 0 To MaxRoomAdjacents - 1 
+								If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
+									If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then d\ToHide = False
+								EndIf
+							Next
+						EndIf
+					Next
+				EndIf
+			Next
+			If d\ToHide Then
+				EntityAlpha(d\OBJ, 1.0)
+				If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 1.0)
+				For j = 0 To 1
+					If d\Buttons[j] <> 0 Then EntityAlpha(d\Buttons[j], 1.0)
+					If d\ElevatorPanel[j] <> 0 Then
+						If EntityHidden(d\ElevatorPanel[j]) Then ShowEntity(d\ElevatorPanel[j])
+					EndIf
+				Next
+				EntityAlpha(d\FrameOBJ, 1.0)
+			EndIf
+		EndIf
+	Next
+	
+	For sc.SecurityCams = Each SecurityCams
+		If sc\room = room Then
+			If EntityHidden(sc\BaseOBJ) Then
+				ShowEntity(sc\BaseOBJ)
+				ShowEntity(sc\CameraOBJ)
+				If sc\Screen Then
+					ShowEntity(sc\MonitorOBJ)
+					ShowEntity(sc\ScrOverlay)
+					ShowEntity(sc\ScrOBJ)
+				EndIf
+			EndIf
+		EndIf
+	Next
+	
+	For i = 0 To MaxRoomObjects - 1
+		If room\Objects[i] <> 0 Then
+			If room\HideObject[i] Then
+				If EntityHidden(room\Objects[i]) Then ShowEntity(room\Objects[i])
+			EndIf
+		Else
+			Exit
+		EndIf
+	Next
+	
+	EntityAlpha(GetChild(room\OBJ, 2), 1.0)
 End Function
+;============
 
 Global LightVolume#, TempLightVolume#
 
@@ -1625,7 +1848,7 @@ Type Rooms
 	Field LightIntensity#[MaxRoomLights]
 	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
 	Field MaxLights% = 0
-	Field Objects%[MaxRoomObjects]
+	Field Objects%[MaxRoomObjects], HideObject%[MaxRoomObjects]
 	Field Levers%[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
@@ -1862,6 +2085,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	
 	Local r.Rooms = New Rooms
 	Local rt.RoomTemplates
+	Local i%
 	
 	r\Zone = Zone
 	
@@ -1879,8 +2103,11 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
 				EntityType(r\OBJ, HIT_MAP)
 				EntityPickMode(r\OBJ, 2)
-				
 				PositionEntity(r\OBJ, x, y, z)
+				
+				For i = 0 To MaxRoomObjects - 1
+					r\HideObject[i] = True
+				Next
 				FillRoom(r)
 				
 				CalculateRoomExtents(r)
@@ -1893,8 +2120,6 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	Local Temp% = 0
 	
 	For rt.RoomTemplates = Each RoomTemplates
-		Local i%
-		
 		For i = 0 To 4
 			If rt\Zone[i] = Zone Then 
 				If rt\Shape = RoomShape Then
@@ -1921,8 +2146,11 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
 					EntityType(r\OBJ, HIT_MAP)
 					EntityPickMode(r\OBJ, 2)
-					
 					PositionEntity(r\OBJ, x, y, z)
+					
+					For i = 0 To MaxRoomObjects - 1
+						r\HideObject[i] = True
+					Next
 					FillRoom(r)
 					
 					CalculateRoomExtents(r)
@@ -2037,6 +2265,7 @@ Type Doors
 	Field IsElevatorDoor% = False
 	Field MTFClose% = True
 	Field ElevatorPanel%[2]
+	Field ToHide%
 End Type 
 
 ; ~ Door ID Constants
@@ -3980,8 +4209,8 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "gate_a"
 			;[Block]
-			r\RoomDoors.Doors[2] = CreateDoor(r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, r)
-			r\RoomDoors[2]\AutoClose = False
+			r\RoomDoors.Doors[0] = CreateDoor(r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, r)
+			r\RoomDoors[0]\AutoClose = False
 			
 			d.Doors = CreateDoor(r\x, r\y, r\z + 2336.0 * RoomScale, 0.0, r, True, BIG_DOOR)
 			For i = 0 To 1
@@ -4063,6 +4292,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Hit Box
 			r\Objects[16] = LoadMesh_Strict("GFX\Map\gatea_hitbox1.b3d", r\OBJ)
+			r\HideObject[16] = False
 			EntityPickMode(r\Objects[16], 2)
 			EntityType(r\Objects[16], HIT_MAP)
 			EntityAlpha(r\Objects[16], 0.0)
@@ -4183,10 +4413,11 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(d\Buttons[0], 0.0, 90.0, 0.0)
 			
 			; ~ Hit Box
-			r\Objects[3] = LoadMesh_Strict("GFX\Map\room372_hb.b3d", r\OBJ)
-			EntityPickMode(r\Objects[3], 2)
-			EntityType(r\Objects[3], HIT_MAP)
-			EntityAlpha(r\Objects[3], 0.0)
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\room372_hb.b3d", r\OBJ)
+			r\HideObject[0] = False
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
 			
 			it.Items = CreateItem("Document SCP-372", "paper", r\x + 800.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 1108.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
@@ -4227,6 +4458,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreateSprite(r\Objects[0])
+			r\HideObject[1] = False
 			SpriteViewMode(r\Objects[1], 2)
 			PositionEntity(r\Objects[1], 0.082, 0.119, 0.010)
 			ScaleSprite(r\Objects[1], 0.09, 0.0725)
@@ -4401,6 +4633,7 @@ Function FillRoom%(r.Rooms)
 			; ~ Glass panel
 			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
+			r\HideObject[2] = False
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			SpriteViewMode(r\Objects[2], 2)
@@ -4673,21 +4906,6 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomDoors.Doors[1] = CreateDoor(r\x + 1200.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z, -90.0, r, False, ELEVATOR_DOOR)
 			
-			; ~ Elevators' pivots
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 1504.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
-			
-			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x + 1504.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
-			
-			; ~ Body
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 1110.0 * RoomScale, r\y + 36.0 * RoomScale, r\z - 208.0 * RoomScale)
-			
-			For i = 4 To 6
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
 			For k = 0 To 1
 				r\Objects[k * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
 				r\Objects[k * 2 + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
@@ -4702,6 +4920,21 @@ Function FillRoom%(r.Rooms)
 				RotateEntity(r\Objects[k * 2 + 1], 10.0, -90.0, 0.0)
 				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
 				EntityRadius(r\Objects[k * 2 + 1], 0.1)
+			Next
+			
+			; ~ Elevators' pivots
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x + 1504.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			
+			r\Objects[5] = CreatePivot()
+			PositionEntity(r\Objects[5], r\x + 1504.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
+			
+			; ~ Body
+			r\Objects[6] = CreatePivot()
+			PositionEntity(r\Objects[6], r\x + 1110.0 * RoomScale, r\y + 36.0 * RoomScale, r\z - 208.0 * RoomScale)
+			
+			For i = 4 To 6
+				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
 			it.Items = CreateItem("Nuclear Device Document", "paper", r\x - 464.0 * RoomScale, r\y + 3958.0 * RoomScale, r\z - 710.0 * RoomScale)
@@ -4798,6 +5031,7 @@ Function FillRoom%(r.Rooms)
 			
 			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
+			r\HideObject[2] = False
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			SpriteViewMode(r\Objects[2], 2)
@@ -4814,8 +5048,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[4], r\x - 384.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 752.0 * RoomScale)
 			
 			; ~ Red light
-			
 			r\Objects[5] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
+			r\HideObject[5] = False
 			
 			; ~ Spawnpoint for the scientist used in the "SCP-008-1's scene"
 			r\Objects[6] = CreatePivot()
@@ -5173,6 +5407,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
+			; ~ TODO:
 			For k = 10 To 11
 				r\Objects[k * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
 				r\Objects[k * 2 + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
@@ -5401,6 +5636,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			
 			r\Objects[3] = CreateRedLight(r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
+			r\HideObject[3] = False
 			
 			For i = 2 To 3
 				EntityParent(r\Objects[i], r\OBJ)
@@ -5545,6 +5781,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			r\Objects[8] = LoadMesh_Strict("GFX\Map\room2_servers_hcz_hb.b3d", r\OBJ)
+			r\HideObject[8] = False
 			EntityPickMode(r\Objects[8], 2)
 			EntityAlpha(r\Objects[8], 0.0)
 			HideEntity(r\Objects[8])
@@ -5634,6 +5871,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[6], r\OBJ)
 			
 			r\Objects[7] = LoadMesh_Strict("GFX\Map\room2_test_hcz_hb.b3d", r\OBJ)
+			r\HideObject[7] = False
 			EntityPickMode(r\Objects[7], 2)
 			EntityAlpha(r\Objects[7], 0.0)
 			
@@ -6178,6 +6416,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)	
 			
 			r\Objects[3] = CreateSprite()
+			r\HideObject[3] = False
 			EntityTexture(r\Objects[3], t\OverlayTextureID[11])
 			SpriteViewMode(r\Objects[3], 2) 
 			EntityBlend(r\Objects[3], 3) 
@@ -6186,6 +6425,7 @@ Function FillRoom%(r.Rooms)
 			HideEntity(r\Objects[3])
 			
 			r\Objects[4] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
+			r\HideObject[4] = False
 			
 			r\Objects[5] = CreatePivot()
 			PositionEntity(r\Objects[5], r\x, r\y, r\z - 800.0 * RoomScale)
@@ -6536,6 +6776,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			r\Objects[11] = LoadMesh_Strict("GFX\Map\cont1_106_hb.b3d", r\OBJ)
+			r\HideObject[11] = False
 			EntityPickMode(r\Objects[11], 2)
 			EntityAlpha(r\Objects[11], 0.0)
 			
@@ -6797,6 +7038,7 @@ Function FillRoom%(r.Rooms)
 			
 			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures)
 			r\Objects[17] = CreateSprite()
+			r\HideObject[17] = False
 			EntityTexture(r\Objects[17], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)
@@ -6807,6 +7049,7 @@ Function FillRoom%(r.Rooms)
 			SpriteViewMode(r\Objects[17], 2)
 			
 			r\Objects[18] = LoadMesh_Strict("GFX\Map\throne_wall.b3d")
+			r\HideObject[18] = False
 			PositionEntity(r\Objects[18], EntityX(r\Objects[8], True), r\y, EntityZ(r\Objects[8], True) - 864.5 * RoomScale)
 			ScaleEntity(r\Objects[18], RoomScale / 2.04, RoomScale, RoomScale)
 			EntityPickMode(r\Objects[18], 2)
@@ -6814,6 +7057,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[18], r\OBJ)
 			
 			r\Objects[19] = CreateSprite()
+			r\HideObject[19] = False
 			ScaleSprite(r\Objects[19], 8.0, 8.0)
 			EntityTexture(r\Objects[19], r\Textures[0])
 			EntityOrder(r\Objects[19], 100)
@@ -6822,6 +7066,7 @@ Function FillRoom%(r.Rooms)
 			SpriteViewMode(r\Objects[19], 2)
 			
 			r\Objects[20] = LoadMesh_Strict("GFX\Map\pocketdimensionterrain.b3d")
+			r\HideObject[20] = False
 			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
 			EntityType(r\Objects[20], HIT_MAP)
 			PositionEntity(r\Objects[20], r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)
@@ -7069,6 +7314,7 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, r, True, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_office_hb.b3d", r\OBJ)
+			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -7253,6 +7499,7 @@ Function FillRoom%(r.Rooms)
 			EntityRadius(r\Objects[9 * 2 + 1], 0.1)
 			
 			r\Objects[22] = CreateRedLight(r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale, r\OBJ)
+			r\HideObject[22] = False
 			
 			; ~ Camera in the room itself
 			sc.SecurityCams = CreateSecurityCam(r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, r, True, r\x - 231.489 * RoomScale, r\y + 760.0 * RoomScale, r\z + 255.744 * RoomScale)
@@ -7293,6 +7540,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[16], r\OBJ)
 			
 			r\Objects[17] = LoadMesh_Strict("GFX\Map\dimension1499\1499object0_cull.b3d", r\OBJ)
+			r\HideObject[17] = False
 			EntityType(r\Objects[17], HIT_MAP)
 			EntityAlpha(r\Objects[17], 0.0)
 			;[End Block]
@@ -7319,6 +7567,7 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x + 234.0 * RoomScale, r\y, r\z, 90.0, r, False, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_office_2_hb.b3d", r\OBJ)
+			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -7735,40 +7984,20 @@ Function UpdateRooms%()
 		
 		Hide = True
 		If r = PlayerRoom Then Hide = False
-		If Hide Then
-			If IsRoomAdjacent(PlayerRoom, r) Then Hide = False
-		EndIf
-		If Hide Then
-			For i = 0 To MaxRoomAdjacents - 1
+		If IsRoomAdjacent(PlayerRoom, r) Then Hide = False
+		For i = 0 To MaxRoomAdjacents - 1
+			If PlayerRoom\Adjacent[i] <> Null Then
 				If IsRoomAdjacent(PlayerRoom\Adjacent[i], r) Then
 					Hide = False
 					Exit
 				EndIf
-			Next
-		EndIf
+			EndIf
+		Next
 		
 		If Hide Then
-			If (Not EntityHidden(r\OBJ)) Then
-				HideEntity(r\OBJ)
-				HideProps(r)
-			EndIf
+			HideRoomsNoColl(r)
 		Else
-			If EntityHidden(r\OBJ) Then
-				ShowEntity(r\OBJ)
-				ShowProps(r)
-				
-				If r\TriggerBoxAmount > 0 Then
-					For i = 0 To r\TriggerBoxAmount - 1
-						If chs\DebugHUD <> 0 Then
-							EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
-							EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.2)
-						Else
-							EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 255)
-							EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
-						EndIf
-					Next
-				EndIf
-			EndIf
+			ShowRoomsNoColl(r)
 			For i = 0 To MaxRoomLights - 1
 				If r\Lights[i] <> 0 Then
 					Dist = EntityDistanceSquared(Camera, r\Lights[i])
@@ -7785,29 +8014,20 @@ Function UpdateRooms%()
 	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
 	PlayerRoom\Found = True
 	
-	EntityAlpha(GetChild(PlayerRoom\OBJ, 2), 1.0)
-	ShowAlphaProps(PlayerRoom)
+	ShowRoomsColl(PlayerRoom)
 	For i = 0 To MaxRoomAdjacents - 1
 		If PlayerRoom\Adjacent[i] <> Null Then
 			If PlayerRoom\AdjDoor[i] <> Null Then
-				If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Then
-					EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
-					HideAlphaProps(PlayerRoom\Adjacent[i])
-				ElseIf (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
-					EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 0.0)
-					HideAlphaProps(PlayerRoom\Adjacent[i])
+				If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Lor (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera)) Then
+					HideRoomsColl(PlayerRoom\Adjacent[i])
 				Else
-					EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\OBJ, 2), 1.0)
-					ShowAlphaProps(PlayerRoom\Adjacent[i])
+					ShowRoomsColl(PlayerRoom\Adjacent[i])
 				EndIf
 			EndIf
 			
 			For j = 0 To MaxRoomAdjacents - 1
 				If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-					If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then
-						EntityAlpha(GetChild(PlayerRoom\Adjacent[i]\Adjacent[j]\OBJ, 2), 0.0)
-						HideAlphaProps(PlayerRoom\Adjacent[i]\Adjacent[j])
-					EndIf
+					If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then HideRoomsColl(PlayerRoom\Adjacent[i]\Adjacent[j])
 				EndIf
 			Next
 		EndIf
