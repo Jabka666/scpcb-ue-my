@@ -1,12 +1,56 @@
-Type INIFile
-	Field Name$
-	Field Bank%
-	Field BankOffset% = 0
-	Field Size%
-End Type
+Function IniWriteBuffer%(File$, ClearPrevious% = True)
+	IniWriteBuffer_(File, ClearPrevious)
+End Function
 
-Function GetFileLocalString$(File$, Name$, Key_$, DefaultValue$ = "")
-	Return(IniGetBufferString(lang\LanguagePath + File, Name, Key_, IniGetBufferString(File, Name, Key_, DefaultValue)))
+Function IniGetBufferString$(File$, Section$, Parameter$, DefaultValue$ = "")
+	Return(IniGetBufferString_(File, Section, Parameter, DefaultValue))
+End Function
+
+Function IniWriteString%(File$, Section$, Parameter$, Value$, UpdateBuffer% = True)
+	IniWriteString_(File, Section, Parameter, Value, UpdateBuffer)
+End Function
+
+Function IniWriteInt%(File$, Section$, Parameter$, Value%, UpdateBuffer% = True)
+	IniWriteInt_(File, Section, Parameter, Value, UpdateBuffer)
+End Function
+
+Function IniWriteFloat%(File$, Section$, Parameter$, Value#, UpdateBuffer% = True)
+	IniWriteFloat_(File, Section, Parameter, Value, UpdateBuffer)
+End Function
+
+Function IniGetString$(File$, Section$, Parameter$, DefaultValue$ = "", AllowBuffer% = True)
+	Return(IniGetString_(File, Section, Parameter, DefaultValue, AllowBuffer))
+End Function
+
+Function IniGetInt%(File$, Section$, Parameter$, DefaultValue% = 0, AllowBuffer% = True)
+	Local Result$ = IniGetString(File, Section, Parameter, DefaultValue, AllowBuffer)
+	
+	Select Result
+		Case "True", "true"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "False", "false"
+			;[Block]
+			Return(False)
+			;[End Block]
+		Default
+			;[Block]
+			Return(Int(Result))
+			;[End Block]
+	End Select
+End Function
+
+Function IniGetFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0, AllowBuffer% = True)
+	Return(IniGetFloat_(File, Section, Parameter, DefaultValue, AllowBuffer))
+End Function
+
+Function IniSectionExist%(File$, Section$, AllowBuffer% = True)
+	Return(IniSectionExist_(File, Section, AllowBuffer))
+End Function
+
+Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "")
+	Return(IniGetBufferString(lang\LanguagePath + File, Name, Parameter, IniGetBufferString(File, Name, Parameter, DefaultValue)))
 End Function
 
 Function GetLocalString$(Section$, Parameter$)
@@ -20,33 +64,27 @@ End Function
 Function StringToBoolean%(String_$, DefaultValue% = False)
 	Select String_
 		Case "True", "true", "1"
-			Return True
+			;[Block]
+			Return(True)
+			;[End Block]
 		Case "False", "false", "0"
-			Return False
-		Default 
-			Return DefaultValue
+			;[Block]
+			Return(False)
+			;[End Block]
+		Default
+			;[Block]
+			Return(DefaultValue)
+			;[End Block]
 	End Select
 End Function
 
 Function FindSCP294Drink$(Drink$, Update294Panel% = False)
 	Local StrTemp$ = FindSCP294Drink_(lang\LanguagePath + SCP294File, Drink)
-	If StrTemp = "Null" Then StrTemp$ = FindSCP294Drink_(SCP294File, Drink)
+	
+	If StrTemp = "Null" Then StrTemp = FindSCP294Drink_(SCP294File, Drink)
 	If StrTemp = "Null" Then Return(StrTemp)
 	If Update294Panel Then I_294\ToInput = Right(StrTemp, Len(StrTemp) - Instr(StrTemp, ","))
 	Return(Left(StrTemp, Instr(StrTemp, ",") - 1))
-End Function
-
-Function INI_FileToString$(INI_sFilename$)
-	Local INI_sString$ = ""
-	Local INI_lFileHandle% = ReadFile(INI_sFilename)
-	
-	If INI_lFileHandle <> 0 Then
-		While (Not Eof(INI_lFileHandle))
-			INI_sString = INI_sString + ReadLine(INI_lFileHandle) + Chr(0)
-		Wend
-		CloseFile(INI_lFileHandle)
-	EndIf
-	Return(INI_sString)
 End Function
 
 Function StripFileName$(File$)
@@ -117,11 +155,7 @@ Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 			;[End Block]
 		Case 3
 			;[Block]
-			If Value = "True" Lor Value = "1"
-				Return(True)
-			Else
-				Return(False)
-			EndIf
+			StringToBoolean(Value)
 			;[End Block]
 	End Select
 End Function
