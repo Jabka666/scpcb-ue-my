@@ -3602,10 +3602,8 @@ Function UpdateSecurityCams%()
 						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 							If EntityVisible(Camera, sc\ScrOBJ) Then
 								If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then
-									If me\BlinkTimer > -5.0 Then
-										me\Sanity = me\Sanity - fps\Factor[0]
-										me\RestoreSanity = False
-									EndIf
+									me\Sanity = me\Sanity - fps\Factor[0]
+									me\RestoreSanity = False
 								EndIf
 							EndIf
 						EndIf
