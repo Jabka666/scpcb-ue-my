@@ -5034,15 +5034,24 @@ Function UpdateGUI%()
 								wi\HazmatSuit = 0
 								DropItem(SelectedItem)
 							Else
-								CreateMsg(GetLocalString("msg", "suit.on"))
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-								If SelectedItem\ItemTemplate\TempName = "hazmatsuit" Then
-									wi\HazmatSuit = 1
-								ElseIf SelectedItem\ItemTemplate\TempName = "veryfinehazmatsuit"
-									wi\HazmatSuit = 2
-								Else
-									wi\HazmatSuit = 3
-								EndIf
+								Select SelectedItem\ItemTemplate\TempName
+									Case "hazmatsuit"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "suit.on"))
+										wi\HazmatSuit = 1
+										;[End Block]
+									Case "veryfinehazmatsuit"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "suit.on.easy"))
+										wi\HazmatSuit = 2
+										;[End Block]
+									Case "hazmatsuit148"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "suit.on"))
+										wi\HazmatSuit = 3
+										;[End Block]
+								End Select
 								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 								wi\GasMask = 0
 								wi\BallisticHelmet = False
