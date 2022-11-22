@@ -12,6 +12,9 @@ Type Props
 	Field x#, y#, z#
 	Field Pitch#, Yaw#, Roll#
 	Field ScaleX#, ScaleY#, ScaleZ#
+	Field HasCollision%
+	Field FX%
+	Field Texture$
 	Field room.Rooms
 End Type
 
@@ -20,6 +23,9 @@ Type TempProps
 	Field x#, y#, z#
 	Field Pitch#, Yaw#, Roll#
 	Field ScaleX#, ScaleY#, ScaleZ#
+	Field HasCollision%
+	Field FX%
+	Field Texture$
 	Field RoomTemplate.RoomTemplates
 End Type
 
@@ -92,7 +98,9 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	If room <> Null Then EntityParent(p\OBJ, room\OBJ)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
-	EntityType(p\OBJ, HIT_MAP)
+	If p\HasCollision Then EntityType(p\OBJ, HIT_MAP)
+	EntityFX(p\OBJ, p\FX)
+	If p\Texture <> "" Then EntityTexture(p\OBJ, p\Texture)
 	EntityPickMode(p\OBJ, 2)
 	
 	Return(p)
@@ -915,29 +923,53 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				;[End Block]
 			Case "model"
 				;[Block]
+				tp.TempProps = New TempProps
+				tp\RoomTemplate = rt
+				
 				File = ReadString(f)
-				If File <> "" Then
-					; ~ A hacky way to use .b3d format
-					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
-					
-					tp.TempProps = New TempProps
-					tp\RoomTemplate = rt
-					tp\Name = "GFX\Map\Props\" + File
-					
-					tp\x = ReadFloat(f) * RoomScale
-					tp\y = ReadFloat(f) * RoomScale
-					tp\z = ReadFloat(f) * RoomScale
-					
-					tp\Pitch = ReadFloat(f)
-					tp\Yaw = ReadFloat(f)
-					tp\Roll = ReadFloat(f)
-					
-					tp\ScaleX = ReadFloat(f)
-					tp\ScaleY = ReadFloat(f)
-					tp\ScaleZ = ReadFloat(f)
-				Else
-					ReadFloat(f) : ReadFloat(f) : ReadFloat(f)
-				EndIf
+				; ~ A hacky way to use .b3d format
+				If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+				tp\Name = "GFX\Map\Props\" + File
+				
+				tp\x = ReadFloat(f) * RoomScale
+				tp\y = ReadFloat(f) * RoomScale
+				tp\z = ReadFloat(f) * RoomScale
+				
+				tp\Pitch = ReadFloat(f)
+				tp\Yaw = ReadFloat(f)
+				tp\Roll = ReadFloat(f)
+				
+				tp\ScaleX = ReadFloat(f)
+				tp\ScaleY = ReadFloat(f)
+				tp\ScaleZ = ReadFloat(f)
+				
+				tp\HasCollision = True
+				;[End Block]
+			Case "mesh"
+				;[Block]
+				tp.TempProps = New TempProps
+				tp\RoomTemplate = rt
+				
+				tp\x = ReadFloat(f) * RoomScale
+				tp\y = ReadFloat(f) * RoomScale
+				tp\z = ReadFloat(f) * RoomScale
+				
+				File = ReadString(f)
+				; ~ A hacky way to use .b3d format
+				If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+				tp\Name = "GFX\Map\Props\" + File
+				
+				tp\Pitch = ReadFloat(f)
+				tp\Yaw = ReadFloat(f)
+				tp\Roll = ReadFloat(f)
+				
+				tp\ScaleX = ReadFloat(f)
+				tp\ScaleY = ReadFloat(f)
+				tp\ScaleZ = ReadFloat(f)
+				
+				tp\HasCollision = ReadByte(f)
+				tp\FX = ReadInt(f)
+				tp\Texture = ReadString(f)
 				;[End Block]
 		End Select
 	Next
