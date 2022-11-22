@@ -838,7 +838,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", "gasmask148", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.02, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "hazmatsuit", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
-	CreateItemTemplate(GetLocalString("items", "veryfinesuit"), "Hazmat Suit", "veryfinehazmatsusit", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
+	CreateItemTemplate(GetLocalString("items", "veryfinesuit"), "Hazmat Suit", "veryfinehazmatsuit", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", "hazmatsuit148", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
 	
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "nvg", ItemsPath + "night_vision_goggles.b3d", ItemsPath + "INV_night_vision_goggles.png", "", 0.02, 2)

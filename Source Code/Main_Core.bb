@@ -5032,15 +5032,24 @@ Function UpdateGUI%()
 								wi\HazmatSuit = 0
 								DropItem(SelectedItem)
 							Else
-								CreateMsg(GetLocalString("msg", "suit.on"))
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-								If SelectedItem\ItemTemplate\TempName = "hazmatsuit" Then
-									wi\HazmatSuit = 1
-								ElseIf SelectedItem\ItemTemplate\TempName = "veryfinehazmatsuit"
-									wi\HazmatSuit = 2
-								Else
-									wi\HazmatSuit = 3
-								EndIf
+								Select SelectedItem\ItemTemplate\TempName
+									Case "hazmatsuit"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "suit.on"))
+										wi\HazmatSuit = 1
+										;[End Block]
+									Case "veryfinehazmatsuit"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "suit.on.easy"))
+										wi\HazmatSuit = 2
+										;[End Block]
+									Case "hazmatsuit148"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "suit.on"))
+										wi\HazmatSuit = 3
+										;[End Block]
+								End Select
 								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 								wi\GasMask = 0
 								wi\BallisticHelmet = False
@@ -8729,11 +8738,11 @@ Function Update008%()
 		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
-			If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
+			If I_427\Timer < 70.0 * 360.0 Then
 				If I_008\Revert Then
 					I_008\Timer = Max(0.0, I_008\Timer - (fps\Factor[0] * 0.01))
 				Else
-					I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
+					If (Not I_427\Using) Then I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
 				EndIf
 			EndIf
 			
@@ -8884,11 +8893,11 @@ Function Update409%()
 	If I_409\Timer > 0.0 Then
 		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
 		
-		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
+		If I_427\Timer < 70.0 * 360.0 Then
 			If I_409\Revert Then
 				I_409\Timer = Max(0.0, I_409\Timer - (fps\Factor[0] * 0.01))
 			Else
-				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+				If (Not I_427\Using) Then I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 			EndIf
 		EndIf	
 		EntityAlpha(t\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
