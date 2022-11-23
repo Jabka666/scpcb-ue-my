@@ -9,12 +9,6 @@ Include "Source Code\Texture_Cache_Core.bb"
 Type Props
 	Field Name$
 	Field OBJ%
-	Field x#, y#, z#
-	Field Pitch#, Yaw#, Roll#
-	Field ScaleX#, ScaleY#, ScaleZ#
-	Field HasCollision%
-	Field FX%
-	Field Texture$
 	Field room.Rooms
 End Type
 
@@ -77,7 +71,7 @@ Function CheckForPropModel%(File$)
 	End Select
 End Function
 
-Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, room.Rooms)
+Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, Texture$, room.Rooms)
 	Local p.Props, p2.Props
 	
 	p.Props = New Props
@@ -98,9 +92,13 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	If room <> Null Then EntityParent(p\OBJ, room\OBJ)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
-	If p\HasCollision Then EntityType(p\OBJ, HIT_MAP)
-	EntityFX(p\OBJ, p\FX)
-	If p\Texture <> "" Then EntityTexture(p\OBJ, p\Texture)
+	If HasCollision Then
+		EntityType(p\OBJ, HIT_MAP)
+	Else
+		EntityType(p\OBJ, 0)
+	EndIf
+	EntityFX(p\OBJ, FX)
+	If Texture <> "" Then EntityTexture(p\OBJ, Texture)
 	EntityPickMode(p\OBJ, 2)
 	
 	Return(p)
@@ -251,7 +249,7 @@ Function HideRoomsColl%(room.Rooms)
 					EntityAlpha(d\OBJ, 0.0)
 					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
 					For j = 0 To 1
-						If d\Buttons[j] <> 0 Then EntityAlpha(d\Buttons[j], 0.0)
+						If d\Buttons[j] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[j], 0.0)
 						; ~ Hide collider anyway because player's collider cannot interact with this object
 						If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
 					Next
@@ -323,7 +321,7 @@ Function ShowRoomsColl%(room.Rooms)
 				Next
 				If Hide Then
 					EntityAlpha(d\OBJ, 1.0)
-					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 1.0)
+					If d\OBJ2 <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\OBJ2, 1.0)
 					For j = 0 To 1
 						If d\Buttons[j] <> 0 Then EntityAlpha(d\Buttons[j], 1.0)
 						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
@@ -944,6 +942,8 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				tp\ScaleZ = ReadFloat(f)
 				
 				tp\HasCollision = True
+				tp\FX = 0
+				tp\Texture = ""
 				;[End Block]
 			Case "mesh"
 				;[Block]
@@ -7899,7 +7899,7 @@ Function FillRoom%(r.Rooms)
 	Next
 	
 	For tp.TempProps = Each TempProps
-		If tp\RoomTemplate = r\RoomTemplate Then CreateProp(tp\Name, r\x + tp\x, r\y + tp\y, r\z + tp\z, tp\Pitch, tp\Yaw, tp\Roll, tp\ScaleX, tp\ScaleY, tp\ScaleZ, r)
+		If tp\RoomTemplate = r\RoomTemplate Then CreateProp(tp\Name, r\x + tp\x, r\y + tp\y, r\z + tp\z, tp\Pitch, tp\Yaw, tp\Roll, tp\ScaleX, tp\ScaleY, tp\ScaleZ, tp\HasCollision, tp\FX, tp\Texture, r)
 	Next
 	
 	If r\RoomTemplate\TempTriggerBoxAmount > 0 Then
@@ -7930,11 +7930,8 @@ End Function
 Global UpdateTimer#
 
 Function UpdateDistanceTimer%()
-	If UpdateTimer <= 0.0 Then
-		UpdateTimer = 30.0
-	Else
-		UpdateTimer = UpdateTimer - fps\Factor[0]
-	EndIf
+	UpdateTimer = UpdateTimer - fps\Factor[0]
+	If UpdateTimer <= 0.0 Then UpdateTimer = 30.0
 End Function
 
 Function TeleportToRoom%(r.Rooms)

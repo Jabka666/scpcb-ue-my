@@ -594,7 +594,7 @@ Function UpdateNPCs%()
 		Select n\NPCType
 			Case NPCType173
 				;[Block]
-				If n_I\Curr173\Idle <> 3 And PlayerRoom\RoomTemplate\Name <> "gate_b" Lor PlayerRoom\RoomTemplate\Name <> "gate_a" Then
+				If n_I\Curr173\Idle <> 3 And (Not IsPlayerOutsideFacility()) Then
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)		
 					
 					n\State3 = 1.0
@@ -680,7 +680,7 @@ Function UpdateNPCs%()
 											PlaySound_Strict(HorrorSFX[14])
 											;[End Block]
 									End Select
-								EndIf									
+								EndIf
 								
 								n\LastDist = Sqr(Dist)
 								
@@ -689,7 +689,7 @@ Function UpdateNPCs%()
 								; ~ Teleport to a room closer to the player
 								If Dist > 2500.0 Then
 									If Rand(70) = 1 Then
-										If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" And PlayerRoom\RoomTemplate\Name <> "dimension_106" Then
+										If (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\Name <> "dimension_106" Then
 											For w.WayPoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1 Then
 													x = Abs(EntityX(me\Collider) - EntityX(w\OBJ, True))
@@ -1068,7 +1068,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If n\Reload = 0.0 Then
-								If Dist > 100.0 And PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "gate_a" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
+								If Dist > 100.0 And (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\Name <> "dimension_106" And n\State < -5.0 Then ; ~ Timer idea -- Juanjpro
 									If (Not EntityInView(n\OBJ, Camera)) Then
 										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 										Pick = EntityPick(me\Collider, 5.0)
@@ -1116,7 +1116,7 @@ Function UpdateNPCs%()
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						MoveEntity(n\OBJ2, 0.0, 8.6 * 0.11, -1.5 * 0.11)
 						
-						If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
+						If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor IsPlayerOutsideFacility() Then
 							If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 						Else
 							If Dist < PowTwo(opt\CameraFogFar * LightVolume * 0.6) Then
@@ -6511,11 +6511,8 @@ Function PlayerSees173%(n.NPCs)
 End Function
 
 Function UpdateNPCBlinking%(n.NPCs)
-	If n\BlinkTimer > 0.0 Then
-		n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
-	Else
-		n\BlinkTimer = 70.0 * Rnd(10.0, 15.0)
-	EndIf
+	n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
+	If n\BlinkTimer =< 0.0 Then n\BlinkTimer = 70.0 * Rnd(10.0, 15.0)
 End Function
 
 Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)  
@@ -6883,12 +6880,19 @@ Function NPCSpeedChange%(n.NPCs)
 	End Select
 End Function
 
+Function IsPlayerOutsideFacility%()
+	Local RN$ = PlayerRoom\RoomTemplate\Name
+	
+	If RN = "gate_a" Lor RN = "gate_b" Then Return(True)
+	Return(False)
+End Function
+
 Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	Local e.Events
 	Local RN$ = PlayerRoom\RoomTemplate\Name
 	
 	; ~ Player is in these rooms, returning false
-	If RN = "dimension_106" Lor RN = "dimension_1499" Lor (RN = "cont1_173_intro" And (Not Intro)) Lor RN = "gate_b" Lor RN = "gate_a" Then Return(False)
+	If RN = "dimension_106" Lor RN = "dimension_1499" Lor (RN = "cont1_173_intro" And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
 	If forest_event <> Null Then
 		If forest_event\EventState = 1.0 Then Return(False)

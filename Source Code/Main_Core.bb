@@ -2134,7 +2134,7 @@ Function UpdateGame%()
 			
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
-			If RN <> "gate_b" And RN <> "gate_a" Then HideDistance = 17.0
+			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
 			UpdateZoneColor()
 			UpdateDistanceTimer()
 			UpdateDeaf()
@@ -2154,7 +2154,7 @@ Function UpdateGame%()
 				UpdateDoors()
 				UpdateScreens()
 				UpdateRoomLights()
-				If RN = "gate_b" Lor RN = "gate_a" Then
+				If IsPlayerOutsideFacility() Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
 					UpdateRooms()
@@ -3210,7 +3210,7 @@ Function UpdateZoneColor%()
 	Local i%
 	
 	LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
+	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor IsPlayerOutsideFacility() Then
 		CameraFogMode(Camera, 0)
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.05, 60.0)
@@ -3236,7 +3236,7 @@ Function UpdateZoneColor%()
 	
 	If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale Then
 		SetZoneColor(FogColorStorageTunnels)
-	ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
+	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
 		SetZoneColor(FogColorDimension_1499)
@@ -4293,7 +4293,7 @@ Function UpdateGUI%()
 								
 								Local RoomName$ = PlayerRoom\RoomTemplate\Name
 								
-								If RoomName = "dimension_1499" Lor RoomName = "gate_b" Lor RoomName = "gate_a" Then
+								If RoomName = "dimension_1499" Lor IsPlayerOutsideFacility() Then
 									me\Injuries = 2.5
 									CreateMsg(GetLocalString("msg", "bleed"))
 								Else
@@ -6599,7 +6599,7 @@ Function UpdateMenu%()
 	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen Then
-		If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then
+		If (Not IsPlayerOutsideFacility()) Then
 			If me\StopHidingTimer = 0.0 Then
 				If n_I\Curr173 <> Null And n_I\Curr106 <> Null Then
 					If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 16.0 Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 16.0 Then me\StopHidingTimer = 1.0
@@ -8869,7 +8869,7 @@ Function Update008%()
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 					msg\DeathMsg = GetLocalString("death", "14991")
-				ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
+				ElseIf IsPlayerOutsideFacility() Then
 					msg\DeathMsg = Format(GetLocalString("death", "008gate"), SubjectName, "{0}")
 					If PlayerRoom\RoomTemplate\Name = "gate_a" Then
 						msg\DeathMsg = Format(msg\DeathMsg, "A", "{1}")
