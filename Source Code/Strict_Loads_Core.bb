@@ -117,7 +117,7 @@ Function LoadSound_Strict%(File$)
 		If (IniSectionExist(lang\LanguagePath + SubtitlesFile, File)) Lor (IniSectionExist(SubtitlesFile, File)) Then snd\HasSubtitles = True
 	EndIf
 	If (Not opt\EnableSFXRelease) Then
-		If (Not snd\InternalHandle) Then  snd\InternalHandle = LoadSound(snd\Name)
+		If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
 	EndIf
 	Return(Handle(snd))
 End Function
@@ -130,6 +130,10 @@ Function FreeSound_Strict%(SoundHandle%)
 		snd\ReleaseTime = 0
 		Delete(snd)
 	EndIf
+End Function
+
+Function StopChannel_Strict(CHN%)
+	StopChannel(CHN) : CHN = 0
 End Function
 
 Type Stream
@@ -174,7 +178,7 @@ Function StopStream_Strict%(StreamHandle%)
 		OpenConsoleOnError()
 		Return
 	EndIf
-	StopChannel(st\CHN) : st\CHN = 0
+	StopChannel_Strict(st\CHN)
 	
 	Delete(st)
 End Function

@@ -920,8 +920,8 @@ Function UpdateConsole%()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType096 Then
 							n\State = 0.0
-							StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
+							StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
+							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
 							Exit
 						EndIf
 					Next
@@ -3102,7 +3102,7 @@ Function UpdateMouseLook%()
 			If (Not ChannelPlaying(BreathCHN)) Then
 				If (Not ChannelPlaying(BreathGasRelaxedCHN)) Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
 			Else
-				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
 			EndIf
 		EndIf
 		
@@ -3128,7 +3128,7 @@ Function UpdateMouseLook%()
 			EndIf
 		EndIf
 	Else
-		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
 		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
@@ -5451,7 +5451,7 @@ Function UpdateGUI%()
 				If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 			Next
 			
-			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0]) : LowBatteryCHN[0] = 0
+			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel_Strict(LowBatteryCHN[0])
 		EndIf		
 	EndIf
 	
@@ -5728,7 +5728,7 @@ Function RenderGUI%()
 				If e\EventState2 = PD_ThroneRoom Then
 					If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
 						If (Not e\Img) Then
-							StopChannel(e\SoundCHN) : e\SoundCHN = 0
+							StopChannel_Strict(e\SoundCHN)
 							If Rand(30) = 1 Then PlaySound_Strict(e\Sound2)
 							e\Img = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
 							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
@@ -5738,7 +5738,7 @@ Function RenderGUI%()
 						EndIf
 					Else
 						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
-						StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						StopChannel_Strict(e\SoundCHN)
 					EndIf
 				EndIf
 				Exit
@@ -7596,9 +7596,7 @@ Function UpdateEnding%()
 		EndIf
 		
 		If me\EndingTimer > -700.0 Then 
-			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer <= -450.0 Then
-				PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
-			EndIf			
+			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer <= -450.0 Then PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				If mm\AchievementsMenu =< 0 Then 
@@ -8476,7 +8474,7 @@ Function Use427%()
 			EndIf
 		Else
 			For i = 0 To 1
-				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
+				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel_Strict(I_427\SoundCHN[i])
 			Next
 		EndIf
 	Else
