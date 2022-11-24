@@ -70,6 +70,10 @@ Bug fixes:
 - Fixed "ThreatAnnouncPossession.ogg" not playing at all.
 - Fixed battery messages and sounds playing even if the game is paused.
 - Fixed SCP-1025 not being in player's focus while reading (no darkness effect).
+- Fixed light flash appearing ahead of time in Gate A area.
+- Fixed SCP-106 collider not being teleported correctly.
+
+- Hopefully fixed height of NPCs teleportation.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

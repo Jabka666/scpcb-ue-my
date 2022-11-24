@@ -2001,6 +2001,7 @@ Function UpdateEvents%()
 							EntityParent(de\OBJ, e\room\OBJ)
 							
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), e\room\y - 1541.0 * RoomScale, EntityZ(e\room\Objects[1], True))
+							ResetEntity(n_I\Curr106\Collider)
 							SetNPCFrame(n_I\Curr106, 110.0)
 							n_I\Curr106\State = -0.1
 							n_I\Curr106\PrevY = EntityY(me\Collider)
@@ -2190,7 +2191,7 @@ Function UpdateEvents%()
 				If (Not n_I\Curr106\Contained) Then
 					If e\EventState = 0.0 Then
 						If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then
-							If n_I\Curr106\State < 0.0 Then 
+							If n_I\Curr106\State =< 0.0 Then 
 								RemoveEvent(e)
 							Else
 								e\room\RoomDoors[0]\Open = True
@@ -2252,6 +2253,7 @@ Function UpdateEvents%()
 						If e\EventState > 100.0 Then
 							PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), -100.0, EntityZ(n_I\Curr106\Collider), True)
 							PositionEntity(n_I\Curr106\Collider, EntityX(n_I\Curr106\Collider), -100.0, EntityZ(n_I\Curr106\Collider), True)
+							ResetEntity(n_I\Curr106\Collider)
 							
 							n_I\Curr106\Idle = 0
 							If EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 Then n_I\Curr106\State = -0.1
@@ -3681,6 +3683,7 @@ Function UpdateEvents%()
 								EntityParent(de\OBJ, e\room\OBJ)
 								
 								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[Temp], True), EntityY(me\Collider, True) - 3.0, EntityZ(e\room\Objects[Temp], True))
+								ResetEntity(n_I\Curr106\Collider)
 								SetNPCFrame(n_I\Curr106, 110.0)
 								n_I\Curr106\State = -0.1	
 								n_I\Curr106\PrevY = EntityY(me\Collider)
@@ -5526,6 +5529,7 @@ Function UpdateEvents%()
 								If e\EventState3 >= 2500.0 Then
 									If e\EventState2 = 1.0 And e\EventState3 - fps\Factor[0] < 2500.0 Then
 										PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
+										ResetEntity(n_I\Curr106\Collider)
 										n_I\Curr106\Contained = False
 										ShowEntity(n_I\Curr106\OBJ)
 										n_I\Curr106\State = -11.0 : n_I\Curr106\Idle = 0
@@ -5536,6 +5540,7 @@ Function UpdateEvents%()
 									ShouldPlay = 10
 									
 									PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[5], True), ((-6628.0) + 108.0 * (Min(e\EventState3 - 2500.0, 800.0) / 320.0)) * RoomScale, EntityZ(e\room\Objects[5], True))
+									ResetEntity(n_I\Curr106\Collider)
 									If (Not EntityHidden(n_I\Curr106\OBJ2)) Then HideEntity(n_I\Curr106\OBJ2)
 									
 									RotateEntity(n_I\Curr106\Collider, 0.0, EntityYaw(e\room\Objects[5], True) + 180.0, 0.0, True)
@@ -5564,7 +5569,7 @@ Function UpdateEvents%()
 											n_I\Curr106\Contained = True
 										Else
 											PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
-											
+											ResetEntity(n_I\Curr106\Collider)
 											n_I\Curr106\Contained = False
 											ShowEntity(n_I\Curr106\OBJ)
 											n_I\Curr106\State = -11.0 : n_I\Curr106\Idle = 0
@@ -6304,6 +6309,7 @@ Function UpdateEvents%()
 					ElseIf e\EventState > 180.0 And e\EventState < 300.0 Then
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0 : n_I\Curr106\PathTimer = 70.0 * 10.0 : n_I\Curr106\PathStatus = 0 : n_I\Curr106\PathLocation = 0
 						PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
+						ResetEntity(n_I\Curr106\Collider)
 						de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ, True), e\room\y + 0.005, EntityZ(e\room\OBJ, True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 						de\SizeChange = 0.01
 						EntityParent(de\OBJ, e\room\OBJ)
@@ -7056,8 +7062,7 @@ Function UpdateEvents%()
 			Case e_cont2_500_1499
 				;[Block]
 				If e\room\Dist < 15.0 Then
-					If n_I\Curr106\Contained Then e\EventState = 2.0
-					If n_I\Curr106\State < 0.0 Then e\EventState = 2.0
+					If n_I\Curr106\Contained Lor n_I\Curr106\State =< 0.0 Then e\EventState = 2.0
 					
 					If e\EventState < 2.0 Then
 						If e\EventState = 0.0 Then
@@ -7888,6 +7893,7 @@ Function UpdateEvents%()
 								EntityParent(de\OBJ, e\room\OBJ)
 								
 								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+								ResetEntity(n_I\Curr106\Collider)
 								n_I\Curr106\State = -11.0
 								ShowEntity(n_I\Curr106\OBJ)
 								
@@ -8327,7 +8333,6 @@ Function UpdateDimension106%()
 						If e\EventState3 > 12.0 Then 
 							n_I\Curr106\Idle = 1
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[e\EventState3], True), 0.27, EntityZ(e\room\Objects[e\EventState3], True))
-							ResetEntity(n_I\Curr106\Collider)
 							
 							PointEntity(n_I\Curr106\Collider, Camera)
 							TurnEntity(n_I\Curr106\Collider, 0.0, Sin(MilliSecs2() / 20.0) * 6.0, 0, True)
@@ -9046,7 +9051,7 @@ Function UpdateEndings%()
 											
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Gunshot.ogg"))
 											
-											me\LightFlash = 20.0
+											me\LightFlash = 1.0
 											me\Terminated = True
 											msg\DeathMsg = ""
 											me\BlinkTimer = -10.0
@@ -9256,6 +9261,7 @@ Function UpdateEndings%()
 									EntityParent(de\OBJ, e\room\OBJ)
 									
 									PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[3], True), EntityY(me\Collider) - 3.0, EntityZ(e\room\Objects[3], True), True)
+									ResetEntity(n_I\Curr106\Collider)
 									SetNPCFrame(n_I\Curr106, 110.0)
 									n_I\Curr106\State = -0.1
 									n_I\Curr106\PrevY = EntityY(me\Collider)
@@ -9275,8 +9281,8 @@ Function UpdateEndings%()
 												n_I\Curr106\PathStatus = FindPath(n_I\Curr106, EntityX(e\room\NPC[5]\Collider, True), EntityY(e\room\NPC[5]\Collider, True), EntityZ(e\room\NPC[5]\Collider, True))
 												n_I\Curr106\PathTimer = 70.0 * 200.0 : n_I\Curr106\PathLocation = 1
 												PositionEntity(n_I\Curr106\Collider, EntityX(n_I\Curr106\Collider), Dist, EntityZ(n_I\Curr106\Collider), True)
-												ResetEntity(n_I\Curr106\Collider)
 											EndIf
+											ResetEntity(n_I\Curr106\Collider)
 										Else
 											n_I\Curr106\PathTimer = 70.0 * 200.0
 											For i = 2 To 4 ; ~ Helicopters start attacking SCP-106
@@ -9340,6 +9346,7 @@ Function UpdateEndings%()
 											
 											n_I\Curr106\State3 = n_I\Curr106\State3 + fps\Factor[0]
 											PositionEntity(n_I\Curr106\Collider, EntityX(n_I\Curr106\Collider, True), CurveValue(EntityY(e\room\Objects[3], True) - (n_I\Curr106\State3 / 4500.0), EntityY(n_I\Curr106\Collider, True), 100.0), EntityZ(n_I\Curr106\Collider, True))
+											ResetEntity(n_I\Curr106\Collider)
 											If n_I\Curr106\State3 > 700.0 Then
 												n_I\Curr106\State = 100000.0
 												e\EventState2 = 0.0
@@ -9358,24 +9365,26 @@ Function UpdateEndings%()
 													e\EventState2 = 1.0
 												ElseIf e\EventState2 > 0.0
 													e\EventState2 = e\EventState2 + fps\Factor[0]
-													If e\EventState2 >= 70.0 * 7.5 And e\EventState2 - fps\Factor[0] < 70.0 * 7.5 Then
-														p.Particles = CreateParticle(PARTICLE_SUN, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + 0.4, EntityZ(n_I\Curr106\OBJ, True), 7.0, 0.0, 470.0)
-														p\Speed = 0.0 : p\Alpha = 1.0
-														EntityParent(p\Pvt, n_I\Curr106\Collider, True)
-														
-														p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 2.0, 0.0, 470.0)
-														p\Speed = 0.0 : p\Alpha = 1.0
-														RotateEntity(p\Pvt, EntityPitch(e\room\Objects[10], True), EntityYaw(e\room\Objects[10], True), 0.0, True)
-														MoveEntity(p\Pvt, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
-														EntityParent(p\Pvt, e\room\Objects[10], True)
-													ElseIf e\EventState2 < 70.0 * 14.3
-														me\CameraShake = 0.5
-														me\LightFlash = 0.3 + EntityInView(e\room\Objects[10], Camera) * 0.5
-														
-														If (Not (me\Terminated Lor chs\GodMode)) Then
-															If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 1.44 Then
-																PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-																Kill(True)
+													If e\EventState2 >= 70.0 * 7.5 Then
+														If e\EventState2 - fps\Factor[0] < 70.0 * 7.5 Then
+															p.Particles = CreateParticle(PARTICLE_SUN, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + 0.4, EntityZ(n_I\Curr106\OBJ, True), 7.0, 0.0, 470.0)
+															p\Speed = 0.0 : p\Alpha = 1.0
+															EntityParent(p\Pvt, n_I\Curr106\Collider, True)
+															
+															p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True), 2.0, 0.0, 470.0)
+															p\Speed = 0.0 : p\Alpha = 1.0
+															RotateEntity(p\Pvt, EntityPitch(e\room\Objects[10], True), EntityYaw(e\room\Objects[10], True), 0.0, True)
+															MoveEntity(p\Pvt, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
+															EntityParent(p\Pvt, e\room\Objects[10], True)
+														ElseIf e\EventState2 < 70.0 * 14.3
+															me\CameraShake = 0.5
+															me\LightFlash = 0.3 + EntityInView(e\room\Objects[10], Camera) * 0.5
+															
+															If (Not (me\Terminated Lor chs\GodMode)) Then
+																If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 1.44 Then
+																	PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+																	Kill(True)
+																EndIf
 															EndIf
 														EndIf
 													EndIf
@@ -9580,7 +9589,7 @@ Function UpdateEndings%()
 												EndIf
 											Next
 											
-											me\LightFlash = 20.0
+											me\LightFlash = 1.0
 											me\Terminated = True
 											msg\DeathMsg = ""
 											me\BlinkTimer = -10.0

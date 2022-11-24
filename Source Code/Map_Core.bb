@@ -104,261 +104,6 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	Return(p)
 End Function
 
-; ~ TODO: Split into one function and make more optimizations
-;============
-Function HideRoomsNoColl%(room.Rooms)
-	Local i%, j%
-	Local p.Props, d.Doors, sc.SecurityCams
-	
-	If (Not EntityHidden(room\OBJ)) Then
-		For p.Props = Each Props
-			If p\room = room Then HideEntity(p\OBJ)
-		Next
-		
-		For d.Doors = Each Doors
-			If d <> Null Then
-				If d\room = room Then
-					HideEntity(d\OBJ)
-					If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
-					For j = 0 To 1
-						If d\Buttons[j] <> 0 Then HideEntity(d\Buttons[j])
-						If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
-					Next
-					HideEntity(d\FrameOBJ)
-				EndIf
-			EndIf
-		Next
-		
-		For sc.SecurityCams = Each SecurityCams
-			If sc\room = room Then
-				HideEntity(sc\BaseOBJ)
-				HideEntity(sc\CameraOBJ)
-				If sc\Screen Then
-					HideEntity(sc\MonitorOBJ)
-					HideEntity(sc\ScrOverlay)
-					HideEntity(sc\ScrOBJ)
-				EndIf
-			EndIf
-		Next
-		
-		For i = 0 To MaxRoomObjects - 1
-			If room\Objects[i] <> 0 Then
-				If room\HideObject[i] Then ShowEntity(room\Objects[i])
-			Else
-				Exit
-			EndIf
-		Next
-		
-		HideEntity(room\OBJ)
-	EndIf
-End Function
-
-Function ShowRoomsNoColl%(room.Rooms)
-	Local i%, j%
-	Local p.Props, d.Doors, sc.SecurityCams
-	
-	If EntityHidden(room\OBJ) Then
-		For p.Props = Each Props
-			If p\room = room Then ShowEntity(p\OBJ)
-		Next
-		
-		For d.Doors = Each Doors
-			If d <> Null Then
-				If d\room = room Then
-					ShowEntity(d\OBJ)
-					If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
-					For j = 0 To 1
-						If d\Buttons[j] <> 0 Then ShowEntity(d\Buttons[j])
-						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
-					Next
-					ShowEntity(d\FrameOBJ)
-				EndIf
-			EndIf
-		Next
-		
-		For sc.SecurityCams = Each SecurityCams
-			If sc\room = room Then
-				ShowEntity(sc\BaseOBJ)
-				ShowEntity(sc\CameraOBJ)
-				If sc\Screen Then
-					ShowEntity(sc\MonitorOBJ)
-					ShowEntity(sc\ScrOverlay)
-					ShowEntity(sc\ScrOBJ)
-				EndIf
-			EndIf
-		Next
-		
-		For i = 0 To MaxRoomObjects - 1
-			If room\Objects[i] <> 0 Then
-				If room\HideObject[i] Then ShowEntity(room\Objects[i])
-			Else
-				Exit
-			EndIf
-		Next
-		
-		If room\TriggerBoxAmount > 0 Then
-			For i = 0 To room\TriggerBoxAmount - 1
-				If chs\DebugHUD <> 0 Then
-					EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
-					EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
-				Else
-					EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
-					EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
-				EndIf
-			Next
-		EndIf
-		
-		ShowEntity(room\OBJ)
-	EndIf
-End Function
-
-Function HideRoomsColl%(room.Rooms)
-	Local i%, j%, k%
-	Local p.Props, d.Doors, sc.SecurityCams
-	
-	If (Not room\HiddenAlpha) Then
-		For p.Props = Each Props
-			If p\room = room Then EntityAlpha(p\OBJ, 0.0)
-		Next
-		
-		For d.Doors = Each Doors
-			If d\room = room Then
-				; ~ What the fuck is this? I really "like" how the adjacent door system works. Fuck this shit, I'm out -- Jabka
-				Local Hide% = True
-				
-				For i = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\AdjDoor[i] <> Null Then
-						If d = PlayerRoom\AdjDoor[i] Then Hide = False
-					EndIf
-					If PlayerRoom\Adjacent[i] <> Null Then
-						For j = 0 To MaxRoomAdjacents - 1
-							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
-								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
-							EndIf
-							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-								For k = 0 To MaxRoomAdjacents - 1 
-									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
-										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
-									EndIf
-								Next
-							EndIf
-						Next
-					EndIf
-				Next
-				If Hide Then
-					EntityAlpha(d\OBJ, 0.0)
-					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
-					For j = 0 To 1
-						If d\Buttons[j] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[j], 0.0)
-						; ~ Hide collider anyway because player's collider cannot interact with this object
-						If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
-					Next
-					EntityAlpha(d\FrameOBJ, 0.0)
-				EndIf
-			EndIf
-		Next
-		
-		; ~ Hide collider anyway because with most of them player cannot interact
-		For sc.SecurityCams = Each SecurityCams
-			If sc\room = room Then
-				If (Not EntityHidden(sc\BaseOBJ)) Then
-					HideEntity(sc\BaseOBJ)
-					HideEntity(sc\CameraOBJ)
-					If sc\Screen Then
-						HideEntity(sc\MonitorOBJ)
-						HideEntity(sc\ScrOverlay)
-						HideEntity(sc\ScrOBJ)
-					EndIf
-				EndIf
-			EndIf
-		Next
-		
-		; ~ Hide collider anyway because with most of them player cannot interact
-		For i = 0 To MaxRoomObjects - 1
-			If room\Objects[i] <> 0 Then
-				If room\HideObject[i] Then HideEntity(room\Objects[i])
-			Else
-				Exit
-			EndIf
-		Next
-		
-		EntityAlpha(GetChild(room\OBJ, 2), 0.0)
-		room\HiddenAlpha = True
-	EndIf
-End Function
-
-Function ShowRoomsColl%(room.Rooms)
-	Local i%, j%, k%
-	Local p.Props, d.Doors, sc.SecurityCams
-	
-	If room\HiddenAlpha Then
-		For p.Props = Each Props
-			If p\room = room Then EntityAlpha(p\OBJ, 1.0)
-		Next
-		
-		For d.Doors = Each Doors
-			If d\room = room Then
-				Local Hide% = True
-				
-				For i = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\AdjDoor[i] <> Null Then
-						If d = PlayerRoom\AdjDoor[i] Then Hide = False
-					EndIf
-					If PlayerRoom\Adjacent[i] <> Null Then
-						For j = 0 To MaxRoomAdjacents - 1
-							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
-								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
-							EndIf
-							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-								For k = 0 To MaxRoomAdjacents - 1 
-									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
-										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
-									EndIf
-								Next
-							EndIf
-						Next
-					EndIf
-				Next
-				If Hide Then
-					EntityAlpha(d\OBJ, 1.0)
-					If d\OBJ2 <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\OBJ2, 1.0)
-					For j = 0 To 1
-						If d\Buttons[j] <> 0 Then EntityAlpha(d\Buttons[j], 1.0)
-						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
-					Next
-					EntityAlpha(d\FrameOBJ, 1.0)
-				EndIf
-			EndIf
-		Next
-		
-		For sc.SecurityCams = Each SecurityCams
-			If sc\room = room Then
-				If EntityHidden(sc\BaseOBJ) Then
-					ShowEntity(sc\BaseOBJ)
-					ShowEntity(sc\CameraOBJ)
-					If sc\Screen Then
-						ShowEntity(sc\MonitorOBJ)
-						ShowEntity(sc\ScrOverlay)
-						ShowEntity(sc\ScrOBJ)
-					EndIf
-				EndIf
-			EndIf
-		Next
-		
-		For i = 0 To MaxRoomObjects - 1
-			If room\Objects[i] <> 0 Then
-				If room\HideObject[i] Then ShowEntity(room\Objects[i])
-			Else
-				Exit
-			EndIf
-		Next
-		
-		EntityAlpha(GetChild(room\OBJ, 2), 1.0)
-		room\HiddenAlpha = False
-	EndIf
-End Function
-;============
-
 Global LightVolume#, TempLightVolume#
 
 Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
@@ -7945,6 +7690,261 @@ Function TeleportToRoom%(r.Rooms)
 	UpdateDoors()
 	UpdateRooms()
 End Function
+
+; ~ TODO: Split into one function and make more optimizations
+;============
+Function HideRoomsNoColl%(room.Rooms)
+	Local i%, j%
+	Local p.Props, d.Doors, sc.SecurityCams
+	
+	If (Not EntityHidden(room\OBJ)) Then
+		For p.Props = Each Props
+			If p\room = room Then HideEntity(p\OBJ)
+		Next
+		
+		For d.Doors = Each Doors
+			If d <> Null Then
+				If d\room = room Then
+					HideEntity(d\OBJ)
+					If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
+					For j = 0 To 1
+						If d\Buttons[j] <> 0 Then HideEntity(d\Buttons[j])
+						If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
+					Next
+					HideEntity(d\FrameOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For sc.SecurityCams = Each SecurityCams
+			If sc\room = room Then
+				HideEntity(sc\BaseOBJ)
+				HideEntity(sc\CameraOBJ)
+				If sc\Screen Then
+					HideEntity(sc\MonitorOBJ)
+					HideEntity(sc\ScrOverlay)
+					HideEntity(sc\ScrOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For i = 0 To MaxRoomObjects - 1
+			If room\Objects[i] <> 0 Then
+				If room\HideObject[i] Then ShowEntity(room\Objects[i])
+			Else
+				Exit
+			EndIf
+		Next
+		
+		HideEntity(room\OBJ)
+	EndIf
+End Function
+
+Function ShowRoomsNoColl%(room.Rooms)
+	Local i%, j%
+	Local p.Props, d.Doors, sc.SecurityCams
+	
+	If EntityHidden(room\OBJ) Then
+		For p.Props = Each Props
+			If p\room = room Then ShowEntity(p\OBJ)
+		Next
+		
+		For d.Doors = Each Doors
+			If d <> Null Then
+				If d\room = room Then
+					ShowEntity(d\OBJ)
+					If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
+					For j = 0 To 1
+						If d\Buttons[j] <> 0 Then ShowEntity(d\Buttons[j])
+						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
+					Next
+					ShowEntity(d\FrameOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For sc.SecurityCams = Each SecurityCams
+			If sc\room = room Then
+				ShowEntity(sc\BaseOBJ)
+				ShowEntity(sc\CameraOBJ)
+				If sc\Screen Then
+					ShowEntity(sc\MonitorOBJ)
+					ShowEntity(sc\ScrOverlay)
+					ShowEntity(sc\ScrOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For i = 0 To MaxRoomObjects - 1
+			If room\Objects[i] <> 0 Then
+				If room\HideObject[i] Then ShowEntity(room\Objects[i])
+			Else
+				Exit
+			EndIf
+		Next
+		
+		If room\TriggerBoxAmount > 0 Then
+			For i = 0 To room\TriggerBoxAmount - 1
+				If chs\DebugHUD <> 0 Then
+					EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
+					EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
+				Else
+					EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
+					EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
+				EndIf
+			Next
+		EndIf
+		
+		ShowEntity(room\OBJ)
+	EndIf
+End Function
+
+Function HideRoomsColl%(room.Rooms)
+	Local i%, j%, k%
+	Local p.Props, d.Doors, sc.SecurityCams
+	
+	If (Not room\HiddenAlpha) Then
+		For p.Props = Each Props
+			If p\room = room Then EntityAlpha(p\OBJ, 0.0)
+		Next
+		
+		For d.Doors = Each Doors
+			If d\room = room Then
+				; ~ What the fuck is this? I really "like" how the adjacent door system works. Fuck this shit, I'm out -- Jabka
+				Local Hide% = True
+				
+				For i = 0 To MaxRoomAdjacents - 1
+					If PlayerRoom\AdjDoor[i] <> Null Then
+						If d = PlayerRoom\AdjDoor[i] Then Hide = False
+					EndIf
+					If PlayerRoom\Adjacent[i] <> Null Then
+						For j = 0 To MaxRoomAdjacents - 1
+							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
+								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
+							EndIf
+							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+								For k = 0 To MaxRoomAdjacents - 1 
+									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
+										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
+									EndIf
+								Next
+							EndIf
+						Next
+					EndIf
+				Next
+				If Hide Then
+					EntityAlpha(d\OBJ, 0.0)
+					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
+					For j = 0 To 1
+						If d\Buttons[j] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[j], 0.0)
+						; ~ Hide collider anyway because player's collider cannot interact with this object
+						If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
+					Next
+					EntityAlpha(d\FrameOBJ, 0.0)
+				EndIf
+			EndIf
+		Next
+		
+		; ~ Hide collider anyway because with most of them player cannot interact
+		For sc.SecurityCams = Each SecurityCams
+			If sc\room = room Then
+				If (Not EntityHidden(sc\BaseOBJ)) Then
+					HideEntity(sc\BaseOBJ)
+					HideEntity(sc\CameraOBJ)
+					If sc\Screen Then
+						HideEntity(sc\MonitorOBJ)
+						HideEntity(sc\ScrOverlay)
+						HideEntity(sc\ScrOBJ)
+					EndIf
+				EndIf
+			EndIf
+		Next
+		
+		; ~ Hide collider anyway because with most of them player cannot interact
+		For i = 0 To MaxRoomObjects - 1
+			If room\Objects[i] <> 0 Then
+				If room\HideObject[i] Then HideEntity(room\Objects[i])
+			Else
+				Exit
+			EndIf
+		Next
+		
+		EntityAlpha(GetChild(room\OBJ, 2), 0.0)
+		room\HiddenAlpha = True
+	EndIf
+End Function
+
+Function ShowRoomsColl%(room.Rooms)
+	Local i%, j%, k%
+	Local p.Props, d.Doors, sc.SecurityCams
+	
+	If room\HiddenAlpha Then
+		For p.Props = Each Props
+			If p\room = room Then EntityAlpha(p\OBJ, 1.0)
+		Next
+		
+		For d.Doors = Each Doors
+			If d\room = room Then
+				Local Hide% = True
+				
+				For i = 0 To MaxRoomAdjacents - 1
+					If PlayerRoom\AdjDoor[i] <> Null Then
+						If d = PlayerRoom\AdjDoor[i] Then Hide = False
+					EndIf
+					If PlayerRoom\Adjacent[i] <> Null Then
+						For j = 0 To MaxRoomAdjacents - 1
+							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
+								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
+							EndIf
+							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+								For k = 0 To MaxRoomAdjacents - 1 
+									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
+										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
+									EndIf
+								Next
+							EndIf
+						Next
+					EndIf
+				Next
+				If Hide Then
+					EntityAlpha(d\OBJ, 1.0)
+					If d\OBJ2 <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\OBJ2, 1.0)
+					For j = 0 To 1
+						If d\Buttons[j] <> 0 Then EntityAlpha(d\Buttons[j], 1.0)
+						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
+					Next
+					EntityAlpha(d\FrameOBJ, 1.0)
+				EndIf
+			EndIf
+		Next
+		
+		For sc.SecurityCams = Each SecurityCams
+			If sc\room = room Then
+				If EntityHidden(sc\BaseOBJ) Then
+					ShowEntity(sc\BaseOBJ)
+					ShowEntity(sc\CameraOBJ)
+					If sc\Screen Then
+						ShowEntity(sc\MonitorOBJ)
+						ShowEntity(sc\ScrOverlay)
+						ShowEntity(sc\ScrOBJ)
+					EndIf
+				EndIf
+			EndIf
+		Next
+		
+		For i = 0 To MaxRoomObjects - 1
+			If room\Objects[i] <> 0 Then
+				If room\HideObject[i] Then ShowEntity(room\Objects[i])
+			Else
+				Exit
+			EndIf
+		Next
+		
+		EntityAlpha(GetChild(room\OBJ, 2), 1.0)
+		room\HiddenAlpha = False
+	EndIf
+End Function
+;============
 
 Function UpdateRooms%()
 	CatchErrors("Uncaught (UpdateRooms)")

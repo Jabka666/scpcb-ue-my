@@ -1,5 +1,5 @@
 Include "Source Code\Math_Core.bb"
-Include "Source Code\Strict_Loads_Core.bb"
+Include "Source Code\Strict_Functions_Core.bb"
 
 Type Fonts
 	Field FontID%[MaxFontIDAmount]

@@ -694,7 +694,7 @@ Function UpdateNPCs%()
 													If x < 25.0 And x > 15.0 Then
 														z = Abs(EntityZ(me\Collider) - EntityZ(w\OBJ, True))
 														If z < 25.0 And z > 15.0 Then
-															PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 0.35, EntityZ(w\OBJ, True))
+															PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
 															ResetEntity(n\Collider)
 															Exit
 														EndIf
@@ -2608,8 +2608,7 @@ Function UpdateNPCs%()
 									If x > 3.0 And x < 9.0 Then
 										z = Abs(EntityZ(me\Collider) - EntityZ(w\OBJ, True))
 										If z > 3.0 And z < 9.0 Then
-											PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 0.35, EntityZ(w\OBJ, True))
-											PositionEntity(n\OBJ, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 0.35, EntityZ(w\OBJ, True))
+											PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
 											ResetEntity(n\Collider)
 											If EntityHidden(n\OBJ) Then
 												ShowEntity(n\OBJ)
@@ -3604,7 +3603,7 @@ Function UpdateNPCs%()
 									If w\door = Null Then
 										If Abs(EntityX(w\OBJ, True) - EntityX(n\Collider)) < 4.0 Then
 											If Abs(EntityZ(w\OBJ, True) - EntityZ(n\Collider)) < 4.0 Then
-												PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 0.35, EntityZ(w\OBJ, True))
+												PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
 												ResetEntity(n\Collider)
 												Exit
 											EndIf
@@ -4604,7 +4603,7 @@ Function UpdateNPCs%()
 															z = Abs(EntityZ(n\Collider) - EntityZ(w\OBJ, True))
 															If z < 12.0 And z > 4.0 Then
 																If w\room\Dist > 4.0
-																	PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 0.35, EntityZ(w\OBJ, True))
+																	PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
 																	ResetEntity(n\Collider)
 																	n\PathStatus = 0
 																	n\PathTimer = 0.0
@@ -5004,7 +5003,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If n_I\Curr106\State <= 0 Then
+					If n_I\Curr106\State <= 0.0 Then
 						If NPCSeesNPC(n_I\Curr106, n) Lor EntityDistanceSquared(n\Collider, n_I\Curr106\Collider) < 9.0 Then
 							If EntityVisible(n\Collider, n_I\Curr106\Collider) Then
 								n\State = 4.0
@@ -5326,7 +5325,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If n_I\Curr106\State <= 0 Then
+					If n_I\Curr106\State <= 0.0 Then
 						If NPCSeesNPC(n_I\Curr106, n) Lor EntityDistanceSquared(n\Collider, n_I\Curr106\Collider) < 9.0 Then
 							If EntityVisible(n\Collider, n_I\Curr106\Collider) Then
 								n\State = 4.0
@@ -6194,7 +6193,7 @@ Function TeleportCloser%(n.NPCs)
 		EndIf
 		
 		If ShouldTeleport Then
-			PositionEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 0.15, EntityZ(closestWaypoint\OBJ, True), True)
+			PositionEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 200.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), True)
 			ResetEntity(n\Collider)
 			n\PathStatus = 0
 			n\PathTimer = 0.0

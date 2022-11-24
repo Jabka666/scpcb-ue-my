@@ -6,7 +6,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	If Volume > 0.0 Then 
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
+		If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
 			SoundCHN = PlaySound_Strict(SoundHandle)
@@ -44,7 +44,7 @@ Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1
 		If Volume > 0.0 Then
 			Local Dist# = EntityDistance(Cam, Entity) / Range
 			
-			If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
+			If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
 				Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 				
 				ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * opt\SFXVolume * opt\MasterVolume)))
@@ -330,7 +330,7 @@ Function KillSounds%()
 	EndIf
 	
 	For snd.Sound = Each Sound
-		For i = 0 To 31
+		For i = 0 To MaxChannelsAmount - 1
 			StopChannel_Strict(snd\Channels[i])
 		Next
 	Next
@@ -447,8 +447,8 @@ Function ControlSoundVolume%()
 	Local i%
 	
 	For snd.Sound = Each Sound
-		For i = 0 To 31
-			If snd\Channels[i] <> 0 Then ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
+		For i = 0 To MaxChannelsAmount - 1
+			If ChannelPlaying(snd\Channels[i]) Then ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 		Next
 	Next
 End Function
