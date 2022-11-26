@@ -78,6 +78,7 @@ Bug fixes:
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.
 - Tiny fix for keypad slots.
+- Tiny fix for S-NAV image position.
 
 v1.0.3
 

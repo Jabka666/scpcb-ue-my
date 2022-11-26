@@ -85,7 +85,7 @@ Else
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
-Const VersionNumber$ = "1.0.4"
+Const VersionNumber$ = "1.1"
 
 AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
@@ -2317,20 +2317,19 @@ Function UpdateGame%()
 		
 		UpdateGUI()
 		
-		If KeyHit(key\INVENTORY) And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) Then
-			If me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 Then
+		If KeyHit(key\INVENTORY) Then
+			If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 Then
 				Local W$ = ""
 				Local V# = 0.0
 				
 				If SelectedItem <> Null Then
 					W = SelectedItem\ItemTemplate\TempName
 					V = SelectedItem\State
-					; ~ Reset SCP-1025
-					If SelectedItem\ItemTemplate\TempName = "scp1025" Then
+					If W = "paper" Lor W = "badge" Lor W = "oldpaper" Lor W = "ticket" Lor W = "scp1025" Then
 						If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
 					EndIf
 				EndIf
-				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0
+				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0 Then
 					If InvOpen Then
 						StopMouseMovement()
 					Else
@@ -4443,6 +4442,14 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "ticket"
 					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
 					If SelectedItem\State = 0.0 Then
 						CreateMsg(GetLocalString("msg", "ticket"))
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5) + ".ogg"))
@@ -4451,6 +4458,14 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp1025"
 					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
 					If SelectedItem\State3 = 0.0 Then
 						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 							If SelectedItem\State = 7.0 Then
@@ -4587,6 +4602,14 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img)
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
 					If SelectedItem\ItemTemplate\TempName <> "fineradio" And SelectedItem\ItemTemplate\TempName <> "veryfineradio" Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.004)
 					
 					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
@@ -5153,6 +5176,14 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "nav", "nav310"
 					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
 					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
 					
 					If SelectedItem\State > 0.0 Then
@@ -5244,15 +5275,17 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "badge"
 					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
 					If SelectedItem\State = 0.0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
-						Select SelectedItem\ItemTemplate\Name
-							Case "Old Badge"
-								;[Block]
-								CreateMsg(GetLocalString("msg", "oldbadge"))
-								;[End Block]
-						End Select
-						
+						CreateMsg(GetLocalString("msg", "oldbadge"))
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
@@ -5260,32 +5293,31 @@ Function UpdateGUI%()
 					;[Block]
 					If SelectedItem\State = 0.0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
-						
 						CreateMsg(GetLocalString("msg", "lostkey"))
+						SelectedItem\State = 1.0
 					EndIf
-					
-					SelectedItem\State = 1.0
 					;[End Block]
 				Case "oldpaper"
 					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)	
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
 					If SelectedItem\State = 0.0 Then
-						Select SelectedItem\ItemTemplate\Name
-							Case "Disciplinary Hearing DH-S-4137-17092"
-								;[Block]
-								me\BlurTimer = 1000.0
-								
-								CreateMsg(GetLocalString("msg", "oldpaper"))
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
-								SelectedItem\State = 1.0
-								;[End Block]
-						End Select
+						me\BlurTimer = 1000.0
+						CreateMsg(GetLocalString("msg", "oldpaper"))
+						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
+						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
 				Case "coin"
 					;[Block]
 					If SelectedItem\State = 0.0 Then
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5) + ".ogg"))
-						
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
@@ -6333,8 +6365,8 @@ Function RenderGUI%()
 					Local NAV_WIDTH% = 287 * MenuScale
 					Local NAV_HEIGHT% = 256 * MenuScale
 					
-					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20.0 * MenuScale)
-					y = opt\GraphicHeight - ((SelectedItem\ItemTemplate\ImgHeight * 2) * (0.4 * MenuScale)) - (85 * MenuScale)
+					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
+					y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 					
 					Local PlayerX%, PlayerZ%
 					
@@ -6395,8 +6427,8 @@ Function RenderGUI%()
 							EndIf
 							Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 							
-							x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20.0 * MenuScale)
-							y = opt\GraphicHeight - ((SelectedItem\ItemTemplate\ImgHeight * 2) * (0.4 * MenuScale)) - (85.0 * MenuScale)
+							x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
+							y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 							
 							If Offline Then 
 								Color(100, 0, 0)
@@ -8432,7 +8464,7 @@ Function Render294%()
 	Text(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
 	If Temp Then
-		If mo\MouseHit2 Lor (Not I_294\Using) Then  HidePointer()
+		If mo\MouseHit2 Lor (Not I_294\Using) Then HidePointer()
 	Else ; ~ Playing a dispensing sound
 		If (Not ChannelPlaying(PlayerRoom\SoundCHN)) Then
 			If I_294\ToInput <> GetLocalString("misc", "ofr") Then HidePointer()
