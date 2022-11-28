@@ -8016,15 +8016,17 @@ Function UpdateRooms%()
 		
 		Hide = True
 		If r = PlayerRoom Then Hide = False
-		If IsRoomAdjacent(PlayerRoom, r) Then Hide = False
-		For i = 0 To MaxRoomAdjacents - 1
-			If PlayerRoom\Adjacent[i] <> Null Then
-				If IsRoomAdjacent(PlayerRoom\Adjacent[i], r) Then
+		If Hide Then
+			If IsRoomAdjacent(PlayerRoom, r) Then Hide = False
+		EndIf
+		If Hide Then
+			For i = 0 To 3
+				If (IsRoomAdjacent(PlayerRoom\Adjacent[i], r)) Then
 					Hide = False
 					Exit
 				EndIf
-			EndIf
-		Next
+			Next
+		EndIf
 		
 		If Hide Then
 			HideRoomsNoColl(r)
