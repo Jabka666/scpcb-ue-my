@@ -1930,7 +1930,7 @@ Function InitNewGame%()
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
 	
-	RenderLoading(50, GetLocalString("loading", "stats"))
+	RenderLoading(50, GetLocalString("loading", "stuff"))
 	
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0 : me\Funds = Rand(0, 6)
 	
