@@ -62,7 +62,7 @@ Function LanguageSelector%()
 		Local x#, y#, LinesAmount%
 		
 		Color(255, 255, 255)
-		DrawImage(LanguageBG, 0, 0)
+		DrawBlock(LanguageBG, 0, 0)
 		Rect(479, 195, 140, 100)
 		
 		If LinesAmount > 13 Then
@@ -94,7 +94,7 @@ Function LanguageSelector%()
 				LinesAmount = LinesAmount + 1
 			Next
 			SetBuffer(BackBuffer())
-			DrawImage(LanguageIMG, 20, 195)
+			DrawBlock(LanguageIMG, 20, 195)
 			Color(10, 10, 10)
 			Rect(452, 195, 20, 254, True)
 			ScrollMenuHeight = LinesAmount - 12
@@ -300,12 +300,12 @@ Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Fra
 	
 	Local Result% = UpdateLauncherButton(x, y, Width, Height, Txt, False, False)
 	
-	DrawImage(Img, x + (Width / 2) - (StringWidth(Txt) / 2) - 3, y + (Height / 2) - ImageHeight(Img) / 2, Frame)
+	DrawBlock(Img, x + (Width / 2) - (StringWidth(Txt) / 2) - 3, y + (Height / 2) - ImageHeight(Img) / 2, Frame)
 	Return(Result)
 End Function
 
 Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)
-	DrawImage(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
+	DrawBlock(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
 	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
 End Function
 

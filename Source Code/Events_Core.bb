@@ -3867,7 +3867,6 @@ Function UpdateEvents%()
 							If itt\Name = "Drawing" Then
 								If itt\Img <> 0 Then FreeImage(itt\Img) : itt\Img = 0
 								itt\Img = LoadImage_Strict(ImgPath)
-								MaskImage(itt\Img, 255, 0, 255)
 								itt\ImgPath = ImgPath
 								Exit
 							EndIf
@@ -7314,7 +7313,7 @@ Function UpdateEvents%()
 									;[End Block]
 								Case 5.0
 									;[Block]
-									it.Items = CreateItem("Old Badge", "badge", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									it.Items = CreateItem("Old Badge", "oldbadge", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 									;[End Block]
 							End Select
 							EntityType(it\Collider, HIT_ITEM)

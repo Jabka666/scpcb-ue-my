@@ -25,7 +25,6 @@ Global mma.MainMenuAssets
 MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
 MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
 MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
-MaskImage(MenuBlack, 255, 255, 0)
 
 Function InitMainMenuAssets%()
 	mma.MainMenuAssets = New MainMenuAssets
@@ -1037,8 +1036,8 @@ Function RenderMainMenu%()
 	Else
 		HidePointer()
 	EndIf
-	DrawImage(mma\BackGround, 0, 0)
-	If (MilliSecs2() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawImage(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
+	DrawBlock(mma\BackGround, 0, 0)
+	If (MilliSecs2() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
 	SetFont(fo\FontID[Font_Default])
 	If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1] Then
 		Color(50, 50, 50)
@@ -1114,7 +1113,7 @@ Function RenderMainMenu%()
 		EndIf
 	EndIf
 	SetFont(fo\FontID[Font_Default_Big])
-	DrawImage(mma\SECURE_CONTAIN_PROTECT, mo\Viewport_Center_X - ImageWidth(mma\SECURE_CONTAIN_PROTECT) / 2, opt\GraphicHeight - (20 * MenuScale) - ImageHeight(mma\SECURE_CONTAIN_PROTECT))
+	DrawBlock(mma\SECURE_CONTAIN_PROTECT, mo\Viewport_Center_X - ImageWidth(mma\SECURE_CONTAIN_PROTECT) / 2, opt\GraphicHeight - (20 * MenuScale) - ImageHeight(mma\SECURE_CONTAIN_PROTECT))
 	If opt\GraphicWidth > 1240 * MenuScale Then RenderTiledImageRect(MenuWhite, 0, 5 * MenuScale, 512.0 * MenuScale, 5.0 * MenuScale, 985 * MenuScale, 407 * MenuScale, (opt\GraphicWidth - (940 * MenuScale)), 5 * MenuScale)
 	If mm\MainMenuTab <> MainMenuTab_Default Then
 		x = 159 * MenuScale
@@ -1786,7 +1785,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")	
-	MaskImage(MenuBlack, 255, 255, 0)
 	
 	Local LauncherIMG%[3]
 	
@@ -1823,7 +1821,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		mo\MouseHit1 = MouseHit(1)
 		
 		Color(255, 255, 255)
-		DrawImage(LauncherIMG[0], 0, 0)
+		DrawBlock(LauncherIMG[0], 0, 0)
 		
 		Text(LauncherWidth - 620, LauncherHeight - 305, GetLocalString("launcher", "resolution"))
 		
@@ -1881,19 +1879,19 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Text(LauncherWidth - 620 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "DISCORD", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://discord.gg/n7KdW4u")
 		EndIf
-		DrawImage(LauncherIMG[1], LauncherWidth - 620, LauncherHeight - 86, 0)
+		DrawBlock(LauncherIMG[1], LauncherWidth - 620, LauncherHeight - 86, 0)
 		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
 			Text(LauncherWidth - 510 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "MODDB", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 		EndIf
-		DrawImage(LauncherIMG[1], LauncherWidth - 510, LauncherHeight - 86, 1)
+		DrawBlock(LauncherIMG[1], LauncherWidth - 510, LauncherHeight - 86, 1)
 		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
 			Text(LauncherWidth - 400 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "YOUTUBE", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 		EndIf
-		DrawImage(LauncherIMG[1], LauncherWidth - 400, LauncherHeight - 86, 2)
+		DrawBlock(LauncherIMG[1], LauncherWidth - 400, LauncherHeight - 86, 2)
 		If MouseOn(LauncherWidth - 185, LauncherHeight - 191, 40, 40) Then
 			DrawImage(LauncherIMG[2], LauncherWidth - 185, LauncherHeight - 191, 1)
 			Rect(LauncherWidth - 185, LauncherHeight - 191, 40, 40, False)
@@ -2052,7 +2050,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		If Percent > 20 Then UpdateMusic()
 		If Percent > (100.0 / SelectedLoadingScreen\TxtAmount) * (LoadingScreenText + 1) Then LoadingScreenText = LoadingScreenText + 1
 		
-		If (Not SelectedLoadingScreen\DisableBackground) Then DrawImage(LoadingBack, mo\Viewport_Center_X - ImageWidth(LoadingBack) / 2, mo\Viewport_Center_Y - ImageHeight(LoadingBack) / 2)
+		If (Not SelectedLoadingScreen\DisableBackground) Then DrawBlock(LoadingBack, mo\Viewport_Center_X - ImageWidth(LoadingBack) / 2, mo\Viewport_Center_Y - ImageHeight(LoadingBack) / 2)
 		
 		If SelectedLoadingScreen\AlignX = 0 Then
 			x = mo\Viewport_Center_X - ImageWidth(SelectedLoadingScreen\Img) / 2 
@@ -2223,7 +2221,7 @@ Function RenderTiledImageRect%(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%
 		Local y2% = y
 		
 		While y2 < y + Height
-			DrawImageRect(Img, x2, y2, SrcX, SrcY, SrcWidth, Min((y + Height) - y2, SrcHeight))
+			DrawBlockRect(Img, x2, y2, SrcX, SrcY, SrcWidth, Min((y + Height) - y2, SrcHeight))
 			y2 = y2 + SrcHeight
 		Wend
 		x2 = x2 + SrcWidth
@@ -2252,7 +2250,7 @@ Function RenderBar%(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% 
 		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), Height - (6 * MenuScale))	
 	Else
 		For i = 1 To Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)) / MenuScale)
-			DrawImage(Img, x + ((3 + (10 * (i - 1))) * MenuScale), y + (3 * MenuScale))
+			DrawBlock(Img, x + ((3 + (10 * (i - 1))) * MenuScale), y + (3 * MenuScale))
 		Next
 	EndIf
 End Function
@@ -2721,7 +2719,7 @@ Function RenderMenuSlideBars%()
 		Color(255, 255, 255)
 		Rect(msb\x, msb\y, msb\Width + (14 * MenuScale), 20 * MenuScale, False)
 		
-		DrawImage(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
+		DrawBlock(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
 		
 		Color(170, 170, 170)
 		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))					
@@ -2853,11 +2851,11 @@ Function RenderMenuSliders%()
 			EndIf
 			
 			If ms\Value = 0 Then
-				DrawImage(BlinkMeterIMG, ms\x, ms\y - (8 * MenuScale))
+				DrawBlock(BlinkMeterIMG, ms\x, ms\y - (8 * MenuScale))
 			ElseIf ms\Value = 1
-				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 2) + (3 * MenuScale), ms\y - (8 * MenuScale))
+				DrawBlock(BlinkMeterIMG, ms\x + (ms\Width / 2) + (3 * MenuScale), ms\y - (8 * MenuScale))
 			Else
-				DrawImage(BlinkMeterIMG, ms\x + ms\Width + (6 * MenuScale), ms\y - (8 * MenuScale))
+				DrawBlock(BlinkMeterIMG, ms\x + ms\Width + (6 * MenuScale), ms\y - (8 * MenuScale))
 			EndIf
 			
 			Color(170, 170, 170)
@@ -2894,15 +2892,15 @@ Function RenderMenuSliders%()
 			EndIf
 			
 			If ms\Value = 0 Then
-				DrawImage(BlinkMeterIMG, ms\x, ms\y - (8 * MenuScale))
+				DrawBlock(BlinkMeterIMG, ms\x, ms\y - (8 * MenuScale))
 			ElseIf ms\Value = 1
-				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 4) + (1.5 * MenuScale), ms\y - (8 * MenuScale))
+				DrawBlock(BlinkMeterIMG, ms\x + (ms\Width / 4) + (1.5 * MenuScale), ms\y - (8 * MenuScale))
 			ElseIf ms\Value = 2
-				DrawImage(BlinkMeterIMG, ms\x + (ms\Width / 2) + (3 * MenuScale), ms\y - (8 * MenuScale))
+				DrawBlock(BlinkMeterIMG, ms\x + (ms\Width / 2) + (3 * MenuScale), ms\y - (8 * MenuScale))
 			ElseIf ms\Value = 3
-				DrawImage(BlinkMeterIMG, ms\x + (ms\Width * 0.75) + (4.5 * MenuScale), ms\y - (8 * MenuScale))
+				DrawBlock(BlinkMeterIMG, ms\x + (ms\Width * 0.75) + (4.5 * MenuScale), ms\y - (8 * MenuScale))
 			Else
-				DrawImage(BlinkMeterIMG, ms\x + ms\Width + (6 * MenuScale), ms\y - (8 * MenuScale))
+				DrawBlock(BlinkMeterIMG, ms\x + ms\Width + (6 * MenuScale), ms\y - (8 * MenuScale))
 			EndIf
 			
 			Color(170, 170, 170)

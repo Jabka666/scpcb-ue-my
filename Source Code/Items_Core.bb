@@ -76,14 +76,12 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 		it\InvImg = LoadImage_Strict(InvImgPath)
 		it\InvImg = ScaleImage2(it\InvImg, MenuScale, MenuScale)
 		it\InvImgPath = InvImgPath
-		MaskImage(it\InvImg, 255, 0, 255)
 	EndIf
 	
 	If InvImgPath2 <> "" Then
 		If (Not it\InvImg2) Then
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
 			it\InvImg2 = ScaleImage2(it\InvImg2, MenuScale, MenuScale)
-			MaskImage(it\InvImg2, 255, 0, 255)
 		EndIf
 	Else
 		it\InvImg2 = 0
@@ -706,7 +704,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\TempName
-		Case "nav", "nav300", "nav310", "navulti", "paper", "oldpaper", "badge", "radio", "18vradio", "fineradio", "veryfineradio", "scp1025"
+		Case "nav", "nav300", "nav310", "navulti", "paper", "oldpaper", "badge", "oldbadge", "radio", "18vradio", "fineradio", "veryfineradio", "scp1025"
 			;[Block]
 			Return(True)
 			;[End Block]

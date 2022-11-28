@@ -58,18 +58,19 @@ Function AchievementTooltip%(AchvNo%)
 End Function
 
 Function RenderAchvIMG%(x%, y%, AchvNo%)
-	Local Row%
+	Local Row%, IMG%
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local SeparationConst2# = 76.0 * Scale
 	
 	Row = (AchvNo Mod 4)
 	Color(0, 0, 0)
 	Rect((x + ((Row) * SeparationConst2)), y, 64 * Scale, 64 * Scale, True)
-	If achv\Achievement[AchvNo] = True Then
-		DrawImage(achv\AchvIMG[AchvNo], (x + (Row * SeparationConst2)), y)
+	If achv\Achievement[AchvNo] Then
+		IMG = achv\AchvIMG[AchvNo]
 	Else
-		DrawImage(achv\AchvLocked, (x + (Row * SeparationConst2)), y)
+		IMG = achv\AchvLocked
 	EndIf
+	DrawBlock(IMG, (x + (Row * SeparationConst2)), y)
 	Color(50, 50, 50)
 	
 	Rect((x + (Row * SeparationConst2)), y, 64 * Scale, 64 * Scale, False)
@@ -145,7 +146,7 @@ Function RenderAchievementMsg%()
 			RenderFrame(x, y, Width, Height)
 			Color(0, 0, 0)
 			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale)
-			DrawImage(achv\AchvIMG[amsg\AchvID], x + (10 * Scale), y + 10 * Scale)
+			DrawBlock(achv\AchvIMG[amsg\AchvID], x + (10 * Scale), y + 10 * Scale)
 			Color(50, 50, 50)
 			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale, False)
 			Color(255, 255, 255)

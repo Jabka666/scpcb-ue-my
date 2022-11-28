@@ -762,7 +762,7 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "docrand"), "Notification", "paper", ItemsPath + "paper.b3d", ItemsPath + "INV_note.png", ItemsPath + "doc_RAND.png", 0.003, 0, ItemsPath + "note.png")
 	
-	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", "badge", ItemsPath + "badge.b3d", ItemsPath + "INV_D_9341_badge.png", ItemsPath + "D_9341_badge_HUD.png", 0.0001, 1, ItemsPath + "D_9341_badge.png", "", 0, 1 + 2 + 8)
+	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", "oldbadge", ItemsPath + "badge.b3d", ItemsPath + "INV_D_9341_badge.png", ItemsPath + "D_9341_badge_HUD.png", 0.0001, 1, ItemsPath + "D_9341_badge.png", "", 0, 1 + 2 + 8)
 	
 	CreateItemTemplate(GetLocalString("items", "origami"), "Origami", "origami", ItemsPath + "origami.b3d", ItemsPath + "INV_origami.png", "", 0.003, 0)
 	
@@ -1661,7 +1661,6 @@ Function LoadEntities%()
 	
 	t\ImageID[0] = LoadImage_Strict("GFX\Menu\pause_menu.png")
 	t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
-	MaskImage(t\ImageID[0], 255, 255, 0)
 	
 	If (Not opt\SmoothBars) Then
 		t\ImageID[1] = LoadImage_Strict("GFX\HUD\blink_meter(2).png")
@@ -1675,11 +1674,9 @@ Function LoadEntities%()
 	
 	t\ImageID[4] = LoadImage_Strict("GFX\HUD\keypad_HUD.png")
 	t\ImageID[4] = ScaleImage2(t\ImageID[4], MenuScale, MenuScale)
-	MaskImage(t\ImageID[4], 255, 0, 255)
 	
 	t\ImageID[5] = LoadImage_Strict("GFX\Overlays\scp_294_panel_overlay.png")
 	t\ImageID[5] = ScaleImage2(t\ImageID[5], MenuScale, MenuScale)
-	MaskImage(t\ImageID[5], 255, 0, 255)
 	
 	t\ImageID[6] = LoadImage_Strict("GFX\HUD\night_vision_goggles_battery.png")
 	t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale)
