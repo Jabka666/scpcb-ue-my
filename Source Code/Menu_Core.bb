@@ -100,7 +100,7 @@ End Function
 
 If opt\DisplayMode <> 0 Then
 	opt\AntiAliasing = False
-	PutINIValue(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
+	IniWriteString(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 EndIf
 
 Function UpdateMainMenu%()
@@ -382,7 +382,7 @@ Function UpdateMainMenu%()
 						InitNewGame()
 						ResetInput()
 						
-						PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+						IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 						
 						MainMenuOpen = False
 						Return
@@ -663,8 +663,8 @@ Function UpdateMainMenu%()
 							If opt\PrevEnableSFXRelease <> opt\EnableSFXRelease
 								If opt\EnableSFXRelease Then
 									For snd.Sound = Each Sound
-										For i = 0 To 31
-											StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
+										For i = 0 To MaxChannelsAmount - 1
+											StopChannel_Strict(snd\Channels[i])
 										Next
 										If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 										snd\ReleaseTime = 0
@@ -974,7 +974,7 @@ Function UpdateMainMenu%()
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
 							;[Block]
-							PutINIValue(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							For sv.Save = Each Save
 								Delete(sv)
 							Next
@@ -1922,10 +1922,10 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Flip()
 	Forever
 	
-	PutINIValue(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
-	PutINIValue(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
-	PutINIValue(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-	PutINIValue(OptionFile, "Global", "Display Mode", opt\DisplayMode)
+	IniWriteString(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
+	IniWriteString(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
+	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
+	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	
 	For i = 0 To 2
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0

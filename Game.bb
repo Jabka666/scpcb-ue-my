@@ -18,6 +18,8 @@ Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"
 Const AchievementsFile$ = "Data\Achievements.ini"
 Const LoadingScreensFile$ = "LoadingScreens\loading_screens.ini"
+Const SCP294File$ = "Data\SCP-294.ini"
+Const SCP1499ChunksFile$ = "Data\1499chunks.ini" ; ~ Unable to localize
 
 Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not exist
 	Local InitErrorStr$ = ""
@@ -34,10 +36,11 @@ End Function
 Function SetLanguage%(Language$)
 	lang\CurrentLanguage = Language
 	lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
-	IniWriteBuffer_(lang\LanguagePath + LanguageFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + SubtitlesFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + AchievementsFile, 1)
-	IniWriteBuffer_(lang\LanguagePath + LoadingScreensFile, 1)
+	IniWriteBuffer(lang\LanguagePath + LanguageFile)
+	IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
+	IniWriteBuffer(lang\LanguagePath + AchievementsFile)
+	IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
+	IniWriteBuffer(lang\LanguagePath + SCP294File)
 	opt\Language = Language
 End Function
 
@@ -47,22 +50,21 @@ CheckForDlls()
 If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
 ; ~ Second, create a folder inside "scpcb-ue" folder
 If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
-; ~ After, put the "options.ini" file to the latest created folder
-If FileType(GetEnv("AppData") + "\scpcb-ue\Data\options.ini") <> 1 Then WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\options.ini")
 
 Global lang.Language = New Language
 
-IniWriteBuffer_(LanguageFile, 1)
-IniWriteBuffer_(SubtitlesFile, 1)
-IniWriteBuffer_(AchievementsFile, 1)
-IniWriteBuffer_(LoadingScreensFile, 1)
+IniWriteBuffer(LanguageFile)
+IniWriteBuffer(SubtitlesFile)
+IniWriteBuffer(AchievementsFile)
+IniWriteBuffer(LoadingScreensFile)
+IniWriteBuffer(SCP294File)
+IniWriteBuffer(SCP1499ChunksFile)
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
 
 LoadOptionsINI()
-
-SetLanguage(GetINIString(OptionFile, "Global", "Language"))
+SetLanguage(opt\Language)
 
 Include "Source Code\Main_Core.bb"
 

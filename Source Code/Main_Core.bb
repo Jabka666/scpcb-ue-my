@@ -1,5 +1,5 @@
 Include "Source Code\Math_Core.bb"
-Include "Source Code\Strict_Loads_Core.bb"
+Include "Source Code\Strict_Functions_Core.bb"
 
 Type Fonts
 	Field FontID%[MaxFontIDAmount]
@@ -85,7 +85,7 @@ Else
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
-Const VersionNumber$ = "1.0.4"
+Const VersionNumber$ = "1.1"
 
 AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
@@ -920,8 +920,8 @@ Function UpdateConsole%()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType096 Then
 							n\State = 0.0
-							StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
+							StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
+							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
 							Exit
 						EndIf
 					Next
@@ -1979,7 +1979,6 @@ End Function
 
 Repeat
 	Cls()
-	
 	Local ElapsedMilliSecs%
 	
 	fps\CurrTime = MilliSecs2()
@@ -2135,7 +2134,7 @@ Function UpdateGame%()
 			
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
-			If RN <> "gate_b" And RN <> "gate_a" Then HideDistance = 17.0
+			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
 			UpdateZoneColor()
 			UpdateDistanceTimer()
 			UpdateDeaf()
@@ -2155,7 +2154,7 @@ Function UpdateGame%()
 				UpdateDoors()
 				UpdateScreens()
 				UpdateRoomLights()
-				If RN = "gate_b" Lor RN = "gate_a" Then
+				If IsPlayerOutsideFacility() Then
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
 					UpdateRooms()
@@ -2318,20 +2317,19 @@ Function UpdateGame%()
 		
 		UpdateGUI()
 		
-		If KeyHit(key\INVENTORY) And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) Then
-			If me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 Then
+		If KeyHit(key\INVENTORY) Then
+			If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 Then
 				Local W$ = ""
 				Local V# = 0.0
 				
 				If SelectedItem <> Null Then
 					W = SelectedItem\ItemTemplate\TempName
 					V = SelectedItem\State
-					; ~ Reset SCP-1025
-					If SelectedItem\ItemTemplate\TempName = "scp1025" Then
+					If W = "paper" Lor W = "badge" Lor W = "oldpaper" Lor W = "ticket" Lor W = "scp1025" Then
 						If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
 					EndIf
 				EndIf
-				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0
+				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0 Then
 					If InvOpen Then
 						StopMouseMovement()
 					Else
@@ -3103,7 +3101,7 @@ Function UpdateMouseLook%()
 			If (Not ChannelPlaying(BreathCHN)) Then
 				If (Not ChannelPlaying(BreathGasRelaxedCHN)) Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
 			Else
-				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
 			EndIf
 		EndIf
 		
@@ -3129,7 +3127,7 @@ Function UpdateMouseLook%()
 			EndIf
 		EndIf
 	Else
-		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
 		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
 		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
@@ -3211,7 +3209,7 @@ Function UpdateZoneColor%()
 	Local i%
 	
 	LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
-	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
+	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor IsPlayerOutsideFacility() Then
 		CameraFogMode(Camera, 0)
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.05, 60.0)
@@ -3237,7 +3235,7 @@ Function UpdateZoneColor%()
 	
 	If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale Then
 		SetZoneColor(FogColorStorageTunnels)
-	ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a"
+	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
 	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
 		SetZoneColor(FogColorDimension_1499)
@@ -4294,7 +4292,7 @@ Function UpdateGUI%()
 								
 								Local RoomName$ = PlayerRoom\RoomTemplate\Name
 								
-								If RoomName = "dimension_1499" Lor RoomName = "gate_b" Lor RoomName = "gate_a" Then
+								If RoomName = "dimension_1499" Lor IsPlayerOutsideFacility() Then
 									me\Injuries = 2.5
 									CreateMsg(GetLocalString("msg", "bleed"))
 								Else
@@ -4444,14 +4442,30 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "ticket"
 					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
 					If SelectedItem\State = 0.0 Then
-						CreateMsg(Chr(34) + "Hey, I remember this movie!" + Chr(34))
+						CreateMsg(GetLocalString("msg", "ticket"))
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5) + ".ogg"))
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
 				Case "scp1025"
 					;[Block]
+					If (Not SelectedItem\ItemTemplate\Img) Then
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\1025\1025(" + (Int(SelectedItem\State) + 1) + ").png")	
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
 					If SelectedItem\State3 = 0.0 Then
 						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
 							If SelectedItem\State = 7.0 Then
@@ -4476,55 +4490,54 @@ Function UpdateGUI%()
 				Case "cup"
 					;[Block]
 					If CanUseItem(False, True) Then
-						StrTemp = Trim(Lower(SelectedItem\Name))
-						If Left(StrTemp, 6) = "cup of" Then
-							StrTemp = Right(StrTemp, Len(StrTemp) - 7)
-						ElseIf Left(StrTemp, 8) = "a cup of" 
-							StrTemp = Right(StrTemp, Len(StrTemp) - 9)
+						Local Drink$ = Trim(SelectedItem\Name)
+						
+						If Lower(Left(Drink, 6)) = "cup of" Then
+							Drink = Right(Drink, Len(Drink) - 7)
+						ElseIf Lower(Left(Drink, 8)) = "a cup of" 
+							Drink = Right(Drink, Len(Drink) - 9)
 						EndIf
 						
-						Local Loc% = GetINISectionLocation(SCP294File, StrTemp)
-						
-						StrTemp = GetINIString2(SCP294File, Loc, "Message")
+						StrTemp = GetFileLocalString(SCP294File, Drink, "Message")
 						If StrTemp <> "" Then CreateMsg(StrTemp)
 						
-						If GetINIInt2(SCP294File, Loc, "Lethal")
-							msg\DeathMsg = GetINIString2(SCP294File, Loc, "Death Message")
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Lethal"))
+							msg\DeathMsg = GetFileLocalString(SCP294File, Drink, "Death Message")
 							Kill()
 						EndIf
-						me\BlurTimer = Max(GetINIInt2(SCP294File, Loc, "Blur") * 70.0, 0.0)
+						me\BlurTimer = Max(Int(GetFileLocalString(SCP294File, Drink, "Blur")) * 70.0, 0.0)
 						If me\VomitTimer = 0.0 Then
-							me\VomitTimer = GetINIInt2(SCP294File, Loc, "Vomit")
+							me\VomitTimer = Int(GetFileLocalString(SCP294File, Drink, "Vomit"))
 						Else
-							me\VomitTimer = Min(me\VomitTimer, GetINIInt2(SCP294File, Loc, "Vomit"))
+							me\VomitTimer = Min(me\VomitTimer, Int(GetFileLocalString(SCP294File, Drink, "Vomit")))
 						EndIf
-						me\CameraShakeTimer = GetINIString2(SCP294File, Loc, "Camera Shake")
-						me\Injuries = Max(me\Injuries + GetINIInt2(SCP294File, Loc, "Damage"), 0.0)
-						me\Bloodloss = Max(me\Bloodloss + GetINIInt2(SCP294File, Loc, "Blood Loss"), 0.0)
-						StrTemp =  GetINIString2(SCP294File, Loc, "Sound")
+						me\CameraShakeTimer = GetFileLocalString(SCP294File, Drink, "Camera Shake")
+						me\Injuries = Max(me\Injuries + Int(GetFileLocalString(SCP294File, Drink, "Damage")), 0.0)
+						me\Bloodloss = Max(me\Bloodloss + Int(GetFileLocalString(SCP294File, Drink, "Blood Loss")), 0.0)
+						StrTemp =  GetFileLocalString(SCP294File, Drink, "Sound")
 						If StrTemp <> "" Then PlaySound_Strict(LoadTempSound(StrTemp))
-						If GetINIInt2(SCP294File, Loc, "Stomach Ache") Then I_1025\State[3] = 1.0
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Stomach Ache")) Then I_1025\State[3] = 1.0
 						
-						If GetINIInt2(SCP294File, Loc, "Infection") Then I_008\Timer = I_008\Timer + 1.0
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Infection")) Then I_008\Timer = I_008\Timer + 1.0
 						
-						If GetINIInt2(SCP294File, Loc, "Crystallization") Then I_409\Timer = I_409\Timer + 1.0
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Crystallization")) Then I_409\Timer = I_409\Timer + 1.0
 						
 						If me\DeathTimer = 0.0 Then
-							me\DeathTimer = GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0
+							me\DeathTimer = Int(GetFileLocalString(SCP294File, Drink, "Death Timer")) * 70.0
 						Else
-							me\DeathTimer = Min(me\DeathTimer, GetINIInt2(SCP294File, Loc, "Death Timer") * 70.0)
+							me\DeathTimer = Min(me\DeathTimer, Int(GetFileLocalString(SCP294File, Drink, "Death Timer")) * 70.0)
 						EndIf
 						
 						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
-						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect")
+						StrTemp = GetFileLocalString(SCP294File, Drink, "Blink Effect")
 						If StrTemp <> "" Then me\BlinkEffect = Float(StrTemp) ^ SelectedItem\State
-						StrTemp = GetINIString2(SCP294File, Loc, "Blink Effect Timer")
+						StrTemp = GetFileLocalString(SCP294File, Drink, "Blink Effect Timer")
 						If StrTemp <> "" Then me\BlinkEffectTimer = Float(StrTemp) * SelectedItem\State
-						StrTemp = GetINIString2(SCP294File, Loc, "Stamina Effect")
+						StrTemp = GetFileLocalString(SCP294File, Drink, "Stamina Effect")
 						If StrTemp <> "" Then me\StaminaEffect = Float(StrTemp) ^ SelectedItem\State
-						StrTemp = GetINIString2(SCP294File, Loc, "Stamina Effect Timer")
+						StrTemp = GetFileLocalString(SCP294File, Drink, "Stamina Effect Timer")
 						If StrTemp <> "" Then me\StaminaEffectTimer = Float(StrTemp) * SelectedItem\State
-						StrTemp = GetINIString2(SCP294File, Loc, "Refuse Message")
+						StrTemp = GetFileLocalString(SCP294File, Drink, "Refuse Message")
 						If StrTemp <> "" Then
 							CreateMsg(StrTemp)
 						Else
@@ -5483,7 +5496,7 @@ Function UpdateGUI%()
 				If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 			Next
 			
-			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0]) : LowBatteryCHN[0] = 0
+			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel_Strict(LowBatteryCHN[0])
 		EndIf		
 	EndIf
 	
@@ -5760,7 +5773,7 @@ Function RenderGUI%()
 				If e\EventState2 = PD_ThroneRoom Then
 					If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
 						If (Not e\Img) Then
-							StopChannel(e\SoundCHN) : e\SoundCHN = 0
+							StopChannel_Strict(e\SoundCHN)
 							If Rand(30) = 1 Then PlaySound_Strict(e\Sound2)
 							e\Img = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
 							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
@@ -5770,7 +5783,7 @@ Function RenderGUI%()
 						EndIf
 					Else
 						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
-						StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						StopChannel_Strict(e\SoundCHN)
 					EndIf
 				EndIf
 				Exit
@@ -6362,8 +6375,8 @@ Function RenderGUI%()
 					Local NAV_WIDTH% = 287 * MenuScale
 					Local NAV_HEIGHT% = 256 * MenuScale
 					
-					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20.0 * MenuScale)
-					y = opt\GraphicHeight - ((SelectedItem\ItemTemplate\ImgHeight * 2) * (0.4 * MenuScale)) - (85 * MenuScale)
+					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
+					y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 					
 					Local PlayerX%, PlayerZ%
 					
@@ -6424,8 +6437,8 @@ Function RenderGUI%()
 							EndIf
 							Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 							
-							x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20.0 * MenuScale)
-							y = opt\GraphicHeight - ((SelectedItem\ItemTemplate\ImgHeight * 2) * (0.4 * MenuScale)) - (85.0 * MenuScale)
+							x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
+							y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 							
 							If Offline Then 
 								Color(100, 0, 0)
@@ -6637,7 +6650,7 @@ Function UpdateMenu%()
 	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen Then
-		If PlayerRoom\RoomTemplate\Name <> "gate_b" And PlayerRoom\RoomTemplate\Name <> "gate_a" Then
+		If (Not IsPlayerOutsideFacility()) Then
 			If me\StopHidingTimer = 0.0 Then
 				If n_I\Curr173 <> Null And n_I\Curr106 <> Null Then
 					If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 16.0 Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 16.0 Then me\StopHidingTimer = 1.0
@@ -7634,9 +7647,7 @@ Function UpdateEnding%()
 		EndIf
 		
 		If me\EndingTimer > -700.0 Then 
-			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer <= -450.0 Then
-				PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
-			EndIf			
+			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer <= -450.0 Then PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				If mm\AchievementsMenu =< 0 Then 
@@ -8182,8 +8193,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame")
 End Function
 
-Const SCP294File$ = "Data\SCP-294.ini"
-
 Function Update294%()
 	Local it.Items
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
@@ -8194,7 +8203,7 @@ Function Update294%()
 	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[5]) / 2)
 	
 	Temp = True
-	If ChannelPlaying(PlayerRoom\SoundCHN) Then Temp = False
+	If PlayerRoom\SoundCHN <> 0 Then Temp = False
 	
 	If Temp Then
 		If mo\MouseHit1 Then
@@ -8356,7 +8365,7 @@ Function Update294%()
 			I_294\ToInput = I_294\ToInput + StrTemp
 			
 			If Temp And I_294\ToInput <> "" Then ; ~ Dispense
-				I_294\ToInput = Trim(Lower(I_294\ToInput))
+				I_294\ToInput = Trim(I_294\ToInput)
 				If Left(I_294\ToInput, Min(7, Len(I_294\ToInput))) = "cup of " Then
 					I_294\ToInput = Right(I_294\ToInput, Len(I_294\ToInput) - 7)
 				ElseIf Left(I_294\ToInput, Min(9, Len(I_294\ToInput))) = "a cup of " 
@@ -8364,11 +8373,11 @@ Function Update294%()
 				EndIf
 				
 				If I_294\ToInput <> "" Then
-					Local Loc% = GetINISectionLocation(SCP294File, I_294\ToInput, True)
+					Local Drink$ = FindSCP294Drink(I_294\ToInput, True)
 				EndIf
 				
-				If Loc > 0 Then
-					StrTemp = GetINIString2(SCP294File, Loc, "Dispense Sound")
+				If Drink <> "Null" Then
+					StrTemp = GetFileLocalString(SCP294File, Drink, "Dispense Sound")
 					If StrTemp = "" Then
 						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
 					Else
@@ -8400,12 +8409,12 @@ Function Update294%()
 						EndIf
 					EndIf
 					
-					If GetINIInt2(SCP294File, Loc, "Explosion") Then 
+					If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Explosion")) Then 
 						me\ExplosionTimer = 135.0
-						msg\DeathMsg = GetINIString2(SCP294File, Loc, "Death Message")
+						msg\DeathMsg = GetFileLocalString(SCP294File, Drink, "Death Message")
 					EndIf
 					
-					StrTemp = GetINIString2(SCP294File, Loc, "Color")
+					StrTemp = GetFileLocalString(SCP294File, Drink, "Color")
 					
 					Sep1 = Instr(StrTemp, ", ", 1)
 					Sep2 = Instr(StrTemp, ", ", Sep1 + 1)
@@ -8413,13 +8422,13 @@ Function Update294%()
 					G = Trim(Mid(StrTemp, Sep1 + 1, Sep2 - Sep1 - 1))
 					B = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
 					
-					Alpha = Float(GetINIString2(SCP294File, Loc, "Alpha", 1.0))
-					Glow = GetINIInt2(SCP294File, Loc, "Glow")
+					Alpha = Float(GetFileLocalString(SCP294File, Drink, "Alpha", 1.0))
+					Glow = GetFileLocalString(SCP294File, Drink, "Glow")
 					If Glow Then Alpha = -Alpha
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
-					it\Name = "Cup of " + I_294\ToInput
-					it\DisplayName = Format(GetLocalString("item", "cupof"), I_294\ToInput)
+					it\Name = "Cup of " + Drink
+					it\DisplayName = Format(GetLocalString("items", "cupof"), I_294\ToInput)
 					EntityType(it\Collider, HIT_ITEM)
 				Else
 					; ~ Out of range
@@ -8469,12 +8478,12 @@ Function Render294%()
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
 	Temp = True
-	If ChannelPlaying(PlayerRoom\SoundCHN) Then Temp = False
+	If PlayerRoom\SoundCHN <> 0 Then Temp = False
 	
 	Text(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
 	If Temp Then
-		If mo\MouseHit2 Lor (Not I_294\Using) Then  HidePointer()
+		If mo\MouseHit2 Lor (Not I_294\Using) Then HidePointer()
 	Else ; ~ Playing a dispensing sound
 		If (Not ChannelPlaying(PlayerRoom\SoundCHN)) Then
 			If I_294\ToInput <> GetLocalString("misc", "ofr") Then HidePointer()
@@ -8516,7 +8525,7 @@ Function Use427%()
 			EndIf
 		Else
 			For i = 0 To 1
-				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
+				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel_Strict(I_427\SoundCHN[i])
 			Next
 		EndIf
 	Else
@@ -8909,7 +8918,7 @@ Function Update008%()
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 					msg\DeathMsg = GetLocalString("death", "14991")
-				ElseIf PlayerRoom\RoomTemplate\Name = "gate_b" Lor PlayerRoom\RoomTemplate\Name = "gate_a" Then
+				ElseIf IsPlayerOutsideFacility() Then
 					msg\DeathMsg = Format(GetLocalString("death", "008gate"), SubjectName, "{0}")
 					If PlayerRoom\RoomTemplate\Name = "gate_a" Then
 						msg\DeathMsg = Format(msg\DeathMsg, "A", "{1}")

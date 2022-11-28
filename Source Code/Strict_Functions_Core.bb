@@ -1,15 +1,17 @@
 ; ~ Safe loads for MAV trapping media issues
-
+; ~ Functions with extra parameters
 ; ~ Basic wrapper functions that check to make sure that the file exists before attempting to load it, raises an RTE if it doesn't
 ; ~ More informative alternative to MAVs outside of debug mode, makes it immiediately obvious whether or not someone is loading resources
 ; ~ Likely to cause more crashes than 'clean' CB, as this prevents anyone from loading any assets that don't exist, regardless if they are ever used
 ; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists.
 
+Const MaxChannelsAmount% = 32
+
 Type Sound
 	Field InternalHandle%
 	Field Name$
 	Field HasSubtitles%
-	Field Channels%[32]
+	Field Channels%[MaxChannelsAmount]
 	Field ReleaseTime%
 End Type
 
@@ -20,13 +22,11 @@ Function AutoReleaseSounds%()
 		Local TryRelease% = True
 		Local i%
 		
-		For i = 0 To 31
-			If snd\Channels[i] <> 0 Then
-				If ChannelPlaying(snd\Channels[i]) Then
-					TryRelease = False
-					snd\ReleaseTime = MilliSecs2() + 5000
-					Exit
-				EndIf
+		For i = 0 To MaxChannelsAmount - 1
+			If ChannelPlaying(snd\Channels[i]) Then
+				TryRelease = False
+				snd\ReleaseTime = MilliSecs2() + 5000
+				Exit
 			EndIf
 		Next
 		
@@ -45,7 +45,7 @@ Function PlaySound_Strict%(SoundHandle%)
 		Local ShouldPlay% = True
 		Local i%
 		
-		For i = 0 To 31
+		For i = 0 To MaxChannelsAmount - 1
 			If snd\Channels[i] <> 0 Then
 				If (Not ChannelPlaying(snd\Channels[i])) Then
 					If (Not snd\InternalHandle) Then
@@ -114,10 +114,10 @@ Function LoadSound_Strict%(File$)
 	snd\ReleaseTime = 0
 	If opt\EnableSubtitles Then
 		; ~ Check if the sound has subtitles
-		If GetINISectionLocation(SubtitlesFile, File) <> 0 Then snd\HasSubtitles = True
+		If (IniSectionExist(lang\LanguagePath + SubtitlesFile, File)) Lor (IniSectionExist(SubtitlesFile, File)) Then snd\HasSubtitles = True
 	EndIf
 	If (Not opt\EnableSFXRelease) Then
-		If (Not snd\InternalHandle) Then  snd\InternalHandle = LoadSound(snd\Name)
+		If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
 	EndIf
 	Return(Handle(snd))
 End Function
@@ -130,6 +130,10 @@ Function FreeSound_Strict%(SoundHandle%)
 		snd\ReleaseTime = 0
 		Delete(snd)
 	EndIf
+End Function
+
+Function StopChannel_Strict(SoundCHN%)
+	StopChannel(SoundCHN) : SoundCHN = 0
 End Function
 
 Type Stream
@@ -174,7 +178,7 @@ Function StopStream_Strict%(StreamHandle%)
 		OpenConsoleOnError()
 		Return
 	EndIf
-	StopChannel(st\CHN) : st\CHN = 0
+	StopChannel_Strict(st\CHN)
 	
 	Delete(st)
 End Function
@@ -255,7 +259,7 @@ Function UpdateStreamSoundOrigin%(StreamHandle, Cam%, Entity%, Range# = 10.0, Vo
 			If Volume > 0.0 Then
 				Local Dist# = EntityDistance(Cam, Entity) / Range
 				
-				If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
+				If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
 					Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 					
 					SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * opt\SFXVolume * opt\MasterVolume)

@@ -6,7 +6,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	If Volume > 0.0 Then 
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
-		If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
+		If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
 			SoundCHN = PlaySound_Strict(SoundHandle)
@@ -44,7 +44,7 @@ Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1
 		If Volume > 0.0 Then
 			Local Dist# = EntityDistance(Cam, Entity) / Range
 			
-			If 1.0 - Dist > 0.0 And 1.0 - Dist < 1.0 Then
+			If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
 				Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 				
 				ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * opt\SFXVolume * opt\MasterVolume)))
@@ -66,7 +66,7 @@ Function PlayMTFSound%(SoundHandle%, n.NPCs)
 				Case "radio", "fineradio", "18vradio"
 					;[Block]
 					If SoundHandle <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3])) Then
-						StopChannel(RadioCHN[3])
+						StopChannel_Strict(RadioCHN[3])
 						RadioCHN[3] = PlaySound_Strict(SoundHandle)
 					EndIf
 					;[End Block]
@@ -120,7 +120,7 @@ Function UpdateMusic%()
 		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
 			opt\CurrMusicVolume = Max(opt\CurrMusicVolume - (fps\Factor[0] / 250.0), 0.0)
 			If opt\CurrMusicVolume = 0.0 Then
-				If NowPlaying < 66 Then StopStream_Strict(MusicCHN) : MusicCHN = 0
+				If NowPlaying < 66 Then StopStream_Strict(MusicCHN)
 				NowPlaying = ShouldPlay
 				CurrMusic = False
 			EndIf
@@ -273,17 +273,17 @@ Function KillSounds%()
 		If e\SoundCHN_IsStream Then
 			If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN)
 		Else
-			StopChannel(e\SoundCHN)
+			StopChannel_Strict(e\SoundCHN)
 		EndIf
 		If e\SoundCHN2_IsStream Then
 			If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2)
 		Else
-			StopChannel(e\SoundCHN2)
+			StopChannel_Strict(e\SoundCHN2)
 		EndIf
 		If e\SoundCHN3_IsStream Then
 			If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3)
 		Else
-			StopChannel(e\SoundCHN3)
+			StopChannel_Strict(e\SoundCHN3)
 		EndIf
 	Next
 	
@@ -291,36 +291,36 @@ Function KillSounds%()
 		If n\SoundCHN_IsStream Then
 			If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
 		Else
-			StopChannel(n\SoundCHN)
+			StopChannel_Strict(n\SoundCHN)
 		EndIf
 		If n\SoundCHN2_IsStream Then
 			If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
 		Else
-			StopChannel(n\SoundCHN2)
+			StopChannel_Strict(n\SoundCHN2)
 		EndIf
 	Next
 	
 	For d.Doors = Each Doors
-		StopChannel(d\SoundCHN) : d\SoundCHN = 0
-		StopChannel(d\SoundCHN2) : d\SoundCHN2 = 0
+		StopChannel_Strict(d\SoundCHN)
+		StopChannel_Strict(d\SoundCHN2)
 	Next
 	
-	StopChannel(AmbientSFXCHN) : AmbientSFXCHN = 0
-	StopChannel(BreathCHN) : BreathCHN = 0
-	StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
-	StopChannel(VomitCHN) : VomitCHN = 0
-	StopChannel(CoughCHN) : CoughCHN = 0
-	StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+	StopChannel_Strict(AmbientSFXCHN)
+	StopChannel_Strict(VomitCHN)
+	StopChannel_Strict(CoughCHN)
+	StopChannel_Strict(SCRAMBLECHN)
+	
+	StopBreathSound()
 	
 	For i = 0 To 1
-		StopChannel(LowBatteryCHN[i]) : LowBatteryCHN[i] = 0
+		StopChannel_Strict(LowBatteryCHN[i])
 	Next
 		
 	For i = 0 To 6
-		StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
+		StopChannel_Strict(RadioCHN[i])
 	Next
 	
-	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
+	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN)
 	
 	If opt\EnableSFXRelease Then
 		For snd.Sound = Each Sound
@@ -330,8 +330,8 @@ Function KillSounds%()
 	EndIf
 	
 	For snd.Sound = Each Sound
-		For i = 0 To 31
-			StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
+		For i = 0 To MaxChannelsAmount - 1
+			StopChannel_Strict(snd\Channels[i])
 		Next
 	Next
 	
@@ -339,8 +339,8 @@ Function KillSounds%()
 End Function
 
 Function StopBreathSound%()
-	If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN) : BreathCHN = 0
-	If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+	If ChannelPlaying(BreathCHN) Then StopChannel_Strict(BreathCHN)
+	If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
 End Function
 
 Function GetStepSound%(Entity%)
@@ -398,7 +398,7 @@ Function GetStepSound%(Entity%)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
-	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
+	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN)
 	IntercomStreamCHN = StreamSound_Strict(File, opt\SFXVolume * opt\MasterVolume, 0)
 End Function
 
@@ -423,18 +423,18 @@ Function UpdateStreamSounds%()
 	If (Not PlayerInReachableRoom()) Then
 		Local RN$ = PlayerRoom\RoomTemplate\Name
 		
-		If RN <> "gate_b" And RN <> "gate_a" Then
-			If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
+		If (Not IsPlayerOutsideFacility()) Then
+			If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN)
 			If RN <> "dimension_1499" Then
 				For e.Events = Each Events
 					If e\SoundCHN_IsStream Then
-						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN_IsStream = False
 					EndIf
 					If e\SoundCHN2_IsStream Then
-						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
+						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2_IsStream = False
 					EndIf
 					If e\SoundCHN3_IsStream Then
-						If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
+						If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3_IsStream = False
 					EndIf
 				Next
 			EndIf
@@ -447,8 +447,8 @@ Function ControlSoundVolume%()
 	Local i%
 	
 	For snd.Sound = Each Sound
-		For i = 0 To 31
-			If snd\Channels[i] <> 0 Then ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
+		For i = 0 To MaxChannelsAmount - 1
+			If ChannelPlaying(snd\Channels[i]) Then ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 		Next
 	Next
 End Function

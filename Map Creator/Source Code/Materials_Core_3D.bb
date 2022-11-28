@@ -23,8 +23,8 @@ Function LoadMaterials(File$)
 			mat.Materials = New Materials
 			
 			mat\Name = Lower(TemporaryString)
-			mat\IsDiffuseAlpha = GetINIInt(File, TemporaryString, "transparent")
-			mat\UseMask = GetINIInt(File, TemporaryString, "masked")
+			mat\IsDiffuseAlpha = IniGetInt(File, TemporaryString, "transparent")
+			mat\UseMask = IniGetInt(File, TemporaryString, "masked")
 		EndIf
 	Wend
 	
