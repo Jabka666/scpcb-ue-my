@@ -1999,7 +1999,7 @@ Function InitNewGame%()
 		
 		If (Not r\RoomTemplate\DisableDecals) Then
 			If Rand(4) = 1 Then
-				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(r\OBJ) + Rnd(- 2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
+				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			If Rand(4) = 1 Then

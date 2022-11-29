@@ -26,11 +26,11 @@ Function IniGetInt%(File$, Section$, Parameter$, DefaultValue% = 0, AllowBuffer%
 	Local Result$ = IniGetString(File, Section, Parameter, DefaultValue, AllowBuffer)
 	
 	Select Result
-		Case "True", "true"
+		Case "True", "true", "1"
 			;[Block]
 			Return(True)
 			;[End Block]
-		Case "False", "false"
+		Case "False", "false", "0"
 			;[Block]
 			Return(False)
 			;[End Block]

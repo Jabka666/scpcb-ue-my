@@ -2710,19 +2710,21 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_nuke
 				;[Block]
+				If e\room\NPC[0] = Null Then
+					TFormPoint(1110.0, 0.0, -208.0, e\room\OBJ, 0)
+					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), 0.5, TFormedZ())
+					e\room\NPC[0]\State = 3.0
+					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
+					SetNPCFrame(e\room\NPC[0], 40.0)
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
+				EndIf
+				
 				If PlayerRoom = e\room Then
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[4], e\room\Objects[5], e)
 					
-					e\EventState = UpdateLever(e\room\Objects[1])
-					UpdateLever(e\room\Objects[3])
-					
-					If e\EventState3 = 0.0 Then
-						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[6], True), 0.55, EntityZ(e\room\Objects[6], True))
-						e\room\NPC[0]\State = 3.0
-						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
-						SetNPCFrame(e\room\NPC[0], 40.0)
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
-						e\EventState3 = 1.0
+					If EntityY(me\Collider) > 1.0 Then
+						e\EventState = UpdateLever(e\room\Objects[1])
+						UpdateLever(e\room\Objects[3])
 					EndIf
 				EndIf
 				;[End Block]
@@ -4641,8 +4643,8 @@ Function UpdateEvents%()
 							If n_I\Curr049 <> Null Then
 								If n_I\Curr049\State = 2.0 And EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) > 256.0 Then
 									n_I\Curr049\PathStatus = 0 : n_I\Curr049\State = 4.0 : n_I\Curr049\State2 = 0.0 : n_I\Curr049\State3 = 0.0
-									TFormVector(368.0, 528.0, 176.0, e\room\OBJ, 0)
-									PositionEntity(n_I\Curr049\Collider, EntityX(e\room\OBJ) + TFormedX(), TFormedY(), EntityZ(e\room\OBJ) + TFormedZ())
+									TFormPoint(368.0, 528.0, 176.0, e\room\OBJ, 0)
+									PositionEntity(n_I\Curr049\Collider, TFormedX(), TFormedY(), TFormedZ())
 									ResetEntity(n_I\Curr049\Collider)
 									RemoveEvent(e)
 								EndIf
@@ -5298,8 +5300,6 @@ Function UpdateEvents%()
 							
 							If e\EventState <= (-70.0) * 4.0 Then 
 								UpdateTimer = 0.0
-								UpdateDoors()
-								UpdateRooms()
 								HideEntity(me\Head)
 								ShowEntity(me\Collider)
 								me\DropSpeed = 0.0
@@ -5906,7 +5906,6 @@ Function UpdateEvents%()
 								ResetEntity(me\Collider)
 								
 								UpdateTimer = 0.0
-								UpdateDoors()
 								
 								SecondaryLightOn = PrevSecondaryLightOn
 								
@@ -6935,27 +6934,23 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room4_2_hcz
 				;[Block]
-				If e\room\Dist < 10.0 And e\room\Dist > 0.0 Then
-					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ, True), 0.5, EntityZ(e\room\OBJ, True))
-					e\room\NPC[0]\State = 8.0
-					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
-					SetNPCFrame(e\room\NPC[0], 19.0)
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)	
-					
-					RemoveEvent(e)
-				EndIf
+				TFormPoint(256.0, 0.0, 256.0, e\room\OBJ, 0)
+				e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), 0.5, TFormedZ())
+				e\room\NPC[0]\State = 8.0
+				ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
+				SetNPCFrame(e\room\NPC[0], 19.0)
+				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 65.0, 0.0)
+				RemoveEvent(e)
 				;[End Block]
 			Case e_room2_gw_2
 				;[Block]
 				If e\room\Dist < 8.0 Then
-					If e\EventState = 0.0 Then
+					If e\room\NPC[0] = Null Then
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 						e\room\NPC[0]\State = 8.0
 						SetNPCFrame(e\room\NPC[0], 288.0)
 						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
-						
-						e\EventState = 1.0
 					EndIf
 					
 					p.Particles = CreateParticle(PARTICLE_WHITE_SMOKE, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 0.2, 0.0, 10.0)
@@ -8523,10 +8518,7 @@ Function UpdateDimension106%()
 							e\EventState2 = PD_FakeTunnelRoom
 							;[End Block]
 					End Select 
-					
 					UpdateTimer = 0.0
-					UpdateDoors()
-					UpdateRooms()
 				EndIf
 			Else
 				If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)

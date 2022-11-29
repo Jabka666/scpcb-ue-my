@@ -4299,9 +4299,8 @@ Function UpdateGUI%()
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "dimension_106" Then
 											PositionEntity(me\Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))		
-											ResetEntity(me\Collider)									
-											UpdateDoors()
-											UpdateRooms()
+											ResetEntity(me\Collider)
+											UpdateTimer = 0.0
 											PlaySound_Strict(Use914SFX)
 											me\DropSpeed = 0.0
 											n_I\Curr106\State = -2500.0
@@ -7103,7 +7102,7 @@ Function UpdateMenu%()
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
 							
-							UpdateRooms()
+							UpdateTimer = 0.0
 							
 							For r.Rooms = Each Rooms
 								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
@@ -7164,7 +7163,7 @@ Function UpdateMenu%()
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
 							
-							UpdateRooms()
+							UpdateTimer = 0.0
 							
 							For r.Rooms = Each Rooms
 								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))

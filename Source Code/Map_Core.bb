@@ -2242,7 +2242,6 @@ Function UpdateDoors%()
 		If (d\Dist <= HideDistance) Lor (d\IsElevatorDoor > 0) Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
 			; ~ Automatically disable d\AutoClose if the door is locked because if not, this can cause a locked door to be closed and player get stuck -- Jabka
 			If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
-			
 			FindButton = True
 			If d\Open And ((d\DoorType = OFFICE_DOOR) Lor (d\DoorType = WOODEN_DOOR)) Then FindButton = False
 			
@@ -2632,8 +2631,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
 						UpdateTimer = 0.0
 						me\DropSpeed = 0.0
-						UpdateDoors()
-						UpdateRooms()
 						
 						door1\SoundCHN = PlaySound2(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door1\OBJ)
 					EndIf
@@ -2745,8 +2742,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
 						UpdateTimer = 0.0
 						me\DropSpeed = 0.0
-						UpdateDoors()
-						UpdateRooms()
 						
 						door2\SoundCHN = PlaySound2(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door2\OBJ)
 					EndIf
@@ -4707,11 +4702,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[5] = CreatePivot()
 			PositionEntity(r\Objects[5], r\x + 1504.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
 			
-			; ~ Body
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 1110.0 * RoomScale, r\y + 36.0 * RoomScale, r\z - 208.0 * RoomScale)
-			
-			For i = 4 To 6
+			For i = 4 To 5
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -7686,8 +7677,6 @@ Function TeleportToRoom%(r.Rooms)
 	For it.Items = Each Items
 		it\DistTimer = 0.0
 	Next
-	UpdateDoors()
-	UpdateRooms()
 End Function
 
 ; ~ TODO: Split into one function and make more optimizations
@@ -7812,25 +7801,27 @@ Function HideRoomsColl%(room.Rooms)
 				; ~ What the fuck is this? I really "like" how the adjacent door system works. Fuck this shit, I'm out -- Jabka
 				Local Hide% = True
 				
-				For i = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\AdjDoor[i] <> Null Then
-						If d = PlayerRoom\AdjDoor[i] Then Hide = False
-					EndIf
-					If PlayerRoom\Adjacent[i] <> Null Then
-						For j = 0 To MaxRoomAdjacents - 1
-							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
-								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
-							EndIf
-							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-								For k = 0 To MaxRoomAdjacents - 1 
-									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
-										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
-									EndIf
-								Next
-							EndIf
-						Next
-					EndIf
-				Next
+				If Hide Then
+					For i = 0 To MaxRoomAdjacents - 1
+						If PlayerRoom\AdjDoor[i] <> Null Then
+							If d = PlayerRoom\AdjDoor[i] Then Hide = False
+						EndIf
+						If PlayerRoom\Adjacent[i] <> Null Then
+							For j = 0 To MaxRoomAdjacents - 1
+								If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
+									If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
+								EndIf
+								If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+									For k = 0 To MaxRoomAdjacents - 1 
+										If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
+											If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
+										EndIf
+									Next
+								EndIf
+							Next
+						EndIf
+					Next
+				EndIf
 				If Hide Then
 					EntityAlpha(d\OBJ, 0.0)
 					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
@@ -7886,25 +7877,27 @@ Function ShowRoomsColl%(room.Rooms)
 			If d\room = room Then
 				Local Hide% = True
 				
-				For i = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\AdjDoor[i] <> Null Then
-						If d = PlayerRoom\AdjDoor[i] Then Hide = False
-					EndIf
-					If PlayerRoom\Adjacent[i] <> Null Then
-						For j = 0 To MaxRoomAdjacents - 1
-							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
-								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
-							EndIf
-							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-								For k = 0 To MaxRoomAdjacents - 1 
-									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
-										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
-									EndIf
-								Next
-							EndIf
-						Next
-					EndIf
-				Next
+				If Hide Then
+					For i = 0 To MaxRoomAdjacents - 1
+						If PlayerRoom\AdjDoor[i] <> Null Then
+							If d = PlayerRoom\AdjDoor[i] Then Hide = False
+						EndIf
+						If PlayerRoom\Adjacent[i] <> Null Then
+							For j = 0 To MaxRoomAdjacents - 1
+								If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
+									If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
+								EndIf
+								If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+									For k = 0 To MaxRoomAdjacents - 1 
+										If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
+											If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
+										EndIf
+									Next
+								EndIf
+							Next
+						EndIf
+					Next
+				EndIf
 				If Hide Then
 					EntityAlpha(d\OBJ, 1.0)
 					If d\OBJ2 <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\OBJ2, 1.0)
@@ -8052,10 +8045,12 @@ Function UpdateRooms%()
 	For i = 0 To MaxRoomAdjacents - 1
 		If PlayerRoom\Adjacent[i] <> Null Then
 			If PlayerRoom\AdjDoor[i] <> Null Then
-				If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Lor (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera)) Then
-					HideRoomsColl(PlayerRoom\Adjacent[i])
-				Else
-					ShowRoomsColl(PlayerRoom\Adjacent[i])
+				If PlayerRoom\Adjacent[i] <> PlayerRoom Then
+					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Lor (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera)) Then
+						HideRoomsColl(PlayerRoom\Adjacent[i])
+					Else
+						ShowRoomsColl(PlayerRoom\Adjacent[i])
+					EndIf
 				EndIf
 			EndIf
 			
