@@ -691,17 +691,17 @@ Function UpdateEvents%()
 						
 						If e\room\NPC[0] = Null Then
 							e\room\NPC[3] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
-							e\room\NPC[3]\State = 8.0
+							e\room\NPC[3]\State = 8.0 : e\room\NPC[3]\IsDead = True
 							SetNPCFrame(e\room\NPC[3], 286.0)
 							RotateEntity(e\room\NPC[3]\Collider, 0.0, 90.0, 0.0)
 							
 							e\room\NPC[4] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True))
-							e\room\NPC[4]\State = 3.0
+							e\room\NPC[4]\IsDead = True
 							SetNPCFrame(e\room\NPC[4], 711.0)
 							RotateEntity(e\room\NPC[4]\Collider, 0.0, 270.0, 0.0)
 							
 							e\room\NPC[5] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
-							e\room\NPC[5]\State = 5.0
+							e\room\NPC[5]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[5], NPC_CLASS_D_CLASS_D_TEXTURE)
 							SetNPCFrame(e\room\NPC[5], 779.0)
 							RotateEntity(e\room\NPC[5]\Collider, 0.0, 270.0, 0.0)
@@ -2011,11 +2011,11 @@ Function UpdateEvents%()
 					ElseIf CoffinDistance < 3.0
 						If e\room\NPC[0] = Null Then
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y, e\room\z)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\GravityMult = 0.0 : e\room\NPC[0]\IsDead = True : e\room\NPC[0]\FallingPickDistance = 0.0
-							SetNPCFrame(e\room\NPC[0], 270.0)
 							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\895Chamber\GuardIdle" + Rand(3) + ".ogg")
 							e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
+							SetNPCFrame(e\room\NPC[0], 270.0)
 							
 							If (Not e\room\RoomDoors[0]\Open) Then e\room\RoomDoors[0]\Open = True
 						EndIf
@@ -2501,12 +2501,14 @@ Function UpdateEvents%()
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room And n_I\Curr173\Idle < 2 Then
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+						e\room\NPC[0]\State3 = 3.0
 						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_JANITOR_2_TEXTURE)
 						
 						e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Room\Storeroom\Escape1.ogg")
 						e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12.0)
 						
 						e\room\NPC[1] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+						e\room\NPC[1]\State3 = 4.0
 						ChangeNPCTextureID(e\room\NPC[1], NPC_CLASS_D_SCIENTIST_TEXTURE)
 						
 						PointEntity(e\room\NPC[0]\Collider, e\room\NPC[1]\Collider)
@@ -2541,12 +2543,8 @@ Function UpdateEvents%()
 							me\LightBlink = 10.0
 						EndIf
 						
-						If e\EventState > 70.0 * 7.5 Then
-							e\room\NPC[0]\State = 8.0
-							Animate2(e\room\NPC[0]\OBJ, AnimTime(e\room\NPC[0]\OBJ), 555.0, 629.0, 0.5, False)
-						EndIf
-						
 						If e\EventState > 70.0 * 7.5 And e\EventState - fps\Factor[0] <= 70.0 * 7.5 Then
+							e\room\NPC[0]\IsDead = True
 							If wi\NightVision > 0 Then me\BlinkTimer = -10.0
 							
 							PlaySound2(NeckSnapSFX[0], Camera, e\room\NPC[0]\Collider, 8.0)
@@ -2555,14 +2553,8 @@ Function UpdateEvents%()
 							PointEntity(n_I\Curr173\Collider, e\room\NPC[0]\Collider)
 							ResetEntity(n_I\Curr173\Collider)
 							n_I\Curr173\Idle = 1
-						EndIf
-						
-						If e\EventState > 70.0 * 8.0 Then
-							e\room\NPC[1]\State = 6.0
-							Animate2(e\room\NPC[1]\OBJ, AnimTime(e\room\NPC[1]\OBJ), 630.0, 677.0, 0.5, False) 
-						EndIf
-						
-						If e\EventState > 70.0 * 8.0 And e\EventState - fps\Factor[0] <= 70.0 * 8.0 Then
+						ElseIf e\EventState > 70.0 * 8.0 And e\EventState - fps\Factor[0] <= 70.0 * 8.0 Then
+							e\room\NPC[1]\IsDead = True
 							If wi\NightVision > 0 Then me\BlinkTimer = -10.0
 							
 							PlaySound2(NeckSnapSFX[1], Camera, e\room\NPC[1]\Collider, 8.0)
@@ -2571,9 +2563,7 @@ Function UpdateEvents%()
 							PointEntity(n_I\Curr173\Collider, e\room\NPC[1]\Collider)
 							ResetEntity(n_I\Curr173\Collider)
 							n_I\Curr173\Idle = 0
-						EndIf
-						
-						If e\EventState > 70.0 * 9.0 And e\EventState - fps\Factor[0] <= 70.0 * 9.0 Then
+						ElseIf e\EventState > 70.0 * 9.0 And e\EventState - fps\Factor[0] <= 70.0 * 9.0 Then
 							it.Items = CreateItem("Wallet", "wallet", EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 							EntityType(it\Collider, HIT_ITEM)
 							PointEntity(it\Collider, e\room\NPC[0]\Collider)
@@ -2587,8 +2577,8 @@ Function UpdateEvents%()
 								EntityType(it2\Collider, HIT_ITEM)
 								EntityParent(it2\Collider, 0)
 							Next
+							RemoveEvent(e)
 						EndIf
-						If e\EventState > 70.0 * 10.0 Then RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
@@ -2667,7 +2657,7 @@ Function UpdateEvents%()
 					EntityParent(de\OBJ, e\room\OBJ)
 					
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[0], True), e\room\y + 0.5, EntityZ(e\room\Objects[0], True))
-					e\room\NPC[0]\State = 8.0
+					e\room\NPC[0]\IsDead = True
 					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_GONZALES_TEXTURE)
 					SetNPCFrame(e\room\NPC[0], 19.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)	
@@ -2713,7 +2703,7 @@ Function UpdateEvents%()
 				If e\room\NPC[0] = Null Then
 					TFormPoint(1110.0, 0.0, -208.0, e\room\OBJ, 0)
 					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), 0.5, TFormedZ())
-					e\room\NPC[0]\State = 3.0
+					e\room\NPC[0]\IsDead = True
 					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
 					SetNPCFrame(e\room\NPC[0], 40.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
@@ -2755,7 +2745,7 @@ Function UpdateEvents%()
 					If e\room\Dist < 8.0 Then
 						If e\room\NPC[0] = Null Then
 							e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x, 0.5, e\room\z)
-							e\room\NPC[0]\State = 3.0
+							e\room\NPC[0]\IsDead = True
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
@@ -2782,190 +2772,169 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_tesla
 				;[Block]
-				Local ActivateTesla% = False
-				
-				Temp = True
-				If e\EventState2 > 70.0 * 3.5 And e\EventState2 < 70.0 * 90.0 Then Temp = False
-				If Temp And EntityY(me\Collider, True) > EntityY(e\room\OBJ, True) And EntityY(me\Collider, True) < 4.0 Then
-					If e\EventState = 0.0 Then
-						If e\room\Dist < 8.0 Then
-							If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
-							UpdateRedLight(e\room\Objects[4], 1500, 800)
-							
-							; ~ Humming when the player isn't close
-							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound2(TeslaIdleSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-							
-							For i = 0 To 2
-								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(300.0 * RoomScale) Then
-									; ~ Play the activation sound
-									If (Not me\Terminated) Then
-										ActivateTesla = True
-										Exit
-									EndIf
-								EndIf
-							Next
-							
-							Local Temp2% = True
-							
-							For e2.Events = Each Events
-								If e2\EventID = e\EventID And e2 <> e
-									If e2\EventStr <> ""
-										Temp2 = False
-										e\EventStr = "Done"
-										Exit
-									EndIf
-								EndIf
-							Next
-							
-							Local Temp3% = 0
-							
-							If Temp2 Then
-								If e\EventStr = "" And PlayerRoom = e\room
-									If EntityDistanceSquared(e\room\Objects[5], me\Collider) < EntityDistanceSquared(e\room\Objects[6], me\Collider)
-										Temp3 = 6
-									Else
-										Temp3 = 5
-									EndIf
-									
-									e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\Objects[Temp3], True), 0.5, EntityZ(e\room\Objects[Temp3], True))
-									e\room\NPC[0]\State = 2.0
-									PointEntity(e\room\NPC[0]\Collider, e\room\Objects[2])
-									
-									e\EventStr = "Step1"
-									e\EventState = 0.0
-									e\EventState2 = 0.0
-									e\EventState3 = 0.0
-								EndIf
-							EndIf
-						Else
-							If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
-						EndIf
-					Else
-						e\EventState = e\EventState + fps\Factor[0]
-						If e\EventState <= 40.0 Then
-							If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
-							
-							UpdateRedLight(e\room\Objects[4], 100, 50)
-						Else
-							If e\room\Dist < 2.0 Then
-								If e\EventState - fps\Factor[0] <= 40.0 Then PlaySound_Strict(TeslaShockSFX)	
-							Else
-								If e\EventState - fps\Factor[0] <= 40.0 Then PlaySound2(TeslaShockSFX, Camera, e\room\Objects[2])
-							EndIf
-							If e\EventState < 70.0 Then 
-								If (Not me\Terminated) Then 
-									For i = 0 To 2
-										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
-											me\LightFlash = 0.4
-											me\CameraShake = 1.0
-											Kill()
-											msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
-										EndIf
-									Next
-								EndIf
-								
-								If e\EventStr = "Step1" Then e\room\NPC[0]\State = 3.0
-								
-								For i = 3 To 4
-									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
-								Next
-								
-								If Rand(5) < 5 Then 
-									PositionTexture(t\OverlayTextureID[11], 0.0, Rnd(0.0, 1.0))
-									If EntityHidden(e\room\Objects[3]) Then ShowEntity(e\room\Objects[3])
-									If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.5, 2.0)
-								EndIf
-							Else
-								If e\EventState - fps\Factor[0] < 70.0 * 1.0 Then 
-									StopChannel_Strict(e\SoundCHN)
-									e\SoundCHN = PlaySound2(TeslaPowerUpSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-								EndIf 
-								If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
-								
-								If e\EventState > 150.0 Then e\EventState = 0.0
-							EndIf
-						EndIf
-					EndIf
-					TriggerTeslaGateOnNPCs(e)
-				Else
-					If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
-				EndIf
-				
-				If e\room\NPC[0] <> Null Then
-					If e\EventStr = "Step1" And e\room\NPC[0]\State <> 3.0 Then
-						If e\EventState = 0.0 Then
-							For i = 0 To 2
-								If DistanceSquared(EntityX(e\room\NPC[0]\Collider), EntityX(e\room\Objects[i], True), EntityZ(e\room\NPC[0]\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(400.0 * RoomScale)
-									ActivateTesla = True
+				If e\room\Dist < 16 Then
+					If PlayerRoom = e\room Then
+						Temp = True
+						For e2.Events = Each Events
+							If e2\EventID = e\EventID And e2 <> e Then
+								If e2\room\NPC[0] <> Null Then
+									Temp = False
 									Exit
 								EndIf
-							Next
-						EndIf
-					ElseIf e\EventStr = "Step1" And e\room\NPC[0]\State = 3.0
-						e\room\NPC[0]\CurrSpeed = 0.0
-						AnimateNPC(e\room\NPC[0], 41.0, 60.0, 0.5, False)
-						If e\room\NPC[0]\Frame = 60.0 Then
-							e\room\NPC[0]\IsDead = True
-							e\EventStr = "Step2"
-							SetNPCFrame(e\room\NPC[0], 57.0)
-						EndIf
-					ElseIf e\EventStr = "Step2"
-						AnimateNPC(e\room\NPC[0], 57.0, 60.0, 0.5, False)
-						If e\room\NPC[0]\Frame = 60.0 Then e\EventStr = "0"
-					ElseIf e\EventStr <> "" And e\EventStr <> "Step1" And e\EventStr <> "Done"
-						If Float(e\EventStr) < 70.0 * 10.0 Then
-							If opt\ParticleAmount > 0 Then
-								If Rand(20 - (10 * (opt\ParticleAmount - 1))) = 1 Then
-									p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\OBJ) + 0.05, EntityZ(e\room\NPC[0]\Collider), 0.05, 0.0, 60.0)
-									p\Speed = 0.002 : p\AlphaChange = -0.02
-									RotateEntity(p\Pvt, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0)
-									MoveEntity(p\Pvt, Rnd(-0.1, 0.1), 0.0, 0.1 + Rnd(0.0, 0.5))
-									RotateEntity(p\Pvt, -90.0, EntityYaw(e\room\NPC[0]\Collider), 0.0)
-								EndIf
 							EndIf
-							e\EventStr = Float(e\EventStr) + fps\Factor[0]
-						Else
-							e\EventStr = "Done"
+						Next
+						If e\room\NPC[0] = Null And Temp Then
+							If Abs(EntityX(me\Collider, True) - EntityX(e\room\Objects[0], True)) <= 5.0 And (e\room\Angle Mod 180 = 90.0) Then
+								e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\Objects[0], True) + (800.0 * RoomScale), 0.5, EntityZ(e\room\Objects[0], True))
+							Else
+								e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True) - (800.0 * RoomScale))
+							EndIf
+							e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Speed = 1.8
+							PointEntity(e\room\NPC[0]\Collider, e\room\Objects[0])
+							e\EventState = 0.0
 						EndIf
 					EndIf
-				EndIf
-				
-				If ActivateTesla Then
-					me\SndVolume = Max(8.0, me\SndVolume)
-					StopChannel_Strict(e\SoundCHN)
-					e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-					If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
-					e\EventState = 1.0
-				EndIf
-				
-				If PlayerRoom\RoomTemplate\Name <> "dimension_106" And PlayerRoom\RoomTemplate\Name <> "cont2_860_1" Then
-					If e\EventState2 = 0.0 Then
-						If e\EventState3 <= 0.0 Then 
-							Temp = False
-							For n.NPCs = Each NPCs
-								If n\NPCType = NPCTypeMTF Then
-									If Abs(EntityX(n\Collider) - EntityX(e\room\OBJ, True)) < 4.0 Then
-										If Abs(EntityZ(n\Collider) - EntityZ(e\room\OBJ, True)) < 4.0 Then
-											Temp = True
-											If e\EventState2 = 0.0 Then
-												n\Sound = LoadSound_Strict("SFX\Character\MTF\Tesla0.ogg")
-												PlayMTFSound(n\Sound, n)
-												n\Idle = 70.0 * 10.0
-												e\EventState2 = 70.0 * 100.0
-											EndIf
-										EndIf
+					For n.NPCs = Each NPCs
+						UpdateNPCParticles(n)
+						
+						Select n\NPCType
+							Case NPCType106
+								;[Block]
+								If n\State3 = 1.0 Then
+									AnimateNPC(n, 259.0, 110.0, -0.1, False)
+									
+									If n\Frame <= 110.1 Then
+										If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+										PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+										ResetEntity(n\Collider)
+										
+										n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 13.0) : n\State3 = 0.0
 									EndIf
 								EndIf
+								;[End Block]
+						End Select
+					Next
+					
+					Select e\EventState
+						Case 0.0 ; ~ Idle state
+							;[Block]
+							UpdateRedLight(e\room\Objects[2], 1500, 800)
+							HideEntity(e\room\Objects[1])
+							e\SoundCHN = LoopSound2(TeslaIdleSFX, e\SoundCHN, Camera, e\room\Objects[1], 4.0, 0.5)
+							e\EventState2 = 0.0
+							If Abs(EntityX(me\Collider, True) - EntityX(e\room\Objects[0], True)) < 1.0 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(me\Collider, True) - EntityZ(e\room\Objects[0], True)) < 1.0 And (e\room\Angle Mod 180 = 0.0) Then
+								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < PowTwo(300.0 * RoomScale) And (Not me\Terminated) And (Not chs\NoTarget) Then
+									StopChannel_Strict(e\SoundCHN)
+									e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[1], 4.0, 0.5)
+									e\EventState = 1.0
+								EndIf
+							EndIf
+							For n.NPCs = Each NPCs
+								If n\NPCType <> NPCType966 And n\NPCType <> NPCType513_1 And (Not n\IsDead) Then
+									If n\NPCType = NPCTypeMTF And e\room\NPC[1] = Null Then
+										If Abs(EntityX(n\Collider, True) - EntityX(e\room\Objects[0], True)) <= 5.0 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(n\Collider, True) - EntityZ(e\room\Objects[0], True)) <= 5.0 And (e\room\Angle Mod 180 = 0.0) Then
+											If EntityDistanceSquared(n\Collider, e\room\Objects[0]) < PowTwo(500.0 * RoomScale) Then
+												n\Idle = 70.0 * 10.0
+												LoadNPCSound(n, "SFX\Character\MTF\Tesla0.ogg")
+												PlayMTFSound(n\Sound, n)
+												e\room\NPC[1] = n
+											EndIf
+										EndIf
+									Else
+										If Abs(EntityX(n\Collider, True) - EntityX(e\room\Objects[0], True)) < 0.8 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(n\Collider, True) - EntityZ(e\room\Objects[0], True)) < 0.8 And (e\room\Angle Mod 180 = 0.0) Then
+											If EntityDistanceSquared(n\Collider, e\room\Objects[0]) < PowTwo(300.0 * RoomScale) Then
+												StopChannel_Strict(e\SoundCHN)
+												e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[1], 4.0, 0.5)
+												e\EventState = 1.0
+											EndIf
+										EndIf
+									EndIf	
+								EndIf
 							Next
-							If (Not Temp) Then e\EventState2 = 70.0 * 3.5
-							e\EventState3 = e\EventState3 + 140.0
-						Else
-							e\EventState3 = e\EventState3 - fps\Factor[0]
-						EndIf
-					Else
-						If e\EventState2 >= 70.0 * 92.0 And e\EventState2 - fps\Factor[0] < 70.0 * 92.0 Then PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(3) + ".ogg")
-						e\EventState2 = Max(e\EventState2 - fps\Factor[0], 0.0)
-					EndIf					
+							If e\room\NPC[1] <> Null Then
+								If e\room\NPC[1]\Idle <= 0.0 Then
+									StopChannel_Strict(e\SoundCHN)
+									PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(3) + ".ogg")
+									e\EventState = 3.0
+									e\EventState2 = (-70.0) * 90.0
+									e\room\NPC[1] = Null
+								EndIf	
+							EndIf
+							;[End Block]
+						Case 1.0 ; ~ Charge state
+							;[Block]
+							UpdateRedLight(e\room\Objects[2], 100, 50)
+							e\EventState2 = e\EventState2 + fps\Factor[0]
+							If e\EventState2 >= 35.0 Then
+								e\EventState = 2.0
+								PlaySound2(LoadTempSound("SFX\Room\Tesla\Shock.ogg"), Camera ,e\room\Objects[1])
+							EndIf
+							;[End Block]
+						Case 2.0 ; ~ Zap state
+							;[Block]
+							If Abs(EntityX(me\Collider, True) - EntityX(e\room\Objects[0], True)) < 0.75 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(me\Collider, True) - EntityZ(e\room\Objects[0], True)) < 0.75 And (e\room\Angle Mod 180 = 0.0) Then
+								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < PowTwo(300.0 * RoomScale) And (Not me\Terminated) Then
+									me\LightFlash = 0.4
+									me\CameraShake = 1.0
+									Kill()
+									msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
+								EndIf	
+							EndIf
+							For n.NPCs = Each NPCs
+								If n\NPCType <> NPCType966 And n\NPCType <> NPCType513_1 And (Not n\IsDead) Then
+									If Abs(EntityX(n\Collider, True) - EntityX(e\room\Objects[0], True)) < 0.5 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(n\Collider, True) - EntityZ(e\room\Objects[0], True)) < 0.5 And (e\room\Angle Mod 180 = 0.0) Then
+										If EntityDistanceSquared(n\Collider, e\room\Objects[0]) < PowTwo(300.0 * RoomScale) Then
+											n\CurrSpeed = 0.0 : n\TeslaHit = True
+											Select n\NPCType
+												Case NPCType106
+													;[Block]
+													If n\State3 = 0.0 Then
+														GiveAchievement(AchvTesla)
+														
+														PlaySound2(LoadTempSound("SFX\Ending\GateA\106Retreat.ogg"), Camera, n\OBJ, 10.0)
+														
+														de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), e\room\y + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
+														de\SizeChange = 0.004 : de\Timer = 90000.0
+														
+														SetNPCFrame(n, 259.0)
+														n\Idle = 1 : n\State3 = 1.0
+													EndIf
+													;[End Block]
+												Case NPCType049, NPCType096, NPCType173, NPCType066, NPCType1499_1
+													;[Block]
+													; ~ Skip
+													;[End Block]
+												Default
+													;[Block]
+													If n\NPCType = NPCTypeClerk Lor n\NPCType = NPCTypeD Then n\State3 = 2.0
+													n\IsDead = True
+													;[End Block]
+											End Select
+											If e\room\Dist < 8 And EntityInView(e\room\Objects[0], Camera) Then me\LightFlash = 0.4
+										EndIf	
+									EndIf
+								EndIf
+							Next	
+							If Rand(5) < 5 Then 
+								PositionTexture(t\OverlayTextureID[11], 0.0, Rnd(0.0, 1.0))
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+								If e\room\Dist < 8.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
+							EndIf
+							e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
+							If e\EventState2 <= 0.0 Then
+								e\EventState = 3.0
+								e\EventState2 = -70.0
+								StopChannel_Strict(e\SoundCHN)
+								e\SoundCHN = PlaySound2(TeslaPowerUpSFX, Camera, e\room\Objects[1], 4.0, 0.5)
+							EndIf
+							;[End Block]
+						Case 3.0 ; ~ Recharge state
+							;[Block]
+							e\EventState2 = e\EventState2 + fps\Factor[0]
+							If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+							If e\EventState2 >= 0.0 Then e\EventState = 0.0
+							;[End Block]
+					End Select
 				EndIf
 				;[End Block]
 			Case e_trick
@@ -4321,10 +4290,10 @@ Function UpdateEvents%()
 							Case 25.0
 								;[Block]
 								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, 0.35, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale)
+								e\room\NPC[0]\IsDead = True
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 200.0, 0.0, True)
 								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BENJAMIN_TEXTURE)
 								SetNPCFrame(e\room\NPC[0], 80.0)
-								e\room\NPC[0]\State = 10.0
 								;[End Block]
 							Case 30.0
 								;[Block]
@@ -4525,13 +4494,13 @@ Function UpdateEvents%()
 							Next
 							
 							e\room\NPC[4] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
-							e\room\NPC[4]\State = 3.0
+							e\room\NPC[4]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[4], NPC_CLASS_D_VICTIM_939_1_TEXTURE)
 							SetNPCFrame(e\room\NPC[4], 40.0)
 							TurnEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 							
 							e\room\NPC[5] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True), EntityZ(e\room\Objects[18], True))
-							e\room\NPC[5]\State = 8.0
+							e\room\NPC[5]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[5], NPC_CLASS_D_VICTIM_939_2_TEXTURE)
 							SetNPCFrame(e\room\NPC[5], 19.0)
 							TurnEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
@@ -4626,7 +4595,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True) + 0.5, EntityZ(e\room\Objects[0], True))
-					e\room\NPC[0]\State = 8.0
+					e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 					SetNPCFrame(e\room\NPC[0], 288.0)
 					PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider) + Rnd(-20.0, 20.0), 0.0, True)
@@ -5368,7 +5337,7 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-9500.0) * RoomScale Then
 						If e\EventState = 0.0 Then
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
-							e\room\NPC[0]\State = 8.0
+							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 							SetNPCFrame(e\room\NPC[0], 288.0)
 							PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
@@ -6385,7 +6354,7 @@ Function UpdateEvents%()
 					If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then e\EventState = 1.0
 				ElseIf e\EventState = 1.0
 					e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True) + 0.5, EntityZ(e\room\Objects[1], True))
-					e\room\NPC[0]\State = 8.0
+					e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 					PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider) - 20.0, 0.0, True)
 					SetNPCFrame(e\room\NPC[0], 287.0)
@@ -6496,7 +6465,7 @@ Function UpdateEvents%()
 						If e\EventState > 200.0 Then
 							If e\room\NPC[0] = Null Then
 								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ), 900.0 * RoomScale, EntityZ(e\room\OBJ))
-								e\room\NPC[0]\State = 6.0
+								e\room\NPC[0]\IsDead = True
 								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_MAYNARD_TEXTURE)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)
 								
@@ -6936,7 +6905,7 @@ Function UpdateEvents%()
 				;[Block]
 				TFormPoint(256.0, 0.0, 256.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), 0.5, TFormedZ())
-				e\room\NPC[0]\State = 8.0
+				e\room\NPC[0]\IsDead = True
 				ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
 				SetNPCFrame(e\room\NPC[0], 19.0)
 				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 65.0, 0.0)
@@ -6947,7 +6916,7 @@ Function UpdateEvents%()
 				If e\room\Dist < 8.0 Then
 					If e\room\NPC[0] = Null Then
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-						e\room\NPC[0]\State = 8.0
+						e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 						SetNPCFrame(e\room\NPC[0], 288.0)
 						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
@@ -7789,7 +7758,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0 Then
 					e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True) + 0.5, EntityZ(e\room\Objects[1], True))
-					e\room\NPC[0]\State = 8.0
+					e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 					SetNPCFrame(e\room\NPC[0], 286.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 					
@@ -7826,7 +7795,7 @@ Function UpdateEvents%()
 						
 						If e\EventState = 0.0 Then
 							e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
-							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
+							e\room\NPC[0]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
@@ -9605,17 +9574,17 @@ End Function
 
 Function RemoveEvent%(e.Events)
 	If e\SoundCHN_IsStream Then
-		If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN)
+		If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN_IsStream = False
 	Else
 		StopChannel_Strict(e\SoundCHN)
 	EndIf
 	If e\SoundCHN2_IsStream Then
-		If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2)
+		If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2_IsStream = False
 	Else
 		StopChannel_Strict(e\SoundCHN2)
 	EndIf
 	If e\SoundCHN3_IsStream Then
-		If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3)
+		If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3_IsStream = False
 	Else
 		StopChannel_Strict(e\SoundCHN3)
 	EndIf

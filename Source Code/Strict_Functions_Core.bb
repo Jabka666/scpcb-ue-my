@@ -132,7 +132,7 @@ Function FreeSound_Strict%(SoundHandle%)
 	EndIf
 End Function
 
-Function StopChannel_Strict(SoundCHN%)
+Function StopChannel_Strict%(SoundCHN%)
 	StopChannel(SoundCHN) : SoundCHN = 0
 End Function
 

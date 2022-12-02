@@ -10,15 +10,16 @@ Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 1
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
 	Field NPCType%, ID%
-	Field DropSpeed#, Gravity%
+	Field CollRadius#
+	Field DropSpeed#, Gravity%, FallingPickDistance#
 	Field State#, State2#, State3#, PrevState%
-	Field Frame#
-	Field Angle#
+	Field Frame#, Angle#
 	Field Sound%, SoundCHN%, SoundTimer#
 	Field Sound2%, SoundCHN2%
+	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field Speed#, CurrSpeed#
 	Field Texture$
-	Field Idle#
+	Field Idle#, IdleTimer#
 	Field Reload#
 	Field LastSeen%, LastDist#
 	Field PrevX#, PrevY#, PrevZ#
@@ -33,8 +34,7 @@ Type NPCs
 	Field IsDead%
 	Field BlinkTimer# = 1.0
 	Field IgnorePlayer%
-	Field ManipulateBone%
-	Field ManipulationType%
+	Field ManipulateBone%, ManipulationType%
 	Field BoneToManipulate$
 	Field BonePitch#, BoneYaw#, BoneRoll#
 	Field NPCNameInSection$
@@ -44,12 +44,9 @@ Type NPCs
 	Field Model$
 	Field ModelScaleX#, ModelScaleY#, ModelScaleZ#
 	Field TextureID% = -1
-	Field CollRadius#
-	Field IdleTimer#
-	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
-	Field FallingPickDistance#
 	Field HasAsset% = False
 	Field Contained% = False
+	Field TeslaHit% = False
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -558,12 +555,12 @@ Function RemoveNPC%(n.NPCs)
 	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
 	
 	If n\SoundCHN_IsStream Then
-		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
+		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
 	Else
 		StopChannel_Strict(n\SoundCHN)
 	EndIf
 	If n\SoundCHN2_IsStream Then
-		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
+		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
 	Else
 		StopChannel_Strict(n\SoundCHN2)
 	EndIf
@@ -2102,6 +2099,7 @@ Function UpdateNPCs%()
 					If n\State > 1.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 				Else
 					; ~ The NPC was killed
+					EntityType(n\Collider, HIT_DEAD)
 					If ChannelPlaying(n\SoundCHN) Then StopChannel_Strict(n\SoundCHN)
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
@@ -2524,8 +2522,7 @@ Function UpdateNPCs%()
 					If (PrevFrame < 5.0 And n\Frame >= 5.0) Lor (PrevFrame < 23.0 And n\Frame >= 23.0) Then PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
 				EndIf
 				
-				If n\Frame > 286.5 And n\Frame < 288.5 Then n\IsDead = True
-				If AnimTime(n\OBJ) > 286.5 And AnimTime(n\OBJ) < 288.5 Then n\IsDead = True
+				If n\IsDead Then EntityType(n\Collider, HIT_DEAD)
 				
 				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 				
@@ -2546,51 +2543,69 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCTypeD, NPCTypeClerk
 				;[Block]
-				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
-				
-				PrevFrame = AnimTime(n\OBJ)
-				
-				Select n\State
-					Case 0.0 ; ~ Idles
-						;[Block]
-						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-						Animate2(n\OBJ, AnimTime(n\OBJ), 210.0, 235.0, 0.1)
-						;[End Block]
-					Case 1.0 ; ~ Walking
-						;[Block]
-						If n\State2 = 1.0
-							n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-						Else
-							n\CurrSpeed = CurveValue(0.015, n\CurrSpeed, 5.0)
-						EndIf
-						Animate2(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
-						;[End Block]
-					Case 2.0 ; ~ Running
-						;[Block]
-						n\CurrSpeed = CurveValue(0.03, n\CurrSpeed, 5.0)
-						Animate2(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
-						;[End Block]
-				End Select
-				
-				If n\State2 <> 2.0
-					If n\State = 1.0
-						If n\CurrSpeed > 0.01 Then
-							If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 256.0 And AnimTime(n\OBJ) >= 256.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))						
-						EndIf
-					ElseIf n\State = 2.0
-						If n\CurrSpeed > 0.01 Then
-							If (PrevFrame < 309.0 And AnimTime(n\OBJ) >= 309.0) Lor (PrevFrame <= 319.0 And AnimTime(n\OBJ) <= 301.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+				If (Not n\IsDead) Then
+					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
+					
+					PrevFrame = AnimTime(n\OBJ)
+					Select n\State
+						Case 0.0 ; ~ Idles
+							;[Block]
+							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+							Animate2(n\OBJ, AnimTime(n\OBJ), 210.0, 235.0, 0.1)
+							;[End Block]
+						Case 1.0 ; ~ Walking
+							;[Block]
+							If n\State2 = 1.0 Then
+								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+							Else
+								n\CurrSpeed = CurveValue(0.015, n\CurrSpeed, 5.0)
+							EndIf
+							Animate2(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
+							;[End Block]
+						Case 2.0 ; ~ Running
+							;[Block]
+							n\CurrSpeed = CurveValue(n\Speed * 0.015 , n\CurrSpeed, 5.0)
+							Animate2(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
+							;[End Block]
+					End Select
+					
+					If n\State2 <> 2.0 Then
+						If n\State = 1.0 Then
+							If n\CurrSpeed > 0.005 Then
+								If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 256.0 And AnimTime(n\OBJ) >= 256.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))						
+							EndIf
+						ElseIf n\State = 2.0
+							If n\CurrSpeed > 0.005 Then
+								If (PrevFrame < 309.0 And AnimTime(n\OBJ) >= 309.0) Lor (PrevFrame <= 319.0 And AnimTime(n\OBJ) <= 301.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+							EndIf
 						EndIf
 					EndIf
+					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+				Else
+					EntityType(n\Collider, HIT_DEAD)
+					Select n\State3
+						Case 0.0 ; ~ Don't animate
+							;[Block]
+							;[End Block]
+						Case 1.0 ; ~ Fall backward
+							;[Block]
+							AnimateNPC(n, 1.0, 40.0, 0.5, False)
+							;[End Block]
+						Case 2.0 ; ~ Fall forward
+							;[Block]
+							AnimateNPC(n, 41.0, 60.0, 0.5, False)
+							;[End Block]
+						Case 3.0 ; ~ Snap #1
+							;[Block]
+							AnimateNPC(n, 555.0, 629.0, 0.5, False)
+							;[End Block]
+						Case 4.0 ; ~ Snap #2
+							;[Block]
+							AnimateNPC(n, 630.0, 677.0, 0.5, False)
+							;[End Block]
+					End Select
 				EndIf
-				
-				If n\Frame = 19.0 Lor n\Frame = 40.0 Lor n\Frame = 60.0 Lor n\Frame = 629.0 Lor n\Frame = 677.0 Lor n\Frame = 711.0 Lor n\Frame = 779.0 Then n\IsDead = True
-				If AnimTime(n\OBJ) = 19.0 Lor AnimTime(n\OBJ) = 40.0 Lor AnimTime(n\OBJ) = 60.0 Lor AnimTime(n\OBJ) = 629.0 Lor AnimTime(n\OBJ) = 677.0 Lor AnimTime(n\OBJ) = 711.0 Lor AnimTime(n\OBJ) = 779.0 Then n\IsDead = True
-				
-				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
-				
 				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
 				;[End Block]
 			Case NPCType513_1
@@ -4633,6 +4648,7 @@ Function UpdateNPCs%()
 					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 				Else
 					; ~ The NPC was killed
+					EntityType(n\Collider, HIT_DEAD)
 					If ChannelPlaying(n\SoundCHN) Then StopChannel_Strict(n\SoundCHN)
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
@@ -4641,8 +4657,6 @@ Function UpdateNPCs%()
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 				;[End Block]
 		End Select
-		
-		If n\IsDead Then EntityType(n\Collider, HIT_DEAD)
 		
 		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
@@ -4754,7 +4768,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		If n\State = 2.0 Then
 			If n\BlinkTimer <= 0.0 Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\BLINKING.ogg"), n)
 		EndIf
-			
+		
 		n\Reload = n\Reload - fps\Factor[0]
 		
 		Local PrevFrame# = n\Frame
@@ -6410,94 +6424,6 @@ Function NPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 	EndIf
 End Function
 
-Function TriggerTeslaGateOnNPCs%(e.Events)
-	Local n.NPCs, de.Decals, p.Particles
-	Local i%
-	
-	For n.NPCs = Each NPCs
-		If (n\NPCType = NPCType513_1) Lor (n\NPCType = NPCType372) Lor (n\NPCType = NPCType966) Then Return
-		If (Not n\IsDead) Then
-			If e\EventState = 0.0 Then
-				For i = 0 To 2
-					If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(300.0 * RoomScale) Then
-						me\SndVolume = Max(8.0, me\SndVolume)
-						StopChannel_Strict(e\SoundCHN)
-						e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[3], 4.0, 0.5)
-						If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
-						e\EventState = 1.0
-						Exit
-					EndIf
-				Next
-			Else
-				If e\EventState >= 40.0 And e\EventState < 70.0 Then
-					For i = 0 To 2
-						If DistanceSquared(EntityX(n\Collider), EntityX(e\room\Objects[i], True), EntityZ(n\Collider), EntityZ(e\room\Objects[i], True)) < PowTwo(250.0 * RoomScale) Then
-							If PlayerRoom = e\room Then me\LightFlash = 0.3
-							n\CurrSpeed = 0.0 : n\IgnorePlayer = True ; ~ Used as a placeholder
-							Select n\NPCType
-								Case NPCType106
-									;[Block]
-									If n\State3 = 0.0 Then
-										GiveAchievement(AchvTesla)
-										
-										SetNPCFrame(n, 259.0)
-										LoadEventSound(e, "SFX\Ending\GateA\106Retreat.ogg", 1)
-										e\SoundCHN2 = PlaySound2(e\Sound2, Camera, n\Collider, 10.0)
-										
-										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), e\room\y + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
-										de\SizeChange = 0.004 : de\Timer = 90000.0
-										
-										n\Idle = 1
-										n\State3 = 1.0
-									EndIf
-									;[End Block]
-								Case NPCType049, NPCType096, NPCType173, NPCType066, NPCType1499_1
-									;[Block]
-									; ~ Skip
-									;[End Block]
-								Default
-									;[Block]
-									n\IsDead = True
-									;[End Block]
-							End Select
-							Exit
-						EndIf
-					Next
-				EndIf
-			EndIf
-			
-			Select n\NPCType
-				Case NPCType106
-					;[Block]
-					If n\State3 > 0.0 Then
-						AnimateNPC(n, 259.0, 110.0, -0.1, False)
-						
-						n\State3 = n\State3 + fps\Factor[0]
-						If n\State3 > 1200.0 Then
-							If e\Sound2 <> 0 Then  FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-							PositionEntity(n\Collider, 0.0, 500.0, 0.0)
-							
-							n\Idle = 0
-							n\State = 70.0 * 60.0 * Rnd(10.0, 13.0)
-							n\State3 = 0.0
-						EndIf
-					EndIf
-					;[End Block]
-			End Select
-			If n\IgnorePlayer Then
-				If opt\ParticleAmount > 0 Then
-					If Rand(10 - (5 * (opt\ParticleAmount - 1))) = 1 Then
-						p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(n\OBJ, True) + (Rnd(-0.15, 0.15)), EntityY(n\OBJ, True) + Rnd(0.3, 0.9), EntityZ(n\OBJ) + (Rnd(-0.15, 0.15)), 0.06, -0.001)
-						p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-						RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
-					EndIf
-				EndIf
-				n\IgnorePlayer = False
-			EndIf
-		EndIf
-	Next
-End Function
-
 Function PlayerSees173%(n.NPCs)
 	If (Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink > 0.0 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0)) Then
 		Return(False)
@@ -6956,6 +6882,20 @@ Function CheckForNPCInFacility%(n.NPCs)
 	Return(True)
 End Function
 
+Function UpdateNPCParticles%(n.NPCs)
+	Local p.Particles
+	
+	If n\TeslaHit Then
+		If opt\ParticleAmount > 0 Then
+			If Rand(10 - (5 * (opt\ParticleAmount - 1))) = 1 Then
+				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(n\OBJ, True) + (Rnd(-0.15, 0.15)), EntityY(n\OBJ, True) + Rnd(0.3, 0.9), EntityZ(n\OBJ) + (Rnd(-0.15, 0.15)), 0.06, -0.001, 700.0)
+				p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
+				RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
+			EndIf
+		EndIf
+		n\TeslaHit = False
+	EndIf
+End Function
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If Abs(n\Frame - Frame) < 0.001 Then Return
 	

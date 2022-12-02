@@ -11,6 +11,8 @@ General:
 
 - Removed "Playmusic" console command.
 
+- Improved fluid step sounds.
+
 - Finally made the «Bright mode» similar to original game.
 
 - Converted .ini files to UTF-8 format.

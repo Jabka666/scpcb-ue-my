@@ -2667,22 +2667,15 @@ Function UpdateMoving%()
 	
 	If (Not me\Terminated) And (Not chs\NoClip) And (PlayerRoom\RoomTemplate\Name <> "dimension_106") And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
 		If me\Stamina < 5.0 Then
-			Temp = 0
-			If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-			If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
+			Temp3 = 0
+			If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp3 = 1
+			If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp3), 0))
 		ElseIf me\Stamina < 40.0
-			If (Not BreathCHN) Then
-				Temp = 0.0
-				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-				BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(3)))
-				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume * opt\MasterVolume)
-			Else
-				If (Not ChannelPlaying(BreathCHN)) Then
-					Temp = 0.0
-					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-					BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(3)))
-					ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume * opt\MasterVolume)		
-				EndIf
+			If (Not ChannelPlaying(BreathCHN)) Then
+				Temp3 = 0
+				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp3 = 1
+				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), Rand(3)))
+				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume * opt\MasterVolume)		
 			EndIf
 		EndIf
 	EndIf
@@ -2738,11 +2731,11 @@ Function UpdateMoving%()
 				
 				Temp = (me\Shake Mod 360.0)
 				
-				Local TempCHN%
+				Local TempCHN%, TempCHN2%
 				
 				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And (Not me\Terminated) Then
-					If CurrStepSFX = 0 Then
+					If CurrStepSFX = 0 Lor CurrStepSFX = 3 Then
 						Temp = GetStepSound(me\Collider)
 						
 						If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2" Then
@@ -2756,12 +2749,11 @@ Function UpdateMoving%()
 						Else
 							TempCHN = PlaySound_Strict(StepSFX(Temp, 1 - (Temp3 / 5), Rand(0, 7 - Temp3)))
 						EndIf
+						If CurrStepSFX = 3 Then TempCHN2 = PlaySound_Strict(Step2SFX[Rand(13, 14)])
 					ElseIf CurrStepSFX = 1
 						TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 					ElseIf CurrStepSFX = 2
 						TempCHN = PlaySound_Strict(Step2SFX[Rand(0, 2)])
-					ElseIf CurrStepSFX = 3
-						TempCHN = PlaySound_Strict(Step2SFX[Rand(13, 14)])
 					EndIf
 					If Sprint = 2.5 Then
 						me\SndVolume = Max(4.0, me\SndVolume)
@@ -2769,6 +2761,7 @@ Function UpdateMoving%()
 						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
 					EndIf
 					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+					ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
 				EndIf	
 			EndIf
 		Else
@@ -2874,14 +2867,13 @@ Function UpdateMoving%()
 				EndIf
 				
 				If me\DropSpeed < -0.07 Then 
-					If CurrStepSFX = 0 Then
+					If CurrStepSFX = 0 Lor CurrStepSFX = 3 Then
 						PlaySound_Strict(StepSFX(GetStepSound(me\Collider), 0, Rand(0, 7 - Temp3)))
+						If CurrStepSFX = 3 Then PlaySound_Strict(Step2SFX[Rand(13, 14)])
 					ElseIf CurrStepSFX = 1
 						PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
 					ElseIf CurrStepSFX = 2
 						PlaySound_Strict(Step2SFX[Rand(0, 2)])
-					ElseIf CurrStepSFX = 3
-						PlaySound_Strict(Step2SFX[Rand(13, 14)])
 					EndIf
 					me\SndVolume = Max(3.0, me\SndVolume)
 				EndIf
@@ -3081,7 +3073,6 @@ Function UpdateMouseLook%()
 				RotateEntity(me\Head, CurveAngle(90.0, EntityPitch(me\Head), 20.0), EntityYaw(me\Head), EntityRoll(me\Head))
 				RotateEntity(Camera, CurveAngle(EntityPitch(me\Head) + 40.0, EntityPitch(Camera), 40.0), EntityYaw(Camera), EntityRoll(Camera))
 			EndIf
-			
 			me\HeadDropSpeed = me\HeadDropSpeed - (0.002 * fps\Factor[0])
 		EndIf
 	EndIf
@@ -3104,22 +3095,14 @@ Function UpdateMouseLook%()
 				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
 			EndIf
 		EndIf
-		
 		If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
 		
 		If wi\GasMask <> 2 Then
+			; ~ TODO: Make more realistic
 			If ChannelPlaying(BreathCHN) Then
-				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 2.0), 100.0)
+				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.2, 1.0)), 100.0)
 			Else
-				If wi\GasMask = 3 Lor I_1499\Using = 2 Then
-					If me\CurrSpeed > 0.0 And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
-						wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * 0.2), 100.0)
-					Else
-						wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
-					EndIf
-				Else
-					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
-				EndIf
+				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 			EndIf
 			If wi\GasMaskFogTimer > 0.0 Then
 				If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
@@ -3128,7 +3111,7 @@ Function UpdateMouseLook%()
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
-		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.32))
+		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
 		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
 	EndIf
@@ -7097,6 +7080,7 @@ Function UpdateMenu%()
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load")) Then
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
+							KillSounds()
 							LoadGameQuick(CurrSave\Name)
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
@@ -7158,6 +7142,7 @@ Function UpdateMenu%()
 						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load")) Then
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
+							KillSounds()
 							LoadGameQuick(CurrSave\Name)
 							
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
@@ -8026,7 +8011,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(as)
 	as.AutoSave = New AutoSave
 	
-	ShouldPlay = 0
+	ShouldPlay = 66
 	
 	opt\CameraFogFar = 0.0
 	opt\CameraFogNear = 0.0
@@ -8841,10 +8826,10 @@ Function Update008%()
 								PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
 								ResetEntity(me\Collider)
 								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
+								r\NPC[0]\IsDead = True
 								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
 								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
 								ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
-								r\NPC[0]\State = 6.0
 								TeleportToRoom(r)
 								Exit
 							EndIf

@@ -271,17 +271,17 @@ Function KillSounds%()
 	
 	For e.Events = Each Events
 		If e\SoundCHN_IsStream Then
-			If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN)
+			If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN_IsStream = False
 		Else
 			StopChannel_Strict(e\SoundCHN)
 		EndIf
 		If e\SoundCHN2_IsStream Then
-			If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2)
+			If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2_IsStream = False
 		Else
 			StopChannel_Strict(e\SoundCHN2)
 		EndIf
 		If e\SoundCHN3_IsStream Then
-			If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3)
+			If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3_IsStream = False
 		Else
 			StopChannel_Strict(e\SoundCHN3)
 		EndIf
@@ -289,12 +289,12 @@ Function KillSounds%()
 	
 	For n.NPCs = Each NPCs
 		If n\SoundCHN_IsStream Then
-			If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
+			If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
 		Else
 			StopChannel_Strict(n\SoundCHN)
 		EndIf
 		If n\SoundCHN2_IsStream Then
-			If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
+			If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
 		Else
 			StopChannel_Strict(n\SoundCHN2)
 		EndIf
@@ -306,11 +306,11 @@ Function KillSounds%()
 	Next
 	
 	StopChannel_Strict(AmbientSFXCHN)
+	StopChannel_Strict(BreathCHN)
+	StopChannel_Strict(BreathGasRelaxedCHN)
 	StopChannel_Strict(VomitCHN)
 	StopChannel_Strict(CoughCHN)
 	StopChannel_Strict(SCRAMBLECHN)
-	
-	StopBreathSound()
 	
 	For i = 0 To 1
 		StopChannel_Strict(LowBatteryCHN[i])
