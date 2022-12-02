@@ -1993,7 +1993,7 @@ Function DeInitLoadingTextColor%(ltc.LoadingTextColor)
 	Delete(ltc)
 End Function
 
-Function RenderLoadingText%(x%, y%, AlignX% = False, AlignY% = False)
+Function RenderLoadingText%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 	Local ltc.LoadingTextColor
 	
 	For ltc.LoadingTextColor = Each LoadingTextColor
@@ -2014,7 +2014,7 @@ Function RenderLoadingText%(x%, y%, AlignX% = False, AlignY% = False)
 		EndIf
 		SetFont(fo\FontID[Font_Default])
 		Color(ltc\R, ltc\G, ltc\B)
-		Text(x, y, GetLocalString("menu", "anykey"), AlignX, AlignY)
+		Text(x, y, Txt, AlignX, AlignY)
 	Next
 End Function
 
@@ -2188,7 +2188,12 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			ResetInput()
 		Else
 			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
-			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), True, True)
+			If SelectedLoadingScreen\Title = "CWM" Then
+				StrTemp = GetLocalString("menu", "wakeup")
+			Else
+				StrTemp = GetLocalString("menu", "anykey")
+			EndIf
+			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), StrTemp, True, True)
 		EndIf
 		
 		RenderGamma()

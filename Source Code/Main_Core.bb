@@ -7905,7 +7905,7 @@ Function RenderCredits%()
 		Next
 	EndIf
 	
-	RenderLoadingText(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale))
+	RenderLoadingText(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"))
 	
 	Flip(True)
 	

@@ -9,7 +9,7 @@ General:
 - Added SCP-066 achievement.
 - Added new color effects depending on player zone.
 
-- Removed "Playmusic" console command.
+- Removed «Playmusic» console command.
 
 - Improved fluid step sounds.
 
@@ -40,6 +40,7 @@ Items:
 
 Menu:
 - Added degree symbol for FOV value.
+- Added «PRESS ANY KEY TO WAKE UP» string for CWM loading screen.
 
 - Tiny improvement for difficulties color.
 
