@@ -49,8 +49,14 @@ Function IniSectionExist%(File$, Section$, AllowBuffer% = True)
 	Return(IniSectionExist_(File, Section, AllowBuffer))
 End Function
 
-Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "")
-	Return(IniGetBufferString(lang\LanguagePath + File, Name, Parameter, IniGetBufferString(File, Name, Parameter, DefaultValue)))
+Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", CheckRootFile% = True)
+	Local DefaultValue1$
+	If CheckRootFile Then
+		DefaultValue1 = IniGetBufferString(File, Name, Parameter, DefaultValue)
+	Else 
+		DefaultValue1 = DefaultValue
+	EndIf
+	Return(IniGetBufferString(lang\LanguagePath + File, Name, Parameter, DefaultValue1))
 End Function
 
 Function GetLocalString$(Section$, Parameter$)

@@ -35,12 +35,16 @@ End Function
 
 Function SetLanguage%(Language$)
 	lang\CurrentLanguage = Language
-	lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
-	IniWriteBuffer(lang\LanguagePath + LanguageFile)
-	IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
-	IniWriteBuffer(lang\LanguagePath + AchievementsFile)
-	IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
-	IniWriteBuffer(lang\LanguagePath + SCP294File)
+	If lang\CurrentLanguage = "en-US" Then
+		lang\LanguagePath = ""
+	Else
+		lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
+		IniWriteBuffer(lang\LanguagePath + LanguageFile)
+		IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
+		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
+		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
+		IniWriteBuffer(lang\LanguagePath + SCP294File)
+	EndIf
 	opt\Language = Language
 End Function
 

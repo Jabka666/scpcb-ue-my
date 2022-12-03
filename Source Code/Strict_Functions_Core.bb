@@ -114,7 +114,7 @@ Function LoadSound_Strict%(File$)
 	snd\ReleaseTime = 0
 	If opt\EnableSubtitles Then
 		; ~ Check if the sound has subtitles
-		If (IniSectionExist(lang\LanguagePath + SubtitlesFile, File)) Lor (IniSectionExist(SubtitlesFile, File)) Then snd\HasSubtitles = True
+		If IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, File) Then snd\HasSubtitles = True
 	EndIf
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
