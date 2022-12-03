@@ -8361,7 +8361,7 @@ Function Update294%()
 				EndIf
 				
 				If Drink <> "Null" Then
-					StrTemp = GetFileLocalString(SCP294File, Drink, "Dispense Sound")
+					StrTemp = GetFileLocalString(SCP294File, Drink, "Dispense Sound", "", False)
 					If StrTemp = "" Then
 						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
 					Else
@@ -8393,12 +8393,12 @@ Function Update294%()
 						EndIf
 					EndIf
 					
-					If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Explosion")) Then 
+					If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Explosion", "", False)) Then 
 						me\ExplosionTimer = 135.0
-						msg\DeathMsg = GetFileLocalString(SCP294File, Drink, "Death Message")
+						msg\DeathMsg = GetFileLocalString(SCP294File, Drink, "Death Message", "", False)
 					EndIf
 					
-					StrTemp = GetFileLocalString(SCP294File, Drink, "Color")
+					StrTemp = GetFileLocalString(SCP294File, Drink, "Color", "", False)
 					
 					Sep1 = Instr(StrTemp, ", ", 1)
 					Sep2 = Instr(StrTemp, ", ", Sep1 + 1)
@@ -8406,8 +8406,8 @@ Function Update294%()
 					G = Trim(Mid(StrTemp, Sep1 + 1, Sep2 - Sep1 - 1))
 					B = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
 					
-					Alpha = Float(GetFileLocalString(SCP294File, Drink, "Alpha", 1.0))
-					Glow = GetFileLocalString(SCP294File, Drink, "Glow")
+					Alpha = Float(GetFileLocalString(SCP294File, Drink, "Alpha", 1.0, False))
+					Glow = GetFileLocalString(SCP294File, Drink, "Glow", "", False)
 					If Glow Then Alpha = -Alpha
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
