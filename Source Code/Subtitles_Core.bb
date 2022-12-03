@@ -53,8 +53,8 @@ Function ShowSubtitles%(Name$)
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
 	Local sub.Subtitles, CurrSub.Subtitles
-	Local Person% = Int(GetFileLocalString(SubtitlesFile, Name, "Person"))
-	Local LinesAmount% = Int(GetFileLocalString(SubtitlesFile, Name, "LinesAmount"))
+	Local Person% = Int(GetFileLocalString(SubtitlesFile, Name, "Person", "", False))
+	Local LinesAmount% = Int(GetFileLocalString(SubtitlesFile, Name, "LinesAmount", "", False))
 	Local SubID%, i%
 	
 	Select Person
@@ -88,8 +88,8 @@ Function ShowSubtitles%(Name$)
 		Else
 			sub.Subtitles = CurrSub.Subtitles
 		EndIf
-		sub\Txt[SubID] = GetFileLocalString(SubtitlesFile, Name, "Txt" + i)
-		sub\Timer[SubID] = 70.0 * Float(GetFileLocalString(SubtitlesFile, Name, "Timer" + i))
+		sub\Txt[SubID] = GetFileLocalString(SubtitlesFile, Name, "Txt" + i, "", False)
+		sub\Timer[SubID] = 70.0 * Float(GetFileLocalString(SubtitlesFile, Name, "Timer" + i, "", False))
 	Next
 	
 	CatchErrors("ShowSubtitles")
