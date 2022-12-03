@@ -51,6 +51,7 @@ End Function
 
 Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", CheckRootFile% = True)
 	Local DefaultValue1$
+	
 	If CheckRootFile Then
 		DefaultValue1 = IniGetBufferString(File, Name, Parameter, DefaultValue)
 	Else 

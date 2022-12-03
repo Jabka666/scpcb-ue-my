@@ -73,6 +73,7 @@ End Function
 
 Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, Texture$, room.Rooms)
 	Local p.Props, p2.Props
+	Local Tex%
 	
 	p.Props = New Props
 	For p2.Props = Each Props
@@ -98,7 +99,11 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 		EntityType(p\OBJ, 0)
 	EndIf
 	EntityFX(p\OBJ, FX)
-	If Texture <> "" Then EntityTexture(p\OBJ, Texture)
+	If Texture <> "" Then
+		Tex = LoadTexture_Strict(Texture)
+		EntityTexture(p\OBJ, Tex)
+		DeleteSingleTextureEntryFromCache(Tex)
+	EndIf
 	EntityPickMode(p\OBJ, 2)
 	
 	Return(p)
