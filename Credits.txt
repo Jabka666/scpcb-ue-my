@@ -121,7 +121,7 @@
 		EpicDasherFR
 
 *Development Helpers
-		
+
 		Shaun Gaylard ("ENDSHN")
 		Alexander Deshko ("CmElektrik") 
 		neptuneprogamertv
@@ -152,7 +152,7 @@
 by "ZiYueCommentary"
 
 		Russian localization,
-by "CreatorMasters" and "Jabka"
+by "CreatorMasters", "Trill Team" and Nikita Sidorov ("Jabka")
 
 		French localization,
 by "EpicDasherFR"
@@ -217,7 +217,7 @@ by "Dr. Gears"
 by "Lt Masipag"
 
 		SCP-173 is based on "SCP-173 - The Sculpture",
-by "Lt Masipag"
+by "Moto42"
 
 		SCP-205 is based on "SCP-205 - Shadow Lamps", 
 by "Sorts"
@@ -268,7 +268,7 @@ by "Adam Smascher"
 by "Enma Ai"
 
 		SCP-970 is based on "SCP-970 - The Recursive Room",
-by "Freudian"	
+by "Freudian"
 
 		SCP-1025 is based on "SCP-1025 - Encyclopedia of Diseases",
 by "Lasergoose"
@@ -291,11 +291,11 @@ by "Skara Brae"
 /
 	A big thank you to everyone who's supported the project during these years
 	- it would have	never gotten to where it is now without your help.
-	
+
 	SCP-CB has been a big collaborative effort with dozens (maybe even hundreds?)
 	of people creating material and giving ideas and feedback for the game, and
 	I'm sure I've forgotten to mention some of you here. If you've contributed
 	something to the game and would like your name to be added here, drop
 	me a message on the Undertow Games forum or contact@undertowgames.com!
-	
+
 	- Joonas Rikkonen ("Regalis")
