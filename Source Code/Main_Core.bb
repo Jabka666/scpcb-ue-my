@@ -2680,14 +2680,7 @@ Function UpdateMoving%()
 		EndIf
 	EndIf
 	
-	For i = 0 To MaxItemAmount - 1
-		If Inventory(i) <> Null Then
-			If Inventory(i)\ItemTemplate\TempName = "finevest" Then
-				me\Stamina = Min(me\Stamina, 60.0)
-				Exit
-			EndIf
-		EndIf
-	Next
+	If wi\BallisticVest = 2 Then me\Stamina = Min(me\Stamina, 60.0)
 	
 	If I_714\Using Then
 		me\Stamina = Min(me\Stamina, 10.0)
