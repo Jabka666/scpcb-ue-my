@@ -1132,13 +1132,13 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										
 										For i = 0 To 3
 											d = CopyEntity(fr\DetailMesh[2])
-											RotateEntity(d, 0.0, 90.0 * i + Rnd(-20.0, 20.0), 0.0)
+											RotateEntity(d, 0.0, (90.0 * i) + Rnd(-20.0, 20.0), 0.0)
 											EntityParent(d, Detail_Entity)
 											EntityFX(d, 1)
 										Next
 										
 										ScaleEntity(Detail_Entity, Tempf2 * 1.1, Tempf2, Tempf2 * 1.1, True)
-										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
 										;[End Block]
 									Case 6 ; ~ Add a stump
@@ -1146,13 +1146,13 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										Detail_Entity = CopyEntity(fr\DetailMesh[2])
 										Tempf2 = Rnd(0.1, 0.12)
 										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
-										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[1])
 										Tempf2 = Rnd(0.01, 0.012)
-										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										EntityFX(Detail_Entity, 1)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
 										;[End Block]
@@ -1322,8 +1322,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 											EntityFX(d, 1)
 										Next
 										ScaleEntity(Detail_Entity, Tempf2 * 1.1, Tempf2, Tempf2 * 1.1, True)
-										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
-										
+										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
 										;[End Block]
 									Case 6 ; ~ Add a stump
@@ -1331,13 +1330,13 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										Detail_Entity = CopyEntity(fr\DetailMesh[2])
 										Tempf2 = Rnd(0.1, 0.12)
 										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
-										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[1])
 										Tempf2 = Rnd(0.01, 0.012)
-										PositionEntity(Detail_Entity, lX * Tempf4 - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
 										EntityFX(Detail_Entity, 1)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
 										;[End Block]
