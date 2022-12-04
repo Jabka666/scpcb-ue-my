@@ -7779,7 +7779,7 @@ End Type
 
 Function InitCredits%()
 	Local cl.CreditsLine
-	Local File% = OpenFile("Credits.txt")
+	Local File% = OpenFile_Strict("Credits.txt")
 	Local l$
 	
 	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 21)

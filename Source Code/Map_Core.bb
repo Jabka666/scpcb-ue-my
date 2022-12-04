@@ -299,7 +299,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	ClsColor(0, 0, 0)
 	
 	; ~ Read the file
-	Local f% = ReadFile(File)
+	Local f% = ReadFile_Strict(File)
 	Local i%, j%, k%, x#, y#, z#, Yaw#, Pitch#, Roll#
 	Local Vertex%
 	Local Temp1i%, Temp2i%, Temp3i%
@@ -310,7 +310,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	
 	For i = 0 To 3 ; ~ Reattempt up to 3 times
 		If (Not f) Then
-			f = ReadFile(File)
+			f = ReadFile_Strict(File)
 		Else
 			Exit
 		EndIf
@@ -1498,7 +1498,7 @@ Function LoadRoomTemplates%(File$)
 	Local TemporaryString$, i%
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
-	Local f% = OpenFile(File)
+	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
