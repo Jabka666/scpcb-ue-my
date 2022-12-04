@@ -11,16 +11,14 @@ Type TextureInCache
 	Field TexDeleteType%
 End Type
 
-Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
+Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
 	Local tic.TextureInCache
 	Local CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
 		If tic\TexName <> "CreateTexture" Then
 			If StripPath(TexName) = tic\TexName Then
-				If tic\TexDeleteType < DeleteType Then
-					tic\TexDeleteType = DeleteType
-				EndIf
+				If tic\TexDeleteType < DeleteType Then tic\TexDeleteType = DeleteType
 				Return(tic\Tex)
 			EndIf
 		EndIf
@@ -30,13 +28,11 @@ Function LoadTextureCheckingIfInCache(TexName$, TexFlags% = 1, DeleteType% = Del
 	tic.TextureInCache = New TextureInCache
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
-	If (Not tic\Tex) Then
-		tic\Tex = LoadTexture_Cache(CurrPath, TexFlags)
-	EndIf
+	If (Not tic\Tex) Then tic\Tex = LoadTexture(CurrPath, TexFlags)
 	Return(tic\Tex)
 End Function
 
-Function DeleteTextureEntriesFromCache(DeleteType%)
+Function DeleteTextureEntriesFromCache%(DeleteType%)
 	Local tic.TextureInCache
 	
 	For tic.TextureInCache = Each TextureInCache
@@ -47,7 +43,7 @@ Function DeleteTextureEntriesFromCache(DeleteType%)
 	Next
 End Function
 
-Function DeleteSingleTextureEntryFromCache(Texture%)
+Function DeleteSingleTextureEntryFromCache%(Texture%)
 	Local tic.TextureInCache
 	
 	For tic.TextureInCache = Each TextureInCache
@@ -58,7 +54,7 @@ Function DeleteSingleTextureEntryFromCache(Texture%)
 	Next
 End Function
 
-Function CreateTextureUsingCacheSystem(Width%, Height%, TexFlags% = 1, Frames% = 1, DeleteType% = DeleteAllTextures)
+Function CreateTextureUsingCacheSystem%(Width%, Height%, TexFlags% = 1, Frames% = 1, DeleteType% = DeleteAllTextures)
 	Local tic.TextureInCache
 	
 	tic.TextureInCache = New TextureInCache
@@ -96,7 +92,7 @@ End Function
 ; ~ This is supposed to be the only texture that will be outside the TextureCache system
 Global MissingTexture%
 
-Function LoadMissingTexture()
+Function LoadMissingTexture%()
 	MissingTexture = CreateTexture(2, 2, 1)
 	TextureBlend(MissingTexture, 3)
 	SetBuffer(TextureBuffer(MissingTexture))

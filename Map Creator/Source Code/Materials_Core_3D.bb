@@ -6,7 +6,7 @@ Type Materials
 	Field UseMask%
 End Type
 
-Function LoadMaterials(File$)
+Function LoadMaterials%(File$)
 	CatchErrors("Uncaught (LoadMaterials")
 	
 	Local TemporaryString$

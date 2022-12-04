@@ -1,4 +1,4 @@
-Include "Source Code\Strict_Loads_Core_3D.bb"
+Include "Source Code\Strict_Functions_Core_3D.bb"
 Include "Source Code\INI_Core_3D.bb"
 Include "Source Code\Math_Core_3D.bb"
 Include "Source Code\Materials_Core_3D.bb"
@@ -97,7 +97,7 @@ Global o.Objects = New Objects
 
 ChangeDir("..")
 
-Function LoadEntities()
+Function LoadEntities%()
 	Local i%
 
 	; ~ [BUTTONS]
@@ -185,34 +185,38 @@ MXS = 180.0
 
 Const Period# = 1000.0 / 60.0
 
-Global PrevTime% = MilliSecs()
+Global PrevTime% = MilliSecs2()
 Global ElapsedTime#
 
-Function CatchErrors(Location$)
-	InitErrorMsgs(7, True)
-	SetErrorMsg(0, "An error occured in SCP:CB Ultimate Edition Map Creator" + ". Engine version: " + SystemProperty("blitzversion") + Chr(10))
-	SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
-	SetErrorMsg(2, "CPU: " + GetEnv("PROCESSOR_IDENTIFIER") + " (Arch: " + GetEnv("PROCESSOR_ARCHITECTURE") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)" + Chr(10))
-	SetErrorMsg(3, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)" + Chr(10))
-	SetErrorMsg(4, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-	SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
-	SetErrorMsg(6, "Error located in: " + Location + Chr(10) + "Caught exception: _CaughtError_" + Chr(10) + Chr(10) + "Please take a screenshot of this error and send it to us!") 
+InitErrorMsgs(9, True)
+SetErrorMsg(0, "An error occured in SCP:CB Ultimate Edition Map Creator" + ". Engine version: " + SystemProperty("blitzversion") + Chr(10))
+SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
+SetErrorMsg(2, "CPU: " + GetEnv("PROCESSOR_IDENTIFIER") + " (Arch: " + GetEnv("PROCESSOR_ARCHITECTURE") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)" + Chr(10))
+SetErrorMsg(3, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)" + Chr(10))
+SetErrorMsg(4, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
+SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
+
+SetErrorMsg(7, "Caught exception: _CaughtError_" + Chr(10))
+SetErrorMsg(8, Chr(10) + "Please take a screenshot of this error and send it to us!") 
+
+Function CatchErrors%(Location$)
+	SetErrorMsg(6, "Error located in: " + Location)
 End Function
 
 Repeat
 	Cls()
 	
 	If opt\ShowFPS Then
-		If CheckFPS < MilliSecs() Then
+		If CheckFPS < MilliSecs2() Then
 			FPS = ElapsedLoops
 			ElapsedLoops = 0
-			CheckFPS = MilliSecs() + 1000
+			CheckFPS = MilliSecs2() + 1000
 		EndIf
 		ElapsedLoops = ElapsedLoops + 1
 	EndIf
 	
-	ElapsedTime = ElapsedTime + Float(MilliSecs() - PrevTime) / Float(Period)
-	PrevTime = MilliSecs()
+	ElapsedTime = ElapsedTime + Float(MilliSecs2() - PrevTime) / Float(Period)
+	PrevTime = MilliSecs2()
 	
 	Local f%
 	
@@ -234,7 +238,7 @@ Repeat
 		DeleteFile("CONFIG_OPTINIT.SI")
 	EndIf
 	
-	Local x%, y%
+	Local x%, y%, i%
 	Local r.Rooms, rt.RoomTemplates
 	Local Name$, Angle%
 	Local eName$, eProb#
@@ -446,15 +450,15 @@ Repeat
 			PickedRoom = Null
 			If CurrMapGrid <> 1 Then
 				If EntityDistanceSquared(Camera, r\OBJ) > PowTwo(opt\CamRange) Lor (Not EntityInView(GetChild(r\OBJ, 2), Camera))
-					HideEntity(r\OBJ)
+					If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 				Else
-					ShowEntity(r\OBJ)
+					If EntityHidden(r\OBJ) Then ShowEntity(r\OBJ)
 				EndIf
 			Else
 				If EntityDistanceSquared(Camera, r\OBJ) > PowTwo(opt\CamRange) Lor (Not EntityInView(r\OBJ, Camera))
-					HideEntity(r\OBJ)
+					If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 				Else
-					ShowEntity(r\OBJ)
+					If EntityHidden(r\OBJ) Then ShowEntity(r\OBJ)
 				EndIf
 			EndIf
 		Next
@@ -490,7 +494,7 @@ Repeat
 					If CurrMapGrid <> 1 Then
 						If PickedEntity() = GetChild(r\OBJ, 2)
 							SetBuffer(TextureBuffer(r\OverlayTex))
-							ClsColor(70, 70, 20 + (Float(Sin(MilliSecs() / 4.0)) * 20))
+							ClsColor(70, 70, 20 + (Float(Sin(MilliSecs2() / 4.0)) * 20))
 							Cls()
 							SetBuffer(BackBuffer())
 							PickedRoom = r
@@ -500,7 +504,7 @@ Repeat
 					Else
 						If PickedEntity() = r\OBJ
 							SetBuffer(TextureBuffer(r\OverlayTex))
-							ClsColor(60, 60, 50 - (Float(Sin(MilliSecs() / 4.0)) * 50))
+							ClsColor(60, 60, 50 - (Float(Sin(MilliSecs2() / 4.0)) * 50))
 							Cls()
 							SetBuffer(BackBuffer())
 							PickedRoom = r
@@ -615,7 +619,7 @@ Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 	Return(rt)
 End Function
 
-Function LoadRoomTemplates(File$)
+Function LoadRoomTemplates%(File$)
 	CatchErrors("Uncaught (LoadRoomTemplates)")
 	
 	Local TemporaryString$, i%
@@ -670,7 +674,7 @@ Function LoadRoomTemplates(File$)
 	CatchErrors("LoadRoomTemplates")
 End Function
 
-Function LoadRoomTemplateMeshes()
+Function LoadRoomTemplateMeshes%()
 	CatchErrors("Uncaught (LoadRoomTemplatesMeshes)")
 	
 	Local rt.RoomTemplates, i%
@@ -858,7 +862,7 @@ Function CheckForPropModel%(File$)
 	End Select
 End Function
 
-Function CreatePropOBJ%(File$)
+Function CreateProp%(File$)
 	Local p.Props
 	
 	; ~ A hacky way to use .b3d format
@@ -958,7 +962,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	CatchErrors("CreateRoom")
 End Function
 
-Function CreateOverLapBox(r.Rooms)
+Function CreateOverLapBox%(r.Rooms)
 	Local s%
 	Local SizeAdd# = 0.02
 	
@@ -1006,7 +1010,7 @@ Function CreateOverLapBox(r.Rooms)
 	EntityAlpha(r\OverlapCheckBox, 0.5)
 End Function
 
-Function LoadRoomMesh(rt.RoomTemplates)
+Function LoadRoomMesh%(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is RoomMesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
@@ -1020,7 +1024,7 @@ Function LoadRoomMesh(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
-Function LoadRMesh(File$, rt.RoomTemplates)
+Function LoadRMesh%(File$, rt.RoomTemplates)
 	CatchErrors("Uncaught (LoadRMesh)")
 	
 	ClsColor(0, 0, 0)
@@ -1222,6 +1226,8 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 		Next
 	EndIf
 	
+	Local Model%
+	
 	Count = ReadInt(f) ; ~ Point entities
 	For i = 1 To Count
 		Temp1s = ReadString(f)
@@ -1269,22 +1275,40 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 			Case "model"
 				;[Block]
 				File = ReadString(f)
-				If File <> "" Then
-					Local Model% = CreatePropOBJ("GFX\map\Props\" + File)
-					
-					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-					PositionEntity(Model, Temp1, Temp2, Temp3)
-					
-					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-					RotateEntity(Model, Temp1, Temp2, Temp3)
-					
-					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-					ScaleEntity(Model, Temp1, Temp2, Temp3)
-					
-					EntityParent(Model, Opaque)
-				Else
-					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-				EndIf
+				
+				Model = CreateProp("GFX\map\Props\" + File)
+				
+				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
+				PositionEntity(Model, Temp1, Temp2, Temp3)
+				
+				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
+				RotateEntity(Model, Temp1, Temp2, Temp3)
+				
+				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
+				ScaleEntity(Model, Temp1, Temp2, Temp3)
+				
+				EntityParent(Model, Opaque)
+				;[End Block]
+			Case "mesh"
+				;[Block]
+				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
+				
+				File = ReadString(f)
+				; ~ A hacky way to use .b3d format
+				Model = CreateProp("GFX\map\Props\" + File)
+				
+				PositionEntity(Model, Temp1, Temp2, Temp3)
+				
+				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
+				RotateEntity(Model, Temp1, Temp2, Temp3)
+				
+				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
+				ScaleEntity(Model, Temp1, Temp2, Temp3)
+				
+				EntityParent(Model, Opaque)
+				ReadByte(f)
+				ReadInt(f)
+				ReadString(f)
 				;[End Block]
 		End Select
 	Next
@@ -1322,7 +1346,7 @@ Function LoadRMesh(File$, rt.RoomTemplates)
 	CatchErrors("LoadRMesh")
 End Function
 
-Function LoadTerrain(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
+Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
 	If (Not HeightMap) Then RuntimeError("HeightMap image " + HeightMap + " does not exist.")
 	

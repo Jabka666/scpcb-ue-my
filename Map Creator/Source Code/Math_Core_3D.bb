@@ -24,7 +24,7 @@ Global Mesh_MinX#, Mesh_MinY#, Mesh_MinZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
 Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
 
-Function GetMeshExtents(Mesh%)
+Function GetMeshExtents%(Mesh%)
 	Local su%, s%, i%, x#, y#, z#
 	Local MinX# = Infinity
 	Local MinY# = Infinity

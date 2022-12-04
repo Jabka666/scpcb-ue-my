@@ -15,6 +15,6 @@
  AbsPath="\Source Code\Main_Core_3D.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Materials_Core_3D.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Math_Core_3D.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
- AbsPath="\Source Code\Strict_Loads_Core_3D.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
+ AbsPath="\Source Code\Strict_Functions_Core_3D.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Texture_Cache_Core_3D.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
 </Files>

@@ -5,7 +5,7 @@
 ; ~ Likely to cause more crashes than 'clean' CB, as this prevents anyone from loading any assets that don't exist, regardless if they are ever used
 ; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists.
 
-Function LoadMesh_Strict(File$, Parent% = 0)
+Function LoadMesh_Strict%(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
 	Local TexAlpha% = 0
 	
@@ -61,7 +61,7 @@ Function LoadMesh_Strict(File$, Parent% = 0)
 End Function
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
-Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
+Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
 	If (Not Tmp) Then
@@ -72,7 +72,7 @@ Function LoadTexture_Strict(File$, Flags% = 1, TexDeleteType% = DeleteMapTexture
 	Return(Tmp) 
 End Function
 
-Function LoadFont_Strict(File$ = "Tahoma", Height% = 13)
+Function LoadFont_Strict%(File$ = "Tahoma", Height% = 13)
 	Local Tmp%
 	
 	If (Not Tmp) Then
@@ -83,7 +83,7 @@ Function LoadFont_Strict(File$ = "Tahoma", Height% = 13)
 	Return(Tmp)
 End Function
 
-Function LoadImage_Strict(File$)
+Function LoadImage_Strict%(File$)
 	Local Tmp%
 	
 	If (Not Tmp) Then
