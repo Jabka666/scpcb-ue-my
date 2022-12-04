@@ -1921,45 +1921,37 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				
-				If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
+				For i = 0 To 1
 					For e2.Events = Each Events
-						If e2\EventID = e_cont2_008 Then
-							If e2\EventState = 2.0 Then
-								If e\room\RoomDoors[0]\Locked Then
-									TurnCheckpointMonitorsOff(False)
-									e\room\RoomDoors[0]\Locked = 0
-									e\room\RoomDoors[1]\Locked = 0
-								EndIf
-							Else
+						If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
+							If e2\EventID = e_cont2_008 Then
 								If e\room\Dist < 12.0 Then
-									UpdateCheckpointMonitors(False)
-									e\room\RoomDoors[0]\Locked = 1
-									e\room\RoomDoors[1]\Locked = 1
+									If e2\EventState = 2.0 Then
+										TurnCheckpointMonitorsOff(False)
+										e\room\RoomDoors[i]\Locked = 0
+									Else
+										UpdateCheckpointMonitors(False)
+										e\room\RoomDoors[i]\Locked = 1
+									EndIf
+									Exit
 								EndIf
 							EndIf
-							Exit
-						EndIf
-					Next
-				Else
-					For e2.Events = Each Events
-						If e2\EventID = e_room2_sl Then
-							If e2\EventState3 = 0.0 Then
+						Else
+							If e2\EventID = e_room2_sl Then
 								If e\room\Dist < 12.0 Then
-									TurnCheckpointMonitorsOff()
-									e\room\RoomDoors[0]\Locked = 0
-									e\room\RoomDoors[1]\Locked = 0
-								EndIf
-							Else
-								If e\room\Dist < 12.0 Then
-									UpdateCheckpointMonitors()
-									e\room\RoomDoors[0]\Locked = 1
-									e\room\RoomDoors[1]\Locked = 1
+									If e2\EventState3 = 0.0 Then
+										TurnCheckpointMonitorsOff()
+										e\room\RoomDoors[i]\Locked = 0
+									Else
+										UpdateCheckpointMonitors()
+										e\room\RoomDoors[i]\Locked = 1
+									EndIf
+									Exit
 								EndIf
 							EndIf
-							Exit
 						EndIf
 					Next
-				EndIf
+				Next
 				
 				If e\room\RoomDoors[0]\Open <> e\EventState Then
 					If (Not e\Sound) Then LoadEventSound(e, "SFX\Door\DoorCheckpoint.ogg")
