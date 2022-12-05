@@ -3312,9 +3312,7 @@ Function UpdateSecurityCams%()
 					If (Not EntityHidden(sc\Cam)) Then HideEntity(sc\Cam)
 				EndIf
 				
-				If sc\room <> Null Then
-					If sc\room\RoomTemplate\Name = "room2_sl" Then sc\CoffinEffect = 0
-				EndIf
+				If sc\room\RoomTemplate\Name = "room2_sl" Then sc\CoffinEffect = 0
 				
 				If Close Lor sc = sc_I\CoffinCam Then 
 					If sc\FollowPlayer Then
@@ -7699,13 +7697,13 @@ Function HideRoomsNoColl%(room.Rooms)
 		
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room Then
-				HideEntity(sc\BaseOBJ)
-				HideEntity(sc\CameraOBJ)
 				If sc\Screen Then
 					HideEntity(sc\MonitorOBJ)
 					HideEntity(sc\ScrOverlay)
 					HideEntity(sc\ScrOBJ)
 				EndIf
+				HideEntity(sc\CameraOBJ)
+				HideEntity(sc\BaseOBJ)
 			EndIf
 		Next
 		
@@ -7746,13 +7744,13 @@ Function ShowRoomsNoColl%(room.Rooms)
 		
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room Then
-				ShowEntity(sc\BaseOBJ)
-				ShowEntity(sc\CameraOBJ)
-				If sc\Screen Then
+				If sc\Screen
 					ShowEntity(sc\MonitorOBJ)
 					ShowEntity(sc\ScrOverlay)
 					ShowEntity(sc\ScrOBJ)
 				EndIf
+				ShowEntity(sc\CameraOBJ)
+				ShowEntity(sc\BaseOBJ)
 			EndIf
 		Next
 		
@@ -7832,13 +7830,13 @@ Function HideRoomsColl%(room.Rooms)
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room Then
 				If (Not EntityHidden(sc\BaseOBJ)) Then
-					HideEntity(sc\BaseOBJ)
-					HideEntity(sc\CameraOBJ)
 					If sc\Screen Then
 						HideEntity(sc\MonitorOBJ)
 						HideEntity(sc\ScrOverlay)
 						HideEntity(sc\ScrOBJ)
 					EndIf
+					HideEntity(sc\CameraOBJ)
+					HideEntity(sc\BaseOBJ)
 				EndIf
 			EndIf
 		Next
@@ -7895,7 +7893,7 @@ Function ShowRoomsColl%(room.Rooms)
 					EntityAlpha(d\OBJ, 1.0)
 					If d\OBJ2 <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\OBJ2, 1.0)
 					For j = 0 To 1
-						If d\Buttons[j] <> 0 Then EntityAlpha(d\Buttons[j], 1.0)
+						If d\Buttons[j] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[j], 1.0)
 						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
 					Next
 					EntityAlpha(d\FrameOBJ, 1.0)
@@ -7906,14 +7904,16 @@ Function ShowRoomsColl%(room.Rooms)
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room Then
 				If EntityHidden(sc\BaseOBJ) Then
-					ShowEntity(sc\BaseOBJ)
-					ShowEntity(sc\CameraOBJ)
 					If sc\Screen Then
 						ShowEntity(sc\MonitorOBJ)
 						ShowEntity(sc\ScrOverlay)
 						ShowEntity(sc\ScrOBJ)
 					EndIf
+					ShowEntity(sc\CameraOBJ)
+					ShowEntity(sc\BaseOBJ)
 				EndIf
+				CreateMsg(EntityHidden(sc\ScrOverlay))
+				CreateHintMsg(EntityHidden(sc\ScrOBJ))
 			EndIf
 		Next
 		
