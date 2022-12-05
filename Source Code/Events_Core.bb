@@ -2393,8 +2393,6 @@ Function UpdateEvents%()
 						If EntityDistanceSquared(me\Collider, e\room\OBJ) < 2.25 Then
 							PlaySound_Strict(RustleSFX[Rand(0, 5)])
 							CreateNPC(NPCType372, 0.0, 0.0, 0.0)
-							e\EventState = 1.0
-							
 							RemoveEvent(e)
 						EndIf					
 					EndIf

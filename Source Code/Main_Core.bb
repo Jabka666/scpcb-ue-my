@@ -2962,7 +2962,7 @@ Function UpdateMoving%()
 	CatchErrors("UpdateMoving")
 End Function
 
-Function UpdateMouseInput()
+Function UpdateMouseInput%()
 	If Input_ResetTime > 0.0 Then
 		Input_ResetTime = Max(Input_ResetTime - fps\Factor[0], 0.0)
 	Else
