@@ -1923,9 +1923,9 @@ Function UpdateEvents%()
 				
 				For i = 0 To 1
 					For e2.Events = Each Events
-						If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
-							If e2\EventID = e_cont2_008 Then
-								If e\room\Dist < 12.0 Then
+						If e\room\Dist < 12.0 Then
+							If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
+								If e2\EventID = e_cont2_008 Then
 									If e2\EventState = 2.0 Then
 										TurnCheckpointMonitorsOff(False)
 										e\room\RoomDoors[i]\Locked = 0
@@ -1935,10 +1935,8 @@ Function UpdateEvents%()
 									EndIf
 									Exit
 								EndIf
-							EndIf
-						Else
-							If e2\EventID = e_room2_sl Then
-								If e\room\Dist < 12.0 Then
+							Else
+								If e2\EventID = e_room2_sl Then
 									If e2\EventState3 = 0.0 Then
 										TurnCheckpointMonitorsOff()
 										e\room\RoomDoors[i]\Locked = 0
