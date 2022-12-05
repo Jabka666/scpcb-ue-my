@@ -1921,44 +1921,46 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				
-				If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
-					For e2.Events = Each Events
-						If e2\EventID = e_cont2_008 Then
-							If e2\EventState = 2.0 Then
-								If e\room\RoomDoors[0]\Locked Then
-									TurnCheckpointMonitorsOff(False)
-									e\room\RoomDoors[0]\Locked = 0
-									e\room\RoomDoors[1]\Locked = 0
-								EndIf
-							Else
-								If e\room\Dist < 12.0 Then
+				If e\room\Dist < 12.0 Then
+					If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
+						For e2.Events = Each Events
+							If e2\EventID = e_cont2_008 Then
+								If e2\EventState = 2.0 Then
+									If e\room\RoomDoors[0]\Locked = 1 Then
+										TurnCheckpointMonitorsOff(False)
+										For i = 0 To 1
+											e\room\RoomDoors[i]\Locked = 0
+										Next
+									EndIf
+								Else
 									UpdateCheckpointMonitors(False)
-									e\room\RoomDoors[0]\Locked = 1
-									e\room\RoomDoors[1]\Locked = 1
+									For i = 0 To 1
+										e\room\RoomDoors[i]\Locked = 1
+									Next
 								EndIf
+								Exit
 							EndIf
-							Exit
-						EndIf
-					Next
-				Else
-					For e2.Events = Each Events
-						If e2\EventID = e_room2_sl Then
-							If e2\EventState3 = 0.0 Then
-								If e\room\Dist < 12.0 Then
-									TurnCheckpointMonitorsOff()
-									e\room\RoomDoors[0]\Locked = 0
-									e\room\RoomDoors[1]\Locked = 0
-								EndIf
-							Else
-								If e\room\Dist < 12.0 Then
+						Next
+					Else
+						For e2.Events = Each Events
+							If e2\EventID = e_room2_sl Then
+								If e2\EventState3 = 0.0 Then
+									If e\room\RoomDoors[0]\Locked = 1 Then
+										TurnCheckpointMonitorsOff()
+										For i = 0 To 1
+											e\room\RoomDoors[i]\Locked = 0
+										Next
+									EndIf
+								Else
 									UpdateCheckpointMonitors()
-									e\room\RoomDoors[0]\Locked = 1
-									e\room\RoomDoors[1]\Locked = 1
+									For i = 0 To 1
+										e\room\RoomDoors[i]\Locked = 1
+									Next
 								EndIf
+								Exit
 							EndIf
-							Exit
-						EndIf
-					Next
+						Next
+					EndIf
 				EndIf
 				
 				If e\room\RoomDoors[0]\Open <> e\EventState Then
@@ -2040,7 +2042,7 @@ Function UpdateEvents%()
 							Else
 								e\room\NPC[0]\GravityMult = 1.0
 							EndIf
-							If EntityY(e\room\NPC[0]\Collider) > (-1531.0 * RoomScale) + 0.35 Then
+							If EntityY(e\room\NPC[0]\Collider) > ((-1531.0) * RoomScale) + 0.35 Then
 								Dist = EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider)
 								If Dist < 0.64 Then ; ~ Get the player out of the way
 									Dist = Sqr(Dist)
