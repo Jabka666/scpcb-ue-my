@@ -664,7 +664,7 @@ Repeat
 								Local Width2% = Float(Width) / Float(MapGridSize + 1) / 2.0
 								Local Height2% = Float(Height) / Float(MapGridSize + 1) / 2.0
 								
-								DrawBlock(Arrows[Floor(MapAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MapGridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MapGridSize + 1) * Grid_SelectedY + Height2)
+								DrawImage(Arrows[Floor(MapAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MapGridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MapGridSize + 1) * Grid_SelectedY + Height2)
 								If PrevAngle <> MapAngle(Grid_SelectedX, Grid_SelectedY) Then
 									ChangeGridGadget = True
 									If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> "[none]" Then
@@ -839,7 +839,7 @@ Repeat
 							EndIf
 							Width2 = Float(Width - 1) / Float(ForestGridSize + 1) / 2.0
 							Height2 = Float(Height - 1) / Float(ForestGridSize + 1) / 2.0
-							DrawBlock(Arrows[Floor(ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width - 1) / Float(ForestGridSize + 1) * Grid_SelectedX + Width2, Float(Height - 1) / Float(ForestGridSize + 1) * Grid_SelectedY + Height2)
+							DrawImage(Arrows[Floor(ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width - 1) / Float(ForestGridSize + 1) * Grid_SelectedX + Width2, Float(Height - 1) / Float(ForestGridSize + 1) * Grid_SelectedY + Height2)
 							If PrevAngle <> ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY)
 								ChangeGridGadget = True
 								GridGadgetText = "Name: " + ForestPlace(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY) + "???"
@@ -988,7 +988,7 @@ Repeat
 							EndIf
 							Width2 = Float(Width) / Float(MT_GridSize + 1) / 2.0
 							Height2 = Float(Height) / Float(MT_GridSize + 1) / 2.0
-							DrawBlock(Arrows[Floor(MTRoomAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MT_GridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MT_GridSize + 1) * Grid_SelectedY + Height2)
+							DrawImage(Arrows[Floor(MTRoomAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MT_GridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MT_GridSize + 1) * Grid_SelectedY + Height2)
 							If PrevAngle <> MTRoomAngle(Grid_SelectedX, Grid_SelectedY)
 								ChangeGridGadget = True
 								GridGadgetText = "Name: " + MTRoom(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MTRoomAngle(Grid_SelectedX, Grid_SelectedY) + "???"
