@@ -8,6 +8,7 @@ General:
 - Added language selection.
 - Added SCP-066 achievement.
 - Added new color effects depending on player zone.
+- Added a small chance to accidentally drop an item when trying to use it.
 
 - Removed «Playmusic» console command.
 

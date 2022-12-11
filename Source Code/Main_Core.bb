@@ -3476,6 +3476,19 @@ Function UpdateGUI%()
 								ClosedInv = True
 								InvOpen = False
 								mo\DoubleClick = False
+								
+								If Rand(100 - Int((-me\Stamina * Rnd(5.0, 10.0)))) = 1 Then
+									If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper" Then
+										CreateMsg(GetLocalString("msg", "droprnd.paper"))
+									ElseIf SelectedItem\ItemTemplate\TempName = "badge" Lor SelectedItem\ItemTemplate\TempName = "oldbadge"
+										CreateMsg(Format(GetLocalString("msg", "droprnd.badge"), SelectedItem\ItemTemplate\Name))
+									Else
+										CreateMsg(Format(GetLocalString("msg", "droprnd.others"), SelectedItem\ItemTemplate\Name))
+									EndIf
+									DropItem(SelectedItem, False)
+									SelectedItem = Null
+									Return
+								EndIf
 							EndIf
 						EndIf
 					EndIf
@@ -3620,7 +3633,6 @@ Function UpdateGUI%()
 					If SelectedItem = Null Then
 						If mo\MouseHit1 Then
 							SelectedItem = Inventory(n)
-							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
 								If wi\HazmatSuit > 0 And (Not Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit")) Then
 									CreateMsg(GetLocalString("msg", "suit.use"))
@@ -3630,6 +3642,19 @@ Function UpdateGUI%()
 								If Inventory(n)\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[Inventory(n)\ItemTemplate\Sound])
 								InvOpen = False
 								mo\DoubleClick = False
+								
+								If Rand(100 - Int((-me\Stamina * Rnd(5.0, 10.0)))) = 1 Then
+									If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper" Then
+										CreateMsg(GetLocalString("msg", "droprnd.paper"))
+									ElseIf SelectedItem\ItemTemplate\TempName = "badge" Lor SelectedItem\ItemTemplate\TempName = "oldbadge"
+										CreateMsg(Format(GetLocalString("msg", "droprnd.badge"), SelectedItem\ItemTemplate\Name))
+									Else
+										CreateMsg(Format(GetLocalString("msg", "droprnd.others"), SelectedItem\ItemTemplate\Name))
+									EndIf
+									DropItem(SelectedItem, False)
+									SelectedItem = Null
+									Return
+								EndIf
 							EndIf
 						EndIf
 					EndIf
