@@ -76,6 +76,7 @@ Bug fixes:
 - Fixed SCP-1025 not being in player's focus while reading (no darkness effect).
 - Fixed light flash appearing ahead of time in Gate A area.
 - Fixed SCP-106 collider not being teleported correctly.
+- Fixed sound path for some SCP-294 drinks.
 
 - Hopefully fixed height of NPCs teleportation.
 
