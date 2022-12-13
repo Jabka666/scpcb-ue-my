@@ -6908,7 +6908,7 @@ Function UpdateEvents%()
 				e\room\NPC[0]\IsDead = True
 				ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
 				SetNPCFrame(e\room\NPC[0], 19.0)
-				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 65.0, 0.0)
+				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 30.0, 0.0)
 				RemoveEvent(e)
 				;[End Block]
 			Case e_room2_gw_2

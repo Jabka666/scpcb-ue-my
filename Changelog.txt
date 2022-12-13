@@ -8,6 +8,7 @@ General:
 - Added language selection.
 - Added SCP-066 achievement.
 - Added new color effects depending on player zone.
+- Added a small chance to accidentally drop an item when trying to use it.
 
 - Removed «Playmusic» console command.
 
@@ -75,6 +76,7 @@ Bug fixes:
 - Fixed SCP-1025 not being in player's focus while reading (no darkness effect).
 - Fixed light flash appearing ahead of time in Gate A area.
 - Fixed SCP-106 collider not being teleported correctly.
+- Fixed sound path for some SCP-294 drinks.
 
 - Hopefully fixed height of NPCs teleportation.
 
