@@ -14,7 +14,7 @@ Global LanguagePath$ = "..\Localization\" + Language + "\Data\local.ini"
 IniWriteBuffer_("..\Data\local.ini", True)
 IniWriteBuffer_("..\Localization\" + Language + "\Data\local.ini", True)
 
-Global None$ = GetLocalString("mc", "none")
+Global None$ = GetLocalString("mc", None)
 
 ; ~ Create a window to put the toolbar in
 ; ~ Do not localize this because 3-D Viewer may can't find Map Creator
@@ -572,7 +572,7 @@ Repeat
 											If Item2 >= 0 Then
 												Local Event_Name$ = GadgetItemText(ComboBox, Item2)
 												
-												If Event_Name <> "" And Event_Name <> "None" Then
+												If Event_Name <> "" And Event_Name <> None Then
 													MapEvent(x, y) = Event_Name
 													MapEventProb(x, y) = Float((SliderValue(Event_Prob) + 1) / 100.0)
 												EndIf
@@ -1671,7 +1671,7 @@ Function LoadMap%(File$)
 			
 			MapAngle(x, y) = ReadByte(f) * 90
 			MapEvent(x, y) = ReadString(f)
-			If MapEvent(x, y) = "" Then MapEvent(x, y) = "None"
+			If MapEvent(x, y) = "" Then MapEvent(x, y) = None
 			MapEventProb(x, y) = ReadFloat(f)
 			If MapEventProb(x, y) = 0.0 Then MapEventProb(x, y) = 1.0
 		Next
@@ -1717,7 +1717,7 @@ Function LoadMap%(File$)
 			Next
 			MapAngle(x, y) = ReadByte(f) * 90
 			MapEvent(x, y) = ReadString(f)
-			If MapEvent(x, y) = "" Then MapEvent(x, y) = "None"
+			If MapEvent(x, y) = "" Then MapEvent(x, y) = None
 			MapEventProb(x, y) = ReadFloat(f)
 			If MapEventProb(x, y) = 0.0 Then MapEventProb(x, y) = 1.0
 		Wend
@@ -1782,7 +1782,7 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 				WriteByte(f, y)
 				WriteString(f, Lower(Map(x, y)\Name))
 				WriteByte(f, Floor(MapAngle(x, y) / 90))
-				If MapEvent(x, y) <> "None" Then
+				If MapEvent(x, y) <> None Then
 					WriteString(f, MapEvent(x, y))
 				Else
 					WriteString(f, "")
