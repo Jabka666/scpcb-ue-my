@@ -75,7 +75,7 @@ Function LanguageSelector%()
 				If lan\Full Then
 					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
 				Else
-					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 2, y - 195, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 2, y - 195, 432, lan\FlagImg)
 				EndIf
 				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
@@ -107,7 +107,7 @@ Function LanguageSelector%()
 				If lan\Full Then
 					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, lan\FlagImg)
 				Else
-					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 21, y, 432, LoadImage(BasePath + "flags\" + lan\Flag))
+					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 21, y, 432, lan\FlagImg)
 				EndIf
 				If lan\ID = opt\Language Then 
 					Color(200, 0, 0)
@@ -156,7 +156,7 @@ Function LanguageSelector%()
 				EndIf
 			EndIf
 		Else
-			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://gist.github.com/ZiYueCommentary/97424394a0daf69d3a1220253b0a1cbb#file-ue-contribute-md")
+			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language")
 		EndIf
 		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages) Then  Exit
 		
@@ -300,12 +300,12 @@ Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Fra
 	
 	Local Result% = UpdateLauncherButton(x, y, Width, Height, Txt, False, False)
 	
-	DrawBlock(Img, x + (Width / 2) - (StringWidth(Txt) / 2) - 3, y + (Height / 2) - ImageHeight(Img) / 2, Frame)
+	DrawImage(Img, x + (Width / 2) - (StringWidth(Txt) / 2) - 3, y + (Height / 2) - ImageHeight(Img) / 2, Frame) ; ~ No DrawBlock please
 	Return(Result)
 End Function
 
 Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)
-	DrawBlock(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
+	DrawImage(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
 	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
 End Function
 

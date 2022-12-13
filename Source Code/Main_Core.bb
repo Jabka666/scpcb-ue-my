@@ -1438,7 +1438,7 @@ Function UpdateConsole%()
 							Exit
 						EndIf
 					Next
-					CreateConsoleMsg(GetLocalString("console", "stas"))
+					CreateConsoleMsg(GetLocalString("console", "stfu"))
 					;[End Block]
 				Case "notarget", "nt"
 					;[Block]

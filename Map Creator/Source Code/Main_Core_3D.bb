@@ -18,7 +18,7 @@ Local HHWND% = api_GetActiveWindow() ; ~ User32.dll
 api_ShowWindow(HHWND, 0) ; ~ User32.dll
 SetBuffer(BackBuffer())
 
-AppTitle("MapCreator 3-D View")
+AppTitle("MapCreator 3-D View") ; ~ Do not localize this
 
 Global Camera% = CreateCamera()
 
@@ -44,7 +44,6 @@ Global MenuOpen% = True
 
 Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
 
-Global Font1% = LoadFont_Strict("..\GFX\fonts\Courier New.ttf", 16)
 Global ConsoleFont% = LoadFont_Strict("..\GFX\fonts\Andale Mono.ttf", 16)
 
 Global RoomTempID%
@@ -52,6 +51,11 @@ Global RoomTempID%
 LoadRoomTemplates("..\Data\rooms.ini")
 
 LoadMaterials("..\Data\materials.ini")
+
+Global Language$ = IniGetString(GetEnv("AppData") + "\scpcb-ue\Data\options.ini", "Global", "Language")
+Global LanguagePath$ = "..\Localization\" + Language + "\Data\local.ini"
+IniWriteBuffer_("..\Data\local.ini", True)
+IniWriteBuffer_("..\Localization\" + Language + "\Data\local.ini", True)
 
 Const RoomScale# = 8.0 / 2048.0
 
@@ -189,18 +193,18 @@ Global PrevTime% = MilliSecs2()
 Global ElapsedTime#
 
 InitErrorMsgs(9, True)
-SetErrorMsg(0, "An error occured in SCP:CB Ultimate Edition Map Creator" + ". Engine version: " + SystemProperty("blitzversion") + Chr(10))
-SetErrorMsg(1, "Date and time: " + CurrentDate() + " at " + CurrentTime() + Chr(10) + "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " bit (Build: " + SystemProperty("osbuild") + ")" + Chr(10))
-SetErrorMsg(2, "CPU: " + GetEnv("PROCESSOR_IDENTIFIER") + " (Arch: " + GetEnv("PROCESSOR_ARCHITECTURE") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)" + Chr(10))
-SetErrorMsg(3, "GPU: " + GfxDriverName(CountGfxDrivers()) + " (" + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB)" + Chr(10))
-SetErrorMsg(4, "Video memory: " + ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)) + " MB/" + (TotalVidMem() / 1024) + " MB" + Chr(10))
-SetErrorMsg(5, "Global memory status: " + ((TotalPhys() / 1024) - (AvailPhys() / 1024)) + " MB/" + (TotalPhys() / 1024) + " MB" + Chr(10))
+SetErrorMsg(0, Format(GetLocalString("mc", "errtit"), SystemProperty("blitzversion")) + Chr(10))
+SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
+SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
+SetErrorMsg(4, Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024))), (TotalVidMem() / 1024)))
+SetErrorMsg(5, Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024))), (TotalPhys() / 1024)))
 
-SetErrorMsg(7, "Caught exception: _CaughtError_" + Chr(10))
-SetErrorMsg(8, Chr(10) + "Please take a screenshot of this error and send it to us!") 
+SetErrorMsg(7, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
+SetErrorMsg(8, Chr(10) + GetLocalString("error", "shot")) 
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(6, "Error located in: " + Location)
+	SetErrorMsg(6, Format(GetLocalString("error", "error"), Location))
 End Function
 
 Repeat
@@ -552,14 +556,14 @@ Repeat
 			Local rAngle% = Int(PickedRoom\Angle)
 			
 			Color(0, 0, 0)
-			Rect(2, 32, StringWidth("Room name: " + rName), StringHeight("Room name: " + rName))
-			Rect(2, 52, StringWidth("Room X: " + rX), StringHeight("Room X: " + rX))
-			Rect(2, 72, StringWidth("Room Z: " + rZ), StringHeight("Room Z: " + rZ))
+			Rect(2, 32, StringWidth(Format(GetLocalString("mc", "room.name"), rName)), StringHeight(Format(GetLocalString("mc", "room.name"), rName)))
+			Rect(2, 52, StringWidth(Format(GetLocalString("mc", "room.x"), rX)), StringHeight(Format(GetLocalString("mc", "room.x"), rX)))
+			Rect(2, 72, StringWidth(Format(GetLocalString("mc", "room.z"), rZ)), StringHeight(Format(GetLocalString("mc", "room.z"), rZ)))
 			
 			Color(255, 255, 255)
-			Text(2, 32, "Room name: " + rName)
-			Text(2, 52, "Room X: " + rX)
-			Text(2, 72, "Room Z: " + rZ)
+			Text(2, 32, Format(GetLocalString("mc", "room.name"), rName))
+			Text(2, 52, Format(GetLocalString("mc", "room.x"), rX))
+			Text(2, 72, Format(GetLocalString("mc", "room.z"), rZ))
 			
 			If PickedRoom\Event <> "" Then
 				eName$ = PickedRoom\Event
@@ -567,12 +571,12 @@ Repeat
 				Local eChance# = PickedRoom\EventChance
 				
 				Color(0, 0, 0)
-				Rect(2, 92, StringWidth("Room event: " + eName), StringHeight("Room event: " + eName))
-				Rect(2, 112, StringWidth("Room event chance: " + Int(eChance * 100) + "%"), StringHeight("Room event chance: " + Int(eChance * 100) + "%"))
+				Rect(2, 92, StringWidth(Format(GetLocalString("mc", "room.event"),  eName)), StringHeight(Format(GetLocalString("mc", "room.event"),  eName)))
+				Rect(2, 112, StringWidth(Format(GetLocalString("mc", "room.event.chance"), Int(eChance * 100))), StringHeight(Format(GetLocalString("mc", "room.event.chance"), Int(eChance * 100))))
 				
 				Color(255, 255, 255)
-				Text(2, 92, "Room event: " + eName)
-				Text(2, 112, "Room event chance: " + Int(eChance * 100) + "%")
+				Text(2, 92, Format(GetLocalString("mc", "room.event"),  eName))
+				Text(2, 112, Format(GetLocalString("mc", "room.event.chance"), Int(eChance * 100)))
 			EndIf
 		EndIf
 		
@@ -580,10 +584,10 @@ Repeat
 			rName = CurrSelectedRoom\RoomTemplate\Name
 			
 			Color(0, 0, 0)
-			Rect(ResWidth - 2) - StringWidth("Selected room: " + rName), 2, StringWidth("Selected room: " + rName), StringHeight("Selected room: " + rName)
+			Rect(ResWidth - 2) - StringWidth(Format(GetLocalString("mc", "room.selected"), rName)), 2, StringWidth(Format(GetLocalString("mc", "room.selected"), rName)), StringHeight(Format(GetLocalString("mc", "room.selected"), rName))
 			
 			Color(255, 255, 255)
-			Text((ResWidth - 2) - StringWidth("Selected room: " + rName), 2, "Selected room: " + rName)
+			Text((ResWidth - 2) - StringWidth(Format(GetLocalString("mc", "room.selected"), rName)), 2, Format(GetLocalString("mc", "room.selected"), rName))
 		EndIf
 		
 		Color(opt\CursorR, opt\CursorG, opt\CursorB)
@@ -1014,12 +1018,12 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is RoomMesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
-		RuntimeError(".b3d rooms are no longer supported, please use the converter! Affected room: " + Chr(34) + rt\OBJPath + Chr(34))
+		RuntimeError(Format(GetLocalString("runerr", "b3d"), rt\OBJPath))
 	Else ; ~ File not found
-		RuntimeError("File: " + Chr(34) + rt\OBJPath + Chr(34) + " not found.")
+		RuntimeError(Format(GetLocalString("runerr", "notfound"), rt\OBJPath))
 	EndIf
 	
-	If (Not rt\OBJ) Then RuntimeError("Failed To load map file " + Chr(34) + rt\OBJPath + Chr(34) + ".")
+	If (Not rt\OBJ) Then RuntimeError(Format(GetLocalString("runerr", "failedload"), rt\OBJPath))
 	
 	HideEntity(rt\OBJ)
 End Function
@@ -1046,7 +1050,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			Exit
 		EndIf
 	Next
-	If f = 0 Then RuntimeError("Error reading file " + Chr(34) + File + Chr(34))
+	If f = 0 Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
 	
@@ -1055,7 +1059,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
 		HasTriggerBox = True
 	Else
-		RuntimeError(Chr(34) + File + Chr(34) + " is Not RMESH (" + IsRMesh + ")")
+		RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
 	EndIf
 	
 	File = StripFileName(File)
@@ -1348,16 +1352,16 @@ End Function
 
 Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
-	If (Not HeightMap) Then RuntimeError("HeightMap image " + HeightMap + " does not exist.")
+	If (Not HeightMap) Then RuntimeError(Format(GetLocalString("runerr", "heightmap"), HeightMap))
 	
 	; ~ Store heightmap dimensions
 	Local x% = ImageWidth(HeightMap) - 1, y% = ImageHeight(HeightMap) - 1
 	Local lX%, lY%, Index%
 	
 	; ~ Load texture and lightmaps
-	If (Not t1) Then RuntimeError("Texture 1 " + Chr(34) + t1 + Chr(34) + " does not exist.")
-	If (Not t2) Then RuntimeError("Texture 2 " + Chr(34) + t2 + Chr(34) + " does not exist.")
-	If (Not Mask) Then RuntimeError("Mask image " + Chr(34) + Mask + Chr(34) + " does not exist.")
+	If (Not t1) Then RuntimeError(Format(GetLocalString("runerr", "tex_1"), t1))
+	If (Not t2) Then RuntimeError(Format(GetLocalString("runerr", "tex_2"), t2))
+	If (Not Mask) Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
 	
 	; ~ Auto scale the textures to the right size
 	If t1 Then ScaleTexture(t1, x / 4.0, y / 4.0)

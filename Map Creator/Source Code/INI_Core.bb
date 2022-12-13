@@ -29,7 +29,39 @@ Function IniGetFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0, AllowBuf
 	Return(IniGetFloat_(File, Section, Parameter, DefaultValue, AllowBuffer))
 End Function
 
+Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
+	Local DefaultValue$
+	
+	If CheckRootFile Then
+		DefaultValue = IniGetBufferString_("..\Data\local.ini", Section, Parameter, Section + "," + Parameter)
+	Else 
+		DefaultValue = Section + "," + Parameter
+	EndIf
+	Return(ConvertUTF8toANSI(IniGetBufferString_("..\Localization\" + Language + "\Data\local.ini", Section, Parameter, DefaultValue))) ; local.ini -> UTF8, MapCreator -> ANSI
+End Function
+
+Function Format$(String_$, Parameter$, Replace_$ = "%s")
+	Return(Replace(String_, Replace_, Parameter))
+End Function
+
 Global OptionFileMC$ = GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini"
+
+;[Block]
+; BlitzEncode - A part of BlitzToolbox
+; Encoding converter.
+; v1.0 2022.9.22
+; https://github.com/ZiYueCommentary/BlitzToolbox
+
+Const UTF8% = 65001
+
+Function ConvertANSItoUTF8$(txt$)
+	Return ConvertEncoding(txt$, GetCodePage(), UTF8)
+End Function
+
+Function ConvertUTF8toANSI$(txt$)
+	Return ConvertEncoding(txt$, UTF8, GetCodePage())
+End Function
+;[End Block]
 
 Type Options
 	Field FogR%, FogG%, FogB%

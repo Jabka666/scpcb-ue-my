@@ -52,6 +52,21 @@ Function IniGetFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0, AllowBuf
 	Return(IniGetFloat_(File, Section, Parameter, DefaultValue, AllowBuffer))
 End Function
 
+Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
+	Local DefaultValue$
+	
+	If CheckRootFile Then
+		DefaultValue = IniGetBufferString_("..\Data\local.ini", Section, Parameter, Section + "," + Parameter)
+	Else 
+		DefaultValue = Section + "," + Parameter
+	EndIf
+	Return(IniGetBufferString_("..\Localization\" + Language + "\Data\local.ini", Section, Parameter, DefaultValue))
+End Function
+
+Function Format$(String_$, Parameter$, Replace_$ = "%s")
+	Return(Replace(String_, Replace_, Parameter))
+End Function
+
 Global OptionFileMC$ = GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini"
 
 Type Options
@@ -72,7 +87,7 @@ Function LoadOptionsINI%()
 	
 	opt\FogG = IniGetInt(OptionFileMC, "3-D Scene", "BG Color G", 0)
 	
-	opt\FogB = IniGetInt(OptionFileMC, "3-D Scene", "BG Color B", 0)
+	opt\FogB = IniGetInt(OptionFileMC, "3-D Scene", "BG Color B", 100)
 	
 	opt\CursorR% = IniGetInt(OptionFileMC, "3-D Scene", "Cursor Color R", 255)
 	

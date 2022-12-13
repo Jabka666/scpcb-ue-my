@@ -10,9 +10,9 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 	Local TexAlpha% = 0
 	
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("3D Mesh " + Chr(34) + File + Chr(34) + " not found.")
+		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "mesh.notfound"), File))
 		Tmp = LoadMesh(File, Parent)
-		If (Not Tmp) Then RuntimeError("Failed to load 3D Mesh: " + Chr(34) + File + Chr(34))
+		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "mesh.failed.load"), File))
 	EndIf
 	
 	For i = 1 To CountSurfaces(Tmp)
@@ -64,21 +64,23 @@ End Function
 Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
+	If FileType(LanguagePath + File) = 1 Then File = LanguagePath + File
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Texture " + Chr(34) + File + Chr(34) + " not found.")
+		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "texture.notfound"), File))
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
-		If (Not Tmp) Then RuntimeError("Failed to load Texture: " + Chr(34) + File + Chr(34))
+		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "texture.failed.load"), File))
 	EndIf
 	Return(Tmp) 
 End Function
 
-Function LoadFont_Strict%(File$ = "Tahoma", Height% = 13)
+Function LoadFont_Strict%(File$, Height% = 13)
 	Local Tmp%
 	
+	If FileType(LanguagePath + File) = 1 Then File = LanguagePath + File
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Font " + Chr(34) + File + Chr(34) + " not found.")
+		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "font.notfound"), File))
 		Tmp = LoadFont(File, Height)
-		If (Not Tmp) Then RuntimeError("Failed to load Font: " + Chr(34) + File + Chr(34))
+		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "font.failed.load"), File))
 	EndIf
 	Return(Tmp)
 End Function
@@ -86,11 +88,20 @@ End Function
 Function LoadImage_Strict%(File$)
 	Local Tmp%
 	
+	If FileType(LanguagePath + File) = 1 Then File = LanguagePath + File
 	If (Not Tmp) Then
-		If FileType(File) <> 1 Then RuntimeError("Image " + Chr(34) + File + Chr(34) + " not found.")
+		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "image.notfound"), File))
 		Tmp = LoadImage(File)
-		If (Not Tmp) Then RuntimeError("Failed to load image: " + Chr(34) + File + Chr(34))
+		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "image.failed.load"), File))
 	EndIf
+	Return(Tmp)
+End Function
+
+Function LoadTexture_Cache%(File$, Flags% = 1)
+	Local Tmp%
+	
+	If FileType(LanguagePath + File) = 1 Then File = LanguagePath + File
+	If (Not Tmp) Then Tmp = LoadTexture(File, Flags)
 	Return(Tmp)
 End Function
 
