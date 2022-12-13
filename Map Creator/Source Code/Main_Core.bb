@@ -9,7 +9,15 @@ Local PanelLoading% = CreatePanel(0, 0, 320, 260, LoadingWindow, 0)
 
 SetPanelImage(PanelLoading, "Assets\map_logo.png")
 
+Global Language$ = IniGetString(GetEnv("AppData") + "\scpcb-ue\Data\options.ini", "Global", "Language")
+Global LanguagePath$ = "..\Localization\" + Language + "\Data\local.ini"
+IniWriteBuffer_("..\Data\local.ini", True)
+IniWriteBuffer_("..\Localization\" + Language + "\Data\local.ini", True)
+
+Global None$ = GetLocalString("mc", "none")
+
 ; ~ Create a window to put the toolbar in
+; ~ Do not localize this because 3-D Viewer may can't find Map Creator
 Local WinHandle% = CreateWindow("SCP-CB Ultimate Edition Map Creator", GraphicsWidth() / 2 - ResWidth / 2, GraphicsHeight() / 2 - ResHeight / 2, ResWidth, ResHeight, 0, 13) 
 
 Global MainHwnd% = api_GetActiveWindow() ; ~ User32.dll
@@ -34,7 +42,7 @@ Const EventsFile$ = "..\Data\events_MC.ini"
 InitEvents(EventsFile)
 AddEvents()
 
-Global Room_Desc% = CreateLabel("Room description:", 5, 40 + ResHeight / 2, ResWidth / 4, ResHeight / 11.8, WinHandle, 3)
+Global Room_Desc% = CreateLabel(GetLocalString("mc", "room.desc"), 5, 40 + ResHeight / 2, ResWidth / 4, ResHeight / 11.8, WinHandle, 3)
 
 SetGadgetLayout(Room_Desc, 3, 3, 2, 2)
 
@@ -70,7 +78,7 @@ Local TxtBox% = CreateTextField(5, 40, 150, 20, WinHandle) ; ~ Create TextField 
 
 SetGadgetText(TxtBox, "") ; ~ Set Text in that TextField for info
 
-Local OK% = CreateButton("Search", 155, 40, 50, 20, WinHandle) ; ~ Create OK button
+Local OK% = CreateButton(GetLocalString("mc", "search"), 155, 40, 50, 20, WinHandle) ; ~ Create OK button
 Local Clean_Txt% = CreateButton("X", 210, 40, 20, 20, WinHandle) ; ~ Create EXIT button
 
 Global ShowGrid% = True
@@ -171,40 +179,40 @@ SetGadgetLayout(Clean_Txt, 3, 3, 3, 3)
 
 Local Tab% = CreateTabber(0, 5, ResWidth / 4 + 20, ResHeight - 60, WinHandle)
 
-InsertGadgetItem(Tab, 0, "2-D/Map Creator")
-InsertGadgetItem(Tab, 1, "3-D/Map Viewer")
+InsertGadgetItem(Tab, 0, GetLocalString("mc", "tab.2d"))
+InsertGadgetItem(Tab, 1, GetLocalString("mc", "tab.3d"))
 SetGadgetLayout(Tab, 3, 3, 2, 2)
 
 Local Tab2% = CreateTabber(300, 5, ResWidth / 4 + 20, ResHeight - 100, WinHandle)
 
-InsertGadgetItem(Tab2, 0, "Facility")
-InsertGadgetItem(Tab2, 1, "Forest")
-InsertGadgetItem(Tab2, 2, "Maintenance Tunnels")
+InsertGadgetItem(Tab2, 0, GetLocalString("mc", "tab2.fac"))
+InsertGadgetItem(Tab2, 1, GetLocalString("mc", "tab2.forest"))
+InsertGadgetItem(Tab2, 2, GetLocalString("mc", "tab2.mt"))
 SetGadgetLayout(Tab2, 3, 3, 2, 2)
 
-SetStatusText(LoadingWindow, "Starting up")
+SetStatusText(LoadingWindow, GetLocalString("mc", "load.start"))
 
 ; ~ Now create a whole bunch of menus and sub-items
-Local File% = CreateMenu("File", 0, Menu) ; ~ Main menu
+Local File% = CreateMenu(GetLocalString("mc", "menu.file"), 0, Menu) ; ~ Main menu
 
-CreateMenu("New", 0, File) ; ~ Child menu 
-CreateMenu("Open", 1, File) ; ~ Child menu 
+CreateMenu(GetLocalString("mc", "menu.file.new"), 0, File) ; ~ Child menu 
+CreateMenu(GetLocalString("mc", "menu.file.open"), 1, File) ; ~ Child menu 
 CreateMenu("", 1000, File) ; ~ Use an empty string to generate separator bars
-CreateMenu("Save", 2, File) ; ~ Child menu 
-CreateMenu("Save as...", 3, File) ; ~ Child menu 
+CreateMenu(GetLocalString("mc", "menu.file.save"), 2, File) ; ~ Child menu 
+CreateMenu(GetLocalString("mc", "menu.file.saveas"), 3, File) ; ~ Child menu 
 CreateMenu("", 1000, File) ; ~ Use an empty string to generate separator bars
-CreateMenu("Quit", 10001, File) ; ~ Another child menu
+CreateMenu(GetLocalString("mc", "menu.file.quit"), 10001, File) ; ~ Another child menu
 
-Local Options% = CreateMenu("Options", 0, Menu)
-Local Event_Default% = CreateMenu("Set the event for the rooms by default", 15, Options)
+Local Options% = CreateMenu(GetLocalString("mc", "menu.opt"), 0, Menu)
+Local Event_Default% = CreateMenu(GetLocalString("mc", "menu.opt.event"), 15, Options)
 
 CreateMenu("", 1000, Options)
 
-Local Zone_Trans% = CreateMenu("Map Settings", 18, Options)
-Local Author_Descr% = CreateMenu("Edit Author and Description", 19, Options)
+Local Zone_Trans% = CreateMenu(GetLocalString("mc", "menu.opt.mapset"), 18, Options)
+Local Author_Descr% = CreateMenu(GetLocalString("mc", "menu.opt.mapdesc"), 19, Options)
 
 CreateMenu("", 1000, Options)
-CreateMenu("Edit Camera", 17, Options)
+CreateMenu(GetLocalString("mc", "menu.opt.editcam"), 17, Options)
 
 LoadOptionsINI()
 
@@ -215,10 +223,10 @@ Else
 EndIf
 
 ; ~ Now the Edit Menu
-Local Edit% = CreateMenu("&Help", 0, Menu) ; ~ Main menu with Alt Shortcut - Use & to specify the shortcut key
+Local Edit% = CreateMenu(GetLocalString("mc", "menu.help"), 0, Menu) ; ~ Main menu with Alt Shortcut - Use & to specify the shortcut key
 
-CreateMenu("Manual" + Chr(8) + "F1", 6, Edit) ; ~ Another Child menu with Alt Shortcut
-CreateMenu("About" + Chr(8) + "F12", 40, Edit) ; ~ Child menu with Alt Shortcut
+CreateMenu(GetLocalString("mc", "menu.help.manual") + Chr(8) + "F1", 6, Edit) ; ~ Another Child menu with Alt Shortcut
+CreateMenu(GetLocalString("mc", "menu.help.about") + Chr(8) + "F12", 40, Edit) ; ~ Child menu with Alt Shortcut
 
 HotKeyEvent(59, 0, $1001, 6)
 HotKeyEvent(88, 0, $1001, 40)
@@ -226,17 +234,17 @@ HotKeyEvent(88, 0, $1001, 40)
 ; ~ Finally, once all menus are set up / updated, we call UpdateWindowMenu to tell the OS about the menu
 UpdateWindowMenu(WinHandle)
 
-SetStatusText(LoadingWindow, "Creating 2D scene...")
+SetStatusText(LoadingWindow, GetLocalString("mc", "load.2d"))
 
-Local OptionWin% = CreateWindow("Edit Camera", GraphicsWidth() / 2 - 160, GraphicsHeight() / 2 - 120, 300, 280, WinHandle, 1)
+Local OptionWin% = CreateWindow(GetLocalString("mc", "menu.opt.editcam"), GraphicsWidth() / 2 - 160, GraphicsHeight() / 2 - 120, 300, 280, WinHandle, 1)
 
 HideGadget(OptionWin)
 
 Local LabelColor% = CreateLabel("", 5, 5, 285, 60, OptionWin, 1)
 Local LabelColor2% = CreateLabel("", 5, 70, 285, 60, OptionWin, 1)
 Local LabelRange% = CreateLabel("", 5, 135, 285, 60, OptionWin, 1)
-Local Color_Button% = CreateButton("Change CameraFog Color", 25, 20, 150, 30, OptionWin)
-Local Color_Button2% = CreateButton("Change Cursor Color", 25, 85, 150, 30, OptionWin)
+Local Color_Button% = CreateButton(GetLocalString("mc", "editcam.camfogcolor"), 25, 20, 150, 30, OptionWin)
+Local Color_Button2% = CreateButton(GetLocalString("mc", "editcam.cursorcolor"), 25, 85, 150, 30, OptionWin)
 Local LabelFogR% = CreateLabel("R " + opt\FogR, 225, 15, 40, 15, OptionWin)
 Local LabelFogG% = CreateLabel("G " + opt\FogG, 225, 30, 40, 15, OptionWin)
 Local LabelFogB% = CreateLabel("B " + opt\FogB, 225, 45, 40, 15, OptionWin)
@@ -244,35 +252,35 @@ Local LabelCursorR% = CreateLabel("R " + opt\CursorR, 225, 75, 40, 15, OptionWin
 Local LabelCursorG% = CreateLabel("G " + opt\CursorG, 225, 90, 40, 15, OptionWin)
 Local LabelCursorB% = CreateLabel("B " + opt\CursorG, 225, 105, 40, 15, OptionWin)
 
-LabelRange = CreateLabel("Culling Range", 10, 170, 80, 20, OptionWin)
+LabelRange = CreateLabel(GetLocalString("mc", "editcam.culling"), 10, 170, 80, 20, OptionWin)
 
 Global CameraRangeOpt% = CreateTextField(25, 150, 40, 20, OptionWin)
 
 SetGadgetText(CameraRangeOpt, opt\CamRange)
 
-Global VSync% = CreateButton("Vsync", 123, 145, 50, 30, OptionWin, 2)
+Global VSync% = CreateButton(GetLocalString("mc", "editcam.vsync"), 123, 145, 50, 30, OptionWin, 2)
 
 SetButtonState(VSync, opt\VSync)
 
-Global ShowFPS% = CreateButton("Show FPS", 210, 145, 70, 30, OptionWin, 2)
+Global ShowFPS% = CreateButton(GetLocalString("mc", "editcam.fps"), 210, 145, 70, 30, OptionWin, 2)
 
 SetButtonState(ShowFPS, opt\ShowFPS)
 
-Local CancelOpt_Button% = CreateButton("Cancel", 10, 210, 100,30, OptionWin)
-Local SaveOpt_Button% = CreateButton("Save", 185, 210, 100, 30, OptionWin)
+Local CancelOpt_Button% = CreateButton(GetLocalString("mc", "editcam.cancel"), 10, 210, 100,30, OptionWin)
+Local SaveOpt_Button% = CreateButton(GetLocalString("mc", "editcam.save"), 185, 210, 100, 30, OptionWin)
 
-Local Map_Settings% = CreateWindow("Map Settings", GraphicsWidth() / 2 - 120, GraphicsHeight() / 2 - 80, 240, 160, WinHandle, 1)
+Local Map_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapset"), GraphicsWidth() / 2 - 120, GraphicsHeight() / 2 - 80, 240, 160, WinHandle, 1)
 
 HideGadget(Map_Settings)
 
-Local ZoneText% = CreateLabel("Zone transition settings:", 10, 10, 200, 20, Map_Settings)
-Local LabelZoneTrans1% = CreateLabel("LCZ to HCZ transition", 10, 60, 120, 20, Map_Settings)
+Local ZoneText% = CreateLabel(GetLocalString("mc", "mapset.zonetrans"), 10, 10, 200, 20, Map_Settings)
+Local LabelZoneTrans1% = CreateLabel(GetLocalString("mc", "mapset.lhtrans"), 10, 60, 120, 20, Map_Settings)
 
 Global ZoneTrans1% = CreateTextField(20, 40, 80, 20, Map_Settings)
 
 SetGadgetText(ZoneTrans1, 5)
 
-Local LabelZoneTrans2% = CreateLabel("HCZ to EZ transition", 120, 60, 120, 20, Map_Settings)
+Local LabelZoneTrans2% = CreateLabel(GetLocalString("mc", "mapset.hztrans"), 120, 60, 120, 20, Map_Settings)
 
 Global ZoneTrans2% = CreateTextField(130, 40, 80, 20, Map_Settings)
 
@@ -280,23 +288,23 @@ SetGadgetText(ZoneTrans2, 11)
 
 Global ZoneTransValue1% = 13, ZoneTransValue2% = 7
 
-Local ResetZoneTrans% = CreateButton("Reset", 10, 90, 100, 30, Map_Settings)
-Local ApplyZoneTrans% = CreateButton("Apply", 120, 90, 100, 30, Map_Settings)
+Local ResetZoneTrans% = CreateButton(GetLocalString("mc", "reset"), 10, 90, 100, 30, Map_Settings)
+Local ApplyZoneTrans% = CreateButton(GetLocalString("mc", "apply"), 120, 90, 100, 30, Map_Settings)
 
-Local AuthorDescr_Settings% = CreateWindow("Edit Author and Description", GraphicsWidth() / 2 - 200, GraphicsHeight() / 2 - 80, 400, 200, WinHandle, 1)
+Local AuthorDescr_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapdesc"), GraphicsWidth() / 2 - 200, GraphicsHeight() / 2 - 80, 400, 200, WinHandle, 1)
 
 HideGadget(AuthorDescr_Settings)
 
 Global MapAuthor$ = "", MapDescription$ = ""
 Global Map_Author_Text% = CreateTextField(120, 30, 140, 20, AuthorDescr_Settings)
 
-Local Map_Author_Label% = CreateLabel("Map author:", 140, 10, 160, 20, AuthorDescr_Settings)
+Local Map_Author_Label% = CreateLabel(GetLocalString("mc", "mapset.author"), 140, 10, 160, 20, AuthorDescr_Settings)
 
 Global Descr_Text% = CreateTextArea(20, 80, 350, 80, AuthorDescr_Settings, 1)
 
-Local Descr_Label% = CreateLabel("Description:", 140, 60, 160, 20, AuthorDescr_Settings)
+Local Descr_Label% = CreateLabel(GetLocalString("mc", "mapset.desc"), 140, 60, 160, 20, AuthorDescr_Settings)
 
-SetStatusText(LoadingWindow, "Executing 3-D viewer...")
+SetStatusText(LoadingWindow, GetLocalString("mc", "load.3d"))
 ExecFile("Window3D.exe")
 
 Repeat
@@ -304,7 +312,7 @@ Repeat
 	
 	ShowGadget(LoadingWindow)
 Until VWPRT <> 0
-SetStatusText(LoadingWindow, "Creating 3-D scene...")
+SetStatusText(LoadingWindow, GetLocalString("mc", "load.3d.create"))
 
 api_SetParent(VWPRT, MainHwnd) ; ~ User32.dll				
 api_SetWindowPos(VWPRT, 0, 5, 30, 895, 560, 1) ; ~ User32.dll
@@ -328,10 +336,10 @@ Repeat
 	MouseHit3 = MouseHit(3)
 	
 	SetGadgetText(Map_Author_Text, Left(TextFieldText(Map_Author_Text), 15))
-	SetGadgetText(Map_Author_Label, ("Map author (" + (Len(TextFieldText(Map_Author_Text))) + "/15) :"))
+	SetGadgetText(Map_Author_Label, Format(GetLocalString("mc", "mapset.author.label"), Len(TextFieldText(Map_Author_Text))))
 	
 	If Len(TextAreaText(Descr_Text)) > 200 Then SetGadgetText(Descr_Text, Left(TextAreaText(Descr_Text), 200))
-	SetGadgetText(Descr_Label, ("Description (" + (Len(TextAreaText(Descr_Text))) + "/200) :"))
+	SetGadgetText(Descr_Label, Format(GetLocalString("mc", "mapset.desc.label"), Len(TextAreaText(Descr_Text))))
 	
 	If FileType("CONFIG_TO2D.SI") = 1 Then
 		Local f% = ReadFile("CONFIG_TO2D.SI")
@@ -355,7 +363,7 @@ Repeat
 				If rt = Map(Grid_SelectedX, Grid_SelectedY)
 					For i = 0 To 5
 						If rt\Events[i] <> "" Then
-							InsertGadgetItem(ComboBox, 0, "[none]")
+							InsertGadgetItem(ComboBox, 0, None)
 							HasEvent = True
 							Exit
 						EndIf
@@ -363,7 +371,7 @@ Repeat
 					For i = 0 To 5
 						If rt\Events[i] <> "" Then InsertGadgetItem(ComboBox, i + 1, rt\Events[i])
 					Next
-					SetGadgetText(Room_Desc, "Room description:" + Chr(13) + rt\Description)
+					SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
 					Exit
 				EndIf
 			Next 
@@ -374,29 +382,29 @@ Repeat
 				SetGadgetText(Event_Prob_Label, "")
 				SetSliderValue(Event_Prob, 99)
 				DisableGadget(Event_Prob)
-				GridGadgetText = "Name: " + Map(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MapAngle(Grid_SelectedX, Grid_SelectedY) + "???"
+				GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY))
 			Else
 				EnableGadget(ComboBox)
-				If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> "[none]"
+				If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> None
 					For ev.Event = Each Event
 						If ev\Name = MapEvent(Grid_SelectedX, Grid_SelectedY)
-							SetGadgetText(Event_Desc, "Event description:" + Chr(13) + ev\Description)
+							SetGadgetText(Event_Desc, GetLocalString("mc", "event.desc") + Chr(13) + ev\Description)
 							Exit
 						EndIf
 					Next
 				Else
 					SetGadgetText(Event_Desc, "")
 				EndIf
-				If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> "[none]"
-					SetGadgetText(Event_Prob_Label, "Event chance: " + Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100) + "%")
+				If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> None
+					SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100)))
 					SetSliderValue(Event_Prob, Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100) - 1)
 					EnableGadget(Event_Prob)
-					GridGadgetText = "Name: " + Map(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MapAngle(Grid_SelectedX, Grid_SelectedY) + "???" + Chr(13) + "Event: " + MapEvent(Grid_SelectedX, Grid_SelectedY) + Chr(13) + "Event Chance: " + Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100) + "%"
+					GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY)) + Chr(13) + Format(GetLocalString("mc", "room.event"), MapEvent(Grid_SelectedX, Grid_SelectedY)) + Chr(13) + Format(GetLocalString("mc", "event.chance"), Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100))
 				Else
 					SetGadgetText(Event_Prob_Label, "")
 					SetSliderValue(Event_Prob, 99)
 					DisableGadget(Event_Prob)
-					GridGadgetText = "Name: " + Map(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MapAngle(Grid_SelectedX, Grid_SelectedY) + "???"
+					GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY))
 				EndIf
 			EndIf
 			
@@ -409,7 +417,7 @@ Repeat
 		ElseIf CurrMapGrid = 1
 			For rt.RoomTemplates = Each RoomTemplates
 				If rt = ForestPlace(Grid_SelectedX, Grid_SelectedY)
-					SetGadgetText(Room_Desc, "Room description:" + Chr(13) + rt\Description)
+					SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
 					Exit
 				EndIf
 			Next 
@@ -419,11 +427,11 @@ Repeat
 			SetGadgetText(Event_Prob_Label, "")
 			SetSliderValue(Event_Prob, 99)
 			DisableGadget(Event_Prob)
-			GridGadgetText = "Name: " + ForestPlace(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY) + "???"
+			GridGadgetText = Format(GetLocalString("mc", "name"), ForestPlace(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY))
 		Else
 			For rt.RoomTemplates = Each RoomTemplates
 				If rt = MTRoom(Grid_SelectedX, Grid_SelectedY)
-					SetGadgetText(Room_Desc, "Room description:" + Chr(13) + rt\Description)
+					SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
 					Exit
 				EndIf
 			Next 
@@ -433,7 +441,7 @@ Repeat
 			SetGadgetText(Event_Prob_Label, "")
 			SetSliderValue(Event_Prob, 99)
 			DisableGadget(Event_Prob)
-			GridGadgetText = "Name: " + MTRoom(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MTRoomAngle(Grid_SelectedX, Grid_SelectedY) + "???"
+			GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomAngle(Grid_SelectedX, Grid_SelectedY))
 		EndIf
 		
 		CloseFile(f)
@@ -498,7 +506,7 @@ Repeat
 											If rt = Map(x, y) Then
 												For i = 0 To 5
 													If rt\Events[i] <> "" Then
-														InsertGadgetItem(ComboBox, 0, "[none]")
+														InsertGadgetItem(ComboBox, 0, None)
 														HasEvent = True
 														Exit
 													EndIf
@@ -506,7 +514,7 @@ Repeat
 												For i = 0 To 5
 													If rt\Events[i] <> "" Then InsertGadgetItem(ComboBox, i + 1, rt\Events[i])
 												Next
-												SetGadgetText(Room_Desc, "Room description:" + Chr(13) + rt\Description)
+												SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
 												Exit
 											EndIf
 										Next 
@@ -519,18 +527,18 @@ Repeat
 											DisableGadget(Event_Prob)
 										Else
 											EnableGadget(ComboBox)
-											If MapEvent(x, y) <> "" And MapEvent(x, y) <> "[none]" Then
+											If MapEvent(x, y) <> "" And MapEvent(x, y) <> None Then
 												For ev.Event = Each Event
 													If ev\Name = MapEvent(x, y)
-														SetGadgetText(Event_Desc, "Event description:" + Chr(13) + ev\Description)
+														SetGadgetText(Event_Desc, GetLocalString("mc", "event.desc") + Chr(13) + ev\Description)
 														Exit
 													EndIf
 												Next
 											Else
 												SetGadgetText(Event_Desc, "")
 											EndIf
-											If MapEvent(x, y) <> "" And MapEvent(x, y) <> "[none]" Then
-												SetGadgetText(Event_Prob_Label, "Event chance: 100%")
+											If MapEvent(x, y) <> "" And MapEvent(x, y) <> None Then
+												SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), 100))
 												SetSliderValue(Event_Prob, 99)
 												EnableGadget(Event_Prob)
 											Else
@@ -622,13 +630,13 @@ Repeat
 						If Grid_SelectedX = x And Grid_SelectedY = y Then
 							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY Then
 								ChangeGridGadget = True
-								If MapEvent(x, y) <> "" And MapEvent(x, y) <> "[none]"
-									GridGadgetText = "Name: " + Map(x, y)\Name + Chr(13) + "Angle: " + MapAngle(x, y) + "???" + Chr(13) + "Event: " + MapEvent(x, y) + Chr(13) + "Event Chance: " + Int(MapEventProb(x, y) * 100) + "%"
+								If MapEvent(x, y) <> "" And MapEvent(x, y) <> None
+									GridGadgetText = Format(GetLocalString("mc", "name"), Map(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(x, y)) + Chr(13) + "Event: " + MapEvent(x, y) + Chr(13) + Format(GetLocalString("mc", "event.chance"), Int(MapEventProb(x, y) * 100))
 									SetSliderValue(Event_Prob, Int(MapEventProb(x, y) * 100) - 1)
 								Else
-									GridGadgetText = "Name: " + Map(x, y)\Name + Chr(13) + "Angle: " + MapAngle(x, y) + "???"
+									GridGadgetText = Format(GetLocalString("mc", "name"), Map(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(x, y))
 								EndIf
-								If GadgetText(Event_Prob_Label) <> "" Then SetGadgetText(Event_Prob_Label, "Event chance: " + (SliderValue(Event_Prob) + 1) + "%")
+								If GadgetText(Event_Prob_Label) <> "" Then SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), (SliderValue(Event_Prob) + 1)))
 							EndIf
 						EndIf
 					EndIf
@@ -667,10 +675,10 @@ Repeat
 								DrawBlock(Arrows[Floor(MapAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MapGridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MapGridSize + 1) * Grid_SelectedY + Height2)
 								If PrevAngle <> MapAngle(Grid_SelectedX, Grid_SelectedY) Then
 									ChangeGridGadget = True
-									If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> "[none]" Then
-										GridGadgetText = "Name: " + Map(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MapAngle(Grid_SelectedX, Grid_SelectedY) + "???" + Chr(13) + "Event: " + MapEvent(Grid_SelectedX, Grid_SelectedY) + Chr(13) + "Event Chance: " + Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100) + "%"
+									If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> None Then
+										GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY)) + Chr(13) + Format(GetLocalString("mc", "room.event"), MapEvent(Grid_SelectedX, Grid_SelectedY)) + Chr(13) + Format(GetLocalString("mc", "event.chance"), Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100))
 									Else
-										GridGadgetText = "Name: " + Map(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MapAngle(Grid_SelectedX, Grid_SelectedY) + "???"
+										GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY))
 									EndIf
 								EndIf
 							EndIf
@@ -732,7 +740,7 @@ Repeat
 										
 										For rt.RoomTemplates = Each RoomTemplates
 											If rt = ForestPlace(x, y)
-												SetGadgetText(Room_Desc, "Room description:" + Chr(13) + rt\Description)
+												SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
 												Exit
 											EndIf
 										Next 
@@ -808,7 +816,7 @@ Repeat
 						If Grid_SelectedX = x And Grid_SelectedY = y Then
 							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY Then
 								ChangeGridGadget = True
-								GridGadgetText = "Name: " + ForestPlace(x, y)\Name + Chr(13) + "Angle: " + ForestPlaceAngle(x, y) + "???"
+								GridGadgetText = Format(GetLocalString("mc", "name"), ForestPlace(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), ForestPlaceAngle(x, y))
 							EndIf
 						EndIf
 					EndIf
@@ -842,7 +850,7 @@ Repeat
 							DrawBlock(Arrows[Floor(ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width - 1) / Float(ForestGridSize + 1) * Grid_SelectedX + Width2, Float(Height - 1) / Float(ForestGridSize + 1) * Grid_SelectedY + Height2)
 							If PrevAngle <> ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY)
 								ChangeGridGadget = True
-								GridGadgetText = "Name: " + ForestPlace(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY) + "???"
+								GridGadgetText = Format(GetLocalString("mc", "name"), ForestPlace(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY))
 							EndIf
 						EndIf
 					EndIf
@@ -882,7 +890,7 @@ Repeat
 										
 										For rt.RoomTemplates = Each RoomTemplates
 											If rt = MTRoom(x, y)
-												SetGadgetText(Room_Desc, "Room description:" + Chr(13) + rt\Description)
+												SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
 												Exit
 											EndIf
 										Next 
@@ -957,7 +965,7 @@ Repeat
 						If Grid_SelectedX = x And Grid_SelectedY = y Then
 							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY Then
 								ChangeGridGadget = True
-								GridGadgetText = "Name: " + MTRoom(x, y)\Name + Chr(13) + "Angle: " + MTRoomAngle(x, y) + "???"
+								GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomAngle(x, y))
 							EndIf
 						EndIf
 					EndIf
@@ -991,7 +999,7 @@ Repeat
 							DrawBlock(Arrows[Floor(MTRoomAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MT_GridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MT_GridSize + 1) * Grid_SelectedY + Height2)
 							If PrevAngle <> MTRoomAngle(Grid_SelectedX, Grid_SelectedY)
 								ChangeGridGadget = True
-								GridGadgetText = "Name: " + MTRoom(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MTRoomAngle(Grid_SelectedX, Grid_SelectedY) + "???"
+								GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomangle(Grid_SelectedX, Grid_SelectedY))
 							EndIf
 						EndIf
 					EndIf
@@ -1008,15 +1016,15 @@ Repeat
 		If Item2 >= 0 Then
 			Event_Name = GadgetItemText(ComboBox, Item2)
 			If Event_Name <> PrevEvent
-				If Event_Name <> "" And Event_Name <> "[none]"
+				If Event_Name <> "" And Event_Name <> None
 					MapEvent(Grid_SelectedX, Grid_SelectedY) = Event_Name
 					MapEventProb(Grid_SelectedX, Grid_SelectedY) = Float((SliderValue(Event_Prob) + 1) / 100.0)
-					GridGadgetText = "Name: " + Map(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MapAngle(Grid_SelectedX, Grid_SelectedY) + "???" + Chr(13) + "Event: " + MapEvent(Grid_SelectedX, Grid_SelectedY) + Chr(13) + "Event Chance: " + Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100) + "%"
+					GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY)) + Chr(13) + Format(GetLocalString("mc", "room.event"), MapEvent(Grid_SelectedX, Grid_SelectedY)) + Chr(13) + Format(GetLocalString("mc", "event.chance"), Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100))
 					ChangeGridGadget = True
 				Else
 					MapEvent(Grid_SelectedX, Grid_SelectedY) = Event_Name
 					MapEventProb(Grid_SelectedX, Grid_SelectedY) = 0.0
-					GridGadgetText = "Name: " + Map(Grid_SelectedX, Grid_SelectedY)\Name + Chr(13) + "Angle: " + MapAngle(Grid_SelectedX, Grid_SelectedY) + "???"
+					GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY))
 					ChangeGridGadget = True
 				EndIf
 			EndIf
@@ -1039,33 +1047,33 @@ Repeat
 		Local EID% = EventData() 
 		
 	    If EID = 0 Then 
-			Local Result% = Proceed("Save current map?", True)
+			Local Result% = Proceed(GetLocalString("mc", "savemap"), True)
 			
 			If Result = 1 Then
-				SetStatusText(WinHandle, "Created new map and saving prev. map")
-				If FileType(FileName) <> 1 Then FileName = RequestFile("Open map", "cbmap", True, "")
+				SetStatusText(WinHandle, GetLocalString("mc", "status.save"))
+				If FileType(FileName) <> 1 Then FileName = RequestFile(GetLocalString("mc", "openmap"), "cbmap", True, "")
 				If FileName <> "" Then SaveMap(FileName)
 				EraseMap()
 				If (Not ShowGrid) Then SaveMap("CONFIG_MAPINIT.SI", True)
 				FileName = ""
 			ElseIf Result = 0 Then 
-				SetStatusText(WinHandle, "Created new map without saving prev. map")
+				SetStatusText(WinHandle, GetLocalString("mc", "status.nosave"))
 				EraseMap()
 				If (Not ShowGrid) Then SaveMap("CONFIG_MAPINIT.SI", True)
 				FileName = ""
 			ElseIf Result = -1 Then
-				SetStatusText(WinHandle, "Creating new map has been cancelled")
+				SetStatusText(WinHandle, GetLocalString("mc", "status.cancel"))
 			EndIf
 		EndIf
 		If EID = 1 Then
-			FileName = RequestFile("Open Map","*cbmap2;*cbmap,*cbmap2,*cbmap", False, "") 
+			FileName = RequestFile(GetLocalString("mc", "openmap"),"*cbmap2;*cbmap,*cbmap2,*cbmap", False, "") 
 			If FileName <> "" Then LoadMap(FileName)
 		EndIf
 		If EID = 2 Then
-			If FileType(FileName) <> 1 Then FileName = RequestFile("Save Map", "cbmap2,cbmap", True, "")
+			If FileType(FileName) <> 1 Then FileName = RequestFile(GetLocalString("mc", "save"), "cbmap2,cbmap", True, "")
 			If FileName <> "" Then
 				If Right(FileName, 5) = "cbmap" Then
-					Local Value% = Confirm("cbmap is an outdated file format. Some data can be lost if you save your map to this file format." + Chr(13) + "Are you sure you want to proceed?", 0)
+					Local Value% = Confirm(Format(GetLocalString("mc", "oldfile"), Chr(13), "\n"), 0)
 					
 					If Value = 1 Then SaveMap(FileName, False, 1)
 				Else
@@ -1075,10 +1083,10 @@ Repeat
 		EndIf	
 		If EID = 3 Then
 			.back
-			FileName = RequestFile("Save Map", "cbmap2, cbmap", True, "")
+			FileName = RequestFile(GetLocalString("mc", "save"), "cbmap2, cbmap", True, "")
 			If FileName <> "" Then
 				If Right(FileName, 5) = "cbmap" Then
-					Value = Confirm("cbmap is an outdated file format. Some data can be lost if you save your map to this file format." + Chr(13) + "Are you sure you want to proceed?", 0)
+					Value = Confirm(Format(GetLocalString("mc", "oldfile"), Chr(13), "\n"), 0)
 					If Value = 0 Then Goto back
 					SaveMap(FileName, False, 1)
 				Else
@@ -1087,8 +1095,8 @@ Repeat
 			EndIf
 		EndIf
 		
-		If EID = 6 Then ExecFile("Manual.pdf")
-		If EID = 40 Then Notify("SCP Containment Breach Ultimate Edition Map Creator" + Chr(13))
+		If EID = 6 Then ExecFile("https://wiki.ziyuesinicization.site/index.php?title=Map_Creator_Manual")
+		If EID = 40 Then Notify(GetLocalString("mc", "about") + Chr(13))
 		If EID = 17 Then ShowGadget(OptionWin)
 		If EID = 15 Then
 			Value = MenuChecked(Event_Default)
@@ -1157,7 +1165,7 @@ Repeat
 			SetGadgetText(Event_Prob_Label, "")
 			SetSliderValue(Event_Prob, 99)
 			DisableGadget(Event_Prob)
-			SetGadgetText(Room_Desc, "Room description:")
+			SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc"))
 			Grid_SelectedX = -1
 			Grid_SelectedY = -1
 		EndIf
@@ -1196,7 +1204,7 @@ Repeat
 		EndIf	
 		If EventSource() = SaveOpt_Button Then
 			HideGadget(OptionWin)
-			SetStatusText(WinHandle, "New settings are saved")
+			SetStatusText(WinHandle, GetLocalString("mc", "status.saved"))
 			IniWriteString(OptionFileMC, "3-D Scene", "BG Color R", opt\FogR)
 			IniWriteString(OptionFileMC, "3-D Scene", "BG Color G", opt\FogG)
 			IniWriteString(OptionFileMC, "3-D Scene", "BG Color B", opt\FogB)
@@ -1245,11 +1253,11 @@ Repeat
 				If Item > 0 Then
 					For ev.Event = Each Event
 						If ev\Name = Name Then
-							SetGadgetText(Event_Desc, "Event description:" + Chr(13) + ev\Description)
+							SetGadgetText(Event_Desc, GetLocalString("mc", "event.desc") + Chr(13) + ev\Description)
 							Exit
 						EndIf
 					Next
-					SetGadgetText(Event_Prob_Label, "Event chance: " + (SliderValue(Event_Prob) + 1) + "%")
+					SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), (SliderValue(Event_Prob) + 1)))
 					EnableGadget(Event_Prob)
 					SetSliderValue(Event_Prob, 99)
 				Else
@@ -1281,7 +1289,7 @@ Repeat
 					If rt\Name = Name
 						For i = 0 To 5
 							If rt\Events[i] <> "" Then
-								InsertGadgetItem(ComboBox, 0, "[none]")
+								InsertGadgetItem(ComboBox, 0, None)
 								HasEvent = True
 								Exit
 							EndIf
@@ -1289,7 +1297,7 @@ Repeat
 						For i = 0 To 5
 							If rt\Events[i] <> "" Then InsertGadgetItem(ComboBox, i + 1, rt\Events[i])
 						Next
-						SetGadgetText(Room_Desc, "Room description:" + Chr(13) + rt\Description)
+						SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
 						CurrRT = rt
 						Exit
 					EndIf
@@ -1314,11 +1322,11 @@ Repeat
 					If SelectedGadgetItem(ComboBox) <> 0 Then
 						For ev.Event = Each Event
 							If ev\Name = CurrRT\Events[0]
-								SetGadgetText(Event_Desc, "Event description:" + Chr(13) + ev\Description)
+								SetGadgetText(Event_Desc, GetLocalString("mc", "event.desc") + Chr(13) + ev\Description)
 								Exit
 							EndIf
 						Next
-						SetGadgetText(Event_Prob_Label, "Event chance: 100%")
+						SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), 100))
 						SetSliderValue(Event_Prob, 99)
 						EnableGadget(Event_Prob)
 					Else
@@ -1334,12 +1342,12 @@ Repeat
 			EndIf
 		EndIf
 		If EventSource() = Event_Prob Then
-			SetGadgetText(Event_Prob_Label, "Event chance: " + (SliderValue(Event_Prob) + 1) + "%")
+			SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), (SliderValue(Event_Prob) + 1)))
 			If Grid_SelectedX <> -1 And Grid_SelectedY <> -1 Then
 				x = Grid_SelectedX
 				y = Grid_SelectedY
 				MapEventProb(x, y) = Float((SliderValue(Event_Prob) + 1) / 100.0)
-				If MapEvent(x, y) <> "" Then GridGadgetText = "Name: " + Map(x, y)\Name + Chr(13) + "Angle: " + MapAngle(x, y) + "???" + Chr(13) + "Event: " + MapEvent(x, y) + Chr(13) + "Event Chance: " + Int(MapEventProb(x, y) * 100) + "%"
+				If MapEvent(x, y) <> "" Then GridGadgetText = Format(GetLocalString("mc", "name"), Map(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(x, y)) + Chr(13) + "Event: " + MapEvent(x, y) + Chr(13) + Format(GetLocalString("mc", "event.chance"), Int(MapEventProb(x, y) * 100))
 				SetGadgetText(Grid_Room_Info, GridGadgetText)
 			EndIf
 		EndIf
@@ -1589,7 +1597,7 @@ Function EraseMap%()
 		DisableGadget(Event_Prob)
 	Else
 		SetSliderValue(Event_Prob, 99)
-		SetGadgetText(Event_Prob_Label, "Event chance: " + (SliderValue(Event_Prob) + 1) + "%")
+		SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), (SliderValue(Event_Prob) + 1)))
 	EndIf
 	
 	For x = 0 To MapGridSize
@@ -1635,8 +1643,8 @@ Function LoadMap%(File$)
 	If Right(File, 6) = "cbmap2" Then
 		MapAuthor = ReadLine(f)
 		MapDescription = ReadLine(f)
-		If MapAuthor = "[Unknown]" Then MapAuthor = ""
-		If MapDescription = "[No description]" Then MapDescription = ""
+		If MapAuthor = GetLocalString("creator", "unknown") Then MapAuthor = ""
+		If MapDescription = GetLocalString("creator", "nodesc") Then MapDescription = ""
 		SetGadgetText(Map_Author_Text, MapAuthor)
 		SetGadgetText(Descr_Text, MapDescription)
 		ZoneTransValue1 = ReadByte(f)
@@ -1727,13 +1735,13 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 	If Old = 0 Then
 		MapAuthor = TextFieldText(Map_Author_Text)
 		If Trim(MapAuthor) = "" Then
-			WriteLine(f, "[Unknown]")
+			WriteLine(f, GetLocalString("creator", "unknown"))
 		Else
 			WriteLine(f, MapAuthor)
 		EndIf
 		MapDescription = TextAreaText(Descr_Text)
 		If Trim(MapDescription) = "" Then
-			WriteLine(f, "[No description]")
+			WriteLine(f, GetLocalString("creator", "nodesc"))
 		Else
 			WriteLine(f, MapDescription)
 		EndIf
@@ -1848,4 +1856,4 @@ Function WriteOptions%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#BlitzPlus
+;~C#Blitz3D
