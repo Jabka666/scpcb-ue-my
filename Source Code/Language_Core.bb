@@ -6,6 +6,7 @@ Type ListLanguage
 	Field Flag$
 	Field FlagImg%
 	Field Full%
+	Field FileSize$
 End Type
 
 Function LanguageSelector%()
@@ -31,6 +32,7 @@ Function LanguageSelector%()
 				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
 				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
+				lan\FileSize = ParseDomainTXT(l, "size") ; ~ Size of localization
 				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage(BasePath + "flags\" + lan\Flag)
 			Else
@@ -47,8 +49,9 @@ Function LanguageSelector%()
 	
 	Local LanguageBG% = LoadImage_Strict("GFX\Menu\Language.png")
 	Local LanguageIMG% = CreateImage(452, 254)
-	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 5)
+	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 6)
 	Local SelectedLanguage.ListLanguage = Null
+	Local MouseHoverLanguage.ListLanguage = Null
 	
 	AppTitle(GetLocalString("language", "title"))
 	
@@ -68,14 +71,16 @@ Function LanguageSelector%()
 		If LinesAmount > 13 Then
 			y = 200 - (20 * ScrollMenuHeight * ScrollBarY)
 			SetBuffer(ImageBuffer(LanguageIMG))
-			Cls()
+			DrawImage LanguageBG,-20,-195
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(1, 0, 0)
-				If lan\Full Then
-					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
-				Else
-					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 2, y - 195, 432, lan\FlagImg)
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
+				If MouseOn(20, y - (FontHeight() / 2), 430, 20) Then
+					DrawImage(ButtonImages, 405, y - 199, 5)
+					If MouseOn(425, y - 4, 21, 21) Then
+						MouseHoverLanguage = lan
+					EndIf
 				EndIf
 				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
@@ -104,10 +109,12 @@ Function LanguageSelector%()
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
-				If lan\Full Then
-					LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, lan\FlagImg)
-				Else
-					LimitTextWithImage(lan\Name + "(" + lan\ID + ") - " + GetLocalString("language", "unfull"), 21, y, 432, lan\FlagImg)
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, lan\FlagImg)
+				If MouseOn(20, y - (FontHeight() / 2), 430, 20) Then
+					DrawImage(ButtonImages, 425, y - 4, 5)
+					If MouseOn(425, y - 4, 21, 21) Then
+						MouseHoverLanguage = lan
+					EndIf
 				EndIf
 				If lan\ID = opt\Language Then 
 					Color(200, 0, 0)
@@ -128,9 +135,10 @@ Function LanguageSelector%()
 			ScrollMenuHeight = LinesAmount
 		EndIf
 		
+		Color(0, 0, 0)
+		RowText(GetLocalString("language", "more"), 481, 200, 140, 100)
+		
 		If SelectedLanguage <> Null Then
-			Color(0, 0, 0)
-			RowText(Format(Format(GetLocalString("language", "author"), SelectedLanguage\Author, "{0}"), SelectedLanguage\LastModify, "{1}"), 481, 197, 140, 100)
 			If SelectedLanguage\ID = opt\Language Then
 				; ~ Just save this line, okay?
 			ElseIf SelectedLanguage\Name = "English"
@@ -158,7 +166,47 @@ Function LanguageSelector%()
 		Else
 			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language")
 		EndIf
-		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages) Then  Exit
+		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
+		
+		If MouseHoverLanguage <> Null Then
+			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
+			Local ID$ = Format(GetLocalString("language", "id"), MouseHoverLanguage\ID)
+			If MouseHoverLanguage\ID <> "en-US" Then
+				Local Author$ = Format(GetLocalString("language", "author"), MouseHoverLanguage\Author)
+				Local Prefect$ = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
+				Local Size$ = Format(GetLocalString("language", "size"), MouseHoverLanguage\FileSize)
+				Local Height% = FontHeight() * 9.5
+			Else
+				Author = ""
+				Prefect = ""
+				Size = ""
+				Height = FontHeight() * 4.5
+			EndIf
+			Local Width% = Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size))
+			x = MouseX() + 10
+			y = MouseY() + 10
+			If (x + Width) > 640 Then
+				x = x - Width - 10
+			EndIf
+			RenderFrame(x, y, Width + 10, Height)
+			x = x + 5
+			Text(x, y + 8, Name)
+			Text(x, y + 8 + 15, ID)
+			If MouseHoverLanguage\ID <> "en-US" Then
+				Text(x, y + 8 + 15*2, Author)
+				If MouseHoverLanguage\Full Then
+					TextWithDualColors(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
+				Else
+					TextWithDualColors(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "no"), 255, 255, 255, 200, 0, 0)
+				EndIf
+				Text(x, y + 8 + 15*4, Size)
+			EndIf
+			If mo\MouseHit1 Then
+				ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
+			EndIf
+		EndIf
+		
+		MouseHoverLanguage = Null
 		
 		Flip()
 	Forever
@@ -307,6 +355,18 @@ End Function
 Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)
 	DrawImage(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
 	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
+End Function
+
+Function TextWithDualColors(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, ColorR2%, ColorG2%, ColorB2%)
+	Local OldR% = ColorRed()
+	Local OldG% = ColorGreen()
+	Local OldB% = ColorBlue()
+	
+	Color(ColorR1, ColorG1, ColorB1)
+	Text(x, y, Txt1)
+	Color(ColorR2, ColorG2, ColorB2)
+	Text(x + StringWidth(Txt1), y, Txt2)
+	Color(OldR, OldG, OldB)
 End Function
 
 ;~IDEal Editor Parameters:
