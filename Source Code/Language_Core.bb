@@ -200,9 +200,9 @@ Function LanguageSelector%()
 					TextWithDualColors(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "no"), 255, 255, 255, 200, 0, 0)
 				EndIf
 				Text(x, y + 8 + 15*4, Size)
-				If mo\MouseHit1 Then
-					ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
-				EndIf
+			EndIf
+			If mo\MouseHit1 Then
+				ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
 			EndIf
 		EndIf
 		
