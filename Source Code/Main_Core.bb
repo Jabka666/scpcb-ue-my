@@ -30,11 +30,6 @@ MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
 MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
 
 Global SplitSpace$
-If GetLocalString("global", "splitwithspace") Then
-	SplitSpace = " "
-Else
-	SplitSpace = ""
-EndIf
 
 Type Mouse
 	Field MouseHit1%, MouseHit2%

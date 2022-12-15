@@ -45,6 +45,11 @@ Function SetLanguage%(Language$)
 		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
 		IniWriteBuffer(lang\LanguagePath + SCP294File)
 	EndIf
+	If StringToBoolean(GetLocalString("global", "splitwithspace")) Then
+		SplitSpace = " "
+	Else
+		SplitSpace = ""
+	EndIf
 	opt\Language = Language
 End Function
 
