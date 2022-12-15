@@ -7,6 +7,7 @@ Type ListLanguage
 	Field FlagImg%
 	Field Full%
 	Field FileSize$
+	Field Compatible$
 End Type
 
 Function LanguageSelector%()
@@ -33,6 +34,7 @@ Function LanguageSelector%()
 				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				lan\FileSize = ParseDomainTXT(l, "size") ; ~ Size of localization
+				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
 				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage(BasePath + "flags\" + lan\Flag)
 			Else
@@ -174,19 +176,21 @@ Function LanguageSelector%()
 			If MouseHoverLanguage\ID <> "en-US" Then
 				Local Author$ = Format(GetLocalString("language", "author"), MouseHoverLanguage\Author)
 				Local Prefect$ = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
+				Local Compatible$ = Format(GetLocalString("language", "compatible"), MouseHoverLanguage\Compatible)
 				Local Size$ = Format(GetLocalString("language", "size"), MouseHoverLanguage\FileSize)
-				Local Height% = FontHeight() * 9.5
+				Local Height% = FontHeight() * 11
 			Else
 				Author = ""
 				Prefect = ""
+				Compatible = ""
 				Size = ""
 				Height = FontHeight() * 4.5
 			EndIf
-			Local Width% = Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size))
+			Local Width% = Max(Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size)), StringWidth(Compatible))
 			x = MouseX() + 10
 			y = MouseY() + 10
-			If (x + Width) > 640 Then
-				x = x - Width - 10
+			If (x + Width) > 640 Then ; ~ If tooltip is too long...
+				x = x - Width - 10 ; ~ ... then move tooltip to the left
 			EndIf
 			RenderFrame(x, y, Width + 10, Height)
 			x = x + 5
@@ -195,11 +199,16 @@ Function LanguageSelector%()
 			If MouseHoverLanguage\ID <> "en-US" Then
 				Text(x, y + 8 + 15*2, Author)
 				If MouseHoverLanguage\Full Then
-					TextWithDualColors(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
+					DualColorText(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
 				Else
-					TextWithDualColors(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "no"), 255, 255, 255, 200, 0, 0)
+					DualColorText(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "no"), 255, 255, 255, 200, 0, 0)
 				EndIf
-				Text(x, y + 8 + 15*4, Size)
+				If MouseHoverLanguage\Compatible = VersionNumber Then
+					DualColorText(x, y + 8 + 15*4, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 0, 200, 0)
+				Else
+					DualColorText(x, y + 8 + 15*4, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
+				EndIf
+				Text(x, y + 8 + 15*5, Size)
 			EndIf
 			If mo\MouseHit1 Then
 				ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
@@ -357,7 +366,7 @@ Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)
 	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
 End Function
 
-Function TextWithDualColors(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, ColorR2%, ColorG2%, ColorB2%)
+Function DualColorText(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, ColorR2%, ColorG2%, ColorB2%)
 	Local OldR% = ColorRed()
 	Local OldG% = ColorGreen()
 	Local OldB% = ColorBlue()
