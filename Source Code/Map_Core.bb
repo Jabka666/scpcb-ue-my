@@ -7913,8 +7913,6 @@ Function ShowRoomsColl%(room.Rooms)
 					ShowEntity(sc\CameraOBJ)
 					ShowEntity(sc\BaseOBJ)
 				EndIf
-				CreateMsg(EntityHidden(sc\ScrOverlay))
-				CreateHintMsg(EntityHidden(sc\ScrOBJ))
 			EndIf
 		Next
 		
