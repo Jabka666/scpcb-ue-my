@@ -37,7 +37,7 @@ Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
 	Else 
 		DefaultValue = Section + "," + Parameter
 	EndIf
-	Return(ConvertUTF8toANSI(IniGetBufferString_("..\Localization\" + Language + "\Data\local.ini", Section, Parameter, DefaultValue))) ; local.ini -> UTF8, MapCreator -> ANSI
+	Return(ConvertUTF8toANSI(IniGetBufferString_("..\Localization\" + Language + "\Data\local.ini", Section, Parameter, DefaultValue))) ; ~ local.ini -> UTF8, MapCreator -> ANSI
 End Function
 
 Function Format$(String_$, Parameter$, Replace_$ = "%s")
@@ -47,19 +47,19 @@ End Function
 Global OptionFileMC$ = GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini"
 
 ;[Block]
-; BlitzEncode - A part of BlitzToolbox
-; Encoding converter.
-; v1.0 2022.9.22
-; https://github.com/ZiYueCommentary/BlitzToolbox
+; ~ BlitzEncode - A part of BlitzToolbox
+; ~ Encoding converter.
+; ~ v1.0 2022.9.22
+; ~ https://github.com/ZiYueCommentary/BlitzToolbox
 
 Const UTF8% = 65001
 
-Function ConvertANSItoUTF8$(txt$)
-	Return ConvertEncoding(txt$, GetCodePage(), UTF8)
+Function ConvertANSItoUTF8$(Txt$)
+	Return(ConvertEncoding(Txt, GetCodePage(), UTF8))
 End Function
 
-Function ConvertUTF8toANSI$(txt$)
-	Return ConvertEncoding(txt$, UTF8, GetCodePage())
+Function ConvertUTF8toANSI$(Txt$)
+	Return(ConvertEncoding(Txt, UTF8, GetCodePage()))
 End Function
 ;[End Block]
 

@@ -14,7 +14,7 @@ Global LanguagePath$ = "..\Localization\" + Language + "\Data\local.ini"
 IniWriteBuffer_("..\Data\local.ini", True)
 IniWriteBuffer_("..\Localization\" + Language + "\Data\local.ini", True)
 
-Global None$ = GetLocalString("mc", None)
+Global None$ = GetLocalString("mc", "none")
 
 ; ~ Create a window to put the toolbar in
 ; ~ Do not localize this because 3-D Viewer may can't find Map Creator
@@ -42,34 +42,34 @@ Const EventsFile$ = "..\Data\events_MC.ini"
 InitEvents(EventsFile)
 AddEvents()
 
-Global Room_Desc% = CreateLabel(GetLocalString("mc", "room.desc"), 5, 40 + ResHeight / 2, ResWidth / 4, ResHeight / 11.8, WinHandle, 3)
+Global Room_Desc% = CreateLabel(GetLocalString("mc", "room.desc"), 5, 40 + ResHeight / 2, ResWidth / 4, ResHeight / 11.8, WinHandle, 13)
 
 SetGadgetLayout(Room_Desc, 3, 3, 2, 2)
 
-Global Grid_Room_Info% = CreateLabel("", 5, 200 + ResHeight / 2, ResWidth / 4, ResHeight / 11.6, WinHandle, 3)
+Global Grid_Room_Info% = CreateLabel("", 5, 200 + (ResHeight / 2), ResWidth / 4, ResHeight / 11.6, WinHandle, 3)
 
 SetGadgetLayout(Grid_Room_Info, 3, 3, 2, 2)
 
 Global ChangeGridGadget% = False
 Global GridGadgetText$ = ""
 
-Global Event_Desc% = CreateLabel("", 5, 117 + ResHeight / 2, ResWidth / 4, ResHeight / 12.0, WinHandle, 3)
+Global Event_Desc% = CreateLabel("", 5, 117 + (ResHeight / 2), ResWidth / 4, ResHeight / 12.0, WinHandle, 3)
 
 SetGadgetLayout(Event_Desc , 3, 3, 2, 2)
 
-Global Event_Prob% = CreateSlider(6, 185 + ResHeight / 2, ResWidth / 4 - 2, ResHeight / 38.0, WinHandle, 1)
+Global Event_Prob% = CreateSlider(6, 185 + (ResHeight / 2), ResWidth / 4 - 2, ResHeight / 38.0, WinHandle, 1)
 
 SetGadgetLayout(Event_Prob, 3, 3, 2, 2)
 SetSliderRange(Event_Prob, 0, 100)
 DisableGadget(Event_Prob)
 
-Global Event_Prob_Label% = CreateLabel("", 5, 170 + ResHeight / 2, ResWidth / 4, ResHeight / 38.0, WinHandle, 3)
+Global Event_Prob_Label% = CreateLabel("", 5, 170 + (ResHeight / 2), ResWidth / 4, ResHeight / 38.0, WinHandle, 3)
 
 SetGadgetLayout(Event_Prob_Label, 3, 3, 2, 2)
 
 Local Menu% = WindowMenu(WinHandle)
 
-Global ComboBox% = CreateComboBox(5, 95 + ResHeight / 2, ResWidth / 4, ResHeight - ResHeight / 1.39, WinHandle)
+Global ComboBox% = CreateComboBox(5, 95 + (ResHeight / 2), ResWidth / 4, ResHeight - ResHeight / 1.39, WinHandle)
 
 SetGadgetLayout(ComboBox, 3, 3, 2, 2)
 DisableGadget(ComboBox)
@@ -236,13 +236,13 @@ UpdateWindowMenu(WinHandle)
 
 SetStatusText(LoadingWindow, GetLocalString("mc", "load.2d"))
 
-Local OptionWin% = CreateWindow(GetLocalString("mc", "menu.opt.editcam"), GraphicsWidth() / 2 - 160, GraphicsHeight() / 2 - 120, 300, 280, WinHandle, 1)
+Local OptionWin% = CreateWindow(GetLocalString("mc", "menu.opt.editcam"), GraphicsWidth() / 2 - 160, GraphicsHeight() / 2 - 120, 400, 380, WinHandle, 1)
 
 HideGadget(OptionWin)
 
-Local LabelColor% = CreateLabel("", 5, 5, 285, 60, OptionWin, 1)
-Local LabelColor2% = CreateLabel("", 5, 70, 285, 60, OptionWin, 1)
-Local LabelRange% = CreateLabel("", 5, 135, 285, 60, OptionWin, 1)
+Local LabelColor% = CreateLabel("", 5, 5, 370, 60, OptionWin, 1)
+Local LabelColor2% = CreateLabel("", 5, 70, 370, 60, OptionWin, 1)
+Local LabelRange% = CreateLabel("", 5, 135, 370, 105, OptionWin, 1)
 Local Color_Button% = CreateButton(GetLocalString("mc", "editcam.camfogcolor"), 25, 20, 150, 30, OptionWin)
 Local Color_Button2% = CreateButton(GetLocalString("mc", "editcam.cursorcolor"), 25, 85, 150, 30, OptionWin)
 Local LabelFogR% = CreateLabel("R " + opt\FogR, 225, 15, 40, 15, OptionWin)
@@ -252,22 +252,22 @@ Local LabelCursorR% = CreateLabel("R " + opt\CursorR, 225, 75, 40, 15, OptionWin
 Local LabelCursorG% = CreateLabel("G " + opt\CursorG, 225, 90, 40, 15, OptionWin)
 Local LabelCursorB% = CreateLabel("B " + opt\CursorG, 225, 105, 40, 15, OptionWin)
 
-LabelRange = CreateLabel(GetLocalString("mc", "editcam.culling"), 10, 170, 80, 20, OptionWin)
+LabelRange = CreateLabel(GetLocalString("mc", "editcam.culling"), 10, 140, 100, 30, OptionWin)
 
 Global CameraRangeOpt% = CreateTextField(25, 150, 40, 20, OptionWin)
 
 SetGadgetText(CameraRangeOpt, opt\CamRange)
 
-Global VSync% = CreateButton(GetLocalString("mc", "editcam.vsync"), 123, 145, 50, 30, OptionWin, 2)
+Global VSync% = CreateButton(GetLocalString("mc", "editcam.vsync"), 10, 175, 100, 30, OptionWin, 2)
 
 SetButtonState(VSync, opt\VSync)
 
-Global ShowFPS% = CreateButton(GetLocalString("mc", "editcam.fps"), 210, 145, 70, 30, OptionWin, 2)
+Global ShowFPS% = CreateButton(GetLocalString("mc", "editcam.fps"), 10, 205, 100, 30, OptionWin, 2)
 
 SetButtonState(ShowFPS, opt\ShowFPS)
 
-Local CancelOpt_Button% = CreateButton(GetLocalString("mc", "editcam.cancel"), 10, 210, 100,30, OptionWin)
-Local SaveOpt_Button% = CreateButton(GetLocalString("mc", "editcam.save"), 185, 210, 100, 30, OptionWin)
+Local CancelOpt_Button% = CreateButton(GetLocalString("mc", "editcam.cancel"), 0, 310, 180, 30, OptionWin)
+Local SaveOpt_Button% = CreateButton(GetLocalString("mc", "editcam.save"), 220, 310, 180, 30, OptionWin)
 
 Local Map_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapset"), GraphicsWidth() / 2 - 120, GraphicsHeight() / 2 - 80, 240, 160, WinHandle, 1)
 
@@ -999,7 +999,7 @@ Repeat
 							DrawImage(Arrows[Floor(MTRoomAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MT_GridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MT_GridSize + 1) * Grid_SelectedY + Height2)
 							If PrevAngle <> MTRoomAngle(Grid_SelectedX, Grid_SelectedY)
 								ChangeGridGadget = True
-								GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomangle(Grid_SelectedX, Grid_SelectedY))
+								GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomAngle(Grid_SelectedX, Grid_SelectedY))
 							EndIf
 						EndIf
 					EndIf

@@ -87,7 +87,7 @@ Function LoadOptionsINI%()
 	
 	opt\FogG = IniGetInt(OptionFileMC, "3-D Scene", "BG Color G", 0)
 	
-	opt\FogB = IniGetInt(OptionFileMC, "3-D Scene", "BG Color B", 100)
+	opt\FogB = IniGetInt(OptionFileMC, "3-D Scene", "BG Color B", 0)
 	
 	opt\CursorR% = IniGetInt(OptionFileMC, "3-D Scene", "Cursor Color R", 255)
 	

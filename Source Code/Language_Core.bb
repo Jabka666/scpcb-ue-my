@@ -49,9 +49,10 @@ Function LanguageSelector%()
 	Cls()
 	Flip()
 	
-	Local LanguageBG% = LoadImage_Strict("GFX\Menu\Language.png")
+	Local LanguageBG%
 	Local LanguageIMG% = CreateImage(452, 254)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 6)
+	Local CurrFontHeight% = FontHeight() / 2
 	Local SelectedLanguage.ListLanguage = Null
 	Local MouseHoverLanguage.ListLanguage = Null
 	
@@ -67,34 +68,33 @@ Function LanguageSelector%()
 		Local x#, y#, LinesAmount%
 		
 		Color(255, 255, 255)
+		If (Not LanguageBG) Then LanguageBG = LoadImage_Strict("GFX\Menu\Language.png")
 		DrawBlock(LanguageBG, 0, 0)
 		Rect(479, 195, 140, 100)
 		
 		If LinesAmount > 13 Then
 			y = 200 - (20 * ScrollMenuHeight * ScrollBarY)
 			SetBuffer(ImageBuffer(LanguageIMG))
-			DrawImage LanguageBG,-20,-195
+			DrawImage(LanguageBG, -20, -195)
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(1, 0, 0)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
-				If MouseOn(20, y - (FontHeight() / 2), 430, 20) Then
+				If MouseOn(20, y - CurrFontHeight, 430, 20) Then
 					DrawImage(ButtonImages, 405, y - 199, 5)
-					If MouseOn(425, y - 4, 21, 21) Then
-						MouseHoverLanguage = lan
-					EndIf
+					If MouseOn(425, y - 4, 21, 21) Then MouseHoverLanguage = lan
 				EndIf
 				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
-					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
+					Rect(0, y - 195 - CurrFontHeight, 430, 20, False)
 				EndIf
 				If SelectedLanguage <> Null And lan = SelectedLanguage Then
 					Color(0, 0, 0)
-					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
+					Rect(0, y - 195 - CurrFontHeight, 430, 20, False)
 				EndIf
-				If MouseOn(20, y - (FontHeight() / 2), 432, 20) Then
+				If MouseOn(20, y - CurrFontHeight, 432, 20) Then
 					Color(150, 150, 150)
-					Rect(0, y - 195 - (FontHeight() / 2), 430, 20, False)
+					Rect(0, y - 195 - CurrFontHeight, 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
 				y = y + 20
@@ -112,23 +112,21 @@ Function LanguageSelector%()
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, lan\FlagImg)
-				If MouseOn(20, y - (FontHeight() / 2), 430, 20) Then
+				If MouseOn(20, y - CurrFontHeight, 430, 20) Then
 					DrawImage(ButtonImages, 425, y - 4, 5)
-					If MouseOn(425, y - 4, 21, 21) Then
-						MouseHoverLanguage = lan
-					EndIf
+					If MouseOn(425, y - 4, 21, 21) Then MouseHoverLanguage = lan
 				EndIf
 				If lan\ID = opt\Language Then 
 					Color(200, 0, 0)
-					Rect(20, y - (FontHeight() / 2), 430, 20, False)
+					Rect(20, y - CurrFontHeight, 430, 20, False)
 				EndIf
 				If SelectedLanguage <> Null And lan = SelectedLanguage Then
 					Color(0, 0, 0)
-					Rect(20, y - (FontHeight() / 2), 430, 20, False)
+					Rect(20, y - CurrFontHeight, 430, 20, False)
 				EndIf
 				If MouseOn(20, y - (FontHeight() / 2), 432, 20) Then
 					Color(150, 150, 150)
-					Rect(20, y - (FontHeight() / 2), 430, 20, False)
+					Rect(20, y - CurrFontHeight, 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
 				y = y + 20
@@ -148,6 +146,7 @@ Function LanguageSelector%()
 					SetLanguage(SelectedLanguage\ID)
 					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 					AppTitle(GetLocalString("language", "title"))
+					FreeImage(LanguageBG) : LanguageBG = 0
 				EndIf
 			ElseIf FileType("Localization\" + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language Then
@@ -156,6 +155,7 @@ Function LanguageSelector%()
 						SetLanguage(SelectedLanguage\ID)
 						fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 						AppTitle(GetLocalString("language", "title"))
+						FreeImage(LanguageBG) : LanguageBG = 0
 					EndIf
 				EndIf
 			Else
@@ -173,6 +173,7 @@ Function LanguageSelector%()
 		If MouseHoverLanguage <> Null Then
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
 			Local ID$ = Format(GetLocalString("language", "id"), MouseHoverLanguage\ID)
+			
 			If MouseHoverLanguage\ID <> "en-US" Then
 				Local Author$ = Format(GetLocalString("language", "author"), MouseHoverLanguage\Author)
 				Local Prefect$ = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
@@ -186,33 +187,31 @@ Function LanguageSelector%()
 				Size = ""
 				Height = FontHeight() * 4.5
 			EndIf
+			
 			Local Width% = Max(Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size)), StringWidth(Compatible))
+			
 			x = MouseX() + 10
 			y = MouseY() + 10
-			If (x + Width) > 640 Then ; ~ If tooltip is too long...
-				x = x - Width - 10 ; ~ ... then move tooltip to the left
-			EndIf
+			If (x + Width) > 640 Then x = x - Width - 10 ; ~ If tooltip is too long then move tooltip to the left
 			RenderFrame(x, y, Width + FontWidth(), Height)
 			x = x + 5
 			Text(x, y + 8, Name)
-			Text(x, y + 8 + 15, ID)
+			Text(x, y + 23, ID)
 			If MouseHoverLanguage\ID <> "en-US" Then
-				Text(x, y + 8 + 15*2, Author)
+				Text(x, y + 8 + 30, Author)
 				If MouseHoverLanguage\Full Then
-					DualColorText(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
+					DualColorText(x, y + 53, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
 				Else
-					DualColorText(x, y + 8 + 15*3, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "no"), 255, 255, 255, 200, 0, 0)
+					DualColorText(x, y + 53, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "no"), 255, 255, 255, 200, 0, 0)
 				EndIf
 				If MouseHoverLanguage\Compatible = VersionNumber Then
-					DualColorText(x, y + 8 + 15*4, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 0, 200, 0)
+					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 0, 200, 0)
 				Else
-					DualColorText(x, y + 8 + 15*4, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
+					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
 				EndIf
-				Text(x, y + 8 + 15*5, Size)
+				Text(x, y + 83, Size)
 			EndIf
-			If mo\MouseHit1 Then
-				ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
-			EndIf
+			If mo\MouseHit1 Then ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
 		EndIf
 		
 		MouseHoverLanguage = Null
@@ -233,6 +232,7 @@ Function LanguageSelector%()
 	DeleteFolder(BasePath) ; ~ Delete temporary folder
 	
 	AppTitle(GetLocalString("launcher", "title"))
+	FreeImage(LauncherBG) : LauncherBG = 0
 End Function
 
 Global OnScrollBar%
@@ -366,7 +366,7 @@ Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)
 	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
 End Function
 
-Function DualColorText(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, ColorR2%, ColorG2%, ColorB2%)
+Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, ColorR2%, ColorG2%, ColorB2%)
 	Local OldR% = ColorRed()
 	Local OldG% = ColorGreen()
 	Local OldB% = ColorBlue()

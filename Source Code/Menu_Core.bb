@@ -1768,6 +1768,8 @@ End Function
 Const LauncherWidth% = 640
 Const LauncherHeight% = 480
 
+Global LauncherBG%
+
 Function UpdateLauncher%(lnchr.Launcher)
 	Local i%, n%
 	
@@ -1786,11 +1788,12 @@ Function UpdateLauncher%(lnchr.Launcher)
 	MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")	
 	
-	Local LauncherIMG%[3]
+	Local LauncherIMG%[2]
+	Local LauncherMediaWidth%
 	
-	LauncherIMG[0] = LoadImage_Strict("GFX\menu\launcher.png")
-	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
-	LauncherIMG[2] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 2)
+	LauncherIMG[0] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
+	LauncherMediaWidth = ImageWidth(LauncherIMG[0]) / 2
+	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 2)
 	
 	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
@@ -1821,7 +1824,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		mo\MouseHit1 = MouseHit(1)
 		
 		Color(255, 255, 255)
-		DrawBlock(LauncherIMG[0], 0, 0)
+		If (Not LauncherBG) Then LauncherBG = LoadImage_Strict("GFX\menu\launcher.png")
+		DrawBlock(LauncherBG, 0, 0)
 		
 		Text(LauncherWidth - 620, LauncherHeight - 305, GetLocalString("launcher", "resolution"))
 		
@@ -1870,35 +1874,36 @@ Function UpdateLauncher%(lnchr.Launcher)
 				Txt = GetLocalString("launcher", "display.windowed")
 				;[End Block]
 		End Select
+		
 		Text(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 120, 30)
 		Text(515, 264, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 65, LauncherHeight - 226, 30, 30, ">", False) Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
-			Text(LauncherWidth - 620 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "DISCORD", True)
+			Text(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://discord.gg/n7KdW4u")
 		EndIf
-		DrawBlock(LauncherIMG[1], LauncherWidth - 620, LauncherHeight - 86, 0)
+		DrawBlock(LauncherIMG[0], LauncherWidth - 620, LauncherHeight - 86, 0)
 		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
-			Text(LauncherWidth - 510 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "MODDB", True)
+			Text(LauncherWidth - 510 + LauncherMediaWidth, LauncherHeight - 106, "MODDB", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 		EndIf
-		DrawBlock(LauncherIMG[1], LauncherWidth - 510, LauncherHeight - 86, 1)
+		DrawBlock(LauncherIMG[0], LauncherWidth - 510, LauncherHeight - 86, 1)
 		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
-			Text(LauncherWidth - 400 + (ImageWidth(LauncherIMG[1]) / 2), LauncherHeight - 106, "YOUTUBE", True)
+			Text(LauncherWidth - 400 + LauncherMediaWidth, LauncherHeight - 106, "YOUTUBE", True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 		EndIf
-		DrawBlock(LauncherIMG[1], LauncherWidth - 400, LauncherHeight - 86, 2)
+		DrawBlock(LauncherIMG[0], LauncherWidth - 400, LauncherHeight - 86, 2)
 		If MouseOn(LauncherWidth - 185, LauncherHeight - 191, 40, 40) Then
-			DrawImage(LauncherIMG[2], LauncherWidth - 185, LauncherHeight - 191, 1)
+			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 191, 1)
 			Rect(LauncherWidth - 185, LauncherHeight - 191, 40, 40, False)
 			Text(LauncherWidth - 185 + 45, LauncherHeight - 171, GetLocalString("launcher", "language"), False, True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : LanguageSelector()
 		Else
-			DrawImage(LauncherIMG[2], LauncherWidth - 185, LauncherHeight - 191, 0)
+			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 191, 0)
 		EndIf
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, GetLocalString("launcher", "report"), False, False) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 150, 30, GetLocalString("launcher", "changelog"), False, False) Then ExecFile_Strict("Changelog.txt")
@@ -1914,7 +1919,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 			opt\RealGraphicHeight = opt\GraphicHeight
 			Exit
 		EndIf
-		
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, GetLocalString("launcher", "exit"), False, False) Then
 			Quit = True
 			Exit
@@ -1926,8 +1930,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 	IniWriteString(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
+	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 	
-	For i = 0 To 2
+	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
 	Next
 	
