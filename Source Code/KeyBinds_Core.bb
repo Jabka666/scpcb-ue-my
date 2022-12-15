@@ -99,6 +99,7 @@ key\Name[203] = GetLocalString("key", "left")
 key\Name[205] = GetLocalString("key", "right")
 key\Name[207] = GetLocalString("key", "end")
 key\Name[208] = GetLocalString("key", "down")
+key\Name[209] = GetLocalString("key", "pagedown")
 key\Name[210] = GetLocalString("key", "insert")
 key\Name[211] = GetLocalString("key", "delete")
 
