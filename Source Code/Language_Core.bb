@@ -192,7 +192,7 @@ Function LanguageSelector%()
 			If (x + Width) > 640 Then ; ~ If tooltip is too long...
 				x = x - Width - 10 ; ~ ... then move tooltip to the left
 			EndIf
-			RenderFrame(x, y, Width + 10, Height)
+			RenderFrame(x, y, Width + FontWidth(), Height)
 			x = x + 5
 			Text(x, y + 8, Name)
 			Text(x, y + 8 + 15, ID)
