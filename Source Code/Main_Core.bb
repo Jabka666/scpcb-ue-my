@@ -8839,7 +8839,7 @@ Function Update008%()
 								PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
 								ResetEntity(me\Collider)
 								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
-								r\State3 = -1.0 : r\NPC[0]\IsDead = True
+								r\NPC[0]\State3 = -1.0 : r\NPC[0]\IsDead = True
 								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
 								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
 								ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
