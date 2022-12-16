@@ -2099,7 +2099,6 @@ Function UpdateNPCs%()
 					If n\State > 1.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 				Else
 					; ~ The NPC was killed
-					EntityType(n\Collider, HIT_DEAD)
 					If ChannelPlaying(n\SoundCHN) Then StopChannel_Strict(n\SoundCHN)
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
@@ -2522,8 +2521,6 @@ Function UpdateNPCs%()
 					If (PrevFrame < 5.0 And n\Frame >= 5.0) Lor (PrevFrame < 23.0 And n\Frame >= 23.0) Then PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))						
 				EndIf
 				
-				If n\IsDead Then EntityType(n\Collider, HIT_DEAD)
-				
 				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 				
 				If n\OBJ2 <> 0 Then
@@ -2548,6 +2545,9 @@ Function UpdateNPCs%()
 					
 					PrevFrame = AnimTime(n\OBJ)
 					Select n\State
+						Case -1.0 ; ~ Nothing
+							;[Block]
+							;[End Block]
 						Case 0.0 ; ~ Idles
 							;[Block]
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -2582,24 +2582,23 @@ Function UpdateNPCs%()
 					EndIf
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 				Else
-					EntityType(n\Collider, HIT_DEAD)
 					Select n\State3
-						Case 0.0 ; ~ Don't animate
+						Case -1.0 ; ~ Don't animate
 							;[Block]
 							;[End Block]
-						Case 1.0 ; ~ Fall backward
+						Case 0.0 ; ~ Fall backward
 							;[Block]
 							AnimateNPC(n, 1.0, 40.0, 0.5, False)
 							;[End Block]
-						Case 2.0 ; ~ Fall forward
+						Case 1.0 ; ~ Fall forward
 							;[Block]
 							AnimateNPC(n, 41.0, 60.0, 0.5, False)
 							;[End Block]
-						Case 3.0 ; ~ Snap #1
+						Case 2.0 ; ~ Snap #1
 							;[Block]
 							AnimateNPC(n, 555.0, 629.0, 0.5, False)
 							;[End Block]
-						Case 4.0 ; ~ Snap #2
+						Case 3.0 ; ~ Snap #2
 							;[Block]
 							AnimateNPC(n, 630.0, 677.0, 0.5, False)
 							;[End Block]
@@ -4648,7 +4647,6 @@ Function UpdateNPCs%()
 					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 				Else
 					; ~ The NPC was killed
-					EntityType(n\Collider, HIT_DEAD)
 					If ChannelPlaying(n\SoundCHN) Then StopChannel_Strict(n\SoundCHN)
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
@@ -4660,6 +4658,7 @@ Function UpdateNPCs%()
 		
 		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
+		If n\IsDead Then EntityType(n\Collider, HIT_DEAD)
 		If GravityDist < PowTwo(HideDistance * 0.7) Lor n\NPCType = NPCType1499_1 Then
 			If n\InFacility = InFacility Then
 				TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
