@@ -2388,10 +2388,10 @@ Function LoadMap%(File$)
 		For i = 0 To ForestPieceAmount - 1
 			x = ReadByte(f)
 			y = ReadByte(f)
-			Name = Lower(ReadString(f))
+			ReadString(f) ; ~ Skip translated name
 			
 			Angle = ReadByte(f)
-			
+			Name = ReadString(f)
 			If Angle <> 0.0 And Angle <> 2.0 Then Angle = Angle + 2.0
 			Angle = Angle + 1.0
 			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
@@ -2405,27 +2405,27 @@ Function LoadMap%(File$)
 					; ~ 13, 14, 15, 16 = ROOM3
 					; ~ 17, 18, 19, 20 = ROOM4
 					; ~ 21, 22, 23, 24 = DOORROOM
-					Case "scp-860-1 endroom"
+					Case "FRENDROOM"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 1.0
 						;[End Block]
-					Case "scp-860-1 path"
+					Case "FRPATH"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 5.0
 						;[End Block]
-					Case "scp-860-1 corner"
+					Case "FRCORNER"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 9.0
 						;[End Block]
-					Case "scp-860-1 t-shaped path"
+					Case "FRTSHAPE"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 13.0
 						;[End Block]
-					Case "scp-860-1 4-way path"
+					Case "FR4WAY"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 17.0
 						;[End Block]
-					Case "scp-860-1 door"
+					Case "FRDOOR"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 21.0
 						;[End Block]
@@ -2453,43 +2453,43 @@ Function LoadMap%(File$)
 		For i = 0 To MTPieceAmount - 1
 			x = ReadByte(f)
 			y = ReadByte(f)
-			Name = Lower(ReadString(f))
+			ReadString(f) ; ~ Skip translated name
 			
 			Angle = ReadByte(f)
-			
+			Name = ReadString(f)
 			If Angle <> 1.0 And Angle <> 3.0 Then Angle = Angle + 2.0
-			If Name = "maintenance tunnel corner" Lor Name = "maintenance tunnel t-shaped room" Then Angle = Angle + 3.0
+			If Name = "MTCORNER" Lor Name = "MTTSHAPE" Then Angle = Angle + 3.0
 			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
 			
 			x = (MTGridSize - 1) - x
 			
 			If MTRoom <> Null Then
 				Select Name
-					Case "maintenance tunnel endroom"
+					Case "MTENDROOM"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM1 + 1
 						;[End Block]
-					Case "maintenance tunnel corridor"
+					Case "MTCORRIDOR"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2 + 1
 						;[End Block]
-					Case "maintenance tunnel corner"
+					Case "MTCORNER"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2C + 1
 						;[End Block]
-					Case "maintenance tunnel t-shaped room"
+					Case "MTTSHAPE"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM3 + 1
 						;[End Block]
-					Case "maintenance tunnel 4-way room"
+					Case "MT4WAY"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 1
 						;[End Block]
-					Case "maintenance tunnel elevator"
+					Case "MTELEVATOR"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 2
 						;[End Block]
-					Case "maintenance tunnel generator room"
+					Case "MTGENERATOR"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 3
 						;[End Block]

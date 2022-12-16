@@ -36,7 +36,7 @@ Function LanguageSelector%()
 				lan\FileSize = ParseDomainTXT(l, "size") ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
 				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
-				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage(BasePath + "flags\" + lan\Flag)
+				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit
 			EndIf
@@ -70,7 +70,7 @@ Function LanguageSelector%()
 		Color(255, 255, 255)
 		If (Not LanguageBG) Then LanguageBG = LoadImage_Strict("GFX\Menu\Language.png")
 		DrawBlock(LanguageBG, 0, 0)
-		Rect(479, 195, 140, 100)
+		Rect(459, 195, 175, 100)
 		
 		If LinesAmount > 13 Then
 			y = 200 - (20 * ScrollMenuHeight * ScrollBarY)
@@ -78,7 +78,7 @@ Function LanguageSelector%()
 			DrawImage(LanguageBG, -20, -195)
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
-				Color(1, 0, 0)
+				Color(0, 0, 0)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
 				If MouseOn(20, y - CurrFontHeight, 430, 20) Then
 					DrawImage(ButtonImages, 405, y - 199, 5)
@@ -124,7 +124,7 @@ Function LanguageSelector%()
 					Color(0, 0, 0)
 					Rect(20, y - CurrFontHeight, 430, 20, False)
 				EndIf
-				If MouseOn(20, y - (FontHeight() / 2), 432, 20) Then
+				If MouseOn(20, y - CurrFontHeight, 432, 20) Then
 					Color(150, 150, 150)
 					Rect(20, y - CurrFontHeight, 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
@@ -136,13 +136,13 @@ Function LanguageSelector%()
 		EndIf
 		
 		Color(0, 0, 0)
-		RowText(GetLocalString("language", "more"), 481, 200, 140, 100)
+		RowText(GetLocalString("language", "more"), 461, 199, 169, 92)
 		
 		If SelectedLanguage <> Null Then
 			If SelectedLanguage\ID = opt\Language Then
 				; ~ Just save this line, okay?
 			ElseIf SelectedLanguage\Name = "English"
-				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
+				If UpdateLauncherButtonWithImage(459, LauncherHeight - 115, 175, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 					AppTitle(GetLocalString("language", "title"))
@@ -150,8 +150,8 @@ Function LanguageSelector%()
 				EndIf
 			ElseIf FileType("Localization\" + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language Then
-					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 140, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then DeleteFolder("Localization\" + SelectedLanguage\ID)
-					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
+					If UpdateLauncherButtonWithImage(459, LauncherHeight - 165, 175, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then DeleteFolder("Localization\" + SelectedLanguage\ID)
+					If UpdateLauncherButtonWithImage(459, LauncherHeight - 115, 175, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 						AppTitle(GetLocalString("language", "title"))
@@ -159,16 +159,16 @@ Function LanguageSelector%()
 					EndIf
 				EndIf
 			Else
-				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
+				If UpdateLauncherButtonWithImage(459, LauncherHeight - 115, 175, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
 					DownloadFile("https://files.ziyuesinicization.site/cbue/" + SelectedLanguage\ID + ".zip", BasePath + "/local.zip")
 					CreateDir("Localization\" + SelectedLanguage\ID)
 					Unzip(BasePath + "/local.zip", "Localization/" + SelectedLanguage\ID)
 				EndIf
 			EndIf
 		Else
-			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 140, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language")
+			If UpdateLauncherButtonWithImage(459, LauncherHeight - 115, 175, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language")
 		EndIf
-		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 140, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
+		If UpdateLauncherButtonWithImage(459, LauncherHeight - 65, 175, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
 		
 		If MouseHoverLanguage <> Null Then
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
@@ -198,7 +198,7 @@ Function LanguageSelector%()
 			Text(x, y + 8, Name)
 			Text(x, y + 23, ID)
 			If MouseHoverLanguage\ID <> "en-US" Then
-				Text(x, y + 8 + 30, Author)
+				Text(x, y + 38, Author)
 				If MouseHoverLanguage\Full Then
 					DualColorText(x, y + 53, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
 				Else

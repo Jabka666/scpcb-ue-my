@@ -4,7 +4,17 @@ Include "Source Code\Math_Core.bb"
 Const ResWidth% = 910
 Const ResHeight% = 660
 
-Local LoadingWindow% = CreateWindow("", GraphicsWidth() / 2 - 160, GraphicsHeight() / 2 - 120, 320, 260, 0, 8)
+Type Mouse
+	Field Viewport_Center_X%, Viewport_Center_Y%
+End Type
+
+Global mo.Mouse = New Mouse
+
+; ~ Viewport
+mo\Viewport_Center_X = GraphicsWidth() / 2
+mo\Viewport_Center_Y = GraphicsHeight() / 2
+
+Local LoadingWindow% = CreateWindow("", mo\Viewport_Center_X - 160, mo\Viewport_Center_Y - 120, 320, 260, 0, 8)
 Local PanelLoading% = CreatePanel(0, 0, 320, 260, LoadingWindow, 0)
 
 SetPanelImage(PanelLoading, "Assets\map_logo.png")
@@ -18,7 +28,7 @@ Global None$ = GetLocalString("mc", "none")
 
 ; ~ Create a window to put the toolbar in
 ; ~ Do not localize this because 3-D Viewer may can't find Map Creator
-Local WinHandle% = CreateWindow("SCP-CB Ultimate Edition Map Creator", GraphicsWidth() / 2 - ResWidth / 2, GraphicsHeight() / 2 - ResHeight / 2, ResWidth, ResHeight, 0, 13) 
+Local WinHandle% = CreateWindow("SCP-CB Ultimate Edition Map Creator", mo\Viewport_Center_X - ResWidth / 2, mo\Viewport_Center_Y - ResHeight / 2, ResWidth, ResHeight, 0, 13) 
 
 Global MainHwnd% = api_GetActiveWindow() ; ~ User32.dll
 
@@ -46,30 +56,30 @@ Global Room_Desc% = CreateLabel(GetLocalString("mc", "room.desc"), 5, 40 + ResHe
 
 SetGadgetLayout(Room_Desc, 3, 3, 2, 2)
 
-Global Grid_Room_Info% = CreateLabel("", 5, 200 + (ResHeight / 2), ResWidth / 4, ResHeight / 11.6, WinHandle, 3)
+Global Grid_Room_Info% = CreateLabel("", 5, (ResHeight / 2) + 200, ResWidth / 4, ResHeight / 11.6, WinHandle, 3)
 
 SetGadgetLayout(Grid_Room_Info, 3, 3, 2, 2)
 
 Global ChangeGridGadget% = False
 Global GridGadgetText$ = ""
 
-Global Event_Desc% = CreateLabel("", 5, 117 + (ResHeight / 2), ResWidth / 4, ResHeight / 12.0, WinHandle, 3)
+Global Event_Desc% = CreateLabel("", 5, (ResHeight / 2) + 117, ResWidth / 4, ResHeight / 12.0, WinHandle, 3)
 
 SetGadgetLayout(Event_Desc , 3, 3, 2, 2)
 
-Global Event_Prob% = CreateSlider(6, 185 + (ResHeight / 2), ResWidth / 4 - 2, ResHeight / 38.0, WinHandle, 1)
+Global Event_Prob% = CreateSlider(6, (ResHeight / 2) + 185, ResWidth / 4 - 2, ResHeight / 38.0, WinHandle, 1)
 
 SetGadgetLayout(Event_Prob, 3, 3, 2, 2)
 SetSliderRange(Event_Prob, 0, 100)
 DisableGadget(Event_Prob)
 
-Global Event_Prob_Label% = CreateLabel("", 5, 170 + (ResHeight / 2), ResWidth / 4, ResHeight / 38.0, WinHandle, 3)
+Global Event_Prob_Label% = CreateLabel("", 5, (ResHeight / 2) + 170, ResWidth / 4, ResHeight / 38.0, WinHandle, 3)
 
 SetGadgetLayout(Event_Prob_Label, 3, 3, 2, 2)
 
 Local Menu% = WindowMenu(WinHandle)
 
-Global ComboBox% = CreateComboBox(5, 95 + (ResHeight / 2), ResWidth / 4, ResHeight - ResHeight / 1.39, WinHandle)
+Global ComboBox% = CreateComboBox(5, (ResHeight / 2) + 95, ResWidth / 4, ResHeight - ResHeight / 1.39, WinHandle)
 
 SetGadgetLayout(ComboBox, 3, 3, 2, 2)
 DisableGadget(ComboBox)
@@ -157,13 +167,15 @@ Const MT_GridSize% = 18
 Dim MTRoom.RoomTemplates(MT_GridSize, MT_GridSize)
 Dim MTRoomAngle%(MT_GridSize, MT_GridSize)
 
-Global Arrows%[4]
-
+Local Arrows%[4], ArrowsWidth%, ArrowsHeight%
 Arrows[0] = LoadImage("Assets\arrows.png")
-HandleImage(Arrows[0], ImageWidth(Arrows[0]) / 2, ImageHeight(Arrows[0]) / 2)
+ArrowsWidth = ImageWidth(Arrows[0]) / 2
+ArrowsHeight = ImageHeight(Arrows[0]) / 2
+
+HandleImage(Arrows[0], ArrowsWidth, ArrowsHeight)
 For i = 1 To 3
 	Arrows[i] = CopyImage(Arrows[0])
-	HandleImage(Arrows[i], ImageWidth(Arrows[i]) / 2, ImageHeight(Arrows[i]) / 2)
+	HandleImage(Arrows[i], ArrowsWidth, ArrowsHeight)
 	RotateImage(Arrows[i], i * 90.0)
 Next
 
@@ -177,13 +189,13 @@ SetGadgetLayout(TxtBox, 3, 3, 3, 3)
 SetGadgetLayout(OK, 3, 3, 3, 3)
 SetGadgetLayout(Clean_Txt, 3, 3, 3, 3)
 
-Local Tab% = CreateTabber(0, 5, ResWidth / 4 + 20, ResHeight - 60, WinHandle)
+Local Tab% = CreateTabber(0, 5, (ResWidth / 4) + 20, ResHeight - 60, WinHandle)
 
 InsertGadgetItem(Tab, 0, GetLocalString("mc", "tab.2d"))
 InsertGadgetItem(Tab, 1, GetLocalString("mc", "tab.3d"))
 SetGadgetLayout(Tab, 3, 3, 2, 2)
 
-Local Tab2% = CreateTabber(300, 5, ResWidth / 4 + 20, ResHeight - 100, WinHandle)
+Local Tab2% = CreateTabber(300, 5, (ResWidth / 4) + 20, ResHeight - 100, WinHandle)
 
 InsertGadgetItem(Tab2, 0, GetLocalString("mc", "tab2.fac"))
 InsertGadgetItem(Tab2, 1, GetLocalString("mc", "tab2.forest"))
@@ -236,7 +248,7 @@ UpdateWindowMenu(WinHandle)
 
 SetStatusText(LoadingWindow, GetLocalString("mc", "load.2d"))
 
-Local OptionWin% = CreateWindow(GetLocalString("mc", "menu.opt.editcam"), GraphicsWidth() / 2 - 160, GraphicsHeight() / 2 - 120, 400, 380, WinHandle, 1)
+Local OptionWin% = CreateWindow(GetLocalString("mc", "menu.opt.editcam"), mo\Viewport_Center_X - 160, mo\Viewport_Center_Y - 120, 400, 380, WinHandle, 1)
 
 HideGadget(OptionWin)
 
@@ -269,7 +281,7 @@ SetButtonState(ShowFPS, opt\ShowFPS)
 Local CancelOpt_Button% = CreateButton(GetLocalString("mc", "editcam.cancel"), 0, 310, 180, 30, OptionWin)
 Local SaveOpt_Button% = CreateButton(GetLocalString("mc", "editcam.save"), 220, 310, 180, 30, OptionWin)
 
-Local Map_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapset"), GraphicsWidth() / 2 - 120, GraphicsHeight() / 2 - 80, 240, 160, WinHandle, 1)
+Local Map_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapset"), mo\Viewport_Center_X - 120, mo\Viewport_Center_Y - 80, 240, 160, WinHandle, 1)
 
 HideGadget(Map_Settings)
 
@@ -291,7 +303,7 @@ Global ZoneTransValue1% = 13, ZoneTransValue2% = 7
 Local ResetZoneTrans% = CreateButton(GetLocalString("mc", "reset"), 10, 90, 100, 30, Map_Settings)
 Local ApplyZoneTrans% = CreateButton(GetLocalString("mc", "apply"), 120, 90, 100, 30, Map_Settings)
 
-Local AuthorDescr_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapdesc"), GraphicsWidth() / 2 - 200, GraphicsHeight() / 2 - 80, 400, 200, WinHandle, 1)
+Local AuthorDescr_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapdesc"), mo\Viewport_Center_X - 200, mo\Viewport_Center_Y - 80, 400, 200, WinHandle, 1)
 
 HideGadget(AuthorDescr_Settings)
 
@@ -806,8 +818,8 @@ Repeat
 						Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x + 1, Float(Height - 1) / Float(ForestGridSize + 1) * y + 1, (Float(Width - 1) / Float(ForestGridSize + 1)) - 1, (Float(Height - 1) / Float(ForestGridSize + 1)) - 1, False)
 					Else
 						x2 = Float(Width - 1) / Float(ForestGridSize + 1)
-						y2 = Float(Height - 1) / Float(ForestGridSize +1)
-						If ForestPlace(x, y)\Name = "SCP-860-1 door" Then
+						y2 = Float(Height - 1) / Float(ForestGridSize + 1)
+						If ForestPlace(x, y)\Description = "FRDOOR" Then
 							DrawImage(SpecialIcons(1, Floor(ForestPlaceAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						Else
 							DrawImage(ForestIcons(ForestPlace(x, y)\Shape, Floor(ForestPlaceAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
@@ -956,7 +968,7 @@ Repeat
 					Else
 						x2 = Float(Width) / Float(MT_GridSize + 1)
 						y2 = Float(Height) / Float(MT_GridSize + 1)
-						If MTRoom(x, y)\Name = "Maintenance tunnel elevator"
+						If MTRoom(x, y)\Description = "MTELEVATOR"
 							DrawImage(SpecialIcons(2, Floor(MTRoomAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						Else
 							DrawImage(MapIcons(MTRoom(x, y)\Shape, Floor(MTRoomAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
@@ -1433,74 +1445,74 @@ Function LoadRoomTemplates%(File$)
 	Wend
 	
 	; ~ Forest pieces
-	Local Fr_Prefix$ = "SCP-860-1 "
+	Local Fr_Prefix$ = GetLocalString("mc", "860")
 	
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = Fr_Prefix + "door"
+	rt\Name = Fr_Prefix + GetLocalString("mc", "prefix.door")
 	rt\Shape = ROOM1
 	rt\Description = "FRDOOR"
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = Fr_Prefix + "endroom"
+	rt\Name = Fr_Prefix + GetLocalString("mc", "prefix.endroom")
 	rt\Shape = ROOM1
 	rt\Description = "FRENDROOM"
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = Fr_Prefix + "path"
+	rt\Name = Fr_Prefix + GetLocalString("mc", "prefix.path")
 	rt\Shape = ROOM2
 	rt\Description = "FRPATH"
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = Fr_Prefix + "corner"
+	rt\Name = Fr_Prefix + GetLocalString("mc", "prefix.corner")
 	rt\Shape = ROOM2C
 	rt\Description = "FRCORNER"
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = Fr_Prefix + "t-shaped path"
+	rt\Name = Fr_Prefix + GetLocalString("mc", "prefix.path.t")
 	rt\Shape = ROOM3
 	rt\Description = "FRTSHAPE"
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = Fr_Prefix + "4-way path"
+	rt\Name = Fr_Prefix + GetLocalString("mc", "prefix.path.4")
 	rt\Shape = ROOM4
 	rt\Description = "FR4WAY"
 	rt\MapGrid = 1
 	
 	; ~ Maintenance tunnel rooms
-	Local MT_Prefix$ = "Maintenance tunnel "
+	Local MT_Prefix$ = GetLocalString("mc", "mt")
 	
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "endroom"
+	rt\Name = MT_Prefix + GetLocalString("mc", "prefix.endroom")
 	rt\Shape = ROOM1
 	rt\Description = "MTENDROOM"
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "corridor"
+	rt\Name = MT_Prefix + GetLocalString("mc", "prefix.corridor")
 	rt\Shape = ROOM2
 	rt\Description = "MTCORRIDOR"
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "corner"
+	rt\Name = MT_Prefix + GetLocalString("mc", "prefix.corner")
 	rt\Shape = ROOM2C
 	rt\Description = "MTCORNER"
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "t-shaped room"
+	rt\Name = MT_Prefix + GetLocalString("mc", "prefix.room.t")
 	rt\Shape = ROOM3
 	rt\Description = "MTTSHAPE"
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "4-way room"
+	rt\Name = MT_Prefix + GetLocalString("mc", "prefix.room.4")
 	rt\Shape = ROOM4
 	rt\Description = "MT4WAY"
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "elevator"
+	rt\Name = MT_Prefix + GetLocalString("mc", "prefix.elev")
 	rt\Shape = ROOM2
 	rt\Description = "MTELEVATOR"
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "generator room"
+	rt\Name = MT_Prefix + GetLocalString("mc", "prefix.gen")
 	rt\Shape = ROOM1
 	rt\Description = "MTGENERATOR"
 	rt\MapGrid = 2
@@ -1688,6 +1700,7 @@ Function LoadMap%(File$)
 				EndIf
 			Next
 			ForestPlaceAngle(x, y) = ReadByte(f) * 90
+			ForestPlace(x, y)\Description = ReadString(f)
 		Next
 		; ~ Maintenance tunnel pieces
 		For i = 0 To MTRoomAmount - 1
@@ -1702,6 +1715,7 @@ Function LoadMap%(File$)
 				EndIf
 			Next
 			MTRoomAngle(x, y) = ReadByte(f) * 90
+			MTRoom(x, y)\Description = ReadString(f)
 		Next
 	Else
 		While (Not Eof(f))
@@ -1816,6 +1830,7 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 							WriteByte(f, 0)
 						EndIf
 					EndIf
+					WriteString(f, ForestPlace(x, y)\Description)
 				EndIf
 			Next
 		Next
@@ -1835,6 +1850,7 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 							WriteByte(f, 0)
 						EndIf
 					EndIf
+					WriteString(f, MTRoom(x, y)\Description)
 				EndIf
 			Next
 		Next

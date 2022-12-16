@@ -1864,9 +1864,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 				;[Block]
 				Txt = GetLocalString("launcher", "display.borderless")
 				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopWidth() Then
-					Text(LauncherWidth - 275, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
+					Text(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
 				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopWidth() Then
-					Text(LauncherWidth - 275, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
+					Text(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
 				EndIf
 				;[End Block]
 			Case 2
@@ -1876,9 +1876,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 		End Select
 		
 		Text(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
-		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 120, 30)
-		Text(515, 264, Txt, True)
-		If UpdateLauncherButton(LauncherWidth - 65, LauncherHeight - 226, 30, 30, ">", False) Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
+		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 145, 30)
+		Text(LauncherWidth - 185 + 72.5, LauncherHeight - 216, Txt, True)
+		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 226, 30, 30, ">", False) Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
 			Text(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
@@ -1905,8 +1905,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Else
 			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 191, 0)
 		EndIf
-		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 150, 30, GetLocalString("launcher", "report"), False, False) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
-		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 150, 30, GetLocalString("launcher", "changelog"), False, False) Then ExecFile_Strict("Changelog.txt")
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 165, 30, GetLocalString("launcher", "report"), False, False) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 165, 30, GetLocalString("launcher", "changelog"), False, False) Then ExecFile_Strict("Changelog.txt")
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"), False, False) Then
 			If opt\DisplayMode = 1 Then
 				opt\GraphicWidth = DesktopWidth()
