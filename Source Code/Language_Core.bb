@@ -70,7 +70,7 @@ Function LanguageSelector%()
 		Color(255, 255, 255)
 		If (Not LanguageBG) Then LanguageBG = LoadImage_Strict("GFX\Menu\Language.png")
 		DrawBlock(LanguageBG, 0, 0)
-		Rect(459, 195, 175, 100)
+		Rect(479, 195, 155, 110)
 		
 		If LinesAmount > 13 Then
 			y = 200 - (20 * ScrollMenuHeight * ScrollBarY)
@@ -136,13 +136,13 @@ Function LanguageSelector%()
 		EndIf
 		
 		Color(0, 0, 0)
-		RowText(GetLocalString("language", "more"), 461, 199, 169, 92)
+		RowText(GetLocalString("language", "more"), 481, 199, 149, 102)
 		
 		If SelectedLanguage <> Null Then
 			If SelectedLanguage\ID = opt\Language Then
 				; ~ Just save this line, okay?
 			ElseIf SelectedLanguage\Name = "English"
-				If UpdateLauncherButtonWithImage(459, LauncherHeight - 115, 175, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
+				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 					AppTitle(GetLocalString("language", "title"))
@@ -150,8 +150,8 @@ Function LanguageSelector%()
 				EndIf
 			ElseIf FileType("Localization\" + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language Then
-					If UpdateLauncherButtonWithImage(459, LauncherHeight - 165, 175, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then DeleteFolder("Localization\" + SelectedLanguage\ID)
-					If UpdateLauncherButtonWithImage(459, LauncherHeight - 115, 175, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
+					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then DeleteFolder("Localization\" + SelectedLanguage\ID)
+					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
 						AppTitle(GetLocalString("language", "title"))
@@ -159,16 +159,16 @@ Function LanguageSelector%()
 					EndIf
 				EndIf
 			Else
-				If UpdateLauncherButtonWithImage(459, LauncherHeight - 115, 175, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
+				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
 					DownloadFile("https://files.ziyuesinicization.site/cbue/" + SelectedLanguage\ID + ".zip", BasePath + "/local.zip")
 					CreateDir("Localization\" + SelectedLanguage\ID)
 					Unzip(BasePath + "/local.zip", "Localization/" + SelectedLanguage\ID)
 				EndIf
 			EndIf
 		Else
-			If UpdateLauncherButtonWithImage(459, LauncherHeight - 115, 175, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language")
+			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language")
 		EndIf
-		If UpdateLauncherButtonWithImage(459, LauncherHeight - 65, 175, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
+		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
 		
 		If MouseHoverLanguage <> Null Then
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
