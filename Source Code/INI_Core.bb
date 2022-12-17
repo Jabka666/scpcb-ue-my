@@ -167,7 +167,7 @@ Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 			;[End Block]
 		Case 3
 			;[Block]
-			StringToBoolean(Value)
+			Return(StringToBoolean(Value))
 			;[End Block]
 	End Select
 End Function

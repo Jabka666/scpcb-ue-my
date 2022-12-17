@@ -2868,7 +2868,7 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 							If Temp < d\KeyCard Then
 								CreateMsg(Format(GetLocalString("msg", "key.higher"), d\KeyCard - 2))
 							Else
-								CreateMsg(GetLocalString("msg", "slot"))
+								CreateMsg(GetLocalString("msg", "key.slot"))
 							EndIf
 						EndIf
 					EndIf
@@ -2991,34 +2991,34 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 		ElseIf d\DoorType = ELEVATOR_DOOR
 			If d\Locked = 1 Then
 				If (Not d\IsElevatorDoor > 0) Then
-					CreateMsg(GetLocalString("elevator", "broken"))
+					CreateMsg(GetLocalString("msg", "elev.broken"))
 					PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
 				Else
 					If d\IsElevatorDoor = 1 Then
-						CreateMsg(GetLocalString("elevator", "called"))
+						CreateMsg(GetLocalString("msg", "elev.called"))
 					ElseIf d\IsElevatorDoor = 3
-						CreateMsg(GetLocalString("elevator", "on"))
-					ElseIf msg\Txt <> GetLocalString("elevator", "called")
+						CreateMsg(GetLocalString("msg", "elev.floor"))
+					ElseIf msg\Txt <> GetLocalString("msg", "elev.called")
 						Select Rand(10)
 							Case 1
 								;[Block]
-								CreateMsg(GetLocalString("elevator", "stop"))
+								CreateMsg(GetLocalString("msg", "elev.stop"))
 								;[End Block]
 							Case 2
 								;[Block]
-								CreateMsg(GetLocalString("elevator", "faster"))
+								CreateMsg(GetLocalString("msg", "elev.faster"))
 								;[End Block]
 							Case 3
 								;[Block]
-								CreateMsg(GetLocalString("elevator", "mav"))
+								CreateMsg(GetLocalString("msg", "elev.mav"))
 								;[End Block]
 							Default
 								;[Block]
-								CreateMsg(GetLocalString("elevator", "already"))
+								CreateMsg(GetLocalString("msg", "elev.already"))
 								;[End Block]
 						End Select
 					Else
-						CreateMsg(GetLocalString("elevator", "already"))
+						CreateMsg(GetLocalString("msg", "elev.already"))
 					EndIf
 					PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 				EndIf
