@@ -7770,7 +7770,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					UpdateButton(e\room\Objects[2])
 					If d_I\ClosestButton = e\room\Objects[2] And mo\MouseHit1 Then
-						CreateMsg(GetLocalString("elevator", "broken"))
+						CreateMsg(GetLocalString("msg", "elev.broken"))
 						PlaySound2(ButtonSFX2, Camera, e\room\Objects[2])
 						mo\MouseHit1 = False
 					EndIf
