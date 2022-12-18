@@ -177,18 +177,20 @@ Function LanguageSelector%()
 			If MouseHoverLanguage\ID <> "en-US" Then
 				Local Author$ = Format(GetLocalString("language", "author"), MouseHoverLanguage\Author)
 				Local Prefect$ = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
-				Local Compatible$ = Format(GetLocalString("language", "compatible"), MouseHoverLanguage\Compatible)
+				Local Prefect2$ = Format(GetLocalString("language", "full"), GetLocalString("language", "no"))
+				Local Compatible$ = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
 				Local Size$ = Format(GetLocalString("language", "size"), MouseHoverLanguage\FileSize)
 				Local Height% = FontHeight() * 11
 			Else
 				Author = ""
 				Prefect = ""
 				Compatible = ""
+				Prefect2 = ""
 				Size = ""
 				Height = FontHeight() * 4.5
 			EndIf
 			
-			Local Width% = Max(Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size)), StringWidth(Compatible))
+			Local Width% = Max(Max(Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size)), StringWidth(Compatible)), StringWidth(Prefect2))
 			
 			x = MouseX() + 10
 			y = MouseY() + 10
@@ -362,7 +364,7 @@ Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Fra
 End Function
 
 Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)
-	DrawImage(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
+	DrawBlock(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
 	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
 End Function
 
