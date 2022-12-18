@@ -23,7 +23,7 @@ Function SaveGame%(File$)
 	
 	GameSaved = True
 	
-	File = ConvertToANSI(SavePath + File)
+	File = SavePath + File
 	
 	CreateDir(File)
 	
