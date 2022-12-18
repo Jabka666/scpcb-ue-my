@@ -136,7 +136,7 @@ Function LanguageSelector%()
 		EndIf
 		
 		Color(0, 0, 0)
-		RowText(GetLocalString("language", "more"), 481, 199, 149, 102)
+		RowText(GetLocalString("language", "more"), 481, 199, 151, 102)
 		
 		If SelectedLanguage <> Null Then
 			If SelectedLanguage\ID = opt\Language Then
