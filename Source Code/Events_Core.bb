@@ -7006,7 +7006,7 @@ Function UpdateEvents%()
 									RotateEntity(p\Pvt, 90.0, 0.0, 0.0)
 								Next
 								FreeEntity(Pvt)
-								If (Not e\SoundCHN) Then e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 5.0)
+								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 5.0)
 							EndIf
 						Else
 							e\EventState = 0.0

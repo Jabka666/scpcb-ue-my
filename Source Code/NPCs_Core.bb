@@ -2622,7 +2622,7 @@ Function UpdateNPCs%()
 									If x > 3.0 And x < 9.0 Then
 										z = Abs(EntityZ(me\Collider) - EntityZ(w\OBJ, True))
 										If z > 3.0 And z < 9.0 Then
-											PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
+											PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 20.0 * RoomScale, EntityZ(w\OBJ, True))
 											ResetEntity(n\Collider)
 											If EntityHidden(n\OBJ) Then
 												ShowEntity(n\OBJ)
