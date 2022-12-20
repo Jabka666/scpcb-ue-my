@@ -271,17 +271,17 @@ Function KillSounds%()
 	
 	For e.Events = Each Events
 		If e\SoundCHN_IsStream Then
-			If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN_IsStream = False
+			If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN)
 		Else
 			StopChannel_Strict(e\SoundCHN)
 		EndIf
 		If e\SoundCHN2_IsStream Then
-			If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2_IsStream = False
+			If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2)
 		Else
 			StopChannel_Strict(e\SoundCHN2)
 		EndIf
 		If e\SoundCHN3_IsStream Then
-			If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3_IsStream = False
+			If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3)
 		Else
 			StopChannel_Strict(e\SoundCHN3)
 		EndIf
@@ -289,12 +289,12 @@ Function KillSounds%()
 	
 	For n.NPCs = Each NPCs
 		If n\SoundCHN_IsStream Then
-			If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
+			If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
 		Else
 			StopChannel_Strict(n\SoundCHN)
 		EndIf
 		If n\SoundCHN2_IsStream Then
-			If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
+			If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
 		Else
 			StopChannel_Strict(n\SoundCHN2)
 		EndIf
@@ -428,13 +428,13 @@ Function UpdateStreamSounds%()
 			If RN <> "dimension_1499" Then
 				For e.Events = Each Events
 					If e\SoundCHN_IsStream Then
-						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN_IsStream = False
+						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN)
 					EndIf
 					If e\SoundCHN2_IsStream Then
-						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2_IsStream = False
+						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2)
 					EndIf
 					If e\SoundCHN3_IsStream Then
-						If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3_IsStream = False
+						If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3)
 					EndIf
 				Next
 			EndIf

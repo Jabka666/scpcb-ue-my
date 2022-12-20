@@ -915,8 +915,8 @@ Function UpdateConsole%()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType096 Then
 							n\State = 0.0
-							StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
-							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
+							StopStream_Strict(n\SoundCHN)
+							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
 							Exit
 						EndIf
 					Next
