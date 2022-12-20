@@ -4883,7 +4883,7 @@ Function FillRoom%(r.Rooms)
 				
 				For k = 0 To 1
 					ScaleEntity(r\Objects[i * 2 + k], 0.04, 0.04, 0.04)
-					PositionEntity(r\Objects[i * 2 + k], r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - (208.0 - i * 76.0) * RoomScale)
+					PositionEntity(r\Objects[i * 2 + k], r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - (203.0 - i * 71.0) * RoomScale)
 					EntityParent(r\Objects[i * 2 + k], r\OBJ)
 				Next
 				
