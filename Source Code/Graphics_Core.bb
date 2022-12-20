@@ -49,6 +49,7 @@ End Function
 
 Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	Graphics3D(Width, Height, Depth, Mode)
+	SetGfxDriver(opt\GFXDriver)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
 	TextureAnisotropic(opt\AnisotropicLevel)
 	SMALLEST_POWER_TWO = 512.0

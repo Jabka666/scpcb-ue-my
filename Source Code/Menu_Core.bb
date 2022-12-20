@@ -1827,7 +1827,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		If (Not LauncherBG) Then LauncherBG = LoadImage_Strict("GFX\menu\launcher.png")
 		DrawBlock(LauncherBG, 0, 0)
 		
-		Text(LauncherWidth - 620, LauncherHeight - 305, GetLocalString("launcher", "resolution"))
+		; ~ Resolution selector
+		Text(LauncherWidth - 620, LauncherHeight - 303, GetLocalString("launcher", "resolution"))
 		
 		Local x% = LauncherWidth - 600
 		Local y% = LauncherHeight - 275
@@ -1849,9 +1850,17 @@ Function UpdateLauncher%(lnchr.Launcher)
 				x = x + 100
 			EndIf
 		Next
-		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 185, LauncherHeight - 278, opt\LauncherEnabled)
-		Text(LauncherWidth - 155, LauncherHeight - 275, GetLocalString("launcher", "launcher"))
-		Text(LauncherWidth - 185, LauncherHeight - 246, GetLocalString("launcher", "display"))
+		
+		; ~ Driver selector
+		Color(255, 255, 255)
+		Text(LauncherWidth - 185, LauncherHeight - 303, GetLocalString("launcher", "gfx"))
+		RenderFrame(LauncherWidth - 185, LauncherHeight - 283, 145, 30)
+		Text(LauncherWidth - 112.5, LauncherHeight - 273, Format(GetLocalString("launcher", "gfx.num"), opt\GFXDriver), True)
+		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 283, 30, 30, ">", False) Then opt\GFXDriver = (opt\GFXDriver + 1)
+		If opt\GFXDriver > CountGfxDrivers() Then opt\GFXDriver = 1
+		
+		; ~ Display selector
+		Text(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
 		
 		Local Txt$
 		
@@ -1877,8 +1886,12 @@ Function UpdateLauncher%(lnchr.Launcher)
 		
 		Text(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 145, 30)
-		Text(LauncherWidth - 185 + 72.5, LauncherHeight - 216, Txt, True)
+		Text(LauncherWidth - 112.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 226, 30, 30, ">", False) Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
+		; ~ Launcher tick
+		Text(LauncherWidth - 620, LauncherHeight - 130, GetLocalString("launcher", "launcher"))
+		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 480, LauncherHeight - 133, opt\LauncherEnabled)
+		; ~ Media buttons
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
 			Text(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
@@ -1897,16 +1910,20 @@ Function UpdateLauncher%(lnchr.Launcher)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 		EndIf
 		DrawBlock(LauncherIMG[0], LauncherWidth - 400, LauncherHeight - 86, 2)
-		If MouseOn(LauncherWidth - 185, LauncherHeight - 191, 40, 40) Then
-			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 191, 1)
-			Rect(LauncherWidth - 185, LauncherHeight - 191, 40, 40, False)
-			Text(LauncherWidth - 185 + 45, LauncherHeight - 171, GetLocalString("launcher", "language"), False, True)
+		; ~ Language selector
+		If MouseOn(LauncherWidth - 185, LauncherHeight - 186, 40, 40) Then
+			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
+			Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+			Text(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : LanguageSelector()
 		Else
-			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 191, 0)
+			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 0)
 		EndIf
+		; ~ Report button
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 165, 30, GetLocalString("launcher", "report"), False, False) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
+		; ~ Changelog button
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 165, 30, GetLocalString("launcher", "changelog"), False, False) Then ExecFile_Strict("Changelog.txt")
+		; ~ Launch button
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"), False, False) Then
 			If opt\DisplayMode = 1 Then
 				opt\GraphicWidth = DesktopWidth()
@@ -1919,6 +1936,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			opt\RealGraphicHeight = opt\GraphicHeight
 			Exit
 		EndIf
+		; ~ Exit button
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, GetLocalString("launcher", "exit"), False, False) Then
 			Quit = True
 			Exit
@@ -1929,6 +1947,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	IniWriteString(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
 	IniWriteString(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
+	IniWriteString(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 	
