@@ -555,12 +555,12 @@ Function RemoveNPC%(n.NPCs)
 	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
 	
 	If n\SoundCHN_IsStream Then
-		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
+		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
 	Else
 		StopChannel_Strict(n\SoundCHN)
 	EndIf
 	If n\SoundCHN2_IsStream Then
-		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
+		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
 	Else
 		StopChannel_Strict(n\SoundCHN2)
 	EndIf
@@ -1182,7 +1182,7 @@ Function UpdateNPCs%()
 											
 											SetNPCFrame(n, 194.0)
 											
-											StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
+											StopStream_Strict(n\SoundCHN)
 											n\Sound = 0
 											
 											n\State3 = 0.0
@@ -1377,7 +1377,7 @@ Function UpdateNPCs%()
 							If n\State2 > 70.0 * 26.0 Then
 								AnimateNPC(n, 823.0, 847.0, n\Speed * 8.0, False)
 								If n\Frame > 846.9 Then
-									StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
+									StopStream_Strict(n\SoundCHN)
 									n\State = 4.0
 								EndIf
 							Else
@@ -1455,7 +1455,7 @@ Function UpdateNPCs%()
 											
 											If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
 											
-											StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
+											StopStream_Strict(n\SoundCHN)
 											n\Sound = 0
 											
 											n\State = 2.0

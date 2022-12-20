@@ -1856,7 +1856,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Text(LauncherWidth - 185, LauncherHeight - 303, GetLocalString("launcher", "gfx"))
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 283, 145, 30)
 		Text(LauncherWidth - 112.5, LauncherHeight - 273, Format(GetLocalString("launcher", "gfx.num"), opt\GFXDriver), True)
-		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 283, 30, 30, ">", False) Then opt\GFXDriver = (opt\GFXDriver + 1)
+		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 283, 30, 30, ">", False) Then opt\GFXDriver = opt\GFXDriver + 1
 		If opt\GFXDriver > CountGfxDrivers() Then opt\GFXDriver = 1
 		
 		; ~ Display selector
@@ -1934,6 +1934,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			EndIf
 			opt\RealGraphicWidth = opt\GraphicWidth
 			opt\RealGraphicHeight = opt\GraphicHeight
+			SetGfxDriver(opt\GFXDriver)
 			Exit
 		EndIf
 		; ~ Exit button
