@@ -44,8 +44,6 @@ Global MenuOpen% = True
 
 Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
 
-Global ConsoleFont% = LoadFont_Strict("..\GFX\fonts\Andale Mono.ttf", 16)
-
 Global RoomTempID%
 
 LoadRoomTemplates("..\Data\rooms.ini")
@@ -100,6 +98,8 @@ End Type
 Global o.Objects = New Objects
 
 ChangeDir("..")
+
+Global ConsoleFont% = LoadFont_Strict("\GFX\fonts\Andale Mono.ttf", 16)
 
 Function LoadEntities%()
 	Local i%
@@ -193,12 +193,12 @@ Global PrevTime% = MilliSecs2()
 Global ElapsedTime#
 
 InitErrorMsgs(9, True)
-SetErrorMsg(0, Format(GetLocalString("mc", "errtit"), SystemProperty("blitzversion")) + Chr(10))
+SetErrorMsg(0, Format(GetLocalString("error", "mc.title"), SystemProperty("blitzversion")) + Chr(10))
 SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
 SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
 SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
-SetErrorMsg(4, Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024))), (TotalVidMem() / 1024)))
-SetErrorMsg(5, Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024))), (TotalPhys() / 1024)))
+SetErrorMsg(4, Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{0}"), (TotalVidMem() / 1024), "{1}"))
+SetErrorMsg(5, Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
 
 SetErrorMsg(7, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
 SetErrorMsg(8, Chr(10) + GetLocalString("error", "shot")) 

@@ -194,7 +194,7 @@ Function LanguageSelector%()
 			
 			x = MouseX() + 10
 			y = MouseY() + 10
-			If (x + Width) > 640 Then x = x - Width - 10 ; ~ If tooltip is too long then move tooltip to the left
+			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long then move tooltip to the left
 			RenderFrame(x, y, Width + FontWidth(), Height)
 			x = x + 5
 			Text(x, y + 8, Name)

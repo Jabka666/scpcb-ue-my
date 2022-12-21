@@ -76,7 +76,7 @@ End Function
 Function LoadFont_Strict%(File$, Height% = 13)
 	Local Tmp%
 	
-	If FileType(LanguagePath + File) = 1 Then File = LanguagePath + File
+	If FileType("Localization\" + Language + File) = 1 Then File = "Localization\" + Language + File
 	If (Not Tmp) Then
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "font.notfound"), File))
 		Tmp = LoadFont(File, Height)
