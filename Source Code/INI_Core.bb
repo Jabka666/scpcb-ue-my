@@ -215,7 +215,6 @@ Type Options
 	Field GraphicWidth%, RealGraphicWidth%
 	Field GraphicHeight%, RealGraphicHeight%
 	Field DisplayMode%
-	Field GFXDriver%
 	Field CameraFogNear#
 	Field CameraFogFar#, StoredCameraFogFar#
 	Field IntroEnabled%
@@ -383,8 +382,6 @@ Function LoadOptionsINI%()
 	opt\GraphicHeight = IniGetInt(OptionFile, "Global", "Height", DesktopHeight())
 	
 	opt\DisplayMode = IniGetInt(OptionFile, "Global", "Display Mode", 0)
-	
-	opt\GFXDriver = IniGetInt(OptionFile, "Global", "GFX Driver", 1)
 	
 	opt\CameraFogNear = IniGetFloat(OptionFile, "Global", "Camera Fog Near", 0.1)
 	
