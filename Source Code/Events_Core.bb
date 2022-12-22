@@ -9461,7 +9461,7 @@ Function UpdateEndings%()
 										TurnEntity(e\room\Objects[14], 0.0, (Sin(e\EventState3 - 50.0) * 0.85) * fps\Factor[0], 0.0, True)
 										
 										For i = 5 To 8
-											PositionEntity(e\room\NPC[i]\Collider, CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[i]\Collider, True), 50.0), EntityY(e\room\NPC[i]\Collider, True), CurveValue(EntityZ(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(e\room\NPC[i]\Collider, True), 50.0), True)
+											PositionEntity(e\room\NPC[i]\Collider, CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[i]\Collider, True), 50.0), EntityY(e\room\NPC[i]\Collider, True), CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), EntityZ(e\room\NPC[i]\Collider, True), 50.0), True)
 											ResetEntity(e\room\NPC[i]\Collider)
 										Next
 									EndIf
