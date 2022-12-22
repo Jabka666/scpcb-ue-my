@@ -6464,11 +6464,11 @@ Function UpdateEvents%()
 					EndIf
 					
 					If e\EventState > 0.0 Then 
-						If e\room\NPC[0] = Null Then e\EventState = e\EventState + fps\Factor[0]
+						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState > 200.0 Then
 							If e\room\NPC[0] = Null Then
 								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ), 900.0 * RoomScale, EntityZ(e\room\OBJ))
-								e\room\NPC[0]\State = -1.0
+								e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = -1.0
 								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_MAYNARD_TEXTURE)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)
 								SetNPCFrame(e\room\NPC[0], 1.0)
@@ -6491,7 +6491,6 @@ Function UpdateEvents%()
 								EndIf
 								If EntityY(e\room\NPC[0]\Collider) > 0.6 Then EntityType(e\room\NPC[0]\Collider, 0)
 							Else
-								e\EventState = e\EventState + fps\Factor[0]
 								e\room\NPC[0]\IsDead = True
 								AnimateNPC(e\room\NPC[0], 11.0, 19.0, 0.25, False)
 								If (Not e\Sound) Then 
@@ -6501,7 +6500,7 @@ Function UpdateEvents%()
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ), e\room\y + 0.005, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.4, 0.8)
 									EntityParent(de\OBJ, e\room\OBJ)
 								EndIf
-								If e\EventState > 400.0 Then RemoveEvent(e)
+								If e\room\NPC[0]\Frame >= 18.9 Then RemoveEvent(e)
 							EndIf
 						EndIf
 					EndIf
