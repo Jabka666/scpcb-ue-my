@@ -2068,6 +2068,8 @@ Function UpdateGame%()
 			me\RestoreSanity = True
 			ShouldEntitiesFall = True
 			
+			UpdateDistanceTimer()
+			
 			If PlayerInReachableRoom(False, True) Then
 				UpdateSecurityCams()
 				
@@ -2131,7 +2133,6 @@ Function UpdateGame%()
 			
 			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
 			UpdateZoneColor()
-			UpdateDistanceTimer()
 			UpdateDeaf()
 			UpdateEmitters()
 			If RN = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
