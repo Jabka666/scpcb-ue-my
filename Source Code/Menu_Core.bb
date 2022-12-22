@@ -1775,7 +1775,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	MenuScale = 1
 	
-	Graphics3DExt(LauncherWidth, LauncherHeight)
+	Graphics3D(LauncherWidth, LauncherHeight, 32, 2)
 	
 	SetBuffer(BackBuffer())
 	
@@ -1850,16 +1850,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 				x = x + 100
 			EndIf
 		Next
-		
-		; ~ Driver selector
-		Color(255, 255, 255)
-		Text(LauncherWidth - 185, LauncherHeight - 303, GetLocalString("launcher", "gfx"))
-		RenderFrame(LauncherWidth - 185, LauncherHeight - 283, 145, 30)
-		Text(LauncherWidth - 112.5, LauncherHeight - 273, Format(GetLocalString("launcher", "gfx.num"), opt\GFXDriver), True)
-		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 283, 30, 30, ">", False) Then opt\GFXDriver = opt\GFXDriver + 1
-		If opt\GFXDriver > CountGfxDrivers() Then opt\GFXDriver = 1
-		
 		; ~ Display selector
+		Color(255, 255, 255)
 		Text(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
 		
 		Local Txt$
@@ -1889,8 +1881,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Text(LauncherWidth - 112.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 226, 30, 30, ">", False) Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		; ~ Launcher tick
-		Text(LauncherWidth - 620, LauncherHeight - 130, GetLocalString("launcher", "launcher"))
-		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 480, LauncherHeight - 133, opt\LauncherEnabled)
+		Text(LauncherWidth - 155, LauncherHeight - 275, GetLocalString("launcher", "launcher"))
+		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 185, LauncherHeight - 278, opt\LauncherEnabled)
 		; ~ Media buttons
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
@@ -1934,7 +1926,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 			EndIf
 			opt\RealGraphicWidth = opt\GraphicWidth
 			opt\RealGraphicHeight = opt\GraphicHeight
-			SetGfxDriver(opt\GFXDriver)
 			Exit
 		EndIf
 		; ~ Exit button
@@ -1948,7 +1939,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 	IniWriteString(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
 	IniWriteString(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-	IniWriteString(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 	
