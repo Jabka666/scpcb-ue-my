@@ -1516,7 +1516,7 @@ Function UpdateEvents%()
 							
 							If IntroSFX[3] <> 0 Then
 								If PlayerSees173(n_I\Curr173) Then
-									CreateHintMsg(Format(GetLocalString("msg", "blink"), key\BLINK))
+									CreateHintMsg(Format(GetLocalString("msg", "blink"), key\Name[key\BLINK]))
 									PlaySound_Strict(IntroSFX[3])
 									FreeSound_Strict(IntroSFX[3]) : IntroSFX[3] = 0
 								EndIf

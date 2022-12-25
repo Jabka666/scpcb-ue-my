@@ -305,7 +305,7 @@ Function CreateConsoleMsg%(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	If c\B < 0 Then c\B = ConsoleB
 End Function
 
-Function CreateConsoleMultiMsg(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
+Function CreateConsoleMultiMsg%(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	While Instr(Txt, "\n") <> 0 
 		CreateConsoleMsg(Left(Txt, Instr(Txt, "\n") - 1), R, G, B, IsCommand)
 		Txt = Right(Txt, Len(Txt) - Instr(Txt, "\n") - 3)
