@@ -6273,150 +6273,165 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 		Case "cont1_173_intro"
 			;[Block]
-			r\RoomDoors.Doors[1] = CreateDoor(EntityX(r\OBJ) + 288.0 * RoomScale, r\y, EntityZ(r\OBJ) + 384.0 * RoomScale, 90.0, r, False, BIG_DOOR)
-			r\RoomDoors[1]\MTFClose = False
-			For i = 0 To 1
-				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
-			Next
-			
-			r\RoomDoors.Doors[2] = CreateDoor(r\x - 1008.0 * RoomScale, r\y, r\z - 688.0 * RoomScale, 90.0, r)
-			r\RoomDoors[2]\AutoClose = False : r\RoomDoors[2]\Locked = 1 : r\RoomDoors[2]\MTFClose = False
-			For i = 0 To 1
-				FreeEntity(r\RoomDoors[2]\Buttons[i]) : r\RoomDoors[2]\Buttons[i] = 0
-			Next
-			
-			r\RoomDoors.Doors[3] = CreateDoor(r\x - 2324.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
-			r\RoomDoors[3]\Locked = 1 : r\RoomDoors[3]\MTFClose = False
-			PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True) - 4.0 * RoomScale, EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True), True)
-			PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True) + 4.0 * RoomScale, EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True), True)
-			
-			r\RoomDoors.Doors[4] = CreateDoor(r\x - 4352.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
-			r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\MTFClose = False	
-			
-			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
-			For zTemp = 0 To 1
-				d.Doors = CreateDoor(r\x - 5760.0 * RoomScale, r\y, r\z + ((320.0 + (896.0 * zTemp)) * RoomScale), (zTemp * 180.0), r)
-				d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-				FreeEntity(d\OBJ2) : d\OBJ2 = 0
-				
-				d.Doors = CreateDoor(r\x - 8288.0 * RoomScale, r\y, r\z + ((320.0 + (896.0 * zTemp)) * RoomScale), 180.0, r, zTemp = 0)
-				d\Locked = 1 : d\MTFClose = False
-				If zTemp <> 0 Then 
-					d\DisableWaypoint = True
-					FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-					FreeEntity(d\OBJ2) : d\OBJ2 = 0
-				EndIf
-				
-				For xTemp = 0 To 2
-					d.Doors = CreateDoor(r\x - (7424.0 - 512.0 * xTemp) * RoomScale, r\y, r\z + ((1008.0 - (480.0 * zTemp)) * RoomScale), 180.0 * (Not zTemp), r)
-					d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-					EntityTexture(d\OBJ, Tex)
-					FreeEntity(d\OBJ2) : d\OBJ2 = 0
-					For i = 0 To 1
-						FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-					Next
-				Next					
-				For xTemp = 0 To 4
-					d.Doors = CreateDoor(r\x - (5120.0 - 512.0 * xTemp) * RoomScale, r\y, r\z + ((1008.0 - (480.0 * zTemp)) * RoomScale), 180.0 * (Not zTemp), r)
-					d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-					EntityTexture(d\OBJ, Tex)
-					FreeEntity(d\OBJ2) : d\OBJ2 = 0
-					For i = 0 To 1
-						FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-					Next
-					
-					If xTemp = 2 And zTemp = 1 Then r\RoomDoors[5] = d
-				Next	
-			Next
-			DeleteSingleTextureEntryFromCache(Tex)
-			
-			; ~ The door in the office below the walkway
-			r\RoomDoors.Doors[6] = CreateDoor(r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 128.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_CARD_3)
-			r\RoomDoors[6]\MTFClose = False
-			FreeEntity(r\RoomDoors[6]\Buttons[1]) : r\RoomDoors[6]\Buttons[1] = 0
-			
-			d.Doors = CreateDoor(r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 2336.0 * RoomScale, 0.0, r)
-			d\AutoClose = False : d\DisableWaypoint = True : d\MTFClose = False
+			; ~ Other doors
+			d.Doors = CreateDoor(r\x - 2784 * RoomScale, r\y, r\z + 768.0 * RoomScale, 90.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
+			d.Doors = CreateDoor(r\x - 5760.0 * RoomScale, r\y, r\z + 1216.0 * RoomScale, 180.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x - 5760.0 * RoomScale, r\y, r\z + 320.0 * RoomScale, 0.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x - 8064.0 * RoomScale, r\y, r\z + 1216.0 * RoomScale, 180.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x - 8736.0 * RoomScale, r\y, r\z + 768.0 * RoomScale, 270.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x - 8064.0 * RoomScale, r\y, r\z - 2272.0 * RoomScale, 0.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			; ~ The door leading to T-shaped room
+			d.Doors = CreateDoor(r\x - 8064.0 * RoomScale, r\y, r\z + 320.0 * RoomScale, 0.0, r, True)
+			d\Locked = 1 : d\MTFClose = False
+			
+			; ~ The door leading to the room with road
+			d.Doors = CreateDoor(r\x - 6496.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
+			d\Locked = 1 : d\MTFClose = False
+			
+			; ~ The door leading to office room
+			d.Doors = CreateDoor(r\x - 4064.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
+			d\Locked = 1 : d\MTFClose = False
+			
+			; ~ The door leading to 3-11 chamber
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
+			r\RoomDoors.Doors[5] = CreateDoor(r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0, r)
+			r\RoomDoors[5]\Locked = 1 : r\RoomDoors[5]\DisableWaypoint = True : r\RoomDoors[5]\MTFClose = False
+			EntityTexture(r\RoomDoors[5]\OBJ, Tex)
+			FreeEntity(r\RoomDoors[5]\OBJ2) : r\RoomDoors[5]\OBJ2 = 0
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[5]\Buttons[i]) : r\RoomDoors[5]\Buttons[i] = 0
+			Next
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			;r\RoomDoors.Doors[1] = CreateDoor(EntityX(r\OBJ) + 288.0 * RoomScale, r\y, EntityZ(r\OBJ) + 384.0 * RoomScale, 90.0, r, False, BIG_DOOR)
+			;r\RoomDoors[1]\MTFClose = False
+			;For i = 0 To 1
+			;	FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
+			;Next
+			
+			;r\RoomDoors.Doors[2] = CreateDoor(r\x - 1008.0 * RoomScale, r\y, r\z - 688.0 * RoomScale, 90.0, r)
+			;r\RoomDoors[2]\AutoClose = False : r\RoomDoors[2]\Locked = 1 : r\RoomDoors[2]\MTFClose = False
+			;For i = 0 To 1
+			;	FreeEntity(r\RoomDoors[2]\Buttons[i]) : r\RoomDoors[2]\Buttons[i] = 0
+			;Next
+			
+			;r\RoomDoors.Doors[3] = CreateDoor(r\x - 2324.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
+			;r\RoomDoors[3]\Locked = 1 : r\RoomDoors[3]\MTFClose = False
+			;PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True) - 4.0 * RoomScale, EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True), True)
+			;PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True) + 4.0 * RoomScale, EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True), True)
+			
+			;r\RoomDoors.Doors[4] = CreateDoor(r\x - 4352.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
+			;r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\MTFClose = False	
+			
+			; ~ The door in the office below the walkway
+			;r\RoomDoors.Doors[6] = CreateDoor(r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 128.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_CARD_3)
+			;r\RoomDoors[6]\MTFClose = False
+			;FreeEntity(r\RoomDoors[6]\Buttons[1]) : r\RoomDoors[6]\Buttons[1] = 0
+			
+			;d.Doors = CreateDoor(r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 2336.0 * RoomScale, 0.0, r)
+			;d\AutoClose = False : d\DisableWaypoint = True : d\MTFClose = False
+			;FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			;FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
 			; ~ The door from the concrete tunnel to the large hall
-			d.Doors = CreateDoor(r\x - 6864.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
-			d\AutoClose = False : d\Locked = 1 : d\MTFClose = False
+			;d.Doors = CreateDoor(r\x - 6864.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
+			;d\AutoClose = False : d\Locked = 1 : d\MTFClose = False
 			
 			; ~ The door to the staircase in the office room
-			d.Doors = CreateDoor(r\x - 2448.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r, False, ONE_SIDED_DOOR)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			PositionEntity(d\Buttons[0], r\x - 2592.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 1010.0 * RoomScale, True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			;d.Doors = CreateDoor(r\x - 2448.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r, False, ONE_SIDED_DOOR)
+			;d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			;PositionEntity(d\Buttons[0], r\x - 2592.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 1010.0 * RoomScale, True)
+			;FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], EntityX(r\OBJ) + 40.0 * RoomScale, 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
+			;r\Objects[0] = CreatePivot()
+			;PositionEntity(r\Objects[0], EntityX(r\OBJ) + 40.0 * RoomScale, 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
 			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], EntityX(r\OBJ) - 80.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 480.0 * RoomScale)
+			;r\Objects[1] = CreatePivot()
+			;PositionEntity(r\Objects[1], EntityX(r\OBJ) - 80.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 480.0 * RoomScale)
 			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 128.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
+			;r\Objects[2] = CreatePivot()
+			;PositionEntity(r\Objects[2], EntityX(r\OBJ) - 128.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
 			
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], EntityX(r\OBJ) + 660.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 526.0 * RoomScale)
+			;r\Objects[3] = CreatePivot()
+			;PositionEntity(r\Objects[3], EntityX(r\OBJ) + 660.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 526.0 * RoomScale)
 			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], EntityX(r\OBJ) + 700.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
+			;r\Objects[4] = CreatePivot()
+			;PositionEntity(r\Objects[4], EntityX(r\OBJ) + 700.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
 			
-			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], EntityX(r\OBJ) + 1472.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 912.0 * RoomScale)
+			;r\Objects[5] = CreatePivot()
+			;PositionEntity(r\Objects[5], EntityX(r\OBJ) + 1472.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 912.0 * RoomScale)
 			
-			For i = 0 To 5
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
+			;For i = 0 To 5
+			;	EntityParent(r\Objects[i], r\OBJ)
+			;Next
 			
-			For i = 0 To 4
-				Select i
-					Case 0
-						;[Block]
-						xTemp = 587.0
-						zTemp = -70.0
-						Temp = DECAL_BLOOD_3
-						;[End Block]
-					Case 1
-						;[Block]
-						xTemp = 1472.0
-						zTemp = 912.0  
-						Temp = DECAL_BLOOD_3
-						;[End Block]
-					Case 2
-						;[Block]
-						xTemp = 1504.0
-						zTemp = -80.0
-						Temp = DECAL_BLOOD_3
-						;[End Block]
-					Case 3
-						;[Block]
-						xTemp = 602.0 
-						zTemp = 642.0
-						Temp = DECAL_BLOOD_3
-						;[End Block]
-					Case 4
-						;[Block]
-						xTemp = 1260.0
-						zTemp = 627.0
-						Temp = DECAL_BLOOD_5
-						;[End Block]
-				End Select
-				de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
-			Next
+			;For i = 0 To 4
+			;	Select i
+			;		Case 0
+			;			;[Block]
+			;			xTemp = 587.0
+			;			zTemp = -70.0
+			;			Temp = DECAL_BLOOD_3
+			;			;[End Block]
+			;		Case 1
+			;			;[Block]
+			;			xTemp = 1472.0
+			;			zTemp = 912.0  
+			;			Temp = DECAL_BLOOD_3
+			;			;[End Block]
+			;		Case 2
+			;			;[Block]
+			;			xTemp = 1504.0
+			;			zTemp = -80.0
+			;			Temp = DECAL_BLOOD_3
+			;			;[End Block]
+			;		Case 3
+			;			;[Block]
+			;			xTemp = 602.0 
+			;			zTemp = 642.0
+			;			Temp = DECAL_BLOOD_3
+			;			;[End Block]
+			;		Case 4
+			;			;[Block]
+			;			xTemp = 1260.0
+			;			zTemp = 627.0
+			;			Temp = DECAL_BLOOD_5
+			;			;[End Block]
+			;	End Select
+			;	de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
+			;Next
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 4048.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1232.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
-			sc\Angle = 270.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
+			;sc.SecurityCams = CreateSecurityCam(r\x - 4048.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1232.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
+			;sc\Angle = 270.0 : sc\Turn = 45.0
+			;TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			;TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
-			it.Items = CreateItem("Class D Orientation Leaflet", "paper", r\x - (2914.0 + 1024.0) * RoomScale, r\y + 170.0 * RoomScale, r\z + 40.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
+			;it.Items = CreateItem("Class D Orientation Leaflet", "paper", r\x - (2914.0 + 1024.0) * RoomScale, r\y + 170.0 * RoomScale, r\z + 40.0 * RoomScale)
+			;EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2c_ec"
 			;[Block]
