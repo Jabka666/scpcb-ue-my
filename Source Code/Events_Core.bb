@@ -4721,7 +4721,7 @@ Function UpdateEvents%()
 											PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech7.ogg"))
 											If (Not me\Crouch) Then SetCrouch(True)
 											
-											de.Decals = CreateDecal(DECAL_BLOOD_6, EntityX(me\Collider), e\room\y - 768.0 * RoomScale + 0.005, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.1)
+											de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
 											de\MaxSize = 0.45 : de\SizeChange = 0.0002
 											EntityParent(de\OBJ, e\room\OBJ)
 										ElseIf e\EventState3 > 70.0 * 85.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 85.0	

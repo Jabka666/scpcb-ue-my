@@ -2460,11 +2460,16 @@ End Function
 Function Kill%(IsBloody% = False)
 	If chs\GodMode Then Return
 	
+	Local de.Decals
+	
 	StopBreathSound()
 	
 	If (Not me\Terminated) Then
 		If IsBloody Then
 			If EntityHidden(t\OverlayID[9]) Then ShowEntity(t\OverlayID[9])
+			de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
+			de\SizeChange = 0.002
+			EntityParent(de\OBJ, PlayerRoom\OBJ)
 		EndIf
 		
 		me\KillAnim = Rand(0, 1)
