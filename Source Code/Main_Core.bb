@@ -1651,6 +1651,7 @@ Function ClearConsole%()
 	
 	ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
 	
+	CreateConsoleMsg("")
 	CreateConsoleMsg("Console commands: ")
 	CreateConsoleMsg("  - help [page]")
 	CreateConsoleMsg("  - teleport [room name]")
