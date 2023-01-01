@@ -78,6 +78,7 @@ Bug fixes:
 - Fixed light flash appearing ahead of time in Gate A area.
 - Fixed SCP-106 collider not being teleported correctly.
 - Fixed sound path for some SCP-294 drinks.
+- Fixed the framelimit not working properly.
 
 - Hopefully fixed height of NPCs teleportation.
 
@@ -85,6 +86,7 @@ Bug fixes:
 - Tiny fix for map generation.
 - Tiny fix for keypad slots.
 - Tiny fix for S-NAV image position.
+- Tiny fix for console.
 
 v1.0.3
 

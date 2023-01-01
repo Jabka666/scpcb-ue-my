@@ -108,12 +108,15 @@ Type FramesPerSeconds
 	Field FPS%
 	Field TempFPS%
 	Field Goal%
+	Field LoopDelay%
 	Field Factor#[2]
 End Type
 
 Global fps.FramesPerSeconds = New FramesPerSeconds
 
 SeedRnd(MilliSecs2())
+
+fps\LoopDelay = MilliSecs2()
 
 Global WireFrameState%
 
@@ -1984,10 +1987,10 @@ Repeat
 	fps\PrevTime = fps\CurrTime
 	
 	If opt\FrameLimit > 0.0 Then
-		Local LoopDelay% = MilliSecs2()
-		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs2() - LoopDelay)
+		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs2() - fps\LoopDelay)
 		
 		Delay(WaitingTime)
+		fps\LoopDelay = MilliSecs2()
 	EndIf
 	
 	fps\Factor[0] = TICK_DURATION
