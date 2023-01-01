@@ -1599,7 +1599,7 @@ Global RemoteDoorOn% = True
 ; ~ Room Objects Constants
 ;[Block]
 Const MaxRoomEmitters% = 8
-Const MaxRoomLights% = 32
+Const MaxRoomLights% = 128
 Const MaxRoomObjects% = 30
 Const MaxRoomLevers% = 10
 Const MaxRoomDoors% = 7
@@ -6274,7 +6274,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 		Case "cont1_173_intro"
 			;[Block]
-			; ~ Other doors
+			; ~ Misc doors
 			d.Doors = CreateDoor(r\x - 2784 * RoomScale, r\y, r\z + 768.0 * RoomScale, 90.0, r)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
@@ -6305,6 +6305,11 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
+			d.Doors = CreateDoor(r\x - 3424.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 2367.0 * RoomScale, 0.0, r)
+			d\AutoClose = False : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
 			; ~ The door leading to T-shaped room
 			d.Doors = CreateDoor(r\x - 8064.0 * RoomScale, r\y, r\z + 320.0 * RoomScale, 0.0, r, True)
 			d\Locked = 1 : d\MTFClose = False
@@ -6317,7 +6322,18 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x - 4064.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
 			d\Locked = 1 : d\MTFClose = False
 			
-			; ~ The door leading to 3-11 chamber
+			; ~ The door to the staircase in the office room
+			d.Doors = CreateDoor(r\x - 2258.0 * RoomScale, r\y, r\z - 1004.0 * RoomScale, 180.0, r, False, ONE_SIDED_DOOR)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			; ~ The door leading to chamber entrance
+			r\RoomDoors.Doors[3] = CreateDoor(r\x - 2032.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
+			r\RoomDoors[3]\Locked = 1 : r\RoomDoors[3]\MTFClose = False
+			
+			; ~ The door leading to 3-11 cell
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
 			r\RoomDoors.Doors[5] = CreateDoor(r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0, r)
 			r\RoomDoors[5]\Locked = 1 : r\RoomDoors[5]\DisableWaypoint = True : r\RoomDoors[5]\MTFClose = False
@@ -6327,6 +6343,11 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(r\RoomDoors[5]\Buttons[i]) : r\RoomDoors[5]\Buttons[i] = 0
 			Next
 			DeleteSingleTextureEntryFromCache(Tex)
+			
+			; ~ The door in the office below the walkway
+			r\RoomDoors.Doors[6] = CreateDoor(r\x - 3424.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 129.0 * RoomScale, 0.0, r, True)
+			r\RoomDoors[6]\MTFClose = False
+			FreeEntity(r\RoomDoors[6]\Buttons[1]) : r\RoomDoors[6]\Buttons[1] = 0
 			
 			;r\RoomDoors.Doors[1] = CreateDoor(EntityX(r\OBJ) + 288.0 * RoomScale, r\y, EntityZ(r\OBJ) + 384.0 * RoomScale, 90.0, r, False, BIG_DOOR)
 			;r\RoomDoors[1]\MTFClose = False
@@ -6340,18 +6361,8 @@ Function FillRoom%(r.Rooms)
 			;	FreeEntity(r\RoomDoors[2]\Buttons[i]) : r\RoomDoors[2]\Buttons[i] = 0
 			;Next
 			
-			;r\RoomDoors.Doors[3] = CreateDoor(r\x - 2324.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
-			;r\RoomDoors[3]\Locked = 1 : r\RoomDoors[3]\MTFClose = False
-			;PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True) - 4.0 * RoomScale, EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True), True)
-			;PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True) + 4.0 * RoomScale, EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True), True)
-			
 			;r\RoomDoors.Doors[4] = CreateDoor(r\x - 4352.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
 			;r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\MTFClose = False	
-			
-			; ~ The door in the office below the walkway
-			;r\RoomDoors.Doors[6] = CreateDoor(r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 128.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_CARD_3)
-			;r\RoomDoors[6]\MTFClose = False
-			;FreeEntity(r\RoomDoors[6]\Buttons[1]) : r\RoomDoors[6]\Buttons[1] = 0
 			
 			;d.Doors = CreateDoor(r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 2336.0 * RoomScale, 0.0, r)
 			;d\AutoClose = False : d\DisableWaypoint = True : d\MTFClose = False
@@ -6426,13 +6437,13 @@ Function FillRoom%(r.Rooms)
 			;	de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
 			;Next
 			
-			;sc.SecurityCams = CreateSecurityCam(r\x - 4048.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1232.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
-			;sc\Angle = 270.0 : sc\Turn = 45.0
-			;TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			;TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
+			sc.SecurityCams = CreateSecurityCam(r\x - 3940.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1248.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
+			sc\Angle = 270.0 : sc\Turn = 45.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
-			;it.Items = CreateItem("Class D Orientation Leaflet", "paper", r\x - (2914.0 + 1024.0) * RoomScale, r\y + 170.0 * RoomScale, r\z + 40.0 * RoomScale)
-			;EntityParent(it\Collider, r\OBJ)
+			it.Items = CreateItem("Class D Orientation Leaflet", "paper", r\x - 3934.0 * RoomScale, r\y + 170.0 * RoomScale, r\z + 8.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2c_ec"
 			;[Block]
