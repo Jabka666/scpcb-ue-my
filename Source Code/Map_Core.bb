@@ -3443,17 +3443,19 @@ Function UpdateSecurityCams%()
 							EndIf
 						EndIf
 						
-						If sc\InSight And sc\CoffinEffect = 0 Lor sc\CoffinEffect = 2 Then
-							If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
-							If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
-							If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
-								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
-							Else
-								If (Not ChannelPlaying(sc\SoundCHN)) Then
-									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
-									If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
+						If PlayerRoom\RoomTemplate\Name <> "cont1_173_intro" Then
+							If sc\InSight And sc\CoffinEffect = 0 Lor sc\CoffinEffect = 2 Then
+								If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
+								If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
+								If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
+									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+								Else
+									If (Not ChannelPlaying(sc\SoundCHN)) Then
+										sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
+										If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
+									EndIf
+									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
 								EndIf
-								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
 							EndIf
 						EndIf
 					EndIf
@@ -6309,6 +6311,11 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
+			d.Doors = CreateDoor(r\x - 1296.0 * RoomScale, r\y, r\z - 1761.0 * RoomScale, 0.0, r)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
 			; ~ The door leading to T-shaped room
 			d.Doors = CreateDoor(r\x - 8064.0 * RoomScale, r\y, r\z + 320.0 * RoomScale, 0.0, r, True)
 			d\Locked = 1 : d\MTFClose = False
@@ -6325,8 +6332,22 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x - 2258.0 * RoomScale, r\y, r\z - 1004.0 * RoomScale, 180.0, r, False, ONE_SIDED_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.048, True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			; ~ Big door leading to testing area
+			r\RoomDoors.Doors[1] = CreateDoor(r\x + 576.0 * RoomScale, r\y, r\z + 383.0 * RoomScale, 90.0, r, False, BIG_DOOR)
+			r\RoomDoors[1]\MTFClose = False
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
+			Next
+			
+			; ~ The door leading to containment chamber
+			r\RoomDoors.Doors[2] = CreateDoor(r\x - 720.0 * RoomScale, r\y, r\z - 689.0 * RoomScale, 90.0, r)
+			r\RoomDoors[2]\Locked = 1 : r\RoomDoors[2]\MTFClose = False
+			For i = 0 To 1
+				FreeEntity(r\RoomDoors[2]\Buttons[i]) : r\RoomDoors[2]\Buttons[i] = 0
+			Next
 			
 			; ~ The door leading to chamber entrance
 			r\RoomDoors.Doors[3] = CreateDoor(r\x - 2032.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
@@ -6334,109 +6355,131 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ The door leading to 3-11 cell
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
-			r\RoomDoors.Doors[5] = CreateDoor(r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0, r)
-			r\RoomDoors[5]\Locked = 1 : r\RoomDoors[5]\DisableWaypoint = True : r\RoomDoors[5]\MTFClose = False
-			EntityTexture(r\RoomDoors[5]\OBJ, Tex)
-			FreeEntity(r\RoomDoors[5]\OBJ2) : r\RoomDoors[5]\OBJ2 = 0
+			r\RoomDoors.Doors[4] = CreateDoor(r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0, r)
+			r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\DisableWaypoint = True : r\RoomDoors[4]\MTFClose = False
+			EntityTexture(r\RoomDoors[4]\OBJ, Tex)
+			FreeEntity(r\RoomDoors[4]\OBJ2) : r\RoomDoors[4]\OBJ2 = 0
 			For i = 0 To 1
-				FreeEntity(r\RoomDoors[5]\Buttons[i]) : r\RoomDoors[5]\Buttons[i] = 0
+				FreeEntity(r\RoomDoors[4]\Buttons[i]) : r\RoomDoors[4]\Buttons[i] = 0
 			Next
 			DeleteSingleTextureEntryFromCache(Tex)
 			
-			; ~ The door in the office below the walkway
-			r\RoomDoors.Doors[6] = CreateDoor(r\x - 3424.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 129.0 * RoomScale, 0.0, r, True)
-			r\RoomDoors[6]\MTFClose = False
-			FreeEntity(r\RoomDoors[6]\Buttons[1]) : r\RoomDoors[6]\Buttons[1] = 0
+			; ~ The door in the office leading to observarion room
+			r\RoomDoors.Doors[5] = CreateDoor(r\x - 3424.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 129.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_CARD_3)
+			r\RoomDoors[5]\MTFClose = False
+			FreeEntity(r\RoomDoors[5]\Buttons[1]) : r\RoomDoors[5]\Buttons[1] = 0
 			
-			;r\RoomDoors.Doors[1] = CreateDoor(EntityX(r\OBJ) + 288.0 * RoomScale, r\y, EntityZ(r\OBJ) + 384.0 * RoomScale, 90.0, r, False, BIG_DOOR)
-			;r\RoomDoors[1]\MTFClose = False
-			;For i = 0 To 1
-			;	FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
-			;Next
+			; ~ Balcony guard spawnpoint
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x + 328.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 1072.0 * RoomScale)
 			
-			;r\RoomDoors.Doors[2] = CreateDoor(r\x - 1008.0 * RoomScale, r\y, r\z - 688.0 * RoomScale, 90.0, r)
-			;r\RoomDoors[2]\AutoClose = False : r\RoomDoors[2]\Locked = 1 : r\RoomDoors[2]\MTFClose = False
-			;For i = 0 To 1
-			;	FreeEntity(r\RoomDoors[2]\Buttons[i]) : r\RoomDoors[2]\Buttons[i] = 0
-			;Next
+			; ~ Class-D spawnpoint
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x + 208.0 * RoomScale, r\y + 0.3, r\z + 480.0 * RoomScale)
 			
-			;r\RoomDoors.Doors[4] = CreateDoor(r\x - 4352.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
-			;r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\MTFClose = False	
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x + 160.0 * RoomScale, r\y + 0.3, r\z + 320.0 * RoomScale)
 			
-			;d.Doors = CreateDoor(r\x - 3712.0 * RoomScale, r\y - 385.0 * RoomScale, r\z - 2336.0 * RoomScale, 0.0, r)
-			;d\AutoClose = False : d\DisableWaypoint = True : d\MTFClose = False
-			;FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			;FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			r\Objects[3] = CreatePivot()
+			PositionEntity(r\Objects[3], r\x + 948.0 * RoomScale, r\y + 0.3, r\z + 526.0 * RoomScale)
 			
-			; ~ The door from the concrete tunnel to the large hall
-			;d.Doors = CreateDoor(r\x - 6864.0 * RoomScale, r\y, r\z - 1248.0 * RoomScale, 90.0, r, True)
-			;d\AutoClose = False : d\Locked = 1 : d\MTFClose = False
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x + 980.0 * RoomScale, r\y + 0.3, r\z + 320.0 * RoomScale)
 			
-			; ~ The door to the staircase in the office room
-			;d.Doors = CreateDoor(r\x - 2448.0 * RoomScale, r\y, r\z - 1000.0 * RoomScale, 0.0, r, False, ONE_SIDED_DOOR)
-			;d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			;PositionEntity(d\Buttons[0], r\x - 2592.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 1010.0 * RoomScale, True)
-			;FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			; ~ Player spawnpoint
+			r\Objects[5] = CreatePivot()
+			PositionEntity(r\Objects[5], r\x - 4096.0 * RoomScale, r\y + 0.3, r\z)
 			
-			;r\Objects[0] = CreatePivot()
-			;PositionEntity(r\Objects[0], EntityX(r\OBJ) + 40.0 * RoomScale, 460.0 * RoomScale, EntityZ(r\OBJ) + 1072.0 * RoomScale)
+			; ~ SCP-173 spawnpoint
+			r\Objects[6] = CreatePivot()
+			PositionEntity(r\Objects[6], r\x + 1760.0 * RoomScale, r\y + 0.4, r\z + 912.0 * RoomScale)
 			
-			;r\Objects[1] = CreatePivot()
-			;PositionEntity(r\Objects[1], EntityX(r\OBJ) - 80.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 480.0 * RoomScale)
+			; ~ Guard conwoy #1 spawnpoint
+			r\Objects[7] = CreatePivot()
+			PositionEntity(r\Objects[7], r\x - 4096.0 * RoomScale + Rnd(-0.3, 0.3), r\y + 0.3, r\z + Rnd(860.0, 896.0) * RoomScale)
 			
-			;r\Objects[2] = CreatePivot()
-			;PositionEntity(r\Objects[2], EntityX(r\OBJ) - 128.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
+			r\Objects[8] = CreatePivot()
+			PositionEntity(r\Objects[8], r\x - 3840.0 * RoomScale + Rnd(-0.3, 0.3), r\y + 0.3, r\z + 786.0 * RoomScale)
 			
-			;r\Objects[3] = CreatePivot()
-			;PositionEntity(r\Objects[3], EntityX(r\OBJ) + 660.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 526.0 * RoomScale)
+			; ~ Music guard spawnpoint
+			r\Objects[9] = CreatePivot()
+			PositionEntity(r\Objects[9], r\x - 8064.0 * RoomScale, r\y + 0.3, r\z + 1096.0 * RoomScale)
 			
-			;r\Objects[4] = CreatePivot()
-			;PositionEntity(r\Objects[4], EntityX(r\OBJ) + 700.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
+			; ~ Franklin spawnpoint
+			r\Objects[10] = CreatePivot()
+			PositionEntity(r\Objects[10], r\x - 3424.0 * RoomScale, r\y - 0.3, r\z - 2208.0 * RoomScale)
 			
-			;r\Objects[5] = CreatePivot()
-			;PositionEntity(r\Objects[5], EntityX(r\OBJ) + 1472.0 * RoomScale, 100.0 * RoomScale, EntityZ(r\OBJ) + 912.0 * RoomScale)
+			; ~ Sitting scientist spawnpoint
+			r\Objects[11] = CreatePivot()
+			PositionEntity(r\Objects[11], r\x - 3073.0 * RoomScale, r\y - 315.0 * RoomScale, r\z - 2165.0 * RoomScale)
 			
-			;For i = 0 To 5
-			;	EntityParent(r\Objects[i], r\OBJ)
-			;Next
+			; ~ Guard convoy #2 spawnpoint
+			r\Objects[12] = CreatePivot()
+			PositionEntity(r\Objects[12], r\x - 3800.0 * RoomScale, r\y + 1.1, r\z - 4088.0 * RoomScale)
 			
-			;For i = 0 To 4
-			;	Select i
-			;		Case 0
-			;			;[Block]
-			;			xTemp = 587.0
-			;			zTemp = -70.0
-			;			Temp = DECAL_BLOOD_3
-			;			;[End Block]
-			;		Case 1
-			;			;[Block]
-			;			xTemp = 1472.0
-			;			zTemp = 912.0  
-			;			Temp = DECAL_BLOOD_3
-			;			;[End Block]
-			;		Case 2
-			;			;[Block]
-			;			xTemp = 1504.0
-			;			zTemp = -80.0
-			;			Temp = DECAL_BLOOD_3
-			;			;[End Block]
-			;		Case 3
-			;			;[Block]
-			;			xTemp = 602.0 
-			;			zTemp = 642.0
-			;			Temp = DECAL_BLOOD_3
-			;			;[End Block]
-			;		Case 4
-			;			;[Block]
-			;			xTemp = 1260.0
-			;			zTemp = 627.0
-			;			Temp = DECAL_BLOOD_5
-			;			;[End Block]
-			;	End Select
-			;	de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
-			;Next
+			r\Objects[13] = CreatePivot()
+			PositionEntity(r\Objects[13], r\x - 4200.0 * RoomScale, r\y + 1.1, r\z - 4088.0 * RoomScale)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 3940.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1248.0 * RoomScale, r, True, r\x - 2256.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
+			; ~ Class-D inside convoy
+			r\Objects[14] = CreatePivot()
+			PositionEntity(r\Objects[14], r\x - 4000.0 * RoomScale, r\y + 1.1, r\z - 4088.0 * RoomScale)
+			
+			r\Objects[15] = CreatePivot()
+			PositionEntity(r\Objects[15], r\x - 7208.0 * RoomScale, r\y - 0.6, r\z - 3104.0 * RoomScale)
+			
+			; ~ Sitting Frankling spawnpoint
+			r\Objects[16] = CreatePivot()
+			PositionEntity(r\Objects[16], r\x - 902.0 * RoomScale, r\y + 500.0 * RoomScale, r\z + 456.0 * RoomScale)
+			
+			; ~ Balcony guard positon after breach
+			r\Objects[17] = CreatePivot()
+			PositionEntity(r\Objects[17], r\x + 128.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 1280.0 * RoomScale)
+			
+			; ~ SCP-173 position after breach
+			r\Objects[18] = CreatePivot()
+			PositionEntity(r\Objects[18], r\x - 320.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 1312.0 * RoomScale)
+			
+			For i = 0 To 18
+				EntityParent(r\Objects[i], r\OBJ)
+			Next
+			
+			For i = 0 To 4
+				Select i
+					Case 0
+						;[Block]
+						xTemp = 875.0
+						zTemp = -70.0
+						Temp = DECAL_BLOOD_3
+						;[End Block]
+					Case 1
+						;[Block]
+						xTemp = 1760.0
+						zTemp = 912.0  
+						Temp = DECAL_BLOOD_3
+						;[End Block]
+					Case 2
+						;[Block]
+						xTemp = 1792.0
+						zTemp = -80.0
+						Temp = DECAL_BLOOD_3
+						;[End Block]
+					Case 3
+						;[Block]
+						xTemp = 890.0 
+						zTemp = 642.0
+						Temp = DECAL_BLOOD_3
+						;[End Block]
+					Case 4
+						;[Block]
+						xTemp = 1548.0
+						zTemp = 627.0
+						Temp = DECAL_BLOOD_5
+						;[End Block]
+				End Select
+				de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
+			Next
+			
+			sc.SecurityCams = CreateSecurityCam(r\x - 3940.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1248.0 * RoomScale, r, True, r\x - 1970.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
 			sc\Angle = 270.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
@@ -8845,7 +8888,7 @@ Function CreateMap%()
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1	
 	
 	If opt\IntroEnabled Then
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "cont1_173_intro")
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing ^ 2, "cont1_173_intro")
 		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	EndIf
 	
