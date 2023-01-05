@@ -2026,7 +2026,7 @@ Function InitNewGame%()
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
 		ElseIf r\RoomTemplate\Name = "cont1_173_intro" And opt\IntroEnabled Then
-			PositionEntity(me\Collider, EntityX(r\OBJ), 1.0, EntityZ(r\OBJ))
+			PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
 			PlayerRoom = r
 		EndIf
 	Next
