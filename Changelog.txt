@@ -10,6 +10,7 @@ General:
 - Added new color effects depending on player zone.
 - Added a small chance to accidentally drop an item when trying to use it.
 - Added a blood decal after killing the player.
+- Added buttons for containment door in SCP-049's containment chamber.
 
 - Removed «Playmusic» console command.
 
@@ -28,6 +29,8 @@ Rooms:
 - Improved «room1_archive» room's design.
 
 - Tiny corrections for rooms description.
+
+- Dr. L's office harm player like inside the Pocket Dimension.
 
 Items:
 - Added a new gas mask variation: gas mask without fogging.
@@ -248,7 +251,7 @@ Bug Fixes:
 - Fixed wrong zone sections for Map Creator.
 - Fixed custom map shows a random seed in the menu.
 - Fixed elevator door in «room2_ic».
-- Fixed GodMode doesn't protect from Pocket Dimension flying columns.
+- Fixed GodMode doesn't protect from the Pocket Dimension flying columns.
 
 - Hopefully fixed mouse movement.
 
@@ -660,7 +663,7 @@ Bug Fixes:
 - Fixed keycard, origami, SCP-513-1 models.
 - Fixed breath sound while wearing SCP-714.
 - Fixed and reworked the «Revive» command.
-- Fixed tentacles, SCP-205, SCP-966, SCP-1048-A, SCP-066, SCP-860-2, SCP-049, Pocket Dimension plane and guards at some points not respecting the «NoTarget» command.
+- Fixed tentacles, SCP-205, SCP-966, SCP-1048-A, SCP-066, SCP-860-2, SCP-049, the Pocket Dimension plane and guards at some points not respecting the «NoTarget» command.
 - Fixed stopsound not stopping the MTF announcements.
 - Fixed wrong paper texture on the props.
 - Fixed SCP-079 door sound in the Surveillance Room.
@@ -683,7 +686,7 @@ Bug Fixes:
 - Fixed Omni Key Card achievement image.
 - Fixed text font for Burnt Note with Dr. Maynard's access code.
 - Fixed smoke doesn't interact with fog.
-- Fixed wrong decal blend in Pocket Dimension.
+- Fixed wrong decal blend in the Pocket Dimension.
 - Fixed a bug where auto closing is applied for locked doors.
 - Fixed some item positions near the glass.
 - Fixed ability to select an item without any effect.

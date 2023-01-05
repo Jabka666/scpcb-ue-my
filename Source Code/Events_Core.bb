@@ -3920,6 +3920,7 @@ Function UpdateEvents%()
 							me\HeartBeatRate = CurveValue(120.0, me\HeartBeatRate, 150.0) 
 							e\SoundCHN = LoopSound2(OldManSFX[4], e\SoundCHN, Camera, e\room\OBJ, 5.0, 0.3)
 							n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
+							InjurePlayer(fps\Factor[0] * 0.00005)
 						EndIf
 					EndIf
 				EndIf
