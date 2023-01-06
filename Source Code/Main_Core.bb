@@ -2342,20 +2342,6 @@ Function UpdateGame%()
 			EndIf
 		EndIf
 		
-		If RN = "cont1_173_intro" Then
-			For e.Events = Each Events
-				If e\EventID = e_cont1_173_intro Then
-					If e\EventState3 >= 40.0 And e\EventState3 < 50.0 Then
-						If InvOpen Then
-							CreateHintMsg(GetLocalString("msg", "doc.click"))
-							e\EventState3 = 50.0
-							Exit
-						EndIf
-					EndIf
-				EndIf
-			Next
-		EndIf
-		
 		If KeyHit(key\SAVE) Then
 			If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then
 				If QuickLoadPercent > -1 Then CanSave = 0
