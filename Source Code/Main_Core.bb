@@ -1969,7 +1969,7 @@ SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemP
 SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
 
 SetErrorMsg(10, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
-SetErrorMsg(11, Chr(10) + GetLocalString("error", "shot")) 
+SetErrorMsg(11, GetLocalString("error", "shot")) 
 
 Function CatchErrors%(Location$)
 	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))

@@ -35,7 +35,9 @@ Function LanguageSelector%()
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				lan\FileSize = ParseDomainTXT(l, "size") ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
-				DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then
+					DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+				EndIf
 				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit
@@ -194,7 +196,7 @@ Function LanguageSelector%()
 			
 			x = MouseX() + 10
 			y = MouseY() + 10
-			If (x + Width) > 640 Then x = x - Width - 10 ; ~ If tooltip is too long then move tooltip to the left
+			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long then move tooltip to the left
 			RenderFrame(x, y, Width + FontWidth(), Height)
 			x = x + 5
 			Text(x, y + 8, Name)
