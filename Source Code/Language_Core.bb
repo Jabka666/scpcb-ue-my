@@ -118,7 +118,7 @@ Function LanguageSelector%()
 					DrawImage(ButtonImages, 425, y - 4, 5)
 					If MouseOn(425, y - 4, 21, 21) Then MouseHoverLanguage = lan
 				EndIf
-				If lan\ID = opt\Language Then 
+				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
 					Rect(20, y - CurrFontHeight, 430, 20, False)
 				EndIf
@@ -288,7 +288,7 @@ Function UpdateLauncherScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidt
 	
 	If MouseSpeedZ <> 0.0 Then ; ~ Only for vertical scroll bars
 		Return(Min(Max(Bar - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
-    EndIf
+	EndIf
 	
 	Return(Bar)
 End Function
@@ -324,10 +324,10 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 		EndIf
 	EndIf
 	
-	If Pushed Then 
+	If Pushed Then
 		Rect(x, y, Width, Height)
 		Color(130, 130, 130)
-		Rect(x + 1, y + 1, Width - 1, Height - 1, False)	
+		Rect(x + 1, y + 1, Width - 1, Height - 1, False)
 		Color(10, 10, 10)
 		Rect(x, y, Width, Height, False)
 		Color(255, 255, 255)
@@ -336,12 +336,12 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 	Else
 		Rect(x, y, Width, Height)
 		Color(130, 130, 130)
-		Rect(x, y, Width - 1, Height - 1, False)	
+		Rect(x, y, Width - 1, Height - 1, False)
 		Color(255, 255, 255)
 		Rect(x, y, Width, Height, False)
 		Color(10, 10, 10)
 		Line(x, y + Height - 1, x + Width - 1, y + Height - 1)
-		Line(x + Width - 1, y, x + Width - 1, y + Height - 1)	
+		Line(x + Width - 1, y, x + Width - 1, y + Height - 1)
 	EndIf
 	
 	Color(255, 255, 255)

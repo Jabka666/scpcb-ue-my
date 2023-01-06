@@ -184,7 +184,7 @@ Function SaveGame%(File$)
 	Temp = 0
 	For n.NPCs = Each NPCs
 		Temp = Temp + 1
-	Next	
+	Next
 	
 	WriteInt(f, Temp)
 	For n.NPCs = Each NPCs
@@ -214,7 +214,7 @@ Function SaveGame%(File$)
 		
 		WriteInt(f, n\ID)
 		If n\Target <> Null Then
-			WriteInt(f, n\Target\ID)		
+			WriteInt(f, n\Target\ID)
 		Else
 			WriteInt(f, 0)
 		EndIf
@@ -255,8 +255,8 @@ Function SaveGame%(File$)
 	Temp = 0
 	For r.Rooms = Each Rooms
 		Temp = Temp + 1
-	Next	
-	WriteInt(f, Temp)	
+	Next
+	WriteInt(f, Temp)
 	For r.Rooms = Each Rooms
 		WriteInt(f, r\RoomTemplate\ID)
 		WriteInt(f, r\Angle)
@@ -267,7 +267,7 @@ Function SaveGame%(File$)
 		WriteByte(f, r\Found)
 		WriteInt(f, r\Zone)
 		
-		If PlayerRoom = r Then 
+		If PlayerRoom = r Then
 			WriteByte(f, 1)
 		Else
 			WriteByte(f, 0)
@@ -287,7 +287,7 @@ Function SaveGame%(File$)
 					WriteByte(f, 1)
 				Else
 					WriteByte(f, 0)
-				EndIf	
+				EndIf
 			EndIf
 		Next
 		WriteByte(f, 2)
@@ -327,9 +327,9 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For do.Doors = Each Doors
-		Temp = Temp + 1	
-	Next	
-	WriteInt(f, Temp)	
+		Temp = Temp + 1
+	Next
+	WriteInt(f, Temp)
 	For do.Doors = Each Doors
 		WriteFloat(f, EntityX(do\FrameOBJ, True))
 		WriteFloat(f, EntityY(do\FrameOBJ, True))
@@ -365,7 +365,7 @@ Function SaveGame%(File$)
 	Temp = 0
 	For de.Decals = Each Decals
 		Temp = Temp + 1
-	Next	
+	Next
 	WriteInt(f, Temp)
 	For de.Decals = Each Decals
 		WriteInt(f, de\ID)
@@ -395,12 +395,12 @@ Function SaveGame%(File$)
 	Temp = 0
 	For e.Events = Each Events
 		Temp = Temp + 1
-	Next	
+	Next
 	WriteInt(f, Temp)
 	For e.Events = Each Events
 		WriteByte(f, e\EventID)
 		WriteFloat(f, e\EventState)
-		WriteFloat(f, e\EventState2)	
+		WriteFloat(f, e\EventState2)
 		WriteFloat(f, e\EventState3)
 		WriteFloat(f, e\EventState4)
 		WriteFloat(f, EntityX(e\room\OBJ))
@@ -411,7 +411,7 @@ Function SaveGame%(File$)
 	Local it.Items
 	
 	Temp = 0
-	For it.Items = Each Items	
+	For it.Items = Each Items
 		Temp = Temp + 1
 	Next
 	WriteInt(f, Temp)
@@ -452,8 +452,8 @@ Function SaveGame%(File$)
 				Exit
 			EndIf
 		Next
-		If ItemFound Then 
-			WriteByte(f, i) 
+		If ItemFound Then
+			WriteByte(f, i)
 		Else
 			WriteByte(f, 66)
 		EndIf
@@ -461,8 +461,8 @@ Function SaveGame%(File$)
 		If it\ItemTemplate\IsAnim <> 0 Then WriteFloat(f, AnimTime(it\Model))
 		WriteByte(f, it\InvSlots)
 		WriteInt(f, it\ID)
-		If it\ItemTemplate\InvImg = it\InvImg Then 
-			WriteByte(f, 0) 
+		If it\ItemTemplate\InvImg = it\InvImg Then
+			WriteByte(f, 0)
 		Else
 			WriteByte(f, 1)
 		EndIf
@@ -536,7 +536,7 @@ Function LoadGame%(File$)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
-	z = ReadFloat(f)	
+	z = ReadFloat(f)
 	PositionEntity(me\Head, x, y + 0.05, z)
 	ResetEntity(me\Head)
 	
@@ -550,11 +550,11 @@ Function LoadGame%(File$)
 	
 	me\BlinkTimer = ReadFloat(f)
 	me\BLINKFREQ = ReadFloat(f)
-	me\BlinkEffect = ReadFloat(f)	
+	me\BlinkEffect = ReadFloat(f)
 	me\BlinkEffectTimer = ReadFloat(f)
 	
-	me\DeathTimer = ReadFloat(f)	
-	me\BlurTimer = ReadFloat(f)	
+	me\DeathTimer = ReadFloat(f)
+	me\BlurTimer = ReadFloat(f)
 	me\HealTimer = ReadFloat(f)
 	
 	me\Crouch = ReadByte(f)
@@ -564,8 +564,8 @@ Function LoadGame%(File$)
 	I_500\Taken = ReadByte(f)
 	
 	me\Stamina = ReadFloat(f)
-	me\StaminaEffect = ReadFloat(f)	
-	me\StaminaEffectTimer = ReadFloat(f)	
+	me\StaminaEffect = ReadFloat(f)
+	me\StaminaEffectTimer = ReadFloat(f)
 	
 	me\EyeStuck = ReadFloat(f)
 	me\EyeIrritation = ReadFloat(f)
@@ -600,7 +600,7 @@ Function LoadGame%(File$)
 	SelectedDifficulty = difficulties[DifficultyIndex]
 	If DifficultyIndex = ESOTERIC Then
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
-		SelectedDifficulty\SaveType	= ReadByte(f)
+		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
 	EndIf
 	SelectedDifficulty\InventorySlots = ReadByte(f)
@@ -640,7 +640,7 @@ Function LoadGame%(File$)
 	SecondaryLightOn = ReadFloat(f)
 	PrevSecondaryLightOn = ReadFloat(f)
 	RemoteDoorOn = ReadByte(f)
-	SoundTransmission = ReadByte(f)	
+	SoundTransmission = ReadByte(f)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		achv\Achievement[i] = ReadByte(f)
@@ -711,8 +711,8 @@ Function LoadGame%(File$)
 		RotateEntity(n\Collider, x, y, z)
 		
 		n\State = ReadFloat(f)
-		n\State2 = ReadFloat(f)	
-		n\State3 = ReadFloat(f)			
+		n\State2 = ReadFloat(f)
+		n\State3 = ReadFloat(f)
 		n\PrevState = ReadInt(f)
 		
 		n\Idle = ReadByte(f)
@@ -805,7 +805,7 @@ Function LoadGame%(File$)
 		Local Found% = ReadByte(f)
 		Local Level% = ReadInt(f)
 		
-		Local Temp2% = ReadByte(f)		
+		Local Temp2% = ReadByte(f)
 		
 		Angle = WrapAngle(Angle)
 		
@@ -1048,7 +1048,7 @@ Function LoadGame%(File$)
 				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, y, OBJ2Z, True)
 				Exit
 			EndIf
-		Next		
+		Next
 	Next
 	
 	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
@@ -1114,7 +1114,7 @@ Function LoadGame%(File$)
 		
 		e\EventID = ReadByte(f)
 		e\EventState = ReadFloat(f)
-		e\EventState2 = ReadFloat(f)		
+		e\EventState2 = ReadFloat(f)
 		e\EventState3 = ReadFloat(f)
 		e\EventState4 = ReadFloat(f)
 		x = ReadFloat(f)
@@ -1178,7 +1178,7 @@ Function LoadGame%(File$)
 		
 		Red = ReadByte(f)
 		Green = ReadByte(f)
-		Blue = ReadByte(f)	
+		Blue = ReadByte(f)
 		
 		Local A% = ReadFloat(f)
 		
@@ -1227,7 +1227,7 @@ Function LoadGame%(File$)
 		Else
 			it\InvImg = it\ItemTemplate\InvImg2
 		EndIf
-	Next	
+	Next
 	
 	Local o_i%
 	
@@ -1404,14 +1404,14 @@ Function LoadGameQuick%(File$)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
-	z = ReadFloat(f)	
+	z = ReadFloat(f)
 	PositionEntity(me\Collider, x, y + 0.05, z)
 	
 	ShowEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
-	z = ReadFloat(f)	
+	z = ReadFloat(f)
 	PositionEntity(me\Head, x, y + 0.05, z)
 	ResetEntity(me\Head)
 	
@@ -1425,11 +1425,11 @@ Function LoadGameQuick%(File$)
 	
 	me\BlinkTimer = ReadFloat(f)
 	me\BLINKFREQ = ReadFloat(f)
-	me\BlinkEffect = ReadFloat(f)	
-	me\BlinkEffectTimer = ReadFloat(f)	
+	me\BlinkEffect = ReadFloat(f)
+	me\BlinkEffectTimer = ReadFloat(f)
 	
-	me\DeathTimer = ReadFloat(f)	
-	me\BlurTimer = ReadFloat(f)	
+	me\DeathTimer = ReadFloat(f)
+	me\BlurTimer = ReadFloat(f)
 	me\HealTimer = ReadFloat(f)
 	
 	me\Crouch = ReadByte(f)
@@ -1439,8 +1439,8 @@ Function LoadGameQuick%(File$)
 	I_500\Taken = ReadByte(f)
 	
 	me\Stamina = ReadFloat(f)
-	me\StaminaEffect = ReadFloat(f)	
-	me\StaminaEffectTimer = ReadFloat(f)	
+	me\StaminaEffect = ReadFloat(f)
+	me\StaminaEffectTimer = ReadFloat(f)
 	
 	me\EyeStuck = ReadFloat(f)
 	me\EyeIrritation = ReadFloat(f)
@@ -1475,7 +1475,7 @@ Function LoadGameQuick%(File$)
 	SelectedDifficulty = difficulties[DifficultyIndex]
 	If DifficultyIndex = ESOTERIC Then
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
-		SelectedDifficulty\SaveType	= ReadByte(f)
+		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
 	EndIf
 	SelectedDifficulty\InventorySlots = ReadByte(f)
@@ -1515,7 +1515,7 @@ Function LoadGameQuick%(File$)
 	SecondaryLightOn = ReadFloat(f)
 	PrevSecondaryLightOn = ReadFloat(f)
 	RemoteDoorOn = ReadByte(f)
-	SoundTransmission = ReadByte(f)	
+	SoundTransmission = ReadByte(f)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		achv\Achievement[i] = ReadByte(f)
@@ -1589,8 +1589,8 @@ Function LoadGameQuick%(File$)
 		RotateEntity(n\Collider, x, y, z)
 		
 		n\State = ReadFloat(f)
-		n\State2 = ReadFloat(f)	
-		n\State3 = ReadFloat(f)			
+		n\State2 = ReadFloat(f)
+		n\State3 = ReadFloat(f)
 		n\PrevState = ReadInt(f)
 		
 		n\Idle = ReadByte(f)
@@ -1622,7 +1622,7 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				SetAnimTime(n\OBJ, Frame)
 				;[End Block]
-		End Select		
+		End Select
 		
 		n\Frame = Frame
 		n\Contained = ReadByte(f)
@@ -1683,7 +1683,7 @@ Function LoadGameQuick%(File$)
 		Local Found% = ReadByte(f)
 		Local Level% = ReadInt(f)
 		
-		Local Temp2% = ReadByte(f)	
+		Local Temp2% = ReadByte(f)
 		
 		If Angle >= 360.0
 			Angle = Angle - 360.0
@@ -1802,7 +1802,7 @@ Function LoadGameQuick%(File$)
 				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, EntityY(do\OBJ2), OBJ2Z, True)
 				Exit
 			EndIf
-		Next		
+		Next
 	Next
 	
 	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
@@ -1872,7 +1872,7 @@ Function LoadGameQuick%(File$)
 		e\EventID = ReadByte(f)
 		e\EventState = ReadFloat(f)
 		e\EventState2 = ReadFloat(f)
-		e\EventState3 = ReadFloat(f)	
+		e\EventState3 = ReadFloat(f)
 		e\EventState4 = ReadFloat(f)
 		x = ReadFloat(f)
 		z = ReadFloat(f)
@@ -1881,7 +1881,7 @@ Function LoadGameQuick%(File$)
 				e\room = r
 				Exit
 			EndIf
-		Next	
+		Next
 		e\EventStr = ReadString(f)
 		FindForestEvent(e)
 		
@@ -1920,7 +1920,7 @@ Function LoadGameQuick%(File$)
 		
 		Red = ReadByte(f)
 		Green = ReadByte(f)
-		Blue = ReadByte(f)	
+		Blue = ReadByte(f)
 		
 		Local A% = ReadFloat(f)
 		
@@ -1969,7 +1969,7 @@ Function LoadGameQuick%(File$)
 		Else
 			it\InvImg = it\ItemTemplate\InvImg2
 		EndIf
-	Next	
+	Next
 	
 	Local o_i%
 	
@@ -2076,7 +2076,7 @@ Function LoadGameQuick%(File$)
 					zTemp = EntityZ(r\Objects[14], True)
 					FreeEntity(r\Objects[14])
 					r\Objects[14] = LoadMesh_Strict("GFX\Map\gateawall2.b3d", r\OBJ)
-					PositionEntity(r\Objects[14], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)	
+					PositionEntity(r\Objects[14], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)
 					EntityColor(r\Objects[14], 25.0, 25.0, 25.0)
 					EntityType(r\Objects[14], HIT_MAP)
 				EndIf
@@ -2201,7 +2201,7 @@ Function LoadSavedGames%()
 	Local File$ = NextFile(MyDir)
 	
 	While File <> ""
-		If FileType(SavePath + File) = 2 Then 
+		If FileType(SavePath + File) = 2 Then
 			Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 			
 			newsv.Save = New Save
@@ -2260,24 +2260,24 @@ Function LoadSavedMaps%()
 		File = NextFile(Dir)
 		
 		If File = "" Then Exit
-		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then 
+		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then
 			If File <> "." And File <> ".." Then
 				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then SavedMapsAmount = SavedMapsAmount + 1
 			EndIf
-		EndIf 
-	Forever 
+		EndIf
+	Forever
 	CloseDir(Dir)
 	
 	Dim SavedMaps$(SavedMapsAmount)
 	Dim SavedMapsAuthor$(SavedMapsAmount)
 	
 	i = 0
-	Dir = ReadDir(CustomMapsPath) 
+	Dir = ReadDir(CustomMapsPath)
 	Repeat
 		File = NextFile(Dir)
 		
 		If File = "" Then Exit
-		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then 
+		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then
 			If File <> "." And File <> ".." Then
 				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
 					SavedMaps(i) = File
@@ -2292,8 +2292,8 @@ Function LoadSavedMaps%()
 					i = i + 1
 				EndIf
 			EndIf
-		EndIf 
-	Forever 
+		EndIf
+	Forever
 	CloseDir(Dir)
 	
 	CatchErrors("LoadSavedMaps")
@@ -2302,7 +2302,7 @@ End Function
 Function LoadMap%(File$)
 	CatchErrors("Uncaught (LoadMap)")
 	
-	Local r.Rooms, rt.RoomTemplates, e.Events	
+	Local r.Rooms, rt.RoomTemplates, e.Events
 	Local f%, x%, y%, Name$, Angle%, Prob#
 	Local RoomAmount%, ForestPieceAmount%, MTPieceAmount%, i%
 	
@@ -2359,14 +2359,14 @@ Function LoadMap%(File$)
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
 						FindForestEvent(e)
-						e\room = r   
+						e\room = r
 					EndIf
 				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
 					e\EventName = Name
 					e\EventID = FindEventID(Name)
 					FindForestEvent(e)
-					e\room = r  
+					e\room = r
 				EndIf
 			EndIf
 		Next
@@ -2532,7 +2532,7 @@ Function LoadMap%(File$)
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
 						FindForestEvent(e)
-						e\room = r   
+						e\room = r
 					EndIf
 				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events

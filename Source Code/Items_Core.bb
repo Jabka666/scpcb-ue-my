@@ -17,7 +17,7 @@ Type ItemTemplates
 	Field IsAnim%
 	Field Scale#
 	Field Tex%, TexPath$
-End Type 
+End Type
 
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 9)
 	Local it.ItemTemplates, it2.ItemTemplates
@@ -205,7 +205,7 @@ Type Items
 	Field SecondInv.Items[20]
 	Field ID%
 	Field InvSlots%
-End Type 
+End Type
 
 Dim Inventory.Items(0)
 
@@ -226,7 +226,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	For it.ItemTemplates = Each ItemTemplates
 		If Lower(it\Name) = Name And Lower(it\TempName) = TempName Then
 			i\ItemTemplate = it
-			i\Collider = CreatePivot()			
+			i\Collider = CreatePivot()
 			EntityRadius(i\Collider, 0.01)
 			EntityPickMode(i\Collider, 1, False)
 			i\Model = CopyEntity(it\OBJ, i\Collider)
@@ -261,7 +261,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EntityParent(Liquid, i\Model)
 		EntityColor(Liquid, R, G, B)
 		
-		If A < 0.0 Then 
+		If A < 0.0 Then
 			EntityFX(Liquid, 1)
 			EntityAlpha(Liquid, Abs(A))
 		Else
@@ -449,7 +449,7 @@ Function UpdateItems%()
 						Next
 					EndIf
 				EndIf
-				If EntityY(i\Collider) < -60.0 Then 
+				If EntityY(i\Collider) < -60.0 Then
 					RemoveItem(i)
 					DeletedItem = True
 				EndIf
@@ -530,7 +530,7 @@ Function PickItem%(item.Items)
 						GiveAchievement(AchvOmni)
 						;[End Block]
 					Case "scp005"
-						;[Block]    
+						;[Block]
 						GiveAchievement(Achv005)
 						;[End Block]
 					Case "veryfinevest"
@@ -1267,7 +1267,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									If Rand(10) = 1 Then
 										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 									Else
-										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)	
+										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
 									EndIf
 									;[End Block]
 								Case NORMAL
@@ -1275,7 +1275,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									If Rand(15) = 1 Then
 										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 									Else
-										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)	
+										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
 									EndIf
 									;[End Block]
 								Case HARD
@@ -1283,7 +1283,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									If Rand(20) = 1 Then
 										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 									Else
-										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)	
+										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
 									EndIf
 									;[End Block]
 								Case EXTREME
@@ -1291,7 +1291,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									If Rand(25) = 1 Then
 										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 									Else
-										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)	
+										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
 									EndIf
 									;[End Block]
 							End Select
@@ -1504,8 +1504,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If Rand(2) = 1 Then
 						it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 					Else
-						it2.Items = CreateItem("Playing Card", "playcard", x, y, z)			
-					EndIf	
+						it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
+					EndIf
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
@@ -1544,7 +1544,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 					End Select
 					;[End Block]
-			End Select		
+			End Select
 			;[End Block]
 		Case "playcard", "coin", "25ct"
 			;[Block]
@@ -1925,7 +1925,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE, ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)	
+					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
 					;[End Block]
 				Case FINE
 					;[Block]
@@ -2108,7 +2108,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					it2\State = item\State * 2.0
 					If Rand(5) = 1 Then me\ExplosionTimer = 135.0
 					;[End Block]
-			End Select	
+			End Select
 			;[End Block]
 		Case "paper"
 			;[Block]

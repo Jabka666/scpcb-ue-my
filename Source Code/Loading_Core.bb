@@ -635,8 +635,8 @@ Function LoadMaterials%(File$)
 			mat\Name = Lower(TemporaryString)
 			If opt\BumpEnabled Then
 				StrTemp = IniGetString(File, TemporaryString, "bump")
-				If StrTemp <> "" Then 
-					mat\Bump =  LoadTexture_Strict(StrTemp, 256)
+				If StrTemp <> "" Then
+					mat\Bump = LoadTexture_Strict(StrTemp, 256)
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
@@ -830,7 +830,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "fak"), "First Aid Kit", "firstaid", ItemsPath + "first_aid_kit.b3d", ItemsPath + "INV_first_aid_kit.png", "", 0.05, 1)
 	CreateItemTemplate(GetLocalString("items", "sfak"), "Small First Aid Kit", "finefirstaid", ItemsPath + "first_aid_kit.b3d", ItemsPath + "INV_first_aid_kit.png", "", 0.03, 1)
 	CreateItemTemplate(GetLocalString("items", "bfak"), "Blue First Aid Kit", "firstaid2", ItemsPath + "first_aid_kit.b3d", ItemsPath + "INV_first_aid_kit(2).png", "", 0.03, 1, ItemsPath + "first_aid_kit(2).png")
-	CreateItemTemplate(GetLocalString("items", "sb"), "Strange Bottle", "veryfinefirstaid", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_strange_bottle.png", "", 0.002, 1, ItemsPath + "strange_bottle.png")	
+	CreateItemTemplate(GetLocalString("items", "sb"), "Strange Bottle", "veryfinefirstaid", ItemsPath + "eye_drops.b3d", ItemsPath + "INV_strange_bottle.png", "", 0.002, 1, ItemsPath + "strange_bottle.png")
 	
 	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "gasmask", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.019, 2)
 	CreateItemTemplate(GetLocalString("items", "finemask"), "Gas Mask", "finegasmask", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.019, 2)
@@ -906,7 +906,7 @@ Function LoadItems%()
 			DeleteSingleTextureEntryFromCache(it\Tex) : it\Tex = 0
 		EndIf
 	Next
-End Function 
+End Function
 
 Global SoundEmitter%
 Global TempSounds%[10]
@@ -956,8 +956,8 @@ Global CurrMusic% = True
 Dim OpenDoorSFX%(6, 3), CloseDoorSFX%(6, 3)
 Global BigDoorErrorSFX%[3]
 
-Global KeyCardSFX1% 
-Global KeyCardSFX2% 
+Global KeyCardSFX1%
+Global KeyCardSFX2%
 Global ScannerSFX1%
 Global ScannerSFX2%
 
@@ -966,22 +966,22 @@ Global DoorBudgeSFX2%
 Global DoorLockSFX%
 
 Global OpenDoorFastSFX%
-Global CautionSFX% 
+Global CautionSFX%
 
 Global NuclearSirenSFX%
 
-Global CameraSFX% 
+Global CameraSFX%
 
-Global StoneDragSFX% 
+Global StoneDragSFX%
 
-Global GunshotSFX% 
-Global Gunshot2SFX% 
-Global Gunshot3SFX% 
-Global BulletHitSFX% 
+Global GunshotSFX%
+Global Gunshot2SFX%
+Global Gunshot3SFX%
+Global BulletHitSFX%
 
-Global TeslaIdleSFX% 
-Global TeslaActivateSFX% 
-Global TeslaPowerUpSFX% 
+Global TeslaIdleSFX%
+Global TeslaActivateSFX%
+Global TeslaPowerUpSFX%
 Global TeslaShockSFX%
 
 Global MagnetUpSFX%, MagnetDownSFX%
@@ -993,28 +993,28 @@ Global CrouchSFX%
 
 Global DecaySFX%[5]
 
-Global BurstSFX% 
+Global BurstSFX%
 
 Global HissSFX%
 
 Global RustleSFX%[6]
 
 Global Use914SFX%
-Global Death914SFX% 
+Global Death914SFX%
 
 Global DripSFX%[4]
 
 Global KnobSFX%[2]
 
-Global LeverSFX%, LightSFX% 
-Global ButtGhostSFX% 
+Global LeverSFX%, LightSFX%
+Global ButtGhostSFX%
 
-Dim RadioSFX%(2, 9) 
+Dim RadioSFX%(2, 9)
 
-Global RadioSquelch% 
-Global RadioStatic% 
+Global RadioSquelch%
+Global RadioStatic%
 Global RadioStatic895%
-Global RadioBuzz% 
+Global RadioBuzz%
 
 Global SCRAMBLESFX%
 Global SCRAMBLECHN%
@@ -1024,7 +1024,7 @@ Global NVGSFX%[2]
 Global LowBatterySFX%[2]
 Global LowBatteryCHN%[2]
 
-Global ElevatorBeepSFX%, ElevatorMoveSFX% 
+Global ElevatorBeepSFX%, ElevatorMoveSFX%
 
 Global PickSFX%[4]
 
@@ -1047,7 +1047,7 @@ Global AlarmSFX%[4]
 
 Global CommotionState%[25]
 
-Global HeartBeatSFX% 
+Global HeartBeatSFX%
 
 Global VomitSFX%
 
@@ -1066,7 +1066,7 @@ Global MTFSFX%[2]
 Global CoughSFX%[3]
 Global CoughCHN%, VomitCHN%
 
-Global MachineSFX% 
+Global MachineSFX%
 Global ApacheSFX%
 
 Global CurrStepSFX%
@@ -1296,7 +1296,7 @@ Function LoadEvents%()
 	If opt\IntroEnabled Then CreateEvent("cont1_173_intro", "cont1_173_intro", 0)
 	CreateEvent("cont1_173", "cont1_173", 0)
 	
-	CreateEvent("dimension_106", "dimension_106", 0)	
+	CreateEvent("dimension_106", "dimension_106", 0)
 	
 	; ~ There's a 7% chance that SCP-106 appears in the rooms named "room2_5_hcz"
 	CreateEvent("room2_5_hcz_106", "room2_5_hcz", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
@@ -1306,11 +1306,11 @@ Function LoadEvents%()
 	If Rand(3) < 3 Then CreateEvent("room2c_gw_lcz_173", "room2c_gw_lcz", 0)
 	CreateEvent("room2c_gw_lcz_173", "room2c_gw_lcz", 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent("trick", "room2_lcz", 0, 0.15)	
+	CreateEvent("trick", "room2_lcz", 0, 0.15)
 	
-	CreateEvent("1048_a", "room2_lcz", 0, 1.0)	
+	CreateEvent("1048_a", "room2_lcz", 0, 1.0)
 	
-	CreateEvent("room2_storage", "room2_storage", 0)	
+	CreateEvent("room2_storage", "room2_storage", 0)
 	
 	; ~ SCP-096 spawns in the first (and last)
 	CreateEvent("room2c_gw_ez_096", "room2c_gw_ez", 0)
@@ -1335,16 +1335,16 @@ Function LoadEvents%()
 	; ~ The anomalous duck in "room2_2_ez"-rooms
 	CreateEvent("room2_2_ez", "room2_2_ez", 0, 0.7)
 	
-	CreateEvent("room2_closets", "room2_closets", 0)	
+	CreateEvent("room2_closets", "room2_closets", 0)
 	
-	CreateEvent("room2_cafeteria", "room2_cafeteria", 0)	
+	CreateEvent("room2_cafeteria", "room2_cafeteria", 0)
 	
 	CreateEvent("room3_hcz_duck", "room3_hcz", 0)
 	CreateEvent("room3_hcz_1048", "room3_hcz", 1)
 	
-	CreateEvent("room2_servers_hcz", "room2_servers_hcz", 0)	
+	CreateEvent("room2_servers_hcz", "room2_servers_hcz", 0)
 	
-	CreateEvent("room3_2_ez", "room3_2_ez", 0)	
+	CreateEvent("room3_2_ez", "room3_2_ez", 0)
 	CreateEvent("room3_2_ez", "room3_3_ez", 0)
 	
 	; ~ The dead guard
@@ -1352,7 +1352,7 @@ Function LoadEvents%()
 	
 	CreateEvent("room4_lcz", "room4_lcz", 0)
 	
-	If Rand(5) < 5 Then 
+	If Rand(5) < 5 Then
 		Select Rand(3)
 			Case 1
 				;[Block]
@@ -1360,28 +1360,28 @@ Function LoadEvents%()
 				;[End Block]
 			Case 2
 				;[Block]
-				CreateEvent("682_roar", "room3_hcz", Rand(0, 2))	
+				CreateEvent("682_roar", "room3_hcz", Rand(0, 2))
 				;[End Block]
 			Case 3
 				;[Block]
 				CreateEvent("682_roar", "room2_5_ez", 0)
 				;[End Block]
-		End Select 
-	EndIf 
+		End Select
+	EndIf
 	
 	CreateEvent("room2_nuke", "room2_nuke", 0)
 	
-	If Rand(5) < 5 Then 
+	If Rand(5) < 5 Then
 		CreateEvent("cont1_895_106", "cont1_895", 0)
 	Else
 		CreateEvent("cont1_895", "cont1_895", 0)
-	EndIf 
+	EndIf
 	
 	CreateEvent("room2_checkpoint", "room2_checkpoint_lcz_hcz", 0, 1.0)
 	CreateEvent("room2_checkpoint", "room2_checkpoint_hcz_ez", 0, 1.0)
 	
 	CreateEvent("door_closing", "room3_lcz", 0, 0.1)
-	CreateEvent("door_closing", "room3_2_hcz", 0, 0.1)	
+	CreateEvent("door_closing", "room3_2_hcz", 0, 0.1)
 	
 	If Rand(2) = 1 Then
 		CreateEvent("106_victim", "room3_lcz", Rand(2))
@@ -1392,7 +1392,7 @@ Function LoadEvents%()
 	EndIf
 	CreateEvent("106_sinkhole", "room4_lcz", Rand(2))
 	
-	CreateEvent("cont1_079", "cont1_079", 0)	
+	CreateEvent("cont1_079", "cont1_079", 0)
 	
 	CreateEvent("cont2_049", "cont2_049", 0)
 	
@@ -1402,7 +1402,7 @@ Function LoadEvents%()
 	
 	CreateEvent("cont2_008", "cont2_008", 0)
 	
-	CreateEvent("cont1_106", "cont1_106", 0)	
+	CreateEvent("cont1_106", "cont1_106", 0)
 	
 	CreateEvent("cont1_372", "cont1_372", 0)
 	
@@ -1411,12 +1411,12 @@ Function LoadEvents%()
 	CreateEvent("butt_ghost", "room2_6_ez", 0)
 	CreateEvent("toilet_guard", "room2_6_ez", 1)
 	
-	CreateEvent("room2_2_hcz_106", "room2_2_hcz", Rand(0, 3)) 
+	CreateEvent("room2_2_hcz_106", "room2_2_hcz", Rand(0, 3))
 	
 	CreateEvent("room2_4_hcz", "room2_4_hcz", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2_test_hcz", "room2_test_hcz", 0)
-	CreateEvent("room2_test_lcz_173", "room2_test_lcz", 0, 1.0)	
+	CreateEvent("room2_test_lcz_173", "room2_test_lcz", 0, 1.0)
 	
 	CreateEvent("room2_mt", "room2_mt", 0)
 	
@@ -1530,8 +1530,8 @@ Function LoadWayPoints%(LoadingStart% = 55)
 	For w.WayPoints = Each WayPoints
 		Number = Number + 1
 		Iter = Iter + 1
-		If Iter = 20 Then 
-			RenderLoading(LoadingStart + Floor((30.0 / Amount) * Number), GetLocalString("loading", "waypoints")) 
+		If Iter = 20 Then
+			RenderLoading(LoadingStart + Floor((30.0 / Amount) * Number), GetLocalString("loading", "waypoints"))
 			Iter = 0
 		EndIf
 		
@@ -1554,21 +1554,21 @@ Function LoadWayPoints%(LoadingStart% = 55)
 						If EntityVisible(w\OBJ, w2\OBJ) Then
 							For i = 0 To 4
 								If w\connected[i] = Null Then
-									w\connected[i] = w2.WayPoints 
+									w\connected[i] = w2.WayPoints
 									w\Dist[i] = Dist
 									Exit
 								EndIf
 							Next
 							
 							For n = 0 To 4
-								If w2\connected[n] = Null Then 
-									w2\connected[n] = w.WayPoints 
+								If w2\connected[n] = Null Then
+									w2\connected[n] = w.WayPoints
 									w2\Dist[n] = Dist
 									Exit
-								EndIf					
+								EndIf
 							Next
 						EndIf
-					EndIf	
+					EndIf
 				EndIf
 			EndIf
 			w2 = After(w2)
@@ -1578,7 +1578,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 	For d.Doors = Each Doors
 		ShowEntity(d\OBJ)
 		If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
-		ShowEntity(d\FrameOBJ)		
+		ShowEntity(d\FrameOBJ)
 	Next
 	
 	For w.WayPoints = Each WayPoints
@@ -1586,7 +1586,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		EntityRadius(w\OBJ, 0)
 		
 		For i = 0 To 4
-			If w\connected[i] <> Null Then 
+			If w\connected[i] <> Null Then
 				Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
 				
 				EntityColor(tLine, 255.0, 0.0, 0.0)
@@ -1868,25 +1868,25 @@ Function LoadEntities%()
 	ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
 	
 	CreateConsoleMsg("Console commands: ")
-	CreateConsoleMsg("  - help [page]")
-	CreateConsoleMsg("  - teleport [room name]")
-	CreateConsoleMsg("  - godmode [on / off]")
-	CreateConsoleMsg("  - noclip [on / off]")
-	CreateConsoleMsg("  - infinitestamina [on / off]")
-	CreateConsoleMsg("  - noblink [on / off]")
-	CreateConsoleMsg("  - notarget [on / off]")
-	CreateConsoleMsg("  - noclipspeed [x] (default = 2.0)")
-	CreateConsoleMsg("  - wireframe [on / off]")
-	CreateConsoleMsg("  - debughud [category]")
-	CreateConsoleMsg("  - camerafog [near] [far]")
-	CreateConsoleMsg("  - heal")
-	CreateConsoleMsg("  - revive")
-	CreateConsoleMsg("  - asd")
-	CreateConsoleMsg("  - spawnitem [item name]")
-	CreateConsoleMsg("  - 106retreat")
-	CreateConsoleMsg("  - disable173 / enable173")
-	CreateConsoleMsg("  - disable106 / enable106")
-	CreateConsoleMsg("  - spawn [NPC type]")
+	CreateConsoleMsg(" - help [page]")
+	CreateConsoleMsg(" - teleport [room name]")
+	CreateConsoleMsg(" - godmode [on / off]")
+	CreateConsoleMsg(" - noclip [on / off]")
+	CreateConsoleMsg(" - infinitestamina [on / off]")
+	CreateConsoleMsg(" - noblink [on / off]")
+	CreateConsoleMsg(" - notarget [on / off]")
+	CreateConsoleMsg(" - noclipspeed [x] (default = 2.0)")
+	CreateConsoleMsg(" - wireframe [on / off]")
+	CreateConsoleMsg(" - debughud [category]")
+	CreateConsoleMsg(" - camerafog [near] [far]")
+	CreateConsoleMsg(" - heal")
+	CreateConsoleMsg(" - revive")
+	CreateConsoleMsg(" - asd")
+	CreateConsoleMsg(" - spawnitem [item name]")
+	CreateConsoleMsg(" - 106retreat")
+	CreateConsoleMsg(" - disable173 / enable173")
+	CreateConsoleMsg(" - disable106 / enable106")
+	CreateConsoleMsg(" - spawn [NPC type]")
 	
 	CatchErrors("LoadEntities")
 End Function
@@ -1986,7 +1986,7 @@ Function InitNewGame%()
 		sc\Angle = EntityYaw(sc\BaseOBJ) + sc\Angle
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
-	Next	
+	Next
 	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomLights - 1
@@ -2008,7 +2008,7 @@ Function InitNewGame%()
 			EndIf
 		EndIf
 		
-		If r\RoomTemplate\Name = "cont1_173" And (Not opt\IntroEnabled) Then 
+		If r\RoomTemplate\Name = "cont1_173" And (Not opt\IntroEnabled) Then
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
@@ -2033,7 +2033,7 @@ Function InitNewGame%()
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
-	Next	
+	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints
 		Delete(twp)

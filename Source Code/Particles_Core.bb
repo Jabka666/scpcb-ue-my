@@ -6,7 +6,7 @@ Type Particles
 	Field SizeChange#
 	Field LifeTime#
 	Field Dist#
-End Type 
+End Type
 
 Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
 	Local p.Particles
@@ -71,10 +71,10 @@ Function UpdateParticles%()
 			
 			If p\AlphaChange <> 0.0 Then
 				p\Alpha = Min(Max(p\Alpha + (p\AlphaChange * fps\Factor[0]), 0.0), 1.0)
-				EntityAlpha(p\OBJ, p\Alpha)		
+				EntityAlpha(p\OBJ, p\Alpha)
 			EndIf
 			
-			If p\SizeChange <> 0.0 Then 
+			If p\SizeChange <> 0.0 Then
 				p\Size = p\Size + (p\SizeChange * fps\Factor[0])
 				ScaleSprite(p\OBJ, p\Size, p\Size)
 			EndIf
@@ -102,9 +102,9 @@ Type Emitters
 	Field SoundCHN%
 	Field Speed#, RandAngle#
 	Field SizeChange#, AlphaChange#
-End Type 
+End Type
 
-Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%) 
+Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 	Local e.Emitters
 	Local r.Rooms
 	
@@ -166,21 +166,21 @@ Function UpdateEmitters%()
 					If DistanceSquared(EntityX(Camera, True), EntityX(e\OBJ, True), EntityZ(Camera, True), EntityZ(e\OBJ, True)) < 0.64 Then
 						If Abs(EntityY(Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True
 					EndIf
-				EndIf					
+				EndIf
 			EndIf
 		EndIf
 	Next
 	
 	If InSmoke Then
 		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
-		If me\EyeIrritation > 70.0 * 24.0 Then 
+		If me\EyeIrritation > 70.0 * 24.0 Then
 			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
 			Kill()
 		EndIf
 		
 		UpdateCough(150)
 		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
-	EndIf	
+	EndIf
 End Function
 
 Function UpdateDust%()

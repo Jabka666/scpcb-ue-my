@@ -3,7 +3,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	
 	Local SoundCHN% = 0
 	
-	If Volume > 0.0 Then 
+	If Volume > 0.0 Then
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
 		If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
@@ -59,9 +59,9 @@ Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1
 End Function
 
 Function PlayMTFSound%(SoundHandle%, n.NPCs)
-	If n <> Null Then n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0)	
+	If n <> Null Then n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0)
 	If SelectedItem <> Null Then
-		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0 Then 
+		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0 Then
 			Select SelectedItem\ItemTemplate\TempName 
 				Case "radio", "fineradio", "18vradio"
 					;[Block]
@@ -72,7 +72,7 @@ Function PlayMTFSound%(SoundHandle%, n.NPCs)
 					;[End Block]
 			End Select
 		EndIf
-	EndIf 
+	EndIf
 End Function
 
 Function LoadEventSound%(e.Events, File$, Number% = 0)
@@ -141,7 +141,7 @@ Function UpdateMusic%()
 			ChannelVolume(MusicCHN, opt\MusicVolume * opt\MasterVolume)
 		EndIf
 	EndIf
-End Function 
+End Function
 
 Function PauseSounds%()
 	Local e.Events, n.NPCs, d.Doors
@@ -162,7 +162,7 @@ Function PauseSounds%()
 			If e\SoundCHN3 <> 0 Then SetStreamPaused_Strict(e\SoundCHN3, True)
 		Else
 			PauseChannel(e\SoundCHN3)
-		EndIf	
+		EndIf
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -176,7 +176,7 @@ Function PauseSounds%()
 		Else
 			PauseChannel(n\SoundCHN2)
 		EndIf
-	Next	
+	Next
 	
 	For d.Doors = Each Doors
 		PauseChannel(d\SoundCHN)
@@ -235,7 +235,7 @@ Function ResumeSounds%()
 		Else
 			ResumeChannel(n\SoundCHN2)
 		EndIf
-	Next	
+	Next
 	
 	For d.Doors = Each Doors
 		ResumeChannel(d\SoundCHN)
@@ -364,7 +364,7 @@ Function GetStepSound%(Entity%)
 						EndIf
 						Exit
 					EndIf
-				Next                
+				Next
 			EndIf
 			Texture = GetBrushTexture(Brush, 2)
 			If Texture <> 0 Then
@@ -378,7 +378,7 @@ Function GetStepSound%(Entity%)
 						EndIf
 						Exit
 					EndIf
-				Next                
+				Next
 			EndIf
 			Texture = GetBrushTexture(Brush, 1)
 			If Texture <> 0 Then
@@ -390,7 +390,7 @@ Function GetStepSound%(Entity%)
 						If mat\StepSound > 0 Then Return(mat\StepSound - 1)
 						Exit
 					EndIf
-				Next                
+				Next
 			EndIf
 		EndIf
 	EndIf

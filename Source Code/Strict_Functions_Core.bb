@@ -65,7 +65,7 @@ Function PlaySound_Strict%(SoundHandle%)
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
 					EndIf
-					If opt\EnableSubtitles Then 
+					If opt\EnableSubtitles Then
 						If snd\HasSubtitles Then ShowSubtitles(snd\Name)
 					EndIf
 					ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
@@ -91,7 +91,7 @@ Function PlaySound_Strict%(SoundHandle%)
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 				EndIf
-				If opt\EnableSubtitles Then 
+				If opt\EnableSubtitles Then
 					If snd\HasSubtitles Then ShowSubtitles(snd\Name)
 				EndIf
 				ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
@@ -364,7 +364,7 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 		EndIf
 	Next
 	Return(Tmp)
-End Function   
+End Function
 
 Function LoadTexture_Cache%(File$, Flags% = 1)
 	Local Tmp%
@@ -384,7 +384,7 @@ Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextur
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "texture.failed.load"), File))
 	EndIf
-	Return(Tmp) 
+	Return(Tmp)
 End Function
 
 Function ExecFile_Strict%(File$)
@@ -401,7 +401,7 @@ Function OpenMovie_Strict%(File$)
 		Tmp = OpenMovie(File)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "movie.failed.load"), File))
 	EndIf
-	Return(Tmp) 
+	Return(Tmp)
 End Function
 
 Function OpenFile_Strict%(File$)
@@ -438,7 +438,7 @@ Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Co
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "animtexture.failed.load"), File))
 	EndIf
 	Return(Tmp)
-End Function   
+End Function
 
 Function LoadBrush_Strict%(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 	Local Tmp%
@@ -450,7 +450,7 @@ Function LoadBrush_Strict%(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "brush.failed.load"), File))
 	EndIf
 	Return(Tmp)
-End Function 
+End Function
 
 Function LoadFont_Strict%(File$, Height% = 13, IgnoreScaling% = False)
 	Local Tmp%

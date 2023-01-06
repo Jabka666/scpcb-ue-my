@@ -166,13 +166,13 @@ Function UpdateMainMenu%()
 						;[Block]
 						Txt = GetLocalString("menu", "new")
 						RandomSeed = ""
-						If Temp Then 
+						If Temp Then
 							If opt\DebugMode Then
 								RandomSeed = "666"
 							Else
-								If Rand(15) = 1 Then 
+								If Rand(15) = 1 Then
 									Select Rand(13)
-										Case 1 
+										Case 1
 											;[Block]
 											RandomSeed = "NIL"
 											;[End Block]
@@ -233,7 +233,7 @@ Function UpdateMainMenu%()
 										Else
 											RandomSeed = RandomSeed + Chr(Rand(97, 122))
 										EndIf
-									Next							
+									Next
 								EndIf
 							EndIf
 							LoadSavedGames()
@@ -292,15 +292,15 @@ Function UpdateMainMenu%()
 					EndIf
 					
 					If SelectedMap = "" Then
-						RandomSeed = UpdateMainMenuInputBox(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, RandomSeed, 2, 15)	
+						RandomSeed = UpdateMainMenuInputBox(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, RandomSeed, 2, 15)
 					Else
 						If UpdateMainMenuButton(x + (370 * MenuScale), y + (55 * MenuScale), 120 * MenuScale, 30 * MenuScale, GetLocalString("menu", "deselect"), False) Then
 							mm\ShouldDeleteGadgets = True
 							SelectedMap = ""
 						EndIf
-					EndIf	
+					EndIf
 					
-					opt\IntroEnabled = UpdateMainMenuTick(x + (280 * MenuScale), y + (110 * MenuScale), opt\IntroEnabled)	
+					opt\IntroEnabled = UpdateMainMenuTick(x + (280 * MenuScale), y + (110 * MenuScale), opt\IntroEnabled)
 					
 					For i = SAFE To ESOTERIC
 						Local PrevSelectedDifficulty.Difficulty = SelectedDifficulty
@@ -315,7 +315,7 @@ Function UpdateMainMenu%()
 					If SelectedDifficulty\Customizable Then
 						; ~ Save type
 						If UpdateMainMenuButton(x + (160 * MenuScale), y + (180 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False) Then
-							If SelectedDifficulty\SaveType  < NO_SAVES Then
+							If SelectedDifficulty\SaveType < NO_SAVES Then
 								SelectedDifficulty\SaveType = SelectedDifficulty\SaveType + 1
 							Else
 								SelectedDifficulty\SaveType = SAVE_ANYWHERE
@@ -396,7 +396,7 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 296 * MenuScale
 					
-					If mm\CurrMenuPage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And DelSave = Null Then 
+					If mm\CurrMenuPage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And DelSave = Null Then
 						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
@@ -473,7 +473,7 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 350 * MenuScale
 					
-					If mm\CurrMenuPage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 And SelectedMapActionMsg = "" Then 
+					If mm\CurrMenuPage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 And SelectedMapActionMsg = "" Then
 						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
@@ -485,7 +485,7 @@ Function UpdateMainMenu%()
 					EndIf
 					If mm\CurrMenuPage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
 					
-					If SavedMapsAmount > 0 Then 
+					If SavedMapsAmount > 0 Then
 						x = x + (20 * MenuScale)
 						y = y + (20 * MenuScale)
 						For i = (1 + (5 * mm\CurrMenuPage)) To 5 + (5 * mm\CurrMenuPage)
@@ -743,22 +743,22 @@ Function UpdateMainMenu%()
 							Else
 								y = y + (20 * MenuScale)
 								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)		
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)
 								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
 								
 								y = y + (20 * MenuScale)
 								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)	
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)
 								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
 								
 								y = y + (20 * MenuScale)
 								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)				
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)
 								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
 								
 								y = y + (20 * MenuScale)
 								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)	
+								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
 								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
 								
 								y = y + (20 * MenuScale)
@@ -839,7 +839,7 @@ Function UpdateMainMenu%()
 							;[Block]
 							Height = 340 * MenuScale
 							
-							If mm\CurrMenuPage = 0 Then 
+							If mm\CurrMenuPage = 0 Then
 								If UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then ChangePage(mm\CurrMenuPage + 1)
 							Else
 								UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
@@ -970,7 +970,7 @@ Function UpdateMainMenu%()
 			Height = 70 * MenuScale
 			
 			If SelectedMapActionMsg = "" And DelSave = Null Then
-				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False) Lor KeyDown(1) Then 
+				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False) Lor KeyDown(1) Then
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
 							;[Block]
@@ -1141,7 +1141,7 @@ Function RenderMainMenu%()
 				Width = 580 * MenuScale
 				Height = 345 * MenuScale
 				
-				RenderFrame(x, y, Width, Height)				
+				RenderFrame(x, y, Width, Height)
 				
 				SetFont(fo\FontID[Font_Default])
 				
@@ -1223,7 +1223,7 @@ Function RenderMainMenu%()
 					End Select
 					Text(x + (200 * MenuScale), y + (276 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 				Else
-					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 140 * MenuScale)					
+					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 140 * MenuScale)
 				EndIf
 				
 				SetFont(fo\FontID[Font_Default_Big])
@@ -1344,8 +1344,8 @@ Function RenderMainMenu%()
 						
 						y = y + (20 * MenuScale)
 						
-						Color(255, 255, 255)				
-						Text(x, y + (5 * MenuScale), GetLocalString("options", "bump"))	
+						Color(255, 255, 255)
+						Text(x, y + (5 * MenuScale), GetLocalString("options", "bump"))
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
 						
 						y = y + (30 * MenuScale)
@@ -1420,7 +1420,7 @@ Function RenderMainMenu%()
 						Else
 							Height = 210 * MenuScale
 						EndIf
-						RenderFrame(x - (20 * MenuScale), y, Width, Height)	
+						RenderFrame(x - (20 * MenuScale), y, Width, Height)
 						
 						y = y + (20 * MenuScale)
 						
@@ -1538,16 +1538,16 @@ Function RenderMainMenu%()
 						;[Block]
 						Height = 340 * MenuScale
 						
-						RenderFrame(x - (20 * MenuScale), y, Width, Height)	
+						RenderFrame(x - (20 * MenuScale), y, Width, Height)
 						
-						RenderFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)	
+						RenderFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)
 						
 						Text(x + (Width / 2), y + Height + (20 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), "2", "{1}"), True, True)
 						
 						If mm\CurrMenuPage = 0 Then
 							y = y + (20 * MenuScale)
 							
-							Color(255, 255, 255)				
+							Color(255, 255, 255)
 							Text(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
 							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 							
@@ -1621,9 +1621,9 @@ Function RenderMainMenu%()
 							
 							y = y + (30 * MenuScale)
 							
-							If opt\EnableSubtitles Then     
+							If opt\EnableSubtitles Then
 								Color(255, 255, 255)
-								Text(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))  
+								Text(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
 							EndIf
 							
 							y = y + (5 * MenuScale)
@@ -1786,7 +1786,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	SetFont(fo\FontID[Font_Default])
 	
 	MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
-	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")	
+	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 	
 	Local LauncherIMG%[2]
 	Local LauncherMediaWidth%
@@ -2054,7 +2054,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 				Exit
 			EndIf
 		Next
-	EndIf	
+	EndIf
 	
 	FirstLoop = True
 	
@@ -2068,7 +2068,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		If (Not SelectedLoadingScreen\DisableBackground) Then DrawBlock(LoadingBack, mo\Viewport_Center_X - ImageWidth(LoadingBack) / 2, mo\Viewport_Center_Y - ImageHeight(LoadingBack) / 2)
 		
 		If SelectedLoadingScreen\AlignX = 0 Then
-			x = mo\Viewport_Center_X - ImageWidth(SelectedLoadingScreen\Img) / 2 
+			x = mo\Viewport_Center_X - ImageWidth(SelectedLoadingScreen\Img) / 2
 		ElseIf SelectedLoadingScreen\AlignX = 1
 			x = opt\GraphicWidth - ImageWidth(SelectedLoadingScreen\Img)
 		Else
@@ -2076,12 +2076,12 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		EndIf
 		
 		If SelectedLoadingScreen\AlignY = 0 Then
-			y = mo\Viewport_Center_Y - ImageHeight(SelectedLoadingScreen\Img) / 2 
+			y = mo\Viewport_Center_Y - ImageHeight(SelectedLoadingScreen\Img) / 2
 		ElseIf SelectedLoadingScreen\AlignY = 1
 			y = opt\GraphicHeight - ImageHeight(SelectedLoadingScreen\Img)
 		Else
 			y = 0
-		EndIf	
+		EndIf
 		
 		DrawImage(SelectedLoadingScreen\Img, x, y)
 		
@@ -2099,7 +2099,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		Text(x + (Width / 2), opt\GraphicHeight - (70 * MenuScale), Percent + "%", True, True)
 		
 		If SelectedLoadingScreen\Title = "CWM" Then
-			If FirstLoop Then 
+			If FirstLoop Then
 				If Percent = 0 Then
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
 				ElseIf Percent = 100
@@ -2116,7 +2116,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			SetFont(fo\FontID[Font_Default_Big])
 			Text(mo\Viewport_Center_X, mo\Viewport_Center_Y - (450 * MenuScale), StrTemp, True, True)
 			
-			If Percent = 0 Then 
+			If Percent = 0 Then
 				If Rand(5) = 1 Then
 					Select Rand(2)
 						Case 1
@@ -2185,9 +2185,9 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			Temp = Int(Len(SelectedLoadingScreen\Txt[0]) - Rand(5))
 			For i = 0 To Rand(10, 15)
 				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
-			Next		
+			Next
 			SetFont(fo\FontID[Font_Default])
-			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)		
+			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
 		Else
 			Color(255, 255, 255)
 			SetFont(fo\FontID[Font_Default_Big])
@@ -2258,7 +2258,7 @@ Function RenderFrame%(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locke
 		IMG = MenuWhite
 	EndIf
 	RenderTiledImageRect(IMG, xOffset, yOffset, 512, 512, x, y, Width, Height)
-	RenderTiledImageRect(MenuBlack, xOffset, yOffset, 512, 512, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))	
+	RenderTiledImageRect(MenuBlack, xOffset, yOffset, 512, 512, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))
 End Function
 
 Function RenderBar%(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% = 100, G% = 100, B% = 100)
@@ -2266,8 +2266,8 @@ Function RenderBar%(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% 
 	
 	Rect(x, y, Width + (4 * MenuScale), Height, False)
 	If opt\SmoothBars Then
-		Color(R, G, B)	
-		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), Height - (6 * MenuScale))	
+		Color(R, G, B)
+		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), Height - (6 * MenuScale))
 	Else
 		For i = 1 To Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)) / MenuScale)
 			DrawBlock(Img, x + ((3 + (10 * (i - 1))) * MenuScale), y + (3 * MenuScale))
@@ -2332,7 +2332,7 @@ Function RenderMenuButtons%()
 		RenderFrame(mb\x, mb\y, mb\Width, mb\Height, (mb\x Mod 256), (mb\y Mod 256), mb\Locked)
 		If MouseOn(mb\x, mb\y, mb\Width, mb\Height) Then
 			Color(30, 30, 30)
-			Rect(mb\x + (3 * MenuScale), mb\y + (3 * MenuScale), mb\Width - (6 * MenuScale), mb\Height - (6 * MenuScale))	
+			Rect(mb\x + (3 * MenuScale), mb\y + (3 * MenuScale), mb\Width - (6 * MenuScale), mb\Height - (6 * MenuScale))
 		Else
 			Color(0, 0, 0)
 		EndIf
@@ -2346,7 +2346,7 @@ Function RenderMenuButtons%()
 		Else
 			Color(mb\R, mb\G, mb\B)
 		EndIf
-		If mb\BigFont Then 
+		If mb\BigFont Then
 			SetFont(fo\FontID[Font_Default_Big])
 		Else
 			SetFont(fo\FontID[Font_Default])
@@ -2361,7 +2361,7 @@ Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, W
 	RenderFrame(x, y, Width, Height, 0, 0, Locked)
 	If MouseOn(x, y, Width, Height) Then
 		Color(30, 30, 30)
-		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp) Then 
+		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp) Then
 			If Locked Then
 				PlaySound_Strict(ButtonSFX2)
 			Else
@@ -2369,7 +2369,7 @@ Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, W
 				PlaySound_Strict(ButtonSFX)
 			EndIf
 		EndIf
-		Rect(x + 3, y + 3, Width - 6, Height - 6)	
+		Rect(x + 3, y + 3, Width - 6, Height - 6)
 	Else
 		Color(0, 0, 0)
 	EndIf
@@ -2424,7 +2424,7 @@ Function UpdateMainMenuTick%(x%, y%, Selected%, Locked% = False)
 	Local Highlight% = MouseOn(x, y, Width, Height)
 	
 	If Highlight Then
-		If mo\MouseHit1 Then 
+		If mo\MouseHit1 Then
 			If Locked Then
 				PlaySound_Strict(ButtonSFX2)
 			Else
@@ -2459,7 +2459,7 @@ Function RenderMenuTicks%()
 		If Highlight Then
 			Color(50, 50, 50)
 		Else
-			Color(0, 0, 0)		
+			Color(0, 0, 0)
 		EndIf
 		
 		Rect(mt\x + 2, mt\y + 2, Width - 4, Height - 4)
@@ -2499,7 +2499,7 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 			If mo\MouseHit1 Then Selected = (Not Selected) : PlaySound_Strict(ButtonSFX)
 		EndIf
 	Else
-		Color(0, 0, 0)		
+		Color(0, 0, 0)
 	EndIf
 	
 	Rect(x + 2, y + 2, Width - 4, Height - 4)
@@ -2611,7 +2611,7 @@ Function UpdateInput$(aString$, MaxChr%)
 		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
 		If InsertMode Then
-			If ChrCanDisplay(Value) Then 
+			If ChrCanDisplay(Value) Then
 				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 2)
 				CursorPos = CursorPos + 1
 			ElseIf Value = 8 Then ; ~ Backspace
@@ -2621,7 +2621,7 @@ Function UpdateInput$(aString$, MaxChr%)
 			EndIf
 		Else
 			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
-		EndIf 
+		EndIf
 		CursorPos = CursorPos + Len(aString) - Length
 		If MaxChr > 0 And MaxChr < Len(aString) Then
 			aString = Left(aString, MaxChr)
@@ -2692,7 +2692,7 @@ Function RenderMenuInputBoxes%()
 			Rect(mib\x + (3 * MenuScale), mib\y + (3 * MenuScale), mib\Width - (6 * MenuScale), mib\Height - (6 * MenuScale))
 		EndIf
 		
-		Color(255, 255, 255)	
+		Color(255, 255, 255)
 		If SelectedInputBox = mib\ID Then
 			If ((MilliSecs2() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf
@@ -2744,8 +2744,8 @@ Function RenderMenuSlideBars%()
 		DrawBlock(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
 		
 		Color(170, 170, 170)
-		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))					
-		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.high"))	
+		Text(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))
+		Text(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.high"))
 	Next
 End Function
 
@@ -3016,7 +3016,7 @@ Function GetLineAmount%(Txt$, W%, H%, Leading# = 1.0)
 		If Space = 0 Then Space = Len(Txt)
 		
 		Local Temp$ = Left(Txt, Space)
-		Local Trimmed$ = Trim(Temp) ; ~ We might ignore a final space 
+		Local Trimmed$ = Trim(Temp) ; ~ We might ignore a final space
 		Local Extra% = 0 ; ~ We haven't ignored it yet
 		
 		; ~ Ignore final space if doing so would make a word fit at end of line:

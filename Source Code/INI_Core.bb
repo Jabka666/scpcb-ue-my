@@ -59,7 +59,7 @@ Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", Check
 	
 	If CheckRootFile Then
 		DefaultValue1 = IniGetBufferString(File, Name, Parameter, DefaultValue)
-	Else 
+	Else
 		DefaultValue1 = DefaultValue
 	EndIf
 	Return(IniGetBufferString(lang\LanguagePath + File, Name, Parameter, DefaultValue1))
@@ -111,17 +111,17 @@ Function StripFileName$(File$)
 	Return(Left(File, LastSlash))
 End Function
 
-Function StripPath$(File$) 
+Function StripPath$(File$)
 	Local Name$ = "", i%, mi$
 	
 	If Len(File) > 0 Then
-		For i = Len(File) To 1 Step -1 
-			mi = Mid(File, i, 1) 
+		For i = Len(File) To 1 Step -1
+			mi = Mid(File, i, 1)
 			If mi = "\" Lor mi = "/" Then Return(Name)
-			Name = mi + Name 
-		Next 
-	EndIf 
-	Return(Name) 
+			Name = mi + Name
+		Next
+	EndIf
+	Return(Name)
 End Function
 
 Function Piece$(s$, Entry%, Char$ = " ")
