@@ -2388,10 +2388,9 @@ Function LoadMap%(File$)
 		For i = 0 To ForestPieceAmount - 1
 			x = ReadByte(f)
 			y = ReadByte(f)
-			ReadString(f) ; ~ Skip translated name
+			Name = ReadString(f)
 			
 			Angle = ReadByte(f)
-			Name = ReadString(f)
 			If Angle <> 0.0 And Angle <> 2.0 Then Angle = Angle + 2.0
 			Angle = Angle + 1.0
 			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
@@ -2405,27 +2404,27 @@ Function LoadMap%(File$)
 					; ~ 13, 14, 15, 16 = ROOM3
 					; ~ 17, 18, 19, 20 = ROOM4
 					; ~ 21, 22, 23, 24 = DOORROOM
-					Case "FRENDROOM"
+					Case GetLocalString("mc", "860.endroom")
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 1.0
 						;[End Block]
-					Case "FRPATH"
+					Case GetLocalString("mc", "860.path")
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 5.0
 						;[End Block]
-					Case "FRCORNER"
+					Case GetLocalString("mc", "860.corner")
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 9.0
 						;[End Block]
-					Case "FRTSHAPE"
+					Case GetLocalString("mc", "860.tshape")
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 13.0
 						;[End Block]
-					Case "FR4WAY"
+					Case GetLocalString("mc", "860.4way")
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 17.0
 						;[End Block]
-					Case "FRDOOR"
+					Case GetLocalString("mc", "860.door")
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 21.0
 						;[End Block]
@@ -2453,43 +2452,42 @@ Function LoadMap%(File$)
 		For i = 0 To MTPieceAmount - 1
 			x = ReadByte(f)
 			y = ReadByte(f)
-			ReadString(f) ; ~ Skip translated name
+			Name = ReadString(f)
 			
 			Angle = ReadByte(f)
-			Name = ReadString(f)
 			If Angle <> 1.0 And Angle <> 3.0 Then Angle = Angle + 2.0
-			If Name = "MTCORNER" Lor Name = "MTTSHAPE" Then Angle = Angle + 3.0
+			If Name = GetLocalString("mc", "mt.corner") Lor Name = GetLocalString("mc", "mt.tshape") Then Angle = Angle + 3.0
 			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
 			
 			x = (MTGridSize - 1) - x
 			
 			If MTRoom <> Null Then
 				Select Name
-					Case "MTENDROOM"
+					Case GetLocalString("mc", "mt.endroom")
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM1 + 1
 						;[End Block]
-					Case "MTCORRIDOR"
+					Case GetLocalString("mc", "mt.corridor")
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2 + 1
 						;[End Block]
-					Case "MTCORNER"
+					Case GetLocalString("mc", "mt.corner")
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2C + 1
 						;[End Block]
-					Case "MTTSHAPE"
+					Case GetLocalString("mc", "mt.tshape")
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM3 + 1
 						;[End Block]
-					Case "MT4WAY"
+					Case GetLocalString("mc", "mt.4way")
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 1
 						;[End Block]
-					Case "MTELEVATOR"
+					Case GetLocalString("mc", "mt.elevator")
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 2
 						;[End Block]
-					Case "MTGENERATOR"
+					Case GetLocalString("mc", "mt.generator")
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 3
 						;[End Block]

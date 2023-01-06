@@ -99,7 +99,7 @@ Global o.Objects = New Objects
 
 ChangeDir("..")
 
-Global ConsoleFont% = LoadFont_Strict("\GFX\fonts\Andale Mono.ttf", 16)
+Global ConsoleFont% = LoadFont_Strict("GFX\fonts\Andale Mono.ttf", 16)
 
 Function LoadEntities%()
 	Local i%
