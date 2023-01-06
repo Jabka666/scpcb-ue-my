@@ -2606,6 +2606,8 @@ Function UpdateInput$(aString$, MaxChr%)
 				CursorPos = CursorPos + 1
 			ElseIf Value = 8 Then ; ~ Backspace
 				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+			ElseIf Value = 4 Then ; ~ Delete
+				aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0))
 			EndIf
 		Else
 			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
