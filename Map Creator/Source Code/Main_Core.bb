@@ -819,7 +819,7 @@ Repeat
 					Else
 						x2 = Float(Width - 1) / Float(ForestGridSize + 1)
 						y2 = Float(Height - 1) / Float(ForestGridSize + 1)
-						If ForestPlace(x, y)\Name = GetLocalString("mc", "860.door") Then
+						If ForestPlace(x, y)\Name = "SCP-860-1 door" Then
 							DrawImage(SpecialIcons(1, Floor(ForestPlaceAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						Else
 							DrawImage(ForestIcons(ForestPlace(x, y)\Shape, Floor(ForestPlaceAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
@@ -968,7 +968,7 @@ Repeat
 					Else
 						x2 = Float(Width) / Float(MT_GridSize + 1)
 						y2 = Float(Height) / Float(MT_GridSize + 1)
-						If MTRoom(x, y)\Name = GetLocalString("mc", "mt.elevator") Then
+						If MTRoom(x, y)\Name = "Maintenance tunnel elevator"
 							DrawImage(SpecialIcons(2, Floor(MTRoomAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						Else
 							DrawImage(MapIcons(MTRoom(x, y)\Shape, Floor(MTRoomAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
@@ -1445,72 +1445,76 @@ Function LoadRoomTemplates%(File$)
 	Wend
 	
 	; ~ Forest pieces
+	Local Fr_Prefix$ = "SCP-860-1 "
+
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "860.door")
+	rt\Name = Fr_Prefix + "door"
 	rt\Shape = ROOM1
-	rt\Description = "FRDOOR"
+	rt\Description = GetLocalString("mc", "860.door")
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "860.endroom")
+	rt\Name = Fr_Prefix + "endroom"
 	rt\Shape = ROOM1
-	rt\Description = "FRENDROOM"
+	rt\Description = GetLocalString("mc", "860.endroom")
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "860.path")
+	rt\Name = Fr_Prefix + "path"
 	rt\Shape = ROOM2
-	rt\Description = "FRPATH"
+	rt\Description = GetLocalString("mc", "860.path")
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "860.corner")
+	rt\Name = Fr_Prefix + "corner"
 	rt\Shape = ROOM2C
-	rt\Description = "FRCORNER"
+	rt\Description = GetLocalString("mc", "860.corner")
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "860.tshape")
+	rt\Name = Fr_Prefix + "t-shaped path"
 	rt\Shape = ROOM3
-	rt\Description = "FRTSHAPE"
+	rt\Description = GetLocalString("mc", "860.tshape")
 	rt\MapGrid = 1
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "860.4way")
+	rt\Name = Fr_Prefix + "4-way path"
 	rt\Shape = ROOM4
-	rt\Description = "FR4WAY"
+	rt\Description = GetLocalString("mc", "860.4way")
 	rt\MapGrid = 1
 
 	; ~ Maintenance tunnel rooms
+	Local MT_Prefix$ = "Maintenance tunnel "
+
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "mt.endroom")
+	rt\Name = MT_Prefix + "endroom"
 	rt\Shape = ROOM1
-	rt\Description = "MTENDROOM"
+	rt\Description = GetLocalString("mc", "mt.endroom")
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "mt.corridor")
+	rt\Name = MT_Prefix + "corridor"
 	rt\Shape = ROOM2
-	rt\Description = "MTCORRIDOR"
+	rt\Description = GetLocalString("mc", "mt.corridor")
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "mt.corner")
+	rt\Name = MT_Prefix + "corner"
 	rt\Shape = ROOM2C
-	rt\Description = "MTCORNER"
+	rt\Description = GetLocalString("mc", "mt.corner")
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "mt.tshape")
+	rt\Name = MT_Prefix + "t-shaped room"
 	rt\Shape = ROOM3
-	rt\Description = "MTTSHAPE"
+	rt\Description = GetLocalString("mc", "mt.tshape")
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "mt.4way")
+	rt\Name = MT_Prefix + "4-way room"
 	rt\Shape = ROOM4
-	rt\Description = "MT4WAY"
+	rt\Description = GetLocalString("mc", "mt.4way")
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "mt.elevator")
+	rt\Name = MT_Prefix + "elevator"
 	rt\Shape = ROOM2
-	rt\Description = "MTELEVATOR"
+	rt\Description = GetLocalString("mc", "mt.elevator")
 	rt\MapGrid = 2
 	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = GetLocalString("mc", "mt.generator")
+	rt\Name = MT_Prefix + "generator room"
 	rt\Shape = ROOM1
-	rt\Description = "MTGENERATOR"
+	rt\Description = GetLocalString("mc", "mt.generator")
 	rt\MapGrid = 2
 	
 	CloseFile(f)

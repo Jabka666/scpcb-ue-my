@@ -2404,27 +2404,27 @@ Function LoadMap%(File$)
 					; ~ 13, 14, 15, 16 = ROOM3
 					; ~ 17, 18, 19, 20 = ROOM4
 					; ~ 21, 22, 23, 24 = DOORROOM
-					Case GetLocalString("mc", "860.endroom")
+					Case "scp-860-1 endroom"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 1.0
 						;[End Block]
-					Case GetLocalString("mc", "860.path")
+					Case "scp-860-1 path"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 5.0
 						;[End Block]
-					Case GetLocalString("mc", "860.corner")
+					Case "scp-860-1 corner"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 9.0
 						;[End Block]
-					Case GetLocalString("mc", "860.tshape")
+					Case "scp-860-1 t-shaped path"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 13.0
 						;[End Block]
-					Case GetLocalString("mc", "860.4way")
+					Case "scp-860-1 4-way path"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 17.0
 						;[End Block]
-					Case GetLocalString("mc", "860.door")
+					Case "scp-860-1 door"
 						;[Block]
 						fr\Grid[(y * ForestGridSize) + x] = Angle + 21.0
 						;[End Block]
@@ -2463,31 +2463,31 @@ Function LoadMap%(File$)
 			
 			If MTRoom <> Null Then
 				Select Name
-					Case GetLocalString("mc", "mt.endroom")
+					Case "maintenance tunnel endroom"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM1 + 1
 						;[End Block]
-					Case GetLocalString("mc", "mt.corridor")
+					Case "maintenance tunnel corridor"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2 + 1
 						;[End Block]
-					Case GetLocalString("mc", "mt.corner")
+					Case "maintenance tunnel corner"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2C + 1
 						;[End Block]
-					Case GetLocalString("mc", "mt.tshape")
+					Case "maintenance tunnel t-shaped room"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM3 + 1
 						;[End Block]
-					Case GetLocalString("mc", "mt.4way")
+					Case "maintenance tunnel 4-way room"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 1
 						;[End Block]
-					Case GetLocalString("mc", "mt.elevator")
+					Case "maintenance tunnel elevator"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 2
 						;[End Block]
-					Case GetLocalString("mc", "mt.generator")
+					Case "maintenance tunnel generator room"
 						;[Block]
 						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 3
 						;[End Block]
