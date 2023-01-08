@@ -5660,9 +5660,9 @@ Function RenderDebugHUD%()
 			Text(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.effect"), me\BlinkEffect))
 			Text(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.efftim"), me\BlinkEffectTimer))
 			Text(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_2.eyeirr"), me\EyeIrritation))
-			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "eyestuck"), me\EyeStuck))
+			Text(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.eyestuck"), me\EyeStuck))
 			
-			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "stamina"), me\Stamina))
+			Text(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.stamina"), me\Stamina))
 			Text(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_2.stameff"), me\StaminaEffect))
 			Text(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.stamtimer"), me\StaminaEffectTimer))
 			
