@@ -2805,17 +2805,32 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 						Next
+						
 						If e\room\NPC[0] = Null And Temp Then
-							If Abs(EntityX(me\Collider, True) - EntityX(e\room\Objects[0], True)) <= 5.0 And (e\room\Angle Mod 180 = 90.0) Then
-								e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\Objects[0], True) + (800.0 * RoomScale), 0.5, EntityZ(e\room\Objects[0], True))
+							If (e\room\Angle Mod 180 = 90.0) Then
+								If Abs(EntityX(me\Collider, True) < EntityX(e\room\Objects[0], True))
+									x = 800.0
+									z = 0.0
+								Else
+									x = -800.0
+									z = 0.0
+								EndIf
 							Else
-								e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True) - (800.0 * RoomScale))
+								If Abs(EntityZ(me\Collider, True) < EntityZ(e\room\Objects[0], True))
+									x = 0.0
+									z = 800.0
+								Else
+									x = 0.0
+									z = -800.0
+								EndIf
 							EndIf
-							e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Speed = 1.8
+							e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\Objects[0], True) + x * RoomScale, 0.5, EntityZ(e\room\Objects[0], True) + z * RoomScale)
+							e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\State3 = 1.0 : e\room\NPC[0]\Speed = 1.8
 							PointEntity(e\room\NPC[0]\Collider, e\room\Objects[0])
 							e\EventState = 0.0
 						EndIf
 					EndIf
+					
 					For n.NPCs = Each NPCs
 						UpdateNPCParticles(n)
 						

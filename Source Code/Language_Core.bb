@@ -35,9 +35,7 @@ Function LanguageSelector%()
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				lan\FileSize = ParseDomainTXT(l, "size") ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
-				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then
-					DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
-				EndIf
+				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit

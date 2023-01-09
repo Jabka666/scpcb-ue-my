@@ -8066,6 +8066,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	For s.Screens = Each Screens
 		Delete(s)
 	Next
+	SelectedScreen = Null
 	
 	For ts.TempScreens = Each TempScreens
 		Delete(ts)
@@ -8080,12 +8081,16 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Dim Inventory.Items(0)
 	
+	GrabbedEntity = 0
+	
 	Delete(bk)
 	bk.BrokenDoor = New BrokenDoor
 	
 	For d.Doors = Each Doors
 		Delete(d)
 	Next
+	d_I\ClosestButton = 0
+	d_I\ClosestDoor = Null
 	
 	For lt.LightTemplates = Each LightTemplates
 		Delete(lt)
@@ -8137,10 +8142,13 @@ Function NullGame%(PlayButtonSFX% = True)
 	For e.Events = Each Events
 		Delete(e)
 	Next
+	forest_event = Null
+	skull_event = Null
 	
 	For sc.SecurityCams = Each SecurityCams
 		Delete(sc)
 	Next
+	sc_I\SelectedMonitor = Null
 	
 	For em.Emitters = Each Emitters
 		Delete(em)

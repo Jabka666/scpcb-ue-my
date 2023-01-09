@@ -6184,7 +6184,6 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y, r\z)
-			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreateSprite()
 			r\HideObject[1] = False
