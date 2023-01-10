@@ -1,4 +1,9 @@
-Type ListLanguage
+Type Language ; ~ Game Language
+	Field CurrentLanguage$
+	Field LanguagePath$
+End Type
+
+Type ListLanguage ; ~ Languages in the list
 	Field Name$
 	Field ID$
 	Field Author$
@@ -9,6 +14,29 @@ Type ListLanguage
 	Field FileSize$
 	Field Compatible$
 End Type
+
+Global lang.Language = New Language
+
+Function SetLanguage%(Language$)
+	lang\CurrentLanguage = Language
+	If lang\CurrentLanguage = "en-US" Then
+		lang\LanguagePath = ""
+	Else
+		lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
+		IniWriteBuffer(lang\LanguagePath + LanguageFile)
+		IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
+		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
+		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
+		IniWriteBuffer(lang\LanguagePath + SCP294File)
+		IniWriteBuffer(lang\LanguagePath + FontSettingsFile)
+	EndIf
+	If StringToBoolean(GetLocalString("global", "splitwithspace")) Then
+		SplitSpace = " "
+	Else
+		SplitSpace = ""
+	EndIf
+	opt\Language = Language
+End Function
 
 Function LanguageSelector%()
 	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
@@ -144,7 +172,7 @@ Function LanguageSelector%()
 			ElseIf SelectedLanguage\Name = "English"
 				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
-					fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
+					fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default", "file"), GetFileLocalString(FontSettingsFile, "Default", "size"), True)
 					AppTitle(GetLocalString("language", "title"))
 					FreeImage(LanguageBG) : LanguageBG = 0
 				EndIf
@@ -153,7 +181,7 @@ Function LanguageSelector%()
 					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then DeleteFolder("Localization\" + SelectedLanguage\ID)
 					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
-						fo\FontID[Font_Default] = LoadFont_Strict("GFX\fonts\Courier New.ttf", 16, True)
+						fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default", "file"), GetFileLocalString(FontSettingsFile, "Default", "size"), True)
 						AppTitle(GetLocalString("language", "title"))
 						FreeImage(LanguageBG) : LanguageBG = 0
 					EndIf

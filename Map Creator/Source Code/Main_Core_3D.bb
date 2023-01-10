@@ -99,7 +99,7 @@ Global o.Objects = New Objects
 
 ChangeDir("..")
 
-Global ConsoleFont% = LoadFont_Strict("GFX\fonts\Andale Mono.ttf", 16)
+Global ConsoleFont% = LoadFont_Strict("GFX\fonts\" + IniGetString("Localization\GFX\Fonts\Settings.ini", "Console", "file", IniGetString("GFX\Fonts\Settings.ini", "Console", "file")), IniGetString("Localization\GFX\Fonts\Settings.ini", "Console", "size", IniGetString("GFX\Fonts\Settings.ini", "Console", "size")))
 
 Function LoadEntities%()
 	Local i%
