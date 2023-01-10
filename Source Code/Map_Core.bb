@@ -7444,7 +7444,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), r\x - 152.0 * RoomScale, r\y + 5.0 * RoomScale + 0.005, r\z - 594.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rand(0.4, 0.6))
+			de.Decals = CreateDecal(DECAL_BLOOD_1, r\x - 108.0 * RoomScale, r\y + 4.0 * RoomScale + 0.005, r\z - 574.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rand(0.4, 0.6), 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 384.0 * RoomScale, r\y + 0.005, r\z - 512.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.5, 1)
