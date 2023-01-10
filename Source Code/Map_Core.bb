@@ -7730,7 +7730,7 @@ Function UpdateDistanceTimer%()
 End Function
 
 Function ResetDistanceTimer%()
-	If UpdateTimer <= 0.0 Then UpdateTimer = 30.0
+	If UpdateTimer <= 0.0 Then UpdateTimer = 35.0
 End Function
 
 Function TeleportToRoom%(r.Rooms)
