@@ -134,16 +134,12 @@ LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
 
 InitLoadingScreens(LoadingScreensFile)
 
-; ~ For some reason, Blitz3D doesn't load fonts that have filenames that
-; ~ Don't match their "internal name" (i.e. their display name in applications like Word and such)
-; ~ As a workaround, I moved the files and renamed them so they
-; ~ Can load without FastText
-fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 16)
-fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 52)
-fo\FontID[Font_Digital] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 20)
-fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\Fonts\DS-Digital.ttf", 60)
-fo\FontID[Font_Journal] = LoadFont_Strict("GFX\Fonts\Journal.ttf", 58)
-fo\FontID[Font_Console] = LoadFont_Strict("GFX\Fonts\Andale Mono.ttf", 16)
+fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default", "file"), GetFileLocalString(FontSettingsFile, "Default", "size"))
+fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default_Big", "file"), GetFileLocalString(FontSettingsFile, "Default_Big", "size"))
+fo\FontID[Font_Digital] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Digital", "file"), GetFileLocalString(FontSettingsFile, "Digital", "size"))
+fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Digital_Big", "file"), GetFileLocalString(FontSettingsFile, "Digital_Big", "size"))
+fo\FontID[Font_Journal] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Journal", "file"), GetFileLocalString(FontSettingsFile, "Journal", "size"))
+fo\FontID[Font_Console] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Console", "file"), GetFileLocalString(FontSettingsFile, "Console", "size"))
 
 SetFont(fo\FontID[Font_Default_Big])
 
@@ -7800,8 +7796,8 @@ Function InitCredits%()
 	Local File% = OpenFile_Strict("Credits.txt")
 	Local l$
 	
-	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 21)
-	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\Fonts\Courier New.ttf", 35)
+	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Credits", "file"), GetFileLocalString(FontSettingsFile, "Credits", "size"))
+	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Credits_Big", "file"), GetFileLocalString(FontSettingsFile, "Credits_Big", "size"))
 	
 	If (Not me\CreditsScreen) Then
 		me\CreditsScreen = LoadImage_Strict("GFX\Menu\credits_screen.png")

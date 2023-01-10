@@ -9,16 +9,15 @@
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 
-Type Language
-	Field CurrentLanguage$
-	Field LanguagePath$
-End Type
+Include "Source Code\Override_Core.bb"
+Include "Source Code\Language_Core.bb"
 
 Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"
 Const AchievementsFile$ = "Data\Achievements.ini"
 Const LoadingScreensFile$ = "LoadingScreens\loading_screens.ini"
 Const SCP294File$ = "Data\SCP-294.ini"
+Const FontSettingsFile$ = "GFX\Fonts\Settings.ini"
 Const SCP1499ChunksFile$ = "Data\1499chunks.ini" ; ~ Unable to localize
 
 Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not exist
@@ -33,34 +32,15 @@ Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not ex
 	If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 End Function
 
-Function SetLanguage%(Language$)
-	lang\CurrentLanguage = Language
-	If lang\CurrentLanguage = "en-US" Then
-		lang\LanguagePath = ""
-	Else
-		lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
-		IniWriteBuffer(lang\LanguagePath + LanguageFile)
-		IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
-		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
-		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
-		IniWriteBuffer(lang\LanguagePath + SCP294File)
-	EndIf
-	If StringToBoolean(GetLocalString("global", "splitwithspace")) Then
-		SplitSpace = " "
-	Else
-		SplitSpace = ""
-	EndIf
-	opt\Language = Language
+Function InitOptions%()
+	; ~ First, create a folder inside "AppData" folder
+	If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
+	; ~ Second, create a folder inside "scpcb-ue" folder
+	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
 End Function
 
 CheckForDlls()
-
-; ~ First, create a folder inside "AppData" folder
-If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
-; ~ Second, create a folder inside "scpcb-ue" folder
-If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
-
-Global lang.Language = New Language
+InitOptions()
 
 IniWriteBuffer(LanguageFile)
 IniWriteBuffer(SubtitlesFile)
@@ -68,6 +48,7 @@ IniWriteBuffer(AchievementsFile)
 IniWriteBuffer(LoadingScreensFile)
 IniWriteBuffer(SCP294File)
 IniWriteBuffer(SCP1499ChunksFile)
+IniWriteBuffer(FontSettingsFile)
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
