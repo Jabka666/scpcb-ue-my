@@ -2456,7 +2456,7 @@ Function LoadMap%(File$)
 			
 			Angle = ReadByte(f)
 			If Angle <> 1.0 And Angle <> 3.0 Then Angle = Angle + 2.0
-			If Name = GetLocalString("mc", "mt.corner") Lor Name = GetLocalString("mc", "mt.tshape") Then Angle = Angle + 3.0
+			If Name = "maintenance tunnel corner" Lor Name = "maintenance tunnel t-shaped room" Then Angle = Angle + 3.0
 			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
 			
 			x = (MTGridSize - 1) - x
