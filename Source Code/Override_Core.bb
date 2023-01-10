@@ -17,6 +17,10 @@ Function SetFont%(Font%)
 			FontName = "Journal"
 		Case fo\FontID[Font_Console]
 			FontName = "Console"
+		Case fo\FontID[Font_Credits]
+			FontName = "Credits"
+		Case fo\FontID[Font_Credits_Big]
+			FontName = "Credits_Big"
 	End Select
 	TextOffset = Int(GetFileLocalString(FontSettingsFile, FontName, "offset"))
 	Blitz_SetFont(Font)
