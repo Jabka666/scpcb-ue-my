@@ -2407,6 +2407,8 @@ Function UpdateGame%()
 		UpdateQuickLoading()
 		
 		UpdateAchievementMsg()
+		
+		ResetDistanceTimer()
 	Wend
 	
 	; ~ Go out of function immediately if the game has been quit

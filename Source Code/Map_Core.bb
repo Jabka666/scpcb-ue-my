@@ -7502,7 +7502,7 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
-			de.Decals = CreateDecal(DECAL_409, r\x - 4858.0 * RoomScale, r\y - 4495.0 * RoomScale, r\z + 1655.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
+			de.Decals = CreateDecal(DECAL_409, r\x - 4858.0 * RoomScale, r\y - (4497.0 * RoomScale) + 0.005, r\z + 1729.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
@@ -7727,6 +7727,9 @@ Global UpdateTimer#
 
 Function UpdateDistanceTimer%()
 	UpdateTimer = UpdateTimer - fps\Factor[0]
+End Function
+
+Function ResetDistanceTimer%()
 	If UpdateTimer <= 0.0 Then UpdateTimer = 30.0
 End Function
 
