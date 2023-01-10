@@ -2825,7 +2825,7 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 							e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\Objects[0], True) + x * RoomScale, 0.5, EntityZ(e\room\Objects[0], True) + z * RoomScale)
-							e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\State3 = 1.0 : e\room\NPC[0]\Speed = 1.8
+							e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Speed = 1.8
 							PointEntity(e\room\NPC[0]\Collider, e\room\Objects[0])
 							e\EventState = 0.0
 						EndIf

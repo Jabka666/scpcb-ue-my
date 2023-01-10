@@ -2588,27 +2588,27 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 0.0 ; ~ Fall backward
 							;[Block]
-							Animate2(n\OBJ, AnimTime(n\OBJ), 1.0, 40.0, 0.5, False)
+							AnimateNPC(n, 1.0, 40.0, 0.5, False)
 							;[End Block]
 						Case 1.0 ; ~ Fall forward
 							;[Block]
-							Animate2(n\OBJ, AnimTime(n\OBJ), 41.0, 60.0, 0.5, False)
+							AnimateNPC(n, 41.0, 60.0, 0.5, False)
 							;[End Block]
 						Case 2.0 ; ~ Snap #1
 							;[Block]
-							Animate2(n\OBJ, AnimTime(n\OBJ), 555.0, 629.0, 0.5, False)
+							AnimateNPC(n, 555.0, 629.0, 0.5, False)
 							;[End Block]
 						Case 3.0 ; ~ Snap #2
 							;[Block]
-							Animate2(n\OBJ, AnimTime(n\OBJ), 630.0, 677.0, 0.5, False)
+							AnimateNPC(n, 630.0, 677.0, 0.5, False)
 							;[End Block]
 						Case 4.0 ; ~ Snap #3
 							;[Block]
-							Animate2(n\OBJ, AnimTime(n\OBJ), 678.0, 711.0, 0.5, False)
+							AnimateNPC(n, 678.0, 711.0, 0.5, False)
 							;[End Block]
 						Case 5.0 ; ~ Snap #4
 							;[Block]
-							Animate2(n\OBJ, AnimTime(n\OBJ), 712.0, 779.0, 0.5, False)
+							AnimateNPC(n, 712.0, 779.0, 0.5, False)
 							;[End Block]
 					End Select
 				EndIf
