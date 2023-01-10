@@ -1541,7 +1541,7 @@ Function LoadRoomTemplates%(File$)
 				
 				rt\Commonness = Max(Min(IniGetInt(File, TemporaryString, "Commonness"), 100), 0)
 				rt\Large = IniGetInt(File, TemporaryString, "Large")
-				rt\DisableDecals = IniGetInt(File, TemporaryString, "Disabledecals")
+				rt\DisableDecals = IniGetInt(File, TemporaryString, "DisableDecals")
 				rt\DisableOverlapCheck = IniGetInt(File, TemporaryString, "DisableOverlapCheck")
 			EndIf
 		EndIf
