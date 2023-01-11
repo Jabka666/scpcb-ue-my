@@ -15,6 +15,13 @@ Type ListLanguage ; ~ Languages in the list
 	Field Compatible$
 End Type
 
+Const LANGUAGE_STATUS_NULL = 0
+Const LANGUAGE_STATUS_DOWNLOAD_REQUEST = 1
+Const LANGUAGE_STATUS_DOWNLOAD_START = 2
+Const LANGUAGE_STATUS_UNPACK_REQUEST = 3
+Const LANGUAGE_STATUS_UNPACK_START = 4
+Const LANGUAGE_STATUS_DONE = 5
+
 Global lang.Language = New Language
 
 Function SetLanguage%(Language$)
@@ -83,10 +90,28 @@ Function LanguageSelector%()
 	Local CurrFontHeight% = FontHeight() / 2
 	Local SelectedLanguage.ListLanguage = Null
 	Local MouseHoverLanguage.ListLanguage = Null
+	Local CurrentStatus% = LANGUAGE_STATUS_NULL
+	Local RequestLanguageID$ = ""
+	Local StatusTimer% = 0
 	
 	AppTitle(GetLocalString("language", "title"))
 	
 	Repeat
+		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START Then
+			DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguageID + ".zip", BasePath + "/local.zip")
+			CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_START Then
+			CreateDir("Localization\" + RequestLanguageID)
+			Unzip(BasePath + "/local.zip", "Localization/" + RequestLanguageID)
+			CurrentStatus = LANGUAGE_STATUS_DONE
+			StatusTimer = MilliSecs2()
+		EndIf
+		If CurrentStatus = LANGUAGE_STATUS_DONE Then
+			If (MilliSecs2() - StatusTimer) > 1500 Then
+				CurrentStatus = LANGUAGE_STATUS_NULL
+			EndIf
+		EndIf
+		
 		SetBuffer(BackBuffer())
 		Cls()
 		
@@ -163,8 +188,19 @@ Function LanguageSelector%()
 			ScrollMenuHeight = LinesAmount
 		EndIf
 		
+		Local InfoBoxContent$ = GetLocalString("language", "more")
+		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST Then
+			InfoBoxContent = GetLocalString("language", "downloading")
+			CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
+		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST Then
+			InfoBoxContent = GetLocalString("language", "unpacking")
+			CurrentStatus = LANGUAGE_STATUS_UNPACK_START
+		ElseIf CurrentStatus = LANGUAGE_STATUS_DONE Then
+			InfoBoxContent = GetLocalString("language", "done")
+		EndIf
+		
 		Color(0, 0, 0)
-		RowText(GetLocalString("language", "more"), 481, 199, 151, 102)
+		RowText(InfoBoxContent, 481, 199, 151, 102)
 		
 		If SelectedLanguage <> Null Then
 			If SelectedLanguage\ID = opt\Language Then
@@ -188,9 +224,8 @@ Function LanguageSelector%()
 				EndIf
 			Else
 				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
-					DownloadFile("https://files.ziyuesinicization.site/cbue/" + SelectedLanguage\ID + ".zip", BasePath + "/local.zip")
-					CreateDir("Localization\" + SelectedLanguage\ID)
-					Unzip(BasePath + "/local.zip", "Localization/" + SelectedLanguage\ID)
+					CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
+					RequestLanguageID = SelectedLanguage\ID
 				EndIf
 			EndIf
 		Else
