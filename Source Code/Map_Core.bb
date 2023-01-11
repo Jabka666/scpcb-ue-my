@@ -221,8 +221,9 @@ Function RenderRoomLights%(Cam%)
 			For i = 0 To r\MaxLights - 1
 				If r\Lights[i] <> 0 Then
 					If SecondaryLightOn > 0.5 Then
-						If UpdateRoomLightsTimer = 0.0 Then
-							If Cam = Camera Then ; ~ The lights are rendered by player's cam
+						If Cam = Camera Then ; ~ The lights are rendered by player's cam
+							If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], -1)
+							If UpdateRoomLightsTimer = 0.0 Then
 								If EntityDistanceSquared(Camera, r\Lights[i]) < 72.25 Then
 									If EntityHidden(r\Lights[i]) Then ShowEntity(r\Lights[i])
 									If EntityVisible(Camera, r\Lights[i]) Then
@@ -233,7 +234,6 @@ Function RenderRoomLights%(Cam%)
 											
 											If Alpha > 0.0 Then
 												If EntityHidden(r\LightSprites2[i]) Then ShowEntity(r\LightSprites2[i])
-												EntityOrder(r\LightSprites2[i], -1)
 												EntityAlpha(r\LightSprites2[i], Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
 												
 												Random = Rnd(0.36, 0.4)
@@ -261,10 +261,10 @@ Function RenderRoomLights%(Cam%)
 										If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
 									EndIf
 								EndIf
-							Else
-								; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
-								If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], 0)
 							EndIf
+						Else
+							; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
+							If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], 0)
 						EndIf
 					Else
 						Return ; ~ The lights were turned off
