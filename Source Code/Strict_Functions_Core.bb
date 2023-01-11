@@ -132,10 +132,6 @@ Function FreeSound_Strict%(SoundHandle%)
 	EndIf
 End Function
 
-Function StopChannel_Strict%(SoundCHN%)
-	StopChannel(SoundCHN) : SoundCHN = 0
-End Function
-
 Type Stream
 	Field CHN%
 End Type
@@ -178,7 +174,7 @@ Function StopStream_Strict%(StreamHandle%)
 		OpenConsoleOnError()
 		Return
 	EndIf
-	StopChannel_Strict(st\CHN)
+	StopChannel(st\CHN)
 	
 	Delete(st)
 End Function

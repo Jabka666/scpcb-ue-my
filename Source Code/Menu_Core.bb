@@ -664,7 +664,7 @@ Function UpdateMainMenu%()
 								If opt\EnableSFXRelease Then
 									For snd.Sound = Each Sound
 										For i = 0 To MaxChannelsAmount - 1
-											StopChannel_Strict(snd\Channels[i])
+											StopChannel(snd\Channels[i])
 										Next
 										If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 										snd\ReleaseTime = 0
@@ -1782,7 +1782,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	opt\RealGraphicWidth = opt\GraphicWidth
 	opt\RealGraphicHeight = opt\GraphicHeight
 	
-	fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default", "file"), GetFileLocalString(FontSettingsFile, "Default", "size"), True)
+	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
 	SetFont(fo\FontID[Font_Default])
 	
 	MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")

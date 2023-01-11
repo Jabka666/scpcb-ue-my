@@ -134,12 +134,14 @@ LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
 
 InitLoadingScreens(LoadingScreensFile)
 
-fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default", "file"), GetFileLocalString(FontSettingsFile, "Default", "size"))
-fo\FontID[Font_Default_Big] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default_Big", "file"), GetFileLocalString(FontSettingsFile, "Default_Big", "size"))
-fo\FontID[Font_Digital] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Digital", "file"), GetFileLocalString(FontSettingsFile, "Digital", "size"))
-fo\FontID[Font_Digital_Big] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Digital_Big", "file"), GetFileLocalString(FontSettingsFile, "Digital_Big", "size"))
-fo\FontID[Font_Journal] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Journal", "file"), GetFileLocalString(FontSettingsFile, "Journal", "size"))
-fo\FontID[Font_Console] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Console", "file"), GetFileLocalString(FontSettingsFile, "Console", "size"))
+Const FontsPath$ = "GFX\Fonts\"
+
+fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
+fo\FontID[Font_Default_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default_Big", "File"), GetFileLocalString(FontsFile, "Default_Big", "Size"))
+fo\FontID[Font_Digital] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital", "File"), GetFileLocalString(FontsFile, "Digital", "Size"))
+fo\FontID[Font_Digital_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital_Big", "File"), GetFileLocalString(FontsFile, "Digital_Big", "Size"))
+fo\FontID[Font_Journal] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Journal", "File"), GetFileLocalString(FontsFile, "Journal", "Size"))
+fo\FontID[Font_Console] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Console", "File"), GetFileLocalString(FontsFile, "Console", "Size"))
 
 SetFont(fo\FontID[Font_Default_Big])
 
@@ -3074,7 +3076,7 @@ Function UpdateMouseLook%()
 			If (Not ChannelPlaying(BreathCHN)) Then
 				If (Not ChannelPlaying(BreathGasRelaxedCHN)) Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
 			Else
-				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
+				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 			EndIf
 		EndIf
 		If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
@@ -3092,7 +3094,7 @@ Function UpdateMouseLook%()
 			EndIf
 		EndIf
 	Else
-		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel_Strict(BreathGasRelaxedCHN)
+		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN)
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
 		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
@@ -5485,7 +5487,7 @@ Function UpdateGUI%()
 				If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 			Next
 			
-			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel_Strict(LowBatteryCHN[0])
+			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0])
 		EndIf
 	EndIf
 	
@@ -5762,7 +5764,7 @@ Function RenderGUI%()
 				If e\EventState2 = PD_ThroneRoom Then
 					If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
 						If (Not e\Img) Then
-							StopChannel_Strict(e\SoundCHN)
+							StopChannel(e\SoundCHN)
 							If Rand(30) = 1 Then PlaySound_Strict(e\Sound2)
 							e\Img = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
 							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
@@ -5772,7 +5774,7 @@ Function RenderGUI%()
 						EndIf
 					Else
 						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
-						StopChannel_Strict(e\SoundCHN)
+						StopChannel(e\SoundCHN)
 					EndIf
 				EndIf
 				Exit
@@ -7796,8 +7798,8 @@ Function InitCredits%()
 	Local File% = OpenFile_Strict("Credits.txt")
 	Local l$
 	
-	fo\FontID[Font_Credits] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Credits", "file"), GetFileLocalString(FontSettingsFile, "Credits", "size"))
-	fo\FontID[Font_Credits_Big] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Credits_Big", "file"), GetFileLocalString(FontSettingsFile, "Credits_Big", "size"))
+	fo\FontID[Font_Credits] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits", "File"), GetFileLocalString(FontsFile, "Credits", "Size"))
+	fo\FontID[Font_Credits_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits_Big", "File"), GetFileLocalString(FontsFile, "Credits_Big", "Size"))
 	
 	If (Not me\CreditsScreen) Then
 		me\CreditsScreen = LoadImage_Strict("GFX\Menu\credits_screen.png")
@@ -8524,7 +8526,7 @@ Function Use427%()
 			EndIf
 		Else
 			For i = 0 To 1
-				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel_Strict(I_427\SoundCHN[i])
+				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i])
 			Next
 		EndIf
 	Else

@@ -41,7 +41,7 @@ Function SetLanguage%(Language$)
 		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
 		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
 		IniWriteBuffer(lang\LanguagePath + SCP294File)
-		IniWriteBuffer(lang\LanguagePath + FontSettingsFile)
+		IniWriteBuffer(lang\LanguagePath + FontsFile)
 	EndIf
 	If StringToBoolean(GetLocalString("global", "splitwithspace")) Then
 		SplitSpace = " "
@@ -220,7 +220,7 @@ Function LanguageSelector%()
 			ElseIf SelectedLanguage\Name = "English"
 				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
-					fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default", "file"), GetFileLocalString(FontSettingsFile, "Default", "size"), True)
+					fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
 					AppTitle(GetLocalString("language", "title"))
 					FreeImage(LanguageBG) : LanguageBG = 0
 				EndIf
@@ -232,7 +232,7 @@ Function LanguageSelector%()
 					EndIf
 					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
-						fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default", "file"), GetFileLocalString(FontSettingsFile, "Default", "size"), True)
+						fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
 						AppTitle(GetLocalString("language", "title"))
 						FreeImage(LanguageBG) : LanguageBG = 0
 					EndIf

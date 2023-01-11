@@ -14,10 +14,10 @@ Include "Source Code\Language_Core.bb"
 
 Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"
-Const AchievementsFile$ = "Data\Achievements.ini"
-Const LoadingScreensFile$ = "LoadingScreens\loading_screens.ini"
+Const AchievementsFile$ = "Data\achievements.ini"
+Const LoadingScreensFile$ = "Data\loading_screens.ini"
 Const SCP294File$ = "Data\SCP-294.ini"
-Const FontSettingsFile$ = "GFX\Fonts\Settings.ini"
+Const FontsFile$ = "Data\fonts.ini"
 Const SCP1499ChunksFile$ = "Data\1499chunks.ini" ; ~ Unable to localize
 
 Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not exist
@@ -48,7 +48,7 @@ IniWriteBuffer(AchievementsFile)
 IniWriteBuffer(LoadingScreensFile)
 IniWriteBuffer(SCP294File)
 IniWriteBuffer(SCP1499ChunksFile)
-IniWriteBuffer(FontSettingsFile)
+IniWriteBuffer(FontsFile)
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
