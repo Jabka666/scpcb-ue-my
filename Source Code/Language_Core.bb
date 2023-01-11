@@ -15,12 +15,18 @@ Type ListLanguage ; ~ Languages in the list
 	Field Compatible$
 End Type
 
-Const LANGUAGE_STATUS_NULL = 0
-Const LANGUAGE_STATUS_DOWNLOAD_REQUEST = 1
-Const LANGUAGE_STATUS_DOWNLOAD_START = 2
-Const LANGUAGE_STATUS_UNPACK_REQUEST = 3
-Const LANGUAGE_STATUS_UNPACK_START = 4
-Const LANGUAGE_STATUS_DONE = 5
+; ~ Language status constants
+;[Block]
+Const LANGUAGE_STATUS_NULL% = 0
+Const LANGUAGE_STATUS_DOWNLOAD_REQUEST% = 1
+Const LANGUAGE_STATUS_DOWNLOAD_START% = 2
+Const LANGUAGE_STATUS_UNPACK_REQUEST% = 3
+Const LANGUAGE_STATUS_UNPACK_START% = 4
+Const LANGUAGE_STATUS_UNINSTALLING_REQUEST% = 5
+Const LANGUAGE_STATUS_UNINSTALLING_START% = 6
+Const LANGUAGE_STATUS_DONE% = 7
+;[End Block]
+Const LocalizaitonPath$ = "Localization\"
 
 Global lang.Language = New Language
 
@@ -29,7 +35,7 @@ Function SetLanguage%(Language$)
 	If lang\CurrentLanguage = "en-US" Then
 		lang\LanguagePath = ""
 	Else
-		lang\LanguagePath = "Localization\" + lang\CurrentLanguage + "\"
+		lang\LanguagePath = LocalizaitonPath + lang\CurrentLanguage + "\"
 		IniWriteBuffer(lang\LanguagePath + LanguageFile)
 		IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
 		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
@@ -49,7 +55,7 @@ Function LanguageSelector%()
 	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
 	
 	If FileType(BasePath) <> 2 Then CreateDir(BasePath) ; ~ Create temporary folder
-	If FileType("Localization\") <> 2 Then CreateDir("Localization\")
+	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
 	CreateDir(BasePath + "flags/")
 	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
@@ -101,15 +107,17 @@ Function LanguageSelector%()
 			DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguageID + ".zip", BasePath + "/local.zip")
 			CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_START Then
-			CreateDir("Localization\" + RequestLanguageID)
-			Unzip(BasePath + "/local.zip", "Localization/" + RequestLanguageID)
-			CurrentStatus = LANGUAGE_STATUS_DONE
+			CreateDir(LocalizaitonPath + RequestLanguageID)
+			Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguageID)
 			StatusTimer = MilliSecs2()
+			CurrentStatus = LANGUAGE_STATUS_DONE
+		ElseIf CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_START
+			DeleteFolder(LocalizaitonPath + SelectedLanguage\ID)
+			StatusTimer = MilliSecs2()
+			CurrentStatus = LANGUAGE_STATUS_DONE
 		EndIf
 		If CurrentStatus = LANGUAGE_STATUS_DONE Then
-			If (MilliSecs2() - StatusTimer) > 1500 Then
-				CurrentStatus = LANGUAGE_STATUS_NULL
-			EndIf
+			If (MilliSecs2() - StatusTimer) > 1500 Then CurrentStatus = LANGUAGE_STATUS_NULL
 		EndIf
 		
 		SetBuffer(BackBuffer())
@@ -189,13 +197,17 @@ Function LanguageSelector%()
 		EndIf
 		
 		Local InfoBoxContent$ = GetLocalString("language", "more")
+		
 		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST Then
 			InfoBoxContent = GetLocalString("language", "downloading")
 			CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
-		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST Then
+		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 			InfoBoxContent = GetLocalString("language", "unpacking")
 			CurrentStatus = LANGUAGE_STATUS_UNPACK_START
-		ElseIf CurrentStatus = LANGUAGE_STATUS_DONE Then
+		ElseIf CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
+			InfoBoxContent = GetLocalString("language", "uninstalling")
+			CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_START
+		ElseIf CurrentStatus = LANGUAGE_STATUS_DONE
 			InfoBoxContent = GetLocalString("language", "done")
 		EndIf
 		
@@ -212,9 +224,12 @@ Function LanguageSelector%()
 					AppTitle(GetLocalString("language", "title"))
 					FreeImage(LanguageBG) : LanguageBG = 0
 				EndIf
-			ElseIf FileType("Localization\" + SelectedLanguage\ID) = 2
+			ElseIf FileType(LocalizaitonPath + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language Then
-					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then DeleteFolder("Localization\" + SelectedLanguage\ID)
+					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
+						CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
+						RequestLanguageID = SelectedLanguage\ID
+					EndIf
 					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						fo\FontID[Font_Default] = LoadFont_Strict("GFX\Fonts\" + GetFileLocalString(FontSettingsFile, "Default", "file"), GetFileLocalString(FontSettingsFile, "Default", "size"), True)
