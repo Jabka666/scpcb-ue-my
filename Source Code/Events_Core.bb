@@ -4521,7 +4521,7 @@ Function UpdateEvents%()
 						If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
 							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
-							If me\BlurTimer >= 1500.0 Then
+							If me\BlurTimer >= 1500.0 And me\FallTimer = 0.0 Then
 								Kill(False)
 								msg\DeathMsg = GetLocalString("death", "939.gas")
 							EndIf
