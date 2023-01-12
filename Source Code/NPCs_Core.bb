@@ -551,24 +551,23 @@ End Function
 Function RemoveNPC%(n.NPCs)
 	If n = Null Then Return
 	
-	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
-	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
-	
 	If n\SoundCHN_IsStream Then
-		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN)
+		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
 	Else
 		StopChannel(n\SoundCHN)
 	EndIf
 	If n\SoundCHN2_IsStream Then
-		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
+		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
 	Else
 		StopChannel(n\SoundCHN2)
 	EndIf
-	
-	FreeEntity(n\Collider) : n\Collider = 0
-	FreeEntity(n\OBJ) : n\OBJ = 0
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+	
+	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
+	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
+	FreeEntity(n\Collider) : n\Collider = 0
+	FreeEntity(n\OBJ) : n\OBJ = 0
 	
 	Delete(n)
 End Function
@@ -1182,7 +1181,7 @@ Function UpdateNPCs%()
 											
 											SetNPCFrame(n, 194.0)
 											
-											StopStream_Strict(n\SoundCHN)
+											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
 											n\Sound = 0
 											
 											n\State3 = 0.0
@@ -1377,7 +1376,7 @@ Function UpdateNPCs%()
 							If n\State2 > 70.0 * 26.0 Then
 								AnimateNPC(n, 823.0, 847.0, n\Speed * 8.0, False)
 								If n\Frame > 846.9 Then
-									StopStream_Strict(n\SoundCHN)
+									StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
 									n\State = 4.0
 								EndIf
 							Else
@@ -1455,7 +1454,7 @@ Function UpdateNPCs%()
 											
 											If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
 											
-											StopStream_Strict(n\SoundCHN)
+											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
 											n\Sound = 0
 											
 											n\State = 2.0

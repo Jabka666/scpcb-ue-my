@@ -916,8 +916,8 @@ Function UpdateConsole%()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType096 Then
 							n\State = 0.0
-							StopStream_Strict(n\SoundCHN)
-							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2)
+							StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
 							Exit
 						EndIf
 					Next
@@ -7632,7 +7632,7 @@ Function UpdateEnding%()
 			
 			ShouldPlay = 23
 			opt\CurrMusicVolume = opt\MusicVolume
-			StopStream_Strict(MusicCHN)
+			StopStream_Strict(MusicCHN) : MusicCHN = 0
 			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, 0)
 			NowPlaying = ShouldPlay
 			
@@ -7664,7 +7664,7 @@ Function UpdateEnding%()
 						For i = 0 To 9
 							If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
 						Next
-						StopStream_Strict(MusicCHN)
+						StopStream_Strict(MusicCHN) : MusicCHN = 0
 						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
 						SetStreamVolume_Strict(MusicCHN, opt\MusicVolume * opt\MasterVolume)
 						me\EndingTimer = -2000.0
@@ -7853,7 +7853,7 @@ Function UpdateCredits%()
 		DeInitLoadingTextColor(ltc)
 		Delete Each CreditsLine
 		NullGame(False)
-		StopStream_Strict(MusicCHN)
+		StopStream_Strict(MusicCHN) : MusicCHN = 0
 		ShouldPlay = 21
 		CurrSave = Null
 		ResetInput()

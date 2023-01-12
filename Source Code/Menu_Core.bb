@@ -258,7 +258,7 @@ Function UpdateMainMenu%()
 						;[Block]
 						Txt = GetLocalString("menu", "quit")
 						If Temp Then
-							StopStream_Strict(MusicCHN)
+							StopStream_Strict(MusicCHN) : MusicCHN = 0
 							End()
 						EndIf
 						;[End Block]

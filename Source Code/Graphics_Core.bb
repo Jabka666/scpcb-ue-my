@@ -488,7 +488,7 @@ Function PlayStartupVideos%()
 			DrawMovie(Movie, 0, (opt\RealGraphicHeight / 2 - ScaledGraphicHeight / 2), opt\RealGraphicWidth, ScaledGraphicHeight)
 			Flip()
 		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
-		StopStream_Strict(SplashScreenAudio)
+		StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
 		CloseMovie(Movie)
 		
 		Cls()

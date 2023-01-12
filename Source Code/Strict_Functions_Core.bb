@@ -247,7 +247,7 @@ Function SetStreamPan_Strict%(StreamHandle%, Pan#)
 	ChannelPan(st\CHN, Pan)
 End Function
 
-Function UpdateStreamSoundOrigin%(StreamHandle, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
+Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	If StreamHandle <> 0 Then
 		If IsStreamPlaying_Strict(StreamHandle) Then
 			Range = Max(Range, 1.0)
