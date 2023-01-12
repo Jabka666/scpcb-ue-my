@@ -2028,9 +2028,9 @@ Function UpdateGame%()
 		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 	Else
 		If Len(SelectedMap) > 15 Then
-			TempStr = GetLocalString("menu", "new.map") + Left(SelectedMap, 14) + "..."
+			TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedMap), 14) + "..."
 		Else
-			TempStr = GetLocalString("menu", "new.map") + SelectedMap
+			TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedMap)
 		EndIf
 	EndIf
 	SetErrorMsg(6, TempStr)

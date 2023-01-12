@@ -2221,7 +2221,7 @@ Function LoadSavedGames%()
 	CatchErrors("LoadSaveGames")
 End Function
 
-Function DeleteGame(sv.Save)
+Function DeleteGame%(sv.Save)
 	sv\Name = SavePath + sv\Name + "\"
 	
 	Local DelDir% = ReadDir(sv\Name)
