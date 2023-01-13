@@ -2774,9 +2774,13 @@ Function UpdateEvents%()
 							MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -0.5)
 							ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
 						EndIf
-						
-						If e\room\NPC[1] = Null Then
-							If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 6.25 Then
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 6.25 Then
+							If wi\HazmatSuit = 0 Then
+								InjurePlayer(fps\Factor[0] / 5000.0)
+							Else
+								InjurePlayer(fps\Factor[0] / 10000.0)
+							EndIf
+							If e\room\NPC[1] = Null Then
 								e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.13, EntityZ(e\room\NPC[0]\Collider))
 								RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle, 0.0)
 								MoveEntity(e\room\NPC[1]\Collider, 0.0, 0.0, 0.6)
@@ -4949,7 +4953,6 @@ Function UpdateEvents%()
 											e\EventState = 70.0 * 61.0
 										EndIf
 									Else
-										
 										e\EventState = e\EventState + fps\Factor[0]
 										If e\EventState > 70.0 * 4.0 And e\EventState - fps\Factor[0] <= 70.0 * 4.0 Then
 											LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Help1.ogg")

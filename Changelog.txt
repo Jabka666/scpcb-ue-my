@@ -57,6 +57,8 @@ Menu:
 NPCs:
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
 
+- SCP-035's victim now slowly hurts player.
+
 Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.
 
