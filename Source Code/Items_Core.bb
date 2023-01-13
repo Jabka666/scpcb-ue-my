@@ -751,7 +751,7 @@ End Function
 
 Function IsDoubleItem%(Variable, ID, Msg$)
 	If Variable > 0 And Variable <> ID Then
-		CreateMsg(Format(GetLocalString("msg", "weartwo"), Msg))
+		CreateMsg(msg)
 		SelectedItem = Null
 		Return(True)
 	EndIf

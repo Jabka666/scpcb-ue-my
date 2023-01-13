@@ -103,19 +103,26 @@ Function LanguageSelector%()
 	AppTitle(GetLocalString("language", "title"))
 	
 	Repeat
-		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START Then
-			DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguageID + ".zip", BasePath + "/local.zip")
-			CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
-		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_START Then
-			CreateDir(LocalizaitonPath + RequestLanguageID)
-			Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguageID)
-			StatusTimer = MilliSecs2()
-			CurrentStatus = LANGUAGE_STATUS_DONE
-		ElseIf CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_START
-			DeleteFolder(LocalizaitonPath + SelectedLanguage\ID)
-			StatusTimer = MilliSecs2()
-			CurrentStatus = LANGUAGE_STATUS_DONE
-		EndIf
+		Select CurrentStatus
+			Case LANGUAGE_STATUS_DOWNLOAD_START
+				;[Block]
+				DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguageID + ".zip", BasePath + "/local.zip")
+				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+				;[End Block]
+			Case LANGUAGE_STATUS_UNPACK_START
+				;[Block]
+				CreateDir(LocalizaitonPath + RequestLanguageID)
+				Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguageID)
+				StatusTimer = MilliSecs2()
+				CurrentStatus = LANGUAGE_STATUS_DONE
+				;[End Block]
+			Case LANGUAGE_STATUS_UNINSTALLING_START
+				;[Block]
+				DeleteFolder(LocalizaitonPath + SelectedLanguage\ID)
+				StatusTimer = MilliSecs2()
+				CurrentStatus = LANGUAGE_STATUS_DONE
+				;[End Block]
+		End Select
 		If CurrentStatus = LANGUAGE_STATUS_DONE Then
 			If (MilliSecs2() - StatusTimer) > 1500 Then CurrentStatus = LANGUAGE_STATUS_NULL
 		EndIf
@@ -459,4 +466,5 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#35#6B
 ;~C#Blitz3D

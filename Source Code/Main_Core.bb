@@ -4146,15 +4146,15 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "nvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 1, GetLocalString("misc", "twonvg")) Then Return
+								If IsDoubleItem(wi\NightVision, 1, GetLocalString("msg", "weartwo.nvg")) Then Return
 								;[End Block]
 							Case "veryfinenvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 2, GetLocalString("misc", "twonvg")) Then Return
+								If IsDoubleItem(wi\NightVision, 2, GetLocalString("msg", "weartwo.nvg")) Then Return
 								;[End Block]
 							Case "finenvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 3, GetLocalString("misc", "twonvg")) Then Return
+								If IsDoubleItem(wi\NightVision, 3, GetLocalString("msg", "weartwo.nvg")) Then Return
 								;[End Block]
 						End Select
 						
@@ -5110,19 +5110,19 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 1, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(wi\GasMask, 1, GetLocalString("msg", "weartwo.gas")) Then Return
 								;[End Block]
 							Case "finegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 2, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(wi\GasMask, 2, GetLocalString("msg", "weartwo.gas")) Then Return
 								;[End Block]
 							Case "veryfinegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 3, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(wi\GasMask, 3, GetLocalString("msg", "weartwo.gas")) Then Return
 								;[End Block]
 							Case "gasmask148"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 4, "gas masks") Then Return
+								If IsDoubleItem(wi\GasMask, 4, GetLocalString("msg", "weartwo.gas")) Then Return
 								;[End Block]
 						End Select
 						
