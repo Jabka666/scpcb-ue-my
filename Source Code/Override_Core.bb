@@ -47,9 +47,5 @@ Function Text%(x%, y%, Txt$, AlignX% = 0, AlignY% = 0)
 	Blitz_Text(x, y + TextOffset, Txt, AlignX, AlignY)
 End Function
 
-Function StopChannel%(SoundCHN%)
-	Blitz_StopChannel(SoundCHN) : SoundCHN = 0
-End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

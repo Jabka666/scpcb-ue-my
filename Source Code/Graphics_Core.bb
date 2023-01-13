@@ -241,7 +241,7 @@ Function UpdateWorld2%()
 	If wi\SCRAMBLE And HasBattery <> 0 Then
 		If (Not ChannelPlaying(SCRAMBLECHN)) Then SCRAMBLECHN = PlaySound_Strict(SCRAMBLESFX)
 	Else
-		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN)
+		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 	EndIf
 	
 	If HasBattery = 1 Then

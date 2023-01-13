@@ -552,15 +552,17 @@ Function RemoveNPC%(n.NPCs)
 	If n = Null Then Return
 	
 	If n\SoundCHN_IsStream Then
-		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
 	Else
 		StopChannel(n\SoundCHN)
 	EndIf
+	n\SoundCHN = 0
 	If n\SoundCHN2_IsStream Then
-		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
+		If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
 	Else
 		StopChannel(n\SoundCHN2)
 	EndIf
+	n\SoundCHN2 = 0
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
 	
@@ -1489,8 +1491,8 @@ Function UpdateNPCs%()
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
 					n\DropSpeed = 0.0
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 					ResetEntity(n\Collider)
 				Else
@@ -1774,7 +1776,7 @@ Function UpdateNPCs%()
 								
 								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
 							ElseIf n\Idle = 0
-								If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+								If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 								If PlayerInReachableRoom(True) And InFacility = 1 Then ; ~ Player is in a room where SCP-049 can teleport to
 									If Rand(3 - SelectedDifficulty\OtherFactors) = 1 Then
 										TeleportCloser(n)
@@ -2098,7 +2100,7 @@ Function UpdateNPCs%()
 					If n\State > 1.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 				Else
 					; ~ The NPC was killed
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
@@ -2484,7 +2486,7 @@ Function UpdateNPCs%()
 							
 							AnimateNPC(n, 623.0, 642.0, 0.3)
 							
-							If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+							If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 							n\SoundCHN = LoopSound2(VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 13.0, 1.0)
 							
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -2497,7 +2499,7 @@ Function UpdateNPCs%()
 							
 							AnimateNPC(n, 623.0, 642.0, 0.3)
 							
-							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 							n\SoundCHN2 = LoopSound2(VehicleSFX[1], n\SoundCHN2, Camera, n\OBJ2, 13.0, 1.0)
 							
 							n\CurrSpeed = CurveValue(n\Speed * 0.9, n\CurrSpeed, 20.0)
@@ -3075,7 +3077,7 @@ Function UpdateNPCs%()
 					AnimateNPC(n, 515.0, 551.0, 0.15, False)
 					If n\Frame >= 550.0 Then
 						If (Not EntityHidden(n\OBJ)) Then
-							StopChannel(n\SoundCHN)
+							StopChannel(n\SoundCHN) : n\SoundCHN = 0
 							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 							HideEntity(n\Collider)
 							HideEntity(n\OBJ)
@@ -4654,7 +4656,7 @@ Function UpdateNPCs%()
 					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 				Else
 					; ~ The NPC was killed
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
 				EndIf
@@ -4764,8 +4766,8 @@ Function UpdateMTFUnit%(n.NPCs)
 	If n\IsDead Then
 		n\BlinkTimer = -1.0
 		SetNPCFrame(n, 532.0)
-		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
-		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 	Else
 		n\MaxGravity = 0.03
 		
