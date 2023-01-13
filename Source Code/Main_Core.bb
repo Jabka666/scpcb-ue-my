@@ -3510,7 +3510,7 @@ Function UpdateGUI%()
 		If mo\MouseHit1 Then mo\DoubleClickSlot = IsMouseOn
 		
 		If SelectedItem <> Null Then
-			If (Not mo\MouseDown1) Then
+			If (Not mo\MouseDown1) Lor mo\MouseHit2 Then
 				If MouseSlot = 66 Then
 					If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 					ShowEntity(SelectedItem\Collider)
@@ -3561,10 +3561,12 @@ Function UpdateGUI%()
 					EndIf
 					
 					SelectedItem = Null
-					OtherOpen = Null
-					ClosedInv = True
 					
-					MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+					If (Not mo\MouseHit2) Then
+						OtherOpen = Null
+						ClosedInv = True
+						MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+					EndIf
 				Else
 					If PrevOtherOpen\SecondInv[MouseSlot] = Null Then
 						For z = 0 To OtherSize - 1
@@ -3674,7 +3676,7 @@ Function UpdateGUI%()
 		If mo\MouseHit1 Then mo\DoubleClickSlot = IsMouseOn
 		
 		If SelectedItem <> Null Then
-			If (Not mo\MouseDown1) Then
+			If (Not mo\MouseDown1) Lor mo\MouseHit2 Then
 				If MouseSlot = 66 Then
 					Select SelectedItem\ItemTemplate\TempName
 						Case "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
@@ -3687,7 +3689,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								InvOpen = False
+								If (Not mo\MouseHit2) Then InvOpen = False
 							EndIf
 							;[End Block]
 						Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
@@ -3696,7 +3698,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								InvOpen = False
+								If (Not mo\MouseHit2) Then InvOpen = False
 							EndIf
 							;[End Block]
 						Case "helmet"
@@ -3705,7 +3707,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								InvOpen = False
+								If (Not mo\MouseHit2) Then InvOpen = False
 							EndIf
 							;[End Block] 
 						Case "nvg", "veryfinenvg", "finenvg"
@@ -3714,7 +3716,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								InvOpen = False
+								If (Not mo\MouseHit2) Then InvOpen = False
 							EndIf
 							;[End Block]
 						Case "scramble"
@@ -3723,18 +3725,20 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								InvOpen = False
+								If (Not mo\MouseHit2) Then InvOpen = False
 							EndIf
 							;[End Block]
 						Default
 							;[Block]
 							DropItem(SelectedItem)
-							InvOpen = False
+							If (Not mo\MouseHit2) Then InvOpen = False
 							;[End Block]
 					End Select
 					
-					MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
-					StopMouseMovement()
+					If (Not mo\MouseHit2) Then
+						MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+						StopMouseMovement()
+					EndIf
 				Else
 					If Inventory(MouseSlot) = Null Then
 						For z = 0 To MaxItemAmount - 1
@@ -5491,6 +5495,24 @@ Function UpdateGUI%()
 		EndIf
 	EndIf
 	
+	;If SelectedDifficulty\InventorySlots > 3 Then
+	;	For i = 0 To (MaxItemAmount / 2) - 1
+	;		If KeyHit(i + 2) Then
+	;			If OtherOpen = Null And SelectedScreen = Null And (Not InvOpen) And (Not I_294\Using) And (Not MenuOpen) And (Not ConsoleOpen) Then
+	;				If me\Playable And (Not me\Zombie) And (Not me\Terminated) And me\SelectedEnding = -1 Then
+	;					If SelectedItem = Inventory(i) Then
+	;						If SelectedItem <> Null Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+	;						SelectedItem = Null
+	;					ElseIf SelectedItem = Null And Inventory(i) <> Null
+	;						SelectedItem = Inventory(i)
+	;						PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+	;					EndIf
+	;				EndIf
+	;			EndIf
+	;		EndIf
+	;	Next
+	;EndIf
+	
 	For it.Items = Each Items
 		If it <> SelectedItem Then
 			Select it\ItemTemplate\TempName
@@ -6058,7 +6080,11 @@ Function RenderGUI%()
 			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
 			
 			If Inventory(n) <> Null Then
-				If IsMouseOn = n Lor SelectedItem <> Inventory(n) Then DrawBlock(Inventory(n)\InvImg, x + (INVENTORY_GFX_SIZE / 2) - (32 * MenuScale), y + (INVENTORY_GFX_SIZE / 2) - (32 * MenuScale))
+				If IsMouseOn = n Lor SelectedItem <> Inventory(n) Then
+					DrawBlock(Inventory(n)\InvImg, x + (INVENTORY_GFX_SIZE / 2) - (32 * MenuScale), y + (INVENTORY_GFX_SIZE / 2) - (32 * MenuScale))
+					;SetFont(fo\FontID[Font_Default])
+					;If n < MaxItemAmount / 2 Then Text(x + (32 * MenuScale), y - (9 * MenuScale), n + 1, True, True)
+				EndIf
 			EndIf
 			
 			If Inventory(n) <> Null And SelectedItem <> Inventory(n) Then
