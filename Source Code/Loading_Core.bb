@@ -2065,7 +2065,7 @@ Function InitNewGame%()
 	
 	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
-	SetFont(fo\FontID[Font_Default])
+	SetFont2(fo\FontID[Font_Default])
 	
 	HidePointer()
 	
@@ -2163,7 +2163,7 @@ Function InitLoadGame%()
 	
 	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
-	SetFont(fo\FontID[Font_Default])
+	SetFont2(fo\FontID[Font_Default])
 	
 	HidePointer()
 	

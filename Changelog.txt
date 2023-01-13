@@ -11,6 +11,7 @@ General:
 - Added a small chance to accidentally drop an item when trying to use it.
 - Added a blood decal after killing the player.
 - Added buttons for containment door in SCP-049's containment chamber.
+- Added dropping items without closing inventory with right click.
 
 - Removed «Playmusic» console command.
 
@@ -19,6 +20,8 @@ General:
 - Finally made the «Bright mode» similar to original game.
 
 - Converted .ini files to UTF-8 format.
+
+- Optimized game a lot.
 
 Rooms:
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.

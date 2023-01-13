@@ -299,15 +299,15 @@ Function RenderWorld2%(Tween#)
 		If wi\NightVision = 2 Then ; ~ Show a HUD
 			Color(255, 255, 255)
 			
-			SetFont(fo\FontID[Font_Digital])
+			SetFont2(fo\FontID[Font_Digital])
 			
 			Local PlusY% = 0
 			
 			If HasBattery = 1 Then PlusY = 40
 			
-			Text(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, GetLocalString("msg", "refresh"), True, False)
-			Text(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-			Text(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, GetLocalString("msg", "refresh.sec"), True, False)
+			Text2(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, GetLocalString("msg", "refresh"), True, False)
+			Text2(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True, False)
+			Text2(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, GetLocalString("msg", "refresh.sec"), True, False)
 			
 			Local Temp% = CreatePivot()
 			Local Temp2% = CreatePivot()
@@ -348,8 +348,8 @@ Function RenderWorld2%(Tween#)
 						EndIf
 						
 						If (Not wi\IsNVGBlinking) Then
-							Text(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVGName, True, True)
-							Text(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
+							Text2(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVGName, True, True)
+							Text2(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
 						EndIf
 					EndIf
 				EndIf
@@ -389,9 +389,9 @@ Function RenderWorld2%(Tween#)
 	If HasBattery = 1 Then
 		If BatMsgTimer >= 70.0 * 1.0 Then
 			Color(255, 0, 0)
-			SetFont(fo\FontID[Font_Digital])
+			SetFont2(fo\FontID[Font_Digital])
 			
-			Text(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True, False)
+			Text2(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True, False)
 		EndIf
 	EndIf
 	Color(255, 255, 255)
@@ -530,6 +530,53 @@ Function GetScreenshot%()
 	If (Not MainMenuOpen) Then CreateHintMsg(GetLocalString("msg", "screenshot"))
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	ScreenshotCount = ScreenshotCount + 1
+End Function
+
+Global TextOffset% = 0
+
+Function SetFont2%(Font%)
+	Local FontName$ = "Default"
+	
+	Select Font
+		Case fo\FontID[Font_Default]
+			;[Block]
+			FontName = "Default"
+			;[End Block]
+		Case fo\FontID[Font_Default_Big]
+			;[Block]
+			FontName = "Default_Big"
+			;[End Block]
+		Case fo\FontID[Font_Digital]
+			;[Block]
+			FontName = "Digital"
+			;[End Block]
+		Case fo\FontID[Font_Digital_Big]
+			;[Block]
+			FontName = "Digital_Big"
+			;[End Block]
+		Case fo\FontID[Font_Journal]
+			;[Block]
+			FontName = "Journal"
+			;[End Block]
+		Case fo\FontID[Font_Console]
+			;[Block]
+			FontName = "Console"
+			;[End Block]
+		Case fo\FontID[Font_Credits]
+			;[Block]
+			FontName = "Credits"
+			;[End Block]
+		Case fo\FontID[Font_Credits_Big]
+			;[Block]
+			FontName = "Credits_Big"
+			;[End Block]
+	End Select
+	TextOffset = Int(GetFileLocalString(FontsFile, FontName, "Offset"))
+	SetFont(Font)
+End Function
+
+Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
+	Text(x, y + TextOffset, Txt, AlignX, AlignY)
 End Function
 
 ;~IDEal Editor Parameters:

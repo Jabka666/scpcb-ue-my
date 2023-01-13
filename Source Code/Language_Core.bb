@@ -282,10 +282,10 @@ Function LanguageSelector%()
 			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long then move tooltip to the left
 			RenderFrame(x, y, Width + FontWidth(), Height)
 			x = x + 5
-			Text(x, y + 8, Name)
-			Text(x, y + 23, ID)
+			Text2(x, y + 8, Name)
+			Text2(x, y + 23, ID)
 			If MouseHoverLanguage\ID <> "en-US" Then
-				Text(x, y + 38, Author)
+				Text2(x, y + 38, Author)
 				If MouseHoverLanguage\Full Then
 					DualColorText(x, y + 53, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
 				Else
@@ -296,7 +296,7 @@ Function LanguageSelector%()
 				Else
 					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
 				EndIf
-				Text(x, y + 83, Size)
+				Text2(x, y + 83, Size)
 			EndIf
 			If mo\MouseHit1 Then ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
 		EndIf
@@ -385,10 +385,10 @@ Function LimitText%(Txt$, x%, y%, Width%)
 	TextLength = StringWidth(Txt)
 	UnFitting = TextLength - Width
 	If UnFitting <= 0 Then
-		Text(x, y, Txt, 0, 0)
+		Text2(x, y, Txt, 0, 0)
 	Else
 		LetterWidth = TextLength / Len(Txt)
-		Text(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
+		Text2(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
 	EndIf
 End Function
 
@@ -429,7 +429,7 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 	
 	Color(255, 255, 255)
 	If Disabled Then Color(100, 100, 100)
-	Text(x + (Width / 2), y + (Height / 2) - 1, Txt, True, True)
+	Text2(x + (Width / 2), y + (Height / 2) - 1, Txt, True, True)
 	
 	Color(0, 0, 0)
 	
@@ -459,12 +459,12 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 	Local OldB% = ColorBlue()
 	
 	Color(ColorR1, ColorG1, ColorB1)
-	Text(x, y, Txt1)
+	Text2(x, y, Txt1)
 	Color(ColorR2, ColorG2, ColorB2)
-	Text(x + StringWidth(Txt1), y, Txt2)
+	Text2(x + StringWidth(Txt1), y, Txt2)
 	Color(OldR, OldG, OldB)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#35#6B
+;~F#6B
 ;~C#Blitz3D

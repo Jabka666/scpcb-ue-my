@@ -40,9 +40,9 @@ Function RenderSubtitles%()
 		If sub.Subtitles = First Subtitles Then
 			For i = ANNOUNCEMENT To THIRD_PERSON
 				If sub\Timer[i] > 0.0 Then
-					SetFont(fo\FontID[Font_Default])
+					SetFont2(fo\FontID[Font_Default])
 					Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-					Text(mo\Viewport_Center_X, mo\Viewport_Center_Y + (290 * MenuScale) - ((i * 20) * MenuScale), sub\Txt[i], True, False)
+					Text2(mo\Viewport_Center_X, mo\Viewport_Center_Y + (290 * MenuScale) - ((i * 20) * MenuScale), sub\Txt[i], True, False)
 				EndIf
 			Next
 		EndIf
