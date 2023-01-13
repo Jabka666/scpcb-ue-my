@@ -174,7 +174,7 @@ Function StopStream_Strict%(StreamHandle%)
 		OpenConsoleOnError()
 		Return
 	EndIf
-	StopChannel(st\CHN)
+	StopChannel(st\CHN) : st\CHN = 0
 	
 	Delete(st)
 End Function

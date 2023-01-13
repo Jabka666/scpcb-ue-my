@@ -664,7 +664,7 @@ Function UpdateMainMenu%()
 								If opt\EnableSFXRelease Then
 									For snd.Sound = Each Sound
 										For i = 0 To MaxChannelsAmount - 1
-											StopChannel(snd\Channels[i])
+											StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
 										Next
 										If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 										snd\ReleaseTime = 0
