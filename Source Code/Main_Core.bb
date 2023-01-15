@@ -7937,7 +7937,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events
 	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, sub.Subtitles
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
-	
 	Local i%, x%, y%, Lvl%
 	
 	KillSounds()
@@ -8093,8 +8092,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	For d.Doors = Each Doors
 		Delete(d)
 	Next
-	d_I\ClosestButton = 0
-	d_I\ClosestDoor = Null
 	
 	For lt.LightTemplates = Each LightTemplates
 		Delete(lt)
