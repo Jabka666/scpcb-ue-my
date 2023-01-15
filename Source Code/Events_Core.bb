@@ -859,8 +859,7 @@ Function UpdateEvents%()
 					If ((e\EventState Mod 600.0 > 300.0) And ((e\EventState + fps\Factor[0]) Mod 600.0 < 300.0)) Then
 						i = Floor((e\EventState - 5000.0) / 600.0) + 1.0
 						
-						If i = 0 Then PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\Scripted\Scripted6.ogg"))
-						
+						If i = 0 Then PlayAnnouncement("SFX\Room\Intro\IA\Scripted\Scripted6.ogg")
 						If i > 0 And i < 26 Then
 							If (Not CommotionState[i]) Then ; ~ Prevents the same commotion file from playing more then once
 								PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Commotion\Commotion" + i + ".ogg"))
@@ -6079,8 +6078,10 @@ Function UpdateEvents%()
 						EndIf
 					ElseIf e\EventState = 3.0
 						If e\room\RoomDoors[0]\OpenState > 160.0 Then
-							If (Not e\Sound) Then e\Sound = LoadSound_Strict("SFX\Music\1123.ogg")
-							e\SoundCHN = PlaySound_Strict(e\Sound)
+							If (Not e\Sound) Then
+								e\Sound = LoadSound_Strict("SFX\Music\1123.ogg")
+								e\SoundCHN = PlaySound_Strict(e\Sound)
+							EndIf
 							
 							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
 							ResetEntity(e\room\NPC[0]\Collider)
@@ -6125,6 +6126,7 @@ Function UpdateEvents%()
 							me\Injuries = 1.5
 							me\Bloodloss = 70.0
 							me\BlinkTimer = -10.0
+							me\BlurTimer = 500.0
 							
 							PositionEntity(me\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), True)
 							ResetEntity(me\Collider)
@@ -6133,18 +6135,18 @@ Function UpdateEvents%()
 							EntityParent(de\OBJ, e\room\OBJ)
 							
 							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\1123\Officer3.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 7.0)
 							
 							e\EventState = 6.0
 						EndIf
 					ElseIf e\EventState = 6.0
 						PointEntity(e\room\NPC[0]\Collider, me\Collider)
-						AnimateNPC(e\room\NPC[0], 75.0, 128.0, 0.04, True)
+						AnimateNPC(e\room\NPC[0], 75.0, 128.0, 0.04)
 						If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then
 							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Gunshot.ogg"))
 							If e\room\NPC[0]\Sound <> 0 Then FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 							e\EventState = 7.0
 						EndIf
-						If e\room\NPC[0]\Sound <> 0 Then e\room\NPC[0]\SoundCHN = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 7.0)
 					ElseIf e\EventState = 7.0
 						PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(me\Collider)

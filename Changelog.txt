@@ -87,6 +87,7 @@ Bug fixes:
 - Fixed SCP-106 collider not being teleported correctly.
 - Fixed sound path for some SCP-294 drinks.
 - Fixed the framelimit not working properly.
+- Fixed a wrong sound of the wooden doors.
 
 - Hopefully fixed height of NPCs teleportation.
 

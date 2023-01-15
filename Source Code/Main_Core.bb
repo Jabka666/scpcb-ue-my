@@ -8943,7 +8943,6 @@ Function Update409%()
 	
 	If I_409\Timer > 0.0 Then
 		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
-		
 		If I_427\Timer < 70.0 * 360.0 Then
 			If I_409\Revert Then
 				I_409\Timer = Max(0.0, I_409\Timer - (fps\Factor[0] * 0.01))
