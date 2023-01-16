@@ -309,7 +309,7 @@ End Function
 Function CreateConsoleMultiMsg%(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = False)
 	While Instr(Txt, "\n") <> 0 
 		CreateConsoleMsg(Left(Txt, Instr(Txt, "\n") - 1), R, G, B, IsCommand)
-		Txt = Right(Txt, Len(Txt) - Instr(Txt, "\n") - 3)
+		Txt = Right(Txt, Len(Txt) - Instr(Txt, "\n") - 1)
 	Wend
 	CreateConsoleMsg(Txt, R, G, B, IsCommand)
 End Function
@@ -552,223 +552,223 @@ Function UpdateConsole%()
 							;[End Block]
 						Case "camerafog"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.camerafog.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "camerafog"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.camerafog"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "noclip", "fly"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.noclip.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "noclip"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.noclip"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "noblink", "nb"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.noblink.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "noblink"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.noblink"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "godmode", "god"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.god.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "god"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.god"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "infinitestamina", "is"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.is.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "infinitestamina"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.is"))
 							CreateConsoleMsg("******************************")
 						Case "notarget", "nt"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.nt.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "notarget"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.nt"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "wireframe", "wf"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.wf.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "wireframe"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.wf"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "spawnitem", "si", "giveitem"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.si.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "spawnitem"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.si"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "spawn", "s"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.s.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "spawn"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.s"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset372" 
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.r372.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "reset372"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.r372"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "106retreat" 
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.106r.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "106retreat"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.106r"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable106"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.d106.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable106"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.d106"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable106"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.e106.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable106"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.e106"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable173"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.d173.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable173"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.d173"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable173"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.e173.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable173"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.e173"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset096" 
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.r096.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "reset096"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.r096"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "doorcontrol" 
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.dc.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "doorcontrol"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.dc"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "asd"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.asd.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "asd"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.asd"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "unlockcheckpoints" 
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.uc.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "unlockcheckpoints"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.uc"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable049"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.d049.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable049"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.d049"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable049"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.e049.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable049"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.e049"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable966"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.d966.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable966"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.d966"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable966"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.e966.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable966"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.e966"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "revive", "undead", "resurrect"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.revive.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "revive"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.revive"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "teleport"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.teleport.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "teleport"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.teleport"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "stopsound", "stfu"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.stfu.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "stopsound"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.stfu"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "weed", "scp-420-j", "420j", "scp420-j", "scp-420j", "420"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.weed.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "weed"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.weed"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "infect"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.infect.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "infect"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.infect"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "crystal" 
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.crystal.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "crystal"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.crystal"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "resetfunds"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.rf.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "resetfunds"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.rf"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "giveachievement"
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.ac.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "giveachievement"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.ac"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "codes" 
 							;[Block]
-							CreateConsoleMsg(GetLocalString("console", "help.codes.title"))
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "codes"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.codes"))
 							CreateConsoleMsg("******************************")
@@ -2034,7 +2034,7 @@ Function UpdateGame%()
 		EndIf
 	EndIf
 	SetErrorMsg(6, TempStr)
-	SetErrorMsg(7, GetLocalString("misc", "room") + PlayerRoom\RoomTemplate\Name)
+	SetErrorMsg(7, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\Name))
 	
 	For ev.Events = Each Events
 		If ev\room = PlayerRoom Then
@@ -2550,13 +2550,13 @@ Function ResetNegativeStats%(Revive% = False)
 		; ~ If death by SCP-173 or SCP-106, enable GodMode, prevent instant death again -- Salvage
 		If n_I\Curr173 <> Null Then
 		If n_I\Curr173\Idle = 1 Then
-			CreateConsoleMsg(GetLocalString("console", "revive173"))
+			CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-173"))
 				chs\GodMode = True
 				n_I\Curr173\Idle = 0
 			EndIf
 		ElseIf n_I\Curr106 <> Null
 			If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 4.0 Then
-				CreateConsoleMsg(GetLocalString("console", "revive106"))
+				CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-106"))
 				chs\GodMode = True
 			EndIf
 		EndIf

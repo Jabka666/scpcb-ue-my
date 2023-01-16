@@ -4647,12 +4647,12 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Cup", "cup", r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
 			EntityParent(it\Collider, r\OBJ)
 			it\Name = FindSCP294Drink("Orange Juice")
-			it\DisplayName = GetLocalString("items", "cuporange")
+			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "orange"))
 			
 			it.Items = CreateItem("Cup", "cup", r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
 			EntityParent(it\Collider, r\OBJ)
 			it\Name = FindSCP294Drink("Coffee Drink")
-			it\DisplayName = GetLocalString("items", "cupcoffee")
+			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
 			
 			it.Items = CreateItem("Empty Cup", "emptycup", r\x - 540.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 124.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -7634,7 +7634,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Cup", "cup", r\x - 100.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
 			it\Name = FindSCP294Drink("Water")
-			it\DisplayName = GetLocalString("items", "cupwater")
+			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Empty Cup", "emptycup", r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
