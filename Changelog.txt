@@ -518,7 +518,6 @@ Rooms:
 - Added new bump textures.
 - Added unique elevator buttons.
 - Added elevator panels showing the floor that you are going to.
-- Added a colored fog depending on the player's area.
 - Added O5 Council office.
 - Added Entrance Zone endroom.
 - Added one-sided and office doors.
@@ -533,7 +532,7 @@ Rooms:
 		- System unit;
 		- Yucca bush;
 		- Computer mouse;
-		- Water cooler;
+		- Water cooler.
 	- Added observation room for SCP-914's containment chamber.
 	- Added observation room signs.
 	- Added more interactable doors.
@@ -541,15 +540,14 @@ Rooms:
 	- Added elevator to SCP-008, SCP-079 and SCP-106's containment chambers.
 	- Added vehicle in the intro sequence.
 	- Added save monitor in the Surveillance Room.
-	- Added checkpoint monitor in Information Center Room.
+	- Added checkpoint monitor in «room4_ic».
 	- Added Light Containment Zone medical bay.
 	- Added new Heavy Containment Zone tunnel.
 	- Added new Entrance Zone offices.
 
 	- Improved SCP-895's model and image.
 	- Improved office seat model.
-	- Improved SCP-035's containment chamber.
-
+	
 	- Changed some rooms to Heavy Containment Zone style.
 
 - Renamed all rooms.
@@ -566,7 +564,6 @@ Items:
 - Added infected syringes.
 - Added Level 0 Key Card and Level 6 Key Card.
 - Added new sounds for Night Vision Goggles.
-- Added 3D models for coins and Lost Key.
 - Added messages for eye drops.
 
 - Rebalanced the S-NAVs.
@@ -588,14 +585,16 @@ Mechanics and effects:
 - Added crouch sound.
 - Added walk and closed eye icons.
 - Added smoothed HUD bars.
-- Added idle gas mask breathing.
-- Added wet effect for gas mask.
+- Gasmask changes:
+	- Added idle breathing.
+	- Added wet effect.
 - Added ability to swap items in inventory.
 - Added green indicator for positive effects and more negative indicators.
-- Added slightly blackout while reading a document or note.
+- Added slightly blackout while reading a document or note and etc.
 - Added bloody overlay.
 - Added more D-9341 sounds into the intro sequence. Also added tiny blur.
 - Added miss sound for NPCs.
+- Added a colored fog depending on the player's area.
 
 - Improved glass break and elevator beep sounds.
 - Improved white smoke texture.

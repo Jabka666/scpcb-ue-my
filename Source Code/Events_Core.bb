@@ -5936,8 +5936,8 @@ Function UpdateEvents%()
 						EndIf
 						; ~ Reset the doors after leaving the forest
 						For i = 0 To 1
-							If fr\ForestDoors[i]\Open Then fr\ForestDoors[i]\Open = False
-							If fr\ForestDoors[i]\Locked <> 2 Then fr\ForestDoors[i]\Locked = 2
+							fr\ForestDoors[i]\Open = False
+							fr\ForestDoors[i]\Locked = 2
 						Next
 						
 						If e\room\RoomDoors[0]\Open Then
