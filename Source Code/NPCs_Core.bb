@@ -133,7 +133,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeGuard
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "human")
+			n\NVGName = GetLocalString("npc", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -149,7 +149,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeMTF
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "human")
+			n\NVGName = GetLocalString("npc", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -171,7 +171,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "human")
+			n\NVGName = GetLocalString("npc", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -256,7 +256,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType049_2
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "human")
+			n\NVGName = GetLocalString("npc", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -276,7 +276,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "apache")
+			n\NVGName = GetLocalString("npc", "apache")
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			n\Collider = CreatePivot()
@@ -322,7 +322,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType035_Tentacle
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "undefine")
+			n\NVGName = GetLocalString("npc", "undefine")
 			
 			n\Collider = CreatePivot()
 			
@@ -336,7 +336,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType860_2
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "undefine")
+			n\NVGName = GetLocalString("npc", "undefine")
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.25)
@@ -426,7 +426,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType1499_1
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "undefine")
+			n\NVGName = GetLocalString("npc", "undefine")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -443,7 +443,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCType008_1
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "human")
+			n\NVGName = GetLocalString("npc", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -465,7 +465,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[End Block]
 		Case NPCTypeClerk
 			;[Block]
-			n\NVGName = GetLocalString("npcs", "human")
+			n\NVGName = GetLocalString("npc", "human")
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.32)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -6611,109 +6611,109 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCType008_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			ConsoleMsg = GetLocalString("console", "spawn.008")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "008"))
 			;[End Block]
 		Case "049", "scp049", "scp-049", "plaguedoctor"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			If n_I\Curr049 = Null Then n_I\Curr049 = n
-			ConsoleMsg = GetLocalString("console", "spawn.049")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-049")
 			;[End Block]
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492", "049_2", "scp_049_2"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType049_2, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			ConsoleMsg = GetLocalString("console", "spawn.0492")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-049-2")
 			;[End Block]
 		Case "066", "scp066", "scp-066", "eric"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType066, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.066")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-066")
 			;[End Block]
 		Case "096", "scp096", "scp-096", "shyguy"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 5.0
 			If n_I\Curr096 = Null Then n_I\Curr096 = n
-			ConsoleMsg = GetLocalString("console", "spawn.096")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-096")
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType106, EntityX(me\Collider), EntityY(me\Collider) - 0.5, EntityZ(me\Collider))
 			n\State = -1.0
-			ConsoleMsg = GetLocalString("console", "spawn.106")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-106")
 			;[End Block]
 		Case "173", "scp173", "scp-173", "statue", "sculpture"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType173, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n_I\Curr173 = n
 			If n_I\Curr173\Idle = 3 Then n_I\Curr173\Idle = 0
-			ConsoleMsg = GetLocalString("console", "spawn.173")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-173")
 			;[End Block]
 		Case "372", "scp372", "scp-372", "pj", "jumper"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType372, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.372")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-173")
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType513_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.5131")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-513-1")
 			;[End Block]
 		Case "860-2", "8602", "scp860-2", "scp-860-2", "forestmonster", "scp8602"
 			;[Block]
-			CreateConsoleMsg(GetLocalString("console", "spawn.8602"), 255, 0, 0)
+			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-860-2"), 255, 0, 0)
 			;[End Block]
 		Case "939", "scp939", "scp-939"
-			CreateConsoleMsg(GetLocalString("console", "spawn.939"), 255, 0, 0)
+			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), GetLocalString("npc", "939")), 255, 0, 0)
 			;[End Block]
 		Case "966", "scp966", "scp-966", "sleepkiller"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType966, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.966")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "966"))
 			;[End Block]
 		Case "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a", "earbear"
 			;[Block]
-			CreateConsoleMsg(GetLocalString("console", "spawn.1048a"), 255, 0, 0)
+			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-1048-A"), 255, 0, 0)
 			;[End Block]
 		Case "1048", "scp1048", "scp-1048", "scp-1048", "bear", "builderbear"
 			;[Block]
-			CreateConsoleMsg(GetLocalString("console", "spawn.1048"), 255, 0, 0)
+			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-1048"), 255, 0, 0)
 			;[End Block]
 		Case "1499-1", "14991", "scp-1499-1", "scp1499-1", "scp-14991", "scp14991"
 			n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.14991")
+			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-1499-1"), 255, 0, 0)
 			;[End Block]
 		Case "class-d", "classd", "d"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeD, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.classd")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "dclass"))
 			;[End Block]
 		Case "guard"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeGuard, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.guard")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "guard"))
 			;[End Block]
 		Case "mtf", "ntf"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeMTF, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.mtf")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "mtf"))
 			;[End Block]
 		Case "apache", "helicopter"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeApache, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.apache")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "apache"))
 			;[End Block]
 		Case "tentacle", "scp035tentacle", "scp-035tentacle", "scp-035-tentacle", "scp035-tentacle"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType035_Tentacle, EntityX(me\Collider), EntityY(me\Collider) - 0.12, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.tentacle")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "tentacle"))
 			;[End Block]
 		Case "clerk", "woman"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeClerk, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = GetLocalString("console", "spawn.clerk")
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "clerk"))
 			;[End Block]
 		Default 
 			;[Block]

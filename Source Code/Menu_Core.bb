@@ -3372,25 +3372,23 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 		HasForest = False
 		HasMT = False
 	EndIf
-	Txt[1] = GetLocalString("creator", "author") + Author
-	Txt[2] = GetLocalString("creator", "desc") + Descr
+	Txt[1] = Format(GetLocalString("creator", "author"), Author)
+	Txt[2] = Format(GetLocalString("creator", "desc"), Descr)
 	If rAmount > 0 Then
-		Txt[3] = GetLocalString("creator", "ramount") + rAmount
+		Txt[3] = Format(GetLocalString("creator", "ramount"), rAmount)
 	Else
-		Txt[3] = GetLocalString("creator", "ramount.unknown")
+		Txt[3] = Format(GetLocalString("creator", "ramount"), GetLocalString("creator", "unknown"))
 	EndIf
 	If HasForest Then
-		Temp = GetLocalString("creator", "yes")
+		Txt[4] = Format(GetLocalString("creator", "forest"), GetLocalString("creator", "yes"))
 	Else
-		Temp = GetLocalString("creator", "no")
+		Txt[4] = Format(GetLocalString("creator", "forest"), GetLocalString("creator", "no"))
 	EndIf
-	Txt[4] = Format(GetLocalString("creator", "forest"), Temp)
 	If HasMT Then
-		Temp = GetLocalString("creator", "yes")
+		Txt[5] = Format(GetLocalString("creator", "mt"), GetLocalString("creator", "yes"))
 	Else
-		Temp = GetLocalString("creator", "no")
+		Txt[5] = Format(GetLocalString("creator", "mt"), GetLocalString("creator", "no"))
 	EndIf
-	Txt[5] = Format(GetLocalString("creator", "mt"), Temp)
 	
 	Lines = GetLineAmount(Txt[2], fW, fH)
 	RenderFrame(x, y, Width, (StringHeight(Txt[0]) * 6) + StringHeight(Txt[2]) * Lines + (5 * MenuScale))

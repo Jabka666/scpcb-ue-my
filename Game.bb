@@ -54,6 +54,7 @@ Include "Source Code\INI_Core.bb"
 
 LoadOptionsINI()
 SetLanguage(opt\Language)
+InitKeyNames()
 
 Include "Source Code\Main_Core.bb"
 
