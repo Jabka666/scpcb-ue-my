@@ -89,6 +89,7 @@ Bug fixes:
 - Fixed sound path for some SCP-294 drinks.
 - Fixed the framelimit not working properly.
 - Fixed a wrong sound of the wooden doors.
+- Fixed a loading text's color timer getting out of sync.
 
 - Hopefully fixed height of NPCs teleportation.
 
