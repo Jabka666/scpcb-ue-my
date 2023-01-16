@@ -1991,57 +1991,42 @@ Function InitLoadingScreens%(File$)
 	CloseFile(f)
 End Function
 
-Type LoadingTextColor
-	Field R#, G#, B#
-	Field ChangeColor%
-End Type
-
-Function InitLoadingTextColor.LoadingTextColor(R%, G%, B%)
-	Local ltc.LoadingTextColor
-	
-	ltc.LoadingTextColor = New LoadingTextColor
-	ltc\R = R : ltc\G = G : ltc\B = B
-	Return(ltc)
-End Function
-
-Function DeInitLoadingTextColor%(ltc.LoadingTextColor)
-	Delete(ltc)
-End Function
+Global TextR# = 0.0, TextG# = 0.0, TextB# = 0.0
+Global ChangeColor%
 
 Function RenderLoadingText%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
-	Local ltc.LoadingTextColor
+	If TextR = 0.0 Then
+		ChangeColor = True
+	ElseIf TextR = 255.0
+		ChangeColor = False
+	EndIf
 	
-	For ltc.LoadingTextColor = Each LoadingTextColor
-		If ltc\R = 0.0 Then
-			ltc\ChangeColor = True
-		ElseIf ltc\R = 255.0
-			ltc\ChangeColor = False
-		EndIf
-		
-		If (Not ltc\ChangeColor) Then
-			ltc\R = Max(0.0, ltc\R - 3.0)
-			ltc\G = Max(0.0, ltc\G - 3.0)
-			ltc\B = Max(0.0, ltc\B - 3.0)
-		Else
-			ltc\R = Min(ltc\R + 3.0, 255.0)
-			ltc\G = Min(ltc\G + 3.0, 255.0)
-			ltc\B = Min(ltc\B + 3.0, 255.0)
-		EndIf
-		SetFont2(fo\FontID[Font_Default])
-		Color(ltc\R, ltc\G, ltc\B)
-		Text2(x, y, Txt, AlignX, AlignY)
-	Next
+	If (Not ChangeColor) Then
+		TextR = Max(0.0, TextR - 3.0)
+		TextG = Max(0.0, TextG - 3.0)
+		TextB = Max(0.0, TextB - 3.0)
+	Else
+		TextR = Min(TextR + 3.0, 255.0)
+		TextG = Min(TextG + 3.0, 255.0)
+		TextB = Min(TextB + 3.0, 255.0)
+	EndIf
+	SetFont2(fo\FontID[Font_Default])
+	Color(TextR, TextG, TextB)
+	Text2(x, y, Txt, AlignX, AlignY)
+End Function
+
+Function ResetLoadingTextColor%()
+	TextR = 0.0 : TextG = 0.0 : TextB = 0.0
 End Function
 
 Function RenderLoading%(Percent%, Assets$ = "")
 	Local x%, y%, Temp%, FirstLoop%
-	Local ls.LoadingScreens, ltc.LoadingTextColor
+	Local ls.LoadingScreens
 	
 	HidePointer()
 	
 	If Percent = 0 Then
 		LoadingScreenText = 0
-		InitLoadingTextColor(255, 255, 255)
 		
 		Temp = Rand(LoadingScreenAmount)
 		For ls.LoadingScreens = Each LoadingScreens
@@ -2221,7 +2206,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		Local Close% = False
 		
 		If GetKey() <> 0 Lor MouseHit(1) Then
-			DeInitLoadingTextColor(ltc)
+			ResetLoadingTextColor()
 			ResetInput()
 			ResetTimingAccumulator()
 			SetFont2(fo\FontID[Font_Default])

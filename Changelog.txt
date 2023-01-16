@@ -12,6 +12,7 @@ General:
 - Added a blood decal after killing the player.
 - Added buttons for containment door in SCP-049's containment chamber.
 - Added dropping items without closing inventory with right click.
+- Added PRESS ANY KEY TO CONTINUE string while playing startup videos.
 
 - Removed «Playmusic» console command.
 

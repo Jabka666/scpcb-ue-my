@@ -2867,7 +2867,7 @@ Function UpdateEvents%()
 								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < PowTwo(300.0 * RoomScale) And (Not me\Terminated) And (Not chs\NoTarget) Then
 									StopChannel(e\SoundCHN) : e\SoundCHN = 0
 									e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[1], 4.0, 0.5)
-									If (e\room\NPC[0] = Null) Or (e\room\NPC[0]\IsDead) Then e\EventState = 1.0
+									If (e\room\NPC[0] = Null) Lor e\room\NPC[0]\IsDead Then e\EventState = 1.0
 								EndIf
 							EndIf
 							For n.NPCs = Each NPCs

@@ -437,7 +437,7 @@ End Function
 
 Function RenderBlur%(Power#)
 	EntityAlpha(ArkBlurImage, Power)
-	CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - (opt\GraphicWidth / 2), SMALLEST_POWER_TWO_HALF - (opt\GraphicHeight / 2), BackBuffer(), TextureBuffer(ArkBlurTexture))
+	CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
 
 Function FreeBlur%()
@@ -448,9 +448,12 @@ End Function
 Function PlayStartupVideos%()
 	HidePointer()
 	
+	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
+	
 	Local ScaledGraphicHeight%
 	Local Ratio# = Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)
 	
+	; ~ TODO: Rework scaling for 4k resolutions
 	If Ratio > 1.76 And Ratio < 1.78 Then
 		ScaledGraphicHeight = opt\RealGraphicHeight
 	Else
@@ -486,10 +489,18 @@ Function PlayStartupVideos%()
 		Repeat
 			Cls()
 			DrawMovie(Movie, 0, (opt\RealGraphicHeight / 2 - ScaledGraphicHeight / 2), opt\RealGraphicWidth, ScaledGraphicHeight)
+			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
 			Flip()
-		Until (GetKey() Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)))
-		StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
-		CloseMovie(Movie)
+			
+			Local Close% = False
+			
+			If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)) Then
+				ResetLoadingTextColor()
+				StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
+				CloseMovie(Movie)
+				Close = True
+			EndIf
+		Until Close
 		
 		Cls()
 		Flip()

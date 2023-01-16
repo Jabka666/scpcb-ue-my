@@ -136,7 +136,7 @@ InitLoadingScreens(LoadingScreensFile)
 
 Const FontsPath$ = "GFX\Fonts\"
 
-fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
+If (Not opt\PlayStartup) Then fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
 fo\FontID[Font_Default_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default_Big", "File"), GetFileLocalString(FontsFile, "Default_Big", "Size"))
 fo\FontID[Font_Digital] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital", "File"), GetFileLocalString(FontsFile, "Digital", "Size"))
 fo\FontID[Font_Digital_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital_Big", "File"), GetFileLocalString(FontsFile, "Digital_Big", "Size"))
@@ -7810,8 +7810,6 @@ Function InitCredits%()
 		me\CreditsScreen = ScaleImage2(me\CreditsScreen, MenuScale, MenuScale)
 	EndIf
 	
-	InitLoadingTextColor(255, 255, 255)
-	
 	Repeat
 		l = ReadLine(File)
 		cl.CreditsLine = New CreditsLine
@@ -7823,7 +7821,7 @@ Function InitCredits%()
 End Function
 
 Function UpdateCredits%()
-	Local cl.CreditsLine, LastCreditLine.CreditsLine, ltc.LoadingTextColor
+	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = ((me\EndingTimer + 2000.0) / 2) + (opt\GraphicHeight + 10.0)
 	Local ID%
 	Local EndLinesAmount%
@@ -7854,12 +7852,12 @@ Function UpdateCredits%()
 	If GetKey() <> 0 Lor MouseHit(1) Then me\CreditsTimer = -1.0
 	
 	If me\CreditsTimer = -1.0 Then
-		DeInitLoadingTextColor(ltc)
 		Delete Each CreditsLine
 		NullGame(False)
 		StopStream_Strict(MusicCHN) : MusicCHN = 0
 		ShouldPlay = 21
 		CurrSave = Null
+		ResetLoadingTextColor()
 		ResetInput()
 		Return
 	EndIf

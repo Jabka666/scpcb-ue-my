@@ -369,9 +369,8 @@ Function UpdateLauncherScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidt
 	
 	Local MouseSpeedZ# = MouseZSpeed()
 	
-	If MouseSpeedZ <> 0.0 Then ; ~ Only for vertical scroll bars
-		Return(Min(Max(Bar - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
-	EndIf
+	; ~ Only for vertical scroll bars
+	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Bar - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
 	
 	Return(Bar)
 End Function
@@ -466,5 +465,4 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#6B
 ;~C#Blitz3D
