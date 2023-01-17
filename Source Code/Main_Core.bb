@@ -179,6 +179,7 @@ Type Player
 	Field Collider%, Head%
 	Field StopHidingTimer#
 	Field Funds%, UsedMastercard%
+	Field EscapeTimer%
 End Type
 
 Global me.Player = New Player
@@ -2141,6 +2142,7 @@ Function UpdateGame%()
 			UpdateMouseLook()
 			UpdateMoving()
 			UpdateVomit()
+			UpdateEscapeTimer()
 			InFacility = CheckForPlayerInFacility()
 			CurrStepSFX = 0
 			If RN = "dimension_1499" Then
@@ -5702,6 +5704,7 @@ Function RenderDebugHUD%()
 			
 			Text2(x + (380 * MenuScale), y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
 			Text2(x + (380 * MenuScale), y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
+			Text2(x + (380 * MenuScale), y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), me\EscapeTimer))
 			;[End Block]
 		Case 3
 			;[Block]
@@ -7769,11 +7772,17 @@ Function RenderEnding%()
 						AchievementsUnlocked = AchievementsUnlocked + achv\Achievement[i]
 					Next
 					
+					Local EscapeSeconds% = me\EscapeTimer Mod 60
+					Local EscapeMinutes% = Floor(me\EscapeTimer / 60)
+					Local EscapeHours% = Floor(EscapeMinutes / 60)
+					EscapeMinutes = EscapeMinutes - (EscapeHours * 60)
+					
 					Text2(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
 					Text2(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), MAXACHIEVEMENTS, "{1}"))
 					Text2(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomAmount, "{1}"))
 					Text2(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocAmount, "{1}"))
 					Text2(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
+					Text2(x, y + (100 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
 				Else
 					RenderMenu()
 				EndIf
@@ -8780,6 +8789,28 @@ Function UpdateVomit%()
 	EndIf
 	
 	CatchErrors("UpdateVomit")
+End Function
+
+Global EscapeSecondsTimer# = 70.0
+
+Function UpdateEscapeTimer%()
+	CatchErrors("Uncaught (UpdateEscapeTimer)")
+	
+	For ev.Events = Each Events
+		If ev\room = PlayerRoom Then
+			If ev\EventName = "cont1_173_intro" Then Return
+			Exit
+		EndIf
+	Next
+	
+	EscapeSecondsTimer = EscapeSecondsTimer - fps\Factor[0]
+	
+	If EscapeSecondsTimer <= 0 Then
+		me\EscapeTimer = me\EscapeTimer + 1
+		EscapeSecondsTimer = 70.0
+	EndIf
+	
+	CatchErrors("UpdateEscapeTimer")
 End Function
 
 Function Update008%()

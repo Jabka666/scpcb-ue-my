@@ -494,6 +494,8 @@ Function SaveGame%(File$)
 		WriteByte(f, itt\Found)
 	Next
 	
+	WriteInt(f, me\EscapeTimer)
+	
 	CloseFile(f)
 	
 	If (Not MenuOpen) And (Not MainMenuOpen) Then
@@ -1260,6 +1262,8 @@ Function LoadGame%(File$)
 		itt\Found = ReadByte(f)
 	Next
 	
+	me\EscapeTimer = ReadInt(f)
+	
 	Local Dist#, Dist2#
 	
 	For do.Doors = Each Doors
@@ -2000,6 +2004,8 @@ Function LoadGameQuick%(File$)
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = ReadByte(f)
 	Next
+	
+	me\EscapeTimer = ReadInt(f)
 	
 	Local Dist#, Dist2#
 	
