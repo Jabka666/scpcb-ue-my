@@ -493,6 +493,8 @@ Function SaveGame%(File$)
 	For itt.ItemTemplates = Each ItemTemplates
 		WriteByte(f, itt\Found)
 	Next
+
+	WriteInt(f, me\EscapeTimer)
 	
 	CloseFile(f)
 	
@@ -1259,6 +1261,8 @@ Function LoadGame%(File$)
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = ReadByte(f)
 	Next
+
+	me\EscapeTimer = ReadInt(f)
 	
 	Local Dist#, Dist2#
 	
@@ -2000,6 +2004,8 @@ Function LoadGameQuick%(File$)
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = ReadByte(f)
 	Next
+
+	me\EscapeTimer = ReadInt(f)
 	
 	Local Dist#, Dist2#
 	
