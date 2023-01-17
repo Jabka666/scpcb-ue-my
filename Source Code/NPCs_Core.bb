@@ -1565,7 +1565,7 @@ Function UpdateNPCs%()
 																If Inventory(i) <> Null Then
 																	If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
 																		wi\HazmatSuit = 0 : DropItem(Inventory(i))
-																		CreateMsg(GetLocalString("msg", "hazmat.forceremoved"))
+																		CreateMsg(GetLocalString("msg", "suit.destroyed"))
 																		Exit
 																	EndIf
 																EndIf
