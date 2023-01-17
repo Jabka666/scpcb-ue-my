@@ -115,7 +115,7 @@ General:
 - The player must use SCP-513 to get an achievement.
 - SCP-914 changes:
 	- Added new refinement for SCP-500.
-	- SCP-914 is now slightly rebalanced;
+	- SCP-914 is now slightly rebalanced.
 	
 - Optimized game.
 
@@ -155,9 +155,9 @@ Bug Fixes:
 	- Fixed messages while using echo sound.
 	- Fixed an issue where SCP-966 had one extra frame of idle animation while chasing the player.
 - Fixes for SCP-294:
-    	- Fixed wrong color of the drinks refined in SCP-914.
-    	- Fixed multipliers for drinks effects.
-    	- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
+		- Fixed wrong color of the drinks refined in SCP-914.
+		- Fixed multipliers for drinks effects.
+		- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
 	- Fixed a bug where SCP-294 didn't remove a master card from inventory while using.
 	- Fixed SCP-008 and SCP-409 cups resetting their effects.
 	- Fixed SCP-294 sometimes giving the wrong drink.
@@ -166,10 +166,10 @@ Bug Fixes:
 - Fixed a bug where fog color was stored in memory every time.
 - Fixed ticket model.
 - Fixes for SCP-860-1:
-    	- Fixed missing dark fog color.
-    	- Fixed Izumi sprite shifting one pixel to the left when blinking.
-    	- Fixed incorrect position of Izumi logs.
-    	- Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
+		- Fixed missing dark fog color.
+		- Fixed Izumi sprite shifting one pixel to the left when blinking.
+		- Fixed incorrect position of Izumi logs.
+		- Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
 	- Fixed SCP-860-1 branches wrapping around the grid border and creating unreachable tiles.
 	- Fixed a bug causing Logs inside SCP-860-1 to have a wrong scale after loading the game.
 - Fixes for SCP-1162-ARC:
@@ -339,15 +339,15 @@ Bug Fixes:
 - Fixed ability to save the game on endings. 
 - Fixes for SCP-1499's dimension:
 	- Fixed double first chunk.
-    	- Fixed chunk objects spawn.
+		- Fixed chunk objects spawn.
 - Fixed the game doesn't load door positions properly.
 - Fixed doors in «room2_servers_hcz».
 - Fixed SCP-1048's paper texture.
 - Fixed refinements for clipboard and wallet.
 - Fixed wrong interface scaling.
 - Fixes for SCP-294:
-    	- Fixed keypad isn't accurate.
-    	- Fixed duplicate buttons.
+		- Fixed keypad isn't accurate.
+		- Fixed duplicate buttons.
 - Fixed keypad button interface isn't accurate.
 - Fixed items in the wallet/clipboard aren't clickable/hard to click.
 - Fixed ticket model.
@@ -425,17 +425,17 @@ Menu:
 	- SCP-008, SCP-148, SCP-1048, SCP-1048-A.
 
 - Improved console:
-	- Added new commands:
-		- 106retreat;
-		- money or rich;
-		- doorcontrol;
-		- unlockcheckpoints;
-		- resetfunds;
-		- newyear;
-		- noblink or nb;
-		- debughud (game/player/scps);
-		- clear or cls;
-		- codes;
+	- Added new console commands:
+		- 106retreat.
+		- money or rich.
+		- doorcontrol.
+		- unlockcheckpoints.
+		- resetfunds.
+		- newyear.
+		- noblink or nb.
+		- debughud (game/player/scps).
+		- clear or cls.
+		- codes.
 	- Added more names for NPCs.
 	- Added short names for some commands.
 
@@ -445,7 +445,7 @@ Menu:
 
 	- Renamed some item names (each item has own ID now).
 
-	- Reworked «Asd» command.
+	- Reworked «asd» console command.
 	
 - Removed unnecesary files.
 
@@ -500,7 +500,7 @@ NPCs:
 - Improved D-Class animations.
 - Improved MTF AI.
 - Improved guard and SCP-049-2 helmet texture.
-- Improved CI model.	
+- Improved CI model.
 
 - Nerfed SCP-500-01.
 
@@ -532,9 +532,9 @@ Rooms:
 - Improved bump textures.
 - Improved rooms design.
 	- Added new props:
-		- System unit;
-		- Yucca bush;
-		- Computer mouse;
+		- System unit.
+		- Yucca bush.
+		- Computer mouse.
 		- Water cooler.
 	- Added observation room for SCP-914's containment chamber.
 	- Added observation room signs.
@@ -624,7 +624,7 @@ Bug Fixes:
 	- Fixed head poking out of its box when recontained by the MTFs.
 	- Fixed distance on S-NAV Ultimate.
 	- Fixed SCP-173 not breaking the glass in the Light Containment Zone test room event if the player looked away.
-- Fixed breath sound while using «NoClip» command.
+- Fixed breath sound while using «noclip» console command.
 - Fixed button sound not working when not using launcher.
 - Fixed annoying secondary lighting lever in the Electrical Center.
 - Fixed messages being visible in the pause menu or console.
@@ -633,7 +633,7 @@ Bug Fixes:
 - Fixed launcher options not saving when quitting.
 - Fixed security camera bases rotating with the cameras.
 - Fixed inventory not being fully centered while using clipboard/wallet.
-- Fixed button positions.
+- Fixed positions of some buttons.
 - Fixed message being moved down if selecting a document, while a clipboard/wallet is open.
 - Fixed brightness of the buttons guarded by 4-digit pass code.
 - Fixed door types in HCZ checkpoints-endrooms.
@@ -643,20 +643,22 @@ Bug Fixes:
 - Fixed light rendering through wooden doors.
 - Fixed time not being bound to FPS correctly.
 - Fixed input boxes displaying too many characters for a frame, if too many characters are entered.
-- Fixed an exploit allowing the player to avoid SCP-1025 resetting by opening the inventory.
-- Fixed being able to walk/run while getting up from bed in the intro sequence.
+- Fixes for SCP-1025:
+	- Fixed an exploit allowing the player to avoid SCP-1025 resetting by opening the inventory.
+	- Fixed SCP-1025's appendicitis messages not showing up.
 - Fixed multiple items appearing to be worn, when multiple items of the same type are held.
 - Fixes for SCP-966:
 	- Fixed SCP-966's walking animations.
 	- Fixed echo sound spamming.
-- Fixed SCP-1025's appendicitis messages not showing up.
-- Fixed being able to see SCP-1048 disappearing in Heavy Containment Zone test room when using the keycard scanner.
+- Fixed being able to see SCP-1048 disappearing in Heavy Containment Zone test room when using the scanner.
 - Fixed inventory single clicks being recognized as double clicks.
-- Fixed SCP-895 and NVG interaction.
-- Fixed NVG not working against temporary blackouts.
+- Fixes for NVG:
+	- Fixed SCP-895 and NVG interaction.
+	- Fixed NVG not working against temporary blackouts.
 - Fixed refined items of which the base version requires batteries being broken when spawned via command and removed the commands that acted as workarounds.
 - Fixed Right and Down movement always overriding Left and Up movement.
 - Fixes for intro sequence:
+	- Fixed being able to walk/run while getting up from bed in the intro sequence.
 	- Fixed decals disappearing after the intro sequence.
 	- Fixed animation of balcony guard.
 	- Fixed gurads not shooting at the player if the music guard has been triggered.
@@ -667,27 +669,27 @@ Bug Fixes:
 	- Fixed MTFs not announcing blinking or the presence of SCP-049-2.
 	- Fixed missing P90 texture on the scope.
 	- Fixed MTF SCP-049-2 voicelines not having a radio filter.
-	- Fixed MTF spawning triggers outside Entrance Zone. 
+	- Fixed MTF spawning triggers outside Entrance Zone.
+	- Fixed «stopsound» or «stfu» console command not stopping the MTF announcements.
 - Fixed keycard, origami, SCP-513-1 models.
 - Fixed breath sound while wearing SCP-714.
-- Fixed and reworked the «Revive» command.
-- Fixed tentacles, SCP-205, SCP-966, SCP-1048-A, SCP-066, SCP-860-2, SCP-049, the Pocket Dimension plane and guards at some points not respecting the «NoTarget» command.
-- Fixed stopsound not stopping the MTF announcements.
+- Fixed and reworked the «revive» console command.
+- Fixed tentacles, SCP-205, SCP-966, SCP-1048-A, SCP-066, SCP-860-2, SCP-049, the Pocket Dimension plane and guards at some points not respecting the «notarget» command.
 - Fixed wrong paper texture on the props.
 - Fixed SCP-079 door sound in the Surveillance Room.
 - Fixed step sounds not being recognized correctly.
-- Fixed flying assets at the world center.
+- Fixed flying models in the center of the world.
 - Fixed ability to open menu and inventory while cutscenes.
 - Fixed SCP-096 can't be triggered through the glass.
 - Fixed missing waypoints.
 - Fixed MAVs in SCP-1499 dimension and SCP-205's containment chamber after loading a save file.
 - Fixed blink and stamina timers not being saved.
-- Fixed item positions.
+- Fixed positions of some items.
 - Fixed paper texture on the spawned clipboard.
 - Fixed broken textures, missing room props and lights.
 - Fixed decontamination gateway triggers.
 - Fixed severed hand scale.
-- Fixed room descriptions.
+- Fixed descriptions of some rooms.
 - Fixed decals size not being saved correctly.
 - Fixed double corrosion decal in the Emily Ross event.
 - Fixed menu buttons have wrong width and height.
@@ -696,5 +698,4 @@ Bug Fixes:
 - Fixed smoke doesn't interact with fog.
 - Fixed wrong decal blend in the Pocket Dimension.
 - Fixed a bug where auto closing is applied for locked doors.
-- Fixed some item positions near the glass.
 - Fixed ability to select an item without any effect.
