@@ -2287,7 +2287,7 @@ Function LoadSavedMaps%()
 						SavedMapsAuthor(i) = ReadLine(f)
 						CloseFile(f)
 					Else
-						SavedMapsAuthor(i) = GetLocalString("save", "map.author.unknown")
+						SavedMapsAuthor(i) = GetLocalString("creator", "unknown")
 					EndIf
 					i = i + 1
 				EndIf

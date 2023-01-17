@@ -49,6 +49,7 @@ Function SetLanguage%(Language$)
 		SplitSpace = ""
 	EndIf
 	opt\Language = Language
+	InitKeyNames()
 End Function
 
 Function LanguageSelector%()
