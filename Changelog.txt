@@ -13,6 +13,7 @@ General:
 - Added buttons for containment door in SCP-049's containment chamber.
 - Added dropping items without closing inventory with right click.
 - Added PRESS ANY KEY TO CONTINUE string while playing startup videos.
+- Added escape time.
 
 - Removed «Playmusic» console command.
 

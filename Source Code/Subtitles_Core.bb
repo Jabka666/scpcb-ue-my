@@ -7,8 +7,8 @@ Const THIRD_PERSON% = 3
 ;[End Block]
 
 Type Subtitles
-	Field Txt$[THIRD_PERSON + 1]
-	Field Timer#[THIRD_PERSON + 1]
+	Field Txt$[4]
+	Field Timer#[4]
 End Type
 
 Function UpdateSubtitles%()

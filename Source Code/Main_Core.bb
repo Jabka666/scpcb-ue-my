@@ -7775,6 +7775,7 @@ Function RenderEnding%()
 					Local EscapeSeconds% = me\EscapeTimer Mod 60
 					Local EscapeMinutes% = Floor(me\EscapeTimer / 60)
 					Local EscapeHours% = Floor(EscapeMinutes / 60)
+					
 					EscapeMinutes = EscapeMinutes - (EscapeHours * 60)
 					
 					Text2(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
