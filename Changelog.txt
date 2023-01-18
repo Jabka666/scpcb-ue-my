@@ -37,6 +37,8 @@ Rooms:
 
 - Dr. L's office harm player like inside the Pocket Dimension.
 
+- Returned "Pipes_NoRust" texture.
+
 Items:
 - Added a new gas mask variation: gas mask without fogging.
 

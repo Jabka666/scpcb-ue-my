@@ -101,6 +101,7 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	EntityFX(p\OBJ, FX)
 	If Texture <> "" Then
 		Tex = LoadTexture_Strict(Texture)
+		If opt\Atmosphere Then TextureBlend(Tex, 5)
 		EntityTexture(p\OBJ, Tex)
 		DeleteSingleTextureEntryFromCache(Tex)
 	EndIf
@@ -6345,6 +6346,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ The door leading to 3-11 cell
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
+			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			r\RoomDoors.Doors[4] = CreateDoor(r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0, r)
 			r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\DisableWaypoint = True : r\RoomDoors[4]\MTFClose = False
 			EntityTexture(r\RoomDoors[4]\OBJ, Tex)
@@ -7756,16 +7758,14 @@ Function HideRoomsNoColl%(room.Rooms)
 		Next
 		
 		For d.Doors = Each Doors
-			If d <> Null Then
-				If d\room = room Then
-					HideEntity(d\OBJ)
-					If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
-					For j = 0 To 1
-						If d\Buttons[j] <> 0 Then HideEntity(d\Buttons[j])
-						If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
-					Next
-					HideEntity(d\FrameOBJ)
-				EndIf
+			If d\room = room Then
+				HideEntity(d\OBJ)
+				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
+				For j = 0 To 1
+					If d\Buttons[j] <> 0 Then HideEntity(d\Buttons[j])
+					If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
+				Next
+				HideEntity(d\FrameOBJ)
 			EndIf
 		Next
 		
@@ -7803,16 +7803,14 @@ Function ShowRoomsNoColl%(room.Rooms)
 		Next
 		
 		For d.Doors = Each Doors
-			If d <> Null Then
-				If d\room = room Then
-					ShowEntity(d\OBJ)
-					If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
-					For j = 0 To 1
-						If d\Buttons[j] <> 0 Then ShowEntity(d\Buttons[j])
-						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
-					Next
-					ShowEntity(d\FrameOBJ)
-				EndIf
+			If d\room = room Then
+				ShowEntity(d\OBJ)
+				If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
+				For j = 0 To 1
+					If d\Buttons[j] <> 0 Then ShowEntity(d\Buttons[j])
+					If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
+				Next
+				ShowEntity(d\FrameOBJ)
 			EndIf
 		Next
 		
