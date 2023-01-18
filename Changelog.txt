@@ -21,7 +21,7 @@ General:
 
 - Converted .ini files to UTF-8 format.
 - Finally made the «Bright mode» similar to original game.
-- Can no longer save inside the gate elevators, the Pocket Dimension and inside elevators.
+- Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
 
 - Optimized game a lot.
 
