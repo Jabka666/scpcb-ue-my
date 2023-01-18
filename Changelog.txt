@@ -19,10 +19,8 @@ General:
 
 - Improved fluid step sounds.
 
-- Finally made the «Bright mode» similar to original game.
-
 - Converted .ini files to UTF-8 format.
-
+- Finally made the «Bright mode» similar to original game.
 - Can no longer save inside the gate elevators, the Pocket Dimension and inside elevators.
 
 - Optimized game a lot.
@@ -30,13 +28,12 @@ General:
 Rooms:
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
 
-- Batteries on the map are now randomized.
-
 - Improved SCP-096's containment chamber design.
 - Improved «room1_archive» room's design.
 
 - Tiny corrections for rooms description.
 
+- Batteries on the map are now randomized.
 - Dr. L's office harm player like inside the Pocket Dimension.
 
 - Returned "Pipes_NoRust" texture.
@@ -44,13 +41,12 @@ Rooms:
 Items:
 - Added a new gas mask variation: gas mask without fogging.
 
-- S-NAV 310 and blue NVG require now an 18V Battery.
-
 - Renamed some console item names.
 
+- S-NAV 310 and blue NVG require now an 18V Battery.
 - Tiny battery rebalance for SCRAMBLE Gear.
-
 - Nerfed NVG fog distance from 30 to 17.
+- The white pill now cures the Common Cold.
 
 Menu:
 - Added degree symbol for FOV value.
@@ -62,7 +58,6 @@ Menu:
 
 NPCs:
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
-
 - SCP-035's victim now slowly hurts player.
 
 Map Creator:
@@ -96,6 +91,7 @@ Bug fixes:
 - Fixed a wrong sound of the wooden doors.
 - Fixed a loading text's color timer getting out of sync.
 - Fixed images disappearing after using ALT+TAB.
+- Fixed a white pill not being be put in the wallet.
 
 - Hopefully fixed height of NPCs teleportation.
 
@@ -141,7 +137,6 @@ NPCs:
 - Changed SCP-049 eyes glow to blue.
 
 - Tiny rebalance for MTF's shooting.
-
 - Decreased detect distance for MTF.
 
 Rooms:
@@ -457,8 +452,9 @@ Menu:
 - Improved SCP-682 and Night Vision Goggles loading screens.
 - Improved loading screen itself.
 
-- Using the «ESC» button has «BACK» button effect.
 - Changed the name of the «Custom» difficulty to «Esoteric».
+
+- Using the «ESC» button has «BACK» button effect.
 
 NPCs:
 - Added new SCP-1048 drawings.
@@ -507,8 +503,6 @@ NPCs:
 - Improved guard and SCP-049-2 helmet texture.
 - Improved CI model.
 
-- Nerfed SCP-500-01.
-
 - Changed SCP-049's model.
 	- Also changed eyes to blue.
 - Changed SCP-372's model.
@@ -518,6 +512,7 @@ NPCs:
 - Combined SCP-1048 and SCP-1048 Pen models.
 - Combined texture for SCP-173's cell.
 
+- Nerfed SCP-500-01.
 - SCP-1123 can be picked up.
 
 Rooms:
@@ -575,7 +570,6 @@ Items:
 - Added messages for eye drops.
 
 - Rebalanced the S-NAVs.
-
 - The Master Card can be used in SCP-294.
 - The Hazmat Suit is now hunched over when put off.
 	- Also added unique overlay.
