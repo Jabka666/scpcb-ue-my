@@ -23,6 +23,8 @@ General:
 
 - Converted .ini files to UTF-8 format.
 
+- Can no longer save inside the gate elevators, the Pocket Dimension and inside elevators.
+
 - Optimized game a lot.
 
 Rooms:

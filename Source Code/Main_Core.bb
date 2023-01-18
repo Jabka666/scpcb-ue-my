@@ -2318,7 +2318,7 @@ Function UpdateGame%()
 		UpdateGUI()
 		
 		If KeyHit(key\INVENTORY) Then
-			If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 Then
+			If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 Then
 				Local W$ = ""
 				Local V# = 0.0
 				

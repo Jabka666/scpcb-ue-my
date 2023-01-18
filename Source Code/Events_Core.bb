@@ -6566,6 +6566,8 @@ Function UpdateEvents%()
 					If Dist < 0.25 Then
 						If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 						
+						me\Playable = False
+						
 						x = CurveValue(EntityX(e\room\OBJ), EntityX(me\Collider), 10.0)
 						y = CurveValue(EntityY(e\room\OBJ) - e\EventState2, EntityY(me\Collider), 25.0)
 						z = CurveValue(EntityZ(e\room\OBJ), EntityZ(me\Collider), 10.0)
@@ -6583,7 +6585,10 @@ Function UpdateEvents%()
 						EndIf
 						me\BlurTimer = e\EventState2 * 500.0
 						
-						If e\EventState2 = 2.0 Then MoveToPocketDimension()
+						If e\EventState2 = 2.0 Then
+							me\Playable = True
+							MoveToPocketDimension()
+						EndIf
 					EndIf
 				Else
 					e\EventState2 = 0.0
@@ -7920,6 +7925,8 @@ Function UpdateEvents%()
 								If Dist < 0.16 Then
 									If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 									
+									me\Playable = False
+									
 									x = CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityX(me\Collider), 10.0)
 									y = CurveValue(EntityY(e\room\RoomDoors[0]\FrameOBJ) - e\EventState2, EntityY(me\Collider), 25.0)
 									z = CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), 10.0)
@@ -7937,7 +7944,10 @@ Function UpdateEvents%()
 									EndIf
 									me\BlurTimer = e\EventState2 * 500.0
 									
-									If e\EventState2 = 2.0 Then MoveToPocketDimension()
+									If e\EventState2 = 2.0 Then
+										me\Playable = True
+										MoveToPocketDimension()
+									EndIf
 								EndIf
 							EndIf
 						EndIf
