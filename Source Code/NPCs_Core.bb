@@ -1059,7 +1059,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If me\FallTimer < -1.0 Then
-								CanSave = False
+								CanSave = 0
 								Sprint = 0.0
 							EndIf
 							
