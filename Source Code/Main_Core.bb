@@ -2712,7 +2712,7 @@ Function UpdateMoving%()
 				If me\ForceMove > 0.0 Then Speed = Speed * me\ForceMove
 				
 				If SelectedItem <> Null Then
-					If SelectedItem\ItemTemplate\TempName = "firstaid" Lor SelectedItem\ItemTemplate\TempName = "finefirstaid" Lor SelectedItem\ItemTemplate\TempName = "firstaid2" Then Sprint = 0.0
+					If (SelectedItem\ItemTemplate\TempName = "firstaid" Lor SelectedItem\ItemTemplate\TempName = "finefirstaid" Lor SelectedItem\ItemTemplate\TempName = "firstaid2") And wi\HazmatSuit = 0 Then Sprint = 0.0
 				EndIf
 				
 				Temp = (me\Shake Mod 360.0)
@@ -3070,9 +3070,9 @@ Function UpdateMouseLook%()
 		If (ScaledMouseX() > mo\Mouse_Right_Limit) Lor (ScaledMouseX() < mo\Mouse_Left_Limit) Lor (ScaledMouseY() > mo\Mouse_Bottom_Limit) Lor (ScaledMouseY() < mo\Mouse_Top_Limit) Then MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	EndIf
 	
-	If wi\GasMask > 0 Lor I_1499\Using > 0 Then
+	If wi\GasMask > 0 Lor wi\HazmatSuit > 0 Lor I_1499\Using > 0 Then
 		If (Not I_714\Using) Then
-			If wi\GasMask = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
+			If wi\GasMask = 3 Lor wi\HazmatSuit = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 		EndIf
 		If (Not me\Terminated) Then
 			If (Not ChannelPlaying(BreathCHN)) Then
@@ -3081,12 +3081,24 @@ Function UpdateMouseLook%()
 				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 			EndIf
 		EndIf
-		If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
 		
-		If wi\GasMask <> 2 Then
+		If wi\HazmatSuit > 0 Then
+			If wi\HazmatSuit = 1 Then me\Stamina = Min(60.0, me\Stamina)
+			If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
+		Else
+			If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
+		EndIf
+		
+		If wi\GasMask <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4 Then
 			; ~ TODO: Make more realistic
 			If ChannelPlaying(BreathCHN) Then
-				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.2, 1.0)), 100.0)
+				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.4, 1.5)), 100.0)
+			ElseIf wi\GasMask = 3 Lor wi\HazmatSuit = 3 Then
+				If me\CurrSpeed > 0.0 And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
+					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.2, 0.6)), 100.0)
+				Else
+					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
+				EndIf
 			Else
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 			EndIf
@@ -3099,17 +3111,8 @@ Function UpdateMouseLook%()
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
-		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
-	EndIf
-	
-	If wi\HazmatSuit > 0 Then
-		If wi\HazmatSuit = 1 Then me\Stamina = Min(60.0, me\Stamina)
-		If (Not I_714\Using) Then
-			If wi\HazmatSuit = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
-		EndIf
-		If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
-	Else
 		If (Not EntityHidden(t\OverlayID[2])) Then HideEntity(t\OverlayID[2])
+		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
 	EndIf
 	
 	If wi\BallisticHelmet Then
@@ -3629,11 +3632,6 @@ Function UpdateGUI%()
 						If mo\MouseHit1 Then
 							SelectedItem = Inventory(n)
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
-								If wi\HazmatSuit > 0 And (Not Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit")) Then
-									CreateMsg(GetLocalString("msg", "suit.use"))
-									SelectedItem = Null
-									Return
-								EndIf
 								If Inventory(n)\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[Inventory(n)\ItemTemplate\Sound])
 								InvOpen = False
 								mo\DoubleClick = False
@@ -3681,7 +3679,7 @@ Function UpdateGUI%()
 			If (Not mo\MouseDown1) Lor mo\MouseHit2 Then
 				If MouseSlot = 66 Then
 					Select SelectedItem\ItemTemplate\TempName
-						Case "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+						Case "vest", "finevest", "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 							;[Block]
 							CreateHintMsg(GetLocalString("msg", "takeoff"))
 							;[End Block]
@@ -4212,7 +4210,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp500pill"
 					;[Block]
-					If CanUseItem(False, True) Then
+					If CanUseItem(True) Then
 						GiveAchievement(Achv500)
 						
 						If I_008\Timer > 0.0 Then
@@ -4259,7 +4257,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "veryfinefirstaid"
 					;[Block]
-					If CanUseItem(False, True) Then
+					If CanUseItem(True) Then
 						Select Rand(5)
 							Case 1
 								;[Block]
@@ -4314,94 +4312,96 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
-					If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
-						CreateMsg(GetLocalString("msg", "aid.no"))
-						SelectedItem = Null
-						Return
-					Else
-						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
-						If (Not me\Crouch) Then SetCrouch(True)
-						
-						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)
-						
-						If SelectedItem\State = 100.0 Then
-							If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then
-								me\Bloodloss = 0.0
-								me\Injuries = Max(0.0, me\Injuries - 2.0)
-								If me\Injuries = 0.0 Then
-									CreateMsg(GetLocalString("msg", "aid.fine"))
-								ElseIf me\Injuries > 1.0
-									CreateMsg(GetLocalString("msg", "aid.bleed"))
-								Else
-									CreateMsg(GetLocalString("msg", "aid.sore"))
-								EndIf
-								RemoveItem(SelectedItem)
-							Else
-								me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 20.0))
-								If me\Injuries >= 2.5 Then
-									CreateMsg(GetLocalString("msg", "aid.toobad_1"))
-									me\Injuries = Max(2.5, me\Injuries - Rnd(0.3, 0.7))
-								ElseIf me\Injuries > 1.0
-									me\Injuries = Max(0.5, me\Injuries - Rnd(0.5, 1.0))
-									If me\Injuries > 1.0 Then
-										CreateMsg(GetLocalString("msg", "aid.toobad_2"))
+					If CanUseItem(True, True) Then
+						If me\Bloodloss = 0.0 And me\Injuries = 0.0 Then
+							CreateMsg(GetLocalString("msg", "aid.no"))
+							SelectedItem = Null
+							Return
+						Else
+							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+							If (Not me\Crouch) Then SetCrouch(True)
+							
+							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)
+							
+							If SelectedItem\State = 100.0 Then
+								If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then
+									me\Bloodloss = 0.0
+									me\Injuries = Max(0.0, me\Injuries - 2.0)
+									If me\Injuries = 0.0 Then
+										CreateMsg(GetLocalString("msg", "aid.fine"))
+									ElseIf me\Injuries > 1.0
+										CreateMsg(GetLocalString("msg", "aid.bleed"))
 									Else
-										CreateMsg(GetLocalString("msg", "aid.stop"))
+										CreateMsg(GetLocalString("msg", "aid.sore"))
 									EndIf
+									RemoveItem(SelectedItem)
 								Else
-									If me\Injuries > 0.5 Then
-										me\Injuries = 0.5
-										CreateMsg(GetLocalString("msg", "aid.slight"))
+									me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 20.0))
+									If me\Injuries >= 2.5 Then
+										CreateMsg(GetLocalString("msg", "aid.toobad_1"))
+										me\Injuries = Max(2.5, me\Injuries - Rnd(0.3, 0.7))
+									ElseIf me\Injuries > 1.0
+										me\Injuries = Max(0.5, me\Injuries - Rnd(0.5, 1.0))
+										If me\Injuries > 1.0 Then
+											CreateMsg(GetLocalString("msg", "aid.toobad_2"))
+										Else
+											CreateMsg(GetLocalString("msg", "aid.stop"))
+										EndIf
 									Else
-										me\Injuries = me\Injuries / 2.0
-										CreateMsg(GetLocalString("msg", "aid.nowalk"))
+										If me\Injuries > 0.5 Then
+											me\Injuries = 0.5
+											CreateMsg(GetLocalString("msg", "aid.slight"))
+										Else
+											me\Injuries = me\Injuries / 2.0
+											CreateMsg(GetLocalString("msg", "aid.nowalk"))
+										EndIf
 									EndIf
+									
+									If SelectedItem\ItemTemplate\TempName = "firstaid2" Then
+										Select Rand(6)
+											Case 1
+												;[Block]
+												chs\SuperMan = True
+												CreateMsg(GetLocalString("msg", "aid.super"))
+												;[End Block]
+											Case 2
+												;[Block]
+												opt\InvertMouseX = (Not opt\InvertMouseX)
+												opt\InvertMouseY = (Not opt\InvertMouseY)
+												CreateMsg(GetLocalString("msg", "aid.invert"))
+												;[End Block]
+											Case 3
+												;[Block]
+												me\BlurTimer = 5000.0
+												CreateMsg(GetLocalString("msg", "nausea"))
+												;[End Block]
+											Case 4
+												;[Block]
+												me\BlinkEffect = 0.6
+												me\BlinkEffectTimer = Rnd(20.0, 30.0)
+												;[End Block]
+											Case 5
+												;[Block]
+												me\Bloodloss = 0.0
+												me\Injuries = 0.0
+												CreateMsg(GetLocalString("msg", "aid.stopall"))
+												;[End Block]
+											Case 6
+												;[Block]
+												CreateMsg(GetLocalString("msg", "aid.through"))
+												me\Injuries = 3.5
+												;[End Block]
+										End Select
+									EndIf
+									RemoveItem(SelectedItem)
 								EndIf
-								
-								If SelectedItem\ItemTemplate\TempName = "firstaid2" Then
-									Select Rand(6)
-										Case 1
-											;[Block]
-											chs\SuperMan = True
-											CreateMsg(GetLocalString("msg", "aid.super"))
-											;[End Block]
-										Case 2
-											;[Block]
-											opt\InvertMouseX = (Not opt\InvertMouseX)
-											opt\InvertMouseY = (Not opt\InvertMouseY)
-											CreateMsg(GetLocalString("msg", "aid.invert"))
-											;[End Block]
-										Case 3
-											;[Block]
-											me\BlurTimer = 5000.0
-											CreateMsg(GetLocalString("msg", "nausea"))
-											;[End Block]
-										Case 4
-											;[Block]
-											me\BlinkEffect = 0.6
-											me\BlinkEffectTimer = Rnd(20.0, 30.0)
-											;[End Block]
-										Case 5
-											;[Block]
-											me\Bloodloss = 0.0
-											me\Injuries = 0.0
-											CreateMsg(GetLocalString("msg", "aid.stopall"))
-											;[End Block]
-										Case 6
-											;[Block]
-											CreateMsg(GetLocalString("msg", "aid.through"))
-											me\Injuries = 3.5
-											;[End Block]
-									End Select
-								EndIf
-								RemoveItem(SelectedItem)
 							EndIf
 						EndIf
 					EndIf
 					;[End Block]
 				Case "eyedrops", "eyedrops2"
 					;[Block]
-					If CanUseItem(False, False) Then
+					If CanUseItem() Then
 						me\BlinkEffect = 0.6
 						me\BlinkEffectTimer = Rnd(20.0, 30.0)
 						me\BlurTimer = 200.0
@@ -4413,7 +4413,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "fineeyedrops"
 					;[Block]
-					If CanUseItem(False, False) Then
+					If CanUseItem() Then
 						me\BlinkEffect = 0.4
 						me\BlinkEffectTimer = Rnd(30.0, 40.0)
 						me\Bloodloss = Max(me\Bloodloss - 1.0, 0.0)
@@ -4426,7 +4426,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "supereyedrops"
 					;[Block]
-					If CanUseItem(False, False) Then
+					If CanUseItem() Then
 						me\BlinkEffect = 0.0
 						me\BlinkEffectTimer = 60.0
 						me\EyeStuck = 10000.0
@@ -4464,7 +4464,7 @@ Function UpdateGUI%()
 					EndIf
 					
 					If SelectedItem\State3 = 0.0 Then
-						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
+						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
 							If SelectedItem\State = 7.0 Then
 								If I_008\Timer = 0.0 Then I_008\Timer = 1.0
 							Else
@@ -4486,7 +4486,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "cup"
 					;[Block]
-					If CanUseItem(False, True) Then
+					If CanUseItem(True) Then
 						Local Drink$ = Trim(SelectedItem\Name)
 						
 						If Lower(Left(Drink, 6)) = "cup of" Then
@@ -4555,47 +4555,53 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "syringe"
 					;[Block]
-					me\HealTimer = 30.0
-					me\StaminaEffect = 0.5
-					me\StaminaEffectTimer = 20.0
-					
-					CreateMsg(GetLocalString("msg", "syringe_1"))
-					
-					RemoveItem(SelectedItem)
+					If CanUseItem(True, True) Then
+						me\HealTimer = 30.0
+						me\StaminaEffect = 0.5
+						me\StaminaEffectTimer = 20.0
+						
+						CreateMsg(GetLocalString("msg", "syringe_1"))
+						
+						RemoveItem(SelectedItem)
+					EndIf
 					;[End Block]
 				Case "finesyringe"
 					;[Block]
-					me\HealTimer = Rnd(20.0, 40.0)
-					me\StaminaEffect = Rnd(0.5, 0.8)
-					me\StaminaEffectTimer = Rnd(20.0, 30.0)
-					
-					CreateMsg(GetLocalString("msg", "syringe_2"))
-					
-					RemoveItem(SelectedItem)
+					If CanUseItem(True, True) Then
+						me\HealTimer = Rnd(20.0, 40.0)
+						me\StaminaEffect = Rnd(0.4, 0.7)
+						me\StaminaEffectTimer = Rnd(20.0, 30.0)
+						
+						CreateMsg(GetLocalString("msg", "syringe_2"))
+						
+						RemoveItem(SelectedItem)
+					EndIf
 					;[End Block]
 				Case "veryfinesyringe"
 					;[Block]
-					Select Rand(3)
-						Case 1
-							;[Block]
-							me\HealTimer = Rnd(40.0, 60.0)
-							me\StaminaEffect = 0.1
-							me\StaminaEffectTimer = 30.0
-							CreateMsg(GetLocalString("msg", "syringe_3"))
-							;[End Block]
-						Case 2
-							;[Block]
-							chs\SuperMan = True
-							CreateMsg(GetLocalString("msg", "syringe_4"))
-							;[End Block]
-						Case 3
-							;[Block]
-							me\VomitTimer = 30.0
-							CreateMsg(GetLocalString("msg", "syringe_5"))
-							;[End Block]
-					End Select
-					
-					RemoveItem(SelectedItem)
+					If CanUseItem(True, True) Then
+						Select Rand(3)
+							Case 1
+								;[Block]
+								me\HealTimer = Rnd(40.0, 60.0)
+								me\StaminaEffect = 0.1
+								me\StaminaEffectTimer = 30.0
+								CreateMsg(GetLocalString("msg", "syringe_3"))
+								;[End Block]
+							Case 2
+								;[Block]
+								chs\SuperMan = True
+								CreateMsg(GetLocalString("msg", "syringe_4"))
+								;[End Block]
+							Case 3
+								;[Block]
+								me\VomitTimer = 30.0
+								CreateMsg(GetLocalString("msg", "syringe_5"))
+								;[End Block]
+						End Select
+						
+						RemoveItem(SelectedItem)
+					EndIf
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
@@ -4956,7 +4962,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "cigarette"
 					;[Block]
-					If CanUseItem(False, True) Then
+					If CanUseItem(True) Then
 						Select Rand(6)
 							Case 1
 								;[Block]
@@ -4988,8 +4994,8 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp420j"
 					;[Block]
-					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
+					If CanUseItem(True) Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420j.yeah"))
@@ -5003,8 +5009,8 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "joint"
 					;[Block]
-					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
+					If CanUseItem(True) Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420j.dead"))
@@ -5016,8 +5022,8 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp420s"
 					;[Block]
-					If CanUseItem(False, True) Then
-						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 3 Then
+					If CanUseItem(True) Then
+						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420s"))
@@ -5029,17 +5035,19 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp714"
 					;[Block]
-					If I_714\Using Then
-						CreateMsg(GetLocalString("msg", "714.off"))
-						I_714\Using = False
-					Else
-						CreateMsg(GetLocalString("msg", "714.on"))
-						GiveAchievement(Achv714)
-						I_714\Using = True
+					If CanUseItem(True, True) Then
+						If I_714\Using Then
+							CreateMsg(GetLocalString("msg", "714.off"))
+							I_714\Using = False
+						Else
+							CreateMsg(GetLocalString("msg", "714.on"))
+							GiveAchievement(Achv714)
+							I_714\Using = True
+						EndIf
+						SelectedItem = Null
 					EndIf
-					SelectedItem = Null
 					;[End Block]
-				Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+				Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
 					If wi\BallisticVest = 0 Then
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
@@ -5059,21 +5067,25 @@ Function UpdateGUI%()
 										CreateMsg(GetLocalString("msg", "suit.on"))
 										wi\HazmatSuit = 1
 										;[End Block]
+									Case "finehazmatsuit"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "suit.on"))
+										wi\HazmatSuit = 2
+										;[End Block]
 									Case "veryfinehazmatsuit"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "suit.on.easy"))
-										wi\HazmatSuit = 2
+										wi\HazmatSuit = 3
 										;[End Block]
 									Case "hazmatsuit148"
 										;[Block]
 										CreateMsg(GetLocalString("msg", "suit.on"))
-										wi\HazmatSuit = 3
+										wi\HazmatSuit = 4
 										;[End Block]
 								End Select
 								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
-								wi\GasMask = 0
-								wi\BallisticHelmet = False
-								wi\SCRAMBLE = False
+								wi\GasMask = 0 : wi\BallisticHelmet = False : wi\SCRAMBLE = False
+								I_427\Using = False : I_714\Using = False : I_1499\Using = 0
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5345,7 +5357,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "pill"
 					;[Block]
-					If CanUseItem(False, True) Then
+					If CanUseItem(True) Then
 						CreateMsg(GetLocalString("msg", "pill"))
 						
 						RemoveItem(SelectedItem)
@@ -5353,7 +5365,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp500pilldeath"
 					;[Block]
-					If CanUseItem(False, True) Then
+					If CanUseItem(True) Then
 						CreateMsg(GetLocalString("msg", "pill"))
 						
 						If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
@@ -5473,12 +5485,10 @@ Function UpdateGUI%()
 						SelectedItem\State = 0.0
 						If (Not wi\BallisticVest) Then DropItem(SelectedItem, False)
 						;[End Block]
-					Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+					Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 						;[Block]
 						SelectedItem\State = 0.0
-						If wi\HazmatSuit = 0 Then
-							DropItem(SelectedItem, False)
-						EndIf
+						If wi\HazmatSuit = 0 Then DropItem(SelectedItem, False)
 						;[End Block]
 					Case "nvg", "veryfinenvg", "finenvg", "scramble", "scp1025"
 						;[Block]
@@ -5500,7 +5510,7 @@ Function UpdateGUI%()
 	For it.Items = Each Items
 		If it <> SelectedItem Then
 			Select it\ItemTemplate\TempName
-				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
+				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 					;[Block]
 					it\State = 0.0
 					;[End Block]
@@ -5526,6 +5536,28 @@ Function RenderHUD%()
 	Height = 20 * MenuScale
 	x = 80 * MenuScale
 	y = opt\GraphicHeight - (95 * MenuScale)
+	
+	Color(255, 255, 255)
+	If (I_714\Using Lor wi\HazmatSuit > 0) And TakeOffTimer < 500.0 Then
+		For i = 0 To MaxItemAmount - 1
+			If Inventory(i) <> Null Then
+				If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
+					If Inventory(i)\State2 < 3.0 And wi\HazmatSuit = 4 Then
+						Color(0, 200, 0)
+						Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+					EndIf
+				EndIf
+			EndIf
+		Next
+		Color(255, 255, 255)
+		Rect(x - (51 * MenuScale), y - (41 * MenuScale), 32 * MenuScale, 32 * MenuScale, False)
+		If TakeOffTimer < 125.0 Then
+			RenderBar(t\ImageID[1], x, y - (40 * MenuScale), Width, Height, TakeOffTimer, 500.0, 100, 0, 0)
+		Else
+			RenderBar(BlinkMeterIMG, x, y - (40 * MenuScale), Width, Height, TakeOffTimer, 500.0)
+		EndIf
+		DrawBlock(t\IconID[7], x - (50 * MenuScale), y - (40 * MenuScale))
+	EndIf
 	
 	Color(255, 255, 255)
 	If me\BlinkTimer < 150.0 Then
@@ -5567,7 +5599,7 @@ Function RenderHUD%()
 	If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0 Then
 		Color(200, 0, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 2
+	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 3
 		Color(0, 200, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	EndIf
@@ -5983,7 +6015,7 @@ Function RenderGUI%()
 						;[Block]
 						If wi\GasMask = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "veryfinegasmask"
+					Case "finegasmask"
 						;[Block]
 						If wi\GasMask = 2 Then ShouldDrawRect = True
 						;[End Block]
@@ -5999,13 +6031,17 @@ Function RenderGUI%()
 						;[Block]
 						If wi\HazmatSuit = 1 Then ShouldDrawRect = True
 						;[End Block]
-					Case "veryfinehazmatsuit"
+					Case "finehazmatsuit"
 						;[Block]
 						If wi\HazmatSuit = 2 Then ShouldDrawRect = True
 						;[End Block]
+					Case "veryfinehazmatsuit"
+						;[Block]
+						If wi\HazmatSuit = 3 Then ShouldDrawRect = True
+						;[End Block]
 					Case "hazmatsuit148"
 						;[Block]"
-						If wi\HazmatSuit = 3 Then ShouldDrawRect = True
+						If wi\HazmatSuit = 4 Then ShouldDrawRect = True
 						;[End Block]
 					Case "vest"
 						;[Block]
@@ -6133,7 +6169,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
 					;[Block]
-					If me\Bloodloss <> 0.0 Lor me\Injuries <> 0.0 Then
+					If (me\Bloodloss <> 0.0 Lor me\Injuries <> 0.0) And wi\HazmatSuit = 0 Then
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
@@ -6304,7 +6340,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+				Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
 					If wi\BallisticVest = 0 Then
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)

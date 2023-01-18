@@ -2344,7 +2344,7 @@ Function UpdateDoors%()
 					EndIf
 					If d\AutoClose And RemoteDoorOn Then
 						If EntityDistanceSquared(Camera, d\OBJ) < 4.41 Then
-							If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then PlaySound_Strict(HorrorSFX[7])
+							If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then PlaySound_Strict(HorrorSFX[7])
 							OpenCloseDoor(d) : d\AutoClose = False
 						EndIf
 					EndIf
@@ -3376,7 +3376,7 @@ Function UpdateSecurityCams%()
 						
 						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 							If EntityVisible(Camera, sc\ScrOBJ) Then
-								If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then
+								If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
 									me\Sanity = me\Sanity - fps\Factor[0]
 									me\RestoreSanity = False
 								EndIf
@@ -3399,7 +3399,7 @@ Function UpdateSecurityCams%()
 							sc\InSight = False
 						EndIf
 						
-						If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 3 And wi\GasMask <> 4 Then
+						If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
 							If sc\InSight Then
 								Local Pvt% = CreatePivot()
 								
@@ -3413,7 +3413,7 @@ Function UpdateSecurityCams%()
 								CameraPitch = CameraPitch - 90.0
 								
 								FreeEntity(Pvt)
-								If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And ((Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3) Then
+								If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And ((Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4) Then
 									If me\Sanity < -800.0 Then
 										If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 										If Rand(6) < 5 Then
@@ -3440,7 +3440,7 @@ Function UpdateSecurityCams%()
 							EndIf
 						Else
 							If sc\InSight Then
-								If I_714\Using Lor wi\HazmatSuit = 3 Lor wi\GasMask = 4 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+								If I_714\Using Lor wi\HazmatSuit = 4 Lor wi\GasMask = 4 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 							EndIf
 						EndIf
 						
