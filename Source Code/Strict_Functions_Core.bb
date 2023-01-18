@@ -10,7 +10,6 @@ Const MaxChannelsAmount% = 32
 Type Sound
 	Field InternalHandle%
 	Field Name$
-	Field HasSubtitles%
 	Field Channels%[MaxChannelsAmount]
 	Field ReleaseTime%
 End Type
@@ -65,9 +64,7 @@ Function PlaySound_Strict%(SoundHandle%)
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
 					EndIf
-					If opt\EnableSubtitles Then
-						If snd\HasSubtitles Then ShowSubtitles(snd\Name)
-					EndIf
+					ShowSubtitles(snd\Name)
 					ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 					snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
@@ -91,9 +88,7 @@ Function PlaySound_Strict%(SoundHandle%)
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 				EndIf
-				If opt\EnableSubtitles Then
-					If snd\HasSubtitles Then ShowSubtitles(snd\Name)
-				EndIf
+				ShowSubtitles(snd\Name)
 				ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 				snd\ReleaseTime = MilliSecs2() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
@@ -112,10 +107,6 @@ Function LoadSound_Strict%(File$)
 	snd\Name = File
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0
-	If opt\EnableSubtitles Then
-		; ~ Check if the sound has subtitles
-		If IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, File) Then snd\HasSubtitles = True
-	EndIf
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
 	EndIf
@@ -150,6 +141,7 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	Local st.Stream = New Stream
 	
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
+	ShowSubtitles(File)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg(Format(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File, "{0}"), st\CHN, "{1}"))
