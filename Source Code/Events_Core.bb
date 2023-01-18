@@ -2332,6 +2332,7 @@ Function UpdateEvents%()
 							PlayerRoom = gateb
 							RemoveEvent(e)
 						EndIf
+						If PlayerInsideElevator Then CanSave = 1
 					EndIf
 				EndIf
 				;[End Block]
@@ -2381,6 +2382,7 @@ Function UpdateEvents%()
 							PlayerRoom = gatea
 							RemoveEvent(e)
 						EndIf
+						If PlayerInsideElevator Then CanSave = 1
 					EndIf
 				EndIf
 				;[End Block]
@@ -6726,7 +6728,7 @@ Function UpdateEvents%()
 					
 					If e\EventState > 0.0 Then
 						e\EventState = e\EventState + fps\Factor[0]
-						
+						CanSave = 0
 						e\room\RoomDoors[1]\Open = False
 						If e\EventState > 70.0 * 2.0 Then
 							If e\room\RoomDoors[0]\Open Then e\room\RoomDoors[0]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[0]\OBJ)
@@ -7987,6 +7989,8 @@ Function UpdateDimension106%()
 					HideRoomsNoColl(r)
 				Next
 				ShowRoomsNoColl(e\room)
+				
+				CanSave = 1
 				
 				PlayerFallingPickDistance = 0.0
 				CurrStepSFX = 1
