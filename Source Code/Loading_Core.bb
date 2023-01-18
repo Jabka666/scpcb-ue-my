@@ -838,6 +838,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", "gasmask148", ItemsPath + "gas_mask.b3d", ItemsPath + "INV_gas_mask.png", "", 0.02, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "hazmatsuit", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
+	CreateItemTemplate(GetLocalString("items", "finesuit"), "Hazmat Suit", "finehazmatsuit", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
 	CreateItemTemplate(GetLocalString("items", "veryfinesuit"), "Hazmat Suit", "veryfinehazmatsuit", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", "hazmatsuit148", ItemsPath + "hazmat_suit.b3d", ItemsPath + "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
 	
@@ -1640,6 +1641,8 @@ Function LoadEntities%()
 		t\IconID[i] = LoadImage_Strict("GFX\HUD\hand_symbol(" + (i - 4) + ").png")
 		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
 	Next
+	t\IconID[7] = LoadImage_Strict("GFX\HUD\shield_icon.png")
+	t\IconID[7] = ScaleImage2(t\IconID[7], MenuScale, MenuScale)
 	
 	QuickLoadIcon = LoadImage_Strict("GFX\Menu\QuickLoading.png")
 	QuickLoadIcon = ScaleImage2(QuickLoadIcon, MenuScale, MenuScale)
@@ -1932,6 +1935,8 @@ Function InitNewGame%()
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0 : me\Funds = Rand(0, 6)
 	
 	I_005\ChanceToSpawn = Rand(10)
+	
+	TakeOffTimer = 500.0
 	
 	CODE_DR_MAYNARD = 0
 	For i = 0 To 3

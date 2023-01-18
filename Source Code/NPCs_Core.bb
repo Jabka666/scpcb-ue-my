@@ -574,7 +574,7 @@ Function RemoveNPC%(n.NPCs)
 	Delete(n)
 End Function
 
-Global RemoveHazmatTimer#, Remove714Timer#
+Global TakeOffTimer#
 
 Function UpdateNPCs%()
 	CatchErrors("Uncaught (UpdateNPCs)")
@@ -1552,40 +1552,35 @@ Function UpdateNPCs%()
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 									
 									If Dist < 0.25 Then
-										If wi\HazmatSuit > 0 Then
-											RemoveHazmatTimer = Min(RemoveHazmatTimer + (fps\Factor[0] * 1.5), 1460.0)
-											If RemoveHazmatTimer > 100.0 And RemoveHazmatTimer - (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
-												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
-											ElseIf RemoveHazmatTimer >= 500.0
-												For i = 0 To 3
-													If RemoveHazmatTimer > 500.0 + (i * 240.0) And RemoveHazmatTimer - (fps\Factor[0] * 1.5) <= 500.0 + (i * 240.0) Then
-														me\CameraShake = 2.0
-														If i = 3 Then
-															For i = 0 To MaxItemAmount - 1
-																If Inventory(i) <> Null Then
-																	If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
-																		wi\HazmatSuit = 0 : DropItem(Inventory(i))
-																		CreateMsg(GetLocalString("msg", "suit.destroyed"))
-																		Exit
-																	EndIf
-																EndIf
-															Next
-														EndIf
-													EndIf
-												Next
-											EndIf
-										ElseIf I_714\Using
-											me\BlurTimer = me\BlurTimer + fps\Factor[0] * 2.5
-											Remove714Timer = Min(Remove714Timer + (fps\Factor[0] * 1.5), 500.0)
-											
-											If Remove714Timer > 100.0 And Remove714Timer - fps\Factor[0] * 1.5 <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
-												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
-											ElseIf Remove714Timer >= 500.0
+										If wi\HazmatSuit > 0 Lor I_714\Using Then
+											TakeOffTimer = TakeOffTimer - (fps\Factor[0] * 1.5)
+											If TakeOffTimer < 100.0 And TakeOffTimer + (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
+												If wi\HazmatSuit > 0 Then
+													n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
+												ElseIf I_714\Using
+													n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
+												EndIf
+											ElseIf TakeOffTimer <= 0.0
 												For i = 0 To MaxItemAmount - 1
 													If Inventory(i) <> Null Then
-														If Inventory(i)\ItemTemplate\TempName = "scp714" Then
-															I_714\Using = False : DropItem(Inventory(i))
+														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
+															If Inventory(i)\State2 < 3.0 And wi\HazmatSuit = 4 Then
+																Inventory(i)\State2 = Inventory(i)\State2 + 1.0
+																TakeOffTimer = 260.0
+																me\CameraShake = 2.0
+															Else
+																RemoveItem(Inventory(i))
+																CreateMsg(GetLocalString("msg", "suit.destroyed"))
+																wi\HazmatSuit = 0
+																PlaySound_Strict(PickSFX[2])
+																TakeOffTimer = 500.0
+																Exit
+															EndIf
+														ElseIf I_714\Using
 															CreateMsg(GetLocalString("msg", "ring.forceremoved"))
+															I_714\Using = 0
+															PlaySound_Strict(PickSFX[3])
+															TakeOffTimer = 500.0
 															Exit
 														EndIf
 													EndIf
@@ -1614,8 +1609,7 @@ Function UpdateNPCs%()
 											EndIf
 										EndIf
 									Else
-										RemoveHazmatTimer = Max(RemoveHazmatTimer - fps\Factor[0], 0.0)
-										Remove714Timer = Max(Remove714Timer - fps\Factor[0], 0.0)
+										TakeOffTimer = Min(TakeOffTimer + fps\Factor[0], 500.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
@@ -3893,7 +3887,7 @@ Function UpdateNPCs%()
 									If n\State3 < 900.0 Then
 										me\BlurTimer = Float(((Sin(MilliSecs2() / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
-										If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 And Dist < 256.0 Then
+										If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 And Dist < 256.0 Then
 											If me\StaminaEffect < 1.5 Then
 												Select Rand(4)
 													Case 1

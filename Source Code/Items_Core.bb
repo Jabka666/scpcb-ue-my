@@ -322,7 +322,7 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			wi\GasMask = 0
 			;[End Block]
-		Case "hazmatsuit", "hazmatsuit148", "veryfinehazmatsuit"
+		Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 			;[Block]
 			wi\HazmatSuit = 0
 			SetAnimTime(item\Model, 4.0)
@@ -476,10 +476,6 @@ Function UpdateItems%()
 End Function
 
 Function PickItem%(item.Items)
-	If wi\HazmatSuit > 0 Then
-		CreateMsg(GetLocalString("msg", "pick.suit"))
-		Return
-	EndIf
 	
 	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
 	
@@ -504,7 +500,7 @@ Function PickItem%(item.Items)
 					Case "scp1123"
 						;[Block]
 						Use1123()
-						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then Return
+						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then Return
 						;[End Block]
 					Case "killbat"
 						;[Block]
@@ -551,12 +547,12 @@ Function PickItem%(item.Items)
 						;[Block]
 						GiveAchievement(AchvSNAV)
 						;[End Block]
-					Case "hazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+					Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 						;[Block]
 						CanPickItem = True
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
-								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148" Then
+								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148" Then
 									CanPickItem = 0
 									Return
 								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
@@ -584,7 +580,7 @@ Function PickItem%(item.Items)
 								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = 0
 									Return
-								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
+								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
 									CanPickItem = 2
 									Return
 								EndIf
@@ -629,10 +625,6 @@ Function PickItem%(item.Items)
 End Function
 
 Function DropItem%(item.Items, PlayDropSound% = True)
-	If wi\HazmatSuit > 0 Then
-		CreateMsg(GetLocalString("msg", "drop.suit"))
-		Return
-	EndIf
 	
 	CatchErrors("Uncaught (DropItem)")
 	
@@ -712,12 +704,15 @@ Function IsItemInFocus%()
 	Return(False)
 End Function
 
-Function CanUseItem%(CanUseWithGasMask%, CanUseWithEyewear%)
+Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, CanUseWithHazmat% = False)
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
 		CreateMsg(GetLocalString("msg", "mask.use"))
 		Return(False)
 	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE)
 		CreateMsg(GetLocalString("msg", "gear.use"))
+		Return(False)
+	ElseIf (Not CanUseWithHazmat) And wi\HazmatSuit > 0
+		CreateMsg(GetLocalString("msg", "suit.use"))
 		Return(False)
 	EndIf
 	Return(True)
@@ -743,6 +738,10 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 		Return(True)
 	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE
 		CreateMsg(GetLocalString("msg", "gear.use.off"))
+		SelectedItem = Null
+		Return(True)
+	ElseIf wi\HazmatSuit > 0
+		CreateMsg(GetLocalString("msg", "suit.use.off"))
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -1061,7 +1060,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										it2.Items = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
 										Exit
 										;[End Block]
-									Case "hazmatsuit", "veryfinehazmatsuit"
+									Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit"
 										;[Block]
 										RemoveItem(it)
 										it2.Items = CreateItem("Heavy Hazmat Suit", "hazmatsuit148", x, y, z)
@@ -1832,7 +1831,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "hazmatsuit", "hazmatsuit148"
+		Case "hazmatsuit", "finehazmatsuit", "hazmatsuit148"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -1844,7 +1843,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Hazmat Suit", "hazmatsuit", x, y, z)
 					;[End Block]
-				Case FINE, VERYFINE
+				Case FINE
+					;[Block]
+					it2.Items = CreateItem("Hazmat Suit", "finehazmatsuit", x, y, z)
+					;[End Block]
+				Case VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Hazmat Suit", "veryfinehazmatsuit", x, y, z)
 					;[End Block]
@@ -2217,7 +2220,7 @@ Function Use1123%()
 	Local e.Events
 	Local Temp%
 	
-	If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 3 Then
+	If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
 		me\LightFlash = 3.0
 		PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 		
