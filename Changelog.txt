@@ -12,10 +12,10 @@ General:
 - Added a blood decal after killing the player.
 - Added buttons for containment door in SCP-049's containment chamber.
 - Added dropping items without closing inventory with right click.
-- Added PRESS ANY KEY TO CONTINUE string while playing startup videos.
+- Added «PRESS ANY KEY TO CONTINUE» string while playing startup videos.
 - Added escape time.
 
-- Removed «Playmusic» console command.
+- Removed «playmusic» console command.
 
 - Improved fluid step sounds.
 
@@ -91,6 +91,7 @@ Bug fixes:
 - Fixed the framelimit not working properly.
 - Fixed a wrong sound of the wooden doors.
 - Fixed a loading text's color timer getting out of sync.
+- Fixed images disappearing after using ALT+TAB.
 
 - Hopefully fixed height of NPCs teleportation.
 
@@ -155,9 +156,9 @@ Bug Fixes:
 	- Fixed messages while using echo sound.
 	- Fixed an issue where SCP-966 had one extra frame of idle animation while chasing the player.
 - Fixes for SCP-294:
-		- Fixed wrong color of the drinks refined in SCP-914.
-		- Fixed multipliers for drinks effects.
-		- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
+	- Fixed wrong color of the drinks refined in SCP-914.
+	- Fixed multipliers for drinks effects.
+	- Fixed blink and stamina multipliers that were reducing player stats on Fine and Very Fine settings.
 	- Fixed a bug where SCP-294 didn't remove a master card from inventory while using.
 	- Fixed SCP-008 and SCP-409 cups resetting their effects.
 	- Fixed SCP-294 sometimes giving the wrong drink.
@@ -166,10 +167,10 @@ Bug Fixes:
 - Fixed a bug where fog color was stored in memory every time.
 - Fixed ticket model.
 - Fixes for SCP-860-1:
-		- Fixed missing dark fog color.
-		- Fixed Izumi sprite shifting one pixel to the left when blinking.
-		- Fixed incorrect position of Izumi logs.
-		- Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
+	- Fixed missing dark fog color.
+	- Fixed Izumi sprite shifting one pixel to the left when blinking.
+	- Fixed incorrect position of Izumi logs.
+	- Fixed calculation of previous EventState3 value to prevent SCP-860-2's spawn from being skipped.
 	- Fixed SCP-860-1 branches wrapping around the grid border and creating unreachable tiles.
 	- Fixed a bug causing Logs inside SCP-860-1 to have a wrong scale after loading the game.
 - Fixes for SCP-1162-ARC:
