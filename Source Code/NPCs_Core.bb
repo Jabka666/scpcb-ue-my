@@ -1559,7 +1559,7 @@ Function UpdateNPCs%()
 									If Dist < 0.25 Then
 										If wi\HazmatSuit > 0 Lor I_714\Using Then
 											TakeOffTimer = TakeOffTimer - (fps\Factor[0] * 1.5)
-											If TakeOffTimer < 100.0 And TakeOffTimer + (fps\Factor[0] * 1.5) <= 100.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
+											If TakeOffTimer < 400.0 And TakeOffTimer + (fps\Factor[0] * 1.5) >= 400.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												If wi\HazmatSuit > 0 Then
 													n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
 												ElseIf I_714\Using

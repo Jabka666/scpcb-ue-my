@@ -39,7 +39,7 @@ Rooms:
 - Returned "Pipes_NoRust" texture.
 
 Items:
-- Added a new gas mask variation: gas mask without fogging.
+- Added a new gas mask/hazmat suit variation: gas mask/hazmat suit without fogging.
 
 - Renamed some console item names.
 
@@ -47,6 +47,9 @@ Items:
 - Tiny battery rebalance for SCRAMBLE Gear.
 - Nerfed NVG fog distance from 30 to 17.
 - The white pill now cures the Common Cold.
+- Players wearing Hazmat Suit are now able to pick up and drop items.
+- You can use items while wearing the Hazmat Suit with exceptions being similar to that of the Gasmask plus no First Aid Kit nor Syringes.
+- The Hazmat Suit now fogs up.
 
 Menu:
 - Added degree symbol for FOV value.
@@ -58,6 +61,7 @@ Menu:
 
 NPCs:
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
+- Reduces how long the Hazmat Suit protects the player from SCP-049 from 12 seconds down to 5 seconds. The Heavy Hazmat Suit changed from indefinite to 12 seconds.
 - SCP-035's victim now slowly hurts player.
 
 Map Creator:
@@ -75,7 +79,7 @@ Bug fixes:
 - Fixed wrong textures for Class-D model in «room2_nuke» and «room3_2_hcz».
 - Fixed grammar a little bit.
 - Fixed an ability to pick up items when you died.
-- Fixed SCP-049 removing a hazmat suit and SCP-714 at the same time.
+- Fixed SCP-049 removing hazmat suit and SCP-714 at the same time.
 - Fixed position of the SCP-895 pivot attracting player's camera while wearing night vision goggles.
 - Fixed "ACCESS CODE" string going out of button image on different resolutions.
 - Fixed autosave option text color when option is disabled.
