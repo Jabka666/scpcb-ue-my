@@ -19,11 +19,12 @@ Type ItemTemplates
 	Field Tex%, TexPath$
 End Type
 
-Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 9)
+Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1 + 8)
 	Local it.ItemTemplates, it2.ItemTemplates
 	
 	it.ItemTemplates = New ItemTemplates
 	; ~ If another item shares the same object, copy it
+	OBJPath = ItemsPath + OBJPath
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\OBJPath = OBJPath And it2\OBJ <> 0 Then
 			it\OBJ = CopyEntity(it2\OBJ)
@@ -45,6 +46,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	Local Texture%
 	
 	If TexturePath <> "" Then
+		TexturePath = ItemTexturePath + TexturePath
 		For it2.ItemTemplates = Each ItemTemplates
 			If it2\TexPath = TexturePath And it2\Tex <> 0 Then
 				Texture = it2\Tex
@@ -65,6 +67,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	ScaleEntity(it\OBJ, Scale, Scale, Scale, True)
 	
 	; ~ If another item shares the same object, copy it
+	InvImgPath = ItemINVIconPath + InvImgPath
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\InvImgPath = InvImgPath And it2\InvImg <> 0 Then
 			it\InvImg = it2\InvImg
@@ -79,6 +82,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	EndIf
 	
 	If InvImgPath2 <> "" Then
+		InvImgPath2 = ItemINVIconPath + InvImgPath2
 		If (Not it\InvImg2) Then
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
 			it\InvImg2 = ScaleImage2(it\InvImg2, MenuScale, MenuScale)
@@ -87,7 +91,10 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 		it\InvImg2 = 0
 	EndIf
 	
-	it\ImgPath = ImgPath
+	If ImgPath  <> "" Then
+		ImgPath = ItemHUDTexturePath + ImgPath
+		it\ImgPath = ImgPath
+	EndIf
 	
 	it\DisplayName = DisplayName
 	it\TempName = TempName
@@ -750,7 +757,6 @@ End Function
 
 Function IsDoubleItem%(Variable, ID, Msg$)
 	If Variable > 0 And Variable <> ID Then
-		CreateMsg(msg)
 		SelectedItem = Null
 		Return(True)
 	EndIf

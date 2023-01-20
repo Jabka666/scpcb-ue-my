@@ -3877,7 +3877,8 @@ Function UpdateEvents%()
 						ScaleEntity(e\room\Objects[2], 0.05, 0.05, 0.05)
 						SetAnimTime(e\room\Objects[2], 488.0)
 						
-						Local ImgPath$ = ItemsPath + "1048\1048(" + Rand(25) + ").png"
+						Local DrawingName$ = "drawing_1048(" + Rand(25) + ").png"
+						Local ImgPath$ = ItemHUDTexturePath + DrawingName
 						Local itt.ItemTemplates
 						
 						For itt.ItemTemplates = Each ItemTemplates
@@ -3888,6 +3889,7 @@ Function UpdateEvents%()
 								itt\ImgWidth = ImageWidth(itt\Img) / 2
 								itt\ImgHeight = ImageHeight(itt\Img) / 2
 								itt\ImgPath = ImgPath
+								itt\TexPath = ItemTexturePath + DrawingName
 								Exit
 							EndIf
 						Next
