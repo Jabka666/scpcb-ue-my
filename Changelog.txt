@@ -80,6 +80,7 @@ Bug fixes:
 - Fixed grammar a little bit.
 - Fixed an ability to pick up items when you died.
 - Fixed SCP-049 removing hazmat suit and SCP-714 at the same time.
+- Fixed SCP-1499 not being taken off when the hazmat suit was equipped in the 1499 dimension.
 - Fixed position of the SCP-895 pivot attracting player's camera while wearing night vision goggles.
 - Fixed "ACCESS CODE" string going out of button image on different resolutions.
 - Fixed autosave option text color when option is disabled.
