@@ -5676,8 +5676,8 @@ Function RenderDebugHUD%()
 			EndIf
 			
 			Text2(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-			Text2(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024))), (TotalVidMem() / 1024)))
-			Text2(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024))), (TotalPhys() / 1024)))
+			Text2(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{0}"), (TotalVidMem() / 1024), "{1}"))
+			Text2(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
 			Text2(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
 			Text2(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
 			;[End Block]
