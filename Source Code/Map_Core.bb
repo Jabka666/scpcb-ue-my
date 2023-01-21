@@ -8036,7 +8036,7 @@ Function UpdateRooms%()
 					If x < 4.0 Then
 						z = Abs(PlayerRoom\Adjacent[i]\z - EntityZ(me\Collider, True))
 						If z < 4.0 Then
-							y = Abs(PlayerRoom\Adjacent[i]\y-EntityY(me\Collider,True))
+							y = Abs(PlayerRoom\Adjacent[i]\y - EntityY(me\Collider, True))
 							If y < 4.0 Then
 								FoundNewPlayerRoom = True
 								PlayerRoom = PlayerRoom\Adjacent[i]
