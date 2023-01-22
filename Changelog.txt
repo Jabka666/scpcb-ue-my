@@ -7,11 +7,6 @@ General:
 - Added some folders organization.
 - Added language selection.
 - Added SCP-066 achievement.
-- Added new color effects depending on player zone.
-- Added a small chance to accidentally drop an item when trying to use it.
-- Added a blood decal after killing the player.
-- Added buttons for containment door in SCP-049's containment chamber.
-- Added dropping items without closing inventory with right click.
 - Added «PRESS ANY KEY TO CONTINUE» string while playing startup videos.
 - Added escape time.
 
@@ -21,15 +16,25 @@ General:
 
 - Converted .ini files to UTF-8 format.
 - Finally made the «Bright mode» similar to original game.
-- Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
 
 - Optimized game a lot.
 
+Mechanics and effects:
+- Added a small chance to accidentally drop an item when trying to use it.
+- Added dropping items without closing inventory with right click.
+- Added a blood decal after killing the player.
+- Added new color effects depending on player zone.
+- Added a smooth stamina reducing effect while wearing a hazmat suit or SCP-714.
+
+- Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
+
 Rooms:
+- Added buttons for containment door in SCP-049's containment chamber.
+
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
 
 - Improved SCP-096's containment chamber design.
-- Improved «room1_archive» room's design.
+- Improved some rooms design.
 
 - Tiny corrections for rooms description.
 
