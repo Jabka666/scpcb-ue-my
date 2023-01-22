@@ -2329,7 +2329,7 @@ Function UpdateGame%()
 						If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
 					EndIf
 				EndIf
-				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0 Then
+				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "finehazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0 Then
 					If InvOpen Then
 						StopMouseMovement()
 					Else
@@ -2673,10 +2673,10 @@ Function UpdateMoving%()
 		EndIf
 	EndIf
 	
-	If wi\BallisticVest = 2 Then me\Stamina = Min(me\Stamina, 60.0)
+	If wi\BallisticVest = 2 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
 	
 	If I_714\Using Then
-		me\Stamina = Min(me\Stamina, 10.0)
+		me\Stamina = CurveValue(Min(10.0, me\Stamina), me\Stamina, 10.0)
 		me\Sanity = Max(-850.0, me\Sanity)
 	EndIf
 	
@@ -3087,7 +3087,7 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		If wi\HazmatSuit > 0 Then
-			If wi\HazmatSuit = 1 Then me\Stamina = Min(60.0, me\Stamina)
+			If wi\HazmatSuit = 1 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
 			If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
 		Else
 			If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
