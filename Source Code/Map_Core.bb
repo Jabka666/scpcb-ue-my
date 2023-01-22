@@ -6968,19 +6968,6 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
 			Next
 			
-			For r2.Rooms = Each Rooms
-				If r2 <> r Then
-					If r2\RoomTemplate\Name = "room2_gw" Lor r2\RoomTemplate\Name = "room2_gw_2" Then
-						r\Objects[2] = CopyEntity(r2\Objects[2]) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
-			If (Not r\Objects[2]) Then r\Objects[2] = LoadRMesh("GFX\Map\room2_gw_pipes.rmesh", Null)
-			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x, r\y, r\z)
-			EntityParent(r\Objects[2], r\OBJ)
-			
 			If r\RoomTemplate\Name = "room2_gw" Then
 				r\Objects[0] = CreatePivot()
 				PositionEntity(r\Objects[0], r\x + 344.0 * RoomScale, r\y + 128.0 * RoomScale, r\z)
@@ -7043,19 +7030,6 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x - 48.0 * RoomScale, r\y + 128.0 * RoomScale, r\z + 320.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
-			
-			For r2.Rooms = Each Rooms
-				If r2 <> r Then
-					If r2\RoomTemplate\Name = "room3_gw" Then
-						r\Objects[1] = CopyEntity(r2\Objects[1]) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
-			If (Not r\Objects[1]) Then r\Objects[1] = LoadRMesh("GFX\Map\room3_gw_pipes.rmesh", Null)
-			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[1], r\x, r\y, r\z)
-			EntityParent(r\Objects[1], r\OBJ)
 			;[End Block]
 		Case "cont2c_1162_arc"
 			;[Block]
