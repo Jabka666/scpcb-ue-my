@@ -2082,7 +2082,10 @@ Function UpdateEvents%()
 									de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(e\room\OBJ), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.4)
 									EntityParent(de\OBJ, e\room\OBJ)
 									
-									it.Items = CreateItem("Unknown Note", "paper", EntityX(e\room\OBJ), e\room\y - 1526.0 * RoomScale, EntityZ(e\room\OBJ))
+									it.Items = CreateItem("Unknown Note", "paper", EntityX(e\room\OBJ), e\room\y - 1516.0 * RoomScale, EntityZ(e\room\OBJ))
+									EntityType(it\Collider, HIT_ITEM)
+									
+									it.Items = CreateItem("Level 3 Key Card", "key3", EntityX(e\room\OBJ), e\room\y - 1504.0 * RoomScale, EntityZ(e\room\OBJ))
 									EntityType(it\Collider, HIT_ITEM)
 								EndIf
 								If e\room\NPC[0]\Frame = 286.0 Then e\room\NPC[0]\PrevState = 2
