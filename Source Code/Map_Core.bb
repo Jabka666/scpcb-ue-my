@@ -7632,14 +7632,25 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Radio Transceiver", "radio", r\x + 712.0 * RoomScale, r\y + 165.0 * RoomScale, r\z - 797.0 * RoomScale)
-			it\State = Rnd(100.0)
-			EntityParent(it\Collider, r\OBJ)
+			If Rand(5) = 1 Then
+				it.Items = CreateItem("Radio Transceiver", "radio", r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it\State = Rnd(100.0)
+				EntityParent(it\Collider, r\OBJ)
+			ElseIf Rand(4) = 1 Then
+				it.Items = CreateItem("S-NAV Navigator", "nav", r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it\State = Rnd(100.0)
+			EndIf
 			
 			If Rand(4) = 1 Then
-				it.Items = CreateItem("Cup", "cup", r\x + 880.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
+				it.Items = CreateItem("Cup", "cup", r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
 				it\Name = FindSCP294Drink("Coffee Drink")
 				it\DisplayName = GetLocalString("items", "cupcoffee")
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			ElseIf Rand(3) = 1 Then
+				it.Items = CreateRandomBattery(r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
