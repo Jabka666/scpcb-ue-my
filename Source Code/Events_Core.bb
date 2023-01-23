@@ -6594,6 +6594,8 @@ Function UpdateEvents%()
 							me\Playable = True
 							MoveToPocketDimension()
 						EndIf
+					Else
+						If chs\NoClip Then me\Playable = true
 					EndIf
 				Else
 					e\EventState2 = 0.0

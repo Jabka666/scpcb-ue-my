@@ -28,6 +28,8 @@ Mechanics and effects:
 
 - Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
 
+- Some improvements for Player Room detection. Might fix some problems with custom maps and new optimization system.
+
 Rooms:
 - Added buttons for containment door in SCP-049's containment chamber.
 
