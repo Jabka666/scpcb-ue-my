@@ -43,6 +43,8 @@ Rooms:
 
 - Returned "Pipes_NoRust" texture.
 
+- Level 3 Keycard located in SCP-895's containment chamber now drops from a fallen guard.
+
 Items:
 - Added a new gas mask/hazmat suit variation: gas mask/hazmat suit without fogging.
 
