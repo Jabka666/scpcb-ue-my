@@ -106,6 +106,7 @@ Bug fixes:
 - Fixed a loading text's color timer getting out of sync.
 - Fixed images disappearing after using ALT+TAB.
 - Fixed a white pill not being be put in the wallet.
+- Fixed cutscene in SCP-049's containment chamber not working at all.
 
 - Hopefully fixed height of NPCs teleportation.
 

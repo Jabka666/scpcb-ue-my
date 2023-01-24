@@ -281,15 +281,16 @@ Function SaveGame%(File$)
 		Next
 		
 		For i = 0 To MaxRoomLevers - 1
-			If r\Levers[i] <> 0 Then
-				If EntityPitch(r\Levers[i], True) > 0.0 Then
+			If r\RoomLevers[i] = Null Then
+				WriteByte(f, 2)
+			Else
+				If EntityPitch(r\RoomLevers[i]\OBJ, True) > 0.0 Then
 					WriteByte(f, 1)
 				Else
 					WriteByte(f, 0)
 				EndIf
 			EndIf
 		Next
-		WriteByte(f, 2)
 		
 		If r\mt = Null Then ; ~ This room doesn't have a grid
 			WriteByte(f, 0)
@@ -836,12 +837,10 @@ Function LoadGame%(File$)
 		
 		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
-			If ID = 2 Then
-				Exit
-			ElseIf ID = 1
-				RotateEntity(r\Levers[x], 78.0, EntityYaw(r\Levers[x]), 0.0)
-			Else
-				RotateEntity(r\Levers[x], -78.0, EntityYaw(r\Levers[x]), 0.0)
+			If ID = 1 Then
+				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+			ElseIf ID = 0
+				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			EndIf
 		Next
 		
@@ -899,9 +898,7 @@ Function LoadGame%(File$)
 			Delete(r\fr) : r\fr = Null
 		EndIf
 		
-		If r\x = r1499_x And r\z = r1499_z
-			I_1499\PrevRoom = r
-		EndIf
+		If r\x = r1499_x And r\z = r1499_z Then I_1499\PrevRoom = r
 	Next
 	
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
@@ -1708,12 +1705,10 @@ Function LoadGameQuick%(File$)
 		
 		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
-			If ID = 2 Then
-				Exit
-			ElseIf ID = 1
-				RotateEntity(r\Levers[x], 78.0, EntityYaw(r\Levers[x]), 0.0)
-			Else
-				RotateEntity(r\Levers[x], -78.0, EntityYaw(r\Levers[x]), 0.0)
+			If ID = 1 Then
+				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+			ElseIf ID = 0
+				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			EndIf
 		Next
 		
@@ -2100,29 +2095,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case "cont1_035"
 				;[Block]
-				If I_035\Sad <> 0 Then
-					Tex = LoadTexture_Strict("GFX\Map\Textures\label035_sad.png")
-				Else
-					Tex = LoadTexture_Strict("GFX\Map\Textures\label035_smile.png")
-				EndIf
-				
-				For i = 2 To CountSurfaces(r\Objects[9])
-					SF = GetSurface(r\Objects[9], i)
-					b = GetSurfaceBrush(SF)
-					If b <> 0 Then
-						t1 = GetBrushTexture(b, 0)
-						If t1 <> 0 Then
-							Name = StripPath(TextureName(t1))
-							If Lower(Name) <> "cable_black.jpg"
-								BrushTexture(b, Tex, 0, 0)
-								PaintSurface(SF, b)
-							EndIf
-							If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
-						EndIf
-						FreeBrush(b)
-					EndIf
-				Next
-				DeleteSingleTextureEntryFromCache(Tex)
+				Update035Label(r\Objects[6])
 				;[End Block]
 		End Select
 	Next

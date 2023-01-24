@@ -1631,7 +1631,7 @@ Type Rooms
 	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
 	Field MaxLights% = 0
 	Field Objects%[MaxRoomObjects], HideObject%[MaxRoomObjects]
-	Field Levers%[MaxRoomLevers]
+	Field RoomLevers.Levers[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
 	Field mt.MTGrid
@@ -3740,12 +3740,44 @@ Function UpdateScreens%()
 	Next
 End Function
 
-Function UpdateLever%(OBJ%, Locked% = False)
+Type Levers
+	Field OBJ%, BaseOBJ%
+	Field room.Rooms
+End Type
+
+Function CreateLever.Levers(room.Rooms, x#, y#, z#, Rotation# = 0.0, TurnedOn% = False)
+	Local lvr.Levers
+	
+	lvr.Levers = New Levers
+	lvr\BaseOBJ = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
+	lvr\OBJ = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
+	
+	ScaleEntity(lvr\BaseOBJ, 0.04, 0.04, 0.04)
+	ScaleEntity(lvr\OBJ, 0.04, 0.04, 0.04)
+	PositionEntity(lvr\BaseOBJ, x, y, z, True)
+	PositionEntity(lvr\OBJ, x, y, z, True)
+	
+	EntityParent(lvr\BaseOBJ, room\OBJ)
+	EntityParent(lvr\OBJ, room\OBJ)
+	
+	RotateEntity(lvr\BaseOBJ, 0.0, Rotation, 0.0)
+	RotateEntity(lvr\OBJ, -80.0 + (160.0 * TurnedOn), Rotation - 180.0, 0.0)
+	
+	EntityPickMode(lvr\OBJ, 1, False)
+	EntityRadius(lvr\OBJ, 0.1)
+	
+	lvr\room = room
+	
+	Return(lvr)
+End Function
+
+Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
+	Local PrevValue#, RefValue#
 	Local Dist# = EntityDistanceSquared(Camera, OBJ)
 	
-	If Dist < 64.0 Then
-		If Dist < 0.64 And (Not Locked) Then
-			If EntityInView(OBJ, Camera) Then
+	If Dist < 4.0 Then 
+		If Dist <= 0.65 And (Not Locked) Then 
+			If EntityVisible(OBJ, Camera) Then 
 				EntityPick(Camera, 0.65)
 				
 				If PickedEntity() = OBJ Then
@@ -3753,39 +3785,39 @@ Function UpdateLever%(OBJ%, Locked% = False)
 					If mo\MouseHit1 Then GrabbedEntity = OBJ
 				EndIf
 				
-				Local PrevPitch# = EntityPitch(OBJ)
+				PrevValue = EntityPitch(OBJ)
 				
 				If (mo\MouseDown1 Lor mo\MouseHit1) Then
 					If GrabbedEntity <> 0 Then
 						If GrabbedEntity = OBJ Then
-							ga\DrawHandIcon = True 
-							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), 80.0), -80.0), EntityYaw(OBJ), 0.0)
-							
+							ga\DrawHandIcon = True
+							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), MaxValue), MinValue), EntityYaw(OBJ), 0.0)
 							ga\DrawArrowIcon[0] = True
 							ga\DrawArrowIcon[2] = True
 						EndIf
 					EndIf
 				EndIf
 				
-				If EntityPitch(OBJ, True) > 75.0 Then
-					If PrevPitch <= 75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
-				ElseIf EntityPitch(OBJ, True) < -75.0
-					If PrevPitch >= -75.0 Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
+				RefValue = EntityPitch(OBJ, True)
+				If RefValue > (MaxValue - 5.0) Then
+					If PrevValue =< (MaxValue - 5.0) Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)
+				ElseIf RefValue < (MinValue + 5.0) Then
+					If PrevValue => (MinValue + 5.0) Then PlaySound2(LeverSFX, Camera, OBJ, 1.0)	
 				EndIf
 			EndIf
 		EndIf
-		
-		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then
-			If EntityPitch(OBJ,True) > 0 Then
-				RotateEntity(OBJ, CurveValue(80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
+		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
+		If (Not GrabbedEntity) Lor Dist > 0.65 Then
+			If EntityPitch(OBJ, True) > ((MaxValue + MinValue) / 2.0) Then
+				RotateEntity(OBJ, CurveValue(MaxValue, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			Else
-				RotateEntity(OBJ, CurveValue(-80.0, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
+				RotateEntity(OBJ, CurveValue(MinValue, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			EndIf
-			GrabbedEntity = 0
 		EndIf
 	EndIf
 	
-	If EntityPitch(OBJ, True) > 0.0 Then
+	RefValue = EntityPitch(OBJ, True)
+	If RefValue > ((MaxValue + MinValue) / 2.0) Then
 		Return(True)
 	Else
 		Return(False)
@@ -4685,30 +4717,17 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomDoors.Doors[1] = CreateDoor(r\x + 1200.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z, -90.0, r, False, ELEVATOR_DOOR)
 			
-			For k = 0 To 1
-				r\Objects[k * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-				r\Objects[k * 2 + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-				r\Levers[k] = r\Objects[k * 2 + 1]
-				
-				For i = 0 To 1
-					ScaleEntity(r\Objects[k * 2 + i], 0.04, 0.04, 0.04)
-					PositionEntity(r\Objects[k * 2 + i], r\x - 495.0 * RoomScale, r\y + 4016.0 * RoomScale, r\z - (553.0 - (132.0 * k)) * RoomScale)
-					EntityParent(r\Objects[k * 2 + i], r\OBJ)
-				Next
-				RotateEntity(r\Objects[k * 2], 0.0, -270.0, 0.0)
-				RotateEntity(r\Objects[k * 2 + 1], 10.0, -90.0, 0.0)
-				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
-				EntityRadius(r\Objects[k * 2 + 1], 0.1)
-			Next
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 495.0 * RoomScale, r\y + 4016.0 * RoomScale, r\z - 553.0 * RoomScale, -270.0, True)
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 495.0 * RoomScale, r\y + 4016.0 * RoomScale, r\z - 421.0 * RoomScale, -270.0, True)
 			
 			; ~ Elevators' pivots
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 1504.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x + 1504.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
 			
-			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x + 1504.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x + 1504.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
 			
-			For i = 4 To 5
+			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -4802,8 +4821,6 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x - 62.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 945.0 * RoomScale)
 			RotateEntity(r\Objects[1], 85.0, 0.0, 0.0, True)
 			
-			r\Levers[0] = r\Objects[1]
-			
 			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			r\HideObject[2] = False
@@ -4825,6 +4842,7 @@ Function FillRoom%(r.Rooms)
 			; ~ Red light
 			r\Objects[5] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
 			r\HideObject[5] = False
+			HideEntity(r\Objects[5])
 			
 			; ~ Spawnpoint for the scientist used in the "SCP-008-1's scene"
 			r\Objects[6] = CreatePivot()
@@ -4879,60 +4897,41 @@ Function FillRoom%(r.Rooms)
 			; ~ Door to the storage room
 			r\RoomDoors.Doors[3] = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_CONT1_035))
 			
-			For i = 0 To 1
-				r\Objects[i * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-				r\Objects[i * 2 + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-				
-				r\Levers[i] = r\Objects[i * 2 + 1]
-				
-				For k = 0 To 1
-					ScaleEntity(r\Objects[i * 2 + k], 0.04, 0.04, 0.04)
-					PositionEntity(r\Objects[i * 2 + k], r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - (203.0 - i * 71.0) * RoomScale)
-					EntityParent(r\Objects[i * 2 + k], r\OBJ)
-				Next
-				
-				RotateEntity(r\Objects[i * 2], 0, -90.0 - 180.0, 0.0)
-				RotateEntity(r\Objects[i * 2 + 1], -80.0, -90.0, 0.0)
-				EntityPickMode(r\Objects[i * 2 + 1], 1, False)
-				EntityRadius(r\Objects[i * 2 + 1], 0.1)
-			Next
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 203.0 * RoomScale, -270.0)
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 132.0 * RoomScale, -270.0)
 			
 			; ~ The control room
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 456.0 * RoomScale, r\y + 0.5, r\z + 400.0 * RoomScale)
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x + 456.0 * RoomScale, r\y + 0.5, r\z + 400.0 * RoomScale)
 			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 576.0 * RoomScale, r\y + 0.5, r\z + 640.0 * RoomScale)
-			
-			For i = 3 To 4
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x - 576.0 * RoomScale, r\y + 0.5, r\z + 640.0 * RoomScale)
 			
 			em.Emitters = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 624.0 * RoomScale, 0)
 			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
-			r\Objects[5] = em\OBJ
+			r\Objects[2] = em\OBJ
 			
 			em.Emitters = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 135.0 * RoomScale, 0)
 			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
-			r\Objects[6] = em\OBJ
+			r\Objects[3] = em\OBJ
 			
 			; ~ The corners of the cont chamber (needed to calculate whether the player is inside the chamber)
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x - 720.0 * RoomScale, r\y + 0.5, r\z + 880.0 * RoomScale)
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x - 720.0 * RoomScale, r\y + 0.5, r\z + 880.0 * RoomScale)
 			
-			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x + 176.0 * RoomScale, r\y + 0.5, r\z - 144.0 * RoomScale)
+			r\Objects[5] = CreatePivot()
+			PositionEntity(r\Objects[5], r\x + 176.0 * RoomScale, r\y + 0.5, r\z - 144.0 * RoomScale)
 			
-			r\Objects[9] = LoadMesh_Strict("GFX\Map\Props\cont1_035_label.b3d")
-			Update035Label(r\Objects[9])
-			ScaleEntity(r\Objects[9], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[9], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
+			r\Objects[6] = LoadMesh_Strict("GFX\Map\Props\cont1_035_label.b3d")
+			Update035Label(r\Objects[6])
+			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[6], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
 			
-			For i = 7 To 9
+			For i = 0 To 6
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -5116,6 +5115,9 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 3095.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 6568.0 * RoomScale)
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 1215.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 3164.0 * RoomScale)
+			
 			; ~ Elevators' pivots
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
@@ -5180,28 +5182,6 @@ Function FillRoom%(r.Rooms)
 			
 			For i = 0 To 18
 				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			; ~ TODO:
-			For k = 10 To 11
-				r\Objects[k * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-				r\Objects[k * 2 + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-				
-				r\Levers[k - 10] = r\Objects[k * 2 + 1]
-				
-				For i = 0 To 1
-					ScaleEntity(r\Objects[k * 2 + i], 0.04, 0.04, 0.04)
-					If k = 10
-						PositionEntity(r\Objects[k * 2 + i], r\x + 3095.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 6568.0 * RoomScale)
-					Else
-						PositionEntity(r\Objects[k * 2 + i], r\x + 1215.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 3164.0 * RoomScale)
-					EndIf
-					EntityParent(r\Objects[k * 2 + i], r\OBJ)
-				Next
-				RotateEntity(r\Objects[k * 2], 0.0, 0.0, 0.0)
-				RotateEntity(r\Objects[k * 2 + 1], -10.0, 0.0 - 180.0, 0.0)
-				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
-				EntityRadius(r\Objects[k * 2 + 1], 0.1)
 			Next
 			
 			em.Emitters = CreateEmitter(r\x + 5218.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 600.0 * RoomScale, 0)
@@ -5295,6 +5275,11 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
+			; ~ Power feed lever
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 866.0 * RoomScale, r\y - 3374.0 * RoomScale, r\z - 854.0 * RoomScale, 270.0, True)
+			; ~ Generator lever
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 815.0 * RoomScale, r\y - 3400.0 * RoomScale, r\z + 1094.0 * RoomScale, 180.0)
+			
 			; ~ Elevators' pivots
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 624.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 640.0 * RoomScale)
@@ -5316,48 +5301,18 @@ Function FillRoom%(r.Rooms)
 			r\Objects[5] = CreatePivot()
 			PositionEntity(r\Objects[5], r\x + 64.0 * RoomScale, r\y - 3440.0 * RoomScale, r\z - 1000.0 * RoomScale)
 			
-			For i = 0 To 5
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			For k = 0 To 1
-				r\Objects[k * 2 + 6] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-				r\Objects[k * 2 + 7] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-				
-				r\Levers[k] = r\Objects[k * 2 + 7]
-				
-				For i = 0 To 1
-					ScaleEntity(r\Objects[k * 2 + 6 + i], 0.03, 0.03, 0.03)
-					
-					Select k
-						Case 0 ; ~ Power feed
-							;[Block]
-							PositionEntity(r\Objects[k * 2 + 6 + i], r\x + 866.0 * RoomScale, r\y - 3374.0 * RoomScale, r\z - 854.0 * RoomScale)
-							;[End Block]
-						Case 1 ; ~ Generator
-							;[Block]
-							PositionEntity(r\Objects[k * 2 + 6 + i], r\x - 815.0 * RoomScale, r\y - 3400.0 * RoomScale, r\z + 1094.0 * RoomScale)
-							;[End Block]
-					End Select
-					EntityParent(r\Objects[k * 2 + 6 + i], r\OBJ)
-				Next
-				RotateEntity(r\Objects[k * 2 + 6], 0.0, 180.0 + 90.0 * (Not k), 0.0)
-				RotateEntity(r\Objects[k * 2 + 7], 81.0 - 92.0 * k, 90.0 * (Not k), 0.0)
-				EntityPickMode(r\Objects[k * 2 + 7], 1, False)
-				EntityRadius(r\Objects[k * 2 + 7], 0.1)
-			Next
-			
-			r\Objects[10] = CreatePivot()
-			PositionEntity(r\Objects[10], r\x - 832.0 * RoomScale, r\y - 3484.0 * RoomScale, r\z + 1572.0 * RoomScale)
+			; ~ Fuel pump sound emitter
+			r\Objects[6] = CreatePivot()
+			PositionEntity(r\Objects[6], r\x - 832.0 * RoomScale, r\y - 3484.0 * RoomScale, r\z + 1572.0 * RoomScale)
 			
 			; ~ Spawnpoint for the map layout document
-			r\Objects[11] = CreatePivot()
-			PositionEntity(r\Objects[11], r\x + 2720.0 * RoomScale, r\y - 3516.0 * RoomScale, r\z + 1824.0 * RoomScale)
+			r\Objects[7] = CreatePivot()
+			PositionEntity(r\Objects[7], r\x + 2720.0 * RoomScale, r\y - 3516.0 * RoomScale, r\z + 1824.0 * RoomScale)
 			
-			r\Objects[12] = CreatePivot()
-			PositionEntity(r\Objects[12], r\x - 2720.0 * RoomScale, r\y - 3516.0 * RoomScale, r\z - 1824.0 * RoomScale)
+			r\Objects[8] = CreatePivot()
+			PositionEntity(r\Objects[8], r\x - 2720.0 * RoomScale, r\y - 3516.0 * RoomScale, r\z - 1824.0 * RoomScale)
 			
-			For i = 10 To 12
+			For i = 0 To 8
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -5394,34 +5349,24 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 176.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 352.0 * RoomScale, True)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
-			r\Objects[0] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-			r\Objects[1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-			r\Levers[0] = r\Objects[1]
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 364.0 * RoomScale, 0.0, True)
+			
+			r\Objects[0] = LoadRMesh("GFX\Map\cont2_012_box.rmesh", Null)
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[0], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
+			
+			r\Objects[1] = CreateRedLight(r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
+			r\HideObject[1] = False
+			HideEntity(r\Objects[1])
 			
 			For i = 0 To 1
-				ScaleEntity(r\Objects[i], 0.04, 0.04, 0.04)
-				PositionEntity(r\Objects[i], r\x + 240.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 364.0 * RoomScale, True)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
-			RotateEntity(r\Objects[1], 10.0, -180.0, 0.0)
-			EntityPickMode(r\Objects[1], 1, False)
-			EntityRadius(r\Objects[1], 0.1)
 			
-			r\Objects[2] = LoadRMesh("GFX\Map\cont2_012_box.rmesh", Null)
+			r\Objects[2] = LoadMesh_Strict("GFX\Map\Props\scp_012.b3d")
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
-			
-			r\Objects[3] = CreateRedLight(r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
-			r\HideObject[3] = False
-			
-			For i = 2 To 3
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			r\Objects[4] = LoadMesh_Strict("GFX\Map\Props\scp_012.b3d")
-			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
-			EntityParent(r\Objects[4], r\Objects[2])
+			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
+			EntityParent(r\Objects[2], r\Objects[0])
 			
 			it.Items = CreateItem("Document SCP-012", "paper", r\x - 56.0 * RoomScale, r\y - 576.0 * RoomScale, r\z - 408.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -5512,55 +5457,27 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 224.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 90.0, r, True)
 			r\RoomDoors[1]\Locked = 1
 			
-			For k = 0 To 2
-				r\Objects[k * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-				r\Objects[k * 2 + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-				
-				r\Levers[k] = r\Objects[k * 2 + 1]
-				
-				For i = 0 To 1
-					ScaleEntity(r\Objects[k * 2 + i], 0.03, 0.03, 0.03)
-					
-					Select k
-						Case 0 ; ~ Power switch
-							;[Block]
-							PositionEntity(r\Objects[k * 2 + i], r\x - 1260.0 * RoomScale, r\y + 234.0 * RoomScale, r\z + 750.0 * RoomScale)
-							;[End Block]
-						Case 1 ; ~ Generator fuel pump
-							;[Block]
-							PositionEntity(r\Objects[k * 2 + i], r\x - 917.0 * RoomScale, r\y + 164.0 * RoomScale, r\z + 898.0 * RoomScale)
-							;[End Block]
-						Case 2 ; ~ Generator On / Off
-							;[Block]
-							PositionEntity(r\Objects[k * 2 + i], r\x - 837.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 886.0 * RoomScale)
-							;[End Block]
-					End Select
-					EntityParent(r\Objects[k * 2 + i], r\OBJ)
-				Next
-				RotateEntity(r\Objects[k * 2 + 1], 81.0, -180.0, 0.0)
-				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
-				EntityRadius(r\Objects[k * 2 + 1], 0.1)
-			Next
-			RotateEntity(r\Objects[2 + 1], -81.0, -180.0, 0.0)
-			RotateEntity(r\Objects[4 + 1], -81.0, -180.0, 0.0)
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 1260.0 * RoomScale, r\y + 234.0 * RoomScale, r\z + 750.0 * RoomScale, 0.0, True)
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 917.0 * RoomScale, r\y + 164.0 * RoomScale, r\z + 898.0 * RoomScale)
+			r\RoomLevers.Levers[2] = CreateLever(r, r\x - 837.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 886.0 * RoomScale)
 			
 			; ~ SCP-096's spawnpoint
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x - 352.0 * RoomScale, r\y + 0.5, r\z)
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x - 352.0 * RoomScale, r\y + 0.5, r\z)
 			
 			; ~ Guard's spawnpoint
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x - 1328.0 * RoomScale, r\y + 0.5, r\z + 528.0 * RoomScale)
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x - 1328.0 * RoomScale, r\y + 0.5, r\z + 528.0 * RoomScale)
 			
-			For i = 6 To 7
+			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[8] = LoadMesh_Strict("GFX\Map\room2_servers_hcz_hb.b3d", r\OBJ)
-			r\HideObject[8] = False
-			EntityPickMode(r\Objects[8], 2)
-			EntityAlpha(r\Objects[8], 0.0)
-			HideEntity(r\Objects[8])
+			r\Objects[2] = LoadMesh_Strict("GFX\Map\room2_servers_hcz_hb.b3d", r\OBJ)
+			r\HideObject[2] = False
+			EntityPickMode(r\Objects[2], 2)
+			EntityAlpha(r\Objects[2], 0.0)
+			HideEntity(r\Objects[2])
 			;[End Block]
 		Case "room3_2_ez"
 			;[Block]
@@ -6131,6 +6048,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x - 390.0 * RoomScale, EntityY(r\RoomDoors[0]\Buttons[i], True), r\z - 280.0 * RoomScale, True)
 			PositionEntity(r\RoomDoors[0]\Buttons[1], EntityX(r\RoomDoors[0]\Buttons[1], True) + 0.025, EntityY(r\RoomDoors[0]\Buttons[1], True), EntityZ(r\RoomDoors[0]\Buttons[1], True), True) 
 			
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 800.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 336.0 * RoomScale, 180.0, True)
+			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, - 1320.0 * RoomScale, r\z + 2304.0 * RoomScale)
 			
@@ -6140,21 +6059,6 @@ Function FillRoom%(r.Rooms)
 			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
-			
-			r\Objects[2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-			r\Objects[3] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL]) ; ~ TODO
-			
-			r\Levers[0] = r\Objects[3]
-			
-			For i = 0 To 1
-				ScaleEntity(r\Objects[2 + i], 0.04, 0.04, 0.04)
-				PositionEntity(r\Objects[2 + i], r\x - 800.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 336.0 * RoomScale)
-				EntityParent(r\Objects[2 + i], r\OBJ)
-			Next
-			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
-			RotateEntity(r\Objects[3], 10.0, 0.0, 0.0)
-			EntityPickMode(r\Objects[3], 1, False)
-			EntityRadius(r\Objects[3], 0.1)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, r, True, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale)
 			sc\Angle = 225.0 : sc\Turn = 45.0 : sc\CoffinEffect = 1 : sc_I\CoffinCam = sc
@@ -6184,6 +6088,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[2] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
 			r\HideObject[2] = False
+			HideEntity(r\Objects[2])
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -6483,22 +6388,9 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r\x - 704.0 * RoomScale, r\y + 896.0 * RoomScale, r\z + 736.0 * RoomScale, 90.0, r, False, ONE_SIDED_DOOR, KEY_CARD_4)
 			
-			For k = 0 To 2
-				r\Objects[k * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-				r\Objects[k * 2 + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-				
-				r\Levers[k] = r\Objects[k * 2 + 1]
-				
-				For i = 0 To 1
-					ScaleEntity(r\Objects[k * 2 + i], 0.04, 0.04, 0.04)
-					PositionEntity(r\Objects[k * 2 + i], r\x - 240.0 * RoomScale, r\y + 1104.0 * RoomScale, r\z + (632.0 - 64.0 * k) * RoomScale)
-					EntityParent(r\Objects[k * 2 + i], r\OBJ)
-				Next
-				RotateEntity(r\Objects[k * 2], 0.0, -90.0, 0.0)
-				RotateEntity(r\Objects[k * 2 + 1], 10.0, -90.0 - 180.0, 0.0)
-				EntityPickMode(r\Objects[k * 2 + 1], 1, False)
-				EntityRadius(r\Objects[k * 2 + 1], 0.1)
-			Next
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 240.0 * RoomScale, r\y + 1104.0 * RoomScale, r\z + 632.0 * RoomScale, -90.0, True)
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 240.0 * RoomScale, r\y + 1104.0 * RoomScale, r\z + 568.0 * RoomScale, -90.0, True)
+			r\RoomLevers.Levers[2] = CreateLever(r, r\x - 240.0 * RoomScale, r\y + 1104.0 * RoomScale, r\z + 504.0 * RoomScale, -90.0, True)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 265.0 * RoomScale, r\y + 1280.0 * RoomScale, r\z + 105.0 * RoomScale, r)
 			sc\Angle = 45.0 : sc\Turn = 45.0
@@ -6532,40 +6424,24 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
 			; ~ Levers
-			For k = 0 To 2 Step 2
-				r\Objects[k] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-				r\Objects[k + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-				
-				r\Levers[k / 2] = r\Objects[k + 1]
-				
-				For i = 0 To 1
-					ScaleEntity(r\Objects[k + i], 0.04, 0.04, 0.04)
-					PositionEntity(r\Objects[k + i], r\x - (744.0 - 79.0 * (k / 2.0)) * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3119.0 * RoomScale, True)
-					EntityParent(r\Objects[k + i], r\OBJ)
-				Next
-				RotateEntity(r\Objects[k], 0.0, 0.0, 0.0)
-				RotateEntity(r\Objects[k + 1], 10.0, -180.0, 0.0)
-				EntityPickMode(r\Objects[k + 1], 1, False)
-				EntityRadius(r\Objects[k + 1], 0.1)
-			Next
-			RotateEntity(r\Objects[1], 81.0, -180.0, 0.0)
-			RotateEntity(r\Objects[3], -81.0, -180.0, 0.0)
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 744.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3119.0 * RoomScale, 0.0, True)
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 665.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3119.0 * RoomScale)
 			
 			; ~ Femur breaker button
-			r\Objects[4] = CreateButton(0, r\x - 337.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3136.0 * RoomScale)
+			r\Objects[0] = CreateButton(0, r\x - 337.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3136.0 * RoomScale)
 			
 			; ~ Class-D spawnpoint
-			r\Objects[5] = CreatePivot()
-			TurnEntity(r\Objects[5], 0.0, 180.0, 0.0)
-			PositionEntity(r\Objects[5], r\x + 1088.0 * RoomScale, r\y - 6224.0 * RoomScale, r\z + 1824.0 * RoomScale) 
+			r\Objects[1] = CreatePivot()
+			TurnEntity(r\Objects[1], 0.0, 180.0, 0.0)
+			PositionEntity(r\Objects[1], r\x + 1088.0 * RoomScale, r\y - 6224.0 * RoomScale, r\z + 1824.0 * RoomScale) 
 			
 			; ~ Chamber
-			r\Objects[6] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null)
-			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
-			EntityPickMode(r\Objects[6], 2)
-			PositionEntity(r\Objects[6], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
+			r\Objects[2] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null)
+			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
+			EntityPickMode(r\Objects[2], 2)
+			PositionEntity(r\Objects[2], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
 			
-			For i = 4 To 6
+			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -6575,8 +6451,8 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(sc\CameraOBJ, 45.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, -10.0, 0.0)
 			
-			r\Objects[7] = sc\CameraOBJ
-			r\Objects[8] = sc\BaseOBJ
+			r\Objects[3] = sc\CameraOBJ
+			r\Objects[4] = sc\BaseOBJ
 			
 			; ~ Security camera inside the observation room
 			sc.SecurityCams = CreateSecurityCam(r\x - 1439.0 * RoomScale, r\y - 7664.0 * RoomScale, r\z + 1709.0 * RoomScale, r)
@@ -6584,20 +6460,20 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			; ~ Elevators' pivots
-			r\Objects[9] = CreatePivot()
-			PositionEntity(r\Objects[9], r\x - 1008.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 704.0 * RoomScale)
+			r\Objects[5] = CreatePivot()
+			PositionEntity(r\Objects[5], r\x - 1008.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 704.0 * RoomScale)
 			
-			r\Objects[10] = CreatePivot()
-			PositionEntity(r\Objects[10], r\x - 1008.0 * RoomScale, r\y - 7088.0 * RoomScale, r\z - 704.0 * RoomScale)
+			r\Objects[6] = CreatePivot()
+			PositionEntity(r\Objects[6], r\x - 1008.0 * RoomScale, r\y - 7088.0 * RoomScale, r\z - 704.0 * RoomScale)
 			
-			For i = 9 To 10
+			For i = 5 To 6
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[11] = LoadMesh_Strict("GFX\Map\cont1_106_hb.b3d", r\OBJ)
-			r\HideObject[11] = False
-			EntityPickMode(r\Objects[11], 2)
-			EntityAlpha(r\Objects[11], 0.0)
+			r\Objects[7] = LoadMesh_Strict("GFX\Map\cont1_106_hb.b3d", r\OBJ)
+			r\HideObject[7] = False
+			EntityPickMode(r\Objects[7], 2)
+			HideEntity(r\Objects[7])
 			
 			it.Items = CreateItem("Level 5 Key Card", "key5", r\x - 1275.0 * RoomScale, r\y - 7910.0 * RoomScale, r\z + 3106.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -7150,6 +7026,8 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 49.0 * RoomScale, r\y + 689.0 * RoomScale, r\z + 912.0 * RoomScale, 0.0, True)
+			
 			Scale = RoomScale * 4.5 * 0.4
 			
 			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
@@ -7209,19 +7087,19 @@ Function FillRoom%(r.Rooms)
 						End Select
 						EntityParent(Screen, r\Objects[i])
 					ElseIf i = 4 Then
-						r\Objects[20] = CreateSprite()
-						EntityFX(r\Objects[20], 17)
-						SpriteViewMode r\Objects[20], 2
-						ScaleSprite(r\Objects[20], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.95 * 0.5)
-						EntityTexture(r\Objects[20], r\Textures[0], 2)
-						EntityParent(r\Objects[20], r\Objects[i])
+						r\Objects[18] = CreateSprite()
+						EntityFX(r\Objects[18], 17)
+						SpriteViewMode(r\Objects[18], 2)
+						ScaleSprite(r\Objects[18], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.95 * 0.5)
+						EntityTexture(r\Objects[18], r\Textures[0], 2)
+						EntityParent(r\Objects[18], r\Objects[i])
 					Else
-						r\Objects[21] = CreateSprite()
-						EntityFX(r\Objects[21], 17)
-						SpriteViewMode(r\Objects[21], 2)
-						ScaleSprite(r\Objects[21], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.95 * 0.5)
-						EntityTexture(r\Objects[21], r\Textures[1], 6)
-						EntityParent(r\Objects[21], r\Objects[i])
+						r\Objects[19] = CreateSprite()
+						EntityFX(r\Objects[19], 17)
+						SpriteViewMode(r\Objects[19], 2)
+						ScaleSprite(r\Objects[19], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.95 * 0.5)
+						EntityTexture(r\Objects[19], r\Textures[1], 6)
+						EntityParent(r\Objects[19], r\Objects[i])
 					EndIf
 				EndIf
 			Next
@@ -7275,24 +7153,9 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[9 * 2] = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-			r\Objects[9 * 2 + 1] = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL]) ; TODO
-			
-			r\Levers[0] = r\Objects[9 * 2 + 1]
-			
-			For i = 0 To 1
-				ScaleEntity(r\Objects[9 * 2 + i], 0.04, 0.04, 0.04)
-				PositionEntity(r\Objects[9 * 2 + i], r\x - 49.0 * RoomScale, r\y + 689.0 * RoomScale, r\z + 912.0 * RoomScale)
-				EntityParent(r\Objects[9 * 2 + i], r\OBJ)
-			Next
-			
-			RotateEntity(r\Objects[9 * 2], 0.0, 0.0, 0.0)
-			RotateEntity(r\Objects[9 * 2 + 1], 10.0, 0.0 - 180.0, 0.0)
-			EntityPickMode(r\Objects[9 * 2 + 1], 1, False)
-			EntityRadius(r\Objects[9 * 2 + 1], 0.1)
-			
-			r\Objects[22] = CreateRedLight(r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale, r\OBJ)
-			r\HideObject[22] = False
+			r\Objects[20] = CreateRedLight(r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale, r\OBJ)
+			r\HideObject[20] = False
+			HideEntity(r\Objects[20])
 			
 			; ~ Camera in the room itself
 			sc.SecurityCams = CreateSecurityCam(r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, r, True, r\x - 231.489 * RoomScale, r\y + 760.0 * RoomScale, r\z + 255.744 * RoomScale)
@@ -7732,7 +7595,7 @@ End Function
 ;============
 Function HideRoomsNoColl%(room.Rooms)
 	Local i%, j%
-	Local p.Props, d.Doors, sc.SecurityCams
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers
 	
 	If (Not EntityHidden(room\OBJ)) Then
 		For p.Props = Each Props
@@ -7763,6 +7626,13 @@ Function HideRoomsNoColl%(room.Rooms)
 			EndIf
 		Next
 		
+		For lvr.Levers = Each Levers
+			If lvr\room = room Then
+				HideEntity(lvr\OBJ)
+				HideEntity(lvr\BaseOBJ)
+			EndIf
+		Next
+		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0 Then
 				If room\HideObject[i] Then ShowEntity(room\Objects[i])
@@ -7777,7 +7647,7 @@ End Function
 
 Function ShowRoomsNoColl%(room.Rooms)
 	Local i%, j%
-	Local p.Props, d.Doors, sc.SecurityCams
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers
 	
 	If EntityHidden(room\OBJ) Then
 		For p.Props = Each Props
@@ -7808,6 +7678,13 @@ Function ShowRoomsNoColl%(room.Rooms)
 			EndIf
 		Next
 		
+		For lvr.Levers = Each Levers
+			If lvr\room = room Then
+				ShowEntity(lvr\OBJ)
+				ShowEntity(lvr\BaseOBJ)
+			EndIf
+		Next
+		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0 Then
 				If room\HideObject[i] Then ShowEntity(room\Objects[i])
@@ -7834,7 +7711,7 @@ End Function
 
 Function HideRoomsColl%(room.Rooms)
 	Local i%, j%, k%
-	Local p.Props, d.Doors, sc.SecurityCams
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers
 	
 	If (Not room\HiddenAlpha) Then
 		For p.Props = Each Props
@@ -7896,6 +7773,16 @@ Function HideRoomsColl%(room.Rooms)
 		Next
 		
 		; ~ Hide collider anyway because with most of them player cannot interact
+		For lvr.Levers = Each Levers
+			If lvr\room = room Then
+				If (Not EntityHidden(lvr\BaseOBJ)) Then
+					HideEntity(lvr\OBJ)
+					HideEntity(lvr\BaseOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		; ~ Hide collider anyway because with most of them player cannot interact
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0 Then
 				If room\HideObject[i] Then HideEntity(room\Objects[i])
@@ -7911,7 +7798,7 @@ End Function
 
 Function ShowRoomsColl%(room.Rooms)
 	Local i%, j%, k%
-	Local p.Props, d.Doors, sc.SecurityCams
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers
 	
 	If room\HiddenAlpha Then
 		For p.Props = Each Props
@@ -7965,6 +7852,15 @@ Function ShowRoomsColl%(room.Rooms)
 					EndIf
 					ShowEntity(sc\CameraOBJ)
 					ShowEntity(sc\BaseOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For lvr.Levers = Each Levers
+			If lvr\room = room Then
+				If EntityHidden(lvr\BaseOBJ) Then
+					ShowEntity(lvr\OBJ)
+					ShowEntity(lvr\BaseOBJ)
 				EndIf
 			EndIf
 		Next
