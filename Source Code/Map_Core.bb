@@ -3298,7 +3298,7 @@ Function TurnOffSecurityCam%(room.Rooms, TurnOff%)
 		Else
 			If sc\room = room Then
 				If EntityHidden(sc\ScrOBJ) Then
-					If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "cont1_106" Then sc\CoffinEffect = 2
+					If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "cont1_106" And sc\room\RoomTemplate\Name <> "cont1_205" Then sc\CoffinEffect = 2
 					sc\Screen = True
 					ShowEntity(sc\ScrOverlay)
 					ShowEntity(sc\ScrOBJ)
