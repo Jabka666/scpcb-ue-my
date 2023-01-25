@@ -3907,7 +3907,7 @@ Function UpdateEvents%()
 							BT = GetBrushTexture(b, 0)
 							TexName = StripPath(TextureName(BT))
 							
-							If Lower(TexName) <> "scp_1048.png" Then PaintSurface(SF, Brush)
+							If Lower(TexName) = "scp_1048.png" Then PaintSurface(SF, Brush)
 							FreeBrush(b)
 						Next
 						DeleteSingleTextureEntryFromCache(Tex)
@@ -4894,7 +4894,7 @@ Function UpdateEvents%()
 												
 												PlaySound_Strict(LoadTempSound("SFX\SCP\035\KilledGetUp.ogg"))
 												
-												I_035\Sad = 1
+												I_035\Sad = True
 												
 												Update035Label(e\room\Objects[6])
 												CreateNPCAsset(e\room\NPC[0])
@@ -9721,32 +9721,55 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 End Function
 
 Function Update035Label%(OBJ%)
-	Local Tex%, i%
-	Local SF%, b%, t1%, Name$
+	Local itt.ItemTemplates, it.Items
+	Local Tex%, i%, LabelPath$, CurrTex$
+	Local SF%, b%, Brush%, t1%, TexName$
 	
-	If I_035\Sad <> 0 Then
-		Tex = LoadTexture_Strict("GFX\Map\Textures\label035_sad.png")
+	If I_035\Sad Then
+		CurrTex = "035_sad"
 	Else
-		Tex = LoadTexture_Strict("GFX\Map\Textures\label035_smile.png")
+		CurrTex = "035_smile"
 	EndIf
+	LabelPath = "GFX\Map\Textures\label" + CurrTex + ".png"
+	Tex = LoadTexture_Strict(LabelPath)
 	If opt\Atmosphere Then TextureBlend(Tex, 5)
-	For i = 2 To CountSurfaces(OBJ)
+	
+	Tex = LoadTexture_Strict(LabelPath)
+	Brush = LoadBrush_Strict(LabelPath)
+	For i = 1 To CountSurfaces(OBJ)
 		SF = GetSurface(OBJ, i)
 		b = GetSurfaceBrush(SF)
-		If b <> 0 Then
-			t1 = GetBrushTexture(b, 0)
-			If t1 <> 0 Then
-				Name = StripPath(TextureName(t1))
-				If Lower(Name) <> "cable_white.jpg" Then
-					BrushTexture(b, Tex, 0, 0)
-					PaintSurface(SF, b)
-				EndIf
-				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
-			EndIf
-			FreeBrush(b)
-		EndIf
+		t1 = GetBrushTexture(b, 0)
+		TexName = StripPath(TextureName(t1))
+		
+		If Lower(TexName) <> "cable_white.jpg" Then PaintSurface(SF, Brush)
+		FreeBrush(b)
 	Next
 	DeleteSingleTextureEntryFromCache(Tex)
+	FreeBrush(Brush)
+	
+	For itt.ItemTemplates = Each ItemTemplates
+		If itt\Name = "Document SCP-035" Then
+			If itt\Img <> 0 Then FreeImage(itt\Img) : itt\Img = 0
+			itt\ImgPath = ItemHUDTexturePath + "doc_" + CurrTex + ".png"
+			itt\Img = LoadImage_Strict(itt\ImgPath)
+			itt\Img = ScaleImage2(itt\Img, MenuScale, MenuScale)
+			itt\ImgWidth = ImageWidth(itt\Img) / 2
+			itt\ImgHeight = ImageHeight(itt\Img) / 2
+			itt\TexPath = ItemTexturePath + "doc_" + CurrTex + ".png"
+			
+			For it.Items = Each Items
+				If it\ItemTemplate\Name = itt\Name Then
+					Tex = LoadTexture_Strict(itt\TexPath)
+					If opt\Atmosphere Then TextureBlend(Tex, 5)
+					EntityTexture(it\Model, Tex)
+					DeleteSingleTextureEntryFromCache(Tex)
+					Exit
+				EndIf
+			Next
+			Exit
+		EndIf
+	Next
 End Function
 
 ;~IDEal Editor Parameters:

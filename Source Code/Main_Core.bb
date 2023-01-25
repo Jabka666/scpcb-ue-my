@@ -6186,20 +6186,11 @@ Function RenderGUI%()
 					;[End Block]
 				Case "paper", "oldpaper"
 					;[Block]
-					If I_035\Sad = 1 Then
-						If SelectedItem\ItemTemplate\Name = "Document SCP-035" Then
-							If SelectedItem\ItemTemplate\Img <> 0 Then
-								FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
-								I_035\Sad = 2
-							EndIf
-						EndIf
-					EndIf
-					
 					If (Not SelectedItem\ItemTemplate\Img) Then
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\note_Maynard.png")
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "note_Maynard.png")
 								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
@@ -6228,15 +6219,6 @@ Function RenderGUI%()
 								SetFont2(fo\FontID[Font_Journal])
 								Text2(383 * MenuScale, 734 * MenuScale, CODE_MAINTENANCE_TUNNELS, True, True)
 								SetBuffer(BackBuffer())
-								;[End Block]
-							Case "Document SCP-035"
-								;[Block]
-								If I_035\Sad <> 0 Then
-									SelectedItem\ItemTemplate\Img = LoadImage_Strict("GFX\Items\doc_035_sad.png")
-								Else
-									SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								EndIf
-								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								;[End Block]
 							Default 
 								;[Block]

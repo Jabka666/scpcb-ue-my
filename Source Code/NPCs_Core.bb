@@ -529,7 +529,7 @@ Function CreateNPCAsset%(n.NPCs)
 				Save = True
 			EndIf
 			
-			If I_035\Sad <> 0 Then
+			If I_035\Sad Then
 				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
 				If Save Then
 					RotateEntity(n\OBJ2, Pitch, Yaw, Roll)
