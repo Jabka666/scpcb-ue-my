@@ -27,8 +27,9 @@ Mechanics and effects:
 - Added a smooth stamina reducing effect while wearing a hazmat suit or SCP-714.
 
 - Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
+- Every document, note and chatscreen has it's own texture.
 
-- Some improvements for Player Room detection. Might fix some problems with custom maps and new optimization system.
+- Some improvements for player's room detection. Might fix some problems with custom maps and new optimization system.
 
 Rooms:
 - Added buttons for containment door in SCP-049's containment chamber.

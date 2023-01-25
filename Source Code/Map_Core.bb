@@ -3698,20 +3698,17 @@ Type TempScreens
 End Type
 
 Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
-	Local s.Screens = New Screens
+	Local s.Screens
 	
+	s.Screens = New Screens
 	s\OBJ = CreatePivot()
 	EntityPickMode(s\OBJ, 1)
 	EntityRadius(s\OBJ, 0.1)
-	
 	PositionEntity(s\OBJ, x, y, z)
-	
-	; ~ A hacky way to use .png format
-	If Right(ImgPath, 3) = "jpg" Then ImgPath = Left(ImgPath, Len(ImgPath) - 3) + "png"
+	EntityParent(s\OBJ, r\OBJ)
 	
 	s\ImgPath = ImgPath
 	s\room = r
-	EntityParent(s\OBJ, r\OBJ)
 	
 	Return(s)
 End Function
