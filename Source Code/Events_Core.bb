@@ -6001,13 +6001,16 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
 						If RemoteDoorOn Then
+							PlaySound_Strict(LightSFX)
 							me\LightBlink = 4.0
 							For i = 0 To 1
-								e\room\RoomDoors[i]\SoundCHN = PlaySound2(LoadTempSound("SFX\Door\DoorSparks.ogg"), Camera, e\room\RoomDoors[i]\OBJ)
-								e\room\RoomDoors[i]\Open = True
+								If (Not e\room\RoomDoors[i]\Open) Then
+									e\room\RoomDoors[i]\SoundCHN = PlaySound2(LoadTempSound("SFX\Door\DoorSparks.ogg"), Camera, e\room\RoomDoors[i]\FrameOBJ, 5.0)
+									OpenCloseDoor(e\room\RoomDoors[i])
+								EndIf
 							Next
 						EndIf
-						If e\room\RoomDoors[0]\Open = True Lor e\room\RoomDoors[1]\Open = True Then
+						If e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open Then
 							For i = 0 To 1
 								CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 							Next
