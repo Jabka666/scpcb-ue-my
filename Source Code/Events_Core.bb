@@ -3899,7 +3899,7 @@ Function UpdateEvents%()
 							BT = GetBrushTexture(b, 0)
 							TexName = StripPath(TextureName(BT))
 							
-							If Lower(TexName) = "scp_1048.png" Then PaintSurface(SF, Brush)
+							If Lower(TexName) <> "scp_1048.png" Then PaintSurface(SF, Brush)
 							FreeBrush(b)
 						Next
 						DeleteSingleTextureEntryFromCache(Tex)
