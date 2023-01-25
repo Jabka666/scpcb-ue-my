@@ -3282,6 +3282,32 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	Return(sc)
 End Function
 
+Function TurnOffSecurityCam%(room.Rooms, TurnOff%)
+	Local sc.SecurityCams
+	
+	For sc.SecurityCams = Each SecurityCams
+		If TurnOff Then
+			If sc\room = room Then
+				If (Not EntityHidden(sc\ScrOBJ)) Then
+					If sc\CoffinEffect <> 1 Then sc\CoffinEffect = 0
+					sc\Screen = False
+					HideEntity(sc\ScrOverlay)
+					HideEntity(sc\ScrOBJ)
+				EndIf
+			EndIf
+		Else
+			If sc\room = room Then
+				If EntityHidden(sc\ScrOBJ) Then
+					If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "cont1_106" Then sc\CoffinEffect = 2
+					sc\Screen = True
+					ShowEntity(sc\ScrOverlay)
+					ShowEntity(sc\ScrOBJ)
+				EndIf
+			EndIf
+		EndIf
+	Next
+End Function
+
 Function UpdateSecurityCams%()
 	CatchErrors("Uncaught (UpdateSecurityCams)")
 	

@@ -108,6 +108,7 @@ Bug fixes:
 - Fixed images disappearing after using ALT+TAB.
 - Fixed a white pill not being be put in the wallet.
 - Fixed cutscene in SCP-049's containment chamber not working at all.
+- Fixed monitor overlay not hiding after turning off the security cam.
 
 - Hopefully fixed height of NPCs teleportation.
 

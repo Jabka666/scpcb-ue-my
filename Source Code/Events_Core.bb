@@ -2197,17 +2197,9 @@ Function UpdateEvents%()
 					ShouldPlay = 66
 					
 					If UpdateLever(e\room\RoomLevers[0]\OBJ) Then
-						For sc.SecurityCams = Each SecurityCams
-							If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "cont1_106" Then sc\CoffinEffect = 2
-							If sc\CoffinEffect = 1 Then EntityBlend(sc\ScrOverlay, 3)
-							If sc\room = e\room Then sc\Screen = True
-						Next
+						TurnOffSecurityCam(e\room, False)
 					Else
-						For sc.SecurityCams = Each SecurityCams
-							If sc\CoffinEffect <> 1 Then sc\CoffinEffect = 0
-							If sc\CoffinEffect = 1 Then EntityBlend(sc\ScrOverlay, 0)
-							If sc\room = e\room Then sc\Screen = False
-						Next
+						TurnOffSecurityCam(e\room, True)
 					EndIf
 				Else
 					CoffinDistance = e\room\Dist
