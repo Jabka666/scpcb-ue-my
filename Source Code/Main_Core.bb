@@ -2674,6 +2674,7 @@ Function UpdateMoving%()
 	EndIf
 	
 	If wi\BallisticVest = 2 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
+	If wi\HazmatSuit = 1 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
 	
 	If I_714\Using Then
 		me\Stamina = CurveValue(Min(10.0, me\Stamina), me\Stamina, 10.0)
@@ -3087,7 +3088,6 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		If wi\HazmatSuit > 0 Then
-			If wi\HazmatSuit = 1 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
 			If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
 		Else
 			If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
