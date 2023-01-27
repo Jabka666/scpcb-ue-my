@@ -1,5 +1,3 @@
-Global BurntNote%
-
 Global ItemAmount%, MaxItemAmount%
 
 Global LastItemID%
