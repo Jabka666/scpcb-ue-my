@@ -79,7 +79,7 @@ Function PlaySound_Strict%(SoundHandle%)
 					EndIf
 						
 					If (Not snd\InternalHandle) Then
-						CreateConsoleMsg(Format(GetLocalString("runerr", "sound.failedload"), snd\Name))
+						CreateConsoleMsg(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
 						OpenConsoleOnError()
 					EndIf
 				EndIf
@@ -232,7 +232,7 @@ Function SetStreamPan_Strict%(StreamHandle%, Pan#)
 		Return
 	EndIf
 	If st\CHN = 0 Lor st\CHN = -1 Then
-		CreateConsoleMsg(Format(GetLocalString("runerr","sound.stream.failed.find.v"), st\CHN))
+		CreateConsoleMsg(Format(GetLocalString("runerr", "sound.stream.failed.find.v"), st\CHN))
 		OpenConsoleOnError()
 		Return
 	EndIf
