@@ -2025,13 +2025,13 @@ Function UpdateGame%()
 	Local i%, TempStr$
 	Local RN$ = PlayerRoom\RoomTemplate\Name
 	
-	If SelectedMap = "" Then
+	If SelectedCustomMap = Null Then
 		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 	Else
-		If Len(SelectedMap) > 15 Then
-			TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedMap), 14) + "..."
+		If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15 Then
+			TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..."
 		Else
-			TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedMap)
+			TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedCustomMap\Name)
 		EndIf
 	EndIf
 	SetErrorMsg(6, TempStr)
@@ -7588,13 +7588,13 @@ Function RenderMenu%()
 			EndIf
 			Text2(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
 			
-			If SelectedMap = "" Then
+			If SelectedCustomMap = Null Then
 				TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 			Else
-				If Len(SelectedMap) > 15 Then
-					TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedMap), 14) + "..."
+				If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15 Then
+					TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..."
 				Else
-					TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedMap)
+					TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedCustomMap\Name)
 				EndIf
 			EndIf
 			Text2(x, y + (40 * MenuScale), TempStr)
@@ -7642,7 +7642,7 @@ Function UpdateEnding%()
 	EndIf
 	
 	GiveAchievement(Achv055)
-	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedMap = "" Then
+	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedCustomMap = Null Then
 		GiveAchievement(AchvConsole)
 		If SelectedDifficulty\Name = "Keter" Lor SelectedDifficulty\Name = "Apollyon" Then
 			GiveAchievement(AchvKeter)
@@ -7978,7 +7978,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	QuickLoadPercent_DisplayTimer = 0.0
 	QuickLoad_CurrEvent = Null
 	
-	SelectedMap = ""
+	SelectedCustomMap = Null
 	
 	UsedConsole = False
 	

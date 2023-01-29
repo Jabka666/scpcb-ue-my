@@ -1,14 +1,3 @@
-Type Save
-	Field Name$
-	Field Time$
-	Field Date$
-	Field Version$
-End Type
-
-Global CurrSave.Save
-Global DelSave.Save
-Global SaveGameAmount%
-
 Const SavePath$ = "Saves\"
 
 Function SaveGame%(File$)
@@ -906,9 +895,9 @@ Function LoadGame%(File$)
 	Local Zone%, ShouldSpawnDoor%
 	
 	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - (SelectedMap = "") Then
+		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null) Then
 			Zone = 3
-		ElseIf y >= I_Zone\Transition[1] - (SelectedMap = "") And y < I_Zone\Transition[0] - (SelectedMap = "")
+		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
 			Zone = 2
 		Else
 			Zone = 1
@@ -2153,9 +2142,16 @@ Function LoadAchievementsFile%()
 	CloseFile(File)
 End Function
 
-Global SavedMapsAmount% = 0
-Dim SavedMaps$(SavedMapsAmount)
-Dim SavedMapsAuthor$(SavedMapsAmount)
+Type Save
+	Field Name$
+	Field Time$
+	Field Date$
+	Field Version$
+End Type
+
+Global CurrSave.Save
+Global DelSave.Save
+Global SavedGamesAmount%
 
 Function LoadSavedGames%()
 	CatchErrors("Uncaught (LoadSaveGames)")
@@ -2165,16 +2161,16 @@ Function LoadSavedGames%()
 	For sv.Save = Each Save
 		Delete(sv)
 	Next
-	SaveGameAmount = 0
+	SavedGamesAmount = 0
 	
 	If FileType(SavePath) = 1 Then RuntimeError(Format(GetLocalString("save", "cantcreatedir"), SavePath))
 	If FileType(SavePath) = 0 Then CreateDir(SavePath)
 	
-	Local MyDir% = ReadDir(SavePath)
+	Local SaveDir% = ReadDir(SavePath)
 	
-	NextFile(MyDir) : NextFile(MyDir) ; ~ Skipping "." and ".."
+	NextFile(SaveDir) : NextFile(SaveDir) ; ~ Skipping "." and ".."
 	
-	Local File$ = NextFile(MyDir)
+	Local File$ = NextFile(SaveDir)
 	
 	While File <> ""
 		If FileType(SavePath + File) = 2 Then
@@ -2188,11 +2184,11 @@ Function LoadSavedGames%()
 			newsv\Version = ReadString(f)
 			
 			CloseFile(f)
-			SaveGameAmount = SaveGameAmount + 1
+			SavedGamesAmount = SavedGamesAmount + 1
 		EndIf
-		File = NextFile(MyDir)
+		File = NextFile(SaveDir)
 	Wend
-	CloseDir(MyDir)
+	CloseDir(SaveDir)
 	
 	CatchErrors("LoadSaveGames")
 End Function
@@ -2213,66 +2209,81 @@ Function DeleteGame%(sv.Save)
 		Wend
 		CloseDir(DelDir)
 		DeleteDir(sv\Name)
+		SavedGamesAmount = SavedGamesAmount - 1
 	EndIf
 	Delete(sv)
 End Function
 
 Const CustomMapsPath$ = "Map Creator\Maps\"
 
-Function LoadSavedMaps%()
-	CatchErrors("Uncaught (LoadSavedMaps)")
+Type CustomMaps
+	Field Name$
+	Field Author$
+End Type
+
+Global CurrCustomMap.CustomMaps
+Global DelCustomMap.CustomMaps
+Global SelectedCustomMap.CustomMaps
+Global CustomMapsAmount%
+
+Function LoadCustomMaps%()
+	CatchErrors("Uncaught (LoadCustomMaps)")
 	
-	Local i%, Dir, File$
+	Local cm.CustomMaps, newcm.CustomMaps
 	
-	For i = 0 To SavedMapsAmount - 1
-		SavedMaps(i) = ""
-		SavedMapsAuthor(i) = ""
+	For cm.CustomMaps = Each CustomMaps
+		Delete(cm)
 	Next
-	SavedMapsAmount = 0
+	CustomMapsAmount = 0
 	
-	If FileType(CustomMapsPath) <> 2 Then CreateDir(CustomMapsPath)
-	Dir = ReadDir(CustomMapsPath)
-	Repeat
-		File = NextFile(Dir)
-		
-		If File = "" Then Exit
-		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then
-			If File <> "." And File <> ".." Then
-				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then SavedMapsAmount = SavedMapsAmount + 1
-			EndIf
-		EndIf
-	Forever
-	CloseDir(Dir)
+	If FileType(CustomMapsPath) = 1 Then RuntimeError(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
+	If FileType(CustomMapsPath) = 0 Then CreateDir(CustomMapsPath)
 	
-	Dim SavedMaps$(SavedMapsAmount)
-	Dim SavedMapsAuthor$(SavedMapsAmount)
+	Local MapDir% = ReadDir(CustomMapsPath)
 	
-	i = 0
-	Dir = ReadDir(CustomMapsPath)
-	Repeat
-		File = NextFile(Dir)
-		
-		If File = "" Then Exit
-		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then
-			If File <> "." And File <> ".." Then
-				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
-					SavedMaps(i) = File
-					If Right(File, 6) = "cbmap2" Then
-						Local f% = ReadFile_Strict(CustomMapsPath + File)
-						
-						SavedMapsAuthor(i) = ReadLine(f)
-						CloseFile(f)
-					Else
-						SavedMapsAuthor(i) = GetLocalString("creator", "unknown")
-					EndIf
-					i = i + 1
+	NextFile(MapDir) : NextFile(MapDir) ; ~ Skipping "." and ".."
+	
+	Local File$ = NextFile(MapDir)
+	
+	While File <> ""
+		If FileType(CustomMapsPath + File) = 1 Then
+			If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
+				Local f% = ReadFile_Strict(CustomMapsPath + File)
+				
+				newcm.CustomMaps = New CustomMaps
+				newcm\Name = File
+				If Right(File, 6) = "cbmap2" Then
+					newcm\Author = ReadLine(f)
+				Else
+					newcm\Author = GetLocalString("creator", "unknown")
 				EndIf
+				CloseFile(f)
+				CustomMapsAmount = CustomMapsAmount + 1
 			EndIf
 		EndIf
-	Forever
-	CloseDir(Dir)
+		File = NextFile(MapDir)
+	Wend
+	CloseDir(MapDir)
 	
-	CatchErrors("LoadSavedMaps")
+	CatchErrors("LoadCustomMaps")
+End Function
+
+Function DeleteCustomMap%(cm.CustomMaps)
+	Local DelDir% = ReadDir(CustomMapsPath)
+	
+	If DelDir <> 0 Then
+		NextFile(DelDir) : NextFile(DelDir) ; ~ Skipping "." and ".."
+		
+		Local File$ = NextFile(DelDir)
+		
+		While File <> ""
+			DeleteFile(CustomMapsPath + File)
+			File = NextFile(DelDir)
+		Wend
+		CloseDir(DelDir)
+		CustomMapsAmount = CustomMapsAmount - 1
+	EndIf
+	Delete(cm)
 End Function
 
 Function LoadMap%(File$)

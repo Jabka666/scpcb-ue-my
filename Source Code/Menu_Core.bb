@@ -67,9 +67,6 @@ Next
 Global RandomSeed$
 
 Global SelectedInputBox%, CursorPos% = -1
-Global SelectedMapActionMsg$
-
-Global SelectedMap$
 
 ; ~ Main Menu Tab Constants
 ;[Block]
@@ -106,7 +103,7 @@ EndIf
 Function UpdateMainMenu%()
 	CatchErrors("Uncaught (UpdateMainMenu")
 	
-	Local sv.Save, snd.Sound
+	Local sv.Save, cm.CustomMaps, snd.Sound
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%, g%
 	Local File$, Test%
 	
@@ -238,6 +235,8 @@ Function UpdateMainMenu%()
 							EndIf
 							LoadSavedGames()
 							CurrSave = New Save
+							LoadCustomMaps()
+							CurrCustomMap = New CustomMaps
 							mm\MainMenuTab = MainMenuTab_New_Game
 						EndIf
 						;[End Block]
@@ -291,12 +290,12 @@ Function UpdateMainMenu%()
 						CursorPos = Min(CursorPos, Len(CurrSave\Name))
 					EndIf
 					
-					If SelectedMap = "" Then
+					If SelectedCustomMap = Null Then
 						RandomSeed = UpdateMainMenuInputBox(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, RandomSeed, 2, 15)
 					Else
 						If UpdateMainMenuButton(x + (370 * MenuScale), y + (55 * MenuScale), 120 * MenuScale, 30 * MenuScale, GetLocalString("menu", "deselect"), False) Then
 							mm\ShouldDeleteGadgets = True
-							SelectedMap = ""
+							SelectedCustomMap = Null
 						EndIf
 					EndIf
 					
@@ -345,8 +344,8 @@ Function UpdateMainMenu%()
 					EndIf
 					
 					If UpdateMainMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "loadmap"), False) Then
+						LoadCustomMaps()
 						mm\MainMenuTab = MainMenuTab_Load_Map
-						LoadSavedMaps()
 					EndIf
 					
 					If UpdateMainMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start"), False) Then
@@ -396,7 +395,7 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 296 * MenuScale
 					
-					If mm\CurrMenuPage < Ceil(Float(SaveGameAmount) / 5.0) - 1 And DelSave = Null Then
+					If mm\CurrMenuPage < Ceil(Float(SavedGamesAmount) / 5.0) - 1 And DelSave = Null Then
 						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
@@ -406,9 +405,9 @@ Function UpdateMainMenu%()
 					Else
 						UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
-					If mm\CurrMenuPage > Ceil(Float(SaveGameAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
+					If mm\CurrMenuPage > Ceil(Float(SavedGamesAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
 					
-					If SaveGameAmount <> 0 Then
+					If SavedGamesAmount > 0 Then
 						x = x + (20 * MenuScale)
 						y = y + (20 * MenuScale)
 						
@@ -473,56 +472,58 @@ Function UpdateMainMenu%()
 					Width = 580 * MenuScale
 					Height = 350 * MenuScale
 					
-					If mm\CurrMenuPage < Ceil(Float(SavedMapsAmount) / 5.0) - 1 And SelectedMapActionMsg = "" Then
+					If mm\CurrMenuPage < Ceil(Float(CustomMapsAmount) / 5.0) - 1 And DelCustomMap = Null Then
 						If UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
 					Else
 						UpdateMainMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
 					EndIf
-					If mm\CurrMenuPage > 0 And SelectedMapActionMsg = "" Then
+					If mm\CurrMenuPage > 0 And DelCustomMap = Null Then
 						If UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then ChangePage(mm\CurrMenuPage - 1)
 					Else
 						UpdateMainMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
 					EndIf
-					If mm\CurrMenuPage > Ceil(Float(SavedMapsAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
+					If mm\CurrMenuPage > Ceil(Float(CustomMapsAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
 					
-					If SavedMapsAmount > 0 Then
+					If CustomMapsAmount > 0 Then
 						x = x + (20 * MenuScale)
 						y = y + (20 * MenuScale)
-						For i = (1 + (5 * mm\CurrMenuPage)) To 5 + (5 * mm\CurrMenuPage)
-							If i <= SavedMapsAmount Then
-								If SelectedMapActionMsg = "" Then
+						
+						CurrCustomMap = First CustomMaps
+						
+						For i = 0 To 4 + (5 * mm\CurrMenuPage)
+							If i > 0 Then CurrCustomMap = After CurrCustomMap
+							If CurrCustomMap = Null Then Exit
+							If i >= (5 * mm\CurrMenuPage) Then
+								If DelCustomMap = Null Then
 									If UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False) Then
-										SelectedMap = SavedMaps(i - 1)
+										SelectedCustomMap = CurrCustomMap
 										mm\MainMenuTab = MainMenuTab_New_Game
 										mm\ShouldDeleteGadgets = True
 									EndIf
 									
 									If UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False) Then
-										SelectedMapActionMsg = SavedMaps(i - 1)
+										DelCustomMap = CurrCustomMap
 										Exit
 									EndIf
 								Else
 									UpdateMainMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True)
 									UpdateMainMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False, False, True)
 								EndIf
+								If CurrCustomMap = Last CustomMaps Then Exit
 								y = y + (80 * MenuScale)
-							Else
-								Exit
 							EndIf
 						Next
 						
-						If SelectedMapActionMsg <> "" Then
+						If DelCustomMap <> Null Then
 							x = 739 * MenuScale
 							y = 376 * MenuScale
 							
 							If UpdateMainMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "yes"), False) Then
-								DeleteFile(CurrentDir() + CustomMapsPath + SelectedMapActionMsg)
-								SelectedMapActionMsg = ""
-								LoadSavedMaps()
+								DeleteCustomMap(DelCustomMap)
 								mm\ShouldDeleteGadgets = True
 							EndIf
 							If UpdateMainMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "no"), False) Then
-								SelectedMapActionMsg = ""
+								DelCustomMap = Null
 								mm\ShouldDeleteGadgets = True
 							EndIf
 						EndIf
@@ -969,7 +970,7 @@ Function UpdateMainMenu%()
 			Width = 400 * MenuScale
 			Height = 70 * MenuScale
 			
-			If SelectedMapActionMsg = "" And DelSave = Null Then
+			If DelSave = Null And DelCustomMap = Null Then
 				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False) Lor KeyDown(1) Then
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
@@ -977,6 +978,9 @@ Function UpdateMainMenu%()
 							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							For sv.Save = Each Save
 								Delete(sv)
+							Next
+							For cm.CustomMaps = Each CustomMaps
+								Delete(cm)
 							Next
 							mm\MainMenuTab = MainMenuTab_Default
 							;[End Block]
@@ -1001,9 +1005,12 @@ Function UpdateMainMenu%()
 							;[End Block]
 						Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
 							;[Block]
-							mm\MainMenuTab = MainMenuTab_New_Game
 							mm\CurrMenuPage = 0
-							mo\MouseHit1 = False
+							For cm.CustomMaps = Each CustomMaps
+								Delete(cm)
+							Next
+							ResetInput()
+							mm\MainMenuTab = MainMenuTab_New_Game
 							;[End Block]
 						Default
 							;[Block]
@@ -1029,6 +1036,7 @@ Function RenderMainMenu%()
 	CatchErrors("Uncaught (RenderMainMenu")
 	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%
+	Local tX#, tY#, tW#, tH#
 	Local TempStr$, TempStr2$
 	
 	If (Not mm\OnPalette) Then
@@ -1147,17 +1155,17 @@ Function RenderMainMenu%()
 				
 				Text2(x + (20 * MenuScale), y + (25 * MenuScale), GetLocalString("menu", "new.name"))
 				
-				If SelectedMap = "" Then
+				If SelectedCustomMap = Null Then
 					TempStr = GetLocalString("menu", "new.seed")
 				Else
 					TempStr = GetLocalString("menu", "new.map")
 					RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
 					
 					Color(255, 0, 0)
-					If Len(ConvertToUTF8(SelectedMap)) > 15 Then
-						TempStr2 = Left(ConvertToUTF8(SelectedMap), 14) + "..."
+					If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15 Then
+						TempStr2 = Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..."
 					Else
-						TempStr2 = ConvertToUTF8(SelectedMap)
+						TempStr2 = ConvertToUTF8(SelectedCustomMap\Name)
 					EndIf
 					Text2(x + (250 * MenuScale), y + (70 * MenuScale), TempStr2, True, True)
 				EndIf
@@ -1254,11 +1262,11 @@ Function RenderMainMenu%()
 				
 				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
 				
-				Text2(x + (Width / 2), y + (465 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), Int(Max((Int(Ceil(Float(SaveGameAmount) / 5.0))), 1)), "{1}"), True, True)
+				Text2(x + (Width / 2), y + (465 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), Int(Max((Int(Ceil(Float(SavedGamesAmount) / 5.0))), 1)), "{1}"), True, True)
 				
 				SetFont2(fo\FontID[Font_Default])
 				
-				If SaveGameAmount = 0 Then
+				If SavedGamesAmount = 0 Then
 					RowText(GetLocalString("menu", "save.nosaves"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
 				Else
 					x = x + (20 * MenuScale)
@@ -1293,6 +1301,78 @@ Function RenderMainMenu%()
 						y = 376 * MenuScale
 						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)
 						RowText(GetLocalString("menu", "save.delete?"), x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
+					EndIf
+				EndIf
+				;[End Block]
+			Case MainMenuTab_Load_Map
+				;[Block]
+				y = y + Height + (20 * MenuScale)
+				Width = 580 * MenuScale
+				Height = 430 * MenuScale
+				
+				RenderFrame(x, y, Width, Height)
+				
+				x = 159 * MenuScale
+				y = 286 * MenuScale
+				
+				Width = 400 * MenuScale
+				Height = 70 * MenuScale
+				
+				Color(255, 255, 255)
+				SetFont2(fo\FontID[Font_Default_Big])
+				Text2(x + (Width / 2), y + (Height / 2), GetLocalString("menu", "loadmap"), True, True)
+				
+				y = y + Height + (20 * MenuScale)
+				Width = 580 * MenuScale
+				Height = 350 * MenuScale
+				
+				SetFont2(fo\FontID[Font_Default_Big])
+				
+				tX = x + Width
+				tY = y
+				tW = 400 * MenuScale
+				tH = 150 * MenuScale
+				
+				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
+				
+				Text2(x + (Width / 2), y + (465 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), Int(Max((Int(Ceil(Float(CustomMapsAmount) / 5.0))), 1)), "{1}"), True, True)
+				
+				SetFont2(fo\FontID[Font_Default])
+				
+				If CustomMapsAmount = 0 Then
+					RowText(GetLocalString("menu", "nomap"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
+				Else
+					x = x + (20 * MenuScale)
+					y = y + (20 * MenuScale)
+					
+					CurrCustomMap = First CustomMaps
+					
+					For i = 0 To 4 + (5 * mm\CurrMenuPage)
+						If i > 0 Then CurrCustomMap = After CurrCustomMap
+						If CurrCustomMap = Null Then Exit
+						If i >= (5 * mm\CurrMenuPage) Then
+							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
+							
+							If Len(ConvertToUTF8(CurrCustomMap\Name)) > 20 Then
+								Text2(x + (20 * MenuScale), y + (15 * MenuScale), Left(ConvertToUTF8(CurrCustomMap\Name), 19) + "...")
+							Else
+								Text2(x + (20 * MenuScale), y + (15 * MenuScale), ConvertToUTF8(CurrCustomMap\Name))
+							EndIf
+							Text2(x + (20 * MenuScale), y + (45 * MenuScale), ConvertToUTF8(CurrCustomMap\Author))
+							
+							If MouseOn(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Lor MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Then
+								RenderMapCreatorTooltip(tX, tY, tW, tH, CurrCustomMap\Name)
+							EndIf
+							If CurrCustomMap = Last CustomMaps Then Exit
+							y = y + (80 * MenuScale)
+						EndIf
+					Next
+					
+					If DelCustomMap <> Null Then
+						x = 739 * MenuScale
+						y = 376 * MenuScale
+						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)
+						RowText(GetLocalString("menu", "map.delete?"), x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
 					EndIf
 				EndIf
 				;[End Block]
@@ -1331,10 +1411,10 @@ Function RenderMainMenu%()
 				y = y + (70 * MenuScale)
 				x = x + (20 * MenuScale)
 				
-				Local tX# = x - (20 * MenuScale) + Width
-				Local tY# = y
-				Local tW# = 400.0 * MenuScale
-				Local tH# = 150.0 * MenuScale
+				tX = x - (20 * MenuScale) + Width
+				tY = y
+				tW = 400.0 * MenuScale
+				tH = 150.0 * MenuScale
 				
 				Select mm\MainMenuTab
 					Case MainMenuTab_Options_Graphics
@@ -1670,74 +1750,6 @@ Function RenderMainMenu%()
 						EndIf
 						;[End Block]
 				End Select
-				;[End Block]
-			Case MainMenuTab_Load_Map
-				;[Block]
-				y = y + Height + (20 * MenuScale)
-				Width = 580 * MenuScale
-				Height = 430 * MenuScale
-				
-				RenderFrame(x, y, Width, Height)
-				
-				x = 159 * MenuScale
-				y = 286 * MenuScale
-				
-				Width = 400 * MenuScale
-				Height = 70 * MenuScale
-				
-				Color(255, 255, 255)
-				SetFont2(fo\FontID[Font_Default_Big])
-				Text2(x + (Width / 2), y + (Height / 2), GetLocalString("menu", "loadmap"), True, True)
-				
-				y = y + Height + (20 * MenuScale)
-				Width = 580 * MenuScale
-				Height = 350 * MenuScale
-				
-				SetFont2(fo\FontID[Font_Default_Big])
-				
-				tX = x + Width
-				tY = y
-				tW = 400 * MenuScale
-				tH = 150 * MenuScale
-				
-				RenderFrame(x + (60 * MenuScale), y + (440 * MenuScale), Width - (120 * MenuScale), 50 * MenuScale)
-				
-				Text2(x + (Width / 2), y + (465 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), Int(Max((Int(Ceil(Float(SavedMapsAmount) / 5.0))), 1)), "{1}"), True, True)
-				
-				SetFont2(fo\FontID[Font_Default])
-				
-				If SavedMapsAmount = 0 Then
-					RowText(GetLocalString("menu", "nomap"), x + (20 * MenuScale), y + (20 * MenuScale), 540 * MenuScale, 390 * MenuScale)
-				Else
-					x = x + (20 * MenuScale)
-					y = y + (20 * MenuScale)
-					For i = (1 + (5 * mm\CurrMenuPage)) To 5 + (5 * mm\CurrMenuPage)
-						If i <= SavedMapsAmount Then
-							RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
-							
-							If Len(ConvertToUTF8(SavedMaps(i - 1))) > 20 Then
-								Text2(x + (20 * MenuScale), y + (15 * MenuScale), Left(ConvertToUTF8(SavedMaps(i - 1)), 19) + "...")
-							Else
-								Text2(x + (20 * MenuScale), y + (15 * MenuScale), ConvertToUTF8(SavedMaps(i - 1)))
-							EndIf
-							Text2(x + (20 * MenuScale), y + (45 * MenuScale), ConvertToUTF8(SavedMapsAuthor(i - 1)))
-							
-							If MouseOn(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Lor MouseOn(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale) Then
-								RenderMapCreatorTooltip(tX, tY, tW, tH, SavedMaps(i - 1))
-							EndIf
-							y = y + (80 * MenuScale)
-						Else
-							Exit
-						EndIf
-					Next
-					
-					If SelectedMapActionMsg <> "" Then
-						x = 739 * MenuScale
-						y = 376 * MenuScale
-						RenderFrame(x, y, 420 * MenuScale, 200 * MenuScale)
-						RowText(GetLocalString("menu", "map.delete?"), x + (20 * MenuScale), y + (15 * MenuScale), 400 * MenuScale, 200 * MenuScale)
-					EndIf
-				EndIf
 				;[End Block]
 		End Select
 	EndIf

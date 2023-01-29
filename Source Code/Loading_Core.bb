@@ -1952,10 +1952,10 @@ Function InitNewGame%()
 	
 	RenderLoading(55, GetLocalString("loading", "rooms"))
 	
-	If SelectedMap = "" Then
+	If SelectedCustomMap = Null Then
 		CreateMap()
 	Else
-		LoadMap(CustomMapsPath + SelectedMap)
+		LoadMap(CustomMapsPath + SelectedCustomMap\Name)
 	EndIf
 	
 	LoadWayPoints()
@@ -2054,7 +2054,7 @@ Function InitNewGame%()
 	
 	RenderLoading(85, GetLocalString("loading", "events"))
 	
-	If SelectedMap = "" Then LoadEvents()
+	If SelectedCustomMap = Null Then LoadEvents()
 	
 	For e.Events = Each Events
 		If e\EventID = e_room2_nuke Then e\EventState = 1.0

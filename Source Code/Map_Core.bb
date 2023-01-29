@@ -7910,10 +7910,10 @@ Function UpdateRooms%()
 	
 	; ~ The reason why it is like this:
 	; ~ When the map gets spawned by a seed, it starts from LCZ to HCZ to EZ (bottom to top)
-	; ~ A map loaded by the map creator starts from EZ to HCZ to LCZ (top to bottom) and that's why this little code thing with the (SelectedMap = "") needs to be there - ENDSHN
-	If (EntityZ(me\Collider) / 8.0) < I_Zone\Transition[1] - (SelectedMap = "") Then
+	; ~ A map loaded by the map creator starts from EZ to HCZ to LCZ (top to bottom) and that's why this little code thing with the (SelectedCustomMap = Null) needs to be there - ENDSHN
+	If (EntityZ(me\Collider) / 8.0) < I_Zone\Transition[1] - (SelectedCustomMap = Null) Then
 		me\Zone = 2
-	ElseIf (EntityZ(me\Collider) / 8.0) >= I_Zone\Transition[1] - (SelectedMap = "") And (EntityZ(me\Collider) / 8.0) < I_Zone\Transition[0] - (SelectedMap = "") Then
+	ElseIf (EntityZ(me\Collider) / 8.0) >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And (EntityZ(me\Collider) / 8.0) < I_Zone\Transition[0] - (SelectedCustomMap = Null) Then
 		me\Zone = 1
 	Else
 		me\Zone = 0
