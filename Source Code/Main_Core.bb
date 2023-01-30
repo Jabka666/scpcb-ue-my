@@ -8607,25 +8607,27 @@ Function UpdateMTF%()
 				EndIf
 			Next
 			
-			If entrance <> Null Then 
-				If me\Zone = 2 Then
-					If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
-					
-					MTFTimer = fps\Factor[0]
-					
-					Local leader.NPCs
-					
-					For i = 0 To 2
-						n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 0.6, EntityZ(entrance\OBJ) + 8.0)
+			If entrance <> Null Then
+				If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 36.0 Then
+					If me\Zone = 2 Then
+						If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 						
-						If i = 0 Then
-							leader = n
-						Else
-							n\MTFLeader = leader
-						EndIf
+						MTFTimer = fps\Factor[0]
 						
-						n\PrevX = i
-					Next
+						Local leader.NPCs
+						
+						For i = 0 To 2
+							n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 0.6, EntityZ(entrance\OBJ) + 8.0)
+							
+							If i = 0 Then
+								leader = n
+							Else
+								n\MTFLeader = leader
+							EndIf
+							
+							n\PrevX = i
+						Next
+					EndIf
 				EndIf
 			EndIf
 		EndIf
