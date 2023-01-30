@@ -373,7 +373,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3 Then
 						If Instr(Lower(Temp1s), "_lm") <> 0 Then
-							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1, 256)
+							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1 + 256)
 						Else
 							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1)
 						EndIf
