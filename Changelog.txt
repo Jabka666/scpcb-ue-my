@@ -49,17 +49,18 @@ Rooms:
 - Level 3 Keycard located in SCP-895's containment chamber now drops from a fallen guard.
 
 Items:
-- Added a new gas mask/hazmat suit variation: gas mask/hazmat suit without fogging.
-
 - Renamed some console item names.
 
 - S-NAV 310 and blue NVG require now an 18V Battery.
 - Tiny battery rebalance for SCRAMBLE Gear.
 - Nerfed NVG fog distance from 30 to 17.
 - The white pill now cures the Common Cold.
-- Players wearing Hazmat Suit are now able to pick up and drop items.
-- You can use items while wearing the Hazmat Suit with exceptions being similar to that of the Gas mask plus no First Aid Kit nor Syringes.
-- The Hazmat Suit now fogs up.
+- Hazmat Suit/Gas mask changes:
+	- Added a new gas mask/hazmat suit variation: gas mask/hazmat suit without fogging.
+	- Players wearing Hazmat Suit are now able to pick up and drop items.
+	- You can use items while wearing the Hazmat Suit with exceptions being similar to that of the Gas mask plus no First Aid Kit and no Syringes.
+	- The Hazmat Suit now fogs up.
+	- Very fine variations of these items no longer grant infinite stamina. Stamina is doubled.
 
 Menu:
 - Added degree symbol for FOV value.

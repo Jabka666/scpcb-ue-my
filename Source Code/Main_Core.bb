@@ -2673,12 +2673,13 @@ Function UpdateMoving%()
 		EndIf
 	EndIf
 	
-	If wi\BallisticVest = 2 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
-	If wi\HazmatSuit = 1 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
-	
 	If I_714\Using Then
 		me\Stamina = CurveValue(Min(10.0, me\Stamina), me\Stamina, 10.0)
 		me\Sanity = Max(-850.0, me\Sanity)
+	Else
+		If wi\BallisticVest = 2 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
+		If wi\HazmatSuit = 1 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
+		If wi\GasMask = 3 Lor wi\HazmatSuit = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.002 * fps\Factor[0])
 	EndIf
 	
 	If me\Zombie Then
@@ -3072,25 +3073,18 @@ Function UpdateMouseLook%()
 	EndIf
 	
 	If wi\GasMask > 0 Lor wi\HazmatSuit > 0 Lor I_1499\Using > 0 Then
-		If (Not I_714\Using) Then
-			If wi\GasMask = 3 Lor I_1499\Using = 2 Then
-				me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
-			ElseIf wi\HazmatSuit = 3
-				me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.002 * fps\Factor[0])
-			EndIf
+		If wi\HazmatSuit > 0 Then
+			If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
+		Else
+			If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
 		EndIf
+		
 		If (Not me\Terminated) Then
 			If (Not ChannelPlaying(BreathCHN)) Then
 				If (Not ChannelPlaying(BreathGasRelaxedCHN)) Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
 			Else
 				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 			EndIf
-		EndIf
-		
-		If wi\HazmatSuit > 0 Then
-			If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
-		Else
-			If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
 		EndIf
 		
 		If wi\GasMask <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4 Then
@@ -5532,9 +5526,10 @@ Function UpdateGUI%()
 End Function
 
 Function RenderHUD%()
-	If me\Terminated Then Return
+	If me\Terminated Lor (Not me\Playable) Then Return
 	
 	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
+	Local i%
 	
 	Width = 200 * MenuScale
 	Height = 20 * MenuScale
