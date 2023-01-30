@@ -362,21 +362,13 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				Temp1s = ReadString(f)
 				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3 Then
-						If Instr(Lower(Temp1s), "_lm") <> 0 Then
-							Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1 + 256)
-						Else
-							Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1)
-						EndIf
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1)
 					Else
 						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3 Then
-						If Instr(Lower(Temp1s), "_lm") <> 0 Then
-							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1, 256)
-						Else
-							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1)
-						EndIf
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1)
 					Else
 						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3)
 					EndIf
@@ -1002,8 +994,8 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	; ~ Load assets
 	Local hMap%[ROOM4 + 1], Mask%[ROOM4 + 1]
-	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.jpg", 256)
-	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.jpg", 256)
+	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.jpg")
+	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.jpg")
 	
 	If opt\Atmosphere Then
 		TextureBlend(GroundTexture, 5)
@@ -1011,19 +1003,19 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	EndIf
 	
 	hMap[ROOM1] = LoadImage_Strict("GFX\Map\Forest\forest1h.png")
-	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 256)
+	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2)
 	
 	hMap[ROOM2] = LoadImage_Strict("GFX\Map\Forest\forest2h.png")
-	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 256)
+	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2)
 	
 	hMap[ROOM2C] = LoadImage_Strict("GFX\Map\Forest\forest2Ch.png")
-	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 256)
+	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2)
 	
 	hMap[ROOM3] = LoadImage_Strict("GFX\Map\Forest\forest3h.png")
-	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 256)
+	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2)
 	
 	hMap[ROOM4] = LoadImage_Strict("GFX\Map\Forest\forest4h.png")
-	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 256)
+	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
