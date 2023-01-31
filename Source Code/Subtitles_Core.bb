@@ -57,8 +57,8 @@ Function ShowSubtitles%(Name$)
 	
 	Local sub.Subtitles, CurrSub.Subtitles
 	Local Person% = Int(GetFileLocalString(SubtitlesFile, Name, "Person", "", False))
-	Local LinesAmount% = Int(GetFileLocalString(SubtitlesFile, Name, "LinesAmount", "", False))
-	Local SubID%, i%
+	Local SubID%
+	Local i% = 1
 	
 	Select Person
 		Case 1
@@ -85,7 +85,11 @@ Function ShowSubtitles%(Name$)
 		EndIf
 	Next
 	
-	For i = 1 To LinesAmount
+	Repeat
+		Local TxtExist% = IniBufferKeyExist(lang\LanguagePath + SubtitlesFile, Name, "Txt" + i)
+		Local TimerExist% = IniBufferKeyExist(lang\LanguagePath + SubtitlesFile, Name, "Timer" + i)
+		If Not (TxtExist And TimerExist) Then Exit ; ~ Seems there is no more subtitle
+	
 		If CurrSub = Null Then
 			sub.Subtitles = New Subtitles
 		Else
@@ -93,7 +97,9 @@ Function ShowSubtitles%(Name$)
 		EndIf
 		sub\Txt[SubID] = GetFileLocalString(SubtitlesFile, Name, "Txt" + i, "", False)
 		sub\Timer[SubID] = 70.0 * Float(GetFileLocalString(SubtitlesFile, Name, "Timer" + i, "", False))
-	Next
+		
+		i = i + 1
+	Forever
 	
 	CatchErrors("ShowSubtitles")
 End Function
