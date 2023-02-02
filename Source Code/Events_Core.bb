@@ -8115,7 +8115,7 @@ Function UpdateDimension106%()
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not me\Terminated) Then
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = GetLocalString("msg", "106_2")
+									msg\DeathMsg = GetLocalString("death", "106_2")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
@@ -8401,7 +8401,7 @@ Function UpdateDimension106%()
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not me\Terminated) Then
 									PlaySound_Strict(HorrorSFX[8])
-									msg\DeathMsg = GetLocalString("msg", "106_2")
+									msg\DeathMsg = GetLocalString("death", "106_2")
 									me\BlurTimer = 3000.0
 									me\Terminated = True
 								EndIf
