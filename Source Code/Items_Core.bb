@@ -488,7 +488,7 @@ Function PickItem%(item.Items)
 	
 	Local e.Events
 	Local n% = 0, z%
-	Local CanPickItem = 1
+	Local CanPickItem% = 1
 	Local FullINV% = True
 	
 	For n = 0 To MaxItemAmount - 1
@@ -554,15 +554,13 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 						;[Block]
-						CanPickItem = True
+						CanPickItem = 1
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
 								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148" Then
 									CanPickItem = 0
-									Return
 								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
 									CanPickItem = 2
-									Return
 								EndIf
 							EndIf
 						Next
@@ -579,21 +577,19 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case "vest", "finevest"
 						;[Block]
-						CanPickItem = True
+						CanPickItem = 1
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
 								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = 0
-									Return
 								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
 									CanPickItem = 2
-									Return
 								EndIf
 							EndIf
 						Next
 						
 						If CanPickItem = 0 Then
-							CreateMsg(GetLocalString("msg", "twosuit"))
+							CreateMsg(GetLocalString("msg", "twovest"))
 							Return
 						ElseIf CanPickItem = 2 Then
 							CreateMsg(GetLocalString("msg", "vestsuit"))
