@@ -893,9 +893,7 @@ Function UpdateNPCs%()
 								
 								SetAnimTime(n\OBJ, 110.0)
 								
-								If PlayerRoom\RoomTemplate\Name <> "cont1_895"
-									PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
-								EndIf
+								If PlayerRoom\RoomTemplate\Name <> "cont1_895" Then PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
 								
 								PlaySound_Strict(DecaySFX[0])
 							EndIf
@@ -1058,11 +1056,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If me\FallTimer < -1.0 Then
-								CanSave = 0
-								Sprint = 0.0
-							EndIf
-							
+							If me\FallTimer < -1.0 Then CanSave = 0
 							If me\FallTimer < -250.0 Then
 								MoveToPocketDimension()
 								n\State = 250.0 ; ~ Make SCP-106 idle for a while
@@ -1421,9 +1415,7 @@ Function UpdateNPCs%()
 										Else
 											If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider)
 											EntityPick(n\Collider, 1.5)
-											If PickedEntity() <> 0 Then
-												n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
-											EndIf
+											If PickedEntity() <> 0 Then n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
 											If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
 										EndIf
 										n\State3 = MilliSecs2() + 3000.0
