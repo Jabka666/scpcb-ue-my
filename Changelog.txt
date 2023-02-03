@@ -3,7 +3,7 @@ v1.1
 General:
 - Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
 - Added «Home» key, «End» key, «Delete» key and «Insert» key to switch insert mode. Abilty to hold left/right arrow to fast move cursor. Implement of Ctrl+C and Ctrl+V.
-- Added a hitbox in "room2_servers_hcz" preventing SCP-096 to be triggered through the bloody windows.
+- Added a hitbox in «room2_servers_hcz» preventing SCP-096 to be triggered through the bloody windows.
 - Added some folders organization.
 - Added language selection.
 - Added SCP-066 achievement.
@@ -44,7 +44,7 @@ Rooms:
 - Batteries on the map are now randomized.
 - Dr. L's office harm player like inside the Pocket Dimension.
 
-- Returned "Pipes_NoRust" texture.
+- Returned «Pipes_NoRust» texture.
 
 - Level 3 Keycard located in SCP-895's containment chamber now drops from a fallen guard.
 
@@ -94,11 +94,11 @@ Bug fixes:
 - Fixed SCP-049 removing hazmat suit and SCP-714 at the same time.
 - Fixed SCP-1499 not being taken off when the hazmat suit was equipped in the 1499 dimension.
 - Fixed position of the SCP-895 pivot attracting player's camera while wearing night vision goggles.
-- Fixed "ACCESS CODE" string going out of button image on different resolutions.
+- Fixed «ACCESS CODE» string going out of button image on different resolutions.
 - Fixed autosave option text color when option is disabled.
 - Fixed an issue caused SCP-106's collider to linger while using «disable106» command.
-- Fixed "disable/enable966" console command not hiding/showing all SCP-966 instances.
-- Fixed "ThreatAnnouncPossession.ogg" not playing at all.
+- Fixed «disable/enable966» console command not hiding/showing all SCP-966 instances.
+- Fixed «ThreatAnnouncPossession.ogg» not playing at all.
 - Fixed battery messages and sounds playing even if the game is paused.
 - Fixed SCP-1025 not being in player's focus while reading (no darkness effect).
 - Fixed light flash appearing ahead of time in Gate A area.
@@ -220,7 +220,7 @@ Bug Fixes:
 - Fixed MAVs:
 	- Fixed MAV after deleting saved game.
 	- Fixed MAV while playing in «NO SAVE» mode.
-	- Fixed MAV after using "disable/enable049" commands.
+	- Fixed MAV after using «disable/enable049» commands.
 	- Fixed MAV while trying to use a clipboard or wallet.
 	- Fixed MAV on the forest created by the Map Creator.
 	- Fixed MAV after killing SCP-035's tentacle.
@@ -232,7 +232,7 @@ Bug Fixes:
 - Fixed «room2_js» overlapping with adjacent rooms.
 - Fixed a console input box that is rendered through pause menu.
 - Fixed upgraded NVG killing earlier around SCP-895.
-- Fixed empty sound in "DoorBudge1.ogg".
+- Fixed empty sound in «DoorBudge1.ogg».
 - Fixed NPCs AI not being able to find correct waypoint on stairs.
 - Fixed Burnt Note scaling.
 - Fixed wrong SCP-409 texture.
