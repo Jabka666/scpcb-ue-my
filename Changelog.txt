@@ -50,6 +50,7 @@ Rooms:
 
 Items:
 - Renamed some console item names.
+- Renamed Severed Hand to White/Yellow Severed Hand.
 
 - S-NAV 310 and blue NVG require now an 18V Battery.
 - Tiny battery rebalance for SCRAMBLE Gear.
