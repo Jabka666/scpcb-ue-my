@@ -783,15 +783,22 @@ CreateItemTemplate(GetLocalString("items", "005"), "SCP-005", "scp005", "scp_005
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "5001"), "SCP-500-01", "scp500pill", "pill.b3d", "INV_scp_500_pill.png", "", 0.0001, 2)
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
 
-	CreateItemTemplate(GetLocalString("items", "500"), "SCP-500", "scp500", "scp_500.b3d", "INV_scp_500.png", "", 0.035, 2)
-	CreateItemTemplate(GetLocalString("items", "513"), "SCP-513", "scp513", "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
-	CreateItemTemplate(GetLocalString("items", "714"), "SCP-714", "scp714", "scp_714.b3d", "INV_scp_714.png", "", 0.3, 3)
-	CreateItemTemplate(GetLocalString("items", "860"), "SCP-860", "scp860", "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3)
-	CreateItemTemplate(GetLocalString("items", "1025"), "SCP-1025", "scp1025", "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0)
-	CreateItemTemplate(GetLocalString("items", "1123"), "SCP-1123", "scp1123", "scp_1123.b3d", "INV_scp_1123.png", "", 0.015, 2)
-	CreateItemTemplate(GetLocalString("items", "1499"), "SCP-1499", "scp1499", "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
-	CreateItemTemplate(GetLocalString("items", "fine1499"), "SCP-1499", "fine1499", "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
-
+	CreateItemTemplate("SCP-005", "SCP-005", "scp005", "scp_005.b3d", "INV_scp_005.png", "", 0.0004, 1)
+	CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", "scp148ingot", "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
+	CreateItemTemplate("SCP-427", "SCP-427", "scp427", "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3)
+	
+	it.ItemTemplates = CreateItemTemplate("SCP-500-01", "SCP-500-01", "scp500pill", "pill.b3d", "INV_scp_500_pill.png", "", 0.0001, 2)
+	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
+	
+	CreateItemTemplate("SCP-500", "SCP-500", "scp500", "scp_500.b3d", "INV_scp_500.png", "", 0.035, 2)
+	CreateItemTemplate("SCP-513", "SCP-513", "scp513", "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
+	CreateItemTemplate("SCP-714", "SCP-714", "scp714", "scp_714.b3d", "INV_scp_714.png", "", 0.3, 3)
+	CreateItemTemplate("SCP-860", "SCP-860", "scp860", "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3)
+	CreateItemTemplate("SCP-1025", "SCP-1025", "scp1025", "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0)
+	CreateItemTemplate("SCP-1123", "SCP-1123", "scp1123", "scp_1123.b3d", "INV_scp_1123.png", "", 0.015, 2)
+	CreateItemTemplate("SCP-1499", "SCP-1499", "scp1499", "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
+	CreateItemTemplate("SCP-1499", "SCP-1499", "fine1499", "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
+	
 	CreateItemTemplate(GetLocalString("items", "joint"), "Joint", "joint", "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.0004, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "metalpanel"), "Metal Panel", "scp148", "metal_panel.b3d", "INV_metal_panel.png", "", RoomScale, 2)
