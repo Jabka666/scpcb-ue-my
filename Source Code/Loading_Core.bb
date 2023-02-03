@@ -636,7 +636,7 @@ Function LoadMaterials%(File$)
 			If opt\BumpEnabled Then
 				StrTemp = IniGetString(File, TemporaryString, "bump")
 				If StrTemp <> "" Then
-					mat\Bump = LoadTexture_Strict(StrTemp, 256)
+					mat\Bump = LoadTexture_Strict(StrTemp, 1 + (256 * opt\SaveTexturesInVRAM))
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
@@ -776,13 +776,6 @@ CreateItemTemplate(GetLocalString("items", "doc005"), "Document SCP-005", "paper
 	
 	; ~ [SCPs]
 	
-CreateItemTemplate(GetLocalString("items", "005"), "SCP-005", "scp005", "scp_005.b3d", "INV_scp_005.png", "", 0.0004, 1)
-	CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", "scp148ingot", "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
-	CreateItemTemplate(GetLocalString("items", "427"), "SCP-427", "scp427", "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3)
-
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "5001"), "SCP-500-01", "scp500pill", "pill.b3d", "INV_scp_500_pill.png", "", 0.0001, 2)
-	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
-
 	CreateItemTemplate("SCP-005", "SCP-005", "scp005", "scp_005.b3d", "INV_scp_005.png", "", 0.0004, 1)
 	CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", "scp148ingot", "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
 	CreateItemTemplate("SCP-427", "SCP-427", "scp427", "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3)
@@ -1698,7 +1691,7 @@ Function LoadEntities%()
 	
 	LoadMissingTexture()
 	
-	AmbientLightRoomTex = CreateTextureUsingCacheSystem(1, 1)
+	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
 	TextureBlend(AmbientLightRoomTex, 3)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)

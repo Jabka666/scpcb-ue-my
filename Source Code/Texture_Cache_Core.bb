@@ -88,7 +88,7 @@ Function CreateTextureUsingCacheSystem%(Width%, Height%, TexFlags% = 1, Frames% 
 	tic.TextureInCache = New TextureInCache
 	tic\TexName = "CreateTexture"
 	tic\TexDeleteType = DeleteType
-	tic\Tex = CreateTexture(Width, Height, TexFlags + (256 * (opt\SaveTexturesInVRAM <> 0)), Frames)
+	tic\Tex = CreateTexture(Width, Height, TexFlags + (256 * opt\SaveTexturesInVRAM), Frames)
 	Return(tic\Tex)
 End Function
 
@@ -120,7 +120,7 @@ End Function
 Global MissingTexture%
 
 Function LoadMissingTexture%()
-	MissingTexture = CreateTexture(2, 2, 1)
+	MissingTexture = CreateTexture(2, 2, 1 + (256 * opt\SaveTexturesInVRAM))
 	TextureBlend(MissingTexture, 3)
 	SetBuffer(TextureBuffer(MissingTexture))
 	ClsColor(0, 0, 0)
