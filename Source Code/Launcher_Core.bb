@@ -173,7 +173,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 	IniWriteString(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
-	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 	
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
@@ -498,7 +497,6 @@ Function LanguageSelector%()
 			EndIf
 			If mo\MouseHit1 Then ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
 		EndIf
-		
 		MouseHoverLanguage = Null
 		
 		Flip()
@@ -518,6 +516,8 @@ Function LanguageSelector%()
 	
 	AppTitle(GetLocalString("launcher", "title"))
 	FreeImage(LauncherBG) : LauncherBG = 0
+	
+	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 End Function
 
 Global OnScrollBar%
