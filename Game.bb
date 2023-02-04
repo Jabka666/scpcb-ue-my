@@ -9,7 +9,7 @@
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 
-Include "Source Code\Language_Core.bb"
+Include "Source Code\Launcher_Core.bb"
 
 Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"

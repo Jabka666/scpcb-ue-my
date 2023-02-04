@@ -190,6 +190,7 @@ End Type
 Type ListLanguage ; ~ Languages in the list
 	Field Name$
 	Field ID$
+	Field WeblateID$
 	Field Author$
 	Field LastModify$
 	Field Flag$
@@ -255,6 +256,7 @@ Function LanguageSelector%()
 				lan.ListLanguage = New ListLanguage
 				lan\Name = ParseDomainTXT(l, "name") ; ~ Name of localization
 				lan\ID = ParseDomainTXT(l, "id") ; ~ Language ID of localization
+				lan\WeblateID = ParseDomainTXT(l, "weblate") ; ~ Language ID in ZiYue Weblate
 				lan\Author = ParseDomainTXT(l, "author") ; ~ Author of translation
 				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
 				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
@@ -282,7 +284,7 @@ Function LanguageSelector%()
 	Local SelectedLanguage.ListLanguage = Null
 	Local MouseHoverLanguage.ListLanguage = Null
 	Local CurrentStatus% = LANGUAGE_STATUS_NULL
-	Local RequestLanguageID$ = ""
+	Local RequestLanguage.ListLanguage = Null
 	Local StatusTimer% = 0
 	
 	AppTitle(GetLocalString("language", "title"))
@@ -291,13 +293,14 @@ Function LanguageSelector%()
 		Select CurrentStatus
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
-				DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguageID + ".zip", BasePath + "/local.zip")
+				DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+				DownloadFile("http://weblate.ziyuesinicization.site/download/scpcb-ue/local-ini/" + RequestLanguage\WeblateID + "/", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini") ; ~ Download local.ini from ZiYue Weblate
 				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
 				;[Block]
-				CreateDir(LocalizaitonPath + RequestLanguageID)
-				Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguageID)
+				CreateDir(LocalizaitonPath + RequestLanguage\ID)
+				Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
 				StatusTimer = MilliSecs2()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
@@ -420,7 +423,7 @@ Function LanguageSelector%()
 				If SelectedLanguage\ID <> opt\Language Then
 					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
 						CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
-						RequestLanguageID = SelectedLanguage\ID
+						RequestLanguage = SelectedLanguage
 					EndIf
 					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
@@ -432,7 +435,7 @@ Function LanguageSelector%()
 			Else
 				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
 					CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
-					RequestLanguageID = SelectedLanguage\ID
+					RequestLanguage = SelectedLanguage
 				EndIf
 			EndIf
 		Else

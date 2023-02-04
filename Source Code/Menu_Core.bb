@@ -1,5 +1,3 @@
-Include "Source Code\Language_Core.bb"
-
 Type MainMenu
 	Field MainMenuBlinkTimer#[2]
 	Field MainMenuBlinkDuration#[2]
