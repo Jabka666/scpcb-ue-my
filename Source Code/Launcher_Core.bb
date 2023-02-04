@@ -64,7 +64,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Text2(LauncherWidth - 620, LauncherHeight - 303, GetLocalString("launcher", "resolution"))
 		
 		Local x% = LauncherWidth - 600
-		Local y% = LauncherHeight - 275
+		Local y% = LauncherHeight - 269
 		
 		For i = 0 To lnchr\GFXModes - 1
 			Color(0, 0, 0)
@@ -79,7 +79,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			
 			y = y + 20
 			If y >= LauncherHeight - 155 Then
-				y = LauncherHeight - 275
+				y = LauncherHeight - 269
 				x = x + 100
 			EndIf
 		Next
