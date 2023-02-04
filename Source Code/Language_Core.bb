@@ -252,7 +252,7 @@ Function LanguageSelector%()
 				EndIf
 			EndIf
 		Else
-			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language")
+			If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://github.com/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
 		EndIf
 		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
 		
