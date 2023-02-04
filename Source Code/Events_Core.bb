@@ -720,7 +720,7 @@ Function UpdateEvents%()
 				Else
 					If e\room\NPC[0] <> Null Then AnimateNPC(e\room\NPC[0], 249.0, 286.0, 0.4, False)
 					
-					If EntityDistanceSquared(me\Collider, e\room\RoomDoors[2]\FrameOBJ) < 1.0 Then e\EventState = 500.0
+					If EntityDistanceSquared(me\Collider, e\room\RoomDoors[2]\FrameOBJ) < 1.21 Then e\EventState = Max(e\EventState, 500.0)
 					If e\EventState >= 500.0 Then
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState2 = 0.0 Then
