@@ -661,7 +661,7 @@ Function LoadItems%()
 	
 	; ~ [PAPER]
 	
-CreateItemTemplate(GetLocalString("items", "doc005"), "Document SCP-005", "paper", "paper.b3d", "INV_paper.png", "doc_005.png", 0.003, 0, "doc_005.png")
+	CreateItemTemplate(GetLocalString("items", "doc005"), "Document SCP-005", "paper", "paper.b3d", "INV_paper.png", "doc_005.png", 0.003, 0, "doc_005.png")
 	CreateItemTemplate(GetLocalString("items", "doc008"), "Document SCP-008", "paper", "paper.b3d", "INV_paper.png", "doc_008.png", 0.003, 0, "doc_008.png")
 	CreateItemTemplate(GetLocalString("items", "doc012"), "Document SCP-012", "paper", "paper.b3d", "INV_paper.png", "doc_012.png", 0.003, 0, "doc_012.png")
 	CreateItemTemplate(GetLocalString("items", "doc035"), "Document SCP-035", "paper", "paper.b3d", "INV_paper.png", "doc_035_smile.png", 0.003, 0, "doc_035_smile.png")
@@ -857,9 +857,9 @@ CreateItemTemplate(GetLocalString("items", "doc005"), "Document SCP-005", "paper
 	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "veryfineradio", "radio.b3d", "INV_radio.png", "radio.png", 1.0, 1)
 	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "18vradio", "radio.b3d", "INV_radio.png", "radio.png", 1.02, 1)
 	
-	CreateItemTemplate(GetLocalString("items", "hand_1"), "Severed Hand", "hand", "severed_hand.b3d", "INV_severed_hand(1).png", "", 0.03, 2)
+	CreateItemTemplate(GetLocalString("items", "hand_1"), "White Severed Hand", "hand", "severed_hand.b3d", "INV_severed_hand(1).png", "", 0.03, 2)
 	CreateItemTemplate(GetLocalString("items", "hand_2"), "Black Severed Hand", "hand2", "severed_hand.b3d", "INV_severed_hand(2).png", "", 0.03, 2, "severed_hand(2).png")
-	CreateItemTemplate(GetLocalString("items", "hand_3"), "Severed Hand", "hand3", "severed_hand.b3d", "INV_severed_hand(3).png", "", 0.03, 2, "severed_hand(3).png")
+	CreateItemTemplate(GetLocalString("items", "hand_3"), "Yellow Severed Hand", "hand3", "severed_hand.b3d", "INV_severed_hand(3).png", "", 0.03, 2, "severed_hand(3).png")
 	
 	CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV Navigator", "nav", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1)
 	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", "navulti", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1)
