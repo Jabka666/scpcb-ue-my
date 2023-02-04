@@ -294,13 +294,15 @@ Function LanguageSelector%()
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
 				DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
-				DownloadFile("http://weblate.ziyuesinicization.site/download/scpcb-ue/local-ini/" + RequestLanguage\WeblateID + "/", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini") ; ~ Download local.ini from ZiYue Weblate
+				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\WeblateID + "/file/", BasePath + "/local.ini") ; ~ Download local.ini from ZiYue Weblate
 				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
 				;[Block]
+				; ~ Unzip function will delete everything in the directory, so we need move local.ini to directory after unziping
 				CreateDir(LocalizaitonPath + RequestLanguage\ID)
 				Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
+				CopyFile(BasePath + "/local.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini")
 				StatusTimer = MilliSecs2()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
