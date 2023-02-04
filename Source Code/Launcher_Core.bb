@@ -328,21 +328,21 @@ Function LanguageSelector%()
 		Color(255, 255, 255)
 		If (Not LanguageBG) Then LanguageBG = LoadImage_Strict("GFX\Menu\Language.png")
 		DrawBlock(LanguageBG, 0, 0)
-		Rect(479, 195, 155, 110)
+		Rect(LauncherWidth - 161, LauncherHeight - 285, 155, 110)
 		
 		If LinesAmount > 13 Then
-			y = 200 - (20 * ScrollMenuHeight * ScrollBarY)
+			y = LauncherHeight - 280 - (20 * ScrollMenuHeight * ScrollBarY)
 			SetBuffer(ImageBuffer(LanguageIMG))
 			DrawImage(LanguageBG, -20, -195)
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
-				If MouseOn(20, y - CurrFontHeight, 430, 20) Then
-					DrawImage(ButtonImages, 405, y - 199, 5)
-					If MouseOn(425, y - 4, 21, 21) Then
+				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 430, 20) Then
+					DrawImage(ButtonImages, LauncherWidth - 235, y - 199, 5)
+					If MouseOn(LauncherWidth - 215, y - 4, 21, 21) Then
 						Color(150, 150, 150)
-						Rect(425, y - 4, 20, 20, False)
+						Rect(LauncherWidth - 215, y - 4, 20, 20, False)
 						MouseHoverLanguage = lan
 					EndIf
 				EndIf
@@ -354,7 +354,7 @@ Function LanguageSelector%()
 					Color(0, 0, 0)
 					Rect(0, y - 195 - CurrFontHeight, 430, 20, False)
 				EndIf
-				If MouseOn(20, y - CurrFontHeight, 432, 20) Then
+				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 432, 20) Then
 					Color(150, 150, 150)
 					Rect(0, y - 195 - CurrFontHeight, 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
@@ -363,36 +363,36 @@ Function LanguageSelector%()
 				LinesAmount = LinesAmount + 1
 			Next
 			SetBuffer(BackBuffer())
-			DrawBlock(LanguageIMG, 20, 195)
+			DrawBlock(LanguageIMG, LauncherWidth - 620, LauncherHeight - 285)
 			Color(10, 10, 10)
-			Rect(452, 195, 20, 254, True)
+			Rect(LauncherWidth - 188, LauncherHeight - 285, 20, 254, True)
 			ScrollMenuHeight = LinesAmount - 12
 			ScrollBarY = UpdateLauncherScrollBar(452, 195, 20, 254, 452, 195 + (254 - (254 - (4 * ScrollMenuHeight))) * ScrollBarY, 20, 254 - (4 * ScrollMenuHeight), ScrollBarY, 1)
 		Else
-			y = 200
+			y = LauncherHeight - 280
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
-				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, lan\FlagImg)
-				If MouseOn(20, y - CurrFontHeight, 430, 20) Then
-					DrawImage(ButtonImages, 425, y - 4, 5)
-					If MouseOn(425, y - 4, 21, 21) Then
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", LauncherWidth - 619, y, 432, lan\FlagImg)
+				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 430, 20) Then
+					DrawImage(ButtonImages, LauncherWidth - 215, y - 4, 5)
+					If MouseOn(LauncherWidth - 215, y - 4, 21, 21) Then
 						Color(150, 150, 150)
-						Rect(425, y - 4, 20, 20, False)
+						Rect(LauncherWidth - 215, y - 4, 20, 20, False)
 						MouseHoverLanguage = lan
 					EndIf
 				EndIf
 				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
-					Rect(20, y - CurrFontHeight, 430, 20, False)
+					Rect(LauncherWidth - 620, y - CurrFontHeight, 430, 20, False)
 				EndIf
 				If SelectedLanguage <> Null And lan = SelectedLanguage Then
 					Color(0, 0, 0)
-					Rect(20, y - CurrFontHeight, 430, 20, False)
+					Rect(LauncherWidth - 620, y - CurrFontHeight, 430, 20, False)
 				EndIf
-				If MouseOn(20, y - CurrFontHeight, 432, 20) Then
+				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 432, 20) Then
 					Color(150, 150, 150)
-					Rect(20, y - CurrFontHeight, 430, 20, False)
+					Rect(LauncherWidth - 620, y - CurrFontHeight, 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
 				y = y + 20
@@ -417,13 +417,13 @@ Function LanguageSelector%()
 		EndIf
 		
 		Color(0, 0, 0)
-		RowText(InfoBoxContent, 481, 199, 151, 102)
+		RowText(InfoBoxContent, LauncherWidth - 159, LauncherHeight - 281, 151, 102)
 		
 		If SelectedLanguage <> Null Then
 			If SelectedLanguage\ID = opt\Language Then
-				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://github.com/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://github.com/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
 			ElseIf SelectedLanguage\Name = "English"
-				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					; ~ Reload some stuff manually
 					fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
@@ -432,11 +432,11 @@ Function LanguageSelector%()
 				EndIf
 			ElseIf FileType(LocalizaitonPath + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language Then
-					If UpdateLauncherButtonWithImage(479, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
+					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
 						CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
 						RequestLanguage = SelectedLanguage
 					EndIf
-					If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
+					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						; ~ Reload some stuff manually
 						fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
@@ -445,13 +445,13 @@ Function LanguageSelector%()
 					EndIf
 				EndIf
 			Else
-				If UpdateLauncherButtonWithImage(479, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
 					CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
 					RequestLanguage = SelectedLanguage
 				EndIf
 			EndIf
 		EndIf
-		If UpdateLauncherButtonWithImage(479, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
+		If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
 		
 		If MouseHoverLanguage <> Null Then
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
