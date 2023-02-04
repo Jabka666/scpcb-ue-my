@@ -649,7 +649,7 @@ Function UpdateEvents%()
 				
 				If e\EventState = 0.0 Then
 					If PlayerRoom = e\room Then
-						e\room\RoomDoors[2]\Open = True
+						e\room\RoomDoors[1]\Open = True
 						
 						If SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
 							CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
@@ -659,10 +659,10 @@ Function UpdateEvents%()
 						
 						n_I\Curr173\Idle = 1
 						
-						While e\room\RoomDoors[1]\OpenState < 180.0
-							e\room\RoomDoors[1]\OpenState = Min(180.0, e\room\RoomDoors[1]\OpenState + 0.8)
-							MoveEntity(e\room\RoomDoors[1]\OBJ, Sin(e\room\RoomDoors[1]\OpenState) / 180.0, 0.0, 0.0)
-							MoveEntity(e\room\RoomDoors[1]\OBJ2, -Sin(e\room\RoomDoors[1]\OpenState) / 180.0, 0.0, 0.0)
+						While e\room\RoomDoors[0]\OpenState < 180.0
+							e\room\RoomDoors[0]\OpenState = Min(180.0, e\room\RoomDoors[0]\OpenState + 0.8)
+							MoveEntity(e\room\RoomDoors[0]\OBJ, Sin(e\room\RoomDoors[0]\OpenState) / 180.0, 0.0, 0.0)
+							MoveEntity(e\room\RoomDoors[0]\OBJ2, -Sin(e\room\RoomDoors[0]\OpenState) / 180.0, 0.0, 0.0)
 						Wend
 						
 						If e\room\NPC[0] <> Null Then
@@ -720,14 +720,7 @@ Function UpdateEvents%()
 				Else
 					If e\room\NPC[0] <> Null Then AnimateNPC(e\room\NPC[0], 249.0, 286.0, 0.4, False)
 					
-					CurrTrigger = CheckTriggers()
-					
-					If CurrTrigger = "173scene_timer" Then
-						e\EventState = e\EventState + fps\Factor[0]
-					ElseIf CurrTrigger = "173scene_activated"
-						e\EventState = Max(e\EventState, 500.0)
-					EndIf
-					
+					If EntityDistanceSquared(me\Collider, e\room\RoomDoors[2]\FrameOBJ) < 1.0 Then e\EventState = 500.0
 					If e\EventState >= 500.0 Then
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState2 = 0.0 Then
@@ -809,7 +802,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								; ~ If Ulgrin can see the player then start shooting at them.
-								If (Not chs\NoTarget) And (CurrTrigger = "173scene_end" And EntityVisible(e\room\NPC[2]\Collider, me\Collider)) Then
+								If (Not chs\NoTarget) And EntityDistanceSquared(me\Collider, e\room\NPC[2]\Collider) < 9.0 And EntityVisible(e\room\NPC[2]\Collider, me\Collider) Then
 									e\room\NPC[2]\State = 1.0
 									e\room\NPC[2]\State3 = 1.0
 								ElseIf e\room\NPC[2]\State = 1.0 And (Not EntityVisible(e\room\NPC[2]\Collider, me\Collider))
@@ -831,14 +824,21 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 						
-						PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), -Max(e\EventState - 1300.0, 0.0) / 4500.0, EntityZ(e\room\Objects[0], True), True)
-						RotateEntity(e\room\Objects[0], -Max(e\EventState - 1320.0, 0.0) / 130.0, 0.0, -Max(e\EventState - 1300.0, 0.0) / 40.0, True)
-						
-						PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), -Max(e\EventState - 1800.0, 0.0) / 5000.0, EntityZ(e\room\Objects[1], True), True)
-						RotateEntity(e\room\Objects[1], -Max(e\EventState - 2040.0, 0.0) / 135.0, 0.0, -Max(e\EventState - 2040.0, 0.0) / 43.0, True)
-						
-						If Rand(300) = 2 Then
-							If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then PlaySound2(DecaySFX[Rand(3)], Camera, e\room\Objects[0], 3.0)
+						If e\room\Objects[1] <> 0 Then
+							If EntityY(e\room\Objects[1], True) > e\room\y - 100.0 * RoomScale Then
+								PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), -Max(e\EventState - 1300.0, 0.0) / 4500.0, EntityZ(e\room\Objects[0], True), True)
+								RotateEntity(e\room\Objects[0], 90.0 - Max(e\EventState - 1320.0, 0.0) / 130.0, 45.0, -Max(e\EventState - 1300.0, 0.0) / 40.0, True)
+								
+								PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), -Max(e\EventState - 1800.0, 0.0) / 5000.0, EntityZ(e\room\Objects[1], True), True)
+								RotateEntity(e\room\Objects[1], -Max(e\EventState - 2040.0, 0.0) / 135.0, 225.0, 90.0 - Max(e\EventState - 2040.0, 0.0) / 43.0, True)
+							Else
+								For i = 0 To 1
+									FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
+								Next
+							EndIf
+							If Rand(300) = 2 Then
+								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then PlaySound2(DecaySFX[Rand(3)], Camera, e\room\Objects[0], 3.0)
+							EndIf
 						EndIf
 					EndIf
 					
@@ -869,10 +869,6 @@ Function UpdateEvents%()
 						
 						If i > 26 
 							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
-							
-							For j = 0 To 1
-								FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
-							Next
 							
 							RemoveEvent(e)
 						EndIf
