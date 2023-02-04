@@ -340,7 +340,11 @@ Function LanguageSelector%()
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
 				If MouseOn(20, y - CurrFontHeight, 430, 20) Then
 					DrawImage(ButtonImages, 405, y - 199, 5)
-					If MouseOn(425, y - 4, 21, 21) Then MouseHoverLanguage = lan
+					If MouseOn(425, y - 4, 21, 21) Then
+						Color(150, 150, 150)
+						Rect(425, y - 4, 20, 20, False)
+						MouseHoverLanguage = lan
+					EndIf
 				EndIf
 				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
@@ -372,7 +376,11 @@ Function LanguageSelector%()
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 21, y, 432, lan\FlagImg)
 				If MouseOn(20, y - CurrFontHeight, 430, 20) Then
 					DrawImage(ButtonImages, 425, y - 4, 5)
-					If MouseOn(425, y - 4, 21, 21) Then MouseHoverLanguage = lan
+					If MouseOn(425, y - 4, 21, 21) Then
+						Color(150, 150, 150)
+						Rect(425, y - 4, 20, 20, False)
+						MouseHoverLanguage = lan
+					EndIf
 				EndIf
 				If lan\ID = opt\Language Then
 					Color(200, 0, 0)
