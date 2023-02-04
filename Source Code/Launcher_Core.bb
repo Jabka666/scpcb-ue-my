@@ -1,3 +1,187 @@
+Const LauncherWidth% = 640
+Const LauncherHeight% = 480
+
+Global LauncherBG%
+
+Function UpdateLauncher%(lnchr.Launcher)
+	Local i%, n%
+	
+	MenuScale = 1
+	
+	Graphics3D(LauncherWidth, LauncherHeight, 32, 2)
+	
+	SetBuffer(BackBuffer())
+	
+	opt\RealGraphicWidth = opt\GraphicWidth
+	opt\RealGraphicHeight = opt\GraphicHeight
+	
+	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
+	SetFont2(fo\FontID[Font_Default])
+	
+	MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
+	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
+	
+	Local LauncherIMG%[2]
+	Local LauncherMediaWidth%
+	
+	LauncherIMG[0] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
+	LauncherMediaWidth = ImageWidth(LauncherIMG[0]) / 2
+	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 2)
+	
+	For i = 1 To lnchr\TotalGFXModes
+		Local SameFound% = False
+		
+		For n = 0 To lnchr\TotalGFXModes - 1
+			If lnchr\GFXModeWidths[n] = GfxModeWidth(i) And lnchr\GFXModeHeights[n] = GfxModeHeight(i) Then
+				SameFound = True
+				Exit
+			EndIf
+		Next
+		If (Not SameFound) Then
+			If GfxModeWidth(i) >= 800 And GfxModeHeight(i) >= 600 Then
+				If opt\GraphicWidth = GfxModeWidth(i) And opt\GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
+				lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
+				lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
+				lnchr\GFXModes = lnchr\GFXModes + 1
+			EndIf
+		EndIf
+	Next
+	
+	AppTitle(GetLocalString("launcher", "title"))
+	
+	Local Quit% = False
+	
+	Repeat
+		Cls()
+		
+		mo\MouseHit1 = MouseHit(1)
+		
+		Color(255, 255, 255)
+		If (Not LauncherBG) Then LauncherBG = LoadImage_Strict("GFX\menu\launcher.png")
+		DrawBlock(LauncherBG, 0, 0)
+		
+		; ~ Resolution selector
+		Text2(LauncherWidth - 620, LauncherHeight - 303, GetLocalString("launcher", "resolution"))
+		
+		Local x% = LauncherWidth - 600
+		Local y% = LauncherHeight - 275
+		
+		For i = 0 To lnchr\GFXModes - 1
+			Color(0, 0, 0)
+			If lnchr\SelectedGFXMode = i Then Rect(x - 1, y - 5, 100, 20, False)
+			
+			Text2(x, y, (lnchr\GFXModeWidths[i] + "x" + lnchr\GFXModeHeights[i]))
+			If MouseOn(x - 1, y - 5, 100, 20) Then
+				Color(100, 100, 100)
+				Rect(x - 1, y - 5, 100, 20, False)
+				If mo\MouseHit1 Then lnchr\SelectedGFXMode = i
+			EndIf
+			
+			y = y + 20
+			If y >= LauncherHeight - 155 Then
+				y = LauncherHeight - 275
+				x = x + 100
+			EndIf
+		Next
+		; ~ Display selector
+		Color(255, 255, 255)
+		Text2(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
+		
+		Local Txt$
+		
+		Select opt\DisplayMode
+			Case 0
+				;[Block]
+				Txt = GetLocalString("launcher", "display.fullscreen")
+				;[End Block]
+			Case 1
+				;[Block]
+				Txt = GetLocalString("launcher", "display.borderless")
+				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopWidth() Then
+					Text2(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
+				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopWidth() Then
+					Text2(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
+				EndIf
+				;[End Block]
+			Case 2
+				;[Block]
+				Txt = GetLocalString("launcher", "display.windowed")
+				;[End Block]
+		End Select
+		
+		Text2(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
+		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 145, 30)
+		Text2(LauncherWidth - 112.5, LauncherHeight - 216, Txt, True)
+		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 226, 30, 30, ">", False) Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
+		; ~ Launcher tick
+		Text2(LauncherWidth - 155, LauncherHeight - 275, GetLocalString("launcher", "launcher"))
+		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 185, LauncherHeight - 278, opt\LauncherEnabled)
+		; ~ Media buttons
+		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
+			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
+			Text2(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://discord.gg/n7KdW4u")
+		EndIf
+		DrawBlock(LauncherIMG[0], LauncherWidth - 620, LauncherHeight - 86, 0)
+		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64) Then
+			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
+			Text2(LauncherWidth - 510 + LauncherMediaWidth, LauncherHeight - 106, "MODDB", True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
+		EndIf
+		DrawBlock(LauncherIMG[0], LauncherWidth - 510, LauncherHeight - 86, 1)
+		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64) Then
+			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
+			Text2(LauncherWidth - 400 + LauncherMediaWidth, LauncherHeight - 106, "YOUTUBE", True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
+		EndIf
+		DrawBlock(LauncherIMG[0], LauncherWidth - 400, LauncherHeight - 86, 2)
+		; ~ Language selector
+		If MouseOn(LauncherWidth - 185, LauncherHeight - 186, 40, 40) Then
+			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
+			Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+			Text2(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX) : LanguageSelector()
+		Else
+			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 0)
+		EndIf
+		; ~ Report button
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 165, 30, GetLocalString("launcher", "report"), False, False) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
+		; ~ Changelog button
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 165, 30, GetLocalString("launcher", "changelog"), False, False) Then ExecFile_Strict("Changelog.txt")
+		; ~ Launch button
+		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"), False, False) Then
+			If opt\DisplayMode = 1 Then
+				opt\GraphicWidth = DesktopWidth()
+				opt\GraphicHeight = DesktopHeight()
+			Else
+				opt\GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
+				opt\GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
+			EndIf
+			opt\RealGraphicWidth = opt\GraphicWidth
+			opt\RealGraphicHeight = opt\GraphicHeight
+			Exit
+		EndIf
+		; ~ Exit button
+		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, GetLocalString("launcher", "exit"), False, False) Then
+			Quit = True
+			Exit
+		EndIf
+		Flip()
+	Forever
+	
+	IniWriteString(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
+	IniWriteString(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
+	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
+	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
+	IniWriteString(OptionFile, "Global", "Language", opt\Language)
+	
+	For i = 0 To 1
+		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
+	Next
+	
+	If Quit Then End()
+End Function
+
 Type Language ; ~ Game Language
 	Field CurrentLanguage$
 	Field LanguagePath$
