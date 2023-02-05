@@ -720,7 +720,7 @@ Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, Can
 End Function
 
 ; ~ Maybe re-work?
-Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False)
+Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False, Suit% = False)
 	If (Not GasMask) And wi\GasMask > 0 Then
 		CreateMsg(GetLocalString("msg", "mask.use.off"))
 		SelectedItem = Null
@@ -741,7 +741,7 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 		CreateMsg(GetLocalString("msg", "gear.use.off"))
 		SelectedItem = Null
 		Return(True)
-	ElseIf wi\HazmatSuit > 0
+	ElseIf (Not Suit) And wi\HazmatSuit > 0
 		CreateMsg(GetLocalString("msg", "suit.use.off"))
 		SelectedItem = Null
 		Return(True)

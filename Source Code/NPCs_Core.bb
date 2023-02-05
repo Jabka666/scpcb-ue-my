@@ -574,7 +574,7 @@ Function RemoveNPC%(n.NPCs)
 	Delete(n)
 End Function
 
-Global TakeOffTimer#
+Global RemoveHazmatTimer#, Remove714Timer#
 
 Function UpdateNPCs%()
 	CatchErrors("Uncaught (UpdateNPCs)")
@@ -1483,8 +1483,6 @@ Function UpdateNPCs%()
 				
 				UpdateNPCBlinking(n)
 				
-				If Dist >= 0.25 Then TakeOffTimer = Min(TakeOffTimer + fps\Factor[0], 500.0)
-				
 				If n\Idle > 0.1 Then
 					If PlayerRoom\RoomTemplate\Name <> "cont2_049" Then
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
@@ -1551,35 +1549,42 @@ Function UpdateNPCs%()
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 									
 									If Dist < 0.25 Then
-										If wi\HazmatSuit > 0 Lor I_714\Using Then
-											TakeOffTimer = TakeOffTimer - (fps\Factor[0] * 1.5)
-											If TakeOffTimer < 400.0 And TakeOffTimer + (fps\Factor[0] * 1.5) >= 400.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
-												If wi\HazmatSuit > 0 Then
-													n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
-												ElseIf I_714\Using
-													n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
-												EndIf
-											ElseIf TakeOffTimer <= 0.0
+										If wi\HazmatSuit > 0 Then
+											RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
+											
+											If RemoveHazmatTimer < 150.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 150.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
+												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"))
+											ElseIf RemoveHazmatTimer =< 0.0
+												For i = 0 To 2
+													If RemoveHazmatTimer < -(i * 70.0 * (3.0 + (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * 70.0 * (3.0 + (wi\HazmatSuit = 4))) Then
+														me\CameraShake = 2.0
+														If i = 2 Then
+															For i = 0 To MaxItemAmount - 1
+																If Inventory(i) <> Null Then
+																	If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
+																		wi\HazmatSuit = 0 : RemoveItem(Inventory(i))
+																		CreateMsg(GetLocalString("msg", "suit.destroyed"))
+																		Exit
+																	EndIf
+																EndIf
+															Next
+														EndIf
+													EndIf
+												Next
+											EndIf
+										ElseIf I_714\Using
+											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
+											
+											Remove714Timer = Remove714Timer - (fps\Factor[0] * 1.5)
+											
+											If Remove714Timer < 150.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 150.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
+												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"))
+											ElseIf Remove714Timer =< 0.0
 												For i = 0 To MaxItemAmount - 1
 													If Inventory(i) <> Null Then
-														If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
-															If Inventory(i)\State2 < 3.0 And wi\HazmatSuit = 4 Then
-																Inventory(i)\State2 = Inventory(i)\State2 + 1.0
-																TakeOffTimer = 260.0
-																me\CameraShake = 2.0
-															Else
-																RemoveItem(Inventory(i))
-																CreateMsg(GetLocalString("msg", "suit.destroyed"))
-																wi\HazmatSuit = 0
-																PlaySound_Strict(PickSFX[2])
-																TakeOffTimer = 500.0
-																Exit
-															EndIf
-														ElseIf I_714\Using
-															CreateMsg(GetLocalString("msg", "ring.forceremoved"))
-															I_714\Using = 0
-															PlaySound_Strict(PickSFX[3])
-															TakeOffTimer = 500.0
+														If Inventory(i)\ItemTemplate\TempName = "scp714" Then
+															I_714\Using = False : DropItem(Inventory(i))
+															CreateMsg(GetLocalString("msg", "714.forceremoved"))
 															Exit
 														EndIf
 													EndIf
@@ -1587,6 +1592,7 @@ Function UpdateNPCs%()
 											EndIf
 										Else
 											me\CurrCameraZoom = 20.0
+											me\BlurTimer = 500.0
 											
 											If (Not chs\GodMode) Then
 												If PlayerRoom\RoomTemplate\Name = "cont2_049" Then
@@ -1608,6 +1614,9 @@ Function UpdateNPCs%()
 											EndIf
 										EndIf
 									Else
+										RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
+										Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
+										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										

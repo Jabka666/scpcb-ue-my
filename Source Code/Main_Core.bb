@@ -5083,7 +5083,7 @@ Function UpdateGUI%()
 								End Select
 								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 								wi\GasMask = 0 : wi\BallisticHelmet = False : wi\SCRAMBLE = False
-								I_427\Using = False : I_714\Using = False : I_1499\Using = 0
+								I_427\Using = False : I_1499\Using = 0
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5481,7 +5481,7 @@ Function UpdateGUI%()
 					Case "vest", "finevest"
 						;[Block]
 						SelectedItem\State = 0.0
-						If (Not wi\BallisticVest) Then DropItem(SelectedItem, False)
+						If wi\BallisticVest = 0 Then DropItem(SelectedItem, False)
 						;[End Block]
 					Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 						;[Block]
@@ -5537,23 +5537,26 @@ Function RenderHUD%()
 	y = opt\GraphicHeight - (95 * MenuScale)
 	
 	Color(255, 255, 255)
-	If (I_714\Using Lor wi\HazmatSuit > 0) And TakeOffTimer < 500.0 Then
-		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) <> Null Then
-				If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit") Then
-					If Inventory(i)\State2 < 3.0 And wi\HazmatSuit = 4 Then
-						Color(0, 200, 0)
-						Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-					EndIf
-				EndIf
-			EndIf
-		Next
+	If (I_714\Using And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0) Then
+		If wi\HazmatSuit = 4 Then
+			Color(0, 200, 0)
+			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		EndIf
 		Color(255, 255, 255)
 		Rect(x - (51 * MenuScale), y - (41 * MenuScale), 32 * MenuScale, 32 * MenuScale, False)
-		If TakeOffTimer < 125.0 Then
-			RenderBar(t\ImageID[1], x, y - (40 * MenuScale), Width, Height, TakeOffTimer, 500.0, 100, 0, 0)
+		
+		If wi\HazmatSuit > 0 Then
+			If RemoveHazmatTimer < 125.0 Then
+				RenderBar(t\ImageID[1], x, y - (40 * MenuScale), Width, Height, RemoveHazmatTimer, 500.0, 100, 0, 0)
+			Else
+				RenderBar(BlinkMeterIMG, x, y - (40 * MenuScale), Width, Height, RemoveHazmatTimer, 500.0)
+			EndIf
 		Else
-			RenderBar(BlinkMeterIMG, x, y - (40 * MenuScale), Width, Height, TakeOffTimer, 500.0)
+			If Remove714Timer < 125.0 Then
+				RenderBar(t\ImageID[1], x, y - (40 * MenuScale), Width, Height, Remove714Timer, 500.0, 100, 0, 0)
+			Else
+				RenderBar(BlinkMeterIMG, x, y - (40 * MenuScale), Width, Height, Remove714Timer, 500.0)
+			EndIf
 		EndIf
 		DrawBlock(t\IconID[7], x - (50 * MenuScale), y - (40 * MenuScale))
 	EndIf

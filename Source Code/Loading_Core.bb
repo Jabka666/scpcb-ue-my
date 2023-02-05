@@ -873,9 +873,9 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "killbat"), "Strange Battery", "killbat", "battery.b3d", "INV_strange_battery.png", "", 0.01, 1, "strange_battery.png")
 	
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
-	CreateItemTemplate(GetLocalString("items", "finesyringe"), "Syringe", "finesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
-	CreateItemTemplate(GetLocalString("items", "vfsyringe"), "Syringe", "veryfinesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
-	CreateItemTemplate(GetLocalString("items", "syringeinf"), "Syringe", "syringeinf", "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png")
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "finesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "veryfinesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringeinf", "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png")
 	
 	CreateItemTemplate(GetLocalString("items", "wallet"), "Wallet", "wallet", "wallet.b3d", "INV_wallet.png", "", 0.0006, 2, "", "", 1)
 	
@@ -1936,7 +1936,8 @@ Function InitNewGame%()
 	
 	I_005\ChanceToSpawn = Rand(10)
 	
-	TakeOffTimer = 500.0
+	Remove714Timer = 500.0
+	RemoveHazmatTimer = 500.0
 	
 	CODE_DR_MAYNARD = 0
 	For i = 0 To 3
