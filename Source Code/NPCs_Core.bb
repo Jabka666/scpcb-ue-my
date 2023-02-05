@@ -4800,17 +4800,6 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathStatus = FindPath(n, EntityX(n\MTFLeader\Collider, True), EntityY(n\MTFLeader\Collider, True) + 0.1, EntityZ(n\MTFLeader\Collider, True)) ; ~ Whatever you say boss
 						Else ; ~ I am the leader
 							If n_I\Curr173\Idle <> 2 Then
-								If (Not n_I\Curr173\IsDead) And n_I\Curr173\Idle = 3 Then
-									For r.Rooms = Each Rooms
-										If r\RoomTemplate\Name = "cont1_173" Then
-											If EntityX(n\Collider, True) - r\x < 15.0 Then
-												If r\RoomDoors[1]\Open Then OpenCloseDoor(r\RoomDoors[1])
-												n_I\Curr173\IsDead = True
-												Exit
-											EndIf
-										EndIf
-									Next
-								EndIf
 								For r.Rooms = Each Rooms
 									If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1) Then
 										x = r\x
@@ -4834,24 +4823,22 @@ Function UpdateMTFUnit%(n.NPCs)
 											
 											PositionEntity(Pvt, EntityX(r\OBJ, True) + 4736.0 * RoomScale, 0.5, EntityZ(r\OBJ, True) + 1692.0 * RoomScale)
 											
-											If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then
-												FoundChamber = True
-											EndIf
+											If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
 											
 											If n_I\Curr173\Idle = 3 And DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) > 16.0 Then
-												If r\RoomDoors[1]\Open Then OpenCloseDoor(r\RoomDoors[1])
+												If r\RoomDoors[0]\Open Then OpenCloseDoor(r\RoomDoors[0])
 											EndIf
 											
 											FreeEntity(Pvt)
 											
 											If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And (Not FoundChamber) Then
-												x = EntityX(r\OBJ, True) + 4736.0 * RoomScale
+												x = r\x + 4736.0 * RoomScale
 												y = 0.1
-												z = EntityZ(r\OBJ, True) + 1692.0 * RoomScale
+												z = r\z + 1722.0 * RoomScale
 												Exit
 											ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And FoundChamber
-												n\PathX = EntityX(r\OBJ, True) + 4736.0 * RoomScale
-												n\PathZ = EntityZ(r\OBJ, True) + 1692.0 * RoomScale
+												n\PathX = r\x + 4736.0 * RoomScale
+												n\PathZ = r\z + 1722.0 * RoomScale
 												Exit
 											Else
 												n_I\Curr173\Idle = 3
