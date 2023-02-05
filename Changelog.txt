@@ -1,5 +1,8 @@
 v1.1
 
+Launcher:
+- Aligned resolution list.
+
 General:
 - Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
 - Added «Home» key, «End» key, «Delete» key and «Insert» key to switch insert mode. Abilty to hold left/right arrow to fast move cursor. Implement of Ctrl+C and Ctrl+V.
@@ -24,7 +27,7 @@ Mechanics and effects:
 - Added dropping items without closing inventory with right click.
 - Added a blood decal after killing the player.
 - Added new color effects depending on player zone.
-- Added a smooth stamina reducing effect while wearing a hazmat suit or SCP-714.
+- Added a smooth stamina reducing effect while wearing the Hazmat Suit or SCP-714.
 
 - Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
 - Every document, note and chatscreen has it's own texture.
@@ -57,11 +60,13 @@ Items:
 - Nerfed NVG fog distance from 30 to 17.
 - The white pill now cures the Common Cold.
 - Hazmat Suit/Gas mask changes:
-	- Added a new gas mask/hazmat suit variation: gas mask/hazmat suit without fogging.
+	- Added a new Gas Mask/Hazmat Suit variation: Gas Mask/Hazmat Suit without fogging.
 	- Players wearing Hazmat Suit are now able to pick up and drop items.
 	- You can use items while wearing the Hazmat Suit with exceptions being similar to that of the Gas mask plus no First Aid Kit and no Syringes.
 	- The Hazmat Suit now fogs up.
 	- Very fine variations of these items no longer grant infinite stamina. Stamina is doubled.
+	- You can now wear SCP-714 and the Hazmat Suit at the same time, but only if SCP-714 was worn before the hazmat suit.
+	- Reduced defense time against SCP-049, but added for Hazmat Suit combined with SCP-148.
 
 Menu:
 - Added degree symbol for FOV value.
