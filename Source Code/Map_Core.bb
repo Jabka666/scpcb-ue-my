@@ -3978,7 +3978,7 @@ Function FillRoom%(r.Rooms)
 				Next
 			Next
 			;[End Block]
-		Case "room1_dead_end_lcz"
+		Case "room1_dead_end_lcz", "room1_dead_end_ez"
 			;[Block]
 			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z + 1202.0 * RoomScale, r\y, r, False, BIG_DOOR)
 			r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWaypoint = True
@@ -4829,7 +4829,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Level 0 Key Card", "key0", r\x - 672.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 224.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_tesla_lcz"
+		Case "room2_tesla_lcz", "room2_tesla_hcz", "room2_tesla_ez"
 			;[Block]
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y, r\z)
@@ -6058,28 +6058,6 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("ReVision Eyedrops", "eyedrops", r\x + 1930.0 * RoomScale, r\y + 225.0 * RoomScale, r\z + 128.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_tesla_hcz"
-			;[Block]
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y, r\z)
-			
-			r\Objects[1] = CreateSprite()
-			r\HideObject[1] = False
-			EntityTexture(r\Objects[1], t\OverlayTextureID[11])
-			SpriteViewMode(r\Objects[1], 2) 
-			EntityBlend(r\Objects[1], 3) 
-			EntityFX(r\Objects[1], 1 + 8 + 16)
-			PositionEntity(r\Objects[1], r\x, r\y + 0.8, r\z)
-			HideEntity(r\Objects[1])
-			
-			r\Objects[2] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
-			r\HideObject[2] = False
-			HideEntity(r\Objects[2])
-			
-			For i = 0 To 2
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			;[End Block]
 		Case "room2_test_hcz"
 			;[Block]
 			; ~ DNA door
@@ -6776,14 +6754,6 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			;[End Block]
-		Case "room1_dead_end_ez"
-			;[Block]
-			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z + 1202.0 * RoomScale, r\y, r, False, BIG_DOOR)
-			r\RoomDoors[0]\MTFClose = False : r\RoomDoors[0]\DisableWaypoint = True
-			For i = 0 To 1
-				FreeEntity(r\RoomDoors[0]\Buttons[i]) : r\RoomDoors[0]\Buttons[i] = 0
-			Next
-			;[End Block]
 		Case "room1_lifts"
 			;[Block]
 			d.Doors = CreateDoor(r\x - 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, r, False, ELEVATOR_DOOR)
@@ -7209,28 +7179,6 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("The Modular Site Project", "paper", r\x + 622.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 73.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-			;[End Block]
-		Case "room2_tesla_ez"
-			;[Block]
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y, r\z)
-			
-			r\Objects[1] = CreateSprite()
-			r\HideObject[1] = False
-			EntityTexture(r\Objects[1], t\OverlayTextureID[11])
-			SpriteViewMode(r\Objects[1], 2) 
-			EntityBlend(r\Objects[1], 3) 
-			EntityFX(r\Objects[1], 1 + 8 + 16)
-			PositionEntity(r\Objects[1], r\x, r\y + 0.8, r\z)
-			HideEntity(r\Objects[1])
-			
-			r\Objects[2] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
-			r\HideObject[2] = False
-			HideEntity(r\Objects[2])
-			
-			For i = 0 To 2
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
 			;[End Block]
 		Case "cont2_860_1"
 			;[Block]
