@@ -6271,7 +6271,7 @@ Function RenderGUI%()
 									ElseIf UserTrackMusicAmount < 1
 										StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "nofound"))
 									Else
-										If ChannelPlaying(RadioCHN[0]) Then StrTemp = Format(GetLocalString("radio", "usertrack"), Upper(UserTrackName[RadioState[0]]) + "          ")
+										If ChannelPlaying(RadioCHN[0]) Then StrTemp = Format(GetLocalString("radio", "usertrack"), Upper(UserTrackName[RadioState[0]]))
 									EndIf
 									;[End Block]
 								Case 1
@@ -6318,7 +6318,7 @@ Function RenderGUI%()
 							SetFont2(fo\FontID[Font_Digital])
 							If StrTemp <> "" Then
 								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
-								Text2(x + (32 * MenuScale), y + (33 * MenuScale), StrTemp)
+								Text2(x - (28 * MenuScale), y + (33 * MenuScale), "          " + StrTemp + "          ")
 							EndIf
 							SetFont2(fo\FontID[Font_Default])
 						EndIf
