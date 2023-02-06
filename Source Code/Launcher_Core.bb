@@ -194,6 +194,7 @@ Type ListLanguage ; ~ Languages in the list
 	Field LastModify$
 	Field Flag$
 	Field FlagImg%
+	Field MajorOnly%
 	Field Full%
 	Field FileSize$
 	Field Compatible$
@@ -258,6 +259,7 @@ Function LanguageSelector%()
 				lan\WeblateID = ParseDomainTXT(l, "weblate") ; ~ Language ID in ZiYue Weblate
 				lan\Author = ParseDomainTXT(l, "author") ; ~ Author of translation
 				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
+				lan\MajorOnly = Int(ParseDomainTXT(l, "majoronly")) ; ~ loca.ini only?
 				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				lan\FileSize = ParseDomainTXT(l, "size") ; ~ Size of localization
@@ -292,7 +294,7 @@ Function LanguageSelector%()
 		Select CurrentStatus
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
-				DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+				If Not RequestLanguage\MajorOnly Then DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\WeblateID + "/file/", BasePath + "/local.ini") ; ~ Download local.ini from ZiYue Weblate
 				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 				;[End Block]
@@ -300,7 +302,7 @@ Function LanguageSelector%()
 				;[Block]
 				; ~ Unzip function will delete everything in the directory, so we need move local.ini to directory after unziping
 				CreateDir(LocalizaitonPath + RequestLanguage\ID)
-				Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
+				If Not RequestLanguage\MajorOnly Then Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
 				CopyFile(BasePath + "/local.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini")
 				StatusTimer = MilliSecs2()
 				CurrentStatus = LANGUAGE_STATUS_DONE
@@ -337,11 +339,11 @@ Function LanguageSelector%()
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 0)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
-				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 430, 20) Then
-					DrawImage(ButtonImages, LauncherWidth - 235, y - 199, 5)
-					If MouseOn(LauncherWidth - 215, y - 4, 21, 21) Then
+				If MouseOn(430, y - CurrFontHeight, 21, 21) Then
+					DrawImage(ButtonImages, 410, y - 195 - CurrFontHeight, 5)
+					If MouseOn(430, y - CurrFontHeight, 21, 21) Then
 						Color(150, 150, 150)
-						Rect(LauncherWidth - 215, y - 4, 20, 20, False)
+						Rect(410, y - 195 - CurrFontHeight, 20, 20, False)
 						MouseHoverLanguage = lan
 					EndIf
 				EndIf
@@ -374,10 +376,10 @@ Function LanguageSelector%()
 				Color(0, 0, 0)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", LauncherWidth - 619, y, 432, lan\FlagImg)
 				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 430, 20) Then
-					DrawImage(ButtonImages, LauncherWidth - 215, y - 4, 5)
-					If MouseOn(LauncherWidth - 215, y - 4, 21, 21) Then
+					DrawImage(ButtonImages, LauncherWidth - 210, y - 4, 5)
+					If MouseOn(LauncherWidth - 210, y - 4, 21, 21) Then
 						Color(150, 150, 150)
-						Rect(LauncherWidth - 215, y - 4, 20, 20, False)
+						Rect(LauncherWidth - 210, y - 4, 20, 20, False)
 						MouseHoverLanguage = lan
 					EndIf
 				EndIf
@@ -461,10 +463,16 @@ Function LanguageSelector%()
 				Local Prefect$ = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
 				Local Prefect2$ = Format(GetLocalString("language", "full"), GetLocalString("language", "no"))
 				Local Compatible$ = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
-				Local Size$ = Format(GetLocalString("language", "size"), MouseHoverLanguage\FileSize)
-				Local Height% = FontHeight() * 11
+				If Not MouseHoverLanguage\MajorOnly Then 
+					Local Size$ = Format(GetLocalString("language", "size"), MouseHoverLanguage\FileSize)
+					Local LastMod$ = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
+					Local Height% = FontHeight() * 13
+				Else
+					Height% = FontHeight() * 10
+				EndIf
 			Else
 				Author = ""
+				LastMod	= ""
 				Prefect = ""
 				Compatible = ""
 				Prefect2 = ""
@@ -472,7 +480,7 @@ Function LanguageSelector%()
 				Height = FontHeight() * 4.5
 			EndIf
 			
-			Local Width% = Max(Max(Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size)), StringWidth(Compatible)), StringWidth(Prefect2))
+			Local Width% = Max(Max(Max(Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size)), StringWidth(Compatible)), StringWidth(Prefect2)), StringWidth(LastMod))
 			
 			x = MouseX() + 10
 			y = MouseY() + 10
@@ -493,9 +501,12 @@ Function LanguageSelector%()
 				Else
 					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
 				EndIf
-				Text2(x, y + 83, Size)
+				If Not MouseHoverLanguage\MajorOnly Then
+					Text2(x, y + 83, LastMod)
+					Text2(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
+				EndIf
 			EndIf
-			If mo\MouseHit1 Then ExecFile("https://wiki.ziyuesinicization.site/index.php?title=How_to_contribute_a_language/Language_List")
+			If mo\MouseHit1 Then ExecFile("https://wiki.ziyuesinicization.site/index.php?title=Language_List_of_Ultimate_Edition")
 		EndIf
 		MouseHoverLanguage = Null
 		
