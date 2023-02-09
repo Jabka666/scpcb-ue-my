@@ -4799,20 +4799,29 @@ Function FillRoom%(r.Rooms)
 		Case "room2_storage"
 			;[Block]
 			r\RoomDoors.Doors[0] = CreateDoor(r\x - 1288.0 * RoomScale, r\y, r\z, 270.0, r)
+			FreeEntity(r\RoomDoors[0]\Buttons[0]) : r\RoomDoors[0]\Buttons[0] = 0
+			FreeEntity(r\RoomDoors[0]\OBJ2) : r\RoomDoors[0]\OBJ2 = 0
 			
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 760.0 * RoomScale, r\y, r\z, 270.0, r)
+			FreeEntity(r\RoomDoors[1]\Buttons[0]) : r\RoomDoors[1]\Buttons[0] = 0
 			
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 264.0 * RoomScale, r\y, r\z, 270.0, r)
 			
 			r\RoomDoors.Doors[3] = CreateDoor(r\x + 264.0 * RoomScale, r\y, r\z, 270.0, r)
 			
-			r\RoomDoors.Doors[4] = CreateDoor(r\x + 760.0 * RoomScale, r\y, r\z, 270.0, r)
+			r\RoomDoors.Doors[4] = CreateDoor(r\x + 760.0 * RoomScale, r\y, r\z, 90.0, r)
+			FreeEntity(r\RoomDoors[4]\Buttons[0]) : r\RoomDoors[4]\Buttons[0] = 0
 			
-			r\RoomDoors.Doors[5] = CreateDoor(r\x + 1288.0 * RoomScale, r\y, r\z, 270.0, r)
+			r\RoomDoors.Doors[5] = CreateDoor(r\x + 1288.0 * RoomScale, r\y, r\z, 90.0, r)
+			FreeEntity(r\RoomDoors[5]\Buttons[0]) : r\RoomDoors[5]\Buttons[0] = 0
+			FreeEntity(r\RoomDoors[5]\OBJ2) : r\RoomDoors[5]\OBJ2 = 0
+			
+			For i = 2 To 3
+				MoveEntity(r\RoomDoors[i]\Buttons[0], 0.0, 0.0, -8.0)
+			Next
 			
 			For i = 0 To 5
 				r\RoomDoors[i]\AutoClose = False
-				MoveEntity(r\RoomDoors[i]\Buttons[0], 0.0, 0.0, -8.0)
 				MoveEntity(r\RoomDoors[i]\Buttons[1], 0.0, 0.0, -8.0)
 			Next
 			
