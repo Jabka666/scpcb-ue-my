@@ -58,7 +58,7 @@ Items:
 - S-NAV 310 and blue NVG require now an 18V Battery.
 - Tiny battery rebalance for SCRAMBLE Gear.
 - Nerfed NVG fog distance from 30 to 17.
-- The white pill now cures the Common Cold.
+- The white pill now cures the «Common Cold».
 - Hazmat Suit/Gas mask changes:
 	- Added a new Gas Mask/Hazmat Suit variation: Gas Mask/Hazmat Suit without fogging.
 	- Players wearing Hazmat Suit are now able to pick up and drop items.
@@ -71,10 +71,14 @@ Items:
 Menu:
 - Added degree symbol for FOV value.
 - Added «PRESS ANY KEY TO WAKE UP» string for CWM loading screen.
+- Added additional options menu. This was done in order to free up some space for settings.
+	- Added in-game versions of the «Use launcher», «Subtitles», «Startup videos» and «Smooth bars» settings.
 
 - Tiny improvement for difficulties color.
 
 - Removed extra spacing in credits.
+
+- The subtitles setting has been moved to the «AUDIO» category.
 
 NPCs:
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.

@@ -1627,6 +1627,8 @@ Function LoadEntities%()
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
 	
+	igm.InGameMenu = New InGameMenu
+	
 	RenderLoading(5, GetLocalString("loading", "icons"))
 	
 	t\IconID[0] = LoadImage_Strict("GFX\HUD\walk_icon.png")

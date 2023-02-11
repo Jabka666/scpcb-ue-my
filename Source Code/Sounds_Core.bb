@@ -136,7 +136,7 @@ Function UpdateMusic%()
 			SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume * opt\MasterVolume)
 		EndIf
 	Else
-		If fps\Factor[0] > 0.0 Lor OptionsMenu = 2 Then
+		If fps\Factor[0] > 0.0 Lor igm\OptionsMenu = MenuTab_Options_Audio Then
 			If (Not ChannelPlaying(MusicCHN)) Then MusicCHN = PlaySound_Strict(CustomMusic)
 			ChannelVolume(MusicCHN, opt\MusicVolume * opt\MasterVolume)
 		EndIf

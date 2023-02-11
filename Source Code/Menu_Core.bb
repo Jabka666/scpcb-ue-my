@@ -6,7 +6,6 @@ Type MainMenu
 	Field ShouldDeleteGadgets%
 	Field CurrMenuPage%
 	Field OnSliderID%, OnPalette%
-	Field AchievementsMenu%
 End Type
 
 Global mm.MainMenu = New MainMenu
@@ -15,7 +14,6 @@ Type MainMenuAssets
 	Field BackGround%
 	Field SECURE_CONTAIN_PROTECT%
 	Field SCP173%
-	Field Palette%
 End Type
 
 Global mma.MainMenuAssets
@@ -35,9 +33,6 @@ Function InitMainMenuAssets%()
 	
 	mma\SCP173 = LoadImage_Strict("GFX\Menu\scp_173_back.png")
 	mma\SCP173 = ScaleImage2(mma\SCP173, MenuScale, MenuScale)
-	
-	mma\Palette = LoadImage_Strict("GFX\Menu\palette.png")
-	mma\Palette = ScaleImage2(mma\Palette, MenuScale, MenuScale)
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
@@ -72,20 +67,20 @@ Const MainMenuTab_Default% = 0
 Const MainMenuTab_New_Game% = 1
 Const MainMenuTab_Load_Game% = 2
 Const MainMenuTab_Load_Map% = 3
-Const MainMenuTab_Options_Graphics% = 4
-Const MainMenuTab_Options_Audio% = 5
-Const MainMenuTab_Options_Controls% = 6
-Const MainMenuTab_Options_Advanced% = 7
+Const MainMenuTab_Options% = 4
+Const MainMenuTab_Options_Graphics% = 5
+Const MainMenuTab_Options_Audio% = 6
+Const MainMenuTab_Options_Controls% = 7
+Const MainMenuTab_Options_Advanced% = 8
 ;[End Block]
 
 Function ChangeOptionTab%(Page%, MainMenu% = True)
 	If MainMenu Then
 		mm\MainMenuTab = Page
 	Else
-		OptionsMenu = Page
+		igm\OptionsMenu = Page
+		mm\ShouldDeleteGadgets = True
 	EndIf
-	mm\CurrMenuPage = 0
-	mm\ShouldDeleteGadgets = True
 End Function
 
 Function ChangePage%(Page%)
@@ -102,7 +97,7 @@ Function UpdateMainMenu%()
 	CatchErrors("Uncaught (UpdateMainMenu")
 	
 	Local sv.Save, cm.CustomMaps, snd.Sound
-	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%, g%
+	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
 	Local File$, Test%
 	
 	While fps\Accumulator > 0.0
@@ -144,125 +139,141 @@ Function UpdateMainMenu%()
 		mm\PrevMainMenuTab = mm\MainMenuTab
 		
 		If mm\MainMenuTab = MainMenuTab_Default Then
-			For i = 0 To 3
-				Temp = False
-				x = 159 * MenuScale
-				y = (286 + 100 * i) * MenuScale
-				
-				Width = 400 * MenuScale
-				Height = 70 * MenuScale
-				
-				Temp = (mo\MouseHit1 And MouseOn(x, y, Width, Height))
-				
-				Local Txt$
-				
-				Select i
-					Case 0
-						;[Block]
-						Txt = GetLocalString("menu", "new")
-						RandomSeed = ""
-						If Temp Then
-							If opt\DebugMode Then
-								RandomSeed = "666"
+			x = 159 * MenuScale
+			y = 286 * MenuScale
+			Width = 400 * MenuScale
+			Height = 70 * MenuScale
+			
+			RandomSeed = ""
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("menu", "new")) Then
+				If opt\DebugMode Then
+					RandomSeed = "666"
+				Else
+					If Rand(15) = 1 Then
+						Select Rand(13)
+							Case 1
+								;[Block]
+								RandomSeed = "NIL"
+								;[End Block]
+							Case 2
+								;[Block]
+								RandomSeed = "NO"
+								;[End Block]
+							Case 3
+								;[Block]
+								RandomSeed = "d9341"
+								;[End Block]
+							Case 4
+								;[Block]
+								RandomSeed = "5CP_I73"
+								;[End Block]
+							Case 5
+								;[Block]
+								RandomSeed = "DONTBLINK"
+								;[End Block]
+							Case 6
+								;[Block]
+								RandomSeed = "CRUNCH"
+								;[End Block]
+							Case 7
+								;[Block]
+								RandomSeed = "die"
+								;[End Block]
+							Case 8
+								;[Block]
+								RandomSeed = "HTAED"
+								;[End Block]
+							Case 9
+								;[Block]
+								RandomSeed = "rustledjim"
+								;[End Block]
+							Case 10
+								;[Block]
+								RandomSeed = "larry"
+								;[End Block]
+							Case 11
+								;[Block]
+								RandomSeed = "JORGE"
+								;[End Block]
+							Case 12
+								;[Block]
+								RandomSeed = "dirtymetal"
+								;[End Block]
+							Case 13
+								;[Block]
+								RandomSeed = "whatpumpkin"
+								;[End Block]
+						End Select
+					Else
+						i = Rand(4, 8)
+						For j = 1 To i
+							If Rand(3) = 1 Then
+								RandomSeed = RandomSeed + Rand(0, 9)
 							Else
-								If Rand(15) = 1 Then
-									Select Rand(13)
-										Case 1
-											;[Block]
-											RandomSeed = "NIL"
-											;[End Block]
-										Case 2
-											;[Block]
-											RandomSeed = "NO"
-											;[End Block]
-										Case 3
-											;[Block]
-											RandomSeed = "d9341"
-											;[End Block]
-										Case 4
-											;[Block]
-											RandomSeed = "5CP_I73"
-											;[End Block]
-										Case 5
-											;[Block]
-											RandomSeed = "DONTBLINK"
-											;[End Block]
-										Case 6
-											;[Block]
-											RandomSeed = "CRUNCH"
-											;[End Block]
-										Case 7
-											;[Block]
-											RandomSeed = "die"
-											;[End Block]
-										Case 8
-											;[Block]
-											RandomSeed = "HTAED"
-											;[End Block]
-										Case 9
-											;[Block]
-											RandomSeed = "rustledjim"
-											;[End Block]
-										Case 10
-											;[Block]
-											RandomSeed = "larry"
-											;[End Block]
-										Case 11
-											;[Block]
-											RandomSeed = "JORGE"
-											;[End Block]
-										Case 12
-											;[Block]
-											RandomSeed = "dirtymetal"
-											;[End Block]
-										Case 13
-											;[Block]
-											RandomSeed = "whatpumpkin"
-											;[End Block]
-									End Select
-								Else
-									g = Rand(4, 8)
-									For j = 1 To g
-										If Rand(3) = 1 Then
-											RandomSeed = RandomSeed + Rand(0, 9)
-										Else
-											RandomSeed = RandomSeed + Chr(Rand(97, 122))
-										EndIf
-									Next
-								EndIf
+								RandomSeed = RandomSeed + Chr(Rand(97, 122))
 							EndIf
-							LoadSavedGames()
-							CurrSave = New Save
-							LoadCustomMaps()
-							CurrCustomMap = New CustomMaps
-							mm\MainMenuTab = MainMenuTab_New_Game
-						EndIf
-						;[End Block]
-					Case 1
-						;[Block]
-						Txt = GetLocalString("menu", "load")
-						If Temp Then
-							LoadSavedGames()
-							mm\MainMenuTab = MainMenuTab_Load_Game
-						EndIf
-						;[End Block]
-					Case 2
-						;[Block]
-						Txt = GetLocalString("menu", "options")
-						If Temp Then mm\MainMenuTab = MainMenuTab_Options_Graphics
-						;[End Block]
-					Case 3
-						;[Block]
-						Txt = GetLocalString("menu", "quit")
-						If Temp Then
-							StopStream_Strict(MusicCHN) : MusicCHN = 0
-							End()
-						EndIf
-						;[End Block]
-				End Select
-				
-				UpdateMainMenuButton(x, y, Width, Height, Txt)
-			Next
+						Next
+					EndIf
+				EndIf
+				LoadSavedGames()
+				CurrSave = New Save
+				LoadCustomMaps()
+				CurrCustomMap = New CustomMaps
+				mm\MainMenuTab = MainMenuTab_New_Game
+			EndIf
+			
+			y = y + (100 * MenuScale)
+			
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("menu", "load")) Then
+				LoadSavedGames()
+				mm\MainMenuTab = MainMenuTab_Load_Game
+			EndIf
+			
+			y = y + (100 * MenuScale)
+			
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("menu", "options")) Then mm\MainMenuTab = MainMenuTab_Options
+			
+			y = y + (100 * MenuScale)
+			
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("menu", "quit")) Then
+				StopStream_Strict(MusicCHN) : MusicCHN = 0
+				End()
+			EndIf
+		ElseIf mm\MainMenuTab = MainMenuTab_Options
+			x = 159 * MenuScale
+			y = 286 * MenuScale
+			Width = 400 * MenuScale
+			Height = 70 * MenuScale
+			
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("options", "grap")) Then
+				ResetInput()
+				ChangeOptionTab(MainMenuTab_Options_Graphics)
+			EndIf
+			
+			y = y + (100 * MenuScale)
+			
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("options", "audio")) Then
+				ResetInput()
+				ChangeOptionTab(MainMenuTab_Options_Audio)
+			EndIf
+			
+			y = y + (100 * MenuScale)
+			
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("options", "ctrl")) Then
+				ResetInput()
+				ChangeOptionTab(MainMenuTab_Options_Controls)
+			EndIf
+			
+			y = y + (100 * MenuScale)
+			
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("options", "avc")) Then
+				ResetInput()
+				ChangeOptionTab(MainMenuTab_Options_Advanced)
+			EndIf
+			
+			y = y + (100 * MenuScale)
+			
+			If UpdateMainMenuButton(x, y, Width, Height, GetLocalString("menu", "back")) Lor KeyDown(1) Then mm\MainMenuTab = MainMenuTab_Default
 		Else
 			Select mm\MainMenuTab
 				Case MainMenuTab_New_Game
@@ -527,438 +538,404 @@ Function UpdateMainMenu%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced
+				Case MainMenuTab_Options_Graphics
 					;[Block]
-					x = 159 * MenuScale
+					x = 469 * MenuScale
 					y = 376 * MenuScale
 					
 					Width = 580 * MenuScale
 					Height = 60 * MenuScale
 					
-					If UpdateMainMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "grap"), False) Then ChangeOptionTab(MainMenuTab_Options_Graphics)
-					If UpdateMainMenuButton(x + (160 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "audio"), False) Then ChangeOptionTab(MainMenuTab_Options_Audio)
-					If UpdateMainMenuButton(x + (300 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "ctrl"), False) Then ChangeOptionTab(MainMenuTab_Options_Controls)
-					If UpdateMainMenuButton(x + (440 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "avc"), False) Then ChangeOptionTab(MainMenuTab_Options_Advanced)
+					y = y + (20 * MenuScale)
 					
-					x = x + (310 * MenuScale)
-					y = y + (70 * MenuScale)
+					opt\BumpEnabled = UpdateMainMenuTick(x, y, opt\BumpEnabled)
 					
-					If mm\MainMenuTab <> MainMenuTab_Options_Audio Then
-						UserTrackCheck = 0
-						UserTrackCheck2 = 0
-					EndIf
+					y = y + (30 * MenuScale)
 					
-					Select mm\MainMenuTab
-						Case MainMenuTab_Options_Graphics
+					opt\VSync = UpdateMainMenuTick(x, y, opt\VSync)
+					
+					y = y + (30 * MenuScale)
+					
+					opt\AntiAliasing = UpdateMainMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
+					
+					y = y + (30 * MenuScale)
+					
+					opt\AdvancedRoomLights = UpdateMainMenuTick(x, y, opt\AdvancedRoomLights)
+					
+					y = y + (40 * MenuScale)
+					
+					opt\ScreenGamma = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
+					
+					y = y + (45 * MenuScale)
+					
+					opt\ParticleAmount = UpdateMainMenuSlider3(x, y, 150 * MenuScale, opt\ParticleAmount, 2, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
+					
+					y = y + (45 * MenuScale)
+					
+					opt\TextureDetails = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
+					Select opt\TextureDetails
+						Case 0
 							;[Block]
-							y = y + (20 * MenuScale)
-							
-							opt\BumpEnabled = UpdateMainMenuTick(x, y, opt\BumpEnabled)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\VSync = UpdateMainMenuTick(x, y, opt\VSync)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\AntiAliasing = UpdateMainMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\AdvancedRoomLights = UpdateMainMenuTick(x, y, opt\AdvancedRoomLights)
-							
-							y = y + (40 * MenuScale)
-							
-							opt\ScreenGamma = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
-							
-							y = y + (45 * MenuScale)
-							
-							opt\ParticleAmount = UpdateMainMenuSlider3(x, y, 150 * MenuScale, opt\ParticleAmount, 2, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
-							
-							y = y + (45 * MenuScale)
-							
-							opt\TextureDetails = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
-							Select opt\TextureDetails
-								Case 0
-									;[Block]
-									opt\TextureDetailsLevel = 0.8
-									;[End Block]
-								Case 1
-									;[Block]
-									opt\TextureDetailsLevel = 0.4
-									;[End Block]
-								Case 2
-									;[Block]
-									opt\TextureDetailsLevel = 0.0
-									;[End Block]
-								Case 3
-									;[Block]
-									opt\TextureDetailsLevel = -0.4
-									;[End Block]
-								Case 4
-									;[Block]
-									opt\TextureDetailsLevel = -0.8
-									;[End Block]
-							End Select
-							TextureLodBias(opt\TextureDetailsLevel)
-							
-							y = y + (35 * MenuScale)
-							
-							opt\SaveTexturesInVRAM = UpdateMainMenuTick(x, y, opt\SaveTexturesInVRAM)
-							
-							y = y + (40 * MenuScale)
-							
-							opt\CurrFOV = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0)
-							opt\FOV = opt\CurrFOV + 40
-							
-							y = y + (45 * MenuScale)
-							
-							opt\Anisotropic = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 5, GetLocalString("options", "tri"), "2x", "4x", "8x", "16x")
-							Select opt\Anisotropic
-								Case 0
-									;[Block]
-									opt\AnisotropicLevel = 0
-									;[End Block]
-								Case 1
-									;[Block]
-									opt\AnisotropicLevel = 2
-									;[End Block]
-								Case 2
-									;[Block]
-									opt\AnisotropicLevel = 4
-									;[End Block]
-								Case 3
-									;[Block]
-									opt\AnisotropicLevel = 8
-									;[End Block]
-								Case 4
-									;[Block]
-									opt\AnisotropicLevel = 16
-									;[End Block]
-							End Select
-							TextureAnisotropic(opt\AnisotropicLevel)
-							
-							y = y + (35 * MenuScale)
-							
-							opt\Atmosphere = UpdateMainMenuTick(x, y, opt\Atmosphere)
+							opt\TextureDetailsLevel = 0.8
 							;[End Block]
-						Case MainMenuTab_Options_Audio
+						Case 1
 							;[Block]
-							y = y + (20 * MenuScale)
-							
-							opt\MasterVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
-							
-							y = y + (40 * MenuScale)
-							
-							opt\MusicVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\MusicVolume * 100.0, 2) / 100.0
-							
-							y = y + (40 * MenuScale)
-							
-							opt\SFXVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\SFXVolume * 100.0, 3) / 100.0
-							
-							y = y + (40 * MenuScale)
-							
-							opt\EnableSFXRelease = UpdateMainMenuTick(x, y, opt\EnableSFXRelease)
-							If opt\PrevEnableSFXRelease <> opt\EnableSFXRelease
-								If opt\EnableSFXRelease Then
-									For snd.Sound = Each Sound
-										For i = 0 To MaxChannelsAmount - 1
-											StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
-										Next
-										If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-										snd\ReleaseTime = 0
-									Next
-								Else
-									For snd.Sound = Each Sound
-										If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
-									Next
-								EndIf
-								opt\PrevEnableSFXRelease = opt\EnableSFXRelease
-							EndIf
-							
-							y = y + (30 * MenuScale)
-							
-							Local PrevEnableUserTracks% = opt\EnableUserTracks
-							
-							opt\EnableUserTracks = UpdateMainMenuTick(x, y, opt\EnableUserTracks)
-							
-							If PrevEnableUserTracks Then
-								If PrevEnableUserTracks <> opt\EnableUserTracks Then mm\ShouldDeleteGadgets = True
-							EndIf
-							
-							If opt\EnableUserTracks Then
-								y = y + (30 * MenuScale)
-								
-								opt\UserTrackMode = UpdateMainMenuTick(x, y, opt\UserTrackMode)
-								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), False)
-									UserTrackCheck = 0
-									UserTrackCheck2 = 0
-									
-									Local DirPath$ = "SFX\Radio\UserTracks\"
-									
-									If FileType(DirPath) <> 2 Then CreateDir(DirPath)
-									
-									Local Dir% = ReadDir(DirPath)
-									
-									Repeat
-										File = NextFile(Dir)
-										If File = "" Then Exit
-										If FileType(DirPath + File) = 1 Then
-											UserTrackCheck = UserTrackCheck + 1
-											Test = LoadSound(DirPath + File)
-											If Test <> 0 Then UserTrackCheck2 = UserTrackCheck2 + 1
-											FreeSound(Test) : Test = 0
-										EndIf
-									Forever
-									CloseDir(Dir)
-								EndIf
-							Else
-								UserTrackCheck = 0
-							EndIf
+							opt\TextureDetailsLevel = 0.4
 							;[End Block]
-						Case MainMenuTab_Options_Controls
+						Case 2
 							;[Block]
-							If mm\CurrMenuPage = 0 Then
-								y = y + (20 * MenuScale)
-								
-								opt\MouseSensitivity = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0, 1) / 100.0) - 0.5
-								
-								y = y + (40 * MenuScale)
-								
-								opt\InvertMouseX = UpdateMainMenuTick(x, y, opt\InvertMouseX)
-								
-								y = y + (40 * MenuScale)
-								
-								opt\InvertMouseY = UpdateMainMenuTick(x, y, opt\InvertMouseY)
-								
-								y = y + (40 * MenuScale)
-								
-								opt\MouseSmoothing = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
-								
-								y = y + (40 * MenuScale)
-								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, GetLocalString("options", "controlconfig"), False) Then ChangePage(1)
-							Else
-								y = y + (20 * MenuScale)
-								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)
-								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
-								
-								y = y + (20 * MenuScale)
-								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)
-								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
-								
-								y = y + (20 * MenuScale)
-								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)
-								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
-								
-								y = y + (20 * MenuScale)
-								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
-								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
-								
-								y = y + (20 * MenuScale)
-								
-								UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
-								UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
-								
-								If opt\CanOpenConsole Then
-									y = y + (20 * MenuScale)
-									
-									UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
-								EndIf
-								
-								Local TempKey%
-								
-								For i = 0 To 227
-									If KeyHit(i) Then
-										TempKey = i
-										Exit
-									EndIf
-								Next
-								If TempKey <> 0 Then
-									Select SelectedInputBox
-										Case 3
-											;[Block]
-											key\MOVEMENT_UP = TempKey
-											;[End Block]
-										Case 4
-											;[Block]
-											key\MOVEMENT_LEFT = TempKey
-											;[End Block]
-										Case 5
-											;[Block]
-											key\MOVEMENT_DOWN = TempKey
-											;[End Block]
-										Case 6
-											;[Block]
-											key\MOVEMENT_RIGHT = TempKey
-											;[End Block]
-										Case 7
-											;[Block]
-											key\SPRINT = TempKey
-											;[End Block]
-										Case 8
-											;[Block]
-											key\CROUCH = TempKey
-											;[End Block]
-										Case 9
-											;[Block]
-											key\BLINK = TempKey
-											;[End Block]
-										Case 10
-											;[Block]
-											key\INVENTORY = TempKey
-											;[End Block]
-										Case 11
-											;[Block]
-											key\SAVE = TempKey
-											;[End Block]
-										Case 12
-											;[Block]
-											key\CONSOLE = TempKey
-											;[End Block]
-										Case 13
-											;[Block]
-											key\SCREENSHOT = TempKey
-											;[End Block]
-									End Select
-									SelectedInputBox = 0
-								EndIf
-								
-								y = y + (40 * MenuScale)
-								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y, 240 * MenuScale, 30 * MenuScale, GetLocalString("menu", "back"), False) Then ChangePage(0)
-							EndIf
+							opt\TextureDetailsLevel = 0.0
 							;[End Block]
-						Case MainMenuTab_Options_Advanced
+						Case 3
 							;[Block]
-							Height = 340 * MenuScale
-							
-							If mm\CurrMenuPage = 0 Then
-								If UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False) Then ChangePage(mm\CurrMenuPage + 1)
-							Else
-								UpdateMainMenuButton(x - (310 * MenuScale) + Width - (30 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, ">", False, False, True)
-							EndIf
-							If mm\CurrMenuPage = 1 Then
-								If UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False) Then ChangePage(mm\CurrMenuPage - 1)
-							Else
-								UpdateMainMenuButton(x - (310 * MenuScale), y + Height + (5 * MenuScale), 30 * MenuScale, 30 * MenuScale, "<", False, False, True)
-							EndIf
-							
-							If mm\CurrMenuPage = 0 Then
-								y = y + (20 * MenuScale)
-								
-								opt\HUDEnabled = UpdateMainMenuTick(x, y, opt\HUDEnabled)
-								
-								y = y + (30 * MenuScale)
-								
-								Local PrevCanOpenConsole% = opt\CanOpenConsole
-								
-								opt\CanOpenConsole = UpdateMainMenuTick(x, y, opt\CanOpenConsole)
-								
-								If PrevCanOpenConsole Then
-									If PrevCanOpenConsole <> opt\CanOpenConsole Then mm\ShouldDeleteGadgets = True
-								EndIf
-								
-								y = y + (30 * MenuScale)
-								
-								If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMainMenuTick(x, y, opt\ConsoleOpening)
-								
-								y = y + (30 * MenuScale)
-								
-								opt\AchvMsgEnabled = UpdateMainMenuTick(x, y, opt\AchvMsgEnabled)
-								
-								y = y + (30 * MenuScale)
-								
-								opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
-								
-								y = y + (30 * MenuScale)
-								
-								opt\ShowFPS = UpdateMainMenuTick(x, y, opt\ShowFPS)
-								
-								y = y + (30 * MenuScale)
-								
-								Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
-								
-								If UpdateMainMenuTick(x, y, opt\CurrFrameLimit > 0.0) Then
-									opt\CurrFrameLimit = UpdateMainMenuSlideBar(x - (160 * MenuScale), y + (40 * MenuScale), 150 * MenuScale, opt\CurrFrameLimit * 99.0, 1) / 99.0
-									opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
-									opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
-								Else
-									opt\CurrFrameLimit = 0.0
-									opt\FrameLimit = 0
-								EndIf
-								
-								If PrevCurrFrameLimit Then
-									If PrevCurrFrameLimit <> opt\CurrFrameLimit Then mm\ShouldDeleteGadgets = True
-								EndIf
-							Else
-								y = y + (20 * MenuScale)
-								
-								opt\SmoothBars = UpdateMainMenuTick(x, y, opt\SmoothBars)
-								
-								y = y + (30 * MenuScale)
-								
-								opt\PlayStartup = UpdateMainMenuTick(x, y, opt\PlayStartup)
-								
-								y = y + (30 * MenuScale)
-								
-								opt\LauncherEnabled = UpdateMainMenuTick(x, y, opt\LauncherEnabled)
-								
-								y = y + (30 * MenuScale)
-								
-								Local PrevEnableSubtitles% = opt\EnableSubtitles
-								
-								opt\EnableSubtitles = UpdateMainMenuTick(x, y, opt\EnableSubtitles)
-								
-								If PrevEnableSubtitles Then
-									If PrevEnableSubtitles <> opt\EnableSubtitles Then mm\ShouldDeleteGadgets = True
-								EndIf
-								
-								y = y + (35 * MenuScale)
-								
-								If opt\EnableSubtitles Then UpdateMainMenuPalette(mma\Palette, x - (63 * MenuScale), y)
-								
-								y = y + (30 * MenuScale)
-								
-								If opt\EnableSubtitles Then
-									opt\SubColorR = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3)
-									If SelectedInputBox = 14 Then
-										If opt\SubColorR > 255 Then opt\SubColorR = 255
-									EndIf
-								EndIf
-								
-								y = y + (30 * MenuScale)
-								
-								If opt\EnableSubtitles Then
-									opt\SubColorG = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3)
-									If SelectedInputBox = 15 Then
-										If opt\SubColorG > 255 Then opt\SubColorG = 255
-									EndIf
-								EndIf
-								
-								y = y + (30 * MenuScale)
-								
-								If opt\EnableSubtitles Then
-									opt\SubColorB = UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3)
-									If SelectedInputBox = 16 Then
-										If opt\SubColorB > 255 Then opt\SubColorB = 255
-									EndIf
-								EndIf
-								
-								y = y + (40 * MenuScale)
-								
-								If UpdateMainMenuButton(x - (290 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False) Then
-									ResetOptionsINI()
-									SaveOptionsINI(True)
-								EndIf
-							EndIf
+							opt\TextureDetailsLevel = -0.4
+							;[End Block]
+						Case 4
+							;[Block]
+							opt\TextureDetailsLevel = -0.8
 							;[End Block]
 					End Select
+					TextureLodBias(opt\TextureDetailsLevel)
+					
+					y = y + (35 * MenuScale)
+					
+					opt\SaveTexturesInVRAM = UpdateMainMenuTick(x, y, opt\SaveTexturesInVRAM)
+					
+					y = y + (40 * MenuScale)
+					
+					opt\CurrFOV = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0)
+					opt\FOV = opt\CurrFOV + 40
+					
+					y = y + (45 * MenuScale)
+					
+					opt\Anisotropic = UpdateMainMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 5, GetLocalString("options", "tri"), "2x", "4x", "8x", "16x")
+					Select opt\Anisotropic
+						Case 0
+							;[Block]
+							opt\AnisotropicLevel = 0
+							;[End Block]
+						Case 1
+							;[Block]
+							opt\AnisotropicLevel = 2
+							;[End Block]
+						Case 2
+							;[Block]
+							opt\AnisotropicLevel = 4
+							;[End Block]
+						Case 3
+							;[Block]
+							opt\AnisotropicLevel = 8
+							;[End Block]
+						Case 4
+							;[Block]
+							opt\AnisotropicLevel = 16
+							;[End Block]
+					End Select
+					TextureAnisotropic(opt\AnisotropicLevel)
+					
+					y = y + (35 * MenuScale)
+					
+					opt\Atmosphere = UpdateMainMenuTick(x, y, opt\Atmosphere)
+					;[End Block]
+				Case MainMenuTab_Options_Audio
+					;[Block]
+					x = 469 * MenuScale
+					y = 376 * MenuScale
+					
+					Width = 580 * MenuScale
+					Height = 60 * MenuScale
+					
+					y = y + (20 * MenuScale)
+					
+					opt\MasterVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
+					
+					y = y + (40 * MenuScale)
+					
+					opt\MusicVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\MusicVolume * 100.0, 2) / 100.0
+					
+					y = y + (40 * MenuScale)
+					
+					opt\SFXVolume = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, opt\SFXVolume * 100.0, 3) / 100.0
+					
+					y = y + (40 * MenuScale)
+					
+					opt\EnableSFXRelease = UpdateMainMenuTick(x, y, opt\EnableSFXRelease)
+					If opt\PrevEnableSFXRelease <> opt\EnableSFXRelease
+						If opt\EnableSFXRelease Then
+							For snd.Sound = Each Sound
+								For i = 0 To MaxChannelsAmount - 1
+									StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
+								Next
+								If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+								snd\ReleaseTime = 0
+							Next
+						Else
+							For snd.Sound = Each Sound
+								If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
+							Next
+						EndIf
+						opt\PrevEnableSFXRelease = opt\EnableSFXRelease
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Local PrevEnableUserTracks% = opt\EnableUserTracks
+					
+					opt\EnableUserTracks = UpdateMainMenuTick(x, y, opt\EnableUserTracks)
+					
+					If PrevEnableUserTracks Then
+						If PrevEnableUserTracks <> opt\EnableUserTracks Then mm\ShouldDeleteGadgets = True
+					EndIf
+					
+					If opt\EnableUserTracks Then
+						y = y + (30 * MenuScale)
+						
+						opt\UserTrackMode = UpdateMainMenuTick(x, y, opt\UserTrackMode)
+						
+						If UpdateMainMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), False)
+							UserTrackCheck = 0
+							UserTrackCheck2 = 0
+							
+							Local DirPath$ = "SFX\Radio\UserTracks\"
+							
+							If FileType(DirPath) <> 2 Then CreateDir(DirPath)
+							
+							Local Dir% = ReadDir(DirPath)
+							
+							Repeat
+								File = NextFile(Dir)
+								If File = "" Then Exit
+								If FileType(DirPath + File) = 1 Then
+									UserTrackCheck = UserTrackCheck + 1
+									Test = LoadSound(DirPath + File)
+									If Test <> 0 Then UserTrackCheck2 = UserTrackCheck2 + 1
+									FreeSound(Test) : Test = 0
+								EndIf
+							Forever
+							CloseDir(Dir)
+						EndIf
+						
+						y = y + (40 * MenuScale)
+					Else
+						UserTrackCheck = 0
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					Local PrevEnableSubtitles% = opt\EnableSubtitles
+					
+					opt\EnableSubtitles = UpdateMainMenuTick(x, y, opt\EnableSubtitles)
+					
+					If PrevEnableSubtitles Then
+						If PrevEnableSubtitles <> opt\EnableSubtitles Then mm\ShouldDeleteGadgets = True
+					EndIf
+					
+					If opt\EnableSubtitles Then
+						y = y + (35 * MenuScale)
+						
+						If opt\EnableSubtitles Then UpdateMainMenuPalette(x - (63 * MenuScale), y)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\SubColorR = Min(UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3), 255.0)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\SubColorG = Min(UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3), 255.0)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\SubColorB = Min(UpdateMainMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3), 255.0)
+						
+						y = y + (40 * MenuScale)
+					EndIf
+					;[End Block]
+				Case MainMenuTab_Options_Controls
+					;[Block]
+					x = 469 * MenuScale
+					y = 376 * MenuScale
+					
+					Width = 580 * MenuScale
+					Height = 60 * MenuScale
+					
+					y = y + (20 * MenuScale)
+					
+					opt\MouseSensitivity = (UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0, 1) / 100.0) - 0.5
+					
+					y = y + (40 * MenuScale)
+					
+					opt\InvertMouseX = UpdateMainMenuTick(x, y, opt\InvertMouseX)
+					
+					y = y + (40 * MenuScale)
+					
+					opt\InvertMouseY = UpdateMainMenuTick(x, y, opt\InvertMouseY)
+					
+					y = y + (40 * MenuScale)
+					
+					opt\MouseSmoothing = UpdateMainMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
+					
+					y = y + (80 * MenuScale)
+					
+					UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)
+					UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
+					
+					y = y + (20 * MenuScale)
+					
+					UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)
+					UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
+					
+					y = y + (20 * MenuScale)
+					
+					UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)
+					UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
+					
+					y = y + (20 * MenuScale)
+					
+					UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
+					UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
+					
+					y = y + (20 * MenuScale)
+					
+					UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
+					UpdateMainMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
+					
+					If opt\CanOpenConsole Then
+						y = y + (20 * MenuScale)
+						
+						UpdateMainMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+					EndIf
+					
+					Local TempKey%
+					
+					For i = 0 To 227
+						If KeyHit(i) Then
+							TempKey = i
+							Exit
+						EndIf
+					Next
+					If TempKey <> 0 Then
+						Select SelectedInputBox
+							Case 3
+								;[Block]
+								key\MOVEMENT_UP = TempKey
+								;[End Block]
+							Case 4
+								;[Block]
+								key\MOVEMENT_LEFT = TempKey
+								;[End Block]
+							Case 5
+								;[Block]
+								key\MOVEMENT_DOWN = TempKey
+								;[End Block]
+							Case 6
+								;[Block]
+								key\MOVEMENT_RIGHT = TempKey
+								;[End Block]
+							Case 7
+								;[Block]
+								key\SPRINT = TempKey
+								;[End Block]
+							Case 8
+								;[Block]
+								key\CROUCH = TempKey
+								;[End Block]
+							Case 9
+								;[Block]
+								key\BLINK = TempKey
+								;[End Block]
+							Case 10
+								;[Block]
+								key\INVENTORY = TempKey
+								;[End Block]
+							Case 11
+								;[Block]
+								key\SAVE = TempKey
+								;[End Block]
+							Case 12
+								;[Block]
+								key\CONSOLE = TempKey
+								;[End Block]
+							Case 13
+								;[Block]
+								key\SCREENSHOT = TempKey
+								;[End Block]
+						End Select
+						SelectedInputBox = 0
+					EndIf
+					;[End Block]
+				Case MainMenuTab_Options_Advanced
+					;[Block]
+					x = 469 * MenuScale
+					y = 376 * MenuScale
+					
+					Width = 580 * MenuScale
+					Height = 330 * MenuScale
+					
+					y = y + (20 * MenuScale)
+					
+					opt\HUDEnabled = UpdateMainMenuTick(x, y, opt\HUDEnabled)
+					
+					y = y + (30 * MenuScale)
+					
+					Local PrevCanOpenConsole% = opt\CanOpenConsole
+					
+					opt\CanOpenConsole = UpdateMainMenuTick(x, y, opt\CanOpenConsole)
+					
+					If PrevCanOpenConsole Then
+						If PrevCanOpenConsole <> opt\CanOpenConsole Then mm\ShouldDeleteGadgets = True
+					EndIf
+					
+					y = y + (30 * MenuScale)
+					
+					If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMainMenuTick(x, y, opt\ConsoleOpening)
+					
+					y = y + (30 * MenuScale)
+					
+					opt\AchvMsgEnabled = UpdateMainMenuTick(x, y, opt\AchvMsgEnabled)
+					
+					y = y + (30 * MenuScale)
+					
+					opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
+					
+					y = y + (30 * MenuScale)
+					
+					opt\ShowFPS = UpdateMainMenuTick(x, y, opt\ShowFPS)
+					
+					y = y + (30 * MenuScale)
+					
+					Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
+					
+					If UpdateMainMenuTick(x, y, opt\CurrFrameLimit > 0.0) Then
+						opt\CurrFrameLimit = UpdateMainMenuSlideBar(x - (160 * MenuScale), y + (40 * MenuScale), 150 * MenuScale, opt\CurrFrameLimit * 99.0, 1) / 99.0
+						opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
+						opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
+					Else
+						opt\CurrFrameLimit = 0.0
+						opt\FrameLimit = 0
+					EndIf
+					
+					If PrevCurrFrameLimit Then
+						If PrevCurrFrameLimit <> opt\CurrFrameLimit Then mm\ShouldDeleteGadgets = True
+					EndIf
+					
+					y = y + (80 * MenuScale)
+					
+					opt\SmoothBars = UpdateMainMenuTick(x, y, opt\SmoothBars)
+					
+					y = y + (30 * MenuScale)
+					
+					opt\PlayStartup = UpdateMainMenuTick(x, y, opt\PlayStartup)
+					
+					y = y + (30 * MenuScale)
+					
+					opt\LauncherEnabled = UpdateMainMenuTick(x, y, opt\LauncherEnabled)
+					
+					y = y + (40 * MenuScale)
+					
+					If UpdateMainMenuButton(x - (290 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False) Then
+						ResetOptionsINI()
+						SaveOptionsINI(True)
+					EndIf
 					;[End Block]
 			End Select
 			
@@ -967,6 +944,11 @@ Function UpdateMainMenu%()
 			
 			Width = 400 * MenuScale
 			Height = 70 * MenuScale
+			
+			If mm\MainMenuTab <> MainMenuTab_Options_Audio Then
+				UserTrackCheck = 0
+				UserTrackCheck2 = 0
+			EndIf
 			
 			If DelSave = Null And DelCustomMap = Null Then
 				If UpdateMainMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False) Lor KeyDown(1) Then
@@ -997,9 +979,10 @@ Function UpdateMainMenu%()
 							UserTrackCheck = 0
 							UserTrackCheck2 = 0
 							
-							mm\CurrMenuPage = 0
 							AntiAlias(opt\AntiAliasing)
-							mm\MainMenuTab = MainMenuTab_Default
+							TextureLodBias(opt\TextureDetailsLevel)
+							TextureAnisotropic(opt\AnisotropicLevel)
+							mm\MainMenuTab = MainMenuTab_Options
 							;[End Block]
 						Case MainMenuTab_Load_Map ; ~ Move back to the "New Game" tab
 							;[Block]
@@ -1121,7 +1104,7 @@ Function RenderMainMenu%()
 	SetFont2(fo\FontID[Font_Default_Big])
 	DrawBlock(mma\SECURE_CONTAIN_PROTECT, mo\Viewport_Center_X - ImageWidth(mma\SECURE_CONTAIN_PROTECT) / 2, opt\GraphicHeight - (20 * MenuScale) - ImageHeight(mma\SECURE_CONTAIN_PROTECT))
 	If opt\GraphicWidth > 1240 * MenuScale Then RenderTiledImageRect(MenuWhite, 0, 5 * MenuScale, 512.0 * MenuScale, 5.0 * MenuScale, 985 * MenuScale, 407 * MenuScale, (opt\GraphicWidth - (940 * MenuScale)), 5 * MenuScale)
-	If mm\MainMenuTab <> MainMenuTab_Default Then
+	If mm\MainMenuTab <> MainMenuTab_Default And mm\MainMenuTab <> MainMenuTab_options Then
 		x = 159 * MenuScale
 		y = 286 * MenuScale
 		
@@ -1374,7 +1357,7 @@ Function RenderMainMenu%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case MainMenuTab_Options_Graphics, MainMenuTab_Options_Audio, MainMenuTab_Options_Controls, MainMenuTab_Options_Advanced
+			Case MainMenuTab_Options_Graphics
 				;[Block]
 				x = 159 * MenuScale
 				y = 286 * MenuScale
@@ -1384,29 +1367,14 @@ Function RenderMainMenu%()
 				
 				Color(255, 255, 255)
 				SetFont2(fo\FontID[Font_Default_Big])
-				Text2(x + (Width / 2), y + (Height / 2), GetLocalString("menu", "options"), True, True)
+				Text2(x + (Width / 2), y + (Height / 2), GetLocalString("options", "grap"), True, True)
 				
 				y = y + Height + (20 * MenuScale)
 				Width = 580 * MenuScale
-				Height = 60 * MenuScale
-				RenderFrame(x, y, Width, Height)
-				
-				Color(0, 255, 0)
-				If mm\MainMenuTab = MainMenuTab_Options_Graphics
-					Rect(x + (15 * MenuScale), y + (10 * MenuScale), (Width / 5) + (10 * MenuScale), (Height / 2) + (10 * MenuScale))
-				ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
-					Rect(x + (155 * MenuScale), y + (10 * MenuScale), (Width / 5) + (10 * MenuScale), (Height / 2) + (10 * MenuScale))
-				ElseIf mm\MainMenuTab = MainMenuTab_Options_Controls
-					Rect(x + (295 * MenuScale), y + (10 * MenuScale), (Width / 5) + (10 * MenuScale), (Height / 2) + (10 * MenuScale))
-				ElseIf mm\MainMenuTab = MainMenuTab_Options_Advanced
-					Rect(x + (435 * MenuScale), y + (10 * MenuScale), (Width / 5) + (10 * MenuScale), (Height / 2) + (10 * MenuScale))
-				EndIf
-				
-				Color(255, 255, 255)
+				Height = 130 * MenuScale
 				
 				SetFont2(fo\FontID[Font_Default])
 				
-				y = y + (70 * MenuScale)
 				x = x + (20 * MenuScale)
 				
 				tX = x - (20 * MenuScale) + Width
@@ -1414,340 +1382,385 @@ Function RenderMainMenu%()
 				tW = 400.0 * MenuScale
 				tH = 150.0 * MenuScale
 				
-				Select mm\MainMenuTab
-					Case MainMenuTab_Options_Graphics
-						;[Block]
-						Height = 440 * MenuScale
-						RenderFrame(x - (20 * MenuScale), y, Width, Height)
-						
-						y = y + (20 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "bump"))
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
-						
-						y = y + (30 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
-						
-						y = y + (30 * MenuScale)
-						
-						Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
-						
-						y = y + (30 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
-						
-						y = y + (40 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
-						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
-						
-						y = y + (45 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y, GetLocalString("options", "particle"))
-						If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
-						
-						y = y + (45 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y, GetLocalString("options", "lod"))
-						If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
-						
-						y = y + (35 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "vram"))
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
-						
-						y = y + (40 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
-						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
-						
-						y = y + (45 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y, GetLocalString("options", "filter"))
-						If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
-						
-						y = y + (35 * MenuScale)
-						
-						Color(255, 255, 255)
-						If opt\Atmosphere Then
-							TempStr = GetLocalString("options", "atmo.bright")
-						Else
-							TempStr = GetLocalString("options", "atmo.dark")
-						EndIf
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
-						;[End Block]
-					Case MainMenuTab_Options_Audio
-						;[Block]
-						If opt\EnableUserTracks Then
-							Height = 280 * MenuScale
-						Else
-							Height = 210 * MenuScale
-						EndIf
-						RenderFrame(x - (20 * MenuScale), y, Width, Height)
-						
-						y = y + (20 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
-						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
-						
-						y = y + (40 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
-						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
-						
-						y = y + (40 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
-						If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
-						
-						y = y + (40 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH + (220 * MenuScale), Tooltip_SoundAutoRelease)
-						
-						y = y + (30 * MenuScale)
-						
-						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
-						
-						y = y + (30 * MenuScale)
-						
-						If opt\EnableUserTracks Then
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
-							If opt\UserTrackMode
-								TempStr = GetLocalString("options", "track.repeat")
-							Else
-								TempStr = GetLocalString("options", "track.random")
-							EndIf
-							Text2(x + (330 * MenuScale), y + (5 * MenuScale), TempStr)
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
-							If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
-							If UserTrackCheck > 0 Then Text2(x, y + (100 * MenuScale), Format(Format(GetLocalString("options", "track.found"), UserTrackCheck2, "{0}"), UserTrackCheck, "{1}"))
-						EndIf
-						;[End Block]
-					Case MainMenuTab_Options_Controls
-						;[Block]
-						Height = (230 - ((mm\CurrMenuPage = 1) * (20 + (20 * (Not opt\CanOpenConsole))))) * MenuScale
-						RenderFrame(x - (20 * MenuScale), y, Width, Height)
-						y = y + (20 * MenuScale)
-						If mm\CurrMenuPage = 0 Then
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
-							If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
-							
-							y = y + (40 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
-							
-							y = y + (40 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
-							
-							y = y + (40 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
-							If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
-							
-							y = y + (40 * MenuScale)
-							
-							If MouseOn(x, y, 240 * MenuScale, 30 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
-						Else
-							Color(255, 255, 255)
-							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.forward"))
-							Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.crouch"))
-							
-							y = y + (20 * MenuScale)
-							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.left"))
-							Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.blink"))
-							
-							y = y + (20 * MenuScale)
-							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.backward"))
-							Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.inv"))
-							
-							y = y + (20 * MenuScale)
-							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.right"))
-							Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.save"))
-							
-							y = y + (20 * MenuScale)
-							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.sprint"))
-							Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.screenshot"))
-							
-							If opt\CanOpenConsole Then
-								y = y + (20 * MenuScale)
-								
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.console"))
-							EndIf
-							
-							If MouseOn(x, y - ((80 + (20 * opt\CanOpenConsole)) * MenuScale), Width - (40 * MenuScale), (100 + (20 * opt\CanOpenConsole)) * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
-						EndIf
-						;[End Block]
-					Case MainMenuTab_Options_Advanced
-						;[Block]
-						Height = 340 * MenuScale
-						
-						RenderFrame(x - (20 * MenuScale), y, Width, Height)
-						
-						RenderFrame(x + (15 * MenuScale), y + Height + (5 * MenuScale), Width - (70 * MenuScale), 30 * MenuScale)
-						
-						Text2(x + (Width / 2), y + Height + (20 * MenuScale), Format(Format(GetLocalString("menu", "page"), Int(Max((mm\CurrMenuPage + 1), 1)), "{0}"), "2", "{1}"), True, True)
-						
-						If mm\CurrMenuPage = 0 Then
-							y = y + (20 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
-							
-							y = y + (30 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "console"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
-							
-							y = y + (30 * MenuScale)
-							
-							If opt\CanOpenConsole Then
-								Color(255, 255, 255)
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "error"))
-								If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
-							EndIf
-							
-							y = y + (30 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
-							
-							y = y + (30 * MenuScale)
-							
-							Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "save"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
-							
-							y = y + (30 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
-							
-							y = y + (30 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
-							Color(255, 255, 255)
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
-							If opt\CurrFrameLimit > 0.0 Then
-								Color(255, 255, 0)
-								Text2(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
-								If (MouseOn(x + (130 * MenuScale), y + (40 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
-							EndIf
-						Else
-							y = y + (20 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
-							
-							y = y + (30 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "startvideo"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_StartupVideos)
-							
-							y = y + (30 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "launcher"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Launcher)
-							
-							y = y + (30 * MenuScale)
-							
-							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
-							If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
-							
-							y = y + (30 * MenuScale)
-							
-							If opt\EnableSubtitles Then
-								Color(255, 255, 255)
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
-							EndIf
-							
-							y = y + (5 * MenuScale)
-							
-							If opt\EnableSubtitles Then
-								If MouseOn(x + (230 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							EndIf
-							
-							y = y + (30 * MenuScale)
-							
-							If opt\EnableSubtitles Then
-								Color(255, 255, 255)
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
-								If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							EndIf
-							
-							y = y + (30 * MenuScale)
-							
-							If opt\EnableSubtitles Then
-								Color(255, 255, 255)
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
-								If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							EndIf
-							
-							y = y + (30 * MenuScale)
-							
-							If opt\EnableSubtitles Then
-								Color(255, 255, 255)
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
-								If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							EndIf
-							
-							y = y + (40 * MenuScale)
-							
-							If MouseOn(x, y, 170 * MenuScale, 30 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ResetOptions)
-							
-							If opt\EnableSubtitles Then
-								Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-								Text2(x - (20 * MenuScale) + (Width / 2), y + (115 * MenuScale), GetLocalString("options", "subtitles.example_1"), True)
-								Text2(x - (20 * MenuScale) + (Width / 2), y + (135 * MenuScale), GetLocalString("options", "subtitles.example_2"), True)
-								Text2(x - (20 * MenuScale) + (Width / 2), y + (155 * MenuScale), GetLocalString("options", "subtitles.example_3"), True)
-								Text2(x - (20 * MenuScale) + (Width / 2), y + (175 * MenuScale), GetLocalString("options", "subtitles.example_4"), True)
-							EndIf
-						EndIf
-						;[End Block]
-				End Select
+				Height = 440 * MenuScale
+				RenderFrame(x - (20 * MenuScale), y, Width, Height)
+				
+				y = y + (20 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "bump"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
+				If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
+				
+				y = y + (45 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y, GetLocalString("options", "particle"))
+				If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
+				
+				y = y + (45 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y, GetLocalString("options", "lod"))
+				If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
+				
+				y = y + (35 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "vram"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
+				If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
+				
+				y = y + (45 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y, GetLocalString("options", "filter"))
+				If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
+				
+				y = y + (35 * MenuScale)
+				
+				Color(255, 255, 255)
+				If opt\Atmosphere Then
+					TempStr = GetLocalString("options", "atmo.bright")
+				Else
+					TempStr = GetLocalString("options", "atmo.dark")
+				EndIf
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
+				
+			Case MainMenuTab_Options_Audio
+				;[Block]
+				x = 159 * MenuScale
+				y = 286 * MenuScale
+				
+				Width = 400 * MenuScale
+				Height = 70 * MenuScale
+				
+				Color(255, 255, 255)
+				SetFont2(fo\FontID[Font_Default_Big])
+				Text2(x + (Width / 2), y + (Height / 2), GetLocalString("options", "audio"), True, True)
+				
+				y = y + Height + (20 * MenuScale)
+				Width = 580 * MenuScale
+				Height = 130 * MenuScale
+				
+				SetFont2(fo\FontID[Font_Default])
+				
+				x = x + (20 * MenuScale)
+				
+				tX = x - (20 * MenuScale) + Width
+				tY = y
+				tW = 400.0 * MenuScale
+				tH = 150.0 * MenuScale
+				
+				Height = ((240 + (70 * opt\EnableUserTracks)) + (160 * opt\EnableSubtitles)) * MenuScale
+				RenderFrame(x - (20 * MenuScale), y, Width, Height)
+				
+				y = y + (20 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
+				If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
+				If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
+				If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH + (220 * MenuScale), Tooltip_SoundAutoRelease)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
+				
+				If opt\EnableUserTracks Then
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
+					If opt\UserTrackMode
+						TempStr = GetLocalString("options", "track.repeat")
+					Else
+						TempStr = GetLocalString("options", "track.random")
+					EndIf
+					Text2(x + (330 * MenuScale), y + (5 * MenuScale), TempStr)
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
+					If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
+					If UserTrackCheck > 0 Then Text2(x, y + (100 * MenuScale), Format(Format(GetLocalString("options", "track.found"), UserTrackCheck2, "{0}"), UserTrackCheck, "{1}"))
+					
+					y = y + (40 * MenuScale)
+				EndIf
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
+				
+				If opt\EnableSubtitles Then
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
+					
+					y = y + (5 * MenuScale)
+					
+					If MouseOn(x + (230 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
+					If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
+					If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
+					If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+					
+					Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
+					Text2(x - (20 * MenuScale) + (Width / 2), Height + (396 * MenuScale), GetLocalString("options", "subtitles.example_1"), True)
+					Text2(x - (20 * MenuScale) + (Width / 2), Height + (416 * MenuScale), GetLocalString("options", "subtitles.example_2"), True)
+					Text2(x - (20 * MenuScale) + (Width / 2), Height + (436 * MenuScale), GetLocalString("options", "subtitles.example_3"), True)
+					Text2(x - (20 * MenuScale) + (Width / 2), Height + (456 * MenuScale), GetLocalString("options", "subtitles.example_4"), True)
+				EndIf
+				;[End Block]
+			Case MainMenuTab_Options_Controls
+				;[Block]
+				x = 159 * MenuScale
+				y = 286 * MenuScale
+				
+				Width = 400 * MenuScale
+				Height = 70 * MenuScale
+				
+				Color(255, 255, 255)
+				SetFont2(fo\FontID[Font_Default_Big])
+				Text2(x + (Width / 2), y + (Height / 2), GetLocalString("options", "avc"), True, True)
+				
+				y = y + Height + (20 * MenuScale)
+				Width = 580 * MenuScale
+				Height = 130 * MenuScale
+				
+				SetFont2(fo\FontID[Font_Default])
+				
+				x = x + (20 * MenuScale)
+				
+				tX = x - (20 * MenuScale) + Width
+				tY = y
+				tW = 400.0 * MenuScale
+				tH = 150.0 * MenuScale
+				
+				Height = 360 * MenuScale
+				RenderFrame(x - (20 * MenuScale), y, Width, Height)
+				
+				y = y + (20 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
+				If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
+				If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
+				
+				y = y + (40 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("menu", "controlconfig"))
+				
+				y = y + (40 * MenuScale)
+				
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.forward"))
+				Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.crouch"))
+				
+				y = y + (20 * MenuScale)
+				
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.left"))
+				Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.blink"))
+				
+				y = y + (20 * MenuScale)
+				
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.backward"))
+				Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.inv"))
+				
+				y = y + (20 * MenuScale)
+				
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.right"))
+				Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.save"))
+				
+				y = y + (20 * MenuScale)
+				
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.sprint"))
+				Text2(x + (260 * MenuScale), y, GetLocalString("options", "key.screenshot"))
+				
+				If opt\CanOpenConsole Then
+					y = y + (20 * MenuScale)
+					
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.console"))
+				EndIf
+				If MouseOn(x, y - ((80 + (20 * opt\CanOpenConsole)) * MenuScale), Width - (40 * MenuScale), (100 + (20 * opt\CanOpenConsole)) * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+				;[End Block]
+			Case MainMenuTab_Options_Advanced
+				;[Block]
+				x = 159 * MenuScale
+				y = 286 * MenuScale
+				
+				Width = 400 * MenuScale
+				Height = 70 * MenuScale
+				
+				Color(255, 255, 255)
+				SetFont2(fo\FontID[Font_Default_Big])
+				Text2(x + (Width / 2), y + (Height / 2), GetLocalString("options", "grap"), True, True)
+				
+				y = y + Height + (20 * MenuScale)
+				Width = 580 * MenuScale
+				Height = 130 * MenuScale
+				
+				SetFont2(fo\FontID[Font_Default])
+				
+				x = x + (20 * MenuScale)
+				
+				tX = x - (20 * MenuScale) + Width
+				tY = y
+				tW = 400.0 * MenuScale
+				tH = 150.0 * MenuScale
+				
+				Height = 430 * MenuScale
+				RenderFrame(x - (20 * MenuScale), y, Width, Height)
+				
+				y = y + (20 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "console"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
+				
+				y = y + (30 * MenuScale)
+				
+				If opt\CanOpenConsole Then
+					Color(255, 255, 255)
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "error"))
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
+				EndIf
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "save"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
+				Color(255, 255, 255)
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+				If opt\CurrFrameLimit > 0.0 Then
+					Color(255, 255, 0)
+					Text2(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
+					If (MouseOn(x + (130 * MenuScale), y + (40 * MenuScale), 164 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+				EndIf
+				
+				y = y + (80 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "startvideo"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_StartupVideos)
+				
+				y = y + (30 * MenuScale)
+				
+				Color(255, 255, 255)
+				Text2(x, y + (5 * MenuScale), GetLocalString("options", "launcher"))
+				If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Launcher)
+				
+				y = y + (40 * MenuScale)
+				
+				If MouseOn(x, y, 195 * MenuScale, 30 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ResetOptions)
 				;[End Block]
 		End Select
 	EndIf
@@ -2332,7 +2345,7 @@ Type MenuPalette
 	Field x%, y%, Width%, Height%
 End Type
 
-Function UpdateMainMenuPalette%(Img%, x%, y%)
+Function UpdateMainMenuPalette%(x%, y%)
 	Local mp.MenuPalette
 	Local PaletteExists% = False
 	
@@ -2344,14 +2357,17 @@ Function UpdateMainMenuPalette%(Img%, x%, y%)
 	Next
 	If (Not PaletteExists) Then
 		mp.MenuPalette = New MenuPalette
-		mp\Img = Img
+		If (Not mp\Img) Then
+			mp\Img = LoadImage_Strict("GFX\Menu\palette.png")
+			mp\Img = ScaleImage2(mp\Img, MenuScale, MenuScale)
+		EndIf
 		mp\x = x
 		mp\y = y
-		mp\Width = ImageWidth(Img)
-		mp\Height = ImageHeight(Img)
+		mp\Width = ImageWidth(mp\Img)
+		mp\Height = ImageHeight(mp\Img)
 	EndIf
 	
-	If MouseOn(x, y, ImageWidth(Img), ImageHeight(Img)) Then
+	If MouseOn(x, y, mp\Width, mp\Height) Then
 		mm\OnPalette = True
 	Else
 		mm\OnPalette = False
@@ -2508,6 +2524,7 @@ Function RenderMenuInputBoxes%()
 			If ((MilliSecs2() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf
 		
+		SetFont2(fo\FontID[Font_Default])
 		Text2(mib\x + (mib\Width / 2), mib\y + (mib\Height / 2), mib\Txt, True, True)
 	Next
 End Function
@@ -2555,6 +2572,7 @@ Function RenderMenuSlideBars%()
 		DrawBlock(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
 		
 		Color(170, 170, 170)
+		SetFont2(fo\FontID[Font_Default])
 		Text2(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))
 		Text2(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.high"))
 	Next
@@ -2692,6 +2710,7 @@ Function RenderMenuSliders%()
 			EndIf
 			
 			Color(170, 170, 170)
+			SetFont2(fo\FontID[Font_Default])
 			If ms\Value = 0 Then
 				Text2(ms\x + (2 * MenuScale), ms\y + (12 * MenuScale), ms\Val1, True)
 			ElseIf ms\Value = 1
@@ -2737,6 +2756,7 @@ Function RenderMenuSliders%()
 			EndIf
 			
 			Color(170, 170, 170)
+			SetFont2(fo\FontID[Font_Default])
 			If ms\Value = 0 Then
 				Text2(ms\x + (2 * MenuScale), ms\y + (12 * MenuScale), ms\Val1, True)
 			ElseIf ms\Value = 1
@@ -3093,26 +3113,18 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_SmoothBars
 			;[Block]
 			Txt = GetLocalString("tooltip", "bar")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_StartupVideos
 			;[Block]
 			Txt = GetLocalString("tooltip", "startvideo")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_Launcher
 			;[Block]
 			Txt = GetLocalString("tooltip", "launcher")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_Subtitles
 			;[Block]
 			Txt = GetLocalString("tooltip", "subtitles")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_SubtitlesColor
 			;[Block]
@@ -3121,6 +3133,8 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_ResetOptions
 			;[Block]
 			Txt = GetLocalString("tooltip", "reset")
+			R = 255
+			Txt2 = GetLocalString("tooltip", "cantchangebtn")
 			;[End Block]
 	End Select
 	
