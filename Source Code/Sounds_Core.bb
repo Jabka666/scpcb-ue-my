@@ -460,11 +460,10 @@ End Function
 
 Function UpdateDeaf%()
 	If me\DeafTimer > 0.0 Then
-		me\DeafTimer = me\DeafTimer - fps\Factor[0]
+		me\DeafTimer = Max(me\DeafTimer - fps\Factor[0], 0.0)
 		opt\MasterVolume = 0.0
 		If opt\MasterVolume > 0.0 Then ControlSoundVolume()
 	Else
-		me\DeafTimer = 0.0
 		If me\Deaf Then ControlSoundVolume()
 		me\Deaf = False
 	EndIf
