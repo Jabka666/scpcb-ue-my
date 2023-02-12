@@ -1608,7 +1608,34 @@ Function LoadEntities%()
 	
 	DeInitMainMenuAssets()
 	
-	RenderLoading(0, GetLocalString("loading", "player"))
+	RenderLoading(0, GetLocalString("loading", "types"))
+	
+	me.Player = New Player
+	wi.WearableItems = New WearableItems
+	
+	I_005.SCP005 = New SCP005
+	I_008.SCP008 = New SCP008
+	I_035.SCP035 = New SCP035
+	I_294.SCP294 = New SCP294
+	I_409.SCP409 = New SCP409
+	I_427.SCP427 = New SCP427
+	I_500.SCP500 = New SCP500
+	I_714.SCP714 = New SCP714
+	I_1025.SCP1025 = New SCP1025
+	I_1499.SCP1499 = New SCP1499
+	
+	as.AutoSave = New AutoSave
+	
+	msg.Messages = New Messages
+	
+	I_Zone.MapZones = New MapZones
+	
+	bk.BrokenDoor = New BrokenDoor
+	
+	achv.Achievements = New Achievements
+	igm.InGameMenu = New InGameMenu
+	
+	RenderLoading(3, GetLocalString("loading", "player"))
 	
 	SoundEmitter = CreatePivot()
 	
@@ -1626,8 +1653,6 @@ Function LoadEntities%()
 	CameraRange(Camera, 0.05, opt\CameraFogFar)
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
-	
-	igm.InGameMenu = New InGameMenu
 	
 	RenderLoading(5, GetLocalString("loading", "icons"))
 	
@@ -1667,15 +1692,13 @@ Function LoadEntities%()
 	t\ImageID[0] = LoadImage_Strict("GFX\Menu\pause_menu.png")
 	t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
 	
-	If (Not opt\SmoothBars) Then
-		t\ImageID[1] = LoadImage_Strict("GFX\HUD\blink_meter(2).png")
-		t\ImageID[1] = ScaleImage2(t\ImageID[1], MenuScale, MenuScale)
-		
-		For i = 2 To 3
-			t\ImageID[i] = LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png")
-			t\ImageID[i] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
-		Next
-	EndIf
+	t\ImageID[1] = LoadImage_Strict("GFX\HUD\blink_meter(2).png")
+	t\ImageID[1] = ScaleImage2(t\ImageID[1], MenuScale, MenuScale)
+	
+	For i = 2 To 3
+		t\ImageID[i] = LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png")
+		t\ImageID[i] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
+	Next
 	
 	t\ImageID[4] = LoadImage_Strict("GFX\HUD\keypad_HUD.png")
 	t\ImageID[4] = ScaleImage2(t\ImageID[4], MenuScale, MenuScale)
@@ -1689,7 +1712,7 @@ Function LoadEntities%()
 	
 	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
-	RenderLoading(10, GetLocalString("loading", "models"))
+	RenderLoading(10, GetLocalString("loading", "textures"))
 	
 	LoadMissingTexture()
 	
@@ -1820,6 +1843,8 @@ Function LoadEntities%()
 	
 	LoadMaterials(MaterialsFile)
 	
+	RenderLoading(13, GetLocalString("loading", "models"))
+	
 	LoadDoors()
 	
 	LoadNPCs()
@@ -1865,6 +1890,7 @@ Function LoadEntities%()
 	
 	RenderLoading(25, GetLocalString("loading", "graphic"))
 	
+	AntiAlias(opt\AntiAliasing)
 	TextureLodBias(opt\TextureDetailsLevel)
 	TextureAnisotropic(opt\AnisotropicLevel)
 	

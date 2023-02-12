@@ -1,8 +1,8 @@
-RenderLoading(45, GetLocalString("loading", "core.mat"))
+RenderLoading(50, GetLocalString("loading", "core.mat"))
 
 Include "Source Code\Materials_Core.bb"
 
-RenderLoading(50, GetLocalString("loading", "core.texcache"))
+RenderLoading(55, GetLocalString("loading", "core.texcache"))
 
 Include "Source Code\Texture_Cache_Core.bb"
 
@@ -9096,7 +9096,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	Return(Mesh)
 End Function
 
-RenderLoading(55, GetLocalString("loading", "core.sky"))
+RenderLoading(60, GetLocalString("loading", "core.sky"))
 
 Include "Source Code\Sky_Core.bb"
 

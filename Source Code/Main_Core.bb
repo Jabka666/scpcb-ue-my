@@ -272,6 +272,8 @@ End Type
 
 Global t.Textures = New Textures
 
+RenderLoading(15, GetLocalString("loading", "core.loading"))
+
 Include "Source Code\Loading_Core.bb"
 
 Global ConsoleFlush%
@@ -1801,11 +1803,11 @@ End Function
 
 Global Camera%
 
-RenderLoading(15, GetLocalString("loading", "core.subtitle"))
+RenderLoading(20, GetLocalString("loading", "core.subtitle"))
 
 Include "Source Code\Subtitles_Core.bb"
 
-RenderLoading(20, GetLocalString("loading", "core.sound"))
+RenderLoading(25, GetLocalString("loading", "core.sound"))
 
 Include "Source Code\Sounds_Core.bb"
 
@@ -1813,27 +1815,27 @@ Global InFacility% = True
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 
-RenderLoading(25, GetLocalString("loading", "core.item"))
+RenderLoading(30, GetLocalString("loading", "core.item"))
 
 Include "Source Code\Items_Core.bb"
 
-RenderLoading(30, GetLocalString("loading", "core.particle"))
+RenderLoading(35, GetLocalString("loading", "core.particle"))
 
 Include "Source Code\Particles_Core.bb"
 
-RenderLoading(35, GetLocalString("loading", "core.grap"))
+RenderLoading(40, GetLocalString("loading", "core.grap"))
 
 Include "Source Code\Graphics_Core.bb"
 
-RenderLoading(40, GetLocalString("loading", "core.map"))
+RenderLoading(45, GetLocalString("loading", "core.map"))
 
 Include "Source Code\Map_Core.bb"
 
-RenderLoading(60, GetLocalString("loading", "core.npc"))
+RenderLoading(65, GetLocalString("loading", "core.npc"))
 
 Include "Source Code\NPCs_Core.bb"
 
-RenderLoading(65, GetLocalString("loading", "core.event"))
+RenderLoading(70, GetLocalString("loading", "core.event"))
 
 Include "Source Code\Events_Core.bb"
 
@@ -1861,7 +1863,7 @@ Global PlayerFallingPickDistance# = 10.0
 Global MTFCameraCheckTimer# = 0.0
 Global MTFCameraCheckDetected% = False
 
-RenderLoading(70, GetLocalString("loading", "core.save"))
+RenderLoading(75, GetLocalString("loading", "core.save"))
 
 Include "Source Code\Save_Core.bb"
 
@@ -2051,8 +2053,8 @@ Function UpdateGame%()
 		
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
-		If mm\ShouldDeleteGadgets Then DeleteMenuGadgets()
-		mm\ShouldDeleteGadgets = False
+		If ShouldDeleteGadgets Then DeleteMenuGadgets()
+		ShouldDeleteGadgets = False
 		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
@@ -2380,7 +2382,7 @@ Function UpdateGame%()
 					UsedConsole = True
 					ResumeSounds()
 					StopMouseMovement()
-					mm\ShouldDeleteGadgets = True
+					ShouldDeleteGadgets = True
 				Else
 					PauseSounds()
 				EndIf
@@ -3402,7 +3404,7 @@ Function UpdateGUI%()
 			ResumeSounds()
 			If igm\OptionsMenu <> 0 Then SaveOptionsINI()
 			StopMouseMovement()
-			mm\ShouldDeleteGadgets = True
+			ShouldDeleteGadgets = True
 		Else
 			PauseSounds()
 		EndIf
@@ -6682,7 +6684,7 @@ Function UpdateMenu%()
 					If me\StopHidingTimer >= 40.0 Then
 						PlaySound_Strict(HorrorSFX[15])
 						CreateMsg(GetLocalString("msg", "stophiding"))
-						mm\ShouldDeleteGadgets = True
+						ShouldDeleteGadgets = True
 						MenuOpen = False
 						Return
 					EndIf
@@ -6693,7 +6695,7 @@ Function UpdateMenu%()
 		InvOpen = False
 		If ConsoleOpen Then
 			ConsoleOpen = False
-			mm\ShouldDeleteGadgets = True
+			ShouldDeleteGadgets = True
 		EndIf
 		
 		Width = ImageWidth(t\ImageID[0])
@@ -6704,7 +6706,7 @@ Function UpdateMenu%()
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
 		
-		If (Not mo\MouseDown1) Then mm\OnSliderID = 0
+		If (Not mo\MouseDown1) Then OnSliderID = 0
 		
 		If igm\AchievementsMenu <= 0 And igm\OptionsMenu > 0 And igm\QuitMenu <= 0 Then
 			y = y + (10 * MenuScale)
@@ -6734,7 +6736,7 @@ Function UpdateMenu%()
 					igm\QuitMenu = 0
 					ResetInput()
 					
-					mm\ShouldDeleteGadgets = True
+					ShouldDeleteGadgets = True
 				EndIf
 			Else
 				If UpdateMainMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
@@ -6747,7 +6749,7 @@ Function UpdateMenu%()
 					AntiAlias(opt\AntiAliasing)
 					TextureLodBias(opt\TextureDetailsLevel)
 					TextureAnisotropic(opt\AnisotropicLevel)
-					mm\ShouldDeleteGadgets = True
+					ShouldDeleteGadgets = True
 				EndIf
 				
 				x = x + (270 * MenuScale)
@@ -6882,7 +6884,7 @@ Function UpdateMenu%()
 						opt\EnableSubtitles = UpdateMainMenuTick(x, y, opt\EnableSubtitles)
 						
 						If PrevEnableSubtitles Then
-							If PrevEnableSubtitles <> opt\EnableSubtitles Then mm\ShouldDeleteGadgets = True
+							If PrevEnableSubtitles <> opt\EnableSubtitles Then ShouldDeleteGadgets = True
 						EndIf
 						
 						If opt\EnableSubtitles Then
@@ -7034,7 +7036,7 @@ Function UpdateMenu%()
 						opt\CanOpenConsole = UpdateMainMenuTick(x, y, opt\CanOpenConsole)
 						
 						If PrevCanOpenConsole Then
-							If PrevCanOpenConsole <> opt\CanOpenConsole Then mm\ShouldDeleteGadgets = True
+							If PrevCanOpenConsole <> opt\CanOpenConsole Then ShouldDeleteGadgets = True
 						EndIf
 						
 						y = y + (30 * MenuScale)
@@ -7067,12 +7069,12 @@ Function UpdateMenu%()
 						EndIf
 						
 						If PrevCurrFrameLimit Then
-							If PrevCurrFrameLimit <> opt\CurrFrameLimit Then mm\ShouldDeleteGadgets = True
+							If PrevCurrFrameLimit <> opt\CurrFrameLimit Then ShouldDeleteGadgets = True
 						EndIf
 						
 						y = y + (80 * MenuScale)
 						
-						opt\SmoothBars = UpdateMainMenuTick(x, y, opt\SmoothBars, True)
+						opt\SmoothBars = UpdateMainMenuTick(x, y, opt\SmoothBars)
 						
 						y = y + (30 * MenuScale)
 						
@@ -7120,7 +7122,7 @@ Function UpdateMenu%()
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
 				ResetInput()
-				mm\ShouldDeleteGadgets = True
+				ShouldDeleteGadgets = True
 			EndIf
 		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
 			If UpdateMainMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
@@ -7128,14 +7130,14 @@ Function UpdateMenu%()
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
 				ResetInput()
-				mm\ShouldDeleteGadgets = True
+				ShouldDeleteGadgets = True
 			EndIf
 			
 			If igm\AchievementsMenu > 0 Then
 				If igm\AchievementsMenu <= Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then
 					If UpdateMainMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">") Then
 						igm\AchievementsMenu = igm\AchievementsMenu + 1
-						mm\ShouldDeleteGadgets = True
+						ShouldDeleteGadgets = True
 					EndIf
 				Else
 					UpdateMainMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">", True, False, True)
@@ -7143,7 +7145,7 @@ Function UpdateMenu%()
 				If igm\AchievementsMenu > 1 Then
 					If UpdateMainMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<") Then
 						igm\AchievementsMenu = igm\AchievementsMenu - 1
-						mm\ShouldDeleteGadgets = True
+						ShouldDeleteGadgets = True
 					EndIf
 				Else
 					UpdateMainMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<", True, False, True)
@@ -7211,21 +7213,21 @@ Function UpdateMenu%()
 				
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements")) Then
 					igm\AchievementsMenu = 1
-					mm\ShouldDeleteGadgets = True
+					ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "options")) Then
 					igm\OptionsMenu = 1
-					mm\ShouldDeleteGadgets = True
+					ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
 				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit")) Then
 					igm\QuitMenu = 1
-					mm\ShouldDeleteGadgets = True
+					ShouldDeleteGadgets = True
 				EndIf
 			Else
 				y = y + (75 * MenuScale)
@@ -7303,7 +7305,7 @@ Function RenderMenu%()
 		x = mo\Viewport_Center_X - (Width / 2)
 		y = mo\Viewport_Center_Y - (Height / 2)
 		
-		If (Not mm\OnPalette) Then
+		If (Not OnPalette) Then
 			ShowPointer()
 		Else
 			HidePointer()
@@ -7359,62 +7361,62 @@ Function RenderMenu%()
 						;[Block]
 						Color(100, 100, 100)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "bump"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
-						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
+						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 						
 						y = y + (45 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y, GetLocalString("options", "particle"))
-						If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
+						If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 						
 						y = y + (45 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y, GetLocalString("options", "lod"))
-						If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, Tooltip_TextureLODBias)
+						If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, Tooltip_TextureLODBias)
 						
 						y = y + (35 * MenuScale)
 						
 						Color(100, 100, 100)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "vram"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
 						Color(255, 255, 0)
-						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
+						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 						
 						y = y + (45 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y, GetLocalString("options", "filter"))
-						If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
+						If (MouseOn(x + (270 * MenuScale), y - (9 * MenuScale), 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 						
 						y = y + (35 * MenuScale)
 						
@@ -7425,37 +7427,37 @@ Function RenderMenu%()
 							TempStr = GetLocalString("options", "atmo.dark")
 						EndIf
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
-						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
+						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
-						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
+						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
-						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
+						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(100, 100, 100)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, Tooltip_SoundAutoRelease)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, Tooltip_SoundAutoRelease)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(100, 100, 100)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
 						
 						If opt\EnableUserTracks Then
 							y = y + (30 * MenuScale)
@@ -7468,8 +7470,8 @@ Function RenderMenu%()
 								TempStr = GetLocalString("options", "track.random")
 							EndIf
 							Text2(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
-							If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
-							If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
+							If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
+							If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
 							
 							y = y + (40 * MenuScale)
 						EndIf
@@ -7513,25 +7515,25 @@ Function RenderMenu%()
 						;[Block]
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
-						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
+						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
-						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
+						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
 						
 						y = y + (40 * MenuScale)
 						
@@ -7590,55 +7592,55 @@ Function RenderMenu%()
 						;[Block]
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "console"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 						
 						y = y + (30 * MenuScale)
 						
 						If opt\CanOpenConsole Then
 							Color(255, 255, 255)
 							Text2(x, y + (5 * MenuScale), GetLocalString("options", "error"))
-							If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
+							If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
 						EndIf
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "save"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
 						Color(255, 255, 255)
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 						If opt\CurrFrameLimit > 0.0 Then
 							Color(255, 255, 0)
 							Text2(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
-							If (MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20 * MenuScale) And mm\OnSliderID = 0) Lor mm\OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+							If (MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 						EndIf
 						
 						y = y + (80 * MenuScale)
 						
-						Color(100, 100, 100)
+						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
 						
@@ -7656,7 +7658,7 @@ Function RenderMenu%()
 						
 						y = y + (40 * MenuScale)
 						
-						If MouseOn(x, y, 170 * MenuScale, 30 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ResetOptions)
+						If MouseOn(x, y, 195 * MenuScale, 30 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ResetOptions)
 						;[End Block]
 				End Select
 			EndIf
@@ -7720,7 +7722,7 @@ Function RenderMenu%()
 		RenderMenuSlideBars()
 		RenderMenuSliders()
 		
-		If opt\DisplayMode = 0 And (Not mm\OnPalette) Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+		If opt\DisplayMode = 0 And (Not OnPalette) Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	
 	SetFont2(fo\FontID[Font_Default])
@@ -7787,7 +7789,7 @@ Function UpdateEnding%()
 					
 					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements"), True) Then
 						igm\AchievementsMenu = 1
-						mm\ShouldDeleteGadgets = True
+						ShouldDeleteGadgets = True
 					EndIf
 					
 					y = y + 75 * MenuScale
@@ -7802,7 +7804,7 @@ Function UpdateEnding%()
 						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
 						SetStreamVolume_Strict(MusicCHN, opt\MusicVolume * opt\MasterVolume)
 						me\EndingTimer = -2000.0
-						mm\ShouldDeleteGadgets = True
+						ShouldDeleteGadgets = True
 						ResetInput()
 						InitCredits()
 					EndIf
@@ -8107,45 +8109,22 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete Each ParticleInstance
 	Delete Each MiscInstance
 	
-	; ~ Just remove the Type and create again
 	Delete(me)
-	me.Player = New Player
-	
 	Delete(wi)
-	wi.WearableItems = New WearableItems
 	
 	RemoveHazmatTimer = 0.0
 	Remove714Timer = 0.0
 	
 	Delete(I_005)
-	I_005.SCP005 = New SCP005
-	
 	Delete(I_008)
-	I_008.SCP008 = New SCP008
-	
 	Delete(I_035)
-	I_035.SCP035 = New SCP035
-	
 	Delete(I_294)
-	I_294.SCP294 = New SCP294
-	
 	Delete(I_409)
-	I_409.SCP409 = New SCP409
-	
 	Delete(I_427)
-	I_427.SCP427 = New SCP427
-	
 	Delete(I_500)
-	I_500.SCP500 = New SCP500
-	
 	Delete(I_714)
-	I_714.SCP714 = New SCP714
-	
 	Delete(I_1025)
-	I_1025.SCP1025 = New SCP1025
-	
 	Delete(I_1499)
-	I_1499.SCP1499 = New SCP1499
 	
 	ClearCheats()
 	WireFrameState = 0
@@ -8156,7 +8135,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	MTFTimer = 0.0
 	
 	Delete(as)
-	as.AutoSave = New AutoSave
 	
 	ShouldPlay = 66
 	
@@ -8184,7 +8162,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	BatMsgTimer = 0.0
 	
 	Delete(msg)
-	msg.Messages = New Messages
 	
 	ConsoleInput = ""
 	ConsoleOpen = False
@@ -8199,7 +8176,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Delete(CurrMapGrid)
 	Delete(I_Zone)
-	I_Zone.MapZones = New MapZones
 	
 	For s.Screens = Each Screens
 		Delete(s)
@@ -8222,7 +8198,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	GrabbedEntity = 0
 	
 	Delete(bk)
-	bk.BrokenDoor = New BrokenDoor
 	
 	For d.Doors = Each Doors
 		Delete(d)
@@ -8303,12 +8278,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	DeleteChunks()
 	
-	igm\OptionsMenu = 0
-	igm\QuitMenu = 0
-	igm\AchievementsMenu = 0
-	
 	Delete(achv)
-	achv.Achievements = New Achievements
 	
 	Delete Each AchievementMsg
 	CurrAchvMSGID = 0
@@ -8321,9 +8291,10 @@ Function NullGame%(PlayButtonSFX% = True)
 	InitFastResize()
 	
 	; ~ Load main menu assets and open main menu
-	mm\ShouldDeleteGadgets = True
+	ShouldDeleteGadgets = True
 	InitMainMenuAssets()
 	MenuOpen = False
+	Delete(igm)
 	MainMenuOpen = True
 	mm\MainMenuTab = MainMenuTab_Default
 	
