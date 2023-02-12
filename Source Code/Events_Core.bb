@@ -6740,7 +6740,7 @@ Function UpdateEvents%()
 						e\EventState = e\EventState + fps\Factor[0]
 						
 						CanSave = 0
-						n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
+						If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
 						
 						e\room\RoomDoors[1]\Open = False
 						If e\EventState > 70.0 * 2.0 Then
