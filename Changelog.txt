@@ -84,6 +84,7 @@ NPCs:
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
 - Reduces how long the Hazmat Suit protects the player from SCP-049 from 12 seconds down to 5 seconds. The Heavy Hazmat Suit changed from indefinite to 12 seconds.
 - SCP-035's victim now slowly hurts player.
+- Increased the spawn timer for SCP-106 when using SCP-914.
 
 Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.
