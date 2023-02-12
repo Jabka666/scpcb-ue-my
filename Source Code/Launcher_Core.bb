@@ -368,7 +368,7 @@ Function LanguageSelector%()
 			Color(10, 10, 10)
 			Rect(LauncherWidth - 188, LauncherHeight - 285, 20, 254, True)
 			ScrollMenuHeight = LinesAmount - 12
-			ScrollBarY = UpdateLauncherScrollBar(452, 195, 20, 254, 452, 195 + (254 - (254 - (4 * ScrollMenuHeight))) * ScrollBarY, 20, 254 - (4 * ScrollMenuHeight), ScrollBarY, 1)
+			ScrollBarY = UpdateLauncherScrollBar(20, 254, 452, 195 + (254 - (254 - (4 * ScrollMenuHeight))) * ScrollBarY, 20, 254 - (4 * ScrollMenuHeight), ScrollBarY, True)
 		Else
 			y = LauncherHeight - 280
 			LinesAmount = 0
@@ -531,73 +531,41 @@ Function LanguageSelector%()
 	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 End Function
 
-Global OnScrollBar%
-Global ScrollBarY# = 0.0
-Global ScrollMenuHeight# = 0.0
-
-Function UpdateLauncherScrollBar#(x%, y%, Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Bar#, Vertical% = False)
-	Local MouseSpeedX# = MouseXSpeed()
-	Local MouseSpeedY# = MouseYSpeed()
+Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
+	Local Clicked% = False
 	
-	Color(0, 0, 0)
-	UpdateLauncherDownloadButton(BarX, BarY, BarWidth, BarHeight, "")
-	
-	If (Not Vertical) Then ; ~ Horizontal
-		If Height > 10 Then
-			Color(255, 255, 255)
-			Rect(BarX + (BarWidth / 2), BarY + 5, 2, BarHeight - 10)
-			Rect(BarX + (BarWidth / 2) - 3, BarY + 5, 2, BarHeight - 10)
-			Rect(BarX + (BarWidth / 2) + 3, BarY + 5, 2, BarHeight - 10)
+	RenderFrame(x, y, Width, Height, 0, 0, Locked)
+	If MouseOn(x, y, Width, Height) Then
+		Color(30, 30, 30)
+		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp) Then
+			If Locked Then
+				PlaySound_Strict(ButtonSFX2)
+			Else
+				Clicked = True
+				PlaySound_Strict(ButtonSFX)
+			EndIf
 		EndIf
-	Else ; ~ Vertical
-		If Width > 10 Then
-			Color(255, 255, 255)
-			Rect(BarX + 4, BarY + (BarHeight / 2), BarWidth - 10, 2)
-			Rect(BarX + 4, BarY + (BarHeight / 2) - 3, BarWidth - 10, 2)
-			Rect(BarX + 4, BarY + (BarHeight / 2) + 3, BarWidth - 10, 2)
-		EndIf
+		Rect(x + 3, y + 3, Width - 6, Height - 6)
+	Else
+		Color(0, 0, 0)
 	EndIf
 	
-	If MouseX() > BarX And MouseX() < BarX + BarWidth
-		If MouseY() > BarY And MouseY() < BarY + BarHeight
-			OnScrollBar = True
+	If Locked Then
+		If R <> 255 Lor G <> 255 Lor B <> 255 Then
+			Color(R, G, B)
 		Else
-			If (Not mo\MouseDown1) Then OnScrollBar = False
+			Color(100, 100, 100)
 		EndIf
 	Else
-		If (Not mo\MouseDown1) Then OnScrollBar = False
+		Color(R, G, B)
 	EndIf
-	
-	If mo\MouseDown1 And OnScrollBar Then
-		If (Not Vertical) Then
-			Return(Min(Max(Bar + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
-		Else
-			Return(Min(Max(Bar + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
-		EndIf
-	EndIf
-	
-	Local MouseSpeedZ# = MouseZSpeed()
-	
-	; ~ Only for vertical scroll bars
-	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Bar - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
-	
-	Return(Bar)
-End Function
-
-Function LimitText%(Txt$, x%, y%, Width%)
-	Local TextLength%
-	Local UnFitting%
-	Local LetterWidth%
-	
-	If Txt = "" Lor Width = 0 Then Return(0)
-	TextLength = StringWidth(Txt)
-	UnFitting = TextLength - Width
-	If UnFitting <= 0 Then
-		Text2(x, y, Txt, 0, 0)
+	If BigFont Then
+		SetFont2(fo\FontID[Font_Default_Big])
 	Else
-		LetterWidth = TextLength / Len(Txt)
-		Text2(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
+		SetFont2(fo\FontID[Font_Default])
 	EndIf
+	Text2(x + (Width / 2), y + (Height / 2), Txt, True, True)
+	Return(Clicked)
 End Function
 
 Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% = False)
@@ -654,6 +622,111 @@ Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Fra
 	
 	DrawImage(Img, x + (Width / 2) - (StringWidth(Txt) / 2) - 3, y + (Height / 2) - ImageHeight(Img) / 2, Frame) ; ~ No DrawBlock please
 	Return(Result)
+End Function
+
+Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
+	Local Width% = 20, Height% = 20
+	Local Highlight% = MouseOn(x, y, Width, Height)
+	Local IMG%
+	
+	If Locked Then
+		IMG = MenuGray
+	Else
+		IMG = MenuWhite
+	EndIf
+	
+	Color(255, 255, 255)
+	RenderTiledImageRect(IMG, (x Mod 256), (y Mod 256), 512, 512, x, y, Width, Height)
+	
+	If Highlight Then
+		If Locked Then
+			Color(0, 0, 0)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX2)
+		Else
+			Color(50, 50, 50)
+			If mo\MouseHit1 Then Selected = (Not Selected) : PlaySound_Strict(ButtonSFX)
+		EndIf
+	Else
+		Color(0, 0, 0)
+	EndIf
+	
+	Rect(x + 2, y + 2, Width - 4, Height - 4)
+	
+	If Selected Then
+		If Highlight Then
+			Color(255, 255, 255)
+		Else
+			Color(200, 200, 200)
+		EndIf
+		RenderTiledImageRect(IMG, (x Mod 256), (y Mod 256), 512, 512, x + 4, y + 4, Width - 8, Height - 8)
+	EndIf
+	Color(255, 255, 255)
+	Return(Selected)
+End Function
+
+Function UpdateLauncherScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Value#, Vertical% = False)
+	Local MouseSpeedX# = MouseXSpeed()
+	Local MouseSpeedY# = MouseYSpeed()
+	
+	Color(0, 0, 0)
+	UpdateLauncherDownloadButton(BarX, BarY, BarWidth, BarHeight, "")
+	
+	If (Not Vertical) Then ; ~ Horizontal
+		If Height > 10 Then
+			Color(255, 255, 255)
+			Rect(BarX + (BarWidth / 2), BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + (BarWidth / 2) - 3, BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + (BarWidth / 2) + 3, BarY + 5, 2, BarHeight - 10)
+		EndIf
+	Else ; ~ Vertical
+		If Width > 10 Then
+			Color(255, 255, 255)
+			Rect(BarX + 4, BarY + (BarHeight / 2), BarWidth - 10, 2)
+			Rect(BarX + 4, BarY + (BarHeight / 2) - 3, BarWidth - 10, 2)
+			Rect(BarX + 4, BarY + (BarHeight / 2) + 3, BarWidth - 10, 2)
+		EndIf
+	EndIf
+	
+	If MouseX() > BarX And MouseX() < BarX + BarWidth
+		If MouseY() > BarY And MouseY() < BarY + BarHeight
+			OnScrollBar = True
+		Else
+			If (Not mo\MouseDown1) Then OnScrollBar = False
+		EndIf
+	Else
+		If (Not mo\MouseDown1) Then OnScrollBar = False
+	EndIf
+	
+	If mo\MouseDown1 And OnScrollBar Then
+		If (Not Vertical) Then
+			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
+		Else
+			Return(Min(Max(Value + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
+		EndIf
+	EndIf
+	
+	Local MouseSpeedZ# = MouseZSpeed()
+	
+	; ~ Only for vertical scroll bars
+	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
+	
+	Return(Value)
+End Function
+
+Function LimitText%(Txt$, x%, y%, Width%)
+	Local TextLength%
+	Local UnFitting%
+	Local LetterWidth%
+	
+	If Txt = "" Lor Width = 0 Then Return(0)
+	TextLength = StringWidth(Txt)
+	UnFitting = TextLength - Width
+	If UnFitting <= 0 Then
+		Text2(x, y, Txt, 0, 0)
+	Else
+		LetterWidth = TextLength / Len(Txt)
+		Text2(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
+	EndIf
 End Function
 
 Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)

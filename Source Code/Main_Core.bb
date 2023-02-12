@@ -460,7 +460,7 @@ Function UpdateConsole%()
 		
 		Local OldConsoleInput$ = ConsoleInput
 		
-		ConsoleInput = UpdateMainMenuInputBox(x, y + Height, Width, 30 * MenuScale, ConsoleInput, 2)
+		ConsoleInput = UpdateMenuInputBox(x, y + Height, Width, 30 * MenuScale, ConsoleInput, 2)
 		If OldConsoleInput <> ConsoleInput Then ConsoleReissue = Null
 		ConsoleInput = Left(ConsoleInput, 100)
 		
@@ -6714,23 +6714,23 @@ Function UpdateMenu%()
 			If igm\OptionsMenu = 1 Then
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "grap")) Then ChangeOptionTab(MenuTab_Options_Graphics, False)
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "grap")) Then ChangeOptionTab(MenuTab_Options_Graphics, False)
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "audio")) Then ChangeOptionTab(MenuTab_Options_Audio, False)
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "audio")) Then ChangeOptionTab(MenuTab_Options_Audio, False)
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "ctrl")) Then ChangeOptionTab(MenuTab_Options_Controls, False)
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "ctrl")) Then ChangeOptionTab(MenuTab_Options_Controls, False)
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "avc")) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "avc")) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 0
 					igm\QuitMenu = 0
@@ -6739,7 +6739,7 @@ Function UpdateMenu%()
 					ShouldDeleteGadgets = True
 				EndIf
 			Else
-				If UpdateMainMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
+				If UpdateMenuButton(x + (101 * MenuScale), y + (460 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 1
 					igm\QuitMenu = 0
@@ -6757,31 +6757,31 @@ Function UpdateMenu%()
 				Select igm\OptionsMenu
 					Case MenuTab_Options_Graphics
 						;[Block]
-						opt\BumpEnabled = UpdateMainMenuTick(x, y, opt\BumpEnabled, True)
+						opt\BumpEnabled = UpdateMenuTick(x, y, opt\BumpEnabled, True)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\VSync = UpdateMainMenuTick(x, y, opt\VSync)
+						opt\VSync = UpdateMenuTick(x, y, opt\VSync)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\AntiAliasing = UpdateMainMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
+						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\AdvancedRoomLights = UpdateMainMenuTick(x, y, opt\AdvancedRoomLights)
+						opt\AdvancedRoomLights = UpdateMenuTick(x, y, opt\AdvancedRoomLights)
 						
 						y = y + (40 * MenuScale)
 						
-						opt\ScreenGamma = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
+						opt\ScreenGamma = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
 						
 						y = y + (45 * MenuScale)
 						
-						opt\ParticleAmount = UpdateMainMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
 						
 						y = y + (45 * MenuScale)
 						
-						opt\TextureDetails = UpdateMainMenuSlider5(x, y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
+						opt\TextureDetails = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
 						Select opt\TextureDetails
 							Case 0
 								;[Block]
@@ -6808,17 +6808,17 @@ Function UpdateMenu%()
 						
 						y = y + (35 * MenuScale)
 						
-						opt\SaveTexturesInVRAM = UpdateMainMenuTick(x, y, opt\SaveTexturesInVRAM, True)
+						opt\SaveTexturesInVRAM = UpdateMenuTick(x, y, opt\SaveTexturesInVRAM, True)
 						
 						y = y + (40 * MenuScale)
 						
-						opt\CurrFOV = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0
+						opt\CurrFOV = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0
 						opt\FOV = opt\CurrFOV + 40
 						CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 						
 						y = y + (45 * MenuScale)
 						
-						opt\Anisotropic = UpdateMainMenuSlider5(x, y, 100 * MenuScale, opt\Anisotropic, 5, "Trilinear", "2x", "4x", "8x", "16x")
+						opt\Anisotropic = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\Anisotropic, 5, "Trilinear", "2x", "4x", "8x", "16x")
 						Select opt\Anisotropic
 							Case 0
 								;[Block]
@@ -6845,34 +6845,34 @@ Function UpdateMenu%()
 						
 						y = y + (35 * MenuScale)
 						
-						opt\Atmosphere = UpdateMainMenuTick(x, y, opt\Atmosphere, True)
+						opt\Atmosphere = UpdateMenuTick(x, y, opt\Atmosphere, True)
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
-						opt\MasterVolume = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
+						opt\MasterVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
 						
 						y = y + (40 * MenuScale)
 						
-						opt\MusicVolume = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\MusicVolume * 100.0, 2) / 100.0
+						opt\MusicVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\MusicVolume * 100.0, 2) / 100.0
 						
 						y = y + (40 * MenuScale)
 						
-						opt\SFXVolume = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, opt\SFXVolume * 100.0, 3) / 100.0
+						opt\SFXVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\SFXVolume * 100.0, 3) / 100.0
 						
 						y = y + (40 * MenuScale)
 						
-						opt\EnableSFXRelease = UpdateMainMenuTick(x, y, opt\EnableSFXRelease, True)
+						opt\EnableSFXRelease = UpdateMenuTick(x, y, opt\EnableSFXRelease, True)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\EnableUserTracks = UpdateMainMenuTick(x, y, opt\EnableUserTracks, True)
+						opt\EnableUserTracks = UpdateMenuTick(x, y, opt\EnableUserTracks, True)
 						
 						If opt\EnableUserTracks Then
 							y = y + (30 * MenuScale)
 							
-							opt\UserTrackMode = UpdateMainMenuTick(x, y, opt\UserTrackMode)
+							opt\UserTrackMode = UpdateMenuTick(x, y, opt\UserTrackMode)
 							
-							UpdateMainMenuButton(x - (270 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), False, False, True)
+							UpdateMenuButton(x - (270 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), False, False, True)
 							
 							y = y + (40 * MenuScale)
 						EndIf
@@ -6881,7 +6881,7 @@ Function UpdateMenu%()
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
 						
-						opt\EnableSubtitles = UpdateMainMenuTick(x, y, opt\EnableSubtitles)
+						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						
 						If PrevEnableSubtitles Then
 							If PrevEnableSubtitles <> opt\EnableSubtitles Then ShouldDeleteGadgets = True
@@ -6890,81 +6890,81 @@ Function UpdateMenu%()
 						If opt\EnableSubtitles Then
 							y = y + (35 * MenuScale)
 							
-							UpdateMainMenuPalette(x - (43 * MenuScale), y)
+							UpdateMenuPalette(x - (43 * MenuScale), y)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorR = Min(UpdateMainMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3), 255.0)
+							opt\SubColorR = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorG = Min(UpdateMainMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3), 255.0)
+							opt\SubColorG = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorB = Min(UpdateMainMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3), 255.0)
+							opt\SubColorB = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3), 255.0)
 						EndIf
 						;[End Block]
 					Case MenuTab_Options_Controls
 						;[Block]
-						opt\MouseSensitivity = (UpdateMainMenuSlideBar(x, y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0, 1) / 100.0) - 0.5
+						opt\MouseSensitivity = (UpdateMenuSlideBar(x, y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0, 1) / 100.0) - 0.5
 						
 						y = y + (40 * MenuScale)
 						
-						opt\InvertMouseX = UpdateMainMenuTick(x, y, opt\InvertMouseX)
+						opt\InvertMouseX = UpdateMenuTick(x, y, opt\InvertMouseX)
 						
 						y = y + (40 * MenuScale)
 						
-						opt\InvertMouseY = UpdateMainMenuTick(x, y, opt\InvertMouseY)
+						opt\InvertMouseY = UpdateMenuTick(x, y, opt\InvertMouseY)
 						
 						y = y + (40 * MenuScale)
 						
-						opt\MouseSmoothing = UpdateMainMenuSlideBar(x, y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
+						opt\MouseSmoothing = UpdateMenuSlideBar(x, y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
 						
 						y = y + (80 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
 						
 						If opt\CanOpenConsole Then
 							y = y + (20 * MenuScale)
 							
-							UpdateMainMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+							UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
 						EndIf
 						
 						Local TempKey%
@@ -7027,13 +7027,13 @@ Function UpdateMenu%()
 						;[End Block]
 					Case MenuTab_Options_Advanced
 						;[Block]
-						opt\HUDEnabled = UpdateMainMenuTick(x, y, opt\HUDEnabled)
+						opt\HUDEnabled = UpdateMenuTick(x, y, opt\HUDEnabled)
 						
 						y = y + (30 * MenuScale)
 						
 						Local PrevCanOpenConsole% = opt\CanOpenConsole
 						
-						opt\CanOpenConsole = UpdateMainMenuTick(x, y, opt\CanOpenConsole)
+						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
 						
 						If PrevCanOpenConsole Then
 							If PrevCanOpenConsole <> opt\CanOpenConsole Then ShouldDeleteGadgets = True
@@ -7041,26 +7041,26 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMainMenuTick(x, y, opt\ConsoleOpening)
+						If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMenuTick(x, y, opt\ConsoleOpening)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\AchvMsgEnabled = UpdateMainMenuTick(x, y, opt\AchvMsgEnabled)
+						opt\AchvMsgEnabled = UpdateMenuTick(x, y, opt\AchvMsgEnabled)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\AutoSaveEnabled = UpdateMainMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
+						opt\AutoSaveEnabled = UpdateMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\ShowFPS = UpdateMainMenuTick(x, y, opt\ShowFPS)
+						opt\ShowFPS = UpdateMenuTick(x, y, opt\ShowFPS)
 						
 						y = y + (30 * MenuScale)
 						
 						Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
 						
-						If UpdateMainMenuTick(x, y, opt\CurrFrameLimit > 0.0) Then
-							opt\CurrFrameLimit = UpdateMainMenuSlideBar(x - (120 * MenuScale), y + (40 * MenuScale), 100 * MenuScale, opt\CurrFrameLimit * 99.0, 1) / 99.0
+						If UpdateMenuTick(x, y, opt\CurrFrameLimit > 0.0) Then
+							opt\CurrFrameLimit = UpdateMenuSlideBar(x - (120 * MenuScale), y + (40 * MenuScale), 100 * MenuScale, opt\CurrFrameLimit * 99.0, 1) / 99.0
 							opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
 							opt\FrameLimit = 19 + (opt\CurrFrameLimit * 100.0)
 						Else
@@ -7074,19 +7074,19 @@ Function UpdateMenu%()
 						
 						y = y + (80 * MenuScale)
 						
-						opt\SmoothBars = UpdateMainMenuTick(x, y, opt\SmoothBars)
+						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\PlayStartup = UpdateMainMenuTick(x, y, opt\PlayStartup)
+						opt\PlayStartup = UpdateMenuTick(x, y, opt\PlayStartup)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\LauncherEnabled = UpdateMainMenuTick(x, y, opt\LauncherEnabled)
+						opt\LauncherEnabled = UpdateMenuTick(x, y, opt\LauncherEnabled)
 						
 						y = y + (40 * MenuScale)
 						
-						UpdateMainMenuButton(x - (270 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False, False, True)
+						UpdateMenuButton(x - (270 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False, False, True)
 						;[End Block]
 				End Select
 			EndIf
@@ -7099,7 +7099,7 @@ Function UpdateMenu%()
 				If CanSave < 2 Then AbleToSave = False
 				If AbleToSave Then
 					QuitButton = 160
-					If UpdateMainMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit")) Then
+					If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit")) Then
 						me\DropSpeed = 0.0
 						SaveGame(CurrSave\Name)
 						NullGame()
@@ -7110,14 +7110,14 @@ Function UpdateMenu%()
 				EndIf
 			EndIf
 			
-			If UpdateMainMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit")) Then
+			If UpdateMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit")) Then
 				NullGame()
 				CurrSave = Null
 				ResetInput()
 				Return
 			EndIf
 			
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
+			If UpdateMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
 				igm\AchievementsMenu = 0
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
@@ -7125,7 +7125,7 @@ Function UpdateMenu%()
 				ShouldDeleteGadgets = True
 			EndIf
 		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
-			If UpdateMainMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
+			If UpdateMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back")) Then
 				igm\AchievementsMenu = 0
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
@@ -7135,20 +7135,20 @@ Function UpdateMenu%()
 			
 			If igm\AchievementsMenu > 0 Then
 				If igm\AchievementsMenu <= Floor(Float(MAXACHIEVEMENTS - 1) / 12.0) Then
-					If UpdateMainMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">") Then
+					If UpdateMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">") Then
 						igm\AchievementsMenu = igm\AchievementsMenu + 1
 						ShouldDeleteGadgets = True
 					EndIf
 				Else
-					UpdateMainMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">", True, False, True)
+					UpdateMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">", True, False, True)
 				EndIf
 				If igm\AchievementsMenu > 1 Then
-					If UpdateMainMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<") Then
+					If UpdateMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<") Then
 						igm\AchievementsMenu = igm\AchievementsMenu - 1
 						ShouldDeleteGadgets = True
 					EndIf
 				Else
-					UpdateMainMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<", True, False, True)
+					UpdateMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<", True, False, True)
 				EndIf
 			EndIf
 		Else
@@ -7157,7 +7157,7 @@ Function UpdateMenu%()
 			If (Not me\Terminated) Lor me\SelectedEnding <> - 1 Then
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "resume"), True, True) Then
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "resume"), True, True) Then
 					ResumeSounds()
 					StopMouseMovement()
 					DeleteMenuGadgets()
@@ -7169,7 +7169,7 @@ Function UpdateMenu%()
 				
 				If SelectedDifficulty\SaveType <> NO_SAVES Then
 					If GameSaved Then
-						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load")) Then
+						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load")) Then
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
 							KillSounds()
@@ -7206,26 +7206,26 @@ Function UpdateMenu%()
 							Return
 						EndIf
 					Else
-						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), True, False, True)
+						UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), True, False, True)
 					EndIf
 					y = y + (75 * MenuScale)
 				EndIf
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements")) Then
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements")) Then
 					igm\AchievementsMenu = 1
 					ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "options")) Then
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "options")) Then
 					igm\OptionsMenu = 1
 					ShouldDeleteGadgets = True
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit")) Then
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit")) Then
 					igm\QuitMenu = 1
 					ShouldDeleteGadgets = True
 				EndIf
@@ -7234,7 +7234,7 @@ Function UpdateMenu%()
 				
 				If SelectedDifficulty\SaveType <> NO_SAVES Then
 					If GameSaved Then
-						If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load")) Then
+						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load")) Then
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
 							KillSounds()
@@ -7271,11 +7271,11 @@ Function UpdateMenu%()
 							Return
 						EndIf
 					Else
-						UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), True, False, True)
+						UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), True, False, True)
 					EndIf
 					y = y + (75 * MenuScale)
 				EndIf
-				If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quitmenu")) Then
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quitmenu")) Then
 					NullGame()
 					CurrSave = Null
 					ResetInput()
@@ -7787,14 +7787,14 @@ Function UpdateEnding%()
 					x = x + (132 * MenuScale)
 					y = y + (432 * MenuScale)
 					
-					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements"), True) Then
+					If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements"), True) Then
 						igm\AchievementsMenu = 1
 						ShouldDeleteGadgets = True
 					EndIf
 					
 					y = y + 75 * MenuScale
 					
-					If UpdateMainMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "mainmenu"), True)
+					If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "mainmenu"), True)
 						ShouldPlay = 24
 						NowPlaying = ShouldPlay
 						For i = 0 To 9
