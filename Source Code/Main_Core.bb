@@ -7200,6 +7200,7 @@ Function UpdateMenu%()
 							UpdateWorld(0.0)
 							
 							fps\Factor[0] = 0.0
+							fps\PrevTime = MilliSecs2()
 							
 							ResetInput()
 							MenuOpen = False
@@ -7265,6 +7266,7 @@ Function UpdateMenu%()
 							UpdateWorld(0.0)
 							
 							fps\Factor[0] = 0.0
+							fps\PrevTime = MilliSecs2()
 							
 							ResetInput()
 							MenuOpen = False

@@ -2103,15 +2103,16 @@ Function InitNewGame%()
 	
 	HidePointer()
 	
-	fps\Factor[0] = 0.0
-	
-	ResetInput()
-	
 	me\DropSpeed = 0.0
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
 	RenderLoading(100)
+	
+	fps\Factor[0] = 0.0
+	fps\PrevTime = MilliSecs2()
+	
+	ResetInput()
 	
 	CatchErrors("InitNewGame")
 End Function
@@ -2201,15 +2202,16 @@ Function InitLoadGame%()
 	
 	HidePointer()
 	
-	fps\Factor[0] = 0.0
-	
-	ResetInput()
-	
 	me\DropSpeed = 0.0
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
 	RenderLoading(100)
+	
+	fps\Factor[0] = 0.0
+	fps\PrevTime = MilliSecs2()
+	
+	ResetInput()
 	
 	CatchErrors("InitLoadGame")
 End Function
