@@ -143,7 +143,7 @@ Function UpdateMainMenu%()
 			Height = 70 * MenuScale
 			
 			RandomSeed = ""
-			If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "new")) Then
+			If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "new"), Font_Default_Big) Then
 				If opt\DebugMode Then
 					RandomSeed = "666"
 				Else
@@ -222,18 +222,18 @@ Function UpdateMainMenu%()
 			
 			y = y + (100 * MenuScale)
 			
-			If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "load")) Then
+			If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "load"), Font_Default_Big) Then
 				LoadSavedGames()
 				mm\MainMenuTab = MainMenuTab_Load_Game
 			EndIf
 			
 			y = y + (100 * MenuScale)
 			
-			If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "options")) Then mm\MainMenuTab = MainMenuTab_Options
+			If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "options"), Font_Default_Big) Then mm\MainMenuTab = MainMenuTab_Options
 			
 			y = y + (100 * MenuScale)
 			
-			If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "quit")) Then
+			If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "quit"), Font_Default_Big) Then
 				StopStream_Strict(MusicCHN) : MusicCHN = 0
 				End()
 			EndIf
@@ -246,7 +246,7 @@ Function UpdateMainMenu%()
 						;[Block]
 						Height = 345 * MenuScale
 						
-						CurrSave\Name = UpdateMenuInputBox(x + (150 * MenuScale), y + (15 * MenuScale), 200 * MenuScale, 30 * MenuScale, CurrSave\Name, 1, 15)
+						CurrSave\Name = UpdateMenuInputBox(x + (150 * MenuScale), y + (15 * MenuScale), 200 * MenuScale, 30 * MenuScale, CurrSave\Name, Font_Default, 1, 15)
 						If SelectedInputBox = 1 Then
 							CurrSave\Name = Replace(CurrSave\Name, ":", "")
 							CurrSave\Name = Replace(CurrSave\Name, ".", "")
@@ -262,9 +262,9 @@ Function UpdateMainMenu%()
 						EndIf
 						
 						If SelectedCustomMap = Null Then
-							RandomSeed = UpdateMenuInputBox(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, RandomSeed, 2, 15)
+							RandomSeed = UpdateMenuInputBox(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, RandomSeed, Font_Default, 2, 15)
 						Else
-							If UpdateMenuButton(x + (370 * MenuScale), y + (55 * MenuScale), 120 * MenuScale, 30 * MenuScale, GetLocalString("menu", "deselect"), False) Then
+							If UpdateMenuButton(x + (370 * MenuScale), y + (55 * MenuScale), 120 * MenuScale, 30 * MenuScale, GetLocalString("menu", "deselect")) Then
 								ShouldDeleteGadgets = True
 								SelectedCustomMap = Null
 							EndIf
@@ -284,7 +284,7 @@ Function UpdateMainMenu%()
 						
 						If SelectedDifficulty\Customizable Then
 							; ~ Save type
-							If UpdateMenuButton(x + (160 * MenuScale), y + (180 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False) Then
+							If UpdateMenuButton(x + (160 * MenuScale), y + (180 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">") Then
 								If SelectedDifficulty\SaveType < NO_SAVES Then
 									SelectedDifficulty\SaveType = SelectedDifficulty\SaveType + 1
 								Else
@@ -296,16 +296,16 @@ Function UpdateMainMenu%()
 							SelectedDifficulty\AggressiveNPCs = UpdateMenuTick(x + (160 * MenuScale), y + (210 * MenuScale), SelectedDifficulty\AggressiveNPCs)
 							
 							; ~ Inventory slots
-							If UpdateMenuButton(x + (405 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, "<", False) Then
+							If UpdateMenuButton(x + (405 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, "<") Then
 								SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots - 2
 								If SelectedDifficulty\InventorySlots <= 0 Then SelectedDifficulty\InventorySlots = 10
-							ElseIf UpdateMenuButton(x + (160 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False)
+							ElseIf UpdateMenuButton(x + (160 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">")
 								SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots + 2
 								If SelectedDifficulty\InventorySlots > 10 Then SelectedDifficulty\InventorySlots = 2
 							EndIf
 							
 							; ~ Other factor's difficulty
-							If UpdateMenuButton(x + (160 * MenuScale), y + (270 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">", False) Then
+							If UpdateMenuButton(x + (160 * MenuScale), y + (270 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">") Then
 								If SelectedDifficulty\OtherFactors < EXTREME Then
 									SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
 								Else
@@ -314,12 +314,12 @@ Function UpdateMainMenu%()
 							EndIf
 						EndIf
 						
-						If UpdateMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "loadmap"), False) Then
+						If UpdateMenuButton(x, y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "loadmap")) Then
 							LoadCustomMaps()
 							mm\MainMenuTab = MainMenuTab_Load_Map
 						EndIf
 						
-						If UpdateMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start"), False) Then
+						If UpdateMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start")) Then
 							If CurrSave\Name = "" Then CurrSave\Name = ConvertToANSI(GetLocalString("save", "untitled"))
 							
 							If RandomSeed = "" Then RandomSeed = MilliSecs2()
@@ -363,14 +363,14 @@ Function UpdateMainMenu%()
 						Height = 296 * MenuScale
 						
 						If mm\CurrMenuPage < Ceil(Float(SavedGamesAmount) / 5.0) - 1 And DelSave = Null Then
-							If UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
+							If UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big) Then ChangePage(mm\CurrMenuPage + 1)
 						Else
-							UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+							UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big, False, True)
 						EndIf
 						If mm\CurrMenuPage > 0 And DelSave = Null Then
-							If UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then ChangePage(mm\CurrMenuPage - 1)
+							If UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", Font_Default_Big) Then ChangePage(mm\CurrMenuPage - 1)
 						Else
-							UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+							UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", Font_Default_Big, False, True)
 						EndIf
 						If mm\CurrMenuPage > Ceil(Float(SavedGamesAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
 						
@@ -386,9 +386,9 @@ Function UpdateMainMenu%()
 								If i >= (5 * mm\CurrMenuPage) Then
 									If DelSave = Null Then
 										If CurrSave\Version <> VersionNumber Then
-											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True, 255, 0, 0)
+											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True, 255, 0, 0)
 										Else
-											If UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False) Then
+											If UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload")) Then
 												LoadEntities()
 												LoadSounds()
 												LoadGame(CurrSave\Name)
@@ -399,17 +399,17 @@ Function UpdateMainMenu%()
 											EndIf
 										EndIf
 										
-										If UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False) Then
+										If UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete")) Then
 											DelSave = CurrSave
 											Exit
 										EndIf
 									Else
 										If CurrSave\Version <> VersionNumber Then
-											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True, 255, 0, 0)
+											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True, 255, 0, 0)
 										Else
-											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True)
+											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True)
 										EndIf
-										UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False, False, True)
+										UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), Font_Default, False, True)
 									EndIf
 									If CurrSave = Last Save Then Exit
 									y = y + (80 * MenuScale)
@@ -420,11 +420,11 @@ Function UpdateMainMenu%()
 								x = 739 * MenuScale
 								y = 376 * MenuScale
 								
-								If UpdateMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "yes"), False) Then
+								If UpdateMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "yes")) Then
 									DeleteGame(DelSave)
 									ShouldDeleteGadgets = True
 								EndIf
-								If UpdateMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "no"), False) Then
+								If UpdateMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "no")) Then
 									DelSave = Null
 									ShouldDeleteGadgets = True
 								EndIf
@@ -436,14 +436,14 @@ Function UpdateMainMenu%()
 						Height = 350 * MenuScale
 						
 						If mm\CurrMenuPage < Ceil(Float(CustomMapsAmount) / 5.0) - 1 And DelCustomMap = Null Then
-							If UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">") Then ChangePage(mm\CurrMenuPage + 1)
+							If UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big) Then ChangePage(mm\CurrMenuPage + 1)
 						Else
-							UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", True, False, True)
+							UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big, False, True)
 						EndIf
 						If mm\CurrMenuPage > 0 And DelCustomMap = Null Then
-							If UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<") Then ChangePage(mm\CurrMenuPage - 1)
+							If UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", Font_Default_Big) Then ChangePage(mm\CurrMenuPage - 1)
 						Else
-							UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", True, False, True)
+							UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", Font_Default_Big, False, True)
 						EndIf
 						If mm\CurrMenuPage > Ceil(Float(CustomMapsAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
 						
@@ -458,19 +458,19 @@ Function UpdateMainMenu%()
 								If CurrCustomMap = Null Then Exit
 								If i >= (5 * mm\CurrMenuPage) Then
 									If DelCustomMap = Null Then
-										If UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False) Then
+										If UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload")) Then
 											SelectedCustomMap = CurrCustomMap
 											mm\MainMenuTab = MainMenuTab_New_Game
 											ShouldDeleteGadgets = True
 										EndIf
 										
-										If UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False) Then
+										If UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete")) Then
 											DelCustomMap = CurrCustomMap
 											Exit
 										EndIf
 									Else
-										UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), False, False, True)
-										UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), False, False, True)
+										UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True)
+										UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), Font_Default, False, True)
 									EndIf
 									If CurrCustomMap = Last CustomMaps Then Exit
 									y = y + (80 * MenuScale)
@@ -481,11 +481,11 @@ Function UpdateMainMenu%()
 								x = 739 * MenuScale
 								y = 376 * MenuScale
 								
-								If UpdateMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "yes"), False) Then
+								If UpdateMenuButton(x + (74 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "yes")) Then
 									DeleteCustomMap(DelCustomMap)
 									ShouldDeleteGadgets = True
 								EndIf
-								If UpdateMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "no"), False) Then
+								If UpdateMenuButton(x + (246 * MenuScale), y + (150 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "no")) Then
 									DelCustomMap = Null
 									ShouldDeleteGadgets = True
 								EndIf
@@ -496,10 +496,10 @@ Function UpdateMainMenu%()
 						;[Block]
 						Height = 60 * MenuScale
 						
-						If UpdateMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "grap"), False) Then ChangeOptionTab(MainMenuTab_Options_Graphics)
-						If UpdateMenuButton(x + (160 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "audio"), False) Then ChangeOptionTab(MainMenuTab_Options_Audio)
-						If UpdateMenuButton(x + (300 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "ctrl"), False) Then ChangeOptionTab(MainMenuTab_Options_Controls)
-						If UpdateMenuButton(x + (440 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "avc"), False) Then ChangeOptionTab(MainMenuTab_Options_Advanced)
+						If UpdateMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "grap")) Then ChangeOptionTab(MainMenuTab_Options_Graphics)
+						If UpdateMenuButton(x + (160 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "audio")) Then ChangeOptionTab(MainMenuTab_Options_Audio)
+						If UpdateMenuButton(x + (300 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "ctrl")) Then ChangeOptionTab(MainMenuTab_Options_Controls)
+						If UpdateMenuButton(x + (440 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "avc")) Then ChangeOptionTab(MainMenuTab_Options_Advanced)
 						;[End Block]
 				End Select
 			Else
@@ -655,7 +655,7 @@ Function UpdateMainMenu%()
 							
 							opt\UserTrackMode = UpdateMenuTick(x, y, opt\UserTrackMode)
 							
-							If UpdateMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), False)
+							If UpdateMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"))
 								UserTrackCheck = 0
 								UserTrackCheck2 = 0
 								
@@ -700,15 +700,15 @@ Function UpdateMainMenu%()
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorR = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), 14, 3), 255.0)
+							opt\SubColorR = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), Font_Default, 14, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorG = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), 15, 3), 255.0)
+							opt\SubColorG = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), Font_Default, 15, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorB = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), 16, 3), 255.0)
+							opt\SubColorB = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), Font_Default, 16, 3), 255.0)
 							
 							y = y + (40 * MenuScale)
 						EndIf
@@ -733,33 +733,33 @@ Function UpdateMainMenu%()
 						
 						y = y + (80 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], 3)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], 8)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], Font_Default, 3)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], Font_Default, 8)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], 4)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], 9)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], Font_Default, 4)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], Font_Default, 9)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], 5)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], 10)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], Font_Default, 5)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], Font_Default, 10)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], 6)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], 11)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], Font_Default, 6)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], Font_Default, 11)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], 7)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], 13)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], Font_Default, 7)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], Font_Default, 13)
 						
 						If opt\CanOpenConsole Then
 							y = y + (20 * MenuScale)
 							
-							UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], 12)
+							UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], Font_Default, 12)
 						EndIf
 						
 						Local TempKey%
@@ -883,7 +883,7 @@ Function UpdateMainMenu%()
 						
 						y = y + (40 * MenuScale)
 						
-						If UpdateMenuButton(x - (290 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), False) Then
+						If UpdateMenuButton(x - (290 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset")) Then
 							ResetOptionsINI()
 							SaveOptionsINI(True)
 						EndIf
@@ -903,7 +903,7 @@ Function UpdateMainMenu%()
 			EndIf
 			
 			If DelSave = Null And DelCustomMap = Null Then
-				If UpdateMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False) Lor KeyDown(1) Then
+				If UpdateMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back")) Lor KeyDown(1) Then
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
 							;[Block]
@@ -957,7 +957,7 @@ Function UpdateMainMenu%()
 					ResetInput()
 				EndIf
 			Else
-				UpdateMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), False, False, True)
+				UpdateMenuButton(x + Width + (20 * MenuScale), y, (580 * MenuScale) - Width - (20 * MenuScale), Height, GetLocalString("menu", "back"), Font_Default, False, True)
 			EndIf
 		EndIf
 	Wend
@@ -1977,12 +1977,12 @@ End Function
 Type MenuButton
 	Field x%, y%, Width%, Height%
 	Field Txt$
-	Field BigFont%
+	Field FontID%
 	Field Locked%
 	Field R%, G%, B%
 End Type
 
-Function UpdateMenuButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
+Function UpdateMenuButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
 	Local mb.MenuButton, currMButton.MenuButton
 	Local Clicked% = False
 	Local ButtonExists% = False
@@ -2000,7 +2000,7 @@ Function UpdateMenuButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitF
 		mb\Width = Width
 		mb\Height = Height
 		mb\Txt = Txt
-		mb\BigFont = BigFont
+		mb\FontID = FontID
 		mb\Locked = Locked
 		mb\R = R
 		mb\B = B
@@ -2008,6 +2008,7 @@ Function UpdateMenuButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitF
 	Else
 		currMButton = mb
 		currMButton\Txt = Txt
+		currMButton\FontID = FontID
 		currMButton\Locked = Locked
 	EndIf
 	
@@ -2045,11 +2046,7 @@ Function RenderMenuButtons%()
 		Else
 			Color(mb\R, mb\G, mb\B)
 		EndIf
-		If mb\BigFont Then
-			SetFont2(fo\FontID[Font_Default_Big])
-		Else
-			SetFont2(fo\FontID[Font_Default])
-		EndIf
+		SetFont2(fo\FontID[mb\FontID])
 		Text2(mb\x + (mb\Width / 2), mb\y + (mb\Height / 2), mb\Txt, True, True)
 	Next
 End Function
@@ -2079,8 +2076,8 @@ Function UpdateMenuTick%(x%, y%, Selected%, Locked% = False)
 		mt\Locked = Locked
 	Else
 		currTick = mt
-		mt\Selected = Selected
-		mt\Locked = Locked
+		currTick\Selected = Selected
+		currTick\Locked = Locked
 	EndIf
 	
 	Local Highlight% = MouseOn(x, y, Width, Height)
@@ -2260,11 +2257,11 @@ End Function
 
 Type MenuInputBox
 	Field x%, y%, Width%, Height%
-	Field Txt$
+	Field Txt$, FontID%
 	Field ID%
 End Type
 
-Function UpdateMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr% = 0)
+Function UpdateMenuInputBox$(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, ID% = 0, MaxChr% = 0)
 	Local mib.MenuInputBox, currInputBox.MenuInputBox
 	Local InputBoxExists% = False
 	
@@ -2281,10 +2278,12 @@ Function UpdateMenuInputBox$(x%, y%, Width%, Height%, Txt$, ID% = 0, MaxChr% = 0
 		mib\Width = Width
 		mib\Height = Height
 		mib\Txt = Txt
+		mib\FontID = FontID
 		mib\ID = ID
 	Else
 		currInputBox = mib
 		currInputBox\Txt = Txt
+		currInputBox\FontID = FontID
 	EndIf
 	
 	Local MouseOnBox% = False
@@ -2324,7 +2323,7 @@ Function RenderMenuInputBoxes%()
 			If ((MilliSecs2() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf
 		
-		SetFont2(fo\FontID[Font_Default])
+		SetFont2(fo\FontID[mib\FontID])
 		Text2(mib\x + (mib\Width / 2), mib\y + (mib\Height / 2), mib\Txt, True, True)
 	Next
 End Function
@@ -2610,11 +2609,11 @@ Function UpdateMenuScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarHeigh
 		msb\Locked = Locked
 	Else
 		currScrollBar = msb
-		msb\Width = Width
-		msb\Height = Height
-		msb\Value = Value
-		msb\Vertical = Vertical
-		msb\Locked = Locked
+		currScrollBar\Width = Width
+		currScrollBar\Height = Height
+		currScrollBar\Value = Value
+		currScrollBar\Vertical = Vertical
+		currScrollBar\Locked = Locked
 	EndIf
 	
 	Local MouseSpeedX# = MouseXSpeed()
