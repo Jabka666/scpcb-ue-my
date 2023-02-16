@@ -2335,7 +2335,7 @@ Function UpdateGame%()
 						mo\DoubleClickSlot = -1
 					EndIf
 					InvOpen = (Not InvOpen)
-					If OtherOpen <> Null Then OtherOpen = Null
+					OtherOpen = Null
 					SelectedItem = Null
 				EndIf
 			EndIf
@@ -3465,6 +3465,11 @@ Function UpdateGUI%()
 							SelectedItem = OtherOpen\SecondInv[n]
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
+								If SelectedItem\ItemTemplate\TempName = "scp714" Then
+									CreateMsg(GetLocalString("msg", "wallet.714"))
+									SelectedItem = Null
+									Return
+								EndIf
 								If OtherOpen\SecondInv[n]\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[OtherOpen\SecondInv[n]\ItemTemplate\Sound])
 								OtherOpen = Null
 								ClosedInv = True
@@ -3538,7 +3543,7 @@ Function UpdateGUI%()
 								If OtherOpen\SecondInv[z] <> Null Then
 									Local Name$ = OtherOpen\SecondInv[z]\ItemTemplate\TempName
 									
-									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp500pill" And Name <> "scp500pilldeath" And Name <> "pill" Then
+									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp714" And Name <> "scp500pill" And Name <> "scp500pilldeath" And Name <> "pill" Then
 										IsEmpty = False
 										Exit
 									EndIf
@@ -3726,6 +3731,24 @@ Function UpdateGUI%()
 								If (Not mo\MouseHit2) Then InvOpen = False
 							EndIf
 							;[End Block]
+						Case "scp714"
+							;[Block]
+							If I_714\Using Then
+								CreateHintMsg(GetLocalString("msg", "takeoff"))
+							Else
+								DropItem(SelectedItem)
+								If (Not mo\MouseHit2) Then InvOpen = False
+							EndIf
+							;[End Block]
+						Case "scp427"
+							;[Block]
+							If I_427\Using Then
+								CreateHintMsg(GetLocalString("msg", "takeoff"))
+							Else
+								DropItem(SelectedItem)
+								If (Not mo\MouseHit2) Then InvOpen = False
+							EndIf
+							;[End Block]
 						Default
 							;[Block]
 							DropItem(SelectedItem)
@@ -3751,15 +3774,15 @@ Function UpdateGUI%()
 						PrevItem = Inventory(MouseSlot)
 						
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "oldpaper", "badge", "oldbadge", "ticket", "25ct", "coin", "key", "scp860", "scp500pill", "scp500pilldeath", "pill"
+							Case "paper", "oldpaper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "badge", "oldbadge", "ticket", "25ct", "coin", "key", "scp860", "scp714", "scp500pill", "scp500pilldeath", "pill"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
-									; ~ Add an item to wallet
+									; ~ Add an item to clipboard
 									Local added.Items = Null
 									Local b$ = SelectedItem\ItemTemplate\TempName
 									Local c%, ri%
 									
-									If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then
+									If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp714" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If Inventory(MouseSlot)\SecondInv[c] = Null Then
 												If SelectedItem <> Null Then
@@ -3802,29 +3825,33 @@ Function UpdateGUI%()
 										Inventory(MouseSlot) = SelectedItem
 									EndIf
 								ElseIf Inventory(MouseSlot)\ItemTemplate\TempName = "wallet" Then
-									; ~ Add an item to clipboard
+									; ~ Add an item to wallet
 									added.Items = Null
 									b = SelectedItem\ItemTemplate\TempName
 									If b <> "paper" And b <> "oldpaper" Then
+										If SelectedItem\ItemTemplate\TempName = "scp714" And I_714\Using Then
+											CreateMsg(GetLocalString("msg", "takeoff"))
+											SelectedItem = Null
+											Return
+										EndIf
+										
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If Inventory(MouseSlot)\SecondInv[c] = Null Then
-												If SelectedItem <> Null Then
-													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
-													Inventory(MouseSlot)\State = 1.0
-													If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
-													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
-													
-													For ri = 0 To MaxItemAmount - 1
-														If Inventory(ri) = SelectedItem Then
-															Inventory(ri) = Null
-															PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
-															Exit
-														EndIf
-													Next
-													added = SelectedItem
-													SelectedItem = Null
-													Exit
-												EndIf
+												Inventory(MouseSlot)\SecondInv[c] = SelectedItem
+												Inventory(MouseSlot)\State = 1.0
+												If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp714" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
+												Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
+												
+												For ri = 0 To MaxItemAmount - 1
+													If Inventory(ri) = SelectedItem Then
+														Inventory(ri) = Null
+														PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+														Exit
+													EndIf
+												Next
+												added = SelectedItem
+												SelectedItem = Null
+												Exit
 											EndIf
 										Next
 										If SelectedItem <> Null Then

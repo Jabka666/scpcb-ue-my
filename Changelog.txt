@@ -67,6 +67,8 @@ Items:
 	- Very fine variations of these items no longer grant infinite stamina. Stamina is doubled.
 	- You can now wear SCP-714 and the Hazmat Suit at the same time, but only if SCP-714 was worn before the hazmat suit.
 	- Reduced defense time against SCP-049, but added for Hazmat Suit combined with SCP-148.
+- SCP-714 can be put into the wallet.
+- SCP-427 and SCP-714 cannot be dropped anymore without taking it off.
 
 Menu:
 - Added degree symbol for FOV value.
