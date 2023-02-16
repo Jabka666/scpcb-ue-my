@@ -1120,8 +1120,6 @@ Function LoadGame%(File$)
 			Case e_dimension_1499
 				;[Block]
 				If e\EventState > 0.0 Then
-					e\EventState = 0.0
-					e\EventStr = ""
 					HideChunks()
 					DeleteChunks()
 					For n.NPCs = Each NPCs
@@ -1135,6 +1133,9 @@ Function LoadGame%(File$)
 					For du.Dummy1499_1 = Each Dummy1499_1
 						Delete(du)
 					Next
+					
+					e\EventStr = ""
+					e\EventState = 0.0
 				EndIf
 				;[End Block]
 			Case e_cont2_860_1, e_cont1_205

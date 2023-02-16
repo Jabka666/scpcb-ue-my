@@ -9110,7 +9110,7 @@ Function SetChunkDataValues%()
 	
 	For i = 0 To 63
 		For j = 0 To 63
-			CHUNKDATA[i + (j * 64)] = Rand(0, IniGetInt("Data\1499chunks.ini", "general", "count"))
+			CHUNKDATA[i + (j * 64)] = Rand(0, IniGetInt(SCP1499ChunksFile, "general", "count"))
 		Next
 	Next
 	
@@ -9187,7 +9187,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	ch\IsSpawnChunk = IsSpawnChunk
 	
 	If OBJ > -1 Then
-		ch\Amount = IniGetInt("Data\1499chunks.ini", "chunk" + OBJ, "count")
+		ch\Amount = IniGetInt(SCP1499ChunksFile, "chunk" + OBJ, "count")
 		For chp.ChunkPart = Each ChunkPart
 			If chp\ID = OBJ
 				For i = 0 To ch\Amount
@@ -9206,7 +9206,7 @@ End Function
 
 Const ChunkMaxDistance# = 120.0
 
-Function UpdateChunks%(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
+Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	Local ch.Chunk, ch2.Chunk, n.NPCs
 	Local StrTemp$, i%, j%, x#, z#, y#
 	Local ChunkX#, ChunkZ#
@@ -9218,7 +9218,7 @@ Function UpdateChunks%(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	x = (-ChunkMaxDistance) + (ChunkX * 40.0)
 	z = (-ChunkMaxDistance) + (ChunkZ * 40.0)
 	
-	Local CurrChunkData% = 0, MaxChunks% = IniGetInt("Data\1499chunks.ini", "general", "count")
+	Local CurrChunkData% = 0, MaxChunks% = IniGetInt(SCP1499ChunksFile, "general", "count")
 	
 	Repeat
 		Local ChunkFound% = False
@@ -9244,6 +9244,10 @@ Function UpdateChunks%(r.Rooms, ChunkPartAmount%, SpawnNPCs% = True)
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk) Then
 			If DistanceSquared(EntityX(me\Collider), EntityX(ch\ChunkPivot), EntityZ(me\Collider), EntityZ(ch\ChunkPivot)) > PowTwo(ChunkMaxDistance)
+				For i = 0 To ch\Amount
+					FreeEntity(ch\OBJ[i]) : ch\OBJ[i] = 0
+				Next
+				FreeEntity(ch\PlatForm) : ch\PlatForm = 0
 				FreeEntity(ch\ChunkPivot) : ch\ChunkPivot = 0
 				Delete(ch)
 			EndIf

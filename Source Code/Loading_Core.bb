@@ -1635,6 +1635,8 @@ Function LoadEntities%()
 	achv.Achievements = New Achievements
 	igm.InGameMenu = New InGameMenu
 	
+	t.Textures = New Textures
+	
 	RenderLoading(3, GetLocalString("loading", "player"))
 	
 	SoundEmitter = CreatePivot()
@@ -2167,6 +2169,7 @@ Function InitLoadGame%()
 			If e\EventState = 2.0 Then
 				e\room\Objects[0] = LoadMesh_Strict("GFX\Map\dimension1499\1499plane.b3d")
 				HideEntity(e\room\Objects[0])
+				e\room\HideObject[0] = False
 				
 				I_1499\Sky = CreateSky("GFX\Map\sky\1499sky")
 				

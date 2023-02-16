@@ -583,6 +583,7 @@ Function QuickLoadEvents%()
 					QuickLoadPercent = 10
 					e\room\Objects[0] = LoadMesh_Strict("GFX\Map\dimension1499\1499plane.b3d")
 					HideEntity(e\room\Objects[0])
+					e\room\HideObject[0] = False
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
 					QuickLoadPercent = 30
@@ -7805,6 +7806,7 @@ Function UpdateEvents%()
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 					HideEntity(I_1499\Sky)
 					HideChunks()
+					HideRoomsNoColl(e\room)
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1 Then RemoveNPC(n)
 					Next
@@ -8715,7 +8717,7 @@ Function UpdateDimension1499%()
 				Next
 				ShowRoomsNoColl(e\room)
 				If QuickLoadPercent = 100 Lor QuickLoadPercent = -1 Then
-					UpdateChunks(e\room, 15)
+					UpdateChunks(15)
 					If EntityHidden(I_1499\Sky) Then ShowEntity(I_1499\Sky)
 					UpdateSky(I_1499\Sky)
 					ShouldPlay = 18
@@ -8848,6 +8850,7 @@ Function UpdateDimension1499%()
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 					HideEntity(I_1499\Sky)
 					HideChunks()
+					HideRoomsNoColl(e\room)
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1 Then RemoveNPC(n)
 					Next

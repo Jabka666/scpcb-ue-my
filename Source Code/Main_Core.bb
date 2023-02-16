@@ -8276,7 +8276,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	
 	Delete(t)
-	t.Textures = New Textures
 	
 	DeleteChunks()
 	
