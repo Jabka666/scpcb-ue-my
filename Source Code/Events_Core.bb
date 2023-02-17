@@ -3759,7 +3759,7 @@ Function UpdateEvents%()
 								PositionEntity(Pvt, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
 								PointEntity(Pvt, me\Collider)
 								If WrapAngle(EntityYaw(Pvt) - EntityYaw(n_I\Curr106\Collider)) < 80.0 Then
-									n_I\Curr106\State = -11.0 : n_I\Curr106\Idle = 0
+									n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 									PlaySound_Strict(HorrorSFX[10])
 									e\EventState = 260.0
 								EndIf
@@ -3956,7 +3956,7 @@ Function UpdateEvents%()
 							me\HeartBeatVolume = CurveValue(0.5, me\HeartBeatVolume, 5.0)
 							me\HeartBeatRate = CurveValue(120.0, me\HeartBeatRate, 150.0) 
 							e\SoundCHN = LoopSound2(OldManSFX[4], e\SoundCHN, Camera, e\room\OBJ, 5.0, 0.3)
-							n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
+							If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
 							InjurePlayer(fps\Factor[0] * 0.00005)
 						EndIf
 					EndIf
@@ -5538,7 +5538,7 @@ Function UpdateEvents%()
 										ResetEntity(n_I\Curr106\Collider)
 										n_I\Curr106\Contained = False
 										ShowEntity(n_I\Curr106\OBJ)
-										n_I\Curr106\State = -11.0 : n_I\Curr106\Idle = 0
+										n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 										e\EventState = 2.0
 										Exit
 									EndIf
@@ -5550,7 +5550,7 @@ Function UpdateEvents%()
 									If (Not EntityHidden(n_I\Curr106\OBJ2)) Then HideEntity(n_I\Curr106\OBJ2)
 									
 									RotateEntity(n_I\Curr106\Collider, 0.0, EntityYaw(e\room\Objects[1], True) + 180.0, 0.0, True)
-									n_I\Curr106\State = -11.0 : n_I\Curr106\Idle = 1
+									n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 1
 									AnimateNPC(n_I\Curr106, 206.0, 250.0, 0.1)
 									
 									If e\EventState3 - fps\Factor[0] < 2500.0 Then 
@@ -5578,7 +5578,7 @@ Function UpdateEvents%()
 											ResetEntity(n_I\Curr106\Collider)
 											n_I\Curr106\Contained = False
 											ShowEntity(n_I\Curr106\OBJ)
-											n_I\Curr106\State = -11.0 : n_I\Curr106\Idle = 0
+											n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 											
 											e\EventState = 2.0
 											Exit
@@ -6740,9 +6740,6 @@ Function UpdateEvents%()
 					If e\EventState > 0.0 Then
 						e\EventState = e\EventState + fps\Factor[0]
 						
-						CanSave = 0
-						If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
-						
 						e\room\RoomDoors[1]\Open = False
 						If e\EventState > 70.0 * 2.0 Then
 							If e\room\RoomDoors[0]\Open Then e\room\RoomDoors[0]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[0]\OBJ)
@@ -6828,8 +6825,12 @@ Function UpdateEvents%()
 							e\room\RoomDoors[1]\SoundCHN = PlaySound2(OpenSFX914, Camera, e\room\RoomDoors[1]\OBJ)
 						EndIf
 					EndIf
+					If (Not e\room\RoomDoors[1]\Open) Then
+						CanSave = 0
+						If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
+					EndIf
+					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
 				EndIf
-				UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
 				;[End Block]
 			Case e_1048_a
 				;[Block]
@@ -7922,7 +7923,7 @@ Function UpdateEvents%()
 								
 								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 								ResetEntity(n_I\Curr106\Collider)
-								n_I\Curr106\State = -11.0
+								n_I\Curr106\State = -10.0
 								ShowEntity(n_I\Curr106\OBJ)
 								
 								e\EventState = 1.0
