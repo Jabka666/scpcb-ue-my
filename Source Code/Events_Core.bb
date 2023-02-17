@@ -465,7 +465,6 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 	Return(Null)
 End Function
 
-Global QuickLoadIcon%
 Global QuickLoadPercent% = -1
 Global QuickLoadPercent_DisplayTimer# = 0.0
 Global QuickLoad_CurrEvent.Events
@@ -489,8 +488,8 @@ End Function
 
 Function RenderQuickLoading%()
 	If QuickLoadPercent > -1 Then
-		MidHandle(QuickLoadIcon)
-		DrawImage(QuickLoadIcon, opt\GraphicWidth - (90 * MenuScale), opt\GraphicHeight - (150 * MenuScale))
+		MidHandle(t\IconID[8])
+		DrawImage(t\IconID[8], opt\GraphicWidth - (90 * MenuScale), opt\GraphicHeight - (150 * MenuScale))
 		Color(255, 255, 255)
 		SetFont2(fo\FontID[Font_Default])
 		Text2(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - (90 * MenuScale), Format(GetLocalString("loading", "loading"), QuickLoadPercent), True)
@@ -5490,7 +5489,7 @@ Function UpdateEvents%()
 							
 							Local LeverState# = UpdateLever(e\room\RoomLevers[0]\OBJ, ((EntityY(e\room\Objects[2], True) < -8318.0 * RoomScale) And (EntityY(e\room\Objects[2], True) > -8603.0 * RoomScale)))
 							
-							If GrabbedEntity = e\room\RoomLevers[0]\OBJ And ga\DrawHandIcon = True Then e\EventState2 = LeverState
+							If GrabbedEntity = e\room\RoomLevers[0]\OBJ And DrawHandIcon = True Then e\EventState2 = LeverState
 							
 							If e\EventState2 <> Temp Then
 								If e\EventState2 = 0.0 Then
@@ -6626,10 +6625,10 @@ Function UpdateEvents%()
 					If e\EventState2 = 1.0 Then ShouldPlay = 22
 					EntityPick(Camera, 1.0)
 					If PickedEntity() = e\room\Objects[0] Then
-						ga\DrawHandIcon = True
+						DrawHandIcon = True
 						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[0]
 					ElseIf PickedEntity() = e\room\Objects[1]
-						ga\DrawHandIcon = True
+						DrawHandIcon = True
 						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[1]
 					EndIf
 					
@@ -6637,12 +6636,12 @@ Function UpdateEvents%()
 						If GrabbedEntity <> 0 Then ; ~ Avain
 							If GrabbedEntity = e\room\Objects[0] Then
 								If e\EventState = 0.0 Then
-									ga\DrawHandIcon = True
+									DrawHandIcon = True
 									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[0]))
-									If Angle > 181.0 Then ga\DrawArrowIcon[3] = True
-									ga\DrawArrowIcon[1] = True
+									If Angle > 181.0 Then DrawArrowIcon[3] = True
+									DrawArrowIcon[1] = True
 									
 									If Angle < 90.0 Then
 										RotateEntity(GrabbedEntity, 0.0, 0.0, 361.0)
@@ -6667,12 +6666,12 @@ Function UpdateEvents%()
 								EndIf
 							ElseIf GrabbedEntity = e\room\Objects[1]
 								If e\EventState = 0.0 Then
-									ga\DrawHandIcon = True
+									DrawHandIcon = True
 									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[1]))
-									ga\DrawArrowIcon[3] = True
-									ga\DrawArrowIcon[1] = True
+									DrawArrowIcon[3] = True
+									DrawArrowIcon[1] = True
 									
 									If Angle > 90.0 Then
 										If Angle < 180.0 Then

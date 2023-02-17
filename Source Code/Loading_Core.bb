@@ -1599,6 +1599,23 @@ Function LoadWayPoints%(LoadingStart% = 55)
 	Next
 End Function
 
+; ~ Textures Constants
+;[Block]
+Const MaxOverlayTextureIDAmount% = 13
+Const MaxOverlayIDAmount% = 11
+Const MaxIconIDAmount% = 8
+Const MaxImageIDAmount% = 12
+;[End Block]
+
+Type Textures
+	Field IconID%[MaxIconIDAmount]
+	Field ImageID%[MaxImageIDAmount]
+	Field OverlayTextureID%[MaxOverlayTextureIDAmount]
+	Field OverlayID%[MaxOverlayIDAmount]
+End Type
+
+Global t.Textures
+
 Function LoadEntities%()
 	CatchErrors("Uncaught (LoadEntities)")
 	
@@ -1675,8 +1692,8 @@ Function LoadEntities%()
 	t\IconID[7] = LoadImage_Strict("GFX\HUD\shield_icon.png")
 	t\IconID[7] = ScaleImage2(t\IconID[7], MenuScale, MenuScale)
 	
-	QuickLoadIcon = LoadImage_Strict("GFX\Menu\QuickLoading.png")
-	QuickLoadIcon = ScaleImage2(QuickLoadIcon, MenuScale, MenuScale)
+	t\IconID[8] = LoadImage_Strict("GFX\Menu\QuickLoading.png")
+	t\IconID[8] = ScaleImage2(t\IconID[8], MenuScale, MenuScale)
 	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvName")
@@ -1714,6 +1731,12 @@ Function LoadEntities%()
 	
 	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
+	For i = 0 To 3
+		t\ImageID[i + 8] = LoadImage_Strict("GFX\Menu\arrow.png")
+		t\ImageID[i + 8] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
+		RotateImage(t\ImageID[i + 8], i * 90.0)
+		HandleImage(t\ImageID[i + 8], 0, 0)
+	Next
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
 	LoadMissingTexture()

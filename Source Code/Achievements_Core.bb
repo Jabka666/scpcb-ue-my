@@ -8,7 +8,7 @@ Type Achievements
 	Field AchvLocked%
 End Type
 
-Global achv.Achievements = New Achievements
+Global achv.Achievements
 
 Global UsedConsole%
 

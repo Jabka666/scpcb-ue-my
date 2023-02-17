@@ -2039,7 +2039,7 @@ Type BrokenDoor
 	Field z#
 End Type
 
-Global bk.BrokenDoor = New BrokenDoor
+Global bk.BrokenDoor
 
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
@@ -3598,7 +3598,7 @@ Function UpdateMonitorSaving%()
 			If Close And (Not GrabbedEntity) And (Not d_I\ClosestButton) Then
 				If EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.0 Then
 					If EntityInView(sc\ScrOBJ, Camera) And EntityVisible(sc\ScrOBJ, Camera) Then
-						ga\DrawHandIcon = True
+						DrawHandIcon = True
 						If mo\MouseHit1 Then sc_I\SelectedMonitor = sc
 					Else
 						If sc_I\SelectedMonitor = sc Then sc_I\SelectedMonitor = Null
@@ -3757,7 +3757,7 @@ Function UpdateScreens%()
 			If EntityDistanceSquared(me\Collider, s\OBJ) < 1.44 Then
 				EntityPick(Camera, 1.2)
 				If PickedEntity() = s\OBJ And s\ImgPath <> "" Then
-					ga\DrawHandIcon = True
+					DrawHandIcon = True
 					If mo\MouseUp1 Then
 						SelectedScreen = s
 						s\Img = LoadImage_Strict("GFX\Map\Screens\" + s\ImgPath)
@@ -3812,7 +3812,7 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 				EntityPick(Camera, 0.65)
 				
 				If PickedEntity() = OBJ Then
-					ga\DrawHandIcon = True
+					DrawHandIcon = True
 					If mo\MouseHit1 Then GrabbedEntity = OBJ
 				EndIf
 				
@@ -3821,10 +3821,10 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 				If (mo\MouseDown1 Lor mo\MouseHit1) Then
 					If GrabbedEntity <> 0 Then
 						If GrabbedEntity = OBJ Then
-							ga\DrawHandIcon = True
+							DrawHandIcon = True
 							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), MaxValue), MinValue), EntityYaw(OBJ), 0.0)
-							ga\DrawArrowIcon[0] = True
-							ga\DrawArrowIcon[2] = True
+							DrawArrowIcon[0] = True
+							DrawArrowIcon[2] = True
 						EndIf
 					EndIf
 				EndIf

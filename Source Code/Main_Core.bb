@@ -255,23 +255,6 @@ Global RadioState#[9]
 Global RadioState2%[9]
 Global RadioState3%[10]
 
-; ~ Textures Constants
-;[Block]
-Const MaxOverlayTextureIDAmount% = 13
-Const MaxOverlayIDAmount% = 11
-Const MaxIconIDAmount% = 7
-Const MaxImageIDAmount% = 8
-;[End Block]
-
-Type Textures
-	Field IconID%[MaxIconIDAmount]
-	Field ImageID%[MaxImageIDAmount]
-	Field OverlayTextureID%[MaxOverlayTextureIDAmount]
-	Field OverlayID%[MaxOverlayIDAmount]
-End Type
-
-Global t.Textures = New Textures
-
 RenderLoading(15, GetLocalString("loading", "core.loading"))
 
 Include "Source Code\Loading_Core.bb"
@@ -1697,7 +1680,7 @@ Type Messages
 	Field HintY#
 End Type
 
-Global msg.Messages = New Messages
+Global msg.Messages
 
 Function CreateMsg%(Txt$, Sec# = 6.0)
 	If SelectedDifficulty\OtherFactors = EXTREME Then Return
@@ -1884,34 +1867,34 @@ Type SCP005
 	Field ChanceToSpawn%
 End Type
 
-Global I_005.SCP005 = New SCP005
+Global I_005.SCP005
 
 Type SCP008
 	Field Timer#
 	Field Revert%
 End Type
 
-Global I_008.SCP008 = New SCP008
+Global I_008.SCP008
 
 Type SCP035
 	Field Sad%
 End Type
 
-Global I_035.SCP035 = New SCP035
+Global I_035.SCP035
 
 Type SCP294
 	Field Using%
 	Field ToInput$
 End Type
 
-Global I_294.SCP294 = New SCP294
+Global I_294.SCP294
 
 Type SCP409
 	Field Timer#
 	Field Revert%
 End Type
 
-Global I_409.SCP409 = New SCP409
+Global I_409.SCP409
 
 Type SCP427
 	Field Using%
@@ -1920,19 +1903,19 @@ Type SCP427
 	Field SoundCHN%[2]
 End Type
 
-Global I_427.SCP427 = New SCP427
+Global I_427.SCP427
 
 Type SCP714
 	Field Using%
 End Type
 
-Global I_714.SCP714 = New SCP714
+Global I_714.SCP714
 
 Type SCP1025
 	Field State#[8]
 End Type
 
-Global I_1025.SCP1025 = New SCP1025
+Global I_1025.SCP1025
 
 Type SCP1499
 	Field Using%
@@ -1942,13 +1925,13 @@ Type SCP1499
 	Field Sky%
 End Type
 
-Global I_1499.SCP1499 = New SCP1499
+Global I_1499.SCP1499
 
 Type SCP500
 	Field Taken%
 End Type
 
-Global I_500.SCP500 = New SCP500
+Global I_500.SCP500
 
 Type MapZones
 	Field Transition%[2]
@@ -1956,7 +1939,7 @@ Type MapZones
 	Field HasCustomMT%
 End Type
 
-Global I_Zone.MapZones = New MapZones
+Global I_Zone.MapZones
 
 InitErrorMsgs(12, True)
 SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
@@ -2062,9 +2045,9 @@ Function UpdateGame%()
 		UpdateStreamSounds()
 		
 		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
-			If ga\DrawHandIcon Then ga\DrawHandIcon = False
+			If DrawHandIcon Then DrawHandIcon = False
 			For i = 0 To 3
-				If ga\DrawArrowIcon[i] Then ga\DrawArrowIcon[i] = False
+				If DrawArrowIcon[i] Then DrawArrowIcon[i] = False
 			Next
 			
 			me\RestoreSanity = True
@@ -3261,6 +3244,9 @@ Function UpdateZoneColor%()
 	CurrAmbientColorG = CurveValue(Mid(CurrAmbientColor, 4, 3), CurrAmbientColorG, ZoneColorChangeSpeed)
 	CurrAmbientColorB = CurveValue(Right(CurrAmbientColor, 3), CurrAmbientColorB, ZoneColorChangeSpeed)
 End Function
+
+Global DrawHandIcon%
+Global DrawArrowIcon%[4]
 
 Function UpdateGUI%()
 	CatchErrors("Uncaught (UpdateGUI)")
@@ -5877,9 +5863,9 @@ Function RenderGUI%()
 	EndIf
 	
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
-		If ga\DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
+		If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
 		For i = 0 To 3
-			If ga\DrawArrowIcon[i] Then
+			If DrawArrowIcon[i] Then
 				x = mo\Viewport_Center_X - (32 * MenuScale)
 				y = mo\Viewport_Center_Y - (32 * MenuScale)
 				Select i
@@ -5903,7 +5889,7 @@ Function RenderGUI%()
 				DrawBlock(t\IconID[5], x, y)
 				Color(0, 0, 0)
 				Rect(x + (4 * MenuScale), y + (4 * MenuScale), 56 * MenuScale, 56 * MenuScale)
-				DrawBlock(ga\ArrowIMG[i], x + (21 * MenuScale), y + (21 * MenuScale))
+				DrawBlock(t\ImageID[i + 8], x + (21 * MenuScale), y + (21 * MenuScale))
 			EndIf
 		Next
 	EndIf
@@ -8920,6 +8906,8 @@ Global EscapeSecondsTimer# = 70.0
 Function UpdateEscapeTimer%()
 	CatchErrors("Uncaught (UpdateEscapeTimer)")
 	
+	Local ev.Events
+	
 	For ev.Events = Each Events
 		If ev\room = PlayerRoom Then
 			If ev\EventName = "cont1_173_intro" Then Return
@@ -9320,8 +9308,8 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 	
 	If EntityDistanceSquared(me\Collider, OBJ) < Dist Then
 		If EntityInView(OBJ, Camera) Then
-			If Arrow Then ga\DrawArrowIcon[ArrowID] = True
-			ga\DrawHandIcon = True
+			If Arrow Then DrawArrowIcon[ArrowID] = True
+			DrawHandIcon = True
 			If MouseDown_ Then
 				If mo\MouseDown1 Then Return(True)
 			Else

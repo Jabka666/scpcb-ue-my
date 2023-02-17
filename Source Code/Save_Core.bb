@@ -2104,7 +2104,7 @@ Type AutoSave
 	Field Timer#
 End Type
 
-Global as.AutoSave = New AutoSave
+Global as.AutoSave
 
 Function UpdateAutoSave%()
 	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 2 Lor (Not me\Playable) Lor me\Zombie Then

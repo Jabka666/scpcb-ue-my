@@ -40,21 +40,6 @@ Function DeInitMainMenuAssets%()
 	Delete(mma)
 End Function
 
-Type GameAssets
-	Field ArrowIMG%[4]
-	Field DrawHandIcon%
-	Field DrawArrowIcon%[4]
-End Type
-
-Global ga.GameAssets = New GameAssets
-
-For i = 0 To 3
-	ga\ArrowIMG[i] = LoadImage_Strict("GFX\Menu\arrow.png")
-	ga\ArrowIMG[i] = ScaleImage2(ga\ArrowIMG[i], MenuScale, MenuScale)
-	RotateImage(ga\ArrowIMG[i], i * 90.0)
-	HandleImage(ga\ArrowIMG[i], 0, 0)
-Next
-
 Global RandomSeed$
 
 Global SelectedInputBox%, CursorPos% = -1
@@ -2591,7 +2576,7 @@ Function UpdateMenuScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarHeigh
 	Local ScrollBarExist% = False
 	
 	For msb.MenuScrollBar = Each MenuScrollBar
-		If msb\BarX = BarX And msb\BarY = BarY And msb\BarWidth = Width And msb\Height = Height Then
+		If msb\BarX = BarX And msb\BarY = BarY And msb\BarWidth = BarWidth And msb\BarHeight = BarHeight Then
 			ScrollBarExist = True
 			Exit
 		EndIf
@@ -2656,37 +2641,37 @@ Function RenderMenuScrollBars%()
 			Color(30, 30, 30)
 			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight)
 			Color(130, 130, 130)
-			Rect(msb\BarX + 1, msb\BarY + 1, msb\BarWidth - 1, msb\BarHeight - 1, False)
+			Rect(msb\BarX + MenuScale, msb\BarY + MenuScale, msb\BarWidth - MenuScale, msb\BarHeight - MenuScale, False)
 			Color(10, 10, 10)
 			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight, False)
 			Color(255, 255, 255)
-			Line(msb\BarX, msb\BarY + msb\BarHeight - 1, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
-			Line(msb\BarX + msb\BarWidth - 1, msb\BarY, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
+			Line(msb\BarX, msb\BarY + msb\BarHeight - MenuScale, msb\BarX + msb\BarWidth - MenuScale, msb\BarY + msb\BarHeight - MenuScale)
+			Line(msb\BarX + msb\BarWidth - MenuScale, msb\BarY, msb\BarX + msb\BarWidth - MenuScale, msb\BarY + msb\BarHeight - MenuScale)
 		Else
 			Color(100, 100, 100)
 			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight)
 			Color(130, 130, 130)
-			Rect(msb\BarX, msb\BarY, msb\BarWidth - 1, msb\BarHeight - 1, False)
+			Rect(msb\BarX, msb\BarY, msb\BarWidth - MenuScale, msb\BarHeight - MenuScale, False)
 			Color(255, 255, 255)
 			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight, False)
 			Color(10, 10, 10)
-			Line(msb\BarX, msb\BarY + msb\BarHeight - 1, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
-			Line(msb\BarX + msb\BarWidth - 1, msb\BarY, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
+			Line(msb\BarX, msb\BarY + msb\BarHeight - MenuScale, msb\BarX + msb\BarWidth - MenuScale, msb\BarY + msb\BarHeight - MenuScale)
+			Line(msb\BarX + msb\BarWidth - MenuScale, msb\BarY, msb\BarX + msb\BarWidth - MenuScale, msb\BarY + msb\BarHeight - MenuScale)
 		EndIf
 		
 		If (Not msb\Vertical) Then ; ~ Horizontal
-			If msb\Height > 10 Then
+			If msb\Height > (10 * MenuScale) Then
 				Color(255, 255, 255)
-				Rect(msb\BarX + (msb\BarWidth / 2), msb\BarY + 5, 2, msb\BarHeight - 10)
-				Rect(msb\BarX + (msb\BarWidth / 2) - 3, msb\BarY + 5, 2, msb\BarHeight - 10)
-				Rect(msb\BarX + (msb\BarWidth / 2) + 3, msb\BarY + 5, 2, msb\BarHeight - 10)
+				Rect(msb\BarX + (msb\BarWidth / 2), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
+				Rect(msb\BarX + (msb\BarWidth / 2) - (3 * MenuScale), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
+				Rect(msb\BarX + (msb\BarWidth / 2) + (3 * MenuScale), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
 			EndIf
 		Else ; ~ Vertical
-			If msb\Width > 10 Then
+			If msb\Width > (10 * MenuScale) Then
 				Color(255, 255, 255)
-				Rect(msb\BarX + 4, msb\BarY + (msb\BarHeight / 2), msb\BarWidth - 10, 2)
-				Rect(msb\BarX + 4, msb\BarY + (msb\BarHeight / 2) - 3, msb\BarWidth - 10, 2)
-				Rect(msb\BarX + 4, msb\BarY + (msb\BarHeight / 2) + 3, msb\BarWidth - 10, 2)
+				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
+				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2) - (3 * MenuScale), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
+				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2) + (3 * MenuScale), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
 			EndIf
 		EndIf
 	Next
