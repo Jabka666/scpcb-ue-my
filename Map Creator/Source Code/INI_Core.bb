@@ -98,5 +98,29 @@ Function LoadOptionsINI()
 	opt\Events% = IniGetInt(OptionFileMC, "General", "Events_Default", True)
 End Function
 
+Function SaveOptionsINI()
+	; ~ [3-D SCENE]
+
+	IniWriteString(OptionFileMC, "3-D Scene", "BG Color R", opt\FogR)
+	
+	IniWriteString(OptionFileMC, "3-D Scene", "BG Color G", opt\FogG)
+	
+	IniWriteString(OptionFileMC, "3-D Scene", "BG Color B", opt\FogB)
+	
+	IniWriteString(OptionFileMC, "3-D Scene", "Cursor Color R", opt\CursorR)
+	
+	IniWriteString(OptionFileMC, "3-D Scene", "Cursor Color G", opt\CursorG)
+	
+	IniWriteString(OptionFileMC, "3-D Scene", "Cursor Color B", opt\CursorB)
+	
+	IniWriteString(OptionFileMC, "3-D Scene", "VSync", opt\VSync)
+	
+	IniWriteString(OptionFileMC, "3-D Scene", "Show FPS", opt\ShowFPS)
+	
+	IniWriteString(OptionFileMC, "3-D Scene", "Camera Range", opt\CamRange)
+	
+	IniWriteString(OptionFileMC, "General", "Events_Default", opt\Events)
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#BlitzPlus

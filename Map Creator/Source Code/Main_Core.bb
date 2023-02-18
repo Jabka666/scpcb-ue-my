@@ -1365,6 +1365,7 @@ Repeat
 		EndIf
 	EndIf
 Forever
+SaveOptionsINI()
 End()
 
 Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4
