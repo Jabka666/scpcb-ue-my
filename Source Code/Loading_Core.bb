@@ -556,9 +556,9 @@ Function LoadNPCs%()
 	
 	If opt\Atmosphere Then
 		For i = NPC_CLASS_D_GONZALES_TEXTURE To NPC_096_BLOODY_TEXTURE
-			Local Skip% = False
+			Local Skip%
 			
-			If (Not opt\IntroEnabled) And i = NPC_CLASS_D_D9341_TEXTURE Then Skip = True
+			Skip = ((Not opt\IntroEnabled) And i = NPC_CLASS_D_D9341_TEXTURE)
 			If (Not Skip) Then TextureBlend(n_I\NPCTextureID[i], 5)
 		Next
 	EndIf
@@ -1603,8 +1603,8 @@ End Function
 ;[Block]
 Const MaxOverlayTextureIDAmount% = 13
 Const MaxOverlayIDAmount% = 11
-Const MaxIconIDAmount% = 8
-Const MaxImageIDAmount% = 12
+Const MaxIconIDAmount% = 13
+Const MaxImageIDAmount% = 8
 ;[End Block]
 
 Type Textures
@@ -1695,6 +1695,13 @@ Function LoadEntities%()
 	t\IconID[8] = LoadImage_Strict("GFX\Menu\QuickLoading.png")
 	t\IconID[8] = ScaleImage2(t\IconID[8], MenuScale, MenuScale)
 	
+	For i = 0 To 3
+		t\IconID[i + 9] = LoadImage_Strict("GFX\Menu\arrow.png")
+		t\IconID[i + 9] = ScaleImage2(t\IconID[i + 9], MenuScale, MenuScale)
+		RotateImage(t\IconID[i + 9], i * 90.0)
+		HandleImage(t\IconID[i + 9], 0, 0)
+	Next
+	
 	For i = 0 To MAXACHIEVEMENTS - 1
 		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvName")
 		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvDesc")
@@ -1731,12 +1738,6 @@ Function LoadEntities%()
 	
 	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
-	For i = 0 To 3
-		t\ImageID[i + 8] = LoadImage_Strict("GFX\Menu\arrow.png")
-		t\ImageID[i + 8] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
-		RotateImage(t\ImageID[i + 8], i * 90.0)
-		HandleImage(t\ImageID[i + 8], 0, 0)
-	Next
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
 	LoadMissingTexture()

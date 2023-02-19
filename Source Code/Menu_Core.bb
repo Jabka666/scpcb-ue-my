@@ -262,9 +262,7 @@ Function UpdateMainMenu%()
 							
 							If UpdateMenuTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i])) Then SelectedDifficulty = difficulties[i]
 							
-							If PrevSelectedDifficulty <> SelectedDifficulty Then
-								If PrevSelectedDifficulty = difficulties[ESOTERIC] Then ShouldDeleteGadgets = True
-							EndIf
+							If PrevSelectedDifficulty <> SelectedDifficulty Then ShouldDeleteGadgets = (PrevSelectedDifficulty = difficulties[ESOTERIC])
 						Next
 						
 						If SelectedDifficulty\Customizable Then
@@ -631,9 +629,7 @@ Function UpdateMainMenu%()
 						
 						opt\EnableUserTracks = UpdateMenuTick(x, y, opt\EnableUserTracks)
 						
-						If PrevEnableUserTracks Then
-							If PrevEnableUserTracks <> opt\EnableUserTracks Then ShouldDeleteGadgets = True
-						EndIf
+						If PrevEnableUserTracks Then ShouldDeleteGadgets = (PrevEnableUserTracks <> opt\EnableUserTracks)
 						
 						If opt\EnableUserTracks Then
 							y = y + (30 * MenuScale)
@@ -674,9 +670,7 @@ Function UpdateMainMenu%()
 						
 						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						
-						If PrevEnableSubtitles Then
-							If PrevEnableSubtitles <> opt\EnableSubtitles Then ShouldDeleteGadgets = True
-						EndIf
+						If PrevEnableSubtitles Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles)
 						
 						If opt\EnableSubtitles Then
 							y = y + (35 * MenuScale)
@@ -817,9 +811,7 @@ Function UpdateMainMenu%()
 						
 						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
 						
-						If PrevCanOpenConsole Then
-							If PrevCanOpenConsole <> opt\CanOpenConsole Then ShouldDeleteGadgets = True
-						EndIf
+						If PrevCanOpenConsole Then ShouldDeleteGadgets = (PrevCanOpenConsole <> opt\CanOpenConsole)
 						
 						y = y + (30 * MenuScale)
 						
@@ -850,9 +842,7 @@ Function UpdateMainMenu%()
 							opt\FrameLimit = 0
 						EndIf
 						
-						If PrevCurrFrameLimit Then
-							If PrevCurrFrameLimit <> opt\CurrFrameLimit Then ShouldDeleteGadgets = True
-						EndIf
+						If PrevCurrFrameLimit Then ShouldDeleteGadgets = (PrevCurrFrameLimit <> opt\CurrFrameLimit)
 						
 						y = y + (80 * MenuScale)
 						
@@ -2149,11 +2139,7 @@ Function UpdateMenuPalette%(x%, y%)
 		mp\Height = ImageHeight(mp\Img)
 	EndIf
 	
-	If MouseOn(x, y, mp\Width, mp\Height) Then
-		OnPalette = True
-	Else
-		OnPalette = False
-	EndIf
+	OnPalette = (MouseOn(x, y, mp\Width, mp\Height))
 End Function
 
 Function RenderMenuPalettes%()
@@ -2604,12 +2590,7 @@ Function UpdateMenuScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarHeigh
 	Local MouseSpeedX# = MouseXSpeed()
 	Local MouseSpeedY# = MouseYSpeed()
 	
-	If MouseOn(BarX, BarY, BarWidth, BarHeight)
-		If mo\MouseDown1 Then OnScrollBar = True
-	Else
-		If (Not mo\MouseDown1) Then OnScrollBar = False
-	EndIf
-	
+	OnScrollBar = (mo\MouseDown1 And MouseOn(BarX, BarY, BarWidth, BarHeight))
 	If OnScrollBar Then
 		If mo\MouseHit1 Then
 			If Locked Then
@@ -3083,16 +3064,8 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 		Local rAmount% = ReadInt(f)
 		Local HasForest%, HasMT%
 		
-		If ReadInt(f) > 0 Then
-			HasForest = True
-		Else
-			HasForest = False
-		EndIf
-		If ReadInt(f) > 0 Then
-			HasMT = True
-		Else
-			HasMT = False
-		EndIf
+		HasForest = (ReadInt(f) > 0)
+		HasMT = (ReadInt(f) > 0)
 		
 		CloseFile(f)
 	Else

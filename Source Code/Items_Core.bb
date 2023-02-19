@@ -1333,9 +1333,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Local CurrAchvAmount% = 0
 							
 							For i = 0 To MAXACHIEVEMENTS - 1
-								If achv\Achievement[i] = True
-									CurrAchvAmount = CurrAchvAmount + 1
-								EndIf
+								If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 							Next
 							
 							Select SelectedDifficulty\OtherFactors
@@ -1432,9 +1430,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					CurrAchvAmount = 0
 					For i = 0 To MAXACHIEVEMENTS - 1
-						If achv\Achievement[i] = True
-							CurrAchvAmount = CurrAchvAmount + 1
-						EndIf
+						If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 					Next
 					
 					Select SelectedDifficulty\OtherFactors
@@ -2136,6 +2132,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			End Select
 			;[End Block]
 		Case "scp1025"
+			;[Block]
 			Remove = False
 			Select Setting
 				Case ROUGH
@@ -2165,7 +2162,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					item\State2 = 2.0
 					;[End Block]
 			End Select
+			;[End Block]
 		Case "book"
+			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
@@ -2185,6 +2184,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					Remove = False
 					;[End Block]
 			End Select
+			;[End Block]
 		Default
 			;[Block]
 			Select Setting

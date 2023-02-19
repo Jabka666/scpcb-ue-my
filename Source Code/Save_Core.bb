@@ -639,7 +639,7 @@ Function LoadGame%(File$)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
-	If ReadInt(f) <> 994 Then UsedConsole = True
+	UsedConsole = (ReadInt(f) <> 994)
 	
 	opt\CameraFogFar = ReadFloat(f)
 	opt\StoredCameraFogFar = ReadFloat(f)
@@ -909,31 +909,22 @@ Function LoadGame%(File$)
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
 					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 90.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90.0 Lor r\Angle = 270.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Default
 								;[Block]
@@ -949,31 +940,22 @@ Function LoadGame%(File$)
 							EndIf
 						EndIf
 						
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Default
 								;[Block]
@@ -1513,7 +1495,7 @@ Function LoadGameQuick%(File$)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
-	If ReadInt(f) <> 994 Then UsedConsole = True
+	UsedConsole = (ReadInt(f) <> 994)
 	
 	opt\CameraFogFar = ReadFloat(f)
 	opt\StoredCameraFogFar = ReadFloat(f)
@@ -2313,9 +2295,9 @@ Function LoadMap%(File$)
 		ForestPieceAmount = ReadInt(f)
 		MTPieceAmount = ReadInt(f)
 		
-		If ForestPieceAmount > 0 Then I_Zone\HasCustomForest = True
+		I_Zone\HasCustomForest = (ForestPieceAmount > 0)
 		
-		If MTPieceAmount > 0 Then I_Zone\HasCustomMT = True
+		I_Zone\HasCustomMT = (MTPieceAmount > 0)
 		
 		; ~ Facility rooms
 		For i = 0 To RoomAmount - 1
@@ -2539,7 +2521,7 @@ Function LoadMap%(File$)
 	CloseFile(f)
 	
 	Local Zone%
-	Local ShouldSpawnDoor% = False
+	Local ShouldSpawnDoor%
 	Local d.Doors
 	
 	For y = MapGridSize To 0 Step -1
@@ -2555,22 +2537,21 @@ Function LoadMap%(File$)
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
 					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 90.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Default
 								;[Block]
@@ -2586,23 +2567,22 @@ Function LoadMap%(File$)
 							EndIf
 						EndIf
 						
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Default
 								;[Block]

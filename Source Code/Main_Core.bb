@@ -1047,7 +1047,7 @@ Function UpdateConsole%()
 				Case "sanic"
 					;[Block]
 					chs\SuperMan = (Not chs\SuperMan)
-					If chs\SuperMan = True Then
+					If chs\SuperMan Then
 						CreateConsoleMsg(GetLocalString("console", "sanic.on"))
 					Else
 						CreateConsoleMsg(GetLocalString("console", "sanic.off"))
@@ -1703,15 +1703,9 @@ Function RenderMessages%()
 	If SelectedDifficulty\OtherFactors = EXTREME Then Return
 	
 	If msg\Timer > 0.0 Then
-		Local Temp% = False
+		Local Temp%
 		
-		If (Not (InvOpen Lor OtherOpen <> Null)) Then
-			If SelectedItem <> Null Then
-				If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper" Then Temp = True
-			ElseIf I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null
-				Temp = True
-			EndIf
-		EndIf
+		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper")))
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
@@ -2045,9 +2039,9 @@ Function UpdateGame%()
 		UpdateStreamSounds()
 		
 		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
-			If DrawHandIcon Then DrawHandIcon = False
+			DrawHandIcon = False
 			For i = 0 To 3
-				If DrawArrowIcon[i] Then DrawArrowIcon[i] = False
+				DrawArrowIcon[i] = False
 			Next
 			
 			me\RestoreSanity = True
@@ -2824,10 +2818,10 @@ Function UpdateMoving%()
 			
 			If me\Playable Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 			
-			Local CollidedFloor% = False
+			Local CollidedFloor%
 			
 			For i = 1 To CountCollisions(me\Collider)
-				If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25 Then CollidedFloor = True
+				CollidedFloor = (CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25)
 			Next
 			
 			If CollidedFloor Then
@@ -2954,11 +2948,7 @@ Function UpdateMouseInput%()
 		Local PrevMouseDown1% = mo\MouseDown1
 		
 		mo\MouseDown1 = MouseDown(1)
-		If PrevMouseDown1 And (Not mo\MouseDown1) Then
-			mo\MouseUp1 = True 
-		Else
-			mo\MouseUp1 = False
-		EndIf
+		mo\MouseUp1 = (PrevMouseDown1 And (Not mo\MouseDown1))
 		
 		mo\MouseHit2 = MouseHit(2)
 	EndIf
@@ -3026,10 +3016,10 @@ Function UpdateMouseLook%()
 		If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 		PositionEntity(Camera, EntityX(me\Head), EntityY(me\Head), EntityZ(me\Head))
 		
-		Local CollidedFloor% = False
+		Local CollidedFloor%
 		
 		For i = 1 To CountCollisions(me\Head)
-			If CollisionY(me\Head, i) < EntityY(me\Head) - 0.01 Then CollidedFloor = True
+			CollidedFloor = (CollisionY(me\Head, i) < EntityY(me\Head) - 0.01)
 		Next
 		
 		If CollidedFloor Then
@@ -3678,7 +3668,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								If (Not mo\MouseHit2) Then InvOpen = False
+								InvOpen = mo\MouseHit2
 							EndIf
 							;[End Block]
 						Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
@@ -3687,7 +3677,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								If (Not mo\MouseHit2) Then InvOpen = False
+								InvOpen = mo\MouseHit2
 							EndIf
 							;[End Block]
 						Case "helmet"
@@ -3696,7 +3686,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								If (Not mo\MouseHit2) Then InvOpen = False
+								InvOpen = mo\MouseHit2
 							EndIf
 							;[End Block] 
 						Case "nvg", "veryfinenvg", "finenvg"
@@ -3705,7 +3695,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								If (Not mo\MouseHit2) Then InvOpen = False
+								InvOpen = mo\MouseHit2
 							EndIf
 							;[End Block]
 						Case "scramble"
@@ -3714,7 +3704,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								If (Not mo\MouseHit2) Then InvOpen = False
+								InvOpen = mo\MouseHit2
 							EndIf
 							;[End Block]
 						Case "scp714"
@@ -3723,7 +3713,7 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								If (Not mo\MouseHit2) Then InvOpen = False
+								InvOpen = mo\MouseHit2
 							EndIf
 							;[End Block]
 						Case "scp427"
@@ -3732,13 +3722,13 @@ Function UpdateGUI%()
 								CreateHintMsg(GetLocalString("msg", "takeoff"))
 							Else
 								DropItem(SelectedItem)
-								If (Not mo\MouseHit2) Then InvOpen = False
+								InvOpen = mo\MouseHit2
 							EndIf
 							;[End Block]
 						Default
 							;[Block]
 							DropItem(SelectedItem)
-							If (Not mo\MouseHit2) Then InvOpen = False
+							InvOpen = mo\MouseHit2
 							;[End Block]
 					End Select
 					
@@ -5889,7 +5879,7 @@ Function RenderGUI%()
 				DrawBlock(t\IconID[5], x, y)
 				Color(0, 0, 0)
 				Rect(x + (4 * MenuScale), y + (4 * MenuScale), 56 * MenuScale, 56 * MenuScale)
-				DrawBlock(t\ImageID[i + 8], x + (21 * MenuScale), y + (21 * MenuScale))
+				DrawBlock(t\IconID[i + 9], x + (21 * MenuScale), y + (21 * MenuScale))
 			EndIf
 		Next
 	EndIf
@@ -6019,85 +6009,85 @@ Function RenderGUI%()
 			If MouseOn(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE) Then IsMouseOn = n
 			
 			If Inventory(n) <> Null Then
-				Local ShouldDrawRect% = False
+				Local ShouldDrawRect%
 				
 				Color(200, 200, 200)
 				Select Inventory(n)\ItemTemplate\TempName 
 					Case "gasmask"
 						;[Block]
-						If wi\GasMask = 1 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\GasMask = 1)
 						;[End Block]
 					Case "finegasmask"
 						;[Block]
-						If wi\GasMask = 2 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\GasMask = 2)
 						;[End Block]
 					Case "veryfinegasmask"
 						;[Block]
-						If wi\GasMask = 3 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\GasMask = 3)
 						;[End Block]
 					Case "gasmask148"
 						;[Block]
-						If wi\GasMask = 4 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\GasMask = 4)
 						;[End Block]
 					Case "hazmatsuit"
 						;[Block]
-						If wi\HazmatSuit = 1 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\HazmatSuit = 1)
 						;[End Block]
 					Case "finehazmatsuit"
 						;[Block]
-						If wi\HazmatSuit = 2 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\HazmatSuit = 2)
 						;[End Block]
 					Case "veryfinehazmatsuit"
 						;[Block]
-						If wi\HazmatSuit = 3 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\HazmatSuit = 3)
 						;[End Block]
 					Case "hazmatsuit148"
 						;[Block]"
-						If wi\HazmatSuit = 4 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\HazmatSuit = 4)
 						;[End Block]
 					Case "vest"
 						;[Block]
-						If wi\BallisticVest = 1 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\BallisticVest = 1)
 						;[End Block]
 					Case "finevest"
 						;[Block]
-						If wi\BallisticVest = 2 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\BallisticVest = 2)
 						;[End Block]
 					Case "helmet"
 						;[Block]
-						If wi\BallisticHelmet Then ShouldDrawRect = True
+						ShouldDrawRect = wi\BallisticHelmet
 						;[End Block]
 					Case "scp714"
 						;[Block]
-						If I_714\Using Then ShouldDrawRect = True
+						ShouldDrawRect = I_714\Using
 						;[End Block]
 					Case "nvg"
 						;[Block]
-						If wi\NightVision = 1 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\NightVision = 1)
 						;[End Block]
 					Case "veryfinenvg"
 						;[Block]
-						If wi\NightVision = 2 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\NightVision = 2)
 						;[End Block]
 					Case "finenvg"
 						;[Block]
-						If wi\NightVision = 3 Then ShouldDrawRect = True
+						ShouldDrawRect = (wi\NightVision = 3)
 						;[End Block]
 					Case "scramble"
 						;[Block]
-						If wi\SCRAMBLE Then ShouldDrawRect = True
+						ShouldDrawRect = wi\SCRAMBLE
 						;[End Block]
 					Case "scp1499"
 						;[Block]
-						If I_1499\Using = 1 Then ShouldDrawRect = True
+						ShouldDrawRect = (I_1499\Using = 1)
 						;[End Block]
 					Case "fine1499"
 						;[Block]
-						If I_1499\Using = 2 Then ShouldDrawRect = True
+						ShouldDrawRect = (I_1499\Using = 2)
 						;[End Block]
 					Case "scp427"
 						;[Block]
-						If I_427\Using Then ShouldDrawRect = True
+						ShouldDrawRect = (I_427\Using)
 						;[End Block]
 				End Select
 				If ShouldDrawRect Then Rect(x - (3 * MenuScale), y - (3 * MenuScale), INVENTORY_GFX_SIZE + (6 * MenuScale), INVENTORY_GFX_SIZE + (6 * MenuScale))
@@ -6412,13 +6402,13 @@ Function RenderGUI%()
 					
 					SetFont2(fo\FontID[Font_Digital])
 					
-					Local Offline% = False
+					Local Offline%
 					
-					If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300" Then Offline = True
+					Offline = (SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300")
 					
-					Local NavWorks% = True
+					Local NavWorks%
 					
-					If (Not PlayerInReachableRoom()) Then NavWorks = False
+					NavWorks = PlayerInReachableRoom()
 					If (Not NavWorks) Then
 						If (MilliSecs2() Mod 800) < 200 Then
 							Color(200, 0, 0)
@@ -6896,9 +6886,7 @@ Function UpdateMenu%()
 						
 						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						
-						If PrevEnableSubtitles Then
-							If PrevEnableSubtitles <> opt\EnableSubtitles Then ShouldDeleteGadgets = True
-						EndIf
+						If PrevEnableSubtitles Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles)
 						
 						If opt\EnableSubtitles Then
 							y = y + (35 * MenuScale)
@@ -7048,9 +7036,7 @@ Function UpdateMenu%()
 						
 						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
 						
-						If PrevCanOpenConsole Then
-							If PrevCanOpenConsole <> opt\CanOpenConsole Then ShouldDeleteGadgets = True
-						EndIf
+						If PrevCanOpenConsole Then ShouldDeleteGadgets = (PrevCanOpenConsole <> opt\CanOpenConsole)
 						
 						y = y + (30 * MenuScale)
 						
@@ -7081,9 +7067,7 @@ Function UpdateMenu%()
 							opt\FrameLimit = 0
 						EndIf
 						
-						If PrevCurrFrameLimit Then
-							If PrevCurrFrameLimit <> opt\CurrFrameLimit Then ShouldDeleteGadgets = True
-						EndIf
+						If PrevCurrFrameLimit Then ShouldDeleteGadgets = (PrevCurrFrameLimit <> opt\CurrFrameLimit)
 						
 						y = y + (80 * MenuScale)
 						
@@ -7107,9 +7091,9 @@ Function UpdateMenu%()
 			Local QuitButton% = 85
 			
 			If SelectedDifficulty\SaveType = SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = SAVE_ANYWHERE Then
-				Local AbleToSave% = True
+				Local AbleToSave%
 				
-				If CanSave < 2 Then AbleToSave = False
+				AbleToSave = (CanSave = 2)
 				If AbleToSave Then
 					QuitButton = 160
 					If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big) Then
@@ -7986,9 +7970,7 @@ Function UpdateCredits%()
 	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "/" Then LastCreditLine = Before(cl)
-		If LastCreditLine <> Null Then
-			If cl\ID > LastCreditLine\ID Then cl\Stay = True
-		EndIf
+		If LastCreditLine <> Null Then cl\Stay = (cl\ID > LastCreditLine\ID)
 		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
 		ID = ID + 1
 	Next
@@ -8042,9 +8024,7 @@ Function RenderCredits%()
 			SetFont2(fo\FontID[Font_Credits])
 			If (Not cl\Stay) Then Text2(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
 		EndIf
-		If LastCreditLine <> Null Then
-			If cl\ID > LastCreditLine\ID Then cl\Stay = True
-		EndIf
+		If LastCreditLine <> Null Then cl\Stay = (cl\ID > LastCreditLine\ID)
 		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
 		ID = ID + 1
 	Next
@@ -8324,8 +8304,7 @@ Function Update294%()
 	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[5]) / 2)
 	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[5]) / 2)
 	
-	Temp = True
-	If PlayerRoom\SoundCHN <> 0 Then Temp = False
+	Temp = (PlayerRoom\SoundCHN = 0)
 	
 	If Temp Then
 		If mo\MouseHit1 Then
@@ -8599,8 +8578,7 @@ Function Render294%()
 	DrawBlock(t\ImageID[5], x, y)
 	If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	
-	Temp = True
-	If PlayerRoom\SoundCHN <> 0 Then Temp = False
+	Temp = (PlayerRoom\SoundCHN = 0)
 	
 	Text2(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
@@ -8928,9 +8906,9 @@ End Function
 Function Update008%()
 	Local r.Rooms, e.Events, p.Particles, de.Decals
 	Local PrevI008Timer#, i%
-	Local TeleportForInfect% = True
+	Local TeleportForInfect%
 	
-	If (Not PlayerInReachableRoom()) Then TeleportForInfect = False
+	TeleportForInfect = PlayerInReachableRoom()
 	If I_008\Timer > 0.0 Then
 		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
 		If I_008\Timer < 93.0 Then
@@ -9079,7 +9057,7 @@ Function Update008%()
 			EndIf
 		EndIf
 	Else
-		If I_008\Revert Then I_008\Revert = False
+		I_008\Revert = False
 		If (Not EntityHidden(t\OverlayID[3])) Then HideEntity(t\OverlayID[3])
 	EndIf
 End Function
@@ -9144,7 +9122,7 @@ Function Update409%()
 			Kill(True)
 		EndIf
 	Else
-		If I_409\Revert Then I_409\Revert = False
+		I_409\Revert = False
 		If (Not EntityHidden(t\OverlayID[7])) Then HideEntity(t\OverlayID[7])
 	EndIf
 End Function
@@ -9308,7 +9286,7 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 	
 	If EntityDistanceSquared(me\Collider, OBJ) < Dist Then
 		If EntityInView(OBJ, Camera) Then
-			If Arrow Then DrawArrowIcon[ArrowID] = True
+			DrawArrowIcon[ArrowID] = Arrow
 			DrawHandIcon = True
 			If MouseDown_ Then
 				If mo\MouseDown1 Then Return(True)

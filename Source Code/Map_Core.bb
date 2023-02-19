@@ -2103,7 +2103,7 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	If DoorType = SCP_914_DOOR Then DoorType = ONE_SIDED_DOOR
 	
 	d\MTFClose = True
-	If Open And ((DoorType = DEFAULT_DOOR) Lor (DoorType = HEAVY_DOOR)) And (Keycard = 0) And (Code = "") And Rand(10) = 1 Then d\AutoClose = True
+	d\AutoClose = (Open And ((DoorType = DEFAULT_DOOR) Lor (DoorType = HEAVY_DOOR)) And (Keycard = 0) And (Code = "") And Rand(10) = 1)
 	
 	d\room = room
 	
@@ -2253,10 +2253,9 @@ Function UpdateDoors%()
 	
 	For d.Doors = Each Doors
 		If (d\Dist <= HideDistance) Lor (d\IsElevatorDoor > 0) Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
-			; ~ Automatically disable d\AutoClose if the door is locked because if not, this can cause a locked door to be closed and player get stuck -- Jabka
+			; ~ Automatically disable d\AutoClose parameter in order to prevent player get stuck -- Jabka
 			If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
-			FindButton = True
-			If d\Open And ((d\DoorType = OFFICE_DOOR) Lor (d\DoorType = WOODEN_DOOR)) Then FindButton = False
+			FindButton = (1 - (d\Open And ((d\DoorType = OFFICE_DOOR) Lor (d\DoorType = WOODEN_DOOR))))
 			
 			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And (Not GrabbedEntity) Then
 				For i = 0 To 1
@@ -2568,8 +2567,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	ToElevatorFloor = FindFloor(event)
 	
 	; ~ After, determine if the player inside the elevator
-	PlayerInsideElevator = False
-	If IsInsideArea(FirstPivot, 280.0 * RoomScale) Lor IsInsideArea(SecondPivot, 280.0 * RoomScale) Then PlayerInsideElevator = True
+	PlayerInsideElevator = (IsInsideArea(FirstPivot, 280.0 * RoomScale) Lor IsInsideArea(SecondPivot, 280.0 * RoomScale))
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
@@ -3353,9 +3351,7 @@ Function UpdateSecurityCams%()
 				If Close Lor sc = sc_I\CoffinCam Then
 					If sc\FollowPlayer Then
 						If sc <> sc_I\CoffinCam Then
-							If EntityVisible(sc\CameraOBJ, Camera) Then
-								If MTFCameraCheckTimer > 0.0 Then MTFCameraCheckDetected = True
-							EndIf
+							If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
 						EndIf
 						If (Not sc\Pvt) Then
 							sc\Pvt = CreatePivot(sc\BaseOBJ)
@@ -3393,9 +3389,7 @@ Function UpdateSecurityCams%()
 						
 						If sc <> sc_I\CoffinCam Then
 							If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0 Then
-								If EntityVisible(sc\CameraOBJ, Camera) Then
-									If MTFCameraCheckTimer > 0.0 Then MTFCameraCheckDetected = True
-								EndIf
+								If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
 							EndIf
 						EndIf
 					EndIf
@@ -3428,11 +3422,7 @@ Function UpdateSecurityCams%()
 							me\Sanity = -1010.0
 						EndIf
 						
-						If me\BlinkTimer > -5.0 And (EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ)) Then
-							sc\InSight = True
-						Else
-							sc\InSight = False
-						EndIf
+						sc\InSight = (me\BlinkTimer > -5.0 And (EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ)))
 						
 						If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
 							If sc\InSight Then
@@ -3516,10 +3506,9 @@ Function RenderSecurityCams%()
 	CatchErrors("Uncaught (RenderSecurityCams)")
 	
 	Local sc.SecurityCams
+	Local Close% = False
 	
 	For sc.SecurityCams = Each SecurityCams
-		Local Close% = False
-		
 		If sc\room <> Null Then
 			If sc\room\Dist < 6.0 Lor PlayerRoom = sc\room Then Close = True
 			If Close Then
@@ -3593,7 +3582,6 @@ Function UpdateMonitorSaving%()
 	
 	For sc.SecurityCams = Each SecurityCams
 		If sc\AllowSaving And sc\Screen Then
-			Close = False
 			If sc\room\Dist < 6.0 Lor PlayerRoom = sc\room Then Close = True
 			If Close And (Not GrabbedEntity) And (Not d_I\ClosestButton) Then
 				If EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.0 Then
@@ -4599,11 +4587,9 @@ Function FillRoom%(r.Rooms)
 				PositionEntity(r\Objects[0], r\x + 344.0 * RoomScale, r\y + 128.0 * RoomScale, r\z)
 				EntityParent(r\Objects[0], r\OBJ)
 				
-				Local BD_Temp% = False
+				Local BD_Temp%
 				
-				If bk\IsBroken Then
-					If bk\x = r\x And bk\z = r\z Then BD_Temp = True
-				EndIf
+				If bk\IsBroken Then BD_Temp = (bk\x = r\x And bk\z = r\z)
 				
 				If ((Not bk\IsBroken) And Rand(2) = 1) Lor BD_Temp Then
 					r\Objects[1] = CopyEntity(d_I\DoorModelID[DOOR_DEFAULT_MODEL])
@@ -5549,15 +5535,15 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ Monitors at the both sides
-			r\Objects[2] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
-			PositionEntity(r\Objects[2], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
-			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
+			r\Objects[1] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			PositionEntity(r\Objects[1], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
+			ScaleEntity(r\Objects[1], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[1], 0.0, 180.0, 0.0)
 			
-			r\Objects[3] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
-			PositionEntity(r\Objects[3], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
-			ScaleEntity(r\Objects[3], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
+			r\Objects[2] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			PositionEntity(r\Objects[2], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
+			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 960.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 0.0
@@ -6551,15 +6537,15 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ Monitors at the both sides
-			r\Objects[2] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
-			PositionEntity(r\Objects[2], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
-			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
+			r\Objects[1] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			PositionEntity(r\Objects[1], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
+			ScaleEntity(r\Objects[1], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[1], 0.0, 180.0, 0.0)
 			
-			r\Objects[3] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
-			PositionEntity(r\Objects[3], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
-			ScaleEntity(r\Objects[3], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
+			r\Objects[2] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			PositionEntity(r\Objects[2], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
+			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, r)
 			sc\Angle = 45.0 : sc\Turn = 0.0
@@ -7774,27 +7760,25 @@ Function HideRoomsColl%(room.Rooms)
 				; ~ What the fuck is this? I really "like" how the adjacent door system works. Fuck this shit, I'm out -- Jabka
 				Local Hide% = True
 				
-				If Hide Then
-					For i = 0 To MaxRoomAdjacents - 1
-						If PlayerRoom\AdjDoor[i] <> Null Then
-							If d = PlayerRoom\AdjDoor[i] Then Hide = False
-						EndIf
-						If PlayerRoom\Adjacent[i] <> Null Then
-							For j = 0 To MaxRoomAdjacents - 1
-								If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
-									If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
-								EndIf
-								If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-									For k = 0 To MaxRoomAdjacents - 1 
-										If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
-											If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
-										EndIf
-									Next
-								EndIf
-							Next
-						EndIf
-					Next
-				EndIf
+				For i = 0 To MaxRoomAdjacents - 1
+					If PlayerRoom\AdjDoor[i] <> Null Then
+						If d = PlayerRoom\AdjDoor[i] Then Hide = False
+					EndIf
+					If PlayerRoom\Adjacent[i] <> Null Then
+						For j = 0 To MaxRoomAdjacents - 1
+							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
+								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
+							EndIf
+							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+								For k = 0 To MaxRoomAdjacents - 1 
+									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
+										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
+									EndIf
+								Next
+							EndIf
+						Next
+					EndIf
+				Next
 				If Hide Then
 					EntityAlpha(d\OBJ, 0.0)
 					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
@@ -7860,27 +7844,25 @@ Function ShowRoomsColl%(room.Rooms)
 			If d\room = room Then
 				Local Hide% = True
 				
-				If Hide Then
-					For i = 0 To MaxRoomAdjacents - 1
-						If PlayerRoom\AdjDoor[i] <> Null Then
-							If d = PlayerRoom\AdjDoor[i] Then Hide = False
-						EndIf
-						If PlayerRoom\Adjacent[i] <> Null Then
-							For j = 0 To MaxRoomAdjacents - 1
-								If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
-									If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
-								EndIf
-								If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
-									For k = 0 To MaxRoomAdjacents - 1 
-										If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
-											If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
-										EndIf
-									Next
-								EndIf
-							Next
-						EndIf
-					Next
-				EndIf
+				For i = 0 To MaxRoomAdjacents - 1
+					If PlayerRoom\AdjDoor[i] <> Null Then
+						If d = PlayerRoom\AdjDoor[i] Then Hide = False
+					EndIf
+					If PlayerRoom\Adjacent[i] <> Null Then
+						For j = 0 To MaxRoomAdjacents - 1
+							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null Then
+								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
+							EndIf
+							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null Then
+								For k = 0 To MaxRoomAdjacents - 1 
+									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null Then
+										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
+									EndIf
+								Next
+							EndIf
+						Next
+					EndIf
+				Next
 				If Hide Then
 					EntityAlpha(d\OBJ, 1.0)
 					If d\OBJ2 <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\OBJ2, 1.0)
@@ -8900,23 +8882,22 @@ Function CreateMap%()
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
 					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 90.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0 )
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Default
 								;[Block]
@@ -8933,23 +8914,22 @@ Function CreateMap%()
 							EndIf
 						EndIf
 						
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Default
 								;[Block]

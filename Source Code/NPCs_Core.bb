@@ -865,11 +865,7 @@ Function UpdateNPCs%()
 							If e\EventID = e_gate_a Then
 								If e\EventState <> 0.0 Then
 									Spawn106 = True
-									If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
-										n\Idle = 1
-									Else
-										n\Idle = 0
-									EndIf
+									n\Idle = PlayerRoom\RoomTemplate\Name = "dimension_1499"
 								EndIf
 								Exit
 							EndIf
@@ -2041,7 +2037,6 @@ Function UpdateNPCs%()
 						Case 4.0 ; ~ Attacks
 							;[Block]
 							If (Not me\Terminated) Then
-								Attack = False
 								If n\Frame <= 813.0 Then
 									AnimateNPC(n, 795.0, 813.0, 0.7, False)
 									If n\Frame >= 813.0 Then
@@ -2054,17 +2049,15 @@ Function UpdateNPCs%()
 								Else
 									If n\Frame < 879.0 Then
 										AnimateNPC(n, 814.0, 878.0, 0.4, False)
-										If n\Frame >= 839.0 And PrevFrame < 839.0 Then
-											Attack = True
-										ElseIf n\Frame >= 878.0
+										Attack = (n\Frame >= 839.0 And PrevFrame < 839.0)
+										If n\Frame >= 878.0 Then
 											SetNPCFrame(n, 705.0)
 											n\State = 2.0
 										EndIf
 									Else
 										AnimateNPC(n, 879.0, 943.0, 0.4, False)
-										If n\Frame >= 900.0 And PrevFrame < 900.0 Then
-											Attack = True
-										ElseIf n\Frame >= 943.0
+										Attack = (n\Frame >= 900.0 And PrevFrame < 900.0)
+										If n\Frame >= 943.0 Then
 											SetNPCFrame(n, 705.0)
 											n\State = 2.0
 										EndIf
@@ -2158,13 +2151,12 @@ Function UpdateNPCs%()
 									If n\State3 = 1.0 Then
 										Local InstaKillPlayer% = False
 										
+										msg\DeathMsg = Format(GetLocalString("death", "guard.default"), SubjectName)
 										If PlayerRoom\RoomTemplate\Name = "cont1_173" Then 
 											msg\DeathMsg = Format(GetLocalString("death", "guard.173"), SubjectName)
 											InstaKillPlayer = True
 										ElseIf PlayerRoom\RoomTemplate\Name = "gate_b"
 											msg\DeathMsg = GetLocalString("death", "guard.gateb")
-										Else
-											msg\DeathMsg = Format(GetLocalString("death", "guard.default"), SubjectName)
 										EndIf
 										
 										PlaySound2(GunshotSFX, Camera, n\Collider, 35.0)
@@ -3481,12 +3473,7 @@ Function UpdateNPCs%()
 							If (PrevFrame < 664.0 And n\Frame >= 664.0) Lor (PrevFrame > 673.0 And n\Frame < 654.0) Then
 								PlaySound2(Step2SFX[Rand(6, 9)], Camera, n\Collider, 12.0)
 								If Rand(10) = 1 Then
-									Temp = False
-									If (Not n\SoundCHN) Then
-										Temp = True
-									ElseIf (Not ChannelPlaying(n\SoundCHN))
-										Temp = True
-									EndIf
+									Temp = ((Not n\SoundCHN) Lor (Not ChannelPlaying(n\SoundCHN)))
 									If Temp Then
 										LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Lure" + Rand(10) + ".ogg")
 										n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider)
@@ -3518,14 +3505,7 @@ Function UpdateNPCs%()
 									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 									AnimateNPC(n, 18.0, 68.0, 0.5, True)
 									
-									Temp = False
-									
-									If PrevFrame < 24.0 And n\Frame >= 24.0 Then
-										Temp = True
-									ElseIf PrevFrame < 57.0 And n\Frame >= 57.0
-										Temp = True
-									EndIf
-									
+									Temp = ((PrevFrame < 24.0 And n\Frame >= 24.0) Lor (PrevFrame < 57.0 And n\Frame >= 57.0))
 									If Temp Then
 										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 2.25 Then
 											PlaySound_Strict(DamageSFX[11])
@@ -6194,15 +6174,10 @@ Function TeleportCloser%(n.NPCs)
 		EndIf
 	Next
 	
-	Local ShouldTeleport% = False
+	Local ShouldTeleport%
 	
 	If closestWaypoint <> Null Then
-		If n\InFacility <> 1 Lor SelectedDifficulty\AggressiveNPCs Then
-			ShouldTeleport = True
-		ElseIf EntityY(closestWaypoint\OBJ, True) <= 7.0 And EntityY(closestWaypoint\OBJ, True) >= -10.0
-			ShouldTeleport = True
-		EndIf
-		
+		ShouldTeleport = ((n\InFacility <> 1 Lor SelectedDifficulty\AggressiveNPCs) Lor (EntityY(closestWaypoint\OBJ, True) <= 7.0 And EntityY(closestWaypoint\OBJ, True) >= -10.0))
 		If ShouldTeleport Then
 			PositionEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 200.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), True)
 			ResetEntity(n\Collider)

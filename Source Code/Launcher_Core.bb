@@ -112,7 +112,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Text2(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 145, 30)
 		Text2(LauncherWidth - 112.5, LauncherHeight - 216, Txt, True)
-		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 226, 30, 30, ">", False) Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
+		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		; ~ Launcher tick
 		Text2(LauncherWidth - 155, LauncherHeight - 275, GetLocalString("launcher", "launcher"))
 		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 185, LauncherHeight - 278, opt\LauncherEnabled)
@@ -145,11 +145,11 @@ Function UpdateLauncher%(lnchr.Launcher)
 			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 0)
 		EndIf
 		; ~ Report button
-		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 165, 30, GetLocalString("launcher", "report"), False, False) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 165, 30, GetLocalString("launcher", "report")) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
 		; ~ Changelog button
-		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 165, 30, GetLocalString("launcher", "changelog"), False, False) Then ExecFile_Strict("Changelog.txt")
+		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 165, 30, GetLocalString("launcher", "changelog")) Then ExecFile_Strict("Changelog.txt")
 		; ~ Launch button
-		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"), False, False) Then
+		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch")) Then
 			If opt\DisplayMode = 1 Then
 				opt\GraphicWidth = DesktopWidth()
 				opt\GraphicHeight = DesktopHeight()
@@ -162,7 +162,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Exit
 		EndIf
 		; ~ Exit button
-		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, GetLocalString("launcher", "exit"), False, False) Then
+		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, GetLocalString("launcher", "exit")) Then
 			Quit = True
 			Exit
 		EndIf
@@ -422,9 +422,9 @@ Function LanguageSelector%()
 		
 		If SelectedLanguage <> Null Then
 			If SelectedLanguage\ID = opt\Language Then
-				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), ButtonImages, 4) Then ExecFile_Strict("https://github.com/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), Font_Default, ButtonImages, 4) Then ExecFile_Strict("https://github.com/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
 			ElseIf SelectedLanguage\Name = "English"
-				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					; ~ Reload some stuff manually
 					fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
@@ -433,11 +433,11 @@ Function LanguageSelector%()
 				EndIf
 			ElseIf FileType(LocalizaitonPath + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language Then
-					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), ButtonImages, 3) Then
+					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), Font_Default, ButtonImages, 3) Then
 						CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
 						RequestLanguage = SelectedLanguage
 					EndIf
-					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), ButtonImages, 2) Then
+					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						; ~ Reload some stuff manually
 						fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
@@ -446,13 +446,13 @@ Function LanguageSelector%()
 					EndIf
 				EndIf
 			Else
-				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), ButtonImages, 1) Then
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), Font_Default, ButtonImages, 1) Then
 					CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
 					RequestLanguage = SelectedLanguage
 				EndIf
 			EndIf
 		EndIf
-		If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), ButtonImages) Then Exit
+		If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), Font_Default, ButtonImages) Then Exit
 		
 		If MouseHoverLanguage <> Null Then
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
@@ -531,7 +531,7 @@ Function LanguageSelector%()
 	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 End Function
 
-Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
+Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
 	Local Clicked% = False
 	
 	RenderFrame(x, y, Width, Height, 0, 0, Locked)
@@ -559,11 +559,7 @@ Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, BigFont% = True, W
 	Else
 		Color(R, G, B)
 	EndIf
-	If BigFont Then
-		SetFont2(fo\FontID[Font_Default_Big])
-	Else
-		SetFont2(fo\FontID[Font_Default])
-	EndIf
+	SetFont2(fo\FontID[FontID])
 	Text2(x + (Width / 2), y + (Height / 2), Txt, True, True)
 	Return(Clicked)
 End Function
@@ -615,10 +611,10 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 	EndIf
 End Function
 
-Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, Img%, Frame% = 0)
+Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, Img% = 0, Frame% = 0)
 	Txt = String(" ", ImageWidth(Img) / 8) + Txt
 	
-	Local Result% = UpdateLauncherButton(x, y, Width, Height, Txt, False, False)
+	Local Result% = UpdateLauncherButton(x, y, Width, Height, Txt, FontID)
 	
 	DrawImage(Img, x + (Width / 2) - (StringWidth(Txt) / 2) - 3, y + (Height / 2) - ImageHeight(Img) / 2, Frame) ; ~ No DrawBlock please
 	Return(Result)
@@ -687,17 +683,8 @@ Function UpdateLauncherScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarH
 		EndIf
 	EndIf
 	
-	If MouseX() > BarX And MouseX() < BarX + BarWidth
-		If MouseY() > BarY And MouseY() < BarY + BarHeight
-			OnScrollBar = True
-		Else
-			If (Not mo\MouseDown1) Then OnScrollBar = False
-		EndIf
-	Else
-		If (Not mo\MouseDown1) Then OnScrollBar = False
-	EndIf
-	
-	If mo\MouseDown1 And OnScrollBar Then
+	OnScrollBar = (mo\MouseDown1 And MouseOn(BarX, BarY, BarWidth, BarHeight))
+	If OnScrollBar Then
 		If (Not Vertical) Then
 			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
 		Else

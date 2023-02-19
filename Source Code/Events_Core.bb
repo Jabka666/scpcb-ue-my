@@ -1908,31 +1908,31 @@ Function UpdateEvents%()
 					If e\EventState3 = 0.0 Then
 						If Rand(2) = 1 Then
 							GiveAchievement(Achv1048)
-							e\room\Objects[1] = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
-							ScaleEntity(e\room\Objects[1], 0.05, 0.05, 0.05)
-							PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-							SetAnimTime(e\room\Objects[1], 267.0)
+							e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
+							ScaleEntity(e\room\Objects[3], 0.05, 0.05, 0.05)
+							PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+							SetAnimTime(e\room\Objects[3], 267.0)
 						EndIf
 						
 						e\EventState3 = 1.0
-					ElseIf e\room\Objects[1] <> 0
+					ElseIf e\room\Objects[3] <> 0
 						If e\EventState3 = 1.0 Then
-							PointEntity(e\room\Objects[1], me\Collider)
-							RotateEntity(e\room\Objects[1], -90.0, EntityYaw(e\room\Objects[1]), 0.0)
-							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[1]))
+							PointEntity(e\room\Objects[3], me\Collider)
+							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
+							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
 							If Angle < 40.0 Lor Angle > 320.0 Then e\EventState3 = 2.0
 						ElseIf e\EventState3 = 2.0
-							PointEntity(e\room\Objects[1], me\Collider)
-							RotateEntity(e\room\Objects[1], -90.0, EntityYaw(e\room\Objects[1]), 0.0)
-							Animate2(e\room\Objects[1], AnimTime(e\room\Objects[1]), 267.0, 283.0, 0.3, False)
-							If AnimTime(e\room\Objects[1]) = 283.0 Then e\EventState3 = 3.0
+							PointEntity(e\room\Objects[3], me\Collider)
+							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
+							Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 267.0, 283.0, 0.3, False)
+							If AnimTime(e\room\Objects[3]) = 283.0 Then e\EventState3 = 3.0
 						ElseIf e\EventState3 = 3.0
-							Animate2(e\room\Objects[1], AnimTime(e\room\Objects[1]), 283.0, 267.0, -0.2, False)
-							If AnimTime(e\room\Objects[1]) = 267.0 Then e\EventState3 = 4.0
+							Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 283.0, 267.0, -0.2, False)
+							If AnimTime(e\room\Objects[3]) = 267.0 Then e\EventState3 = 4.0
 						ElseIf e\EventState3 = 4.0
-							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[1]))
+							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
 							If Angle > 90.0 And Angle < 270.0 Then
-								FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
+								FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
 								e\EventState3 = 5.0
 							EndIf
 						EndIf
@@ -2037,7 +2037,7 @@ Function UpdateEvents%()
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 							SetNPCFrame(e\room\NPC[0], 270.0)
 							
-							If (Not e\room\RoomDoors[0]\Open) Then e\room\RoomDoors[0]\Open = True
+							e\room\RoomDoors[0]\Open = True
 						EndIf
 					ElseIf CoffinDistance > 5.0
 						If e\room\NPC[0] <> Null Then
@@ -5270,10 +5270,10 @@ Function UpdateEvents%()
 							
 							If e\EventState < 70.0 * 190.0 Then
 								If e\EventState >= 70.0 * 180.0 Then
-									e\room\RoomDoors[1]\Open = False
-									e\room\RoomDoors[3]\Open = False
-									e\room\RoomDoors[0]\Open = True
-									e\room\RoomDoors[2]\Open = True
+									For i = 0 To 2 Step 2
+										e\room\RoomDoors[i]\Open = True
+										e\room\RoomDoors[i + 1]\Open = False
+									Next
 									
 									e\EventState = 70.0 * 190.0
 								EndIf
@@ -5489,7 +5489,7 @@ Function UpdateEvents%()
 							
 							Local LeverState# = UpdateLever(e\room\RoomLevers[0]\OBJ, ((EntityY(e\room\Objects[2], True) < -8318.0 * RoomScale) And (EntityY(e\room\Objects[2], True) > -8603.0 * RoomScale)))
 							
-							If GrabbedEntity = e\room\RoomLevers[0]\OBJ And DrawHandIcon = True Then e\EventState2 = LeverState
+							If GrabbedEntity = e\room\RoomLevers[0]\OBJ And DrawHandIcon Then e\EventState2 = LeverState
 							
 							If e\EventState2 <> Temp Then
 								If e\EventState2 = 0.0 Then
@@ -6624,13 +6624,13 @@ Function UpdateEvents%()
 					
 					If e\EventState2 = 1.0 Then ShouldPlay = 22
 					EntityPick(Camera, 1.0)
-					If PickedEntity() = e\room\Objects[0] Then
-						DrawHandIcon = True
-						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[0]
-					ElseIf PickedEntity() = e\room\Objects[1]
-						DrawHandIcon = True
-						If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[1]
-					EndIf
+					For i = 0 To 1
+						If PickedEntity() = e\room\Objects[i] Then
+							DrawHandIcon = True
+							If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[i]
+							Exit
+						EndIf
+					Next
 					
 					If mo\MouseDown1 Lor mo\MouseHit1 Then
 						If GrabbedEntity <> 0 Then ; ~ Avain
@@ -6640,7 +6640,7 @@ Function UpdateEvents%()
 									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[0]))
-									If Angle > 181.0 Then DrawArrowIcon[3] = True
+									DrawArrowIcon[3] = (Angle > 181.0)
 									DrawArrowIcon[1] = True
 									
 									If Angle < 90.0 Then
@@ -7001,9 +7001,9 @@ Function UpdateEvents%()
 				
 				; ~ e\EventState3: Checks if the player had left the airlock or not
 				
-				Local BrokenDoor% = False
+				Local BrokenDoor%
 				
-				If e\room\Objects[1] <> 0 Then BrokenDoor = True
+				BrokenDoor = (e\room\Objects[1] <> 0)
 				
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 Then
@@ -9073,9 +9073,7 @@ Function UpdateEndings%()
 										
 										me\Playable = False
 										
-										For i = 4 To 5
-											If e\room\NPC[i]\State3 = 70.0 * 4.0 Then Temp = True
-										Next
+										Temp = (e\room\NPC[4]\State3 = 70.0 * 4.0 Lor e\room\NPC[5]\State3 = 70.0 * 4.0)
 										
 										If e\EventState > 70.0 * 92.0 And Temp Then
 											ClearCheats()
@@ -9779,4 +9777,5 @@ Function Update035Label%(OBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#19CA
 ;~C#Blitz3D

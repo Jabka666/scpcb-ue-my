@@ -521,7 +521,7 @@ Function ResetOptionsINI%()
 	
 	opt\VSync = True
 	
-	If opt\DisplayMode = 0 Then opt\AntiAliasing = True
+	opt\AntiAliasing = (opt\DisplayMode = 0)
 	
 	opt\AdvancedRoomLights = True
 	
