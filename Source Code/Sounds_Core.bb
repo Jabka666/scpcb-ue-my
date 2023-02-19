@@ -265,8 +265,9 @@ Function KillSounds%()
 	Local e.Events, n.NPCs, d.Doors, snd.Sound, sub.Subtitles
 	Local i%
 	
-	For i = 0 To 9
+	For i = 0 To 8 Step 2
 		If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
+		If TempSounds[i + 1] <> 0 Then FreeSound_Strict(TempSounds[i + 1]) : TempSounds[i + 1] = 0
 	Next
 	
 	For e.Events = Each Events

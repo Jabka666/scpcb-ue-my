@@ -535,16 +535,20 @@ Function QuickLoadEvents%()
 					QuickLoadPercent = 50
 					e\EventStr = "Load5"
 				ElseIf e\EventStr = "Load5"
-					For i = 3 To 6
+					For i = 3 To 5 Step 2
 						PositionEntity(e\room\Objects[i], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
 						RotateEntity(e\room\Objects[i], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
 						ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
+						PositionEntity(e\room\Objects[i + 1], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
+						RotateEntity(e\room\Objects[i + 1], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
+						ScaleEntity(e\room\Objects[i + 1], 0.05, 0.05, 0.05, True)
 					Next
 					QuickLoadPercent = 70
 					e\EventStr = "Load6"
 				ElseIf e\EventStr = "Load6"
-					For i = 3 To 6
+					For i = 3 To 5 Step 2
 						HideEntity(e\room\Objects[i])
+						HideEntity(e\room\Objects[i + 1])
 					Next
 					QuickLoadPercent = 100
 					e\EventStr = "LoadDone"
@@ -4529,8 +4533,9 @@ Function UpdateEvents%()
 						ShouldPlay = 7
 						
 						If e\room\NPC[0] = Null Then
-							For i = 0 To 3
+							For i = 0 To 2 Step 2
 								e\room\NPC[i] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
+								e\room\NPC[i + 1] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
 							Next
 							
 							e\room\NPC[4] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
@@ -4618,15 +4623,17 @@ Function UpdateEvents%()
 					Else
 						e\EventState = 0.0
 						If e\room\NPC[0] <> Null Then
-							For i = 0 To 3
+							For i = 0 To 2 Step 2
 								e\room\NPC[i]\State = 66.0
+								e\room\NPC[i + 1]\State = 66.0
 							Next
 						EndIf
 					EndIf
 				Else
 					If e\room\NPC[0] <> Null Then
-						For i = 0 To 3
+						For i = 0 To 2 Step 2
 							e\room\NPC[i]\State = 66.0
+							e\room\NPC[i + 1]\State = 66.0
 						Next
 					EndIf
 				EndIf
@@ -5746,8 +5753,9 @@ Function UpdateEvents%()
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								If EntityHidden(e\room\Objects[3]) Then
-									For i = 3 To 6
+									For i = 3 To 5 Step 2
 										ShowEntity(e\room\Objects[i])
+										ShowEntity(e\room\Objects[i + 1])
 									Next
 								EndIf
 								
@@ -5762,8 +5770,9 @@ Function UpdateEvents%()
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								If EntityHidden(e\room\Objects[3]) Then
-									For i = 3 To 6
+									For i = 3 To 5 Step 2
 										ShowEntity(e\room\Objects[i])
+										ShowEntity(e\room\Objects[i + 1])
 									Next
 								EndIf
 								If AnimTime(e\room\Objects[6]) <> 227.0 Then SetAnimTime(e\room\Objects[6], 227.0)
@@ -5828,8 +5837,9 @@ Function UpdateEvents%()
 					EndIf
 				ElseIf e\room\Objects[3] <> 0
 					If (Not EntityHidden(e\room\Objects[3])) Then
-						For i = 3 To 6
+						For i = 3 To 5 Step 2
 							HideEntity(e\room\Objects[i])
+							HideEntity(e\room\Objects[i + 1])
 						Next
 					EndIf
 				Else
@@ -8036,8 +8046,9 @@ Function UpdateDimension106%()
 				Select e\EventState2
 					Case PD_StartRoom
 						;[Block]
-						For i = 0 To 7
+						For i = 0 To 6 Step 2
 							ScaleEntity(e\room\Objects[i], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
+							ScaleEntity(e\room\Objects[i + 1], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + (i + 1) * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + (i + 1) * 20.0) * 0.1), RoomScale, True)
 						Next
 						
 						If n_I\Curr106\State > 0.0 Then ; ~ SCP-106 circles around the starting room
@@ -8798,13 +8809,15 @@ Function UpdateDimension1499%()
 						e\EventState3 = 70.0 * 20.0
 					ElseIf e\EventState3 = 70.0 * 20.0
 						If e\room\NPC[0]\Frame > 854.5 Then
-							For i = 2 To 5
+							For i = 2 To 4 Step 2
 								If i = 2 Then
 									LoadNPCSound(e\room\NPC[i], "SFX\SCP\1499\Triggered.ogg")
 									e\room\NPC[i]\SoundCHN = PlaySound2(e\room\NPC[i]\Sound, Camera, e\room\NPC[i]\Collider, 50.0)
 								EndIf
 								e\room\NPC[i]\State = 1.0
 								SetNPCFrame(e\room\NPC[i], 203.0)
+								e\room\NPC[i + 1]\State = 1.0
+								SetNPCFrame(e\room\NPC[i + 1], 203.0)
 							Next
 							e\EventState3 = 70.0 * 30.0
 						EndIf
@@ -9381,8 +9394,9 @@ Function UpdateEndings%()
 											If n_I\Curr106\State3 > 700.0 Then
 												n_I\Curr106\State = 100000.0
 												e\EventState2 = 0.0
-												For i = 5 To 8
+												For i = 5 To 7 Step 2
 													e\room\NPC[i]\State = 10.0 : e\room\NPC[i]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.2)
+													e\room\NPC[i + 1]\State = 10.0 : e\room\NPC[i + 1]\Speed = e\room\NPC[i + 1]\Speed * Rnd(1.0, 1.2)
 												Next
 												For i = 2 To 4 ; ~ Helicopters attack the player
 													e\room\NPC[i]\State = 2.0
@@ -9777,5 +9791,4 @@ Function Update035Label%(OBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#19CA
 ;~C#Blitz3D

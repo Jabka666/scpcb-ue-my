@@ -1439,8 +1439,9 @@ Function DestroyForest%(fr.Forest, RemoveGrid% = True)
 	For i = ROOM1 To ROOM4
 		If fr\TileMesh[i] <> 0 Then FreeEntity(fr\TileMesh[i]) : fr\TileMesh[i] = 0
 	Next
-	For i = 0 To 3
+	For i = 0 To 2 Step 2
 		If fr\DetailMesh[i] <> 0 Then FreeEntity(fr\DetailMesh[i]) : fr\DetailMesh[i] = 0
+		If fr\DetailMesh[i + 1] <> 0 Then FreeEntity(fr\DetailMesh[i + 1]) : fr\DetailMesh[i + 1] = 0
 	Next
 	
 	CatchErrors("DestroyForest")
@@ -4415,8 +4416,9 @@ Function FillRoom%(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x + 308.0 * RoomScale, r\y + 0.5, r\z + 640.0 * RoomScale)
 			
-			For i = 0 To 3
+			For i = 0 To 2 Step 2
 				EntityParent(r\Objects[i], r\OBJ)
+				EntityParent(r\Objects[i + 1], r\OBJ)
 			Next
 			
 			it.Items = CreateItem("Addendum: 5/14 Test Log", "paper", r\x + 538.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 127.0 * RoomScale)
@@ -4806,9 +4808,11 @@ Function FillRoom%(r.Rooms)
 				MoveEntity(r\RoomDoors[i]\Buttons[0], 0.0, 0.0, -8.0)
 			Next
 			
-			For i = 0 To 5
+			For i = 0 To 4 Step 2
 				r\RoomDoors[i]\AutoClose = False
 				MoveEntity(r\RoomDoors[i]\Buttons[1], 0.0, 0.0, -8.0)
+				r\RoomDoors[i + 1]\AutoClose = False
+				MoveEntity(r\RoomDoors[i + 1]\Buttons[1], 0.0, 0.0, -8.0)
 			Next
 			
 			it.Items = CreateItem("Document SCP-939", "paper", r\x + 352.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 256.0 * RoomScale)
@@ -5845,8 +5849,9 @@ Function FillRoom%(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x - 224.0 * RoomScale + 0.005, r\y + 192.0 * RoomScale, r\z)
 			
-			For i = 0 To 3
+			For i = 0 To 2 Step 2
 				EntityParent(r\Objects[i], r\OBJ)
+				EntityParent(r\Objects[i + 1], r\OBJ)
 			Next
 			;[End Block]
 		Case "room2_4_hcz"
@@ -6168,8 +6173,9 @@ Function FillRoom%(r.Rooms)
 			r\Objects[9] = CreatePivot()
 			PositionEntity(r\Objects[9], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
 			
-			For i = 0 To 9
+			For i = 0 To 8 Step 2
 				EntityParent(r\Objects[i], r\OBJ)
+				EntityParent(r\Objects[i + 1], r\OBJ)
 			Next
 			
 			it.Items = CreateItem("Hazmat Suit", "hazmatsuit", r\x - 537.0 * RoomScale, r\y - 4895.0 * RoomScale, r\z - 66.0 * RoomScale)
@@ -6628,8 +6634,9 @@ Function FillRoom%(r.Rooms)
 			r\Objects[8] = CreatePivot()
 			PositionEntity(r\Objects[8], r\x - 1824.0 * RoomScale, r\y + 0.22, r\z + 7056.0 * RoomScale)
 			
-			For i = 3 To 8
+			For i = 3 To 7 Step 2
 				EntityParent(r\Objects[i], r\OBJ)
+				EntityParent(r\Objects[i + 1], r\OBJ)
 			Next
 			
 			r\Objects[11] = CreatePivot()
@@ -6725,8 +6732,9 @@ Function FillRoom%(r.Rooms)
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x + 2816.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 2816.0 * RoomScale)
 			
-			For i = 3 To 6
+			For i = 3 To 5 Step 2
 				EntityParent(r\Objects[i], r\OBJ)
+				EntityParent(r\Objects[i + 1], r\OBJ)
 			Next
 			
 			; ~ MTF spawnpoint
@@ -6745,8 +6753,9 @@ Function FillRoom%(r.Rooms)
 			r\Objects[11] = CreatePivot()
 			PositionEntity(r\Objects[11], r\x - 5424.0 * RoomScale, r\y, r\z - 1068.0 * RoomScale)
 			
-			For i = 8 To 11
+			For i = 8 To 10 Step 2
 				EntityParent(r\Objects[i], r\OBJ)
+				EntityParent(r\Objects[i + 1], r\OBJ)
 			Next
 			;[End Block]
 		Case "room1_lifts"
@@ -7334,8 +7343,9 @@ Function FillRoom%(r.Rooms)
 			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[3], r\x + 928.0 * RoomScale, r\y - 640.0 * RoomScale, r\z + 704.0 * RoomScale)
 			
-			For i = 0 To 3
+			For i = 0 To 2 Step 2
 				EntityParent(r\Objects[i], r\OBJ)
+				EntityParent(r\Objects[i + 1], r\OBJ)
 			Next
 			
 			it.Items = CreateRandomBattery(r\x - 132.0 * RoomScale, r\y - 368.0 * RoomScale, r\z - 658.0 * RoomScale)
@@ -7542,8 +7552,9 @@ Function FillRoom%(r.Rooms)
 			EntityType(r\Objects[20], HIT_MAP)
 			PositionEntity(r\Objects[20], r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)
 			
-			For i = 17 To 20
+			For i = 17 To 19 Step 2
 				HideEntity(r\Objects[i])
+				HideEntity(r\Objects[i + 1])
 			Next
 			
 			it.Items = CreateItem("Burnt Note", "paper", EntityX(r\OBJ), r\y + 0.5, EntityZ(r\OBJ) + 3.5)
@@ -9088,9 +9099,10 @@ Function SetChunkDataValues%()
 	StrTemp = ""
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
-	For i = 0 To 63
-		For j = 0 To 63
+	For i = 0 To 62 Step 2
+		For j = 0 To 62 Step 2
 			CHUNKDATA[i + (j * 64)] = Rand(0, IniGetInt(SCP1499ChunksFile, "general", "count"))
+			CHUNKDATA[(i + 1) + ((j + 1) * 64)] = Rand(0, IniGetInt(SCP1499ChunksFile, "general", "count"))
 		Next
 	Next
 	

@@ -2040,8 +2040,9 @@ Function UpdateGame%()
 		
 		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
 			DrawHandIcon = False
-			For i = 0 To 3
+			For i = 0 To 2 Step 2
 				DrawArrowIcon[i] = False
+				DrawArrowIcon[i + 1] = False
 			Next
 			
 			me\RestoreSanity = True
@@ -5854,10 +5855,11 @@ Function RenderGUI%()
 	
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
 		If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
+		
+		x = mo\Viewport_Center_X - (32 * MenuScale)
+		y = mo\Viewport_Center_Y - (32 * MenuScale)
 		For i = 0 To 3
 			If DrawArrowIcon[i] Then
-				x = mo\Viewport_Center_X - (32 * MenuScale)
-				y = mo\Viewport_Center_Y - (32 * MenuScale)
 				Select i
 					Case 0
 						;[Block]
@@ -7796,8 +7798,9 @@ Function UpdateEnding%()
 					If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "mainmenu"), Font_Default_Big)
 						ShouldPlay = 24
 						NowPlaying = ShouldPlay
-						For i = 0 To 9
+						For i = 0 To 8 Step 2
 							If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
+							If TempSounds[i + 1] <> 0 Then FreeSound_Strict(TempSounds[i + 1]) : TempSounds[i + 1] = 0
 						Next
 						StopStream_Strict(MusicCHN) : MusicCHN = 0
 						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
