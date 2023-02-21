@@ -209,8 +209,9 @@ Function LoadDoors%()
 	
 	d_I\DoorFrameModelID[DOOR_WOODEN_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWoodenFrame.b3d")
 	
-	For i = 0 To MaxDoorFrameModelIDAmount - 1
+	For i = 0 To MaxDoorFrameModelIDAmount - 2 Step 2
 		HideEntity(d_I\DoorFrameModelID[i])
+		HideEntity(d_I\DoorFrameModelID[i + 1])
 	Next
 	
 	d_I\ElevatorPanelModel = LoadMesh_Strict("GFX\Map\Props\elevator_panel.b3d")
@@ -531,8 +532,9 @@ Function LoadNPCs%()
 	
 	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\vehicle.b3d")
 	
-	For i = 0 To MaxNPCModelIDAmount - 1
+	For i = 0 To MaxNPCModelIDAmount - 2 Step 2
 		HideEntity(n_I\NPCModelID[i])
+		HideEntity(n_I\NPCModelID[i + 1])
 	Next
 	
 	n_I\NPCTextureID[NPC_CLASS_D_GONZALES_TEXTURE] = LoadTexture_Strict("GFX\NPCs\Gonzales.png", 1, DeleteAllTextures)
@@ -1702,7 +1704,7 @@ Function LoadEntities%()
 		HandleImage(t\IconID[i + 9], 0, 0)
 	Next
 	
-	For i = 0 To MAXACHIEVEMENTS - 1
+	For i = 0 To MaxAchievements - 1
 		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvName")
 		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvDesc")
 		

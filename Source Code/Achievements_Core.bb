@@ -1,10 +1,10 @@
-Const MAXACHIEVEMENTS% = 42
+Const MaxAchievements% = 42
 
 Type Achievements
-	Field Achievement%[MAXACHIEVEMENTS]
-	Field AchievementStrings$[MAXACHIEVEMENTS]
-	Field AchievementDescs$[MAXACHIEVEMENTS]
-	Field AchvIMG%[MAXACHIEVEMENTS]
+	Field Achievement%[MaxAchievements]
+	Field AchievementStrings$[MaxAchievements]
+	Field AchievementDescs$[MaxAchievements]
+	Field AchvIMG%[MaxAchievements]
 	Field AchvLocked%
 End Type
 

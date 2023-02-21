@@ -1332,14 +1332,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[Block]
 							Local CurrAchvAmount% = 0
 							
-							For i = 0 To MAXACHIEVEMENTS - 1
+							For i = 0 To MaxAchievements - 2 Step 2
 								If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
+								If achv\Achievement[i + 1] = True Then CurrAchvAmount = CurrAchvAmount + 1
 							Next
 							
 							Select SelectedDifficulty\OtherFactors
 								Case EASY
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(10) = 1 Then
@@ -1351,7 +1352,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(15) = 1 Then
@@ -1363,7 +1364,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(20) = 1 Then
@@ -1375,7 +1376,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(25) = 1 Then
@@ -1429,14 +1430,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					CurrAchvAmount = 0
-					For i = 0 To MAXACHIEVEMENTS - 1
+					For i = 0 To MaxAchievements - 2 Step 2
 						If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
+						If achv\Achievement[i + 1] = True Then CurrAchvAmount = CurrAchvAmount + 1
 					Next
 					
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
+							If Rand(0, ((MaxAchievements - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(20) = 1 Then
@@ -1448,7 +1450,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
+							If Rand(0, ((MaxAchievements - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(25) = 1 Then
@@ -1460,7 +1462,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case HARD
 							;[Block]
-							If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
+							If Rand(0, ((MaxAchievements - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(30) = 1 Then

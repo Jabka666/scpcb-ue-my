@@ -582,6 +582,7 @@ Function UpdateNPCs%()
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
+	Local SinValue#
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -825,15 +826,17 @@ Function UpdateNPCs%()
 							EndIf
 						EndIf
 						
-						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) + 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
+						SinValue = 0.05 + (Sin(MilliSecs2() * 0.08) * 0.02)
+						
+						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) + SinValue, EntityZ(n\Collider))
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						
-						PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) + 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
+						PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) + SinValue, EntityZ(n\Collider))
 						RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
 						
 						If EntityHidden(n\OBJ3) Then ShowEntity(n\OBJ3)
 						
-						PositionEntity(n\OBJ3, EntityX(n\Collider), EntityY(n\Collider) - 0.05 + Sin(MilliSecs2() * 0.08) * 0.02, EntityZ(n\Collider))
+						PositionEntity(n\OBJ3, EntityX(n\Collider), EntityY(n\Collider) - SinValue, EntityZ(n\Collider))
 						RotateEntity(n\OBJ3, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 					EndIf
 				EndIf

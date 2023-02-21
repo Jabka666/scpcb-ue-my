@@ -1057,10 +1057,13 @@ Function UpdateConsole%()
 					;[Block]
 					For i = 1 To 20
 						If Rand(2) = 1 Then
-							it.Items = CreateItem("Some SCP-420-J", "scp420j", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+							StrTemp = "Some SCP-420-J"
+							StrTemp2 = "scp420j"
 						Else
-							it.Items = CreateItem("Joint", "joint", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+							StrTemp = "Joint"
+							StrTemp2 = "joint"
 						EndIf
+						it.Items = CreateItem(StrTemp, StrTemp2, EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 						EntityType(it\Collider, HIT_ITEM)
 					Next
 					PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
@@ -1250,10 +1253,13 @@ Function UpdateConsole%()
 					;[Block]
 					For i = 1 To 20
 						If Rand(2) = 1 Then
-							it.Items = CreateItem("Quarter", "25ct", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+							StrTemp = "Quarter"
+							StrTemp2 = "25ct"
 						Else
-							it.Items = CreateItem("Coin", "coin", EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+							StrTemp = "Coin"
+							StrTemp2 = "coin"
 						EndIf
+						it.Items = CreateItem(StrTemp, StrTemp2, EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 						EntityType(it\Collider, HIT_ITEM)
 					Next
 					;[End Block]
@@ -1492,13 +1498,14 @@ Function UpdateConsole%()
 					EndIf
 					
 					If StrTemp = "all" Then
-						For i = 0 To MAXACHIEVEMENTS - 1
+						For i = 0 To MaxAchievements - 2 Step 2
 							achv\Achievement[i] = True
+							achv\Achievement[i + 1] = True
 						Next
 						CreateConsoleMsg(GetLocalString("console", "ga.all"))
 					EndIf
 					
-					If Int(StrTemp) >= 0 And Int(StrTemp) < MAXACHIEVEMENTS And StrTemp <> "all" Then
+					If Int(StrTemp) >= 0 And Int(StrTemp) < MaxAchievements And StrTemp <> "all" Then
 						achv\Achievement[Int(StrTemp)] = True
 						CreateConsoleMsg(Format(GetLocalString("console", "ga.success"), achv\AchievementStrings[Int(StrTemp)]))
 					ElseIf StrTemp <> "all"
@@ -6091,6 +6098,10 @@ Function RenderGUI%()
 						;[Block]
 						ShouldDrawRect = (I_427\Using)
 						;[End Block]
+					Default
+						;[Block]
+						ShouldDrawRect = False
+						;[End Block]
 				End Select
 				If ShouldDrawRect Then Rect(x - (3 * MenuScale), y - (3 * MenuScale), INVENTORY_GFX_SIZE + (6 * MenuScale), INVENTORY_GFX_SIZE + (6 * MenuScale))
 			EndIf
@@ -7668,7 +7679,7 @@ Function RenderMenu%()
 		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
 			If igm\AchievementsMenu > 0 Then
 				For i = 0 To 11
-					If i + ((igm\AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
+					If i + ((igm\AchievementsMenu - 1) * 12) < MaxAchievements Then
 						RenderAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i + ((igm\AchievementsMenu - 1) * 12))
 					Else
 						Exit
@@ -7899,7 +7910,7 @@ Function RenderEnding%()
 					
 					Local AchievementsUnlocked% = 0
 					
-					For i = 0 To MAXACHIEVEMENTS - 1
+					For i = 0 To MaxAchievements - 1
 						AchievementsUnlocked = AchievementsUnlocked + achv\Achievement[i]
 					Next
 					
@@ -8910,10 +8921,12 @@ Function Update008%()
 	Local r.Rooms, e.Events, p.Particles, de.Decals
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect%
+	Local SinValue#
 	
 	TeleportForInfect = PlayerInReachableRoom()
 	If I_008\Timer > 0.0 Then
 		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
+		SinValue = Sin(MilliSecs2() / 8.0) + 2.0
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If I_427\Timer < 70.0 * 360.0 Then
@@ -8929,7 +8942,7 @@ Function Update008%()
 			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
 			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(t\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * (Sin(MilliSecs2() / 8.0) + 2.0))
+			EntityAlpha(t\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * SinValue)
 			
 			For i = 0 To 6
 				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer <= (i * 15.0) + 10.0 Then
@@ -8988,7 +9001,7 @@ Function Update008%()
 			
 			If TeleportForInfect Then
 				If I_008\Timer < 94.7 Then
-					EntityAlpha(t\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 8.0) + 2.0))
+					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
 					me\BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
@@ -9001,7 +9014,7 @@ Function Update008%()
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
-					EntityAlpha(t\OverlayID[3], 0.5 * (Sin(MilliSecs2() / 5.0) + 2.0))
+					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
@@ -9038,9 +9051,10 @@ Function Update008%()
 					EndIf
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
-					RotateEntity(me\Head, (1.0 + Sin(MilliSecs2() / 5.0)) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
+					SinValue = Sin(MilliSecs2() / 5.0)
+					RotateEntity(me\Head, (1.0 + SinValue) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
 					MoveEntity(me\Head, 0.0, 0.0, -0.4)
-					TurnEntity(me\Head, 80.0 + (Sin(MilliSecs2() / 5.0)) * 30.0, (Sin(MilliSecs2() / 5.0)) * 40.0, 0.0)
+					TurnEntity(me\Head, 80.0 + SinValue * 30.0, SinValue * 40.0, 0.0)
 				EndIf
 			Else
 				Kill()

@@ -329,6 +329,7 @@ Function SetupTriggerBoxes%(r.Rooms)
 	Local pXMin#, pXMax#
 	Local pZMin#, pZMax#
 	Local i%
+	Local SinValue#, CosValue#
 	
 	For i = 0 To r\TriggerBoxAmount - 1
 		t = r\TriggerBoxes[i]
@@ -338,11 +339,14 @@ Function SetupTriggerBoxes%(r.Rooms)
 		
 		GetMeshExtents(t\OBJ)
 		
-		pXMin = Cos(r\Angle) * sX * Mesh_MinX - Sin(r\Angle) * sZ * Mesh_MinZ + r\x
-		pZMin = Sin(r\Angle) * sX * Mesh_MinX + Cos(r\Angle) * sZ * Mesh_MinZ + r\z
+		SinValue = Sin(r\Angle)
+		CosValue = Cos(r\Angle)
 		
-		pXMax = Cos(r\Angle) * sX * Mesh_MaxX - Sin(r\Angle) * sZ * Mesh_MaxZ + r\x
-		pZMax = Sin(r\Angle) * sX * Mesh_MaxX + Cos(r\Angle) * sZ * Mesh_MaxZ + r\z
+		pXMin = CosValue * sX * Mesh_MinX - SinValue * sZ * Mesh_MinZ + r\x
+		pZMin = SinValue * sX * Mesh_MinX + CosValue * sZ * Mesh_MinZ + r\z
+		
+		pXMax = CosValue * sX * Mesh_MaxX - SinValue * sZ * Mesh_MaxZ + r\x
+		pZMax = SinValue * sX * Mesh_MaxX + CosValue * sZ * Mesh_MaxZ + r\z
 		
 		If pXMin > pXMax Then
 			t\MinX = pXMax

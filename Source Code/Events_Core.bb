@@ -636,6 +636,7 @@ Function UpdateEvents%()
 	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
 	Local Angle#, RoomExists%
+	Local SinValue#, CosValue#
 	
 	For e.Events = Each Events
 		Select e\EventID
@@ -665,8 +666,9 @@ Function UpdateEvents%()
 						
 						While e\room\RoomDoors[0]\OpenState < 180.0
 							e\room\RoomDoors[0]\OpenState = Min(180.0, e\room\RoomDoors[0]\OpenState + 0.8)
-							MoveEntity(e\room\RoomDoors[0]\OBJ, Sin(e\room\RoomDoors[0]\OpenState) / 180.0, 0.0, 0.0)
-							MoveEntity(e\room\RoomDoors[0]\OBJ2, -Sin(e\room\RoomDoors[0]\OpenState) / 180.0, 0.0, 0.0)
+							SinValue = Sin(e\room\RoomDoors[0]\OpenState) / 180.0
+							MoveEntity(e\room\RoomDoors[0]\OBJ, SinValue, 0.0, 0.0)
+							MoveEntity(e\room\RoomDoors[0]\OBJ2, -SinValue, 0.0, 0.0)
 						Wend
 						
 						If e\room\NPC[0] <> Null Then
@@ -2069,7 +2071,7 @@ Function UpdateEvents%()
 								If Dist < 0.64 Then ; ~ Get the player out of the way
 									Dist = Sqr(Dist)
 									fDir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
-									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0, Sin(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
+									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0.0, Sin(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
 								EndIf
 								If EntityY(e\room\NPC[0]\Collider) > 0.6 Then EntityType(e\room\NPC[0]\Collider, 0)
 							Else
@@ -3286,6 +3288,8 @@ Function UpdateEvents%()
 									
 									ScaleEntity(TempInt, RoomScale, RoomScale, RoomScale, True)
 									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + MTGridY, e\room\z + (iY * 2.0), True)
+									SinValue = Sin(EntityYaw(TempInt, True))
+									CosValue = Cos(EntityYaw(TempInt, True))
 									
 									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
 										Case MT_ROOM1 + 1
@@ -3298,28 +3302,28 @@ Function UpdateEvents%()
 											;[End Block]
 										Case MT_ROOM4 + 3
 											;[Block]
-											AddLight(Null, e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + MTGridY + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-											it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(TempInt, True)) * 1226.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 1226.0 * RoomScale))
+											AddLight(Null, e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+											it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											
-											it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale))
+											it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale))
 											EntityType(it\Collider, HIT_ITEM)
 											;[End Block]
 									End Select
 									
 									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = 5 Then
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, ELEVATOR_DOOR)
-										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
-										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
-										PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
-										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (Sin(EntityYaw(TempInt, True)) * (-0.18)), True)
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (CosValue * 240.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, ELEVATOR_DOOR)
+										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (CosValue * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (SinValue * 0.05), True)
+										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (CosValue * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (SinValue * 0.031), True)
+										PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (SinValue * 0.05), True)
+										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.18)), True)
 										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 										
-										AddLight(Null, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+										AddLight(Null, e\room\x + (iX * 2.0) + (CosValue * 555.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
-										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
+										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (CosValue * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 552.0 * RoomScale))
 										If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Then
 											If e\room\RoomDoors[1] <> Null Then
 												RemoveDoor(dr)
@@ -3501,6 +3505,8 @@ Function UpdateEvents%()
 									
 									RotateEntity(TempInt, 0.0, e\room\mt\Angles[iX + (iY * MTGridSize)] * 90.0, 0.0)
 									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + MTGridY, e\room\z + (iY * 2.0), True)
+									SinValue = Sin(EntityYaw(TempInt, True))
+									CosValue = Cos(EntityYaw(TempInt, True))
 									
 									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
 										Case MT_ROOM1 + 1, MT_ROOM4 + 1, MT_ROOM4 + 2
@@ -3513,23 +3519,23 @@ Function UpdateEvents%()
 											;[End Block]
 										Case MT_ROOM4 + 3
 											;[Block]
-											AddLight(Null, e\room\x + (iX * 2.0) - (Sin(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(TempInt, True)) * 16.0 * RoomScale), e\room\y + MTGridY + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (Cos(EntityYaw(TempInt, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(TempInt, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+											AddLight(Null, e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
 											;[End Block]
 									End Select
 									
 									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = 5 Then
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 240.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, ELEVATOR_DOOR)
-										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
-										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(TempInt, True)) * 0.031), True)
-										PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (Sin(EntityYaw(TempInt, True)) * 0.05), True)
-										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (Cos(EntityYaw(TempInt, True)) * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (Sin(EntityYaw(TempInt, True)) * (-0.18)), True)
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (CosValue * 240.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, ELEVATOR_DOOR)
+										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (CosValue * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (SinValue * 0.05), True)
+										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (CosValue * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (SinValue * 0.031), True)
+										PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (SinValue * 0.05), True)
+										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.18)), True)
 										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 										
-										AddLight(Null, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 555.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+										AddLight(Null, e\room\x + (iX * 2.0) + (CosValue * 555.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
-										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (Cos(EntityYaw(TempInt, True)) * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (Sin(EntityYaw(TempInt, True)) * 552.0 * RoomScale))
+										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (CosValue * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 552.0 * RoomScale))
 										If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Then
 											If e\room\RoomDoors[1] <> Null Then
 												RemoveDoor(dr)
@@ -4076,17 +4082,19 @@ Function UpdateEvents%()
 							
 							For i = 0 To 6
 								If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 Then
-									de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x - Rnd(197.0, 199.0) * Cos(e\room\Angle) * RoomScale, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
+									CosValue = Rnd(197.0, 199.0) * Cos(e\room\Angle) * RoomScale
+									de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x - CosValue, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 									de\SizeChange = 0.001
 									EntityParent(de\OBJ, e\room\OBJ)
-									de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x - Rnd(197.0, 199.0) * Cos(e\room\Angle) * RoomScale, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
+									de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x - CosValue, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 									de\SizeChange = 0.001
 									EntityParent(de\OBJ, e\room\OBJ)
 								Else
-									de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - Rnd(197.0, 199.0) * Sin(e\room\Angle) * RoomScale - Rnd(0.001, 0.003), 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
+									SinValue = Rnd(197.0, 199.0) * Sin(e\room\Angle) * RoomScale - Rnd(0.001, 0.003)
+									de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - SinValue, 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 									de\SizeChange = 0.001
 									EntityParent(de\OBJ, e\room\OBJ)
-									de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - Rnd(197.0, 199.0) * Sin(e\room\Angle) * RoomScale - Rnd(0.001, 0.003), 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
+									de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - SinValue, 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 									de\SizeChange = 0.001
 									EntityParent(de\OBJ, e\room\OBJ)
 								EndIf
@@ -4701,7 +4709,7 @@ Function UpdateEvents%()
 								If EntityPitch(e\room\RoomLevers[0]\OBJ) = -80.0 Then e\EventState2 = 1.0
 							EndIf
 							
-							UpdateRedLight(e\room\Objects[1], 100, 50)
+							UpdateRedLight(e\room\Objects[1], 1500, 800)
 							
 							If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
 								If EntityVisible(e\room\Objects[0], Camera) Then
@@ -4720,8 +4728,9 @@ Function UpdateEvents%()
 									
 									me\HeartBeatRate = 150.0
 									me\HeartBeatVolume = Max(3.0 - Sqr(Dist), 0.0) / 3.0
-									me\BlurVolume = Max((2.0 - Sqr(Dist)) * (e\EventState3 / 800.0) * (Sin(Float(MilliSecs2()) / 20.0 + 1.0)), me\BlurVolume)
-									me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 8.0 * Max((3.0 - Sqr(Dist)), 0.0))
+									SinValue = Sin(Float(MilliSecs2()) / 20.0) + 1.0
+									me\BlurVolume = Max((2.0 - Sqr(Dist)) * (e\EventState3 / 800.0) * SinValue, me\BlurVolume)
+									me\CurrCameraZoom = Max(me\CurrCameraZoom, SinValue * 8.0 * Max((3.0 - Sqr(Dist)), 0.0))
 									
 									StopBreathSound()
 									
@@ -6457,7 +6466,7 @@ Function UpdateEvents%()
 						ElseIf e\EventState = 1.0
 							e\SoundCHN = LoopSound2(AlarmSFX[0], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 							
-							UpdateRedLight(e\room\Objects[5], 1000, 500)
+							UpdateRedLight(e\room\Objects[5], 1500, 800)
 							
 							Dist = EntityDistanceSquared(me\Collider, e\room\Objects[0])
 							If Dist < 4.0 Then
@@ -7630,7 +7639,7 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						
-						UpdateRedLight(e\room\Objects[20], 100, 50)
+						UpdateRedLight(e\room\Objects[20], 1500, 800)
 					Else
 						For i = 0 To 14
 							If e\room\Objects[i] <> 0 And i <> 7 Then
@@ -8004,6 +8013,7 @@ Const PD_TowerRoom% = 6
 Function UpdateDimension106%()
 	Local e.Events, e2.Events, r.Rooms, it.Items, p.Particles, de.Decals
 	Local i%, Angle#, Dist#, Pvt%, Temp%
+	Local SinValue#, CosValue#
 	Local x#, y#, z#
 	
 	For e.Events = Each Events
@@ -8080,14 +8090,17 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_FourWayRoom
 						;[Block]
+						SinValue = Sin(e\EventState * 1.6) * 4.0
+						CosValue = Cos(e\EventState * 0.8) * 5.0
+						
 						PositionEntity(e\room\Objects[9], EntityX(e\room\Objects[8], True) + 3384.0 * RoomScale, 0.0, EntityZ(e\room\Objects[8], True))
 						
-						TranslateEntity(e\room\Objects[9], Cos(e\EventState * 0.8) * 5.0, 0.0, Sin(e\EventState * 1.6) * 4.0, True)
+						TranslateEntity(e\room\Objects[9], CosValue, 0.0, SinValue, True)
 						RotateEntity(e\room\Objects[9], 0.0, e\EventState * 2.0, 0.0)
 						
 						PositionEntity(e\room\Objects[10], EntityX(e\room\Objects[8], True), 0.0, EntityZ(e\room\Objects[8], True) + 3384.0 * RoomScale)
 						
-						TranslateEntity(e\room\Objects[10], Sin(e\EventState * 1.6) * 4.0, 0.0, Cos(e\EventState * 0.8) * 5.0, True)
+						TranslateEntity(e\room\Objects[10], SinValue, 0.0, CosValue, True)
 						RotateEntity(e\room\Objects[10], 0.0, e\EventState * 2.0, 0.0)
 						
 						If (Not chs\GodMode) Then
@@ -8381,7 +8394,7 @@ Function UpdateDimension106%()
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[e\EventState3], True), 0.27, EntityZ(e\room\Objects[e\EventState3], True))
 							
 							PointEntity(n_I\Curr106\Collider, Camera)
-							TurnEntity(n_I\Curr106\Collider, 0.0, Sin(MilliSecs2() / 20.0) * 6.0, 0, True)
+							TurnEntity(n_I\Curr106\Collider, 0.0, Sin(MilliSecs2() / 20.0) * 6.0, 0.0, True)
 							MoveEntity(n_I\Curr106\Collider, 0.0, 0.0, Sin(MilliSecs2() / 15.0) * 0.06)
 							
 							n_I\Curr106\GravityMult = 0.0 : n_I\Curr106\DropSpeed = 0.0
@@ -8882,7 +8895,8 @@ End Function
 
 Function UpdateEndings%()
 	Local e.Events, e2.Events, n.NPCs, r.Rooms, p.Particles, de.Decals, em.Emitters
-	Local Dist#, i%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
+	Local Dist#, i%, k%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
+	Local SinValue#
 	
 	For e.Events = Each Events
 		Select e\EventID
@@ -9536,13 +9550,17 @@ Function UpdateEndings%()
 									EndIf
 									
 									If e\EventState3 > 50.0 And e\EventState3 < 230.0 Then
-										me\CameraShake = Sin(e\EventState3 - 50.0) * 3.0
-										TurnEntity(e\room\Objects[13], 0.0, (Sin(e\EventState3 - 50.0) * (-0.85)) * fps\Factor[0], 0.0, True)
-										TurnEntity(e\room\Objects[14], 0.0, (Sin(e\EventState3 - 50.0) * 0.85) * fps\Factor[0], 0.0, True)
+										SinValue = Sin(e\EventState3 - 50.0)
+										me\CameraShake = SinValue * 3.0
+										TurnEntity(e\room\Objects[13], 0.0, (SinValue * (-0.85)) * fps\Factor[0], 0.0, True)
+										TurnEntity(e\room\Objects[14], 0.0, (SinValue * 0.85) * fps\Factor[0], 0.0, True)
 										
-										For i = 5 To 8
+										For i = 5 To 7 Step 2
 											PositionEntity(e\room\NPC[i]\Collider, CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[i]\Collider, True), 50.0), EntityY(e\room\NPC[i]\Collider, True), CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), EntityZ(e\room\NPC[i]\Collider, True), 50.0), True)
 											ResetEntity(e\room\NPC[i]\Collider)
+											
+											PositionEntity(e\room\NPC[i + 1]\Collider, CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[i + 1]\Collider, True), 50.0), EntityY(e\room\NPC[i + 1]\Collider, True), CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), EntityZ(e\room\NPC[i + 1]\Collider, True), 50.0), True)
+											ResetEntity(e\room\NPC[i + 1]\Collider)
 										Next
 									EndIf
 									
@@ -9583,9 +9601,14 @@ Function UpdateEndings%()
 										e\room\NPC[i]\State = 0.0
 									Next
 									
-									For i = 5 To 8
+									For i = 5 To 7 Step 2
+										k = (i Mod 2)
 										e\room\NPC[i]\State = 3.0 : e\room\NPC[i]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i]\LastSeen = 70.0 * 300.0
-										e\room\NPC[i]\PathStatus = FindPath(e\room\NPC[i], EntityX(e\room\OBJ) - 1.0 + 2.0 * (i Mod 2), EntityY(me\Collider) + 0.2, EntityZ(e\room\OBJ) - 2.0 * (i Mod 2))
+										e\room\NPC[i]\PathStatus = FindPath(e\room\NPC[i], EntityX(e\room\OBJ) - 1.0 + 2.0 * k, EntityY(me\Collider) + 0.2, EntityZ(e\room\OBJ) - 2.0 * k)
+										
+										k = ((i + 1) Mod 2)
+										e\room\NPC[i + 1]\State = 3.0 : e\room\NPC[i + 1]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i + 1]\LastSeen = 70.0 * 300.0
+										e\room\NPC[i + 1]\PathStatus = FindPath(e\room\NPC[i + 1], EntityX(e\room\OBJ) - 1.0 + 2.0 * k, EntityY(me\Collider) + 0.2, EntityZ(e\room\OBJ) - 2.0 * k)
 									Next
 									e\EventState2 = 1.0
 								Else
@@ -9629,9 +9652,7 @@ Function UpdateEndings%()
 											PlaySound_Strict(IntroSFX[7])
 											
 											For n.NPCs = Each NPCs
-												If n\NPCType = NPCTypeMTF
-													RemoveNPC(n)
-												EndIf
+												If n\NPCType = NPCTypeMTF Then RemoveNPC(n)
 											Next
 											
 											me\LightFlash = 1.0

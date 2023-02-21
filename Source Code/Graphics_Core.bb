@@ -330,9 +330,9 @@ Function RenderWorld2%(Tween#)
 						Local xValue# = 0.0
 						
 						If YawValue > 90.0 And YawValue <= 180.0 Then
-							xValue = Sin(90.0) / 90.0 * YawValue
+							xValue = 1.0 / 90.0 * YawValue
 						ElseIf YawValue > 180 And YawValue < 270.0
-							xValue = Sin(270.0) / YawValue * 270.0
+							xValue = (-1.0) / YawValue * 270.0
 						Else
 							xValue = Sin(YawValue)
 						EndIf
@@ -341,9 +341,9 @@ Function RenderWorld2%(Tween#)
 						Local yValue# = 0.0
 						
 						If PitchValue > 90.0 And PitchValue <= 180.0 Then
-							yValue = Sin(90.0) / 90.0 * PitchValue
-						ElseIf PitchValue > 180.0 And PitchValue < 270
-							yValue = Sin(270.0) / PitchValue * 270.0
+							yValue = 1.0 / 90.0 * PitchValue
+						ElseIf PitchValue > 180.0 And PitchValue < 270.0
+							yValue = (-1.0) / PitchValue * 270.0
 						Else
 							yValue = Sin(PitchValue)
 						EndIf

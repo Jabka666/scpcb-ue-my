@@ -1699,6 +1699,7 @@ Function PlaceMapCreatorMT%(r.Rooms)
 	Local dr.Doors, it.Items, wayp.WayPoints
 	Local x%, y%, i%, Dist#
 	Local Meshes%[7]
+	Local SinValue#, CosValue#
 	
 	For i = 0 To MaxMTModelIDAmount - 1
 		Meshes[i] = CopyEntity(misc_I\MTModelID[i])
@@ -1719,6 +1720,8 @@ Function PlaceMapCreatorMT%(r.Rooms)
 				RotateEntity(Tile_Entity, 0.0, Angle, 0.0)
 				ScaleEntity(Tile_Entity, RoomScale, RoomScale, RoomScale, True)
 				PositionEntity(Tile_Entity, r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
+				SinValue = Sin(EntityYaw(Tile_Entity, True))
+				CosValue = Cos(EntityYaw(Tile_Entity, True))
 				
 				Select Tile_Type
 					Case ROOM1 + 1, ROOM2 + 1
@@ -1731,19 +1734,19 @@ Function PlaceMapCreatorMT%(r.Rooms)
 						;[End Block]
 					Case ROOM4 + 2
 						;[Block]
-						dr.Doors = CreateDoor(r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, Null, False, ELEVATOR_DOOR)
-						PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.05), True)
-						PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.031), True)
-						PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (Sin(EntityYaw(Tile_Entity, True)) * 0.05), True)
-						PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (Cos(EntityYaw(Tile_Entity, True)) * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (Sin(EntityYaw(Tile_Entity, True)) * (-0.18)), True)
+						dr.Doors = CreateDoor(r\x + (x * 2.0) + (CosValue * 240.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (SinValue * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, Null, False, ELEVATOR_DOOR)
+						PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (CosValue * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (SinValue * 0.05), True)
+						PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (CosValue * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (SinValue * 0.031), True)
+						PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (SinValue * 0.05), True)
+						PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.18)), True)
 						RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 						
-						AddLight(Null, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+						AddLight(Null, r\x + (x * 2.0) + (CosValue * 555.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
 						
 						Local TempInt2% = CreatePivot()
 						
 						RotateEntity(TempInt2, 0.0, EntityYaw(Tile_Entity, True) + 180.0, 0.0, True)
-						PositionEntity(TempInt2, r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale), r\y + MTGridY + (240.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * 552.0 * RoomScale))
+						PositionEntity(TempInt2, r\x + (x * 2.0) + (CosValue * 552.0 * RoomScale), r\y + MTGridY + (240.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 552.0 * RoomScale))
 						If r\RoomDoors[1] = Null Then
 							r\RoomDoors[1] = dr
 							r\Objects[3] = TempInt2
@@ -1756,11 +1759,11 @@ Function PlaceMapCreatorMT%(r.Rooms)
 						;[End Block]
 					Case ROOM4 + 3
 						;[Block]
-						AddLight(Null, r\x + (x * 2.0) - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
-						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + (x * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) - (Sin(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (Sin(EntityYaw(Tile_Entity, True)) * (-208.0) * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 1226.0 * RoomScale))
+						AddLight(Null, r\x + (x * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + (x * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						
-						it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + (x * 2.0) - (Sin(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Cos(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (Cos(EntityYaw(Tile_Entity, True)) * 504.0 * RoomScale) + (Sin(EntityYaw(Tile_Entity, True)) * 16.0 * RoomScale))
+						it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + (x * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						;[End Block]
 				End Select
@@ -2239,6 +2242,7 @@ End Function
 Function UpdateDoors%()
 	Local d.Doors, p.Particles
 	Local x#, z#, Dist#, i%, FindButton%
+	Local SinValue#
 	
 	If UpdateTimer <= 0.0 Then
 		For d.Doors = Each Doors
@@ -2292,26 +2296,30 @@ Function UpdateDoors%()
 						Case DEFAULT_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 120.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 85.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case BIG_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 0.8))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\Factor[0] / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-Sin(d\OpenState)) * fps\Factor[0] / 180.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * fps\Factor[0] / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-SinValue) * fps\Factor[0] / 180.0, 0.0, 0.0)
 							;[End Block]
 						Case OFFICE_DOOR, WOODEN_DOOR
 							;[Block]
@@ -2324,14 +2332,16 @@ Function UpdateDoors%()
 						Case ONE_SIDED_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (d\FastOpen * 2 + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)
 							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 1.4))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * fps\Factor[0] / 114.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (-fps\Factor[0]) / 114.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * fps\Factor[0] / 114.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (-fps\Factor[0]) / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 				Else
@@ -2364,26 +2374,30 @@ Function UpdateDoors%()
 						Case DEFAULT_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 120.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case BIG_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 0.8))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\Factor[0] / 180.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) / 180.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * fps\Factor[0] / 180.0, 0.0, 0.0)
 							If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0
 								If opt\ParticleAmount = 2 Then
 									For i = 0 To Rand(75, 99)
@@ -2410,14 +2424,16 @@ Function UpdateDoors%()
 						Case ONE_SIDED_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
 							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState - (fps\Factor[0] * 1.4))
-							MoveEntity(d\OBJ, Sin(d\OpenState) * (-fps\Factor[0]) / 114.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, Sin(d\OpenState) * fps\Factor[0] / 114.0, 0.0, 0.0)
+							SinValue = Sin(d\OpenState)
+							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) / 114.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * fps\Factor[0] / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
 					
@@ -3876,6 +3892,7 @@ Function FillRoom%(r.Rooms)
 	Local t1%, Tex%, Screen%, Scale#
 	Local i%, k%, Temp%, Temp3%, Angle#
 	Local ItemName$, ItemTempName$
+	Local SinValue#, CosValue#
 	
 	Select r\RoomTemplate\Name
 		Case "room1_archive"
@@ -7458,16 +7475,18 @@ Function FillRoom%(r.Rooms)
 				r\Objects[i - 1] = CopyEntity(Hallway)
 				
 				Angle = (i - 1) * (360.0 / 8.0)
+				SinValue = Sin(Angle) * (512.0 * RoomScale)
+				CosValue = Cos(Angle) * (512.0 * RoomScale)
 				
 				ScaleEntity(r\Objects[i - 1], RoomScale, RoomScale, RoomScale)
 				EntityType(r\Objects[i - 1], HIT_MAP)
 				EntityPickMode(r\Objects[i - 1], 2)
 				RotateEntity(r\Objects[i - 1], 0.0, Angle - 90.0, 0.0)
-				PositionEntity(r\Objects[i - 1], r\x + Cos(Angle) * (512.0 * RoomScale), r\y, r\z + Sin(Angle) * (512.0 * RoomScale))
+				PositionEntity(r\Objects[i - 1], r\x + CosValue, r\y, r\z + SinValue)
 				EntityParent(r\Objects[i - 1], r\OBJ)
 				
 				If i < 6 Then
-					de.Decals = CreateDecal(i + 7, r\x + Cos(Angle) * (512.0 * RoomScale) * 3.0, r\y + 0.02, r\z + Sin(Angle) * (512.0 * RoomScale) * 3.0, 90.0, Angle - 90.0, 0.0, 0.5, 1.0, 1 + 8, 2)
+					de.Decals = CreateDecal(i + 7, r\x + CosValue * 3.0, r\y + 0.02, r\z + SinValue * 3.0, 90.0, Angle - 90.0, 0.0, 0.5, 1.0, 1 + 8, 2)
 				EndIf
 			Next
 			FreeEntity(Hallway)
