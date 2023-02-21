@@ -868,7 +868,7 @@ Function UpdateNPCs%()
 							If e\EventID = e_gate_a Then
 								If e\EventState <> 0.0 Then
 									Spawn106 = True
-									n\Idle = PlayerRoom\RoomTemplate\Name = "dimension_1499"
+									n\Idle = (PlayerRoom\RoomTemplate\Name = "dimension_1499")
 								EndIf
 								Exit
 							EndIf
