@@ -3,9 +3,9 @@ Type Events
 	Field EventID%
 	Field room.Rooms
 	Field EventState#, EventState2#, EventState3#, EventState4#
-	Field SoundCHN%, SoundCHN2%, SoundCHN3%
-	Field Sound%, Sound2%, Sound3%
-	Field SoundCHN_IsStream%, SoundCHN2_IsStream%, SoundCHN3_IsStream%
+	Field SoundCHN%, SoundCHN2%
+	Field Sound%, Sound2%
+	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field EventStr$
 	Field Img%
 End Type
@@ -5409,13 +5409,13 @@ Function UpdateEvents%()
 									e\EventState = 3.0
 									e\EventState2 = 1.0
 									
-									If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume * opt\MasterVolume, 0)
-									e\SoundCHN3_IsStream = True
+									If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+									e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\SFXVolume * opt\MasterVolume, 0)
+									e\SoundCHN_IsStream = True
 								EndIf
 							ElseIf e\EventState < 6000.0 Then
-								If e\SoundCHN3 <> 0 Then
-									If IsStreamPlaying_Strict(e\SoundCHN3) Then
+								If e\SoundCHN <> 0 Then
+									If IsStreamPlaying_Strict(e\SoundCHN) Then
 										If Rand(4) = 1 Then
 											EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
 											If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
@@ -5423,7 +5423,7 @@ Function UpdateEvents%()
 											If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
 										EndIf
 									Else
-										StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
+										StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 										EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
 										If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 									EndIf
@@ -5431,16 +5431,16 @@ Function UpdateEvents%()
 								e\EventState = e\EventState + fps\Factor[0]
 							Else
 								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then
-									If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
-									e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume * opt\MasterVolume, 0)
-									e\SoundCHN3_IsStream = True
+									If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+									e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\SFXVolume * opt\MasterVolume, 0)
+									e\SoundCHN_IsStream = True
 									
 									e\EventState = 10001.0
 								EndIf
 							EndIf
 						Else
-							If e\SoundCHN3 <> 0 Then
-								If IsStreamPlaying_Strict(e\SoundCHN3) Then
+							If e\SoundCHN <> 0 Then
+								If IsStreamPlaying_Strict(e\SoundCHN) Then
 									If Rand(4) = 1 Then
 										EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
 										If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
@@ -5448,7 +5448,7 @@ Function UpdateEvents%()
 										If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
 									EndIf
 								Else
-									StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
+									StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 									EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
 									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								EndIf
@@ -5460,9 +5460,9 @@ Function UpdateEvents%()
 				
 				If e\EventState2 = 1.0 Then
 					If RemoteDoorOn Then
-						If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
-						e\SoundCHN3 = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume * opt\MasterVolume, 0)
-						e\SoundCHN3_IsStream = True
+						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+						e\SoundCHN = StreamSound_Strict("SFX\SCP\079\GateB.ogg", opt\SFXVolume * opt\MasterVolume, 0)
+						e\SoundCHN_IsStream = True
 						
 						For e2.Events = Each Events
 							If e2\EventID = e_gate_b_entrance Lor e2\EventID = e_gate_a_entrance Then e2\EventState3 = 1.0
@@ -5478,7 +5478,7 @@ Function UpdateEvents%()
 				
 				If SoundTransmission Then
 					If e\EventState = 1.0 Then e\EventState3 = Min(e\EventState3 + fps\Factor[0], 4000.0)
-					If (Not ChannelPlaying(e\SoundCHN3)) Then e\SoundCHN3 = PlaySound_Strict(RadioStatic)
+					If (Not ChannelPlaying(e\SoundCHN2)) Then e\SoundCHN2 = PlaySound_Strict(RadioStatic)
 				EndIf
 				
 				If PlayerRoom = e\room Then
@@ -5517,33 +5517,33 @@ Function UpdateEvents%()
 							
 							If ((e\EventState3 > 3200.0) Lor (e\EventState3 < 2500.0)) Lor (e\EventState <> 1.0) Then SoundTransmission = UpdateLever(e\room\RoomLevers[1]\OBJ)
 							If (Not SoundTransmission) Then
+								If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 								If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-								If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3) : e\SoundCHN3 = 0
 							EndIf
 							
 							If e\EventState = 0.0 Then
 								If SoundTransmission And Rand(100) = 1 Then
-									If (Not ChannelPlaying(e\SoundCHN2)) Then
+									If (Not ChannelPlaying(e\SoundCHN)) Then
 										LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(6) + ".ogg", 1)
-										e\SoundCHN2 = PlaySound_Strict(e\Sound2)
+										e\SoundCHN = PlaySound_Strict(e\Sound2)
 									EndIf
 								EndIf
 								
 								If SoundTransmission Then
 									UpdateButton(e\room\Objects[0])
 									If d_I\ClosestButton = e\room\Objects[0] And mo\MouseHit1 Then
-										If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
+										If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 										FemurBreakerSFX = LoadSound_Strict("SFX\Room\106Chamber\FemurBreaker.ogg")
-										e\SoundCHN2 = PlaySound_Strict(FemurBreakerSFX)
+										e\SoundCHN = PlaySound_Strict(FemurBreakerSFX)
 										
 										e\EventState = 1.0 ; ~ Start the femur breaker
 									EndIf
 								EndIf
 							ElseIf e\EventState = 1.0 ; ~ Bone was broken
 								If SoundTransmission And e\EventState3 < 2000.0 Then 
-									If (Not ChannelPlaying(e\SoundCHN2)) Then
+									If (Not ChannelPlaying(e\SoundCHN)) Then
 										LoadEventSound(e, "SFX\Character\LureSubject\Sniffling.ogg", 1)
-										e\SoundCHN2 = PlaySound_Strict(e\Sound2)
+										e\SoundCHN = PlaySound_Strict(e\Sound2)
 									EndIf
 								EndIf
 								
@@ -5573,9 +5573,9 @@ Function UpdateEvents%()
 										de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.003
 										EntityParent(de\OBJ, e\room\OBJ)
 										
-										If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
+										If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 										LoadEventSound(e, "SFX\Character\LureSubject\106Bait.ogg", 1)
-										e\SoundCHN2 = PlaySound_Strict(e\Sound2)
+										e\SoundCHN = PlaySound_Strict(e\Sound2)
 									ElseIf e\EventState3 - fps\Factor[0] < 2900.0 And e\EventState3 >= 2900.0 Then
 										If FemurBreakerSFX <> 0 Then FreeSound_Strict(FemurBreakerSFX) : FemurBreakerSFX = 0
 										
@@ -5619,8 +5619,8 @@ Function UpdateEvents%()
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[5], e\room\Objects[6], e)
 				Else
 					If (Not PlayerInReachableRoom()) Then
+						If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 						If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-						If ChannelPlaying(e\SoundCHN3) Then StopChannel(e\SoundCHN3) : e\SoundCHN3 = 0
 					EndIf
 				EndIf
 				;[End Block]
@@ -9691,15 +9691,8 @@ Function RemoveEvent%(e.Events)
 		StopChannel(e\SoundCHN2)
 	EndIf
 	e\SoundCHN2 = 0
-	If e\SoundCHN3_IsStream Then
-		If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3_IsStream = False
-	Else
-		StopChannel(e\SoundCHN3)
-	EndIf
-	e\SoundCHN3 = 0
 	If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-	If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
 	
 	If e\Img <> 0 Then FreeImage(e\Img)
 	

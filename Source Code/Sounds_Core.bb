@@ -84,10 +84,6 @@ Function LoadEventSound%(e.Events, File$, Number% = 0)
 		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 		e\Sound2 = LoadSound_Strict(File)
 		Return(e\Sound2)
-	ElseIf Number = 2
-		If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
-		e\Sound3 = LoadSound_Strict(File)
-		Return(e\Sound3)
 	EndIf
 End Function
 
@@ -158,11 +154,6 @@ Function PauseSounds%()
 		Else
 			PauseChannel(e\SoundCHN2)
 		EndIf
-		If e\SoundCHN3_IsStream Then
-			If e\SoundCHN3 <> 0 Then SetStreamPaused_Strict(e\SoundCHN3, True)
-		Else
-			PauseChannel(e\SoundCHN3)
-		EndIf
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -216,11 +207,6 @@ Function ResumeSounds%()
 			If e\SoundCHN2 <> 0 Then SetStreamPaused_Strict(e\SoundCHN2, False)
 		Else
 			ResumeChannel(e\SoundCHN2)
-		EndIf
-		If e\SoundCHN3_IsStream Then
-			If e\SoundCHN3 <> 0 Then SetStreamPaused_Strict(e\SoundCHN3, False)
-		Else
-			ResumeChannel(e\SoundCHN3)
 		EndIf
 	Next
 	
@@ -283,12 +269,6 @@ Function KillSounds%()
 			StopChannel(e\SoundCHN2)
 		EndIf
 		e\SoundCHN2 = 0
-		If e\SoundCHN3_IsStream Then
-			If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3_IsStream = False
-		Else
-			StopChannel(e\SoundCHN3)
-		EndIf
-		e\SoundCHN3 = 0
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -420,9 +400,6 @@ Function UpdateStreamSounds%()
 			If e\SoundCHN2_IsStream Then
 				If e\SoundCHN2 <> 0 Then SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
 			EndIf
-			If e\SoundCHN3_IsStream Then
-				If e\SoundCHN3 <> 0 Then SetStreamVolume_Strict(e\SoundCHN3, opt\SFXVolume * opt\MasterVolume)
-			EndIf
 		Next
 	EndIf
 	
@@ -438,9 +415,6 @@ Function UpdateStreamSounds%()
 					EndIf
 					If e\SoundCHN2_IsStream Then
 						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
-					EndIf
-					If e\SoundCHN3_IsStream Then
-						If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
 					EndIf
 				Next
 			EndIf
