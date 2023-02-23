@@ -1620,7 +1620,6 @@ Function RenderMainMenu%()
 	RenderMenuInputBoxes()
 	RenderMenuSlideBars()
 	RenderMenuSliders()
-	RenderMenuScrollBars()
 	
 	Color(255, 255, 255)
 	SetFont2(fo\FontID[Font_Console])
