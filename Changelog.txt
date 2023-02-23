@@ -69,6 +69,7 @@ Items:
 	- Reduced defense time against SCP-049, but added for Hazmat Suit combined with SCP-148.
 - SCP-714 can be put into the wallet.
 - SCP-427 and SCP-714 cannot be dropped anymore without taking it off.
+- SCRAMBLE Gears' HUD is more brighter now.
 
 Menu:
 - Added degree symbol for FOV value.
@@ -81,6 +82,8 @@ Menu:
 - Removed extra spacing in credits.
 
 - The subtitles setting has been moved to the «AUDIO» category.
+
+- Remade options menu.
 
 NPCs:
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
