@@ -264,6 +264,8 @@ Function RenderWorld2%(Tween#)
 	AmbientLightRooms()
 	If wi\NightVision > 0 Then
 		AmbientLight(200.0, 200.0, 200.0)
+	ElseIf wi\SCRAMBLE
+		AmbientLight(100.0 + CurrAmbientColorR, 100.0 + CurrAmbientColorG, 100.0 + CurrAmbientColorB)
 	Else
 		AmbientLight(CurrAmbientColorR, CurrAmbientColorG, CurrAmbientColorB)
 	EndIf
