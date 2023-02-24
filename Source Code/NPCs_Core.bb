@@ -1055,12 +1055,9 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If me\FallTimer < -1.0 Then
-								CanSave = 0
-								If me\FallTimer < -250.0 Then
-									MoveToPocketDimension()
-									n\State = 250.0 ; ~ Make SCP-106 idle for a while
-								EndIf
+							If me\FallTimer < -250.0 Then
+								MoveToPocketDimension()
+								n\State = 250.0 ; ~ Make SCP-106 idle for a while
 							EndIf
 							
 							If n\Reload = 0.0 Then

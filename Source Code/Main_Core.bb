@@ -2265,6 +2265,7 @@ Function UpdateGame%()
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
 				me\FallTimer = me\FallTimer - fps\Factor[0]
 				DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))
+				CanSave = 0
 			EndIf
 			
 			If me\LightFlash > 0.0 Then

@@ -2329,7 +2329,6 @@ Function UpdateEvents%()
 							PlayerRoom = gateb
 							RemoveEvent(e)
 						EndIf
-						If PlayerInsideElevator Then CanSave = 1
 					EndIf
 				EndIf
 				;[End Block]
@@ -2379,7 +2378,6 @@ Function UpdateEvents%()
 							PlayerRoom = gatea
 							RemoveEvent(e)
 						EndIf
-						If PlayerInsideElevator Then CanSave = 1
 					EndIf
 				EndIf
 				;[End Block]
@@ -8455,6 +8453,7 @@ Function UpdateDimension106%()
 							RotateEntity(e\room\Objects[10], 0.0, EntityYaw(Pvt), 0.0, True)
 							
 							FreeEntity(Pvt)
+							e\EventState2 = PD_StartRoom
 							;[End Block]
 						Case 5, 6, 7, 8, 9, 10 ; ~ The 4-way room
 							;[Block]
@@ -8530,7 +8529,7 @@ Function UpdateDimension106%()
 										me\LightBlink = 5.0
 										
 										If RoomName = "cont1_106" Then
-											TeleportEntity(me\Collider, EntityX(r\Objects[10], True), 0.4, EntityZ(r\Objects[10], True), 0.3, True)
+											TeleportEntity(me\Collider, EntityX(r\Objects[6], True), 0.4, EntityZ(r\Objects[6], True), 0.3, True)
 										Else
 											TeleportEntity(me\Collider, EntityX(r\OBJ, True), 0.4, EntityZ(r\OBJ, True), 0.3, True)
 										EndIf
@@ -8555,7 +8554,6 @@ Function UpdateDimension106%()
 									EndIf
 									e\EventState = 0.0
 									e\EventState3 = 0.0
-									e\EventState2 = PD_StartRoom
 									Exit
 								EndIf
 							Next
@@ -8563,6 +8561,7 @@ Function UpdateDimension106%()
 								PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
 								ResetEntity(me\Collider)
 							EndIf
+							e\EventState2 = PD_StartRoom
 							;[End Block]
 						Case 23, 24, 25, 26 ; ~ The tower room
 							;[Block]
