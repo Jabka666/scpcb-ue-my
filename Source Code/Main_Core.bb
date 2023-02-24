@@ -179,7 +179,6 @@ Type Player
 	Field Collider%, Head%
 	Field StopHidingTimer#
 	Field Funds%, UsedMastercard%
-	Field EscapeTimer%
 End Type
 
 Global me.Player = New Player
@@ -5746,7 +5745,7 @@ Function RenderDebugHUD%()
 			
 			Text2(x + (380 * MenuScale), y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
 			Text2(x + (380 * MenuScale), y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
-			Text2(x + (380 * MenuScale), y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), me\EscapeTimer))
+			Text2(x + (380 * MenuScale), y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
 			;[End Block]
 		Case 3
 			;[Block]
@@ -7901,8 +7900,8 @@ Function RenderEnding%()
 						AchievementsUnlocked = AchievementsUnlocked + achv\Achievement[i]
 					Next
 					
-					Local EscapeSeconds% = me\EscapeTimer Mod 60
-					Local EscapeMinutes% = Floor(me\EscapeTimer / 60)
+					Local EscapeSeconds% = EscapeTimer Mod 60
+					Local EscapeMinutes% = Floor(EscapeTimer / 60)
 					Local EscapeHours% = Floor(EscapeMinutes / 60)
 					
 					EscapeMinutes = EscapeMinutes - (EscapeHours * 60)
@@ -8880,6 +8879,7 @@ Function UpdateVomit%()
 	CatchErrors("UpdateVomit")
 End Function
 
+Global EscapeTimer%
 Global EscapeSecondsTimer# = 70.0
 
 Function UpdateEscapeTimer%()
@@ -8895,9 +8895,8 @@ Function UpdateEscapeTimer%()
 	Next
 	
 	EscapeSecondsTimer = EscapeSecondsTimer - fps\Factor[0]
-	
-	If EscapeSecondsTimer <= 0 Then
-		me\EscapeTimer = me\EscapeTimer + 1
+	If EscapeSecondsTimer <= 0.0 Then
+		EscapeTimer = EscapeTimer + 1
 		EscapeSecondsTimer = 70.0
 	EndIf
 	

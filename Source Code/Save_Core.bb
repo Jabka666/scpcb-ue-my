@@ -484,7 +484,7 @@ Function SaveGame%(File$)
 		WriteByte(f, itt\Found)
 	Next
 
-	WriteInt(f, me\EscapeTimer)
+	WriteInt(f, EscapeTimer)
 	
 	CloseFile(f)
 	
@@ -1231,7 +1231,7 @@ Function LoadGame%(File$)
 		itt\Found = ReadByte(f)
 	Next
 
-	me\EscapeTimer = ReadInt(f)
+	EscapeTimer = ReadInt(f)
 	
 	Local Dist#, Dist2#
 	
@@ -1972,7 +1972,7 @@ Function LoadGameQuick%(File$)
 		itt\Found = ReadByte(f)
 	Next
 
-	me\EscapeTimer = ReadInt(f)
+	EscapeTimer = ReadInt(f)
 	
 	Local Dist#, Dist2#
 	
