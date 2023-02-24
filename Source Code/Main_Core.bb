@@ -2375,12 +2375,6 @@ Function UpdateGame%()
 			EndIf
 		EndIf
 		
-		If me\EndingTimer < 0.0 Then
-			If me\SelectedEnding <> -1 Then UpdateEnding()
-		Else
-			If me\SelectedEnding = -1 Then UpdateMenu()
-		EndIf
-		
 		UpdateMessages()
 		UpdateHintMessages()
 		UpdateSubtitles()
@@ -2392,6 +2386,12 @@ Function UpdateGame%()
 		UpdateAchievementMsg()
 		
 		ResetDistanceTimer()
+		
+		If me\EndingTimer < 0.0 Then
+			If me\SelectedEnding <> -1 Then UpdateEnding()
+		Else
+			If me\SelectedEnding = -1 Then UpdateMenu()
+		EndIf
 	Wend
 	
 	; ~ Go out of function immediately if the game has been quit
@@ -2419,17 +2419,17 @@ Function RenderGame%()
 	RenderHintMessages()
 	RenderSubtitles()
 	
-	If me\EndingTimer < 0.0 Then
-		If me\SelectedEnding <> -1 Then RenderEnding()
-	Else
-		If me\SelectedEnding = -1 Then RenderMenu()
-	EndIf
-	
 	RenderConsole()
 	
 	RenderQuickLoading()
 	
 	RenderAchievementMsg()
+	
+	If me\EndingTimer < 0.0 Then
+		If me\SelectedEnding <> -1 Then RenderEnding()
+	Else
+		If me\SelectedEnding = -1 Then RenderMenu()
+	EndIf
 End Function
 
 Function Kill%(IsBloody% = False)
@@ -8066,7 +8066,7 @@ End Function
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("Uncaught (NullGame)")
 	
-	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events
+	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events, lvr.Levers
 	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, sub.Subtitles
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x%, y%, Lvl%
@@ -8175,7 +8175,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	For s.Screens = Each Screens
 		Delete(s)
 	Next
-	SelectedScreen = Null
 	
 	For ts.TempScreens = Each TempScreens
 		Delete(ts)
@@ -8197,6 +8196,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	For d.Doors = Each Doors
 		Delete(d)
 	Next
+	Delete(d_I)
 	
 	For lt.LightTemplates = Each LightTemplates
 		Delete(lt)
@@ -8230,6 +8230,8 @@ Function NullGame%(PlayButtonSFX% = True)
 		Delete(pr)
 	Next
 	
+	Delete(mon_I)
+	
 	For tp.TempProps = Each TempProps
 		Delete(tp)
 	Next
@@ -8237,24 +8239,28 @@ Function NullGame%(PlayButtonSFX% = True)
 	For de.Decals = Each Decals
 		Delete(de)
 	Next
+	Delete(de_I)
 	
-	ForestNPC = 0
-	ForestNPCTex = 0
+	For lvr.Levers = Each Levers
+		Delete(lvr)
+	Next
+	Delete(lvr_I)
 	
 	For n.NPCs = Each NPCs
 		Delete(n)
 	Next
+	Delete(n_I)
+	ForestNPC = 0
+	ForestNPCTex = 0
 	
 	For e.Events = Each Events
 		Delete(e)
 	Next
-	forest_event = Null
-	skull_event = Null
 	
 	For sc.SecurityCams = Each SecurityCams
 		Delete(sc)
 	Next
-	sc_I\SelectedMonitor = Null
+	Delete(sc_I)
 	
 	For em.Emitters = Each Emitters
 		Delete(em)
@@ -8263,11 +8269,13 @@ Function NullGame%(PlayButtonSFX% = True)
 	For p.Particles = Each Particles
 		Delete(p)
 	Next
+	Delete(p_I)
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
+	Delete(misc_I)
 	Delete(t)
 	
 	DeleteChunks()
