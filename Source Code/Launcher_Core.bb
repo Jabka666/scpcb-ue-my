@@ -303,6 +303,7 @@ Function LanguageSelector%()
 				; ~ Unzip function will delete everything in the directory, so we need move local.ini to directory after unziping
 				CreateDir(LocalizaitonPath + RequestLanguage\ID)
 				If Not RequestLanguage\MajorOnly Then Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
+				CreateDir(LocalizaitonPath + RequestLanguage\ID + "/Data")
 				CopyFile(BasePath + "/local.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini")
 				StatusTimer = MilliSecs2()
 				CurrentStatus = LANGUAGE_STATUS_DONE
