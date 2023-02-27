@@ -138,7 +138,7 @@ Function SaveGame%(File$)
 	WriteByte(f, RemoteDoorOn)
 	WriteByte(f, SoundTransmission)
 	
-	For i = 0 To MAXACHIEVEMENTS - 1
+	For i = 0 To MaxAchievements - 1
 		WriteByte(f, achv\Achievement[i])
 	Next
 	WriteInt(f, me\RefinedItems)
@@ -634,7 +634,7 @@ Function LoadGame%(File$)
 	RemoteDoorOn = ReadByte(f)
 	SoundTransmission = ReadByte(f)
 	
-	For i = 0 To MAXACHIEVEMENTS - 1
+	For i = 0 To MaxAchievements - 1
 		achv\Achievement[i] = ReadByte(f)
 	Next
 	me\RefinedItems = ReadInt(f)
@@ -1490,7 +1490,7 @@ Function LoadGameQuick%(File$)
 	RemoteDoorOn = ReadByte(f)
 	SoundTransmission = ReadByte(f)
 	
-	For i = 0 To MAXACHIEVEMENTS - 1
+	For i = 0 To MaxAchievements - 1
 		achv\Achievement[i] = ReadByte(f)
 	Next
 	me\RefinedItems = ReadInt(f)
