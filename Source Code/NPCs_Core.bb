@@ -6520,6 +6520,8 @@ Function MoveToPocketDimension%()
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\Name = "dimension_106" Then
 			UpdateTimer = 0.0
+			UpdateDoors()
+			UpdateRooms()
 			HideEntity(me\Head)
 			ShowEntity(me\Collider)
 			PlaySound_Strict(Use914SFX)

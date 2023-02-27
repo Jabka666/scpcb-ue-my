@@ -1236,7 +1236,7 @@ Function LoadGame%(File$)
 	Local Dist#, Dist2#
 	
 	For do.Doors = Each Doors
-		If do\room <> Null Then
+		If do\room = Null Then
 			Dist = 400.0
 			
 			Local closestroom.Rooms
@@ -1977,7 +1977,7 @@ Function LoadGameQuick%(File$)
 	Local Dist#, Dist2#
 	
 	For do.Doors = Each Doors
-		If do\room <> Null Then
+		If do\room = Null Then
 			Dist = 400.0
 			
 			Local closestroom.Rooms

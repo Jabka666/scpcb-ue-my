@@ -712,9 +712,9 @@ Function UpdateEvents%()
 							SetNPCFrame(e\room\NPC[5], 779.0)
 							RotateEntity(e\room\NPC[5]\Collider, 0.0, 270.0, 0.0)
 							
-							x = EntityX(e\room\OBJ, True) + 3712.0 * RoomScale
+							x = e\room\x + 3712.0 * RoomScale
 							y = 384.0 * RoomScale
-							z = EntityZ(e\room\OBJ, True) + 1312.0 * RoomScale
+							z = e\room\z + 1312.0 * RoomScale
 							
 							For i = 3 To 5
 								PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - EntityX(e\room\OBJ)), y + EntityY(e\room\NPC[i]\Collider) + 0.4, z + (EntityZ(e\room\NPC[i]\Collider) - EntityZ(e\room\OBJ)))
@@ -2081,13 +2081,13 @@ Function UpdateEvents%()
 									LoadEventSound(e,"SFX\General\BodyFall.ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 									
-									de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(e\room\OBJ), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.4)
+									de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
 									EntityParent(de\OBJ, e\room\OBJ)
 									
-									it.Items = CreateItem("Unknown Note", "paper", EntityX(e\room\OBJ), e\room\y - 1516.0 * RoomScale, EntityZ(e\room\OBJ))
+									it.Items = CreateItem("Unknown Note", "paper", e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
 									
-									it.Items = CreateItem("Level 3 Key Card", "key3", EntityX(e\room\OBJ), e\room\y - 1504.0 * RoomScale, EntityZ(e\room\OBJ))
+									it.Items = CreateItem("Level 3 Key Card", "key3", e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
 								EndIf
 								If e\room\NPC[0]\Frame = 286.0 Then e\room\NPC[0]\PrevState = 2
@@ -2245,7 +2245,7 @@ Function UpdateEvents%()
 						EndIf
 					ElseIf e\EventState = 2.0
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\OBJ) < 2.25 Then
-							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ), e\room\y + 0.005, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.05)
+							de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05)
 							de\SizeChange = 0.008 : de\Timer = 10000.0
 							EntityParent(de\OBJ, e\room\OBJ)
 							e\EventState = 3.0
@@ -4309,7 +4309,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 10.0
 								;[Block]
-								de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, e\room\y + 0.005, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+								de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, e\room\y + 0.005, e\room\z + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 								EntityParent(de\OBJ, e\room\OBJ)
 								;[End Block]
 							Case 14.0
@@ -4339,7 +4339,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 25.0
 								;[Block]
-								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ) + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, 0.35, EntityZ(e\room\OBJ) + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale)
+								e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, 0.35, e\room\z + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale)
 								e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 200.0, 0.0, True)
 								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BENJAMIN_TEXTURE)
@@ -4373,7 +4373,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 50.0
 								;[Block]
-								e\room\NPC[1] = CreateNPC(NPCTypeGuard, EntityX(e\room\OBJ) + Cos(e\room\Angle + 90.0) * 600.0 * RoomScale, 0.35, EntityZ(e\room\OBJ) + Sin(e\room\Angle + 90.0) * 600.0 * RoomScale)
+								e\room\NPC[1] = CreateNPC(NPCTypeGuard, e\room\x + Cos(e\room\Angle + 90.0) * 600.0 * RoomScale, 0.35, e\room\z + Sin(e\room\Angle + 90.0) * 600.0 * RoomScale)
 								e\room\NPC[1]\State = 7.0
 								;[End Block]
 							Case 52.0
@@ -5929,6 +5929,8 @@ Function UpdateEvents%()
 								ResetEntity(me\Collider)
 								
 								UpdateTimer = 0.0
+								UpdateDoors()
+								UpdateRooms()
 								
 								SecondaryLightOn = PrevSecondaryLightOn
 								
@@ -6346,7 +6348,7 @@ Function UpdateEvents%()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0 : n_I\Curr106\PathTimer = 70.0 * 10.0 : n_I\Curr106\PathStatus = 0 : n_I\Curr106\PathLocation = 0
 						PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(n_I\Curr106\Collider)
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ, True), e\room\y + 0.005, EntityZ(e\room\OBJ, True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+						de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 						de\SizeChange = 0.01
 						EntityParent(de\OBJ, e\room\OBJ)
 						e\EventState = 300.0
@@ -6521,7 +6523,7 @@ Function UpdateEvents%()
 				If (Not n_I\Curr106\Contained) Then
 					If PlayerRoom = e\room Then
 						If e\EventState = 0.0 Then
-							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ), e\room\y + 798.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, 0.5, 0.8)
+							de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 798.0 * RoomScale, e\room\z, -90.0, Rnd(360.0), 0.0, 0.5, 0.8)
 							de\SizeChange = 0.0015
 							EntityParent(de\OBJ, e\room\OBJ)
 							PlaySound_Strict(DecaySFX[3])
@@ -6533,7 +6535,7 @@ Function UpdateEvents%()
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState > 200.0 Then
 							If e\room\NPC[0] = Null Then
-								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\OBJ), 900.0 * RoomScale, EntityZ(e\room\OBJ))
+								e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 900.0 * RoomScale, e\room\z)
 								e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = -1.0
 								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_MAYNARD_TEXTURE)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -6563,7 +6565,7 @@ Function UpdateEvents%()
 									LoadEventSound(e, "SFX\General\BodyFall.ogg")
 									PlaySound2(e\Sound, Camera, e\room\NPC[0]\Collider)
 									
-									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ), e\room\y + 0.005, EntityZ(e\room\OBJ), 90.0, Rnd(360.0), 0.0, 0.4, 0.8)
+									de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4, 0.8)
 									EntityParent(de\OBJ, e\room\OBJ)
 								EndIf
 								If e\room\NPC[0]\Frame >= 18.9 Then RemoveEvent(e)
@@ -6575,7 +6577,7 @@ Function UpdateEvents%()
 			Case e_106_sinkhole
 				;[Block]
 				If e\EventState = 0.0 Then
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ) + Rnd(-0.5, 0.5), e\room\y + 0.005, EntityZ(e\room\OBJ) + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, 2.5)
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x + Rnd(-0.5, 0.5), e\room\y + 0.005, e\room\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, 2.5)
 					EntityParent(de\OBJ, e\room\OBJ)
 					e\EventState = 1.0
 				ElseIf PlayerRoom = e\room
@@ -8583,9 +8585,11 @@ Function UpdateDimension106%()
 							;[End Block]
 					End Select
 					UpdateTimer = 0.0
+					UpdateDoors()
+					UpdateRooms()
 				EndIf
 			Else
-				If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
+				HideRoomsNoColl(e\room)
 				e\EventState = 0.0
 				e\EventState3 = 0.0
 				e\EventState2 = PD_StartRoom
@@ -9202,7 +9206,7 @@ Function UpdateEndings%()
 						EndIf
 					EndIf
 				Else
-					If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
+					HideRoomsNoColl(e\room)
 				EndIf
 				;[End Block]
 			Case e_gate_a
@@ -9668,7 +9672,7 @@ Function UpdateEndings%()
 						EndIf
 					EndIf
 				Else
-					If (Not EntityHidden(e\room\OBJ)) Then HideEntity(e\room\OBJ)
+					HideRoomsNoColl(e\room)
 				EndIf
 				;[End Block]
 		End Select

@@ -2121,7 +2121,7 @@ Function InitNewGame%()
 	
 	RenderLoading(90, GetLocalString("loading", "pos"))
 	
-	TurnEntity(me\Collider, 0.0, Rnd(160.0, 200.0), 0.0)
+	TurnEntity(me\Collider, 0.0, 160.0, 0.0);Rnd(160.0, 200.0), 0.0)
 	
 	ResetEntity(me\Collider)
 	
@@ -2141,6 +2141,9 @@ Function InitNewGame%()
 	fps\PrevTime = MilliSecs2()
 	
 	ResetInput()
+	
+	UpdateDoors()
+	UpdateRooms()
 	
 	CatchErrors("InitNewGame")
 End Function
@@ -2241,6 +2244,9 @@ Function InitLoadGame%()
 	fps\PrevTime = MilliSecs2()
 	
 	ResetInput()
+	
+	UpdateDoors()
+	UpdateRooms()
 	
 	CatchErrors("InitLoadGame")
 End Function

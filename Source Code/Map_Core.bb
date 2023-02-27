@@ -2658,8 +2658,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						EndIf
 						
 						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
-						UpdateTimer = 0.0
 						me\DropSpeed = 0.0
+						UpdateTimer = 0.0
+						UpdateDoors()
+						UpdateRooms()
 						
 						door1\SoundCHN = PlaySound2(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door1\OBJ)
 					EndIf
@@ -2769,8 +2771,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							z = Max(Min((EntityZ(me\Collider) - EntityZ(SecondPivot, True)), (280 * RoomScale) - 0.22), ((-280) * RoomScale) + 0.22)
 						EndIf
 						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
-						UpdateTimer = 0.0
 						me\DropSpeed = 0.0
+						UpdateTimer = 0.0
+						UpdateDoors()
+						UpdateRooms()
 						
 						door2\SoundCHN = PlaySound2(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door2\OBJ)
 					EndIf
@@ -7654,13 +7658,13 @@ Function TeleportToRoom%(r.Rooms)
 	
 	PlayerRoom = r
 	UpdateTimer = 0.0
+	UpdateDoors()
+	UpdateRooms()
 	For it.Items = Each Items
 		it\DistTimer = 0.0
 	Next
 End Function
 
-; ~ TODO: Split into one function and make more optimizations
-;============
 Function HideRoomsNoColl%(room.Rooms)
 	Local i%, j%
 	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers
@@ -7703,7 +7707,7 @@ Function HideRoomsNoColl%(room.Rooms)
 		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0 Then
-				If room\HideObject[i] Then ShowEntity(room\Objects[i])
+				If room\HideObject[i] Then HideEntity(room\Objects[i])
 			Else
 				Exit
 			EndIf
@@ -7941,7 +7945,6 @@ Function ShowRoomsColl%(room.Rooms)
 		room\HiddenAlpha = False
 	EndIf
 End Function
-;============
 
 Function UpdateRooms%()
 	CatchErrors("Uncaught (UpdateRooms)")
@@ -7952,9 +7955,9 @@ Function UpdateRooms%()
 	; ~ The reason why it is like this:
 	; ~ When the map gets spawned by a seed, it starts from LCZ to HCZ to EZ (bottom to top)
 	; ~ A map loaded by the map creator starts from EZ to HCZ to LCZ (top to bottom) and that's why this little code thing with the (SelectedCustomMap = Null) needs to be there - ENDSHN
-	If (EntityZ(me\Collider) / 8.0) < I_Zone\Transition[1] - (SelectedCustomMap = Null) Then
+	If (EntityZ(me\Collider) / RoomSpacing) < I_Zone\Transition[1] - (SelectedCustomMap = Null) Then
 		me\Zone = 2
-	ElseIf (EntityZ(me\Collider) / 8.0) >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And (EntityZ(me\Collider) / 8.0) < I_Zone\Transition[0] - (SelectedCustomMap = Null) Then
+	ElseIf (EntityZ(me\Collider) / RoomSpacing) >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And (EntityZ(me\Collider) / RoomSpacing) < I_Zone\Transition[0] - (SelectedCustomMap = Null) Then
 		me\Zone = 1
 	Else
 		me\Zone = 0
@@ -8015,17 +8018,13 @@ Function UpdateRooms%()
 		
 		Hide = True
 		If r = PlayerRoom Then Hide = False
-		If Hide Then
-			If IsRoomAdjacent(PlayerRoom, r) Then Hide = False
-		EndIf
-		If Hide Then
-			For i = 0 To 3
-				If (IsRoomAdjacent(PlayerRoom\Adjacent[i], r)) Then
-					Hide = False
-					Exit
-				EndIf
-			Next
-		EndIf
+		If IsRoomAdjacent(PlayerRoom, r) Then Hide = False
+		For i = 0 To MaxRoomAdjacents - 1
+			If IsRoomAdjacent(PlayerRoom\Adjacent[i], r) Then
+				Hide = False
+				Exit
+			EndIf
+		Next
 		
 		If Hide Then
 			HideRoomsNoColl(r)
@@ -8044,7 +8043,7 @@ Function UpdateRooms%()
 	
 	TempLightVolume = Max(TempLightVolume / 4.5, 1.0)
 	
-	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / 8.0) + (Floor(EntityZ(PlayerRoom\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
+	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / RoomSpacing) + (Floor(EntityZ(PlayerRoom\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 	PlayerRoom\Found = True
 	
 	ShowRoomsColl(PlayerRoom)
@@ -8133,8 +8132,8 @@ Function PreventRoomOverlap%(r.Rooms)
 	; ~ Room is interseting: First, check if the given room is a ROOM2, so we could potentially just turn it by 180.0 degrees
 	IsIntersecting = False
 	
-	Local x% = r\x / 8.0
-	Local y% = r\z / 8.0
+	Local x% = r\x / RoomSpacing
+	Local y% = r\z / RoomSpacing
 	
 	If r\RoomTemplate\Shape = ROOM2 Then
 		; ~ Room is a ROOM2, let's check if turning it 180.0 degrees fixes the overlapping issue
@@ -8169,12 +8168,12 @@ Function PreventRoomOverlap%(r.Rooms)
 	For r2.Rooms = Each Rooms
 		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck) Then
 			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "room2_checkpoint_lcz_hcz" And r2\RoomTemplate\Name <> "room2_checkpoint_hcz_ez" And r2\RoomTemplate\Name <> "cont1_173") Then
-				x = r\x / 8.0
-				y = r\z / 8.0
+				x = r\x / RoomSpacing
+				y = r\z / RoomSpacing
 				Rot = r\Angle
 				
-				x2 = r2\x / 8.0
-				y2 = r2\z / 8.0
+				x2 = r2\x / RoomSpacing
+				y2 = r2\z / RoomSpacing
 				Rot2 = r2\Angle
 				
 				IsIntersecting = False

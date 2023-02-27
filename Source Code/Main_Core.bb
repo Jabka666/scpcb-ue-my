@@ -1959,6 +1959,7 @@ End Function
 
 Repeat
 	Cls()
+	
 	Local ElapsedMilliSecs%
 	
 	fps\CurrTime = MilliSecs2()
@@ -4306,6 +4307,8 @@ Function UpdateGUI%()
 											PositionEntity(me\Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))
 											ResetEntity(me\Collider)
 											UpdateTimer = 0.0
+											UpdateDoors()
+											UpdateRooms()
 											PlaySound_Strict(Use914SFX)
 											me\DropSpeed = 0.0
 											n_I\Curr106\State = -2500.0
@@ -7176,16 +7179,18 @@ Function UpdateMenu%()
 							HidePointer()
 							
 							UpdateTimer = 0.0
+							UpdateDoors()
+							UpdateRooms()
 							
 							For r.Rooms = Each Rooms
 								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
-									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
+									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
+										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 									EndIf
 								EndIf
 							Next
@@ -7242,16 +7247,18 @@ Function UpdateMenu%()
 							HidePointer()
 							
 							UpdateTimer = 0.0
+							UpdateDoors()
+							UpdateRooms()
 							
 							For r.Rooms = Each Rooms
 								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0 Then
-									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)], 1.0)
+									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)], 1.0)
 									If x < 4.0 And z < 4.0 Then
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / 8.0) + (Floor(EntityZ(r\OBJ) / 8.0) * MapGridSize)] = MapGrid_Tile
+										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 									EndIf
 								EndIf
 							Next
@@ -7673,7 +7680,7 @@ Function RenderMenu%()
 					EndIf
 				Next
 				For i = 0 To 11
-					If i + ((igm\AchievementsMenu - 1) * 12) < MAXACHIEVEMENTS Then
+					If i + ((igm\AchievementsMenu - 1) * 12) < MaxAchievements Then
 						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 64 * Scale, 64 * Scale) Then
 							AchievementTooltip(i + ((igm\AchievementsMenu - 1) * 12))
 							Exit
@@ -7908,7 +7915,7 @@ Function RenderEnding%()
 					EscapeMinutes = EscapeMinutes - (EscapeHours * 60)
 					
 					Text2(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
-					Text2(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), MAXACHIEVEMENTS, "{1}"))
+					Text2(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), MaxAchievements, "{1}"))
 					Text2(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomAmount, "{1}"))
 					Text2(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocAmount, "{1}"))
 					Text2(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
