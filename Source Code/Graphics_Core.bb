@@ -257,18 +257,23 @@ Global CurrTrisAmount%
 Function RenderWorld2%(Tween#)
 	Local np.NPCs
 	Local i%, k%, l%
+	Local CurrR#, CurrG#, CurrB#
 	
 	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(Camera, 1)
 	
 	AmbientLightRooms()
 	If wi\NightVision > 0 Then
-		AmbientLight(200.0, 200.0, 200.0)
+		CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
 	ElseIf wi\SCRAMBLE
-		AmbientLight(100.0 + CurrAmbientColorR, 100.0 + CurrAmbientColorG, 100.0 + CurrAmbientColorB)
+		CurrR = 100.0 + CurrAmbientColorR : CurrG = 100.0 + CurrAmbientColorR : CurrB = 100.0 + CurrAmbientColorR
 	Else
-		AmbientLight(CurrAmbientColorR, CurrAmbientColorG, CurrAmbientColorB)
+		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
+		If forest_event <> Null Then
+			If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
+		EndIf
 	EndIf
+	AmbientLight(CurrR, CurrG, CurrB)
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	
