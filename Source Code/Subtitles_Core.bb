@@ -52,8 +52,7 @@ End Function
 Function ShowSubtitles%(Name$)
 	CatchErrors("Uncaught (ShowSubtitles)")
 	
-	If (Not opt\EnableSubtitles) Then Return
-	If Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name) Then Return
+	If (Not opt\EnableSubtitles) Lor (Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name)) Then Return
 	
 	Local sub.Subtitles, CurrSub.Subtitles
 	Local Person% = Int(GetFileLocalString(SubtitlesFile, Name, "Person", "", False))
@@ -88,8 +87,9 @@ Function ShowSubtitles%(Name$)
 	Repeat
 		Local TxtExist% = IniBufferKeyExist(lang\LanguagePath + SubtitlesFile, Name, "Txt" + i)
 		Local TimerExist% = IniBufferKeyExist(lang\LanguagePath + SubtitlesFile, Name, "Timer" + i)
-		If Not (TxtExist And TimerExist) Then Exit ; ~ Seems there is no more subtitle
-	
+		
+		If (Not (TxtExist And TimerExist)) Then Exit ; ~ Seems there is no more subtitle
+		
 		If CurrSub = Null Then
 			sub.Subtitles = New Subtitles
 		Else
