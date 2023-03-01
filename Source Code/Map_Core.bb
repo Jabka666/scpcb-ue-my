@@ -8051,10 +8051,14 @@ Function UpdateRooms%()
 		If PlayerRoom\Adjacent[i] <> Null Then
 			If PlayerRoom\AdjDoor[i] <> Null Then
 				If PlayerRoom\Adjacent[i] <> PlayerRoom Then
-					If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Lor (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera)) Then
+					If EntityY(me\Collider) > 8.0 Lor EntityY(me\Collider) < -8.0 Then
 						HideRoomsColl(PlayerRoom\Adjacent[i])
 					Else
-						ShowRoomsColl(PlayerRoom\Adjacent[i])
+						If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Lor (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera)) Then
+							HideRoomsColl(PlayerRoom\Adjacent[i])
+						Else
+							ShowRoomsColl(PlayerRoom\Adjacent[i])
+						EndIf
 					EndIf
 				EndIf
 			EndIf
