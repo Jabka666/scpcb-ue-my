@@ -7666,7 +7666,7 @@ Function TeleportToRoom%(r.Rooms)
 End Function
 
 Function HideRoomsNoColl%(room.Rooms)
-	Local i%, j%
+	Local i%
 	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers
 	
 	If (Not EntityHidden(room\OBJ)) Then
@@ -7678,9 +7678,9 @@ Function HideRoomsNoColl%(room.Rooms)
 			If d\room = room Then
 				HideEntity(d\OBJ)
 				If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
-				For j = 0 To 1
-					If d\Buttons[j] <> 0 Then HideEntity(d\Buttons[j])
-					If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
+				For i = 0 To 1
+					If d\Buttons[i] <> 0 Then HideEntity(d\Buttons[i])
+					If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
 				Next
 				HideEntity(d\FrameOBJ)
 			EndIf
@@ -7718,7 +7718,7 @@ Function HideRoomsNoColl%(room.Rooms)
 End Function
 
 Function ShowRoomsNoColl%(room.Rooms)
-	Local i%, j%
+	Local i%
 	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers
 	
 	If EntityHidden(room\OBJ) Then
@@ -7730,9 +7730,9 @@ Function ShowRoomsNoColl%(room.Rooms)
 			If d\room = room Then
 				ShowEntity(d\OBJ)
 				If d\OBJ2 <> 0 Then ShowEntity(d\OBJ2)
-				For j = 0 To 1
-					If d\Buttons[j] <> 0 Then ShowEntity(d\Buttons[j])
-					If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
+				For i = 0 To 1
+					If d\Buttons[i] <> 0 Then ShowEntity(d\Buttons[i])
+					If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
 				Next
 				ShowEntity(d\FrameOBJ)
 			EndIf
@@ -7817,10 +7817,10 @@ Function HideRoomsColl%(room.Rooms)
 				If Hide Then
 					EntityAlpha(d\OBJ, 0.0)
 					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
-					For j = 0 To 1
-						If d\Buttons[j] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[j], 0.0)
+					For i = 0 To 1
+						If d\Buttons[i] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[i], 0.0)
 						; ~ Hide collider anyway because player's collider cannot interact with this object
-						If d\ElevatorPanel[j] <> 0 Then HideEntity(d\ElevatorPanel[j])
+						If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
 					Next
 					EntityAlpha(d\FrameOBJ, 0.0)
 				EndIf
@@ -7830,25 +7830,21 @@ Function HideRoomsColl%(room.Rooms)
 		; ~ Hide collider anyway because with most of them player cannot interact
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room Then
-				If (Not EntityHidden(sc\BaseOBJ)) Then
-					If sc\Screen Then
-						HideEntity(sc\MonitorOBJ)
-						HideEntity(sc\ScrOverlay)
-						HideEntity(sc\ScrOBJ)
-					EndIf
-					HideEntity(sc\CameraOBJ)
-					HideEntity(sc\BaseOBJ)
+				If sc\Screen Then
+					HideEntity(sc\MonitorOBJ)
+					HideEntity(sc\ScrOverlay)
+					HideEntity(sc\ScrOBJ)
 				EndIf
+				HideEntity(sc\CameraOBJ)
+				HideEntity(sc\BaseOBJ)
 			EndIf
 		Next
 		
 		; ~ Hide collider anyway because with most of them player cannot interact
 		For lvr.Levers = Each Levers
 			If lvr\room = room Then
-				If (Not EntityHidden(lvr\BaseOBJ)) Then
-					HideEntity(lvr\OBJ)
-					HideEntity(lvr\BaseOBJ)
-				EndIf
+				HideEntity(lvr\OBJ)
+				HideEntity(lvr\BaseOBJ)
 			EndIf
 		Next
 		
@@ -7901,9 +7897,9 @@ Function ShowRoomsColl%(room.Rooms)
 				If Hide Then
 					EntityAlpha(d\OBJ, 1.0)
 					If d\OBJ2 <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\OBJ2, 1.0)
-					For j = 0 To 1
-						If d\Buttons[j] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[j], 1.0)
-						If d\ElevatorPanel[j] <> 0 Then ShowEntity(d\ElevatorPanel[j])
+					For i = 0 To 1
+						If d\Buttons[i] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[i], 1.0)
+						If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
 					Next
 					EntityAlpha(d\FrameOBJ, 1.0)
 				EndIf
@@ -7912,24 +7908,20 @@ Function ShowRoomsColl%(room.Rooms)
 		
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room Then
-				If EntityHidden(sc\BaseOBJ) Then
-					If sc\Screen Then
-						ShowEntity(sc\MonitorOBJ)
-						ShowEntity(sc\ScrOverlay)
-						ShowEntity(sc\ScrOBJ)
-					EndIf
-					ShowEntity(sc\CameraOBJ)
-					ShowEntity(sc\BaseOBJ)
+				If sc\Screen Then
+					ShowEntity(sc\MonitorOBJ)
+					ShowEntity(sc\ScrOverlay)
+					ShowEntity(sc\ScrOBJ)
 				EndIf
+				ShowEntity(sc\CameraOBJ)
+				ShowEntity(sc\BaseOBJ)
 			EndIf
 		Next
 		
 		For lvr.Levers = Each Levers
 			If lvr\room = room Then
-				If EntityHidden(lvr\BaseOBJ) Then
-					ShowEntity(lvr\OBJ)
-					ShowEntity(lvr\BaseOBJ)
-				EndIf
+				ShowEntity(lvr\OBJ)
+				ShowEntity(lvr\BaseOBJ)
 			EndIf
 		Next
 		
