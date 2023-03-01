@@ -1242,7 +1242,7 @@ Function LoadGame%(File$)
 			Local closestroom.Rooms
 			
 			For r.Rooms = Each Rooms
-				Dist2 = EntityDistanceSquared(r\OBJ, do\OBJ)
+				Dist2 = EntityDistanceSquared(r\OBJ, do\FrameOBJ)
 				If Dist2 < Dist Then
 					Dist = Dist2
 					closestroom = r.Rooms
@@ -1768,9 +1768,9 @@ Function LoadGameQuick%(File$)
 				do\IsElevatorDoor = IsElevDoor
 				do\MTFClose = MTFClose
 				
-				PositionEntity(do\OBJ, OBJX, EntityY(do\OBJ), OBJZ, True)
+				PositionEntity(do\OBJ, OBJX, y, OBJZ, True)
 				RotateEntity(do\OBJ, 0.0, OBJYaw, 0.0, True)
-				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, EntityY(do\OBJ2), OBJ2Z, True)
+				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, y, OBJ2Z, True)
 				Exit
 			EndIf
 		Next
@@ -1983,7 +1983,7 @@ Function LoadGameQuick%(File$)
 			Local closestroom.Rooms
 			
 			For r.Rooms = Each Rooms
-				Dist2 = EntityDistanceSquared(r\OBJ, do\OBJ)
+				Dist2 = EntityDistanceSquared(r\OBJ, do\FrameOBJ)
 				If Dist2 < Dist Then
 					Dist = Dist2
 					closestroom = r.Rooms

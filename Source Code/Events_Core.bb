@@ -4470,9 +4470,9 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 6.25 Then
 						For do.Doors = Each Doors
-							If Abs(EntityX(do\OBJ, True) - EntityX(me\Collider)) < 2.0 Then
-								If Abs(EntityZ(do\OBJ, True) - EntityZ(me\Collider)) < 2.0 Then
-									If (Not EntityInView(do\OBJ, Camera)) Then
+							If Abs(EntityX(do\FrameOBJ, True) - EntityX(me\Collider)) < 2.0 Then
+								If Abs(EntityZ(do\FrameOBJ, True) - EntityZ(me\Collider)) < 2.0 Then
+									If (Not EntityInView(do\FrameOBJ, Camera)) Then
 										If do\Open Then
 											do\Open = False
 											do\OpenState = 0.0
