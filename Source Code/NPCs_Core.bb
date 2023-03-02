@@ -6829,7 +6829,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True)
 				Else
 					If (Not n\Path[n\PathLocation]\door\Open) Then
 						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX)
-						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
+						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 3.0
 					EndIf
 				EndIf
 			EndIf
