@@ -6856,20 +6856,37 @@ Function CheckForNPCInFacility%(n.NPCs)
 	Return(True)
 End Function
 
-Function UpdateNPCParticles%(n.NPCs)
-	Local p.Particles
+Function UpdateNPCNearTesla%()
+	Local n.NPCs, p.Particles
 	
-	If n\TeslaHit Then
-		If opt\ParticleAmount > 0 Then
-			If Rand(10 - (5 * (opt\ParticleAmount - 1))) = 1 Then
-				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(n\OBJ, True) + (Rnd(-0.15, 0.15)), EntityY(n\OBJ, True) + Rnd(0.3, 0.9), EntityZ(n\OBJ) + (Rnd(-0.15, 0.15)), 0.06, -0.001, 700.0)
-				p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-				RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
+	For n.NPCs = Each NPCs
+		If n\TeslaHit Then
+			If opt\ParticleAmount > 0 Then
+				If Rand(10 - (5 * (opt\ParticleAmount - 1))) = 1 Then
+					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(n\OBJ, True) + (Rnd(-0.15, 0.15)), EntityY(n\OBJ, True) + Rnd(0.3, 0.9), EntityZ(n\OBJ) + (Rnd(-0.15, 0.15)), Rnd(0.04, 0.06), -0.001, 700.0)
+					p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
+					RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
+				EndIf
+			EndIf
+			
+			If n\NPCType = NPCType106 Then
+				If n\State3 = 1.0 Then
+					AnimateNPC(n, 259.0, 110.0, -0.12, False)
+					
+					If n\Frame <= 170.0 Then
+						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+						ResetEntity(n\Collider)
+						
+						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 13.0) : n\State3 = 0.0 : n\TeslaHit = False
+					EndIf
+				EndIf
+			Else
+				n\TeslaHit = False
 			EndIf
 		EndIf
-		n\TeslaHit = False
-	EndIf
+	Next
 End Function
+
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If Abs(n\Frame - Frame) < 0.001 Then Return
 	

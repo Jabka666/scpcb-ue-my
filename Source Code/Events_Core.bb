@@ -2832,26 +2832,7 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 					
-					For n.NPCs = Each NPCs
-						UpdateNPCParticles(n)
-						
-						Select n\NPCType
-							Case NPCType106
-								;[Block]
-								If n\State3 = 1.0 Then
-									AnimateNPC(n, 259.0, 110.0, -0.1, False)
-									
-									If n\Frame <= 110.1 Then
-										If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-										PositionEntity(n\Collider, 0.0, 500.0, 0.0)
-										ResetEntity(n\Collider)
-										
-										n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 13.0) : n\State3 = 0.0
-									EndIf
-								EndIf
-								;[End Block]
-						End Select
-					Next
+					UpdateNPCNearTesla()
 					
 					Select e\EventState
 						Case 0.0 ; ~ Idle state
