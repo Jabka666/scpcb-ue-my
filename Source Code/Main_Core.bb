@@ -2220,7 +2220,7 @@ Function UpdateGame%()
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
 				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * 0.6 * me\BlinkEffect)
-				If wi\NightVision = 0 And (Not wi\SCRAMBLE) Then
+				If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then
 					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
 				EndIf
 			EndIf
@@ -3101,7 +3101,7 @@ Function UpdateMouseLook%()
 		If (Not EntityHidden(t\OverlayID[8])) Then HideEntity(t\OverlayID[8])
 	EndIf
 	
-	If wi\NightVision > 0 Lor wi\SCRAMBLE Then
+	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0 Then
 		If EntityHidden(t\OverlayID[4]) Then ShowEntity(t\OverlayID[4])
 		If wi\NightVision = 2 Then
 			EntityColor(t\OverlayID[4], 0.0, 100.0, 200.0)
@@ -3666,80 +3666,80 @@ Function UpdateGUI%()
 		If SelectedItem <> Null Then
 			If (Not mo\MouseDown1) Lor mo\MouseHit2 Then
 				If MouseSlot = 66 Then
+					Local ShouldPreventDropping%
+					
 					Select SelectedItem\ItemTemplate\TempName
 						Case "vest", "finevest", "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 							;[Block]
-							CreateHintMsg(GetLocalString("msg", "takeoff"))
+							ShouldPreventDropping = True
 							;[End Block]
-						Case "scp1499", "fine1499"
+						Case "scp1499"
 							;[Block]
-							If I_1499\Using > 0 Then
-								CreateHintMsg(GetLocalString("msg", "takeoff"))
-							Else
-								DropItem(SelectedItem)
-								InvOpen = mo\MouseHit2
-							EndIf
+							ShouldPreventDropping = (I_1499\Using = 1)
 							;[End Block]
-						Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
+						Case "fine1499"
 							;[Block]
-							If wi\GasMask > 0 Then
-								CreateHintMsg(GetLocalString("msg", "takeoff"))
-							Else
-								DropItem(SelectedItem)
-								InvOpen = mo\MouseHit2
-							EndIf
+							ShouldPreventDropping = (I_1499\Using = 2)
+							;[End Block]
+						Case "gasmask"
+							;[Block]
+							ShouldPreventDropping = (wi\GasMask = 1)
+							;[End Block]
+						Case "finegasmask"
+							;[Block]
+							ShouldPreventDropping = (wi\GasMask = 2)
+							;[End Block]
+						Case "veryfinegasmask"
+							;[Block]
+							ShouldPreventDropping = (wi\GasMask = 3)
+							;[End Block]
+						Case "gasmask148"
+							;[Block]
+							ShouldPreventDropping = (wi\GasMask = 4)
 							;[End Block]
 						Case "helmet"
 							;[Block]
-							If wi\BallisticHelmet Then
-								CreateHintMsg(GetLocalString("msg", "takeoff"))
-							Else
-								DropItem(SelectedItem)
-								InvOpen = mo\MouseHit2
-							EndIf
+							ShouldPreventDropping = wi\BallisticHelmet
 							;[End Block] 
-						Case "nvg", "veryfinenvg", "finenvg"
+						Case "nvg"
 							;[Block]
-							If wi\NightVision > 0 Then
-								CreateHintMsg(GetLocalString("msg", "takeoff"))
-							Else
-								DropItem(SelectedItem)
-								InvOpen = mo\MouseHit2
-							EndIf
+							ShouldPreventDropping = (wi\NightVision = 1)
+							;[End Block]
+						Case "veryfinenvg"
+							;[Block]
+							ShouldPreventDropping = (wi\NightVision = 2)
+							;[End Block]
+						Case "finenvg"
+							;[Block]
+							ShouldPreventDropping = (wi\NightVision = 3)
 							;[End Block]
 						Case "scramble"
 							;[Block]
-							If wi\SCRAMBLE Then
-								CreateHintMsg(GetLocalString("msg", "takeoff"))
-							Else
-								DropItem(SelectedItem)
-								InvOpen = mo\MouseHit2
-							EndIf
+							ShouldPreventDropping = (wi\SCRAMBLE = 1)
+							;[End Block]
+						Case "finescramble"
+							;[Block]
+							ShouldPreventDropping = (wi\SCRAMBLE = 2)
 							;[End Block]
 						Case "scp714"
 							;[Block]
-							If I_714\Using Then
-								CreateHintMsg(GetLocalString("msg", "takeoff"))
-							Else
-								DropItem(SelectedItem)
-								InvOpen = mo\MouseHit2
-							EndIf
+							ShouldPreventDropping = I_714\Using
 							;[End Block]
 						Case "scp427"
 							;[Block]
-							If I_427\Using Then
-								CreateHintMsg(GetLocalString("msg", "takeoff"))
-							Else
-								DropItem(SelectedItem)
-								InvOpen = mo\MouseHit2
-							EndIf
+							ShouldPreventDropping = I_427\Using
 							;[End Block]
 						Default
 							;[Block]
-							DropItem(SelectedItem)
-							InvOpen = mo\MouseHit2
+							ShouldPreventDropping = False
 							;[End Block]
 					End Select
+					If ShouldPreventDropping Then
+						CreateHintMsg(GetLocalString("msg", "takeoff"))
+					Else
+						DropItem(SelectedItem)
+						InvOpen = mo\MouseHit2
+					EndIf
 					
 					If (Not mo\MouseHit2) Then
 						MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
@@ -3919,6 +3919,10 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
+									Case "finescramble"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										;[End Block]
 									Default
 										;[Block]
 										For z = 0 To MaxItemAmount - 1
@@ -3969,7 +3973,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(0.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "finenvg"
@@ -3984,8 +3988,12 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(0.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
+										;[End Block]
+									Case "finescramble"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4011,7 +4019,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(200.0)
+										Inventory(MouseSlot)\State = Rnd(0.0, 200.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "navulti", "nav300"
@@ -4026,7 +4034,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(200.0)
+										Inventory(MouseSlot)\State = Rnd(0.0, 200.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "fineradio", "veryfineradio"
@@ -4052,6 +4060,10 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
+									Case "finescramble"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										;[End Block]
 									Default
 										;[Block]
 										For z = 0 To MaxItemAmount - 1
@@ -4072,7 +4084,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(0.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "nav310"
@@ -4087,7 +4099,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(0.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "18vradio"
@@ -4119,6 +4131,10 @@ Function UpdateGUI%()
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(10000.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
+										;[End Block]
+									Case "finescramble"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4160,15 +4176,15 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "nvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 1, GetLocalString("msg", "weartwo.nvg")) Then Return
+								If IsDoubleItem(wi\NightVision, 1) Then Return
 								;[End Block]
 							Case "veryfinenvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 2, GetLocalString("msg", "weartwo.nvg")) Then Return
+								If IsDoubleItem(wi\NightVision, 2) Then Return
 								;[End Block]
 							Case "finenvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 3, GetLocalString("msg", "weartwo.nvg")) Then Return
+								If IsDoubleItem(wi\NightVision, 3) Then Return
 								;[End Block]
 						End Select
 						
@@ -5096,7 +5112,8 @@ Function UpdateGUI%()
 										;[End Block]
 								End Select
 								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
-								wi\GasMask = 0 : wi\BallisticHelmet = False : wi\SCRAMBLE = False
+								If wi\SCRAMBLE > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\SCRAMBLE = 0
+								wi\GasMask = 0 : wi\BallisticHelmet = False
 								I_427\Using = False : I_1499\Using = 0
 							EndIf
 							SelectedItem\State = 0.0
@@ -5140,19 +5157,19 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 1, GetLocalString("msg", "weartwo.gas")) Then Return
+								If IsDoubleItem(wi\GasMask, 1) Then Return
 								;[End Block]
 							Case "finegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 2, GetLocalString("msg", "weartwo.gas")) Then Return
+								If IsDoubleItem(wi\GasMask, 2) Then Return
 								;[End Block]
 							Case "veryfinegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 3, GetLocalString("msg", "weartwo.gas")) Then Return
+								If IsDoubleItem(wi\GasMask, 3) Then Return
 								;[End Block]
 							Case "gasmask148"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 4, GetLocalString("msg", "weartwo.gas")) Then Return
+								If IsDoubleItem(wi\GasMask, 4) Then Return
 								;[End Block]
 						End Select
 						
@@ -5222,11 +5239,11 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "scp1499"
 								;[Block]
-								If IsDoubleItem(I_1499\Using, 1, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(I_1499\Using, 1) Then Return
 								;[End Block]
 							Case "fine1499"
 								;[Block]
-								If IsDoubleItem(I_1499\Using, 2, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(I_1499\Using, 2) Then Return
 								;[End Block]
 						End Select
 						
@@ -5416,9 +5433,20 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scramble"
+				Case "scramble", "finescramble"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "scramble"
+								;[Block]
+								If IsDoubleItem(wi\SCRAMBLE, 1) Then Return
+								;[End Block]
+							Case "finescramble"
+								;[Block]
+								If IsDoubleItem(wi\SCRAMBLE, 2) Then Return
+								;[End Block]
+						End Select
+						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 1.6), 100.0)
@@ -5426,12 +5454,24 @@ Function UpdateGUI%()
 						If SelectedItem\State3 = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
-							If wi\SCRAMBLE Then
+							If wi\SCRAMBLE > 0 Then
 								CreateMsg(GetLocalString("msg", "gear.off"))
-								wi\SCRAMBLE = False
+								wi\SCRAMBLE = 0
+								opt\CameraFogFar = opt\StoredCameraFogFar
 							Else
 								CreateMsg(GetLocalString("msg", "gear.on"))
-								wi\SCRAMBLE = True
+								Select SelectedItem\ItemTemplate\TempName
+									Case "scramble"
+										;[Block]
+										wi\SCRAMBLE = 1
+										;[End Block]
+									Case "finescramble"
+										;[Block]
+										wi\SCRAMBLE = 2
+										;[End Block]
+								End Select
+								opt\StoredCameraFogFar = opt\CameraFogFar
+								opt\CameraFogFar = opt\CameraFogFar * 1.5
 							EndIf
 							SelectedItem\State3 = 0.0
 							SelectedItem = Null
@@ -5499,7 +5539,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 0.0
 						If wi\HazmatSuit = 0 Then DropItem(SelectedItem, False)
 						;[End Block]
-					Case "nvg", "veryfinenvg", "finenvg", "scramble", "scp1025"
+					Case "nvg", "veryfinenvg", "finenvg", "scramble", "finescramble", "scp1025"
 						;[Block]
 						SelectedItem\State3 = 0.0
 						;[End Block]
@@ -5523,7 +5563,7 @@ Function UpdateGUI%()
 					;[Block]
 					it\State = 0.0
 					;[End Block]
-				Case "nvg", "veryfinenvg", "finenvg", "scramble", "scp1025"
+				Case "nvg", "veryfinenvg", "finenvg", "scramble", "finescramble", "scp1025"
 					;[Block]
 					it\State3 = 0.0
 					;[End Block]
@@ -6087,7 +6127,11 @@ Function RenderGUI%()
 						;[End Block]
 					Case "scramble"
 						;[Block]
-						ShouldDrawRect = wi\SCRAMBLE
+						ShouldDrawRect = (wi\SCRAMBLE = 1)
+						;[End Block]
+					Case "finescramble"
+						;[Block]
+						ShouldDrawRect = (wi\SCRAMBLE = 2)
 						;[End Block]
 					Case "scp1499"
 						;[Block]
@@ -6159,15 +6203,15 @@ Function RenderGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "nvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 1, "pairs of goggles") Then Return
+								If IsDoubleItem(wi\NightVision, 1) Then Return
 								;[End Block]
 							Case "veryfinenvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 2, "pairs of goggles") Then Return
+								If IsDoubleItem(wi\NightVision, 2) Then Return
 								;[End Block]
 							Case "finenvg"
 								;[Block]
-								If IsDoubleItem(wi\NightVision, 3, "pairs of goggles") Then Return
+								If IsDoubleItem(wi\NightVision, 3) Then Return
 								;[End Block]
 						End Select
 						
@@ -6370,19 +6414,19 @@ Function RenderGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 1, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(wi\GasMask, 1) Then Return
 								;[End Block]
 							Case "finegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 2, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(wi\GasMask, 2) Then Return
 								;[End Block]
 							Case "veryfinegasmask"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 3, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(wi\GasMask, 3) Then Return
 								;[End Block]
 							Case "gasmask148"
 								;[Block]
-								If IsDoubleItem(wi\GasMask, 4, "gas masks") Then Return
+								If IsDoubleItem(wi\GasMask, 4) Then Return
 								;[End Block]
 						End Select
 						
@@ -6574,11 +6618,11 @@ Function RenderGUI%()
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
-								If IsDoubleItem(I_1499\Using, 1, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(I_1499\Using, 1) Then Return
 								;[End Block]
 							Case "fine1499"
 								;[Block]
-								If IsDoubleItem(I_1499\Using, 2, GetLocalString("misc", "twomask")) Then Return
+								If IsDoubleItem(I_1499\Using, 2) Then Return
 								;[End Block]
 						End Select
 						
@@ -6626,7 +6670,7 @@ Function RenderGUI%()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case "scramble"
+				Case "scramble", "finescramble"
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, False, False, True)) Then
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)

@@ -55,8 +55,11 @@ Items:
 - Renamed some console item names.
 - Renamed Severed Hand to White/Yellow Severed Hand.
 
+- SCRAMBLE Gear changes:
+	- Added SCRAMBLE Gear variation without batteries.
+	- Tiny battery rebalance for SCRAMBLE Gear.
+	- The SCRAMBLE Gear a bit distances camera fog now. Also made a SCRAMBLE Gear's HUD a bit brighter.
 - S-NAV 310 and blue NVG require now an 18V Battery.
-- Tiny battery rebalance for SCRAMBLE Gear.
 - Nerfed NVG fog distance from 30 to 17.
 - The white pill now cures the «Common Cold».
 - Hazmat Suit/Gas mask changes:
@@ -69,7 +72,6 @@ Items:
 	- Reduced defense time against SCP-049, but added for Hazmat Suit combined with SCP-148.
 - SCP-714 can be put into the wallet.
 - SCP-427 and SCP-714 cannot be dropped anymore without taking it off.
-- SCRAMBLE Gears' HUD is more brighter now.
 
 Menu:
 - Added degree symbol for FOV value.
@@ -126,6 +128,7 @@ Bug fixes:
 - Fixed a white pill not being be put in the wallet.
 - Fixed cutscene in SCP-049's containment chamber not working at all.
 - Fixed monitor overlay not hiding after turning off the security cam.
+- Fixed an issue with wearable items of the same type not dropping when one of the items was equipped.
 
 - Hopefully fixed height of NPCs teleportation.
 

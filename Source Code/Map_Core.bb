@@ -5501,7 +5501,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 1936.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z - 944.0 * RoomScale)
-			it\State = Rnd(1000.0)
+			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
@@ -5738,7 +5738,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCRAMBLE Gear", "scramble", r\x - 860.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 80.0 * RoomScale)
-			it\State = Rnd(1000.0)
+			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "cont1_106"
@@ -5854,7 +5854,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 50.0 * RoomScale, r\y - 1302.0 * RoomScale, r\z + 2415.0 * RoomScale)
-			it\State = Rnd(1000.0)
+			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2_2_hcz"
@@ -6504,7 +6504,7 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 173.0 * RoomScale, r\y + 0.5, r\z + 631.0 * RoomScale)
-			it\State = Rnd(1000.0)
+			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room3_2_hcz"
@@ -7141,7 +7141,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
-			it\State = Rnd(1000.0)
+			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2_scientists"

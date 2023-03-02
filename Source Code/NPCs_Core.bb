@@ -1131,7 +1131,7 @@ Function UpdateNPCs%()
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
 				
-				If wi\SCRAMBLE And Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
+				If wi\SCRAMBLE > 0 And Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) Then
 					If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
 					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
 					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
@@ -1172,7 +1172,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\NoTarget) Then
 								If Dist < PowTwo(opt\CameraFogFar * LightVolume) Then
-									If (Not wi\SCRAMBLE) And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
+									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
 										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink <= 0.0
 											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
 											
@@ -1443,7 +1443,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\NoTarget) Then
 								If Dist < PowTwo(opt\CameraFogFar * LightVolume) Then
-									If (Not wi\SCRAMBLE) And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
+									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)) Then
 										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink <= 0.0
 											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"))
 											

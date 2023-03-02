@@ -850,6 +850,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "finenvg", "night_vision_goggles.b3d", "INV_night_vision_goggles(2).png", "", 0.02, 2)
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "veryfinenvg", "night_vision_goggles.b3d", "INV_night_vision_goggles(3).png", "", 0.02, 2)
 	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", "scramble", "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
+	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", "finescramble", "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "pill"), "Pill", "pill", "pill.b3d", "INV_pill.png", "", 0.0001, 2)
 	EntityColor(it\OBJ, 255.0, 255.0, 255.0)

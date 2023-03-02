@@ -199,15 +199,15 @@ Function UpdateWorld2%()
 	Local HasBattery%
 	Local Power%
 	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE Then
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 					Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision) + (0.17 * (wi\SCRAMBLE))))
 					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
-						If wi\SCRAMBLE Then
+						If wi\SCRAMBLE = 1 Then
 							CreateMsg(GetLocalString("msg", "battery.died"))
 						Else
 							CreateMsg(GetLocalString("msg", "battery.died.nvg"))
@@ -238,7 +238,7 @@ Function UpdateWorld2%()
 		EndIf
 	EndIf
 	
-	If wi\SCRAMBLE And HasBattery <> 0 Then
+	If (wi\SCRAMBLE = 1 And HasBattery <> 0) Lor wi\SCRAMBLE = 2 Then
 		If (Not ChannelPlaying(SCRAMBLECHN)) Then SCRAMBLECHN = PlaySound_Strict(SCRAMBLESFX)
 	Else
 		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
@@ -265,8 +265,8 @@ Function RenderWorld2%(Tween#)
 	AmbientLightRooms()
 	If wi\NightVision > 0 Then
 		CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
-	ElseIf wi\SCRAMBLE
-		CurrR = 100.0 + CurrAmbientColorR : CurrG = 100.0 + CurrAmbientColorR : CurrB = 100.0 + CurrAmbientColorR
+	ElseIf wi\SCRAMBLE > 0
+		CurrR = CurrAmbientColorR * 2.0 : CurrG = CurrAmbientColorR * 2.0 : CurrB = CurrAmbientColorR * 2.0
 	Else
 		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
 		If forest_event <> Null Then
@@ -280,10 +280,10 @@ Function RenderWorld2%(Tween#)
 	Local HasBattery%
 	Local Power%
 	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE Then
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0

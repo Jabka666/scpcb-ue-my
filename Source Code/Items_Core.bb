@@ -356,9 +356,9 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			I_427\Using = False
 			;[End Block]
-		Case "scramble"
+		Case "scramble", "finescramble"
 			;[Block]
-			wi\SCRAMBLE = False
+			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\SCRAMBLE = 0
 			;[End Block]
 	End Select
 	
@@ -653,8 +653,6 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	Next
 	ItemAmount = ItemAmount - 1
 	
-	RemoveWearableItems(item)
-	
 	CatchErrors("DropItem")
 End Function
 
@@ -709,7 +707,7 @@ Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, Can
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
 		CreateMsg(GetLocalString("msg", "mask.use"))
 		Return(False)
-	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE)
+	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
 		CreateMsg(GetLocalString("msg", "gear.use"))
 		Return(False)
 	ElseIf (Not CanUseWithHazmat) And wi\HazmatSuit > 0
@@ -737,7 +735,7 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 		CreateMsg(GetLocalString("msg", "helmet.use.off"))
 		SelectedItem = Null
 		Return(True)
-	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE
+	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
 		CreateMsg(GetLocalString("msg", "gear.use.off"))
 		SelectedItem = Null
 		Return(True)
@@ -749,8 +747,21 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 	Return(False)
 End Function
 
-Function IsDoubleItem%(Variable, ID, Msg$)
+Function IsDoubleItem%(Variable%, ID%)
+	Local Message$
+	
 	If Variable > 0 And Variable <> ID Then
+		Select Variable
+			Case wi\GasMask, I_1499\Using
+				;[Block]
+				Message = GetLocalString("msg", "weartwo.gas")
+				;[End Block]
+			Case wi\NightVision, wi\SCRAMBLE
+				;[Block]
+				Message = GetLocalString("msg", "weartwo.nvg")
+				;[End Block]
+		End Select
+		CreateMsg(Message)
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -915,13 +926,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "nvg", "veryfinenvg", "finenvg", "scramble"
+		Case "nvg", "veryfinenvg", "finenvg", "scramble", "finescramble"
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
 					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -930,17 +945,16 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
+					If Rand(2) = 1 Then
+						it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
+					Else
+						it2.Items = CreateItem("SCRAMBLE Gear", "finescramble", x, y, z)
+					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(5) = 1 Then
-						it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
-						it2\State = Rnd(0.0, 1000.0)
-					Else
-						it2.Items = CreateItem("Night Vision Goggles", "veryfinenvg", x, y, z)
-						it2\State = Rnd(0.0, 1000.0)
-					EndIf
+					it2.Items = CreateItem("Night Vision Goggles", "veryfinenvg", x, y, z)
+					it2\State = Rnd(0.0, 1000.0)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -949,7 +963,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
 					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					;[End Block]
 				Case ONETOONE
@@ -1002,7 +1016,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case 3
 							;[Block]
-							Select Rand(3)
+							Select Rand(4)
 								Case 1
 									;[Block]
 									it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
@@ -1016,6 +1030,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
 									it2\State = Rnd(0.0, 1000.0)
+									;[End Block]
+								Case 4
+									;[Block]
+									it2.Items = CreateItem("SCRAMBLE Gear", "finescramble", x, y, z)
 									;[End Block]
 							End Select
 							;[End Block]
@@ -1474,7 +1492,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							If Rand(0, ((MAXACHIEVEMENTS - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0
+							If Rand(0, ((MaxAchievements - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(35) = 1 Then
