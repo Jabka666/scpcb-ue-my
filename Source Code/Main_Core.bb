@@ -3759,7 +3759,7 @@ Function UpdateGUI%()
 						PrevItem = Inventory(MouseSlot)
 						
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "oldpaper", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "badge", "oldbadge", "ticket", "25ct", "coin", "key", "scp860", "scp714", "scp500pill", "scp500pilldeath", "pill"
+							Case "paper", "oldpaper", "origami", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "badge", "oldbadge", "ticket", "25ct", "coin", "key", "scp860", "scp714", "scp500pill", "scp500pilldeath", "pill"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
@@ -3813,7 +3813,7 @@ Function UpdateGUI%()
 									; ~ Add an item to wallet
 									added.Items = Null
 									b = SelectedItem\ItemTemplate\TempName
-									If b <> "paper" And b <> "oldpaper" Then
+									If b <> "paper" And b <> "oldpaper" And b <> "origami" Then
 										If SelectedItem\ItemTemplate\TempName = "scp714" And I_714\Using Then
 											CreateMsg(GetLocalString("msg", "takeoff"))
 											SelectedItem = Null
@@ -6248,7 +6248,7 @@ Function RenderGUI%()
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "note_Maynard.png")
+								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)

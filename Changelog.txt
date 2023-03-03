@@ -72,6 +72,7 @@ Items:
 	- Reduced defense time against SCP-049, but added for Hazmat Suit combined with SCP-148.
 - SCP-714 can be put into the wallet.
 - SCP-427 and SCP-714 cannot be dropped anymore without taking it off.
+- Origami can be added to the clipboard.
 
 Menu:
 - Added degree symbol for FOV value.
