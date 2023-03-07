@@ -2606,7 +2606,6 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					If e\EventState = 0.0 And n_I\Curr173\Idle = 0 Then
 						If (Not EntityInView(n_I\Curr173\OBJ, Camera)) And (Not EntityInView(n_I\Curr173\OBJ2, Camera)) Then
-							e\EventState = 1.0
 							PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
 							ResetEntity(n_I\Curr173\Collider)
 							RemoveEvent(e)
@@ -4363,14 +4362,12 @@ Function UpdateEvents%()
 								;[End block]
 							Case 60.0
 								;[Block]
-								If n_I\Curr173 <> Null Then
-									If (Not n_I\IsHalloween) Then
-										Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
-										If opt\Atmosphere Then TextureBlend(Tex, 5)
-										EntityTexture(n_I\Curr173\OBJ, Tex)
-										EntityTexture(n_I\Curr173\OBJ2, Tex)
-										DeleteSingleTextureEntryFromCache(Tex)
-									EndIf
+								If (Not n_I\IsHalloween) Then
+									Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
+									If opt\Atmosphere Then TextureBlend(Tex, 5)
+									EntityTexture(n_I\Curr173\OBJ, Tex)
+									EntityTexture(n_I\Curr173\OBJ2, Tex)
+									DeleteSingleTextureEntryFromCache(Tex)
 								EndIf
 								;[End Block]
 						End Select
