@@ -633,7 +633,7 @@ Function UpdateEvents%()
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.WayPoints, pr.Props
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
-	Local CurrTrigger$ = "", fDir#, Scale#, Tex%, t1%, Name$
+	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
 	Local Angle#, RoomExists%
 	Local SinValue#, CosValue#
@@ -4525,17 +4525,17 @@ Function UpdateEvents%()
 								e\room\NPC[i + 1] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
 							Next
 							
-							e\room\NPC[4] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
+							e\room\NPC[4] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[16], True), EntityY(e\room\Objects[16], True), EntityZ(e\room\Objects[16], True))
 							e\room\NPC[4]\State3 = -1.0 : e\room\NPC[4]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[4], NPC_CLASS_D_VICTIM_939_1_TEXTURE)
 							SetNPCFrame(e\room\NPC[4], 40.0)
 							TurnEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 							
-							e\room\NPC[5] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True), EntityZ(e\room\Objects[18], True))
+							e\room\NPC[5] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
 							e\room\NPC[5]\State3 = -1.0 : e\room\NPC[5]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[5], NPC_CLASS_D_VICTIM_939_2_TEXTURE)
 							SetNPCFrame(e\room\NPC[5], 19.0)
-							TurnEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
+							TurnEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle, 0.0)
 						Else
 							If e\EventState = 0.0 Then
 								; ~ Instance # 1
@@ -4545,23 +4545,23 @@ Function UpdateEvents%()
 								e\room\NPC[0]\State2 = 5.0
 								e\room\NPC[0]\PrevState = 7
 								; ~ Instance # 2
-								PositionEntity(e\room\NPC[1]\Collider, EntityX(e\room\Objects[9], True), EntityY(e\room\Objects[9], True) + 0.2, EntityZ(e\room\Objects[9], True))
+								PositionEntity(e\room\NPC[1]\Collider, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True) + 0.2, EntityZ(e\room\Objects[8], True))
 								ResetEntity(e\room\NPC[1]\Collider)
 								e\room\NPC[1]\State = 2.0
-								e\room\NPC[1]\State2 = 10.0
-								e\room\NPC[1]\PrevState = 12
+								e\room\NPC[1]\State2 = 9.0
+								e\room\NPC[1]\PrevState = 11
 								; ~ Instance # 3
-								PositionEntity(e\room\NPC[2]\Collider, EntityX(e\room\Objects[13], True), EntityY(e\room\Objects[13], True) + 0.2, EntityZ(e\room\Objects[13], True))
+								PositionEntity(e\room\NPC[2]\Collider, EntityX(e\room\Objects[12], True), EntityY(e\room\Objects[12], True) + 0.2, EntityZ(e\room\Objects[12], True))
 								ResetEntity(e\room\NPC[2]\Collider)
 								e\room\NPC[2]\State = 2.0
-								e\room\NPC[2]\State2 = 14.0
-								e\room\NPC[2]\PrevState = 16
+								e\room\NPC[2]\State2 = 13.0
+								e\room\NPC[2]\PrevState = 15
 								; ~ Instance # 4
 								PositionEntity(e\room\NPC[3]\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True) + 0.2, EntityZ(e\room\Objects[6], True)) 
 								ResetEntity(e\room\NPC[3]\Collider)
 								e\room\NPC[3]\State = 2.0
 								e\room\NPC[3]\State2 = 7.0
-								e\room\NPC[3]\PrevState = 7.0
+								e\room\NPC[3]\PrevState = 7
 								
 								e\EventState = 1.0
 							EndIf
@@ -4580,23 +4580,23 @@ Function UpdateEvents%()
 							UpdateLever(e\room\RoomLevers[0]\OBJ, e\room\RoomDoors[4]\Open)
 							UpdateLever(e\room\RoomLevers[1]\OBJ, e\room\RoomDoors[4]\Open)
 							
-							e\room\NPC[0]\IgnorePlayer = False
-							e\room\NPC[2]\IgnorePlayer = False
-							e\room\NPC[3]\IgnorePlayer = False
+							;e\room\NPC[0]\IgnorePlayer = False
+							;e\room\NPC[2]\IgnorePlayer = False
+							;e\room\NPC[3]\IgnorePlayer = False
 							
-							CurrTrigger = CheckTriggers()
+							;CurrTrigger = CheckTriggers()
 							
-							Select CurrTrigger
-								Case "939-1_fix"
-									;[Block]
-									e\room\NPC[0]\IgnorePlayer = True
-									e\room\NPC[3]\IgnorePlayer = True
-									;[End Block]
-								Case "939-3_fix"
-									;[Block]
-									e\room\NPC[2]\IgnorePlayer = True
-									;[End Block]
-							End Select
+							;Select CurrTrigger
+							;	Case "939-1_fix"
+							;		;[Block]
+							;		e\room\NPC[0]\IgnorePlayer = True
+							;		e\room\NPC[3]\IgnorePlayer = True
+							;		;[End Block]
+							;	Case "939-3_fix"
+							;		;[Block]
+							;		e\room\NPC[2]\IgnorePlayer = True
+							;		;[End Block]
+							;End Select
 							
 							UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[4]\OBJ, 400.0)
 							

@@ -307,7 +307,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	Local Temp1#, Temp2#, Temp3#
 	Local Temp1s$, Temp2s$
 	Local CollisionMeshes% = CreatePivot()
-	Local HasTriggerBox% = False
+	;Local HasTriggerBox% = False
 	
 	For i = 0 To 3 ; ~ Reattempt up to 3 times
 		If (Not f) Then
@@ -320,10 +320,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	
 	Local IsRMesh$ = ReadString(f)
 	
-	If IsRMesh = "RoomMesh"
+	If IsRMesh = "RoomMesh" Then
 		; ~ Continue
-	ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
-		HasTriggerBox = True
+	;ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
+	;	HasTriggerBox = True
 	Else
 		RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
 	EndIf
@@ -536,30 +536,30 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	Next
 	
 	; ~ Trigger boxes
-	If HasTriggerBox Then
-		Local TB%
-		
-		rt\TempTriggerBoxAmount = ReadInt(f)
-		For TB = 0 To rt\TempTriggerBoxAmount - 1
-			rt\TempTriggerBox[TB] = CreateMesh(rt\OBJ)
-			Count = ReadInt(f)
-			For i = 1 To Count
-				Surf = CreateSurface(rt\TempTriggerBox[TB])
-				Count2 = ReadInt(f)
-				For j = 1 To Count2
-					x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
-					Vertex = AddVertex(Surf, x, y, z)
-				Next
-				Count2 = ReadInt(f)
-				For j = 1 To Count2
-					Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
-					AddTriangle(Surf, Temp1i, Temp2i, Temp3i)
-					AddTriangle(Surf, Temp1i, Temp3i, Temp2i)
-				Next
-			Next
-			rt\TempTriggerBoxName[TB] = ReadString(f)
-		Next
-	EndIf
+	;If HasTriggerBox Then
+	;	Local TB%
+	;	
+	;	rt\TempTriggerBoxAmount = ReadInt(f)
+	;	For TB = 0 To rt\TempTriggerBoxAmount - 1
+	;		rt\TempTriggerBox[TB] = CreateMesh(rt\OBJ)
+	;		Count = ReadInt(f)
+	;		For i = 1 To Count
+	;			Surf = CreateSurface(rt\TempTriggerBox[TB])
+	;			Count2 = ReadInt(f)
+	;			For j = 1 To Count2
+	;				x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
+	;				Vertex = AddVertex(Surf, x, y, z)
+	;			Next
+	;			Count2 = ReadInt(f)
+	;			For j = 1 To Count2
+	;				Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
+	;				AddTriangle(Surf, Temp1i, Temp2i, Temp3i)
+	;				AddTriangle(Surf, Temp1i, Temp3i, Temp2i)
+	;			Next
+	;		Next
+	;		rt\TempTriggerBoxName[TB] = ReadString(f)
+	;	Next
+	;EndIf
 	
 	Count = ReadInt(f) ; ~ Point entities
 	
@@ -1483,9 +1483,9 @@ Type RoomTemplates
 	Field Shape%, Name$
 	Field Commonness%, Large%
 	Field DisableDecals%
-	Field TempTriggerBoxAmount%
-	Field TempTriggerBox%[8]
-	Field TempTriggerBoxName$[8]
+	;Field TempTriggerBoxAmount%
+	;Field TempTriggerBox%[8]
+	;Field TempTriggerBoxName$[8]
 	Field DisableOverlapCheck% = True
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
@@ -1587,12 +1587,12 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
-Type TriggerBox
-	Field OBJ%
-	Field Name$
-	Field MinX#, MinY#, MinZ#
-	Field MaxX#, MaxY#, MaxZ#
-End Type
+;Type TriggerBox
+;	Field OBJ%
+;	Field Name$
+;	Field MinX#, MinY#, MinZ#
+;	Field MaxX#, MaxY#, MaxZ#
+;End Type
 
 LoadRoomTemplates("Data\rooms.ini")
 
@@ -1616,7 +1616,7 @@ Const MaxRoomDoors% = 7
 Const MaxRoomNPCs% = 12
 Const MaxRoomAdjacents% = 4
 Const MaxRoomTextures% = 10
-Const MaxRoomTriggerBoxes% = 8
+;Const MaxRoomTriggerBoxes% = 8
 ;[End Block]
 
 Type Rooms
@@ -1647,8 +1647,8 @@ Type Rooms
 	Field Adjacent.Rooms[MaxRoomAdjacents]
 	Field AdjDoor.Doors[MaxRoomAdjacents]
 	Field Textures%[MaxRoomTextures]
-	Field TriggerBoxAmount%
-	Field TriggerBoxes.TriggerBox[MaxRoomTriggerBoxes]
+	;Field TriggerBoxAmount%
+	;Field TriggerBoxes.TriggerBox[MaxRoomTriggerBoxes]
 	Field MaxWayPointY#
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
@@ -5362,119 +5362,105 @@ Function FillRoom%(r.Rooms)
 			; ~ Elevator Doors
 			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z + 448.0 * RoomScale, 0.0, r, True, ELEVATOR_DOOR)
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x + 5840.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 1048.0 * RoomScale, 0.0, r, False, ELEVATOR_DOOR)
-			PositionEntity(r\RoomDoors[1]\Buttons[0], EntityX(r\RoomDoors[1]\Buttons[0], True), EntityY(r\RoomDoors[1]\Buttons[0], True), EntityZ(r\RoomDoors[1]\Buttons[0], True) - 0.031, True)
-			PositionEntity(r\RoomDoors[1]\Buttons[1], EntityX(r\RoomDoors[1]\Buttons[1], True), EntityY(r\RoomDoors[1]\Buttons[1], True), EntityZ(r\RoomDoors[1]\Buttons[1], True) + 0.031, True)
-			PositionEntity(r\RoomDoors[1]\ElevatorPanel[0], EntityX(r\RoomDoors[1]\ElevatorPanel[0], True), EntityY(r\RoomDoors[1]\ElevatorPanel[0], True), EntityZ(r\RoomDoors[1]\ElevatorPanel[0], True) + 0.031, True)
-			PositionEntity(r\RoomDoors[1]\ElevatorPanel[1], EntityX(r\RoomDoors[1]\ElevatorPanel[1], True), EntityY(r\RoomDoors[1]\ElevatorPanel[1], True), EntityZ(r\RoomDoors[1]\ElevatorPanel[1], True) - 0.031, True)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x + 5840.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 1040.0 * RoomScale, 0.0, r, False, ELEVATOR_DOOR)
 			
-			r\RoomDoors.Doors[2] = CreateDoor(r\x + 608.0 * RoomScale, r\y, r\z - 313.0 * RoomScale, 180.0, r, True, ELEVATOR_DOOR)
-			PositionEntity(r\RoomDoors[2]\Buttons[0], EntityX(r\RoomDoors[2]\Buttons[0], True), EntityY(r\RoomDoors[2]\Buttons[0], True), EntityZ(r\RoomDoors[2]\Buttons[0], True) + 0.03, True)
-			PositionEntity(r\RoomDoors[2]\Buttons[1], EntityX(r\RoomDoors[2]\Buttons[1], True), EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[1], True) - 0.03, True)
-			PositionEntity(r\RoomDoors[2]\ElevatorPanel[0], EntityX(r\RoomDoors[2]\ElevatorPanel[0], True), EntityY(r\RoomDoors[2]\ElevatorPanel[0], True), EntityZ(r\RoomDoors[2]\ElevatorPanel[0], True) - 0.03, True)
-			PositionEntity(r\RoomDoors[2]\ElevatorPanel[1], EntityX(r\RoomDoors[2]\ElevatorPanel[1], True), EntityY(r\RoomDoors[2]\ElevatorPanel[1], True), EntityZ(r\RoomDoors[2]\ElevatorPanel[1], True) + 0.03, True)
+			r\RoomDoors.Doors[2] = CreateDoor(r\x + 608.0 * RoomScale, r\y, r\z - 306.0 * RoomScale, 180.0, r, True, ELEVATOR_DOOR)
 			
-			r\RoomDoors.Doors[3] = CreateDoor(r\x - 456.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z - 824.0 * RoomScale, 180.0, r, False, ELEVATOR_DOOR)
-			PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True), EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True) + 0.031, True)
-			PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True), EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True) - 0.031, True)
-			PositionEntity(r\RoomDoors[3]\ElevatorPanel[0], EntityX(r\RoomDoors[3]\ElevatorPanel[0], True), EntityY(r\RoomDoors[3]\ElevatorPanel[0], True), EntityZ(r\RoomDoors[3]\ElevatorPanel[0], True) - 0.031, True)
-			PositionEntity(r\RoomDoors[3]\ElevatorPanel[1], EntityX(r\RoomDoors[3]\ElevatorPanel[1], True), EntityY(r\RoomDoors[3]\ElevatorPanel[1], True), EntityZ(r\RoomDoors[3]\ElevatorPanel[1], True) + 0.031, True)
+			r\RoomDoors.Doors[3] = CreateDoor(r\x - 456.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z - 816.0 * RoomScale, 180.0, r, False, ELEVATOR_DOOR)
 			
-			; ~ Other doors
-			r\RoomDoors.Doors[4] = CreateDoor(r\x + 56.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 6344.0 * RoomScale, 90.0, r, False, HEAVY_DOOR)
+			; ~ Remote opening door
+			r\RoomDoors.Doors[4] = CreateDoor(r\x + 56.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 6300.0 * RoomScale, 90.0, r, False, HEAVY_DOOR)
 			r\RoomDoors[4]\AutoClose = False
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[4]\Buttons[i]) : r\RoomDoors[4]\Buttons[i] = 0
 			Next
 			
-			d.Doors = CreateDoor(r\x + 1157.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 660.0 * RoomScale, 0.0, r, False, HEAVY_DOOR)
+			; ~ Misc doors
+			d.Doors = CreateDoor(r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 660.0 * RoomScale, 0.0, r, False, HEAVY_DOOR)
 			d\AutoClose = False : d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			
-			d.Doors = CreateDoor(r\x + 234.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 5239.0 * RoomScale, 90.0, r, False, HEAVY_DOOR)
+			d.Doors = CreateDoor(r\x + 219.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 5276.0 * RoomScale, 90.0, r, False, HEAVY_DOOR)
 			d\AutoClose = False : d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			
-			d.Doors = CreateDoor(r\x + 3446.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 6369.0 * RoomScale, 90.0, r, False, HEAVY_DOOR)
+			d.Doors = CreateDoor(r\x + 3446.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 6300.0 * RoomScale, 90.0, r, False, HEAVY_DOOR)
 			d\AutoClose = False : d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			
-			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 3095.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 6568.0 * RoomScale)
-			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 1215.5 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 3164.0 * RoomScale)
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 3096.0 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 6568.0 * RoomScale)
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 1216.0 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 3239.0 * RoomScale)
 			
 			; ~ Elevators' pivots
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 5840.0 * RoomScale, r\y - 5392.0 * RoomScale, r\z + 1360.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x + 5840.0 * RoomScale, r\y - 5392.0 * RoomScale, r\z + 1344.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 608.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 624.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 608.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 610.0 * RoomScale)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 456.0 * RoomScale, r\y - 5392.0 * RoomScale, r\z - 1136 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 456.0 * RoomScale, r\y - 5392.0 * RoomScale, r\z - 1120.0 * RoomScale)
 			
 			; ~ Waypoints # 1
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 2128.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 2048.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x + 2155.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 1966.0 * RoomScale)
 			
 			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x + 2128.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z - 1136.0 * RoomScale)
+			PositionEntity(r\Objects[5], r\x + 2155.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z - 968.0 * RoomScale)
 			
 			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 3824.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z - 1168.0 * RoomScale)
+			PositionEntity(r\Objects[6], r\x + 3980.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z - 968.0 * RoomScale)
 			
 			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x + 3760.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 2048.0 * RoomScale)
-			
-			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x + 4848.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 112.0 * RoomScale)
+			PositionEntity(r\Objects[7], r\x + 3980.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 1966.0 * RoomScale)
 			
 			; ~ Waypoints # 2
+			r\Objects[8] = CreatePivot()
+			PositionEntity(r\Objects[8], r\x + 567.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 5176.0 * RoomScale)
+			
 			r\Objects[9] = CreatePivot()
-			PositionEntity(r\Objects[9], r\x + 592.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 6352.0 * RoomScale)
+			PositionEntity(r\Objects[9], r\x + 567.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 6373.0 * RoomScale)
 			
 			r\Objects[10] = CreatePivot()
-			PositionEntity(r\Objects[10], r\x + 2928.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 6352.0 * RoomScale)
+			PositionEntity(r\Objects[10], r\x + 2940.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 6373.0 * RoomScale)
 			
 			r\Objects[11] = CreatePivot()
-			PositionEntity(r\Objects[11], r\x + 2928.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 5200.0 * RoomScale)
-			
-			r\Objects[12] = CreatePivot()
-			PositionEntity(r\Objects[12], r\x + 592.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 5200.0 * RoomScale)
+			PositionEntity(r\Objects[11], r\x + 2940.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 5176.0 * RoomScale)
 			
 			; ~ Waypoints # 3
+			r\Objects[12] = CreatePivot()
+			PositionEntity(r\Objects[12], r\x + 1083.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 3023.0 * RoomScale)
+			
 			r\Objects[13] = CreatePivot()
-			PositionEntity(r\Objects[13], r\x + 1136.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 2944.0 * RoomScale)
+			PositionEntity(r\Objects[13], r\x + 1083.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 1180.0 * RoomScale)
 			
 			r\Objects[14] = CreatePivot()
-			PositionEntity(r\Objects[14], r\x + 1104.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 1184.0 * RoomScale)
+			PositionEntity(r\Objects[14], r\x - 456.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 1180.0 * RoomScale)
 			
 			r\Objects[15] = CreatePivot()
-			PositionEntity(r\Objects[15], r\x - 464.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 1216.0 * RoomScale)
-			
-			r\Objects[16] = CreatePivot()
-			PositionEntity(r\Objects[16], r\x - 432.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 2976.0 * RoomScale)
+			PositionEntity(r\Objects[15], r\x - 456.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 3023.0 * RoomScale)
 			
 			; ~ Corpses
+			r\Objects[16] = CreatePivot()
+			PositionEntity(r\Objects[16], r\x + 2156.0 * RoomScale, r\y - 5540.0 * RoomScale, r\z + 3018.0 * RoomScale)
+			
 			r\Objects[17] = CreatePivot()
-			PositionEntity(r\Objects[17], r\x + 2200.0 * RoomScale, r\y - 5540.0 * RoomScale, r\z + 2932.0 * RoomScale)
+			PositionEntity(r\Objects[17], r\x + 1083.0 * RoomScale, r\y - 5540.0 * RoomScale, r\z + 989.0 * RoomScale)
 			
-			r\Objects[18] = CreatePivot()
-			PositionEntity(r\Objects[18], r\x + 1015.5 * RoomScale, r\y - 5540.0 * RoomScale, r\z + 2964.0 * RoomScale)
-			
-			For i = 0 To 18
+			For i = 0 To 17
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			em.Emitters = CreateEmitter(r\x + 5218.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 600.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 0)
 			em\RandAngle = 15.0 : em\Speed = 0.03 : em\SizeChange = 0.01 : em\AlphaChange = -0.006 : em\Gravity = -0.2 
 			TurnEntity(em\OBJ, 20.0, -100.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ) : em\room = r
@@ -5482,8 +5468,8 @@ Function FillRoom%(r.Rooms)
 			Select Rand(3)
 				Case 1
 					;[Block]
-					xTemp = 2312.0
-					zTemp = -952.0
+					xTemp = 4674.0
+					zTemp = 950.0
 					;[End Block]
 				Case 2
 					;[Block]
@@ -5492,25 +5478,25 @@ Function FillRoom%(r.Rooms)
 					;[End Block]
 				Case 3
 					;[Block]
-					xTemp = 2824.0
-					zTemp = 2808.0
+					xTemp = 2938.0
+					zTemp = 2793.0
 					;[End Block]
 			End Select
 			
-			it.Items = CreateItem("Black Severed Hand", "hand2", r\x + xTemp * RoomScale, r\y - 5596.0 * RoomScale + 1.0, r\z + zTemp * RoomScale)
+			it.Items = CreateItem("Black Severed Hand", "hand2", r\x + xTemp * RoomScale, r\y - 5496.0 * RoomScale, r\z + zTemp * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 1936.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z - 944.0 * RoomScale)
+			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 1991.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z - 837.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
+			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + 2268.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 2932.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
+			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + 2222.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 3018.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(DECAL_BLOOD_6, r\x + 1215.5 * RoomScale, r\y - 5632.0 * RoomScale + 0.01, r\z + 2964.0 * RoomScale, 90.0, r\Angle + 180.0, 0.0, 0.4)
+			de.Decals = CreateDecal(DECAL_BLOOD_6, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + 890.0 * RoomScale, 90.0, r\Angle + 180.0, 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
 		Case "room4_ic"
@@ -7618,16 +7604,16 @@ Function FillRoom%(r.Rooms)
 		If tp\RoomTemplate = r\RoomTemplate Then CreateProp(tp\Name, r\x + tp\x, r\y + tp\y, r\z + tp\z, tp\Pitch, tp\Yaw, tp\Roll, tp\ScaleX, tp\ScaleY, tp\ScaleZ, tp\HasCollision, tp\FX, tp\Texture, r)
 	Next
 	
-	If r\RoomTemplate\TempTriggerBoxAmount > 0 Then
-		r\TriggerBoxAmount = r\RoomTemplate\TempTriggerBoxAmount
-		For i = 0 To r\TriggerBoxAmount - 1
-			r\TriggerBoxes[i] = New TriggerBox
-			r\TriggerBoxes[i]\OBJ = CopyEntity(r\RoomTemplate\TempTriggerBox[i], r\OBJ)
-			EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
-			EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
-			r\TriggerBoxes[i]\Name = r\RoomTemplate\TempTriggerBoxName[i]
-		Next
-	EndIf
+	;If r\RoomTemplate\TempTriggerBoxAmount > 0 Then
+	;	r\TriggerBoxAmount = r\RoomTemplate\TempTriggerBoxAmount
+	;	For i = 0 To r\TriggerBoxAmount - 1
+	;		r\TriggerBoxes[i] = New TriggerBox
+	;		r\TriggerBoxes[i]\OBJ = CopyEntity(r\RoomTemplate\TempTriggerBox[i], r\OBJ)
+	;		EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
+	;		EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
+	;		r\TriggerBoxes[i]\Name = r\RoomTemplate\TempTriggerBoxName[i]
+	;	Next
+	;EndIf
 	
 	For i = 0 To MaxRoomEmitters - 1
 		If r\RoomTemplate\TempSoundEmitter[i] <> 0 Then
@@ -7765,17 +7751,17 @@ Function ShowRoomsNoColl%(room.Rooms)
 			EndIf
 		Next
 		
-		If room\TriggerBoxAmount > 0 Then
-			For i = 0 To room\TriggerBoxAmount - 1
-				If chs\DebugHUD <> 0 Then
-					EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
-					EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
-				Else
-					EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
-					EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
-				EndIf
-			Next
-		EndIf
+		;If room\TriggerBoxAmount > 0 Then
+		;	For i = 0 To room\TriggerBoxAmount - 1
+		;		If chs\DebugHUD <> 0 Then
+		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
+		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
+		;		Else
+		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
+		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
+		;		EndIf
+		;	Next
+		;EndIf
 		
 		ShowEntity(room\OBJ)
 	EndIf
@@ -8979,7 +8965,7 @@ Function CreateMap%()
 	
 	For r.Rooms = Each Rooms
 		r\Angle = WrapAngle(r\Angle)
-		SetupTriggerBoxes(r)
+		;SetupTriggerBoxes(r)
 		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
 		Next

@@ -33,7 +33,7 @@ Type NPCs
 	Field MTFLeader.NPCs
 	Field IsDead%
 	Field BlinkTimer# = 1.0
-	Field IgnorePlayer%
+	;Field IgnorePlayer%
 	Field ManipulateBone%, ManipulationType%
 	Field BoneToManipulate$
 	Field BonePitch#, BoneYaw#, BoneRoll#
@@ -3556,7 +3556,7 @@ Function UpdateNPCs%()
 							;[End Block]
 					End Select
 					
-					If n\State < 3.0 And (Not chs\NoTarget) And (Not n\IgnorePlayer) Then
+					If n\State < 3.0 And (Not chs\NoTarget); And (Not n\IgnorePlayer) Then
 						Dist = EntityDistanceSquared(n\Collider, me\Collider)
 						
 						If Dist < 16.0 Then Dist = Dist - PowTwo((EntityVisible(me\Collider, n\Collider) + (EntityVisible(me\Collider, n\Collider) * 0.21)))

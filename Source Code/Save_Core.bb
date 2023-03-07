@@ -806,7 +806,7 @@ Function LoadGame%(File$)
 				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\Name)
 				TurnEntity(r\OBJ, 0.0, Angle, 0.0)
 				r\Angle = Angle
-				SetupTriggerBoxes(r)
+				;SetupTriggerBoxes(r)
 				r\Found = Found
 				Exit
 			EndIf
@@ -2314,7 +2314,7 @@ Function LoadMap%(File$)
 					r\Angle = Angle
 					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
 					r\Angle = WrapAngle(r\Angle)
-					SetupTriggerBoxes(r)
+					;SetupTriggerBoxes(r)
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
@@ -2487,7 +2487,7 @@ Function LoadMap%(File$)
 					r\Angle = Angle
 					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
 					r\Angle = WrapAngle(r\Angle)
-					SetupTriggerBoxes(r)
+					;SetupTriggerBoxes(r)
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
