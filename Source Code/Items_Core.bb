@@ -695,7 +695,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\TempName
-		Case "nav", "nav300", "nav310", "navulti", "paper", "oldpaper", "badge", "oldbadge", "radio", "18vradio", "fineradio", "veryfineradio", "scp1025"
+		Case "nav", "nav300", "nav310", "navulti", "paper", "oldpaper", "badge", "oldbadge", "scp1025"
 			;[Block]
 			Return(True)
 			;[End Block]
