@@ -582,7 +582,7 @@ Function UpdateNPCs%()
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
-	Local SinValue#
+	Local SinValue#, SqrValue#
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -639,8 +639,9 @@ Function UpdateNPCs%()
 							
 							; ~ Doesn't move
 							If (Not Move) Then
-								me\BlurVolume = Max(Max(Min((4.0 - Sqr(Dist)) / 6.0, 0.9), 0.1), me\BlurVolume)
-								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((3.5 - Sqr(Dist)) / 3.5, 0.0))
+								SqrValue = Sqr(Dist)
+								me\BlurVolume = Max(Max(Min((4.0 - SqrValue) / 6.0, 0.9), 0.1), me\BlurVolume)
+								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((3.5 - SqrValue) / 3.5, 0.0))
 								
 								If Dist < 12.25 And MilliSecs2() - n\LastSeen > 60000 And Temp Then
 									PlaySound_Strict(HorrorSFX[Rand(3, 4)])
@@ -925,8 +926,10 @@ Function UpdateNPCs%()
 									If EntityInView(n\Collider, Camera) Then
 										GiveAchievement(Achv106)
 										
-										me\BlurVolume = Max(Max(Min((4.0 - Sqr(Dist)) / 6.0, 0.9), 0.1), me\BlurVolume)
-										me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 20.0 * Max((4.0 - Sqr(Dist)) / 4.0, 0.0))
+										SqrValue = (4.0 - Sqr(Dist))
+										
+										me\BlurVolume = Max(Max(Min(SqrValue / 6.0, 0.9), 0.1), me\BlurVolume)
+										me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 20.0 * Max(SqrValue / 4.0, 0.0))
 										
 										If MilliSecs2() - n\LastSeen > 60000 Then
 											me\CurrCameraZoom = 40.0
@@ -2332,9 +2335,11 @@ Function UpdateNPCs%()
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 										MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
-										
 										PointEntity(Pvt, me\Collider)
-										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True, InstaKillPlayer)
+										
+										SqrValue = Sqr(Dist)
+										
+										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True, InstaKillPlayer)
 										n\Reload = 7.0
 									Else
 										n\CurrSpeed = n\Speed
@@ -2914,7 +2919,9 @@ Function UpdateNPCs%()
 												If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0 Then
 													PlaySound2(Gunshot2SFX, Camera, n\Collider, 20.0)
 													
-													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))) * (n\State = 2.0), (n\State = 2.0))
+													SqrValue = Sqr(Dist)
+													
+													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / SqrValue) * (1.0 / SqrValue)) * (n\State = 2.0), (n\State = 2.0))
 													
 													n\Reload = 5.0
 													
@@ -4744,6 +4751,7 @@ Function UpdateMTFUnit%(n.NPCs)
 	Local x#, y#, z#
 	Local PrevDist#, NewDist#
 	Local Target%, Dist#, SearchPlayer%
+	Local SqrValue#
 	
 	If n\IsDead Then
 		n\BlinkTimer = -1.0
@@ -5127,7 +5135,9 @@ Function UpdateMTFUnit%(n.NPCs)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 										MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
 										
-										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True)
+										SqrValue = Sqr(Dist)
+										
+										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
 										n\Reload = 7.0
 										
 										FreeEntity(Pvt)
@@ -6026,7 +6036,9 @@ Function UpdateMTFUnit%(n.NPCs)
 									PositionEntity(Target, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 									MoveEntity(Target, 0.0632, 0.84925, 0.5451)
 									
-									Shoot(EntityX(Target), EntityY(Target), EntityZ(Target), ((25.0 / Sqr(Dist)) * (1.0 / Sqr(Dist))), True)
+									SqrValue = Sqr(Dist)
+									
+									Shoot(EntityX(Target), EntityY(Target), EntityZ(Target), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
 									n\Reload = 7.0
 									
 									msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)

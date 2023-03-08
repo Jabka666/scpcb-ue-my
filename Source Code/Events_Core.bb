@@ -636,7 +636,7 @@ Function UpdateEvents%()
 	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
 	Local Angle#, RoomExists%
-	Local SinValue#, CosValue#
+	Local SinValue#, CosValue#, SqrValue#
 	
 	For e.Events = Each Events
 		Select e\EventID
@@ -2069,9 +2069,9 @@ Function UpdateEvents%()
 							If EntityY(e\room\NPC[0]\Collider) > ((-1531.0) * RoomScale) + 0.35 Then
 								Dist = EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider)
 								If Dist < 0.64 Then ; ~ Get the player out of the way
-									Dist = Sqr(Dist)
+									SqrValue = (Sqr(Dist) - 0.8) ^ 2
 									fDir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
-									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0.0, Sin(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
+									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * SqrValue, 0.0, Sin(-fDir + 90.0) * SqrValue)
 								EndIf
 								If EntityY(e\room\NPC[0]\Collider) > 0.6 Then EntityType(e\room\NPC[0]\Collider, 0)
 							Else
@@ -4701,12 +4701,13 @@ Function UpdateEvents%()
 									CameraPitch = CameraPitch - 90.0
 									
 									Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True))
+									SqrValue = Sqr(Dist)
 									
 									me\HeartBeatRate = 150.0
-									me\HeartBeatVolume = Max(3.0 - Sqr(Dist), 0.0) / 3.0
+									me\HeartBeatVolume = Max(3.0 - SqrValue, 0.0) / 3.0
 									SinValue = Sin(Float(MilliSecs2()) / 20.0) + 1.0
-									me\BlurVolume = Max((2.0 - Sqr(Dist)) * (e\EventState3 / 800.0) * SinValue, me\BlurVolume)
-									me\CurrCameraZoom = Max(me\CurrCameraZoom, SinValue * 8.0 * Max((3.0 - Sqr(Dist)), 0.0))
+									me\BlurVolume = Max((2.0 - SqrValue) * (e\EventState3 / 800.0) * SinValue, me\BlurVolume)
+									me\CurrCameraZoom = Max(me\CurrCameraZoom, SinValue * 8.0 * Max((3.0 - SqrValue), 0.0))
 									
 									StopBreathSound()
 									
@@ -6531,9 +6532,9 @@ Function UpdateEvents%()
 								AnimateNPC(e\room\NPC[0], 1.0, 10.0, 0.12, False)
 								Dist = EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider)
 								If Dist < 0.64 Then ; ~ Get the player out of the way
-									Dist = Sqr(Dist)
+									SqrValue = (Sqr(Dist) - 0.8) ^ 2
 									fDir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
-									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8), 0.0, Sin(-fDir + 90.0) * (Dist - 0.8) * (Dist - 0.8))
+									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * SqrValue, 0.0, Sin(-fDir + 90.0) * SqrValue)
 								EndIf
 								If EntityY(e\room\NPC[0]\Collider) > 0.6 Then EntityType(e\room\NPC[0]\Collider, 0)
 							Else
@@ -7993,7 +7994,7 @@ Const PD_TowerRoom% = 6
 Function UpdateDimension106%()
 	Local e.Events, e2.Events, r.Rooms, it.Items, p.Particles, de.Decals
 	Local i%, Angle#, Dist#, Pvt%, Temp%
-	Local SinValue#, CosValue#
+	Local SinValue#, CosValue#, SqrValue#
 	Local x#, y#, z#
 	
 	For e.Events = Each Events
@@ -8137,6 +8138,8 @@ Function UpdateDimension106%()
 					Case PD_ThroneRoom
 						;[Block]
 						Temp = EntityDistanceSquared(me\Collider, e\room\Objects[17])
+						SqrValue = Sqr(Temp)
+						
 						If Temp >= PowTwo(2000.0 * RoomScale) Then
 							LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
@@ -8149,9 +8152,9 @@ Function UpdateDimension106%()
 						
 						InjurePlayer(fps\Factor[0] / 4000.0)
 						
-						me\Sanity = Max(me\Sanity - fps\Factor[0] / Sqr(Temp) / 8.0, -1000.0)
+						me\Sanity = Max(me\Sanity - fps\Factor[0] / SqrValue / 8.0, -1000.0)
 						
-						me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((6.0 - Sqr(Temp)) / 6.0, 0.0))
+						me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * 15.0 * Max((6.0 - SqrValue) / 6.0, 0.0))
 						
 						Pvt = CreatePivot()
 						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -8233,6 +8236,7 @@ Function UpdateDimension106%()
 						Next
 						
 						Dist = EntityDistanceSquared(me\Collider, e\room\Objects[19])
+						SqrValue = Sqr(Dist)
 						
 						e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.6)
 						
@@ -8241,7 +8245,7 @@ Function UpdateDimension106%()
 						ElseIf Dist < 64.0
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[19], 8.0)
 							EntityTexture(e\room\Objects[19], e\room\Textures[1])
-							InjurePlayer((8.0 - Sqr(Dist)) * (fps\Factor[0] * 0.0003))
+							InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0003))
 							
 							If Dist < 49.0 Then
 								Pvt = CreatePivot()
@@ -8255,7 +8259,7 @@ Function UpdateDimension106%()
 							EndIf
 						EndIf
 						
-						me\CameraShake = Max(4.0 + ((Not Safe) * 4.0) - Sqr(Dist), 0.0)
+						me\CameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
 						
 						; ~ Check if player is at the sinkhole (the exit from the trench room)
 						If EntityY(me\Collider) < 8.5 Then
@@ -8274,11 +8278,13 @@ Function UpdateDimension106%()
 					Case PD_ExitRoom
 						;[Block]
 						Temp = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
+						SqrValue = Sqr(Temp)
+						
 						If Temp < PowTwo(640.0 * RoomScale)
-							me\BlurTimer = ((640.0 * RoomScale) - Sqr(Temp)) * 3000.0
+							me\BlurTimer = ((640.0 * RoomScale) - SqrValue) * 3000.0
 							
-							e\SoundCHN2 = LoopSound2(DecaySFX[Rand(3)], e\SoundCHN2, Camera, me\Collider, 2.0, (640.0 * RoomScale - Sqr(Temp)) * Abs(me\CurrSpeed) * 100)
-							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Sqr(Temp) * 10.0)
+							e\SoundCHN2 = LoopSound2(DecaySFX[Rand(3)], e\SoundCHN2, Camera, me\Collider, 2.0, (640.0 * RoomScale - SqrValue) * Abs(me\CurrSpeed) * 100.0)
+							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, SqrValue * 10.0)
 							
 							If Temp < PowTwo(130.0 * RoomScale) Then
 								For r.Rooms = Each Rooms
@@ -8879,7 +8885,7 @@ End Function
 Function UpdateEndings%()
 	Local e.Events, e2.Events, n.NPCs, r.Rooms, p.Particles, de.Decals, em.Emitters
 	Local Dist#, i%, k%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
-	Local SinValue#
+	Local SinValue#, SqrValue#
 	
 	For e.Events = Each Events
 		Select e\EventID
@@ -9527,8 +9533,8 @@ Function UpdateEndings%()
 										
 										Dist = EntityDistanceSquared(me\Collider, e\room\Objects[11])
 										If Dist < 42.25 Then
-											Dist = Sqr(Dist)
-											PositionEntity(me\Collider, CurveValue(EntityX(e\room\Objects[11], True), EntityX(me\Collider), Dist * 80.0), EntityY(me\Collider), CurveValue(EntityZ(e\room\Objects[0], True), EntityZ(me\Collider), Dist * 80.0))
+											SqrValue = Sqr(Dist) * 80.0
+											PositionEntity(me\Collider, CurveValue(EntityX(e\room\Objects[11], True), EntityX(me\Collider), Dist), EntityY(me\Collider), CurveValue(EntityZ(e\room\Objects[0], True), EntityZ(me\Collider), Dist))
 										EndIf
 									EndIf
 									

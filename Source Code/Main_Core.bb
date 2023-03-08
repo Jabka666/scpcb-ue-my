@@ -5843,6 +5843,7 @@ Function RenderGUI%()
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
+	Local SqrValue#
 	
 	If MenuOpen Lor ConsoleOpen Lor d_I\SelectedDoor <> Null Lor InvOpen Lor OtherOpen <> Null Lor me\EndingTimer < 0.0 Then
 		ShowPointer()
@@ -6542,9 +6543,9 @@ Function RenderGUI%()
 								If n_I\Curr173 <> Null Then
 									Dist = EntityDistanceSquared(Camera, n_I\Curr173\OBJ)
 									If Dist < 900.0 Then
-										Dist = Sqr(Ceil(Dist / 8.0) * 8.0) ; ~ This is probably done to disguise SCP-173's teleporting behavior
+										SqrValue = Sqr(Ceil(Dist / 8.0) * 8.0) ; ~ This is probably done to disguise SCP-173's teleporting behavior
 										Color(100, 0, 0)
-										Oval(x - (Dist * (3 * MenuScale)), y - (7 * MenuScale) - (Dist * (3 * MenuScale)), Dist * (6 * MenuScale), Dist * (6 * MenuScale), False)
+										Oval(x - (SqrValue * (3 * MenuScale)), y - (7 * MenuScale) - (SqrValue * (3 * MenuScale)), SqrValue * (6 * MenuScale), SqrValue * (6 * MenuScale), False)
 										Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale), "SCP-173")
 										SCPs_Found = SCPs_Found + 1
 									EndIf
@@ -6552,9 +6553,9 @@ Function RenderGUI%()
 								If n_I\Curr106 <> Null Then
 									Dist = EntityDistanceSquared(Camera, n_I\Curr106\OBJ)
 									If Dist < 900.0 Then
-										Dist = Sqr(Dist)
+										SqrValue = Sqr(Dist)
 										Color(100, 0, 0)
-										Oval(x - (Dist * (1.5 * MenuScale)), y - (7 * MenuScale) - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+										Oval(x - (SqrValue * (1.5 * MenuScale)), y - (7 * MenuScale) - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
 										Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-106")
 										SCPs_Found = SCPs_Found + 1
 									EndIf
@@ -6562,9 +6563,9 @@ Function RenderGUI%()
 								If n_I\Curr096 <> Null Then
 									Dist = EntityDistanceSquared(Camera, n_I\Curr096\OBJ)
 									If Dist < 900.0 Then
-										Dist = Sqr(Dist)
+										SqrValue = Sqr(Dist)
 										Color(100, 0, 0)
-										Oval(x - (Dist * (1.5 * MenuScale)), y - (7 * MenuScale) - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+										Oval(x - (SqrValue * (1.5 * MenuScale)), y - (7 * MenuScale) - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
 										Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-096")
 										SCPs_Found = SCPs_Found + 1
 									EndIf
@@ -6573,9 +6574,9 @@ Function RenderGUI%()
 								If (Not n_I\Curr049\HideFromNVG) Then
 									Dist = EntityDistanceSquared(Camera, n_I\Curr049\OBJ)
 										If Dist < 900.0 Then
-											Dist = Sqr(Dist)
+											SqrValue = Sqr(Dist)
 											Color(100, 0, 0)
-											Oval(x - (Dist * (1.5 * MenuScale)), y - (7 * MenuScale) - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+											Oval(x - (SqrValue * (1.5 * MenuScale)), y - (7 * MenuScale) - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
 											Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-049")
 											SCPs_Found = SCPs_Found + 1
 										EndIf
