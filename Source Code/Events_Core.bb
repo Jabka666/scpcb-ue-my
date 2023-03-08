@@ -9695,7 +9695,7 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 	
 	d\Locked = 0
 	If d\OpenState = 0.0 And (Not d\Open) Then
-		If IsInsideArea(me\Collider, ElevatorOBJ) Then
+		If IsInsideElevator(me\Collider, ElevatorOBJ) Then
 			If EventState = 0.0 Then
 				TeleportEntity(n_I\Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), n_I\Curr096\CollRadius)
 				PointEntity(n_I\Curr096\Collider, ElevatorOBJ)
