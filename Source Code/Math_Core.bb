@@ -174,8 +174,8 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	EndIf
 End Function
 
-Function IsInsideArea%(Pvt%, Dist#)
-	If (Abs(EntityX(me\Collider) - EntityX(Pvt, True)) < Dist + (0.015 * fps\Factor[0])) And (Abs(EntityZ(me\Collider) - EntityZ(Pvt, True)) < Dist + (0.015 * fps\Factor[0])) And (Abs(EntityY(me\Collider) - EntityY(Pvt, True)) < Dist + (0.015 * fps\Factor[0])) Then Return(True)
+Function IsInsideElevator%(OBJ%, Pvt%)
+	If (Abs(EntityX(OBJ) - EntityX(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityZ(OBJ) - EntityZ(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityY(OBJ) - EntityY(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) Then Return(True)
 	Return(False)
 End Function
 
