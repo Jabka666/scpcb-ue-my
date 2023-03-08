@@ -17,6 +17,8 @@ General:
 
 - Improved fluid step sounds.
 
+- Changed color of the decal created in SCP-914 on «ROUGH» mode.
+
 - Converted .ini files to UTF-8 format.
 - Finally made the «Bright mode» similar to original game.
 

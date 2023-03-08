@@ -89,7 +89,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 		it\InvImg2 = 0
 	EndIf
 	
-	If ImgPath  <> "" Then
+	If ImgPath <> "" Then
 		ImgPath = ItemHUDTexturePath + ImgPath
 		it\ImgPath = ImgPath
 	EndIf
@@ -782,6 +782,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	
 	Local it.Items, it2.Items, it3.Items, it4.Items, it5.Items, de.Decals, n.NPCs
 	Local Remove% = True, i%
+	Local MakeDecal% = False
 	
 	Select item\ItemTemplate\TempName
 		Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
@@ -789,8 +790,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -815,8 +815,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -840,8 +839,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -866,8 +864,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -884,8 +881,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					ClearSecondInv(item, 0)
 					;[End Block]
 				Case COARSE
@@ -897,8 +893,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						item\InvSlots = 1
 						ClearSecondInv(item, 1)
 					Else
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12, 0.8)
-						EntityParent(de\OBJ, PlayerRoom\OBJ)
+						MakeDecal = True
 						ClearSecondInv(item, 0)
 					EndIf
 					Remove = False
@@ -931,8 +926,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -963,8 +957,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1044,7 +1037,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 		Case "scp148"
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("SCP-148 Ingot", "scp148ingot", x, y, z)
 				Case ONETOONE, FINE, VERYFINE
@@ -1098,8 +1095,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_BLOOD_2, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -1130,8 +1126,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1158,14 +1153,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
 					If Level = 0 Then
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-						EntityParent(de\OBJ, PlayerRoom\OBJ)
+						MakeDecal = True
 					Else
 						it2.Items = CreateItem("Level " + (Level - 1) + " Key Card", "key" + (Level - 1), x, y, z)
 					EndIf
@@ -1350,9 +1343,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[Block]
 							Local CurrAchvAmount% = 0
 							
-							For i = 0 To MaxAchievements - 2 Step 2
+							For i = 0 To MaxAchievements - 1
 								If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
-								If achv\Achievement[i + 1] = True Then CurrAchvAmount = CurrAchvAmount + 1
 							Next
 							
 							Select SelectedDifficulty\OtherFactors
@@ -1448,9 +1440,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					CurrAchvAmount = 0
-					For i = 0 To MaxAchievements - 2 Step 2
+					For i = 0 To MaxAchievements - 1
 						If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
-						If achv\Achievement[i + 1] = True Then CurrAchvAmount = CurrAchvAmount + 1
 					Next
 					
 					Select SelectedDifficulty\OtherFactors
@@ -1511,8 +1502,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1566,8 +1556,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1588,8 +1577,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1629,8 +1617,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1661,8 +1648,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1692,8 +1678,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType513_1 Then RemoveNPC(n)
 					Next
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -1706,8 +1691,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1728,8 +1712,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1750,8 +1733,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1826,8 +1808,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1852,8 +1833,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1874,8 +1854,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1892,8 +1871,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1918,8 +1896,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1965,8 +1942,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1991,8 +1967,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2025,8 +2000,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2088,8 +2062,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -2105,8 +2078,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2134,8 +2106,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -2160,8 +2131,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If item\State2 > 0.0 Then
 						item\State2 = -1.0
 					Else
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-						EntityParent(de\OBJ, PlayerRoom\OBJ)
+						MakeDecal = True
 						Remove = True
 					EndIf
 					;[End Block]
@@ -2188,8 +2158,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2210,8 +2179,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -2221,6 +2189,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			;[End Block]
 	End Select
 	
+	If MakeDecal Then
+		de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.8), Rnd(0.8, 1.0), 1)
+		EntityParent(de\OBJ, PlayerRoom\OBJ)
+	EndIf
 	If Remove Then
 		RemoveItem(item)
 	Else

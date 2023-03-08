@@ -6,7 +6,7 @@ Global LauncherBG%
 Function UpdateLauncher%(lnchr.Launcher)
 	Local i%, n%
 	
-	MenuScale = 1
+	MenuScale = 1.0
 	
 	Graphics3D(LauncherWidth, LauncherHeight, 32, 2)
 	
