@@ -175,13 +175,7 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 End Function
 
 Function IsInsideArea%(Pvt%, Dist#)
-	If Abs(EntityX(me\Collider) - EntityX(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
-		If Abs(EntityZ(me\Collider) - EntityZ(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
-			If Abs(EntityY(me\Collider) - EntityY(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
-				Return(True)
-			EndIf
-		EndIf
-	EndIf
+	If (Abs(EntityX(me\Collider) - EntityX(Pvt, True)) < Dist + (0.015 * fps\Factor[0])) And (Abs(EntityZ(me\Collider) - EntityZ(Pvt, True)) < Dist + (0.015 * fps\Factor[0])) And (Abs(EntityY(me\Collider) - EntityY(Pvt, True)) < Dist + (0.015 * fps\Factor[0])) Then Return(True)
 	Return(False)
 End Function
 

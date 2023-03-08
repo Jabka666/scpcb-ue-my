@@ -3035,11 +3035,11 @@ Function UpdateEvents%()
 							TempInt = Rand(5) Shl Rand(2)
 							For i = 1 To TempInt
 								TempInt2 = True
-								
+								Temp = (i Mod 2)
 								Select Dir
 									Case 0
 										;[Block]
-										If iX < MTGridSize - 2 - (i Mod 2) Then
+										If iX < MTGridSize - 2 - Temp Then
 											iX = iX + 1
 										Else
 											TempInt2 = False
@@ -3047,7 +3047,7 @@ Function UpdateEvents%()
 										;[End Block]
 									Case 1
 										;[Block]
-										If iY < MTGridSize - 2 - (i Mod 2) Then
+										If iY < MTGridSize - 2 - Temp Then
 											iY = iY + 1
 										Else
 											TempInt2 = False
@@ -3055,7 +3055,7 @@ Function UpdateEvents%()
 										;[End Block]
 									Case 2
 										;[Block]
-										If iX > 1 + (i Mod 2) Then
+										If iX > 1 + Temp Then
 											iX = iX - 1
 										Else
 											TempInt2 = False
@@ -3063,7 +3063,7 @@ Function UpdateEvents%()
 										;[End Block]
 									Case 3
 										;[Block]
-										If iY > 1 + (i Mod 2) Then
+										If iY > 1 + Temp Then
 											iY = iY - 1
 										Else
 											TempInt2 = False
@@ -3663,11 +3663,8 @@ Function UpdateEvents%()
 						ShouldPlay = 29
 						
 						If e\EventState = 0.0 Then
-							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < EntityDistanceSquared(me\Collider, e\room\Objects[1]) Then
-								Temp = 0
-							Else
-								Temp = 1
-							EndIf
+							Temp = (1 - (EntityDistanceSquared(me\Collider, e\room\Objects[0]) < EntityDistanceSquared(me\Collider, e\room\Objects[1])))
+							
 							e\EventState = 2.0
 							
 							If (Not n_I\Curr106\Contained) Then
@@ -9698,21 +9695,17 @@ Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
 	
 	d\Locked = 0
 	If d\OpenState = 0.0 And (Not d\Open) Then
-		If Abs(EntityX(me\Collider) - EntityX(ElevatorOBJ, True)) <= (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-			If Abs(EntityZ(me\Collider) - EntityZ(ElevatorOBJ, True)) <= (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-				If Abs(EntityY(me\Collider) - EntityY(ElevatorOBJ, True)) <= (280.0 * RoomScale) + (0.015 * fps\Factor[0]) Then
-					If EventState = 0.0 Then
-						TeleportEntity(n_I\Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), n_I\Curr096\CollRadius)
-						PointEntity(n_I\Curr096\Collider, ElevatorOBJ)
-						RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
-						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
-						ResetEntity(n_I\Curr096\Collider)
-						n_I\Curr096\State = 6.0
-						SetNPCFrame(n_I\Curr096, 0.0)
-						e\Sound = LoadSound_Strict("SFX\SCP\096\ElevatorSlam.ogg")
-						EventState = EventState + (fps\Factor[0] * 1.4)
-					EndIf
-				EndIf
+		If IsInsideArea(ElevatorOBJ, 280.0 * RoomScale)
+			If EventState = 0.0 Then
+				TeleportEntity(n_I\Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), n_I\Curr096\CollRadius)
+				PointEntity(n_I\Curr096\Collider, ElevatorOBJ)
+				RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
+				MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
+				ResetEntity(n_I\Curr096\Collider)
+				n_I\Curr096\State = 6.0
+				SetNPCFrame(n_I\Curr096, 0.0)
+				e\Sound = LoadSound_Strict("SFX\SCP\096\ElevatorSlam.ogg")
+				EventState = EventState + (fps\Factor[0] * 1.4)
 			EndIf
 		EndIf
 	EndIf
