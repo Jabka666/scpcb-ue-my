@@ -79,7 +79,7 @@ If opt\DisplayMode <> 0 Then
 EndIf
 
 Function UpdateMainMenu%()
-	CatchErrors("Uncaught (UpdateMainMenu")
+	CatchErrors("UpdateMainMenu()")
 	
 	Local sv.Save, cm.CustomMaps, snd.Sound
 	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
@@ -942,11 +942,11 @@ Function UpdateMainMenu%()
 	
 	RenderMainMenu()
 	
-	CatchErrors("UpdateMainMenu")
+	CatchErrors("Uncaught: UpdateMainMenu()")
 End Function
 
 Function RenderMainMenu%()
-	CatchErrors("Uncaught (RenderMainMenu")
+	CatchErrors("RenderMainMenu()")
 	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%
 	Local tX#, tY#, tW#, tH#
@@ -1634,7 +1634,7 @@ Function RenderMainMenu%()
 	
 	SetFont2(fo\FontID[Font_Default])
 	
-	CatchErrors("Uncaught (RenderMainMenu")
+	CatchErrors("Uncaught: RenderMainMenu()")
 End Function
 
 Type LoadingScreens
@@ -1708,6 +1708,8 @@ Function ResetLoadingTextColor%()
 End Function
 
 Function RenderLoading%(Percent%, Assets$ = "")
+	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
+	
 	Local x%, y%, Temp%, FirstLoop%
 	Local ls.LoadingScreens
 	
@@ -1903,6 +1905,8 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	Until Close
 	
 	DeleteMenuGadgets()
+	
+	CatchErrors("Uncaught: RenderLoading(" + Percent + ", " + Assets + ")")
 End Function
 
 Function RenderTiledImageRect%(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%, Width%, Height%)

@@ -54,7 +54,9 @@ Type Launcher
 End Type
 
 If opt\LauncherEnabled Then
-	Local lnchr.Launcher = New Launcher
+	Local lnchr.Launcher
+	
+	lnchr.Launcher = New Launcher
 	
 	lnchr\TotalGFXModes = CountGfxModes3D()
 	
@@ -2002,7 +2004,7 @@ Repeat
 Forever
 
 Function UpdateGame%()
-	CatchErrors("Uncaught (UpdateGame)")
+	CatchErrors("UpdateGame()")
 	
 	Local e.Events, ev.Events, r.Rooms
 	Local i%, TempStr$
@@ -2401,11 +2403,11 @@ Function UpdateGame%()
 	
 	RenderGame()
 	
-	CatchErrors("UpdateGame")
+	CatchErrors("Uncaught: UpdateGame()")
 End Function
 
 Function RenderGame%()
-	CatchErrors("Uncaught (RenderGame)")
+	CatchErrors("RenderGame()")
 	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
@@ -2435,7 +2437,7 @@ Function RenderGame%()
 		If me\SelectedEnding = -1 Then RenderMenu()
 	EndIf
 	
-	CatchErrors("RenderGame")
+	CatchErrors("Uncaught: RenderGame()")
 End Function
 
 Function Kill%(IsBloody% = False)
@@ -2604,7 +2606,7 @@ Function UpdateCough%(Chance_%)
 End Function
 
 Function UpdateMoving%()
-	CatchErrors("Uncaught (UpdateMoving)")
+	CatchErrors("(UpdateMoving()")
 	
 	Local de.Decals
 	Local Sprint# = 1.0, Speed# = 0.018
@@ -2944,7 +2946,7 @@ Function UpdateMoving%()
 		me\HeartBeatVolume = Max(me\HeartBeatVolume - fps\Factor[0] * 0.05, 0.0)
 	EndIf
 	
-	CatchErrors("UpdateMoving")
+	CatchErrors("Uncaught: UpdateMoving()")
 End Function
 
 Function UpdateMouseInput%()
@@ -2968,7 +2970,7 @@ Function UpdateMouseInput%()
 End Function
 
 Function UpdateMouseLook%()
-	CatchErrors("Uncaught (UpdateMouseLook)")
+	CatchErrors("UpdateMouseLook()")
 	
 	Local p.Particles
 	Local i%
@@ -3124,7 +3126,7 @@ Function UpdateMouseLook%()
 	
 	Update1025()
 	
-	CatchErrors("UpdateMouseLook")
+	CatchErrors("Uncaught: UpdateMouseLook()")
 End Function
 
 ; ~ Fog Constants
@@ -3252,7 +3254,7 @@ Global DrawHandIcon%
 Global DrawArrowIcon%[4]
 
 Function UpdateGUI%()
-	CatchErrors("Uncaught (UpdateGUI)")
+	CatchErrors("UpdateGUI()")
 	
 	Local e.Events, it.Items, r.Rooms
 	Local Temp%, x%, y%, z%, i%
@@ -5577,7 +5579,7 @@ Function UpdateGUI%()
 	
 	If PrevInvOpen And (Not InvOpen) Then MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
-	CatchErrors("UpdateGUI")
+	CatchErrors("Uncaught: UpdateGUI()")
 End Function
 
 Function RenderHUD%()
@@ -5840,7 +5842,7 @@ Function RenderDebugHUD%()
 End Function
 
 Function RenderGUI%()
-	CatchErrors("Uncaught (RenderGUI)")
+	CatchErrors("RenderGUI()")
 	
 	Local e.Events, it.Items, a_it.Items
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
@@ -6715,7 +6717,7 @@ Function RenderGUI%()
 		EndIf
 	EndIf
 	
-	CatchErrors("RenderGUI")
+	CatchErrors("Uncaught: RenderGUI()")
 End Function
 
 Type InGameMenu
@@ -6735,7 +6737,7 @@ Const MenuTab_Options_Advanced% = 5
 ;[End Block]
 
 Function UpdateMenu%()
-	CatchErrors("Uncaught (UpdateMenu)")
+	CatchErrors("UpdateMenu()")
 	
 	Local r.Rooms
 	Local x%, y%, z%, Width%, Height%, i%
@@ -7340,11 +7342,11 @@ Function UpdateMenu%()
 		EndIf
 	EndIf
 	
-	CatchErrors("UpdateMenu")
+	CatchErrors("Uncaught: UpdateMenu()")
 End Function
 
 Function RenderMenu%()
-	CatchErrors("Uncaught (RenderMenu)")
+	CatchErrors("RenderMenu()")
 	
 	Local x%, y%, Width%, Height%, i%
 	Local TempStr$
@@ -7782,7 +7784,7 @@ Function RenderMenu%()
 	
 	SetFont2(fo\FontID[Font_Default])
 	
-	CatchErrors("RenderMenu")
+	CatchErrors("Uncaught: RenderMenu()")
 End Function
 
 ; ~ Endings ID Constants
@@ -8121,7 +8123,7 @@ Function RenderCredits%()
 End Function
 
 Function NullGame%(PlayButtonSFX% = True)
-	CatchErrors("Uncaught (NullGame)")
+	CatchErrors("NullGame()")
 	
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events, lvr.Levers
 	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, sub.Subtitles
@@ -8357,7 +8359,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	MainMenuOpen = True
 	mm\MainMenuTab = MainMenuTab_Default
 	
-	CatchErrors("NullGame")
+	CatchErrors("Uncaught: NullGame()")
 End Function
 
 Function Update294%()
@@ -8863,7 +8865,7 @@ Function UpdateExplosion%()
 End Function
 
 Function UpdateVomit%()
-	CatchErrors("Uncaught (UpdateVomit)")
+	CatchErrors("UpdateVomit()")
 	
 	Local de.Decals
 	Local Pvt%
@@ -8941,7 +8943,7 @@ Function UpdateVomit%()
 		EndIf
 	EndIf
 	
-	CatchErrors("UpdateVomit")
+	CatchErrors("Uncaught: UpdateVomit()")
 End Function
 
 Global EscapeTimer%

@@ -497,7 +497,7 @@ Function RenderQuickLoading%()
 End Function
 
 Function QuickLoadEvents%()
-	CatchErrors("Uncaught (QuickLoadEvents)")
+	CatchErrors("QuickLoadEvents()")
 	
 	If QuickLoad_CurrEvent = Null Then
 		QuickLoadPercent = -1
@@ -624,11 +624,11 @@ Function QuickLoadEvents%()
 			;[End Block]
 	End Select
 	
-	CatchErrors("QuickLoadEvents (Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
+	CatchErrors("Uncaught: QuickLoadEvents(Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
 End Function
 
 Function UpdateEvents%()
-	CatchErrors("Uncaught (UpdateEvents)")
+	CatchErrors("UpdateEvents()")
 	
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.WayPoints, pr.Props
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors
@@ -7968,9 +7968,9 @@ Function UpdateEvents%()
 		End Select
 		
 		If e <> Null Then
-			CatchErrors("UpdateEvents (Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
+			CatchErrors("UpdateEvents(Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
 		Else
-			CatchErrors("UpdateEvents (Removed event!)")
+			CatchErrors("UpdateEvents(Event doesn't exist anymore!)")
 		EndIf
 	Next
 	

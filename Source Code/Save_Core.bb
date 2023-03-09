@@ -1,7 +1,7 @@
 Const SavePath$ = "Saves\"
 
 Function SaveGame%(File$)
-	CatchErrors("Uncaught (SaveGame(" + File + "))")
+	CatchErrors("SaveGame(" + File + ")")
 	
 	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
@@ -498,11 +498,11 @@ Function SaveGame%(File$)
 		CreateHintMsg(GetLocalString("save", "saved"))
 	EndIf
 	
-	CatchErrors("SaveGame(" + File + ")")
+	CatchErrors("Uncaught: SaveGame(" + File + ")")
 End Function
 
 Function LoadGame%(File$)
-	CatchErrors("Uncaught (LoadGame(" + File + "))")
+	CatchErrors("LoadGame(" + File + ")")
 	
 	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
@@ -1318,11 +1318,11 @@ Function LoadGame%(File$)
 	
 	UpdateTimer = 0.0
 	
-	CatchErrors("LoadGame(" + File + ")")
+	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
 
 Function LoadGameQuick%(File$)
-	CatchErrors("Uncaught (LoadGameQuick(" + File + "))")
+	CatchErrors("LoadGameQuick(" + File + ")")
 	
 	Local r.Rooms, n.NPCs, do.Doors
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
@@ -2078,7 +2078,7 @@ Function LoadGameQuick%(File$)
 	; ~ Resetting some stuff (those get changed when going to the endings)
 	HideDistance = 17.0
 	
-	CatchErrors("LoadGameQuick(" + File + ")")
+	CatchErrors("Uncaught: LoadGameQuick(" + File + ")")
 End Function
 
 Type AutoSave
@@ -2140,7 +2140,7 @@ Global DelSave.Save
 Global SavedGamesAmount%
 
 Function LoadSavedGames%()
-	CatchErrors("Uncaught (LoadSaveGames)")
+	CatchErrors("LoadSaveGames()")
 	
 	Local sv.Save, newsv.Save
 	
@@ -2176,7 +2176,7 @@ Function LoadSavedGames%()
 	Wend
 	CloseDir(SaveDir)
 	
-	CatchErrors("LoadSaveGames")
+	CatchErrors("Uncaught: LoadSaveGames()")
 End Function
 
 Function DeleteGame%(sv.Save)
@@ -2213,7 +2213,7 @@ Global SelectedCustomMap.CustomMaps
 Global CustomMapsAmount%
 
 Function LoadCustomMaps%()
-	CatchErrors("Uncaught (LoadCustomMaps)")
+	CatchErrors("LoadCustomMaps()")
 	
 	Local cm.CustomMaps, newcm.CustomMaps
 	
@@ -2251,7 +2251,7 @@ Function LoadCustomMaps%()
 	Wend
 	CloseDir(MapDir)
 	
-	CatchErrors("LoadCustomMaps")
+	CatchErrors("Uncaught: LoadCustomMaps()")
 End Function
 
 Function DeleteCustomMap%(cm.CustomMaps)
@@ -2273,7 +2273,7 @@ Function DeleteCustomMap%(cm.CustomMaps)
 End Function
 
 Function LoadMap%(File$)
-	CatchErrors("Uncaught (LoadMap(" + File + "))")
+	CatchErrors("LoadMap(" + File + ")")
 	
 	Local r.Rooms, rt.RoomTemplates, e.Events
 	Local f%, x%, y%, Name$, Angle%, Prob#
@@ -2653,7 +2653,7 @@ Function LoadMap%(File$)
 		Next
 	Next
 	
-	CatchErrors("LoadMap(" + File + ")")
+	CatchErrors("Uncaught: LoadMap(" + File + ")")
 End Function
 
 ;~IDEal Editor Parameters:

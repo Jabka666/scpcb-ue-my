@@ -220,7 +220,7 @@ Global ClosestItem.Items
 Global OtherOpen.Items = Null
 
 Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, A# = 1.0, InvSlots% = 0)
-	CatchErrors("Uncaught (CreateItem)")
+	CatchErrors("CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + A + ", " + InvSlots + ")")
 	
 	Local i.Items, it.ItemTemplates
 	
@@ -290,13 +290,13 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	i\ID = LastItemID + 1
 	LastItemID = i\ID
 	
-	CatchErrors("CreateItem")
+	CatchErrors("Uncaught: CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + A + ", " + InvSlots + ")")
 	
 	Return(i)
 End Function
 
 Function RemoveItem%(i.Items)
-	CatchErrors("Uncaught (RemoveItem)")
+	CatchErrors("RemoveItem()")
 	
 	Local n%
 	
@@ -316,7 +316,7 @@ Function RemoveItem%(i.Items)
 	If i\ItemTemplate\Img <> 0 Then FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
 	Delete(i)
 	
-	CatchErrors("RemoveItem")
+	CatchErrors("Uncaught: RemoveItem()")
 End Function
 
 Function RemoveWearableItems%(item.Items)
@@ -370,7 +370,7 @@ Function ClearSecondInv%(item.Items, From% = 0)
 End Function
 
 Function UpdateItems%()
-	CatchErrors("Uncaught (UpdateItems)")
+	CatchErrors("UpdateItems()")
 	
 	Local i.Items, i2.Items, np.NPCs
 	Local xTemp#, yTemp#, zTemp#
@@ -464,9 +464,9 @@ Function UpdateItems%()
 		EndIf
 		
 		If (Not DeletedItem) Then
-			CatchErrors("UpdateItems (Item Name:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + ")")
+			CatchErrors("UpdateItems(Item Name:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + ")")
 		Else
-			CatchErrors("UpdateItems (Removed item!)")
+			CatchErrors("UpdateItems(Item doesn't exist anymore!)")
 		EndIf
 		DeletedItem = False
 	Next
@@ -480,7 +480,7 @@ Function PickItem%(item.Items)
 	
 	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
 	
-	CatchErrors("Uncaught (PickItem)")
+	CatchErrors("PickItem()")
 	
 	Local e.Events
 	Local n% = 0, z%
@@ -618,12 +618,12 @@ Function PickItem%(item.Items)
 		CreateMsg(GetLocalString("msg", "cantcarry"))
 	EndIf
 	
-	CatchErrors("PickItem")
+	CatchErrors("Uncaught: PickItem()")
 End Function
 
 Function DropItem%(item.Items, PlayDropSound% = True)
 	
-	CatchErrors("Uncaught (DropItem)")
+	CatchErrors("DropItem()")
 	
 	Local n%
 	
@@ -649,7 +649,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	Next
 	ItemAmount = ItemAmount - 1
 	
-	CatchErrors("DropItem")
+	CatchErrors("Uncaught: DropItem()")
 End Function
 
 Function IsItemGoodFor1162ARC%(itt.ItemTemplates)

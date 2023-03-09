@@ -577,7 +577,7 @@ End Function
 Global RemoveHazmatTimer#, Remove714Timer#
 
 Function UpdateNPCs%()
-	CatchErrors("Uncaught (UpdateNPCs)")
+	CatchErrors("UpdateNPCs()")
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
@@ -4740,7 +4740,7 @@ Function UpdateNPCs%()
 		Else
 			n\DropSpeed = 0.0
 		EndIf
-		CatchErrors("UpdateNPCs (NPC Name: " + Chr(34) + n\NVGName + Chr(34) + ", ID: " + n\NPCType + ")")
+		CatchErrors("Uncaught: UpdateNPCs(NPC Name: " + Chr(34) + n\NVGName + Chr(34) + ", ID: " + n\NPCType + ")")
 	Next
 	
 	UpdateCameraCheck()

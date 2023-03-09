@@ -9,7 +9,7 @@ Type Particles
 End Type
 
 Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
-	CatchErrors("Uncaught (CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + "))")
+	CatchErrors("CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
 	
 	Local p.Particles
 	
@@ -48,13 +48,13 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	
 	If (Not p_I\ParticleTextureID[ID]) Then RuntimeError(Format(GetLocalString("runerr", "particle"), ID))
 	
-	CatchErrors("CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
+	CatchErrors("Uncaught: CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
 	
 	Return(p)
 End Function
 	
 Function UpdateParticles%()
-	CatchErrors("Uncaught (UpdateParticles)")
+	CatchErrors("UpdateParticles()")
 	
 	Local p.Particles
 	
@@ -92,17 +92,17 @@ Function UpdateParticles%()
 		EndIf
 	Next
 	
-	CatchErrors("UpdateParticles")
+	CatchErrors("Uncaught: UpdateParticles()")
 End Function
 	
 Function RemoveParticle%(p.Particles)
-	CatchErrors("Uncaught (RemoveParticle)")
+	CatchErrors("RemoveParticle()")
 	
 	FreeEntity(p\OBJ) : p\OBJ = 0
 	FreeEntity(p\Pvt) : p\Pvt = 0
 	Delete(p)
 	
-	CatchErrors("RemoveParticle")
+	CatchErrors("Uncaught: RemoveParticles()")
 End Function
 
 Type Emitters
@@ -117,7 +117,7 @@ Type Emitters
 End Type
 
 Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
-	CatchErrors("Uncaught (CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + "))")
+	CatchErrors("CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + ")")
 	
 	Local e.Emitters
 	Local r.Rooms
@@ -153,13 +153,13 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then e\room = r
 	Next
 	
-	CatchErrors("CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + ")")
+	CatchErrors("Uncaught: CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + ")")
 	
 	Return(e)
 End Function
 
 Function UpdateEmitters%()
-	CatchErrors("Uncaught (UpdateEmitters)")
+	CatchErrors("UpdateEmitters()")
 	
 	Local e.Emitters, p.Particles
 	Local InSmoke% = False
@@ -200,7 +200,7 @@ Function UpdateEmitters%()
 		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
 	EndIf
 	
-	CatchErrors("UpdateEmitters")
+	CatchErrors("Uncaught: UpdateEmitters()")
 End Function
 
 Function UpdateDust%()

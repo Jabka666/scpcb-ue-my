@@ -622,7 +622,7 @@ Function LoadMisc%()
 End Function
 
 Function LoadMaterials%(File$)
-	CatchErrors("Uncaught (LoadMaterials(" + File + ")")
+	CatchErrors("LoadMaterials(" + File + ")")
 	
 	Local TemporaryString$
 	Local mat.Materials = Null
@@ -650,7 +650,7 @@ Function LoadMaterials%(File$)
 	
 	CloseFile(f)
 	
-	CatchErrors("LoadMaterials(" + File + ")")
+	CatchErrors("Uncaught: LoadMaterials(" + File + ")")
 End Function
 
 Const ItemsPath$ = "GFX\Items\"
@@ -1620,7 +1620,7 @@ End Type
 Global t.Textures
 
 Function LoadEntities%()
-	CatchErrors("Uncaught (LoadEntities)")
+	CatchErrors("LoadEntities()")
 	
 	Local i%, Tex%
 	Local b%, t1%, SF%
@@ -1948,7 +1948,7 @@ Function LoadEntities%()
 	CreateConsoleMsg(" - disable106 / enable106")
 	CreateConsoleMsg(" - spawn [NPC type]")
 	
-	CatchErrors("LoadEntities")
+	CatchErrors("Uncaught: LoadEntities()")
 End Function
 
 Function InitOtherStuff%()
@@ -1973,7 +1973,7 @@ Function InitOtherStuff%()
 End Function
 
 Function InitNewGame%()
-	CatchErrors("Uncaught (InitNewGame)")
+	CatchErrors("InitNewGame()")
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
@@ -2146,11 +2146,11 @@ Function InitNewGame%()
 	UpdateDoors()
 	UpdateRooms()
 	
-	CatchErrors("InitNewGame")
+	CatchErrors("Uncaught: InitNewGame()")
 End Function
 
 Function InitLoadGame%()
-	CatchErrors("Uncaught (InitLoadGame)")
+	CatchErrors("InitLoadGame()")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
@@ -2249,7 +2249,7 @@ Function InitLoadGame%()
 	UpdateDoors()
 	UpdateRooms()
 	
-	CatchErrors("InitLoadGame")
+	CatchErrors("Uncaught: InitLoadGame()")
 End Function
 
 ;~IDEal Editor Parameters:
