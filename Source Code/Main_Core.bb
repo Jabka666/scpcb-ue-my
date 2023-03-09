@@ -2405,6 +2405,8 @@ Function UpdateGame%()
 End Function
 
 Function RenderGame%()
+	CatchErrors("Uncaught (RenderGame)")
+	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
@@ -2432,6 +2434,8 @@ Function RenderGame%()
 	Else
 		If me\SelectedEnding = -1 Then RenderMenu()
 	EndIf
+	
+	CatchErrors("RenderGame")
 End Function
 
 Function Kill%(IsBloody% = False)
@@ -8944,8 +8948,6 @@ Global EscapeTimer%
 Global EscapeSecondsTimer# = 70.0
 
 Function UpdateEscapeTimer%()
-	CatchErrors("Uncaught (UpdateEscapeTimer)")
-	
 	Local ev.Events
 	
 	For ev.Events = Each Events
@@ -8960,8 +8962,6 @@ Function UpdateEscapeTimer%()
 		EscapeTimer = EscapeTimer + 1
 		EscapeSecondsTimer = 70.0
 	EndIf
-	
-	CatchErrors("UpdateEscapeTimer")
 End Function
 
 Function Update008%()

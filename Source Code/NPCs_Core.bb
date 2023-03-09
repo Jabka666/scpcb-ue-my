@@ -4740,7 +4740,7 @@ Function UpdateNPCs%()
 		Else
 			n\DropSpeed = 0.0
 		EndIf
-		CatchErrors("UpdateNPCs: NPC Name: " + Chr(34) + n\NVGName + Chr(34) + ", ID: " + n\NPCType)
+		CatchErrors("UpdateNPCs (NPC Name: " + Chr(34) + n\NVGName + Chr(34) + ", ID: " + n\NPCType + ")")
 	Next
 	
 	UpdateCameraCheck()

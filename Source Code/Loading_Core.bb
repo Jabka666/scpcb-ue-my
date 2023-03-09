@@ -622,7 +622,7 @@ Function LoadMisc%()
 End Function
 
 Function LoadMaterials%(File$)
-	CatchErrors("Uncaught (LoadMaterials)")
+	CatchErrors("Uncaught (LoadMaterials(" + File + ")")
 	
 	Local TemporaryString$
 	Local mat.Materials = Null
@@ -650,7 +650,7 @@ Function LoadMaterials%(File$)
 	
 	CloseFile(f)
 	
-	CatchErrors("LoadMaterials")
+	CatchErrors("LoadMaterials(" + File + ")")
 End Function
 
 Const ItemsPath$ = "GFX\Items\"

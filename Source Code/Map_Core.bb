@@ -761,9 +761,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	
 	CloseFile(f)
 	
-	Return(OBJ)
-	
 	CatchErrors("LoadRMesh")
+	
+	Return(OBJ)
 End Function
 
 Const ForestGridSize% = 10
@@ -986,7 +986,7 @@ Const ROOM4% = 4
 ;[End Block]
 
 Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
-	CatchErrors("Uncaught (PlaceForest)")
+	CatchErrors("Uncaught (PlaceForest(" + x + ", " + y + ", " + z + "))")
 	
 	Local tX%, tY%
 	Local Tile_Size# = 12.0
@@ -1231,11 +1231,11 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 		Next
 	Next
 	
-	CatchErrors("PlaceForest")
+	CatchErrors("PlaceForest(" + x + ", " + y + ", " + z + ")")
 End Function
 
 Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
-	CatchErrors("Uncaught (PlaceMapCreatorForest)")
+	CatchErrors("Uncaught (PlaceMapCreatorForest(" + x + ", " + y + ", " + z + "))")
 	
 	Local tX%, tY%
 	Local Tile_Size# = 12.0
@@ -1415,11 +1415,11 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 		Next
 	Next
 	
-	CatchErrors("PlaceMapCreatorForest")
+	CatchErrors("PlaceMapCreatorForest(" + x + ", " + y + ", " + z + ")")
 End Function
 
 Function DestroyForest%(fr.Forest, RemoveGrid% = True)
-	CatchErrors("Uncaught (DestroyForest)")
+	CatchErrors("Uncaught (DestroyForest(" + RemoveGrid + "))")
 	
 	Local tX%, tY%, i%
 	
@@ -1444,7 +1444,7 @@ Function DestroyForest%(fr.Forest, RemoveGrid% = True)
 		If fr\DetailMesh[i + 1] <> 0 Then FreeEntity(fr\DetailMesh[i + 1]) : fr\DetailMesh[i + 1] = 0
 	Next
 	
-	CatchErrors("DestroyForest")
+	CatchErrors("DestroyForest(" + RemoveGrid + ")")
 End Function
 
 Function UpdateForest%(fr.Forest)
@@ -1503,7 +1503,7 @@ Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 End Function
 
 Function LoadRoomTemplates%(File$)
-	CatchErrors("Uncaught (LoadRoomTemplates)")
+	CatchErrors("Uncaught (LoadRoomTemplates(" + File + "))")
 	
 	Local TemporaryString$, i%
 	Local rt.RoomTemplates = Null
@@ -1568,7 +1568,7 @@ Function LoadRoomTemplates%(File$)
 	
 	CloseFile(f)
 	
-	CatchErrors("LoadRoomTemplates")
+	CatchErrors("LoadRoomTemplates(" + File + ")")
 End Function
 
 Function LoadRoomMesh%(rt.RoomTemplates)
@@ -1876,7 +1876,7 @@ Function PlaceMapCreatorMT%(r.Rooms)
 End Function
 
 Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
-	CatchErrors("Uncaught (CreateRoom)")
+	CatchErrors("Uncaught (CreateRoom(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + "))")
 	
 	Local r.Rooms = New Rooms
 	Local rt.RoomTemplates
@@ -1956,7 +1956,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 		Next
 	Next
 	
-	CatchErrors("CreateRoom")
+	CatchErrors("CreateRoom(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + "))")
 End Function
 
 Type TempWayPoints
@@ -3490,10 +3490,10 @@ Function UpdateSecurityCams%()
 					If sc\room <> Null Then
 						CatchErrors("UpdateSecurityCameras (" + sc\room\RoomTemplate\Name + ")")
 					Else
-						CatchErrors("UpdateSecurityCameras (screen has no room)")
+						CatchErrors("UpdateSecurityCameras (Screen has no room)")
 					EndIf
 				Else
-					CatchErrors("UpdateSecurityCameras (screen doesn't exist anymore)")
+					CatchErrors("UpdateSecurityCameras (Screen doesn't exist anymore)")
 				EndIf
 			EndIf
 		EndIf
@@ -3562,10 +3562,10 @@ Function RenderSecurityCams%()
 				If sc\room <> Null Then
 					CatchErrors("RenderSecurityCameras (" + sc\room\RoomTemplate\Name + ")")
 				Else
-					CatchErrors("RenderSecurityCameras (screen has no room)")
+					CatchErrors("RenderSecurityCameras (Screen has no room)")
 				EndIf
 			Else
-				CatchErrors("RenderSecurityCameras (screen doesn't exist anymore)")
+				CatchErrors("RenderSecurityCameras (Screen doesn't exist anymore)")
 			EndIf
 		EndIf
 	Next

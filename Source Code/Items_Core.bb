@@ -320,8 +320,6 @@ Function RemoveItem%(i.Items)
 End Function
 
 Function RemoveWearableItems%(item.Items)
-	CatchErrors("Uncaught (RemoveWearableItems)")
-	
 	Select item\ItemTemplate\TempName
 		Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 			;[Block]
@@ -361,8 +359,6 @@ Function RemoveWearableItems%(item.Items)
 			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\SCRAMBLE = 0
 			;[End Block]
 	End Select
-	
-	CatchErrors("RemoveWearableItems")
 End Function
 
 Function ClearSecondInv%(item.Items, From% = 0)
@@ -468,9 +464,9 @@ Function UpdateItems%()
 		EndIf
 		
 		If (Not DeletedItem) Then
-			CatchErrors("Detected error for:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + " item!")
+			CatchErrors("UpdateItems (Item Name:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + ")")
 		Else
-			CatchErrors("Detected error for deleted item!")
+			CatchErrors("UpdateItems (Removed item!)")
 		EndIf
 		DeletedItem = False
 	Next

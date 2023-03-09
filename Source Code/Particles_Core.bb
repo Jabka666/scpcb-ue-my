@@ -9,6 +9,8 @@ Type Particles
 End Type
 
 Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
+	CatchErrors("Uncaught (CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + "))")
+	
 	Local p.Particles
 	
 	p.Particles = New Particles
@@ -46,10 +48,14 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	
 	If (Not p_I\ParticleTextureID[ID]) Then RuntimeError(Format(GetLocalString("runerr", "particle"), ID))
 	
+	CatchErrors("CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
+	
 	Return(p)
 End Function
 	
 Function UpdateParticles%()
+	CatchErrors("Uncaught (UpdateParticles)")
+	
 	Local p.Particles
 	
 	If UpdateTimer <= 0.0 Then
@@ -85,12 +91,18 @@ Function UpdateParticles%()
 			RemoveParticle(p)
 		EndIf
 	Next
+	
+	CatchErrors("UpdateParticles")
 End Function
 	
 Function RemoveParticle%(p.Particles)
+	CatchErrors("Uncaught (RemoveParticle)")
+	
 	FreeEntity(p\OBJ) : p\OBJ = 0
 	FreeEntity(p\Pvt) : p\Pvt = 0
 	Delete(p)
+	
+	CatchErrors("RemoveParticle")
 End Function
 
 Type Emitters
@@ -105,6 +117,8 @@ Type Emitters
 End Type
 
 Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
+	CatchErrors("Uncaught (CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + "))")
+	
 	Local e.Emitters
 	Local r.Rooms
 	
@@ -139,10 +153,14 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then e\room = r
 	Next
 	
+	CatchErrors("CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + ")")
+	
 	Return(e)
 End Function
 
 Function UpdateEmitters%()
+	CatchErrors("Uncaught (UpdateEmitters)")
+	
 	Local e.Emitters, p.Particles
 	Local InSmoke% = False
 	
@@ -181,6 +199,8 @@ Function UpdateEmitters%()
 		UpdateCough(150)
 		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
 	EndIf
+	
+	CatchErrors("UpdateEmitters")
 End Function
 
 Function UpdateDust%()

@@ -624,7 +624,7 @@ Function QuickLoadEvents%()
 			;[End Block]
 	End Select
 	
-	CatchErrors("QuickLoadEvents: Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID)
+	CatchErrors("QuickLoadEvents (Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
 End Function
 
 Function UpdateEvents%()
@@ -7968,9 +7968,9 @@ Function UpdateEvents%()
 		End Select
 		
 		If e <> Null Then
-			CatchErrors("UpdateEvents: Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID)
+			CatchErrors("UpdateEvents (Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
 		Else
-			CatchErrors("UpdateEvents: Removed event!")
+			CatchErrors("UpdateEvents (Removed event!)")
 		EndIf
 	Next
 	

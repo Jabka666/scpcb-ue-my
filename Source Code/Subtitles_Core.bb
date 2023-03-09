@@ -50,7 +50,7 @@ Function RenderSubtitles%()
 End Function
 
 Function ShowSubtitles%(Name$)
-	CatchErrors("Uncaught (ShowSubtitles)")
+	CatchErrors("Uncaught (ShowSubtitles(" + Name + "))")
 	
 	If (Not opt\EnableSubtitles) Lor (Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name)) Then Return
 	
@@ -101,7 +101,7 @@ Function ShowSubtitles%(Name$)
 		i = i + 1
 	Forever
 	
-	CatchErrors("ShowSubtitles")
+	CatchErrors("ShowSubtitles(" + Name + ")")
 End Function
 
 ;~IDEal Editor Parameters:

@@ -1,7 +1,7 @@
 Const SavePath$ = "Saves\"
 
 Function SaveGame%(File$)
-	CatchErrors("Uncaught (SaveGame)")
+	CatchErrors("Uncaught (SaveGame(" + File + "))")
 	
 	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
@@ -498,11 +498,11 @@ Function SaveGame%(File$)
 		CreateHintMsg(GetLocalString("save", "saved"))
 	EndIf
 	
-	CatchErrors("SaveGame")
+	CatchErrors("SaveGame(" + File + ")")
 End Function
 
 Function LoadGame%(File$)
-	CatchErrors("Uncaught (LoadGame)")
+	CatchErrors("Uncaught (LoadGame(" + File + "))")
 	
 	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
@@ -1318,11 +1318,11 @@ Function LoadGame%(File$)
 	
 	UpdateTimer = 0.0
 	
-	CatchErrors("LoadGame")
+	CatchErrors("LoadGame(" + File + ")")
 End Function
 
 Function LoadGameQuick%(File$)
-	CatchErrors("Uncaught (LoadGameQuick)")
+	CatchErrors("Uncaught (LoadGameQuick(" + File + "))")
 	
 	Local r.Rooms, n.NPCs, do.Doors
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
@@ -2078,7 +2078,7 @@ Function LoadGameQuick%(File$)
 	; ~ Resetting some stuff (those get changed when going to the endings)
 	HideDistance = 17.0
 	
-	CatchErrors("LoadGameQuick")
+	CatchErrors("LoadGameQuick(" + File + ")")
 End Function
 
 Type AutoSave
@@ -2273,7 +2273,7 @@ Function DeleteCustomMap%(cm.CustomMaps)
 End Function
 
 Function LoadMap%(File$)
-	CatchErrors("Uncaught (LoadMap)")
+	CatchErrors("Uncaught (LoadMap(" + File + "))")
 	
 	Local r.Rooms, rt.RoomTemplates, e.Events
 	Local f%, x%, y%, Name$, Angle%, Prob#
@@ -2653,7 +2653,7 @@ Function LoadMap%(File$)
 		Next
 	Next
 	
-	CatchErrors("LoadMap")
+	CatchErrors("LoadMap(" + File + ")")
 End Function
 
 ;~IDEal Editor Parameters:
