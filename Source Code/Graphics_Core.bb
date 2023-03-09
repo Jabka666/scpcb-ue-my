@@ -85,7 +85,7 @@ Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	EndIf
 	
 	; ~ If the image does not need to be scaled, just copy the image and exit the function
-	If (SrcWidth = DestWidth) And (SrcHeight = DestHeight) Then Return(CopyImage(SrcImage))
+	If (SrcWidth = DestWidth) And (SrcHeight = DestHeight) Then Return(SrcImage)
 	
 	; ~ Create a scratch image that is as tall as the source image, and as wide as the destination image
 	ScratchImage = CreateImage(DestWidth, SrcHeight)
