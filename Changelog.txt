@@ -132,8 +132,7 @@ Bug fixes:
 - Fixed cutscene in SCP-049's containment chamber not working at all.
 - Fixed monitor overlay not hiding after turning off the security cam.
 - Fixed an issue with wearable items of the same type not dropping when one of the items was equipped.
-
-- Hopefully fixed height of NPCs teleportation.
+- Fixed height of NPCs teleportation.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

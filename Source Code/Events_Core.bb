@@ -782,11 +782,7 @@ Function UpdateEvents%()
 									ResetEntity(n_I\Curr173\Collider)
 									RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 									
-									If me\LightBlink > 0.0 Then
-										n_I\Curr173\Idle = 0
-									Else
-										n_I\Curr173\Idle = 1
-									EndIf
+									n_I\Curr173\Idle = (1 - (me\LightBlink > 0.0))
 									
 									If e\room\NPC[2]\State <> 1.0 And (Not me\Terminated) Then
 										If EntityZ(e\room\NPC[2]\Collider) < e\room\z - 1150.0 * RoomScale Then
