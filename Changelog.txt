@@ -133,6 +133,7 @@ Bug fixes:
 - Fixed monitor overlay not hiding after turning off the security cam.
 - Fixed an issue with wearable items of the same type not dropping when one of the items was equipped.
 - Fixed height of NPCs teleportation.
+- Fixed center coordinates of some rooms correcting player's/SCP-049's/MTF's teleportation.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

@@ -8509,10 +8509,10 @@ Function UpdateDimension106%()
 										
 										me\LightBlink = 5.0
 										
-										If RoomName = "cont1_106" Then
-											TeleportEntity(me\Collider, EntityX(r\Objects[6], True), 0.4, EntityZ(r\Objects[6], True), 0.3, True)
+										If r\RoomCenter <> 0 Then
+											TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.4, EntityZ(r\RoomCenter, True), 0.3, True)
 										Else
-											TeleportEntity(me\Collider, EntityX(r\OBJ, True), 0.4, EntityZ(r\OBJ, True), 0.3, True)
+											TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.4, EntityZ(r\OBJ), 0.3, True)
 										EndIf
 										TeleportToRoom(r)
 										

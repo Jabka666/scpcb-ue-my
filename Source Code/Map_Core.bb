@@ -1653,6 +1653,7 @@ Type Rooms
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 	Field HiddenAlpha% = True
+	Field RoomCenter%
 End Type
 
 Global PlayerRoom.Rooms
@@ -3863,6 +3864,12 @@ Function UpdateRedLight%(Light%, Value1#, Value2#)
 	EndIf
 End Function
 
+Function CreateCustomCenter%(x#, z#, room.Rooms)
+	room\RoomCenter = CreatePivot()
+	PositionEntity(room\RoomCenter, x, 0.0, z)
+	EntityParent(room\RoomCenter, room\OBJ)
+End Function
+
 Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom()")
 	
@@ -3964,6 +3971,8 @@ Function FillRoom%(r.Rooms)
 					Next
 				Next
 			Next
+			
+			CreateCustomCenter(r\x, r\z - 768.0 * RoomScale, r)
 			;[End Block]
 		Case "room1_dead_end_lcz", "room1_dead_end_ez"
 			;[Block]
@@ -4005,6 +4014,8 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
+			
+			CreateCustomCenter(r\x, r\z - 830.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_173"
 			;[Block]
@@ -4353,6 +4364,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Document SCP-205", "paper", r\x - 357.0 * RoomScale, r\y + 120.0 * RoomScale, r\z + 50.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x + 465.0 * RoomScale, r\z, r)
 			;[End Block]
 		Case "cont1_372"
 			;[Block]
@@ -4375,6 +4388,8 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Radio Transceiver", "radio", r\x + 800.0 * RoomScale, r\y + 112.0 * RoomScale, r\z + 944.0 * RoomScale)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 704.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_914"
 			;[Block]
@@ -4429,6 +4444,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Dr. L's Note #1", "paper", r\x - 538.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 365.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 704.0 * RoomScale, r)
 			;[End Block]
 		Case "room2_2_lcz"
 			;[Block]
@@ -4607,6 +4624,8 @@ Function FillRoom%(r.Rooms)
 					FreeEntity(r\RoomDoors[1]\OBJ2) : r\RoomDoors[1]\OBJ2 = 0
 				EndIf
 			EndIf
+			
+			CreateCustomCenter(r\x + 336.0 * RoomScale, r\z + 32.0 * RoomScale, r)
 			;[End Block]
 		Case "room2_js"
 			;[Block]
@@ -4847,6 +4866,8 @@ Function FillRoom%(r.Rooms)
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
+			
+			CreateCustomCenter(r\x, r\z - 256.0 * RoomScale, r)
 			;[End Block]
 		Case "room2_test_lcz"
 			;[Block]
@@ -5285,6 +5306,8 @@ Function FillRoom%(r.Rooms)
 			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
+			
+			CreateCustomCenter(r\x - 736.0 * RoomScale, r\z - 352.0 * RoomScale, r)
 			;[End Block]
 		Case "room2c_gw_2_lcz"
 			;[Block]
@@ -5314,6 +5337,8 @@ Function FillRoom%(r.Rooms)
 			
 			d\LinkedDoor = d2
 			d2\LinkedDoor = d
+			
+			CreateCustomCenter(r\x + 815.0 * RoomScale, r\z - 815.0 * RoomScale, r)
 			;[End Block]
 		Case "cont2c_1162_arc"
 			;[Block]
@@ -5613,6 +5638,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Document SCP-035", "paper", r\x + 1168.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 408.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 848.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_079"
 			;[Block]
@@ -5671,6 +5698,8 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x - 2200.0 * RoomScale, r\y - 10688.0 * RoomScale + 0.01, r\z + 1000.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 256.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_096"
 			;[Block]
@@ -5702,6 +5731,8 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("SCRAMBLE Gear", "scramble", r\x - 860.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 80.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 512.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_106"
 			;[Block]
@@ -5787,6 +5818,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Recall Protocol RP-106-N", "paper", r\x - 989.0 * RoomScale, r\y - 8008.0 * RoomScale, r\z + 3107.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x - 132.0 * RoomScale, r\z - 704.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_895"
 			;[Block]
@@ -5919,6 +5952,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Scorched Note", "paper", r\x + 64.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 384.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 656.0 * RoomScale, r)
 			;[End Block]
 		Case "room2_nuke"
 			;[Block]
@@ -5998,6 +6033,8 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[2], 2)
 			EntityAlpha(r\Objects[2], 0.0)
 			HideEntity(r\Objects[2])
+			
+			CreateCustomCenter(r\x, r\z - 756.0 * RoomScale, r)
 			;[End Block]
 		Case "room2_shaft"
 			;[Block]
@@ -6273,6 +6310,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("First Aid Kit", "firstaid", r\x + 385.0 * RoomScale, r\y - 3412.0 * RoomScale, r\z + 271.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x - 672.0 * RoomScale, r\z - 640.0 * RoomScale, r)
 			;[End Block]
 		Case "cont2_409"
 			;[Block]
@@ -6336,6 +6375,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Dr. L's Note #2", "paper", r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x + 340.0 * RoomScale, r\z - 340.0 * RoomScale, r)
 			;[End Block]
 		Case "room3_hcz"
 			;[Block]
@@ -6352,6 +6393,8 @@ Function FillRoom%(r.Rooms)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 425.0 * RoomScale, r)
 			;[End Block]
 		Case "cont3_513"
 			;[Block]
@@ -6468,6 +6511,8 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 173.0 * RoomScale, r\y + 0.5, r\z + 631.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x + 490.0 * RoomScale, r\z - 490.0 * RoomScale, r)
 			;[End Block]
 		Case "room3_2_hcz"
 			;[Block]
@@ -6497,6 +6542,8 @@ Function FillRoom%(r.Rooms)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
 			EntityParent(em\OBJ, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 425.0 * RoomScale, r)
 			;[End Block]
 		Case "room2_checkpoint_hcz_ez"
 			;[Block]
@@ -6556,6 +6603,8 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1024.0 * RoomScale, r\y, r\z + 512.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 720.0 * RoomScale, r)
 			;[End Block]
 		Case "gate_a"
 			;[Block]
@@ -6666,6 +6715,8 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 720.0 * RoomScale, r\y, r\z + 1744.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 720.0 * RoomScale, r)
 			;[End Block]
 		Case "gate_b"
 			;[Block]
@@ -6778,6 +6829,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Ballistic Helmet", "helmet", r\x + 344.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 900.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x, r\z - 639.0 * RoomScale, r)
 			;[End Block]
 		Case "room2_ez"
 			;[Block]
@@ -7197,6 +7250,8 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-860-1", "paper", r\x + 1158.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 17.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x + 927.0 * RoomScale, r\z, r)
 			;[End Block]
 		Case "room2c_ec"
 			;[Block]
@@ -7411,6 +7466,8 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x - 48.0 * RoomScale, r\y + 128.0 * RoomScale, r\z + 320.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
+			
+			CreateCustomCenter(r\x - 32.0 * RoomScale, r\z - 736.0 * RoomScale, r)
 			;[End Block]
 		Case "room3_office"
 			;[Block]
@@ -7543,7 +7600,7 @@ Function FillRoom%(r.Rooms)
 				HideEntity(r\Objects[i + 1])
 			Next
 			
-			it.Items = CreateItem("Burnt Note", "paper", EntityX(r\OBJ), r\y + 0.5, EntityZ(r\OBJ) + 3.5)
+			it.Items = CreateItem("Burnt Note", "paper", r\x, r\y + 0.5, r\z + 3.5)
 			;[End Block]
 		Case "dimension_1499"
 			;[Block]

@@ -834,7 +834,11 @@ Function UpdateConsole%()
 					
 					For r.Rooms = Each Rooms
 						If r\RoomTemplate\Name = StrTemp Then
-							TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.7, EntityZ(r\OBJ))
+							If r\RoomCenter <> 0 Then
+								TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.4, EntityZ(r\RoomCenter, True), 0.3, True)
+							Else
+								TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.4, EntityZ(r\OBJ))
+							EndIf
 							TeleportToRoom(r)
 							CreateConsoleMsg(Format(GetLocalString("console", "tp.success"), StrTemp))
 							Exit
@@ -4326,7 +4330,7 @@ Function UpdateGUI%()
 								Else
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "dimension_106" Then
-											PositionEntity(me\Collider, EntityX(r\OBJ), 0.8, EntityZ(r\OBJ))
+											PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.8, EntityZ(r\OBJ))
 											ResetEntity(me\Collider)
 											UpdateTimer = 0.0
 											UpdateDoors()
@@ -8757,7 +8761,7 @@ Function UpdateMTF%()
 						Local leader.NPCs
 						
 						For i = 0 To 2
-							n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\OBJ) + 0.3 * (i - 1), 0.6, EntityZ(entrance\OBJ) + 8.0)
+							n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.6, EntityZ(entrance\RoomCenter, True))
 							
 							If i = 0 Then
 								leader = n
