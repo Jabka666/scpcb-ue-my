@@ -63,13 +63,6 @@ Function AngleDist#(a0#, a1#)
 	Return(bb)
 End Function
 
-Function MilliSecs2%()
-	Local RetVal% = MilliSecs()
-	
-	If RetVal < 0 Then RetVal = RetVal + 2147483648
-	Return(RetVal)
-End Function
-
 Function FloatToString$(n#, Count%)
 	Return(Left(n, Len(Int(Str(n))) + Count + 1))
 End Function

@@ -116,9 +116,9 @@ End Type
 
 Global fps.FramesPerSeconds = New FramesPerSeconds
 
-SeedRnd(MilliSecs2())
+SeedRnd(MilliSecs())
 
-fps\LoopDelay = MilliSecs2()
+fps\LoopDelay = MilliSecs()
 
 Global WireFrameState%
 
@@ -1964,17 +1964,17 @@ Repeat
 	
 	Local ElapsedMilliSecs%
 	
-	fps\CurrTime = MilliSecs2()
+	fps\CurrTime = MilliSecs()
 	
 	ElapsedMilliSecs = fps\CurrTime - fps\PrevTime
 	If (ElapsedMilliSecs > 0 And ElapsedMilliSecs < 500) Then fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliSecs) * 70.0 / 1000.0)
 	fps\PrevTime = fps\CurrTime
 	
 	If opt\FrameLimit > 0.0 Then
-		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs2() - fps\LoopDelay)
+		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs() - fps\LoopDelay)
 		
 		Delay(WaitingTime)
-		fps\LoopDelay = MilliSecs2()
+		fps\LoopDelay = MilliSecs()
 	EndIf
 	
 	fps\Factor[0] = TICK_DURATION
@@ -1991,10 +1991,10 @@ Repeat
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
 	If opt\ShowFPS Then
-		If fps\Goal < MilliSecs2() Then
+		If fps\Goal < MilliSecs() Then
 			fps\FPS = fps\TempFPS
 			fps\TempFPS = 0
-			fps\Goal = MilliSecs2() + 1000
+			fps\Goal = MilliSecs() + 1000
 		Else
 			fps\TempFPS = fps\TempFPS + 1
 		EndIf
@@ -2881,7 +2881,7 @@ Function UpdateMoving%()
 	
 	If me\Injuries > 1.0 Then
 		Temp2 = me\Bloodloss
-		me\BlurTimer = Max(Max(Sin(MilliSecs2() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
+		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
 		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then CreateMsg(GetLocalString("msg", "bloodloss"))
 	EndIf
@@ -2906,7 +2906,7 @@ Function UpdateMoving%()
 			FreeEntity(Pvt)
 		EndIf
 		
-		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs2()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
+		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
 		
 		If me\Bloodloss > 60.0 Then
 			If (Not me\Crouch) Then SetCrouch(True)
@@ -2956,8 +2956,8 @@ Function UpdateMouseInput%()
 		mo\DoubleClick = False
 		mo\MouseHit1 = MouseHit(1)
 		If mo\MouseHit1 Then
-			If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
-			mo\LastMouseHit1 = MilliSecs2()
+			If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+			mo\LastMouseHit1 = MilliSecs()
 		EndIf
 		
 		Local PrevMouseDown1% = mo\MouseDown1
@@ -3025,7 +3025,7 @@ Function UpdateMouseLook%()
 		RotateEntity(Camera, WrapAngle(CameraPitch + Rnd(-ShakeTimer, ShakeTimer)), WrapAngle(EntityYaw(me\Collider) + Rnd(-ShakeTimer, ShakeTimer)), Roll) ; ~ Pitch the user's camera up and down
 		
 		If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
-			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs2() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
+			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 		EndIf
 	Else
 		If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
@@ -6384,7 +6384,7 @@ Function RenderGUI%()
 							
 							SetFont2(fo\FontID[Font_Digital])
 							If StrTemp <> "" Then
-								StrTemp = Right(Left(StrTemp, (Int(MilliSecs2() / 300) Mod Len(StrTemp))), 10)
+								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
 								Text2(x - (28 * MenuScale), y + (33 * MenuScale), "          " + StrTemp + "          ")
 							EndIf
 							SetFont2(fo\FontID[Font_Default])
@@ -6477,7 +6477,7 @@ Function RenderGUI%()
 					
 					NavWorks = PlayerInReachableRoom()
 					If (Not NavWorks) Then
-						If (MilliSecs2() Mod 800) < 200 Then
+						If (MilliSecs() Mod 800) < 200 Then
 							Color(200, 0, 0)
 							Text2(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
 							Text2(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
@@ -6530,7 +6530,7 @@ Function RenderGUI%()
 							Else
 								Color(30, 30, 30)
 							EndIf
-							If (MilliSecs2() Mod 800) < 200 Then ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS2
+							If (MilliSecs() Mod 800) < 200 Then ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS2
 								If Offline Then Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), "MAP DATABASE OFFLINE")
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
@@ -6545,7 +6545,7 @@ Function RenderGUI%()
 							
 							Local SCPs_Found% = 0, Dist#
 							
-							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSecs2() Mod 600) < 400 Then
+							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSecs() Mod 600) < 400 Then
 								If n_I\Curr173 <> Null Then
 									Dist = EntityDistanceSquared(Camera, n_I\Curr173\OBJ)
 									If Dist < 900.0 Then
@@ -7253,7 +7253,7 @@ Function UpdateMenu%()
 							UpdateWorld(0.0)
 							
 							fps\Factor[0] = 0.0
-							fps\PrevTime = MilliSecs2()
+							fps\PrevTime = MilliSecs()
 							
 							ResetInput()
 							MenuOpen = False
@@ -7321,7 +7321,7 @@ Function UpdateMenu%()
 							UpdateWorld(0.0)
 							
 							fps\Factor[0] = 0.0
-							fps\PrevTime = MilliSecs2()
+							fps\PrevTime = MilliSecs()
 							
 							ResetInput()
 							MenuOpen = False
@@ -8878,22 +8878,22 @@ Function UpdateVomit%()
 	If me\VomitTimer > 0.0 Then
 		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
 		
-		If (MilliSecs2() Mod 1600) < Rand(200, 400) Then
+		If (MilliSecs() Mod 1600) < Rand(200, 400) Then
 			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
 			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
-		If Rand(50) = 50 And (MilliSecs2() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)])
+		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)])
 		
 		; ~ Regurgitate when timer is below 10 seconds
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0 Then
 			If (Not ChannelPlaying(VomitCHN)) And me\Regurgitate = 0 Then
 				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(2) + ".ogg"))
-				me\Regurgitate = MilliSecs2() + 50
+				me\Regurgitate = MilliSecs() + 50
 			EndIf
 		EndIf
 		
-		If me\Regurgitate > MilliSecs2() And me\Regurgitate <> 0 Then
+		If me\Regurgitate > MilliSecs() And me\Regurgitate <> 0 Then
 			mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + 1.0
 		Else
 			me\Regurgitate = 0
@@ -8902,7 +8902,7 @@ Function UpdateVomit%()
 		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
 		
 		If me\VomitTimer > -5.0 Then
-			If (MilliSecs2() Mod 400) < 50 Then me\CameraShake = 4.0
+			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0
 			mo\Mouse_X_Speed_1 = 0.0
 			me\Playable = False
 		Else
@@ -8975,7 +8975,7 @@ Function Update008%()
 	TeleportForInfect = PlayerInReachableRoom()
 	If I_008\Timer > 0.0 Then
 		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
-		SinValue = Sin(MilliSecs2() / 8.0) + 2.0
+		SinValue = Sin(MilliSecs() / 8.0) + 2.0
 		If I_008\Timer < 93.0 Then
 			PrevI008Timer = I_008\Timer
 			If I_427\Timer < 70.0 * 360.0 Then
@@ -9100,7 +9100,7 @@ Function Update008%()
 					EndIf
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
-					SinValue = Sin(MilliSecs2() / 5.0)
+					SinValue = Sin(MilliSecs() / 5.0)
 					RotateEntity(me\Head, (1.0 + SinValue) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
 					MoveEntity(me\Head, 0.0, 0.0, -0.4)
 					TurnEntity(me\Head, 80.0 + SinValue * 30.0, SinValue * 40.0, 0.0)

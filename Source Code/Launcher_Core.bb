@@ -305,18 +305,18 @@ Function LanguageSelector%()
 				If Not RequestLanguage\MajorOnly Then Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
 				CreateDir(LocalizaitonPath + RequestLanguage\ID + "/Data")
 				CopyFile(BasePath + "/local.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini")
-				StatusTimer = MilliSecs2()
+				StatusTimer = MilliSecs()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
 			Case LANGUAGE_STATUS_UNINSTALLING_START
 				;[Block]
 				DeleteFolder(LocalizaitonPath + SelectedLanguage\ID)
-				StatusTimer = MilliSecs2()
+				StatusTimer = MilliSecs()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
 		End Select
 		If CurrentStatus = LANGUAGE_STATUS_DONE Then
-			If (MilliSecs2() - StatusTimer) > 1500 Then CurrentStatus = LANGUAGE_STATUS_NULL
+			If (MilliSecs() - StatusTimer) > 1500 Then CurrentStatus = LANGUAGE_STATUS_NULL
 		EndIf
 		
 		SetBuffer(BackBuffer())

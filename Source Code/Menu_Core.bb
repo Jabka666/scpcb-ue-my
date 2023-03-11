@@ -305,7 +305,7 @@ Function UpdateMainMenu%()
 						If UpdateMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start")) Then
 							If CurrSave\Name = "" Then CurrSave\Name = ConvertToANSI(GetLocalString("save", "untitled"))
 							
-							If RandomSeed = "" Then RandomSeed = MilliSecs2()
+							If RandomSeed = "" Then RandomSeed = MilliSecs()
 							
 							SeedRnd(GenerateSeedNumber(RandomSeed))
 							
@@ -958,7 +958,7 @@ Function RenderMainMenu%()
 		HidePointer()
 	EndIf
 	DrawBlock(mma\BackGround, 0, 0)
-	If (MilliSecs2() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
+	If (MilliSecs() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
 	SetFont2(fo\FontID[Font_Default])
 	If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1] Then
 		Color(50, 50, 50)
@@ -2217,13 +2217,13 @@ Function UpdateInput$(aString$, MaxChr%)
 		Return(aString)
 	EndIf
 	
-	If Value = 30 Then CursorPos = CursorPos + 1 : PrevInputBoxCtrl = MilliSecs2() : Return(aString)
-	If Value = 31 Then CursorPos = CursorPos - 1 : PrevInputBoxCtrl = MilliSecs2() : Return(aString)
+	If Value = 30 Then CursorPos = CursorPos + 1 : PrevInputBoxCtrl = MilliSecs() : Return(aString)
+	If Value = 31 Then CursorPos = CursorPos - 1 : PrevInputBoxCtrl = MilliSecs() : Return(aString)
 
-	If KeyDown(205) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) Then ; ~ Right arrow
-		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
-	ElseIf KeyDown(203) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) Then ; ~ Left arrow
-		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
+	If KeyDown(205) And ((MilliSecs() - PrevInputBoxCtrl) > 500) Then ; ~ Right arrow
+		If (MilliSecs() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
+	ElseIf KeyDown(203) And ((MilliSecs() - PrevInputBoxCtrl) > 500) Then ; ~ Left arrow
+		If (MilliSecs() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
 		If InsertMode Then
 			If ChrCanDisplay(Value) Then
@@ -2311,7 +2311,7 @@ Function RenderMenuInputBoxes%()
 		
 		Color(255, 255, 255)
 		If SelectedInputBox = mib\ID Then
-			If ((MilliSecs2() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+			If ((MilliSecs() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf
 		
 		SetFont2(fo\FontID[mib\FontID])

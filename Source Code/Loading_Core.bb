@@ -1491,7 +1491,7 @@ End Function
 Function LoadWayPoints%(LoadingStart% = 55)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
 	Local x#, y#, z#
-	Local Temper% = MilliSecs2()
+	Local Temper% = MilliSecs()
 	Local Dist#, Dist2#
 	
 	For d.Doors = Each Doors
@@ -2139,7 +2139,7 @@ Function InitNewGame%()
 	RenderLoading(100)
 	
 	fps\Factor[0] = 0.0
-	fps\PrevTime = MilliSecs2()
+	fps\PrevTime = MilliSecs()
 	
 	ResetInput()
 	
@@ -2242,7 +2242,7 @@ Function InitLoadGame%()
 	RenderLoading(100)
 	
 	fps\Factor[0] = 0.0
-	fps\PrevTime = MilliSecs2()
+	fps\PrevTime = MilliSecs()
 	
 	ResetInput()
 	

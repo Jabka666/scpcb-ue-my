@@ -3373,7 +3373,7 @@ Function UpdateSecurityCams%()
 						PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
 						RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
 						
-						If (MilliSecs2() Mod 1350) < 800 Then
+						If (MilliSecs() Mod 1350) < 800 Then
 							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
 						Else
 							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
@@ -3471,7 +3471,7 @@ Function UpdateSecurityCams%()
 							If sc\InSight And sc\CoffinEffect = 0 Lor sc\CoffinEffect = 2 Then
 								If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
 								If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
-								If (MilliSecs2() Mod sc\PlayerState) >= Rand(600) Then
+								If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
 									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 								Else
 									If (Not ChannelPlaying(sc\SoundCHN)) Then
@@ -3856,7 +3856,7 @@ Function CreateRedLight%(x#, y#, z#, Parent% = 0)
 End Function
 
 Function UpdateRedLight%(Light%, Value1#, Value2#)
-	If (MilliSecs2() Mod Value1) < Value2 Then
+	If (MilliSecs() Mod Value1) < Value2 Then
 		If EntityHidden(Light) Then ShowEntity(Light)
 	Else
 		If (Not EntityHidden(Light)) Then HideEntity(Light)
@@ -9083,7 +9083,7 @@ Function SetChunkDataValues%()
 		Next
 	Next
 	
-	SeedRnd(MilliSecs2())
+	SeedRnd(MilliSecs())
 End Function
 
 Type ChunkPart
@@ -9130,7 +9130,7 @@ Function CreateChunkParts%(r.Rooms)
 		EndIf
 	Next
 	
-	SeedRnd(MilliSecs2())
+	SeedRnd(MilliSecs())
 End Function
 
 Type Chunk
