@@ -1047,23 +1047,40 @@ Function RenderMainMenu%()
 		
 		Color(255, 255, 255)
 		SetFont2(fo\FontID[Font_Default_Big])
-		If mm\MainMenuTab = MainMenuTab_New_Game Then
-			TempStr = GetLocalString("menu", "new")
-		ElseIf mm\MainMenuTab = MainMenuTab_Load_Game
-			TempStr = GetLocalString("menu", "load")
-		ElseIf mm\MainMenuTab = MainMenuTab_Load_Map
-			TempStr = GetLocalString("menu", "loadmap")
-		ElseIf mm\MainMenuTab = MainMenuTab_Options Then
-			TempStr = GetLocalString("menu", "options")
-		ElseIf mm\MainMenuTab = MainMenuTab_Options_Graphics Then
-			TempStr = GetLocalString("options", "grap")
-		ElseIf mm\MainMenuTab = MainMenuTab_Options_Audio
-			TempStr = GetLocalString("options", "audio")
-		ElseIf mm\MainMenuTab = MainMenuTab_Options_Controls
-			TempStr = GetLocalString("options", "ctrl")
-		ElseIf mm\MainMenuTab = MainMenuTab_Options_Advanced
-			TempStr = GetLocalString("options", "avc")
-		EndIf
+		Select mm\MainMenuTab
+			Case MainMenuTab_New_Game
+				;[Block]
+				TempStr = GetLocalString("menu", "new")
+				;[End Block]
+			Case MainMenuTab_Load_Game
+				;[Block]
+				TempStr = GetLocalString("menu", "load")
+				;[End Block]
+			Case MainMenuTab_Load_Map
+				;[Block]
+				TempStr = GetLocalString("menu", "loadmap")
+				;[End Block]
+			Case MainMenuTab_Options
+				;[Block]
+				TempStr = GetLocalString("menu", "options")
+				;[End Block]
+			Case MainMenuTab_Options_Graphics
+				;[Block]
+				TempStr = GetLocalString("options", "grap")
+				;[End Block]
+			Case MainMenuTab_Options_Audio
+				;[Block]
+				TempStr = GetLocalString("options", "audio")
+				;[End Block]
+			Case MainMenuTab_Options_Controls
+				;[Block]
+				TempStr = GetLocalString("options", "ctrl")
+				;[End Block]
+			Case MainMenuTab_Options_Advanced
+				;[Block]
+				TempStr = GetLocalString("options", "avc")
+				;[End Block]
+		End Select
 		Text2(x + (Width / 2), y + (Height / 2), TempStr, True, True)
 		
 		y = y + Height + (20 * MenuScale)
