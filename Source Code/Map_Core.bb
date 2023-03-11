@@ -2661,6 +2661,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
 						me\DropSpeed = 0.0
 						UpdateTimer = 0.0
+						UpdateRoomLightsTimer = 0.0
 						UpdateDoors()
 						UpdateRooms()
 						
@@ -2762,6 +2763,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
 						me\DropSpeed = 0.0
 						UpdateTimer = 0.0
+						UpdateRoomLightsTimer = 0.0
 						UpdateDoors()
 						UpdateRooms()
 						
@@ -7662,7 +7664,7 @@ Function FillRoom%(r.Rooms)
 	CatchErrors("Uncaught: FillRoom(Room name: " + r\RoomTemplate\Name + ")")
 End Function
 
-Global UpdateTimer#
+Global UpdateTimer# = 35.0
 
 Function UpdateDistanceTimer%()
 	UpdateTimer = UpdateTimer - fps\Factor[0]
@@ -7677,6 +7679,7 @@ Function TeleportToRoom%(r.Rooms)
 	
 	PlayerRoom = r
 	UpdateTimer = 0.0
+	UpdateRoomLightsTimer = 0.0
 	UpdateDoors()
 	UpdateRooms()
 	For it.Items = Each Items

@@ -4333,6 +4333,7 @@ Function UpdateGUI%()
 											PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.8, EntityZ(r\OBJ))
 											ResetEntity(me\Collider)
 											UpdateTimer = 0.0
+											UpdateRoomLightsTimer = 0.0
 											UpdateDoors()
 											UpdateRooms()
 											PlaySound_Strict(Use914SFX)
@@ -7234,6 +7235,7 @@ Function UpdateMenu%()
 							HidePointer()
 							
 							UpdateTimer = 0.0
+							UpdateRoomLightsTimer = 0.0
 							UpdateDoors()
 							UpdateRooms()
 							
@@ -7302,6 +7304,7 @@ Function UpdateMenu%()
 							HidePointer()
 							
 							UpdateTimer = 0.0
+							UpdateRoomLightsTimer = 0.0
 							UpdateDoors()
 							UpdateRooms()
 							

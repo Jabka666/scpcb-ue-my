@@ -5291,6 +5291,7 @@ Function UpdateEvents%()
 							
 							If e\EventState <= (-70.0) * 4.0 Then
 								UpdateTimer = 0.0
+								UpdateRoomLightsTimer = 0.0
 								HideEntity(me\Head)
 								ShowEntity(me\Collider)
 								me\DropSpeed = 0.0
@@ -5901,6 +5902,7 @@ Function UpdateEvents%()
 								ResetEntity(me\Collider)
 								
 								UpdateTimer = 0.0
+								UpdateRoomLightsTimer = 0.0
 								UpdateDoors()
 								UpdateRooms()
 								
@@ -8564,6 +8566,7 @@ Function UpdateDimension106%()
 							;[End Block]
 					End Select
 					UpdateTimer = 0.0
+					UpdateRoomLightsTimer = 0.0
 					UpdateDoors()
 					UpdateRooms()
 				EndIf

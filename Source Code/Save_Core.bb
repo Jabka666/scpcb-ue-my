@@ -1317,6 +1317,7 @@ Function LoadGame%(File$)
 	EndIf
 	
 	UpdateTimer = 0.0
+	UpdateRoomLightsTimer = 0.0
 	
 	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
@@ -2012,6 +2013,7 @@ Function LoadGameQuick%(File$)
 	EndIf
 	
 	UpdateTimer = 0.0
+	UpdateRoomLightsTimer = 0.0
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)
 	; ~ This is only required for the LoadGameQuick function, as the other one is from the menu where everything is already deleted anyways
