@@ -1153,16 +1153,16 @@ Function UpdateNPCs%()
 							EndIf
 							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0)
 							
-							If n\State3 = -1.0
+							If n\State3 = -1.0 Then
 								AnimateNPC(n, 936.0, 1263.0, 0.1, False)
-								If n\Frame >= 1262.9
+								If n\Frame >= 1262.9 Then
 									SetNPCFrame(n, 312.0)
 									n\State3 = 0.0
 									n\State = 5.0
 								EndIf
 							Else
 								AnimateNPC(n, 936.0, 1263.0, 0.1)
-								If n\State3 < 70.0 * 6.0
+								If n\State3 < 70.0 * 6.0 Then
 									n\State3 = n\State3 + fps\Factor[0]
 								Else
 									If Rand(5) = 1
@@ -1191,6 +1191,47 @@ Function UpdateNPCs%()
 										EndIf
 									EndIf
 								EndIf
+							EndIf
+						EndIf
+						;[End Block]
+					Case 1.0, 2.0, 3.0
+						;[Block]
+						If (Not n\SoundCHN) Then
+							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
+							n\SoundCHN_IsStream = True
+						EndIf
+						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 10.0, 1.0)
+						
+						If n\State = 1.0 Then ; ~ Get up
+							If n\Frame < 312.0 Then
+								AnimateNPC(n, 193.0, 311.0, 0.3, False)
+								If n\Frame > 310.9 Then
+									SetNPCFrame(n, 737.0)
+									n\State = 2.0
+								EndIf
+							ElseIf n\Frame >= 312.0 And n\Frame <= 422.0
+								AnimateNPC(n, 312.0, 422.0, 0.3, False)
+								If n\Frame > 421.9 Then SetNPCFrame(n, 677.0)
+							Else
+								AnimateNPC(n, 677.0, 736.0, 0.3, False)
+								If n\Frame > 735.9 Then
+									SetNPCFrame(n, 737.0)
+									n\State = 2.0
+								EndIf
+							EndIf
+						ElseIf n\State = 2.0
+							AnimateNPC(n, 677.0, 737.0, 0.3, False)
+							If n\Frame >= 737.0 Then n\State = 3.0 : n\State2 = 0.0
+						ElseIf n\State = 3.0
+							n\State2 = n\State2 + fps\Factor[0]
+							If n\State2 > 70.0 * 26.0 Then
+								AnimateNPC(n, 823.0, 847.0, n\Speed * 8.0, False)
+								If n\Frame > 846.9 Then
+									StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+									n\State = 4.0
+								EndIf
+							Else
+								AnimateNPC(n, 1471.0, 1556.0, 0.4)
 							EndIf
 						EndIf
 						;[End Block]
@@ -1280,7 +1321,7 @@ Function UpdateNPCs%()
 									
 									If n\Frame > 847.0 Then n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 									
-									If n\Frame < 906 Then
+									If n\Frame < 906.0 Then
 										AnimateNPC(n, 737.0, 906.0, n\Speed * 8.0, False)
 									Else
 										AnimateNPC(n, 907.0, 935.0, n\CurrSpeed * 8.0)
@@ -1327,7 +1368,7 @@ Function UpdateNPCs%()
 									AnimateNPC(n, 1471.0, 1556.0, 0.1)
 									
 									n\PathTimer = Max(0.0, n\PathTimer - fps\Factor[0])
-									If n\PathTimer <= 0 Then
+									If n\PathTimer <= 0.0 Then
 										If n\Target <> Null Then
 											n\PathStatus = FindPath(n, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.2, EntityZ(n\Target\Collider))
 										Else
@@ -1343,47 +1384,6 @@ Function UpdateNPCs%()
 							EndIf
 						Else
 							AnimateNPC(n, Min(27.0, AnimTime(n\OBJ)), 193.0, 0.5)
-						EndIf
-						;[End Block]
-					Case 1.0, 2.0, 3.0
-						;[Block]
-						If (Not n\SoundCHN) Then
-							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
-							n\SoundCHN_IsStream = True
-						EndIf
-						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 10.0, 1.0)
-						
-						If n\State = 1.0 Then ; ~ Get up
-							If n\Frame < 312.0 Then
-								AnimateNPC(n, 193.0, 311.0, 0.3, False)
-								If n\Frame > 310.9 Then
-									SetNPCFrame(n, 737.0)
-									n\State = 2.0
-								EndIf
-							ElseIf n\Frame >= 312.0 And n\Frame <= 422.0
-								AnimateNPC(n, 312.0, 422.0, 0.3, False)
-								If n\Frame > 421.9 Then SetNPCFrame(n, 677.0)
-							Else
-								AnimateNPC(n, 677.0, 736.0, 0.3, False)
-								If n\Frame > 735.9 Then
-									SetNPCFrame(n, 737.0)
-									n\State = 2.0
-								EndIf
-							EndIf
-						ElseIf n\State = 2.0
-							AnimateNPC(n, 677.0, 737.0, 0.3, False)
-							If n\Frame >= 737.0 Then n\State = 3.0 : n\State2 = 0.0
-						ElseIf n\State = 3.0
-							n\State2 = n\State2 + fps\Factor[0]
-							If n\State2 > 70.0 * 26.0 Then
-								AnimateNPC(n, 823.0, 847.0, n\Speed * 8.0, False)
-								If n\Frame > 846.9 Then
-									StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-									n\State = 4.0
-								EndIf
-							Else
-								AnimateNPC(n, 1471.0, 1556.0, 0.4)
-							EndIf
 						EndIf
 						;[End Block]
 					Case 5.0
