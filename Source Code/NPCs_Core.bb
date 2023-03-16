@@ -6808,12 +6808,16 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	; ~ Player is in these rooms, returning false
 	If RN = "dimension_106" Lor RN = "dimension_1499" Lor (RN = "cont1_173_intro" And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
-	If forest_event <> Null Then
-		If forest_event\EventState = 1.0 Then Return(False)
+	If RN = "cont2_860_1" Then
+		If forest_event <> Null Then
+			If forest_event\EventState = 1.0 Then Return(False)
+		EndIf
 	EndIf
 	; ~ Player is inside the fake world, returning false
-	If skull_event <> Null Then
-		If skull_event\EventState > 0.0 Then Return(False)
+	If RN = "cont2_1123" Then
+		If skull_event <> Null Then
+			If skull_event\EventState > 0.0 Then Return(False)
+		EndIf
 	EndIf
 	
 	If (Not CanSpawnIn049Chamber) Then

@@ -8006,26 +8006,27 @@ Function UpdateDimension106%()
 				Next
 				ShowRoomsNoColl(e\room)
 				
-				CanSave = 1
-				
 				PlayerFallingPickDistance = 0.0
-				CurrStepSFX = 1
-				ShouldPlay = 3
-				
-				InjurePlayer(fps\Factor[0] * 0.00005)
 				PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = True
-				
-				If e\EventState = 0.0 Then e\EventState = 0.1
-				
-				e\EventState = e\EventState + fps\Factor[0]
-				
-				ScaleEntity(e\room\OBJ, RoomScale, RoomScale * (1.0 + Sin(e\EventState / 14.0) * 0.2), RoomScale)
-				For i = 9 To 10
-					ScaleEntity(e\room\Objects[i], RoomScale * (1.5 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
-				Next
-				
 				; ~ SCP-106 attacks if close enough to player
 				If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 0.09 Then n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
+				If e\EventState2 <> PD_FakeTunnelRoom Then
+					CanSave = 1
+					
+					CurrStepSFX = 1
+					ShouldPlay = 3
+					
+					InjurePlayer(fps\Factor[0] * 0.00005)
+					
+					If e\EventState = 0.0 Then e\EventState = 0.1
+					
+					e\EventState = e\EventState + fps\Factor[0]
+					
+					ScaleEntity(e\room\OBJ, RoomScale, RoomScale * (1.0 + Sin(e\EventState / 14.0) * 0.2), RoomScale)
+					For i = 9 To 10
+						ScaleEntity(e\room\Objects[i], RoomScale * (1.5 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
+					Next
+				EndIf
 				
 				Local Teleport% = False, Random% = Rand(30)
 				
@@ -8333,6 +8334,7 @@ Function UpdateDimension106%()
 						
 						UpdateDoors()
 						
+						ScaleEntity(e\room\OBJ, RoomScale, RoomScale, RoomScale)
 						If e\EventState3 = 0.0 And (e\room\RoomDoors[0]\OpenState > 150.0 Lor e\room\RoomDoors[1]\OpenState > 150.0) Then
 							PlaySound_Strict(LoadTempSound("SFX\Horror\Horror16.ogg"))
 							me\BlurTimer = 800.0
@@ -8352,6 +8354,7 @@ Function UpdateDimension106%()
 							LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
 							
+							e\EventState = 0.0
 							e\EventState3 = 0.0
 							e\EventState2 = PD_FourWayRoom
 						EndIf

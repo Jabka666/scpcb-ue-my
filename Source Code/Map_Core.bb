@@ -568,85 +568,85 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	Local R%, G%, B%
 	Local Angles$
 	
-	For i = 1 To Count
-		Temp1s = ReadString(f)
-		Select Temp1s
-			Case "screen"
-				;[Block]
-				Temp1 = ReadFloat(f) * RoomScale
-				Temp2 = ReadFloat(f) * RoomScale
-				Temp3 = ReadFloat(f) * RoomScale
-				
-				Temp2s = ReadString(f)
-				
-				If Temp1 <> 0 Lor Temp2 <> 0 Lor Temp3 <> 0 Then
-					ts.TempScreens = New TempScreens
-					ts\x = Temp1
-					ts\y = Temp2
-					ts\z = Temp3
-					ts\ImgPath = Temp2s
-					ts\RoomTemplate = rt
-				EndIf
-				;[End Block]
-			Case "waypoint"
-				;[Block]
-				twp.TempWayPoints = New TempWayPoints
-				twp\RoomTemplate = rt
-				twp\x = ReadFloat(f) * RoomScale
-				twp\y = ReadFloat(f) * RoomScale
-				twp\z = ReadFloat(f) * RoomScale
-				;[End Block]
-			Case "light"
-				;[Block]
-				Temp1 = ReadFloat(f) * RoomScale
-				Temp2 = ReadFloat(f) * RoomScale
-				Temp3 = ReadFloat(f) * RoomScale
-				
-				If Temp1 <> 0 Lor Temp2 <> 0 Lor Temp3 <> 0 Then
-					Range = ReadFloat(f) / 2000.0
-					lColor = ReadString(f)
-					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
-					R = Int(Piece(lColor, 1, " ")) * Intensity
-					G = Int(Piece(lColor, 2, " ")) * Intensity
-					B = Int(Piece(lColor, 3, " ")) * Intensity
+	If rt <> Null Then ; ~ TEMPORARY SOLUTION
+		For i = 1 To Count
+			Temp1s = ReadString(f)
+			Select Temp1s
+				Case "screen"
+					;[Block]
+					Temp1 = ReadFloat(f) * RoomScale
+					Temp2 = ReadFloat(f) * RoomScale
+					Temp3 = ReadFloat(f) * RoomScale
 					
-					AddTempLight(rt, Temp1, Temp2, Temp3, 2, Range, R, G, B)
-				Else
-					ReadFloat(f) : ReadString(f) : ReadFloat(f)
-				EndIf
-				;[End Block]
-			Case "spotlight"
-				;[Block]
-				Temp1 = ReadFloat(f) * RoomScale
-				Temp2 = ReadFloat(f) * RoomScale
-				Temp3 = ReadFloat(f) * RoomScale
-				
-				If Temp1 <> 0 Lor Temp2 <> 0 Lor Temp3 <> 0 Then
-					Range = ReadFloat(f) / 2000.0
-					lColor = ReadString(f)
-					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
-					R = Int(Piece(lColor, 1, " ")) * Intensity
-					G = Int(Piece(lColor, 2, " ")) * Intensity
-					B = Int(Piece(lColor, 3, " ")) * Intensity
+					Temp2s = ReadString(f)
 					
-					Local lt.LightTemplates = AddTempLight(rt, Temp1, Temp2, Temp3, 2, Range, R, G, B)
+					If Temp1 <> 0.0 Lor Temp2 <> 0.0 Lor Temp3 <> 0.0 Then
+						ts.TempScreens = New TempScreens
+						ts\x = Temp1
+						ts\y = Temp2
+						ts\z = Temp3
+						ts\ImgPath = Temp2s
+						ts\RoomTemplate = rt
+					EndIf
+					;[End Block]
+				Case "waypoint"
+					;[Block]
+					twp.TempWayPoints = New TempWayPoints
+					twp\RoomTemplate = rt
+					twp\x = ReadFloat(f) * RoomScale
+					twp\y = ReadFloat(f) * RoomScale
+					twp\z = ReadFloat(f) * RoomScale
+					;[End Block]
+				Case "light"
+					;[Block]
+					Temp1 = ReadFloat(f) * RoomScale
+					Temp2 = ReadFloat(f) * RoomScale
+					Temp3 = ReadFloat(f) * RoomScale
 					
-					Angles = ReadString(f)
-					Pitch = Piece(Angles, 1, " ")
-					Yaw = Piece(Angles, 2, " ")
-					lt\Pitch = Pitch
-					lt\Yaw = Yaw
+					If Temp1 <> 0.0 Lor Temp2 <> 0.0 Lor Temp3 <> 0.0 Then
+						Range = ReadFloat(f) / 2000.0
+						lColor = ReadString(f)
+						Intensity = Min(ReadFloat(f) * 0.8, 1.0)
+						R = Int(Piece(lColor, 1, " ")) * Intensity
+						G = Int(Piece(lColor, 2, " ")) * Intensity
+						B = Int(Piece(lColor, 3, " ")) * Intensity
+						
+						AddTempLight(rt, Temp1, Temp2, Temp3, 2, Range, R, G, B)
+					Else
+						ReadFloat(f) : ReadString(f) : ReadFloat(f)
+					EndIf
+					;[End Block]
+				Case "spotlight"
+					;[Block]
+					Temp1 = ReadFloat(f) * RoomScale
+					Temp2 = ReadFloat(f) * RoomScale
+					Temp3 = ReadFloat(f) * RoomScale
 					
-					lt\InnerConeAngle = ReadInt(f)
-					lt\OuterConeAngle = ReadInt(f)
-				Else
-					ReadFloat(f) : ReadString(f) : ReadFloat(f) : ReadString(f) : ReadInt(f) : ReadInt(f)
-				EndIf
-				;[End Block]
-			Case "soundemitter"
-				;[Block]
-				Temp1i = 0
-				If rt <> Null Then
+					If Temp1 <> 0.0 Lor Temp2 <> 0.0 Lor Temp3 <> 0.0 Then
+						Range = ReadFloat(f) / 2000.0
+						lColor = ReadString(f)
+						Intensity = Min(ReadFloat(f) * 0.8, 1.0)
+						R = Int(Piece(lColor, 1, " ")) * Intensity
+						G = Int(Piece(lColor, 2, " ")) * Intensity
+						B = Int(Piece(lColor, 3, " ")) * Intensity
+						
+						Local lt.LightTemplates = AddTempLight(rt, Temp1, Temp2, Temp3, 2, Range, R, G, B)
+						
+						Angles = ReadString(f)
+						Pitch = Piece(Angles, 1, " ")
+						Yaw = Piece(Angles, 2, " ")
+						lt\Pitch = Pitch
+						lt\Yaw = Yaw
+						
+						lt\InnerConeAngle = ReadInt(f)
+						lt\OuterConeAngle = ReadInt(f)
+					Else
+						ReadFloat(f) : ReadString(f) : ReadFloat(f) : ReadString(f) : ReadInt(f) : ReadInt(f)
+					EndIf
+					;[End Block]
+				Case "soundemitter"
+					;[Block]
+					Temp1i = 0
 					For j = 0 To MaxRoomEmitters - 1
 						If (Not rt\TempSoundEmitter[j]) Then
 							rt\TempSoundEmitterX[j] = ReadFloat(f) * RoomScale
@@ -659,79 +659,79 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 							Exit
 						EndIf
 					Next
-				EndIf
-				
-				If Temp1i = 0 Then
-					ReadFloat(f)
-					ReadFloat(f)
-					ReadFloat(f)
-					ReadInt(f)
-					ReadFloat(f)
-				EndIf
-				;[End Block]
-			Case "playerstart"
-				;[Block]
-				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-				
-				Angles = ReadString(f)
-				Pitch = Piece(Angles, 1, " ")
-				Yaw = Piece(Angles, 2, " ")
-				Roll = Piece(Angles, 3, " ")
-				;[End Block]
-			Case "model"
-				;[Block]
-				tp.TempProps = New TempProps
-				tp\RoomTemplate = rt
-				
-				File = ReadString(f)
-				; ~ A hacky way to use .b3d format
-				If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
-				tp\Name = "GFX\Map\Props\" + File
-				
-				tp\x = ReadFloat(f) * RoomScale
-				tp\y = ReadFloat(f) * RoomScale
-				tp\z = ReadFloat(f) * RoomScale
-				
-				tp\Pitch = ReadFloat(f)
-				tp\Yaw = ReadFloat(f)
-				tp\Roll = ReadFloat(f)
-				
-				tp\ScaleX = ReadFloat(f)
-				tp\ScaleY = ReadFloat(f)
-				tp\ScaleZ = ReadFloat(f)
-				
-				tp\HasCollision = True
-				tp\FX = 0
-				tp\Texture = ""
-				;[End Block]
-			Case "mesh"
-				;[Block]
-				tp.TempProps = New TempProps
-				tp\RoomTemplate = rt
-				
-				tp\x = ReadFloat(f) * RoomScale
-				tp\y = ReadFloat(f) * RoomScale
-				tp\z = ReadFloat(f) * RoomScale
-				
-				File = ReadString(f)
-				; ~ A hacky way to use .b3d format
-				If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
-				tp\Name = "GFX\Map\Props\" + File
-				
-				tp\Pitch = ReadFloat(f)
-				tp\Yaw = ReadFloat(f)
-				tp\Roll = ReadFloat(f)
-				
-				tp\ScaleX = ReadFloat(f)
-				tp\ScaleY = ReadFloat(f)
-				tp\ScaleZ = ReadFloat(f)
-				
-				tp\HasCollision = ReadByte(f)
-				tp\FX = ReadInt(f)
-				tp\Texture = ReadString(f)
-				;[End Block]
-		End Select
-	Next
+					
+					If Temp1i = 0 Then
+						ReadFloat(f)
+						ReadFloat(f)
+						ReadFloat(f)
+						ReadInt(f)
+						ReadFloat(f)
+					EndIf
+					;[End Block]
+				Case "playerstart"
+					;[Block]
+					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
+					
+					Angles = ReadString(f)
+					Pitch = Piece(Angles, 1, " ")
+					Yaw = Piece(Angles, 2, " ")
+					Roll = Piece(Angles, 3, " ")
+					;[End Block]
+				Case "model"
+					;[Block]
+					tp.TempProps = New TempProps
+					tp\RoomTemplate = rt
+					
+					File = ReadString(f)
+					; ~ A hacky way to use .b3d format
+					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+					tp\Name = "GFX\Map\Props\" + File
+					
+					tp\x = ReadFloat(f) * RoomScale
+					tp\y = ReadFloat(f) * RoomScale
+					tp\z = ReadFloat(f) * RoomScale
+					
+					tp\Pitch = ReadFloat(f)
+					tp\Yaw = ReadFloat(f)
+					tp\Roll = ReadFloat(f)
+					
+					tp\ScaleX = ReadFloat(f)
+					tp\ScaleY = ReadFloat(f)
+					tp\ScaleZ = ReadFloat(f)
+					
+					tp\HasCollision = True
+					tp\FX = 0
+					tp\Texture = ""
+					;[End Block]
+				Case "mesh"
+					;[Block]
+					tp.TempProps = New TempProps
+					tp\RoomTemplate = rt
+					
+					tp\x = ReadFloat(f) * RoomScale
+					tp\y = ReadFloat(f) * RoomScale
+					tp\z = ReadFloat(f) * RoomScale
+					
+					File = ReadString(f)
+					; ~ A hacky way to use .b3d format
+					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+					tp\Name = "GFX\Map\Props\" + File
+					
+					tp\Pitch = ReadFloat(f)
+					tp\Yaw = ReadFloat(f)
+					tp\Roll = ReadFloat(f)
+					
+					tp\ScaleX = ReadFloat(f)
+					tp\ScaleY = ReadFloat(f)
+					tp\ScaleZ = ReadFloat(f)
+					
+					tp\HasCollision = ReadByte(f)
+					tp\FX = ReadInt(f)
+					tp\Texture = ReadString(f)
+					;[End Block]
+			End Select
+		Next
+	EndIf
 	
 	Local OBJ%
 	
@@ -7517,7 +7517,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			FreeEntity(Hallway)
 			
-			r\Objects[8] = LoadRMesh("GFX\Map\pocketdimension3_opt.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
+			r\Objects[8] = LoadRMesh("GFX\Map\dimension_106_3.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
 			
 			r\Objects[9] = LoadRMesh("GFX\Map\pocketdimension4_opt.rmesh", Null) ; ~ The flying pillar
 			
@@ -7652,8 +7652,8 @@ Function FillRoom%(r.Rooms)
 	
 	For i = 0 To MaxRoomEmitters - 1
 		If r\RoomTemplate\TempSoundEmitter[i] <> 0 Then
-			r\SoundEmitterOBJ[i] = CreatePivot(r\OBJ)
-			PositionEntity(r\SoundEmitterOBJ[i], r\x + r\RoomTemplate\TempSoundEmitterX[i], r\y + r\RoomTemplate\TempSoundEmitterY[i], r\z + r\RoomTemplate\TempSoundEmitterZ[i], True)
+			r\SoundEmitterOBJ[i] = CreatePivot()
+			PositionEntity(r\SoundEmitterOBJ[i], r\x + r\RoomTemplate\TempSoundEmitterX[i], r\y + r\RoomTemplate\TempSoundEmitterY[i], r\z + r\RoomTemplate\TempSoundEmitterZ[i])
 			EntityParent(r\SoundEmitterOBJ[i], r\OBJ)
 			
 			r\SoundEmitter[i] = r\RoomTemplate\TempSoundEmitter[i]
@@ -7662,6 +7662,16 @@ Function FillRoom%(r.Rooms)
 	Next
 	
 	CatchErrors("Uncaught: FillRoom(Room name: " + r\RoomTemplate\Name + ")")
+End Function
+
+Function UpdateSoundEmitters%(room.Rooms)
+	Local x#, z#, i%
+	
+	For i = 0 To MaxRoomEmitters - 1
+		If room\SoundEmitter[i] <> 0 Then
+			If EntityDistanceSquared(room\SoundEmitterOBJ[i], me\Collider) < PowTwo(room\SoundEmitterRange[i]) Then room\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[room\SoundEmitter[i] - 1], room\SoundEmitterCHN[i], Camera, room\SoundEmitterOBJ[i], room\SoundEmitterRange[i])
+		EndIf
+	Next
 End Function
 
 Global UpdateTimer# = 35.0
@@ -8014,11 +8024,7 @@ Function UpdateRooms%()
 		r\Dist = Max(x, z)
 		
 		If x < 16 And z < 16 Then
-			For i = 0 To MaxRoomEmitters - 1
-				If r\SoundEmitter[i] <> 0 Then
-					If EntityDistanceSquared(r\SoundEmitterOBJ[i], me\Collider) < PowTwo(r\SoundEmitterRange[i]) Then r\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[r\SoundEmitter[i] - 1], r\SoundEmitterCHN[i], Camera, r\SoundEmitterOBJ[i], r\SoundEmitterRange[i])
-				EndIf
-			Next
+			UpdateSoundEmitters(r)
 			
 			If (Not FoundNewPlayerRoom) And PlayerRoom <> r Then
 				If x < 4.0 Then
