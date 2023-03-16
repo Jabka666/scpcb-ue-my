@@ -2586,9 +2586,11 @@ Function SetCrouch%(NewCrouch%)
 			me\SndVolume = Max(1.0, me\SndVolume)
 			
 			If me\Stamina < 10.0 Then
-				Temp = 0
-				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-				If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
+				If (Not ChannelPlaying(BreathCHN)) Then
+					Temp = 0
+					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
+					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
+				EndIf
 			EndIf
 			
 			me\Crouch = NewCrouch
@@ -2657,9 +2659,11 @@ Function UpdateMoving%()
 	
 	If (Not me\Terminated) And (Not chs\NoClip) And (PlayerRoom\RoomTemplate\Name <> "dimension_106") And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) Then
 		If me\Stamina < 5.0 Then
-			Temp3 = 0
-			If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp3 = 1
-			If (Not ChannelPlaying(BreathCHN)) Then BreathCHN = PlaySound_Strict(BreathSFX((Temp3), 0))
+			If (Not ChannelPlaying(BreathCHN)) Then
+				Temp3 = 0
+				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp3 = 1
+				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), 0))
+			EndIf
 		ElseIf me\Stamina < 40.0
 			If (Not ChannelPlaying(BreathCHN)) Then
 				Temp3 = 0
@@ -2716,7 +2720,7 @@ Function UpdateMoving%()
 				
 				Temp = (me\Shake Mod 360.0)
 				
-				Local TempCHN%, TempCHN2%
+				Local TempCHN% = 0, TempCHN2% = 0
 				
 				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And (Not me\Terminated) Then
