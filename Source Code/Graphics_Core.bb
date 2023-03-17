@@ -322,8 +322,6 @@ Function RenderWorld2%(Tween#)
 			
 			PositionEntity(Temp, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			
-			Color(255, 255, 255)
-			
 			For np.NPCs = Each NPCs
 				If np\NVGName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
 					PositionEntity(Temp2, np\NVGX, np\NVGY, np\NVGZ)

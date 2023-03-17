@@ -1318,13 +1318,11 @@ Function RenderMainMenu%()
 					y = y + (20 * MenuScale)
 					
 					SetFont2(fo\FontID[Font_Default])
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "bump"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
 					
@@ -1342,43 +1340,36 @@ Function RenderMainMenu%()
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
 					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 					
 					y = y + (45 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y, GetLocalString("options", "particle"))
 					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 					
 					y = y + (45 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y, GetLocalString("options", "lod"))
 					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
 					
 					y = y + (35 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "vram"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
 					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 					
 					y = y + (45 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y, GetLocalString("options", "filter"))
 					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 					
 					y = y + (35 * MenuScale)
 					
-					Color(255, 255, 255)
 					If opt\Atmosphere Then
 						TempStr = GetLocalString("options", "atmo.bright")
 					Else
@@ -1395,38 +1386,32 @@ Function RenderMainMenu%()
 					y = y + (20 * MenuScale)
 					
 					SetFont2(fo\FontID[Font_Default])
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
 					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
 					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
 					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH + (220 * MenuScale), Tooltip_SoundAutoRelease)
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
 					
 					If opt\EnableUserTracks Then
 						y = y + (30 * MenuScale)
 						
-						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
 						If opt\UserTrackMode
 							TempStr = GetLocalString("options", "track.repeat")
@@ -1443,14 +1428,12 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
 					
 					If opt\EnableSubtitles Then
 						y = y + (30 * MenuScale)
 						
-						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
 						
 						y = y + (5 * MenuScale)
@@ -1459,19 +1442,16 @@ Function RenderMainMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
 						If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 						
 						y = y + (30 * MenuScale)
 						
-						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
 						If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 						
 						y = y + (30 * MenuScale)
 						
-						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
 						If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 						
@@ -1490,31 +1470,26 @@ Function RenderMainMenu%()
 					y = y + (20 * MenuScale)
 					
 					SetFont2(fo\FontID[Font_Default])
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
 					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
 					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
 					
 					y = y + (40 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("menu", "controlconfig"))
 					
 					y = y + (40 * MenuScale)
@@ -1557,27 +1532,23 @@ Function RenderMainMenu%()
 					y = y + (20 * MenuScale)
 					
 					SetFont2(fo\FontID[Font_Default])
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "console"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 					
 					y = y + (30 * MenuScale)
 					
 					If opt\CanOpenConsole Then
-						Color(255, 255, 255)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "error"))
 						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
 					EndIf
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 					
@@ -1595,9 +1566,7 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
-					Color(255, 255, 255)
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 					If opt\CurrFrameLimit > 0.0 Then
 						Color(255, 255, 0)
@@ -1613,13 +1582,11 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "startvideo"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_StartupVideos)
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "launcher"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Launcher)
 					
@@ -1945,7 +1912,6 @@ End Function
 Function RenderFrame%(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locked% = False)
 	Local IMG%
 	
-	Color(255, 255, 255)
 	If Locked Then
 		IMG = MenuGray
 	Else
@@ -2105,7 +2071,6 @@ Function RenderMenuTicks%()
 			IMG = MenuWhite
 		EndIf
 		
-		Color(255, 255, 255)
 		RenderTiledImageRect(IMG, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x, mt\y, Width, Height)
 		
 		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
@@ -2301,7 +2266,6 @@ Function RenderMenuInputBoxes%()
 	Local mib.MenuInputBox
 	
 	For mib.MenuInputBox = Each MenuInputBox
-		Color(255, 255, 255)
 		RenderFrame(mib\x, mib\y, mib\Width, mib\Height, (mib\x Mod 256), (mib\y Mod 256))
 		
 		If MouseOn(mib\x, mib\y, mib\Width, mib\Height) Then
@@ -2311,7 +2275,7 @@ Function RenderMenuInputBoxes%()
 		
 		Color(255, 255, 255)
 		If SelectedInputBox = mib\ID Then
-			If ((MilliSecs() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+			If ((MilliSecs() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0.0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf
 		
 		SetFont2(fo\FontID[mib\FontID])
@@ -2346,7 +2310,7 @@ Function UpdateMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 	EndIf
 	
 	If mo\MouseDown1 And OnSliderID = 0 Then
-		If (ScaledMouseX() >= x And ScaledMouseX() <= x + Width + (14 * MenuScale)) And (ScaledMouseY() >= y And ScaledMouseY() <= (y + 20 * MenuScale)) Then OnSliderID = ID
+		If MouseOn(x, y, Width + (14 * MenuScale), (20 * MenuScale)) Then OnSliderID = ID
 	EndIf
 	If ID = OnSliderID Then Value = Min(Max((ScaledMouseX() - x) * 100 / Width, 0.0), 100.0)
 	Return(Value)
@@ -3056,6 +3020,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 	If Txt2 <> "" Then
 		Color(R, G, B)
 		RowText(Txt2, fX, (fY + (StringHeight(Txt) * Lines) + (5 + Lines) * MenuScale), fW, fH)
+		Color(255, 255, 255)
 	EndIf
 End Function
 
