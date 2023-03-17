@@ -81,6 +81,7 @@ Menu:
 - Added «PRESS ANY KEY TO WAKE UP» string for CWM loading screen.
 - Added additional options menu. This was done in order to free up some space for settings.
 	- Added in-game versions of the «Use launcher», «Subtitles», «Startup videos» and «Smooth bars» settings.
+- Added highlight effect for slidebars.
 
 - Tiny improvement for difficulties color.
 
@@ -269,6 +270,7 @@ Bug Fixes:
 - Tiny fix for heavy hazmat suit icon.
 - Tiny fix for SCP-106 decals deceleration speed.
 - Tiny fixes for some rooms.
+- Tiny fix for slider highlight detection.
 
 v1.0.2
 

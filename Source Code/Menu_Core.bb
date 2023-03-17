@@ -1346,12 +1346,12 @@ Function RenderMainMenu%()
 					y = y + (45 * MenuScale)
 					
 					Text2(x, y, GetLocalString("options", "particle"))
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
+					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), 164 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 					
 					y = y + (45 * MenuScale)
 					
 					Text2(x, y, GetLocalString("options", "lod"))
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
+					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), 164 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
 					
 					y = y + (35 * MenuScale)
 					
@@ -1366,7 +1366,7 @@ Function RenderMainMenu%()
 					y = y + (45 * MenuScale)
 					
 					Text2(x, y, GetLocalString("options", "filter"))
-					If (MouseOn(x + (290 * MenuScale), y - (9 * MenuScale), 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
+					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), 164 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 					
 					y = y + (35 * MenuScale)
 					
@@ -2320,7 +2320,11 @@ Function RenderMenuSlideBars%()
 	Local msb.MenuSlideBar
 	
 	For msb.MenuSlideBar = Each MenuSlideBar
-		Color(255, 255, 255)
+		If MouseOn(msb\x, msb\y, msb\Width + (14 * MenuScale), 20 * MenuScale) Then
+			Color(0, 200, 0)
+		Else
+			Color(255, 255, 255)
+		EndIf
 		Rect(msb\x, msb\y, msb\Width + (14 * MenuScale), 20 * MenuScale, False)
 		
 		DrawBlock(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
@@ -2369,7 +2373,7 @@ Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	EndIf
 	
 	If mo\MouseDown1 And OnSliderID = 0 Then
-		If (ScaledMouseX() >= x And ScaledMouseX() <= x + Width + (14 * MenuScale)) And (ScaledMouseY() >= y - (8 * MenuScale) And ScaledMouseY() <= y + (10 * MenuScale)) Then OnSliderID = ID
+		If MouseOn(x, y - (8 * MenuScale), Width + (14 * MenuScale), 18 * MenuScale) Then OnSliderID = ID
 	EndIf
 	
 	If ID = OnSliderID Then
@@ -2413,7 +2417,7 @@ Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Va
 	EndIf
 	
 	If mo\MouseDown1 And OnSliderID = 0 Then
-		If (ScaledMouseX() >= x) And (ScaledMouseX() <= x + Width + (14 * MenuScale)) And (ScaledMouseY() >= y - (8 * MenuScale)) And (ScaledMouseY() <= y + (10 * MenuScale)) Then OnSliderID = ID
+		If MouseOn(x, y - (8 * MenuScale), Width + (14 * MenuScale), 18 * MenuScale) Then OnSliderID = ID
 	EndIf
 	
 	If ID = OnSliderID Then
@@ -2438,7 +2442,7 @@ Function RenderMenuSliders%()
 	For ms.MenuSlider = Each MenuSlider
 		If ms\Amount = 3
 			If ms\ID = OnSliderID Then
-				Color(0, 255, 0)
+				Color(0, 200, 0)
 			Else
 				Color(200, 200, 200)
 			EndIf
@@ -2448,7 +2452,7 @@ Function RenderMenuSliders%()
 			Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
 			
 			If ms\ID <> OnSliderID Then
-				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() <= ms\x + ms\Width + (14 * MenuScale)) And (ScaledMouseY() >= ms\y - (8 * MenuScale)) And (ScaledMouseY() <= ms\y + (10 * MenuScale)) Then
+				If MouseOn(ms\x, ms\y - (8 * MenuScale), ms\Width + (14 * MenuScale), 18 * MenuScale) Then
 					Color(0, 200, 0)
 					Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale, False)
 					Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
@@ -2476,7 +2480,7 @@ Function RenderMenuSliders%()
 			EndIf
 		ElseIf ms\Amount = 5
 			If ms\ID = OnSliderID Then
-				Color(0, 255, 0)
+				Color(0, 200, 0)
 			Else
 				Color(200, 200, 200)
 			EndIf
@@ -2488,7 +2492,7 @@ Function RenderMenuSliders%()
 			Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
 			
 			If ms\ID <> OnSliderID Then
-				If (ScaledMouseX() >= ms\x) And (ScaledMouseX() <= ms\x + ms\Width + (14 * MenuScale)) And (ScaledMouseY() >= ms\y - (8 * MenuScale)) And (ScaledMouseY() <= ms\y + (10 * MenuScale)) Then
+				If MouseOn(ms\x, ms\y - (8 * MenuScale), ms\Width + (14 * MenuScale), 18 * MenuScale) Then
 					Color(0, 200, 0)
 					Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale, False)
 					Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
