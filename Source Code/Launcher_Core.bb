@@ -189,7 +189,6 @@ End Type
 Type ListLanguage ; ~ Languages in the list
 	Field Name$
 	Field ID$
-	Field WeblateID$
 	Field Author$
 	Field LastModify$
 	Field Flag$
@@ -217,7 +216,7 @@ Global lang.Language = New Language
 
 Function SetLanguage%(Language$)
 	lang\CurrentLanguage = Language
-	If lang\CurrentLanguage = "en-US" Then
+	If lang\CurrentLanguage = "en" Then
 		lang\LanguagePath = ""
 	Else
 		lang\LanguagePath = LocalizaitonPath + lang\CurrentLanguage + "\"
@@ -256,7 +255,6 @@ Function LanguageSelector%()
 				lan.ListLanguage = New ListLanguage
 				lan\Name = ParseDomainTXT(l, "name") ; ~ Name of localization
 				lan\ID = ParseDomainTXT(l, "id") ; ~ Language ID of localization
-				lan\WeblateID = ParseDomainTXT(l, "weblate") ; ~ Language ID in ZiYue Weblate
 				lan\Author = ParseDomainTXT(l, "author") ; ~ Author of translation
 				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
 				lan\MajorOnly = Int(ParseDomainTXT(l, "majoronly")) ; ~ loca.ini only?
@@ -295,7 +293,7 @@ Function LanguageSelector%()
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
 				If Not RequestLanguage\MajorOnly Then DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
-				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\WeblateID + "/file/", BasePath + "/local.ini") ; ~ Download local.ini from ZiYue Weblate
+				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini") ; ~ Download local.ini from ZiYue Weblate
 				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
@@ -459,7 +457,7 @@ Function LanguageSelector%()
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
 			Local ID$ = Format(GetLocalString("language", "id"), MouseHoverLanguage\ID)
 			
-			If MouseHoverLanguage\ID <> "en-US" Then
+			If MouseHoverLanguage\ID <> "en" Then
 				Local Author$ = Format(GetLocalString("language", "author"), MouseHoverLanguage\Author)
 				Local Prefect$ = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
 				Local Prefect2$ = Format(GetLocalString("language", "full"), GetLocalString("language", "no"))
@@ -490,7 +488,7 @@ Function LanguageSelector%()
 			x = x + 5
 			Text2(x, y + 8, Name)
 			Text2(x, y + 23, ID)
-			If MouseHoverLanguage\ID <> "en-US" Then
+			If MouseHoverLanguage\ID <> "en" Then
 				Text2(x, y + 38, Author)
 				If MouseHoverLanguage\Full Then
 					DualColorText(x, y + 53, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
