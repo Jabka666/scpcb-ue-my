@@ -8039,6 +8039,7 @@ Function UpdateDimension106%()
 					Next
 				EndIf
 				
+				Local RoomExist%
 				Local Teleport% = False, Random% = Rand(30)
 				
 				Select e\EventState2
@@ -8284,17 +8285,20 @@ Function UpdateDimension106%()
 					Case PD_ExitRoom
 						;[Block]
 						Temp = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
-						SqrValue = Sqr(Temp)
 						
 						If Temp < PowTwo(640.0 * RoomScale)
+							SqrValue = Sqr(Temp)
 							me\BlurTimer = ((640.0 * RoomScale) - SqrValue) * 3000.0
 							
 							e\SoundCHN2 = LoopSound2(DecaySFX[Rand(3)], e\SoundCHN2, Camera, me\Collider, 2.0, (640.0 * RoomScale - SqrValue) * Abs(me\CurrSpeed) * 100.0)
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, SqrValue * 10.0)
 							
 							If Temp < PowTwo(130.0 * RoomScale) Then
+								RoomExist = False
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "room2_shaft" Then
+										RoomExist = True
+										
 										GiveAchievement(AchvPD)
 										
 										SecondaryLightOn = PrevSecondaryLightOn
@@ -8332,6 +8336,10 @@ Function UpdateDimension106%()
 										Exit
 									EndIf
 								Next
+								If (Not RoomExist) Then
+									Teleport = True
+									Random = Rand(16, 22)
+								EndIf
 							EndIf
 						EndIf
 						;[End Block]
@@ -8510,8 +8518,7 @@ Function UpdateDimension106%()
 									;[End Block]
 							End Select
 							
-							Local RoomExist% = False
-							
+							RoomExist = False
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\Name = RoomName Then
 									RoomExist = True
