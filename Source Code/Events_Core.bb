@@ -2968,10 +2968,14 @@ Function UpdateEvents%()
 							
 							PlaySound_Strict(HorrorSFX[11])
 							
-							PositionEntity(me\Collider, EntityX(Pvt), EntityY(Pvt) + 0.05, EntityZ(Pvt))
 							UpdateWorld()
 							
+							PositionEntity(me\Collider, EntityX(Pvt), EntityY(Pvt) + 0.05, EntityZ(Pvt))
 							TurnEntity(me\Collider, 0.0, 180.0, 0.0)
+							
+							UpdateTimer = 0.0
+							UpdateRoomLightsTimer = 0.0
+							UpdateDoors()
 							
 							FreeEntity(Pvt)
 							RemoveEvent(e)
@@ -4212,6 +4216,9 @@ Function UpdateEvents%()
 						TFormPoint(TFormedX() - 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)
 						PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider), TFormedZ(), True)
 						ResetEntity(me\Collider)
+						UpdateTimer = 0.0
+						UpdateRoomLightsTimer = 0.0
+						UpdateDoors()
 						
 						Temp = True
 					ElseIf TFormedX() < -730.0
@@ -4243,6 +4250,9 @@ Function UpdateEvents%()
 						TFormPoint(TFormedX() + 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)
 						PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider), TFormedZ(), True)
 						ResetEntity(me\Collider)
+						UpdateTimer = 0.0
+						UpdateRoomLightsTimer = 0.0
+						UpdateDoors()
 						
 						Temp = True
 					EndIf
