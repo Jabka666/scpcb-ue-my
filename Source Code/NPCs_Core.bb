@@ -1882,7 +1882,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then ShouldPlay = 20
+							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then ShouldPlay = 19
 							
 							If n\CurrSpeed > 0.005 Then
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
@@ -4308,7 +4308,7 @@ Function UpdateNPCs%()
 							;[Block]
 							If chs\NoTarget Then n\State = 0.0
 							
-							If PlayerRoom\RoomTemplate\Name = "dimension_1499" And n\PrevState = 0 Then ShouldPlay = 19
+							If PlayerRoom\RoomTemplate\Name = "dimension_1499" And n\PrevState = 0 Then ShouldPlay = 18
 							
 							PointEntity(n\OBJ, me\Collider)
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)

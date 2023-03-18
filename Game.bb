@@ -19,7 +19,7 @@ Const SCP294File$ = "Data\SCP-294.ini"
 Const FontsFile$ = "Data\fonts.ini"
 Const SCP1499ChunksFile$ = "Data\1499chunks.ini" ; ~ Unable to localize
 
-Function CheckForDlls%() ; ~ Can't localized because IniControler.dll may not exist
+Function CheckForDlls%() ; ~ Can't be localized because IniControler.dll may not exist
 	Local InitErrorStr$ = ""
 	
 	If FileSize("FMod.dll") = 0 Then InitErrorStr = InitErrorStr + "FMod.dll" + Chr(13) + Chr(10)

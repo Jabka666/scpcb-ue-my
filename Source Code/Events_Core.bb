@@ -3656,7 +3656,7 @@ Function UpdateEvents%()
 					EndIf
 					
 					If EntityY(me\Collider, True) > 4.0 Then
-						ShouldPlay = 29
+						ShouldPlay = 28
 						
 						If e\EventState = 0.0 Then
 							Temp = (1 - (EntityDistanceSquared(me\Collider, e\room\Objects[0]) < EntityDistanceSquared(me\Collider, e\room\Objects[1])))
@@ -4810,7 +4810,7 @@ Function UpdateEvents%()
 							e\EventState = 1.0
 						EndIf
 					ElseIf e\EventState > 0.0
-						ShouldPlay = 27
+						ShouldPlay = 26
 						
 						If ChannelPlaying(e\room\NPC[0]\SoundCHN) Then e\room\NPC[0]\SoundCHN = LoopSound2(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0)
 						
@@ -5152,7 +5152,7 @@ Function UpdateEvents%()
 						e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 					Else
-						ShouldPlay = 25
+						ShouldPlay = 24
 						
 						If e\EventState = 0.0 Then
 							n.NPCs = CreateNPC(NPCType049_2, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
@@ -5455,7 +5455,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					If e\room\NPC[0] <> Null Then
 						If EntityY(me\Collider) < (-6900.0) * RoomScale
-							ShouldPlay = 26
+							ShouldPlay = 25
 							
 							If EntityHidden(e\room\Objects[7]) Then ShowEntity(e\room\Objects[7])
 							
@@ -5624,7 +5624,7 @@ Function UpdateEvents%()
 							e\EventState = 1.0
 						EndIf
 					Else
-						ShouldPlay = 16
+						ShouldPlay = 15
 						If e\EventState < 65.0 Then
 							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.0 And (Not chs\NoTarget) Then
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
@@ -6615,7 +6615,7 @@ Function UpdateEvents%()
 						e\EventState2 = 1.0
 					EndIf
 					
-					If e\EventState2 = 1.0 Then ShouldPlay = 22
+					If e\EventState2 = 1.0 Then ShouldPlay = 21
 					EntityPick(Camera, 1.0)
 					For i = 0 To 1
 						If PickedEntity() = e\room\Objects[i] Then
@@ -7537,7 +7537,7 @@ Function UpdateEvents%()
 							e\EventState2 = 7.0
 						Else
 							; ~ Still playing the Music for SCP-049 (in the real, SCP-049's State will be set to 2, causing it to stop playing the chasing track)
-							If PlayerRoom = e\room Then ShouldPlay = 20
+							If PlayerRoom = e\room Then ShouldPlay = 19
 							If e\room\NPC[0]\PathStatus <> 1 Then
 								e\room\NPC[0]\Idle = 70.0 * 60.0 ; ~ Making SCP-049 idle for one minute (twice as fast for AggressiveNPCs = True)
 								PositionEntity(e\room\NPC[0]\Collider, 0.0, 500.0, 0.0)
@@ -7849,7 +7849,7 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityY(me\Collider) < (-3728.0) * RoomScale Then
-						ShouldPlay = 28
+						ShouldPlay = 27
 						
 						If e\EventState = 0.0 Then
 							e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
@@ -8176,7 +8176,7 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_TrenchesRoom
 						;[Block]
-						ShouldPlay = 15
+						ShouldPlay = 14
 						
 						For i = 17 To 20
 							If i > 18 Then
@@ -8732,7 +8732,7 @@ Function UpdateDimension1499%()
 					UpdateChunks(15)
 					If EntityHidden(I_1499\Sky) Then ShowEntity(I_1499\Sky)
 					UpdateSky(I_1499\Sky)
-					ShouldPlay = 18
+					ShouldPlay = 17
 					If EntityY(me\Collider) < 800.0 Then
 						PositionEntity(me\Collider, EntityX(me\Collider), 800.5, EntityZ(me\Collider), True)
 						ResetEntity(me\Collider)
@@ -8837,7 +8837,7 @@ Function UpdateDimension1499%()
 							EndIf
 							If e\Sound2 <> 0 Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[16], 10.0, opt\MusicVolume * opt\MasterVolume)
 						Else
-							ShouldPlay = 19
+							ShouldPlay = 18
 							If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 							If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 							If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
@@ -9284,7 +9284,7 @@ Function UpdateEndings%()
 						Next
 						ShowRoomsNoColl(e\room)
 						
-						ShouldPlay = 17
+						ShouldPlay = 16
 						
 						e\EventState = e\EventState + fps\Factor[0]
 						

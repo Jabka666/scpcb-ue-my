@@ -96,7 +96,7 @@ Function UpdateMainMenu%()
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
-		If ShouldPlay = 21 Then
+		If ShouldPlay = 20 Then
 			EndBreathSFX = LoadSound_Strict("SFX\Ending\MenuBreath.ogg")
 			EndBreathCHN = PlaySound_Strict(EndBreathSFX)
 			ShouldPlay = 66

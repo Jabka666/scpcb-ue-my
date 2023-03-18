@@ -7814,7 +7814,7 @@ Function UpdateEnding%()
 			me\EndingScreen = LoadImage_Strict("GFX\Menu\ending_screen.png")
 			me\EndingScreen = ScaleImage2(me\EndingScreen, MenuScale, MenuScale)
 			
-			ShouldPlay = 23
+			ShouldPlay = 22
 			opt\CurrMusicVolume = opt\MusicVolume
 			StopStream_Strict(MusicCHN) : MusicCHN = 0
 			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, 0)
@@ -7843,7 +7843,7 @@ Function UpdateEnding%()
 					y = y + 75 * MenuScale
 					
 					If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "mainmenu"), Font_Default_Big)
-						ShouldPlay = 24
+						ShouldPlay = 23
 						NowPlaying = ShouldPlay
 						For i = 0 To 8 Step 2
 							If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
@@ -7858,12 +7858,12 @@ Function UpdateEnding%()
 						InitCredits()
 					EndIf
 				Else
-					ShouldPlay = 23
+					ShouldPlay = 22
 					UpdateMenu()
 				EndIf
 			; ~ Credits
 			ElseIf me\EndingTimer <= -2000.0
-				ShouldPlay = 24
+				ShouldPlay = 23
 				UpdateCredits()
 			EndIf
 		EndIf
@@ -8041,7 +8041,7 @@ Function UpdateCredits%()
 		Delete Each CreditsLine
 		NullGame(False)
 		StopStream_Strict(MusicCHN) : MusicCHN = 0
-		ShouldPlay = 21
+		ShouldPlay = 20
 		CurrSave = Null
 		ResetLoadingTextColor()
 		ResetInput()
