@@ -3272,6 +3272,78 @@ Function UpdateGUI%()
 	Local x2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
 	
+	If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
+		For e.Events = Each Events
+			If e\room = PlayerRoom Then
+				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom Then
+					If e\Img2 <> 0 Then
+						StopChannel(e\SoundCHN)
+						FreeImage(e\Img2) : e\Img2 = 0
+					EndIf
+					
+					If (Not e\Img) Then
+						StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						Select Rand(5)
+							Case 1
+								;[Block]
+								PlaySound_Strict(HorrorSFX[1])
+								;[End Block]
+							Case 2
+								;[Block]
+								PlaySound_Strict(HorrorSFX[2])
+								;[End Block]
+							Case 3
+								;[Block]
+								PlaySound_Strict(HorrorSFX[9])
+								;[End Block]
+							Case 4
+								;[Block]
+								PlaySound_Strict(HorrorSFX[10])
+								;[End Block]
+							Case 5
+								;[Block]
+								PlaySound_Strict(HorrorSFX[14])
+								;[End Block]
+						End Select
+						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face.png")
+						e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
+					Else
+						wi\IsNVGBlinking = True
+						If Rand(30) = 1 Then
+							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
+						EndIf
+					EndIf
+				Else
+					If e\Img <> 0 Then
+						StopChannel(e\SoundCHN)
+						FreeImage(e\Img) : e\Img = 0
+					EndIf
+					
+					If e\EventState2 = PD_ThroneRoom Then
+						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
+							If (Not e\Img2) Then
+								StopChannel(e\SoundCHN) : e\SoundCHN = 0
+								PlaySound_Strict(e\Sound2)
+								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
+								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
+							Else
+								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
+							EndIf
+						Else
+							StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						EndIf
+					Else
+						If e\Img2 <> 0 Then
+							FreeImage(e\Img2) : e\Img2 = 0
+							StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						EndIf
+					EndIf
+				EndIf
+				Exit
+			EndIf
+		Next
+	EndIf
+	
 	If I_294\Using Then Update294()
 	
 	If d_I\ClosestButton <> 0 And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) Then
@@ -5872,20 +5944,48 @@ Function RenderGUI%()
 	If PlayerRoom\RoomTemplate\Name = "dimension_106" Then
 		For e.Events = Each Events
 			If e\room = PlayerRoom Then
-				If e\EventState2 = PD_ThroneRoom Then
-					If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
-						If (Not e\Img) Then
-							StopChannel(e\SoundCHN) : e\SoundCHN = 0
-							If Rand(30) = 1 Then PlaySound_Strict(e\Sound2)
-							e\Img = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
-							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
-						Else
-							DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(390, 310) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
-							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
-						EndIf
-					Else
-						If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
+				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom Then
+					If (Not e\Img) Then
 						StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						Select Rand(5)
+							Case 1
+								;[Block]
+								PlaySound_Strict(HorrorSFX[1])
+								;[End Block]
+							Case 2
+								;[Block]
+								PlaySound_Strict(HorrorSFX[2])
+								;[End Block]
+							Case 3
+								;[Block]
+								PlaySound_Strict(HorrorSFX[9])
+								;[End Block]
+							Case 4
+								;[Block]
+								PlaySound_Strict(HorrorSFX[10])
+								;[End Block]
+							Case 5
+								;[Block]
+								PlaySound_Strict(HorrorSFX[14])
+								;[End Block]
+						End Select
+						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face.png")
+						e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
+					Else
+						DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
+					EndIf
+				Else
+					If e\EventState2 = PD_ThroneRoom Then
+						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
+							If (Not e\Img2) Then
+								StopChannel(e\SoundCHN) : e\SoundCHN = 0
+								PlaySound_Strict(e\Sound2)
+								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
+								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
+							Else
+								DrawBlock(e\Img2, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 				Exit

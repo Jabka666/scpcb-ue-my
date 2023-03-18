@@ -7,7 +7,7 @@ Type Events
 	Field Sound%, Sound2%
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field EventStr$
-	Field Img%
+	Field Img%, Img2%
 End Type
 
 Global forest_event.Events
@@ -8016,7 +8016,7 @@ Function UpdateDimension106%()
 					CurrStepSFX = 1
 					ShouldPlay = 3
 					
-					InjurePlayer(fps\Factor[0] * 0.00005)
+					InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
 					
 					If e\EventState = 0.0 Then e\EventState = 0.1
 					
@@ -8164,12 +8164,11 @@ Function UpdateDimension106%()
 						; ~ Teleport the player to the trenches
 						If me\Crouch Then
 							me\BlinkTimer = -10.0 : me\Crouch = False
-							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 1344.0 * RoomScale, e\room\y + 2944.0 * RoomScale, EntityZ(e\room\Objects[8], True) - 1184.0 * RoomScale)
+							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 1344.0 * RoomScale, e\room\y + 16.0 + 2944.0 * RoomScale, EntityZ(e\room\Objects[8], True) - 1184.0 * RoomScale)
 							ResetEntity(me\Collider)
 							
 							LoadEventSound(e, "SFX\Room\PocketDimension\Explosion.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\TrenchPlane.ogg", 1)
-							PositionEntity(e\room\Objects[19], EntityX(e\room\Objects[8], True) - 1000.0, 0.0, 0.0, True)
 							
 							e\EventState2 = PD_TrenchesRoom
 						EndIf
@@ -8189,13 +8188,13 @@ Function UpdateDimension106%()
 						If EntityX(e\room\Objects[19], True) < EntityX(e\room\Objects[8], True) - 4000.0 * RoomScale Then
 							e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 							
-							PositionEntity(e\room\Objects[19], EntityX(me\Collider, True) + 4000.0 * RoomScale, 12.0, EntityZ(me\Collider, True))
+							PositionEntity(e\room\Objects[19], EntityX(me\Collider, True) + 4000.0 * RoomScale, 28.0, EntityZ(me\Collider, True))
 						EndIf
 						
-						MoveEntity(me\Collider, 0.0, Min((12.0 - EntityY(me\Collider)), 0.0) * fps\Factor[0], 0.0)
+						MoveEntity(me\Collider, 0.0, Min((28.0 - EntityY(me\Collider)), 0.0) * fps\Factor[0], 0.0)
 						
 						x = (-fps\Factor[0]) * RoomScale * 4.0
-						y = (17.0 - Abs(EntityX(me\Collider) - EntityX(e\room\Objects[19])) * 0.5) - EntityY(e\room\Objects[19])
+						y = (33.0 - Abs(EntityX(me\Collider) - EntityX(e\room\Objects[19])) * 0.5) - EntityY(e\room\Objects[19])
 						z = EntityZ(me\Collider, True) - EntityZ(e\room\Objects[19])
 						TranslateEntity(e\room\Objects[19], x, y, z, True)
 						RotateEntity(e\room\Objects[19], -90.0 - (EntityX(me\Collider) - EntityX(e\room\Objects[19])) * 1.5, -90.0, 0.0, True)
@@ -8258,14 +8257,14 @@ Function UpdateDimension106%()
 						me\CameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
 						
 						; ~ Check if player is at the sinkhole (the exit from the trench room)
-						If EntityY(me\Collider) < 8.5 Then
+						If EntityY(me\Collider) < 24.5 Then
 							; ~ Move to the "exit room"
 							me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
 							
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 							
-							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, -304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
+							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y + 16.0 - 304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 							ResetEntity(me\Collider)
 							
 							e\EventState2 = PD_ExitRoom
@@ -8464,7 +8463,7 @@ Function UpdateDimension106%()
 							;[End Block]
 						Case 13, 14, 15 ; ~ The exit room
 							;[Block]
-							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y - 300.0 * RoomScale, EntityZ(e\room\Objects[8], True))
+							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y + 16.0 - 304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 							ResetEntity(me\Collider)
 							
 							e\EventState3 = 0.0
@@ -9682,7 +9681,8 @@ Function RemoveEvent%(e.Events)
 	If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 	
-	If e\Img <> 0 Then FreeImage(e\Img)
+	If e\Img <> 0 Then FreeImage(e\Img) : e\Img = 0
+	If e\Img2 <> 0 Then FreeImage(e\Img2) : e\Img2 = 0
 	
 	Delete(e)
 End Function

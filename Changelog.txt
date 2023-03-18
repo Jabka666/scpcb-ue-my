@@ -53,6 +53,8 @@ Rooms:
 
 - Level 3 Keycard located in SCP-895's containment chamber now drops from a fallen guard.
 
+- Night vision doesn't work inside the Pocket Dimension. If you'll use it, you'll get more damage.
+
 Items:
 - Renamed some console item names.
 - Renamed Severed Hand to White/Yellow Severed Hand.

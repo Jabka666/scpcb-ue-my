@@ -7590,12 +7590,13 @@ Function FillRoom%(r.Rooms)
 			EntityBlend(r\Objects[19], 2)
 			EntityFX(r\Objects[19], 1 + 8)
 			SpriteViewMode(r\Objects[19], 2)
+			PositionEntity(r\Objects[19], EntityX(r\Objects[8], True) - 1000.0, 16.0, 0.0, True)
 			
 			r\Objects[20] = LoadMesh_Strict("GFX\Map\pocketdimensionterrain.b3d")
 			r\HideObject[20] = False
 			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
 			EntityType(r\Objects[20], HIT_MAP)
-			PositionEntity(r\Objects[20], r\x, r\y + 2944.0 * RoomScale, r\z + 32.0, True)
+			PositionEntity(r\Objects[20], r\x, r\y + 16.0 + 2944.0 * RoomScale, r\z + 32.0, True)
 			
 			For i = 17 To 19 Step 2
 				HideEntity(r\Objects[i])
