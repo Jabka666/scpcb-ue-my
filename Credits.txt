@@ -114,11 +114,11 @@
 		Nikita Sidorov ("Jabka")
 		Andre Pari ("ADMClef")
 		Dawid Mleczko ("Mleczyk76")
-		Yuri Novikov ("BayanForce")
 		slend
 		Samuel ("Ayylien/Soylien")
 		Egor Oleynik ("Chumnaya Karkusa")
 		EpicDasherFR
+		ZiYueCommentary
 
 *Development Helpers
 
@@ -135,7 +135,7 @@
 		Elan S.
 		Ashad Jackson ("ashadttt") 
 		Vladislav Borisevich ("Vane Brain")
-		Dmitry Petrov ("Ne4to")
+		Dmitry Afanasenko ("Ne4to")
 		BerkeliumΛsset
 		Dmitriy Sazanov ("Dmitriy-Bars")
 		C45
@@ -143,8 +143,8 @@
 		Quote
 		Dreamanchik
 		Time_the_Creator
-		ZiYueCommentary
 		Snoe
+		Yuri Novikov ("BayanForce")
 
 *Translators
 
@@ -157,6 +157,18 @@ by "CreatorMasters", "Trill Team" and Nikita Sidorov ("Jabka")
 		French localization,
 by "EpicDasherFR"
 
+		Italian localization,
+by Extol ("amogussusimpostor3")
+
+		Germany localization,
+by Tillikum Soyer ("Tillikum")
+
+		Japanese localization,
+by Xing Jie ("XingJieGames")
+
+		Spanish localization,
+by kSuzukuOninuts ("SuzukuKnm")
+
 *Mod Testers
 
 		Alexey Krasnov ("TaskeWSH")
@@ -167,19 +179,28 @@ by "EpicDasherFR"
 		Vladislav Sofonov ("Onmane")
 		Nerrow
 
-*Some Materials Taken From:
+*Some Materials Taken or Idealized from:
 
-		SCP - Containment Breach official wiki (ENG)
+		SCP - Containment Breach official wiki (ENG):
 		www.scpcb.gamepedia.com
 
-		SCP - Containment Breach official wiki (RUS)
+		SCP - Containment Breach official wiki (RUS):
 		www.scpcontainmentbreach.fandom.com/ru/
 
-		The SCP Foundation (ENG)
+		The SCP Foundation (ENG):
 		www.scpfoundation.net
 
-		The SCP Foundation (RUS)
+		The SCP Foundation (RUS):
 		www.scpfoundation.ru
+
+		The Box of Horrors mod for "SCP - Containment Breach":
+		https://undertowgames.com/forum/viewtopic.php?t=3404
+
+		Field Of View (FOV) mod for "SCP - Containment Breach":
+		https://www.moddb.com/mods/scp-containment-breach-field-of-view-fov-addon
+
+		Gameplay Overhaul mod for "SCP - Containment Breach":
+		https://www.moddb.com/mods/scp-containment-breach-gameplay-overhaul
 
 *The game is based on the works of the SCP Foundation community.
 
