@@ -1809,9 +1809,9 @@ Function UpdateNPCs%()
 								For r.Rooms = Each Rooms
 									If EntityDistanceSquared(r\OBJ, n\Collider) < 16.0 Then
 										If r\RoomCenter <> 0 Then
-											TeleportEntity(n\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.4, EntityZ(r\RoomCenter, True), n\CollRadius, True)
+											TeleportEntity(n\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.5, EntityZ(r\RoomCenter, True), n\CollRadius, True)
 										Else
-											TeleportEntity(n\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.4, EntityZ(r\OBJ), n\CollRadius, True)
+											TeleportEntity(n\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.5, EntityZ(r\OBJ), n\CollRadius, True)
 										EndIf
 										Exit
 									EndIf
@@ -6544,7 +6544,7 @@ Function MoveToPocketDimension%()
 			PlaySound_Strict(Use914SFX)
 			PlaySound_Strict(OldManSFX[5])
 			
-			TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.8, EntityZ(r\OBJ))
+			TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.5, EntityZ(r\OBJ))
 			TeleportToRoom(r)
 			
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0

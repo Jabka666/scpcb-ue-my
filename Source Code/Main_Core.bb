@@ -835,9 +835,9 @@ Function UpdateConsole%()
 					For r.Rooms = Each Rooms
 						If r\RoomTemplate\Name = StrTemp Then
 							If r\RoomCenter <> 0 Then
-								TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.4, EntityZ(r\RoomCenter, True), 0.3, True)
+								TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.5, EntityZ(r\RoomCenter, True), 0.3, True)
 							Else
-								TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.4, EntityZ(r\OBJ))
+								TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.5, EntityZ(r\OBJ))
 							EndIf
 							TeleportToRoom(r)
 							CreateConsoleMsg(Format(GetLocalString("console", "tp.success"), StrTemp))
@@ -4409,7 +4409,7 @@ Function UpdateGUI%()
 								Else
 									For r.Rooms = Each Rooms
 										If r\RoomTemplate\Name = "dimension_106" Then
-											PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.8, EntityZ(r\OBJ))
+											PositionEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.5, EntityZ(r\OBJ))
 											ResetEntity(me\Collider)
 											UpdateTimer = 0.0
 											UpdateRoomLightsTimer = 0.0
