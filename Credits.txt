@@ -145,6 +145,7 @@
 		Time_the_Creator
 		Snoe
 		Yuri Novikov ("BayanForce")
+		TheHappyJammer
 
 *Translators
 
@@ -176,7 +177,7 @@ by kSuzukuOninuts ("SuzukuKnm")
 		[dataexpunded]
 		ALeKS GM
 		rus_hunter
-		Vladislav Sofonov ("Onmane")
+		Vladislav Safonov ("Onmane")
 		Nerrow
 
 *Some Materials Taken from or Idealized by:
