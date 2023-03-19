@@ -122,9 +122,6 @@ fps\LoopDelay = MilliSecs()
 
 Global WireFrameState%
 
-Global GameSaved%
-Global CanSave%
-
 If opt\PlayStartup Then PlayStartupVideos()
 
 Global CursorIMG% = LoadImage_Strict("GFX\Menu\cursor.png")
@@ -2133,6 +2130,7 @@ Function UpdateGame%()
 			If RN = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 			UpdateMouseLook()
 			UpdateMoving()
+			UpdateSaveState()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			InFacility = CheckForPlayerInFacility()
@@ -2275,7 +2273,6 @@ Function UpdateGame%()
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
 				me\FallTimer = me\FallTimer - fps\Factor[0]
 				DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))
-				CanSave = 0
 			EndIf
 			
 			If me\LightFlash > 0.0 Then
@@ -2338,7 +2335,6 @@ Function UpdateGame%()
 		
 		If KeyHit(key\SAVE) Then
 			If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then
-				If QuickLoadPercent > -1 Then CanSave = 0
 				If CanSave = 0 Then ; ~ Scripted location
 					CreateHintMsg(GetLocalString("save", "failed.now"))
 				ElseIf CanSave = 1 ; ~ Endings / Intro location
@@ -2359,7 +2355,6 @@ Function UpdateGame%()
 					EndIf
 				EndIf
 				If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
-				CanSave = 2
 			Else
 				CreateHintMsg(GetLocalString("save", "disable"))
 			EndIf
@@ -3379,6 +3374,7 @@ Function UpdateGUI%()
 			EndIf
 		EndIf
 		If ShouldDrawHUD Then
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((60.0) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True), EntityZ(d_I\ClosestButton, True))
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
@@ -3387,7 +3383,6 @@ Function UpdateGUI%()
 			PointEntity(Camera, d_I\ClosestButton)
 			FreeEntity(Pvt)
 			
-			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((60.0) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
 			ProjY = ProjectedY()
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))

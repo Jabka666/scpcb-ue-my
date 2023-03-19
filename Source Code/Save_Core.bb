@@ -2083,6 +2083,16 @@ Function LoadGameQuick%(File$)
 	CatchErrors("Uncaught: LoadGameQuick(" + File + ")")
 End Function
 
+Global GameSaved%
+Global CanSave%
+
+Function UpdateState%()
+	If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then
+		CanSave = 2
+		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Then CanSave = 0
+	EndIf
+End Function
+
 Type AutoSave
 	Field Amount%
 	Field Timer#
