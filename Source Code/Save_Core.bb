@@ -2086,7 +2086,7 @@ End Function
 Global GameSaved%
 Global CanSave%
 
-Function UpdateState%()
+Function UpdateSaveState%()
 	If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then
 		CanSave = 2
 		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Then CanSave = 0
