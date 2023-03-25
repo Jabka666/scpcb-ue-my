@@ -7659,7 +7659,7 @@ Function FillRoom%(r.Rooms)
 End Function
 
 Function UpdateSoundEmitters%(room.Rooms)
-	Local x#, z#, i%
+	Local i%
 	
 	For i = 0 To MaxRoomEmitters - 1
 		If room\SoundEmitter[i] <> 0 Then
