@@ -99,6 +99,7 @@ NPCs:
 - SCP-035's victim now slowly hurts player.
 - Increased the spawn timer for SCP-106 when using SCP-914.
 - Reduced SCP-096's speed.
+- The MTF Units and SCP-049 now open linked doors in the same way as the player.
 
 Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.
@@ -138,6 +139,7 @@ Bug fixes:
 - Fixed an issue with wearable items of the same type not dropping when one of the items was equipped.
 - Fixed height of NPCs teleportation.
 - Fixed center coordinates of some rooms correcting player's/SCP-049's/MTF's teleportation.
+- Fixed open door SFX for the forest door.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

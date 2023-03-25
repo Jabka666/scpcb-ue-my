@@ -2352,15 +2352,7 @@ Function UpdateDoors%()
 					If d\TimerState > 0.0 Then
 						d\TimerState = Max(0.0, d\TimerState - fps\Factor[0])
 						If d\TimerState + fps\Factor[0] > 110.0 And d\TimerState <= 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
-						
-						If d\TimerState = 0.0 Then 
-							d\Open = (Not d\Open)
-							If d\DoorType <> DEFAULT_DOOR And d\DoorType <> ONE_SIDED_DOOR Then
-								d\SoundCHN = PlaySound2(CloseDoorSFX(d\DoorType, Rand(0, 2)), Camera, d\OBJ)
-							Else
-								d\SoundCHN = PlaySound2(CloseDoorSFX(0, Rand(0, 2)), Camera, d\OBJ)
-							EndIf
-						EndIf
+						If d\TimerState = 0.0 Then OpenCloseDoor(d)
 					EndIf
 					If d\AutoClose And RemoteDoorOn Then
 						If EntityDistanceSquared(Camera, d\OBJ) < 4.41 Then
@@ -2467,7 +2459,7 @@ Function UpdateDoors%()
 					EndIf
 				EndIf
 			EndIf
-			UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
+			If (Not (d\DoorType = WOODEN_DOOR And PlayerRoom\RoomTemplate\Name = "cont2_860_1")) Then UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR Then
 				If d\Locked <> d\LockedUpdated Then
@@ -3084,7 +3076,6 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True)
 		Else
 			d\SoundCHN = PlaySound2(SoundClose, Camera, d\OBJ)
 		EndIf
-		UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 	EndIf
 End Function
 
