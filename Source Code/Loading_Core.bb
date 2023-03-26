@@ -2142,8 +2142,7 @@ Function InitNewGame%()
 	
 	ResetInput()
 	
-	UpdateDoors()
-	UpdateRooms()
+	UpdateRender()
 	
 	CatchErrors("Uncaught: InitNewGame()")
 End Function
@@ -2245,8 +2244,7 @@ Function InitLoadGame%()
 	
 	ResetInput()
 	
-	UpdateDoors()
-	UpdateRooms()
+	UpdateRender()
 	
 	CatchErrors("Uncaught: InitLoadGame()")
 End Function

@@ -2973,9 +2973,7 @@ Function UpdateEvents%()
 							PositionEntity(me\Collider, EntityX(Pvt), EntityY(Pvt) + 0.05, EntityZ(Pvt))
 							TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 							
-							UpdateTimer = 0.0
-							UpdateRoomLightsTimer = 0.0
-							UpdateDoors()
+							UpdateRender()
 							
 							FreeEntity(Pvt)
 							RemoveEvent(e)
@@ -4216,9 +4214,8 @@ Function UpdateEvents%()
 						TFormPoint(TFormedX() - 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)
 						PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider), TFormedZ(), True)
 						ResetEntity(me\Collider)
-						UpdateTimer = 0.0
-						UpdateRoomLightsTimer = 0.0
-						UpdateDoors()
+						
+						UpdateRender()
 						
 						Temp = True
 					ElseIf TFormedX() < -730.0
@@ -4250,9 +4247,8 @@ Function UpdateEvents%()
 						TFormPoint(TFormedX() + 1024.0, TFormedY(), TFormedZ(), e\room\OBJ, 0)
 						PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider), TFormedZ(), True)
 						ResetEntity(me\Collider)
-						UpdateTimer = 0.0
-						UpdateRoomLightsTimer = 0.0
-						UpdateDoors()
+						
+						UpdateRender()
 						
 						Temp = True
 					EndIf
@@ -5915,10 +5911,7 @@ Function UpdateEvents%()
 								
 								ResetEntity(me\Collider)
 								
-								UpdateTimer = 0.0
-								UpdateRoomLightsTimer = 0.0
-								UpdateDoors()
-								UpdateRooms()
+								UpdateRender()
 								
 								SecondaryLightOn = PrevSecondaryLightOn
 								
@@ -8589,10 +8582,7 @@ Function UpdateDimension106%()
 							e\EventState2 = PD_FakeTunnelRoom
 							;[End Block]
 					End Select
-					UpdateTimer = 0.0
-					UpdateRoomLightsTimer = 0.0
-					UpdateDoors()
-					UpdateRooms()
+					UpdateRender()
 				EndIf
 			Else
 				HideRoomsNoColl(e\room)

@@ -168,7 +168,7 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 End Function
 
 Function IsInsideElevator%(OBJ%, Pvt%)
-	If (Abs(EntityX(OBJ) - EntityX(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityZ(OBJ) - EntityZ(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityY(OBJ) - EntityY(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) Then Return(True)
+	If (Abs(EntityX(OBJ, True) - EntityX(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityZ(OBJ, True) - EntityZ(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityY(OBJ, True) - EntityY(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) Then Return(True)
 	Return(False)
 End Function
 
