@@ -2921,8 +2921,8 @@ Function UpdateMoving%()
 			If (Not me\Crouch) Then SetCrouch(True)
 		EndIf
 		If me\Bloodloss >= 100.0 Then
-			Kill(True)
 			me\HeartBeatVolume = 0.0
+			Kill(True)
 		ElseIf me\Bloodloss > 80.0
 			me\HeartBeatRate = Max(150.0 - (me\Bloodloss - 80.0) * 5.0, me\HeartBeatRate)
 			me\HeartBeatVolume = Max(me\HeartBeatVolume, 0.75 + (me\Bloodloss - 80.0) * 0.0125)
@@ -8814,8 +8814,8 @@ Function Use427%()
 			me\BlurTimer = 800.0
 		EndIf
 		If I_427\Timer >= 70.0 * 420.0 Then
-			Kill()
 			msg\DeathMsg = GetLocalString("death", "morepower")
+			Kill()
 		ElseIf I_427\Timer >= 70.0 * 390.0
 			If (Not me\Crouch) Then SetCrouch(True)
 		EndIf
@@ -9166,9 +9166,11 @@ Function Update008%()
 						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound)
 						
 						msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
-						Kill()
+						
 						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
 						EntityParent(de\OBJ, PlayerRoom\OBJ)
+						
+						Kill()
 					ElseIf I_008\Timer > 96.0
 						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 					Else
@@ -9198,7 +9200,6 @@ Function Update008%()
 					TurnEntity(me\Head, 80.0 + SinValue * 30.0, SinValue * 40.0, 0.0)
 				EndIf
 			Else
-				Kill()
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 				If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
 					msg\DeathMsg = GetLocalString("death", "14991")
@@ -9212,6 +9213,7 @@ Function Update008%()
 				Else
 					msg\DeathMsg = ""
 				EndIf
+				Kill()
 			EndIf
 		EndIf
 	Else

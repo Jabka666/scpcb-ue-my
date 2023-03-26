@@ -1038,7 +1038,7 @@ Function UpdateEvents%()
 												TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 											EndIf
 											me\EyeIrritation = Max(me\EyeIrritation + (fps\Factor[0] * 4.0), 1.0)
-											If Rand(1000) = 1 Then Kill(False)
+											If Rand(1000) = 1 Then Kill()
 										EndIf
 									EndIf
 								EndIf
@@ -2890,8 +2890,8 @@ Function UpdateEvents%()
 								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < PowTwo(300.0 * RoomScale) And (Not me\Terminated) Then
 									me\LightFlash = 0.4
 									me\CameraShake = 1.0
-									Kill()
 									msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
+									Kill()
 								EndIf
 							EndIf
 							For n.NPCs = Each NPCs
@@ -4512,8 +4512,8 @@ Function UpdateEvents%()
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
 							If me\BlurTimer >= 500.0 Then UpdateCough(1000)
 							If me\BlurTimer >= 1500.0 And me\FallTimer = 0.0 Then
-								Kill(False)
-								msg\DeathMsg = GetLocalString("death", "939.gas")
+								msg\DeathMsg = Format(GetLocalString("death", "939.gas"), SubjectName)
+								Kill()
 							EndIf
 						EndIf
 						
@@ -4602,9 +4602,13 @@ Function UpdateEvents%()
 							
 							PlayerFallingPickDistance = 0.0
 							
-							If EntityY(me\Collider) < -6400.0 * RoomScale And (Not me\Terminated) And me\FallTimer >= 0.0 Then
-								PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
-								me\Terminated = True
+							If EntityY(me\Collider) < -6400.0 * RoomScale Then
+								If (Not chs\GodMode) And (Not me\Terminated) And me\FallTimer >= 0.0 Then
+									msg\DeathMsg = Format(GetLocalString("death", "939.shaft"), SubjectName)
+									PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
+									me\BlurTimer = 3000.0
+									me\Terminated = True
+								EndIf
 							EndIf
 						EndIf
 					Else
@@ -5877,8 +5881,8 @@ Function UpdateEvents%()
 						; ~ The player fell
 						If (Not chs\NoClip) Then
 							If EntityY(me\Collider) <= 28.5 Then 
+								me\BlinkTimer = -10.0
 								Kill() 
-								me\BlinkTimer = -2.0
 							ElseIf EntityY(me\Collider) > EntityY(fr\Forest_Pivot, True) + 0.5
 								MoveEntity(me\Collider, 0.0, ((EntityY(fr\Forest_Pivot, True) + 0.5) - EntityY(me\Collider)) * fps\Factor[0], 0.0)
 							EndIf
@@ -8105,10 +8109,10 @@ Function UpdateDimension106%()
 										PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider), EntityZ(Pvt))
 										FreeEntity(Pvt)
 										
-										If (Not me\Terminated) Then
+										If (Not chs\GodMode) And (Not me\Terminated) Then
 											msg\DeathMsg = GetLocalString("death", "106_1")
-											
 											PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"))
+											me\BlurTimer = 3000.0
 											me\Terminated = True
 										EndIf
 									EndIf
@@ -8127,7 +8131,7 @@ Function UpdateDimension106%()
 								Teleport = True
 								Random = Rand(11, 30)
 							Else ; ~ The player is not at the exit, must've fallen down
-								If (Not me\Terminated) Then
+								If (Not chs\GodMode) And (Not me\Terminated) Then
 									PlaySound_Strict(HorrorSFX[8])
 									msg\DeathMsg = GetLocalString("death", "106_2")
 									me\BlurTimer = 3000.0
@@ -8426,7 +8430,7 @@ Function UpdateDimension106%()
 								Teleport = True
 								Random = Rand(11, 30)
 							Else ; ~ Somewhere else, must've fallen down
-								If (Not me\Terminated) Then
+								If (Not chs\GodMode) And (Not me\Terminated) Then
 									PlaySound_Strict(HorrorSFX[8])
 									msg\DeathMsg = GetLocalString("death", "106_2")
 									me\BlurTimer = 3000.0

@@ -1291,8 +1291,6 @@ Function UpdateNPCs%()
 												me\CameraShake = 30.0
 												me\BlurTimer = 2000.0
 												msg\DeathMsg = Format(GetLocalString("death", "096"), SubjectName)
-												Kill(True)
-												me\KillAnim = 1
 												For i = 0 To 6
 													PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.1, 0.1), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.1, 0.1))
 													TurnEntity(Pvt, 90.0, 0.0, 0.0)
@@ -1301,6 +1299,7 @@ Function UpdateNPCs%()
 													de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.6))
 												Next
 												FreeEntity(Pvt)
+												me\KillAnim = 1 : Kill(True)
 											EndIf
 										EndIf
 									EndIf
@@ -1606,7 +1605,7 @@ Function UpdateNPCs%()
 													Next
 												Else
 													msg\DeathMsg = GetLocalString("death", "049")
-													Kill() : me\KillAnim = 0
+													me\KillAnim = 0 : Kill()
 												EndIf
 												PlaySound_Strict(HorrorSFX[13])
 												LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(2) + ".ogg", 1)
@@ -3383,11 +3382,10 @@ Function UpdateNPCs%()
 									AnimateNPC(n, 451.0, 493.0, 0.5, False)
 									
 									If (PrevFrame < 461.0 And n\Frame >= 461.0) Then
-										If (Not me\Terminated) Then Kill(True)
 										PlaySound_Strict(DamageSFX[11])
+										Kill(True)
 									EndIf
-									If (PrevFrame < 476.0 And n\Frame >= 476.0) Then PlaySound_Strict(DamageSFX[12])
-									If (PrevFrame < 486.0 And n\Frame >= 486.0) Then PlaySound_Strict(DamageSFX[12])
+									If (PrevFrame < 476.0 And n\Frame >= 476.0) Lor (PrevFrame < 486.0 And n\Frame >= 486.0) Then PlaySound_Strict(DamageSFX[12])
 								Else
 									n\CurrSpeed = CurveValue(n\Speed * 0.8, n\CurrSpeed, 10.0)
 									
@@ -3527,9 +3525,9 @@ Function UpdateNPCs%()
 									EndIf
 									
 									If me\Injuries > 4.0 Then
+										If (Not chs\GodMode) Then n\State = 5.0
 										msg\DeathMsg = GetLocalString("death", "939")
 										Kill(True)
-										If (Not chs\GodMode) Then n\State = 5.0
 									EndIf
 								Else
 									If n\LastSeen = 70.0 * 1.0 Then
@@ -4364,12 +4362,12 @@ Function UpdateNPCs%()
 										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, Rnd(0.1, 0.4), 0.2)
 										PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
 										If me\Injuries > 10.0 Then
-											Kill(True)
 											If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 												msg\DeathMsg = GetLocalString("death", "1499.dimension")
 											Else
 												msg\DeathMsg = GetLocalString("death", "1499")
 											EndIf
+											Kill(True)
 										EndIf
 									EndIf
 								ElseIf n\Frame >= 99.0
@@ -4385,12 +4383,12 @@ Function UpdateNPCs%()
 										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, Rnd(0.1, 0.4), 0.2)
 										PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
 										If me\Injuries > 10.0 Then
-											Kill(True)
 											If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 												msg\DeathMsg = GetLocalString("death", "1499.dimension")
 											Else
 												msg\DeathMsg = GetLocalString("death", "1499")
 											EndIf
+											Kill(True)
 										EndIf
 									EndIf
 								ElseIf n\Frame >= 201.0
@@ -6435,7 +6433,11 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 	
 	LightVolume = TempLightVolume * 1.2
 	
-	If InstaKill Then Kill(True) : PlaySound_Strict(BulletHitSFX) : Return
+	If InstaKill Then
+		PlaySound_Strict(BulletHitSFX)
+		Kill(True)
+		Return
+	EndIf
 	
 	If Rnd(1.0) <= HitProb Then
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)

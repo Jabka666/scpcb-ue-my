@@ -12,6 +12,7 @@ General:
 - Added SCP-066 achievement.
 - Added «PRESS ANY KEY TO CONTINUE» string while playing startup videos.
 - Added escape time.
+- Added sound volume for dropping the items, so NPCs can hear your activity. Increased crouch and picking up sound volumes.
 
 - Removed «playmusic» console command.
 
@@ -38,7 +39,9 @@ Mechanics and effects:
 
 Rooms:
 - Added buttons for containment door in SCP-049's containment chamber.
-- Added Level 1 Keycard inside the «room3_storage» area.
+- «room3_storage» changes:
+	- Added Level 1 Keycard inside the «room3_storage» area.
+	- Added death message when falling down the elevator shaft.
 
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
 
