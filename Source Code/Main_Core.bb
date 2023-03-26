@@ -2580,7 +2580,7 @@ Function SetCrouch%(NewCrouch%)
 		If NewCrouch <> me\Crouch Then
 			PlaySound_Strict(CrouchSFX)
 			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
-			me\SndVolume = Max(1.0, me\SndVolume)
+			me\SndVolume = Max(2.0, me\SndVolume)
 			
 			If me\Stamina < 10.0 Then
 				If (Not ChannelPlaying(BreathCHN)) Then
@@ -2839,10 +2839,13 @@ Function UpdateMoving%()
 			
 			If me\Playable Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 			
-			Local CollidedFloor%
+			Local CollidedFloor% = False
 			
 			For i = 1 To CountCollisions(me\Collider)
-				CollidedFloor = (CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25)
+				If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25 Then
+					CollidedFloor = True
+					Exit
+				EndIf
 			Next
 			
 			If CollidedFloor Then
@@ -3037,10 +3040,13 @@ Function UpdateMouseLook%()
 		If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 		PositionEntity(Camera, EntityX(me\Head), EntityY(me\Head), EntityZ(me\Head))
 		
-		Local CollidedFloor%
+		Local CollidedFloor% = False
 		
 		For i = 1 To CountCollisions(me\Head)
-			CollidedFloor = (CollisionY(me\Head, i) < EntityY(me\Head) - 0.01)
+			If CollisionY(me\Head, i) < EntityY(me\Head) - 0.01 Then
+				CollidedFloor = True
+				Exit
+			EndIf
 		Next
 		
 		If CollidedFloor Then

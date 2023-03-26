@@ -613,7 +613,7 @@ Function PickItem%(item.Items)
 				Exit
 			EndIf
 		Next
-		me\SndVolume = Max(1.5, me\SndVolume)
+		me\SndVolume = Max(2.0, me\SndVolume)
 	Else
 		CreateMsg(GetLocalString("msg", "cantcarry"))
 	EndIf
@@ -648,6 +648,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 		EndIf
 	Next
 	ItemAmount = ItemAmount - 1
+	me\SndVolume = Max(2.0, me\SndVolume)
 	
 	CatchErrors("Uncaught: DropItem()")
 End Function
