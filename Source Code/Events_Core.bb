@@ -2838,7 +2838,7 @@ Function UpdateEvents%()
 							e\EventState2 = 0.0
 							If Abs(EntityX(me\Collider, True) - EntityX(e\room\Objects[0], True)) < 1.0 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(me\Collider, True) - EntityZ(e\room\Objects[0], True)) < 1.0 And (e\room\Angle Mod 180 = 0.0) Then
 								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < PowTwo(300.0 * RoomScale) And (Not me\Terminated) And (Not chs\NoTarget) Then
-									StopChannel(e\SoundCHN) : e\SoundCHN = 0
+									If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 									e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[1], 4.0, 0.5)
 									If (e\room\NPC[0] = Null) Lor e\room\NPC[0]\IsDead Then e\EventState = 1.0
 								EndIf
@@ -2857,7 +2857,7 @@ Function UpdateEvents%()
 									Else
 										If Abs(EntityX(n\Collider, True) - EntityX(e\room\Objects[0], True)) < 0.8 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(n\Collider, True) - EntityZ(e\room\Objects[0], True)) < 0.8 And (e\room\Angle Mod 180 = 0.0) Then
 											If EntityDistanceSquared(n\Collider, e\room\Objects[0]) < PowTwo(300.0 * RoomScale) Then
-												StopChannel(e\SoundCHN) : e\SoundCHN = 0
+												If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 												e\SoundCHN = PlaySound2(TeslaActivateSFX, Camera, e\room\Objects[1], 4.0, 0.5)
 												e\EventState = 1.0
 											EndIf
@@ -2936,10 +2936,10 @@ Function UpdateEvents%()
 							EndIf
 							e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
 							If e\EventState2 <= 0.0 Then
-								e\EventState = 3.0
-								e\EventState2 = -70.0
 								StopChannel(e\SoundCHN) : e\SoundCHN = 0
 								e\SoundCHN = PlaySound2(TeslaPowerUpSFX, Camera, e\room\Objects[1], 4.0, 0.5)
+								e\EventState = 3.0
+								e\EventState2 = -70.0
 							EndIf
 							;[End Block]
 						Case 3.0 ; ~ Recharge state
