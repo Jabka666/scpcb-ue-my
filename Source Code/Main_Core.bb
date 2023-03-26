@@ -3374,7 +3374,7 @@ Function UpdateGUI%()
 			EndIf
 		EndIf
 		If ShouldDrawHUD Then
-			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((60.0) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((74.0) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True), EntityZ(d_I\ClosestButton, True))
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
