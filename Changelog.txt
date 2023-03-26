@@ -38,6 +38,7 @@ Mechanics and effects:
 
 Rooms:
 - Added buttons for containment door in SCP-049's containment chamber.
+- Added Level 1 Keycard inside the «room3_storage» area.
 
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
 
