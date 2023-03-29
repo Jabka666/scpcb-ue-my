@@ -5556,6 +5556,8 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 960.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 0.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			
+			CreateCustomCenter(r\x, r\z + 500.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_035"
 			;[Block]
@@ -6582,6 +6584,8 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, r)
 			sc\Angle = 45.0 : sc\Turn = 0.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			
+			CreateCustomCenter(r\x, r\z + 500.0 * RoomScale, r)
 			;[End Block]
 		Case "gate_a_entrance"
 			;[Block]
