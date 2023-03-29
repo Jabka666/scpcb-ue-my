@@ -100,8 +100,6 @@ Function SaveGame%(File$)
 	Next
 	WriteByte(f, SelectedDifficulty\InventorySlots)
 	
-	WriteFloat(f, mon_I\MonitorTimer)
-	
 	WriteFloat(f, me\Sanity)
 	
 	WriteFloat(f, wi\GasMaskFogTimer)
@@ -160,6 +158,10 @@ Function SaveGame%(File$)
 	
 	WriteFloat(f, Remove714Timer)
 	WriteFloat(f, RemoveHazmatTimer)
+	
+	For i = 0 To 1
+		WriteByte(f, mon_I\UpdateCheckpoint[i])
+	Next
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -600,8 +602,6 @@ Function LoadGame%(File$)
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
 	
-	mon_I\MonitorTimer = ReadFloat(f)
-	
 	me\Sanity = ReadFloat(f)
 	
 	wi\GasMaskFogTimer = ReadFloat(f)
@@ -654,6 +654,10 @@ Function LoadGame%(File$)
 	
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
+	
+	For i = 0 To 1
+		mon_I\UpdateCheckpoint[i] = ReadByte(f)
+	Next
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -1457,8 +1461,6 @@ Function LoadGameQuick%(File$)
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
 	
-	mon_I\MonitorTimer = ReadFloat(f)
-	
 	me\Sanity = ReadFloat(f)
 	
 	wi\GasMaskFogTimer = ReadFloat(f)
@@ -1511,6 +1513,10 @@ Function LoadGameQuick%(File$)
 	
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
+	
+	For i = 0 To 1
+		mon_I\UpdateCheckpoint[i] = ReadByte(f)
+	Next
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize

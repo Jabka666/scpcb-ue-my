@@ -1942,16 +1942,14 @@ Function UpdateEvents%()
 				EndIf
 				
 				If e\room\Dist < 12.0 Then
-					If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
-						For e2.Events = Each Events
+					For e2.Events = Each Events
+						If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Then
 							If e2\EventID = e_cont2_008 Then
 								If e2\EventState = 2.0 Then
-									If e\room\RoomDoors[0]\Locked = 1 Then
-										TurnCheckpointMonitorsOff(False)
-										For i = 0 To 1
-											e\room\RoomDoors[i]\Locked = 0
-										Next
-									EndIf
+									TurnCheckpointMonitorsOff(False)
+									For i = 0 To 1
+										e\room\RoomDoors[i]\Locked = 0
+									Next
 								Else
 									UpdateCheckpointMonitors(False)
 									For i = 0 To 1
@@ -1960,17 +1958,13 @@ Function UpdateEvents%()
 								EndIf
 								Exit
 							EndIf
-						Next
-					Else
-						For e2.Events = Each Events
+						Else
 							If e2\EventID = e_room2_sl Then
 								If e2\EventState3 = 0.0 Then
-									If e\room\RoomDoors[0]\Locked = 1 Then
-										TurnCheckpointMonitorsOff()
-										For i = 0 To 1
-											e\room\RoomDoors[i]\Locked = 0
-										Next
-									EndIf
+									TurnCheckpointMonitorsOff()
+									For i = 0 To 1
+										e\room\RoomDoors[i]\Locked = 0
+									Next
 								Else
 									UpdateCheckpointMonitors()
 									For i = 0 To 1
@@ -1979,8 +1973,8 @@ Function UpdateEvents%()
 								EndIf
 								Exit
 							EndIf
-						Next
-					EndIf
+						EndIf
+					Next
 				EndIf
 				
 				If e\room\RoomDoors[0]\Open <> e\EventState Then
@@ -7589,16 +7583,16 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					; ~ Lever for checkpoint locking (might have a function in the future for the case if the checkpoint needs to be locked again)
 					e\EventState3 = UpdateLever(e\room\RoomLevers[0]\OBJ)
-					If e\EventState3 = 1.0 Then
+					If e\EventState3 = 0.0 Then
+						TurnCheckpointMonitorsOff()
+						EntityTexture(e\room\Objects[18], e\room\Textures[0], 0)
+					Else
 						UpdateCheckpointMonitors()
-						If mon_I\MonitorTimer < 50.0 Then
+						If mon_I\MonitorTimer[0] < 50.0 Then
 							EntityTexture(e\room\Objects[18], e\room\Textures[0], 1)
 						Else
 							EntityTexture(e\room\Objects[18], e\room\Textures[0], 2)
 						EndIf
-					Else
-						TurnCheckpointMonitorsOff(False)
-						EntityTexture(e\room\Objects[18], e\room\Textures[0], 0)
 					EndIf
 					
 					; ~ Checking if the monitors and such should be rendered or not
@@ -7842,16 +7836,18 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room4_ic
 				;[Block]
-				For e2.Events = Each Events
-					If e2\EventID = e_room2_sl Then
-						If e2\EventState3 = 0.0 Then
-							If e\room\Dist < 12.0 Then TurnCheckpointMonitorsOff()
-						Else
-							If e\room\Dist < 12.0 Then UpdateCheckpointMonitors()
+				If e\room\Dist < 12.0 Then
+					For e2.Events = Each Events
+						If e2\EventID = e_room2_sl Then
+							If e2\EventState3 = 0.0 Then
+								TurnCheckpointMonitorsOff()
+							Else
+								UpdateCheckpointMonitors()
+							EndIf
+							Exit
 						EndIf
-						Exit
-					EndIf
-				Next
+					Next
+				EndIf
 				;[End Block]
 			Case e_cont2_409
 				;[Block]
@@ -8319,7 +8315,6 @@ Function UpdateDimension106%()
 												e2\EventState3 = 0.0
 												UpdateLever(e2\room\RoomLevers[0]\OBJ)
 												RotateEntity(e2\room\RoomLevers[0]\OBJ, 0.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
-												TurnCheckpointMonitorsOff()
 												Exit
 											EndIf
 										Next
@@ -8543,7 +8538,6 @@ Function UpdateDimension106%()
 													e2\EventState3 = 0.0
 													UpdateLever(e2\room\RoomLevers[0]\OBJ)
 													RotateEntity(e2\room\RoomLevers[0]\OBJ, 0.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
-													TurnCheckpointMonitorsOff()
 													Exit
 												EndIf
 											Next

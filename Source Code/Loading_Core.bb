@@ -332,8 +332,8 @@ Const MaxMonitorOverlayIDAmount% = 18
 Type MonitorInstance
 	Field MonitorModelID%[MaxMonitorModelIDAmount]
 	Field MonitorOverlayID%[MaxMonitorOverlayIDAmount]
-	Field MonitorTimer#, MonitorTimer2#
-	Field UpdateCheckpoint1%, UpdateCheckpoint2%
+	Field MonitorTimer#[2]
+	Field UpdateCheckpoint%[2]
 End Type
 
 Global mon_I.MonitorInstance

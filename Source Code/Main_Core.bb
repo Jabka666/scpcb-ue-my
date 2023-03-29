@@ -1305,12 +1305,10 @@ Function UpdateConsole%()
 							e2\EventState3 = 0.0
 							UpdateLever(e2\room\RoomLevers[0]\OBJ)
 							RotateEntity(e2\room\RoomLevers[0]\OBJ, -80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
-							TurnCheckpointMonitorsOff()
 						ElseIf e2\EventID = e_cont2_008
 							e2\EventState = 2.0
 							UpdateLever(e2\room\Objects[1])
 							RotateEntity(e2\room\Objects[1], -80.0, EntityYaw(e2\room\Objects[1]), 30.0)
-							TurnCheckpointMonitorsOff(False)
 						EndIf
 					Next
 					
@@ -2117,9 +2115,6 @@ Function UpdateGame%()
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"))
 				EndIf
 			EndIf
-			
-			mon_I\UpdateCheckpoint1 = False
-			mon_I\UpdateCheckpoint2 = False
 			
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			

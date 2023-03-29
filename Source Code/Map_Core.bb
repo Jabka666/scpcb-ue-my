@@ -3614,13 +3614,7 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
-	Entity = mon_I\MonitorModelID[1]
-	
-	If LCZ Then
-		mon_I\UpdateCheckpoint1 = True
-	Else
-		mon_I\UpdateCheckpoint2 = True
-	EndIf
+	Entity = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
 	
 	For i = 2 To CountSurfaces(Entity)
 		SF = GetSurface(Entity, i)
@@ -3629,15 +3623,15 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 			t1 = GetBrushTexture(b, 0)
 			If t1 <> 0 Then
 				Name = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitor_overlay.png"
+				If Lower(Name) <> "monitortexture.jpg"
 					If LCZ Then
-						If mon_I\MonitorTimer < 50.0 Then
+						If mon_I\MonitorTimer[0] < 50.0 Then
 							BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY], 0, 0)
 						Else
 							BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_3_OVERLAY], 0, 0)
 						EndIf
 					Else
-						If mon_I\MonitorTimer2 < 50.0 Then
+						If mon_I\MonitorTimer[1] < 50.0 Then
 							BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY], 0, 0)
 						Else
 							BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], 0, 0)
@@ -3650,53 +3644,50 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 			FreeBrush(b)
 		EndIf
 	Next
+	mon_I\UpdateCheckpoint[(1 - LCZ)] = True
 End Function
 
 Function TurnCheckpointMonitorsOff%(LCZ% = True)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
-	Entity = mon_I\MonitorModelID[1]
+	Entity = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
 	
-	If LCZ Then
-		mon_I\UpdateCheckpoint1 = False
-		mon_I\MonitorTimer = 0.0
-	Else
-		mon_I\UpdateCheckpoint2 = False
-		mon_I\MonitorTimer2 = 0.0
-	EndIf
-	
-	For i = 2 To CountSurfaces(Entity)
-		SF = GetSurface(Entity, i)
-		b = GetSurfaceBrush(SF)
-		If b <> 0 Then
-			t1 = GetBrushTexture(b, 0)
-			If t1 <> 0 Then
-				Name = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitor_overlay.png"
-					BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY], 0, 0)
-					PaintSurface(SF, b)
+	If mon_I\UpdateCheckpoint[0] Lor mon_I\UpdateCheckpoint[1] Then
+		For i = 2 To CountSurfaces(Entity)
+			SF = GetSurface(Entity, i)
+			b = GetSurfaceBrush(SF)
+			If b <> 0 Then
+				t1 = GetBrushTexture(b, 0)
+				If t1 <> 0 Then
+					Name = StripPath(TextureName(t1))
+					If Lower(Name) <> "monitortexture.jpg"
+						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY], 0, 0)
+						PaintSurface(SF, b)
+					EndIf
+					If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
 				EndIf
-				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+				FreeBrush(b)
 			EndIf
-			FreeBrush(b)
-		EndIf
-	Next
+		Next
+		mon_I\UpdateCheckpoint[(1 - LCZ)] = False
+		mon_I\MonitorTimer[(1 - LCZ)] = 0.0
+	EndIf
 End Function
 
 Function TimeCheckpointMonitors%()
-	If mon_I\UpdateCheckpoint1 Then
-		If mon_I\MonitorTimer < 100.0
-			mon_I\MonitorTimer = Min(mon_I\MonitorTimer + fps\Factor[0], 100.0)
+	If mon_I\UpdateCheckpoint[0] Then
+		If mon_I\MonitorTimer[0] < 100.0 Then
+			mon_I\MonitorTimer[0] = Min(mon_I\MonitorTimer[0] + fps\Factor[0], 100.0)
 		Else
-			mon_I\MonitorTimer = 0.0
+			mon_I\MonitorTimer[0] = 0.0
 		EndIf
 	EndIf
-	If mon_I\UpdateCheckpoint2 Then
-		If mon_I\MonitorTimer2 < 100.0
-			mon_I\MonitorTimer2 = Min(mon_I\MonitorTimer2 + fps\Factor[0], 100.0)
+	If mon_I\UpdateCheckpoint[1] Then
+		If mon_I\MonitorTimer[1] < 100.0 Then
+			mon_I\MonitorTimer[1] = Min(mon_I\MonitorTimer[1] + fps\Factor[0], 100.0)
 		Else
-			mon_I\MonitorTimer2 = 0.0
+			mon_I\MonitorTimer[1] = 0.0
 		EndIf
 	EndIf
 End Function
