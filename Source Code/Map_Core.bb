@@ -4532,13 +4532,7 @@ Function FillRoom%(r.Rooms)
 			If r\RoomTemplate\Name = "room2_gw_2" Then
 				r\Objects[0] = CreatePivot()
 				PositionEntity(r\Objects[0], r\x + 262.0 * RoomScale, r\y + 325.0 * RoomScale, r\z - 345.0 * RoomScale)
-				
-				r\Objects[1] = CreatePivot()
-				PositionEntity(r\Objects[1], r\x - 156.0 * RoomScale, r\y + 0.5, r\z + 121.0 * RoomScale)
-				
-				For i = 0 To 1
-					EntityParent(r\Objects[i], r\OBJ)
-				Next
+				EntityParent(r\Objects[0], r\OBJ)
 			EndIf
 			
 			d.Doors = CreateDoor(r\x - 468.0 * RoomScale, r\y, r\z + 729.0 * RoomScale, 270.0, r)

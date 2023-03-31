@@ -45,7 +45,7 @@ Const e_door_closing% = 32
 Const e_room3_2_ez% = 33
 Const e_room3_storage% = 34
 Const e_room3_2_hcz% = 35
-Const e_room4_lcz% = 36
+Const e_room4_lcz_049% = 36
 Const e_cont2_012% = 37
 Const e_cont1_035% = 38
 Const e_cont2_049% = 39
@@ -229,9 +229,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room3_2_hcz)
 			;[End Block]
-		Case "room4_lcz"
+		Case "room4_lcz_049"
 			;[Block]
-			Return(e_room4_lcz)
+			Return(e_room4_lcz_049)
 			;[End Block]
 		Case "cont2_012"
 			;[Block]
@@ -4632,21 +4632,18 @@ Function UpdateEvents%()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case e_room4_lcz
+			Case e_room4_lcz_049
 				;[Block]
 				If e\EventState < MilliSecs() Then
 					If PlayerRoom <> e\room Then
-						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 256.0 Then
+						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 64.0 Then
 							If n_I\Curr049 <> Null Then
 								If n_I\Curr049\State = 2.0 And EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) > 256.0 Then
 									n_I\Curr049\PathStatus = 0 : n_I\Curr049\State = 4.0 : n_I\Curr049\State2 = 0.0 : n_I\Curr049\State3 = 0.0
 									TFormPoint(368.0, 528.0, 176.0, e\room\OBJ, 0)
-									PositionEntity(n_I\Curr049\Collider, TFormedX(), TFormedY(), TFormedZ())
-									ResetEntity(n_I\Curr049\Collider)
+									TeleportEntity(n_I\Curr049\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr049\CollRadius, True)
 									RemoveEvent(e)
 								EndIf
-							Else
-								RemoveEvent(e)
 							EndIf
 						EndIf
 					EndIf
@@ -6973,7 +6970,8 @@ Function UpdateEvents%()
 				;[Block]
 				If e\room\Dist < 8.0 Then
 					If e\room\NPC[0] = Null Then
-						e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+						TFormPoint(-156.0, 0.0, 121.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), 0.5, TFormedZ())
 						e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 						SetNPCFrame(e\room\NPC[0], 288.0)
 						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
@@ -6984,7 +6982,7 @@ Function UpdateEvents%()
 					p\Speed = 0.01 : p\AlphaChange = -0.02
 					RotateEntity(p\Pvt, -60.0, e\room\Angle - 90.0, 0.0)
 					
-					e\SoundCHN = LoopSound2(AlarmSFX[2], e\SoundCHN, Camera, e\room\Objects[1], 5.0)
+					e\SoundCHN = LoopSound2(AlarmSFX[2], e\SoundCHN, Camera, e\room\OBJ, 5.0)
 				EndIf
 				;[End Block]
 			Case e_gateway
