@@ -6650,53 +6650,27 @@ Function RenderGUI%()
 							Local SCPs_Found% = 0, Dist#
 							
 							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSecs() Mod 600) < 400 Then
-								If n_I\Curr173 <> Null Then
-									Dist = EntityDistanceSquared(Camera, n_I\Curr173\OBJ)
-									If Dist < 900.0 Then
-										SqrValue = Sqr(Ceil(Dist / 8.0) * 8.0) ; ~ This is probably done to disguise SCP-173's teleporting behavior
-										Color(100, 0, 0)
-										Oval(x - (SqrValue * (3 * MenuScale)), y - (7 * MenuScale) - (SqrValue * (3 * MenuScale)), SqrValue * (6 * MenuScale), SqrValue * (6 * MenuScale), False)
-										Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale), "SCP-173")
-										SCPs_Found = SCPs_Found + 1
-									EndIf
-								EndIf
-								If n_I\Curr106 <> Null Then
-									Dist = EntityDistanceSquared(Camera, n_I\Curr106\OBJ)
-									If Dist < 900.0 Then
-										SqrValue = Sqr(Dist)
-										Color(100, 0, 0)
-										Oval(x - (SqrValue * (1.5 * MenuScale)), y - (7 * MenuScale) - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-										Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-106")
-										SCPs_Found = SCPs_Found + 1
-									EndIf
-								EndIf
-								If n_I\Curr096 <> Null Then
-									Dist = EntityDistanceSquared(Camera, n_I\Curr096\OBJ)
-									If Dist < 900.0 Then
-										SqrValue = Sqr(Dist)
-										Color(100, 0, 0)
-										Oval(x - (SqrValue * (1.5 * MenuScale)), y - (7 * MenuScale) - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-										Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-096")
-										SCPs_Found = SCPs_Found + 1
-									EndIf
-								EndIf
-								If n_I\Curr049 <> Null Then
-								If (Not n_I\Curr049\HideFromNVG) Then
-									Dist = EntityDistanceSquared(Camera, n_I\Curr049\OBJ)
-										If Dist < 900.0 Then
-											SqrValue = Sqr(Dist)
-											Color(100, 0, 0)
-											Oval(x - (SqrValue * (1.5 * MenuScale)), y - (7 * MenuScale) - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-											Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-049")
-											SCPs_Found = SCPs_Found + 1
+								Local np.NPCs
+								
+								For np.NPCs = Each NPCs
+									If np\NPCType = NPCType173 Lor np\NPCType = NPCType106 Lor np\NPCType = NPCType096 Lor np\NPCType = NPCType049 Then
+										If (Not np\HideFromNVG) Then
+											Dist = EntityDistanceSquared(Camera, np\Collider)
+											If Dist < 900.0 Then
+												SqrValue = Sqr(Dist)
+												Color(100, 0, 0)
+												Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
+												Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
+												SCPs_Found = SCPs_Found + 1
+											EndIf
 										EndIf
 									EndIf
-								EndIf
+								Next
 								If PlayerRoom\RoomTemplate\Name = "cont1_895" Then
 									If CoffinDistance < 8.0 Then
 										Dist = Rnd(4.0, 8.0)
 										Color(100, 0, 0)
-										Oval(x - (Dist * (1.5 * MenuScale)), y - (7 * MenuScale) - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+										Oval(x - (Dist * (1.5 * MenuScale)), y - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
 										Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
 									EndIf
 								EndIf
