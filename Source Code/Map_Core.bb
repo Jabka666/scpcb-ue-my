@@ -7481,11 +7481,11 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[8] = LoadRMesh("GFX\Map\dimension_106_3.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
 			
-			r\Objects[9] = LoadRMesh("GFX\Map\pocketdimension4_opt.rmesh", Null) ; ~ The flying pillar
+			r\Objects[9] = LoadMesh_Strict("GFX\Map\Props\dimension_106_pillar.b3d") ; ~ The flying pillar
 			
 			r\Objects[10] = CopyEntity(r\Objects[9])
 			
-			r\Objects[11] = LoadRMesh("GFX\Map\dimension_106_5.rmesh", Null) ; ~ The pillar room
+			r\Objects[11] = LoadRMesh("GFX\Map\dimension_106_4.rmesh", Null) ; ~ The pillar room
 			
 			For i = 8 To 11
 				ScaleEntity(r\Objects[i], RoomScale * ((i <> 10) + ((i = 10) * 1.5)), RoomScale * ((i <> 10) + ((i = 10) * 2.0)), RoomScale * ((i <> 10) + ((i = 10) * 1.5)))
@@ -7536,7 +7536,7 @@ Function FillRoom%(r.Rooms)
 			EntityFX(r\Objects[17], 1 + 8)
 			SpriteViewMode(r\Objects[17], 2)
 			
-			r\Objects[18] = LoadMesh_Strict("GFX\Map\throne_wall.b3d")
+			r\Objects[18] = LoadMesh_Strict("GFX\Map\Props\throne_wall.b3d")
 			r\HideObject[18] = False
 			PositionEntity(r\Objects[18], EntityX(r\Objects[8], True), r\y, EntityZ(r\Objects[8], True) - 864.5 * RoomScale)
 			ScaleEntity(r\Objects[18], RoomScale / 2.04, RoomScale, RoomScale)
@@ -7554,8 +7554,11 @@ Function FillRoom%(r.Rooms)
 			SpriteViewMode(r\Objects[19], 2)
 			PositionEntity(r\Objects[19], EntityX(r\Objects[8], True) - 1000.0, 16.0, 0.0, True)
 			
-			r\Objects[20] = LoadMesh_Strict("GFX\Map\pocketdimensionterrain.b3d")
+			r\Objects[20] = LoadMesh_Strict("GFX\Map\dimension_106_terrain.b3d")
 			r\HideObject[20] = False
+			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
+			EntityTexture(r\Objects[20], Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
 			EntityType(r\Objects[20], HIT_MAP)
 			PositionEntity(r\Objects[20], r\x, r\y + 16.0 + 2944.0 * RoomScale, r\z + 32.0, True)

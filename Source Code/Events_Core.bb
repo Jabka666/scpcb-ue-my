@@ -8063,9 +8063,8 @@ Function UpdateDimension106%()
 								e\EventState = 601.0
 							EndIf
 						EndIf
-						
 						Dist = EntityDistanceSquared(me\Collider, e\room\OBJ)
-						If Dist > PowTwo(1600.0 * RoomScale) Then Teleport = True
+						If Dist > PowTwo(-1200.0 * RoomScale) Then Teleport = True
 						;[End Block]
 					Case PD_FourWayRoom
 						;[Block]
@@ -8178,6 +8177,8 @@ Function UpdateDimension106%()
 					Case PD_TrenchesRoom
 						;[Block]
 						ShouldPlay = 14
+						
+						CameraFogRange(Camera, 0.05, 8.0)
 						
 						For i = 17 To 20
 							If i > 18 Then
