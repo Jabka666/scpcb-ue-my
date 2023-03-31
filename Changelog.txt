@@ -105,6 +105,7 @@ NPCs:
 - Increased the spawn timer for SCP-106 when using SCP-914.
 - Reduced SCP-096's speed.
 - The MTF Units and SCP-049 now open linked doors in the same way as the player.
+- SCP-066 is now visible on the S-NAV Ultimate.
 
 Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.

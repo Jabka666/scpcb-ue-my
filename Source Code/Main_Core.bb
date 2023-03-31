@@ -6653,7 +6653,7 @@ Function RenderGUI%()
 								Local np.NPCs
 								
 								For np.NPCs = Each NPCs
-									If np\NPCType = NPCType173 Lor np\NPCType = NPCType106 Lor np\NPCType = NPCType096 Lor np\NPCType = NPCType049 Then
+									If np\NPCType = NPCType173 Lor np\NPCType = NPCType106 Lor np\NPCType = NPCType096 Lor np\NPCType = NPCType049 np\NPCType = NPCType066 Then
 										If (Not np\HideFromNVG) Then
 											Dist = EntityDistanceSquared(Camera, np\Collider)
 											If Dist < 900.0 Then
