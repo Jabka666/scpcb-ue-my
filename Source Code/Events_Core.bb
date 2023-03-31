@@ -5294,7 +5294,6 @@ Function UpdateEvents%()
 							e\EventState = e\EventState - fps\Factor[0]
 							
 							If e\EventState <= (-70.0) * 4.0 Then
-								UpdateTimer = 0.0
 								UpdateRoomLightsTimer = 0.0
 								HideEntity(me\Head)
 								ShowEntity(me\Collider)

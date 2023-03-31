@@ -2245,20 +2245,11 @@ Function UpdateDoors%()
 	Local x#, z#, Dist#, i%, FindButton%
 	Local SinValue#
 	
-	If UpdateTimer <= 0.0 Then
-		For d.Doors = Each Doors
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(d\FrameOBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(d\FrameOBJ, True))
-			
-			d\Dist = xDist + zDist
-		Next
-	EndIf
-	
 	d_I\ClosestButton = 0
 	d_I\ClosestDoor = Null
 	
 	For d.Doors = Each Doors
-		If (d\Dist <= HideDistance) Lor (d\IsElevatorDoor > 0) Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
+		If (EntityDistanceSquared(d\FrameOBJ, me\Collider) <= PowTwo(HideDistance)) Lor (d\IsElevatorDoor > 0) Then ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
 			; ~ Automatically disable d\AutoClose parameter in order to prevent player get stuck -- Jabka
 			If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
 			FindButton = (1 - (d\Open And ((d\DoorType = OFFICE_DOOR) Lor (d\DoorType = WOODEN_DOOR))))
@@ -2651,7 +2642,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						
 						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider, True) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
 						me\DropSpeed = 0.0
-						UpdateTimer = 0.0
 						UpdateRoomLightsTimer = 0.0
 						UpdateDoors()
 						UpdateRooms()
@@ -2756,7 +2746,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						EndIf
 						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider, True) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
 						me\DropSpeed = 0.0
-						UpdateTimer = 0.0
 						UpdateRoomLightsTimer = 0.0
 						UpdateDoors()
 						UpdateRooms()
@@ -3137,17 +3126,8 @@ End Function
 Function UpdateDecals%()
 	Local de.Decals
 	
-	If UpdateTimer <= 0.0 Then
-		For de.Decals = Each Decals
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(de\OBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(de\OBJ, True))
-			
-			de\Dist = xDist + zDist
-		Next
-	EndIf
-	
 	For de.Decals = Each Decals
-		If de\Dist <= HideDistance Then
+		If EntityDistanceSquared(de\OBJ, me\Collider) <= PowTwo(HideDistance) Then
 			If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
 			If de\SizeChange <> 0.0 Then
 				de\Size = de\Size + (de\SizeChange * fps\Factor[0])
@@ -3321,179 +3301,168 @@ Function UpdateSecurityCams%()
 	; ~ CoffinEffect = 2, SCP-079 can broadcast SCP-895 feed on this screen
 	; ~ CoffinEffect = 3, SCP-079 broadcasting SCP-895 feed
 	
-	If UpdateTimer <= 0.0 Then
-		For sc.SecurityCams = Each SecurityCams
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(sc\BaseOBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(sc\BaseOBJ, True))
-			
-			sc\Dist = xDist + zDist
-		Next
-	EndIf
-	
 	For sc.SecurityCams = Each SecurityCams
-		If sc\Dist <= HideDistance Then
-			Local Close% = False
-			
-			If sc\room = Null Then
+		Local Close% = False
+		
+		If sc\room = Null Then
+			If (Not EntityHidden(sc\Cam)) Then HideEntity(sc\Cam)
+		Else
+			If sc\room\Dist < 6.0 Lor PlayerRoom = sc\room Then
+				Close = True
+			ElseIf sc\Cam <> 0
 				If (Not EntityHidden(sc\Cam)) Then HideEntity(sc\Cam)
-			Else
-				If sc\room\Dist < 6.0 Lor PlayerRoom = sc\room Then
-					Close = True
-				ElseIf sc\Cam <> 0
-					If (Not EntityHidden(sc\Cam)) Then HideEntity(sc\Cam)
-				EndIf
-				
-				If sc\room\RoomTemplate\Name = "room2_sl" Then sc\CoffinEffect = 0
-				
-				If Close Lor sc = sc_I\CoffinCam Then
-					If sc\FollowPlayer Then
-						If sc <> sc_I\CoffinCam Then
+			EndIf
+			
+			If sc\room\RoomTemplate\Name = "room2_sl" Then sc\CoffinEffect = 0
+			
+			If Close Lor sc = sc_I\CoffinCam Then
+				If sc\FollowPlayer Then
+					If sc <> sc_I\CoffinCam Then
+						If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
+					EndIf
+					If (Not sc\Pvt) Then
+						sc\Pvt = CreatePivot(sc\BaseOBJ)
+						EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
+					EndIf
+					PointEntity(sc\Pvt, Camera)
+					
+					RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
+					
+					PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
+				Else
+					If sc\Turn > 0.0 Then
+						If (Not sc\Dir) Then
+							sc\CurrAngle = sc\CurrAngle + (0.2 * fps\Factor[0])
+							If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = True
+						Else
+							sc\CurrAngle = sc\CurrAngle - (0.2 * fps\Factor[0])
+							If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = False
+						EndIf
+					EndIf
+					PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
+					RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
+					
+					If (MilliSecs() Mod 1350) < 800 Then
+						EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
+					Else
+						EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
+					EndIf
+					
+					If sc\Cam <> 0 Then
+						PositionEntity(sc\Cam, EntityX(sc\CameraOBJ, True), EntityY(sc\CameraOBJ, True), EntityZ(sc\CameraOBJ, True))
+						RotateEntity(sc\Cam, EntityPitch(sc\CameraOBJ), EntityYaw(sc\CameraOBJ), 0.0)
+						MoveEntity(sc\Cam, 0.0, 0.0, 0.1)
+					EndIf
+					
+					If sc <> sc_I\CoffinCam Then
+						If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0 Then
 							If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
 						EndIf
-						If (Not sc\Pvt) Then
-							sc\Pvt = CreatePivot(sc\BaseOBJ)
-							EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
-						EndIf
-						PointEntity(sc\Pvt, Camera)
-						
-						RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
-						
-						PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
+					EndIf
+				EndIf
+			EndIf
+			
+			If Close Then
+				If sc\Screen Then
+					If sc\State < sc\RenderInterval Then
+						sc\State = sc\State + fps\Factor[0]
 					Else
-						If sc\Turn > 0.0 Then
-							If (Not sc\Dir) Then
-								sc\CurrAngle = sc\CurrAngle + (0.2 * fps\Factor[0])
-								If sc\CurrAngle > sc\Turn * 1.3 Then sc\Dir = True
-							Else
-								sc\CurrAngle = sc\CurrAngle - (0.2 * fps\Factor[0])
-								If sc\CurrAngle < (-sc\Turn) * 1.3 Then sc\Dir = False
-							EndIf
-						EndIf
-						PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
-						RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
-						
-						If (MilliSecs() Mod 1350) < 800 Then
-							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
-						Else
-							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
-						EndIf
-						
-						If sc\Cam <> 0 Then
-							PositionEntity(sc\Cam, EntityX(sc\CameraOBJ, True), EntityY(sc\CameraOBJ, True), EntityZ(sc\CameraOBJ, True))
-							RotateEntity(sc\Cam, EntityPitch(sc\CameraOBJ), EntityYaw(sc\CameraOBJ), 0.0)
-							MoveEntity(sc\Cam, 0.0, 0.0, 0.1)
-						EndIf
-						
-						If sc <> sc_I\CoffinCam Then
-							If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0 Then
-								If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
+						sc\State = 0.0
+					EndIf
+					
+					If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
+						If EntityVisible(Camera, sc\ScrOBJ) Then
+							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
+								me\Sanity = me\Sanity - fps\Factor[0]
+								me\RestoreSanity = False
 							EndIf
 						EndIf
 					EndIf
-				EndIf
-				
-				If Close Then
-					If sc\Screen Then
-						If sc\State < sc\RenderInterval Then
-							sc\State = sc\State + fps\Factor[0]
-						Else
-							sc\State = 0.0
-						EndIf
-						
-						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
-							If EntityVisible(Camera, sc\ScrOBJ) Then
-								If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
-									me\Sanity = me\Sanity - fps\Factor[0]
-									me\RestoreSanity = False
-								EndIf
-							EndIf
-						EndIf
-						
-						If me\Sanity < -1000.0 Then
-							msg\DeathMsg = GetLocalString("death", "895")
-							If me\VomitTimer < -10.0 Then Kill()
-						EndIf
-						
-						If me\VomitTimer < 0.0 And me\Sanity < -800.0 Then
-							me\RestoreSanity = False
-							me\Sanity = -1010.0
-						EndIf
-						
-						sc\InSight = (me\BlinkTimer > -5.0 And (EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ)))
-						
-						If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
-							If sc\InSight Then
-								Local Pvt% = CreatePivot()
-								
-								PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-								PointEntity(Pvt, sc\ScrOBJ)
-								
-								RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
-								
-								TurnEntity(Pvt, 90.0, 0.0, 0.0)
-								CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
-								CameraPitch = CameraPitch - 90.0
-								
-								FreeEntity(Pvt)
-								If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And ((Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4) Then
-									If me\Sanity < -800.0 Then
-										If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
-										If Rand(6) < 5 Then
-											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
-											If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX[1])
-											sc\PlayerState = 2
-											If (Not ChannelPlaying(sc\SoundCHN)) Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
-											If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
-										EndIf
-										me\BlurTimer = 1000.0
-										If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
-									ElseIf me\Sanity < -500.0
-										If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
-										If Rand(50) = 1 Then
-											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
-											If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX[0])
-											sc\PlayerState = Max(sc\PlayerState, 1)
-											If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
-										EndIf
-									Else
-										EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+					
+					If me\Sanity < -1000.0 Then
+						msg\DeathMsg = GetLocalString("death", "895")
+						If me\VomitTimer < -10.0 Then Kill()
+					EndIf
+					
+					If me\VomitTimer < 0.0 And me\Sanity < -800.0 Then
+						me\RestoreSanity = False
+						me\Sanity = -1010.0
+					EndIf
+					
+					sc\InSight = (me\BlinkTimer > -5.0 And (EntityInView(sc\ScrOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ)))
+					
+					If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
+						If sc\InSight Then
+							Local Pvt% = CreatePivot()
+							
+							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+							PointEntity(Pvt, sc\ScrOBJ)
+							
+							RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
+							
+							TurnEntity(Pvt, 90.0, 0.0, 0.0)
+							CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
+							CameraPitch = CameraPitch - 90.0
+							
+							FreeEntity(Pvt)
+							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And ((Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4) Then
+								If me\Sanity < -800.0 Then
+									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+									If Rand(6) < 5 Then
+										EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
+										If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX[1])
+										sc\PlayerState = 2
+										If (Not ChannelPlaying(sc\SoundCHN)) Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
+										If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
 									EndIf
-								EndIf
-							EndIf
-						Else
-							If sc\InSight Then
-								If I_714\Using Lor wi\HazmatSuit = 4 Lor wi\GasMask = 4 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
-							EndIf
-						EndIf
-						
-						If PlayerRoom\RoomTemplate\Name <> "cont1_173_intro" Then
-							If sc\InSight And sc\CoffinEffect = 0 Lor sc\CoffinEffect = 2 Then
-								If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
-								If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
-								If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
-									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+									me\BlurTimer = 1000.0
+									If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
+								ElseIf me\Sanity < -500.0
+									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+									If Rand(50) = 1 Then
+										EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
+										If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX[0])
+										sc\PlayerState = Max(sc\PlayerState, 1)
+										If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
+									EndIf
 								Else
-									If (Not ChannelPlaying(sc\SoundCHN)) Then
-										sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
-										If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
-									EndIf
-									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
+									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 								EndIf
 							EndIf
 						EndIf
-					EndIf
-					If (Not sc\InSight) Then sc\SoundCHN = LoopSound2(CameraSFX, sc\SoundCHN, Camera, sc\CameraOBJ, 4.0)
-				EndIf
-				
-				If sc <> Null Then
-					If sc\room <> Null Then
-						CatchErrors("Uncaught: UpdateSecurityCameras(Room name: " + sc\room\RoomTemplate\Name + ")")
 					Else
-						CatchErrors("Uncaught: UpdateSecurityCameras(Screen has no room!)")
+						If sc\InSight Then
+							If I_714\Using Lor wi\HazmatSuit = 4 Lor wi\GasMask = 4 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+						EndIf
 					EndIf
-				Else
-					CatchErrors("Uncaught: UpdateSecurityCameras(Screen doesn't exist anymore!)")
+					
+					If PlayerRoom\RoomTemplate\Name <> "cont1_173_intro" Then
+						If sc\InSight And sc\CoffinEffect = 0 Lor sc\CoffinEffect = 2 Then
+							If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
+							If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
+							If (MilliSecs() Mod sc\PlayerState) >= Rand(600) Then
+								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+							Else
+								If (Not ChannelPlaying(sc\SoundCHN)) Then
+									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
+									If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
+								EndIf
+								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
+							EndIf
+						EndIf
+					EndIf
 				EndIf
+				If (Not sc\InSight) Then sc\SoundCHN = LoopSound2(CameraSFX, sc\SoundCHN, Camera, sc\CameraOBJ, 4.0)
+			EndIf
+			
+			If sc <> Null Then
+				If sc\room <> Null Then
+					CatchErrors("Uncaught: UpdateSecurityCameras(Room name: " + sc\room\RoomTemplate\Name + ")")
+				Else
+					CatchErrors("Uncaught: UpdateSecurityCameras(Screen has no room!)")
+				EndIf
+			Else
+				CatchErrors("Uncaught: UpdateSecurityCameras(Screen doesn't exist anymore!)")
 			EndIf
 		EndIf
 	Next
@@ -7674,20 +7643,9 @@ Function UpdateSoundEmitters%(room.Rooms)
 	Next
 End Function
 
-Global UpdateTimer# = 35.0
-
-Function UpdateDistanceTimer%()
-	UpdateTimer = UpdateTimer - fps\Factor[0]
-End Function
-
-Function ResetDistanceTimer%()
-	If UpdateTimer <= 0.0 Then UpdateTimer = 35.0
-End Function
-
 Function UpdateRender%()
 	Local it.Items
 	
-	UpdateTimer = 0.0
 	UpdateRoomLightsTimer = 0.0
 	UpdateDoors()
 	UpdateDecals()

@@ -58,17 +58,8 @@ Function UpdateParticles%()
 	
 	Local p.Particles
 	
-	If UpdateTimer <= 0.0 Then
-		For p.Particles = Each Particles
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(p\OBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(p\OBJ, True))
-			
-			p\Dist = xDist + zDist
-		Next
-	EndIf
-		
 	For p.Particles = Each Particles
-		If p\Dist <= HideDistance Then
+		If EntityDistanceSquared(p\OBJ, me\Collider) <= PowTwo(HideDistance) Then
 			MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
 			If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
 			TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)

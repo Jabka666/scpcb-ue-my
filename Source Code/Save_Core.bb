@@ -1320,7 +1320,6 @@ Function LoadGame%(File$)
 		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
 	EndIf
 	
-	UpdateTimer = 0.0
 	UpdateRoomLightsTimer = 0.0
 	
 	CatchErrors("Uncaught: LoadGame(" + File + ")")
@@ -2018,7 +2017,6 @@ Function LoadGameQuick%(File$)
 		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
 	EndIf
 	
-	UpdateTimer = 0.0
 	UpdateRoomLightsTimer = 0.0
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)

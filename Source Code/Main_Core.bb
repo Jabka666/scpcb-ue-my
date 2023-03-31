@@ -2058,8 +2058,6 @@ Function UpdateGame%()
 			me\RestoreSanity = True
 			ShouldEntitiesFall = True
 			
-			UpdateDistanceTimer()
-			
 			If PlayerInReachableRoom(False, True) Then
 				UpdateSecurityCams()
 				
@@ -2385,8 +2383,6 @@ Function UpdateGame%()
 		UpdateQuickLoading()
 		
 		UpdateAchievementMsg()
-		
-		ResetDistanceTimer()
 		
 		If me\EndingTimer < 0.0 Then
 			If me\SelectedEnding <> -1 Then UpdateEnding()
