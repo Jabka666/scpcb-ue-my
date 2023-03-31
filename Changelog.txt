@@ -144,6 +144,7 @@ Bug fixes:
 - Fixed height of NPCs teleportation.
 - Fixed center coordinates of some rooms correcting player's/SCP-049's/MTF's teleportation.
 - Fixed open door SFX for the forest door.
+- Fixed SCP-096's idle ambient sound playing even if player teleported far away.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

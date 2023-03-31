@@ -1145,13 +1145,12 @@ Function UpdateNPCs%()
 				Select n\State
 					Case 0.0
 						;[Block]
+						If Dist < 16.0 Then GiveAchievement(Achv096)
 						If Dist < 64.0 Then
-							GiveAchievement(Achv096)
 							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
 								n\SoundCHN_IsStream = True
 							EndIf
-							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0)
 							
 							If n\State3 = -1.0 Then
 								AnimateNPC(n, 936.0, 1263.0, 0.1, False)
@@ -1193,6 +1192,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 						EndIf
+						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0)
 						;[End Block]
 					Case 1.0, 2.0, 3.0
 						;[Block]
@@ -1200,7 +1200,7 @@ Function UpdateNPCs%()
 							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
 							n\SoundCHN_IsStream = True
 						EndIf
-						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 10.0, 1.0)
+						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider)
 						
 						If n\State = 1.0 Then ; ~ Get up
 							If n\Frame < 312.0 Then
@@ -1244,7 +1244,7 @@ Function UpdateNPCs%()
 								n\SoundCHN = StreamSound_Strict("SFX\SCP\096\Scream.ogg", 0)
 								n\SoundCHN_IsStream = True
 							EndIf
-							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 7.5, 1.0)
+							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 7.5)
 							
 							If (Not n\SoundCHN2) Then
 								n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
@@ -1387,13 +1387,12 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 5.0
 						;[Block]
+						If Dist < 16.0 Then GiveAchievement(Achv096)
 						If Dist < 256.0 Then
-							If Dist < 16.0 Then GiveAchievement(Achv096)
 							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
 								n\SoundCHN_IsStream = True
 							EndIf
-							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0, 1.0)
 							
 							If n\Frame >= 422.0 Then
 								n\State2 = n\State2 + fps\Factor[0]
@@ -1462,6 +1461,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 						EndIf
+						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0)
 						;[End Block]
 				End Select
 				
