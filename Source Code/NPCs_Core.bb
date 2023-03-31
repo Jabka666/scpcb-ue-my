@@ -13,7 +13,7 @@ Type NPCs
 	Field CollRadius#
 	Field DropSpeed#, Gravity%, FallingPickDistance#
 	Field State#, State2#, State3#, PrevState%
-	Field Frame#, Angle#
+	Field Frame#, Angle#, AnimTimer#
 	Field Sound%, SoundCHN%, SoundTimer#
 	Field Sound2%, SoundCHN2%
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
@@ -6905,7 +6905,16 @@ End Function
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If Abs(n\Frame - Frame) < 0.001 Then Return
 	
-	SetAnimTime(n\OBJ, Frame)
+	If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(HideDistance) Then
+		If n\AnimTimer <= 0.0 Then
+			SetAnimTime(n\OBJ, Frame)
+			n\AnimTimer = fps\Factor[0] * 4.0
+		Else
+			n\AnimTimer = n\AnimTimer - fps\Factor[0]
+		EndIf
+	Else
+		SetAnimTime(n\OBJ, Frame)
+	EndIf
 	
 	n\Frame = Frame
 End Function
