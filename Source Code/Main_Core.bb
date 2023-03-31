@@ -5841,37 +5841,39 @@ Function RenderDebugHUD%()
 			
 			Text2(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.deaf"), me\DeafTimer))
 			
+			x = x + (380 * MenuScale)
+			
 			If me\Terminated Then
-				Text2(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug_2.terminated"), "True"))
+				Text2(x, y, Format(GetLocalString("console", "debug_2.terminated"), "True"))
 			Else
-				Text2(x + (380 * MenuScale), y, Format(GetLocalString("console", "debug_2.terminated"), "False"))
+				Text2(x, y, Format(GetLocalString("console", "debug_2.terminated"), "False"))
 			EndIf
 			
-			Text2(x + (380 * MenuScale), y + (20 * MenuScale), Format(GetLocalString("console", "debug_2.death"), me\DeathTimer))
-			Text2(x + (380 * MenuScale), y + (40 * MenuScale), Format(GetLocalString("console", "debug_2.fall"), me\FallTimer))
+			Text2(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_2.death"), me\DeathTimer))
+			Text2(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_2.fall"), me\FallTimer))
 			
-			Text2(x + (380 * MenuScale), y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.heal"), me\HealTimer))
+			Text2(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.heal"), me\HealTimer))
 			
-			Text2(x + (380 * MenuScale), y + (120 * MenuScale), Format(GetLocalString("console", "debug_2.heartbeat"), me\HeartBeatTimer))
+			Text2(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_2.heartbeat"), me\HeartBeatTimer))
 			
-			Text2(x + (380 * MenuScale), y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.explosion"), me\ExplosionTimer))
+			Text2(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.explosion"), me\ExplosionTimer))
 			
-			Text2(x + (380 * MenuScale), y + (200 * MenuScale), Format(GetLocalString("console", "debug_2.speed"), me\CurrSpeed))
+			Text2(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_2.speed"), me\CurrSpeed))
 			
-			Text2(x + (380 * MenuScale), y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.camshake"), me\CameraShakeTimer))
-			Text2(x + (380 * MenuScale), y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.camzoom"), me\CurrCameraZoom))
+			Text2(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.camshake"), me\CameraShakeTimer))
+			Text2(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.camzoom"), me\CurrCameraZoom))
 			
-			Text2(x + (380 * MenuScale), y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.vomit"), me\VomitTimer))
+			Text2(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.vomit"), me\VomitTimer))
 			
 			If me\Playable Then
-				Text2(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "True"))
+				Text2(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "True"))
 			Else
-				Text2(x + (380 * MenuScale), y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "False"))
+				Text2(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "False"))
 			EndIf
 			
-			Text2(x + (380 * MenuScale), y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
-			Text2(x + (380 * MenuScale), y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
-			Text2(x + (380 * MenuScale), y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
+			Text2(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
+			Text2(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
+			Text2(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
 			;[End Block]
 		Case 3
 			;[Block]
