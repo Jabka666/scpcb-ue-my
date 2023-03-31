@@ -13,6 +13,7 @@ General:
 - Added «PRESS ANY KEY TO CONTINUE» string while playing startup videos.
 - Added escape time.
 - Added sound volume for dropping the items, so NPCs can hear your activity. Increased crouch and picking up sound volumes.
+- Added more parameters for debug menu.
 
 - Removed «playmusic» console command.
 
