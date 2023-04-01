@@ -1299,7 +1299,7 @@ Function UpdateNPCs%()
 													de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.6))
 												Next
 												FreeEntity(Pvt)
-												me\KillAnim = 1 : Kill(True)
+												Kill(True) : me\KillAnim = 1
 											EndIf
 										EndIf
 									EndIf
@@ -1605,7 +1605,7 @@ Function UpdateNPCs%()
 													Next
 												Else
 													msg\DeathMsg = GetLocalString("death", "049")
-													me\KillAnim = 0 : Kill()
+													Kill() : me\KillAnim = 0
 												EndIf
 												PlaySound_Strict(HorrorSFX[13])
 												LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(2) + ".ogg", 1)
