@@ -5123,7 +5123,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ A door inside the cell 
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 336.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 712.0 * RoomScale, 90.0, r, False, WOODEN_DOOR)
-			r\RoomDoors[1]\Locked = 1 : d\MTFClose = False
+			r\RoomDoors[1]\Locked = 1 : r\RoomDoors[1]\MTFClose = False
 			
 			; ~ An intermediate door
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 336.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 168.0 * RoomScale, 270.0, r, False, WOODEN_DOOR)
