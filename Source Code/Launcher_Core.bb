@@ -293,7 +293,8 @@ Function LanguageSelector%()
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
 				If Not RequestLanguage\MajorOnly Then DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
-				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini") ; ~ Download local.ini from ZiYue Weblate
+				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
+				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-ini/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.ini")
 				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
@@ -303,6 +304,7 @@ Function LanguageSelector%()
 				If Not RequestLanguage\MajorOnly Then Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
 				CreateDir(LocalizaitonPath + RequestLanguage\ID + "/Data")
 				CopyFile(BasePath + "/local.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini")
+				CopyFile(BasePath + "/achievements.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/achievements.ini")
 				StatusTimer = MilliSecs()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
