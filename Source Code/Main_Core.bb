@@ -5708,7 +5708,7 @@ Function RenderHUD%()
 	EndIf
 	
 	Color(255, 255, 255)
-	Rect(x - (51 * MenuScale), y - MenuScale, 32 * MenuScale, 32 * MenuScale, False)
+	Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
 	
 	If me\BlinkTimer < 0.0
 		BlinkIconID = 4
@@ -5736,7 +5736,7 @@ Function RenderHUD%()
 	EndIf
 	
 	Color(255, 255, 255)
-	Rect(x - (51 * MenuScale), y - MenuScale, 32 * MenuScale, 32 * MenuScale, False)
+	Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
 	If me\Crouch Then
 		WalkIconID = 2
 	ElseIf (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0 Then
@@ -6121,7 +6121,7 @@ Function RenderGUI%()
 			If IsMouseOn = n Then
 				MouseSlot = n
 				Color(255, 0, 0)
-				Rect(x - MenuScale, y - MenuScale, INVENTORY_GFX_SIZE + (2 * MenuScale), INVENTORY_GFX_SIZE + (2 * MenuScale))
+				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + (2 * MenuScale), INVENTORY_GFX_SIZE + (2 * MenuScale))
 			EndIf
 			
 			RenderFrame(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE, (x Mod 64), (x Mod 64))
@@ -6267,7 +6267,7 @@ Function RenderGUI%()
 			If IsMouseOn = n Then
 				MouseSlot = n
 				Color(255, 0, 0)
-				Rect(x - MenuScale, y - MenuScale, INVENTORY_GFX_SIZE + (2 * MenuScale), INVENTORY_GFX_SIZE + (2 * MenuScale))
+				Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + (2 * MenuScale), INVENTORY_GFX_SIZE + (2 * MenuScale))
 			EndIf
 			
 			Color(255, 255, 255)
@@ -6607,11 +6607,11 @@ Function RenderGUI%()
 											Local DrawX% = x + (PlayerX - x2) * (24 * MenuScale), DrawY% = y - (PlayerZ - z2) * (24 * MenuScale) 
 											
 											Color(30, 30, 30)
-											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
-											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), MenuScale, 24 * MenuScale)
+											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 1, 24 * MenuScale)
+											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), 1, 24 * MenuScale)
 											
-											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, MenuScale)
-											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, MenuScale)
+											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, 1)
+											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, 1)
 										EndIf
 									EndIf
 								Next
@@ -7184,6 +7184,10 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
+						opt\TextShadow = UpdateMenuTick(x, y, opt\TextShadow)
+						
+						y = y + (30 * MenuScale)
+						
 						opt\ShowFPS = UpdateMenuTick(x, y, opt\ShowFPS)
 						
 						y = y + (30 * MenuScale)
@@ -7735,6 +7739,11 @@ Function RenderMenu%()
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
+						Text2(x, y + (5 * MenuScale), GetLocalString("options", "txtshadow"))
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_TextShadow)
+						
+						y = y + (30 * MenuScale)
+						
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
 						

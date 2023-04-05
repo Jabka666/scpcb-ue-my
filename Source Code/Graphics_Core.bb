@@ -594,7 +594,22 @@ Function SetFont2%(Font%)
 End Function
 
 Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
-	Text(x, y + TextOffset, Txt, AlignX, AlignY)
+	If opt\TextShadow Then
+		Local ColorR# = ColorRed()
+		Local ColorG# = ColorGreen()
+		Local ColorB# = ColorBlue()
+		
+		If ColorR = 0.0 And ColorG = 0.0 And ColorB = 0.0 Then
+			Color(200, 200, 200)
+		Else
+			Color(55, 55, 55)
+		EndIf
+		Text(x + 1, y + TextOffset + 1, Txt, AlignX, AlignY)
+		Color(ColorR, ColorG, ColorB)
+		Text(x, y + TextOffset, Txt, AlignX, AlignY)
+	Else
+		Text(x, y + TextOffset, Txt, AlignX, AlignY)
+	EndIf
 End Function
 
 ;~IDEal Editor Parameters:

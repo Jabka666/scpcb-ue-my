@@ -827,6 +827,10 @@ Function UpdateMainMenu%()
 						
 						y = y + (30 * MenuScale)
 						
+						opt\TextShadow = UpdateMenuTick(x, y, opt\TextShadow)
+						
+						y = y + (30 * MenuScale)
+						
 						opt\ShowFPS = UpdateMenuTick(x, y, opt\ShowFPS)
 						
 						y = y + (30 * MenuScale)
@@ -1526,7 +1530,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Advanced
 					;[Block]
-					Height = 430 * MenuScale
+					Height = 460 * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1561,6 +1565,11 @@ Function RenderMainMenu%()
 					y = y + (30 * MenuScale)
 					
 					Color(255, 255, 255)
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "txtshadow"))
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_TextShadow)
+					
+					y = y + (30 * MenuScale)
+					
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
 					
@@ -2610,22 +2619,22 @@ Function RenderMenuScrollBars%()
 			Color(30, 30, 30)
 			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight)
 			Color(130, 130, 130)
-			Rect(msb\BarX + MenuScale, msb\BarY + MenuScale, msb\BarWidth - MenuScale, msb\BarHeight - MenuScale, False)
+			Rect(msb\BarX + 1, msb\BarY + 1, msb\BarWidth - 1, msb\BarHeight - 1, False)
 			Color(10, 10, 10)
 			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight, False)
 			Color(255, 255, 255)
-			Line(msb\BarX, msb\BarY + msb\BarHeight - MenuScale, msb\BarX + msb\BarWidth - MenuScale, msb\BarY + msb\BarHeight - MenuScale)
-			Line(msb\BarX + msb\BarWidth - MenuScale, msb\BarY, msb\BarX + msb\BarWidth - MenuScale, msb\BarY + msb\BarHeight - MenuScale)
+			Line(msb\BarX, msb\BarY + msb\BarHeight - 1, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
+			Line(msb\BarX + msb\BarWidth - 1, msb\BarY, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
 		Else
 			Color(100, 100, 100)
 			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight)
 			Color(130, 130, 130)
-			Rect(msb\BarX, msb\BarY, msb\BarWidth - MenuScale, msb\BarHeight - MenuScale, False)
+			Rect(msb\BarX, msb\BarY, msb\BarWidth - 1, msb\BarHeight - 1, False)
 			Color(255, 255, 255)
 			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight, False)
 			Color(10, 10, 10)
-			Line(msb\BarX, msb\BarY + msb\BarHeight - MenuScale, msb\BarX + msb\BarWidth - MenuScale, msb\BarY + msb\BarHeight - MenuScale)
-			Line(msb\BarX + msb\BarWidth - MenuScale, msb\BarY, msb\BarX + msb\BarWidth - MenuScale, msb\BarY + msb\BarHeight - MenuScale)
+			Line(msb\BarX, msb\BarY + msb\BarHeight - 1, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
+			Line(msb\BarX + msb\BarWidth - 1, msb\BarY, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
 		EndIf
 		
 		If (Not msb\Vertical) Then ; ~ Horizontal
@@ -2787,12 +2796,13 @@ Const Tooltip_AchievementPopups% = 26
 Const Tooltip_FPS% = 27
 Const Tooltip_FrameLimit% = 28
 Const Tooltip_AutoSave% = 29
-Const Tooltip_SmoothBars% = 30
-Const Tooltip_StartupVideos% = 31
-Const Tooltip_Launcher% = 32
-Const Tooltip_Subtitles% = 33
-Const Tooltip_SubtitlesColor% = 34
-Const Tooltip_ResetOptions% = 35
+Const Tooltip_TextShadow% = 30
+Const Tooltip_SmoothBars% = 31
+Const Tooltip_StartupVideos% = 32
+Const Tooltip_Launcher% = 33
+Const Tooltip_Subtitles% = 34
+Const Tooltip_SubtitlesColor% = 35
+Const Tooltip_ResetOptions% = 36
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -2972,6 +2982,10 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			Txt = Format(GetLocalString("tooltip", "autosave"), key\Name[key\SAVE])
 			R = 255 : G = 255
 			Txt2 = GetLocalString("tooltip", "autosave.note")
+			;[End Block]
+		Case Tooltip_TextShadow
+			;[Block]
+			Txt = GetLocalString("tooltip", "txtshadow")
 			;[End Block]
 		Case Tooltip_FPS
 			;[Block]

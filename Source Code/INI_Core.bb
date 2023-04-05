@@ -202,6 +202,7 @@ Type Options
 	Field ConsoleOpening%
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
+	Field TextShadow%
 	Field PlayStartup%
 	Field LauncherEnabled%
 	Field EnableSubtitles%
@@ -356,6 +357,8 @@ Function LoadOptionsINI%()
 	
 	opt\AutoSaveEnabled = IniGetInt(OptionFile, "Advanced", "Enable Auto Save", True)
 	
+	opt\TextShadow = IniGetInt(OptionFile, "Advanced", "Enable Text Shadow", False)
+	
 	opt\ShowFPS = IniGetInt(OptionFile, "Advanced", "Show FPS", False)
 	
 	opt\FrameLimit = IniGetInt(OptionFile, "Advanced", "Frame Limit", 0.0)
@@ -481,6 +484,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Advanced", "Enable Auto Save", opt\AutoSaveEnabled)
 	
+	IniWriteString(OptionFile, "Advanced", "Enable Text Shadow", opt\TextShadow)
+	
 	IniWriteString(OptionFile, "Advanced", "Show FPS", opt\ShowFPS)
 	
 	IniWriteString(OptionFile, "Advanced", "Frame Limit", opt\FrameLimit)
@@ -597,6 +602,8 @@ Function ResetOptionsINI%()
 	opt\AchvMsgEnabled = True
 	
 	opt\AutoSaveEnabled = True
+	
+	opt\TextShadow = False
 	
 	opt\ShowFPS = False
 	
