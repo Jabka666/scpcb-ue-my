@@ -310,9 +310,9 @@ Rooms:
 Bug Fixes:
 - Fixed button positions in «room2C_gw_2_lcz».
 - Fixed MAV while entering the SCP-970 loop again.
+- Fixed MAV in «cont_914» (the bug manifests itself while entering the «room2_nuke» for some reason).
 - Fixed electric box collision and ventilation grate lighting in «room2_6_hcz».
 - Fixed SCP-500-01 amount in SCP-500.
-- Fixed MAV in «cont_914» (the bug manifests itself while entering the «room2_nuke» for some reason).
 - Fixed wrong zone sections for Map Creator.
 - Fixed custom map shows a random seed in the menu.
 - Fixed elevator door in «room2_ic».
