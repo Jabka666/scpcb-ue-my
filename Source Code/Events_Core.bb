@@ -5619,7 +5619,7 @@ Function UpdateEvents%()
 							e\EventStr = "Load0"
 						EndIf
 						
-						If e\room\RoomDoors[1]\Open Then
+						If e\room\RoomDoors[1]\Open Lor e\room\RoomDoors[2]\Open Then
 							GiveAchievement(Achv205)
 							e\EventState = 1.0
 						EndIf

@@ -47,6 +47,7 @@ Rooms:
 
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
 
+- Improved SCP-205's containment chamber.
 - Improved SCP-096's containment chamber design.
 - Improved some rooms design.
 

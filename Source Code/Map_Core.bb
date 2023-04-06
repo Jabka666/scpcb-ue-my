@@ -4306,7 +4306,11 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(r\RoomDoors[0]\Buttons[i]) : r\RoomDoors[0]\Buttons[i] = 0
 			Next
 			
-			r\RoomDoors.Doors[1] = CreateDoor(r\x + 128.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_CARD_3)
+			r\RoomDoors.Doors[1] = CreateDoor(r\x + 128.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_CARD_2)
+			
+			r\RoomDoors.Doors[2] = CreateDoor(r\x - 96.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_2)
+			
+			d.Doors = CreateDoor(r\x + 472.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_1)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, r, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
@@ -4321,10 +4325,19 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[1] = sc\ScrOBJ
 			
-			it.Items = CreateItem("Document SCP-205", "paper", r\x - 357.0 * RoomScale, r\y + 120.0 * RoomScale, r\z + 50.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-205", "paper", r\x - 357.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			CreateCustomCenter(r\x + 465.0 * RoomScale, r\z, r)
+			it.Items = CreateItem("Ballistic Helmet", "helmet", r\x + 206.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 80.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x + 206.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 180.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Level 2 Key Card", "key2", r\x - 975.0 * RoomScale, r\y - 5.0 * RoomScale, r\z + 650.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x + 188.0 * RoomScale, r\z - 724.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_372"
 			;[Block]
