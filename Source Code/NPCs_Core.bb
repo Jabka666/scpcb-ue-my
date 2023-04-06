@@ -1092,13 +1092,7 @@ Function UpdateNPCs%()
 							SetNPCFrame(n, 110.0)
 							
 							If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
-								If PlayerRoom\RoomTemplate\Name <> "gate_a" Then
-									If SelectedDifficulty\AggressiveNPCs Then
-										n\State = n\State - (fps\Factor[0] * 2.0)
-									Else
-										n\State = n\State - fps\Factor[0]
-									EndIf
-								EndIf
+								If PlayerRoom\RoomTemplate\Name <> "gate_a" Then n\State = n\State - (fps\Factor[0] * (1.0 + (SelectedDifficulty\AggressiveNPCs)))
 							EndIf
 						EndIf
 						
