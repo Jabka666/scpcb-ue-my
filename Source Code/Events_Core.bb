@@ -6817,7 +6817,7 @@ Function UpdateEvents%()
 					EndIf
 					If (Not e\room\RoomDoors[1]\Open) Then
 						CanSave = 0
-						If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * (1.7 + (SelectedDifficulty\AggressiveNPCs)))
+						If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * (1.8 + (SelectedDifficulty\AggressiveNPCs)))
 					EndIf
 					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
 				EndIf
