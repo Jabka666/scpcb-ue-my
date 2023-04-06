@@ -1320,7 +1320,9 @@ Function LoadGame%(File$)
 		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
 	EndIf
 	
-	UpdateRoomLightsTimer = 0.0
+	For i = False To True
+		TurnCheckpointMonitorsOff(i)
+	Next
 	
 	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
@@ -2079,6 +2081,10 @@ Function LoadGameQuick%(File$)
 				Update035Label(r\Objects[6])
 				;[End Block]
 		End Select
+	Next
+	
+	For i = False To True
+		TurnCheckpointMonitorsOff(i)
 	Next
 	
 	; ~ Resetting some stuff (those get changed when going to the endings)

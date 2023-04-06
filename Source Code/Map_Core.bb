@@ -3622,7 +3622,7 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 	
 	Entity = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
 	
-	If mon_I\UpdateCheckpoint[0] Lor mon_I\UpdateCheckpoint[1] Then
+	If mon_I\UpdateCheckpoint[(1 - LCZ)] Then
 		For i = 2 To CountSurfaces(Entity)
 			SF = GetSurface(Entity, i)
 			b = GetSurfaceBrush(SF)
