@@ -7900,7 +7900,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont1_005
 				;[Block]
-				If (Not n_I\Curr106\Contained) And I_005\ChanceToSpawn = 1 Then
+				If (Not n_I\Curr106\Contained) And I_005\ChanceToSpawn < 3 Then
 					If PlayerRoom = e\room Then
 						If e\EventState = 0.0 Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69 Then
