@@ -6580,8 +6580,8 @@ Function UpdateEvents%()
 						me\BlurTimer = e\EventState2 * 500.0
 						
 						If e\EventState2 = 2.0 Then
-							me\Playable = True
 							MoveToPocketDimension()
+							me\Playable = True
 						EndIf
 					Else
 						If chs\NoClip Then me\Playable = True
@@ -7906,18 +7906,9 @@ Function UpdateEvents%()
 							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69 Then
 								PlaySound_Strict(HorrorSFX[10])
 								
-								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
-								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
-								EntityParent(de\OBJ, e\room\OBJ)
-								
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityY(e\room\RoomDoors[0]\FrameOBJ, True) + 0.005, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), 90.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
 								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
 								EntityParent(de\OBJ, e\room\OBJ)
-								
-								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
-								ResetEntity(n_I\Curr106\Collider)
-								n_I\Curr106\State = -10.0
-								ShowEntity(n_I\Curr106\OBJ)
 								
 								e\EventState = 1.0
 							EndIf
@@ -7949,8 +7940,8 @@ Function UpdateEvents%()
 									me\BlurTimer = e\EventState2 * 500.0
 									
 									If e\EventState2 = 2.0 Then
-										me\Playable = True
 										MoveToPocketDimension()
+										me\Playable = True
 									EndIf
 								Else
 									If chs\NoClip Then me\Playable = True

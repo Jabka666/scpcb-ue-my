@@ -17,6 +17,7 @@ General:
 - Added text shadow option.
 
 - Removed «playmusic» console command.
+- Removed SCP-106 from SCP-005's containment chamber event.
 
 - Improved fluid step sounds.
 
