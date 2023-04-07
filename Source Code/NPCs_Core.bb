@@ -1761,11 +1761,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If n\CurrSpeed > 0.005 Then
-									If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
-										PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
-									ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0)
-										PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
-									EndIf
+									If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 								EndIf
 								
 								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
@@ -1878,11 +1874,7 @@ Function UpdateNPCs%()
 							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then ShouldPlay = 19
 							
 							If n\CurrSpeed > 0.005 Then
-								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Then
-									PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
-								ElseIf (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0)
-									PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
-								EndIf
+								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 							EndIf
 							
 							UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ)
@@ -4897,7 +4889,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								
 								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								If NewDist < 1.0 Then UseDoorNPC(n)
+								If NewDist < 1.0 Then UseDoorNPC(n, True, True)
 								
 								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
 							EndIf
@@ -5248,7 +5240,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
-									If NewDist < 1.0 Then UseDoorNPC(n)
+									If NewDist < 1.0 Then UseDoorNPC(n, True, True)
 									
 									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
 								EndIf
@@ -5523,7 +5515,7 @@ Function UpdateMTFUnit%(n.NPCs)
 										
 										NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										
-										If NewDist < 1.0 Then UseDoorNPC(n)
+										If NewDist < 1.0 Then UseDoorNPC(n, True, True)
 										
 										If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
 									EndIf
@@ -5557,7 +5549,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
-							UseDoorNPC(n)
+							UseDoorNPC(n, True, True)
 							
 							If Dist < PowTwo(HideDistance) Then
 								PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
@@ -5696,7 +5688,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
-									If NewDist < 4.0 Then UseDoorNPC(n)
+									If NewDist < 4.0 Then UseDoorNPC(n, True, True)
 									
 									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
 								EndIf
@@ -5860,7 +5852,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								
 								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								If NewDist < 1.0 Then UseDoorNPC(n)
+								If NewDist < 1.0 Then UseDoorNPC(n, True, True)
 								
 								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
 							EndIf
@@ -5985,7 +5977,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 									
-									If NewDist < 1.0 Then UseDoorNPC(n)
+									If NewDist < 1.0 Then UseDoorNPC(n, True, True)
 									
 									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
 								EndIf
@@ -6078,7 +6070,7 @@ Function UpdateMTFUnit%(n.NPCs)
 										
 										NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 										
-										If NewDist < 1.0 Then UseDoorNPC(n)
+										If NewDist < 1.0 Then UseDoorNPC(n, True, True)
 										
 										If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
 									EndIf
@@ -6817,11 +6809,11 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	Return(True)
 End Function
 
-Function UseDoorNPC%(n.NPCs, PlaySFX% = True)
+Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 	If n\NPCType = NPCTypeMTF Then
 		If n\Path[n\PathLocation]\door <> Null Then
 			If (Not n\Path[n\PathLocation]\door\Open) Then
-				OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX)
+				OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
 				If PlaySFX Then PlayMTFSound(MTFSFX[0], n)
 				If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 			EndIf
@@ -6837,7 +6829,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True)
 					Temp = False
 				Else
 					If (Not n\Path[n\PathLocation]\door\Open) Then
-						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX)
+						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
 						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 3.0
 					EndIf
 				EndIf

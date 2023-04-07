@@ -2061,6 +2061,7 @@ Type Doors
 	Field IsElevatorDoor% = False
 	Field MTFClose% = True
 	Field ElevatorPanel%[2]
+	Field PlayCautionSFX%
 End Type
 
 ; ~ Door ID Constants
@@ -2342,7 +2343,7 @@ Function UpdateDoors%()
 					If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
 					If d\TimerState > 0.0 Then
 						d\TimerState = Max(0.0, d\TimerState - fps\Factor[0])
-						If d\TimerState + fps\Factor[0] > 110.0 And d\TimerState <= 110.0 Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
+						If d\PlayCautionSFX And (d\TimerState + fps\Factor[0] > 110.0 And d\TimerState <= 110.0) Then d\SoundCHN = PlaySound2(CautionSFX, Camera, d\OBJ)
 						If d\TimerState = 0.0 Then OpenCloseDoor(d)
 					EndIf
 					If d\AutoClose And RemoteDoorOn Then
@@ -3036,8 +3037,10 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 	OpenCloseDoor(d, PlaySFX)
 End Function
 
-Function OpenCloseDoor%(d.Doors, PlaySFX% = True)
+Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 	d\Open = (Not d\Open)
+	d\PlayCautionSFX = PlayCautionSFX
+	
 	If d\LinkedDoor <> Null Then d\LinkedDoor\Open = (Not d\LinkedDoor\Open)
 	
 	If d\Open Then
