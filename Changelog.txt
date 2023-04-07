@@ -63,6 +63,8 @@ Rooms:
 
 - Night vision doesn't work inside the Pocket Dimension. If you'll use it, you'll get more damage.
 
+- Increased SCP-005's spawnrate in the containment chamber.
+
 Items:
 - Renamed some console item names.
 - Renamed Severed Hand to White/Yellow Severed Hand.
