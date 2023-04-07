@@ -1132,6 +1132,10 @@ Function LoadGame%(File$)
 				;[Block]
 				If e\EventState2 = 0.0 Then PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), (-1280.0) * RoomScale, EntityZ(e\room\Objects[2], True), True)
 				;[End Block]
+			Case e_cont2_008
+				;[Block]
+				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, 0.0, 0.0, True)
+				;[End Block]
 		End Select
 	Next
 	
@@ -1877,6 +1881,10 @@ Function LoadGameQuick%(File$)
 			Case e_cont2_860_1
 				;[Block]
 				If e\EventState = 1.0 Then ShowEntity(e\room\fr\Forest_Pivot)
+				;[End Block]
+			Case e_cont2_008
+				;[Block]
+				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, 0.0, 0.0, True)
 				;[End Block]
 		End Select
 	Next
