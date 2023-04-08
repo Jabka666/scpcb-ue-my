@@ -612,7 +612,10 @@ Function UpdateMainMenu%()
 									For i = 0 To MaxChannelsAmount - 1
 										StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
 									Next
-									If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+									If snd\InternalHandle <> 0 Then
+										FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+										DeleteSubtiltes(snd\Name)
+									EndIf
 									snd\ReleaseTime = 0
 								Next
 							Else

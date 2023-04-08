@@ -31,7 +31,10 @@ Function AutoReleaseSounds%()
 		
 		If TryRelease Then
 			If snd\ReleaseTime < MilliSecs() Then
-				If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+				If snd\InternalHandle <> 0 Then
+					FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+					DeleteSubtiltes(snd\Name)
+				EndIf
 			EndIf
 		EndIf
 	Next
@@ -39,6 +42,7 @@ End Function
 
 Function PlaySound_Strict%(SoundHandle%)
 	Local snd.Sound = Object.Sound(SoundHandle)
+	Local sub.Subtitles
 	
 	If snd <> Null Then
 		Local ShouldPlay% = True
@@ -52,7 +56,10 @@ Function PlaySound_Strict%(SoundHandle%)
 							CreateConsoleMsg(Format(GetLocalString("runerr", "sound.notfound"), snd\Name))
 							OpenConsoleOnError()
 						Else
-							If opt\EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
+							If opt\EnableSFXRelease Then
+								snd\InternalHandle = LoadSound(snd\Name)
+								sub.Subtitles = CreateSubtitles(snd\Name)
+							EndIf
 						EndIf
 						If (Not snd\InternalHandle) Then
 							CreateConsoleMsg(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
@@ -64,7 +71,6 @@ Function PlaySound_Strict%(SoundHandle%)
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
 					EndIf
-					ShowSubtitles(snd\Name)
 					ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 					snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
@@ -75,7 +81,10 @@ Function PlaySound_Strict%(SoundHandle%)
 						CreateConsoleMsg(Format(GetLocalString("runerr", "sound.notfound"), snd\Name))
 						OpenConsoleOnError()
 					Else
-						If opt\EnableSFXRelease Then snd\InternalHandle = LoadSound(snd\Name)
+						If opt\EnableSFXRelease Then
+							snd\InternalHandle = LoadSound(snd\Name)
+							sub.Subtitles = CreateSubtitles(snd\Name)
+						EndIf
 					EndIf
 						
 					If (Not snd\InternalHandle) Then
@@ -88,7 +97,6 @@ Function PlaySound_Strict%(SoundHandle%)
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 				EndIf
-				ShowSubtitles(snd\Name)
 				ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 				snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
@@ -102,13 +110,17 @@ Function LoadSound_Strict%(File$)
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	
 	Local snd.Sound
+	Local sub.Subtitles
 	
 	snd.Sound = New Sound
 	snd\Name = File
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0
 	If (Not opt\EnableSFXRelease) Then
-		If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
+		If (Not snd\InternalHandle) Then
+			snd\InternalHandle = LoadSound(snd\Name)
+			sub.Subtitles = CreateSubtitles(snd\Name)
+		EndIf
 	EndIf
 	Return(Handle(snd))
 End Function
@@ -117,7 +129,10 @@ Function FreeSound_Strict%(SoundHandle%)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	
 	If snd <> Null Then
-		If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+		If snd\InternalHandle <> 0 Then
+			FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+			DeleteSubtiltes(snd\Name)
+		EndIf
 		snd\ReleaseTime = 0
 		Delete(snd)
 	EndIf
@@ -141,7 +156,6 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	Local st.Stream = New Stream
 	
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
-	ShowSubtitles(File)
 	
 	If st\CHN = -1 Then
 		CreateConsoleMsg(Format(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File, "{0}"), st\CHN, "{1}"))
