@@ -2821,10 +2821,9 @@ Function UpdateNPCs%()
 							PositionEntity(n\Collider, 0.0, 500.0, 0.0)
 						EndIf
 					EndIf
+					n\DropSpeed = 0.0
+					ResetEntity(n\Collider)
 				EndIf
-				
-				n\DropSpeed = 0.0
-				ResetEntity(n\Collider)
 				;[End Block]
 			Case NPCTypeApache
 				;[Block]
@@ -6650,7 +6649,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "1499-1", "14991", "scp-1499-1", "scp1499-1", "scp-14991", "scp14991"
 			n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-1499-1"), 255, 0, 0)
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-1499-1")
 			;[End Block]
 		Case "class-d", "classd", "d"
 			;[Block]
