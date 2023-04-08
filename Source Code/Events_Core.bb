@@ -2274,6 +2274,8 @@ Function UpdateEvents%()
 							RemoveEvent(e)
 						EndIf
 					EndIf
+				Else
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_gate_b_entrance
@@ -3766,35 +3768,44 @@ Function UpdateEvents%()
 							de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
 							EntityParent(de\OBJ, e\room\OBJ)
 						EndIf
-						If e\EventState > 250.0 Then n_I\Curr106\Idle = 0 : RemoveEvent(e)
+						If e\EventState > 250.0 Then
+							n_I\Curr106\Idle = 0
+							RemoveEvent(e)
+						EndIf
 					EndIf
+				Else
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_room2_4_hcz_106
 				;[Block]
-				If (Not n_I\Curr106\Contained) And n_I\Curr106\State > 0.0 Then
-					If e\EventState = 0.0 Then
-						If PlayerRoom = e\room Then e\EventState = 1.0
-					Else
-						e\EventState = e\EventState + 1.0
-						PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
-						ResetEntity(n_I\Curr106\Collider)
-						
-						PointEntity(n_I\Curr106\Collider, Camera)
-						TurnEntity(n_I\Curr106\Collider, 0.0, Sin(MilliSecs() / 20) * 6.0, 0.0, True)
-						MoveEntity(n_I\Curr106\Collider, 0.0, 0.0, Sin(MilliSecs() / 15) * 0.06)
-						PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider) - 0.15, EntityZ(n_I\Curr106\Collider))
-						
-						RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
-						n_I\Curr106\Idle = 1
-						AnimateNPC(n_I\Curr106, 334.0, 494.0, 0.3)
-						If e\EventState > 800.0 Then
-							If me\BlinkTimer < -5.0 Then
-								n_I\Curr106\Idle = 0
-								RemoveEvent(e)
+				If (Not n_I\Curr106\Contained)
+					If n_I\Curr106\State > 0.0 Then
+						If e\EventState = 0.0 Then
+							If PlayerRoom = e\room Then e\EventState = 1.0
+						Else
+							e\EventState = e\EventState + 1.0
+							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+							ResetEntity(n_I\Curr106\Collider)
+							
+							PointEntity(n_I\Curr106\Collider, Camera)
+							TurnEntity(n_I\Curr106\Collider, 0.0, Sin(MilliSecs() / 20) * 6.0, 0.0, True)
+							MoveEntity(n_I\Curr106\Collider, 0.0, 0.0, Sin(MilliSecs() / 15) * 0.06)
+							PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider) - 0.15, EntityZ(n_I\Curr106\Collider))
+							
+							RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
+							n_I\Curr106\Idle = 1
+							AnimateNPC(n_I\Curr106, 334.0, 494.0, 0.3)
+							If e\EventState > 800.0 Then
+								If me\BlinkTimer < -5.0 Then
+									n_I\Curr106\Idle = 0
+									RemoveEvent(e)
+								EndIf
 							EndIf
 						EndIf
 					EndIf
+				Else
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_room2_4_hcz
@@ -3932,7 +3943,9 @@ Function UpdateEvents%()
 							me\HeartBeatVolume = CurveValue(0.5, me\HeartBeatVolume, 5.0)
 							me\HeartBeatRate = CurveValue(120.0, me\HeartBeatRate, 150.0) 
 							e\SoundCHN = LoopSound2(OldManSFX[4], e\SoundCHN, Camera, e\room\OBJ, 5.0, 0.3)
-							If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
+							If (Not n_I\Curr106\Contained) Then
+								If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
+							EndIf
 							InjurePlayer(fps\Factor[0] * 0.00005)
 						EndIf
 					EndIf
@@ -6275,65 +6288,66 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_5_hcz_106
 				;[Block]
-				If e\EventState = 0.0 Then
-					If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
-						If n_I\Curr106\State >= 0.0 Then
-							e\EventState = 1.0
-						Else
-							If n_I\Curr106\State <= -10.0 And EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) > 25.0 And (Not EntityInView(n_I\Curr106\OBJ, Camera)) Then
+				If (Not n_I\Curr106\Contained) Then
+					If e\EventState = 0.0 Then
+						If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
+							If n_I\Curr106\State >= 0.0 Then
 								e\EventState = 1.0
-								e\EventState2 = 1.0
+							Else
+								If n_I\Curr106\State <= -10.0 And EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) > 25.0 And (Not EntityInView(n_I\Curr106\OBJ, Camera)) Then
+									e\EventState = 1.0
+									e\EventState2 = 1.0
+								EndIf
 							EndIf
 						EndIf
-					ElseIf n_I\Curr106\Contained
-						RemoveEvent(e)
-					EndIf
-				ElseIf e\EventState = 1.0
-					If e\room\Dist < 3.0 Lor Rand(7000) = 1 Then
-						e\EventState = 2.0
-						de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\OBJ), e\room\y + 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
-						EntityParent(de\OBJ, e\room\OBJ)
-						
-						PlaySound_Strict(HorrorSFX[10])
-					ElseIf e\room\Dist > 8.0
-						If Rand(5) = 1 Then
-							n_I\Curr106\Idle = 0
+					ElseIf e\EventState = 1.0
+						If e\room\Dist < 3.0 Lor Rand(7000) = 1 Then
+							e\EventState = 2.0
+							de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\OBJ), e\room\y + 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+							EntityParent(de\OBJ, e\room\OBJ)
+							
+							PlaySound_Strict(HorrorSFX[10])
+						ElseIf e\room\Dist > 8.0
+							If Rand(5) = 1 Then
+								n_I\Curr106\Idle = 0
+							Else
+								n_I\Curr106\State = -10000.0 : n_I\Curr106\Idle = 0
+							EndIf
 							RemoveEvent(e)
+						EndIf
+					Else
+						If e\EventState2 = 1.0 Then ShouldPlay = 10
+						e\EventState = e\EventState + fps\Factor[0]
+						If e\EventState <= 180.0 Then
+							n_I\Curr106\State = 1.0 : n_I\Curr106\Idle = 1 : n_I\Curr106\DropSpeed = 0.0
+							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), EntityY(me\Collider) + 1.0 - Min(Sin(e\EventState) * 1.5, 1.1), EntityZ(e\room\OBJ, True), True)
+							PointEntity(n_I\Curr106\Collider, Camera)
+							AnimateNPC(n_I\Curr106, 55.0, 104.0, 0.1)
+							ResetEntity(n_I\Curr106\Collider)
+							PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider) - 0.15, EntityZ(n_I\Curr106\Collider))
+							RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
+							If EntityHidden(n_I\Curr106\OBJ) Then ShowEntity(n_I\Curr106\OBJ)
+						ElseIf e\EventState > 180.0 And e\EventState < 300.0 Then
+							n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0 : n_I\Curr106\PathTimer = 70.0 * 10.0 : n_I\Curr106\PathStatus = 0 : n_I\Curr106\PathLocation = 0
+							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
+							ResetEntity(n_I\Curr106\Collider)
+							de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+							de\SizeChange = 0.01
+							EntityParent(de\OBJ, e\room\OBJ)
+							e\EventState = 300.0
+						ElseIf e\EventState < 800.0
+							If EntityY(n_I\Curr106\Collider) >= EntityY(me\Collider) - 0.05 Then
+								RemoveEvent(e)
+							Else
+								TranslateEntity(n_I\Curr106\Collider, 0.0, ((EntityY(me\Collider, True) - 0.11) - EntityY(n_I\Curr106\Collider)) / 50.0, 0.0)
+								If EntityY(n_I\Curr106\Collider) < -0.1 Then n_I\Curr106\CurrSpeed = 0.0
+							EndIf
 						Else
-							n_I\Curr106\State = -10000.0 : n_I\Curr106\Idle = 0
 							RemoveEvent(e)
 						EndIf
 					EndIf
 				Else
-					If e\EventState2 = 1.0 Then ShouldPlay = 10
-					e\EventState = e\EventState + fps\Factor[0]
-					If e\EventState <= 180.0 Then
-						n_I\Curr106\State = 1.0 : n_I\Curr106\Idle = 1 : n_I\Curr106\DropSpeed = 0.0
-						PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), EntityY(me\Collider) + 1.0 - Min(Sin(e\EventState) * 1.5, 1.1), EntityZ(e\room\OBJ, True), True)
-						PointEntity(n_I\Curr106\Collider, Camera)
-						AnimateNPC(n_I\Curr106, 55.0, 104.0, 0.1)
-						ResetEntity(n_I\Curr106\Collider)
-						PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider) - 0.15, EntityZ(n_I\Curr106\Collider))
-						RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
-						If EntityHidden(n_I\Curr106\OBJ) Then ShowEntity(n_I\Curr106\OBJ)
-					ElseIf e\EventState > 180.0 And e\EventState < 300.0 Then
-						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0 : n_I\Curr106\PathTimer = 70.0 * 10.0 : n_I\Curr106\PathStatus = 0 : n_I\Curr106\PathLocation = 0
-						PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
-						ResetEntity(n_I\Curr106\Collider)
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
-						de\SizeChange = 0.01
-						EntityParent(de\OBJ, e\room\OBJ)
-						e\EventState = 300.0
-					ElseIf e\EventState < 800.0
-						If EntityY(n_I\Curr106\Collider) >= EntityY(me\Collider) - 0.05 Then
-							RemoveEvent(e)
-						Else
-							TranslateEntity(n_I\Curr106\Collider, 0.0, ((EntityY(me\Collider, True) - 0.11) - EntityY(n_I\Curr106\Collider)) / 50.0, 0.0)
-							If EntityY(n_I\Curr106\Collider) < -0.1 Then n_I\Curr106\CurrSpeed = 0.0
-						EndIf
-					Else
-						RemoveEvent(e)
-					EndIf
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_room2_test_lcz_173
@@ -6544,6 +6558,8 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					EndIf
+				Else
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_106_sinkhole
@@ -6817,7 +6833,9 @@ Function UpdateEvents%()
 					EndIf
 					If (Not e\room\RoomDoors[1]\Open) Then
 						CanSave = 0
-						If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * (1.8 + (SelectedDifficulty\AggressiveNPCs)))
+						If (Not n_I\Curr106\Contained) Then
+							If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * (1.8 + (SelectedDifficulty\AggressiveNPCs)))
+						EndIf
 					EndIf
 					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
 				EndIf
