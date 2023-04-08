@@ -153,6 +153,7 @@ Bug fixes:
 - Fixed open door SFX for the forest door.
 - Fixed SCP-096's idle ambient sound playing even if player teleported far away.
 - Fixed an issue that caused SCP-008's container to get a closed state after loading a save.
+- Fixed «STOP HIDING!» string not working while using pause menu.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.

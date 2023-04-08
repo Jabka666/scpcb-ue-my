@@ -2666,10 +2666,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							EndIf
 							
 							TeleportEntity(n\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(n\Collider, True) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, n\CollRadius, True)
-							If n = n_I\Curr173 Then n_I\Curr173\IdleTimer = 70.0 * 2.0
-							If n_I\Curr049 <> Null Then
-								If n = n_I\Curr049 Then n_I\Curr049\IdleTimer = 70.0 * 2.0
-							EndIf
 						EndIf
 					Next
 					
@@ -2768,10 +2764,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								z = Max(Min((EntityZ(n\Collider, True) - EntityZ(SecondPivot, True)), (280.0 * RoomScale) - 0.22), ((-280.0) * RoomScale) + 0.22)
 							EndIf
 							TeleportEntity(n\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(n\Collider, True) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, n\CollRadius, True)
-							If n = n_I\Curr173 Then n_I\Curr173\IdleTimer = 70.0 * 2.0
-							If n_I\Curr049 <> Null Then
-								If n = n_I\Curr049 Then n_I\Curr049\IdleTimer = 70.0 * 2.0
-							EndIf
 						EndIf
 					Next
 					

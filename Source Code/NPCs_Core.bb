@@ -591,7 +591,7 @@ Function UpdateNPCs%()
 		Select n\NPCType
 			Case NPCType173
 				;[Block]
-				If n_I\Curr173\Idle <> 3 And (Not IsPlayerOutsideFacility()) Then
+				If n\Idle <> 3 And (Not IsPlayerOutsideFacility()) Then
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					
 					n\State3 = 1.0

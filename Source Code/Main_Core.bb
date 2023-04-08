@@ -2535,15 +2535,18 @@ Function ResetNegativeStats%(Revive% = False)
 		ClearCheats()
 		
 		; ~ If death by SCP-173 or SCP-106, enable GodMode, prevent instant death again -- Salvage
-		If n_I\Curr173 <> Null Then
 		If n_I\Curr173\Idle = 1 Then
 			CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-173"))
-				chs\GodMode = True
-				n_I\Curr173\Idle = 0
-			EndIf
-		ElseIf n_I\Curr106 <> Null
-			If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 4.0 Then
-				CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-106"))
+			chs\GodMode = True
+			n_I\Curr173\Idle = 0
+		EndIf
+		If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 4.0 Then
+			CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-106"))
+			chs\GodMode = True
+		EndIf
+		If n_I\Curr049 <> Null Then
+			If EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) < 4.0 Then
+				CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-049"))
 				chs\GodMode = True
 			EndIf
 		EndIf
@@ -5885,16 +5888,13 @@ Function RenderDebugHUD%()
 				Text2(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_3.096idle"), n_I\Curr096\Idle))
 				Text2(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_3.096state"), n_I\Curr096\State))
 			EndIf
-			If n_I\Curr106 <> Null Then
-				Text2(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
-				Text2(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_3.106idle"), n_I\Curr106\Idle))
-				Text2(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_3.106state"), n_I\Curr106\State))
-			EndIf
-			If n_I\Curr173 <> Null Then
-				Text2(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
-				Text2(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_3.173idle"), n_I\Curr173\Idle))
-				Text2(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_3.173state"), n_I\Curr173\State))
-			EndIf
+			Text2(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
+			Text2(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_3.106idle"), n_I\Curr106\Idle))
+			Text2(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_3.106state"), n_I\Curr106\State))
+			
+			Text2(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
+			Text2(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_3.173idle"), n_I\Curr173\Idle))
+			Text2(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_3.173state"), n_I\Curr173\State))
 			
 			Text2(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_3.pill"), I_500\Taken))
 			
@@ -6821,22 +6821,18 @@ Function UpdateMenu%()
 	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen Then
-		If (Not IsPlayerOutsideFacility()) Then
+		If (Not IsPlayerOutsideFacility()) And (Not me\Terminated) Then
 			If me\StopHidingTimer = 0.0 Then
-				If n_I\Curr173 <> Null And n_I\Curr106 <> Null Then
-					If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 16.0 Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 16.0 Then me\StopHidingTimer = 1.0
-				EndIf
-			ElseIf me\StopHidingTimer < 40.0
-				If (Not me\Terminated) Then
-					me\StopHidingTimer = me\StopHidingTimer + fps\Factor[0]
-					If me\StopHidingTimer >= 40.0 Then
-						PlaySound_Strict(HorrorSFX[15])
-						CreateMsg(GetLocalString("msg", "stophiding"))
-						ShouldDeleteGadgets = True
-						MenuOpen = False
-						Return
-					EndIf
-				EndIf
+				If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 2.25 Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 2.25 Then me\StopHidingTimer = 1.0
+			ElseIf me\StopHidingTimer < 60.0
+				me\StopHidingTimer = me\StopHidingTimer + fps\Factor[1]
+			Else
+				me\StopHidingTimer = 0.0
+				PlaySound_Strict(HorrorSFX[15])
+				CreateHintMsg(GetLocalString("msg", "stophiding"))
+				ShouldDeleteGadgets = True
+				MenuOpen = False
+				Return
 			EndIf
 		EndIf
 		

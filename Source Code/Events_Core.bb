@@ -2202,7 +2202,7 @@ Function UpdateEvents%()
 				If (Not n_I\Curr106\Contained) Then
 					If e\EventState = 0.0 Then
 						If e\room\Dist < 8.0 And e\room\Dist > 0.0 Then
-							If n_I\Curr106\State =< 0.0 Then 
+							If n_I\Curr106\State =< 0.0 Then
 								RemoveEvent(e)
 							Else
 								e\room\RoomDoors[0]\Open = True
@@ -2949,7 +2949,7 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room Then
 					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 4.0 Then
-						If EntityDistanceSquared(me\Collider, n_I\Curr173\OBJ) < 36.0 Lor EntityDistanceSquared(me\Collider, n_I\Curr106\OBJ) < 36.0 Then
+						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 36.0 Lor EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 36.0 Then
 							RemoveEvent(e)
 						Else
 							Pvt = CreatePivot()
@@ -4154,13 +4154,13 @@ Function UpdateEvents%()
 						e\room\RoomDoors[1]\Locked = 0
 						e\room\RoomDoors[4]\Locked = 0
 						
-						If EntityDistanceSquared(me\Collider, n_I\Curr173\OBJ) < 64.0 Lor EntityDistanceSquared(me\Collider, n_I\Curr106\OBJ) < 64.0 Then
+						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 64.0 Lor EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 64.0 Then
 							e\room\RoomDoors[1]\Locked = 1
 							e\room\RoomDoors[4]\Locked = 1
 						Else
 							For n.NPCs = Each NPCs
 								If n\NPCType = NPCTypeMTF Then
-									If EntityDistanceSquared(me\Collider, n_I\Curr173\OBJ) < 64.0 Then
+									If EntityDistanceSquared(n\Collider, n_I\Curr173\Collider) < 64.0 Then
 										e\room\RoomDoors[1]\Locked = 1
 										e\room\RoomDoors[4]\Locked = 1
 										Exit
