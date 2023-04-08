@@ -669,6 +669,10 @@ Function LoadGame%(File$)
 	
 	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
 	
+	For n.NPCs = Each NPCs
+		RemoveNPC(n)
+	Next
+	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		Local NPCType% = ReadByte(f)
@@ -1082,10 +1086,13 @@ Function LoadGame%(File$)
 	
 	Local e.Events
 	
+	For e.Events = Each Events
+		RemoveEvent(e)
+	Next
+	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		e.Events = New Events
-		
 		e\EventID = ReadByte(f)
 		e\EventState = ReadFloat(f)
 		e\EventState2 = ReadFloat(f)
