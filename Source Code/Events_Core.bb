@@ -5911,9 +5911,7 @@ Function UpdateEvents%()
 						CameraFogRange(Camera, 0.05, 8.0)
 					Else
 						If (Not n_I\Curr106\Contained) Then n_I\Curr106\Idle = 0
-						If fr\Forest_Pivot <> 0 Then
-							If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
-						EndIf
+						If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
 						; ~ Reset the doors after leaving the forest
 						For i = 0 To 1
 							fr\ForestDoors[i]\Open = False
@@ -5971,9 +5969,7 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					If fr <> Null Then
-						If fr\Forest_Pivot <> 0 Then
-							If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
-						EndIf
+						If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
 						e\EventState = 0.0
 					Else
 						RemoveEvent(e)
