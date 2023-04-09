@@ -2020,6 +2020,7 @@ End Function
 
 Function UpdateButton%(OBJ%)
 	Local Dist# = EntityDistanceSquared(me\Collider, OBJ)
+	Local Result% = False
 	
 	If Dist < 0.64 Then
 		Local Temp% = CreatePivot()
@@ -2028,14 +2029,14 @@ Function UpdateButton%(OBJ%)
 		PointEntity(Temp, OBJ)
 		
 		If EntityPick(Temp, 0.6) = OBJ Then
-			If (Not d_I\ClosestButton) Then
+			If (Not d_I\ClosestButton) Lor Dist < EntityDistanceSquared(me\Collider, d_I\ClosestButton) Then
 				d_I\ClosestButton = OBJ
-			Else
-				If Dist < EntityDistanceSquared(me\Collider, d_I\ClosestButton) Then d_I\ClosestButton = OBJ
+				Result = True
 			EndIf
 		EndIf
-		FreeEntity(Temp)
+		FreeEntity(Temp) : Temp = 0
 	EndIf
+	Return(Result)
 End Function
 
 Type BrokenDoor
@@ -2260,23 +2261,7 @@ Function UpdateDoors%()
 					If d\Buttons[i] <> 0 Then
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 Then
 							If Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0 Then
-								Dist = DistanceSquared(EntityX(me\Collider, True), EntityX(d\Buttons[i], True), EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True))
-								If Dist < 0.64 Then
-									Local Temp% = CreatePivot()
-									
-									PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-									PointEntity(Temp, d\Buttons[i])
-									
-									If EntityPick(Temp, 0.6) = d\Buttons[i] Then
-										If (Not d_I\ClosestButton) Then
-											d_I\ClosestButton = d\Buttons[i]
-											d_I\ClosestDoor = d
-										Else
-											If Dist < EntityDistanceSquared(me\Collider, d_I\ClosestButton) Then d_I\ClosestButton = d\Buttons[i] : d_I\ClosestDoor = d
-										EndIf
-									EndIf
-									FreeEntity(Temp)
-								EndIf
+								If UpdateButton(d\Buttons[i]) Then d_I\ClosestDoor = d
 							EndIf
 						EndIf
 					EndIf
