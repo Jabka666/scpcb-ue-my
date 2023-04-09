@@ -5776,6 +5776,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[7] = LoadMesh_Strict("GFX\Map\cont1_106_hb.b3d", r\OBJ)
 			r\HideObject[7] = False
 			EntityPickMode(r\Objects[7], 2)
+			EntityAlpha(r\Objects[7], 0.0)
 			HideEntity(r\Objects[7])
 			
 			it.Items = CreateItem("Level 5 Key Card", "key5", r\x - 1275.0 * RoomScale, r\y - 7910.0 * RoomScale, r\z + 3106.0 * RoomScale)
