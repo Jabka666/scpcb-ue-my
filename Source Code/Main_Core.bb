@@ -2961,7 +2961,7 @@ End Function
 
 Function UpdateMouseInput%()
 	If Input_ResetTime > 0.0 Then
-		Input_ResetTime = Max(Input_ResetTime - fps\Factor[0], 0.0)
+		Input_ResetTime = Max(Input_ResetTime - fps\Factor[1], 0.0)
 	Else
 		mo\DoubleClick = False
 		mo\MouseHit1 = MouseHit(1)
