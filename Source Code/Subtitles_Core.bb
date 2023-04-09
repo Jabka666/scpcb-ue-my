@@ -109,7 +109,7 @@ Function CreateSubtitles.Subtitles(Name$)
 	Return(sub)
 End Function
 
-Function DeleteSubtiltes%(Name$)
+Function DeleteSubtitles%(Name$)
 	If (Not opt\EnableSubtitles) Lor (Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name)) Then Return
 	
 	Local sub.Subtitles

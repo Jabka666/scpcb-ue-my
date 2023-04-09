@@ -310,7 +310,10 @@ Function KillSounds%()
 	
 	If opt\EnableSFXRelease Then
 		For snd.Sound = Each Sound
-			If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+			If snd\InternalHandle <> 0 Then
+				FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+				DeleteSubtitles(snd\Name)
+			EndIf
 			snd\ReleaseTime = 0
 		Next
 	EndIf
@@ -320,8 +323,6 @@ Function KillSounds%()
 			StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
 		Next
 	Next
-	
-	Delete Each Subtitles
 End Function
 
 Function StopBreathSound%()

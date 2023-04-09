@@ -33,7 +33,7 @@ Function AutoReleaseSounds%()
 			If snd\ReleaseTime < MilliSecs() Then
 				If snd\InternalHandle <> 0 Then
 					FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-					DeleteSubtiltes(snd\Name)
+					DeleteSubtitles(snd\Name)
 				EndIf
 			EndIf
 		EndIf
@@ -131,7 +131,7 @@ Function FreeSound_Strict%(SoundHandle%)
 	If snd <> Null Then
 		If snd\InternalHandle <> 0 Then
 			FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-			DeleteSubtiltes(snd\Name)
+			DeleteSubtitles(snd\Name)
 		EndIf
 		snd\ReleaseTime = 0
 		Delete(snd)
