@@ -497,12 +497,12 @@ Function RenderQuickLoading%()
 End Function
 
 Function QuickLoadEvents%()
-	CatchErrors("QuickLoadEvents()")
-	
 	If QuickLoad_CurrEvent = Null Then
 		QuickLoadPercent = -1
 		Return
 	EndIf
+	
+	CatchErrors("QuickLoadEvents()")
 	
 	Local e.Events = QuickLoad_CurrEvent
 	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, n.NPCs
@@ -7976,9 +7976,9 @@ Function UpdateEvents%()
 		End Select
 		
 		If e <> Null Then
-			CatchErrors("UpdateEvents(Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
+			CatchErrors("Uncaught: UpdateEvents(Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
 		Else
-			CatchErrors("UpdateEvents(Event doesn't exist anymore!)")
+			CatchErrors("Uncaught: UpdateEvents(Event doesn't exist anymore!)")
 		EndIf
 	Next
 	

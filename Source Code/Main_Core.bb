@@ -299,6 +299,8 @@ Function CreateConsoleMultiMsg%(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = Fa
 End Function
 
 Function UpdateConsole%()
+	CatchErrors("UpdateConsole()")
+	
 	If (Not opt\CanOpenConsole) Then
 		ConsoleOpen = False
 		Return
@@ -1562,10 +1564,13 @@ Function UpdateConsole%()
 	EndIf
 	
 	SetFont2(fo\FontID[Font_Default])
+	CatchErrors("Uncaught: UpdateConsole()")
 End Function
 
 Function RenderConsole%()
 	If (Not opt\CanOpenConsole) Then Return
+	
+	CatchErrors("RenderConsole()")
 	
 	If ConsoleOpen Then
 		Local cm.ConsoleMsg
@@ -1636,6 +1641,8 @@ Function RenderConsole%()
 		If opt\DisplayMode = 0 Then DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 	EndIf
 	SetFont2(fo\FontID[Font_Default])
+	
+	CatchErrors("Uncaught: RenderConsole()")
 End Function
 
 Function ClearConsole%()
@@ -1950,17 +1957,18 @@ SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
 SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
 SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "os"), SystemProperty("os"), "{0}"), (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32), "{1}"), SystemProperty("osbuild"), "{2}"))
 SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
-SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
 
 SetErrorMsg(10, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
 SetErrorMsg(11, GetLocalString("error", "shot")) 
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
 	SetErrorMsg(9, Format(GetLocalString("error", "error"), Location))
 End Function
 
 Repeat
+	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
+	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
+	
 	Cls()
 	
 	Local ElapsedMilliSecs%
@@ -2005,8 +2013,6 @@ Repeat
 Forever
 
 Function UpdateGame%()
-	CatchErrors("UpdateGame()")
-	
 	Local e.Events, ev.Events, r.Rooms
 	Local i%, TempStr$
 	Local RN$ = PlayerRoom\RoomTemplate\Name
@@ -2029,6 +2035,8 @@ Function UpdateGame%()
 			Exit
 		EndIf
 	Next
+	
+	CatchErrors("UpdateGame()")
 	
 	While fps\Accumulator > 0.0
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
@@ -2604,7 +2612,7 @@ Function UpdateCough%(Chance_%)
 End Function
 
 Function UpdateMoving%()
-	CatchErrors("(UpdateMoving()")
+	CatchErrors("UpdateMoving()")
 	
 	Local de.Decals
 	Local Sprint# = 1.0, Speed# = 0.018
@@ -8883,6 +8891,8 @@ Function UpdateCameraCheck%()
 End Function
 
 Function UpdateExplosion%()
+	CatchErrors("UpdateExplosion()")
+	
 	Local p.Particles
 	Local i%
 	
@@ -8918,6 +8928,8 @@ Function UpdateExplosion%()
 			PositionEntity(me\Collider, EntityX(me\Collider), 200.0, EntityZ(me\Collider))
 		EndIf
 	EndIf
+	
+	CatchErrors("Uncaught: UpdateExplosion()")
 End Function
 
 Function UpdateVomit%()

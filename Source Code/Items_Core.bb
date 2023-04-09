@@ -464,9 +464,9 @@ Function UpdateItems%()
 		EndIf
 		
 		If (Not DeletedItem) Then
-			CatchErrors("UpdateItems(Item Name:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + ")")
+			CatchErrors("Uncaught: UpdateItems(Item Name:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + ")")
 		Else
-			CatchErrors("UpdateItems(Item doesn't exist anymore!)")
+			CatchErrors("Uncaught: UpdateItems(Item doesn't exist anymore!)")
 		EndIf
 		DeletedItem = False
 	Next

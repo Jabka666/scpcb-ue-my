@@ -52,6 +52,8 @@ End Type
 Const NPCsFile$ = "Data\NPCs.ini"
 
 Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
+	CatchErrors("CreateNPC(" + NPCType + ", " + x + ", " + y + ", " + z)
+	
 	Local n.NPCs, n2.NPCs
 	Local Temp#, i%, Tex%, TexFestive%
 	Local SF%, b%, t1%
@@ -493,6 +495,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	
 	NPCSpeedChange(n)
 	
+	CatchErrors("Uncaught: CreateNPC(" + NPCType + ", " + x + ", " + y + ", " + z)
+	
 	Return(n)
 End Function
 
@@ -551,6 +555,8 @@ End Function
 Function RemoveNPC%(n.NPCs)
 	If n = Null Then Return
 	
+	CatchErrors("RemoveNPC()")
+	
 	If n\SoundCHN_IsStream Then
 		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
 	Else
@@ -572,6 +578,8 @@ Function RemoveNPC%(n.NPCs)
 	FreeEntity(n\OBJ) : n\OBJ = 0
 	
 	Delete(n)
+	
+	CatchErrors("Uncaught: RemoveNPC()")
 End Function
 
 Global RemoveHazmatTimer#, Remove714Timer#
