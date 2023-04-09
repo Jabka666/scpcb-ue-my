@@ -45,6 +45,7 @@ Rooms:
 - «room3_storage» changes:
 	- Added Level 1 Keycard inside the «room3_storage» area.
 	- Added death message when falling down the elevator shaft.
+- Added missing chatscreen in «room2_office_3» room.
 
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
 
