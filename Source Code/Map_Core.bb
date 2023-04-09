@@ -6983,6 +6983,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Empty Cup", "emptycup", r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r\x - 400.0 * RoomScale, r\z, r)
 			;[End Block]
 		Case "room2_medibay"
 			;[Block]
