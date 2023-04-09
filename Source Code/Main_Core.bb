@@ -1563,7 +1563,6 @@ Function UpdateConsole%()
 		Next
 	EndIf
 	
-	SetFont2(fo\FontID[Font_Default])
 	CatchErrors("Uncaught: UpdateConsole()")
 End Function
 
