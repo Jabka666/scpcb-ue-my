@@ -5615,10 +5615,10 @@ Function UpdateEvents%()
 						If sc\room = e\room Then
 							If sc\ScrOBJ <> 0 Then
 								If (Not EntityHidden(sc\BaseOBJ)) Then
-									HideEntity(sc\BaseOBJ)
 									If sc\CameraOBJ <> 0 Then HideEntity(sc\CameraOBJ)
 									If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
 									If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
+									HideEntity(sc\BaseOBJ)
 								EndIf
 							EndIf
 							Exit
@@ -5644,11 +5644,9 @@ Function UpdateEvents%()
 								
 								e\EventState = Max(e\EventState, 65.0)
 								
-								If EntityHidden(e\room\Objects[3]) Then
-									For i = 3 To 5
-										ShowEntity(e\room\Objects[i])
-									Next
-								EndIf
+								For i = 3 To 5
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+								Next
 								If (Not EntityHidden(e\room\Objects[6])) Then HideEntity(e\room\Objects[6])
 								
 								SetAnimTime(e\room\Objects[3], 492.0)
@@ -5668,11 +5666,9 @@ Function UpdateEvents%()
 							Case 1.0
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								If (Not EntityHidden(e\room\Objects[3])) Then
-									For i = 3 To 5
-										HideEntity(e\room\Objects[i])
-									Next
-								EndIf
+								For i = 3 To 5
+									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
+								Next
 								; ~ Sitting
 								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
 								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 526.0, 530.0, 0.2)
@@ -5681,11 +5677,9 @@ Function UpdateEvents%()
 							Case 3.0
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								If (Not EntityHidden(e\room\Objects[3])) Then
-									For i = 3 To 5
-										HideEntity(e\room\Objects[i])
-									Next
-								EndIf
+								For i = 3 To 5
+									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
+								Next
 								; ~ Laying down
 								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
 								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 377.0, 525.0, 0.2)
@@ -5694,11 +5688,9 @@ Function UpdateEvents%()
 							Case 5.0
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								If (Not EntityHidden(e\room\Objects[3])) Then
-									For i = 3 To 5
-										HideEntity(e\room\Objects[i])
-									Next
-								EndIf
+								For i = 3 To 5
+									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
+								Next
 								; ~ Standing
 								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
 								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 228.0, 376.0, 0.2)
@@ -5728,11 +5720,9 @@ Function UpdateEvents%()
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
-								If EntityHidden(e\room\Objects[4]) Then
-									For i = 4 To 6
-										ShowEntity(e\room\Objects[i])
-									Next
-								EndIf
+								For i = 4 To 6
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+								Next
 								; ~ Idle
 								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2.0, 200.0, 0.2)
 								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 4.0, 125.0, 0.2)
@@ -5745,12 +5735,10 @@ Function UpdateEvents%()
 							Case 11.0
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								If EntityHidden(e\room\Objects[3]) Then
-									For i = 3 To 5 Step 2
-										ShowEntity(e\room\Objects[i])
-										ShowEntity(e\room\Objects[i + 1])
-									Next
-								EndIf
+								For i = 3 To 5 Step 2
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+									If EntityHidden(e\room\Objects[i + 1]) Then ShowEntity(e\room\Objects[i + 1])
+								Next
 								
 								; ~ Idle
 								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2.0, 226.0, 0.2)
@@ -5762,12 +5750,10 @@ Function UpdateEvents%()
 							Case 13.0
 								;[Block]
 								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								If EntityHidden(e\room\Objects[3]) Then
-									For i = 3 To 5 Step 2
-										ShowEntity(e\room\Objects[i])
-										ShowEntity(e\room\Objects[i + 1])
-									Next
-								EndIf
+								For i = 3 To 5 Step 2
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+									If EntityHidden(e\room\Objects[i + 1]) Then ShowEntity(e\room\Objects[i + 1])
+								Next
 								If AnimTime(e\room\Objects[6]) <> 227.0 Then SetAnimTime(e\room\Objects[6], 227.0)
 								
 								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2.0, 491.0, 0.05)
@@ -5829,12 +5815,10 @@ Function UpdateEvents%()
 						End Select
 					EndIf
 				ElseIf e\room\Objects[3] <> 0
-					If (Not EntityHidden(e\room\Objects[3])) Then
-						For i = 3 To 5 Step 2
-							HideEntity(e\room\Objects[i])
-							HideEntity(e\room\Objects[i + 1])
-						Next
-					EndIf
+					For i = 3 To 5 Step 2
+						If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
+						If (Not EntityHidden(e\room\Objects[i + 1])) Then HideEntity(e\room\Objects[i + 1])
+					Next
 				Else
 					e\EventState = 0.0
 					e\EventStr = ""
@@ -7621,9 +7605,9 @@ Function UpdateEvents%()
 							If sc\room = e\room Then
 								If sc\ScrOBJ <> 0 Then
 									If EntityHidden(sc\ScrOBJ) Then
-										ShowEntity(sc\ScrOBJ)
 										If sc\ScrOverlay <> 0 Then ShowEntity(sc\ScrOverlay)
 										If sc\MonitorOBJ <> 0 Then ShowEntity(sc\MonitorOBJ)
+										ShowEntity(sc\ScrOBJ)
 									EndIf
 								EndIf
 								Exit
@@ -7641,9 +7625,9 @@ Function UpdateEvents%()
 							If sc\room = e\room Then
 								If sc\ScrOBJ <> 0 Then
 									If (Not EntityHidden(sc\ScrOBJ)) Then
-										HideEntity(sc\ScrOBJ)
 										If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
 										If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
+										HideEntity(sc\ScrOBJ)
 									EndIf
 								EndIf
 								Exit
