@@ -193,6 +193,8 @@ Type Options
 	Field UserTrackMode%
 	Field SFXVolume#
 	Field EnableSFXRelease%, PrevEnableSFXRelease%
+	Field EnableSubtitles%
+	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [ADVANCED]
 	Field AchvMsgEnabled%
 	Field CanOpenConsole%
@@ -205,8 +207,6 @@ Type Options
 	Field TextShadow%
 	Field PlayStartup%
 	Field LauncherEnabled%
-	Field EnableSubtitles%
-	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [CONTROLS]
 	Field MouseSmoothing#
 	Field InvertMouseX%, InvertMouseY%
@@ -313,6 +313,14 @@ Function LoadOptionsINI%()
 	
 	opt\UserTrackMode = IniGetInt(OptionFile, "Audio", "User Track Setting", False)
 	
+	opt\EnableSubtitles = IniGetInt(OptionFile, "Audio", "Enable Subtitles", False)
+	
+	opt\SubColorR = IniGetInt(OptionFile, "Audio", "Subtitles Color R", 255)
+	
+	opt\SubColorG = IniGetInt(OptionFile, "Audio", "Subtitles Color G", 255)
+	
+	opt\SubColorB = IniGetInt(OptionFile, "Audio", "Subtitles Color B", 255)
+	
 	; ~ [CONTROLS]
 	
 	opt\MouseSensitivity = IniGetFloat(OptionFile, "Controls", "Mouse Sensitivity", 0.0)
@@ -369,14 +377,6 @@ Function LoadOptionsINI%()
 	opt\PlayStartup = IniGetInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
 	opt\LauncherEnabled = IniGetInt(OptionFile, "Advanced", "Launcher Enabled", True)
-	
-	opt\EnableSubtitles = IniGetInt(OptionFile, "Advanced", "Enable Subtitles", False)
-	
-	opt\SubColorR = IniGetInt(OptionFile, "Advanced", "Subtitles Color R", 255)
-	
-	opt\SubColorG = IniGetInt(OptionFile, "Advanced", "Subtitles Color G", 255)
-	
-	opt\SubColorB = IniGetInt(OptionFile, "Advanced", "Subtitles Color B", 255)
 	
 	; ~ [GLOBAL]
 	
@@ -437,6 +437,14 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Audio", "Enable User Tracks", opt\EnableUserTracks)
 	
 	IniWriteString(OptionFile, "Audio", "User Track Setting", opt\UserTrackMode)
+	
+	IniWriteString(OptionFile, "Audio", "Enable Subtitles", opt\EnableSubtitles)
+	
+	IniWriteString(OptionFile, "Audio", "Subtitles Color R", opt\SubColorR)
+	
+	IniWriteString(OptionFile, "Audio", "Subtitles Color G", opt\SubColorG)
+	
+	IniWriteString(OptionFile, "Audio", "Subtitles Color B", opt\SubColorB)
 	;[End Block]
 	
 	; ~ [CONTROLS]
@@ -495,14 +503,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-	
-	IniWriteString(OptionFile, "Advanced", "Enable Subtitles", opt\EnableSubtitles)
-	
-	IniWriteString(OptionFile, "Advanced", "Subtitles Color R", opt\SubColorR)
-	
-	IniWriteString(OptionFile, "Advanced", "Subtitles Color G", opt\SubColorG)
-	
-	IniWriteString(OptionFile, "Advanced", "Subtitles Color B", opt\SubColorB)
 	;[End Block]
 	
 	; ~ [GLOBAL]
@@ -558,6 +558,14 @@ Function ResetOptionsINI%()
 	opt\EnableUserTracks = False
 	
 	opt\UserTrackMode = False
+	
+	opt\EnableSubtitles = False
+	
+	opt\SubColorR = 255
+	
+	opt\SubColorG = 255
+	
+	opt\SubColorB = 255
 	
 	; ~ [CONTROLS]
 	
@@ -615,14 +623,6 @@ Function ResetOptionsINI%()
 	opt\PlayStartup = True
 	
 	opt\LauncherEnabled = True
-	
-	opt\EnableSubtitles = False
-	
-	opt\SubColorR = 255
-	
-	opt\SubColorG = 255
-	
-	opt\SubColorB = 255
 	
 	; ~ [GLOBAL]
 	

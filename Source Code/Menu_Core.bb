@@ -78,6 +78,9 @@ If opt\DisplayMode <> 0 Then
 	IniWriteString(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 EndIf
 
+opt\EnableSubtitles = False
+IniWriteString(OptionFile, "Audio", "Enable Subtitles", opt\EnableSubtitles)
+
 Function UpdateMainMenu%()
 	CatchErrors("UpdateMainMenu()")
 	
@@ -671,7 +674,7 @@ Function UpdateMainMenu%()
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
 						
-						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
+						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles, True)
 						
 						If PrevEnableSubtitles Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles)
 						
@@ -2938,6 +2941,16 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			R = 255
 			Txt2 = GetLocalString("tooltip", "cantchangebtn")
 			;[End Block]
+		Case Tooltip_Subtitles
+			;[Block]
+			Txt = GetLocalString("tooltip", "subtitles")
+			R = 255
+			Txt2 = GetLocalString("tooltip", "subtitles.note")
+			;[End Block]
+		Case Tooltip_SubtitlesColor
+			;[Block]
+			Txt = GetLocalString("tooltip", "subtitles.color")
+			;[End Block]
 			; ~ [CONTROLS]
 		Case Tooltip_MouseSensitivity
 			;[Block]
@@ -3013,14 +3026,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_Launcher
 			;[Block]
 			Txt = GetLocalString("tooltip", "launcher")
-			;[End Block]
-		Case Tooltip_Subtitles
-			;[Block]
-			Txt = GetLocalString("tooltip", "subtitles")
-			;[End Block]
-		Case Tooltip_SubtitlesColor
-			;[Block]
-			Txt = GetLocalString("tooltip", "subtitles.color")
 			;[End Block]
 		Case Tooltip_ResetOptions
 			;[Block]

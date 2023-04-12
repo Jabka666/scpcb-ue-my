@@ -7019,7 +7019,7 @@ Function UpdateMenu%()
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
 						
-						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
+						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles, True)
 						
 						If PrevEnableSubtitles Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles)
 						
