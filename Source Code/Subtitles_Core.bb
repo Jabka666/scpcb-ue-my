@@ -51,7 +51,7 @@ Function RenderSubtitles%()
 End Function
 
 Function CreateSubtitles.Subtitles(Name$)
-	If (Not opt\EnableSubtitles) Lor (Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name)) Then Return Return(Null)
+	If (Not opt\EnableSubtitles) Lor (Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name)) Then Return(Null)
 	
 	CatchErrors("ShowSubtitles(" + Name + ")")
 	
