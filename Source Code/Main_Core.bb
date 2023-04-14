@@ -6088,6 +6088,7 @@ Function RenderGUI%()
 			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)
 			
 			SetFont2(fo\FontID[Font_Digital])
+			Color(255, 255, 255)
 			If msg\KeyPadMsg <> "" Then
 				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text2(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadMsg, True, True)
 			Else
