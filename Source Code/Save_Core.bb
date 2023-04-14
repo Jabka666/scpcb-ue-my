@@ -1141,7 +1141,7 @@ Function LoadGame%(File$)
 				;[End Block]
 			Case e_cont2_008
 				;[Block]
-				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, 0.0, 0.0, True)
+				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
 				;[End Block]
 		End Select
 	Next
@@ -1887,7 +1887,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case e_cont2_008
 				;[Block]
-				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, 0.0, 0.0, True)
+				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
 				;[End Block]
 		End Select
 	Next
