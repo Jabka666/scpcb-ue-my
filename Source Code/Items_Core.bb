@@ -328,7 +328,6 @@ Function RemoveWearableItems%(item.Items)
 		Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 			;[Block]
 			wi\HazmatSuit = 0
-			SetAnimTime(item\Model, 4.0)
 			;[End Block]
 		Case "vest", "finevest"
 			;[Block]
@@ -639,6 +638,10 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	MoveEntity(item\Collider, 0.0, -0.1, 0.1)
 	RotateEntity(item\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
 	ResetEntity(item\Collider)
+	
+	Local IN$ = item\ItemTemplate\TempName
+	
+	If IN = "hazmatsuit" Lor IN = "finehazmatsuit" Lor IN = "veryfinehazmatsuit" Lor IN = "hazmatsuit148" Then SetAnimTime(item\Model, 4.0)
 	
 	item\Picked = False
 	For n = 0 To MaxItemAmount - 1
