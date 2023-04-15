@@ -83,8 +83,15 @@ Function UpdateLauncher%(lnchr.Launcher)
 				x = x + 100
 			EndIf
 		Next
-		; ~ Display selector
+		; ~ Driver selector
 		Color(255, 255, 255)
+		Text2(LauncherWidth - 185, LauncherHeight - 303, GetLocalString("launcher", "gfx"))
+		RenderFrame(LauncherWidth - 185, LauncherHeight - 283, 145, 30)
+		Text2(LauncherWidth - 112.5, LauncherHeight - 273, Format(GetLocalString("launcher", "gfx.num"), opt\GFXDriver), True)
+		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 283, 30, 30, ">", False) Then opt\GFXDriver = (opt\GFXDriver + 1)
+		If opt\GFXDriver > CountGfxDrivers() Then opt\GFXDriver = 1
+		
+		; ~ Display selector
 		Text2(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
 		
 		Local Txt$
@@ -114,8 +121,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Text2(LauncherWidth - 112.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 40, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		; ~ Launcher tick
-		Text2(LauncherWidth - 155, LauncherHeight - 275, GetLocalString("launcher", "launcher"))
-		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 185, LauncherHeight - 278, opt\LauncherEnabled)
+		Text(LauncherWidth - 620, LauncherHeight - 130, GetLocalString("launcher", "launcher"))
+		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 480, LauncherHeight - 133, opt\LauncherEnabled)
 		; ~ Media buttons
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64) Then
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
@@ -173,6 +180,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	IniWriteString(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
+	IniWriteString(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
 	
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
