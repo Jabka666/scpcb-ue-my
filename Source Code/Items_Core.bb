@@ -1,5 +1,3 @@
-Global BurntNote%
-
 Global ItemAmount%, MaxItemAmount%
 
 Global LastItemID%
@@ -19,11 +17,12 @@ Type ItemTemplates
 	Field Tex%, TexPath$
 End Type
 
-Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 9)
+Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1 + 8)
 	Local it.ItemTemplates, it2.ItemTemplates
 	
 	it.ItemTemplates = New ItemTemplates
 	; ~ If another item shares the same object, copy it
+	OBJPath = ItemsPath + OBJPath
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\OBJPath = OBJPath And it2\OBJ <> 0 Then
 			it\OBJ = CopyEntity(it2\OBJ)
@@ -45,6 +44,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	Local Texture%
 	
 	If TexturePath <> "" Then
+		TexturePath = ItemTexturePath + TexturePath
 		For it2.ItemTemplates = Each ItemTemplates
 			If it2\TexPath = TexturePath And it2\Tex <> 0 Then
 				Texture = it2\Tex
@@ -65,6 +65,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	ScaleEntity(it\OBJ, Scale, Scale, Scale, True)
 	
 	; ~ If another item shares the same object, copy it
+	InvImgPath = ItemINVIconPath + InvImgPath
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\InvImgPath = InvImgPath And it2\InvImg <> 0 Then
 			it\InvImg = it2\InvImg
@@ -79,6 +80,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	EndIf
 	
 	If InvImgPath2 <> "" Then
+		InvImgPath2 = ItemINVIconPath + InvImgPath2
 		If (Not it\InvImg2) Then
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
 			it\InvImg2 = ScaleImage2(it\InvImg2, MenuScale, MenuScale)
@@ -87,7 +89,10 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 		it\InvImg2 = 0
 	EndIf
 	
-	it\ImgPath = ImgPath
+	If ImgPath <> "" Then
+		ImgPath = ItemHUDTexturePath + ImgPath
+		it\ImgPath = ImgPath
+	EndIf
 	
 	it\DisplayName = DisplayName
 	it\TempName = TempName
@@ -215,7 +220,7 @@ Global ClosestItem.Items
 Global OtherOpen.Items = Null
 
 Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, A# = 1.0, InvSlots% = 0)
-	CatchErrors("Uncaught (CreateItem)")
+	CatchErrors("CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + A + ", " + InvSlots + ")")
 	
 	Local i.Items, it.ItemTemplates
 	
@@ -285,13 +290,13 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	i\ID = LastItemID + 1
 	LastItemID = i\ID
 	
-	CatchErrors("CreateItem")
+	CatchErrors("Uncaught: CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + A + ", " + InvSlots + ")")
 	
 	Return(i)
 End Function
 
 Function RemoveItem%(i.Items)
-	CatchErrors("Uncaught (RemoveItem)")
+	CatchErrors("RemoveItem()")
 	
 	Local n%
 	
@@ -311,12 +316,10 @@ Function RemoveItem%(i.Items)
 	If i\ItemTemplate\Img <> 0 Then FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
 	Delete(i)
 	
-	CatchErrors("RemoveItem")
+	CatchErrors("Uncaught: RemoveItem()")
 End Function
 
 Function RemoveWearableItems%(item.Items)
-	CatchErrors("Uncaught (RemoveWearableItems)")
-	
 	Select item\ItemTemplate\TempName
 		Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 			;[Block]
@@ -325,7 +328,6 @@ Function RemoveWearableItems%(item.Items)
 		Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 			;[Block]
 			wi\HazmatSuit = 0
-			SetAnimTime(item\Model, 4.0)
 			;[End Block]
 		Case "vest", "finevest"
 			;[Block]
@@ -351,13 +353,11 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			I_427\Using = False
 			;[End Block]
-		Case "scramble"
+		Case "scramble", "finescramble"
 			;[Block]
-			wi\SCRAMBLE = False
+			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\SCRAMBLE = 0
 			;[End Block]
 	End Select
-	
-	CatchErrors("RemoveWearableItems")
 End Function
 
 Function ClearSecondInv%(item.Items, From% = 0)
@@ -369,7 +369,7 @@ Function ClearSecondInv%(item.Items, From% = 0)
 End Function
 
 Function UpdateItems%()
-	CatchErrors("Uncaught (UpdateItems)")
+	CatchErrors("UpdateItems()")
 	
 	Local i.Items, i2.Items, np.NPCs
 	Local xTemp#, yTemp#, zTemp#
@@ -383,9 +383,9 @@ Function UpdateItems%()
 		i\Dropped = 0
 		
 		If (Not i\Picked) Then
-			If i\DistTimer < MilliSecs2() Then
+			If i\DistTimer < MilliSecs() Then
 				i\Dist = EntityDistanceSquared(Camera, i\Collider)
-				i\DistTimer = MilliSecs2() + 700
+				i\DistTimer = MilliSecs() + 700
 				If i\Dist < HideDist Then
 					If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
 				EndIf
@@ -463,9 +463,9 @@ Function UpdateItems%()
 		EndIf
 		
 		If (Not DeletedItem) Then
-			CatchErrors("Detected error for:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + " item!")
+			CatchErrors("Uncaught: UpdateItems(Item Name:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + ")")
 		Else
-			CatchErrors("Detected error for deleted item!")
+			CatchErrors("Uncaught: UpdateItems(Item doesn't exist anymore!)")
 		EndIf
 		DeletedItem = False
 	Next
@@ -479,11 +479,11 @@ Function PickItem%(item.Items)
 	
 	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
 	
-	CatchErrors("Uncaught (PickItem)")
+	CatchErrors("PickItem()")
 	
 	Local e.Events
 	Local n% = 0, z%
-	Local CanPickItem = 1
+	Local CanPickItem% = 1
 	Local FullINV% = True
 	
 	For n = 0 To MaxItemAmount - 1
@@ -549,15 +549,13 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 						;[Block]
-						CanPickItem = True
+						CanPickItem = 1
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
 								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148" Then
 									CanPickItem = 0
-									Return
 								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
 									CanPickItem = 2
-									Return
 								EndIf
 							EndIf
 						Next
@@ -574,21 +572,19 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case "vest", "finevest"
 						;[Block]
-						CanPickItem = True
+						CanPickItem = 1
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null Then
 								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
 									CanPickItem = 0
-									Return
 								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
 									CanPickItem = 2
-									Return
 								EndIf
 							EndIf
 						Next
 						
 						If CanPickItem = 0 Then
-							CreateMsg(GetLocalString("msg", "twosuit"))
+							CreateMsg(GetLocalString("msg", "twovest"))
 							Return
 						ElseIf CanPickItem = 2 Then
 							CreateMsg(GetLocalString("msg", "vestsuit"))
@@ -616,17 +612,17 @@ Function PickItem%(item.Items)
 				Exit
 			EndIf
 		Next
-		me\SndVolume = Max(1.5, me\SndVolume)
+		me\SndVolume = Max(2.0, me\SndVolume)
 	Else
 		CreateMsg(GetLocalString("msg", "cantcarry"))
 	EndIf
 	
-	CatchErrors("PickItem")
+	CatchErrors("Uncaught: PickItem()")
 End Function
 
 Function DropItem%(item.Items, PlayDropSound% = True)
 	
-	CatchErrors("Uncaught (DropItem)")
+	CatchErrors("DropItem()")
 	
 	Local n%
 	
@@ -643,6 +639,10 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	RotateEntity(item\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
 	ResetEntity(item\Collider)
 	
+	Local IN$ = item\ItemTemplate\TempName
+	
+	If IN = "hazmatsuit" Lor IN = "finehazmatsuit" Lor IN = "veryfinehazmatsuit" Lor IN = "hazmatsuit148" Then SetAnimTime(item\Model, 4.0)
+	
 	item\Picked = False
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = item Then
@@ -651,10 +651,9 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 		EndIf
 	Next
 	ItemAmount = ItemAmount - 1
+	me\SndVolume = Max(2.0, me\SndVolume)
 	
-	RemoveWearableItems(item)
-	
-	CatchErrors("DropItem")
+	CatchErrors("Uncaught: DropItem()")
 End Function
 
 Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
@@ -696,7 +695,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\TempName
-		Case "nav", "nav300", "nav310", "navulti", "paper", "oldpaper", "badge", "oldbadge", "radio", "18vradio", "fineradio", "veryfineradio", "scp1025"
+		Case "nav", "nav300", "nav310", "navulti", "paper", "oldpaper", "badge", "oldbadge", "scp1025"
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -708,7 +707,7 @@ Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, Can
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
 		CreateMsg(GetLocalString("msg", "mask.use"))
 		Return(False)
-	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE)
+	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
 		CreateMsg(GetLocalString("msg", "gear.use"))
 		Return(False)
 	ElseIf (Not CanUseWithHazmat) And wi\HazmatSuit > 0
@@ -719,7 +718,7 @@ Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, Can
 End Function
 
 ; ~ Maybe re-work?
-Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False)
+Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False, Suit% = False)
 	If (Not GasMask) And wi\GasMask > 0 Then
 		CreateMsg(GetLocalString("msg", "mask.use.off"))
 		SelectedItem = Null
@@ -736,11 +735,11 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 		CreateMsg(GetLocalString("msg", "helmet.use.off"))
 		SelectedItem = Null
 		Return(True)
-	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE
+	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
 		CreateMsg(GetLocalString("msg", "gear.use.off"))
 		SelectedItem = Null
 		Return(True)
-	ElseIf wi\HazmatSuit > 0
+	ElseIf (Not Suit) And wi\HazmatSuit > 0
 		CreateMsg(GetLocalString("msg", "suit.use.off"))
 		SelectedItem = Null
 		Return(True)
@@ -748,9 +747,21 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 	Return(False)
 End Function
 
-Function IsDoubleItem%(Variable, ID, Msg$)
+Function IsDoubleItem%(Variable%, ID%)
+	Local Message$
+	
 	If Variable > 0 And Variable <> ID Then
-		CreateMsg(msg)
+		Select Variable
+			Case wi\GasMask, I_1499\Using
+				;[Block]
+				Message = GetLocalString("msg", "weartwo.gas")
+				;[End Block]
+			Case wi\NightVision, wi\SCRAMBLE
+				;[Block]
+				Message = GetLocalString("msg", "weartwo.nvg")
+				;[End Block]
+		End Select
+		CreateMsg(Message)
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -771,6 +782,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	
 	Local it.Items, it2.Items, it3.Items, it4.Items, it5.Items, de.Decals, n.NPCs
 	Local Remove% = True, i%
+	Local MakeDecal% = False
 	
 	Select item\ItemTemplate\TempName
 		Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
@@ -778,8 +790,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -804,8 +815,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -829,8 +839,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -855,8 +864,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -873,8 +881,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					ClearSecondInv(item, 0)
 					;[End Block]
 				Case COARSE
@@ -886,8 +893,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						item\InvSlots = 1
 						ClearSecondInv(item, 1)
 					Else
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12, 0.8)
-						EntityParent(de\OBJ, PlayerRoom\OBJ)
+						MakeDecal = True
 						ClearSecondInv(item, 0)
 					EndIf
 					Remove = False
@@ -915,13 +921,16 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "nvg", "veryfinenvg", "finenvg", "scramble"
+		Case "nvg", "veryfinenvg", "finenvg", "scramble", "finescramble"
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -930,17 +939,16 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
+					If Rand(2) = 1 Then
+						it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
+					Else
+						it2.Items = CreateItem("SCRAMBLE Gear", "finescramble", x, y, z)
+					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(5) = 1 Then
-						it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
-						it2\State = Rnd(0.0, 1000.0)
-					Else
-						it2.Items = CreateItem("Night Vision Goggles", "veryfinenvg", x, y, z)
-						it2\State = Rnd(0.0, 1000.0)
-					EndIf
+					it2.Items = CreateItem("Night Vision Goggles", "veryfinenvg", x, y, z)
+					it2\State = Rnd(0.0, 1000.0)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -949,8 +957,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1002,7 +1009,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case 3
 							;[Block]
-							Select Rand(3)
+							Select Rand(4)
 								Case 1
 									;[Block]
 									it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
@@ -1017,6 +1024,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									it2.Items = CreateItem("SCRAMBLE Gear", "scramble", x, y, z)
 									it2\State = Rnd(0.0, 1000.0)
 									;[End Block]
+								Case 4
+									;[Block]
+									it2.Items = CreateItem("SCRAMBLE Gear", "finescramble", x, y, z)
+									;[End Block]
 							End Select
 							;[End Block]
 					End Select
@@ -1026,7 +1037,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 		Case "scp148"
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("SCP-148 Ingot", "scp148ingot", x, y, z)
 				Case ONETOONE, FINE, VERYFINE
@@ -1080,8 +1095,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_BLOOD_2, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -1089,17 +1103,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						If Rand(2) = 1 Then
 							it2.Items = CreateItem("Black Severed Hand", "hand2", x, y, z)
 						Else
-							it2.Items = CreateItem("Severed Hand", "hand3", x, y, z)
+							it2.Items = CreateItem("Yellow Severed Hand", "hand3", x, y, z)
 						EndIf
 					ElseIf item\ItemTemplate\TempName = "hand2"
 						If Rand(2) = 1 Then
-							it2.Items = CreateItem("Severed Hand", "hand", x, y, z)
+							it2.Items = CreateItem("White Severed Hand", "hand", x, y, z)
 						Else
-							it2.Items = CreateItem("Severed Hand", "hand3", x, y, z)
+							it2.Items = CreateItem("Yellow Severed Hand", "hand3", x, y, z)
 						EndIf
 					Else
 						If Rand(2) = 1 Then
-							it2.Items = CreateItem("Severed Hand", "hand", x, y, z)
+							it2.Items = CreateItem("White Severed Hand", "hand", x, y, z)
 						Else
 							it2.Items = CreateItem("Black Severed Hand", "hand2", x, y, z)
 						EndIf
@@ -1112,8 +1126,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1140,14 +1153,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
 					If Level = 0 Then
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-						EntityParent(de\OBJ, PlayerRoom\OBJ)
+						MakeDecal = True
 					Else
 						it2.Items = CreateItem("Level " + (Level - 1) + " Key Card", "key" + (Level - 1), x, y, z)
 					EndIf
@@ -1332,16 +1343,14 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[Block]
 							Local CurrAchvAmount% = 0
 							
-							For i = 0 To MAXACHIEVEMENTS - 1
-								If achv\Achievement[i] = True
-									CurrAchvAmount = CurrAchvAmount + 1
-								EndIf
+							For i = 0 To MaxAchievements - 1
+								If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 							Next
 							
 							Select SelectedDifficulty\OtherFactors
 								Case EASY
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(10) = 1 Then
@@ -1353,7 +1362,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(15) = 1 Then
@@ -1365,7 +1374,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(20) = 1 Then
@@ -1377,7 +1386,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(0, ((MAXACHIEVEMENTS - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										If Rand(25) = 1 Then
@@ -1431,16 +1440,14 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					CurrAchvAmount = 0
-					For i = 0 To MAXACHIEVEMENTS - 1
-						If achv\Achievement[i] = True
-							CurrAchvAmount = CurrAchvAmount + 1
-						EndIf
+					For i = 0 To MaxAchievements - 1
+						If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 					Next
 					
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							If Rand(0, ((MAXACHIEVEMENTS - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
+							If Rand(0, ((MaxAchievements - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(20) = 1 Then
@@ -1452,7 +1459,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							If Rand(0, ((MAXACHIEVEMENTS - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
+							If Rand(0, ((MaxAchievements - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(25) = 1 Then
@@ -1464,7 +1471,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case HARD
 							;[Block]
-							If Rand(0, ((MAXACHIEVEMENTS - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
+							If Rand(0, ((MaxAchievements - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(30) = 1 Then
@@ -1476,7 +1483,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							If Rand(0, ((MAXACHIEVEMENTS - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0
+							If Rand(0, ((MaxAchievements - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(35) = 1 Then
@@ -1495,8 +1502,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1550,8 +1556,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1572,8 +1577,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1613,8 +1617,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1645,8 +1648,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.12)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1676,8 +1678,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType513_1 Then RemoveNPC(n)
 					Next
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -1690,8 +1691,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1712,8 +1712,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1734,8 +1733,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1810,8 +1808,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1836,8 +1833,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1858,8 +1854,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1876,8 +1871,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1902,8 +1896,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -1949,8 +1942,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.07)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1975,8 +1967,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2009,8 +2000,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2072,8 +2062,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -2089,8 +2078,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2118,8 +2106,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
@@ -2136,6 +2123,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			End Select
 			;[End Block]
 		Case "scp1025"
+			;[Block]
 			Remove = False
 			Select Setting
 				Case ROUGH
@@ -2143,8 +2131,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If item\State2 > 0.0 Then
 						item\State2 = -1.0
 					Else
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-						EntityParent(de\OBJ, PlayerRoom\OBJ)
+						MakeDecal = True
 						Remove = True
 					EndIf
 					;[End Block]
@@ -2165,12 +2152,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					item\State2 = 2.0
 					;[End Block]
 			End Select
+			;[End Block]
 		Case "book"
+			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2185,13 +2173,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					Remove = False
 					;[End Block]
 			End Select
+			;[End Block]
 		Default
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
@@ -2201,6 +2189,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			;[End Block]
 	End Select
 	
+	If MakeDecal Then
+		de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.8), Rnd(0.8, 1.0), 1)
+		EntityParent(de\OBJ, PlayerRoom\OBJ)
+	EndIf
 	If Remove Then
 		RemoveItem(item)
 	Else

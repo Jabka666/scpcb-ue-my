@@ -193,6 +193,8 @@ Type Options
 	Field UserTrackMode%
 	Field SFXVolume#
 	Field EnableSFXRelease%, PrevEnableSFXRelease%
+	Field EnableSubtitles%
+	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [ADVANCED]
 	Field AchvMsgEnabled%
 	Field CanOpenConsole%
@@ -202,10 +204,9 @@ Type Options
 	Field ConsoleOpening%
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
+	Field TextShadow%
 	Field PlayStartup%
 	Field LauncherEnabled%
-	Field EnableSubtitles%
-	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [CONTROLS]
 	Field MouseSmoothing#
 	Field InvertMouseX%, InvertMouseY%
@@ -215,6 +216,7 @@ Type Options
 	Field GraphicWidth%, RealGraphicWidth%
 	Field GraphicHeight%, RealGraphicHeight%
 	Field DisplayMode%
+	Field GFXDriver%
 	Field CameraFogNear#
 	Field CameraFogFar#, StoredCameraFogFar#
 	Field IntroEnabled%
@@ -312,6 +314,14 @@ Function LoadOptionsINI%()
 	
 	opt\UserTrackMode = IniGetInt(OptionFile, "Audio", "User Track Setting", False)
 	
+	opt\EnableSubtitles = IniGetInt(OptionFile, "Audio", "Enable Subtitles", False)
+	
+	opt\SubColorR = IniGetInt(OptionFile, "Audio", "Subtitles Color R", 255)
+	
+	opt\SubColorG = IniGetInt(OptionFile, "Audio", "Subtitles Color G", 255)
+	
+	opt\SubColorB = IniGetInt(OptionFile, "Audio", "Subtitles Color B", 255)
+	
 	; ~ [CONTROLS]
 	
 	opt\MouseSensitivity = IniGetFloat(OptionFile, "Controls", "Mouse Sensitivity", 0.0)
@@ -356,6 +366,8 @@ Function LoadOptionsINI%()
 	
 	opt\AutoSaveEnabled = IniGetInt(OptionFile, "Advanced", "Enable Auto Save", True)
 	
+	opt\TextShadow = IniGetInt(OptionFile, "Advanced", "Enable Text Shadow", False)
+	
 	opt\ShowFPS = IniGetInt(OptionFile, "Advanced", "Show FPS", False)
 	
 	opt\FrameLimit = IniGetInt(OptionFile, "Advanced", "Frame Limit", 0.0)
@@ -367,14 +379,6 @@ Function LoadOptionsINI%()
 	
 	opt\LauncherEnabled = IniGetInt(OptionFile, "Advanced", "Launcher Enabled", True)
 	
-	opt\EnableSubtitles = IniGetInt(OptionFile, "Advanced", "Enable Subtitles", True)
-	
-	opt\SubColorR = IniGetInt(OptionFile, "Advanced", "Subtitles Color R", 255)
-	
-	opt\SubColorG = IniGetInt(OptionFile, "Advanced", "Subtitles Color G", 255)
-	
-	opt\SubColorB = IniGetInt(OptionFile, "Advanced", "Subtitles Color B", 255)
-	
 	; ~ [GLOBAL]
 	
 	opt\GraphicWidth = IniGetInt(OptionFile, "Global", "Width", DesktopWidth())
@@ -382,6 +386,8 @@ Function LoadOptionsINI%()
 	opt\GraphicHeight = IniGetInt(OptionFile, "Global", "Height", DesktopHeight())
 	
 	opt\DisplayMode = IniGetInt(OptionFile, "Global", "Display Mode", 0)
+	
+	opt\GFXDriver = IniGetInt(OptionFile, "Global", "GFX Driver", 1)
 	
 	opt\CameraFogNear = IniGetFloat(OptionFile, "Global", "Camera Fog Near", 0.1)
 	
@@ -434,6 +440,14 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Audio", "Enable User Tracks", opt\EnableUserTracks)
 	
 	IniWriteString(OptionFile, "Audio", "User Track Setting", opt\UserTrackMode)
+	
+	IniWriteString(OptionFile, "Audio", "Enable Subtitles", opt\EnableSubtitles)
+	
+	IniWriteString(OptionFile, "Audio", "Subtitles Color R", opt\SubColorR)
+	
+	IniWriteString(OptionFile, "Audio", "Subtitles Color G", opt\SubColorG)
+	
+	IniWriteString(OptionFile, "Audio", "Subtitles Color B", opt\SubColorB)
 	;[End Block]
 	
 	; ~ [CONTROLS]
@@ -481,6 +495,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Advanced", "Enable Auto Save", opt\AutoSaveEnabled)
 	
+	IniWriteString(OptionFile, "Advanced", "Enable Text Shadow", opt\TextShadow)
+	
 	IniWriteString(OptionFile, "Advanced", "Show FPS", opt\ShowFPS)
 	
 	IniWriteString(OptionFile, "Advanced", "Frame Limit", opt\FrameLimit)
@@ -490,14 +506,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-	
-	IniWriteString(OptionFile, "Advanced", "Enable Subtitles", opt\EnableSubtitles)
-	
-	IniWriteString(OptionFile, "Advanced", "Subtitles Color R", opt\SubColorR)
-	
-	IniWriteString(OptionFile, "Advanced", "Subtitles Color G", opt\SubColorG)
-	
-	IniWriteString(OptionFile, "Advanced", "Subtitles Color B", opt\SubColorB)
 	;[End Block]
 	
 	; ~ [GLOBAL]
@@ -521,7 +529,7 @@ Function ResetOptionsINI%()
 	
 	opt\VSync = True
 	
-	If opt\DisplayMode = 0 Then opt\AntiAliasing = True
+	opt\AntiAliasing = (opt\DisplayMode = 0)
 	
 	opt\AdvancedRoomLights = True
 	
@@ -553,6 +561,14 @@ Function ResetOptionsINI%()
 	opt\EnableUserTracks = False
 	
 	opt\UserTrackMode = False
+	
+	opt\EnableSubtitles = False
+	
+	opt\SubColorR = 255
+	
+	opt\SubColorG = 255
+	
+	opt\SubColorB = 255
 	
 	; ~ [CONTROLS]
 	
@@ -598,6 +614,8 @@ Function ResetOptionsINI%()
 	
 	opt\AutoSaveEnabled = True
 	
+	opt\TextShadow = False
+	
 	opt\ShowFPS = False
 	
 	opt\CurrFrameLimit = 0.0
@@ -608,14 +626,6 @@ Function ResetOptionsINI%()
 	opt\PlayStartup = True
 	
 	opt\LauncherEnabled = True
-	
-	opt\EnableSubtitles = True
-	
-	opt\SubColorR = 255
-	
-	opt\SubColorG = 255
-	
-	opt\SubColorB = 255
 	
 	; ~ [GLOBAL]
 	

@@ -34,8 +34,8 @@ Function InitFastResize%()
 	FresizeImage = SPR
 	
 	; ~ Create texture
-	FresizeTexture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
-	FresizeTexture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
+	FresizeTexture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + (256 * opt\SaveTexturesInVRAM))
+	FresizeTexture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + (256 * opt\SaveTexturesInVRAM))
 	TextureBlend(FresizeTexture2, 3)
 	SetBuffer(TextureBuffer(FresizeTexture2))
 	ClsColor(0, 0, 0)
@@ -48,9 +48,9 @@ Function InitFastResize%()
 End Function
 
 Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
+	SetGfxDriver(opt\GFXDriver)
 	Graphics3D(Width, Height, Depth, Mode)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
-	SetGfxDriver(CountGfxDrivers())
 	TextureAnisotropic(opt\AnisotropicLevel)
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
@@ -85,7 +85,7 @@ Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	EndIf
 	
 	; ~ If the image does not need to be scaled, just copy the image and exit the function
-	If (SrcWidth = DestWidth) And (SrcHeight = DestHeight) Then Return(CopyImage(SrcImage))
+	If (SrcWidth = DestWidth) And (SrcHeight = DestHeight) Then Return(SrcImage)
 	
 	; ~ Create a scratch image that is as tall as the source image, and as wide as the destination image
 	ScratchImage = CreateImage(DestWidth, SrcHeight)
@@ -199,15 +199,15 @@ Function UpdateWorld2%()
 	Local HasBattery%
 	Local Power%
 	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE Then
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 					Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision) + (0.17 * (wi\SCRAMBLE))))
 					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
-						If wi\SCRAMBLE Then
+						If wi\SCRAMBLE = 1 Then
 							CreateMsg(GetLocalString("msg", "battery.died"))
 						Else
 							CreateMsg(GetLocalString("msg", "battery.died.nvg"))
@@ -238,7 +238,7 @@ Function UpdateWorld2%()
 		EndIf
 	EndIf
 	
-	If wi\SCRAMBLE And HasBattery <> 0 Then
+	If (wi\SCRAMBLE = 1 And HasBattery <> 0) Lor wi\SCRAMBLE = 2 Then
 		If (Not ChannelPlaying(SCRAMBLECHN)) Then SCRAMBLECHN = PlaySound_Strict(SCRAMBLESFX)
 	Else
 		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
@@ -257,26 +257,33 @@ Global CurrTrisAmount%
 Function RenderWorld2%(Tween#)
 	Local np.NPCs
 	Local i%, k%, l%
+	Local CurrR#, CurrG#, CurrB#
 	
 	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(Camera, 1)
 	
 	AmbientLightRooms()
 	If wi\NightVision > 0 Then
-		AmbientLight(200.0, 200.0, 200.0)
+		CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
+	ElseIf wi\SCRAMBLE > 0
+		CurrR = CurrAmbientColorR * 2.0 : CurrG = CurrAmbientColorR * 2.0 : CurrB = CurrAmbientColorR * 2.0
 	Else
-		AmbientLight(CurrAmbientColorR, CurrAmbientColorG, CurrAmbientColorB)
+		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
+		If forest_event <> Null Then
+			If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
+		EndIf
 	EndIf
+	AmbientLight(CurrR, CurrG, CurrB)
 	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	
 	Local HasBattery%
 	Local Power%
 	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE Then
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
 					Power = Int(Inventory(i)\State)
 					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
@@ -305,16 +312,16 @@ Function RenderWorld2%(Tween#)
 			
 			If HasBattery = 1 Then PlusY = 40
 			
-			Text2(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, GetLocalString("msg", "refresh"), True, False)
+			Local RefreshHint$ = GetLocalString("msg", "refresh")
+			
+			Text2(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, Trim(Left(RefreshHint, Instr(RefreshHint, "%s") - 1)), True, False)
 			Text2(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-			Text2(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, GetLocalString("msg", "refresh.sec"), True, False)
+			Text2(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - Instr(RefreshHint, "%s") - 1)), True, False)
 			
 			Local Temp% = CreatePivot()
 			Local Temp2% = CreatePivot()
 			
 			PositionEntity(Temp, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
-			
-			Color(255, 255, 255)
 			
 			For np.NPCs = Each NPCs
 				If np\NVGName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
@@ -329,9 +336,9 @@ Function RenderWorld2%(Tween#)
 						Local xValue# = 0.0
 						
 						If YawValue > 90.0 And YawValue <= 180.0 Then
-							xValue = Sin(90.0) / 90.0 * YawValue
+							xValue = 1.0 / 90.0 * YawValue
 						ElseIf YawValue > 180 And YawValue < 270.0
-							xValue = Sin(270.0) / YawValue * 270.0
+							xValue = (-1.0) / YawValue * 270.0
 						Else
 							xValue = Sin(YawValue)
 						EndIf
@@ -340,9 +347,9 @@ Function RenderWorld2%(Tween#)
 						Local yValue# = 0.0
 						
 						If PitchValue > 90.0 And PitchValue <= 180.0 Then
-							yValue = Sin(90.0) / 90.0 * PitchValue
-						ElseIf PitchValue > 180.0 And PitchValue < 270
-							yValue = Sin(270.0) / PitchValue * 270.0
+							yValue = 1.0 / 90.0 * PitchValue
+						ElseIf PitchValue > 180.0 And PitchValue < 270.0
+							yValue = (-1.0) / PitchValue * 270.0
 						Else
 							yValue = Sin(PitchValue)
 						EndIf
@@ -431,7 +438,7 @@ Function CreateBlurImage%()
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 0)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO)
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
@@ -587,7 +594,22 @@ Function SetFont2%(Font%)
 End Function
 
 Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
-	Text(x, y + TextOffset, Txt, AlignX, AlignY)
+	If opt\TextShadow Then
+		Local ColorR# = ColorRed()
+		Local ColorG# = ColorGreen()
+		Local ColorB# = ColorBlue()
+		
+		If ColorR = 0.0 And ColorG = 0.0 And ColorB = 0.0 Then
+			Color(200, 200, 200)
+		Else
+			Color(55, 55, 55)
+		EndIf
+		Text(x + 1, y + TextOffset + 1, Txt, AlignX, AlignY)
+		Color(ColorR, ColorG, ColorB)
+		Text(x, y + TextOffset, Txt, AlignX, AlignY)
+	Else
+		Text(x, y + TextOffset, Txt, AlignX, AlignY)
+	EndIf
 End Function
 
 ;~IDEal Editor Parameters:

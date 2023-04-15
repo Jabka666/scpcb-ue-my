@@ -63,13 +63,6 @@ Function AngleDist#(a0#, a1#)
 	Return(bb)
 End Function
 
-Function MilliSecs2%()
-	Local RetVal% = MilliSecs()
-	
-	If RetVal < 0 Then RetVal = RetVal + 2147483648
-	Return(RetVal)
-End Function
-
 Function FloatToString$(n#, Count%)
 	Return(Left(n, Len(Int(Str(n))) + Count + 1))
 End Function
@@ -174,14 +167,8 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	EndIf
 End Function
 
-Function IsInsideArea%(Pvt%, Dist#)
-	If Abs(EntityX(me\Collider) - EntityX(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
-		If Abs(EntityZ(me\Collider) - EntityZ(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
-			If Abs(EntityY(me\Collider) - EntityY(Pvt, True)) < Dist + (0.015 * fps\Factor[0]) Then
-				Return(True)
-			EndIf
-		EndIf
-	EndIf
+Function IsInsideElevator%(OBJ%, Pvt%)
+	If (Abs(EntityX(OBJ, True) - EntityX(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityZ(OBJ, True) - EntityZ(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityY(OBJ, True) - EntityY(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) Then Return(True)
 	Return(False)
 End Function
 
@@ -323,71 +310,75 @@ Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
 End Function
 
 ; ~ This must be called after the room angle has been finalized!
-Function SetupTriggerBoxes%(r.Rooms)
-	Local t.TriggerBox
-	Local sX#, sY#, sZ#
-	Local pXMin#, pXMax#
-	Local pZMin#, pZMax#
-	Local i%
-	
-	For i = 0 To r\TriggerBoxAmount - 1
-		t = r\TriggerBoxes[i]
-		sX = EntityScaleX(t\OBJ, 1)
-		sY = Max(EntityScaleY(t\OBJ, 1), 0.001)
-		sZ = EntityScaleZ(t\OBJ, 1)
-		
-		GetMeshExtents(t\OBJ)
-		
-		pXMin = Cos(r\Angle) * sX * Mesh_MinX - Sin(r\Angle) * sZ * Mesh_MinZ + r\x
-		pZMin = Sin(r\Angle) * sX * Mesh_MinX + Cos(r\Angle) * sZ * Mesh_MinZ + r\z
-		
-		pXMax = Cos(r\Angle) * sX * Mesh_MaxX - Sin(r\Angle) * sZ * Mesh_MaxZ + r\x
-		pZMax = Sin(r\Angle) * sX * Mesh_MaxX + Cos(r\Angle) * sZ * Mesh_MaxZ + r\z
-		
-		If pXMin > pXMax Then
-			t\MinX = pXMax
-			t\MaxX = pXMin
-		Else
-			t\MinX = pXMin
-			t\MaxX = pXMax
-		EndIf
-		
-		If pZMin > pZMax Then
-			t\MinZ = pZMax
-			t\MaxZ = pZMin
-		Else
-			t\MinZ = pZMin
-			t\MaxZ = pZMax
-		EndIf
-		
-		t\MinY = ((sY * Mesh_MinY) + r\y)
-		t\MaxY = ((sY * Mesh_MaxY) + r\y)
-	Next
-End Function
+;Function SetupTriggerBoxes%(r.Rooms)
+;	Local t.TriggerBox
+;	Local sX#, sY#, sZ#
+;	Local pXMin#, pXMax#
+;	Local pZMin#, pZMax#
+;	Local i%
+;	Local SinValue#, CosValue#
+;	
+;	For i = 0 To r\TriggerBoxAmount - 1
+;		t = r\TriggerBoxes[i]
+;		sX = EntityScaleX(t\OBJ, 1)
+;		sY = Max(EntityScaleY(t\OBJ, 1), 0.001)
+;		sZ = EntityScaleZ(t\OBJ, 1)
+;		
+;		GetMeshExtents(t\OBJ)
+;		
+;		SinValue = Sin(r\Angle)
+;		CosValue = Cos(r\Angle)
+;		
+;		pXMin = CosValue * sX * Mesh_MinX - SinValue * sZ * Mesh_MinZ + r\x
+;		pZMin = SinValue * sX * Mesh_MinX + CosValue * sZ * Mesh_MinZ + r\z
+;		
+;		pXMax = CosValue * sX * Mesh_MaxX - SinValue * sZ * Mesh_MaxZ + r\x
+;		pZMax = SinValue * sX * Mesh_MaxX + CosValue * sZ * Mesh_MaxZ + r\z
+;		
+;		If pXMin > pXMax Then
+;			t\MinX = pXMax
+;			t\MaxX = pXMin
+;		Else
+;			t\MinX = pXMin
+;			t\MaxX = pXMax
+;		EndIf
+;		
+;		If pZMin > pZMax Then
+;			t\MinZ = pZMax
+;			t\MaxZ = pZMin
+;		Else
+;			t\MinZ = pZMin
+;			t\MaxZ = pZMax
+;		EndIf
+;		
+;		t\MinY = ((sY * Mesh_MinY) + r\y)
+;		t\MaxY = ((sY * Mesh_MaxY) + r\y)
+;	Next
+;End Function
 
-Function CheckTriggers$()
-	Local i%
-	
-	If PlayerRoom\TriggerBoxAmount = 0 Then
-		Return
-	Else
-		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
-			If chs\DebugHUD <> 0 Then
-				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
-			Else
-				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)
- 			EndIf
-			
-			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX Then
-				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY Then
-					If EntityZ(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinZ And EntityZ(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxZ Then
-						Return(PlayerRoom\TriggerBoxes[i]\Name)
-					EndIf
-				EndIf
-			EndIf
-		Next
-	EndIf
-End Function
+;Function CheckTriggers$()
+;	Local i%
+;	
+;	If PlayerRoom\TriggerBoxAmount = 0 Then
+;		Return
+;	Else
+;		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
+;			If chs\DebugHUD <> 0 Then
+;				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
+;			Else
+;				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)
+;			EndIf
+;			
+;			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX Then
+;				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY Then
+;					If EntityZ(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinZ And EntityZ(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxZ Then
+;						Return(PlayerRoom\TriggerBoxes[i]\Name)
+;					EndIf
+;				EndIf
+;			EndIf
+;		Next
+;	EndIf
+;End Function
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D

@@ -1,18 +1,7 @@
-Type Save
-	Field Name$
-	Field Time$
-	Field Date$
-	Field Version$
-End Type
-
-Global CurrSave.Save
-Global DelSave.Save
-Global SaveGameAmount%
-
 Const SavePath$ = "Saves\"
 
 Function SaveGame%(File$)
-	CatchErrors("Uncaught (SaveGame)")
+	CatchErrors("SaveGame(" + File + ")")
 	
 	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
@@ -111,8 +100,6 @@ Function SaveGame%(File$)
 	Next
 	WriteByte(f, SelectedDifficulty\InventorySlots)
 	
-	WriteFloat(f, mon_I\MonitorTimer)
-	
 	WriteFloat(f, me\Sanity)
 	
 	WriteFloat(f, wi\GasMaskFogTimer)
@@ -149,7 +136,7 @@ Function SaveGame%(File$)
 	WriteByte(f, RemoteDoorOn)
 	WriteByte(f, SoundTransmission)
 	
-	For i = 0 To MAXACHIEVEMENTS - 1
+	For i = 0 To MaxAchievements - 1
 		WriteByte(f, achv\Achievement[i])
 	Next
 	WriteInt(f, me\RefinedItems)
@@ -170,6 +157,10 @@ Function SaveGame%(File$)
 	WriteFloat(f, MTFTimer)
 	
 	WriteFloat(f, TakeOffTimer)
+	
+	For i = 0 To 1
+		WriteByte(f, mon_I\UpdateCheckpoint[i])
+	Next
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -281,15 +272,16 @@ Function SaveGame%(File$)
 		Next
 		
 		For i = 0 To MaxRoomLevers - 1
-			If r\Levers[i] <> 0 Then
-				If EntityPitch(r\Levers[i], True) > 0.0 Then
+			If r\RoomLevers[i] = Null Then
+				WriteByte(f, 2)
+			Else
+				If EntityPitch(r\RoomLevers[i]\OBJ, True) > 0.0 Then
 					WriteByte(f, 1)
 				Else
 					WriteByte(f, 0)
 				EndIf
 			EndIf
 		Next
-		WriteByte(f, 2)
 		
 		If r\mt = Null Then ; ~ This room doesn't have a grid
 			WriteByte(f, 0)
@@ -493,7 +485,7 @@ Function SaveGame%(File$)
 		WriteByte(f, itt\Found)
 	Next
 
-	WriteInt(f, me\EscapeTimer)
+	WriteInt(f, EscapeTimer)
 	
 	CloseFile(f)
 	
@@ -507,11 +499,11 @@ Function SaveGame%(File$)
 		CreateHintMsg(GetLocalString("save", "saved"))
 	EndIf
 	
-	CatchErrors("SaveGame")
+	CatchErrors("Uncaught: SaveGame(" + File + ")")
 End Function
 
 Function LoadGame%(File$)
-	CatchErrors("Uncaught (LoadGame)")
+	CatchErrors("LoadGame(" + File + ")")
 	
 	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
@@ -609,8 +601,6 @@ Function LoadGame%(File$)
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
 	
-	mon_I\MonitorTimer = ReadFloat(f)
-	
 	me\Sanity = ReadFloat(f)
 	
 	wi\GasMaskFogTimer = ReadFloat(f)
@@ -643,12 +633,12 @@ Function LoadGame%(File$)
 	RemoteDoorOn = ReadByte(f)
 	SoundTransmission = ReadByte(f)
 	
-	For i = 0 To MAXACHIEVEMENTS - 1
+	For i = 0 To MaxAchievements - 1
 		achv\Achievement[i] = ReadByte(f)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
-	If ReadInt(f) <> 994 Then UsedConsole = True
+	UsedConsole = (ReadInt(f) <> 994)
 	
 	opt\CameraFogFar = ReadFloat(f)
 	opt\StoredCameraFogFar = ReadFloat(f)
@@ -663,6 +653,10 @@ Function LoadGame%(File$)
 	
 	TakeOffTimer = ReadFloat(f)
 	
+	For i = 0 To 1
+		mon_I\UpdateCheckpoint[i] = ReadByte(f)
+	Next
+	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -672,6 +666,10 @@ Function LoadGame%(File$)
 	Next
 	
 	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
+	
+	For n.NPCs = Each NPCs
+		RemoveNPC(n)
+	Next
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -814,7 +812,7 @@ Function LoadGame%(File$)
 				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\Name)
 				TurnEntity(r\OBJ, 0.0, Angle, 0.0)
 				r\Angle = Angle
-				SetupTriggerBoxes(r)
+				;SetupTriggerBoxes(r)
 				r\Found = Found
 				Exit
 			EndIf
@@ -836,12 +834,10 @@ Function LoadGame%(File$)
 		
 		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
-			If ID = 2 Then
-				Exit
-			ElseIf ID = 1
-				RotateEntity(r\Levers[x], 78.0, EntityYaw(r\Levers[x]), 0.0)
-			Else
-				RotateEntity(r\Levers[x], -78.0, EntityYaw(r\Levers[x]), 0.0)
+			If ID = 1 Then
+				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+			ElseIf ID = 0
+				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			EndIf
 		Next
 		
@@ -899,9 +895,7 @@ Function LoadGame%(File$)
 			Delete(r\fr) : r\fr = Null
 		EndIf
 		
-		If r\x = r1499_x And r\z = r1499_z
-			I_1499\PrevRoom = r
-		EndIf
+		If r\x = r1499_x And r\z = r1499_z Then I_1499\PrevRoom = r
 	Next
 	
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
@@ -909,9 +903,9 @@ Function LoadGame%(File$)
 	Local Zone%, ShouldSpawnDoor%
 	
 	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - (SelectedMap = "") Then
+		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null) Then
 			Zone = 3
-		ElseIf y >= I_Zone\Transition[1] - (SelectedMap = "") And y < I_Zone\Transition[0] - (SelectedMap = "")
+		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
 			Zone = 2
 		Else
 			Zone = 1
@@ -921,31 +915,22 @@ Function LoadGame%(File$)
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
 					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 90.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90.0 Lor r\Angle = 270.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Default
 								;[Block]
@@ -961,31 +946,22 @@ Function LoadGame%(File$)
 							EndIf
 						EndIf
 						
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0
-									ShouldSpawnDoor = True
-								EndIf
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Default
 								;[Block]
@@ -1108,10 +1084,13 @@ Function LoadGame%(File$)
 	
 	Local e.Events
 	
+	For e.Events = Each Events
+		RemoveEvent(e)
+	Next
+	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		e.Events = New Events
-		
 		e\EventID = ReadByte(f)
 		e\EventState = ReadFloat(f)
 		e\EventState2 = ReadFloat(f)
@@ -1132,8 +1111,6 @@ Function LoadGame%(File$)
 			Case e_dimension_1499
 				;[Block]
 				If e\EventState > 0.0 Then
-					e\EventState = 0.0
-					e\EventStr = ""
 					HideChunks()
 					DeleteChunks()
 					For n.NPCs = Each NPCs
@@ -1147,6 +1124,9 @@ Function LoadGame%(File$)
 					For du.Dummy1499_1 = Each Dummy1499_1
 						Delete(du)
 					Next
+					
+					e\EventStr = ""
+					e\EventState = 0.0
 				EndIf
 				;[End Block]
 			Case e_cont2_860_1, e_cont1_205
@@ -1155,7 +1135,11 @@ Function LoadGame%(File$)
 				;[End Block]
 			Case e_cont1_106
 				;[Block]
-				If e\EventState2 = 0.0 Then PositionEntity(e\room\Objects[6], EntityX(e\room\Objects[6], True), (-1280.0) * RoomScale, EntityZ(e\room\Objects[6], True), True)
+				If e\EventState2 = 0.0 Then PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), (-1280.0) * RoomScale, EntityZ(e\room\Objects[2], True), True)
+				;[End Block]
+			Case e_cont2_008
+				;[Block]
+				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
 				;[End Block]
 		End Select
 	Next
@@ -1260,18 +1244,18 @@ Function LoadGame%(File$)
 		itt\Found = ReadByte(f)
 	Next
 
-	me\EscapeTimer = ReadInt(f)
+	EscapeTimer = ReadInt(f)
 	
 	Local Dist#, Dist2#
 	
 	For do.Doors = Each Doors
-		If do\room <> Null Then
+		If do\room = Null Then
 			Dist = 400.0
 			
 			Local closestroom.Rooms
 			
 			For r.Rooms = Each Rooms
-				Dist2 = EntityDistanceSquared(r\OBJ, do\OBJ)
+				Dist2 = EntityDistanceSquared(r\OBJ, do\FrameOBJ)
 				If Dist2 < Dist Then
 					Dist = Dist2
 					closestroom = r.Rooms
@@ -1345,13 +1329,11 @@ Function LoadGame%(File$)
 		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
 	EndIf
 	
-	UpdateTimer = 0.0
-	
-	CatchErrors("LoadGame")
+	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
 
 Function LoadGameQuick%(File$)
-	CatchErrors("Uncaught (LoadGameQuick)")
+	CatchErrors("LoadGameQuick(" + File + ")")
 	
 	Local r.Rooms, n.NPCs, do.Doors
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
@@ -1485,8 +1467,6 @@ Function LoadGameQuick%(File$)
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
 	
-	mon_I\MonitorTimer = ReadFloat(f)
-	
 	me\Sanity = ReadFloat(f)
 	
 	wi\GasMaskFogTimer = ReadFloat(f)
@@ -1519,12 +1499,12 @@ Function LoadGameQuick%(File$)
 	RemoteDoorOn = ReadByte(f)
 	SoundTransmission = ReadByte(f)
 	
-	For i = 0 To MAXACHIEVEMENTS - 1
+	For i = 0 To MaxAchievements - 1
 		achv\Achievement[i] = ReadByte(f)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
-	If ReadInt(f) <> 994 Then UsedConsole = True
+	UsedConsole = (ReadInt(f) <> 994)
 	
 	opt\CameraFogFar = ReadFloat(f)
 	opt\StoredCameraFogFar = ReadFloat(f)
@@ -1538,6 +1518,10 @@ Function LoadGameQuick%(File$)
 	MTFTimer = ReadFloat(f)
 	
 	TakeOffTimer = ReadFloat(f)
+	
+	For i = 0 To 1
+		mon_I\UpdateCheckpoint[i] = ReadByte(f)
+	Next
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -1708,12 +1692,10 @@ Function LoadGameQuick%(File$)
 		
 		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
-			If ID = 2 Then
-				Exit
-			ElseIf ID = 1
-				RotateEntity(r\Levers[x], 78.0, EntityYaw(r\Levers[x]), 0.0)
-			Else
-				RotateEntity(r\Levers[x], -78.0, EntityYaw(r\Levers[x]), 0.0)
+			If ID = 1 Then
+				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+			ElseIf ID = 0
+				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			EndIf
 		Next
 		
@@ -1798,9 +1780,9 @@ Function LoadGameQuick%(File$)
 				do\IsElevatorDoor = IsElevDoor
 				do\MTFClose = MTFClose
 				
-				PositionEntity(do\OBJ, OBJX, EntityY(do\OBJ), OBJZ, True)
+				PositionEntity(do\OBJ, OBJX, y, OBJZ, True)
 				RotateEntity(do\OBJ, 0.0, OBJYaw, 0.0, True)
-				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, EntityY(do\OBJ2), OBJ2Z, True)
+				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, y, OBJ2Z, True)
 				Exit
 			EndIf
 		Next
@@ -1899,6 +1881,10 @@ Function LoadGameQuick%(File$)
 			Case e_cont2_860_1
 				;[Block]
 				If e\EventState = 1.0 Then ShowEntity(e\room\fr\Forest_Pivot)
+				;[End Block]
+			Case e_cont2_008
+				;[Block]
+				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
 				;[End Block]
 		End Select
 	Next
@@ -2002,18 +1988,18 @@ Function LoadGameQuick%(File$)
 		itt\Found = ReadByte(f)
 	Next
 
-	me\EscapeTimer = ReadInt(f)
+	EscapeTimer = ReadInt(f)
 	
 	Local Dist#, Dist2#
 	
 	For do.Doors = Each Doors
-		If do\room <> Null Then
+		If do\room = Null Then
 			Dist = 400.0
 			
 			Local closestroom.Rooms
 			
 			For r.Rooms = Each Rooms
-				Dist2 = EntityDistanceSquared(r\OBJ, do\OBJ)
+				Dist2 = EntityDistanceSquared(r\OBJ, do\FrameOBJ)
 				If Dist2 < Dist Then
 					Dist = Dist2
 					closestroom = r.Rooms
@@ -2041,7 +2027,7 @@ Function LoadGameQuick%(File$)
 		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
 	EndIf
 	
-	UpdateTimer = 0.0
+	UpdateRoomLightsTimer = 0.0
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)
 	; ~ This is only required for the LoadGameQuick function, as the other one is from the menu where everything is already deleted anyways
@@ -2100,29 +2086,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case "cont1_035"
 				;[Block]
-				If I_035\Sad <> 0 Then
-					Tex = LoadTexture_Strict("GFX\Map\Textures\label035_sad.png")
-				Else
-					Tex = LoadTexture_Strict("GFX\Map\Textures\label035_smile.png")
-				EndIf
-				
-				For i = 2 To CountSurfaces(r\Objects[9])
-					SF = GetSurface(r\Objects[9], i)
-					b = GetSurfaceBrush(SF)
-					If b <> 0 Then
-						t1 = GetBrushTexture(b, 0)
-						If t1 <> 0 Then
-							Name = StripPath(TextureName(t1))
-							If Lower(Name) <> "cable_black.jpg"
-								BrushTexture(b, Tex, 0, 0)
-								PaintSurface(SF, b)
-							EndIf
-							If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
-						EndIf
-						FreeBrush(b)
-					EndIf
-				Next
-				DeleteSingleTextureEntryFromCache(Tex)
+				Update035Label(r\Objects[6])
 				;[End Block]
 		End Select
 	Next
@@ -2130,7 +2094,17 @@ Function LoadGameQuick%(File$)
 	; ~ Resetting some stuff (those get changed when going to the endings)
 	HideDistance = 17.0
 	
-	CatchErrors("LoadGameQuick")
+	CatchErrors("Uncaught: LoadGameQuick(" + File + ")")
+End Function
+
+Global GameSaved%
+Global CanSave%
+
+Function UpdateSaveState%()
+	If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then
+		CanSave = 2
+		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Lor PlayerInsideElevator Then CanSave = 0
+	EndIf
 End Function
 
 Type AutoSave
@@ -2138,7 +2112,7 @@ Type AutoSave
 	Field Timer#
 End Type
 
-Global as.AutoSave = New AutoSave
+Global as.AutoSave
 
 Function UpdateAutoSave%()
 	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 2 Lor (Not me\Playable) Lor me\Zombie Then
@@ -2180,28 +2154,35 @@ Function LoadAchievementsFile%()
 	CloseFile(File)
 End Function
 
-Global SavedMapsAmount% = 0
-Dim SavedMaps$(SavedMapsAmount)
-Dim SavedMapsAuthor$(SavedMapsAmount)
+Type Save
+	Field Name$
+	Field Time$
+	Field Date$
+	Field Version$
+End Type
+
+Global CurrSave.Save
+Global DelSave.Save
+Global SavedGamesAmount%
 
 Function LoadSavedGames%()
-	CatchErrors("Uncaught (LoadSaveGames)")
+	CatchErrors("LoadSaveGames()")
 	
 	Local sv.Save, newsv.Save
 	
 	For sv.Save = Each Save
 		Delete(sv)
 	Next
-	SaveGameAmount = 0
+	SavedGamesAmount = 0
 	
 	If FileType(SavePath) = 1 Then RuntimeError(Format(GetLocalString("save", "cantcreatedir"), SavePath))
 	If FileType(SavePath) = 0 Then CreateDir(SavePath)
 	
-	Local MyDir% = ReadDir(SavePath)
+	Local SaveDir% = ReadDir(SavePath)
 	
-	NextFile(MyDir) : NextFile(MyDir) ; ~ Skipping "." and ".."
+	NextFile(SaveDir) : NextFile(SaveDir) ; ~ Skipping "." and ".."
 	
-	Local File$ = NextFile(MyDir)
+	Local File$ = NextFile(SaveDir)
 	
 	While File <> ""
 		If FileType(SavePath + File) = 2 Then
@@ -2215,13 +2196,13 @@ Function LoadSavedGames%()
 			newsv\Version = ReadString(f)
 			
 			CloseFile(f)
-			SaveGameAmount = SaveGameAmount + 1
+			SavedGamesAmount = SavedGamesAmount + 1
 		EndIf
-		File = NextFile(MyDir)
+		File = NextFile(SaveDir)
 	Wend
-	CloseDir(MyDir)
+	CloseDir(SaveDir)
 	
-	CatchErrors("LoadSaveGames")
+	CatchErrors("Uncaught: LoadSaveGames()")
 End Function
 
 Function DeleteGame%(sv.Save)
@@ -2240,70 +2221,85 @@ Function DeleteGame%(sv.Save)
 		Wend
 		CloseDir(DelDir)
 		DeleteDir(sv\Name)
+		SavedGamesAmount = SavedGamesAmount - 1
 	EndIf
 	Delete(sv)
 End Function
 
 Const CustomMapsPath$ = "Map Creator\Maps\"
 
-Function LoadSavedMaps%()
-	CatchErrors("Uncaught (LoadSavedMaps)")
+Type CustomMaps
+	Field Name$
+	Field Author$
+End Type
+
+Global CurrCustomMap.CustomMaps
+Global DelCustomMap.CustomMaps
+Global SelectedCustomMap.CustomMaps
+Global CustomMapsAmount%
+
+Function LoadCustomMaps%()
+	CatchErrors("LoadCustomMaps()")
 	
-	Local i%, Dir, File$
+	Local cm.CustomMaps, newcm.CustomMaps
 	
-	For i = 0 To SavedMapsAmount - 1
-		SavedMaps(i) = ""
-		SavedMapsAuthor(i) = ""
+	For cm.CustomMaps = Each CustomMaps
+		Delete(cm)
 	Next
-	SavedMapsAmount = 0
+	CustomMapsAmount = 0
 	
-	If FileType(CustomMapsPath) <> 2 Then CreateDir(CustomMapsPath)
-	Dir = ReadDir(CustomMapsPath)
-	Repeat
-		File = NextFile(Dir)
-		
-		If File = "" Then Exit
-		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then
-			If File <> "." And File <> ".." Then
-				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then SavedMapsAmount = SavedMapsAmount + 1
-			EndIf
-		EndIf
-	Forever
-	CloseDir(Dir)
+	If FileType(CustomMapsPath) = 1 Then RuntimeError(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
+	If FileType(CustomMapsPath) = 0 Then CreateDir(CustomMapsPath)
 	
-	Dim SavedMaps$(SavedMapsAmount)
-	Dim SavedMapsAuthor$(SavedMapsAmount)
+	Local MapDir% = ReadDir(CustomMapsPath)
 	
-	i = 0
-	Dir = ReadDir(CustomMapsPath)
-	Repeat
-		File = NextFile(Dir)
-		
-		If File = "" Then Exit
-		If FileType(CurrentDir() + CustomMapsPath + File) = 1 Then
-			If File <> "." And File <> ".." Then
-				If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
-					SavedMaps(i) = File
-					If Right(File, 6) = "cbmap2" Then
-						Local f% = ReadFile_Strict(CustomMapsPath + File)
-						
-						SavedMapsAuthor(i) = ReadLine(f)
-						CloseFile(f)
-					Else
-						SavedMapsAuthor(i) = GetLocalString("creator", "unknown")
-					EndIf
-					i = i + 1
+	NextFile(MapDir) : NextFile(MapDir) ; ~ Skipping "." and ".."
+	
+	Local File$ = NextFile(MapDir)
+	
+	While File <> ""
+		If FileType(CustomMapsPath + File) = 1 Then
+			If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
+				Local f% = ReadFile_Strict(CustomMapsPath + File)
+				
+				newcm.CustomMaps = New CustomMaps
+				newcm\Name = File
+				If Right(File, 6) = "cbmap2" Then
+					newcm\Author = ReadLine(f)
+				Else
+					newcm\Author = GetLocalString("creator", "unknown")
 				EndIf
+				CloseFile(f)
+				CustomMapsAmount = CustomMapsAmount + 1
 			EndIf
 		EndIf
-	Forever
-	CloseDir(Dir)
+		File = NextFile(MapDir)
+	Wend
+	CloseDir(MapDir)
 	
-	CatchErrors("LoadSavedMaps")
+	CatchErrors("Uncaught: LoadCustomMaps()")
+End Function
+
+Function DeleteCustomMap%(cm.CustomMaps)
+	Local DelDir% = ReadDir(CustomMapsPath)
+	
+	If DelDir <> 0 Then
+		NextFile(DelDir) : NextFile(DelDir) ; ~ Skipping "." and ".."
+		
+		Local File$ = NextFile(DelDir)
+		
+		While File <> ""
+			DeleteFile(CustomMapsPath + File)
+			File = NextFile(DelDir)
+		Wend
+		CloseDir(DelDir)
+		CustomMapsAmount = CustomMapsAmount - 1
+	EndIf
+	Delete(cm)
 End Function
 
 Function LoadMap%(File$)
-	CatchErrors("Uncaught (LoadMap)")
+	CatchErrors("LoadMap(" + File + ")")
 	
 	Local r.Rooms, rt.RoomTemplates, e.Events
 	Local f%, x%, y%, Name$, Angle%, Prob#
@@ -2325,9 +2321,9 @@ Function LoadMap%(File$)
 		ForestPieceAmount = ReadInt(f)
 		MTPieceAmount = ReadInt(f)
 		
-		If ForestPieceAmount > 0 Then I_Zone\HasCustomForest = True
+		I_Zone\HasCustomForest = (ForestPieceAmount > 0)
 		
-		If MTPieceAmount > 0 Then I_Zone\HasCustomMT = True
+		I_Zone\HasCustomMT = (MTPieceAmount > 0)
 		
 		; ~ Facility rooms
 		For i = 0 To RoomAmount - 1
@@ -2344,7 +2340,7 @@ Function LoadMap%(File$)
 					r\Angle = Angle
 					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
 					r\Angle = WrapAngle(r\Angle)
-					SetupTriggerBoxes(r)
+					;SetupTriggerBoxes(r)
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
@@ -2517,7 +2513,7 @@ Function LoadMap%(File$)
 					r\Angle = Angle
 					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
 					r\Angle = WrapAngle(r\Angle)
-					SetupTriggerBoxes(r)
+					;SetupTriggerBoxes(r)
 					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
@@ -2551,7 +2547,7 @@ Function LoadMap%(File$)
 	CloseFile(f)
 	
 	Local Zone%
-	Local ShouldSpawnDoor% = False
+	Local ShouldSpawnDoor%
 	Local d.Doors
 	
 	For y = MapGridSize To 0 Step -1
@@ -2567,22 +2563,21 @@ Function LoadMap%(File$)
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
 					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 90.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Default
 								;[Block]
@@ -2598,23 +2593,22 @@ Function LoadMap%(File$)
 							EndIf
 						EndIf
 						
-						ShouldSpawnDoor = False
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
-								If r\Angle = 180.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2
 								;[Block]
-								If r\Angle = 0.0 Lor r\Angle = 180.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
 								;[End Block]
 							Case ROOM2C
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
 								;[Block]
-								If r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0 Then ShouldSpawnDoor = True
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
 								;[End Block]
 							Default
 								;[Block]
@@ -2685,7 +2679,7 @@ Function LoadMap%(File$)
 		Next
 	Next
 	
-	CatchErrors("LoadMap")
+	CatchErrors("Uncaught: LoadMap(" + File + ")")
 End Function
 
 ;~IDEal Editor Parameters:

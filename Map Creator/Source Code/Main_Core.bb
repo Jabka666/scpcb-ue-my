@@ -248,7 +248,7 @@ UpdateWindowMenu(WinHandle)
 
 SetStatusText(LoadingWindow, GetLocalString("mc", "load.2d"))
 
-Local OptionWin% = CreateWindow(GetLocalString("mc", "menu.opt.editcam"), mo\Viewport_Center_X - 160, mo\Viewport_Center_Y - 120, 400, 380, WinHandle, 1)
+Local OptionWin% = CreateWindow(GetLocalString("mc", "editcam.title"), mo\Viewport_Center_X - 160, mo\Viewport_Center_Y - 120, 400, 380, WinHandle, 1)
 
 HideGadget(OptionWin)
 
@@ -281,7 +281,7 @@ SetButtonState(ShowFPS, opt\ShowFPS)
 Local CancelOpt_Button% = CreateButton(GetLocalString("mc", "editcam.cancel"), 0, 310, 180, 30, OptionWin)
 Local SaveOpt_Button% = CreateButton(GetLocalString("mc", "editcam.save"), 220, 310, 180, 30, OptionWin)
 
-Local Map_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapset"), mo\Viewport_Center_X - 120, mo\Viewport_Center_Y - 80, 240, 160, WinHandle, 1)
+Local Map_Settings% = CreateWindow(GetLocalString("mc", "mapset.title"), mo\Viewport_Center_X - 120, mo\Viewport_Center_Y - 80, 240, 160, WinHandle, 1)
 
 HideGadget(Map_Settings)
 
@@ -303,7 +303,7 @@ Global ZoneTransValue1% = 13, ZoneTransValue2% = 7
 Local ResetZoneTrans% = CreateButton(GetLocalString("mc", "reset"), 10, 90, 100, 30, Map_Settings)
 Local ApplyZoneTrans% = CreateButton(GetLocalString("mc", "apply"), 120, 90, 100, 30, Map_Settings)
 
-Local AuthorDescr_Settings% = CreateWindow(GetLocalString("mc", "menu.opt.mapdesc"), mo\Viewport_Center_X - 200, mo\Viewport_Center_Y - 80, 400, 200, WinHandle, 1)
+Local AuthorDescr_Settings% = CreateWindow(GetLocalString("mc", "mapdesc.title"), mo\Viewport_Center_X - 200, mo\Viewport_Center_Y - 80, 400, 200, WinHandle, 1)
 
 HideGadget(AuthorDescr_Settings)
 
@@ -1365,6 +1365,7 @@ Repeat
 		EndIf
 	EndIf
 Forever
+SaveOptionsINI()
 End()
 
 Const ROOM1% = 0, ROOM2% = 1, ROOM2C% = 2, ROOM3% = 3, ROOM4% = 4

@@ -1,68 +1,117 @@
 v1.1
 
+Launcher:
+- Aligned resolution list.
+
 General:
 - Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
 - Added «Home» key, «End» key, «Delete» key and «Insert» key to switch insert mode. Abilty to hold left/right arrow to fast move cursor. Implement of Ctrl+C and Ctrl+V.
-- Added a hitbox in "room2_servers_hcz" preventing SCP-096 to be triggered through the bloody windows.
+- Added a hitbox in «room2_servers_hcz» room preventing SCP-096 to be triggered through the bloody windows.
 - Added some folders organization.
 - Added language selection.
 - Added SCP-066 achievement.
-- Added new color effects depending on player zone.
-- Added a small chance to accidentally drop an item when trying to use it.
-- Added a blood decal after killing the player.
-- Added buttons for containment door in SCP-049's containment chamber.
-- Added dropping items without closing inventory with right click.
 - Added «PRESS ANY KEY TO CONTINUE» string while playing startup videos.
 - Added escape time.
+- Added sound volume for dropping the items, so NPCs can hear your activity. Increased crouch and picking up sound volumes.
+- Added more parameters for debug menu.
+- Added text shadow option.
 
 - Removed «playmusic» console command.
+- Removed SCP-106 from SCP-005's containment chamber event.
 
 - Improved fluid step sounds.
 
+- Changed color of the decal created in SCP-914 on «ROUGH» mode.
+
 - Converted .ini files to UTF-8 format.
 - Finally made the «Bright mode» similar to original game.
-- Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
 
 - Optimized game a lot.
 
+Mechanics and effects:
+- Added a small chance to accidentally drop an item when trying to use it.
+- Added dropping items without closing inventory with right click.
+- Added a blood decal after killing the player.
+- Added new color effects depending on player zone.
+- Added a smooth stamina reducing effect while wearing the Hazmat Suit or SCP-714.
+
+- Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
+- Every document, note and chatscreen has it's own texture.
+
+- Some improvements for player's room detection. Might fix some problems with custom maps and new optimization system.
+
 Rooms:
+- Added buttons for containment door in SCP-049's containment chamber.
+- «room3_storage» changes:
+	- Added Level 1 Keycard inside the «room3_storage» area.
+	- Added death message when falling down the elevator shaft.
+- Added missing chatscreen in «room2_office_3» room.
+
 - Changed type of door button being used in the Heavy Containment Zone's deadend checkpoint rooms.
 
+- Improved SCP-205's containment chamber.
 - Improved SCP-096's containment chamber design.
-- Improved «room1_archive» room's design.
+- Improved some rooms design.
 
 - Tiny corrections for rooms description.
 
 - Batteries on the map are now randomized.
 - Dr. L's office harm player like inside the Pocket Dimension.
 
-- Returned "Pipes_NoRust" texture.
+- Returned «Pipes_NoRust» texture.
+
+- Level 3 Keycard located in SCP-895's containment chamber now drops from a fallen guard.
+
+- Night vision doesn't work inside the Pocket Dimension. If you'll use it, you'll get more damage.
+
+- Increased SCP-005's spawnrate in the containment chamber.
 
 Items:
-- Added a new gas mask/hazmat suit variation: gas mask/hazmat suit without fogging.
-
 - Renamed some console item names.
+- Renamed Severed Hand to White/Yellow Severed Hand.
 
+- SCRAMBLE Gear changes:
+	- Added SCRAMBLE Gear variation without batteries.
+	- Tiny battery rebalance for SCRAMBLE Gear.
+	- The SCRAMBLE Gear a bit distances camera fog now. Also made a SCRAMBLE Gear's HUD a bit brighter.
 - S-NAV 310 and blue NVG require now an 18V Battery.
-- Tiny battery rebalance for SCRAMBLE Gear.
 - Nerfed NVG fog distance from 30 to 17.
-- The white pill now cures the Common Cold.
-- Players wearing Hazmat Suit are now able to pick up and drop items.
-- You can use items while wearing the Hazmat Suit with exceptions being similar to that of the Gas mask plus no First Aid Kit nor Syringes.
-- The Hazmat Suit now fogs up.
+- The white pill now cures the «Common Cold».
+- Hazmat Suit/Gas mask changes:
+	- Added a new Gas Mask/Hazmat Suit variation: Gas Mask/Hazmat Suit without fogging.
+	- Players wearing Hazmat Suit are now able to pick up and drop items.
+	- You can use items while wearing the Hazmat Suit with exceptions being similar to that of the Gas mask plus no First Aid Kit and no Syringes.
+	- The Hazmat Suit now fogs up.
+	- Very fine variations of these items no longer grant infinite stamina. Stamina is doubled.
+	- You can now wear SCP-714 and the Hazmat Suit at the same time, but only if SCP-714 was worn before the hazmat suit.
+	- Reduced defense time against SCP-049, but added for Hazmat Suit combined with SCP-148.
+- SCP-714 can be put into the wallet.
+- SCP-427 and SCP-714 cannot be dropped anymore without taking it off.
+- Origami can be added to the clipboard.
 
 Menu:
 - Added degree symbol for FOV value.
 - Added «PRESS ANY KEY TO WAKE UP» string for CWM loading screen.
+- Added additional options menu. This was done in order to free up some space for settings.
+	- Added in-game versions of the «Use launcher», «Subtitles», «Startup videos» and «Smooth bars» settings.
+- Added highlight effect for slidebars.
 
 - Tiny improvement for difficulties color.
 
 - Removed extra spacing in credits.
 
+- The subtitles setting has been moved to the «AUDIO» category.
+
+- Remade options menu.
+
 NPCs:
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
 - Reduces how long the Hazmat Suit protects the player from SCP-049 from 12 seconds down to 5 seconds. The Heavy Hazmat Suit changed from indefinite to 12 seconds.
 - SCP-035's victim now slowly hurts player.
+- Increased the spawn timer for SCP-106 when using SCP-914.
+- Reduced SCP-096's speed.
+- The MTF Units and SCP-049 now open linked doors in the same way as the player.
+- SCP-066 is now visible on the S-NAV Ultimate.
 
 Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.
@@ -82,11 +131,11 @@ Bug fixes:
 - Fixed SCP-049 removing hazmat suit and SCP-714 at the same time.
 - Fixed SCP-1499 not being taken off when the hazmat suit was equipped in the 1499 dimension.
 - Fixed position of the SCP-895 pivot attracting player's camera while wearing night vision goggles.
-- Fixed "ACCESS CODE" string going out of button image on different resolutions.
+- Fixed «ACCESS CODE» string going out of button image on different resolutions.
 - Fixed autosave option text color when option is disabled.
 - Fixed an issue caused SCP-106's collider to linger while using «disable106» command.
-- Fixed "disable/enable966" console command not hiding/showing all SCP-966 instances.
-- Fixed "ThreatAnnouncPossession.ogg" not playing at all.
+- Fixed «disable/enable966» console command not hiding/showing all SCP-966 instances.
+- Fixed «ThreatAnnouncPossession.ogg» not playing at all.
 - Fixed battery messages and sounds playing even if the game is paused.
 - Fixed SCP-1025 not being in player's focus while reading (no darkness effect).
 - Fixed light flash appearing ahead of time in Gate A area.
@@ -97,14 +146,23 @@ Bug fixes:
 - Fixed a loading text's color timer getting out of sync.
 - Fixed images disappearing after using ALT+TAB.
 - Fixed a white pill not being be put in the wallet.
-
-- Hopefully fixed height of NPCs teleportation.
+- Fixed cutscene in SCP-049's containment chamber not working at all.
+- Fixed monitor overlay not hiding after turning off the security cam.
+- Fixed an issue with wearable items of the same type not dropping when one of the items was equipped.
+- Fixed height of NPCs teleportation.
+- Fixed center coordinates of some rooms correcting player's/SCP-049's/MTF's teleportation.
+- Fixed open door SFX for the forest door.
+- Fixed SCP-096's idle ambient sound playing even if player teleported far away.
+- Fixed an issue that caused SCP-008's container to get a closed state after loading a save.
+- Fixed «STOP HIDING!» string not working while using pause menu.
 
 - Tiny fix for dead guard position in the starting location.
 - Tiny fix for map generation.
 - Tiny fix for keypad slots.
 - Tiny fix for S-NAV image position.
 - Tiny fix for console.
+
+- Minor bugfixes...
 
 v1.0.3
 
@@ -206,7 +264,7 @@ Bug Fixes:
 - Fixed MAVs:
 	- Fixed MAV after deleting saved game.
 	- Fixed MAV while playing in «NO SAVE» mode.
-	- Fixed MAV after using "disable/enable049" commands.
+	- Fixed MAV after using «disable/enable049» commands.
 	- Fixed MAV while trying to use a clipboard or wallet.
 	- Fixed MAV on the forest created by the Map Creator.
 	- Fixed MAV after killing SCP-035's tentacle.
@@ -218,7 +276,7 @@ Bug Fixes:
 - Fixed «room2_js» overlapping with adjacent rooms.
 - Fixed a console input box that is rendered through pause menu.
 - Fixed upgraded NVG killing earlier around SCP-895.
-- Fixed empty sound in "DoorBudge1.ogg".
+- Fixed empty sound in «DoorBudge1.ogg».
 - Fixed NPCs AI not being able to find correct waypoint on stairs.
 - Fixed Burnt Note scaling.
 - Fixed wrong SCP-409 texture.
@@ -233,6 +291,7 @@ Bug Fixes:
 - Tiny fix for heavy hazmat suit icon.
 - Tiny fix for SCP-106 decals deceleration speed.
 - Tiny fixes for some rooms.
+- Tiny fix for slider highlight detection.
 
 v1.0.2
 
@@ -259,9 +318,9 @@ Rooms:
 Bug Fixes:
 - Fixed button positions in «room2C_gw_2_lcz».
 - Fixed MAV while entering the SCP-970 loop again.
+- Fixed MAV in SCP-914's containment chamber (the bug manifests itself while entering the «room2_nuke» for some reason).
 - Fixed electric box collision and ventilation grate lighting in «room2_6_hcz».
 - Fixed SCP-500-01 amount in SCP-500.
-- Fixed MAV in «cont_914» (the bug manifests itself while entering the «room2_nuke» for some reason).
 - Fixed wrong zone sections for Map Creator.
 - Fixed custom map shows a random seed in the menu.
 - Fixed elevator door in «room2_ic».
@@ -274,6 +333,8 @@ Bug Fixes:
 v1.0.1
 
 General:
+- Added death message for guard.
+
 - Improved auto save system. If you saved badly, you can return to the previous save.
 
 - Renamed «Smooth HUD» option to «Smooth Bars».
@@ -295,20 +356,16 @@ General:
 Menu:
 - Improved input boxes design.
 
-Events:
-- Improved SCP-1123's event.
-
 Rooms:
 - Removed «room2_7_hcz».
 - Removed «room2_3_ez» event.
+
+- Improved SCP-1123's event.
 
 - Changed «096_spawn» event rooms (from «room2_2_hcz» to «room2_3_hcz»).
 
 - Separated «room2_elevator» and «room2_elevator_2» events.
 - Some props are brighter now.
-
-Ingame:
-- Added death message for guard.
 
 Map Creator:
 - Sorted rooms list.
@@ -326,19 +383,19 @@ Bug Fixes:
 	- Fixed MAV while entering the SCP-970 loop.
 	- Fixed MAV in SCP-035's containment chamber.
 	- Fixed MAV in SCP-1499's dimension.
-- Fixed missing door in «room2_checkpoint_lcz_hcz» and «room2_checkpoint_hcz_ez».
+- Fixed missing door in «room2_checkpoint_lcz_hcz» and «room2_checkpoint_hcz_ez» rooms.
 - Fixed a bug where SCP-714 and hazmat suit  sometimes don't defend the player from SCP-049. 
 - Fixed a bug where you can't exit from SCP-294's overlay.
 - Fixed SCP-008-1's attack AI.
-- Fixed SCP-049-2 positions in «cont2_049».
-- Fixed missing door frame in «room2_4_hcz».
+- Fixed SCP-049-2 positions in SCP-049's containment chamber.
+- Fixed missing door frame in «room2_4_hcz» room.
 - Fixed SCP-106's decal on the wall in SCP-005's containment chamber.
 - Fixed inventory slots amount after loading the game with another difficulty type.
 - Fixed SCP-035's texture in «room2_ez_035» event.
 - Fixed a bug where SCP-173 can stuck inside an office seat in SCP-008's containment chamber.
-- Fixed «room2_3_ez» design.
-- Fixed missing ambient sound in «room2_ez» and «room2_2_ez».
-- Fixed electric box collision in «cont2_008», «cont1_096» and «cont1_205».
+- Fixed «room2_3_ez» room design.
+- Fixed missing ambient sound in «room2_ez» and «room2_2_ez» rooms.
+- Fixed electric box collision in SCP-008, SCP-096 and SCP-205's containment chambers.
 - Fixed blood decal position under guard in SCP-895's containment chamber. 
 - Fixed blood decal position under player in SCP-1123's containment chamber.
 - Fixed ability to save the game on endings. 
@@ -359,10 +416,10 @@ Bug Fixes:
 - Fixed missing textures in «room3_storage».
 - Fixed SCP-1162's label wasn't renamed to SCP-1162-ARC.
 - Fixed crouching in NoClip mode.
-- Fixed doors in «cont1_173».
+- Fixed doors in SCP-173's containment chamber.
 
-- Tiny fix for «room2_shaft», «cont1_914», «room2_ic» and «room2_js».
-- Tiny fix for item positions in «room2_3_ez».
+- Tiny fix for «room2_shaft», «cont1_914», «room2_ic» and «room2_js» rooms.
+- Tiny fix for item positions in «room2_3_ez» room.
 - Tiny fixes for 4K resolutions.
 - Tiny fix for monitor saving.
 - Tiny fix for selected items.

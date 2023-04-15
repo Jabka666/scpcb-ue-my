@@ -15,7 +15,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 			ChannelPan(SoundCHN, PanValue)
 		EndIf
 	Else
-		If ChannelPlaying(SoundCHN) Then ChannelVolume(SoundCHN, 0.0)
+		ChannelVolume(SoundCHN, 0.0)
 	EndIf
 	Return(SoundCHN)
 End Function
@@ -32,7 +32,7 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 		ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume * opt\MasterVolume)
 		ChannelPan(SoundCHN, PanValue)
 	Else
-		If ChannelPlaying(SoundCHN) Then ChannelVolume(SoundCHN, 0.0)
+		ChannelVolume(SoundCHN, 0.0)
 	EndIf
 	Return(SoundCHN)
 End Function
@@ -84,10 +84,6 @@ Function LoadEventSound%(e.Events, File$, Number% = 0)
 		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 		e\Sound2 = LoadSound_Strict(File)
 		Return(e\Sound2)
-	ElseIf Number = 2
-		If e\Sound3 <> 0 Then FreeSound_Strict(e\Sound3) : e\Sound3 = 0
-		e\Sound3 = LoadSound_Strict(File)
-		Return(e\Sound3)
 	EndIf
 End Function
 
@@ -136,7 +132,7 @@ Function UpdateMusic%()
 			SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume * opt\MasterVolume)
 		EndIf
 	Else
-		If fps\Factor[0] > 0.0 Lor OptionsMenu = 2 Then
+		If fps\Factor[0] > 0.0 Lor igm\OptionsMenu = MenuTab_Options_Audio Then
 			If (Not ChannelPlaying(MusicCHN)) Then MusicCHN = PlaySound_Strict(CustomMusic)
 			ChannelVolume(MusicCHN, opt\MusicVolume * opt\MasterVolume)
 		EndIf
@@ -157,11 +153,6 @@ Function PauseSounds%()
 			If e\SoundCHN2 <> 0 Then SetStreamPaused_Strict(e\SoundCHN2, True)
 		Else
 			PauseChannel(e\SoundCHN2)
-		EndIf
-		If e\SoundCHN3_IsStream Then
-			If e\SoundCHN3 <> 0 Then SetStreamPaused_Strict(e\SoundCHN3, True)
-		Else
-			PauseChannel(e\SoundCHN3)
 		EndIf
 	Next
 	
@@ -217,11 +208,6 @@ Function ResumeSounds%()
 		Else
 			ResumeChannel(e\SoundCHN2)
 		EndIf
-		If e\SoundCHN3_IsStream Then
-			If e\SoundCHN3 <> 0 Then SetStreamPaused_Strict(e\SoundCHN3, False)
-		Else
-			ResumeChannel(e\SoundCHN3)
-		EndIf
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -265,8 +251,9 @@ Function KillSounds%()
 	Local e.Events, n.NPCs, d.Doors, snd.Sound, sub.Subtitles
 	Local i%
 	
-	For i = 0 To 9
+	For i = 0 To 8 Step 2
 		If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
+		If TempSounds[i + 1] <> 0 Then FreeSound_Strict(TempSounds[i + 1]) : TempSounds[i + 1] = 0
 	Next
 	
 	For e.Events = Each Events
@@ -282,12 +269,6 @@ Function KillSounds%()
 			StopChannel(e\SoundCHN2)
 		EndIf
 		e\SoundCHN2 = 0
-		If e\SoundCHN3_IsStream Then
-			If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3_IsStream = False
-		Else
-			StopChannel(e\SoundCHN3)
-		EndIf
-		e\SoundCHN3 = 0
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -329,7 +310,10 @@ Function KillSounds%()
 	
 	If opt\EnableSFXRelease Then
 		For snd.Sound = Each Sound
-			If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+			If snd\InternalHandle <> 0 Then
+				FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+				DeleteSubtitles(snd\Name)
+			EndIf
 			snd\ReleaseTime = 0
 		Next
 	EndIf
@@ -339,8 +323,6 @@ Function KillSounds%()
 			StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
 		Next
 	Next
-	
-	Delete Each Subtitles
 End Function
 
 Function StopBreathSound%()
@@ -419,9 +401,6 @@ Function UpdateStreamSounds%()
 			If e\SoundCHN2_IsStream Then
 				If e\SoundCHN2 <> 0 Then SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
 			EndIf
-			If e\SoundCHN3_IsStream Then
-				If e\SoundCHN3 <> 0 Then SetStreamVolume_Strict(e\SoundCHN3, opt\SFXVolume * opt\MasterVolume)
-			EndIf
 		Next
 	EndIf
 	
@@ -438,9 +417,6 @@ Function UpdateStreamSounds%()
 					If e\SoundCHN2_IsStream Then
 						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
 					EndIf
-					If e\SoundCHN3_IsStream Then
-						If e\SoundCHN3 <> 0 Then StopStream_Strict(e\SoundCHN3) : e\SoundCHN3 = 0 : e\SoundCHN3_IsStream = False
-					EndIf
 				Next
 			EndIf
 		EndIf
@@ -453,18 +429,17 @@ Function ControlSoundVolume%()
 	
 	For snd.Sound = Each Sound
 		For i = 0 To MaxChannelsAmount - 1
-			If ChannelPlaying(snd\Channels[i]) Then ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
+			ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
 		Next
 	Next
 End Function
 
 Function UpdateDeaf%()
 	If me\DeafTimer > 0.0 Then
-		me\DeafTimer = me\DeafTimer - fps\Factor[0]
+		me\DeafTimer = Max(me\DeafTimer - fps\Factor[0], 0.0)
 		opt\MasterVolume = 0.0
 		If opt\MasterVolume > 0.0 Then ControlSoundVolume()
 	Else
-		me\DeafTimer = 0.0
 		If me\Deaf Then ControlSoundVolume()
 		me\Deaf = False
 	EndIf

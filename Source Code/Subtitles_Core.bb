@@ -7,6 +7,7 @@ Const THIRD_PERSON% = 3
 ;[End Block]
 
 Type Subtitles
+	Field Name$
 	Field Txt$[4]
 	Field Timer#[4]
 End Type
@@ -49,16 +50,15 @@ Function RenderSubtitles%()
 	Next
 End Function
 
-Function ShowSubtitles%(Name$)
-	CatchErrors("Uncaught (ShowSubtitles)")
+Function CreateSubtitles.Subtitles(Name$)
+	If (Not opt\EnableSubtitles) Lor (Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name)) Then Return(Null)
 	
-	If (Not opt\EnableSubtitles) Then Return
-	If Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name) Then Return
+	CatchErrors("ShowSubtitles(" + Name + ")")
 	
 	Local sub.Subtitles, CurrSub.Subtitles
 	Local Person% = Int(GetFileLocalString(SubtitlesFile, Name, "Person", "", False))
-	Local LinesAmount% = Int(GetFileLocalString(SubtitlesFile, Name, "LinesAmount", "", False))
-	Local SubID%, i%
+	Local SubID%
+	Local i% = 0
 	
 	Select Person
 		Case 1
@@ -79,13 +79,20 @@ Function ShowSubtitles%(Name$)
 	End Select
 	
 	For sub.Subtitles = Each Subtitles
-		If sub\Txt[SubID] = "" Then
+		If sub\Timer[SubID] =< 0.0 Then
 			CurrSub.Subtitles = sub.Subtitles
 			Exit
 		EndIf
 	Next
 	
-	For i = 1 To LinesAmount
+	Repeat
+		i = i + 1
+		
+		Local TxtExist% = IniBufferKeyExist(lang\LanguagePath + SubtitlesFile, Name, "Txt" + i)
+		Local TimerExist% = IniBufferKeyExist(lang\LanguagePath + SubtitlesFile, Name, "Timer" + i)
+		
+		If (Not TxtExist) And (Not TimerExist) Then Exit ; ~ Seems there is no more subtitles
+		
 		If CurrSub = Null Then
 			sub.Subtitles = New Subtitles
 		Else
@@ -93,9 +100,23 @@ Function ShowSubtitles%(Name$)
 		EndIf
 		sub\Txt[SubID] = GetFileLocalString(SubtitlesFile, Name, "Txt" + i, "", False)
 		sub\Timer[SubID] = 70.0 * Float(GetFileLocalString(SubtitlesFile, Name, "Timer" + i, "", False))
-	Next
+	Forever
 	
-	CatchErrors("ShowSubtitles")
+	sub\Name = Name
+	
+	CatchErrors("Uncaught: ShowSubtitles(" + Name + ")")
+	
+	Return(sub)
+End Function
+
+Function DeleteSubtitles%(Name$)
+	If (Not opt\EnableSubtitles) Lor (Not IniBufferSectionExist(lang\LanguagePath + SubtitlesFile, Name)) Then Return
+	
+	Local sub.Subtitles
+	
+	For sub.Subtitles = Each Subtitles
+		If sub\Name = Name Then Delete(sub)
+	Next
 End Function
 
 ;~IDEal Editor Parameters:

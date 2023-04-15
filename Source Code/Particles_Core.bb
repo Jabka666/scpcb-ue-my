@@ -9,6 +9,8 @@ Type Particles
 End Type
 
 Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
+	CatchErrors("CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
+	
 	Local p.Particles
 	
 	p.Particles = New Particles
@@ -46,23 +48,18 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	
 	If (Not p_I\ParticleTextureID[ID]) Then RuntimeError(Format(GetLocalString("runerr", "particle"), ID))
 	
+	CatchErrors("Uncaught: CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
+	
 	Return(p)
 End Function
 	
 Function UpdateParticles%()
+	CatchErrors("UpdateParticles()")
+	
 	Local p.Particles
 	
-	If UpdateTimer <= 0.0 Then
-		For p.Particles = Each Particles
-			Local xDist# = Abs(EntityX(me\Collider) - EntityX(p\OBJ, True))
-			Local zDist# = Abs(EntityZ(me\Collider) - EntityZ(p\OBJ, True))
-			
-			p\Dist = xDist + zDist
-		Next
-	EndIf
-		
 	For p.Particles = Each Particles
-		If p\Dist <= HideDistance Then
+		If EntityDistanceSquared(p\OBJ, me\Collider) <= PowTwo(HideDistance) Then
 			MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
 			If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
 			TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)
@@ -85,12 +82,18 @@ Function UpdateParticles%()
 			RemoveParticle(p)
 		EndIf
 	Next
+	
+	CatchErrors("Uncaught: UpdateParticles()")
 End Function
 	
 Function RemoveParticle%(p.Particles)
+	CatchErrors("RemoveParticle()")
+	
 	FreeEntity(p\OBJ) : p\OBJ = 0
 	FreeEntity(p\Pvt) : p\Pvt = 0
 	Delete(p)
+	
+	CatchErrors("Uncaught: RemoveParticles()")
 End Function
 
 Type Emitters
@@ -105,6 +108,8 @@ Type Emitters
 End Type
 
 Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
+	CatchErrors("CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + ")")
+	
 	Local e.Emitters
 	Local r.Rooms
 	
@@ -139,10 +144,14 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then e\room = r
 	Next
 	
+	CatchErrors("Uncaught: CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + ")")
+	
 	Return(e)
 End Function
 
 Function UpdateEmitters%()
+	CatchErrors("UpdateEmitters()")
+	
 	Local e.Emitters, p.Particles
 	Local InSmoke% = False
 	
@@ -181,6 +190,8 @@ Function UpdateEmitters%()
 		UpdateCough(150)
 		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
 	EndIf
+	
+	CatchErrors("Uncaught: UpdateEmitters()")
 End Function
 
 Function UpdateDust%()
@@ -208,7 +219,7 @@ Function UpdateDust%()
 		
 		; ~ Create extra dust particles while the camera is shaking
 		If me\BigCameraShake > 0.0 Then
-			For i = 0 To 5 + (5 * (opt\ParticleAmount - 1))
+			For i = 0 To 5 + (2 * (opt\ParticleAmount - 1))
 				Pvt = CreatePivot()
 				PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 				RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
