@@ -2979,12 +2979,6 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_mt
 				;[Block]
-				If EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0 Then
-					If (EntityX(me\Collider, True) >= e\room\x - 6.0) And (EntityX(me\Collider, True) <= (e\room\x + 2.0 * MTGridSize + 6.0)) Then
-						If (EntityZ(me\Collider, True) >= e\room\z - 6.0) And (EntityZ(me\Collider, True) <= (e\room\z + 2.0 * MTGridSize + 6.0)) Then PlayerRoom = e\room
-					EndIf
-				EndIf
-				
 				If PlayerRoom = e\room Then
 					Local Meshes%[7]
 					Local TempStr$

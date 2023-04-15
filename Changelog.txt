@@ -162,7 +162,7 @@ Bug fixes:
 - Tiny fix for S-NAV image position.
 - Tiny fix for console.
 
-- Probably fixed FOV for code button interface.
+- Minor bugfixes...
 
 v1.0.3
 
