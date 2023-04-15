@@ -2877,7 +2877,7 @@ Function UpdateEvents%()
 							e\EventState2 = e\EventState2 + fps\Factor[0]
 							If e\EventState2 >= 35.0 Then
 								e\EventState = 2.0
-								PlaySound2(LoadTempSound("SFX\Room\Tesla\Shock.ogg"), Camera ,e\room\Objects[1])
+								PlaySound2(LoadTempSound("SFX\Room\Tesla\Shock.ogg"), Camera, e\room\Objects[1])
 							EndIf
 							;[End Block]
 						Case 2.0 ; ~ Zap state
@@ -2920,7 +2920,7 @@ Function UpdateEvents%()
 													n\IsDead = True
 													;[End Block]
 											End Select
-											If e\room\Dist < 8 And EntityInView(e\room\Objects[0], Camera) Then me\LightFlash = 0.4
+											If e\room\Dist < 8.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.4
 										EndIf
 									EndIf
 								EndIf
