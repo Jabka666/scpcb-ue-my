@@ -535,13 +535,10 @@ Function QuickLoadEvents%()
 					QuickLoadPercent = 50
 					e\EventStr = "Load5"
 				ElseIf e\EventStr = "Load5"
-					For i = 3 To 5 Step 2
+					For i = 3 To 6
 						PositionEntity(e\room\Objects[i], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
 						RotateEntity(e\room\Objects[i], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
 						ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
-						PositionEntity(e\room\Objects[i + 1], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
-						RotateEntity(e\room\Objects[i + 1], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
-						ScaleEntity(e\room\Objects[i + 1], 0.05, 0.05, 0.05, True)
 					Next
 					QuickLoadPercent = 70
 					e\EventStr = "Load6"
@@ -5607,13 +5604,15 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room Then
 					For sc.SecurityCams = Each SecurityCams
 						If sc\room = e\room Then
-							If sc\ScrOBJ <> 0 Then
-								If (Not EntityHidden(sc\BaseOBJ)) Then
-									If sc\CameraOBJ <> 0 Then HideEntity(sc\CameraOBJ)
-									If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
-									If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
-									HideEntity(sc\BaseOBJ)
+							If sc\Screen Then
+								If (Not EntityHidden(sc\ScrOverlay)) Then
+									HideEntity(sc\MonitorOBJ)
+									HideEntity(sc\ScrOverlay)
 								EndIf
+							EndIf
+							If (Not EntityHidden(sc\BaseOBJ)) Then
+								HideEntity(sc\CameraOBJ)
+								HideEntity(sc\BaseOBJ)
 							EndIf
 							Exit
 						EndIf
@@ -7364,12 +7363,12 @@ Function UpdateEvents%()
 						If e\EventState2 = (-70.0) * 5.0 Then
 							For sc.SecurityCams = Each SecurityCams
 								If sc\room = e\room Then
-									If EntityDistanceSquared(sc\ScrOBJ, Camera) < 25.0 Then
-										If EntityVisible(sc\ScrOBJ, Camera) Then
-											e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
-											Exit
+									If sc\Screen Then
+										If EntityDistanceSquared(sc\ScrOBJ, Camera) < 25.0 Then
+											If EntityVisible(sc\ScrOBJ, Camera) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
 										EndIf
 									EndIf
+									Exit
 								EndIf
 							Next
 						Else
@@ -7593,10 +7592,10 @@ Function UpdateEvents%()
 						Next
 						For sc.SecurityCams = Each SecurityCams
 							If sc\room = e\room Then
-								If sc\ScrOBJ <> 0 Then
+								If sc\Screen Then
 									If EntityHidden(sc\ScrOBJ) Then
-										If sc\ScrOverlay <> 0 Then ShowEntity(sc\ScrOverlay)
-										If sc\MonitorOBJ <> 0 Then ShowEntity(sc\MonitorOBJ)
+										ShowEntity(sc\ScrOverlay)
+										ShowEntity(sc\MonitorOBJ)
 										ShowEntity(sc\ScrOBJ)
 									EndIf
 								EndIf
@@ -7613,10 +7612,10 @@ Function UpdateEvents%()
 						Next
 						For sc.SecurityCams = Each SecurityCams
 							If sc\room = e\room Then
-								If sc\ScrOBJ <> 0 Then
+								If sc\Screen Then
 									If (Not EntityHidden(sc\ScrOBJ)) Then
-										If sc\ScrOverlay <> 0 Then HideEntity(sc\ScrOverlay)
-										If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
+										HideEntity(sc\ScrOverlay)
+										HideEntity(sc\MonitorOBJ)
 										HideEntity(sc\ScrOBJ)
 									EndIf
 								EndIf

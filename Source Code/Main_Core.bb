@@ -8891,8 +8891,6 @@ Function UpdateCameraCheck%()
 End Function
 
 Function UpdateExplosion%()
-	CatchErrors("UpdateExplosion()")
-	
 	Local p.Particles
 	Local i%
 	
@@ -8928,8 +8926,6 @@ Function UpdateExplosion%()
 			PositionEntity(me\Collider, EntityX(me\Collider), 200.0, EntityZ(me\Collider))
 		EndIf
 	EndIf
-	
-	CatchErrors("Uncaught: UpdateExplosion()")
 End Function
 
 Function UpdateVomit%()

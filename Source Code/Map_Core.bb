@@ -3238,9 +3238,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	
 	If r <> Null Then
 		EntityParent(sc\BaseOBJ, r\OBJ)
-		If Screen Then
-			If sc\ScrOBJ <> 0 Then EntityParent(sc\ScrOBJ, r\OBJ)
-		EndIf
+		If Screen Then EntityParent(sc\ScrOBJ, r\OBJ)
 	EndIf
 	Return(sc)
 End Function
@@ -3249,24 +3247,23 @@ Function TurnOffSecurityCam%(room.Rooms, TurnOff%)
 	Local sc.SecurityCams
 	
 	For sc.SecurityCams = Each SecurityCams
-		If TurnOff Then
-			If sc\room = room Then
-				If (Not EntityHidden(sc\ScrOBJ)) Then
+		If sc\room = room Then
+			If TurnOff Then
+				If sc\Screen Then
 					If sc\CoffinEffect <> 1 Then sc\CoffinEffect = 0
-					sc\Screen = False
 					HideEntity(sc\ScrOverlay)
 					HideEntity(sc\ScrOBJ)
+					sc\Screen = False
 				EndIf
-			EndIf
-		Else
-			If sc\room = room Then
-				If EntityHidden(sc\ScrOBJ) Then
+			Else
+				If (Not sc\Screen) Then
 					If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "cont1_106" And sc\room\RoomTemplate\Name <> "cont1_205" Then sc\CoffinEffect = 2
-					sc\Screen = True
 					ShowEntity(sc\ScrOverlay)
 					ShowEntity(sc\ScrOBJ)
+					sc\Screen = True
 				EndIf
 			EndIf
+			Exit
 		EndIf
 	Next
 End Function
