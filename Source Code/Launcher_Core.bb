@@ -301,8 +301,8 @@ Function LanguageSelector%()
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
 				If Not RequestLanguage\MajorOnly Then DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
-				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
-				DownloadFile("http://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-ini/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.ini")
+				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
+				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-ini/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.ini")
 				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
@@ -436,6 +436,7 @@ Function LanguageSelector%()
 				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2) Then
 					SetLanguage(SelectedLanguage\ID)
 					; ~ Reload some stuff manually
+					FreeFont(fo\FontID[Font_Default])
 					fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
 					AppTitle(GetLocalString("language", "title"))
 					FreeImage(LanguageBG) : LanguageBG = 0
@@ -449,6 +450,7 @@ Function LanguageSelector%()
 					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2) Then
 						SetLanguage(SelectedLanguage\ID)
 						; ~ Reload some stuff manually
+						FreeFont(fo\FontID[Font_Default])
 						fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
 						AppTitle(GetLocalString("language", "title"))
 						FreeImage(LanguageBG) : LanguageBG = 0
