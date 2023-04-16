@@ -1,3 +1,14 @@
+v1.1.1
+
+General:
+- Tiny optimizations.
+
+Fixes:
+- Fixed a bug with incorrect description of SCP-005 in Map Creator.
+- Fixed SCP-860-1 dimension and all related crashes.
+
+- Some fixs for event descriptions in Map Creator.
+
 v1.1
 
 Launcher:
@@ -117,7 +128,6 @@ Map Creator:
 - Made the Map Creator to be compatible with latest BlitzPlus version.
 
 Bug fixes:
-- Fixed a bug with incorrect description of SCP-005 in MapCreator.
 - Fixed a bug with Ulgrin not triggering on the player when he is reading a document.
 - Fixed a bug with console bind.
 - Fixed SCP-096 triggering while his face is hidden by fog.
