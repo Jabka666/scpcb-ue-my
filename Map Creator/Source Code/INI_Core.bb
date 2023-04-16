@@ -30,14 +30,18 @@ Function IniGetFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0, AllowBuf
 End Function
 
 Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
+	Return GetLocalFileString("Data\local.ini", Section, Parameter, Section + "," + Parameter)
+End Function
+
+Function GetLocalFileString$(File$, Section$, Parameter$, CheckRootFile% = True)
 	Local DefaultValue$
 	
 	If CheckRootFile Then
-		DefaultValue = IniGetBufferString_("..\Data\local.ini", Section, Parameter, Section + "," + Parameter)
+		DefaultValue = IniGetBufferString_("..\" + File, Section, Parameter, Section + "," + Parameter)
 	Else 
 		DefaultValue = Section + "," + Parameter
 	EndIf
-	Return(ConvertUTF8toANSI(IniGetBufferString_("..\Localization\" + Language + "\Data\local.ini", Section, Parameter, DefaultValue))) ; ~ local.ini -> UTF8, MapCreator -> ANSI
+	Return(ConvertUTF8toANSI(IniGetBufferString_("..\Localization\" + Language + "\" + File, Section, Parameter, DefaultValue))) ; ~ local.ini -> UTF8, MapCreator -> ANSI
 End Function
 
 Function Format$(String_$, Parameter$, Replace_$ = "%s")

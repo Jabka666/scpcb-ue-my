@@ -34,7 +34,9 @@ Global MainHwnd% = api_GetActiveWindow() ; ~ User32.dll
 
 HideGadget(WinHandle)
 
-Const RoomsFile$ = "..\Data\rooms.ini"
+Const RoomsFile$ = "Data\rooms.ini"
+IniWriteBuffer_("..\" + RoomsFile, True)
+IniWriteBuffer_("..\Localization\" + Language + "\" + RoomsFile, True)
 
 LoadRoomTemplates(RoomsFile)
 
@@ -47,7 +49,9 @@ For rt.RoomTemplates = Each RoomTemplates
 Next
 SetGadgetLayout(ListBox, 3, 3, 2, 2)
 
-Const EventsFile$ = "..\Data\events_MC.ini"
+Const EventsFile$ = "Data\events_MC.ini"
+IniWriteBuffer_("..\" + EventsFile, True)
+IniWriteBuffer_("..\Localization\" + Language + "\" + EventsFile, True)
 
 InitEvents(EventsFile)
 AddEvents()
@@ -1394,7 +1398,7 @@ Function LoadRoomTemplates%(File$)
 	Local TemporaryString$
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
-	Local f% = OpenFile(File)
+	Local f% = OpenFile("..\" + File)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
@@ -1414,7 +1418,7 @@ Function LoadRoomTemplates%(File$)
 				rt.RoomTemplates = CreateRoomTemplate()
 				rt\Name = TemporaryString
 				
-				StrTemp = IniGetString(File, TemporaryString, "Shape")
+				StrTemp = IniGetString("..\" + File, TemporaryString, "Shape")
 				Select StrTemp
 					Case "room1", "1"
 						;[Block]
@@ -1438,7 +1442,7 @@ Function LoadRoomTemplates%(File$)
 						;[End Block]
 				End Select
 				
-				rt\Description = IniGetString(File, TemporaryString, "Descr")
+				rt\Description = GetLocalFileString(File, TemporaryString, "Descr")
 				
 				rt\MapGrid = 0
 			EndIf
@@ -1533,7 +1537,7 @@ Function InitEvents%(File$)
 	Local TemporaryString$
 	Local e.Event = Null
 	Local StrTemp$ = "", i%
-	Local f% = OpenFile(File)
+	Local f% = OpenFile("..\" + File)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
@@ -1543,10 +1547,10 @@ Function InitEvents%(File$)
 			e.Event = New Event
 			e\Name = TemporaryString
 			
-			e\Description = IniGetString(File, TemporaryString, "Descr")
+			e\Description = GetLocalFileString(File, TemporaryString, "Descr")
 			
 			For i = 0 To MaxEvents - 1
-				e\Room[i] = IniGetString(File, TemporaryString, "Room" + i)
+				e\Room[i] = IniGetString("..\" + File, TemporaryString, "Room" + i)
 			Next
 		EndIf
 	Wend
