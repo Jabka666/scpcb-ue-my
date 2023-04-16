@@ -3,9 +3,11 @@ v1.1.1
 General:
 - Tiny optimizations.
 
-Fixes:
+Bug fixes:
 - Fixed a bug with incorrect description of SCP-005 in Map Creator.
 - Fixed SCP-860-1 dimension and all related crashes.
+- Fixed downloaded languages cannot be deleted.
+- Fixed Map Creator events cannot be localized.
 
 - Some fixs for event descriptions in Map Creator.
 
