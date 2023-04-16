@@ -2084,9 +2084,11 @@ Function UpdateGame%()
 					If RN = "cont1_173_intro" Then
 						me\Zone = 4
 					ElseIf forest_event <> Null
-						If forest_event\EventState = 1.0 Then
-							me\Zone = 5
-							PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+						If PlayerRoom = forest_event\room Then
+							If forest_event\EventState = 1.0 Then
+								me\Zone = 5
+								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+							EndIf
 						EndIf
 					EndIf
 					
@@ -3226,10 +3228,12 @@ Function UpdateZoneColor%()
 	ElseIf (PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale) Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale) Then
 		SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 	ElseIf forest_event <> Null
-		If forest_event\EventState = 1.0 Then
-			SetZoneColor(FogColorForest)
-			If forest_event\room\NPC[0] <> Null Then
-				If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
+		If PlayerRoom = forest_event\room Then
+			If forest_event\EventState = 1.0 Then
+				SetZoneColor(FogColorForest)
+				If forest_event\room\NPC[0] <> Null Then
+					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
+				EndIf
 			EndIf
 		EndIf
 	EndIf

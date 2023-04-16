@@ -5963,7 +5963,6 @@ Function UpdateEvents%()
 				Else
 					If fr <> Null Then
 						If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
-						e\EventState = 0.0
 					Else
 						RemoveEvent(e)
 					EndIf

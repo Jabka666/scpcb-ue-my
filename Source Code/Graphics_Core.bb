@@ -270,7 +270,9 @@ Function RenderWorld2%(Tween#)
 	Else
 		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
 		If forest_event <> Null Then
-			If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
+			If PlayerRoom = forest_event\room Then
+				If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
+			EndIf
 		EndIf
 	EndIf
 	AmbientLight(CurrR, CurrG, CurrB)
