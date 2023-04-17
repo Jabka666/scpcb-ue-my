@@ -883,6 +883,83 @@ Function UpdateEvents%()
 					ShowRoomsNoColl(e\room)
 					CanSave = 1
 					If (Not me\Terminated) And e\EventState2 = 0.0 Then
+						If e\EventState = 0.0 Then
+							For i = 0 To 1
+								IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Ew" + (i + 1) + ".ogg")
+							Next
+							IntroSFX[2] = LoadSound_Strict("SFX\Room\Intro\Horror.ogg")
+							IntroSFX[3] = LoadSound_Strict("SFX\Room\Intro\See173.ogg")
+							IntroSFX[4] = LoadSound_Strict("SFX\Room\Intro\173Chamber.ogg")
+							
+							HideDistance = 68.0
+							
+							PositionEntity(me\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
+							ResetEntity(me\Collider)
+							
+							PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
+							RotateEntity(n_I\Curr173\Collider, 0.0, 0.0, 0.0, True)
+							ResetEntity(n_I\Curr173\Collider)
+							n_I\Curr173\Angle = 90.0
+							n_I\Curr173\Idle = 1
+							
+							e\room\NPC[3] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
+							RotateEntity(e\room\NPC[3]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
+							e\room\NPC[3]\State = 7.0
+							
+							e\room\NPC[4] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True))
+							RotateEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 135.0, 0.0)
+							e\room\NPC[4]\State = 7.0
+							
+							e\room\NPC[5] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[9], True), EntityY(e\room\Objects[9], True), EntityZ(e\room\Objects[9], True))
+							e\room\NPC[5]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Music" + Rand(5) + ".ogg")
+							RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+							e\room\NPC[5]\State = 7.0
+							e\room\NPC[5]\Sound2 = LoadSound_Strict("SFX\Room\Intro\Guard\PlayerEscape.ogg")
+							
+							e\room\NPC[6] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True))
+							ChangeNPCTextureID(e\room\NPC[6], NPC_CLASS_D_FRANKLIN_TEXTURE)
+							
+							e\room\NPC[7] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True))
+							e\room\NPC[7]\Sound = LoadSound_Strict("SFX\Room\Intro\Scientist\Conversation.ogg")
+							e\room\NPC[7]\State = 6.0
+							SetNPCFrame(e\room\NPC[7], 182.0)
+							ChangeNPCTextureID(e\room\NPC[7], NPC_CLASS_D_SCIENTIST_TEXTURE)
+							
+							e\room\NPC[8] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[12], True), EntityY(e\room\Objects[12], True), EntityZ(e\room\Objects[12], True))
+							e\room\NPC[8]\State = 7.0
+							
+							e\room\NPC[9] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[13], True), EntityY(e\room\Objects[13], True), EntityZ(e\room\Objects[13], True))
+							e\room\NPC[9]\State = 7.0
+							
+							e\room\NPC[10] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[14], True), EntityY(e\room\Objects[14], True), EntityZ(e\room\Objects[14], True))
+							e\room\NPC[10]\State2 = 1.0
+							ChangeNPCTextureID(e\room\NPC[10], NPC_CLASS_D_D9341_TEXTURE)
+							
+							e\room\NPC[11] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
+							e\room\NPC[11]\State = 15.0
+							CreateNPCAsset(e\room\NPC[11])
+							
+							Pvt = CreatePivot()
+							RotateEntity(Pvt, 90.0, 0.0, 0.0)
+							For i = 8 To 11
+								PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
+								EntityPick(Pvt, 20.0)
+								If PickedEntity() <> 0 Then
+									PositionEntity(e\room\NPC[i]\Collider, PickedX(), PickedY(), PickedZ(), True)
+									AlignToVector(e\room\NPC[i]\Collider, -PickedNX(), -PickedNY(), -PickedNZ(), 3.0)
+									If i < 11 Then
+										RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
+									Else
+										RotateEntity(e\room\NPC[i]\Collider, 0.0, -90.0, 0.0)
+									EndIf
+								EndIf
+							Next
+							FreeEntity(Pvt)
+							
+							e\EventState3 = 1.0
+							e\EventState = 1.0
+						EndIf
+						
 						If e\EventState3 > 0.0 Then
 							ShouldPlay = 13
 							; ~ Slow the player down to match his speed to the guards
@@ -1434,82 +1511,7 @@ Function UpdateEvents%()
 						Else
 							If IntroSFX[4] <> 0 Then e\SoundCHN2 = LoopSound2(IntroSFX[4], e\SoundCHN2, Camera, e\room\Objects[4], 6.0)
 							
-							If e\EventState = 0.0 Then
-								For i = 0 To 1
-									IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Ew" + (i + 1) + ".ogg")
-								Next
-								IntroSFX[2] = LoadSound_Strict("SFX\Room\Intro\Horror.ogg")
-								IntroSFX[3] = LoadSound_Strict("SFX\Room\Intro\See173.ogg")
-								IntroSFX[4] = LoadSound_Strict("SFX\Room\Intro\173Chamber.ogg")
-								
-								HideDistance = 68.0
-								
-								PositionEntity(me\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
-								ResetEntity(me\Collider)
-								
-								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
-								RotateEntity(n_I\Curr173\Collider, 0.0, 0.0, 0.0, True)
-								ResetEntity(n_I\Curr173\Collider)
-								n_I\Curr173\Angle = 90.0
-								n_I\Curr173\Idle = 1
-								
-								e\room\NPC[3] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
-								RotateEntity(e\room\NPC[3]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
-								e\room\NPC[3]\State = 7.0
-								
-								e\room\NPC[4] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True))
-								RotateEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 135.0, 0.0)
-								e\room\NPC[4]\State = 7.0
-								
-								e\room\NPC[5] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[9], True), EntityY(e\room\Objects[9], True), EntityZ(e\room\Objects[9], True))
-								e\room\NPC[5]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Music" + Rand(5) + ".ogg")
-								RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-								e\room\NPC[5]\State = 7.0
-								e\room\NPC[5]\Sound2 = LoadSound_Strict("SFX\Room\Intro\Guard\PlayerEscape.ogg")
-								
-								e\room\NPC[6] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True))
-								ChangeNPCTextureID(e\room\NPC[6], NPC_CLASS_D_FRANKLIN_TEXTURE)
-								
-								e\room\NPC[7] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True))
-								e\room\NPC[7]\Sound = LoadSound_Strict("SFX\Room\Intro\Scientist\Conversation.ogg")
-								e\room\NPC[7]\State = 6.0
-								SetNPCFrame(e\room\NPC[7], 182.0)
-								ChangeNPCTextureID(e\room\NPC[7], NPC_CLASS_D_SCIENTIST_TEXTURE)
-								
-								e\room\NPC[8] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[12], True), EntityY(e\room\Objects[12], True), EntityZ(e\room\Objects[12], True))
-								e\room\NPC[8]\State = 7.0
-								
-								e\room\NPC[9] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[13], True), EntityY(e\room\Objects[13], True), EntityZ(e\room\Objects[13], True))
-								e\room\NPC[9]\State = 7.0
-								
-								e\room\NPC[10] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[14], True), EntityY(e\room\Objects[14], True), EntityZ(e\room\Objects[14], True))
-								e\room\NPC[10]\State2 = 1.0
-								ChangeNPCTextureID(e\room\NPC[10], NPC_CLASS_D_D9341_TEXTURE)
-								
-								e\room\NPC[11] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
-								e\room\NPC[11]\State = 15.0
-								CreateNPCAsset(e\room\NPC[11])
-								
-								Pvt = CreatePivot()
-								RotateEntity(Pvt, 90.0, 0.0, 0.0)
-								For i = 8 To 11
-									PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
-									EntityPick(Pvt, 20.0)
-									If PickedEntity() <> 0 Then
-										PositionEntity(e\room\NPC[i]\Collider, PickedX(), PickedY(), PickedZ(), True)
-										AlignToVector(e\room\NPC[i]\Collider, -PickedNX(), -PickedNY(), -PickedNZ(), 3.0)
-										If i < 11 Then
-											RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
-										Else
-											RotateEntity(e\room\NPC[i]\Collider, 0.0, -90.0, 0.0)
-										EndIf
-									EndIf
-								Next
-								FreeEntity(Pvt)
-								
-								e\EventState3 = 1.0
-								e\EventState = 1.0
-							ElseIf e\EventState < 10000.0
+							If e\EventState < 10000.0 Then
 								If ChannelPlaying(e\SoundCHN) Then
 									e\room\NPC[6]\State = 6.0
 									If AnimTime(e\room\NPC[6]\OBJ) >= 325.0 Then
@@ -1846,32 +1848,6 @@ Function UpdateEvents%()
 						e\EventState2 = 1.0
 					EndIf
 				Else
-					For i = 2 To 4
-						If IntroSFX[i] <> 0 Then FreeSound_Strict(IntroSFX[i]) : IntroSFX[i] = 0
-					Next
-					
-					For do.Doors = Each Doors
-						If do\room = e\room Then RemoveDoor(do)
-					Next
-					
-					For w.WayPoints = Each WayPoints
-						If w\room = e\room Then
-							FreeEntity(w\OBJ) : w\OBJ = 0
-							Delete(w)
-						EndIf
-					Next
-					
-					FreeEntity(e\room\OBJ) : e\room\OBJ = 0
-					Delete(e\room)
-					
-					For sc.SecurityCams = Each SecurityCams
-						If sc\room = e\room Then Delete(sc)
-					Next
-					
-					For pr.Props = Each Props
-						If pr\room = e\room Then Delete(pr)
-					Next
-					
 					RemoveEvent(e)
 				EndIf
 				;[End Block]

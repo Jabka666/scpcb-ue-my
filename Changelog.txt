@@ -8,11 +8,15 @@ Items:
 
 - Tiny improvement for Compact First Aid Kit.
 
+Rooms:
+- Updated lightmaps.
+
 Bug fixes:
 - Fixed a bug with incorrect description of SCP-005 in Map Creator.
-- Fixed SCP-860-1 dimension and all related crashes.
+- Fixed SCP-860-1 dimension and all related MAVs.
 - Fixed downloaded languages cannot be deleted.
 - Fixed Map Creator events cannot be localized.
+- Fixed MAV after playing intro sequence.
 
 - Some fixes for event descriptions in Map Creator.
 
