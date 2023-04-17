@@ -4441,7 +4441,11 @@ Function UpdateGUI%()
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 							If (Not me\Crouch) Then SetCrouch(True)
 							
-							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)
+							If SelectedItem\ItemTemplate\TempName = "firstaid" Then
+								SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)
+							Else
+								SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 4.0), 100.0)
+							EndIf
 							
 							If SelectedItem\State = 100.0 Then
 								If SelectedItem\ItemTemplate\TempName = "finefirstaid" Then

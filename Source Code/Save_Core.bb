@@ -156,7 +156,8 @@ Function SaveGame%(File$)
 	
 	WriteFloat(f, MTFTimer)
 	
-	WriteFloat(f, TakeOffTimer)
+	WriteFloat(f, Remove714Timer)
+	WriteFloat(f, RemoveHazmatTimer)
 	
 	For i = 0 To 1
 		WriteByte(f, mon_I\UpdateCheckpoint[i])
@@ -651,7 +652,8 @@ Function LoadGame%(File$)
 	
 	MTFTimer = ReadFloat(f)
 	
-	TakeOffTimer = ReadFloat(f)
+	Remove714Timer = ReadFloat(f)
+	RemoveHazmatTimer = ReadFloat(f)
 	
 	For i = 0 To 1
 		mon_I\UpdateCheckpoint[i] = ReadByte(f)
@@ -1517,7 +1519,8 @@ Function LoadGameQuick%(File$)
 	
 	MTFTimer = ReadFloat(f)
 	
-	TakeOffTimer = ReadFloat(f)
+	Remove714Timer = ReadFloat(f)
+	RemoveHazmatTimer = ReadFloat(f)
 	
 	For i = 0 To 1
 		mon_I\UpdateCheckpoint[i] = ReadByte(f)

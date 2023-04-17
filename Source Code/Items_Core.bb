@@ -1130,7 +1130,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(2) = 1 Then
+					If SelectedItem\ItemTemplate\TempName = "firstaid" Then
 						it2.Items = CreateItem("Blue First Aid Kit", "firstaid2", x, y, z)
 					Else
 						it2.Items = CreateItem("First Aid Kit", "firstaid", x, y, z)
@@ -1138,7 +1138,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Small First Aid Kit", "finefirstaid", x, y, z)
+					it2.Items = CreateItem("Compact First Aid Kit", "finefirstaid", x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
@@ -1875,7 +1875,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Small First Aid Kit", "finefirstaid", x, y, z)
+					it2.Items = CreateItem("Compact First Aid Kit", "finefirstaid", x, y, z)
 					;[End Block]
 				Case FINE
 					;[Block]
