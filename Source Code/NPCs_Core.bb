@@ -1487,7 +1487,10 @@ Function UpdateNPCs%()
 				
 				UpdateNPCBlinking(n)
 				
-				If Dist >= 0.25 Then TakeOffTimer = Min(TakeOffTimer + fps\Factor[0], 500.0)
+				If Dist >= 0.25 Then
+					Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
+					RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
+				EndIf
 				
 				If n\Idle > 0.1 Then
 					If PlayerRoom\RoomTemplate\Name <> "cont2_049" Then
@@ -1620,9 +1623,6 @@ Function UpdateNPCs%()
 											EndIf
 										EndIf
 									Else
-										RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
-										Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
-                    
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
