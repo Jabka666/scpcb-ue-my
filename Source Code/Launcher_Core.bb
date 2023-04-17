@@ -517,7 +517,7 @@ Function LanguageSelector%()
 					Text2(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
 				EndIf
 			EndIf
-			If mo\MouseHit1 Then ExecFile("https://wiki.ziyuesinicization.site/index.php?title=Language_List_of_Ultimate_Edition")
+			If mo\MouseHit1 Then ExecFile("https://github.com/Jabka666/scpcb-ue-my/wiki/Language-List-of-Ultimate-Edition")
 		EndIf
 		MouseHoverLanguage = Null
 		
