@@ -832,7 +832,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "eyedrops.red"), "RedVision Eyedrops", "eyedrops2", "eye_drops.b3d", "INV_eye_drops_red.png", "", 0.0012, 1, "eye_drops_red.png")
 	
 	CreateItemTemplate(GetLocalString("items", "fak"), "First Aid Kit", "firstaid", "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.05, 1)
-	CreateItemTemplate(GetLocalString("items", "sfak"), "Small First Aid Kit", "finefirstaid", "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.03, 1)
+	CreateItemTemplate(GetLocalString("items", "cfak"), "Compact First Aid Kit", "finefirstaid", "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.03, 1)
 	CreateItemTemplate(GetLocalString("items", "bfak"), "Blue First Aid Kit", "firstaid2", "first_aid_kit.b3d", "INV_first_aid_kit(2).png", "", 0.03, 1, "first_aid_kit(2).png")
 	CreateItemTemplate(GetLocalString("items", "sb"), "Strange Bottle", "veryfinefirstaid", "eye_drops.b3d", "INV_strange_bottle.png", "", 0.002, 1, "strange_bottle.png")
 	
