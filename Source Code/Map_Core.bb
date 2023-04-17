@@ -714,8 +714,12 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 					
 					File = ReadString(f)
 					; ~ A hacky way to use .b3d format
-					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
-					tp\Name = "GFX\Map\Props\" + File
+					If Right(File, 2) = ".x" Then
+						File = Left(File, Len(File) - 2)
+					ElseIf Right(File, 4) = ".b3d"
+						File = Left(File, Len(File) - 4)
+					EndIf
+					tp\Name = "GFX\Map\Props\" + File + ".b3d"
 					
 					tp\Pitch = ReadFloat(f)
 					tp\Yaw = ReadFloat(f)
