@@ -6833,7 +6833,7 @@ Const MenuTab_Options_Advanced% = 5
 Function UpdateMenu%()
 	CatchErrors("UpdateMenu()")
 	
-	Local r.Rooms
+	Local r.Rooms, sc.SecurityCams
 	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen Then
@@ -6993,6 +6993,35 @@ Function UpdateMenu%()
 						y = y + (35 * MenuScale)
 						
 						opt\Atmosphere = UpdateMenuTick(x, y, opt\Atmosphere, True)
+						
+						y = y + (45 * MenuScale)
+						
+						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\SecurityCamRenderInterval, 17, "24.0", "18.0", "12.0", "6.0", "0.0")
+						Select opt\SecurityCamRenderInterval
+							Case 0
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 24.0
+								;[End Block]
+							Case 1
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 18.0
+								;[End Block]
+							Case 2
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 12.0
+								;[End Block]
+							Case 3
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 6.0
+								;[End Block]
+							Case 4
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 0.0
+								;[End Block]
+						End Select
+						For sc.SecurityCams = Each SecurityCams
+							sc\RenderInterval = opt\SecurityCamRenderIntervalLevel
+						Next
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
@@ -7572,6 +7601,12 @@ Function RenderMenu%()
 						EndIf
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
+						
+						y = y + (45 * MenuScale)
+						
+						Color(255, 255, 255)
+						Text2(x, y, GetLocalString("options", "screnderinterval"))
+						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), 114 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 17 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SecurityCamRenderInterval)
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]

@@ -585,6 +585,32 @@ Function UpdateMainMenu%()
 						y = y + (35 * MenuScale)
 						
 						opt\Atmosphere = UpdateMenuTick(x, y, opt\Atmosphere)
+						
+						y = y + (45 * MenuScale)
+						
+						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 150 * MenuScale, opt\SecurityCamRenderInterval, 17, "24.0", "18.0", "12.0", "6.0", "0.0")
+						Select opt\SecurityCamRenderInterval
+							Case 0
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 24.0
+								;[End Block]
+							Case 1
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 18.0
+								;[End Block]
+							Case 2
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 12.0
+								;[End Block]
+							Case 3
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 6.0
+								;[End Block]
+							Case 4
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 0.0
+								;[End Block]
+						End Select
 						;[End Block]
 					Case MainMenuTab_Options_Audio
 						;[Block]
@@ -1322,7 +1348,7 @@ Function RenderMainMenu%()
 			Select mm\MainMenuTab
 				Case MainMenuTab_Options_Graphics
 					;[Block]
-					Height = 440 * MenuScale
+					Height = 485 * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1387,6 +1413,11 @@ Function RenderMainMenu%()
 					EndIf
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
+					
+					y = y + (45 * MenuScale)
+					
+					Text2(x, y, GetLocalString("options", "screnderinterval"))
+					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), 164 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 17 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SecurityCamRenderInterval)
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
@@ -2771,44 +2802,45 @@ Const Tooltip_SaveTexturesInVRAM% = 7
 Const Tooltip_FOV% = 8
 Const Tooltip_AnisotropicFiltering% = 9
 Const Tooltip_Atmosphere% = 10
+Const Tooltip_SecurityCamRenderInterval% = 11
 ;[End Block]
 
 ; ~ Audio Tooltips Constants
 ;[Block]
-Const Tooltip_MasterVolume% = 11
-Const Tooltip_MusicVolume% = 12
-Const Tooltip_SoundVolume% = 13
-Const Tooltip_SoundAutoRelease% = 14
-Const Tooltip_UserTracks% = 15
-Const Tooltip_UserTracksMode% = 16
-Const Tooltip_UserTrackScan% = 17
+Const Tooltip_MasterVolume% = 12
+Const Tooltip_MusicVolume% = 13
+Const Tooltip_SoundVolume% = 14
+Const Tooltip_SoundAutoRelease% = 15
+Const Tooltip_UserTracks% = 16
+Const Tooltip_UserTracksMode% = 17
+Const Tooltip_UserTrackScan% = 18
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 18
-Const Tooltip_MouseInvertX% = 19
-Const Tooltip_MouseInvertY% = 20
-Const Tooltip_MouseSmoothing% = 21
-Const Tooltip_ControlConfiguration% = 22
+Const Tooltip_MouseSensitivity% = 19
+Const Tooltip_MouseInvertX% = 20
+Const Tooltip_MouseInvertY% = 21
+Const Tooltip_MouseSmoothing% = 22
+Const Tooltip_ControlConfiguration% = 23
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 23
-Const Tooltip_Console% = 24
-Const Tooltip_ConsoleOnError% = 25
-Const Tooltip_AchievementPopups% = 26
-Const Tooltip_FPS% = 27
-Const Tooltip_FrameLimit% = 28
-Const Tooltip_AutoSave% = 29
-Const Tooltip_TextShadow% = 30
-Const Tooltip_SmoothBars% = 31
-Const Tooltip_StartupVideos% = 32
-Const Tooltip_Launcher% = 33
-Const Tooltip_Subtitles% = 34
-Const Tooltip_SubtitlesColor% = 35
-Const Tooltip_ResetOptions% = 36
+Const Tooltip_HUD% = 24
+Const Tooltip_Console% = 25
+Const Tooltip_ConsoleOnError% = 26
+Const Tooltip_AchievementPopups% = 27
+Const Tooltip_FPS% = 28
+Const Tooltip_FrameLimit% = 29
+Const Tooltip_AutoSave% = 30
+Const Tooltip_TextShadow% = 31
+Const Tooltip_SmoothBars% = 32
+Const Tooltip_StartupVideos% = 33
+Const Tooltip_Launcher% = 34
+Const Tooltip_Subtitles% = 35
+Const Tooltip_SubtitlesColor% = 36
+Const Tooltip_ResetOptions% = 37
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -2897,6 +2929,10 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			Txt = GetLocalString("tooltip", "atmo")
 			R = 255
 			Txt2 = GetLocalString("tooltip", "cantchange")
+			;[End Block]
+		Case Tooltip_SecurityCamRenderInterval
+			;[Block]
+			Txt = GetLocalString("tooltip", "screnderinterval")
 			;[End Block]
 			; ~ [AUDIO]
 		Case Tooltip_MasterVolume
