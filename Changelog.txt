@@ -14,6 +14,7 @@ Bug fixes:
 - Fixed MAV after playing intro sequence.
 - Fixed saves.
 - Fixed downloaded languages cannot be deleted.
+- Fixed default language not setting correctly.
 
 v1.1.1
 

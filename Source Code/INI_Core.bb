@@ -424,7 +424,7 @@ Function LoadOptionsINI%()
 	
 	opt\DebugMode = IniGetInt(OptionFile, "Global", "Debug Mode", False)
 	
-	opt\Language = IniGetString(OptionFile, "Global", "Language", "en-US")
+	opt\Language = IniGetString(OptionFile, "Global", "Language", "en")
 End Function
 
 Function SaveOptionsINI%(SaveGlobal% = False)
@@ -668,7 +668,7 @@ Function ResetOptionsINI%()
 	
 	opt\IntroEnabled = True
 	
-	opt\Language = "en-US"
+	opt\Language = "en"
 End Function
 
 ;~IDEal Editor Parameters:
