@@ -20,23 +20,38 @@ Local PanelLoading% = CreatePanel(0, 0, 320, 260, LoadingWindow, 0)
 SetPanelImage(PanelLoading, "Assets\map_logo.png")
 
 Global Language$ = IniGetString(GetEnv("AppData") + "\scpcb-ue\Data\options.ini", "Global", "Language")
-Global LanguagePath$ = "..\Localization\" + Language + "\Data\local.ini"
-IniWriteBuffer_("..\Data\local.ini", True)
-IniWriteBuffer_("..\Localization\" + Language + "\Data\local.ini", True)
+Global LanguagePath$
 
-Global None$ = GetLocalString("mc", "none")
+Const LanguageFile$ = "Data\local.ini"
+Const RoomsFile$ = "Data\rooms.ini"
+Const EventsFile$ = "Data\events_MC.ini"
+
+IniWriteBuffer("..\" + LanguageFile)
+IniWriteBuffer("..\" + RoomsFile)
+IniWriteBuffer("..\" + EventsFile)
+
+Function SetLanguage%()
+	If Language = "en" Then
+		LanguagePath = ""
+	Else
+		LanguagePath = "Localization\" + Language + "\"
+		IniWriteBuffer("..\" + LanguagePath + LanguageFile)
+		IniWriteBuffer("..\" + LanguagePath + RoomsFile)
+		IniWriteBuffer("..\" + LanguagePath + EventsFile)
+	EndIf
+End Function
 
 ; ~ Create a window to put the toolbar in
 ; ~ Do not localize this because 3-D Viewer may can't find Map Creator
-Local WinHandle% = CreateWindow("SCP-CB Ultimate Edition Map Creator", mo\Viewport_Center_X - ResWidth / 2, mo\Viewport_Center_Y - ResHeight / 2, ResWidth, ResHeight, 0, 13) 
+Local WinHandle% = CreateWindow("SCP-CB Ultimate Edition Reborn Map Creator", mo\Viewport_Center_X - ResWidth / 2, mo\Viewport_Center_Y - ResHeight / 2, ResWidth, ResHeight, 0, 13) 
 
 Global MainHwnd% = api_GetActiveWindow() ; ~ User32.dll
 
 HideGadget(WinHandle)
 
-Const RoomsFile$ = "Data\rooms.ini"
-IniWriteBuffer_("..\" + RoomsFile, True)
-IniWriteBuffer_("..\Localization\" + Language + "\" + RoomsFile, True)
+SetLanguage()
+
+Global None$ = GetLocalString("mc", "none")
 
 LoadRoomTemplates(RoomsFile)
 
@@ -48,10 +63,6 @@ For rt.RoomTemplates = Each RoomTemplates
 	If rt\MapGrid = 0 Then AddGadgetItem(ListBox, rt\Name)
 Next
 SetGadgetLayout(ListBox, 3, 3, 2, 2)
-
-Const EventsFile$ = "Data\events_MC.ini"
-IniWriteBuffer_("..\" + EventsFile, True)
-IniWriteBuffer_("..\Localization\" + Language + "\" + EventsFile, True)
 
 InitEvents(EventsFile)
 AddEvents()

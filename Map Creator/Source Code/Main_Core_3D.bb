@@ -872,7 +872,12 @@ Function CreateProp%(File$)
 	Local p.Props
 	
 	; ~ A hacky way to use .b3d format
-	If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
+	If Right(File, 2) = ".x" Then
+		File = Left(File, Len(File) - 2)
+	ElseIf Right(File, 4) = ".b3d"
+		File = Left(File, Len(File) - 4)
+	EndIf
+	File = File + ".b3d"
 	
 	For p.Props = Each Props
 		If p\File = File Then
@@ -1300,7 +1305,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 				
 				File = ReadString(f)
-				; ~ A hacky way to use .b3d format
 				Model = CreateProp("GFX\map\Props\" + File)
 				
 				PositionEntity(Model, Temp1, Temp2, Temp3)

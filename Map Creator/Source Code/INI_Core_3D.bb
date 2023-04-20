@@ -1,29 +1,7 @@
-Function StripFileName$(File$)
-	Local mi$ = "", LastSlash% = 0, i%
-	
-	If Len(File) > 0 Then
-		For i = 1 To Len(File)
-			mi = Mid(File, i, 1)
-			If mi = "\" Lor mi = "/" Then
-				LastSlash = i
-			EndIf
-		Next
-	EndIf
-	Return(Left(File, LastSlash))
-End Function
-
-Function StripPath$(File$) 
-	Local Name$ = "", i%, mi$
-	
-	If Len(File) > 0 Then
-		For i = Len(File) To 1 Step -1 
-			mi = Mid(File, i, 1) 
-			If mi = "\" Lor mi = "/" Then Return(Name)
-			Name = mi + Name 
-		Next 
-	EndIf 
-	Return(Name) 
-End Function
+; ~ IniControler - A part of BlitzToolBox
+; ~ Write & Read ini file.
+; ~ v1.06 2022.11.12
+; ~ https://github.com/ZiYueCommentary/BlitzToolbox
 
 Function IniGetString$(File$, Section$, Parameter$, DefaultValue$ = "", AllowBuffer% = True)
 	Return(IniGetString_(File, Section, Parameter, DefaultValue, AllowBuffer))
@@ -66,6 +44,34 @@ End Function
 Function Format$(String_$, Parameter$, Replace_$ = "%s")
 	Return(Replace(String_, Replace_, Parameter))
 End Function
+
+Function StripFileName$(File$)
+	Local mi$ = "", LastSlash% = 0, i%
+	
+	If Len(File) > 0 Then
+		For i = 1 To Len(File)
+			mi = Mid(File, i, 1)
+			If mi = "\" Lor mi = "/" Then
+				LastSlash = i
+			EndIf
+		Next
+	EndIf
+	Return(Left(File, LastSlash))
+End Function
+
+Function StripPath$(File$) 
+	Local Name$ = "", i%, mi$
+	
+	If Len(File) > 0 Then
+		For i = Len(File) To 1 Step -1 
+			mi = Mid(File, i, 1) 
+			If mi = "\" Lor mi = "/" Then Return(Name)
+			Name = mi + Name 
+		Next 
+	EndIf 
+	Return(Name) 
+End Function
+
 
 Global OptionFileMC$ = GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini"
 

@@ -1,3 +1,16 @@
+; ~ IniControler - A part of BlitzToolBox
+; ~ Write & Read ini file.
+; ~ v1.06 2022.11.12
+; ~ https://github.com/ZiYueCommentary/BlitzToolbox
+
+Function IniWriteBuffer%(File$, ClearPrevious% = True)
+	IniWriteBuffer_(File, ClearPrevious)
+End Function
+
+Function IniGetBufferString$(File$, Section$, Parameter$, DefaultValue$ = "")
+	Return(IniGetBufferString_(File, Section, Parameter, DefaultValue))
+End Function
+
 Function IniWriteString%(File$, Section$, Parameter$, Value$, UpdateBuffer% = True)
 	IniWriteString_(File, Section, Parameter, Value, UpdateBuffer)
 End Function
@@ -29,19 +42,19 @@ Function IniGetFloat#(File$, Section$, Parameter$, DefaultValue# = 0.0, AllowBuf
 	Return(IniGetFloat_(File, Section, Parameter, DefaultValue, AllowBuffer))
 End Function
 
-Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
-	Return GetLocalFileString("Data\local.ini", Section, Parameter, Section + "," + Parameter)
-End Function
-
 Function GetLocalFileString$(File$, Section$, Parameter$, CheckRootFile% = True)
 	Local DefaultValue$
 	
 	If CheckRootFile Then
-		DefaultValue = IniGetBufferString_("..\" + File, Section, Parameter, Section + "," + Parameter)
+		DefaultValue = IniGetBufferString("..\" + File, Section, Parameter, Section + "," + Parameter)
 	Else 
 		DefaultValue = Section + "," + Parameter
 	EndIf
-	Return(ConvertUTF8toANSI(IniGetBufferString_("..\Localization\" + Language + "\" + File, Section, Parameter, DefaultValue))) ; ~ local.ini -> UTF8, MapCreator -> ANSI
+	Return(ConvertUTF8toANSI(IniGetBufferString("..\" + LanguagePath + File, Section, Parameter, DefaultValue))) ; ~ local.ini -> UTF8, MapCreator -> ANSI
+End Function
+
+Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
+	Return(GetLocalFileString("..\" + LanguageFile, Section, Parameter, Section + "," + Parameter))
 End Function
 
 Function Format$(String_$, Parameter$, Replace_$ = "%s")
@@ -50,7 +63,6 @@ End Function
 
 Global OptionFileMC$ = GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini"
 
-;[Block]
 ; ~ BlitzEncode - A part of BlitzToolbox
 ; ~ Encoding converter.
 ; ~ v1.0 2022.9.22
@@ -65,7 +77,6 @@ End Function
 Function ConvertUTF8toANSI$(Txt$)
 	Return(ConvertEncoding(Txt, UTF8, GetCodePage()))
 End Function
-;[End Block]
 
 Type Options
 	Field FogR%, FogG%, FogB%
