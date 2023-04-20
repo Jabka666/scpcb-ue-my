@@ -1,22 +1,30 @@
-v1.1.1
-
+v1.1.2
 General:
-- Tiny optimizations.
+- Added «Camera render interval» option.
+
+Rooms:
+- Updated lightmaps.
 
 Items:
 - Renamed «Small First Aid Kit» to «Compact First Aid Kit».
 
 - Tiny improvement for Compact First Aid Kit.
 
-Rooms:
-- Updated lightmaps.
+Bug fixes:
+- Fixed MAV after playing intro sequence.
+- Fixed saves.
+- Fixed downloaded languages cannot be deleted.
+
+v1.1.1
+
+General:
+- Tiny optimizations.
 
 Bug fixes:
 - Fixed a bug with incorrect description of SCP-005 in Map Creator.
 - Fixed SCP-860-1 dimension and all related MAVs.
 - Fixed downloaded languages cannot be deleted.
 - Fixed Map Creator events cannot be localized.
-- Fixed MAV after playing intro sequence.
 
 - Some fixes for event descriptions in Map Creator.
 
