@@ -895,6 +895,7 @@ Function UpdateMainMenu%()
 						y = y + (40 * MenuScale)
 						
 						If UpdateMenuButton(x - (290 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset")) Then
+							DeleteFile(OptionFile)
 							ResetOptionsINI()
 							SaveOptionsINI(True)
 						EndIf
