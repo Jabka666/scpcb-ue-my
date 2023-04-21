@@ -604,7 +604,7 @@ Repeat
 	Else
 		Flip(False)
 	EndIf
-Until (Not api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Map Creator"))
+Until (Not api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Reborn Map Creator"))
 End()
 
 Type RoomTemplates

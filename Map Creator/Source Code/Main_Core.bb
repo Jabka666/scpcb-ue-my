@@ -210,7 +210,7 @@ InsertGadgetItem(Tab, 0, GetLocalString("mc", "tab.2d"))
 InsertGadgetItem(Tab, 1, GetLocalString("mc", "tab.3d"))
 SetGadgetLayout(Tab, 3, 3, 2, 2)
 
-Local Tab2% = CreateTabber(300, 5, (ResWidth / 4) + 20, ResHeight - 100, WinHandle)
+Local Tab2% = CreateTabber(300, 5, (ResWidth / 4) + 324, ResHeight - 100, WinHandle)
 
 InsertGadgetItem(Tab2, 0, GetLocalString("mc", "tab2.fac"))
 InsertGadgetItem(Tab2, 1, GetLocalString("mc", "tab2.forest"))

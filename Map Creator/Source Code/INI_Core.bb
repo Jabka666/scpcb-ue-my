@@ -54,7 +54,7 @@ Function GetLocalFileString$(File$, Section$, Parameter$, CheckRootFile% = True)
 End Function
 
 Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
-	Return(GetLocalFileString("..\" + LanguageFile, Section, Parameter, Section + "," + Parameter))
+	Return(GetLocalFileString(LanguageFile, Section, Parameter, CheckRootFile))
 End Function
 
 Function Format$(String_$, Parameter$, Replace_$ = "%s")
