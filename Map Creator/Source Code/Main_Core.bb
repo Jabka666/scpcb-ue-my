@@ -1122,7 +1122,7 @@ Repeat
 			EndIf
 		EndIf
 		
-		If EID = 6 Then ExecFile("https://wiki.ziyuesinicization.site/index.php?title=Map_Creator_Manual")
+		If EID = 6 Then ExecFile("https://manual.scpcbgame.cn/map-creator/english")
 		If EID = 40 Then Notify(GetLocalString("mc", "about") + Chr(13))
 		If EID = 17 Then ShowGadget(OptionWin)
 		If EID = 15 Then

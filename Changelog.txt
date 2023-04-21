@@ -20,6 +20,7 @@ Bug fixes:
 
 Map Creator:
 - Increased width of tab above the grid.
+- Changed Manual link.
 
 v1.1.1
 
