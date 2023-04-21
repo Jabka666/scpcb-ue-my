@@ -964,11 +964,7 @@ Function UpdateNPCs%()
 											PrevFrame = n\Frame
 											AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 											
-											If PrevFrame <= 286.0 And n\Frame > 286.0 Then
-												PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
-											ElseIf PrevFrame <= 311.0 And n\Frame > 311.0 
-												PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
-											EndIf
+											If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 										Else
 											n\CurrSpeed = 0.0
 										EndIf
@@ -1010,11 +1006,7 @@ Function UpdateNPCs%()
 													
 													PrevFrame = AnimTime(n\OBJ)
 													AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
-													If PrevFrame <= 286.0 And n\Frame > 286.0 Then
-														PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
-													ElseIf PrevFrame <= 311.0 And n\Frame > 311.0 
-														PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
-													EndIf
+													If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 													
 													If Dist2 < 0.04 Then n\PathLocation = n\PathLocation + 1
 												EndIf
@@ -6127,7 +6119,7 @@ Function UpdateMTFUnit%(n.NPCs)
 			End Select
 			
 			If n\CurrSpeed > 0.01 Then
-				If (PrevFrame > 500.0 And n\Frame < 495.0) And (PrevFrame < 505.0 And n\Frame >= 505.0) Then PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+				If (PrevFrame > 500.0 And n\Frame < 495.0) Lor (PrevFrame < 505.0 And n\Frame >= 505.0) Then PlaySound2(Step2SFX[Rand(3, 5)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 			EndIf
 			
 			If chs\NoTarget And n\State = 1.0 Then n\State = 0.0

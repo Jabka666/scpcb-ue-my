@@ -15,8 +15,10 @@ Bug fixes:
 - Fixed saves.
 - Fixed downloaded languages cannot be deleted.
 - Fixed default language not setting correctly.
-- Fixed the English version of Map Creator doesn't show the text correctly.
-- Fixed the localize font of Map Creator unable to load.
+- Fixes for Map Creator:
+	- Fixed the English version of Map Creator doesn't show the text correctly.
+	- Fixed the localize font unable to load.
+- Fixed MTF step sounds.
 
 Map Creator:
 - Increased width of tab above the grid.
