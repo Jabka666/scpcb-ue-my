@@ -101,7 +101,7 @@ ChangeDir("..")
 
 Const FontsPath$ = "Data\fonts.ini"
 
-Global ConsoleFont% = LoadFont_Strict("GFX\fonts\" + IniGetString("Localization\ " + FontsPath, "Console", "File", IniGetString(FontsPath, "Console", "File")), IniGetString("Localization\" + FontsPath, "Console", "Size", IniGetString(FontsPath, "Console", "Size")))
+Global ConsoleFont% = LoadFont_Strict("GFX\fonts\" + IniGetString("Localization\" + Language + "\" + FontsPath, "Console", "File", IniGetString(FontsPath, "Console", "File")), IniGetString("Localization\" + Language + "\" + FontsPath, "Console", "Size", IniGetString(FontsPath, "Console", "Size")))
 
 Function LoadEntities%()
 	Local i%
