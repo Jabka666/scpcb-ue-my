@@ -15,6 +15,10 @@ Bug fixes:
 - Fixed saves.
 - Fixed downloaded languages cannot be deleted.
 - Fixed default language not setting correctly.
+- Fixed the English version of Map Creator doesn't show the text correctly.
+
+Map Creator:
+- Increased width of tab above the grid.
 
 v1.1.1
 
