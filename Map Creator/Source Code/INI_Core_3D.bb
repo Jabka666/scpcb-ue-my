@@ -3,6 +3,14 @@
 ; ~ v1.06 2022.11.12
 ; ~ https://github.com/ZiYueCommentary/BlitzToolbox
 
+Function IniWriteBuffer%(File$, ClearPrevious% = True)
+	IniWriteBuffer_(File, ClearPrevious)
+End Function
+
+Function IniGetBufferString$(File$, Section$, Parameter$, DefaultValue$ = "")
+	Return(IniGetBufferString_(File, Section, Parameter, DefaultValue))
+End Function
+
 Function IniGetString$(File$, Section$, Parameter$, DefaultValue$ = "", AllowBuffer% = True)
 	Return(IniGetString_(File, Section, Parameter, DefaultValue, AllowBuffer))
 End Function
@@ -34,11 +42,11 @@ Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
 	Local DefaultValue$
 	
 	If CheckRootFile Then
-		DefaultValue = IniGetBufferString_("..\Data\local.ini", Section, Parameter, Section + "," + Parameter)
+		DefaultValue = IniGetBufferString("..\" + LanguageFile, Section, Parameter, Section + "," + Parameter)
 	Else 
 		DefaultValue = Section + "," + Parameter
 	EndIf
-	Return(IniGetBufferString_("..\Localization\" + Language + "\Data\local.ini", Section, Parameter, DefaultValue))
+	Return(IniGetBufferString("..\" + LanguagePath + LanguageFile, Section, Parameter, DefaultValue))
 End Function
 
 Function Format$(String_$, Parameter$, Replace_$ = "%s")
@@ -51,9 +59,7 @@ Function StripFileName$(File$)
 	If Len(File) > 0 Then
 		For i = 1 To Len(File)
 			mi = Mid(File, i, 1)
-			If mi = "\" Lor mi = "/" Then
-				LastSlash = i
-			EndIf
+			If mi = "\" Lor mi = "/" Then LastSlash = i
 		Next
 	EndIf
 	Return(Left(File, LastSlash))
@@ -71,7 +77,6 @@ Function StripPath$(File$)
 	EndIf 
 	Return(Name) 
 End Function
-
 
 Global OptionFileMC$ = GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini"
 

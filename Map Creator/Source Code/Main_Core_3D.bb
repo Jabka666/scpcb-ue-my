@@ -4,6 +4,24 @@ Include "Source Code\Math_Core_3D.bb"
 Include "Source Code\Materials_Core_3D.bb"
 Include "Source Code\Texture_Cache_Core_3D.bb"
 
+Global Language$ = IniGetString(GetEnv("AppData") + "\scpcb-ue\Data\options.ini", "Global", "Language")
+Global LanguagePath$
+
+Const LanguageFile$ = "Data\local.ini"
+
+IniWriteBuffer("..\" + LanguageFile)
+
+Function SetLanguage%()
+	If Language = "en" Then
+		LanguagePath = ""
+	Else
+		LanguagePath = "Localization\" + Language + "\"
+		IniWriteBuffer("..\" + LanguagePath + LanguageFile)
+	EndIf
+End Function
+
+SetLanguage()
+
 Const ClrR% = 50, ClrG% = 50, ClrB% = 50
 
 Global MouseHit1%
@@ -26,12 +44,12 @@ LoadOptionsINI()
 
 CameraClsColor(Camera, opt\FogR, opt\FogG, opt\FogB)
 
-CameraRange(Camera, 0.01, opt\CamRange)
+CameraRange(Camera, 0.05, opt\CamRange)
 PositionEntity(Camera, 0.0, 1.0, 0.0)
 
 Global AmbientLightRoomTex%
 
-AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
+AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 1 + 256)
 TextureBlend(AmbientLightRoomTex, 5)
 SetBuffer(TextureBuffer(AmbientLightRoomTex))
 ClsColor(0, 0, 0)
@@ -49,11 +67,6 @@ Global RoomTempID%
 LoadRoomTemplates("..\Data\rooms.ini")
 
 LoadMaterials("..\Data\materials.ini")
-
-Global Language$ = IniGetString(GetEnv("AppData") + "\scpcb-ue\Data\options.ini", "Global", "Language")
-Global LanguagePath$ = "..\Localization\" + Language + "\Data\local.ini"
-IniWriteBuffer_("..\Data\local.ini", True)
-IniWriteBuffer_("..\Localization\" + Language + "\Data\local.ini", True)
 
 Const RoomScale# = 8.0 / 2048.0
 
@@ -101,7 +114,7 @@ ChangeDir("..")
 
 Const FontsPath$ = "Data\fonts.ini"
 
-Global ConsoleFont% = LoadFont_Strict("GFX\fonts\" + IniGetString("Localization\" + Language + "\" + FontsPath, "Console", "File", IniGetString(FontsPath, "Console", "File")), IniGetString("Localization\" + Language + "\" + FontsPath, "Console", "Size", IniGetString(FontsPath, "Console", "Size")))
+Global ConsoleFont% = LoadFont_Strict("GFX\fonts\" + IniGetString(LanguagePath + FontsPath, "Console", "File", IniGetString(FontsPath, "Console", "File")), IniGetString(LanguagePath + FontsPath, "Console", "Size", IniGetString(FontsPath, "Console", "Size")))
 
 Function LoadEntities%()
 	Local i%
@@ -191,7 +204,7 @@ MXS = 180.0
 
 Const Period# = 1000.0 / 60.0
 
-Global PrevTime% = MilliSecs2()
+Global PrevTime% = MilliSecs()
 Global ElapsedTime#
 
 InitErrorMsgs(9, True)
@@ -199,8 +212,6 @@ SetErrorMsg(0, Format(GetLocalString("error", "title.mc"), SystemProperty("blitz
 SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
 SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
 SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
-SetErrorMsg(4, Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{0}"), (TotalVidMem() / 1024), "{1}"))
-SetErrorMsg(5, Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
 
 SetErrorMsg(7, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
 SetErrorMsg(8, GetLocalString("error", "shot")) 
@@ -210,19 +221,22 @@ Function CatchErrors%(Location$)
 End Function
 
 Repeat
+	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
+	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
+	
 	Cls()
 	
 	If opt\ShowFPS Then
-		If CheckFPS < MilliSecs2() Then
+		If CheckFPS < MilliSecs() Then
 			FPS = ElapsedLoops
 			ElapsedLoops = 0
-			CheckFPS = MilliSecs2() + 1000
+			CheckFPS = MilliSecs() + 1000
 		EndIf
 		ElapsedLoops = ElapsedLoops + 1
 	EndIf
 	
-	ElapsedTime = ElapsedTime + Float(MilliSecs2() - PrevTime) / Float(Period)
-	PrevTime = MilliSecs2()
+	ElapsedTime = ElapsedTime + Float(MilliSecs() - PrevTime) / Float(Period)
+	PrevTime = MilliSecs()
 	
 	Local f%
 	
@@ -500,7 +514,7 @@ Repeat
 					If CurrMapGrid <> 1 Then
 						If PickedEntity() = GetChild(r\OBJ, 2)
 							SetBuffer(TextureBuffer(r\OverlayTex))
-							ClsColor(70, 70, 20 + (Float(Sin(MilliSecs2() / 4.0)) * 20))
+							ClsColor(70, 70, 20 + (Float(Sin(MilliSecs() / 4.0)) * 20))
 							Cls()
 							SetBuffer(BackBuffer())
 							PickedRoom = r
@@ -510,7 +524,7 @@ Repeat
 					Else
 						If PickedEntity() = r\OBJ
 							SetBuffer(TextureBuffer(r\OverlayTex))
-							ClsColor(60, 60, 50 - (Float(Sin(MilliSecs2() / 4.0)) * 50))
+							ClsColor(60, 60, 50 - (Float(Sin(MilliSecs() / 4.0)) * 50))
 							Cls()
 							SetBuffer(BackBuffer())
 							PickedRoom = r
@@ -1103,15 +1117,15 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				Temp1s = ReadString(f)
 				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3 Then
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1, DeleteMapTextures)
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s)
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3, DeleteMapTextures)
+						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3 Then
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1, DeleteMapTextures)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s)
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3, DeleteMapTextures)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3)
 					EndIf
 				EndIf
 				If Tex[j] <> 0 Then

@@ -137,7 +137,7 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 ; ~ If not, check the MapTexturesFolder
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
-	Texture = LoadTextureCheckingIfInCache(Name, TexFlags, DeleteMapTextures)
+	Texture = LoadTextureCheckingIfInCache(Name, TexFlags)
 	If Texture <> 0 Then
 		If ((TexFlags Shr 1) Mod 2) = 0 Then
 			TextureBlend(Texture, 2 + (3 * opt\Atmosphere))

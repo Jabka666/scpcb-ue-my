@@ -365,7 +365,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 						If Instr(Temp1s, "_lm") <> 0 Then
 							Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1 + (256 * opt\SaveTexturesInVRAM))
 						Else
-							Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1)
+							Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s)
 						EndIf
 					Else
 						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3)
@@ -375,7 +375,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 						If Instr(Temp1s, "_lm") <> 0 Then
 							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1 + (256 * opt\SaveTexturesInVRAM))
 						Else
-							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1)
+							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s)
 						EndIf
 					Else
 						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3)
