@@ -1122,7 +1122,13 @@ Repeat
 			EndIf
 		EndIf
 		
-		If EID = 6 Then ExecFile("https://manual.scpcbgame.cn/map-creator/english")
+		If EID = 6 Then 
+			If StringToBoolean(GetLocalString("global", "localizedmanual")) Then 
+				ExecFile("https://manual.scpcbgame.cn/general/map-creator/" + Lower(Language))
+			Else
+				ExecFile("https://manual.scpcbgame.cn/general/map-creator")
+			EndIf
+		EndIf
 		If EID = 40 Then Notify(GetLocalString("mc", "about") + Chr(13))
 		If EID = 17 Then ShowGadget(OptionWin)
 		If EID = 15 Then

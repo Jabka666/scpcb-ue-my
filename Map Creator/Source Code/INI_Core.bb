@@ -61,6 +61,23 @@ Function Format$(String_$, Parameter$, Replace_$ = "%s")
 	Return(Replace(String_, Replace_, Parameter))
 End Function
 
+Function StringToBoolean%(String_$, DefaultValue% = False)
+	Select String_
+		Case "True", "true", "1"
+			;[Block]
+			Return(True)
+			;[End Block]
+		Case "False", "false", "0"
+			;[Block]
+			Return(False)
+			;[End Block]
+		Default
+			;[Block]
+			Return(DefaultValue)
+			;[End Block]
+	End Select
+End Function
+
 Global OptionFileMC$ = GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini"
 
 ; ~ BlitzEncode - A part of BlitzToolbox
