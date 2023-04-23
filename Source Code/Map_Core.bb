@@ -5288,6 +5288,20 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r\x + 815.0 * RoomScale, r\z - 815.0 * RoomScale, r)
 			;[End Block]
+		Case "cont2c_066"
+			;[Block]
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_CARD_3)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.165, True)
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r\x - 288.0 * RoomScale, r\y, r\z, 90.0, r, True, DEFAULT_DOOR, KEY_CARD_3)
+            PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.132, True)
+			
+			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 657.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 50.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			;[End Block]
 		Case "cont2c_1162_arc"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_CARD_2)
@@ -8610,6 +8624,7 @@ Function CreateMap%()
 	SetRoom("room2_js", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_elevator", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
 	
+	MapRoom(ROOM2C, Floor(0.2 * Float(Room2CAmount[0]))) = "cont2c_066"
 	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_1162_arc"
 	
 	MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3_storage"

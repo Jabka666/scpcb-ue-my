@@ -81,6 +81,7 @@ Const e_gate_b_entrance% = 71
 Const e_gate_b% = 72
 Const e_gate_a_entrance% = 73
 Const e_gate_a% = 74
+Const e_cont2c_066% = 75
 ;[End Block]
 
 Function FindEventID%(EventName$)
@@ -384,6 +385,10 @@ Function FindEventID%(EventName$)
 		Case "gate_a"
 			;[Block]
 			Return(e_gate_a)
+			;[End Block]
+		Case "cont2c_066"
+			;[Block]
+			Return(e_cont2c_066)
 			;[End Block]
 		Default
 			;[Block]
@@ -2439,9 +2444,16 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				
-				If e\EventState = 0.0 Then
-					CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
-					e\EventState = 1.0
+				If e\room\Dist < 0.7 Then
+					If e\EventState = 0.0 Then
+						If n_I\Curr066 = Null Then
+							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+						Else
+							PositionEntity(n_I\Curr066\Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+							ResetEntity(n_I\Curr066\Collider)
+						EndIf
+						e\EventState = 1.0
+					EndIf
 				EndIf
 				;[End Block]
 			Case e_room2c_ec
@@ -7918,6 +7930,18 @@ Function UpdateEvents%()
 						e\EventState2 = 0.0
 					EndIf
 				Else
+					RemoveEvent(e)
+				EndIf
+				;[End Block]
+			Case e_cont2c_066
+				;[Block]
+				If e\room\Dist < 0.7 Then
+					If n_I\Curr066 = Null Then
+						n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+					Else
+						PositionEntity(n_I\Curr066\Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+						ResetEntity(n_I\Curr066\Collider)
+					EndIf
 					RemoveEvent(e)
 				EndIf
 				;[End Block]

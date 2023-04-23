@@ -3,7 +3,10 @@ General:
 - Added «Camera render interval» option.
 
 Rooms:
+- Added SCP-066's containment chamber.
+
 - Updated lightmaps.
+- Some design improvements.
 
 Items:
 - Renamed «Small First Aid Kit» to «Compact First Aid Kit».

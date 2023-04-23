@@ -409,6 +409,7 @@ Type NPCInstance
 	Field Curr096.NPCs
 	Field Curr513_1.NPCs
 	Field Curr049.NPCs
+	Field Curr066.NPCs
 	Field IsHalloween%, IsNewYear%
 End Type
 
@@ -1353,7 +1354,7 @@ Function LoadEvents%()
 	CreateEvent("room3_2_ez", "room3_3_ez", 0)
 	
 	; ~ The dead guard
-	CreateEvent("room3_2_hcz", "room3_2_hcz", 0, 0.08)
+	CreateEvent("room3_2_hcz", "room3_2_hcz", 0, 0.1)
 	
 	CreateEvent("room4_lcz_049", "room4_lcz", 0)
 	
@@ -1421,7 +1422,7 @@ Function LoadEvents%()
 	CreateEvent("room2_4_hcz", "room2_4_hcz", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("room2_test_hcz", "room2_test_hcz", 0)
-	CreateEvent("room2_test_lcz_173", "room2_test_lcz", 0, 1.0)
+	CreateEvent("room2_test_lcz_173", "room2_test_lcz", 0)
 	
 	CreateEvent("room2_mt", "room2_mt", 0)
 	
@@ -1485,6 +1486,8 @@ Function LoadEvents%()
 	CreateEvent("cont1_005", "cont1_005", 0)
 	
 	CreateEvent("room2_ic", "room2_ic", 0)
+	
+	CreateEvent("cont2c_066", "cont2c_066", 0.6)
 End Function
 
 Function LoadWayPoints%(LoadingStart% = 55)
