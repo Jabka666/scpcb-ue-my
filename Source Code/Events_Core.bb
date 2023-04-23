@@ -2447,7 +2447,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				
-				If e\room\Dist < 0.7 Then
+				If e\room\Dist < 7.0 Then
 					If e\EventState = 0.0 Then
 						If n_I\Curr066 = Null Then
 							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
@@ -7938,7 +7938,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont2c_066
 				;[Block]
-				If e\room\Dist < 0.7 Then
+				If e\room\Dist < 7.0 Then
 					If n_I\Curr066 = Null Then
 						n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
 					Else
