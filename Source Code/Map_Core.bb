@@ -2862,7 +2862,7 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 				Return
 			EndIf
 		EndIf
-	ElseIf d\KeyCard > KEY_HAND_YELLOW And d\KeyCard < KEY_MISC
+	ElseIf d\KeyCard > KEY_860 And d\KeyCard < KEY_MISC
 		If SelectedItem = Null Then
 			CreateMsg(GetLocalString("msg", "dna.denied_1"))
 			PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
@@ -2885,7 +2885,7 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 							CreateMsg(GetLocalString("msg", "dna.granted.005"))
 						Else
 							CreateMsg(GetLocalString("msg", "dna.granted"))
-					EndIf
+						EndIf
 					EndIf
 				EndIf
 				SelectedItem = Null
@@ -5356,6 +5356,8 @@ Function FillRoom%(r.Rooms)
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
+			
+			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z, 90.0, r, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 3096.0 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 6568.0 * RoomScale)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 1216.0 * RoomScale, r\y - 5461.0 * RoomScale, r\z + 3239.0 * RoomScale)

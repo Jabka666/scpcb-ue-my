@@ -4,6 +4,7 @@ General:
 
 Rooms:
 - Added SCP-066's containment chamber.
+- Added an intermediate door to bypass elevators in «room3_storage».
 
 - Updated lightmaps.
 - Some design improvements.
