@@ -4401,7 +4401,12 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2_2_lcz"
 			;[Block]
-			For r2.Rooms = Each Rooms
+			d.Doors = CreateDoor(r\x + 672.0 * RoomScale, r\y, r\z, 90.0, r, False, DEFAULT_DOOR, KEY_CARD_2)
+            d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+            FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+            
+            For r2.Rooms = Each Rooms
 				If r2 <> r Then
 					If r2\RoomTemplate\Name = "room2_2_lcz" Then
 						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
@@ -4413,6 +4418,9 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
+			
+			it.Items = CreateItem("Empty Cup", "emptycup", r\x + 490.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + -232.0 * RoomScale)
+            EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2_4_lcz"
 			;[Block]
