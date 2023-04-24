@@ -834,7 +834,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "vest"
+		Case "vest", "finevest"
 			;[Block]
 			Select Setting
 				Case ROUGH
@@ -1069,12 +1069,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										it2.Items = CreateItem("Heavy Gas Mask", "gasmask148", x, y, z)
 										Exit
 										;[End Block]
-									Case "vest"
-										;[Block]
-										RemoveItem(it)
-										it2.Items = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
-										Exit
-										;[End Block]
 									Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit"
 										;[Block]
 										RemoveItem(it)
@@ -1130,7 +1124,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If SelectedItem\ItemTemplate\TempName = "firstaid" Then
+					If item\ItemTemplate\TempName = "firstaid" Then
 						it2.Items = CreateItem("Blue First Aid Kit", "firstaid2", x, y, z)
 					Else
 						it2.Items = CreateItem("First Aid Kit", "firstaid", x, y, z)
