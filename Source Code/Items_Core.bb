@@ -1153,6 +1153,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					If Level = 0 Then
 						MakeDecal = True
+					ElseIf Level = 6 Then
+						it2.Items = CreateItem("Level 0 Key Card", "key0", x, y, z)
 					Else
 						it2.Items = CreateItem("Level " + (Level - 1) + " Key Card", "key" + (Level - 1), x, y, z)
 					EndIf
@@ -1397,7 +1399,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Select SelectedDifficulty\OtherFactors
 								Case EASY
 									;[Block]
-									If Rand(3) = 1 Then
+									If Rand(4) = 1 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1405,7 +1407,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(4) = 1 Then
+									If Rand(6) = 1 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1413,7 +1415,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(5) = 1 Then
+									If Rand(8) = 1 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1421,7 +1423,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case EXTREME
 									;[Block]
-									If Rand(6) = 1 Then
+									If Rand(10) = 1 Then
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1511,7 +1513,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							If Rand(3) = 1 Then
+							If Rand(4) = 1 Then
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1519,7 +1521,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							If Rand(4) = 1 Then
+							If Rand(6) = 1 Then
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1527,7 +1529,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case HARD
 							;[Block]
-							If Rand(5) = 1 Then
+							If Rand(8) = 1 Then
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1535,7 +1537,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							If Rand(6) = 1 Then
+							If Rand(10) = 1 Then
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
