@@ -5204,13 +5204,13 @@ Function UpdateEvents%()
 									SecondaryLightOn = CurveValue(1.0, SecondaryLightOn, 10.0)
 									If (Not e\Sound2) Then LoadEventSound(e, "SFX\Ambient\Room Ambience\FuelPump.ogg", 1)
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[6], 6.0)
-									For i = 4 To 6
+									For i = 4 To 7
 										e\room\RoomDoors[i]\Locked = 0
 									Next
 								Else
 									SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
 									If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-									For i = 4 To 6
+									For i = 4 To 7
 										e\room\RoomDoors[i]\Locked = 1
 									Next
 								EndIf
