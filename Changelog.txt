@@ -10,6 +10,8 @@ Rooms:
 - Updated lightmaps.
 - Some design improvements.
 
+- The Heavy Ballistic Vest can be modified by SCP-914.
+
 Items:
 - Renamed «Small First Aid Kit» to «Compact First Aid Kit».
 
