@@ -15,6 +15,14 @@ Items:
 
 - Tiny improvement for Compact First Aid Kit.
 
+- Tiny improvement for Ballistic Vests.
+
+NPCs:
+
+- NPCs that deal damage now have their damage scale with difficulty.
+
+- SCP-008-1's walk speed is slower than their chase speed.
+
 Bug fixes:
 - Fixed MAV after playing intro sequence.
 - Fixed saves.
