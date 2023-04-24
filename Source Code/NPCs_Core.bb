@@ -591,6 +591,26 @@ Function UpdateNPCs%()
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	Local SinValue#, SqrValue#
+	Local DifficultyDMGMult#
+	
+	Select SelectedDifficulty\OtherFactors
+		Case EASY
+			;[Block]
+			DifficultyDMGMult = 1.0
+			;[End Block]
+		Case NORMAL
+			;[Block]
+			DifficultyDMGMult = 1.15
+			;[End Block]
+		Case HARD
+			;[Block]
+			DifficultyDMGMult = 1.3
+			;[End Block]
+		Case EXTREME
+			;[Block]
+			DifficultyDMGMult = 1.45
+			;[End Block]
+	End Select
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -2062,7 +2082,7 @@ Function UpdateNPCs%()
 										If Dist < 0.49 Then
 											If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0 Then
 												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
-												InjurePlayer(Rnd(0.4, 1.0), 0.0, 0.0, Rnd(0.1, 0.25), 0.2)
+												InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, Rnd(0.25, 0.3) * DifficultyDMGMult, 0.2)
 												
 												If me\Injuries > 3.0 Then
 													msg\DeathMsg = Format(GetLocalString("death", "0492killed"), SubjectName)
@@ -3039,7 +3059,7 @@ Function UpdateNPCs%()
 													InjurePlayer(Rnd(0.5))
 												Else
 													PlaySound_Strict(DamageSFX[Rand(9, 10)])
-													InjurePlayer(Rnd(1.0, 1.5), 0.0, 100.0, Rnd(0.1, 0.55), 0.2)
+													InjurePlayer(Rnd(0.75, 1.15) * DifficultyDMGMult, 0.0, 100.0, Rnd(0.35, 0.4) * DifficultyDMGMult, 0.2)
 													
 													If me\Injuries > 3.0 Then
 														If PlayerRoom\RoomTemplate\Name = "room2_ez" Then
@@ -3509,7 +3529,7 @@ Function UpdateNPCs%()
 									If Temp Then
 										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 2.25 Then
 											PlaySound_Strict(DamageSFX[11])
-											InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.1, 0.75))
+											InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.2, 0.75))
 										Else
 											SetNPCFrame(n, 449.0)
 										EndIf
@@ -4033,7 +4053,7 @@ Function UpdateNPCs%()
 									If Dist < 0.64 Then
 										If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0 Then
 											PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
-											InjurePlayer(Rnd(0.5, 1.0), 0.0, 500.0, Rnd(0.1, 0.3))
+											InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, Rnd(0.2, 0.25) * DifficultyDMGMult)
 										EndIf
 									Else
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
@@ -4350,7 +4370,7 @@ Function UpdateNPCs%()
 									If Dist > 0.64 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									Else
-										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, Rnd(0.1, 0.4), 0.2)
+										InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, Rnd(0.3, 0.35) * DifficultyDMGMult, 0.2)
 										PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
 										If me\Injuries > 10.0 Then
 											If PlayerRoom\RoomTemplate\Name = "dimension_1499"
@@ -4371,7 +4391,7 @@ Function UpdateNPCs%()
 									If Dist > 0.64 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 									Else
-										InjurePlayer(Rnd(0.75, 1.5), 0.0, 500.0, Rnd(0.1, 0.4), 0.2)
+										InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, Rnd(0.3, 0.35) * DifficultyDMGMult, 0.2)
 										PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
 										If me\Injuries > 10.0 Then
 											If PlayerRoom\RoomTemplate\Name = "dimension_1499"
@@ -4454,7 +4474,7 @@ Function UpdateNPCs%()
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 								
 								AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
-								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								
@@ -4557,7 +4577,7 @@ Function UpdateNPCs%()
 									If Dist < 0.49 Then
 										If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0 Then
 											PlaySound_Strict(DamageSFX[Rand(5, 8)])
-											InjurePlayer(Rnd(0.4, 1.0), 1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs), 0.0, Rnd(0.1, 0.25), 0.2)
+											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0 + SelectedDifficulty\AggressiveNPCs, 0.0, Rnd(0.175, 0.225) * DifficultyDMGMult, 0.2)
 											If me\Injuries > 3.0 Then
 												msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
 												Kill(True)
@@ -6419,6 +6439,26 @@ End Function
 Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)
 	Local p.Particles, de.Decals, n.NPCs
 	Local Pvt%, ShotMessageUpdate$, i%
+	Local DifficultyDMGMult#
+	
+	Select SelectedDifficulty\OtherFactors
+		Case EASY
+			;[Block]
+			DifficultyDMGMult = 1.0
+			;[End Block]
+		Case NORMAL
+			;[Block]
+			DifficultyDMGMult = 1.15
+			;[End Block]
+		Case HARD
+			;[Block]
+			DifficultyDMGMult = 1.3
+			;[End Block]
+		Case EXTREME
+			;[Block]
+			DifficultyDMGMult = 1.45
+			;[End Block]
+	End Select
 	
 	p.Particles = CreateParticle(PARTICLE_FLASH, x, y, z, Rnd(0.08, 0.1), 0.0, 5.0)
 	p\AlphaChange = -0.15
@@ -6437,8 +6477,8 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 		Select Rand(17)
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
-				me\Stamina = me\Stamina - Rnd(5.0)
-				InjurePlayer(Rnd(0.7, 0.9), 0.0, 650.0, Rnd(0.25, 0.5))
+				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - Rnd(5.0)
+				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, 650.0, (0.61 / 1.4) * DifficultyDMGMult)
 				If wi\BallisticVest > 0 Then
 					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
 				Else
@@ -6448,28 +6488,28 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 			Case 11 ; ~ Left Leg
 				;[Block]
 				me\Stamina = me\Stamina - Rnd(10.0)
-				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, 650.0)
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
 				me\Stamina = me\Stamina - Rnd(10.0)
-				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, 650.0)
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]
 			Case 13 ; ~ Left Arm
 				;[Block]
-				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, 650.0)
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.left")
 				;[End Block]
 			Case 14 ; ~ Right Arm
 				;[Block]
-				InjurePlayer(Rnd(0.5, 0.7), 0.0, 650.0)
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, 650.0)
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.right")
 				;[End Block]
 			Case 15 ; ~ Neck
 				;[Block]
-				InjurePlayer(Rnd(1.0, 1.2), 0.0, 650.0)
+				InjurePlayer(Rnd(0.75, 0.9) * DifficultyDMGMult, 0.0, 650.0)
 				ShotMessageUpdate = GetLocalString("msg", "bullet.neck")
 				;[End Block]
 			Case 16, 17 ; ~ Helmet, Face or Head
@@ -6767,7 +6807,7 @@ End Function
 
 Function NPCSpeedChange%(n.NPCs)
 	Select n\NPCType
-		Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType939, NPCTypeMTF
+		Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType939
 			Select SelectedDifficulty\OtherFactors
 				Case NORMAL
 					;[Block]
