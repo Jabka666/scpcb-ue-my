@@ -8224,7 +8224,7 @@ Function UpdateDimension106%()
 						
 						If Safe Lor chs\NoTarget Then
 							EntityTexture(e\room\Objects[19], e\room\Textures[0])
-						ElseIf Dist < 64.0
+						ElseIf Dist < 64.0 And (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[19], 8.0)
 							EntityTexture(e\room\Objects[19], e\room\Textures[1])
 							InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0003))
@@ -8239,6 +8239,9 @@ Function UpdateDimension106%()
 								RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 10.0), 0.0)
 								FreeEntity(Pvt)
 							EndIf
+						ElseIf Dist < 64.0 Then
+							EntityTexture(e\room\Objects[19], e\room\Textures[0])
+							InjurePlayer((8.0 - Sqr(Dist)) * (fps\Factor[0] * 0.00015))
 						EndIf
 						
 						me\CameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
