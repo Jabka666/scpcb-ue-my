@@ -341,10 +341,6 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
 			;[End Block]
-		Case "scp714"
-			;[Block]
-			I_714\Using = False
-			;[End Block]
 		Case "scp1499", "fine1499"
 			;[Block]
 			I_1499\Using = 0
@@ -352,6 +348,14 @@ Function RemoveWearableItems%(item.Items)
 		Case "scp427"
 			;[Block]
 			I_427\Using = False
+			;[End Block]
+		Case "cap", "scp268", "fine268"
+			;[Block]
+			I_268\Using = 0
+			;[End Block]
+		Case "scp714"
+			;[Block]
+			I_714\Using = False
 			;[End Block]
 		Case "scramble", "finescramble"
 			;[Block]
@@ -718,7 +722,7 @@ Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, Can
 End Function
 
 ; ~ Maybe re-work?
-Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False, Suit% = False)
+Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False, Suit% = False, Cap% = False)
 	If (Not GasMask) And wi\GasMask > 0 Then
 		CreateMsg(GetLocalString("msg", "mask.use.off"))
 		SelectedItem = Null
@@ -743,6 +747,10 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 		CreateMsg(GetLocalString("msg", "suit.use.off"))
 		SelectedItem = Null
 		Return(True)
+	ElseIf (Not Cap) And I_268\Using > 0
+		CreateMsg(GetLocalString("msg", "cap.use.off"))
+		SelectedItem = Null
+		Return(True)
 	EndIf
 	Return(False)
 End Function
@@ -759,6 +767,10 @@ Function IsDoubleItem%(Variable%, ID%)
 			Case wi\NightVision, wi\SCRAMBLE
 				;[Block]
 				Message = GetLocalString("msg", "weartwo.nvg")
+				;[End Block]
+			Case I_268\Using
+				;[Block]
+				Message = GetLocalString("msg", "weartwo.cap")
 				;[End Block]
 		End Select
 		CreateMsg(Message)
