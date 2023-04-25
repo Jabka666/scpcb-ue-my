@@ -6812,6 +6812,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Ballistic Helmet", "helmet", r\x + 344.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 900.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("SCP-268", "scp268", r\x + 290.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 170.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			CreateCustomCenter(r\x, r\z - 639.0 * RoomScale, r)
 			;[End Block]
 		Case "room2_ez"

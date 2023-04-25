@@ -1898,6 +1898,13 @@ End Type
 
 Global I_294.SCP294
 
+Type SCP268
+	Field Using%
+	Field Timer#
+End Type
+
+Global I_268.SCP268
+
 Type SCP409
 	Field Timer#
 	Field Revert%
@@ -2161,6 +2168,7 @@ Function UpdateGame%()
 			UpdateNPCs()
 			UpdateItems()
 			UpdateParticles()
+			Use268()
 			Use427()
 			
 			If chs\InfiniteStamina Then me\Stamina = 100.0
@@ -3823,6 +3831,18 @@ Function UpdateGUI%()
 							;[Block]
 							ShouldPreventDropping = (wi\SCRAMBLE = 2)
 							;[End Block]
+						Case "cap"
+							;[Block]
+							ShouldPreventDropping = (I_268\Using = 1)
+							;[End Block]
+						Case "scp268"
+							;[Block]
+							ShouldPreventDropping = (I_268\Using = 2)
+							;[End Block]
+						Case "fine268"
+							;[Block]
+							ShouldPreventDropping = (I_268\Using = 3)
+							;[End Block]
 						Case "scp714"
 							;[Block]
 							ShouldPreventDropping = I_714\Using
@@ -5164,6 +5184,58 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
+				Case "cap", "scp268", "fine268"
+					;[Block]
+					If (Not PreventItemOverlapping(False, False, False, False, False, False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "cap"
+								;[Block]
+								If IsDoubleItem(I_268\Using, 1) Then Return
+								;[End Block]
+							Case "scp268"
+								;[Block]
+								If IsDoubleItem(I_268\Using, 2) Then Return
+								;[End Block]
+							Case "fine268"
+								;[Block]
+								If IsDoubleItem(I_268\Using, 3) Then Return
+								;[End Block]
+						End Select
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+						
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.6), 100.0)
+						
+						If SelectedItem\State = 100.0 Then
+							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+							
+							If I_268\Using > 0
+								CreateMsg(GetLocalString("msg", "cap.off"))
+								I_268\Using = 0
+								PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
+							Else
+								Select SelectedItem\ItemTemplate\TempName
+									Case "cap"
+										;[Block]
+										I_268\Using = 1
+										;[End Block]
+									Case "scp268"
+										;[Block]
+										I_268\Using = 2
+										;[End Block]
+									Case "fine268"
+										;[Block]
+										I_268\Using = 3
+										;[End Block]
+								End Select
+								GiveAchievement(Achv268)
+								CreateMsg(GetLocalString("msg", "cap.on"))
+								PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOn.ogg"))
+							EndIf
+							SelectedItem\State = 0.0
+							SelectedItem = Null
+						EndIf
+					EndIf
+					;[End Block]
 				Case "scp714"
 					;[Block]
 					If CanUseItem(True, True) Then
@@ -5628,7 +5700,7 @@ Function UpdateGUI%()
 			
 			If mo\MouseHit2 Then
 				Select SelectedItem\ItemTemplate\TempName
-					Case "firstaid", "finefirstaid", "firstaid2", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
+					Case "firstaid", "finefirstaid", "firstaid2", "cap", "scp268", "fine268", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 						;[Block]
 						SelectedItem\State = 0.0
 						;[End Block]
@@ -5662,7 +5734,7 @@ Function UpdateGUI%()
 	For it.Items = Each Items
 		If it <> SelectedItem Then
 			Select it\ItemTemplate\TempName
-				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
+				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "cap", "scp268", "fine268", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 					;[Block]
 					it\State = 0.0
 					;[End Block]
@@ -5691,7 +5763,7 @@ Function RenderHUD%()
 	y = opt\GraphicHeight - (95 * MenuScale)
 	
 	Color(255, 255, 255)
-	If (I_714\Using And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0) Then
+	If (I_714\Using And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0) And (I_268\Timer =< 0.0 Lor I_268\Using < 2) Then
 		If wi\HazmatSuit = 4 Then
 			Color(0, 200, 0)
 			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
@@ -5713,6 +5785,25 @@ Function RenderHUD%()
 			EndIf
 		EndIf
 		DrawBlock(t\IconID[7], x - (50 * MenuScale), y - (40 * MenuScale))
+	ElseIf I_268\Using > 1 Then
+		If I_268\Timer =< 0.0 Then
+			Color(150, 150, 0)
+			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		ElseIf I_714\Using
+			Color(200, 0, 0)
+			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		ElseIf I_268\Using = 3
+			Color(0, 200, 0)
+			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		EndIf
+		Color(255, 255, 255)
+		Rect(x - (51 * MenuScale), y - (41 * MenuScale), 32 * MenuScale, 32 * MenuScale, False)
+		If I_268\Timer < 150.0 Then
+			RenderBar(t\ImageID[1], x, y - (40 * MenuScale), Width, Height, I_268\Timer, 600.0, 100, 0, 0)
+		Else
+			RenderBar(BlinkMeterIMG, x, y - (40 * MenuScale), Width, Height, I_268\Timer, 600.0)
+		EndIf
+		DrawBlock(t\IconID[8], x - (50 * MenuScale), y - (40 * MenuScale))
 	EndIf
 	
 	Color(255, 255, 255)
@@ -6218,6 +6309,18 @@ Function RenderGUI%()
 						;[Block]
 						ShouldDrawRect = wi\BallisticHelmet
 						;[End Block]
+					Case "cap"
+						;[Block]
+						ShouldDrawRect = (I_268\Using = 1)
+						;[End Block]
+					Case "scp268"
+						;[Block]
+						ShouldDrawRect = (I_268\Using = 2)
+						;[End Block]
+					Case "fine268"
+						;[Block]
+						ShouldDrawRect = (I_268\Using = 3)
+						;[End Block]
 					Case "scp714"
 						;[Block]
 						ShouldDrawRect = I_714\Using
@@ -6536,6 +6639,34 @@ Function RenderGUI%()
 							Case "gasmask148"
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 4) Then Return
+								;[End Block]
+						End Select
+						
+						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
+						
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+					EndIf
+					;[End Block]
+				Case "cap", "scp268", "fine268"
+					;[Block]
+					If (Not PreventItemOverlapping(False, False, False, False, False, False, True)) Then
+						Select SelectedItem\ItemTemplate\TempName
+							Case "cap"
+								;[Block]
+								If IsDoubleItem(I_268\Using, 1) Then Return
+								;[End Block]
+							Case "scp268"
+								;[Block]
+								If IsDoubleItem(I_268\Using, 2) Then Return
+								;[End Block]
+							Case "fine268"
+								;[Block]
+								If IsDoubleItem(I_268\Using, 3) Then Return
 								;[End Block]
 						End Select
 						
@@ -8267,6 +8398,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(I_005)
 	Delete(I_008)
 	Delete(I_035)
+	Delete(I_268)
 	Delete(I_294)
 	Delete(I_409)
 	Delete(I_427)
@@ -9060,6 +9192,24 @@ Function UpdateEscapeTimer%()
 		EscapeSecondsTimer = 70.0
 	EndIf
 End Function
+
+Function Use268()
+    If I_268\Using > 1 Then
+		If I_268\Timer > 0 Then
+			chs\NoTarget = True
+		Else
+			chs\NoTarget = False
+		EndIf
+        If I_268\Using = 3 Then 
+            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.5) * (1.0 + I_714\Using)), 0)
+        Else
+            I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0)
+        EndIf
+    Else
+        I_268\Timer = Min(I_268\Timer + fps\Factor[0], 600.0)
+		chs\NoTarget = False
+    EndIf
+End Function 
 
 Function Update008%()
 	Local r.Rooms, e.Events, p.Particles, de.Decals
