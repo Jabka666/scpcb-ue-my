@@ -6476,7 +6476,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
 				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - Rnd(5.0)
-				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(200.0, 300.0, (0.61 / 1.4) * DifficultyDMGMult)
+				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(200.0, 300.0), (0.61 / 1.4) * DifficultyDMGMult)
 				If wi\BallisticVest > 0 Then
 					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
 				Else
