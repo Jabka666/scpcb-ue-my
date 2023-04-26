@@ -27,6 +27,8 @@ Items:
 - Tiny improvement for Compact First Aid Kit.
 - Tiny improvement for Ballistic Vests.
 
+- SCP-714 and Heavy equipment can be used to protect the player from Pocket Dimension bird planes in the trenches.
+
 NPCs:
 
 - NPCs that deal damage now have their damage scale with difficulty.

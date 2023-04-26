@@ -6476,7 +6476,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
 				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - Rnd(5.0)
-				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, 650.0, (0.61 / 1.4) * DifficultyDMGMult)
+				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(200.0, 300.0, (0.61 / 1.4) * DifficultyDMGMult)
 				If wi\BallisticVest > 0 Then
 					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
 				Else
@@ -6485,29 +6485,29 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 				;[End Block]
 			Case 11 ; ~ Left Leg
 				;[Block]
-				me\Stamina = me\Stamina - Rnd(10.0)
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, 650.0)
+				me\Stamina = me\Stamina - Rnd(20.0)
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
-				me\Stamina = me\Stamina - Rnd(10.0)
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, 650.0)
+				me\Stamina = me\Stamina - Rnd(20.0)
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]
 			Case 13 ; ~ Left Arm
 				;[Block]
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, 650.0)
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.left")
 				;[End Block]
 			Case 14 ; ~ Right Arm
 				;[Block]
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, 650.0)
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.right")
 				;[End Block]
 			Case 15 ; ~ Neck
 				;[Block]
-				InjurePlayer(Rnd(0.75, 0.9) * DifficultyDMGMult, 0.0, 650.0)
+				InjurePlayer(Rnd(0.75, 0.9) * DifficultyDMGMult, 0.0, 700.0)
 				ShotMessageUpdate = GetLocalString("msg", "bullet.neck")
 				;[End Block]
 			Case 16, 17 ; ~ Helmet, Face or Head
