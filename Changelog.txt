@@ -1,4 +1,5 @@
 v1.1.2
+
 General:
 - Added «Camera render interval» option.
 - Added Voice Volume slider.
@@ -19,10 +20,11 @@ Rooms:
 - Some design improvements.
 
 Items:
+- Added SCP-268.
+
 - Renamed «Small First Aid Kit» to «Compact First Aid Kit».
 
 - Tiny improvement for Compact First Aid Kit.
-
 - Tiny improvement for Ballistic Vests.
 
 NPCs:
