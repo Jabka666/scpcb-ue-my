@@ -5740,7 +5740,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 665.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3119.0 * RoomScale)
 			
 			; ~ Femur breaker button
-			r\Objects[0] = CreateButton(0, r\x - 337.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3136.0 * RoomScale)
+			r\Objects[0] = CreateButton(BUTTON_DEFAULT, r\x - 337.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3136.0 * RoomScale)
 			
 			; ~ Class-D spawnpoint
 			r\Objects[1] = CreatePivot()
@@ -6032,7 +6032,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[1] = CreatePivot()
 			PositionEntity(r\Objects[1], r\x + 1344.0 * RoomScale, r\y - 752.0 * RoomScale, r\z - 384.0 * RoomScale)
 			
-			r\Objects[2] = CreateButton(0, r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
+			r\Objects[2] = CreateButton(BUTTON_DEFAULT, r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -6310,7 +6310,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Class-D spawn
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 4858.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1729.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 4812.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1729.0 * RoomScale)
 			
 			; ~ Touching pivot
 			r\Objects[3] = CreatePivot()
