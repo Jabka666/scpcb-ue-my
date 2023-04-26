@@ -442,6 +442,7 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 					e\EventID = FindEventID(EventName)
 					FindForestEvent(e)
 					e\room = r
+					Return(e)
 				EndIf
 			EndIf
 		Next
@@ -466,11 +467,7 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 			EndIf
 		Next
 	EndIf
-	If e <> Null Then
-		Return(e)
-	Else
-		Return(Null)
-	EndIf
+	Return(Null)
 End Function
 
 Global QuickLoadPercent% = -1
