@@ -193,6 +193,7 @@ Type Options
 	Field EnableUserTracks%
 	Field UserTrackMode%
 	Field SFXVolume#
+	Field VoiceVolume#
 	Field EnableSFXRelease%, PrevEnableSFXRelease%
 	Field EnableSubtitles%
 	Field SubColorR%, SubColorG%, SubColorB%
@@ -333,6 +334,8 @@ Function LoadOptionsINI%()
 	
 	opt\SFXVolume = IniGetFloat(OptionFile, "Audio", "Sound Volume", 0.5)
 	
+	opt\VoiceVolume = IniGetFloat(OptionFile, "Audio", "Voice Volume", 0.5)
+	
 	opt\EnableSFXRelease = IniGetInt(OptionFile, "Audio", "SFX Release", True)
 	opt\PrevEnableSFXRelease = opt\EnableSFXRelease
 	
@@ -463,6 +466,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Audio", "Sound Volume", opt\SFXVolume)
 	
+	IniWriteString(OptionFile, "Audio", "Voice Volume", opt\VoiceVolume)
+	
 	IniWriteString(OptionFile, "Audio", "SFX Release", opt\EnableSFXRelease)
 	
 	IniWriteString(OptionFile, "Audio", "Enable User Tracks", opt\EnableUserTracks)
@@ -588,6 +593,8 @@ Function ResetOptionsINI%()
 	opt\MusicVolume = 0.5
 	
 	opt\SFXVolume = 0.5
+	
+	opt\VoiceVolume = 0.5
 	
 	opt\EnableSFXRelease = True
 	

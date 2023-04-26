@@ -40,7 +40,7 @@ Function AutoReleaseSounds%()
 	Next
 End Function
 
-Function PlaySound_Strict%(SoundHandle%)
+Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	Local sub.Subtitles
 	
@@ -71,7 +71,8 @@ Function PlaySound_Strict%(SoundHandle%)
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
 					EndIf
-					ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
+					
+					ChannelVolume(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 					snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
@@ -97,7 +98,7 @@ Function PlaySound_Strict%(SoundHandle%)
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 				EndIf
-				ChannelVolume(snd\Channels[i], opt\SFXVolume * opt\MasterVolume)
+				ChannelVolume(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 				snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
 			EndIf
@@ -253,7 +254,7 @@ Function SetStreamPan_Strict%(StreamHandle%, Pan#)
 	ChannelPan(st\CHN, Pan)
 End Function
 
-Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
+Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
 	If StreamHandle <> 0 Then
 		If IsStreamPlaying_Strict(StreamHandle) Then
 			Range = Max(Range, 1.0)
@@ -264,7 +265,7 @@ Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, V
 				If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
 					Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 					
-					SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * opt\SFXVolume * opt\MasterVolume)
+					SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 					SetStreamPan_Strict(StreamHandle, PanValue)
 				Else
 					SetStreamVolume_Strict(StreamHandle, 0.0)

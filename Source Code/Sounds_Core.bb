@@ -1,4 +1,4 @@
-Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
+Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
 	Range = Max(Range, 1.0)
 	
 	Local SoundCHN% = 0
@@ -9,9 +9,9 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 		If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SoundCHN = PlaySound_Strict(SoundHandle)
+			SoundCHN = PlaySound_Strict(SoundHandle, IsVoice)
 			
-			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume * opt\MasterVolume)
+			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 			ChannelPan(SoundCHN, PanValue)
 		EndIf
 	Else
@@ -20,16 +20,16 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
 	Return(SoundCHN)
 End Function
 
-Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0)
+Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
 	Range = Max(Range, 1.0)
 	
 	If Volume > 0.0 Then
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		
-		If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle)
+		If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle, IsVoice)
 		
-		ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * opt\SFXVolume * opt\MasterVolume)
+		ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 		ChannelPan(SoundCHN, PanValue)
 	Else
 		ChannelVolume(SoundCHN, 0.0)
@@ -37,7 +37,7 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 	Return(SoundCHN)
 End Function
 
-Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, SFXVolume% = True)
+Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False, SFXVolume% = True)
 	If ChannelPlaying(SoundCHN) Then
 		Range = Max(Range, 1.0)
 		
@@ -47,7 +47,7 @@ Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1
 			If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
 				Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 				
-				ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * opt\SFXVolume * opt\MasterVolume)))
+				ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)))
 				ChannelPan(SoundCHN, PanValue)
 			Else
 				ChannelVolume(SoundCHN, 0.0)
@@ -59,7 +59,7 @@ Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1
 End Function
 
 Function PlayMTFSound%(SoundHandle%, n.NPCs)
-	If n <> Null Then n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0)
+	If n <> Null Then n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0, 1.0, True)
 	If SelectedItem <> Null Then
 		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0 Then
 			Select SelectedItem\ItemTemplate\TempName 
@@ -67,7 +67,7 @@ Function PlayMTFSound%(SoundHandle%, n.NPCs)
 					;[Block]
 					If SoundHandle <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3])) Then
 						StopChannel(RadioCHN[3]) : RadioCHN[3] = 0
-						RadioCHN[3] = PlaySound_Strict(SoundHandle)
+						RadioCHN[3] = PlaySound_Strict(SoundHandle, True)
 					EndIf
 					;[End Block]
 			End Select
@@ -386,14 +386,14 @@ End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
 	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
-	IntercomStreamCHN = StreamSound_Strict(File, opt\SFXVolume * opt\MasterVolume, 0)
+	IntercomStreamCHN = StreamSound_Strict(File, opt\VoiceVolume * opt\MasterVolume, 0)
 End Function
 
 Function UpdateStreamSounds%()
 	Local e.Events
 	
 	If fps\Factor[0] > 0.0 Then
-		If IntercomStreamCHN <> 0 Then SetStreamVolume_Strict(IntercomStreamCHN, opt\SFXVolume * opt\MasterVolume)
+		If IntercomStreamCHN <> 0 Then SetStreamVolume_Strict(IntercomStreamCHN, opt\VoiceVolume * opt\MasterVolume)
 		For e.Events = Each Events
 			If e\SoundCHN_IsStream Then
 				If e\SoundCHN <> 0 Then SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)

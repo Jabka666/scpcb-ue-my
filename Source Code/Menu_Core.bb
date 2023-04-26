@@ -101,7 +101,7 @@ Function UpdateMainMenu%()
 		
 		If ShouldPlay = 20 Then
 			EndBreathSFX = LoadSound_Strict("SFX\Ending\MenuBreath.ogg")
-			EndBreathCHN = PlaySound_Strict(EndBreathSFX)
+			EndBreathCHN = PlaySound_Strict(EndBreathSFX, True)
 			ShouldPlay = 66
 		ElseIf ShouldPlay = 66
 			If (Not ChannelPlaying(EndBreathCHN)) Then
@@ -631,6 +631,10 @@ Function UpdateMainMenu%()
 						y = y + (40 * MenuScale)
 						
 						opt\SFXVolume = UpdateMenuSlideBar(x, y, 150 * MenuScale, opt\SFXVolume * 100.0, 3) / 100.0
+						
+						y = y + (40 * MenuScale)
+						
+						opt\VoiceVolume = UpdateMenuSlideBar(x, y, 150 * MenuScale, opt\VoiceVolume * 100.0, 18) / 100.0
 						
 						y = y + (40 * MenuScale)
 						
@@ -1422,7 +1426,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
-					Height = ((240 + (70 * opt\EnableUserTracks)) + (160 * opt\EnableSubtitles)) * MenuScale
+					Height = ((280 + (70 * opt\EnableUserTracks)) + (160 * opt\EnableSubtitles)) * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1440,6 +1444,11 @@ Function RenderMainMenu%()
 					
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
 					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
+					
+					y = y + (40 * MenuScale)
+					
+					Text2(x, y + (5 * MenuScale), GetLocalString("options", "voicevolume"))
+					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 18 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VoiceVolume, opt\VoiceVolume)
 					
 					y = y + (40 * MenuScale)
 					
@@ -2811,37 +2820,38 @@ Const Tooltip_SecurityCamRenderInterval% = 11
 Const Tooltip_MasterVolume% = 12
 Const Tooltip_MusicVolume% = 13
 Const Tooltip_SoundVolume% = 14
-Const Tooltip_SoundAutoRelease% = 15
-Const Tooltip_UserTracks% = 16
-Const Tooltip_UserTracksMode% = 17
-Const Tooltip_UserTrackScan% = 18
+Const Tooltip_VoiceVolume% = 15
+Const Tooltip_SoundAutoRelease% = 16
+Const Tooltip_UserTracks% = 17
+Const Tooltip_UserTracksMode% = 18
+Const Tooltip_UserTrackScan% = 19
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 19
-Const Tooltip_MouseInvertX% = 20
-Const Tooltip_MouseInvertY% = 21
-Const Tooltip_MouseSmoothing% = 22
-Const Tooltip_ControlConfiguration% = 23
+Const Tooltip_MouseSensitivity% = 20
+Const Tooltip_MouseInvertX% = 21
+Const Tooltip_MouseInvertY% = 22
+Const Tooltip_MouseSmoothing% = 23
+Const Tooltip_ControlConfiguration% = 24
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 24
-Const Tooltip_Console% = 25
-Const Tooltip_ConsoleOnError% = 26
-Const Tooltip_AchievementPopups% = 27
-Const Tooltip_FPS% = 28
-Const Tooltip_FrameLimit% = 29
-Const Tooltip_AutoSave% = 30
-Const Tooltip_TextShadow% = 31
-Const Tooltip_SmoothBars% = 32
-Const Tooltip_StartupVideos% = 33
-Const Tooltip_Launcher% = 34
-Const Tooltip_Subtitles% = 35
-Const Tooltip_SubtitlesColor% = 36
-Const Tooltip_ResetOptions% = 37
+Const Tooltip_HUD% = 25
+Const Tooltip_Console% = 26
+Const Tooltip_ConsoleOnError% = 27
+Const Tooltip_AchievementPopups% = 28
+Const Tooltip_FPS% = 29
+Const Tooltip_FrameLimit% = 30
+Const Tooltip_AutoSave% = 31
+Const Tooltip_TextShadow% = 32
+Const Tooltip_SmoothBars% = 33
+Const Tooltip_StartupVideos% = 34
+Const Tooltip_Launcher% = 35
+Const Tooltip_Subtitles% = 36
+Const Tooltip_SubtitlesColor% = 37
+Const Tooltip_ResetOptions% = 38
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -2951,6 +2961,12 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_SoundVolume
 			;[Block]
 			Txt = GetLocalString("tooltip", "soundvolume")
+			R = 255 : G = 255
+			Txt2 = Format(GetLocalString("tooltip", "default.value.50"), Int(Value * 100.0))
+			;[End Block]
+		Case Tooltip_VoiceVolume
+			;[Block]
+			Txt = GetLocalString("tooltip", "voicevolume")
 			R = 255 : G = 255
 			Txt2 = Format(GetLocalString("tooltip", "default.value.50"), Int(Value * 100.0))
 			;[End Block]

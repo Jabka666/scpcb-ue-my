@@ -1,6 +1,7 @@
 v1.1.2
 General:
 - Added «Camera render interval» option.
+- Added Voice Volume slider.
 
 Rooms:
 - Added SCP-066's containment chamber.

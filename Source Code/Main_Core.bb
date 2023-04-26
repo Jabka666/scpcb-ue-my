@@ -2119,7 +2119,7 @@ Function UpdateGame%()
 				
 				If Rand(50000) = 3 Then
 					me\LightBlink = Rnd(1.0, 2.0)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"))
+					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"), True)
 				EndIf
 			EndIf
 			
@@ -2589,7 +2589,7 @@ Function SetCrouch%(NewCrouch%)
 				If (Not ChannelPlaying(BreathCHN)) Then
 					Temp = 0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
-					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0))
+					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
 				EndIf
 			EndIf
 			
@@ -2607,7 +2607,7 @@ End Function
 Function UpdateCough%(Chance_%)
 	If (Not me\Terminated) Then
 		If Rand(Chance_) = 1 Then
-			If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)])
+			If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
 		EndIf
 	EndIf
 End Function
@@ -2662,14 +2662,15 @@ Function UpdateMoving%()
 			If (Not ChannelPlaying(BreathCHN)) Then
 				Temp3 = 0
 				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp3 = 1
-				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), 0))
+				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), 0), True)
+				ChannelVolume(BreathCHN, opt\VoiceVolume * opt\MasterVolume)
 			EndIf
 		ElseIf me\Stamina < 40.0
 			If (Not ChannelPlaying(BreathCHN)) Then
 				Temp3 = 0
 				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp3 = 1
-				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), Rand(3)))
-				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\SFXVolume * opt\MasterVolume)
+				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), Rand(3)), True)
+				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\VoiceVolume * opt\MasterVolume)
 			EndIf
 		EndIf
 	EndIf
@@ -3084,7 +3085,10 @@ Function UpdateMouseLook%()
 		
 		If (Not me\Terminated) Then
 			If (Not ChannelPlaying(BreathCHN)) Then
-				If (Not ChannelPlaying(BreathGasRelaxedCHN)) Then BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX)
+				If (Not ChannelPlaying(BreathGasRelaxedCHN)) Then
+					BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX, True)
+					ChannelVolume(BreathGasRelaxedCHN, opt\VoiceVolume * opt\MasterVolume)
+				EndIf
 			Else
 				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 			EndIf
@@ -3329,11 +3333,14 @@ Function UpdateGUI%()
 						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
 							If (Not e\Img2) Then
 								StopChannel(e\SoundCHN) : e\SoundCHN = 0
-								PlaySound_Strict(e\Sound2)
+								PlaySound_Strict(e\Sound2, True)
 								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
 								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
 							Else
-								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound)
+								If (Not ChannelPlaying(e\SoundCHN)) Then
+									e\SoundCHN = PlaySound_Strict(e\Sound)
+									ChannelVolume(e\Sound, opt\VoiceVolume * opt\MasterVolume)
+								EndIf
 							EndIf
 						Else
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
@@ -4872,7 +4879,7 @@ Function UpdateGUI%()
 											Case 40
 												;[Block]
 												If (Not RadioState2[0]) Then
-													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random1.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random1.ogg"), True)
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState2[0] = True
 												EndIf
@@ -4880,7 +4887,7 @@ Function UpdateGUI%()
 											Case 400
 												;[Block]
 												If (Not RadioState2[1]) Then
-													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random2.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random2.ogg"), True)
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState2[1] = True
 												EndIf
@@ -4888,7 +4895,7 @@ Function UpdateGUI%()
 											Case 800
 												;[Block]
 												If (Not RadioState2[2]) Then
-													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random3.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random3.ogg"), True)
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState2[2] = True
 												EndIf
@@ -4896,7 +4903,7 @@ Function UpdateGUI%()
 											Case 1200
 												;[Block]
 												If (Not RadioState2[3]) Then
-													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random4.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random4.ogg"), True)
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState2[3] = True
 												EndIf
@@ -4904,7 +4911,7 @@ Function UpdateGUI%()
 											Case 1600
 												;[Block]
 												If (Not RadioState2[4]) Then
-													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random5.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random5.ogg"), True)
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState2[4] = True
 												EndIf
@@ -4912,7 +4919,7 @@ Function UpdateGUI%()
 											Case 2000
 												;[Block]
 												If (Not RadioState2[5]) Then
-													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random6.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random6.ogg"), True)
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState2[5] = True
 												EndIf
@@ -4920,7 +4927,7 @@ Function UpdateGUI%()
 											Case 2400
 												;[Block]
 												If (Not RadioState2[6]) Then
-													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random7.ogg"))
+													RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random7.ogg"), True)
 													RadioState[3] = RadioState[3] + 1.0
 													RadioState2[6] = True
 												EndIf
@@ -4940,7 +4947,7 @@ Function UpdateGUI%()
 									If (Not ChannelPlaying(RadioCHN[4])) Then
 										ResumeChannel(RadioCHN[4])
 										If (Not RemoteDoorOn) And RadioState[8] = 0 Then
-											RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"))
+											RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"), True)
 											RadioState[8] = 1
 										Else
 											RadioState[4] = RadioState[4] + Max(Rand(-10, 1), 0.0)
@@ -4950,7 +4957,7 @@ Function UpdateGUI%()
 													;[Block]
 													If (Not n_I\Curr106\Contained) Then
 														If (Not RadioState3[0]) Then
-															RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\OhGod.ogg"))
+															RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\OhGod.ogg"), True)
 															RadioState[4] = RadioState[4] + 1.0
 															RadioState3[0] = True
 														EndIf
@@ -4959,7 +4966,7 @@ Function UpdateGUI%()
 												Case 100
 													;[Block]
 													If (Not RadioState3[1]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter2.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter2.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState3[1] = True
 													EndIf
@@ -4967,7 +4974,7 @@ Function UpdateGUI%()
 												Case 158
 													;[Block]
 													If MTFTimer = 0.0 And (Not RadioState3[2]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin1.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin1.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState[2] = True
 													EndIf
@@ -4975,7 +4982,7 @@ Function UpdateGUI%()
 												Case 200
 													;[Block]
 													If (Not RadioState3[3]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter4.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter4.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState3[3] = True
 													EndIf
@@ -4983,7 +4990,7 @@ Function UpdateGUI%()
 												Case 260
 													;[Block]
 													If (Not RadioState3[4]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp1.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp1.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState3[4] = True
 													EndIf
@@ -4991,7 +4998,7 @@ Function UpdateGUI%()
 												Case 300
 													;[Block]
 													If (Not RadioState3[5]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter1.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter1.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState3[5] = True
 													EndIf
@@ -4999,7 +5006,7 @@ Function UpdateGUI%()
 												Case 350
 													;[Block]
 													If (Not RadioState3[6]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin2.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin2.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState3[6] = True
 													EndIf
@@ -5007,7 +5014,7 @@ Function UpdateGUI%()
 												Case 400
 													;[Block]
 													If (Not RadioState3[7]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp2.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\SCP\035\RadioHelp2.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState3[7] = True
 													EndIf
@@ -5015,7 +5022,7 @@ Function UpdateGUI%()
 												Case 450
 													;[Block]
 													If (Not RadioState3[8]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin3.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin3.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState3[8] = True
 													EndIf
@@ -5023,7 +5030,7 @@ Function UpdateGUI%()
 												Case 600
 													;[Block]
 													If (Not RadioState3[9]) Then
-														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin4.ogg"))
+														RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin4.ogg"), True)
 														RadioState[4] = RadioState[4] + 1.0
 														RadioState3[9] = True
 													EndIf
@@ -5953,29 +5960,6 @@ Function RenderGUI%()
 			If e\room = PlayerRoom Then
 				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom Then
 					If (Not e\Img) Then
-						StopChannel(e\SoundCHN) : e\SoundCHN = 0
-						Select Rand(5)
-							Case 1
-								;[Block]
-								PlaySound_Strict(HorrorSFX[1])
-								;[End Block]
-							Case 2
-								;[Block]
-								PlaySound_Strict(HorrorSFX[2])
-								;[End Block]
-							Case 3
-								;[Block]
-								PlaySound_Strict(HorrorSFX[9])
-								;[End Block]
-							Case 4
-								;[Block]
-								PlaySound_Strict(HorrorSFX[10])
-								;[End Block]
-							Case 5
-								;[Block]
-								PlaySound_Strict(HorrorSFX[14])
-								;[End Block]
-						End Select
 						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face.png")
 						e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
 					Else
@@ -5985,8 +5969,6 @@ Function RenderGUI%()
 					If e\EventState2 = PD_ThroneRoom Then
 						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
 							If (Not e\Img2) Then
-								StopChannel(e\SoundCHN) : e\SoundCHN = 0
-								PlaySound_Strict(e\Sound2)
 								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
 								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
 							Else
@@ -7035,6 +7017,10 @@ Function UpdateMenu%()
 						
 						y = y + (40 * MenuScale)
 						
+						opt\VoiceVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\VoiceVolume * 100.0, 18) / 100.0
+						
+						y = y + (40 * MenuScale)
+						
 						opt\EnableSFXRelease = UpdateMenuTick(x, y, opt\EnableSFXRelease, True)
 						
 						y = y + (30 * MenuScale)
@@ -7622,6 +7608,11 @@ Function RenderMenu%()
 						
 						y = y + (40 * MenuScale)
 						
+						Text2(x, y + (5 * MenuScale), GetLocalString("options", "voicevolume"))
+						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 18 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VoiceVolume, opt\VoiceVolume)
+						
+						y = y + (40 * MenuScale)
+						
 						Color(100, 100, 100)
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, Tooltip_SoundAutoRelease)
@@ -7937,7 +7928,7 @@ Function UpdateEnding%()
 		EndIf
 		
 		If me\EndingTimer > -700.0 Then
-			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer <= -450.0 Then PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"))
+			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer <= -450.0 Then PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + (me\SelectedEnding + 1) + ".ogg"), True)
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0 Then
 				If igm\AchievementsMenu =< 0 Then
@@ -8987,12 +8978,12 @@ Function UpdateVomit%()
 			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
-		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)])
+		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
 		
 		; ~ Regurgitate when timer is below 10 seconds
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0 Then
 			If (Not ChannelPlaying(VomitCHN)) And me\Regurgitate = 0 Then
-				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(2) + ".ogg"))
+				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(2) + ".ogg"), True)
 				me\Regurgitate = MilliSecs() + 50
 			EndIf
 		EndIf
@@ -9016,7 +9007,7 @@ Function UpdateVomit%()
 		If (Not me\Vomit) Then
 			me\BlurTimer = 70.0 * 40.0
 			VomitSFX = LoadSound_Strict("SFX\SCP\294\Vomit.ogg")
-			VomitCHN = PlaySound_Strict(VomitSFX)
+			VomitCHN = PlaySound_Strict(VomitSFX, True)
 			me\PrevInjuries = me\Injuries
 			me\PrevBloodloss = me\Bloodloss
 			If (Not me\Crouch) Then SetCrouch(True)
@@ -9040,7 +9031,7 @@ Function UpdateVomit%()
 		If me\VomitTimer < -15.0 Then
 			FreeSound_Strict(VomitSFX)
 			me\VomitTimer = 0.0
-			If (Not me\Terminated) Then PlaySound_Strict(BreathSFX(0, 0))
+			If (Not me\Terminated) Then PlaySound_Strict(BreathSFX(0, 0), True)
 			me\Injuries = me\PrevInjuries
 			me\Bloodloss = me\PrevBloodloss
 			me\Vomit = False
@@ -9099,7 +9090,7 @@ Function Update008%()
 			
 			For i = 0 To 6
 				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer <= (i * 15.0) + 10.0 Then
-					If (Not I_008\Revert) Then PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"))
+					If (Not I_008\Revert) Then PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"), True)
 				EndIf
 			Next
 			
@@ -9139,7 +9130,7 @@ Function Update008%()
 								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
 								r\NPC[0]\State3 = -1.0 : r\NPC[0]\IsDead = True
 								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
-								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound)
+								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound, True)
 								ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
 								TeleportToRoom(r)
 								Exit
@@ -9175,7 +9166,7 @@ Function Update008%()
 					
 					If PrevI008Timer < 94.7 Then
 						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
-						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound)
+						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound, True)
 						
 						msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
 						
@@ -9275,7 +9266,7 @@ Function Update409%()
 			EndIf
 		ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
 			If (Not I_409\Revert) Then
-				PlaySound_Strict(DamageSFX[13])
+				PlaySound_Strict(DamageSFX[13], True)
 				me\Injuries = Max(me\Injuries, 2.0)
 			EndIf
 		ElseIf I_409\Timer > 94.0
