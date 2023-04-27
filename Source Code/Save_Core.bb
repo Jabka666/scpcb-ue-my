@@ -163,6 +163,9 @@ Function SaveGame%(File$)
 		WriteByte(f, mon_I\UpdateCheckpoint[i])
 	Next
 	
+	WriteByte(f, I_268\Using)
+	WriteFloat(f, I_268\Timer)
+	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
 			WriteByte(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
@@ -658,6 +661,9 @@ Function LoadGame%(File$)
 	For i = 0 To 1
 		mon_I\UpdateCheckpoint[i] = ReadByte(f)
 	Next
+	
+	I_268\Using = ReadByte(f)
+	I_268\Timer = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -1525,6 +1531,9 @@ Function LoadGameQuick%(File$)
 	For i = 0 To 1
 		mon_I\UpdateCheckpoint[i] = ReadByte(f)
 	Next
+	
+	I_268\Using = ReadByte(f)
+	I_268\Timer = ReadFloat(f)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize

@@ -2181,6 +2181,27 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case "cap", "scp268", "fine268"
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Newsboy Cap", "cap", x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					Remove = False
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					it2.Items = CreateItem("SCP-268", "fine268", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
 		Default
 			;[Block]
 			Select Setting

@@ -806,7 +806,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								; ~ If Ulgrin can see the player then start shooting at them.
-								If (Not chs\NoTarget) And EntityDistanceSquared(me\Collider, e\room\NPC[2]\Collider) < 9.0 And EntityVisible(e\room\NPC[2]\Collider, me\Collider) Then
+								If (Not chs\NoTarget) And (Not I_268\InvisibilityOn) And EntityDistanceSquared(me\Collider, e\room\NPC[2]\Collider) < 9.0 And EntityVisible(e\room\NPC[2]\Collider, me\Collider) Then
 									e\room\NPC[2]\State = 1.0
 									e\room\NPC[2]\State3 = 1.0
 								ElseIf e\room\NPC[2]\State = 1.0 And (Not EntityVisible(e\room\NPC[2]\Collider, me\Collider))
@@ -2612,7 +2612,7 @@ Function UpdateEvents%()
 							e\EventState = 2.0
 						EndIf
 					ElseIf e\EventState = 2.0
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 5.0625 And (Not chs\NoTarget) Then
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 5.0625 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 							e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State3 = 1.0
 						Else
 							e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
@@ -5620,7 +5620,7 @@ Function UpdateEvents%()
 					Else
 						ShouldPlay = 15
 						If e\EventState < 65.0 Then
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.0 And (Not chs\NoTarget) Then
+							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 								
 								e\EventState = Max(e\EventState, 65.0)
@@ -5759,7 +5759,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 67.0
 								;[Block]
-								If (Not chs\NoTarget) Then
+								If (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 									If Rand(150) = 1 Then
 										msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
 										
@@ -6820,14 +6820,14 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					e\EventState3 = e\EventState3 + fps\Factor[0]
-					If chs\NoTarget Then e\EventState = 1.0
+					If chs\NoTarget Lor I_268\InvisibilityOn Then e\EventState = 1.0
 					
 					Select e\EventState
 						Case 1.0
 							;[Block]
 							Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
 							
-							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 6.25 And (Not chs\NoTarget) Then e\EventState = 2.0
+							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 6.25 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then e\EventState = 2.0
 							;[End Block]
 						Case 2.0
 							;[Block]
@@ -8219,7 +8219,7 @@ Function UpdateDimension106%()
 						
 						e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.6)
 						
-						If Safe Lor chs\NoTarget Then
+						If Safe Lor chs\NoTarget Lor I_268\InvisibilityOn Then
 							EntityTexture(e\room\Objects[19], e\room\Textures[0])
 						ElseIf Dist < 64.0 And (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[19], 8.0)
@@ -9162,7 +9162,7 @@ Function UpdateEndings%()
 					
 					If e\room\NPC[1] <> Null Then
 						; ~ Helicopter spots or player is within range --> Start shooting
-						If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 And (Not chs\NoTarget) Then
+						If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 							e\room\NPC[1]\State = 1.0
 							e\room\NPC[1]\State3 = 1.0
 						Else
@@ -9171,7 +9171,7 @@ Function UpdateEndings%()
 						EndIf
 						
 						; ~ Below roof or inside catwalk --> Stop shooting
-						If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[3], me\Collider) < 285.61 Lor chs\NoTarget Then
+						If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[3], me\Collider) < 285.61 Lor chs\NoTarget Lor I_268\InvisibilityOn Then
 							e\room\NPC[1]\State3 = 0.0
 						Else
 							e\room\NPC[1]\State3 = 1.0
@@ -9326,7 +9326,7 @@ Function UpdateEndings%()
 											Next
 											
 											For i = 5 To 8
-												If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 25.0 And (Not chs\NoTarget) Then
+												If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 25.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 													e\room\NPC[i]\State = 6.0
 												Else
 													e\room\NPC[i]\State = 5.0

@@ -1901,6 +1901,7 @@ Global I_294.SCP294
 Type SCP268
 	Field Using%
 	Field Timer#
+	Field InvisibilityOn%
 End Type
 
 Global I_268.SCP268
@@ -9193,21 +9194,17 @@ Function UpdateEscapeTimer%()
 	EndIf
 End Function
 
-Function Use268()
+Function Use268%()
     If I_268\Using > 1 Then
-		If I_268\Timer > 0 Then
-			chs\NoTarget = True
-		Else
-			chs\NoTarget = False
-		EndIf
-        If I_268\Using = 3 Then 
-            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.5) * (1.0 + I_714\Using)), 0)
+		I_268\InvisibilityOn = (I_268\Timer > 0.0)
+		If I_268\Using = 3 Then 
+            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.5) * (1.0 + I_714\Using)), 0.0)
         Else
-            I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0)
+            I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
         EndIf
     Else
         I_268\Timer = Min(I_268\Timer + fps\Factor[0], 600.0)
-		chs\NoTarget = False
+		I_268\InvisibilityOn = False
     EndIf
 End Function 
 
