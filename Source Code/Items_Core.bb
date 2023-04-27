@@ -723,32 +723,31 @@ End Function
 
 ; ~ Maybe re-work?
 Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False, Suit% = False, Cap% = False)
+	Local DoReturn% = False
+	
 	If (Not GasMask) And wi\GasMask > 0 Then
 		CreateMsg(GetLocalString("msg", "mask.use.off"))
-		SelectedItem = Null
-		Return(True)
+		DoReturn = True
 	ElseIf (Not SCP1499) And I_1499\Using > 0
 		CreateMsg(GetLocalString("msg", "1499.use.off"))
-		SelectedItem = Null
-		Return(True)
+		DoReturn = True
 	ElseIf (Not NVG) And wi\NightVision > 0 Then
 		CreateMsg(GetLocalString("msg", "goggle.use.off"))
-		SelectedItem = Null
-		Return(True)
+		DoReturn = True
 	ElseIf (Not Helmet) And wi\BallisticHelmet
 		CreateMsg(GetLocalString("msg", "helmet.use.off"))
-		SelectedItem = Null
-		Return(True)
+		DoReturn = True
 	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
 		CreateMsg(GetLocalString("msg", "gear.use.off"))
-		SelectedItem = Null
-		Return(True)
+		DoReturn = True
 	ElseIf (Not Suit) And wi\HazmatSuit > 0
 		CreateMsg(GetLocalString("msg", "suit.use.off"))
-		SelectedItem = Null
-		Return(True)
+		DoReturn = True
 	ElseIf (Not Cap) And I_268\Using > 0
 		CreateMsg(GetLocalString("msg", "cap.use.off"))
+		DoReturn = True
+	EndIf
+	If DoReturn Then
 		SelectedItem = Null
 		Return(True)
 	EndIf
