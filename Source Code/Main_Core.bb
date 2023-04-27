@@ -4664,7 +4664,7 @@ Function UpdateGUI%()
 						me\Injuries = Max(me\Injuries + Int(GetFileLocalString(SCP294File, Drink, "Damage", "", False)), 0.0)
 						me\Bloodloss = Max(me\Bloodloss + Int(GetFileLocalString(SCP294File, Drink, "Blood Loss", "", False)), 0.0)
 						StrTemp = GetFileLocalString(SCP294File, Drink, "Sound", "", False)
-						If StrTemp <> "" Then PlaySound_Strict(LoadTempSound(StrTemp))
+						If StrTemp <> "" Then PlaySound_Strict(LoadTempSound(StrTemp), True)
 						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Stomach Ache", "", False)) Then I_1025\State[3] = 1.0
 						
 						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Infection", "", False)) Then I_008\Timer = I_008\Timer + 1.0
