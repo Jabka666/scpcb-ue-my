@@ -2896,8 +2896,6 @@ Function UpdateNPCs%()
 							PositionEntity(Target, n\EnemyX, n\EnemyY, n\EnemyZ, True)
 						EndIf
 						
-						If (chs\NoTarget Lor I_268\InvisibilityOn) And n\State = 2.0 Then n\State = 1.0
-						
 						TurnEntity(n\OBJ2, 0.0, 20.0 * fps\Factor[0], 0.0)
 						TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 						
@@ -2914,14 +2912,16 @@ Function UpdateNPCs%()
 									
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
+									Visible = False
 									If n\PathTimer = 0.0 Then
-										n\PathStatus = EntityVisible(n\Collider, Target)
+										Visible = EntityVisible(n\Collider, Target)
 										n\PathTimer = Rnd(100.0, 200.0)
 									Else
 										n\PathTimer = Min(n\PathTimer - fps\Factor[0], 0.0)
 									EndIf
+									If chs\NoTarget Lor I_268\InvisibilityOn Then Visible = False
 									
-									If n\PathStatus = 1 Then ; ~ Player visible
+									If Visible Then ; ~ Player visible
 										RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(0.0, EntityRoll(n\Collider), 40.0), True)
 										If n\Reload <= 0.0 Then
 											If Dist < 400.0 Then
