@@ -1989,7 +1989,7 @@ Function UpdateEvents%()
 					CoffinDistance = EntityDistance(me\Collider, e\room\Objects[1])
 					If CoffinDistance < 1.5 Then
 						GiveAchievement(Achv895)
-						If (Not n_I\Curr106\Contained) And e\EventID = e_cont1_895_106 And e\EventState2 = 0.0 Then
+						If (Not n_I\Curr106\Contained) And e\EventID = e_cont1_895_106 And e\EventState2 = 0.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 							de\SizeChange = 0.001
 							EntityParent(de\OBJ, e\room\OBJ)
@@ -3640,7 +3640,7 @@ Function UpdateEvents%()
 							
 							e\EventState = 2.0
 							
-							If (Not n_I\Curr106\Contained) Then
+							If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.02, EntityZ(e\room\Objects[Temp], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 								de\SizeChange = 0.001
 								EntityParent(de\OBJ, e\room\OBJ)
@@ -3694,7 +3694,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_2_hcz_106
 				;[Block]
-				If (Not n_I\Curr106\Contained) Then
+				If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 					If e\EventState = 0.0 Then
 						If PlayerRoom = e\room Then e\EventState = 1.0
 					Else
@@ -3758,7 +3758,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_4_hcz_106
 				;[Block]
-				If (Not n_I\Curr106\Contained)
+				If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 					If n_I\Curr106\State > 0.0 Then
 						If e\EventState = 0.0 Then
 							If PlayerRoom = e\room Then e\EventState = 1.0
@@ -6248,7 +6248,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_5_hcz_106
 				;[Block]
-				If (Not n_I\Curr106\Contained) Then
+				If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 					If e\EventState = 0.0 Then
 						If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
 							If n_I\Curr106\State >= 0.0 Then
@@ -7878,7 +7878,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont1_005
 				;[Block]
-				If (Not n_I\Curr106\Contained) And I_005\ChanceToSpawn < 3 Then
+				If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) And I_005\ChanceToSpawn < 3 Then
 					If PlayerRoom = e\room Then
 						If e\EventState = 0.0 Then
 							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69 Then
