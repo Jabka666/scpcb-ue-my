@@ -2919,7 +2919,7 @@ Function UpdateNPCs%()
 									Else
 										n\PathTimer = Min(n\PathTimer - fps\Factor[0], 0.0)
 									EndIf
-									If chs\NoTarget Lor I_268\InvisibilityOn Then Visible = False
+									If chs\NoTarget Lor I_268\InvisibilityOn And n\State = 2.0 Then Visible = False
 									
 									If Visible Then ; ~ Player visible
 										RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(0.0, EntityRoll(n\Collider), 40.0), True)
