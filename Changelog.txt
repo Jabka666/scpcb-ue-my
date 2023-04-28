@@ -17,6 +17,7 @@ Rooms:
 - Added an intermediate door to bypass elevators in «room3_storage».
 
 - Updated lightmaps.
+- Updated texture for alcohol hand gel.
 - Some design improvements.
 
 Items:
