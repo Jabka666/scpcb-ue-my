@@ -8,10 +8,6 @@ General:
 
 - The Heavy Ballistic Vest can be modified by SCP-914.
 
-- Reduced chances of obtaining Key Card Omni from SCP-914 with Level 6 Key Card.
-
-- The Heavy Ballistic Vest can be modified by SCP-914.
-
 Rooms:
 - Added SCP-066's containment chamber.
 - Added an intermediate door to bypass elevators in «room3_storage».
