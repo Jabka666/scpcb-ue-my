@@ -157,6 +157,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_MTF_MODEL])
+			If IsPlayerOutsideFacility() Then EntityFX(n\OBJ, 1)
 			
 			Temp = IniGetFloat(NPCsFile, "MTF", "Scale") / 2.5
 			
@@ -285,8 +286,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_APACHE_MODEL])
+			EntityFX(n\OBJ, 1)
 			
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_1_MODEL])
+			EntityFX(n\OBJ2, 1)
 			EntityParent(n\OBJ2, n\OBJ)
 			
 			For i = -1 To 1 Step 2
@@ -297,6 +300,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Next
 			
 			n\OBJ3 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_2_MODEL])
+			EntityFX(n\OBJ3, 1)
 			EntityParent(n\OBJ3, n\OBJ)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
 			
