@@ -1679,9 +1679,12 @@ Function LoadEntities%()
 	
 	Camera = CreateCamera()
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-	CameraRange(Camera, 0.05, opt\CameraFogFar)
+	CameraRange(Camera, 0.01, opt\CameraFogFar)
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
+	CameraFogColor(Camera, 30.0, 30.0, 30.0)
+	CameraClsColor(Camera, 30.0, 30.0, 30.0)
+	AmbientLight(30.0, 30.0, 30.0)
 	
 	RenderLoading(5, GetLocalString("loading", "icons"))
 	

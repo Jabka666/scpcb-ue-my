@@ -5888,8 +5888,8 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						
-						CameraRange(Camera, RoomScale, 8.5)
-						CameraFogRange(Camera, 0.05, 8.0)
+						CameraRange(Camera, 0.01, 8.5)
+						CameraFogRange(Camera, 0.01, 8.0)
 					Else
 						If (Not n_I\Curr106\Contained) Then n_I\Curr106\Idle = 0
 						If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
@@ -8159,7 +8159,7 @@ Function UpdateDimension106%()
 						;[Block]
 						ShouldPlay = 14
 						
-						CameraFogRange(Camera, 0.05, 8.0)
+						CameraFogRange(Camera, 0.01, 8.0)
 						
 						For i = 17 To 20
 							If i > 18 Then
@@ -8709,7 +8709,7 @@ Function UpdateDimension1499%()
 				EndIf
 				
 				CameraFogRange(Camera, 40.0, 80.0)
-				CameraRange(Camera, 0.05, 90.0)
+				CameraRange(Camera, 0.01, 90.0)
 				
 				For r.Rooms = Each Rooms
 					HideRoomsNoColl(r)
