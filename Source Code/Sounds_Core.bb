@@ -248,7 +248,7 @@ Function ResumeSounds%()
 End Function
 
 Function KillSounds%()
-	Local e.Events, n.NPCs, d.Doors, snd.Sound, sub.Subtitles
+	Local e.Events, n.NPCs, d.Doors, snd.Sound
 	Local i%
 	
 	For i = 0 To 8 Step 2
@@ -312,7 +312,7 @@ Function KillSounds%()
 		For snd.Sound = Each Sound
 			If snd\InternalHandle <> 0 Then
 				FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-				DeleteSubtitles(snd\Name)
+				;DeleteSubtitles(snd\Name)
 			EndIf
 			snd\ReleaseTime = 0
 		Next

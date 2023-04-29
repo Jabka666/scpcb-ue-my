@@ -1795,9 +1795,9 @@ End Function
 
 Global Camera%
 
-RenderLoading(20, GetLocalString("loading", "core.subtitle"))
+;RenderLoading(20, GetLocalString("loading", "core.subtitle"))
 
-Include "Source Code\Subtitles_Core.bb"
+;Include "Source Code\Subtitles_Core.bb"
 
 RenderLoading(25, GetLocalString("loading", "core.sound"))
 
@@ -2394,7 +2394,7 @@ Function UpdateGame%()
 		
 		UpdateMessages()
 		UpdateHintMessages()
-		UpdateSubtitles()
+		;UpdateSubtitles()
 		
 		UpdateConsole()
 		
@@ -2434,7 +2434,7 @@ Function RenderGame%()
 	
 	RenderMessages()
 	RenderHintMessages()
-	RenderSubtitles()
+	;RenderSubtitles()
 	
 	RenderConsole()
 	
@@ -8350,7 +8350,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events, lvr.Levers
-	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, sub.Subtitles
+	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles;, sub.Subtitles
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x%, y%, Lvl%
 	
@@ -8449,9 +8449,9 @@ Function NullGame%(PlayButtonSFX% = True)
 		Delete(c)
 	Next
 	
-	For sub.Subtitles = Each Subtitles
-		Delete(sub)
-	Next
+	;For sub.Subtitles = Each Subtitles
+	;	Delete(sub)
+	;Next
 	
 	Delete(CurrMapGrid)
 	Delete(I_Zone)

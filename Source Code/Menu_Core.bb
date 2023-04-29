@@ -647,7 +647,7 @@ Function UpdateMainMenu%()
 									Next
 									If snd\InternalHandle <> 0 Then
 										FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-										DeleteSubtitles(snd\Name)
+										;DeleteSubtitles(snd\Name)
 									EndIf
 									snd\ReleaseTime = 0
 								Next
