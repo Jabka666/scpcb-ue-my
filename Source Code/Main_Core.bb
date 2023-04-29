@@ -6106,9 +6106,9 @@ Function RenderGUI%()
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
 		If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
 		
-		x = mo\Viewport_Center_X - (32 * MenuScale)
-		y = mo\Viewport_Center_Y - (32 * MenuScale)
 		For i = 0 To 3
+			x = mo\Viewport_Center_X - (32 * MenuScale)
+			y = mo\Viewport_Center_Y - (32 * MenuScale)
 			If DrawArrowIcon[i] Then
 				Select i
 					Case 0
@@ -6128,10 +6128,7 @@ Function RenderGUI%()
 						x = x - (69 * MenuScale)
 						;[End Block]
 				End Select
-				DrawBlock(t\IconID[5], x, y)
-				Color(0, 0, 0)
-				Rect(x + (4 * MenuScale), y + (4 * MenuScale), 56 * MenuScale, 56 * MenuScale)
-				DrawBlock(t\IconID[i + 9], x + (21 * MenuScale), y + (21 * MenuScale))
+				DrawBlock(t\IconID[i + 10], x, y)
 			EndIf
 		Next
 	EndIf

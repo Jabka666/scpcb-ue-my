@@ -9049,7 +9049,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Create some verts for the terrain
 	For lY = 0 To y
 		For lX = 0 To x
-			AddVertex(Surf, lX, 0, lY, 1.0 / lX, 1.0 / lY)
+			AddVertex(Surf, lX, 0.0, lY, 1.0 / lX, 1.0 / lY)
 		Next
 	Next
 	RenderWorld()

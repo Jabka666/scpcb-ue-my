@@ -12,7 +12,7 @@ Function InitFastResize%()
 	CameraZoom(Cam, 0.1)
 	CameraClsMode(Cam, 0, 0)
 	CameraRange(Cam, 0.1, 1.5)
-	MoveEntity(Cam, 0.0, 0.0, -10000)
+	MoveEntity(Cam, 0.0, 0.0, -10000.0)
 	
 	FresizeCam = Cam
 	

@@ -6613,7 +6613,7 @@ Function UpdateEvents%()
 									If Angle < 90.0 Then
 										RotateEntity(GrabbedEntity, 0.0, 0.0, 361.0)
 									ElseIf Angle < 180.0
-										RotateEntity(GrabbedEntity, 0.0, 0.0, 180)
+										RotateEntity(GrabbedEntity, 0.0, 0.0, 180.0)
 									EndIf
 									
 									If Angle < 181.0 And Angle > 90.0 Then

@@ -1,9 +1,14 @@
 v1.1.3
 
+General:
+- Updated spark texture.
+
 - Improvements for Bright atmosphere.
 
 Bug Fixes:
 - Fixed NVG and SCRAMBLE not increasing the brightness of the rooms.
+- Fixed quick loading image.
+- Fixed and optimized arrow images.
 
 v1.1.2
 

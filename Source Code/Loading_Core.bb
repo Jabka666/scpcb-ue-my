@@ -1709,10 +1709,10 @@ Function LoadEntities%()
 	t\IconID[9] = ScaleImage2(t\IconID[9], MenuScale, MenuScale)
 	
 	For i = 0 To 3
-		t\IconID[i + 9] = LoadImage_Strict("GFX\Menu\arrow.png")
-		t\IconID[i + 9] = ScaleImage2(t\IconID[i + 9], MenuScale, MenuScale)
-		RotateImage(t\IconID[i + 9], i * 90.0)
-		HandleImage(t\IconID[i + 9], 0, 0)
+		t\IconID[i + 10] = LoadImage_Strict("GFX\HUD\arrow_symbol.png")
+		t\IconID[i + 10] = ScaleImage2(t\IconID[i + 10], MenuScale, MenuScale)
+		RotateImage(t\IconID[i + 10], i * 90.0)
+		HandleImage(t\IconID[i + 10], 0, 0)
 	Next
 	
 	For i = 0 To MaxAchievements - 1
