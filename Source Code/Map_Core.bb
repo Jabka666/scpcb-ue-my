@@ -280,11 +280,11 @@ End Function
 
 Global AmbientLightRoomTex%
 
-Function AmbientLightRooms%()
+Function AmbientLightRooms%(R%, G%, B%)
 	Local OldBuffer% = BackBuffer() ; ~ Probably shouldn't make assumptions here but who cares, why wouldn't it use the BackBuffer()
 	
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
-	ClsColor(CurrAmbientColorR, CurrAmbientColorG, CurrAmbientColorB)
+	ClsColor(R, G, B)
 	Cls()
 	ClsColor(0, 0, 0)
 	SetBuffer(OldBuffer)
@@ -383,7 +383,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				EndIf
 				If Tex[j] <> 0 Then
 					If Temp1i = 1 Then TextureBlend(Tex[j], 2 + (3 * opt\Atmosphere))
-					If Instr(Lower(Temp1s), "_lm") <> 0 Then TextureBlend(Tex[j], 2)
+					If Instr(Lower(Temp1s), "_lm") <> 0 Then TextureBlend(Tex[j], 3 - (Not opt\Atmosphere))
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
 					TextureCoords(Tex[j], 1 - j)

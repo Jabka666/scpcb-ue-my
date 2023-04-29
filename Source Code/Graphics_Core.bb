@@ -194,6 +194,25 @@ Function UpdateWorld2%()
 	Local np.NPCs
 	Local i%
 	
+	Local CurrR#, CurrG#, CurrB#
+	
+	If wi\NightVision > 0 Then
+		CurrR = CurrAmbientColorR * 6.0 : CurrG = CurrAmbientColorG * 6.0 : CurrB = CurrAmbientColorB * 6.0
+		AmbientLightRooms(CurrR / 3.0, CurrG / 3.0, CurrB / 3.0)
+	ElseIf wi\SCRAMBLE > 0
+		CurrR = CurrAmbientColorR * 2.0 : CurrG = CurrAmbientColorG * 2.0 : CurrB = CurrAmbientColorB * 2.0
+		AmbientLightRooms(CurrR / 3.0, CurrG / 3.0, CurrB / 3.0)
+	Else
+		AmbientLightRooms(CurrAmbientColorR / 5.0, CurrAmbientColorG / 5.0, CurrAmbientColorB / 5.0)
+		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
+		If forest_event <> Null Then
+			If PlayerRoom = forest_event\room Then
+				If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
+			EndIf
+		EndIf
+	EndIf
+	AmbientLight(CurrR, CurrG, CurrB)
+	
 	wi\IsNVGBlinking = False
 	
 	Local HasBattery%
@@ -257,26 +276,9 @@ Global CurrTrisAmount%
 Function RenderWorld2%(Tween#)
 	Local np.NPCs
 	Local i%, k%, l%
-	Local CurrR#, CurrG#, CurrB#
 	
 	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(Camera, 1)
-	
-	AmbientLightRooms()
-	If wi\NightVision > 0 Then
-		CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
-	ElseIf wi\SCRAMBLE > 0
-		CurrR = CurrAmbientColorR * 2.0 : CurrG = CurrAmbientColorR * 2.0 : CurrB = CurrAmbientColorR * 2.0
-	Else
-		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
-		If forest_event <> Null Then
-			If PlayerRoom = forest_event\room Then
-				If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
-			EndIf
-		EndIf
-	EndIf
-	AmbientLight(CurrR, CurrG, CurrB)
-	
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	
 	Local HasBattery%
