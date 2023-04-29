@@ -193,8 +193,11 @@ End Function
 Function UpdateWorld2%()
 	Local np.NPCs
 	Local i%
-	
 	Local CurrR#, CurrG#, CurrB#
+	
+	CameraProjMode(ArkBlurCam, 0)
+	CameraProjMode(Camera, 1)
+	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	
 	If wi\NightVision > 0 Then
 		CurrR = CurrAmbientColorR * 6.0 : CurrG = CurrAmbientColorG * 6.0 : CurrB = CurrAmbientColorB * 6.0
@@ -276,10 +279,6 @@ Global CurrTrisAmount%
 Function RenderWorld2%(Tween#)
 	Local np.NPCs
 	Local i%, k%, l%
-	
-	CameraProjMode(ArkBlurCam, 0)
-	CameraProjMode(Camera, 1)
-	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	
 	Local HasBattery%
 	Local Power%
