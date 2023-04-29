@@ -3278,6 +3278,25 @@ Function UpdateZoneColor%()
 	CurrAmbientColorR = CurveValue(Left(CurrAmbientColor, 3), CurrAmbientColorR, ZoneColorChangeSpeed)
 	CurrAmbientColorG = CurveValue(Mid(CurrAmbientColor, 4, 3), CurrAmbientColorG, ZoneColorChangeSpeed)
 	CurrAmbientColorB = CurveValue(Right(CurrAmbientColor, 3), CurrAmbientColorB, ZoneColorChangeSpeed)
+	
+	Local CurrR#, CurrG#, CurrB#
+	
+	If wi\NightVision > 0 Then
+		CurrR = CurrAmbientColorR * 6.0 : CurrG = CurrAmbientColorG * 6.0 : CurrB = CurrAmbientColorB * 6.0
+		AmbientLightRooms(CurrR / 3.0, CurrG / 3.0, CurrB / 3.0)
+	ElseIf wi\SCRAMBLE > 0
+		CurrR = CurrAmbientColorR * 2.0 : CurrG = CurrAmbientColorG * 2.0 : CurrB = CurrAmbientColorB * 2.0
+		AmbientLightRooms(CurrR / 3.0, CurrG / 3.0, CurrB / 3.0)
+	Else
+		AmbientLightRooms(CurrAmbientColorR / 5.0, CurrAmbientColorG / 5.0, CurrAmbientColorB / 5.0)
+		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
+		If forest_event <> Null Then
+			If PlayerRoom = forest_event\room Then
+				If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
+			EndIf
+		EndIf
+	EndIf
+	AmbientLight(CurrR, CurrG, CurrB)
 End Function
 
 Global DrawHandIcon%
