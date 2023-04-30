@@ -1166,11 +1166,11 @@ Function UpdateNPCs%()
 				Else
 					If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 				EndIf
+				If Dist < 16.0 Then GiveAchievement(Achv096)
 				
 				Select n\State
 					Case 0.0
 						;[Block]
-						If Dist < 16.0 Then GiveAchievement(Achv096)
 						If Dist < 64.0 Then
 							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
@@ -1412,7 +1412,6 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 5.0
 						;[Block]
-						If Dist < 16.0 Then GiveAchievement(Achv096)
 						If Dist < 256.0 Then
 							If (Not n\SoundCHN) Then
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
@@ -1512,7 +1511,10 @@ Function UpdateNPCs%()
 					Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
 					RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
 				EndIf
-				
+				If Dist < 16.0 Then
+					If EntityInView(n\Collider, Camera) Then GiveAchievement(Achv049)
+				EndIf
+					
 				If n\Idle > 0.1 Then
 					If PlayerRoom\RoomTemplate\Name <> "cont2_049" Then
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
@@ -1562,8 +1564,6 @@ Function UpdateNPCs%()
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 								PlayerSeeAble = NPCSeesPlayer(n)
 								If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then ; ~ Player is visible for SCP-049's sight
-									GiveAchievement(Achv049)
-									
 									; ~ Playing a sound after detecting the player
 									If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2)) Then
 										LoadNPCSound(n, "SFX\SCP\049\Spotted" + Rand(7) + ".ogg", 1)
