@@ -9,6 +9,7 @@ General:
 
 Rooms:
 - The door to SCP-005's containment chamber will be opened if SCP-005 appears inside SCP-409's containment chamber.
+- Some design improvements.
 
 Bug Fixes:
 - Fixed NVG and SCRAMBLE not increasing the brightness of the rooms.
