@@ -9,6 +9,7 @@ Bug Fixes:
 - Fixed NVG and SCRAMBLE not increasing the brightness of the rooms.
 - Fixed quick loading image.
 - Fixed and optimized arrow images.
+- Fixed an ability to open wooden doors in "cont2_1123" event.
 
 v1.1.2
 
