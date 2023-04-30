@@ -1602,18 +1602,22 @@ Function UpdateNPCs%()
 													EndIf
 												Next
 											EndIf
-										ElseIf I_714\Using
+										ElseIf I_714\Using > 0
 											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
 											
-											Remove714Timer = Remove714Timer - (fps\Factor[0] * 1.5)
+											If I_714\Using = 2 Then
+												Remove714Timer = Remove714Timer - (fps\Factor[0] * 1.5)
+											Else
+												Remove714Timer = Remove714Timer - (fps\Factor[0] * 3.0)
+											EndIf
 											
 											If Remove714Timer < 150.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 150.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
-												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), True)
+												If I_714\Using = 2 Then n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), True)
 											ElseIf Remove714Timer =< 0.0
 												For i = 0 To MaxItemAmount - 1
 													If Inventory(i) <> Null Then
-														If Inventory(i)\ItemTemplate\TempName = "scp714" Then
-															I_714\Using = False : DropItem(Inventory(i))
+														If Inventory(i)\ItemTemplate\TempName = "scp714" Lor Inventory(i)\ItemTemplate\TempName = "coarse714" Then
+															I_714\Using = 0 : DropItem(Inventory(i))
 															CreateMsg(GetLocalString("msg", "714.forceremoved"))
 															Exit
 														EndIf
@@ -3900,7 +3904,7 @@ Function UpdateNPCs%()
 									If n\State3 < 900.0 Then
 										me\BlurTimer = Float(((Sin(MilliSecs() / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
-										If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 And Dist < 256.0 Then
+										If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 And Dist < 256.0 Then
 											If me\StaminaEffect < 1.5 Then
 												Select Rand(4)
 													Case 1
@@ -3921,10 +3925,10 @@ Function UpdateNPCs%()
 														;[End Block]
 												End Select
 											EndIf
-											me\BlinkEffect = Max(me\BlinkEffect, 1.5)
+											me\BlinkEffect = Max(me\BlinkEffect, 1.5 - (0.25 * I_714\Using))
 											me\BlinkEffectTimer = 1000.0
 											
-											me\StaminaEffect = 2.0
+											me\StaminaEffect = 2.0 - (0.5 * I_714\Using)
 											me\StaminaEffectTimer = 1000.0
 										EndIf
 									EndIf

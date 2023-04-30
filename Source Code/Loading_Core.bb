@@ -791,6 +791,8 @@ Function LoadItems%()
 	CreateItemTemplate("SCP-500", "SCP-500", "scp500", "scp_500.b3d", "INV_scp_500.png", "", 0.035, 2)
 	CreateItemTemplate("SCP-513", "SCP-513", "scp513", "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
 	CreateItemTemplate("SCP-714", "SCP-714", "scp714", "scp_714.b3d", "INV_scp_714.png", "", 0.3, 3)
+	CreateItemTemplate("SCP-714", "SCP-714", "coarse714", "scp_714.b3d", "INV_scp_714_grey.png", "", 0.3, 3, "scp_714_grey.png")
+	CreateItemTemplate("SCP-714", "SCP-714", "fine714", "scp_714.b3d", "INV_scp_714_blue.png", "", 0.3, 3, "scp_714_blue.png")
 	CreateItemTemplate("SCP-860", "SCP-860", "scp860", "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3)
 	CreateItemTemplate("SCP-1025", "SCP-1025", "scp1025", "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0)
 	CreateItemTemplate("SCP-1123", "SCP-1123", "scp1123", "scp_1123.b3d", "INV_scp_1123.png", "", 0.015, 2)
@@ -809,6 +811,8 @@ Function LoadItems%()
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "500death"), "Upgraded Pill", "scp500pilldeath", "pill.b3d", "INV_scp_500_pill.png", "", 0.0001, 2)
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
+	
+	CreateItemTemplate(GetLocalString("items", "ring"), "Green Jade Ring", "ring", "scp_714.b3d", "INV_scp_714.png", "", 0.2, 3)
 	
 	; ~ [MISC ITEMS]
 	

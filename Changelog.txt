@@ -7,6 +7,10 @@ General:
 
 - Player won't receive the crystallization effect if wearing SCP-427 and touching SCP-409.
 
+- Add varinats of SCP-714 from SCP-914.
+
+- Add Sanity timer to the Debug Hud 2.
+
 Rooms:
 - The door to SCP-005's containment chamber will be opened if SCP-005 appears inside SCP-409's containment chamber.
 - Some design improvements.
@@ -18,6 +22,7 @@ Bug Fixes:
 - Fixed an ability to open wooden doors in "cont2_1123" event.
 - Fixed MAV in the Pocket Dimension throne room.
 - Fixed an issue where SCP-049 achievement couldn't be obtained when using SCP-268.
+- Fixed Stamina cap not draining exactly where it needs to.
 
 v1.1.2
 

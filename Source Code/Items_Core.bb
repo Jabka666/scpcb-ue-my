@@ -353,9 +353,9 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			I_268\Using = 0
 			;[End Block]
-		Case "scp714"
+		Case "scp714", "coarse714"
 			;[Block]
-			I_714\Using = False
+			I_714\Using = 0
 			;[End Block]
 		Case "scramble", "finescramble"
 			;[Block]
@@ -1690,6 +1690,28 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					it2.Items = CreateItem("SCP-513", "scp513", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "scp714", "coarse714", "fine714", "ring"
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("SCP-714", "coarse714", x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Green Jade Ring", "ring", x, y, z)
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					it2.Items = CreateItem("SCP-714", "fine714", x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
