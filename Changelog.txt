@@ -10,6 +10,7 @@ Bug Fixes:
 - Fixed quick loading image.
 - Fixed and optimized arrow images.
 - Fixed an ability to open wooden doors in "cont2_1123" event.
+- Fixed MAV in the Pocket Dimension throne room.
 
 v1.1.2
 

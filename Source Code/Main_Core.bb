@@ -3367,7 +3367,7 @@ Function UpdateGUI%()
 							Else
 								If (Not ChannelPlaying(e\SoundCHN)) Then
 									e\SoundCHN = PlaySound_Strict(e\Sound)
-									ChannelVolume(e\Sound, opt\VoiceVolume * opt\MasterVolume)
+									ChannelVolume(e\SoundCHN, opt\VoiceVolume * opt\MasterVolume)
 								EndIf
 							EndIf
 						Else
