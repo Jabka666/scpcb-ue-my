@@ -3590,7 +3590,7 @@ Function UpdateGUI%()
 							SelectedItem = OtherOpen\SecondInv[n]
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
-								If SelectedItem\ItemTemplate\TempName = "scp714" Lor SelectedItem\ItemTemplate\TempName = "coarse714" Then
+								If SelectedItem\ItemTemplate\TempName = "scp714" Lor SelectedItem\ItemTemplate\TempName = "coarse714" Lor SelectedItem\ItemTemplate\TempName = "fine714" Lor SelectedItem\ItemTemplate\TempName = "ring" Then
 									CreateMsg(GetLocalString("msg", "wallet.714"))
 									SelectedItem = Null
 									Return
@@ -3668,7 +3668,7 @@ Function UpdateGUI%()
 								If OtherOpen\SecondInv[z] <> Null Then
 									Local Name$ = OtherOpen\SecondInv[z]\ItemTemplate\TempName
 									
-									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp714" And Name <> "coarse714" And Name <> "scp500pill" And Name <> "scp500pilldeath" And Name <> "pill" Then
+									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp714" And Name <> "coarse714" And Name <> "fine714" And Name <> "ring" And Name <> "scp500pill" And Name <> "scp500pilldeath" And Name <> "pill" Then
 										IsEmpty = False
 										Exit
 									EndIf
@@ -5266,11 +5266,7 @@ Function UpdateGUI%()
 						Else
 							CreateMsg(GetLocalString("msg", "714.on"))
 							GiveAchievement(Achv714)
-							If SelectedItem\ItemTemplate\TempName = "scp714" Then
-								I_714\Using = 2
-							Else
-								I_714\Using = 1
-							EndIf
+							I_714\Using = (1 + (SelectedItem\ItemTemplate\TempName = "scp714"))
 						EndIf
 						SelectedItem = Null
 					EndIf
@@ -5279,7 +5275,7 @@ Function UpdateGUI%()
 					;[Block]
 						If CanUseItem(True, True)
 							If SelectedItem\ItemTemplate\TempName = "fine714" Then
-								CreateMsg(GetLocalString("msg", "714.sleep"), SubjectName)
+								CreateMsg(Format(GetLocalString("msg", "714.sleep"), SubjectName))
 								msg\DeathMsg = GetLocalString("death", "ringsleep")
 								Kill()
 							Else

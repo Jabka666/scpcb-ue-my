@@ -1605,11 +1605,7 @@ Function UpdateNPCs%()
 										ElseIf I_714\Using > 0
 											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
 											
-											If I_714\Using = 2 Then
-												Remove714Timer = Remove714Timer - (fps\Factor[0] * 1.5)
-											Else
-												Remove714Timer = Remove714Timer - (fps\Factor[0] * 3.0)
-											EndIf
+											Remove714Timer = Remove714Timer - (fps\Factor[0] * ((I_714\Using = 2) + (2.0 * (I_714\Using <> 2))) * 1.5)
 											
 											If Remove714Timer < 150.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 150.0 And (Not ChannelPlaying(n\SoundCHN2)) Then
 												If I_714\Using = 2 Then n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), True)

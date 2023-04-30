@@ -1698,8 +1698,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.010, z, 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					MakeDecal = True
 					;[End Block]
 				Case COARSE
 					;[Block]
