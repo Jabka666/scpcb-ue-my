@@ -7844,16 +7844,22 @@ Function UpdateEvents%()
 							If I_409\Timer = 0.0 Then
 								If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.7225 Then
 									GiveAchievement(Achv409)
-									me\BlurTimer = 1000.0
-									I_409\Timer = 0.001
+									If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
+										me\BlurTimer = 1000.0
+										I_409\Timer = 0.001
+									EndIf
 								EndIf
 								
 								; ~ Touching SCP-409
 								If InteractObject(e\room\Objects[3], 0.64) Then
-									CreateMsg(GetLocalString("msg", "409"))
-									me\BlurTimer = 1000.0
 									GiveAchievement(Achv409)
-									I_409\Timer = 0.001
+									If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then
+										CreateMsg(GetLocalString("msg", "409"))
+										me\BlurTimer = 1000.0
+										I_409\Timer = 0.001
+									Else
+										CreateMsg(GetLocalString("msg", "409.nothappened"))
+									EndIf
 								EndIf
 							EndIf
 						EndIf

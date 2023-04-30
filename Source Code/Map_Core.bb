@@ -6310,7 +6310,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Class-D spawn
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 4812.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1729.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 4858.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1729.0 * RoomScale)
 			
 			; ~ Touching pivot
 			r\Objects[3] = CreatePivot()
@@ -6336,7 +6336,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5 Then
-				it.Items = CreateItem("SCP-005", "scp005", r\x - 5000.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1728.0 * RoomScale)
+				it.Items = CreateItem("SCP-005", "scp005", r\x - 5000.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1578.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
