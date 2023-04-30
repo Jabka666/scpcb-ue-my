@@ -5,10 +5,19 @@ General:
 
 - Improvements for Bright atmosphere.
 
+- Player won't receive the crystallization effect if wearing SCP-427 and touching SCP-409.
+
+Rooms:
+- The door to SCP-005's containment chamber will be opened if SCP-005 appears inside SCP-409's containment chamber.
+- Some design improvements.
+
 Bug Fixes:
 - Fixed NVG and SCRAMBLE not increasing the brightness of the rooms.
 - Fixed quick loading image.
 - Fixed and optimized arrow images.
+- Fixed an ability to open wooden doors in "cont2_1123" event.
+- Fixed MAV in the Pocket Dimension throne room.
+- Fixed an issue where SCP-049 achievement couldn't be obtained when using SCP-268.
 
 v1.1.2
 

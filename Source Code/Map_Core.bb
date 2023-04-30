@@ -3924,7 +3924,7 @@ Function FillRoom%(r.Rooms)
 		Case "cont1_005"
 			;[Block]
 			; ~ The door leading to the containment chamber
-			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z - 640.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_4)
+			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z - 640.0 * RoomScale, 0.0, r, (I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5), DEFAULT_DOOR, KEY_CARD_4)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z - 210.0 * RoomScale)
@@ -5124,7 +5124,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ A door inside the cell 
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 336.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 712.0 * RoomScale, 90.0, r, False, WOODEN_DOOR)
-			r\RoomDoors[1]\Locked = 1 : r\RoomDoors[1]\MTFClose = False
+			r\RoomDoors[1]\Locked = 2 : r\RoomDoors[1]\MTFClose = False
 			
 			; ~ An intermediate door
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 336.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 168.0 * RoomScale, 270.0, r, False, WOODEN_DOOR)
@@ -5149,10 +5149,10 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
 			d.Doors = CreateDoor(r\x, r\y + 769.0 * RoomScale, r\z + 416.0 * RoomScale, 0.0, r, False, WOODEN_DOOR)
-			d\Locked = 1 : d\MTFClose = False
+			d\Locked = 2 : d\MTFClose = False
 			
 			d.Doors = CreateDoor(r\x, r\y + 769.0 * RoomScale, r\z - 945.0 * RoomScale, 0.0, r, False, WOODEN_DOOR)
-			d\Locked = 1 : d\MTFClose = False
+			d\Locked = 2 : d\MTFClose = False
 			
 			; ~ SCP-1123 sound position
 			r\Objects[0] = CreatePivot()
