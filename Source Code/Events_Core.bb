@@ -2091,11 +2091,11 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 						Next
-						If CoffinDistance < 4.0 And HasBatteryFor895 And (Not I_714\Using) Then
+						If CoffinDistance < 4.0 And HasBatteryFor895 And I_714\Using <> 2 Then
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
-							me\Sanity = me\Sanity - (fps\Factor[0] * 1.1 / (wi\NightVision + wi\SCRAMBLE))
+							me\Sanity = me\Sanity - ((fps\Factor[0] * 1.1 / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 							me\RestoreSanity = False
 							me\BlurTimer = Sin(MilliSecs() / 10) * Abs(me\Sanity)
 							
@@ -4673,7 +4673,7 @@ Function UpdateEvents%()
 							
 							UpdateRedLight(e\room\Objects[1], 1500, 800)
 							
-							If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
+							If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
 								If EntityVisible(e\room\Objects[0], Camera) Then
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[1], 10.0, e\EventState3 / (86.0 * 70.0))
 									
@@ -5083,7 +5083,7 @@ Function UpdateEvents%()
 										e\EventState2 = Min(e\EventState2 + (fps\Factor[0] / 6000.0), 1.0)
 										e\EventState3 = CurveValue(e\EventState2, e\EventState3, 50.0)
 										
-										If (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
+										If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
 											me\Sanity = me\Sanity - (fps\Factor[0] * 1.1)
 											me\BlurTimer = Sin(MilliSecs() / 10.0) * Abs(me\Sanity)
 										EndIf
@@ -5118,7 +5118,7 @@ Function UpdateEvents%()
 							e\EventState3 = Max(e\EventState3 - (fps\Factor[0] / 100.0), 0.0)
 						EndIf
 						
-						If e\EventState3 > 0.0 And (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then 
+						If e\EventState3 > 0.0 And I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then 
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 10.0, e\EventState3)
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
@@ -5985,7 +5985,7 @@ Function UpdateEvents%()
 			Case e_cont2_1123
 				;[Block]
 				If PlayerRoom = e\room Then
-					If (Not I_714\Using) And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
+					If I_714\Using = 0 And wi\HazmatSuit <> 4 And wi\GasMask <> 4 Then
 						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 0.81 Lor e\EventState > 0.0 Then
 							If e\EventState = 0.0 Then me\BlurTimer = 1000.0
 							me\CameraShake = 1.0
@@ -8227,10 +8227,14 @@ Function UpdateDimension106%()
 						
 						If Safe Lor chs\NoTarget Lor I_268\InvisibilityOn Then
 							EntityTexture(e\room\Objects[19], e\room\Textures[0])
-						ElseIf Dist < 64.0 And (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
+						ElseIf Dist < 64.0 And I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[19], 8.0)
 							EntityTexture(e\room\Objects[19], e\room\Textures[1])
-							InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0003))
+							If I_714\Using = 1 Then
+								InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0002))
+							Else
+								InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0003))
+							EndIf
 							
 							If Dist < 49.0 Then
 								Pvt = CreatePivot()

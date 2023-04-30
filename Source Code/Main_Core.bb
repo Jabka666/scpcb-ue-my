@@ -156,7 +156,7 @@ Type Player
 	Field ForceMove#, ForceAngle#
 	Field Playable%, PlayTime%
 	Field BlinkTimer#, BLINKFREQ#, BlinkEffect#, BlinkEffectTimer#, EyeIrritation#, EyeStuck#
-	Field Stamina#, StaminaEffect#, StaminaEffectTimer#
+	Field Stamina#, StaminaEffect#, StaminaEffectTimer#, StaminaMax#
 	Field CameraShakeTimer#, Shake#, CameraShake#, BigCameraShake#
 	Field Vomit%, VomitTimer#, Regurgitate%
 	Field HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
@@ -2652,10 +2652,12 @@ Function UpdateMoving%()
 		Kill()
 	EndIf
 	
-	If me\CurrSpeed > 0.0 Then
-		me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] / 1.25), 100.0)
-	Else
-		me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] * 1.25), 100.0)
+	If me\Stamina < me\StaminaMax Then
+		If me\CurrSpeed > 0.0 Then
+			me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] / 1.25), 100.0)
+		Else
+			me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] * 1.25), 100.0)
+		EndIf
 	EndIf
 	
 	If me\StaminaEffectTimer > 0.0 Then
@@ -2684,12 +2686,20 @@ Function UpdateMoving%()
 		EndIf
 	EndIf
 	
-	If I_714\Using Then
+	me\StaminaMax = 100.0
+	
+	If I_714\Using = 2 Then
 		me\Stamina = CurveValue(Min(10.0, me\Stamina), me\Stamina, 10.0)
+		me\StaminaMax = Min(me\StaminaMax, 10.0)
 		me\Sanity = Max(-850.0, me\Sanity)
+	ElseIf I_714\Using = 1
+		me\Stamina = CurveValue(Min(25.0, me\Stamina), me\Stamina, 15.0)
+		me\StaminaMax = Min(me\StaminaMax, 25.0)
 	Else
-		If wi\BallisticVest = 2 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
-		If wi\HazmatSuit = 1 Then me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
+		If wi\BallisticVest = 2 Lor wi\HazmatSuit = 1 Then
+			me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
+			me\StaminaMax = Min(me\StaminaMax, 60.0)
+		EndIf
 		If wi\GasMask = 3 Lor wi\HazmatSuit = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.002 * fps\Factor[0])
 	EndIf
 	
@@ -3580,7 +3590,7 @@ Function UpdateGUI%()
 							SelectedItem = OtherOpen\SecondInv[n]
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n Then
-								If SelectedItem\ItemTemplate\TempName = "scp714" Then
+								If SelectedItem\ItemTemplate\TempName = "scp714" Lor SelectedItem\ItemTemplate\TempName = "coarse714" Then
 									CreateMsg(GetLocalString("msg", "wallet.714"))
 									SelectedItem = Null
 									Return
@@ -3658,7 +3668,7 @@ Function UpdateGUI%()
 								If OtherOpen\SecondInv[z] <> Null Then
 									Local Name$ = OtherOpen\SecondInv[z]\ItemTemplate\TempName
 									
-									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp714" And Name <> "scp500pill" And Name <> "scp500pilldeath" And Name <> "pill" Then
+									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp714" And Name <> "coarse714" And Name <> "scp500pill" And Name <> "scp500pilldeath" And Name <> "pill" Then
 										IsEmpty = False
 										Exit
 									EndIf
@@ -3865,7 +3875,11 @@ Function UpdateGUI%()
 							;[End Block]
 						Case "scp714"
 							;[Block]
-							ShouldPreventDropping = I_714\Using
+							ShouldPreventDropping = (I_714\Using = 2)
+							;[End Block]
+						Case "coarse714"
+							;[Block]
+							ShouldPreventDropping = (I_714\Using = 1)
 							;[End Block]
 						Case "scp427"
 							;[Block]
@@ -3901,7 +3915,7 @@ Function UpdateGUI%()
 						PrevItem = Inventory(MouseSlot)
 						
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "oldpaper", "origami", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "badge", "oldbadge", "ticket", "25ct", "coin", "key", "scp860", "scp714", "scp500pill", "scp500pilldeath", "pill"
+							Case "paper", "oldpaper", "origami", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "badge", "oldbadge", "ticket", "25ct", "coin", "key", "scp860", "scp714", "coarse714", "fine714", "ring", "scp500pill", "scp500pilldeath", "pill"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard" Then
 									; ~ Add an item to clipboard
@@ -3909,7 +3923,7 @@ Function UpdateGUI%()
 									Local b$ = SelectedItem\ItemTemplate\TempName
 									Local c%, ri%
 									
-									If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp714" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then
+									If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp714" And b <> "coarse714" And b <> "fine714" And b <> "ring" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If Inventory(MouseSlot)\SecondInv[c] = Null Then
 												If SelectedItem <> Null Then
@@ -3956,7 +3970,7 @@ Function UpdateGUI%()
 									added.Items = Null
 									b = SelectedItem\ItemTemplate\TempName
 									If b <> "paper" And b <> "oldpaper" And b <> "origami" Then
-										If SelectedItem\ItemTemplate\TempName = "scp714" And I_714\Using Then
+										If (SelectedItem\ItemTemplate\TempName = "scp714" And I_714\Using = 2) Lor (SelectedItem\ItemTemplate\TempName = "coarse714" And I_714\Using = 1) Then
 											CreateMsg(GetLocalString("msg", "takeoff"))
 											SelectedItem = Null
 											Return
@@ -3966,7 +3980,7 @@ Function UpdateGUI%()
 											If Inventory(MouseSlot)\SecondInv[c] = Null Then
 												Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 												Inventory(MouseSlot)\State = 1.0
-												If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp714" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
+												If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp714" And b <> "coarse714" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
 												Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
 												
 												For ri = 0 To MaxItemAmount - 1
@@ -4635,7 +4649,7 @@ Function UpdateGUI%()
 					EndIf
 					
 					If SelectedItem\State3 = 0.0 Then
-						If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
+						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
 							If SelectedItem\State = 7.0 Then
 								If I_008\Timer = 0.0 Then I_008\Timer = 1.0
 							Else
@@ -5166,7 +5180,7 @@ Function UpdateGUI%()
 				Case "scp420j"
 					;[Block]
 					If CanUseItem(True) Then
-						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then
+						If I_714\Using > 0 Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420j.yeah"))
@@ -5178,26 +5192,13 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "joint"
+				Case "joint", "scp420s"
 					;[Block]
 					If CanUseItem(True) Then
-						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then
+						If I_714\Using > 0 Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420j.dead"))
-							msg\DeathMsg = Format(GetLocalString("death", "joint"), SubjectName)
-							Kill()
-						EndIf
-						RemoveItem(SelectedItem)
-					EndIf
-					;[End Block]
-				Case "scp420s"
-					;[Block]
-					If CanUseItem(True) Then
-						If I_714\Using Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then
-							CreateMsg(GetLocalString("msg", "420j.no"))
-						Else
-							CreateMsg(GetLocalString("msg", "420s"))
 							msg\DeathMsg = Format(GetLocalString("death", "joint"), SubjectName)
 							Kill()
 						EndIf
@@ -5256,19 +5257,36 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp714"
+				Case "scp714", "coarse714"
 					;[Block]
 					If CanUseItem(True, True) Then
-						If I_714\Using Then
+						If (I_714\Using = 2 And SelectedItem\ItemTemplate\TempName = "scp714") Lor (I_714\Using = 1 And SelectedItem\ItemTemplate\TempName = "coarse714") Then
 							CreateMsg(GetLocalString("msg", "714.off"))
-							I_714\Using = False
+							I_714\Using = 0
 						Else
 							CreateMsg(GetLocalString("msg", "714.on"))
 							GiveAchievement(Achv714)
-							I_714\Using = True
+							If SelectedItem\ItemTemplate\TempName = "scp714" Then
+								I_714\Using = 2
+							Else
+								I_714\Using = 1
+							EndIf
 						EndIf
 						SelectedItem = Null
 					EndIf
+					;[End Block]
+				Case "fine714", "ring"
+					;[Block]
+						If CanUseItem(True, True)
+							If SelectedItem\ItemTemplate\TempName = "fine714" Then
+								CreateMsg(GetLocalString("msg", "714.sleep"), SubjectName)
+								msg\DeathMsg = GetLocalString("death", "ringsleep")
+								Kill()
+							Else
+								CreateMsg(GetLocalString("msg", "714.small"))
+							EndIf
+							SelectedItem = Null
+						EndIf
 					;[End Block]
 				Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
@@ -5783,7 +5801,7 @@ Function RenderHUD%()
 	y = opt\GraphicHeight - (95 * MenuScale)
 	
 	Color(255, 255, 255)
-	If (I_714\Using And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0) And (I_268\Timer =< 0.0 Lor I_268\Using < 2) Then
+	If (I_714\Using > 0 And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0) And (I_268\Timer =< 0.0 Lor I_268\Using < 2) Then
 		If wi\HazmatSuit = 4 Then
 			Color(0, 200, 0)
 			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
@@ -5809,7 +5827,7 @@ Function RenderHUD%()
 		If I_268\Timer =< 0.0 Then
 			Color(150, 150, 0)
 			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-		ElseIf I_714\Using
+		ElseIf I_714\Using > 0
 			Color(200, 0, 0)
 			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 		ElseIf I_268\Using = 3
@@ -5863,7 +5881,7 @@ Function RenderHUD%()
 	Color(0, 0, 0)
 	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
 	
-	If (PlayerRoom\RoomTemplate\Name = "dimension_106" And (EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale)) Lor I_714\Using Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0 Then
+	If (PlayerRoom\RoomTemplate\Name = "dimension_106" And (EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0 Then
 		Color(200, 0, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask = 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit = 3
@@ -5974,6 +5992,7 @@ Function RenderDebugHUD%()
 			Text2(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.stamtimer"), me\StaminaEffectTimer))
 			
 			Text2(x, y + (440 * MenuScale), Format(GetLocalString("console", "debug_2.deaf"), me\DeafTimer))
+			Text2(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_2.sanity"), me\Sanity))
 			
 			x = x + (700 * MenuScale)
 			
@@ -6340,7 +6359,11 @@ Function RenderGUI%()
 						;[End Block]
 					Case "scp714"
 						;[Block]
-						ShouldDrawRect = I_714\Using
+						ShouldDrawRect = (I_714\Using = 2)
+						;[End Block]
+					Case "coarse714"
+						;[Block]
+						ShouldDrawRect = (I_714\Using = 1)
 						;[End Block]
 					Case "nvg"
 						;[Block]
