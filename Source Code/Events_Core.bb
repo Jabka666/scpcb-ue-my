@@ -3836,25 +3836,22 @@ Function UpdateEvents%()
 						SetAnimTime(e\room\Objects[2], 488.0)
 						
 						Local DrawingName$ = "drawing_1048(" + Rand(25) + ").png"
-						Local ImgPath$ = ItemHUDTexturePath + DrawingName
 						Local itt.ItemTemplates
 						
 						For itt.ItemTemplates = Each ItemTemplates
 							If itt\Name = "Drawing" Then
 								If itt\Img <> 0 Then FreeImage(itt\Img) : itt\Img = 0
-								itt\Img = LoadImage_Strict(ImgPath)
-								itt\Img = ScaleImage2(itt\Img, MenuScale, MenuScale)
-								itt\ImgWidth = ImageWidth(itt\Img) / 2
-								itt\ImgHeight = ImageHeight(itt\Img) / 2
-								itt\ImgPath = ImgPath
+								itt\ImgPath = ItemHUDTexturePath + DrawingName
 								itt\TexPath = ItemTexturePath + DrawingName
+								Tex = LoadTexture_Strict(itt\TexPath)
+								If opt\Atmosphere Then TextureBlend(Tex, 5)
+								EntityTexture(itt\OBJ, Tex)
+								DeleteSingleTextureEntryFromCache(Tex)
 								Exit
 							EndIf
 						Next
 						
-						Tex = LoadTexture_Strict(ImgPath)
-						
-						Local Brush% = LoadBrush_Strict(ImgPath)
+						Local Brush% = LoadBrush_Strict(ItemTexturePath + DrawingName)
 						
 						For i = 1 To CountSurfaces(e\room\Objects[2])
 							SF = GetSurface(e\room\Objects[2], i)
@@ -3865,8 +3862,7 @@ Function UpdateEvents%()
 							If Lower(TexName) <> "scp_1048.png" Then PaintSurface(SF, Brush)
 							FreeBrush(b)
 						Next
-						DeleteSingleTextureEntryFromCache(Tex)
-						FreeBrush(Brush)
+						FreeBrush(Brush) : Brush = 0
 						
 						PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 					Else

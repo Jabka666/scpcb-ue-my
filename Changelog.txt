@@ -2,6 +2,7 @@ v1.1.3.1
 
 Bug Fixes:
 - Fixed SCP-939's texture which is too bright.
+- Fixed wrong textures are applied for SCP-1048's drawings.
 
 v1.1.3
 
