@@ -4776,6 +4776,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		SetNPCFrame(n, 532.0)
 		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+		Return
 	Else
 		n\MaxGravity = 0.03
 		
