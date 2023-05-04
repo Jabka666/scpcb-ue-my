@@ -4704,7 +4704,7 @@ Function UpdateEvents%()
 										ElseIf e\EventState3 > 70.0 * 31.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 31.0
 											Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(2).png")
 											If opt\Atmosphere Then TextureBlend(Tex, 5)
-											EntityTexture(e\room\Objects[2], Tex)
+											EntityTexture(e\room\Objects[3], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
 											CreateMsg(GetLocalString("msg", "012_2"))
@@ -4717,7 +4717,7 @@ Function UpdateEvents%()
 										ElseIf e\EventState3 > 70.0 * 63.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 63.0
 											Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(3).png")
 											If opt\Atmosphere Then TextureBlend(Tex, 5)
-											EntityTexture(e\room\Objects[2], Tex)
+											EntityTexture(e\room\Objects[3], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
 											InjurePlayer(0.5)
@@ -4725,7 +4725,7 @@ Function UpdateEvents%()
 										ElseIf e\EventState3 > 70.0 * 74.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 74.0
 											Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(4).png")
 											If opt\Atmosphere Then TextureBlend(Tex, 5)
-											EntityTexture(e\room\Objects[2], Tex)
+											EntityTexture(e\room\Objects[3], Tex)
 											DeleteSingleTextureEntryFromCache(Tex)
 											
 											CreateMsg(GetLocalString("msg", "012_4"))

@@ -4414,7 +4414,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\Map\room2_2_lcz_fan.rmesh", Null)
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -4884,14 +4884,18 @@ Function FillRoom%(r.Rooms)
 			r\HideObject[1] = False
 			HideEntity(r\Objects[1])
 			
-			For i = 0 To 1
+			r\Objects[2] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null)
+			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[2], r\x - 470.0 * RoomScale, r\y + 528.0 * RoomScale, r\z - 382.0 * RoomScale)
+			
+			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			r\Objects[2] = LoadMesh_Strict("GFX\Map\Props\scp_012.b3d")
-			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
-			EntityParent(r\Objects[2], r\Objects[0])
+			r\Objects[3] = LoadMesh_Strict("GFX\Map\Props\scp_012.b3d")
+			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[3], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
+			EntityParent(r\Objects[3], r\Objects[0])
 			
 			it.Items = CreateItem("Document SCP-012", "paper", r\x - 56.0 * RoomScale, r\y - 576.0 * RoomScale, r\z - 408.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -7240,6 +7244,47 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r\x + 927.0 * RoomScale, r\z, r)
 			;[End Block]
+		Case "room2c_ez"
+			;[Block]
+			sc.SecurityCams = CreateSecurityCam(r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, r)
+			sc\Angle = 225.0 : sc\Turn = 45.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			;[End Block]
+		Case "room2c_2_ez"
+			;[Block]
+			d.Doors = CreateDoor(r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, r, False, OFFICE_DOOR)
+			
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2C_2_ez_hb.b3d", r\OBJ)
+			r\HideObject[0] = False
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
+			
+			sc.SecurityCams = CreateSecurityCam(r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, r)
+			sc\Angle = 225.0 : sc\Turn = 45.0
+			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
+			
+			If Rand(5) = 1 Then
+				it.Items = CreateItem("ReVision Eyedrops", "eyedrops", r\x + 402.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 922.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			ElseIf Rand(4) = 1
+				it.Items = CreateItem("First Aid Kit", "firstaid", r\x + 402.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 922.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(4) = 1 Then
+				it.Items = CreateItem("Cup", "cup", r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
+				it\Name = FindSCP294Drink("Coffee Drink")
+				it\DisplayName = GetLocalString("items", "cupcoffee")
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			ElseIf Rand(3) = 1
+				it.Items = CreateRandomBattery(r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			;[End Block]
 		Case "room2c_ec"
 			;[Block]
 			d.Doors = CreateDoor(r\x, r\y, r\z + 384.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_4)
@@ -7312,11 +7357,12 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, r, False, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_ez_hb.b3d", r\OBJ)
+			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.25 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
@@ -7325,11 +7371,12 @@ Function FillRoom%(r.Rooms)
 			
 			If Rand(5) = 1 Then
 				it.Items = CreateItem("Radio Transceiver", "radio", r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
-				it\State = Rnd(100.0)
+				it\State = Rnd(0.0, 100.0)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf Rand(4) = 1 Then
+			ElseIf Rand(4) = 1
 				it.Items = CreateItem("S-NAV Navigator", "nav", r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
-				it\State = Rnd(100.0)
+				it\State = Rnd(0.0, 100.0)
+				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
 			If Rand(4) = 1 Then
@@ -7340,7 +7387,7 @@ Function FillRoom%(r.Rooms)
 				
 				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf Rand(3) = 1 Then
+			ElseIf Rand(3) = 1
 				it.Items = CreateRandomBattery(r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
@@ -7415,7 +7462,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room3_4_ez"
 			;[Block]
-			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.25 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
