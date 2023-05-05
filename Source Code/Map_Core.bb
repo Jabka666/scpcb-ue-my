@@ -4360,9 +4360,9 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\RoomDoors[2]\Buttons[1], EntityX(r\RoomDoors[2]\Buttons[1], True) + 0.025, EntityY(r\RoomDoors[2]\Buttons[1], True), EntityZ(r\RoomDoors[2]\Buttons[1], True), True)
 			TurnEntity(r\RoomDoors[2]\Buttons[0], 0.0, 90.0, 0.0)
 			
-			r\RoomDoors.Doors[3] = CreateDoor(r\x - 450.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_CARD_2)
-			PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True) - 0.056, EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True), True)
-			PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True) + 0.056, EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True), True)
+			r\RoomDoors.Doors[3] = CreateDoor(r\x - 449.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_CARD_2)
+			PositionEntity(r\RoomDoors[3]\Buttons[0], EntityX(r\RoomDoors[3]\Buttons[0], True) - 0.057, EntityY(r\RoomDoors[3]\Buttons[0], True), EntityZ(r\RoomDoors[3]\Buttons[0], True), True)
+			PositionEntity(r\RoomDoors[3]\Buttons[1], EntityX(r\RoomDoors[3]\Buttons[1], True) + 0.057, EntityY(r\RoomDoors[3]\Buttons[1], True), EntityZ(r\RoomDoors[3]\Buttons[1], True), True)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\scp_914_key.b3d")
 			PositionEntity(r\Objects[0], r\x - 416.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 374.0 * RoomScale, True)
