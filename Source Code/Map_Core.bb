@@ -6889,6 +6889,20 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r\x - 1056.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 736.0 * RoomScale, 270.0, r, True, ONE_SIDED_DOOR, KEY_CARD_3)
 			
+			For r2.Rooms = Each Rooms
+				If r2 <> r Then
+					If r2\RoomTemplate\Name = "room2_3_ez" Then
+						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_3_ez_hb.b3d", r\OBJ)
+			r\HideObject[0] = False
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
+			
 			If Rand(2) = 1 Then
 				it.Items = CreateItem("Mobile Task Forces", "paper", r\x + 744.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 944.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
@@ -7254,7 +7268,15 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			d.Doors = CreateDoor(r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, r, False, OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2C_2_ez_hb.b3d", r\OBJ)
+			For r2.Rooms = Each Rooms
+				If r2 <> r Then
+					If r2\RoomTemplate\Name = "room2c_2_ez" Then
+						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2C_2_ez_hb.b3d", r\OBJ)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -7356,7 +7378,15 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, r, False, OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_ez_hb.b3d", r\OBJ)
+			For r2.Rooms = Each Rooms
+				If r2 <> r Then
+					If r2\RoomTemplate\Name = "room3_ez" Then
+						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_ez_hb.b3d", r\OBJ)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
