@@ -622,7 +622,8 @@ Function UpdateMainMenu%()
 						
 						y = y + (20 * MenuScale)
 						
-						opt\MasterVolume = UpdateMenuSlideBar(x, y, 150 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
+						opt\PrevMasterVolume = UpdateMenuSlideBar(x, y, 150 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
+						opt\MasterVolume = opt\PrevMasterVolume
 						
 						y = y + (40 * MenuScale)
 						
@@ -1433,7 +1434,7 @@ Function RenderMainMenu%()
 					
 					SetFont2(fo\FontID[Font_Default])
 					Text2(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
-					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
+					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\PrevMasterVolume)
 					
 					y = y + (40 * MenuScale)
 					

@@ -7172,7 +7172,8 @@ Function UpdateMenu%()
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
-						opt\MasterVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
+						opt\PrevMasterVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
+						If (Not me\Deaf) Then opt\MasterVolume = opt\PrevMasterVolume
 						
 						y = y + (40 * MenuScale)
 						
@@ -7761,7 +7762,7 @@ Function RenderMenu%()
 					Case MenuTab_Options_Audio
 						;[Block]
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
-						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\MasterVolume)
+						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\PrevMasterVolume)
 						
 						y = y + (40 * MenuScale)
 						

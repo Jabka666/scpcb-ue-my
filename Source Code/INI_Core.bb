@@ -189,12 +189,13 @@ Type Options
 	Field Atmosphere%
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
 	; ~ [AUDIO]
-	Field MasterVolume#, MusicVolume#, CurrMusicVolume#
-	Field EnableUserTracks%
-	Field UserTrackMode%
+	Field MasterVolume#, PrevMasterVolume#
+	Field MusicVolume#, CurrMusicVolume#
 	Field SFXVolume#
 	Field VoiceVolume#
 	Field EnableSFXRelease%, PrevEnableSFXRelease%
+	Field EnableUserTracks%
+	Field UserTrackMode%
 	Field EnableSubtitles%
 	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [ADVANCED]
@@ -327,7 +328,8 @@ Function LoadOptionsINI%()
 	
 	; ~ [AUDIO]
 	
-	opt\MasterVolume = IniGetFloat(OptionFile, "Audio", "Master Volume", 0.5)
+	opt\PrevMasterVolume = IniGetFloat(OptionFile, "Audio", "Master Volume", 0.5)
+	opt\MasterVolume = opt\PrevMasterVolume
 	
 	opt\MusicVolume = IniGetFloat(OptionFile, "Audio", "Music Volume", 0.5)
 	opt\CurrMusicVolume = 1.0
@@ -460,7 +462,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	; ~ [AUDIO]
 	;[Block]
-	IniWriteString(OptionFile, "Audio", "Master Volume", opt\MasterVolume)
+	IniWriteString(OptionFile, "Audio", "Master Volume", opt\PrevMasterVolume)
 	
 	IniWriteString(OptionFile, "Audio", "Music Volume", opt\MusicVolume)
 	
@@ -588,7 +590,8 @@ Function ResetOptionsINI%()
 	
 	; ~ [AUDIO]
 	
-	opt\MasterVolume = 0.5
+	opt\PrevMasterVolume = 0.5
+	opt\MasterVolume = opt\PrevMasterVolume
 	
 	opt\MusicVolume = 0.5
 	

@@ -440,6 +440,7 @@ Function UpdateDeaf%()
 		opt\MasterVolume = 0.0
 		If opt\MasterVolume > 0.0 Then ControlSoundVolume()
 	Else
+		opt\MasterVolume = opt\PrevMasterVolume
 		If me\Deaf Then ControlSoundVolume()
 		me\Deaf = False
 	EndIf

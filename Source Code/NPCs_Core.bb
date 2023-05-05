@@ -3689,8 +3689,7 @@ Function UpdateNPCs%()
 										Select Rand(6)
 											Case 1
 												;[Block]
-												If (Not n\Sound2) Then n\Sound2 = LoadSound_Strict("SFX\SCP\066\Beethoven.ogg")
-												n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\Collider)
+												PlaySound_Strict(LoadTempSound("SFX\SCP\066\Beethoven.ogg"))
 												me\DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
 												me\Deaf = True
 												me\BigCameraShake = 10.0
