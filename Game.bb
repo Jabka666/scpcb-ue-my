@@ -1,6 +1,6 @@
 ; ~ The main file of the game
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
-; ~ SCP - Containment Breach Ultimate Edition v1.1.3
+; ~ SCP - Containment Breach Ultimate Edition v1.1.4
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ This is a modification of the game "SCP - Containment Breach"
 ; ~ The mod is developed by the "Ultimate Edition Team" (https://www.moddb.com/company/ultimate-edition-team)
