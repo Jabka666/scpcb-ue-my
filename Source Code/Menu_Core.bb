@@ -78,9 +78,6 @@ If opt\DisplayMode <> 0 Then
 	IniWriteString(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 EndIf
 
-opt\EnableSubtitles = False
-IniWriteString(OptionFile, "Audio", "Enable Subtitles", opt\EnableSubtitles)
-
 Function UpdateMainMenu%()
 	CatchErrors("UpdateMainMenu()")
 	
@@ -648,7 +645,6 @@ Function UpdateMainMenu%()
 									Next
 									If snd\InternalHandle <> 0 Then
 										FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-										;DeleteSubtitles(snd\Name)
 									EndIf
 									snd\ReleaseTime = 0
 								Next
@@ -704,15 +700,20 @@ Function UpdateMainMenu%()
 						y = y + (30 * MenuScale)
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
+						Local PrevOverrideSubColor% = opt\OverrideSubColor
 						
-						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles, True)
-						
-						If PrevEnableSubtitles Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles)
+						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						
 						If opt\EnableSubtitles Then
+							opt\OverrideSubColor = UpdateMenuTick(x, y+(30*MenuScale), opt\OverrideSubColor)
+						EndIf
+						
+						If PrevEnableSubtitles Or PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Or (PrevOverrideSubColor <> opt\OverrideSubColor)
+						
+						If opt\EnableSubtitles And opt\OverrideSubColor Then
 							y = y + (35 * MenuScale)
 							
-							If opt\EnableSubtitles Then UpdateMenuPalette(x - (63 * MenuScale), y)
+							If opt\OverrideSubColor Then UpdateMenuPalette(x - (63 * MenuScale), y+(15*MenuScale))
 							
 							y = y + (30 * MenuScale)
 							
@@ -1427,7 +1428,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
-					Height = ((280 + (70 * opt\EnableUserTracks)) + (160 * opt\EnableSubtitles)) * MenuScale
+					Height = ((280 + (70 * opt\EnableUserTracks)) + (30 * opt\EnableSubtitles) + (145 * (opt\EnableSubtitles And opt\OverrideSubColor))) * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1489,29 +1490,31 @@ Function RenderMainMenu%()
 						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
 						
 						y = y + (5 * MenuScale)
-						
+							
 						If MouseOn(x + (230 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 						
-						y = y + (30 * MenuScale)
-						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
-						If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-						
-						y = y + (30 * MenuScale)
-						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
-						If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-						
-						y = y + (30 * MenuScale)
-						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
-						If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-						
-						Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
-						Text2(x - (20 * MenuScale) + (Width / 2), Height + (396 * MenuScale), GetLocalString("options", "subtitles.example_1"), True)
-						Text2(x - (20 * MenuScale) + (Width / 2), Height + (416 * MenuScale), GetLocalString("options", "subtitles.example_2"), True)
-						Text2(x - (20 * MenuScale) + (Width / 2), Height + (436 * MenuScale), GetLocalString("options", "subtitles.example_3"), True)
-						Text2(x - (20 * MenuScale) + (Width / 2), Height + (456 * MenuScale), GetLocalString("options", "subtitles.example_4"), True)
+						If opt\OverrideSubColor Then
+							y = y + (30 * MenuScale)
+							
+							Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
+							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							
+							y = y + (30 * MenuScale)
+							
+							Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
+							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							
+							y = y + (30 * MenuScale)
+							
+							Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
+							If MouseOn(x + (125 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							
+							Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
+							Text2(x - (20 * MenuScale) + (Width / 2), Height + (396 * MenuScale), GetLocalString("options", "subtitles.example_1"), True)
+							Text2(x - (20 * MenuScale) + (Width / 2), Height + (416 * MenuScale), GetLocalString("options", "subtitles.example_2"), True)
+							Text2(x - (20 * MenuScale) + (Width / 2), Height + (436 * MenuScale), GetLocalString("options", "subtitles.example_3"), True)
+							Text2(x - (20 * MenuScale) + (Width / 2), Height + (456 * MenuScale), GetLocalString("options", "subtitles.example_4"), True)
+						EndIf
 					EndIf
 					;[End Block]
 				Case MainMenuTab_Options_Controls
@@ -2998,8 +3001,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_Subtitles
 			;[Block]
 			Txt = GetLocalString("tooltip", "subtitles")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "subtitles.note")
 			;[End Block]
 		Case Tooltip_SubtitlesColor
 			;[Block]
@@ -3172,4 +3173,4 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

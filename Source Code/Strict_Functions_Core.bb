@@ -33,7 +33,6 @@ Function AutoReleaseSounds%()
 			If snd\ReleaseTime < MilliSecs() Then
 				If snd\InternalHandle <> 0 Then
 					FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-					;DeleteSubtitles(snd\Name)
 				EndIf
 			EndIf
 		EndIf
@@ -42,7 +41,6 @@ End Function
 
 Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 	Local snd.Sound = Object.Sound(SoundHandle)
-	;Local sub.Subtitles
 	
 	If snd <> Null Then
 		Local ShouldPlay% = True
@@ -58,7 +56,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 						Else
 							If opt\EnableSFXRelease Then
 								snd\InternalHandle = LoadSound(snd\Name)
-								;sub.Subtitles = CreateSubtitles(snd\Name)
+								CreateCaptionToken(snd\Name, snd)
 							EndIf
 						EndIf
 						If (Not snd\InternalHandle) Then
@@ -84,7 +82,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 					Else
 						If opt\EnableSFXRelease Then
 							snd\InternalHandle = LoadSound(snd\Name)
-							;sub.Subtitles = CreateSubtitles(snd\Name)
+							CreateCaptionToken(snd\Name, snd)
 						EndIf
 					EndIf
 						
@@ -111,7 +109,6 @@ Function LoadSound_Strict%(File$)
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	
 	Local snd.Sound
-	;Local sub.Subtitles
 	
 	snd.Sound = New Sound
 	snd\Name = File
@@ -120,7 +117,6 @@ Function LoadSound_Strict%(File$)
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then
 			snd\InternalHandle = LoadSound(snd\Name)
-			;sub.Subtitles = CreateSubtitles(snd\Name)
 		EndIf
 	EndIf
 	Return(Handle(snd))
@@ -132,7 +128,7 @@ Function FreeSound_Strict%(SoundHandle%)
 	If snd <> Null Then
 		If snd\InternalHandle <> 0 Then
 			FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-			;DeleteSubtitles(snd\Name)
+			RemoveCaptionToken(snd)
 		EndIf
 		snd\ReleaseTime = 0
 		Delete(snd)
@@ -164,6 +160,8 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 		Return(-1)
 	EndIf
 	ChannelVolume(st\CHN, Volume)
+
+	CreateCaptionToken(File, null)
 	
 	Return(Handle(st))
 End Function

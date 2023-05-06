@@ -1795,9 +1795,9 @@ End Function
 
 Global Camera%
 
-;RenderLoading(20, GetLocalString("loading", "core.subtitle"))
+RenderLoading(20, GetLocalString("loading", "core.subtitle"))
 
-;Include "Source Code\Subtitles_Core.bb"
+Include "Source Code\Captions_Core.bb"
 
 RenderLoading(25, GetLocalString("loading", "core.sound"))
 
@@ -2394,7 +2394,7 @@ Function UpdateGame%()
 		
 		UpdateMessages()
 		UpdateHintMessages()
-		;UpdateSubtitles()
+		UpdateCaptions()
 		
 		UpdateConsole()
 		
@@ -2434,7 +2434,7 @@ Function RenderGame%()
 	
 	RenderMessages()
 	RenderHintMessages()
-	;RenderSubtitles()
+	RenderCaptions()
 	
 	RenderConsole()
 	
@@ -7208,15 +7208,20 @@ Function UpdateMenu%()
 						y = y + (30 * MenuScale)
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
+						Local PrevOverrideSubColor% = opt\OverrideSubColor
 						
-						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles, True)
-						
-						If PrevEnableSubtitles Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles)
+						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						
 						If opt\EnableSubtitles Then
+							opt\OverrideSubColor = UpdateMenuTick(x, y+(30*MenuScale), opt\OverrideSubColor)
+						EndIf
+						
+						If PrevEnableSubtitles Or PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Or (PrevOverrideSubColor <> opt\OverrideSubColor)
+						
+						If opt\EnableSubtitles And opt\OverrideSubColor Then
 							y = y + (35 * MenuScale)
 							
-							UpdateMenuPalette(x - (43 * MenuScale), y)
+							UpdateMenuPalette(x - (43 * MenuScale), y+(15*MenuScale))
 							
 							y = y + (30 * MenuScale)
 							
@@ -7823,20 +7828,22 @@ Function RenderMenu%()
 							
 							If MouseOn(x + (210 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							
-							y = y + (30 * MenuScale)
-							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
-							If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							
-							y = y + (30 * MenuScale)
-							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
-							If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							
-							y = y + (30 * MenuScale)
-							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
-							If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							If opt\OverrideSubColor Then
+								y = y + (30 * MenuScale)
+								
+								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
+								If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+								
+								y = y + (30 * MenuScale)
+								
+								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
+								If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+								
+								y = y + (30 * MenuScale)
+								
+								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
+								If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							EndIf
 						EndIf
 						;[End Block]
 					Case MenuTab_Options_Controls
@@ -8389,11 +8396,12 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events, lvr.Levers
-	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles;, sub.Subtitles
+	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x%, y%, Lvl%
 	
 	KillSounds()
+	ClearCaptions()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
 	
 	DeleteTextureEntriesFromCache(DeleteAllTextures)
@@ -8487,10 +8495,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	For c.ConsoleMsg = Each ConsoleMsg
 		Delete(c)
 	Next
-	
-	;For sub.Subtitles = Each Subtitles
-	;	Delete(sub)
-	;Next
 	
 	Delete(CurrMapGrid)
 	Delete(I_Zone)
