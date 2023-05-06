@@ -1254,25 +1254,6 @@ Function LoadGame%(File$)
 
 	EscapeTimer = ReadInt(f)
 	
-	Local Dist#, Dist2#
-	
-	For do.Doors = Each Doors
-		If do\room = Null Then
-			Dist = 400.0
-			
-			Local closestroom.Rooms
-			
-			For r.Rooms = Each Rooms
-				Dist2 = EntityDistanceSquared(r\OBJ, do\FrameOBJ)
-				If Dist2 < Dist Then
-					Dist = Dist2
-					closestroom = r.Rooms
-				EndIf
-			Next
-			do\room = closestroom
-		EndIf
-	Next
-	
 	CloseFile(f)
 	
 	For r.Rooms = Each Rooms
@@ -2001,25 +1982,6 @@ Function LoadGameQuick%(File$)
 	Next
 
 	EscapeTimer = ReadInt(f)
-	
-	Local Dist#, Dist2#
-	
-	For do.Doors = Each Doors
-		If do\room = Null Then
-			Dist = 400.0
-			
-			Local closestroom.Rooms
-			
-			For r.Rooms = Each Rooms
-				Dist2 = EntityDistanceSquared(r\OBJ, do\FrameOBJ)
-				If Dist2 < Dist Then
-					Dist = Dist2
-					closestroom = r.Rooms
-				EndIf
-			Next
-			do\room = closestroom
-		EndIf
-	Next
 	
 	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
 	Local sc.SecurityCams
