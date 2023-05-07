@@ -1698,6 +1698,7 @@ Function UpdateEvents%()
 										LoadNPCSound(e\room\NPC[0], "SFX\Room\Intro\Guard\Balcony\WTF" + Rand(2) + ".ogg")
 										e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 20.0, 1.0, True)
 										e\room\NPC[0]\State = 12.0 : e\room\NPC[0]\State2 = 0.0 : e\room\NPC[0]\Angle = 180.0
+										e\EventState = 14065.0
 									Else
 										If (Not e\room\NPC[2]\Sound) Then 
 											LoadNPCSound(e\room\NPC[2], "SFX\Room\Intro\ClassD\Gasp.ogg")
@@ -9783,4 +9784,4 @@ Function Update035Label%(OBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

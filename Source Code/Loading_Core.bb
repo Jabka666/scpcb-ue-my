@@ -2271,4 +2271,4 @@ Function InitLoadGame%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

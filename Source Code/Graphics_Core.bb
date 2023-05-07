@@ -598,4 +598,4 @@ Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

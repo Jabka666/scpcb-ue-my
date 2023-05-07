@@ -1797,7 +1797,7 @@ Global Camera%
 
 RenderLoading(20, GetLocalString("loading", "core.subtitle"))
 
-Include "Source Code\Captions_Core.bb"
+Include "Source Code\Subtitles_Core.bb"
 
 RenderLoading(25, GetLocalString("loading", "core.sound"))
 
@@ -2394,7 +2394,7 @@ Function UpdateGame%()
 		
 		UpdateMessages()
 		UpdateHintMessages()
-		UpdateCaptions()
+		UpdateSubtitles()
 		
 		UpdateConsole()
 		
@@ -2434,7 +2434,7 @@ Function RenderGame%()
 	
 	RenderMessages()
 	RenderHintMessages()
-	RenderCaptions()
+	RenderSubtitles()
 	
 	RenderConsole()
 	
@@ -7216,7 +7216,7 @@ Function UpdateMenu%()
 							opt\OverrideSubColor = UpdateMenuTick(x, y+(30*MenuScale), opt\OverrideSubColor)
 						EndIf
 						
-						If PrevEnableSubtitles Or PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Or (PrevOverrideSubColor <> opt\OverrideSubColor)
+						If PrevEnableSubtitles Lor PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor)
 						
 						If opt\EnableSubtitles And opt\OverrideSubColor Then
 							y = y + (35 * MenuScale)
@@ -8401,7 +8401,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Local i%, x%, y%, Lvl%
 	
 	KillSounds()
-	ClearCaptions()
 	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
 	
 	DeleteTextureEntriesFromCache(DeleteAllTextures)
@@ -9649,4 +9648,4 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

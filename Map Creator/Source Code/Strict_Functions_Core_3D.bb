@@ -106,4 +106,4 @@ Function LoadTexture_Cache%(File$, Flags% = 1)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

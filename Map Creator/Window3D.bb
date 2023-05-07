@@ -11,4 +11,4 @@ If FileType(GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini") <> 1 Then Write
 Include "Source Code\Main_Core_3D.bb"
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

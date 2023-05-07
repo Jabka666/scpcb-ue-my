@@ -33,6 +33,7 @@ Function AutoReleaseSounds%()
 			If snd\ReleaseTime < MilliSecs() Then
 				If snd\InternalHandle <> 0 Then
 					FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+					RemoveSubtitlesToken(snd)
 				EndIf
 			EndIf
 		EndIf
@@ -56,7 +57,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 						Else
 							If opt\EnableSFXRelease Then
 								snd\InternalHandle = LoadSound(snd\Name)
-								CreateCaptionToken(snd\Name, snd)
+								CreateSubtitlesToken(snd\Name, snd)
 							EndIf
 						EndIf
 						If (Not snd\InternalHandle) Then
@@ -82,10 +83,10 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 					Else
 						If opt\EnableSFXRelease Then
 							snd\InternalHandle = LoadSound(snd\Name)
-							CreateCaptionToken(snd\Name, snd)
+							CreateSubtitlesToken(snd\Name, snd)
 						EndIf
 					EndIf
-						
+					
 					If (Not snd\InternalHandle) Then
 						CreateConsoleMsg(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
 						OpenConsoleOnError()
@@ -117,6 +118,7 @@ Function LoadSound_Strict%(File$)
 	If (Not opt\EnableSFXRelease) Then
 		If (Not snd\InternalHandle) Then
 			snd\InternalHandle = LoadSound(snd\Name)
+			CreateSubtitlesToken(snd\Name, snd)
 		EndIf
 	EndIf
 	Return(Handle(snd))
@@ -128,7 +130,7 @@ Function FreeSound_Strict%(SoundHandle%)
 	If snd <> Null Then
 		If snd\InternalHandle <> 0 Then
 			FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-			RemoveCaptionToken(snd)
+			RemoveSubtitlesToken(snd)
 		EndIf
 		snd\ReleaseTime = 0
 		Delete(snd)
@@ -160,8 +162,8 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 		Return(-1)
 	EndIf
 	ChannelVolume(st\CHN, Volume)
-
-	CreateCaptionToken(File, null)
+	
+	CreateSubtitlesToken(File, Null)
 	
 	Return(Handle(st))
 End Function

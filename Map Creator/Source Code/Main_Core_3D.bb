@@ -1466,4 +1466,4 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

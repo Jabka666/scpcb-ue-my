@@ -65,4 +65,4 @@ Data +1, -1, +1, 0, 1
 Data -1, -1, +1, 0, 0
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS

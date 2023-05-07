@@ -708,7 +708,7 @@ Function UpdateMainMenu%()
 							opt\OverrideSubColor = UpdateMenuTick(x, y+(30*MenuScale), opt\OverrideSubColor)
 						EndIf
 						
-						If PrevEnableSubtitles Or PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Or (PrevOverrideSubColor <> opt\OverrideSubColor)
+						If PrevEnableSubtitles Lor PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor)
 						
 						If opt\EnableSubtitles And opt\OverrideSubColor Then
 							y = y + (35 * MenuScale)

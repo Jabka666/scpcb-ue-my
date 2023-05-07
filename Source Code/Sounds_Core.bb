@@ -312,7 +312,7 @@ Function KillSounds%()
 		For snd.Sound = Each Sound
 			If snd\InternalHandle <> 0 Then
 				FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-				;DeleteSubtitles(snd\Name)
+				RemoveSubtitlesToken(snd)
 			EndIf
 			snd\ReleaseTime = 0
 		Next
@@ -323,6 +323,8 @@ Function KillSounds%()
 			StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
 		Next
 	Next
+	
+	ClearSubtitles()
 End Function
 
 Function StopBreathSound%()
@@ -447,4 +449,4 @@ Function UpdateDeaf%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS
