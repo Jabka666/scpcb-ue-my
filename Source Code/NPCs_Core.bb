@@ -3257,7 +3257,7 @@ Function UpdateNPCs%()
 										
 										If n\State2 = 0.0 Then ; ~ Don't start moving until the player is looking
 											If EntityInView(n\Collider, Camera) Then
-												If Rand(8) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 20.0, 1.0, True)
+												If Rand(8) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 20.0, 1.0, True)
 												n\State2 = 1.0
 											EndIf
 										Else
@@ -3340,9 +3340,9 @@ Function UpdateNPCs%()
 											If Dist < 64.0 Then
 												If EntityInView(n\Collider, Camera) Then
 													If Rand(8) = 1 Then
-														PlaySound_Strict(LoadTempSound("SFX\SCP\860\Chase" + Rand(2) + ".ogg"))
+														PlaySound_Strict(LoadTempSound("SFX\SCP\860_2\Chase" + Rand(2) + ".ogg"))
 														
-														PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+														PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 													EndIf
 													n\State2 = 1.0
 												EndIf
@@ -3354,14 +3354,14 @@ Function UpdateNPCs%()
 											If Rnd(5000.0) < n\State3 Then
 												Temp = True
 												If ChannelPlaying(n\SoundCHN) Then Temp = False
-												If Temp Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+												If Temp Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 											EndIf
 										Else
 											n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
 										EndIf
 										
 										If Dist < 20.25 Lor n\State3 > Rnd(200.0, 250.0) Then
-											n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+											n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 											If (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
 												n\State = 3.0
 											Else

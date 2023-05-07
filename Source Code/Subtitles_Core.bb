@@ -4,9 +4,6 @@ Global SubtitlesTextHeight%
 Global SubtitlesCurrentBoxTop#
 Global SubtitlesCurrentBoxHeight#
 
-Global SubtitlesSprite%
-Global SubtitlesBoxTexture%
-
 Global SubtitlesInit%
 
 Type SubtitlesMsg
@@ -418,15 +415,19 @@ End Function
 
 Function InitSubtitlesColors%()
 	CreateSubtitlesColor("announcement", 130, 130, 130)
-	CreateSubtitlesColor("d", 225, 120, 0)
-	CreateSubtitlesColor("janitor", 120, 140, 170)
-	CreateSubtitlesColor("crew", 135, 160, 130)
-	CreateSubtitlesColor("guard", 180, 180, 150)
-	CreateSubtitlesColor("mtf", 200, 60, 20)
 	CreateSubtitlesColor("ci", 0, 130, 0)
+	CreateSubtitlesColor("crew", 135, 160, 130)
+	CreateSubtitlesColor("d", 225, 120, 0)
+	CreateSubtitlesColor("guard", 180, 180, 150)
+	CreateSubtitlesColor("janitor", 120, 140, 170)
+	CreateSubtitlesColor("mtf", 200, 60, 20)
+	CreateSubtitlesColor("nazi", 130, 0, 20)
 	CreateSubtitlesColor("035angry", 150, 0, 0)
-	CreateSubtitlesColor("049", 65, 65, 65)
+	CreateSubtitlesColor("049", 50, 70, 70)
 	CreateSubtitlesColor("066", 180, 35, 60)
+	CreateSubtitlesColor("106", 10, 5, 5)
+	CreateSubtitlesColor("682", 180, 160, 135)
+	CreateSubtitlesColor("860-2", 110, 55, 80)
 End Function
 
 Function ClearSubtitlesColor%()
