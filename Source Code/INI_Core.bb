@@ -197,6 +197,7 @@ Type Options
 	Field EnableUserTracks%
 	Field UserTrackMode%
 	Field EnableSubtitles%
+	Field OverrideSubColor%
 	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [ADVANCED]
 	Field AchvMsgEnabled%
@@ -347,6 +348,8 @@ Function LoadOptionsINI%()
 	
 	opt\EnableSubtitles = IniGetInt(OptionFile, "Audio", "Enable Subtitles", False)
 	
+	opt\OverrideSubColor = IniGetInt(OptionFile, "Audio", "Override Subtitle Color", False)
+	
 	opt\SubColorR = IniGetInt(OptionFile, "Audio", "Subtitles Color R", 255)
 	
 	opt\SubColorG = IniGetInt(OptionFile, "Audio", "Subtitles Color G", 255)
@@ -477,6 +480,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Audio", "User Track Setting", opt\UserTrackMode)
 	
 	IniWriteString(OptionFile, "Audio", "Enable Subtitles", opt\EnableSubtitles)
+	
+	IniWriteString(OptionFile, "Audio", "Override Subtitle Color", opt\OverrideSubColor)
 	
 	IniWriteString(OptionFile, "Audio", "Subtitles Color R", opt\SubColorR)
 	
@@ -682,4 +687,4 @@ Function ResetOptionsINI%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS
