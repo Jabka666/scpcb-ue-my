@@ -4,7 +4,7 @@
  Expanded="True"
  Icon=""
  MainFile="Game.bb"
- Compiler="Blitz3D"
+ Compiler="Blitz3D TSS"
  CommandLine=""
 </Settings>
 <Folders>
