@@ -23,7 +23,7 @@ Type QueuedSubtitlesMsg
 	Field subtitles.SubtitlesMsg
 	Field sound.Sound
 	Field Txt$
-	Field R#, G#, B#
+	Field R%, G%, B%
 	Field IsGlitch%
 	Field TimeStart#
 	Field TimeLeft#
@@ -51,15 +51,15 @@ Function UpdateSubtitles%()
 			
 			; ~ Split long lines of text into multiple lines.
 			While Len(TxtLine) > 0
-				Local StringRight# = GetSubtitlesBoxLeft() + 10 + StringWidth(TxtLine)
+				Local StringRight# = GetSubtitlesBoxLeft() + (10 * MenuScale) + StringWidth(TxtLine)
 				
-				If StringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - 10 Then
+				If StringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - (10 * MenuScale) Then
 					Local NextLine$ = ""
 					
-					While StringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - 10
+					While StringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - (10 * MenuScale)
 						NextLine = Right(TxtLine, 1) + NextLine
 						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0.0))
-						StringRight = GetSubtitlesBoxLeft() + 10 + StringWidth(TxtLine)
+						StringRight = GetSubtitlesBoxLeft() + (10 * MenuScale) + StringWidth(TxtLine)
 					Wend
 					
 					Local OldTxtLine$ = TxtLine
@@ -68,14 +68,14 @@ Function UpdateSubtitles%()
 						NextLine = Right(TxtLine, 1) + NextLine
 						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0.0))
 						
-						Local NextStringRight# = GetSubtitlesBoxLeft() + 10 + StringWidth(NextLine)
+						Local NextStringRight# = GetSubtitlesBoxLeft() + (10 * MenuScale) + StringWidth(NextLine)
 						
 						; ~ If a very long single word exceeds the box size, split it.
-						If NextStringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - 10 Then
-							While NextStringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - 10
+						If NextStringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - (10 * MenuScale) Then
+							While NextStringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - (10 * MenuScale)
 								TxtLine = Right(NextLine, 1) + TxtLine
 								NextLine = Left(NextLine, Len(NextLine) - 1)
-								NextStringRight = GetSubtitlesBoxLeft() + 10 + StringWidth(NextLine)
+								NextStringRight = GetSubtitlesBoxLeft() + (10 * MenuScale) + StringWidth(NextLine)
 							Wend
 							Exit
 						EndIf
@@ -172,9 +172,9 @@ Function RenderSubtitles%()
 	Next
 	
 	Local BoxTop# = (GetSubtitlesBoxTop() + SubtitlesTextHeight) - SubtitlesTextHeight * Lines
-	Local BoxHeight# = (SubtitlesTextHeight * Lines) + 5
+	Local BoxHeight# = (SubtitlesTextHeight * Lines) + (5 * MenuScale)
 	
-	If Lines = 0 Then BoxHeight = BoxHeight - 5
+	If Lines = 0 Then BoxHeight = BoxHeight - (5 * MenuScale)
 	
 	SubtitlesCurrentBoxTop = CurveValue(BoxTop, SubtitlesCurrentBoxTop, 7.0)
 	SubtitlesCurrentBoxHeight = CurveValue(BoxHeight, SubtitlesCurrentBoxHeight, 7.0)
@@ -191,7 +191,7 @@ Function RenderSubtitles%()
 		
 		Local Txt$ = sub\Txt
 		
-		sub\yPos = BoxTop + (SubtitlesTextHeight * Lines) + 10
+		sub\yPos = BoxTop + (SubtitlesTextHeight * Lines) + (10 * MenuScale)
 		sub\CurrYPos = CurveValue(sub\yPos, sub\CurrYPos, 7.0)
 		
 		Local i%
@@ -208,7 +208,7 @@ Function RenderSubtitles%()
 			Color(sub\R, sub\G, sub\B)
 		EndIf
 		
-		Text2(GetSubtitlesBoxLeft() + 10, sub\CurrYPos, Txt)
+		Text2(GetSubtitlesBoxLeft() + (10 * MenuScale), sub\CurrYPos, Txt)
 	Next
 End Function
 
@@ -397,20 +397,20 @@ Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255,
 	Local BoxTop# = (GetSubtitlesBoxTop() + SubtitlesTextHeight) - SubtitlesTextHeight * Lines
 	Local BoxHeight# = SubtitlesTextHeight * Lines
 	
-	sub\yPos = (BoxTop + BoxHeight) - SubtitlesTextHeight + 10
-	sub\CurrYPos = (BoxTop + BoxHeight) - SubtitlesTextHeight + 10
+	sub\yPos = (BoxTop + BoxHeight) - SubtitlesTextHeight + (10 * MenuScale)
+	sub\CurrYPos = (BoxTop + BoxHeight) - SubtitlesTextHeight + (10 * MenuScale)
 	
 	Insert sub After Last SubtitlesMsg
 End Function
 
-Function CreateSubtitlesColor%(Name$, r%, g%, b%)
+Function CreateSubtitlesColor%(Name$, R%, G%, B%)
 	Local subcolor.SubtitlesColor
 	
 	subcolor.SubtitlesColor = New SubtitlesColor
 	subcolor\Name = Name
-	subcolor\R = r
-	subcolor\G = g
-	subcolor\B = b
+	subcolor\R = R
+	subcolor\G = G
+	subcolor\B = B
 End Function
 
 Function InitSubtitlesColors%()
