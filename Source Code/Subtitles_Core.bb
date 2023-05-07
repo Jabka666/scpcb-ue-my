@@ -158,7 +158,7 @@ Function GetSubtitlesBoxLeft#()
 End Function
 
 Function GetSubtitlesBoxTop#()
-	Return(opt\GraphicHeight * 0.8)
+	Return(opt\GraphicHeight * 0.82)
 End Function
 
 Function RenderSubtitles%()
@@ -420,7 +420,7 @@ Function InitSubtitlesColors%()
 	CreateSubtitlesColor("d", 225, 120, 0)
 	CreateSubtitlesColor("guard", 180, 180, 150)
 	CreateSubtitlesColor("janitor", 120, 140, 170)
-	CreateSubtitlesColor("mtf", 200, 60, 20)
+	CreateSubtitlesColor("mtf", 100, 60, 45)
 	CreateSubtitlesColor("nazi", 130, 0, 20)
 	CreateSubtitlesColor("035angry", 150, 0, 0)
 	CreateSubtitlesColor("049", 50, 70, 70)
