@@ -1,5 +1,8 @@
 v1.1.4
 
+Launcher:
+- Added «Primary Driver» string for GFX driver selector.
+
 General:
 - Finished subtitles.
 
