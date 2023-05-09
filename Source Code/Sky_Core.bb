@@ -19,7 +19,7 @@ Function CreateSky%(FileName$, Parent% = 0)
 			Next
 			AddTriangle(s, 0, 1, 2)
 			AddTriangle(s, 0, 2, 3)
-			FreeBrush(b)
+			FreeBrush(b) : b = 0
 		EndIf
 	Next
 	FlipMesh(Sky)

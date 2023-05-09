@@ -744,7 +744,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	AddMesh(Temp1i, Alpha)
 	FreeEntity(Temp1i) : Temp1i = 0
 	
-	If Brush <> 0 Then FreeBrush(Brush)
+	If Brush <> 0 Then FreeBrush(Brush) : Brush = 0
 	
 	AddMesh(Alpha, Opaque)
 	FreeEntity(Alpha) : Alpha = 0
@@ -3591,7 +3591,7 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 				EndIf
 				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
 			EndIf
-			FreeBrush(b)
+			FreeBrush(b) : b = 0
 		EndIf
 	Next
 	mon_I\UpdateCheckpoint[(1 - LCZ)] = True
@@ -3617,7 +3617,7 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 					EndIf
 					If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
 				EndIf
-				FreeBrush(b)
+				FreeBrush(b) : b = 0
 			EndIf
 		Next
 		mon_I\UpdateCheckpoint[(1 - LCZ)] = False

@@ -3861,7 +3861,7 @@ Function UpdateEvents%()
 							TexName = StripPath(TextureName(BT))
 							
 							If Lower(TexName) <> "scp_1048.png" Then PaintSurface(SF, Brush)
-							FreeBrush(b)
+							FreeBrush(b) : b = 0
 						Next
 						FreeBrush(Brush) : Brush = 0
 						
@@ -9754,10 +9754,10 @@ Function Update035Label%(OBJ%)
 		TexName = StripPath(TextureName(t1))
 		
 		If Lower(TexName) <> "cable_white.jpg" Then PaintSurface(SF, Brush)
-		FreeBrush(b)
+		FreeBrush(b) : b = 0
 	Next
 	DeleteSingleTextureEntryFromCache(Tex)
-	FreeBrush(Brush)
+	FreeBrush(Brush) : Brush = 0
 	
 	For itt.ItemTemplates = Each ItemTemplates
 		If itt\Name = "Document SCP-035" Then

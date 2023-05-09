@@ -111,7 +111,7 @@ Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	Next
 	
 	; ~ Free the scratch image
-	FreeImage(ScratchImage)
+	FreeImage(ScratchImage) : ScratchImage = 0
 	
 	; ~ Return the new image
 	Return(DestImage)

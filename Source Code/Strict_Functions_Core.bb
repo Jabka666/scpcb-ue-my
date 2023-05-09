@@ -322,12 +322,12 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 					Else
 						BrushTexture(b, MissingTexture, 0, 1)
 					EndIf
-					FreeTexture(t2)
+					FreeTexture(t2) : t2 = 0
 				EndIf
 				PaintSurface(SF, b)
-				FreeTexture(t1)
+				FreeTexture(t1) : t1 = 0
 			EndIf
-			FreeBrush(b)
+			FreeBrush(b) : b = 0
 		EndIf
 	Next
 	Return(Tmp)
@@ -361,9 +361,9 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 					BrushTexture(b, MissingTexture, 0, 0)
 				EndIf
 				PaintSurface(SF, b)
-				FreeTexture(t1)
+				FreeTexture(t1) : t1 = 0
 			EndIf
-			FreeBrush(b)
+			FreeBrush(b) : b = 0
 		EndIf
 	Next
 	Return(Tmp)
@@ -494,4 +494,4 @@ Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS
