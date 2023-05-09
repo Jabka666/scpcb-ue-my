@@ -16,6 +16,7 @@ Bug Fixes:
 - Fixed SCP-939's texture which is too bright.
 - Fixed wrong textures are applied for SCP-1048's drawings.
 - Fixed deaf effect.
+- Fixed SCP-427's texture.
 
 - Some fixes for room items, hitboxes and textures.
 

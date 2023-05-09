@@ -3353,7 +3353,7 @@ Function UpdateGUI%()
 								PlaySound_Strict(HorrorSFX[14])
 								;[End Block]
 						End Select
-						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face.png")
+						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
 						e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
 					Else
 						wi\IsNVGBlinking = True
@@ -3372,7 +3372,7 @@ Function UpdateGUI%()
 							If (Not e\Img2) Then
 								StopChannel(e\SoundCHN) : e\SoundCHN = 0
 								PlaySound_Strict(e\Sound2, True)
-								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
+								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
 								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
 							Else
 								If (Not ChannelPlaying(e\SoundCHN)) Then
