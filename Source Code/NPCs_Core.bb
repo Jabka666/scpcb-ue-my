@@ -758,7 +758,7 @@ Function UpdateNPCs%()
 																		PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
 																		OpenCloseDoor(d, True)
 																	EndIf
-																	FreeEntity(Pvt) : Pvt = 0
+																	FreeEntity(Pvt)
 																EndIf
 															EndIf
 														EndIf
@@ -1323,7 +1323,7 @@ Function UpdateNPCs%()
 													
 													de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.6))
 												Next
-												FreeEntity(Pvt) : Pvt = 0
+												FreeEntity(Pvt)
 												Kill(True) : me\KillAnim = 1
 											EndIf
 										EndIf
@@ -2204,7 +2204,7 @@ Function UpdateNPCs%()
 									If n\Frame < 302.0 Then AnimateNPC(n, 302.0, 344.0, 0.35)
 								EndIf
 								
-								FreeEntity(Pvt) : Pvt = 0
+								FreeEntity(Pvt)
 							Else
 								AnimateNPC(n, 302.0, 344.0, 0.35)
 							EndIf
@@ -2372,7 +2372,7 @@ Function UpdateNPCs%()
 								Else
 									If n\Frame < 302.0 Then AnimateNPC(n, 302.0, 344.0, 0.35)
 								EndIf
-								FreeEntity(Pvt) : Pvt = 0
+								FreeEntity(Pvt)
 							Else
 								If n\PathStatus = 1 Then
 									If n\Path[n\PathLocation] = Null Then
@@ -2461,7 +2461,7 @@ Function UpdateNPCs%()
 						EndIf
 						RotateEntity(Pvt, Min(EntityPitch(Pvt), 40.0), EntityYaw(n\Collider), 0.0)
 						
-						FreeEntity(Pvt) : Pvt = 0
+						FreeEntity(Pvt)
 						;[End Block]
 					Case 13.0
 						;[Block]
@@ -2842,7 +2842,7 @@ Function UpdateNPCs%()
 							Else
 								RotateEntity(n\Collider, 0.0, EntityYaw(me\Collider) + 80.0, 0.0)
 							EndIf
-							FreeEntity(Temp) : Temp = 0
+							FreeEntity(Temp)
 							
 							MoveEntity(n\Collider, 0.0, 0.0, 0.03 * fps\Factor[0])
 						EndIf
@@ -2952,7 +2952,7 @@ Function UpdateNPCs%()
 														EndIf
 													EndIf
 												EndIf
-												FreeEntity(Pvt) : Pvt = 0
+												FreeEntity(Pvt)
 											EndIf
 										EndIf
 									Else
@@ -2964,7 +2964,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 						EndIf
-						If n\State = 3 Then FreeEntity(Target) : Target = 0
+						If n\State = 3 Then FreeEntity(Target)
 						;[End Block]
 					Case 4.0 ; ~ Crashes
 						;[Block]
@@ -2987,7 +2987,7 @@ Function UpdateNPCs%()
 								PlaySound_Strict(LoadTempSound("SFX\Character\Apache\Crash" + Rand(2) + ".ogg"))
 								n\State = 5.0
 							EndIf
-							FreeEntity(Target) : Target = 0
+							FreeEntity(Target)
 						EndIf
 						;[End Block]
 				End Select
@@ -3448,7 +3448,7 @@ Function UpdateNPCs%()
 									PointEntity(Pvt, n\OBJ2)
 									MoveEntity(Pvt, 0.0, 0.0, 8.0)
 									PositionEntity(n\OBJ2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
-									FreeEntity(Pvt) : Pvt = 0
+									FreeEntity(Pvt)
 								Else
 									If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 								EndIf
@@ -4837,7 +4837,7 @@ Function UpdateMTFUnit%(n.NPCs)
 												If r\RoomDoors[0]\Open Then OpenCloseDoor(r\RoomDoors[0])
 											EndIf
 											
-											FreeEntity(Pvt) : Pvt = 0
+											FreeEntity(Pvt)
 											
 											If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And (Not FoundChamber) Then
 												x = r\x + 4736.0 * RoomScale
@@ -4943,7 +4943,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0)
 							EndIf
 							
-							FreeEntity(Pvt) : Pvt = 0
+							FreeEntity(Pvt)
 						Else
 							n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0) ; ~ Timer goes down fast
 							If n\MTFLeader = Null Then
@@ -5158,7 +5158,7 @@ Function UpdateMTFUnit%(n.NPCs)
 										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
 										n\Reload = 7.0
 										
-										FreeEntity(Pvt) : Pvt = 0
+										FreeEntity(Pvt)
 										
 										msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 										
@@ -5752,7 +5752,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						If n\PathStatus = 1 And n\Reload <= 0.0 Then Dist = DistanceSquared(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider))
 					EndIf
 					
-					FreeEntity(Target) : Target = 0
+					FreeEntity(Target)
 					
 					n\Angle = EntityYaw(n\Collider)
 					;[End Block]
@@ -5780,7 +5780,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.9)
 								n\Reload = 7.0
 								
-								FreeEntity(Pvt) : Pvt = 0
+								FreeEntity(Pvt)
 								
 								msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 								
@@ -5813,7 +5813,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						p\AlphaChange = -0.15
 						TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 						
-						FreeEntity(Pvt) : Pvt = 0
+						FreeEntity(Pvt)
 						n\Reload = 7.0
 					EndIf
 					;[End Block]
@@ -5964,7 +5964,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								EndIf
 								n\Reload = 7.0
 								
-								FreeEntity(Pvt) : Pvt = 0
+								FreeEntity(Pvt)
 							EndIf
 						EndIf
 						n\PathStatus = 0
@@ -6074,7 +6074,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								AnimateNPC(n, 79.0, 310.0, 0.35)
 							EndIf
 							
-							FreeEntity(Target) : Target = 0
+							FreeEntity(Target)
 						Else
 							If PlayerRoom\RoomTemplate\Name = "gate_b" Then n\State3 = Max(0.0, n\State3 - fps\Factor[0])
 							
@@ -6265,7 +6265,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 			EndIf
 		EndIf
 	Next
-	FreeEntity(Temp) : Temp = 0
+	FreeEntity(Temp)
 	
 	If StartPoint = Null Then Return(2)
 	StartPoint\State = 1
@@ -6283,7 +6283,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 			EndPoint = w
 		EndIf
 	Next
-	FreeEntity(Pvt) : Pvt = 0
+	FreeEntity(Pvt)
 	
 	If EndPoint = StartPoint Then
 		If Dist < 0.4 Then
@@ -6564,7 +6564,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
 			EndIf
 		EndIf
-		FreeEntity(Pvt) : Pvt = 0
+		FreeEntity(Pvt)
 	EndIf
 End Function
 
@@ -6802,7 +6802,7 @@ Function ManipulateNPCBones%()
 						RotateEntity(Bone, EntityPitch(Bone) + n\BonePitch, EntityYaw(Bone) + n\BoneYaw, EntityRoll(Bone) + n\BoneRoll)
 						;[End Block]
 				End Select
-				FreeEntity(Pvt) : Pvt = 0
+				FreeEntity(Pvt)
 			EndIf
 		EndIf
 	Next

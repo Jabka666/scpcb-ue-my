@@ -347,8 +347,8 @@ Function RenderWorld2%(Tween#)
 				EndIf
 			Next
 			
-			FreeEntity(Temp) : Temp = 0
-			FreeEntity(Temp2) : Temp2 = 0
+			FreeEntity(Temp)
+			FreeEntity(Temp2)
 			
 			Color(0, 0, 55)
 		ElseIf wi\NightVision = 1

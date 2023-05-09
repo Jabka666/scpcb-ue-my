@@ -763,7 +763,7 @@ Function LoadGame%(File$)
 		n\ModelScaleY = ReadFloat(f)
 		n\ModelScaleZ = ReadFloat(f)
 		If n\Model <> "" Then
-			FreeEntity(n\OBJ) : n\OBJ = 0
+			FreeEntity(n\OBJ)
 			n\OBJ = LoadAnimMesh_Strict(n\Model)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
 			SetAnimTime(n\OBJ, Frame)
@@ -1613,7 +1613,7 @@ Function LoadGameQuick%(File$)
 		n\ModelScaleY = ReadFloat(f)
 		n\ModelScaleZ = ReadFloat(f)
 		If n\Model <> "" Then
-			FreeEntity(n\OBJ) : n\OBJ = 0
+			FreeEntity(n\OBJ)
 			n\OBJ = LoadAnimMesh_Strict(n\Model)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
 			SetAnimTime(n\OBJ, Frame)
@@ -2029,7 +2029,7 @@ Function LoadGameQuick%(File$)
 					; ~ The Gate A wall pieces
 					xTemp = EntityX(r\Objects[13], True)
 					zTemp = EntityZ(r\Objects[13], True)
-					FreeEntity(r\Objects[13]) : r\Objects[13] = 0
+					FreeEntity(r\Objects[13])
 					r\Objects[13] = LoadMesh_Strict("GFX\Map\gateawall1.b3d", r\OBJ)
 					PositionEntity(r\Objects[13], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)
 					EntityColor(r\Objects[13], 25.0, 25.0, 25.0)
@@ -2037,7 +2037,7 @@ Function LoadGameQuick%(File$)
 					
 					xTemp = EntityX(r\Objects[14], True)
 					zTemp = EntityZ(r\Objects[14], True)
-					FreeEntity(r\Objects[14]) : r\Objects[14] = 0
+					FreeEntity(r\Objects[14])
 					r\Objects[14] = LoadMesh_Strict("GFX\Map\gateawall2.b3d", r\OBJ)
 					PositionEntity(r\Objects[14], xTemp, r\y - 1045.0 * RoomScale, zTemp, True)
 					EntityColor(r\Objects[14], 25.0, 25.0, 25.0)

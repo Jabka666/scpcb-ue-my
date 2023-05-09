@@ -2935,7 +2935,7 @@ Function UpdateMoving%()
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			
-			FreeEntity(Pvt) : Pvt = 0
+			FreeEntity(Pvt)
 		EndIf
 		
 		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
@@ -3437,7 +3437,7 @@ Function UpdateGUI%()
 			MoveEntity(Pvt, 0.0, 0.0, 0.22)
 			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 			PointEntity(Camera, d_I\ClosestButton)
-			FreeEntity(Pvt) : Pvt = 0
+			FreeEntity(Pvt)
 			
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
 			ProjY = ProjectedY()
@@ -6121,7 +6121,7 @@ Function RenderGUI%()
 		If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 		
-		FreeEntity(Temp) : Temp = 0
+		FreeEntity(Temp)
 		
 		DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
 	EndIf
@@ -6190,7 +6190,7 @@ Function RenderGUI%()
 			MoveEntity(Pvt, 0.0, 0.0, 0.22)
 			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 			PointEntity(Camera, d_I\ClosestButton)
-			FreeEntity(Pvt) : Pvt = 0
+			FreeEntity(Pvt)
 			
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
 			ProjY = ProjectedY()
@@ -8985,7 +8985,7 @@ Function Use427%()
 			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
-			FreeEntity(Pvt) : Pvt = 0
+			FreeEntity(Pvt)
 			me\BlurTimer = 800.0
 		EndIf
 		If I_427\Timer >= 70.0 * 420.0 Then
@@ -9194,7 +9194,7 @@ Function UpdateVomit%()
 			de.Decals = CreateDecal(DECAL_BLOOD_4, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
 			de\SizeChange = 0.001 : de\MaxSize = 0.6
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			FreeEntity(Pvt) : Pvt = 0
+			FreeEntity(Pvt)
 			me\Vomit = True
 		EndIf
 		
@@ -9626,7 +9626,7 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	Else
 		PositionEntity(Entity, x, y, z, IsGlobal)
 	EndIf
-	FreeEntity(Pvt) : Pvt = 0
+	FreeEntity(Pvt)
 	ResetEntity(Entity)
 End Function
 
