@@ -509,7 +509,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			
 			FlipMesh(FlipChild)
 			AddMesh(FlipChild, ChildMesh)
-			FreeEntity(FlipChild)
+			FreeEntity(FlipChild) : FlipChild = 0
 		EndIf
 	Next
 	
@@ -742,12 +742,12 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	Temp1i = CopyMesh(Alpha)
 	FlipMesh(Temp1i)
 	AddMesh(Temp1i, Alpha)
-	FreeEntity(Temp1i)
+	FreeEntity(Temp1i) : Temp1i = 0
 	
 	If Brush <> 0 Then FreeBrush(Brush)
 	
 	AddMesh(Alpha, Opaque)
-	FreeEntity(Alpha)
+	FreeEntity(Alpha) : Alpha = 0
 	
 	EntityFX(Opaque, 3)
 	
@@ -2385,7 +2385,7 @@ Function UpdateDoors%()
 										RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 										ScaleSprite(p\OBJ, p\Size, p\Size)
 										EntityOrder(p\OBJ, -1)
-										FreeEntity(Pvt)
+										FreeEntity(Pvt) : Pvt = 0
 									Next
 								EndIf
 							EndIf
@@ -3385,7 +3385,7 @@ Function UpdateSecurityCams%()
 							CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
 							CameraPitch = CameraPitch - 90.0
 							
-							FreeEntity(Pvt)
+							FreeEntity(Pvt) : Pvt = 0
 							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4) Then
 								If me\Sanity < -800.0 Then
 									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
@@ -3550,7 +3550,7 @@ Function UpdateMonitorSaving%()
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
 						CameraPitch = CameraPitch - 90.0
-						FreeEntity(Pvt)
+						FreeEntity(Pvt) : Pvt = 0
 					EndIf
 				EndIf
 			Else
