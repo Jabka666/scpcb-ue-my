@@ -3711,11 +3711,11 @@ Function UpdateNPCs%()
 											Case 4
 												;[Block]
 												If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
-													me\BigCameraShake = 5.0
 													de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
-													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
-													If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.3, 0.5), 0.0, 200.0)
 												EndIf
+												me\BigCameraShake = 5.0
+												PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
+												If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.3, 0.5), 0.0, 200.0)
 												;[End Block]
 											Case 5, 6 ; ~ No effect
 												;[Block]
