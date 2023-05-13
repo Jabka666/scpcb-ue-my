@@ -584,12 +584,12 @@ Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 		Local ColorG# = ColorGreen()
 		Local ColorB# = ColorBlue()
 		
-		If ColorR = 0.0 And ColorG = 0.0 And ColorB = 0.0 Then
+		If ColorR = 0.0 And ColorG = 0.0 And ColorB = 1.0 Then
 			Color(200, 200, 200)
 		Else
 			Color(55, 55, 55)
 		EndIf
-		Text(x + 1, y + TextOffset + 1, Txt, AlignX, AlignY)
+		Text(x + (2 * MenuScale), y + TextOffset + (2 * MenuScale), Txt, AlignX, AlignY)
 		Color(ColorR, ColorG, ColorB)
 		Text(x, y + TextOffset, Txt, AlignX, AlignY)
 	Else

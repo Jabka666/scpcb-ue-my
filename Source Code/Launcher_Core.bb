@@ -67,7 +67,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Local y% = LauncherHeight - 269
 		
 		For i = 0 To lnchr\GFXModes - 1
-			Color(0, 0, 0)
+			Color(0, 0, 1)
 			If lnchr\SelectedGFXMode = i Then Rect(x - 1, y - 5, 100, 20, False)
 			
 			Text2(x, y, (lnchr\GFXModeWidths[i] + "x" + lnchr\GFXModeHeights[i]))
@@ -354,7 +354,7 @@ Function LanguageSelector%()
 			DrawImage(LanguageBG, -20, -195)
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
-				Color(0, 0, 0)
+				Color(0, 0, 1)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
 				If MouseOn(430, y - CurrFontHeight, 21, 21) Then
 					DrawImage(ButtonImages, 410, y - 195 - CurrFontHeight, 5)
@@ -369,7 +369,7 @@ Function LanguageSelector%()
 					Rect(0, y - 195 - CurrFontHeight, 430, 20, False)
 				EndIf
 				If SelectedLanguage <> Null And lan = SelectedLanguage Then
-					Color(0, 0, 0)
+					Color(0, 0, 1)
 					Rect(0, y - 195 - CurrFontHeight, 430, 20, False)
 				EndIf
 				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 432, 20) Then
@@ -390,7 +390,7 @@ Function LanguageSelector%()
 			y = LauncherHeight - 280
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
-				Color(0, 0, 0)
+				Color(0, 0, 1)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", LauncherWidth - 619, y, 432, lan\FlagImg)
 				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 430, 20) Then
 					DrawImage(ButtonImages, LauncherWidth - 210, y - 4, 5)
@@ -405,7 +405,7 @@ Function LanguageSelector%()
 					Rect(LauncherWidth - 620, y - CurrFontHeight, 430, 20, False)
 				EndIf
 				If SelectedLanguage <> Null And lan = SelectedLanguage Then
-					Color(0, 0, 0)
+					Color(0, 0, 1)
 					Rect(LauncherWidth - 620, y - CurrFontHeight, 430, 20, False)
 				EndIf
 				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 432, 20) Then
@@ -434,7 +434,7 @@ Function LanguageSelector%()
 			InfoBoxContent = GetLocalString("language", "done")
 		EndIf
 		
-		Color(0, 0, 0)
+		Color(0, 0, 1)
 		RowText(InfoBoxContent, LauncherWidth - 159, LauncherHeight - 281, 151, 102)
 		
 		If SelectedLanguage <> Null Then
