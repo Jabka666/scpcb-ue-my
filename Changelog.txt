@@ -17,6 +17,8 @@ Bug Fixes:
 - Fixed wrong textures are applied for SCP-1048's drawings.
 - Fixed deaf effect.
 - Fixed SCP-427's texture.
+- Fixed SCP-066's attack not working in a room with "DisableDecals" parameter.
+- Fixed SCP-106's appearance state not reducing in a room with "DisableDecals" parameter.
 
 - Some fixes for room items, hitboxes and textures.
 
