@@ -921,6 +921,7 @@ Function UpdateNPCs%()
 								If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
+									EntityParent(de\OBJ, PlayerRoom\OBJ)
 								EndIf
 								
 								n\PrevY = EntityY(me\Collider)
@@ -1320,6 +1321,7 @@ Function UpdateNPCs%()
 													EntityPick(Pvt, 0.3)
 													
 													de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.6))
+													EntityParent(de\OBJ, PlayerRoom\OBJ)
 												Next
 												FreeEntity(Pvt) : Pvt = 0
 												Kill(True) : me\KillAnim = 1
@@ -3710,6 +3712,7 @@ Function UpdateNPCs%()
 												;[Block]
 												If (Not PlayerRoom\RoomTemplate\DisableDecals) Then
 													de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
+													EntityParent(de\OBJ, PlayerRoom\OBJ)
 												EndIf
 												me\BigCameraShake = 5.0
 												PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
