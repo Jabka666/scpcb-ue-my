@@ -1,8 +1,39 @@
 Global SubFile$
 
-Global SubtitlesTextHeight%
-Global SubtitlesCurrentBoxTop#
-Global SubtitlesCurrentBoxHeight#
+Type SubtitlesAssets
+	Field TextHeight%
+	Field CurrentBoxTop#
+	Field CurrentBoxHeight#
+	Field BoxWidth#, BoxLeft#, BoxTop#
+End Type
+
+Global subassets.SubtitlesAssets
+
+Function InitSubtitlesAssets%()
+	subassets.SubtitlesAssets = New SubtitlesAssets
+	
+	subassets\BoxWidth = opt\GraphicWidth * 0.75
+	subassets\BoxLeft = mo\Viewport_Center_X + 1 - (subassets\BoxWidth / 2)
+	subassets\BoxTop = opt\GraphicHeight * 0.82
+	
+	SetFont2(fo\FontID[Font_Default])
+	subassets\TextHeight = FontHeight() * 2.5
+	
+	CreateSubtitlesColor("announcement", 130, 130, 130)
+	CreateSubtitlesColor("ci", 0, 130, 0)
+	CreateSubtitlesColor("crew", 135, 160, 130)
+	CreateSubtitlesColor("d", 225, 120, 0)
+	CreateSubtitlesColor("guard", 180, 180, 150)
+	CreateSubtitlesColor("janitor", 120, 140, 170)
+	CreateSubtitlesColor("mtf", 100, 60, 45)
+	CreateSubtitlesColor("nazi", 130, 0, 20)
+	CreateSubtitlesColor("035angry", 150, 0, 0)
+	CreateSubtitlesColor("049", 50, 70, 70)
+	CreateSubtitlesColor("066", 180, 35, 60)
+	CreateSubtitlesColor("106", 10, 5, 5)
+	CreateSubtitlesColor("682", 180, 160, 135)
+	CreateSubtitlesColor("860-2", 110, 55, 80)
+End Function
 
 Global SubtitlesInit%
 
@@ -51,15 +82,15 @@ Function UpdateSubtitles%()
 			
 			; ~ Split long lines of text into multiple lines.
 			While Len(TxtLine) > 0
-				Local StringRight# = GetSubtitlesBoxLeft() + (10 * MenuScale) + StringWidth(TxtLine)
+				Local StringRight# = subassets\BoxLeft + (10 * MenuScale) + StringWidth(TxtLine)
 				
-				If StringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - (10 * MenuScale) Then
+				If StringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale) Then
 					Local NextLine$ = ""
 					
-					While StringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - (10 * MenuScale)
+					While StringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
 						NextLine = Right(TxtLine, 1) + NextLine
 						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0.0))
-						StringRight = GetSubtitlesBoxLeft() + (10 * MenuScale) + StringWidth(TxtLine)
+						StringRight = subassets\BoxLeft + (10 * MenuScale) + StringWidth(TxtLine)
 					Wend
 					
 					Local OldTxtLine$ = TxtLine
@@ -68,14 +99,14 @@ Function UpdateSubtitles%()
 						NextLine = Right(TxtLine, 1) + NextLine
 						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0.0))
 						
-						Local NextStringRight# = GetSubtitlesBoxLeft() + (10 * MenuScale) + StringWidth(NextLine)
+						Local NextStringRight# = subassets\BoxLeft + (10 * MenuScale) + StringWidth(NextLine)
 						
 						; ~ If a very long single word exceeds the box size, split it.
-						If NextStringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - (10 * MenuScale) Then
-							While NextStringRight > GetSubtitlesBoxLeft() + GetSubtitlesBoxWidth() - (10 * MenuScale)
+						If NextStringRight > subassets\BoxLeft + subassets\BoxWidth- (10 * MenuScale) Then
+							While NextStringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
 								TxtLine = Right(NextLine, 1) + TxtLine
 								NextLine = Left(NextLine, Len(NextLine) - 1)
-								NextStringRight = GetSubtitlesBoxLeft() + (10 * MenuScale) + StringWidth(NextLine)
+								NextStringRight = subassets\BoxLeft + (10 * MenuScale) + StringWidth(NextLine)
 							Wend
 							Exit
 						EndIf
@@ -89,8 +120,8 @@ Function UpdateSubtitles%()
 					
 					; ~ Move previously added lines upwards
 					If HasSplit Then
-						lastSubtitles\yPos = lastSubtitles\yPos - SubtitlesTextHeight
-						lastSubtitles\CurrYPos = lastSubtitles\CurrYPos - SubtitlesTextHeight
+						lastSubtitles\yPos = lastSubtitles\yPos - subassets\TextHeight
+						lastSubtitles\CurrYPos = lastSubtitles\CurrYPos - subassets\TextHeight
 						
 						If Before lastSubtitles <> Null Then lastSubtitles = Before lastSubtitles
 					EndIf
@@ -149,18 +180,6 @@ Function SubtitlesGetINIFileSectionLocation%(Section$)
 	SeekFile(SubFile, 0)
 End Function
 
-Function GetSubtitlesBoxWidth#()
-	Return(opt\GraphicWidth * 0.75)
-End Function
-
-Function GetSubtitlesBoxLeft#()
-	Return(mo\Viewport_Center_X + 1 - (GetSubtitlesBoxWidth() / 2))
-End Function
-
-Function GetSubtitlesBoxTop#()
-	Return(opt\GraphicHeight * 0.82)
-End Function
-
 Function RenderSubtitles%()
 	If (Not opt\EnableSubtitles) Then Return
 	
@@ -171,17 +190,17 @@ Function RenderSubtitles%()
 		Lines = Lines + 1
 	Next
 	
-	Local BoxTop# = (GetSubtitlesBoxTop() + SubtitlesTextHeight) - SubtitlesTextHeight * Lines
-	Local BoxHeight# = (SubtitlesTextHeight * Lines) + (5 * MenuScale)
+	Local BoxTop# = (subassets\BoxTop + subassets\TextHeight) - subassets\TextHeight * Lines
+	Local BoxHeight# = (subassets\TextHeight * Lines) + (5 * MenuScale)
 	
 	If Lines = 0 Then BoxHeight = BoxHeight - (5 * MenuScale)
 	
-	SubtitlesCurrentBoxTop = CurveValue(BoxTop, SubtitlesCurrentBoxTop, 7.0)
-	SubtitlesCurrentBoxHeight = CurveValue(BoxHeight, SubtitlesCurrentBoxHeight, 7.0)
+	subassets\CurrentBoxTop = CurveValue(BoxTop, subassets\CurrentBoxTop, 7.0)
+	subassets\CurrentBoxHeight = CurveValue(BoxHeight, subassets\CurrentBoxHeight, 7.0)
 	
 	; ~ Render a box
 	Color(20, 20, 20)
-	Rect(GetSubtitlesBoxLeft(), SubtitlesCurrentBoxTop, GetSubtitlesBoxWidth(), SubtitlesCurrentBoxHeight)
+	Rect(subassets\BoxLeft, subassets\CurrentBoxTop, subassets\BoxWidth, subassets\CurrentBoxHeight)
 	
 	; ~ Render a text
 	Lines = -1
@@ -191,13 +210,13 @@ Function RenderSubtitles%()
 		
 		Local Txt$ = sub\Txt
 		
-		sub\yPos = BoxTop + (SubtitlesTextHeight * Lines) + (10 * MenuScale)
+		sub\yPos = BoxTop + (subassets\TextHeight * Lines) + (10 * MenuScale)
 		sub\CurrYPos = CurveValue(sub\yPos, sub\CurrYPos, 7.0)
 		
 		Local i%
 		
 		If sub\IsGlitch Then
-			For i = 0 To Rand(30, 60)
+			For i = 0 To Rand(10, 15)
 				Txt = Replace(sub\Txt, Mid(sub\Txt, Rand(1, Len(Txt) - 1), 1), Chr(Rand(130, 250)))
 			Next
 		EndIf
@@ -207,8 +226,7 @@ Function RenderSubtitles%()
 		Else
 			Color(sub\R, sub\G, sub\B)
 		EndIf
-		
-		Text2(GetSubtitlesBoxLeft() + (10 * MenuScale), sub\CurrYPos, Txt)
+		Text2(subassets\BoxLeft + (10 * MenuScale), sub\CurrYPos, Txt)
 	Next
 End Function
 
@@ -310,7 +328,6 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 				EndIf
 			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
 			SeekFile(SubFile, 0)
-			
 			Return
 		EndIf
 	Wend
@@ -335,8 +352,6 @@ Function ClearSubtitles%()
 End Function
 
 Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#)
-	If (Not SubtitlesInit) Then Return
-	
 	If Txt = "" Lor Left(Txt, 1) = "[" Then Return
 	
 	Local queue.QueuedSubtitlesMsg
@@ -347,9 +362,7 @@ Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#
 	
 	queue\Txt = Txt
 	
-	queue\R = 255
-	queue\G = 255
-	queue\B = 255
+	queue\R = 255 : queue\G = 255 : queue\B = 255
 	queue\IsGlitch = False
 	
 	queue\TimeLeft = TimeLeft * 70.0
@@ -394,11 +407,11 @@ Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255,
 		Lines = Lines + 1
 	Next
 	
-	Local BoxTop# = (GetSubtitlesBoxTop() + SubtitlesTextHeight) - SubtitlesTextHeight * Lines
-	Local BoxHeight# = SubtitlesTextHeight * Lines
+	Local BoxTop# = (subassets\BoxTop + subassets\TextHeight) - subassets\TextHeight * Lines
+	Local BoxHeight# = subassets\TextHeight * Lines
 	
-	sub\yPos = (BoxTop + BoxHeight) - SubtitlesTextHeight + (10 * MenuScale)
-	sub\CurrYPos = (BoxTop + BoxHeight) - SubtitlesTextHeight + (10 * MenuScale)
+	sub\yPos = (BoxTop + BoxHeight) - subassets\TextHeight + (10 * MenuScale)
+	sub\CurrYPos = (BoxTop + BoxHeight) - subassets\TextHeight + (10 * MenuScale)
 	
 	Insert sub After Last SubtitlesMsg
 End Function
@@ -413,38 +426,21 @@ Function CreateSubtitlesColor%(Name$, R%, G%, B%)
 	subcolor\B = B
 End Function
 
-Function InitSubtitlesColors%()
-	CreateSubtitlesColor("announcement", 130, 130, 130)
-	CreateSubtitlesColor("ci", 0, 130, 0)
-	CreateSubtitlesColor("crew", 135, 160, 130)
-	CreateSubtitlesColor("d", 225, 120, 0)
-	CreateSubtitlesColor("guard", 180, 180, 150)
-	CreateSubtitlesColor("janitor", 120, 140, 170)
-	CreateSubtitlesColor("mtf", 100, 60, 45)
-	CreateSubtitlesColor("nazi", 130, 0, 20)
-	CreateSubtitlesColor("035angry", 150, 0, 0)
-	CreateSubtitlesColor("049", 50, 70, 70)
-	CreateSubtitlesColor("066", 180, 35, 60)
-	CreateSubtitlesColor("106", 10, 5, 5)
-	CreateSubtitlesColor("682", 180, 160, 135)
-	CreateSubtitlesColor("860-2", 110, 55, 80)
-End Function
-
-Function ClearSubtitlesColor%()
-	Local subcolor.SubtitlesColor
+Function DeInitSubtitlesAssets%()
+	Local subcolor.SubtitlesColor, snd.Sound
 	
 	For subcolor.SubtitlesColor = Each SubtitlesColor
 		Delete(subcolor)
 	Next
+	For snd.Sound = Each Sound
+		RemoveSubtitlesToken(snd)
+	Next
+	Delete(subassets)
 End Function
-
-InitSubtitlesColors()
-
-SetFont2(fo\FontID[Font_Default])
-SubtitlesTextHeight = FontHeight() * 2.5
 
 SubFile = ReadFile_Strict(SubtitlesFile)
 
 SubtitlesInit = True
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

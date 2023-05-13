@@ -1668,6 +1668,8 @@ Function LoadEntities%()
 	
 	t.Textures = New Textures
 	
+	InitSubtitlesAssets()
+	
 	RenderLoading(3, GetLocalString("loading", "player"))
 	
 	SoundEmitter = CreatePivot()

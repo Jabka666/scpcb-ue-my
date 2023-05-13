@@ -7213,7 +7213,9 @@ Function UpdateMenu%()
 						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						
 						If opt\EnableSubtitles Then
-							opt\OverrideSubColor = UpdateMenuTick(x, y+(30*MenuScale), opt\OverrideSubColor)
+							y = y + (30 * MenuScale)
+							
+							opt\OverrideSubColor = UpdateMenuTick(x, y, opt\OverrideSubColor)
 						EndIf
 						
 						If PrevEnableSubtitles Lor PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor)
@@ -7221,7 +7223,7 @@ Function UpdateMenu%()
 						If opt\EnableSubtitles And opt\OverrideSubColor Then
 							y = y + (35 * MenuScale)
 							
-							UpdateMenuPalette(x - (43 * MenuScale), y+(15*MenuScale))
+							UpdateMenuPalette(x - (43 * MenuScale), y + (15 * MenuScale))
 							
 							y = y + (30 * MenuScale)
 							
@@ -8450,6 +8452,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(I_714)
 	Delete(I_1025)
 	Delete(I_1499)
+	DeInitSubtitlesAssets()
 	
 	ClearCheats()
 	WireFrameState = 0
