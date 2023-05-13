@@ -3927,30 +3927,37 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = CreateDoor(r\x, r\y, r\z - 640.0 * RoomScale, 0.0, r, (I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5), DEFAULT_DOOR, KEY_CARD_4)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z - 210.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z + 238.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z + 185.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z + 455.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 240.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 510.0 * RoomScale)
 			
-			For i = 0 To 2
+			; ~ Dead Guard's spawnpoint
+			r\Objects[3] = CreatePivot()
+			PositionEntity(r\Objects[3], r\x - 281.0 * RoomScale, r\y, r\z - 210.0 * RoomScale)
+			
+			For i = 0 To 3
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
-			sc.SecurityCams = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z - 556.0 * RoomScale, r)
-			sc\Angle = 0.0 : sc\Turn = 30.0
+			sc.SecurityCams = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z + 424.0 * RoomScale, r)
+			sc\Angle = 180.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			
-			it.Items = CreateItem("Document SCP-005", "paper", r\x + 338.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 500.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-005", "paper", r\x + 504.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 500.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If I_005\ChanceToSpawn < 3 Then
-				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
+				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
+				
+				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+				EntityParent(de\OBJ, r\OBJ)
 			ElseIf I_005\ChanceToSpawn >= 5
-				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z - 210.0 * RoomScale)
+				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
