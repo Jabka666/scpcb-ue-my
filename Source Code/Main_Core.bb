@@ -7211,6 +7211,9 @@ Function UpdateMenu%()
 						Local PrevOverrideSubColor% = opt\OverrideSubColor
 						
 						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
+						If PrevEnableSubtitles <> opt\EnableSubtitles Then
+							If opt\EnableSubtitles Then ClearSubtitles()
+						EndIf
 						
 						If opt\EnableSubtitles Then
 							y = y + (30 * MenuScale)
