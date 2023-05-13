@@ -5,6 +5,7 @@ Launcher:
 
 General:
 - Finished subtitles.
+- Upscaled some textures.
 
 Rooms:
 - Added security camera in «room2C_ez» room.
