@@ -6554,10 +6554,7 @@ Function UpdateEvents%()
 						EndIf
 						me\BlurTimer = e\EventState2 * 500.0
 						
-						If e\EventState2 = 2.0 Then
-							MoveToPocketDimension()
-							me\Playable = True
-						EndIf
+						If e\EventState2 = 2.0 Then MoveToPocketDimension()
 					Else
 						If chs\NoClip Then me\Playable = True
 					EndIf
@@ -7932,10 +7929,9 @@ Function UpdateEvents%()
 									EndIf
 									me\BlurTimer = e\EventState2 * 500.0
 									
-									If e\EventState2 = 2.0 Then
-										MoveToPocketDimension()
-										me\Playable = True
-									EndIf
+									If e\EventState2 > 0.2 And n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
+									
+									If e\EventState2 = 2.0 Then MoveToPocketDimension()
 								Else
 									If chs\NoClip Then me\Playable = True
 								EndIf
