@@ -12,6 +12,8 @@ Rooms:
 - Added security camera in «room2C_ez» room.
 - Added «room2C_2_ez» room.
 
+- Changed «room2_4_hcz_106» event.
+
 - Some design improvements.
 
 Bug Fixes:
@@ -24,6 +26,7 @@ Bug Fixes:
 - Fixed softlock in SCP-513's containment chamber.
 - Fixed text flashing white after disappearing.
 
+- Several fixes for SCP-268.
 - Some fixes for room items, hitboxes and textures.
 
 v1.1.3

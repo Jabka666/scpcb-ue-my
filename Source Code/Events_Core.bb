@@ -806,7 +806,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								; ~ If Ulgrin can see the player then start shooting at them.
-								If (Not chs\NoTarget) And (Not I_268\InvisibilityOn) And EntityDistanceSquared(me\Collider, e\room\NPC[2]\Collider) < 9.0 And EntityVisible(e\room\NPC[2]\Collider, me\Collider) Then
+								If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) And EntityDistanceSquared(me\Collider, e\room\NPC[2]\Collider) < 9.0 And EntityVisible(e\room\NPC[2]\Collider, me\Collider) Then
 									e\room\NPC[2]\State = 1.0
 									e\room\NPC[2]\State3 = 1.0
 								ElseIf e\room\NPC[2]\State = 1.0 And (Not EntityVisible(e\room\NPC[2]\Collider, me\Collider))
@@ -1991,7 +1991,7 @@ Function UpdateEvents%()
 					CoffinDistance = EntityDistance(me\Collider, e\room\Objects[1])
 					If CoffinDistance < 1.5 Then
 						GiveAchievement(Achv895)
-						If (Not n_I\Curr106\Contained) And e\EventID = e_cont1_895_106 And e\EventState2 = 0.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+						If (Not n_I\Curr106\Contained) And e\EventID = e_cont1_895_106 And e\EventState2 = 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 							de\SizeChange = 0.001
 							EntityParent(de\OBJ, e\room\OBJ)
@@ -2247,7 +2247,7 @@ Function UpdateEvents%()
 							ResetEntity(n_I\Curr106\Collider)
 							
 							n_I\Curr106\Idle = 0
-							If EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 Then n_I\Curr106\State = -0.1
+							If EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then n_I\Curr106\State = -0.1
 							
 							RemoveNPC(e\room\NPC[0])
 							
@@ -2616,7 +2616,7 @@ Function UpdateEvents%()
 							e\EventState = 2.0
 						EndIf
 					ElseIf e\EventState = 2.0
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 5.0625 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 5.0625 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
 							e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State3 = 1.0
 						Else
 							e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
@@ -3642,7 +3642,7 @@ Function UpdateEvents%()
 						If e\EventState = 0.0 Then
 							Temp = (1 - (EntityDistanceSquared(me\Collider, e\room\Objects[0]) < EntityDistanceSquared(me\Collider, e\room\Objects[1])))
 							
-							If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+							If (Not n_I\Curr106\Contained) And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True) + 0.02, EntityZ(e\room\Objects[Temp], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 								de\SizeChange = 0.001
 								EntityParent(de\OBJ, e\room\OBJ)
@@ -3697,9 +3697,9 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_2_hcz_106
 				;[Block]
-				If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+				If (Not n_I\Curr106\Contained) Then
 					If e\EventState = 0.0 Then
-						If PlayerRoom = e\room Then e\EventState = 1.0
+						If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState = 1.0
 					Else
 						e\EventState = (e\EventState + fps\Factor[0] * 0.7)
 						If e\EventState < 50.0 Then
@@ -3718,7 +3718,7 @@ Function UpdateEvents%()
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
 								PointEntity(Pvt, me\Collider)
-								If WrapAngle(EntityYaw(Pvt) - EntityYaw(n_I\Curr106\Collider)) < 80.0 Then
+								If WrapAngle(EntityYaw(Pvt) - EntityYaw(n_I\Curr106\Collider)) < 80.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
 									n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 									PlaySound_Strict(HorrorSFX[10])
 									e\EventState = 260.0
@@ -3761,31 +3761,22 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_4_hcz_106
 				;[Block]
-				If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+				If (Not n_I\Curr106\Contained) Then
 					If n_I\Curr106\State > 0.0 Then
 						If e\EventState = 0.0 Then
-							If PlayerRoom = e\room Then e\EventState = 1.0
-						Else
+							If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState = 1.0
+						ElseIf e\EventState = 1.0
+							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), e\room\y - 447.0 * RoomScale + 0.005, EntityZ(e\room\Objects[1], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+							de\SizeChange = 0.001
+							EntityParent(de\OBJ, e\room\OBJ)
+							
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 							ResetEntity(n_I\Curr106\Collider)
+							SetNPCFrame(n_I\Curr106, 110.0)
+							n_I\Curr106\State = -0.1
+							n_I\Curr106\PrevY = EntityY(e\room\Objects[1], True)
 							
-							PointEntity(n_I\Curr106\Collider, Camera)
-							TurnEntity(n_I\Curr106\Collider, 0.0, Sin(MilliSecs() / 20) * 6.0, 0.0, True)
-							MoveEntity(n_I\Curr106\Collider, 0.0, 0.0, Sin(MilliSecs() / 15) * 0.06)
-							PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider) - 0.15, EntityZ(n_I\Curr106\Collider))
-							
-							RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
-							n_I\Curr106\Idle = 1
-							AnimateNPC(n_I\Curr106, 334.0, 494.0, 0.3)
-							
-							e\EventState = e\EventState + 1.0
-							
-							If e\EventState > 800.0 Then
-								If me\BlinkTimer < -5.0 Then
-									n_I\Curr106\Idle = 0
-									RemoveEvent(e)
-								EndIf
-							EndIf
+							RemoveEvent(e)
 						EndIf
 					EndIf
 				Else
@@ -5620,7 +5611,7 @@ Function UpdateEvents%()
 					Else
 						ShouldPlay = 15
 						If e\EventState < 65.0 Then
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 								
 								e\EventState = Max(e\EventState, 65.0)
@@ -5759,7 +5750,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 67.0
 								;[Block]
-								If (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+								If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
 									If Rand(150) = 1 Then
 										msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
 										
@@ -6246,15 +6237,17 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_5_hcz_106
 				;[Block]
-				If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+				If (Not n_I\Curr106\Contained) Then
 					If e\EventState = 0.0 Then
-						If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
-							If n_I\Curr106\State >= 0.0 Then
-								e\EventState = 1.0
-							Else
-								If n_I\Curr106\State <= -10.0 And EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) > 25.0 And (Not EntityInView(n_I\Curr106\OBJ, Camera)) Then
-									e\EventState2 = 1.0
+						If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
+							If e\room\Dist < 5.0 And e\room\Dist > 0.0 Then
+								If n_I\Curr106\State >= 0.0 Then
 									e\EventState = 1.0
+								Else
+									If n_I\Curr106\State <= -10.0 And EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) > 25.0 And (Not EntityInView(n_I\Curr106\OBJ, Camera)) Then
+										e\EventState2 = 1.0
+										e\EventState = 1.0
+									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -6295,7 +6288,7 @@ Function UpdateEvents%()
 							EntityParent(de\OBJ, e\room\OBJ)
 							e\EventState = 300.0
 						ElseIf e\EventState < 800.0
-							If EntityY(n_I\Curr106\Collider) >= EntityY(me\Collider) - 0.05 Then
+							If EntityY(n_I\Curr106\Collider) >= EntityY(me\Collider) - 0.05 Lor (chs\NoTarget Lor I_268\InvisibilityOn) Then
 								RemoveEvent(e)
 							Else
 								TranslateEntity(n_I\Curr106\Collider, 0.0, ((EntityY(me\Collider, True) - 0.11) - EntityY(n_I\Curr106\Collider)) / 50.0, 0.0)
@@ -6824,7 +6817,7 @@ Function UpdateEvents%()
 							;[Block]
 							Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
 							
-							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 6.25 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then e\EventState = 2.0
+							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 6.25 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState = 2.0
 							;[End Block]
 						Case 2.0
 							;[Block]
@@ -7881,26 +7874,28 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont1_005
 				;[Block]
-				If (Not n_I\Curr106\Contained) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) And I_005\ChanceToSpawn < 3 Then
+				If (Not n_I\Curr106\Contained) And I_005\ChanceToSpawn < 3 Then
 					If PlayerRoom = e\room Then
 						If e\EventState = 0.0 Then
-							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69 Then
-								PlaySound_Strict(HorrorSFX[10])
-								
-								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
-								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
-								EntityParent(de\OBJ, e\room\OBJ)
-								
-								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityY(e\room\RoomDoors[0]\FrameOBJ, True) + 0.005, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), 90.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
-								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
-								EntityParent(de\OBJ, e\room\OBJ)
-								
-								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
-								ResetEntity(n_I\Curr106\Collider)
-								n_I\Curr106\State = -10.0
-								ShowEntity(n_I\Curr106\OBJ)
-								
-								e\EventState = 1.0
+							If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
+								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69 Then
+									PlaySound_Strict(HorrorSFX[10])
+									
+									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
+									de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
+									EntityParent(de\OBJ, e\room\OBJ)
+									
+									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityY(e\room\RoomDoors[0]\FrameOBJ, True) + 0.005, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), 90.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
+									de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
+									EntityParent(de\OBJ, e\room\OBJ)
+									
+									PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+									ResetEntity(n_I\Curr106\Collider)
+									n_I\Curr106\State = -10.0
+									ShowEntity(n_I\Curr106\OBJ)
+									
+									e\EventState = 1.0
+								EndIf
 							EndIf
 						Else
 							Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ))
@@ -7942,7 +7937,8 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					If I_005\ChanceToSpawn >= 5 Then
-						e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True) + 0.5, EntityZ(e\room\Objects[3], True))
+						TFormPoint(-217.0, 0.0, -196.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), 0.5, TFormedZ())
 						e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 						SetNPCFrame(e\room\NPC[0], 288.0)
 						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
@@ -9184,7 +9180,7 @@ Function UpdateEndings%()
 					
 					If e\room\NPC[1] <> Null Then
 						; ~ Helicopter spots or player is within range --> Start shooting
-						If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+						If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
 							e\room\NPC[1]\State = 1.0
 							e\room\NPC[1]\State3 = 1.0
 						Else
@@ -9348,7 +9344,7 @@ Function UpdateEndings%()
 											Next
 											
 											For i = 5 To 8
-												If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 25.0 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn) Then
+												If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 25.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then
 													e\room\NPC[i]\State = 6.0
 												Else
 													e\room\NPC[i]\State = 5.0

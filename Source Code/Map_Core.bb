@@ -3935,11 +3935,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 510.0 * RoomScale)
 			
-			; ~ Dead Guard's spawnpoint
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 281.0 * RoomScale, r\y, r\z - 210.0 * RoomScale)
-			
-			For i = 0 To 3
+			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -5888,7 +5884,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 640.0 * RoomScale, r\y + 8.0 * RoomScale, r\z - 896.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 864.0 * RoomScale, r\y - 400.0 * RoomScale, r\z - 632.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 864.0 * RoomScale, r\y - 477.0 * RoomScale, r\z - 632.0 * RoomScale)
 			
 			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
