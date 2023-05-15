@@ -2063,7 +2063,7 @@ Function UpdateGame%()
 		
 		UpdateStreamSounds()
 		
-		If (Not MenuOpen) And (Not ConsoleOpen) And me\EndingTimer >= 0.0 Then
+		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0)) Then
 			DrawHandIcon = False
 			For i = 0 To 2 Step 2
 				DrawArrowIcon[i] = False
@@ -2294,7 +2294,7 @@ Function UpdateGame%()
 				If (Not EntityHidden(t\OverlayID[6])) Then HideEntity(t\OverlayID[6])
 			EndIf
 			
-			If SelectedItem <> Null And (Not InvOpen) And OtherOpen = Null Then
+			If (Not (SelectedItem = Null Lor InvOpen Lor OtherOpen <> Null)) Then
 				If IsItemInFocus() Then DarkAlpha = Max(DarkAlpha, 0.5)
 			EndIf
 			
@@ -2424,7 +2424,7 @@ Function RenderGame%()
 	
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
 	
-	If (Not MenuOpen) And (Not InvOpen) And (OtherOpen = Null) And (d_I\SelectedDoor = Null) And (Not ConsoleOpen) And (Not I_294\Using) And (SelectedScreen = Null) And me\EndingTimer >= 0.0 Then
+	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\EndingTimer < 0.0)) Then
 		RenderRoomLights(Camera)
 	EndIf
 	
@@ -2713,7 +2713,7 @@ Function UpdateMoving%()
 		me\CrouchState = CurveValue(me\Crouch, me\CrouchState, 10.0)
 	EndIf
 	
-	If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) Then
+	If (Not (d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using)) Then
 		If (Not chs\NoClip) Then
 			If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0.0 Then
 				If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0 And (Not me\Zombie) Then
@@ -3091,7 +3091,7 @@ Function UpdateMouseLook%()
 	UpdateDust()
 	
 	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop
-	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null Then
+	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null)) Then
 		If (ScaledMouseX() > mo\Mouse_Right_Limit) Lor (ScaledMouseX() < mo\Mouse_Left_Limit) Lor (ScaledMouseY() > mo\Mouse_Bottom_Limit) Lor (ScaledMouseY() < mo\Mouse_Top_Limit) Then MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	EndIf
 	
@@ -3396,7 +3396,7 @@ Function UpdateGUI%()
 	EndIf
 	
 	If I_294\Using Then Update294()
-	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And (Not me\Terminated) Then
+	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 		If d_I\ClosestButton <> 0 Then
 			If mo\MouseUp1 Then
 				mo\MouseUp1 = False
@@ -3408,7 +3408,7 @@ Function UpdateGUI%()
 					EndIf
 				EndIf
 			EndIf
-		endif
+		EndIf
 	EndIf
 	
 	If SelectedScreen <> Null Then
@@ -6076,7 +6076,7 @@ Function RenderGUI%()
 	Local Width%, Height%
 	Local SqrValue#
 	
-	If MenuOpen Lor ConsoleOpen Lor d_I\SelectedDoor <> Null Lor InvOpen Lor OtherOpen <> Null Lor me\EndingTimer < 0.0 Then
+	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor me\EndingTimer < 0.0 Then
 		ShowPointer()
 	Else
 		HidePointer()
@@ -6110,7 +6110,7 @@ Function RenderGUI%()
 	EndIf
 	
 	If I_294\Using Then Render294()
-	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME And (Not me\Terminated) Then
+	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SelectedDifficulty\OtherFactors = EXTREME)) Then
 		If d_I\ClosestButton <> 0 Then
 			Temp = CreatePivot()
 			PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -9637,7 +9637,7 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 End Function
 
 Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% = False)
-	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
+	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
 	
 	If EntityDistanceSquared(me\Collider, OBJ) < Dist Then
 		If EntityInView(OBJ, Camera) Then

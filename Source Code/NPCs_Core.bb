@@ -6832,9 +6832,7 @@ Function NPCSpeedChange%(n.NPCs)
 End Function
 
 Function IsPlayerOutsideFacility%()
-	Local RN$ = PlayerRoom\RoomTemplate\Name
-	
-	If RN = "gate_a" Lor RN = "gate_b" Then Return(True)
+	If PlayerRoom\RoomTemplate\Name = "gate_a" Lor PlayerRoom\RoomTemplate\Name= "gate_b" Then Return(True)
 	Return(False)
 End Function
 

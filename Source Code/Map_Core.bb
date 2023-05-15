@@ -3522,10 +3522,10 @@ Function RenderSecurityCams%()
 End Function
 
 Function UpdateMonitorSaving%()
+	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
+	
 	Local sc.SecurityCams
 	Local Close% = False
-	
-	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
 	
 	For sc.SecurityCams = Each SecurityCams
 		If sc\AllowSaving And sc\Screen Then
@@ -8161,10 +8161,11 @@ Function UpdateRooms%()
 End Function
 
 Function IsRoomAdjacent%(this.Rooms, that.Rooms)
-	Local i%
-	
 	If this = Null Then Return(False)
 	If this = that Then Return(True)
+	
+	Local i%
+	
 	For i = 0 To MaxRoomAdjacents - 1
 		If that = this\Adjacent[i] Then Return(True)
 	Next

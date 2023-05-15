@@ -1,11 +1,11 @@
 Const SavePath$ = "Saves\"
 
 Function SaveGame%(File$)
-	CatchErrors("SaveGame(" + File + ")")
-	
 	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
 	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
+	
+	CatchErrors("SaveGame(" + File + ")")
 	
 	Local n.NPCs, r.Rooms, do.Doors
 	Local x%, y%, i%, Temp%

@@ -474,14 +474,13 @@ Function UpdateItems%()
 		DeletedItem = False
 	Next
 	
-	If ClosestItem <> Null And (Not me\Terminated) Then
+	If ClosestItem <> Null Then
 		If mo\MouseHit1 Then PickItem(ClosestItem)
 	EndIf
 End Function
 
 Function PickItem%(item.Items)
-	
-	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then Return
+	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
 	
 	CatchErrors("PickItem()")
 	
