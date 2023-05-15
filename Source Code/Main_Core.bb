@@ -6109,35 +6109,34 @@ Function RenderGUI%()
 	EndIf
 	
 	If I_294\Using Then Render294()
-	
-	If d_I\ClosestButton <> 0 And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
-		Temp = CreatePivot()
-		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-		PointEntity(Temp, d_I\ClosestButton)
-		YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
-		If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
-		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-		PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
-		If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
-		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
-		
-		FreeEntity(Temp) : Temp = 0
-		
-		DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
-	EndIf
-	
-	If ClosestItem <> Null And (Not me\Terminated) And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
-		YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
-		If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
-		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-		PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
-		If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
-		If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
-		
-		DrawBlock(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
-	EndIf
-	
 	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
+		If d_I\ClosestButton <> 0 Then
+			Temp = CreatePivot()
+			PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+			PointEntity(Temp, d_I\ClosestButton)
+			YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
+			If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
+			If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+			PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
+			If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
+			If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
+			
+			FreeEntity(Temp) : Temp = 0
+			
+			DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
+		EndIf
+		
+		If ClosestItem <> Null And (Not me\Terminated) Then
+			YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
+			If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
+			If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+			PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
+			If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
+			If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
+			
+			DrawBlock(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
+		EndIf
+	
 		If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
 		
 		For i = 0 To 3
