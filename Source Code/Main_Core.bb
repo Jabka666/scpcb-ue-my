@@ -3396,18 +3396,19 @@ Function UpdateGUI%()
 	EndIf
 	
 	If I_294\Using Then Update294()
-	
-	If d_I\ClosestButton <> 0 And (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) Then
-		If mo\MouseUp1 Then
-			mo\MouseUp1 = False
-			If d_I\ClosestDoor <> Null Then
-				If d_I\ClosestDoor\Code <> "" Then
-					d_I\SelectedDoor = d_I\ClosestDoor
-				ElseIf me\Playable Then
-					UseDoor(d_I\ClosestDoor)
+	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And (Not me\Terminated) Then
+		If d_I\ClosestButton <> 0 Then
+			If mo\MouseUp1 Then
+				mo\MouseUp1 = False
+				If d_I\ClosestDoor <> Null Then
+					If d_I\ClosestDoor\Code <> "" Then
+						d_I\SelectedDoor = d_I\ClosestDoor
+					ElseIf me\Playable Then
+						UseDoor(d_I\ClosestDoor)
+					EndIf
 				EndIf
 			EndIf
-		EndIf
+		endif
 	EndIf
 	
 	If SelectedScreen <> Null Then
@@ -6109,7 +6110,7 @@ Function RenderGUI%()
 	EndIf
 	
 	If I_294\Using Then Render294()
-	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME Then
+	If (Not InvOpen) And (Not I_294\Using) And OtherOpen = Null And d_I\SelectedDoor = Null And SelectedScreen = Null And (Not MenuOpen) And (Not ConsoleOpen) And SelectedDifficulty\OtherFactors <> EXTREME And (Not me\Terminated) Then
 		If d_I\ClosestButton <> 0 Then
 			Temp = CreatePivot()
 			PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -6126,7 +6127,7 @@ Function RenderGUI%()
 			DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
 		EndIf
 		
-		If ClosestItem <> Null And (Not me\Terminated) Then
+		If ClosestItem <> Null Then
 			YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
 			If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
 			If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
@@ -6136,7 +6137,7 @@ Function RenderGUI%()
 			
 			DrawBlock(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
 		EndIf
-	
+		
 		If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
 		
 		For i = 0 To 3
