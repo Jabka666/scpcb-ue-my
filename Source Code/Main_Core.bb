@@ -1698,14 +1698,14 @@ End Type
 Global msg.Messages
 
 Function CreateMsg%(Txt$, Sec# = 6.0)
-	If SelectedDifficulty\OtherFactors = EXTREME Then Return
+	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
 	
 	msg\Txt = Txt
 	msg\Timer = 70.0 * Sec
 End Function
 
 Function UpdateMessages%()
-	If SelectedDifficulty\OtherFactors = EXTREME Then Return
+	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
 	
 	If msg\Timer > 0.0 Then
 		msg\Timer = msg\Timer - fps\Factor[0]
@@ -1715,7 +1715,7 @@ Function UpdateMessages%()
 End Function
 
 Function RenderMessages%()
-	If SelectedDifficulty\OtherFactors = EXTREME Then Return
+	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
 	
 	If msg\Timer > 0.0 Then
 		Local Temp%
@@ -1742,14 +1742,14 @@ Function RenderMessages%()
 End Function
 
 Function CreateHintMsg%(Txt$, Sec# = 6.0)
-	If SelectedDifficulty\OtherFactors = EXTREME Then Return
+	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
 	
 	msg\HintTxt = Txt
 	msg\HintTimer = 70.0 * Sec
 End Function
 
 Function UpdateHintMessages%()
-	If SelectedDifficulty\OtherFactors = EXTREME Then Return
+	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width = StringWidth(msg\HintTxt) + (20 * Scale)
@@ -1777,7 +1777,7 @@ Function UpdateHintMessages%()
 End Function
 
 Function RenderHintMessages%()
-	If SelectedDifficulty\OtherFactors = EXTREME Then Return
+	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width = StringWidth(msg\HintTxt) + (20 * Scale)
@@ -6110,64 +6110,66 @@ Function RenderGUI%()
 	EndIf
 	
 	If I_294\Using Then Render294()
-	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SelectedDifficulty\OtherFactors = EXTREME)) Then
-		If d_I\ClosestButton <> 0 Then
-			Temp = CreatePivot()
-			PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-			PointEntity(Temp, d_I\ClosestButton)
-			YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
-			If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
-			If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-			PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
-			If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
-			If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
-			
-			FreeEntity(Temp) : Temp = 0
-			
-			DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
-		EndIf
-		
-		If ClosestItem <> Null Then
-			YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
-			If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
-			If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-			PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
-			If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
-			If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
-			
-			DrawBlock(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
-		EndIf
-		
-		If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
-		
-		For i = 0 To 3
-			x = mo\Viewport_Center_X - (32 * MenuScale)
-			y = mo\Viewport_Center_Y - (32 * MenuScale)
-			If DrawArrowIcon[i] Then
-				Select i
-					Case 0
-						;[Block]
-						y = y - (69 * MenuScale)
-						;[End Block]
-					Case 1
-						;[Block]
-						x = x + (69 * MenuScale)
-						;[End Block]
-					Case 2
-						;[Block]
-						y = y + (69 * MenuScale)
-						;[End Block]
-					Case 3
-						;[Block]
-						x = x - (69 * MenuScale)
-						;[End Block]
-				End Select
-				DrawBlock(t\IconID[i + 10], x, y)
+	If SelectedDifficulty\Name <> "Apollyon" And opt\HUDEnabled Then
+		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated)) Then
+			If d_I\ClosestButton <> 0 Then
+				Temp = CreatePivot()
+				PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+				PointEntity(Temp, d_I\ClosestButton)
+				YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
+				If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
+				If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+				PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
+				If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
+				If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
+				
+				FreeEntity(Temp) : Temp = 0
+				
+				DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
 			EndIf
-		Next
+		
+			If ClosestItem <> Null Then
+				YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
+				If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
+				If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+				PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
+				If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
+				If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
+				
+				DrawBlock(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
+			EndIf
+			
+			If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
+			
+			For i = 0 To 3
+				x = mo\Viewport_Center_X - (32 * MenuScale)
+				y = mo\Viewport_Center_Y - (32 * MenuScale)
+				If DrawArrowIcon[i] Then
+					Select i
+						Case 0
+							;[Block]
+							y = y - (69 * MenuScale)
+							;[End Block]
+						Case 1
+							;[Block]
+							x = x + (69 * MenuScale)
+							;[End Block]
+						Case 2
+							;[Block]
+							y = y + (69 * MenuScale)
+							;[End Block]
+						Case 3
+							;[Block]
+							x = x - (69 * MenuScale)
+							;[End Block]
+					End Select
+					DrawBlock(t\IconID[i + 10], x, y)
+				EndIf
+			Next
+		EndIf
+		
+		RenderHUD()
 	EndIf
-	
-	If opt\HUDEnabled And SelectedDifficulty\OtherFactors <> EXTREME Then RenderHUD()
 	If chs\DebugHUD <> 0 Then RenderDebugHUD()
 	
 	If SelectedScreen <> Null Then
