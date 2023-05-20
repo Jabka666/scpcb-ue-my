@@ -1635,6 +1635,7 @@ Function LoadEntities%()
 	Local i%, Tex%
 	Local b%, t1%, SF%
 	Local Name$, Test%, File$
+	Local Buffer% = BackBuffer()
 	
 	DeInitMainMenuAssets()
 	
@@ -1769,7 +1770,7 @@ Function LoadEntities%()
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()
-	SetBuffer(BackBuffer())
+	SetBuffer(Buffer)
 	
 	CreateBlurImage()
 	CameraProjMode(ArkBlurCam, 0)
@@ -1824,7 +1825,7 @@ Function LoadEntities%()
 	t\OverlayTextureID[5] = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2) ; ~ DARK
 	SetBuffer(TextureBuffer(t\OverlayTextureID[5]))
 	Cls()
-	SetBuffer(BackBuffer())
+	SetBuffer(Buffer)
 	t\OverlayID[5] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[5], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[5], t\OverlayTextureID[5])
@@ -1838,7 +1839,7 @@ Function LoadEntities%()
 	ClsColor(255, 255, 255)
 	Cls()
 	ClsColor(0, 0, 0)
-	SetBuffer(BackBuffer())
+	SetBuffer(buffer)
 	t\OverlayID[6] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[6], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[6], t\OverlayTextureID[6])

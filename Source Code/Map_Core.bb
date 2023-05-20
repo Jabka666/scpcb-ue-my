@@ -1137,19 +1137,18 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						For lY = 3 To Width - 2
 							GetColor(lX, Width - lY)
 							If ColorRed() > Rand(100, 260) Then
+								Detail_Entity = 0
 								Select Rand(0, 7)
 									Case 0, 1, 2, 3, 4, 5, 6 ; ~ Create a tree
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[0])
 										Tempf2 = Rnd(0.25, 0.4)
-										
 										For i = 0 To 3
 											d = CopyEntity(fr\DetailMesh[2])
 											RotateEntity(d, 0.0, (90.0 * i) + Rnd(-20.0, 20.0), 0.0)
 											EntityParent(d, Detail_Entity)
 											EntityFX(d, 1)
 										Next
-										
 										ScaleEntity(Detail_Entity, Tempf2 * 1.1, Tempf2, Tempf2 * 1.1, True)
 										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
@@ -1327,7 +1326,6 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[0])
 										Tempf2 = Rnd(0.25, 0.4)
-										
 										For i = 0 To 3
 											d = CopyEntity(fr\DetailMesh[2])
 											RotateEntity(d, 0.0, (90.0 * i) + Rnd(-20.0, 20.0), 0.0)
@@ -1354,7 +1352,6 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
 										;[End Block]
 								End Select
-								
 								If Detail_Entity <> 0 Then
 									EntityFX(Detail_Entity, 1)
 									EntityParent(Detail_Entity, Tile_Entity)
@@ -3463,6 +3460,8 @@ Function RenderSecurityCams%()
 					If sc\State >= sc\RenderInterval Then
 						If me\BlinkTimer > -5.0 And EntityInView(sc\ScrOBJ, Camera) Then
 							If EntityVisible(Camera, sc\ScrOBJ) Then
+								Local Buffer% = BackBuffer()
+								
 								If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3 Then
 									If (Not EntityHidden(Camera)) Then
 										ShowEntity(sc\Cam)
@@ -3472,9 +3471,9 @@ Function RenderSecurityCams%()
 									
 									RenderRoomLights(sc\Cam)
 									
-									SetBuffer(BackBuffer())
+									SetBuffer(Buffer)
 									RenderWorld()
-									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(sc_I\ScreenTexs[sc\ScrTexture]))
+									CopyRect(0, 0, 512, 512, 0, 0, Buffer, TextureBuffer(sc_I\ScreenTexs[sc\ScrTexture]))
 									
 									If (Not EntityHidden(sc\Cam)) Then
 										ShowEntity(Camera)
@@ -3491,9 +3490,9 @@ Function RenderSecurityCams%()
 									
 									RenderRoomLights(sc_I\CoffinCam\Cam)
 									
-									SetBuffer(BackBuffer())
+									SetBuffer(Buffer)
 									RenderWorld()
-									CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(sc_I\ScreenTexs[sc\ScrTexture]))
+									CopyRect(0, 0, 512, 512, 0, 0, Buffer, TextureBuffer(sc_I\ScreenTexs[sc\ScrTexture]))
 									
 									If (Not EntityHidden(sc_I\CoffinCam\room\OBJ)) Then
 										HideEntity(sc_I\CoffinCam\Cam)

@@ -132,13 +132,15 @@ Function ScaleRender%(x#, y#, hScale# = 1.0, vScale# = 1.0)
 End Function
 
 Function RenderGamma%()
+	Local Buffer% = BackBuffer()
+	
 	If opt\DisplayMode = 1 Then
 		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
 			SetBuffer(TextureBuffer(FresizeTexture))
 			ClsColor(0, 0, 0)
 			Cls()
-			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
-			SetBuffer(BackBuffer())
+			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, Buffer, TextureBuffer(FresizeTexture))
+			SetBuffer(Buffer)
 			ClsColor(0, 0, 0)
 			Cls()
 			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio)
@@ -150,7 +152,7 @@ Function RenderGamma%()
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
 	If opt\ScreenGamma > 1.0 Then
-		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, Buffer, TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
@@ -160,7 +162,7 @@ Function RenderGamma%()
 		EntityAlpha(FresizeImage, opt\ScreenGamma - 1.0)
 		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
-		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, Buffer, TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
@@ -171,12 +173,12 @@ Function RenderGamma%()
 		SetBuffer(TextureBuffer(FresizeTexture2))
 		ClsColor(255 * opt\ScreenGamma, 255 * opt\ScreenGamma, 255 * opt\ScreenGamma)
 		Cls()
-		SetBuffer(BackBuffer())
+		SetBuffer(Buffer)
 		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
 		SetBuffer(TextureBuffer(FresizeTexture2))
 		ClsColor(0, 0, 0)
 		Cls()
-		SetBuffer(BackBuffer())
+		SetBuffer(Buffer)
 	EndIf
 	EntityFX(FresizeImage, 1)
 	EntityBlend(FresizeImage, 1)
@@ -512,24 +514,25 @@ Function GetScreenshot%()
 	If FileType("Screenshots\") <> 2 Then CreateDir("Screenshots")
 	
 	Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
+	Local Buffer% = BackBuffer()
 	
-	LockBuffer(BackBuffer())
+	LockBuffer(Buffer)
 	For x = 0 To opt\RealGraphicWidth - 1
 		For y = 0 To opt\RealGraphicHeight - 1
-			Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+			Local Pixel% = ReadPixelFast(x, y, Buffer)
 			
 			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), ReadPixelColor(Pixel, 0))
 			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, ReadPixelColor(Pixel, 8))
 			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, ReadPixelColor(Pixel, 16))
 		Next
 	Next
-	UnlockBuffer(BackBuffer())
+	UnlockBuffer(Buffer)
 	
 	Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
 	
 	FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
 	FI_Unload(fiBuffer)
-	FreeBank(Bank)
+	FreeBank(Bank) : Bank = 0
 	If (Not MainMenuOpen) Then CreateHintMsg(GetLocalString("msg", "screenshot"))
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	ScreenshotCount = ScreenshotCount + 1
