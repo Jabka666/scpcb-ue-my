@@ -8717,8 +8717,8 @@ Function CreateMap%()
 	SetRoom("room2_js", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_elevator", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
 	
-	MapRoom(ROOM2C, Floor(0.2 * Float(Room2CAmount[0]))) = "cont2c_066"
-	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_1162_arc"
+	MapRoom(ROOM2C, Floor(0.25 * Float(Room2CAmount[0]))) = "cont2c_1162_arc"
+	MapRoom(ROOM2C, Floor(0.75 * Float(Room2CAmount[0]))) = "cont2c_066"
 	
 	MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3_storage"
 	
