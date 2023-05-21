@@ -5385,7 +5385,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0]) / 1.6, 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.6), 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
@@ -5459,7 +5459,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + fps\Factor[0] / 1.6, 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.6), 100.0)
 						
 						If SelectedItem\State = 100.0 Then
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
