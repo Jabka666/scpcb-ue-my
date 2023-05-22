@@ -4421,8 +4421,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			it.Items = CreateItem("Empty Cup", "emptycup", r\x + 490.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + -232.0 * RoomScale)
-            EntityParent(it\Collider, r\OBJ)
+			If Rand(2) = 1 Then
+				it.Items = CreateItem("Empty Cup", "emptycup", r\x + 490.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + -232.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			;[End Block]
 		Case "room2_4_lcz"
 			;[Block]
