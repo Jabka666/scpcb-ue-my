@@ -4890,7 +4890,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[2] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x - 470.0 * RoomScale, r\y + 528.0 * RoomScale, r\z - 382.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 450.0 * RoomScale, r\y + 528.0 * RoomScale, r\z - 382.0 * RoomScale)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
