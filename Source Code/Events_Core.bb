@@ -6529,6 +6529,7 @@ Function UpdateEvents%()
 						If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 						
 						me\Playable = False
+						SelectedItem = Null
 						
 						x = CurveValue(EntityX(e\room\OBJ), EntityX(me\Collider), 10.0)
 						y = CurveValue(EntityY(e\room\OBJ) - e\EventState2, EntityY(me\Collider), 25.0)
@@ -7906,6 +7907,7 @@ Function UpdateEvents%()
 									If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 									
 									me\Playable = False
+									SelectedItem = Null
 									
 									x = CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityX(me\Collider), 10.0)
 									y = CurveValue(EntityY(e\room\RoomDoors[0]\FrameOBJ) - e\EventState2, EntityY(me\Collider), 25.0)
@@ -9069,6 +9071,9 @@ Function UpdateEndings%()
 										me\SelectedEnding = Ending_B2
 										me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
 									Else
+										me\Playable = False
+										SelectedItem = Null
+										
 										me\SelectedEnding = Ending_B1
 										
 										PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
@@ -9095,8 +9100,6 @@ Function UpdateEndings%()
 										e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 23.0) * 3.0
 										
 										e\room\RoomDoors[4]\Open = True : e\room\RoomDoors[4]\Locked = 0
-										
-										me\Playable = False
 										
 										Temp = (e\room\NPC[4]\State3 = 70.0 * 4.0 Lor e\room\NPC[5]\State3 = 70.0 * 4.0)
 										
@@ -9636,6 +9639,7 @@ Function UpdateEndings%()
 												e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
 												
 												me\Playable = False
+												SelectedItem = Null
 												me\SelectedEnding = Ending_A2
 												
 												If e\EventState2 = 1.0 Then
