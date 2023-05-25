@@ -8403,7 +8403,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events, lvr.Levers
-	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles
+	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, du.Dummy1499_1
 	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x%, y%, Lvl%
 	
@@ -8582,6 +8582,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	For n.NPCs = Each NPCs
 		Delete(n)
+	Next
+	For du.Dummy1499_1 = Each Dummy1499_1
+		Delete(du)
 	Next
 	Delete(n_I)
 	ForestNPC = 0

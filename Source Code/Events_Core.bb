@@ -8887,7 +8887,7 @@ Function UpdateDimension1499%()
 End Function
 
 Function UpdateEndings%()
-	Local e.Events, e2.Events, n.NPCs, r.Rooms, p.Particles, de.Decals, em.Emitters
+	Local e.Events, e2.Events, n.NPCs, r.Rooms, p.Particles, de.Decals, em.Emitters, du.Dummy1499_1
 	Local Dist#, i%, k%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
 	Local SinValue#, SqrValue#
 	
@@ -8902,9 +8902,14 @@ Function UpdateEndings%()
 						For n.NPCs = Each NPCs
 							If n <> n_I\Curr106 And n <> n_I\Curr173 Then RemoveNPC(n)
 						Next
+						n_I\Curr066 = Null
+						n_I\Curr049 = Null
 						n_I\Curr096 = Null
 						n_I\Curr513_1 = Null
-						n_I\Curr049 = Null
+						
+						For du.Dummy1499_1 = Each Dummy1499_1
+							Delete(du)
+						Next
 						
 						e\room\NPC[0] = CreateNPC(NPCTypeApache, e\room\x, 100.0, e\room\z)
 						e\room\NPC[0]\State = 1.0
@@ -9208,9 +9213,14 @@ Function UpdateEndings%()
 						For n.NPCs = Each NPCs
 							If n <> n_I\Curr106 And n <> n_I\Curr173 Then RemoveNPC(n)
 						Next
+						n_I\Curr066 = Null
+						n_I\Curr049 = Null
 						n_I\Curr096 = Null
 						n_I\Curr513_1 = Null
-						n_I\Curr049 = Null
+						
+						For du.Dummy1499_1 = Each Dummy1499_1
+							Delete(du)
+						Next
 						
 						For i = 2 To 4
 							e\room\NPC[i] = CreateNPC(NPCTypeApache, e\room\x, e\room\y + 11.0, e\room\z)
