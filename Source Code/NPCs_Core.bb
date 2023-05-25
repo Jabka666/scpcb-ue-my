@@ -881,7 +881,8 @@ Function UpdateNPCs%()
 						n\Idle = 1
 						HideEntity(n\OBJ)
 						HideEntity(n\OBJ2)
-						PositionEntity(n\OBJ, 0.0, 500.0, 0.0, True)
+						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+						ResetEntity(n\Collider)
 					EndIf
 				Else
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
@@ -898,21 +899,20 @@ Function UpdateNPCs%()
 					If PlayerRoom\RoomTemplate\Name = "cont2_049" And EntityY(me\Collider) <= -2848.0 * RoomScale Then Spawn106 = False
 					; ~ Gate A event has been triggered. Don't make SCP-106 disappear!
 					; ~ The reason why this is a seperate for loop is because we need to make sure that cont2_860_1 would not be able to overwrite the "Spawn106" variable
-					If PlayerRoom\RoomTemplate\Name = "gate_a" Then
-						For e.Events = Each Events
-							If e\EventID = e_gate_a Then
-								If e\EventState <> 0.0 Then
-									Spawn106 = True
-									n\Idle = (PlayerRoom\RoomTemplate\Name = "dimension_1499")
-								EndIf
-								Exit
+					For e.Events = Each Events
+						If e\EventID = e_gate_a Then
+							If e\EventState <> 0.0 Then
+								Spawn106 = True
+								n\Idle = (PlayerRoom\RoomTemplate\Name = "dimension_1499")
 							EndIf
-						Next
-					EndIf
+							Exit
+						EndIf
+					Next
 					
 					If (Not Spawn106) And n\State <= 0.0 Then
 						n\State = Rnd(22000.0, 27000.0)
 						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+						ResetEntity(n\Collider)
 					EndIf
 					
 					If n\Idle = 0 And Spawn106 Then

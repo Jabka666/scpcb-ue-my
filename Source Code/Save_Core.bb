@@ -1730,9 +1730,7 @@ Function LoadGameQuick%(File$)
 		
 		If Temp2 = 1 Then PlayerRoom = r
 		
-		If r\x = r1499_x And r\z = r1499_z
-			I_1499\PrevRoom = r
-		EndIf
+		If r\x = r1499_x And r\z = r1499_z Then I_1499\PrevRoom = r
 	Next
 	
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
