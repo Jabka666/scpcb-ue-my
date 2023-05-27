@@ -5330,6 +5330,7 @@ Function UpdateGUI%()
 								If wi\SCRAMBLE > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\SCRAMBLE = 0
 								wi\GasMask = 0 : wi\BallisticHelmet = False
 								I_427\Using = False : I_1499\Using = 0
+								I_268\Using = 0
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null

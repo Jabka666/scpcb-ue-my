@@ -58,4 +58,4 @@ SetLanguage(opt\Language)
 Include "Source Code\Main_Core.bb"
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D
+;~C#Blitz3D TSS
