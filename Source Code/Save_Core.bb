@@ -88,10 +88,10 @@ Function SaveGame%(File$)
 	WriteByte(f, I_035\Sad)
 	
 	For i = SAFE To ESOTERIC
-		If SelectedDifficulty = difficulties[i] Then
+		If SelectedDifficulty = difficulties[i]
 			WriteByte(f, i)
 			
-			If i = ESOTERIC Then
+			If i = ESOTERIC
 				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
 				WriteByte(f, SelectedDifficulty\SaveType)
 				WriteByte(f, SelectedDifficulty\OtherFactors)
@@ -118,7 +118,7 @@ Function SaveGame%(File$)
 	WriteFloat(f, I_1499\x)
 	WriteFloat(f, I_1499\y)
 	WriteFloat(f, I_1499\z)
-	If I_1499\PrevRoom <> Null Then
+	If I_1499\PrevRoom <> Null
 		WriteFloat(f, I_1499\PrevRoom\x)
 		WriteFloat(f, I_1499\PrevRoom\z)
 	Else
@@ -141,7 +141,7 @@ Function SaveGame%(File$)
 	Next
 	WriteInt(f, me\RefinedItems)
 	
-	If UsedConsole Then
+	If UsedConsole
 		WriteInt(f, 100)
 	Else
 		WriteInt(f, 994)
@@ -207,7 +207,7 @@ Function SaveGame%(File$)
 		WriteFloat(f, n\Reload)
 		
 		WriteInt(f, n\ID)
-		If n\Target <> Null Then
+		If n\Target <> Null
 			WriteInt(f, n\Target\ID)
 		Else
 			WriteInt(f, 0)
@@ -261,14 +261,14 @@ Function SaveGame%(File$)
 		WriteByte(f, r\Found)
 		WriteInt(f, r\Zone)
 		
-		If PlayerRoom = r Then
+		If PlayerRoom = r
 			WriteByte(f, 1)
 		Else
 			WriteByte(f, 0)
 		EndIf
 		
 		For i = 0 To MaxRoomNPCs - 1
-			If r\NPC[i] = Null Then
+			If r\NPC[i] = Null
 				WriteInt(f, 0)
 			Else
 				WriteInt(f, r\NPC[i]\ID)
@@ -276,10 +276,10 @@ Function SaveGame%(File$)
 		Next
 		
 		For i = 0 To MaxRoomLevers - 1
-			If r\RoomLevers[i] = Null Then
+			If r\RoomLevers[i] = Null
 				WriteByte(f, 2)
 			Else
-				If EntityPitch(r\RoomLevers[i]\OBJ, True) > 0.0 Then
+				If EntityPitch(r\RoomLevers[i]\OBJ, True) > 0.0
 					WriteByte(f, 1)
 				Else
 					WriteByte(f, 0)
@@ -287,7 +287,7 @@ Function SaveGame%(File$)
 			EndIf
 		Next
 		
-		If r\mt = Null Then ; ~ This room doesn't have a grid
+		If r\mt = Null ; ~ This room doesn't have a grid
 			WriteByte(f, 0)
 		Else ; ~ This room has a grid
 			WriteByte(f, 1)
@@ -299,10 +299,10 @@ Function SaveGame%(File$)
 			Next
 		EndIf
 		
-		If r\fr = Null Then ; ~ This room doesn't have a forest
+		If r\fr = Null ; ~ This room doesn't have a forest
 			WriteByte(f, 0)
 		Else ; ~ This room has a forest
-			If (Not I_Zone\HasCustomForest) Then
+			If (Not I_Zone\HasCustomForest)
 				WriteByte(f, 1)
 			Else
 				WriteByte(f, 2)
@@ -338,7 +338,7 @@ Function SaveGame%(File$)
 		WriteFloat(f, EntityZ(do\OBJ, True))
 		WriteFloat(f, EntityYaw(do\OBJ, True))
 		
-		If do\OBJ2 <> 0 Then
+		If do\OBJ2 <> 0
 			WriteFloat(f, EntityX(do\OBJ2, True))
 			WriteFloat(f, EntityZ(do\OBJ2, True))
 		Else
@@ -433,7 +433,7 @@ Function SaveGame%(File$)
 		WriteFloat(f, it\State3)
 		WriteByte(f, it\Picked)
 		
-		If SelectedItem = it Then
+		If SelectedItem = it
 			WriteByte(f, 1) 
 		Else
 			WriteByte(f, 0)
@@ -442,12 +442,12 @@ Function SaveGame%(File$)
 		Local ItemFound% = False
 		
 		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) = it Then
+			If Inventory(i) = it
 				ItemFound = True
 				Exit
 			EndIf
 		Next
-		If ItemFound Then
+		If ItemFound
 			WriteByte(f, i)
 		Else
 			WriteByte(f, 66)
@@ -456,7 +456,7 @@ Function SaveGame%(File$)
 		If it\ItemTemplate\IsAnim <> 0 Then WriteFloat(f, AnimTime(it\Model))
 		WriteByte(f, it\InvSlots)
 		WriteInt(f, it\ID)
-		If it\ItemTemplate\InvImg = it\InvImg Then
+		If it\ItemTemplate\InvImg = it\InvImg
 			WriteByte(f, 0)
 		Else
 			WriteByte(f, 1)
@@ -471,10 +471,10 @@ Function SaveGame%(File$)
 	WriteInt(f, Temp)
 	
 	For it.Items = Each Items
-		If it\InvSlots > 0 Then
+		If it\InvSlots > 0
 			WriteInt(f, it\ID)
 			For i = 0 To it\InvSlots - 1
-				If it\SecondInv[i] <> Null Then
+				If it\SecondInv[i] <> Null
 					WriteInt(f, it\SecondInv[i]\ID)
 				Else
 					WriteInt(f, -1)
@@ -493,8 +493,8 @@ Function SaveGame%(File$)
 	
 	CloseFile(f)
 	
-	If (Not MenuOpen) And (Not MainMenuOpen) Then
-		If SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then
+	If (Not MenuOpen) And (Not MainMenuOpen)
+		If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
 			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
 		Else
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
@@ -595,7 +595,7 @@ Function LoadGame%(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC Then
+	If DifficultyIndex = ESOTERIC
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
@@ -737,7 +737,7 @@ Function LoadGame%(File$)
 		n\EnemyZ = ReadFloat(f)
 		
 		n\Texture = ReadString(f)
-		If n\Texture <> "" Then
+		If n\Texture <> ""
 			Tex = LoadTexture_Strict(n\Texture)
 			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(n\OBJ, Tex)
@@ -762,7 +762,7 @@ Function LoadGame%(File$)
 		n\ModelScaleX = ReadFloat(f)
 		n\ModelScaleY = ReadFloat(f)
 		n\ModelScaleZ = ReadFloat(f)
-		If n\Model <> "" Then
+		If n\Model <> ""
 			FreeEntity(n\OBJ) : n\OBJ = 0
 			n\OBJ = LoadAnimMesh_Strict(n\Model)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
@@ -771,17 +771,17 @@ Function LoadGame%(File$)
 		n\HasAsset = ReadByte(f)
 		If n\HasAsset Then CreateNPCAsset(n)
 		n\TextureID = ReadByte(f)
-		If n\TextureID > 0 Then
+		If n\TextureID > 0
 			ChangeNPCTextureID(n, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\HideFromNVG = ReadByte(f)
 		
-		If n\TargetID <> 0 Then
+		If n\TargetID <> 0
 			Local n2.NPCs
 			
 			For n2.NPCs = Each NPCs
-				If n2 <> n Then
+				If n2 <> n
 					If n2\ID = n\TargetID Then n\Target = n2
 				EndIf
 			Next
@@ -816,7 +816,7 @@ Function LoadGame%(File$)
 		Angle = WrapAngle(Angle)
 		
 		For rt.RoomTemplates = Each RoomTemplates
-			If rt\ID = RoomTemplateID Then
+			If rt\ID = RoomTemplateID
 				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\Name)
 				TurnEntity(r\OBJ, 0.0, Angle, 0.0)
 				r\Angle = Angle
@@ -830,9 +830,9 @@ Function LoadGame%(File$)
 		
 		For x = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
-			If ID > 0 Then
+			If ID > 0
 				For n.NPCs = Each NPCs
-					If n\ID = ID Then
+					If n\ID = ID
 						r\NPC[x] = n
 						Exit
 					EndIf
@@ -842,15 +842,15 @@ Function LoadGame%(File$)
 		
 		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
-			If ID = 1 Then
+			If ID = 1
 				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			ElseIf ID = 0
 				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			EndIf
 		Next
 		
-		If ReadByte(f) = 1 Then ; ~ This room has a grid
-			If r\mt <> Null Then ; ~ Remove the old grid content
+		If ReadByte(f) = 1 ; ~ This room has a grid
+			If r\mt <> Null ; ~ Remove the old grid content
 				For x = 0 To MTGridSize - 1
 					For y = 0 To MTGridSize - 1
 						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
@@ -874,8 +874,8 @@ Function LoadGame%(File$)
 		
 		Local HasForest% = ReadByte(f)
 		
-		If HasForest > 0 Then ; ~ This room has a forest
-			If r\fr <> Null Then ; ~ Remove the old forest
+		If HasForest > 0 ; ~ This room has a forest
+			If r\fr <> Null ; ~ Remove the old forest
 				DestroyForest(r\fr)
 			Else
 				r\fr.Forest = New Forest
@@ -893,7 +893,7 @@ Function LoadGame%(File$)
 			Local lY# = ReadFloat(f)
 			Local lZ# = ReadFloat(f)
 			
-			If HasForest = 1 Then
+			If HasForest = 1
 				PlaceForest(r\fr, lX, lY, lZ, r)
 			Else
 				PlaceMapCreatorForest(r\fr, lX, lY, lZ, r)
@@ -911,7 +911,7 @@ Function LoadGame%(File$)
 	Local Zone%, ShouldSpawnDoor%
 	
 	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null) Then
+		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
 			Zone = 2
@@ -919,10 +919,10 @@ Function LoadGame%(File$)
 			Zone = 1
 		EndIf
 		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
+					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
@@ -945,9 +945,9 @@ Function LoadGame%(File$)
 								ShouldSpawnDoor = True
 								;[End Block]
 						End Select
-						If ShouldSpawnDoor Then
-							If x + 1 < MapGridSize + 1 Then
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then
+						If ShouldSpawnDoor
+							If x + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
 									do.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[0] = do
 								EndIf
@@ -977,8 +977,8 @@ Function LoadGame%(File$)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If y + 1 < MapGridSize + 1 Then
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
+							If y + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
 									do.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[3] = do
 								EndIf
@@ -1017,7 +1017,7 @@ Function LoadGame%(File$)
 		Local MTFClose = ReadByte(f)
 		
 		For do.Doors = Each Doors
-			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z Then
+			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z
 				do\Open = Open
 				do\OpenState = OpenState
 				do\Locked = Locked
@@ -1069,7 +1069,7 @@ Function LoadGame%(File$)
 		Local AlphaChange# = ReadFloat(f)
 		
 		For de.Decals = Each Decals
-			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z Then
+			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z
 				de\Size = Size
 				de\Alpha = Alpha
 				de\FX = FX
@@ -1107,7 +1107,7 @@ Function LoadGame%(File$)
 		x = ReadFloat(f)
 		z = ReadFloat(f)
 		For r.Rooms = Each Rooms
-			If EntityX(r\OBJ) = x And EntityZ(r\OBJ) = z Then
+			If EntityX(r\OBJ) = x And EntityZ(r\OBJ) = z
 				e\room = r
 				Exit
 			EndIf
@@ -1118,11 +1118,11 @@ Function LoadGame%(File$)
 		Select e\EventID
 			Case e_dimension_1499
 				;[Block]
-				If e\EventState > 0.0 Then
+				If e\EventState > 0.0
 					HideChunks()
 					DeleteChunks()
 					For n.NPCs = Each NPCs
-						If n\NPCType = NPCType1499_1 Then
+						If n\NPCType = NPCType1499_1
 							If n\InFacility = 0 Then RemoveNPC(n)
 						EndIf
 					Next
@@ -1194,7 +1194,7 @@ Function LoadGame%(File$)
 		If nt = True Then SelectedItem = it
 		
 		nt = ReadByte(f)
-		If nt < 66 Then
+		If nt < 66
 			Inventory(nt) = it
 			ItemAmount = ItemAmount + 1
 		EndIf
@@ -1202,8 +1202,8 @@ Function LoadGame%(File$)
 		Local itt.ItemTemplates
 		
 		For itt.ItemTemplates = Each ItemTemplates
-			If itt\TempName = TempName And itt\Name = IttName Then
-				If itt\IsAnim <> 0 Then
+			If itt\TempName = TempName And itt\Name = IttName
+				If itt\IsAnim <> 0
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit
 				EndIf
@@ -1214,7 +1214,7 @@ Function LoadGame%(File$)
 		
 		If it\ID > LastItemID Then LastItemID = it\ID
 		
-		If ReadByte(f) = 0 Then
+		If ReadByte(f) = 0
 			it\InvImg = it\ItemTemplate\InvImg
 		Else
 			it\InvImg = it\ItemTemplate\InvImg2
@@ -1230,16 +1230,16 @@ Function LoadGame%(File$)
 		Local ij.Items
 		
 		For ij.Items = Each Items
-			If ij\ID = o_i Then
+			If ij\ID = o_i
 				it.Items = ij
 				Exit
 			EndIf
 		Next
 		For j = 0 To it\InvSlots - 1
 			o_i = ReadInt(f)
-			If o_i <> -1 Then
+			If o_i <> -1
 				For ij.Items = Each Items
-					If ij\ID = o_i Then
+					If ij\ID = o_i
 						it\SecondInv[j] = ij
 						Exit
 					EndIf
@@ -1264,9 +1264,9 @@ Function LoadGame%(File$)
 		Local r2.Rooms
 		
 		For r2.Rooms = Each Rooms
-			If r <> r2 Then
-				If r2\z = r\z Then
-					If r2\x = r\x + 8.0 Then
+			If r <> r2
+				If r2\z = r\z
+					If r2\x = r\x + 8.0
 						r\Adjacent[0] = r2
 						If r\AdjDoor[0] = Null Then r\AdjDoor[0] = r2\AdjDoor[2]
 					ElseIf r2\x = r\x - 8.0
@@ -1274,7 +1274,7 @@ Function LoadGame%(File$)
 						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
 					EndIf
 				ElseIf r2\x = r\x
-					If r2\z = r\z - 8.0 Then
+					If r2\z = r\z - 8.0
 						r\Adjacent[1] = r2
 						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
 					ElseIf r2\z = r\z + 8.0
@@ -1287,15 +1287,15 @@ Function LoadGame%(File$)
 		Next
 		
 		For do.Doors = Each Doors
-			If do\KeyCard = 0 And do\Code = "" Then
-				If EntityZ(do\FrameOBJ, True) = r\z Then
-					If EntityX(do\FrameOBJ, True) = r\x + 4.0 Then
+			If do\KeyCard = 0 And do\Code = ""
+				If EntityZ(do\FrameOBJ, True) = r\z
+					If EntityX(do\FrameOBJ, True) = r\x + 4.0
 						r\AdjDoor[0] = do
 					ElseIf EntityX(do\FrameOBJ, True) = r\x - 4.0
 						r\AdjDoor[2] = do
 					EndIf
 				ElseIf EntityX(do\FrameOBJ, True) = r\x
-					If EntityZ(do\FrameOBJ, True) = r\z + 4.0 Then
+					If EntityZ(do\FrameOBJ, True) = r\z + 4.0
 						r\AdjDoor[3] = do
 					ElseIf EntityZ(do\FrameOBJ, True) = r\z - 4.0
 						r\AdjDoor[1] = do
@@ -1305,13 +1305,13 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then
+	If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 		me\BlinkTimer = -1.0
 		ShouldEntitiesFall = False
 		TeleportToRoom(I_1499\PrevRoom)
 	EndIf
 	
-	If me\Collider <> 0 Then
+	If me\Collider <> 0
 		If PlayerRoom <> Null Then ShowEntity(PlayerRoom\OBJ)
 		ShowEntity(me\Collider)
 		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
@@ -1446,7 +1446,7 @@ Function LoadGameQuick%(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC Then
+	If DifficultyIndex = ESOTERIC
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
@@ -1587,7 +1587,7 @@ Function LoadGameQuick%(File$)
 		n\EnemyZ = ReadFloat(f)
 		
 		n\Texture = ReadString(f)
-		If n\Texture <> "" Then
+		If n\Texture <> ""
 			Tex = LoadTexture_Strict(n\Texture)
 			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(n\OBJ, Tex)
@@ -1612,7 +1612,7 @@ Function LoadGameQuick%(File$)
 		n\ModelScaleX = ReadFloat(f)
 		n\ModelScaleY = ReadFloat(f)
 		n\ModelScaleZ = ReadFloat(f)
-		If n\Model <> "" Then
+		If n\Model <> ""
 			FreeEntity(n\OBJ) : n\OBJ = 0
 			n\OBJ = LoadAnimMesh_Strict(n\Model)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
@@ -1621,17 +1621,17 @@ Function LoadGameQuick%(File$)
 		n\HasAsset = ReadByte(f)
 		If n\HasAsset Then CreateNPCAsset(n)
 		n\TextureID = ReadByte(f)
-		If n\TextureID > 0 Then
+		If n\TextureID > 0
 			ChangeNPCTextureID(n, n\TextureID - 1)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\HideFromNVG = ReadByte(f)
 		
-		If n\TargetID <> 0 Then
+		If n\TargetID <> 0
 			Local n2.NPCs
 			
 			For n2.NPCs = Each NPCs
-				If n2 <> n Then
+				If n2 <> n
 					If n2\ID = n\TargetID Then n\Target = n2
 				EndIf
 			Next
@@ -1673,9 +1673,9 @@ Function LoadGameQuick%(File$)
 		
 		For x = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
-			If ID > 0 Then
+			If ID > 0
 				For n.NPCs = Each NPCs
-					If n\ID = ID Then
+					If n\ID = ID
 						r\NPC[x] = n
 						Exit
 					EndIf
@@ -1685,21 +1685,21 @@ Function LoadGameQuick%(File$)
 		
 		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
-			If ID = 1 Then
+			If ID = 1
 				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			ElseIf ID = 0
 				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			EndIf
 		Next
 		
-		If ReadByte(f) = 1 Then ; ~ This room has a grid
+		If ReadByte(f) = 1 ; ~ This room has a grid
 			For y = 0 To MTGridSize - 1
 				For x = 0 To MTGridSize - 1
 					ReadByte(f) : ReadByte(f)
 				Next
 			Next
 		Else ; ~ This grid doesn't exist in the save
-			If r\mt <> Null Then
+			If r\mt <> Null
 				For x = 0 To MTGridSize - 1
 					For y = 0 To MTGridSize - 1
 						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
@@ -1713,7 +1713,7 @@ Function LoadGameQuick%(File$)
 			EndIf
 		EndIf
 		
-		If ReadByte(f) > 0 Then ; ~ This room has a forest
+		If ReadByte(f) > 0 ; ~ This room has a forest
 			For y = 0 To ForestGridSize - 1
 				For x = 0 To ForestGridSize - 1
 					ReadByte(f)
@@ -1761,7 +1761,7 @@ Function LoadGameQuick%(File$)
 		Local MTFClose% = ReadByte(f)
 		
 		For do.Doors = Each Doors
-			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z Then
+			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z
 				do\Open = Open
 				do\OpenState = OpenState
 				do\Locked = Locked
@@ -1813,7 +1813,7 @@ Function LoadGameQuick%(File$)
 		Local AlphaChange# = ReadFloat(f)
 		
 		For de.Decals = Each Decals
-			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z Then
+			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z
 				de\Size = Size
 				de\Alpha = Alpha
 				de\FX = FX
@@ -1851,7 +1851,7 @@ Function LoadGameQuick%(File$)
 		x = ReadFloat(f)
 		z = ReadFloat(f)
 		For r.Rooms = Each Rooms
-			If EntityX(r\OBJ) = x And EntityZ(r\OBJ) = z Then
+			If EntityX(r\OBJ) = x And EntityZ(r\OBJ) = z
 				e\room = r
 				Exit
 			EndIf
@@ -1864,7 +1864,7 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				; ~ A hacky fix for the case that the intro objects aren't loaded when they should
 				; ~ Altough I'm too lazy to add those objects there because at the time where you can save, those objects are already in the ground anyway -- ENDSHN
-				If (Not e\room\Objects[0]) Then
+				If (Not e\room\Objects[0])
 					e\room\Objects[0] = CreatePivot()
 					e\room\Objects[1] = CreatePivot()
 				EndIf
@@ -1922,7 +1922,7 @@ Function LoadGameQuick%(File$)
 		If nt = True Then SelectedItem = it
 		
 		nt = ReadByte(f)
-		If nt < 66 Then
+		If nt < 66
 			Inventory(nt) = it
 			ItemAmount = ItemAmount + 1
 		EndIf
@@ -1930,8 +1930,8 @@ Function LoadGameQuick%(File$)
 		Local itt.ItemTemplates
 		
 		For itt.ItemTemplates = Each ItemTemplates
-			If itt\TempName = TempName Then
-				If itt\IsAnim <> 0 Then
+			If itt\TempName = TempName
+				If itt\IsAnim <> 0
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit
 				EndIf
@@ -1942,7 +1942,7 @@ Function LoadGameQuick%(File$)
 		
 		If it\ID > LastItemID Then LastItemID = it\ID
 		
-		If ReadByte(f) = 0 Then
+		If ReadByte(f) = 0
 			it\InvImg = it\ItemTemplate\InvImg
 		Else
 			it\InvImg = it\ItemTemplate\InvImg2
@@ -1958,16 +1958,16 @@ Function LoadGameQuick%(File$)
 		Local ij.Items
 		
 		For ij.Items = Each Items
-			If ij\ID = o_i Then
+			If ij\ID = o_i
 				it.Items = ij
 				Exit
 			EndIf
 		Next
 		For j = 0 To it\InvSlots - 1
 			o_i = ReadInt(f)
-			If o_i <> -1 Then
+			If o_i <> -1
 				For ij.Items = Each Items
-					If ij\ID = o_i Then
+					If ij\ID = o_i
 						it\SecondInv[j] = ij
 						Exit
 					EndIf
@@ -1992,7 +1992,7 @@ Function LoadGameQuick%(File$)
 	
 	CloseFile(f)
 	
-	If me\Collider <> 0 Then
+	If me\Collider <> 0
 		If PlayerRoom <> Null Then ShowEntity(PlayerRoom\OBJ)
 		ShowEntity(me\Collider)
 		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
@@ -2010,7 +2010,7 @@ Function LoadGameQuick%(File$)
 		Select r\RoomTemplate\Name
 			Case "gate_a"
 				;[Block]
-				If r\Objects[0] <> 0 Then
+				If r\Objects[0] <> 0
 					FreeEntity(r\Objects[0]) : r\Objects[0] = 0
 					
 					xTemp = EntityX(r\Objects[9], True)
@@ -2041,14 +2041,14 @@ Function LoadGameQuick%(File$)
 					EntityColor(r\Objects[14], 25.0, 25.0, 25.0)
 					EntityType(r\Objects[14], HIT_MAP)
 				EndIf
-				If r\Objects[12] <> 0 Then
+				If r\Objects[12] <> 0
 					FreeEntity(r\Objects[12]) : r\Objects[12] = 0
 					FreeEntity(r\Objects[17]) : r\Objects[17] = 0
 				EndIf
 				;[End Block]
 			Case "gate_b"
 				;[Block]
-				If r\Objects[0] <> 0 Then
+				If r\Objects[0] <> 0
 					xTemp = EntityX(r\Objects[0], True)
 					zTemp = EntityZ(r\Objects[0], True)
 					FreeEntity(r\Objects[0]) : r\Objects[0] = 0
@@ -2073,7 +2073,7 @@ Global GameSaved%
 Global CanSave%
 
 Function UpdateSaveState%()
-	If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then
+	If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 		CanSave = 2
 		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Lor PlayerInsideElevator Then CanSave = 0
 	EndIf
@@ -2087,12 +2087,12 @@ End Type
 Global as.AutoSave
 
 Function UpdateAutoSave%()
-	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 2 Lor (Not me\Playable) Lor me\Zombie Then
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 2 Lor (Not me\Playable) Lor me\Zombie
 		CancelAutoSave()
 		Return
 	EndIf
 	
-	If as\Timer <= 0.0 Then
+	If as\Timer <= 0.0
 		as\Amount = as\Amount + 1
 		If as\Amount >= 5 Then as\Amount = 0
 		SaveGame(CurrSave\Name + "_" + as\Amount)
@@ -2157,7 +2157,7 @@ Function LoadSavedGames%()
 	Local File$ = NextFile(SaveDir)
 	
 	While File <> ""
-		If FileType(SavePath + File) = 2 Then
+		If FileType(SavePath + File) = 2
 			Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 			
 			newsv.Save = New Save
@@ -2182,7 +2182,7 @@ Function DeleteGame%(sv.Save)
 	
 	Local DelDir% = ReadDir(sv\Name)
 	
-	If DelDir <> 0 Then
+	If DelDir <> 0
 		NextFile(DelDir) : NextFile(DelDir) ; ~ Skipping "." and ".."
 		
 		Local File$ = NextFile(DelDir)
@@ -2230,13 +2230,13 @@ Function LoadCustomMaps%()
 	Local File$ = NextFile(MapDir)
 	
 	While File <> ""
-		If FileType(CustomMapsPath + File) = 1 Then
-			If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap" Then
+		If FileType(CustomMapsPath + File) = 1
+			If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap"
 				Local f% = ReadFile_Strict(CustomMapsPath + File)
 				
 				newcm.CustomMaps = New CustomMaps
 				newcm\Name = File
-				If Right(File, 6) = "cbmap2" Then
+				If Right(File, 6) = "cbmap2"
 					newcm\Author = ReadLine(f)
 				Else
 					newcm\Author = GetLocalString("creator", "unknown")
@@ -2255,7 +2255,7 @@ End Function
 Function DeleteCustomMap%(cm.CustomMaps)
 	Local DelDir% = ReadDir(CustomMapsPath)
 	
-	If DelDir <> 0 Then
+	If DelDir <> 0
 		NextFile(DelDir) : NextFile(DelDir) ; ~ Skipping "." and ".."
 		
 		Local File$ = NextFile(DelDir)
@@ -2279,12 +2279,12 @@ Function LoadMap%(File$)
 	
 	f = ReadFile_Strict(File)
 	
-	If CurrMapGrid <> Null Then Delete(CurrMapGrid) : CurrMapGrid = Null
+	Delete(CurrMapGrid) : CurrMapGrid = Null
 	CurrMapGrid = New MapGrid
 	
 	CoffinDistance = 100.0
 	
-	If Right(File, 6) = "cbmap2" Then
+	If Right(File, 6) = "cbmap2"
 		ReadLine(f)
 		ReadLine(f)
 		I_Zone\Transition[0] = ReadByte(f)
@@ -2306,7 +2306,7 @@ Function LoadMap%(File$)
 			Angle = ReadByte(f) * 90.0
 			
 			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name Then
+				If Lower(rt\Name) = Name
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name)
 					
 					r\Angle = Angle
@@ -2323,9 +2323,9 @@ Function LoadMap%(File$)
 			Name = ReadString(f)
 			Prob = ReadFloat(f)
 			
-			If r <> Null Then
-				If Prob > 0.0 Then
-					If Rnd(0.0, 1.0) <= Prob Then
+			If r <> Null
+				If Prob > 0.0
+					If Rnd(0.0, 1.0) <= Prob
 						e.Events = New Events
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
@@ -2345,7 +2345,7 @@ Function LoadMap%(File$)
 		Local ForestRoom.Rooms
 		
 		For r.Rooms = Each Rooms
-			If r\RoomTemplate\Name = "cont2_860_1" Then
+			If r\RoomTemplate\Name = "cont2_860_1"
 				ForestRoom = r
 				Exit
 			EndIf
@@ -2367,7 +2367,7 @@ Function LoadMap%(File$)
 			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
 			x = (ForestGridSize - 1) - x
 			
-			If fr <> Null Then
+			If fr <> Null
 				Select Name
 					; ~ 1, 2, 3, 4 = ROOM1
 					; ~ 5, 6, 7, 8 = ROOM2
@@ -2403,7 +2403,7 @@ Function LoadMap%(File$)
 			EndIf
 		Next
 		
-		If fr <> Null Then
+		If fr <> Null
 			ForestRoom\fr = fr
 			PlaceMapCreatorForest(ForestRoom\fr, ForestRoom\x, ForestRoom\y + 30.0, ForestRoom\z, ForestRoom)
 		EndIf
@@ -2411,7 +2411,7 @@ Function LoadMap%(File$)
 		Local MTRoom.Rooms
 		
 		For r.Rooms = Each Rooms
-			If r\RoomTemplate\Name = "room2_mt" Then
+			If r\RoomTemplate\Name = "room2_mt"
 				MTRoom = r
 				Exit
 			EndIf
@@ -2432,7 +2432,7 @@ Function LoadMap%(File$)
 			
 			x = (MTGridSize - 1) - x
 			
-			If MTRoom <> Null Then
+			If MTRoom <> Null
 				Select Name
 					Case "maintenance tunnel endroom"
 						;[Block]
@@ -2479,7 +2479,7 @@ Function LoadMap%(File$)
 			Angle = ReadByte(f) * 90.0
 			
 			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name Then
+				If Lower(rt\Name) = Name
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name)
 					
 					r\Angle = Angle
@@ -2496,9 +2496,9 @@ Function LoadMap%(File$)
 			Name = ReadString(f)
 			Prob = ReadFloat(f)
 			
-			If r <> Null Then
-				If Prob > 0.0 Then
-					If Rnd(0.0, 1.0) <= Prob Then
+			If r <> Null
+				If Prob > 0.0
+					If Rnd(0.0, 1.0) <= Prob
 						e.Events = New Events
 						e\EventName = Name
 						e\EventID = FindEventID(Name)
@@ -2523,7 +2523,7 @@ Function LoadMap%(File$)
 	Local d.Doors
 	
 	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] Then
+		If y < I_Zone\Transition[1]
 			Zone = 3
 		ElseIf y >= I_Zone\Transition[1] And y < I_Zone\Transition[0]
 			Zone = 2
@@ -2531,10 +2531,10 @@ Function LoadMap%(File$)
 			Zone = 1
 		EndIf
 		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile Then
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y Then
+					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
@@ -2556,9 +2556,9 @@ Function LoadMap%(File$)
 								ShouldSpawnDoor = True
 								;[End Block]
 						End Select
-						If ShouldSpawnDoor Then
-							If x + 1 < MapGridSize + 1 Then
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then
+						If ShouldSpawnDoor
+							If x + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
 									d.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[0] = d
 								EndIf
@@ -2587,9 +2587,9 @@ Function LoadMap%(File$)
 								ShouldSpawnDoor = True
 								;[End Block]
 						End Select
-						If ShouldSpawnDoor Then
-							If y + 1 < MapGridSize + 1 Then
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then
+						If ShouldSpawnDoor
+							If y + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
 									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[3] = d
 								EndIf
@@ -2612,7 +2612,7 @@ Function LoadMap%(File$)
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "dimension_106")
 	CreateEvent("dimension_106", "dimension_106", 0) 
 	
-	If opt\IntroEnabled Then
+	If opt\IntroEnabled
 		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "cont1_173_intro")
 		CreateEvent("cont1_173_intro", "cont1_173_intro", 0)
 	EndIf
@@ -2628,9 +2628,9 @@ Function LoadMap%(File$)
 		Local r2.Rooms
 		
 		For r2.Rooms = Each Rooms
-			If r <> r2 Then
-				If r2\z = r\z Then
-					If r2\x = r\x + 8.0 Then
+			If r <> r2
+				If r2\z = r\z
+					If r2\x = r\x + 8.0
 						r\Adjacent[0] = r2
 						If r\AdjDoor[0] = Null Then r\AdjDoor[0] = r2\AdjDoor[2]
 					ElseIf r2\x = r\x - 8.0
@@ -2638,7 +2638,7 @@ Function LoadMap%(File$)
 						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
 					EndIf
 				ElseIf r2\x = r\x
-					If r2\z = r\z - 8.0 Then
+					If r2\z = r\z - 8.0
 						r\Adjacent[1] = r2
 						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
 					ElseIf r2\z = r\z + 8.0

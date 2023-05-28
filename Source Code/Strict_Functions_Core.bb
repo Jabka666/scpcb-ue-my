@@ -22,16 +22,16 @@ Function AutoReleaseSounds%()
 		Local i%
 		
 		For i = 0 To MaxChannelsAmount - 1
-			If ChannelPlaying(snd\Channels[i]) Then
+			If ChannelPlaying(snd\Channels[i])
 				TryRelease = False
 				snd\ReleaseTime = MilliSecs() + 5000
 				Exit
 			EndIf
 		Next
 		
-		If TryRelease Then
-			If snd\ReleaseTime < MilliSecs() Then
-				If snd\InternalHandle <> 0 Then
+		If TryRelease
+			If snd\ReleaseTime < MilliSecs()
+				If snd\InternalHandle <> 0
 					FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 					RemoveSubtitlesToken(snd)
 				EndIf
@@ -43,29 +43,29 @@ End Function
 Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	
-	If snd <> Null Then
+	If snd <> Null
 		Local ShouldPlay% = True
 		Local i%
 		
 		For i = 0 To MaxChannelsAmount - 1
-			If snd\Channels[i] <> 0 Then
-				If (Not ChannelPlaying(snd\Channels[i])) Then
-					If (Not snd\InternalHandle) Then
-						If FileType(snd\Name) <> 1 Then
+			If snd\Channels[i] <> 0
+				If (Not ChannelPlaying(snd\Channels[i]))
+					If (Not snd\InternalHandle)
+						If FileType(snd\Name) <> 1
 							CreateConsoleMsg(Format(GetLocalString("runerr", "sound.notfound"), snd\Name))
 							OpenConsoleOnError()
 						Else
-							If opt\EnableSFXRelease Then
+							If opt\EnableSFXRelease
 								snd\InternalHandle = LoadSound(snd\Name)
 								CreateSubtitlesToken(snd\Name, snd)
 							EndIf
 						EndIf
-						If (Not snd\InternalHandle) Then
+						If (Not snd\InternalHandle)
 							CreateConsoleMsg(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
 							OpenConsoleOnError()
 						EndIf
 					EndIf
-					If ConsoleFlush Then
+					If ConsoleFlush
 						snd\Channels[i] = PlaySound(ConsoleFlushSnd)
 					Else
 						snd\Channels[i] = PlaySound(snd\InternalHandle)
@@ -76,23 +76,23 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 					Return(snd\Channels[i])
 				EndIf
 			Else
-				If (Not snd\InternalHandle) Then
-					If FileType(snd\Name) <> 1 Then
+				If (Not snd\InternalHandle)
+					If FileType(snd\Name) <> 1
 						CreateConsoleMsg(Format(GetLocalString("runerr", "sound.notfound"), snd\Name))
 						OpenConsoleOnError()
 					Else
-						If opt\EnableSFXRelease Then
+						If opt\EnableSFXRelease
 							snd\InternalHandle = LoadSound(snd\Name)
 							CreateSubtitlesToken(snd\Name, snd)
 						EndIf
 					EndIf
 					
-					If (Not snd\InternalHandle) Then
+					If (Not snd\InternalHandle)
 						CreateConsoleMsg(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
 						OpenConsoleOnError()
 					EndIf
 				EndIf
-				If ConsoleFlushSnd Then
+				If ConsoleFlushSnd
 					snd\Channels[i] = PlaySound(ConsoleFlushSnd)
 				Else
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
@@ -115,8 +115,8 @@ Function LoadSound_Strict%(File$)
 	snd\Name = File
 	snd\InternalHandle = 0
 	snd\ReleaseTime = 0
-	If (Not opt\EnableSFXRelease) Then
-		If (Not snd\InternalHandle) Then
+	If (Not opt\EnableSFXRelease)
+		If (Not snd\InternalHandle)
 			snd\InternalHandle = LoadSound(snd\Name)
 			CreateSubtitlesToken(snd\Name, snd)
 		EndIf
@@ -127,8 +127,8 @@ End Function
 Function FreeSound_Strict%(SoundHandle%)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	
-	If snd <> Null Then
-		If snd\InternalHandle <> 0 Then
+	If snd <> Null
+		If snd\InternalHandle <> 0
 			FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 			RemoveSubtitlesToken(snd)
 		EndIf
@@ -146,7 +146,7 @@ Const TwoD% = 8192
 
 Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If FileType(File) <> 1 Then
+	If FileType(File) <> 1
 		CreateConsoleMsg(Format(GetLocalString("runerr", "sound.notfound"), File))
 		OpenConsoleOnError()
 		Return(0)
@@ -156,7 +156,7 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	st\CHN = PlayMusic(File, CustomMode + TwoD)
 	
-	If st\CHN = -1 Then
+	If st\CHN = -1
 		CreateConsoleMsg(Format(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File, "{0}"), st\CHN, "{1}"))
 		OpenConsoleOnError()
 		Return(-1)
@@ -171,12 +171,12 @@ End Function
 Function StopStream_Strict%(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then
+	If st = Null
 		CreateConsoleMsg(GetLocalString("runerr", "sound.stream.failed.stop"))
 		OpenConsoleOnError()
 		Return
 	EndIf
-	If st\CHN = 0 Lor st\CHN = -1 Then
+	If st\CHN = 0 Lor st\CHN = -1
 		CreateConsoleMsg(Format(GetLocalString("runerr", "sound.stream.failed.stop.v"), st\CHN))
 		OpenConsoleOnError()
 		Return
@@ -189,12 +189,12 @@ End Function
 Function SetStreamVolume_Strict%(StreamHandle%, Volume#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then
+	If st = Null
 		CreateConsoleMsg(GetLocalString("runerr", "sound.stream.failed.set"))
 		OpenConsoleOnError()
 		Return
 	EndIf
-	If st\CHN = 0 Lor st\CHN = -1 Then
+	If st\CHN = 0 Lor st\CHN = -1
 		CreateConsoleMsg(Format(GetLocalString("runerr", "sound.stream.failed.set.v"), st\CHN))
 		OpenConsoleOnError()
 		Return
@@ -205,17 +205,17 @@ End Function
 Function SetStreamPaused_Strict%(StreamHandle%, Paused%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then
+	If st = Null
 		CreateConsoleMsg(GetLocalString("runerr", "sound.stream.failed.pause"))
 		OpenConsoleOnError()
 		Return
 	EndIf
-	If st\CHN = 0 Lor st\CHN = -1 Then
+	If st\CHN = 0 Lor st\CHN = -1
 		CreateConsoleMsg(Format(GetLocalString("runerr", "sound.stream.failed.pause.v"), st\CHN))
 		OpenConsoleOnError()
 		Return
 	EndIf
-	If Paused Then
+	If Paused
 		PauseChannel(st\CHN)
 	Else
 		ResumeChannel(st\CHN)
@@ -225,12 +225,12 @@ End Function
 Function IsStreamPlaying_Strict%(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then
+	If st = Null
 		CreateConsoleMsg(GetLocalString("runerr", "sound.stream.failed.find"))
 		OpenConsoleOnError()
 		Return
 	EndIf
-	If st\CHN = 0 Lor st\CHN = -1 Then
+	If st\CHN = 0 Lor st\CHN = -1
 		CreateConsoleMsg(Format(GetLocalString("runerr","sound.stream.failed.find.v"), st\CHN))
 		OpenConsoleOnError()
 		Return
@@ -241,12 +241,12 @@ End Function
 Function SetStreamPan_Strict%(StreamHandle%, Pan#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then
+	If st = Null
 		CreateConsoleMsg(GetLocalString("runerr", "sound.stream.failed.find"))
 		OpenConsoleOnError()
 		Return
 	EndIf
-	If st\CHN = 0 Lor st\CHN = -1 Then
+	If st\CHN = 0 Lor st\CHN = -1
 		CreateConsoleMsg(Format(GetLocalString("runerr", "sound.stream.failed.find.v"), st\CHN))
 		OpenConsoleOnError()
 		Return
@@ -255,14 +255,14 @@ Function SetStreamPan_Strict%(StreamHandle%, Pan#)
 End Function
 
 Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
-	If StreamHandle <> 0 Then
-		If IsStreamPlaying_Strict(StreamHandle) Then
+	If StreamHandle <> 0
+		If IsStreamPlaying_Strict(StreamHandle)
 			Range = Max(Range, 1.0)
 			
-			If Volume > 0.0 Then
+			If Volume > 0.0
 				Local Dist# = EntityDistance(Cam, Entity) / Range
 				
-				If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
+				If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0)
 					Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 					
 					SetStreamVolume_Strict(StreamHandle, Volume * (1.0 - Dist) * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
@@ -282,7 +282,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 	Local TexAlpha% = 0
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "mesh.notfound"), File))
 		Tmp = LoadMesh(File, Parent)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "mesh.failed.load"), File))
@@ -291,15 +291,15 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 	For i = 1 To CountSurfaces(Tmp)
 		SF = GetSurface(Tmp, i)
 		b = GetSurfaceBrush(SF)
-		If b <> 0 Then
+		If b <> 0
 			Texture = 0
 			t1 = 0 : t2 = 0
 			t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
-			If t1 <> 0 Then
+			If t1 <> 0
 				TexAlpha = IsTexAlpha(t1)
-				If TexAlpha <> 2 Then
+				If TexAlpha <> 2
 					Texture = CheckForTexture(t1, TexAlpha)
-					If Texture <> 0 Then
+					If Texture <> 0
 						BrushTexture(b, Texture, 0, 0)
 					Else
 						; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
@@ -308,7 +308,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 				Else
 					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if Lightmap is existing)
 					Texture = CheckForTexture(t1, 1)
-					If Texture <> 0 Then
+					If Texture <> 0
 						TextureCoords(Texture, 1)
 						BrushTexture(b, Texture, 0, 0)
 					Else
@@ -316,7 +316,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 					EndIf
 					
 					Texture = CheckForTexture(t2, TexAlpha)
-					If Texture <> 0 Then
+					If Texture <> 0
 						TextureCoords(Texture, 0)
 						BrushTexture(b, Texture, 0, 1)
 					Else
@@ -338,7 +338,7 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 	Local TexAlpha% = 0
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animmesh.notfound"), File))
 		Tmp = LoadAnimMesh(File, Parent)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "animmesh.failed.load"), File))
@@ -347,14 +347,14 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 	For i = 1 To CountSurfaces(Tmp)
 		SF = GetSurface(Tmp, i)
 		b = GetSurfaceBrush(SF)
-		If b <> 0 Then
+		If b <> 0
 			Texture = 0
 			t1 = 0
 			t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
-			If t1 <> 0 Then
+			If t1 <> 0
 				TexAlpha = IsTexAlpha(t1)
 				Texture = CheckForTexture(t1, TexAlpha)
-				If Texture <> 0 Then
+				If Texture <> 0
 					BrushTexture(b, Texture, 0, 0)
 				Else
 					; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
@@ -382,7 +382,7 @@ Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextur
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "texture.notfound"), File))
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "texture.failed.load"), File))
@@ -399,7 +399,7 @@ Function OpenMovie_Strict%(File$)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "movie.notfound"), File))
 		Tmp = OpenMovie(File)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "movie.failed.load"), File))
@@ -411,7 +411,7 @@ Function OpenFile_Strict%(File$)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "openfile.notfound"), File))
 		Tmp = OpenFile(File)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "openfile.failed.open"), File))
@@ -423,7 +423,7 @@ Function ReadFile_Strict%(File$)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "readfile.notfound"), File))
 		Tmp = ReadFile(File)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "readfile.failed.read"), File))
@@ -435,7 +435,7 @@ Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Co
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animtexture.notfound"), File))
 		Tmp = LoadAnimTextureCheckingIfInCache(File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "animtexture.failed.load"), File))
@@ -447,7 +447,7 @@ Function LoadBrush_Strict%(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "brush.notfound"), File))
 		Tmp = LoadBrush(File, Flags, u, v)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "brush.failed.load"), File))
@@ -459,7 +459,7 @@ Function LoadFont_Strict%(File$, Height% = 13, IgnoreScaling% = False)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "font.notfound"), File))
 		Tmp = LoadFont(File, (Int(Height * (opt\GraphicHeight / 1024.0))) * (Not IgnoreScaling) + IgnoreScaling * Height)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "font.failed.load"), File))
@@ -471,7 +471,7 @@ Function LoadImage_Strict%(File$)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "image.notfound"), File))
 		Tmp = LoadImage(File)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "image.failed.load"), File))
@@ -484,7 +484,7 @@ Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 	Local Tmp%
 	
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then
+	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animimage.notfound"), File))
 		Tmp = LoadAnimImage(File, Width, Height, FirstFrame, Count)
 		If (Not Tmp) Then RuntimeError(Format(GetLocalString("runerr", "animimage.failed.load"), File))

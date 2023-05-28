@@ -73,7 +73,7 @@ Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	SrcHeight = ImageHeight(SrcImage)
 	
 	; ~ Calculate the width and height of the dest image, or the scale
-	If (Not ExactSize) Then
+	If (Not ExactSize)
 		DestWidth = Floor(SrcWidth * ScaleX)
 		DestHeight = Floor(SrcHeight * ScaleY)
 	Else
@@ -134,8 +134,8 @@ End Function
 Function RenderGamma%()
 	Local Buffer% = BackBuffer()
 	
-	If opt\DisplayMode = 1 Then
-		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight Then
+	If opt\DisplayMode = 1
+		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight
 			SetBuffer(TextureBuffer(FresizeTexture))
 			ClsColor(0, 0, 0)
 			Cls()
@@ -151,7 +151,7 @@ Function RenderGamma%()
 	
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
-	If opt\ScreenGamma > 1.0 Then
+	If opt\ScreenGamma > 1.0
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, Buffer, TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
@@ -201,15 +201,15 @@ Function UpdateWorld2%()
 	Local HasBattery%
 	Local Power%
 	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0
 		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) <> Null Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+			If Inventory(i) <> Null
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble")
 					Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision) + (0.17 * (wi\SCRAMBLE))))
 					Power = Int(Inventory(i)\State)
-					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
+					If Power = 0 ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
-						If wi\SCRAMBLE = 1 Then
+						If wi\SCRAMBLE = 1
 							CreateMsg(GetLocalString("msg", "battery.died"))
 						Else
 							CreateMsg(GetLocalString("msg", "battery.died.nvg"))
@@ -226,8 +226,8 @@ Function UpdateWorld2%()
 			EndIf
 		Next
 		
-		If wi\NightVision = 2 Then
-			If wi\NVGTimer <= 0.0 Then
+		If wi\NightVision = 2
+			If wi\NVGTimer <= 0.0
 				For np.NPCs = Each NPCs
 					np\NVGX = EntityX(np\Collider, True)
 					np\NVGY = EntityY(np\Collider, True)
@@ -240,15 +240,15 @@ Function UpdateWorld2%()
 		EndIf
 	EndIf
 	
-	If (wi\SCRAMBLE = 1 And HasBattery <> 0) Lor wi\SCRAMBLE = 2 Then
+	If (wi\SCRAMBLE = 1 And HasBattery <> 0) Lor wi\SCRAMBLE = 2
 		If (Not ChannelPlaying(SCRAMBLECHN)) Then SCRAMBLECHN = PlaySound_Strict(SCRAMBLESFX)
 	Else
 		If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 	EndIf
 	
-	If HasBattery = 1 Then
+	If HasBattery = 1
 		UpdateBatteryTimer()
-		If BatMsgTimer >= 70.0 * 1.0 Then
+		If BatMsgTimer >= 70.0 * 1.0
 			If (Not ChannelPlaying(LowBatteryCHN[1])) Then LowBatteryCHN[1] = PlaySound_Strict(LowBatterySFX[1])
 		EndIf
 	EndIf
@@ -267,12 +267,12 @@ Function RenderWorld2%(Tween#)
 	Local HasBattery%
 	Local Power%
 	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0 Then
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0
 		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) <> Null Then
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Then
+			If Inventory(i) <> Null
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\TempName = "nvg") Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\TempName = "veryfinenvg") Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble")
 					Power = Int(Inventory(i)\State)
-					If Power = 0 Then ; ~ This NVG or SCRAMBLE can't be used
+					If Power = 0 ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
 					ElseIf Power <= 100
 						HasBattery = 1
@@ -289,8 +289,8 @@ Function RenderWorld2%(Tween#)
 	
 	CurrTrisAmount = TrisRendered()
 	
-	If HasBattery > 0 Then
-		If wi\NightVision = 2 Then ; ~ Show a HUD
+	If HasBattery > 0
+		If wi\NightVision = 2 ; ~ Show a HUD
 			Color(255, 255, 255)
 			
 			SetFont2(fo\FontID[Font_Digital])
@@ -311,18 +311,18 @@ Function RenderWorld2%(Tween#)
 			PositionEntity(Temp, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			
 			For np.NPCs = Each NPCs
-				If np\NVGName <> "" And (Not np\HideFromNVG) Then ; ~ Don't waste your time if the string is empty
+				If np\NVGName <> "" And (Not np\HideFromNVG) ; ~ Don't waste your time if the string is empty
 					PositionEntity(Temp2, np\NVGX, np\NVGY, np\NVGZ)
 					
 					Local Dist# = EntityDistanceSquared(Temp2, me\Collider)
 					
-					If Dist < 552.25 Then ; ~ Don't draw text if the NPC is too far away
+					If Dist < 552.25 ; ~ Don't draw text if the NPC is too far away
 						PointEntity(Temp, Temp2)
 						
 						Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
 						Local xValue# = 0.0
 						
-						If YawValue > 90.0 And YawValue <= 180.0 Then
+						If YawValue > 90.0 And YawValue <= 180.0
 							xValue = 1.0 / 90.0 * YawValue
 						ElseIf YawValue > 180 And YawValue < 270.0
 							xValue = (-1.0) / YawValue * 270.0
@@ -333,7 +333,7 @@ Function RenderWorld2%(Tween#)
 						Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
 						Local yValue# = 0.0
 						
-						If PitchValue > 90.0 And PitchValue <= 180.0 Then
+						If PitchValue > 90.0 And PitchValue <= 180.0
 							yValue = 1.0 / 90.0 * PitchValue
 						ElseIf PitchValue > 180.0 And PitchValue < 270.0
 							yValue = (-1.0) / PitchValue * 270.0
@@ -341,7 +341,7 @@ Function RenderWorld2%(Tween#)
 							yValue = Sin(PitchValue)
 						EndIf
 						
-						If (Not wi\IsNVGBlinking) Then
+						If (Not wi\IsNVGBlinking)
 							Text2(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVGName, True, True)
 							Text2(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
 						EndIf
@@ -380,8 +380,8 @@ Function RenderWorld2%(Tween#)
 	RenderWorld()
 	CameraProjMode(ArkBlurCam, 0)
 	
-	If HasBattery = 1 Then
-		If BatMsgTimer >= 70.0 * 1.0 Then
+	If HasBattery = 1
+		If BatMsgTimer >= 70.0 * 1.0
 			Color(255, 0, 0)
 			SetFont2(fo\FontID[Font_Digital])
 			
@@ -440,6 +440,8 @@ Function FreeBlur%()
 End Function
 
 Function PlayStartupVideos%()
+	If (Not opt\PlayStartup) Then Return
+	
 	HidePointer()
 	
 	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
@@ -448,7 +450,7 @@ Function PlayStartupVideos%()
 	Local Ratio# = Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)
 	
 	; ~ TODO: Rework scaling for 4k resolutions
-	If Ratio > 1.76 And Ratio < 1.78 Then
+	If Ratio > 1.76 And Ratio < 1.78
 		ScaledGraphicHeight = opt\RealGraphicHeight
 	Else
 		ScaledGraphicHeight = Float(opt\RealGraphicWidth) / (16.0 / 9.0)
@@ -488,7 +490,7 @@ Function PlayStartupVideos%()
 			
 			Local Close% = False
 			
-			If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio)) Then
+			If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio))
 				ResetLoadingTextColor()
 				StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
 				CloseMovie(Movie)
@@ -582,12 +584,12 @@ Function SetFont2%(Font%)
 End Function
 
 Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
-	If opt\TextShadow Then
+	If opt\TextShadow
 		Local ColorR# = ColorRed()
 		Local ColorG# = ColorGreen()
 		Local ColorB# = ColorBlue()
 		
-		If ColorR = 0.0 And ColorG = 0.0 And ColorB = 1.0 Then
+		If ColorR = 0.0 And ColorG = 0.0 And ColorB = 1.0
 			Color(200, 200, 200)
 		Else
 			Color(55, 55, 55)

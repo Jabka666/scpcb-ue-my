@@ -72,7 +72,7 @@ Function UpdateSubtitles%()
 	Local lastSubtitles.SubtitlesMsg
 	
 	For queue.QueuedSubtitlesMsg = Each QueuedSubtitlesMsg
-		If queue\TimeStart > 0.0 Then
+		If queue\TimeStart > 0.0
 			queue\TimeStart = queue\TimeStart - fps\Factor[0]
 		Else
 			Local TxtLine$ = queue\Txt
@@ -84,7 +84,7 @@ Function UpdateSubtitles%()
 			While Len(TxtLine) > 0
 				Local StringRight# = subassets\BoxLeft + (10 * MenuScale) + StringWidth(TxtLine)
 				
-				If StringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale) Then
+				If StringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
 					Local NextLine$ = ""
 					
 					While StringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
@@ -102,7 +102,7 @@ Function UpdateSubtitles%()
 						Local NextStringRight# = subassets\BoxLeft + (10 * MenuScale) + StringWidth(NextLine)
 						
 						; ~ If a very long single word exceeds the box size, split it.
-						If NextStringRight > subassets\BoxLeft + subassets\BoxWidth- (10 * MenuScale) Then
+						If NextStringRight > subassets\BoxLeft + subassets\BoxWidth- (10 * MenuScale)
 							While NextStringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
 								TxtLine = Right(NextLine, 1) + TxtLine
 								NextLine = Left(NextLine, Len(NextLine) - 1)
@@ -112,14 +112,14 @@ Function UpdateSubtitles%()
 						EndIf
 						
 						; ~ No need to split the text
-						If TxtLine = "" Then
+						If TxtLine = ""
 							TxtLine = OldTxtLine
 							Exit
 						EndIf
 					Wend
 					
 					; ~ Move previously added lines upwards
-					If HasSplit Then
+					If HasSplit
 						lastSubtitles\yPos = lastSubtitles\yPos - subassets\TextHeight
 						lastSubtitles\CurrYPos = lastSubtitles\CurrYPos - subassets\TextHeight
 						
@@ -141,7 +141,7 @@ Function UpdateSubtitles%()
 	
 	For sub.SubtitlesMsg = Each SubtitlesMsg
 		sub\TimeLeft = sub\TimeLeft - fps\Factor[0]
-		If sub\TimeLeft < 0.0 Then
+		If sub\TimeLeft < 0.0
 			sub\Alpha = Max(sub\Alpha - (fps\Factor[0] / 7.0), 0.0)
 			If sub\Alpha <= 0.0 Then Delete(sub)
 		Else
@@ -165,11 +165,11 @@ Function SubtitlesGetINIFileSectionLocation%(Section$)
 		Local Strtemp$ = ReadLine(f)
 		
 		n = n + 1
-		If Left(Strtemp, 1) = "[" Then
+		If Left(Strtemp, 1) = "["
 			Strtemp = Lower(Strtemp)
 			Temp = Instr(Strtemp, Section)
-			If Temp > 0 Then
-				If Mid(Strtemp, Temp - 1, 1) = "[" Lor Mid(Strtemp, Temp - 1, 1) = "|" Then
+			If Temp > 0
+				If Mid(Strtemp, Temp - 1, 1) = "[" Lor Mid(Strtemp, Temp - 1, 1) = "|"
 					SeekFile(SubFile, 0)
 					Return(n)
 				EndIf
@@ -215,13 +215,13 @@ Function RenderSubtitles%()
 		
 		Local i%
 		
-		If sub\IsGlitch Then
+		If sub\IsGlitch
 			For i = 0 To Rand(10, 15)
 				Txt = Replace(sub\Txt, Mid(sub\Txt, Rand(1, Len(Txt) - 1), 1), Chr(Rand(130, 250)))
 			Next
 		EndIf
 		
-		If opt\OverrideSubColor Then
+		If opt\OverrideSubColor
 			Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
 		Else
 			Color(sub\R, sub\G, sub\B)
@@ -241,7 +241,7 @@ Function ParseSubtitlesSettings$(qsub.QueuedSubtitlesMsg)
 	While Temp < Len(Txt)
 		Temp = Temp + 1
 		
-		If Mid(Txt, Temp, 1) = "<" Then
+		If Mid(Txt, Temp, 1) = "<"
 			StartLeft = Temp - 1
 			While Mid(Txt, Temp, 1) <> ">" And Temp < Len(Txt)
 				If Mid(Txt, Temp, 1) = "<" Then Temp = Temp + 1
@@ -254,7 +254,7 @@ Function ParseSubtitlesSettings$(qsub.QueuedSubtitlesMsg)
 					Temp = Temp + 1
 				Wend
 				
-				If Mid(Txt, Temp, 1) = "=" Then
+				If Mid(Txt, Temp, 1) = "="
 					Temp = Temp + 1
 				EndIf
 				
@@ -265,11 +265,11 @@ Function ParseSubtitlesSettings$(qsub.QueuedSubtitlesMsg)
 				
 				If Mid(Txt, Temp, 1) = "," Then Temp = Temp + 1
 				
-				If Trim(Lower(IniKey)) = "color" Then
+				If Trim(Lower(IniKey)) = "color"
 					Local subcolor.SubtitlesColor
 					
 					For subcolor.SubtitlesColor = Each SubtitlesColor
-						If Trim(Lower(IniValue)) = subcolor\Name Then
+						If Trim(Lower(IniValue)) = subcolor\Name
 							qsub\R = subcolor\R
 							qsub\G = subcolor\G
 							qsub\B = subcolor\B
@@ -280,10 +280,10 @@ Function ParseSubtitlesSettings$(qsub.QueuedSubtitlesMsg)
 				If Trim(Lower(IniKey)) = "g" Then qsub\G = Int(Trim(Lower(IniValue)))
 				If Trim(Lower(IniKey)) = "b" Then qsub\B = Int(Trim(Lower(IniValue)))
 				
-				If Trim(Lower(IniKey)) = "glitch" Then
-					If Trim(Lower(IniValue)) = "true" Then
+				If Trim(Lower(IniKey)) = "glitch"
+					If Trim(Lower(IniValue)) = "true"
 						qsub\IsGlitch = True
-					ElseIf Trim(Lower(IniValue)) = "false" Then
+					ElseIf Trim(Lower(IniValue)) = "false"
 						qsub\IsGlitch = False
 					EndIf
 				EndIf
@@ -291,7 +291,7 @@ Function ParseSubtitlesSettings$(qsub.QueuedSubtitlesMsg)
 			Wend
 		EndIf
 		
-		If Mid(Txt, Temp, 1) = ">" Then
+		If Mid(Txt, Temp, 1) = ">"
 			Txt = Left(Txt, StartLeft) + Right(Txt, Len(Txt) - Temp)
 			Temp = 0
 		EndIf
@@ -315,12 +315,12 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 		Local Strtemp$ = ReadLine(f)
 		
 		n = n + 1
-		If n = Start Then
+		If n = Start
 			Repeat
 				TemporaryString = ReadLine(f)
 				
-				If Instr(TemporaryString, "=") <> 0 Then
-					If Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0.0))) = "text" Then
+				If Instr(TemporaryString, "=") <> 0
+					If Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0.0))) = "text"
 						QueueSubtitlesMsg(SoundPath, sound, Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))), 0.0, 10.0)
 					Else
 						QueueSubtitlesMsg(SoundPath, sound, Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))), Float(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0.0)))), 10.0)
@@ -376,7 +376,7 @@ End Function
 Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255, G% = 255, B% = 255, IsGlitch% = False)
 	If me\Deaf Then Return
 	
-	If sound <> Null Then
+	If sound <> Null
 		Local IsChannelPlaying% = False
 		Local i%
 		

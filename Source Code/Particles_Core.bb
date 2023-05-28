@@ -16,7 +16,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p.Particles = New Particles
 	p\OBJ = CreateSprite()
 	PositionEntity(p\OBJ, x, y, z, True)
-	If ID = PARTICLE_WHITE_SMOKE Then
+	If ID = PARTICLE_WHITE_SMOKE
 		EntityTexture(p\OBJ, p_I\ParticleTextureID[ID], Rand(0, 3))
 	Else
 		EntityTexture(p\OBJ, p_I\ParticleTextureID[ID])
@@ -59,19 +59,19 @@ Function UpdateParticles%()
 	Local p.Particles
 	
 	For p.Particles = Each Particles
-		If EntityDistanceSquared(p\OBJ, me\Collider) <= PowTwo(HideDistance) Then
+		If EntityDistanceSquared(p\OBJ, me\Collider) <= PowTwo(HideDistance)
 			MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
 			If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
 			TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)
 			
 			PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
 			
-			If p\AlphaChange <> 0.0 Then
+			If p\AlphaChange <> 0.0
 				p\Alpha = Min(Max(p\Alpha + (p\AlphaChange * fps\Factor[0]), 0.0), 1.0)
 				EntityAlpha(p\OBJ, p\Alpha)
 			EndIf
 			
-			If p\SizeChange <> 0.0 Then
+			If p\SizeChange <> 0.0
 				p\Size = p\Size + (p\SizeChange * fps\Factor[0])
 				ScaleSprite(p\OBJ, p\Size, p\Size)
 			EndIf
@@ -156,7 +156,7 @@ Function UpdateEmitters%()
 	Local InSmoke% = False
 	
 	For e.Emitters = Each Emitters
-		If fps\Factor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0) Then
+		If fps\Factor[0] > 0.0 And (PlayerRoom = e\room Lor e\room\Dist < 8.0)
 			p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(e\OBJ, True), EntityY(e\OBJ, True), EntityZ(e\OBJ, True), e\Size, e\Gravity, e\LifeTime)
 			p\Speed = e\Speed
 			RotateEntity(p\Pvt, EntityPitch(e\OBJ, True), EntityYaw(e\OBJ, True), EntityRoll(e\OBJ, True), True)
@@ -170,9 +170,9 @@ Function UpdateEmitters%()
 			
 			e\SoundCHN = LoopSound2(HissSFX, e\SoundCHN, Camera, e\OBJ)
 			
-			If (Not InSmoke) Then
-				If wi\GasMask = 0 And wi\HazmatSuit = 0 Then
-					If DistanceSquared(EntityX(Camera, True), EntityX(e\OBJ, True), EntityZ(Camera, True), EntityZ(e\OBJ, True)) < 0.64 Then
+			If (Not InSmoke)
+				If wi\GasMask = 0 And wi\HazmatSuit = 0
+					If DistanceSquared(EntityX(Camera, True), EntityX(e\OBJ, True), EntityZ(Camera, True), EntityZ(e\OBJ, True)) < 0.64
 						If Abs(EntityY(Camera, True) - EntityY(e\OBJ, True)) < 5.0 Then InSmoke = True
 					EndIf
 				EndIf
@@ -180,9 +180,9 @@ Function UpdateEmitters%()
 		EndIf
 	Next
 	
-	If InSmoke Then
+	If InSmoke
 		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
-		If me\EyeIrritation > 70.0 * 24.0 Then
+		If me\EyeIrritation > 70.0 * 24.0
 			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
 			Kill()
 		EndIf
@@ -198,14 +198,14 @@ Function UpdateDust%()
 	Local p.Particles
 	Local i%, Pvt%
 	
-	If opt\ParticleAmount > 0 Then
+	If opt\ParticleAmount > 0
 		; ~ Create a single dust particle
-		If Rand(35 + (35 * (opt\ParticleAmount = 1))) = 1 Then
+		If Rand(35 + (35 * (opt\ParticleAmount = 1))) = 1
 			Pvt = CreatePivot()
 			
 			PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 			RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
-			If Rand(2) = 1 Then
+			If Rand(2) = 1
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 			Else
 				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
@@ -218,12 +218,12 @@ Function UpdateDust%()
 		EndIf
 		
 		; ~ Create extra dust particles while the camera is shaking
-		If me\BigCameraShake > 0.0 Then
+		If me\BigCameraShake > 0.0
 			For i = 0 To 5 + (2 * (opt\ParticleAmount - 1))
 				Pvt = CreatePivot()
 				PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 				RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
-				If Rand(2) = 1 Then
+				If Rand(2) = 1
 					MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 				Else
 					MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))

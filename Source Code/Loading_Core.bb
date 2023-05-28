@@ -221,7 +221,7 @@ Function LoadDoors%()
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_UP] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_up.png", 1, DeleteAllTextures)
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_idle.png", 1, DeleteAllTextures)
 	
-	If opt\Atmosphere Then
+	If opt\Atmosphere
 		For i = ELEVATOR_PANEL_DOWN To ELEVATOR_PANEL_IDLE
 			TextureBlend(d_I\ElevatorPanelTextureID[i], 5)
 		Next
@@ -244,7 +244,7 @@ Function LoadDoors%()
 	d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad.jpg", 1, DeleteAllTextures)
 	d_I\ButtonTextureID[BUTTON_RED_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_locked.png", 1, DeleteAllTextures)
 	
-	If opt\Atmosphere Then
+	If opt\Atmosphere
 		For i = BUTTON_GREEN_TEXTURE To BUTTON_RED_TEXTURE
 			TextureBlend(d_I\ButtonTextureID[i], 5)
 		Next
@@ -557,7 +557,7 @@ Function LoadNPCs%()
 	
 	n_I\NPCTextureID[NPC_096_BLOODY_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_096_bloody.png", 1, DeleteAllTextures)
 	
-	If opt\Atmosphere Then
+	If opt\Atmosphere
 		For i = NPC_CLASS_D_GONZALES_TEXTURE To NPC_096_BLOODY_TEXTURE
 			Local Skip%
 			
@@ -632,13 +632,13 @@ Function LoadMaterials%(File$)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
-		If Left(TemporaryString, 1) = "[" Then
+		If Left(TemporaryString, 1) = "["
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			mat.Materials = New Materials
 			mat\Name = Lower(TemporaryString)
-			If opt\BumpEnabled Then
+			If opt\BumpEnabled
 				StrTemp = IniGetString(File, TemporaryString, "bump")
-				If StrTemp <> "" Then
+				If StrTemp <> ""
 					mat\Bump = LoadTexture_Strict(StrTemp, 1 + (256 * opt\SaveTexturesInVRAM))
 					ApplyBumpMap(mat\Bump)
 				EndIf
@@ -912,8 +912,8 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", "coin", "coin.b3d", "INV_coin_rusty.png", "", 0.0005, 3, "coin_rusty.png")
 	
 	For it.ItemTemplates = Each ItemTemplates
-		If it\Tex <> 0 Then
-			If it\TexPath <> "" Then
+		If it\Tex <> 0
+			If it\TexPath <> ""
 				For it2.ItemTemplates = Each ItemTemplates
 					If it2 <> it And it2\Tex = it\Tex Then it2\Tex = 0
 				Next
@@ -1266,7 +1266,7 @@ Function LoadSounds%()
 		StepSFX(1, 0, i) = LoadSound_Strict("SFX\Step\StepMetal" + (i + 1) + ".ogg")
 		StepSFX(0, 1, i) = LoadSound_Strict("SFX\Step\Run" + (i + 1) + ".ogg")
 		StepSFX(1, 1, i) = LoadSound_Strict("SFX\Step\RunMetal" + (i + 1) + ".ogg")
-		If i < 3 Then
+		If i < 3
 			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
 		EndIf
 	Next
@@ -1366,7 +1366,7 @@ Function LoadEvents%()
 	
 	CreateEvent("room4_lcz_049", "room4_lcz", 0)
 	
-	If Rand(5) < 5 Then
+	If Rand(5) < 5
 		Select Rand(3)
 			Case 1
 				;[Block]
@@ -1385,7 +1385,7 @@ Function LoadEvents%()
 	
 	CreateEvent("room2_nuke", "room2_nuke", 0)
 	
-	If Rand(5) < 5 Then
+	If Rand(5) < 5
 		CreateEvent("cont1_895_106", "cont1_895", 0)
 	Else
 		CreateEvent("cont1_895", "cont1_895", 0)
@@ -1397,7 +1397,7 @@ Function LoadEvents%()
 	CreateEvent("door_closing", "room3_lcz", 0, 0.1)
 	CreateEvent("door_closing", "room3_2_hcz", 0, 0.1)
 	
-	If Rand(2) = 1 Then
+	If Rand(2) = 1
 		CreateEvent("106_victim", "room3_lcz", Rand(2))
 		CreateEvent("106_sinkhole", "room3_2_lcz", Rand(2, 3))
 	Else
@@ -1509,16 +1509,16 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		If d\OBJ2 <> 0 Then HideEntity(d\OBJ2)
 		HideEntity(d\FrameOBJ)
 		
-		If d\room = Null Then
+		If d\room = Null
 			ClosestRoom.Rooms = Null
 			Dist = 30.0
 			For r.Rooms = Each Rooms
 				x = Abs(EntityX(r\OBJ, True) - EntityX(d\FrameOBJ, True))
-				If x < 20.0 Then
+				If x < 20.0
 					z = Abs(EntityZ(r\OBJ, True) - EntityZ(d\FrameOBJ, True))
-					If z < 20.0 Then
+					If z < 20.0
 						Dist2 = (x * x) + (z * z)
-						If Dist2 < Dist Then
+						If Dist2 < Dist
 							ClosestRoom = r
 							Dist = Dist2
 						EndIf
@@ -1546,7 +1546,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 	For w.WayPoints = Each WayPoints
 		Number = Number + 1
 		Iter = Iter + 1
-		If Iter = 20 Then
+		If Iter = 20
 			RenderLoading(LoadingStart + Floor((30.0 / Amount) * Number), GetLocalString("loading", "waypoints"))
 			Iter = 0
 		EndIf
@@ -1556,7 +1556,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		Local CanCreateWayPoint% = False
 		
 		While w2 <> Null
-			If w\room = w2\room Lor w\door <> Null Lor w2\door <> Null Then
+			If w\room = w2\room Lor w\door <> Null Lor w2\door <> Null
 				Dist = EntityDistance(w\OBJ, w2\OBJ)
 				
 				If w\room\MaxWayPointY = 0.0 Lor w2\room\MaxWayPointY = 0.0
@@ -1565,11 +1565,11 @@ Function LoadWayPoints%(LoadingStart% = 55)
 					If Abs(EntityY(w\OBJ) - EntityY(w2\OBJ)) <= w\room\MaxWayPointY Then CanCreateWayPoint = True
 				EndIf
 				
-				If Dist < 7.0 Then
+				If Dist < 7.0
 					If CanCreateWayPoint
-						If EntityVisible(w\OBJ, w2\OBJ) Then
+						If EntityVisible(w\OBJ, w2\OBJ)
 							For i = 0 To 4
-								If w\connected[i] = Null Then
+								If w\connected[i] = Null
 									w\connected[i] = w2.WayPoints
 									w\Dist[i] = Dist
 									Exit
@@ -1577,7 +1577,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 							Next
 							
 							For n = 0 To 4
-								If w2\connected[n] = Null Then
+								If w2\connected[n] = Null
 									w2\connected[n] = w.WayPoints
 									w2\Dist[n] = Dist
 									Exit
@@ -1602,7 +1602,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		EntityRadius(w\OBJ, 0)
 		
 		For i = 0 To 4
-			If w\connected[i] <> Null Then
+			If w\connected[i] <> Null
 				Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
 				
 				EntityColor(tLine, 255.0, 0.0, 0.0)
@@ -1918,7 +1918,7 @@ Function LoadEntities%()
 	RenderLoading(20, GetLocalString("loading", "tracks"))
 	
 	UserTrackMusicAmount = 0
-	If opt\EnableUserTracks Then
+	If opt\EnableUserTracks
 		Local DirPath$ = "SFX\Radio\UserTracks\"
 		
 		If FileType(DirPath) <> 2 Then CreateDir(DirPath)
@@ -1928,9 +1928,9 @@ Function LoadEntities%()
 		Repeat
 			File = NextFile(Dir)
 			If File = "" Then Exit
-			If FileType(DirPath + File) = 1 Then
+			If FileType(DirPath + File) = 1
 				Test = LoadSound(DirPath + File)
-				If Test <> 0 Then
+				If Test <> 0
 					UserTrackName[UserTrackMusicAmount] = File
 					UserTrackMusicAmount = UserTrackMusicAmount + 1
 				EndIf
@@ -1984,7 +1984,7 @@ Function InitOtherStuff%()
 	
 	CanSave = 2
 	
-	If opt\DebugMode Then
+	If opt\DebugMode
 		InitCheats()
 	Else
 		ClearCheats()
@@ -2034,7 +2034,7 @@ Function InitNewGame%()
 	
 	RenderLoading(55, GetLocalString("loading", "rooms"))
 	
-	If SelectedCustomMap = Null Then
+	If SelectedCustomMap = Null
 		CreateMap()
 	Else
 		LoadMap(CustomMapsPath + SelectedCustomMap\Name)
@@ -2048,12 +2048,12 @@ Function InitNewGame%()
 	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
-		If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR Then
+		If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR
 			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 		ElseIf d\DoorType = OFFICE_DOOR Lor d\DoorType = WOODEN_DOOR
 			MoveEntity(d\OBJ, (((d\DoorType = OFFICE_DOOR) * 92.0) + ((d\DoorType = WOODEN_DOOR) * 70.0)) * RoomScale, 0.0, 0.0)
 		EndIf
-		If d\OBJ2 <> 0 Then
+		If d\OBJ2 <> 0
 			EntityParent(d\OBJ2, 0)
 			If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 		EndIf
@@ -2077,25 +2077,25 @@ Function InitNewGame%()
 	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomLights - 1
-			If r\Lights[i] <> 0 Then
+			If r\Lights[i] <> 0
 				EntityParent(r\Lights[i], 0)
 			Else
 				Exit
 			EndIf
 		Next
 		
-		If (Not r\RoomTemplate\DisableDecals) Then
-			If Rand(4) = 1 Then
+		If (Not r\RoomTemplate\DisableDecals)
+			If Rand(4) = 1
 				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
-			If Rand(4) = 1 Then
+			If Rand(4) = 1
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 		EndIf
 		
-		If r\RoomTemplate\Name = "cont1_173" And (Not opt\IntroEnabled) Then
+		If r\RoomTemplate\Name = "cont1_173" And (Not opt\IntroEnabled)
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
@@ -2112,7 +2112,7 @@ Function InitNewGame%()
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
-		ElseIf r\RoomTemplate\Name = "cont1_173_intro" And opt\IntroEnabled Then
+		ElseIf r\RoomTemplate\Name = "cont1_173_intro" And opt\IntroEnabled
 			PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
 			PlayerRoom = r
 		EndIf
@@ -2218,8 +2218,8 @@ Function InitLoadGame%()
 	
 	For e.Events = Each Events
 		; ~ Loading the necessary stuff for dimension_1499, but this will only be done if the player is in this dimension already
-		If e\EventID = e_dimension_1499 Then
-			If e\EventState = 2.0 Then
+		If e\EventID = e_dimension_1499
+			If e\EventState = 2.0
 				e\room\Objects[0] = LoadMesh_Strict("GFX\Map\dimension1499\1499plane.b3d")
 				HideEntity(e\room\Objects[0])
 				e\room\HideObject[0] = False

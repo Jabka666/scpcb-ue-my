@@ -3,10 +3,10 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, 
 	
 	Local SoundCHN% = 0
 	
-	If Volume > 0.0 Then
+	If Volume > 0.0
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
-		If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
+		If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0)
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
 			SoundCHN = PlaySound_Strict(SoundHandle, IsVoice)
@@ -23,7 +23,7 @@ End Function
 Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
 	Range = Max(Range, 1.0)
 	
-	If Volume > 0.0 Then
+	If Volume > 0.0
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		
@@ -38,13 +38,13 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 End Function
 
 Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False, SFXVolume% = True)
-	If ChannelPlaying(SoundCHN) Then
+	If ChannelPlaying(SoundCHN)
 		Range = Max(Range, 1.0)
 		
-		If Volume > 0.0 Then
+		If Volume > 0.0
 			Local Dist# = EntityDistance(Cam, Entity) / Range
 			
-			If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0) Then
+			If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0)
 				Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 				
 				ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)))
@@ -60,12 +60,12 @@ End Function
 
 Function PlayMTFSound%(SoundHandle%, n.NPCs)
 	If n <> Null Then n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0, 1.0, True)
-	If SelectedItem <> Null Then
-		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0 Then
+	If SelectedItem <> Null
+		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0
 			Select SelectedItem\ItemTemplate\TempName 
 				Case "radio", "fineradio", "18vradio"
 					;[Block]
-					If SoundHandle <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3])) Then
+					If SoundHandle <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3]))
 						StopChannel(RadioCHN[3]) : RadioCHN[3] = 0
 						RadioCHN[3] = PlaySound_Strict(SoundHandle, True)
 					EndIf
@@ -76,7 +76,7 @@ Function PlayMTFSound%(SoundHandle%, n.NPCs)
 End Function
 
 Function LoadEventSound%(e.Events, File$, Number% = 0)
-	If Number = 0 Then
+	If Number = 0
 		If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 		e\Sound = LoadSound_Strict(File)
 		Return(e\Sound)
@@ -88,7 +88,7 @@ Function LoadEventSound%(e.Events, File$, Number% = 0)
 End Function
 
 Function LoadNPCSound%(n.NPCs, File$, Number% = 0)
-	If Number = 0 Then
+	If Number = 0
 		If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 		n\Sound = LoadSound_Strict(File)
 		Return(n\Sound)
@@ -110,12 +110,12 @@ Function LoadTempSound%(File$)
 End Function
 
 Function UpdateMusic%()
-	If ConsoleFlush Then
+	If ConsoleFlush
 		If (Not ChannelPlaying(ConsoleMusPlay)) Then ConsoleMusPlay = PlaySound_Strict(ConsoleMusFlush)
 	ElseIf (Not PlayCustomMusic)
-		If NowPlaying <> ShouldPlay Then ; ~ Playing the wrong clip, fade out
+		If NowPlaying <> ShouldPlay ; ~ Playing the wrong clip, fade out
 			opt\CurrMusicVolume = Max(opt\CurrMusicVolume - (fps\Factor[0] / 250.0), 0.0)
-			If opt\CurrMusicVolume = 0.0 Then
+			If opt\CurrMusicVolume = 0.0
 				If NowPlaying < 66 Then StopStream_Strict(MusicCHN) : MusicCHN = 0
 				NowPlaying = ShouldPlay
 				CurrMusic = False
@@ -124,15 +124,15 @@ Function UpdateMusic%()
 			opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\Factor[0])
 		EndIf
 		
-		If NowPlaying < 66 Then
-			If (Not CurrMusic) Then
+		If NowPlaying < 66
+			If (Not CurrMusic)
 				MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
 				CurrMusic = True
 			EndIf
 			SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume * opt\MasterVolume)
 		EndIf
 	Else
-		If fps\Factor[0] > 0.0 Lor igm\OptionsMenu = MenuTab_Options_Audio Then
+		If fps\Factor[0] > 0.0 Lor igm\OptionsMenu = MenuTab_Options_Audio
 			If (Not ChannelPlaying(MusicCHN)) Then MusicCHN = PlaySound_Strict(CustomMusic)
 			ChannelVolume(MusicCHN, opt\MusicVolume * opt\MasterVolume)
 		EndIf
@@ -144,12 +144,12 @@ Function PauseSounds%()
 	Local i%
 	
 	For e.Events = Each Events
-		If e\SoundCHN_IsStream Then
+		If e\SoundCHN_IsStream
 			If e\SoundCHN <> 0 Then SetStreamPaused_Strict(e\SoundCHN, True)
 		Else
 			PauseChannel(e\SoundCHN)
 		EndIf
-		If e\SoundCHN2_IsStream Then
+		If e\SoundCHN2_IsStream
 			If e\SoundCHN2 <> 0 Then SetStreamPaused_Strict(e\SoundCHN2, True)
 		Else
 			PauseChannel(e\SoundCHN2)
@@ -157,12 +157,12 @@ Function PauseSounds%()
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\SoundCHN_IsStream Then
+		If n\SoundCHN_IsStream
 			If n\SoundCHN <> 0 Then SetStreamPaused_Strict(n\SoundCHN, True)
 		Else
 			PauseChannel(n\SoundCHN)
 		EndIf
-		If n\SoundCHN2_IsStream Then
+		If n\SoundCHN2_IsStream
 			If n\SoundCHN2 <> 0 Then SetStreamPaused_Strict(n\SoundCHN2, True)
 		Else
 			PauseChannel(n\SoundCHN2)
@@ -198,12 +198,12 @@ Function ResumeSounds%()
 	Local i%
 	
 	For e.Events = Each Events
-		If e\SoundCHN_IsStream Then
+		If e\SoundCHN_IsStream
 			If e\SoundCHN <> 0 Then SetStreamPaused_Strict(e\SoundCHN, False)
 		Else
 			ResumeChannel(e\SoundCHN)
 		EndIf
-		If e\SoundCHN2_IsStream Then
+		If e\SoundCHN2_IsStream
 			If e\SoundCHN2 <> 0 Then SetStreamPaused_Strict(e\SoundCHN2, False)
 		Else
 			ResumeChannel(e\SoundCHN2)
@@ -211,12 +211,12 @@ Function ResumeSounds%()
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\SoundCHN_IsStream Then
+		If n\SoundCHN_IsStream
 			If n\SoundCHN <> 0 Then SetStreamPaused_Strict(n\SoundCHN, False)
 		Else
 			ResumeChannel(n\SoundCHN)
 		EndIf
-		If n\SoundCHN2_IsStream Then
+		If n\SoundCHN2_IsStream
 			If n\SoundCHN2 <> 0 Then SetStreamPaused_Strict(n\SoundCHN2, False)
 		Else
 			ResumeChannel(n\SoundCHN2)
@@ -257,13 +257,13 @@ Function KillSounds%()
 	Next
 	
 	For e.Events = Each Events
-		If e\SoundCHN_IsStream Then
+		If e\SoundCHN_IsStream
 			If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN_IsStream = False
 		Else
 			StopChannel(e\SoundCHN)
 		EndIf
 		e\SoundCHN = 0
-		If e\SoundCHN2_IsStream Then
+		If e\SoundCHN2_IsStream
 			If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2_IsStream = False
 		Else
 			StopChannel(e\SoundCHN2)
@@ -272,13 +272,13 @@ Function KillSounds%()
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\SoundCHN_IsStream Then
+		If n\SoundCHN_IsStream
 			If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
 		Else
 			StopChannel(n\SoundCHN)
 		EndIf
 		n\SoundCHN = 0
-		If n\SoundCHN2_IsStream Then
+		If n\SoundCHN2_IsStream
 			If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2_IsStream = False
 		Else
 			StopChannel(n\SoundCHN2)
@@ -308,9 +308,9 @@ Function KillSounds%()
 	
 	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
 	
-	If opt\EnableSFXRelease Then
+	If opt\EnableSFXRelease
 		For snd.Sound = Each Sound
-			If snd\InternalHandle <> 0 Then
+			If snd\InternalHandle <> 0
 				FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 				RemoveSubtitlesToken(snd)
 			EndIf
@@ -337,17 +337,17 @@ Function GetStepSound%(Entity%)
 	Local Picker%, Brush%, Texture%, Name$
 	
 	Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0.0, -1.0, 0.0)
-	If Picker <> 0 Then
+	If Picker <> 0
 		If GetEntityType(Picker) <> HIT_MAP Then Return(0)
 		Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
-		If Brush <> 0 Then
+		If Brush <> 0
 			Texture = GetBrushTexture(Brush, 3)
-			If Texture <> 0 Then
+			If Texture <> 0
 				Name = StripPath(TextureName(Texture))
 				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
 				For mat.Materials = Each Materials
-					If mat\Name = Name Then
-						If mat\StepSound > 0 Then
+					If mat\Name = Name
+						If mat\StepSound > 0
 							FreeBrush(Brush) : Brush = 0
 							Return(mat\StepSound - 1)
 						EndIf
@@ -356,12 +356,12 @@ Function GetStepSound%(Entity%)
 				Next
 			EndIf
 			Texture = GetBrushTexture(Brush, 2)
-			If Texture <> 0 Then
+			If Texture <> 0
 				Name = StripPath(TextureName(Texture))
 				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
 				For mat.Materials = Each Materials
-					If mat\Name = Name Then
-						If mat\StepSound > 0 Then
+					If mat\Name = Name
+						If mat\StepSound > 0
 							FreeBrush(Brush) : Brush = 0
 							Return(mat\StepSound - 1)
 						EndIf
@@ -370,12 +370,12 @@ Function GetStepSound%(Entity%)
 				Next
 			EndIf
 			Texture = GetBrushTexture(Brush, 1)
-			If Texture <> 0 Then
+			If Texture <> 0
 				Name = StripPath(TextureName(Texture))
 				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
 				FreeBrush(Brush) : Brush = 0
 				For mat.Materials = Each Materials
-					If mat\Name = Name Then
+					If mat\Name = Name
 						If mat\StepSound > 0 Then Return(mat\StepSound - 1)
 						Exit
 					EndIf
@@ -394,29 +394,29 @@ End Function
 Function UpdateStreamSounds%()
 	Local e.Events
 	
-	If fps\Factor[0] > 0.0 Then
+	If fps\Factor[0] > 0.0
 		If IntercomStreamCHN <> 0 Then SetStreamVolume_Strict(IntercomStreamCHN, opt\VoiceVolume * opt\MasterVolume)
 		For e.Events = Each Events
-			If e\SoundCHN_IsStream Then
+			If e\SoundCHN_IsStream
 				If e\SoundCHN <> 0 Then SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)
 			EndIf
-			If e\SoundCHN2_IsStream Then
+			If e\SoundCHN2_IsStream
 				If e\SoundCHN2 <> 0 Then SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
 			EndIf
 		Next
 	EndIf
 	
-	If (Not PlayerInReachableRoom()) Then
+	If (Not PlayerInReachableRoom())
 		Local RN$ = PlayerRoom\RoomTemplate\Name
 		
-		If (Not IsPlayerOutsideFacility()) Then
+		If (Not IsPlayerOutsideFacility())
 			If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
-			If RN <> "dimension_1499" Then
+			If RN <> "dimension_1499"
 				For e.Events = Each Events
-					If e\SoundCHN_IsStream Then
+					If e\SoundCHN_IsStream
 						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 					EndIf
-					If e\SoundCHN2_IsStream Then
+					If e\SoundCHN2_IsStream
 						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
 					EndIf
 				Next
@@ -437,7 +437,7 @@ Function ControlSoundVolume%()
 End Function
 
 Function UpdateDeaf%()
-	If me\DeafTimer > 0.0 Then
+	If me\DeafTimer > 0.0
 		me\DeafTimer = Max(me\DeafTimer - fps\Factor[0], 0.0)
 		opt\MasterVolume = 0.0
 		If opt\MasterVolume > 0.0 Then ControlSoundVolume()

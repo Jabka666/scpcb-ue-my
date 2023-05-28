@@ -17,8 +17,8 @@ Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = De
 	Local CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
-		If tic\TexName <> "CreateTexture" Then
-			If StripPath(TexName) = tic\TexName Then
+		If tic\TexName <> "CreateTexture"
+			If StripPath(TexName) = tic\TexName
 				If tic\TexDeleteType < DeleteType Then tic\TexDeleteType = DeleteType
 				Return(tic\Tex)
 			EndIf
@@ -39,8 +39,8 @@ Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Heig
 	Local CurrPath$
 	
 	For tic.TextureInCache = Each TextureInCache
-		If tic\TexName <> "CreateTexture" Then
-			If StripPath(TexName) = tic\TexName Then
+		If tic\TexName <> "CreateTexture"
+			If StripPath(TexName) = tic\TexName
 				If tic\TexDeleteType < DeleteType Then tic\TexDeleteType = DeleteType
 				Return(tic\Tex)
 			EndIf
@@ -97,7 +97,7 @@ Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
 	Local Temp1s$
 	Local Temp%, Temp2%
 	
-	If Name = "" Then
+	If Name = ""
 		Temp1s = StripPath(TextureName(Tex))
 	Else
 		Temp1s = Name
@@ -107,7 +107,7 @@ Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
 	If Instr(Temp1s, "_lm") <> 0 Then Return(2)
 	
 	For mat.Materials = Each Materials
-		If mat\Name = Temp1s Then
+		If mat\Name = Temp1s
 			Temp = mat\IsDiffuseAlpha
 			Temp2 = mat\UseMask
 			Exit
@@ -132,14 +132,14 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 	Local Name$ = ""
 	Local Texture%
 	
-	If FileType(TextureName(Tex)) = 1 Then ; ~ Check if texture is existing in original path
+	If FileType(TextureName(Tex)) = 1 ; ~ Check if texture is existing in original path
 		Name = TextureName(Tex)
 	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 ; ~ If not, check the MapTexturesFolder
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
 	Texture = LoadTextureCheckingIfInCache(Name, TexFlags)
-	If Texture <> 0 Then
-		If ((TexFlags Shr 1) Mod 2) = 0 Then
+	If Texture <> 0
+		If ((TexFlags Shr 1) Mod 2) = 0
 			TextureBlend(Texture, 2 + (3 * opt\Atmosphere))
 		Else
 			TextureBlend(Texture, 1)

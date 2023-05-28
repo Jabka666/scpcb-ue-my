@@ -24,14 +24,14 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	; ~ If another item shares the same object, copy it
 	OBJPath = ItemsPath + OBJPath
 	For it2.ItemTemplates = Each ItemTemplates
-		If it2\OBJPath = OBJPath And it2\OBJ <> 0 Then
+		If it2\OBJPath = OBJPath And it2\OBJ <> 0
 			it\OBJ = CopyEntity(it2\OBJ)
 			Exit
 		EndIf
 	Next
 	
-	If (Not it\OBJ) Then
-		If HasAnim Then
+	If (Not it\OBJ)
+		If HasAnim
 			it\OBJ = LoadAnimMesh_Strict(OBJPath)
 			it\IsAnim = True
 		Else
@@ -43,16 +43,16 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	
 	Local Texture%
 	
-	If TexturePath <> "" Then
+	If TexturePath <> ""
 		TexturePath = ItemTexturePath + TexturePath
 		For it2.ItemTemplates = Each ItemTemplates
-			If it2\TexPath = TexturePath And it2\Tex <> 0 Then
+			If it2\TexPath = TexturePath And it2\Tex <> 0
 				Texture = it2\Tex
 				If opt\Atmosphere Then TextureBlend(Texture, 5)
 				Exit
 			EndIf
 		Next
-		If (Not Texture) Then
+		If (Not Texture)
 			Texture = LoadTexture_Strict(TexturePath, TexFlags)
 			If opt\Atmosphere Then TextureBlend(Texture, 5)
 			it\TexPath = TexturePath
@@ -67,21 +67,21 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	; ~ If another item shares the same object, copy it
 	InvImgPath = ItemINVIconPath + InvImgPath
 	For it2.ItemTemplates = Each ItemTemplates
-		If it2\InvImgPath = InvImgPath And it2\InvImg <> 0 Then
+		If it2\InvImgPath = InvImgPath And it2\InvImg <> 0
 			it\InvImg = it2\InvImg
 			If it2\InvImg2 <> 0 Then it\InvImg2 = it2\InvImg2
 			Exit
 		EndIf
 	Next
-	If (Not it\InvImg) Then
+	If (Not it\InvImg)
 		it\InvImg = LoadImage_Strict(InvImgPath)
 		it\InvImg = ScaleImage2(it\InvImg, MenuScale, MenuScale)
 		it\InvImgPath = InvImgPath
 	EndIf
 	
-	If InvImgPath2 <> "" Then
+	If InvImgPath2 <> ""
 		InvImgPath2 = ItemINVIconPath + InvImgPath2
-		If (Not it\InvImg2) Then
+		If (Not it\InvImg2)
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
 			it\InvImg2 = ScaleImage2(it\InvImg2, MenuScale, MenuScale)
 		EndIf
@@ -89,7 +89,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 		it\InvImg2 = 0
 	EndIf
 	
-	If ImgPath <> "" Then
+	If ImgPath <> ""
 		ImgPath = ItemHUDTexturePath + ImgPath
 		it\ImgPath = ImgPath
 	EndIf
@@ -229,7 +229,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	
 	i.Items = New Items
 	For it.ItemTemplates = Each ItemTemplates
-		If Lower(it\Name) = Name And Lower(it\TempName) = TempName Then
+		If Lower(it\Name) = Name And Lower(it\TempName) = TempName
 			i\ItemTemplate = it
 			i\Collider = CreatePivot()
 			EntityRadius(i\Collider, 0.01)
@@ -252,7 +252,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	i\Dist = EntityDistanceSquared(me\Collider, i\Collider)
 	i\DropSpeed = 0.0
 	
-	If TempName = "cup" Then
+	If TempName = "cup"
 		i\R = R
 		i\G = G
 		i\B = B
@@ -266,7 +266,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EntityParent(Liquid, i\Model)
 		EntityColor(Liquid, R, G, B)
 		
-		If A < 0.0 Then
+		If A < 0.0
 			EntityFX(Liquid, 1)
 			EntityAlpha(Liquid, Abs(A))
 		Else
@@ -276,11 +276,11 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	EndIf
 	
 	i\InvImg = i\ItemTemplate\InvImg
-	If TempName = "clipboard" And InvSlots = 0 Then
+	If TempName = "clipboard" And InvSlots = 0
 		InvSlots = 10
 		SetAnimTime(i\Model, 17.0)
 		i\InvImg = i\ItemTemplate\InvImg2
-	ElseIf TempName = "wallet" And InvSlots = 0 Then
+	ElseIf TempName = "wallet" And InvSlots = 0
 		InvSlots = 10
 		SetAnimTime(i\Model, 0.0)
 	EndIf
@@ -386,33 +386,33 @@ Function UpdateItems%()
 	For i.Items = Each Items
 		i\Dropped = 0
 		
-		If (Not i\Picked) Then
-			If i\DistTimer < MilliSecs() Then
+		If (Not i\Picked)
+			If i\DistTimer < MilliSecs()
 				i\Dist = EntityDistanceSquared(Camera, i\Collider)
 				i\DistTimer = MilliSecs() + 700
-				If i\Dist < HideDist Then
+				If i\Dist < HideDist
 					If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
 				EndIf
 			EndIf
 			
-			If i\Dist < HideDist Then
+			If i\Dist < HideDist
 				If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
-				If i\Dist < 1.44 Then
-					If ClosestItem = Null Then
+				If i\Dist < 1.44
+					If ClosestItem = Null
 						If EntityInView(i\Model, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
 					ElseIf ClosestItem = i Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)
 						If EntityInView(i\Model, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
 					EndIf
 				EndIf
 				
-				If EntityCollided(i\Collider, HIT_MAP) Then
+				If EntityCollided(i\Collider, HIT_MAP)
 					i\DropSpeed = 0.0
 					i\xSpeed = 0.0
 					i\zSpeed = 0.0
 				Else
-					If ShouldEntitiesFall Then
+					If ShouldEntitiesFall
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
-						If Pick Then
+						If Pick
 							i\DropSpeed = i\DropSpeed - (0.0004 * fps\Factor[0])
 							TranslateEntity(i\Collider, i\xSpeed * fps\Factor[0], i\DropSpeed * fps\Factor[0], i\zSpeed * fps\Factor[0])
 						Else
@@ -427,16 +427,16 @@ Function UpdateItems%()
 					EndIf
 				EndIf
 				
-				If PlayerRoom\RoomTemplate\Name <> "room2_storage" Then
-					If i\Dist < HideDist * 0.04 Then
+				If PlayerRoom\RoomTemplate\Name <> "room2_storage"
+					If i\Dist < HideDist * 0.04
 						For i2.Items = Each Items
-							If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.04 Then
+							If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.04
 								xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
 								yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
 								zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
 								
 								ed = (xTemp ^ 2) + (zTemp ^ 2)
-								If ed < 0.07 And Abs(yTemp) < 0.25 Then
+								If ed < 0.07 And Abs(yTemp) < 0.25
 									; ~ Items are too close together, push away
 									xTemp = xTemp * (0.07 - ed)
 									zTemp = zTemp * (0.07 - ed)
@@ -453,7 +453,7 @@ Function UpdateItems%()
 						Next
 					EndIf
 				EndIf
-				If EntityY(i\Collider) < -60.0 Then
+				If EntityY(i\Collider) < -60.0
 					RemoveItem(i)
 					DeletedItem = True
 				EndIf
@@ -466,7 +466,7 @@ Function UpdateItems%()
 			i\zSpeed = 0.0
 		EndIf
 		
-		If (Not DeletedItem) Then
+		If (Not DeletedItem)
 			CatchErrors("Uncaught: UpdateItems(Item Name:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + ")")
 		Else
 			CatchErrors("Uncaught: UpdateItems(Item doesn't exist anymore!)")
@@ -474,7 +474,7 @@ Function UpdateItems%()
 		DeletedItem = False
 	Next
 	
-	If ClosestItem <> Null Then
+	If ClosestItem <> Null
 		If mo\MouseHit1 Then PickItem(ClosestItem)
 	EndIf
 End Function
@@ -490,15 +490,15 @@ Function PickItem%(item.Items)
 	Local FullINV% = True
 	
 	For n = 0 To MaxItemAmount - 1
-		If Inventory(n) = Null Then
+		If Inventory(n) = Null
 			FullINV = False
 			Exit
 		EndIf
 	Next
 	
-	If (Not FullINV) Then
+	If (Not FullINV)
 		For n = 0 To MaxItemAmount - 1
-			If Inventory(n) = Null Then
+			If Inventory(n) = Null
 				Select item\ItemTemplate\TempName
 					Case "scp1123"
 						;[Block]
@@ -554,8 +554,8 @@ Function PickItem%(item.Items)
 						;[Block]
 						CanPickItem = 1
 						For z = 0 To MaxItemAmount - 1
-							If Inventory(z) <> Null Then
-								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148" Then
+							If Inventory(z) <> Null
+								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
 									CanPickItem = 0
 								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
 									CanPickItem = 2
@@ -563,10 +563,10 @@ Function PickItem%(item.Items)
 							EndIf
 						Next
 						
-						If CanPickItem = 0 Then
+						If CanPickItem = 0
 							CreateMsg(GetLocalString("msg", "twosuit"))
 							Return
-						ElseIf CanPickItem = 2 Then
+						ElseIf CanPickItem = 2
 							CreateMsg(GetLocalString("msg", "vestsuit"))
 							Return
 						Else
@@ -577,8 +577,8 @@ Function PickItem%(item.Items)
 						;[Block]
 						CanPickItem = 1
 						For z = 0 To MaxItemAmount - 1
-							If Inventory(z) <> Null Then
-								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest" Then
+							If Inventory(z) <> Null
+								If Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
 									CanPickItem = 0
 								ElseIf Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
 									CanPickItem = 2
@@ -586,10 +586,10 @@ Function PickItem%(item.Items)
 							EndIf
 						Next
 						
-						If CanPickItem = 0 Then
+						If CanPickItem = 0
 							CreateMsg(GetLocalString("msg", "twovest"))
 							Return
-						ElseIf CanPickItem = 2 Then
+						ElseIf CanPickItem = 2
 							CreateMsg(GetLocalString("msg", "vestsuit"))
 							Return
 						Else
@@ -603,7 +603,7 @@ Function PickItem%(item.Items)
 				item\Dropped = -1
 				
 				item\ItemTemplate\Found = True
-				If item\InvSlots > 0 Then
+				If item\InvSlots > 0
 					For z = 0 To item\InvSlots - 1
 						If item\SecondInv[z] <> Null Then item\SecondInv[z]\ItemTemplate\Found = True
 					Next
@@ -629,7 +629,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	Local n%
 	
-	If PlayDropSound Then
+	If PlayDropSound
 		If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\Sound])
 	EndIf
 	
@@ -648,7 +648,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	item\Picked = False
 	For n = 0 To MaxItemAmount - 1
-		If Inventory(n) = item Then
+		If Inventory(n) = item
 			Inventory(n) = Null
 			Exit
 		EndIf
@@ -683,7 +683,7 @@ Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 			;[End Block]
 		Default
 			;[Block]
-			If itt\TempName <> "paper" Then
+			If itt\TempName <> "paper"
 				Return(False)
 			ElseIf Instr(itt\Name, "Leaflet")
 				Return(False)
@@ -707,7 +707,7 @@ Function IsItemInFocus%()
 End Function
 
 Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, CanUseWithHazmat% = False)
-	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0) Then
+	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0)
 		CreateMsg(GetLocalString("msg", "mask.use"))
 		Return(False)
 	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
@@ -724,13 +724,13 @@ End Function
 Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False, Suit% = False, Cap% = False)
 	Local DoReturn% = False
 	
-	If (Not GasMask) And wi\GasMask > 0 Then
+	If (Not GasMask) And wi\GasMask > 0
 		CreateMsg(GetLocalString("msg", "mask.use.off"))
 		DoReturn = True
 	ElseIf (Not SCP1499) And I_1499\Using > 0
 		CreateMsg(GetLocalString("msg", "1499.use.off"))
 		DoReturn = True
-	ElseIf (Not NVG) And wi\NightVision > 0 Then
+	ElseIf (Not NVG) And wi\NightVision > 0
 		CreateMsg(GetLocalString("msg", "goggle.use.off"))
 		DoReturn = True
 	ElseIf (Not Helmet) And wi\BallisticHelmet
@@ -746,7 +746,7 @@ Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = Fals
 		CreateMsg(GetLocalString("msg", "cap.use.off"))
 		DoReturn = True
 	EndIf
-	If DoReturn Then
+	If DoReturn
 		SelectedItem = Null
 		Return(True)
 	EndIf
@@ -756,7 +756,7 @@ End Function
 Function IsDoubleItem%(Variable%, ID%)
 	Local Message$
 	
-	If Variable > 0 And Variable <> ID Then
+	If Variable > 0 And Variable <> ID
 		Select Variable
 			Case wi\GasMask, I_1499\Using
 				;[Block]
@@ -804,7 +804,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(50) = 1 Then
+					If Rand(50) = 1
 						it2.Items = CreateItem("SCP-1499", "scp1499", x, y, z)
 					Else
 						Remove = False
@@ -896,7 +896,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case COARSE
 					;[Block]
-					If item\InvSlots > 5 Then
+					If item\InvSlots > 5
 						item\InvSlots = item\InvSlots - 5
 						ClearSecondInv(item, item\InvSlots)
 					ElseIf item\InvSlots = 5
@@ -913,7 +913,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If item\InvSlots = 1 Then
+					If item\InvSlots = 1
 						item\InvSlots = 5
 					Else
 						item\InvSlots = Min(20.0, item\InvSlots + 5.0)
@@ -922,7 +922,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If item\InvSlots = 1 Then
+					If item\InvSlots = 1
 						item\InvSlots = 10
 					Else
 						item\InvSlots = Min(20.0, item\InvSlots + 10.0)
@@ -949,7 +949,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(2) = 1 Then
+					If Rand(2) = 1
 						it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
 					Else
 						it2.Items = CreateItem("SCRAMBLE Gear", "finescramble", x, y, z)
@@ -983,7 +983,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case 2
 							;[Block]
-							If Rand(3) = 1 Then
+							If Rand(3) = 1
 								it2.Items = CreateItem("S-NAV 300 Navigator", "nav300", x, y, z)
 							Else
 								it2.Items = CreateItem("S-NAV Navigator", "nav", x, y, z)
@@ -1002,7 +1002,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					Select Rand(3)
 						Case 1
 							;[Block]
-							If Rand(3) = 1 Then
+							If Rand(3) = 1
 								it2.Items = CreateItem("Radio Transceiver", "fineradio", x, y, z)
 							Else
 								it2.Items = CreateItem("Radio Transceiver", "veryfineradio", x, y, z)
@@ -1010,7 +1010,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case 2
 							;[Block]
-							If Rand(2) = 1 Then
+							If Rand(2) = 1
 								it2.Items = CreateItem("S-NAV Navigator Ultimate", "navulti", x, y, z)
 							Else
 								it2.Items = CreateItem("S-NAV 310 Navigator", "nav310", x, y, z)
@@ -1070,7 +1070,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked) Then
+						If it <> item And it\Collider <> 0 And (Not it\Picked)
 							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
 								Select it\ItemTemplate\TempName
 									Case "gasmask", "finegasmask", "veryfinegasmask"
@@ -1103,20 +1103,20 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
-					If item\ItemTemplate\TempName = "hand" Then
-						If Rand(2) = 1 Then
+					If item\ItemTemplate\TempName = "hand"
+						If Rand(2) = 1
 							it2.Items = CreateItem("Black Severed Hand", "hand2", x, y, z)
 						Else
 							it2.Items = CreateItem("Yellow Severed Hand", "hand3", x, y, z)
 						EndIf
 					ElseIf item\ItemTemplate\TempName = "hand2"
-						If Rand(2) = 1 Then
+						If Rand(2) = 1
 							it2.Items = CreateItem("White Severed Hand", "hand", x, y, z)
 						Else
 							it2.Items = CreateItem("Yellow Severed Hand", "hand3", x, y, z)
 						EndIf
 					Else
-						If Rand(2) = 1 Then
+						If Rand(2) = 1
 							it2.Items = CreateItem("White Severed Hand", "hand", x, y, z)
 						Else
 							it2.Items = CreateItem("Black Severed Hand", "hand2", x, y, z)
@@ -1134,7 +1134,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If item\ItemTemplate\TempName = "firstaid" Then
+					If item\ItemTemplate\TempName = "firstaid"
 						it2.Items = CreateItem("Blue First Aid Kit", "firstaid2", x, y, z)
 					Else
 						it2.Items = CreateItem("First Aid Kit", "firstaid", x, y, z)
@@ -1161,9 +1161,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case COARSE
 					;[Block]
-					If Level = 0 Then
+					If Level = 0
 						MakeDecal = True
-					ElseIf Level = 6 Then
+					ElseIf Level = 6
 						it2.Items = CreateItem("Level 0 Key Card", "key0", x, y, z)
 					Else
 						it2.Items = CreateItem("Level " + (Level - 1) + " Key Card", "key" + (Level - 1), x, y, z)
@@ -1185,7 +1185,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(6) = 1 Then
+									If Rand(6) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", "key1", x, y, z)
@@ -1193,7 +1193,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(5) = 1 Then
+									If Rand(5) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", "key1", x, y, z)
@@ -1201,7 +1201,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case EXTREME
 									;[Block]
-									If Rand(4) = 1 Then
+									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", "key1", x, y, z)
@@ -1218,7 +1218,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(5) = 1 Then
+									If Rand(5) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", "key2", x, y, z)
@@ -1226,7 +1226,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(4) = 1 Then
+									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", "key2", x, y, z)
@@ -1234,7 +1234,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case EXTREME
 									;[Block]
-									If Rand(3) = 1 Then
+									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", "key2", x, y, z)
@@ -1251,7 +1251,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(4) = 1 Then
+									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", "key3", x, y, z)
@@ -1259,7 +1259,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(3) = 1 Then
+									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", "key3", x, y, z)
@@ -1267,7 +1267,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case EXTREME
 									;[Block]
-									If Rand(2) = 1 Then
+									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", "key3", x, y, z)
@@ -1280,7 +1280,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Select SelectedDifficulty\OtherFactors
 								Case EASY
 									;[Block]
-									If Rand(10) = 1 Then
+									If Rand(10) = 1
 										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 									Else
 										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
@@ -1288,7 +1288,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(15) = 1 Then
+									If Rand(15) = 1
 										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 									Else
 										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
@@ -1296,7 +1296,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(20) = 1 Then
+									If Rand(20) = 1
 										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 									Else
 										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
@@ -1304,7 +1304,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case EXTREME
 									;[Block]
-									If Rand(25) = 1 Then
+									If Rand(25) = 1
 										it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 									Else
 										it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
@@ -1321,7 +1321,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(4) = 1 Then
+									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", "key5", x, y, z)
@@ -1329,7 +1329,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(3) = 1 Then
+									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", "key5", x, y, z)
@@ -1337,7 +1337,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case EXTREME
 									;[Block]
-									If Rand(2) = 1 Then
+									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", "key5", x, y, z)
@@ -1356,10 +1356,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Select SelectedDifficulty\OtherFactors
 								Case EASY
 									;[Block]
-									If Rand(0, ((MaxAchievements - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
-										If Rand(10) = 1 Then
+										If Rand(10) = 1
 											it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 										Else
 											it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1368,10 +1368,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(0, ((MaxAchievements - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
-										If Rand(15) = 1 Then
+										If Rand(15) = 1
 											it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 										Else
 											it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1380,10 +1380,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(0, ((MaxAchievements - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
-										If Rand(20) = 1 Then
+										If Rand(20) = 1
 											it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 										Else
 											it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1392,10 +1392,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(0, ((MaxAchievements - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0 Then
+									If Rand(0, ((MaxAchievements - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
-										If Rand(25) = 1 Then
+										If Rand(25) = 1
 											it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 										Else
 											it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1409,7 +1409,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Select SelectedDifficulty\OtherFactors
 								Case EASY
 									;[Block]
-									If Rand(4) = 1 Then
+									If Rand(4) = 1
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1417,7 +1417,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(6) = 1 Then
+									If Rand(6) = 1
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1425,7 +1425,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(8) = 1 Then
+									If Rand(8) = 1
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1433,7 +1433,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case EXTREME
 									;[Block]
-									If Rand(10) = 1 Then
+									If Rand(10) = 1
 										it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 									Else
 										it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1456,7 +1456,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							If Rand(0, ((MaxAchievements - 1) * 3) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
-								If Rand(20) = 1 Then
+								If Rand(20) = 1
 									it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 								Else
 									it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1468,7 +1468,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							If Rand(0, ((MaxAchievements - 1) * 4) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
-								If Rand(25) = 1 Then
+								If Rand(25) = 1
 									it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 								Else
 									it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1480,7 +1480,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							If Rand(0, ((MaxAchievements - 1) * 5) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
-								If Rand(30) = 1 Then
+								If Rand(30) = 1
 									it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 								Else
 									it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1492,7 +1492,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							If Rand(0, ((MaxAchievements - 1) * 6) - ((CurrAchvAmount - 1) * 3)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
-								If Rand(35) = 1 Then
+								If Rand(35) = 1
 									it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 								Else
 									it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1512,7 +1512,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(2) = 1 Then
+					If Rand(2) = 1
 						it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
 					Else
 						it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
@@ -1523,7 +1523,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							If Rand(4) = 1 Then
+							If Rand(4) = 1
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1531,7 +1531,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							If Rand(6) = 1 Then
+							If Rand(6) = 1
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1539,7 +1539,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case HARD
 							;[Block]
-							If Rand(8) = 1 Then
+							If Rand(8) = 1
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1547,7 +1547,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							If Rand(10) = 1 Then
+							If Rand(10) = 1
 								it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1589,17 +1589,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Quarter", "25ct", x, y, z)
 					
-					If Rand(2) = 1 Then
+					If Rand(2) = 1
 						it3.Items = CreateItem("Quarter", "25ct", x, y, z)
 						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					
-					If Rand(3) = 1 Then
+					If Rand(3) = 1
 						it4.Items = CreateItem("Quarter", "25ct", x, y, z)
 						EntityType(it4\Collider, HIT_ITEM)
 					EndIf
 					
-					If Rand(4) = 1 Then
+					If Rand(4) = 1
 						it5.Items = CreateItem("Quarter", "25ct", x, y, z)
 						EntityType(it5\Collider, HIT_ITEM)
 					EndIf
@@ -1636,7 +1636,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(3) = 1 Then
+					If Rand(3) = 1
 						it2.Items = CreateItem("S-NAV 300 Navigator", "nav300", x, y, z)
 					Else
 						it2.Items = CreateItem("S-NAV 310 Navigator", "nav310", x, y, z)
@@ -1776,7 +1776,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(5) = 1 Then
+					If Rand(5) = 1
 						it2.Items = CreateItem("999V Battery", "veryfinebat", x, y, z)
 					Else
 						it2.Items = CreateItem("Strange Battery", "killbat", x, y, z)
@@ -1805,7 +1805,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(3) = 1 Then
+					If Rand(3) = 1
 						it2.Items = CreateItem("999V Battery", "veryfinebat", x, y, z)
 					Else
 						it2.Items = CreateItem("Strange Battery", "killbat", x, y, z)
@@ -1839,7 +1839,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(2) = 1 Then
+					If Rand(2) = 1
 						it2.Items = CreateItem("ReVision Eyedrops", "eyedrops", x, y, z)
 					Else
 						it2.Items = CreateItem("RedVision Eyedrops", "eyedrops2", x, y, z)
@@ -1910,7 +1910,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(3) = 1 Then
+					If Rand(3) = 1
 						it2.Items = CreateItem("Syringe", "veryfinesyringe", x, y, z)
 					Else
 						it2.Items = CreateItem("Syringe", "syringeinf", x, y, z)
@@ -1935,7 +1935,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
-					If Rand(3) = 1 Then
+					If Rand(3) = 1
 						it2.Items = CreateItem("Syringe", "veryfinesyringe", x, y, z)
 					Else
 						it2.Items = CreateItem("Syringe", "syringeinf", x, y, z)
@@ -1956,7 +1956,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(2) = 1 Then
+					If Rand(2) = 1
 						n.NPCs = CreateNPC(NPCType008_1, x, y, z)
 						n\State = 2.0
 					Else
@@ -1982,7 +1982,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(4) = 1 Then
+					If Rand(4) = 1
 						it2.Items = CreateItem("Blue First Aid Kit", "firstaid2", x, y, z)
 					Else
 						it2.Items = CreateItem("Syringe", "finesyringe", x, y, z)
@@ -2005,12 +2005,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					Local NO427Spawn% = False
 					
 					For it3.Items = Each Items
-						If it3\ItemTemplate\TempName = "scp427" Then
+						If it3\ItemTemplate\TempName = "scp427"
 							NO427Spawn = True
 							Exit
 						EndIf
 					Next
-					If (Not NO427Spawn) Then
+					If (Not NO427Spawn)
 						it2.Items = CreateItem("SCP-427", "scp427", x, y, z)
 					Else
 						it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
@@ -2033,17 +2033,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
 					
-					If Rand(2) = 1 Then
+					If Rand(2) = 1
 						it3.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
 						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					
-					If Rand(3) = 1 Then
+					If Rand(3) = 1
 						it4.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
 						EntityType(it4\Collider, HIT_ITEM)
 					EndIf
 					
-					If Rand(4) = 1 Then
+					If Rand(4) = 1
 						it5.Items = CreateItem("SCP-500-01", "scp500pill", x, y, z)
 						EntityType(it5\Collider, HIT_ITEM)
 					EndIf
@@ -2053,12 +2053,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					NO427Spawn = False
 					
 					For it3.Items = Each Items
-						If it3\ItemTemplate\TempName = "scp427" Then
+						If it3\ItemTemplate\TempName = "scp427"
 							NO427Spawn = True
 							Exit
 						EndIf
 					Next
-					If (Not NO427Spawn) Then
+					If (Not NO427Spawn)
 						it2.Items = CreateItem("SCP-427", "scp427", x, y, z)
 					Else
 						it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
@@ -2068,17 +2068,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
 					
-					If Rand(2) = 1 Then
+					If Rand(2) = 1
 						it3.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
 						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					
-					If Rand(3) = 1 Then
+					If Rand(3) = 1
 						it4.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
 						EntityType(it4\Collider, HIT_ITEM)
 					EndIf
 					
-					If Rand(4) = 1 Then
+					If Rand(4) = 1
 						it5.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
 						EntityType(it5\Collider, HIT_ITEM)
 					EndIf
@@ -2155,7 +2155,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH
 					;[Block]
-					If item\State2 > 0.0 Then
+					If item\State2 > 0.0
 						item\State2 = -1.0
 					Else
 						MakeDecal = True
@@ -2189,7 +2189,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(3) = 1 Then
+					If Rand(3) = 1
 						it2.Items = CreateItem("SCP-1025", "scp1025", x, y, z) ; ~ I know that this can be exploited to get a SCP-1025 reset, but this effort makes it seem fair to me -- Salvage
 					Else
 						Remove = False
@@ -2237,11 +2237,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			;[End Block]
 	End Select
 	
-	If MakeDecal Then
+	If MakeDecal
 		de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.8), Rnd(0.8, 1.0), 1)
 		EntityParent(de\OBJ, PlayerRoom\OBJ)
 	EndIf
-	If Remove Then
+	If Remove
 		RemoveItem(item)
 	Else
 		PositionEntity(item\Collider, x, y, z)
@@ -2260,15 +2260,15 @@ Function Use1123%()
 	Local e.Events
 	Local Temp%
 	
-	If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then
+	If (Not I_714\Using) And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 		me\LightFlash = 3.0
 		PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 		
 		Temp = True
 		For e.Events = Each Events
-			If e\EventID = e_cont2_1123 Then
-				If PlayerRoom = e\room Then
-					If e\EventState < 1.0 Then ; ~ Start the event
+			If e\EventID = e_cont2_1123
+				If PlayerRoom = e\room
+					If e\EventState < 1.0 ; ~ Start the event
 						e\EventState = 1.0
 						Temp = False
 						Exit
@@ -2280,7 +2280,7 @@ Function Use1123%()
 		CreateMsg(GetLocalString("msg", "skull.nothappend"))
 	EndIf
 	
-	If Temp Then
+	If Temp
 		msg\DeathMsg = Format(GetLocalString("death", "1123"), SubjectName)
 		Kill()
 	EndIf
@@ -2393,7 +2393,7 @@ Function CreateRandomBattery.Items(x#, y#, z#)
 	End Select
 	
 	RandomChance = Rand(BatteryChance)
-	If RandomChance >= 1 And RandomChance <= 7 Then
+	If RandomChance >= 1 And RandomChance <= 7
 		BatteryName = "9V Battery"
 		BatteryTempName = "bat"
 	ElseIf RandomChance >= 8 And RandomChance < BatteryChance

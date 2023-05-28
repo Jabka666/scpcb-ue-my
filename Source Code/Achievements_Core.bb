@@ -24,9 +24,9 @@ Const AchvO5% = 38, AchvPD% = 39, AchvSNAV% = 40, AchvTesla% = 41, Achv268% = 42
 ;[End Block]
 
 Function GiveAchievement%(AchvName%, ShowMessage% = True)
-	If achv\Achievement[AchvName] <> True Then
+	If achv\Achievement[AchvName] <> True
 		achv\Achievement[AchvName] = True
-		If opt\AchvMsgEnabled And ShowMessage Then
+		If opt\AchvMsgEnabled And ShowMessage
 			Local AchievementName$ = GetFileLocalString(AchievementsFile, "a" + AchvName, "AchvName")
 			
 			CreateAchievementMsg(AchvName, AchievementName)
@@ -65,7 +65,7 @@ Function RenderAchvIMG%(x%, y%, AchvNo%)
 	Row = (AchvNo Mod 4)
 	Color(0, 0, 0)
 	Rect((x + ((Row) * SeparationConst2)), y, 64 * Scale, 64 * Scale, True)
-	If achv\Achievement[AchvNo] Then
+	If achv\Achievement[AchvNo]
 		IMG = achv\AchvIMG[AchvNo]
 	Else
 		IMG = achv\AchvLocked
@@ -108,14 +108,14 @@ Function UpdateAchievementMsg%()
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
-		If amsg\MsgTime <> 0.0 Then
-			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0 Then
+		If amsg\MsgTime <> 0.0
+			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0
 				amsg\MsgTime = amsg\MsgTime + fps\Factor[1]
 				If amsg\MsgX > -Width Then amsg\MsgX = Max(amsg\MsgX - (4.0 * fps\Factor[1]), -Width)
 			ElseIf amsg\MsgTime >= 70.0 * 7.0
 				amsg\MsgTime = -1.0
 			ElseIf amsg\MsgTime = -1.0
-				If amsg\MsgX < 0.0 Then
+				If amsg\MsgX < 0.0
 					amsg\MsgX = Min(amsg\MsgX + (4.0 * fps\Factor[1]), 0.0)
 				Else
 					amsg\MsgTime = 0.0
@@ -135,11 +135,11 @@ Function RenderAchievementMsg%()
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
-		If amsg\MsgTime <> 0.0 Then
+		If amsg\MsgTime <> 0.0
 			x = opt\GraphicWidth + amsg\MsgX
 			y = 0
 			For amsg2.AchievementMsg = Each AchievementMsg
-				If amsg2 <> amsg Then
+				If amsg2 <> amsg
 					If amsg2\MsgID > amsg\MsgID Then y = y + Height 
 				EndIf
 			Next

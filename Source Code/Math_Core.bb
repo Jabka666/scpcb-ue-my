@@ -12,7 +12,7 @@ End Function
 
 Function WrapAngle#(Angle#)
 	If Angle = Infinity Then Return(0.0)
-	If Angle < 0.0 Then
+	If Angle < 0.0
 		Return(360.0 + (Angle Mod 360.0))
 	Else
 		Return(Angle Mod 360.0)
@@ -22,7 +22,7 @@ End Function
 Function CurveValue#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	
-	If Value < Old Then
+	If Value < Old
 		Return(Max(Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0]), Value))
 	Else
 		Return(Min(Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0]), Value))
@@ -52,7 +52,7 @@ Function AngleDist#(a0#, a1#)
 	Local b# = a0 - a1
 	Local bb#
 	
-	If b < -180.0 Then
+	If b < -180.0
 		bb = b + 360.0
 	ElseIf b > 180.0
 		bb = b - 360.0
@@ -74,14 +74,14 @@ End Function
 
 Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = False)
 	; ~ Move 1 unit along the grid in the designated direction
-	If Dir = 1 Then
-		If (Not RetVal) Then
+	If Dir = 1
+		If (Not RetVal)
 			Return(PathX)
 		Else
 			Return(PathY + 1)
 		EndIf
 	EndIf
-	If (Not RetVal) Then
+	If (Not RetVal)
 		Return(PathX - 1 + Dir)
 	Else
 		Return(PathY)
@@ -93,11 +93,11 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	Local Current_Deviation% = Center_ - Pathx
 	Local Deviated% = False
 	
-	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Lor (Dir = 2 And Current_Deviation <= -Max_Deviation_Distance_) Then
+	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Lor (Dir = 2 And Current_Deviation <= -Max_Deviation_Distance_)
 		Dir = ((Dir + 2) Mod 4)
 		Deviated = True
 	EndIf
-	If (Not RetVal) Then
+	If (Not RetVal)
 		Return(Dir)
 	Else
 		Return(Deviated)
@@ -107,7 +107,7 @@ End Function
 Function ChangeAngleValueForCorrectBoneAssigning#(Value#)
 	Local Number#
 	
-	If Value <= 180.0 Then
+	If Value <= 180.0
 		Number = Value
 	Else
 		Number = (-360.0) + Value
@@ -149,12 +149,12 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	Local xt% = Floor(x), zt% = Floor(z)
 	Local x2%, z2%
 	
-	If xt <> PlayerX Lor zt <> PlayerZ Then ; ~ The monster is not on the same tile as the player
+	If xt <> PlayerX Lor zt <> PlayerZ ; ~ The monster is not on the same tile as the player
 		For x2 = Max(xt - 1, 0) To Min(xt + 1, ForestGridSize - 1)
 			For z2 = Max(zt - 1, 0) To Min(zt + 1, ForestGridSize - 1)
-				If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2 <> xt Lor z2 <> zt) And (x2 = xt Lor z2 = zt) Then
+				If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2 <> xt Lor z2 <> zt) And (x2 = xt Lor z2 = zt)
 					; ~ Tile (x2, z2) is closer to the player than the monsters current tile
-					If (Abs(PlayerX - x2) + Abs(PlayerZ - z2)) < (Abs(PlayerX - xt) + Abs(PlayerZ - zt)) Then
+					If (Abs(PlayerX - x2) + Abs(PlayerZ - z2)) < (Abs(PlayerX - xt) + Abs(PlayerZ - zt))
 						; ~ Calculate the position of the tile in world coordinates
 						TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
 						Return(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), TFormedX(), TFormedZ()) + 180.0)
@@ -175,7 +175,7 @@ End Function
 Function CreateLine%(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
 	Local Surf%, Verts%
 	
-	If (Not Mesh) Then
+	If (Not Mesh)
 		Mesh = CreateMesh()
 		EntityFX(Mesh, 16)
 		Surf = CreateSurface(Mesh)
@@ -284,13 +284,13 @@ Function CalculateRoomExtents%(r.Rooms)
 	r\MaxY = TFormedY()
 	r\MaxZ = TFormedZ() - r\z
 	
-	If r\MinX > r\MaxX Then
+	If r\MinX > r\MaxX
 		Local TempX# = r\MaxX
 		
 		r\MaxX = r\MinX
 		r\MinX = TempX
 	EndIf
-	If r\MinZ > r\MaxZ Then
+	If r\MinZ > r\MaxZ
 		Local TempZ# = r\MaxZ
 		
 		r\MaxZ = r\MinZ
@@ -335,7 +335,7 @@ End Function
 ;		pXMax = CosValue * sX * Mesh_MaxX - SinValue * sZ * Mesh_MaxZ + r\x
 ;		pZMax = SinValue * sX * Mesh_MaxX + CosValue * sZ * Mesh_MaxZ + r\z
 ;		
-;		If pXMin > pXMax Then
+;		If pXMin > pXMax
 ;			t\MinX = pXMax
 ;			t\MaxX = pXMin
 ;		Else
@@ -343,7 +343,7 @@ End Function
 ;			t\MaxX = pXMax
 ;		EndIf
 ;		
-;		If pZMin > pZMax Then
+;		If pZMin > pZMax
 ;			t\MinZ = pZMax
 ;			t\MaxZ = pZMin
 ;		Else
@@ -359,19 +359,19 @@ End Function
 ;Function CheckTriggers$()
 ;	Local i%
 ;	
-;	If PlayerRoom\TriggerBoxAmount = 0 Then
+;	If PlayerRoom\TriggerBoxAmount = 0
 ;		Return
 ;	Else
 ;		For i = 0 To PlayerRoom\TriggerBoxAmount - 1
-;			If chs\DebugHUD <> 0 Then
+;			If chs\DebugHUD <> 0
 ;				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.2)
 ;			Else
 ;				EntityAlpha(PlayerRoom\TriggerBoxes[i]\OBJ, 0.0)
 ;			EndIf
 ;			
-;			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX Then
-;				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY Then
-;					If EntityZ(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinZ And EntityZ(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxZ Then
+;			If EntityX(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinX And EntityX(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxX
+;				If EntityY(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinY And EntityY(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxY
+;					If EntityZ(me\Collider) > PlayerRoom\TriggerBoxes[i]\MinZ And EntityZ(me\Collider) < PlayerRoom\TriggerBoxes[i]\MaxZ
 ;						Return(PlayerRoom\TriggerBoxes[i]\Name)
 ;					EndIf
 ;				EndIf

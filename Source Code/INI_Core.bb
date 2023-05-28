@@ -57,7 +57,7 @@ End Function
 Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", CheckRootFile% = True)
 	Local DefaultValue1$
 	
-	If CheckRootFile Then
+	If CheckRootFile
 		DefaultValue1 = IniGetBufferString(File, Name, Parameter, DefaultValue)
 	Else
 		DefaultValue1 = DefaultValue
@@ -102,7 +102,7 @@ End Function
 Function StripFileName$(File$)
 	Local mi$ = "", LastSlash% = 0, i%
 	
-	If Len(File) > 0 Then
+	If Len(File) > 0
 		For i = 1 To Len(File)
 			mi = Mid(File, i, 1)
 			If mi = "\" Lor mi = "/" Then LastSlash = i
@@ -114,7 +114,7 @@ End Function
 Function StripPath$(File$)
 	Local Name$ = "", i%, mi$
 	
-	If Len(File) > 0 Then
+	If Len(File) > 0
 		For i = Len(File) To 1 Step -1
 			mi = Mid(File, i, 1)
 			If mi = "\" Lor mi = "/" Then Return(Name)
@@ -135,7 +135,7 @@ Function Piece$(s$, Entry%, Char$ = " ")
 		s = Right(s, Len(s) - p)
 	Next
 	p = Instr(s, Char)
-	If p < 1 Then
+	If p < 1
 		a = s
 	Else
 		a = Left(s, p - 1)
@@ -550,7 +550,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	; ~ [GLOBAL]
 	;[Block]
-	If SaveGlobal Then
+	If SaveGlobal
 		IniWriteString(OptionFile, "Global", "Camera Fog Near", opt\CameraFogNear)
 		
 		IniWriteString(OptionFile, "Global", "Camera Fog Far", opt\CameraFogFar)

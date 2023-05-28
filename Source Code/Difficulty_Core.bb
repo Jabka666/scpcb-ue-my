@@ -89,7 +89,7 @@ difficulties[ESOTERIC]\SaveType = SAVE_ANYWHERE
 difficulties[ESOTERIC]\OtherFactors = EASY
 SetDifficultyColor(ESOTERIC, 200, 50, 200)
 
-If opt\DebugMode Then
+If opt\DebugMode
 	SelectedDifficulty = difficulties[SAFE]
 Else
 	SelectedDifficulty = difficulties[EUCLID]
