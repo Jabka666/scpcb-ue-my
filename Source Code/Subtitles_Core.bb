@@ -33,6 +33,7 @@ Function InitSubtitlesAssets%()
 	CreateSubtitlesColor("106", 10, 5, 5)
 	CreateSubtitlesColor("682", 180, 160, 135)
 	CreateSubtitlesColor("860-2", 110, 55, 80)
+	CreateSubtitlesColor("1499-1", 40, 40, 40)
 End Function
 
 Global SubtitlesInit%
