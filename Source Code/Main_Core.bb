@@ -6863,7 +6863,7 @@ Function RenderGUI%()
 							EndIf
 							
 							Color(30, 30, 30)
-							If Offline
+							If Offline Lor SelectedItem\ItemTemplate\TempName = "nav310"
 								Color(100, 0, 0)
 								xTemp = x - (NAV_WIDTH / 2) + (196 * MenuScale)
 								yTemp = y - (NAV_HEIGHT / 2) + (10 * MenuScale)
