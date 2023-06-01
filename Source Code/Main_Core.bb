@@ -7092,7 +7092,7 @@ Function UpdateMenu%()
 						
 						y = y + (45 * MenuScale)
 						
-						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 2, "MINIMAL", "REDUCED", "FULL")
+						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 2, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
 						
 						y = y + (45 * MenuScale)
 						
