@@ -4589,8 +4589,8 @@ Function UpdateGUI%()
 				Case "eyedrops", "eyedrops2"
 					;[Block]
 					If CanUseItem()
-						me\BlinkEffect = 0.6
-						me\BlinkEffectTimer = Rnd(20.0, 30.0)
+						me\BlinkEffect = 0.7
+						me\BlinkEffectTimer = Rnd(25.0, 35.0)
 						me\BlurTimer = 200.0
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
@@ -4601,8 +4601,8 @@ Function UpdateGUI%()
 				Case "fineeyedrops"
 					;[Block]
 					If CanUseItem()
-						me\BlinkEffect = 0.4
-						me\BlinkEffectTimer = Rnd(30.0, 40.0)
+						me\BlinkEffect = 0.5
+						me\BlinkEffectTimer = Rnd(35.0, 45.0)
 						me\Bloodloss = Max(me\Bloodloss - 1.0, 0.0)
 						me\BlurTimer = 200.0
 						
@@ -4756,7 +4756,7 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(True, True)
 						me\HealTimer = Rnd(20.0, 40.0)
-						me\StaminaEffect = Rnd(0.4, 0.7)
+						me\StaminaEffect = Rnd(0.4, 0.6)
 						me\StaminaEffectTimer = Rnd(20.0, 30.0)
 						
 						CreateMsg(GetLocalString("msg", "syringe_2"))
