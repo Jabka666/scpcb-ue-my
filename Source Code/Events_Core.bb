@@ -4636,6 +4636,7 @@ Function UpdateEvents%()
 			Case e_cont2_012
 				;[Block]
 				If PlayerRoom = e\room
+					e\room\RoomDoors[0]\Locked = RemoteDoorOn
 					If EntityY(me\Collider) < 0.0
 						If e\EventState = 0.0
 							If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25 And RemoteDoorOn
@@ -4644,7 +4645,7 @@ Function UpdateEvents%()
 								PlaySound_Strict(HorrorSFX[7])
 								PlaySound2(LeverSFX, Camera, e\room\RoomDoors[0]\OBJ)
 								
-								OpenCloseDoor(e\room\RoomDoors[0])
+								If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
 								
 								e\EventState = 1.0
 							EndIf
@@ -5611,7 +5612,7 @@ Function UpdateEvents%()
 					Else
 						ShouldPlay = 15
 						If e\EventState < 65.0
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.1 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 								
 								e\EventState = Max(e\EventState, 65.0)
@@ -5625,11 +5626,11 @@ Function UpdateEvents%()
 								SetAnimTime(e\room\Objects[4], 434.0)
 								SetAnimTime(e\room\Objects[5], 434.0)
 								
-								If e\room\RoomDoors[0]\Open Then OpenCloseDoor(e\room\RoomDoors[0])
+								If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
 							EndIf
 							
 							If e\EventState > 7.0
-								If Rand(300) = 1 Then OpenCloseDoor(e\room\RoomDoors[0])
+								If Rand(150 + (150 * e\room\RoomDoors[0]\Open)) = 1 Then OpenCloseDoor(e\room\RoomDoors[0])
 							EndIf
 							e\EventState2 = e\EventState2 + fps\Factor[0]
 						EndIf
@@ -5740,21 +5741,19 @@ Function UpdateEvents%()
 								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 434.0, 494.0, 0.1, False)
 								
 								If AnimTime(e\room\Objects[3]) > 515.0
-									If AnimTime(e\room\Objects[3]) > 533.0
-										If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
-										e\EventState = 67.0
-										e\EventState2 = 0.0
-										e\EventState3 = 0.0
-									EndIf
+									If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+									e\EventState = 67.0
+									e\EventState2 = 0.0
+									e\EventState3 = 0.0
 								EndIf
 								;[End Block]
 							Case 67.0
 								;[Block]
-								If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-									If Rand(150) = 1
+								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 8.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+									If Rand(100) = 1
 										msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
 										
-										InjurePlayer(Rnd(0.4, 0.8), 0.0, 300.0)
+										InjurePlayer(Rnd(0.3, 0.6), 0.0, 300.0)
 										PlaySound_Strict(DamageSFX[Rand(2, 3)])
 										me\CameraShake = 0.5
 										

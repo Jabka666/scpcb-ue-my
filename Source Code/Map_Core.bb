@@ -4310,10 +4310,10 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Ballistic Helmet", "helmet", r\x + 206.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 80.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateRandomBattery(r\x + 206.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 180.0 * RoomScale)
+			it.Items = CreateItem("ReVision Eyedrops", "eyedrops", r\x + 206.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 180.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 2 Key Card", "key2", r\x - 975.0 * RoomScale, r\y - 5.0 * RoomScale, r\z + 650.0 * RoomScale)
+			it.Items = CreateItem("Level 3 Key Card", "key3", r\x - 975.0 * RoomScale, r\y - 5.0 * RoomScale, r\z + 650.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r\x + 188.0 * RoomScale, r\z - 724.0 * RoomScale, r)
@@ -4871,11 +4871,10 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			r\RoomDoors.Doors[0] = CreateDoor(r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 320.0 * RoomScale, 0.0, r)
-			r\RoomDoors[0]\Locked = 1
-			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 176.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 352.0 * RoomScale, True)
+			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 176.0 * RoomScale, r\y - 562.0 * RoomScale, r\z - 354.0 * RoomScale, True)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			
-			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 364.0 * RoomScale, 0.0, True)
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 562.0 * RoomScale, r\z - 364.0 * RoomScale, 0.0, True)
 			
 			r\Objects[0] = LoadRMesh("GFX\Map\cont2_012_box.rmesh", Null)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
@@ -7023,6 +7022,9 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_WATER, r\x - 711.0 * RoomScale, r\y + 0.005, r\z + 140.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.8, 1.0), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
+			
+			it.Items = CreateItem("Level 0 Key Card", "key0", r\x - 1000.0 * RoomScale, r\y + 140.0 * RoomScale, r\z + 165.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Cup", "cup", r\x - 100.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
 			it\Name = FindSCP294Drink("Water")
