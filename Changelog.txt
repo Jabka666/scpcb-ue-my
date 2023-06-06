@@ -12,9 +12,19 @@ Rooms:
 - Added security camera in «room2C_ez» room.
 - Added «room2C_2_ez» room.
 
+- Changes for SCP-205's containment chamber:
+	- Added Level 3 Keycard.
+	- Replaced battery by eyedrops.
+
 - Changed «room2_4_hcz_106» event.
 
-- Some design improvements.
+- Updated elevators design.
+
+- Some design improvements...
+
+Items:
+- Rebalanced syringes and eyedrops.
+- Rebalanced equipping time for some items.
 
 Bug Fixes:
 - Fixed SCP-939's texture which is too bright.
@@ -26,11 +36,14 @@ Bug Fixes:
 - Fixed softlock in SCP-513's containment chamber.
 - Fixed text flashing white after disappearing.
 - Fixed SCP-106 disappearing after entering SCP-1499's dimension in the Gate A area.
+- Fixed S-NAV 310 Navigator not displaying battery icon.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 
 - Several fixes for SCP-268.
 - Some fixes for room items, hitboxes and textures.
+
+- Tiny fixes for translation system.
 
 v1.1.3
 
