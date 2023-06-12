@@ -6702,7 +6702,7 @@ Function UpdateEvents%()
 							e\room\RoomDoors[0]\Open = False
 						EndIf
 						
-						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < PowTwo(170.0 * RoomScale)
+						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < PowTwo(160.0 * RoomScale)
 							If Setting = ROUGH Lor Setting = COARSE
 								If e\EventState > 70.0 * 2.6 And e\EventState - fps\Factor[1] < 70.0 * 2.6 Then PlaySound_Strict(Death914SFX)
 							EndIf
