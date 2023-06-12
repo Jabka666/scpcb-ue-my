@@ -11,6 +11,7 @@ General:
 Rooms:
 - Added security camera in «room2C_ez» room.
 - Added «room2C_2_ez» room.
+- The doors guarded by a four-pass code are now unlocked by default in SCP-860-1's containment chamber.
 
 - Changes for SCP-205's containment chamber:
 	- Added Level 3 Keycard.
