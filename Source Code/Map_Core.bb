@@ -4304,6 +4304,10 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[1] = sc\ScrOBJ
 			
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x - 1400.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
+			EntityParent(r\Objects[2], r\OBJ)
+			
 			it.Items = CreateItem("Document SCP-205", "paper", r\x - 357.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			

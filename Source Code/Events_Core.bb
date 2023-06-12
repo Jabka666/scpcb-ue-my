@@ -5612,7 +5612,7 @@ Function UpdateEvents%()
 					Else
 						ShouldPlay = 15
 						If e\EventState < 65.0
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 4.1 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < 4.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 								
 								e\EventState = Max(e\EventState, 65.0)
@@ -5749,7 +5749,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 67.0
 								;[Block]
-								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 8.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < 7.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 									If Rand(100) = 1
 										msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
 										
