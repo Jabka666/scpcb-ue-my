@@ -82,7 +82,7 @@ Else
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
-Const VersionNumber$ = "1.1.4"
+Const VersionNumber$ = "1.2"
 
 AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
