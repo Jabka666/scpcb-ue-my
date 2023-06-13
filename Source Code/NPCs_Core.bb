@@ -96,6 +96,16 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
 			
+			; ~ On April Fools set kawaii texture
+			If (Left(CurrentDate(), 7) = "01 Apr ") Then
+				n_I\IsAprilFools = True
+				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
+				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
+				EntityTexture(n\OBJ, TexFestive)
+				EntityTexture(n\OBJ2, TexFestive)
+				DeleteSingleTextureEntryFromCache(TexFestive)
+			EndIf
+			
 			Temp = IniGetFloat(NPCsFile, "SCP-173", "Scale") / MeshDepth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)

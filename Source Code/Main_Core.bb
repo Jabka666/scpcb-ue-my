@@ -1020,6 +1020,7 @@ Function UpdateConsole%()
 						CreateConsoleMsg(GetLocalString("console", "halloween.on"))
 					Else
 						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
+						If n_I\IsAprilFools Then n_I\IsAprilFools = (Not n_I\IsAprilFools)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
@@ -1040,12 +1041,34 @@ Function UpdateConsole%()
 						CreateConsoleMsg(GetLocalString("console", "newyear.on"))
 					Else
 						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
+						If n_I\IsAprilFools Then n_I\IsAprilFools = (Not n_I\IsAprilFools)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
 						CreateConsoleMsg(GetLocalString("console", "newyear.off"))
+					EndIf
+					;[End Block]
+				Case "joke" 
+					;[Block]
+					n_I\IsAprilFools = (Not n_I\IsAprilFools)
+					If n_I\IsAprilFools
+						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_J.png", 1)
+						If opt\Atmosphere Then TextureBlend(Tex, 5)
+						EntityTexture(n_I\Curr173\OBJ, Tex)
+						EntityTexture(n_I\Curr173\OBJ2, Tex)
+						DeleteSingleTextureEntryFromCache(Tex)
+						CreateConsoleMsg(GetLocalString("console", "aprilfools.on"))
+					Else
+						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
+						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
+						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
+						If opt\Atmosphere Then TextureBlend(Tex2, 5)
+						EntityTexture(n_I\Curr173\OBJ, Tex2)
+						EntityTexture(n_I\Curr173\OBJ2, Tex2)
+						DeleteSingleTextureEntryFromCache(Tex2)
+						CreateConsoleMsg(GetLocalString("console", "aprilfools.off"))
 					EndIf
 					;[End Block]
 				Case "sanic"

@@ -410,7 +410,7 @@ Type NPCInstance
 	Field Curr513_1.NPCs
 	Field Curr049.NPCs
 	Field Curr066.NPCs
-	Field IsHalloween%, IsNewYear%
+	Field IsHalloween%, IsNewYear%, IsAprilFools%
 End Type
 
 Global n_I.NPCInstance
