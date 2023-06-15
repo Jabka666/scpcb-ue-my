@@ -27,6 +27,9 @@ Items:
 - Rebalanced syringes and eyedrops.
 - Rebalanced equipping time for some items.
 
+NPCs:
+- Add SCP-173-J as a skin for SCP-173 during April Fools day.
+
 Bug Fixes:
 - Fixed SCP-939's texture which is too bright.
 - Fixed wrong textures are applied for SCP-1048's drawings.
@@ -38,6 +41,7 @@ Bug Fixes:
 - Fixed text flashing white after disappearing.
 - Fixed SCP-106 disappearing after entering SCP-1499's dimension in the Gate A area.
 - Fixed S-NAV 310 Navigator not displaying battery icon.
+- Fixed death messages in room3_storage not displaying the correct ones.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 
