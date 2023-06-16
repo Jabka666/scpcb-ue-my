@@ -3926,10 +3926,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z + 238.0 * RoomScale)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z + 455.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z + 459.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 510.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 514.0 * RoomScale)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
