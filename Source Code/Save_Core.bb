@@ -2075,7 +2075,7 @@ Global CanSave%
 Function UpdateSaveState%()
 	If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 		CanSave = 2
-		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Lor PlayerInsideElevator Then CanSave = 0
+		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Then CanSave = 0
 	EndIf
 End Function
 
