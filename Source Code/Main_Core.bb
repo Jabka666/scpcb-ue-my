@@ -1860,16 +1860,13 @@ Const HIT_MAP% = 1
 Const HIT_PLAYER% = 2
 Const HIT_ITEM% = 3
 Const HIT_APACHE% = 4
-Const HIT_178% = 5
-Const HIT_DEAD% = 6
+Const HIT_DEAD% = 5
 ;[End Block]
 
 Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
 Collisions(HIT_PLAYER, HIT_PLAYER, 1, 3)
 Collisions(HIT_ITEM, HIT_MAP, 2, 2)
 Collisions(HIT_APACHE, HIT_APACHE, 1, 2)
-Collisions(HIT_178, HIT_MAP, 2, 2)
-Collisions(HIT_178, HIT_178, 1, 3)
 Collisions(HIT_DEAD, HIT_MAP, 2, 2)
 
 Global ShouldEntitiesFall% = True
