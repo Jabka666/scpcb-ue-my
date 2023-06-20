@@ -223,7 +223,7 @@ Function RenderSubtitles%()
 		EndIf
 		
 		If opt\OverrideSubColor
-			Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
+			Color((sub\R + opt\SubColorR) / 2.0, (sub\G + opt\SubColorG) / 2.0, (sub\B + opt\SubColorB) / 2.0)
 		Else
 			Color(sub\R, sub\G, sub\B)
 		EndIf
