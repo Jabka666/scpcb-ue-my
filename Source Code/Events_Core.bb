@@ -6695,7 +6695,10 @@ Function UpdateEvents%()
 					
 					If e\EventState > 0.0
 						e\EventState = e\EventState + fps\Factor[0]
-						
+						CanSave = 0
+						If (Not n_I\Curr106\Contained)
+							If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * (1.8 + (SelectedDifficulty\AggressiveNPCs)))
+						EndIf
 						e\room\RoomDoors[1]\Open = False
 						If e\EventState > 70.0 * 2.0
 							If e\room\RoomDoors[0]\Open Then e\room\RoomDoors[0]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[0]\OBJ)
@@ -6779,12 +6782,6 @@ Function UpdateEvents%()
 							
 							e\room\RoomDoors[0]\SoundCHN = PlaySound2(OpenSFX914, Camera, e\room\RoomDoors[0]\OBJ)
 							e\room\RoomDoors[1]\SoundCHN = PlaySound2(OpenSFX914, Camera, e\room\RoomDoors[1]\OBJ)
-						EndIf
-					EndIf
-					If (Not e\room\RoomDoors[1]\Open)
-						CanSave = 0
-						If (Not n_I\Curr106\Contained)
-							If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * (1.8 + (SelectedDifficulty\AggressiveNPCs)))
 						EndIf
 					EndIf
 					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
