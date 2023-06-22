@@ -8167,7 +8167,7 @@ Function UpdateRooms%()
 End Function
 
 Function IsRoomAdjacent%(this.Rooms, that.Rooms)
-	If this = Null Then Return(False)
+	If this = Null Lor that = Null Then Return(False)
 	If this = that Then Return(True)
 	
 	Local i%
