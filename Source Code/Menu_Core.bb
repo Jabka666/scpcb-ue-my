@@ -479,10 +479,10 @@ Function UpdateMainMenu%()
 						;[Block]
 						Height = 60 * MenuScale
 						
-						If UpdateMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "grap")) Then ChangeOptionTab(MainMenuTab_Options_Graphics)
-						If UpdateMenuButton(x + (160 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "audio")) Then ChangeOptionTab(MainMenuTab_Options_Audio)
-						If UpdateMenuButton(x + (300 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "ctrl")) Then ChangeOptionTab(MainMenuTab_Options_Controls)
-						If UpdateMenuButton(x + (440 * MenuScale), y + (15 * MenuScale), Width / 5, Height / 2, GetLocalString("options", "avc")) Then ChangeOptionTab(MainMenuTab_Options_Advanced)
+						If UpdateMenuButton(x + (20 * MenuScale), y + (15 * MenuScale), (Width / 5) + (420 * MenuScale), Height, GetLocalString("options", "grap"), Font_Default_Big) Then ChangeOptionTab(MainMenuTab_Options_Graphics)
+						If UpdateMenuButton(x + (20 * MenuScale), y + (85  * MenuScale), (Width / 5) + (420 * MenuScale), Height, GetLocalString("options", "audio"), Font_Default_Big) Then ChangeOptionTab(MainMenuTab_Options_Audio)
+						If UpdateMenuButton(x + (20 * MenuScale), y + (155 * MenuScale), (Width / 5) + (420 * MenuScale), Height, GetLocalString("options", "ctrl"), Font_Default_Big) Then ChangeOptionTab(MainMenuTab_Options_Controls)
+						If UpdateMenuButton(x + (20 * MenuScale), y + (225 * MenuScale), (Width / 5) + (420 * MenuScale), Height, GetLocalString("options", "avc"), Font_Default_Big) Then ChangeOptionTab(MainMenuTab_Options_Advanced)
 						;[End Block]
 				End Select
 			Else
@@ -1339,7 +1339,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options
 					;[Block]
-					Height = 60 * MenuScale
+					Height = 300 * MenuScale
 					
 					RenderFrame(x, y, Width, Height)
 					;[End Block]
