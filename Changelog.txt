@@ -7,6 +7,7 @@ General:
 - Finished subtitles.
 - Upscaled some textures.
 - Made letter shadows more visible.
+- Can save in elevators that are currently not moving.
 
 Rooms:
 - Added security camera in «room2C_ez» room.
@@ -42,6 +43,7 @@ Bug Fixes:
 - Fixed SCP-106 disappearing after entering SCP-1499's dimension in the Gate A area.
 - Fixed S-NAV 310 Navigator not displaying battery icon.
 - Fixed death messages in room3_storage not displaying the correct ones.
+- Fixed SCP-914 not letting you save if the doors were closed but was not refining.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 
