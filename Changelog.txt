@@ -8,6 +8,7 @@ General:
 - Upscaled some textures.
 - Made letter shadows more visible.
 - Can save in elevators that are currently not moving.
+- Cannot save anymore if SCP-096 has been triggered.
 - Light Blink NPC visiblity adjustments.
 
 Rooms:

@@ -1232,6 +1232,11 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 1.0, 2.0, 3.0
 						;[Block]
+						For e2.Events = Each Events
+							If e2\EventID = e_room2_servers_hcz
+								If e2\EventState >= 70.0 * 50.0 Then CanSave = 0
+							EndIf
+						Next
 						If (Not n\SoundCHN)
 							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
 							n\SoundCHN_IsStream = True
