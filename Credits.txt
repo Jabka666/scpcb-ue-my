@@ -120,6 +120,7 @@
 		Egor Oleynik ("Chumnaya Karkusa")
 		EpicDasherFR
 		ZiYueCommentary
+		Snoe
 
 *Development Helpers
 
@@ -144,7 +145,6 @@
 		Quote
 		Dreamanchik
 		Time_the_Creator
-		Snoe
 		Yuri Novikov ("BayanForce")
 		TheHappyJammer
 		Femcube Zero
@@ -174,6 +174,9 @@ by Xing Jie ("XingJieGames")
 
 		Spanish localization,
 by kSuzukuOninuts ("SuzukuKnm")
+
+		Portuguese localization,
+by Ariel ("arielniii")
 
 *Mod Testers
 
