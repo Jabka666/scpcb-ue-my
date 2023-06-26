@@ -1208,10 +1208,10 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+							If (Not chs\NoTarget)
 								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
 									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink <= 0.0
+										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink < 0.25
 											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 											
 											me\CurrCameraZoom = 10.0
@@ -1273,6 +1273,8 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 4.0
 						;[Block]
+						CanSave = 0
+						
 						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
 						
 						If n\Target = Null
@@ -1301,7 +1303,7 @@ Function UpdateNPCs%()
 								n\State3 = MilliSecs() + 3000.0
 							EndIf
 							
-							If chs\NoTarget Lor I_268\InvisibilityOn And n\Target = Null Then n\LastSeen = 0
+							If chs\NoTarget And n\Target = Null Then n\LastSeen = 0
 							
 							If n\LastSeen = 1
 								n\PathTimer = Max(70.0 * 3.0, n\PathTimer)
@@ -1367,7 +1369,7 @@ Function UpdateNPCs%()
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							Else
-								If n\PathStatus = 1 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+								If n\PathStatus = 1 And (Not chs\NoTarget)
 									If n\Path[n\PathLocation] = Null
 										If n\PathLocation > 19
 											n\PathLocation = 0 : n\PathStatus = 0
@@ -1478,10 +1480,10 @@ Function UpdateNPCs%()
 								AnimateNPC(n, 312.0, 422.0, 0.3, False)
 							EndIf
 							
-							If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+							If (Not chs\NoTarget)
 								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
 									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink <= 0.0
+										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink < 0.25
 											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 											
 											me\CurrCameraZoom = 10.0
@@ -1594,7 +1596,7 @@ Function UpdateNPCs%()
 										If wi\HazmatSuit > 0
 											RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
 											
-											If RemoveHazmatTimer < 150.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 150.0 And (Not ChannelPlaying(n\SoundCHN2))
+											If RemoveHazmatTimer < 200.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
 												n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), True)
 											ElseIf RemoveHazmatTimer =< 0.0
 												For i = 0 To 2
@@ -1617,9 +1619,9 @@ Function UpdateNPCs%()
 										ElseIf I_714\Using > 0
 											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
 											
-											Remove714Timer = Remove714Timer - (fps\Factor[0] * ((I_714\Using = 2) + (2.0 * (I_714\Using <> 2))) * 1.5)
+											Remove714Timer = Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
 											
-											If Remove714Timer < 150.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 150.0 And (Not ChannelPlaying(n\SoundCHN2))
+											If Remove714Timer < 200.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
 												If I_714\Using = 2 Then n\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), True)
 											ElseIf Remove714Timer =< 0.0
 												For i = 0 To MaxItemAmount - 1
@@ -3370,8 +3372,8 @@ Function UpdateNPCs%()
 										EndIf
 										
 										If Dist < 20.25 Lor n\State3 > Rnd(200.0, 250.0)
-											n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 											If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+												n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 												n\State = 3.0
 											Else
 												If (PrevFrame < 492.0 And n\Frame >= 492.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0)
@@ -6425,7 +6427,7 @@ Function NPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 End Function
 
 Function PlayerSees173%(n.NPCs)
-	If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink > 0.0 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))
+	If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink >= 0.25 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))
 		Return(False)
 	Else
 		Return(True)
