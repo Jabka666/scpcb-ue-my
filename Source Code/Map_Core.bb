@@ -2806,7 +2806,7 @@ Global CODE_DR_MAYNARD%, CODE_O5_COUNCIL%, CODE_MAINTENANCE_TUNNELS%
 ;[Block]
 Const CODE_DR_HARP% = 7816
 Const CODE_DR_L% = 2411
-Const CODE_CONT3_035% = 5731
+Const CODE_cont1_035% = 5731
 Const CODE_LOCKED$ = "GEAR"
 ;[End Block]
 
@@ -5548,7 +5548,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r\x, r\z + 500.0 * RoomScale, r)
 			;[End Block]
-		Case "cont3_035"
+		Case "cont1_035"
 			;[Block]
 			; ~ The doors to the containment chamber
 			r\RoomDoors.Doors[0] = CreateDoor(r\x - 296.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, r, True, ONE_SIDED_DOOR, KEY_CARD_5)
@@ -5569,7 +5569,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[2] = CreateDoor(r\x + 384.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, r, False, DEFAULT_DOOR, KEY_CARD_5)
 			
 			; ~ The door to the storage room
-			r\RoomDoors.Doors[3] = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_CONT3_035))
+			r\RoomDoors.Doors[3] = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_cont1_035))
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 203.0 * RoomScale, -270.0)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 132.0 * RoomScale, -270.0)
@@ -5600,7 +5600,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[5] = CreatePivot()
 			PositionEntity(r\Objects[5], r\x + 176.0 * RoomScale, r\y + 0.5, r\z - 144.0 * RoomScale)
 			
-			r\Objects[6] = LoadMesh_Strict("GFX\Map\Props\cont3_035_label.b3d")
+			r\Objects[6] = LoadMesh_Strict("GFX\Map\Props\cont1_035_label.b3d")
 			Update035Label(r\Objects[6])
 			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[6], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
@@ -8739,6 +8739,7 @@ Function CreateMap%()
 	SetRoom("cont1_079", ROOM1, Room1Amount[0] + Floor(0.15 * Float(Room1Amount[1])), MinPos, MaxPos)
 	SetRoom("cont1_106", ROOM1, Room1Amount[0] + Floor(0.3 * Float(Room1Amount[1])), MinPos, MaxPos)
 	SetRoom("cont1_096", ROOM1, Room1Amount[0] + Floor(0.4 * Float(Room1Amount[1])), MinPos, MaxPos)
+	SetRoom("cont1_035", ROOM1, Room1Amount[0] + Floor(0.5 * Float(Room1Amount[1])), MinPos, MaxPos)
 	SetRoom("cont1_895", ROOM1, Room1Amount[0] + Floor(0.7 * Float(Room1Amount[1])), MinPos, MaxPos)
 	
 	MinPos = Room2Amount[0]
@@ -8756,7 +8757,6 @@ Function CreateMap%()
 	
 	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "room2c_maintenance"
 	
-	MapRoom(ROOM3, Room3Amount[0] + Floor(0.2 * Float(Room3Amount[1]))) = "cont3_035"
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.5 * Float(Room3Amount[1]))) = "cont3_513"
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.8 * Float(Room3Amount[1]))) = "cont3_966"
 	

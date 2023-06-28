@@ -47,7 +47,7 @@ Const e_room3_storage% = 34
 Const e_room3_2_hcz% = 35
 Const e_room4_lcz_049% = 36
 Const e_cont2_012% = 37
-Const e_cont3_035% = 38
+Const e_cont1_035% = 38
 Const e_cont2_049% = 39
 Const e_cont1_079% = 40
 Const e_cont1_106% = 41
@@ -238,9 +238,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont2_012)
 			;[End Block]
-		Case "cont3_035"
+		Case "cont1_035"
 			;[Block]
-			Return(e_cont3_035)
+			Return(e_cont1_035)
 			;[End Block]
 		Case "cont2_049"
 			;[Block]
@@ -2732,7 +2732,7 @@ Function UpdateEvents%()
 				Local Is035Released% = False
 				
 				For e2.Events = Each Events
-					If e2 <> e And e2\EventID = e_cont3_035
+					If e2 <> e And e2\EventID = e_cont1_035
 						If e2\EventState < 0.0
 							Is035Released = True
 							Exit
@@ -4776,7 +4776,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_cont3_035
+			Case e_cont1_035
 				;[Block]
 				If PlayerRoom = e\room
 					; ~ EventState2: has SCP-035 told the code to the storage room (True / False)
