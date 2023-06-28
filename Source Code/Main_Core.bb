@@ -5841,6 +5841,9 @@ Function RenderHUD%()
 		If wi\HazmatSuit = 4
 			Color(0, 200, 0)
 			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		ElseIf I_714\Using = 1
+			Color(200, 0, 0)
+			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 		EndIf
 		Color(255, 255, 255)
 		Rect(x - (51 * MenuScale), y - (41 * MenuScale), 32 * MenuScale, 32 * MenuScale, False)
