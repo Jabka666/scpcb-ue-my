@@ -48,6 +48,7 @@ Bug Fixes:
 - Fixed death messages in room3_storage not displaying the correct ones.
 - Fixed SCP-914 not letting you save if the doors were closed but was not refining.
 - Fixed SCP-860-2 sounds repeating when wearing SCP-268.
+- Fixed SCP-106 being unable to locate the player when the meter ran out.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 

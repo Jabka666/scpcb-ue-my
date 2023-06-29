@@ -989,7 +989,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If Dist > 0.64
-									If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor Visible Lor (n\PathStatus <> 1 And (Not chs\NoTarget) And (Not I_268\Using))) And PlayerRoom\RoomTemplate\Name <> "gate_a"
+									If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor Visible Lor (n\PathStatus <> 1 And (Not chs\NoTarget) And (Not I_268\InvisibilityOn))) And PlayerRoom\RoomTemplate\Name <> "gate_a"
 										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\Name = "dimension_106") Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
