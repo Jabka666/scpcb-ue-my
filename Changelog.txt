@@ -29,6 +29,7 @@ Rooms:
 Items:
 - Rebalanced syringes and eyedrops.
 - Rebalanced equipping time for some items.
+- Can obtain regular SCP-714 back from SCP-914.
 
 NPCs:
 - Add SCP-173-J as a skin for SCP-173 during April Fools day.

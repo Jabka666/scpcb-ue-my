@@ -1705,7 +1705,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Green Jade Ring", "ring", x, y, z)
+					If item\ItemTemplate\TempName = "scp714"
+						it2.Items = CreateItem("Green Jade Ring", "ring", x, y, z)
+					Else
+						it2.Items = CreateItem("SCP-714", "scp714", x, y, z)
+					EndIf
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
