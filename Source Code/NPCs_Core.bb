@@ -677,7 +677,7 @@ Function UpdateNPCs%()
 								If PlayerSees173(n) Then Move = False
 							EndIf
 							
-							If chs\NoTarget Lor I_268\InvisibilityOn Then Move = True
+							If chs\NoTarget Then Move = True
 							
 							; ~ Doesn't move
 							If (Not Move)
@@ -778,7 +778,7 @@ Function UpdateNPCs%()
 										Next
 									EndIf
 									
-									If chs\NoTarget Lor I_268\InvisibilityOn
+									If chs\NoTarget
 										Temp = False
 										n\EnemyX = 0.0
 										n\EnemyY = 0.0
@@ -787,7 +787,7 @@ Function UpdateNPCs%()
 									
 									; ~ Attacks
 									If Temp
-										n\Angle = DeltaYaw(n\Collider, Camera)
+										If (Not I_268\InvisibilityOn) Then n\Angle = DeltaYaw(n\Collider, Camera)
 										If Dist < 0.4225
 											If (Not me\Terminated) And (Not chs\GodMode)
 												Select PlayerRoom\RoomTemplate\Name
@@ -820,14 +820,16 @@ Function UpdateNPCs%()
 												Kill()
 											EndIf
 										Else
-											PointEntity(n\Collider, me\Collider)
-											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider))
-											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
+											If (Not I_268\InvisibilityOn)
+												PointEntity(n\Collider, me\Collider)
+												RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider))
+												TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
+											EndIf
 										EndIf
 									Else ; ~ Move to the location where he was last seen
 										If n\EnemyX <> 0.0
 											n\Angle = DeltaYaw(n\Collider, Camera)
-											If DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ) > 0.25
+											If DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ) > 0.25 And (Not I_268\InvisibilityOn)
 												AlignToVector(n\Collider, n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider), 3)
 												MoveEntity(n\Collider, 0.0, 0.0, n\Speed * fps\Factor[0])
 												If Rand(500) = 1 Then n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
@@ -837,7 +839,7 @@ Function UpdateNPCs%()
 										Else
 											If Rand(400) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 10.0)
 											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
-											If me\LightBlink <= 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+											If me\LightBlink <= 0.0 And (Not chs\NoTarget)
 												n\Angle = Rnd(-120.0, 120.0)
 											Else
 												n\Angle = 0.0
@@ -6433,7 +6435,7 @@ Function NPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 End Function
 
 Function PlayerSees173%(n.NPCs)
-	If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink >= 0.25 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))
+	If (Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink >= 0.25 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))
 		Return(False)
 	Else
 		Return(True)
