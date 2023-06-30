@@ -1834,6 +1834,7 @@ Function UpdateNPCs%()
 							
 							PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(me\Collider) - 180.0, EntityYaw(n\Collider), 40.0), 0.0)
+							If (Not me\Terminated) Then n\State = 1.0
 							;[End Block]
 						Case 4.0 ; ~ Standing on catwalk
 							;[Block]
