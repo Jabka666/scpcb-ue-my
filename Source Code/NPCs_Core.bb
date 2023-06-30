@@ -1584,21 +1584,22 @@ Function UpdateNPCs%()
 							If (Dist < PowTwo(HideDistance * 2.0)) And n\Idle = 0 And PlayerInReachableRoom(True)
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 								PlayerSeeAble = NPCSeesPlayer(n)
-								If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) ; ~ Player is visible for SCP-049's sight
-									; ~ Playing a sound after detecting the player
-									If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
-										LoadNPCSound(n, "SFX\SCP\049\Spotted" + Rand(7) + ".ogg", 1)
-										n\SoundCHN2 = LoopSound2(n\Sound2, n\SoundCHN2, Camera, n\OBJ, 10.0, 1.0, True)
-										n\PrevState = 2
+								If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget) ; ~ Player is visible for SCP-049's sight
+									If (Not I_268\InvisibilityOn)
+										; ~ Playing a sound after detecting the player
+										If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
+											LoadNPCSound(n, "SFX\SCP\049\Spotted" + Rand(7) + ".ogg", 1)
+											n\SoundCHN2 = LoopSound2(n\Sound2, n\SoundCHN2, Camera, n\OBJ, 10.0, 1.0, True)
+											n\PrevState = 2
+										EndIf
+										n\PathStatus = 0
+										n\PathTimer = 0.0
+										n\PathLocation = 0
+										If PlayerSeeAble = 1 Then n\State2 = 70.0 * 2.0
+										
+										PointEntity(n\OBJ, me\Collider)
+										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 									EndIf
-									n\PathStatus = 0
-									n\PathTimer = 0.0
-									n\PathLocation = 0
-									If PlayerSeeAble = 1 Then n\State2 = 70.0 * 2.0
-									
-									PointEntity(n\OBJ, me\Collider)
-									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
-									
 									If Dist < 0.25
 										If wi\HazmatSuit > 0
 											RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
@@ -1665,18 +1666,24 @@ Function UpdateNPCs%()
 											EndIf
 										EndIf
 									Else
-										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+										If (Not I_268\InvisibilityOn)
+											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+										EndIf
 										
-										If Dist < 9.0
-											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387.0), 463.0, n\CurrSpeed * 38.0)
-										Else
-											If n\Frame > 428.0
-												AnimateNPC(n, Min(AnimTime(n\OBJ), 463.0), 498.0, n\CurrSpeed * 38.0, False)
-												If n\Frame > 497.9 Then SetNPCFrame(n, 358.0)
+										If (Not I_268\InvisibilityOn)
+											If Dist < 9.0
+												AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387.0), 463.0, n\CurrSpeed * 38.0)
 											Else
-												AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
+												If n\Frame > 428.0
+													AnimateNPC(n, Min(AnimTime(n\OBJ), 463.0), 498.0, n\CurrSpeed * 38.0, False)
+													If n\Frame > 497.9 Then SetNPCFrame(n, 358.0)
+												Else
+													AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
+												EndIf
 											EndIf
+										Else
+											AnimateNPC(n, 269.0, 345.0, 0.2)
 										EndIf
 									EndIf
 								Else ; ~ Finding a path to the player
@@ -6403,7 +6410,9 @@ Function NPCSeesPlayer%(n.NPCs, DisableSoundOnCrouch% = False)
 	; ~ 2: Player is detected by emitting a sound
 	; ~ 3: Player is detected by a camera (only for MTF Units!)
 	
-	If chs\NoTarget Lor I_268\InvisibilityOn Then Return(False)
+	If chs\NoTarget Then Return(False)
+	
+	If n\NPCType = NPCTypeMTF And I_268\InvisibilityOn then Return(False)
 	
 	If (Not me\Detected) Lor n\NPCType <> NPCTypeMTF
 		If n\BlinkTimer <= 0.0 Then Return(0)
