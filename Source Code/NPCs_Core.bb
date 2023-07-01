@@ -1983,22 +1983,25 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 2.0 ; ~ Player is visible, tries to kill
 							;[Block]
-							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-								If PlayerSeeAble = 1
-									n\State2 = 70.0 * 2.0
-								Else
-									n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
+							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget)
+								If (Not I_268\InvisibilityOn)
+									If PlayerSeeAble = 1
+										n\State2 = 70.0 * 2.0
+									Else
+										n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
+									EndIf
+									PointEntity(n\OBJ, me\Collider)
+									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
+									
+									If n\Frame < 713.0
+										AnimateNPC(n, 705, 713.0, 0.4, False)
+									Else
+										AnimateNPC(n, 714.0, 794.0, n\CurrSpeed * 60.0)
+									EndIf
+									
+									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								EndIf
-								PointEntity(n\OBJ, me\Collider)
-								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
-								
-								If n\Frame < 713.0
-									AnimateNPC(n, 705, 713.0, 0.4, False)
-								Else
-									AnimateNPC(n, 714.0, 794.0, n\CurrSpeed * 60.0)
-								EndIf
-								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								If Dist < 0.49
 									If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0
@@ -2007,16 +2010,28 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								
-								n\PathTimer = 0.0
-								n\PathStatus = 0
-								n\PathLocation = 0
+								If (Not I_268\InvisibilityOn)
+									n\PathTimer = 0.0
+									n\PathStatus = 0
+									n\PathLocation = 0
+								Else
+									n\State = 3.0
+								EndIf
 							Else
 								n\State = 3.0
 							EndIf
 							;[End Block]
 						Case 3.0 ; ~ Player isn't visible, tries to find
 							;[Block]
-							If PlayerSeeAble = 1 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then n\State = 2.0
+							If PlayerSeeAble = 1 And (Not chs\NoTarget)
+								If (Not I_268\InvisibilityOn) Then n\State = 2.0
+								If Dist < 0.49 Then
+									If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0
+										SetNPCFrame(n, 795.0)
+										n\State = 4.0
+									EndIf
+								EndIf
+							EndIf
 							If n\PathStatus = 1
 								If n\Path[n\PathLocation] = Null
 									If n\PathLocation > 19
@@ -2091,6 +2106,8 @@ Function UpdateNPCs%()
 						Case 4.0 ; ~ Attacks
 							;[Block]
 							If (Not me\Terminated)
+								PointEntity(n\OBJ, me\Collider)
+								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 40.0), 0.0)
 								If n\Frame <= 813.0
 									AnimateNPC(n, 795.0, 813.0, 0.7, False)
 									If n\Frame >= 813.0
@@ -4484,34 +4501,44 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 2.0 ; ~ Player is visible, tries to kill
 							;[Block]
-							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-								If PlayerSeeAble = 1
-									n\State2 = 70.0 * 2.0
-								Else
-									n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
+							If PlayerSeeAble = 1 Lor n\State2 > 0.0 And (Not chs\NoTarget)
+								If (Not I_268\InvisibilityOn)
+									If PlayerSeeAble = 1
+										n\State2 = 70.0 * 2.0
+									Else
+										n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
+									EndIf
+									PointEntity(n\OBJ, me\Collider)
+									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
+									
+									AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
+									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								EndIf
-								PointEntity(n\OBJ, me\Collider)
-								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
-								
-								AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
-								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-								
 								
 								If Dist < 0.49
 									If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0 Then n\State = 4.0
 								EndIf
 								
-								n\PathTimer = 0.0
-								n\PathStatus = 0
-								n\PathLocation = 0
+								If (Not I_268\InvisibilityOn)
+									n\PathTimer = 0.0
+									n\PathStatus = 0
+									n\PathLocation = 0
+								Else
+									n\State = 3.0
+								EndIf
 							Else
 								n\State = 3.0
 							EndIf
 							;[End Block]
 						Case 3.0 ; ~ Player isn't visible, tries to find
 							;[Block]
-							If PlayerSeeAble = 1 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then n\State = 2.0
+							If PlayerSeeAble = 1 And (Not chs\NoTarget)
+								If (Not I_268\InvisibilityOn) Then n\State = 2.0
+								If Dist < 0.49 Then
+									If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0 Then n\State = 4.0
+								EndIf
+							EndIf
 							
 							If n\PathStatus = 1
 								If n\Path[n\PathLocation] = Null
@@ -4590,6 +4617,8 @@ Function UpdateNPCs%()
 						Case 4.0 ; ~ Attacks
 							;[Block]
 							If (Not me\Terminated)
+								PointEntity(n\OBJ, me\Collider)
+								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 40.0), 0.0)
 								AnimateNPC(n, 126.0, 165.0, 0.6, False)
 								If n\Frame >= 146.0 And PrevFrame < 146.0
 									If Dist < 0.49
