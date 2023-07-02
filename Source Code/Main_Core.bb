@@ -2164,7 +2164,6 @@ Function UpdateGame%()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			InFacility = CheckForPlayerInFacility()
-			CurrStepSFX = 0
 			If RN = "dimension_1499"
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
 				UpdateLeave1499()
@@ -2738,9 +2737,9 @@ Function UpdateMoving%()
 		If (Not chs\NoClip)
 			If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0.0
 				If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0 And (Not me\Zombie)
-					Sprint = 2.5
 					me\Stamina = me\Stamina - (fps\Factor[0] * 0.4 * me\StaminaEffect)
 					If me\Stamina <= 0.0 Then me\Stamina = -20.0
+					Sprint = 2.5
 				EndIf
 				
 				If PlayerRoom\RoomTemplate\Name = "dimension_106"
@@ -2761,37 +2760,38 @@ Function UpdateMoving%()
 				
 				Temp = (me\Shake Mod 360.0)
 				
-				Local TempCHN% = 0, TempCHN2% = 0
-				
 				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And (Not me\Terminated)
-					If CurrStepSFX = 0 Lor CurrStepSFX = 3
-						Temp = GetStepSound(me\Collider)
-						
-						If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2"
-							Temp3 = 5
-						Else
-							Temp3 = 0
-						EndIf
-						
-						If Sprint = 2.5
-							TempCHN = PlaySound_Strict(StepSFX(Temp, 0, Rand(0, 7 - Temp3)))
-						Else
-							TempCHN = PlaySound_Strict(StepSFX(Temp, 1 - (Temp3 / 5), Rand(0, 7 - Temp3)))
-						EndIf
-						If CurrStepSFX = 3 Then TempCHN2 = PlaySound_Strict(Step2SFX[Rand(13, 14)])
-					ElseIf CurrStepSFX = 1
-						TempCHN = PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
-					ElseIf CurrStepSFX = 2
-						TempCHN = PlaySound_Strict(Step2SFX[Rand(0, 2)])
+					Temp = GetStepSound(me\Collider)
+					If DecalStep = 1
+						Temp = 2
+					ElseIf forest_event <> Null
+						If forest_event\room = PlayerRoom And forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
 					EndIf
+					
+					Local TempCHN% = 0, TempCHN2% = 0
+					Local HasSprint% = True, StepRand% = Rand(0, 7)
+					
+					Select Temp
+						Case 2, 3, 4
+							;[Block]
+							HasSprint = False
+							StepRand = Rand(0, 2)
+							;[End Block]
+					End Select
+					
+					TempCHN = PlaySound_Strict(StepSFX(Temp, (Sprint = 2.5 And HasSprint), StepRand))
+					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+					If DecalStep = 2
+						TempCHN2 = PlaySound_Strict(Step2SFX[Rand(10, 11)])
+						ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+					EndIf
+					
 					If Sprint = 2.5
 						me\SndVolume = Max(4.0, me\SndVolume)
 					Else
 						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
 					EndIf
-					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
-					ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
 				EndIf
 			EndIf
 		Else
@@ -2893,22 +2893,31 @@ Function UpdateMoving%()
 			Next
 			
 			If CollidedFloor
-				If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor PlayerRoom\RoomTemplate\Name = "room2_scientists_2"
-					Temp3 = 5
-				Else
-					Temp3 = 0
-				EndIf
-				
 				If me\DropSpeed < -0.07
-					If CurrStepSFX = 0 Lor CurrStepSFX = 3
-						PlaySound_Strict(StepSFX(GetStepSound(me\Collider), 0, Rand(0, 7 - Temp3)))
-						If CurrStepSFX = 3 Then PlaySound_Strict(Step2SFX[Rand(13, 14)])
-					ElseIf CurrStepSFX = 1
-						PlaySound_Strict(StepSFX(2, 0, Rand(0, 2)))
-					ElseIf CurrStepSFX = 2
-						PlaySound_Strict(Step2SFX[Rand(0, 2)])
+					Temp = GetStepSound(me\Collider)
+					If DecalStep = 1
+						Temp = 2
+					ElseIf forest_event <> Null
+						If forest_event\room = PlayerRoom And forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
 					EndIf
-					me\SndVolume = Max(3.0, me\SndVolume)
+					
+					TempCHN = 0 : TempCHN2 = 0
+					HasSprint = True : StepRand = Rand(0, 7)
+					
+					Select Temp
+						Case 2, 3, 4
+							;[Block]
+							HasSprint = False
+							StepRand = Rand(0, 2)
+							;[End Block]
+					End Select
+					
+					TempCHN = PlaySound_Strict(StepSFX(Temp, (Sprint = 2.5 And HasSprint), StepRand))
+					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+					If DecalStep = 2
+						TempCHN2 = PlaySound_Strict(Step2SFX[Rand(10, 11)])
+						ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+					EndIf
 				EndIf
 				me\DropSpeed = 0.0
 			Else

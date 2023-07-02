@@ -1083,10 +1083,14 @@ Global CoughCHN%, VomitCHN%
 Global MachineSFX%
 Global ApacheSFX%
 
-Global CurrStepSFX%
-Dim StepSFX%(3, 2, 8) ; ~ (Normal / Metal, Walk / Run, ID)
-
-Global Step2SFX%[15]
+Global DecalStep%
+; ~ 0 - Normal
+; ~ 1 - Metal
+; ~ 2 - PD
+; ~ 3 - Cloth
+; ~ 4 - Forest (Should be used in future. Currently doesn't work for player)
+Dim StepSFX%(5, 2, 8) ; ~ (Ground Type, Walk / Run, ID)
+Global Step2SFX%[12]
 
 Global VehicleSFX%[2]
 
@@ -1263,24 +1267,24 @@ Function LoadSounds%()
 	
 	For i = 0 To 7
 		StepSFX(0, 0, i) = LoadSound_Strict("SFX\Step\Step" + (i + 1) + ".ogg")
-		StepSFX(1, 0, i) = LoadSound_Strict("SFX\Step\StepMetal" + (i + 1) + ".ogg")
 		StepSFX(0, 1, i) = LoadSound_Strict("SFX\Step\Run" + (i + 1) + ".ogg")
+		StepSFX(1, 0, i) = LoadSound_Strict("SFX\Step\StepMetal" + (i + 1) + ".ogg")
 		StepSFX(1, 1, i) = LoadSound_Strict("SFX\Step\RunMetal" + (i + 1) + ".ogg")
 		If i < 3
 			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + (i + 1) + ".ogg")
+			StepSFX(3, 0, i) = LoadSound_Strict("SFX\Step\StepCloth" + (i + 1) + ".ogg")
+			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
 		EndIf
 	Next
+	
 	For i = 0 To 2
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
+		Step2SFX[i] = LoadSound_Strict("SFX\Character\MTF\Step" + (i + 1) + ".ogg")
 	Next
-	For i = 3 To 5
-		Step2SFX[i] = LoadSound_Strict("SFX\Character\MTF\Step" + (i - 2) + ".ogg")
+	For i = 3 To 9
+		Step2SFX[i] = LoadSound_Strict("SFX\Step\SCP\StepMetal" + (i - 2) + ".ogg")
 	Next
-	For i = 6 To 12
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\SCP\StepMetal" + (i - 5) + ".ogg")
-	Next
-	For i = 13 To 14
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepFluid" + (i - 12) + ".ogg")
+	For i = 10 To 11
+		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepFluid" + (i - 9) + ".ogg")
 	Next
 	
 	VehicleSFX[0] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
@@ -1839,7 +1843,7 @@ Function LoadEntities%()
 	ClsColor(255, 255, 255)
 	Cls()
 	ClsColor(0, 0, 0)
-	SetBuffer(buffer)
+	SetBuffer(Buffer)
 	t\OverlayID[6] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[6], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[6], t\OverlayTextureID[6])

@@ -3145,19 +3145,20 @@ Function UpdateDecals%()
 			Local Dist# = DistanceSquared(EntityX(me\Collider), EntityX(de\OBJ, True), EntityZ(me\Collider), EntityZ(de\OBJ, True))
 			Local ActualSize# = PowTwo(de\Size * 0.8)
 			
+			DecalStep = 0
 			If (Dist < ActualSize) And (Int(EntityPitch(de\OBJ, True)) = 90.0) And (Abs((EntityY(me\Collider) - 0.3) - EntityY(de\OBJ, True)) < 0.05)
 				Select de\ID
 					Case 0
 						;[Block]
 						If de\FX <> 1
-							CurrStepSFX = 1
+							DecalStep = 1
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(100.0 - (Sqr(ActualSize - Dist)) * 15.0, 1.0))
 							me\CrouchState = Max(me\CrouchState, (ActualSize - Dist) / 2.0)
 						EndIf
 						;[End Block]
 					Case 2, 3, 4, 5, 6, 7, 16, 17, 18, 20
 						;[Block]
-						CurrStepSFX = 3
+						DecalStep = 2
 						;[End Block]
 				End Select
 			EndIf

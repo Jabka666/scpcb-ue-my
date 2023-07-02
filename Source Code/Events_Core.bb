@@ -5807,8 +5807,6 @@ Function UpdateEvents%()
 				
 				If PlayerRoom = e\room And fr <> Null
 					If e\EventState = 1.0 ; ~ The player is in the forest
-						CurrStepSFX = 2
-						
 						n_I\Curr106\Idle = 1
 						
 						For r.Rooms = Each Rooms
@@ -8007,7 +8005,6 @@ Function UpdateDimension106%()
 				If e\EventState2 <> PD_FakeTunnelRoom
 					CanSave = 1
 					
-					CurrStepSFX = 1
 					ShouldPlay = 3
 					
 					InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
@@ -8335,7 +8332,6 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_FakeTunnelRoom
 						;[Block]
-						CurrStepSFX = 0
 						ShouldPlay = 1
 						
 						GiveAchievement(AchvPD)
@@ -8859,7 +8855,6 @@ Function UpdateDimension1499%()
 				Else
 					me\DropSpeed = 0.0
 				EndIf
-				CurrStepSFX = 0
 				PlayerFallingPickDistance = 0.0
 			Else
 				If e\EventState = 2.0
