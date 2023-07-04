@@ -5350,7 +5350,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "finehazmatsuit"
 										;[Block]
-										CreateMsg(GetLocalString("msg", "suit.on"))
+										CreateMsg(GetLocalString("msg", "suit.dry"))
 										wi\HazmatSuit = 2
 										;[End Block]
 									Case "veryfinehazmatsuit"
