@@ -5450,7 +5450,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "finegasmask"
 										;[Block]
-										CreateMsg(GetLocalString("msg", "mask.on.easy"))
+										CreateMsg(GetLocalString("msg", "mask.on.dry"))
 										wi\GasMask = 2
 										;[End Block]
 									Case "veryfinegasmask"
