@@ -1730,12 +1730,12 @@ Function LoadEntities%()
 	Next
 	
 	For i = 0 To MaxAchievements - 1
-		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvName")
-		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvDesc")
+		Local Loc$ = "a" + Str(i)
 		
-		Local Image$ = GetFileLocalString(AchievementsFile, "a" + Str(i), "AchvImage")
+		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, Loc, "AchvName")
+		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, Loc, "AchvDesc")
 		
-		achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + Image + ".png")
+		achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + GetFileLocalString(AchievementsFile, Loc, "AchvImage") + ".png")
 		achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 	Next
 	

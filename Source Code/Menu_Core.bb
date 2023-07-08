@@ -1717,7 +1717,7 @@ Function InitLoadingScreens%(File$)
 				If ls\Txt[i] <> "" Then ls\TxtAmount = ls\TxtAmount + 1
 			Next
 			
-			ls\DisableBackground = GetFileLocalString(File, TemporaryString, "DisableBackground")
+			ls\DisableBackground = StringToBoolean(GetFileLocalString(File, TemporaryString, "DisableBackground"))
 			
 			ls\AlignX = Int(GetFileLocalString(File, TemporaryString, "AlignX"))
 			ls\AlignY = Int(GetFileLocalString(File, TemporaryString, "AlignY"))

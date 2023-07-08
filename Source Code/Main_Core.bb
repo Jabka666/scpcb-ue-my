@@ -4705,9 +4705,9 @@ Function UpdateGUI%()
 					If CanUseItem(True)
 						Local Drink$ = Trim(SelectedItem\Name)
 						
-						If Lower(Left(Drink, 6)) = "cup of"
+						If Lower(Left(Drink, Min(6, Len(Drink)))) = "cup of"
 							Drink = Right(Drink, Len(Drink) - 7)
-						ElseIf Lower(Left(Drink, 8)) = "a cup of"
+						ElseIf Lower(Left(Drink, Min(8, Len(Drink)))) = "a cup of"
 							Drink = Right(Drink, Len(Drink) - 9)
 						EndIf
 						
@@ -8920,7 +8920,7 @@ Function Update294%()
 					B = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
 					
 					Alpha = Float(GetFileLocalString(SCP294File, Drink, "Alpha", 1.0, False))
-					Glow = GetFileLocalString(SCP294File, Drink, "Glow", "", False)
+					Glow = StringToBoolean(GetFileLocalString(SCP294File, Drink, "Glow", "", False))
 					If Glow Then Alpha = -Alpha
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
