@@ -655,6 +655,7 @@ Function LoadMaterials%(File$)
 End Function
 
 Const ItemsPath$ = "GFX\Items\"
+Const ModelsPath$ = "GFX\Items\Models\"
 Const ItemHUDTexturePath$ = "GFX\Items\HUD Textures\"
 Const ItemTexturePath$ = "GFX\Items\Textures\"
 Const ItemINVIconPath$ = "GFX\Items\Inventory Icons\"
@@ -749,7 +750,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "docl_4"), "Dr. L's Burnt Note #1", "paper", "paper.b3d", "INV_burnt_note.png", "note_L(4).png", 0.0025, 0, "note_L(4).png")
 	CreateItemTemplate(GetLocalString("items", "docl_5"), "Dr. L's Burnt Note #2", "paper", "paper.b3d", "INV_burnt_note.png", "note_L(5).png", 0.0025, 0, "note_L(5).png")
 	
-	CreateItemTemplate(GetLocalString("items", "badge"), "Emily Ross' Badge", "badge", "badge.b3d", "INV_Emily_badge.png", "Emily_badge.png", 0.0001, 1)
+	CreateItemTemplate(GetLocalString("items", "badge"), "Emily Ross' Badge", "badge", "badge.b3d", "INV_Emily_badge.png", "Emily_badge.png", 0.0001, 1, "Emily_badge.png")
 	
 	CreateItemTemplate(GetLocalString("items", "docjournal"), "Journal Page", "paper", "paper.b3d", "INV_note.png", "note_Gonzales.png", 0.0025, 0, "note_Gonzales.png")
 	
@@ -779,25 +780,25 @@ Function LoadItems%()
 	
 	; ~ [SCPs]
 	
-	CreateItemTemplate("SCP-005", "SCP-005", "scp005", "scp_005.b3d", "INV_scp_005.png", "", 0.0004, 1)
-	CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", "scp148ingot", "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
-	CreateItemTemplate("SCP-427", "SCP-427", "scp427", "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3)
+	CreateItemTemplate("SCP-005", "SCP-005", "scp005", "scp_005.b3d", "INV_scp_005.png", "", 0.0004, 1, "scp_005.png")
+	CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", "scp148ingot", "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2, "scp_148.png")
+	CreateItemTemplate("SCP-427", "SCP-427", "scp427", "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3, "scp_427.png")
 	
-	it.ItemTemplates = CreateItemTemplate("SCP-500-01", "SCP-500-01", "scp500pill", "pill.b3d", "INV_scp_500_pill.png", "", 0.0001, 2)
+	it.ItemTemplates = CreateItemTemplate("SCP-500-01", "SCP-500-01", "scp500pill", "pill.b3d", "INV_scp_500_pill.png", "", 0.0001, 2, "scp_500_red.png")
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
 	
-	CreateItemTemplate("SCP-268", "SCP-268", "scp268", "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2)
-	CreateItemTemplate("SCP-268", "SCP-268", "fine268", "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2)
+	CreateItemTemplate("SCP-268", "SCP-268", "scp268", "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2, "scp_268.png")
+	CreateItemTemplate("SCP-268", "SCP-268", "fine268", "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2, "scp_268.png")
 	CreateItemTemplate("SCP-500", "SCP-500", "scp500", "scp_500.b3d", "INV_scp_500.png", "", 0.035, 2)
-	CreateItemTemplate("SCP-513", "SCP-513", "scp513", "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
-	CreateItemTemplate("SCP-714", "SCP-714", "scp714", "scp_714.b3d", "INV_scp_714.png", "", 0.3, 3)
+	CreateItemTemplate("SCP-513", "SCP-513", "scp513", "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2, "scp_513.png")
+	CreateItemTemplate("SCP-714", "SCP-714", "scp714", "scp_714.b3d", "INV_scp_714.png", "", 0.3, 3, "scp_714.png")
 	CreateItemTemplate("SCP-714", "SCP-714", "coarse714", "scp_714.b3d", "INV_scp_714_grey.png", "", 0.3, 3, "scp_714_grey.png")
 	CreateItemTemplate("SCP-714", "SCP-714", "fine714", "scp_714.b3d", "INV_scp_714_blue.png", "", 0.3, 3, "scp_714_blue.png")
-	CreateItemTemplate("SCP-860", "SCP-860", "scp860", "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3)
-	CreateItemTemplate("SCP-1025", "SCP-1025", "scp1025", "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0)
-	CreateItemTemplate("SCP-1123", "SCP-1123", "scp1123", "scp_1123.b3d", "INV_scp_1123.png", "", 0.015, 2)
-	CreateItemTemplate("SCP-1499", "SCP-1499", "scp1499", "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
-	CreateItemTemplate("SCP-1499", "SCP-1499", "fine1499", "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
+	CreateItemTemplate("SCP-860", "SCP-860", "scp860", "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3, "scp_860.png")
+	CreateItemTemplate("SCP-1025", "SCP-1025", "scp1025", "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0, "scp_1025.png")
+	CreateItemTemplate("SCP-1123", "SCP-1123", "scp1123", "scp_1123.b3d", "INV_scp_1123.png", "", 0.015, 2, "scp_1123.png")
+	CreateItemTemplate("SCP-1499", "SCP-1499", "scp1499", "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2, "scp_1499.png")
+	CreateItemTemplate("SCP-1499", "SCP-1499", "fine1499", "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2, "scp_1499.png")
 	
 	CreateItemTemplate(GetLocalString("items", "metalpanel"), "Metal Panel", "scp148", "metal_panel.b3d", "INV_metal_panel.png", "", RoomScale, 2)
 	
@@ -809,16 +810,16 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "420j"), "Some SCP-420-J", "scp420j", "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.0005, 2)
 	
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "500death"), "Upgraded Pill", "scp500pilldeath", "pill.b3d", "INV_scp_500_pill.png", "", 0.0001, 2)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "500death"), "Upgraded Pill", "scp500pilldeath", "pill.b3d", "INV_scp_500_pill.png", "", 0.0001, 2, "scp_500_red.png")
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
 	
 	CreateItemTemplate(GetLocalString("items", "ring"), "Green Jade Ring", "ring", "scp_714.b3d", "INV_scp_714.png", "", 0.2, 3)
 	
 	; ~ [MISC ITEMS]
 	
-	CreateItemTemplate(GetLocalString("items", "helmet"), "Ballistic Helmet", "helmet", "ballistic_helmet.b3d", "INV_ballistic_helmet.png", "", 0.018, 2)
+	CreateItemTemplate(GetLocalString("items", "helmet"), "Ballistic Helmet", "helmet", "ballistic_helmet.b3d", "INV_ballistic_helmet.png", "", 0.018, 2, "ballistic_helmet.png")
 	
-	CreateItemTemplate(GetLocalString("items", "vest"), "Ballistic Vest", "vest", "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.02, 2)
+	CreateItemTemplate(GetLocalString("items", "vest"), "Ballistic Vest", "vest", "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.02, 2, "ballistic_vest.png")
 	CreateItemTemplate(GetLocalString("items", "veryfinevest"), "Bulky Ballistic Vest", "veryfinevest", "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.025, 2)
 	CreateItemTemplate(GetLocalString("items", "finevest"), "Heavy Ballistic Vest", "finevest", "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.022, 2)
 	CreateItemTemplate(GetLocalString("items", "corrvest"), "Corrosive Ballistic Vest", "corrvest", "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.02, 2, "ballistic_vest_corrosive.png")
@@ -827,73 +828,73 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "cigarette"), "Cigarette", "cigarette", "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.0004, 2)
 	
-	CreateItemTemplate(GetLocalString("items", "cup"), "Cup", "cup", "cup.b3d", "INV_cup.png", "", 0.04, 2)
+	CreateItemTemplate(GetLocalString("items", "cup"), "Cup", "cup", "cup.b3d", "INV_cup.png", "", 0.04, 2, "cup.png")
 	
-	CreateItemTemplate(GetLocalString("items", "clipboard"), "Clipboard", "clipboard", "clipboard.b3d", "INV_clipboard.png", "", 0.003, 1, "", "INV_clipboard(2).png", 1)
+	CreateItemTemplate(GetLocalString("items", "clipboard"), "Clipboard", "clipboard", "clipboard.b3d", "INV_clipboard.png", "", 0.003, 1, "", "INV_clipboard(2).png", 1, "clipboard.png")
 	
-	CreateItemTemplate(GetLocalString("items", "electronics"), "Electronical Components", "electronics", "circuits.b3d", "INV_circuits.png", "", 0.0011, 1)
+	CreateItemTemplate(GetLocalString("items", "electronics"), "Electronical Components", "electronics", "circuits.b3d", "INV_circuits.png", "", 0.0011, 1, "circuits.png")
 	
-	CreateItemTemplate(GetLocalString("items", "emptycup"), "Empty Cup", "emptycup", "cup.b3d", "INV_cup.png", "", 0.04, 2)
+	CreateItemTemplate(GetLocalString("items", "emptycup"), "Empty Cup", "emptycup", "cup.b3d", "INV_cup.png", "", 0.04, 2, "cup.png")
 	
-	CreateItemTemplate(GetLocalString("items", "eyedrops"), "ReVision Eyedrops", "eyedrops", "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1)
-	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Eyedrops", "fineeyedrops", "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1)
-	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Eyedrops", "supereyedrops", "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1)
+	CreateItemTemplate(GetLocalString("items", "eyedrops"), "ReVision Eyedrops", "eyedrops", "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1, "eye_drops.png")
+	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Eyedrops", "fineeyedrops", "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1, "eye_drops.png")
+	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Eyedrops", "supereyedrops", "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1, "eye_drops.png")
 	CreateItemTemplate(GetLocalString("items", "eyedrops.red"), "RedVision Eyedrops", "eyedrops2", "eye_drops.b3d", "INV_eye_drops_red.png", "", 0.0012, 1, "eye_drops_red.png")
 	
-	CreateItemTemplate(GetLocalString("items", "fak"), "First Aid Kit", "firstaid", "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.05, 1)
-	CreateItemTemplate(GetLocalString("items", "cfak"), "Compact First Aid Kit", "finefirstaid", "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.03, 1)
+	CreateItemTemplate(GetLocalString("items", "fak"), "First Aid Kit", "firstaid", "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.05, 1, "first_aid_kit.png")
+	CreateItemTemplate(GetLocalString("items", "cfak"), "Compact First Aid Kit", "finefirstaid", "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.03, 1, "first_aid_kit.png")
 	CreateItemTemplate(GetLocalString("items", "bfak"), "Blue First Aid Kit", "firstaid2", "first_aid_kit.b3d", "INV_first_aid_kit(2).png", "", 0.03, 1, "first_aid_kit(2).png")
 	CreateItemTemplate(GetLocalString("items", "sb"), "Strange Bottle", "veryfinefirstaid", "eye_drops.b3d", "INV_strange_bottle.png", "", 0.002, 1, "strange_bottle.png")
 	
-	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "gasmask", "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, 2)
-	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "finegasmask", "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, 2)
-	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "veryfinegasmask", "gas_mask.b3d", "INV_gas_mask.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", "gasmask148", "gas_mask.b3d", "INV_gas_mask.png", "", 0.02, 2)
+	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "gasmask", "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, 2, "gas_mask.png")
+	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "finegasmask", "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, 2, "gas_mask.png")
+	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "veryfinegasmask", "gas_mask.b3d", "INV_gas_mask.png", "", 0.02, 2, "gas_mask.png")
+	CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", "gasmask148", "gas_mask.b3d", "INV_gas_mask.png", "", 0.02, 2, "gas_mask.png")
 	
-	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "hazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
-	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "finehazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
-	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "veryfinehazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
-	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", "hazmatsuit148", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
+	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "hazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1, "hazmat_suit.png")
+	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "finehazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1, "hazmat_suit.png")
+	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "veryfinehazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1, "hazmat_suit.png")
+	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", "hazmatsuit148", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1, "hazmat_suit.png")
 	
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "nvg", "night_vision_goggles.b3d", "INV_night_vision_goggles.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "finenvg", "night_vision_goggles.b3d", "INV_night_vision_goggles(2).png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "veryfinenvg", "night_vision_goggles.b3d", "INV_night_vision_goggles(3).png", "", 0.02, 2)
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "nvg", "night_vision_goggles.b3d", "INV_night_vision_goggles.png", "", 0.02, 2, "night_vision_goggles.png")
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "finenvg", "night_vision_goggles.b3d", "INV_night_vision_goggles(2).png", "", 0.02, 2, "night_vision_goggles.png")
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "veryfinenvg", "night_vision_goggles.b3d", "INV_night_vision_goggles(3).png", "", 0.02, 2, "night_vision_goggles.png")
 	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", "scramble", "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
 	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", "finescramble", "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
 	
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "pill"), "Pill", "pill", "pill.b3d", "INV_pill.png", "", 0.0001, 2)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "pill"), "Pill", "pill", "pill.b3d", "INV_pill.png", "", 0.0001, 2, "scp_500_white.png")
 	EntityColor(it\OBJ, 255.0, 255.0, 255.0)
 	
-	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "radio", "radio.b3d", "INV_radio.png", "radio.png", 1.0, 1)
-	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "fineradio", "radio.b3d", "INV_radio.png", "radio.png", 1.0, 1)
-	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "veryfineradio", "radio.b3d", "INV_radio.png", "radio.png", 1.0, 1)
-	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "18vradio", "radio.b3d", "INV_radio.png", "radio.png", 1.02, 1)
+	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "radio", "radio.b3d", "INV_radio.png", "radio.png", 1.0, 1, "radio.png")
+	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "fineradio", "radio.b3d", "INV_radio.png", "radio.png", 1.0, 1, "radio.png")
+	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "veryfineradio", "radio.b3d", "INV_radio.png", "radio.png", 1.0, 1, "radio.png")
+	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", "18vradio", "radio.b3d", "INV_radio.png", "radio.png", 1.02, 1, "radio.png")
 	
-	CreateItemTemplate(GetLocalString("items", "hand_1"), "White Severed Hand", "hand", "severed_hand.b3d", "INV_severed_hand(1).png", "", 0.03, 2)
+	CreateItemTemplate(GetLocalString("items", "hand_1"), "White Severed Hand", "hand", "severed_hand.b3d", "INV_severed_hand(1).png", "", 0.03, 2, "severed_hand(1).png")
 	CreateItemTemplate(GetLocalString("items", "hand_2"), "Black Severed Hand", "hand2", "severed_hand.b3d", "INV_severed_hand(2).png", "", 0.03, 2, "severed_hand(2).png")
 	CreateItemTemplate(GetLocalString("items", "hand_3"), "Yellow Severed Hand", "hand3", "severed_hand.b3d", "INV_severed_hand(3).png", "", 0.03, 2, "severed_hand(3).png")
 	
-	CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV Navigator", "nav", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1)
-	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", "navulti", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1)
-	CreateItemTemplate(GetLocalString("items", "nav300"), "S-NAV 300 Navigator", "nav300", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1)
-	CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310 Navigator", "nav310", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1)
+	CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV Navigator", "nav", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1, "navigator.png")
+	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", "navulti", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1, "navigator.png")
+	CreateItemTemplate(GetLocalString("items", "nav300"), "S-NAV 300 Navigator", "nav300", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1, "navigator.png")
+	CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310 Navigator", "nav310", "navigator.b3d", "INV_navigator.png", "navigator.png", 0.0008, 1, "navigator.png")
 	
-	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", "bat", "battery.b3d", "INV_battery_9v.png", "", 0.008, 1)
+	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", "bat", "battery.b3d", "INV_battery_9v.png", "", 0.008, 1, "battery_9V.png")
 	CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", "coarsebat", "battery.b3d", "INV_battery_4.5v.png", "", 0.008, 1, "battery_4.5V.png")
 	CreateItemTemplate(GetLocalString("items", "18bat"), "18V Battery", "finebat", "battery.b3d", "INV_battery_18v.png", "", 0.01, 1, "battery_18V.png")
 	CreateItemTemplate(GetLocalString("items", "999bat"), "999V Battery", "veryfinebat", "battery.b3d", "INV_battery_999v.png", "", 0.009, 1, "battery_999V.png")
 	CreateItemTemplate(GetLocalString("items", "killbat"), "Strange Battery", "killbat", "battery.b3d", "INV_strange_battery.png", "", 0.01, 1, "strange_battery.png")
 	
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "finesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "veryfinesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringeinf", "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png")
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2, "syringe.png")
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "finesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2, "syringe.png")
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "veryfinesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2, "syringe.png")
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringeinf", "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png", "syringe.png")
 	
-	CreateItemTemplate(GetLocalString("items", "wallet"), "Wallet", "wallet", "wallet.b3d", "INV_wallet.png", "", 0.0006, 2, "", "", 1)
+	CreateItemTemplate(GetLocalString("items", "wallet"), "Wallet", "wallet", "wallet.b3d", "INV_wallet.png", "", 0.0006, 2, "", "", 1, "wallet.png")
 	
 	; ~ [KEYCARDS, KEYS, CARDS, COINS]
 	
-	CreateItemTemplate(GetLocalString("items", "key0"), "Level 0 Key Card", "key0", "key_card.b3d", "INV_key_card_lvl_0.png", "", 0.0004, 1)
+	CreateItemTemplate(GetLocalString("items", "key0"), "Level 0 Key Card", "key0", "key_card.b3d", "INV_key_card_lvl_0.png", "", 0.0004, 1, "key_card_lvl_0.png")
 	CreateItemTemplate(GetLocalString("items", "key1"), "Level 1 Key Card", "key1", "key_card.b3d", "INV_key_card_lvl_1.png", "", 0.0004, 1, "key_card_lvl_1.png")
 	CreateItemTemplate(GetLocalString("items", "key2"), "Level 2 Key Card", "key2", "key_card.b3d", "INV_key_card_lvl_2.png", "", 0.0004, 1, "key_card_lvl_2.png")
 	CreateItemTemplate(GetLocalString("items", "key3"), "Level 3 Key Card", "key3", "key_card.b3d", "INV_key_card_lvl_3.png", "", 0.0004, 1, "key_card_lvl_3.png")
@@ -902,13 +903,13 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "key6"), "Level 6 Key Card", "key6", "key_card.b3d", "INV_key_card_lvl_6.png", "", 0.0004, 1, "key_card_lvl_6.png")
 	CreateItemTemplate(GetLocalString("items", "keyomni"), "Key Card Omni", "keyomni", "key_card.b3d", "INV_key_card_lvl_omni.png", "", 0.0004, 1, "key_card_lvl_omni.png")
 	
-	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", "key", "key.b3d", "INV_key.png", "", 0.003, 3)
+	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", "key", "key.b3d", "INV_key.png", "", 0.003, 3, "key.png")
 	
 	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", "mastercard", "key_card.b3d", "INV_master_card.png", "", 0.0004, 1, "master_card.png")
 	
 	CreateItemTemplate(GetLocalString("items", "playcard"), "Playing Card", "playcard", "key_card.b3d", "INV_playing_card.png", "", 0.0004, 1, "playing_card.png")
 	
-	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", "25ct", "coin.b3d", "INV_coin.png", "", 0.0005, 3)
+	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", "25ct", "coin.b3d", "INV_coin.png", "", 0.0005, 3, "coin.png")
 	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", "coin", "coin.b3d", "INV_coin_rusty.png", "", 0.0005, 3, "coin_rusty.png")
 	
 	For it.ItemTemplates = Each ItemTemplates

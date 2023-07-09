@@ -22,7 +22,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	
 	it.ItemTemplates = New ItemTemplates
 	; ~ If another item shares the same object, copy it
-	OBJPath = ItemsPath + OBJPath
+	OBJPath = ModelsPath + OBJPath
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\OBJPath = OBJPath And it2\OBJ <> 0
 			it\OBJ = CopyEntity(it2\OBJ)
@@ -44,7 +44,11 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	Local Texture%
 	
 	If TexturePath <> ""
-		TexturePath = ItemTexturePath + TexturePath
+		If TexturePath = ImgPath Then
+			TexturePath = ItemHUDTexturePath + TexturePath
+		Else
+			TexturePath = ItemTexturePath + TexturePath
+		EndIf
 		For it2.ItemTemplates = Each ItemTemplates
 			If it2\TexPath = TexturePath And it2\Tex <> 0
 				Texture = it2\Tex
@@ -53,7 +57,11 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 			EndIf
 		Next
 		If (Not Texture)
-			Texture = LoadTexture_Strict(TexturePath, TexFlags)
+			If Left(TexturePath, Len(ItemHUDTexturePath)) = ItemHUDTexturePath Then
+				Texture = GetRescaledTexture(TexturePath, TexFlags, 256, 256)
+			Else
+				Texture = LoadTexture_Strict(TexturePath, TexFlags)
+			EndIf
 			If opt\Atmosphere Then TextureBlend(Texture, 5)
 			it\TexPath = TexturePath
 		EndIf

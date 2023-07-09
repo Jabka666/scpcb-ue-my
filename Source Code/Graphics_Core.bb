@@ -602,5 +602,15 @@ Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 	EndIf
 End Function
 
+Function GetRescaledTexture%(Texture$, Flags%, Width%, Height%)
+	Local Format% = FI_GetFIFFromFilename(Texture)
+	Local FImg% = FI_Rescale(FI_Load(Format, Texture, Flags), Width, Height, 0)
+	Local TexPath$ = GetEnv("Temp") + "\" + StripPath(Texture)
+	FI_Save(Format, FImg, TexPath, Flags)
+	Local Ret% = LoadTexture(TexPath, Flags)
+	DeleteFile(TexPath)
+	Return Ret%
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS
