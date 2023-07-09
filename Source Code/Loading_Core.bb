@@ -613,7 +613,7 @@ Function LoadMisc%()
 		HideEntity(misc_I\MTModelID[i])
 	Next
 	
-	misc_I\CupLiquid = LoadMesh_Strict("GFX\Items\cup_liquid.b3d")
+	misc_I\CupLiquid = LoadMesh_Strict("GFX\Items\Models\cup_liquid.b3d")
 	HideEntity(misc_I\CupLiquid)
 	
 	For i = LIGHT_SPRITE_DEFAULT To LIGHT_SPRITE_RED
@@ -832,7 +832,7 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "clipboard"), "Clipboard", "clipboard", "clipboard.b3d", "INV_clipboard.png", "", 0.003, 1, "", "INV_clipboard(2).png", 1, "clipboard.png")
 	
-	CreateItemTemplate(GetLocalString("items", "electronics"), "Electronical Components", "electronics", "circuits.b3d", "INV_circuits.png", "", 0.0011, 1, "circuits.png")
+	CreateItemTemplate(GetLocalString("items", "electronics"), "Electronical Components", "electronics", "circuits.b3d", "INV_circuits.png", "", 0.0011, 1, "circuit.png")
 	
 	CreateItemTemplate(GetLocalString("items", "emptycup"), "Empty Cup", "emptycup", "cup.b3d", "INV_cup.png", "", 0.04, 2, "cup.png")
 	
@@ -888,7 +888,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2, "syringe.png")
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "finesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2, "syringe.png")
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "veryfinesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2, "syringe.png")
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringeinf", "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png", "syringe.png")
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringeinf", "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png")
 	
 	CreateItemTemplate(GetLocalString("items", "wallet"), "Wallet", "wallet", "wallet.b3d", "INV_wallet.png", "", 0.0006, 2, "", "", 1, "wallet.png")
 	
