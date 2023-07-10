@@ -3838,8 +3838,8 @@ Function UpdateEvents%()
 							If itt\Name = "Drawing"
 								If itt\Img <> 0 Then FreeImage(itt\Img) : itt\Img = 0
 								itt\ImgPath = ItemHUDTexturePath + DrawingName
-								itt\TexPath = ItemTexturePath + DrawingName
-								Tex = LoadTexture_Strict(itt\TexPath)
+								itt\TexPath = itt\ImgPath
+								Tex = GetRescaledTexture(itt\TexPath, 1, 256, 256)
 								If opt\Atmosphere Then TextureBlend(Tex, 5)
 								EntityTexture(itt\OBJ, Tex)
 								DeleteSingleTextureEntryFromCache(Tex)
@@ -9783,11 +9783,11 @@ Function Update035Label%(OBJ%)
 			itt\Img = ScaleImage2(itt\Img, MenuScale, MenuScale)
 			itt\ImgWidth = ImageWidth(itt\Img) / 2
 			itt\ImgHeight = ImageHeight(itt\Img) / 2
-			itt\TexPath = ItemTexturePath + "doc_" + CurrTex + ".png"
+			itt\TexPath = itt\ImgPath
 			
 			For it.Items = Each Items
 				If it\ItemTemplate\Name = itt\Name
-					Tex = LoadTexture_Strict(itt\TexPath)
+					Tex = GetRescaledTexture(itt\TexPath, 1, 256, 256)
 					If opt\Atmosphere Then TextureBlend(Tex, 5)
 					EntityTexture(it\Model, Tex)
 					DeleteSingleTextureEntryFromCache(Tex)
