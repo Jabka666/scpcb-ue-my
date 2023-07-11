@@ -2437,17 +2437,18 @@ Function UpdateDoors%()
 			If (Not (d\DoorType = WOODEN_DOOR And PlayerRoom\RoomTemplate\Name = "cont2_860_1")) Then UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
-				If d\Locked <> d\LockedUpdated
-					If d\Locked = 1
-						For i = 0 To 1
-							If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
-						Next
-					Else
-						For i = 0 To 1
-							If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE])
-						Next
-					EndIf
-					d\LockedUpdated = d\Locked
+				If d\OpenState > 0.0 And d\OpenState < 180.0
+					For i = 0 To 1
+						If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
+					Next
+				ElseIf d\Locked = 1
+					For i = 0 To 1
+						If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
+					Next
+				Else
+					For i = 0 To 1
+						If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE])
+					Next
 				EndIf
 			EndIf
 			
@@ -2797,6 +2798,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				EndIf
 			EndIf
 		EndIf
+		For i = 0 To 1
+			EntityTexture(door1\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
+			EntityTexture(door2\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
+		Next
 	EndIf
 	Return(State)
 End Function

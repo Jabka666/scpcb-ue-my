@@ -2635,6 +2635,7 @@ Function UpdateEvents%()
 						EndIf
 					ElseIf e\EventState < 70.0 * 13.0
 						e\EventState = e\EventState + fps\Factor[0]
+						EntityTexture(e\room\RoomDoors[0]\Buttons[0], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
 						If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4
 							me\BigCameraShake = 7.4 - (e\EventState / 70.0)
 							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null

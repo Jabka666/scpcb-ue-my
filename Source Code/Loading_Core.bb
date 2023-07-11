@@ -117,7 +117,7 @@ End Function
 Const MaxDoorModelIDAmount% = 9
 Const MaxDoorFrameModelIDAmount% = 4
 Const MaxButtonModelIDAmount% = 5
-Const MaxButtonTextureIDAmount% = 2
+Const MaxButtonTextureIDAmount% = 3
 Const MaxElevatorPanelTextureIDAmount% = 3
 
 Type DoorInstance
@@ -166,7 +166,8 @@ Const BUTTON_ELEVATOR_MODEL% = 4
 ; ~ Button Texture ID Constants
 ;[Block]
 Const BUTTON_GREEN_TEXTURE% = 0
-Const BUTTON_RED_TEXTURE% = 1
+Const BUTTON_YELLOW_TEXTURE% = 1
+Const BUTTON_RED_TEXTURE% = 2
 ;[End Block]
 
 ; ~ Elevator Panel Texture ID Constants
@@ -242,6 +243,7 @@ Function LoadDoors%()
 	Next
 	
 	d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad.jpg", 1, DeleteAllTextures)
+	d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_using.png", 1, DeleteAllTextures)
 	d_I\ButtonTextureID[BUTTON_RED_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_locked.png", 1, DeleteAllTextures)
 	
 	If opt\Atmosphere
