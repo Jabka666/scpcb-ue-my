@@ -90,7 +90,7 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	
 	If (Not p\OBJ) Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes models folder if the CBRE was used
 	PositionEntity(p\OBJ, x, y, z)
-	If room <> Null Then EntityParent(p\OBJ, room\OBJ)
+	EntityParent(p\OBJ, room\OBJ)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
 	If HasCollision
@@ -106,6 +106,7 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 		DeleteSingleTextureEntryFromCache(Tex)
 	EndIf
 	EntityPickMode(p\OBJ, 2)
+	HideEntity(p\OBJ)
 	
 	Return(p)
 End Function
@@ -7937,7 +7938,7 @@ Function HideRoomsColl%(room.Rooms)
 			EndIf
 		Next
 		
-		; ~ Hide collider anyway because with most of them player cannot interact
+		; ~ Hide collider anyway because the player/NPC cannot interact with it
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
 				If sc\Screen
@@ -7950,7 +7951,7 @@ Function HideRoomsColl%(room.Rooms)
 			EndIf
 		Next
 		
-		; ~ Hide collider anyway because with most of them player cannot interact
+		; ~ Hide collider anyway because the player/NPC cannot interact with it
 		For lvr.Levers = Each Levers
 			If lvr\room = room
 				HideEntity(lvr\OBJ)
@@ -7958,7 +7959,7 @@ Function HideRoomsColl%(room.Rooms)
 			EndIf
 		Next
 		
-		; ~ Hide collider anyway because with most of them player cannot interact
+		; ~ Hide collider anyway because the player/NPC cannot interact with it
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
 				If room\HideObject[i] Then HideEntity(room\Objects[i])
