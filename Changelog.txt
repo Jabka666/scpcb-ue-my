@@ -10,6 +10,7 @@ General:
 - Can save in elevators that are currently not moving.
 - Cannot save anymore if SCP-096 has been triggered.
 - Light Blink NPC visiblity adjustments.
+- Button panels now glow yellow when in use.
 
 Rooms:
 - Added security camera in «room2C_ez» room.
