@@ -2369,29 +2369,23 @@ Function UpdateGame%()
 					CreateHintMsg(GetLocalString("save", "failed.now"))
 				ElseIf CanSave = 1 ; ~ Endings / Intro location
 					CreateHintMsg(GetLocalString("save", "failed.location"))
-				Else ; ~ Can save
-					If SelectedDifficulty\SaveType = SAVE_ANYWHERE
-						If as\Timer <= 70.0 * 5.0
-							CancelAutoSave()
-						Else
-							SaveGame(CurrSave\Name)
-						EndIf
+					If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
+				ElseIf as\Timer <= 70.0 * 5.0
+					CancelAutoSave()
+				ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
+						CreateHintMsg(GetLocalString("save", "failed.screen"))
 					Else
-						If SelectedScreen = Null And sc_I\SelectedMonitor = Null
-							CreateHintMsg(GetLocalString("save", "failed.screen"))
-						Else
-							SaveGame(CurrSave\Name)
-						EndIf
+						SaveGame(CurrSave\Name) ; Can save at screen
 					EndIf
+				Else
+					SaveGame(CurrSave\Name) ; Can save
 				EndIf
-				If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
 			Else
 				CreateHintMsg(GetLocalString("save", "disable"))
 			EndIf
 		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
-			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0
-				CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
-			EndIf
+			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
 			If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
 		EndIf
 		UpdateAutoSave()

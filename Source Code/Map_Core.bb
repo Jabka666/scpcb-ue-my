@@ -3535,27 +3535,25 @@ Function UpdateMonitorSaving%()
 		If sc\AllowSaving And sc\Screen
 			If sc\room\Dist < 6.0 Lor PlayerRoom = sc\room Then Close = True
 			If Close And (Not GrabbedEntity) And (Not d_I\ClosestButton)
-				If EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.0
-					If EntityInView(sc\ScrOBJ, Camera) And EntityVisible(sc\ScrOBJ, Camera)
-						DrawHandIcon = True
-						If mo\MouseHit1 Then sc_I\SelectedMonitor = sc
-					Else
-						If sc_I\SelectedMonitor = sc Then sc_I\SelectedMonitor = Null
+				If EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.0 And EntityInView(sc\ScrOBJ, Camera) And EntityVisible(sc\ScrOBJ, Camera)
+					DrawHandIcon = True
+					If mo\MouseHit1 Then sc_I\SelectedMonitor = sc
+					
+					If sc_I\SelectedMonitor = sc
+						If sc\InSight
+							Local Pvt% = CreatePivot()
+							
+							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+							PointEntity(Pvt, sc\ScrOBJ)
+							RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
+							TurnEntity(Pvt, 90.0, 0.0, 0.0)
+							CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
+							CameraPitch = CameraPitch - 90.0
+							FreeEntity(Pvt) : Pvt = 0
+						EndIf
 					EndIf
-				EndIf
-				
-				If sc_I\SelectedMonitor = sc
-					If sc\InSight
-						Local Pvt% = CreatePivot()
-						
-						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-						PointEntity(Pvt, sc\ScrOBJ)
-						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
-						TurnEntity(Pvt, 90.0, 0.0, 0.0)
-						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
-						CameraPitch = CameraPitch - 90.0
-						FreeEntity(Pvt) : Pvt = 0
-					EndIf
+				Else
+					If sc_I\SelectedMonitor = sc Then sc_I\SelectedMonitor = Null
 				EndIf
 			Else
 				If sc_I\SelectedMonitor = sc Then sc_I\SelectedMonitor = Null
