@@ -8148,7 +8148,7 @@ Function UpdateEnding%()
 			ShouldPlay = 22
 			opt\CurrMusicVolume = opt\MusicVolume
 			StopStream_Strict(MusicCHN) : MusicCHN = 0
-			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[23] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, 0)
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[22] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, 0)
 			NowPlaying = ShouldPlay
 			
 			PlaySound_Strict(LightSFX)
