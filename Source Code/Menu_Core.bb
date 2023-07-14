@@ -333,7 +333,6 @@ Function UpdateMainMenu%()
 							If SameFound = 2 Then CurrSave\Name = CurrSave\Name + " (" + LowestPossible + ")"
 							
 							InitNewGame()
-							ResetInput()
 							
 							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							

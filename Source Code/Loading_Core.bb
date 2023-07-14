@@ -2165,6 +2165,10 @@ Function InitNewGame%()
 	
 	me\DropSpeed = 0.0
 	
+	UpdateWorld()
+	UpdateNPCs()
+	UpdateRender()
+	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
 	RenderLoading(100)
@@ -2173,8 +2177,6 @@ Function InitNewGame%()
 	fps\PrevTime = MilliSecs()
 	
 	ResetInput()
-	
-	UpdateRender()
 	
 	CatchErrors("Uncaught: InitNewGame()")
 End Function
@@ -2267,6 +2269,10 @@ Function InitLoadGame%()
 	
 	me\DropSpeed = 0.0
 	
+	UpdateWorld()
+	UpdateNPCs()
+	UpdateRender()
+	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
 	RenderLoading(100)
@@ -2275,8 +2281,6 @@ Function InitLoadGame%()
 	fps\PrevTime = MilliSecs()
 	
 	ResetInput()
-	
-	UpdateRender()
 	
 	CatchErrors("Uncaught: InitLoadGame()")
 End Function

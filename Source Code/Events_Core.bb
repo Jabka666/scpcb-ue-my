@@ -3848,7 +3848,7 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						
-						Local Brush% = LoadBrush_Strict(ItemTexturePath + DrawingName)
+						Local Brush% = LoadBrush_Strict(ItemHUDTexturePath + DrawingName)
 						
 						For i = 1 To CountSurfaces(e\room\Objects[2])
 							SF = GetSurface(e\room\Objects[2], i)
@@ -5442,8 +5442,6 @@ Function UpdateEvents%()
 						If EntityY(me\Collider) < (-6900.0) * RoomScale
 							ShouldPlay = 25
 							
-							If EntityHidden(e\room\Objects[7]) Then ShowEntity(e\room\Objects[7])
-							
 							e\room\NPC[0]\State = 6.0
 							If e\room\NPC[0]\Idle = 0
 								AnimateNPC(e\room\NPC[0], 17.0, 19.0, 0.01, False)
@@ -6311,24 +6309,6 @@ Function UpdateEvents%()
 								e\EventState = 1.0
 							EndIf
 						Else
-							If (Not e\room\Objects[2])
-								Local GlassTex% = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
-								
-								e\room\Objects[2] = CreateSprite()
-								e\room\HideObject[2] = False
-								EntityTexture(e\room\Objects[2], GlassTex)
-								SpriteViewMode(e\room\Objects[2], 2)
-								ScaleSprite(e\room\Objects[2], 182.0 * RoomScale * 0.5, 192.0 * RoomScale * 0.5)
-								Pvt = CreatePivot(e\room\OBJ)
-								PositionEntity(Pvt, -632.0, 224.0, -208.0)
-								PositionEntity(e\room\Objects[2], EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True))
-								FreeEntity(Pvt) : Pvt = 0
-								RotateEntity(e\room\Objects[2], 0.0, e\room\Angle, 0.0)
-								TurnEntity(e\room\Objects[2], 0.0, 180.0, 0.0)
-								EntityParent(e\room\Objects[2], e\room\OBJ)
-								DeleteSingleTextureEntryFromCache(GlassTex)
-							EndIf
-							
 							If EntityHidden(e\room\Objects[2]) Then ShowEntity(e\room\Objects[2])
 							; ~ Start a timer for SCP-173 breaking through the window
 							e\EventState = e\EventState + 1.0

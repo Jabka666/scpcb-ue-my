@@ -106,7 +106,6 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 		DeleteSingleTextureEntryFromCache(Tex)
 	EndIf
 	EntityPickMode(p\OBJ, 2)
-	HideEntity(p\OBJ)
 	
 	Return(p)
 End Function
@@ -219,10 +218,10 @@ Function RenderRoomLights%(Cam%)
 	Local r.Rooms, i%, Random#, Alpha#
 	
 	For r.Rooms = Each Rooms
-		If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom
-			For i = 0 To r\MaxLights - 1
-				If r\Lights[i] <> 0
-					If SecondaryLightOn > 0.5
+		For i = 0 To r\MaxLights - 1
+			If r\Lights[i] <> 0
+				If SecondaryLightOn > 0.5
+					If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom
 						If Cam = Camera ; ~ The lights are rendered by player's cam
 							If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], -1)
 							If UpdateRoomLightsTimer = 0.0
@@ -268,14 +267,14 @@ Function RenderRoomLights%(Cam%)
 							; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
 							If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], 0)
 						EndIf
-					Else
-						Return ; ~ The lights were turned off
 					EndIf
 				Else
-					Exit
+					Return ; ~ The lights were turned off
 				EndIf
-			Next
-		EndIf
+			Else
+				Exit
+			EndIf
+		Next
 	Next
 End Function
 
@@ -1032,6 +1031,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
+		HideEntity(fr\TileMesh[i])
 	Next
 	
 	; ~ Detail meshes
@@ -1040,9 +1040,6 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
 	fr\DetailMesh[3] = LoadRMesh("GFX\Map\scp_860_1_wall.rmesh", Null)
 	
-	For i = ROOM1 To ROOM4
-		HideEntity(fr\TileMesh[i])
-	Next
 	For i = 0 To 3
 		HideEntity(fr\DetailMesh[i])
 	Next
@@ -1280,6 +1277,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
+		HideEntity(fr\TileMesh[i])
 	Next
 	
 	; ~ Detail meshes
@@ -1288,9 +1286,6 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
 	fr\DetailMesh[3] = LoadRMesh("GFX\Map\scp_860_1_wall.rmesh", Null)
 	
-	For i = ROOM1 To ROOM4
-		HideEntity(fr\TileMesh[i])
-	Next
 	For i = 0 To 3
 		HideEntity(fr\DetailMesh[i])
 	Next
@@ -3102,6 +3097,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	EntityBlend(de\OBJ, BlendMode)
 	SpriteViewMode(de\OBJ, 2)
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
+	HideEntity(de\OBJ)
 	
 	If (Not de_I\DecalTextureID[ID]) Then RuntimeError(Format(GetLocalString("runerr", "decals"), ID))
 	
@@ -4149,16 +4145,16 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[3]\Locked = 1 : r\RoomDoors[3]\MTFClose = False
 			
 			; ~ The door leading to 3-11 cell
-			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			r\RoomDoors.Doors[4] = CreateDoor(r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0, r)
 			r\RoomDoors[4]\Locked = 1 : r\RoomDoors[4]\DisableWaypoint = True : r\RoomDoors[4]\MTFClose = False
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
+			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(r\RoomDoors[4]\OBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			FreeEntity(r\RoomDoors[4]\OBJ2) : r\RoomDoors[4]\OBJ2 = 0
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[4]\Buttons[i]) : r\RoomDoors[4]\Buttons[i] = 0
 			Next
-			DeleteSingleTextureEntryFromCache(Tex)
 			
 			; ~ The door in the office leading to observarion room
 			r\RoomDoors.Doors[5] = CreateDoor(r\x - 3424.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 129.0 * RoomScale, 0.0, r, True, DEFAULT_DOOR, KEY_CARD_3)
@@ -4704,6 +4700,7 @@ Function FillRoom%(r.Rooms)
 						EntityTexture(r\Objects[19], r\Textures[1], 6)
 						EntityParent(r\Objects[19], r\Objects[i])
 					EndIf
+					HideEntity(r\Objects[i])
 				EndIf
 			Next
 			
@@ -4853,9 +4850,9 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x - 669.0 * RoomScale, r\y + 0.5, r\z - 16.0 * RoomScale)
 			
 			; ~ Glass panel
-			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			r\HideObject[2] = False
+			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			SpriteViewMode(r\Objects[2], 2)
@@ -5800,7 +5797,6 @@ Function FillRoom%(r.Rooms)
 			r\HideObject[7] = False
 			EntityPickMode(r\Objects[7], 2)
 			EntityAlpha(r\Objects[7], 0.0)
-			HideEntity(r\Objects[7])
 			
 			it.Items = CreateItem("Level 5 Key Card", "key5", r\x - 1275.0 * RoomScale, r\y - 7910.0 * RoomScale, r\z + 3106.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -6148,15 +6144,16 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x - 62.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 945.0 * RoomScale)
 			RotateEntity(r\Objects[1], 85.0, 0.0, 0.0, True)
 			
-			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			r\Objects[2] = CreateSprite()
 			r\HideObject[2] = False
+			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			SpriteViewMode(r\Objects[2], 2)
 			ScaleSprite(r\Objects[2], 194.0 * RoomScale * 0.5, 194.0 * RoomScale * 0.5)
 			PositionEntity(r\Objects[2], r\x - 640.0 * RoomScale, r\y - 4881.0 * RoomScale, r\z + 800.0 * RoomScale)
 			TurnEntity(r\Objects[2], 0.0, 90.0, 0.0)
+			HideEntity(r\Objects[2])
 			
 			; ~ SCP-173's spawnpoint
 			r\Objects[3] = CreatePivot()
@@ -7453,12 +7450,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x + 736.0 * RoomScale, r\y - 512.0 * RoomScale, r\z + 272.0 * RoomScale)
 			
 			r\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_DUCK_MODEL])
+			PositionEntity(r\Objects[3], r\x + 928.0 * RoomScale, r\y - 640.0 * RoomScale, r\z + 704.0 * RoomScale)
 			ScaleEntity(r\Objects[3], 0.07, 0.07, 0.07)
 			Tex = LoadTexture_Strict("GFX\NPCs\duck(2).png")
 			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(r\Objects[3], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
-			PositionEntity(r\Objects[3], r\x + 928.0 * RoomScale, r\y - 640.0 * RoomScale, r\z + 704.0 * RoomScale)
 			
 			For i = 0 To 2 Step 2
 				EntityParent(r\Objects[i], r\OBJ)
@@ -7638,9 +7635,9 @@ Function FillRoom%(r.Rooms)
 			
 			r\Textures[1] = LoadTexture_Strict("GFX\NPCs\pd_plane_eye.png", 1 + 2, DeleteAllTextures)
 			
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures)
 			r\Objects[17] = CreateSprite()
 			r\HideObject[17] = False
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures)
 			EntityTexture(r\Objects[17], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)
@@ -7928,7 +7925,7 @@ Function HideRoomsColl%(room.Rooms)
 					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
 					For i = 0 To 1
 						If d\Buttons[i] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[i], 0.0)
-						; ~ Hide collider anyway because player's collider cannot interact with this object
+						; ~ Hide collider anyway because player's collider cannot interact with it
 						If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
 					Next
 					EntityAlpha(d\FrameOBJ, 0.0)
