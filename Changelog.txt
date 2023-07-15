@@ -34,6 +34,7 @@ Items:
 - Rebalanced equipping time for some items.
 - Can obtain regular SCP-714 back from SCP-914.
 - Unique messages for Fine(Dry)/Very Fine(Super) variants of the Gas Mask and Hazmat Suit.
+- Ringing SCP-513-1 while deafened no longer spawns SCP-513-1
 
 NPCs:
 - Add SCP-173-J as a skin for SCP-173 during April Fools day.
