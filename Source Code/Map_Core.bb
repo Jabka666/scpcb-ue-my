@@ -3536,17 +3536,15 @@ Function UpdateMonitorSaving%()
 					If mo\MouseHit1 Then sc_I\SelectedMonitor = sc
 					
 					If sc_I\SelectedMonitor = sc
-						If sc\InSight
-							Local Pvt% = CreatePivot()
+						Local Pvt% = CreatePivot()
 							
-							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-							PointEntity(Pvt, sc\ScrOBJ)
-							RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
-							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
-							CameraPitch = CameraPitch - 90.0
-							FreeEntity(Pvt) : Pvt = 0
-						EndIf
+						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+						PointEntity(Pvt, sc\ScrOBJ)
+						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
+						TurnEntity(Pvt, 90.0, 0.0, 0.0)
+						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
+						CameraPitch = CameraPitch - 90.0
+						FreeEntity(Pvt) : Pvt = 0
 					EndIf
 				Else
 					If sc_I\SelectedMonitor = sc Then sc_I\SelectedMonitor = Null
