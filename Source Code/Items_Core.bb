@@ -22,7 +22,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	
 	it.ItemTemplates = New ItemTemplates
 	; ~ If another item shares the same object, copy it
-	OBJPath = ModelsPath + OBJPath
+	OBJPath = ItemsPath + OBJPath
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\OBJPath = OBJPath And it2\OBJ <> 0
 			it\OBJ = CopyEntity(it2\OBJ)
