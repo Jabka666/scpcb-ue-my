@@ -44,7 +44,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	Local Texture%
 	
 	If TexturePath <> ""
-		If (TexturePath = ImgPath) And (FileType(ItemTexturePath + TexturePath) = 0)Then
+		If (TexturePath = ImgPath) And (FileType(ItemTexturePath + TexturePath) = 0)
 			TexturePath = ItemHUDTexturePath + TexturePath
 		Else
 			TexturePath = ItemTexturePath + TexturePath
@@ -57,7 +57,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 			EndIf
 		Next
 		If (Not Texture)
-			If Left(TexturePath, Len(ItemHUDTexturePath)) = ItemHUDTexturePath Then
+			If Left(TexturePath, Len(ItemHUDTexturePath)) = ItemHUDTexturePath
 				Texture = GetRescaledTexture(TexturePath, TexFlags, 256, 256)
 			Else
 				Texture = LoadTexture_Strict(TexturePath, TexFlags)
