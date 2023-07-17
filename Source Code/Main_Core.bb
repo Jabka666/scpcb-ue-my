@@ -2980,8 +2980,8 @@ Function UpdateMoving%()
 	EndIf
 	
 	If me\HealTimer > 0.0
-		me\HealTimer = me\HealTimer - (fps\Factor[0] / 70.0)
-		me\Bloodloss = Min(me\Bloodloss + (2.0 / 400.0) * fps\Factor[0], 100.0)
+		me\HealTimer = Max(me\HealTimer - (fps\Factor[0] / 70.0), 0.0)
+		me\Bloodloss = Min(me\Bloodloss + (fps\Factor[0] / 210.0), 100.0)
 		me\Injuries = Max(me\Injuries - (fps\Factor[0] / 70.0) / 30.0, 0.0)
 	EndIf
 		
@@ -4719,7 +4719,7 @@ Function UpdateGUI%()
 							me\VomitTimer = Min(me\VomitTimer, Int(GetFileLocalString(SCP294File, Drink, "Vomit", "", False)))
 						EndIf
 						me\CameraShakeTimer = GetFileLocalString(SCP294File, Drink, "Camera Shake", "", False)
-						me\Injuries = Max(me\Injuries + Int(GetFileLocalString(SCP294File, Drink, "Damage", "", False)), 0.0)
+						me\Injuries = Max(me\Injuries + Float(GetFileLocalString(SCP294File, Drink, "Damage", "", False)), 0.0)
 						me\Bloodloss = Max(me\Bloodloss + Int(GetFileLocalString(SCP294File, Drink, "Blood Loss", "", False)), 0.0)
 						StrTemp = GetFileLocalString(SCP294File, Drink, "Sound", "", False)
 						If StrTemp <> "" Then PlaySound_Strict(LoadTempSound(StrTemp), True)
