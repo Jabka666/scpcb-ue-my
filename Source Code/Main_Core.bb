@@ -3141,12 +3141,6 @@ Function UpdateMouseLook%()
 			; ~ TODO: Make more realistic
 			If ChannelPlaying(BreathCHN)
 				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.4, 1.5)), 100.0)
-			ElseIf wi\GasMask = 3 Lor wi\HazmatSuit = 3
-				If me\CurrSpeed > 0.0 And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
-					wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.2, 0.6)), 100.0)
-				Else
-					wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
-				EndIf
 			Else
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 			EndIf
