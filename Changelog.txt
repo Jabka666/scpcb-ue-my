@@ -11,6 +11,7 @@ General:
 - Cannot save anymore if SCP-096 has been triggered.
 - Light Blink NPC visiblity adjustments.
 - Button panels now glow yellow when in use.
+- Removed additional fogging on Very Fine Gas Mask and Very Fine Hazmat Suit.
 
 Rooms:
 - Added security camera in «room2C_ez» room.
@@ -55,6 +56,7 @@ Bug Fixes:
 - Fixed death messages in room3_storage not displaying the correct ones.
 - Fixed SCP-914 not letting you save if the doors were closed but was not refining.
 - Fixed SCP-049 being stuck in the procedure animation if the player used revive command.
+- Fixed SCP-294 not healing or damaging the player if a float was used.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 
