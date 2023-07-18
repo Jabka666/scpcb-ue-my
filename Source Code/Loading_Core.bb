@@ -656,6 +656,41 @@ Function LoadMaterials%(File$)
 	CatchErrors("Uncaught: LoadMaterials(" + File + ")")
 End Function
 
+Function InitLoadingScreens%(File$)
+	Local TemporaryString$, i%
+	Local ls.LoadingScreens
+	Local f% = OpenFile_Strict(File)
+	
+	While (Not Eof(f))
+		TemporaryString = Trim(ReadLine(f))
+		If Left(TemporaryString, 1) = "["
+			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
+			
+			ls.LoadingScreens = New LoadingScreens
+			LoadingScreenAmount = LoadingScreenAmount + 1
+			ls\ID = LoadingScreenAmount
+			
+			ls\Title = TemporaryString
+			ls\ImgPath = GetFileLocalString(File, TemporaryString, "ImgPath")
+			
+			For i = 0 To 3
+				ls\Txt[i] = GetFileLocalString(File, TemporaryString, "Desc" + (i + 1))
+				If ls\Txt[i] <> "" Then ls\TxtAmount = ls\TxtAmount + 1
+			Next
+			
+			ls\DisableBackground = StringToBoolean(GetFileLocalString(File, TemporaryString, "DisableBackground"))
+			DebugLog(ls\ImgPath)
+			DebugLog(ls\DisableBackground)
+			DebugLog("------------------")
+			
+			ls\AlignX = Int(GetFileLocalString(File, TemporaryString, "AlignX"))
+			ls\AlignY = Int(GetFileLocalString(File, TemporaryString, "AlignY"))
+		EndIf
+	Wend
+	
+	CloseFile(f)
+End Function
+
 Const ItemsPath$ = "GFX\Items\"
 Const ItemHUDTexturePath$ = "GFX\Items\HUD Textures\"
 Const ItemTexturePath$ = "GFX\Items\"
