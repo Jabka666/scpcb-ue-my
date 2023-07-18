@@ -939,7 +939,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "nvg", "veryfinenvg", "finenvg", "scramble", "finescramble"
+		Case "nvg", "veryfinenvg", "finenvg"
 			;[Block]
 			Select Setting
 				Case ROUGH
@@ -957,15 +957,39 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(2) = 1
-						it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
-					Else
+					If Rand(5) = 1
 						it2.Items = CreateItem("SCRAMBLE Gear", "finescramble", x, y, z)
+						it2\State = Rnd(0.0, 1000.0)
+					Else
+						it2.Items = CreateItem("Night Vision Goggles", "finenvg", x, y, z)
 					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Night Vision Goggles", "veryfinenvg", x, y, z)
+					it2\State = Rnd(0.0, 1000.0)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "scramble", "finescramble"
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Night Vision Goggles", "nvg", x, y, z)
+					it2\State = Rnd(0.0, 1000.0)
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					it2.Items = CreateItem("SCRAMBLE Gear", "finescramble", x, y, z)
 					it2\State = Rnd(0.0, 1000.0)
 					;[End Block]
 			End Select
