@@ -4094,7 +4094,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "finescramble"
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4166,7 +4166,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "finescramble"
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4226,7 +4226,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(2000.0)
+										Inventory(MouseSlot)\State = Rnd(1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "scramble"
@@ -4235,7 +4235,10 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "finescramble"
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
+										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4307,7 +4310,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case "finescramble"
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
+										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
 									Default
 										;[Block]
