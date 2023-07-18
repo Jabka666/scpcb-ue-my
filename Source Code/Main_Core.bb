@@ -2257,7 +2257,9 @@ Function UpdateGame%()
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
 				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * 0.6 * me\BlinkEffect)
-				If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0 - (wi\NightVision > 0 + wi\SCRAMBLE > 0), 4.0) * fps\Factor[0]
+				If wi\NightVision = 0 And wi\SCRAMBLE = 0
+					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
+				EndIf
 			EndIf
 			
 			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\Factor[0])
