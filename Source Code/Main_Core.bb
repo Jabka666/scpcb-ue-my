@@ -4716,6 +4716,7 @@ Function UpdateGUI%()
 							me\VomitTimer = Min(me\VomitTimer, Int(GetFileLocalString(SCP294File, Drink, "Vomit", "", False)))
 						EndIf
 						me\CameraShakeTimer = GetFileLocalString(SCP294File, Drink, "Camera Shake", "", False)
+						me\DeafTimer = Max(me\DeafTimer + Int(GetFileLocalString(SCP294File, Drink, "Deaf Timer", "", False)), 0.0)
 						me\Injuries = Max(me\Injuries + Float(GetFileLocalString(SCP294File, Drink, "Damage", "", False)), 0.0)
 						me\Bloodloss = Max(me\Bloodloss + Int(GetFileLocalString(SCP294File, Drink, "Blood Loss", "", False)), 0.0)
 						StrTemp = GetFileLocalString(SCP294File, Drink, "Sound", "", False)
@@ -4725,6 +4726,16 @@ Function UpdateGUI%()
 						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Infection", "", False)) Then I_008\Timer = I_008\Timer + 1.0
 						
 						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Crystallization", "", False)) Then I_409\Timer = I_409\Timer + 1.0
+						
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Mutation", "", False)) Then
+							If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
+						EndIf
+						
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Revitalize", "", False)) Then
+							For i = 0 To 6
+								I_1025\State[i] = 0.0
+							Next
+						EndIf
 						
 						If me\DeathTimer = 0.0
 							me\DeathTimer = Int(GetFileLocalString(SCP294File, Drink, "Death Timer", "", False)) * 70.0
