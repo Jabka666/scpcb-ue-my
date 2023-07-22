@@ -6311,28 +6311,21 @@ Function FillRoom%(r.Rooms)
 			r\Objects[1] = CreatePivot()
 			PositionEntity(r\Objects[1], r\x - 2032.0 * RoomScale, r\y - 4011.0 * RoomScale, r\z - 648.0 * RoomScale)
 			
-			; ~ Class-D spawn
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 4858.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1729.0 * RoomScale)
-			
 			; ~ Touching pivot
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 4917.0 * RoomScale, r\y - 4310.0 * RoomScale, r\z + 2095.0 * RoomScale)
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x - 4917.0 * RoomScale, r\y - 4310.0 * RoomScale, r\z + 2095.0 * RoomScale)
 			
 			; ~ Sparks pivot
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 4523.0 * RoomScale, r\y - 4060.0 * RoomScale, r\z - 2097.0 * RoomScale)
+			r\Objects[3] = CreatePivot()
+			PositionEntity(r\Objects[3], r\x - 4523.0 * RoomScale, r\y - 4060.0 * RoomScale, r\z - 2097.0 * RoomScale)
 			
-			For i = 0 To 4
+			For i = 0 To 3
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, r)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			
-			de.Decals = CreateDecal(DECAL_409, r\x - 4858.0 * RoomScale, r\y - (4497.0 * RoomScale) + 0.005, r\z + 1729.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
-			EntityParent(de\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
@@ -6341,6 +6334,14 @@ Function FillRoom%(r.Rooms)
 			If I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5
 				it.Items = CreateItem("SCP-005", "scp005", r\x - 5000.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1578.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
+				
+				; ~ Class-D spawn
+				r\Objects[4] = CreatePivot()
+				PositionEntity(r\Objects[4], r\x - 4812.0 * RoomScale, r\y - 4491.0 * RoomScale, r\z + 1729.0 * RoomScale)
+				EntityParent(r\Objects[4], r\OBJ)
+				
+				de.Decals = CreateDecal(DECAL_409, r\x - 4812.0 * RoomScale, r\y - (4497.0 * RoomScale) + 0.005, r\z + 1729.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
+				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			;[End Block]
 		Case "room2c_maintenance"
@@ -7198,8 +7199,10 @@ Function FillRoom%(r.Rooms)
 			
 			If I_005\ChanceToSpawn >= 5
 				it.Items = CreateItem("SCP-005", "scp005", r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 755.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
+			Else
+				it.Items = CreateItem("Level 4 Key Card", "key4", r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 755.0 * RoomScale)
 			EndIf
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case "room2_scientists_2"
 			;[Block]

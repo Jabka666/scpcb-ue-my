@@ -7797,27 +7797,31 @@ Function UpdateEvents%()
 						ShouldPlay = 27
 						
 						If e\EventState = 0.0
-							e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True) + 0.5, EntityZ(e\room\Objects[2], True))
-							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
-							ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
-							SetNPCFrame(e\room\NPC[0], 19.0)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
+							If I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5
+								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 0.5, EntityZ(e\room\Objects[4], True))
+								e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
+								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
+								SetNPCFrame(e\room\NPC[0], 19.0)
+								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
+							EndIf
 							
 							e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
 							
 							e\EventState = 1.0
 						Else
 							If I_409\Timer = 0.0
-								If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.7225
-									GiveAchievement(Achv409)
-									If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
-										me\BlurTimer = 1000.0
-										I_409\Timer = 0.001
+								If I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5
+									If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.7225
+										GiveAchievement(Achv409)
+										If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
+											me\BlurTimer = 1000.0
+											I_409\Timer = 0.001
+										EndIf
 									EndIf
 								EndIf
 								
 								; ~ Touching SCP-409
-								If InteractObject(e\room\Objects[3], 0.64)
+								If InteractObject(e\room\Objects[2], 0.64)
 									GiveAchievement(Achv409)
 									If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
 										CreateMsg(GetLocalString("msg", "409"))
@@ -7830,13 +7834,13 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 						
-						If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 25.0
+						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
 							If Rand(50) = 1
-								PlaySound2(e\Sound, Camera, e\room\Objects[4], 3.0, 0.4)
+								PlaySound2(e\Sound, Camera, e\room\Objects[3], 3.0, 0.4)
 								
 								If opt\ParticleAmount > 0
 									For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
-										p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), 0.002, 0.0, 25.0)
+										p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.002, 0.0, 25.0)
 										p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\AlphaChange = -0.05
 										RotateEntity(p\Pvt, Rnd(-20.0, 0.0), e\room\Angle, 0.0)
 										ScaleSprite(p\OBJ, p\Size, p\Size)
