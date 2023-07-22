@@ -7057,10 +7057,6 @@ Function UpdateMenu%()
 		EndIf
 		
 		InvOpen = False
-		If ConsoleOpen
-			ConsoleOpen = False
-			ShouldDeleteGadgets = True
-		EndIf
 		
 		Width = ImageWidth(t\ImageID[0])
 		Height = ImageHeight(t\ImageID[0])
