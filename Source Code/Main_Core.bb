@@ -2475,7 +2475,7 @@ Function Kill%(IsBloody% = False)
 		If IsBloody
 			If EntityHidden(t\OverlayID[9]) Then ShowEntity(t\OverlayID[9])
 			de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
-			de\SizeChange = 0.002
+			de\SizeChange = 0.0025
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
 		EndIf
 		

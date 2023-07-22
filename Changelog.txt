@@ -30,6 +30,7 @@ Rooms:
 
 Items:
 - Added unique texture for heavy equipment.
+- Added new SCP-294 drinks.
 
 - Rebalanced syringes and eyedrops.
 - Rebalanced equipping time for some items.
@@ -59,6 +60,7 @@ Bug Fixes:
 - Fixed SCP-294 not healing or damaging the player if a float was used.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
+- Hopefully fixed a bug with items getting stuck under the floor.
 
 - Several fixes for SCP-268.
 - Some fixes for room items, hitboxes and textures.
