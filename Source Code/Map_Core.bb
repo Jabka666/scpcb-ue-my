@@ -7749,11 +7749,11 @@ Function UpdateRender%()
 	UpdateRoomLightsTimer = 0.0
 	UpdateDoors()
 	UpdateDecals()
+	UpdateRooms()
 	For it.Items = Each Items
 		it\DistTimer = 0.0
 	Next
 	UpdateItems()
-	UpdateRooms()
 End Function
 
 Function TeleportToRoom%(r.Rooms)
