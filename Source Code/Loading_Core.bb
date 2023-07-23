@@ -679,9 +679,6 @@ Function InitLoadingScreens%(File$)
 			Next
 			
 			ls\DisableBackground = StringToBoolean(GetFileLocalString(File, TemporaryString, "DisableBackground"))
-			DebugLog(ls\ImgPath)
-			DebugLog(ls\DisableBackground)
-			DebugLog("------------------")
 			
 			ls\AlignX = Int(GetFileLocalString(File, TemporaryString, "AlignX"))
 			ls\AlignY = Int(GetFileLocalString(File, TemporaryString, "AlignY"))

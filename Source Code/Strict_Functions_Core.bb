@@ -281,7 +281,6 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
 	Local TexAlpha% = 0
 	
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "mesh.notfound"), File))
 		Tmp = LoadMesh(File, Parent)
@@ -337,7 +336,6 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 	Local Tmp%, i%, SF%, b%, t1%, Texture%
 	Local TexAlpha% = 0
 	
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animmesh.notfound"), File))
 		Tmp = LoadAnimMesh(File, Parent)
@@ -369,19 +367,10 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 	Return(Tmp)
 End Function
 
-Function LoadTexture_Cache%(File$, Flags% = 1)
-	Local Tmp%
-	
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If (Not Tmp) Then Tmp = LoadTexture(File, Flags)
-	Return(Tmp)
-End Function
-
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
 Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "texture.notfound"), File))
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
@@ -434,7 +423,6 @@ End Function
 Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Count%, TexDeleteType% = DeleteMapTextures)
 	Local Tmp%
 	
-	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	If (Not Tmp)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animtexture.notfound"), File))
 		Tmp = LoadAnimTextureCheckingIfInCache(File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)

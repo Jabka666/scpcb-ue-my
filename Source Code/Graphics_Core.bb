@@ -604,6 +604,8 @@ Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 End Function
 
 Function GetRescaledTexture%(Texture$, Flags%, Width%, Height%)
+	If FileType(lang\LanguagePath + Texture) = 1 Then Texture = lang\LanguagePath + Texture
+	
 	Local ImgType% = FI_GetFIFFromFilename(Texture)
 	Local FImg% = FI_Rescale(FI_Load(ImgType, Texture, Flags), Width, Height, 0)
 	Local TexPath$ = GetEnv("Temp") + "\" + StripPath(Texture)
