@@ -2651,10 +2651,10 @@ Function UpdateMoving%()
 		If chs\SuperManTimer > 70.0 * 50.0
 			msg\DeathMsg = GetLocalString("console", "superman")
 			Kill()
-			If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
+			;If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 		Else
 			me\BlurTimer = 500.0
-			If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
+			;If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 		EndIf
 	EndIf
 	
@@ -3174,10 +3174,10 @@ Function UpdateMouseLook%()
 		Else
 			EntityColor(t\OverlayID[4], 200.0, 200.0, 200.0)
 		EndIf
-		EntityTexture(t\OverlayID[0], t\OverlayTextureID[12])
+		;EntityTexture(t\OverlayID[0], t\OverlayTextureID[12])
 	Else
 		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
-		EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
+		;EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
 	EndIf
 	
 	Update1025()
@@ -3227,12 +3227,12 @@ Function UpdateZoneColor%()
 		CameraFogMode(Camera, 0)
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.01, 60.0)
-		If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
+		;If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 	Else
 		CameraFogMode(Camera, 1)
 		CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
-		If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
+		;If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 	EndIf
 	For r.Rooms = Each Rooms
 		For i = 0 To r\MaxLights - 1
