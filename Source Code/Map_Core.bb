@@ -7116,7 +7116,7 @@ Function FillRoom%(r.Rooms)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
-			;EntityAlpha(r\Objects[0], 0.0)
+			EntityAlpha(r\Objects[0], 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 30.0
@@ -7286,7 +7286,7 @@ Function FillRoom%(r.Rooms)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
-			;EntityAlpha(r\Objects[0], 0.0)
+			EntityAlpha(r\Objects[0], 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
@@ -7396,7 +7396,7 @@ Function FillRoom%(r.Rooms)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
-			;EntityAlpha(r\Objects[0], 0.0)
+			EntityAlpha(r\Objects[0], 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
@@ -7547,7 +7547,7 @@ Function FillRoom%(r.Rooms)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
-			;EntityAlpha(r\Objects[0], 0.0)
+			EntityAlpha(r\Objects[0], 0.0)
 			
 			de.Decals = CreateDecal(DECAL_WATER, r\x + 236.0 * RoomScale, r\y + 0.005, r\z - 68.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
