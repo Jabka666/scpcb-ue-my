@@ -21,6 +21,7 @@ IniSetExportBufferValue(buffer%, section$, key$, value$):"_IniSetExportBufferVal
 
 ; Custom for scpcb-ue, require custom unordered map edition for scpcb-ue.
 FindSCP294Drink_$(file$, drink$):"_FindSCP294Drink@8"
+FindNextDirectory$(path$, directory$):"_FindNextDirectory@8"
 
 ; they have default parameters so you need include "IniControler.bb"
 IniWriteBuffer_(path$, clearPrevious%):"_IniWriteBuffer@8"

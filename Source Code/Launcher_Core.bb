@@ -26,7 +26,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	LauncherIMG[0] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
 	LauncherMediaWidth = ImageWidth(LauncherIMG[0]) / 2
-	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 2)
+	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 3)
 	
 	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
@@ -161,12 +161,26 @@ Function UpdateLauncher%(lnchr.Launcher)
 		DrawBlock(LauncherIMG[0], LauncherWidth - 400, LauncherHeight - 86, 2)
 		; ~ Language selector
 		If MouseOn(LauncherWidth - 185, LauncherHeight - 186, 40, 40)
-			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
-			Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
-			Text2(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
-			If mo\MouseHit1 Then
-				PlaySound_Strict(ButtonSFX)
-				UpdateLanguageSelector()
+			If KeyDown(29) ; LCtrl
+				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 2)
+				Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+				Text2(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.iter"), False, True)
+				If mo\MouseHit1 Then
+					PlaySound_Strict(ButtonSFX)
+					If FileType("Localization") = 2 Then
+						SetLanguage(FindNextDirectory("Localization", opt\Language))
+						FreeFont(fo\FontID[Font_Default])
+					fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
+					EndIf
+				EndIf
+			Else
+				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
+				Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+				Text2(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
+				If mo\MouseHit1 Then
+					PlaySound_Strict(ButtonSFX)
+					UpdateLanguageSelector()
+				EndIf
 			EndIf
 		Else
 			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 0)
