@@ -846,7 +846,7 @@ Function UpdateConsole%()
 					
 					If PlayerRoom\RoomTemplate\Name <> StrTemp Then CreateConsoleMsg(GetLocalString("console", "tp.failed"), 255, 0, 0)
 					;[End Block]
-				Case "spawnitem", "si", "giveitem"
+				Case "spawnitem", "si", "giveitem", "gi"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					Temp = False 
@@ -943,7 +943,7 @@ Function UpdateConsole%()
 				Case "disable106", "dis106"
 					;[Block]
 					n_I\Curr106\Idle = 1
-					n_I\Curr106\State = 200000.0
+					n_I\Curr106\State = 100000.0
 					n_I\Curr106\Contained = True
 					HideEntity(n_I\Curr106\Collider)
 					HideEntity(n_I\Curr106\OBJ)
@@ -1181,7 +1181,7 @@ Function UpdateConsole%()
 						CreateConsoleMsg(GetLocalString("console", "nb.off"))
 					EndIf
 					;[End Block]
-				Case "debughud"
+				Case "debughud", "dbh"
 					;[Block]
 					If Instr(ConsoleInput, " ") <> 0
 						StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
@@ -1231,7 +1231,7 @@ Function UpdateConsole%()
 					Next
 					CreateConsoleMsg(GetLocalString("console", "stfu"))
 					;[End Block]
-				Case "camerafog"
+				Case "camerafog", "cf"
 					;[Block]
 					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					opt\CameraFogNear = Float(Left(Args, Len(Args) - Instr(Args, " ")))
