@@ -9,7 +9,8 @@
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 
-Include "Source Code\Launcher_Core.bb"
+Include "Source Code\KeyBinds_Core.bb"
+Include "Source Code\INI_Core.bb"
 
 Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.ini"
@@ -18,6 +19,16 @@ Const LoadingScreensFile$ = "Data\loading_screens.ini"
 Const SCP294File$ = "Data\SCP-294.ini"
 Const FontsFile$ = "Data\fonts.ini"
 Const SCP1499ChunksFile$ = "Data\1499chunks.ini" ; ~ Unable to localize
+
+IniWriteBuffer(LanguageFile)
+IniWriteBuffer(SubtitlesFile)
+IniWriteBuffer(AchievementsFile)
+IniWriteBuffer(LoadingScreensFile)
+IniWriteBuffer(SCP294File)
+IniWriteBuffer(SCP1499ChunksFile)
+IniWriteBuffer(FontsFile)
+
+Include "Source Code\Launcher_Core.bb"
 
 Function CheckForDlls%() ; ~ Can't be localized because IniControler.dll may not exist
 	Local InitErrorStr$ = ""
@@ -31,29 +42,14 @@ Function CheckForDlls%() ; ~ Can't be localized because IniControler.dll may not
 	If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 End Function
 
-Function InitOptions%()
-	; ~ First, create a folder inside "AppData" folder
-	If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
-	; ~ Second, create a folder inside "scpcb-ue" folder
-	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
-End Function
-
 CheckForDlls()
-InitOptions()
 
-IniWriteBuffer(LanguageFile)
-IniWriteBuffer(SubtitlesFile)
-IniWriteBuffer(AchievementsFile)
-IniWriteBuffer(LoadingScreensFile)
-IniWriteBuffer(SCP294File)
-IniWriteBuffer(SCP1499ChunksFile)
-IniWriteBuffer(FontsFile)
-
-Include "Source Code\KeyBinds_Core.bb"
-Include "Source Code\INI_Core.bb"
+; ~ First, create a folder inside "AppData" folder
+If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
+; ~ Second, create a folder inside "scpcb-ue" folder
+If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
 
 LoadOptionsINI()
-SetLanguage(opt\Language)
 
 Include "Source Code\Main_Core.bb"
 

@@ -1,3 +1,24 @@
+Type Fonts
+	Field FontID%[MaxFontIDAmount]
+End Type
+
+Const MaxFontIDAmount% = 8
+; ~ Fonts ID Constants
+;[Block]
+Const Font_Default% = 0
+Const Font_Default_Big% = 1
+Const Font_Digital% = 2
+Const Font_Digital_Big% = 3
+Const Font_Journal% = 4
+Const Font_Console% = 5
+Const Font_Credits% = 6
+Const Font_Credits_Big% = 7
+;[End Block]
+
+Global fo.Fonts = New Fonts
+
+Const FontsPath$ = "GFX\Fonts\"
+
 Const LauncherWidth% = 640
 Const LauncherHeight% = 480
 
@@ -168,9 +189,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 				If mo\MouseHit1 Then
 					PlaySound_Strict(ButtonSFX)
 					If FileType("Localization") = 2 Then
-						SetLanguage(FindNextDirectory("Localization", opt\Language))
-						FreeFont(fo\FontID[Font_Default])
-					fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
+						SetLanguage(FindNextDirectory("Localization", opt\Language), False)
+						FreeImage(LauncherBG) : LauncherBG = 0
 					EndIf
 				EndIf
 			Else
@@ -256,7 +276,7 @@ Const LocalizaitonPath$ = "Localization\"
 
 Global lang.Language = New Language
 
-Function SetLanguage%(Language$)
+Function SetLanguage%(Language$, FromSelector% = True)
 	lang\CurrentLanguage = Language
 	If lang\CurrentLanguage = "en"
 		lang\LanguagePath = ""
@@ -276,6 +296,17 @@ Function SetLanguage%(Language$)
 	EndIf
 	opt\Language = Language
 	InitKeyNames()
+	
+	; ~ Reload some stuff manually
+	FreeFont(fo\FontID[Font_Default]) : fo\FontID[Font_Default] = 0
+	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
+	If FromSelector
+		AppTitle(GetLocalString("language", "title"))
+	Else
+		AppTitle(GetLocalString("launcher", "title"))
+	EndIf
+	
+	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 End Function
 
 Function UpdateLanguageSelector%()
@@ -469,10 +500,6 @@ Function UpdateLanguageSelector%()
 			ElseIf SelectedLanguage\Name = "English"
 				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2)
 					SetLanguage(SelectedLanguage\ID)
-					; ~ Reload some stuff manually
-					FreeFont(fo\FontID[Font_Default])
-					fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
-					AppTitle(GetLocalString("language", "title"))
 					FreeImage(LanguageBG) : LanguageBG = 0
 				EndIf
 			ElseIf FileType(LocalizaitonPath + SelectedLanguage\ID) = 2
@@ -483,10 +510,6 @@ Function UpdateLanguageSelector%()
 					EndIf
 					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2)
 						SetLanguage(SelectedLanguage\ID)
-						; ~ Reload some stuff manually
-						FreeFont(fo\FontID[Font_Default])
-						fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
-						AppTitle(GetLocalString("language", "title"))
 						FreeImage(LanguageBG) : LanguageBG = 0
 					EndIf
 				EndIf
@@ -508,12 +531,13 @@ Function UpdateLanguageSelector%()
 				Local Prefect$ = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
 				Local Prefect2$ = Format(GetLocalString("language", "full"), GetLocalString("language", "no"))
 				Local Compatible$ = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
-				If Not MouseHoverLanguage\MajorOnly 
+				
+				If (Not MouseHoverLanguage\MajorOnly) 
 					Local Size$ = Format(GetLocalString("language", "size"), MouseHoverLanguage\FileSize)
 					Local LastMod$ = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
 					Local Height% = FontHeight() * 13
 				Else
-					Height% = FontHeight() * 10
+					Height = FontHeight() * 10
 				EndIf
 			Else
 				Author = ""
@@ -572,8 +596,6 @@ Function UpdateLanguageSelector%()
 	
 	AppTitle(GetLocalString("launcher", "title"))
 	FreeImage(LauncherBG) : LauncherBG = 0
-	
-	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 End Function
 
 Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)

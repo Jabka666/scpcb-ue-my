@@ -1,25 +1,6 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Functions_Core.bb"
 
-Type Fonts
-	Field FontID%[MaxFontIDAmount]
-End Type
-
-Const MaxFontIDAmount% = 8
-; ~ Fonts ID Constants
-;[Block]
-Const Font_Default% = 0
-Const Font_Default_Big% = 1
-Const Font_Digital% = 2
-Const Font_Digital_Big% = 3
-Const Font_Journal% = 4
-Const Font_Console% = 5
-Const Font_Credits% = 6
-Const Font_Credits_Big% = 7
-;[End Block]
-
-Global fo.Fonts = New Fonts
-
 Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
 Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
@@ -132,8 +113,6 @@ Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
 LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
 
 InitLoadingScreens(LoadingScreensFile)
-
-Const FontsPath$ = "GFX\Fonts\"
 
 If (Not opt\PlayStartup) Then fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
 fo\FontID[Font_Default_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default_Big", "File"), GetFileLocalString(FontsFile, "Default_Big", "Size"))
