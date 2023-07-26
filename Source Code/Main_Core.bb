@@ -2481,8 +2481,9 @@ Function Kill%(IsBloody% = False)
 		
 		me\KillAnim = Rand(0, 1)
 		PlaySound_Strict(DamageSFX[0])
-		If SelectedDifficulty\SaveType = NO_SAVES
+		If SelectedDifficulty\SaveType => SAVE_ON_QUIT
 			DeleteGame(CurrSave)
+			GameSaved = False
 			LoadSavedGames()
 		EndIf
 		
@@ -7481,10 +7482,7 @@ Function UpdateMenu%()
 			Local QuitButton% = 85
 			
 			If SelectedDifficulty\SaveType = SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = SAVE_ANYWHERE
-				Local AbleToSave%
-				
-				AbleToSave = (CanSave = 2)
-				If AbleToSave
+				If CanSave = 2
 					QuitButton = 160
 					If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big)
 						me\DropSpeed = 0.0
