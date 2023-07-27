@@ -1013,8 +1013,8 @@ Function LoadGame%(File$)
 		Local Timer# = ReadFloat(f)
 		Local TimerState# = ReadFloat(f)
 		
-		Local IsElevDoor = ReadByte(f)
-		Local MTFClose = ReadByte(f)
+		Local IsElevDoor% = ReadByte(f)
+		Local MTFClose% = ReadByte(f)
 		
 		For do.Doors = Each Doors
 			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z
