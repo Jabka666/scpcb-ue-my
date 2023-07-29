@@ -6324,7 +6324,7 @@ Function UpdateEvents%()
 										RemoveEvent(e)
 									Else
 										PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, n_I\Curr173\OBJ) 
-										FreeEntity(e\room\Objects[2]) : e\room\Objects[2] = 0
+										HideEntity(e\room\Objects[2])
 										PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 										ResetEntity(n_I\Curr173\Collider)
 										RemoveEvent(e)
