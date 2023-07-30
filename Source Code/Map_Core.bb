@@ -961,7 +961,7 @@ Function GenForestGrid%(fr.Forest)
 					Else
 						Color(0, 0, 0)
 					EndIf
-					Text2(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, fr\Grid[x + (y * ForestGridSize)])
+					TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, fr\Grid[x + (y * ForestGridSize)])
 				Next
 				i = i - 1
 			Next
@@ -8972,11 +8972,11 @@ Function CreateMap%()
 				For y = 0 To MapGridSize - 1
 					If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale)
 						Color(255, 0, 0)
-						Text2(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)] + " " + CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)] + " " + CurrMapGrid\RoomName[x + (y * MapGridSize)])
 					Else
 						If CurrMapGrid\RoomName[x + (y * MapGridSize)] <> ""
 							Color(0, 0, 0)
-							Text2(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)])
+							TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)])
 						EndIf
 					EndIf
 				Next

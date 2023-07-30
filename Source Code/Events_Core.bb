@@ -496,8 +496,8 @@ Function RenderQuickLoading%()
 		MidHandle(t\IconID[9])
 		DrawImage(t\IconID[9], opt\GraphicWidth - (90 * MenuScale), opt\GraphicHeight - (150 * MenuScale))
 		Color(255, 255, 255)
-		SetFont2(fo\FontID[Font_Default])
-		Text2(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - (90 * MenuScale), Format(GetLocalString("loading", "loading"), QuickLoadPercent), True)
+		SetFontEx(fo\FontID[Font_Default])
+		TextEx(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - (90 * MenuScale), Format(GetLocalString("loading", "loading"), QuickLoadPercent), True)
 	EndIf
 End Function
 

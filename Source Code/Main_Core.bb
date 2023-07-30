@@ -121,7 +121,7 @@ fo\FontID[Font_Digital_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(Fon
 fo\FontID[Font_Journal] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Journal", "File"), GetFileLocalString(FontsFile, "Journal", "Size"))
 fo\FontID[Font_Console] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Console", "File"), GetFileLocalString(FontsFile, "Console", "Size"))
 
-SetFont2(fo\FontID[Font_Default_Big])
+SetFontEx(fo\FontID[Font_Default_Big])
 
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\HUD\blink_meter(1).png")
 BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
@@ -1579,7 +1579,7 @@ Function RenderConsole%()
 		Local x%, y%, Width%, Height%
 		Local TempStr$
 		
-		SetFont2(fo\FontID[Font_Console])
+		SetFontEx(fo\FontID[Font_Console])
 		
 		x = 0
 		y = opt\GraphicHeight - 300 * MenuScale
@@ -1630,7 +1630,7 @@ Function RenderConsole%()
 					Else
 						TempStr = cm\Txt
 					EndIf
-					Text2(x + (20 * MenuScale), TempY, TempStr)
+					TextEx(x + (20 * MenuScale), TempY, TempStr)
 				EndIf
 				TempY = TempY - (15.0 * MenuScale)
 			EndIf
@@ -1641,7 +1641,7 @@ Function RenderConsole%()
 		
 		RenderCursor()
 	EndIf
-	SetFont2(fo\FontID[Font_Default])
+	SetFontEx(fo\FontID[Font_Default])
 	
 	CatchErrors("Uncaught: RenderConsole()")
 End Function
@@ -1726,20 +1726,20 @@ Function RenderMessages%()
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
-		SetFont2(fo\FontID[Font_Default])
+		SetFontEx(fo\FontID[Font_Default])
 		If (Not Temp)
 			Color(Temp2, Temp2, Temp2)
-			Text2(mo\Viewport_Center_X, mo\Viewport_Center_Y + (200 * MenuScale), msg\Txt, True)
+			TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y + (200 * MenuScale), msg\Txt, True)
 		Else
 			Color(Temp2, Temp2, Temp2)
-			Text2(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True)
+			TextEx(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True)
 		EndIf
 	EndIf
 	Color(255, 255, 255)
 	If opt\ShowFPS
-		SetFont2(fo\FontID[Font_Console])
-		Text2(20 * MenuScale, 20 * MenuScale, "FPS: " + fps\FPS)
-		SetFont2(fo\FontID[Font_Default])
+		SetFontEx(fo\FontID[Font_Console])
+		TextEx(20 * MenuScale, 20 * MenuScale, "FPS: " + fps\FPS)
+		SetFontEx(fo\FontID[Font_Default])
 	EndIf
 End Function
 
@@ -1790,8 +1790,8 @@ Function RenderHintMessages%()
 	If msg\HintTxt <> ""
 		RenderFrame(x, y, Width, Height)
 		Color(255, 255, 255)
-		SetFont2(fo\FontID[Font_Default])
-		Text2(mo\Viewport_Center_X, y + (Height / 2), msg\HintTxt, True, True)
+		SetFontEx(fo\FontID[Font_Default])
+		TextEx(mo\Viewport_Center_X, y + (Height / 2), msg\HintTxt, True, True)
 	EndIf
 End Function
 
@@ -5939,164 +5939,164 @@ Function RenderDebugHUD%()
 	y = 40 * MenuScale
 	
 	Color(255, 255, 255)
-	SetFont2(fo\FontID[Font_Console])
+	SetFontEx(fo\FontID[Font_Console])
 	
 	Select chs\DebugHUD
 		Case 1
 			;[Block]
-			Text2(x, y, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\Name))
-			Text2(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
+			TextEx(x, y, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\Name))
+			TextEx(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom
-					Text2(x, y + (40 * MenuScale), Format(Format(GetLocalString("console", "debug_1.event"), ev\EventName, "{0}"), ev\EventID, "{1}"))
-					Text2(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_1.state_1"), ev\EventState))
-					Text2(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_1.state_2"), ev\EventState2))
-					Text2(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_1.state_3"), ev\EventState3))
-					Text2(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_1.state_4"), ev\EventState4))
-					Text2(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_1.str"), ev\EventStr))
+					TextEx(x, y + (40 * MenuScale), Format(Format(GetLocalString("console", "debug_1.event"), ev\EventName, "{0}"), ev\EventID, "{1}"))
+					TextEx(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_1.state_1"), ev\EventState))
+					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_1.state_2"), ev\EventState2))
+					TextEx(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_1.state_3"), ev\EventState3))
+					TextEx(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_1.state_4"), ev\EventState4))
+					TextEx(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_1.str"), ev\EventStr))
 					Exit
 				EndIf
 			Next
 			If PlayerRoom\RoomTemplate\Name = "dimension_1499"
-				Text2(x, y + (180 * MenuScale), Format(Format(GetLocalString("console", "debug_1.chunkxyz"), (Int((EntityX(me\Collider) + 20) / 40)), "{0}"), (Int((EntityZ(me\Collider) + 20) / 40)), "{1}"))
+				TextEx(x, y + (180 * MenuScale), Format(Format(GetLocalString("console", "debug_1.chunkxyz"), (Int((EntityX(me\Collider) + 20) / 40)), "{0}"), (Int((EntityZ(me\Collider) + 20) / 40)), "{1}"))
 				
 				Local CH_Amount% = 0
 				
 				For ch.Chunk = Each Chunk
 					CH_Amount = CH_Amount + 1
 				Next
-				Text2(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_1.currchunk"), CH_Amount))
+				TextEx(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_1.currchunk"), CH_Amount))
 			Else
-				Text2(x, y + (200 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.currroom"), PlayerRoom\x, "{0}"), PlayerRoom\y, "{1}"), PlayerRoom\z, "{2}"))
+				TextEx(x, y + (200 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.currroom"), PlayerRoom\x, "{0}"), PlayerRoom\y, "{1}"), PlayerRoom\z, "{2}"))
 			EndIf
 			
 			If sc_I\SelectedMonitor <> Null
-				Text2(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), sc_I\SelectedMonitor\ScrOBJ))
+				TextEx(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), sc_I\SelectedMonitor\ScrOBJ))
 			Else
-				Text2(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), "Null"))
+				TextEx(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), "Null"))
 			EndIf
 			
 			If SelectedItem <> Null
-				Text2(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), SelectedItem\ItemTemplate\Name))
+				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), SelectedItem\ItemTemplate\Name))
 			Else
-				Text2(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), "Null"))
+				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), "Null"))
 			EndIf
 			
-			Text2(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), PlayerElevatorFloor))
-			Text2(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.roomflo"), ToElevatorFloor))
+			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), PlayerElevatorFloor))
+			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.roomflo"), ToElevatorFloor))
 			If PlayerInsideElevator
-				Text2(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "True"))
+				TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "True"))
 			Else
-				Text2(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "False"))
+				TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "False"))
 			EndIf
 			
-			Text2(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-			Text2(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{0}"), (TotalVidMem() / 1024), "{1}"))
-			Text2(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
-			Text2(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
-			Text2(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
+			TextEx(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{0}"), (TotalVidMem() / 1024), "{1}"))
+			TextEx(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
+			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
+			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
 			;[End Block]
 		Case 2
 			;[Block]
 			TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, PlayerRoom\OBJ)
-			Text2(x, y, Format(Format(Format(GetLocalString("console", "debug_2.ppos"), FloatToString(TFormedX(), 1), "{0}"), FloatToString(TFormedY(), 1), "{1}"), FloatToString(TFormedZ(), 1), "{2}"))
-			Text2(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_2.pcampos"), FloatToString(EntityX(Camera), 1), "{0}"), FloatToString(EntityY(Camera), 1), "{1}"), FloatToString(EntityZ(Camera), 1), "{2}"))
-			Text2(x, y + (40 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_2.prot"), FloatToString(EntityPitch(me\Collider), 1), "{0}"), FloatToString(EntityYaw(me\Collider), 1), "{1}"), FloatToString(EntityRoll(me\Collider), 1), "{2}"))
+			TextEx(x, y, Format(Format(Format(GetLocalString("console", "debug_2.ppos"), FloatToString(TFormedX(), 1), "{0}"), FloatToString(TFormedY(), 1), "{1}"), FloatToString(TFormedZ(), 1), "{2}"))
+			TextEx(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_2.pcampos"), FloatToString(EntityX(Camera), 1), "{0}"), FloatToString(EntityY(Camera), 1), "{1}"), FloatToString(EntityZ(Camera), 1), "{2}"))
+			TextEx(x, y + (40 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_2.prot"), FloatToString(EntityPitch(me\Collider), 1), "{0}"), FloatToString(EntityYaw(me\Collider), 1), "{1}"), FloatToString(EntityRoll(me\Collider), 1), "{2}"))
 			
-			Text2(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.injuries"), me\Injuries))
-			Text2(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_2.bloodloss"), me\Bloodloss))
+			TextEx(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.injuries"), me\Injuries))
+			TextEx(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_2.bloodloss"), me\Bloodloss))
 			
-			Text2(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_2.blur"), me\BlurTimer))
-			Text2(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.blink"), me\LightBlink))
-			Text2(x, y + (180 * MenuScale), Format(GetLocalString("console", "debug_2.flash"), me\LightFlash))
+			TextEx(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_2.blur"), me\BlurTimer))
+			TextEx(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.blink"), me\LightBlink))
+			TextEx(x, y + (180 * MenuScale), Format(GetLocalString("console", "debug_2.flash"), me\LightFlash))
 			
-			Text2(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_2.freq"), me\BLINKFREQ))
-			Text2(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.timer"), me\BlinkTimer))
-			Text2(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.effect"), me\BlinkEffect))
-			Text2(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_2.efftim"), me\BlinkEffectTimer))
-			Text2(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.eyeirr"), me\EyeIrritation))
-			Text2(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_2.eyestuck"), me\EyeStuck))
+			TextEx(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_2.freq"), me\BLINKFREQ))
+			TextEx(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.timer"), me\BlinkTimer))
+			TextEx(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.effect"), me\BlinkEffect))
+			TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_2.efftim"), me\BlinkEffectTimer))
+			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.eyeirr"), me\EyeIrritation))
+			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_2.eyestuck"), me\EyeStuck))
 			
-			Text2(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_2.stamina"), me\Stamina))
-			Text2(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.stameff"), me\StaminaEffect))
-			Text2(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.stamtimer"), me\StaminaEffectTimer))
+			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_2.stamina"), me\Stamina))
+			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.stameff"), me\StaminaEffect))
+			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.stamtimer"), me\StaminaEffectTimer))
 			
-			Text2(x, y + (440 * MenuScale), Format(GetLocalString("console", "debug_2.deaf"), me\DeafTimer))
-			Text2(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_2.sanity"), me\Sanity))
+			TextEx(x, y + (440 * MenuScale), Format(GetLocalString("console", "debug_2.deaf"), me\DeafTimer))
+			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_2.sanity"), me\Sanity))
 			
 			x = x + (700 * MenuScale)
 			
 			If me\Terminated
-				Text2(x, y, Format(GetLocalString("console", "debug_2.terminated"), "True"))
+				TextEx(x, y, Format(GetLocalString("console", "debug_2.terminated"), "True"))
 			Else
-				Text2(x, y, Format(GetLocalString("console", "debug_2.terminated"), "False"))
+				TextEx(x, y, Format(GetLocalString("console", "debug_2.terminated"), "False"))
 			EndIf
 			
-			Text2(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_2.death"), me\DeathTimer))
-			Text2(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_2.fall"), me\FallTimer))
+			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_2.death"), me\DeathTimer))
+			TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_2.fall"), me\FallTimer))
 			
-			Text2(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.heal"), me\HealTimer))
+			TextEx(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_2.heal"), me\HealTimer))
 			
-			Text2(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_2.heartbeat"), me\HeartBeatTimer))
+			TextEx(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_2.heartbeat"), me\HeartBeatTimer))
 			
-			Text2(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.explosion"), me\ExplosionTimer))
+			TextEx(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_2.explosion"), me\ExplosionTimer))
 			
-			Text2(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_2.speed"), me\CurrSpeed))
+			TextEx(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_2.speed"), me\CurrSpeed))
 			
-			Text2(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.camshake"), me\CameraShakeTimer))
-			Text2(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.camzoom"), me\CurrCameraZoom))
+			TextEx(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.camshake"), me\CameraShakeTimer))
+			TextEx(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.camzoom"), me\CurrCameraZoom))
 			
-			Text2(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.vomit"), me\VomitTimer))
+			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.vomit"), me\VomitTimer))
 			
 			If me\Playable
-				Text2(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "True"))
+				TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "True"))
 			Else
-				Text2(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "False"))
+				TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "False"))
 			EndIf
 			
-			Text2(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
-			Text2(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
-			Text2(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
+			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
+			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
+			TextEx(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
 			;[End Block]
 		Case 3
 			;[Block]
 			If n_I\Curr049 <> Null
-				Text2(x, y, Format(Format(Format(GetLocalString("console", "debug_3.049pos"), FloatToString(EntityX(n_I\Curr049\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr049\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr049\OBJ), 2), "{2}"))
-				Text2(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_3.049idle"), n_I\Curr049\Idle))
-				Text2(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.049state"), n_I\Curr049\State))
+				TextEx(x, y, Format(Format(Format(GetLocalString("console", "debug_3.049pos"), FloatToString(EntityX(n_I\Curr049\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr049\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr049\OBJ), 2), "{2}"))
+				TextEx(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_3.049idle"), n_I\Curr049\Idle))
+				TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.049state"), n_I\Curr049\State))
 			EndIf
 			If n_I\Curr096 <> Null
-				Text2(x, y + (60 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.096pos"), FloatToString(EntityX(n_I\Curr096\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr096\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr096\OBJ), 2), "{2}"))
-				Text2(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_3.096idle"), n_I\Curr096\Idle))
-				Text2(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_3.096state"), n_I\Curr096\State))
+				TextEx(x, y + (60 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.096pos"), FloatToString(EntityX(n_I\Curr096\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr096\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr096\OBJ), 2), "{2}"))
+				TextEx(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_3.096idle"), n_I\Curr096\Idle))
+				TextEx(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_3.096state"), n_I\Curr096\State))
 			EndIf
-			Text2(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
-			Text2(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_3.106idle"), n_I\Curr106\Idle))
-			Text2(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_3.106state"), n_I\Curr106\State))
+			TextEx(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
+			TextEx(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_3.106idle"), n_I\Curr106\Idle))
+			TextEx(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_3.106state"), n_I\Curr106\State))
 			
-			Text2(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
-			Text2(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_3.173idle"), n_I\Curr173\Idle))
-			Text2(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_3.173state"), n_I\Curr173\State))
+			TextEx(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
+			TextEx(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_3.173idle"), n_I\Curr173\Idle))
+			TextEx(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_3.173state"), n_I\Curr173\State))
 			
-			Text2(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_3.pill"), I_500\Taken))
+			TextEx(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_3.pill"), I_500\Taken))
 			
-			Text2(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
-			Text2(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
-			Text2(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.427"), Int(I_427\Timer / 70.0)))
+			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
+			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
+			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.427"), Int(I_427\Timer / 70.0)))
 			For i = 0 To 7
-				Text2(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
+				TextEx(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			
 			If I_005\ChanceToSpawn < 3
-				Text2(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
+				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
 			ElseIf I_005\ChanceToSpawn < 5
-				Text2(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.409"))
+				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.409"))
 			ElseIf I_005\ChanceToSpawn =< 10
-				Text2(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
+				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			;[End Block]
 	End Select
-	SetFont2(fo\FontID[Font_Default])
+	SetFontEx(fo\FontID[Font_Default])
 End Function
 
 Function RenderGUI%()
@@ -6235,14 +6235,14 @@ Function RenderGUI%()
 			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
 			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)
 			
-			SetFont2(fo\FontID[Font_Digital])
+			SetFontEx(fo\FontID[Font_Digital])
 			Color(255, 255, 255)
 			If msg\KeyPadMsg <> ""
-				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then Text2(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadMsg, True, True)
+				If (msg\KeyPadTimer Mod 70.0) < 35.0 Then TextEx(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadMsg, True, True)
 			Else
-				Text2(mo\Viewport_Center_X, y + (70 * MenuScale * Scale), GetLocalString("msg", "accesscode"), True, True)
-				SetFont2(fo\FontID[Font_Digital_Big])
-				Text2(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadInput, True, True)
+				TextEx(mo\Viewport_Center_X, y + (70 * MenuScale * Scale), GetLocalString("msg", "accesscode"), True, True)
+				SetFontEx(fo\FontID[Font_Digital_Big])
+				TextEx(mo\Viewport_Center_X, y + (124 * MenuScale * Scale), msg\KeyPadInput, True, True)
 			EndIf
 			RenderCursor()
 		EndIf
@@ -6290,7 +6290,7 @@ Function RenderGUI%()
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n]
 				If IsMouseOn = n
 					Color(255, 255, 255)
-					Text2(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), OtherOpen\SecondInv[n]\ItemTemplate\DisplayName, True)
+					TextEx(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), OtherOpen\SecondInv[n]\ItemTemplate\DisplayName, True)
 				EndIf
 			EndIf
 			
@@ -6452,9 +6452,9 @@ Function RenderGUI%()
 			If Inventory(n) <> Null And SelectedItem <> Inventory(n)
 				If IsMouseOn = n
 					If SelectedItem = Null
-						SetFont2(fo\FontID[Font_Default])
+						SetFontEx(fo\FontID[Font_Default])
 						Color(255, 255, 255)
-						Text2(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), Inventory(n)\DisplayName, True)
+						TextEx(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), Inventory(n)\DisplayName, True)
 					EndIf
 				EndIf
 			EndIf
@@ -6535,8 +6535,8 @@ Function RenderGUI%()
 								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
-								SetFont2(fo\FontID[Font_Default])
-								Text2(277 * MenuScale, 469 * MenuScale, CODE_DR_MAYNARD, True, True)
+								SetFontEx(fo\FontID[Font_Default])
+								TextEx(277 * MenuScale, 469 * MenuScale, CODE_DR_MAYNARD, True, True)
 								SetBuffer(BackBuffer())
 								;[End Block]
 							Case "Unknown Note"
@@ -6546,8 +6546,8 @@ Function RenderGUI%()
 								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(50, 50, 50)
-								SetFont2(fo\FontID[Font_Journal])
-								Text2(300 * MenuScale, 295 * MenuScale, CODE_O5_COUNCIL, True, True)
+								SetFontEx(fo\FontID[Font_Journal])
+								TextEx(300 * MenuScale, 295 * MenuScale, CODE_O5_COUNCIL, True, True)
 								SetBuffer(BackBuffer())
 								;[End Block]
 							Case "Document SCP-372"
@@ -6557,8 +6557,8 @@ Function RenderGUI%()
 								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(37, 45, 137)
-								SetFont2(fo\FontID[Font_Journal])
-								Text2(383 * MenuScale, 734 * MenuScale, CODE_MAINTENANCE_TUNNELS, True, True)
+								SetFontEx(fo\FontID[Font_Journal])
+								TextEx(383 * MenuScale, 734 * MenuScale, CODE_MAINTENANCE_TUNNELS, True, True)
 								SetBuffer(BackBuffer())
 								;[End Block]
 							Default 
@@ -6642,8 +6642,8 @@ Function RenderGUI%()
 								Next
 							EndIf
 							
-							SetFont2(fo\FontID[Font_Digital])
-							Text2(x + (60 * MenuScale), y, GetLocalString("radio", "chn"))
+							SetFontEx(fo\FontID[Font_Digital])
+							TextEx(x + (60 * MenuScale), y, GetLocalString("radio", "chn"))
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio"
 								StrTemp = ""
@@ -6651,19 +6651,19 @@ Function RenderGUI%()
 									StrTemp = StrTemp + Chr(Rand(100))
 								Next
 								
-								SetFont2(fo\FontID[Font_Digital_Big])
-								Text2(x + (97 * MenuScale), y + (16 * MenuScale), Rand(0, 9), True, True)
+								SetFontEx(fo\FontID[Font_Digital_Big])
+								TextEx(x + (97 * MenuScale), y + (16 * MenuScale), Rand(0, 9), True, True)
 							Else
-								SetFont2(fo\FontID[Font_Digital_Big])
-								Text2(x + (97 * MenuScale), y + (16 * MenuScale), Int(SelectedItem\State2 + 1.0), True, True)
+								SetFontEx(fo\FontID[Font_Digital_Big])
+								TextEx(x + (97 * MenuScale), y + (16 * MenuScale), Int(SelectedItem\State2 + 1.0), True, True)
 							EndIf
 							
-							SetFont2(fo\FontID[Font_Digital])
+							SetFontEx(fo\FontID[Font_Digital])
 							If StrTemp <> ""
 								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
-								Text2(x - (28 * MenuScale), y + (33 * MenuScale), "          " + StrTemp + "          ")
+								TextEx(x - (28 * MenuScale), y + (33 * MenuScale), "          " + StrTemp + "          ")
 							EndIf
-							SetFont2(fo\FontID[Font_Default])
+							SetFontEx(fo\FontID[Font_Default])
 						EndIf
 					EndIf
 					;[End Block]
@@ -6771,7 +6771,7 @@ Function RenderGUI%()
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x - SelectedItem\ItemTemplate\ImgWidth, y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale))
 					
-					SetFont2(fo\FontID[Font_Digital])
+					SetFontEx(fo\FontID[Font_Digital])
 					
 					Local Offline%
 					
@@ -6783,8 +6783,8 @@ Function RenderGUI%()
 					If (Not NavWorks)
 						If (MilliSecs() Mod 800) < 200
 							Color(200, 0, 0)
-							Text2(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
-							Text2(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
+							TextEx(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
+							TextEx(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
 						EndIf
 					Else
 						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\Name <> "cont1_895")
@@ -6835,7 +6835,7 @@ Function RenderGUI%()
 								Color(30, 30, 30)
 							EndIf
 							If (MilliSecs() Mod 800) < 200 ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS
-								If Offline Then Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), GetLocalString("msg", "nav.data"))
+								If Offline Then TextEx(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), GetLocalString("msg", "nav.data"))
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
 								x1 = x + Cos(YawValue) * (6.0 * MenuScale) : y1 = y - Sin(YawValue) * (6.0 * MenuScale)
@@ -6860,7 +6860,7 @@ Function RenderGUI%()
 												SqrValue = Sqr(Dist)
 												Color(100, 0, 0)
 												Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-												Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
+												TextEx(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
 												SCPs_Found = SCPs_Found + 1
 											EndIf
 										EndIf
@@ -6871,7 +6871,7 @@ Function RenderGUI%()
 										Dist = Rnd(4.0, 8.0)
 										Color(100, 0, 0)
 										Oval(x - (Dist * (1.5 * MenuScale)), y - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
-										Text2(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
+										TextEx(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
 									EndIf
 								EndIf
 							EndIf
@@ -6892,7 +6892,7 @@ Function RenderGUI%()
 								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
 									Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 								Next
-								SetFont2(fo\FontID[Font_Digital])
+								SetFontEx(fo\FontID[Font_Digital])
 							EndIf
 						EndIf
 					EndIf
@@ -7702,9 +7702,9 @@ Function RenderMenu%()
 		Else
 			TempStr = GetLocalString("menu", "died")
 		EndIf
-		SetFont2(fo\FontID[Font_Default_Big])
-		Text2(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), TempStr, True, True)
-		SetFont2(fo\FontID[Font_Default])
+		SetFontEx(fo\FontID[Font_Default_Big])
+		TextEx(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), TempStr, True, True)
+		SetFontEx(fo\FontID[Font_Default])
 		
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
@@ -7725,59 +7725,59 @@ Function RenderMenu%()
 					Case MenuTab_Options_Graphics
 						;[Block]
 						Color(100, 100, 100)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "bump"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bump"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
 						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 						
 						y = y + (45 * MenuScale)
 						
-						Text2(x, y, GetLocalString("options", "particle"))
+						TextEx(x, y, GetLocalString("options", "particle"))
 						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), 114 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 						
 						y = y + (45 * MenuScale)
 						
-						Text2(x, y, GetLocalString("options", "lod"))
+						TextEx(x, y, GetLocalString("options", "lod"))
 						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), 114 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, Tooltip_TextureLODBias)
 						
 						y = y + (35 * MenuScale)
 						
 						Color(100, 100, 100)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "vram"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vram"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SaveTexturesInVRAM)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
 						Color(255, 255, 0)
 						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 						
 						y = y + (45 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text2(x, y, GetLocalString("options", "filter"))
+						TextEx(x, y, GetLocalString("options", "filter"))
 						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), 114 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
 						
 						y = y + (35 * MenuScale)
@@ -7788,58 +7788,58 @@ Function RenderMenu%()
 						Else
 							TempStr = GetLocalString("options", "atmo.dark")
 						EndIf
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 						
 						y = y + (45 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text2(x, y, GetLocalString("options", "screnderinterval"))
+						TextEx(x, y, GetLocalString("options", "screnderinterval"))
 						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), 114 * MenuScale, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 17 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SecurityCamRenderInterval)
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
 						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\PrevMasterVolume)
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
 						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
 						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "voicevolume"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "voicevolume"))
 						If (MouseOn(x + (250 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 18 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VoiceVolume, opt\VoiceVolume)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(100, 100, 100)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, Tooltip_SoundAutoRelease)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(100, 100, 100)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
 						
 						If opt\EnableUserTracks
 							y = y + (30 * MenuScale)
 							
 							Color(255, 255, 255)
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
+							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
 							If opt\UserTrackMode
 								TempStr = GetLocalString("options", "track.repeat")
 							Else
 								TempStr = GetLocalString("options", "track.random")
 							EndIf
-							Text2(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
+							TextEx(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
 							If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
 							If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
 							
@@ -7849,13 +7849,13 @@ Function RenderMenu%()
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
 						
 						If opt\EnableSubtitles
 							y = y + (30 * MenuScale)
 							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
+							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
 							
 							y = y + (5 * MenuScale)
 							
@@ -7864,156 +7864,156 @@ Function RenderMenu%()
 							If opt\OverrideSubColor
 								y = y + (30 * MenuScale)
 								
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
+								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
 								If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 								
 								y = y + (30 * MenuScale)
 								
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
+								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
 								If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 								
 								y = y + (30 * MenuScale)
 								
-								Text2(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
+								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
 								If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
 						;[End Block]
 					Case MenuTab_Options_Controls
 						;[Block]
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
 						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
 						If (MouseOn(x + (270 * MenuScale), y, 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("menu", "controlconfig"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("menu", "controlconfig"))
 						
 						y = y + (40 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.forward"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.forward"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.left"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.left"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.backward"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.backward"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.right"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.right"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.sprint"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.sprint"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.crouch"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.crouch"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.blink"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.blink"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.inv"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.inv"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.save"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.save"))
 						
 						y = y + (20 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.screenshot"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.screenshot"))
 						
 						If opt\CanOpenConsole
 							y = y + (20 * MenuScale)
 							
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "key.console"))
+							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.console"))
 						EndIf
 						
 						If MouseOn(x, y - ((180 + (20 * opt\CanOpenConsole)) * MenuScale), 380 * MenuScale, ((200 + (20 * opt\CanOpenConsole)) * MenuScale)) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
 						;[End Block]
 					Case MenuTab_Options_Advanced
 						;[Block]
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
 						
 						y = y + (30 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "console"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "console"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 						
 						y = y + (30 * MenuScale)
 						
 						If opt\CanOpenConsole
-							Text2(x, y + (5 * MenuScale), GetLocalString("options", "error"))
+							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "error"))
 							If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
 						EndIf
 						
 						y = y + (30 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "save"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
 						
 						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "txtshadow"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "txtshadow"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_TextShadow)
 						
 						y = y + (30 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
 						
 						y = y + (30 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 						If opt\CurrFrameLimit > 0.0
 							Color(255, 255, 0)
-							Text2(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
+							TextEx(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
 							If (MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), 114 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
 						EndIf
 						
 						y = y + (80 * MenuScale)
 						
 						Color(255, 255, 255)
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
 						
 						y = y + (30 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "startvideo"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "startvideo"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_StartupVideos)
 						
 						y = y + (30 * MenuScale)
 						
-						Text2(x, y + (5 * MenuScale), GetLocalString("options", "launcher"))
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "launcher"))
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Launcher)
 						
 						y = y + (40 * MenuScale)
@@ -8045,14 +8045,14 @@ Function RenderMenu%()
 				Next
 			EndIf
 		Else
-			SetFont2(fo\FontID[Font_Default])
-			Text2(x, y, GetLocalString("menu", "new.diff") + SelectedDifficulty\Name)
+			SetFontEx(fo\FontID[Font_Default])
+			TextEx(x, y, GetLocalString("menu", "new.diff") + SelectedDifficulty\Name)
 			If CurrSave = Null
 				TempStr = GetLocalString("menu", "dataredacted")
 			Else
 				TempStr = ConvertToUTF8(CurrSave\Name)
 			EndIf
-			Text2(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
+			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
 			
 			If SelectedCustomMap = Null
 				TempStr = GetLocalString("menu", "new.seed") + RandomSeed
@@ -8063,14 +8063,14 @@ Function RenderMenu%()
 					TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedCustomMap\Name)
 				EndIf
 			EndIf
-			Text2(x, y + (40 * MenuScale), TempStr)
+			TextEx(x, y + (40 * MenuScale), TempStr)
 			
 			If me\Terminated And me\SelectedEnding = -1
 				y = y + (175 * MenuScale)
 				If SelectedDifficulty\SaveType <> NO_SAVES
 					y = y + (75 * MenuScale)
 				EndIf
-				SetFont2(fo\FontID[Font_Default])
+				SetFontEx(fo\FontID[Font_Default])
 				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
 			EndIf
 		EndIf
@@ -8085,7 +8085,7 @@ Function RenderMenu%()
 		RenderCursor()
 	EndIf
 	
-	SetFont2(fo\FontID[Font_Default])
+	SetFontEx(fo\FontID[Font_Default])
 	
 	CatchErrors("Uncaught: RenderMenu()")
 End Function
@@ -8222,9 +8222,9 @@ Function RenderEnding%()
 				DrawBlock(t\ImageID[0], x, y)
 				
 				Color(255, 255, 255)
-				SetFont2(fo\FontID[Font_Default_Big])
-				Text2(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), GetLocalString("menu", "end"), True, True)
-				SetFont2(fo\FontID[Font_Default])
+				SetFontEx(fo\FontID[Font_Default_Big])
+				TextEx(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), GetLocalString("menu", "end"), True, True)
+				SetFontEx(fo\FontID[Font_Default])
 				
 				If igm\AchievementsMenu =< 0
 					x = x + (132 * MenuScale)
@@ -8268,12 +8268,12 @@ Function RenderEnding%()
 					
 					EscapeMinutes = EscapeMinutes - (EscapeHours * 60)
 					
-					Text2(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
-					Text2(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), MaxAchievements, "{1}"))
-					Text2(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomAmount, "{1}"))
-					Text2(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocAmount, "{1}"))
-					Text2(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
-					Text2(x, y + (100 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
+					TextEx(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
+					TextEx(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), MaxAchievements, "{1}"))
+					TextEx(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomAmount, "{1}"))
+					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocAmount, "{1}"))
+					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
+					TextEx(x, y + (100 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
 				Else
 					RenderMenu()
 				EndIf
@@ -8288,7 +8288,7 @@ Function RenderEnding%()
 	
 	RenderCursor()
 	
-	SetFont2(fo\FontID[Font_Default])
+	SetFontEx(fo\FontID[Font_Default])
 End Function
 
 Type CreditsLine
@@ -8378,13 +8378,13 @@ Function RenderCredits%()
 	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
 		If Left(cl\Txt, 1) = "*"
-			SetFont2(fo\FontID[Font_Credits_Big])
-			If (Not cl\Stay) Then Text2(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+			SetFontEx(fo\FontID[Font_Credits_Big])
+			If (Not cl\Stay) Then TextEx(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 		ElseIf Left(cl\Txt, 1) = "/"
 			LastCreditLine = Before(cl)
 		Else
-			SetFont2(fo\FontID[Font_Credits])
-			If (Not cl\Stay) Then Text2(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
+			SetFontEx(fo\FontID[Font_Credits])
+			If (Not cl\Stay) Then TextEx(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
 		EndIf
 		If LastCreditLine <> Null Then cl\Stay = (cl\ID > LastCreditLine\ID)
 		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
@@ -8402,11 +8402,11 @@ Function RenderCredits%()
 	If me\CreditsTimer <> 0.0
 		For cl.CreditsLine = Each CreditsLine
 			If cl\Stay
-				SetFont2(fo\FontID[Font_Credits])
+				SetFontEx(fo\FontID[Font_Credits])
 				If Left(cl\Txt, 1) = "/"
-					Text2(mo\Viewport_Center_X, mo\Viewport_Center_Y + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+					TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
 				Else
-					Text2(mo\Viewport_Center_X, mo\Viewport_Center_Y + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
+					TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
 				EndIf
 			EndIf
 		Next
@@ -8951,7 +8951,7 @@ Function Render294%()
 	
 	Temp = (PlayerRoom\SoundCHN = 0)
 	
-	Text2(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
+	TextEx(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
 	If Temp
 		If mo\MouseHit2 Lor (Not I_294\Using) Then HidePointer()

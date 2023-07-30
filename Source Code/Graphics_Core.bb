@@ -294,7 +294,7 @@ Function RenderWorld2%(Tween#)
 		If wi\NightVision = 2 ; ~ Show a HUD
 			Color(255, 255, 255)
 			
-			SetFont2(fo\FontID[Font_Digital])
+			SetFontEx(fo\FontID[Font_Digital])
 			
 			Local PlusY% = 0
 			
@@ -302,9 +302,9 @@ Function RenderWorld2%(Tween#)
 			
 			Local RefreshHint$ = GetLocalString("msg", "refresh")
 			
-			Text2(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, Trim(Left(RefreshHint, Instr(RefreshHint, "%s") - 1)), True, False)
-			Text2(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-			Text2(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - Instr(RefreshHint, "%s") - 1)), True, False)
+			TextEx(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, Trim(Left(RefreshHint, Instr(RefreshHint, "%s") - 1)), True, False)
+			TextEx(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True, False)
+			TextEx(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - Instr(RefreshHint, "%s") - 1)), True, False)
 			
 			Local Temp% = CreatePivot()
 			Local Temp2% = CreatePivot()
@@ -343,8 +343,8 @@ Function RenderWorld2%(Tween#)
 						EndIf
 						
 						If (Not wi\IsNVGBlinking)
-							Text2(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVGName, True, True)
-							Text2(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
+							TextEx(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVGName, True, True)
+							TextEx(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
 						EndIf
 					EndIf
 				EndIf
@@ -384,9 +384,9 @@ Function RenderWorld2%(Tween#)
 	If HasBattery = 1
 		If BatMsgTimer >= 70.0 * 1.0
 			Color(255, 0, 0)
-			SetFont2(fo\FontID[Font_Digital])
+			SetFontEx(fo\FontID[Font_Digital])
 			
-			Text2(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True, False)
+			TextEx(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True, False)
 		EndIf
 	EndIf
 	Color(255, 255, 255)
@@ -543,7 +543,7 @@ End Function
 
 Global TextOffset% = 0
 
-Function SetFont2%(Font%)
+Function SetFontEx%(Font%)
 	Local FontName$ = "Default"
 	
 	Select Font
@@ -584,7 +584,7 @@ Function SetFont2%(Font%)
 	SetFont(Font)
 End Function
 
-Function Text2%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
+Function TextEx%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 	If opt\TextShadow
 		Local ColorR# = ColorRed()
 		Local ColorG# = ColorGreen()

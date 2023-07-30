@@ -37,7 +37,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	opt\RealGraphicHeight = opt\GraphicHeight
 	
 	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
-	SetFont2(fo\FontID[Font_Default])
+	SetFontEx(fo\FontID[Font_Default])
 	
 	MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
 	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
@@ -82,7 +82,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		DrawBlock(LauncherBG, 0, 0)
 		
 		; ~ Resolution selector
-		Text2(LauncherWidth - 620, LauncherHeight - 303, GetLocalString("launcher", "resolution"))
+		TextEx(LauncherWidth - 620, LauncherHeight - 303, GetLocalString("launcher", "resolution"))
 		
 		Local x% = LauncherWidth - 600
 		Local y% = LauncherHeight - 269
@@ -91,7 +91,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Color(0, 0, 1)
 			If lnchr\SelectedGFXMode = i Then Rect(x - 1, y - 5, 100, 20, False)
 			
-			Text2(x, y, (lnchr\GFXModeWidths[i] + "x" + lnchr\GFXModeHeights[i]))
+			TextEx(x, y, (lnchr\GFXModeWidths[i] + "x" + lnchr\GFXModeHeights[i]))
 			If MouseOn(x - 1, y - 5, 100, 20)
 				Color(100, 100, 100)
 				Rect(x - 1, y - 5, 100, 20, False)
@@ -106,7 +106,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Next
 		; ~ Driver selector
 		Color(255, 255, 255)
-		Text2(LauncherWidth - 185, LauncherHeight - 303, GetLocalString("launcher", "gfx"))
+		TextEx(LauncherWidth - 185, LauncherHeight - 303, GetLocalString("launcher", "gfx"))
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
 		
 		Local DriverName$
@@ -116,12 +116,12 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Else
 			DriverName = Format(GetLocalString("launcher", "gfx.num"), opt\GFXDriver - 1)
 		EndIf
-		Text2(LauncherWidth - 107.5, LauncherHeight - 273, DriverName, True)
+		TextEx(LauncherWidth - 107.5, LauncherHeight - 273, DriverName, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 283, 30, 30, ">", False) Then opt\GFXDriver = (opt\GFXDriver + 1)
 		If opt\GFXDriver > CountGfxDrivers() Then opt\GFXDriver = 1
 		
 		; ~ Display selector
-		Text2(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
+		TextEx(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
 		
 		Local Txt$
 		
@@ -134,9 +134,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 				;[Block]
 				Txt = GetLocalString("launcher", "display.borderless")
 				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopWidth()
-					Text2(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
+					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
 				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopWidth()
-					Text2(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
+					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
 				EndIf
 				;[End Block]
 			Case 2
@@ -145,9 +145,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 				;[End Block]
 		End Select
 		
-		Text2(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
+		TextEx(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 155, 30)
-		Text2(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
+		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		; ~ Launcher tick
 		Text(LauncherWidth - 620, LauncherHeight - 130, GetLocalString("launcher", "launcher"))
@@ -155,7 +155,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		; ~ Media buttons
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
-			Text2(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
+			TextEx(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
 			If mo\MouseHit1 Then
 				PlaySound_Strict(ButtonSFX)
 				ExecFile_Strict("https://discord.gg/n7KdW4u")
@@ -164,7 +164,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		DrawBlock(LauncherIMG[0], LauncherWidth - 620, LauncherHeight - 86, 0)
 		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
-			Text2(LauncherWidth - 510 + LauncherMediaWidth, LauncherHeight - 106, "MODDB", True)
+			TextEx(LauncherWidth - 510 + LauncherMediaWidth, LauncherHeight - 106, "MODDB", True)
 			If mo\MouseHit1 Then
 				PlaySound_Strict(ButtonSFX)
 				ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
@@ -173,7 +173,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		DrawBlock(LauncherIMG[0], LauncherWidth - 510, LauncherHeight - 86, 1)
 		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
-			Text2(LauncherWidth - 400 + LauncherMediaWidth, LauncherHeight - 106, "YOUTUBE", True)
+			TextEx(LauncherWidth - 400 + LauncherMediaWidth, LauncherHeight - 106, "YOUTUBE", True)
 			If mo\MouseHit1 Then
 				PlaySound_Strict(ButtonSFX)
 				ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
@@ -185,7 +185,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			If KeyDown(29) ; LCtrl
 				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 2)
 				Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
-				Text2(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.iter"), False, True)
+				TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.iter"), False, True)
 				If mo\MouseHit1 Then
 					PlaySound_Strict(ButtonSFX)
 					If FileType("Localization") = 2 Then
@@ -196,7 +196,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Else
 				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
 				Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
-				Text2(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
+				TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
 				If mo\MouseHit1 Then
 					PlaySound_Strict(ButtonSFX)
 					UpdateLanguageSelector()
@@ -556,10 +556,10 @@ Function UpdateLanguageSelector%()
 			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long then move tooltip to the left
 			RenderFrame(x, y, Width + FontWidth(), Height)
 			x = x + 5
-			Text2(x, y + 8, Name)
-			Text2(x, y + 23, ID)
+			TextEx(x, y + 8, Name)
+			TextEx(x, y + 23, ID)
 			If MouseHoverLanguage\ID <> "en"
-				Text2(x, y + 38, Author)
+				TextEx(x, y + 38, Author)
 				If MouseHoverLanguage\Full
 					DualColorText(x, y + 53, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "yes"), 255, 255, 255, 0, 200, 0)
 				Else
@@ -571,8 +571,8 @@ Function UpdateLanguageSelector%()
 					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
 				EndIf
 				If (Not MouseHoverLanguage\MajorOnly)
-					Text2(x, y + 83, LastMod)
-					Text2(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
+					TextEx(x, y + 83, LastMod)
+					TextEx(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
 				EndIf
 			EndIf
 			If mo\MouseHit1 Then ExecFile("https://github.com/Jabka666/scpcb-ue-my/wiki/Language-List-of-Ultimate-Edition")
@@ -626,8 +626,8 @@ Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Def
 	Else
 		Color(R, G, B)
 	EndIf
-	SetFont2(fo\FontID[FontID])
-	Text2(x + (Width / 2), y + (Height / 2), Txt, True, True)
+	SetFontEx(fo\FontID[FontID])
+	TextEx(x + (Width / 2), y + (Height / 2), Txt, True, True)
 	Return(Clicked)
 End Function
 
@@ -668,7 +668,7 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 	
 	Color(255, 255, 255)
 	If Disabled Then Color(100, 100, 100)
-	Text2(x + (Width / 2), y + (Height / 2) - 1, Txt, True, True)
+	TextEx(x + (Width / 2), y + (Height / 2) - 1, Txt, True, True)
 	
 	Color(0, 0, 0)
 	
@@ -779,10 +779,10 @@ Function LimitText%(Txt$, x%, y%, Width%)
 	TextLength = StringWidth(Txt)
 	UnFitting = TextLength - Width
 	If UnFitting <= 0
-		Text2(x, y, Txt, 0, 0)
+		TextEx(x, y, Txt, 0, 0)
 	Else
 		LetterWidth = TextLength / Len(Txt)
-		Text2(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
+		TextEx(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
 	EndIf
 End Function
 
@@ -797,9 +797,9 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 	Local OldB% = ColorBlue()
 	
 	Color(ColorR1, ColorG1, ColorB1)
-	Text2(x, y, Txt1)
+	TextEx(x, y, Txt1)
 	Color(ColorR2, ColorG2, ColorB2)
-	Text2(x + StringWidth(Txt1), y, Txt2)
+	TextEx(x + StringWidth(Txt1), y, Txt2)
 	Color(OldR, OldG, OldB)
 End Function
 

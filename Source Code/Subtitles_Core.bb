@@ -16,7 +16,7 @@ Function InitSubtitlesAssets%()
 	subassets\BoxLeft = mo\Viewport_Center_X + 1 - (subassets\BoxWidth / 2)
 	subassets\BoxTop = opt\GraphicHeight * 0.82
 	
-	SetFont2(fo\FontID[Font_Default])
+	SetFontEx(fo\FontID[Font_Default])
 	subassets\TextHeight = FontHeight() * 2.5
 	
 	CreateSubtitlesColor("announcement", 130, 130, 130)
@@ -205,7 +205,7 @@ Function RenderSubtitles%()
 	
 	; ~ Render a text
 	Lines = -1
-	SetFont2(fo\FontID[Font_Default])
+	SetFontEx(fo\FontID[Font_Default])
 	For sub.SubtitlesMsg = Each SubtitlesMsg
 		Lines = Lines + 1
 		
@@ -227,7 +227,7 @@ Function RenderSubtitles%()
 		Else
 			Color(sub\R, sub\G, sub\B)
 		EndIf
-		Text2(subassets\BoxLeft + (10 * MenuScale), sub\CurrYPos, Txt)
+		TextEx(subassets\BoxLeft + (10 * MenuScale), sub\CurrYPos, Txt)
 	Next
 End Function
 
