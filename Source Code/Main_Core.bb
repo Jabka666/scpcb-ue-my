@@ -3600,18 +3600,18 @@ Function UpdateGUI%()
 								InvOpen = False
 								mo\DoubleClick = False
 								
-								If Rand(100 - Int((-me\Stamina * Rnd(5.0, 10.0)))) = 1
-									If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper"
-										CreateMsg(GetLocalString("msg", "droprnd.paper"))
-									ElseIf SelectedItem\ItemTemplate\TempName = "badge" Lor SelectedItem\ItemTemplate\TempName = "oldbadge"
-										CreateMsg(Format(GetLocalString("msg", "droprnd.badge"), SelectedItem\ItemTemplate\Name))
-									Else
-										CreateMsg(Format(GetLocalString("msg", "droprnd.others"), SelectedItem\ItemTemplate\Name))
-									EndIf
-									DropItem(SelectedItem, False)
-									SelectedItem = Null
-									Return
-								EndIf
+								;If Rand(100 - Int((-me\Stamina * Rnd(5.0, 10.0)))) = 1
+								;	If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper"
+								;		CreateMsg(GetLocalString("msg", "droprnd.paper"))
+								;	ElseIf SelectedItem\ItemTemplate\TempName = "badge" Lor SelectedItem\ItemTemplate\TempName = "oldbadge"
+								;		CreateMsg(Format(GetLocalString("msg", "droprnd.badge"), SelectedItem\ItemTemplate\Name))
+								;	Else
+								;		CreateMsg(Format(GetLocalString("msg", "droprnd.others"), SelectedItem\ItemTemplate\Name))
+								;	EndIf
+								;	DropItem(SelectedItem, False)
+								;	SelectedItem = Null
+								;	Return
+								;EndIf
 							EndIf
 						EndIf
 					EndIf
@@ -3763,18 +3763,18 @@ Function UpdateGUI%()
 								InvOpen = False
 								mo\DoubleClick = False
 								
-								If Rand(100 - Int((-me\Stamina * Rnd(5.0, 10.0)))) = 1
-									If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper"
-										CreateMsg(GetLocalString("msg", "droprnd.paper"))
-									ElseIf SelectedItem\ItemTemplate\TempName = "badge" Lor SelectedItem\ItemTemplate\TempName = "oldbadge"
-										CreateMsg(Format(GetLocalString("msg", "droprnd.badge"), SelectedItem\ItemTemplate\Name))
-									Else
-										CreateMsg(Format(GetLocalString("msg", "droprnd.others"), SelectedItem\ItemTemplate\Name))
-									EndIf
-									DropItem(SelectedItem, False)
-									SelectedItem = Null
-									Return
-								EndIf
+								;If Rand(100 - Int((-me\Stamina * Rnd(5.0, 10.0)))) = 1
+								;	If SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper"
+								;		CreateMsg(GetLocalString("msg", "droprnd.paper"))
+								;	ElseIf SelectedItem\ItemTemplate\TempName = "badge" Lor SelectedItem\ItemTemplate\TempName = "oldbadge"
+								;		CreateMsg(Format(GetLocalString("msg", "droprnd.badge"), SelectedItem\ItemTemplate\Name))
+								;	Else
+								;		CreateMsg(Format(GetLocalString("msg", "droprnd.others"), SelectedItem\ItemTemplate\Name))
+								;	EndIf
+								;	DropItem(SelectedItem, False)
+								;	SelectedItem = Null
+								;	Return
+								;EndIf
 							EndIf
 						EndIf
 					EndIf
