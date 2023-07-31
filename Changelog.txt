@@ -58,6 +58,8 @@ Bug Fixes:
 - Fixed SCP-914 not letting you save if the doors were closed but was not refining.
 - Fixed SCP-049 being stuck in the procedure animation if the player used revive command.
 - Fixed SCP-294 not healing or damaging the player if a float was used.
+- Fixed Newsboy Cap not displaying the correct name and having invisibility sounds.
+- Fixed enhanced SCP-714 death message.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.

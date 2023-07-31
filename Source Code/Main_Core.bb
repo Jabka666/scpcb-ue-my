@@ -5217,10 +5217,11 @@ Function UpdateGUI%()
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If I_268\Using > 0
+								If I_268\Using > 1 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
 								CreateMsg(GetLocalString("msg", "cap.off"))
 								I_268\Using = 0
-								PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
 							Else
+								If I_268\Using > 1 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOn.ogg"))
 								Select SelectedItem\ItemTemplate\TempName
 									Case "cap"
 										;[Block]
@@ -5237,7 +5238,6 @@ Function UpdateGUI%()
 								End Select
 								GiveAchievement(Achv268)
 								CreateMsg(GetLocalString("msg", "cap.on"))
-								PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOn.ogg"))
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5271,8 +5271,8 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(True, True)
 						If SelectedItem\ItemTemplate\TempName = "fine714"
-							CreateMsg(Format(GetLocalString("msg", "714.sleep"), SubjectName))
-							msg\DeathMsg = GetLocalString("death", "ringsleep")
+							CreateMsg(GetLocalString("msg", "714.sleep"))
+							msg\DeathMsg = Format(GetLocalString("death", "ringsleep"), SubjectName)
 							Kill()
 						Else
 							CreateMsg(GetLocalString("msg", "714.small"))
