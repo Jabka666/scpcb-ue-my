@@ -4801,23 +4801,20 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2_tesla_lcz", "room2_tesla_hcz", "room2_tesla_ez"
 			;[Block]
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y, r\z)
+			r\Objects[0] = CreateSprite()
+			r\HideObject[0] = False
+			EntityTexture(r\Objects[0], t\OverlayTextureID[11])
+			SpriteViewMode(r\Objects[0], 2) 
+			EntityBlend(r\Objects[0], 3) 
+			EntityFX(r\Objects[0], 1 + 8 + 16)
+			PositionEntity(r\Objects[0], r\x, r\y + 0.8, r\z)
+			HideEntity(r\Objects[0])
 			
-			r\Objects[1] = CreateSprite()
+			r\Objects[1] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
 			r\HideObject[1] = False
-			EntityTexture(r\Objects[1], t\OverlayTextureID[11])
-			SpriteViewMode(r\Objects[1], 2) 
-			EntityBlend(r\Objects[1], 3) 
-			EntityFX(r\Objects[1], 1 + 8 + 16)
-			PositionEntity(r\Objects[1], r\x, r\y + 0.8, r\z)
 			HideEntity(r\Objects[1])
 			
-			r\Objects[2] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
-			r\HideObject[2] = False
-			HideEntity(r\Objects[2])
-			
-			For i = 0 To 2
+			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			

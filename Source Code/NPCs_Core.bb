@@ -2628,7 +2628,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 2.0 ; ~ Running
 							;[Block]
-							n\CurrSpeed = CurveValue(n\Speed * 0.015 , n\CurrSpeed, 5.0)
+							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
 							Animate2(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
 							;[End Block]
 					End Select
