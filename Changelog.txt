@@ -64,6 +64,7 @@ Bug Fixes:
 - Fixed Newsboy Cap not displaying the correct name and having invisibility sounds.
 - Fixed enhanced SCP-714 death message.
 - Fixed SCP-012 event activating while terminated from above.
+- Fixed achievement spam in Pocket Dimension.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.
