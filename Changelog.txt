@@ -13,6 +13,9 @@ General:
 - Button panels now glow yellow when in use.
 - Removed additional fogging on Very Fine Gas Mask and Very Fine Hazmat Suit.
 
+Mechanics:
+- Removed accidental item dropping.
+
 Rooms:
 - Added security camera in «room2C_ez» room.
 - Added «room2C_2_ez» room.
@@ -60,6 +63,7 @@ Bug Fixes:
 - Fixed SCP-294 not healing or damaging the player if a float was used.
 - Fixed Newsboy Cap not displaying the correct name and having invisibility sounds.
 - Fixed enhanced SCP-714 death message.
+- Fixed SCP-012 event activating while terminated from above.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.

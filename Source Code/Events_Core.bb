@@ -4643,7 +4643,7 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room
 					e\room\RoomDoors[0]\Locked = RemoteDoorOn
-					If EntityY(me\Collider) < 0.0
+					If EntityY(me\Collider) < 0.0 And (Not me\Terminated)
 						If e\EventState = 0.0
 							If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25 And RemoteDoorOn
 								GiveAchievement(Achv012)
