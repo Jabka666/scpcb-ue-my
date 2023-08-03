@@ -24,12 +24,14 @@ Const AchvO5% = 38, AchvPD% = 39, AchvSNAV% = 40, AchvTesla% = 41, Achv268% = 42
 ;[End Block]
 
 Function GiveAchievement%(AchvName%, ShowMessage% = True)
-	If achv\Achievement[AchvName] <> True
-		achv\Achievement[AchvName] = True
-		If opt\AchvMsgEnabled And ShowMessage
-			Local AchievementName$ = GetFileLocalString(AchievementsFile, "a" + AchvName, "AchvName")
-			
-			CreateAchievementMsg(AchvName, AchievementName)
+	If (Not me\Terminated)
+		If achv\Achievement[AchvName] <> True
+			achv\Achievement[AchvName] = True
+			If opt\AchvMsgEnabled And ShowMessage
+				Local AchievementName$ = GetFileLocalString(AchievementsFile, "a" + AchvName, "AchvName")
+				
+				CreateAchievementMsg(AchvName, AchievementName)
+			EndIf
 		EndIf
 	EndIf
 End Function
