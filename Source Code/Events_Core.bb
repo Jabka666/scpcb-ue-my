@@ -1861,7 +1861,7 @@ Function UpdateEvents%()
 			Case e_butt_ghost
 				;[Block]
 				If PlayerRoom = e\room
-					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 3.24
+					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 3.0
 						If e\EventState = 0.0
 							GiveAchievement(Achv789_J)
 							e\SoundCHN = PlaySound2(ButtGhostSFX, Camera, e\room\Objects[0], 10.0, 1.0, True)
@@ -6356,9 +6356,9 @@ Function UpdateEvents%()
 					e\EventState = 2.0
 				Else
 					If (Not e\Sound) Then e\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard1.ogg")
-					If e\room\Dist < 15.0 And e\room\Dist >= 4.0 
+					If e\room\Dist < 15.0 And PlayerRoom <> e\room
 						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0, 1.0, True)
-					ElseIf e\room\Dist < 4.0 And me\SndVolume > 1.0
+					ElseIf PlayerRoom = e\room And me\SndVolume > 1.0
 						If e\EventState2 = 0.0
 							de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
 							EntityParent(de\OBJ, e\room\OBJ)

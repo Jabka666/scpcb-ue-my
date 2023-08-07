@@ -6943,13 +6943,13 @@ Function FillRoom%(r.Rooms)
 		Case "room2_6_ez"
 			;[Block]
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 1040.0 * RoomScale, r\y + 192.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[0], r\x + 1040.0 * RoomScale, r\y, r\z)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 1530.0 * RoomScale, r\y + 0.5, r\z + 512.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x + 1290.0 * RoomScale, r\y, r\z + 491.0 * RoomScale)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 1535.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 512.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 1295.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 491.0 * RoomScale)
 			
 			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
