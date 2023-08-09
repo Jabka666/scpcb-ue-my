@@ -239,6 +239,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
 	Next
+	EndGraphics()
 	
 	If Quit Then End()
 End Function

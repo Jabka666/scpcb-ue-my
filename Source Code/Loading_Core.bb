@@ -1573,8 +1573,8 @@ Function LoadWayPoints%(LoadingStart% = 55)
 	Local Amount% = 0
 	
 	For w.WayPoints = Each WayPoints
-		EntityPickMode(w\OBJ, 1, True)
 		EntityRadius(w\OBJ, 0.2)
+		EntityPickMode(w\OBJ, 1, True)
 		Amount = Amount + 1
 	Next
 	
@@ -1637,8 +1637,8 @@ Function LoadWayPoints%(LoadingStart% = 55)
 	Next
 	
 	For w.WayPoints = Each WayPoints
-		EntityPickMode(w\OBJ, 0, 0)
-		EntityRadius(w\OBJ, 0)
+		EntityRadius(w\OBJ, 0.0)
+		EntityPickMode(w\OBJ, 0, False)
 		
 		For i = 0 To 4
 			If w\connected[i] <> Null

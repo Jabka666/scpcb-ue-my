@@ -462,7 +462,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			EndIf
 		EndIf
 		
-		Surf = CreateSurface(ChildMesh)
+		;Surf = CreateSurface(ChildMesh) ; ~ Check if this don't needed anymore
 		
 		If IsAlpha > 0 Then PaintSurface(Surf, Brush)
 		
@@ -511,6 +511,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			AddMesh(FlipChild, ChildMesh)
 			FreeEntity(FlipChild) : FlipChild = 0
 		EndIf
+		HideEntity(ChildMesh)
 	Next
 	
 	Local HiddenMesh%
@@ -667,15 +668,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 						ReadInt(f)
 						ReadFloat(f)
 					EndIf
-					;[End Block]
-				Case "playerstart"
-					;[Block]
-					Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-					
-					Angles = ReadString(f)
-					Pitch = Piece(Angles, 1, " ")
-					Yaw = Piece(Angles, 2, " ")
-					Roll = Piece(Angles, 3, " ")
 					;[End Block]
 				Case "model"
 					;[Block]
@@ -2186,7 +2178,6 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
 	EntityType(d\OBJ, HIT_MAP)
 	EntityPickMode(d\OBJ, 2)
-	CreateCollBox(d\OBJ)
 	EntityParent(d\OBJ, Parent)
 	
 	If DoorType <> OFFICE_DOOR And DoorType <> WOODEN_DOOR
@@ -2196,7 +2187,6 @@ Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorTyp
 		RotateEntity(d\OBJ2, 0.0, Angle + ((DoorType <> BIG_DOOR) * 180.0), 0.0)
 		EntityType(d\OBJ2, HIT_MAP)
 		EntityPickMode(d\OBJ2, 2)
-		CreateCollBox(d\OBJ2)
 		EntityParent(d\OBJ2, Parent)
 	EndIf
 	
@@ -3652,8 +3642,8 @@ Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
 	
 	s.Screens = New Screens
 	s\OBJ = CreatePivot()
-	EntityPickMode(s\OBJ, 1)
 	EntityRadius(s\OBJ, 0.1)
+	EntityPickMode(s\OBJ, 1)
 	PositionEntity(s\OBJ, x, y, z)
 	EntityParent(s\OBJ, r\OBJ)
 	
@@ -3710,8 +3700,8 @@ Function CreateLever.Levers(room.Rooms, x#, y#, z#, Rotation# = 0.0, TurnedOn% =
 	RotateEntity(lvr\BaseOBJ, 0.0, Rotation, 0.0)
 	RotateEntity(lvr\OBJ, -80.0 + (160.0 * TurnedOn), Rotation - 180.0, 0.0)
 	
-	EntityPickMode(lvr\OBJ, 1, False)
 	EntityRadius(lvr\OBJ, 0.1)
+	EntityPickMode(lvr\OBJ, 1, False)
 	
 	lvr\room = room
 	

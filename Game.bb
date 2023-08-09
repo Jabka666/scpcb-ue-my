@@ -50,7 +50,7 @@ If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppDat
 If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
 
 LoadOptionsINI()
-SetLanguage(opt\Language)
+InitKeyNames()
 
 Include "Source Code\Main_Core.bb"
 
