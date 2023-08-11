@@ -528,13 +528,13 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.05, z)
+	PositionEntity(me\Collider, x, y + 0.5, z)
 	ResetEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.05, z)
+	PositionEntity(me\Head, x, y + 0.5, z)
 	ResetEntity(me\Head)
 	
 	CODE_DR_MAYNARD = Int(ReadString(f))
@@ -1311,12 +1311,7 @@ Function LoadGame%(File$)
 		TeleportToRoom(I_1499\PrevRoom)
 	EndIf
 	
-	If me\Collider <> 0
-		If PlayerRoom <> Null Then ShowEntity(PlayerRoom\OBJ)
-		ShowEntity(me\Collider)
-		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
-		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
-	EndIf
+	ShowEntity(me\Collider)
 	
 	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
@@ -1340,9 +1335,6 @@ Function LoadGameQuick%(File$)
 	msg\HintTxt = ""
 	msg\HintTimer = 0.0
 	me\SelectedEnding = -1
-	
-	PositionEntity(me\Collider, 0.0, 1000.0, 0.0, True)
-	ResetEntity(me\Collider)
 	
 	StrTemp = ReadString(f)
 	StrTemp = ReadString(f)
@@ -1373,19 +1365,20 @@ Function LoadGameQuick%(File$)
 	WireFrameState = 0
 	WireFrame(0)
 	
+	ResetEntity(me\Collider)
 	HideEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.05, z)
+	PositionEntity(me\Collider, x, y + 0.5, z)
 	
 	ShowEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.05, z)
+	PositionEntity(me\Head, x, y + 0.5, z)
 	ResetEntity(me\Head)
 	
 	CODE_DR_MAYNARD = Int(ReadString(f))
@@ -1988,16 +1981,10 @@ Function LoadGameQuick%(File$)
 		sc\PlayerState = 0
 	Next
 	EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
-	me\RestoreSanity = True
 	
 	CloseFile(f)
 	
-	If me\Collider <> 0
-		If PlayerRoom <> Null Then ShowEntity(PlayerRoom\OBJ)
-		ShowEntity(me\Collider)
-		TeleportEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider), 0.3, True)
-		If PlayerRoom <> Null Then HideEntity(PlayerRoom\OBJ)
-	EndIf
+	ShowEntity(me\Collider)
 	
 	UpdateRoomLightsTimer = 0.0
 	
