@@ -627,27 +627,27 @@ End Function
 Function LoadMaterials%(File$)
 	CatchErrors("LoadMaterials(" + File + ")")
 	
-	Local TemporaryString$
+	Local Loc$
 	Local mat.Materials = Null
 	Local StrTemp$ = ""
 	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
-		TemporaryString = Trim(ReadLine(f))
-		If Left(TemporaryString, 1) = "["
-			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
+		Loc = Trim(ReadLine(f))
+		If Left(Loc, 1) = "["
+			Loc = Mid(Loc, 2, Len(Loc) - 2)
 			mat.Materials = New Materials
-			mat\Name = Lower(TemporaryString)
+			mat\Name = Lower(Loc)
 			If opt\BumpEnabled
-				StrTemp = IniGetString(File, TemporaryString, "bump")
+				StrTemp = IniGetString(File, Loc, "bump")
 				If StrTemp <> ""
 					mat\Bump = LoadTexture_Strict(StrTemp, 1 + (256 * opt\SaveTexturesInVRAM))
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
-			mat\StepSound = (IniGetInt(File, TemporaryString, "stepsound") + 1)
-			mat\IsDiffuseAlpha = IniGetInt(File, TemporaryString, "transparent")
-			mat\UseMask = IniGetInt(File, TemporaryString, "masked")
+			mat\StepSound = (IniGetInt(File, Loc, "stepsound") + 1)
+			mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")
+			mat\UseMask = IniGetInt(File, Loc, "masked")
 		EndIf
 	Wend
 	
@@ -657,31 +657,31 @@ Function LoadMaterials%(File$)
 End Function
 
 Function InitLoadingScreens%(File$)
-	Local TemporaryString$, i%
+	Local Loc$, i%
 	Local ls.LoadingScreens
 	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
-		TemporaryString = Trim(ReadLine(f))
-		If Left(TemporaryString, 1) = "["
-			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
+		Loc = Trim(ReadLine(f))
+		If Left(Loc, 1) = "["
+			Loc = Mid(Loc, 2, Len(Loc) - 2)
 			
 			ls.LoadingScreens = New LoadingScreens
 			LoadingScreenAmount = LoadingScreenAmount + 1
 			ls\ID = LoadingScreenAmount
 			
-			ls\Title = TemporaryString
-			ls\ImgPath = GetFileLocalString(File, TemporaryString, "ImgPath")
+			ls\Title = Loc
+			ls\ImgPath = GetFileLocalString(File, Loc, "ImgPath")
 			
 			For i = 0 To 3
-				ls\Txt[i] = GetFileLocalString(File, TemporaryString, "Desc" + (i + 1))
+				ls\Txt[i] = GetFileLocalString(File, Loc, "Desc" + (i + 1))
 				If ls\Txt[i] <> "" Then ls\TxtAmount = ls\TxtAmount + 1
 			Next
 			
-			ls\DisableBackground = StringToBoolean(GetFileLocalString(File, TemporaryString, "DisableBackground"))
+			ls\DisableBackground = StringToBoolean(GetFileLocalString(File, Loc, "DisableBackground"))
 			
-			ls\AlignX = Int(GetFileLocalString(File, TemporaryString, "AlignX"))
-			ls\AlignY = Int(GetFileLocalString(File, TemporaryString, "AlignY"))
+			ls\AlignX = Int(GetFileLocalString(File, Loc, "AlignX"))
+			ls\AlignY = Int(GetFileLocalString(File, Loc, "AlignY"))
 		EndIf
 	Wend
 	

@@ -27,13 +27,6 @@ End Type
 
 Global mo.Mouse = New Mouse
 
-Type Launcher
-	Field TotalGFXModes%
-	Field GFXModes%
-	Field SelectedGFXMode%
-	Field GFXModeWidths%[64], GFXModeHeights%[64]
-End Type
-
 If opt\LauncherEnabled
 	Local lnchr.Launcher
 	

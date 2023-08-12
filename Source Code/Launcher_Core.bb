@@ -24,6 +24,80 @@ Const LauncherHeight% = 480
 
 Global LauncherBG%
 
+Type Language ; ~ Game Language
+	Field CurrentLanguage$
+	Field LanguagePath$
+End Type
+
+Type ListLanguage ; ~ Languages in the list
+	Field Name$
+	Field ID$
+	Field Author$
+	Field LastModify$
+	Field Flag$
+	Field FlagImg%
+	Field MajorOnly%
+	Field Full%
+	Field FileSize$
+	Field Compatible$
+End Type
+
+; ~ Language status constants
+;[Block]
+Const LANGUAGE_STATUS_NULL% = 0
+Const LANGUAGE_STATUS_DOWNLOAD_REQUEST% = 1
+Const LANGUAGE_STATUS_DOWNLOAD_START% = 2
+Const LANGUAGE_STATUS_UNPACK_REQUEST% = 3
+Const LANGUAGE_STATUS_UNPACK_START% = 4
+Const LANGUAGE_STATUS_UNINSTALLING_REQUEST% = 5
+Const LANGUAGE_STATUS_UNINSTALLING_START% = 6
+Const LANGUAGE_STATUS_DONE% = 7
+;[End Block]
+Const LocalizaitonPath$ = "Localization\"
+
+Global lang.Language = New Language
+
+Function SetLanguage%(Language$, FromSelector% = True)
+	lang\CurrentLanguage = Language
+	If lang\CurrentLanguage = "en"
+		lang\LanguagePath = ""
+	Else
+		lang\LanguagePath = LocalizaitonPath + lang\CurrentLanguage + "\"
+		
+		IniWriteBuffer(lang\LanguagePath + LanguageFile)
+		IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
+		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
+		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
+		IniWriteBuffer(lang\LanguagePath + SCP294File)
+		IniWriteBuffer(lang\LanguagePath + FontsFile)
+	EndIf
+	If StringToBoolean(GetLocalString("global", "splitwithspace"))
+		SplitSpace = " "
+	Else
+		SplitSpace = ""
+	EndIf
+	opt\Language = Language
+	InitKeyNames()
+	
+	; ~ Reload some stuff manually
+	FreeFont(fo\FontID[Font_Default]) : fo\FontID[Font_Default] = 0
+	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
+	If FromSelector
+		AppTitle(GetLocalString("language", "title"))
+	Else
+		AppTitle(GetLocalString("launcher", "title"))
+	EndIf
+End Function
+
+SetLanguage(opt\Language)
+
+Type Launcher
+	Field TotalGFXModes%
+	Field GFXModes%
+	Field SelectedGFXMode%
+	Field GFXModeWidths%[64], GFXModeHeights%[64]
+End Type
+
 Function UpdateLauncher%(lnchr.Launcher)
 	Local i%, n%
 	
@@ -191,6 +265,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 					If FileType("Localization") = 2 Then
 						SetLanguage(FindNextDirectory("Localization", opt\Language), False)
 						FreeImage(LauncherBG) : LauncherBG = 0
+						IniWriteString(OptionFile, "Global", "Language", opt\Language)
 					EndIf
 				EndIf
 			Else
@@ -242,72 +317,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 	EndGraphics()
 	
 	If Quit Then End()
-End Function
-
-Type Language ; ~ Game Language
-	Field CurrentLanguage$
-	Field LanguagePath$
-End Type
-
-Type ListLanguage ; ~ Languages in the list
-	Field Name$
-	Field ID$
-	Field Author$
-	Field LastModify$
-	Field Flag$
-	Field FlagImg%
-	Field MajorOnly%
-	Field Full%
-	Field FileSize$
-	Field Compatible$
-End Type
-
-; ~ Language status constants
-;[Block]
-Const LANGUAGE_STATUS_NULL% = 0
-Const LANGUAGE_STATUS_DOWNLOAD_REQUEST% = 1
-Const LANGUAGE_STATUS_DOWNLOAD_START% = 2
-Const LANGUAGE_STATUS_UNPACK_REQUEST% = 3
-Const LANGUAGE_STATUS_UNPACK_START% = 4
-Const LANGUAGE_STATUS_UNINSTALLING_REQUEST% = 5
-Const LANGUAGE_STATUS_UNINSTALLING_START% = 6
-Const LANGUAGE_STATUS_DONE% = 7
-;[End Block]
-Const LocalizaitonPath$ = "Localization\"
-
-Global lang.Language = New Language
-
-Function SetLanguage%(Language$, FromSelector% = True)
-	lang\CurrentLanguage = Language
-	If lang\CurrentLanguage = "en"
-		lang\LanguagePath = ""
-	Else
-		lang\LanguagePath = LocalizaitonPath + lang\CurrentLanguage + "\"
-		IniWriteBuffer(lang\LanguagePath + LanguageFile)
-		IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
-		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
-		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
-		IniWriteBuffer(lang\LanguagePath + SCP294File)
-		IniWriteBuffer(lang\LanguagePath + FontsFile)
-	EndIf
-	If StringToBoolean(GetLocalString("global", "splitwithspace"))
-		SplitSpace = " "
-	Else
-		SplitSpace = ""
-	EndIf
-	opt\Language = Language
-	InitKeyNames()
-	
-	; ~ Reload some stuff manually
-	FreeFont(fo\FontID[Font_Default]) : fo\FontID[Font_Default] = 0
-	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
-	If FromSelector
-		AppTitle(GetLocalString("language", "title"))
-	Else
-		AppTitle(GetLocalString("launcher", "title"))
-	EndIf
-	
-	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 End Function
 
 Function UpdateLanguageSelector%()
@@ -502,6 +511,7 @@ Function UpdateLanguageSelector%()
 				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2)
 					SetLanguage(SelectedLanguage\ID)
 					FreeImage(LanguageBG) : LanguageBG = 0
+					IniWriteString(OptionFile, "Global", "Language", opt\Language)
 				EndIf
 			ElseIf FileType(LocalizaitonPath + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language
@@ -512,6 +522,7 @@ Function UpdateLanguageSelector%()
 					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2)
 						SetLanguage(SelectedLanguage\ID)
 						FreeImage(LanguageBG) : LanguageBG = 0
+						IniWriteString(OptionFile, "Global", "Language", opt\Language)
 					EndIf
 				EndIf
 			Else

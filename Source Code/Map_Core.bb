@@ -1494,22 +1494,22 @@ End Function
 Function LoadRoomTemplates%(File$)
 	CatchErrors("LoadRoomTemplates(" + File + ")")
 	
-	Local TemporaryString$, i%
+	Local Loc$, i%
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
 	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
-		TemporaryString = Trim(ReadLine(f))
-		If Left(TemporaryString, 1) = "["
-			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			If TemporaryString <> "room ambience"
-				StrTemp = IniGetString(File, TemporaryString, "Mesh Path")
+		Loc = Trim(ReadLine(f))
+		If Left(Loc, 1) = "["
+			Loc = Mid(Loc, 2, Len(Loc) - 2)
+			If Loc <> "room ambience"
+				StrTemp = IniGetString(File, Loc, "Mesh Path")
 				
 				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
-				rt\Name = Lower(TemporaryString)
+				rt\Name = Lower(Loc)
 				
-				StrTemp = IniGetString(File, TemporaryString, "Shape")
+				StrTemp = IniGetString(File, Loc, "Shape")
 				
 				Select StrTemp
 					Case "room1", "1"
@@ -1535,13 +1535,13 @@ Function LoadRoomTemplates%(File$)
 				End Select
 				
 				For i = 0 To 4
-					rt\Zone[i] = IniGetInt(File, TemporaryString, "Zone" + (i + 1))
+					rt\Zone[i] = IniGetInt(File, Loc, "Zone" + (i + 1))
 				Next
 				
-				rt\Commonness = Max(Min(IniGetInt(File, TemporaryString, "Commonness"), 100), 0)
-				rt\Large = IniGetInt(File, TemporaryString, "Large")
-				rt\DisableDecals = IniGetInt(File, TemporaryString, "DisableDecals")
-				rt\DisableOverlapCheck = IniGetInt(File, TemporaryString, "DisableOverlapCheck")
+				rt\Commonness = Max(Min(IniGetInt(File, Loc, "Commonness"), 100), 0)
+				rt\Large = IniGetInt(File, Loc, "Large")
+				rt\DisableDecals = IniGetInt(File, Loc, "DisableDecals")
+				rt\DisableOverlapCheck = IniGetInt(File, Loc, "DisableOverlapCheck")
 			EndIf
 		EndIf
 	Wend
