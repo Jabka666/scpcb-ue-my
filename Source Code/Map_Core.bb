@@ -3186,11 +3186,15 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	Local sc.SecurityCams
 	
 	sc.SecurityCams = New SecurityCams
+	
 	sc\BaseOBJ = CopyEntity(sc_I\CamModelID[CAM_BASE_MODEL])
 	ScaleEntity(sc\BaseOBJ, 0.0015, 0.0015, 0.0015)
 	PositionEntity(sc\BaseOBJ, x1, y1, z1)
+	EntityParent(sc\BaseOBJ, r\OBJ)
+	
 	sc\CameraOBJ = CopyEntity(sc_I\CamModelID[CAM_HEAD_MODEL])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
+	PositionEntity(sc\CameraOBJ, x1, y1, z1)
 	
 	sc\room = r
 	
@@ -3209,6 +3213,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		EntityTexture(sc\ScrOBJ, sc_I\ScreenTexs[sc\ScrTexture])
 		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
+		EntityParent(sc\ScrOBJ, r\OBJ)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
 		ScaleSprite(sc\ScrOverlay, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
@@ -3228,10 +3233,6 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		HideEntity(sc\Cam)
 	EndIf
 	
-	If r <> Null
-		EntityParent(sc\BaseOBJ, r\OBJ)
-		If Screen Then EntityParent(sc\ScrOBJ, r\OBJ)
-	EndIf
 	Return(sc)
 End Function
 
@@ -3686,24 +3687,22 @@ Function CreateLever.Levers(room.Rooms, x#, y#, z#, Rotation# = 0.0, TurnedOn% =
 	Local lvr.Levers
 	
 	lvr.Levers = New Levers
-	lvr\BaseOBJ = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-	lvr\OBJ = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-	
-	ScaleEntity(lvr\BaseOBJ, 0.04, 0.04, 0.04)
-	ScaleEntity(lvr\OBJ, 0.04, 0.04, 0.04)
-	PositionEntity(lvr\BaseOBJ, x, y, z, True)
-	PositionEntity(lvr\OBJ, x, y, z, True)
-	
-	EntityParent(lvr\BaseOBJ, room\OBJ)
-	EntityParent(lvr\OBJ, room\OBJ)
-	
-	RotateEntity(lvr\BaseOBJ, 0.0, Rotation, 0.0)
-	RotateEntity(lvr\OBJ, -80.0 + (160.0 * TurnedOn), Rotation - 180.0, 0.0)
-	
-	EntityRadius(lvr\OBJ, 0.1)
-	EntityPickMode(lvr\OBJ, 1, False)
 	
 	lvr\room = room
+	
+	lvr\BaseOBJ = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
+	ScaleEntity(lvr\BaseOBJ, 0.04, 0.04, 0.04)
+	PositionEntity(lvr\BaseOBJ, x, y, z, True)
+	EntityParent(lvr\BaseOBJ, room\OBJ)
+	RotateEntity(lvr\BaseOBJ, 0.0, Rotation, 0.0)
+	
+	lvr\OBJ = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
+	ScaleEntity(lvr\OBJ, 0.04, 0.04, 0.04)
+	PositionEntity(lvr\OBJ, x, y, z, True)
+	EntityParent(lvr\OBJ, room\OBJ)
+	RotateEntity(lvr\OBJ, -80.0 + (160.0 * TurnedOn), Rotation - 180.0, 0.0)
+	EntityRadius(lvr\OBJ, 0.1)
+	EntityPickMode(lvr\OBJ, 1, False)
 	
 	Return(lvr)
 End Function
