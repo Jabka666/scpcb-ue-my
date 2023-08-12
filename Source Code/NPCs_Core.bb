@@ -1670,9 +1670,7 @@ Function UpdateNPCs%()
 										If (Not I_268\InvisibilityOn)
 											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-										EndIf
-										
-										If (Not I_268\InvisibilityOn)
+											
 											If Dist < 9.0
 												AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387.0), 463.0, n\CurrSpeed * 38.0)
 											Else
