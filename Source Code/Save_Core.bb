@@ -25,6 +25,10 @@ Function SaveGame%(File$)
 	
 	WriteInt(f, me\PlayTime)
 	
+	WriteString(f, Str(CODE_DR_MAYNARD))
+	WriteString(f, Str(CODE_O5_COUNCIL))
+	WriteString(f, Str(CODE_MAINTENANCE_TUNNELS))
+	
 	WriteFloat(f, EntityX(me\Collider))
 	WriteFloat(f, EntityY(me\Collider))
 	WriteFloat(f, EntityZ(me\Collider))
@@ -32,10 +36,6 @@ Function SaveGame%(File$)
 	WriteFloat(f, EntityX(me\Head))
 	WriteFloat(f, EntityY(me\Head))
 	WriteFloat(f, EntityZ(me\Head))
-	
-	WriteString(f, Str(CODE_DR_MAYNARD))
-	WriteString(f, Str(CODE_O5_COUNCIL))
-	WriteString(f, Str(CODE_MAINTENANCE_TUNNELS))
 	
 	WriteFloat(f, EntityPitch(me\Collider))
 	WriteFloat(f, EntityYaw(me\Collider))
@@ -50,10 +50,6 @@ Function SaveGame%(File$)
 	WriteFloat(f, me\HealTimer)
 	
 	WriteByte(f, me\Crouch)
-	
-	WriteByte(f, I_005\ChanceToSpawn)
-	
-	WriteByte(f, I_500\Taken)
 	
 	WriteFloat(f, me\Stamina)
 	WriteFloat(f, me\StaminaEffect)
@@ -70,16 +66,21 @@ Function SaveGame%(File$)
 	
 	WriteString(f, msg\DeathMsg)
 	
-	For i = 0 To 7
-		WriteFloat(f, I_1025\State[i])
-	Next
-	
 	WriteByte(f, me\Funds)
 	WriteByte(f, me\UsedMastercard)
 	
 	WriteFloat(f, me\VomitTimer)
 	WriteByte(f, me\Vomit)
 	WriteFloat(f, me\CameraShakeTimer)
+	
+	WriteByte(f, I_005\ChanceToSpawn)
+	
+	WriteByte(f, I_500\Taken)
+	
+	For i = 0 To 7
+		WriteFloat(f, I_1025\State[i])
+	Next
+	
 	WriteFloat(f, I_008\Timer)
 	WriteByte(f, I_008\Revert)
 	WriteFloat(f, I_409\Timer)
@@ -126,6 +127,13 @@ Function SaveGame%(File$)
 		WriteFloat(f, 0.0)
 	EndIf
 	
+	WriteByte(f, I_268\Using)
+	WriteFloat(f, I_268\Timer)
+	WriteByte(f, I_427\Using)
+	WriteFloat(f, I_427\Timer)
+	WriteByte(f, I_714\Using)
+	WriteByte(f, I_294\Using)
+	
 	WriteByte(f, chs\SuperMan)
 	WriteFloat(f, chs\SuperManTimer)
 	
@@ -149,11 +157,6 @@ Function SaveGame%(File$)
 	WriteFloat(f, opt\CameraFogFar)
 	WriteFloat(f, opt\StoredCameraFogFar)
 	
-	WriteByte(f, I_427\Using)
-	WriteFloat(f, I_427\Timer)
-	WriteByte(f, I_714\Using)
-	WriteByte(f, I_294\Using)
-	
 	WriteFloat(f, MTFTimer)
 	
 	WriteFloat(f, Remove714Timer)
@@ -162,9 +165,6 @@ Function SaveGame%(File$)
 	For i = 0 To 1
 		WriteByte(f, mon_I\UpdateCheckpoint[i])
 	Next
-	
-	WriteByte(f, I_268\Using)
-	WriteFloat(f, I_268\Timer)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -525,6 +525,10 @@ Function LoadGame%(File$)
 	
 	me\PlayTime = ReadInt(f)
 	
+	CODE_DR_MAYNARD = Int(ReadString(f))
+	CODE_O5_COUNCIL = Int(ReadString(f))
+	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
+	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
@@ -536,10 +540,6 @@ Function LoadGame%(File$)
 	z = ReadFloat(f)
 	PositionEntity(me\Head, x, y + 0.5, z)
 	ResetEntity(me\Head)
-	
-	CODE_DR_MAYNARD = Int(ReadString(f))
-	CODE_O5_COUNCIL = Int(ReadString(f))
-	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
@@ -556,10 +556,6 @@ Function LoadGame%(File$)
 	
 	me\Crouch = ReadByte(f)
 	
-	I_005\ChanceToSpawn = ReadByte(f)
-	
-	I_500\Taken = ReadByte(f)
-	
 	me\Stamina = ReadFloat(f)
 	me\StaminaEffect = ReadFloat(f)
 	me\StaminaEffectTimer = ReadFloat(f)
@@ -575,16 +571,21 @@ Function LoadGame%(File$)
 	
 	msg\DeathMsg = ReadString(f)
 	
-	For i = 0 To 7
-		I_1025\State[i] = ReadFloat(f)
-	Next
-	
 	me\Funds = ReadByte(f)
 	me\UsedMastercard = ReadByte(f)
 	
 	me\VomitTimer = ReadFloat(f)
 	me\Vomit = ReadByte(f)
 	me\CameraShakeTimer = ReadFloat(f)
+	
+	I_005\ChanceToSpawn = ReadByte(f)
+	
+	I_500\Taken = ReadByte(f)
+	
+	For i = 0 To 7
+		I_1025\State[i] = ReadFloat(f)
+	Next
+	
 	I_008\Timer = ReadFloat(f)
 	I_008\Revert = ReadByte(f)
 	I_409\Timer = ReadFloat(f)
@@ -627,6 +628,13 @@ Function LoadGame%(File$)
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
 	
+	I_268\Using = ReadByte(f)
+	I_268\Timer = ReadFloat(f)
+	I_427\Using = ReadByte(f)
+	I_427\Timer = ReadFloat(f)
+	I_714\Using = ReadByte(f)
+	I_294\Using = ReadByte(f)
+	
 	chs\SuperMan = ReadByte(f)
 	chs\SuperManTimer = ReadFloat(f)
 	
@@ -648,11 +656,6 @@ Function LoadGame%(File$)
 	opt\StoredCameraFogFar = ReadFloat(f)
 	If opt\CameraFogFar = 0.0 Then opt\CameraFogFar = 6.0
 	
-	I_427\Using = ReadByte(f)
-	I_427\Timer = ReadFloat(f)
-	I_714\Using = ReadByte(f)
-	I_294\Using = ReadByte(f)
-	
 	MTFTimer = ReadFloat(f)
 	
 	Remove714Timer = ReadFloat(f)
@@ -661,9 +664,6 @@ Function LoadGame%(File$)
 	For i = 0 To 1
 		mon_I\UpdateCheckpoint[i] = ReadByte(f)
 	Next
-	
-	I_268\Using = ReadByte(f)
-	I_268\Timer = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -1326,14 +1326,14 @@ Function LoadGameQuick%(File$)
 	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 	
 	GameSaved = True
-	me\Zombie = False
-	me\Deaf = False
-	me\DeafTimer = 0.0
-	me\Playable = True
 	msg\Txt = ""
 	msg\Timer = 0.0
 	msg\HintTxt = ""
 	msg\HintTimer = 0.0
+	me\Zombie = False
+	me\Deaf = False
+	me\DeafTimer = 0.0
+	me\Playable = True
 	me\SelectedEnding = -1
 	
 	StrTemp = ReadString(f)
@@ -1365,6 +1365,10 @@ Function LoadGameQuick%(File$)
 	WireFrameState = 0
 	WireFrame(0)
 	
+	CODE_DR_MAYNARD = Int(ReadString(f))
+	CODE_O5_COUNCIL = Int(ReadString(f))
+	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
+	
 	ResetEntity(me\Collider)
 	HideEntity(me\Collider)
 	
@@ -1381,10 +1385,6 @@ Function LoadGameQuick%(File$)
 	PositionEntity(me\Head, x, y + 0.5, z)
 	ResetEntity(me\Head)
 	
-	CODE_DR_MAYNARD = Int(ReadString(f))
-	CODE_O5_COUNCIL = Int(ReadString(f))
-	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
-	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	RotateEntity(me\Collider, x, y, 0.0)
@@ -1399,10 +1399,6 @@ Function LoadGameQuick%(File$)
 	me\HealTimer = ReadFloat(f)
 	
 	me\Crouch = ReadByte(f)
-	
-	I_005\ChanceToSpawn = ReadByte(f)
-	
-	I_500\Taken = ReadByte(f)
 	
 	me\Stamina = ReadFloat(f)
 	me\StaminaEffect = ReadFloat(f)
@@ -1419,16 +1415,21 @@ Function LoadGameQuick%(File$)
 	
 	msg\DeathMsg = ReadString(f)
 	
-	For i = 0 To 7
-		I_1025\State[i] = ReadFloat(f)
-	Next
-	
 	me\Funds = ReadByte(f)
 	me\UsedMastercard = ReadByte(f)
 	
 	me\VomitTimer = ReadFloat(f)
 	me\Vomit = ReadByte(f)
 	me\CameraShakeTimer = ReadFloat(f)
+	
+	I_005\ChanceToSpawn = ReadByte(f)
+	
+	I_500\Taken = ReadByte(f)
+	
+	For i = 0 To 7
+		I_1025\State[i] = ReadFloat(f)
+	Next
+	
 	I_008\Timer = ReadFloat(f)
 	I_008\Revert = ReadByte(f)
 	I_409\Timer = ReadFloat(f)
@@ -1471,6 +1472,13 @@ Function LoadGameQuick%(File$)
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
 	
+	I_268\Using = ReadByte(f)
+	I_268\Timer = ReadFloat(f)
+	I_427\Using = ReadByte(f)
+	I_427\Timer = ReadFloat(f)
+	I_714\Using = ReadByte(f)
+	I_294\Using = ReadByte(f)
+	
 	chs\SuperMan = ReadByte(f)
 	chs\SuperManTimer = ReadFloat(f)
 	
@@ -1492,11 +1500,6 @@ Function LoadGameQuick%(File$)
 	opt\StoredCameraFogFar = ReadFloat(f)
 	If opt\CameraFogFar = 0.0 Then opt\CameraFogFar = 6.0
 	
-	I_427\Using = ReadByte(f)
-	I_427\Timer = ReadFloat(f)
-	I_714\Using = ReadByte(f)
-	I_294\Using = ReadByte(f)
-	
 	MTFTimer = ReadFloat(f)
 	
 	Remove714Timer = ReadFloat(f)
@@ -1505,9 +1508,6 @@ Function LoadGameQuick%(File$)
 	For i = 0 To 1
 		mon_I\UpdateCheckpoint[i] = ReadByte(f)
 	Next
-	
-	I_268\Using = ReadByte(f)
-	I_268\Timer = ReadFloat(f)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
