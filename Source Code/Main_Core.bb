@@ -784,7 +784,7 @@ Function UpdateConsole%()
 					
 					I_008\Timer = Float(StrTemp)
 					
-					CreateConsoleMsg(Format(GetLocalString("console", "infect"), StrTemp))
+					CreateConsoleMsg(Format(GetLocalString("console", "008"), StrTemp))
 					;[End Block]
 				Case "crystal"
 					;[Block]
@@ -792,7 +792,7 @@ Function UpdateConsole%()
 					
 					I_409\Timer = Float(StrTemp)
 					
-					CreateConsoleMsg(Format(GetLocalString("console", "crystal"), StrTemp))
+					CreateConsoleMsg(Format(GetLocalString("console", "409"), StrTemp))
 					;[End Block]
 				Case "heal"
 					;[Block]
