@@ -5611,6 +5611,14 @@ Function UpdateEvents%()
 							e\EventStr = "Load0"
 						EndIf
 						
+						If e\room\NPC[0] = Null
+							e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\Objects[7], True), 0.1, EntityZ(e\room\Objects[7], True))
+							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
+							ChangeNPCTextureID(e\room\NPC[0], NPC_CLERK_VICTIM_205_TEXTURE)
+							SetNPCFrame(e\room\NPC[0], 40.0)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 180.0, 0.0)
+						EndIf
+						
 						If e\room\RoomDoors[1]\Open Lor e\room\RoomDoors[2]\Open
 							GiveAchievement(Achv205)
 							e\EventState = 1.0

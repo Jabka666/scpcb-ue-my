@@ -470,8 +470,9 @@ Const NPC_CLASS_D_VICTIM_035_TEXTURE% = 12
 Const NPC_CLASS_D_VICTIM_409_TEXTURE% = 13
 Const NPC_CLASS_D_VICTIM_939_1_TEXTURE% = 14
 Const NPC_CLASS_D_VICTIM_939_2_TEXTURE% = 15
+Const NPC_CLERK_VICTIM_205_TEXTURE% = 16
 
-Const NPC_096_BLOODY_TEXTURE% = 16
+Const NPC_096_BLOODY_TEXTURE% = 17
 ;[End Block]
 
 Function LoadNPCs%()
@@ -556,6 +557,7 @@ Function LoadNPCs%()
 	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_409_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_409_victim.png", 1, DeleteAllTextures)
 	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_939_1_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_939_victim.png", 1, DeleteAllTextures)
 	n_I\NPCTextureID[NPC_CLASS_D_VICTIM_939_2_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_939_victim(2).png", 1, DeleteAllTextures)
+	n_I\NPCTextureID[NPC_CLERK_VICTIM_205_TEXTURE] = LoadTexture_Strict("GFX\NPCs\clerk2.png", 1, DeleteAllTextures)
 	
 	n_I\NPCTextureID[NPC_096_BLOODY_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_096_bloody.png", 1, DeleteAllTextures)
 	

@@ -4291,6 +4291,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x - 1400.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
+			r\Objects[7] = CreatePivot()
+			PositionEntity(r\Objects[7], r\x - 1055.0 * RoomScale, r\y, r\z + 650.0 * RoomScale)
+			EntityParent(r\Objects[7], r\OBJ)
+			
 			it.Items = CreateItem("Document SCP-205", "paper", r\x - 357.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4300,7 +4304,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("ReVision Eyedrops", "eyedrops", r\x + 206.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 180.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 3 Key Card", "key3", r\x - 975.0 * RoomScale, r\y - 5.0 * RoomScale, r\z + 650.0 * RoomScale)
+			it.Items = CreateItem("Level 3 Key Card", "key3", r\x - 975.0 * RoomScale, r\y - 10.0 * RoomScale, r\z + 650.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r\x + 188.0 * RoomScale, r\z - 724.0 * RoomScale, r)
