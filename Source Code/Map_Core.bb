@@ -3191,11 +3191,9 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	sc\BaseOBJ = CopyEntity(sc_I\CamModelID[CAM_BASE_MODEL])
 	ScaleEntity(sc\BaseOBJ, 0.0015, 0.0015, 0.0015)
 	PositionEntity(sc\BaseOBJ, x1, y1, z1)
-	EntityParent(sc\BaseOBJ, r\OBJ)
 	
 	sc\CameraOBJ = CopyEntity(sc_I\CamModelID[CAM_HEAD_MODEL])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
-	PositionEntity(sc\CameraOBJ, x1, y1, z1)
 	
 	sc\room = r
 	
@@ -3214,7 +3212,6 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		EntityTexture(sc\ScrOBJ, sc_I\ScreenTexs[sc\ScrTexture])
 		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
-		EntityParent(sc\ScrOBJ, r\OBJ)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
 		ScaleSprite(sc\ScrOverlay, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
@@ -3234,6 +3231,10 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		HideEntity(sc\Cam)
 	EndIf
 	
+	If r <> Null
+		EntityParent(sc\BaseOBJ, r\OBJ)
+		If Screen Then EntityParent(sc\ScrOBJ, r\OBJ)
+	EndIf
 	Return(sc)
 End Function
 
