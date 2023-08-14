@@ -2160,7 +2160,7 @@ Function InitNewGame%()
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
-		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
+		FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints
@@ -2242,7 +2242,7 @@ Function InitLoadGame%()
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
-		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
+		FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints

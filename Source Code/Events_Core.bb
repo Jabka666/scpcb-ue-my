@@ -1336,7 +1336,7 @@ Function UpdateEvents%()
 											PointEntity(e\room\NPC[3]\OBJ, me\Collider)
 											RotateEntity(e\room\NPC[3]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[3]\OBJ), EntityYaw(e\room\NPC[3]\Collider), 20.0), 0.0, True)
 											
-											If e\room\NPC[3]\PathStatus = 2
+											If e\room\NPC[3]\PathStatus = PATH_STATUS_NOT_FOUND
 												e\room\NPC[3]\PathStatus = FindPath(e\room\NPC[3], e\room\x - 320.0 * RoomScale, e\room\y + 0.3, e\room\z - 704.0 * RoomScale)
 												e\room\NPC[4]\PathStatus = FindPath(e\room\NPC[4], e\room\x - 320.0 * RoomScale, e\room\y + 0.3, e\room\z - 704.0 * RoomScale)
 												e\room\NPC[3]\State = 3.0
@@ -1350,7 +1350,7 @@ Function UpdateEvents%()
 										RotateEntity(e\room\NPC[3]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[3]\OBJ), EntityYaw(e\room\NPC[3]\Collider), 20.0), 0.0, True)
 										
 										If Dist > 30.25
-											e\room\NPC[3]\PathStatus = 2
+											e\room\NPC[3]\PathStatus = PATH_STATUS_NOT_FOUND
 											If e\room\NPC[3]\State2 = 0.0
 												For i = 3 To 4
 													StopChannel(e\room\NPC[i]\SoundCHN) : e\room\NPC[i]\SoundCHN = 0
@@ -2836,9 +2836,15 @@ Function UpdateEvents%()
 									If n\NPCType = NPCTypeMTF And e\room\NPC[1] = Null
 										If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) <= 5.0 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) <= 5.0 And (e\room\Angle Mod 180 = 0.0)
 											If EntityDistanceSquared(n\Collider, e\room\OBJ) < PowTwo(500.0 * RoomScale)
-												n\Idle = 70.0 * 10.0
 												LoadNPCSound(n, "SFX\Character\MTF\Tesla0.ogg")
 												PlayMTFSound(n\Sound, n)
+												
+												n\PrevState = 1
+												n\PathTimer = 0.0
+												n\PathStatus = PATH_STATUS_NO_SEARCH
+												n\Idle = 70.0 * 10.0
+												
+												n\State = MTF_DISABLING_TESLA
 												e\room\NPC[1] = n
 											EndIf
 										EndIf
@@ -4628,7 +4634,7 @@ Function UpdateEvents%()
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 64.0
 							If n_I\Curr049 <> Null
 								If n_I\Curr049\State = 2.0 And EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) > 256.0
-									n_I\Curr049\PathStatus = 0 : n_I\Curr049\State = 4.0 : n_I\Curr049\State2 = 0.0 : n_I\Curr049\State3 = 0.0
+									n_I\Curr049\PathStatus = PATH_STATUS_NO_SEARCH : n_I\Curr049\State = 4.0 : n_I\Curr049\State2 = 0.0 : n_I\Curr049\State3 = 0.0
 									TFormPoint(368.0, 528.0, 176.0, e\room\OBJ, 0)
 									TeleportEntity(n_I\Curr049\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr049\CollRadius, True)
 									RemoveEvent(e)
@@ -5299,18 +5305,18 @@ Function UpdateEvents%()
 								Next
 								
 								n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = 6.0 : n\Reload = 70.0 * 6.0
+								n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0
 								PointEntity(n\Collider, me\Collider)
 								e\room\NPC[1] = n
 								
 								n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = 6.0 : n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
+								n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
 								RotateEntity(n\Collider, 0.0, EntityYaw(e\room\NPC[1]\Collider), 0.0)
 								MoveEntity(n\Collider, 0.5, 0.0, 0.0)
 								PointEntity(n\Collider, me\Collider)
 								
 								n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = 6.0 : n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
+								n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
 								RotateEntity(n\Collider, 0.0, EntityYaw(e\room\NPC[1]\Collider), 0.0)
 								n\State2 = EntityYaw(n\Collider)
 								MoveEntity(n\Collider, -0.65, 0.0, 0.0)
@@ -6291,7 +6297,7 @@ Function UpdateEvents%()
 							RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
 							If EntityHidden(n_I\Curr106\OBJ) Then ShowEntity(n_I\Curr106\OBJ)
 						ElseIf e\EventState > 180.0 And e\EventState < 300.0
-							n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0 : n_I\Curr106\PathTimer = 70.0 * 10.0 : n_I\Curr106\PathStatus = 0 : n_I\Curr106\PathLocation = 0
+							n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0 : n_I\Curr106\PathTimer = 70.0 * 10.0 : n_I\Curr106\PathStatus = PATH_STATUS_NO_SEARCH : n_I\Curr106\PathLocation = 0
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
 							ResetEntity(n_I\Curr106\Collider)
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
@@ -7485,7 +7491,7 @@ Function UpdateEvents%()
 								If EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) < PowTwo(HideDistance * 2.0) And EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) > PowTwo(HideDistance)
 									e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(r\OBJ), EntityY(r\OBJ), EntityZ(r\OBJ))
 									e\room\NPC[0]\PathTimer = 0.0
-									If e\room\NPC[0]\PathStatus = 1 Then e\EventState2 = 6.0
+									If e\room\NPC[0]\PathStatus = PATH_STATUS_FOUND Then e\EventState2 = 6.0
 									Exit
 								EndIf
 							EndIf
@@ -9075,7 +9081,7 @@ Function UpdateEndings%()
 										e\room\NPC[5] = n
 										
 										For i = 4 To 5
-											e\room\NPC[i]\State = 10.0
+											e\room\NPC[i]\State = MTF_FOLLOW_AT_GATES
 										Next
 										
 										e\EventState = 70.0 * 85.0
@@ -9229,8 +9235,7 @@ Function UpdateEndings%()
 						
 						For i = 5 To 8
 							e\room\NPC[i] = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[i + ((i < 7) * 2)], True) + ((i > 6) * 0.8), EntityY(e\room\Objects[i + ((i < 7) * 2)], True), EntityZ(e\room\Objects[i + ((i < 7) * 2)], True) + ((i > 6) * 0.8))
-							e\room\NPC[i]\State = 5.0
-							e\room\NPC[i]\PrevState = 1
+							e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next
 						
@@ -9348,10 +9353,10 @@ Function UpdateEndings%()
 											Next
 											
 											For i = 5 To 8
-												If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) < 25.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-													e\room\NPC[i]\State = 6.0
+												If NPCSeesPlayer(e\room\NPC[i]) = 1
+													e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
 												Else
-													e\room\NPC[i]\State = 5.0
+													e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 													e\room\NPC[i]\EnemyX = EntityX(n_I\Curr106\OBJ, True)
 													e\room\NPC[i]\EnemyY = EntityY(n_I\Curr106\OBJ, True) + 0.4
 													e\room\NPC[i]\EnemyZ = EntityZ(n_I\Curr106\OBJ, True)
@@ -9381,7 +9386,7 @@ Function UpdateEndings%()
 									If Dist < 225.0
 										If (Not e\SoundCHN2) Then e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Franklin.ogg"), True)
 										If Dist < 0.16
-											n_I\Curr106\PathStatus = 0
+											n_I\Curr106\PathStatus = PATH_STATUS_NO_SEARCH
 											n_I\Curr106\PathTimer = 70.0 * 200.0
 											If n_I\Curr106\State3 = 0.0
 												SetNPCFrame(n_I\Curr106, 259.0)
@@ -9406,8 +9411,8 @@ Function UpdateEndings%()
 												n_I\Curr106\State = 100000.0
 												e\EventState2 = 0.0
 												For i = 5 To 7 Step 2
-													e\room\NPC[i]\State = 10.0 : e\room\NPC[i]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.2)
-													e\room\NPC[i + 1]\State = 10.0 : e\room\NPC[i + 1]\Speed = e\room\NPC[i + 1]\Speed * Rnd(1.0, 1.2)
+													e\room\NPC[i]\State = MTF_FOLLOW_AT_GATES : e\room\NPC[i]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.2)
+													e\room\NPC[i + 1]\State = MTF_FOLLOW_AT_GATES : e\room\NPC[i + 1]\Speed = e\room\NPC[i + 1]\Speed * Rnd(1.0, 1.2)
 												Next
 												For i = 2 To 4 ; ~ Helicopters attack the player
 													e\room\NPC[i]\State = 2.0
@@ -9470,7 +9475,7 @@ Function UpdateEndings%()
 												ResetEntity(e\room\NPC[i]\Collider)
 												
 												e\room\NPC[i]\PathStatus = FindPath(e\room\NPC[i], EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-												e\room\NPC[i]\State = 3.0 : e\room\NPC[i]\PathTimer = 70.0 * 2.0 : e\room\NPC[i]\LastSeen = 70.0 * 100.0
+												e\room\NPC[i]\State = MTF_FOLLOW_PATH : e\room\NPC[i]\PathTimer = 70.0 * 2.0 : e\room\NPC[i]\LastSeen = 70.0 * 100.0
 											Next
 											e\room\NPC[5]\Sound = LoadSound_Strict("SFX\Character\MTF\ThereHeIs1.ogg")
 											PlaySound2(e\room\NPC[5]\Sound, Camera, e\room\NPC[5]\Collider, 25.0, 1.0, True)
@@ -9487,9 +9492,9 @@ Function UpdateEndings%()
 								ElseIf e\EventState3 = 1.0
 									For i = 5 To 8
 										If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) > 16.0
-											e\room\NPC[i]\State = 3.0
+											e\room\NPC[i]\State = MTF_FOLLOW_PATH
 										Else
-											e\room\NPC[i]\State = 1.0
+											e\room\NPC[i]\State = MTF_SEARCHING_PLAYER
 										EndIf
 									Next
 									
@@ -9600,30 +9605,30 @@ Function UpdateEndings%()
 									
 									For i = 5 To 7 Step 2
 										k = (i Mod 2)
-										e\room\NPC[i]\State = 3.0 : e\room\NPC[i]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i]\LastSeen = 70.0 * 300.0
+										e\room\NPC[i]\State = MTF_FOLLOW_PATH : e\room\NPC[i]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i]\LastSeen = 70.0 * 300.0
 										e\room\NPC[i]\PathStatus = FindPath(e\room\NPC[i], EntityX(e\room\OBJ) - 1.0 + 2.0 * k, EntityY(me\Collider) + 0.2, EntityZ(e\room\OBJ) - 2.0 * k)
 										
 										k = ((i + 1) Mod 2)
-										e\room\NPC[i + 1]\State = 3.0 : e\room\NPC[i + 1]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i + 1]\LastSeen = 70.0 * 300.0
+										e\room\NPC[i + 1]\State = MTF_FOLLOW_PATH : e\room\NPC[i + 1]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i + 1]\LastSeen = 70.0 * 300.0
 										e\room\NPC[i + 1]\PathStatus = FindPath(e\room\NPC[i + 1], EntityX(e\room\OBJ) - 1.0 + 2.0 * k, EntityY(me\Collider) + 0.2, EntityZ(e\room\OBJ) - 2.0 * k)
 									Next
 									e\EventState2 = 1.0
 								Else
 									For i = 5 To 8
-										If e\room\NPC[i]\State = 5.0
+										If e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 											e\room\NPC[i]\EnemyX = EntityX(me\Collider)
 											e\room\NPC[i]\EnemyY = EntityY(me\Collider)
 											e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
 										Else
 											If EntityDistanceSquared(e\room\NPC[5]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[6]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[7]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[8]\Collider, me\Collider) < 36.0
-												e\room\NPC[i]\State = 5.0 : e\room\NPC[i]\CurrSpeed = 0.0
+												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET : e\room\NPC[i]\CurrSpeed = 0.0
 											EndIf
 										EndIf
 									Next
 									
 									If e\EventState2 <= 1.0
 										For i = 5 To 8
-											If e\room\NPC[i]\State = 5.0
+											If e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 												e\room\NPC[i]\PathTimer = 70.0 * Rnd(7.0, 10.0) : e\room\NPC[i]\Reload = 2000.0
 												e\room\NPC[i]\EnemyX = EntityX(me\Collider)
 												e\room\NPC[i]\EnemyY = EntityY(me\Collider)

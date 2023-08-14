@@ -8602,7 +8602,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(p_I)
 	
 	For rt.RoomTemplates = Each RoomTemplates
-		If rt\OBJ <> 0 Then FreeEntity(rt\OBJ) : rt\OBJ = 0
+		FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
 	Delete(misc_I)
@@ -9035,8 +9035,6 @@ Function UpdateMTF%()
 							Else
 								n\MTFLeader = leader
 							EndIf
-							
-							n\PrevX = i
 						Next
 					EndIf
 				EndIf

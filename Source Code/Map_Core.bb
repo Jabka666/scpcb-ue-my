@@ -6884,7 +6884,7 @@ Function FillRoom%(r.Rooms)
 			For r2.Rooms = Each Rooms
 				If r2 <> r
 					If r2\RoomTemplate\Name = "room2_3_ez"
-						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
 						Exit
 					EndIf
 				EndIf
@@ -7267,7 +7267,7 @@ Function FillRoom%(r.Rooms)
 			For r2.Rooms = Each Rooms
 				If r2 <> r
 					If r2\RoomTemplate\Name = "room2c_2_ez"
-						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
 						Exit
 					EndIf
 				EndIf
@@ -7377,7 +7377,7 @@ Function FillRoom%(r.Rooms)
 			For r2.Rooms = Each Rooms
 				If r2 <> r
 					If r2\RoomTemplate\Name = "room3_ez"
-						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
 						Exit
 					EndIf
 				EndIf
