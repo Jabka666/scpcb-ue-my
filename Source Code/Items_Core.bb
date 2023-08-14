@@ -2035,6 +2035,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
+					Remove = True
 					it2.Items = CreateItem("Book", "book", x, y, z)
 					;[End Block]
 				Case FINE

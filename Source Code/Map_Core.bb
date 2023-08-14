@@ -586,6 +586,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 						ts\x = Temp1
 						ts\y = Temp2
 						ts\z = Temp3
+						If Right(Temp2s, 3) = ".sc" Temp2s = Left(Temp2s, Len(Temp2s) - 2) + "png"
 						ts\ImgPath = Temp2s
 						ts\RoomTemplate = rt
 					EndIf
