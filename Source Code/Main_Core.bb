@@ -2937,7 +2937,7 @@ Function UpdateMoving%()
 		
 		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
 		
-		If me\Bloodloss > 60.0
+		If me\Bloodloss > 60.0 And (Not chs\NoClip)
 			If (Not me\Crouch) Then SetCrouch(True)
 		EndIf
 		If me\Bloodloss >= 100.0
