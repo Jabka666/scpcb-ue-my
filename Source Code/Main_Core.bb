@@ -2607,6 +2607,12 @@ Function UpdateCough%(Chance_%)
 	EndIf
 End Function
 
+Function MakeMeUnplayable%()
+	me\Playable = False
+	InvOpen = False
+	SelectedItem = Null
+End Function
+
 Function UpdateMoving%()
 	CatchErrors("UpdateMoving()")
 	
@@ -9173,8 +9179,7 @@ Function UpdateVomit%()
 		If me\VomitTimer > -5.0
 			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0
 			mo\Mouse_X_Speed_1 = 0.0
-			me\Playable = False
-			SelectedItem = Null
+			MakeMeUnplayable()
 		Else
 			me\Playable = True
 		EndIf
@@ -9460,8 +9465,7 @@ Function Update409%()
 			EndIf
 		ElseIf I_409\Timer > 94.0
 			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
-			me\Playable = False
-			SelectedItem = Null
+			MakeMeUnplayable()
 			me\BlurTimer = 4.0
 			me\CameraShake = 3.0
 		EndIf

@@ -985,7 +985,7 @@ Function UpdateEvents%()
 									PlaySound_Strict(IntroSFX[Rand(8, 10)])
 									me\BlurTimer = 1000.0
 									me\LightFlash = 1.0
-									me\Playable = False
+									MakeMeUnplayable()
 									
 									CreateConsoleMsg("")
 									CreateConsoleMsg(GetLocalString("misc", "warning"), 255, 0, 0)
@@ -6527,8 +6527,7 @@ Function UpdateEvents%()
 					If Dist < 0.25
 						If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 						
-						me\Playable = False
-						SelectedItem = Null
+						MakeMeUnplayable()
 						
 						x = CurveValue(EntityX(e\room\OBJ), EntityX(me\Collider), 10.0)
 						y = CurveValue(EntityY(e\room\OBJ) - e\EventState2, EntityY(me\Collider), 25.0)
@@ -7906,8 +7905,7 @@ Function UpdateEvents%()
 								If Dist < 0.16
 									If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 									
-									me\Playable = False
-									SelectedItem = Null
+									MakeMeUnplayable()
 									
 									x = CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityX(me\Collider), 10.0)
 									y = CurveValue(EntityY(e\room\RoomDoors[0]\FrameOBJ) - e\EventState2, EntityY(me\Collider), 25.0)
@@ -9110,7 +9108,7 @@ Function UpdateEndings%()
 												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 											Next
 											ShouldPlay = 0
-											me\Playable = False
+											MakeMeUnplayable()
 											e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\THEREHEIS.ogg"), True)
 										EndIf
 										
@@ -9639,8 +9637,7 @@ Function UpdateEndings%()
 											e\EventState2 = 2.0
 										EndIf
 									ElseIf e\EventState2 = 2.0
-										me\Playable = False
-										SelectedItem = Null
+										MakeMeUnplayable()
 										me\SelectedEnding = Ending_A2
 										
 										e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\STOPRIGHTTHERE.ogg"), True)
