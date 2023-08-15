@@ -1331,7 +1331,7 @@ Function UpdateEvents%()
 								
 								If e\room\NPC[3]\State <> 11.0
 									If Dist < PowTwo(Min(Max(4.0 - e\room\NPC[3]\State3 * 0.05, 1.5), 4.0))
-										If e\room\NPC[3]\PathStatus <> 1
+										If e\room\NPC[3]\PathStatus <> PATH_STATUS_FOUND
 											e\room\NPC[3]\State = 7.0
 											PointEntity(e\room\NPC[3]\OBJ, me\Collider)
 											RotateEntity(e\room\NPC[3]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[3]\OBJ), EntityYaw(e\room\NPC[3]\Collider), 20.0), 0.0, True)
@@ -7391,13 +7391,13 @@ Function UpdateEvents%()
 						
 						e\EventState2 = 1.0
 					ElseIf e\EventState2 = 1.0
-						If e\room\NPC[0]\PathStatus <> 1
+						If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
 							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
 						Else
 							e\EventState2 = 2.0
 						EndIf
 					ElseIf e\EventState2 = 2.0
-						If e\room\NPC[0]\PathStatus <> 1
+						If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
 							e\room\NPC[0]\State3 = 1.0
 							e\room\NPC[0]\PathTimer = 0.0
 							e\EventState2 = 3.0
@@ -7421,7 +7421,7 @@ Function UpdateEvents%()
 						
 						If NPCSeesPlayer(e\room\NPC[0], True) = 2 Then e\EventState2 = 4.0
 						
-						If e\room\NPC[0]\PathStatus <> 1
+						If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
 							If e\room\NPC[0]\PathTimer = 0.0
 								If e\room\NPC[0]\PrevState = 1
 									If (Not e\room\NPC[0]\SoundCHN2)
@@ -7502,7 +7502,7 @@ Function UpdateEvents%()
 						Else
 							; ~ Still playing the Music for SCP-049 (in the real, SCP-049's State will be set to 2, causing it to stop playing the chasing track)
 							If PlayerRoom = e\room Then ShouldPlay = 19
-							If e\room\NPC[0]\PathStatus <> 1
+							If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
 								e\room\NPC[0]\Idle = 70.0 * 60.0 ; ~ Making SCP-049 idle for one minute (twice as fast for AggressiveNPCs = True)
 								PositionEntity(e\room\NPC[0]\Collider, 0.0, 500.0, 0.0)
 								ResetEntity(e\room\NPC[0]\Collider)
@@ -8979,8 +8979,8 @@ Function UpdateEndings%()
 								If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
 								PlayAnnouncement("SFX\Ending\GateB\682Battle.ogg")
 							EndIf
-						Else
 							ShouldPlay = 6
+						Else
 							e\EventState = e\EventState + fps\Factor[0]
 							
 							If e\EventState < 70.0 * 40.0
@@ -9051,8 +9051,6 @@ Function UpdateEndings%()
 								EndIf
 							Else
 								If me\SelectedEnding = -1
-									ShouldPlay = 66
-									
 									If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 									If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
 									
@@ -9065,10 +9063,10 @@ Function UpdateEndings%()
 									Next
 									
 									If Temp = 1.0 ; ~ Explode
+										ShouldPlay = 66
 										me\SelectedEnding = Ending_B2
 										me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
 									Else
-										me\Playable = False
 										SelectedItem = Null
 										
 										me\SelectedEnding = Ending_B1
@@ -9081,13 +9079,18 @@ Function UpdateEndings%()
 										e\room\NPC[5] = n
 										
 										For i = 4 To 5
-											e\room\NPC[i]\State = MTF_FOLLOW_AT_GATES
+											e\room\NPC[i]\EnemyX = EntityX(me\Collider)
+											e\room\NPC[i]\EnemyY = EntityY(me\Collider)
+											e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+											e\room\NPC[i]\State = MTF_FOLLOW_PATH
 										Next
 										
 										e\EventState = 70.0 * 85.0
 									EndIf
 								Else
 									If me\SelectedEnding = Ending_B1
+										e\room\RoomDoors[4]\Open = True : e\room\RoomDoors[4]\Locked = 0
+										
 										e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[6], True) + Sin(MilliSecs() / 25.0) * 3.0
 										e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 85.0) + 9.0
 										e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 25.0) * 3.0
@@ -9096,14 +9099,23 @@ Function UpdateEndings%()
 										e\room\NPC[2]\EnemyY = EntityY(e\room\Objects[6], True) + Cos(MilliSecs() / 83.0) + 5.0
 										e\room\NPC[2]\EnemyZ = EntityZ(e\room\Objects[6], True) + Cos(MilliSecs() / 23.0) * 3.0
 										
-										e\room\RoomDoors[4]\Open = True : e\room\RoomDoors[4]\Locked = 0
+										For i = 4 To 5
+											e\room\NPC[i]\EnemyX = EntityX(me\Collider)
+											e\room\NPC[i]\EnemyY = EntityY(me\Collider)
+											e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+										Next
 										
-										Temp = (e\room\NPC[4]\State3 = 70.0 * 4.0 Lor e\room\NPC[5]\State3 = 70.0 * 4.0)
-										
-										If e\EventState > 70.0 * 92.0 And Temp
-											ClearCheats()
-											
+										If (e\room\NPC[4]\State = MTF_FOLLOW_PATH And NPCSeesPlayer(e\room\NPC[4]) = 1) Lor (e\room\NPC[5]\State = MTF_FOLLOW_PATH And NPCSeesPlayer(e\room\NPC[5]) = 1)
+											For i = 4 To 5
+												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
+											Next
 											ShouldPlay = 0
+											me\Playable = False
+											e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\THEREHEIS.ogg"), True)
+										EndIf
+										
+										If e\room\NPC[4]\State = MTF_LOOKING_AT_SOME_TARGET And (Not ChannelPlaying(e\SoundCHN))
+											ClearCheats()
 											
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Gunshot.ogg"))
 											
@@ -9235,8 +9247,10 @@ Function UpdateEndings%()
 						
 						For i = 5 To 8
 							e\room\NPC[i] = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[i + ((i < 7) * 2)], True) + ((i > 6) * 0.8), EntityY(e\room\Objects[i + ((i < 7) * 2)], True), EntityZ(e\room\Objects[i + ((i < 7) * 2)], True) + ((i > 6) * 0.8))
+							e\room\NPC[i]\EnemyX = EntityX(e\room\OBJ, True)
+							e\room\NPC[i]\EnemyY = EntityY(e\room\OBJ, True)
+							e\room\NPC[i]\EnemyZ = EntityZ(e\room\OBJ, True)
 							e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
-							PointEntity(e\room\NPC[i]\Collider, e\room\Objects[3])
 						Next
 						
 						If n_I\Curr106\Contained
@@ -9333,7 +9347,7 @@ Function UpdateEndings%()
 									n_I\Curr106\PathTimer = 70.0 * 100.0
 									
 									If n_I\Curr106\State3 = 0.0
-										If n_I\Curr106\PathStatus <> 1
+										If n_I\Curr106\PathStatus <> PATH_STATUS_FOUND
 											PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[3], True), EntityY(n_I\Curr106\Collider), EntityZ(e\room\Objects[3], True), True)
 											If n_I\Curr106\State <= -10.0
 												Dist = EntityY(n_I\Curr106\Collider)
@@ -9346,20 +9360,20 @@ Function UpdateEndings%()
 										Else
 											n_I\Curr106\PathTimer = 70.0 * 200.0
 											For i = 2 To 4 ; ~ Helicopters start attacking SCP-106
-												e\room\NPC[i]\State = 3.0 
 												e\room\NPC[i]\EnemyX = EntityX(n_I\Curr106\OBJ, True)
 												e\room\NPC[i]\EnemyY = EntityY(n_I\Curr106\OBJ, True) + 5.0
 												e\room\NPC[i]\EnemyZ = EntityZ(n_I\Curr106\OBJ, True)
+												e\room\NPC[i]\State = 3.0
 											Next
 											
 											For i = 5 To 8
 												If NPCSeesPlayer(e\room\NPC[i]) = 1
 													e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
 												Else
-													e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 													e\room\NPC[i]\EnemyX = EntityX(n_I\Curr106\OBJ, True)
 													e\room\NPC[i]\EnemyY = EntityY(n_I\Curr106\OBJ, True) + 0.4
 													e\room\NPC[i]\EnemyZ = EntityZ(n_I\Curr106\OBJ, True)
+													e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 												EndIf
 											Next
 											
@@ -9410,12 +9424,15 @@ Function UpdateEndings%()
 											If n_I\Curr106\State3 > 700.0
 												n_I\Curr106\State = 100000.0
 												e\EventState2 = 0.0
-												For i = 5 To 7 Step 2
-													e\room\NPC[i]\State = MTF_FOLLOW_AT_GATES : e\room\NPC[i]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.2)
-													e\room\NPC[i + 1]\State = MTF_FOLLOW_AT_GATES : e\room\NPC[i + 1]\Speed = e\room\NPC[i + 1]\Speed * Rnd(1.0, 1.2)
-												Next
 												For i = 2 To 4 ; ~ Helicopters attack the player
 													e\room\NPC[i]\State = 2.0
+												Next
+												For i = 5 To 7 Step 2 ; ~ MTFs attack the player
+													e\room\NPC[i]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.3)
+													e\room\NPC[i + 1]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.3)
+													
+													e\room\NPC[i]\State = MTF_SEARCHING_PLAYER
+													e\room\NPC[i + 1]\State = MTF_SEARCHING_PLAYER
 												Next
 												If (Not EntityHidden(n_I\Curr106\OBJ)) Then HideEntity(n_I\Curr106\OBJ)
 											EndIf
@@ -9474,8 +9491,11 @@ Function UpdateEndings%()
 												PositionEntity(e\room\NPC[i]\Collider, EntityX(e\room\Objects[15], True) + (i - 6) * 0.3, EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True) + (i - 6) * 0.3, True)
 												ResetEntity(e\room\NPC[i]\Collider)
 												
-												e\room\NPC[i]\PathStatus = FindPath(e\room\NPC[i], EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-												e\room\NPC[i]\State = MTF_FOLLOW_PATH : e\room\NPC[i]\PathTimer = 70.0 * 2.0 : e\room\NPC[i]\LastSeen = 70.0 * 100.0
+												e\room\NPC[i]\EnemyX = EntityX(me\Collider)
+												e\room\NPC[i]\EnemyY = EntityY(me\Collider)
+												e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+												e\room\NPC[i]\PathTimer = 0.0
+												e\room\NPC[i]\State = MTF_FOLLOW_PATH
 											Next
 											e\room\NPC[5]\Sound = LoadSound_Strict("SFX\Character\MTF\ThereHeIs1.ogg")
 											PlaySound2(e\room\NPC[5]\Sound, Camera, e\room\NPC[5]\Collider, 25.0, 1.0, True)
@@ -9500,6 +9520,9 @@ Function UpdateEndings%()
 									
 									If Abs(EntityY(me\Collider) - EntityY(e\room\Objects[11], True)) < 1.0
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[11], True), EntityZ(me\Collider), EntityZ(e\room\Objects[11], True)) < 49.0
+											For i = 5 To 8
+												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
+											Next
 											e\room\Objects[12] = LoadAnimMesh_Strict("GFX\NPCs\CI.b3d")
 											
 											Local Temp2# = 0.55 / MeshWidth(e\room\Objects[12])
@@ -9556,14 +9579,6 @@ Function UpdateEndings%()
 										me\CameraShake = SinValue * 3.0
 										TurnEntity(e\room\Objects[13], 0.0, (SinValue * (-0.85)) * fps\Factor[0], 0.0, True)
 										TurnEntity(e\room\Objects[14], 0.0, (SinValue * 0.85) * fps\Factor[0], 0.0, True)
-										
-										For i = 5 To 7 Step 2
-											PositionEntity(e\room\NPC[i]\Collider, CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[i]\Collider, True), 50.0), EntityY(e\room\NPC[i]\Collider, True), CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), EntityZ(e\room\NPC[i]\Collider, True), 50.0), True)
-											ResetEntity(e\room\NPC[i]\Collider)
-											
-											PositionEntity(e\room\NPC[i + 1]\Collider, CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[i + 1]\Collider, True), 50.0), EntityY(e\room\NPC[i + 1]\Collider, True), CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), EntityZ(e\room\NPC[i + 1]\Collider, True), 50.0), True)
-											ResetEntity(e\room\NPC[i + 1]\Collider)
-										Next
 									EndIf
 									
 									If e\EventState3 >= 230.0
@@ -9603,50 +9618,34 @@ Function UpdateEndings%()
 										e\room\NPC[i]\State = 0.0
 									Next
 									
-									For i = 5 To 7 Step 2
-										k = (i Mod 2)
-										e\room\NPC[i]\State = MTF_FOLLOW_PATH : e\room\NPC[i]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i]\LastSeen = 70.0 * 300.0
-										e\room\NPC[i]\PathStatus = FindPath(e\room\NPC[i], EntityX(e\room\OBJ) - 1.0 + 2.0 * k, EntityY(me\Collider) + 0.2, EntityZ(e\room\OBJ) - 2.0 * k)
-										
-										k = ((i + 1) Mod 2)
-										e\room\NPC[i + 1]\State = MTF_FOLLOW_PATH : e\room\NPC[i + 1]\PathTimer = 70.0 * Rnd(15.0, 20.0) : e\room\NPC[i + 1]\LastSeen = 70.0 * 300.0
-										e\room\NPC[i + 1]\PathStatus = FindPath(e\room\NPC[i + 1], EntityX(e\room\OBJ) - 1.0 + 2.0 * k, EntityY(me\Collider) + 0.2, EntityZ(e\room\OBJ) - 2.0 * k)
+									For i = 5 To 8
+										e\room\NPC[i]\EnemyX = EntityX(me\Collider)
+										e\room\NPC[i]\EnemyY = EntityY(me\Collider)
+										e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+										e\room\NPC[i]\State = MTF_FOLLOW_PATH
 									Next
 									e\EventState2 = 1.0
 								Else
 									For i = 5 To 8
-										If e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
-											e\room\NPC[i]\EnemyX = EntityX(me\Collider)
-											e\room\NPC[i]\EnemyY = EntityY(me\Collider)
-											e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
-										Else
-											If EntityDistanceSquared(e\room\NPC[5]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[6]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[7]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[8]\Collider, me\Collider) < 36.0
-												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET : e\room\NPC[i]\CurrSpeed = 0.0
-											EndIf
-										EndIf
+										e\room\NPC[i]\EnemyX = EntityX(me\Collider)
+										e\room\NPC[i]\EnemyY = EntityY(me\Collider)
+										e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
 									Next
-									
-									If e\EventState2 <= 1.0
-										For i = 5 To 8
-											If e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
-												e\room\NPC[i]\PathTimer = 70.0 * Rnd(7.0, 10.0) : e\room\NPC[i]\Reload = 2000.0
-												e\room\NPC[i]\EnemyX = EntityX(me\Collider)
-												e\room\NPC[i]\EnemyY = EntityY(me\Collider)
-												e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
-												
-												me\Playable = False
-												SelectedItem = Null
-												me\SelectedEnding = Ending_A2
-												
-												If e\EventState2 = 1.0
-													e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\STOPRIGHTTHERE.ogg"), True)
-													e\EventState2 = 2.0
-												EndIf
-											Else
-												e\room\NPC[i]\LastSeen = 70.0 * 300.0 : e\room\NPC[i]\Reload = 2000.0 : e\room\NPC[i]\State3 = 70.0 * 145.0
-											EndIf
-										Next
-									Else
+									If e\EventState2 = 1.0
+										If EntityDistanceSquared(e\room\NPC[5]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[6]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[7]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[8]\Collider, me\Collider) < 36.0
+											For i = 5 To 8
+												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
+											Next
+											e\EventState2 = 2.0
+										EndIf
+									ElseIf e\EventState2 = 2.0
+										me\Playable = False
+										SelectedItem = Null
+										me\SelectedEnding = Ending_A2
+										
+										e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\STOPRIGHTTHERE.ogg"), True)
+										e\EventState2 = 3.0
+									ElseIf e\EventState2 = 3.0
 										ShouldPlay = 0
 										me\CurrSpeed = 0.0
 										If (Not ChannelPlaying(e\SoundCHN))

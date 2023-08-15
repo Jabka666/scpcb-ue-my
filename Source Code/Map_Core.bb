@@ -462,7 +462,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			EndIf
 		EndIf
 		
-		;Surf = CreateSurface(ChildMesh) ; ~ Check if this don't needed anymore
+		Surf = CreateSurface(ChildMesh) ; ~ Check if this don't needed anymore
 		
 		If IsAlpha > 0 Then PaintSurface(Surf, Brush)
 		
@@ -511,7 +511,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			AddMesh(FlipChild, ChildMesh)
 			FreeEntity(FlipChild) : FlipChild = 0
 		EndIf
-		HideEntity(ChildMesh)
 	Next
 	
 	Local HiddenMesh%
@@ -3969,7 +3968,6 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ The big door leading to testing area
 			r\RoomDoors.Doors[0] = CreateDoor(r\x + 4000.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 1726.0 * RoomScale, 90.0, r, True, BIG_DOOR)
-			r\RoomDoors[0]\MTFClose = False
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[0]\Buttons[i]) : r\RoomDoors[0]\Buttons[i] = 0
 			Next
