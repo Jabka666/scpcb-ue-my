@@ -2038,7 +2038,7 @@ Function UpdateNPCs%()
 										EndIf
 									EndIf
 								EndIf
-								n\PathTimer = 70.0 * 10.0 ; ~ Search again after 10 seconds
+								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 							Else
 								If n\PathStatus = PATH_STATUS_FOUND
 									If n\Path[n\PathLocation] = Null
@@ -2065,19 +2065,22 @@ Function UpdateNPCs%()
 									EndIf
 								Else
 									n\CurrSpeed = 0.0
-									If n\Frame > 713.9
-										AnimateNPC(n, 795.0, 813.0, 0.7, False)
-										If n\Frame > 812.9 Then SetNPCFrame(n, 557.0)
-									Else
-										AnimateNPC(n, 557.0, 704.0, 0.1)
-									EndIf
 								EndIf
 								n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
+							EndIf
+							If n\CurrSpeed = 0.0
+								If n\Frame > 713.9
+									AnimateNPC(n, 795.0, 813.0, 0.7, False)
+									If n\Frame > 812.9 Then SetNPCFrame(n, 557.0)
+								Else
+									AnimateNPC(n, 557.0, 704.0, 0.1)
+								EndIf
 							EndIf
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
 							If (Not me\Terminated)
+								n\CurrSpeed = 0.0
 								PointEntity(n\Collider, me\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								If n\Frame <= 813.0
