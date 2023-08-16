@@ -2129,6 +2129,7 @@ Function UpdateGame%()
 			UpdateZoneColor()
 			UpdateDeaf()
 			UpdateEmitters()
+			UpdateDecals()
 			If RN = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 			UpdateMouseLook()
 			UpdateMoving()
@@ -2136,6 +2137,7 @@ Function UpdateGame%()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			InFacility = CheckForPlayerInFacility()
+			DecalStep = 0
 			If RN = "dimension_1499"
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
 				UpdateLeave1499()
@@ -2155,7 +2157,6 @@ Function UpdateGame%()
 				TimeCheckpointMonitors()
 				UpdateMonitorSaving()
 			EndIf
-			UpdateDecals()
 			UpdateMTF()
 			UpdateNPCs()
 			UpdateItems()

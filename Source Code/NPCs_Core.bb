@@ -4936,7 +4936,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									z = EntityZ(n_I\Curr173\Collider)
 								EndIf
 							EndIf
-							If n\PathX = 0 Then n\PathStatus = FindPath(n, x, y, z) ; ~ We're going to this room for no particular reason
+							If n\PathX = 0.0 Then n\PathStatus = FindPath(n, x, y, z) ; ~ We're going to this room for no particular reason
 						EndIf
 						If n\PathStatus = PATH_STATUS_FOUND
 							While n\Path[n\PathLocation] = Null
@@ -5212,37 +5212,32 @@ Function UpdateMTFUnit%(n.NPCs)
 					If NPCSeesPlayer(n) = 1
 						; ~ If close enough, start shooting at the player
 						If Dist < 25.0
-							Local Angle# = VectorYaw(EntityX(me\Collider) - EntityX(n\Collider), 0.0, EntityZ(me\Collider) - EntityZ(n\Collider))
-							
-							RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 10.0), 0.0, True)
-							n\Angle = EntityYaw(n\Collider)
+							PointEntity(n\Collider, me\Collider)
+							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							
 							If n\Reload <= 0.0 And (Not me\Terminated)
-								Angle = WrapAngle(Angle - EntityYaw(n\Collider))
-								If Angle < 5.0 Lor Angle > 355.0
-									Local PrevTerminated# = me\Terminated
-									
-									PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
-									
-									Pvt = CreatePivot()
-									
-									RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
-									PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-									MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
-									
-									SqrValue = Sqr(Dist)
-									
-									Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
-									n\Reload = 7.0
-									
-									FreeEntity(Pvt) : Pvt = 0
-									
-									msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
-									
-									If (Not PrevTerminated) And me\Terminated
-										msg\DeathMsg = Format(GetLocalString("death", "ntf.terminated"), SubjectName)
-										PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetTerminated" + Rand(4) + ".ogg"), n)
-									EndIf
+								Local PrevTerminated# = me\Terminated
+								
+								PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+								
+								Pvt = CreatePivot()
+								
+								RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
+								PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
+								MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
+								
+								SqrValue = Sqr(Dist)
+								
+								Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
+								n\Reload = 7.0
+								
+								FreeEntity(Pvt) : Pvt = 0
+								
+								msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
+								
+								If (Not PrevTerminated) And me\Terminated
+									msg\DeathMsg = Format(GetLocalString("death", "ntf.terminated"), SubjectName)
+									PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetTerminated" + Rand(4) + ".ogg"), n)
 								EndIf
 							EndIf
 							
@@ -5286,9 +5281,9 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
-							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-							RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 						EndIf
+						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
+						RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 					Else
 						n\LastSeen = n\LastSeen - fps\Factor[0]
 						
@@ -5613,7 +5608,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					PointEntity(n\Collider, me\Collider)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					AnimateNPC(n, 346.0, 351.0, 0.2)
-					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
 					RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 					
 					If n\Reload <= 0.0 And (Not me\Terminated)
@@ -6003,7 +5998,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								
 								n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
 							EndIf
-							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
 							RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 							
 							If n\Reload <= 0.0 And (Not n\Target\IsDead)
@@ -6019,6 +6014,8 @@ Function UpdateMTFUnit%(n.NPCs)
 								p.Particles = CreateParticle(PARTICLE_FLASH, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), Rnd(0.08, 0.1), 0.0, 5.0)
 								p\AlphaChange = -0.15
 								TurnEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
+								
+								FreeEntity(Pvt) : Pvt = 0
 								
 								If n\Target\HP > 0
 									n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0.0)
@@ -6038,8 +6035,6 @@ Function UpdateMTFUnit%(n.NPCs)
 									Return
 								EndIf
 								n\Reload = 7.0
-								
-								FreeEntity(Pvt) : Pvt = 0
 							EndIf
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 						Else

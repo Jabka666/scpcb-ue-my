@@ -3141,7 +3141,6 @@ Function UpdateDecals%()
 			Local Dist# = DistanceSquared(EntityX(me\Collider), EntityX(de\OBJ, True), EntityZ(me\Collider), EntityZ(de\OBJ, True))
 			Local ActualSize# = PowTwo(de\Size * 0.8)
 			
-			DecalStep = 0
 			If (Dist < ActualSize) And (Int(EntityPitch(de\OBJ, True)) = 90.0) And (Abs((EntityY(me\Collider) - 0.3) - EntityY(de\OBJ, True)) < 0.05)
 				Select de\ID
 					Case 0
