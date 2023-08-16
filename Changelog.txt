@@ -45,6 +45,7 @@ Items:
 NPCs:
 - Add SCP-173-J as a skin for SCP-173 during April Fools day.
 - Can no longer use SCP-268 against SCP-096.
+- Improved SCP-049-2 and MTF's AI.
 
 Bug Fixes:
 - Fixed SCP-939's texture which is too bright.
@@ -65,6 +66,7 @@ Bug Fixes:
 - Fixed enhanced SCP-714 death message.
 - Fixed SCP-012 event activating while terminated from above.
 - Fixed achievement spam in Pocket Dimension.
+- Fixed the most problems in MTF's AI.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.
