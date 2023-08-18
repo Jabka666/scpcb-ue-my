@@ -244,19 +244,19 @@ Function RenderRoomLights%(Cam%)
 												If (Not EntityHidden(r\LightSprites2[i])) Then HideEntity(r\LightSprites2[i])
 											EndIf
 										Else
-											; ~ The additional sprites option is disable, hide the sprites
+											; ~ The additional sprites option is disabled, hide the sprites
 											If (Not EntityHidden(r\LightSprites2[i])) Then HideEntity(r\LightSprites2[i])
 										EndIf
 									Else
-										; ~ Hide the sprites, because they aren't visible
+										; ~ Hide the sprites because they aren't visible
 										If (Not EntityHidden(r\LightSprites[i]))
 											HideEntity(r\LightSprites[i])
 											If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
 										EndIf
 									EndIf
 								Else
-									; ~ Hide the sprites, because they are too far
-									If (Not EntityHidden(r\Lights[i]))
+									; ~ Hide the sprites and light emitter because they are too far
+									If (Not EntityHidden(r\Lights[i])) Lor (Not EntityHidden(r\LightSprites[i]))
 										HideEntity(r\Lights[i])
 										HideEntity(r\LightSprites[i])
 										If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
@@ -269,7 +269,12 @@ Function RenderRoomLights%(Cam%)
 						EndIf
 					EndIf
 				Else
-					Return ; ~ The lights were turned off
+					; ~ The lights were turned off
+					If (Not EntityHidden(r\Lights[i])) Lor (Not EntityHidden(r\LightSprites[i]))
+						HideEntity(r\Lights[i])
+						HideEntity(r\LightSprites[i])
+						If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
+					EndIf
 				EndIf
 			Else
 				Exit
@@ -4758,6 +4763,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(r\RoomDoors[0]\OBJ2) : r\RoomDoors[0]\OBJ2 = 0
 			
 			r\RoomDoors.Doors[1] = CreateDoor(r\x - 760.0 * RoomScale, r\y, r\z, 270.0, r)
+			r\RoomDoors[1]\MTFClose = False
 			FreeEntity(r\RoomDoors[1]\Buttons[0]) : r\RoomDoors[1]\Buttons[0] = 0
 			
 			r\RoomDoors.Doors[2] = CreateDoor(r\x - 264.0 * RoomScale, r\y, r\z, 270.0, r)
@@ -4765,6 +4771,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[3] = CreateDoor(r\x + 264.0 * RoomScale, r\y, r\z, 270.0, r)
 			
 			r\RoomDoors.Doors[4] = CreateDoor(r\x + 760.0 * RoomScale, r\y, r\z, 90.0, r)
+			r\RoomDoors[4]\MTFClose = False
 			FreeEntity(r\RoomDoors[4]\Buttons[0]) : r\RoomDoors[4]\Buttons[0] = 0
 			
 			r\RoomDoors.Doors[5] = CreateDoor(r\x + 1288.0 * RoomScale, r\y, r\z, 90.0, r)
@@ -4863,6 +4870,7 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, r, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			r\RoomDoors.Doors[0] = CreateDoor(r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 320.0 * RoomScale, 0.0, r)
+			r\RoomDoors[0]\MTFClose = False
 			PositionEntity(r\RoomDoors[0]\Buttons[0], r\x + 176.0 * RoomScale, r\y - 562.0 * RoomScale, r\z - 354.0 * RoomScale, True)
 			FreeEntity(r\RoomDoors[0]\Buttons[1]) : r\RoomDoors[0]\Buttons[1] = 0
 			

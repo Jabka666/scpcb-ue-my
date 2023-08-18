@@ -2452,7 +2452,7 @@ Function Kill%(IsBloody% = False)
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
 		EndIf
 		
-		me\KillAnim = Rand(0, 1)
+		me\KillAnim = Rand(0, 1) : me\ForceMove = 0.0
 		PlaySound_Strict(DamageSFX[0])
 		If SelectedDifficulty\SaveType => SAVE_ON_QUIT
 			DeleteGame(CurrSave)
@@ -2550,6 +2550,7 @@ Function ResetNegativeStats%(Revive% = False)
 			chs\GodMode = True
 		EndIf
 		If n_I\Curr049 <> Null
+			n_I\Curr049\State = 1.0 ; ~ Reset SCP-049
 			If EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) < 4.0
 				CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-049"))
 				chs\GodMode = True
@@ -2709,7 +2710,7 @@ Function UpdateMoving%()
 	
 	If (Not (d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using))
 		If (Not chs\NoClip)
-			If (me\Playable And (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT))) Lor me\ForceMove > 0.0
+			If (me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated) And ((KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT)))) Lor me\ForceMove > 0.0
 				If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0 And (Not me\Zombie)
 					me\Stamina = me\Stamina - (fps\Factor[0] * 0.4 * me\StaminaEffect)
 					If me\Stamina <= 0.0 Then me\Stamina = -20.0
@@ -2735,7 +2736,7 @@ Function UpdateMoving%()
 				Temp = (me\Shake Mod 360.0)
 				
 				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
-				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 And (Not me\Terminated)
+				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0
 					Temp = GetStepSound(me\Collider)
 					If DecalStep = 1
 						Temp = 2
@@ -2775,7 +2776,7 @@ Function UpdateMoving%()
 				Sprint = 0.5
 			EndIf
 		EndIf
-		If KeyHit(key\CROUCH) And me\Playable And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (Not chs\NoClip) And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then SetCrouch((Not me\Crouch))
+		If KeyHit(key\CROUCH) And me\Playable And (Not me\Zombie) And me\FallTimer >= 0.0 And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (Not chs\NoClip) And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then SetCrouch((Not me\Crouch))
 		
 		Local Temp2# = (Speed * Sprint) / (1.0 + me\CrouchState)
 		
@@ -2799,7 +2800,7 @@ Function UpdateMoving%()
 			Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
 			If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0)
 			Temp = False
-			If (Not me\Zombie)
+			If (Not me\Zombie) And me\FallTimer >= 0.0
 				If KeyDown(key\MOVEMENT_DOWN) And me\Playable
 					If (Not KeyDown(key\MOVEMENT_UP))
 						Temp = True
@@ -5791,7 +5792,7 @@ Function UpdateGUI%()
 End Function
 
 Function RenderHUD%()
-	If me\Terminated Lor (Not me\Playable) Then Return
+	If me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Then Return
 	
 	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
 	Local i%

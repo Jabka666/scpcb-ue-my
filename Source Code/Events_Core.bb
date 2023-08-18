@@ -4468,8 +4468,8 @@ Function UpdateEvents%()
 					EndIf
 					
 					If e\room\Objects[3] <> 0
-						If me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0
-							PointEntity(e\room\Objects[3], Camera)
+						If me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0
+							PointEntity(e\room\Objects[3], me\Collider)
 							RotateEntity(e\room\Objects[3], 0.0, EntityYaw(e\room\Objects[3], True), 0.0, True)
 						EndIf
 						If e\EventState2 = 0.0
@@ -5270,82 +5270,54 @@ Function UpdateEvents%()
 								Next
 								e\EventState = 70.0 * 241.0
 							EndIf
-						EndIf
-					EndIf
-				EndIf
-				
-				If e\EventState < 0.0
-					If e\EventState > (-70.0) * 4.0
-						If me\FallTimer >= 0.0
-							ShowEntity(me\Head)
-							PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
-							ResetEntity(me\Head)
-							RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
-							me\FallTimer = Min(-1.0, me\FallTimer)
-						ElseIf me\FallTimer < -230.0
-							me\BlinkTimer = 0.0 : me\FallTimer = -231.0
-							
-							e\EventState = e\EventState - fps\Factor[0]
-							
-							If e\EventState <= (-70.0) * 4.0
-								UpdateRoomLightsTimer = 0.0
-								HideEntity(me\Head)
-								ShowEntity(me\Collider)
-								me\DropSpeed = 0.0
-								me\BlinkTimer = -10.0
-								me\FallTimer = 0.0
-								PositionEntity(me\Collider, EntityX(e\room\OBJ, True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\OBJ, True))
-								ResetEntity(me\Collider)
-								
-								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
-								ResetEntity(e\room\NPC[0]\Collider)
-								
-								For n.NPCs = Each NPCs
-									If n\NPCType = NPCType049_2 Then RemoveNPC(n)
-								Next
-								
-								n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0
-								PointEntity(n\Collider, me\Collider)
-								e\room\NPC[1] = n
-								
-								n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
-								RotateEntity(n\Collider, 0.0, EntityYaw(e\room\NPC[1]\Collider), 0.0)
-								MoveEntity(n\Collider, 0.5, 0.0, 0.0)
-								PointEntity(n\Collider, me\Collider)
-								
-								n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
-								n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0 + Rnd(15.0, 30.0)
-								RotateEntity(n\Collider, 0.0, EntityYaw(e\room\NPC[1]\Collider), 0.0)
-								n\State2 = EntityYaw(n\Collider)
-								MoveEntity(n\Collider, -0.65, 0.0, 0.0)
-								
-								MoveEntity(e\room\NPC[1]\Collider, 0.0, 0.0, 0.1)
-								PointEntity(me\Collider, e\room\NPC[1]\Collider)
-								
-								PlaySound_Strict(LoadTempSound("SFX\Character\MTF\049_2\Spotted.ogg"), True)
-								
-								LoadEventSound(e, "SFX\SCP\049_2\Breath.ogg")
-								
-								me\Zombie = True
-							EndIf
-						EndIf
-					Else
-						me\BlurTimer = 800.0 : me\ForceMove = 0.5 : me\Injuries = Max(2.0, me\Injuries) : me\Bloodloss = 0.0
-						I_008\Timer = 0.0 : I_409\Timer = 0.0
-						
-						Pvt = CreatePivot()
-						PositionEntity(Pvt, EntityX(e\room\NPC[1]\Collider), EntityY(e\room\NPC[1]\Collider) + 0.2, EntityZ(e\room\NPC[1]\Collider))
-						PointEntity(me\Collider, e\room\NPC[1]\Collider)
-						PointEntity(Camera, Pvt, EntityRoll(Camera))
-						FreeEntity(Pvt) : Pvt = 0
-						
-						If me\Terminated
-							PlaySound_Strict(LoadTempSound("SFX\Character\MTF\049_2\TargetTerminated.ogg"), True)
-							RemoveEvent(e)
 						Else
-							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound, True)
+							If e\EventState > (-70.0) * 4.0
+								If me\FallTimer < -230.0
+									me\BlinkTimer = 0.0 : me\FallTimer = -231.0
+									
+									e\EventState = e\EventState - fps\Factor[0]
+									
+									If e\EventState <= (-70.0) * 4.0
+										HideEntity(me\Head)
+										ShowEntity(me\Collider)
+										me\DropSpeed = 0.0 : me\BlinkTimer = -10.0 : I_008\Timer = 0.0 : I_409\Timer = 0.0 : me\FallTimer = 0.0
+										
+										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
+										ResetEntity(e\room\NPC[0]\Collider)
+										
+										For n.NPCs = Each NPCs
+											If n\NPCType = NPCType049_2 Then n\IsDead = True
+										Next
+										
+										n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
+										n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0
+										e\room\NPC[1] = n
+										
+										PositionEntity(me\Collider, EntityX(e\room\OBJ, True), e\room\y - (3440.0 * RoomScale) + 0.2, EntityZ(e\room\OBJ, True))
+										ResetEntity(me\Collider)
+										PointEntity(me\Collider, e\room\NPC[1]\Collider)
+										
+										PlaySound_Strict(LoadTempSound("SFX\Character\MTF\049_2\Spotted.ogg"), True)
+										
+										LoadEventSound(e, "SFX\SCP\049_2\Breath.ogg")
+										
+										me\Zombie = True
+									EndIf
+								EndIf
+							Else
+								me\BlurTimer = 800.0 : me\ForceMove = 0.5 : me\Injuries = Max(2.0, me\Injuries) : me\Bloodloss = 0.0
+								Pvt = CreatePivot()
+								PositionEntity(Pvt, EntityX(e\room\NPC[1]\Collider), EntityY(e\room\NPC[1]\Collider) + 0.2, EntityZ(e\room\NPC[1]\Collider))
+								PointEntity(me\Collider, Pvt)
+								PointEntity(Camera, Pvt, EntityRoll(Camera))
+								FreeEntity(Pvt) : Pvt = 0
+								
+								If me\Terminated
+									RemoveEvent(e)
+								Else
+									If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound, True)
+								EndIf
+							EndIf
 						EndIf
 					EndIf
 				EndIf
@@ -6224,7 +6196,6 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					If n_I\Curr173\Idle > 1
 						RemoveEvent(e)
-						Exit
 					Else
 						If e\EventState = 0.0
 							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 12.25
@@ -6395,7 +6366,7 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-4496.0) * RoomScale
 						GiveAchievement(Achv008)
 						If e\EventState = 0.0
-							If n_I\Curr173\Idle < 2 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > PowTwo(HideDistance) ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
+							If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > PowTwo(HideDistance) ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
 								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), True)
 								ResetEntity(n_I\Curr173\Collider)
 							EndIf
