@@ -1562,7 +1562,11 @@ Function UpdateNPCs%()
 									For j = 0 To MaxRoomAdjacents - 1
 										If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
 											If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
-												TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+												If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
+													TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), 0.5, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
+												Else
+													TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+												EndIf
 												Exit
 											EndIf
 										EndIf
