@@ -1537,8 +1537,13 @@ Function UpdateNPCs%()
 					Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
 					RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
 				ElseIf I_268\InvisibilityOn ; ~ Kill the player anyway even using SCP-268
-					msg\DeathMsg = GetLocalString("death", "049")
-					Kill()
+					If I_714\Using = 0 And wi\HazmatSuit = 0
+						msg\DeathMsg = GetLocalString("death", "049")
+						Kill()
+					Else
+						Remove714Timer = Min(Remove714Timer + fps\Factor[0], 499.9)
+						RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 499.9)
+					EndIf
 				EndIf
 				If Dist < 16.0
 					If EntityInView(n\Collider, Camera) Then GiveAchievement(Achv049)
@@ -1549,8 +1554,8 @@ Function UpdateNPCs%()
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
 					n\DropSpeed = 0.0
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+					StopChannel(n\SoundCHN) : n\SoundCHN = 0
+					StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 					ResetEntity(n\Collider)
 				Else
@@ -4777,8 +4782,8 @@ Function UpdateMTFUnit%(n.NPCs)
 	If n\IsDead
 		n\BlinkTimer = -1.0
 		SetNPCFrame(n, 532.0)
-		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0 ; ~ Breath channel
+		StopChannel(n\SoundCHN) : n\SoundCHN = 0
+		StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0 ; ~ Breath channel
 		Return
 	Else
 		n\MaxGravity = 0.03

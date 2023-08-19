@@ -5800,84 +5800,10 @@ Function RenderHUD%()
 	Width = 200 * MenuScale
 	Height = 20 * MenuScale
 	x = 80 * MenuScale
-	y = opt\GraphicHeight - (95 * MenuScale)
+	y = opt\GraphicHeight - (15 * MenuScale)
 	
 	Color(255, 255, 255)
-	If (I_714\Using > 0 And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0) And (I_268\Timer =< 0.0 Lor I_268\Using < 2)
-		If wi\HazmatSuit = 4
-			Color(0, 200, 0)
-			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-		ElseIf I_714\Using = 1
-			Color(200, 0, 0)
-			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-		EndIf
-		Color(255, 255, 255)
-		Rect(x - (51 * MenuScale), y - (41 * MenuScale), 32 * MenuScale, 32 * MenuScale, False)
-		
-		If wi\HazmatSuit > 0
-			If RemoveHazmatTimer < 125.0
-				RenderBar(t\ImageID[1], x, y - (40 * MenuScale), Width, Height, RemoveHazmatTimer, 500.0, 100, 0, 0)
-			Else
-				RenderBar(BlinkMeterIMG, x, y - (40 * MenuScale), Width, Height, RemoveHazmatTimer, 500.0)
-			EndIf
-		Else
-			If Remove714Timer < 125.0
-				RenderBar(t\ImageID[1], x, y - (40 * MenuScale), Width, Height, Remove714Timer, 500.0, 100, 0, 0)
-			Else
-				RenderBar(BlinkMeterIMG, x, y - (40 * MenuScale), Width, Height, Remove714Timer, 500.0)
-			EndIf
-		EndIf
-		DrawBlock(t\IconID[7], x - (50 * MenuScale), y - (40 * MenuScale))
-	ElseIf I_268\Using > 1
-		If I_268\Timer =< 0.0
-			Color(150, 150, 0)
-			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-		ElseIf I_714\Using > 0
-			Color(200, 0, 0)
-			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-		ElseIf I_268\Using = 3
-			Color(0, 200, 0)
-			Rect(x - (53 * MenuScale), y - (43 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-		EndIf
-		Color(255, 255, 255)
-		Rect(x - (51 * MenuScale), y - (41 * MenuScale), 32 * MenuScale, 32 * MenuScale, False)
-		If I_268\Timer < 150.0
-			RenderBar(t\ImageID[1], x, y - (40 * MenuScale), Width, Height, I_268\Timer, 600.0, 100, 0, 0)
-		Else
-			RenderBar(BlinkMeterIMG, x, y - (40 * MenuScale), Width, Height, I_268\Timer, 600.0)
-		EndIf
-		DrawBlock(t\IconID[8], x - (50 * MenuScale), y - (40 * MenuScale))
-	EndIf
-	
-	Color(255, 255, 255)
-	If me\BlinkTimer < 150.0
-		RenderBar(t\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
-	Else
-		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
-	EndIf
-	Color(0, 0, 0)
-	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
-	
-	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink > 0.0 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0)
-		Color(200, 0, 0)
-		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink
-		Color(0, 200, 0)
-		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
-	EndIf
-	
-	Color(255, 255, 255)
-	Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
-	
-	If me\BlinkTimer < 0.0
-		BlinkIconID = 4
-	Else
-		BlinkIconID = 3
-	EndIf
-	DrawBlock(t\IconID[BlinkIconID], x - (50 * MenuScale), y)
-	
-	y = opt\GraphicHeight - (55 * MenuScale)
-	
+	y = y - (40 * MenuScale)
 	If me\Stamina <= 25.0
 		RenderBar(t\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
 	Else
@@ -5885,7 +5811,6 @@ Function RenderHUD%()
 	EndIf
 	Color(0, 0, 0)
 	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
-	
 	If (PlayerRoom\RoomTemplate\Name = "dimension_106" And (EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0
 		Color(200, 0, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
@@ -5893,7 +5818,6 @@ Function RenderHUD%()
 		Color(0, 200, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	EndIf
-	
 	Color(255, 255, 255)
 	Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
 	If me\Crouch
@@ -5904,6 +5828,81 @@ Function RenderHUD%()
 		WalkIconID = 0
 	EndIf
 	DrawBlock(t\IconID[WalkIconID], x - (50 * MenuScale), y)
+	
+	Color(255, 255, 255)
+	y = y - (40 * MenuScale)
+	If me\BlinkTimer < 150.0
+		RenderBar(t\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
+	Else
+		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
+	EndIf
+	Color(0, 0, 0)
+	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
+	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink > 0.0 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0)
+		Color(200, 0, 0)
+		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink
+		Color(0, 200, 0)
+		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+	EndIf
+	Color(255, 255, 255)
+	Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
+	If me\BlinkTimer < 0.0
+		BlinkIconID = 4
+	Else
+		BlinkIconID = 3
+	EndIf
+	DrawBlock(t\IconID[BlinkIconID], x - (50 * MenuScale), y)
+	
+	If (I_714\Using > 0 And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0) And (I_268\Timer =< 0.0 Lor I_268\Using < 2)
+		Color(255, 255, 255)
+		y = y - (40 * MenuScale)
+		If wi\HazmatSuit > 0
+			If RemoveHazmatTimer < 125.0
+				RenderBar(t\ImageID[1], x, y, Width, Height, RemoveHazmatTimer, 500.0, 100, 0, 0)
+			Else
+				RenderBar(BlinkMeterIMG, x, y, Width, Height, RemoveHazmatTimer, 500.0)
+			EndIf
+		Else
+			If Remove714Timer < 125.0
+				RenderBar(t\ImageID[1], x, y, Width, Height, Remove714Timer, 500.0, 100, 0, 0)
+			Else
+				RenderBar(BlinkMeterIMG, x, y, Width, Height, Remove714Timer, 500.0)
+			EndIf
+		EndIf
+		If wi\HazmatSuit = 4
+			Color(0, 200, 0)
+			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		ElseIf I_714\Using = 1
+			Color(200, 0, 0)
+			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		EndIf
+		Color(255, 255, 255)
+		Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
+		DrawBlock(t\IconID[7], x - (50 * MenuScale), y)
+	EndIf
+	If I_268\Using > 1
+		Color(255, 255, 255)
+		y = y - (40 * MenuScale)
+		Color(255, 255, 255)
+		Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
+		If I_268\Timer < 150.0
+			RenderBar(t\ImageID[1], x, y, Width, Height, I_268\Timer, 600.0, 100, 0, 0)
+		Else
+			RenderBar(BlinkMeterIMG, x, y, Width, Height, I_268\Timer, 600.0)
+		EndIf
+		If I_268\Timer =< 0.0
+			Color(150, 150, 0)
+			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		ElseIf I_714\Using > 0
+			Color(200, 0, 0)
+			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		ElseIf I_268\Using = 3
+			Color(0, 200, 0)
+			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		EndIf
+		DrawBlock(t\IconID[8], x - (50 * MenuScale), y)
+	EndIf
 End Function
 
 Function RenderDebugHUD%()
