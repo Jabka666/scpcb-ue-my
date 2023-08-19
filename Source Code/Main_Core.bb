@@ -5884,8 +5884,6 @@ Function RenderHUD%()
 	If I_268\Using > 1
 		Color(255, 255, 255)
 		y = y - (40 * MenuScale)
-		Color(255, 255, 255)
-		Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
 		If I_268\Timer < 150.0
 			RenderBar(t\ImageID[1], x, y, Width, Height, I_268\Timer, 600.0, 100, 0, 0)
 		Else
@@ -5901,6 +5899,8 @@ Function RenderHUD%()
 			Color(0, 200, 0)
 			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 		EndIf
+		Color(255, 255, 255)
+		Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
 		DrawBlock(t\IconID[8], x - (50 * MenuScale), y)
 	EndIf
 End Function
