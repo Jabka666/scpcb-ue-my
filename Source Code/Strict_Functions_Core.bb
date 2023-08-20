@@ -305,7 +305,6 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 				Else
-					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if Lightmap is existing)
 					Texture = CheckForTexture(t1, 1)
 					If Texture <> 0
 						TextureCoords(Texture, 1)
@@ -314,14 +313,17 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
 					
-					Texture = CheckForTexture(t2, TexAlpha)
-					If Texture <> 0
-						TextureCoords(Texture, 0)
-						BrushTexture(b, Texture, 0, 1)
-					Else
-						BrushTexture(b, MissingTexture, 0, 1)
+					t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if Lightmap is existing)
+					If t2 <> 0
+						Texture = CheckForTexture(t2, TexAlpha)
+						If Texture <> 0
+							TextureCoords(Texture, 0)
+							BrushTexture(b, Texture, 0, 1)
+						Else
+							BrushTexture(b, MissingTexture, 0, 1)
+						EndIf
+						FreeTexture(t2) : t2 = 0
 					EndIf
-					FreeTexture(t2) : t2 = 0
 				EndIf
 				PaintSurface(SF, b)
 				FreeTexture(t1) : t1 = 0
