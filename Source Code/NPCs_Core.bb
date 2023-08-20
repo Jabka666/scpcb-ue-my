@@ -1536,7 +1536,7 @@ Function UpdateNPCs%()
 				If Dist >= 0.25
 					Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
 					RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
-				ElseIf I_268\InvisibilityOn ; ~ Kill the player anyway even using SCP-268
+				ElseIf I_268\InvisibilityOn And EntityVisible(me\Collider, n\Collider) ; ~ Kill the player anyway even using SCP-268
 					If I_714\Using = 0 And wi\HazmatSuit = 0
 						msg\DeathMsg = GetLocalString("death", "049")
 						Kill()
