@@ -923,9 +923,9 @@ Function UpdateNPCs%()
 					Next
 					
 					If (Not Spawn106) And n\State <= 0.0
-						n\State = Rnd(22000.0, 27000.0)
 						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
 						ResetEntity(n\Collider)
+						n\State = Rnd(22000.0, 27000.0)
 					EndIf
 					
 					If n\Idle = 0 And Spawn106
@@ -1052,8 +1052,8 @@ Function UpdateNPCs%()
 													If Dist2 < 0.04 Then n\PathLocation = n\PathLocation + 1
 												EndIf
 											Else
-												If n\State3 = 0.0 Then AnimateNPC(n, 334.0, 494.0, 0.3)
 												n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
+												If n\State3 = 0.0 Then AnimateNPC(n, 334.0, 494.0, 0.3)
 											EndIf
 										EndIf
 									EndIf
@@ -1094,8 +1094,9 @@ Function UpdateNPCs%()
 							
 							If n\State <= Rnd(-3500.0, -3000.0)
 								If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
-									n\State = Rnd(22000.0, 27000.0)
 									PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+									ResetEntity(n\Collider)
+									n\State = Rnd(22000.0, 27000.0)
 								EndIf
 							EndIf
 							
@@ -1265,7 +1266,7 @@ Function UpdateNPCs%()
 							EndIf
 						ElseIf n\State = 2.0
 							AnimateNPC(n, 677.0, 737.0, 0.3, False)
-							If n\Frame >= 737.0 Then n\State = 3.0 : n\State2 = 0.0
+							If n\Frame >= 737.0 Then n\State2 = 0.0 : n\State = 3.0
 						ElseIf n\State = 3.0
 							n\State2 = n\State2 + fps\Factor[0]
 							If n\State2 > 70.0 * 26.0
@@ -1848,7 +1849,7 @@ Function UpdateNPCs%()
 								StopChannel(n\SoundCHN) : n\SoundCHN = 0
 								StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 								If PlayerInReachableRoom(True) And InFacility = 1 ; ~ Player is in a room where SCP-049 can teleport to
-									If Rand(3 - SelectedDifficulty\OtherFactors) = 1
+									If Rand(4 - SelectedDifficulty\OtherFactors) = 1
 										TeleportCloser(n)
 									Else
 										n\Idle = 70.0 * 60.0
@@ -1873,8 +1874,6 @@ Function UpdateNPCs%()
 								
 								n\State3 = 1.0
 							ElseIf Dist > PowTwo(HideDistance * 0.8) And n\State3 > 0.0
-								n\State = 2.0
-								n\State3 = 0.0
 								For r.Rooms = Each Rooms
 									If EntityDistanceSquared(r\OBJ, n\Collider) < 16.0
 										If r\RoomCenter <> 0
@@ -1885,31 +1884,33 @@ Function UpdateNPCs%()
 										Exit
 									EndIf
 								Next
+								n\State3 = 0.0
+								n\State = 2.0
 							EndIf
 							;[End Block]
 						Case 5.0 ; ~ Going to surveillance room
 							;[Block]
 							PlayerSeeAble = NPCSeesPlayer(n, True)
 							If PlayerSeeAble = 1
-								n\State = 2.0
+								PlaySound_Strict(LoadTempSound("SFX\Room\Room2SL049Spawn.ogg"))
 								n\PathStatus = PATH_STATUS_NO_SEARCH
 								n\PathLocation = 0
 								n\PathTimer = 0.0
+								n\PrevState = 0
 								n\State3 = 0.0
 								n\State2 = 70.0 * 2.0
-								n\PrevState = 0
-								PlaySound_Strict(LoadTempSound("SFX\Room\Room2SL049Spawn.ogg"))
+								n\State = 2.0
 							ElseIf PlayerSeeAble = 2 And n\State3 > 0.0
 								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 							Else
 								If n\State3 = 6.0
 									If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(HideDistance)
-										n\State = 2.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\PathLocation = 0
 										n\PathTimer = 0.0
-										n\State3 = 0.0
 										n\PrevState = 0
+										n\State3 = 0.0
+										n\State = 2.0
 									Else
 										If n\PathStatus <> PATH_STATUS_FOUND Then n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 									EndIf
@@ -2252,8 +2253,8 @@ Function UpdateNPCs%()
 					Case 3.0 ; ~ Follows a path
 						;[Block]
 						If n\PathStatus = PATH_STATUS_NOT_FOUND
-							n\State = 0.0
 							n\CurrSpeed = 0.0
+							n\State = 0.0
 						ElseIf n\PathStatus = PATH_STATUS_FOUND
 							If n\Path[n\PathLocation] = Null
 								If n\PathLocation > 19
@@ -2518,7 +2519,7 @@ Function UpdateNPCs%()
 							
 							AnimateNPC(n, 623.0, 642.0, 0.3)
 							
-							If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+							StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 							n\SoundCHN = LoopSound2(VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 13.0, 1.0)
 							
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -2531,7 +2532,7 @@ Function UpdateNPCs%()
 							
 							AnimateNPC(n, 623.0, 642.0, 0.3)
 							
-							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+							StopChannel(n\SoundCHN) : n\SoundCHN = 0
 							n\SoundCHN2 = LoopSound2(VehicleSFX[1], n\SoundCHN2, Camera, n\OBJ2, 13.0, 1.0)
 							
 							n\CurrSpeed = CurveValue(n\Speed * 0.9, n\CurrSpeed, 20.0)
@@ -2895,8 +2896,8 @@ Function UpdateNPCs%()
 									If Abs(EntityY(me\Collider) - EntityY(n\Collider)) < 20.0
 										If Rand(20) = 1
 											If EntityVisible(me\Collider, n\Collider)
-												n\State = 2.0
 												PlaySound2(AlarmSFX[1], Camera, n\Collider, 50.0, 1.0)
+												n\State = 2.0
 											EndIf
 										EndIf
 									EndIf
@@ -3096,8 +3097,8 @@ Function UpdateNPCs%()
 										EndIf
 										n\Frame = 6.0
 									ElseIf n\Frame = 32.0
-										n\State = 1.0
 										n\Frame = 173.0
+										n\State = 1.0
 									EndIf
 								EndIf
 								;[End Block]
@@ -3740,8 +3741,8 @@ Function UpdateNPCs%()
 								
 								n\State2 = n\State2 + fps\Factor[0]
 								If n\State2 > 70.0
-									n\State = 3.0
 									n\State2 = 0.0
+									n\State = 3.0
 								EndIf
 							Else
 								n\CurrSpeed = CurveValue(n\Speed * 1.5, n\CurrSpeed, 10.0)
@@ -3770,8 +3771,8 @@ Function UpdateNPCs%()
 						If n\State2 > 250.0
 							AnimateNPC(n, 684.0, 647.0, (-n\CurrSpeed) * 25.0, False)
 							If n\Frame = 647.0
-								n\State = 0.0
 								n\State2 = 0.0
+								n\State = 0.0
 							EndIf
 						Else
 							AnimateNPC(n, 684.0, 647.0, (-n\CurrSpeed) * 25.0)
@@ -3871,7 +3872,7 @@ Function UpdateNPCs%()
 							n\State3 = Max(n\State3 - fps\Factor[0] * 0.2, 0.0)
 						EndIf
 						
-						If n\State <> 10.0 n\LastSeen = 0
+						If n\State <> 10.0 Then n\LastSeen = 0
 						
 						Select n\State
 							Case 0.0 ; ~ Idles
@@ -4276,9 +4277,6 @@ Function UpdateNPCs%()
 							; ~ Randomly play the "screaming animation" and revert back to State = 0.0
 							If n\Target = Null And n\PrevState = 0
 								If Rand(5000) = 1
-									n\State = 2.0
-									n\State2 = 0.0
-									
 									If (Not ChannelPlaying(n\SoundCHN))
 										Dist = EntityDistanceSquared(n\Collider, me\Collider)
 										If Dist < 400.0
@@ -4286,14 +4284,15 @@ Function UpdateNPCs%()
 											n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
 										EndIf
 									EndIf
+									n\State2 = 0.0
+									n\State = 2.0
 								EndIf
 								
 								If (n\ID Mod 2) = 0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 									If EntityVisible(n\Collider, me\Collider)
 										Dist = EntityDistanceSquared(n\Collider, me\Collider)
 										If Dist < 100.0
-										; ~ Play the "screaming animation"
-											n\State = 2.0
+											; ~ Play the "screaming animation"
 											If Dist < 25.0
 												LoadNPCSound(n, "SFX\SCP\1499\Triggered.ogg")
 												n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
@@ -4312,6 +4311,7 @@ Function UpdateNPCs%()
 												n\State2 = 0.0 ; ~ Otherwise keep idling
 											EndIf
 											SetNPCFrame(n, 203.0)
+											n\State = 2.0
 										EndIf
 									EndIf
 								EndIf
@@ -4323,9 +4323,8 @@ Function UpdateNPCs%()
 											LoadNPCSound(n, "SFX\SCP\1499\Triggered.ogg")
 											n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
 											
-											n\State = 1.0
-											
 											SetNPCFrame(n, 203.0)
+											n\State = 1.0
 										EndIf
 									EndIf
 								EndIf
@@ -4641,8 +4640,8 @@ Function UpdateNPCs%()
 													EndIf
 												EndIf
 											Next
-											n\State = 3.0
 											n\State3 = 0.0
+											n\State = 3.0
 										EndIf
 									EndIf
 								EndIf
@@ -4794,8 +4793,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		If Int(n\State) <> MTF_SEARCHING_PLAYER And Int(n\State) <> MTF_DISABLING_TESLA Then n\PrevState = 0
 		
-		n\SoundCHN2 = LoopSound2(MTFSFX[1], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True)
-		
+		n\SoundCHN2 = LoopSound2(MTFSFX[1], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
 		
 		Local Dist#
 		Local PrevFrame# = n\Frame
@@ -6931,7 +6929,7 @@ Function UpdateNPCNearTesla%()
 						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
 						ResetEntity(n\Collider)
 						
-						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 13.0) : n\State3 = 0.0 : n\TeslaHit = False
+						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 13.0) : n\TeslaHit = False : n\State3 = 0.0
 					EndIf
 				EndIf
 			Else
