@@ -3830,7 +3830,7 @@ Function UpdateEvents%()
 								e\EventState = 0.0
 							EndIf
 						Else
-							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
+							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 						EndIf
 					EndIf
 				EndIf

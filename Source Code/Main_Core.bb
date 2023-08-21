@@ -1206,8 +1206,12 @@ Function UpdateConsole%()
 				Case "camerafog", "cf"
 					;[Block]
 					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					opt\CameraFogNear = Float(Left(Args, Len(Args) - Instr(Args, " ")))
-					opt\CameraFogFar = Float(Right(Args, Len(Args) - Instr(Args, " ")))
+					StrTemp = Piece(Args, 1)
+					StrTemp2 = Piece(Args, 2)
+					
+					opt\CameraFogNear = StrTemp
+					opt\StoredCameraFogFar = opt\CameraFogFar
+					opt\CameraFogFar = StrTemp2
 					CreateConsoleMsg(Format(Format(GetLocalString("console", "fog"), opt\CameraFogNear, "{0}"), opt\CameraFogFar, "{1}"))
 					;[End Block]
 				Case "spawn", "s"
