@@ -1537,13 +1537,80 @@ Function UpdateNPCs%()
 				If Dist >= 0.25
 					Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
 					RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
-				ElseIf I_268\InvisibilityOn And EntityVisible(me\Collider, n\Collider) ; ~ Kill the player anyway even using SCP-268
-					If I_714\Using = 0 And wi\HazmatSuit = 0
-						msg\DeathMsg = GetLocalString("death", "049")
-						Kill()
-					Else
-						Remove714Timer = Min(Remove714Timer + fps\Factor[0], 499.9)
-						RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 499.9)
+				ElseIf EntityVisible(me\Collider, n\Collider)
+					If n\State > 1 and n\State <> 3
+						If wi\HazmatSuit > 0
+							RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
+							If RemoveHazmatTimer < 200.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
+								n\SoundCHN2 = PlaySound2(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
+							ElseIf RemoveHazmatTimer =< 0.0
+								For i = 0 To 2
+									If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
+										me\CameraShake = 2.0
+										If i = 2
+											For i = 0 To MaxItemAmount - 1
+												If Inventory(i) <> Null
+													If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit")
+														CreateMsg(GetLocalString("msg", "suit.destroyed"))
+														wi\HazmatSuit = 0 : RemoveItem(Inventory(i))
+														Exit
+													EndIf
+												EndIf
+											Next
+										EndIf
+									EndIf
+								Next
+							EndIf
+						ElseIf I_714\Using > 0
+							me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
+							If I_268\InvisibilityOn
+								Remove714Timer = Min(Remove714Timer, 499.0)
+							Else
+								Remove714Timer = Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
+								If Remove714Timer < 200.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
+									If I_714\Using = 2 Then n\SoundCHN2 = PlaySound2(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
+								ElseIf Remove714Timer =< 0.0
+									For i = 0 To MaxItemAmount - 1
+										If Inventory(i) <> Null
+											If Inventory(i)\ItemTemplate\TempName = "scp714" Lor Inventory(i)\ItemTemplate\TempName = "coarse714"
+												CreateMsg(GetLocalString("msg", "714.forceremoved"))
+												I_714\Using = 0 : DropItem(Inventory(i))
+												Exit
+											EndIf
+										EndIf
+									Next
+								EndIf
+							EndIf
+						Else
+							me\CurrCameraZoom = 20.0
+							me\BlurTimer = 500.0
+							
+							If (Not chs\GodMode)
+								I_268\Using = 0
+								If PlayerRoom\RoomTemplate\Name = "cont2_049"
+									For e.Events = Each Events
+										If e\EventID = e_cont2_049
+											e\EventState = -1.0
+											Exit
+										EndIf
+									Next
+									If me\FallTimer >= 0.0
+										ShowEntity(me\Head)
+										PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
+										ResetEntity(me\Head)
+										RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
+										me\FallTimer = Min(-1.0, me\FallTimer)
+									EndIf
+								Else
+									msg\DeathMsg = GetLocalString("death", "049")
+									Kill() : me\KillAnim = 0
+								EndIf
+								PlaySound_Strict(HorrorSFX[13])
+								LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(2) + ".ogg", 1)
+								n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
+								n\State = 3.0
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 				If Dist < 16.0
@@ -1618,75 +1685,7 @@ Function UpdateNPCs%()
 									PointEntity(n\Collider, me\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									
-									If Dist < 0.25
-										If wi\HazmatSuit > 0
-											RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
-											If RemoveHazmatTimer < 200.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
-												n\SoundCHN2 = PlaySound2(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
-											ElseIf RemoveHazmatTimer =< 0.0
-												For i = 0 To 2
-													If RemoveHazmatTimer < -(i * 70.0 * (3.0 + (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * 70.0 * (3.0 + (wi\HazmatSuit = 4)))
-														me\CameraShake = 2.0
-														If i = 2
-															For i = 0 To MaxItemAmount - 1
-																If Inventory(i) <> Null
-																	If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit")
-																		wi\HazmatSuit = 0 : RemoveItem(Inventory(i))
-																		CreateMsg(GetLocalString("msg", "suit.destroyed"))
-																		Exit
-																	EndIf
-																EndIf
-															Next
-														EndIf
-													EndIf
-												Next
-											EndIf
-										ElseIf I_714\Using > 0
-											me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
-											Remove714Timer = Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
-											If Remove714Timer < 200.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
-												If I_714\Using = 2 Then n\SoundCHN2 = PlaySound2(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
-											ElseIf Remove714Timer =< 0.0
-												For i = 0 To MaxItemAmount - 1
-													If Inventory(i) <> Null
-														If Inventory(i)\ItemTemplate\TempName = "scp714" Lor Inventory(i)\ItemTemplate\TempName = "coarse714"
-															I_714\Using = 0 : DropItem(Inventory(i))
-															CreateMsg(GetLocalString("msg", "714.forceremoved"))
-															Exit
-														EndIf
-													EndIf
-												Next
-											EndIf
-										Else
-											me\CurrCameraZoom = 20.0
-											me\BlurTimer = 500.0
-											
-											If (Not chs\GodMode)
-												If PlayerRoom\RoomTemplate\Name = "cont2_049"
-													For e.Events = Each Events
-														If e\EventID = e_cont2_049
-															e\EventState = -1.0
-															Exit
-														EndIf
-													Next
-													If me\FallTimer >= 0.0
-														ShowEntity(me\Head)
-														PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
-														ResetEntity(me\Head)
-														RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
-														me\FallTimer = Min(-1.0, me\FallTimer)
-													EndIf
-												Else
-													msg\DeathMsg = GetLocalString("death", "049")
-													Kill() : me\KillAnim = 0
-												EndIf
-												PlaySound_Strict(HorrorSFX[13])
-												LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(2) + ".ogg", 1)
-												n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
-												n\State = 3.0
-											EndIf
-										EndIf
-									Else
+									If Dist >= 0.25
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
