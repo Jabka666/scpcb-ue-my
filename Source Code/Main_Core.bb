@@ -5854,7 +5854,7 @@ Function RenderHUD%()
 	EndIf
 	DrawBlock(t\IconID[BlinkIconID], x - (50 * MenuScale), y)
 	
-	If (I_714\Using > 0 And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0) And (I_268\Timer =< 0.0 Lor I_268\Using < 2)
+	If (I_714\Using > 0 And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0)
 		Color(255, 255, 255)
 		y = y - (40 * MenuScale)
 		If wi\HazmatSuit > 0
