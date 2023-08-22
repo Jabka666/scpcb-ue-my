@@ -6098,7 +6098,7 @@ Function RenderGUI%()
 			If e\room = PlayerRoom
 				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom
 					If (Not e\Img)
-						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face.png")
+						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
 						e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
 					Else
 						DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
@@ -6107,7 +6107,7 @@ Function RenderGUI%()
 					If e\EventState2 = PD_ThroneRoom
 						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
 							If (Not e\Img2)
-								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal.png")
+								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
 								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
 							Else
 								DrawBlock(e\Img2, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
