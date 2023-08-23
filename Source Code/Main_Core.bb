@@ -919,6 +919,7 @@ Function UpdateConsole%()
 					n_I\Curr106\Contained = True
 					HideEntity(n_I\Curr106\Collider)
 					HideEntity(n_I\Curr106\OBJ)
+					HideEntity(n_I\Curr106\OBJ2)
 					CreateConsoleMsg(GetLocalString("console", "dis106"))
 					;[End Block]
 				Case "enable106", "en106"
