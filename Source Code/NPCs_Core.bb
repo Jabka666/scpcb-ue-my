@@ -1538,7 +1538,7 @@ Function UpdateNPCs%()
 					Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
 					RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
 				ElseIf EntityVisible(me\Collider, n\Collider)
-					If n\State > 1 and n\State <> 3
+					If n\State > 1 And n\State <> 3
 						If wi\HazmatSuit > 0
 							RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
 							If RemoveHazmatTimer < 200.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
@@ -6146,7 +6146,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				EndIf
 			Else
 				For n2.NPCs = Each NPCs
-					If n2 <> n And (Not n2\IsDead)
+					If n2\NPCType = NPCTypeMTF And n2 <> n And (Not n2\IsDead)
 						If Abs(DeltaYaw(n\Collider, n2\Collider)) < 80.0
 							If EntityDistanceSquared(n\Collider, n2\Collider) < 0.49 Then TranslateEntity(n2\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fps\Factor[0], True)
 						EndIf
@@ -6156,7 +6156,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport back to the facility if fell through the floor
-		If EntityY(n\Collider) < -60.0 Then TeleportCloser(n)
+		If PlayerRoom\RoomTemplate\Name <> "cont2_049" And EntityY(n\Collider) < -7.0 Then TeleportCloser(n)
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.15, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
