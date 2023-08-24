@@ -2584,9 +2584,9 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_6_lcz_173
 				;[Block]
-				If PlayerRoom = e\room
+				If PlayerRoom = e\room And EntityDistanceSquared(me\Collider, e\room\Objects[0]) > 22.0
 					If e\EventState = 0.0 And n_I\Curr173\Idle = 0
-						If (Not EntityInView(n_I\Curr173\OBJ, Camera)) And (Not EntityInView(n_I\Curr173\OBJ2, Camera))
+						If (Not EntityInView(n_I\Curr173\OBJ, Camera)) And (Not EntityInView(n_I\Curr173\OBJ2, Camera)) And EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 36.0
 							PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[0], True), 0.5, EntityZ(e\room\Objects[0], True))
 							ResetEntity(n_I\Curr173\Collider)
 							RemoveEvent(e)
