@@ -7018,24 +7018,19 @@ Function UpdateEvents%()
 				If e\room\Dist < 15.0
 					If n_I\Curr106\Contained Lor n_I\Curr106\State =< 0.0 Then e\EventState = 2.0
 					
-					If e\EventState < 2.0
-						If e\EventState = 0.0
-							LoadEventSound(e, "SFX\Character\Scientist\EmilyScream.ogg")
-							e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 100.0, 1.0, True)
-							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
-							EntityParent(de\OBJ, e\room\OBJ)
-							e\EventState = 1.0
-						ElseIf e\EventState = 1.0
-							If (Not ChannelPlaying(e\SoundCHN))
-								e\EventState = 2.0
-								e\room\RoomDoors[0]\Locked = 0
-							Else
-								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 100.0, 1.0, True)
-							EndIf
+					If e\EventState = 0.0
+						LoadEventSound(e, "SFX\Character\Scientist\EmilyScream.ogg")
+						e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 100.0, 1.0, True)
+						de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
+						EntityParent(de\OBJ, e\room\OBJ)
+						e\EventState = 1.0
+					ElseIf e\EventState = 1.0
+						If (Not ChannelPlaying(e\SoundCHN))
+							e\room\RoomDoors[0]\Locked = 0
+							RemoveEvent(e)
+						Else
+							UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 100.0, 1.0, True)
 						EndIf
-					Else
-						e\room\RoomDoors[0]\Locked = 0
-						RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
