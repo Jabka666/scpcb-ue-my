@@ -643,7 +643,7 @@ Function LoadMaterials%(File$)
 			If opt\BumpEnabled
 				StrTemp = IniGetString(File, Loc, "bump")
 				If StrTemp <> ""
-					mat\Bump = LoadTexture_Strict(StrTemp, 1 + (256 * opt\SaveTexturesInVRAM))
+					mat\Bump = LoadTexture_Strict(StrTemp, 1 + 256)
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
