@@ -643,7 +643,7 @@ Function LoadMaterials%(File$)
 			If opt\BumpEnabled
 				StrTemp = IniGetString(File, Loc, "bump")
 				If StrTemp <> ""
-					mat\Bump = LoadTexture_Strict(StrTemp, 1 + 256)
+					mat\Bump = LoadTexture_Strict(StrTemp, 256)
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
@@ -1806,7 +1806,7 @@ Function LoadEntities%()
 	
 	LoadMissingTexture()
 	
-	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2)
+	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 0)
 	TextureBlend(AmbientLightRoomTex, 2 + (Not opt\Atmosphere))
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)

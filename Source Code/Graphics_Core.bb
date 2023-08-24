@@ -34,8 +34,8 @@ Function InitFastResize%()
 	FresizeImage = SPR
 	
 	; ~ Create texture
-	FresizeTexture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
-	FresizeTexture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
+	FresizeTexture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 256)
+	FresizeTexture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 256)
 	TextureBlend(FresizeTexture2, 3)
 	SetBuffer(TextureBuffer(FresizeTexture2))
 	ClsColor(0, 0, 0)
@@ -426,7 +426,7 @@ Function CreateBlurImage%()
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 0)
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
