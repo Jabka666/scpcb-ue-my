@@ -1210,7 +1210,7 @@ Function UpdateConsole%()
 					StrTemp = Piece(Args, 1)
 					StrTemp2 = Piece(Args, 2)
 					
-					opt\CameraFogNear = StrTemp
+					opt\CameraFogNear = Min(StrTemp, StrTemp2)
 					opt\CameraFogFar = StrTemp2
 					CreateConsoleMsg(Format(Format(GetLocalString("console", "fog"), opt\CameraFogNear, "{0}"), opt\CameraFogFar, "{1}"))
 					;[End Block]
