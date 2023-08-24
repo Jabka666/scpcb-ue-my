@@ -154,8 +154,6 @@ Function SaveGame%(File$)
 	Else
 		WriteInt(f, 994)
 	EndIf
-	WriteFloat(f, opt\CameraFogFar)
-	WriteFloat(f, opt\StoredCameraFogFar)
 	
 	WriteFloat(f, MTFTimer)
 	
@@ -651,10 +649,6 @@ Function LoadGame%(File$)
 	me\RefinedItems = ReadInt(f)
 	
 	UsedConsole = (ReadInt(f) <> 994)
-	
-	opt\CameraFogFar = ReadFloat(f)
-	opt\StoredCameraFogFar = ReadFloat(f)
-	If opt\CameraFogFar = 0.0 Then opt\CameraFogFar = 6.0
 	
 	MTFTimer = ReadFloat(f)
 	
@@ -1267,6 +1261,15 @@ Function LoadGame%(File$)
 	
 	CloseFile(f)
 	
+	If wi\NightVision > 0
+		opt\CameraFogFar = 17.0
+	ElseIf wi\SCRAMBLE > 0
+		opt\CameraFogFar = 9.0
+	Else
+		opt\CameraFogFar = 6.0
+	EndIf
+	opt\CameraFogNear = 0.1
+	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
@@ -1506,10 +1509,6 @@ Function LoadGameQuick%(File$)
 	me\RefinedItems = ReadInt(f)
 	
 	UsedConsole = (ReadInt(f) <> 994)
-	
-	opt\CameraFogFar = ReadFloat(f)
-	opt\StoredCameraFogFar = ReadFloat(f)
-	If opt\CameraFogFar = 0.0 Then opt\CameraFogFar = 6.0
 	
 	MTFTimer = ReadFloat(f)
 	
@@ -2009,6 +2008,15 @@ Function LoadGameQuick%(File$)
 	ShowEntity(me\Collider)
 	
 	UpdateRoomLightsTimer = 0.0
+	
+	If wi\NightVision > 0
+		opt\CameraFogFar = 17.0
+	ElseIf wi\SCRAMBLE > 0
+		opt\CameraFogFar = 9.0
+	Else
+		opt\CameraFogFar = 6.0
+	EndIf
+	opt\CameraFogNear = 0.1
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)
 	; ~ This is only required for the LoadGameQuick function, as the other one is from the menu where everything is already deleted anyways

@@ -347,7 +347,7 @@ Function RemoveWearableItems%(item.Items)
 			;[End Block]
 		Case "nvg", "finenvg", "veryfinenvg"
 			;[Block]
-			If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
+			If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
 			;[End Block]
 		Case "scp1499", "fine1499"
 			;[Block]
@@ -367,7 +367,7 @@ Function RemoveWearableItems%(item.Items)
 			;[End Block]
 		Case "scramble", "finescramble"
 			;[Block]
-			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\SCRAMBLE = 0
+			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
 			;[End Block]
 	End Select
 End Function

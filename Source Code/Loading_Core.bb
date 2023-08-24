@@ -2019,8 +2019,6 @@ Function InitOtherStuff%()
 	me\Playable = True : me\SelectedEnding = -1
 	
 	opt\MasterVolume = opt\PrevMasterVolume
-	opt\CameraFogFar = 6.0
-	opt\CameraFogNear = 0.1
 	HideDistance = 17.0
 	
 	CanSave = 2

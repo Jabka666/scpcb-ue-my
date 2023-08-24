@@ -222,7 +222,7 @@ Type Options
 	Field DisplayMode%
 	Field GFXDriver%
 	Field CameraFogNear#
-	Field CameraFogFar#, StoredCameraFogFar#
+	Field CameraFogFar#
 	Field IntroEnabled%
 	Field DebugMode%
 	Field Language$
@@ -426,7 +426,6 @@ Function LoadOptionsINI%()
 	opt\CameraFogNear = IniGetFloat(OptionFile, "Global", "Camera Fog Near", 0.1)
 	
 	opt\CameraFogFar = IniGetFloat(OptionFile, "Global", "Camera Fog Far", 6.0)
-	opt\StoredCameraFogFar = opt\CameraFogFar
 	
 	opt\IntroEnabled = IniGetInt(OptionFile, "Global", "Enable Intro", True)
 	

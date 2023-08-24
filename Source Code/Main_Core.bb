@@ -1211,7 +1211,6 @@ Function UpdateConsole%()
 					StrTemp2 = Piece(Args, 2)
 					
 					opt\CameraFogNear = StrTemp
-					opt\StoredCameraFogFar = opt\CameraFogFar
 					opt\CameraFogFar = StrTemp2
 					CreateConsoleMsg(Format(Format(GetLocalString("console", "fog"), opt\CameraFogNear, "{0}"), opt\CameraFogFar, "{1}"))
 					;[End Block]
@@ -1411,7 +1410,7 @@ Function UpdateConsole%()
 					chs\GodMode = True
 					chs\InfiniteStamina = True
 					
-					opt\CameraFogFar = 50.0
+					opt\CameraFogFar = 40.0
 					
 					KillSounds()
 					
@@ -4335,11 +4334,12 @@ Function UpdateGUI%()
 							
 							If wi\NightVision > 0
 								CreateMsg(GetLocalString("msg", "nvg.off"))
+								opt\CameraFogFar = 6.0
 								wi\NightVision = 0
-								opt\CameraFogFar = opt\StoredCameraFogFar
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[1])
 							Else
 								CreateMsg(GetLocalString("msg", "nvg.on"))
+								opt\CameraFogFar = 17.0
 								Select SelectedItem\ItemTemplate\TempName
 									Case "nvg"
 										;[Block]
@@ -4354,8 +4354,6 @@ Function UpdateGUI%()
 										wi\NightVision = 3
 										;[End Block]
 								End Select
-								opt\StoredCameraFogFar = opt\CameraFogFar
-								opt\CameraFogFar = HideDistance
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[0])
 							EndIf
 							SelectedItem\State3 = 0.0
@@ -5304,6 +5302,11 @@ Function UpdateGUI%()
 								DropItem(SelectedItem)
 							Else
 								If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+								If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
+								If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
+								wi\GasMask = 0 : wi\BallisticHelmet = False
+								I_427\Using = False : I_1499\Using = 0
+								I_268\Using = 0
 								Select SelectedItem\ItemTemplate\TempName
 									Case "hazmatsuit"
 										;[Block]
@@ -5326,11 +5329,6 @@ Function UpdateGUI%()
 										wi\HazmatSuit = 4
 										;[End Block]
 								End Select
-								If wi\NightVision > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\NightVision = 0
-								If wi\SCRAMBLE > 0 Then opt\CameraFogFar = opt\StoredCameraFogFar : wi\SCRAMBLE = 0
-								wi\GasMask = 0 : wi\BallisticHelmet = False
-								I_427\Using = False : I_1499\Using = 0
-								I_268\Using = 0
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5676,10 +5674,11 @@ Function UpdateGUI%()
 							
 							If wi\SCRAMBLE > 0
 								CreateMsg(GetLocalString("msg", "gear.off"))
+								opt\CameraFogFar = 6.0
 								wi\SCRAMBLE = 0
-								opt\CameraFogFar = opt\StoredCameraFogFar
 							Else
 								CreateMsg(GetLocalString("msg", "gear.on"))
+								opt\CameraFogFar = 9.0
 								Select SelectedItem\ItemTemplate\TempName
 									Case "scramble"
 										;[Block]
@@ -5690,8 +5689,6 @@ Function UpdateGUI%()
 										wi\SCRAMBLE = 2
 										;[End Block]
 								End Select
-								opt\StoredCameraFogFar = opt\CameraFogFar
-								opt\CameraFogFar = opt\CameraFogFar * 1.5
 							EndIf
 							SelectedItem\State3 = 0.0
 							SelectedItem = Null
@@ -8478,7 +8475,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	opt\CameraFogFar = 0.0
 	opt\CameraFogNear = 0.0
-	opt\StoredCameraFogFar = 0.0
 	HideDistance = 0.0
 	
 	LightVolume = 0.0
