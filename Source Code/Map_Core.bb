@@ -297,7 +297,7 @@ End Function
 
 Const RoomScale# = 8.0 / 2048.0
 
-Function LoadRMesh%(File$, rt.RoomTemplates)
+Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	CatchErrors("LoadRMesh("+  File + ")")
 	
 	Local mat.Materials
@@ -314,13 +314,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	Local CollisionMeshes% = CreatePivot()
 	;Local HasTriggerBox% = False
 	
-	For i = 0 To 3 ; ~ Reattempt up to 3 times
-		If (Not f)
-			f = ReadFile_Strict(File)
-		Else
-			Exit
-		EndIf
-	Next
+	f = ReadFile_Strict(File)
 	If (Not f) Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
@@ -510,11 +504,13 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			EntityPickMode(ChildMesh, 2)
 			
 			; ~ Make collision double-sided
-			Local FlipChild% = CopyMesh(ChildMesh)
-			
-			FlipMesh(FlipChild)
-			AddMesh(FlipChild, ChildMesh)
-			FreeEntity(FlipChild) : FlipChild = 0
+			If DoubleSided
+				Local FlipChild% = CopyMesh(ChildMesh)
+				
+				FlipMesh(FlipChild)
+				AddMesh(FlipChild, ChildMesh)
+				FreeEntity(FlipChild) : FlipChild = 0
+			EndIf
 		EndIf
 	Next
 	
@@ -591,9 +587,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 						ts\y = Temp2
 						ts\z = Temp3
 						If Right(Temp2s, 3) = ".sc" Then ; ~ Temporary solution, either re-export Gate B with the screen as .png or update the languages that use .sc
-							If FileSize(lang\LanguagePath + "GFX\Map\Screens\" + Temp2s) = 0 Then
-								Temp2s = Left(Temp2s, Len(Temp2s) - 2) + "png"
-							EndIf
+							If FileSize(lang\LanguagePath + "GFX\Map\Screens\" + Temp2s) = 0 Then Temp2s = Left(Temp2s, Len(Temp2s) - 2) + "png"
 						EndIf
 						ts\ImgPath = Temp2s
 						ts\RoomTemplate = rt
@@ -1039,7 +1033,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
 	fr\DetailMesh[1] = LoadMesh_Strict("GFX\Map\Props\rock.b3d")
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
-	fr\DetailMesh[3] = LoadRMesh("GFX\Map\scp_860_1_wall.rmesh", Null)
+	fr\DetailMesh[3] = LoadRMesh("GFX\Map\scp_860_1_wall.rmesh", Null, False)
 	
 	For i = 0 To 3
 		HideEntity(fr\DetailMesh[i])
@@ -1285,7 +1279,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
 	fr\DetailMesh[1] = LoadMesh_Strict("GFX\Map\Props\rock.b3d")
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
-	fr\DetailMesh[3] = LoadRMesh("GFX\Map\scp_860_1_wall.rmesh", Null)
+	fr\DetailMesh[3] = LoadRMesh("GFX\Map\scp_860_1_wall.rmesh", Null, False)
 	
 	For i = 0 To 3
 		HideEntity(fr\DetailMesh[i])
@@ -4412,7 +4406,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null)
+			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -4876,7 +4870,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 562.0 * RoomScale, r\z - 364.0 * RoomScale, 0.0, True)
 			
-			r\Objects[0] = LoadRMesh("GFX\Map\cont2_012_box.rmesh", Null)
+			r\Objects[0] = LoadRMesh("GFX\Map\cont2_012_box.rmesh", Null, False)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			
@@ -4884,7 +4878,7 @@ Function FillRoom%(r.Rooms)
 			r\HideObject[1] = False
 			HideEntity(r\Objects[1])
 			
-			r\Objects[2] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null)
+			r\Objects[2] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x - 450.0 * RoomScale, r\y + 528.0 * RoomScale, r\z - 382.0 * RoomScale)
 			
@@ -5752,7 +5746,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x + 1088.0 * RoomScale, r\y - 6224.0 * RoomScale, r\z + 1824.0 * RoomScale) 
 			
 			; ~ Chamber
-			r\Objects[2] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null)
+			r\Objects[2] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null, False)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			EntityPickMode(r\Objects[2], 2)
 			PositionEntity(r\Objects[2], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
@@ -6132,7 +6126,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 62.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 889.0 * RoomScale)
 			
 			; ~ The lid of the container
-			r\Objects[1] = LoadRMesh("GFX\Map\008_2_opt.rmesh", Null)
+			r\Objects[1] = LoadRMesh("GFX\Map\008_2_opt.rmesh", Null, False)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x - 62.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 945.0 * RoomScale)
 			RotateEntity(r\Objects[1], 85.0, 0.0, 0.0, True)

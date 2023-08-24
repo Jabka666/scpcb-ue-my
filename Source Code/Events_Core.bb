@@ -597,7 +597,7 @@ Function QuickLoadEvents%()
 				Else
 					If Int(e\EventStr) < 16
 						QuickLoadPercent = QuickLoadPercent + 2
-						e\room\Objects[Int(e\EventStr)] = LoadRMesh("GFX\Map\dimension1499\dimension_1499_object(" + (Int(e\EventStr)) + ").rmesh", Null)
+						e\room\Objects[Int(e\EventStr)] = LoadRMesh("GFX\Map\dimension1499\dimension_1499_object(" + (Int(e\EventStr)) + ").rmesh", Null, False)
 						ScaleEntity(e\room\Objects[Int(e\EventStr)], RoomScale, RoomScale, RoomScale)
 						HideEntity(e\room\Objects[Int(e\EventStr)])
 						e\EventStr = Int(e\EventStr) + 1
