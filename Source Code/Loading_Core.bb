@@ -2045,6 +2045,9 @@ Function InitNewGame%()
 	LoadEntities()
 	LoadSounds()
 	
+	opt\CameraFogFar = 6.0
+	opt\CameraFogNear = 0.1
+	
 	InitOtherStuff()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
