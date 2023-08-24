@@ -2394,22 +2394,6 @@ Function UpdateDoors%()
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * fps\Factor[0] / 114.0, 0.0, 0.0)
 							;[End Block]
 					End Select
-					
-					If d\Angle = 0.0 Lor d\Angle = 180.0
-						If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.15
-							If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.5 * ((d\DoorType = BIG_DOOR) * 3)
-								z = CurveValue(EntityZ(d\FrameOBJ, True) + 0.15 * Sgn(EntityZ(me\Collider) - EntityZ(d\FrameOBJ, True)), EntityZ(me\Collider), 5.0)
-								PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), z)
-							EndIf
-						EndIf
-					Else
-						If Abs(EntityX(d\FrameOBJ, True) - EntityX(me\Collider)) < 0.15
-							If Abs(EntityZ(d\FrameOBJ, True) - EntityZ(me\Collider)) < 0.5 * ((d\DoorType = BIG_DOOR) * 3)
-								x = CurveValue(EntityX(d\FrameOBJ, True) + 0.15 * Sgn(EntityX(me\Collider) - EntityX(d\FrameOBJ, True)), EntityX(me\Collider), 5.0)
-								PositionEntity(me\Collider, x, EntityY(me\Collider), EntityZ(me\Collider))
-							EndIf
-						EndIf
-					EndIf
 				Else
 					d\FastOpen = 0
 					PositionEntity(d\OBJ, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True))
