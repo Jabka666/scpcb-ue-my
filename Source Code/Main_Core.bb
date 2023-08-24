@@ -5821,7 +5821,7 @@ Function RenderHUD%()
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	EndIf
 	Color(255, 255, 255)
-	Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
+	Rect(x - (51 * MenuScale), y, 32 * MenuScale, 32 * MenuScale, False)
 	If me\Crouch
 		WalkIconID = 2
 	ElseIf (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0
@@ -5829,7 +5829,7 @@ Function RenderHUD%()
 	Else
 		WalkIconID = 0
 	EndIf
-	DrawBlock(t\IconID[WalkIconID], x - (50 * MenuScale), y)
+	DrawBlock(t\IconID[WalkIconID], x - (50 * MenuScale), y + 1)
 	
 	Color(255, 255, 255)
 	y = y - (40 * MenuScale)
@@ -5848,13 +5848,13 @@ Function RenderHUD%()
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	EndIf
 	Color(255, 255, 255)
-	Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
+	Rect(x - (51 * MenuScale), y, 32 * MenuScale, 32 * MenuScale, False)
 	If me\BlinkTimer < 0.0
 		BlinkIconID = 4
 	Else
 		BlinkIconID = 3
 	EndIf
-	DrawBlock(t\IconID[BlinkIconID], x - (50 * MenuScale), y)
+	DrawBlock(t\IconID[BlinkIconID], x - (50 * MenuScale), y + 1)
 	
 	If (I_714\Using > 0 And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0)
 		Color(255, 255, 255)
@@ -5880,8 +5880,8 @@ Function RenderHUD%()
 			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 		EndIf
 		Color(255, 255, 255)
-		Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
-		DrawBlock(t\IconID[7], x - (50 * MenuScale), y)
+		Rect(x - (51 * MenuScale), y, 32 * MenuScale, 32 * MenuScale, False)
+		DrawBlock(t\IconID[7], x - (50 * MenuScale), y + 1)
 	EndIf
 	If I_268\Using > 1
 		Color(255, 255, 255)
@@ -5902,8 +5902,8 @@ Function RenderHUD%()
 			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 		EndIf
 		Color(255, 255, 255)
-		Rect(x - (51 * MenuScale), y - 1, 32 * MenuScale, 32 * MenuScale, False)
-		DrawBlock(t\IconID[8], x - (50 * MenuScale), y)
+		Rect(x - (51 * MenuScale), y, 32 * MenuScale, 32 * MenuScale, False)
+		DrawBlock(t\IconID[8], x - (50 * MenuScale), y + 1)
 	EndIf
 End Function
 
