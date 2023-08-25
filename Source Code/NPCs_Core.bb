@@ -5629,12 +5629,24 @@ Function UpdateMTFUnit%(n.NPCs)
 						If Curr173Dist < TempDist
 							n\State3 = n\State3 + fps\Factor[0]
 							If n\State3 >= 70.0 * 15.0
+								; ~ The leader
 								If n\MTFLeader = Null
 									LoadNPCSound(n, "SFX\Character\MTF\173\Box" + Rand(3) + ".ogg")
 									PlayMTFSound(n\Sound, n)
 									n_I\Curr173\Target = n
-									n_I\Curr173\Idle = 2
+								Else
+									; ~ Always attach to leader
+									For n2.NPCs = Each NPCs
+										If n2\NPCType = NPCTypeMTF And n2 <> n
+											If n2\MTFLeader = Null
+												LoadNPCSound(n2, "SFX\Character\MTF\173\Box" + Rand(3) + ".ogg")
+												PlayMTFSound(n2\Sound, n2)
+												n_I\Curr173\Target = n2
+											EndIf
+										EndIf
+									Next
 								EndIf
+								n_I\Curr173\Idle = 2
 							EndIf
 							
 							n\CurrSpeed = 0.0
@@ -5825,6 +5837,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 					EndIf
 				Else
+					n\Target = Null
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				;[End Block]
@@ -5947,6 +5960,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				Else
 					StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					PlaySound2(NVGSFX[1], Camera, n\Collider, 5.0)
+					n\Target = Null
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				;[End Block]
@@ -6080,6 +6094,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 				Else
+					n\Target = Null
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				
@@ -6135,23 +6150,10 @@ Function UpdateMTFUnit%(n.NPCs)
 			If (PrevFrame >= 521.0 And n\Frame < 521.0) Lor (PrevFrame >= 505.0 And n\Frame < 505.0) Then PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 		EndIf
 		
+		; ~ Teleport companions close to the leader if they get stuck
 		If n\State <> MTF_DISABLING_TESLA And n\State <> MTF_LOOKING_AT_SOME_TARGET And n\State <> MTF_SHOOTING_AT_PLAYER And n\State <> MTF_FOLLOW_PATH
 			If n\MTFLeader <> Null
-				If EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) < 0.49
-					PointEntity(n\Collider, n\MTFLeader\Collider)
-					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-					
-					TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) - 45.0) * 0.01 * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) - 45.0) * 0.01 * fps\Factor[0], True)
-				EndIf
-			Else
-				For n2.NPCs = Each NPCs
-					If n2\NPCType = NPCTypeMTF And n2 <> n And (Not n2\IsDead)
-						If Abs(DeltaYaw(n\Collider, n2\Collider)) < 80.0
-							If EntityDistanceSquared(n\Collider, n2\Collider) < 0.49 Then TranslateEntity(n2\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * 0.01 * fps\Factor[0], True)
-						EndIf
-					EndIf
-				Next
+				If EntityDistanceSquared(n\Collider, n\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n\MTFLeader\Collider, True), EntityY(n\MTFLeader\Collider, True) + 0.5, EntityZ(n\MTFLeader\Collider, True), n\CollRadius, True)
 			EndIf
 		EndIf
 		
