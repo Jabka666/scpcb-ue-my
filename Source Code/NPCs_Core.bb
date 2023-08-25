@@ -4805,8 +4805,8 @@ Function UpdateMTFUnit%(n.NPCs)
 				n\Speed = 0.015
 				; ~ Set a timer to step back
 				If n <> n_I\MTFLeader
-					Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
-					If n\State3 >= 0.0 And Dist < 0.64
+					Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader)
+					If Dist < 0.64
 						n\State3 = 70.0
 						For n2.NPCs = Each NPCs
 							If n2\NPCType = NPCTypeMTF And n2 <> n
@@ -5014,7 +5014,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 						
 						For n2.NPCs = Each NPCs
-							If n2\NPCType = NPCTypeMTF And n2 <> n Then
+							If n2\NPCType = NPCTypeMTF
 								n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
 								n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
 								n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
@@ -5025,14 +5025,6 @@ Function UpdateMTFUnit%(n.NPCs)
 								n2\State = MTF_173_SPOTTED
 							EndIf
 						Next
-						n\EnemyX = EntityX(n_I\Curr173\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr173\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\State2 = 70.0 * 30.0 ; ~ Give up after 30 seconds
-						n\State3 = 0.0
-						n\State = MTF_173_SPOTTED
 					EndIf
 				EndIf
 				
@@ -5164,6 +5156,10 @@ Function UpdateMTFUnit%(n.NPCs)
 				n\Speed = 0.015
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If NPCSeesPlayer(n) = 1
+					n\EnemyX = EntityX(me\Collider, True)
+					n\EnemyY = EntityY(me\Collider, True)
+					n\EnemyZ = EntityZ(me\Collider, True)
+					
 					Dist = EntityDistanceSquared(me\Collider, n\Collider)
 					; ~ If close enough, start shooting at the player
 					If Dist < 25.0
@@ -5354,7 +5350,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 						
 						For n2.NPCs = Each NPCs
-							If n2\NPCType = NPCTypeMTF And n2 <> n Then
+							If n2\NPCType = NPCTypeMTF
 								n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
 								n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
 								n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
@@ -5365,14 +5361,6 @@ Function UpdateMTFUnit%(n.NPCs)
 								n2\State = MTF_173_SPOTTED
 							EndIf
 						Next
-						n\EnemyX = EntityX(n_I\Curr173\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr173\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\State2 = 70.0 * 30.0 ; ~ Give up after 30 seconds
-						n\State3 = 0.0
-						n\State = MTF_173_SPOTTED
 					EndIf
 				EndIf
 				
@@ -5838,7 +5826,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					; ~ Set a timer to step back
 					If n <> n_I\MTFLeader
 						Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
-						If n\State3 >= 0.0 And Dist < 0.64
+						If Dist < 0.64
 							n\State3 = 70.0
 							For n2.NPCs = Each NPCs
 								If n2\NPCType = NPCTypeMTF And n2 <> n
