@@ -2134,7 +2134,6 @@ Function UpdateGame%()
 			UpdateDeaf()
 			UpdateEmitters()
 			UpdateDecals()
-			If RN = "dimension_1499" And QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 			UpdateMouseLook()
 			UpdateMoving()
 			UpdateSaveState()
@@ -2143,6 +2142,7 @@ Function UpdateGame%()
 			InFacility = CheckForPlayerInFacility()
 			DecalStep = 0
 			If RN = "dimension_1499"
+				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
 				UpdateLeave1499()
 			ElseIf RN = "dimension_106"
@@ -5225,7 +5225,8 @@ Function UpdateGUI%()
 								CreateMsg(GetLocalString("msg", "cap.off"))
 								I_268\Using = 0
 							Else
-								If I_268\Using > 1 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOn.ogg"))
+								GiveAchievement(Achv268)
+								CreateMsg(GetLocalString("msg", "cap.on"))
 								Select SelectedItem\ItemTemplate\TempName
 									Case "cap"
 										;[Block]
@@ -5240,8 +5241,7 @@ Function UpdateGUI%()
 										I_268\Using = 3
 										;[End Block]
 								End Select
-								GiveAchievement(Achv268)
-								CreateMsg(GetLocalString("msg", "cap.on"))
+								If I_268\Using > 1 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOn.ogg"))
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
@@ -5255,6 +5255,8 @@ Function UpdateGUI%()
 							CreateMsg(GetLocalString("msg", "714.off"))
 							I_714\Using = 0
 						Else
+							GiveAchievement(Achv714)
+							CreateMsg(GetLocalString("msg", "714.on"))
 							Select SelectedItem\ItemTemplate\TempName
 								Case "coarse714"
 									;[Block]
@@ -5265,8 +5267,6 @@ Function UpdateGUI%()
 									I_714\Using = 2
 									;[End Block]
 							End Select
-							GiveAchievement(Achv714)
-							CreateMsg(GetLocalString("msg", "714.on"))
 						EndIf
 						SelectedItem = Null
 					EndIf
@@ -5476,18 +5476,6 @@ Function UpdateGUI%()
 								CreateMsg(GetLocalString("msg", "mask.off"))
 								I_1499\Using = 0
 							Else
-								Select SelectedItem\ItemTemplate\TempName
-									Case "scp1499"
-										;[Block]
-										CreateMsg(GetLocalString("msg", "mask.on"))
-										I_1499\Using = 1
-										;[End Block]
-									Case "fine1499"
-										;[Block]
-										CreateMsg(GetLocalString("msg", "mask.on.easy"))
-										I_1499\Using = 2
-										;[End Block]
-								End Select
 								GiveAchievement(Achv1499)
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\Name = "dimension_1499"
@@ -5523,6 +5511,18 @@ Function UpdateGUI%()
 										Exit
 									EndIf
 								Next
+								Select SelectedItem\ItemTemplate\TempName
+									Case "scp1499"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "mask.on"))
+										I_1499\Using = 1
+										;[End Block]
+									Case "fine1499"
+										;[Block]
+										CreateMsg(GetLocalString("msg", "mask.on.easy"))
+										I_1499\Using = 2
+										;[End Block]
+								End Select
 							EndIf
 							SelectedItem\State = 0.0
 							SelectedItem = Null
