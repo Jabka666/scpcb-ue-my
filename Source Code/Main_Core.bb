@@ -9033,16 +9033,10 @@ Function UpdateMTF%()
 						
 						MTFTimer = fps\Factor[0]
 						
-						Local leader.NPCs
-						
 						For i = 0 To 2
 							n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.6, EntityZ(entrance\RoomCenter, True))
 							
-							If i = 0
-								leader = n
-							Else
-								n\MTFLeader = leader
-							EndIf
+							If i = 0 Then MTFLeader = n
 						Next
 					EndIf
 				EndIf

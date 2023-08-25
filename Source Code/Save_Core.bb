@@ -781,15 +781,10 @@ Function LoadGame%(File$)
 			Next
 		EndIf
 	Next
-	Local leader.NPCs
 	
 	For n.NPCs = Each NPCs
 		If n\NPCType = NPCTypeMTF Then
-			If leader = Null Then
-				leader = n
-			Else
-				n\MTFLeader = leader
-			EndIf 
+			If MTFLeader = Null Then MTFLeader = n
 		EndIf
 	Next
 	
@@ -1640,15 +1635,10 @@ Function LoadGameQuick%(File$)
 			Next
 		EndIf
 	Next
-	Local leader.NPCs
 	
 	For n.NPCs = Each NPCs
 		If n\NPCType = NPCTypeMTF Then
-			If leader = Null Then
-				leader = n
-			Else
-				n\MTFLeader = leader
-			EndIf 
+			If MTFLeader = Null Then MTFLeader = n
 		EndIf
 	Next
 	
