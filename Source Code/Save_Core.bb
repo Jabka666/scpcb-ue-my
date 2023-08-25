@@ -784,7 +784,7 @@ Function LoadGame%(File$)
 	
 	For n.NPCs = Each NPCs
 		If n\NPCType = NPCTypeMTF Then
-			If MTFLeader = Null Then MTFLeader = n
+			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 	Next
 	
@@ -1638,7 +1638,7 @@ Function LoadGameQuick%(File$)
 	
 	For n.NPCs = Each NPCs
 		If n\NPCType = NPCTypeMTF Then
-			If MTFLeader = Null Then MTFLeader = n
+			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 	Next
 	

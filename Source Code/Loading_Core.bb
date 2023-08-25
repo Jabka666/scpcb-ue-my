@@ -412,6 +412,7 @@ Type NPCInstance
 	Field Curr513_1.NPCs
 	Field Curr049.NPCs
 	Field Curr066.NPCs
+	Field MTFLeader.NPCs
 	Field IsHalloween%, IsNewYear%, IsAprilFools%
 End Type
 

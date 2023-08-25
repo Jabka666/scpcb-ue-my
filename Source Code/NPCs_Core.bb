@@ -4773,8 +4773,6 @@ Const MTF_ZOMBIES_SPOTTED% = 9
 Const MTF_DISABLING_TESLA% = 11
 ;[End Block]
 
-Global MTFLeader.NPCs
-
 Function UpdateMTFUnit%(n.NPCs)
 	Local r.Rooms, p.Particles, n2.NPCs, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	
@@ -4806,8 +4804,8 @@ Function UpdateMTFUnit%(n.NPCs)
 				;[Block]
 				n\Speed = 0.015
 				; ~ Set a timer to step back
-				If n <> MTFLeader
-					Dist = EntityDistanceSquared(n\Collider, MTFLeader\Collider)
+				If n <> n_I\MTFLeader
+					Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
 					If n\State3 >= 0.0 And Dist < 0.64
 						n\State3 = 70.0
 						For n2.NPCs = Each NPCs
@@ -4825,8 +4823,8 @@ Function UpdateMTFUnit%(n.NPCs)
 				EndIf
 				
 				If n\PathTimer <= 0.0 ; ~ Update path
-					If n <> MTFLeader ; ~ I'll follow the leader
-						n\PathStatus = FindPath(n, EntityX(MTFLeader\Collider, True), EntityY(MTFLeader\Collider, True) + 0.1, EntityZ(MTFLeader\Collider, True)) ; ~ Whatever you say boss
+					If n <> n_I\MTFLeader ; ~ I'll follow the leader
+						n\PathStatus = FindPath(n, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.1, EntityZ(n_I\MTFLeader\Collider, True)) ; ~ Whatever you say boss
 					Else ; ~ I am the leader
 						If n_I\Curr173\Idle <> 2
 							For r.Rooms = Each Rooms
@@ -4898,7 +4896,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-				ElseIf n\PathTimer <= 70.0 * 2.5 And n = MTFLeader
+				ElseIf n\PathTimer <= 70.0 * 2.5 And n = n_I\MTFLeader
 					n\CurrSpeed = 0.0
 					If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 					FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
@@ -4951,14 +4949,14 @@ Function UpdateMTFUnit%(n.NPCs)
 						
 						FreeEntity(Pvt) : Pvt = 0
 					Else
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							n\CurrSpeed = 0.0
 							If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 							FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 						Else
 							If Dist >= 1.0 And n\State3 =< 0.0
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-								PointEntity(n\Collider, MTFLeader\Collider)
+								PointEntity(n\Collider, n_I\MTFLeader\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
@@ -4968,7 +4966,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 							Else
 								n\CurrSpeed = CurveValue(-n\Speed, n\CurrSpeed, 20.0)
-								PointEntity(n\Collider, MTFLeader\Collider)
+								PointEntity(n\Collider, n_I\MTFLeader\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 522.0, 488.0, n\CurrSpeed * 26.0)
@@ -5010,7 +5008,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
 				If n_I\Curr173\Idle < 2
 					If NPCSeesNPC(n_I\Curr173, n) > 0
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							LoadNPCSound(n, "SFX\Character\MTF\173\Spotted" + Rand(2) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
@@ -5040,7 +5038,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				
 				If n_I\Curr106\State <= 0.0
 					If NPCSeesNPC(n_I\Curr106, n) = 1
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							LoadNPCSound(n, "SFX\Character\MTF\106\Spotted" + Rand(3) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
@@ -5059,7 +5057,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				
 				If n_I\Curr096 <> Null
 					If NPCSeesNPC(n_I\Curr096, n) = 1
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(2) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
@@ -5079,7 +5077,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				
 				If n_I\Curr049 <> Null
 					If NPCSeesNPC(n_I\Curr049, n) = 1
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							LoadNPCSound(n, "SFX\Character\MTF\049\Spotted" + Rand(5) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
@@ -5113,7 +5111,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				For n2.NPCs = Each NPCs
 					If n2\NPCType = NPCType049_2 And (Not n2\IsDead)
 						If NPCSeesNPC(n2, n) = 1
-							If n = MTFLeader
+							If n = n_I\MTFLeader
 								LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
 								PlayMTFSound(n\Sound, n)
 							EndIf
@@ -5247,7 +5245,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					If n\PathTimer <= 0.0 ; ~ Update path
 						n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							If Rand(10) = 1
 								For n2.NPCs = Each NPCs
 									If n2\NPCType = NPCTypeMTF And n2 <> n
@@ -5329,13 +5327,13 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 					EndIf
 					
-					If n = MTFLeader And n\LastSeen < 70.0 * 30.0 And n\LastSeen + fps\Factor[0] >= 70.0 * 30.0
+					If n = n_I\MTFLeader And n\LastSeen < 70.0 * 30.0 And n\LastSeen + fps\Factor[0] >= 70.0 * 30.0
 						If Rand(2) = 1 Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\Searching" + Rand(6) + ".ogg"), n)
 					EndIf
 				EndIf
 				
 				If n\State2 <= 0.0
-					If n = MTFLeader
+					If n = n_I\MTFLeader
 						PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetlost" + Rand(3) + ".ogg"), n)
 						If MTFCameraCheckTimer = 0.0
 							If Rand(15 - (7 * SelectedDifficulty\AggressiveNPCs)) = 1 ; ~ Maybe change this to another chance -- ENDSHN
@@ -5350,7 +5348,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
 				If n_I\Curr173\Idle < 2
 					If NPCSeesNPC(n_I\Curr173, n) > 0
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							LoadNPCSound(n, "SFX\Character\MTF\173\Spotted" + Rand(2) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
@@ -5380,7 +5378,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				
 				If n_I\Curr106\State <= 0.0
 					If NPCSeesNPC(n_I\Curr106, n) = 1
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							LoadNPCSound(n, "SFX\Character\MTF\106\Spotted" + Rand(3) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
@@ -5399,7 +5397,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				
 				If n_I\Curr096 <> Null
 					If NPCSeesNPC(n_I\Curr096, n) = 1
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(2) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
@@ -5419,7 +5417,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				
 				If n_I\Curr049 <> Null
 					If NPCSeesNPC(n_I\Curr049, n) = 1
-						If n = MTFLeader
+						If n = n_I\MTFLeader
 							LoadNPCSound(n, "SFX\Character\MTF\049\Spotted" + Rand(5) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
@@ -5622,7 +5620,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					If Curr173Dist < 25.0
 						Local TempDist# = 1.0
 						
-						If n <> MTFLeader Then TempDist = 4.0
+						If n <> n_I\MTFLeader Then TempDist = 4.0
 						
 						PointEntity(n\Collider, n_I\Curr173\Collider)
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
@@ -5630,10 +5628,10 @@ Function UpdateMTFUnit%(n.NPCs)
 						If Curr173Dist < TempDist
 							n\State3 = n\State3 + fps\Factor[0]
 							If n\State3 >= 70.0 * 15.0
-								LoadNPCSound(MTFLeader, "SFX\Character\MTF\173\Box" + Rand(3) + ".ogg")
-								PlayMTFSound(MTFLeader\Sound, MTFLeader)
+								LoadNPCSound(n_I\MTFLeader, "SFX\Character\MTF\173\Box" + Rand(3) + ".ogg")
+								PlayMTFSound(n_I\MTFLeader\Sound, n_I\MTFLeader)
 								; ~ Always attach to leader
-								n_I\Curr173\Target = MTFLeader
+								n_I\Curr173\Target = n_I\MTFLeader
 								n_I\Curr173\Idle = 2
 							EndIf
 							
@@ -5744,8 +5742,8 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					
 					If n\PathTimer <= 0.0 ; ~ Update path
-						If n <> MTFLeader ; ~ I'll follow the leader
-							n\PathStatus = FindPath(n, EntityX(MTFLeader\Collider, True), EntityY(MTFLeader\Collider, True) + 0.1, EntityZ(MTFLeader\Collider, True))
+						If n <> n_I\MTFLeader ; ~ I'll follow the leader
+							n\PathStatus = FindPath(n, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.1, EntityZ(n_I\MTFLeader\Collider, True))
 						Else ; ~ I am the leader
 							For r.Rooms = Each Rooms
 								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
@@ -5838,8 +5836,8 @@ Function UpdateMTFUnit%(n.NPCs)
 				If n\State2 > 0.0
 					If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * 10.0
 					; ~ Set a timer to step back
-					If n <> MTFLeader
-						Dist = EntityDistanceSquared(n\Collider, MTFLeader\Collider)
+					If n <> n_I\MTFLeader
+						Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
 						If n\State3 >= 0.0 And Dist < 0.64
 							n\State3 = 70.0
 							For n2.NPCs = Each NPCs
@@ -5857,8 +5855,8 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					
 					If n\PathTimer <= 0.0 ; ~ Update path
-						If n <> MTFLeader ; ~ I'll follow the leader
-							n\PathStatus = FindPath(n, EntityX(MTFLeader\Collider, True), EntityY(MTFLeader\Collider, True) + 0.1, EntityZ(MTFLeader\Collider, True)) ; ~ Whatever you say boss
+						If n <> n_I\MTFLeader ; ~ I'll follow the leader
+							n\PathStatus = FindPath(n, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.1, EntityZ(n_I\MTFLeader\Collider, True)) ; ~ Whatever you say boss
 						Else ; ~ I am the leader
 							For r.Rooms = Each Rooms
 								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
@@ -5884,7 +5882,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							EndIf
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-					ElseIf n\PathTimer <= 70.0 * 2.5 And n = MTFLeader
+					ElseIf n\PathTimer <= 70.0 * 2.5 And n = n_I\MTFLeader
 						n\CurrSpeed = 0.0
 						FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -5918,14 +5916,14 @@ Function UpdateMTFUnit%(n.NPCs)
 							EndIf
 							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 						Else
-							If n = MTFLeader
+							If n = n_I\MTFLeader
 								n\CurrSpeed = 0.0
 								If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 								FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 							Else
 								If Dist >= 1.0 And n\State3 =< 0.0
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-									PointEntity(n\Collider, MTFLeader\Collider)
+									PointEntity(n\Collider, n_I\MTFLeader\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 									AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
@@ -5935,7 +5933,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 								Else
 									n\CurrSpeed = CurveValue(-n\Speed, n\CurrSpeed, 20.0)
-									PointEntity(n\Collider, MTFLeader\Collider)
+									PointEntity(n\Collider, n_I\MTFLeader\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 									AnimateNPC(n, 522.0, 488.0, n\CurrSpeed * 26.0)
@@ -5998,7 +5996,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							Else
 								If (Not n\Target\IsDead)
 									If n\Target\NPCType = NPCType049_2
-										If n = MTFLeader
+										If n = n_I\MTFLeader
 											LoadNPCSound(n, "SFX\Character\MTF\049_2\TargetTerminated.ogg")
 											PlayMTFSound(n\Sound, n)
 										EndIf
@@ -6140,8 +6138,8 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		; ~ Teleport companions close to the leader if they get stuck
 		If n\State <> MTF_DISABLING_TESLA And n\State <> MTF_LOOKING_AT_SOME_TARGET And n\State <> MTF_SHOOTING_AT_PLAYER And n\State <> MTF_FOLLOW_PATH
-			If n <> MTFLeader
-				If EntityDistanceSquared(n\Collider, MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(MTFLeader\Collider, True), EntityY(MTFLeader\Collider, True) + 0.5, EntityZ(MTFLeader\Collider, True), n\CollRadius, True)
+			If n <> n_I\MTFLeader
+				If EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
 			EndIf
 		EndIf
 		
@@ -6702,7 +6700,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 		Case "mtf", "ntf"
 			;[Block]
 			n.NPCs = CreateNPC(NPCTypeMTF, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			MTFLeader = n
+			n_I\MTFLeader = n
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "mtf"))
 			;[End Block]
 		Case "apache", "helicopter"
