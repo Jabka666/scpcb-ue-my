@@ -457,7 +457,7 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 					EndIf
 				Next
 				
-				If Rnd(0.0, 1.0) < Prob And (Not Temp)
+				If Rnd(0.0, 1.0) =< Prob And (Not Temp)
 					e.Events = New Events
 					e\EventName = EventName
 					e\EventID = FindEventID(EventName)
