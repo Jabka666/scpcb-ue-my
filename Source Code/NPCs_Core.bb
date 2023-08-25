@@ -6192,7 +6192,7 @@ Function TeleportCloser%(n.NPCs)
 	Local ShouldTeleport%
 	
 	If closestWaypoint <> Null
-		ShouldTeleport = ((n\InFacility <> 1 Lor SelectedDifficulty\AggressiveNPCs) Lor (EntityY(closestWaypoint\OBJ, True) <= 7.0 And EntityY(closestWaypoint\OBJ, True) >= -10.0))
+		ShouldTeleport = ((n\InFacility <> 1 Lor SelectedDifficulty\AggressiveNPCs) Lor (EntityY(closestWaypoint\OBJ, True) <= (10.0 - ((n\NPCType = NPCTypeMTF) * 8.0)) And EntityY(closestWaypoint\OBJ, True) >= -(10.0 - ((n\NPCType = NPCTypeMTF) * 8.0))))
 		If ShouldTeleport
 			PositionEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 200.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), True)
 			ResetEntity(n\Collider)
