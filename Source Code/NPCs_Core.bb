@@ -4805,7 +4805,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				n\Speed = 0.015
 				; ~ Set a timer to step back
 				If n <> n_I\MTFLeader
-					Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader)
+					Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
 					If Dist < 0.64
 						n\State3 = 70.0
 						For n2.NPCs = Each NPCs
