@@ -106,7 +106,7 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 		DeleteSingleTextureEntryFromCache(Tex)
 	EndIf
 	EntityPickMode(p\OBJ, 2)
-	EntityAutoFade(p\OBJ, HideDistance, HideDistance)
+	;EntityAutoFade(p\OBJ, HideDistance, HideDistance)
 	
 	Return(p)
 End Function
