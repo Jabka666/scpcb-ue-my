@@ -4795,7 +4795,6 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		Local Dist#
 		Local PrevFrame# = n\Frame
-		Local PrevDist#, NewDist#
 		Local x#, y#, z#
 		Local SqrValue#, PlayerSeeAble%
 		
@@ -4916,19 +4915,13 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
-							PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-							
 							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 							
-							NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-							
-							If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-							
-							If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+							UseDoorNPC(n, True, True)
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 					ElseIf n\PathX <> 0.0
@@ -5280,19 +5273,13 @@ Function UpdateMTFUnit%(n.NPCs)
 										n\PathLocation = n\PathLocation + 1
 									EndIf
 								Else
-									PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-									
 									PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 									TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 									AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 									
-									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-									
-									If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-									
-									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+									UseDoorNPC(n, True, True)
 								EndIf
 								n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							Else
@@ -5519,19 +5506,13 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
-							PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-							
 							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 							
-							NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-							
-							If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-							
-							If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+							UseDoorNPC(n, True, True)
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 					Else
@@ -5716,19 +5697,13 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Else
-								PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
 								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 								
-								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
-								If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-								
-								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+								UseDoorNPC(n, True, True)
 							EndIf
 							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 						Else
@@ -5832,19 +5807,13 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Else
-								PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
 								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0) ; ~ Placeholder (until running animation has been implemented)
 								
-								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
-								If NewDist < 4.0 Then UseDoorNPC(n, True, True)
-								
-								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+								UseDoorNPC(n, True, True)
 							EndIf
 							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 						Else
@@ -5947,19 +5916,13 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Else
-								PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
 								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 								
-								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
-								If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-								
-								If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+								UseDoorNPC(n, True, True)
 							EndIf
 							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 						Else
@@ -6088,19 +6051,13 @@ Function UpdateMTFUnit%(n.NPCs)
 										n\PathLocation = n\PathLocation + 1
 									EndIf
 								Else
-									PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-									
 									PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 									TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 									AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 									
-									NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-									
-									If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-									
-									If (NewDist < 0.04) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+									UseDoorNPC(n, True, True)
 								EndIf
 								n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							Else
@@ -6859,17 +6816,20 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 End Function
 
 Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
+	Local Dist# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+	
 	If n\NPCType = NPCTypeMTF
-		If n\Path[n\PathLocation]\door <> Null
-			If (Not n\Path[n\PathLocation]\door\Open)
-				OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
-				If PlaySFX Then PlayMTFSound(MTFSFX[0], n)
-				If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
+		If Dist < 1.0
+			If n\Path[n\PathLocation]\door <> Null
+				If (Not n\Path[n\PathLocation]\door\Open)
+					OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
+					If PlaySFX Then PlaySound2(MTFSFX[0], Camera, n\OBJ, 8.0)
+					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
+				EndIf
 			EndIf
+			If Dist < 0.04 Then n\PathLocation = n\PathLocation + 1
 		EndIf
 	Else
-		Local Dist# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-		
 		If Dist < 0.36
 			Local Temp% = True
 			
