@@ -7016,8 +7016,8 @@ Function UpdateMenu%()
 	If MenuOpen
 		If (Not IsPlayerOutsideFacility()) And (Not me\Terminated)
 			If me\StopHidingTimer = 0.0
-				If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 2.25 Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 2.25 me\StopHidingTimer = 1.0
-			ElseIf me\StopHidingTimer < 60.0
+				If (EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 2.25 And n_I\Curr173\Idle < 2) Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 2.25 Then me\StopHidingTimer = 1.0
+			ElseIf me\StopHidingTimer < Rnd(60.0, 120.0)
 				me\StopHidingTimer = me\StopHidingTimer + fps\Factor[1]
 			Else
 				me\StopHidingTimer = 0.0
