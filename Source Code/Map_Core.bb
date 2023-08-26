@@ -24,43 +24,40 @@ Type TempProps
 End Type
 
 Function CheckForPropModel%(File$)
-	Local Path$ = "GFX\Map\Props\"
-	Local FileFormat$ = ".b3d"
-	
-	Select File
-		Case Path + "button" + FileFormat
+	Select StripPath(File)
+		Case "button.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\ButtonModelID[BUTTON_DEFAULT]))
 			;[End Block]
-		Case Path + "buttonkeycard" + FileFormat
+		Case "buttonkeycard.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\ButtonModelID[BUTTON_KEYCARD]))
 			;[End Block]
-		Case Path + "door01" + FileFormat
+		Case "door01.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_DEFAULT_MODEL]))
 			;[End Block]
-		Case Path + "contdoorleft" + FileFormat
+		Case "contdoorleft.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_1]))
 			;[End Block]
-		Case Path + "contdoorright" + FileFormat
+		Case "contdoorright.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_2]))
 			;[End Block]
-		Case Path + "doorframe" + FileFormat
+		Case "doorframe.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL]))
 			;[End Block]
-		Case Path + "contdoorframe" + FileFormat
+		Case "contdoorframe.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_BIG_FRAME_MODEL]))
 			;[End Block]
-		Case Path + "leverbase" + FileFormat
+		Case "leverbase.b3d"
 			;[Block]
 			Return(CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL]))
 			;[End Block]
-		Case Path + "leverhandle" + FileFormat
+		Case "leverhandle.b3d"
 			;[Block]
 			Return(CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL]))
 			;[End Block]
@@ -299,7 +296,7 @@ End Function
 Const RoomScale# = 8.0 / 2048.0
 
 Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
-	CatchErrors("LoadRMesh("+  File + ")")
+	CatchErrors("LoadRMesh(" + File + ")")
 	
 	Local mat.Materials
 	
@@ -327,7 +324,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 		RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
 	EndIf
 	
-	File = StripFileName(File)
+	Local FilePath$ = StripFileName(File)
 	
 	Local Count%, Count2%
 	
@@ -359,15 +356,15 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 			Temp1i = ReadByte(f)
 			If Temp1i <> 0
 				Temp1s = ReadString(f)
-				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
+				If FileType(FilePath + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3
 						If Instr(Temp1s, "_lm") <> 0
-							Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 1 + 256)
+							Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s, 1 + 256)
 						Else
-							Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s)
+							Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s)
 						EndIf
 					Else
-						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3)
+						Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s, 3)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3
@@ -677,10 +674,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 					tp.TempProps = New TempProps
 					tp\RoomTemplate = rt
 					
-					File = ReadString(f)
+					Temp2s = ReadString(f)
 					; ~ A hacky way to use .b3d format
-					If Right(File, 1) = "x" Then File = Left(File, Len(File) - 1) + "b3d"
-					tp\Name = "GFX\Map\Props\" + File
+					If FileExtension(Temp2s) = "x" Then Temp2s = Left(Temp2s, Len(Temp2s) - 1) + "b3d"
+					tp\Name = "GFX\Map\Props\" + Temp2s
 					
 					tp\x = ReadFloat(f) * RoomScale
 					tp\y = ReadFloat(f) * RoomScale
@@ -707,14 +704,14 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 					tp\y = ReadFloat(f) * RoomScale
 					tp\z = ReadFloat(f) * RoomScale
 					
-					File = ReadString(f)
+					Temp2s = ReadString(f)
 					; ~ A hacky way to use .b3d format
-					If Right(File, 2) = ".x"
-						File = Left(File, Len(File) - 2)
-					ElseIf Right(File, 4) = ".b3d"
-						File = Left(File, Len(File) - 4)
+					If FileExtension(Temp2s) = "x"
+						Temp2s = Left(Temp2s, Len(Temp2s) - 2)
+					ElseIf FileExtension(Temp2s) = "b3d"
+						Temp2s = Left(Temp2s, Len(Temp2s) - 4)
 					EndIf
-					tp\Name = "GFX\Map\Props\" + File + ".b3d"
+					tp\Name = "GFX\Map\Props\" + Temp2s + ".b3d"
 					
 					tp\Pitch = ReadFloat(f)
 					tp\Yaw = ReadFloat(f)
@@ -760,7 +757,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	
 	CloseFile(f)
 	
-	CatchErrors("Uncaught: LoadRMesh(" + File +")")
+	CatchErrors("Uncaught: LoadRMesh(" + File + ")")
 	
 	Return(OBJ)
 End Function
@@ -1564,9 +1561,9 @@ Function LoadRoomTemplates%(File$)
 End Function
 
 Function LoadRoomMesh%(rt.RoomTemplates)
-	If Instr(rt\OBJPath, ".rmesh") <> 0 ; ~ File is .rmesh
+	If FileExtension(rt\OBJPath) = "rmesh" ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
-	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
+	ElseIf FileExtension(rt\OBJPath) = "b3d" ; ~ File is .b3d
 		RuntimeError(Format(GetLocalString("runerr", "b3d"), rt\OBJPath))
 	Else ; ~ File not found
 		RuntimeError(Format(GetLocalString("runerr", "notfound"), rt\OBJPath))
