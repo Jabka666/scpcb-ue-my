@@ -305,8 +305,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	
 	ClsColor(0, 0, 0)
 	
-	; ~ Read the file
-	Local f% = ReadFile_Strict(File)
 	Local i%, j%, k%, x#, y#, z#, Yaw#, Pitch#, Roll#
 	Local Vertex%
 	Local Temp1i%, Temp2i%, Temp3i%
@@ -314,8 +312,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	Local Temp1s$, Temp2s$
 	Local CollisionMeshes% = CreatePivot()
 	;Local HasTriggerBox% = False
+	; ~ Read the file
+	Local f% = ReadFile(File)
 	
-	f = ReadFile_Strict(File)
 	If (Not f) Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
@@ -9263,10 +9262,10 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	
 	ch.Chunk = New Chunk
 	ch\ChunkPivot = CreatePivot()
+	PositionEntity(ch\ChunkPivot, x + 20.0, y, z + 20.0, True)
 	ch\x = x
 	ch\y = y
 	ch\z = z
-	PositionEntity(ch\ChunkPivot, ch\x + 20.0, ch\y, ch\z + 20.0, True)
 	
 	ch\IsSpawnChunk = IsSpawnChunk
 	
