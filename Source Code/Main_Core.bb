@@ -4330,6 +4330,7 @@ Function UpdateGUI%()
 						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 1.5), 100.0)
 						
 						If SelectedItem\State3 = 100.0
+							me\LightBlink = 0.5
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If wi\NightVision > 0
@@ -5296,6 +5297,7 @@ Function UpdateGUI%()
 						EndIf
 						
 						If SelectedItem\State = 100.0
+							me\LightBlink = 0.5
 							If wi\HazmatSuit > 0
 								CreateMsg(GetLocalString("msg", "suit.off"))
 								wi\HazmatSuit = 0
@@ -5342,6 +5344,7 @@ Function UpdateGUI%()
 					SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
 					
 					If SelectedItem\State = 100.0
+						me\LightBlink = 0.5
 						If wi\BallisticVest > 0
 							CreateMsg(GetLocalString("msg", "vest.off"))
 							wi\BallisticVest = 0
@@ -5396,6 +5399,7 @@ Function UpdateGUI%()
 						EndIf
 						
 						If SelectedItem\State = 100.0
+							me\LightBlink = 0.5
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If wi\GasMask > 0
@@ -5470,6 +5474,7 @@ Function UpdateGUI%()
 						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.6), 100.0)
 						
 						If SelectedItem\State = 100.0
+							me\LightBlink = 0.5
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If I_1499\Using > 0
@@ -5670,6 +5675,7 @@ Function UpdateGUI%()
 						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 1.5), 100.0)
 						
 						If SelectedItem\State3 = 100.0
+							me\LightBlink = 0.5
 							If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 							
 							If wi\SCRAMBLE > 0
