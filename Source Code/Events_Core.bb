@@ -784,7 +784,7 @@ Function UpdateEvents%()
 									ResetEntity(n_I\Curr173\Collider)
 									RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 									
-									n_I\Curr173\Idle = (1 - (me\LightBlink > 0.0))
+									n_I\Curr173\Idle = (1 - (me\LightBlink >= 0.25))
 									
 									If e\room\NPC[2]\State <> 1.0 And (Not me\Terminated)
 										If EntityZ(e\room\NPC[2]\Collider) < e\room\z - 1150.0 * RoomScale
@@ -6218,7 +6218,7 @@ Function UpdateEvents%()
 						If wi\NightVision > 0 Then me\BlinkTimer = -10.0
 					EndIf
 					e\EventState = e\EventState + fps\Factor[0]
-				ElseIf e\EventState > 0.0 And me\LightBlink = 0.0
+				ElseIf e\EventState > 0.0 And me\LightBlink < 0.25
 					n_I\Curr173\Idle = 0
 					RemoveEvent(e)
 				EndIf

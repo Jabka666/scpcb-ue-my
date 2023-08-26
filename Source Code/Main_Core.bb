@@ -2122,7 +2122,7 @@ Function UpdateGame%()
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
 				If Rand(50000) = 3
-					me\LightBlink = Rnd(1.0, 2.0)
+					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 36.0 Then me\LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"), True)
 				EndIf
 			EndIf
