@@ -1500,7 +1500,7 @@ Function LoadRoomTemplates%(File$)
 	Local Loc$, i%
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
-	Local f% = OpenFile_Strict(File)
+	Local f% = OpenFile(File)
 	
 	While (Not Eof(f))
 		Loc = Trim(ReadLine(f))
