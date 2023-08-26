@@ -778,6 +778,10 @@ Function IsDoubleItem%(Variable%, ID%)
 				;[Block]
 				Message = GetLocalString("msg", "weartwo.cap")
 				;[End Block]
+			Case I_714\Using
+				;[Block]
+				Message = GetLocalString("msg", "weartwo.ring")
+				;[End Block]
 		End Select
 		CreateMsg(Message)
 		SelectedItem = Null

@@ -5252,6 +5252,17 @@ Function UpdateGUI%()
 				Case "scp714", "coarse714"
 					;[Block]
 					If CanUseItem(True, True)
+						Select SelectedItem\ItemTemplate\TempName
+							Case "coarse714"
+								;[Block]
+								If IsDoubleItem(I_714\Using, 1) Then Return
+								;[End Block]
+							Case "scp714"
+								;[Block]
+								If IsDoubleItem(I_714\Using, 2) Then Return
+								;[End Block]
+						End Select
+						
 						If I_714\Using > 0
 							CreateMsg(GetLocalString("msg", "714.off"))
 							I_714\Using = 0
