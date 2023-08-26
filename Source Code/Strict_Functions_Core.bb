@@ -44,7 +44,6 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	
 	If snd <> Null
-		Local ShouldPlay% = True
 		Local i%
 		
 		For i = 0 To MaxChannelsAmount - 1
