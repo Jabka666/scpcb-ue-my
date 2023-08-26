@@ -6127,7 +6127,9 @@ Function UpdateMTFUnit%(n.NPCs)
 		; ~ Teleport companions close to the leader if they get stuck
 		If n\State <> MTF_DISABLING_TESLA And n\State <> MTF_LOOKING_AT_SOME_TARGET And n\State <> MTF_SHOOTING_AT_PLAYER And n\State <> MTF_FOLLOW_PATH
 			If n <> n_I\MTFLeader
-				If EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
+				If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
+					If EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
+				EndIf
 			EndIf
 		EndIf
 		
