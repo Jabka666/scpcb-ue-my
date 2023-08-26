@@ -46,7 +46,7 @@ Items:
 NPCs:
 - Add SCP-173-J as a skin for SCP-173 during April Fools day.
 - Can no longer use SCP-268 against SCP-096.
-- Improved SCP-049-2 and MTF's AI.
+- Improved SCP-008-1, SCP-049, SCP-049-2 and MTF's AI.
 
 Bug Fixes:
 - Fixed SCP-939's texture which is too bright.

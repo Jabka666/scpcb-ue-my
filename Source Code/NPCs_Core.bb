@@ -180,6 +180,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				MTFSFX[0] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
 				MTFSFX[1] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
 			EndIf
+			
+			n\HP = 100
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
@@ -1976,8 +1978,6 @@ Function UpdateNPCs%()
 					
 					UpdateNPCBlinking(n)
 					
-					PlayerSeeAble = NPCSeesPlayer(n)
-					
 					Select n\State
 						Case 0.0 ; ~ Just lies
 							;[Block]
@@ -1991,13 +1991,20 @@ Function UpdateNPCs%()
 							If (PrevFrame < 288.0 And n\Frame >= 288.0) Lor (PrevFrame < 350.0 And n\Frame >= 350.0) Then PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							If n\Frame >= 555.9 Then n\State = 2.0
 							;[End Block]
-						Case 2.0 ; ~ Player is visible, tries to kill
+						Case 2.0 ; ~ Player/NPC is visible, tries to kill
 							;[Block]
 							n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 							If n\State2 > 0.0
-								If NPCSeesPlayer(n) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+								If n\Target = Null
+									If NPCSeesPlayer(n) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+									PointEntity(n\Collider, me\Collider)
+									Dist = EntityDistanceSquared(n\Collider, me\Collider)
+								Else
+									If NPCSeesNPC(n\Target, n) Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+									PointEntity(n\Collider, n\Target\Collider)
+									Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
+								EndIf
 								
-								PointEntity(n\Collider, me\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								
@@ -2005,7 +2012,7 @@ Function UpdateNPCs%()
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 								
-								If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
+								If Dist < 0.49
 									SetNPCFrame(n, 795.0)
 									n\State = 4.0
 								EndIf
@@ -2013,16 +2020,12 @@ Function UpdateNPCs%()
 								n\PathStatus = PATH_STATUS_NO_SEARCH
 								n\PathLocation = 0
 							Else
+								n\Target = Null
 								n\State = 3.0
 							EndIf
 							;[End Block]
-						Case 3.0 ; ~ Player isn't visible, tries to find
+						Case 3.0 ; ~ Player/NPC isn't visible, tries to find
 							;[Block]
-							If NPCSeesPlayer(n) = 1
-								n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-								n\State = 2.0
-							EndIf
-							
 							If n\PathTimer <= 0.0 ; ~ Update path
 								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
 								If n\PathStatus = PATH_STATUS_FOUND
@@ -2071,12 +2074,34 @@ Function UpdateNPCs%()
 									AnimateNPC(n, 557.0, 704.0, 0.2)
 								EndIf
 							EndIf
+							
+							For n2.NPCs = Each NPCs
+								If n2\NPCType = NPCTypeMTF And (Not n2\IsDead)
+									If NPCSeesNPC(n2, n) = 1
+										n\Target = n2
+										n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+										n\State = 2.0
+										Exit
+									EndIf
+								EndIf
+							Next
+							
+							If n\Target = Null
+								If NPCSeesPlayer(n) = 1
+									n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+									n\State = 2.0
+								EndIf
+							EndIf
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
 							If (Not me\Terminated)
 								n\CurrSpeed = 0.0
-								PointEntity(n\Collider, me\Collider)
+								If n\Target = Null
+									PointEntity(n\Collider, me\Collider)
+								Else
+									PointEntity(n\Collider, n\Target\Collider)
+								EndIf
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								If n\Frame <= 813.0
 									AnimateNPC(n, 795.0, 813.0, 0.7, False)
@@ -2104,8 +2129,8 @@ Function UpdateNPCs%()
 										EndIf
 									EndIf
 									If Attack
-										If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
-											If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0
+										If n\Target = Null
+											If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
 												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
 												InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, Rnd(0.25, 0.3) * DifficultyDMGMult, 0.2)
 												
@@ -2114,14 +2139,30 @@ Function UpdateNPCs%()
 													Kill(True)
 												EndIf
 											Else
-												PlaySound2(MissSFX, Camera, n\Collider)
+												PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 											EndIf
 										Else
-											PlaySound2(MissSFX, Camera, n\Collider, 2.5)
+											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
+												If n\Target\HP > 0
+													n\Target\HP = Max(n\Target\HP - Rnd(20.0, 30.0), 0.0)
+													PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
+												Else
+													n\Target\IsDead = True
+													n\Target = Null
+													n\State = 3.0
+													Return
+												EndIf
+											Else
+												PlaySound2(MissSFX, Camera, n\Collider, 2.5)
+											EndIf
 										EndIf
 									EndIf
 								EndIf
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+							EndIf
+							If n\Target\IsDead
+								n\Target = Null
+								n\State = 3.0
 							EndIf
 							;[End Block]
 					End Select
@@ -4460,17 +4501,23 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 11.0, 29.0, 0.1, False)
 							If n\Frame > 28.9 Then n\State = 3.0
 							;[End Block]
-						Case 2.0 ; ~ Player is visible, tries to kill
+						Case 2.0 ; ~ Player/NPC is visible, tries to kill
 							;[Block]
 							n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 							If n\State2 > 0.0
-								If NPCSeesPlayer(n) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+								If n\Target = Null
+									If NPCSeesPlayer(n) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+									PointEntity(n\Collider, me\Collider)
+									Dist = EntityDistanceSquared(n\Collider, me\Collider)
+								Else
+									If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * 2.0
+									PointEntity(n\Collider, n\Target\Collider)
+									Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
+								EndIf
 								
-								PointEntity(n\Collider, me\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								
-								Dist = EntityDistanceSquared(n\Collider, me\Collider)
 								If Dist < 9.0
 									AnimateNPC(n, Min(AnimTime(n\OBJ), 95.0), 125.0, n\CurrSpeed * 30.0)
 								Else
@@ -4488,16 +4535,12 @@ Function UpdateNPCs%()
 								n\PathStatus = PATH_STATUS_NO_SEARCH
 								n\PathLocation = 0
 							Else
+								n\Target = Null
 								n\State = 3.0
 							EndIf
 							;[End Block]
-						Case 3.0 ; ~ Player isn't visible, tries to find
+						Case 3.0 ; ~ Player/NPC isn't visible, tries to find
 							;[Block]
-							If NPCSeesPlayer(n) = 1
-								n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-								n\State = 2.0
-							EndIf
-							
 							If n\PathStatus = PATH_STATUS_FOUND
 								If n\Path[n\PathLocation] = Null
 									If n\PathLocation > 19
@@ -4570,17 +4613,39 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+							
+							For n2.NPCs = Each NPCs
+								If n2\NPCType = NPCTypeMTF And (Not n2\IsDead)
+									If NPCSeesNPC(n2, n) = 1
+										n\Target = n2
+										n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+										n\State = 2.0
+										Exit
+									EndIf
+								EndIf
+							Next
+							
+							If n\Target = Null
+								If NPCSeesPlayer(n) = 1
+									n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+									n\State = 2.0
+								EndIf
+							EndIf
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
 							If (Not me\Terminated)
 								n\CurrSpeed = 0.0
-								PointEntity(n\Collider, me\Collider)
+								If n\Target = Null
+									PointEntity(n\Collider, me\Collider)
+								Else
+									PointEntity(n\Collider, n\Target\Collider)
+								EndIf
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								AnimateNPC(n, 126.0, 165.0, 0.6, False)
 								If n\Frame >= 146.0 And PrevFrame < 146.0
-									If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
-										If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0
+									If n\Target = Null
+										If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
 											PlaySound_Strict(DamageSFX[Rand(5, 8)])
 											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0 + SelectedDifficulty\AggressiveNPCs, 0.0, Rnd(0.175, 0.225) * DifficultyDMGMult, 0.2)
 											If me\Injuries > 3.0
@@ -4588,16 +4653,33 @@ Function UpdateNPCs%()
 												Kill(True)
 											EndIf
 										Else
-											PlaySound2(MissSFX, Camera, n\Collider)
+											PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 										EndIf
 									Else
-										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
+										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
+											If n\Target\HP > 0
+												n\Target\HP = Max(n\Target\HP - Rnd(20.0, 30.0), 0.0)
+												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
+											Else
+												n\Target\IsDead = True
+												n\Target = Null
+												n\State = 3.0
+												Return
+											EndIf
+										Else
+											PlaySound2(MissSFX, Camera, n\Collider, 2.5)
+										EndIf
 									EndIf
 								ElseIf n\Frame >= 164.0
 									n\State = 2.0
 								EndIf
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							Else
+								n\State = 3.0
+							EndIf
+							
+							If n\Target\IsDead
+								n\Target = Null
 								n\State = 3.0
 							EndIf
 							;[End Block]
@@ -4649,7 +4731,7 @@ Function UpdateNPCs%()
 					
 					; ~ Loop the walk sound
 					If n\CurrSpeed > 0.005
-						If (PrevFrame < 80.0 And n\Frame >= 80.0) Lor (PrevFrame > 92.0 And n\Frame < 65.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+						If (PrevFrame < 80.0 And n\Frame >= 80.0) Lor (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 95.0 And n\Frame >= 95.0) Lor (PrevFrame < 113.0 And n\Frame >= 113.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 					EndIf
 					
 					; ~ Loop the breath sound
@@ -4970,34 +5052,6 @@ Function UpdateMTFUnit%(n.NPCs)
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 				EndIf
 				
-				PlayerSeeAble = NPCSeesPlayer(n)
-				If PlayerSeeAble > 0
-					If n\LastSeen > 0 And n\LastSeen < 70.0 * 15.0
-						If PlayerSeeAble < 2
-							LoadNPCSound(n, "SFX\Character\MTF\ThereHeIs" + Rand(6) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						EndIf
-					Else
-						If PlayerSeeAble = 1
-							LoadNPCSound(n, "SFX\Character\MTF\Stop" + Rand(6) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						ElseIf PlayerSeeAble = 2
-							LoadNPCSound(n, "SFX\Character\MTF\ClassD" + Rand(4) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						EndIf
-					EndIf
-					
-					n\EnemyX = EntityX(me\Collider, True)
-					n\EnemyY = EntityY(me\Collider, True)
-					n\EnemyZ = EntityZ(me\Collider, True)
-					n\PathTimer = 0.0
-					n\PathStatus = PATH_STATUS_NO_SEARCH
-					n\LastSeen = 70.0 * Rnd(30.0, 40.0)
-					n\Reload = 70.0 * (2.85 - (1.4 * SelectedDifficulty\AggressiveNPCs))
-					n\State2 = 70.0 * (15.0 * PlayerSeeAble) ; ~ Give up after 15 seconds (30 seconds if detected by loud noise, over camera: 45)
-					n\State = MTF_SEARCHING_PLAYER
-				EndIf
-				
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
 				If n_I\Curr173\Idle < 2
 					If NPCSeesNPC(n_I\Curr173, n) > 0
@@ -5143,6 +5197,34 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 				Next
+				
+				PlayerSeeAble = NPCSeesPlayer(n)
+				If PlayerSeeAble > 0
+					If n\LastSeen > 0 And n\LastSeen < 70.0 * 15.0
+						If PlayerSeeAble < 2
+							LoadNPCSound(n, "SFX\Character\MTF\ThereHeIs" + Rand(6) + ".ogg")
+							PlayMTFSound(n\Sound, n)
+						EndIf
+					Else
+						If PlayerSeeAble = 1
+							LoadNPCSound(n, "SFX\Character\MTF\Stop" + Rand(6) + ".ogg")
+							PlayMTFSound(n\Sound, n)
+						ElseIf PlayerSeeAble = 2
+							LoadNPCSound(n, "SFX\Character\MTF\ClassD" + Rand(4) + ".ogg")
+							PlayMTFSound(n\Sound, n)
+						EndIf
+					EndIf
+					
+					n\EnemyX = EntityX(me\Collider, True)
+					n\EnemyY = EntityY(me\Collider, True)
+					n\EnemyZ = EntityZ(me\Collider, True)
+					n\PathTimer = 0.0
+					n\PathStatus = PATH_STATUS_NO_SEARCH
+					n\LastSeen = 70.0 * Rnd(30.0, 40.0)
+					n\Reload = 70.0 * (2.85 - (1.4 * SelectedDifficulty\AggressiveNPCs))
+					n\State2 = 70.0 * (15.0 * PlayerSeeAble) ; ~ Give up after 15 seconds (30 seconds if detected by loud noise, over camera: 45)
+					n\State = MTF_SEARCHING_PLAYER
+				EndIf
 				;[End Block]
 			Case MTF_SEARCHING_PLAYER
 				;[Block]
