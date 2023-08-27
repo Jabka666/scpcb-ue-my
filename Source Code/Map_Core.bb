@@ -310,7 +310,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	Local CollisionMeshes% = CreatePivot()
 	;Local HasTriggerBox% = False
 	; ~ Read the file
-	Local f% = ReadFile(File)
+	Local f% = ReadFile_Strict(File)
 	
 	If (Not f) Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
@@ -1497,7 +1497,7 @@ Function LoadRoomTemplates%(File$)
 	Local Loc$, i%
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
-	Local f% = OpenFile(File)
+	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
 		Loc = Trim(ReadLine(f))
