@@ -4863,8 +4863,11 @@ Function UpdateMTFUnit%(n.NPCs)
 		SetNPCFrame(n, 532.0)
 		StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0 ; ~ Breath channel
+		If n = n_I\MTFLeader Then n_I\MTFLeader = Null
 		Return
 	Else
+		If n_I\MTFLeader = Null Then n_I\MTFLeader = n
+		
 		n\MaxGravity = 0.03
 		
 		UpdateNPCBlinking(n)
