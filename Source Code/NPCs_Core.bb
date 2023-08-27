@@ -4658,7 +4658,7 @@ Function UpdateNPCs%()
 									Else
 										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
 											If n\Target\HP > 0
-												n\Target\HP = Max(n\Target\HP - Rnd(20.0, 30.0), 0.0)
+												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
 												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 											Else
 												n\Target\IsDead = True
@@ -6052,7 +6052,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						PointEntity(n\Collider, n\Target\Collider)
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
-						If Dist < 1.69 Then n\State3 = 70.0 * 2.0
+						If Dist < 4.0 Then n\State3 = 70.0 * 2.0
 						If n\State3 > 0.0
 							n\Speed = 0.02
 							n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -6143,7 +6143,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								EndIf
 								n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							Else
-								If Dist >= 1.69 And n\State3 =< 0.0
+								If Dist >= 1.0 And n\State3 =< 0.0
 									PointEntity(n\Collider, n\Target\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
