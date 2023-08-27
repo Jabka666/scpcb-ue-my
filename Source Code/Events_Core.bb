@@ -2836,13 +2836,10 @@ Function UpdateEvents%()
 									If n\NPCType = NPCTypeMTF And e\room\NPC[1] = Null
 										If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) <= 5.0 And (e\room\Angle Mod 180 = 90.0) Lor Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) <= 5.0 And (e\room\Angle Mod 180 = 0.0)
 											If EntityDistanceSquared(n\Collider, e\room\OBJ) < PowTwo(500.0 * RoomScale)
-												LoadNPCSound(n, "SFX\Character\MTF\Tesla0.ogg")
-												PlayMTFSound(n\Sound, n)
-												
 												n\PrevState = 1
 												n\PathTimer = 0.0
 												n\PathStatus = PATH_STATUS_NO_SEARCH
-												n\Idle = 70.0 * 10.0
+												n\State3 = 70.0 * 10.0
 												
 												n\State = MTF_DISABLING_TESLA
 												e\room\NPC[1] = n
@@ -2860,7 +2857,7 @@ Function UpdateEvents%()
 								EndIf
 							Next
 							If e\room\NPC[1] <> Null
-								If e\room\NPC[1]\Idle <= 0.0
+								If e\room\NPC[1]\State3 <= 0.0
 									StopChannel(e\SoundCHN) : e\SoundCHN = 0
 									PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(3) + ".ogg")
 									e\EventState = 3.0

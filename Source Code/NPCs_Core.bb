@@ -2144,8 +2144,8 @@ Function UpdateNPCs%()
 										Else
 											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
 												If n\Target\HP > 0
-													n\Target\HP = Max(n\Target\HP - Rnd(20.0, 30.0), 0.0)
 													PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
+													n\Target\HP = Max(n\Target\HP - Rnd(20.0, 30.0), 0.0)
 												Else
 													n\Target\IsDead = True
 													n\Target = Null
@@ -4658,8 +4658,8 @@ Function UpdateNPCs%()
 									Else
 										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
 											If n\Target\HP > 0
-												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
 												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
+												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
 											Else
 												n\Target\IsDead = True
 												n\Target = Null
@@ -4859,12 +4859,11 @@ Function UpdateMTFUnit%(n.NPCs)
 	Local r.Rooms, p.Particles, n2.NPCs, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	
 	If n\IsDead
+		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
 		n\BlinkTimer = -1.0
-		SetNPCFrame(n, 532.0)
 		StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0 ; ~ Breath channel
 		If n = n_I\MTFLeader Then n_I\MTFLeader = Null
-		Return
 	Else
 		If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		
@@ -5191,7 +5190,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n2
-							n\Reload = 70.0 * 5.0
+							n\Reload = 70.0 * 4.0
 							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 							n\State3 = 0.0
 							n\State = MTF_ZOMBIES_SPOTTED
@@ -5205,7 +5204,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n2
-							n\Reload = 70.0 * 5.0
+							n\Reload = 70.0 * 3.0
 							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 							n\State3 = 0.0
 							n\State = MTF_ZOMBIES_SPOTTED
@@ -5219,7 +5218,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n2
-							n\Reload = 70.0 * 5.0
+							n\Reload = 70.0 * 3.0
 							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 							n\State3 = 0.0
 							n\State = MTF_ZOMBIES_SPOTTED
@@ -5522,7 +5521,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n2
-							n\Reload = 70.0 * 5.0
+							n\Reload = 70.0 * 4.0
 							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 							n\State3 = 0.0
 							n\State = MTF_ZOMBIES_SPOTTED
@@ -5536,7 +5535,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n2
-							n\Reload = 70.0 * 5.0
+							n\Reload = 70.0 * 3.0
 							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 							n\State3 = 0.0
 							n\State = MTF_ZOMBIES_SPOTTED
@@ -5550,7 +5549,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n2
-							n\Reload = 70.0 * 5.0
+							n\Reload = 70.0 * 3.0
 							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 							n\State3 = 0.0
 							n\State = MTF_ZOMBIES_SPOTTED
@@ -5663,7 +5662,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				;[Block]
 				For n2.NPCs = Each NPCs
 					If n2\NPCType = NPCTypeMTF And n2 <> n
-						If EntityDistanceSquared(n\Collider, n2\Collider) < 4.0
+						If EntityDistanceSquared(n\Collider, n2\Collider) < 4.0 And n2\State <> MTF_LOOKING_AT_SOME_TARGET
 							n2\PrevState = 0
 							n2\PathTimer = 0.0
 							n2\PathStatus = PATH_STATUS_NO_SEARCH
@@ -5680,16 +5679,20 @@ Function UpdateMTFUnit%(n.NPCs)
 					n\PrevState = 2
 				ElseIf n\PrevState = 2
 					n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 20.0)
-					If n\Frame > 200.0
+					If n\Frame < 1175.0
 						AnimateNPC(n, 423.0, 463.0, 0.5, False)
-						If n\Frame > 462.9 Then n\Frame = 78.0
+						If n\Frame > 462.9
+							LoadNPCSound(n, "SFX\Character\MTF\Tesla0.ogg")
+							PlayMTFSound(n\Sound, n)
+							SetNPCFrame(n, 1175.0)
+						EndIf
 					Else
-						AnimateNPC(n, 78.0, 193.0, 0.2, False)
+						AnimateNPC(n, 1175.0, 1290.0, 0.18, False)
 					EndIf
 				EndIf
 				
-				n\Idle = n\Idle - fps\Factor[0]
-				If n\Idle =< 0.0 Then
+				n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
+				If n\State3 =< 0.0 Then
 					For n2.NPCs = Each NPCs
 						If n2\NPCType = NPCTypeMTF And n2 <> n
 							If EntityDistanceSquared(n\Collider, n2\Collider) < 4.0 Then n2\State = MTF_WANDERING_AROUND
@@ -6199,7 +6202,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		; ~ Teleport back to the facility if fell through the floor
 		If PlayerRoom\RoomTemplate\Name <> "cont2_049" And EntityY(n\Collider) < -7.0 Then TeleportCloser(n)
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.15, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 End Function
 
