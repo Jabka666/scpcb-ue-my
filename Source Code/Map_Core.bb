@@ -3953,7 +3953,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ The door leading to containment chamber
 			r\RoomDoors.Doors[1] = CreateDoor(r\x + 2704.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 654.0 * RoomScale, 90.0, r)
-			r\RoomDoors[1]\AutoClose = False : r\RoomDoors[1]\MTFClose = False
+			r\RoomDoors[1]\AutoClose = False
 			For i = 0 To 1
 				FreeEntity(r\RoomDoors[1]\Buttons[i]) : r\RoomDoors[1]\Buttons[i] = 0
 			Next

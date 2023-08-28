@@ -853,20 +853,20 @@ Function UpdateNPCs%()
 						EndIf
 						PositionEntity(n\Collider, EntityX(n\Collider), Min(EntityY(n\Collider), 0.35), EntityZ(n\Collider))
 					Else ; ~ SCP-173 was captured by MTF
-						If n\Target <> Null
+						If n_I\MTFLeader <> Null
 							Local Tmp% = False
 							
-							Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
-							If Dist > PowTwo(HideDistance / 2.0)
-								If (Not EntityVisible(n\OBJ, me\Collider)) Then Tmp = True
+							Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
+							If (Not EntityVisible(n\Collider, n_I\MTFLeader\Collider)) And (Not EntityInView(n\OBJ, Camera))
+								If Dist > PowTwo(HideDistance / 2.0) Then Tmp = True
 							EndIf
 							If (Not Tmp)
-								PointEntity(n\OBJ, n\Target\Collider)
+								PointEntity(n\OBJ, n_I\MTFLeader\Collider)
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0, True)
 								MoveEntity(n\Collider, 0.0, 0.0, 0.016 * fps\Factor[0] * Max(Min(((Sqr(Dist) * 2.0) - 1.0) * 0.5, 1.0), -0.5))
 								n\GravityMult = 1.0
 							Else
-								PositionEntity(n\Collider, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.3, EntityZ(n\Target\Collider))
+								PositionEntity(n\Collider, EntityX(n_I\MTFLeader\Collider), EntityY(n_I\MTFLeader\Collider) + 0.3, EntityZ(n_I\MTFLeader\Collider))
 								ResetEntity(n\Collider)
 								n\DropSpeed = 0.0
 								n\GravityMult = 0.0
@@ -4935,49 +4935,36 @@ Function UpdateMTFUnit%(n.NPCs)
 								EndIf
 							Next
 						Else
-							Local Tmp% = False
-							
-							If (Not EntityVisible(n\Collider, n_I\Curr173\Collider))
-								If EntityDistanceSquared(n\Collider, n_I\Curr173\Collider) > 16.0 Then Tmp = True
-							EndIf
-							
-							If (Not Tmp)
-								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Name = "cont1_173"
-										Local FoundChamber% = False
-										Local Pvt% = CreatePivot()
-										
-										PositionEntity(Pvt, EntityX(r\OBJ, True) + 4736.0 * RoomScale, 0.5, EntityZ(r\OBJ, True) + 1692.0 * RoomScale)
-										
-										If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
-										
-										FreeEntity(Pvt) : Pvt = 0
-										
-										If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And (Not FoundChamber)
-											x = r\x + 4736.0 * RoomScale
-											y = 0.1
-											z = r\z + 1722.0 * RoomScale
-											Exit
-										ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And FoundChamber
-											n\PathX = r\x + 4736.0 * RoomScale
-											n\PathZ = r\z + 1722.0 * RoomScale
-											Exit
-										Else
-											n_I\Curr173\Idle = 3
-											n_I\Curr173\Target = Null
-											LoadNPCSound(n, "SFX\Character\MTF\173\Cont" + Rand(4) + ".ogg")
-											PlayMTFSound(n\Sound, n)
-											If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
-											If r\RoomDoors[0]\Open Then OpenCloseDoor(r\RoomDoors[0])
-											Exit
-										EndIf
+							For r.Rooms = Each Rooms
+								If r\RoomTemplate\Name = "cont1_173"
+									Local FoundChamber% = False
+									Local Pvt% = CreatePivot()
+									
+									PositionEntity(Pvt, EntityX(r\OBJ, True) + 4736.0 * RoomScale, 0.5, EntityZ(r\OBJ, True) + 1692.0 * RoomScale)
+									
+									If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
+									
+									FreeEntity(Pvt) : Pvt = 0
+									
+									If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And (Not FoundChamber)
+										x = r\x + 4736.0 * RoomScale
+										y = 0.1
+										z = r\z + 1722.0 * RoomScale
+										Exit
+									ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And FoundChamber
+										n\PathX = r\x + 4736.0 * RoomScale
+										n\PathZ = r\z + 1722.0 * RoomScale
+										Exit
+									Else
+										n_I\Curr173\Idle = 3
+										LoadNPCSound(n, "SFX\Character\MTF\173\Cont" + Rand(4) + ".ogg")
+										PlayMTFSound(n\Sound, n)
+										If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
+										If r\RoomDoors[0]\Open Then OpenCloseDoor(r\RoomDoors[0])
+										Exit
 									EndIf
-								Next
-							Else
-								x = EntityX(n_I\Curr173\Collider)
-								y = 0.1
-								z = EntityZ(n_I\Curr173\Collider)
-							EndIf
+								EndIf
+							Next
 						EndIf
 						If n\PathX = 0.0 Then n\PathStatus = FindPath(n, x, y, z) ; ~ We're going to this room for no particular reason
 					EndIf
@@ -5749,7 +5736,6 @@ Function UpdateMTFUnit%(n.NPCs)
 								LoadNPCSound(n_I\MTFLeader, "SFX\Character\MTF\173\Box" + Rand(3) + ".ogg")
 								PlayMTFSound(n_I\MTFLeader\Sound, n_I\MTFLeader)
 								; ~ Always attach to leader
-								n\Target\Target = n_I\MTFLeader
 								n\Target\Idle = 2
 							EndIf
 							
