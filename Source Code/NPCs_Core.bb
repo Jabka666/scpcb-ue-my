@@ -2026,6 +2026,12 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 3.0 ; ~ Player/NPC isn't visible, tries to find
 							;[Block]
+							If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
+								If EntityVisible(n\Collider, me\Collider)
+									SetNPCFrame(n, 795.0)
+									n\State = 4.0
+								EndIf
+							EndIf
 							If n\PathTimer <= 0.0 ; ~ Update path
 								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
 								If n\PathStatus = PATH_STATUS_FOUND
@@ -4541,6 +4547,12 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 3.0 ; ~ Player/NPC isn't visible, tries to find
 							;[Block]
+							If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
+								If EntityVisible(n\Collider, me\Collider)
+									SetNPCFrame(n, 126.0)
+									n\State = 4.0
+								EndIf
+							EndIf
 							If n\PathStatus = PATH_STATUS_FOUND
 								If n\Path[n\PathLocation] = Null
 									If n\PathLocation > 19
@@ -4671,7 +4683,11 @@ Function UpdateNPCs%()
 										EndIf
 									EndIf
 								ElseIf n\Frame >= 164.0
-									n\State = 2.0
+									If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
+										SetNPCFrame(n, 126.0)
+									Else
+										n\State = 2.0
+									EndIf
 								EndIf
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							Else
