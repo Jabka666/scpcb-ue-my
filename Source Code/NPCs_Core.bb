@@ -5081,7 +5081,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\PathTimer = 0.0
 						n\PathStatus = PATH_STATUS_NO_SEARCH
 						n\LastSeen = 70.0 * Rnd(30.0, 40.0)
-						n\Reload = 70.0 * (2.85 - (1.4 * SelectedDifficulty\AggressiveNPCs))
+						n\Reload = 70.0 * (3.0 - SelectedDifficulty\AggressiveNPCs)
 						n\State2 = 70.0 * (15.0 * PlayerSeeAble) ; ~ Give up after 15 seconds (30 seconds if detected by loud noise, over camera: 45)
 						n\State = MTF_SEARCHING_PLAYER
 					EndIf
@@ -5241,38 +5241,38 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\EnemyY = EntityY(me\Collider, True)
 						n\EnemyZ = EntityZ(me\Collider, True)
 						
+						PointEntity(n\Collider, me\Collider)
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+						
+						If n\Reload <= 0.0 And (Not me\Terminated)
+							Local PrevTerminated# = me\Terminated
+							
+							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+							
+							Pvt = CreatePivot()
+							
+							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
+							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
+							MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
+							
+							SqrValue = Sqr(Dist)
+							
+							Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
+							n\Reload = 8.0
+							
+							FreeEntity(Pvt) : Pvt = 0
+							
+							msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
+							
+							If (Not PrevTerminated) And me\Terminated
+								msg\DeathMsg = Format(GetLocalString("death", "ntf.terminated"), SubjectName)
+								PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetTerminated" + Rand(4) + ".ogg"), n)
+							EndIf
+						EndIf
+						
 						Dist = EntityDistanceSquared(me\Collider, n\Collider)
 						; ~ If close enough, start shooting at the player
-						If Dist < 25.0
-							PointEntity(n\Collider, me\Collider)
-							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-							
-							If n\Reload <= 0.0 And (Not me\Terminated)
-								Local PrevTerminated# = me\Terminated
-								
-								PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
-								
-								Pvt = CreatePivot()
-								
-								RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
-								PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-								MoveEntity(Pvt, 0.0632, 0.84925, 0.5451)
-								
-								SqrValue = Sqr(Dist)
-								
-								Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
-								n\Reload = 8.0
-								
-								FreeEntity(Pvt) : Pvt = 0
-								
-								msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
-								
-								If (Not PrevTerminated) And me\Terminated
-									msg\DeathMsg = Format(GetLocalString("death", "ntf.terminated"), SubjectName)
-									PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetTerminated" + Rand(4) + ".ogg"), n)
-								EndIf
-							EndIf
-							
+						If Dist < 9.0
 							For n2.NPCs = Each NPCs
 								If n2\NPCType = NPCTypeMTF And n2 <> n
 									If n2\State = MTF_WANDERING_AROUND
@@ -5285,7 +5285,7 @@ Function UpdateMTFUnit%(n.NPCs)
 											n2\State2 = n\State2
 											n2\PathTimer = 0.0
 											n2\PathStatus = PATH_STATUS_NO_SEARCH
-											n2\Reload = 200.0 - (100.0 * SelectedDifficulty\AggressiveNPCs)
+											n2\Reload = 70.0 * (4.0 - SelectedDifficulty\AggressiveNPCs)
 											n2\PrevState = 0
 											n2\State = MTF_SEARCHING_PLAYER
 										EndIf
@@ -5297,7 +5297,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								SetNPCFrame(n, 423.0)
 								n\PrevState = 2
 							ElseIf n\PrevState = 2
-								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 20.0)
+								n\CurrSpeed = 0.0
 								If n\Frame > 200.0
 									AnimateNPC(n, 424.0, 463.0, 0.5, False)
 									If n\Frame > 462.9 Then n\Frame = 78.0
@@ -5317,7 +5317,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					Else
 						n\LastSeen = n\LastSeen - fps\Factor[0]
 						
-						n\Reload = 8.0
+						If n\Reload =< 8.0 Then n\Reload = 8.0
 						
 						If n\PathTimer <= 0.0 ; ~ Update path
 							n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
@@ -5332,7 +5332,6 @@ Function UpdateMTFUnit%(n.NPCs)
 								EndIf
 							EndIf
 						ElseIf n\PathTimer <= 70.0 * 2.5
-							n\PathTimer = n\PathTimer - fps\Factor[0]
 							n\CurrSpeed = 0.0
 							If n\PrevState = 0
 								If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
@@ -5345,6 +5344,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								AnimateNPC(n, 350.0, 423.0, 0.5, False)
 								If n\Frame > 422.9 Then n\PrevState = 0
 							EndIf
+							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 						Else
 							If n\PathStatus = PATH_STATUS_NOT_FOUND
 								n\CurrSpeed = 0.0
@@ -5681,7 +5681,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					SetNPCFrame(n, 423.0)
 					n\PrevState = 2
 				ElseIf n\PrevState = 2
-					n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 20.0)
+					n\CurrSpeed = 0.0
 					If n\Frame < 1175.0
 						AnimateNPC(n, 423.0, 463.0, 0.5, False)
 						If n\Frame > 462.9
