@@ -1974,7 +1974,7 @@ Function UpdateEvents%()
 					If me\Zone > 0
 						If EntityPitch(e\room\RoomLevers[0]\OBJ, True) > 0.0 ; ~ Camera feed on
 							For sc.SecurityCams = Each SecurityCams
-								If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "cont1_106" And sc\room\RoomTemplate\Name <> "cont1_205" Then sc\CoffinEffect = 2
+								If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "cont1_205" Then sc\CoffinEffect = 2
 								If sc\room = e\room Then sc\Screen = True
 							Next
 						Else ; ~ Camera feed off
