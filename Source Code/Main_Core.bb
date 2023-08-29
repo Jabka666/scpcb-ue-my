@@ -2271,11 +2271,6 @@ Function UpdateGame%()
 			EndIf
 			
 			If me\FallTimer < 0.0
-				If SelectedItem <> Null
-					If Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit") Lor Instr(SelectedItem\ItemTemplate\TempName, "vest")
-						If wi\HazmatSuit = 0 And wi\BallisticVest = 0 Then DropItem(SelectedItem)
-					EndIf
-				EndIf
 				NullSelectedStuff()
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
 				me\FallTimer = me\FallTimer - fps\Factor[0]
@@ -2317,26 +2312,14 @@ Function UpdateGame%()
 		
 		If KeyHit(key\INVENTORY)
 			If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1
-				Local W$ = ""
-				Local V# = 0.0
-				
-				If SelectedItem <> Null
-					W = SelectedItem\ItemTemplate\TempName
-					V = SelectedItem\State
-					If W = "paper" Lor W = "badge" Lor W = "oldpaper" Lor W = "ticket" Lor W = "scp1025"
-						If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
-					EndIf
+				If InvOpen
+					StopMouseMovement()
+				Else
+					mo\DoubleClickSlot = -1
 				EndIf
-				If (W <> "vest" And W <> "finevest" And W <> "hazmatsuit" And W <> "finehazmatsuit" And W <> "veryfinehazmatsuit" And W <> "hazmatsuit148") Lor V = 0.0 Lor V = 100.0
-					If InvOpen
-						StopMouseMovement()
-					Else
-						mo\DoubleClickSlot = -1
-					EndIf
-					InvOpen = (Not InvOpen)
-					OtherOpen = Null
-					SelectedItem = Null
-				EndIf
+				InvOpen = (Not InvOpen)
+				OtherOpen = Null
+				SelectedItem = Null
 			EndIf
 		EndIf
 		
@@ -2614,9 +2597,10 @@ Function UpdateCough%(Chance_%)
 End Function
 
 Function MakeMeUnplayable%()
-	me\Playable = False
-	InvOpen = False
-	SelectedItem = Null
+	If me\Playable
+		NullSelectedStuff()
+		me\Playable = False
+	EndIf
 End Function
 
 Function UpdateMoving%()
@@ -3543,17 +3527,6 @@ Function UpdateGUI%()
 		igm\AchievementsMenu = 0
 		igm\OptionsMenu = 0
 		igm\QuitMenu = 0
-		
-		d_I\SelectedDoor = Null
-		SelectedScreen = Null
-		sc_I\SelectedMonitor = Null
-		I_294\Using = False
-		If SelectedItem <> Null
-			If Instr(SelectedItem\ItemTemplate\TempName, "vest") Lor Instr(SelectedItem\ItemTemplate\TempName, "hazmatsuit")
-				If wi\BallisticVest = 0 And wi\HazmatSuit = 0 Then DropItem(SelectedItem)
-				SelectedItem = Null
-			EndIf
-		EndIf
 	EndIf
 	
 	Local PrevOtherOpen.Items, PrevItem.Items
@@ -5758,7 +5731,7 @@ Function UpdateGUI%()
 					;[End Block]
 			End Select
 			
-			If mo\MouseHit2
+			If mo\MouseHit2 Lor KeyHit(key\INVENTORY) Lor me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Lor me\Zombie
 				Select SelectedItem\ItemTemplate\TempName
 					Case "firstaid", "finefirstaid", "firstaid2", "cap", "scp268", "fine268", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 						;[Block]
@@ -5780,6 +5753,7 @@ Function UpdateGUI%()
 						;[End Block]
 				End Select
 				If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
+				If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
 				SelectedItem = Null
 			EndIf
 		Else
