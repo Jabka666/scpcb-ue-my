@@ -4314,7 +4314,7 @@ Function UpdateGUI%()
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[1])
 							Else
 								CreateMsg(GetLocalString("msg", "nvg.on"))
-								opt\CameraFogFar = 17.0
+								opt\CameraFogFar = HideDistance
 								Select SelectedItem\ItemTemplate\TempName
 									Case "nvg"
 										;[Block]
@@ -5670,7 +5670,7 @@ Function UpdateGUI%()
 								wi\SCRAMBLE = 0
 							Else
 								CreateMsg(GetLocalString("msg", "gear.on"))
-								opt\CameraFogFar = 9.0
+								opt\CameraFogFar = HideDistance * 1.88
 								Select SelectedItem\ItemTemplate\TempName
 									Case "scramble"
 										;[Block]
