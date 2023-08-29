@@ -3192,13 +3192,12 @@ Function UpdateZoneColor%()
 	Local i%
 	
 	LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
+	CameraFogMode(Camera, 1)
 	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor IsPlayerOutsideFacility()
-		CameraFogMode(Camera, 0)
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.01, 60.0)
 		;If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 	Else
-		CameraFogMode(Camera, 1)
 		CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
 		;If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
