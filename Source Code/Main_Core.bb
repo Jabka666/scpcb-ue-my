@@ -3414,6 +3414,14 @@ Function UpdateGUI%()
 		EndIf
 	EndIf
 	
+	If SelectedScreen <> Null
+		If mo\MouseUp1 Lor mo\MouseHit2 Then
+			FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
+			mo\MouseUp1 = False
+			SelectedScreen = Null
+		EndIf
+	EndIf
+	
 	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
 	Local ShouldDrawHUD% = True
 	
@@ -6191,15 +6199,7 @@ Function RenderGUI%()
 	EndIf
 	If chs\DebugHUD <> 0 Then RenderDebugHUD()
 	
-	If SelectedScreen <> Null
-		DrawBlock(SelectedScreen\Img, mo\Viewport_Center_X - ImageWidth(SelectedScreen\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedScreen\Img) / 2)
-		
-		If mo\MouseUp1 Lor mo\MouseHit2 Then
-			FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
-			mo\MouseUp1 = False
-			SelectedScreen = Null
-		EndIf
-	EndIf
+	If SelectedScreen <> Null Then DrawBlock(SelectedScreen\Img, mo\Viewport_Center_X - ImageWidth(SelectedScreen\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedScreen\Img) / 2)
 	
 	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
 	Local ShouldDrawHUD% = True
