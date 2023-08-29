@@ -4595,6 +4595,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp1025"
 					;[Block]
+					GiveAchievement(Achv1025)
 					If (Not SelectedItem\ItemTemplate\Img)
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
@@ -6538,7 +6539,6 @@ Function RenderGUI%()
 					;[End Block]
 				Case "scp1025"
 					;[Block]
-					GiveAchievement(Achv1025)
 					If (Not SelectedItem\ItemTemplate\Img)
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
@@ -6933,29 +6933,6 @@ Function RenderGUI%()
 					EndIf
 					;[End Block]
 			End Select
-			
-			If SelectedItem <> Null
-				If SelectedItem\ItemTemplate\Img <> 0
-					Local IN$ = SelectedItem\ItemTemplate\TempName
-					
-					If IN = "paper" Lor IN = "oldpaper" Lor IN = "badge" Lor IN = "oldbadge" Lor IN = "ticket" Lor IN = "scp1025"
-						For a_it.Items = Each Items
-							If a_it <> SelectedItem
-								Local IN2$ = a_it\ItemTemplate\TempName
-								
-								If IN2 = "paper" Lor IN2 = "oldpaper" Lor IN2 = "badge" Lor IN2 = "oldbadge" Lor IN2 = "ticket" Lor IN2 = "scp1025"
-									If a_it\ItemTemplate\Img <> 0
-										If a_it\ItemTemplate\Img <> SelectedItem\ItemTemplate\Img
-											FreeImage(a_it\ItemTemplate\Img) : a_it\ItemTemplate\Img = 0
-											Exit
-										EndIf
-									EndIf
-								EndIf
-							EndIf
-						Next
-					EndIf
-				EndIf
-			EndIf
 		EndIf
 	EndIf
 	
