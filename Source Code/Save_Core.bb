@@ -782,6 +782,12 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
+	For n.NPCs = Each NPCs
+		If n\NPCType = NPCTypeMTF Then
+			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
+		EndIf
+	Next
+	
 	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
@@ -1627,6 +1633,12 @@ Function LoadGameQuick%(File$)
 					If n2\ID = n\TargetID Then n\Target = n2
 				EndIf
 			Next
+		EndIf
+	Next
+	
+	For n.NPCs = Each NPCs
+		If n\NPCType = NPCTypeMTF Then
+			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 	Next
 	

@@ -9000,6 +9000,7 @@ Function UpdateMTF%()
 						For i = 0 To 2
 							n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.6, EntityZ(entrance\RoomCenter, True))
 						Next
+						If i = 0 Then n_I\MTFLeader = n
 					EndIf
 				EndIf
 			EndIf
