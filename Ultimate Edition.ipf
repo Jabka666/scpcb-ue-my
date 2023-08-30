@@ -22,6 +22,7 @@
  AbsPath="\Source Code\Loading_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Main_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Map_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
+ AbsPath="\Source Code\Rooms_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Materials_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Math_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Menu_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"

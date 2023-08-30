@@ -3939,3 +3939,6 @@ Function FillRoom%(r.Rooms)
 	
 	CatchErrors("Uncaught: FillRoom(Room name: " + r\RoomTemplate\Name + ")")
 End Function
+
+;~IDEal Editor Parameters:
+;~C#Blitz3D TSS
