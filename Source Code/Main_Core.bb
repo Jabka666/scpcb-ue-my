@@ -5669,7 +5669,7 @@ Function UpdateGUI%()
 								wi\SCRAMBLE = 0
 							Else
 								CreateMsg(GetLocalString("msg", "gear.on"))
-								opt\CameraFogFar = HideDistance * 1.88
+								opt\CameraFogFar = HideDistance / 1.88
 								Select SelectedItem\ItemTemplate\TempName
 									Case "scramble"
 										;[Block]
