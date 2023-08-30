@@ -3078,6 +3078,11 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	Return(de)
 End Function
 
+Function RemoveDecal%(de.Decals)
+	FreeEntity(de\OBJ) : de\OBJ = 0
+	Delete(de)
+End Function
+
 Function UpdateDecals%()
 	Local de.Decals
 	
@@ -3138,10 +3143,7 @@ Function UpdateDecals%()
 				End Select
 			EndIf
 			
-			If de\Size <= 0.0 Lor de\Alpha <= 0.0 Lor de\LifeTime = 5.0
-				FreeEntity(de\OBJ) : de\OBJ = 0
-				Delete(de)
-			EndIf
+			If de\Size <= 0.0 Lor de\Alpha <= 0.0 Lor de\LifeTime = 5.0 Then RemoveDecal(de)
 		Else
 			If (Not EntityHidden(de\OBJ)) Then HideEntity(de\OBJ)
 		EndIf

@@ -1040,8 +1040,7 @@ Function LoadGame%(File$)
 	Local de.Decals
 	
 	For de.Decals = Each Decals
-		FreeEntity(de\OBJ) : de\OBJ = 0
-		Delete(de)
+		RemoveDecal(de)
 	Next
 	
 	Temp = ReadInt(f)
@@ -1788,8 +1787,7 @@ Function LoadGameQuick%(File$)
 	Local de.Decals
 	
 	For de.Decals = Each Decals
-		FreeEntity(de\OBJ) : de\OBJ = 0
-		Delete(de)
+		RemoveDecal(de)
 	Next
 	
 	Temp = ReadInt(f)
@@ -1871,6 +1869,27 @@ Function LoadGameQuick%(File$)
 				If (Not e\room\Objects[0])
 					e\room\Objects[0] = CreatePivot()
 					e\room\Objects[1] = CreatePivot()
+				EndIf
+				;[End Block]
+			Case e_dimension_1499
+				;[Block]
+				If e\EventState > 0.0
+					HideChunks()
+					DeleteChunks()
+					For n.NPCs = Each NPCs
+						If n\NPCType = NPCType1499_1
+							If n\InFacility = 0 Then RemoveNPC(n)
+						EndIf
+					Next
+					
+					Local du.Dummy1499_1
+					
+					For du.Dummy1499_1 = Each Dummy1499_1
+						Delete(du)
+					Next
+					
+					e\EventStr = ""
+					e\EventState = 0.0
 				EndIf
 				;[End Block]
 			Case e_cont2_860_1

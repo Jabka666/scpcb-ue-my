@@ -5938,15 +5938,13 @@ Function RenderDebugHUD%()
 				TextEx(x, y + (200 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.currroom"), PlayerRoom\x, "{0}"), PlayerRoom\y, "{1}"), PlayerRoom\z, "{2}"))
 			EndIf
 			
-			If sc_I\SelectedMonitor <> Null
-				TextEx(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), sc_I\SelectedMonitor\ScrOBJ))
-			Else
+			If sc_I\SelectedMonitor = Null
 				TextEx(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_1.currmon"), "Null"))
 			EndIf
 			
 			If SelectedItem <> Null
-				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), SelectedItem\ItemTemplate\Name))
-			Else
+				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.curritem"), SelectedItem\ItemTemplate\Name))
+			ElseIf d_I\ClosestButton = 0
 				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), "Null"))
 			EndIf
 			
