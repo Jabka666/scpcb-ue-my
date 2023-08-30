@@ -45,7 +45,6 @@ Type SubtitlesMsg
 	Field CurrYPos#
 	Field Txt$
 	Field R%, G%, B%
-	Field IsGlitch%
 	Field TimeLeft#
 	Field Alpha#
 End Type
@@ -56,7 +55,6 @@ Type QueuedSubtitlesMsg
 	Field sound.Sound
 	Field Txt$
 	Field R%, G%, B%
-	Field IsGlitch%
 	Field TimeStart#
 	Field TimeLeft#
 End Type
@@ -126,11 +124,11 @@ Function UpdateSubtitles%()
 						
 						If Before lastSubtitles <> Null Then lastSubtitles = Before lastSubtitles
 					EndIf
-					CreateSubtitlesMsg(queue\SoundPath, queue\sound, Trim(TxtLine), queue\TimeLeft, queue\R, queue\G, queue\B, queue\IsGlitch)
+					CreateSubtitlesMsg(queue\SoundPath, queue\sound, Trim(TxtLine), queue\TimeLeft, queue\R, queue\G, queue\B)
 					HasSplit = True
 					TxtLine = NextLine
 				Else
-					CreateSubtitlesMsg(queue\SoundPath, queue\sound, Trim(TxtLine), queue\TimeLeft, queue\R, queue\G, queue\B, queue\IsGlitch)
+					CreateSubtitlesMsg(queue\SoundPath, queue\sound, Trim(TxtLine), queue\TimeLeft, queue\R, queue\G, queue\B)
 					TxtLine = ""
 				EndIf
 			Wend
@@ -214,14 +212,6 @@ Function RenderSubtitles%()
 		sub\yPos = BoxTop + (subassets\TextHeight * Lines) + (10 * MenuScale)
 		sub\CurrYPos = CurveValue(sub\yPos, sub\CurrYPos, 7.0)
 		
-		Local i%
-		
-		If sub\IsGlitch
-			For i = 0 To Rand(10, 15)
-				Txt = Replace(sub\Txt, Mid(sub\Txt, Rand(1, Len(Txt) - 1), 1), Chr(Rand(130, 250)))
-			Next
-		EndIf
-		
 		If opt\OverrideSubColor
 			Color((sub\R + opt\SubColorR) / 2.0, (sub\G + opt\SubColorG) / 2.0, (sub\B + opt\SubColorB) / 2.0)
 		Else
@@ -281,13 +271,6 @@ Function ParseSubtitlesSettings$(qsub.QueuedSubtitlesMsg)
 				If Trim(Lower(IniKey)) = "g" Then qsub\G = Int(Trim(Lower(IniValue)))
 				If Trim(Lower(IniKey)) = "b" Then qsub\B = Int(Trim(Lower(IniValue)))
 				
-				If Trim(Lower(IniKey)) = "glitch"
-					If Trim(Lower(IniValue)) = "true"
-						qsub\IsGlitch = True
-					ElseIf Trim(Lower(IniValue)) = "false"
-						qsub\IsGlitch = False
-					EndIf
-				EndIf
 				If Trim(Lower(IniKey)) = "length" Then qsub\TimeLeft = (Float(Trim(Lower(IniValue))) + 5.0) * 70.0
 			Wend
 		EndIf
@@ -364,7 +347,6 @@ Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#
 	queue\Txt = Txt
 	
 	queue\R = 255 : queue\G = 255 : queue\B = 255
-	queue\IsGlitch = False
 	
 	queue\TimeLeft = TimeLeft * 70.0
 	queue\TimeStart = TimeStart * 70.0
@@ -374,7 +356,7 @@ Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#
 	Insert queue Before First QueuedSubtitlesMsg
 End Function
 
-Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255, G% = 255, B% = 255, IsGlitch% = False)
+Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255, G% = 255, B% = 255)
 	If me\Deaf Then Return
 	
 	If sound <> Null
@@ -397,7 +379,6 @@ Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255,
 	sub\R = R
 	sub\G = G
 	sub\B = B
-	sub\IsGlitch = IsGlitch
 	sub\TimeLeft = TimeLeft
 	sub\Alpha = 0.0
 	
