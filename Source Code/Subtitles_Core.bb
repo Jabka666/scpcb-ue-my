@@ -160,7 +160,7 @@ Function SubtitlesGetINIFileSectionLocation%(Section$)
 	
 	Section = Lower(Section)
 	
-	Local n%=0
+	Local n% = 0
 	
 	While (Not Eof(f))
 		Local Strtemp$ = ReadLine(f)

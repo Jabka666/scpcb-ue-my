@@ -9593,7 +9593,13 @@ Function UpdateEndings%()
 										e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
 									Next
 									If e\EventState2 = 1.0
-										If EntityDistanceSquared(e\room\NPC[5]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[6]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[7]\Collider, me\Collider) < 36.0 Lor EntityDistanceSquared(e\room\NPC[8]\Collider, me\Collider) < 36.0
+										For i = 5 To 8
+											If NPCSeesPlayer(e\room\NPC[i]) = 1
+												Temp = True
+												Exit
+											EndIf
+										Next
+										If Temp
 											For i = 5 To 8
 												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 											Next
