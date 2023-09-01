@@ -2137,8 +2137,9 @@ Function UpdateNPCs%()
 									If Attack
 										If n\Target = Null
 											If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
-												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Collider)
+												PlaySound_Strict(DamageSFX[Rand(5, 8)])
 												InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, Rnd(0.25, 0.3) * DifficultyDMGMult, 0.2)
+												me\CameraShake = 2.0
 												
 												If me\Injuries > 3.0
 													msg\DeathMsg = Format(GetLocalString("death", "0492killed"), SubjectName)
@@ -3134,6 +3135,7 @@ Function UpdateNPCs%()
 														Kill(True)
 													EndIf
 												EndIf
+												me\CameraShake = 2.0
 											Else
 												PlaySound2(MissSFX, Camera, n\Collider)
 											EndIf
@@ -3152,7 +3154,7 @@ Function UpdateNPCs%()
 				Else
 					; ~ The NPC was killed
 					AnimateNPC(n, 515.0, 551.0, 0.15, False)
-					If n\Frame >= 550.0
+					If n\Frame > 550.9
 						If (Not EntityHidden(n\OBJ))
 							StopChannel(n\SoundCHN) : n\SoundCHN = 0
 							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
@@ -3457,6 +3459,7 @@ Function UpdateNPCs%()
 										
 										If (PrevFrame < 461.0 And n\Frame >= 461.0)
 											PlaySound_Strict(DamageSFX[11])
+											me\CameraShake = 2.0
 											Kill(True)
 										EndIf
 										If (PrevFrame < 476.0 And n\Frame >= 476.0) Lor (PrevFrame < 486.0 And n\Frame >= 486.0) Then PlaySound_Strict(DamageSFX[12])
@@ -3594,6 +3597,7 @@ Function UpdateNPCs%()
 										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 2.25
 											PlaySound_Strict(DamageSFX[11])
 											InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.2, 0.75))
+											me\CameraShake = 2.0
 										Else
 											SetNPCFrame(n, 449.0)
 										EndIf
@@ -4118,6 +4122,7 @@ Function UpdateNPCs%()
 										If Abs(DeltaYaw(n\Collider, me\Collider)) <= 60.0
 											PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
 											InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, Rnd(0.2, 0.25) * DifficultyDMGMult)
+											me\CameraShake = 2.0
 										EndIf
 									Else
 										PlaySound2(MissSFX, Camera, n\Collider, 2.5)
@@ -4442,12 +4447,14 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If Attack Then
+							If Attack
 								If Dist > 0.64 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0
 									PlaySound2(MissSFX, Camera, n\Collider, 2.5)
 								Else
-									InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, Rnd(0.3, 0.35) * DifficultyDMGMult, 0.2)
 									PlaySound2(DamageSFX[Rand(11, 12)], Camera, n\Collider)
+									InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, Rnd(0.3, 0.35) * DifficultyDMGMult, 0.2)
+									me\CameraShake = 2.0
+									
 									If me\Injuries > 10.0
 										If PlayerRoom\RoomTemplate\Name = "dimension_1499"
 											msg\DeathMsg = GetLocalString("death", "1499.dimension")
@@ -4660,6 +4667,8 @@ Function UpdateNPCs%()
 										If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
 											PlaySound_Strict(DamageSFX[Rand(5, 8)])
 											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0 + SelectedDifficulty\AggressiveNPCs, 0.0, Rnd(0.175, 0.225) * DifficultyDMGMult, 0.2)
+											me\CameraShake = 2.0
+											
 											If me\Injuries > 3.0
 												msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
 												Kill(True)
@@ -4872,7 +4881,7 @@ Const MTF_DISABLING_TESLA% = 11
 ;[End Block]
 
 Function UpdateMTFUnit%(n.NPCs)
-	Local r.Rooms, p.Particles, n2.NPCs, wp.WayPoints, wayPointCloseToPlayer.WayPoints
+	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints
 	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
@@ -4927,7 +4936,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					Else ; ~ I am the leader
 						If n_I\Curr173\Idle <> 2
 							For r.Rooms = Each Rooms
-								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
+								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2.0)) = 1)
 									x = r\x
 									y = 0.1
 									z = r\z
@@ -5374,12 +5383,12 @@ Function UpdateMTFUnit%(n.NPCs)
 									If Rand(35) = 1 Then
 										RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 										
-										For wp.WayPoints = Each WayPoints
+										For w.WayPoints = Each WayPoints
 											If Rand(3) = 1
-												If EntityDistanceSquared(wp\OBJ, n\Collider) < 36.0
-													n\EnemyX = EntityX(wp\OBJ, True)
-													n\EnemyY = EntityY(wp\OBJ, True)
-													n\EnemyZ = EntityZ(wp\OBJ, True)
+												If EntityDistanceSquared(w\OBJ, n\Collider) < 36.0
+													n\EnemyX = EntityX(w\OBJ, True)
+													n\EnemyY = EntityY(w\OBJ, True)
+													n\EnemyZ = EntityZ(w\OBJ, True)
 													n\PathTimer = 0.0
 													Exit
 												EndIf
@@ -5802,12 +5811,12 @@ Function UpdateMTFUnit%(n.NPCs)
 								If Rand(35) = 1 Then
 									RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 									
-									For wp.WayPoints = Each WayPoints
+									For w.WayPoints = Each WayPoints
 										If Rand(3) = 1
-											If EntityDistanceSquared(wp\OBJ, n\Collider) < 36.0
-												n\EnemyX = EntityX(wp\OBJ, True)
-												n\EnemyY = EntityY(wp\OBJ, True)
-												n\EnemyZ = EntityZ(wp\OBJ, True)
+											If EntityDistanceSquared(w\OBJ, n\Collider) < 36.0
+												n\EnemyX = EntityX(w\OBJ, True)
+												n\EnemyY = EntityY(w\OBJ, True)
+												n\EnemyZ = EntityZ(w\OBJ, True)
 												n\PathTimer = 0.0
 												Exit
 											EndIf

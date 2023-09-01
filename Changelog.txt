@@ -12,6 +12,7 @@ General:
 - Light Blink NPC visiblity adjustments.
 - Button panels now glow yellow when in use.
 - Removed additional fogging on Very Fine Gas Mask and Very Fine Hazmat Suit.
+- The camera now shakes when get hit.
 
 Mechanics:
 - Removed accidental item dropping.
