@@ -3128,9 +3128,9 @@ Function UpdateNPCs%()
 													
 													If me\Injuries > 3.0
 														If PlayerRoom\RoomTemplate\Name = "room2_ez"
-															msg\DeathMsg = GetLocalString("death", "895.offices")
+															msg\DeathMsg = GetLocalString("death", "035.offices")
 														Else
-															msg\DeathMsg = GetLocalString("death", "895.default")
+															msg\DeathMsg = GetLocalString("death", "035.default")
 														EndIf
 														Kill(True)
 													EndIf
