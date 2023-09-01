@@ -2167,9 +2167,11 @@ Function UpdateNPCs%()
 								EndIf
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							EndIf
-							If n\Target\IsDead
-								n\Target = Null
-								n\State = 3.0
+							If n\Target <> Null
+								If n\Target\IsDead
+									n\State = 3.0
+									n\Target = Null
+								EndIf
 							EndIf
 							;[End Block]
 					End Select
@@ -4703,9 +4705,11 @@ Function UpdateNPCs%()
 								n\State = 3.0
 							EndIf
 							
-							If n\Target\IsDead
-								n\Target = Null
-								n\State = 3.0
+							If n\Target <> Null
+								If n\Target\IsDead
+									n\Target = Null
+									n\State = 3.0
+								EndIf
 							EndIf
 							;[End Block]
 						Case 5.0 ; ~ Idling
