@@ -5255,7 +5255,6 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\EnemyZ = EntityZ(me\Collider, True)
 						
 						PointEntity(n\Collider, me\Collider)
-						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
 						If n\Reload <= 0.0 And (Not me\Terminated)
 							Local PrevTerminated# = me\Terminated
@@ -5321,11 +5320,11 @@ Function UpdateMTFUnit%(n.NPCs)
 						Else
 							PositionEntity(n\OBJ, n\EnemyX, n\EnemyY, n\EnemyZ, True)
 							PointEntity(n\Collider, n\OBJ)
-							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 						EndIf
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
 					Else
 						n\LastSeen = n\LastSeen - fps\Factor[0]
@@ -5630,8 +5629,8 @@ Function UpdateMTFUnit%(n.NPCs)
 				PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ, True)
 				PointEntity(n\Collider, Pvt)
 				FreeEntity(Pvt) : Pvt = 0
-				n\CurrSpeed = 0.0
 				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+				n\CurrSpeed = 0.0
 				AnimateNPC(n, 78.0, 194.0, 0.2)
 				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 				;[End Block]
@@ -5639,6 +5638,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				;[Block]
 				PointEntity(n\Collider, me\Collider)
 				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+				n\CurrSpeed = 0.0
 				AnimateNPC(n, 346.0, 351.0, 0.2)
 				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
 				
@@ -5741,7 +5741,6 @@ Function UpdateMTFUnit%(n.NPCs)
 						If n <> n_I\MTFLeader Then TempDist = 4.0
 						
 						PointEntity(n\Collider, n\Target\Collider)
-						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
 						If Curr173Dist < TempDist
 							n\State3 = n\State3 + fps\Factor[0]
@@ -5762,11 +5761,11 @@ Function UpdateMTFUnit%(n.NPCs)
 					Else
 						PositionEntity(n\OBJ, n\EnemyX, n\EnemyY, n\EnemyZ, True)
 						PointEntity(n\Collider, n\OBJ)
-						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 						TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 						AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 					EndIf
+					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 				Else
 					If n\PathTimer <= 0.0 ; ~ Update path
