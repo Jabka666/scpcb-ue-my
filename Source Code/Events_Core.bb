@@ -9066,7 +9066,7 @@ Function UpdateEndings%()
 											e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
 										Next
 										
-										If (e\room\NPC[4]\State = MTF_FOLLOW_PATH And NPCSeesPlayer(e\room\NPC[4]) = 1) Lor (e\room\NPC[5]\State = MTF_FOLLOW_PATH And NPCSeesPlayer(e\room\NPC[5]) = 1)
+										If (e\room\NPC[4]\State = MTF_FOLLOW_PATH And NPCSeesPlayer(e\room\NPC[4], 4.0 - me\CrouchState + me\SndVolume) = 1) Lor (e\room\NPC[5]\State = MTF_FOLLOW_PATH And NPCSeesPlayer(e\room\NPC[5], 4.0 - me\CrouchState + me\SndVolume) = 1)
 											For i = 4 To 5
 												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 											Next
@@ -9328,7 +9328,7 @@ Function UpdateEndings%()
 											Next
 											
 											For i = 5 To 8
-												If NPCSeesPlayer(e\room\NPC[i]) = 1
+												If NPCSeesPlayer(e\room\NPC[i], 4.0 - me\CrouchState + me\SndVolume) = 1
 													e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
 												Else
 													e\room\NPC[i]\EnemyX = EntityX(n_I\Curr106\OBJ, True)
@@ -9594,7 +9594,7 @@ Function UpdateEndings%()
 									Next
 									If e\EventState2 = 1.0
 										For i = 5 To 8
-											If NPCSeesPlayer(e\room\NPC[i]) = 1
+											If NPCSeesPlayer(e\room\NPC[i], 4.0 - me\CrouchState + me\SndVolume) = 1
 												Temp = True
 												Exit
 											EndIf
