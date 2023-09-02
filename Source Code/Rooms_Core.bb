@@ -488,6 +488,8 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			ScaleSprite(sc\ScrOBJ, 896.0 * 0.5 * RoomScale, 896.0 * 0.5 * RoomScale)
 			CameraZoom(sc\Cam, 1.5)
+			HideEntity(sc\ScrOverlay)
+			HideEntity(sc\ScrOBJ)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x - 1536.0 * RoomScale, r\y + 730.0 * RoomScale, r\z + 192.0 * RoomScale)
