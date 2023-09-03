@@ -493,6 +493,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 1536.0 * RoomScale, r\y + 730.0 * RoomScale, r\z + 192.0 * RoomScale)
 			RotateEntity(r\Objects[0], 0.0, -90.0, 0.0)
 			EntityParent(r\Objects[0], r\OBJ)
+			HideEntity(sc\ScrOverlay)
+			HideEntity(sc\ScrOBJ)
 			
 			r\Objects[1] = sc\ScrOBJ
 			
@@ -1964,7 +1966,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Security camera inside the box
 			sc.SecurityCams = CreateSecurityCam(r\x + 768.0 * RoomScale, r\y - 5936.0 * RoomScale, r\z + 1632.0 * RoomScale, r, True, r\x - 462.0 * RoomScale, r\y - 7872.0 * RoomScale, r\z + 3105.0 * RoomScale)
-			sc\Angle = 315.0 : sc\Turn = 20.0 : sc\CoffinEffect = 0
+			sc\Angle = 315.0 : sc\Turn = 20.0
 			TurnEntity(sc\CameraOBJ, 45.0, 0.0, 0.0)
 			TurnEntity(sc\ScrOBJ, 0.0, -10.0, 0.0)
 			

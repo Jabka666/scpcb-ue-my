@@ -1974,13 +1974,11 @@ Function UpdateEvents%()
 					If me\Zone > 0
 						If EntityPitch(e\room\RoomLevers[0]\OBJ, True) > 0.0 ; ~ Camera feed on
 							For sc.SecurityCams = Each SecurityCams
-								If sc\CoffinEffect = 0 And sc\room\RoomTemplate\Name <> "cont1_205" Then sc\CoffinEffect = 2
-								If sc\room = e\room Then sc\Screen = True
+								If sc\CoffinEffect = 0 Then sc\CoffinEffect = 2
 							Next
 						Else ; ~ Camera feed off
 							For sc.SecurityCams = Each SecurityCams
 								If sc\CoffinEffect <> 1 Then sc\CoffinEffect = 0
-								If sc\room = e\room Then sc\Screen = False
 							Next
 						EndIf
 					EndIf
@@ -2168,11 +2166,7 @@ Function UpdateEvents%()
 					
 					ShouldPlay = 66
 					
-					If UpdateLever(e\room\RoomLevers[0]\OBJ)
-						TurnOffSecurityCam(e\room, False)
-					Else
-						TurnOffSecurityCam(e\room, True)
-					EndIf
+					TurnOffSecurityCam(e\room, (Not UpdateLever(e\room\RoomLevers[0]\OBJ)))
 				Else
 					CoffinDistance = e\room\Dist
 				EndIf
@@ -5565,12 +5559,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					For sc.SecurityCams = Each SecurityCams
 						If sc\room = e\room
-							If sc\Screen
-								If (Not EntityHidden(sc\ScrOverlay))
-									HideEntity(sc\MonitorOBJ)
-									HideEntity(sc\ScrOverlay)
-								EndIf
-							EndIf
+							If (Not EntityHidden(sc\MonitorOBJ)) Then HideEntity(sc\MonitorOBJ)
 							If (Not EntityHidden(sc\BaseOBJ))
 								HideEntity(sc\CameraOBJ)
 								HideEntity(sc\BaseOBJ)
@@ -7299,11 +7288,7 @@ Function UpdateEvents%()
 						If e\EventState2 = (-70.0) * 5.0
 							For sc.SecurityCams = Each SecurityCams
 								If sc\room = e\room
-									If sc\Screen
-										If EntityDistanceSquared(sc\ScrOBJ, Camera) < 25.0
-											If EntityVisible(sc\ScrOBJ, Camera) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
-										EndIf
-									EndIf
+									If sc\InSight And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
 									Exit
 								EndIf
 							Next
@@ -7528,13 +7513,7 @@ Function UpdateEvents%()
 						Next
 						For sc.SecurityCams = Each SecurityCams
 							If sc\room = e\room
-								If sc\Screen
-									If EntityHidden(sc\ScrOBJ)
-										ShowEntity(sc\ScrOverlay)
-										ShowEntity(sc\MonitorOBJ)
-										ShowEntity(sc\ScrOBJ)
-									EndIf
-								EndIf
+								If EntityHidden(sc\MonitorOBJ) Then ShowEntity(sc\MonitorOBJ)
 								Exit
 							EndIf
 						Next
@@ -7548,13 +7527,7 @@ Function UpdateEvents%()
 						Next
 						For sc.SecurityCams = Each SecurityCams
 							If sc\room = e\room
-								If sc\Screen
-									If (Not EntityHidden(sc\ScrOBJ))
-										HideEntity(sc\ScrOverlay)
-										HideEntity(sc\MonitorOBJ)
-										HideEntity(sc\ScrOBJ)
-									EndIf
-								EndIf
+								If (Not EntityHidden(sc\MonitorOBJ)) Then HideEntity(sc\MonitorOBJ)
 								Exit
 							EndIf
 						Next
