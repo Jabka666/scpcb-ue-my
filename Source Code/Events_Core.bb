@@ -5565,12 +5565,15 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					For sc.SecurityCams = Each SecurityCams
 						If sc\room = e\room
+							If sc\Screen
+								If (Not EntityHidden(sc\ScrOverlay))
+									HideEntity(sc\MonitorOBJ)
+									HideEntity(sc\ScrOverlay)
+								EndIf
+							EndIf
 							If (Not EntityHidden(sc\BaseOBJ))
 								HideEntity(sc\CameraOBJ)
 								HideEntity(sc\BaseOBJ)
-							EndIf
-							If sc\Screen
-								If (Not EntityHidden(sc\MonitorOBJ)) Then HideEntity(sc\MonitorOBJ)
 							EndIf
 							Exit
 						EndIf
