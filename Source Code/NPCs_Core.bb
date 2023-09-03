@@ -3451,7 +3451,7 @@ Function UpdateNPCs%()
 									
 									; ~ If close enough to attack or already attacking, play the attack anim
 									If (Dist < 1.0 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\Terminated)
-										msg\DeathMsg = ""
+										msg\DeathMsg = Format(GetLocalString("death", "860"), SubjectName)
 										
 										n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 										
