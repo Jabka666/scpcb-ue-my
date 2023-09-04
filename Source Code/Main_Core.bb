@@ -3298,6 +3298,8 @@ End Function
 Global DrawHandIcon%
 Global DrawArrowIcon%[4]
 
+Global IsUsingRadio% = False
+
 Function UpdateGUI%()
 	CatchErrors("UpdateGUI()")
 	
@@ -3367,7 +3369,7 @@ Function UpdateGUI%()
 								EndIf
 							EndIf
 						Else
-							StopChannel(e\SoundCHN) : e\SoundCHN = 0
+							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 						EndIf
 					Else
 						If e\Img2 <> 0
@@ -4769,7 +4771,9 @@ Function UpdateGUI%()
 					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
 					; ~ RadioState[6] = A timer for the "code channel"
 					; ~ RadioState[7] = Another timer for the "code channel"
+					
 					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio")
+						IsUsingRadio = True
 						If RadioState[5] = 0.0
 							CreateMsg(GetLocalString("msg", "radio"))
 							RadioState[5] = 1.0
@@ -4777,44 +4781,29 @@ Function UpdateGUI%()
 						EndIf
 						
 						If PlayerRoom\RoomTemplate\Name = "dimension_106"
-							For i = 0 To 4
+							For i = 0 To 5
 								If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 							Next
-							If ChannelPlaying(RadioCHN[6]) Then PauseChannel(RadioCHN[6])
 							
-							If (Not ChannelPlaying(RadioCHN[5]))
-								RadioCHN[5] = PlaySound_Strict(RadioStatic)
-								ResumeChannel(RadioCHN[5])
-							EndIf
+							If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
 						ElseIf CoffinDistance < 8.0
-							For i = 0 To 4
+							For i = 0 To 5
 								If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 							Next
-							If ChannelPlaying(RadioCHN[6]) Then PauseChannel(RadioCHN[6])
 							
-							If (Not ChannelPlaying(RadioCHN[5]))
-								ResumeChannel(RadioCHN[5])
-								RadioCHN[5] = PlaySound_Strict(RadioStatic895)
-							EndIf
+							If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic895)
 						Else
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
-									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
-									
 									If (Not opt\EnableUserTracks)
-										If (Not ChannelPlaying(RadioCHN[0]))
-											ResumeChannel(RadioCHN[0])
-											RadioCHN[0] = PlaySound_Strict(RadioStatic)
-										EndIf
+										If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
 									ElseIf UserTrackMusicAmount < 1
-										If (Not ChannelPlaying(RadioCHN[0]))
-											ResumeChannel(RadioCHN[0])
-											RadioCHN[0] = PlaySound_Strict(RadioStatic)
-										EndIf
+										If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
 									Else
+										If ChannelPlaying(RadioCHN[6]) Then StopChannel(RadioCHN[6]) : RadioCHN[6] = 0
+										
 										If (Not ChannelPlaying(RadioCHN[0]))
-											ResumeChannel(RadioCHN[0])
 											If (Not UserTrackFlag)
 												If opt\UserTrackMode
 													If RadioState[0] < (UserTrackMusicAmount - 1)
@@ -4856,10 +4845,9 @@ Function UpdateGUI%()
 									;[End Block]
 								Case 1
 									;[Block]
-									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
+									If ChannelPlaying(RadioCHN[6]) Then StopChannel(RadioCHN[6]) : RadioCHN[6] = 0
 									
 									If (Not ChannelPlaying(RadioCHN[1]))
-										ResumeChannel(RadioCHN[1])
 										If RadioState[1] >= 5.0
 											RadioCHN[1] = PlaySound_Strict(RadioSFX(0, 1))
 											RadioState[1] = 0.0
@@ -4871,10 +4859,9 @@ Function UpdateGUI%()
 									;[End Block]
 								Case 2
 									;[Block]
-									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
+									If ChannelPlaying(RadioCHN[6]) Then StopChannel(RadioCHN[6]) : RadioCHN[6] = 0
 									
 									If (Not ChannelPlaying(RadioCHN[2]))
-										ResumeChannel(RadioCHN[2])
 										RadioState[2] = RadioState[2] + 1.0
 										If RadioState[2] = 17.0 Then RadioState[2] = 1.0
 										If Floor(RadioState[2] / 2.0) = Ceil(RadioState[2] / 2.0)
@@ -4886,15 +4873,10 @@ Function UpdateGUI%()
 									;[End Block]
 								Case 3
 									;[Block]
-									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
-									
-									If (Not ChannelPlaying(RadioCHN[3]))
-										ResumeChannel(RadioCHN[3])
-										RadioCHN[3] = PlaySound_Strict(RadioStatic)
-									EndIf
+									If (Not ChannelPlaying(RadioCHN[6])) And (Not ChannelPlaying(RadioCHN[3])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
 									
 									If MTFTimer > 0.0
-										RadioState[3] = RadioState[3] + Max(Rand(-10, 1), 0.0)
+										If (Not RadioState2[6]) Then RadioState[3] = RadioState[3] + Max(Rand(-10, 1), 0.0)
 										Select RadioState[3]
 											Case 40
 												;[Block]
@@ -4957,15 +4939,9 @@ Function UpdateGUI%()
 									;[End Block]
 								Case 4
 									;[Block]
-									If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
-									
-									If (Not ChannelPlaying(RadioCHN[6]))
-										ResumeChannel(RadioCHN[6])
-										RadioCHN[6] = PlaySound_Strict(RadioStatic)
-									EndIf
+									If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
 									
 									If (Not ChannelPlaying(RadioCHN[4]))
-										ResumeChannel(RadioCHN[4])
 										If (Not RemoteDoorOn) And RadioState[8] = 0
 											RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter3.ogg"), True)
 											RadioState[8] = 1
@@ -5061,20 +5037,14 @@ Function UpdateGUI%()
 									;[End Block]
 								Case 5
 									;[Block]
-									If (Not ChannelPlaying(RadioCHN[5]))
-										ResumeChannel(RadioCHN[5])
-										RadioCHN[5] = PlaySound_Strict(RadioStatic)
-									EndIf
+									If ChannelPlaying(RadioCHN[6]) Then StopChannel(RadioCHN[6]) : RadioCHN[6] = 0
+									If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic)
 									;[End Block]
 							End Select
 							
 							If SelectedItem\ItemTemplate\TempName = "veryfineradio"
-								If ChannelPlaying(RadioCHN[5]) Then PauseChannel(RadioCHN[5])
-								
-								If (Not ChannelPlaying(RadioCHN[0]))
-									ResumeChannel(RadioCHN[0])
-									RadioCHN[0] = PlaySound_Strict(RadioStatic)
-								EndIf
+								SelectedItem\State2 = -1
+								If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
 								RadioState[6] = RadioState[6] + fps\Factor[0]
 								Temp = Mid(Str(CODE_DR_MAYNARD), RadioState[8] + 1.0, 1)
 								If RadioState[6] - fps\Factor[0] <= RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0
@@ -5095,9 +5065,10 @@ Function UpdateGUI%()
 											PauseChannel(RadioCHN[Int(SelectedItem\State2)])
 										EndIf
 										SelectedItem\State2 = i - 2
-										ResumeChannel(RadioCHN[SelectedItem\State2])
+										StopChannel(RadioCHN[6]) : RadioCHN[6] = 0
 									EndIf
 								Next
+								If (Not ChannelPlaying(RadioCHN[SelectedItem\State2])) Then ResumeChannel(RadioCHN[SelectedItem\State2])
 							EndIf
 						EndIf
 						
@@ -5754,13 +5725,15 @@ Function UpdateGUI%()
 				End Select
 				If SelectedItem\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\Sound])
 				If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
+				
+				For i = 0 To 6
+					If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
+				Next
+				IsUsingRadio = False
+				
 				SelectedItem = Null
 			EndIf
 		Else
-			For i = 0 To 6
-				If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
-			Next
-			
 			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0]) : LowBatteryCHN[0] = 0
 		EndIf
 	EndIf

@@ -1133,6 +1133,7 @@ Global VehicleSFX%[2]
 Global ExplosionSFX%
 
 Global RadioCHN%[7]
+; ~ 6 is used for radio static only
 
 Global IntercomStreamCHN%
 

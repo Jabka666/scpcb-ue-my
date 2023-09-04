@@ -60,17 +60,12 @@ End Function
 
 Function PlayMTFSound%(SoundHandle%, n.NPCs)
 	If n <> Null Then n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0, 1.0, True)
-	If SelectedItem <> Null
+	If IsUsingRadio
 		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0
-			Select SelectedItem\ItemTemplate\TempName 
-				Case "radio", "fineradio", "18vradio"
-					;[Block]
-					If SoundHandle <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3]))
-						StopChannel(RadioCHN[3]) : RadioCHN[3] = 0
-						RadioCHN[3] = PlaySound_Strict(SoundHandle, True)
-					EndIf
-					;[End Block]
-			End Select
+			If SoundHandle <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3]))
+				StopChannel(RadioCHN[3]) : RadioCHN[3] = 0
+				RadioCHN[3] = PlaySound_Strict(SoundHandle, True)
+			EndIf
 		EndIf
 	EndIf
 End Function
@@ -189,10 +184,9 @@ Function PauseSounds%()
 		PauseChannel(LowBatteryCHN[i])
 	Next
 	
-	; ~ TODO:
-	;For i = 0 To 6
-	;	PauseChannel(RadioCHN[i])
-	;Next
+	For i = 0 To 6
+		PauseChannel(RadioCHN[i])
+	Next
 	
 	If IntercomStreamCHN <> 0 Then SetStreamPaused_Strict(IntercomStreamCHN, True)
 End Function
@@ -247,10 +241,12 @@ Function ResumeSounds%()
 		ResumeChannel(LowBatteryCHN[i])
 	Next
 	
-	; ~ TODO:
-	;For i = 0 To 6
-	;	ResumeChannel(RadioCHN[i])
-	;Next
+	If IsUsingRadio
+		For i = 0 To 5
+			If SelectedItem\State2 = i Then ResumeChannel(RadioCHN[i])
+		Next
+		StopChannel(RadioCHN[6]) : RadioCHN[6] = 0
+	EndIf
 	
 	If IntercomStreamCHN <> 0 Then SetStreamPaused_Strict(IntercomStreamCHN, False)
 End Function
