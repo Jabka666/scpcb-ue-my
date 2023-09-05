@@ -4658,9 +4658,9 @@ Function UpdateGUI%()
 						If StrTemp <> "" Then PlaySound_Strict(LoadTempSound(StrTemp), True)
 						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Stomach Ache", "", False)) Then I_1025\State[3] = 1.0
 						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Infection", "", False)) Then I_008\Timer = I_008\Timer + 1.0
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Infection", "", False)) Then I_008\Timer = I_008\Timer + 0.001
 						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Crystallization", "", False)) Then I_409\Timer = I_409\Timer + 1.0
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Crystallization", "", False)) Then I_409\Timer = I_409\Timer + 0.001
 						
 						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Mutation", "", False)) Then
 							If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
