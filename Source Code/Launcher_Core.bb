@@ -59,6 +59,7 @@ Global lang.Language = New Language
 
 Function SetLanguage%(Language$, FromSelector% = True)
 	lang\CurrentLanguage = Language
+	;IniClearAllBuffer() ; ~ TODO:
 	If lang\CurrentLanguage = "en"
 		lang\LanguagePath = ""
 	Else
