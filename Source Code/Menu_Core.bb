@@ -1663,13 +1663,14 @@ Function RenderMainMenu%()
 	RenderMenuSlideBars()
 	RenderMenuSliders()
 	
-	Color(255, 255, 255)
-	SetFontEx(fo\FontID[Font_Console])
-	TextEx(20 * MenuScale, opt\GraphicHeight - (50 * MenuScale), "v" + VersionNumber)
-	If opt\ShowFPS
+	If opt\HUDEnabled
+		Color(255, 255, 255)
 		SetFontEx(fo\FontID[Font_Console])
-		TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\FPS)
-		SetFontEx(fo\FontID[Font_Default])
+		TextEx(20 * MenuScale, opt\GraphicHeight - (50 * MenuScale), "v" + VersionNumber)
+		If opt\ShowFPS
+			SetFontEx(fo\FontID[Font_Console])
+			TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\FPS)
+		EndIf
 	EndIf
 	
 	RenderCursor()
