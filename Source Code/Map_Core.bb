@@ -4365,8 +4365,8 @@ Function CreateMap%()
 	Local Width%, Height%, TempHeight%, yHallways%
 	Local ShouldSpawnDoor%, Zone%
 	
-	I_Zone\Transition[0] = 13
-	I_Zone\Transition[1] = 7
+	I_Zone\Transition[0] = Floor(MapGridSize * (2.0 / 3.0)) + 1
+	I_Zone\Transition[1] = Floor(MapGridSize * (1.0 / 3.0)) + 1
 	I_Zone\HasCustomForest = False
 	I_Zone\HasCustomMT = False
 	
@@ -4383,11 +4383,11 @@ Function CreateMap%()
 	Next
 	
 	Repeat
-		Width = Rand(10, 15)
+		Width = Rand(Floor(MapGridSize * 0.6), Floor(MapGridSize * 0.85))
 		
-		If x > Ceil(MapGridSize * 0.6)
+		If x > MapGridSize * 0.6
 			Width = -Width
-		ElseIf x > Ceil(MapGridSize * 0.4)
+		ElseIf x > MapGridSize * 0.4
 			x = x - (Width / 2)
 		EndIf
 		
