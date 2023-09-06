@@ -671,7 +671,7 @@ Function InitLoadingScreens%(File$)
 			LoadingScreenAmount = LoadingScreenAmount + 1
 			ls\ID = LoadingScreenAmount
 			
-			ls\Title = Loc
+			ls\Title = GetFileLocalString(File, Loc, "Name")
 			ls\ImgPath = GetFileLocalString(File, Loc, "ImgPath")
 			
 			For i = 0 To 3
