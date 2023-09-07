@@ -1890,7 +1890,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 5.0 ; ~ Going to surveillance room
 							;[Block]
-							PlayerSeeAble = NPCSeesPlayer(n, True)
+							PlayerSeeAble = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, True)
 							If PlayerSeeAble = 1
 								PlaySound_Strict(LoadTempSound("SFX\Room\Room2SL049Spawn.ogg"))
 								n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -1928,6 +1928,7 @@ Function UpdateNPCs%()
 										PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+										n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
 										
 										UseDoorNPC(n)
 										
@@ -3680,7 +3681,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType066
 				;[Block]
-				Dist = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
+				Dist = EntityDistanceSquared(n\Collider, me\Collider)
 				
 				Select n\State
 					Case 0.0
