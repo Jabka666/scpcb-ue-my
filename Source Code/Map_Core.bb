@@ -25,14 +25,6 @@ End Type
 
 Function CheckForPropModel%(File$)
 	Select StripPath(File)
-		Case "button.b3d"
-			;[Block]
-			Return(CopyEntity(d_I\ButtonModelID[BUTTON_DEFAULT]))
-			;[End Block]
-		Case "buttonkeycard.b3d"
-			;[Block]
-			Return(CopyEntity(d_I\ButtonModelID[BUTTON_KEYCARD]))
-			;[End Block]
 		Case "door01.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_DEFAULT_MODEL]))
@@ -45,6 +37,10 @@ Function CheckForPropModel%(File$)
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_2]))
 			;[End Block]
+		Case "officedoor.b3d"
+			;[Block]
+			Return(CopyEntity(d_I\DoorModelID[DOOR_OFFICE_MODEL]))
+			;[End Block]
 		Case "doorframe.b3d"
 			;[Block]
 			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL]))
@@ -53,6 +49,22 @@ Function CheckForPropModel%(File$)
 			;[Block]
 			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_BIG_FRAME_MODEL]))
 			;[End Block]
+		Case "officedoorframe.b3d"
+			;[Block]
+			Return(CopyEntity(d_I\DoorFrameModelID[DOOR_OFFICE_FRAME_MODEL]))
+			;[End Block]
+		Case "button.b3d"
+			;[Block]
+			Return(CopyEntity(d_I\ButtonModelID[BUTTON_DEFAULT]))
+			;[End Block]
+		Case "buttonkeycard.b3d"
+			;[Block]
+			Return(CopyEntity(d_I\ButtonModelID[BUTTON_KEYCARD]))
+			;[End Block]
+		Case "elevator_panel.b3d"
+			;[Block]
+			Return(CopyEntity(d_I\ElevatorPanelModel))
+			;[End Block]
 		Case "leverbase.b3d"
 			;[Block]
 			Return(CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL]))
@@ -60,6 +72,10 @@ Function CheckForPropModel%(File$)
 		Case "leverhandle.b3d"
 			;[Block]
 			Return(CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL]))
+			;[End Block]
+		Case "monitor2.b3d"
+			;[Block]
+			Return(CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]))
 			;[End Block]
 		Default
 			;[Block]
