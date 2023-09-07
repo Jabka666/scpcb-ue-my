@@ -99,6 +99,9 @@ Function CreateAchievementMsg.AchievementMsg(ID%, Txt$)
 	amsg\MsgID = CurrAchvMSGID
 	CurrAchvMSGID = CurrAchvMSGID + 1
 	
+	achv\AchvIMG[ID] = LoadImage_Strict("GFX\Menu\achievements\" + GetFileLocalString(AchievementsFile, "a" + ID, "AchvImage") + ".png")
+	achv\AchvIMG[ID] = ScaleImage2(achv\AchvIMG[ID], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+	
 	Return(amsg)
 End Function
 

@@ -1771,9 +1771,6 @@ Function LoadEntities%()
 		
 		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, Loc, "AchvName")
 		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, Loc, "AchvDesc")
-		
-		achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + GetFileLocalString(AchievementsFile, Loc, "AchvImage") + ".png")
-		achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 	Next
 	
 	achv\AchvLocked = LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png")

@@ -645,6 +645,10 @@ Function LoadGame%(File$)
 	
 	For i = 0 To MaxAchievements - 1
 		achv\Achievement[i] = ReadByte(f)
+		If achv\Achievement[i] = True
+			achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + GetFileLocalString(AchievementsFile, "a" + i, "AchvImage") + ".png")
+			achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+		EndIf
 	Next
 	me\RefinedItems = ReadInt(f)
 	
