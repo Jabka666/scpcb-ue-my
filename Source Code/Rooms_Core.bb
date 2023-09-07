@@ -493,8 +493,6 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 1536.0 * RoomScale, r\y + 730.0 * RoomScale, r\z + 192.0 * RoomScale)
 			RotateEntity(r\Objects[0], 0.0, -90.0, 0.0)
 			EntityParent(r\Objects[0], r\OBJ)
-			HideEntity(sc\ScrOverlay)
-			HideEntity(sc\ScrOBJ)
 			
 			r\Objects[1] = sc\ScrOBJ
 			

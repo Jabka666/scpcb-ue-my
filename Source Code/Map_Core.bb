@@ -3191,6 +3191,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 	sc\BaseOBJ = CopyEntity(sc_I\CamModelID[CAM_BASE_MODEL])
 	ScaleEntity(sc\BaseOBJ, 0.0015, 0.0015, 0.0015)
 	PositionEntity(sc\BaseOBJ, x1, y1, z1)
+	EntityParent(sc\BaseOBJ, r\OBJ)
 	
 	sc\CameraOBJ = CopyEntity(sc_I\CamModelID[CAM_HEAD_MODEL])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
@@ -3211,6 +3212,8 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		EntityTexture(sc\ScrOBJ, sc_I\ScreenTex)
 		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
+		EntityParent(sc\ScrOBJ, r\OBJ)
+		HideEntity(sc\ScrOBJ)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
 		ScaleSprite(sc\ScrOverlay, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
@@ -3219,6 +3222,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		SpriteViewMode(sc\ScrOverlay, 2)
 		EntityFX(sc\ScrOverlay, 1)
 		EntityBlend(sc\ScrOverlay, 3)
+		HideEntity(sc\ScrOverlay)
 		
 		sc\MonitorOBJ = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL], sc\ScrOBJ)
 		ScaleEntity(sc\MonitorOBJ, Scale, Scale, Scale)
@@ -3230,10 +3234,6 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		HideEntity(sc\Cam)
 	EndIf
 	
-	If r <> Null
-		EntityParent(sc\BaseOBJ, r\OBJ)
-		If Screen Then EntityParent(sc\ScrOBJ, r\OBJ)
-	EndIf
 	Return(sc)
 End Function
 
@@ -3336,7 +3336,7 @@ Function UpdateSecurityCams%()
 				
 				sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 				
-				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar) And sc\InSight
+				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume) And sc\InSight
 					Local Temp% = False
 					
 					If sc\room\RoomTemplate\Name = "cont1_205" Lor sc\room\RoomTemplate\Name = "cont1_173_intro" Then sc\CoffinEffect = 0 : Temp = True
@@ -3427,7 +3427,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar) And sc\InSight
+				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume) And sc\InSight
 					If sc\room\RoomTemplate\Name <> "cont1_205"
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)

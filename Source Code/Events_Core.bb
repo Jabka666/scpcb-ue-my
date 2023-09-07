@@ -7288,7 +7288,7 @@ Function UpdateEvents%()
 						If e\EventState2 = (-70.0) * 5.0
 							For sc.SecurityCams = Each SecurityCams
 								If sc\room = e\room
-									If sc\InSight And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
+									If sc\InSight And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
 									Exit
 								EndIf
 							Next
