@@ -1009,7 +1009,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			r\Objects[0] = CreateSprite()
 			r\HideObject[0] = False
-			EntityTexture(r\Objects[0], t\OverlayTextureID[11])
+			EntityTexture(r\Objects[0], t\OverlayTextureID[3])
 			SpriteViewMode(r\Objects[0], 2) 
 			EntityBlend(r\Objects[0], 3) 
 			EntityFX(r\Objects[0], 1 + 8 + 16)

@@ -2014,7 +2014,7 @@ Function LoadGameQuick%(File$)
 	For sc.SecurityCams = Each SecurityCams
 		sc\PlayerState = 0
 	Next
-	EntityTexture(t\OverlayID[4], t\OverlayTextureID[4])
+	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
 	
 	CloseFile(f)
 	
