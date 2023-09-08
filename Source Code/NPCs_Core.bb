@@ -141,6 +141,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityBlend(n\OBJ2, 3)
 			EntityFX(n\OBJ2, 1 + 8)
 			SpriteViewMode(n\OBJ2, 2)
+			HideEntity(n\OBJ2)
 			;[End Block]
 		Case NPCTypeGuard
 			;[Block]
@@ -208,6 +209,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_372_MODEL])
+			HideEntity(n\OBJ)
 			
 			Temp = IniGetFloat(NPCsFile, "SCP-372", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -217,10 +219,13 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = "SCP-513-1"
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, 0.2)
+			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_513_1_MODEL])
+			HideEntity(n\OBJ)
 			
 			n\OBJ2 = CopyEntity(n\OBJ)
 			EntityAlpha(n\OBJ2, 0.6)
+			HideEntity(n\OBJ2)
 			
 			Temp = IniGetFloat(NPCsFile, "SCP-513-1", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -431,7 +436,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius n\Collider,0.2
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_966_MODEL])
-			EntityFX(n\OBJ, 1)
 			
 			Temp = IniGetFloat(NPCsFile, "SCP-966", "Scale") / 40.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -2699,7 +2703,7 @@ Function UpdateNPCs%()
 			Case NPCType513_1
 				;[Block]
 				If PlayerRoom\RoomTemplate\Name <> "dimension_106"
-					If n\Idle
+					If n\Idle = 1
 						If (Not EntityHidden(n\OBJ))
 							HideEntity(n\OBJ)
 							HideEntity(n\OBJ2)
@@ -2713,10 +2717,6 @@ Function UpdateNPCs%()
 										If z > 3.0 And z < 9.0
 											PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 20.0 * RoomScale, EntityZ(w\OBJ, True))
 											ResetEntity(n\Collider)
-											If EntityHidden(n\OBJ)
-												ShowEntity(n\OBJ)
-												ShowEntity(n\OBJ2)
-											EndIf
 											
 											n\LastSeen = 0
 											
@@ -2732,7 +2732,14 @@ Function UpdateNPCs%()
 								EndIf
 							Next
 						EndIf
-					Else
+					EndIf
+					
+					If n\Idle = 0
+						If EntityHidden(n\OBJ)
+							ShowEntity(n\OBJ)
+							ShowEntity(n\OBJ2)
+						EndIf
+						
 						Dist = EntityDistanceSquared(me\Collider, n\Collider)
 						
 						; ~ Use the prev-values to do a "twitching" effect
@@ -2863,10 +2870,9 @@ Function UpdateNPCs%()
 			Case NPCType372
 				;[Block]
 				If PlayerInReachableRoom()
-					If n\Idle
+					If n\Idle = 1
 						If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 						If Rand(50) = 1 And (me\BlinkTimer < -5.0 And me\BlinkTimer > -15.0)
-							If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 							Angle = EntityYaw(me\Collider) + Rnd(-90.0, 90.0)
 							
 							Dist = Rnd(1.5, 2.0)
@@ -2879,6 +2885,7 @@ Function UpdateNPCs%()
 					EndIf
 					
 					If n\Idle = 0
+						If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 						PositionEntity(n\OBJ, EntityX(n\Collider) + Rnd(-0.005, 0.005), EntityY(n\Collider) + 0.3 + 0.1 * Sin(MilliSecs() / 2.0), EntityZ(n\Collider) + Rnd(-0.005, 0.005))
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), ((MilliSecs() / 5.0) Mod 360.0))
 						
