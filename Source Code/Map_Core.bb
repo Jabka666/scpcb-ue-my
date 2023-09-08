@@ -119,7 +119,6 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 		DeleteSingleTextureEntryFromCache(Tex)
 	EndIf
 	EntityPickMode(p\OBJ, 2)
-	;EntityAutoFade(p\OBJ, HideDistance, HideDistance)
 	
 	Return(p)
 End Function
@@ -1214,6 +1213,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					If it <> Null Then EntityParent(it\Collider, 0)
 					
 					fr\TileEntities[tX + (tY * ForestGridSize)] = Tile_Entity
+					HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 				EndIf
 			EndIf
 		Next
@@ -1395,6 +1395,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					If it <> Null Then EntityParent(it\Collider, 0)
 					
 					fr\TileEntities[tX + (tY * ForestGridSize)] = Tile_Entity
+					HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 				EndIf
 				
 				If Ceil(Float(fr\Grid[(tY * ForestGridSize) + tX]) / 4.0) = 6
