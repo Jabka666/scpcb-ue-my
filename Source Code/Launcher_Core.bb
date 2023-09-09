@@ -38,7 +38,7 @@ Type ListLanguage ; ~ Languages in the list
 	Field FlagImg%
 	Field MajorOnly%
 	Field Full%
-	Field FileSize$
+	Field FileSize%
 	Field Compatible$
 End Type
 
@@ -47,11 +47,12 @@ End Type
 Const LANGUAGE_STATUS_NULL% = 0
 Const LANGUAGE_STATUS_DOWNLOAD_REQUEST% = 1
 Const LANGUAGE_STATUS_DOWNLOAD_START% = 2
-Const LANGUAGE_STATUS_UNPACK_REQUEST% = 3
-Const LANGUAGE_STATUS_UNPACK_START% = 4
-Const LANGUAGE_STATUS_UNINSTALLING_REQUEST% = 5
-Const LANGUAGE_STATUS_UNINSTALLING_START% = 6
-Const LANGUAGE_STATUS_DONE% = 7
+Const LANGUAGE_STATUS_DOWNLOADING% = 3
+Const LANGUAGE_STATUS_UNPACK_REQUEST% = 4
+Const LANGUAGE_STATUS_UNPACK_START% = 5
+Const LANGUAGE_STATUS_UNINSTALLING_REQUEST% = 6
+Const LANGUAGE_STATUS_UNINSTALLING_START% = 7
+Const LANGUAGE_STATUS_DONE% = 8
 ;[End Block]
 Const LocalizaitonPath$ = "Localization\"
 
@@ -115,6 +116,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	SetFontEx(fo\FontID[Font_Default])
 	
 	MenuWhite = LoadImage_Strict("GFX\Menu\menu_white.png")
+	MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
 	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 	
 	Local LauncherIMG%[2]
@@ -264,7 +266,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 				If mo\MouseHit1 Then
 					PlaySound_Strict(ButtonSFX)
 					If FileType("Localization") = 2 Then
-						SetLanguage(FindNextDirectory("Localization", opt\Language), False)
+						SetLanguage(FindNextDirectory("Localization", opt\Language, "en"), False)
 						FreeImage(LauncherBG) : LauncherBG = 0
 						IniWriteString(OptionFile, "Global", "Language", opt\Language)
 					EndIf
@@ -326,9 +328,8 @@ Function UpdateLanguageSelector%()
 	If FileType(BasePath) <> 2 Then CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
 	CreateDir(BasePath + "flags/")
-	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
+	DownloadFile("http://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
-	Local lan.ListLanguage
 	Local File% = OpenFile_Strict(BasePath + "temp.txt")
 	Local l$
 	
@@ -344,9 +345,9 @@ Function UpdateLanguageSelector%()
 				lan\MajorOnly = Int(ParseDomainTXT(l, "majoronly")) ; ~ loca.ini only?
 				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
-				lan\FileSize = ParseDomainTXT(l, "size") ; ~ Size of localization
+				lan\FileSize = Int(ParseDomainTXT(l, "size")) ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
-				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("http://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit
@@ -376,10 +377,11 @@ Function UpdateLanguageSelector%()
 		Select CurrentStatus
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
-				If (Not RequestLanguage\MajorOnly) Then DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+				If (Not RequestLanguage\MajorOnly) Then DownloadFileThread("http://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-ini/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.ini")
-				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
+				;If (SimpleFileSize(FileSize(BasePath + "/local.zip")) = RequestLanguage\FileSize) 
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
 				;[Block]
@@ -489,11 +491,29 @@ Function UpdateLanguageSelector%()
 		
 		Local InfoBoxContent$ = GetLocalString("language", "more")
 		
+		Color(100, 100, 100)
 		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
 			InfoBoxContent = GetLocalString("language", "downloading")
+			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, 0, 0, True)
+			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), "0%", True, True)
 			CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
+		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
+			If (RequestLanguage\MajorOnly) Then 
+				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+			Else 
+				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
+			EndIf
+			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, 0, 0, True)
+			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), "0%", True, True)
+		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
+			InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(FileSize(BasePath + "/local.zip")), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
+			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, 0, 0, True)
+			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), Str(Int(Ceil((Float(FileSize(BasePath + "/local.zip")) / Float(RequestLanguage\FileSize)) * 100))) + "%", True, True)
+			If FileSize(BasePath + "/local.zip") >= RequestLanguage\FileSize Then CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 			InfoBoxContent = GetLocalString("language", "unpacking")
+			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, 0, 0, True)
+			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), "100%", True, True)
 			CurrentStatus = LANGUAGE_STATUS_UNPACK_START
 		ElseIf CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
 			InfoBoxContent = GetLocalString("language", "uninstalling")
@@ -507,35 +527,36 @@ Function UpdateLanguageSelector%()
 		
 		If SelectedLanguage <> Null
 			If SelectedLanguage\ID = opt\Language
-				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), Font_Default, ButtonImages, 4) Then ExecFile_Strict("https://github.com/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), Font_Default, ButtonImages, 4, IsDownloadingLanguage(CurrentStatus)) Then ExecFile_Strict("https://github.com/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
 			ElseIf SelectedLanguage\Name = "English"
-				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2)
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2, IsDownloadingLanguage(CurrentStatus))
 					SetLanguage(SelectedLanguage\ID)
 					FreeImage(LanguageBG) : LanguageBG = 0
 					IniWriteString(OptionFile, "Global", "Language", opt\Language)
 				EndIf
 			ElseIf FileType(LocalizaitonPath + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language
-					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), Font_Default, ButtonImages, 3)
+					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), Font_Default, ButtonImages, 3, IsDownloadingLanguage(CurrentStatus))
 						CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
 						RequestLanguage = SelectedLanguage
 					EndIf
-					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2)
+					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2, IsDownloadingLanguage(CurrentStatus))
 						SetLanguage(SelectedLanguage\ID)
 						FreeImage(LanguageBG) : LanguageBG = 0
 						IniWriteString(OptionFile, "Global", "Language", opt\Language)
 					EndIf
 				EndIf
 			Else
-				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), Font_Default, ButtonImages, 1)
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), Font_Default, ButtonImages, 1, IsDownloadingLanguage(CurrentStatus))
 					CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
 					RequestLanguage = SelectedLanguage
 				EndIf
 			EndIf
 		EndIf
-		If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), Font_Default, ButtonImages) Then Exit
+		If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), Font_Default, ButtonImages, 0, IsDownloadingLanguage(CurrentStatus)) Then Exit
 		
 		If MouseHoverLanguage <> Null
+			Color(255, 255, 255)
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
 			Local ID$ = Format(GetLocalString("language", "id"), MouseHoverLanguage\ID)
 			
@@ -546,7 +567,7 @@ Function UpdateLanguageSelector%()
 				Local Compatible$ = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
 				
 				If (Not MouseHoverLanguage\MajorOnly) 
-					Local Size$ = Format(GetLocalString("language", "size"), MouseHoverLanguage\FileSize)
+					Local Size$ = Format(GetLocalString("language", "size"), SimpleFileSize(MouseHoverLanguage\FileSize))
 					Local LastMod$ = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
 					Local Height% = FontHeight() * 13
 				Else
@@ -566,7 +587,7 @@ Function UpdateLanguageSelector%()
 			
 			x = MouseX() + 10
 			y = MouseY() + 10
-			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long then move tooltip to the left
+			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long, then move tooltip to the left
 			RenderFrame(x, y, Width + FontWidth(), Height)
 			x = x + 5
 			TextEx(x, y + 8, Name)
@@ -609,6 +630,14 @@ Function UpdateLanguageSelector%()
 	
 	AppTitle(GetLocalString("launcher", "title"))
 	FreeImage(LauncherBG) : LauncherBG = 0
+End Function
+
+Function IsDownloadingLanguage$(Status%) ; ~ Kind of inline
+	If Status = LANGUAGE_STATUS_DONE Lor Status = LANGUAGE_STATUS_NULL Then 
+		Return False
+	Else
+		Return True
+	EndIf
 End Function
 
 Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
@@ -691,10 +720,10 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 	EndIf
 End Function
 
-Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, Img% = 0, Frame% = 0)
+Function UpdateLauncherButtonWithImage%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, Img% = 0, Frame% = 0, Locked% = False)
 	Txt = String(" ", ImageWidth(Img) / 8) + Txt
 	
-	Local Result% = UpdateLauncherButton(x, y, Width, Height, Txt, FontID)
+	Local Result% = UpdateLauncherButton(x, y, Width, Height, Txt, FontID, False, Locked)
 	
 	DrawImage(Img, x + (Width / 2) - (StringWidth(Txt) / 2) - 3, y + (Height / 2) - ImageHeight(Img) / 2, Frame) ; ~ No DrawBlock please
 	Return(Result)
@@ -814,6 +843,19 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 	Color(ColorR2, ColorG2, ColorB2)
 	TextEx(x + StringWidth(Txt1), y, Txt2)
 	Color(OldR, OldG, OldB)
+End Function
+
+Function SimpleFileSize$(size%)
+	Local fSize# = Float(size)
+	If size >= 1048576 Then ; >= 1MB
+		If size >= 1073741824 Then ; >= 1GB
+			Return Str(Ceil((fSize / 1024 / 1024 / 1024) * 100) / 100) + "GB"
+		Else
+			Return Str(Ceil((fSize / 1024 / 1024) * 100) / 100) + "MB"
+		EndIf
+	Else
+		Return Str(Ceil((fSize / 1024) * 100) / 100) + "KB"
+	EndIf
 End Function
 
 ;~IDEal Editor Parameters:
