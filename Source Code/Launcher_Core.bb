@@ -234,7 +234,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
-			If mo\MouseHit1 Then
+			If mo\MouseHit1
 				PlaySound_Strict(ButtonSFX)
 				ExecFile_Strict("https://discord.gg/n7KdW4u")
 			EndIf
@@ -243,7 +243,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		If MouseOn(LauncherWidth - 510, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 510 + LauncherMediaWidth, LauncherHeight - 106, "MODDB", True)
-			If mo\MouseHit1 Then
+			If mo\MouseHit1
 				PlaySound_Strict(ButtonSFX)
 				ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 			EndIf
@@ -252,14 +252,14 @@ Function UpdateLauncher%(lnchr.Launcher)
 		If MouseOn(LauncherWidth - 400, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 400 + LauncherMediaWidth, LauncherHeight - 106, "YOUTUBE", True)
-			If mo\MouseHit1 Then
+			If mo\MouseHit1
 				PlaySound_Strict(ButtonSFX)
 				ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 			EndIf
 		EndIf
 		DrawBlock(LauncherIMG[0], LauncherWidth - 400, LauncherHeight - 86, 2)
 		; ~ Language selector
-		If SelectorDeniedTimer <> 0 Then
+		If SelectorDeniedTimer <> 0
 			Color(255, 0, 0)
 			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 3)
 			Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
@@ -268,13 +268,13 @@ Function UpdateLauncher%(lnchr.Launcher)
 			If (MilliSecs() - SelectorDeniedTimer) > 5000 Then SelectorDeniedTimer = 0
 		Else
 			If MouseOn(LauncherWidth - 185, LauncherHeight - 186, 40, 40)
-				If KeyDown(29) ; LCtrl
+				If KeyDown(29) ; ~ LCtrl
 					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 2)
 					Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
 					TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.iter"), False, True)
-					If mo\MouseHit1 Then
+					If mo\MouseHit1
 						PlaySound_Strict(ButtonSFX)
-						If FileType("Localization") = 2 Then
+						If FileType("Localization") = 2
 							SetLanguage(FindNextDirectory("Localization", opt\Language, "en"), False)
 							FreeImage(LauncherBG) : LauncherBG = 0
 							IniWriteString(OptionFile, "Global", "Language", opt\Language)
@@ -284,7 +284,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
 					Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
 					TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
-					If mo\MouseHit1 Then
+					If mo\MouseHit1
 						PlaySound_Strict(ButtonSFX)
 						If UpdateLanguageSelector() Then SelectorDeniedTimer = MilliSecs()
 					EndIf
@@ -340,6 +340,7 @@ Function UpdateLanguageSelector%()
 	CreateDir(BasePath + "flags/")
 	DownloadFile("http://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
+	Local lan.ListLanguage
 	Local File% = OpenFile_Strict(BasePath + "temp.txt")
 	Local l$
 	
@@ -365,8 +366,8 @@ Function UpdateLanguageSelector%()
 		Wend
 		CloseFile(File)
 		DeleteFile(BasePath + "temp.txt")
-		Return True
 	Else
+		Return(True)
 	EndIf
 	
 	SetBuffer(BackBuffer())
@@ -510,7 +511,7 @@ Function UpdateLanguageSelector%()
 			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), "0%", True, True)
 			CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
 		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
-			If (RequestLanguage\MajorOnly) Then 
+			If RequestLanguage\MajorOnly
 				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 			Else 
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
@@ -645,11 +646,7 @@ Function UpdateLanguageSelector%()
 End Function
 
 Function IsDownloadingLanguage$(Status%) ; ~ Kind of inline
-	If Status = LANGUAGE_STATUS_DONE Lor Status = LANGUAGE_STATUS_NULL Then 
-		Return False
-	Else
-		Return True
-	EndIf
+	Return(Not (Status = LANGUAGE_STATUS_DONE Lor Status = LANGUAGE_STATUS_NULL))
 End Function
 
 Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default, WaitForMouseUp% = False, Locked% = False, R% = 255, G% = 255, B% = 255)
@@ -761,7 +758,7 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX2)
 		Else
 			Color(50, 50, 50)
-			If mo\MouseHit1 Then
+			If mo\MouseHit1
 				Selected = (Not Selected)
 				PlaySound_Strict(ButtonSFX)
 			EndIf
@@ -857,16 +854,17 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 	Color(OldR, OldG, OldB)
 End Function
 
-Function SimpleFileSize$(size%)
-	Local fSize# = Float(size)
-	If size >= 1048576 Then ; >= 1MB
-		If size >= 1073741824 Then ; >= 1GB
-			Return Str(Ceil((fSize / 1024 / 1024 / 1024) * 100) / 100) + "GB"
+Function SimpleFileSize$(Size%)
+	Local fSize# = Float(Size)
+	
+	If Size >= 1048576 ; >= 1 MB
+		If Size >= 1073741824 ; >= 1 GB
+			Return(Str(Ceil((fSize / 1024 / 1024 / 1024) * 100) / 100) + "GB")
 		Else
-			Return Str(Ceil((fSize / 1024 / 1024) * 100) / 100) + "MB"
+			Return(Str(Ceil((fSize / 1024 / 1024) * 100) / 100) + "MB")
 		EndIf
 	Else
-		Return Str(Ceil((fSize / 1024) * 100) / 100) + "KB"
+		Return(Str(Ceil((fSize / 1024) * 100) / 100) + "KB")
 	EndIf
 End Function
 
