@@ -124,7 +124,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	LauncherIMG[0] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
 	LauncherMediaWidth = ImageWidth(LauncherIMG[0]) / 2
-	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 3)
+	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 4)
 	
 	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
@@ -148,6 +148,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	AppTitle(GetLocalString("launcher", "title"))
 	
 	Local Quit% = False
+	Local SelectorDeniedTimer% = 0
 	
 	Repeat
 		Cls()
@@ -258,30 +259,39 @@ Function UpdateLauncher%(lnchr.Launcher)
 		EndIf
 		DrawBlock(LauncherIMG[0], LauncherWidth - 400, LauncherHeight - 86, 2)
 		; ~ Language selector
-		If MouseOn(LauncherWidth - 185, LauncherHeight - 186, 40, 40)
-			If KeyDown(29) ; LCtrl
-				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 2)
-				Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
-				TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.iter"), False, True)
-				If mo\MouseHit1 Then
-					PlaySound_Strict(ButtonSFX)
-					If FileType("Localization") = 2 Then
-						SetLanguage(FindNextDirectory("Localization", opt\Language, "en"), False)
-						FreeImage(LauncherBG) : LauncherBG = 0
-						IniWriteString(OptionFile, "Global", "Language", opt\Language)
+		If SelectorDeniedTimer <> 0 Then
+			Color(255, 0, 0)
+			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 3)
+			Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+			Color(255, 255, 255)
+			TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.failed"), False, True)
+			If (MilliSecs() - SelectorDeniedTimer) > 5000 Then SelectorDeniedTimer = 0
+		Else
+			If MouseOn(LauncherWidth - 185, LauncherHeight - 186, 40, 40)
+				If KeyDown(29) ; LCtrl
+					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 2)
+					Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+					TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.iter"), False, True)
+					If mo\MouseHit1 Then
+						PlaySound_Strict(ButtonSFX)
+						If FileType("Localization") = 2 Then
+							SetLanguage(FindNextDirectory("Localization", opt\Language, "en"), False)
+							FreeImage(LauncherBG) : LauncherBG = 0
+							IniWriteString(OptionFile, "Global", "Language", opt\Language)
+						EndIf
+					EndIf
+				Else
+					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
+					Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+					TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
+					If mo\MouseHit1 Then
+						PlaySound_Strict(ButtonSFX)
+						If UpdateLanguageSelector() Then SelectorDeniedTimer = MilliSecs()
 					EndIf
 				EndIf
 			Else
-				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
-				Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
-				TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
-				If mo\MouseHit1 Then
-					PlaySound_Strict(ButtonSFX)
-					UpdateLanguageSelector()
-				EndIf
+				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 0)
 			EndIf
-		Else
-			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 0)
 		EndIf
 		; ~ Report button
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 165, 30, GetLocalString("launcher", "report")) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
@@ -355,6 +365,8 @@ Function UpdateLanguageSelector%()
 		Wend
 		CloseFile(File)
 		DeleteFile(BasePath + "temp.txt")
+		Return True
+	Else
 	EndIf
 	
 	SetBuffer(BackBuffer())
