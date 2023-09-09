@@ -3727,7 +3727,6 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 636.0, 646.0, 0.4, False)
 							If n\Frame = 646.0 Then SetNPCFrame(n, 2.0)
 						EndIf
-						Dist = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 						
 						If Rand(700) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\066\Eric" + Rand(3) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 						
