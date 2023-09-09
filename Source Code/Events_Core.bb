@@ -7873,12 +7873,14 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					If I_005\ChanceToSpawn >= 5
-						TFormPoint(-217.0, 0.0, -196.0, e\room\OBJ, 0)
+						TFormPoint(375.0, 0.0, -875.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), 0.5, TFormedZ())
 						e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-						SetNPCFrame(e\room\NPC[0], 288.0)
+						SetNPCFrame(e\room\NPC[0], 287.0)
 						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
+						EntityParent(de\OBJ, e\room\OBJ)
 					EndIf
 					RemoveEvent(e)
 				EndIf
