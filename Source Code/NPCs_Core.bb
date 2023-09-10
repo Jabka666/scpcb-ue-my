@@ -6763,12 +6763,12 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "372", "scp372", "scp-372", "pj", "jumper"
 			;[Block]
-			n.NPCs = CreateNPC(NPCType372, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-173")
+			n.NPCs = CreateNPC(NPCType372, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-372")
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
 			;[Block]
-			n.NPCs = CreateNPC(NPCType513_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
+			n.NPCs = CreateNPC(NPCType513_1, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-513-1")
 			;[End Block]
 		Case "860-2", "8602", "scp860-2", "scp-860-2", "forestmonster", "scp8602"
