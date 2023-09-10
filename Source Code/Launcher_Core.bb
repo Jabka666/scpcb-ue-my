@@ -82,7 +82,7 @@ Function SetLanguage%(Language$, FromSelector% = True)
 	InitKeyNames()
 	
 	; ~ Reload some stuff manually
-	FreeFont(fo\FontID[Font_Default]) : fo\FontID[Font_Default] = 0
+	If fo\FontID[Font_Default] Then FreeFont(fo\FontID[Font_Default])
 	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
 	If FromSelector
 		AppTitle(GetLocalString("language", "title"))
