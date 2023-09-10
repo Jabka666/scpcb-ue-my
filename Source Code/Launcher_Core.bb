@@ -507,8 +507,7 @@ Function UpdateLanguageSelector%()
 		Color(100, 100, 100)
 		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
 			InfoBoxContent = GetLocalString("language", "downloading")
-			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, 0, 0, True)
-			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), "0%", True, True)
+			UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "0%", Font_Default, False, True)
 			CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
 		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
 			If RequestLanguage\MajorOnly
@@ -516,17 +515,15 @@ Function UpdateLanguageSelector%()
 			Else 
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
 			EndIf
-			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, 0, 0, True)
+			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Font_Default, 0, True)
 			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), "0%", True, True)
 		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
 			InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(FileSize(BasePath + "/local.zip")), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
-			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, 0, 0, True)
-			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), Str(Int(Ceil((Float(FileSize(BasePath + "/local.zip")) / Float(RequestLanguage\FileSize)) * 100))) + "%", True, True)
+			UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Str(Int(Ceil((Float(FileSize(BasePath + "/local.zip")) / Float(RequestLanguage\FileSize)) * 100))) + "%", Font_Default, False, True)
 			If FileSize(BasePath + "/local.zip") >= RequestLanguage\FileSize Then CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 			InfoBoxContent = GetLocalString("language", "unpacking")
-			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, 0, 0, True)
-			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), "100%", True, True)
+			UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "100%", Font_Default, False, True)
 			CurrentStatus = LANGUAGE_STATUS_UNPACK_START
 		ElseIf CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
 			InfoBoxContent = GetLocalString("language", "uninstalling")

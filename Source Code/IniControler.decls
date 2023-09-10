@@ -1,7 +1,7 @@
 ; IniControler - A part of BlitzToolBox
 ; Write & Read ini file. Custom branch for scpcb-ue.
-; v1.06 2022.11.12
-; v1.061 2023.9.9
+; v1.06 2023.7.14
+; v1.06.2 2023.9.10
 ; https://github.com/ZiYueCommentary/BlitzToolbox/tree/ziyue
 
 .lib "IniControler.dll"

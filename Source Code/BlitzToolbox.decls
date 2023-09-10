@@ -1,6 +1,6 @@
 ; BlitzToolbox - A part of BlitzToolbox
 ; Custom library for scpcb-ue.
-; v1.0 2023.9.9
+; v1.0 2023.9.10
 ; https://github.com/ZiYueCommentary/BlitzToolbox/tree/ziyue
 
 .lib "BlitzToolbox.dll"
