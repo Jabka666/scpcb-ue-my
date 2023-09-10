@@ -8044,7 +8044,7 @@ Function UpdateDimension106%()
 						FreeEntity(Pvt) : Pvt = 0
 						
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
-							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale)
+							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)
 								Teleport = True
 								Random = Rand(11, 30)
 							Else ; ~ The player is not at the exit, must've fallen down
