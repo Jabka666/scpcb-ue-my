@@ -6741,11 +6741,11 @@ Function RenderGUI%()
 											Local DrawX% = x + (PlayerX - x2) * (24 * MenuScale), DrawY% = y - (PlayerZ - z2) * (24 * MenuScale) 
 											
 											Color(30, 30, 30)
-											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Line(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), DrawX - (12 * MenuScale), DrawY + (12 * MenuScale))
-											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Line(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), DrawX + (12 * MenuScale), DrawY + (12 * MenuScale))
+											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 1, 24 * MenuScale)
+											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), 1, 24 * MenuScale)
 											
-											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Line(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), DrawX + (12 * MenuScale), DrawY - (12 * MenuScale))
-											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Line(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), DrawX + (12 * MenuScale), DrawY + (12 * MenuScale))
+											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, 1)
+											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, 1)
 										EndIf
 									EndIf
 								Next
