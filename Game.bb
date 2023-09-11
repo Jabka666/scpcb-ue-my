@@ -16,6 +16,7 @@ If FileSize("dplayx.dll") = 0 Then InitErrorStr = InitErrorStr + "dplayx.dll" + 
 If FileSize("d3dim700.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dim700.dll" + Chr(13) + Chr(10) ; ~ Optional in fact
 If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
 If FileSize("IniControler.dll") = 0 Then InitErrorStr = InitErrorStr + "IniControler.dll" + Chr(13) + Chr(10)
+If FileSize("RapidBson.dll") = 0 Then InitErrorStr = InitErrorStr + "RapidBson.dll" + Chr(13) + Chr(10)
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 
@@ -28,7 +29,7 @@ Include "Source Code\INI_Core.bb"
 LoadOptionsINI()
 
 Const LanguageFile$ = "Data\local.ini"
-Const SubtitlesFile$ = "Data\subtitles.ini"
+Const SubtitlesFile$ = "Data\subtitles.json"
 Const AchievementsFile$ = "Data\achievements.ini"
 Const LoadingScreensFile$ = "Data\loading_screens.ini"
 Const SCP294File$ = "Data\SCP-294.ini"
@@ -36,7 +37,6 @@ Const FontsFile$ = "Data\fonts.ini"
 Const SCP1499ChunksFile$ = "Data\1499chunks.ini" ; ~ Unable to localize
 
 IniWriteBuffer(LanguageFile)
-IniWriteBuffer(SubtitlesFile)
 IniWriteBuffer(AchievementsFile)
 IniWriteBuffer(LoadingScreensFile)
 IniWriteBuffer(SCP294File)

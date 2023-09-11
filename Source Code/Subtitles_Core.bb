@@ -1,4 +1,5 @@
 Global SubFile$
+Global SubColors%
 
 Type SubtitlesAssets
 	Field TextHeight%
@@ -18,22 +19,6 @@ Function InitSubtitlesAssets%()
 	
 	SetFontEx(fo\FontID[Font_Default])
 	subassets\TextHeight = FontHeight() * 2.5
-	
-	CreateSubtitlesColor("announcement", 130, 130, 130)
-	CreateSubtitlesColor("ci", 0, 130, 0)
-	CreateSubtitlesColor("crew", 135, 160, 130)
-	CreateSubtitlesColor("d", 225, 120, 0)
-	CreateSubtitlesColor("guard", 180, 180, 150)
-	CreateSubtitlesColor("janitor", 120, 140, 170)
-	CreateSubtitlesColor("mtf", 100, 60, 45)
-	CreateSubtitlesColor("nazi", 130, 0, 20)
-	CreateSubtitlesColor("035angry", 150, 0, 0)
-	CreateSubtitlesColor("049", 50, 70, 70)
-	CreateSubtitlesColor("066", 180, 35, 60)
-	CreateSubtitlesColor("106", 10, 5, 5)
-	CreateSubtitlesColor("682", 180, 160, 135)
-	CreateSubtitlesColor("860-2", 110, 55, 80)
-	CreateSubtitlesColor("1499-1", 40, 40, 40)
 End Function
 
 Global SubtitlesInit%
@@ -57,11 +42,6 @@ Type QueuedSubtitlesMsg
 	Field R%, G%, B%
 	Field TimeStart#
 	Field TimeLeft#
-End Type
-
-Type SubtitlesColor
-	Field Name$
-	Field R%, G%, B%
 End Type
 
 Function UpdateSubtitles%()
@@ -149,36 +129,6 @@ Function UpdateSubtitles%()
 	Next
 End Function
 
-Function SubtitlesGetINIFileSectionLocation%(Section$)
-	Local Temp%
-	
-	SeekFile(SubFile, 0)
-	
-	Local f% = SubFile
-	
-	Section = Lower(Section)
-	
-	Local n% = 0
-	
-	While (Not Eof(f))
-		Local Strtemp$ = ReadLine(f)
-		
-		n = n + 1
-		If Left(Strtemp, 1) = "["
-			Strtemp = Lower(Strtemp)
-			Temp = Instr(Strtemp, Section)
-			If Temp > 0
-				If Mid(Strtemp, Temp - 1, 1) = "[" Lor Mid(Strtemp, Temp - 1, 1) = "|"
-					SeekFile(SubFile, 0)
-					Return(n)
-				EndIf
-			EndIf
-		EndIf
-	Wend
-	
-	SeekFile(SubFile, 0)
-End Function
-
 Function RenderSubtitles%()
 	If (Not opt\EnableSubtitles) Then Return
 	
@@ -221,102 +171,76 @@ Function RenderSubtitles%()
 	Next
 End Function
 
-; ~ Parse the caption settings
-; ~ Example of caption settings: <color=mtf,glitch=true>; <length=0.5,r=255,g=255,b=220>
-Function ParseSubtitlesSettings$(qsub.QueuedSubtitlesMsg)
-	Local Txt$ = qsub\Txt
-	Local StartLeft% = 0
-	Local StartRight% = 0
-	Local Temp% = 0
-	
-	While Temp < Len(Txt)
-		Temp = Temp + 1
-		
-		If Mid(Txt, Temp, 1) = "<"
-			StartLeft = Temp - 1
-			While Mid(Txt, Temp, 1) <> ">" And Temp < Len(Txt)
-				If Mid(Txt, Temp, 1) = "<" Then Temp = Temp + 1
-				
-				Local IniKey$ = ""
-				Local IniValue$ = ""
-				
-				While Mid(Txt, Temp, 1) <> "=" And Mid(Txt, Temp, 1) <> ">" And Temp < Len(Txt)
-					IniKey = IniKey + Mid(Txt, Temp, 1)
-					Temp = Temp + 1
-				Wend
-				
-				If Mid(Txt, Temp, 1) = "="
-					Temp = Temp + 1
-				EndIf
-				
-				While Mid(Txt, Temp, 1) <> "," And Mid(Txt, Temp, 1) <> ">" And Temp < Len(Txt)
-					IniValue = IniValue + Mid(Txt, Temp, 1)
-					Temp = Temp + 1
-				Wend
-				
-				If Mid(Txt, Temp, 1) = "," Then Temp = Temp + 1
-				
-				If Trim(Lower(IniKey)) = "color"
-					Local subcolor.SubtitlesColor
-					
-					For subcolor.SubtitlesColor = Each SubtitlesColor
-						If Trim(Lower(IniValue)) = subcolor\Name
-							qsub\R = subcolor\R
-							qsub\G = subcolor\G
-							qsub\B = subcolor\B
-						EndIf
-					Next
-				EndIf
-				If Trim(Lower(IniKey)) = "r" Then qsub\R = Int(Trim(Lower(IniValue)))
-				If Trim(Lower(IniKey)) = "g" Then qsub\G = Int(Trim(Lower(IniValue)))
-				If Trim(Lower(IniKey)) = "b" Then qsub\B = Int(Trim(Lower(IniValue)))
-				
-				If Trim(Lower(IniKey)) = "length" Then qsub\TimeLeft = (Float(Trim(Lower(IniValue))) + 5.0) * 70.0
-			Wend
-		EndIf
-		
-		If Mid(Txt, Temp, 1) = ">"
-			Txt = Left(Txt, StartLeft) + Right(Txt, Len(Txt) - Temp)
-			Temp = 0
-		EndIf
-	Wend
-	
-	Return(Txt)
-End Function
-
 Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 	If (Not opt\EnableSubtitles) Lor (Not SubtitlesInit) Then Return
 	
-	Local TemporaryString$ = ""
-	Local Start% = SubtitlesGetINIFileSectionLocation(SoundPath)
-	
-	SeekFile(SubFile, 0)
-	
-	Local f% = SubFile
-	Local n% = 0
-	
-	While (Not Eof(f))
-		Local Strtemp$ = ReadLine(f)
-		
-		n = n + 1
-		If n = Start
-			Repeat
-				TemporaryString = ReadLine(f)
-				
-				If Instr(TemporaryString, "=") <> 0
-					If Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0.0))) = "text"
-						QueueSubtitlesMsg(SoundPath, sound, Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))), 0.0, 10.0)
-					Else
-						QueueSubtitlesMsg(SoundPath, sound, Trim(Right(TemporaryString, Len(TemporaryString) - Instr(TemporaryString, "="))), Float(Trim(Left(TemporaryString, Max(Instr(TemporaryString, "=") - 1, 0.0)))), 10.0)
+	Local Token% = JsonGetValue(SubFile, SoundPath$)
+	If JsonIsNull(Token) Then
+		Return
+	EndIf
+
+	If Not JsonIsArray(Token) Then
+		Return
+	EndIf
+
+	Local Arr% = JsonGetArray(Token)
+
+	For i = 0 To JsonGetArraySize(Arr)-1
+		Local Subtitle% = JsonGetArrayValue(Arr, i)
+		If JsonIsObject(Subtitle) Then 
+			Local TxtVal% = JsonGetValue(Subtitle, "text")
+			Local DelayVal% = JsonGetValue(Subtitle, "delay")
+			Local LengthVal% = JsonGetValue(Subtitle, "length")
+			Local ColorVal% = JsonGetValue(Subtitle, "color")
+			Local RVal% = JsonGetValue(Subtitle, "r")
+			Local GVal% = JsonGetValue(Subtitle, "g")
+			Local BVal% = JsonGetValue(Subtitle, "b")
+
+			Local Txt$ = "<NO TEXT DATA>"
+			Local Del# = 0.0
+			Local Leng# = 10.0
+			Local Col$
+			Local R% = 255
+			Local G% = 255
+			Local B% = 255
+
+			; ~ A bunch of null and type checking, RapidBson throws MAVs if the value you are type checking is null.
+			If Not JsonIsNull(TxtVal) Then
+				If JsonIsString(TxtVal) Then Txt = JsonGetString(TxtVal)
+			EndIf
+			If Not JsonIsNull(DelayVal) Then
+				If JsonIsFloat(DelayVal) Then Del = JsonGetFloat(DelayVal)
+			EndIf
+			If Not JsonIsNull(LengthVal) Then
+				If JsonIsFloat(LengthVal) Then Leng = JsonGetFloat(LengthVal)
+			EndIf
+			If Not JsonIsNull(RVal) Then
+				If JsonIsInt(RVal) Then R = JsonGetInt(RVal)
+			EndIf
+			If Not JsonIsNull(GVal) Then
+				If JsonIsInt(GVal) Then G = JsonGetInt(GVal)
+			EndIf
+			If Not JsonIsNull(BVal) Then
+				If JsonIsInt(BVal) Then B = JsonGetInt(BVal)
+			EndIf
+			If Not JsonIsNull(ColorVal) Then
+				If JsonIsString(ColorVal) Then 
+					Col = JsonGetString(ColorVal)
+
+					; ~ TODO: Add null checking here. Will throw MAVs if an undefined color is used as the subtitle color.
+					ColorArray% = JsonGetArray(JsonGetValue(SubColors, Col))
+					If JsonGetArraySize(ColorArray) = 3 Then
+						R = JsonGetInt(JsonGetArrayValue(ColorArray%, 0))
+						G = JsonGetInt(JsonGetArrayValue(ColorArray%, 1))
+						B = JsonGetInt(JsonGetArrayValue(ColorArray%, 2))
 					EndIf
 				EndIf
-			Until Left(TemporaryString, 1) = "[" Lor Eof(f)
-			SeekFile(SubFile, 0)
-			Return
-		EndIf
-	Wend
+			EndIf
 
-	SeekFile(SubFile, 0)
+			QueueSubtitlesMsg(SoundPath, sound, Txt, Del, Leng, R, G, B)
+
+		EndIf
+	Next
 End Function
 
 Function RemoveSubtitlesToken%(sound.Sound)
@@ -335,7 +259,7 @@ Function ClearSubtitles%()
 	Next
 End Function
 
-Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#)
+Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#, R% = 255, G% = 255, B% = 255)
 	If Txt = "" Lor Left(Txt, 1) = "[" Then Return
 	
 	Local queue.QueuedSubtitlesMsg
@@ -346,12 +270,10 @@ Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#
 	
 	queue\Txt = Txt
 	
-	queue\R = 255 : queue\G = 255 : queue\B = 255
+	queue\R = R : queue\G = G : queue\B = B
 	
 	queue\TimeLeft = TimeLeft * 70.0
 	queue\TimeStart = TimeStart * 70.0
-	
-	queue\Txt = ParseSubtitlesSettings(queue)
 	
 	Insert queue Before First QueuedSubtitlesMsg
 End Function
@@ -398,29 +320,17 @@ Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255,
 	Insert sub After Last SubtitlesMsg
 End Function
 
-Function CreateSubtitlesColor%(Name$, R%, G%, B%)
-	Local subcolor.SubtitlesColor
-	
-	subcolor.SubtitlesColor = New SubtitlesColor
-	subcolor\Name = Name
-	subcolor\R = R
-	subcolor\G = G
-	subcolor\B = B
-End Function
-
 Function DeInitSubtitlesAssets%()
-	Local subcolor.SubtitlesColor, snd.Sound
+	Local snd.Sound
 	
-	For subcolor.SubtitlesColor = Each SubtitlesColor
-		Delete(subcolor)
-	Next
 	For snd.Sound = Each Sound
 		RemoveSubtitlesToken(snd)
 	Next
 	Delete(subassets)
 End Function
 
-SubFile = ReadFile_Strict(SubtitlesFile)
+SubFile = JsonParseFromFile(SubtitlesFile)
+SubColors = JsonGetValue(SubFile, "colors")
 
 SubtitlesInit = True
 
