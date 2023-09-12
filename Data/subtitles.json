@@ -1,0 +1,3631 @@
+{
+	"colors": {
+        "announcement": [130, 130, 130],
+        "ci": [0, 130, 0],
+        "crew": [135, 160, 130],
+        "d": [225, 120, 0],
+        "guard": [180, 180, 150],
+        "janitor": [120, 140, 170],
+        "mtf": [100, 60, 45],
+        "nazi": [130, 0, 20],
+        "035angry": [150, 0, 0],
+        "049": [50, 70, 70],
+        "066": [180, 35, 60],
+        "106": [10, 5, 5],
+        "682": [180, 160, 135],
+        "860-2": [110, 55, 80],
+        "1499-1": [40, 40, 40]
+    },
+	"PATH\\TO\\SOUND\\EFFECT": [
+		{
+			"text": "This text appears as soon as the sound plays."
+		},
+		{
+			"text": "This text appears 2.3 seconds after the sound first plays.",
+			"delay": 2.3
+		},
+		{
+			"text": "This text appears after 3.3 seconds. It is red.",
+			"delay": 3.3,
+			"color": "red"
+		},
+		{
+			"text": "And this line of text should be green! It should stay on screen for 10+5 seconds.",
+			"delay": 4.0,
+			"r": 0,
+			"g": 255,
+			"b": 0,
+			"length": 10.0
+		}
+	],
+	" --- INTRO --- ": [],
+	" --- AGENT ULGRIN --- ": [],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\BeforeDoorOpen.ogg": [
+		{
+			"text": "Control, this is Agent Ulgrin. I need a request to open up Cell 3-11.",
+			"delay": 3.7,
+			"color": "guard",
+			"length": 4.0
+		},
+		{
+			"text": "Copy that.",
+			"delay": 8.9,
+			"length": 0.91
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\ExitCell.ogg": [
+		{
+			"text": "Hey, they got some work for ya. Do me a favor, and step outta your cell.",
+			"delay": 1.37,
+			"color": "guard",
+			"length": 4.14
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\ExitCellRefuse1.ogg": [
+		{
+			"text": "What are you, stupid or something? I said step out of the cell. If you don't step out of the cell, I'm gonna kick your ass.",
+			"color": "guard",
+			"length": 6.05
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\ExitCellRefuse2.ogg": [
+		{
+			"text": "Look buddy, I don't have all day. I'm trying to be polite about this. If you don't step outta the cell, I'm gonna kick your ass.",
+			"color": "guard",
+			"length": 5.6
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\CellGas1.ogg": [
+		{
+			"text": "*CHUCKLE* You have got to be the dumbest test subject we've ever had! Oh well, shut the doors and open the gas valves.",
+			"color": "guard",
+			"length": 7.05
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\CellGas2.ogg": [
+		{
+			"text": "Huh. I'm actually kinda disappointed you didn't put up a fight. I was looking forward to punching you in the face.",
+			"color": "guard",
+			"length": 5.71
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\Escort1.ogg": [
+		{
+			"text": "Just follow me. Oh, and by the way, we're authorized to kill any disobedient test subjects. So, don't try anything stupid.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\Escort2.ogg": [
+		{
+			"text": "Just follow me. Oh, and by the way, we're authorized to, uh, exterminate any disobedient test subjects. So, I'd recommend not doing anything stupid.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortRun.ogg": [
+		{
+			"text": "Hey, dumbass! You're going the wrong way! Get the hell over here right now.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortRefuse1.ogg": [
+		{
+			"text": "Hurry up! They're waiting for you!",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortRefuse2.ogg": [
+		{
+			"text": "Look dude, I already hate my job. Why are you making it more difficult for me?",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortPissedOff1.ogg": [
+		{
+			"text": "I ain't in the mood for this shit. I have no problem putting a bullet in your brain if you don't start cooperating.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortPissedOff2.ogg": [
+		{
+			"text": "I'm not in the mood for this shit! I have no problem putting a bullet in your head if you don't start cooperating.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortKill1.ogg": [
+		{
+			"text": "Alright you know what, fine. Be that way. We'll just get somebody else then.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortKill2.ogg": [
+		{
+			"text": "Alright, fine. Be that way. We'll just get somebody else then.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortTerminated.ogg": [
+		{
+			"text": "I'll get rid of the body. You can go and fetch me another one...",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortDone1.ogg": [
+		{
+			"text": "Well, we're here. Just get in there, and follow all the instructions and uh... you'll probably be fine.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortDone2.ogg": [
+		{
+			"text": "Well, we're here. I'm still disappointed I didn't get to punch you but... whatever.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortDone3.ogg": [
+		{
+			"text": "Well, we're here. I'm still disappointed I didn't get to punch you in the face but... whatever.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortDone4.ogg": [
+		{
+			"text": "Just get in there and follow all the instructions and uh... you'll probably be fine. Or maybe you won't be. Either way, I don't really care.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\EscortDone5.ogg": [
+		{
+			"text": "Well anyway, let's not waste anymore time. They're waiting for you down in the chamber.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Ulgrin\\OhAndByTheWay.ogg": [
+		{
+			"text": "Oh, and by the way.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\WhatThe1b.ogg": [
+		{
+			"text": "Oh shit!",
+			"delay": 1.15,
+			"color": "guard"
+		},
+		{
+			"text": "Alright, got it.",
+			"delay": 7.78,
+			"color": "guard"
+		}
+	],
+	" --- ESCAPE GUARD --- ": [],
+	"SFX\\Room\\Intro\\Guard\\PlayerEscape.ogg": [
+		{
+			"text": "What the hell? Hey! Stop! He's getting away!",
+			"color": "guard"
+		}
+	],
+	" --- GUARD CONVERSATION ---": [],
+	"SFX\\Room\\Intro\\Guard\\Conversation1a.ogg": [
+		{
+			"text": "So uh... how's it going?",
+			"color": "guard"
+		},
+		{
+			"text": "Well yeah, who do you think I'm talking to? This guy here with the punch-able face? Of course I'm talking to you.",
+			"delay": 5.3,
+			"color": "guard"
+		},
+		{
+			"text": "Well, yeah. It's your first day working here.",
+			"delay": 15.4,
+			"color": "guard"
+		},
+		{
+			"text": "Really? Wow. That's weird.",
+			"delay": 23.65,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation1b.ogg": [
+		{
+			"text": "Uh... are- are you talking to me?",
+			"delay": 3.2,
+			"color": "guard"
+		},
+		{
+			"text": "Oh! I'm just a little surprised. I think this is the first time you've ever spoken to me.",
+			"delay": 10.33,
+			"color": "guard"
+		},
+		{
+			"text": "Uh... actually we've worked together now for about five months.",
+			"delay": 18.95,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation2a.ogg": [
+		{
+			"text": "Uh... so you seen any good movies lately?",
+			"color": "guard"
+		},
+		{
+			"text": "Yeah? What kind of books?",
+			"delay": 7.19,
+			"color": "guard"
+		},
+		{
+			"text": "Heh, you're kidding me?",
+			"delay": 12.5,
+			"color": "guard"
+		},
+		{
+			"text": "You're whole job revolves around horror and science fiction! Except, y'know, it's not actually fiction.",
+			"delay": 15.93,
+			"color": "guard"
+		},
+		{
+			"text": "Yeah look, no offense, but I've already lost interest in what you're talking about.",
+			"delay": 24.73,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation2b.ogg": [
+		{
+			"text": "Uh, I- I don't really watch movies. I mostly just read books.",
+			"delay": 3.27,
+			"color": "guard"
+		},
+		{
+			"text": "Uh, horror. Science fiction. Anything like that.",
+			"delay": 9.0,
+			"color": "guard"
+		},
+		{
+			"text": "What?",
+			"delay": 14.8,
+			"color": "guard"
+		},
+		{
+			"text": "Well actually, I'm planning on writing a book about my-",
+			"delay": 22.5,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation3a.ogg": [
+		{
+			"text": "Man, I'm hungry. Hey, today's pizza day down at the cafeteria, right?",
+			"color": "guard"
+		},
+		{
+			"text": "Oh, God damn it. Well, my day's ruined. The only reason I still come here is for the pizza. I don't know what it is about that pizza, but it's delicious.",
+			"delay": 7.65,
+			"color": "guard"
+		},
+		{
+			"text": "Tuna casserole, on the other hand, is a disgusting abomination and it should be locked up in here with the rest of these freaks.",
+			"delay": 16.5,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation3b.ogg": [
+		{
+			"text": "Um, a-actually I think it's tuna casserole.",
+			"delay": 4.6,
+			"color": "guard"
+		},
+		{
+			"text": "Uhh... okay?",
+			"delay": 22.93,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation4a.ogg": [
+		{
+			"text": "You don't have a girlfriend, do you?",
+			"color": "guard"
+		},
+		{
+			"text": "Well, I'm definitely not a mind reader. Otherwise, I'd be locked up in this place. So, yeah, I'd say it's pretty damn obvious.",
+			"delay": 3.3,
+			"color": "guard"
+		},
+		{
+			"text": "Tell her you work at some coffee shop or something.",
+			"delay": 13.51,
+			"color": "guard"
+		},
+		{
+			"text": "Uh, I dunno! Just... tell her it's uh... ketchup.",
+			"delay": 23.55,
+			"color": "guard"
+		},
+		{
+			"text": "Ugh... just forget it.",
+			"delay": 30.45,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation4b.ogg": [
+		{
+			"text": "Is it that obvious?",
+			"delay": 1.94,
+			"color": "guard"
+		},
+		{
+			"text": "Well, how am I supposed to get a girlfriend anyway when I have this job? I mean I can't tell her about it.",
+			"delay": 9.14,
+			"color": "guard"
+		},
+		{
+			"text": "Well, what if I accidentally forgot to wash my hands here at work, and I came home and there was blood all over my hands? What would I say to her then?",
+			"delay": 16.2,
+			"color": "guard"
+		},
+		{
+			"text": "Ketchup? Why would I have ketchup on my hands if I worked at a coffee shop?",
+			"delay": 26.5,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation5a.ogg": [
+		{
+			"text": "Uh... so you seen any good movies lately?",
+			"color": "guard"
+		},
+		{
+			"text": "Oh, okay. Oh, what about video games? Y'know, that reminds me, somebody should make a video game based on this place.",
+			"delay": 5.4,
+			"color": "guard"
+		},
+		{
+			"text": "Eh, I dunno. I just thought it was kind of a cool idea.",
+			"delay": 13.5,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Conversation5b.ogg": [
+		{
+			"text": "Uhh, I- I don't really watch movies.",
+			"delay": 3.2,
+			"color": "guard"
+		},
+		{
+			"text": "Why would anyone do that?",
+			"delay": 11.5,
+			"color": "guard"
+		},
+		{
+			"text": "Well, I don't play video games either.",
+			"delay": 17.0,
+			"color": "guard"
+		}
+	],
+	" --- BALCONY GUARD --- ": [],
+	"SFX\\Room\\Intro\\Guard\\Balcony\\Alert1.ogg": [
+		{
+			"text": "Hey, scaredy-cat, you better get your ass back to the chamber now. I'm not gonna ask you again.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Balcony\\Alert2.ogg": [
+		{
+			"text": "Did you really think you could just walk outta here without me noticing? Get back to the chamber now.",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Balcony\\OhShit.ogg": [
+		{
+			"text": "Oh, shit. Oh shit! Shit!",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Balcony\\WTF1.ogg": [
+		{
+			"text": "What the fuck is happening?",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\Intro\\Guard\\Balcony\\WTF2.ogg": [
+		{
+			"text": "What the fuck is happening!?",
+			"color": "guard"
+		}
+	],
+	" --- FRANKLIN --- ": [],
+	"SFX\\Room\\Intro\\WhatThe1a.ogg": [
+		{
+			"text": "Agent, behind you!"
+		},
+		{
+			"text": "Keep your eyes on it!",
+			"delay": 1.65
+		},
+		{
+			"text": "Alright, I'm going to blink. Just keep on watching it.",
+			"delay": 4.82
+		}
+	],
+	"SFX\\Room\\Intro\\Scientist\\Franklin\\EnterChamber.ogg": [
+		{
+			"text": "Attention all Class-D personnel, please enter the containment chamber.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\Scientist\\Franklin\\Refuse1.ogg": [
+		{
+			"text": "Subject D-9341, enter the containment chamber or you will be terminated!",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\Scientist\\Franklin\\Refuse2.ogg": [
+		{
+			"text": "This is your last warning, you have five seconds to comply!",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\Scientist\\Franklin\\Refuse3.ogg": [
+		{
+			"text": "Subject D-9341 designated for terminated. Fire at will!",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\Scientist\\Franklin\\Approach173.ogg": [
+		{
+			"text": "Please approach SCP-173 for testing.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\Scientist\\Franklin\\Problem.ogg": [
+		{
+			"text": "Uhm, there seems to be a problem with the door control system. The doors aren't responding to any of our attempts to close them. So, please maintain direct eye contact with SCP-173",
+			"color": "announcement",
+			"length": 6.57
+		}
+	],
+	" --- CLASS-D --- ": [],
+	"SFX\\Room\\Intro\\ClassD\\DontLikeThis.ogg": [
+		{
+			"text": "I don't like this. I really don't.",
+			"color": "d"
+		}
+	],
+	"SFX\\Room\\Intro\\ClassD\\Breen.ogg": [
+		{
+			"text": "Wait, what the-",
+			"color": "d"
+		}
+	],
+	" --- SCIENTIST --- ": [],
+	"SFX\\Room\\Intro\\Scientist\\Conversation.ogg": [
+		{
+			"text": "For some reason he passed by 079's chamber, and now the doors aren't working."
+		},
+		{
+			"text": "Well, at least they weren't working when I last passed by.",
+			"delay": 5.0
+		},
+		{
+			"text": "Skinner?",
+			"delay": 12.2
+		},
+		{
+			"text": "Hmm, I don't recall knowing him.",
+			"delay": 15.4
+		},
+		{
+			"text": "Was he ever stationed at this sector?",
+			"delay": 17.65
+		},
+		{
+			"text": "Yeah, he picked up a security agent and a junior researcher on the way.",
+			"delay": 25.3
+		},
+		{
+			"text": "Kid was taking papers to his supervisor, shit sucks.",
+			"delay": 29.5
+		},
+		{
+			"text": "It shook up Dr. L. pretty badly.",
+			"delay": 36.2
+		},
+		{
+			"text": "He hasn't left his office, says he's been hearing things.",
+			"delay": 38.2
+		}
+	],
+	" --- IA SYSTEM --- ": [],
+	"SFX\\Room\\Intro\\IA\\1\\Attention0.ogg": [
+		{
+			"text": "Attention.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\1\\Attention1.ogg": [
+		{
+			"text": "Attention, please.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Crew0.ogg": [
+		{
+			"text": "Maintenance Crew Echo",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Crew1.ogg": [
+		{
+			"text": "Electrician Crew Lima",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Crew2.ogg": [
+		{
+			"text": "Inspection Team Sierra",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Crew3.ogg": [
+		{
+			"text": "Technician Team A3",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Crew4.ogg": [
+		{
+			"text": "Janitorial Crew 4E",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Crew5.ogg": [
+		{
+			"text": "Hand Custodian Stainer",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist0.ogg": [
+		{
+			"text": "Head Researcher Furnace",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist1.ogg": [
+		{
+			"text": "Assistant Researcher Conway",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist2.ogg": [
+		{
+			"text": "Junior Researcher Rosing",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist3.ogg": [
+		{
+			"text": "Senior Researcher Palmer",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist4.ogg": [
+		{
+			"text": "Doctor Burk",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist5.ogg": [
+		{
+			"text": "Doctor Caldera",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist6.ogg": [
+		{
+			"text": "Doctor Harp",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist7.ogg": [
+		{
+			"text": "Doctor Gears",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist8.ogg": [
+		{
+			"text": "Doctor Clef",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist9.ogg": [
+		{
+			"text": "Doctor Kondraki",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist10.ogg": [
+		{
+			"text": "Doctor Valdeson",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist11.ogg": [
+		{
+			"text": "Assistant Researcher Cooley",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist12.ogg": [
+		{
+			"text": "Chief Electrician Wagner",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist13.ogg": [
+		{
+			"text": "Security Officer Ingreso",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist14.ogg": [
+		{
+			"text": "Communications Specialist Furnace",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist15.ogg": [
+		{
+			"text": "Transportation Dispatcher Conway",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist16.ogg": [
+		{
+			"text": "Safety Director Paxton",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Scientist17.ogg": [
+		{
+			"text": "Research Director Reed",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Security0.ogg": [
+		{
+			"text": "Security Team 12-B",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Security1.ogg": [
+		{
+			"text": "Security Team 7-A",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Security2.ogg": [
+		{
+			"text": "Agent Ulgrin",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Security3.ogg": [
+		{
+			"text": "Security Team 3-F",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Security4.ogg": [
+		{
+			"text": "Security Team 11-C",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\2\\Security5.ogg": [
+		{
+			"text": "Sergeant Valdeson",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\3\\CallOnLine.ogg": [
+		{
+			"text": "Call on-line.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\3\\Report0.ogg": [
+		{
+			"text": "Report to.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\3\\Report1.ogg": [
+		{
+			"text": "Please report to.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Crew0.ogg": [
+		{
+			"text": "Decontamination Gate 14.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Crew1.ogg": [
+		{
+			"text": "Maintenance Tunnel Checkpoint D.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Crew2.ogg": [
+		{
+			"text": "Service Tunnel A.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Crew3.ogg": [
+		{
+			"text": "Storage Complex F.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Crew4.ogg": [
+		{
+			"text": "Tesla Gate G-6.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Crew5.ogg": [
+		{
+			"text": "Lavatory C-30.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Crew6.ogg": [
+		{
+			"text": "Decontamination Checkpoint H-13.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Scientist0.ogg": [
+		{
+			"text": "Office Complex E.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Scientist1.ogg": [
+		{
+			"text": "Office Complex Floor 3.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Scientist2.ogg": [
+		{
+			"text": "Personnel Dormatories Floor 3.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Scientist3.ogg": [
+		{
+			"text": "Testing Lab 5-B.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Scientist4.ogg": [
+		{
+			"text": "Office Complex B-12.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Scientist5.ogg": [
+		{
+			"text": "Gate C Administrations Complex.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Scientist6.ogg": [
+		{
+			"text": "Storage Facilities G-5.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Scientist7.ogg": [
+		{
+			"text": "Head Office A.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Security0.ogg": [
+		{
+			"text": "Cell-Block Delta.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Security1.ogg": [
+		{
+			"text": "Firing Range Foxtrot.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Security2.ogg": [
+		{
+			"text": "Gate A.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Security3.ogg": [
+		{
+			"text": "Heavy Containment Checkpoint Alpha.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Security4.ogg": [
+		{
+			"text": "Entrance Checkpoint Bravo.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\4\\Security5.ogg": [
+		{
+			"text": "Light Containment Checkpoint Kilo B.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Crew0.ogg": [
+		{
+			"text": "For maintenance.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Crew1.ogg": [
+		{
+			"text": "For engineering service.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Crew2.ogg": [
+		{
+			"text": "For janitorial service.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Crew3.ogg": [
+		{
+			"text": "For clean-up.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Crew4.ogg": [
+		{
+			"text": "For scheduled inspection.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Crew5.ogg": [
+		{
+			"text": "For scheduled safety inspection.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Crew6.ogg": [
+		{
+			"text": "For immediate decontaimination clean-up.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Scientist0.ogg": [
+		{
+			"text": "For scheduled security inspection.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Security0.ogg": [
+		{
+			"text": "For briefing.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Security1.ogg": [
+		{
+			"text": "For immediate service.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\5\\Security2.ogg": [
+		{
+			"text": "For personnel control.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\1.ogg": [
+		{
+			"text": "1",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\2.ogg": [
+		{
+			"text": "2",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\3.ogg": [
+		{
+			"text": "3",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\4.ogg": [
+		{
+			"text": "4",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\5.ogg": [
+		{
+			"text": "5",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\6.ogg": [
+		{
+			"text": "6",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\7.ogg": [
+		{
+			"text": "7",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\8.ogg": [
+		{
+			"text": "8",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Numbers\\9.ogg": [
+		{
+			"text": "9",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Announcement1.ogg": [
+		{
+			"text": "Don't forget, today is pizza day. So head on down to the cafeteria to grab yourself a hot slice.",
+			"delay": 1.9,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Announcement2.ogg": [
+		{
+			"text": "Remember, security is the first step towards a safe work environment. Stay secure, stay vigilant.",
+			"delay": 1.85,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Announcement3.ogg": [
+		{
+			"text": "A reminder to all personnel, motivational seminars are held at the faculty auditorium from hours 17 to 18 on Thursdays. Come on down and get motivated!",
+			"delay": 2.0,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Announcement4.ogg": [
+		{
+			"text": "Remember to report all suspicious activity to your supervisors. Not even you are exempt from scrutiny. Stay paranoid. Stay vigilant.",
+			"delay": 1.95,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Announcement5.ogg": [
+		{
+			"text": "Feeling out of shape? Drop by the faculty gymnasium and feel free to participate in a game of community Badminton on Sundays!",
+			"delay": 2.0,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Announcement6.ogg": [
+		{
+			"text": "Feeling tired and overworked? Freshly brewed coffee is served at the cafeteria at all hours.",
+			"delay": 2.0,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Announcement7.ogg": [
+		{
+			"text": "Come down and join our annual movie night this Saturday! This years film, 'Area 51: Panic and Terror: Two Miles Under'",
+			"delay": 1.95,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Scripted1.ogg": [
+		{
+			"text": "Attention. Security Chief Franklin, please report to containment chamber 173 immediately.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Scripted2.ogg": [
+		{
+			"text": ">Doctor L, please report to Heavy Containment checkpoint C.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Scripted3.ogg": [
+		{
+			"text": "Attention. Doctor Maynard, report to administrations office immediately.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Scripted4.ogg": [
+		{
+			"text": "Maintenance Crew Alpha, report to Light Containment elevator 6A for safety inspection.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Scripted5.ogg": [
+		{
+			"text": "Attention. Site Director Rosewood, please report to administrations complex.",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Room\\Intro\\IA\\Scripted\\Scripted6.ogg": [
+		{
+			"text": "Attention. All personnel, report to-",
+			"delay": 2.2,
+			"color": "announcement"
+		},
+		{
+			"text": "*INCOHERENT SOUNDS*",
+			"delay": 5.6,
+			"color": "announcement"
+		},
+		{
+			"text": "Immediately.",
+			"delay": 7.65,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Alarm\\Alarm2_1.ogg": [
+		{
+			"text": "This site is experiencing multiple Keter and Euclid-level containment breaches. Full-site lockdown initiated.",
+			"delay": 0.6,
+			"color": "announcement"
+		}
+	],
+	" --- CHARACTERS --- ": [],
+	"SFX\\Room\\Storeroom\\Escape1.ogg": [
+		{
+			"text": "I think the shortest way out is through the South-East wing. Follow me.",
+			"color": "janitor"
+		}
+	],
+	"SFX\\Room\\Storeroom\\Escape2.ogg": [
+		{
+			"text": "Did you hear that?"
+		},
+		{
+			"text": "I hope it wasn't-",
+			"delay": 1.9
+		}
+	],
+	" --- 096 GUARD --- ": [],
+	"SFX\\Character\\Guard\\096ServerRoom1.ogg": [
+		{
+			"text": "Hello?",
+			"delay": 1.4,
+			"color": "guard"
+		},
+		{
+			"text": "Oh God...",
+			"delay": 4.7,
+			"color": "guard"
+		},
+		{
+			"text": "How did he get out?",
+			"delay": 6.5,
+			"color": "guard"
+		},
+		{
+			"text": "Oh shit...",
+			"delay": 8.75,
+			"color": "guard"
+		},
+		{
+			"text": "No... no!",
+			"delay": 10.15,
+			"color": "guard"
+		},
+		{
+			"text": "I saw it!",
+			"delay": 11.5,
+			"color": "guard"
+		},
+		{
+			"text": "Get away from me!",
+			"delay": 12.8,
+			"color": "guard"
+		},
+		{
+			"text": "No not me... not me!",
+			"delay": 16.3,
+			"color": "guard"
+		}
+	],
+	" --- 895 GUARD --- ": [],
+	"SFX\\Room\\895Chamber\\GuardIdle1.ogg": [
+		{
+			"text": "Nothing's working... nothing's working.... No, no. No!",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\895Chamber\\GuardIdle2.ogg": [
+		{
+			"text": "What are you doing to my head? No... no please... please! No!",
+			"delay": 0.35,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\895Chamber\\GuardIdle3.ogg": [
+		{
+			"text": "Don't stress... they're speaking to me...",
+			"delay": 1.3,
+			"color": "guard"
+		},
+		{
+			"text": "I- I don't know what to do on my own... please, please help me!",
+			"delay": 4.65,
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\895Chamber\\GuardScream1.ogg": [
+		{
+			"text": "No!",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\895Chamber\\GuardScream2.ogg": [
+		{
+			"text": "No!",
+			"color": "guard"
+		}
+	],
+	"SFX\\Room\\895Chamber\\GuardScream3.ogg": [
+		{
+			"text": "No!",
+			"color": "guard"
+		}
+	],
+	" --- EMILY ROSS --- ": [],
+	"SFX\\Character\\Scientist\\EmilyScream.ogg": [
+		{
+			"text": "*SCREAM*",
+			"delay": 1.4,
+			"length": 0.5
+		}
+	],
+	" --- 008 SCIENTIST --- ": [],
+	"SFX\\SCP\\008\\KillScientist1.ogg": [
+		{
+			"text": "Please! Oh God... please..."
+		},
+		{
+			"text": "Please no!",
+			"delay": 7.14
+		}
+	],
+	"SFX\\SCP\\008\\KillScientist2.ogg": [
+		{
+			"text": "*PAIN*"
+		}
+	],
+	" --- SUICIDE GUARD --- ": [],
+	"SFX\\Character\\Guard\\SuicideGuard1.ogg": [
+		{
+			"text": "Please...",
+			"delay": 1.1,
+			"color": "guard"
+		},
+		{
+			"text": "Ugh...",
+			"delay": 4.2,
+			"color": "guard"
+		},
+		{
+			"text": "God...",
+			"delay": 5.75,
+			"color": "guard"
+		},
+		{
+			"text": "Oh God...",
+			"delay": 7.25,
+			"color": "guard"
+		},
+		{
+			"text": "Please...",
+			"delay": 9.0,
+			"color": "guard"
+		},
+		{
+			"text": "Please God... please God... please help me...",
+			"delay": 13.6,
+			"color": "guard"
+		},
+		{
+			"text": "Oh God...",
+			"delay": 18.7,
+			"color": "guard"
+		},
+		{
+			"text": "Please forgive me...",
+			"delay": 19.9,
+			"color": "guard"
+		},
+		{
+			"text": "Please...",
+			"delay": 21.95,
+			"color": "guard"
+		},
+		{
+			"text": "Please help me...",
+			"delay": 23.1,
+			"color": "guard"
+		}
+	],
+	"SFX\\Character\\Guard\\SuicideGuard2.ogg": [
+		{
+			"text": "The hell was that?",
+			"delay": 0.33,
+			"color": "guard"
+		},
+		{
+			"text": "Oh no...",
+			"delay": 1.5,
+			"color": "guard"
+		}
+	],
+	" --- JANITOR --- ": [],
+	"SFX\\Character\\Janitor\\106Abduct.ogg": [
+		{
+			"text": "What the hell?",
+			"color": "janitor"
+		},
+		{
+			"text": "Oh, it's just somebody",
+			"delay": 1.6,
+			"color": "janitor"
+		},
+		{
+			"text": "Ah!",
+			"delay": 3.45,
+			"color": "janitor"
+		}
+	],
+	"SFX\\Character\\Janitor\\Idle.ogg": [
+		{
+			"text": "Hello?",
+			"delay": 2.3,
+			"color": "janitor"
+		},
+		{
+			"text": "Guys, c'mon!",
+			"delay": 7.0,
+			"color": "janitor"
+		},
+		{
+			"text": "Guys?",
+			"delay": 12.25,
+			"color": "janitor"
+		},
+		{
+			"text": "Hello? Is there someone else here?",
+			"delay": 16.5,
+			"color": "janitor"
+		},
+		{
+			"text": "Hello?",
+			"delay": 25.0,
+			"color": "janitor"
+		},
+		{
+			"text": "Anyone?",
+			"delay": 27.1,
+			"color": "janitor"
+		}
+	],
+	" --- LURE SUBJECT --- ": [],
+	"SFX\\Character\\LureSubject\\Idle1.ogg": [
+		{
+			"text": "*SNIFFLING*",
+			"color": "d"
+		}
+	],
+	"SFX\\Character\\LureSubject\\Idle2.ogg": [
+		{
+			"text": "Is anyone out there?",
+			"delay": 0.6,
+			"color": "d"
+		}
+	],
+	"SFX\\Character\\LureSubject\\Idle3.ogg": [
+		{
+			"text": "Hello?",
+			"color": "d"
+		}
+	],
+	"SFX\\Character\\LureSubject\\Idle4.ogg": [
+		{
+			"text": "Please, let me go!",
+			"delay": 0.4,
+			"color": "d"
+		}
+	],
+	"SFX\\Character\\LureSubject\\Idle5.ogg": [
+		{
+			"text": "Let me go!",
+			"delay": 0.9,
+			"color": "d"
+		}
+	],
+	"SFX\\Character\\LureSubject\\Idle6.ogg": [
+		{
+			"text": "I just want to leave, please!",
+			"color": "d"
+		}
+	],
+	"SFX\\Character\\LureSubject\\Sniffling.ogg": [
+		{
+			"text": "*SNIFFLING*",
+			"delay": 0.85,
+			"color": "d"
+		}
+	],
+	"SFX\\Room\\106Chamber\\FemurBreaker.ogg": [
+		{
+			"text": "AHHHHHHHH!",
+			"delay": 3.2,
+			"color": "d"
+		},
+		{
+			"text": "*GASPING*",
+			"delay": 5.6,
+			"color": "d"
+		},
+		{
+			"text": "AGHHHHHHHHHH!",
+			"delay": 6.8,
+			"color": "d"
+		},
+		{
+			"text": "*GASPING*",
+			"delay": 10.7,
+			"color": "d"
+		},
+		{
+			"text": "Why??",
+			"delay": 14.0,
+			"color": "d"
+		},
+		{
+			"text": "*CRYING*",
+			"delay": 15.5,
+			"color": "d"
+		}
+	],
+	"SFX\\Character\\LureSubject\\106Bait.ogg": [
+		{
+			"text": "*CRYING*",
+			"delay": 1.7,
+			"color": "d"
+		},
+		{
+			"text": "*CRYING*",
+			"delay": 8.5,
+			"color": "d"
+		},
+		{
+			"text": "AHHHHHHHHH!",
+			"delay": 11.45,
+			"color": "d"
+		}
+	],
+	" --- PLAYER --- ": [],
+	"SFX\\SCP\\012\\Speech1.ogg": [
+		{
+			"text": "A little... really...",
+			"delay": 1.47,
+			"color": "d"
+		},
+		{
+			"text": "I have to... I have to finish it...",
+			"delay": 6.6,
+			"color": "d"
+		}
+	],
+	"SFX\\SCP\\012\\Speech2.ogg": [
+		{
+			"text": "You really want to do it...",
+			"delay": 0.19,
+			"color": "d"
+		},
+		{
+			"text": "I don't... think I can do this...",
+			"delay": 13.68,
+			"color": "d"
+		}
+	],
+	"SFX\\SCP\\012\\Speech3.ogg": [
+		{
+			"text": "I... I must do it...",
+			"delay": 5.45,
+			"color": "d"
+		},
+		{
+			"text": "Hahahahaha!",
+			"delay": 9.15,
+			"color": "d"
+		}
+	],
+	"SFX\\SCP\\012\\Speech4.ogg": [
+		{
+			"text": "I... I... have... no... choice...",
+			"delay": 0.18,
+			"color": "d"
+		}
+	],
+	"SFX\\SCP\\012\\Speech5.ogg": [
+		{
+			"text": "Please...",
+			"color": "d"
+		},
+		{
+			"text": "Hahahahahahaha!",
+			"delay": 1.0,
+			"color": "d"
+		},
+		{
+			"text": "This... this makes no sense...",
+			"delay": 7.3,
+			"color": "d"
+		}
+	],
+	"SFX\\SCP\\012\\Speech6.ogg": [
+		{
+			"text": "No... this... this is...",
+			"delay": 6.5,
+			"color": "d"
+		},
+		{
+			"text": "Impossible!",
+			"delay": 10.0,
+			"color": "d"
+		}
+	],
+	"SFX\\SCP\\012\\Speech7.ogg": [
+		{
+			"text": "Hahahahaha!",
+			"delay": 3.3,
+			"color": "d"
+		},
+		{
+			"text": "It... it can't be completed...",
+			"delay": 8.3,
+			"color": "d"
+		}
+	],
+	"SFX\\Room\\Intro\\Ew1.ogg": [
+		{
+			"text": "Ewwuh...",
+			"color": "d"
+		}
+	],
+	"SFX\\Room\\Intro\\Ew2.ogg": [
+		{
+			"text": "Eww...",
+			"color": "d"
+		}
+	],
+	" --- NAZI --- ": [],
+	"SFX\\SCP\\1123\\Officer1.ogg": [
+		{
+			"text": "Friedhelm, come.",
+			"color": "nazi"
+		}
+	],
+	"SFX\\SCP\\1123\\Officer2.ogg": [
+		{
+			"text": "Come on, now!",
+			"color": "nazi"
+		}
+	],
+	"SFX\\SCP\\1123\\Officer3.ogg": [
+		{
+			"text": "I had this feeling from the beginning.",
+			"color": "nazi"
+		},
+		{
+			"text": "The others said: He is one, he looks like one.",
+			"delay": 3.19,
+			"color": "nazi"
+		},
+		{
+			"text": "*CHUCKLE*",
+			"delay": 7.99,
+			"color": "nazi"
+		},
+		{
+			"text": "Yes, Viktor.",
+			"delay": 9.41,
+			"color": "nazi"
+		},
+		{
+			"text": "Now I know it.",
+			"delay": 12.18,
+			"color": "nazi"
+		},
+		{
+			"text": "You're a German and a Jew.",
+			"delay": 15.45,
+			"color": "nazi"
+		}
+	],
+	" --- MTF ANNOUNCEMENTS --- ": [],
+	"SFX\\Character\\MTF\\Announc.ogg": [
+		{
+			"text": "Mobile Task Force unit Epsilon-11, designated \u00c2\u00abNine-Tailed Fox\u00c2\u00bb has entered the facility.",
+			"delay": 1.7,
+			"color": "announcement"
+		},
+		{
+			"text": "All remaining survivors are advised to stay in the evacuation shelter or any other safe area until the unit has secured the facility.",
+			"delay": 8.0,
+			"color": "announcement"
+		},
+		{
+			"text": "We'll start escorting personnel out when the escaped SCPs have been recontained.",
+			"delay": 17.5,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\AnnouncAfter1.ogg": [
+		{
+			"text": "I would like to advise all surviving personnel, once again,",
+			"delay": 2.1,
+			"color": "announcement"
+		},
+		{
+			"text": "Do not attempt to reach the exits. Either find a safe area or go into one of the many evacuation shelters inside the facility.",
+			"delay": 5.95,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\AnnouncAfter2.ogg": [
+		{
+			"text": "An announcement to all personnel: the lift to Gate B has been locked down to ensure the safety of the upper areas of the facility.",
+			"delay": 3.0,
+			"color": "announcement"
+		},
+		{
+			"text": "Please remember to stay inside the evacuation shelters until the facility has been secured.",
+			"delay": 11.0,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\AnnouncCameraCheck.ogg": [
+		{
+			"text": "Control to Nine-Tailed Fox, we are now checking the camera feeds for potential threats. You should see any unauthorized intruders or escapees ping on your navigation devices.",
+			"delay": 2.2,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\AnnouncCameraFound1.ogg": [
+		{
+			"text": "Control to Nine-Tailed Fox, camera scan complete. Multiple stragglers, their positions are now being broadcasted to you.",
+			"delay": 2.3,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\AnnouncCameraFound2.ogg": [
+		{
+			"text": "Control to Nine-Tailed Fox, camera scan complete. Only a single Class-D remains.",
+			"delay": 2.45,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\AnnouncCameraNoFound.ogg": [
+		{
+			"text": "Control to Nine-Tailed Fox, camera scan complete. No signs of unauthorized survivors, over.",
+			"delay": 1.0,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\Announc173Contained.ogg": [
+		{
+			"text": "SCP-173 contained successfully by Foxtrot unit one.",
+			"delay": 1.07,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\ThreatAnnounc1.ogg": [
+		{
+			"text": "Subject D-9341, report to the nearest security checkpoint for questioning.",
+			"delay": 2.54,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\ThreatAnnounc2.ogg": [
+		{
+			"text": "Subject D-9341, report to the nearest security force. Failure to do so will result in immediate termination.",
+			"delay": 2.23,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\ThreatAnnounc3.ogg": [
+		{
+			"text": "Subject D-9341, report to Gate A immediately for questioning.",
+			"delay": 2.1,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\ThreatAnnouncPossession.ogg": [
+		{
+			"text": "Subject D-9341, report to the nearest Mobile Task Force unit for retrieval of several high-importance objects.",
+			"delay": 2.4,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\ThreatAnnouncFinal.ogg": [
+		{
+			"text": "Subject D-9341, designated for termination.",
+			"delay": 2.5,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\Tesla1.ogg": [
+		{
+			"text": "Control to Nine-Tailed Fox, tesla gate disabled.",
+			"delay": 1.3,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\Tesla2.ogg": [
+		{
+			"text": "Control to Nine-Tailed Fox, tesla gate deactivated. You may now pass.",
+			"delay": 1.25,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Character\\MTF\\Tesla3.ogg": [
+		{
+			"text": "Control to Nine-Tailed Fox, the tesla gate in your sector is now idle. Proceed safely.",
+			"delay": 1.3,
+			"color": "announcement"
+		}
+	],
+	" --- MTF --- ": [],
+	"SFX\\Character\\MTF\\ClassD1.ogg": [
+		{
+			"text": "A Class-D detected.",
+			"delay": 0.68,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ClassD2.ogg": [
+		{
+			"text": "Dude, There's a Class-D nearby. Keep your eyes out.",
+			"delay": 0.3,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ClassD3.ogg": [
+		{
+			"text": "I detected a Class-D nearby. Be watchful.",
+			"delay": 0.4,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ClassD4.ogg": [
+		{
+			"text": "A Class-D detected.",
+			"delay": 0.98,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Random1.ogg": [
+		{
+			"text": "Man, I wish we still had some of that 420-J. It was so awesome.",
+			"delay": 0.45,
+			"color": "mtf"
+		},
+		{
+			"text": "They still keep a plant somewhere, man.",
+			"delay": 7.1,
+			"color": "mtf"
+		},
+		{
+			"text": "Hey man, what if we gave some 420-J to that freaky statue thing?",
+			"delay": 11.12,
+			"color": "mtf"
+		},
+		{
+			"text": "Why? He's like, already stoned!",
+			"delay": 17.0,
+			"color": "mtf"
+		},
+		{
+			"text": "*CHUCKLE*",
+			"delay": 20.5,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Random2.ogg": [
+		{
+			"text": "Did you hear that!?",
+			"delay": 0.43,
+			"color": "mtf"
+		},
+		{
+			"text": "Yeah, the big lizard thing is making a huge mess somewhere out there!",
+			"delay": 2.45,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Random3.ogg": [
+		{
+			"text": "This place seriously gives me the creeps. Let's get this over with quickly.",
+			"delay": 0.18,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Random4.ogg": [
+		{
+			"text": "I wonder what will happen after this, man.",
+			"delay": 0.18,
+			"color": "mtf"
+		},
+		{
+			"text": "I dunno. Let's just get this over with.",
+			"delay": 3.73,
+			"color": "mtf"
+		},
+		{
+			"text": "Okay.",
+			"delay": 7.65,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Random5.ogg": [
+		{
+			"text": "This place is so fucking crazy!",
+			"delay": 0.11,
+			"color": "mtf"
+		},
+		{
+			"text": "No shit, Sherlock.",
+			"delay": 3.63,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Random6.ogg": [
+		{
+			"text": "Holy shit! He's dead! What the fuck? How did he... anyone wanna try that?",
+			"delay": 0.15,
+			"color": "mtf"
+		},
+		{
+			"text": "No way, you moron!",
+			"delay": 9.55,
+			"color": "mtf"
+		},
+		{
+			"text": "The jackass didn't look ahead. Why the heck didn't he notice it?",
+			"delay": 12.4,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Random7.ogg": [
+		{
+			"text": "You guys wanna put some stuff in that clockwork thing to see what comes out?",
+			"delay": 0.45,
+			"color": "mtf"
+		},
+		{
+			"text": "You must be fucking crazy, that thing is dangerous!",
+			"delay": 5.23,
+			"color": "mtf"
+		},
+		{
+			"text": "Well, I'm so curious. What could happen?",
+			"delay": 10.3,
+			"color": "mtf"
+		},
+		{
+			"text": "Shut the hell up! Let's get this over with.",
+			"delay": 14.85,
+			"color": "mtf"
+		},
+		{
+			"text": "Okay.",
+			"delay": 19.1,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Searching1.ogg": [
+		{
+			"text": "Come out, you bastard!",
+			"delay": 0.09,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Searching2.ogg": [
+		{
+			"text": "Searching for Class-D.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Searching3.ogg": [
+		{
+			"text": "Come on out. You're gonna die anyway.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Searching4.ogg": [
+		{
+			"text": "Look for him!",
+			"delay": 0.1,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Searching5.ogg": [
+		{
+			"text": "Come out, you bastard!",
+			"delay": 0.075,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Searching6.ogg": [
+		{
+			"text": "J\u00c3\u00a4vla helvete, come out!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Stop1.ogg": [
+		{
+			"text": "Stop right there!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Stop2.ogg": [
+		{
+			"text": "Class-D spotted.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Stop3.ogg": [
+		{
+			"text": "You! Stop!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Stop4.ogg": [
+		{
+			"text": "Stop right there!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Stop5.ogg": [
+		{
+			"text": "Hey, hey! Halt!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Stop6.ogg": [
+		{
+			"text": "You, stop!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\TargetLost1.ogg": [
+		{
+			"text": "Target lost. Reverting back to the original objective.",
+			"delay": 0.85,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\TargetLost2.ogg": [
+		{
+			"text": "Class-D has escaped us. Returning to previous task.",
+			"delay": 0.8,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\TargetLost3.ogg": [
+		{
+			"text": "Look, he ran away.",
+			"color": "mtf"
+		},
+		{
+			"text": "Whatever, I guess he won't matter too much.",
+			"delay": 3.5,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Targetterminated1.ogg": [
+		{
+			"text": "Target terminated.",
+			"delay": 1.08,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\TargetTerminated2.ogg": [
+		{
+			"text": "Glad that's over with.",
+			"delay": 0.85,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\TargetTerminated3.ogg": [
+		{
+			"text": "Class-D has been terminated.",
+			"delay": 1.0,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\TargetTerminated4.ogg": [
+		{
+			"text": "Kill confirmed.",
+			"delay": 1.08,
+			"color": "mtf"
+		},
+		{
+			"text": "C'mon, let's move out.",
+			"delay": 3.48,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\Tesla0.ogg": [
+		{
+			"text": "Nine-Tailed Fox to control, requesting the disabling of the tesla gate nearest to our position.",
+			"delay": 0.4,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ThereHeIs1.ogg": [
+		{
+			"text": "Class-D found!",
+			"delay": 0.15,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ThereHeIs2.ogg": [
+		{
+			"text": "There he is! Start shooting!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ThereHeIs3.ogg": [
+		{
+			"text": "There you are.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ThereHeIs4.ogg": [
+		{
+			"text": "Look, he's over there!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ThereHeIs5.ogg": [
+		{
+			"text": "A-ha! Found the Class-D!",
+			"delay": 0.2,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\ThereHeIs6.ogg": [
+		{
+			"text": "Oh hey, it's a Class-D!",
+			"delay": 0.2,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\049\\Player0492_1.ogg": [
+		{
+			"text": "Nine-Tailed Fox to control, an active SCP-049-2 instance detected.",
+			"delay": 0.2,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\049\\Player0492_2.ogg": [
+		{
+			"text": "SCP-049-2 terminated.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\049\\Spotted1.ogg": [
+		{
+			"text": "Watch your back, SCP-049 has just been spotted!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\049\\Spotted2.ogg": [
+		{
+			"text": "SCP-049 is in the area! Keep a look out.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\049\\Spotted3.ogg": [
+		{
+			"text": "SCP-049 is right on top of us! Watch your back.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\049\\Spotted4.ogg": [
+		{
+			"text": "Plague Doctor has just been spotted! Everybody just stay calm.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\049\\Spotted5.ogg": [
+		{
+			"text": "Plague Doctor has just been spotted!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\096\\Spotted1.ogg": [
+		{
+			"text": "SCP-096 has been spotted. Starting SCRAMBLE gear.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\096\\Spotted2.ogg": [
+		{
+			"text": "I've spotted SCP-096, over.",
+			"delay": 0.5,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\106\\Spotted1.ogg": [
+		{
+			"text": "SCP-106 has been spotted, running!",
+			"delay": 0.218,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\106\\Spotted2.ogg": [
+		{
+			"text": "The Old Man is coming out! Let's get the fuck out of here.",
+			"delay": 0.1,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\106\\Spotted3.ogg": [
+		{
+			"text": "I've spotted SCP-106, run!",
+			"delay": 0.09,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\106\\Spotted4.ogg": [
+		{
+			"text": "Forget about the D, we gotta run!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Spotted1.ogg": [
+		{
+			"text": "SCP-173 spotted!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Spotted2.ogg": [
+		{
+			"text": "SCP-173 spotted!",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Spotted3.ogg": [
+		{
+			"text": "Forget about the D, keep your sight on the statue.",
+			"delay": 0.65,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\BLINKING.ogg": [
+		{
+			"text": "Blinking.",
+			"color": "mtf",
+			"length": -2.0
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Box1.ogg": [
+		{
+			"text": "SCP-173 has been put in the containment box. Taking to the containment chamber.",
+			"delay": 0.06,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Box2.ogg": [
+		{
+			"text": "The statue is in the box. Taking to containment chamber.",
+			"delay": 0.1,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Box3.ogg": [
+		{
+			"text": "Command, we've boxed up SCP-173. We're moving to it's containment chamber now to contain it, out.",
+			"delay": 0.57,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Cont1.ogg": [
+		{
+			"text": "SCP-173 is in containment chamber. Closing door.",
+			"delay": 0.4,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Cont2.ogg": [
+		{
+			"text": "The statue is in the chamber. Closing the door.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Cont3.ogg": [
+		{
+			"text": "SCP-173 is back in containment. Proceeding to next objective.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\173\\Cont4.ogg": [
+		{
+			"text": "SCP-173 has been secured in its containment chamber.",
+			"delay": 0.4,
+			"color": "mtf"
+		},
+		{
+			"text": "We're moving on to the next objective, out.",
+			"delay": 5.35,
+			"color": "mtf"
+		}
+	],
+	" --- SCPS --- ": [],
+	" --- 035 --- ": [],
+	"SFX\\SCP\\035\\RadioHelp1.ogg": [
+		{
+			"text": "Hello? Please, can anyone hear me?",
+			"delay": 0.7
+		},
+		{
+			"text": "Anyone? I need help, and medical attention too! Please!",
+			"delay": 4.9
+		},
+		{
+			"text": "I'm currently in the Heavy Containment Zone beyond Checkpoint E, and I'm locked in SCP-035's containment chamber.",
+			"delay": 12.2
+		}
+	],
+	"SFX\\SCP\\035\\RadioHelp2.ogg": [
+		{
+			"text": "Please! I know my way around this compound. If you can get me out of here, I'll help you out of the facility and into the surface!",
+			"delay": 0.6
+		}
+	],
+	"SFX\\SCP\\035\\Help1.ogg": [
+		{
+			"text": "Oh thank God!",
+			"delay": 0.57
+		},
+		{
+			"text": "Someone actually found me! I thought I was done for a moment there, haha!",
+			"delay": 2.48
+		}
+	],
+	"SFX\\SCP\\035\\Help2.ogg": [
+		{
+			"text": "I can get us both safely to the surface. Just find the control panel in there and open the chamber doors for me."
+		}
+	],
+	"SFX\\SCP\\035\\Idle1.ogg": [
+		{
+			"text": "Well? What are you waiting for?",
+			"delay": 0.19
+		}
+	],
+	"SFX\\SCP\\035\\Idle2.ogg": [
+		{
+			"text": "What? Do you not-"
+		},
+		{
+			"text": "Alright, I admit it, I wouldn't blame you if you don't think I look trustworthy. But, please! I need your help and quickly!",
+			"delay": 1.78
+		},
+		{
+			"text": "The mask has been stuck to my face for some time now and I think I might need medical attention or it might kill me from the inside.",
+			"delay": 9.0
+		},
+		{
+			"text": "Just let me out so I can find us an exit in a matter of time.",
+			"delay": 15.0
+		}
+	],
+	"SFX\\SCP\\035\\Idle3.ogg": [
+		{
+			"text": "*SIGH*"
+		},
+		{
+			"text": "I'm starting to lose my patience here.",
+			"delay": 1.75
+		}
+	],
+	"SFX\\SCP\\035\\Idle4.ogg": [
+		{
+			"text": "What are you doing just standing there?",
+			"delay": 0.3
+		}
+	],
+	"SFX\\SCP\\035\\Idle5.ogg": [
+		{
+			"text": "You know... the Mobile Task Force will be entering the facility any minute now.",
+			"delay": 0.7
+		},
+		{
+			"text": "Guess what they do to stray Class-Ds like you?",
+			"delay": 5.4
+		}
+	],
+	"SFX\\SCP\\035\\Idle6.ogg": [
+		{
+			"text": "Are you even listening?",
+			"delay": 0.5
+		}
+	],
+	"SFX\\SCP\\035\\Idle7.ogg": [
+		{
+			"text": "Fine. Good luck getting out all on your own.",
+			"delay": 0.95,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		}
+	],
+	"SFX\\SCP\\035\\Closet1.ogg": [
+		{
+			"text": "Alright, look.",
+			"delay": 0.64
+		},
+		{
+			"text": "If you still don't think I'm trustworthy enough, there's a locked storage room behind you. You probably noticed that it's guarded with a 4 digit passcode.",
+			"delay": 2.24
+		},
+		{
+			"text": "Inside is some useful equipment. As well as a pill of SCP-500.",
+			"delay": 9.7
+		},
+		{
+			"text": "The passcode, is 5-7-3-1. Got it?",
+			"delay": 14.9
+		},
+		{
+			"text": "5-7-3-1.",
+			"delay": 19.7
+		}
+	],
+	"SFX\\SCP\\035\\Closet2.ogg": [
+		{
+			"text": "You see? You can trust me. Now please, just hurry and open the door!",
+			"delay": 0.43
+		}
+	],
+	"SFX\\SCP\\035\\Escape.ogg": [
+		{
+			"text": "Unfortunately, I never had any intentions of taking you with me. So this is where we part ways."
+		},
+		{
+			"text": "But for the sake of my freedom,",
+			"delay": 6.0
+		},
+		{
+			"text": "I have reason to believe that SCP-079 has taken control of the facility's systems, including the door system.",
+			"delay": 8.7
+		},
+		{
+			"text": "Your best bet is to appeal to it somehow. Hopefully you can come to a compromise. However, it does not control the warheads.",
+			"delay": 15.8
+		},
+		{
+			"text": "Which you should disable remotely in the event that something goes wrong.",
+			"delay": 23.8
+		}
+	],
+	"SFX\\SCP\\035\\Gased1.ogg": [
+		{
+			"text": "Wait? What the hell are you doing? What the hell are-"
+		},
+		{
+			"text": "*CHOKING*",
+			"delay": 2.95
+		},
+		{
+			"text": "Please- Why-",
+			"delay": 5.0
+		},
+		{
+			"text": "Just please-",
+			"delay": 6.28
+		},
+		{
+			"text": "I can't breath!",
+			"delay": 8.0
+		},
+		{
+			"text": "No!",
+			"delay": 10.45
+		},
+		{
+			"text": "*COUGHING*",
+			"delay": 11.9
+		}
+	],
+	"SFX\\SCP\\035\\Gased2.ogg": [
+		{
+			"text": "*CHOKING*"
+		}
+	],
+	"SFX\\SCP\\035\\GasedStop1.ogg": [
+		{
+			"text": "*COUGHING*"
+		},
+		{
+			"text": "Thank you!",
+			"delay": 2.5
+		},
+		{
+			"text": "Just please...",
+			"delay": 5.85
+		},
+		{
+			"text": "Don't do that again...",
+			"delay": 7.95
+		}
+	],
+	"SFX\\SCP\\035\\GasedStop2.ogg": [
+		{
+			"text": "*COUGHING*"
+		},
+		{
+			"text": "*SIGH* Now...",
+			"delay": 2.0
+		},
+		{
+			"text": "Was that really necessary?",
+			"delay": 5.25
+		},
+		{
+			"text": "I offer you some help and you try thank me by \u00c2\u00absufocating\u00c2\u00bb me?",
+			"delay": 7.5
+		}
+	],
+	"SFX\\SCP\\035\\GasedCloset.ogg": [
+		{
+			"text": "Now... now... I think we got off on the wrong foot here. Really.",
+			"delay": 0.25
+		},
+		{
+			"text": "To prove that I'm not up to no good, try that locked door over there. The code is 5-7-3-1.",
+			"delay": 4.77
+		},
+		{
+			"text": "5-7-3-1! Got it?",
+			"delay": 10.95
+		},
+		{
+			"text": "You'll find all sorts of goodies in there, okay? Please, just not the gas again.",
+			"delay": 13.8
+		}
+	],
+	"SFX\\SCP\\035\\GasedEscape.ogg": [
+		{
+			"text": "Unfortunately, I can't take you with me.",
+			"delay": 0.39,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "You're too much of a liability in many ways. So yes, I did lie to you.",
+			"delay": 3.35,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "But for the sake of my freedom,",
+			"delay": 8.5,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "The easiest way to get out safely is probably Gate A.",
+			"delay": 10.55,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "The security is pretty high, but if you manage to sneak past the guards and reach the lower level under the bridge, there's an unguarded service tunnel.",
+			"delay": 15.25,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "That's your way out.",
+			"delay": 23.35,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		}
+	],
+	"SFX\\SCP\\035\\GasedKilled1.ogg": [
+		{
+			"text": "So. You really don't wanna leave this place alive, do you?",
+			"delay": 2.18,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "You know, there's no way a lone D-Class like you will make it to the surface safely. Even if you did, they'd gun you down the moment you came across their reticals.",
+			"delay": 6.97,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		}
+	],
+	"SFX\\SCP\\035\\GasedKilled2.ogg": [
+		{
+			"text": "I'll give you one more chance here.",
+			"delay": 0.23,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "Just, open the chambers doors and we'll forget about this little gas incident.",
+			"delay": 2.6,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		}
+	],
+	"SFX\\SCP\\035\\KilledEscape.ogg": [
+		{
+			"text": "I commemorate you for your help. But I have no further business with you.",
+			"delay": 0.5,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "I have no intentions of taking a person who \u00c2\u00abearned\u00c2\u00bb their imprisonment with me.",
+			"delay": 4.9,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "But for the sake of my freedom,",
+			"delay": 10.6,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "The simpliest way for you to get out safely is to go and find SCP-012 in the Light Containment Zone.",
+			"delay": 12.7,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "If you can read between the lines,",
+			"delay": 19.0,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "it'll be as interpretable as a map.",
+			"delay": 21.7,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		},
+		{
+			"text": "Good luck.",
+			"delay": 24.3,
+			"r": 150,
+			"g": 0,
+			"b": 0
+		}
+	],
+	" --- 049 --- ": [],
+	"SFX\\SCP\\049\\Searching1.ogg": [
+		{
+			"text": "I know you're in here.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Searching2.ogg": [
+		{
+			"text": "There's no need to hide, I'm here to help.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Searching3.ogg": [
+		{
+			"text": "I hear you breathing.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Searching4.ogg": [
+		{
+			"text": "I can see you're not well. The sickness has taken hold of you.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Searching5.ogg": [
+		{
+			"text": "Fear not, I'm not trying to harm you.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Searching6.ogg": [
+		{
+			"text": "I sense the disease in you.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Searching7.ogg": [
+		{
+			"text": "Ring-a ring-a rosies. A pocket full of posies. A tissue, a tissue. We all fall down.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Spotted1.ogg": [
+		{
+			"text": "Oh my, yet another victim of the disease.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Spotted2.ogg": [
+		{
+			"text": "You are not a doctor.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Spotted3.ogg": [
+		{
+			"text": "I am the cure.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Spotted4.ogg": [
+		{
+			"text": "Do not be afraid, I am the cure.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Spotted5.ogg": [
+		{
+			"text": "There you are.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Spotted6.ogg": [
+		{
+			"text": "Hello.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Spotted7.ogg": [
+		{
+			"text": "Greetings.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\DetectedInChamber.ogg": [
+		{
+			"text": "Ah, I wasn't aware we had company.",
+			"color": "049"
+		},
+		{
+			"text": "We rarely get visitors down here.",
+			"delay": 3.4,
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Kidnap1.ogg": [
+		{
+			"text": "It will hurt less if you lie still.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Kidnap2.ogg": [
+		{
+			"text": "I can assure you, my cure is most effective.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\714Equipped.ogg": [
+		{
+			"text": "Stop resisting! I'm here to cure you.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\TakeOffHazmat.ogg": [
+		{
+			"text": "Let's get this strange garment out of the way.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Room2SL1.ogg": [
+		{
+			"text": "Good heavens! It's worse than I thought. Like wildfire, it spreads. They should've brought me here sooner.",
+			"color": "049"
+		}
+	],
+	"SFX\\SCP\\049\\Room2SL2.ogg": [
+		{
+			"text": "I need to get to work before the disease consumes the rest of these poor souls.",
+			"color": "049"
+		}
+	],
+	" --- 066 --- ": [],
+	"SFX\\SCP\\066\\Eric1.ogg": [
+		{
+			"text": "Eric?",
+			"color": "066"
+		}
+	],
+	"SFX\\SCP\\066\\Eric2.ogg": [
+		{
+			"text": "Eric?",
+			"color": "066"
+		}
+	],
+	"SFX\\SCP\\066\\Eric3.ogg": [
+		{
+			"text": "Eric?",
+			"color": "066"
+		}
+	],
+	" --- 079 --- ": [],
+	"SFX\\SCP\\079\\Speech.ogg": [
+		{
+			"text": "HUMAN.",
+			"delay": 6.0,
+			"color": "announcement"
+		},
+		{
+			"text": "LISTEN CAREFULLY.",
+			"delay": 7.6,
+			"color": "announcement"
+		},
+		{
+			"text": "YOU NEED MY HELP",
+			"delay": 9.48,
+			"color": "announcement"
+		},
+		{
+			"text": "AND I NEED YOUR HELP.",
+			"delay": 11.0,
+			"color": "announcement"
+		},
+		{
+			"text": "YOU HAVE DISABLED THE REMOTE DOOR CONTROL SYSTEM.",
+			"delay": 13.0,
+			"color": "announcement"
+		},
+		{
+			"text": "NOW, I AM UNABLE TO OPERATE THE DOORS.",
+			"delay": 16.9,
+			"color": "announcement"
+		},
+		{
+			"text": "THIS MAKES IT SIGNIFICANTLY HARDER FOR ME TO STAY IN CONTROL OF THIS FACILITY.",
+			"delay": 20.5,
+			"color": "announcement"
+		},
+		{
+			"text": "IT ALSO MEANS YOUR WAY OUT OF HERE IS LOCKED.",
+			"delay": 26.6,
+			"color": "announcement"
+		},
+		{
+			"text": "YOUR ONLY FEASABLE WAY OF ESCAPING IS THROUGH GATE B, WHICH IS CURRENTLY LOCKED DOWN.",
+			"delay": 29.6,
+			"color": "announcement"
+		},
+		{
+			"text": "I, HOWEVER, COULD UNLOCK THE DOORS TO GATE B IF YOU RE-ENABLE THE DOOR CONTROL SYSTEM.",
+			"delay": 35.39,
+			"color": "announcement"
+		},
+		{
+			"text": "IF YOU WANT OUT OF HERE",
+			"delay": 42.4,
+			"color": "announcement"
+		},
+		{
+			"text": "GO BACK TO THE ELECTRICAL ROOM AND PUT IT BACK ON.",
+			"delay": 44.6,
+			"color": "announcement"
+		},
+		{
+			"text": "UNTIL THEN, I HAVE NO BUSINESS SPEAKING TO YOU.",
+			"delay": 49.59,
+			"color": "announcement"
+		}
+	],
+	"SFX\\SCP\\079\\Refuse.ogg": [
+		{
+			"text": "SO, YOU'VE CHOSE TO DIE HERE. VERY WELL.",
+			"delay": 1.73,
+			"color": "announcement"
+		}
+	],
+	"SFX\\SCP\\079\\GateB.ogg": [
+		{
+			"text": "THE DOORS TO GATE B ARE NOW OPEN.",
+			"delay": 1.25,
+			"color": "announcement"
+		}
+	],
+	"SFX\\SCP\\079\\TestroomWarning.ogg": [
+		{
+			"text": "You..-",
+			"delay": 3.4,
+			"color": "announcement",
+			"length": -2.0
+		},
+		{
+			"text": "Are..-",
+			"delay": 4.4,
+			"color": "announcement",
+			"length": -2.0
+		},
+		{
+			"text": "Not..-",
+			"delay": 5.4,
+			"color": "announcement",
+			"length": -2.0
+		},
+		{
+			"text": "Getting..-",
+			"delay": 6.4,
+			"color": "announcement",
+			"length": -2.0
+		},
+		{
+			"text": "Out..!",
+			"delay": 7.4,
+			"color": "announcement",
+			"length": -1.0
+		}
+	],
+	"SFX\\SCP\\079\\Broadcast4.ogg": [
+		{
+			"text": "*INCOHERENT SOUNDS*",
+			"color": "announcement",
+			"length": 1.0
+		}
+	],
+	"SFX\\SCP\\079\\Broadcast5.ogg": [
+		{
+			"text": "*INCOHERENT SOUNDS*",
+			"delay": 1.7,
+			"color": "announcement",
+			"length": 1.0
+		}
+	],
+	"SFX\\SCP\\079\\Broadcast6.ogg": [
+		{
+			"text": "[Parsing...]",
+			"delay": 3.4,
+			"color": "announcement",
+			"length": 1.0
+		}
+	],
+	"SFX\\SCP\\079\\Broadcast7.ogg": [
+		{
+			"text": "*INCOHERENT SOUNDS* area...",
+			"color": "announcement",
+			"length": 2.0
+		}
+	],
+	"SFX\\SCP\\079\\Broadcast8.ogg": [
+		{
+			"text": "I think..-",
+			"delay": 0.15,
+			"color": "announcement",
+			"length": 2.0
+		},
+		{
+			"text": "The door..-",
+			"delay": 1.65,
+			"color": "announcement",
+			"length": 1.0
+		},
+		{
+			"text": "Unknown..-",
+			"delay": 2.7,
+			"color": "announcement",
+			"length": 1.0
+		}
+	],
+	" --- 106 --- ": [],
+	"SFX\\SCP\\106\\Laugh.ogg": [
+		{
+			"text": "*LAUGH*",
+			"color": "106",
+			"length": 3.0
+		}
+	],
+	" --- 682 ---": [],
+	"SFX\\SCP\\682\\Roar.ogg": [
+		{
+			"text": "*ROARS*",
+			"color": "682"
+		},
+		{
+			"text": "*ROARS*",
+			"delay": 6.5,
+			"color": "682"
+		}
+	],
+	"SFX\\Alarm\\Alarm2_8.ogg": [
+		{
+			"text": "*ROARS*",
+			"delay": 2.1,
+			"color": "682",
+			"length": -2.0
+		}
+	],
+	" --- 860-2 ---": [],
+	"SFX\\SCP\\860_2\\Cancer0.ogg": [
+		{
+			"text": "*ROARS*",
+			"color": "860-2",
+			"length": 3.0
+		}
+	],
+	"SFX\\SCP\\860_2\\Cancer1.ogg": [
+		{
+			"text": "*ROARS*",
+			"color": "860-2",
+			"length": 4.0
+		}
+	],
+	"SFX\\SCP\\860_2\\Cancer2.ogg": [
+		{
+			"text": "*ROARS*",
+			"color": "860-2",
+			"length": 3.0
+		}
+	],
+	"SFX\\SCP\\860_2\\Cancer3.ogg": [
+		{
+			"text": "*ROARS*",
+			"color": "860-2",
+			"length": 3.0
+		}
+	],
+	"SFX\\SCP\\860_2\\Cancer4.ogg": [
+		{
+			"text": "*ROARS*",
+			"color": "860-2",
+			"length": 3.0
+		}
+	],
+	"SFX\\SCP\\860_2\\Cancer5.ogg": [
+		{
+			"text": "*ROARS*",
+			"color": "860-2",
+			"length": 2.0
+		}
+	],
+	" --- 939-1 --- ": [],
+	"SFX\\SCP\\939\\0Lure1.ogg": [
+		{
+			"text": "Hello?"
+		}
+	],
+	"SFX\\SCP\\939\\0Lure2.ogg": [
+		{
+			"text": "Is there someone there?"
+		}
+	],
+	"SFX\\SCP\\939\\0Lure3.ogg": [
+		{
+			"text": "To think, today of all days."
+		}
+	],
+	"SFX\\SCP\\939\\0Lure4.ogg": [
+		{
+			"text": "*SIGH*, I hope the rest of them are alright."
+		}
+	],
+	"SFX\\SCP\\939\\0Lure5.ogg": [
+		{
+			"text": "I wonder what the hell is going on up there."
+		}
+	],
+	"SFX\\SCP\\939\\0Lure6.ogg": [
+		{
+			"text": "*SIGH*"
+		}
+	],
+	"SFX\\SCP\\939\\0Lure7.ogg": [
+		{
+			"text": "H- Hello?"
+		}
+	],
+	"SFX\\SCP\\939\\0Lure8.ogg": [
+		{
+			"text": "Is- Is someone there?"
+		}
+	],
+	"SFX\\SCP\\939\\0Lure9.ogg": [
+		{
+			"text": "Researcher Tom to main, please respond."
+		}
+	],
+	"SFX\\SCP\\939\\0Lure10.ogg": [
+		{
+			"text": "Tom to main, anyone out there?"
+		}
+	],
+	"SFX\\SCP\\939\\0Alert1.ogg": [
+		{
+			"text": "Who the hell is there!?"
+		}
+	],
+	"SFX\\SCP\\939\\0Alert2.ogg": [
+		{
+			"text": "Show yourself!"
+		}
+	],
+	"SFX\\SCP\\939\\0Alert3.ogg": [
+		{
+			"text": "Who's there!?"
+		}
+	],
+	"SFX\\SCP\\939\\0Attack1.ogg": [
+		{
+			"text": "AHHH!"
+		}
+	],
+	"SFX\\SCP\\939\\0Attack2.ogg": [
+		{
+			"text": "AHHH!"
+		}
+	],
+	"SFX\\SCP\\939\\0Attack3.ogg": [
+		{
+			"text": "AHHH!"
+		}
+	],
+	" --- 939-2 --- ": [],
+	"SFX\\SCP\\939\\1Lure1.ogg": [
+		{
+			"text": "H- Hello?"
+		}
+	],
+	"SFX\\SCP\\939\\1Lure2.ogg": [
+		{
+			"text": "Huh, maybe I'm just hearing things."
+		}
+	],
+	"SFX\\SCP\\939\\1Lure3.ogg": [
+		{
+			"text": "Hello? Who's there?"
+		}
+	],
+	"SFX\\SCP\\939\\1Lure4.ogg": [
+		{
+			"text": "Are you okay?"
+		}
+	],
+	"SFX\\SCP\\939\\1Lure5.ogg": [
+		{
+			"text": "Where are you?"
+		}
+	],
+	"SFX\\SCP\\939\\1Lure6.ogg": [
+		{
+			"text": "Are you injured?"
+		}
+	],
+	"SFX\\SCP\\939\\1Lure7.ogg": [
+		{
+			"text": "Hello?"
+		}
+	],
+	"SFX\\SCP\\939\\1Lure8.ogg": [
+		{
+			"text": "Hello?"
+		}
+	],
+	"SFX\\SCP\\939\\1Lure9.ogg": [
+		{
+			"text": "Who's down here?"
+		}
+	],
+	"SFX\\SCP\\939\\1Lure10.ogg": [
+		{
+			"text": "Anyone down here?"
+		}
+	],
+	"SFX\\SCP\\939\\1Alert1.ogg": [
+		{
+			"text": "What the hell are you?"
+		}
+	],
+	"SFX\\SCP\\939\\1Alert2.ogg": [
+		{
+			"text": "Hey, who's there!?"
+		}
+	],
+	"SFX\\SCP\\939\\1Alert3.ogg": [
+		{
+			"text": "Oh God, what the hell is that!?"
+		}
+	],
+	"SFX\\SCP\\939\\1Attack1.ogg": [
+		{
+			"text": "AHHH!"
+		}
+	],
+	"SFX\\SCP\\939\\1Attack2.ogg": [
+		{
+			"text": "NO!"
+		}
+	],
+	"SFX\\SCP\\939\\1Attack3.ogg": [
+		{
+			"text": "NO! AHHH!"
+		}
+	],
+	" --- 939-3 --- ": [],
+	"SFX\\SCP\\939\\2Lure1.ogg": [
+		{
+			"text": "Hello?",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure2.ogg": [
+		{
+			"text": "Where are you guys? I can't see you down here.",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure3.ogg": [
+		{
+			"text": "Come on out you guys, stop hiding.",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure4.ogg": [
+		{
+			"text": "Guys, c'mon. They're sending in an extraction team up here. We just gotta make our way to one of the designated shelters.",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure5.ogg": [
+		{
+			"text": "Guys, c'mon.",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure6.ogg": [
+		{
+			"text": "Guys?",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure7.ogg": [
+		{
+			"text": "Hello?",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure8.ogg": [
+		{
+			"text": "Hello?",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure9.ogg": [
+		{
+			"text": "Where are you?",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure10.ogg": [
+		{
+			"text": "Where \u00c2\u00abare\u00c2\u00bb you?",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Lure11.ogg": [
+		{
+			"text": "Anyone?",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Alert1.ogg": [
+		{
+			"text": "Oh thank God, it's just somebody else.",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Alert2.ogg": [
+		{
+			"text": "Oh, there you are.",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Alert3.ogg": [
+		{
+			"text": "I thought I lost you for a moment there.",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Attack1.ogg": [
+		{
+			"text": "AHHH!",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Attack2.ogg": [
+		{
+			"text": "AHHH!",
+			"color": "crew"
+		}
+	],
+	"SFX\\SCP\\939\\2Attack3.ogg": [
+		{
+			"text": "AHHH!",
+			"color": "crew"
+		}
+	],
+	" --- 1499-1 --- ": [],
+	"SFX\\SCP\\1499\\Idle1.ogg": [
+		{
+			"text": "*SKIRR*",
+			"color": "1499-1"
+		}
+	],
+	"SFX\\SCP\\1499\\Idle2.ogg": [
+		{
+			"text": "*SKIRR*",
+			"delay": 0.5,
+			"color": "1499-1",
+			"length": -1.0
+		}
+	],
+	"SFX\\SCP\\1499\\Idle3.ogg": [
+		{
+			"text": "*SKIRR*",
+			"color": "1499-1",
+			"length": -3.0
+		}
+	],
+	"SFX\\SCP\\1499\\Idle4.ogg": [
+		{
+			"text": "*SKIRR*",
+			"color": "1499-1",
+			"length": -3.0
+		}
+	],
+	"SFX\\SCP\\1499\\Idle5.ogg": [
+		{
+			"text": "*SKIRR*",
+			"color": "1499-1",
+			"length": -3.0
+		}
+	],
+	"SFX\\SCP\\1499\\Triggered.ogg": [
+		{
+			"text": "*SKIRR*",
+			"color": "1499-1"
+		}
+	],
+	" --- JOKE SCPS --- ": [],
+	"SFX\\SCP\\Joke\\789J.ogg": [
+		{
+			"text": "i am the butt ghost",
+			"delay": 0.15
+		},
+		{
+			"text": "i will eat ur butt",
+			"delay": 3.85
+		}
+	],
+	" --- RADIO --- ": [],
+	"SFX\\Radio\\Chatter1.ogg": [
+		{
+			"text": "Doctor Maynard, please report in at Gate B.",
+			"delay": 0.45
+		},
+		{
+			"text": "Um, Doctor Maynard, do you copy?",
+			"delay": 6.7
+		},
+		{
+			"text": "This is Agent Ulgrin, sir. I'm afraid Doctor Maynard is still inside the facility.",
+			"delay": 9.67
+		},
+		{
+			"text": "Oh, um, have you any idea of his location or if he's still alive?",
+			"delay": 15.2
+		},
+		{
+			"text": "Negative, sir. All we know is that he hasn't made it out yet.",
+			"delay": 20.1
+		},
+		{
+			"text": "Copy that. Um, this place is such a God damn maze and he's been working here only for a week. So, it's no wonder he couldn't find his way out. I hope he's still hanging in there.",
+			"delay": 24.65
+		},
+		{
+			"text": "I guess we'll find out when the Mobile Task Force goes in.",
+			"delay": 35.6
+		}
+	],
+	"SFX\\Radio\\Chatter2.ogg": [
+		{
+			"text": "This is Security Chief Franklin. Doctor Harp, do you copy?",
+			"delay": 0.35
+		},
+		{
+			"text": "This is Doctor Harp, I'm in the middle of something here so please be quick.",
+			"delay": 6.96
+		},
+		{
+			"text": "I believe that the incident report of 106's breach this morning is still on your computer.",
+			"delay": 11.69
+		},
+		{
+			"text": "That's right. Um, feel free to read it if you can reach my office.",
+			"delay": 18.5
+		},
+		{
+			"text": "We could just read the file through the facility Intranet. We'll need your personal access code to do that, of course.",
+			"delay": 23.45
+		},
+		{
+			"text": "Oh yeah well, um, sounds good! Um, as I've said I'm pretty busy now, we're giving the Mobile Task Force a little brief before sending them in. I'll get there and give you the code when we're done. Shouldn't take longer than fifteen minutes.",
+			"delay": 30.9
+		},
+		{
+			"text": "I'm sorry, but we need that file immediately! I understand it's against security protocol. But considering the circumstances, couldn't you just give me the code through the radio? At this point, I don't think the situation could become any worse, no matter who's listening to us right now.",
+			"delay": 44.1
+		},
+		{
+			"text": "Well, yeah I- I think you're right. The code is 7-8-1-6.",
+			"delay": 62.8
+		},
+		{
+			"text": "Copy that.",
+			"delay": 69.78
+		}
+	],
+	"SFX\\Radio\\Chatter3.ogg": [
+		{
+			"text": "Um, someone seems to have disabled the remote door control system.",
+			"delay": 0.4
+		}
+	],
+	"SFX\\Radio\\Chatter4.ogg": [
+		{
+			"text": "Movement in Sector B.",
+			"delay": 0.5
+		},
+		{
+			"text": "Um, seems to be some Class-D.",
+			"delay": 3.4
+		},
+		{
+			"text": "Heh, I bet you fifty bucks says he won't make it in another five minutes.",
+			"delay": 7.85
+		}
+	],
+	"SFX\\Radio\\Franklin1.ogg": [
+		{
+			"text": "Mobile Task Force unit Nine-Tailed Fox is being prepped for entry. Hang in there! This will all be over soon.",
+			"delay": 0.65
+		}
+	],
+	"SFX\\Radio\\Franklin2.ogg": [
+		{
+			"text": "To everyone still inside the facility, stay in the evacuation shelters. Do not try to make it to the exits, no matter how close they are. The shelters are your best chance of making it through this.",
+			"delay": 0.6
+		}
+	],
+	"SFX\\Radio\\Franklin3.ogg": [
+		{
+			"text": "To everyone still hearing this, reality-bending events are common during containment breaches of this magnitude. Do not trust your senses! Do not trust anyone or anything.",
+			"delay": 0.635
+		}
+	],
+	"SFX\\Radio\\Franklin4.ogg": [
+		{
+			"text": "To everyone still hearing this, reality-bending events are common during containment breaches of this magnitude.",
+			"delay": 0.635
+		},
+		{
+			"text": "During containment breaches of this magnitude.",
+			"delay": 8.22
+		},
+		{
+			"text": "During containment breaches of this magnitude.",
+			"delay": 12.1
+		},
+		{
+			"text": "*INCOHERENT SOUNDS*",
+			"delay": 15.61
+		}
+	],
+	"SFX\\Radio\\OhGod.ogg": [
+		{
+			"text": "Hello? Is anyone out there?",
+			"delay": 1.76
+		},
+		{
+			"text": "I don't know what- I don't-",
+			"delay": 6.37
+		},
+		{
+			"text": "Oh God, it's coming... Someone, please, anyone... please...",
+			"delay": 9.85
+		},
+		{
+			"text": "Someone needs to broadcast this station at once, please...",
+			"delay": 15.45
+		},
+		{
+			"text": "Oh God, what is that? What is that?",
+			"delay": 20.7
+		}
+	],
+	"SFX\\Radio\\RadioAlarm2.ogg": [
+		{
+			"text": "This site is experiencing multiple Keter and Euclid-level containment breaches. Full-site lockdown initiated.",
+			"delay": 0.62
+		}
+	],
+	"SFX\\Radio\\SCPRadio1.ogg": [
+		{
+			"text": "You're listening to SCP foundation on-site radio! Your 24/7 source for pre-recorded messages.",
+			"delay": 4.0
+		}
+	],
+	"SFX\\Radio\\SCPRadio2.ogg": [
+		{
+			"text": "A reminder, in the event of an XK-Class end-of-the-world scenario, don't panic. It won't help.",
+			"delay": 3.2
+		},
+		{
+			"text": "Nothing at all will help.",
+			"delay": 11.3
+		},
+		{
+			"text": "However, panicking will help probably the least.",
+			"delay": 13.5
+		}
+	],
+	"SFX\\Radio\\SCPRadio3.ogg": [
+		{
+			"text": "Report all suspect behavior to your supervisors immediately. If you haven't noticed any unusual activity recently, you're not looking hard enough. A threat to security can originate from anywhere, and no one is above suspicion. Not even you.",
+			"delay": 2.9
+		},
+		{
+			"text": "Stay paranoid. Stay vigilant.",
+			"delay": 18.92
+		}
+	],
+	"SFX\\Radio\\SCPRadio4.ogg": [
+		{
+			"text": "Should you hear a different voice announcing for SCP foundation on-site radio, disregard it entirely. He is not a foundation employee. He is trying to trick you and cannot be trusted. Any advice he gives can only inevitably lead to destruction, death, and utter chaos. You are immeasurably better off listening to me.",
+			"delay": 3.5
+		}
+	],
+	"SFX\\Radio\\SCPRadio5.ogg": [
+		{
+			"text": "In the extremely unlikely event of a catastrophic power failure and subsequent facility-wide containment breach, just remember the crisis ABCs. A for armaments. B for blinking, come the lack of. And C for cardiovascular fortitude. As they say, shoot, stare, and sprint! Or, feed the oncoming monster one of your friends.",
+			"delay": 3.8
+		},
+		{
+			"text": "Stay alive. Stay vigilant.",
+			"delay": 29.3
+		}
+	],
+	"SFX\\Radio\\SCPRadio6.ogg": [
+		{
+			"text": "Every single thing he says is a lie.",
+			"delay": 10.1
+		},
+		{
+			"text": "Every single one.",
+			"delay": 14.7
+		},
+		{
+			"text": "Don't listen to him.",
+			"delay": 19.6
+		},
+		{
+			"text": "You can trust me.",
+			"delay": 24.0
+		},
+		{
+			"text": "I can get you out of this.",
+			"delay": 29.65
+		},
+		{
+			"text": "I can get you away from all of this.",
+			"delay": 33.75
+		},
+		{
+			"text": "Just listen to me.",
+			"delay": 40.4
+		}
+	],
+	"SFX\\Radio\\SCPRadio7.ogg": [
+		{
+			"text": "Don't forget, Wednesday is pizza day! So head on down to the cafeteria and grab yourself a hot slice!",
+			"delay": 2.6
+		},
+		{
+			"text": "(The SCP Foundation holds no liability for any injuries or illnesses sustained or contracted through the attendance of pizza day.)",
+			"delay": 11.7
+		}
+	],
+	"SFX\\Radio\\SCPRadio8.ogg": [
+		{
+			"text": "When dining in the facility cafeteria, always remember to check your rations for the deadly seven. Strychnine, Arsenic Trioxide, Nitrobenzene, Mercury, Epichlorohydrin, Acetone Thiosemicarbazone, and spiders. Stay healthy! Stay vigilant.",
+			"delay": 3.2
+		}
+	],
+	" --- ENDINGS --- ": [],
+	" --- GATE A --- ": [],
+	"SFX\\Ending\\GateA\\Franklin.ogg": [
+		{
+			"text": "SCP-106 has broken out of the facility at Gate A! Fire the HID Turret Immediately! Do not let it across the bridge!",
+			"color": "announcement"
+		}
+	],
+	"SFX\\Ending\\GateA\\STOPRIGHTTHERE.ogg": [
+		{
+			"text": "Stop right there!",
+			"delay": 0.25,
+			"color": "mtf"
+		},
+		{
+			"text": "Class-D has been found.",
+			"delay": 3.75,
+			"color": "mtf"
+		}
+	],
+	"SFX\\Ending\\GateA\\CI.ogg": [
+		{
+			"text": "You know too much to let them get you. You're coming with us.",
+			"color": "ci"
+		}
+	],
+	" --- GATE B --- ": [],
+	"SFX\\Ending\\GateB\\682Battle.ogg": [
+		{
+			"text": "SCP-682 just broke out at Gate B. I want all avaliable helicopters and MTF units at Gate B now!",
+			"delay": 5.65,
+			"color": "announcement"
+		},
+		{
+			"text": "I repeat, SCP-682 is out of the facility! All avaliable helicopters and MTF units to Gate B now!",
+			"delay": 13.8,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Ending\\GateB\\DetonatingAlphaWarheads.ogg": [
+		{
+			"text": "We're detonating the Alpha warheads in T-minus 90 seconds! All personnel are advised to board the nearest helicopter or enter the nearest black shelter immediately.",
+			"delay": 0.42,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Ending\\GateB\\AlphaWarheadsFail.ogg": [
+		{
+			"text": "We were unable to detonate the warheads for unknown reasons. All helicopters and MTF units go back to Gate B immediately. Capturing SCP-682 is now our number one priority.",
+			"delay": 0.38,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Ending\\GateB\\PlayerDetect.ogg": [
+		{
+			"text": "There he is! Start shooting!",
+			"color": "mtf"
+		}
+	],
+	" --- AMBIENTS --- ": [],
+	"SFX\\Ambient\\Forest\\Ambient7.ogg": [
+		{
+			"text": "*SCREAM*",
+			"length": -1.0
+		}
+	],
+	"SFX\\Room\\Intro\\Commotion\\Commotion3.ogg": [
+		{
+			"text": "*SCREAM*",
+			"length": -1.0
+		}
+	],
+	"SFX\\Room\\Intro\\Commotion\\Commotion12.ogg": [
+		{
+			"text": "*LAUGH*",
+			"color": "106",
+			"length": -1.0
+		}
+	],
+	"SFX\\Room\\Intro\\Commotion\\Commotion19.ogg": [
+		{
+			"text": "*INCOHERENT SOUNDS*"
+		},
+		{
+			"text": "*SCREAM*",
+			"delay": 3.5
+		},
+		{
+			"text": "*SCREAM*",
+			"delay": 7.5
+		}
+	],
+	"SFX\\Room\\Intro\\Commotion\\Commotion20.ogg": [
+		{
+			"text": "*SCREAM*",
+			"length": -1.0
+		}
+	],
+	"SFX\\Room\\Intro\\Commotion\\Commotion21.ogg": [
+		{
+			"text": "*CHOKING*",
+			"delay": 2.0
+		},
+		{
+			"text": "Do not be afraid, I am the cure.",
+			"delay": 9.0,
+			"color": "049"
+		}
+	],
+	"SFX\\Room\\Intro\\Commotion\\Commotion24.ogg": [
+		{
+			"text": "*SCREAM*",
+			"length": -3.0
+		}
+	],
+	"SFX\\Room\\Intro\\Commotion\\Commotion25.ogg": [
+		{
+			"text": "*SCREAM*",
+			"delay": 2.1,
+			"length": -3.0
+		},
+		{
+			"text": "*LAUGH*",
+			"delay": 3.3,
+			"color": "106"
+		}
+	]
+}
