@@ -515,8 +515,6 @@ Function UpdateLanguageSelector%()
 			Else 
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
 			EndIf
-			RenderFrame(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Font_Default, 0, True)
-			TextEx(LauncherWidth - 161 + (155 / 2), LauncherHeight - 165 + (30 / 2), "0%", True, True)
 		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
 			InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(FileSize(BasePath + "/local.zip")), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
 			UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Str(Int(Ceil((Float(FileSize(BasePath + "/local.zip")) / Float(RequestLanguage\FileSize)) * 100))) + "%", Font_Default, False, True)
