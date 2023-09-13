@@ -2220,12 +2220,10 @@ Function UpdateNPCs%()
 							
 							; ~ If at Gate B increase his distance so that he can shoot the player from a distance after they are spotted.
 							If PlayerRoom\RoomTemplate\Name = "gate_b"
-								DetectDistance = 441.0
-								ShootAccuracy = 0.0
-								If Rand(8 - SelectedDifficulty\AggressiveNPCs * 4) < 2 Then ShootAccuracy = 0.03
+								DetectDistance = 484.0
 								
 								; ~ Increase accuracy if the player is going slow
-								ShootAccuracy = ShootAccuracy + (0.5 - me\CurrSpeed * 20.0)
+								ShootAccuracy = 0.53 - (20.0 * me\CurrSpeed)
 							EndIf
 							
 							If Dist < PowTwo(DetectDistance)
