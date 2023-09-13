@@ -2312,8 +2312,6 @@ Function LoadMap%(File$)
 	Delete(CurrMapGrid) : CurrMapGrid = Null
 	CurrMapGrid = New MapGrid
 	
-	CoffinDistance = 100.0
-	
 	If Right(File, 6) = "cbmap2"
 		ReadLine(f)
 		ReadLine(f)

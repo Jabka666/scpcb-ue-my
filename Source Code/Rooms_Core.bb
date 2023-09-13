@@ -124,10 +124,8 @@ Function FillRoom%(r.Rooms)
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 514.0 * RoomScale)
 			
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale)
 			
-			For i = 0 To 3
+			For i = 0 To 2
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -147,6 +145,9 @@ Function FillRoom%(r.Rooms)
 			ElseIf I_005\ChanceToSpawn >= 5
 				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
+				
+				de.Decals = CreateDecal(DECAL_BLOOD_2,  r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
+				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			
 			CreateCustomCenter(r\x, r\z - 830.0 * RoomScale, r)

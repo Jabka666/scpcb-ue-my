@@ -7879,8 +7879,6 @@ Function UpdateEvents%()
 						SetNPCFrame(e\room\NPC[0], 287.0)
 						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
-						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
-						EntityParent(de\OBJ, e\room\OBJ)
 					EndIf
 					RemoveEvent(e)
 				EndIf
