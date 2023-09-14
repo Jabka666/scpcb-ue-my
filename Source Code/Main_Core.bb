@@ -2101,19 +2101,19 @@ Function UpdateGame%()
 					Select me\Zone
 						Case 0, 1, 2
 							;[Block]
-							If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 							;[End Block]
 						Case 3
 							;[Block]
-							If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 							;[End Block]
 						Case 4
 							;[Block]
-							If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 							;[End Block]
 						Case 5
 							;[Block]
-							If (Not AmbientSFX(me\Zone, CurrAmbientSFX)) Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
 							;[End Block]
 					End Select
 					
@@ -3317,7 +3317,7 @@ Function UpdateGUI%()
 						FreeImage(e\Img2) : e\Img2 = 0
 					EndIf
 					
-					If (Not e\Img)
+					If e\Img = 0
 						StopChannel(e\SoundCHN) : e\SoundCHN = 0
 						Select Rand(5)
 							Case 1
@@ -3357,7 +3357,7 @@ Function UpdateGUI%()
 					
 					If e\EventState2 = PD_ThroneRoom
 						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
-							If (Not e\Img2)
+							If e\Img2 = 0
 								StopChannel(e\SoundCHN) : e\SoundCHN = 0
 								PlaySound_Strict(e\Sound2, True)
 								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
@@ -4580,7 +4580,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "ticket"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -4597,7 +4597,7 @@ Function UpdateGUI%()
 				Case "scp1025"
 					;[Block]
 					GiveAchievement(Achv1025)
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -4758,7 +4758,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
@@ -5393,7 +5393,7 @@ Function UpdateGUI%()
 				Case "nav", "nav310", "navulti", "nav300"
 					;[Block]
 					If SelectedItem\ItemTemplate\Name = "navulti" Lor SelectedItem\ItemTemplate\Name = "nav300"
-						If (Not SelectedItem\ItemTemplate\Img)
+						If SelectedItem\ItemTemplate\Img = 0
 							SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 							SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 							SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -5492,7 +5492,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "badge"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -5506,7 +5506,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "oldbadge"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -5530,7 +5530,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "oldpaper"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -6058,7 +6058,7 @@ Function RenderGUI%()
 		For e.Events = Each Events
 			If e\room = PlayerRoom
 				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom
-					If (Not e\Img)
+					If e\Img = 0
 						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
 						e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
 					Else
@@ -6067,7 +6067,7 @@ Function RenderGUI%()
 				Else
 					If e\EventState2 = PD_ThroneRoom
 						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
-							If (Not e\Img2)
+							If e\Img2 = 0
 								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
 								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
 							Else
@@ -6462,7 +6462,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "paper", "oldpaper"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
@@ -6509,7 +6509,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "scp1025"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -6523,7 +6523,7 @@ Function RenderGUI%()
 					; ~ RadioState[6] = A timer for the "code channel"
 					; ~ RadioState[7] = Another timer for the "code channel"
 					
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
@@ -6687,7 +6687,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "nav", "nav300", "nav310", "navulti"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -6857,7 +6857,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "badge"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -6867,7 +6867,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "oldbadge", "ticket"
 					;[Block]
-					If (Not SelectedItem\ItemTemplate\Img)
+					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -8033,7 +8033,7 @@ Function UpdateEnding%()
 	If me\EndingTimer < -200.0
 		StopBreathSound() : me\Stamina = 100.0
 		
-		If (Not me\EndingScreen)
+		If me\EndingScreen = 0
 			me\EndingScreen = LoadImage_Strict("GFX\Menu\ending_screen.png")
 			me\EndingScreen = ScaleImage2(me\EndingScreen, MenuScale, MenuScale)
 			
@@ -8216,7 +8216,7 @@ Function InitCredits%()
 	fo\FontID[Font_Credits] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits", "File"), GetFileLocalString(FontsFile, "Credits", "Size"))
 	fo\FontID[Font_Credits_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits_Big", "File"), GetFileLocalString(FontsFile, "Credits_Big", "Size"))
 	
-	If (Not me\CreditsScreen)
+	If me\CreditsScreen = 0
 		me\CreditsScreen = LoadImage_Strict("GFX\Menu\credits_screen.png")
 		me\CreditsScreen = ScaleImage2(me\CreditsScreen, MenuScale, MenuScale)
 	EndIf
@@ -8339,9 +8339,9 @@ End Function
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
-	Local itt.ItemTemplates, s.Screens, lt.LightTemplates, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events, lvr.Levers
+	Local itt.ItemTemplates, s.Screens, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events, lvr.Levers
 	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, du.Dummy1499_1
-	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
+	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x%, y%, Lvl%
 	
 	KillSounds()
@@ -8400,7 +8400,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	WireFrameState = 0
 	WireFrame(0)
 	
-	CoffinDistance = 100.0
+	CoffinDistance = 0.0
 	
 	MTFTimer = 0.0
 	
@@ -8468,8 +8468,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	Delete(d_I)
 	
-	For lt.LightTemplates = Each LightTemplates
-		Delete(lt)
+	For tl.TempLights = Each TempLights
+		Delete(tl)
 	Next
 	
 	For m.Materials = Each Materials
@@ -8893,10 +8893,10 @@ Function Use427%()
 			For i = 0 To 6
 				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0] * I_1025\State[7]), 0.0)
 			Next
-			If (Not I_427\Sound[0]) Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
+			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
 			If I_427\Timer >= 70.0 * 180.0
-				If (Not I_427\Sound[1]) Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
+				If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
 				If (Not ChannelPlaying(I_427\SoundCHN[1])) Then I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
 			EndIf
 			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0
@@ -8916,8 +8916,8 @@ Function Use427%()
 			CreateMsg(GetLocalString("msg", "nolegs"))
 		EndIf
 		I_427\Timer = I_427\Timer + fps\Factor[0]
-		If (Not I_427\Sound[0]) Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
-		If (Not I_427\Sound[1]) Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
+		If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
+		If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
 		For i = 0 To 1
 			If (Not ChannelPlaying(I_427\SoundCHN[i])) Then I_427\SoundCHN[i] = PlaySound_Strict(I_427\Sound[i])
 		Next

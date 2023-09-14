@@ -101,7 +101,7 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	p\Name = Name
 	p\room = room
 	
-	If (Not p\OBJ) Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes models folder if the CBRE was used
+	If p\OBJ = 0 Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes models folder if the CBRE was used
 	PositionEntity(p\OBJ, x, y, z)
 	EntityParent(p\OBJ, room\OBJ)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
@@ -130,7 +130,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 	
 	If room <> Null
 		For i = 0 To MaxRoomLights - 1
-			If (Not room\Lights[i])
+			If room\Lights[i] = 0
 				room\Lights[i] = CreateLight(lType)
 				LightRange(room\Lights[i], Range)
 				LightColor(room\Lights[i], R, G, B)
@@ -191,7 +191,7 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 	EndIf
 End Function
 
-Type LightTemplates
+Type TempLights
 	Field RoomTemplate.RoomTemplates
 	Field lType%
 	Field x#, y#, z#
@@ -200,23 +200,6 @@ Type LightTemplates
 	Field Pitch#, Yaw#
 	Field InnerConeAngle%, OuterConeAngle#
 End Type
-
-Function AddTempLight.LightTemplates(rt.RoomTemplates, x#, y#, z#, lType%, Range#, R%, G%, B%)
-	Local lt.LightTemplates
-	
-	lt.LightTemplates = New LightTemplates
-	lt\RoomTemplate = rt
-	lt\x = x
-	lt\y = y
-	lt\z = z
-	lt\lType = lType
-	lt\Range = Range
-	lt\R = R
-	lt\G = G
-	lt\B = B
-	
-	Return(lt)
-End Function
 
 Global UpdateRoomLightsTimer# = 0.0
 
@@ -327,7 +310,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	; ~ Read the file
 	Local f% = ReadFile_Strict(File)
 	
-	If (Not f) Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
+	If f = 0 Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
 	
@@ -425,7 +408,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 				Else
 					BumpTex = 0
 				EndIf
-				If (Not BumpTex)
+				If BumpTex = 0
 					For j = 0 To 1
 						BrushTexture(Brush, Tex[j], 0, j + 1)
 					Next
@@ -451,7 +434,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 				Else
 					BumpTex = 0
 				EndIf
-				If (Not BumpTex)
+				If BumpTex = 0
 					For j = 0 To 1
 						If Tex[j] <> 0
 							BrushTexture(Brush, Tex[j], 0, j)
@@ -576,7 +559,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	
 	Count = ReadInt(f) ; ~ Point entities
 	
-	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
+	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local Range#, lColor$, Intensity#
 	Local R%, G%, B%
 	Local Angles$
@@ -587,84 +570,74 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 			Select Temp1s
 				Case "screen"
 					;[Block]
-					Temp1 = ReadFloat(f) * RoomScale
-					Temp2 = ReadFloat(f) * RoomScale
-					Temp3 = ReadFloat(f) * RoomScale
+					ts.TempScreens = New TempScreens
+					ts\RoomTemplate = rt
+					
+					ts\x = ReadFloat(f) * RoomScale
+					ts\y = ReadFloat(f) * RoomScale
+					ts\z = ReadFloat(f) * RoomScale
 					
 					Temp2s = ReadString(f)
-					
-					If Temp1 <> 0.0 Lor Temp2 <> 0.0 Lor Temp3 <> 0.0
-						ts.TempScreens = New TempScreens
-						ts\x = Temp1
-						ts\y = Temp2
-						ts\z = Temp3
-						If Right(Temp2s, 3) = ".sc" Then ; ~ Temporary solution, either re-export Gate B with the screen as .png or update the languages that use .sc
-							If FileSize(lang\LanguagePath + "GFX\Map\Screens\" + Temp2s) = 0 Then Temp2s = Left(Temp2s, Len(Temp2s) - 2) + "png"
-						EndIf
-						ts\ImgPath = Temp2s
-						ts\RoomTemplate = rt
+					If Right(Temp2s, 3) = ".sc" Then ; ~ Temporary solution, either re-export Gate B with the screen as .png or update the languages that use .sc
+						If FileSize(lang\LanguagePath + "GFX\Map\Screens\" + Temp2s) = 0 Then Temp2s = Left(Temp2s, Len(Temp2s) - 2) + "png"
 					EndIf
+					ts\ImgPath = Temp2s
 					;[End Block]
 				Case "waypoint"
 					;[Block]
 					twp.TempWayPoints = New TempWayPoints
 					twp\RoomTemplate = rt
+					
 					twp\x = ReadFloat(f) * RoomScale
 					twp\y = ReadFloat(f) * RoomScale
 					twp\z = ReadFloat(f) * RoomScale
 					;[End Block]
 				Case "light"
 					;[Block]
-					Temp1 = ReadFloat(f) * RoomScale
-					Temp2 = ReadFloat(f) * RoomScale
-					Temp3 = ReadFloat(f) * RoomScale
+					tl.TempLights = New TempLights
+					tl\RoomTemplate = rt
 					
-					If Temp1 <> 0.0 Lor Temp2 <> 0.0 Lor Temp3 <> 0.0
-						Range = ReadFloat(f) / 2000.0
-						lColor = ReadString(f)
-						Intensity = Min(ReadFloat(f) * 0.8, 1.0)
-						R = Int(Piece(lColor, 1, " ")) * Intensity
-						G = Int(Piece(lColor, 2, " ")) * Intensity
-						B = Int(Piece(lColor, 3, " ")) * Intensity
-						
-						AddTempLight(rt, Temp1, Temp2, Temp3, 2, Range, R, G, B)
-					Else
-						ReadFloat(f) : ReadString(f) : ReadFloat(f)
-					EndIf
+					tl\x = ReadFloat(f) * RoomScale
+					tl\y = ReadFloat(f) * RoomScale
+					tl\z = ReadFloat(f) * RoomScale
+					tl\lType = 2
+					tl\Range = ReadFloat(f) / 2000.0
+					
+					lColor = ReadString(f)
+					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
+					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
+					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
+					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
 					;[End Block]
 				Case "spotlight"
 					;[Block]
-					Temp1 = ReadFloat(f) * RoomScale
-					Temp2 = ReadFloat(f) * RoomScale
-					Temp3 = ReadFloat(f) * RoomScale
+					tl.TempLights = New TempLights
+					tl\RoomTemplate = rt
 					
-					If Temp1 <> 0.0 Lor Temp2 <> 0.0 Lor Temp3 <> 0.0
-						Range = ReadFloat(f) / 2000.0
-						lColor = ReadString(f)
-						Intensity = Min(ReadFloat(f) * 0.8, 1.0)
-						R = Int(Piece(lColor, 1, " ")) * Intensity
-						G = Int(Piece(lColor, 2, " ")) * Intensity
-						B = Int(Piece(lColor, 3, " ")) * Intensity
-						
-						Local lt.LightTemplates = AddTempLight(rt, Temp1, Temp2, Temp3, 2, Range, R, G, B)
-						
-						Angles = ReadString(f)
-						Pitch = Piece(Angles, 1, " ")
-						Yaw = Piece(Angles, 2, " ")
-						lt\Pitch = Pitch
-						lt\Yaw = Yaw
-						
-						lt\InnerConeAngle = ReadInt(f)
-						lt\OuterConeAngle = ReadInt(f)
-					Else
-						ReadFloat(f) : ReadString(f) : ReadFloat(f) : ReadString(f) : ReadInt(f) : ReadInt(f)
-					EndIf
+					tl\x = ReadFloat(f) * RoomScale
+					tl\y = ReadFloat(f) * RoomScale
+					tl\z = ReadFloat(f) * RoomScale
+					tl\lType = 3
+					tl\Range = ReadFloat(f) / 2000.0
+					
+					lColor = ReadString(f)
+					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
+					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
+					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
+					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					
+					Angles = ReadString(f)
+					tl\Pitch = Piece(Angles, 1, " ")
+					tl\Yaw = Piece(Angles, 2, " ")
+					
+					tl\InnerConeAngle = ReadInt(f)
+					tl\OuterConeAngle = ReadInt(f)
 					;[End Block]
 				Case "soundemitter"
 					;[Block]
 					Temp1i = 0
 					For j = 0 To MaxRoomEmitters - 1
-						If (Not rt\TempSoundEmitter[j])
+						If rt\TempSoundEmitter[j] = 0
 							rt\TempSoundEmitterX[j] = ReadFloat(f) * RoomScale
 							rt\TempSoundEmitterY[j] = ReadFloat(f) * RoomScale
 							rt\TempSoundEmitterZ[j] = ReadFloat(f) * RoomScale
@@ -1586,7 +1559,7 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 		RuntimeError(Format(GetLocalString("runerr", "notfound"), rt\OBJPath))
 	EndIf
 	
-	If (Not rt\OBJ) Then RuntimeError(Format(GetLocalString("runerr", "failedload"), rt\OBJPath))
+	If rt\OBJ = 0 Then RuntimeError(Format(GetLocalString("runerr", "failedload"), rt\OBJPath))
 	
 	CalculateRoomTemplateExtents(rt)
 	
@@ -1898,7 +1871,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 			If rt\Name = Name
 				r\RoomTemplate = rt
 				
-				If (Not rt\OBJ) Then LoadRoomMesh(rt)
+				If rt\OBJ = 0 Then LoadRoomMesh(rt)
 				
 				r\OBJ = CopyEntity(rt\OBJ)
 				ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
@@ -1941,7 +1914,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				If RandomRoom > Temp - rt\Commonness And RandomRoom <= Temp
 					r\RoomTemplate = rt
 					
-					If (Not rt\OBJ) Then LoadRoomMesh(rt)
+					If rt\OBJ = 0 Then LoadRoomMesh(rt)
 					
 					r\OBJ = CopyEntity(rt\OBJ)
 					ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
@@ -2034,7 +2007,7 @@ Function UpdateButton%(OBJ%)
 		PointEntity(Temp, OBJ)
 		
 		If EntityPick(Temp, 0.6) = OBJ
-			If (Not d_I\ClosestButton) Lor Dist < EntityDistanceSquared(me\Collider, d_I\ClosestButton)
+			If d_I\ClosestButton = 0 Lor Dist < EntityDistanceSquared(me\Collider, d_I\ClosestButton)
 				d_I\ClosestButton = OBJ
 				Result = True
 			EndIf
@@ -2259,7 +2232,7 @@ Function UpdateDoors%()
 			If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
 			FindButton = (1 - (d\Open And ((d\DoorType = OFFICE_DOOR) Lor (d\DoorType = WOODEN_DOOR))))
 			
-			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And (Not GrabbedEntity)
+			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
 				For i = 0 To 1
 					If d\Buttons[i] <> 0
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 And Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0
@@ -3090,7 +3063,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
 	HideEntity(de\OBJ)
 	
-	If (Not de_I\DecalTextureID[ID]) Then RuntimeError(Format(GetLocalString("runerr", "decals"), ID))
+	If de_I\DecalTextureID[ID] = 0 Then RuntimeError(Format(GetLocalString("runerr", "decals"), ID))
 	
 	Return(de)
 End Function
@@ -3281,7 +3254,7 @@ Function UpdateSecurityCams%()
 				If sc <> sc_I\CoffinCam
 					If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
 				EndIf
-				If (Not sc\Pvt)
+				If sc\Pvt = 0
 					sc\Pvt = CreatePivot(sc\BaseOBJ)
 					EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
 				EndIf
@@ -3502,7 +3475,7 @@ Function UpdateMonitorSaving%()
 			Local Close% = sc\room\Dist < 6.0 Lor PlayerRoom = sc\room
 			
 			If Close
-				If sc\InSight And EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.0 And (Not GrabbedEntity) And (Not d_I\ClosestButton)
+				If sc\InSight And EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.0 And GrabbedEntity = 0 And d_I\ClosestButton = 0
 					DrawHandIcon = True
 					If mo\MouseHit1 Then sc_I\SelectedMonitor = sc
 					
@@ -3729,7 +3702,7 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 			EndIf
 		EndIf
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
-		If (Not GrabbedEntity) Lor Dist > 0.65
+		If GrabbedEntity = 0 Lor Dist > 0.65
 			If EntityPitch(OBJ, True) > ((MaxValue + MinValue) / 2.0)
 				RotateEntity(OBJ, CurveValue(MaxValue, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			Else
@@ -5133,7 +5106,7 @@ End Function
 
 Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	; ~ Load the HeightMap
-	If (Not HeightMap) Then RuntimeError(Format(GetLocalString("runerr", "heightmap"), HeightMap))
+	If HeightMap = 0 Then RuntimeError(Format(GetLocalString("runerr", "heightmap"), HeightMap))
 	
 	; ~ Store HeightMap dimensions
 	Local x% = ImageWidth(HeightMap) - 1
@@ -5141,11 +5114,11 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
 	Local lX%, lY%, Index%
 	
 	; ~ Load texture and lightmaps and auto scale the textures to the right size
-	If (Not t1) Then RuntimeError(Format(GetLocalString("runerr", "tex_1"), t1))
+	If t1 = 0 Then RuntimeError(Format(GetLocalString("runerr", "tex_1"), t1))
 	ScaleTexture(t1, x / 4, y / 4)
-	If (Not t2) Then RuntimeError(Format(GetLocalString("runerr", "tex_2"), t2))
+	If t2 = 0 Then RuntimeError(Format(GetLocalString("runerr", "tex_2"), t2))
 	ScaleTexture(t2, x / 4, y / 4)
-	If (Not Mask) Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
+	If Mask = 0 Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
 	ScaleTexture(Mask, x, y)
 	
 	; ~ Start building the terrain

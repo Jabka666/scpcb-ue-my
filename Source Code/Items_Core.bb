@@ -30,7 +30,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 		EndIf
 	Next
 	
-	If (Not it\OBJ)
+	If it\OBJ = 0
 		If HasAnim
 			it\OBJ = LoadAnimMesh_Strict(OBJPath)
 			it\IsAnim = True
@@ -56,7 +56,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 				Exit
 			EndIf
 		Next
-		If (Not Texture)
+		If Texture = 0
 			If Left(TexturePath, Len(ItemHUDTexturePath)) = ItemHUDTexturePath
 				Texture = GetRescaledTexture(TexturePath, TexFlags, 256, 256)
 			Else
@@ -81,7 +81,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 			Exit
 		EndIf
 	Next
-	If (Not it\InvImg)
+	If it\InvImg = 0
 		it\InvImg = LoadImage_Strict(InvImgPath)
 		it\InvImg = ScaleImage2(it\InvImg, MenuScale, MenuScale)
 		it\InvImgPath = InvImgPath
@@ -89,7 +89,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	
 	If InvImgPath2 <> ""
 		InvImgPath2 = ItemINVIconPath + InvImgPath2
-		If (Not it\InvImg2)
+		If it\InvImg2 = 0
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
 			it\InvImg2 = ScaleImage2(it\InvImg2, MenuScale, MenuScale)
 		EndIf

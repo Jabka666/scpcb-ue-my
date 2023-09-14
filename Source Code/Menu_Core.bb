@@ -647,7 +647,7 @@ Function UpdateMainMenu%()
 								Next
 							Else
 								For snd.Sound = Each Sound
-									If (Not snd\InternalHandle) Then snd\InternalHandle = LoadSound(snd\Name)
+									If snd\InternalHandle = 0 Then snd\InternalHandle = LoadSound(snd\Name)
 								Next
 							EndIf
 							opt\PrevEnableSFXRelease = opt\EnableSFXRelease
@@ -1737,7 +1737,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		Temp = Rand(LoadingScreenAmount)
 		For ls.LoadingScreens = Each LoadingScreens
 			If ls\ID = Temp
-				If (Not ls\Img)
+				If ls\Img = 0
 					ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
 					ls\Img = ScaleImage2(ls\Img, MenuScale, MenuScale)
 					SelectedLoadingScreen = ls
@@ -2146,7 +2146,7 @@ Function UpdateMenuPalette%(x%, y%)
 	Next
 	If (Not PaletteExists)
 		mp.MenuPalette = New MenuPalette
-		If (Not mp\Img)
+		If mp\Img = 0
 			mp\Img = LoadImage_Strict("GFX\Menu\palette.png")
 			mp\Img = ScaleImage2(mp\Img, MenuScale, MenuScale)
 		EndIf

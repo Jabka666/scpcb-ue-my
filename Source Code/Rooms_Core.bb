@@ -2,8 +2,8 @@ Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom()")
 	
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, fr.Forest
-	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, lt.LightTemplates
-	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
+	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints
+	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%, SF%, b%, Name$
 	Local t1%, Tex%, Screen%, Scale#
 	Local i%, k%, Temp%, Temp3%, Angle#
@@ -617,7 +617,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -3107,7 +3107,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_3_ez_hb.b3d", r\OBJ)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_3_ez_hb.b3d", r\OBJ)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -3490,7 +3490,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2C_2_ez_hb.b3d", r\OBJ)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2C_2_ez_hb.b3d", r\OBJ)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -3600,7 +3600,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If (Not r\Objects[0]) Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_ez_hb.b3d", r\OBJ)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_ez_hb.b3d", r\OBJ)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -3897,12 +3897,12 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 	End Select
 	
-	For lt.LightTemplates = Each LightTemplates
-		If lt\RoomTemplate = r\RoomTemplate
-			Local NewLight% = AddLight(r, r\x + lt\x, r\y + lt\y, r\z + lt\z, lt\lType, lt\Range, lt\R, lt\G, lt\B)
+	For tl.TempLights = Each TempLights
+		If tl\RoomTemplate = r\RoomTemplate
+			Local NewLight% = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\lType, tl\Range, tl\R, tl\G, tl\B)
 			
 			If NewLight <> 0
-				If lt\lType = 3 Then RotateEntity(NewLight, lt\Pitch, lt\Yaw, 0.0)
+				If tl\lType = 3 Then RotateEntity(NewLight, tl\Pitch, tl\Yaw, 0.0)
 			EndIf
 		EndIf
 	Next

@@ -177,10 +177,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Speed = IniGetFloat(NPCsFile, "MTF", "Speed") / 100.0
 			
-			If (Not MTFSFX[0])
-				MTFSFX[0] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
-				MTFSFX[1] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
-			EndIf
+			If MTFSFX[0] = 0 Then MTFSFX[0] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
+			If MTFSFX[1] = 0 Then MTFSFX[1] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
 			
 			n\HP = 100
 			;[End Block]
@@ -271,7 +269,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Sound = LoadSound_Strict("SFX\Horror\Horror12.ogg")
 			
-			If (Not HorrorSFX[13]) Then HorrorSFX[13] = LoadSound_Strict("SFX\Horror\Horror13.ogg")
+			If HorrorSFX[13] = 0 Then HorrorSFX[13] = LoadSound_Strict("SFX\Horror\Horror13.ogg")
 			;[End Block]
 		Case NPCType049_2
 			;[Block]
@@ -1192,7 +1190,7 @@ Function UpdateNPCs%()
 					Case 0.0
 						;[Block]
 						If Dist < 64.0
-							If (Not n\SoundCHN)
+							If n\SoundCHN = 0
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
 								n\SoundCHN_IsStream = True
 							EndIf
@@ -1246,7 +1244,7 @@ Function UpdateNPCs%()
 								If e\EventState >= 70.0 * 40.0 Then CanSave = 0
 							EndIf
 						Next
-						If (Not n\SoundCHN)
+						If n\SoundCHN = 0
 							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
 							n\SoundCHN_IsStream = True
 						EndIf
@@ -1296,13 +1294,13 @@ Function UpdateNPCs%()
 						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
 						
 						If n\Target = Null
-							If (Not n\SoundCHN)
+							If n\SoundCHN = 0
 								n\SoundCHN = StreamSound_Strict("SFX\SCP\096\Scream.ogg", 0)
 								n\SoundCHN_IsStream = True
 							EndIf
 							UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 7.5, 1.0, True)
 							
-							If (Not n\SoundCHN2)
+							If n\SoundCHN2 = 0
 								n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
 								n\SoundCHN2_IsStream = True
 							Else
@@ -1445,7 +1443,7 @@ Function UpdateNPCs%()
 					Case 5.0
 						;[Block]
 						If Dist < 256.0
-							If (Not n\SoundCHN)
+							If n\SoundCHN = 0
 								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
 								n\SoundCHN_IsStream = True
 							EndIf
@@ -3092,7 +3090,7 @@ Function UpdateNPCs%()
 								;[End Block]
 							Case 1.0 ; ~ Idles
 								;[Block]
-								If (Not n\Sound) Then n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
+								If n\Sound = 0 Then n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
 								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
 								
 								If Dist < 3.24 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
@@ -3566,7 +3564,7 @@ Function UpdateNPCs%()
 							If (PrevFrame < 664.0 And n\Frame >= 664.0) Lor (PrevFrame > 673.0 And n\Frame < 654.0)
 								PlaySound2(Step2SFX[Rand(3, 6)], Camera, n\Collider, 12.0)
 								If Rand(10) = 1
-									Temp = ((Not n\SoundCHN) Lor (Not ChannelPlaying(n\SoundCHN)))
+									Temp = (n\SoundCHN = 0 Lor (Not ChannelPlaying(n\SoundCHN)))
 									If Temp
 										LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Lure" + Rand(10) + ".ogg")
 										n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
@@ -3834,7 +3832,7 @@ Function UpdateNPCs%()
 				End Select
 				
 				If n\State > 1.0
-					If (Not n\Sound) Then n\Sound = LoadSound_Strict("SFX\SCP\066\Rolling.ogg")
+					If n\Sound = 0 Then n\Sound = LoadSound_Strict("SFX\SCP\066\Rolling.ogg")
 					If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
 				EndIf
 				
@@ -6852,7 +6850,7 @@ Function ManipulateNPCBones%()
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
-				If (Not Bone) Then RuntimeError(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
+				If Bone = 0 Then RuntimeError(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player

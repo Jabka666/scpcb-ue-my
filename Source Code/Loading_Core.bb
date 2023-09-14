@@ -2044,7 +2044,7 @@ Function InitNewGame%()
 	CatchErrors("InitNewGame()")
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
-	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
+	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, Skip%
 	
 	LoadEntities()
@@ -2169,6 +2169,10 @@ Function InitNewGame%()
 		FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
+	For tl.TempLights = Each TempLights
+		Delete(tl)
+	Next
+	
 	For twp.TempWayPoints = Each TempWayPoints
 		Delete(twp)
 	Next
@@ -2225,7 +2229,7 @@ Function InitLoadGame%()
 	CatchErrors("InitLoadGame()")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
-	Local twp.TempWayPoints, ts.TempScreens, tp.TempProps
+	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x#, z#
 	
 	InitOtherStuff()
@@ -2249,6 +2253,10 @@ Function InitLoadGame%()
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		FreeEntity(rt\OBJ) : rt\OBJ = 0
+	Next
+	
+	For tl.TempLights = Each TempLights
+		Delete(tl)
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints

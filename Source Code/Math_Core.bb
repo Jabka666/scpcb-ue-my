@@ -175,7 +175,7 @@ End Function
 Function CreateLine%(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
 	Local Surf%, Verts%
 	
-	If (Not Mesh)
+	If Mesh = 0
 		Mesh = CreateMesh()
 		EntityFX(Mesh, 16)
 		Surf = CreateSurface(Mesh)

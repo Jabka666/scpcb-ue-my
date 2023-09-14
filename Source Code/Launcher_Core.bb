@@ -156,7 +156,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		mo\MouseHit1 = MouseHit(1)
 		
 		Color(255, 255, 255)
-		If (Not LauncherBG) Then LauncherBG = LoadImage_Strict("GFX\menu\launcher.png")
+		If LauncherBG = 0 Then LauncherBG = LoadImage_Strict("GFX\menu\launcher.png")
 		DrawBlock(LauncherBG, 0, 0)
 		
 		; ~ Resolution selector
@@ -359,7 +359,7 @@ Function UpdateLanguageSelector%()
 				lan\FileSize = Int(ParseDomainTXT(l, "size")) ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
 				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("http://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
-				If (Not lan\FlagImg) Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
+				If lan\FlagImg = 0 Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit
 			EndIf
@@ -427,7 +427,7 @@ Function UpdateLanguageSelector%()
 		Local x#, y#, LinesAmount%
 		
 		Color(255, 255, 255)
-		If (Not LanguageBG) Then LanguageBG = LoadImage_Strict("GFX\Menu\Language.png")
+		If LanguageBG = 0 Then LanguageBG = LoadImage_Strict("GFX\Menu\Language.png")
 		DrawBlock(LanguageBG, 0, 0)
 		Rect(LauncherWidth - 161, LauncherHeight - 285, 155, 110)
 		
