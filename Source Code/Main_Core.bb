@@ -4716,6 +4716,8 @@ Function UpdateGUI%()
 							RemoveItem(SelectedItem)
 						EndIf
 						SelectedItem = Null
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "syringe"
