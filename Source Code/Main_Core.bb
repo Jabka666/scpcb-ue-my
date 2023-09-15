@@ -4391,8 +4391,6 @@ Function UpdateGUI%()
 							EndIf
 						Next
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "veryfinefirstaid"
@@ -4447,8 +4445,6 @@ Function UpdateGUI%()
 								;[End Block]
 						End Select
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
@@ -4479,7 +4475,6 @@ Function UpdateGUI%()
 									Else
 										CreateMsg(GetLocalString("msg", "aid.sore"))
 									EndIf
-									RemoveItem(SelectedItem)
 								Else
 									me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 20.0))
 									If me\Injuries >= 2.5
@@ -4538,12 +4533,10 @@ Function UpdateGUI%()
 												;[End Block]
 										End Select
 									EndIf
-									RemoveItem(SelectedItem)
 								EndIf
+								RemoveItem(SelectedItem)
 							EndIf
 						EndIf
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "eyedrops", "eyedrops2"
@@ -4556,8 +4549,6 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
 						
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "fineeyedrops"
@@ -4571,8 +4562,6 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.very"))
 						
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "supereyedrops"
@@ -4586,8 +4575,6 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.veryvery"))
 						
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "ticket"
@@ -4702,6 +4689,7 @@ Function UpdateGUI%()
 						StrTemp = GetFileLocalString(SCP294File, Drink, "Refuse Message", "", False)
 						If StrTemp <> ""
 							CreateMsg(StrTemp)
+							SelectedItem = Null
 						Else
 							it.Items = CreateItem("Empty Cup", "emptycup", 0.0, 0.0, 0.0)
 							it\Picked = True
@@ -4715,9 +4703,6 @@ Function UpdateGUI%()
 							
 							RemoveItem(SelectedItem)
 						EndIf
-						SelectedItem = Null
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "syringe"
@@ -4730,8 +4715,6 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "syringe_1"))
 						
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "finesyringe"
@@ -4744,8 +4727,6 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "syringe_2"))
 						
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "veryfinesyringe"
@@ -4772,8 +4753,6 @@ Function UpdateGUI%()
 						End Select
 						
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "syringeinf"
@@ -4785,8 +4764,6 @@ Function UpdateGUI%()
 						
 						I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
@@ -5145,8 +5122,6 @@ Function UpdateGUI%()
 								;[End Block]
 						End Select
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp420j"
@@ -5162,8 +5137,6 @@ Function UpdateGUI%()
 							PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
 						EndIf
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "joint", "scp420s"
@@ -5177,8 +5150,6 @@ Function UpdateGUI%()
 							Kill()
 						EndIf
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "cap", "scp268", "fine268"
@@ -5608,8 +5579,6 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "pill"))
 						I_1025\State[0] = 0.0
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp500pilldeath"
@@ -5620,8 +5589,6 @@ Function UpdateGUI%()
 						If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
 						
 						RemoveItem(SelectedItem)
-					Else
-						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "helmet"

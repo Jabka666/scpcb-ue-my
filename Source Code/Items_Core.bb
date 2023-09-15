@@ -715,14 +715,20 @@ Function IsItemInFocus%()
 End Function
 
 Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, CanUseWithHazmat% = False)
+	Local DoReturn% = False
+	
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0)
 		CreateMsg(GetLocalString("msg", "mask.use"))
-		Return(False)
+		DoReturn = True
 	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
 		CreateMsg(GetLocalString("msg", "gear.use"))
-		Return(False)
+		DoReturn = True
 	ElseIf (Not CanUseWithHazmat) And wi\HazmatSuit > 0
 		CreateMsg(GetLocalString("msg", "suit.use"))
+		DoReturn = True
+	EndIf
+	If DoReturn
+		SelectedItem = Null
 		Return(False)
 	EndIf
 	Return(True)
