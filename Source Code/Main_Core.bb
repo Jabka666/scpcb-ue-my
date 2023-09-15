@@ -4391,6 +4391,8 @@ Function UpdateGUI%()
 							EndIf
 						Next
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "veryfinefirstaid"
@@ -4445,6 +4447,8 @@ Function UpdateGUI%()
 								;[End Block]
 						End Select
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "firstaid", "finefirstaid", "firstaid2"
@@ -4538,6 +4542,8 @@ Function UpdateGUI%()
 								EndIf
 							EndIf
 						EndIf
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "eyedrops", "eyedrops2"
@@ -4550,6 +4556,8 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
 						
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "fineeyedrops"
@@ -4563,6 +4571,8 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.very"))
 						
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "supereyedrops"
@@ -4576,6 +4586,8 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.veryvery"))
 						
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "ticket"
@@ -4716,6 +4728,8 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "syringe_1"))
 						
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "finesyringe"
@@ -4728,6 +4742,8 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "syringe_2"))
 						
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "veryfinesyringe"
@@ -4754,6 +4770,21 @@ Function UpdateGUI%()
 						End Select
 						
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
+					EndIf
+					;[End Block]
+				Case "syringeinf"
+					;[Block]
+					If CanUseItem(True, True)
+						CreateMsg(GetLocalString("msg", "syringe_6"))
+						
+						me\VomitTimer = 70.0 * 1.0
+						
+						I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
+						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "radio", "18vradio", "fineradio", "veryfineradio"
@@ -5112,6 +5143,8 @@ Function UpdateGUI%()
 								;[End Block]
 						End Select
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp420j"
@@ -5127,6 +5160,8 @@ Function UpdateGUI%()
 							PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
 						EndIf
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "joint", "scp420s"
@@ -5140,6 +5175,8 @@ Function UpdateGUI%()
 							Kill()
 						EndIf
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "cap", "scp268", "fine268"
@@ -5569,6 +5606,8 @@ Function UpdateGUI%()
 						CreateMsg(GetLocalString("msg", "pill"))
 						I_1025\State[0] = 0.0
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp500pilldeath"
@@ -5579,16 +5618,9 @@ Function UpdateGUI%()
 						If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
 						
 						RemoveItem(SelectedItem)
+					Else
+						SelectedItem = Null
 					EndIf
-					;[End Block]
-				Case "syringeinf"
-					;[Block]
-					CreateMsg(GetLocalString("msg", "syringe_6"))
-					
-					me\VomitTimer = 70.0 * 1.0
-					
-					I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
-					RemoveItem(SelectedItem)
 					;[End Block]
 				Case "helmet"
 					;[Block]
