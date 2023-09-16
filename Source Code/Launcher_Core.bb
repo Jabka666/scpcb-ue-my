@@ -338,7 +338,7 @@ Function UpdateLanguageSelector%()
 	If FileType(BasePath) <> 2 Then CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
 	CreateDir(BasePath + "flags/")
-	DownloadFile("http://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
+	DownloadFile("http://global.files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
 	Local lan.ListLanguage
 	Local File% = OpenFile_Strict(BasePath + "temp.txt")
@@ -358,7 +358,7 @@ Function UpdateLanguageSelector%()
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				lan\FileSize = Int(ParseDomainTXT(l, "size")) ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
-				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("http://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("http://global.files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 				If lan\FlagImg = 0 Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit
@@ -390,7 +390,7 @@ Function UpdateLanguageSelector%()
 		Select CurrentStatus
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
-				If (Not RequestLanguage\MajorOnly) Then DownloadFileThread("http://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+				If (Not RequestLanguage\MajorOnly) Then DownloadFileThread("http://global.files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-ini/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.ini")
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
@@ -439,7 +439,7 @@ Function UpdateLanguageSelector%()
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 1)
 				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
-				If MouseOn(430, y - CurrFontHeight, 21, 21)
+				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 432, 20)
 					DrawImage(ButtonImages, 410, y - 195 - CurrFontHeight, 5)
 					If MouseOn(430, y - CurrFontHeight, 21, 21)
 						Color(150, 150, 150)
