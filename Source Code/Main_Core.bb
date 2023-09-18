@@ -237,7 +237,6 @@ Repeat
 		UpdateMainMenu()
 	Else
 		UpdateGame()
-		If LoadingBack <> 0 Then DebugLog("T")
 	EndIf
 	
 	RenderGamma()
@@ -312,8 +311,6 @@ Function UpdateGame%()
 			ShouldEntitiesFall = True
 			
 			If PlayerInReachableRoom(False, True)
-				UpdateSecurityCams()
-				
 				ShouldPlay = Min(me\Zone, 2.0)
 				
 				If Rand(1500) = 1
@@ -372,9 +369,7 @@ Function UpdateGame%()
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
 			
 			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
-			UpdateZoneColor()
 			UpdateDeaf()
-			UpdateEmitters()
 			UpdateDecals()
 			UpdateMouseLook()
 			UpdateMoving()
@@ -389,11 +384,14 @@ Function UpdateGame%()
 				UpdateLeave1499()
 			ElseIf RN = "dimension_106"
 				UpdateSoundEmitters(PlayerRoom)
+				LightVolume = 1.0
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			Else
+				UpdateLights()
+				UpdateEmitters()
 				UpdateDoors()
+				UpdateSecurityCams()
 				UpdateScreens()
-				UpdateRoomLights()
 				If IsPlayerOutsideFacility()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
@@ -403,6 +401,7 @@ Function UpdateGame%()
 				TimeCheckpointMonitors()
 				UpdateMonitorSaving()
 			EndIf
+			UpdateZoneColor()
 			UpdateMTF()
 			UpdateNPCs()
 			UpdateItems()
@@ -640,7 +639,7 @@ Function RenderGame%()
 	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
 	
 	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\EndingTimer < 0.0))
-		RenderRoomLights(Camera)
+		RenderLights(Camera)
 	EndIf
 	
 	RenderBlur(me\BlurVolume)
@@ -3005,10 +3004,9 @@ Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
 End Function
 
 Function UpdateZoneColor%()
-	Local r.Rooms, e.Events
+	Local e.Events
 	Local i%
 	
-	LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 	CameraFogMode(Camera, 1)
 	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor IsPlayerOutsideFacility()
 		CameraFogRange(Camera, 5.0, 30.0)
@@ -3016,18 +3014,9 @@ Function UpdateZoneColor%()
 		;If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 	Else
 		CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
-		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, 28.0))
+		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
 		;If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 	EndIf
-	For r.Rooms = Each Rooms
-		For i = 0 To r\MaxLights - 1
-			If r\Lights[i] <> 0
-				EntityAutoFade(r\LightSprites[i], opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
-			Else
-				Exit
-			EndIf
-		Next
-	Next
 	
 	CurrFogColor$ = ""
 	CurrAmbientColor$ = ""

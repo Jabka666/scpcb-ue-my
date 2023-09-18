@@ -2477,14 +2477,6 @@ Function InitNewGame%()
 	Next
 	
 	For r.Rooms = Each Rooms
-		For i = 0 To MaxRoomLights - 1
-			If r\Lights[i] <> 0
-				EntityParent(r\Lights[i], 0)
-			Else
-				Exit
-			EndIf
-		Next
-		
 		If (Not r\RoomTemplate\DisableDecals)
 			If Rand(4) = 1
 				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
@@ -2691,7 +2683,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, em.Emitters, d.Doors, lvr.Levers, sc.SecurityCams
-	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
+	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
 	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps
 	
 	Local i%, x%, y%, Lvl%
@@ -2728,7 +2720,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	SecondaryLightOn = 0.0
 	PrevSecondaryLightOn = 0.0
-	UpdateRoomLightsTimer = 0.0
+	UpdateLightsTimer = 0.0
 	
 	RemoteDoorOn = False
 	
@@ -2867,6 +2859,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For pr.Props = Each Props
 		RemoveProp(pr)
+	Next
+	For l.Lights = Each Lights
+		RemoveLight(l)
 	Next
 	For fr.Forest = Each Forest
 		If fr <> Null Then DestroyForest(fr)

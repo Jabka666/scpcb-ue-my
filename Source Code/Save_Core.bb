@@ -2007,7 +2007,7 @@ Function LoadGameQuick%(File$)
 	
 	ShowEntity(me\Collider)
 	
-	UpdateRoomLightsTimer = 0.0
+	UpdateLightsTimer = 0.0
 	
 	If wi\NightVision > 0
 		opt\CameraFogFar = 17.0

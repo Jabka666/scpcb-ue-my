@@ -657,8 +657,6 @@ Function UpdateLanguageSelector%()
 	FreeImage(LanguageBG) : LanguageBG = 0
 	FreeImage(ButtonImages) : ButtonImages = 0
 	
-	If MenuGray <> 0 Then DebugLog("MenuGray is still in UpdateLauncher!")
-	
 	FreeImage(LauncherBG) : LauncherBG = 0
 	
 	DeleteFolder(BasePath) ; ~ Delete temporary folder

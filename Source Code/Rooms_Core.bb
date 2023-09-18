@@ -3903,13 +3903,13 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 	End Select
 	
+	Local l.Lights
+	
 	For tl.TempLights = Each TempLights
 		If tl\RoomTemplate = r\RoomTemplate
-			Local NewLight% = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\lType, tl\Range, tl\R, tl\G, tl\B)
+			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\lType, tl\Range, tl\R, tl\G, tl\B)
 			
-			If NewLight <> 0
-				If tl\lType = 3 Then RotateEntity(NewLight, tl\Pitch, tl\Yaw, 0.0)
-			EndIf
+			If tl\lType = 3 Then RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
 		EndIf
 	Next
 	

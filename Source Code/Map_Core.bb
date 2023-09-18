@@ -142,158 +142,153 @@ Global LightVolume#, TempLightVolume#
 
 Type Lights
 	Field OBJ%
-	Field SpriteTexture%, AdvancedSpriteTexture%
+	Field Sprite%, AdvancedSprite%
 	Field x#, y#, z#
-	Field Type%
 	Field Range#
 	Field R%, G%, B%
+	Field Intensity#
+	Field room.Rooms
 End Type
 
-Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
-	Local i%
+Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%)
+	Local i%, l.Lights, l2.Lights
 	
-	If room <> Null
-		For i = 0 To MaxRoomLights - 1
-			If room\Lights[i] = 0
-				room\Lights[i] = CreateLight(lType)
-				LightRange(room\Lights[i], Range)
-				LightColor(room\Lights[i], R, G, B)
-				PositionEntity(room\Lights[i], x, y, z, True)
-				EntityParent(room\Lights[i], room\OBJ)
-				HideEntity(room\Lights[i])
-				
-				room\LightSprites[i] = CreateSprite()
-				PositionEntity(room\LightSprites[i], x, y, z)
-				ScaleSprite(room\LightSprites[i], 0.13 , 0.13)
-				EntityTexture(room\LightSprites[i], misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
-				EntityFX(room\LightSprites[i], 1 + 8)
-				EntityBlend(room\LightSprites[i], 3)
-				EntityColor(room\LightSprites[i], R, G, B)
-				EntityParent(room\LightSprites[i], room\OBJ)
-				HideEntity(room\LightSprites[i])
-				
-				room\LightSprites2[i] = CreateSprite()
-				PositionEntity(room\LightSprites2[i], x, y, z)
-				ScaleSprite(room\LightSprites2[i], Rnd(0.36, 0.4), Rnd(0.36, 0.4))
-				EntityTexture(room\LightSprites2[i], misc_I\AdvancedLightSprite)
-				EntityFX(room\LightSprites2[i], 1 + 8)
-				EntityBlend(room\LightSprites2[i], 3)
-				EntityOrder(room\LightSprites2[i], -1)
-				EntityColor(room\LightSprites2[i], R, G, B)
-				EntityParent(room\LightSprites2[i], room\OBJ)
-				RotateEntity(room\LightSprites2[i], 0.0, 0.0, Rnd(360.0))
-				SpriteViewMode(room\LightSprites2[i], 1)
-				HideEntity(room\LightSprites2[i])
-				
-				room\LightIntensity[i] = (R + G + B) / 255.0 / 3.0
-				room\LightR[i] = R
-				room\LightG[i] = G
-				room\LightB[i] = B
-				
-				room\MaxLights = room\MaxLights + 1
-				
-				Return(room\Lights[i])
-			EndIf
-		Next
-	Else
-		Local Light%, Sprite%
-		
-		Light = CreateLight(lType)
-		LightRange(Light, Range)
-		LightColor(Light, R, G, B)
-		PositionEntity(Light, x, y, z, True)
-		
-		Sprite = CreateSprite()
-		PositionEntity(Sprite, x, y, z)
-		ScaleSprite(Sprite, 0.13 , 0.13)
-		EntityTexture(Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
-		EntityFX(Sprite, 1 + 8)
-		EntityBlend(Sprite, 3)
-		EntityColor(Sprite, R, G, B)
-		
-		Return(Light)
-	EndIf
+	l.Lights = New Lights
+	l\room = room
+	
+	l\OBJ = CreateLight(Type_)
+	LightRange(l\OBJ, Range)
+	LightColor(l\OBJ, R, G, B)
+	PositionEntity(l\OBJ, x, y, z, True)
+	If room <> Null Then EntityParent(l\OBJ, room\OBJ)
+	HideEntity(l\OBJ)
+	
+	l\Sprite = CreateSprite()
+	PositionEntity(l\Sprite, x, y, z)
+	ScaleSprite(l\Sprite, 0.13 , 0.13)
+	EntityTexture(l\Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
+	EntityFX(l\Sprite, 1 + 8)
+	EntityBlend(l\Sprite, 3)
+	EntityColor(l\Sprite, R, G, B)
+	EntityParent(l\Sprite, l\OBJ)
+	HideEntity(l\Sprite)
+	
+	l\AdvancedSprite = CreateSprite()
+	PositionEntity(l\AdvancedSprite, x, y, z)
+	ScaleSprite(l\AdvancedSprite, Rnd(0.36, 0.4), Rnd(0.36, 0.4))
+	EntityTexture(l\AdvancedSprite, misc_I\AdvancedLightSprite)
+	EntityFX(l\AdvancedSprite, 1 + 8)
+	EntityBlend(l\AdvancedSprite, 3)
+	EntityOrder(l\AdvancedSprite, -1)
+	EntityColor(l\AdvancedSprite, R, G, B)
+	RotateEntity(l\AdvancedSprite, 0.0, 0.0, Rnd(360.0))
+	SpriteViewMode(l\AdvancedSprite, 1)
+	EntityParent(l\AdvancedSprite, l\OBJ)
+	HideEntity(l\AdvancedSprite)
+	
+	l\Intensity = (R + G + B) / 255.0 / 3.0
+	
+	Return(l)
 End Function
 
 Global SecondaryLightOn#
 Global PrevSecondaryLightOn#
 
-Global UpdateRoomLightsTimer#
+Global UpdateLightsTimer#
 
-Function UpdateRoomLights%()
+Function UpdateLights%()
+	Local l.Lights
+	
 	If SecondaryLightOn > 0.5
-		UpdateRoomLightsTimer = UpdateRoomLightsTimer + fps\Factor[0]
-		If UpdateRoomLightsTimer >= 8.0 Then UpdateRoomLightsTimer = 0.0
+		UpdateLightsTimer = UpdateLightsTimer + fps\Factor[0]
+		If UpdateLightsTimer >= 8.0 Then UpdateLightsTimer = 0.0
+		For l.Lights = Each Lights
+			If l\room <> Null
+				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
+					Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
+					
+					If Dist < PowTwo(HideDistance) Then TempLightVolume = Max((TempLightVolume + (l\Intensity ^ 2) * ((HideDistance - Sqr(Dist)) / HideDistance)) / 4.5, 1.0)
+				EndIf
+			EndIf
+		Next
+		LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
+	Else
+		UpdateLightsTimer = 0.0
+		TempLightVolume = 0.0
 	EndIf
 End Function
 
-Function RenderRoomLights%(Cam%)
-	Local r.Rooms, i%, Random#, Alpha#
+Function RenderLights%(Cam%)
+	Local l.Lights, i%, Random#, Alpha#
 	
-	For r.Rooms = Each Rooms
-		For i = 0 To r\MaxLights - 1
-			If r\Lights[i] <> 0
-				If SecondaryLightOn > 0.5
-					If r\Dist < HideDistance * 0.7 Lor r = PlayerRoom
-						If Cam = Camera ; ~ The lights are rendered by player's cam
-							If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], -1)
-							If UpdateRoomLightsTimer = 0.0
-								If EntityDistanceSquared(Camera, r\Lights[i]) < 72.25
-									If EntityHidden(r\Lights[i]) Then ShowEntity(r\Lights[i])
-									If EntityVisible(Camera, r\Lights[i])
-										If EntityHidden(r\LightSprites[i]) Then ShowEntity(r\LightSprites[i])
+	For l.Lights = Each Lights
+		If SecondaryLightOn > 0.5
+			If l\room <> Null
+				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
+					If Cam = Camera ; ~ The lights are rendered by player's cam
+						If opt\AdvancedRoomLights Then EntityOrder(l\OBJ, -1)
+						If UpdateLightsTimer = 0.0
+							EntityAutoFade(l\Sprite, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+							If EntityDistanceSquared(Cam, l\OBJ) < PowTwo(opt\CameraFogFar * 1.2)
+								If EntityHidden(l\OBJ) Then ShowEntity(l\OBJ)
+								If EntityVisible(Cam, l\OBJ)
+									If EntityHidden(l\Sprite) Then ShowEntity(l\Sprite)
+									
+									If opt\AdvancedRoomLights
+										Alpha = 1.0 - Max(Min(((EntityDistance(Cam, l\OBJ) + 0.5) / 7.5), 1.0), 0.0)
 										
-										If opt\AdvancedRoomLights
-											Alpha = 1.0 - Max(Min(((EntityDistance(Camera, r\Lights[i]) + 0.5) / 7.5), 1.0), 0.0)
+										If Alpha > 0.0
+											If EntityHidden(l\AdvancedSprite) Then ShowEntity(l\AdvancedSprite)
+											EntityAlpha(l\AdvancedSprite, Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (l\Intensity / 2.0), 1.0) * Alpha)
 											
-											If Alpha > 0.0
-												If EntityHidden(r\LightSprites2[i]) Then ShowEntity(r\LightSprites2[i])
-												EntityAlpha(r\LightSprites2[i], Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (r\LightIntensity[i] / 2.0), 1.0) * Alpha)
-												
-												Random = Rnd(0.36, 0.4)
-												ScaleSprite(r\LightSprites2[i], Random, Random)
-											Else
-												; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
-												If (Not EntityHidden(r\LightSprites2[i])) Then HideEntity(r\LightSprites2[i])
-											EndIf
+											Random = Rnd(0.36, 0.4)
+											ScaleSprite(l\AdvancedSprite, Random, Random)
 										Else
-											; ~ The additional sprites option is disabled, hide the sprites
-											If (Not EntityHidden(r\LightSprites2[i])) Then HideEntity(r\LightSprites2[i])
+											; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
+											If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
 										EndIf
 									Else
-										; ~ Hide the sprites because they aren't visible
-										If (Not EntityHidden(r\LightSprites[i]))
-											HideEntity(r\LightSprites[i])
-											If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
-										EndIf
+										; ~ The additional sprites option is disabled, hide the sprites
+										If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
 									EndIf
 								Else
-									; ~ Hide the sprites and light emitter because they are too far
-									If (Not EntityHidden(r\Lights[i])) Lor (Not EntityHidden(r\LightSprites[i]))
-										HideEntity(r\Lights[i])
-										HideEntity(r\LightSprites[i])
-										If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
+									; ~ Hide the sprites because they aren't visible
+									If (Not EntityHidden(l\Sprite))
+										HideEntity(l\Sprite)
+										If opt\AdvancedRoomLights Then HideEntity(l\AdvancedSprite)
 									EndIf
 								EndIf
+							Else
+								; ~ Hide the sprites and light emitter because they are too far
+								If (Not EntityHidden(l\OBJ)) Lor (Not EntityHidden(l\AdvancedSprite))
+									HideEntity(l\Sprite)
+									If opt\AdvancedRoomLights Then HideEntity(l\AdvancedSprite)
+									HideEntity(l\OBJ)
+								EndIf
 							EndIf
-						Else
-							; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
-							If opt\AdvancedRoomLights Then EntityOrder(r\LightSprites2[i], 0)
 						EndIf
-					EndIf
-				Else
-					; ~ The lights were turned off
-					If (Not EntityHidden(r\Lights[i])) Lor (Not EntityHidden(r\LightSprites[i]))
-						HideEntity(r\Lights[i])
-						HideEntity(r\LightSprites[i])
-						If opt\AdvancedRoomLights Then HideEntity(r\LightSprites2[i])
+					Else
+						; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
+						If opt\AdvancedRoomLights Then EntityOrder(l\AdvancedSprite, 0)
 					EndIf
 				EndIf
-			Else
-				Exit
 			EndIf
-		Next
+		Else
+			; ~ The lights were turned off
+			If (Not EntityHidden(l\OBJ)) Lor (Not EntityHidden(l\Sprite))
+				HideEntity(l\Sprite)
+				If opt\AdvancedRoomLights Then HideEntity(l\AdvancedSprite)
+				HideEntity(l\OBJ)
+			EndIf
+		EndIf
 	Next
+End Function
+
+Function RemoveLight%(l.Lights)
+	FreeEntity(l\Sprite) : l\Sprite = 0
+	FreeEntity(l\AdvancedSprite) : l\AdvancedSprite = 0
+	FreeEntity(l\OBJ) : l\OBJ = 0
+	Delete(l)
 End Function
 
 Global AmbientLightRoomTex%
@@ -1631,12 +1626,6 @@ Type Rooms
 	Field SoundEmitterOBJ%[MaxRoomEmitters]
 	Field SoundEmitterRange#[MaxRoomEmitters]
 	Field SoundEmitterCHN%[MaxRoomEmitters]
-	Field Lights%[MaxRoomLights]
-	Field LightSprites%[MaxRoomLights]
-	Field LightSprites2%[MaxRoomLights]
-	Field LightIntensity#[MaxRoomLights]
-	Field LightR#[MaxRoomLights], LightG#[MaxRoomLights], LightB#[MaxRoomLights]
-	Field MaxLights% = 0
 	Field Objects%[MaxRoomObjects], HideObject%[MaxRoomObjects]
 	Field RoomLevers.Levers[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
@@ -1676,8 +1665,8 @@ Function UpdateMT%(mt.MTGrid)
 		For tY = 0 To MTGridSize - 1
 			If mt\Entities[tX + (tY * MTGridSize)] <> 0
 				If Abs(EntityY(me\Collider, True) - EntityY(mt\Entities[tX + (tY * MTGridSize)], True)) > 4.0 Then Exit
-				If Abs(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) < HideDistance
-					If Abs(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)) < HideDistance
+				If Abs(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) < opt\CameraFogFar * LightVolume * 1.5
+					If Abs(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)) < opt\CameraFogFar * LightVolume * 1.5
 						If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
 					Else
 						If (Not EntityHidden(mt\Entities[tX + (tY * MTGridSize)])) Then HideEntity(mt\Entities[tX + (tY * MTGridSize)])
@@ -1739,11 +1728,11 @@ Function PlaceMapCreatorMT%(r.Rooms)
 				Select Tile_Type
 					Case ROOM1 + 1, ROOM2 + 1
 						;[Block]
-						AddLight(Null, r\x + (x * 2.0), r\y + MTGridY + (372.0 * RoomScale), r\z + (y * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (372.0 * RoomScale), r\z + (y * 2.0), 2, 0.4, 255, 255, 255)
 						;[End Block]
 					Case ROOM2C + 1, ROOM3 + 1, ROOM4 + 1
 						;[Block]
-						AddLight(Null, r\x + (x * 2.0), r\y + MTGridY + (416.0 * RoomScale), r\z + (y * 2.0), 2, 500.0 * RoomScale, 255, 255, 255)
+						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (416.0 * RoomScale), r\z + (y * 2.0), 2, 0.4, 255, 255, 255)
 						;[End Block]
 					Case ROOM4 + 2
 						;[Block]
@@ -1754,7 +1743,7 @@ Function PlaceMapCreatorMT%(r.Rooms)
 						PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.18)), True)
 						RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 						
-						AddLight(Null, r\x + (x * 2.0) + (CosValue * 555.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 555.0 * RoomScale), 2, 600.0 * RoomScale, 255, 255, 255)
+						AddLight(r, r\x + (x * 2.0) + (CosValue * 555.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 555.0 * RoomScale), 2, 0.4, 255, 255, 255)
 						
 						Local TempInt2% = CreatePivot()
 						
@@ -1772,7 +1761,7 @@ Function PlaceMapCreatorMT%(r.Rooms)
 						;[End Block]
 					Case ROOM4 + 3
 						;[Block]
-						AddLight(Null, r\x + (x * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 500.0 * RoomScale, 255, 200, 200)
+						AddLight(r, r\x + (x * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.4, 255, 200, 200)
 						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + (x * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						
@@ -1974,13 +1963,6 @@ End Function
 Function RemoveRoom%(r.Rooms)
 	Local i%
 	
-	For i = 0 To MaxRoomLights - 1
-		If r\Lights[i] <> 0
-			FreeEntity(r\LightSprites[i]) : r\LightSprites[i] = 0
-			FreeEntity(r\LightSprites2[i]) : r\LightSprites2[i] = 0
-			FreeEntity(r\Lights[i]) : r\Lights[i] = 0
-		EndIf
-	Next
 	For i = 0 To MaxRoomObjects - 1
 		If r\Objects[i] <> 0 Then r\Objects[i] = 0
 	Next
@@ -2646,7 +2628,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						
 						TeleportEntity(me\Collider, EntityX(SecondPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(SecondPivot, True) + (EntityY(me\Collider, True) - EntityY(FirstPivot, True)), EntityZ(SecondPivot, True) + z, 0.3, True)
 						me\DropSpeed = 0.0
-						UpdateRoomLightsTimer = 0.0
+						UpdateLightsTimer = 0.0
 						UpdateDoors()
 						UpdateRooms()
 						
@@ -2746,7 +2728,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						EndIf
 						TeleportEntity(me\Collider, EntityX(FirstPivot, True) + x, (0.1 * fps\Factor[0]) + EntityY(FirstPivot, True) + (EntityY(me\Collider, True) - EntityY(SecondPivot, True)), EntityZ(FirstPivot, True) + z, 0.3, True)
 						me\DropSpeed = 0.0
-						UpdateRoomLightsTimer = 0.0
+						UpdateLightsTimer = 0.0
 						UpdateDoors()
 						UpdateRooms()
 						
@@ -3475,7 +3457,7 @@ Function RenderSecurityCams%()
 							EndIf
 							Cls()
 							
-							RenderRoomLights(sc\Cam)
+							RenderLights(sc\Cam)
 							
 							SetBuffer(Buffer)
 							RenderWorld()
@@ -3494,7 +3476,7 @@ Function RenderSecurityCams%()
 							EndIf
 							Cls()
 							
-							RenderRoomLights(sc_I\CoffinCam\Cam)
+							RenderLights(sc_I\CoffinCam\Cam)
 							
 							SetBuffer(Buffer)
 							RenderWorld()
@@ -3845,7 +3827,7 @@ End Function
 Function UpdateRender%()
 	Local it.Items
 	
-	UpdateRoomLightsTimer = 0.0
+	UpdateLightsTimer = 0.0
 	UpdateDoors()
 	UpdateDecals()
 	UpdateRooms()
@@ -4136,8 +4118,6 @@ Function UpdateRooms%()
 		me\Zone = 0
 	EndIf
 	
-	TempLightVolume = 0.0
-	
 	Local FoundNewPlayerRoom% = False
 	
 	If Abs(EntityY(me\Collider) - EntityY(PlayerRoom\OBJ)) < 1.5
@@ -4199,18 +4179,8 @@ Function UpdateRooms%()
 			HideRoomsNoColl(r)
 		Else
 			ShowRoomsNoColl(r)
-			For i = 0 To MaxRoomLights - 1
-				If r\Lights[i] <> 0
-					Dist = EntityDistanceSquared(Camera, r\Lights[i])
-					If Dist < PowTwo(HideDistance) Then TempLightVolume = TempLightVolume + r\LightIntensity[i] * r\LightIntensity[i] * ((HideDistance - Sqr(Dist)) / HideDistance)
-				Else
-					Exit
-				EndIf
-			Next
 		EndIf
 	Next
-	
-	TempLightVolume = Max(TempLightVolume / 4.5, 1.0)
 	
 	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / RoomSpacing) + (Floor(EntityZ(PlayerRoom\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 	PlayerRoom\Found = True
