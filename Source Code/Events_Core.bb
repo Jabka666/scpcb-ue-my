@@ -8108,6 +8108,7 @@ Function UpdateDimension106%()
 						;[Block]
 						ShouldPlay = 14
 						
+						DecalStep = 1
 						CameraFogRange(Camera, 0.01, 8.0)
 						
 						For i = 17 To 20
@@ -8194,7 +8195,7 @@ Function UpdateDimension106%()
 							InjurePlayer((8.0 - Sqr(Dist)) * (fps\Factor[0] * 0.00015))
 						EndIf
 						
-						me\CameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
+						me\BigCameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
 						
 						; ~ Check if player is at the sinkhole (the exit from the trench room)
 						If EntityY(me\Collider) < 24.5
