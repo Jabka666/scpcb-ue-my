@@ -219,7 +219,7 @@ Function UpdateDust%()
 		
 		; ~ Create extra dust particles while the camera is shaking
 		If me\BigCameraShake > 0.0
-			For i = 0 To 5 + (2 * (opt\ParticleAmount - 1))
+			For i = 0 To 2 + (2 * (opt\ParticleAmount - 1))
 				Pvt = CreatePivot()
 				PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 				RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
@@ -229,7 +229,7 @@ Function UpdateDust%()
 					MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
 				EndIf
 				
-				p.Particles = CreateParticle(PARTICLE_DUST, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
+				p.Particles = CreateParticle(PARTICLE_DUST, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 200.0)
 				p\Speed = 0.001 : p\SizeChange = -0.00001
 				RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
 				FreeEntity(Pvt) : Pvt = 0
