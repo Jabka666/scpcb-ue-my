@@ -530,7 +530,7 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(d\Buttons[0], 0.0, 90.0, 0.0)
 			
 			; ~ Hit Box
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\room372_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\cont1_372_hb.b3d", r\OBJ)
 			r\HideObject[0] = False
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
