@@ -735,6 +735,7 @@ Function LoadGame%(File$)
 			Tex = LoadTexture_Strict(n\Texture)
 			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(n\OBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 		EndIf
 		
 		Local Frame# = ReadFloat(f)
@@ -1582,6 +1583,7 @@ Function LoadGameQuick%(File$)
 			Tex = LoadTexture_Strict(n\Texture)
 			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(n\OBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 		EndIf
 		
 		Local Frame# = ReadFloat(f)

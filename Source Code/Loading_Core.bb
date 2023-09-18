@@ -1483,12 +1483,16 @@ Function RemoveSoundInstances%()
 			DecaySFX[i] = 0
 			PickSFX[i] = 0
 			AlarmSFX[i] = 0
+			DripSFX[i] = 0
 		EndIf
 		If i < 5
 			BreathSFX(0, i) = 0
 			BreathSFX(1, i) = 0
 		EndIf
-		If i < 6 Then AmbientSFXAmount[i] = 0
+		If i < 6
+			AmbientSFXAmount[i] = 0
+			RustleSFX[i] = 0
+		EndIf
 		If i < 8
 			StepSFX(0, 0, i) = 0
 			StepSFX(0, 1, i) = 0
@@ -1504,6 +1508,7 @@ Function RemoveSoundInstances%()
 			RadioSFX(1, i) = 0
 			OldManSFX[i] = 0
 		EndIf
+		If i < 11 Then RoomAmbience[i] = 0
 		If i < 12
 			IntroSFX[i] = 0
 			Step2SFX[i] = 0
@@ -1546,17 +1551,9 @@ Function RemoveSoundInstances%()
 	
 	HissSFX = 0
 	
-	For i = 0 To 5
-		RustleSFX[i] = 0
-	Next
-	
 	Death914SFX = 0
 	Use914SFX = 0
 	MachineSFX = 0
-	
-	For i = 0 To 3
-		DripSFX[i] = 0
-	Next
 	
 	LeverSFX = 0
 	
@@ -1973,7 +1970,6 @@ Function LoadData%()
 	
 	SubFile = JsonParseFromFile(SubtitlesFile)
 	SubColors = JsonGetValue(SubFile, "colors")
-	
 	SubtitlesInit = True
 	
 	SubjectName = GetLocalString("misc", "subject")

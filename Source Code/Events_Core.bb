@@ -9722,7 +9722,6 @@ Function Update035Label%(OBJ%)
 	Tex = LoadTexture_Strict(LabelPath)
 	If opt\Atmosphere Then TextureBlend(Tex, 5)
 	
-	Tex = LoadTexture_Strict(LabelPath)
 	Brush = LoadBrush_Strict(LabelPath)
 	For i = 1 To CountSurfaces(OBJ)
 		SF = GetSurface(OBJ, i)
