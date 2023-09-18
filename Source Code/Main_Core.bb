@@ -1,8 +1,8 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Strict_Functions_Core.bb"
 
-Global ButtonSFX% = LoadSound_Strict("SFX\Interact\Button.ogg")
-Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
+Global ButtonSFX%
+Global ButtonSFX2%
 
 Global MenuWhite%, MenuGray%, MenuBlack%
 

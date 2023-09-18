@@ -131,6 +131,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 	MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
 	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 	
+	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
+	ButtonSFX2 = LoadSound_Strict("SFX\Interact\Button2.ogg")
+	
 	Local LauncherIMG%[2]
 	Local LauncherMediaWidth%
 	
@@ -345,7 +348,10 @@ Function UpdateLauncher%(lnchr.Launcher)
 	FreeImage(MenuBlack) : MenuBlack = 0
 	FreeImage(MenuGray) : MenuGray = 0
 	FreeImage(MenuWhite) : MenuWhite = 0
-
+	
+	FreeSound_Strict(ButtonSFX) : ButtonSFX = 0
+	FreeSound_Strict(ButtonSFX2) : ButtonSFX2 = 0
+	
 	EndGraphics()
 	
 	If Quit Then End()

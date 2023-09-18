@@ -226,7 +226,7 @@ Function RenderLights%(Cam%)
 			If l\room <> Null
 				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
 					If Cam = Camera ; ~ The lights are rendered by player's cam
-						If opt\AdvancedRoomLights Then EntityOrder(l\OBJ, -1)
+						If opt\AdvancedRoomLights Then EntityOrder(l\AdvancedSprite, -1)
 						If UpdateLightsTimer = 0.0
 							EntityAutoFade(l\Sprite, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 							If EntityDistanceSquared(Cam, l\OBJ) < PowTwo(opt\CameraFogFar * 1.2)

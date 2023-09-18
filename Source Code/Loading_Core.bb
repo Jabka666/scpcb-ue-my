@@ -1462,6 +1462,7 @@ Function RemoveSoundInstances%()
 			NVGSFX[i] = 0
 			LowBatterySFX[i] = 0
 			KnobSFX[i] = 0
+			MTFSFX[i] = 0
 		EndIf
 		If i < 3
 			OpenDoorSFX(DEFAULT_DOOR, i) = 0
@@ -1580,6 +1581,12 @@ Function RemoveSoundInstances%()
 	CrouchSFX = 0
 	
 	SCRAMBLESFX = 0
+	
+	FemurBreakerSFX = 0
+	
+	ExplosionSFX = 0
+	
+	VomitSFX = 0
 End Function
 
 Function LoadEvents%()
@@ -2700,8 +2707,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	ConsoleInput = ""
 	ConsoleScroll = 0.0 : ConsoleScrollDragging = 0
 	ConsoleMouseMem = 0
-	ConsoleReissue.ConsoleMsg = Null
-	ConsoleR% = 0 : ConsoleG% = 0 : ConsoleB = 0
+	ConsoleR = 0 : ConsoleG = 0 : ConsoleB = 0
 	For c.ConsoleMsg = Each ConsoleMsg
 		Delete(c)
 	Next
@@ -2781,21 +2787,17 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete Each SCP294
 	Delete Each SCP409
 	For i = 0 To 1
-		If I_427\Sound[i] <> 0 Then FreeSound_Strict(I_427\Sound[i]) : I_427\Sound[i] = 0
+		I_427\Sound[i] = 0
 	Next
 	Delete Each SCP427
 	Delete Each SCP500
 	Delete Each SCP714
 	Delete Each SCP1025
-	I_1499\PrevRoom.Rooms = Null
 	If I_1499\Sky <> 0 Then FreeEntity(I_1499\Sky) : I_1499\Sky = 0
 	Delete Each SCP1499
 	
 	QuickLoadPercent = -1
 	QuickLoadPercent_DisplayTimer = 0.0
-	QuickLoad_CurrEvent.Events = Null
-	forest_event.Events = Null
-	skull_event.Events = Null
 	For e.Events = Each Events
 		RemoveEvent(e)
 	Next
@@ -2815,8 +2817,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	For itt.ItemTemplates = Each ItemTemplates
 		RemoveItemTemplate(itt)
 	Next
-	ClosestItem.Items = Null
-	OtherOpen.Items = Null
 	For it.Items = Each Items
 		RemoveItem(it)
 	Next
@@ -2876,12 +2876,10 @@ Function NullGame%(PlayButtonSFX% = True)
 	For rt.RoomTemplates = Each RoomTemplates
 		RemoveRoomTemplate(rt)
 	Next
-	SelectedCustomMap = Null
 	Dim MapRoom$(0, 0)
 	Delete Each MapGrid
 	Delete Each MapZones
 	RoomTempID = 0
-	PlayerRoom.Rooms = Null
 	For r.Rooms = Each Rooms
 		RemoveRoom(r)
 	Next
@@ -2896,12 +2894,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	For du.Dummy1499_1 = Each Dummy1499_1
 		RemoveDummy1499_1(du)
 	Next
-	n_I\Curr066 = Null
-	n_I\Curr049 = Null
-	n_I\Curr096 = Null
-	n_I\Curr106 = Null
-	n_I\Curr173 = Null
-	n_I\Curr513_1 = Null
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
 	Next
@@ -2923,14 +2915,18 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	RemoveSoundInstances()
 	
-	CurrSave.Save = Null
 	For sv.Save = Each Save
 		Delete(sv)
 	Next
-	CurrCustomMap.CustomMaps = Null
 	For cm.CustomMaps = Each CustomMaps
 		Delete(cm)
 	Next
+	
+	FreeBlur()
+	If FresizeTexture <> 0 Then FreeTexture(FresizeTexture) : FresizeTexture = 0
+	If FresizeTexture2 <> 0 Then FreeTexture(FresizeTexture2) : FresizeTexture2 = 0
+	If FresizeImage <> 0 Then FreeEntity(FresizeImage) : FresizeImage = 0
+	If FresizeCam <> 0 Then FreeEntity(FresizeCam) : FresizeCam = 0
 	
 	IniClearBuffer(lang\LanguagePath + AchievementsFile)
 	IniClearBuffer(lang\LanguagePath + SCP294File)
@@ -2940,7 +2936,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	ClearCollisions()
 	ClearWorld()
 	ResetTimingAccumulator()
-	FreeBlur()
 	InitFastResize()
 	
 	; ~ Load main menu assets and open main menu

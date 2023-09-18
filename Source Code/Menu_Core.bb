@@ -37,6 +37,9 @@ Function InitMainMenuAssets%()
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
+	
+	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
+	ButtonSFX2 = LoadSound_Strict("SFX\Interact\Button2.ogg")
 End Function
 
 Function DeInitMainMenuAssets%()
