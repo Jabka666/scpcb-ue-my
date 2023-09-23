@@ -3174,7 +3174,7 @@ Function FillRoom%(r.Rooms)
 		Case "room2_bio"
 			;[Block]
 			d.Doors = CreateDoor(r\x + 234.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, r, False, OFFICE_DOOR)
-			d\Locked = 1 : d\MTFClose = False
+			d\Locked = 2 : d\MTFClose = False
 			
 			sc.SecurityCams = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
 			sc\Angle = 225.0 : sc\Turn = 30.0

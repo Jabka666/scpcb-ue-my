@@ -327,6 +327,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
 	Next
+	
+	mo\MouseHit1 = False
+	
 	EndGraphics()
 	
 	If Quit Then End()
@@ -634,10 +637,11 @@ Function UpdateLanguageSelector%()
 	FreeImage(LanguageIMG) : LanguageIMG = 0
 	FreeImage(LanguageBG) : LanguageBG = 0
 	
+	FreeImage(LauncherBG) : LauncherBG = 0
+	
 	DeleteFolder(BasePath) ; ~ Delete temporary folder
 	
 	AppTitle(GetLocalString("launcher", "title"))
-	FreeImage(LauncherBG) : LauncherBG = 0
 End Function
 
 Function IsDownloadingLanguage$(Status%) ; ~ Kind of inline

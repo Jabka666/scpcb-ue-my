@@ -103,8 +103,8 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	
 	If p\OBJ = 0 Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes models folder if the CBRE was used
 	PositionEntity(p\OBJ, x, y, z)
-	EntityParent(p\OBJ, room\OBJ)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
+	EntityParent(p\OBJ, room\OBJ)
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
 	If HasCollision
 		EntityType(p\OBJ, HIT_MAP)
