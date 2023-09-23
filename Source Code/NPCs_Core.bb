@@ -28,8 +28,8 @@ Type NPCs
 	Field Path.WayPoints[21], PathStatus%, PathTimer#, PathLocation%
 	Field HideFromNVG%
 	Field NVGX#, NVGY#, NVGZ#, NVGName$
-	Field GravityMult# = 1.0
-	Field MaxGravity# = 0.2
+	Field GravityMult#
+	Field MaxGravity#
 	Field IsDead%
 	Field BlinkTimer# = 1.0
 	;Field IgnorePlayer%
