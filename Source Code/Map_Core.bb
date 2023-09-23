@@ -228,13 +228,21 @@ Function RenderLights%(Cam%)
 					If Cam = Camera ; ~ The lights are rendered by player's cam
 						If opt\AdvancedRoomLights Then EntityOrder(l\AdvancedSprite, -1)
 						If UpdateLightsTimer = 0.0
-							EntityAutoFade(l\Sprite, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
-							If EntityDistanceSquared(Cam, l\OBJ) < PowTwo(opt\CameraFogFar * 1.2)
+							Local Dist# = EntityDistanceSquared(Cam, l\OBJ)
+							
+							If Dist < 64.0
 								If EntityHidden(l\OBJ) Then ShowEntity(l\OBJ)
+							Else
+								; ~ Hide the sprites and light emitter because they are too far
+								If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
+							EndIf
+							
+							EntityAutoFade(l\Sprite, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+							If Dist < PowTwo(opt\CameraFogFar * 1.2)
 								If EntityVisible(Cam, l\OBJ) And EntityInView(l\OBJ, Cam)
 									If EntityHidden(l\Sprite) Then ShowEntity(l\Sprite)
 									If opt\AdvancedRoomLights
-										Alpha = 1.0 - Max(Min(((EntityDistance(Cam, l\OBJ) + 0.5) / 7.5), 1.0), 0.0)
+										Alpha = 1.0 - Max(Min(((Sqr(Dist) + 0.5) / 7.5), 1.0), 0.0)
 										If Alpha > 0.0
 											If EntityHidden(l\AdvancedSprite) Then ShowEntity(l\AdvancedSprite)
 											EntityAlpha(l\AdvancedSprite, Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (l\Intensity / 2.0), 1.0) * Alpha)
@@ -256,13 +264,6 @@ Function RenderLights%(Cam%)
 										If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
 									EndIf
 								EndIf
-							Else
-								; ~ Hide the sprites and light emitter because they are too far
-								If (Not EntityHidden(l\Sprite)) Then HideEntity(l\Sprite)
-								If opt\AdvancedRoomLights
-									If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
-								EndIf
-								If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
 							EndIf
 						EndIf
 					Else
