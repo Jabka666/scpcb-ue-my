@@ -4549,14 +4549,28 @@ Function CreateMap%()
 	Next
 	
 	Local Placed%
+	Local y_min%, y_max%, x_min%, x_max%
 	
 	; ~ Force more room1s (if needed)
 	For i = 0 To 2
 		; ~ Need more rooms if there are less than 5 of them
 		Temp = (-Room1Amount[i]) + 5
 		If Temp > 0
-			For y = (MapGridSize / ZONEAMOUNT) * (2 - i) + 1 To ((MapGridSize / ZONEAMOUNT) * ((2 - i) + 1.0)) - 2
-				For x = 2 To MapGridSize - 2
+			If i = 2
+				y_min = 1
+			Else
+				y_min = I_Zone\Transition[i]
+			EndIf
+			If i = 0
+				y_max = MapGridSize - 2
+			Else
+				y_max = I_Zone\Transition[i - 1] - 1
+			EndIf
+			x_min = 1
+			x_max = MapGridSize - 2
+			
+			For y = y_min To y_max
+				For x = x_min To x_max
 					If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_NoTile
 						If (Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)) = 1
 							If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)]
@@ -4570,7 +4584,7 @@ Function CreateMap%()
 							EndIf
 							
 							Placed = False
-							If CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] > 1 And CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] < 4 
+							If CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] > 1 And CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] < 4 And (y < y_max Lor y2 < y Lor i = 0)
 								Select CurrMapGrid\Grid[x2 + (y2 * MapGridSize)]
 									Case 2
 										;[Block]
@@ -4612,46 +4626,41 @@ Function CreateMap%()
 	
 	; ~ Force more ROOM4 and ROOM2C
 	For i = 0 To 2
-		Select i
-			Case 2
-				;[Block]
-				Zone = 2
-				Temp2 = MapGridSize / 3
-				;[End Block]
-			Case 1
-				;[Block]
-				Zone = (MapGridSize / 3) + 1
-				Temp2 = (MapGridSize * (2.0 / 3.0)) - 1
-				;[End Block]
-			Case 0
-				;[Block]
-				Zone = (MapGridSize * (2.0 / 3.0)) + 1
-				Temp2 = MapGridSize - 2
-				;[End Block]
-		End Select
+		If i = 2
+			y_min = 2
+		Else
+			y_min = I_Zone\Transition[i]
+		EndIf
+		If i = 0
+			y_max = MapGridSize - 2
+		Else
+			y_max = I_Zone\Transition[i - 1] - 2
+		EndIf
+		x_min = 1
+		x_max = MapGridSize - 2
 		
 		If Room4Amount[i] < 1 ; ~ We want at least one ROOM4
 			Temp = 0
-			For y = Zone To Temp2
-				For x = 2 To MapGridSize - 2
+			For y = y_min To y_max
+				For x = x_min To x_max
 					If CurrMapGrid\Grid[x + (y * MapGridSize)] = 3
 						Select False ; ~ See if adding a ROOM1 is possible
-							Case (CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)])
+							Case (CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)] Lor x = x_max)
 								;[Block]
 								CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 1
 								Temp = 1
 								;[End Block]
-							Case (CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)])
+							Case (CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)] Lor x = x_min)
 								;[Block]
 								CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 1
 								Temp = 1
 								;[End Block]
-							Case (CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)])
+							Case (CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)] Lor (i = 0 And y = y_max))
 								;[Block]
 								CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 1
 								Temp = 1
 								;[End Block]
-							Case (CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)])
+							Case (CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)] Lor (i < 2 And y = y_min))
 								;[Block]
 								CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 1
 								Temp = 1
@@ -4672,21 +4681,19 @@ Function CreateMap%()
 		
 		If Room2CAmount[i] < 1 ; ~ We want at least one ROOM2C
 			Temp = 0
-			Zone = Zone + 1
-			Temp2 = Temp2 - 1
-			For y = Zone To Temp2
-				For x = 3 To MapGridSize - 3
+			For y = y_max To y_min Step -1
+				For x = x_min To x_max
 					If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_Tile
 						Select True ; ~ See if adding some rooms is possible
 							Case CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile
 								;[Block]
-								If (CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)]) = 0
-									If (CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)]) = 0
+								If (CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)]) = 0 And x < x_max
+									If (CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] = 1
 										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)]) = 0
+									ElseIf (CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] = 1
@@ -4696,13 +4703,13 @@ Function CreateMap%()
 								;[End Block]
 							Case CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
 								;[Block]
-								If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)]) = 0
-									If (CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)]) = 0
+								If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)]) = 0 And x > x_min
+									If (CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] = 1
 										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)]) = 0
+									ElseIf (CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] = 1
@@ -4712,13 +4719,13 @@ Function CreateMap%()
 								;[End Block]
 							Case CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile
 								;[Block]
-								If (CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)]) = 0
-									If (CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)]) = 0
+								If (CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
+									If (CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)]) = 0 And x > x_min
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] = 1
 										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)]) = 0
+									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)]) = 0 And x < x_max
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] = 1
@@ -4728,13 +4735,13 @@ Function CreateMap%()
 								;[End Block]
 							Case CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
 								;[Block]
-								If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)]) = 0
-									If (CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)]) = 0
+								If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
+									If (CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)]) = 0 And x > x_min
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] = 1
 										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)]) = 0
+									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)]) = 0 And x < x_max
 										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
 										CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 2
 										CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] = 1
