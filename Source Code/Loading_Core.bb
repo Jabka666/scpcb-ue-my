@@ -680,29 +680,18 @@ Const LIGHT_SPRITE_DEFAULT% = 0
 Const LIGHT_SPRITE_RED% = 1
 ;[End Block]
 
-; ~ MT Model ID Constants
-;[Block]
-Const MT_ROOM1% = 0
-Const MT_ROOM2% = 1
-Const MT_ROOM2C% = 2
-Const MT_ROOM3% = 3
-Const MT_ROOM4% = 4
-Const MT_ELEVATOR% = 5
-Const MT_GENERATOR% = 6
-;[End Block]
-
 Function LoadMisc%()
 	Local i%
 	
 	misc_I.MiscInstance = New MiscInstance
 	
-	misc_I\MTModelID[MT_ROOM1] = LoadRMesh("GFX\Map\mt1.rmesh", Null)
-	misc_I\MTModelID[MT_ROOM2] = LoadRMesh("GFX\Map\mt2.rmesh", Null)
-	misc_I\MTModelID[MT_ROOM2C] = LoadRMesh("GFX\Map\mt2C.rmesh", Null)
-	misc_I\MTModelID[MT_ROOM3] = LoadRMesh("GFX\Map\mt3.rmesh", Null)
-	misc_I\MTModelID[MT_ROOM4] = LoadRMesh("GFX\Map\mt4.rmesh", Null)
-	misc_I\MTModelID[MT_ELEVATOR] = LoadRMesh("GFX\Map\mt_elevator.rmesh", Null)
-	misc_I\MTModelID[MT_GENERATOR] = LoadRMesh("GFX\Map\mt_generator.rmesh", Null)
+	misc_I\MTModelID[0] = LoadRMesh("GFX\Map\mt1.rmesh", Null)
+	misc_I\MTModelID[1] = LoadRMesh("GFX\Map\mt2.rmesh", Null)
+	misc_I\MTModelID[2] = LoadRMesh("GFX\Map\mt2C.rmesh", Null)
+	misc_I\MTModelID[3] = LoadRMesh("GFX\Map\mt3.rmesh", Null)
+	misc_I\MTModelID[4] = LoadRMesh("GFX\Map\mt4.rmesh", Null)
+	misc_I\MTModelID[5] = LoadRMesh("GFX\Map\mt2_elevator.rmesh", Null)
+	misc_I\MTModelID[6] = LoadRMesh("GFX\Map\mt1_generator.rmesh", Null)
 	
 	For i = 0 To MaxMTModelIDAmount - 1
 		HideEntity(misc_I\MTModelID[i])

@@ -231,12 +231,10 @@ Function RenderLights%(Cam%)
 							EntityAutoFade(l\Sprite, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
 							If EntityDistanceSquared(Cam, l\OBJ) < PowTwo(opt\CameraFogFar * 1.2)
 								If EntityHidden(l\OBJ) Then ShowEntity(l\OBJ)
-								If EntityVisible(Cam, l\OBJ)
+								If EntityVisible(Cam, l\OBJ) And EntityInView(l\OBJ, Cam)
 									If EntityHidden(l\Sprite) Then ShowEntity(l\Sprite)
-									
 									If opt\AdvancedRoomLights
 										Alpha = 1.0 - Max(Min(((EntityDistance(Cam, l\OBJ) + 0.5) / 7.5), 1.0), 0.0)
-										
 										If Alpha > 0.0
 											If EntityHidden(l\AdvancedSprite) Then ShowEntity(l\AdvancedSprite)
 											EntityAlpha(l\AdvancedSprite, Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (l\Intensity / 2.0), 1.0) * Alpha)
@@ -253,18 +251,18 @@ Function RenderLights%(Cam%)
 									EndIf
 								Else
 									; ~ Hide the sprites because they aren't visible
-									If (Not EntityHidden(l\Sprite))
-										HideEntity(l\Sprite)
-										If opt\AdvancedRoomLights Then HideEntity(l\AdvancedSprite)
+									If (Not EntityHidden(l\Sprite)) Then HideEntity(l\Sprite)
+									If opt\AdvancedRoomLights
+										If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
 									EndIf
 								EndIf
 							Else
 								; ~ Hide the sprites and light emitter because they are too far
-								If (Not EntityHidden(l\OBJ)) Lor (Not EntityHidden(l\AdvancedSprite))
-									HideEntity(l\Sprite)
-									If opt\AdvancedRoomLights Then HideEntity(l\AdvancedSprite)
-									HideEntity(l\OBJ)
+								If (Not EntityHidden(l\Sprite)) Then HideEntity(l\Sprite)
+								If opt\AdvancedRoomLights
+									If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
 								EndIf
+								If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
 							EndIf
 						EndIf
 					Else
@@ -275,11 +273,11 @@ Function RenderLights%(Cam%)
 			EndIf
 		Else
 			; ~ The lights were turned off
-			If (Not EntityHidden(l\OBJ)) Lor (Not EntityHidden(l\Sprite))
-				HideEntity(l\Sprite)
-				If opt\AdvancedRoomLights Then HideEntity(l\AdvancedSprite)
-				HideEntity(l\OBJ)
+			If (Not EntityHidden(l\Sprite)) Then HideEntity(l\Sprite)
+			If opt\AdvancedRoomLights
+				If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
 			EndIf
+			If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
 		EndIf
 	Next
 End Function
@@ -1648,10 +1646,22 @@ Global PlayerRoom.Rooms
 Const MTGridSize% = 19 ; ~ Same size as the main map itself (better for the map creator)
 Const MTGridY# = 8.0
 
+; ~ MT Model ID Constants
+;[Block]
+Const MT_ROOM2C% = 0
+Const MT_ROOM1% = 1
+Const MT_ROOM2% = 2
+Const MT_ROOM3% = 3
+Const MT_ROOM4% = 4
+Const MT_FIRST_ELEVATOR% = 5
+Const MT_SECOND_ELEVATOR% = 6
+Const MT_GENERATOR% = 7
+;[End Block]
+
 Type MTGrid
 	Field Grid%[MTGridSize ^ 2]
 	Field Angles%[MTGridSize ^ 2]
-	Field Meshes%[7]
+	Field Meshes%[MaxMTModelIDAmount]
 	Field Entities%[MTGridSize ^ 2]
 	Field waypoints.WayPoints[MTGridSize ^ 2]
 End Type
@@ -1690,7 +1700,7 @@ Function DestroyMT%(mt.MTGrid, DestroyWaypoint% = True)
 			If DestroyWaypoint And mt\waypoints[x + (y * MTGridSize)] <> Null Then RemoveWaypoint(mt\waypoints[x + (y * MTGridSize)]) : mt\waypoints[x + (y * MTGridSize)] = Null
 		Next
 	Next
-	For x = 0 To 6
+	For x = 0 To MaxMTModelIDAmount - 1
 		If mt\Meshes[x] <> 0 Then FreeEntity(mt\Meshes[x]) : mt\Meshes[x] = 0
 	Next
 End Function
@@ -1700,7 +1710,7 @@ Function PlaceMapCreatorMT%(r.Rooms)
 	
 	Local dr.Doors, it.Items, wayp.WayPoints
 	Local x%, y%, i%, Dist#
-	Local Meshes%[7]
+	Local Meshes%[MaxMTModelIDAmount]
 	Local SinValue#, CosValue#
 	
 	For i = 0 To MaxMTModelIDAmount - 1
@@ -1726,24 +1736,24 @@ Function PlaceMapCreatorMT%(r.Rooms)
 				CosValue = Cos(EntityYaw(Tile_Entity, True))
 				
 				Select Tile_Type
-					Case ROOM1 + 1, ROOM2 + 1
+					Case 1, 2
 						;[Block]
-						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (372.0 * RoomScale), r\z + (y * 2.0), 2, 0.4, 255, 255, 255)
+						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (409.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
 						;[End Block]
-					Case ROOM2C + 1, ROOM3 + 1, ROOM4 + 1
+					Case 3, 4, 5
 						;[Block]
-						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (416.0 * RoomScale), r\z + (y * 2.0), 2, 0.4, 255, 255, 255)
+						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (424.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
 						;[End Block]
-					Case ROOM4 + 2
+					Case 6
 						;[Block]
-						dr.Doors = CreateDoor(r\x + (x * 2.0) + (CosValue * 240.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (SinValue * 240.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, Null, False, ELEVATOR_DOOR)
-						PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (CosValue * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (SinValue * 0.05), True)
-						PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (CosValue * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (SinValue * 0.031), True)
-						PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (SinValue * 0.05), True)
-						PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.18)), True)
-						RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
+						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (409.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
+						AddLight(r, r\x + (x * 2.0) + (CosValue * 555.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 555.0 * RoomScale), 2, 0.25, 255, 200, 200)
+						CreateProp("GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", r)
+						CreateProp("GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, -90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", r)
 						
-						AddLight(r, r\x + (x * 2.0) + (CosValue * 555.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 555.0 * RoomScale), 2, 0.4, 255, 255, 255)
+						dr.Doors = CreateDoor(r\x + (x * 2.0) + (CosValue * 256.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, r, False, ELEVATOR_DOOR)
+						PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
+						RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 						
 						Local TempInt2% = CreatePivot()
 						
@@ -1759,9 +1769,14 @@ Function PlaceMapCreatorMT%(r.Rooms)
 							PositionEntity(r\Objects[1], r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
 						EndIf
 						;[End Block]
-					Case ROOM4 + 3
+					Case 7
 						;[Block]
-						AddLight(r, r\x + (x * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.4, 255, 200, 200)
+						AddLight(r, r\x + (x * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
+						CreateProp("GFX\map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", r)
+						CreateProp("GFX\map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", r)
+						
+						dr.Doors = CreateDoor(r\x + (x * 2.0) + (SinValue * 224.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (CosValue * 224.0 * RoomScale), EntityYaw(Tile_Entity, True), r, True, DEFAULT_DOOR, KEY_CARD_3)
+						
 						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + (x * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
 						

@@ -2968,7 +2968,7 @@ Function UpdateEvents%()
 			Case e_room2_mt
 				;[Block]
 				If PlayerRoom = e\room
-					Local Meshes%[7]
+					Local Meshes%[MaxMTModelIDAmount]
 					Local TempStr$
 					Local iA%, iB%, iC%, iD%
 					Local dr.Doors
@@ -2976,7 +2976,7 @@ Function UpdateEvents%()
 					Local iX%, iY%
 					
 					If I_Zone\HasCustomMT
-						If e\room\mt\Meshes[MT_ROOM1] = 0 Then PlaceMapCreatorMT(e\room)
+						If e\room\mt\Meshes[0] = 0 Then PlaceMapCreatorMT(e\room)
 					EndIf
 					
 					If e\room\mt = Null
@@ -3083,7 +3083,7 @@ Function UpdateEvents%()
 										CanRetry = True
 										If Rand(0, 1) = 1
 											e\room\mt\Grid[iX + 1 + ((iY) * MTGridSize)] = e\room\mt\Grid[iX + 1 + ((iY) * MTGridSize)] + 1
-											e\room\mt\Grid[iX + ((iY) * MTGridSize)] = 7 ; ~ Generator room
+											e\room\mt\Grid[iX + ((iY) * MTGridSize)] = MT_GENERATOR ; ~ Generator room
 											CanRetry = False
 											Exit
 										EndIf
@@ -3130,7 +3130,7 @@ Function UpdateEvents%()
 						If LastX = FirstX And LastY = FirstY Then RuntimeError(GetLocalString("runerr", "mt"))
 						
 						; ~ Place the tunnels
-						For i = MT_ROOM1 To MT_GENERATOR
+						For i = 0 To MaxMTModelIDAmount - 1
 							Meshes[i] = CopyEntity(misc_I\MTModelID[i])
 							HideEntity(Meshes[i])
 						Next
@@ -3141,9 +3141,10 @@ Function UpdateEvents%()
 							For iX = 0 To MTGridSize - 1
 								If e\room\mt\Grid[iX + (iY * MTGridSize)] > 0
 									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
-										Case MT_ROOM1 + 1, MT_ROOM4 + 3
+										Case 1, 7
 											;[Block]
 											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
+											If e\room\mt\Grid[iX + (iY * MTGridSize)] = 1 Then AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (409.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											
 											If e\room\mt\Grid[(iX + 1) + ((iY) * MTGridSize)] > 0
 												RotateEntity(TempInt, 0.0, 90.0, 0.0)
@@ -3159,14 +3160,13 @@ Function UpdateEvents%()
 												e\room\mt\Angles[iX + (iY * MTGridSize)] = 0
 											EndIf
 											;[End Block]
-										Case MT_ROOM2 + 1
+										Case 2
 											;[Block]
-											If (iX = FirstX And iY = FirstY) Lor (iX = LastX And iY = LastY) Then e\room\mt\Grid[iX + (iY * MTGridSize)] = 6
+											If (iX = FirstX And iY = FirstY) Lor (iX = LastX And iY = LastY) Then e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 											
 											If e\room\mt\Grid[(iX + 1) + (iY * MTGridSize)] > 0 And e\room\mt\Grid[(iX - 1) + (iY * MTGridSize)] > 0 ; ~ Horizontal
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
-												
-												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
+												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (409.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 												
 												TempInt2 = Rand(0, 1)
 												RotateEntity(TempInt, 0.0, (TempInt2 * 180.0) + 90.0, 0.0)
@@ -3174,16 +3174,14 @@ Function UpdateEvents%()
 												e\room\mt\Angles[iX + (iY * MTGridSize)] = (TempInt2 * 2) + 1
 											ElseIf e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)] > 0 And e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)] > 0 ; ~ Vertical
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
-												
-												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
+												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (409.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 												
 												TempInt2 = Rand(0, 1)
 												RotateEntity(TempInt, 0.0, TempInt2 * 180.0, 0.0)
 												e\room\mt\Angles[iX + (iY * MTGridSize)] = (TempInt2 * 2)
 											Else
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
-												
-												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
+												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (424.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 												
 												iA = e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)]
 												iB = e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)]
@@ -3205,11 +3203,12 @@ Function UpdateEvents%()
 												EndIf
 											EndIf
 											
-											If iX = FirstX And iY = FirstY Then e\room\mt\Grid[iX + (iY * MTGridSize)] = 5
+											If iX = FirstX And iY = FirstY Then e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_FIRST_ELEVATOR
 											;[End Block]
-										Case MT_ROOM2C + 1
+										Case 3
 											;[Block]
 											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
+											AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (424.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											
 											iA = e\room\mt\Grid[iX + ((iY + 1) * MTGridSize)]
 											iB = e\room\mt\Grid[iX + ((iY - 1) * MTGridSize)]
@@ -3229,9 +3228,10 @@ Function UpdateEvents%()
 												e\room\mt\Angles[iX + (iY * MTGridSize)] = 2
 											EndIf
 											;[End Block]
-										Case MT_ROOM3 + 1
+										Case 4
 											;[Block]
 											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
+											AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (424.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											
 											TempInt2 = Rand(0, 3)
 											RotateEntity(TempInt, 0.0, TempInt2 * 90.0, 0.0)
@@ -3245,40 +3245,29 @@ Function UpdateEvents%()
 									SinValue = Sin(EntityYaw(TempInt, True))
 									CosValue = Cos(EntityYaw(TempInt, True))
 									
-									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
-										Case MT_ROOM1 + 1
-											;[Block]
-											AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
-											;[End Block]
-										Case MT_ROOM2C + 1, MT_ROOM3 + 1
-											;[Block]
-											AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
-											;[End Block]
-										Case MT_ROOM4 + 3
-											;[Block]
-											AddLight(e\room, e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.25, 255, 200, 200)
-											it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
-											EntityType(it\Collider, HIT_ITEM)
-											
-											it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale))
-											EntityType(it\Collider, HIT_ITEM)
-											;[End Block]
-									End Select
-									
-									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = 5
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (CosValue * 240.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, ELEVATOR_DOOR)
-										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (CosValue * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (SinValue * 0.05), True)
-										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (CosValue * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (SinValue * 0.031), True)
-										PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (SinValue * 0.05), True)
-										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.18)), True)
-										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
+									If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_GENERATOR
+										AddLight(e\room, e\room\x + (iX * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (400.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
+										CreateProp("GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", e\room)
+										CreateProp("GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", e\room)
 										
-										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 555.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 555.0 * RoomScale), 2, 0.25, 255, 200, 200)
+										it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
+										EntityType(it\Collider, HIT_ITEM)
+										
+										it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale))
+										EntityType(it\Collider, HIT_ITEM)
+									ElseIf e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_FIRST_ELEVATOR Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
+										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 544.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 544.0 * RoomScale), 2, 0.25, 255, 200, 200)
+										CreateProp("GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", e\room)
+										CreateProp("GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", e\room)
+										
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, ELEVATOR_DOOR)
+										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
+										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (CosValue * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 552.0 * RoomScale))
-										If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6
+										If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 											If e\room\RoomDoors[1] <> Null
 												RemoveDoor(dr)
 											Else
@@ -3409,15 +3398,15 @@ Function UpdateEvents%()
 							Next
 						Next
 						
-						For i = MT_ROOM1 To MT_GENERATOR
+						For i = 0 To MaxMTModelIDAmount - 1
 							e\room\mt\Meshes[i] = Meshes[i]
 						Next
 						
 						PositionEntity(e\room\Objects[0], e\room\x + (FirstX * 2.0), EntityY(e\room\Objects[0], True), e\room\z + (FirstY * 2.0), True)
 						PositionEntity(e\room\Objects[1], e\room\x + (LastX * 2.0), EntityY(e\room\Objects[1], True), e\room\z + (LastY * 2.0), True)
-					ElseIf e\room\mt\Meshes[MT_ROOM1] = 0
+					ElseIf e\room\mt\Meshes[0] = 0
 						; ~ Place the tunnels
-						For i = MT_ROOM1 To MT_GENERATOR
+						For i = 0 To MaxMTModelIDAmount - 1
 							Meshes[i] = CopyEntity(misc_I\MTModelID[i])
 							HideEntity(Meshes[i])
 						Next
@@ -3428,69 +3417,59 @@ Function UpdateEvents%()
 							For iX = 0 To MTGridSize - 1
 								If e\room\mt\Grid[iX + (iY * MTGridSize)] > 0
 									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
-										Case MT_ROOM1 + 1, MT_ROOM4 + 3
+										Case 1, 7
 											;[Block]
 											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
+											If e\room\mt\Grid[iX + (iY * MTGridSize)] = 1 Then AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (409.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											;[End Block]
-										Case MT_ROOM2 + 1
+										Case 2
 											;[Block]
 											If e\room\mt\Grid[(iX + 1) + ((iY) * MTGridSize)] > 0 And e\room\mt\Grid[(iX - 1) + ((iY) * MTGridSize)] > 0 ; ~ Horizontal
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
-												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
+												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (409.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											ElseIf e\room\mt\Grid[(iX) + ((iY + 1) * MTGridSize)] > 0 And e\room\mt\Grid[(iX) + ((iY - 1) * MTGridSize)] > 0 ; ~ Vertical
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)] - 1])
-												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
+												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (409.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											Else
 												TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
-												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
+												AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (424.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											EndIf
 											;[End Block]
-										Case MT_ROOM2C + 1, MT_ROOM3 + 1
+										Case 3, 4
 											;[Block]
 											TempInt = CopyEntity(Meshes[e\room\mt\Grid[iX + (iY * MTGridSize)]])
+											AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (424.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											;[End Block]
-										Case MT_ROOM4 + 1, MT_ROOM4 + 2
+										Case 5, 6
 											;[Block]
-											TempInt = CopyEntity(Meshes[MT_ELEVATOR])
+											TempInt = CopyEntity(Meshes[5])
+											AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (409.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
 											;[End Block]
 									End Select
 									
 									ScaleEntity(TempInt, RoomScale, RoomScale, RoomScale, True)
-									
 									RotateEntity(TempInt, 0.0, e\room\mt\Angles[iX + (iY * MTGridSize)] * 90.0, 0.0)
 									PositionEntity(TempInt, e\room\x + (iX * 2.0), e\room\y + MTGridY, e\room\z + (iY * 2.0), True)
 									SinValue = Sin(EntityYaw(TempInt, True))
 									CosValue = Cos(EntityYaw(TempInt, True))
 									
-									Select e\room\mt\Grid[iX + (iY * MTGridSize)]
-										Case MT_ROOM1 + 1, MT_ROOM4 + 1, MT_ROOM4 + 2
-											;[Block]
-											AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (372.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
-											;[End Block]
-										Case MT_ROOM2C + 1, MT_ROOM3 + 1
-											;[Block]
-											AddLight(e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + (416.0 * RoomScale), e\room\z + (iY * 2.0), 2, 0.25, 255, 200, 200)
-											;[End Block]
-										Case MT_ROOM4 + 3
-											;[Block]
-											AddLight(e\room, e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (396.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.25, 255, 200, 200)
-											;[End Block]
-									End Select
-									
-									If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6 Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = 5
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (CosValue * 240.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 240.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, ELEVATOR_DOOR)
-										PositionEntity(dr\Buttons[0], EntityX(dr\Buttons[0], True) + (CosValue * 0.05), EntityY(dr\Buttons[0], True), EntityZ(dr\Buttons[0], True) + (SinValue * 0.05), True)
-										PositionEntity(dr\Buttons[1], EntityX(dr\Buttons[1], True) + (CosValue * 0.05), EntityY(dr\Buttons[1], True), EntityZ(dr\Buttons[1], True) + (SinValue * 0.031), True)
-										PositionEntity(dr\ElevatorPanel[0], EntityX(dr\ElevatorPanel[0], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[0], True), EntityZ(dr\ElevatorPanel[0], True) + (SinValue * 0.05), True)
-										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.18)), True)
-										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
+									If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_GENERATOR
+										AddLight(e\room, e\room\x + (iX * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (400.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
+										CreateProp("GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", e\room)
+										CreateProp("GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", e\room)
+									ElseIf e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_FIRST_ELEVATOR Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
+										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 544.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 544.0 * RoomScale), 2, 0.25, 255, 200, 200)
+										CreateProp("GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", e\room)
+										CreateProp("GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", e\room)
 										
-										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 555.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 555.0 * RoomScale), 2, 0.25, 255, 200, 200)
+										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, e\room, False, ELEVATOR_DOOR)
+										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
+										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (CosValue * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 552.0 * RoomScale))
-										If e\room\mt\Grid[iX + (iY * MTGridSize)] = 6
+										If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 											If e\room\RoomDoors[1] <> Null
 												RemoveDoor(dr)
 											Else
@@ -3621,7 +3600,7 @@ Function UpdateEvents%()
 							Next
 						Next
 						
-						For i = MT_ROOM1 To MT_GENERATOR
+						For i = 0 To MaxMTModelIDAmount - 1
 							e\room\mt\Meshes[i] = Meshes[i]
 						Next
 						
@@ -3682,7 +3661,7 @@ Function UpdateEvents%()
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[4], e\room\Objects[5], e, False)
 				Else
 					If e\room\mt <> Null
-						If e\room\mt\Meshes[MT_ROOM1] <> 0
+						If e\room\mt\Meshes[0] <> 0
 							For iY = 0 To MTGridSize - 1
 								For iX = 0 To MTGridSize - 1
 									If e\room\mt\Entities[iX + (iY * MTGridSize)] <> 0

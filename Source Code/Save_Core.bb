@@ -851,7 +851,6 @@ Function LoadGame%(File$)
 		Next
 		
 		If ReadByte(f) = 1 ; ~ This room has a grid
-			; ~ TODO: Check how that works
 			If r\mt <> Null ; ~ Remove the old grid content
 				DestroyMT(r\mt)
 				Delete(r\mt)
@@ -1697,11 +1696,9 @@ Function LoadGameQuick%(File$)
 					ReadByte(f) : ReadByte(f)
 				Next
 			Next
-		Else ; ~ This grid doesn't exist in the save
-			If r\mt <> Null
-				DestroyMT(r\mt)
-				Delete(r\mt)
-			EndIf
+		ElseIf r\mt <> Null ; ~ Remove the old grid
+			DestroyMT(r\mt)
+			Delete(r\mt)
 		EndIf
 		
 		If ReadByte(f) > 0 ; ~ This room has a forest

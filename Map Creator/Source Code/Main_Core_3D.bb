@@ -721,11 +721,11 @@ Function LoadRoomTemplateMeshes%()
 	rt\Name = MT_Prefix + "4-way room"
 	rt\Shape = ROOM4
 	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\map\mt_elevator.rmesh"
+	rt\OBJPath = "GFX\map\mt2_elevator.rmesh"
 	rt\Name = MT_Prefix + "elevator"
 	rt\Shape = ROOM2
 	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\map\mt_generator.rmesh"
+	rt\OBJPath = "GFX\map\mt1_generator.rmesh"
 	rt\Name = MT_Prefix + "generator room"
 	rt\Shape = ROOM1
 	

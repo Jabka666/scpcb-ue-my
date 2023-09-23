@@ -75,6 +75,7 @@ Bug Fixes:
 - Fixed the most problems in MTF's AI.
 - Fixed rings "overlapping".
 - Fixed not being able to open inventory after failing to use an item.
+- Fixed light sprites and props disappearing in Maintenance Tunnels.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.
