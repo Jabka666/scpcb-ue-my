@@ -50,15 +50,12 @@ End Function
 Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	SetGfxDriver(opt\GFXDriver)
 	Graphics3D(Width, Height, Depth, Mode)
-	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
-	TextureAnisotropic(opt\AnisotropicLevel)
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
 		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
 	Wend
 	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2.0
 	InitFastResize()
-	AntiAlias(opt\AntiAliasing)
 End Function
 
 Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
@@ -404,6 +401,7 @@ Function CreateBlurImage%()
 	CameraClsMode(Cam, 0, 0)
 	CameraRange(Cam, 0.1, 1.5)
 	MoveEntity(Cam, 0, 0, 10000)
+	CameraProjMode(Cam, 0)
 	ArkBlurCam = Cam
 	
 	CameraViewport(Cam, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
@@ -436,6 +434,7 @@ Function RenderBlur%(Power#)
 End Function
 
 Function FreeBlur%()
+	If ArkBlurImage <> 0 Then ArkBlurImage = 0
 	If ArkBlurCam <> 0 Then ArkBlurCam = 0
 	If ArkBlurTexture <> 0 Then DeleteSingleTextureEntryFromCache(ArkBlurTexture)
 End Function

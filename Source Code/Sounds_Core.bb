@@ -105,37 +105,28 @@ Function LoadTempSound%(File$)
 End Function
 
 Function UpdateMusic%()
-	If ConsoleFlush
-		If (Not ChannelPlaying(ConsoleMusPlay)) Then ConsoleMusPlay = PlaySound_Strict(ConsoleMusFlush)
-	ElseIf (Not PlayCustomMusic)
-		If NowPlaying <> ShouldPlay ; ~ Playing the wrong clip, fade out
-			opt\CurrMusicVolume = Max(opt\CurrMusicVolume - (fps\Factor[0] / 250.0), 0.0)
-			If opt\CurrMusicVolume = 0.0
-				If NowPlaying < 66 Then StopStream_Strict(MusicCHN) : MusicCHN = 0
-				NowPlaying = ShouldPlay
-				CurrMusic = False
-			EndIf
-		Else ; ~ Playing the right clip
-			opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\Factor[0])
+	If NowPlaying <> ShouldPlay ; ~ Playing the wrong clip, fade out
+		opt\CurrMusicVolume = Max(opt\CurrMusicVolume - (fps\Factor[0] / 250.0), 0.0)
+		If opt\CurrMusicVolume = 0.0
+			If NowPlaying < 66 Then StopStream_Strict(MusicCHN) : MusicCHN = 0
+			NowPlaying = ShouldPlay
+			CurrMusic = False
 		EndIf
-		
-		If NowPlaying < 66
-			If (Not CurrMusic)
-				MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
-				CurrMusic = True
-			EndIf
-			SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume * opt\MasterVolume)
+	Else ; ~ Playing the right clip
+		opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\Factor[0])
+	EndIf
+	
+	If NowPlaying < 66
+		If (Not CurrMusic)
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
+			CurrMusic = True
 		EndIf
-	Else
-		If fps\Factor[0] > 0.0 Lor igm\OptionsMenu = MenuTab_Options_Audio
-			If (Not ChannelPlaying(MusicCHN)) Then MusicCHN = PlaySound_Strict(CustomMusic)
-			ChannelVolume(MusicCHN, opt\MusicVolume * opt\MasterVolume)
-		EndIf
+		SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume * opt\MasterVolume)
 	EndIf
 End Function
 
 Function PauseSounds%()
-	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams
+	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, em.Emitters, r.Rooms
 	Local i%
 	
 	For e.Events = Each Events
@@ -173,6 +164,17 @@ Function PauseSounds%()
 		PauseChannel(sc\SoundCHN)
 	Next
 	
+	For em.Emitters = Each Emitters
+		PauseChannel(em\SoundCHN)
+	Next
+	
+	For r.Rooms = Each Rooms
+		PauseChannel(r\SoundCHN)
+		For i = 0 To MaxRoomEmitters - 1
+			PauseChannel(r\SoundEmitterCHN[i])
+		Next
+	Next
+	
 	PauseChannel(AmbientSFXCHN)
 	PauseChannel(BreathCHN)
 	PauseChannel(BreathGasRelaxedCHN)
@@ -192,7 +194,7 @@ Function PauseSounds%()
 End Function
 
 Function ResumeSounds%()
-	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams
+	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, em.Emitters, r.Rooms
 	Local i%
 	
 	For e.Events = Each Events
@@ -230,6 +232,17 @@ Function ResumeSounds%()
 		ResumeChannel(sc\SoundCHN)
 	Next
 	
+	For em.Emitters = Each Emitters
+		ResumeChannel(em\SoundCHN)
+	Next
+	
+	For r.Rooms = Each Rooms
+		ResumeChannel(r\SoundCHN)
+		For i = 0 To MaxRoomEmitters - 1
+			ResumeChannel(r\SoundEmitterCHN[i])
+		Next
+	Next
+	
 	ResumeChannel(AmbientSFXCHN)
 	ResumeChannel(BreathCHN)
 	ResumeChannel(BreathGasRelaxedCHN)
@@ -251,8 +264,8 @@ Function ResumeSounds%()
 	If IntercomStreamCHN <> 0 Then SetStreamPaused_Strict(IntercomStreamCHN, False)
 End Function
 
-Function KillSounds%()
-	Local e.Events, n.NPCs, d.Doors, snd.Sound, sc.SecurityCams
+Function KillSounds%(EraseSounds% = True)
+	Local e.Events, n.NPCs, d.Doors, snd.Sound, sc.SecurityCams, em.Emitters, r.Rooms
 	Local i%
 	
 	For i = 0 To 8 Step 2
@@ -299,6 +312,17 @@ Function KillSounds%()
 		StopChannel(sc\SoundCHN) : sc\SoundCHN = 0
 	Next
 	
+	For em.Emitters = Each Emitters
+		StopChannel(em\SoundCHN) : em\SoundCHN = 0
+	Next
+	
+	For r.Rooms = Each Rooms
+		StopChannel(r\SoundCHN) : r\SoundCHN = 0
+		For i = 0 To MaxRoomEmitters - 1
+			StopChannel(r\SoundEmitterCHN[i]) : r\SoundEmitterCHN[i] = 0
+		Next
+	Next
+	
 	StopChannel(AmbientSFXCHN) : AmbientSFXCHN = 0
 	StopChannel(BreathCHN) : BreathCHN = 0
 	StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
@@ -316,14 +340,16 @@ Function KillSounds%()
 	
 	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
 	
-	If opt\EnableSFXRelease
-		For snd.Sound = Each Sound
-			If snd\InternalHandle <> 0
-				FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
-				RemoveSubtitlesToken(snd)
-			EndIf
-			snd\ReleaseTime = 0
-		Next
+	If EraseSounds
+		If opt\EnableSFXRelease
+			For snd.Sound = Each Sound
+				If snd\InternalHandle <> 0
+					FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+					RemoveSubtitlesToken(snd)
+				EndIf
+				snd\ReleaseTime = 0
+			Next
+		EndIf
 	EndIf
 	
 	For snd.Sound = Each Sound

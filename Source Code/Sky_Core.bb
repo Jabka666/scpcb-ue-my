@@ -1,3 +1,5 @@
+Global Sky%
+
 Function CreateSky%(FileName$, Parent% = 0)
 	Local Sky%, Face%, Direction$, Vert%
 	Local s%, x%, y%, z%, u%, v%

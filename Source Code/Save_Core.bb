@@ -23,8 +23,6 @@ Function SaveGame%(File$)
 	
 	WriteString(f, VersionNumber)
 	
-	WriteInt(f, me\PlayTime)
-	
 	WriteString(f, Str(CODE_DR_MAYNARD))
 	WriteString(f, Str(CODE_O5_COUNCIL))
 	WriteString(f, Str(CODE_MAINTENANCE_TUNNELS))
@@ -521,8 +519,6 @@ Function LoadGame%(File$)
 	StrTemp = ReadString(f)
 	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
-	me\PlayTime = ReadInt(f)
-	
 	CODE_DR_MAYNARD = Int(ReadString(f))
 	CODE_O5_COUNCIL = Int(ReadString(f))
 	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
@@ -854,19 +850,13 @@ Function LoadGame%(File$)
 		Next
 		
 		If ReadByte(f) = 1 ; ~ This room has a grid
+			; ~ TODO: Check how that works
 			If r\mt <> Null ; ~ Remove the old grid content
-				For x = 0 To MTGridSize - 1
-					For y = 0 To MTGridSize - 1
-						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
-						If r\mt\waypoints[x + (y * MTGridSize)] <> Null Then RemoveWaypoint(r\mt\waypoints[x + (y * MTGridSize)]) : r\mt\waypoints[x + (y * MTGridSize)] = Null
-					Next
-				Next
-				For x = 0 To 6
-					If r\mt\Meshes[x] <> 0 Then FreeEntity(r\mt\Meshes[x]) : r\mt\Meshes[x] = 0
-				Next
-				Delete(r\mt) : r\mt = Null
+				DestroyMT(r\mt)
+				Delete(r\mt)
 			EndIf
 			r\mt.MTGrid = New MTGrid
+			
 			For y = 0 To MTGridSize - 1
 				For x = 0 To MTGridSize - 1
 					r\mt\Grid[x + (y * MTGridSize)] = ReadByte(f)
@@ -885,11 +875,8 @@ Function LoadGame%(File$)
 				r\fr.Forest = New Forest
 			EndIf
 			For y = 0 To ForestGridSize - 1
-				Local sssss$ = ""
-				
 				For x = 0 To ForestGridSize - 1
 					r\fr\Grid[x + (y * ForestGridSize)] = ReadByte(f)
-					sssss = sssss + Str(r\fr\Grid[x + (y * ForestGridSize)])
 				Next
 			Next
 			
@@ -904,7 +891,7 @@ Function LoadGame%(File$)
 			EndIf
 		ElseIf r\fr <> Null ; ~ Remove the old forest
 			DestroyForest(r\fr)
-			Delete(r\fr) : r\fr = Null
+			Delete(r\fr)
 		EndIf
 		
 		If r\x = r1499_x And r\z = r1499_z Then I_1499\PrevRoom = r
@@ -1093,7 +1080,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	Local e.Events
+	Local e.Events, ch.Chunk, chp.ChunkPart
 	
 	For e.Events = Each Events
 		RemoveEvent(e)
@@ -1123,7 +1110,12 @@ Function LoadGame%(File$)
 				;[Block]
 				If e\EventState > 0.0
 					HideChunks()
-					DeleteChunks()
+					For ch.Chunk = Each Chunk
+						RemoveChunk(ch)
+					Next
+					For chp.ChunkPart = Each ChunkPart
+						RemoveChunkPart(chp)
+					Next
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1
 							If n\InFacility = 0 Then RemoveNPC(n)
@@ -1133,7 +1125,7 @@ Function LoadGame%(File$)
 					Local du.Dummy1499_1
 					
 					For du.Dummy1499_1 = Each Dummy1499_1
-						Delete(du)
+						RemoveDummy1499_1(du)
 					Next
 					
 					e\EventStr = ""
@@ -1353,8 +1345,6 @@ Function LoadGameQuick%(File$)
 	
 	StrTemp = ReadString(f)
 	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
-	
-	me\PlayTime = ReadInt(f)
 	
 	me\DropSpeed = -0.1
 	me\HeadDropSpeed = 0.0
@@ -1707,16 +1697,8 @@ Function LoadGameQuick%(File$)
 			Next
 		Else ; ~ This grid doesn't exist in the save
 			If r\mt <> Null
-				For x = 0 To MTGridSize - 1
-					For y = 0 To MTGridSize - 1
-						If r\mt\Entities[x + (y * MTGridSize)] <> 0 Then FreeEntity(r\mt\Entities[x + (y * MTGridSize)]) : r\mt\Entities[x + (y * MTGridSize)] = 0
-						If r\mt\waypoints[x + (y * MTGridSize)] <> Null Then RemoveWaypoint(r\mt\waypoints[x + (y * MTGridSize)]) : r\mt\waypoints[x + (y * MTGridSize)] = Null
-					Next
-				Next
-				For x = 0 To 6
-					If r\mt\Meshes[x] <> 0 Then FreeEntity(r\mt\Meshes[x]) : r\mt\Meshes[x] = 0
-				Next
-				Delete(r\mt) : r\mt = Null
+				DestroyMT(r\mt)
+				Delete(r\mt)
 			EndIf
 		EndIf
 		
@@ -1732,7 +1714,7 @@ Function LoadGameQuick%(File$)
 			Local lZ# = ReadFloat(f)
 		ElseIf r\fr <> Null ; ~ Remove the old forest
 			DestroyForest(r\fr)
-			Delete(r\fr) : r\fr = Null
+			Delete(r\fr)
 		EndIf
 		
 		If Temp2 = 1 Then PlayerRoom = r
@@ -1840,7 +1822,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	Local e.Events
+	Local e.Events, ch.Chunk, chp.ChunkPart
 	
 	For e.Events = Each Events
 		RemoveEvent(e)
@@ -1879,7 +1861,12 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				If e\EventState > 0.0
 					HideChunks()
-					DeleteChunks()
+					For ch.Chunk = Each Chunk
+						RemoveChunk(ch)
+					Next
+					For chp.ChunkPart = Each ChunkPart
+						RemoveChunkPart(chp)
+					Next
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1
 							If n\InFacility = 0 Then RemoveNPC(n)
@@ -1889,7 +1876,7 @@ Function LoadGameQuick%(File$)
 					Local du.Dummy1499_1
 					
 					For du.Dummy1499_1 = Each Dummy1499_1
-						Delete(du)
+						RemoveDummy1499_1(du)
 					Next
 					
 					e\EventStr = ""
@@ -2309,7 +2296,7 @@ Function LoadMap%(File$)
 	
 	f = ReadFile_Strict(File)
 	
-	Delete(CurrMapGrid) : CurrMapGrid = Null
+	Delete(CurrMapGrid)
 	CurrMapGrid = New MapGrid
 	
 	If Right(File, 6) = "cbmap2"

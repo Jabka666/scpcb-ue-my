@@ -1,6 +1,5 @@
 Type Materials
 	Field Name$
-	Field Diff%
 	Field Bump%
 	Field IsDiffuseAlpha%
 	Field UseMask%

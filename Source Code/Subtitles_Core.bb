@@ -174,19 +174,16 @@ End Function
 Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 	If (Not opt\EnableSubtitles) Lor (Not SubtitlesInit) Then Return
 	
-	Local Token% = JsonGetValue(SubFile, SoundPath$)
-	If JsonIsNull(Token) Then
-		Return
-	EndIf
-
-	If Not JsonIsArray(Token) Then
-		Return
-	EndIf
-
+	Local i%
+	Local Token% = JsonGetValue(SubFile, SoundPath)
+	
+	If JsonIsNull(Token) Lor (Not JsonIsArray(Token)) Then Return
+	
 	Local Arr% = JsonGetArray(Token)
 
-	For i = 0 To JsonGetArraySize(Arr)-1
+	For i = 0 To JsonGetArraySize(Arr) - 1
 		Local Subtitle% = JsonGetArrayValue(Arr, i)
+		
 		If JsonIsObject(Subtitle) Then 
 			Local TxtVal% = JsonGetValue(Subtitle, "text")
 			Local DelayVal% = JsonGetValue(Subtitle, "delay")
@@ -195,7 +192,6 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 			Local RVal% = JsonGetValue(Subtitle, "r")
 			Local GVal% = JsonGetValue(Subtitle, "g")
 			Local BVal% = JsonGetValue(Subtitle, "b")
-
 			Local Txt$ = "<NO TEXT DATA>"
 			Local Del# = 0.0
 			Local Leng# = 10.0
@@ -203,42 +199,41 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 			Local R% = 255
 			Local G% = 255
 			Local B% = 255
-
+			
 			; ~ A bunch of null and type checking, RapidBson throws MAVs if the value you are type checking is null.
-			If Not JsonIsNull(TxtVal) Then
+			If (Not JsonIsNull(TxtVal))
 				If JsonIsString(TxtVal) Then Txt = JsonGetString(TxtVal)
 			EndIf
-			If Not JsonIsNull(DelayVal) Then
+			If (Not JsonIsNull(DelayVal))
 				If JsonIsFloat(DelayVal) Then Del = JsonGetFloat(DelayVal)
 			EndIf
-			If Not JsonIsNull(LengthVal) Then
+			If (Not JsonIsNull(LengthVal))
 				If JsonIsFloat(LengthVal) Then Leng = JsonGetFloat(LengthVal)
 			EndIf
-			If Not JsonIsNull(RVal) Then
+			If (Not JsonIsNull(RVal))
 				If JsonIsInt(RVal) Then R = JsonGetInt(RVal)
 			EndIf
-			If Not JsonIsNull(GVal) Then
+			If (Not JsonIsNull(GVal))
 				If JsonIsInt(GVal) Then G = JsonGetInt(GVal)
 			EndIf
-			If Not JsonIsNull(BVal) Then
+			If (Not JsonIsNull(BVal))
 				If JsonIsInt(BVal) Then B = JsonGetInt(BVal)
 			EndIf
-			If Not JsonIsNull(ColorVal) Then
-				If JsonIsString(ColorVal) Then 
+			If (Not JsonIsNull(ColorVal))
+				If JsonIsString(ColorVal) 
 					Col = JsonGetString(ColorVal)
-
+					
 					; ~ TODO: Add null checking here. Will throw MAVs if an undefined color is used as the subtitle color.
-					ColorArray% = JsonGetArray(JsonGetValue(SubColors, Col))
-					If JsonGetArraySize(ColorArray) = 3 Then
+					Local ColorArray% = JsonGetArray(JsonGetValue(SubColors, Col))
+					
+					If JsonGetArraySize(ColorArray) = 3
 						R = JsonGetInt(JsonGetArrayValue(ColorArray%, 0))
 						G = JsonGetInt(JsonGetArrayValue(ColorArray%, 1))
 						B = JsonGetInt(JsonGetArrayValue(ColorArray%, 2))
 					EndIf
 				EndIf
 			EndIf
-
 			QueueSubtitlesMsg(SoundPath, sound, Txt, Del, Leng, R, G, B)
-
 		EndIf
 	Next
 End Function
@@ -252,10 +247,10 @@ Function RemoveSubtitlesToken%(sound.Sound)
 End Function
 
 Function ClearSubtitles%()
-	Local subtitles.SubtitlesMsg
+	Local sub.SubtitlesMsg
 	
-	For subtitles.SubtitlesMsg = Each SubtitlesMsg
-		Delete(subtitles)
+	For sub.SubtitlesMsg = Each SubtitlesMsg
+		Delete(sub)
 	Next
 End Function
 
@@ -326,13 +321,8 @@ Function DeInitSubtitlesAssets%()
 	For snd.Sound = Each Sound
 		RemoveSubtitlesToken(snd)
 	Next
-	Delete(subassets)
+	Delete Each SubtitlesAssets
 End Function
-
-SubFile = JsonParseFromFile(SubtitlesFile)
-SubColors = JsonGetValue(SubFile, "colors")
-
-SubtitlesInit = True
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

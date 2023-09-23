@@ -194,6 +194,11 @@ Function UpdateEmitters%()
 	CatchErrors("Uncaught: UpdateEmitters()")
 End Function
 
+Function RemoveEmitter%(em.Emitters)
+	FreeEntity(em\OBJ) : em\OBJ = 0
+	Delete(em)
+End Function
+
 Function UpdateDust%()
 	Local p.Particles
 	Local i%, Pvt%

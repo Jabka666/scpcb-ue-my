@@ -1,3 +1,18 @@
+Type Mouse
+	Field MouseHit1%, MouseHit2%
+	Field MouseDown1%
+	Field DoubleClick%, DoubleClickSlot%
+	Field LastMouseHit1%
+	Field MouseUp1%
+	Field Mouselook_X_Inc#, Mouselook_Y_Inc#
+	Field Mouse_Left_Limit%, Mouse_Right_Limit%
+	Field Mouse_Top_Limit%, Mouse_Bottom_Limit%
+	Field Mouse_X_Speed_1#, Mouse_Y_Speed_1#
+	Field Viewport_Center_X%, Viewport_Center_Y%
+End Type
+
+Global mo.Mouse = New Mouse
+
 Type Fonts
 	Field FontID%[MaxFontIDAmount]
 End Type
@@ -67,10 +82,7 @@ Function SetLanguage%(Language$, FromSelector% = True)
 		lang\LanguagePath = LocalizaitonPath + lang\CurrentLanguage + "\"
 		
 		IniWriteBuffer(lang\LanguagePath + LanguageFile)
-		IniWriteBuffer(lang\LanguagePath + SubtitlesFile)
-		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
 		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
-		IniWriteBuffer(lang\LanguagePath + SCP294File)
 		IniWriteBuffer(lang\LanguagePath + FontsFile)
 	EndIf
 	If StringToBoolean(GetLocalString("global", "splitwithspace"))
@@ -326,10 +338,14 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
-	Next
+	Next	
 	
 	mo\MouseHit1 = False
 	
+	FreeImage(MenuBlack) : MenuBlack = 0
+	FreeImage(MenuGray) : MenuGray = 0
+	FreeImage(MenuWhite) : MenuWhite = 0
+
 	EndGraphics()
 	
 	If Quit Then End()
@@ -632,10 +648,16 @@ Function UpdateLanguageSelector%()
 	ScrollBarY = 0.0
 	ScrollMenuHeight = 0.0
 	
-	Delete Each ListLanguage
+	For lan.ListLanguage = Each ListLanguage
+		If lan\FlagImg <> 0 Then FreeImage(lan\FlagImg) : lan\FlagImg = 0
+		Delete(lan)
+	Next
 	
 	FreeImage(LanguageIMG) : LanguageIMG = 0
 	FreeImage(LanguageBG) : LanguageBG = 0
+	FreeImage(ButtonImages) : ButtonImages = 0
+	
+	If MenuGray <> 0 Then DebugLog("MenuGray is still in UpdateLauncher!")
 	
 	FreeImage(LauncherBG) : LauncherBG = 0
 	

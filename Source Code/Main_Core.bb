@@ -6,26 +6,24 @@ Global ButtonSFX2% = LoadSound_Strict("SFX\Interact\Button2.ogg")
 
 Global MenuWhite%, MenuGray%, MenuBlack%
 
-MenuWhite = LoadImage_Strict("GFX\menu\menu_white.png")
-MenuGray = LoadImage_Strict("GFX\menu\menu_gray.png")
-MenuBlack = LoadImage_Strict("GFX\menu\menu_black.png")
+Const TICK_DURATION# = 70.0 / 60.0
 
-Global SplitSpace$
-
-Type Mouse
-	Field MouseHit1%, MouseHit2%
-	Field MouseDown1%
-	Field DoubleClick%, DoubleClickSlot%
-	Field LastMouseHit1%
-	Field MouseUp1%
-	Field Mouselook_X_Inc#, Mouselook_Y_Inc#
-	Field Mouse_Left_Limit%, Mouse_Right_Limit%
-	Field Mouse_Top_Limit%, Mouse_Bottom_Limit%
-	Field Mouse_X_Speed_1#, Mouse_Y_Speed_1#
-	Field Viewport_Center_X%, Viewport_Center_Y%
+Type FramesPerSeconds
+	Field Accumulator#
+	Field PrevTime%
+	Field CurrTime%
+	Field FPS%
+	Field TempFPS%
+	Field Goal%
+	Field LoopDelay%
+	Field Factor#[2]
 End Type
 
-Global mo.Mouse = New Mouse
+Global fps.FramesPerSeconds = New FramesPerSeconds
+
+fps\LoopDelay = MilliSecs()
+
+Global SplitSpace$
 
 If opt\LauncherEnabled
 	Local lnchr.Launcher
@@ -56,11 +54,49 @@ Else
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
-Const VersionNumber$ = "1.2"
-
 AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
 Global MenuScale# = opt\GraphicHeight / 1024.0
+
+Global Input_ResetTime# = 0.0
+
+Function UpdateMouseInput%()
+	If Input_ResetTime > 0.0
+		Input_ResetTime = Max(Input_ResetTime - fps\Factor[1], 0.0)
+	Else
+		mo\DoubleClick = False
+		mo\MouseHit1 = MouseHit(1)
+		If mo\MouseHit1
+			If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+			mo\LastMouseHit1 = MilliSecs()
+		EndIf
+		
+		Local PrevMouseDown1% = mo\MouseDown1
+		
+		mo\MouseDown1 = MouseDown(1)
+		mo\MouseUp1 = (PrevMouseDown1 And (Not mo\MouseDown1))
+		
+		mo\MouseHit2 = MouseHit(2)
+	EndIf
+End Function
+
+Function StopMouseMovement%()
+	MouseXSpeed() : MouseYSpeed() : MouseZSpeed()
+	mo\Mouse_X_Speed_1 = 0.0
+	mo\Mouse_Y_Speed_1 = 0.0
+End Function
+
+Function ResetInput%()
+	FlushKeys()
+	FlushMouse()
+	mo\MouseHit1 = False
+	mo\MouseHit2 = False
+	mo\MouseDown1 = False
+	mo\MouseUp1 = False
+	mo\LastMouseHit1 = False
+	GrabbedEntity = 0
+	Input_ResetTime = 10.0
+End Function
 
 mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
 mo\Mouselook_Y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
@@ -75,35 +111,15 @@ mo\Viewport_Center_Y = opt\GraphicHeight / 2
 
 SetBuffer(BackBuffer())
 
-Const TICK_DURATION# = 70.0 / 60.0
-
-Type FramesPerSeconds
-	Field Accumulator#
-	Field PrevTime%
-	Field CurrTime%
-	Field FPS%
-	Field TempFPS%
-	Field Goal%
-	Field LoopDelay%
-	Field Factor#[2]
-End Type
-
-Global fps.FramesPerSeconds = New FramesPerSeconds
-
 SeedRnd(MilliSecs())
-
-fps\LoopDelay = MilliSecs()
-
-Global WireFrameState%
 
 PlayStartupVideos()
 
-Global CursorIMG% = LoadImage_Strict("GFX\Menu\cursor.png")
-CursorIMG = ScaleImage2(CursorIMG, MenuScale, MenuScale)
-
-Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
-Global LoadingBack% = LoadImage_Strict("LoadingScreens\loading_back.png")
-LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
+Global CursorIMG%
+If opt\DisplayMode = 0
+	CursorIMG = LoadImage_Strict("GFX\Menu\cursor.png")
+	CursorIMG = ScaleImage2(CursorIMG, MenuScale, MenuScale)
+EndIf
 
 InitLoadingScreens(LoadingScreensFile)
 
@@ -121,122 +137,542 @@ BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
 
 RenderLoading(0, GetLocalString("loading", "core.main"))
 
-Type Player
-	Field Terminated# = False
-	Field KillAnim%, KillAnimTimer#, FallTimer#, DeathTimer#
-	Field Sanity#, RestoreSanity%
-	Field ForceMove#, ForceAngle#
-	Field Playable%, PlayTime%
-	Field BlinkTimer#, BLINKFREQ#, BlinkEffect#, BlinkEffectTimer#, EyeIrritation#, EyeStuck#
-	Field Stamina#, StaminaEffect#, StaminaEffectTimer#, StaminaMax#
-	Field CameraShakeTimer#, Shake#, CameraShake#, BigCameraShake#
-	Field Vomit%, VomitTimer#, Regurgitate%
-	Field HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
-	Field Injuries#, Bloodloss#, PrevInjuries#, PrevBloodloss#, HealTimer#
-	Field DropSpeed#, HeadDropSpeed#, CurrSpeed#
-	Field Crouch%, CrouchState#
-	Field SndVolume#
-	Field SelectedEnding%, EndingScreen%, EndingTimer#
-	Field CreditsScreen%, CreditsTimer#
-	Field BlurVolume#, BlurTimer#
-	Field LightBlink#, LightFlash#
-	Field CurrCameraZoom#
-	Field RefinedItems%
-	Field Deaf%, DeafTimer#
-	Field Zombie%
-	Field Detected%
-	Field ExplosionTimer#
-	Field Zone%
-	Field Collider%, Head%
-	Field StopHidingTimer#
-	Field Funds%, UsedMastercard%
-End Type
-
-Global me.Player = New Player
-
-Type WearableItems
-	Field GasMask%, GasMaskFogTimer#
-	Field HazmatSuit%
-	Field BallisticVest%
-	Field BallisticHelmet%
-	Field NightVision%, NVGTimer#, IsNVGBlinking%
-	Field SCRAMBLE%
-End Type
-
-Global wi.WearableItems = New WearableItems
-
 RenderLoading(5, GetLocalString("loading", "core.achv"))
 
 Include "Source Code\Achievements_Core.bb"
-
-Global CameraPitch#
-
-Global GrabbedEntity%
-
-Type Cheats
-	Field GodMode%
-	Field NoBlink%
-	Field NoTarget%
-	Field NoClip%, NoClipSpeed#
-	Field InfiniteStamina%
-	Field SuperMan%, SuperManTimer#
-	Field DebugHUD%
-End Type
-
-Global chs.Cheats = New Cheats
-
-Function ClearCheats%()
-	chs\GodMode = False
-	chs\NoBlink = False
-	chs\NoTarget = False
-	chs\NoClip = False
-	chs\NoClipSpeed = 2.0
-	chs\InfiniteStamina = False
-	chs\SuperMan = False
-	chs\SuperManTimer = 0.0
-	chs\DebugHUD = 0
-End Function
-
-Function InitCheats%()
-	chs\GodMode = True
-	chs\NoBlink = True
-	chs\NoTarget = True
-	chs\NoClip = True
-	chs\NoClipSpeed = 2.0
-	chs\InfiniteStamina = True
-	chs\SuperMan = False
-	chs\SuperManTimer = 0.0
-	chs\DebugHUD = Rand(3)
-End Function
-
-Global CoffinDistance# = 100.0
-
-Global SoundTransmission%
-
-Global MainMenuOpen%, MenuOpen%, InvOpen%
 
 RenderLoading(10, GetLocalString("loading", "core.diff"))
 
 Include "Source Code\Difficulty_Core.bb"
 
-Global MTFTimer#
-
-Global RadioState#[9]
-Global RadioState2%[9]
-Global RadioState3%[10]
-
 RenderLoading(15, GetLocalString("loading", "core.loading"))
 
 Include "Source Code\Loading_Core.bb"
 
-Global ConsoleFlush%
-Global ConsoleFlushSnd% = 0, ConsoleMusFlush% = 0, ConsoleMusPlay% = 0
+RenderLoading(20, GetLocalString("loading", "core.subtitle"))
+
+Include "Source Code\Subtitles_Core.bb"
+
+RenderLoading(25, GetLocalString("loading", "core.sound"))
+
+Include "Source Code\Sounds_Core.bb"
+
+RenderLoading(30, GetLocalString("loading", "core.item"))
+
+Include "Source Code\Items_Core.bb"
+
+RenderLoading(35, GetLocalString("loading", "core.particle"))
+
+Include "Source Code\Particles_Core.bb"
+
+RenderLoading(40, GetLocalString("loading", "core.grap"))
+
+Include "Source Code\Graphics_Core.bb"
+
+RenderLoading(45, GetLocalString("loading", "core.map"))
+
+Include "Source Code\Map_Core.bb"
+
+RenderLoading(65, GetLocalString("loading", "core.npc"))
+
+Include "Source Code\NPCs_Core.bb"
+
+RenderLoading(70, GetLocalString("loading", "core.event"))
+
+Include "Source Code\Events_Core.bb"
+
+RenderLoading(75, GetLocalString("loading", "core.save"))
+
+Include "Source Code\Save_Core.bb"
+
+RenderLoading(80, GetLocalString("loading", "core.menu"))
+
+Include "Source Code\Menu_Core.bb"
+
+InitMainMenuAssets()
+MainMenuOpen = True
+ResetInput()
+
+RenderLoading(100)
+
+InitErrorMsgs(12, True)
+SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
+
+SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "os"), SystemProperty("os"), "{0}"), (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32), "{1}"), SystemProperty("osbuild"), "{2}"))
+SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
+
+SetErrorMsg(10, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
+SetErrorMsg(11, GetLocalString("error", "shot")) 
+
+Function CatchErrors%(Location$)
+	SetErrorMsg(9, Format(GetLocalString("error", "error"), Location))
+End Function
+
+Repeat
+	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
+	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
+	
+	Cls()
+	
+	Local ElapsedMilliSecs%
+	
+	fps\CurrTime = MilliSecs()
+	
+	ElapsedMilliSecs = fps\CurrTime - fps\PrevTime
+	If (ElapsedMilliSecs > 0 And ElapsedMilliSecs < 500) Then fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliSecs) * 70.0 / 1000.0)
+	fps\PrevTime = fps\CurrTime
+	
+	If opt\FrameLimit > 0.0
+		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs() - fps\LoopDelay)
+		
+		Delay(WaitingTime)
+		fps\LoopDelay = MilliSecs()
+	EndIf
+	
+	fps\Factor[0] = TICK_DURATION
+	fps\Factor[1] = fps\Factor[0]
+	
+	If MainMenuOpen
+		UpdateMainMenu()
+	Else
+		UpdateGame()
+		If LoadingBack <> 0 Then DebugLog("T")
+	EndIf
+	
+	RenderGamma()
+	
+	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
+	
+	If opt\ShowFPS
+		If fps\Goal < MilliSecs()
+			fps\FPS = fps\TempFPS
+			fps\TempFPS = 0
+			fps\Goal = MilliSecs() + 1000
+		Else
+			fps\TempFPS = fps\TempFPS + 1
+		EndIf
+	EndIf
+	
+	Flip(opt\VSync)
+Forever
+
+Function UpdateGame%()
+	Local e.Events, ev.Events, r.Rooms
+	Local i%, TempStr$
+	Local RN$ = PlayerRoom\RoomTemplate\Name
+	
+	If SelectedCustomMap = Null
+		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
+	Else
+		If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15
+			TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..."
+		Else
+			TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedCustomMap\Name)
+		EndIf
+	EndIf
+	SetErrorMsg(6, TempStr)
+	SetErrorMsg(7, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\Name))
+	
+	For ev.Events = Each Events
+		If ev\room = PlayerRoom
+			SetErrorMsg(8, Format(Format(Format(Format(Format(GetLocalString("misc", "event"), ev\EventID, "{0}"), ev\EventState, "{1}"), ev\EventState2, "{2}"), ev\EventState3, "{3}"), ev\EventState4, "{4}") + Chr(10))
+			Exit
+		EndIf
+	Next
+	
+	CatchErrors("UpdateGame()")
+	
+	While fps\Accumulator > 0.0
+		fps\Accumulator = fps\Accumulator - TICK_DURATION
+		If fps\Accumulator <= 0.0 Then CaptureWorld()
+		
+		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
+		
+		UpdateMouseInput()
+		
+		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
+		
+		If ShouldDeleteGadgets Then DeleteMenuGadgets()
+		ShouldDeleteGadgets = False
+		
+		UpdateMusic()
+		If opt\EnableSFXRelease Then AutoReleaseSounds()
+		
+		UpdateStreamSounds()
+		
+		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
+			DrawHandIcon = False
+			For i = 0 To 2 Step 2
+				DrawArrowIcon[i] = False
+				DrawArrowIcon[i + 1] = False
+			Next
+			
+			me\RestoreSanity = True
+			ShouldEntitiesFall = True
+			
+			If PlayerInReachableRoom(False, True)
+				UpdateSecurityCams()
+				
+				ShouldPlay = Min(me\Zone, 2.0)
+				
+				If Rand(1500) = 1
+					For i = 0 To 5
+						If AmbientSFX(i, CurrAmbientSFX) <> 0
+							If (Not ChannelPlaying(AmbientSFXCHN)) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
+						EndIf
+					Next
+					
+					PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
+					
+					If Rand(3) = 1 Then me\Zone = 3
+					
+					If RN = "cont1_173_intro"
+						me\Zone = 4
+					ElseIf forest_event <> Null
+						If PlayerRoom = forest_event\room
+							If forest_event\EventState = 1.0
+								me\Zone = 5
+								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
+							EndIf
+						EndIf
+					EndIf
+					
+					CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
+					
+					Select me\Zone
+						Case 0, 1, 2
+							;[Block]
+							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							;[End Block]
+						Case 3
+							;[Block]
+							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							;[End Block]
+						Case 4
+							;[Block]
+							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							;[End Block]
+						Case 5
+							;[Block]
+							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
+							;[End Block]
+					End Select
+					
+					AmbientSFXCHN = PlaySound2(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
+				EndIf
+				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
+				
+				If Rand(50000) = 3
+					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 36.0 Then me\LightBlink = Rnd(1.0, 2.0)
+					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"), True)
+				EndIf
+			EndIf
+			
+			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
+			
+			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
+			UpdateZoneColor()
+			UpdateDeaf()
+			UpdateEmitters()
+			UpdateDecals()
+			UpdateMouseLook()
+			UpdateMoving()
+			UpdateSaveState()
+			UpdateVomit()
+			UpdateEscapeTimer()
+			InFacility = CheckForPlayerInFacility()
+			DecalStep = 0
+			If RN = "dimension_1499"
+				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
+				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
+				UpdateLeave1499()
+			ElseIf RN = "dimension_106"
+				UpdateSoundEmitters(PlayerRoom)
+				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
+			Else
+				UpdateDoors()
+				UpdateScreens()
+				UpdateRoomLights()
+				If IsPlayerOutsideFacility()
+					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
+				Else
+					UpdateRooms()
+					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEvents()
+				EndIf
+				TimeCheckpointMonitors()
+				UpdateMonitorSaving()
+			EndIf
+			UpdateMTF()
+			UpdateNPCs()
+			UpdateItems()
+			UpdateParticles()
+			Update268()
+			Update427()
+			
+			If chs\InfiniteStamina Then me\Stamina = 100.0
+			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
+			
+			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
+			If me\BlurTimer > 0.0
+				me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
+				me\BlurTimer = Max(me\BlurTimer - fps\Factor[0], 0.0)
+			EndIf
+			
+			Local DarkAlpha# = 0.0
+			
+			If me\Sanity < 0.0
+				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\Factor[0], 0.0)
+				If me\Sanity < -200.0
+					DarkAlpha = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkAlpha)
+					If (Not me\Terminated)
+						me\HeartBeatVolume = Min(Abs(me\Sanity + 20.00) / 500.0, 1.0)
+						me\HeartBeatRate = Max(70.0 + Abs(me\Sanity + 200.0) / 6.0, me\HeartBeatRate)
+					EndIf
+				EndIf
+			EndIf
+			
+			If me\EyeStuck > 0.0
+				me\BlinkTimer = me\BLINKFREQ
+				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
+				
+				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
+				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
+				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
+			EndIf
+			
+			If me\BlinkTimer < 0.0
+				If me\BlinkTimer > -5.0
+					DarkAlpha = Max(DarkAlpha, Sin(Abs(me\BlinkTimer * 18.0)))
+				ElseIf me\BlinkTimer > -15.0
+					DarkAlpha = 1.0
+				Else
+					DarkAlpha = Max(DarkAlpha, Abs(Sin(me\BlinkTimer * 18.0)))
+				EndIf
+				
+				If me\BlinkTimer <= -20.0
+					; ~ Randomizes the frequency of blinking. Scales with difficulty
+					Select SelectedDifficulty\OtherFactors
+						Case EASY
+							;[Block]
+							me\BLINKFREQ = Rnd(490.0, 700.0)
+							;[End Block]
+						Case NORMAL
+							;[Block]
+							me\BLINKFREQ = Rnd(455.0, 665.0)
+							;[End Block]
+						Case HARD
+							;[Block]
+							me\BLINKFREQ = Rnd(420.0, 630.0)
+							;[End Block]
+						Case EXTREME
+							;[Block]
+							me\BLINKFREQ = Rnd(200.0, 400.0)
+							;[End Block]
+					End Select
+					me\BlinkTimer = me\BLINKFREQ
+					If (Not (RN = "room3_storage" And EntityY(me\Collider) =< (-4100.0) * RoomScale)) Then me\BlurTimer = Max(me\BlurTimer - Rnd(50.0, 150.0), 0.0)
+				EndIf
+				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
+			Else
+				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * 0.6 * me\BlinkEffect)
+				If wi\NightVision = 0 And wi\SCRAMBLE = 0
+					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
+				EndIf
+			EndIf
+			
+			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\Factor[0])
+			
+			If me\BlinkEffectTimer > 0.0
+				me\BlinkEffectTimer = me\BlinkEffectTimer - (fps\Factor[0] / 70.0)
+			Else
+				me\BlinkEffect = 1.0
+			EndIf
+			
+			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
+			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkAlpha = Min(Max(DarkAlpha, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
+			
+			If I_294\Using Then DarkAlpha = 1.0
+			
+			If wi\NightVision = 0 Then DarkAlpha = Max((1.0 - SecondaryLightOn) * 0.9, DarkAlpha)
+			
+			If me\Terminated
+				NullSelectedStuff()
+				me\BlurTimer = me\KillAnimTimer * 5.0
+				If me\SelectedEnding <> -1
+					MenuOpen = True
+					me\EndingTimer = (-me\Terminated) * 0.1
+				Else
+					me\KillAnimTimer = me\KillAnimTimer + fps\Factor[0]
+					If me\KillAnimTimer >= 400.0 Then MenuOpen = True
+				EndIf
+				DarkAlpha = Max(DarkAlpha, Min(Abs(me\Terminated / 400.0), 1.0))
+			Else
+				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
+				me\KillAnimTimer = 0.0
+			EndIf
+			
+			If me\FallTimer < 0.0
+				NullSelectedStuff()
+				me\BlurTimer = Abs(me\FallTimer * 10.0)
+				me\FallTimer = me\FallTimer - fps\Factor[0]
+				DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))
+			EndIf
+			
+			If me\LightFlash > 0.0
+				If EntityHidden(t\OverlayID[6]) Then ShowEntity(t\OverlayID[6])
+				EntityAlpha(t\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
+				me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
+			Else
+				If (Not EntityHidden(t\OverlayID[6])) Then HideEntity(t\OverlayID[6])
+			EndIf
+			
+			If (Not (SelectedItem = Null Lor InvOpen Lor OtherOpen <> Null))
+				If IsItemInFocus() Then DarkAlpha = Max(DarkAlpha, 0.5)
+			EndIf
+			
+			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
+			
+			If DarkAlpha <> 0.0
+				If EntityHidden(t\OverlayID[5]) Then ShowEntity(t\OverlayID[5])
+				EntityAlpha(t\OverlayID[5], DarkAlpha)
+			Else
+				If (Not EntityHidden(t\OverlayID[5])) Then HideEntity(t\OverlayID[5])
+			EndIf
+		EndIf
+		
+		If fps\Factor[0] = 0.0
+			UpdateWorld(0.0)
+		Else
+			UpdateWorld()
+			ManipulateNPCBones()
+		EndIf
+		
+		UpdateWorld2()
+		
+		UpdateGUI()
+		
+		If KeyHit(key\INVENTORY)
+			If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1
+				If InvOpen
+					StopMouseMovement()
+				Else
+					mo\DoubleClickSlot = -1
+				EndIf
+				InvOpen = (Not InvOpen)
+				OtherOpen = Null
+				SelectedItem = Null
+			EndIf
+		EndIf
+		
+		If KeyHit(key\SAVE)
+			If SelectedDifficulty\SaveType < SAVE_ON_QUIT
+				If CanSave = 0 ; ~ Scripted location
+					CreateHintMsg(GetLocalString("save", "failed.now"))
+				ElseIf CanSave = 1 ; ~ Endings / Intro location
+					CreateHintMsg(GetLocalString("save", "failed.location"))
+					If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
+				ElseIf as\Timer <= 70.0 * 5.0
+					CancelAutoSave()
+				ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
+						CreateHintMsg(GetLocalString("save", "failed.screen"))
+					Else
+						SaveGame(CurrSave\Name) ; Can save at screen
+					EndIf
+				Else
+					SaveGame(CurrSave\Name) ; Can save
+				EndIf
+			Else
+				CreateHintMsg(GetLocalString("save", "disable"))
+			EndIf
+		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
+			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
+			If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
+		EndIf
+		UpdateAutoSave()
+		
+		If KeyHit(key\CONSOLE)
+			If opt\CanOpenConsole
+				If ConsoleOpen
+					UsedConsole = True
+					ResumeSounds()
+					StopMouseMovement()
+					ShouldDeleteGadgets = True
+				Else
+					PauseSounds()
+				EndIf
+				ConsoleOpen = (Not ConsoleOpen)
+				FlushKeys()
+			EndIf
+		EndIf
+		
+		UpdateMessages()
+		UpdateHintMessages()
+		UpdateSubtitles()
+		
+		UpdateConsole()
+		
+		UpdateQuickLoading()
+		
+		UpdateAchievementMsg()
+		
+		If me\EndingTimer < 0.0
+			If me\SelectedEnding <> -1 Then UpdateEnding()
+		Else
+			If me\SelectedEnding = -1 Then UpdateMenu()
+		EndIf
+	Wend
+	
+	; ~ Go out of function immediately if the game has been quit
+	If MainMenuOpen Then Return
+	
+	RenderGame()
+	
+	CatchErrors("Uncaught: UpdateGame()")
+End Function
+
+Function RenderGame%()
+	CatchErrors("RenderGame()")
+	
+	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
+	
+	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
+	
+	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\EndingTimer < 0.0))
+		RenderRoomLights(Camera)
+	EndIf
+	
+	RenderBlur(me\BlurVolume)
+	
+	RenderGUI()
+	
+	RenderMessages()
+	RenderHintMessages()
+	RenderSubtitles()
+	
+	RenderConsole()
+	
+	RenderQuickLoading()
+	
+	RenderAchievementMsg()
+	
+	If me\EndingTimer < 0.0
+		If me\SelectedEnding <> -1 Then RenderEnding()
+	Else
+		If me\SelectedEnding = -1 Then RenderMenu()
+	EndIf
+	
+	CatchErrors("Uncaught: RenderGame()")
+End Function
+
+Global WireFrameState%
 
 Global ConsoleOpen%, ConsoleInput$
 Global ConsoleScroll#, ConsoleScrollDragging%
 Global ConsoleMouseMem%
 Global ConsoleReissue.ConsoleMsg = Null
-Global ConsoleR% = 255, ConsoleG% = 255, ConsoleB% = 255
+Global ConsoleR%, ConsoleG%, ConsoleB%
 
 Type ConsoleMsg
 	Field Txt$
@@ -268,6 +704,115 @@ Function CreateConsoleMultiMsg%(Txt$, R% = -1, G% = -1, B% = -1, IsCommand% = Fa
 		Txt = Right(Txt, Len(Txt) - Instr(Txt, "\n") - 1)
 	Wend
 	CreateConsoleMsg(Txt, R, G, B, IsCommand)
+End Function
+
+Type Cheats
+	Field GodMode%
+	Field NoBlink%
+	Field NoTarget%
+	Field NoClip%, NoClipSpeed#
+	Field InfiniteStamina%
+	Field SuperMan%, SuperManTimer#
+	Field DebugHUD%
+End Type
+
+Global chs.Cheats
+
+Function ClearCheats%()
+	chs\GodMode = False
+	chs\NoBlink = False
+	chs\NoTarget = False
+	chs\NoClip = False
+	chs\InfiniteStamina = False
+	chs\SuperMan = False
+	chs\SuperManTimer = 0.0
+	chs\DebugHUD = 0
+End Function
+
+Function InitCheats%()
+	chs\GodMode = True
+	chs\NoBlink = True
+	chs\NoTarget = True
+	chs\NoClip = True
+	chs\InfiniteStamina = True
+	chs\SuperMan = False
+	chs\SuperManTimer = 0.0
+	chs\DebugHUD = Rand(3)
+End Function
+
+Function ResetNegativeStats%(Revive% = False)
+	Local e.Events
+	Local i%
+	
+	me\Injuries = 0.0
+	me\Bloodloss = 0.0
+	
+	me\BlurTimer = 0.0
+	me\LightFlash = 0.0
+	me\LightBlink = 0.0
+	me\CameraShake = 0.0
+	
+	me\DeafTimer = 0.0
+	
+	me\DeathTimer = 0.0
+	
+	me\VomitTimer = 0.0
+	me\HeartBeatVolume = 0.0
+	
+	If me\BlinkEffect > 1.0
+		me\BlinkEffect = 1.0
+		me\BlinkEffectTimer = 0.0
+	EndIf
+	
+	If me\StaminaEffect > 1.0
+		me\StaminaEffect = 1.0
+		me\StaminaEffectTimer = 0.0
+	EndIf
+	me\Stamina = 100.0
+	
+	For i = 0 To 6
+		I_1025\State[i] = 0.0
+	Next
+	
+	If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
+	I_008\Timer = 0.0
+	I_409\Timer = 0.0
+	
+	If Revive
+		ClearCheats()
+		
+		; ~ If death by SCP-173 or SCP-106, enable GodMode, prevent instant death again -- Salvage
+		If n_I\Curr173\Idle = 1
+			CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-173"))
+			chs\GodMode = True
+			n_I\Curr173\Idle = 0
+		EndIf
+		If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 4.0
+			CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-106"))
+			chs\GodMode = True
+		EndIf
+		If n_I\Curr049 <> Null
+			n_I\Curr049\State = 1.0 ; ~ Reset SCP-049
+			If EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) < 4.0
+				CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-049"))
+				chs\GodMode = True
+			EndIf
+		EndIf
+		
+		me\DropSpeed = -0.1
+		me\HeadDropSpeed = 0.0
+		me\Shake = 0.0
+		me\CurrSpeed = 0.0
+		
+		me\FallTimer = 0.0
+		MenuOpen = False
+		
+		HideEntity(me\Head)
+		ShowEntity(me\Collider)
+		
+		me\Terminated = False
+		me\KillAnim = 0
+	EndIf
 End Function
 
 Function UpdateConsole%()
@@ -1680,8 +2225,6 @@ Function OpenConsoleOnError%()
 	ConsoleOpen = True
 End Function
 
-Global SubjectName$ = GetLocalString("misc", "subject")
-
 Type Messages
 	Field Txt$
 	Field Timer#
@@ -1792,638 +2335,6 @@ Function RenderHintMessages%()
 	EndIf
 End Function
 
-Global Camera%
-
-RenderLoading(20, GetLocalString("loading", "core.subtitle"))
-
-Include "Source Code\Subtitles_Core.bb"
-
-RenderLoading(25, GetLocalString("loading", "core.sound"))
-
-Include "Source Code\Sounds_Core.bb"
-
-Global InFacility% = True
-
-Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
-
-RenderLoading(30, GetLocalString("loading", "core.item"))
-
-Include "Source Code\Items_Core.bb"
-
-RenderLoading(35, GetLocalString("loading", "core.particle"))
-
-Include "Source Code\Particles_Core.bb"
-
-RenderLoading(40, GetLocalString("loading", "core.grap"))
-
-Include "Source Code\Graphics_Core.bb"
-
-RenderLoading(45, GetLocalString("loading", "core.map"))
-
-Include "Source Code\Map_Core.bb"
-
-RenderLoading(65, GetLocalString("loading", "core.npc"))
-
-Include "Source Code\NPCs_Core.bb"
-
-RenderLoading(70, GetLocalString("loading", "core.event"))
-
-Include "Source Code\Events_Core.bb"
-
-; ~ Collisions Constants
-;[Block]
-Const HIT_MAP% = 1
-Const HIT_PLAYER% = 2
-Const HIT_ITEM% = 3
-Const HIT_APACHE% = 4
-Const HIT_DEAD% = 5
-;[End Block]
-
-Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
-Collisions(HIT_PLAYER, HIT_PLAYER, 1, 3)
-Collisions(HIT_ITEM, HIT_MAP, 2, 2)
-Collisions(HIT_APACHE, HIT_APACHE, 1, 2)
-Collisions(HIT_DEAD, HIT_MAP, 2, 2)
-
-Global ShouldEntitiesFall% = True
-Global PlayerFallingPickDistance# = 10.0
-
-Global MTFCameraCheckTimer# = 0.0
-Global MTFCameraCheckDetected% = False
-
-RenderLoading(75, GetLocalString("loading", "core.save"))
-
-Include "Source Code\Save_Core.bb"
-
-RenderLoading(80, GetLocalString("loading", "core.menu"))
-
-Include "Source Code\Menu_Core.bb"
-
-InitMainMenuAssets()
-MainMenuOpen = True
-
-ResetInput()
-
-RenderLoading(100)
-
-Global Input_ResetTime# = 0.0
-
-Type SCP005
-	Field ChanceToSpawn%
-End Type
-
-Global I_005.SCP005
-
-Type SCP008
-	Field Timer#
-	Field Revert%
-End Type
-
-Global I_008.SCP008
-
-Type SCP035
-	Field Sad%
-End Type
-
-Global I_035.SCP035
-
-Type SCP294
-	Field Using%
-	Field ToInput$
-End Type
-
-Global I_294.SCP294
-
-Type SCP268
-	Field Using%
-	Field Timer#
-	Field InvisibilityOn%
-End Type
-
-Global I_268.SCP268
-
-Type SCP409
-	Field Timer#
-	Field Revert%
-End Type
-
-Global I_409.SCP409
-
-Type SCP427
-	Field Using%
-	Field Timer#
-	Field Sound%[2]
-	Field SoundCHN%[2]
-End Type
-
-Global I_427.SCP427
-
-Type SCP714
-	Field Using%
-End Type
-
-Global I_714.SCP714
-
-Type SCP1025
-	Field State#[8]
-End Type
-
-Global I_1025.SCP1025
-
-Type SCP1499
-	Field Using%
-	Field PrevX#, PrevY#, PrevZ#
-	Field PrevRoom.Rooms
-	Field x#, y#, z#
-	Field Sky%
-End Type
-
-Global I_1499.SCP1499
-
-Type SCP500
-	Field Taken%
-End Type
-
-Global I_500.SCP500
-
-Type MapZones
-	Field Transition%[2]
-	Field HasCustomForest%
-	Field HasCustomMT%
-End Type
-
-Global I_Zone.MapZones
-
-InitErrorMsgs(12, True)
-SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
-
-SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "os"), SystemProperty("os"), "{0}"), (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32), "{1}"), SystemProperty("osbuild"), "{2}"))
-SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
-
-SetErrorMsg(10, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
-SetErrorMsg(11, GetLocalString("error", "shot")) 
-
-Function CatchErrors%(Location$)
-	SetErrorMsg(9, Format(GetLocalString("error", "error"), Location))
-End Function
-
-Repeat
-	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
-	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
-	
-	Cls()
-	
-	Local ElapsedMilliSecs%
-	
-	fps\CurrTime = MilliSecs()
-	
-	ElapsedMilliSecs = fps\CurrTime - fps\PrevTime
-	If (ElapsedMilliSecs > 0 And ElapsedMilliSecs < 500) Then fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliSecs) * 70.0 / 1000.0)
-	fps\PrevTime = fps\CurrTime
-	
-	If opt\FrameLimit > 0.0
-		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs() - fps\LoopDelay)
-		
-		Delay(WaitingTime)
-		fps\LoopDelay = MilliSecs()
-	EndIf
-	
-	fps\Factor[0] = TICK_DURATION
-	fps\Factor[1] = fps\Factor[0]
-	
-	If MainMenuOpen
-		UpdateMainMenu()
-	Else
-		UpdateGame()
-	EndIf
-	
-	RenderGamma()
-	
-	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
-	
-	If opt\ShowFPS
-		If fps\Goal < MilliSecs()
-			fps\FPS = fps\TempFPS
-			fps\TempFPS = 0
-			fps\Goal = MilliSecs() + 1000
-		Else
-			fps\TempFPS = fps\TempFPS + 1
-		EndIf
-	EndIf
-	
-	Flip(opt\VSync)
-Forever
-
-Function UpdateGame%()
-	Local e.Events, ev.Events, r.Rooms
-	Local i%, TempStr$
-	Local RN$ = PlayerRoom\RoomTemplate\Name
-	
-	If SelectedCustomMap = Null
-		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
-	Else
-		If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15
-			TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..."
-		Else
-			TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedCustomMap\Name)
-		EndIf
-	EndIf
-	SetErrorMsg(6, TempStr)
-	SetErrorMsg(7, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\Name))
-	
-	For ev.Events = Each Events
-		If ev\room = PlayerRoom
-			SetErrorMsg(8, Format(Format(Format(Format(Format(GetLocalString("misc", "event"), ev\EventID, "{0}"), ev\EventState, "{1}"), ev\EventState2, "{2}"), ev\EventState3, "{3}"), ev\EventState4, "{4}") + Chr(10))
-			Exit
-		EndIf
-	Next
-	
-	CatchErrors("UpdateGame()")
-	
-	While fps\Accumulator > 0.0
-		fps\Accumulator = fps\Accumulator - TICK_DURATION
-		If fps\Accumulator <= 0.0 Then CaptureWorld()
-		
-		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
-		
-		UpdateMouseInput()
-		
-		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
-		
-		If ShouldDeleteGadgets Then DeleteMenuGadgets()
-		ShouldDeleteGadgets = False
-		
-		UpdateMusic()
-		If opt\EnableSFXRelease Then AutoReleaseSounds()
-		
-		UpdateStreamSounds()
-		
-		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
-			DrawHandIcon = False
-			For i = 0 To 2 Step 2
-				DrawArrowIcon[i] = False
-				DrawArrowIcon[i + 1] = False
-			Next
-			
-			me\RestoreSanity = True
-			ShouldEntitiesFall = True
-			
-			If PlayerInReachableRoom(False, True)
-				UpdateSecurityCams()
-				
-				ShouldPlay = Min(me\Zone, 2.0)
-				
-				If Rand(1500) = 1
-					For i = 0 To 5
-						If AmbientSFX(i, CurrAmbientSFX) <> 0
-							If (Not ChannelPlaying(AmbientSFXCHN)) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
-						EndIf
-					Next
-					
-					PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
-					
-					If Rand(3) = 1 Then me\Zone = 3
-					
-					If RN = "cont1_173_intro"
-						me\Zone = 4
-					ElseIf forest_event <> Null
-						If PlayerRoom = forest_event\room
-							If forest_event\EventState = 1.0
-								me\Zone = 5
-								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-							EndIf
-						EndIf
-					EndIf
-					
-					CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
-					
-					Select me\Zone
-						Case 0, 1, 2
-							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-							;[End Block]
-						Case 3
-							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-							;[End Block]
-						Case 4
-							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-							;[End Block]
-						Case 5
-							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + (CurrAmbientSFX + 1) + ".ogg")
-							;[End Block]
-					End Select
-					
-					AmbientSFXCHN = PlaySound2(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
-				EndIf
-				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
-				
-				If Rand(50000) = 3
-					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 36.0 Then me\LightBlink = Rnd(1.0, 2.0)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"), True)
-				EndIf
-			EndIf
-			
-			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
-			
-			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
-			UpdateZoneColor()
-			UpdateDeaf()
-			UpdateEmitters()
-			UpdateDecals()
-			UpdateMouseLook()
-			UpdateMoving()
-			UpdateSaveState()
-			UpdateVomit()
-			UpdateEscapeTimer()
-			InFacility = CheckForPlayerInFacility()
-			DecalStep = 0
-			If RN = "dimension_1499"
-				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
-				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
-				UpdateLeave1499()
-			ElseIf RN = "dimension_106"
-				UpdateSoundEmitters(PlayerRoom)
-				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
-			Else
-				UpdateDoors()
-				UpdateScreens()
-				UpdateRoomLights()
-				If IsPlayerOutsideFacility()
-					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
-				Else
-					UpdateRooms()
-					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEvents()
-				EndIf
-				TimeCheckpointMonitors()
-				UpdateMonitorSaving()
-			EndIf
-			UpdateMTF()
-			UpdateNPCs()
-			UpdateItems()
-			UpdateParticles()
-			Use268()
-			Use427()
-			
-			If chs\InfiniteStamina Then me\Stamina = 100.0
-			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
-			
-			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
-			If me\BlurTimer > 0.0
-				me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
-				me\BlurTimer = Max(me\BlurTimer - fps\Factor[0], 0.0)
-			EndIf
-			
-			Local DarkAlpha# = 0.0
-			
-			If me\Sanity < 0.0
-				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\Factor[0], 0.0)
-				If me\Sanity < -200.0
-					DarkAlpha = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkAlpha)
-					If (Not me\Terminated)
-						me\HeartBeatVolume = Min(Abs(me\Sanity + 20.00) / 500.0, 1.0)
-						me\HeartBeatRate = Max(70.0 + Abs(me\Sanity + 200.0) / 6.0, me\HeartBeatRate)
-					EndIf
-				EndIf
-			EndIf
-			
-			If me\EyeStuck > 0.0
-				me\BlinkTimer = me\BLINKFREQ
-				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
-				
-				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
-				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
-				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
-			EndIf
-			
-			If me\BlinkTimer < 0.0
-				If me\BlinkTimer > -5.0
-					DarkAlpha = Max(DarkAlpha, Sin(Abs(me\BlinkTimer * 18.0)))
-				ElseIf me\BlinkTimer > -15.0
-					DarkAlpha = 1.0
-				Else
-					DarkAlpha = Max(DarkAlpha, Abs(Sin(me\BlinkTimer * 18.0)))
-				EndIf
-				
-				If me\BlinkTimer <= -20.0
-					; ~ Randomizes the frequency of blinking. Scales with difficulty
-					Select SelectedDifficulty\OtherFactors
-						Case EASY
-							;[Block]
-							me\BLINKFREQ = Rnd(490.0, 700.0)
-							;[End Block]
-						Case NORMAL
-							;[Block]
-							me\BLINKFREQ = Rnd(455.0, 665.0)
-							;[End Block]
-						Case HARD
-							;[Block]
-							me\BLINKFREQ = Rnd(420.0, 630.0)
-							;[End Block]
-						Case EXTREME
-							;[Block]
-							me\BLINKFREQ = Rnd(200.0, 400.0)
-							;[End Block]
-					End Select
-					me\BlinkTimer = me\BLINKFREQ
-					If (Not (RN = "room3_storage" And EntityY(me\Collider) =< (-4100.0) * RoomScale)) Then me\BlurTimer = Max(me\BlurTimer - Rnd(50.0, 150.0), 0.0)
-				EndIf
-				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
-			Else
-				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * 0.6 * me\BlinkEffect)
-				If wi\NightVision = 0 And wi\SCRAMBLE = 0
-					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
-				EndIf
-			EndIf
-			
-			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\Factor[0])
-			
-			If me\BlinkEffectTimer > 0.0
-				me\BlinkEffectTimer = me\BlinkEffectTimer - (fps\Factor[0] / 70.0)
-			Else
-				me\BlinkEffect = 1.0
-			EndIf
-			
-			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
-			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkAlpha = Min(Max(DarkAlpha, me\LightBlink * Rnd(0.3, 0.8)), 1.0)
-			
-			If I_294\Using Then DarkAlpha = 1.0
-			
-			If wi\NightVision = 0 Then DarkAlpha = Max((1.0 - SecondaryLightOn) * 0.9, DarkAlpha)
-			
-			If me\Terminated
-				NullSelectedStuff()
-				me\BlurTimer = me\KillAnimTimer * 5.0
-				If me\SelectedEnding <> -1
-					MenuOpen = True
-					me\EndingTimer = (-me\Terminated) * 0.1
-				Else
-					me\KillAnimTimer = me\KillAnimTimer + fps\Factor[0]
-					If me\KillAnimTimer >= 400.0 Then MenuOpen = True
-				EndIf
-				DarkAlpha = Max(DarkAlpha, Min(Abs(me\Terminated / 400.0), 1.0))
-			Else
-				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
-				me\KillAnimTimer = 0.0
-			EndIf
-			
-			If me\FallTimer < 0.0
-				NullSelectedStuff()
-				me\BlurTimer = Abs(me\FallTimer * 10.0)
-				me\FallTimer = me\FallTimer - fps\Factor[0]
-				DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))
-			EndIf
-			
-			If me\LightFlash > 0.0
-				If EntityHidden(t\OverlayID[6]) Then ShowEntity(t\OverlayID[6])
-				EntityAlpha(t\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
-				me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
-			Else
-				If (Not EntityHidden(t\OverlayID[6])) Then HideEntity(t\OverlayID[6])
-			EndIf
-			
-			If (Not (SelectedItem = Null Lor InvOpen Lor OtherOpen <> Null))
-				If IsItemInFocus() Then DarkAlpha = Max(DarkAlpha, 0.5)
-			EndIf
-			
-			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
-			
-			If DarkAlpha <> 0.0
-				If EntityHidden(t\OverlayID[5]) Then ShowEntity(t\OverlayID[5])
-				EntityAlpha(t\OverlayID[5], DarkAlpha)
-			Else
-				If (Not EntityHidden(t\OverlayID[5])) Then HideEntity(t\OverlayID[5])
-			EndIf
-		EndIf
-		
-		If fps\Factor[0] = 0.0
-			UpdateWorld(0.0)
-		Else
-			UpdateWorld()
-			ManipulateNPCBones()
-		EndIf
-		
-		UpdateWorld2()
-		
-		UpdateGUI()
-		
-		If KeyHit(key\INVENTORY)
-			If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1
-				If InvOpen
-					StopMouseMovement()
-				Else
-					mo\DoubleClickSlot = -1
-				EndIf
-				InvOpen = (Not InvOpen)
-				OtherOpen = Null
-				SelectedItem = Null
-			EndIf
-		EndIf
-		
-		If KeyHit(key\SAVE)
-			If SelectedDifficulty\SaveType < SAVE_ON_QUIT
-				If CanSave = 0 ; ~ Scripted location
-					CreateHintMsg(GetLocalString("save", "failed.now"))
-				ElseIf CanSave = 1 ; ~ Endings / Intro location
-					CreateHintMsg(GetLocalString("save", "failed.location"))
-					If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
-				ElseIf as\Timer <= 70.0 * 5.0
-					CancelAutoSave()
-				ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
-						CreateHintMsg(GetLocalString("save", "failed.screen"))
-					Else
-						SaveGame(CurrSave\Name) ; Can save at screen
-					EndIf
-				Else
-					SaveGame(CurrSave\Name) ; Can save
-				EndIf
-			Else
-				CreateHintMsg(GetLocalString("save", "disable"))
-			EndIf
-		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
-			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
-			If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
-		EndIf
-		UpdateAutoSave()
-		
-		If KeyHit(key\CONSOLE)
-			If opt\CanOpenConsole
-				If ConsoleOpen
-					UsedConsole = True
-					ResumeSounds()
-					StopMouseMovement()
-					ShouldDeleteGadgets = True
-				Else
-					PauseSounds()
-				EndIf
-				ConsoleOpen = (Not ConsoleOpen)
-				FlushKeys()
-			EndIf
-		EndIf
-		
-		UpdateMessages()
-		UpdateHintMessages()
-		UpdateSubtitles()
-		
-		UpdateConsole()
-		
-		UpdateQuickLoading()
-		
-		UpdateAchievementMsg()
-		
-		If me\EndingTimer < 0.0
-			If me\SelectedEnding <> -1 Then UpdateEnding()
-		Else
-			If me\SelectedEnding = -1 Then UpdateMenu()
-		EndIf
-	Wend
-	
-	; ~ Go out of function immediately if the game has been quit
-	If MainMenuOpen Then Return
-	
-	RenderGame()
-	
-	CatchErrors("Uncaught: UpdateGame()")
-End Function
-
-Function RenderGame%()
-	CatchErrors("RenderGame()")
-	
-	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
-	
-	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
-	
-	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\EndingTimer < 0.0))
-		RenderRoomLights(Camera)
-	EndIf
-	
-	RenderBlur(me\BlurVolume)
-	
-	RenderGUI()
-	
-	RenderMessages()
-	RenderHintMessages()
-	RenderSubtitles()
-	
-	RenderConsole()
-	
-	RenderQuickLoading()
-	
-	RenderAchievementMsg()
-	
-	If me\EndingTimer < 0.0
-		If me\SelectedEnding <> -1 Then RenderEnding()
-	Else
-		If me\SelectedEnding = -1 Then RenderMenu()
-	EndIf
-	
-	CatchErrors("Uncaught: RenderGame()")
-End Function
-
 Function Kill%(IsBloody% = False)
 	If chs\GodMode Then Return
 	
@@ -2455,109 +2366,42 @@ Function Kill%(IsBloody% = False)
 	EndIf
 End Function
 
-Function StopMouseMovement%()
-	MouseXSpeed() : MouseYSpeed() : MouseZSpeed()
-	mo\Mouse_X_Speed_1 = 0.0
-	mo\Mouse_Y_Speed_1 = 0.0
+Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
+	me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.4) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
+	me\BlurTimer = me\BlurTimer + BlurTimer_
+	I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
-Function ResetInput%()
-	FlushKeys()
-	FlushMouse()
-	mo\MouseHit1 = False
-	mo\MouseHit2 = False
-	mo\MouseDown1 = False
-	mo\MouseUp1 = False
-	mo\LastMouseHit1 = False
-	GrabbedEntity = 0
-	Input_ResetTime = 10.0
-End Function
-
-Function NullSelectedStuff%()
-	InvOpen = False
-	I_294\Using = False
-	d_I\SelectedDoor = Null
-	SelectedScreen = Null
-	sc_I\SelectedMonitor = Null
-	SelectedItem = Null
-	OtherOpen = Null
-	d_I\ClosestButton = 0
-	GrabbedEntity = 0
-End Function
-
-Function ResetNegativeStats%(Revive% = False)
-	Local e.Events
-	Local i%
-	
-	me\Injuries = 0.0
-	me\Bloodloss = 0.0
-	
-	me\BlurTimer = 0.0
-	me\LightFlash = 0.0
-	me\LightBlink = 0.0
-	me\CameraShake = 0.0
-	
-	me\DeafTimer = 0.0
-	
-	me\DeathTimer = 0.0
-	
-	me\VomitTimer = 0.0
-	me\HeartBeatVolume = 0.0
-	
-	If me\BlinkEffect > 1.0
-		me\BlinkEffect = 1.0
-		me\BlinkEffectTimer = 0.0
-	EndIf
-	
-	If me\StaminaEffect > 1.0
-		me\StaminaEffect = 1.0
-		me\StaminaEffectTimer = 0.0
-	EndIf
-	me\Stamina = 100.0
-	
-	For i = 0 To 6
-		I_1025\State[i] = 0.0
-	Next
-	
-	If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
-	I_008\Timer = 0.0
-	I_409\Timer = 0.0
-	
-	If Revive
-		ClearCheats()
-		
-		; ~ If death by SCP-173 or SCP-106, enable GodMode, prevent instant death again -- Salvage
-		If n_I\Curr173\Idle = 1
-			CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-173"))
-			chs\GodMode = True
-			n_I\Curr173\Idle = 0
+Function UpdateCough%(Chance_%)
+	If (Not me\Terminated)
+		If Rand(Chance_) = 1
+			If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
 		EndIf
-		If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 4.0
-			CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-106"))
-			chs\GodMode = True
-		EndIf
-		If n_I\Curr049 <> Null
-			n_I\Curr049\State = 1.0 ; ~ Reset SCP-049
-			If EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) < 4.0
-				CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-049"))
-				chs\GodMode = True
+	EndIf
+End Function
+
+Function MakeMeUnplayable%()
+	If me\Playable
+		NullSelectedStuff()
+		me\Playable = False
+	EndIf
+End Function
+
+Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% = False)
+	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
+	
+	If EntityDistanceSquared(me\Collider, OBJ) < Dist
+		If EntityInView(OBJ, Camera)
+			DrawArrowIcon[ArrowID] = Arrow
+			DrawHandIcon = True
+			If MouseDown_
+				If mo\MouseDown1 Then Return(True)
+			Else
+				If mo\MouseHit1 Then Return(True)
 			EndIf
 		EndIf
-		
-		me\DropSpeed = -0.1
-		me\HeadDropSpeed = 0.0
-		me\Shake = 0.0
-		me\CurrSpeed = 0.0
-		
-		me\FallTimer = 0.0
-		MenuOpen = False
-		
-		HideEntity(me\Head)
-		ShowEntity(me\Collider)
-		
-		me\Terminated = False
-		me\KillAnim = 0
 	EndIf
+	Return(False)
 End Function
 
 Function SetCrouch%(NewCrouch%)
@@ -2579,27 +2423,6 @@ Function SetCrouch%(NewCrouch%)
 			
 			me\Crouch = NewCrouch
 		EndIf
-	EndIf
-End Function
-
-Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
-	me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.4) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
-	me\BlurTimer = me\BlurTimer + BlurTimer_
-	I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
-End Function
-
-Function UpdateCough%(Chance_%)
-	If (Not me\Terminated)
-		If Rand(Chance_) = 1
-			If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
-		EndIf
-	EndIf
-End Function
-
-Function MakeMeUnplayable%()
-	If me\Playable
-		NullSelectedStuff()
-		me\Playable = False
 	EndIf
 End Function
 
@@ -2974,25 +2797,18 @@ Function UpdateMoving%()
 	CatchErrors("Uncaught: UpdateMoving()")
 End Function
 
-Function UpdateMouseInput%()
-	If Input_ResetTime > 0.0
-		Input_ResetTime = Max(Input_ResetTime - fps\Factor[1], 0.0)
-	Else
-		mo\DoubleClick = False
-		mo\MouseHit1 = MouseHit(1)
-		If mo\MouseHit1
-			If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
-			mo\LastMouseHit1 = MilliSecs()
-		EndIf
-		
-		Local PrevMouseDown1% = mo\MouseDown1
-		
-		mo\MouseDown1 = MouseDown(1)
-		mo\MouseUp1 = (PrevMouseDown1 And (Not mo\MouseDown1))
-		
-		mo\MouseHit2 = MouseHit(2)
-	EndIf
-End Function
+Type WearableItems
+	Field GasMask%, GasMaskFogTimer#
+	Field HazmatSuit%
+	Field BallisticVest%
+	Field BallisticHelmet%
+	Field NightVision%, NVGTimer#, IsNVGBlinking%
+	Field SCRAMBLE%
+End Type
+
+Global wi.WearableItems
+
+Global CameraPitch#
 
 Function UpdateMouseLook%()
 	CatchErrors("UpdateMouseLook()")
@@ -3168,6 +2984,7 @@ Const FogColorForest$ = "098133162"
 Const FogColorForestChase$ = "032044054"
 ;[End Block]
 
+Global CurrFogColor$
 Global CurrFogColorR#, CurrFogColorG#, CurrFogColorB#
 
 ; ~ Ambient Color Constants
@@ -3177,7 +2994,7 @@ Const AmbientColorHCZ$ = "030023023"
 Const AmbientColorEZ$ = "023023030"
 ;[End Block]
 
-Global CurrFogColor$, CurrAmbientColor$
+Global CurrAmbientColor$
 Global CurrAmbientColorR#, CurrAmbientColorG#, CurrAmbientColorB#
 
 Const ZoneColorChangeSpeed# = 50.0
@@ -3295,10 +3112,30 @@ Function UpdateZoneColor%()
 	AmbientLight(CurrR, CurrG, CurrB)
 End Function
 
+Function NullSelectedStuff%()
+	InvOpen = False
+	I_294\Using = False
+	d_I\SelectedDoor = Null
+	SelectedScreen = Null
+	sc_I\SelectedMonitor = Null
+	SelectedItem = Null
+	OtherOpen = Null
+	d_I\ClosestButton = 0
+	GrabbedEntity = 0
+End Function
+
+Global IsUsingRadio%
+
+Global GrabbedEntity%
+
+Global RadioState#[9]
+Global RadioState2%[9]
+Global RadioState3%[10]
+
 Global DrawHandIcon%
 Global DrawArrowIcon%[4]
 
-Global IsUsingRadio% = False
+Global InvOpen%
 
 Function UpdateGUI%()
 	CatchErrors("UpdateGUI()")
@@ -6926,6 +6763,8 @@ Const MenuTab_Options_Controls% = 4
 Const MenuTab_Options_Advanced% = 5
 ;[End Block]
 
+Global MenuOpen%
+
 Function UpdateMenu%()
 	CatchErrors("UpdateMenu()")
 	
@@ -8337,245 +8176,617 @@ Function RenderCredits%()
 	EndIf
 End Function
 
-Function NullGame%(PlayButtonSFX% = True)
-	CatchErrors("NullGame()")
+Global MTFTimer#
+Global MTFCameraCheckTimer#
+Global MTFCameraCheckDetected%
+
+Function UpdateMTF%()
+	If PlayerRoom\RoomTemplate\Name = "gate_a_entrance" Then Return
 	
-	Local itt.ItemTemplates, s.Screens, d.Doors, m.Materials, de.Decals, sc.SecurityCams, e.Events, lvr.Levers
-	Local wp.WayPoints, r.Rooms, it.Items, pr.Props, c.ConsoleMsg, n.NPCs, em.Emitters, rt.RoomTemplates, p.Particles, du.Dummy1499_1
-	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
-	Local i%, x%, y%, Lvl%
+	Local r.Rooms, n.NPCs
+	Local Dist#, i%
 	
-	KillSounds()
-	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
-	
-	DeleteTextureEntriesFromCache(DeleteAllTextures)
-	
-	QuickLoadPercent = -1
-	QuickLoadPercent_DisplayTimer = 0.0
-	QuickLoad_CurrEvent = Null
-	
-	SelectedCustomMap = Null
-	
-	UsedConsole = False
-	
-	RoomTempID = 0
-	
-	GameSaved = False
-	CanSave = 0
-	
-	NullSelectedStuff()
-	
-	For itt.ItemTemplates = Each ItemTemplates
-		itt\Found = False
-	Next
-	
-	Delete Each DoorInstance
-	Delete Each SecurityCamInstance
-	Delete Each MonitorInstance
-	Delete Each LeverInstance
-	Delete Each NPCInstance
-	Delete Each DecalInstance
-	Delete Each ParticleInstance
-	Delete Each MiscInstance
-	
-	Delete(me)
-	Delete(wi)
-	
-	RemoveHazmatTimer = 0.0
-	Remove714Timer = 0.0
-	
-	Delete(I_005)
-	Delete(I_008)
-	Delete(I_035)
-	Delete(I_268)
-	Delete(I_294)
-	Delete(I_409)
-	Delete(I_427)
-	Delete(I_500)
-	Delete(I_714)
-	Delete(I_1025)
-	Delete(I_1499)
-	DeInitSubtitlesAssets()
-	
-	ClearCheats()
-	WireFrameState = 0
-	WireFrame(0)
-	
-	CoffinDistance = 0.0
-	
-	MTFTimer = 0.0
-	
-	Delete(as)
-	
-	ShouldPlay = 66
-	
-	opt\CameraFogFar = 0.0
-	opt\CameraFogNear = 0.0
-	HideDistance = 0.0
-	
-	LightVolume = 0.0
-	CurrFogColorR = 0.0
-	CurrFogColorG = 0.0
-	CurrFogColorB = 0.0
-	CurrAmbientColorR = 0.0
-	CurrAmbientColorG = 0.0
-	CurrAmbientColorB = 0.0
-	CurrFogColor = ""
-	CurrAmbientColor = ""
-	
-	SecondaryLightOn = True
-	PrevSecondaryLightOn = True
-	RemoteDoorOn = True
-	
-	SoundTransmission = False
-	
-	BatMsgTimer = 0.0
-	
-	Delete(msg)
-	
-	ConsoleInput = ""
-	ConsoleOpen = False
-	
-	For c.ConsoleMsg = Each ConsoleMsg
-		Delete(c)
-	Next
-	
-	Delete(CurrMapGrid)
-	Delete(I_Zone)
-	
-	For s.Screens = Each Screens
-		Delete(s)
-	Next
-	
-	For ts.TempScreens = Each TempScreens
-		Delete(ts)
-	Next
-	
-	For i = 0 To MaxItemAmount - 1
-		Inventory(i) = Null
-	Next
-	ItemAmount = 0
-	MaxItemAmount = 0
-	SelectedItem = Null
-	
-	Dim Inventory.Items(0)
-	
-	GrabbedEntity = 0
-	
-	Delete(bk)
-	
-	For d.Doors = Each Doors
-		Delete(d)
-	Next
-	Delete(d_I)
-	
-	For tl.TempLights = Each TempLights
-		Delete(tl)
-	Next
-	
-	For m.Materials = Each Materials
-		Delete(m)
-	Next
-	
-	For wp.WayPoints = Each WayPoints
-		Delete(wp)
-	Next
-	
-	For twp.TempWayPoints = Each TempWayPoints
-		Delete(twp)
-	Next
-	
-	For r.Rooms = Each Rooms
-		Delete(r)
-	Next
-	
-	For itt.ItemTemplates = Each ItemTemplates
-		Delete(itt)
-	Next
-	
-	For it.Items = Each Items
-		Delete(it)
-	Next
-	
-	For pr.Props = Each Props
-		Delete(pr)
-	Next
-	
-	Delete(mon_I)
-	
-	For tp.TempProps = Each TempProps
-		Delete(tp)
-	Next
-	
-	For de.Decals = Each Decals
-		Delete(de)
-	Next
-	Delete(de_I)
-	
-	For lvr.Levers = Each Levers
-		Delete(lvr)
-	Next
-	Delete(lvr_I)
-	
-	For n.NPCs = Each NPCs
-		Delete(n)
-	Next
-	For du.Dummy1499_1 = Each Dummy1499_1
-		Delete(du)
-	Next
-	Delete(n_I)
-	ForestNPC = 0
-	ForestNPCTex = 0
-	
-	For e.Events = Each Events
-		Delete(e)
-	Next
-	
-	For sc.SecurityCams = Each SecurityCams
-		Delete(sc)
-	Next
-	Delete(sc_I)
-	
-	For em.Emitters = Each Emitters
-		Delete(em)
-	Next
-	
-	For p.Particles = Each Particles
-		Delete(p)
-	Next
-	Delete(p_I)
-	
-	For rt.RoomTemplates = Each RoomTemplates
-		FreeEntity(rt\OBJ) : rt\OBJ = 0
-	Next
-	
-	Delete(misc_I)
-	Delete(t)
-	
-	DeleteChunks()
-	
-	Delete(achv)
-	
-	Delete Each AchievementMsg
-	CurrAchvMSGID = 0
-	
-	ClearWorld()
-	ResetTimingAccumulator()
-	Camera = 0
-	FreeBlur()
-	Sky = 0
-	InitFastResize()
-	
-	; ~ Load main menu assets and open main menu
-	ShouldDeleteGadgets = True
-	InitMainMenuAssets()
-	MenuOpen = False
-	Delete(igm)
-	MainMenuOpen = True
-	mm\MainMenuTab = MainMenuTab_Default
-	
-	CatchErrors("Uncaught: NullGame()")
+	If MTFTimer = 0.0
+		If Rand(200) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension_1499"
+			Local entrance.Rooms = Null
+			
+			For r.Rooms = Each Rooms
+				If r\RoomTemplate\Name = "gate_a_entrance" 
+					entrance = r
+					Exit
+				EndIf
+			Next
+			
+			If entrance <> Null
+				If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 36.0
+					If me\Zone = 2
+						If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
+						
+						MTFTimer = fps\Factor[0]
+						
+						For i = 0 To 2
+							n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.6, EntityZ(entrance\RoomCenter, True))
+						Next
+						If i = 0 Then n_I\MTFLeader = n
+					EndIf
+				EndIf
+			EndIf
+		EndIf
+	Else
+		If MTFTimer <= 70.0 * 120.0
+			MTFTimer = MTFTimer + fps\Factor[0]
+		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
+			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
+			MTFTimer = 10000.0
+		ElseIf MTFTimer >= 10000.0 And MTFTimer <= 10000.0 + (70.0 * 120.0)
+			MTFTimer = MTFTimer + fps\Factor[0]
+		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
+			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
+			MTFTimer = 20000.0
+		ElseIf MTFTimer >= 20000.0 And MTFTimer <= 20000.0 + (70.0 * 60.0)
+			MTFTimer = MTFTimer + fps\Factor[0]
+		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
+			If PlayerInReachableRoom()
+				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(3) + ".ogg")
+				; ~ If the player has an SCP in their inventory play special voice line
+				For i = 0 To MaxItemAmount - 1
+					If Inventory(i) <> Null
+						If (Left(Inventory(i)\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-093")
+							PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
+							Exit
+						EndIf
+					EndIf
+				Next
+			EndIf
+			MTFTimer = 25000.0
+		ElseIf MTFTimer >= 25000.0 And MTFTimer <= 25000.0 + (70.0 * 60.0)
+			MTFTimer = MTFTimer + fps\Factor[0]
+		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
+			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
+			MTFTimer = 30000.0
+		EndIf
+		If n_I\MTFLeader = Null And MTFTimer < 35000.0
+			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
+			MTFTimer = 35000.0
+		EndIf
+	EndIf
 End Function
+
+Function UpdateCameraCheck%()
+	If MTFCameraCheckTimer > 0.0 And MTFCameraCheckTimer < 70.0 * 90.0
+		MTFCameraCheckTimer = MTFCameraCheckTimer + fps\Factor[0]
+	ElseIf MTFCameraCheckTimer >= 70.0 * 90.0
+		MTFCameraCheckTimer = 0.0
+		If (Not me\Detected)
+			If MTFCameraCheckDetected
+				If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(2) + ".ogg")
+				me\Detected = True
+				MTFCameraCheckTimer = 70.0 * 60.0
+			Else
+				If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
+			EndIf
+		EndIf
+		MTFCameraCheckDetected = False
+		If MTFCameraCheckTimer = 0.0 Then me\Detected = False
+	EndIf
+End Function
+
+Function UpdateExplosion%()
+	Local p.Particles
+	Local i%
+	
+	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
+	If me\ExplosionTimer > 0.0
+		me\ExplosionTimer = me\ExplosionTimer + fps\Factor[0]
+		If me\ExplosionTimer < 140.0
+			If me\ExplosionTimer - fps\Factor[0] < 5.0
+				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
+				PlaySound_Strict(ExplosionSFX)
+				me\BigCameraShake = 10.0
+				me\ExplosionTimer = 5.0
+			EndIf
+			me\BigCameraShake = CurveValue(me\ExplosionTimer / 60.0, me\BigCameraShake, 50.0)
+		Else
+			me\BigCameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
+			If me\ExplosionTimer - fps\Factor[0] < 140.0
+				me\BlinkTimer = 1.0
+				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
+				PlaySound_Strict(ExplosionSFX)
+				For i = 0 To (10 + (10 * (opt\ParticleAmount + 1)))
+					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), Rnd(0.2, 0.6), 0.0, 350.0)
+					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
+					p\Speed = Rnd(0.05, 0.07)
+				Next
+			EndIf
+			me\LightFlash = Min((me\ExplosionTimer - 140.0) / 10.0, 5.0)
+			
+			If me\ExplosionTimer > 160.0 Then me\Terminated = True
+			If me\ExplosionTimer > 500.0 Then me\ExplosionTimer = 0.0
+			
+			; ~ A dirty workaround to prevent the collider from falling down into the facility once the nuke goes off, causing the UpdateEvents() function to be called again and crashing the game
+			PositionEntity(me\Collider, EntityX(me\Collider), 200.0, EntityZ(me\Collider))
+		EndIf
+	EndIf
+End Function
+
+Function UpdateVomit%()
+	CatchErrors("UpdateVomit()")
+	
+	Local de.Decals
+	Local Pvt%
+	
+	If me\CameraShakeTimer > 0.0
+		me\CameraShakeTimer = Max(me\CameraShakeTimer - (fps\Factor[0] / 70.0), 0.0)
+		me\CameraShake = 2.0
+	EndIf
+	
+	If me\VomitTimer > 0.0
+		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
+		
+		If (MilliSecs() Mod 1600) < Rand(200, 400)
+			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
+			me\CameraShake = Rnd(0.0, 2.0)
+		EndIf
+		
+		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
+		
+		; ~ Regurgitate when timer is below 10 seconds
+		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0
+			If (Not ChannelPlaying(VomitCHN)) And me\Regurgitate = 0
+				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(2) + ".ogg"), True)
+				me\Regurgitate = MilliSecs() + 50
+			EndIf
+		EndIf
+		
+		If me\Regurgitate > MilliSecs() And me\Regurgitate <> 0
+			mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + 1.0
+		Else
+			me\Regurgitate = 0
+		EndIf
+	ElseIf me\VomitTimer < 0.0 ; ~ Vomit
+		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
+		
+		If me\VomitTimer > -5.0
+			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0
+			mo\Mouse_X_Speed_1 = 0.0
+			MakeMeUnplayable()
+		Else
+			me\Playable = True
+		EndIf
+		
+		If (Not me\Vomit)
+			me\BlurTimer = 70.0 * 40.0
+			VomitSFX = LoadSound_Strict("SFX\SCP\294\Vomit.ogg")
+			VomitCHN = PlaySound_Strict(VomitSFX, True)
+			me\PrevInjuries = me\Injuries
+			me\PrevBloodloss = me\Bloodloss
+			If (Not me\Crouch) Then SetCrouch(True)
+			me\Injuries = 1.5
+			me\Bloodloss = 70.0
+			me\EyeIrritation = 70.0 * 9.0
+			
+			Pvt = CreatePivot()
+			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
+			TurnEntity(Pvt, 90.0, 0.0, 0.0)
+			EntityPick(Pvt, 0.3)
+			de.Decals = CreateDecal(DECAL_BLOOD_4, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
+			de\SizeChange = 0.001 : de\MaxSize = 0.6
+			EntityParent(de\OBJ, PlayerRoom\OBJ)
+			FreeEntity(Pvt) : Pvt = 0
+			me\Vomit = True
+		EndIf
+		
+		mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
+		
+		If me\VomitTimer < -15.0
+			FreeSound_Strict(VomitSFX)
+			me\VomitTimer = 0.0
+			If (Not me\Terminated) Then PlaySound_Strict(BreathSFX(0, 0), True)
+			me\Injuries = me\PrevInjuries
+			me\Bloodloss = me\PrevBloodloss
+			me\Vomit = False
+		EndIf
+	EndIf
+	
+	CatchErrors("Uncaught: UpdateVomit()")
+End Function
+
+Global EscapeTimer%
+Global EscapeSecondsTimer# = 70.0
+
+Function UpdateEscapeTimer%()
+	Local ev.Events
+	
+	For ev.Events = Each Events
+		If ev\room = PlayerRoom
+			If ev\EventName = "cont1_173_intro" Then Return
+			Exit
+		EndIf
+	Next
+	
+	EscapeSecondsTimer = EscapeSecondsTimer - fps\Factor[0]
+	If EscapeSecondsTimer <= 0.0
+		EscapeTimer = EscapeTimer + 1
+		EscapeSecondsTimer = 70.0
+	EndIf
+End Function
+
+Type SCP005
+	Field ChanceToSpawn%
+End Type
+
+Global I_005.SCP005
+
+Type SCP035
+	Field Sad%
+End Type
+
+Global I_035.SCP035
+
+Type SCP500
+	Field Taken%
+End Type
+
+Global I_500.SCP500
+
+Type SCP714
+	Field Using%
+End Type
+
+Global I_714.SCP714
+
+Type SCP008
+	Field Timer#
+	Field Revert%
+End Type
+
+Global I_008.SCP008
+
+Function Update008%()
+	Local r.Rooms, e.Events, p.Particles, de.Decals
+	Local PrevI008Timer#, i%
+	Local TeleportForInfect%
+	Local SinValue#
+	
+	TeleportForInfect = PlayerInReachableRoom()
+	If I_008\Timer > 0.0
+		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
+		SinValue = Sin(MilliSecs() / 8.0) + 2.0
+		If I_008\Timer < 93.0
+			PrevI008Timer = I_008\Timer
+			If I_427\Timer < 70.0 * 360.0
+				If I_008\Revert
+					I_008\Timer = Max(0.0, I_008\Timer - (fps\Factor[0] * 0.01))
+				Else
+					If (Not I_427\Using) Then I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
+				EndIf
+			EndIf
+			
+			me\BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
+			
+			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
+			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
+			
+			EntityAlpha(t\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * SinValue)
+			
+			For i = 0 To 6
+				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer <= (i * 15.0) + 10.0
+					If (Not I_008\Revert) Then PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"), True)
+				EndIf
+			Next
+			
+			If I_008\Timer > 20.0 And PrevI008Timer <= 20.0
+				If I_008\Revert
+					CreateMsg(GetLocalString("msg", "better_2"))
+				Else
+					CreateMsg(GetLocalString("msg", "feverish"))
+				EndIf
+			ElseIf I_008\Timer > 40.0 And PrevI008Timer <= 40.0
+				If I_008\Revert
+					CreateMsg(GetLocalString("msg", "nauseafading"))
+				Else
+					CreateMsg(GetLocalString("msg", "nausea"))
+				EndIf
+			ElseIf I_008\Timer > 60.0 And PrevI008Timer <= 60.0
+				If I_008\Revert
+					CreateMsg(GetLocalString("msg", "headachefading"))
+				Else
+					CreateMsg(GetLocalString("msg", "nauseaworse"))
+				EndIf
+			ElseIf I_008\Timer > 80.0 And PrevI008Timer <= 80.0
+				If I_008\Revert
+					CreateMsg(GetLocalString("msg", "moreener"))
+				Else
+					CreateMsg(GetLocalString("msg", "faint"))
+				EndIf
+			ElseIf I_008\Timer >= 91.5
+				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
+				me\Zombie = True
+				If I_008\Timer >= 92.7 And PrevI008Timer < 92.7
+					If TeleportForInfect
+						For r.Rooms = Each Rooms
+							If r\RoomTemplate\Name = "cont2_008"
+								PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
+								ResetEntity(me\Collider)
+								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
+								r\NPC[0]\State3 = -1.0 : r\NPC[0]\IsDead = True
+								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
+								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound, True)
+								ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
+								TeleportToRoom(r)
+								Exit
+							EndIf
+						Next
+					EndIf
+				EndIf
+			EndIf
+		Else
+			PrevI008Timer = I_008\Timer
+			I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.004), 100.0)
+			
+			If TeleportForInfect
+				If I_008\Timer < 94.7
+					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
+					me\BlurTimer = 900.0
+					
+					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
+					PointEntity(me\Collider, PlayerRoom\NPC[0]\Collider)
+					PointEntity(PlayerRoom\NPC[0]\Collider, me\Collider)
+					PointEntity(Camera, PlayerRoom\NPC[0]\Collider, EntityRoll(Camera))
+					me\ForceMove = 0.75
+					me\Injuries = 2.5
+					me\Bloodloss = 0.0
+					
+					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
+				ElseIf I_008\Timer < 98.5
+					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
+					me\BlurTimer = 950.0
+					
+					me\ForceMove = 0.0
+					PointEntity(Camera, PlayerRoom\NPC[0]\Collider)
+					
+					If PrevI008Timer < 94.7
+						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
+						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound, True)
+						
+						msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
+						
+						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
+						EntityParent(de\OBJ, PlayerRoom\OBJ)
+						
+						Kill()
+					ElseIf I_008\Timer > 96.0
+						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
+					Else
+						me\Terminated = True
+					EndIf
+					
+					If PlayerRoom\NPC[0]\State2 = 0.0
+						Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 13.0, 19.0, 0.3, False)
+						If AnimTime(PlayerRoom\NPC[0]\OBJ) >= 19.0 Then PlayerRoom\NPC[0]\State2 = 1.0
+					Else
+						Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 19.0, 13.0, -0.3)
+						If AnimTime(PlayerRoom\NPC[0]\OBJ) <= 13.0 Then PlayerRoom\NPC[0]\State2 = 0.0
+					EndIf
+					
+					If opt\ParticleAmount > 0
+						If Rand(50) = 1
+							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), Rnd(0.05, 0.1), 0.15, 200.0)
+							p\Speed = 0.01 : p\SizeChange = 0.01 : p\Alpha = 0.5 : p\AlphaChange = -0.01
+							RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
+						EndIf
+					EndIf
+					
+					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
+					SinValue = Sin(MilliSecs() / 5.0)
+					RotateEntity(me\Head, (1.0 + SinValue) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
+					MoveEntity(me\Head, 0.0, 0.0, -0.4)
+					TurnEntity(me\Head, 80.0 + SinValue * 30.0, SinValue * 40.0, 0.0)
+				EndIf
+			Else
+				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
+				If PlayerRoom\RoomTemplate\Name = "dimension_1499"
+					msg\DeathMsg = GetLocalString("death", "14991")
+				ElseIf IsPlayerOutsideFacility()
+					msg\DeathMsg = Format(GetLocalString("death", "008gate"), SubjectName, "{0}")
+					If PlayerRoom\RoomTemplate\Name = "gate_a"
+						msg\DeathMsg = Format(msg\DeathMsg, "A", "{1}")
+					Else
+						msg\DeathMsg = Format(msg\DeathMsg, "B", "{1}")
+					EndIf
+				Else
+					msg\DeathMsg = ""
+				EndIf
+				Kill()
+			EndIf
+		EndIf
+	Else
+		I_008\Revert = False
+		If (Not EntityHidden(t\OverlayID[3])) Then HideEntity(t\OverlayID[3])
+	EndIf
+End Function
+
+Type SCP268
+	Field Using%
+	Field Timer#
+	Field InvisibilityOn%
+End Type
+
+Global I_268.SCP268
+
+Function Update268%()
+    If I_268\Using > 1
+		I_268\InvisibilityOn = (I_268\Timer > 0.0)
+		If I_268\Using = 3 
+            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.5) * (1.0 + I_714\Using)), 0.0)
+        Else
+            I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
+        EndIf
+    Else
+        I_268\Timer = Min(I_268\Timer + fps\Factor[0], 600.0)
+		I_268\InvisibilityOn = False
+    EndIf
+End Function 
+
+Type SCP409
+	Field Timer#
+	Field Revert%
+End Type
+
+Global I_409.SCP409
+
+Function Update409%()
+	Local PrevI409Timer# = I_409\Timer
+	
+	If I_409\Timer > 0.0
+		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
+		If I_427\Timer < 70.0 * 360.0
+			If I_409\Revert
+				I_409\Timer = Max(0.0, I_409\Timer - (fps\Factor[0] * 0.01))
+			Else
+				If (Not I_427\Using) Then I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+			EndIf
+		EndIf
+		EntityAlpha(t\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
+		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
+		
+		If I_409\Timer > 40.0 And PrevI409Timer <= 40.0
+			If I_409\Revert
+				CreateMsg(GetLocalString("msg", "409legs_1"))
+			Else
+				CreateMsg(GetLocalString("msg", "409legs_2"))
+			EndIf
+		ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
+			If I_409\Revert
+				CreateMsg(GetLocalString("msg", "409abdomen_1"))
+			Else
+				CreateMsg(GetLocalString("msg", "409abdomen_2"))
+			EndIf
+		ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
+			If I_409\Revert
+				CreateMsg(GetLocalString("msg", "409arms_1"))
+			Else
+				CreateMsg(GetLocalString("msg", "409arms_2"))
+			EndIf
+		ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
+			If I_409\Revert
+				CreateMsg(GetLocalString("msg", "409head_1"))
+			Else
+				CreateMsg(GetLocalString("msg", "409head_2"))
+			EndIf
+		ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
+			If (Not I_409\Revert)
+				PlaySound_Strict(DamageSFX[13], True)
+				me\Injuries = Max(me\Injuries, 2.0)
+			EndIf
+		ElseIf I_409\Timer > 94.0
+			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+			MakeMeUnplayable()
+			me\BlurTimer = 4.0
+			me\CameraShake = 3.0
+		EndIf
+		If I_409\Timer >= 55.0
+			me\StaminaEffect = 1.2
+			me\StaminaEffectTimer = 1.0
+			me\Stamina = Min(me\Stamina, 60.0)
+		EndIf
+		If I_409\Timer >= 96.9222
+			msg\DeathMsg = Format(GetLocalString("death", "409"), SubjectName)
+			Kill(True)
+		EndIf
+	Else
+		I_409\Revert = False
+		If (Not EntityHidden(t\OverlayID[7])) Then HideEntity(t\OverlayID[7])
+	EndIf
+End Function
+
+Type SCP427
+	Field Using%
+	Field Timer#
+	Field Sound%[2]
+	Field SoundCHN%[2]
+End Type
+
+Global I_427.SCP427
+
+Function Update427%()
+	Local de.Decals, e.Events
+	Local i%, Pvt%, TempCHN%
+	Local PrevI427Timer# = I_427\Timer
+	
+	If I_427\Timer < 70.0 * 360.0
+		If I_427\Using
+			I_427\Timer = I_427\Timer + fps\Factor[0]
+			For e.Events = Each Events
+				If e\EventID = e_1048_a
+					If e\EventState2 > 0.0 Then e\EventState2 = Max(e\EventState2 - (fps\Factor[0] * 0.5), 0.0)
+					Exit
+				EndIf
+			Next
+			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0005), 0.0)
+			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
+			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
+			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
+			For i = 0 To 6
+				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0] * I_1025\State[7]), 0.0)
+			Next
+			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
+			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
+			If I_427\Timer >= 70.0 * 180.0
+				If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
+				If (Not ChannelPlaying(I_427\SoundCHN[1])) Then I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
+			EndIf
+			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0
+				CreateMsg(GetLocalString("msg", "freshener"))
+			ElseIf PrevI427Timer < 70.0 * 180.0 And I_427\Timer >= 70.0 * 180.0
+				CreateMsg(GetLocalString("msg", "gentlemuscle"))
+			EndIf
+		Else
+			For i = 0 To 1
+				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
+			Next
+		EndIf
+	Else
+		If PrevI427Timer - fps\Factor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0
+			CreateMsg(GetLocalString("msg", "muscleswelling"))
+		ElseIf PrevI427Timer - fps\Factor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0
+			CreateMsg(GetLocalString("msg", "nolegs"))
+		EndIf
+		I_427\Timer = I_427\Timer + fps\Factor[0]
+		If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
+		If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
+		For i = 0 To 1
+			If (Not ChannelPlaying(I_427\SoundCHN[i])) Then I_427\SoundCHN[i] = PlaySound_Strict(I_427\Sound[i])
+		Next
+		If Rnd(200) < 2.0
+			Pvt = CreatePivot()
+			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
+			TurnEntity(Pvt, 90.0, 0.0, 0.0)
+			EntityPick(Pvt, 0.3)
+			de.Decals = CreateDecal(DECAL_427, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
+			EntityParent(de\OBJ, PlayerRoom\OBJ)
+			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
+			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
+			ChannelPitch(TempCHN, Rand(20000, 30000))
+			FreeEntity(Pvt) : Pvt = 0
+			me\BlurTimer = 800.0
+		EndIf
+		If I_427\Timer >= 70.0 * 420.0
+			msg\DeathMsg = GetLocalString("death", "morepower")
+			Kill()
+		ElseIf I_427\Timer >= 70.0 * 390.0
+			If (Not me\Crouch) Then SetCrouch(True)
+		EndIf
+	EndIf
+End Function
+
+Type SCP294
+	Field Using%
+	Field ToInput$
+End Type
+
+Global I_294.SCP294
 
 Function Update294%()
 	Local it.Items
@@ -8873,551 +9084,11 @@ Function Render294%()
 	EndIf
 End Function
 
-Function Use427%()
-	Local de.Decals, e.Events
-	Local i%, Pvt%, TempCHN%
-	Local PrevI427Timer# = I_427\Timer
-	
-	If I_427\Timer < 70.0 * 360.0
-		If I_427\Using
-			I_427\Timer = I_427\Timer + fps\Factor[0]
-			For e.Events = Each Events
-				If e\EventID = e_1048_a
-					If e\EventState2 > 0.0 Then e\EventState2 = Max(e\EventState2 - (fps\Factor[0] * 0.5), 0.0)
-					Exit
-				EndIf
-			Next
-			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0005), 0.0)
-			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
-			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
-			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
-			For i = 0 To 6
-				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0] * I_1025\State[7]), 0.0)
-			Next
-			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
-			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
-			If I_427\Timer >= 70.0 * 180.0
-				If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
-				If (Not ChannelPlaying(I_427\SoundCHN[1])) Then I_427\SoundCHN[1] = PlaySound_Strict(I_427\Sound[1])
-			EndIf
-			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0
-				CreateMsg(GetLocalString("msg", "freshener"))
-			ElseIf PrevI427Timer < 70.0 * 180.0 And I_427\Timer >= 70.0 * 180.0
-				CreateMsg(GetLocalString("msg", "gentlemuscle"))
-			EndIf
-		Else
-			For i = 0 To 1
-				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
-			Next
-		EndIf
-	Else
-		If PrevI427Timer - fps\Factor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0
-			CreateMsg(GetLocalString("msg", "muscleswelling"))
-		ElseIf PrevI427Timer - fps\Factor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0
-			CreateMsg(GetLocalString("msg", "nolegs"))
-		EndIf
-		I_427\Timer = I_427\Timer + fps\Factor[0]
-		If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
-		If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
-		For i = 0 To 1
-			If (Not ChannelPlaying(I_427\SoundCHN[i])) Then I_427\SoundCHN[i] = PlaySound_Strict(I_427\Sound[i])
-		Next
-		If Rnd(200) < 2.0
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
-			TurnEntity(Pvt, 90.0, 0.0, 0.0)
-			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(DECAL_427, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
-			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
-			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
-			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
-			ChannelPitch(TempCHN, Rand(20000, 30000))
-			FreeEntity(Pvt) : Pvt = 0
-			me\BlurTimer = 800.0
-		EndIf
-		If I_427\Timer >= 70.0 * 420.0
-			msg\DeathMsg = GetLocalString("death", "morepower")
-			Kill()
-		ElseIf I_427\Timer >= 70.0 * 390.0
-			If (Not me\Crouch) Then SetCrouch(True)
-		EndIf
-	EndIf
-End Function
+Type SCP1025
+	Field State#[8]
+End Type
 
-Function UpdateMTF%()
-	If PlayerRoom\RoomTemplate\Name = "gate_a_entrance" Then Return
-	
-	Local r.Rooms, n.NPCs
-	Local Dist#, i%
-	
-	If MTFTimer = 0.0
-		If Rand(200) = 1 And PlayerRoom\RoomTemplate\Name <> "dimension_1499"
-			Local entrance.Rooms = Null
-			
-			For r.Rooms = Each Rooms
-				If r\RoomTemplate\Name = "gate_a_entrance" 
-					entrance = r
-					Exit
-				EndIf
-			Next
-			
-			If entrance <> Null
-				If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 36.0
-					If me\Zone = 2
-						If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
-						
-						MTFTimer = fps\Factor[0]
-						
-						For i = 0 To 2
-							n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.6, EntityZ(entrance\RoomCenter, True))
-						Next
-						If i = 0 Then n_I\MTFLeader = n
-					EndIf
-				EndIf
-			EndIf
-		EndIf
-	Else
-		If MTFTimer <= 70.0 * 120.0
-			MTFTimer = MTFTimer + fps\Factor[0]
-		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
-			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
-			MTFTimer = 10000.0
-		ElseIf MTFTimer >= 10000.0 And MTFTimer <= 10000.0 + (70.0 * 120.0)
-			MTFTimer = MTFTimer + fps\Factor[0]
-		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
-			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
-			MTFTimer = 20000.0
-		ElseIf MTFTimer >= 20000.0 And MTFTimer <= 20000.0 + (70.0 * 60.0)
-			MTFTimer = MTFTimer + fps\Factor[0]
-		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
-			If PlayerInReachableRoom()
-				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(3) + ".ogg")
-				; ~ If the player has an SCP in their inventory play special voice line
-				For i = 0 To MaxItemAmount - 1
-					If Inventory(i) <> Null
-						If (Left(Inventory(i)\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-093")
-							PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
-							Exit
-						EndIf
-					EndIf
-				Next
-			EndIf
-			MTFTimer = 25000.0
-		ElseIf MTFTimer >= 25000.0 And MTFTimer <= 25000.0 + (70.0 * 60.0)
-			MTFTimer = MTFTimer + fps\Factor[0]
-		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
-			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
-			MTFTimer = 30000.0
-		EndIf
-		If n_I\MTFLeader = Null And MTFTimer < 35000.0
-			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
-			MTFTimer = 35000.0
-		EndIf
-	EndIf
-End Function
-
-Function UpdateCameraCheck%()
-	If MTFCameraCheckTimer > 0.0 And MTFCameraCheckTimer < 70.0 * 90.0
-		MTFCameraCheckTimer = MTFCameraCheckTimer + fps\Factor[0]
-	ElseIf MTFCameraCheckTimer >= 70.0 * 90.0
-		MTFCameraCheckTimer = 0.0
-		If (Not me\Detected)
-			If MTFCameraCheckDetected
-				If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(2) + ".ogg")
-				me\Detected = True
-				MTFCameraCheckTimer = 70.0 * 60.0
-			Else
-				If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
-			EndIf
-		EndIf
-		MTFCameraCheckDetected = False
-		If MTFCameraCheckTimer = 0.0 Then me\Detected = False
-	EndIf
-End Function
-
-Function UpdateExplosion%()
-	Local p.Particles
-	Local i%
-	
-	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
-	If me\ExplosionTimer > 0.0
-		me\ExplosionTimer = me\ExplosionTimer + fps\Factor[0]
-		If me\ExplosionTimer < 140.0
-			If me\ExplosionTimer - fps\Factor[0] < 5.0
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
-				PlaySound_Strict(ExplosionSFX)
-				me\BigCameraShake = 10.0
-				me\ExplosionTimer = 5.0
-			EndIf
-			me\BigCameraShake = CurveValue(me\ExplosionTimer / 60.0, me\BigCameraShake, 50.0)
-		Else
-			me\BigCameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
-			If me\ExplosionTimer - fps\Factor[0] < 140.0
-				me\BlinkTimer = 1.0
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke2.ogg")
-				PlaySound_Strict(ExplosionSFX)
-				For i = 0 To (10 + (10 * (opt\ParticleAmount + 1)))
-					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), Rnd(0.2, 0.6), 0.0, 350.0)
-					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
-					p\Speed = Rnd(0.05, 0.07)
-				Next
-			EndIf
-			me\LightFlash = Min((me\ExplosionTimer - 140.0) / 10.0, 5.0)
-			
-			If me\ExplosionTimer > 160.0 Then me\Terminated = True
-			If me\ExplosionTimer > 500.0 Then me\ExplosionTimer = 0.0
-			
-			; ~ A dirty workaround to prevent the collider from falling down into the facility once the nuke goes off, causing the UpdateEvents() function to be called again and crashing the game
-			PositionEntity(me\Collider, EntityX(me\Collider), 200.0, EntityZ(me\Collider))
-		EndIf
-	EndIf
-End Function
-
-Function UpdateVomit%()
-	CatchErrors("UpdateVomit()")
-	
-	Local de.Decals
-	Local Pvt%
-	
-	If me\CameraShakeTimer > 0.0
-		me\CameraShakeTimer = Max(me\CameraShakeTimer - (fps\Factor[0] / 70.0), 0.0)
-		me\CameraShake = 2.0
-	EndIf
-	
-	If me\VomitTimer > 0.0
-		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
-		
-		If (MilliSecs() Mod 1600) < Rand(200, 400)
-			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
-			me\CameraShake = Rnd(0.0, 2.0)
-		EndIf
-		
-		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
-		
-		; ~ Regurgitate when timer is below 10 seconds
-		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0
-			If (Not ChannelPlaying(VomitCHN)) And me\Regurgitate = 0
-				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(2) + ".ogg"), True)
-				me\Regurgitate = MilliSecs() + 50
-			EndIf
-		EndIf
-		
-		If me\Regurgitate > MilliSecs() And me\Regurgitate <> 0
-			mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + 1.0
-		Else
-			me\Regurgitate = 0
-		EndIf
-	ElseIf me\VomitTimer < 0.0 ; ~ Vomit
-		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
-		
-		If me\VomitTimer > -5.0
-			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0
-			mo\Mouse_X_Speed_1 = 0.0
-			MakeMeUnplayable()
-		Else
-			me\Playable = True
-		EndIf
-		
-		If (Not me\Vomit)
-			me\BlurTimer = 70.0 * 40.0
-			VomitSFX = LoadSound_Strict("SFX\SCP\294\Vomit.ogg")
-			VomitCHN = PlaySound_Strict(VomitSFX, True)
-			me\PrevInjuries = me\Injuries
-			me\PrevBloodloss = me\Bloodloss
-			If (Not me\Crouch) Then SetCrouch(True)
-			me\Injuries = 1.5
-			me\Bloodloss = 70.0
-			me\EyeIrritation = 70.0 * 9.0
-			
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
-			TurnEntity(Pvt, 90.0, 0.0, 0.0)
-			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(DECAL_BLOOD_4, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
-			de\SizeChange = 0.001 : de\MaxSize = 0.6
-			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			FreeEntity(Pvt) : Pvt = 0
-			me\Vomit = True
-		EndIf
-		
-		mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
-		
-		If me\VomitTimer < -15.0
-			FreeSound_Strict(VomitSFX)
-			me\VomitTimer = 0.0
-			If (Not me\Terminated) Then PlaySound_Strict(BreathSFX(0, 0), True)
-			me\Injuries = me\PrevInjuries
-			me\Bloodloss = me\PrevBloodloss
-			me\Vomit = False
-		EndIf
-	EndIf
-	
-	CatchErrors("Uncaught: UpdateVomit()")
-End Function
-
-Global EscapeTimer%
-Global EscapeSecondsTimer# = 70.0
-
-Function UpdateEscapeTimer%()
-	Local ev.Events
-	
-	For ev.Events = Each Events
-		If ev\room = PlayerRoom
-			If ev\EventName = "cont1_173_intro" Then Return
-			Exit
-		EndIf
-	Next
-	
-	EscapeSecondsTimer = EscapeSecondsTimer - fps\Factor[0]
-	If EscapeSecondsTimer <= 0.0
-		EscapeTimer = EscapeTimer + 1
-		EscapeSecondsTimer = 70.0
-	EndIf
-End Function
-
-Function Use268%()
-    If I_268\Using > 1
-		I_268\InvisibilityOn = (I_268\Timer > 0.0)
-		If I_268\Using = 3 
-            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.5) * (1.0 + I_714\Using)), 0.0)
-        Else
-            I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
-        EndIf
-    Else
-        I_268\Timer = Min(I_268\Timer + fps\Factor[0], 600.0)
-		I_268\InvisibilityOn = False
-    EndIf
-End Function 
-
-Function Update008%()
-	Local r.Rooms, e.Events, p.Particles, de.Decals
-	Local PrevI008Timer#, i%
-	Local TeleportForInfect%
-	Local SinValue#
-	
-	TeleportForInfect = PlayerInReachableRoom()
-	If I_008\Timer > 0.0
-		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
-		SinValue = Sin(MilliSecs() / 8.0) + 2.0
-		If I_008\Timer < 93.0
-			PrevI008Timer = I_008\Timer
-			If I_427\Timer < 70.0 * 360.0
-				If I_008\Revert
-					I_008\Timer = Max(0.0, I_008\Timer - (fps\Factor[0] * 0.01))
-				Else
-					If (Not I_427\Using) Then I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
-				EndIf
-			EndIf
-			
-			me\BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
-			
-			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
-			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
-			
-			EntityAlpha(t\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * SinValue)
-			
-			For i = 0 To 6
-				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer <= (i * 15.0) + 10.0
-					If (Not I_008\Revert) Then PlaySound_Strict(LoadTempSound("SFX\SCP\008\Voices" + i + ".ogg"), True)
-				EndIf
-			Next
-			
-			If I_008\Timer > 20.0 And PrevI008Timer <= 20.0
-				If I_008\Revert
-					CreateMsg(GetLocalString("msg", "better_2"))
-				Else
-					CreateMsg(GetLocalString("msg", "feverish"))
-				EndIf
-			ElseIf I_008\Timer > 40.0 And PrevI008Timer <= 40.0
-				If I_008\Revert
-					CreateMsg(GetLocalString("msg", "nauseafading"))
-				Else
-					CreateMsg(GetLocalString("msg", "nausea"))
-				EndIf
-			ElseIf I_008\Timer > 60.0 And PrevI008Timer <= 60.0
-				If I_008\Revert
-					CreateMsg(GetLocalString("msg", "headachefading"))
-				Else
-					CreateMsg(GetLocalString("msg", "nauseaworse"))
-				EndIf
-			ElseIf I_008\Timer > 80.0 And PrevI008Timer <= 80.0
-				If I_008\Revert
-					CreateMsg(GetLocalString("msg", "moreener"))
-				Else
-					CreateMsg(GetLocalString("msg", "faint"))
-				EndIf
-			ElseIf I_008\Timer >= 91.5
-				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
-				me\Zombie = True
-				If I_008\Timer >= 92.7 And PrevI008Timer < 92.7
-					If TeleportForInfect
-						For r.Rooms = Each Rooms
-							If r\RoomTemplate\Name = "cont2_008"
-								PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
-								ResetEntity(me\Collider)
-								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
-								r\NPC[0]\State3 = -1.0 : r\NPC[0]\IsDead = True
-								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
-								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound, True)
-								ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
-								TeleportToRoom(r)
-								Exit
-							EndIf
-						Next
-					EndIf
-				EndIf
-			EndIf
-		Else
-			PrevI008Timer = I_008\Timer
-			I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.004), 100.0)
-			
-			If TeleportForInfect
-				If I_008\Timer < 94.7
-					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
-					me\BlurTimer = 900.0
-					
-					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
-					PointEntity(me\Collider, PlayerRoom\NPC[0]\Collider)
-					PointEntity(PlayerRoom\NPC[0]\Collider, me\Collider)
-					PointEntity(Camera, PlayerRoom\NPC[0]\Collider, EntityRoll(Camera))
-					me\ForceMove = 0.75
-					me\Injuries = 2.5
-					me\Bloodloss = 0.0
-					
-					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
-				ElseIf I_008\Timer < 98.5
-					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
-					me\BlurTimer = 950.0
-					
-					me\ForceMove = 0.0
-					PointEntity(Camera, PlayerRoom\NPC[0]\Collider)
-					
-					If PrevI008Timer < 94.7
-						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
-						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound, True)
-						
-						msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
-						
-						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
-						EntityParent(de\OBJ, PlayerRoom\OBJ)
-						
-						Kill()
-					ElseIf I_008\Timer > 96.0
-						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
-					Else
-						me\Terminated = True
-					EndIf
-					
-					If PlayerRoom\NPC[0]\State2 = 0.0
-						Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 13.0, 19.0, 0.3, False)
-						If AnimTime(PlayerRoom\NPC[0]\OBJ) >= 19.0 Then PlayerRoom\NPC[0]\State2 = 1.0
-					Else
-						Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 19.0, 13.0, -0.3)
-						If AnimTime(PlayerRoom\NPC[0]\OBJ) <= 13.0 Then PlayerRoom\NPC[0]\State2 = 0.0
-					EndIf
-					
-					If opt\ParticleAmount > 0
-						If Rand(50) = 1
-							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), Rnd(0.05, 0.1), 0.15, 200.0)
-							p\Speed = 0.01 : p\SizeChange = 0.01 : p\Alpha = 0.5 : p\AlphaChange = -0.01
-							RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
-						EndIf
-					EndIf
-					
-					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
-					SinValue = Sin(MilliSecs() / 5.0)
-					RotateEntity(me\Head, (1.0 + SinValue) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
-					MoveEntity(me\Head, 0.0, 0.0, -0.4)
-					TurnEntity(me\Head, 80.0 + SinValue * 30.0, SinValue * 40.0, 0.0)
-				EndIf
-			Else
-				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
-				If PlayerRoom\RoomTemplate\Name = "dimension_1499"
-					msg\DeathMsg = GetLocalString("death", "14991")
-				ElseIf IsPlayerOutsideFacility()
-					msg\DeathMsg = Format(GetLocalString("death", "008gate"), SubjectName, "{0}")
-					If PlayerRoom\RoomTemplate\Name = "gate_a"
-						msg\DeathMsg = Format(msg\DeathMsg, "A", "{1}")
-					Else
-						msg\DeathMsg = Format(msg\DeathMsg, "B", "{1}")
-					EndIf
-				Else
-					msg\DeathMsg = ""
-				EndIf
-				Kill()
-			EndIf
-		EndIf
-	Else
-		I_008\Revert = False
-		If (Not EntityHidden(t\OverlayID[3])) Then HideEntity(t\OverlayID[3])
-	EndIf
-End Function
-
-Function Update409%()
-	Local PrevI409Timer# = I_409\Timer
-	
-	If I_409\Timer > 0.0
-		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
-		If I_427\Timer < 70.0 * 360.0
-			If I_409\Revert
-				I_409\Timer = Max(0.0, I_409\Timer - (fps\Factor[0] * 0.01))
-			Else
-				If (Not I_427\Using) Then I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
-			EndIf
-		EndIf
-		EntityAlpha(t\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
-		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
-		
-		If I_409\Timer > 40.0 And PrevI409Timer <= 40.0
-			If I_409\Revert
-				CreateMsg(GetLocalString("msg", "409legs_1"))
-			Else
-				CreateMsg(GetLocalString("msg", "409legs_2"))
-			EndIf
-		ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
-			If I_409\Revert
-				CreateMsg(GetLocalString("msg", "409abdomen_1"))
-			Else
-				CreateMsg(GetLocalString("msg", "409abdomen_2"))
-			EndIf
-		ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
-			If I_409\Revert
-				CreateMsg(GetLocalString("msg", "409arms_1"))
-			Else
-				CreateMsg(GetLocalString("msg", "409arms_2"))
-			EndIf
-		ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
-			If I_409\Revert
-				CreateMsg(GetLocalString("msg", "409head_1"))
-			Else
-				CreateMsg(GetLocalString("msg", "409head_2"))
-			EndIf
-		ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
-			If (Not I_409\Revert)
-				PlaySound_Strict(DamageSFX[13], True)
-				me\Injuries = Max(me\Injuries, 2.0)
-			EndIf
-		ElseIf I_409\Timer > 94.0
-			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
-			MakeMeUnplayable()
-			me\BlurTimer = 4.0
-			me\CameraShake = 3.0
-		EndIf
-		If I_409\Timer >= 55.0
-			me\StaminaEffect = 1.2
-			me\StaminaEffectTimer = 1.0
-			me\Stamina = Min(me\Stamina, 60.0)
-		EndIf
-		If I_409\Timer >= 96.9222
-			msg\DeathMsg = Format(GetLocalString("death", "409"), SubjectName)
-			Kill(True)
-		EndIf
-	Else
-		I_409\Revert = False
-		If (Not EntityHidden(t\OverlayID[7])) Then HideEntity(t\OverlayID[7])
-	EndIf
-End Function
+Global I_1025.SCP1025
 
 Function Update1025%()
 	Local i%
@@ -9484,6 +9155,16 @@ Function Update1025%()
 		EndIf
 	Next
 End Function
+
+Type SCP1499
+	Field Using%
+	Field PrevX#, PrevY#, PrevZ#
+	Field PrevRoom.Rooms
+	Field x#, y#, z#
+	Field Sky%
+End Type
+
+Global I_1499.SCP1499
 
 Function UpdateLeave1499%()
 	Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms
@@ -9571,23 +9252,6 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	EndIf
 	FreeEntity(Pvt) : Pvt = 0
 	ResetEntity(Entity)
-End Function
-
-Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% = False)
-	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
-	
-	If EntityDistanceSquared(me\Collider, OBJ) < Dist
-		If EntityInView(OBJ, Camera)
-			DrawArrowIcon[ArrowID] = Arrow
-			DrawHandIcon = True
-			If MouseDown_
-				If mo\MouseDown1 Then Return(True)
-			Else
-				If mo\MouseHit1 Then Return(True)
-			EndIf
-		EndIf
-	EndIf
-	Return(False)
 End Function
 
 ;~IDEal Editor Parameters:

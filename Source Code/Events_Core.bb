@@ -470,8 +470,8 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 	Return(Null)
 End Function
 
-Global QuickLoadPercent% = -1
-Global QuickLoadPercent_DisplayTimer# = 0.0
+Global QuickLoadPercent% 
+Global QuickLoadPercent_DisplayTimer#
 Global QuickLoad_CurrEvent.Events
 
 Function UpdateQuickLoading%()
@@ -1812,23 +1812,19 @@ Function UpdateEvents%()
 													Next
 													
 													For w.WayPoints = Each WayPoints
-														If w\room = e\room
-															FreeEntity(w\OBJ) : w\OBJ = 0
-															Delete(w)
-														EndIf
+														If w\room = e\room Then RemoveWaypoint(w)
 													Next
 													
 													r\NPC[1] = e\room\NPC[6]
 													
-													FreeEntity(e\room\OBJ) : e\room\OBJ = 0
-													Delete(e\room)
+													RemoveRoom(e\room)
 													
 													For sc.SecurityCams = Each SecurityCams
-														If sc\room = e\room Then Delete(sc)
+														If sc\room = e\room Then RemoveSecurityCam(sc)
 													Next
 													
 													For pr.Props = Each Props
-														If pr\room = e\room Then Delete(pr)
+														If pr\room = e\room Then RemoveProp(pr)
 													Next
 													
 													ClearConsole()
@@ -7720,8 +7716,7 @@ Function UpdateEvents%()
 						If n\NPCType = NPCType1499_1 Then RemoveNPC(n)
 					Next
 					For du.Dummy1499_1 = Each Dummy1499_1
-						FreeEntity(du\OBJ) : du\OBJ = 0
-						Delete(du)
+						RemoveDummy1499_1(du)
 					Next
 					If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 					If e\EventState3 < 70.0 * 30.0 Then e\EventState3 = 0.0
@@ -8545,6 +8540,11 @@ Type Dummy1499_1
 	Field OBJ%
 End Type
 
+Function RemoveDummy1499_1%(du.Dummy1499_1)
+	If du\OBJ <> 0 Then FreeEntity(du\OBJ) : du\OBJ = 0
+	Delete(du)
+End Function
+
 Function UpdateDimension1499%()
 	Local e.Events, n.NPCs, r.Rooms, it.Items, du.Dummy1499_1
 	Local Tex%, Temp%, Scale#, x%, y%, i%, j%
@@ -8825,8 +8825,7 @@ Function UpdateDimension1499%()
 						If n\NPCType = NPCType1499_1 Then RemoveNPC(n)
 					Next
 					For du.Dummy1499_1 = Each Dummy1499_1
-						FreeEntity(du\OBJ) : du\OBJ = 0
-						Delete(du)
+						RemoveDummy1499_1(du)
 					Next
 					If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 					If e\EventState3 < 70.0 * 30.0 Then e\EventState3 = 0.0
@@ -8859,7 +8858,7 @@ Function UpdateEndings%()
 						n_I\Curr513_1 = Null
 						
 						For du.Dummy1499_1 = Each Dummy1499_1
-							Delete(du)
+							RemoveDummy1499_1(du)
 						Next
 						
 						e\room\NPC[0] = CreateNPC(NPCTypeApache, e\room\x, 100.0, e\room\z)
@@ -9183,7 +9182,7 @@ Function UpdateEndings%()
 						n_I\Curr513_1 = Null
 						
 						For du.Dummy1499_1 = Each Dummy1499_1
-							Delete(du)
+							RemoveDummy1499_1(du)
 						Next
 						
 						For i = 2 To 4

@@ -71,6 +71,15 @@ End Function
 
 Const MaxParticleTextureIDAmount% = 8
 
+Function RemoveDecalInstances%()
+	Local i%
+	
+	For i = 0 To MaxDecalTextureIDAmount - 1
+		de_I\DecalTextureID[i] = 0
+	Next
+	Delete Each DecalInstance
+End Function
+
 Type ParticleInstance
 	Field ParticleTextureID%[MaxParticleTextureIDAmount]
 End Type
@@ -112,6 +121,14 @@ Function LoadParticles%()
 	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\Particles\blood.png", 1 + 2, DeleteAllTextures)
 	
 	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures)
+End Function
+
+Function RemoveParticleInstances%()
+	Local i%
+	
+	For i = 0 To MaxParticleTextureIDAmount - 1
+		p_I\ParticleTextureID[i] = 0
+	Next
 End Function
 
 Const MaxDoorModelIDAmount% = 9
@@ -253,6 +270,28 @@ Function LoadDoors%()
 	EndIf
 End Function
 
+Function RemoveDoorInstances%()
+	Local i%
+	
+	For i = 0 To MaxDoorModelIDAmount - 1
+		FreeEntity(d_I\DoorModelID[i]) : d_I\DoorModelID[i] = 0
+	Next
+	For i = 0 To MaxDoorFrameModelIDAmount - 1
+		FreeEntity(d_I\DoorFrameModelID[i]) : d_I\DoorFrameModelID[i] = 0
+	Next
+	FreeEntity(d_I\ElevatorPanelModel) : d_I\ElevatorPanelModel = 0
+	For i = 0 To MaxButtonModelIDAmount - 1
+		FreeEntity(d_I\ButtonModelID[i]) : d_I\ButtonModelID[i] = 0
+	Next
+	For i = ELEVATOR_PANEL_DOWN To ELEVATOR_PANEL_IDLE
+		d_I\ElevatorPanelTextureID[i] = 0
+	Next
+	For i = BUTTON_GREEN_TEXTURE To BUTTON_RED_TEXTURE
+		d_I\ButtonTextureID[i] = 0
+	Next
+	Delete Each DoorInstance
+End Function
+
 Const MaxLeverModelIDAmount% = 2
 
 Type LeverInstance
@@ -279,6 +318,15 @@ Function LoadLevers%()
 	For i = 0 To MaxLeverModelIDAmount - 1
 		HideEntity(lvr_I\LeverModelID[i])
 	Next
+End Function
+
+Function RemoveLeverInstances%()
+	Local i%
+	
+	For i = 0 To MaxLeverModelIDAmount - 1
+		FreeEntity(lvr_I\LeverModelID[i]) : lvr_I\LeverModelID[i] = 0
+	Next
+	Delete Each LeverInstance
 End Function
 
 Const MaxCamModelIDAmount% = 2
@@ -324,6 +372,19 @@ Function LoadSecurityCams%()
 		sc_I\CamTextureID[i] = LoadTexture_Strict("GFX\Map\Textures\camera(" + (i + 1) + ").png", 1, DeleteAllTextures)
 		If opt\Atmosphere Then TextureBlend(sc_I\CamTextureID[i], 5)
 	Next
+End Function
+
+Function RemoveSecurityCamInstances%()
+	Local i%
+	
+	For i = 0 To MaxCamModelIDAmount - 1
+		FreeEntity(sc_I\CamModelID[i]) : sc_I\CamModelID[i] = 0
+	Next
+	sc_I\ScreenTex = 0
+	For i = CAM_HEAD_DEFAULT_TEXTURE To CAM_HEAD_RED_LIGHT_TEXTURE
+		sc_I\CamTextureID[i] = 0
+	Next
+	Delete Each SecurityCamInstance
 End Function
 
 Const MaxMonitorModelIDAmount% = 2
@@ -396,6 +457,25 @@ Function LoadMonitors%()
 	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_6
 		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - 11) + ").png", 1, DeleteAllTextures)
 	Next
+End Function
+
+Function RemoveMonitorInstances%()
+	Local i%
+	
+	For i = 0 To MaxMonitorModelIDAmount - 1
+		FreeEntity(mon_I\MonitorModelID[i]) : mon_I\MonitorModelID[i] = 0
+	Next
+	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = 0
+	For i = MONITOR_LOCKDOWN_1_OVERLAY To MONITOR_LOCKDOWN_3_OVERLAY
+		mon_I\MonitorOverlayID[i] = 0
+	Next
+	For i = MONITOR_079_OVERLAY_1 To MONITOR_079_OVERLAY_7
+		mon_I\MonitorOverlayID[i] = 0
+	Next
+	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_6
+		mon_I\MonitorOverlayID[i] = 0
+	Next
+	Delete Each MonitorInstance
 End Function
 
 Const MaxNPCModelIDAmount% = 32
@@ -570,6 +650,18 @@ Function LoadNPCs%()
 	EndIf
 End Function
 
+Function RemoveNPCInstances%()
+	Local i%
+	
+	For i = 0 To MaxNPCModelIDAmount - 1
+		FreeEntity(n_I\NPCModelID[i]) : n_I\NPCModelID[i] = 0
+	Next
+	For i = NPC_CLASS_D_GONZALES_TEXTURE To NPC_096_BLOODY_TEXTURE
+		n_I\NPCTextureID[i] = 0
+	Next
+	Delete Each NPCInstance
+End Function
+
 Const MaxMTModelIDAmount% = 7
 Const MaxLightSpriteIDAmount% = 3
 
@@ -623,6 +715,20 @@ Function LoadMisc%()
 		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\Particles\light(" + i + ").png", 1, DeleteAllTextures)
 	Next
 	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\Particles\advanced_light.png", 1, DeleteAllTextures)
+End Function
+
+Function RemoveMiscInstances%()
+	Local i%
+	
+	For i = 0 To MaxMTModelIDAmount - 1
+		FreeEntity(misc_I\MTModelID[i]) : misc_I\MTModelID[i] = 0
+	Next
+	FreeEntity(misc_I\CupLiquid) : misc_I\CupLiquid = 0
+	For i = LIGHT_SPRITE_DEFAULT To LIGHT_SPRITE_RED
+		misc_I\LightSpriteID[i] = 0
+	Next
+	misc_I\AdvancedLightSprite = 0
+	Delete Each MiscInstance
 End Function
 
 Function LoadMaterials%(File$)
@@ -959,9 +1065,10 @@ Function LoadItems%()
 	Next
 End Function
 
+Global SoundTransmission%
 Global SoundEmitter%
+
 Global TempSounds%[10]
-Global TempSoundCHN%
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
@@ -1136,8 +1243,6 @@ Global RadioCHN%[7]
 ; ~ 6 is used for radio static only
 
 Global IntercomStreamCHN%
-
-Global PlayCustomMusic% = False, CustomMusic% = 0
 
 Global UserTrackCheck% = 0, UserTrackCheck2% = 0
 Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
@@ -1345,6 +1450,139 @@ Function LoadSounds%()
 	For i = 0 To 1
 		KnobSFX[i] = LoadSound_Strict("SFX\Room\914Chamber\Knob" + (i + 1) + ".ogg")
 	Next
+End Function
+
+Function RemoveSoundInstances%()
+	Local i%
+	
+	For i = 0 To 15
+		If i < 2
+			RadioSFX(0, i) = 0
+			VehicleSFX[i] = 0
+			NVGSFX[i] = 0
+			LowBatterySFX[i] = 0
+			KnobSFX[i] = 0
+		EndIf
+		If i < 3
+			OpenDoorSFX(DEFAULT_DOOR, i) = 0
+			CloseDoorSFX(DEFAULT_DOOR, i) = 0
+			OpenDoorSFX(ELEVATOR_DOOR, i) = 0
+			CloseDoorSFX(ELEVATOR_DOOR, i) = 0
+			OpenDoorSFX(HEAVY_DOOR, i) = 0
+			CloseDoorSFX(HEAVY_DOOR, i) = 0
+			OpenDoorSFX(BIG_DOOR, i) = 0
+			CloseDoorSFX(BIG_DOOR, i) = 0
+			OpenDoorSFX(OFFICE_DOOR, i) = 0
+			OpenDoorSFX(WOODEN_DOOR, i) = 0
+			BigDoorErrorSFX[i] = 0
+			Scp173SFX[i] = 0
+			NeckSnapSFX[i] = 0
+			CoughSFX[i] = 0
+		EndIf
+		If i < 4
+			DecaySFX[i] = 0
+			PickSFX[i] = 0
+			AlarmSFX[i] = 0
+		EndIf
+		If i < 5
+			BreathSFX(0, i) = 0
+			BreathSFX(1, i) = 0
+		EndIf
+		If i < 6 Then AmbientSFXAmount[i] = 0
+		If i < 8
+			StepSFX(0, 0, i) = 0
+			StepSFX(0, 1, i) = 0
+			StepSFX(1, 0, i) = 0
+			StepSFX(1, 1, i) = 0
+			If i < 3
+				StepSFX(2, 0, i) = 0
+				StepSFX(3, 0, i) = 0
+				StepSFX(4, 0, i) = 0
+			EndIf
+		EndIf
+		If i < 9
+			RadioSFX(1, i) = 0
+			OldManSFX[i] = 0
+		EndIf
+		If i < 12
+			IntroSFX[i] = 0
+			Step2SFX[i] = 0
+		EndIf
+		If i < 14 Then DamageSFX[i] = 0
+		HorrorSFX[i] = 0
+	Next
+	
+	KeyCardSFX1 = 0
+	KeyCardSFX2 = 0
+	ScannerSFX1 = 0
+	ScannerSFX2 = 0
+	
+	DoorBudgeSFX1 = 0
+	DoorBudgeSFX2 = 0
+	
+	DoorLockSFX = 0
+	
+	OpenDoorFastSFX = 0
+	CautionSFX = 0
+	
+	CameraSFX = 0
+	
+	StoneDragSFX = 0
+	
+	GunshotSFX = 0
+	Gunshot2SFX = 0
+	Gunshot3SFX = 0
+	BulletHitSFX = 0
+	
+	TeslaIdleSFX = 0
+	TeslaActivateSFX = 0
+	TeslaPowerUpSFX = 0
+	TeslaShockSFX = 0
+	
+	MagnetUpSFX = 0
+	MagnetDownSFX = 0
+	
+	BurstSFX = 0
+	
+	HissSFX = 0
+	
+	For i = 0 To 5
+		RustleSFX[i] = 0
+	Next
+	
+	Death914SFX = 0
+	Use914SFX = 0
+	MachineSFX = 0
+	
+	For i = 0 To 3
+		DripSFX[i] = 0
+	Next
+	
+	LeverSFX = 0
+	
+	LightSFX = 0
+	
+	ButtGhostSFX = 0
+	
+	RadioSquelch = 0
+	RadioStatic = 0
+	RadioStatic895 = 0
+	RadioBuzz = 0
+	
+	ElevatorBeepSFX = 0
+	ElevatorMoveSFX = 0
+	
+	HeartBeatSFX = 0
+	
+	ApacheSFX = 0
+	
+	MissSFX = 0
+	
+	BreathGasRelaxedSFX = 0
+	
+	CrouchSFX = 0
+	
+	SCRAMBLESFX = 0
 End Function
 
 Function LoadEvents%()
@@ -1670,18 +1908,100 @@ End Type
 
 Global t.Textures
 
-Function LoadEntities%()
-	CatchErrors("LoadEntities()")
+; ~ Collisions Constants
+;[Block]
+Const HIT_MAP% = 1
+Const HIT_PLAYER% = 2
+Const HIT_ITEM% = 3
+Const HIT_APACHE% = 4
+Const HIT_DEAD% = 5
+;[End Block]
+
+Global SubjectName$
+Global InFacility%
+Global PlayerFallingPickDistance#
+
+Global ShouldEntitiesFall%
+Global HideDistance#
+Global CoffinDistance#
+
+Global RemoteDoorOn%
+
+Type Player
+	Field Terminated# = False
+	Field KillAnim%, KillAnimTimer#, FallTimer#, DeathTimer#
+	Field Sanity#, RestoreSanity%
+	Field ForceMove#, ForceAngle#
+	Field Playable%
+	Field BlinkTimer#, BLINKFREQ#, BlinkEffect#, BlinkEffectTimer#, EyeIrritation#, EyeStuck#
+	Field Stamina#, StaminaEffect#, StaminaEffectTimer#, StaminaMax#
+	Field CameraShakeTimer#, Shake#, CameraShake#, BigCameraShake#
+	Field Vomit%, VomitTimer#, Regurgitate%
+	Field HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
+	Field Injuries#, Bloodloss#, PrevInjuries#, PrevBloodloss#, HealTimer#
+	Field DropSpeed#, HeadDropSpeed#, CurrSpeed#
+	Field Crouch%, CrouchState#
+	Field SndVolume#
+	Field SelectedEnding%, EndingScreen%, EndingTimer#
+	Field CreditsScreen%, CreditsTimer#
+	Field BlurVolume#, BlurTimer#
+	Field LightBlink#, LightFlash#
+	Field CurrCameraZoom#
+	Field RefinedItems%
+	Field Deaf%, DeafTimer#
+	Field Zombie%
+	Field Detected%
+	Field ExplosionTimer#
+	Field Zone%
+	Field Collider%, Head%
+	Field StopHidingTimer#
+	Field Funds%, UsedMastercard%
+End Type
+
+Global me.Player
+
+Function LoadData%()
+	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
+	TextureAnisotropic(opt\AnisotropicLevel)
+	AntiAlias(opt\AntiAliasing)
 	
-	Local i%, Tex%
-	Local b%, t1%, SF%
-	Local Name$, Test%, File$
-	Local Buffer% = BackBuffer()
+	IniWriteBuffer(lang\LanguagePath + AchievementsFile)
+	IniWriteBuffer(lang\LanguagePath + SCP294File)
+	IniWriteBuffer(SCP1499ChunksFile)
 	
-	DeInitMainMenuAssets()
+	LoadAchievementsFile()
 	
-	RenderLoading(0, GetLocalString("loading", "types"))
+	SubFile = JsonParseFromFile(SubtitlesFile)
+	SubColors = JsonGetValue(SubFile, "colors")
 	
+	SubtitlesInit = True
+	
+	SubjectName = GetLocalString("misc", "subject")
+	InFacility = True
+	PlayerFallingPickDistance = 10.0
+	
+	Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
+	Collisions(HIT_PLAYER, HIT_PLAYER, 1, 3)
+	Collisions(HIT_ITEM, HIT_MAP, 2, 2)
+	Collisions(HIT_APACHE, HIT_APACHE, 1, 2)
+	Collisions(HIT_DEAD, HIT_MAP, 2, 2)
+	
+	LoadRoomTemplates("Data\rooms.ini")
+	
+	ShouldEntitiesFall = True
+	HideDistance = 17.0
+	CoffinDistance = 100.0
+	
+	RemoteDoorOn = True
+	
+	SecondaryLightOn = 1.0
+	PrevSecondaryLightOn = 1.0
+	
+	QuickLoadPercent = -1
+	
+	CanSave = 2
+	
+	chs.Cheats = New Cheats
 	me.Player = New Player
 	wi.WearableItems = New WearableItems
 	
@@ -1709,6 +2029,23 @@ Function LoadEntities%()
 	igm.InGameMenu = New InGameMenu
 	
 	t.Textures = New Textures
+End Function
+
+Global Camera%
+
+Function LoadEntities%()
+	CatchErrors("LoadEntities()")
+	
+	Local i%, Tex%
+	Local b%, t1%, SF%
+	Local Name$, Test%, File$
+	Local Buffer% = BackBuffer()
+	
+	DeInitMainMenuAssets()
+	
+	RenderLoading(0, GetLocalString("loading", "data"))
+	
+	LoadData()
 	
 	InitSubtitlesAssets()
 	
@@ -1811,7 +2148,6 @@ Function LoadEntities%()
 	SetBuffer(Buffer)
 	
 	CreateBlurImage()
-	CameraProjMode(ArkBlurCam, 0)
 	
 	; ~ Overlays
 	Local OverlayScale# = Float(opt\GraphicHeight) / Float(opt\GraphicWidth)
@@ -2020,24 +2356,42 @@ Function LoadEntities%()
 	CatchErrors("Uncaught: LoadEntities()")
 End Function
 
+Function RemoveTextureInstances%()
+	Local i%
+	
+	For i = 0 To MaxAchievements - 1
+		If achv\AchvIMG[i] <> 0 Then FreeImage(achv\AchvIMG[i]) : achv\AchvIMG[i] = 0
+	Next
+	FreeImage(achv\AchvLocked) : achv\AchvLocked = 0
+	
+	For i = 0 To MaxIconIDAmount - 1
+		FreeImage(t\IconID[i]) : t\IconID[i] = 0
+	Next
+	For i = 0 To MaxImageIDAmount - 1
+		FreeImage(t\ImageID[i]) : t\ImageID[i] = 0
+	Next
+	For i = 0 To MaxOverlayTextureIDAmount - 1
+		t\OverlayTextureID[i] = 0
+	Next
+	For i = 0 To MaxOverlayIDAmount - 1
+		t\OverlayID[i] = 0
+	Next
+	Delete Each Achievements
+	Delete Each Textures
+End Function
+
 Function InitOtherStuff%()
+	Local sv.Save, cm.CustomMaps
+	
 	me\Playable = True : me\SelectedEnding = -1
 	
 	opt\MasterVolume = opt\PrevMasterVolume
-	HideDistance = 17.0
 	
-	CanSave = 2
-	
-	If opt\DebugMode
-		InitCheats()
-	Else
-		ClearCheats()
-	EndIf
+	chs\NoClipSpeed = 2.0
+	If opt\DebugMode Then InitCheats()
 	
 	as\Timer = 70.0 * 120.0
 	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
-	
-	LoadAchievementsFile()
 End Function
 
 Function InitNewGame%()
@@ -2331,6 +2685,283 @@ Function InitLoadGame%()
 	ResetInput()
 	
 	CatchErrors("Uncaught: InitLoadGame()")
+End Function
+
+Function NullGame%(PlayButtonSFX% = True)
+	CatchErrors("NullGame()")
+	
+	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, em.Emitters, d.Doors, lvr.Levers, sc.SecurityCams
+	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps
+	
+	Local i%, x%, y%, Lvl%
+	
+	DeleteTextureEntriesFromCache(DeleteAllTextures)
+	
+	StopMouseMovement()
+	KillSounds(False)
+	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX)
+	
+	RandomSeed = ""
+	
+	UsedConsole = False
+	ClearCheats()
+	WireFrameState = 0
+	WireFrame(0)
+	ConsoleOpen = False
+	ConsoleInput = ""
+	ConsoleScroll = 0.0 : ConsoleScrollDragging = 0
+	ConsoleMouseMem = 0
+	ConsoleReissue.ConsoleMsg = Null
+	ConsoleR% = 0 : ConsoleG% = 0 : ConsoleB = 0
+	For c.ConsoleMsg = Each ConsoleMsg
+		Delete(c)
+	Next
+	
+	SubjectName = ""
+	InFacility = False
+	PlayerFallingPickDistance = 0.0
+	
+	ShouldEntitiesFall = False
+	HideDistance = 0.0
+	CoffinDistance = 0.0
+	
+	SecondaryLightOn = 0.0
+	PrevSecondaryLightOn = 0.0
+	UpdateRoomLightsTimer = 0.0
+	
+	RemoteDoorOn = False
+	
+	GameSaved = False
+	CanSave = 0
+	
+	MTFTimer = 0.0
+	MTFCameraCheckTimer = 0.0
+	MTFCameraCheckDetected = False
+	
+	ShouldPlay = 66
+	FreeEntity(SoundEmitter) : SoundEmitter = 0
+	SoundTransmission = False
+	
+	TempLightVolume = 0.0
+	LightVolume = 0.0
+	CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
+	CurrFogColor = ""
+	CurrAmbientColorR = 0.0 : CurrAmbientColorG = 0.0 : CurrAmbientColorB = 0.0
+	CurrAmbientColor = ""
+	
+	GrabbedEntity = 0
+	CameraPitch = 0.0
+	
+	DrawHandIcon = False
+	For i = 0 To 3
+		DrawArrowIcon[i] = False
+	Next
+	
+	BatMsgTimer = 0.0
+	
+	EscapeTimer = 0.0
+	
+	If Camera <> 0 Then FreeEntity(Camera) : Camera = 0
+	If Sky <> 0 Then FreeEntity(Sky) : Sky = 0
+	
+	CurrTrisAmount = 0
+	
+	CurrAchvMSGID = 0
+	For ach.AchievementMsg = Each AchievementMsg
+		Delete(ach)
+	Next
+	
+	SubFile = 0
+	SubtitlesInit = False
+	ClearSubtitles()
+	DeInitSubtitlesAssets()
+	Delete Each Messages
+	Delete Each AutoSave
+	
+	opt\CameraFogFar = 0.0
+	opt\CameraFogNear = 0.0
+	FreeEntity(me\Collider) : me\Collider = 0
+	FreeEntity(me\Head) : me\Head = 0
+	Delete Each Player
+	Delete Each WearableItems
+	
+	Delete Each SCP005
+	Delete Each SCP008
+	Delete Each SCP035
+	Delete Each SCP268
+	Delete Each SCP294
+	Delete Each SCP409
+	For i = 0 To 1
+		If I_427\Sound[i] <> 0 Then FreeSound_Strict(I_427\Sound[i]) : I_427\Sound[i] = 0
+	Next
+	Delete Each SCP427
+	Delete Each SCP500
+	Delete Each SCP714
+	Delete Each SCP1025
+	I_1499\PrevRoom.Rooms = Null
+	If I_1499\Sky <> 0 Then FreeEntity(I_1499\Sky) : I_1499\Sky = 0
+	Delete Each SCP1499
+	
+	QuickLoadPercent = -1
+	QuickLoadPercent_DisplayTimer = 0.0
+	QuickLoad_CurrEvent.Events = Null
+	forest_event.Events = Null
+	skull_event.Events = Null
+	For e.Events = Each Events
+		RemoveEvent(e)
+	Next
+	
+	IsUsingRadio = False
+	InvOpen = False
+	For i = 0 To 9
+		If i < 9
+			RadioState[i] = 0.0
+			RadioState2[i] = 0
+		EndIf
+		RadioState3[i] = 0
+	Next
+	
+	ItemAmount = 0 : MaxItemAmount = 0
+	LastItemID = 0
+	For itt.ItemTemplates = Each ItemTemplates
+		RemoveItemTemplate(itt)
+	Next
+	ClosestItem.Items = Null
+	OtherOpen.Items = Null
+	For it.Items = Each Items
+		RemoveItem(it)
+	Next
+	Dim Inventory.Items(0)
+	
+	For de.Decals = Each Decals
+		RemoveDecal(de)
+	Next
+	RemoveDecalInstances()
+	For p.Particles = Each Particles
+		RemoveParticle(p)
+	Next
+	RemoveParticleInstances()
+	For em.Emitters = Each Emitters
+		RemoveEmitter(em)
+	Next
+	Delete Each BrokenDoor
+	For d.Doors = Each Doors
+		RemoveDoor(d)
+	Next
+	RemoveDoorInstances()
+	For lvr.Levers = Each Levers
+		RemoveLever(lvr)
+	Next
+	RemoveLeverInstances()
+	For sc.SecurityCams = Each SecurityCams
+		RemoveSecurityCam(sc)
+	Next
+	RemoveSecurityCamInstances()
+	RemoveMonitorInstances()
+	For s.Screens = Each Screens
+		RemoveScreen(s)
+	Next
+	For w.WayPoints = Each WayPoints
+		RemoveWaypoint(w)
+	Next
+	For pr.Props = Each Props
+		RemoveProp(pr)
+	Next
+	For fr.Forest = Each Forest
+		If fr <> Null Then DestroyForest(fr)
+		Delete(fr)
+	Next
+	For mt.MTGrid = Each MTGrid
+		If mt <> Null Then DestroyMT(mt, False)
+		Delete(mt)
+	Next
+	For ch.Chunk = Each Chunk
+		RemoveChunk(ch)
+	Next
+	For chp.ChunkPart = Each ChunkPart
+		RemoveChunkPart(chp)
+	Next
+	For rt.RoomTemplates = Each RoomTemplates
+		RemoveRoomTemplate(rt)
+	Next
+	SelectedCustomMap = Null
+	Dim MapRoom$(0, 0)
+	Delete Each MapGrid
+	Delete Each MapZones
+	RoomTempID = 0
+	PlayerRoom.Rooms = Null
+	For r.Rooms = Each Rooms
+		RemoveRoom(r)
+	Next
+	
+	RemoveHazmatTimer = 0.0
+	Remove714Timer = 0.0
+	ForestNPC = 0
+	ForestNPCTex = 0
+	For i = 0 To 2
+		ForestNPCData[i] = 0.0
+	Next
+	For du.Dummy1499_1 = Each Dummy1499_1
+		RemoveDummy1499_1(du)
+	Next
+	n_I\Curr066 = Null
+	n_I\Curr049 = Null
+	n_I\Curr096 = Null
+	n_I\Curr106 = Null
+	n_I\Curr173 = Null
+	n_I\Curr513_1 = Null
+	For n.NPCs = Each NPCs
+		RemoveNPC(n)
+	Next
+	RemoveNPCInstances()
+	
+	RemoveMiscInstances()
+	
+	For m.Materials = Each Materials
+		Delete(m)
+	Next
+	RemoveTextureInstances()
+	Delete Each TextureInCache
+	AmbientLightRoomTex = 0
+	MissingTexture = 0
+	
+	For snd.Sound = Each Sound
+		If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
+		Delete(snd)
+	Next
+	RemoveSoundInstances()
+	
+	CurrSave.Save = Null
+	For sv.Save = Each Save
+		Delete(sv)
+	Next
+	CurrCustomMap.CustomMaps = Null
+	For cm.CustomMaps = Each CustomMaps
+		Delete(cm)
+	Next
+	
+	IniClearBuffer(lang\LanguagePath + AchievementsFile)
+	IniClearBuffer(lang\LanguagePath + SCP294File)
+	IniClearBuffer(SCP1499ChunksFile)
+	
+	ClearTextureFilters()
+	ClearCollisions()
+	ClearWorld()
+	ResetTimingAccumulator()
+	FreeBlur()
+	InitFastResize()
+	
+	; ~ Load main menu assets and open main menu
+	ShouldDeleteGadgets = True
+	DeleteMenuGadgets()
+	InitMainMenuAssets()
+	MenuOpen = False
+	Delete Each InGameMenu
+	MainMenuOpen = True
+	mm\MainMenuTab = MainMenuTab_Default
+	
+	CatchErrors("Uncaught: NullGame()")
 End Function
 
 ;~IDEal Editor Parameters:

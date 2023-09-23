@@ -64,12 +64,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 							OpenConsoleOnError()
 						EndIf
 					EndIf
-					If ConsoleFlush
-						snd\Channels[i] = PlaySound(ConsoleFlushSnd)
-					Else
-						snd\Channels[i] = PlaySound(snd\InternalHandle)
-					EndIf
-					
+					snd\Channels[i] = PlaySound(snd\InternalHandle)
 					ChannelVolume(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 					snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
@@ -91,11 +86,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 						OpenConsoleOnError()
 					EndIf
 				EndIf
-				If ConsoleFlushSnd
-					snd\Channels[i] = PlaySound(ConsoleFlushSnd)
-				Else
-					snd\Channels[i] = PlaySound(snd\InternalHandle)
-				EndIf
+				snd\Channels[i] = PlaySound(snd\InternalHandle)
 				ChannelVolume(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 				snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
@@ -131,7 +122,6 @@ Function FreeSound_Strict%(SoundHandle%)
 			FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 			RemoveSubtitlesToken(snd)
 		EndIf
-		snd\ReleaseTime = 0
 		Delete(snd)
 	EndIf
 End Function

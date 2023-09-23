@@ -123,7 +123,31 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	Return(p)
 End Function
 
+Function RemoveProp%(pr.Props)
+	FreeEntity(pr\OBJ) : pr\OBJ = 0
+	Delete(pr) : pr = Null
+End Function
+
+Type TempLights
+	Field RoomTemplate.RoomTemplates
+	Field lType%
+	Field x#, y#, z#
+	Field Range#
+	Field R%, G%, B%
+	Field Pitch#, Yaw#
+	Field InnerConeAngle%, OuterConeAngle#
+End Type
+
 Global LightVolume#, TempLightVolume#
+
+Type Lights
+	Field OBJ%
+	Field SpriteTexture%, AdvancedSpriteTexture%
+	Field x#, y#, z#
+	Field Type%
+	Field Range#
+	Field R%, G%, B%
+End Type
 
 Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 	Local i%
@@ -191,17 +215,10 @@ Function AddLight%(room.Rooms, x#, y#, z#, lType%, Range#, R%, G%, B%)
 	EndIf
 End Function
 
-Type TempLights
-	Field RoomTemplate.RoomTemplates
-	Field lType%
-	Field x#, y#, z#
-	Field Range#
-	Field R%, G%, B%
-	Field Pitch#, Yaw#
-	Field InnerConeAngle%, OuterConeAngle#
-End Type
+Global SecondaryLightOn#
+Global PrevSecondaryLightOn#
 
-Global UpdateRoomLightsTimer# = 0.0
+Global UpdateRoomLightsTimer#
 
 Function UpdateRoomLights%()
 	If SecondaryLightOn > 0.5
@@ -985,7 +1002,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	PositionEntity(fr\Forest_Pivot, x, y, z, True)
 	
 	; ~ Load assets
-	Local hMap%[ROOM4 + 1], Mask%[ROOM4 + 1]
+	Local hMap%[5], Mask%[5]
 	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.jpg")
 	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.jpg")
 	
@@ -1012,7 +1029,10 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
 		HideEntity(fr\TileMesh[i])
+		DeleteSingleTextureEntryFromCache(Mask[i])
 	Next
+	DeleteSingleTextureEntryFromCache(GroundTexture)
+	DeleteSingleTextureEntryFromCache(PathTexture)
 	
 	; ~ Detail meshes
 	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
@@ -1191,6 +1211,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 			EndIf
 		Next
 	Next
+	FreeImage(hMap[i]) : hMap[i] = 0
 	
 	; ~ Place the wall
 	For i = 0 To 1
@@ -1231,7 +1252,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\Forest_Pivot = CreatePivot()
 	PositionEntity(fr\Forest_Pivot, x, y, z, True)
 	
-	Local hMap%[ROOM4 + 1], Mask%[ROOM4 + 1]
+	Local hMap%[5], Mask%[5]
 	; ~ Load assets
 	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.jpg", 1 + 256)
 	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.jpg", 1 + 256)
@@ -1259,7 +1280,10 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
 		HideEntity(fr\TileMesh[i])
+		DeleteSingleTextureEntryFromCache(Mask[i])
 	Next
+	DeleteSingleTextureEntryFromCache(GroundTexture)
+	DeleteSingleTextureEntryFromCache(PathTexture)
 	
 	; ~ Detail meshes
 	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
@@ -1393,6 +1417,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 			EndIf
 		Next
 	Next
+	FreeImage(hMap[i]) : hMap[i] = 0
 	
 	CatchErrors("Uncaught: PlaceMapCreatorForest(" + x + ", " + y + ", " + z + ")")
 End Function
@@ -1451,6 +1476,7 @@ Function UpdateForest%(fr.Forest)
 End Function
 
 Global RoomTempID%
+Global RoomAmbience%[10]
 
 Type RoomTemplates
 	Field OBJ%, ID%
@@ -1566,24 +1592,17 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
+Function RemoveRoomTemplate%(rt.RoomTemplates)
+	FreeEntity(rt\OBJ) : rt\OBJ = 0
+	Delete(rt)
+End Function
+
 ;Type TriggerBox
 ;	Field OBJ%
 ;	Field Name$
 ;	Field MinX#, MinY#, MinZ#
 ;	Field MaxX#, MaxY#, MaxZ#
 ;End Type
-
-LoadRoomTemplates("Data\rooms.ini")
-
-Global RoomAmbience%[10]
-
-Global Sky%
-
-Global HideDistance#
-
-Global SecondaryLightOn# = True
-Global PrevSecondaryLightOn# = True
-Global RemoteDoorOn% = True
 
 ; ~ Room Objects Constants
 ;[Block]
@@ -1671,6 +1690,20 @@ Function UpdateMT%(mt.MTGrid)
 	Next
 	
 	CatchErrors("Uncaught: UpdateMT()")
+End Function
+
+Function DestroyMT%(mt.MTGrid, DestroyWaypoint% = True)
+	Local x%, y%
+	
+	For x = 0 To MTGridSize - 1
+		For y = 0 To MTGridSize - 1
+			If mt\Entities[x + (y * MTGridSize)] <> 0 Then FreeEntity(mt\Entities[x + (y * MTGridSize)]) : mt\Entities[x + (y * MTGridSize)] = 0
+			If DestroyWaypoint And mt\waypoints[x + (y * MTGridSize)] <> Null Then RemoveWaypoint(mt\waypoints[x + (y * MTGridSize)]) : mt\waypoints[x + (y * MTGridSize)] = Null
+		Next
+	Next
+	For x = 0 To 6
+		If mt\Meshes[x] <> 0 Then FreeEntity(mt\Meshes[x]) : mt\Meshes[x] = 0
+	Next
 End Function
 
 Function PlaceMapCreatorMT%(r.Rooms)
@@ -1936,6 +1969,31 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	Next
 	
 	CatchErrors("Uncaught: CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + "))")
+End Function
+
+Function RemoveRoom%(r.Rooms)
+	Local i%
+	
+	For i = 0 To MaxRoomLights - 1
+		If r\Lights[i] <> 0
+			FreeEntity(r\LightSprites[i]) : r\LightSprites[i] = 0
+			FreeEntity(r\LightSprites2[i]) : r\LightSprites2[i] = 0
+			FreeEntity(r\Lights[i]) : r\Lights[i] = 0
+		EndIf
+	Next
+	For i = 0 To MaxRoomObjects - 1
+		If r\Objects[i] <> 0 Then r\Objects[i] = 0
+	Next
+	For i = 0 To MaxRoomTextures - 1
+		r\Textures[i] = 0
+	Next
+	For i = 0 To MaxRoomEmitters - 1
+		If r\SoundEmitterOBJ[i] <> 0 Then FreeEntity(r\SoundEmitterOBJ[i]) : r\SoundEmitterOBJ[i] = 0
+	Next
+	
+	If r\RoomCenter <> 0 Then FreeEntity(r\RoomCenter) : r\RoomCenter = 0
+	FreeEntity(r\OBJ) : r\OBJ = 0
+	Delete(r)
 End Function
 
 Type TempWayPoints
@@ -3465,6 +3523,19 @@ Function RenderSecurityCams%()
 	Cls()
 End Function
 
+Function RemoveSecurityCam%(sc.SecurityCams)
+	If sc\Pvt <> 0 Then FreeEntity(sc\Pvt) : sc\Pvt = 0
+	FreeEntity(sc\CameraOBJ) : sc\CameraOBJ = 0
+	FreeEntity(sc\BaseOBJ) : sc\BaseOBJ = 0
+	If sc\Screen
+		FreeEntity(sc\MonitorOBJ) : sc\MonitorOBJ = 0
+		FreeEntity(sc\ScrOverlay) : sc\ScrOverlay = 0
+		FreeEntity(sc\ScrOBJ) : sc\ScrOBJ = 0
+		FreeEntity(sc\Cam) : sc\Cam = 0
+	EndIf
+	Delete(sc)
+End Function
+
 Function UpdateMonitorSaving%()
 	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
 	
@@ -3637,6 +3708,12 @@ Function UpdateScreens%()
 	Next
 End Function
 
+Function RemoveScreen%(s.Screens)
+	FreeEntity(s\OBJ) : s\OBJ = 0
+	If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
+	Delete(s)
+End Function
+
 Type Levers
 	Field OBJ%, BaseOBJ%
 	Field room.Rooms
@@ -3717,6 +3794,12 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 	Else
 		Return(False)
 	EndIf
+End Function
+
+Function RemoveLever(lvr.Levers)
+	FreeEntity(lvr\OBJ) : lvr\OBJ = 0
+	FreeEntity(lvr\BaseOBJ) : lvr\BaseOBJ = 0
+	Delete(lvr)
 End Function
 
 Function CreateRedLight%(x#, y#, z#, Parent% = 0)
@@ -4348,6 +4431,14 @@ Const MapGrid_Tile% = 1
 Const MapGrid_CheckpointTile% = 255
 ;[End Block]
 
+Type MapZones
+	Field Transition%[2]
+	Field HasCustomForest%
+	Field HasCustomMT%
+End Type
+
+Global I_Zone.MapZones
+
 Function CreateMap%()
 	Local r.Rooms, r2.Rooms, d.Doors
 	Local x%, y%, Temp%, Temp2%
@@ -4362,7 +4453,7 @@ Function CreateMap%()
 	
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
-	Delete(CurrMapGrid) : CurrMapGrid = Null
+	Delete(CurrMapGrid)
 	CurrMapGrid = New MapGrid
 	
 	x = MapGridSize / 2
@@ -5345,12 +5436,7 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
 			If DistanceSquared(EntityX(me\Collider), EntityX(ch\ChunkPivot), EntityZ(me\Collider), EntityZ(ch\ChunkPivot)) > PowTwo(ChunkMaxDistance)
-				For i = 0 To ch\Amount
-					FreeEntity(ch\OBJ[i]) : ch\OBJ[i] = 0
-				Next
-				FreeEntity(ch\PlatForm) : ch\PlatForm = 0
-				FreeEntity(ch\ChunkPivot) : ch\ChunkPivot = 0
-				Delete(ch)
+				RemoveChunk(ch)
 			EndIf
 		EndIf
 	Next
@@ -5428,19 +5514,30 @@ Function HideChunks%()
 	
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
-			For i = 0 To ch\Amount
-				FreeEntity(ch\OBJ[i]) : ch\OBJ[i] = 0
-			Next
-			FreeEntity(ch\PlatForm) : ch\PlatForm = 0
-			FreeEntity(ch\ChunkPivot) : ch\ChunkPivot = 0
-			Delete(ch)
+			RemoveChunk(ch)
 		EndIf
 	Next
 End Function
 
-Function DeleteChunks%()
-	Delete Each Chunk
-	Delete Each ChunkPart
+Function RemoveChunk%(ch.Chunk)
+	Local i%
+	
+	For i = 0 To ch\Amount
+		FreeEntity(ch\OBJ[i]) : ch\OBJ[i] = 0
+	Next
+	FreeEntity(ch\PlatForm) : ch\PlatForm = 0
+	FreeEntity(ch\ChunkPivot) : ch\ChunkPivot = 0
+	Delete(ch)
+End Function
+
+Function RemoveChunkPart%(chp.ChunkPart)
+	Local i%
+	Local ChunkAmount% = IniGetInt(SCP1499ChunksFile, "general", "count")
+	
+	For i = 0 To ChunkAmount
+		FreeEntity(chp\OBJ[i]) : chp\OBJ[i] = 0
+	Next
+	Delete(chp)
 End Function
 
 ;~IDEal Editor Parameters:

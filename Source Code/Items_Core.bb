@@ -113,6 +113,18 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	Return(it)
 End Function
 
+Function RemoveItemTemplate(itt.ItemTemplates)
+	FreeEntity(itt\OBJ) : itt\OBJ = 0
+	
+	FreeImage(itt\InvImg) : itt\InvImg = 0
+	If itt\InvImg2 <> 0 Then FreeImage(itt\InvImg2) : itt\InvImg2 = 0
+	
+	If itt\Img <> 0 Then FreeImage(itt\Img) : itt\Img = 0
+	
+	If itt\Tex <> 0 Then DeleteSingleTextureEntryFromCache(itt\Tex) : itt\Tex = 0
+	Delete(itt)
+End Function
+	
 Function GetRandDocument$()
 	Select Rand(0, 20)
 		Case 0
@@ -209,7 +221,6 @@ Type Items
 	Field ItemTemplate.ItemTemplates
 	Field DropSpeed#
 	Field R%, G%, B%, A#
-	Field SoundCHN%
 	Field Dist#, DistTimer#
 	Field State#, State2#, State3#
 	Field Picked%, Dropped%
@@ -314,14 +325,13 @@ Function RemoveItem%(i.Items)
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = i
 			Inventory(n) = Null
-			ItemAmount = ItemAmount - 1
 			Exit
 		EndIf
 	Next
 	
 	If SelectedItem = i Then SelectedItem = Null
 	
-	If i\ItemTemplate\Img <> 0 Then FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
+	If i\InvImg <> 0 Then FreeImage(i\InvImg) : i\InvImg = 0
 	Delete(i)
 	
 	CatchErrors("Uncaught: RemoveItem()")

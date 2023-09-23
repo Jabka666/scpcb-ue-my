@@ -1,3 +1,5 @@
+Global MainMenuOpen%
+
 Type MainMenu
 	Field MainMenuBlinkTimer#[2]
 	Field MainMenuBlinkDuration#[2]
@@ -6,7 +8,7 @@ Type MainMenu
 	Field CurrMenuPage%
 End Type
 
-Global mm.MainMenu = New MainMenu
+Global mm.MainMenu
 
 Type MainMenuAssets
 	Field BackGround%
@@ -21,6 +23,7 @@ MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
 MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 
 Function InitMainMenuAssets%()
+	mm.MainMenu = New MainMenu
 	mma.MainMenuAssets = New MainMenuAssets
 	
 	mma\BackGround = LoadImage_Strict("GFX\Menu\back.png")
@@ -37,7 +40,11 @@ Function InitMainMenuAssets%()
 End Function
 
 Function DeInitMainMenuAssets%()
-	Delete(mma)
+	FreeImage(mma\BackGround) : mma\BackGround = 0
+	FreeImage(mma\SECURE_CONTAIN_PROTECT) : mma\SECURE_CONTAIN_PROTECT = 0
+	FreeImage(mma\SCP173) : mma\SCP173 = 0
+	Delete Each MainMenuAssets
+	Delete Each MainMenu
 End Function
 
 Global RandomSeed$
@@ -222,6 +229,7 @@ Function UpdateMainMenu%()
 				StopStream_Strict(MusicCHN) : MusicCHN = 0
 				End()
 			EndIf
+			RuntimeStats()
 		Else
 			y = 376 * MenuScale
 			Width = 580 * MenuScale
@@ -1723,6 +1731,9 @@ Function ResetLoadingTextColor%()
 	TextR = 0.0 : TextG = 0.0 : TextB = 0.0
 End Function
 
+Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
+Global LoadingBack%
+
 Function RenderLoading%(Percent%, Assets$ = "")
 	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
 	
@@ -1737,14 +1748,16 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		Temp = Rand(LoadingScreenAmount)
 		For ls.LoadingScreens = Each LoadingScreens
 			If ls\ID = Temp
-				If ls\Img = 0
-					ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
-					ls\Img = ScaleImage2(ls\Img, MenuScale, MenuScale)
-					SelectedLoadingScreen = ls
-				EndIf
+				ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
+				ls\Img = ScaleImage2(ls\Img, MenuScale, MenuScale)
+				SelectedLoadingScreen = ls
 				Exit
 			EndIf
 		Next
+		If (Not SelectedLoadingScreen\DisableBackground)
+			LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
+			LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
+		EndIf
 	EndIf
 	
 	FirstLoop = True
@@ -1917,10 +1930,12 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			ResetTimingAccumulator()
 			SetFontEx(fo\FontID[Font_Default])
 			Close = True
+			DeleteMenuGadgets()
+			FreeImage(SelectedLoadingScreen\Img) : SelectedLoadingScreen\Img = 0
+			FreeImage(LoadingBack) : LoadingBack = 0
+			SelectedLoadingScreen = Null
 		EndIf
 	Until Close
-	
-	DeleteMenuGadgets()
 	
 	CatchErrors("Uncaught: RenderLoading(" + Percent + ", " + Assets + ")")
 End Function
@@ -2044,6 +2059,10 @@ Function RenderMenuButtons%()
 	Next
 End Function
 
+Function DeleteMenuButton%(mb.MenuButton)
+	Delete(mb)
+End Function
+
 Type MenuTick
 	Field x%, y%
 	Field Selected%
@@ -2127,6 +2146,10 @@ Function RenderMenuTicks%()
 	Next
 End Function
 
+Function DeleteMenuTick%(mt.MenuTick)
+	Delete(mt)
+End Function
+
 Type MenuPalette
 	Field Img%
 	Field x%, y%, Width%, Height%
@@ -2181,6 +2204,11 @@ Function RenderMenuPalettes%()
 			Oval(ScaledMouseX(), ScaledMouseY(), 5 * MenuScale, 5 * MenuScale, False)
 		EndIf
 	Next
+End Function
+
+Function DeleteMenuPallete%(mp.MenuPalette)
+	If mp\Img <> 0 Then FreeImage(mp\Img) : mp\Img = 0
+	Delete(mp)
 End Function
 
 Function ChrCanDisplay%(Char%)
@@ -2325,6 +2353,10 @@ Function RenderMenuInputBoxes%()
 	Next
 End Function
 
+Function DeleteMenuInputBox%(mib.MenuInputBox)
+	Delete(mib)
+End Function
+
 Type MenuSlideBar
 	Field x%, y%, Width%
 	Field Value#
@@ -2376,6 +2408,10 @@ Function RenderMenuSlideBars%()
 		TextEx(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))
 		TextEx(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.high"))
 	Next
+End Function
+
+Function DeleteMenuSlideBar%(msb.MenuSlideBar)
+	Delete(msb)
 End Function
 
 Type MenuSlider
@@ -2574,128 +2610,149 @@ Function RenderMenuSliders%()
 	Next
 End Function
 
-Type MenuScrollBar
-	Field x%, y%
-	Field Width%, Height%
-	Field BarX%, BarY%
-	Field BarWidth%, BarHeight%
-	Field Value#
-	Field Vertical%, Locked%
-End Type
+Function DeleteMenuSlider%(ms.MenuSlider)
+	Delete(ms)
+End Function
+
+;Type MenuScrollBar
+;	Field x%, y%
+;	Field Width%, Height%
+;	Field BarX%, BarY%
+;	Field BarWidth%, BarHeight%
+;	Field Value#
+;	Field Vertical%, Locked%
+;End Type
 
 Global OnScrollBar%
 Global ScrollBarY# = 0.0
 Global ScrollMenuHeight# = 0.0
 
-Function UpdateMenuScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Value#, Vertical% = False, Locked% = False)
-	Local msb.MenuScrollBar, currScrollBar.MenuScrollBar
-	Local ScrollBarExist% = False
-	
-	For msb.MenuScrollBar = Each MenuScrollBar
-		If msb\BarX = BarX And msb\BarY = BarY And msb\BarWidth = BarWidth And msb\BarHeight = BarHeight
-			ScrollBarExist = True
-			Exit
-		EndIf
-	Next
-	If (Not ScrollBarExist)
-		msb.MenuScrollBar = New MenuScrollBar
-		msb\Width = Width
-		msb\Height = Height
-		msb\BarX = BarX
-		msb\BarY = BarY
-		msb\BarWidth = BarWidth
-		msb\BarHeight = BarHeight
-		msb\Value = Value
-		msb\Vertical = Vertical
-		msb\Locked = Locked
-	Else
-		currScrollBar = msb
-		currScrollBar\Width = Width
-		currScrollBar\Height = Height
-		currScrollBar\Value = Value
-		currScrollBar\Vertical = Vertical
-		currScrollBar\Locked = Locked
-	EndIf
-	
-	Local MouseSpeedX# = MouseXSpeed()
-	Local MouseSpeedY# = MouseYSpeed()
-	
-	OnScrollBar = (mo\MouseDown1 And MouseOn(BarX, BarY, BarWidth, BarHeight))
-	If OnScrollBar
-		If mo\MouseHit1
-			If Locked
-				PlaySound_Strict(ButtonSFX2)
-			Else
-				PlaySound_Strict(ButtonSFX)
-			EndIf
-		EndIf
-		If (Not Vertical)
-			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
-		Else
-			Return(Min(Max(Value + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
-		EndIf
-	EndIf
-	
-	Local MouseSpeedZ# = MouseZSpeed()
-	
-	; ~ Only for vertical scroll bars
-	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
-	
-	Return(Value)
-End Function
+;Function UpdateMenuScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Value#, Vertical% = False, Locked% = False)
+;	Local msb.MenuScrollBar, currScrollBar.MenuScrollBar
+;	Local ScrollBarExist% = False
+;	
+;	For msb.MenuScrollBar = Each MenuScrollBar
+;		If msb\BarX = BarX And msb\BarY = BarY And msb\BarWidth = BarWidth And msb\BarHeight = BarHeight
+;			ScrollBarExist = True
+;			Exit
+;		EndIf
+;	Next
+;	If (Not ScrollBarExist)
+;		msb.MenuScrollBar = New MenuScrollBar
+;		msb\Width = Width
+;		msb\Height = Height
+;		msb\BarX = BarX
+;		msb\BarY = BarY
+;		msb\BarWidth = BarWidth
+;		msb\BarHeight = BarHeight
+;		msb\Value = Value
+;		msb\Vertical = Vertical
+;		msb\Locked = Locked
+;	Else
+;		currScrollBar = msb
+;		currScrollBar\Width = Width
+;		currScrollBar\Height = Height
+;		currScrollBar\Value = Value
+;		currScrollBar\Vertical = Vertical
+;		currScrollBar\Locked = Locked
+;	EndIf
+;	
+;	Local MouseSpeedX# = MouseXSpeed()
+;	Local MouseSpeedY# = MouseYSpeed()
+;	
+;	OnScrollBar = (mo\MouseDown1 And MouseOn(BarX, BarY, BarWidth, BarHeight))
+;	If OnScrollBar
+;		If mo\MouseHit1
+;			If Locked
+;				PlaySound_Strict(ButtonSFX2)
+;			Else
+;				PlaySound_Strict(ButtonSFX)
+;			EndIf
+;		EndIf
+;		If (Not Vertical)
+;			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
+;		Else
+;			Return(Min(Max(Value + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
+;		EndIf
+;	EndIf
+;	
+;	Local MouseSpeedZ# = MouseZSpeed()
+;	
+;	; ~ Only for vertical scroll bars
+;	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
+;	
+;	Return(Value)
+;End Function
 
-Function RenderMenuScrollBars%()
-	Local msb.MenuScrollBar
-	
-	For msb.MenuScrollBar = Each MenuScrollBar
-		If OnScrollBar
-			Color(30, 30, 30)
-			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight)
-			Color(130, 130, 130)
-			Rect(msb\BarX + 1, msb\BarY + 1, msb\BarWidth - 1, msb\BarHeight - 1, False)
-			Color(10, 10, 10)
-			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight, False)
-			Color(255, 255, 255)
-			Line(msb\BarX, msb\BarY + msb\BarHeight - 1, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
-			Line(msb\BarX + msb\BarWidth - 1, msb\BarY, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
-		Else
-			Color(100, 100, 100)
-			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight)
-			Color(130, 130, 130)
-			Rect(msb\BarX, msb\BarY, msb\BarWidth - 1, msb\BarHeight - 1, False)
-			Color(255, 255, 255)
-			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight, False)
-			Color(10, 10, 10)
-			Line(msb\BarX, msb\BarY + msb\BarHeight - 1, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
-			Line(msb\BarX + msb\BarWidth - 1, msb\BarY, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
-		EndIf
-		
-		If (Not msb\Vertical) ; ~ Horizontal
-			If msb\Height > (10 * MenuScale)
-				Color(255, 255, 255)
-				Rect(msb\BarX + (msb\BarWidth / 2), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
-				Rect(msb\BarX + (msb\BarWidth / 2) - (3 * MenuScale), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
-				Rect(msb\BarX + (msb\BarWidth / 2) + (3 * MenuScale), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
-			EndIf
-		Else ; ~ Vertical
-			If msb\Width > (10 * MenuScale)
-				Color(255, 255, 255)
-				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
-				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2) - (3 * MenuScale), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
-				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2) + (3 * MenuScale), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
-			EndIf
-		EndIf
-	Next
-End Function
+;Function RenderMenuScrollBars%()
+;	Local msb.MenuScrollBar
+;	
+;	For msb.MenuScrollBar = Each MenuScrollBar
+;		If OnScrollBar
+;			Color(30, 30, 30)
+;			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight)
+;			Color(130, 130, 130)
+;			Rect(msb\BarX + 1, msb\BarY + 1, msb\BarWidth - 1, msb\BarHeight - 1, False)
+;			Color(10, 10, 10)
+;			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight, False)
+;			Color(255, 255, 255)
+;			Line(msb\BarX, msb\BarY + msb\BarHeight - 1, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
+;			Line(msb\BarX + msb\BarWidth - 1, msb\BarY, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
+;		Else
+;			Color(100, 100, 100)
+;			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight)
+;			Color(130, 130, 130)
+;			Rect(msb\BarX, msb\BarY, msb\BarWidth - 1, msb\BarHeight - 1, False)
+;			Color(255, 255, 255)
+;			Rect(msb\BarX, msb\BarY, msb\BarWidth, msb\BarHeight, False)
+;			Color(10, 10, 10)
+;			Line(msb\BarX, msb\BarY + msb\BarHeight - 1, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
+;			Line(msb\BarX + msb\BarWidth - 1, msb\BarY, msb\BarX + msb\BarWidth - 1, msb\BarY + msb\BarHeight - 1)
+;		EndIf
+;		
+;		If (Not msb\Vertical) ; ~ Horizontal
+;			If msb\Height > (10 * MenuScale)
+;				Color(255, 255, 255)
+;				Rect(msb\BarX + (msb\BarWidth / 2), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
+;				Rect(msb\BarX + (msb\BarWidth / 2) - (3 * MenuScale), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
+;				Rect(msb\BarX + (msb\BarWidth / 2) + (3 * MenuScale), msb\BarY + (5 * MenuScale), 2 * MenuScale, msb\BarHeight - (10 * MenuScale))
+;			EndIf
+;		Else ; ~ Vertical
+;			If msb\Width > (10 * MenuScale)
+;				Color(255, 255, 255)
+;				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
+;				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2) - (3 * MenuScale), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
+;				Rect(msb\BarX + (4 * MenuScale), msb\BarY + (msb\BarHeight / 2) + (3 * MenuScale), msb\BarWidth - (10 * MenuScale), 2 * MenuScale)
+;			EndIf
+;		EndIf
+;	Next
+;End Function
+
+;Function DeleteMenuScrollBar%(msb.MenuScrollBar)
+;	Delete(msb)
+;End Function
 
 Function DeleteMenuGadgets%()
-	Delete Each MenuButton
-	Delete Each MenuPalette
-	Delete Each MenuTick
-	Delete Each MenuInputBox
-	Delete Each MenuSlideBar
-	Delete Each MenuSlider
-	Delete Each MenuScrollBar
+	Local mb.MenuButton, mp.MenuPalette, mt.MenuTick, mib.MenuInputBox, msb.MenuSlideBar, ms.MenuSlider;, msb.MenuScrollBar
+	
+	For mb.MenuButton = Each MenuButton
+		DeleteMenuButton(mb)
+	Next
+	For mp.MenuPalette = Each MenuPalette
+		DeleteMenuPallete(mp)
+	Next
+	For mt.MenuTick = Each MenuTick
+		DeleteMenuTick(mt)
+	Next
+	For mib.MenuInputBox = Each MenuInputBox
+		DeleteMenuInputBox(mib)
+	Next
+	For msb.MenuSlideBar = Each MenuSlideBar
+		DeleteMenuSlideBar(msb)
+	Next
+	For ms.MenuSlider = Each MenuSlider
+		DeleteMenuSlider(ms)
+	Next
 End Function
 
 Function RowText%(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)

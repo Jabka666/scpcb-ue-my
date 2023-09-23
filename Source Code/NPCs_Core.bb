@@ -50,6 +50,8 @@ End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
 
+Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
+
 Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	CatchErrors("CreateNPC(" + NPCType + ", " + x + ", " + y + ", " + z)
 	
@@ -575,6 +577,7 @@ Function RemoveNPC%(n.NPCs)
 	
 	CatchErrors("RemoveNPC()")
 	
+	n\Target = Null
 	If n\SoundCHN_IsStream
 		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
 	Else
