@@ -1748,7 +1748,7 @@ Function PlaceMapCreatorMT%(r.Rooms)
 					Case 6
 						;[Block]
 						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (409.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
-						AddLight(r, r\x + (x * 2.0) + (CosValue * 555.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 555.0 * RoomScale), 2, 0.25, 255, 200, 200)
+						AddLight(r, r\x + (x * 2.0) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
 						CreateProp("GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", r)
 						CreateProp("GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, -90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", r)
 						
