@@ -4585,7 +4585,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0
 					e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-					e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True e\room\NPC[0]\GravityMult = 0.0
+					e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True : e\room\NPC[0]\GravityMult = 0.0
 					SetNPCFrame(e\room\NPC[0], 288.0)
 					PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider) + Rnd(-20.0, 20.0), 0.0, True)
