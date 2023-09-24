@@ -383,8 +383,8 @@ Function UpdateGame%()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
 				UpdateLeave1499()
 			ElseIf RN = "dimension_106"
-				UpdateSoundEmitters(PlayerRoom)
 				LightVolume = 1.0
+				UpdateSoundEmitters()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			Else
 				UpdateLights()
@@ -392,6 +392,7 @@ Function UpdateGame%()
 				UpdateDoors()
 				UpdateSecurityCams()
 				UpdateScreens()
+				UpdateSoundEmitters()
 				If IsPlayerOutsideFacility()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else

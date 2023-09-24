@@ -2390,7 +2390,6 @@ Function InitNewGame%()
 	CatchErrors("InitNewGame()")
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
-	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, Skip%
 	
 	LoadEntities()
@@ -2507,20 +2506,26 @@ Function InitNewGame%()
 		FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
-	For tl.TempLights = Each TempLights
-		Delete(tl)
+	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tp.TempProps, tse.TempSoundEmitters
+	
+	For ts.TempScreens = Each TempScreens
+		Delete(ts)
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints
 		Delete(twp)
 	Next
 	
-	For ts.TempScreens = Each TempScreens
-		Delete(ts)
+	For tl.TempLights = Each TempLights
+		Delete(tl)
 	Next
 	
 	For tp.TempProps = Each TempProps
 		Delete(tp)
+	Next
+	
+	For tse.TempSoundEmitters = Each TempSoundEmitters
+		Delete(tse)
 	Next
 	
 	RenderLoading(85, GetLocalString("loading", "events"))
@@ -2567,7 +2572,6 @@ Function InitLoadGame%()
 	CatchErrors("InitLoadGame()")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
-	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
 	Local i%, x#, z#
 	
 	InitOtherStuff()
@@ -2593,20 +2597,26 @@ Function InitLoadGame%()
 		FreeEntity(rt\OBJ) : rt\OBJ = 0
 	Next
 	
-	For tl.TempLights = Each TempLights
-		Delete(tl)
+	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tp.TempProps, tse.TempSoundEmitters
+	
+	For ts.TempScreens = Each TempScreens
+		Delete(ts)
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints
 		Delete(twp)
 	Next
 	
-	For ts.TempScreens = Each TempScreens
-		Delete(ts)
+	For tl.TempLights = Each TempLights
+		Delete(tl)
 	Next
 	
 	For tp.TempProps = Each TempProps
 		Delete(tp)
+	Next
+	
+	For tse.TempSoundEmitters = Each TempSoundEmitters
+		Delete(tse)
 	Next
 	
 	RenderLoading(85, GetLocalString("loading", "events"))
@@ -2676,7 +2686,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, em.Emitters, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters
 	
 	Local i%, x%, y%, Lvl%
 	
@@ -2847,6 +2857,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For l.Lights = Each Lights
 		RemoveLight(l)
+	Next
+	For se.SoundEmitters = Each SoundEmitters
+		RemoveSoundEmitter(se)
 	Next
 	For fr.Forest = Each Forest
 		If fr <> Null Then DestroyForest(fr)

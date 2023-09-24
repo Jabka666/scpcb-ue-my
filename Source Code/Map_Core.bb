@@ -104,7 +104,7 @@ Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, Scale
 	If p\OBJ = 0 Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes models folder if the CBRE was used
 	PositionEntity(p\OBJ, x, y, z)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
-	EntityParent(p\OBJ, room\OBJ)
+	If room <> Null Then EntityParent(p\OBJ, room\OBJ)
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
 	If HasCollision
 		EntityType(p\OBJ, HIT_MAP)
@@ -303,6 +303,55 @@ Function AmbientLightRooms%(R%, G%, B%)
 End Function
 
 Const RoomScale# = 8.0 / 2048.0
+
+Type SoundEmitters
+	Field OBJ%
+	Field ID%
+	Field Range#
+	Field SoundCHN%
+	Field room.Rooms
+End Type
+
+Type TempSoundEmitters
+	Field x#, y#, z#
+	Field ID%
+	Field Range#
+	Field RoomTemplate.RoomTemplates
+End Type
+
+Function CreateSoundEmitter.SoundEmitters(ID%, x#, y#, z#, Range#, room.Rooms)
+	Local se.SoundEmitters
+	
+	se.SoundEmitters = New SoundEmitters
+	se\room = room
+	
+	se\OBJ = CreatePivot()
+	PositionEntity(se\OBJ, x, y, z)
+	If room <> Null Then EntityParent(se\OBJ, room\OBJ)
+	
+	se\ID = ID
+	se\Range = Range
+	
+	Return(se)
+End Function
+
+Function UpdateSoundEmitters%()
+	Local se.SoundEmitters
+	Local i%
+	
+	For se.SoundEmitters = Each SoundEmitters
+		If se\room <> Null
+			If se\room\Dist < 6.0 Lor se\room = PlayerRoom
+				If EntityDistanceSquared(se\OBJ, me\Collider) < PowTwo(se\Range) Then se\SoundCHN = LoopSound2(RoomAmbience[se\ID - 1], se\SoundCHN, Camera, se\OBJ, se\Range)
+			EndIf
+		EndIf
+	Next
+End Function
+
+Function RemoveSoundEmitter%(se.SoundEmitters)
+	FreeEntity(se\OBJ) : se\OBJ = 0
+	Delete(se)
+End Function
 
 Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	CatchErrors("LoadRMesh(" + File + ")")
@@ -570,7 +619,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	
 	Count = ReadInt(f) ; ~ Point entities
 	
-	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
+	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tse.TempSoundEmitters, tp.TempProps
 	Local Range#, lColor$, Intensity#
 	Local R%, G%, B%
 	Local Angles$
@@ -646,27 +695,16 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 					;[End Block]
 				Case "soundemitter"
 					;[Block]
-					Temp1i = 0
-					For j = 0 To MaxRoomEmitters - 1
-						If rt\TempSoundEmitter[j] = 0
-							rt\TempSoundEmitterX[j] = ReadFloat(f) * RoomScale
-							rt\TempSoundEmitterY[j] = ReadFloat(f) * RoomScale
-							rt\TempSoundEmitterZ[j] = ReadFloat(f) * RoomScale
-							rt\TempSoundEmitter[j] = ReadInt(f)
-							
-							rt\TempSoundEmitterRange[j] = ReadFloat(f)
-							Temp1i = 1
-							Exit
-						EndIf
-					Next
+					tse.TempSoundEmitters = New TempSoundEmitters
+					tse\RoomTemplate = rt
 					
-					If Temp1i = 0
-						ReadFloat(f)
-						ReadFloat(f)
-						ReadFloat(f)
-						ReadInt(f)
-						ReadFloat(f)
-					EndIf
+					tse\x = ReadFloat(f) * RoomScale
+					tse\y = ReadFloat(f) * RoomScale
+					tse\z = ReadFloat(f) * RoomScale
+					
+					tse\ID = ReadInt(f)
+					
+					tse\Range = ReadFloat(f)
 					;[End Block]
 				Case "model"
 					;[Block]
@@ -1476,9 +1514,6 @@ Type RoomTemplates
 	Field OBJ%, ID%
 	Field OBJPath$
 	Field Zone%[5]
-	Field TempSoundEmitter%[MaxRoomEmitters]
-	Field TempSoundEmitterX#[MaxRoomEmitters], TempSoundEmitterY#[MaxRoomEmitters], TempSoundEmitterZ#[MaxRoomEmitters]
-	Field TempSoundEmitterRange#[MaxRoomEmitters]
 	Field Shape%, Name$
 	Field Commonness%, Large%
 	Field DisableDecals%
@@ -1600,8 +1635,6 @@ End Function
 
 ; ~ Room Objects Constants
 ;[Block]
-Const MaxRoomEmitters% = 24
-Const MaxRoomLights% = 128
 Const MaxRoomObjects% = 30
 Const MaxRoomLevers% = 10
 Const MaxRoomDoors% = 7
@@ -1621,10 +1654,6 @@ Type Rooms
 	Field Dist#
 	Field SoundCHN%
 	Field fr.Forest
-	Field SoundEmitter%[MaxRoomEmitters]
-	Field SoundEmitterOBJ%[MaxRoomEmitters]
-	Field SoundEmitterRange#[MaxRoomEmitters]
-	Field SoundEmitterCHN%[MaxRoomEmitters]
 	Field Objects%[MaxRoomObjects], HideObject%[MaxRoomObjects]
 	Field RoomLevers.Levers[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
@@ -1985,9 +2014,6 @@ Function RemoveRoom%(r.Rooms)
 	For i = 0 To MaxRoomTextures - 1
 		r\Textures[i] = 0
 	Next
-	For i = 0 To MaxRoomEmitters - 1
-		If r\SoundEmitterOBJ[i] <> 0 Then FreeEntity(r\SoundEmitterOBJ[i]) : r\SoundEmitterOBJ[i] = 0
-	Next
 	
 	If r\RoomCenter <> 0 Then FreeEntity(r\RoomCenter) : r\RoomCenter = 0
 	FreeEntity(r\OBJ) : r\OBJ = 0
@@ -2016,7 +2042,7 @@ Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
 	w.WayPoints = New WayPoints
 	w\OBJ = CreatePivot()
 	PositionEntity(w\OBJ, x, y, z)
-	EntityParent(w\OBJ, room\OBJ)
+	If room <> Null Then EntityParent(w\OBJ, room\OBJ)
 	
 	w\room = room
 	w\door = door
@@ -3213,20 +3239,19 @@ Type SecurityCams
 	Field Dist#
 End Type
 
-Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0)
+Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, room.Rooms, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0)
 	Local sc.SecurityCams
 	
 	sc.SecurityCams = New SecurityCams
+	sc\room = room
 	
 	sc\BaseOBJ = CopyEntity(sc_I\CamModelID[CAM_BASE_MODEL])
 	ScaleEntity(sc\BaseOBJ, 0.0015, 0.0015, 0.0015)
 	PositionEntity(sc\BaseOBJ, x1, y1, z1)
-	EntityParent(sc\BaseOBJ, r\OBJ)
+	If room <> Null Then EntityParent(sc\BaseOBJ, room\OBJ)
 	
 	sc\CameraOBJ = CopyEntity(sc_I\CamModelID[CAM_HEAD_MODEL])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
-	
-	sc\room = r
 	
 	sc\Screen = Screen
 	If Screen
@@ -3242,7 +3267,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, r.Rooms, Screen% = False,
 		EntityTexture(sc\ScrOBJ, sc_I\ScreenTex)
 		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
-		EntityParent(sc\ScrOBJ, r\OBJ)
+		If room <> Null Then EntityParent(sc\ScrOBJ, room\OBJ)
 		HideEntity(sc\ScrOBJ)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
@@ -3830,16 +3855,6 @@ End Function
 
 Include "Source Code\Rooms_Core.bb"
 
-Function UpdateSoundEmitters%(room.Rooms)
-	Local i%
-	
-	For i = 0 To MaxRoomEmitters - 1
-		If room\SoundEmitter[i] <> 0
-			If EntityDistanceSquared(room\SoundEmitterOBJ[i], me\Collider) < PowTwo(room\SoundEmitterRange[i]) Then room\SoundEmitterCHN[i] = LoopSound2(RoomAmbience[room\SoundEmitter[i] - 1], room\SoundEmitterCHN[i], Camera, room\SoundEmitterOBJ[i], room\SoundEmitterRange[i])
-		EndIf
-	Next
-End Function
-
 Function UpdateRender%()
 	Local it.Items
 	
@@ -4169,8 +4184,6 @@ Function UpdateRooms%()
 		r\Dist = Max(x, z)
 		
 		If x < 16 And z < 16
-			UpdateSoundEmitters(r)
-			
 			If (Not FoundNewPlayerRoom) And PlayerRoom <> r
 				If x < 4.0
 					If z < 4.0

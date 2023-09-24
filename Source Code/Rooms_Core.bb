@@ -2,8 +2,7 @@ Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom()")
 	
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, fr.Forest
-	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints
-	Local tl.TempLights, twp.TempWayPoints, ts.TempScreens, tp.TempProps
+	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, l.Lights
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%, SF%, b%, Name$
 	Local t1%, Tex%, Screen%, Scale#
 	Local i%, k%, Temp%, Temp3%, Angle#
@@ -3843,15 +3842,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 	End Select
 	
-	Local l.Lights
-	
-	For tl.TempLights = Each TempLights
-		If tl\RoomTemplate = r\RoomTemplate
-			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\lType, tl\Range, tl\R, tl\G, tl\B)
-			
-			If tl\lType = 3 Then RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
-		EndIf
-	Next
+	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tp.TempProps, tse.TempSoundEmitters
 	
 	For ts.TempScreens = Each TempScreens
 		If ts\RoomTemplate = r\RoomTemplate Then CreateScreen(r\x + ts\x, r\y + ts\y, r\z + ts\z, ts\ImgPath, r)
@@ -3859,6 +3850,14 @@ Function FillRoom%(r.Rooms)
 	
 	For twp.TempWayPoints = Each TempWayPoints
 		If twp\RoomTemplate = r\RoomTemplate Then CreateWaypoint(r\x + twp\x, r\y + twp\y, r\z + twp\z, Null, r)
+	Next
+	
+	For tl.TempLights = Each TempLights
+		If tl\RoomTemplate = r\RoomTemplate
+			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\lType, tl\Range, tl\R, tl\G, tl\B)
+			
+			If tl\lType = 3 Then RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
+		EndIf
 	Next
 	
 	For tp.TempProps = Each TempProps
@@ -3876,15 +3875,8 @@ Function FillRoom%(r.Rooms)
 	;	Next
 	;EndIf
 	
-	For i = 0 To MaxRoomEmitters - 1
-		If r\RoomTemplate\TempSoundEmitter[i] <> 0
-			r\SoundEmitterOBJ[i] = CreatePivot()
-			PositionEntity(r\SoundEmitterOBJ[i], r\x + r\RoomTemplate\TempSoundEmitterX[i], r\y + r\RoomTemplate\TempSoundEmitterY[i], r\z + r\RoomTemplate\TempSoundEmitterZ[i])
-			EntityParent(r\SoundEmitterOBJ[i], r\OBJ)
-			
-			r\SoundEmitter[i] = r\RoomTemplate\TempSoundEmitter[i]
-			r\SoundEmitterRange[i] = r\RoomTemplate\TempSoundEmitterRange[i]
-		EndIf
+	For tse.TempSoundEmitters = Each TempSoundEmitters
+		If tse\RoomTemplate = r\RoomTemplate Then CreateSoundEmitter(tse\ID, r\x + tse\x, r\y + tse\y, r\z + tse\z, tse\Range, r)
 	Next
 	
 	CatchErrors("Uncaught: FillRoom(Room name: " + r\RoomTemplate\Name + ")")

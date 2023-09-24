@@ -632,7 +632,7 @@ End Function
 Function UpdateEvents%()
 	CatchErrors("UpdateEvents()")
 	
-	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.WayPoints, pr.Props, l.Lights
+	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.WayPoints, pr.Props, l.Lights, se.SoundEmitters
 	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
@@ -1822,6 +1822,10 @@ Function UpdateEvents%()
 													
 													For pr.Props = Each Props
 														If pr\room = e\room Then RemoveProp(pr)
+													Next
+													
+													For se.SoundEmitters = Each SoundEmitters
+														If se\room = e\room Then RemoveSoundEmitter(se)
 													Next
 													
 													RemoveRoom(e\room)
