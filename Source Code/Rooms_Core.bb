@@ -141,12 +141,6 @@ Function FillRoom%(r.Rooms)
 				
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 				EntityParent(de\OBJ, r\OBJ)
-			ElseIf I_005\ChanceToSpawn >= 5
-				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-				
-				de.Decals = CreateDecal(DECAL_BLOOD_2,  r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
-				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			
 			CreateCustomCenter(r\x, r\z - 830.0 * RoomScale, r)
@@ -200,16 +194,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[1], 0.0, 225.0, 90.0)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y + 10.0 * RoomScale, r\z + 102.0 * RoomScale)
 			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], EntityX(r\OBJ) - 200.0 * RoomScale, r\y + 440.0 * RoomScale, EntityZ(r\OBJ) + 1322.0 * RoomScale)
-			
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], EntityX(r\OBJ) + 1000.0 * RoomScale, r\y + 120.0 * RoomScale, EntityZ(r\OBJ) + 666.0 * RoomScale)
-			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], EntityX(r\OBJ) + 628.0 * RoomScale, r\y + 120.0 * RoomScale, EntityZ(r\OBJ) + 320.0 * RoomScale)
-			
-			For i = 0 To 4
+			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -502,10 +487,6 @@ Function FillRoom%(r.Rooms)
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x - 1400.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
-			
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x - 1055.0 * RoomScale, r\y - 45.0 * RoomScale, r\z + 650.0 * RoomScale)
-			EntityParent(r\Objects[7], r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-205", "paper", r\x - 357.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -1635,14 +1616,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[15] = CreatePivot()
 			PositionEntity(r\Objects[15], r\x - 456.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 3023.0 * RoomScale)
 			
-			; ~ Corpses
-			r\Objects[16] = CreatePivot()
-			PositionEntity(r\Objects[16], r\x + 2156.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 3018.0 * RoomScale)
-			
-			r\Objects[17] = CreatePivot()
-			PositionEntity(r\Objects[17], r\x + 1083.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 989.0 * RoomScale)
-			
-			For i = 0 To 17
+			For i = 0 To 15
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -1871,23 +1845,16 @@ Function FillRoom%(r.Rooms)
 			EntityTexture(r\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
 			HideEntity(r\Objects[1])
 			
-			; ~ Dead guard spawnpoint
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 2260.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 1000.0 * RoomScale)
-			
 			; ~ Elevators' pivots
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x + 816.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 256.0 * RoomScale)
+			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 816.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 256.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x + 816.0 * RoomScale, r\y - 10000.0 * RoomScale, r\z - 256.0 * RoomScale)
 			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 816.0 * RoomScale, r\y - 10000.0 * RoomScale, r\z - 256.0 * RoomScale)
-			
-			For i = 2 To 4
+			For i = 2 To 3
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
-			
-			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x - 2200.0 * RoomScale, r\y - 10688.0 * RoomScale + 0.01, r\z + 1000.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
-			EntityParent(de\OBJ, r\OBJ)
 			
 			CreateCustomCenter(r\x, r\z - 256.0 * RoomScale, r)
 			;[End Block]
@@ -2241,12 +2208,9 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1551.0 * RoomScale, r\y, r\z + 233.0 * RoomScale)
 			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 1344.0 * RoomScale, r\y - 752.0 * RoomScale, r\z - 384.0 * RoomScale)
+			r\Objects[1] = CreateButton(BUTTON_DEFAULT, r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
 			
-			r\Objects[2] = CreateButton(BUTTON_DEFAULT, r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
-			
-			For i = 0 To 2
+			For i = 0 To 1
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -2540,19 +2504,6 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
-			
-			If I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5
-				it.Items = CreateItem("SCP-005", "scp005", r\x - 5000.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1578.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-				
-				; ~ Class-D spawn
-				r\Objects[4] = CreatePivot()
-				PositionEntity(r\Objects[4], r\x - 4812.0 * RoomScale, r\y - 4409.0 * RoomScale, r\z + 1729.0 * RoomScale)
-				EntityParent(r\Objects[4], r\OBJ)
-				
-				de.Decals = CreateDecal(DECAL_409, r\x - 4812.0 * RoomScale, r\y - (4497.0 * RoomScale) + 0.005, r\z + 1729.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
-				EntityParent(de\OBJ, r\OBJ)
-			EndIf
 			;[End Block]
 		Case "room2c_maintenance"
 			;[Block]
@@ -2707,13 +2658,6 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r\x + 490.0 * RoomScale, r\z - 490.0 * RoomScale, r)
-			;[End Block]
-		Case "room3_2_hcz"
-			;[Block]
-			; ~ Guard's position
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 190.0 * RoomScale, r\y + 55.0 * RoomScale, r\z + 190.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 		Case "room4_hcz"
 			;[Block]
@@ -3227,10 +3171,6 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			d.Doors = CreateDoor(r\x - 896.0 * RoomScale, r\y, r\z, 90.0, r, True, ELEVATOR_DOOR)
 			d\Locked = 1 : d\MTFClose = False
-			
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 1200.0 * RoomScale, r\y + 82.0 * RoomScale, r\z, True)
-			EntityParent(r\Objects[0], r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_WATER, r\x - 711.0 * RoomScale, r\y + 0.005, r\z + 140.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.8, 1.0), 1.0)
 			EntityParent(de\OBJ, r\OBJ)

@@ -232,7 +232,6 @@ Function UpdateMainMenu%()
 				StopStream_Strict(MusicCHN) : MusicCHN = 0
 				End()
 			EndIf
-			RuntimeStats()
 		Else
 			y = 376 * MenuScale
 			Width = 580 * MenuScale

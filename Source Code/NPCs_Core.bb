@@ -4815,7 +4815,10 @@ Function UpdateNPCs%()
 		
 		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
-		If n\IsDead Then EntityType(n\Collider, HIT_DEAD)
+		If n\IsDead And n\GravityMult = 1.0
+			EntityType(n\Collider, HIT_DEAD)
+			n\GravityMult = 0.0
+		EndIf
 		If GravityDist < PowTwo(HideDistance * 0.7) Lor n\NPCType = NPCType1499_1
 			If n\InFacility = InFacility
 				TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
