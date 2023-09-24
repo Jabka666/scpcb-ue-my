@@ -353,7 +353,7 @@ Function RemoveSoundEmitter%(se.SoundEmitters)
 	Delete(se)
 End Function
 
-Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
+Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	CatchErrors("LoadRMesh(" + File + ")")
 	
 	Local mat.Materials
@@ -555,11 +555,15 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 			AddMesh(ChildMesh, Opaque)
 			EntityParent(ChildMesh, CollisionMeshes)
 			EntityAlpha(ChildMesh, 0.0)
-			EntityType(ChildMesh, HIT_MAP)
+			If HasCollision
+				EntityType(ChildMesh, HIT_MAP)
+			Else
+				EntityType(ChildMesh, 0)
+			EndIf
 			EntityPickMode(ChildMesh, 2)
 			
 			; ~ Make collision double-sided
-			If DoubleSided
+			If HasCollision
 				Local FlipChild% = CopyMesh(ChildMesh)
 				
 				FlipMesh(FlipChild)
@@ -781,7 +785,11 @@ Function LoadRMesh%(File$, rt.RoomTemplates, DoubleSided% = True)
 	EntityFX(Opaque, 3)
 	
 	EntityAlpha(HiddenMesh, 0.0)
-	EntityType(HiddenMesh, HIT_MAP)
+	If HasCollision
+		EntityType(HiddenMesh, HIT_MAP)
+	Else
+		EntityType(HiddenMesh, 0)
+	EndIf
 	EntityAlpha(Opaque, 1.0)
 	
 	OBJ = CreatePivot()
