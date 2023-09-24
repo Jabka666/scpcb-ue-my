@@ -2813,13 +2813,13 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	ItemAmount = 0 : MaxItemAmount = 0
 	LastItemID = 0
-	For itt.ItemTemplates = Each ItemTemplates
-		RemoveItemTemplate(itt)
-	Next
 	For it.Items = Each Items
 		RemoveItem(it)
 	Next
 	Dim Inventory.Items(0)
+	For itt.ItemTemplates = Each ItemTemplates
+		RemoveItemTemplate(itt)
+	Next
 	
 	For de.Decals = Each Decals
 		RemoveDecal(de)
@@ -2875,15 +2875,15 @@ Function NullGame%(PlayButtonSFX% = True)
 	For chp.ChunkPart = Each ChunkPart
 		RemoveChunkPart(chp)
 	Next
-	For rt.RoomTemplates = Each RoomTemplates
-		RemoveRoomTemplate(rt)
-	Next
 	Dim MapRoom$(0, 0)
 	Delete Each MapGrid
 	Delete Each MapZones
 	RoomTempID = 0
 	For r.Rooms = Each Rooms
 		RemoveRoom(r)
+	Next
+	For rt.RoomTemplates = Each RoomTemplates
+		RemoveRoomTemplate(rt)
 	Next
 	
 	RemoveHazmatTimer = 0.0

@@ -331,7 +331,7 @@ Function RemoveItem%(i.Items)
 	
 	If SelectedItem = i Then SelectedItem = Null
 	
-	If i\InvImg <> 0 Then FreeImage(i\InvImg) : i\InvImg = 0
+	If i\ItemTemplate\Img <> 0 Then FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
 	Delete(i)
 	
 	CatchErrors("Uncaught: RemoveItem()")
