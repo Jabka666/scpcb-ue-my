@@ -1962,7 +1962,6 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "", Angle# = 0.
 				
 				r\Angle = Angle
 				RotateEntity(r\OBJ, 0.0, Angle, 0.0)
-				CalculateRoomExtents(r)
 				
 				Return(r)
 			EndIf
@@ -2007,7 +2006,6 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "", Angle# = 0.
 					
 					r\Angle = Angle
 					RotateEntity(r\OBJ, 0.0, Angle, 0.0)
-					CalculateRoomExtents(r)
 					
 					Return(r)
 				EndIf
@@ -5004,25 +5002,31 @@ Function CreateMap%()
 						;[End Block]
 				End Select
 			EndIf
+			CalculateRoomExtents(r)
 		Next
 	Next
 	
 	; ~ Spawn some rooms outside the map
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(RoomSpacing ^ 2), "gate_b")
+	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing ^ 2, "gate_a")
+	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "dimension_106")
+	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	If opt\IntroEnabled
 		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "cont1_173_intro")
+		CalculateRoomExtents(r)
 		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	EndIf
 	
 	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, "dimension_1499")
+	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	; ~ Prevent room overlaps
