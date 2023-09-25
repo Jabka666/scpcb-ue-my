@@ -818,9 +818,7 @@ Function LoadGame%(File$)
 		
 		For rt.RoomTemplates = Each RoomTemplates
 			If rt\ID = RoomTemplateID
-				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\Name)
-				TurnEntity(r\OBJ, 0.0, Angle, 0.0)
-				r\Angle = Angle
+				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\Name, Angle)
 				;SetupTriggerBoxes(r)
 				r\Found = Found
 				Exit
@@ -2321,9 +2319,8 @@ Function LoadMap%(File$)
 			
 			For rt.RoomTemplates = Each RoomTemplates
 				If Lower(rt\Name) = Name
-					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name)
+					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name, Angle)
 					
-					r\Angle = Angle
 					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
 					r\Angle = WrapAngle(r\Angle)
 					;SetupTriggerBoxes(r)
@@ -2494,9 +2491,8 @@ Function LoadMap%(File$)
 			
 			For rt.RoomTemplates = Each RoomTemplates
 				If Lower(rt\Name) = Name
-					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name)
+					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name, Angle)
 					
-					r\Angle = Angle
 					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
 					r\Angle = WrapAngle(r\Angle)
 					;SetupTriggerBoxes(r)
