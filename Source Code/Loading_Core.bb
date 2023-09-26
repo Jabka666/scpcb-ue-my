@@ -2368,7 +2368,7 @@ Function RemoveTextureInstances%()
 		t\OverlayTextureID[i] = 0
 	Next
 	For i = 0 To MaxOverlayIDAmount - 1
-		t\OverlayID[i] = 0
+		FreeEntity(t\OverlayID[i]) : t\OverlayID[i] = 0
 	Next
 	Delete Each Achievements
 	Delete Each Textures

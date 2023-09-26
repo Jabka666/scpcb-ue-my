@@ -4771,7 +4771,7 @@ Function UpdateEvents%()
 										
 										me\Sanity = Max(me\Sanity - (fps\Factor[0] * 0.3 / (1.0 + I_714\Using)), -1000.0)
 										me\RestoreSanity = False
-									
+										
 										Pvt = CreatePivot()
 										PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider), EntityZ(Camera))
 										PointEntity(Pvt, e\room\RoomDoors[0]\FrameOBJ)
