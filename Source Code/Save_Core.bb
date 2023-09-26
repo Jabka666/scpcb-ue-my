@@ -2072,7 +2072,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case "cont1_035"
 				;[Block]
-				Update035Label(r\Objects[6])
+				Update035Label(r\Objects[4])
 				;[End Block]
 		End Select
 	Next
@@ -2319,12 +2319,11 @@ Function LoadMap%(File$)
 			
 			For rt.RoomTemplates = Each RoomTemplates
 				If Lower(rt\Name) = Name
+					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
+					Angle = WrapAngle(Angle)
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name, Angle)
 					
-					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
-					r\Angle = WrapAngle(r\Angle)
 					;SetupTriggerBoxes(r)
-					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
 					Exit
@@ -2491,12 +2490,11 @@ Function LoadMap%(File$)
 			
 			For rt.RoomTemplates = Each RoomTemplates
 				If Lower(rt\Name) = Name
-					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name, Angle)
+					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
+					Angle = WrapAngle(Angle)
 					
-					If r\Angle <> 90.0 And r\Angle <> 270.0 Then r\Angle = r\Angle + 180.0
-					r\Angle = WrapAngle(r\Angle)
+					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name, Angle)
 					;SetupTriggerBoxes(r)
-					TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
 					Exit

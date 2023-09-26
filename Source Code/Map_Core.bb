@@ -1646,10 +1646,12 @@ End Function
 ;[Block]
 Const MaxRoomObjects% = 30
 Const MaxRoomLevers% = 10
-Const MaxRoomDoors% = 7
+Const MaxRoomDoors% = 8
 Const MaxRoomNPCs% = 12
+Const MaxRoomSecurityCams% = 8
+Const MaxRoomEmitters% = 8
 Const MaxRoomAdjacents% = 4
-Const MaxRoomTextures% = 10
+Const MaxRoomTextures% = 8
 ;Const MaxRoomTriggerBoxes% = 8
 ;[End Block]
 
@@ -1667,6 +1669,8 @@ Type Rooms
 	Field RoomLevers.Levers[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
+	Field RoomSecurityCams.SecurityCams[MaxRoomSecurityCams]
+	Field RoomEmitters.Emitters[MaxRoomEmitters]
 	Field mt.MTGrid
 	Field Adjacent.Rooms[MaxRoomAdjacents]
 	Field AdjDoor.Doors[MaxRoomAdjacents]
@@ -2019,11 +2023,14 @@ End Function
 Function RemoveRoom%(r.Rooms)
 	Local i%
 	
-	For i = 0 To MaxRoomObjects - 1
-		If r\Objects[i] <> 0 Then r\Objects[i] = 0
-	Next
 	For i = 0 To MaxRoomTextures - 1
 		r\Textures[i] = 0
+	Next
+	For i = 0 To MaxRoomObjects - 1
+		If r\Objects[i] <> 0 Then EntityParent(r\Objects[i], 0)
+	Next
+	For i = 0 To MaxRoomObjects - 1
+		If r\Objects[i] <> 0 Then FreeEntity(r\Objects[i]) : r\Objects[i] = 0
 	Next
 	
 	If r\RoomCenter <> 0 Then FreeEntity(r\RoomCenter) : r\RoomCenter = 0

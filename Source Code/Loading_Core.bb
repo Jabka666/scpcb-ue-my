@@ -1631,7 +1631,8 @@ Function LoadEvents%()
 	
 	CreateEvent("room2_servers_hcz", "room2_servers_hcz", 0)
 	
-	CreateEvent("room3_2_ez", "room3_2_ez", 0)
+	CreateEvent("room3_2_ez", "room3_2_ez", 0, 0.8)
+	CreateEvent("room3_2_ez_duck", "room3_2_ez", 1)
 	CreateEvent("room3_2_ez", "room3_3_ez", 0)
 	
 	; ~ The dead guard

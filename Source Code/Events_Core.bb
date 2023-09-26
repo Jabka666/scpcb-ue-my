@@ -42,46 +42,46 @@ Const e_room2_scientists_2% = 29
 Const e_room2_servers_hcz% = 30
 Const e_room2_storage% = 31
 Const e_door_closing% = 32
-Const e_room3_2_ez% = 33
-Const e_room3_storage% = 34
-Const e_room3_2_hcz% = 35
-Const e_room4_lcz_049% = 36
-Const e_cont2_012% = 37
-Const e_cont1_035% = 38
-Const e_cont2_049% = 39
-Const e_cont1_079% = 40
-Const e_cont1_106% = 41
-Const e_cont1_205% = 42
-Const e_cont2_860_1% = 43
-Const e_cont3_966% = 44
-Const e_cont2_1123% = 45
-Const e_room2_test_hcz% = 46, e_room2_test_lcz_173% = 47
-Const e_room2_6_hcz_smoke% = 48, e_room2_6_hcz% = 49
-Const e_room2_5_hcz_106% = 50
-Const e_toilet_guard% = 51
-Const e_cont2_008% = 52
-Const e_106_victim% = 53
-Const e_106_sinkhole% = 54
-Const e_682_roar% = 55
-Const e_cont1_914% = 56
-Const e_1048_a% = 57
-Const e_room4_2_hcz% = 58
-Const e_room2_gw_2% = 59, e_gateway% = 60
-Const e_cont2_500_1499% = 61
-Const e_cont2c_1162_arc% = 62
-Const e_room2_sl% = 63
-Const e_096_spawn% = 64
-Const e_room2_medibay% = 65
-Const e_dimension_1499% = 66
-Const e_room2_shaft% = 67
-Const e_room4_ic% = 68
-Const e_cont2_409% = 69
-Const e_cont1_005% = 70
-Const e_gate_b_entrance% = 71
-Const e_gate_b% = 72
-Const e_gate_a_entrance% = 73
-Const e_gate_a% = 74
-Const e_cont2c_066% = 75
+Const e_room3_2_ez% = 33, e_room3_2_ez_duck% = 34
+Const e_room3_storage% = 35
+Const e_room3_2_hcz% = 36
+Const e_room4_lcz_049% = 37
+Const e_cont2_012% = 38
+Const e_cont1_035% = 39
+Const e_cont2_049% = 40
+Const e_cont1_079% = 41
+Const e_cont1_106% = 42
+Const e_cont1_205% = 43
+Const e_cont2_860_1% = 44
+Const e_cont3_966% = 45
+Const e_cont2_1123% = 46
+Const e_room2_test_hcz% = 47, e_room2_test_lcz_173% = 48
+Const e_room2_6_hcz_smoke% = 49, e_room2_6_hcz% = 50
+Const e_room2_5_hcz_106% = 51
+Const e_toilet_guard% = 52
+Const e_cont2_008% = 53
+Const e_106_victim% = 54
+Const e_106_sinkhole% = 55
+Const e_682_roar% = 56
+Const e_cont1_914% = 57
+Const e_1048_a% = 58
+Const e_room4_2_hcz% = 59
+Const e_room2_gw_2% = 60, e_gateway% = 61
+Const e_cont2_500_1499% = 62
+Const e_cont2c_1162_arc% = 63
+Const e_room2_sl% = 64
+Const e_096_spawn% = 65
+Const e_room2_medibay% = 66
+Const e_dimension_1499% = 67
+Const e_room2_shaft% = 68
+Const e_room4_ic% = 69
+Const e_cont2_409% = 70
+Const e_cont1_005% = 71
+Const e_gate_b_entrance% = 72
+Const e_gate_b% = 73
+Const e_gate_a_entrance% = 74
+Const e_gate_a% = 75
+Const e_cont2c_066% = 76
 ;[End Block]
 
 Function FindEventID%(EventName$)
@@ -221,6 +221,10 @@ Function FindEventID%(EventName$)
 		Case "room3_2_ez"
 			;[Block]
 			Return(e_room3_2_ez)
+			;[End Block]
+		Case "room3_2_ez_duck"
+			;[Block]
+			Return(e_room3_2_ez_duck)
 			;[End Block]
 		Case "room3_storage"
 			;[Block]
@@ -521,26 +525,26 @@ Function QuickLoadEvents%()
 			;[Block]
 			If e\EventState = 0.0 Lor e\EventStr <> "LoadDone"
 				If e\EventStr = "Load0"
-					e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_1_MODEL])
+					e\room\Objects[2] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_1_MODEL])
 					QuickLoadPercent = 10
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
-					e\room\Objects[4] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_2_MODEL])
+					e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_2_MODEL])
 					QuickLoadPercent = 20
 					e\EventStr = "Load2"
 				ElseIf e\EventStr = "Load2"
-					e\room\Objects[5] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_3_MODEL])
+					e\room\Objects[4] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_3_MODEL])
 					QuickLoadPercent = 30
 					e\EventStr = "Load3"
 				ElseIf e\EventStr = "Load3"
-					e\room\Objects[6] = CopyEntity(n_I\NPCModelID[NPC_205_WOMAN_MODEL])
+					e\room\Objects[5] = CopyEntity(n_I\NPCModelID[NPC_205_WOMAN_MODEL])
 					QuickLoadPercent = 40
 					e\EventStr = "Load4"
 				ElseIf e\EventStr = "Load4"
 					QuickLoadPercent = 50
 					e\EventStr = "Load5"
 				ElseIf e\EventStr = "Load5"
-					For i = 3 To 6
+					For i = 2 To 5
 						PositionEntity(e\room\Objects[i], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
 						RotateEntity(e\room\Objects[i], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
 						ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
@@ -548,9 +552,8 @@ Function QuickLoadEvents%()
 					QuickLoadPercent = 70
 					e\EventStr = "Load6"
 				ElseIf e\EventStr = "Load6"
-					For i = 3 To 5 Step 2
+					For i = 2 To 4
 						HideEntity(e\room\Objects[i])
-						HideEntity(e\room\Objects[i + 1])
 					Next
 					QuickLoadPercent = 100
 					e\EventStr = "LoadDone"
@@ -4431,16 +4434,30 @@ Function UpdateEvents%()
 			Case e_room3_2_ez
 				;[Block]
 				If PlayerRoom = e\room
-					If e\EventState3 = 0.0 And n_I\Curr173\Idle = 0
+					If n_I\Curr173\Idle = 0
 						If me\BlinkTimer < -10.0
 							Temp = Rand(0, 2)
 							PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True), True)
 							ResetEntity(n_I\Curr173\Collider)
-							e\EventState3 = 1.0
+							RemoveEvent(e)
 						EndIf
 					EndIf
-					
-					If e\room\Objects[3] <> 0
+				EndIf
+				;[End Block]
+			Case e_room3_2_ez_duck
+				;[Block]
+				If PlayerRoom = e\room
+					If e\room\Objects[3] = 0
+						e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_DUCK_MODEL])
+						TFormPoint(928.0, -640.0, 704.0, e\room\OBJ, 0) 
+						PositionEntity(e\room\Objects[3], TFormedX(), TFormedY(), TFormedZ())
+						ScaleEntity(e\room\Objects[3], 0.07, 0.07, 0.07)
+						Tex = LoadTexture_Strict("GFX\NPCs\duck(2).png")
+						If opt\Atmosphere Then TextureBlend(Tex, 5)
+						EntityTexture(e\room\Objects[3], Tex)
+						DeleteSingleTextureEntryFromCache(Tex)
+						EntityParent(e\room\Objects[3], e\room\OBJ)
+					Else
 						If me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0
 							PointEntity(e\room\Objects[3], me\Collider)
 							RotateEntity(e\room\Objects[3], 0.0, EntityYaw(e\room\Objects[3], True), 0.0, True)
@@ -4820,11 +4837,11 @@ Function UpdateEvents%()
 								Temp = UpdateLever(e\room\RoomLevers[1]\OBJ, False)
 								If Temp Lor (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0)
 									If Temp
-										PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), 400.0 * RoomScale, EntityZ(e\room\Objects[2], True), True)
-										PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[3], True), 400.0 * RoomScale, EntityZ(e\room\Objects[3], True), True)
+										PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 400.0 * RoomScale, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
+										PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 400.0 * RoomScale, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
 									Else
-										PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), 20.0, EntityZ(e\room\Objects[2], True), True)
-										PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[3], True), 20.0, EntityZ(e\room\Objects[3], True), True)
+										PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
+										PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
 									EndIf
 									
 									If e\EventState3 > (-70.0) * 30.0
@@ -4860,7 +4877,7 @@ Function UpdateEvents%()
 												
 												I_035\Sad = True
 												
-												Update035Label(e\room\Objects[6])
+												Update035Label(e\room\Objects[4])
 												CreateNPCAsset(e\room\NPC[0])
 												
 												e\EventState = 70.0 * 60.0
@@ -4880,8 +4897,8 @@ Function UpdateEvents%()
 										EndIf
 									EndIf
 									
-									PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), 20.0, EntityZ(e\room\Objects[2], True), True)
-									PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[3], True), 20.0, EntityZ(e\room\Objects[3], True), True)
+									PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
+									PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
 									
 									If e\room\NPC[0]\State = 0.0
 										PointEntity(e\room\NPC[0]\OBJ, me\Collider)
@@ -5046,11 +5063,11 @@ Function UpdateEvents%()
 						EndIf
 					Else ; ~ SCP-035 has left
 						If UpdateLever(e\room\RoomLevers[1]\OBJ, False)
-							PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), 400.0 * RoomScale, EntityZ(e\room\Objects[2], True), True)
-							PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[3], True), 400.0 * RoomScale, EntityZ(e\room\Objects[3], True), True)
+							PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 400.0 * RoomScale, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
+							PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 400.0 * RoomScale, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
 						Else
-							PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), 20.0, EntityZ(e\room\Objects[2], True), True)
-							PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[3], True), 20.0, EntityZ(e\room\Objects[3], True), True)
+							PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
+							PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
 						EndIf
 						
 						ShouldPlay = 1
@@ -5058,10 +5075,10 @@ Function UpdateEvents%()
 						Temp = False
 						
 						; ~ Player is inside the containment chamber
-						If EntityX(me\Collider) > Min(EntityX(e\room\Objects[4], True), EntityX(e\room\Objects[5], True))
-							If EntityX(me\Collider) < Max(EntityX(e\room\Objects[4], True), EntityX(e\room\Objects[5], True))
-								If EntityZ(me\Collider) > Min(EntityZ(e\room\Objects[4], True), EntityZ(e\room\Objects[5], True))
-									If EntityZ(me\Collider) < Max(EntityZ(e\room\Objects[4], True), EntityZ(e\room\Objects[5], True))
+						If EntityX(me\Collider) > Min(EntityX(e\room\Objects[2], True), EntityX(e\room\Objects[3], True))
+							If EntityX(me\Collider) < Max(EntityX(e\room\Objects[2], True), EntityX(e\room\Objects[3], True))
+								If EntityZ(me\Collider) > Min(EntityZ(e\room\Objects[2], True), EntityZ(e\room\Objects[3], True))
+									If EntityZ(me\Collider) < Max(EntityZ(e\room\Objects[2], True), EntityZ(e\room\Objects[3], True))
 										If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCType035_Tentacle, 0.0, 0.0, 0.0)
 										
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[1], True), 0.13, EntityZ(e\room\Objects[1], True))
@@ -5513,12 +5530,12 @@ Function UpdateEvents%()
 									ElseIf e\EventState3 - fps\Factor[0] < 2900.0 And e\EventState3 >= 2900.0
 										If FemurBreakerSFX <> 0 Then FreeSound_Strict(FemurBreakerSFX) : FemurBreakerSFX = 0
 										
-										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.0, 0.0, 0.0, 0.05, 0.01) 
+										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityY(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityZ(e\room\RoomSecurityCams[0]\CameraOBJ, True), 0.0, 0.0, 0.0, 0.05, 0.01) 
 										de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.002
-										RotateEntity(de\OBJ, EntityPitch(e\room\Objects[3], True) + Rnd(10.0, 20.0), EntityYaw(e\room\Objects[3], True) + 30.0, EntityRoll(de\OBJ))
+										RotateEntity(de\OBJ, EntityPitch(e\room\RoomSecurityCams[0]\CameraOBJ, True) + Rnd(10.0, 20.0), EntityYaw(e\room\RoomSecurityCams[0]\CameraOBJ, True) + 30.0, EntityRoll(de\OBJ))
 										MoveEntity(de\OBJ, 0.0, 0.05, 0.2) 
-										RotateEntity(de\OBJ, EntityPitch(e\room\Objects[3], True), EntityYaw(e\room\Objects[3], True), EntityRoll(de\OBJ))
-										EntityParent(de\OBJ, e\room\Objects[3])
+										RotateEntity(de\OBJ, EntityPitch(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityYaw(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityRoll(de\OBJ))
+										EntityParent(de\OBJ, e\room\RoomSecurityCams[0]\CameraOBJ)
 									ElseIf e\EventState3 > 3200.0
 										If e\EventState2 = 1.0
 											n_I\Curr106\Contained = True
@@ -5550,7 +5567,7 @@ Function UpdateEvents%()
 						e\room\NPC[0]\HideFromNVG = True
 						TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 					EndIf
-					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[5], e\room\Objects[6], e)
+					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[3], e\room\Objects[4], e)
 				Else
 					If (Not PlayerInReachableRoom())
 						If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
@@ -5595,19 +5612,19 @@ Function UpdateEvents%()
 					Else
 						ShouldPlay = 15
 						If e\EventState < 65.0
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < 4.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[1], True), EntityZ(me\Collider), EntityZ(e\room\Objects[1], True)) < 4.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 								
 								e\EventState = Max(e\EventState, 65.0)
 								
-								For i = 3 To 5
+								For i = 2 To 4
 									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 								Next
-								If (Not EntityHidden(e\room\Objects[6])) Then HideEntity(e\room\Objects[6])
+								If (Not EntityHidden(e\room\Objects[5])) Then HideEntity(e\room\Objects[5])
 								
-								SetAnimTime(e\room\Objects[3], 492.0)
+								SetAnimTime(e\room\Objects[2], 492.0)
+								SetAnimTime(e\room\Objects[3], 434.0)
 								SetAnimTime(e\room\Objects[4], 434.0)
-								SetAnimTime(e\room\Objects[5], 434.0)
 								
 								If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
 							EndIf
@@ -5621,67 +5638,67 @@ Function UpdateEvents%()
 						Select e\EventState
 							Case 1.0
 								;[Block]
-								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								For i = 3 To 5
+								If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+								For i = 2 To 4
 									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 								Next
 								; ~ Sitting
-								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
-								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 526.0, 530.0, 0.2)
+								If EntityHidden(e\room\Objects[5]) Then ShowEntity(e\room\Objects[5])
+								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 526.0, 530.0, 0.2)
 								If e\EventState2 > 70.0 * 20.0 Then e\EventState = e\EventState + 1.0
 								;[End Block]
 							Case 3.0
 								;[Block]
-								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								For i = 3 To 5
+								If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+								For i = 2 To 4
 									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 								Next
 								; ~ Laying down
-								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
-								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 377.0, 525.0, 0.2)
+								If EntityHidden(e\room\Objects[5]) Then ShowEntity(e\room\Objects[5])
+								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 377.0, 525.0, 0.2)
 								If e\EventState2 > 70.0 * 30.0 Then e\EventState = e\EventState + 1.0
 								;[End Block]
 							Case 5.0
 								;[Block]
-								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								For i = 3 To 5
+								If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+								For i = 2 To 4
 									If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 								Next
 								; ~ Standing
-								If EntityHidden(e\room\Objects[6]) Then ShowEntity(e\room\Objects[6])
-								Animate2(e\room\Objects[6], AnimTime(e\room\Objects[6]), 228.0, 376.0, 0.2)
+								If EntityHidden(e\room\Objects[5]) Then ShowEntity(e\room\Objects[5])
+								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 228.0, 376.0, 0.2)
 								If e\EventState2 > 70.0 * 40.0 
-									PlaySound2(LoadTempSound("SFX\SCP\205\Horror.ogg"), Camera, e\room\Objects[6], 10.0, 0.3)
+									PlaySound2(LoadTempSound("SFX\SCP\205\Horror.ogg"), Camera, e\room\Objects[5], 10.0, 0.3)
 									e\EventState = e\EventState + 1.0
 								EndIf
 								;[End Block]
 							Case 7.0
 								;[Block]
-								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								For i = 3 To 6
-									If i < 5
+								If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+								For i = 2 To 5
+									If i < 4
 										If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 									Else
 										If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 									EndIf
 								Next
 								; ~ Sexy demon pose
-								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 500.0, 648.0, 0.2)
+								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 500.0, 648.0, 0.2)
 								If e\EventState2 > 70.0 * 60.0
-									PlaySound2(LoadTempSound("SFX\SCP\205\Horror.ogg"), Camera, e\room\Objects[6], 10.0, 0.5)
+									PlaySound2(LoadTempSound("SFX\SCP\205\Horror.ogg"), Camera, e\room\Objects[5], 10.0, 0.5)
 									e\EventState = e\EventState + 1.0
 								EndIf
 								;[End Block]
 							Case 9.0
 								;[Block]
-								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
-								For i = 4 To 6
+								If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+								If (Not EntityHidden(e\room\Objects[2])) Then HideEntity(e\room\Objects[2])
+								For i = 3 To 5
 									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 								Next
 								; ~ Idle
-								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2.0, 200.0, 0.2)
-								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 4.0, 125.0, 0.2)
+								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2.0, 200.0, 0.2)
+								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 4.0, 125.0, 0.2)
 								
 								If e\EventState2 > 70.0 * 80.0
 									PlaySound_Strict(LoadTempSound("SFX\SCP\205\Horror.ogg"))
@@ -5690,41 +5707,39 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 11.0
 								;[Block]
-								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								For i = 3 To 5 Step 2
+								If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+								For i = 2 To 4
 									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
-									If EntityHidden(e\room\Objects[i + 1]) Then ShowEntity(e\room\Objects[i + 1])
 								Next
 								
 								; ~ Idle
-								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2.0, 226.0, 0.2)
-								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2.0, 200.0, 0.2)
-								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 4.0, 125.0, 0.2)
+								Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 2.0, 226.0, 0.2)
+								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2.0, 200.0, 0.2)
+								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 4.0, 125.0, 0.2)
 								
 								If e\EventState2 > 70.0 * 85.0 Then e\EventState = e\EventState + 1.0
 								;[End Block]
 							Case 13.0
 								;[Block]
-								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								For i = 3 To 5 Step 2
+								If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+								For i = 2 To 4
 									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
-									If EntityHidden(e\room\Objects[i + 1]) Then ShowEntity(e\room\Objects[i + 1])
 								Next
-								If AnimTime(e\room\Objects[6]) <> 227.0 Then SetAnimTime(e\room\Objects[6], 227.0)
+								If AnimTime(e\room\Objects[5]) <> 227.0 Then SetAnimTime(e\room\Objects[5], 227.0)
 								
-								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 2.0, 491.0, 0.05)
-								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 197.0, 433.0, 0.05)
-								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 2.0, 433.0, 0.05)
+								Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 2.0, 491.0, 0.05)
+								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 197.0, 433.0, 0.05)
+								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 2.0, 433.0, 0.05)
 								;[End Block]
 							Case 66.0
 								;[Block]
-								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 492.0, 534.0, 0.1, False)
-								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 434.0, 466.0, 0.1, False)
-								Animate2(e\room\Objects[5], AnimTime(e\room\Objects[5]), 434.0, 494.0, 0.1, False)
+								If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+								Animate2(e\room\Objects[2], AnimTime(e\room\Objects[2]), 492.0, 534.0, 0.1, False)
+								Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 434.0, 466.0, 0.1, False)
+								Animate2(e\room\Objects[4], AnimTime(e\room\Objects[4]), 434.0, 494.0, 0.1, False)
 								
-								If AnimTime(e\room\Objects[3]) > 515.0
-									If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+								If AnimTime(e\room\Objects[2]) > 515.0
+									If (Not EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ)) Then HideEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
 									e\EventState = 67.0
 									e\EventState2 = 0.0
 									e\EventState3 = 0.0
@@ -5732,7 +5747,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 67.0
 								;[Block]
-								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < 7.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[1], True), EntityZ(me\Collider), EntityZ(e\room\Objects[1], True)) < 7.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 									If Rand(100) = 1
 										msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
 										
@@ -5754,24 +5769,23 @@ Function UpdateEvents%()
 							Default
 								;[Block]
 								If Rand(3) = 1
-									If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+									If (Not EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ)) Then HideEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
 								Else
-									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+									If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
 								EndIf
 								
 								e\EventState3 = e\EventState3 + fps\Factor[0]
 								If e\EventState3 > 50.0
-									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+									If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
 									e\EventState = e\EventState + 1.0
 									e\EventState3 = 0.0
 								EndIf
 								;[End Block]
 						End Select
 					EndIf
-				ElseIf e\room\Objects[3] <> 0
-					For i = 3 To 5 Step 2
+				ElseIf e\room\Objects[2] <> 0
+					For i = 2 To 4
 						If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
-						If (Not EntityHidden(e\room\Objects[i + 1])) Then HideEntity(e\room\Objects[i + 1])
 					Next
 				Else
 					e\EventState = 0.0
