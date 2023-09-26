@@ -1859,6 +1859,9 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
+			it.Items = CreateItem("Document SCP-079", "paper", r\x - 897.0 * RoomScale, r\y - 10534.0 * RoomScale, r\z + 783.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			CreateCustomCenter(r\x, r\z - 256.0 * RoomScale, r)
 			;[End Block]
 		Case "cont1_096"
