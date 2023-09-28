@@ -129,6 +129,7 @@ Function RemoveParticleInstances%()
 	For i = 0 To MaxParticleTextureIDAmount - 1
 		p_I\ParticleTextureID[i] = 0
 	Next
+	Delete Each ParticleInstance
 End Function
 
 Const MaxDoorModelIDAmount% = 9
@@ -1995,6 +1996,8 @@ Function LoadData%()
 	
 	CanSave = 2
 	
+	EscapeSecondsTimer = 70.0
+	
 	chs.Cheats = New Cheats
 	me.Player = New Player
 	wi.WearableItems = New WearableItems
@@ -2701,7 +2704,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	RandomSeed = ""
 	
 	UsedConsole = False
-	ClearCheats()
+	Delete Each Cheats
 	WireFrameState = 0
 	WireFrame(0)
 	ConsoleOpen = False
@@ -2716,6 +2719,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	SubjectName = ""
 	InFacility = False
 	PlayerFallingPickDistance = 0.0
+	PlayerInsideElevator = False
+	PlayerElevatorFloor = 0
+	ToElevatorFloor = 0
 	
 	ShouldEntitiesFall = False
 	HideDistance = 0.0
@@ -2733,6 +2739,10 @@ Function NullGame%(PlayButtonSFX% = True)
 	MTFTimer = 0.0
 	MTFCameraCheckTimer = 0.0
 	MTFCameraCheckDetected = False
+	
+	CODE_DR_MAYNARD = 0
+	CODE_MAINTENANCE_TUNNELS = 0
+	CODE_O5_COUNCIL = 0
 	
 	ShouldPlay = 66
 	FreeEntity(SoundEmitter) : SoundEmitter = 0
@@ -2755,6 +2765,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	BatMsgTimer = 0.0
 	
+	EscapeSecondsTimer = 0.0
 	EscapeTimer = 0.0
 	
 	If Camera <> 0 Then FreeEntity(Camera) : Camera = 0
@@ -2768,6 +2779,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	
 	SubFile = 0
+	SubColors = 0
 	SubtitlesInit = False
 	ClearSubtitles()
 	DeInitSubtitlesAssets()
@@ -2797,7 +2809,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	If I_1499\Sky <> 0 Then FreeEntity(I_1499\Sky) : I_1499\Sky = 0
 	Delete Each SCP1499
 	
-	QuickLoadPercent = -1
+	QuickLoadPercent = 0
 	QuickLoadPercent_DisplayTimer = 0.0
 	For e.Events = Each Events
 		RemoveEvent(e)
@@ -2871,6 +2883,9 @@ Function NullGame%(PlayButtonSFX% = True)
 		If mt <> Null Then DestroyMT(mt, False)
 		Delete(mt)
 	Next
+	For i = 0 To 4095
+		CHUNKDATA[i] = 0
+	Next
 	For ch.Chunk = Each Chunk
 		RemoveChunk(ch)
 	Next
@@ -2911,8 +2926,17 @@ Function NullGame%(PlayButtonSFX% = True)
 	RemoveTextureInstances()
 	Delete Each TextureInCache
 	AmbientLightRoomTex = 0
-	MissingTexture = 0
+	FreeTexture(MissingTexture) : MissingTexture = 0
 	
+	Mesh_MinX = 0.0 : Mesh_MinY = 0.0 : Mesh_MinZ = 0.0
+	Mesh_MaxX = 0.0 : Mesh_MaxY = 0.0 : Mesh_MaxZ = 0.0
+	Mesh_MagX = 0.0 : Mesh_MagY = 0.0 : Mesh_MagZ = 0.0
+	
+	For i = 0 To 24
+		CommotionState[i] = False
+	Next
+	CurrAmbientSFX = 0
+	TempSoundIndex = 0
 	For snd.Sound = Each Sound
 		If snd\InternalHandle <> 0 Then FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 		Delete(snd)

@@ -6940,7 +6940,6 @@ Function UpdateEvents%()
 				BrokenDoor = (e\room\Objects[1] <> 0)
 				
 				If PlayerRoom = e\room
-
 					e\EventState4 = UpdateLever(e\room\RoomLevers[0]\OBJ)
 					If e\EventState = 0.0
 						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.64 And e\EventState3 = 0.0 And e\EventState4 = 0.0

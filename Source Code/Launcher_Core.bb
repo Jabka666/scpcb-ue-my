@@ -345,6 +345,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	mo\MouseHit1 = False
 	
+	FreeImage(LauncherBG) : LauncherBG = 0
 	FreeImage(MenuBlack) : MenuBlack = 0
 	FreeImage(MenuGray) : MenuGray = 0
 	FreeImage(MenuWhite) : MenuWhite = 0

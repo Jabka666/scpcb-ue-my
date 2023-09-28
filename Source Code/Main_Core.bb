@@ -8382,7 +8382,7 @@ Function UpdateVomit%()
 End Function
 
 Global EscapeTimer%
-Global EscapeSecondsTimer# = 70.0
+Global EscapeSecondsTimer#
 
 Function UpdateEscapeTimer%()
 	Local ev.Events

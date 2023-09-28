@@ -13,6 +13,8 @@ Type TextureInCache
 End Type
 
 Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
+	If TexName = "" Then Return(0)
+	
 	Local tic.TextureInCache
 	Local CurrPath$
 	
@@ -36,6 +38,8 @@ Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = De
 End Function
 
 Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Height%, FirstFrame%, Count%, DeleteType% = DeleteMapTextures)
+	If TexName = "" Then Return(0)
+	
 	Local tic.TextureInCache
 	Local CurrPath$
 	
