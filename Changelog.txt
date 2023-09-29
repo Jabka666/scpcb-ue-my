@@ -41,6 +41,8 @@ Items:
 - Added unique texture for heavy equipment.
 - Added new SCP-294 drinks.
 
+- Changed gas mask model.
+
 - Rebalanced syringes and eyedrops.
 - Rebalanced equipping time for some items.
 - Can obtain regular SCP-714 back from SCP-914.
