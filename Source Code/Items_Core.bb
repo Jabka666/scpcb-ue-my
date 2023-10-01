@@ -6,7 +6,7 @@ Type ItemTemplates
 	Field DisplayName$
 	Field Name$
 	Field TempName$
-	Field Sound%
+	Field SoundID%
 	Field Found%
 	Field OBJ%, OBJPath$
 	Field InvImg%, InvImg2%, InvImgPath$
@@ -106,7 +106,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 	it\TempName = TempName
 	it\Name = Name
 	
-	it\Sound = SoundID
+	it\SoundID = SoundID
 	
 	HideEntity(it\OBJ)
 	
@@ -616,7 +616,7 @@ Function PickItem%(item.Items)
 						;[End Block]
 				End Select
 				
-				If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\Sound])
+				If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\SoundID])
 				item\Picked = True
 				item\Dropped = -1
 				
@@ -648,7 +648,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	Local n%
 	
 	If PlayDropSound
-		If item\ItemTemplate\Sound <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\Sound])
+		If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\SoundID])
 	EndIf
 	
 	item\Dropped = 1

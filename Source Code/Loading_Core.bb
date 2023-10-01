@@ -2778,7 +2778,7 @@ Function NullGame%(PlayButtonSFX% = True)
 		Delete(ach)
 	Next
 	
-	SubFile = 0
+	SubFile = ""
 	SubColors = 0
 	SubtitlesInit = False
 	ClearSubtitles()

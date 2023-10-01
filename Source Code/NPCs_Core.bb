@@ -81,26 +81,20 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			If (Left(CurrentDate(), 7) = "31 Oct ")
 				n_I\IsHalloween = True
 				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
-				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
-				EntityTexture(n\OBJ, TexFestive)
-				EntityTexture(n\OBJ2, TexFestive)
-				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
 			
 			; ~ On New Year set cookie texture
 			If (Left(CurrentDate(), 7) = "01 Jan ")
 				n_I\IsNewYear = True
 				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
-				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
-				EntityTexture(n\OBJ, TexFestive)
-				EntityTexture(n\OBJ2, TexFestive)
-				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
 			
 			; ~ On April Fools set kawaii texture
-			If (Left(CurrentDate(), 7) = "01 Apr ") Then
+			If (Left(CurrentDate(), 7) = "01 Apr ")
 				n_I\IsAprilFools = True
 				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
+			EndIf
+			If TexFestive <> 0
 				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
 				EntityTexture(n\OBJ2, TexFestive)
@@ -530,7 +524,6 @@ Function CreateNPCAsset%(n.NPCs)
 			Temp = IniGetFloat(NPCsFile, "Guard", "Scale") / 2.5
 			Temp = (Temp + 1.68) / MeshWidth(n\OBJ2)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
-			MeshCullBox(n\OBJ2, -MeshWidth(n\OBJ2), -MeshHeight(n\OBJ2), -MeshDepth(n\OBJ2), MeshWidth(n\OBJ2) * 2.0, MeshHeight(n\OBJ2) * 2.0, MeshDepth(n\OBJ2) * 2.0)
 			HideEntity(n\OBJ2)
 			;[End Block]
 		Case NPCTypeD
@@ -2573,6 +2566,8 @@ Function UpdateNPCs%()
 							n\SoundCHN = LoopSound2(VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 13.0, 1.0)
 							
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						Else
+							OpenConsoleOnError(Format(GetLocalString("runerr", "guard.state"), "15.0"))
 						EndIf
 						;[End Block]
 					Case 16.0 ; ~ Inside vehicle (driving)
@@ -2589,6 +2584,8 @@ Function UpdateNPCs%()
 							Animate2(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
 							
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+						Else
+							OpenConsoleOnError(Format(GetLocalString("runerr", "guard.state"), "16.0"))
 						EndIf
 						;[End Block]
 					Default
@@ -7134,8 +7131,7 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	Local Temp#
 	
 	If n = Null
-		CreateConsoleMsg(GetLocalString("msg", "spawn.invaildtex"))
-		OpenConsoleOnError()
+		OpenConsoleOnError(GetLocalString("msg", "spawn.invaildtex"))
 		Return
 	EndIf
 	

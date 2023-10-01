@@ -2119,8 +2119,7 @@ End Function
 
 Type BrokenDoor
 	Field IsBroken%
-	Field x#
-	Field z#
+	Field x#, z#
 End Type
 
 Global bk.BrokenDoor
@@ -3843,7 +3842,7 @@ Function RemoveLever(lvr.Levers)
 	Delete(lvr)
 End Function
 
-Function CreateRedLight%(x#, y#, z#, Parent% = 0)
+Function CreateRedLight%(x#, y#, z#)
 	Local Sprite%
 	
 	Sprite = CreateSprite()
@@ -3851,8 +3850,6 @@ Function CreateRedLight%(x#, y#, z#, Parent% = 0)
 	ScaleSprite(Sprite, 0.015, 0.015)
 	EntityTexture(Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_RED])
 	EntityBlend(Sprite, 3)
-	EntityParent(Sprite, Parent)
-	HideEntity(Sprite)
 	
 	Return(Sprite)
 End Function
@@ -5538,8 +5535,8 @@ End Function
 Function RemoveChunk%(ch.Chunk)
 	Local i%
 	
-	For i = 0 To ch\Amount
-		FreeEntity(ch\OBJ[i]) : ch\OBJ[i] = 0
+	For i = 0 To 127
+		If ch\OBJ[i] <> 0 Then FreeEntity(ch\OBJ[i]) : ch\OBJ[i] = 0
 	Next
 	FreeEntity(ch\PlatForm) : ch\PlatForm = 0
 	FreeEntity(ch\ChunkPivot) : ch\ChunkPivot = 0
@@ -5550,8 +5547,8 @@ Function RemoveChunkPart%(chp.ChunkPart)
 	Local i%
 	Local ChunkAmount% = IniGetInt(SCP1499ChunksFile, "general", "count")
 	
-	For i = 0 To ChunkAmount
-		FreeEntity(chp\OBJ[i]) : chp\OBJ[i] = 0
+	For i = 0 To 127
+		If chp\OBJ[i] <> 0 Then FreeEntity(chp\OBJ[i]) : chp\OBJ[i] = 0
 	Next
 	Delete(chp)
 End Function

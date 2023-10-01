@@ -963,8 +963,9 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[17], r\x - 48.0 * RoomScale, r\y + 540.0 * RoomScale, r\z + 656.0 * RoomScale)
 			EntityParent(r\Objects[17], r\OBJ)
 			
-			r\Objects[20] = CreateRedLight(r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale, r\OBJ)
+			r\Objects[20] = CreateRedLight(r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale)
 			r\HideObject[20] = False
+			EntityParent(r\Objects[20], r\OBJ)
 			HideEntity(r\Objects[20])
 			
 			; ~ Camera in the room itself
