@@ -3345,7 +3345,7 @@ Function UpdateSecurityCams%()
 	; ~ CoffinEffect = 3, SCP-079 broadcasting SCP-895 feed
 	
 	For sc.SecurityCams = Each SecurityCams
-		Local Close% = sc\room\Dist < 6.0 Lor PlayerRoom = sc\room
+		Local Close% = (sc\room\Dist < 6.0 Lor PlayerRoom = sc\room)
 		
 		If Close Lor sc = sc_I\CoffinCam
 			If sc\FollowPlayer
@@ -3495,7 +3495,7 @@ Function RenderSecurityCams%()
 	Local sc.SecurityCams
 	
 	For sc.SecurityCams = Each SecurityCams
-		Local Close% = sc\room\Dist < 6.0 Lor PlayerRoom = sc\room
+		Local Close% = (sc\room\Dist < 6.0 Lor PlayerRoom = sc\room)
 		
 		If Close
 			If sc\Screen
@@ -3583,7 +3583,7 @@ Function UpdateMonitorSaving%()
 	
 	For sc.SecurityCams = Each SecurityCams
 		If sc\AllowSaving And sc\Screen
-			Local Close% = sc\room\Dist < 6.0 Lor PlayerRoom = sc\room
+			Local Close% = (sc\room\Dist < 6.0 Lor PlayerRoom = sc\room)
 			
 			If Close
 				If sc\InSight And EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.0 And GrabbedEntity = 0 And d_I\ClosestButton = 0
