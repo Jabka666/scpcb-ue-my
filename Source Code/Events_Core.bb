@@ -18,7 +18,7 @@ Global skull_event.Events
 Const e_cont1_173% = 0, e_cont1_173_intro% = 1
 Const e_butt_ghost% = 2
 Const e_room2_checkpoint% = 3
-Const e_cont1_895% = 4, e_cont1_895_106% = 5
+Const e_cont1_895% = 4
 Const e_room1_dead_end_106% = 6
 Const e_room2c_gw_lcz_173% = 7, e_room2c_gw_ez_096% = 8
 Const e_cont1_372% = 9
@@ -105,10 +105,6 @@ Function FindEventID%(EventName$)
 		Case "cont1_895"
 			;[Block]
 			Return(e_cont1_895)
-			;[End Block]
-		Case "cont1_895_106"
-			;[Block]
-			Return(e_cont1_895_106)
 			;[End Block]
 		Case "room1_dead_end_106"
 			;[Block]
@@ -1970,7 +1966,7 @@ Function UpdateEvents%()
 				UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
 				UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
 				;[End Block]
-			Case e_cont1_895, e_cont1_895_106
+			Case e_cont1_895
 				;[Block]
 				If e\EventState < MilliSecs()
 					; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
@@ -1989,23 +1985,9 @@ Function UpdateEvents%()
 				EndIf
 				
 				If PlayerRoom = e\room
-					CoffinDistance = EntityDistance(me\Collider, e\room\Objects[1])
-					If CoffinDistance < 1.5
+					CoffinDistance = EntityDistance(me\Collider, e\room\Objects[0])
+					If CoffinDistance < 2.0
 						GiveAchievement(Achv895)
-						If (Not n_I\Curr106\Contained) And e\EventID = e_cont1_895_106 And e\EventState2 = 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), e\room\y - 1531.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
-							de\SizeChange = 0.001
-							EntityParent(de\OBJ, e\room\OBJ)
-							
-							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), e\room\y - 1541.0 * RoomScale, EntityZ(e\room\Objects[1], True))
-							ResetEntity(n_I\Curr106\Collider)
-							SetNPCFrame(n_I\Curr106, 110.0)
-							n_I\Curr106\State = -0.1
-							n_I\Curr106\PrevY = EntityY(me\Collider)
-							
-							e\EventState2 = 1.0
-						EndIf
-					ElseIf CoffinDistance < 3.0
 						If e\room\NPC[0] = Null
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y, e\room\z)
 							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\GravityMult = 0.0 : e\room\NPC[0]\FallingPickDistance = 0.0
@@ -2016,7 +1998,21 @@ Function UpdateEvents%()
 							
 							e\room\RoomDoors[0]\Open = True
 						EndIf
-					ElseIf CoffinDistance > 5.0
+						If (Not n_I\Curr106\Contained) And e\EventState2 = 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+							TFormPoint(0.0, -1531.0, 2356.0, e\room\OBJ, 0)
+							de.Decals = CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY(), TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+							de\SizeChange = 0.001
+							EntityParent(de\OBJ, e\room\OBJ)
+							
+							PositionEntity(n_I\Curr106\Collider, TFormedX(), TFormedY() - 12.0 * RoomScale, TFormedZ())
+							ResetEntity(n_I\Curr106\Collider)
+							SetNPCFrame(n_I\Curr106, 110.0)
+							n_I\Curr106\State = -0.1
+							n_I\Curr106\PrevY = EntityY(me\Collider)
+							
+							e\EventState2 = 1.0
+						EndIf
+					ElseIf CoffinDistance > 6.0
 						If e\room\NPC[0] <> Null
 							If e\room\NPC[0]\PrevState = 0
 								StopChannel(e\room\NPC[0]\SoundCHN) : e\room\NPC[0]\SoundCHN = 0
@@ -2097,8 +2093,8 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						If CoffinDistance < 4.0 And HasBatteryFor895 And I_714\Using <> 2
-							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
-							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[1], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[1], True))) / 2.0, 0.0), 1.0)) * 0.2)
+							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
+							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
 							me\Sanity = me\Sanity - ((fps\Factor[0] * 1.1 / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 							me\RestoreSanity = False
@@ -7839,7 +7835,7 @@ Function UpdateEvents%()
 									PlaySound_Strict(HorrorSFX[10])
 									
 									TFormPoint(0.0, 188.0, 459.0, e\room\OBJ, 0)
-									de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, TFormedY(), TFormedZ(), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
+									de.Decals = CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
 									de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
 									EntityParent(de\OBJ, e\room\OBJ)
 									
@@ -7848,7 +7844,7 @@ Function UpdateEvents%()
 									EntityParent(de\OBJ, e\room\OBJ)
 									
 									TFormPoint(0.0, 12.0, 514.0, e\room\OBJ, 0)
-									PositionEntity(n_I\Curr106\Collider, e\room\x, TFormedY(), TFormedZ())
+									PositionEntity(n_I\Curr106\Collider, TFormedX(), TFormedY(), TFormedZ())
 									ResetEntity(n_I\Curr106\Collider)
 									n_I\Curr106\State = -10.0
 									ShowEntity(n_I\Curr106\OBJ)
