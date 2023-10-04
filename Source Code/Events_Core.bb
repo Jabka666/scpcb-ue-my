@@ -5342,9 +5342,6 @@ Function UpdateEvents%()
 							PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
 							
-							de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY() - 56.0 * RoomScale + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.5)
-							EntityParent(de\OBJ, e\room\OBJ)
-							
 							e\EventState = 1.0
 						EndIf
 						ShouldPlay = 4
@@ -7783,12 +7780,6 @@ Function UpdateEvents%()
 								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
 								SetNPCFrame(e\room\NPC[0], 19.0)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
-								
-								de.Decals = CreateDecal(DECAL_409, TFormedX(), TFormedY() - (88.0 * RoomScale) + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
-								EntityParent(de\OBJ, e\room\OBJ)
-								
-								it.Items = CreateItem("SCP-005", "scp005", e\room\x - 5000.0 * RoomScale, e\room\y - 4416.0 * RoomScale, e\room\z + 1578.0 * RoomScale)
-								EntityType(it\Collider, HIT_ITEM)
 							EndIf
 							
 							e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
@@ -7847,7 +7838,8 @@ Function UpdateEvents%()
 								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.69
 									PlaySound_Strict(HorrorSFX[10])
 									
-									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
+									TFormPoint(0.0, 188.0, 459.0, e\room\OBJ, 0)
+									de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, TFormedY(), TFormedZ(), 0.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
 									de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
 									EntityParent(de\OBJ, e\room\OBJ)
 									
@@ -7855,7 +7847,8 @@ Function UpdateEvents%()
 									de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
 									EntityParent(de\OBJ, e\room\OBJ)
 									
-									PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+									TFormPoint(0.0, 12.0, 514.0, e\room\OBJ, 0)
+									PositionEntity(n_I\Curr106\Collider, e\room\x, TFormedY(), TFormedZ())
 									ResetEntity(n_I\Curr106\Collider)
 									n_I\Curr106\State = -10.0
 									ShowEntity(n_I\Curr106\OBJ)
@@ -7902,23 +7895,15 @@ Function UpdateEvents%()
 						e\EventState2 = 0.0
 					EndIf
 				Else
-					If e\room\Dist < 8.0
-						If I_005\ChanceToSpawn >= 5
-							TFormPoint(375.0, 51.0, -875.0, e\room\OBJ, 0)
-							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-							SetNPCFrame(e\room\NPC[0], 287.0)
-							PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
-							
-							de.Decals = CreateDecal(DECAL_BLOOD_2,  r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
-							EntityParent(de\OBJ, r\OBJ)
-							
-							it.Items = CreateItem("Note from Maynard", "paper", e\room\x, e\room\y + 255.0 * RoomScale, e\room\z + 238.0 * RoomScale)
-							EntityType(it\Collider, HIT_ITEM)
-						EndIf
-						RemoveEvent(e)
+					If I_005\ChanceToSpawn >= 5
+						TFormPoint(375.0, 51.0, -875.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+						e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
+						SetNPCFrame(e\room\NPC[0], 287.0)
+						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 					EndIf
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_cont2c_066

@@ -120,14 +120,6 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z + 238.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x, r\y + 188.0 * RoomScale, r\z + 459.0 * RoomScale)
-			EntityParent(r\Objects[1], r\OBJ)
-			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x, r\y + 12.0 * RoomScale, r\z + 514.0 * RoomScale)
-			EntityParent(r\Objects[2], r\OBJ)
-			
 			sc.SecurityCams = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z + 424.0 * RoomScale, r)
 			sc\Angle = 180.0 : sc\Turn = 30.0
 			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
@@ -140,6 +132,12 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 				
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+				EntityParent(de\OBJ, r\OBJ)
+			ElseIf I_005\ChanceToSpawn >= 5
+				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				de.Decals = CreateDecal(DECAL_BLOOD_2,  r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			
@@ -1924,6 +1922,9 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[3], r\x + 816.0 * RoomScale, r\y - 10000.0 * RoomScale, r\z - 256.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
+			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x - 2200.0 * RoomScale, r\y - 10688.0 * RoomScale + 0.005, r\z + 1000.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
+			EntityParent(de\OBJ, r\OBJ)
+			
 			it.Items = CreateItem("Document SCP-079", "paper", r\x - 897.0 * RoomScale, r\y - 10534.0 * RoomScale, r\z + 783.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -2594,6 +2595,14 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			If I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5
+				it.Items = CreateItem("SCP-005", "scp005", r\x - 5000.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1578.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				de.Decals = CreateDecal(DECAL_409, r\x - 4812.0 * RoomScale, r\y - 4497.0 * RoomScale + 0.005, r\z + 1729.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
+				EntityParent(de\OBJ, r\OBJ)
+			EndIf
 			;[End Block]
 		Case "room2c_maintenance"
 			;[Block]
