@@ -4671,6 +4671,7 @@ Function UpdateEvents%()
 										RotateEntity(me\Collider, 0.0, e\room\Angle, 0.0)
 										ResetEntity(me\Collider)
 										me\LightBlink = 5.0
+										If wi\NightVision > 0 Then me\BlinkTimer = -10.0
 										e\EventState3 = 1.0
 									EndIf
 									If EntityVisible(e\room\Objects[0], Camera)
