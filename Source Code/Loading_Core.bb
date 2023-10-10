@@ -2450,6 +2450,11 @@ Function InitNewGame%()
 			EntityParent(d\OBJ2, 0)
 			If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 		EndIf
+		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
+		For i = 0 To 1
+			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
+			If d\ElevatorPanel[i] <> 0 Then EntityParent(d\ElevatorPanel[i], 0)
+		Next
 	Next
 	
 	For it.Items = Each Items
@@ -2459,6 +2464,8 @@ Function InitNewGame%()
 	
 	For sc.SecurityCams = Each SecurityCams
 		sc\Angle = EntityYaw(sc\BaseOBJ) + sc\Angle
+		EntityParent(sc\BaseOBJ, 0)
+		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
 	
 	For r.Rooms = Each Rooms
@@ -2574,10 +2581,17 @@ Function InitLoadGame%()
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
 		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
+		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
+		For i = 0 To 1
+			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
+			If d\ElevatorPanel[i] <> 0 Then EntityParent(d\ElevatorPanel[i], 0)
+		Next
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
 		sc\Angle = EntityYaw(sc\BaseOBJ) + sc\Angle
+		EntityParent(sc\BaseOBJ, 0)
+		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
