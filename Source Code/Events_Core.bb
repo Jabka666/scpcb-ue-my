@@ -521,18 +521,22 @@ Function QuickLoadEvents%()
 			If e\EventState = 0.0 Lor e\EventStr <> "LoadDone"
 				If e\EventStr = "Load0"
 					e\room\Objects[2] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_1_MODEL])
+					e\room\ScriptedObject[2] = True
 					QuickLoadPercent = 10
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
 					e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_2_MODEL])
+					e\room\ScriptedObject[3] = True
 					QuickLoadPercent = 20
 					e\EventStr = "Load2"
 				ElseIf e\EventStr = "Load2"
 					e\room\Objects[4] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_3_MODEL])
+					e\room\ScriptedObject[4] = True
 					QuickLoadPercent = 30
 					e\EventStr = "Load3"
 				ElseIf e\EventStr = "Load3"
 					e\room\Objects[5] = CopyEntity(n_I\NPCModelID[NPC_205_WOMAN_MODEL])
+					e\room\ScriptedObject[5] = True
 					QuickLoadPercent = 40
 					e\EventStr = "Load4"
 				ElseIf e\EventStr = "Load4"
@@ -547,7 +551,7 @@ Function QuickLoadEvents%()
 					QuickLoadPercent = 70
 					e\EventStr = "Load6"
 				ElseIf e\EventStr = "Load6"
-					For i = 2 To 4
+					For i = 2 To 5
 						HideEntity(e\room\Objects[i])
 					Next
 					QuickLoadPercent = 100
@@ -586,7 +590,7 @@ Function QuickLoadEvents%()
 					QuickLoadPercent = 10
 					e\room\Objects[0] = LoadMesh_Strict("GFX\Map\dimension1499\1499plane.b3d")
 					HideEntity(e\room\Objects[0])
-					e\room\HideObject[0] = False
+					e\room\ScriptedObject[0] = True
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
 					QuickLoadPercent = 30
@@ -2040,22 +2044,9 @@ Function UpdateEvents%()
 						If EntityY(me\Collider) < (-6900.0) * RoomScale
 							ShouldPlay = 25
 							
-							e\room\NPC[0]\State = 6.0
-							If e\room\NPC[0]\Idle = 0
-								AnimateNPC(e\room\NPC[0], 17.0, 19.0, 0.01, False)
-								If e\room\NPC[0]\Frame = 19.0 Then e\room\NPC[0]\Idle = 1
-							Else
-								AnimateNPC(e\room\NPC[0], 19.0, 17.0, -0.01, False)
-								If e\room\NPC[0]\Frame = 17.0 Then e\room\NPC[0]\Idle = 0
-							EndIf
-							
-							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True) + 0.1, EntityZ(e\room\Objects[1], True), True)
-							RotateEntity(e\room\NPC[0]\Collider, EntityPitch(e\room\Objects[1], True), EntityYaw(e\room\Objects[1], True), 0.0, True)
-							ResetEntity(e\room\NPC[0]\Collider)
-							
 							Temp = e\EventState2
 							
-							Local LeverState# = UpdateLever(e\room\RoomLevers[0]\OBJ, ((EntityY(e\room\Objects[2], True) < -8318.0 * RoomScale) And (EntityY(e\room\Objects[2], True) > -8603.0 * RoomScale)))
+							Local LeverState# = UpdateLever(e\room\RoomLevers[0]\OBJ, ((EntityY(e\room\Objects[1], True) < -8318.0 * RoomScale) And (EntityY(e\room\Objects[1], True) > -8603.0 * RoomScale)))
 							
 							If GrabbedEntity = e\room\RoomLevers[0]\OBJ And DrawHandIcon Then e\EventState2 = LeverState
 							
@@ -2101,7 +2092,7 @@ Function UpdateEvents%()
 								
 								If e\EventState3 >= 2500.0
 									If e\EventState2 = 1.0 And e\EventState3 - fps\Factor[0] < 2500.0
-										PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+										PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 										ResetEntity(n_I\Curr106\Collider)
 										n_I\Curr106\Contained = False
 										ShowEntity(n_I\Curr106\OBJ)
@@ -2112,16 +2103,16 @@ Function UpdateEvents%()
 									
 									ShouldPlay = 10
 									
-									PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), ((-6628.0) + 108.0 * (Min(e\EventState3 - 2500.0, 800.0) / 320.0)) * RoomScale, EntityZ(e\room\Objects[1], True))
+									PositionEntity(n_I\Curr106\Collider, EntityX(e\room\NPC[0]\OBJ, True), ((-6628.0) + 108.0 * (Min(e\EventState3 - 2500.0, 800.0) / 320.0)) * RoomScale, EntityZ(e\room\NPC[0]\OBJ, True))
 									ResetEntity(n_I\Curr106\Collider)
 									If (Not EntityHidden(n_I\Curr106\OBJ2)) Then HideEntity(n_I\Curr106\OBJ2)
 									
-									RotateEntity(n_I\Curr106\Collider, 0.0, EntityYaw(e\room\Objects[1], True) + 180.0, 0.0, True)
+									RotateEntity(n_I\Curr106\Collider, 0.0, EntityYaw(e\room\NPC[0]\OBJ, True) + 180.0, 0.0, True)
 									n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 1
 									AnimateNPC(n_I\Curr106, 206.0, 250.0, 0.1)
 									
 									If e\EventState3 - fps\Factor[0] < 2500.0 
-										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[1], True), e\room\y - 6392.0 * RoomScale, EntityZ(e\room\Objects[1], True), 90.0, 0.0, Rnd(360.0), 0.1, 0.01) 
+										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\NPC[0]\OBJ, True), e\room\y - 6392.0 * RoomScale, EntityZ(e\room\NPC[0]\OBJ, True), 90.0, 0.0, Rnd(360.0), 0.1, 0.01) 
 										de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.003
 										EntityParent(de\OBJ, e\room\OBJ)
 										
@@ -2141,7 +2132,7 @@ Function UpdateEvents%()
 										If e\EventState2 = 1.0
 											n_I\Curr106\Contained = True
 										Else
-											PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+											PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 											ResetEntity(n_I\Curr106\Collider)
 											n_I\Curr106\Contained = False
 											ShowEntity(n_I\Curr106\OBJ)
@@ -2155,20 +2146,21 @@ Function UpdateEvents%()
 							EndIf
 							
 							If e\EventState2
-								PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), CurveValue(-8308.0 * RoomScale + Sin(Float(MilliSecs()) * 0.04) * 0.07, EntityY(e\room\Objects[2], True), 200.0), EntityZ(e\room\Objects[2], True), True)
-								RotateEntity(e\room\Objects[2], Sin(Float(MilliSecs()) * 0.03), EntityYaw(e\room\Objects[2], True), -Sin(Float(MilliSecs()) * 0.025), True)
+								PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), CurveValue(-8308.0 * RoomScale + Sin(Float(MilliSecs()) * 0.04) * 0.07, EntityY(e\room\Objects[1], True), 200.0), EntityZ(e\room\Objects[1], True), True)
+								RotateEntity(e\room\Objects[1], Sin(Float(MilliSecs()) * 0.03), EntityYaw(e\room\Objects[1], True), -Sin(Float(MilliSecs()) * 0.025), True)
 							Else
-								PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), CurveValue(-8608.0 * RoomScale, EntityY(e\room\Objects[2], True), 200.0), EntityZ(e\room\Objects[2], True), True)
-								RotateEntity(e\room\Objects[2], 0.0, EntityYaw(e\room\Objects[2], True), 0.0, True)
+								PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), CurveValue(-8608.0 * RoomScale, EntityY(e\room\Objects[1], True), 200.0), EntityZ(e\room\Objects[1], True), True)
+								RotateEntity(e\room\Objects[1], 0.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
 							EndIf
 						EndIf
 					Else
-						TFormPoint(1088.0, -5900.0, 1728.0, e\room\OBJ, 0)
+						TFormPoint(1088.0, -6208.0, 1824.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-						e\room\NPC[0]\HideFromNVG = True
-						TurnEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+						e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True : e\room\NPC[0]\HideFromNVG = True
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+						SetNPCFrame(e\room\NPC[0], 17.0)
 					EndIf
-					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[3], e\room\Objects[4], e)
+					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e)
 				Else
 					If (Not PlayerInReachableRoom())
 						If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
@@ -2179,17 +2171,6 @@ Function UpdateEvents%()
 			Case e_cont1_205
 				;[Block]
 				If PlayerRoom = e\room
-					For sc.SecurityCams = Each SecurityCams
-						If sc\room = e\room
-							If (Not EntityHidden(sc\MonitorOBJ)) Then HideEntity(sc\MonitorOBJ)
-							If (Not EntityHidden(sc\BaseOBJ))
-								HideEntity(sc\CameraOBJ)
-								HideEntity(sc\BaseOBJ)
-							EndIf
-							Exit
-						EndIf
-					Next
-					
 					If e\EventState = 0.0 Lor e\EventStr <> "LoadDone"
 						If e\EventStr = "" And QuickLoadPercent = -1
 							QuickLoadPercent = 0

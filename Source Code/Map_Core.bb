@@ -1665,7 +1665,7 @@ Type Rooms
 	Field Dist#
 	Field SoundCHN%
 	Field fr.Forest
-	Field Objects%[MaxRoomObjects], HideObject%[MaxRoomObjects]
+	Field Objects%[MaxRoomObjects], ScriptedObject%[MaxRoomObjects]
 	Field RoomLevers.Levers[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
@@ -1960,7 +1960,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "", Angle# = 0.
 				PositionEntity(r\OBJ, x, y, z)
 				
 				For i = 0 To MaxRoomObjects - 1
-					r\HideObject[i] = True
+					r\ScriptedObject[i] = False
 				Next
 				FillRoom(r)
 				
@@ -2004,7 +2004,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "", Angle# = 0.
 					PositionEntity(r\OBJ, x, y, z)
 					
 					For i = 0 To MaxRoomObjects - 1
-						r\HideObject[i] = True
+						r\ScriptedObject[i] = False
 					Next
 					FillRoom(r)
 					
@@ -3241,7 +3241,7 @@ End Function
 
 Type SecurityCams
 	Field BaseOBJ%, CameraOBJ%, MonitorOBJ%, Pvt%
-	Field ScrOBJ%, ScrWidth#, ScrHeight#
+	Field ScrOBJ%
 	Field Screen%, Cam%, ScrOverlay%
 	Field Angle#, Turn#, CurrAngle#
 	Field State#, PlayerState%
@@ -3252,15 +3252,18 @@ Type SecurityCams
 	Field FollowPlayer%
 	Field CoffinEffect%
 	Field AllowSaving%
-	Field MinAngle#, MaxAngle#, Dir%
-	Field Dist#
+	Field Dir%
+	Field ScriptedMonitor% = False
+	Field ScriptedCamera% = False
 End Type
 
-Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, room.Rooms, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0)
+Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, Pitch1#, room.Rooms, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0, Pitch2# = 0.0, Yaw2# = 0.0, Roll2# = 0.0)
 	Local sc.SecurityCams
 	
 	sc.SecurityCams = New SecurityCams
 	sc\room = room
+	sc\ScriptedCamera = False
+	sc\ScriptedMonitor = False
 	
 	sc\BaseOBJ = CopyEntity(sc_I\CamModelID[CAM_BASE_MODEL])
 	ScaleEntity(sc\BaseOBJ, 0.0015, 0.0015, 0.0015)
@@ -3269,6 +3272,7 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, room.Rooms, Screen% = Fal
 	
 	sc\CameraOBJ = CopyEntity(sc_I\CamModelID[CAM_HEAD_MODEL])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
+	RotateEntity(sc\CameraOBJ, Pitch1, 0.0, 0.0)
 	
 	sc\Screen = Screen
 	If Screen
@@ -3279,11 +3283,12 @@ Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, room.Rooms, Screen% = Fal
 		Local Scale# = RoomScale * 4.5 * 0.4
 		
 		sc\ScrOBJ = CreateSprite()
+		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
+		PositionEntity(sc\ScrOBJ, x2, y2, z2)
+		RotateEntity(sc\ScrOBJ, Pitch2, Yaw2, Roll2)
 		EntityFX(sc\ScrOBJ, 17)
 		SpriteViewMode(sc\ScrOBJ, 2)
 		EntityTexture(sc\ScrOBJ, sc_I\ScreenTex)
-		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
-		PositionEntity(sc\ScrOBJ, x2, y2, z2)
 		If room <> Null Then EntityParent(sc\ScrOBJ, room\OBJ)
 		HideEntity(sc\ScrOBJ)
 		
@@ -3478,7 +3483,7 @@ Function UpdateSecurityCams%()
 					EndIf
 				EndIf
 			EndIf
-			If (Not sc\InSight) Then sc\SoundCHN = LoopSound2(CameraSFX, sc\SoundCHN, Camera, sc\CameraOBJ, 4.0)
+			If (Not sc\InSight) And (Not sc\ScriptedCamera) Then sc\SoundCHN = LoopSound2(CameraSFX, sc\SoundCHN, Camera, sc\CameraOBJ, 4.0)
 		EndIf
 		
 		If sc <> Null
@@ -3913,9 +3918,13 @@ Function HideRoomsNoColl%(room.Rooms)
 		
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
-				If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
-				HideEntity(sc\CameraOBJ)
-				HideEntity(sc\BaseOBJ)
+				If sc\MonitorOBJ <> 0
+					If (Not sc\ScriptedMonitor) Then HideEntity(sc\MonitorOBJ)
+				EndIf
+				If (Not sc\ScriptedCamera)
+					HideEntity(sc\CameraOBJ)
+					HideEntity(sc\BaseOBJ)
+				EndIf
 			EndIf
 		Next
 		
@@ -3928,7 +3937,7 @@ Function HideRoomsNoColl%(room.Rooms)
 		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
-				If room\HideObject[i] Then HideEntity(room\Objects[i])
+				If (Not room\ScriptedObject[i]) Then HideEntity(room\Objects[i])
 			Else
 				Exit
 			EndIf
@@ -3961,9 +3970,13 @@ Function ShowRoomsNoColl%(room.Rooms)
 		
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
-				If sc\MonitorOBJ <> 0 Then ShowEntity(sc\MonitorOBJ)
-				ShowEntity(sc\CameraOBJ)
-				ShowEntity(sc\BaseOBJ)
+				If sc\MonitorOBJ <> 0
+					If (Not sc\ScriptedMonitor) Then ShowEntity(sc\MonitorOBJ)
+				EndIf
+				If (Not sc\ScriptedCamera)
+					ShowEntity(sc\CameraOBJ)
+					ShowEntity(sc\BaseOBJ)
+				EndIf
 			EndIf
 		Next
 		
@@ -3976,7 +3989,7 @@ Function ShowRoomsNoColl%(room.Rooms)
 		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
-				If room\HideObject[i] Then ShowEntity(room\Objects[i])
+				If (Not room\ScriptedObject[i]) Then ShowEntity(room\Objects[i])
 			Else
 				Exit
 			EndIf
@@ -4047,9 +4060,13 @@ Function HideRoomsColl%(room.Rooms)
 		; ~ Hide collider anyway because the player/NPC cannot interact with it
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
-				If sc\MonitorOBJ <> 0 Then HideEntity(sc\MonitorOBJ)
-				HideEntity(sc\CameraOBJ)
-				HideEntity(sc\BaseOBJ)
+				If sc\MonitorOBJ <> 0
+					If (Not sc\ScriptedMonitor) Then HideEntity(sc\MonitorOBJ)
+				EndIf
+				If (Not sc\ScriptedCamera)
+					HideEntity(sc\CameraOBJ)
+					HideEntity(sc\BaseOBJ)
+				EndIf
 			EndIf
 		Next
 		
@@ -4064,7 +4081,7 @@ Function HideRoomsColl%(room.Rooms)
 		; ~ Hide collider anyway because the player/NPC cannot interact with it
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
-				If room\HideObject[i] Then HideEntity(room\Objects[i])
+				If (Not room\ScriptedObject[i]) Then HideEntity(room\Objects[i])
 			Else
 				Exit
 			EndIf
@@ -4121,9 +4138,13 @@ Function ShowRoomsColl%(room.Rooms)
 		
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
-				If sc\MonitorOBJ <> 0 Then ShowEntity(sc\MonitorOBJ)
-				ShowEntity(sc\CameraOBJ)
-				ShowEntity(sc\BaseOBJ)
+				If sc\MonitorOBJ <> 0
+					If (Not sc\ScriptedMonitor) Then ShowEntity(sc\MonitorOBJ)
+				EndIf
+				If (Not sc\ScriptedCamera)
+					ShowEntity(sc\CameraOBJ)
+					ShowEntity(sc\BaseOBJ)
+				EndIf
 			EndIf
 		Next
 		
@@ -4136,7 +4157,7 @@ Function ShowRoomsColl%(room.Rooms)
 		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
-				If room\HideObject[i] Then ShowEntity(room\Objects[i])
+				If (Not room\ScriptedObject[i]) Then ShowEntity(room\Objects[i])
 			Else
 				Exit
 			EndIf

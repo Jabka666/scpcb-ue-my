@@ -15,9 +15,8 @@ Function FillRoom%(r.Rooms)
 			; ~ Misc doors
 			d.Doors = CreateDoor(r\x, r\y, r\z - 512.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_2)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 256.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 640.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 256.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 640.0 * RoomScale, 20.0, r)
 			sc\Angle = 180.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			For xTemp2 = 0 To 1
 				For yTemp2 = 0 To 2
@@ -120,9 +119,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z + 238.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z + 424.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x, r\y + 415.0 * RoomScale, r\z + 424.0 * RoomScale, 30.0, r)
 			sc\Angle = 180.0 : sc\Turn = 30.0
-			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("Document SCP-005", "paper", r\x + 504.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 500.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -197,10 +195,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y + 10.0 * RoomScale, r\z + 102.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 516.0 * RoomScale, r\y + 352.0 * RoomScale, r\z + 95.0 * RoomScale, r, True, r\x + 1454.0 * RoomScale, r\y + 608.0 * RoomScale, r\z + 414.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 516.0 * RoomScale, r\y + 352.0 * RoomScale, r\z + 95.0 * RoomScale, 20.0, r, True, r\x + 1454.0 * RoomScale, r\y + 608.0 * RoomScale, r\z + 414.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 270.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 272.0 * RoomScale, r\y + 0.005, r\z + 262.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
@@ -468,10 +464,8 @@ Function FillRoom%(r.Rooms)
 				de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
 			Next
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 3940.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1248.0 * RoomScale, r, True, r\x - 1970.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 3940.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1248.0 * RoomScale, 20.0, r, True, r\x - 1970.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 270.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", r\x - 3934.0 * RoomScale, r\y + 170.0 * RoomScale, r\z + 8.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -493,11 +487,14 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r\x + 472.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, r, False, DEFAULT_DOOR, KEY_CARD_1)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, r, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, r, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
-			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
+			sc\ScriptedCamera = True : sc\ScriptedMonitor = True
 			ScaleSprite(sc\ScrOBJ, 896.0 * 0.5 * RoomScale, 896.0 * 0.5 * RoomScale)
 			CameraZoom(sc\Cam, 1.5)
+			HideEntity(sc\BaseOBJ)
+			HideEntity(sc\CameraOBJ)
+			HideEntity(sc\MonitorOBJ)
 			r\RoomSecurityCams[0] = sc
 			
 			; ~ Demons spawnpoint
@@ -534,7 +531,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Hit Box
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\cont1_372_hb.b3d", r\OBJ)
-			r\HideObject[0] = False
+			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -702,9 +699,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x - 1065.0 * RoomScale, r\y - 380.0 * RoomScale, r\z + 50.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 184.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 952.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 184.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 952.0 * RoomScale, 20.0, r)
 			sc\Angle = 130.0 : sc\Turn = 40.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("Gas Mask", "gasmask", r\x + 736.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 544.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -800,9 +796,8 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			d.Doors = CreateDoor(r\x + 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, r, False, DEFAULT_DOOR, KEY_CARD_0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 1646.0 * RoomScale, r\y + 435.0 * RoomScale, r\z + 193.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 1646.0 * RoomScale, r\y + 435.0 * RoomScale, r\z + 193.0 * RoomScale, 20.0, r)
 			sc\Angle = 30.0 : sc\Turn = 30.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			de.Decals = CreateDecal(DECAL_WATER, r\x + 103.0 * RoomScale, r\y + 0.005, r\z + 161.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.8, 1.0), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
@@ -962,15 +957,13 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[17], r\OBJ)
 			
 			r\Objects[20] = CreateRedLight(r\x + 958.5 * RoomScale, r\y + 762.5 * RoomScale, r\z + 669.0 * RoomScale)
-			r\HideObject[20] = False
+			r\ScriptedObject[20] = True
 			EntityParent(r\Objects[20], r\OBJ)
 			HideEntity(r\Objects[20])
 			
 			; ~ Camera in the room itself
-			sc.SecurityCams = CreateSecurityCam(r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, r, True, r\x - 231.489 * RoomScale, r\y + 760.0 * RoomScale, r\z + 255.744 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, 20.0, r, True, r\x - 231.0 * RoomScale, r\y + 760.0 * RoomScale, r\z + 256.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 315.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
-			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			;[End Block]
 		Case "room2_storage"
 			;[Block]
@@ -1027,7 +1020,7 @@ Function FillRoom%(r.Rooms)
 		Case "room2_tesla_lcz", "room2_tesla_hcz", "room2_tesla_ez"
 			;[Block]
 			r\Objects[0] = CreateSprite()
-			r\HideObject[0] = False
+			r\ScriptedObject[0] = True
 			EntityTexture(r\Objects[0], t\OverlayTextureID[3])
 			SpriteViewMode(r\Objects[0], 2) 
 			EntityBlend(r\Objects[0], 3) 
@@ -1037,7 +1030,7 @@ Function FillRoom%(r.Rooms)
 			HideEntity(r\Objects[0])
 			
 			r\Objects[1] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
-			r\HideObject[1] = False
+			r\ScriptedObject[1] = True
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
@@ -1066,7 +1059,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Glass panel
 			r\Objects[2] = CreateSprite()
-			r\HideObject[2] = False
+			r\ScriptedObject[2] = True
 			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -1103,7 +1096,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreateRedLight(r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
-			r\HideObject[1] = False
+			r\ScriptedObject[1] = True
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
@@ -1176,14 +1169,13 @@ Function FillRoom%(r.Rooms)
 						zTemp = 416.0
 						;[End Block]
 				End Select
-				sc.SecurityCams = CreateSecurityCam(r\x + xTemp * RoomScale, r\y + 386.0 * RoomScale, r\z + zTemp * RoomScale, r)
+				sc.SecurityCams = CreateSecurityCam(r\x + xTemp * RoomScale, r\y + 386.0 * RoomScale, r\z + zTemp * RoomScale, 30.0, r)
 				If i < 2
 					sc\Angle = 180.0
 				Else
 					sc\Angle = 0.0
 				EndIf
 				sc\Turn = 30.0
-				TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			Next
 			
 			For i = 0 To 14
@@ -1317,14 +1309,13 @@ Function FillRoom%(r.Rooms)
 						zTemp = 150.0
 						;[End Block]
 				End Select
-				sc.SecurityCams = CreateSecurityCam(r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale, r)
+				sc.SecurityCams = CreateSecurityCam(r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale, 30.0, r)
 				If i = 0
 					sc\Angle = 220.0
 				Else
 					sc\Angle = 180.0
 				EndIf
 				sc\Turn = 30.0
-				TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			Next
 			
 			it.Items = CreateItem("SCP-1499", "scp1499", r\x + 616.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 234.0 * RoomScale)
@@ -1477,14 +1468,11 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			; ~ Security camera inside
-			sc.SecurityCams = CreateSecurityCam(r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale, r, True, r\x + 670.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 96.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale,  40.0, r, True, r\x + 670.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 96.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
-			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 112.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 112.0 * RoomScale, r, True, r\x + 96.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 670.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 112.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 112.0 * RoomScale, 40.0, r, True, r\x + 96.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 670.0 * RoomScale)
 			sc\Angle = 45.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
 			
 			; ~ Smoke
 			em.Emitters = CreateEmitter(r\x - 175.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 656.0 * RoomScale, 0)
@@ -1559,9 +1547,8 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[0], 1)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 192.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 192.0 * RoomScale, 20.0, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("Document SCP-1162-ARC", "paper", r\x + 863.227 * RoomScale, r\y + 152.0 * RoomScale, r\z - 953.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -1783,9 +1770,8 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 960.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 960.0 * RoomScale, 20.0, r)
 			sc\Angle = 225.0 : sc\Turn = 0.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			CreateCustomCenter(r\x, r\z + 500.0 * RoomScale, r)
 			;[End Block]
@@ -1904,7 +1890,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreateSprite(r\Objects[0])
-			r\HideObject[1] = False
+			r\ScriptedObject[1] = True
 			SpriteViewMode(r\Objects[1], 2)
 			PositionEntity(r\Objects[1], 0.082, 0.119, 0.010)
 			ScaleSprite(r\Objects[1], 0.09, 0.0725)
@@ -1994,47 +1980,40 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 665.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3119.0 * RoomScale)
 			
 			; ~ Security camera inside the box
-			sc.SecurityCams = CreateSecurityCam(r\x + 768.0 * RoomScale, r\y - 5936.0 * RoomScale, r\z + 1632.0 * RoomScale, r, True, r\x - 462.0 * RoomScale, r\y - 7872.0 * RoomScale, r\z + 3105.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x + 768.0 * RoomScale, r\y - 5936.0 * RoomScale, r\z + 1632.0 * RoomScale, 45.0, r, True, r\x - 462.0 * RoomScale, r\y - 7872.0 * RoomScale, r\z + 3105.0 * RoomScale, 0.0, -10.0, 0.0)
 			sc\Angle = 315.0 : sc\Turn = 20.0
-			TurnEntity(sc\CameraOBJ, 45.0, 0.0, 0.0)
-			TurnEntity(sc\ScrOBJ, 0.0, -10.0, 0.0)
+			sc\ScriptedCamera = True
+			HideEntity(sc\BaseOBJ)
 			r\RoomSecurityCams[0] = sc
 			
 			; ~ Security camera inside the observation room
-			sc.SecurityCams = CreateSecurityCam(r\x - 1439.0 * RoomScale, r\y - 7664.0 * RoomScale, r\z + 1709.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 1439.0 * RoomScale, r\y - 7664.0 * RoomScale, r\z + 1709.0 * RoomScale, 20.0, r)
 			sc\Angle = 315.0 : sc\Turn = 30.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			; ~ Femur breaker button
 			r\Objects[0] = CreateButton(BUTTON_DEFAULT, r\x - 337.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3136.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			; ~ Class-D spawnpoint
-			r\Objects[1] = CreatePivot()
-			TurnEntity(r\Objects[1], 0.0, 180.0, 0.0)
-			PositionEntity(r\Objects[1], r\x + 1088.0 * RoomScale, r\y - 6224.0 * RoomScale, r\z + 1824.0 * RoomScale) 
+			; ~ Chamber
+			r\Objects[1] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null, False)
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			EntityPickMode(r\Objects[1], 2)
+			PositionEntity(r\Objects[1], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
-			; ~ Chamber
-			r\Objects[2] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null, False)
-			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			EntityPickMode(r\Objects[2], 2)
-			PositionEntity(r\Objects[2], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
+			; ~ Elevators' pivots
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x - 1008.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 704.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			; ~ Elevators' pivots
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 1008.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 704.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 1008.0 * RoomScale, r\y - 7088.0 * RoomScale, r\z - 704.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 1008.0 * RoomScale, r\y - 7088.0 * RoomScale, r\z - 704.0 * RoomScale)
-			EntityParent(r\Objects[4], r\OBJ)
-			
-			r\Objects[5] = LoadMesh_Strict("GFX\Map\cont1_106_hb.b3d", r\OBJ)
-			r\HideObject[5] = False
-			EntityPickMode(r\Objects[5], 2)
-			EntityAlpha(r\Objects[5], 0.0)
+			r\Objects[4] = LoadMesh_Strict("GFX\Map\cont1_106_hb.b3d", r\OBJ)
+			r\ScriptedObject[4] = True
+			EntityPickMode(r\Objects[4], 2)
+			EntityAlpha(r\Objects[4], 0.0)
 			
 			it.Items = CreateItem("Level 5 Key Card", "key5", r\x - 1275.0 * RoomScale, r\y - 7910.0 * RoomScale, r\z + 3106.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2061,10 +2040,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x, r\y - 1532.0 * RoomScale, r\z + 2508.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, r, True, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, 120.0, r, True, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale, 0.0, 180.0, 0.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0 : sc\CoffinEffect = 1 : sc_I\CoffinCam = sc
-			TurnEntity(sc\CameraOBJ, 120.0, 0.0, 0.0)
-			TurnEntity(sc\ScrOBJ, 0.0, 180.0, 0.0)
 			
 			it.Items = CreateItem("Document SCP-895", "paper", r\x - 688.0 * RoomScale, r\y + 133.0 * RoomScale, r\z - 304.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2215,9 +2192,8 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, -90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 1121.0 * RoomScale, r\y + 4191.0 * RoomScale, r\z - 306.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 1121.0 * RoomScale, r\y + 4191.0 * RoomScale, r\z - 306.0 * RoomScale, 20.0, r)
 			sc\Angle = 90.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "room2_servers_hcz"
 			;[Block]
@@ -2248,7 +2224,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			r\Objects[2] = LoadMesh_Strict("GFX\Map\room2_servers_hcz_hb.b3d", r\OBJ)
-			r\HideObject[2] = False
+			r\ScriptedObject[2] = True
 			EntityPickMode(r\Objects[2], 2)
 			EntityAlpha(r\Objects[2], 0.0)
 			HideEntity(r\Objects[2])
@@ -2317,11 +2293,11 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[6], r\OBJ)
 			
 			r\Objects[7] = LoadMesh_Strict("GFX\Map\room2_test_hcz_hb.b3d", r\OBJ)
-			r\HideObject[7] = False
+			r\ScriptedObject[7] = True
 			EntityPickMode(r\Objects[7], 2)
 			EntityAlpha(r\Objects[7], 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 744.0 * RoomScale, r\y - 856.0 * RoomScale, r\z + 236.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 744.0 * RoomScale, r\y - 856.0 * RoomScale, r\z + 236.0 * RoomScale, 0.0, r)
 			sc\FollowPlayer = True
 			
 			it.Items = CreateItem("Document SCP-682", "paper", r\x + 656.0 * RoomScale, r\y - 1200.0 * RoomScale, r\z - 16.0 * RoomScale)
@@ -2379,7 +2355,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			r\Objects[2] = CreateSprite()
-			r\HideObject[2] = False
+			r\ScriptedObject[2] = True
 			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -2402,7 +2378,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Red light
 			r\Objects[5] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
-			r\HideObject[5] = False
+			r\ScriptedObject[5] = True
 			EntityParent(r\Objects[5], r\OBJ)
 			HideEntity(r\Objects[5])
 			
@@ -2433,9 +2409,8 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y - 4654.0 * RoomScale, r\z + 1168.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y - 4654.0 * RoomScale, r\z + 1168.0 * RoomScale, 20.0, r)
 			sc\Angle = 135.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "cont2_049"
 			;[Block]
@@ -2584,9 +2559,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[3], r\x - 4523.0 * RoomScale, r\y - 4060.0 * RoomScale, r\z - 2097.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, 20.0, r)
 			sc\Angle = 100.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
@@ -2713,9 +2687,8 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 450.0 * RoomScale, r\y + 420.0 * RoomScale, r\z + 250.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 450.0 * RoomScale, r\y + 420.0 * RoomScale, r\z + 250.0 * RoomScale, 20.0, r)
 			sc\Angle = 135.0 : sc\Turn = 0.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("SCP-513", "scp513", r\x, r\y + 196.0 * RoomScale, r\z + 655.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2744,9 +2717,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x, r\y + 0.5, r\z)
 			EntityParent(r\Objects[1], r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 355.0 * RoomScale, r\y + 450.0 * RoomScale, r\z + 321.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 355.0 * RoomScale, r\y + 450.0 * RoomScale, r\z + 321.0 * RoomScale, 30.0, r)
 			sc\Angle = -45.0 : sc\Turn = 0.0
-			TurnEntity(sc\CameraOBJ, 30.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 173.0 * RoomScale, r\y + 0.5, r\z + 631.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
@@ -2819,9 +2791,8 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, 20.0, r)
 			sc\Angle = 45.0 : sc\Turn = 0.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			CreateCustomCenter(r\x, r\z + 500.0 * RoomScale, r)
 			;[End Block]
@@ -2935,7 +2906,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Hit Box
 			r\Objects[16] = LoadMesh_Strict("GFX\Map\gatea_hitbox1.b3d", r\OBJ)
-			r\HideObject[16] = False
+			r\ScriptedObject[16] = True
 			EntityPickMode(r\Objects[16], 2)
 			EntityType(r\Objects[16], HIT_MAP)
 			EntityAlpha(r\Objects[16], 0.0)
@@ -3057,9 +3028,8 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			FreeEntity(d\ElevatorPanel[0]) : d\ElevatorPanel[0] = 0
 			
-			sc.SecurityCams = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 960.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x + 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 960.0 * RoomScale, 20.0, r)
 			sc\Angle = 45.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "room1_o5"
 			;[Block]
@@ -3164,7 +3134,7 @@ Function FillRoom%(r.Rooms)
 				EndIf
 			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_3_ez_hb.b3d", r\OBJ)
-			r\HideObject[0] = False
+			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -3226,9 +3196,8 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x + 234.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, r, False, OFFICE_DOOR)
 			d\Locked = 2 : d\MTFClose = False
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, 20.0, r)
 			sc\Angle = 225.0 : sc\Turn = 30.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "room2_cafeteria"
 			;[Block]
@@ -3368,14 +3337,13 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x + 234.0 * RoomScale, r\y, r\z, 90.0, r, False, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_office_2_hb.b3d", r\OBJ)
-			r\HideObject[0] = False
+			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, 20.0, r)
 			sc\Angle = 225.0 : sc\Turn = 30.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it.Items = CreateRandomBattery(r\x + 360.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3523,9 +3491,8 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2c_ez"
 			;[Block]
-			sc.SecurityCams = CreateSecurityCam(r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, 20.0, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "room2c_2_ez"
 			;[Block]
@@ -3540,14 +3507,13 @@ Function FillRoom%(r.Rooms)
 				EndIf
 			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2C_2_ez_hb.b3d", r\OBJ)
-			r\HideObject[0] = False
+			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, 20.0, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			If Rand(5) = 1
 				it.Items = CreateItem("ReVision Eyedrops", "eyedrops", r\x + 402.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 922.0 * RoomScale)
@@ -3581,9 +3547,8 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 240.0 * RoomScale, r\y + 1104.0 * RoomScale, r\z + 568.0 * RoomScale, -90.0, True)
 			r\RoomLevers.Levers[2] = CreateLever(r, r\x - 240.0 * RoomScale, r\y + 1104.0 * RoomScale, r\z + 504.0 * RoomScale, -90.0, True)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 265.0 * RoomScale, r\y + 1280.0 * RoomScale, r\z + 105.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 265.0 * RoomScale, r\y + 1280.0 * RoomScale, r\z + 105.0 * RoomScale, 20.0, r)
 			sc\Angle = 45.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it.Items = CreateItem("Note from Daniel", "paper", r\x - 400.0 * RoomScale, r\y + 1040.0 * RoomScale, r\z + 115.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3616,14 +3581,11 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			; ~ Security cameras inside
-			sc.SecurityCams = CreateSecurityCam(r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, 40.0, r, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
 			sc\Angle = 135.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
-			TurnEntity(sc\ScrOBJ, 0.0, 90.0, 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, r, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r\x - 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, 40.0, r, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 315.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 40.0, 0.0, 0.0)
 			
 			; ~ The blood decals inside
 			For i = 0 To 5
@@ -3650,14 +3612,13 @@ Function FillRoom%(r.Rooms)
 				EndIf
 			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_ez_hb.b3d", r\OBJ)
-			r\HideObject[0] = False
+			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, 20.0, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			
 			it.Items = CreateRandomBattery(r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3744,9 +3705,8 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room3_4_ez"
 			;[Block]
-			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, r)
+			sc.SecurityCams = CreateSecurityCam(r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, 20.0, r)
 			sc\Angle = 225.0 : sc\Turn = 45.0
-			TurnEntity(sc\CameraOBJ, 20.0, 0.0, 0.0)
 			;[End Block]
 		Case "room3_gw"
 			;[Block]
@@ -3794,7 +3754,7 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, r, True, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_office_hb.b3d", r\OBJ)
-			r\HideObject[0] = False
+			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -3883,7 +3843,7 @@ Function FillRoom%(r.Rooms)
 			r\Textures[1] = LoadTexture_Strict("GFX\NPCs\pd_plane_eye.png", 1 + 2, DeleteAllTextures)
 			
 			r\Objects[17] = CreateSprite()
-			r\HideObject[17] = False
+			r\ScriptedObject[17] = True
 			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures)
 			EntityTexture(r\Objects[17], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -3895,7 +3855,7 @@ Function FillRoom%(r.Rooms)
 			SpriteViewMode(r\Objects[17], 2)
 			
 			r\Objects[18] = LoadMesh_Strict("GFX\Map\Props\throne_wall.b3d")
-			r\HideObject[18] = False
+			r\ScriptedObject[18] = True
 			PositionEntity(r\Objects[18], EntityX(r\Objects[8], True), r\y, EntityZ(r\Objects[8], True) - 864.5 * RoomScale)
 			ScaleEntity(r\Objects[18], RoomScale / 2.04, RoomScale, RoomScale)
 			EntityPickMode(r\Objects[18], 2)
@@ -3903,7 +3863,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[18], r\OBJ)
 			
 			r\Objects[19] = CreateSprite()
-			r\HideObject[19] = False
+			r\ScriptedObject[19] = True
 			ScaleSprite(r\Objects[19], 8.0, 8.0)
 			EntityTexture(r\Objects[19], r\Textures[0])
 			EntityOrder(r\Objects[19], 100)
@@ -3913,7 +3873,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[19], EntityX(r\Objects[8], True) - 1000.0, 16.0, 0.0, True)
 			
 			r\Objects[20] = LoadMesh_Strict("GFX\Map\dimension_106_terrain.b3d")
-			r\HideObject[20] = False
+			r\ScriptedObject[20] = True
 			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
 			EntityTexture(r\Objects[20], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -3935,7 +3895,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[16], r\OBJ)
 			
 			r\Objects[17] = LoadMesh_Strict("GFX\Map\dimension1499\1499object0_cull.b3d", r\OBJ)
-			r\HideObject[17] = False
+			r\ScriptedObject[17] = True
 			EntityType(r\Objects[17], HIT_MAP)
 			EntityAlpha(r\Objects[17], 0.0)
 			;[End Block]

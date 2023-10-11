@@ -2463,7 +2463,6 @@ Function InitNewGame%()
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
-		sc\Angle = EntityYaw(sc\BaseOBJ) + sc\Angle
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
@@ -2589,7 +2588,6 @@ Function InitLoadGame%()
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
-		sc\Angle = EntityYaw(sc\BaseOBJ) + sc\Angle
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
@@ -2628,7 +2626,7 @@ Function InitLoadGame%()
 			If e\EventState = 2.0
 				e\room\Objects[0] = LoadMesh_Strict("GFX\Map\dimension1499\1499plane.b3d")
 				HideEntity(e\room\Objects[0])
-				e\room\HideObject[0] = False
+				e\room\ScriptedObject[0] = True
 				
 				I_1499\Sky = CreateSky("GFX\Map\sky\1499sky")
 				

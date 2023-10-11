@@ -1136,7 +1136,7 @@ Function LoadGame%(File$)
 				;[End Block]
 			Case e_cont1_106
 				;[Block]
-				If e\EventState2 = 0.0 Then PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), (-1280.0) * RoomScale, EntityZ(e\room\Objects[2], True), True)
+				If e\EventState2 = 0.0 Then PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), (-1280.0) * RoomScale, EntityZ(e\room\Objects[1], True), True)
 				;[End Block]
 			Case e_cont2_008
 				;[Block]
