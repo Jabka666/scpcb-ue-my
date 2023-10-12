@@ -84,7 +84,7 @@ Function CheckForPropModel%(File$)
 	End Select
 End Function
 
-Function CreateProp.Props(Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, Texture$, room.Rooms)
+Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, Texture$)
 	Local p.Props, p2.Props
 	Local Tex%
 	
@@ -319,7 +319,7 @@ Type TempSoundEmitters
 	Field RoomTemplate.RoomTemplates
 End Type
 
-Function CreateSoundEmitter.SoundEmitters(ID%, x#, y#, z#, Range#, room.Rooms)
+Function CreateSoundEmitter.SoundEmitters(room.Rooms, ID%, x#, y#, z#, Range#)
 	Local se.SoundEmitters
 	
 	se.SoundEmitters = New SoundEmitters
@@ -1262,7 +1262,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[3])
 				ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 				
-				fr\ForestDoors[i] = CreateDoor(0.0, 32.0 * RoomScale, 0.0, 180.0, Null, False, WOODEN_DOOR, KEY_860, "", fr\DetailEntities[i])
+				fr\ForestDoors[i] = CreateDoor(Null, 0.0, 32.0 * RoomScale, 0.0, 180.0, False, WOODEN_DOOR, KEY_860, "", fr\DetailEntities[i])
 				fr\ForestDoors[i]\Locked = 2
 				
 				EntityType(fr\DetailEntities[i], HIT_MAP)
@@ -1442,7 +1442,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[3])
 							ScaleEntity(fr\DetailEntities[i], RoomScale, RoomScale, RoomScale)
 							
-							fr\ForestDoors[i] = CreateDoor(0.0, 32.0 * RoomScale, 0.0, 180.0, Null, False, WOODEN_DOOR, KEY_860, "", fr\DetailEntities[i])
+							fr\ForestDoors[i] = CreateDoor(Null, 0.0, 32.0 * RoomScale, 0.0, 180.0, False, WOODEN_DOOR, KEY_860, "", fr\DetailEntities[i])
 							fr\ForestDoors[i]\Locked = 2
 							
 							EntityType(fr\DetailEntities[i], HIT_MAP)
@@ -1791,10 +1791,10 @@ Function PlaceMapCreatorMT%(r.Rooms)
 						;[Block]
 						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (409.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
 						AddLight(r, r\x + (x * 2.0) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
-						CreateProp("GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", r)
-						CreateProp("GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, -90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", r)
+						CreateProp(r, "GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+						CreateProp(r, "GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, -90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 						
-						dr.Doors = CreateDoor(r\x + (x * 2.0) + (CosValue * 256.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, r, False, ELEVATOR_DOOR)
+						dr.Doors = CreateDoor(r, r\x + (x * 2.0) + (CosValue * 256.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, False, ELEVATOR_DOOR)
 						PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
 						RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 						
@@ -1815,10 +1815,10 @@ Function PlaceMapCreatorMT%(r.Rooms)
 					Case 7
 						;[Block]
 						AddLight(r, r\x + (x * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
-						CreateProp("GFX\map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", r)
-						CreateProp("GFX\map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", r)
+						CreateProp(r, "GFX\map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+						CreateProp(r, "GFX\map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
 						
-						dr.Doors = CreateDoor(r\x + (x * 2.0) + (SinValue * 224.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (CosValue * 224.0 * RoomScale), EntityYaw(Tile_Entity, True), r, True, DEFAULT_DOOR, KEY_CARD_3)
+						dr.Doors = CreateDoor(r, r\x + (x * 2.0) + (SinValue * 224.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (CosValue * 224.0 * RoomScale), EntityYaw(Tile_Entity, True), True, DEFAULT_DOOR, KEY_CARD_3)
 						
 						it.Items = CreateItem("SCP-500-01", "scp500pill", r\x + (x * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
@@ -1829,7 +1829,7 @@ Function PlaceMapCreatorMT%(r.Rooms)
 				End Select
 				
 				r\mt\Entities[x + (y * MTGridSize)] = Tile_Entity
-				wayp = CreateWaypoint(r\x + (x * 2.0), r\y + MTGridY + 0.2, r\z + (y * 2.0), Null, r)
+				wayp = CreateWaypoint(Null, r, r\x + (x * 2.0), r\y + MTGridY + 0.2, r\z + (y * 2.0))
 				r\mt\waypoints[x + (y * MTGridSize)] = wayp
 				
 				If y < MTGridSize - 1
@@ -2054,7 +2054,7 @@ Type WayPoints
 	Field parent.WayPoints
 End Type
 
-Function CreateWaypoint.WayPoints(x#, y#, z#, door.Doors, room.Rooms)
+Function CreateWaypoint.WayPoints(door.Doors, room.Rooms, x#, y#, z#)
 	Local w.WayPoints
 	
 	w.WayPoints = New WayPoints
@@ -2154,7 +2154,7 @@ Const ONE_SIDED_DOOR% = 6
 Const SCP_914_DOOR% = 7
 ;[End Block]
 
-Function CreateDoor.Doors(x#, y#, z#, Angle#, room.Rooms, Open% = False, DoorType% = DEFAULT_DOOR, Keycard% = KEY_MISC, Code$ = "", CustomParent% = 0)
+Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorType% = DEFAULT_DOOR, Keycard% = KEY_MISC, Code$ = "", CustomParent% = 0)
 	Local d.Doors
 	Local Parent%, i%
 	Local FrameScaleX#, FrameScaleY#, FrameScaleZ#
@@ -3257,7 +3257,7 @@ Type SecurityCams
 	Field ScriptedCamera% = False
 End Type
 
-Function CreateSecurityCam.SecurityCams(x1#, y1#, z1#, Pitch1#, room.Rooms, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0, Pitch2# = 0.0, Yaw2# = 0.0, Roll2# = 0.0)
+Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0, Pitch2# = 0.0, Yaw2# = 0.0, Roll2# = 0.0)
 	Local sc.SecurityCams
 	
 	sc.SecurityCams = New SecurityCams
@@ -3713,7 +3713,7 @@ Type TempScreens
 	Field RoomTemplate.RoomTemplates
 End Type
 
-Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
+Function CreateScreen.Screens(room.Rooms, x#, y#, z#, ImgPath$)
 	Local s.Screens
 	
 	s.Screens = New Screens
@@ -3721,10 +3721,10 @@ Function CreateScreen.Screens(x#, y#, z#, ImgPath$, r.Rooms)
 	EntityRadius(s\OBJ, 0.1)
 	EntityPickMode(s\OBJ, 1)
 	PositionEntity(s\OBJ, x, y, z)
-	EntityParent(s\OBJ, r\OBJ)
+	If room <> Null Then EntityParent(s\OBJ, room\OBJ)
 	
 	s\ImgPath = ImgPath
-	s\room = r
+	s\room = room
 	
 	Return(s)
 End Function
@@ -3867,7 +3867,7 @@ Function UpdateRedLight%(Light%, Value1#, Value2#)
 	EndIf
 End Function
 
-Function CreateCustomCenter%(x#, z#, room.Rooms)
+Function CreateCustomCenter%(room.Rooms, x#, z#)
 	room\RoomCenter = CreatePivot()
 	PositionEntity(room\RoomCenter, x, 0.0, z)
 	EntityParent(room\RoomCenter, room\OBJ)
@@ -5155,7 +5155,7 @@ Function CreateMap%()
 						If ShouldSpawnDoor
 							If x + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									d.Doors = CreateDoor(Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+									d.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[0] = d
 								EndIf
 							EndIf
@@ -5186,7 +5186,7 @@ Function CreateMap%()
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-									d.Doors = CreateDoor(Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, r, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+									d.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[3] = d
 								EndIf
 							EndIf

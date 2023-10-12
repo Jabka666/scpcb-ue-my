@@ -5103,8 +5103,8 @@ Function UpdateEvents%()
 									
 									If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_GENERATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (400.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
-										CreateProp("GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", e\room)
-										CreateProp("GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", e\room)
+										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
 										
 										it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 										EntityType(it\Collider, HIT_ITEM)
@@ -5113,10 +5113,10 @@ Function UpdateEvents%()
 										EntityType(it\Collider, HIT_ITEM)
 									ElseIf e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_FIRST_ELEVATOR Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
-										CreateProp("GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", e\room)
-										CreateProp("GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", e\room)
+										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 										
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, Null, False, ELEVATOR_DOOR)
+										dr.Doors = CreateDoor(e\room, e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, False, ELEVATOR_DOOR)
 										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
 										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 										
@@ -5154,7 +5154,7 @@ Function UpdateEvents%()
 									
 									e\room\mt\Entities[iX + (iY * MTGridSize)] = TempInt
 									
-									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), e\room\y + MTGridY + 0.2, e\room\z + (iY * 2.0), Null, e\room)
+									wayp.WayPoints = CreateWaypoint(Null, e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + 0.2, e\room\z + (iY * 2.0))
 									
 									e\room\mt\waypoints[iX + (iY * MTGridSize)] = wayp
 									
@@ -5311,14 +5311,14 @@ Function UpdateEvents%()
 									
 									If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_GENERATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (400.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
-										CreateProp("GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", e\room)
-										CreateProp("GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "", e\room)
+										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
 									ElseIf e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_FIRST_ELEVATOR Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
-										CreateProp("GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", e\room)
-										CreateProp("GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "", e\room)
+										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 										
-										dr.Doors = CreateDoor(e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, e\room, False, ELEVATOR_DOOR)
+										dr.Doors = CreateDoor(e\room, e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, False, ELEVATOR_DOOR)
 										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
 										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
 										
@@ -5356,7 +5356,7 @@ Function UpdateEvents%()
 									
 									e\room\mt\Entities[iX + (iY * MTGridSize)] = TempInt
 									
-									wayp.WayPoints = CreateWaypoint(e\room\x + (iX * 2.0), e\room\y + MTGridY + 0.2, e\room\z + (iY * 2.0), Null, e\room)
+									wayp.WayPoints = CreateWaypoint(Null, e\room, e\room\x + (iX * 2.0), e\room\y + MTGridY + 0.2, e\room\z + (iY * 2.0))
 									
 									e\room\mt\waypoints[iX + (iY * MTGridSize)] = wayp
 									
