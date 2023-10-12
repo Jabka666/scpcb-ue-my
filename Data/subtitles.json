@@ -2790,31 +2790,31 @@
 			"text": "You..-",
 			"delay": 3.4,
 			"color": "announcement",
-			"length": -2.0
+			"length": 2.0
 		},
 		{
 			"text": "Are..-",
 			"delay": 4.4,
 			"color": "announcement",
-			"length": -2.0
+			"length": 2.0
 		},
 		{
 			"text": "Not..-",
 			"delay": 5.4,
 			"color": "announcement",
-			"length": -2.0
+			"length": 2.0
 		},
 		{
 			"text": "Getting..-",
 			"delay": 6.4,
 			"color": "announcement",
-			"length": -2.0
+			"length": 2.0
 		},
 		{
 			"text": "Out..!",
 			"delay": 7.4,
 			"color": "announcement",
-			"length": -1.0
+			"length": 1.0
 		}
 	],
 	"SFX\\SCP\\079\\Broadcast4.ogg": [
