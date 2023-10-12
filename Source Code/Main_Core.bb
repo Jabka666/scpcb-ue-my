@@ -3020,8 +3020,11 @@ Function UpdateZoneColor%()
 	CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
 	If RN = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
-	ElseIf RN = "cont1_173_intro" Lor IsPlayerOutsideFacility()
+	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
+		CameraFogRange(Camera, 5.0, 30.0)
+		CameraRange(Camera, 0.01, 60.0)
+	ElseIf RN = "cont1_173_intro
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.01, 60.0)
 	ElseIf RN = "dimension_1499"
