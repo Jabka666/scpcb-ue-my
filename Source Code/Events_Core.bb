@@ -3379,9 +3379,6 @@ Function UpdateEvents%()
 								e\EventState3 = 0.0
 							EndIf
 						Next
-						
-						CameraRange(Camera, 0.01, 8.5)
-						CameraFogRange(Camera, 0.01, 8.0)
 					Else
 						If (Not n_I\Curr106\Contained) Then n_I\Curr106\Idle = 0
 						If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
@@ -8666,9 +8663,6 @@ Function UpdateDimension1499%()
 						If EntityDistanceSquared(n\Collider, me\Collider) < 100.0 Then n\State = 2.0
 					Next
 				EndIf
-				
-				CameraFogRange(Camera, 40.0, 80.0)
-				CameraRange(Camera, 0.01, 90.0)
 				
 				For r.Rooms = Each Rooms
 					HideRoomsNoColl(r)

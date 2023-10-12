@@ -378,7 +378,6 @@ Function UpdateGame%()
 			UpdateEscapeTimer()
 			InFacility = CheckForPlayerInFacility()
 			DecalStep = 0
-			UpdateZoneColor()
 			If RN = "dimension_1499"
 				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
@@ -403,6 +402,7 @@ Function UpdateGame%()
 				TimeCheckpointMonitors()
 				UpdateMonitorSaving()
 			EndIf
+			UpdateZoneColor()
 			UpdateMTF()
 			UpdateNPCs()
 			UpdateItems()
@@ -3010,28 +3010,25 @@ End Function
 Function UpdateZoneColor%()
 	Local e.Events
 	Local i%
-	
-	CameraFogMode(Camera, 1)
-	If PlayerRoom\RoomTemplate\Name = "cont1_173_intro" Lor IsPlayerOutsideFacility()
-		CameraFogRange(Camera, 5.0, 30.0)
-		CameraRange(Camera, 0.01, 60.0)
-		;If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
-	Else
-		CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
-		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
-		;If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
-	EndIf
+	Local RN$ = PlayerRoom\RoomTemplate\Name
 	
 	CurrFogColor$ = ""
 	CurrAmbientColor$ = ""
 	
-	If PlayerRoom\RoomTemplate\Name = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale
+	CameraFogMode(Camera, 1)
+	CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+	CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
+	If RN = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
-	ElseIf IsPlayerOutsideFacility()
+	ElseIf RN = "cont1_173_intro" Lor IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
-	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_1499"
+		CameraFogRange(Camera, 5.0, 30.0)
+		CameraRange(Camera, 0.01, 60.0)
+	ElseIf RN = "dimension_1499"
 		SetZoneColor(FogColorDimension_1499)
-	ElseIf PlayerRoom\RoomTemplate\Name = "dimension_106"
+		CameraFogRange(Camera, 40.0, 80.0)
+		CameraRange(Camera, 0.01, 90.0)
+	ElseIf RN = "dimension_106"
 		For e.Events = Each Events
 			If e\EventID = e_dimension_106
 				If e\EventState2 = PD_TrenchesRoom Lor e\EventState2 = PD_TowerRoom
@@ -3044,7 +3041,7 @@ Function UpdateZoneColor%()
 				Exit
 			EndIf
 		Next
-	ElseIf (PlayerRoom\RoomTemplate\Name = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (PlayerRoom\RoomTemplate\Name = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale) Lor (PlayerRoom\RoomTemplate\Name = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale)
+	ElseIf (RN = "room2_mt" And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (RN = "cont2_409" And EntityY(me\Collider) < (-3728.0) * RoomScale) Lor (RN = "cont1_895" And EntityY(me\Collider) < (-1200.0) * RoomScale)
 		SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 	ElseIf forest_event <> Null
 		If PlayerRoom = forest_event\room
@@ -3053,6 +3050,8 @@ Function UpdateZoneColor%()
 				If forest_event\room\NPC[0] <> Null
 					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 				EndIf
+				CameraRange(Camera, 0.01, 8.5)
+				CameraFogRange(Camera, 0.01, 8.0)
 			EndIf
 		EndIf
 	EndIf
