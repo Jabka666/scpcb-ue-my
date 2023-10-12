@@ -1105,12 +1105,11 @@ Function UpdateEvents%()
 											If e\room\RoomDoors[4]\Open
 												OpenCloseDoor(e\room\RoomDoors[4])
 												
-												em.Emitters = CreateEmitter(e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
-												em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\room = PlayerRoom
-												TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
+												em.Emitters = CreateEmitter(e\room, e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
+												em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003
 												
-												em.Emitters = CreateEmitter(e\room\x - 4000.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
-												em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003 : em\room = PlayerRoom
+												em.Emitters = CreateEmitter(e\room, e\room\x - 4000.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
+												em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003
 												TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 											EndIf
 											me\EyeIrritation = Max(me\EyeIrritation + (fps\Factor[0] * 4.0), 1.0)
@@ -6876,9 +6875,8 @@ Function UpdateEvents%()
 						If EntityDistanceSquared(me\Collider, e\room\Objects[6]) < 6.25 And e\EventState > 0.0
 							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"), True)
 							For i = 0 To 5
-								em.Emitters = CreateEmitter(EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
+								em.Emitters = CreateEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
 								em\RandAngle = 5.0 : em\Speed = 0.042 : em\SizeChange = 0.0025
-								TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 							Next
 							RemoveEvent(e)
 						EndIf
@@ -6891,10 +6889,9 @@ Function UpdateEvents%()
 					If e\room\Dist < 3.5
 						PlaySound2(BurstSFX, Camera, e\room\OBJ)
 						For i = 0 To 1
-							em.Emitters = CreateEmitter(EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
+							em.Emitters = CreateEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
 							em\Size = 0.05 : em\RandAngle = 10.0 : em\Speed = 0.06 : em\SizeChange = 0.007
 							TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
-							EntityParent(em\OBJ, e\room\OBJ)
 							For z = 0 To Ceil(3.3333 * (opt\ParticleAmount + 1))
 								p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(em\OBJ, True), 448.0 * RoomScale, EntityZ(em\OBJ, True), em\Size, em\Gravity, em\LifeTime)
 								p\Speed = em\Speed : p\Size = 0.05 : p\SizeChange = 0.008
@@ -9091,8 +9088,8 @@ Function UpdateEndings%()
 											e\room\NPC[3]\EnemyY = EntityY(e\room\Objects[4], True) - 2.5
 											e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[4], True)
 											
-											em.Emitters = CreateEmitter(EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0)
-											em\room = PlayerRoom : em\RandAngle = 45.0 : em\Gravity = -0.18 : em\LifeTime = 400.0 : em\SizeChange = Rnd(0.005, 0.007) : em\AlphaChange = -0.004
+											em.Emitters = CreateEmitter(Null, EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0)
+											em\RandAngle = 45.0 : em\Gravity = -0.18 : em\LifeTime = 400.0 : em\SizeChange = Rnd(0.005, 0.007) : em\AlphaChange = -0.004
 											TurnEntity(em\OBJ, (-80.0) + 20.0 * i, 0.0, 0.0)
 											EntityParent(em\OBJ, e\room\NPC[3]\Collider)
 											

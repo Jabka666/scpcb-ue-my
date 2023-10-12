@@ -1475,15 +1475,13 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			
 			; ~ Smoke
-			em.Emitters = CreateEmitter(r\x - 175.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 656.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x - 175.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 656.0 * RoomScale, 0)
 			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
-			em.Emitters = CreateEmitter(r\x - 655.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x - 655.0 * RoomScale, r\y + 370.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
 			em\RandAngle = 20.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
 			CreateCustomCenter(r\x - 736.0 * RoomScale, r\z - 352.0 * RoomScale, r)
 			;[End Block]
@@ -1668,10 +1666,9 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[15], r\x - 456.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 3023.0 * RoomScale)
 			EntityParent(r\Objects[15], r\OBJ)
 			
-			em.Emitters = CreateEmitter(r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 0)
 			em\RandAngle = 15.0 : em\Speed = 0.03 : em\SizeChange = 0.01 : em\AlphaChange = -0.006 : em\Gravity = -0.2 
 			TurnEntity(em\OBJ, 20.0, -100.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ) : em\room = r
 			
 			Select Rand(3)
 				Case 1
@@ -1805,16 +1802,14 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 203.0 * RoomScale, -270.0)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 132.0 * RoomScale, -270.0)
 			
-			em.Emitters = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 624.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 624.0 * RoomScale, 0)
 			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			r\RoomEmitters[0] = em
 			
-			em.Emitters = CreateEmitter(r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 135.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 135.0 * RoomScale, 0)
 			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
 			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			r\RoomEmitters[1] = em
 			
 			; ~ The control room
@@ -2080,14 +2075,13 @@ Function FillRoom%(r.Rooms)
 			i = 0
 			For xTemp = -1 To 1 Step 2
 				For zTemp = -1 To 1
-					em.Emitters = CreateEmitter(r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 0)
+					em.Emitters = CreateEmitter(r, r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 0)
 					em\RandAngle = 30.0 : em\Speed = 0.0045 : em\SizeChange = 0.007 : em\AlphaChange = -0.016
 					If i < 3
 						TurnEntity(em\OBJ, -45.0, -90.0, 0.0)
 					Else
 						TurnEntity(em\OBJ, -45.0, 90.0, 0.0)
 					EndIf
-					EntityParent(em\OBJ, r\OBJ)
 					i = i + 1
 				Next
 			Next
@@ -2580,10 +2574,9 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			em.Emitters = CreateEmitter(r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Dr. L's Note #2", "paper", r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2596,15 +2589,13 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 704.0 * RoomScale, r\y + 112.0 * RoomScale, r\z - 416.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			em.Emitters = CreateEmitter(r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
-			em.Emitters = CreateEmitter(r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
 			CreateCustomCenter(r\x, r\z - 425.0 * RoomScale, r)
 			;[End Block]
@@ -2728,25 +2719,21 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room4_hcz"
 			;[Block]
-			em.Emitters = CreateEmitter(r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
-			em.Emitters = CreateEmitter(r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
-			em.Emitters = CreateEmitter(r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
-			em.Emitters = CreateEmitter(r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 0)
+			em.Emitters = CreateEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
-			EntityParent(em\OBJ, r\OBJ)
 			
 			CreateCustomCenter(r\x, r\z - 425.0 * RoomScale, r)
 			;[End Block]

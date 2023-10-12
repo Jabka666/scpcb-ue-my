@@ -107,7 +107,7 @@ Type Emitters
 	Field SizeChange#, AlphaChange#
 End Type
 
-Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
+Function CreateEmitter.Emitters(room.Rooms, x#, y#, z#, EmitterType%)
 	CatchErrors("CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + ")")
 	
 	Local e.Emitters
@@ -116,6 +116,7 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 	e.Emitters = New Emitters
 	e\OBJ = CreatePivot()
 	PositionEntity(e\OBJ, x, y, z, True)
+	If room <> Null Then EntityParent(e\OBJ, room\OBJ)
 	
 	Select EmitterType
 		Case 0
@@ -140,9 +141,7 @@ Function CreateEmitter.Emitters(x#, y#, z#, EmitterType%)
 			;[End Block]
 	End Select
 	
-	For r.Rooms = Each Rooms
-		If Abs(EntityX(e\OBJ) - EntityX(r\OBJ)) < 4.0 And Abs(EntityZ(e\OBJ) - EntityZ(r\OBJ)) < 4.0 Then e\room = r
-	Next
+	e\room = room
 	
 	CatchErrors("Uncaught: CreateEmitter(" + x + ", " + y + ", " + z + ", " + EmitterType + ")")
 	
