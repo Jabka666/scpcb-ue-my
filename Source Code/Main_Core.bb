@@ -378,6 +378,7 @@ Function UpdateGame%()
 			UpdateEscapeTimer()
 			InFacility = CheckForPlayerInFacility()
 			DecalStep = 0
+			UpdateZoneColor()
 			If RN = "dimension_1499"
 				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
@@ -402,7 +403,6 @@ Function UpdateGame%()
 				TimeCheckpointMonitors()
 				UpdateMonitorSaving()
 			EndIf
-			UpdateZoneColor()
 			UpdateMTF()
 			UpdateNPCs()
 			UpdateItems()
