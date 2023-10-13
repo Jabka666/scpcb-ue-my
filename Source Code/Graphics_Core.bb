@@ -602,7 +602,7 @@ Function TextEx%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 	EndIf
 End Function
 
-Function GetRescaledTexture%(Texture$, Flags%, Width%, Height%)
+Function GetRescaledTexture%(Texture$, Flags%, Width%, Height%, Brush% = False)
 	If FileType(lang\LanguagePath + Texture) = 1 Then Texture = lang\LanguagePath + Texture
 	
 	Local ImgType% = FI_GetFIFFromFilename(Texture)
@@ -611,7 +611,13 @@ Function GetRescaledTexture%(Texture$, Flags%, Width%, Height%)
 	
 	FI_Save(ImgType, FImg, TexPath, Flags)
 	
-	Local Ret% = LoadTexture_Strict(TexPath, Flags)
+	Local Ret%
+	
+	If Brush
+		Ret = LoadBrush_Strict(TexPath, Flags)
+	Else
+		Ret = LoadTexture_Strict(TexPath, Flags)
+	EndIf
 	
 	DeleteFile(TexPath)
 	Return(Ret)

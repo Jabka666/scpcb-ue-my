@@ -2419,11 +2419,12 @@ Function UpdateEvents%()
 						EndIf
 						If (Not n_I\Curr106\Contained) And e\EventState2 = 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 							TFormPoint(0.0, -1531.0, 2356.0, e\room\OBJ, 0)
-							de.Decals = CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY(), TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+							x = TFormedX() : y = TFormedY() : z = TFormedZ()
+							de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, y, z, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 							de\SizeChange = 0.001
 							EntityParent(de\OBJ, e\room\OBJ)
 							
-							PositionEntity(n_I\Curr106\Collider, TFormedX(), TFormedY() - 12.0 * RoomScale, TFormedZ())
+							PositionEntity(n_I\Curr106\Collider, x, y - 12.0 * RoomScale, z)
 							ResetEntity(n_I\Curr106\Collider)
 							SetNPCFrame(n_I\Curr106, 110.0)
 							n_I\Curr106\State = -0.1
@@ -4499,10 +4500,11 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room
 					TFormPoint(-1200.0, 83.0, 0.0, e\room\OBJ, 0)
-					de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), e\room\y + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0)
+					x = TFormedX() : y = TFormedY() : z = TFormedZ()
+					de.Decals = CreateDecal(DECAL_BLOOD_2, x, y + 0.005, z, 90.0, Rnd(360.0), 0.0)
 					EntityParent(de\OBJ, e\room\OBJ)
 					
-					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+					e\room\NPC[0] = CreateNPC(NPCTypeD, x, y, z)
 					e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_GONZALES_TEXTURE)
 					SetNPCFrame(e\room\NPC[0], 19.0)
@@ -5680,7 +5682,7 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						
-						Local Brush% = LoadBrush_Strict(ItemHUDTexturePath + DrawingName)
+						Local Brush% = GetRescaledTexture(ItemHUDTexturePath + DrawingName, 1, 256, 256, True)
 						
 						For i = 1 To CountSurfaces(e\room\Objects[2])
 							SF = GetSurface(e\room\Objects[2], i)
@@ -5690,8 +5692,10 @@ Function UpdateEvents%()
 							
 							If Lower(TexName) <> "scp_1048.png" Then PaintSurface(SF, Brush)
 							FreeBrush(b) : b = 0
+							FreeTexture(BT) : BT = 0
 						Next
 						FreeBrush(Brush) : Brush = 0
+						TexName = ""
 						
 						PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
 					Else
@@ -7809,12 +7813,12 @@ Function UpdateEvents%()
 						e\EventState = 1.0
 					EndIf
 					
-					If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 1.44
-						If e\EventState2 = 0.0
+					If e\EventState = 1.0
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 1.44
 							me\LightBlink = 10.0
 							PlaySound_Strict(LightSFX)
 							e\room\NPC[0]\State = 1.0
-							e\EventState2 = 1.0
+							e\EventState = 2.0
 						EndIf
 					EndIf
 						
@@ -9698,8 +9702,6 @@ Function Update035Label%(OBJ%)
 		CurrTex = "035_smile"
 	EndIf
 	LabelPath = "GFX\Map\Textures\label" + CurrTex + ".png"
-	Tex = LoadTexture_Strict(LabelPath)
-	If opt\Atmosphere Then TextureBlend(Tex, 5)
 	
 	Brush = LoadBrush_Strict(LabelPath)
 	For i = 1 To CountSurfaces(OBJ)
@@ -9710,8 +9712,8 @@ Function Update035Label%(OBJ%)
 		
 		If Lower(TexName) <> "cable_white.jpg" Then PaintSurface(SF, Brush)
 		FreeBrush(b) : b = 0
+		FreeTexture(t1) : t1 = 0
 	Next
-	DeleteSingleTextureEntryFromCache(Tex)
 	FreeBrush(Brush) : Brush = 0
 	
 	For itt.ItemTemplates = Each ItemTemplates

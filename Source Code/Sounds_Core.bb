@@ -381,7 +381,7 @@ Function GetStepSound%(Entity%)
 			Texture = GetBrushTexture(Brush, 3)
 			If Texture <> 0
 				Name = StripPath(TextureName(Texture))
-				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
+				If Name <> "" Then FreeTexture(Texture) : Texture = 0
 				For mat.Materials = Each Materials
 					If mat\Name = Name
 						If mat\StepSound > 0
@@ -395,7 +395,7 @@ Function GetStepSound%(Entity%)
 			Texture = GetBrushTexture(Brush, 2)
 			If Texture <> 0
 				Name = StripPath(TextureName(Texture))
-				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
+				If Name <> "" Then FreeTexture(Texture) : Texture = 0
 				For mat.Materials = Each Materials
 					If mat\Name = Name
 						If mat\StepSound > 0
@@ -409,7 +409,7 @@ Function GetStepSound%(Entity%)
 			Texture = GetBrushTexture(Brush, 1)
 			If Texture <> 0
 				Name = StripPath(TextureName(Texture))
-				If Name <> "" Then DeleteSingleTextureEntryFromCache(Texture)
+				If Name <> "" Then FreeTexture(Texture) : Texture = 0
 				FreeBrush(Brush) : Brush = 0
 				For mat.Materials = Each Materials
 					If mat\Name = Name

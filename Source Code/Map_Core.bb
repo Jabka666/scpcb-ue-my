@@ -3645,7 +3645,7 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 					EndIf
 					PaintSurface(SF, b)
 				EndIf
-				If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+				If Name <> "" Then FreeTexture(t1) : t1 = 0
 			EndIf
 			FreeBrush(b) : b = 0
 		EndIf
@@ -3671,7 +3671,7 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY], 0, 0)
 						PaintSurface(SF, b)
 					EndIf
-					If Name <> "" Then DeleteSingleTextureEntryFromCache(t1)
+					If Name <> "" Then FreeTexture(t1) : t1 = 0
 				EndIf
 				FreeBrush(b) : b = 0
 			EndIf
