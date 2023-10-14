@@ -8718,7 +8718,6 @@ Function Update427%()
 			For e.Events = Each Events
 				If e\EventID = e_1048_a
 					If e\EventState2 > 0.0 Then e\EventState2 = Max(e\EventState2 - (fps\Factor[0] * 0.5), 0.0)
-					Exit
 				EndIf
 			Next
 			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0005), 0.0)
