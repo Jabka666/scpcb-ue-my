@@ -4549,6 +4549,7 @@ Function UpdateNPCs%()
 						Case 0.0 ; ~ Lying next to the wall
 							;[Block]
 							SetNPCFrame(n, 11.0)
+							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							;[End Block]
 						Case 1.0 ; ~ Stands up
 							;[Block]

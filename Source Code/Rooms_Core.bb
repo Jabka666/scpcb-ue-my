@@ -115,29 +115,11 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 640.0 * RoomScale, 0.0, (I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5), DEFAULT_DOOR, KEY_CARD_4)
 			r\RoomDoors.Doors[0] = d
 			
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y + 76.0 * RoomScale, r\z + 238.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
-			
 			sc.SecurityCams = CreateSecurityCam(r, r\x, r\y + 415.0 * RoomScale, r\z + 424.0 * RoomScale, 30.0)
 			sc\Angle = 180.0 : sc\Turn = 30.0
 			
 			it.Items = CreateItem("Document SCP-005", "paper", r\x + 504.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 500.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-			
-			If I_005\ChanceToSpawn < 3
-				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-				
-				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
-				EntityParent(de\OBJ, r\OBJ)
-			ElseIf I_005\ChanceToSpawn >= 5
-				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-				
-				de.Decals = CreateDecal(DECAL_BLOOD_2,  r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
-				EntityParent(de\OBJ, r\OBJ)
-			EndIf
 			
 			CreateCustomCenter(r, r\x, r\z - 830.0 * RoomScale)
 			;[End Block]
@@ -607,11 +589,11 @@ Function FillRoom%(r.Rooms)
 		Case "room2_2_lcz"
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 672.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
-            d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-            FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
             
-            For r2.Rooms = Each Rooms
+			For r2.Rooms = Each Rooms
 				If r2 <> r
 					If r2\RoomTemplate\Name = "room2_2_lcz"
 						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
@@ -624,7 +606,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			If Rand(2) = 1
+            If Rand(2) = 1
 				it.Items = CreateItem("Empty Cup", "emptycup", r\x + 490.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + -232.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
@@ -1877,22 +1859,6 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\079.b3d")
-			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
-			PositionEntity(r\Objects[0], r\x + 166.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1606.0 * RoomScale)
-			TurnEntity(r\Objects[0], 0.0, -90.0, 0.0)
-			EntityParent(r\Objects[0], r\OBJ)
-			
-			r\Objects[1] = CreateSprite(r\Objects[0])
-			r\ScriptedObject[1] = True
-			SpriteViewMode(r\Objects[1], 2)
-			PositionEntity(r\Objects[1], 0.082, 0.119, 0.010)
-			ScaleSprite(r\Objects[1], 0.09, 0.0725)
-			TurnEntity(r\Objects[1], 0.0, 13.0, 0.0)
-			MoveEntity(r\Objects[1], 0.0, 0.0, -0.022)
-			EntityTexture(r\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
-			HideEntity(r\Objects[1])
-			
 			; ~ Elevators' pivots
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x + 816.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 256.0 * RoomScale)
@@ -1901,12 +1867,6 @@ Function FillRoom%(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x + 816.0 * RoomScale, r\y - 10000.0 * RoomScale, r\z - 256.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
-			
-			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x - 2200.0 * RoomScale, r\y - 10688.0 * RoomScale + 0.005, r\z + 1000.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
-			EntityParent(de\OBJ, r\OBJ)
-			
-			it.Items = CreateItem("Document SCP-079", "paper", r\x - 897.0 * RoomScale, r\y - 10534.0 * RoomScale, r\z + 783.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
 			;[End Block]
@@ -2554,18 +2514,6 @@ Function FillRoom%(r.Rooms)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
-			
-			it.Items = CreateItem("Document SCP-409", "paper", r\x - 4105.0 * RoomScale, r\y - 4336.0 * RoomScale, r\z + 2207.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			If I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5
-				it.Items = CreateItem("SCP-005", "scp005", r\x - 5000.0 * RoomScale, r\y - 4416.0 * RoomScale, r\z + 1578.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-				
-				de.Decals = CreateDecal(DECAL_409, r\x - 4812.0 * RoomScale, r\y - 4497.0 * RoomScale + 0.005, r\z + 1729.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
-				EntityParent(de\OBJ, r\OBJ)
-			EndIf
 			;[End Block]
 		Case "room2c_maintenance"
 			;[Block]
@@ -2584,10 +2532,6 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room3_hcz"
 			;[Block]
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 704.0 * RoomScale, r\y + 112.0 * RoomScale, r\z - 416.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
-			
 			em.Emitters = CreateEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
 			TurnEntity(em\OBJ, -90.0, 0.0, 0.0)
@@ -3059,29 +3003,6 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room2_2_ez"
 			;[Block]
-			r\Objects[0] = CopyEntity(n_I\NPCModelID[NPC_DUCK_MODEL])
-			ScaleEntity(r\Objects[0], 0.07, 0.07, 0.07)
-			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 808.0 * RoomScale, r\y - 72.0 * RoomScale, r\z - 40.0 * RoomScale)
-			EntityParent(r\Objects[1], r\OBJ)
-			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 488.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 700.0 * RoomScale)
-			EntityParent(r\Objects[2], r\OBJ)
-			
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 488.0 * RoomScale, r\y + 160.0 * RoomScale, r\z - 700.0 * RoomScale)
-			EntityParent(r\Objects[3], r\OBJ)
-			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 600.0 * RoomScale, r\y + 340.0 * RoomScale, r\z)
-			EntityParent(r\Objects[4], r\OBJ)
-			
-			Temp = Rand(4)
-			PositionEntity(r\Objects[0], EntityX(r\Objects[Temp], True), EntityY(r\Objects[Temp], True), EntityZ(r\Objects[Temp], True), True)
-			EntityParent(r\Objects[4], r\OBJ)
-			
 			it.Items = CreateItem("Level 1 Key Card", "key1", r\x - 368.0 * RoomScale, r\y - 48.0 * RoomScale, r\z + 80.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3254,22 +3175,6 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			
-			; ~ Zombie spawnpoint
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 820.0 * RoomScale, r\y + 500.0 * RoomScale, r\z - 464.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
-			
-			; ~ Orange duck
-			r\Objects[1] = CopyEntity(n_I\NPCModelID[NPC_DUCK_MODEL])
-			Tex = LoadTexture_Strict("GFX\NPCs\duck(4).png")
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
-			EntityTexture(r\Objects[1], Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
-			ScaleEntity(r\Objects[1], 0.07, 0.07, 0.07)
-			PositionEntity(r\Objects[1], r\x - 910.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 778.0 * RoomScale)
-			TurnEntity(r\Objects[1], 6.0, 180.0, 0.0)
-			EntityParent(r\Objects[1], r\OBJ)
 			
 			If Rand(2) = 1
 				ItemName = "Syringe"
@@ -3634,18 +3539,6 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case "room3_2_ez"
 			;[Block]
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 736.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 400.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
-			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 552.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 528.0 * RoomScale)
-			EntityParent(r\Objects[1], r\OBJ)
-			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 736.0 * RoomScale, r\y - 512.0 * RoomScale, r\z + 272.0 * RoomScale)
-			EntityParent(r\Objects[2], r\OBJ)
-			
 			it.Items = CreateRandomBattery(r\x - 132.0 * RoomScale, r\y - 368.0 * RoomScale, r\z - 658.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
