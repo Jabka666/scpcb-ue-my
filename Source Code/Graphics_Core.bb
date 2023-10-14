@@ -109,6 +109,10 @@ Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	
 	; ~ Free the scratch image
 	FreeImage(ScratchImage) : ScratchImage = 0
+	; ~ Free the source image
+	FreeImage(SrcImage) : SrcImage = 0
+	SrcWidth = 0 : SrcHeight = 0
+	DestWidth = 0 : DestHeight = 0
 	
 	; ~ Return the new image
 	Return(DestImage)
