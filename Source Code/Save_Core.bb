@@ -1256,7 +1256,6 @@ Function LoadGame%(File$)
 	Else
 		opt\CameraFogFar = 6.0
 	EndIf
-	opt\CameraFogNear = 0.1
 	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomAdjacents - 1
@@ -2013,7 +2012,6 @@ Function LoadGameQuick%(File$)
 	Else
 		opt\CameraFogFar = 6.0
 	EndIf
-	opt\CameraFogNear = 0.1
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)
 	; ~ This is only required for the LoadGameQuick function, as the other one is from the menu where everything is already deleted anyways

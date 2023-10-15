@@ -2059,7 +2059,7 @@ Function LoadEntities%()
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	CameraRange(Camera, 0.01, opt\CameraFogFar)
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, opt\CameraFogNear, opt\CameraFogFar)
+	CameraFogRange(Camera, 0.1, opt\CameraFogFar)
 	CameraFogColor(Camera, 30.0, 30.0, 30.0)
 	CameraClsColor(Camera, 30.0, 30.0, 30.0)
 	AmbientLight(30.0, 30.0, 30.0)
@@ -2397,7 +2397,6 @@ Function InitNewGame%()
 	LoadSounds()
 	
 	opt\CameraFogFar = 6.0
-	opt\CameraFogNear = 0.1
 	
 	InitOtherStuff()
 	
@@ -2781,7 +2780,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete Each AutoSave
 	
 	opt\CameraFogFar = 0.0
-	opt\CameraFogNear = 0.0
 	FreeEntity(me\Collider) : me\Collider = 0
 	FreeEntity(me\Head) : me\Head = 0
 	Delete Each Player

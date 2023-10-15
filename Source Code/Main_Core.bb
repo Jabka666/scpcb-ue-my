@@ -1751,13 +1751,10 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "camerafog", "cf"
 					;[Block]
-					Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					StrTemp = Piece(Args, 1)
-					StrTemp2 = Piece(Args, 2)
+					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
-					opt\CameraFogNear = Min(StrTemp, StrTemp2)
-					opt\CameraFogFar = StrTemp2
-					CreateConsoleMsg(Format(Format(GetLocalString("console", "fog"), opt\CameraFogNear, "{0}"), opt\CameraFogFar, "{1}"))
+					opt\CameraFogFar = StrTemp
+					CreateConsoleMsg(Format(GetLocalString("console", "fog"), opt\CameraFogFar, "{0}"))
 					;[End Block]
 				Case "spawn", "s"
 					;[Block]
@@ -3016,17 +3013,17 @@ Function UpdateZoneColor%()
 	CurrAmbientColor$ = ""
 	
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+	CameraFogRange(Camera, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 	CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
 	If RN = "room3_storage" And EntityY(me\Collider) < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
 		CameraFogRange(Camera, 5.0, 30.0)
-		CameraRange(Camera, 0.01, 60.0)
-	ElseIf RN = "cont1_173_intro
+		CameraRange(Camera, 0.01, 45.0)
+	ElseIf RN = "cont1_173_intro"
 		CameraFogRange(Camera, 5.0, 30.0)
-		CameraRange(Camera, 0.01, 60.0)
+		CameraRange(Camera, 0.01, 45.0)
 	ElseIf RN = "dimension_1499"
 		SetZoneColor(FogColorDimension_1499)
 		CameraFogRange(Camera, 40.0, 80.0)
