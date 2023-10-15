@@ -237,7 +237,7 @@ Function RenderLights%(Cam%)
 								If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
 							EndIf
 							
-							EntityAutoFade(l\Sprite, opt\CameraFogNear * LightVolume, opt\CameraFogFar * LightVolume)
+							EntityAutoFade(l\Sprite, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 							If Dist < PowTwo(opt\CameraFogFar * 1.2)
 								If EntityVisible(Cam, l\OBJ) And EntityInView(l\OBJ, Cam)
 									If EntityHidden(l\Sprite) Then ShowEntity(l\Sprite)
