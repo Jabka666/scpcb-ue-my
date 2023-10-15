@@ -3562,10 +3562,10 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			; ~ Security cameras inside
-			sc.SecurityCams = CreateSecurityCam(r, r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, 40.0, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale)
+			sc.SecurityCams = CreateSecurityCam(r, r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, 40.0, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 135.0 : sc\Turn = 45.0
 			
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, 40.0, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale, 0.0, 90.0, 0.0)
+			sc.SecurityCams = CreateSecurityCam(r, r\x - 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, 40.0, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
 			sc\Angle = 315.0 : sc\Turn = 45.0
 			
 			; ~ The blood decals inside
