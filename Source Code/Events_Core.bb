@@ -6962,6 +6962,7 @@ Function UpdateEvents%()
 							For i = 0 To 5
 								em.Emitters = CreateEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
 								em\RandAngle = 5.0 : em\Speed = 0.042 : em\SizeChange = 0.0025
+								TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
 							Next
 							RemoveEvent(e)
 						EndIf
