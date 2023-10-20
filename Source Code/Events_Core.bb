@@ -6607,11 +6607,22 @@ Function UpdateEvents%()
 								Temp = UpdateLever(e\room\RoomLevers[1]\OBJ, False)
 								If Temp Lor (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0)
 									If Temp
-										PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 400.0 * RoomScale, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
-										PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 400.0 * RoomScale, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
+										For i = 0 To 1
+											If e\room\RoomEmitters[i] = Null
+												If i = 0
+													TFormPoint(-269.0, 400.0, 624.0, e\room\OBJ, 0)
+												Else
+													TFormPoint(-269.0, 400.0, 135.0, e\room\OBJ, 0)
+												EndIf
+												e\room\RoomEmitters[i] = CreateEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+												e\room\RoomEmitters[i]\RandAngle = 15.0 : e\room\RoomEmitters[i]\Speed = 0.05 : e\room\RoomEmitters[i]\SizeChange = 0.007 : e\room\RoomEmitters[i]\AlphaChange = -0.006 : e\room\RoomEmitters[i]\Gravity = -0.24
+												TurnEntity(e\room\RoomEmitters[i]\OBJ, 90.0, 0.0, 0.0)
+											EndIf
+										Next
 									Else
-										PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
-										PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
+										For i = 0 To 1
+											If e\room\RoomEmitters[i] <> Null Then RemoveEmitter(e\room\RoomEmitters[i])
+										Next
 									EndIf
 									
 									If e\EventState3 > (-70.0) * 30.0
@@ -6667,8 +6678,9 @@ Function UpdateEvents%()
 										EndIf
 									EndIf
 									
-									PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
-									PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
+									For i = 0 To 1
+										If e\room\RoomEmitters[i] <> Null Then RemoveEmitter(e\room\RoomEmitters[i])
+									Next
 									
 									If e\room\NPC[0]\State = 0.0
 										PointEntity(e\room\NPC[0]\OBJ, me\Collider)
@@ -6833,11 +6845,22 @@ Function UpdateEvents%()
 						EndIf
 					Else ; ~ SCP-035 has left
 						If UpdateLever(e\room\RoomLevers[1]\OBJ, False)
-							PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 400.0 * RoomScale, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
-							PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 400.0 * RoomScale, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
+							For i = 0 To 1
+								If e\room\RoomEmitters[i] = Null
+									If i = 0
+										TFormPoint(-269.0, 400.0, 624.0, e\room\OBJ, 0)
+									Else
+										TFormPoint(-269.0, 400.0, 135.0, e\room\OBJ, 0)
+									EndIf
+									e\room\RoomEmitters[i] = CreateEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+									e\room\RoomEmitters[i]\RandAngle = 15.0 : e\room\RoomEmitters[i]\Speed = 0.05 : e\room\RoomEmitters[i]\SizeChange = 0.007 : e\room\RoomEmitters[i]\AlphaChange = -0.006 : e\room\RoomEmitters[i]\Gravity = -0.24
+									TurnEntity(e\room\RoomEmitters[i]\OBJ, 90.0, 0.0, 0.0)
+								EndIf
+							Next
 						Else
-							PositionEntity(e\room\RoomEmitters[0]\OBJ, EntityX(e\room\RoomEmitters[0]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[0]\OBJ, True), True)
-							PositionEntity(e\room\RoomEmitters[1]\OBJ, EntityX(e\room\RoomEmitters[1]\OBJ, True), 20.0, EntityZ(e\room\RoomEmitters[1]\OBJ, True), True)
+							For i = 0 To 1
+								If e\room\RoomEmitters[i] <> Null Then RemoveEmitter(e\room\RoomEmitters[i])
+							Next
 						EndIf
 						
 						ShouldPlay = 1

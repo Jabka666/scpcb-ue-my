@@ -1785,16 +1785,6 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 203.0 * RoomScale, -270.0)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 210.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 132.0 * RoomScale, -270.0)
 			
-			em.Emitters = CreateEmitter(r, r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 624.0 * RoomScale, 0)
-			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
-			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
-			r\RoomEmitters[0] = em
-			
-			em.Emitters = CreateEmitter(r, r\x - 269.0 * RoomScale, r\y + 20.0, r\z + 135.0 * RoomScale, 0)
-			em\RandAngle = 15.0 : em\Speed = 0.05 : em\SizeChange = 0.007 : em\AlphaChange = -0.006 : em\Gravity = -0.24
-			TurnEntity(em\OBJ, 90.0, 0.0, 0.0)
-			r\RoomEmitters[1] = em
-			
 			; ~ The control room
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 456.0 * RoomScale, r\y + 0.5, r\z + 400.0 * RoomScale)
