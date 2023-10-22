@@ -158,10 +158,6 @@ Function SaveGame%(File$)
 	WriteFloat(f, Remove714Timer)
 	WriteFloat(f, RemoveHazmatTimer)
 	
-	For i = 0 To 1
-		WriteByte(f, mon_I\UpdateCheckpoint[i])
-	Next
-	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
 			WriteByte(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
@@ -654,10 +650,6 @@ Function LoadGame%(File$)
 	
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
-	
-	For i = 0 To 1
-		mon_I\UpdateCheckpoint[i] = ReadByte(f)
-	Next
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -1257,6 +1249,10 @@ Function LoadGame%(File$)
 		opt\CameraFogFar = 6.0
 	EndIf
 	
+	For i = 0 To 1
+		mon_I\UpdateCheckpoint[i] = True
+	Next
+	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
@@ -1499,10 +1495,6 @@ Function LoadGameQuick%(File$)
 	
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
-	
-	For i = 0 To 1
-		mon_I\UpdateCheckpoint[i] = ReadByte(f)
-	Next
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize

@@ -3655,9 +3655,9 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 	Local i%, SF%, b%, t1%
 	Local Entity%, Name$
 	
-	Entity = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
-	
 	If mon_I\UpdateCheckpoint[(1 - LCZ)]
+		Entity = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
+		
 		For i = 2 To CountSurfaces(Entity)
 			SF = GetSurface(Entity, i)
 			b = GetSurfaceBrush(SF)
@@ -3674,6 +3674,8 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 				FreeBrush(b) : b = 0
 			EndIf
 		Next
+		SF = 0
+		Entity = 0
 		mon_I\UpdateCheckpoint[(1 - LCZ)] = False
 		mon_I\MonitorTimer[(1 - LCZ)] = 0.0
 	EndIf
