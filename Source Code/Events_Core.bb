@@ -7278,7 +7278,7 @@ Function UpdateEvents%()
 						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
 						
 						e\EventState3 = e\EventState3 + fps\Factor[0]
-						If e\EventState3 >= 70.0 * 60.0
+						If e\EventState3 >= 70.0 * 180.0
 							If (Not EntityInView(e\room\Objects[0], Camera)) Then Temp = True
 						EndIf
 						If chs\NoTarget Lor I_268\InvisibilityOn Then e\EventState = 1.0
@@ -7318,7 +7318,7 @@ Function UpdateEvents%()
 										e\EventState2 = 0.01
 										e\EventState = 3.0
 									Else
-										e\EventState3 = 70.0 * 60.0
+										e\EventState3 = 70.0 * 180.0
 										e\EventState = 4.0
 									EndIf
 								EndIf
@@ -7377,7 +7377,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								; ~ Remove event when player was cured by SCP-427
-								If e\EventState2 = 0.0 Then e\EventState3 = 70.0 * 60.0
+								If e\EventState2 = 0.0 Then e\EventState3 = 70.0 * 180.0
 								;[End Block]
 							Case 4.0 ; ~ Idle
 								;[Block]
@@ -7387,7 +7387,7 @@ Function UpdateEvents%()
 								RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
 								
 								; ~ Remove event when player was cured by SCP-427
-								If e\EventState2 = 0.0 Then e\EventState3 = 70.0 * 60.0
+								If e\EventState2 = 0.0 Then e\EventState3 = 70.0 * 180.0
 								;[End Block]
 						End Select
 					EndIf

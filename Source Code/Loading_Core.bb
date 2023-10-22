@@ -1595,8 +1595,11 @@ Function LoadEvents%()
 	CreateEvent("173_appearing", "room2c_gw_lcz", 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent("trick", "room2_lcz", 0, 0.15)
+	CreateEvent("trick", "room2_3_lcz", 0, 0.15)
 	
-	CreateEvent("1048_a", "room2_lcz", 0, 1.0)
+	CreateEvent("1048_a", "room2_lcz", 1, 1.0)
+	CreateEvent("1048_a", "room2_3_lcz", 1, Rnd(0.8))
+	CreateEvent("1048_a", "room2_5_lcz", 1, Rnd(0.6))
 	
 	CreateEvent("room2_storage", "room2_storage", 0)
 	
