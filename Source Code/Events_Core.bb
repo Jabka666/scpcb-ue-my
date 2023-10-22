@@ -7297,6 +7297,8 @@ Function UpdateEvents%()
 							
 							UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 7.0, 1.0, True)
 							
+							Local Volume# = Max(1.0 - Abs(PrevFrame - 600.0) / 100.0, 0.0)
+							
 							If PlayerRoom = e\room
 								me\BlurTimer = Volume * 1000.0
 								me\CameraShake = Volume * 10.0
