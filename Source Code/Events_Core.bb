@@ -1,5 +1,4 @@
 Type Events
-	Field EventName$ ; ~ Used for debugs and Map Creator
 	Field EventID%
 	Field room.Rooms
 	Field EventState#, EventState2#, EventState3#, EventState4#
@@ -80,6 +79,7 @@ Const e_gate_b_entrance% = 69, e_gate_b% = 70
 Const e_gate_a_entrance% = 71, e_gate_a% = 72
 ;[End Block]
 
+; ~ For Map Creator
 Function FindEventID%(EventName$)
 	Select Lower(EventName)
 		Case "cont1_173"
@@ -394,7 +394,7 @@ Function FindForestEvent%(e.Events)
 	End Select
 End Function
 
-Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
+Function CreateEvent.Events(EventID%, RoomName$, ID%, Prob# = 0.0)
 	; ~ RoomName = the name of the room(s) you want the event to be assigned to
 	
 	; ~ The ID-variable determines which of the rooms the event is assigned to,
@@ -422,8 +422,7 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 				i = i + 1
 				If i >= ID And (Not Temp)
 					e.Events = New Events
-					e\EventName = EventName
-					e\EventID = FindEventID(EventName)
+					e\EventID = EventID
 					FindForestEvent(e)
 					e\room = r
 					Return(e)
@@ -443,8 +442,7 @@ Function CreateEvent.Events(EventName$, RoomName$, ID%, Prob# = 0.0)
 				
 				If Rnd(0.0, 1.0) =< Prob And (Not Temp)
 					e.Events = New Events
-					e\EventName = EventName
-					e\EventID = FindEventID(EventName)
+					e\EventID = EventID
 					FindForestEvent(e)
 					e\room = r
 				EndIf
@@ -613,7 +611,7 @@ Function QuickLoadEvents%()
 			;[End Block]
 	End Select
 	
-	CatchErrors("Uncaught: QuickLoadEvents(Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
+	CatchErrors("Uncaught: QuickLoadEvents(Event Name: ID: " + e\EventID + ")")
 End Function
 
 Function UpdateEvents%()
@@ -8014,7 +8012,7 @@ Function UpdateEvents%()
 		End Select
 		
 		If e <> Null
-			CatchErrors("Uncaught: UpdateEvents(Event Name: " + Chr(34) + e\EventName + Chr(34) + ", ID: " + e\EventID + ")")
+			CatchErrors("Uncaught: UpdateEvents(Event ID: " + e\EventID + ")")
 		Else
 			CatchErrors("Uncaught: UpdateEvents(Event doesn't exist anymore!)")
 		EndIf
