@@ -4043,7 +4043,6 @@ Function UpdateEvents%()
 										e\room\RoomDoors[i]\Locked = 1
 									Next
 								EndIf
-								Exit
 							EndIf
 						Else
 							If e2\EventID = e_room2_sl
@@ -4058,7 +4057,6 @@ Function UpdateEvents%()
 										e\room\RoomDoors[i]\Locked = 1
 									Next
 								EndIf
-								Exit
 							EndIf
 						EndIf
 					Next
