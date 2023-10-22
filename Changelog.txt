@@ -14,6 +14,10 @@ General:
 - Removed additional fogging on Very Fine Gas Mask and Very Fine Hazmat Suit.
 - The camera now shakes when get hit.
 
+- Optimized the game...
+
+- Updated credits.
+
 Mechanics:
 - Removed accidental item dropping.
 - Player's camera now "blinks" after putting on a gear.
@@ -21,16 +25,16 @@ Mechanics:
 Rooms:
 - Added security camera in «room2C_ez» room.
 - Added «room2C_2_ez» room.
+- Added SCP-079 document to observation room in the chamber.
+
 - The doors guarded by a four-pass code are now unlocked by default in SCP-860-1's containment chamber.
 
 - Add sanity system to SCP-012's event.
 	- Cannot save at monitor and while being dragged in unless you wear SCP-714(Green) or Heavy gear.
 	- Character will lose control when on low sanity and you'll be forced to complete the sheet.
-
 - Changes for SCP-205's containment chamber:
 	- Added Level 3 Keycard.
 	- Replaced battery with eyedrops.
-
 - Changed «room2_4_hcz_106» event.
 
 - Updated elevators design.
@@ -40,8 +44,9 @@ Rooms:
 Items:
 - Added unique texture for heavy equipment.
 - Added new SCP-294 drinks.
+- Added SCP-066 document.
 
-- Changed gas mask model.
+- Changed gas mask and SCP-1499 models.
 
 - Rebalanced syringes and eyedrops.
 - Rebalanced equipping time for some items.
@@ -79,6 +84,9 @@ Bug Fixes:
 - Fixed not being able to open inventory after failing to use an item.
 - Fixed light sprites and props disappearing in Maintenance Tunnels.
 - Fixed/improved ranges of room-forcing code.
+- Fixed an empty texture not applied to checkpoint monitors after loading the game.
+- Fixed some memory leaks.
+- Fixed bodies falling through the map.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.
