@@ -7264,7 +7264,6 @@ Function UpdateEvents%()
 			Case e_1048_a
 				;[Block]
 				If e\room\Dist < HideDistance Lor PlayerRoom = e\room
-					Temp = False
 					If e\room\Objects[0] = 0
 						e\room\Objects[0] =	CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
 						ScaleEntity(e\room\Objects[0], 0.05, 0.05, 0.05)
@@ -7274,21 +7273,16 @@ Function UpdateEvents%()
 						EntityParent(e\room\Objects[0], e\room\OBJ)
 					Else
 						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
-						
-						e\EventState3 = e\EventState3 + fps\Factor[0]
-						If e\EventState3 >= 70.0 * 180.0
-							If (Not EntityInView(e\room\Objects[0], Camera)) Then Temp = True
-						EndIf
-						If chs\NoTarget Lor I_268\InvisibilityOn Then e\EventState = 1.0
+						If chs\NoTarget Lor I_268\InvisibilityOn Then e\EventState = 0.0
 						
 						Select e\EventState
-							Case 1.0 ; ~ Searching for a player
+							Case 0.0 ; ~ Searching for a player
 								;[Block]
 								Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
 								
-								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 6.25 Then e\EventState = 2.0
+								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 6.25 Then e\EventState = 1.0
 								;[End Block]
-							Case 2.0 ; ~ Squeals
+							Case 1.0 ; ~ Squeals
 								;[Block]
 								Local PrevFrame# = AnimTime(e\room\Objects[0])
 								
@@ -7310,89 +7304,86 @@ Function UpdateEvents%()
 								
 								If PrevFrame > 646.0
 									If PlayerRoom = e\room
-										PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Growth.ogg"), True)
+										e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Growth.ogg"), True)
 										
 										CreateMsg(GetLocalString("msg", "1048a_1"))
 										e\EventState2 = 0.01
-										e\EventState = 3.0
-									Else
-										e\EventState3 = 70.0 * 180.0
-										e\EventState = 4.0
 									EndIf
+									e\EventState = 2.0
 								EndIf
 								;[End Block]
-							Case 3.0 ; ~ Idle, growth state
+							Case 2.0 ; ~ Idle, growth state
 								;[Block]
-								If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
-									e\EventState2 = e\EventState2 + fps\Factor[0]
-									me\BlurTimer = e\EventState2 * 2.0
-									
-									If e\EventState2 > 250.0 And e\EventState2 - fps\Factor[0] <= 250.0
-										Select Rand(3)
-											Case 1
-												;[Block]
-												CreateMsg(GetLocalString("msg", "1048a_2"))
-												;[End Block]
-											Case 2
-												;[Block]
-												CreateMsg(GetLocalString("msg", "1048a_3"))
-												;[End Block]
-											Case 3
-												;[Block]
-												CreateMsg(GetLocalString("msg", "1048a_4"))
-												;[End Block]
-										End Select
-									ElseIf e\EventState2 > 600.0 And e\EventState2 - fps\Factor[0] <= 600.0
-										Select Rand(4)
-											Case 1
-												;[Block]
-												CreateMsg(GetLocalString("msg", "1048a_5"))
-												;[End Block]
-											Case 2
-												;[Block]
-												CreateMsg(GetLocalString("msg", "1048a_6"))
-												;[End Block]
-											Case 3
-												;[Block]
-												CreateMsg(GetLocalString("msg", "1048a_7"))
-												;[End Block]
-											Case 4
-												;[Block]
-												CreateMsg(GetLocalString("msg", "1048a_8"))
-												;[End Block]
-										End Select
-									EndIf
-								EndIf
+								e\EventState3 = 1.0
+								
+								; ~ Remove event when the player wasn't infected/cured
+								If e\EventState2 = 0.0 Then e\EventState4 = 1.0
 								
 								Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
 								
 								PointEntity(e\room\Objects[0], me\Collider)
 								RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
 								
+								; ~ Kill the player after 15.0 secs
 								If e\EventState2 > 70.0 * 15.0
 									msg\DeathMsg = GetLocalString("death", "1048a")
 									Kill()
 								EndIf
-								
-								; ~ Remove event when player was cured by SCP-427
-								If e\EventState2 = 0.0 Then e\EventState3 = 70.0 * 180.0
-								;[End Block]
-							Case 4.0 ; ~ Idle
-								;[Block]
-								Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
-								
-								PointEntity(e\room\Objects[0], me\Collider)
-								RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
-								
-								; ~ Remove event when player was cured by SCP-427
-								If e\EventState2 = 0.0 Then e\EventState3 = 70.0 * 180.0
 								;[End Block]
 						End Select
 					EndIf
 				EndIf
-				If Temp
-					FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-					RemoveEvent(e)
+				
+				If e\EventState4 = 0.0
+					If e\EventState3 = 1.0
+						If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
+							If e\EventState2 > 0.0
+								e\EventState2 = e\EventState2 + fps\Factor[0]
+								me\BlurTimer = e\EventState2 * 2.0
+								
+								If e\EventState2 > 250.0 And e\EventState2 - fps\Factor[0] <= 250.0
+									Select Rand(3)
+										Case 1
+											;[Block]
+											CreateMsg(GetLocalString("msg", "1048a_2"))
+											;[End Block]
+										Case 2
+											;[Block]
+											CreateMsg(GetLocalString("msg", "1048a_3"))
+											;[End Block]
+										Case 3
+											;[Block]
+											CreateMsg(GetLocalString("msg", "1048a_4"))
+											;[End Block]
+									End Select
+								ElseIf e\EventState2 > 600.0 And e\EventState2 - fps\Factor[0] <= 600.0
+									Select Rand(4)
+										Case 1
+											;[Block]
+											CreateMsg(GetLocalString("msg", "1048a_5"))
+											;[End Block]
+										Case 2
+											;[Block]
+											CreateMsg(GetLocalString("msg", "1048a_6"))
+											;[End Block]
+										Case 3
+											;[Block]
+											CreateMsg(GetLocalString("msg", "1048a_7"))
+											;[End Block]
+										Case 4
+											;[Block]
+											CreateMsg(GetLocalString("msg", "1048a_8"))
+											;[End Block]
+									End Select
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+				Else
+					If (Not EntityInView(e\room\Objects[0], Camera))
+						FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+						RemoveEvent(e)
+					EndIf
 				EndIf
 				;[End Block]
 			Case e_room4_2_hcz

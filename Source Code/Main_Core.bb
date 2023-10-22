@@ -4214,12 +4214,8 @@ Function UpdateGUI%()
 							If e\EventID = e_1048_a
 								If e\EventState2 > 0.0
 									CreateMsg(GetLocalString("msg", "pill.ears"))
-									
-									If PlayerRoom = e\room Then me\BlinkTimer = -10.0
-									If e\room\Objects[0] <> 0 Then FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-									RemoveEvent(e)
+									e\EventState4 = 1.0
 								EndIf
-								Exit
 							EndIf
 						Next
 						RemoveItem(SelectedItem)
