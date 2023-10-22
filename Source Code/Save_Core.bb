@@ -810,7 +810,7 @@ Function LoadGame%(File$)
 		
 		For rt.RoomTemplates = Each RoomTemplates
 			If rt\ID = RoomTemplateID
-				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\Name, Angle)
+				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\RoomID, Angle)
 				;SetupTriggerBoxes(r)
 				r\Found = Found
 				Exit
@@ -1302,7 +1302,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If PlayerRoom\RoomTemplate\Name = "dimension_1499"
+	If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		me\BlinkTimer = -1.0
 		ShouldEntitiesFall = False
 		TeleportToRoom(I_1499\PrevRoom)
@@ -2011,8 +2011,8 @@ Function LoadGameQuick%(File$)
 	
 	If Sky <> 0 Then FreeEntity(Sky) : Sky = 0
 	For r.Rooms = Each Rooms
-		Select r\RoomTemplate\Name
-			Case "gate_a"
+		Select r\RoomTemplate\RoomID
+			Case r_gate_a
 				;[Block]
 				If r\Objects[0] <> 0
 					FreeEntity(r\Objects[0]) : r\Objects[0] = 0
@@ -2050,7 +2050,7 @@ Function LoadGameQuick%(File$)
 					FreeEntity(r\Objects[17]) : r\Objects[17] = 0
 				EndIf
 				;[End Block]
-			Case "gate_b"
+			Case r_gate_b
 				;[Block]
 				If r\Objects[0] <> 0
 					xTemp = EntityX(r\Objects[0], True)
@@ -2060,7 +2060,7 @@ Function LoadGameQuick%(File$)
 					PositionEntity(r\Objects[0], xTemp, r\y - 1017.0 * RoomScale, zTemp, True)
 				EndIf
 				;[End Block]
-			Case "cont1_035"
+			Case r_cont1_035
 				;[Block]
 				Update035Label(r\Objects[4])
 				;[End Block]
@@ -2278,7 +2278,7 @@ Function LoadMap%(File$)
 	CatchErrors("LoadMap(" + File + ")")
 	
 	Local r.Rooms, rt.RoomTemplates, e.Events
-	Local f%, x%, y%, Name$, Angle%, Prob#
+	Local f%, x%, y%, Name$, ID%, Angle%, Prob#
 	Local RoomAmount%, ForestPieceAmount%, MTPieceAmount%, i%
 	
 	f = ReadFile_Strict(File)
@@ -2304,14 +2304,15 @@ Function LoadMap%(File$)
 			x = ReadByte(f)
 			y = ReadByte(f)
 			Name = Lower(ReadString(f))
+			ID = FindRoomID(Name)
 			
 			Angle = ReadByte(f) * 90.0
 			
 			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name
+				If rt\RoomID = ID
 					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
 					Angle = WrapAngle(Angle)
-					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name, Angle)
+					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
 					
 					;SetupTriggerBoxes(r)
 					
@@ -2321,19 +2322,20 @@ Function LoadMap%(File$)
 			Next
 			
 			Name = ReadString(f)
+			ID = FindEventID(Name)
 			Prob = ReadFloat(f)
 			
 			If r <> Null
 				If Prob > 0.0
 					If Rnd(0.0, 1.0) <= Prob
 						e.Events = New Events
-						e\EventID = FindEventID(Name)
+						e\EventID = ID
 						FindForestEvent(e)
 						e\room = r
 					EndIf
 				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
-					e\EventID = FindEventID(Name)
+					e\EventID = ID
 					FindForestEvent(e)
 					e\room = r
 				EndIf
@@ -2343,7 +2345,7 @@ Function LoadMap%(File$)
 		Local ForestRoom.Rooms
 		
 		For r.Rooms = Each Rooms
-			If r\RoomTemplate\Name = "cont2_860_1"
+			If r\RoomTemplate\RoomID = r_cont2_860_1
 				ForestRoom = r
 				Exit
 			EndIf
@@ -2409,7 +2411,7 @@ Function LoadMap%(File$)
 		Local MTRoom.Rooms
 		
 		For r.Rooms = Each Rooms
-			If r\RoomTemplate\Name = "room2_mt"
+			If r\RoomTemplate\RoomID = r_room2_mt
 				MTRoom = r
 				Exit
 			EndIf
@@ -2473,15 +2475,16 @@ Function LoadMap%(File$)
 			x = ReadByte(f)
 			y = ReadByte(f)
 			Name = Lower(ReadString(f))
+			ID = FindRoomID(Name)
 			
 			Angle = ReadByte(f) * 90.0
 			
 			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name
+				If rt\RoomID = ID
 					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
 					Angle = WrapAngle(Angle)
 					
-					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * 8.0, 0.0, y * 8.0, Name, Angle)
+					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
 					;SetupTriggerBoxes(r)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
@@ -2490,19 +2493,20 @@ Function LoadMap%(File$)
 			Next
 			
 			Name = ReadString(f)
+			ID = FindEventID(Name)
 			Prob = ReadFloat(f)
 			
 			If r <> Null
 				If Prob > 0.0
 					If Rnd(0.0, 1.0) <= Prob
 						e.Events = New Events
-						e\EventID = FindEventID(Name)
+						e\EventID = ID
 						FindForestEvent(e)
 						e\room = r
 					EndIf
 				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
-					e\EventID = FindEventID(Name)
+					e\EventID = ID
 					FindForestEvent(e)
 					e\room = r
 				EndIf
@@ -2597,22 +2601,22 @@ Function LoadMap%(File$)
 	Next
 	
 	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10, "gate_b")
-	CreateEvent(e_gate_b, "gate_b", 0)
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10, r_gate_b)
+	CreateEvent(e_gate_b, r_gate_b, 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2, "gate_a")
-	CreateEvent(e_gate_a, "gate_a", 0)
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2, r_gate_a)
+	CreateEvent(e_gate_a, r_gate_a, 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "dimension_106")
-	CreateEvent(e_dimension_106, "dimension_106", 0) 
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, r_dimension_106)
+	CreateEvent(e_dimension_106, r_dimension_106, 0) 
 	
 	If opt\IntroEnabled
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, "cont1_173_intro")
-		CreateEvent(e_cont1_173_intro, "cont1_173_intro", 0)
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, r_cont1_173_intro)
+		CreateEvent(e_cont1_173_intro, r_cont1_173_intro, 0)
 	EndIf
 	
-	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing * 2), 800.0, 0.0, "dimension_1499")
-	CreateEvent(e_dimension_1499, "dimension_1499", 0)
+	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing * 2), 800.0, 0.0, r_dimension_1499)
+	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
 	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomAdjacents - 1

@@ -602,10 +602,11 @@ Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
-	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, RN$
+	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	Local SinValue#, SqrValue#
 	Local DifficultyDMGMult#
+	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	Select SelectedDifficulty\OtherFactors
 		Case EASY
@@ -729,7 +730,7 @@ Function UpdateNPCs%()
 								; ~ Teleport to a room closer to the player
 								If Dist > 2500.0
 									If Rand(70) = 1
-										If (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\Name <> "dimension_106"
+										If (Not IsPlayerOutsideFacility()) And RID <> r_dimension_106
 											For w.WayPoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1
 													x = Abs(EntityX(me\Collider) - EntityX(w\OBJ, True))
@@ -790,16 +791,16 @@ Function UpdateNPCs%()
 										If (Not I_268\InvisibilityOn) Then n\Angle = DeltaYaw(n\Collider, Camera)
 										If Dist < 0.4225
 											If (Not me\Terminated) And (Not chs\GodMode)
-												Select PlayerRoom\RoomTemplate\Name
-													Case "room2c_gw_lcz", "room2_closets", "cont1_895"
+												Select RID
+													Case r_room2c_gw_lcz, r_room2_closets, r_cont1_895
 														;[Block]
 														msg\DeathMsg = Format(GetLocalString("death", "173.gw"), SubjectName)
 														;[End Block]
-													Case "cont1_173_intro"
+													Case r_cont1_173_intro
 														;[Block]
 														msg\DeathMsg = Format(GetLocalString("death", "173.intro"), SubjectName)
 														;[End block]
-													Case "room2_6_lcz"
+													Case r_room2_6_lcz
 														;[Block]
 														msg\DeathMsg = GetLocalString("death", "173.6")
 														;[End Block]
@@ -888,7 +889,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType106
 				;[Block]
-				If n\Contained Lor PlayerRoom\RoomTemplate\Name = "gate_b"
+				If n\Contained Lor RID = r_gate_b
 					If (Not EntityHidden(n\OBJ))
 						n\Idle = 1
 						HideEntity(n\OBJ)
@@ -902,20 +903,20 @@ Function UpdateNPCs%()
 					Local Spawn106% = True
 					
 					; ~ Checking if SCP-106 is allowed to spawn
-					If PlayerRoom\RoomTemplate\Name = "dimension_1499" Then Spawn106 = False
+					If RID = r_dimension_1499 Then Spawn106 = False
 					If forest_event <> Null
 						If PlayerRoom = forest_event\room
 							If forest_event\EventState = 1.0 Then Spawn106 = False
 						EndIf
 					EndIf
-					If PlayerRoom\RoomTemplate\Name = "cont2_049" And EntityY(me\Collider) <= -2848.0 * RoomScale Then Spawn106 = False
+					If RID = r_cont2_049 And EntityY(me\Collider) <= -2848.0 * RoomScale Then Spawn106 = False
 					; ~ Gate A event has been triggered. Don't make SCP-106 disappear!
 					; ~ The reason why this is a seperate for loop is because we need to make sure that cont2_860_1 would not be able to overwrite the "Spawn106" variable
 					For e.Events = Each Events
 						If e\EventID = e_gate_a
 							If e\EventState <> 0.0
 								Spawn106 = True
-								n\Idle = (PlayerRoom\RoomTemplate\Name = "dimension_1499")
+								n\Idle = (RID = r_dimension_1499)
 							EndIf
 							Exit
 						EndIf
@@ -940,7 +941,7 @@ Function UpdateNPCs%()
 								
 								SetAnimTime(n\OBJ, 110.0)
 								
-								If PlayerRoom\RoomTemplate\Name <> "cont1_895" Then PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
+								If RID <> r_cont1_895 Then PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
 								
 								PlaySound_Strict(DecaySFX[0])
 							EndIf
@@ -962,7 +963,7 @@ Function UpdateNPCs%()
 									n\State = -10.0
 								EndIf
 							Else
-								If PlayerRoom\RoomTemplate\Name <> "gate_a" Then ShouldPlay = 10
+								If RID <> r_gate_a Then ShouldPlay = 10
 								
 								Local Visible% = False
 								
@@ -971,7 +972,7 @@ Function UpdateNPCs%()
 								If chs\NoTarget Lor I_268\InvisibilityOn Then Visible = False
 								
 								If Visible
-									If PlayerRoom\RoomTemplate\Name <> "gate_a" Then n\PathTimer = 0.0
+									If RID <> r_gate_a Then n\PathTimer = 0.0
 									If EntityInView(n\Collider, Camera)
 										GiveAchievement(Achv106)
 										
@@ -991,8 +992,8 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If Dist > 0.64
-									If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\Name = "dimension_106" Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND And (Not chs\NoTarget) And (Not I_268\InvisibilityOn))) And PlayerRoom\RoomTemplate\Name <> "gate_a"
-										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\Name = "dimension_106") Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
+									If (Dist > 625.0 Lor RID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND And (Not chs\NoTarget) And (Not I_268\InvisibilityOn))) And RID <> r_gate_a
+										If (Dist > 1600.0 Lor RID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 										
@@ -1071,10 +1072,10 @@ Function UpdateNPCs%()
 										If Ceil(n\Frame) = 110.0 And (Not chs\GodMode)
 											PlaySound_Strict(DamageSFX[1])
 											PlaySound_Strict(HorrorSFX[5])
-											If PlayerRoom\RoomTemplate\Name = "dimension_106"
+											If RID = r_dimension_106
 												msg\DeathMsg = Format(GetLocalString("death", "106.dimension"), SubjectName)
 												Kill(True)
-											ElseIf PlayerRoom\RoomTemplate\Name = "gate_a"
+											ElseIf RID = r_gate_a
 												msg\DeathMsg = Format(GetLocalString("death", "106.gatea"), SubjectName)
 												Kill(True)
 											Else
@@ -1105,7 +1106,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If n\Reload = 0.0
-								If Dist > 100.0 And (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\Name <> "dimension_106" And n\State < -5.0 ; ~ Timer idea -- Juanjpro
+								If Dist > 100.0 And (Not IsPlayerOutsideFacility()) And RID <> r_dimension_106 And n\State < -5.0 ; ~ Timer idea -- Juanjpro
 									If (Not EntityInView(n\OBJ, Camera))
 										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
@@ -1137,7 +1138,7 @@ Function UpdateNPCs%()
 							SetNPCFrame(n, 110.0)
 							
 							If (Not PlayerRoom\RoomTemplate\DisableDecals)
-								If PlayerRoom\RoomTemplate\Name <> "gate_a" Then n\State = n\State - (fps\Factor[0] * (1.0 + (SelectedDifficulty\AggressiveNPCs)))
+								If RID <> r_gate_a Then n\State = n\State - (fps\Factor[0] * (1.0 + (SelectedDifficulty\AggressiveNPCs)))
 							EndIf
 						EndIf
 						
@@ -1151,7 +1152,7 @@ Function UpdateNPCs%()
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						MoveEntity(n\OBJ2, 0.0, 8.6 * 0.11, -1.5 * 0.11)
 						
-						If PlayerRoom\RoomTemplate\Name = "dimension_106" Lor IsPlayerOutsideFacility()
+						If RID = r_dimension_106 Lor IsPlayerOutsideFacility()
 							If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 						Else
 							If Dist < PowTwo(opt\CameraFogFar * LightVolume * 0.6)
@@ -1586,7 +1587,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\GodMode)
 								I_268\Using = 0
-								If PlayerRoom\RoomTemplate\Name = "cont2_049"
+								If RID = r_cont2_049
 									For e.Events = Each Events
 										If e\EventID = e_cont2_049
 											e\EventState = -1.0
@@ -1617,7 +1618,7 @@ Function UpdateNPCs%()
 				EndIf
 				
 				If n\Idle > 0.1
-					If PlayerRoom\RoomTemplate\Name <> "cont2_049"
+					If RID <> r_cont2_049
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
 					n\DropSpeed = 0.0
@@ -1950,7 +1951,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If PlayerRoom\RoomTemplate\Name = "room2_sl" Then ShouldPlay = 19
+							If RID = r_room2_sl Then ShouldPlay = 19
 							
 							If n\CurrSpeed > 0.005
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySound2(Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
@@ -2213,7 +2214,7 @@ Function UpdateNPCs%()
 							Local DetectDistance# = 121.0
 							
 							; ~ If at Gate B increase his distance so that he can shoot the player from a distance after they are spotted.
-							If PlayerRoom\RoomTemplate\Name = "gate_b"
+							If RID = r_gate_b
 								DetectDistance = 484.0
 								
 								; ~ Increase accuracy if the player is going slow
@@ -2237,10 +2238,10 @@ Function UpdateNPCs%()
 										Local InstaKillPlayer% = False
 										
 										msg\DeathMsg = Format(GetLocalString("death", "guard.default"), SubjectName)
-										If PlayerRoom\RoomTemplate\Name = "cont1_173" 
+										If RID = r_cont1_173 
 											msg\DeathMsg = Format(GetLocalString("death", "guard.173"), SubjectName)
 											InstaKillPlayer = True
-										ElseIf PlayerRoom\RoomTemplate\Name = "gate_b"
+										ElseIf RID = r_gate_b
 											msg\DeathMsg = GetLocalString("death", "guard.gateb")
 										EndIf
 										
@@ -2698,7 +2699,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
-				If PlayerRoom\RoomTemplate\Name <> "dimension_106"
+				If RID <> r_dimension_106
 					If n\Idle = 1
 						If (Not EntityHidden(n\OBJ))
 							HideEntity(n\OBJ)
@@ -2924,7 +2925,7 @@ Function UpdateNPCs%()
 				;[Block]
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				If Dist < 3600.0
-					If PlayerRoom\RoomTemplate\Name = "gate_b"
+					If RID = r_gate_b
 						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 1.0), 0.0)
 					Else
 						Dist2 = 1.0
@@ -3009,7 +3010,7 @@ Function UpdateNPCs%()
 													n\Reload = 5.0
 													
 													If me\Terminated And n\State <> 3
-														If PlayerRoom\RoomTemplate\Name = "gate_b"
+														If RID = r_gate_b
 															msg\DeathMsg = GetLocalString("death", "apache.gateb")
 														Else
 															msg\DeathMsg = GetLocalString("death", "apache.gatea")
@@ -3131,7 +3132,7 @@ Function UpdateNPCs%()
 													InjurePlayer(Rnd(0.75, 1.15) * DifficultyDMGMult, 0.0, 100.0, Rnd(0.35, 0.4) * DifficultyDMGMult, 0.2)
 													
 													If me\Injuries > 3.0
-														If PlayerRoom\RoomTemplate\Name = "room2_ez"
+														If RID = r_room2_ez
 															msg\DeathMsg = GetLocalString("death", "035.offices")
 														Else
 															msg\DeathMsg = GetLocalString("death", "035.default")
@@ -3526,7 +3527,7 @@ Function UpdateNPCs%()
 			Case NPCType939
 				;[Block]
 				; ~ State is set to 66 in the room3_storage-event if player isn't inside the room
-				If PlayerRoom\RoomTemplate\Name <> "room3_storage" Then n\State = 66.0
+				If RID <> r_room3_storage Then n\State = 66.0
 				If n\State < 66.0
 					Select n\State
 						Case 0.0 ; ~ Idles
@@ -4425,7 +4426,7 @@ Function UpdateNPCs%()
 							;[Block]
 							If chs\NoTarget Lor I_268\InvisibilityOn Then n\State = 0.0
 							
-							If PlayerRoom\RoomTemplate\Name = "dimension_1499" And n\PrevState = 0 Then ShouldPlay = 18
+							If RID = r_dimension_1499 And n\PrevState = 0 Then ShouldPlay = 18
 							
 							PointEntity(n\OBJ, me\Collider)
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
@@ -4497,7 +4498,7 @@ Function UpdateNPCs%()
 									me\CameraShake = 2.0
 									
 									If me\Injuries > 10.0
-										If PlayerRoom\RoomTemplate\Name = "dimension_1499"
+										If RID = r_dimension_1499
 											msg\DeathMsg = GetLocalString("death", "1499.dimension")
 										Else
 											msg\DeathMsg = GetLocalString("death", "1499")
@@ -4838,7 +4839,7 @@ Function UpdateNPCs%()
 						Local MaxX#, MinX#, MaxZ#, MinZ#
 						
 						If n\InFacility = 1
-							If PlayerRoom\RoomTemplate\Name <> "cont1_173_intro"
+							If RID <> r_cont1_173_intro
 								If forest_event <> Null
 									If PlayerRoom = forest_event\room
 										If forest_event\EventState = 1.0 Then UpdateGravity = True
@@ -4987,7 +4988,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							Next
 						Else
 							For r.Rooms = Each Rooms
-								If r\RoomTemplate\Name = "cont1_173"
+								If r\RoomTemplate\RoomID = r_cont1_173
 									Local FoundChamber% = False
 									Local Pvt% = CreatePivot()
 									
@@ -5702,7 +5703,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 					
 					If (Not PrevTerminated) And me\Terminated
-						If PlayerRoom\RoomTemplate\Name = "cont2_049"
+						If PlayerRoom\RoomTemplate\RoomID = r_cont2_049
 							msg\DeathMsg = GetLocalString("death", "0492")
 							PlayMTFSound(LoadTempSound("SFX\Character\MTF\049_2\TargetTerminated.ogg"), n)
 						Else
@@ -6252,7 +6253,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport back to the facility if fell through the floor
-		If PlayerRoom\RoomTemplate\Name <> "cont2_049" And EntityY(n\Collider) < -7.0 Then TeleportCloser(n)
+		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And EntityY(n\Collider) < -7.0 Then TeleportCloser(n)
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
@@ -6664,7 +6665,7 @@ Function MoveToPocketDimension%()
 	Local r.Rooms
 	
 	For r.Rooms = Each Rooms
-		If r\RoomTemplate\Name = "dimension_106"
+		If r\RoomTemplate\RoomID = r_dimension_106
 			HideEntity(me\Head)
 			ShowEntity(me\Collider)
 			PlaySound_Strict(Use914SFX)
@@ -6926,16 +6927,18 @@ Function NPCSpeedChange%(n.NPCs)
 End Function
 
 Function IsPlayerOutsideFacility%()
-	If PlayerRoom\RoomTemplate\Name = "gate_a" Lor PlayerRoom\RoomTemplate\Name= "gate_b" Then Return(True)
+	Local RID% = PlayerRoom\RoomTemplate\RoomID
+	
+	If RID = r_gate_a Lor RID = r_gate_b Then Return(True)
 	Return(False)
 End Function
 
 Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	Local e.Events
-	Local RN$ = PlayerRoom\RoomTemplate\Name
+	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	; ~ Player is in these rooms, returning false
-	If RN = "dimension_106" Lor RN = "dimension_1499" Lor (RN = "cont1_173_intro" And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
+	If RID = r_dimension_106 Lor RID = r_dimension_1499 Lor (RID = r_cont1_173_intro And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
 	If forest_event <> Null
 		If PlayerRoom = forest_event\room
@@ -6949,7 +6952,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	
 	If (Not CanSpawnIn049Chamber)
 		If (Not SelectedDifficulty\AggressiveNPCs)
-			If RN = "cont2_049" And EntityY(me\Collider) <= (-2848.0) * RoomScale Then Return(False)
+			If RID = r_cont2_049 And EntityY(me\Collider) <= (-2848.0) * RoomScale Then Return(False)
 		EndIf
 	EndIf
 	; ~ Return true, this means player is in reachable room

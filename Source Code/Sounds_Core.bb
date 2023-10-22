@@ -444,11 +444,9 @@ Function UpdateStreamSounds%()
 	EndIf
 	
 	If (Not PlayerInReachableRoom())
-		Local RN$ = PlayerRoom\RoomTemplate\Name
-		
 		If (Not IsPlayerOutsideFacility())
 			If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
-			If RN <> "dimension_1499"
+			If PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
 				For e.Events = Each Events
 					If e\SoundCHN_IsStream
 						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False

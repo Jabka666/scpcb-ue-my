@@ -1581,195 +1581,195 @@ Function RemoveSoundInstances%()
 End Function
 
 Function LoadEvents%()
-	If opt\IntroEnabled Then CreateEvent(e_cont1_173_intro, "cont1_173_intro", 0)
-	CreateEvent(e_cont1_173, "cont1_173", 0)
+	If opt\IntroEnabled Then CreateEvent(e_cont1_173_intro, r_cont1_173_intro, 0)
+	CreateEvent(e_cont1_173, r_cont1_173, 0)
 	
-	CreateEvent(e_dimension_106, "dimension_106", 0)
+	CreateEvent(e_dimension_106, r_dimension_106, 0)
 	
-	; ~ There's a 7% chance that SCP-106 appears in the rooms named "room2_5_hcz"
-	CreateEvent(e_room2_5_hcz_106, "room2_5_hcz", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	; ~ There's a 7% chance that SCP-106 appears in the rooms named r_room2_5_hcz
+	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
-	; ~ The chance for SCP-173 appearing in the first room2c_gw_lcz is about 66%
-	; ~ There's a 30% chance that it appears in the later room2c_gw_lcz
-	If Rand(3) < 3 Then CreateEvent(e_173_appearing, "room2c_gw_lcz", 1)
-	CreateEvent(e_173_appearing, "room2c_gw_lcz", 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
+	; ~ The chance for SCP-173 appearing in the first r_room2c_gw_lcz is about 66%
+	; ~ There's a 30% chance that it appears in the later r_room2c_gw_lcz
+	If Rand(3) < 3 Then CreateEvent(e_173_appearing, r_room2c_gw_lcz, 1)
+	CreateEvent(e_173_appearing, r_room2c_gw_lcz, 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent(e_trick, "room2_lcz", 0, 0.15)
-	CreateEvent(e_trick, "room2_3_lcz", 0, 0.15)
+	CreateEvent(e_trick, r_room2_lcz, 0, 0.15)
+	CreateEvent(e_trick, r_room2_3_lcz, 0, 0.15)
 	
-	CreateEvent(e_1048_a, "room2_lcz", 1, 1.0)
-	CreateEvent(e_1048_a, "room2_3_lcz", 1, Rnd(0.8))
-	CreateEvent(e_1048_a, "room2_5_lcz", 1, Rnd(0.6))
+	CreateEvent(e_1048_a, r_room2_lcz, 1, 1.0)
+	CreateEvent(e_1048_a, r_room2_3_lcz, 1, Rnd(0.8))
+	CreateEvent(e_1048_a, r_room2_5_lcz, 1, Rnd(0.6))
 	
-	CreateEvent(e_room2_storage, "room2_storage", 0)
+	CreateEvent(e_room2_storage, r_room2_storage, 0)
 	
 	; ~ SCP-096 spawns in the first (and last)
-	CreateEvent(e_room2c_gw_ez_096, "room2c_gw_ez", 0)
+	CreateEvent(e_room2c_gw_ez_096, r_room2c_gw_ez, 0)
 	
-	CreateEvent(e_room1_dead_end_106, "room1_dead_end_lcz", Rand(0, 1))
-	CreateEvent(e_room1_dead_end_106, "room1_dead_end_ez", Rand(0, 1))
+	CreateEvent(e_room1_dead_end_106, r_room1_dead_end_lcz, Rand(0, 1))
+	CreateEvent(e_room1_dead_end_106, r_room1_dead_end_ez, Rand(0, 1))
 	
-	CreateEvent(e_room2_scientists_2, "room2_scientists_2", 0)
+	CreateEvent(e_room2_scientists_2, r_room2_scientists_2, 0)
 	
-	CreateEvent(e_room2_2_lcz, "room2_2_lcz", 0, 1.0)
+	CreateEvent(e_room2_2_lcz, r_room2_2_lcz, 0, 1.0)
 	
-	CreateEvent(e_room2_elevator, "room2_elevator", Rand(2))
+	CreateEvent(e_room2_elevator, r_room2_elevator, Rand(2))
 	
-	CreateEvent(e_room3_storage, "room3_storage", 0)
+	CreateEvent(e_room3_storage, r_room3_storage, 0)
 	
-	CreateEvent(e_room2_6_hcz_smoke, "room2_6_hcz", 0, 0.2)
-	CreateEvent(e_room2_6_hcz, "room2_6_hcz", 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_6_hcz_smoke, r_room2_6_hcz, 0, 0.2)
+	CreateEvent(e_room2_6_hcz, r_room2_6_hcz, 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
-	; ~ SCP-173 appears in half of the "room2_6_lcz"-rooms
-	CreateEvent(e_173_appearing, "room2_6_lcz", 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	; ~ SCP-173 appears in half of the r_room2_6_lcz-rooms
+	CreateEvent(e_173_appearing, r_room2_6_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
-	; ~ The anomalous duck in "room2_2_ez"-rooms
-	CreateEvent(e_room2_2_ez, "room2_2_ez", 0, 0.7)
+	; ~ The anomalous duck in r_room2_2_ez-rooms
+	CreateEvent(e_room2_2_ez, r_room2_2_ez, 0, 0.7)
 	
-	CreateEvent(e_room2_closets, "room2_closets", 0)
+	CreateEvent(e_room2_closets, r_room2_closets, 0)
 	
-	CreateEvent(e_room2_cafeteria, "room2_cafeteria", 0)
+	CreateEvent(e_room2_cafeteria, r_room2_cafeteria, 0)
 	
-	CreateEvent(e_room3_hcz_duck, "room3_hcz", 0)
-	CreateEvent(e_room3_hcz_1048, "room3_hcz", 1)
+	CreateEvent(e_room3_hcz_duck, r_room3_hcz, 0)
+	CreateEvent(e_room3_hcz_1048,r_room3_hcz, 1)
 	
-	CreateEvent(e_room2_servers_hcz, "room2_servers_hcz", 0)
+	CreateEvent(e_room2_servers_hcz, r_room2_servers_hcz, 0)
 	
-	CreateEvent(e_173_appearing, "room3_2_ez", 0, 0.8)
-	CreateEvent(e_room3_2_ez_duck, "room3_2_ez", 1)
-	CreateEvent(e_173_appearing, "room3_3_ez", 0)
+	CreateEvent(e_173_appearing, r_room3_2_ez, 0, 0.8)
+	CreateEvent(e_room3_2_ez_duck, r_room3_2_ez, 1)
+	CreateEvent(e_173_appearing, r_room3_3_ez, 0)
 	
 	; ~ The dead guard
-	CreateEvent(e_room3_2_hcz, "room3_2_hcz", 0, 0.1)
+	CreateEvent(e_room3_2_hcz, r_room3_2_hcz, 0, 0.1)
 	
-	CreateEvent(e_room4_lcz_049, "room4_lcz", 0)
+	CreateEvent(e_room4_lcz_049, r_room4_lcz, 0)
 	
 	If Rand(5) < 5
 		Select Rand(3)
 			Case 1
 				;[Block]
-				CreateEvent(e_682_roar, "room2_5_hcz", Rand(0, 2))
+				CreateEvent(e_682_roar, r_room2_5_hcz, Rand(0, 2))
 				;[End Block]
 			Case 2
 				;[Block]
-				CreateEvent(e_682_roar, "room3_hcz", Rand(0, 2))
+				CreateEvent(e_682_roar, r_room3_hcz, Rand(0, 2))
 				;[End Block]
 			Case 3
 				;[Block]
-				CreateEvent(e_682_roar, "room2_5_ez", 0)
+				CreateEvent(e_682_roar, r_room2_5_ez, 0)
 				;[End Block]
 		End Select
 	EndIf
 	
-	CreateEvent(e_room2_nuke, "room2_nuke", 0)
+	CreateEvent(e_room2_nuke, r_room2_nuke, 0)
 	
-	CreateEvent(e_cont1_895, "cont1_895", 0)
+	CreateEvent(e_cont1_895, r_cont1_895, 0)
 	
-	CreateEvent(e_room2_checkpoint, "room2_checkpoint_lcz_hcz", 0, 1.0)
-	CreateEvent(e_room2_checkpoint, "room2_checkpoint_hcz_ez", 0, 1.0)
+	CreateEvent(e_room2_checkpoint, r_room2_checkpoint_lcz_hcz, 0, 1.0)
+	CreateEvent(e_room2_checkpoint, r_room2_checkpoint_hcz_ez, 0, 1.0)
 	
-	CreateEvent(e_door_closing, "room3_lcz", 0, 0.1)
-	CreateEvent(e_door_closing, "room3_2_hcz", 0, 0.1)
+	CreateEvent(e_door_closing, r_room3_lcz, 0, 0.1)
+	CreateEvent(e_door_closing, r_room3_2_hcz, 0, 0.1)
 	
 	If Rand(2) = 1
-		CreateEvent(e_106_victim, "room3_lcz", Rand(2))
-		CreateEvent(e_106_sinkhole, "room3_2_lcz", Rand(2, 3))
+		CreateEvent(e_106_victim, r_room3_lcz, Rand(2))
+		CreateEvent(e_106_sinkhole, r_room3_2_lcz, Rand(2, 3))
 	Else
-		CreateEvent(e_106_victim, "room3_2_lcz", Rand(2))
-		CreateEvent(e_106_sinkhole, "room3_lcz", Rand(2, 3))
+		CreateEvent(e_106_victim, r_room3_2_lcz, Rand(2))
+		CreateEvent(e_106_sinkhole, r_room3_lcz, Rand(2, 3))
 	EndIf
-	CreateEvent(e_106_sinkhole, "room4_lcz", Rand(2))
+	CreateEvent(e_106_sinkhole, r_room4_lcz, Rand(2))
 	
-	CreateEvent(e_cont1_079, "cont1_079", 0)
+	CreateEvent(e_cont1_079, r_cont1_079, 0)
 	
-	CreateEvent(e_cont2_049, "cont2_049", 0)
+	CreateEvent(e_cont2_049, r_cont2_049, 0)
 	
-	CreateEvent(e_cont2_012, "cont2_012", 0)
+	CreateEvent(e_cont2_012, r_cont2_012, 0)
 	
-	CreateEvent(e_cont1_035, "cont1_035", 0)
+	CreateEvent(e_cont1_035, r_cont1_035, 0)
 	
-	CreateEvent(e_cont2_008, "cont2_008", 0)
+	CreateEvent(e_cont2_008, r_cont2_008, 0)
 	
-	CreateEvent(e_cont1_106, "cont1_106", 0)
+	CreateEvent(e_cont1_106, r_cont1_106, 0)
 	
-	CreateEvent(e_cont1_372, "cont1_372", 0)
+	CreateEvent(e_cont1_372, r_cont1_372, 0)
 	
-	CreateEvent(e_cont1_914, "cont1_914", 0)
+	CreateEvent(e_cont1_914, r_cont1_914, 0)
 	
-	CreateEvent(e_butt_ghost, "room2_6_ez", 0)
-	CreateEvent(e_toilet_guard, "room2_6_ez", 1)
+	CreateEvent(e_butt_ghost, r_room2_6_ez, 0)
+	CreateEvent(e_toilet_guard, r_room2_6_ez, 1)
 	
-	CreateEvent(e_room2_2_hcz_106, "room2_2_hcz", Rand(0, 3))
+	CreateEvent(e_room2_2_hcz_106, r_room2_2_hcz, Rand(0, 3))
 	
-	CreateEvent(e_173_appearing, "room2_4_hcz", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_173_appearing, r_room2_4_hcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent(e_room2_test_hcz, "room2_test_hcz", 0)
-	CreateEvent(e_room2_test_lcz_173, "room2_test_lcz", 0)
+	CreateEvent(e_room2_test_hcz, r_room2_test_hcz, 0)
+	CreateEvent(e_room2_test_lcz_173, r_room2_test_lcz, 0)
 	
-	CreateEvent(e_room2_mt, "room2_mt", 0)
+	CreateEvent(e_room2_mt, r_room2_mt, 0)
 	
-	CreateEvent(e_room2c_ec, "room2c_ec", 0)
+	CreateEvent(e_room2c_ec, r_room2c_ec, 0)
 	
-	CreateEvent(e_gate_a_entrance, "gate_a_entrance", 0)
-	CreateEvent(e_gate_a, "gate_a", 0)
-	CreateEvent(e_gate_b_entrance, "gate_b_entrance", 0)
-	CreateEvent(e_gate_b, "gate_b", 0)
+	CreateEvent(e_gate_a_entrance, r_gate_a_entrance, 0)
+	CreateEvent(e_gate_a, r_gate_a, 0)
+	CreateEvent(e_gate_b_entrance, r_gate_b_entrance, 0)
+	CreateEvent(e_gate_b, r_gate_b, 0)
 	
-	CreateEvent(e_cont1_205, "cont1_205", 0)
+	CreateEvent(e_cont1_205, r_cont1_205, 0)
 	
-	CreateEvent(e_cont2_860_1, "cont2_860_1", 0)
+	CreateEvent(e_cont2_860_1, r_cont2_860_1, 0)
 	
-	CreateEvent(e_cont3_966, "cont3_966", 0)
+	CreateEvent(e_cont3_966, r_cont3_966, 0)
 	
-	CreateEvent(e_cont2_1123, "cont2_1123", 0)
+	CreateEvent(e_cont2_1123, r_cont2_1123, 0)
 	
-	CreateEvent(e_room2_tesla, "room2_tesla_lcz", 0, 0.9)
-	CreateEvent(e_room2_tesla, "room2_tesla_hcz", 0, 0.9)
-	CreateEvent(e_room2_tesla, "room2_tesla_ez", 0, 0.9)
+	CreateEvent(e_room2_tesla, r_room2_tesla_lcz, 0, 0.9)
+	CreateEvent(e_room2_tesla, r_room2_tesla_hcz, 0, 0.9)
+	CreateEvent(e_room2_tesla, r_room2_tesla_ez, 0, 0.9)
 	
-	CreateEvent(e_room4_2_hcz, "room4_2_hcz", 0)
+	CreateEvent(e_room4_2_hcz, r_room4_2_hcz, 0)
 	
-	CreateEvent(e_room2_gw_2, "room2_gw_2", Rand(0, 1))
-	CreateEvent(e_gateway, "room2_gw", 0, 1.0)
-	CreateEvent(e_gateway, "room3_gw", 0, 1.0)
+	CreateEvent(e_room2_gw_2, r_room2_gw_2, Rand(0, 1))
+	CreateEvent(e_gateway, r_room2_gw, 0, 1.0)
+	CreateEvent(e_gateway, r_room3_gw, 0, 1.0)
 	
-	CreateEvent(e_dimension_1499, "dimension_1499", 0)
+	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
 	
-	CreateEvent(e_cont2c_1162_arc, "cont2c_1162_arc", 0)
+	CreateEvent(e_cont2c_1162_arc, r_cont2c_1162_arc, 0)
 	
-	CreateEvent(e_cont2_500_1499, "cont2_500_1499", 0)
+	CreateEvent(e_cont2_500_1499, r_cont2_500_1499, 0)
 	
-	CreateEvent(e_room2_sl, "room2_sl", 0)
+	CreateEvent(e_room2_sl, r_room2_sl, 0)
 	
-	CreateEvent(e_room2_medibay, "room2_medibay", 0)
+	CreateEvent(e_room2_medibay, r_room2_medibay, 0)
 	
-	CreateEvent(e_room2_shaft, "room2_shaft", 0)
+	CreateEvent(e_room2_shaft, r_room2_shaft, 0)
 	
-	CreateEvent(e_096_spawn, "room2_3_hcz", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, "room2_4_hcz", 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, "room2_5_hcz", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, "room2_6_hcz", 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, "room3_hcz", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, "room3_2_hcz", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, "room3_3_hcz", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, "room4_hcz", 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, "room4_2_hcz", 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room2_3_hcz, 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room2_4_hcz, 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room2_5_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room2_6_hcz, 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room3_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room3_2_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room3_3_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room4_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room4_2_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent(e_173_appearing, "room2_4_lcz", 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_173_appearing, r_room2_4_lcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent(e_room2_ez_035, "room2_ez", 0)
+	CreateEvent(e_room2_ez_035, r_room2_ez, 0)
 	
-	CreateEvent(e_room2_4_hcz_106, "room2_4_hcz", 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_4_hcz_106, r_room2_4_hcz, 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent(e_room4_ic, "room4_ic", 0)
+	CreateEvent(e_room4_ic, r_room4_ic, 0)
 	
-	CreateEvent(e_cont2_409, "cont2_409", 0)
+	CreateEvent(e_cont2_409, r_cont2_409, 0)
 	
-	CreateEvent(e_cont1_005, "cont1_005", 0)
+	CreateEvent(e_cont1_005, r_cont1_005, 0)
 	
-	CreateEvent(e_room2_ic, "room2_ic", 0)
+	CreateEvent(e_room2_ic, r_room2_ic, 0)
 	
-	CreateEvent(e_cont2c_066, "cont2c_066", 0.6)
+	CreateEvent(e_cont2c_066, r_cont2c_066, 0.6)
 End Function
 
 Function LoadWayPoints%(LoadingStart% = 55)
@@ -2481,7 +2481,7 @@ Function InitNewGame%()
 			EndIf
 		EndIf
 		
-		If r\RoomTemplate\Name = "cont1_173" And (Not opt\IntroEnabled)
+		If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
 			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
@@ -2498,7 +2498,7 @@ Function InitNewGame%()
 			EntityType(it\Collider, HIT_ITEM)
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
-		ElseIf r\RoomTemplate\Name = "cont1_173_intro" And opt\IntroEnabled
+		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
 			PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
 			PlayerRoom = r
 		EndIf

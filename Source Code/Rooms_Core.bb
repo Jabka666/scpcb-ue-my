@@ -9,8 +9,8 @@ Function FillRoom%(r.Rooms)
 	Local ItemName$, ItemTempName$
 	Local SinValue#, CosValue#
 	
-	Select r\RoomTemplate\Name
-		Case "room1_archive"
+	Select r\RoomTemplate\RoomID
+		Case r_room1_archive
 			;[Block]
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 512.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
@@ -100,7 +100,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
-		Case "room1_dead_end_lcz", "room1_dead_end_ez"
+		Case r_room1_dead_end_lcz, r_room1_dead_end_ez
 			;[Block]
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 1202.0 * RoomScale, r\y, False, BIG_DOOR)
 			d\MTFClose = False : d\DisableWaypoint = True
@@ -109,7 +109,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			;[End Block]
-		Case "cont1_005"
+		Case r_cont1_005
 			;[Block]
 			; ~ The door leading to the containment chamber
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 640.0 * RoomScale, 0.0, (I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5), DEFAULT_DOOR, KEY_CARD_4)
@@ -137,7 +137,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 830.0 * RoomScale)
 			;[End Block]
-		Case "cont1_173"
+		Case r_cont1_173
 			;[Block]
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x - 640.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 95.0 * RoomScale, -90.0)
@@ -237,7 +237,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			;[End Block]
-		Case "cont1_173_intro"
+		Case r_cont1_173_intro
 			;[Block]
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x - 2784 * RoomScale, r\y, r\z + 768.0 * RoomScale, 90.0)
@@ -466,7 +466,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", r\x - 3934.0 * RoomScale, r\y + 170.0 * RoomScale, r\z + 8.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "cont1_205"
+		Case r_cont1_205
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 1400.0 * RoomScale, r\y - 128.0 * RoomScale, r\z - 384.0 * RoomScale, 0.0)
 			d\AutoClose = False
@@ -518,7 +518,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x + 188.0 * RoomScale, r\z - 724.0 * RoomScale)
 			;[End Block]
-		Case "cont1_372"
+		Case r_cont1_372
 			;[Block]
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 368.0 * RoomScale, 0.0, False, BIG_DOOR, KEY_CARD_2)
 			PositionEntity(d\Buttons[0], r\x - 496.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 278.0 * RoomScale, True)
@@ -542,7 +542,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 704.0 * RoomScale)
 			;[End Block]
-		Case "cont1_914"
+		Case r_cont1_914
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 1037.0 * RoomScale, r\y, r\z + 528.0 * RoomScale, 180.0, True, SCP_914_DOOR)
 			For i = 0 To 1
@@ -600,7 +600,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 704.0 * RoomScale)
 			;[End Block]
-		Case "room2_2_lcz"
+		Case r_room2_2_lcz
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 672.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -609,7 +609,7 @@ Function FillRoom%(r.Rooms)
             
 			For r2.Rooms = Each Rooms
 				If r2 <> r
-					If r2\RoomTemplate\Name = "room2_2_lcz"
+					If r2\RoomTemplate\RoomID = r_room2_2_lcz
 						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
 						Exit
 					EndIf
@@ -625,7 +625,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case "room2_4_lcz"
+		Case r_room2_4_lcz
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z - 827.5 * RoomScale, 90.0, False, DEFAULT_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -633,7 +633,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			;[End Block]
-		Case "room2_6_lcz"
+		Case r_room2_6_lcz
 			;[Block]
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 528.0 * RoomScale, 0.0)
 			d\AutoClose = False
@@ -649,7 +649,7 @@ Function FillRoom%(r.Rooms)
 			d\LinkedDoor = d2
 			d2\LinkedDoor = d
 			;[End Block]
-		Case "room2_closets"
+		Case r_room2_closets
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 244.0 * RoomScale, r\y, r\z, 90.0)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.048, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -712,13 +712,13 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Incident Report SCP-1048-A", "paper", r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 480.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_elevator"
+		Case r_room2_elevator
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 448.0 * RoomScale, r\y, r\z, -90.0, True, ELEVATOR_DOOR)
 			d\MTFClose = False
 			r\RoomDoors.Doors[0] = d
 			;[End Block]
-		Case "room2_gw", "room2_gw_2"
+		Case r_room2_gw, r_room2_gw_2
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 338.0 * RoomScale, r\y, r\z - 385.0 * RoomScale, 0.0, True)
 			d\Locked = 1 : d\MTFClose = False
@@ -739,12 +739,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.046, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			d.Doors = CreateDoor(r, r\x - 458.0 * RoomScale, r\y, r\z + 35.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
-			If r\RoomTemplate\Name = "room2_gw_2" Then d\Locked = 1
+			If r\RoomTemplate\RoomID = r_room2_gw_2 Then d\Locked = 1
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.046, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 1.035, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.046, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.09, True)
-			If r\RoomTemplate\Name = "room2_gw" Then r\RoomLevers.Levers[0] = CreateLever(r, r\x + 160.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 204.0 * RoomScale, 270.0)
+			If r\RoomTemplate\RoomID = r_room2_gw Then r\RoomLevers.Levers[0] = CreateLever(r, r\x + 160.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 204.0 * RoomScale, 270.0)
 			
-			If r\RoomTemplate\Name = "room2_gw_2"
+			If r\RoomTemplate\RoomID = r_room2_gw_2
 				r\Objects[0] = CreatePivot()
 				PositionEntity(r\Objects[0], r\x + 262.0 * RoomScale, r\y + 325.0 * RoomScale, r\z - 345.0 * RoomScale)
 				EntityParent(r\Objects[0], r\OBJ)
@@ -775,7 +775,7 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			CreateCustomCenter(r, r\x + 336.0 * RoomScale, r\z + 32.0 * RoomScale)
-		Case "room2_js"
+		Case r_room2_js
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_0)
 			
@@ -795,7 +795,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x + 1714.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 936.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_sl"
+		Case r_room2_sl
 			;[Block]
 			; ~ Doors for room
 			d.Doors = CreateDoor(r, r\x + 480.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
@@ -948,7 +948,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, 20.0, True, r\x - 231.0 * RoomScale, r\y + 760.0 * RoomScale, r\z + 256.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 315.0
 			;[End Block]
-		Case "room2_storage"
+		Case r_room2_storage
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 1288.0 * RoomScale, r\y, r\z, 270.0)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
@@ -1000,7 +1000,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Level 0 Key Card", "key0", r\x - 672.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 224.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_tesla_lcz", "room2_tesla_hcz", "room2_tesla_ez"
+		Case r_room2_tesla_lcz, r_room2_tesla_hcz, r_room2_tesla_ez
 			;[Block]
 			r\Objects[0] = CreateSprite()
 			r\ScriptedObject[0] = True
@@ -1019,7 +1019,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
 			;[End Block]
-		Case "room2_test_lcz"
+		Case r_room2_test_lcz
 			;[Block]
 			; ~ Doors
 			d.Doors = CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_1)
@@ -1061,7 +1061,7 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "cont2_012"
+		Case r_cont2_012
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
@@ -1102,7 +1102,7 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x - 784.0 * RoomScale, r\y - 768.0 * RoomScale + 0.01, r\z + 640.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
-		Case "cont2_427_714_860_1025"
+		Case r_cont2_427_714_860_1025
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 272.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -1263,7 +1263,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "cont2_500_1499"
+		Case r_cont2_500_1499
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			d\Locked = 1
@@ -1319,7 +1319,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ) : RotateEntity(it\Collider, 0.0, 180.0, 0.0)
 			EndIf
 			;[End Block]
-		Case "cont2_1123"
+		Case r_cont2_1123
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 352.0 * RoomScale, r\y + 769.0 * RoomScale, r\z - 640.0 * RoomScale, 90.0)
 			d\AutoClose = False : d\DisableWaypoint = True
@@ -1411,7 +1411,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Leaflet", "paper", r\x - 756.0 * RoomScale, r\y + 920.0 * RoomScale, r\z + 521.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2c_lcz"
+		Case r_room2c_lcz
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -1419,7 +1419,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.165, True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			;[End Block]
-		Case "room2c_gw_lcz"
+		Case r_room2c_gw_lcz
 			;[Block]
 			; ~ Doors
 			d.Doors = CreateDoor(r, r\x + 815.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 0.0)
@@ -1468,7 +1468,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 736.0 * RoomScale, r\z - 352.0 * RoomScale)
 			;[End Block]
-		Case "room2c_gw_2_lcz"
+		Case r_room2c_gw_2_lcz
 			;[Block]
 			; ~ Doors
 			d.Doors = CreateDoor(r, r\x + 815.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 180.0, True)
@@ -1499,7 +1499,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x + 815.0 * RoomScale, r\z - 815.0 * RoomScale)
 			;[End Block]
-		Case "cont2c_066"
+		Case r_cont2c_066
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -1517,7 +1517,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 657.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 50.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "cont2c_1162_arc"
+		Case r_cont2c_1162_arc
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -1534,7 +1534,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-1162-ARC", "paper", r\x + 863.227 * RoomScale, r\y + 152.0 * RoomScale, r\z - 953.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room3_storage"
+		Case r_room3_storage
 			;[Block]
 			; ~ Elevator Doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 448.0 * RoomScale, 0.0, True, ELEVATOR_DOOR)
@@ -1690,7 +1690,7 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_BLOOD_6, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + 890.0 * RoomScale, 90.0, r\Angle + 180.0, 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
-		Case "room4_ic"
+		Case r_room4_ic
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 704.0 * RoomScale, r\y, r\z - 336.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
@@ -1710,7 +1710,7 @@ Function FillRoom%(r.Rooms)
 			HideEntity(it2\Collider)
 			EntityParent(it2\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_checkpoint_lcz_hcz"
+		Case r_room2_checkpoint_lcz_hcz
 			;[Block]
 			d.Doors= CreateDoor(r, r\x + 200.0 * RoomScale, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			d\Timer = 70.0 * 5.0
@@ -1755,7 +1755,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z + 500.0 * RoomScale)
 			;[End Block]
-		Case "cont1_035"
+		Case r_cont1_035
 			;[Block]
 			; ~ The doors to the containment chamber
 			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, True, ONE_SIDED_DOOR, KEY_CARD_5)
@@ -1827,7 +1827,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 848.0 * RoomScale)
 			;[End Block]
-		Case "cont1_079"
+		Case r_cont1_079
 			;[Block]
 			; ~ A blast door leading to the chamber
 			d.Doors = CreateDoor(r, r\x - 1648.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 1230.0 * RoomScale, 90.0, False, BIG_DOOR, KEY_CARD_4)
@@ -1880,7 +1880,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
 			;[End Block]
-		Case "cont1_096"
+		Case r_cont1_096
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 320.0 * RoomScale, r\y, r\z + 320.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -1913,7 +1913,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 512.0 * RoomScale)
 			;[End Block]
-		Case "cont1_106"
+		Case r_cont1_106
 			;[Block]
 			; ~ Elevators' doors
 			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, True, ELEVATOR_DOOR) 
@@ -1991,7 +1991,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 132.0 * RoomScale, r\z - 704.0 * RoomScale)
 			;[End Block]
-		Case "cont1_895"
+		Case r_cont1_895
 			;[Block]
 			; ~ The door to the containment chamber
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 448.0 * RoomScale, 0.0, False, BIG_DOOR, KEY_CARD_2)
@@ -2015,7 +2015,7 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_2_hcz"
+		Case r_room2_2_hcz
 			;[Block]
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 368.0 * RoomScale, r\y, r\z)
@@ -2033,7 +2033,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[3], r\x - 224.0 * RoomScale + 0.005, r\y + 192.0 * RoomScale, r\z)
 			EntityParent(r\Objects[3], r\OBJ)
 			;[End Block]
-		Case "room2_4_hcz"
+		Case r_room2_4_hcz
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z - 827.5 * RoomScale, 90.0)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -2060,7 +2060,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 864.0 * RoomScale, r\y - 477.0 * RoomScale, r\z - 632.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case "room2_6_hcz"
+		Case r_room2_6_hcz
 			;[Block]
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y + 544.0 * RoomScale, r\z + 512.0 * RoomScale)
@@ -2070,7 +2070,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x, r\y + 544.0 * RoomScale, r\z - 512.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			;[End Block]
-		Case "room2_mt"
+		Case r_room2_mt
 			;[Block]
 			; ~ Elevators doors
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 656.0 * RoomScale, -90.0, True, ELEVATOR_DOOR)
@@ -2110,7 +2110,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 656.0 * RoomScale)
 			;[End Block]
-		Case "room2_nuke"
+		Case r_room2_nuke
 			;[Block]
 			; ~ Elevators doors
 			d.Doors = CreateDoor(r, r\x + 1200.0 * RoomScale, r\y, r\z, -90.0, True, ELEVATOR_DOOR)
@@ -2155,7 +2155,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 1121.0 * RoomScale, r\y + 4191.0 * RoomScale, r\z - 306.0 * RoomScale, 20.0)
 			sc\Angle = 90.0 : sc\Turn = 45.0
 			;[End Block]
-		Case "room2_servers_hcz"
+		Case r_room2_servers_hcz
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 224.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, True)
 			d\Locked = 1
@@ -2191,7 +2191,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 756.0 * RoomScale)
 			;[End Block]
-		Case "room2_shaft"
+		Case r_room2_shaft
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 1551.0 * RoomScale, r\y, r\z + 496.0 * RoomScale, 0.0)
 			
@@ -2229,7 +2229,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("ReVision Eyedrops", "eyedrops", r\x + 1930.0 * RoomScale, r\y + 225.0 * RoomScale, r\z + 128.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_test_hcz"
+		Case r_room2_test_hcz
 			;[Block]
 			; ~ DNA door
 			d.Doors = CreateDoor(r, r\x + 720.0 * RoomScale, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_WHITE)
@@ -2263,7 +2263,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-682", "paper", r\x + 656.0 * RoomScale, r\y - 1200.0 * RoomScale, r\z - 16.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "cont2_008"
+		Case r_cont2_008
 			;[Block]
 			; ~ The doors to the containment chamber
 			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 384.0 * RoomScale, 180.0, True, ONE_SIDED_DOOR, KEY_CARD_4)
@@ -2372,7 +2372,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 384.0 * RoomScale, r\y - 4654.0 * RoomScale, r\z + 1168.0 * RoomScale, 20.0)
 			sc\Angle = 135.0 : sc\Turn = 45.0
 			;[End Block]
-		Case "cont2_049"
+		Case r_cont2_049
 			;[Block]
 			; ~ Elevator doors
 			d.Doors = CreateDoor(r, r\x + 320.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, -90.0, True, ELEVATOR_DOOR)
@@ -2487,7 +2487,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 672.0 * RoomScale, r\z - 640.0 * RoomScale)
 			;[End Block]
-		Case "cont2_409"
+		Case r_cont2_409
 			;[Block]
 			; ~ Elevators doors
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 655.0 * RoomScale, -90.0, True, ELEVATOR_DOOR)
@@ -2522,7 +2522,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			;[End Block]
-		Case "room2c_maintenance"
+		Case r_room2c_maintenance
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 272.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, False, HEAVY_DOOR, KEY_CARD_3)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
@@ -2537,7 +2537,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x + 340.0 * RoomScale, r\z - 340.0 * RoomScale)
 			;[End Block]
-		Case "room3_hcz"
+		Case r_room3_hcz
 			;[Block]
 			em.Emitters = CreateEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
@@ -2549,7 +2549,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)
 			;[End Block]
-		Case "cont3_513"
+		Case r_cont3_513
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y, r\z + 304.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
@@ -2640,7 +2640,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-513", "paper", r\x - 480.0 * RoomScale, r\y + 104.0 * RoomScale, r\z - 176.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "cont3_966"
+		Case r_cont3_966
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 400.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			r\RoomDoors.Doors[0] = d
@@ -2667,7 +2667,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x + 490.0 * RoomScale, r\z - 490.0 * RoomScale)
 			;[End Block]
-		Case "room4_hcz"
+		Case r_room4_hcz
 			;[Block]
 			em.Emitters = CreateEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 0)
 			em\RandAngle = 55.0 : em\Speed = 0.0005 : em\AlphaChange = -0.015 : em\SizeChange = 0.007
@@ -2687,7 +2687,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)
 			;[End Block]
-		Case "room2_checkpoint_hcz_ez"
+		Case r_room2_checkpoint_hcz_ez
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 200.0 * RoomScale, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_5)
 			d\Timer = 70.0 * 5.0
@@ -2733,7 +2733,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z + 500.0 * RoomScale)
 			;[End Block]
-		Case "gate_a_entrance"
+		Case r_gate_a_entrance
 			;[Block]
 			; ~ Elevator door
 			d.Doors = CreateDoor(r, r\x + 720.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, -90.0, True, ELEVATOR_DOOR)
@@ -2754,7 +2754,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 720.0 * RoomScale)
 			;[End Block]
-		Case "gate_a"
+		Case r_gate_a
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0)
 			d\AutoClose = False
@@ -2781,7 +2781,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			For r2.Rooms = Each Rooms
-				If r2\RoomTemplate\Name = "gate_a_entrance"
+				If r2\RoomTemplate\RoomID = r_gate_a_entrance
 					; ~ Elevator
 					d.Doors = CreateDoor(r, r\x + 1544.0 * RoomScale, r\y, r\z - 64.0 * RoomScale, -90.0, False, ELEVATOR_DOOR)
 					PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.22, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -2853,7 +2853,7 @@ Function FillRoom%(r.Rooms)
 			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
 			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
-		Case "gate_b_entrance"
+		Case r_gate_b_entrance
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 720.0 * RoomScale, r\y, r\z + 1440.0 * RoomScale, 0.0, True, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[0] = d
@@ -2872,10 +2872,10 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 720.0 * RoomScale)
 			;[End Block]
-		Case "gate_b"
+		Case r_gate_b
 			;[Block]
 			For r2.Rooms = Each Rooms
-				If r2\RoomTemplate\Name = "gate_b_entrance"
+				If r2\RoomTemplate\RoomID = r_gate_b_entrance
 					; ~ Elevator
 					d.Doors = CreateDoor(r, r\x - 5424.0 * RoomScale, r\y, r\z - 1380.0 * RoomScale, 0.0, False, ELEVATOR_DOOR)
 					PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.031, True)
@@ -2952,7 +2952,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 5424.0 * RoomScale, r\z - 1700.0 * RoomScale)
 			;[End Block]
-		Case "room1_lifts"
+		Case r_room1_lifts
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, False, ELEVATOR_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -2968,7 +2968,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 960.0 * RoomScale, 20.0)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			;[End Block]
-		Case "room1_o5"
+		Case r_room1_o5
 			;[Block]
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 240.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_O5_COUNCIL)
 			
@@ -2993,7 +2993,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 639.0 * RoomScale)
 			;[End Block]
-		Case "room2_ez"
+		Case r_room2_ez
 			;[Block]
 			it.Items = CreateItem("Document SCP-106", "paper", r\x + 404.0 * RoomScale, r\y + 145.0 * RoomScale, r\z + 559.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3008,7 +3008,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Notification", "paper", r\x - 137.0 * RoomScale, r\y + 153.0 * RoomScale, r\z + 464.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_2_ez"
+		Case r_room2_2_ez
 			;[Block]
 			it.Items = CreateItem("Level 1 Key Card", "key1", r\x - 368.0 * RoomScale, r\y - 48.0 * RoomScale, r\z + 80.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3027,7 +3027,7 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_3_ez"
+		Case r_room2_3_ez
 			;[Block]
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x - 1056.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
@@ -3036,7 +3036,7 @@ Function FillRoom%(r.Rooms)
 			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
-					If r2\RoomTemplate\Name = "room2_3_ez"
+					If r2\RoomTemplate\RoomID = r_room2_3_ez
 						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
 						Exit
 					EndIf
@@ -3086,7 +3086,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case "room2_bio"
+		Case r_room2_bio
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, False, OFFICE_DOOR)
 			d\Locked = 2 : d\MTFClose = False
@@ -3094,7 +3094,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 30.0
 			;[End Block]
-		Case "room2_cafeteria"
+		Case r_room2_cafeteria
 			;[Block]
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x + 1712.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
@@ -3136,7 +3136,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Quarter", "25ct", r\x + 1409.0 * RoomScale, r\y - 334.0 * RoomScale, r\z - 732.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_ic"
+		Case r_room2_ic
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y, r\z, 90.0, True, ELEVATOR_DOOR)
 			d\Locked = 1 : d\MTFClose = False
@@ -3157,7 +3157,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 400.0 * RoomScale, r\z)
 			;[End Block]
-		Case "room2_medibay"
+		Case r_room2_medibay
 			;[Block]
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
@@ -3192,7 +3192,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Compact First Aid Kit", "finefirstaid", r\x - 333.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 123.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_office"
+		Case r_room2_office
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 244.0 * RoomScale, r\y, r\z, 90.0)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.048, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -3211,7 +3211,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Sticky Note", "paper", r\x - 991.0 * RoomScale, r\y - 242.0 * RoomScale, r\z + 904.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_office_2"
+		Case r_room2_office_2
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z, 90.0, False, OFFICE_DOOR)
 			
@@ -3232,7 +3232,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case "room2_office_3"
+		Case r_room2_office_3
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 1456.0 * RoomScale, r\y + 224.0 * RoomScale, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
@@ -3256,7 +3256,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Radio Transceiver", "radio", r\x + 2272.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 128.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_servers_ez"
+		Case r_room2_servers_ez
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
@@ -3271,7 +3271,7 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_scientists"
+		Case r_room2_scientists
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_MAYNARD))
 			
@@ -3306,7 +3306,7 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2_scientists_2"
+		Case r_room2_scientists_2
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 448.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
 			d\MTFClose = False : d\DisableWaypoint = True
@@ -3333,7 +3333,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("The Modular Site Project", "paper", r\x + 622.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 73.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "cont2_860_1"
+		Case r_cont2_860_1
 			;[Block]
 			; ~ Doors to observation room
 			d.Doors = CreateDoor(r, r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, Str(Rand(1000, 9999)))
@@ -3365,18 +3365,18 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x + 927.0 * RoomScale, r\z)
 			;[End Block]
-		Case "room2c_ez"
+		Case r_room2c_ez
 			;[Block]
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			;[End Block]
-		Case "room2c_2_ez"
+		Case r_room2c_2_ez
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
-					If r2\RoomTemplate\Name = "room2c_2_ez"
+					If r2\RoomTemplate\RoomID = r_room2c_2_ez
 						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
 						Exit
 					EndIf
@@ -3412,7 +3412,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case "room2c_ec"
+		Case r_room2c_ec
 			;[Block]
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.1, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
@@ -3429,7 +3429,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Note from Daniel", "paper", r\x - 400.0 * RoomScale, r\y + 1040.0 * RoomScale, r\z + 115.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room2c_gw_ez"
+		Case r_room2c_gw_ez
 			;[Block]
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x + 815.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 0.0)
@@ -3473,7 +3473,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			;[End Block]
-		Case "room3_ez"
+		Case r_room3_ez
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
@@ -3481,7 +3481,7 @@ Function FillRoom%(r.Rooms)
 			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
-					If r2\RoomTemplate\Name = "room3_ez"
+					If r2\RoomTemplate\RoomID = r_room3_ez
 						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
 						Exit
 					EndIf
@@ -3527,7 +3527,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case "room3_2_ez"
+		Case r_room3_2_ez
 			;[Block]
 			it.Items = CreateRandomBattery(r\x - 132.0 * RoomScale, r\y - 368.0 * RoomScale, r\z - 658.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3546,7 +3546,7 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room3_3_ez"
+		Case r_room3_3_ez
 			;[Block]
 			it.Items = CreateItem("Document SCP-970", "paper", r\x + 960.0 * RoomScale, r\y - 448.0 * RoomScale, r\z + 251.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
@@ -3555,12 +3555,12 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Gas Mask", "gasmask", r\x + 954.0 * RoomScale, r\y - 504.0 * RoomScale, r\z + 235.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case "room3_4_ez"
+		Case r_room3_4_ez
 			;[Block]
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			;[End Block]
-		Case "room3_gw"
+		Case r_room3_gw
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 174.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -3601,7 +3601,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 32.0 * RoomScale, r\z - 736.0 * RoomScale)
 			;[End Block]
-		Case "room3_office"
+		Case r_room3_office
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, True, OFFICE_DOOR)
 			
@@ -3614,7 +3614,7 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_WATER, r\x + 236.0 * RoomScale, r\y + 0.005, r\z - 68.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
-		Case "dimension_106"
+		Case r_dimension_106
 			;[Block]
 			; ~ The doors inside fake tunnel
 			d.Doors = CreateDoor(r, r\x, r\y + 2060.0 * RoomScale, r\z + 32.0 - 1024.0 * RoomScale, 0.0, False, HEAVY_DOOR)
@@ -3740,7 +3740,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Burnt Note", "paper", r\x, r\y + 0.5, r\z + 3.5)
 			;[End Block]
-		Case "dimension_1499"
+		Case r_dimension_1499
 			;[Block]
 			r\Objects[16] = CreatePivot()
 			PositionEntity(r\Objects[16], r\x + 205.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 2287.0 * RoomScale)
@@ -3790,7 +3790,7 @@ Function FillRoom%(r.Rooms)
 		If tse\RoomTemplate = r\RoomTemplate Then CreateSoundEmitter(r, tse\ID, r\x + tse\x, r\y + tse\y, r\z + tse\z, tse\Range)
 	Next
 	
-	CatchErrors("Uncaught: FillRoom(Room name: " + r\RoomTemplate\Name + ")")
+	CatchErrors("Uncaught: FillRoom(Room ID: " + r\RoomTemplate\RoomID + ")")
 End Function
 
 ;~IDEal Editor Parameters:

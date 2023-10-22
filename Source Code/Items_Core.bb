@@ -445,7 +445,7 @@ Function UpdateItems%()
 					EndIf
 				EndIf
 				
-				If PlayerRoom\RoomTemplate\Name <> "room2_storage"
+				If PlayerRoom\RoomTemplate\RoomID <> r_room2_storage
 					If i\Dist < HideDist * 0.04
 						For i2.Items = Each Items
 							If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.04

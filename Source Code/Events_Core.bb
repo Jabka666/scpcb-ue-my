@@ -394,7 +394,7 @@ Function FindForestEvent%(e.Events)
 	End Select
 End Function
 
-Function CreateEvent.Events(EventID%, RoomName$, ID%, Prob# = 0.0)
+Function CreateEvent.Events(EventID%, RoomID%, ID%, Prob# = 0.0)
 	; ~ RoomName = the name of the room(s) you want the event to be assigned to
 	
 	; ~ The ID-variable determines which of the rooms the event is assigned to,
@@ -410,7 +410,7 @@ Function CreateEvent.Events(EventID%, RoomName$, ID%, Prob# = 0.0)
 	
 	If Prob = 0.0
 		For r.Rooms = Each Rooms
-			If RoomName = "" Lor RoomName = r\RoomTemplate\Name
+			If RoomID = r\RoomTemplate\RoomID
 				Temp = False
 				For e2.Events = Each Events
 					If e2\room = r
@@ -431,7 +431,7 @@ Function CreateEvent.Events(EventID%, RoomName$, ID%, Prob# = 0.0)
 		Next
 	Else
 		For r.Rooms = Each Rooms
-			If RoomName = "" Lor RoomName = r\RoomTemplate\Name
+			If RoomID = r\RoomTemplate\RoomID
 				Temp = False
 				For e2.Events = Each Events
 					If e2\room = r
@@ -1763,7 +1763,7 @@ Function UpdateEvents%()
 											ResetEntity(n_I\Curr173\Collider)
 											
 											For r.Rooms = Each Rooms
-												If r\RoomTemplate\Name = "cont1_173"
+												If r\RoomTemplate\RoomID = r_cont1_173
 													x = EntityX(r\OBJ, True) + 3712.0 * RoomScale
 													y = 384.0 * RoomScale
 													z = EntityZ(r\OBJ, True) + 1312.0 * RoomScale
@@ -4028,7 +4028,7 @@ Function UpdateEvents%()
 				
 				If e\room\Dist < 12.0
 					For e2.Events = Each Events
-						If e\room\RoomTemplate\Name = "room2_checkpoint_hcz_ez"
+						If e\room\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
 							If e2\EventID = e_cont2_008
 								If e2\EventState = 2.0
 									TurnCheckpointMonitorsOff(False)
@@ -4315,7 +4315,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					RoomExists = False
 					For r.Rooms = Each Rooms
-						If r\RoomTemplate\Name = "room2c_ec"
+						If r\RoomTemplate\RoomID = r_room2c_ec
 							RoomExists = True
 							Exit
 						EndIf
@@ -4332,7 +4332,7 @@ Function UpdateEvents%()
 						Local gateb.Rooms = Null
 						
 						For r.Rooms = Each Rooms
-							If r\RoomTemplate\Name = "gate_b"
+							If r\RoomTemplate\RoomID = r_gate_b
 								gateb = r 
 								Exit
 							EndIf
@@ -4361,7 +4361,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					RoomExists = False
 					For r.Rooms = Each Rooms
-						If r\RoomTemplate\Name = "room2c_ec"
+						If r\RoomTemplate\RoomID = r_room2c_ec
 							RoomExists = True
 							Exit
 						EndIf
@@ -4378,7 +4378,7 @@ Function UpdateEvents%()
 						Local gatea.Rooms = Null
 						
 						For r.Rooms = Each Rooms
-							If r\RoomTemplate\Name = "gate_a"
+							If r\RoomTemplate\RoomID = r_gate_a
 								gatea = r 
 								Exit
 							EndIf
@@ -4459,20 +4459,20 @@ Function UpdateEvents%()
 					Else
 						If n_I\Curr173\Idle = 0
 							If (Not EntityInView(n_I\Curr173\OBJ, Camera)) And (Not EntityInView(n_I\Curr173\OBJ2, Camera)) And EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 36.0
-								Select e\room\RoomTemplate\Name
-									Case "room2_4_lcz", "room2_4_hcz"
+								Select e\room\RoomTemplate\RoomID
+									Case r_room2_4_lcz, r_room2_4_hcz
 										;[Block]
 										TFormPoint(640.0, 100.0, 896.0, e\room\OBJ, 0)
 										;[End Block]
-									Case "room2_6_lcz"
+									Case r_room2_6_lcz
 										;[Block]
 										TFormPoint(-832.0, 100.0, 0.0, e\room\OBJ, 0)
 										;[End Block]
-									Case "room2c_gw_lcz"
+									Case r_room2c_gw_lcz
 										;[Block]
 										TFormPoint(-410.0, 100.0, 410.0, e\room\OBJ, 0)
 										;[End Block]
-									Case "room3_2_ez", "room3_3_ez"
+									Case r_room3_2_ez, r_room3_3_ez
 										;[Block]
 										Select Rand(3)
 											Case 1
@@ -7483,7 +7483,7 @@ Function UpdateEvents%()
 							ElseIf e\EventState2 > 70.0 * 3.0 And e\EventState2 < 70.0 * 6.0
 								Pvt = CreatePivot(e\room\OBJ)
 								For i = 0 To 1
-									If e\room\RoomTemplate\Name = "room3_gw"
+									If e\room\RoomTemplate\RoomID = r_room3_gw
 										If i = 0
 											PositionEntity(Pvt, -81.0, 416.0, 320.0)
 										Else
@@ -7816,7 +7816,7 @@ Function UpdateEvents%()
 							Next
 							
 							For r.Rooms = Each Rooms
-								If r\RoomTemplate\Name = "room2_checkpoint_lcz_hcz"
+								If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
 									If r\Dist < 10.0
 										e\EventState = 2.0
 										Exit
@@ -7840,10 +7840,11 @@ Function UpdateEvents%()
 					EndIf
 					
 					If e\EventState = 0.0
-						Select e\room\RoomTemplate\Name
-							Case "room3_hcz", "room3_2_hcz", "room3_3_hcz", "room4_hcz", "room4_2_hcz"
+						RID = e\room\RoomTemplate\RoomID
+						Select RID
+							Case r_room3_hcz, r_room3_2_hcz, r_room3_3_hcz, r_room4_hcz, r_room4_2_hcz
 								;[Block]
-								If e\room\RoomTemplate\Name = "room4_hcz" Lor e\room\RoomTemplate\Name = "room4_2_hcz"
+								If RID = r_room4_hcz Lor RID = r_room4_2_hcz
 									Place = Rand(0, 3)
 								Else
 									Place = Rand(0, 2)
@@ -8339,7 +8340,7 @@ Function UpdateDimension106%()
 							If Temp < PowTwo(130.0 * RoomScale)
 								RoomExist = False
 								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Name = "room2_shaft"
+									If r\RoomTemplate\RoomID = r_room2_shaft
 										RoomExist = True
 										
 										GiveAchievement(AchvPD)
@@ -8532,37 +8533,37 @@ Function UpdateDimension106%()
 							;[End Block]
 						Case 16, 17, 18, 19, 20, 21, 22
 							;[Block]
-							Local RoomName$ = ""
+							Local RoomID% = -1
 							Local LCZ% = False
 							
 							Select Rand(5)
 								Case 1
 									;[Block]
-									RoomName = "room2_5_hcz"
+									RoomID = r_room2_5_hcz
 									;[End Block]
 								Case 2
 									;[Block]
-									RoomName = "room_2_lcz"
+									RoomID = r_room2_lcz
 									LCZ = True
 									;[End Block]
 								Case 3
 									;[Block]
-									RoomName = "room3_lcz"
+									RoomID = r_room3_lcz
 									LCZ = True
 									;[End Block]
 								Case 4
 									;[Block]
-									RoomName = "cont1_106"
+									RoomID = r_cont1_106
 									;[End Block]
 								Case 5
 									;[Block]
-									RoomName = "room2_3_hcz"
+									RoomID = r_room2_3_hcz
 									;[End Block]
 							End Select
 							
 							RoomExist = False
 							For r.Rooms = Each Rooms
-								If r\RoomTemplate\Name = RoomName
+								If r\RoomTemplate\RoomID = RoomID
 									RoomExist = True
 									
 									If RoomExist

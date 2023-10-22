@@ -1523,7 +1523,7 @@ Type RoomTemplates
 	Field OBJ%, ID%
 	Field OBJPath$
 	Field Zone%[5]
-	Field Shape%, Name$
+	Field Shape%, RoomID%
 	Field Commonness%, Large%
 	Field DisableDecals%
 	;Field TempTriggerBoxAmount%
@@ -1533,6 +1533,186 @@ Type RoomTemplates
 	Field MinX#, MinY#, MinZ#
 	Field MaxX#, MaxY#, MaxZ#
 End Type
+
+; ~ Room ID constants
+;[Block]
+Const r_room1_archive% = 0
+Const r_room1_dead_end_lcz% = 1
+Const r_cont1_005% = 2
+Const r_cont1_173% = 3, r_cont1_173_intro% = 4, r_cont1_205% = 5, r_cont1_372% = 6, r_cont1_914% = 7
+Const r_room2_lcz% = 8, r_room2_2_lcz% = 9, r_room2_3_lcz% = 10, r_room2_4_lcz% = 11, r_room2_5_lcz% = 12, r_room2_6_lcz% = 13
+Const r_room2_closets% = 14
+Const r_room2_elevator% = 15
+Const r_room2_gw% = 16, r_room2_gw_2% = 17
+Const r_room2_js% = 18
+Const r_room2_sl% = 19
+Const r_room2_storage% = 20
+Const r_room2_tesla_lcz% = 21
+Const r_room2_test_lcz% = 22
+Const r_cont2_012% = 23, r_cont2_427_714_860_1025% = 24, r_cont2_500_1499% = 25, r_cont2_1123% = 26
+Const r_room2c_lcz% = 27, r_room2c_2_lcz% = 28
+Const r_room2c_gw_lcz% = 29, r_room2c_gw_2_lcz% = 30
+Const r_cont2c_066% = 31, r_cont2c_1162_arc% = 32
+Const r_room3_storage% = 33
+Const r_room3_lcz% = 34, r_room3_2_lcz% = 35, r_room3_3_lcz% = 36
+Const r_room4_lcz% = 37, r_room4_2_lcz% = 38
+Const r_room4_ic% = 39
+Const r_room2_checkpoint_lcz_hcz% = 40
+Const r_room1_dead_end_hcz% = 41
+Const r_cont1_035% = 42, r_cont1_079% = 43, r_cont1_096% = 44, r_cont1_106% = 45, r_cont1_895% = 46
+Const r_room2_hcz% = 47, r_room2_2_hcz% = 48, r_room2_3_hcz% = 49, r_room2_4_hcz% = 50, r_room2_5_hcz% = 51, r_room2_6_hcz% = 52
+Const r_room2_mt% = 53
+Const r_room2_nuke% = 54
+Const r_room2_servers_hcz% = 55
+Const r_room2_shaft% = 56
+Const r_room2_tesla_hcz% = 57
+Const r_room2_test_hcz% = 58
+Const r_cont2_008% = 59, r_cont2_049% = 60, r_cont2_409% = 61
+Const r_room2c_hcz% = 62
+Const r_room2c_maintenance% = 63
+Const r_room3_hcz% = 64, r_room3_2_hcz% = 65, r_room3_3_hcz% = 66
+Const r_cont3_513% = 67, r_cont3_966% = 68
+Const r_room4_hcz% = 69, r_room4_2_hcz% = 70
+Const r_room2_checkpoint_hcz_ez% = 71
+Const r_gate_a_entrance% = 72, r_gate_a% = 73, r_gate_b_entrance% = 74, r_gate_b% = 75
+Const r_room1_dead_end_ez% = 76
+Const r_room1_lifts% = 77
+Const r_room1_o5% = 78
+Const r_room2_ez% = 79, r_room2_2_ez% = 80, r_room2_3_ez% = 81, r_room2_4_ez% = 82, r_room2_5_ez% = 83, r_room2_6_ez% = 84
+Const r_room2_bio% = 85
+Const r_room2_cafeteria% = 86
+Const r_room2_ic% = 87
+Const r_room2_medibay% = 88
+Const r_room2_office% = 89, r_room2_office_2% = 90, r_room2_office_3% = 91
+Const r_room2_servers_ez% = 92
+Const r_room2_scientists% = 93, r_room2_scientists_2% = 94
+Const r_room2_tesla_ez% = 95
+Const r_cont2_860_1% = 96
+Const r_room2c_ez% = 97, r_room2c_2_ez% = 98
+Const r_room2c_ec% = 99
+Const r_room2c_gw_ez% = 100
+Const r_room3_gw% = 101
+Const r_room3_office% = 102
+Const r_room3_ez% = 103, r_room3_2_ez% = 104, r_room3_3_ez% = 105, r_room3_4_ez% = 106
+Const r_room4_ez% = 107
+Const r_dimension_106% = 108, r_dimension_1499% = 109
+;[End Block]
+
+Function FindRoomID%(RoomName$)
+	Select RoomName
+		Case "room1_archive" Return(r_room1_archive)
+		Case "room1_dead_end_lcz" Return(r_room1_dead_end_lcz)
+		Case "cont1_005" Return(r_cont1_005)
+		Case "cont1_173" Return(r_cont1_173)
+		Case "cont1_173_intro" Return(r_cont1_173_intro)
+		Case "cont1_205" Return(r_cont1_205)
+		Case "cont1_372" Return(r_cont1_372)
+		Case "cont1_914" Return(r_cont1_914)
+		Case "room2_lcz" Return(r_room2_lcz)
+		Case "room2_2_lcz" Return(r_room2_2_lcz)
+		Case "room2_3_lcz" Return(r_room2_3_lcz)
+		Case "room2_4_lcz" Return(r_room2_4_lcz)
+		Case "room2_5_lcz" Return(r_room2_5_lcz)
+		Case "room2_6_lcz" Return(r_room2_6_lcz)
+		Case "room2_closets" Return(r_room2_closets)
+		Case "room2_elevator" Return(r_room2_elevator)
+		Case "room2_gw" Return(r_room2_gw)
+		Case "room2_gw_2" Return(r_room2_gw_2)
+		Case "room2_js" Return(r_room2_js)
+		Case "room2_sl" Return(r_room2_sl)
+		Case "room2_storage" Return(r_room2_storage)
+		Case "room2_tesla_lcz" Return(r_room2_tesla_lcz)
+		Case "room2_test_lcz" Return(r_room2_test_lcz)
+		Case "cont2_012" Return(r_cont2_012)
+		Case "cont2_427_714_860_1025" Return(r_cont2_427_714_860_1025)
+		Case "cont2_500_1499" Return(r_cont2_500_1499)
+		Case "cont2_1123" Return(r_cont2_1123)
+		Case "room2c_lcz" Return(r_room2c_lcz)
+		Case "room2c_2_lcz" Return(r_room2c_2_lcz)
+		Case "room2c_gw_lcz" Return(r_room2c_gw_lcz)
+		Case "room2c_gw_2_lcz" Return(r_room2c_gw_2_lcz)
+		Case "cont2c_066" Return(r_cont2c_066)
+		Case "cont2c_1162_arc" Return(r_cont2c_1162_arc)
+		Case "room3_storage" Return(r_room3_storage)
+		Case "room3_lcz" Return(r_room3_lcz)
+		Case "room3_2_lcz" Return(r_room3_2_lcz)
+		Case "room3_3_lcz" Return(r_room3_3_lcz)
+		Case "room4_lcz" Return(r_room4_lcz)
+		Case "room4_2_lcz" Return(r_room4_2_lcz)
+		Case "room4_ic" Return(r_room4_ic)
+		Case "room2_checkpoint_lcz_hcz" Return(r_room2_checkpoint_lcz_hcz)
+		Case "room1_dead_end_hcz" Return(r_room1_dead_end_hcz)
+		Case "cont1_035" Return(r_cont1_035)
+		Case "cont1_079" Return(r_cont1_079)
+		Case "cont1_096" Return(r_cont1_096)
+		Case "cont1_106" Return(r_cont1_106)
+		Case "cont1_895" Return(r_cont1_895)
+		Case "room2_hcz" Return(r_room2_hcz)
+		Case "room2_2_hcz" Return(r_room2_2_hcz)
+		Case "room2_3_hcz" Return(r_room2_3_hcz)
+		Case "room2_4_hcz" Return(r_room2_4_hcz)
+		Case "room2_5_hcz" Return(r_room2_5_hcz)
+		Case "room2_6_hcz" Return(r_room2_6_hcz)
+		Case "room2_mt" Return(r_room2_mt)
+		Case "room2_nuke" Return(r_room2_nuke)
+		Case "room2_servers_hcz" Return(r_room2_servers_hcz)
+		Case "room2_shaft" Return(r_room2_shaft)
+		Case "room2_tesla_hcz" Return(r_room2_tesla_hcz)
+		Case "room2_test_hcz" Return(r_room2_test_hcz)
+		Case "cont2_008" Return(r_cont2_008)
+		Case "cont2_049" Return(r_cont2_049)
+		Case "cont2_409" Return(r_cont2_409)
+		Case "room2c_hcz" Return(r_room2c_hcz)
+		Case "room2c_maintenance" Return(r_room2c_maintenance)
+		Case "room3_hcz" Return(r_room3_hcz)
+		Case "room3_2_hcz" Return(r_room3_2_hcz)
+		Case "room3_3_hcz" Return(r_room3_3_hcz)
+		Case "cont3_513" Return(r_cont3_513)
+		Case "cont3_966" Return(r_cont3_966)
+		Case "room4_hcz" Return(r_room4_hcz)
+		Case "room4_2_hcz" Return(r_room4_2_hcz)
+		Case "room2_checkpoint_hcz_ez" Return(r_room2_checkpoint_hcz_ez)
+		Case "gate_a_entrance" Return(r_gate_a_entrance)
+		Case "gate_a" Return(r_gate_a)
+		Case "gate_b_entrance" Return(r_gate_b_entrance)
+		Case "gate_b" Return(r_gate_b)
+		Case "room1_dead_end_ez" Return(r_room1_dead_end_ez)
+		Case "room1_lifts" Return(r_room1_lifts)
+		Case "room1_o5" Return(r_room1_o5)
+		Case "room2_ez" Return(r_room2_ez)
+		Case "room2_2_ez" Return(r_room2_2_ez)
+		Case "room2_3_ez" Return(r_room2_3_ez)
+		Case "room2_4_ez" Return(r_room2_4_ez)
+		Case "room2_5_ez" Return(r_room2_5_ez)
+		Case "room2_6_ez" Return(r_room2_6_ez)
+		Case "room2_bio" Return(r_room2_bio)
+		Case "room2_cafeteria" Return(r_room2_cafeteria)
+		Case "room2_ic" Return(r_room2_ic)
+		Case "room2_medibay" Return(r_room2_medibay)
+		Case "room2_office" Return(r_room2_office)
+		Case "room2_office_2" Return(r_room2_office_2)
+		Case "room2_office_3" Return(r_room2_office_3)
+		Case "room2_servers_ez" Return(r_room2_servers_ez)
+		Case "room2_scientists" Return(r_room2_scientists)
+		Case "room2_scientists_2" Return(r_room2_scientists_2)
+		Case "room2_tesla_ez" Return(r_room2_tesla_ez)
+		Case "cont2_860_1" Return(r_cont2_860_1)
+		Case "room2c_ez" Return(r_room2c_ez)
+		Case "room2c_2_ez" Return(r_room2c_2_ez)
+		Case "room2c_ec" Return(r_room2c_ec)
+		Case "room2c_gw_ez" Return(r_room2c_gw_ez)
+		Case "room3_gw" Return(r_room3_gw)
+		Case "room3_office" Return(r_room3_office)
+		Case "room3_ez" Return(r_room3_ez)
+		Case "room3_2_ez" Return(r_room3_2_ez)
+		Case "room3_3_ez" Return(r_room3_3_ez)
+		Case "room3_4_ez" Return(r_room3_4_ez)
+		Case "room4_ez" Return(r_room4_ez)
+		Case "dimension_106" Return(r_dimension_106)
+		Case "dimension_1499" Return(r_dimension_1499)
+		Default Return(-1)
+	End Select
+End Function
 
 Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 	Local rt.RoomTemplates
@@ -1561,7 +1741,7 @@ Function LoadRoomTemplates%(File$)
 				StrTemp = IniGetString(File, Loc, "Mesh Path")
 				
 				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
-				rt\Name = Lower(Loc)
+				rt\RoomID = FindRoomID(Lower(Loc))
 				
 				StrTemp = IniGetString(File, Loc, "Shape")
 				
@@ -1933,8 +2113,8 @@ Function PlaceMapCreatorMT%(r.Rooms)
 	CatchErrors("Uncaught: PlaceMapCreatorMT()")
 End Function
 
-Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "", Angle# = 0.0)
-	CatchErrors("CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + ")")
+Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 0.0)
+	CatchErrors("CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + RoomID + ")")
 	
 	Local r.Rooms, rt.RoomTemplates
 	Local i%
@@ -1943,10 +2123,9 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "", Angle# = 0.
 	r\Zone = Zone
 	r\x = x : r\y = y : r\z = z
 	
-	If Name <> ""
-		Name = Lower(Name)
+	If RoomID <> -1
 		For rt.RoomTemplates = Each RoomTemplates
-			If rt\Name = Name
+			If rt\RoomID = RoomID
 				r\RoomTemplate = rt
 				
 				If rt\OBJ = 0 Then LoadRoomMesh(rt)
@@ -2015,7 +2194,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "", Angle# = 0.
 		Next
 	Next
 	
-	CatchErrors("Uncaught: CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + "))")
+	CatchErrors("Uncaught: CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + RoomID + "))")
 End Function
 
 Function RemoveRoom%(r.Rooms)
@@ -2491,7 +2670,7 @@ Function UpdateDoors%()
 					EndIf
 				EndIf
 			EndIf
-			If (Not (d\DoorType = WOODEN_DOOR And PlayerRoom\RoomTemplate\Name = "cont2_860_1")) Then UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
+			If (Not (d\DoorType = WOODEN_DOOR And PlayerRoom\RoomTemplate\RoomID = r_cont2_860_1)) Then UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
 				If d\OpenState > 0.0 And d\OpenState < 180.0
@@ -3094,7 +3273,7 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 		Local SoundRand% = Rand(0, 2)
 		
 		If DoorType = WOODEN_DOOR
-			If PlayerRoom\RoomTemplate\Name = "cont2_860_1"
+			If PlayerRoom\RoomTemplate\RoomID = r_cont2_860_1
 				SoundRand = 2
 			Else
 				SoundRand = Rand(0, 1)
@@ -3413,8 +3592,9 @@ Function UpdateSecurityCams%()
 				
 				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume) And sc\InSight
 					Local Temp% = False
+					Local RID% = sc\room\RoomTemplate\ROOMID
 					
-					If sc\room\RoomTemplate\Name = "cont1_205" Lor sc\room\RoomTemplate\Name = "cont1_173_intro" Then sc\CoffinEffect = 0 : Temp = True
+					If RID = r_cont1_205 Lor RID = r_cont1_173_intro Then sc\CoffinEffect = 0 : Temp = True
 					
 					If sc\State < sc\RenderInterval
 						sc\State = sc\State + fps\Factor[0]
@@ -3485,7 +3665,7 @@ Function UpdateSecurityCams%()
 		EndIf
 		
 		If sc <> Null
-			CatchErrors("Uncaught: UpdateSecurityCameras(Room name: " + sc\room\RoomTemplate\Name + ")")
+			CatchErrors("Uncaught: UpdateSecurityCameras(Room ID: " + RID + ")")
 		Else
 			CatchErrors("Uncaught: UpdateSecurityCameras(Screen doesn't exist anymore!)")
 		EndIf
@@ -3503,7 +3683,7 @@ Function RenderSecurityCams%()
 		If Close
 			If sc\Screen
 				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume) And sc\InSight
-					If sc\room\RoomTemplate\Name <> "cont1_205"
+					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
 					EndIf
@@ -3558,7 +3738,7 @@ Function RenderSecurityCams%()
 		EndIf
 		
 		If sc <> Null
-			CatchErrors("Uncaught: RenderSecurityCameras(Room name: " + sc\room\RoomTemplate\Name + ")")
+			CatchErrors("Uncaught: RenderSecurityCameras(Room ID: " + sc\room\RoomTemplate\RoomID + ")")
 		Else
 			CatchErrors("Uncaught: RenderSecurityCameras(Screen doesn't exist anymore!)")
 		EndIf
@@ -4321,9 +4501,10 @@ Function PreventRoomOverlap%(r.Rooms)
 	
 	Local r2.Rooms, r3.Rooms
 	Local IsIntersecting% = False
+	Local RID% = r\RoomTemplate\RoomID
 	
 	; ~ Just skip it when it would try to check for the checkpoints
-	If r\RoomTemplate\Name = "room2_checkpoint_lcz_hcz" Lor r\RoomTemplate\Name = "room2_checkpoint_hcz_ez" Lor r\RoomTemplate\Name = "cont1_173" Then Return(True)
+	If RID = r_room2_checkpoint_lcz_hcz Lor RID = r_room2_checkpoint_hcz_ez Lor RID = r_cont1_173 Then Return(True)
 	
 	; ~ First, check if the room is actually intersecting at all
 	For r2.Rooms = Each Rooms
@@ -4376,7 +4557,9 @@ Function PreventRoomOverlap%(r.Rooms)
 	
 	For r2.Rooms = Each Rooms
 		If r2 <> r And (Not r2\RoomTemplate\DisableOverlapCheck)
-			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (r2\RoomTemplate\Name <> "room2_checkpoint_lcz_hcz" And r2\RoomTemplate\Name <> "room2_checkpoint_hcz_ez" And r2\RoomTemplate\Name <> "cont1_173")
+			RID = r2\RoomTemplate\RoomID
+			
+			If r\RoomTemplate\Shape = r2\RoomTemplate\Shape And r\Zone = r2\Zone And (RID <> r_room2_checkpoint_lcz_hcz And RID <> r_room2_checkpoint_hcz_ez And RID <> r_cont1_173)
 				x = r\x / RoomSpacing
 				y = r\z / RoomSpacing
 				Rot = r\Angle
@@ -4481,6 +4664,7 @@ Function CreateMap%()
 	Local i%, x2%, y2%
 	Local Width%, Height%, TempHeight%, yHallways%
 	Local ShouldSpawnDoor%, Zone%
+	Local RoomID%
 	
 	I_Zone\Transition[0] = Floor(MapGridSize * (2.0 / 3.0)) + 1
 	I_Zone\Transition[1] = Floor(MapGridSize * (1.0 / 3.0)) + 1
@@ -4933,9 +5117,9 @@ Function CreateMap%()
 		For x = 1 To MapGridSize - 2
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_CheckpointTile
 				If y > MapGridSize / 2
-					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, "room2_checkpoint_lcz_hcz")
+					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, r_room2_checkpoint_lcz_hcz)
 				Else
-					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, "room2_checkpoint_hcz_ez")
+					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, r_room2_checkpoint_hcz_ez)
 				EndIf
 				CalculateRoomExtents(r)
 			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
@@ -4956,7 +5140,8 @@ Function CreateMap%()
 						Else
 							CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
 						EndIf
-						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)], CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
 						CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 						;[End Block]
 					Case 2 ; ~ Generate ROOM2
@@ -4970,7 +5155,8 @@ Function CreateMap%()
 							Else
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
 							EndIf
-							r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)], CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+							r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
 							CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
 						ElseIf CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
 							If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
@@ -4981,7 +5167,8 @@ Function CreateMap%()
 							Else
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
 							EndIf
-							r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)], CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+							r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
 							CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
 						Else
 							If CurrMapGrid\RoomID[ROOM2C] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
@@ -4996,7 +5183,8 @@ Function CreateMap%()
 							Else
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
 							EndIf
-							r.Rooms = CreateRoom(Zone, ROOM2C, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)], CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+							r.Rooms = CreateRoom(Zone, ROOM2C, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
 							CurrMapGrid\RoomID[ROOM2C] = CurrMapGrid\RoomID[ROOM2C] + 1
 						EndIf
 						;[End Block]
@@ -5014,7 +5202,8 @@ Function CreateMap%()
 						Else
 							CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
 						EndIf
-						r.Rooms = CreateRoom(Zone, ROOM3, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)], CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r.Rooms = CreateRoom(Zone, ROOM3, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
 						CurrMapGrid\RoomID[ROOM3] = CurrMapGrid\RoomID[ROOM3] + 1
 						;[End Block]
 					Case 4 ; ~ Generate ROOM4
@@ -5023,7 +5212,8 @@ Function CreateMap%()
 							If MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4])
 						EndIf
 						CurrMapGrid\Angle[x + (y * MapGridSize)] = Rand(4)
-						r.Rooms = CreateRoom(Zone, ROOM4, x * RoomSpacing, 0.0, y * RoomSpacing, CurrMapGrid\RoomName[x + (y * MapGridSize)], CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+						r.Rooms = CreateRoom(Zone, ROOM4, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
 						CurrMapGrid\RoomID[ROOM4] = CurrMapGrid\RoomID[ROOM4] + 1
 						;[End Block]
 				End Select
@@ -5033,25 +5223,25 @@ Function CreateMap%()
 	Next
 	
 	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(RoomSpacing ^ 2), "gate_b")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(RoomSpacing ^ 2), r_gate_b)
 	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing ^ 2, "gate_a")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing ^ 2, r_gate_a)
 	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "dimension_106")
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_dimension_106)
 	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	If opt\IntroEnabled
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, "cont1_173_intro")
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
 		CalculateRoomExtents(r)
 		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	EndIf
 	
-	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, "dimension_1499")
+	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
 	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
