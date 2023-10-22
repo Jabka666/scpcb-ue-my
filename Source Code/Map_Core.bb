@@ -3657,23 +3657,23 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 	
 	Entity = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
 	
-	For i = 2 To CountSurfaces(Entity)
-		SF = GetSurface(Entity, i)
-		b = GetSurfaceBrush(SF)
-		If b <> 0
-			t1 = GetBrushTexture(b, 0)
-			If t1 <> 0
-				Name = StripPath(TextureName(t1))
-				If Lower(Name) <> "monitortexture.jpg"
-					BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY], 0, 0)
-					PaintSurface(SF, b)
-				EndIf
-				If Name <> "" Then FreeTexture(t1) : t1 = 0
-			EndIf
-			FreeBrush(b) : b = 0
-		EndIf
-	Next
 	If mon_I\UpdateCheckpoint[(1 - LCZ)]
+		For i = 2 To CountSurfaces(Entity)
+			SF = GetSurface(Entity, i)
+			b = GetSurfaceBrush(SF)
+			If b <> 0
+				t1 = GetBrushTexture(b, 0)
+				If t1 <> 0
+					Name = StripPath(TextureName(t1))
+					If Lower(Name) <> "monitortexture.jpg"
+						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY], 0, 0)
+						PaintSurface(SF, b)
+					EndIf
+					If Name <> "" Then FreeTexture(t1) : t1 = 0
+				EndIf
+				FreeBrush(b) : b = 0
+			EndIf
+		Next
 		mon_I\UpdateCheckpoint[(1 - LCZ)] = False
 		mon_I\MonitorTimer[(1 - LCZ)] = 0.0
 	EndIf
