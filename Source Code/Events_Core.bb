@@ -7263,7 +7263,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_1048_a
 				;[Block]
-				If e\room\Dist < HideDistance Lor PlayerRoom = e\room
+				If e\room\Dist < HideDistance
 					If e\room\Objects[0] = 0
 						e\room\Objects[0] =	CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
 						ScaleEntity(e\room\Objects[0], 0.05, 0.05, 0.05)
@@ -7288,9 +7288,9 @@ Function UpdateEvents%()
 								
 								Animate2(e\room\Objects[0], PrevFrame, 2.0, 647.0, 1.0, False)
 								
-								If PrevFrame <= 400.0 And AnimTime(e\room\Objects[0]) > 400.0 Then e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 10.0, 1.0, True)
+								If PrevFrame <= 400.0 And AnimTime(e\room\Objects[0]) > 400.0 Then e\SoundCHN = PlaySound_Strict(e\Sound, True)
 								
-								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 6.0, 1.0, True)
+								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 8.0, 1.0, True)
 								
 								Local Volume# = Max(1.0 - Abs(PrevFrame - 600.0) / 100.0, 0.0)
 								
@@ -7314,28 +7314,17 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 2.0 ; ~ Idle, growth state
 								;[Block]
-								e\EventState3 = 1.0
-								
-								; ~ Remove event when the player wasn't infected/cured
-								If e\EventState2 = 0.0 Then e\EventState4 = 1.0
-								
 								Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
 								
 								PointEntity(e\room\Objects[0], me\Collider)
 								RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
-								
-								; ~ Kill the player after 15.0 secs
-								If e\EventState2 > 70.0 * 15.0
-									msg\DeathMsg = GetLocalString("death", "1048a")
-									Kill()
-								EndIf
 								;[End Block]
 						End Select
 					EndIf
 				EndIf
 				
-				If e\EventState4 = 0.0
-					If e\EventState3 = 1.0
+				If e\EventState = 2.0
+					If e\EventState3 = 0.0
 						If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
 							If e\EventState2 > 0.0
 								e\EventState2 = e\EventState2 + fps\Factor[0]
@@ -7376,14 +7365,25 @@ Function UpdateEvents%()
 											;[End Block]
 									End Select
 								EndIf
+								
+								; ~ Kill the player after 15.0 secs
+								If e\EventState2 > 70.0 * 15.0
+									msg\DeathMsg = GetLocalString("death", "1048a")
+									Kill()
+								EndIf
 							EndIf
+						Else
+							e\EventState2 = Max(e\EventState2 - (fps\Factor[0] * 0.5), 0.0)
+						EndIf
+					Else
+						If (Not EntityInView(e\room\Objects[0], Camera))
+							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+							RemoveEvent(e)
 						EndIf
 					EndIf
-				Else
-					If (Not EntityInView(e\room\Objects[0], Camera))
-						FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-						RemoveEvent(e)
-					EndIf
+					
+					; ~ Remove event when the player wasn't infected/cured
+					If e\EventState2 = 0.0 Then e\EventState3 = 1.0	
 				EndIf
 				;[End Block]
 			Case e_room4_2_hcz

@@ -4214,7 +4214,7 @@ Function UpdateGUI%()
 							If e\EventID = e_1048_a
 								If e\EventState2 > 0.0
 									CreateMsg(GetLocalString("msg", "pill.ears"))
-									e\EventState4 = 1.0
+									e\EventState3 = 1.0
 								EndIf
 							EndIf
 						Next
@@ -8719,11 +8719,6 @@ Function Update427%()
 	If I_427\Timer < 70.0 * 360.0
 		If I_427\Using
 			I_427\Timer = I_427\Timer + fps\Factor[0]
-			For e.Events = Each Events
-				If e\EventID = e_1048_a
-					If e\EventState2 > 0.0 Then e\EventState2 = Max(e\EventState2 - (fps\Factor[0] * 0.5), 0.0)
-				EndIf
-			Next
 			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0005), 0.0)
 			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
 			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
