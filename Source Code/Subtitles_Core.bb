@@ -200,37 +200,20 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 			Local G% = 255
 			Local B% = 255
 			
-			; ~ A bunch of null and type checking, RapidBson throws MAVs if the value you are type checking is null.
-			If (Not JsonIsNull(TxtVal))
-				If JsonIsString(TxtVal) Then Txt = JsonGetString(TxtVal)
-			EndIf
-			If (Not JsonIsNull(DelayVal))
-				If JsonIsFloat(DelayVal) Then Del = JsonGetFloat(DelayVal)
-			EndIf
-			If (Not JsonIsNull(LengthVal))
-				If JsonIsFloat(LengthVal) Then Leng = JsonGetFloat(LengthVal)
-			EndIf
-			If (Not JsonIsNull(RVal))
-				If JsonIsInt(RVal) Then R = JsonGetInt(RVal)
-			EndIf
-			If (Not JsonIsNull(GVal))
-				If JsonIsInt(GVal) Then G = JsonGetInt(GVal)
-			EndIf
-			If (Not JsonIsNull(BVal))
-				If JsonIsInt(BVal) Then B = JsonGetInt(BVal)
-			EndIf
-			If (Not JsonIsNull(ColorVal))
-				If JsonIsString(ColorVal) 
-					Col = JsonGetString(ColorVal)
-					
-					; ~ TODO: Add null checking here. Will throw MAVs if an undefined color is used as the subtitle color.
-					Local ColorArray% = JsonGetArray(JsonGetValue(SubColors, Col))
-					
-					If JsonGetArraySize(ColorArray) = 3
-						R = JsonGetInt(JsonGetArrayValue(ColorArray%, 0))
-						G = JsonGetInt(JsonGetArrayValue(ColorArray%, 1))
-						B = JsonGetInt(JsonGetArrayValue(ColorArray%, 2))
-					EndIf
+			If JsonIsString(TxtVal) Then Txt = JsonGetString(TxtVal)
+			If JsonIsFloat(DelayVal) Then Del = JsonGetFloat(DelayVal)
+			If JsonIsFloat(LengthVal) Then Leng = JsonGetFloat(LengthVal)
+			If JsonIsInt(RVal) Then R = JsonGetInt(RVal)
+			If JsonIsInt(GVal) Then G = JsonGetInt(GVal)
+			If JsonIsInt(BVal) Then B = JsonGetInt(BVal)
+			If JsonIsString(ColorVal) 
+				Col = JsonGetString(ColorVal)
+				
+				Local ColorArray% = JsonGetArray(JsonGetValue(SubColors, Col))
+				If JsonGetArraySize(ColorArray) = 3
+					R = JsonGetInt(JsonGetArrayValue(ColorArray%, 0))
+					G = JsonGetInt(JsonGetArrayValue(ColorArray%, 1))
+					B = JsonGetInt(JsonGetArrayValue(ColorArray%, 2))
 				EndIf
 			EndIf
 			QueueSubtitlesMsg(SoundPath, sound, Txt, Del, Leng, R, G, B)
