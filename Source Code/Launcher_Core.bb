@@ -561,7 +561,7 @@ Function UpdateLanguageSelector%()
 		
 		If SelectedLanguage <> Null
 			If SelectedLanguage\ID = opt\Language
-				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), Font_Default, ButtonImages, 4, IsDownloadingLanguage(CurrentStatus)) Then ExecFile_Strict("https://github.com/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
+				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "contribute"), Font_Default, ButtonImages, 4, IsDownloadingLanguage(CurrentStatus)) Then ExecFile_Strict("https://github.ziyuesinicization.site/Jabka666/scpcb-ue-my/wiki/How-to-contribute-a-language")
 			ElseIf SelectedLanguage\Name = "English"
 				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "set"), Font_Default, ButtonImages, 2, IsDownloadingLanguage(CurrentStatus))
 					SetLanguage(SelectedLanguage\ID)
@@ -643,7 +643,7 @@ Function UpdateLanguageSelector%()
 					TextEx(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
 				EndIf
 			EndIf
-			If mo\MouseHit1 Then ExecFile("https://github.com/Jabka666/scpcb-ue-my/wiki/Language-List-of-Ultimate-Edition")
+			If mo\MouseHit1 Then ExecFile("https://github.ziyuesinicization.site/Jabka666/scpcb-ue-my/wiki/Language-List-of-Ultimate-Edition")
 		EndIf
 		MouseHoverLanguage = Null
 		
