@@ -433,7 +433,6 @@ Function LoadImage_Strict%(File$)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "image.notfound"), File))
 		Tmp = LoadImage(File)
 		If Tmp = 0 Then RuntimeError(Format(GetLocalString("runerr", "image.failed.load"), File))
-		BufferDirty(ImageBuffer(Tmp))
 	EndIf
 	Return(Tmp)
 End Function
@@ -446,7 +445,6 @@ Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 		If FileType(File) <> 1 Then RuntimeError(Format(GetLocalString("runerr", "animimage.notfound"), File))
 		Tmp = LoadAnimImage(File, Width, Height, FirstFrame, Count)
 		If Tmp = 0 Then RuntimeError(Format(GetLocalString("runerr", "animimage.failed.load"), File))
-		BufferDirty(ImageBuffer(Tmp))
 	EndIf
 	Return(Tmp)
 End Function
