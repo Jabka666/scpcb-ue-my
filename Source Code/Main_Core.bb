@@ -5070,7 +5070,7 @@ Function UpdateGUI%()
 				Case "scp420j"
 					;[Block]
 					If CanUseItem(True)
-						If I_714\Using > 0 Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4
+						If I_714\Using > 0
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420j.yeah"))
@@ -5085,7 +5085,7 @@ Function UpdateGUI%()
 				Case "joint", "scp420s"
 					;[Block]
 					If CanUseItem(True)
-						If I_714\Using > 0 Lor wi\GasMask = 4 Lor wi\HazmatSuit = 4
+						If I_714\Using > 0
 							CreateMsg(GetLocalString("msg", "420j.no"))
 						Else
 							CreateMsg(GetLocalString("msg", "420j.dead"))
