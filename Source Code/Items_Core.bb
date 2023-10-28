@@ -343,41 +343,41 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			wi\GasMask = 0
 			;[End Block]
-		Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+		Case "scp1499", "fine1499"
 			;[Block]
-			wi\HazmatSuit = 0
-			;[End Block]
-		Case "vest", "finevest"
-			;[Block]
-			wi\BallisticVest = 0
-			;[End Block]
-		Case "helmet"
-			;[Block]
-			wi\BallisticHelmet = False
+			I_1499\Using = 0
 			;[End Block]
 		Case "nvg", "finenvg", "veryfinenvg"
 			;[Block]
 			If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
 			;[End Block]
-		Case "scp1499", "fine1499"
+		Case "scramble", "finescramble"
 			;[Block]
-			I_1499\Using = 0
+			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
 			;[End Block]
-		Case "scp427"
+		Case "helmet"
 			;[Block]
-			I_427\Using = False
+			wi\BallisticHelmet = False
+			;[End Block]
+		Case "vest", "finevest"
+			;[Block]
+			wi\BallisticVest = 0
+			;[End Block]
+		Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+			;[Block]
+			wi\HazmatSuit = 0
 			;[End Block]
 		Case "cap", "scp268", "fine268"
 			;[Block]
 			I_268\Using = 0
 			;[End Block]
+		Case "scp427"
+			;[Block]
+			I_427\Using = False
+			;[End Block]
 		Case "scp714", "coarse714"
 			;[Block]
 			I_714\Using = 0
-			;[End Block]
-		Case "scramble", "finescramble"
-			;[Block]
-			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
 			;[End Block]
 	End Select
 End Function
@@ -568,29 +568,6 @@ Function PickItem%(item.Items)
 						;[Block]
 						GiveAchievement(AchvSNAV)
 						;[End Block]
-					Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
-						;[Block]
-						CanPickItem = 1
-						For z = 0 To MaxItemAmount - 1
-							If Inventory(z) <> Null
-								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
-									CanPickItem = 0
-								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
-									CanPickItem = 2
-								EndIf
-							EndIf
-						Next
-						
-						If CanPickItem = 0
-							CreateMsg(GetLocalString("msg", "twosuit"))
-							Return
-						ElseIf CanPickItem = 2
-							CreateMsg(GetLocalString("msg", "vestsuit"))
-							Return
-						Else
-							SelectedItem = item
-						EndIf
-						;[End Block]
 					Case "vest", "finevest"
 						;[Block]
 						CanPickItem = 1
@@ -606,6 +583,29 @@ Function PickItem%(item.Items)
 						
 						If CanPickItem = 0
 							CreateMsg(GetLocalString("msg", "twovest"))
+							Return
+						ElseIf CanPickItem = 2
+							CreateMsg(GetLocalString("msg", "vestsuit"))
+							Return
+						Else
+							SelectedItem = item
+						EndIf
+						;[End Block]
+					Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+						;[Block]
+						CanPickItem = 1
+						For z = 0 To MaxItemAmount - 1
+							If Inventory(z) <> Null
+								If Inventory(z)\ItemTemplate\TempName = "hazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "finehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "veryfinehazmatsuit" Lor Inventory(z)\ItemTemplate\TempName = "hazmatsuit148"
+									CanPickItem = 0
+								ElseIf Inventory(z)\ItemTemplate\TempName = "vest" Lor Inventory(z)\ItemTemplate\TempName = "finevest"
+									CanPickItem = 2
+								EndIf
+							EndIf
+						Next
+						
+						If CanPickItem = 0
+							CreateMsg(GetLocalString("msg", "twosuit"))
 							Return
 						ElseIf CanPickItem = 2
 							CreateMsg(GetLocalString("msg", "vestsuit"))
@@ -872,93 +872,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "vest", "finevest"
-			;[Block]
-			Select Setting
-				Case ROUGH
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case COARSE
-					;[Block]
-					it2.Items = CreateItem("Corrosive Ballistic Vest", "corrvest", x, y, z)
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					it2.Items = CreateItem("Ballistic Helmet", "helmet", x, y, z)
-					;[End Block]
-				Case FINE
-					;[Block]
-					it2.Items = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
-					;[End Block]
-				Case VERYFINE
-					;[Block]
-					it2.Items = CreateItem("Bulky Ballistic Vest", "veryfinevest", x, y, z)
-					;[End Block]
-			End Select
-			;[End Block]
-		Case "helmet"
-			;[Block]
-			Select Setting
-				Case ROUGH, COARSE
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					it2.Items = CreateItem("Ballistic Vest", "vest", x, y, z)
-					;[End Block]	
-				Case FINE, VERYFINE
-					;[Block]
-					it2.Items = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
-					;[End Block]
-			End Select
-			;[End Block]
-		Case "clipboard", "wallet"
-			;[Block]
-			Select Setting
-				Case ROUGH
-					;[Block]
-					MakeDecal = True
-					ClearSecondInv(item, 0)
-					;[End Block]
-				Case COARSE
-					;[Block]
-					If item\InvSlots > 5
-						item\InvSlots = item\InvSlots - 5
-						ClearSecondInv(item, item\InvSlots)
-					ElseIf item\InvSlots = 5
-						item\InvSlots = 1
-						ClearSecondInv(item, 1)
-					Else
-						MakeDecal = True
-						ClearSecondInv(item, 0)
-					EndIf
-					Remove = False
-				Case ONETOONE
-					;[Block]
-					Remove = False
-					;[End Block]
-				Case FINE
-					;[Block]
-					If item\InvSlots = 1
-						item\InvSlots = 5
-					Else
-						item\InvSlots = Min(20.0, item\InvSlots + 5.0)
-					EndIf
-					Remove = False
-					;[End Block]
-				Case VERYFINE
-					;[Block]
-					If item\InvSlots = 1
-						item\InvSlots = 10
-					Else
-						item\InvSlots = Min(20.0, item\InvSlots + 10.0)
-					EndIf
-					Remove = False
-					;[End Block]
-			End Select
-			;[End Block]
 		Case "nvg", "veryfinenvg", "finenvg"
 			;[Block]
 			Select Setting
@@ -1011,6 +924,152 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("SCRAMBLE Gear", "finescramble", x, y, z)
 					it2\State = Rnd(0.0, 1000.0)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "helmet"
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Ballistic Vest", "vest", x, y, z)
+					;[End Block]	
+				Case FINE, VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "cap", "scp268", "fine268"
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Newsboy Cap", "cap", x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					Remove = False
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					it2.Items = CreateItem("SCP-268", "fine268", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "vest", "finevest"
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Corrosive Ballistic Vest", "corrvest", x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Ballistic Helmet", "helmet", x, y, z)
+					;[End Block]
+				Case FINE
+					;[Block]
+					it2.Items = CreateItem("Heavy Ballistic Vest", "finevest", x, y, z)
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Bulky Ballistic Vest", "veryfinevest", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "hazmatsuit", "finehazmatsuit", "hazmatsuit148"
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Hazmat Suit", "hazmatsuit", x, y, z)
+					;[End Block]
+				Case FINE
+					;[Block]
+					it2.Items = CreateItem("Hazmat Suit", "finehazmatsuit", x, y, z)
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Hazmat Suit", "veryfinehazmatsuit", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "veryfinehazmatsuit"
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Hazmat Suit", "hazmatsuit", x, y, z)
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Syringe", "syringeinf", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "clipboard", "wallet"
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					ClearSecondInv(item, 0)
+					;[End Block]
+				Case COARSE
+					;[Block]
+					If item\InvSlots > 5
+						item\InvSlots = item\InvSlots - 5
+						ClearSecondInv(item, item\InvSlots)
+					ElseIf item\InvSlots = 5
+						item\InvSlots = 1
+						ClearSecondInv(item, 1)
+					Else
+						MakeDecal = True
+						ClearSecondInv(item, 0)
+					EndIf
+					Remove = False
+				Case ONETOONE
+					;[Block]
+					Remove = False
+					;[End Block]
+				Case FINE
+					;[Block]
+					If item\InvSlots = 1
+						item\InvSlots = 5
+					Else
+						item\InvSlots = Min(20.0, item\InvSlots + 5.0)
+					EndIf
+					Remove = False
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					If item\InvSlots = 1
+						item\InvSlots = 10
+					Else
+						item\InvSlots = Min(20.0, item\InvSlots + 10.0)
+					EndIf
+					Remove = False
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1501,6 +1560,32 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case "radio", "18vradio", "fineradio", "veryfineradio"
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Radio Transceiver", "18vradio", x, y, z)
+					it2\State = Rnd(0.0, 100.0)
+					;[End Block]
+				Case FINE
+					;[Block]
+					it2.Items = CreateItem("Radio Transceiver", "fineradio", x, y, z)
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Radio Transceiver", "veryfineradio", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
 		Case "nav", "nav300", "nav310", "navulti"
 			;[Block]
 			Select Setting
@@ -1532,32 +1617,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "radio", "18vradio", "fineradio", "veryfineradio"
-			;[Block]
-			Select Setting
-				Case ROUGH
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case COARSE
-					;[Block]
-					it2.Items = CreateItem("Electronical Components", "electronics", x, y, z)
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					it2.Items = CreateItem("Radio Transceiver", "18vradio", x, y, z)
-					it2\State = Rnd(0.0, 100.0)
-					;[End Block]
-				Case FINE
-					;[Block]
-					it2.Items = CreateItem("Radio Transceiver", "fineradio", x, y, z)
-					;[End Block]
-				Case VERYFINE
-					;[Block]
-					it2.Items = CreateItem("Radio Transceiver", "veryfineradio", x, y, z)
-					;[End Block]
-			End Select
-			;[End Block]
 		Case "scp513"
 			;[Block]
 			Select Setting
@@ -1572,6 +1631,27 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					it2.Items = CreateItem("SCP-513", "scp513", x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "scp420j", "cigarette", "joint", "scp420s"
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Cigarette", "cigarette", x + 1.5, y + 0.5, z + 1.0)
+					;[End Block]
+				Case FINE
+					;[Block]
+					it2.Items = CreateItem("Joint", "joint", x + 1.5, y + 0.5, z + 1.0)
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Smelly Joint", "scp420s", x + 1.5, y + 0.5, z + 1.0)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1597,27 +1677,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case FINE, VERYFINE
 					;[Block]
 					it2.Items = CreateItem("SCP-714", "fine714", x, y, z)
-					;[End Block]
-			End Select
-			;[End Block]
-		Case "scp420j", "cigarette", "joint", "scp420s"
-			;[Block]
-			Select Setting
-				Case ROUGH, COARSE
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					it2.Items = CreateItem("Cigarette", "cigarette", x + 1.5, y + 0.5, z + 1.0)
-					;[End Block]
-				Case FINE
-					;[Block]
-					it2.Items = CreateItem("Joint", "joint", x + 1.5, y + 0.5, z + 1.0)
-					;[End Block]
-				Case VERYFINE
-					;[Block]
-					it2.Items = CreateItem("Smelly Joint", "scp420s", x + 1.5, y + 0.5, z + 1.0)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1739,44 +1798,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Eyedrops", "supereyedrops", x, y, z)
-					;[End Block]
-			End Select
-			;[End Block]
-		Case "hazmatsuit", "finehazmatsuit", "hazmatsuit148"
-			;[Block]
-			Select Setting
-				Case ROUGH, COARSE
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					it2.Items = CreateItem("Hazmat Suit", "hazmatsuit", x, y, z)
-					;[End Block]
-				Case FINE
-					;[Block]
-					it2.Items = CreateItem("Hazmat Suit", "finehazmatsuit", x, y, z)
-					;[End Block]
-				Case VERYFINE
-					;[Block]
-					it2.Items = CreateItem("Hazmat Suit", "veryfinehazmatsuit", x, y, z)
-					;[End Block]
-			End Select
-			;[End Block]
-		Case "veryfinehazmatsuit"
-			;[Block]
-			Select Setting
-				Case ROUGH, COARSE
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					it2.Items = CreateItem("Hazmat Suit", "hazmatsuit", x, y, z)
-					;[End Block]
-				Case FINE, VERYFINE
-					;[Block]
-					it2.Items = CreateItem("Syringe", "syringeinf", x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1972,21 +1993,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "origami"
-			Select Setting
-				Case ROUGH
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case COARSE
-					;[Block]
-					it2.Items = CreateItem("Blank Paper", "paper", x, y, z)
-					;[End Block]
-				Case ONETOONE, VERYFINE, FINE
-					;[Block]
-					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), "paper", x, y, z)
-					;[End Block]
-			End Select
 		Case "cup"
 			;[Block]
 			Select Setting
@@ -2012,6 +2018,22 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					it2\Name = item\Name
 					it2\State = item\State * 2.0
 					If Rand(5) = 1 Then me\ExplosionTimer = 135.0
+					;[End Block]
+			End Select
+			;[End Block]
+		Case "origami"
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Blank Paper", "paper", x, y, z)
+					;[End Block]
+				Case ONETOONE, VERYFINE, FINE
+					;[Block]
+					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), "paper", x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2086,27 +2108,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case FINE, VERYFINE
 					;[Block]
 					Remove = False
-					;[End Block]
-			End Select
-			;[End Block]
-		Case "cap", "scp268", "fine268"
-			;[Block]
-			Select Setting
-				Case ROUGH
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case COARSE
-					;[Block]
-					it2.Items = CreateItem("Newsboy Cap", "cap", x, y, z)
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					Remove = False
-					;[End Block]
-				Case FINE, VERYFINE
-					;[Block]
-					it2.Items = CreateItem("SCP-268", "fine268", x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
