@@ -6675,7 +6675,7 @@ Function MoveToPocketDimension%()
 			TeleportToRoom(r)
 			
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
-			InjurePlayer(0.5, 0.0, 1600.0)
+			InjurePlayer(0.5, 0.0, 1500.0)
 			
 			Exit
 		EndIf
