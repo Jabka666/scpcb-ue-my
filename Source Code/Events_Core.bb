@@ -3665,9 +3665,9 @@ Function UpdateEvents%()
 				; ~ e\EventState3: A check for if a item should be removed
 				; ~ 0.0 = no item "trade" will happen
 				; ~ 1.0 = item "trade" will happen
-				; ~ 2.0 = the player doesn't has any items in the Inventory, giving him heavily injuries and giving him a random item
+				; ~ 2.0 = the player doesn't have any items in the Inventory, giving him heavy injuries and giving him a random item
 				; ~ 3.0 = player got a memorial item (to explain a bit D-9341's background)
-				; ~ 3.1 = player got a memorial item + injuries (because he didn't had any item in his inventory before)
+				; ~ 3.1 = player got a memorial item + injuries (because he didn't have any item in his inventory before)
 				
 				If PlayerRoom = e\room
 					GrabbedEntity = 0
