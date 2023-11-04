@@ -361,7 +361,7 @@ End Function
 Function UpdateLanguageSelector%()
 	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
 	
-	If FileType(BasePath) <> 2 Then CreateDir(BasePath) ; ~ Create temporary folder
+	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
 	CreateDir(BasePath + "flags/")
 	DownloadFile("http://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
@@ -420,11 +420,10 @@ Function UpdateLanguageSelector%()
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-ini/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.ini")
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
-				;If (SimpleFileSize(FileSize(BasePath + "/local.zip")) = RequestLanguage\FileSize) 
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
 				;[Block]
-				; ~ Unzip function will delete everything in the directory, so we need move local.ini to directory after unziping
+				; ~ Unzip function will delete everything in the directory, so we need to move local.ini to directory after unziping
 				CreateDir(LocalizaitonPath + RequestLanguage\ID)
 				If (Not RequestLanguage\MajorOnly) Then Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
 				CreateDir(LocalizaitonPath + RequestLanguage\ID + "/Data")
@@ -622,6 +621,7 @@ Function UpdateLanguageSelector%()
 			x = MouseX() + 10
 			y = MouseY() + 10
 			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long, then move tooltip to the left
+			If (y + Height + FontHeight()) > LauncherHeight Then y = y - Height - 15
 			RenderFrame(x, y, Width + FontWidth(), Height)
 			x = x + 5
 			TextEx(x, y + 8, Name)
