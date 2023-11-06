@@ -3022,7 +3022,7 @@ Function UpdateZoneColor%()
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
 		CameraFogRange(Camera, 5.0, 30.0)
-		CameraRange(Camera, 0.01, 45.0)
+		CameraRange(Camera, 0.01, 60.0)
 	ElseIf RID = r_cont1_173_intro
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.01, 45.0)
