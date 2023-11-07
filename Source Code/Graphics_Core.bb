@@ -449,13 +449,15 @@ Function PlayStartupVideos%()
 	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
 	
 	Local ScaledGraphicHeight%
+	; ~ The aspect ratio to target
+	Local TargetAspectRatio# = 16.0 / 9.0
+	; ~ Calculate the target height based on the screen's aspect ratio
 	Local Ratio# = Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)
 	
-	; ~ TODO: Rework scaling for 4k resolutions
-	If Ratio > 1.76 And Ratio < 1.78
+	If Ratio > TargetAspectRatio
 		ScaledGraphicHeight = opt\RealGraphicHeight
 	Else
-		ScaledGraphicHeight = Float(opt\RealGraphicWidth) / (16.0 / 9.0)
+		ScaledGraphicHeight = Int(opt\RealGraphicWidth / TargetAspectRatio)
 	EndIf
 	
 	Local MovieFile$, i%
