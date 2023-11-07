@@ -606,21 +606,32 @@ End Function
 Function GetRescaledTexture%(Texture$, Flags%, Width%, Height%, Brush% = False)
 	If FileType(lang\LanguagePath + Texture) = 1 Then Texture = lang\LanguagePath + Texture
 	
+	; ~ Load the original image
 	Local ImgType% = FI_GetFIFFromFilename(Texture)
-	Local FImg% = FI_Rescale(FI_Load(ImgType, Texture, Flags), Width, Height, 0)
+	Local SrcImg% = FI_Load(ImgType, Texture, Flags)
+	
+	; ~ Rescale the image
+	Local RescaledImg% = FI_Rescale(SrcImg, Width, Height, 0)
 	Local TexPath$ = GetEnv("Temp") + "\" + StripPath(Texture)
 	
-	FI_Save(ImgType, FImg, TexPath, Flags)
+	; ~ Save the rescaled image to a temporary file
+	FI_Save(ImgType, RescaledImg, TexPath, Flags)
 	
 	Local Ret%
 	
+	; ~ Load the rescaled image as a Brush or Texture
 	If Brush
 		Ret = LoadBrush_Strict(TexPath, Flags)
 	Else
 		Ret = LoadTexture_Strict(TexPath, Flags)
 	EndIf
+	; ~ Unload the original and rescaled images
+	FI_Unload(SrcImg) : SrcImg = 0
+	FI_Unload(RescaledImg) : RescaledImg = 0
 	
+	; ~ Delete the temporary path
 	DeleteFile(TexPath)
+	
 	Return(Ret)
 End Function
 
