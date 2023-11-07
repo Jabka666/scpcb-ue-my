@@ -3307,7 +3307,7 @@ Function RemoveDoor%(d.Doors)
 End Function
 
 Type Decals
-	Field OBJ%, ID%
+	Field OBJ%, Surf%, ID%
 	Field Size#, SizeChange#, MaxSize#
 	Field Alpha#, AlphaChange#
 	Field BlendMode%, FX%
@@ -3327,16 +3327,27 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	de\R = R : de\G = G : de\B = B
 	de\MaxSize = 1.0
 	
-	de\OBJ = CreateSprite()
-	PositionEntity(de\OBJ, x, y, z)
-	ScaleSprite(de\OBJ, Size, Size)
-	RotateEntity(de\OBJ, Pitch, Yaw, Roll)
+	de\OBJ = CreateMesh()
+	de\Surf = CreateSurface(de\OBJ)
+	
+	Local v0% = AddVertex(de\Surf, -1.0, 1.0, 0.0, 0.0, 0.0)
+	Local v1% = AddVertex(de\Surf, 1.0, 1.0, 0.0, 1.0, 0.0)
+	Local v2% = AddVertex(de\Surf, 1.0,-1.0, 0.0, 1.0, 1.0)
+	Local v3% = AddVertex(de\Surf, -1.0,-1.0, 0.0, 0.0, 1.0)
+	
+	AddTriangle(de\Surf, v0, v1, v2)
+	AddTriangle(de\Surf, v0, v2, v3)
+	
+	PositionEntity(de\OBJ, x, y, z, True)
+	ScaleEntity(de\OBJ, Size, Size, 1.0, True)
+	RotateEntity(de\OBJ, Pitch, Yaw, Roll, True)
 	EntityTexture(de\OBJ, de_I\DecalTextureID[ID])
 	EntityAlpha(de\OBJ, Alpha)
 	EntityFX(de\OBJ, FX)
 	EntityBlend(de\OBJ, BlendMode)
-	SpriteViewMode(de\OBJ, 2)
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
+	
+	UpdateNormals(de\OBJ)
 	HideEntity(de\OBJ)
 	
 	If de_I\DecalTextureID[ID] = 0 Then RuntimeError(Format(GetLocalString("runerr", "decals"), ID))
@@ -3346,6 +3357,7 @@ End Function
 
 Function RemoveDecal%(de.Decals)
 	FreeEntity(de\OBJ) : de\OBJ = 0
+	de\Surf = 0 
 	Delete(de)
 End Function
 
@@ -3357,7 +3369,7 @@ Function UpdateDecals%()
 			If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
 			If de\SizeChange <> 0.0
 				de\Size = de\Size + (de\SizeChange * fps\Factor[0])
-				ScaleSprite(de\OBJ, de\Size, de\Size)
+				ScaleEntity(de\OBJ, de\Size, de\Size, 1.0, True)
 				
 				Select de\ID
 					Case 0
@@ -3367,7 +3379,7 @@ Function UpdateDecals%()
 							Local Temp# = Rnd(de\Size)
 							Local de2.Decals
 							
-							de2.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(de\OBJ) + Cos(Angle) * Temp, EntityY(de\OBJ) - 0.0005, EntityZ(de\OBJ) + Sin(Angle) * Temp, EntityPitch(de\OBJ), EntityYaw(de\OBJ), EntityRoll(de\OBJ), Rnd(0.1, 0.5))
+							de2.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(de\OBJ, True) + Cos(Angle) * Temp, EntityY(de\OBJ, True) - 0.0005, EntityZ(de\OBJ, True) + Sin(Angle) * Temp, EntityPitch(de\OBJ, True), EntityYaw(de\OBJ, True), EntityRoll(de\OBJ, True), Rnd(0.1, 0.5))
 							EntityParent(de2\OBJ, GetParent(de\OBJ))
 							PlaySound2(DecaySFX[Rand(3)], Camera, de2\OBJ, 10.0, Rnd(0.1, 0.5))
 							de\Timer = Rnd(50.0, 100.0)
