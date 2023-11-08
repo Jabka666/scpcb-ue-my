@@ -52,7 +52,7 @@ End Function
 
 Global RandomSeed$
 
-Global SelectedInputBox%, CursorPos% = -1
+Global SelectedInputBox%
 Global ShouldDeleteGadgets%
 
 ; ~ Main Menu Tab Constants
@@ -2220,22 +2220,17 @@ Function ChrCanDisplay%(Char%)
 	Return((Char >= 32) And (Char <= 126))
 End Function
 
-Global PrevInputBoxCtrl%, InsertMode% = False
+Global PrevInputBoxCtrl%, InsertMode% = False, CursorPos% = 0
 
 Function UpdateInput$(aString$, MaxChr%)
 	Local Value% = GetKey()
 	Local Length% = Len(aString)
 	
-	If (CursorPos < 0) And (CursorPos <> -1) Then CursorPos = Length
-	If CursorPos < 0 Then CursorPos = 0
+	CursorPos = Clamp(CursorPos, 0, Length)
 	
 	If KeyHit(210) Then InsertMode = (Not InsertMode) ; ~ Insert key
 	If KeyHit(199) Then CursorPos = 0 ; ~ Home key
 	If KeyHit(207) Then CursorPos = Length ; ~ End key
-	If KeyHit(211) ; ~ Delete key
-		aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0))
-		CursorPos = CursorPos + 1
-	EndIf
 	
 	If KeyDown(29) Lor KeyDown(157) ; ~ Control key
 		If Value = 30 Then CursorPos = Length ; ~ Control & Right arrow
@@ -2244,45 +2239,57 @@ Function UpdateInput$(aString$, MaxChr%)
 		If Value = 22 ; ~ Control & V
 			aString = Left(aString, CursorPos) + GetClipboardContents() + Right(aString, Length - CursorPos)
 			CursorPos = CursorPos + Len(aString) - Length
-			If MaxChr > 0 And MaxChr < Len(aString) Then aString = Left(aString, MaxChr) : CursorPos = MaxChr
+			If MaxChr > 0 And MaxChr < Len(aString)
+				aString = Left(aString, MaxChr)
+				CursorPos = MaxChr
+			EndIf
 		EndIf
 		Return(aString)
 	EndIf
 	
-	If Value = 30 Then
-		CursorPos = CursorPos + 1
+	If Value = 30
+		CursorPos = Min(CursorPos + 1, Length)
 		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
-	If Value = 31 Then
-		CursorPos = CursorPos - 1
+	If Value = 31
+		CursorPos = Max(CursorPos - 1, 0.0)
 		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
-
+	
 	If KeyDown(205) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Right arrow
 		If (MilliSecs() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
 	ElseIf KeyDown(203) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Left arrow
 		If (MilliSecs() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
-		If InsertMode
+		If InsertMode ; ~ Insert mode is ON
 			If ChrCanDisplay(Value)
 				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 2)
 				CursorPos = CursorPos + 1
-			ElseIf Value = 8 ; ~ Backspace
-				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
-			ElseIf Value = 4 ; ~ Delete
-				aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0))
 			EndIf
-		Else
-			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+		Else ; ~ Insert mode is OFF
+			If ChrCanDisplay(Value)
+				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+				CursorPos = CursorPos + 1
+			EndIf
 		EndIf
-		CursorPos = CursorPos + Len(aString) - Length
+		
+		If Value = 8 ; ~ Backspace
+			If CursorPos > 0
+				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
+				CursorPos = Max(CursorPos - 1, 0)
+			EndIf
+		ElseIf Value = 4 ; ~ Delete
+			aString = TextInput(Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0)))
+		EndIf
+		
 		If MaxChr > 0 And MaxChr < Len(aString)
 			aString = Left(aString, MaxChr)
-			CursorPos = MaxChr
+			If CursorPos > MaxChr Then CursorPos = MaxChr
 		EndIf
 	EndIf
+	
 	Return(aString)
 End Function
 
@@ -2324,13 +2331,13 @@ Function UpdateMenuInputBox$(x%, y%, Width%, Height%, Txt$, FontID% = Font_Defau
 		If mo\MouseHit1
 			SelectedInputBox = ID
 			FlushKeys()
-			CursorPos = -2
+			CursorPos = 0
 		EndIf
 	EndIf
 	
 	If (Not MouseOnBox) And mo\MouseHit1 And SelectedInputBox = ID
 		SelectedInputBox = 0
-		CursorPos = -2
+		CursorPos = 0
 	EndIf
 	
 	If SelectedInputBox = ID Then Txt = UpdateInput(Txt, MaxChr)
