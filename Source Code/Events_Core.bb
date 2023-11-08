@@ -7324,6 +7324,9 @@ Function UpdateEvents%()
 				EndIf
 				
 				If e\EventState = 2.0
+					; ~ Remove event when the player wasn't infected/cured
+					If e\EventState2 = 0.0 Then e\EventState3 = 1.0
+					
 					If e\EventState3 = 0.0
 						If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
 							If e\EventState2 > 0.0
@@ -7381,9 +7384,6 @@ Function UpdateEvents%()
 							RemoveEvent(e)
 						EndIf
 					EndIf
-					
-					; ~ Remove event when the player wasn't infected/cured
-					If e\EventState2 = 0.0 Then e\EventState3 = 1.0	
 				EndIf
 				;[End Block]
 			Case e_room4_2_hcz
