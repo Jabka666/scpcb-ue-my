@@ -6344,7 +6344,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		xTemp = EntityX(w\OBJ, True) - EntityX(Temp, True)
 		zTemp = EntityZ(w\OBJ, True) - EntityZ(Temp, True)
 		yTemp = EntityY(w\OBJ, True) - EntityY(Temp, True)
-		Dist2 = (xTemp ^ 2) + (yTemp ^ 2) + (zTemp ^ 2)
+		Dist2 = PowTwo(xTemp) + PowTwo(yTemp) + PowTwo(zTemp)
 		If Dist2 < Dist
 			; ~ Prefer waypoints that are visible
 			If (Not EntityVisible(w\OBJ, Temp)) Then Dist2 = Dist2 * 3.0
@@ -6365,7 +6365,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		xTemp = EntityX(Pvt, True) - EntityX(w\OBJ, True)
 		zTemp = EntityZ(Pvt, True) - EntityZ(w\OBJ, True)
 		yTemp = EntityY(Pvt, True) - EntityY(w\OBJ, True)
-		Dist2 = (xTemp ^ 2) + (yTemp ^ 2) + (zTemp ^ 2)
+		Dist2 = PowTwo(xTemp) + PowTwo(yTemp) + PowTwo(zTemp)
 		
 		If Dist2 < Dist
 			Dist = Dist2

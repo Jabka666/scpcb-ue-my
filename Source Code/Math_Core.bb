@@ -40,12 +40,7 @@ Function CurveAngle#(Value#, Old#, Smooth#)
 End Function
 
 Function PointDirection#(x1#, z1#, x2#, z2#)
-	Local dX#, dZ#
-	
-	dX = x1 - x2
-	dZ = z1 - z2
-	
-	Return(ATan2(dZ, dX))
+	Return(ATan2(z1 - z2, x1 - x2))
 End Function
 
 Function AngleDist#(a0#, a1#)
@@ -83,14 +78,13 @@ Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = False)
 End Function
 
 Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetVal% = False)
-	; ~ Check if deviating and return the answer. if deviating, turn around
+	; ~ Calculate the current deviation 
 	Local Current_Deviation% = Center_ - Pathx
-	Local Deviated% = False
+	; ~ Check if the deviation exceeds the maximum. If so, turn around
+	Local Deviated% = ((Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Lor (Dir = 2 And Current_Deviation <= -Max_Deviation_Distance_))
 	
-	If (Dir = 0 And Current_Deviation >= Max_Deviation_Distance_) Lor (Dir = 2 And Current_Deviation <= -Max_Deviation_Distance_)
-		Dir = ((Dir + 2) Mod 4)
-		Deviated = True
-	EndIf
+	If Deviated Then Dir = ((Dir + 2) Mod 4)
+	
 	If (Not RetVal)
 		Return(Dir)
 	Else
@@ -117,8 +111,7 @@ Function ScaledMouseY#()
 End Function
 
 Function MouseOn%(x%, y%, Width%, Height%)
-	If (ScaledMouseX() > x And ScaledMouseX() < x + Width) And (ScaledMouseY() > y And ScaledMouseY() < y + Height) Then Return(True)
-	Return(False)
+	Return((ScaledMouseX() > x And ScaledMouseX() < x + Width) And (ScaledMouseY() > y And ScaledMouseY() < y + Height))
 End Function
 
 Function ResetTimingAccumulator%()
@@ -157,8 +150,9 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 End Function
 
 Function IsInsideElevator%(OBJ%, Pvt%)
-	If (Abs(EntityX(OBJ, True) - EntityX(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityZ(OBJ, True) - EntityZ(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) And (Abs(EntityY(OBJ, True) - EntityY(Pvt, True)) < 280.0 * RoomScale + (0.015 * fps\Factor[0])) Then Return(True)
-	Return(False)
+	Local Offset# = 280.0 * RoomScale + (0.015 * fps\Factor[0])
+	
+	Return(Abs(EntityX(OBJ, True) - EntityX(Pvt, True)) < Offset And Abs(EntityZ(OBJ, True) - EntityZ(Pvt, True)) < Offset And Abs(EntityY(OBJ, True) - EntityY(Pvt, True)) < Offset)
 End Function
 
 Function CreateLine%(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)

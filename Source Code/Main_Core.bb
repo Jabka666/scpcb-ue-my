@@ -1754,7 +1754,7 @@ Function UpdateConsole%()
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
-					opt\CameraFogFar = StrTemp
+					opt\CameraFogFar = Clamp(StrTemp, 6.0, 17.0)
 					CreateConsoleMsg(Format(GetLocalString("console", "fog"), opt\CameraFogFar, "{0}"))
 					;[End Block]
 				Case "spawn", "s"
@@ -1953,7 +1953,7 @@ Function UpdateConsole%()
 					chs\GodMode = True
 					chs\InfiniteStamina = True
 					
-					opt\CameraFogFar = 40.0
+					opt\CameraFogFar = 17.0
 					
 					KillSounds()
 					
@@ -2932,7 +2932,7 @@ Function UpdateMouseLook%()
 			EndIf
 			If wi\GasMaskFogTimer > 0.0
 				If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
-				EntityAlpha(t\OverlayID[10], Min(((wi\GasMaskFogTimer * 0.2) ^ 2.0) / 1000.0, 0.45))
+				EntityAlpha(t\OverlayID[10], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
 			EndIf
 		EndIf
 	Else
@@ -8470,7 +8470,7 @@ Function Update008%()
 			me\HeartBeatRate = Max(me\HeartBeatRate, 100.0)
 			me\HeartBeatVolume = Max(me\HeartBeatVolume, I_008\Timer / 120.0)
 			
-			EntityAlpha(t\OverlayID[3], Min(((I_008\Timer * 0.2) ^ 2.0) / 1000.0, 0.5) * SinValue)
+			EntityAlpha(t\OverlayID[3], Min(PowTwo(I_008\Timer * 0.2) / 1000.0, 0.5) * SinValue)
 			
 			For i = 0 To 6
 				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer <= (i * 15.0) + 10.0
@@ -8652,7 +8652,7 @@ Function Update409%()
 				If (Not I_427\Using) Then I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 			EndIf
 		EndIf
-		EntityAlpha(t\OverlayID[7], Min(((I_409\Timer * 0.2) ^ 2.0) / 1000.0, 0.5))
+		EntityAlpha(t\OverlayID[7], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
 		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 		
 		If I_409\Timer > 40.0 And PrevI409Timer <= 40.0

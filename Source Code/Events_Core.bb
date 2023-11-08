@@ -622,7 +622,7 @@ Function UpdateEvents%()
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
-	Local Angle#, RoomExists%
+	Local Angle#, RoomExists%, RID%
 	Local SinValue#, CosValue#, SqrValue#
 	Local itt.ItemTemplates
 	
@@ -2472,7 +2472,7 @@ Function UpdateEvents%()
 							If EntityY(e\room\NPC[0]\Collider) > ((-1531.0) * RoomScale) + 0.35
 								Dist = EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider)
 								If Dist < 0.64 ; ~ Get the player out of the way
-									SqrValue = (Sqr(Dist) - 0.8) ^ 2
+									SqrValue = PowTwo(Sqr(Dist) - 0.8)
 									fDir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
 									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * SqrValue, 0.0, Sin(-fDir + 90.0) * SqrValue)
 								EndIf
@@ -5586,10 +5586,10 @@ Function UpdateEvents%()
 							For i = 0 To 1
 								Local spawnPoint.WayPoints = Null
 								
-								For x = i * ((MTGridSize ^ 2) / 5.0) To ((MTGridSize ^ 2) - 1)
+								For x = i * (PowTwo(MTGridSize) / 5.0) To (PowTwo(MTGridSize) - 1)
 									If Rand(2) = 1 And e\room\mt\waypoints[x] <> Null 
 										spawnPoint = e\room\mt\waypoints[x]
-										x = MTGridSize ^ 2
+										x = PowTwo(MTGridSize)
 									EndIf
 								Next 
 								If spawnPoint <> Null Then e\room\NPC[i] = CreateNPC(NPCType966, EntityX(spawnPoint\OBJ, True), EntityY(spawnPoint\OBJ, True), EntityZ(spawnPoint\OBJ, True))
@@ -7180,7 +7180,7 @@ Function UpdateEvents%()
 								AnimateNPC(e\room\NPC[0], 1.0, 10.0, 0.12, False)
 								Dist = EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider)
 								If Dist < 0.64 ; ~ Get the player out of the way
-									SqrValue = (Sqr(Dist) - 0.8) ^ 2
+									SqrValue = PowTwo(Sqr(Dist) - 0.8)
 									fDir = PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
 									TranslateEntity(me\Collider, Cos(-fDir + 90.0) * SqrValue, 0.0, Sin(-fDir + 90.0) * SqrValue)
 								EndIf

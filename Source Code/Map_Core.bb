@@ -207,7 +207,7 @@ Function UpdateLights%()
 				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
 					Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 					
-					If Dist < PowTwo(HideDistance) Then TempLightVolume = Max((TempLightVolume + (l\Intensity ^ 2) * ((HideDistance - Sqr(Dist)) / HideDistance)) / 4.5, 1.0)
+					If Dist < PowTwo(HideDistance) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((HideDistance - Sqr(Dist)) / HideDistance)) / 4.5, 1.0)
 				EndIf
 			EndIf
 		Next
@@ -820,8 +820,8 @@ Const ForestGridSize% = 10
 Type Forest
 	Field TileMesh%[5]
 	Field DetailMesh%[4]
-	Field Grid%[(ForestGridSize ^ 2) + 11]
-	Field TileEntities%[(ForestGridSize ^ 2) + 1]
+	Field Grid%[PowTwo(ForestGridSize) + 11]
+	Field TileEntities%[PowTwo(ForestGridSize) + 1]
 	Field Forest_Pivot%
 	Field ForestDoors.Doors[2]
 	Field DetailEntities%[2]
@@ -1509,7 +1509,7 @@ Function UpdateForest%(fr.Forest)
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
 			If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0
-				Dist = Sqr((EntityX(me\Collider, True) - EntityX(fr\TileEntities[tX + (tY * ForestGridSize)], True)) ^ 2 + (EntityZ(me\Collider, True) - EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)], True)) ^ 2)
+				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(fr\TileEntities[tX + (tY * ForestGridSize)], True)) + PowTwo(EntityZ(me\Collider, True) - EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)], True)))
 				
 				If Dist < HideDistance Then
 					If EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
@@ -1889,11 +1889,11 @@ Const MT_GENERATOR% = 7
 ;[End Block]
 
 Type MTGrid
-	Field Grid%[MTGridSize ^ 2]
-	Field Angles%[MTGridSize ^ 2]
+	Field Grid%[PowTwo(MTGridSize)]
+	Field Angles%[PowTwo(MTGridSize)]
 	Field Meshes%[MaxMTModelIDAmount]
-	Field Entities%[MTGridSize ^ 2]
-	Field waypoints.WayPoints[MTGridSize ^ 2]
+	Field Entities%[PowTwo(MTGridSize)]
+	Field waypoints.WayPoints[PowTwo(MTGridSize)]
 End Type
 
 Function UpdateMT%(mt.MTGrid)
@@ -1907,7 +1907,7 @@ Function UpdateMT%(mt.MTGrid)
 			If mt\Entities[tX + (tY * MTGridSize)] <> 0
 				If Abs(EntityY(me\Collider, True) - EntityY(mt\Entities[tX + (tY * MTGridSize)], True)) > 4.0 Then Exit
 				
-				Dist = Sqr((EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) ^ 2 + (EntityY(me\Collider, True) - EntityY(mt\Entities[tX + (tY * MTGridSize)], True)) ^ 2 + (EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)) ^ 2)
+				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(EntityY(me\Collider, True) - EntityY(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)))
 				
 				If Dist < opt\CameraFogFar * LightVolume * 1.5
 					If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
@@ -4653,10 +4653,10 @@ Const MapGridSize% = 18
 Const RoomSpacing# = 8.0
 
 Type MapGrid
-	Field Grid%[(MapGridSize + 1) ^ 2]
-	Field Angle%[(MapGridSize + 1) ^ 2]
-	Field Found%[(MapGridSize + 1) ^ 2]
-	Field RoomName$[MapGridSize ^ 2]
+	Field Grid%[PowTwo(MapGridSize + 1)]
+	Field Angle%[PowTwo(MapGridSize + 1)]
+	Field Found%[PowTwo(MapGridSize + 1)]
+	Field RoomName$[PowTwo(MapGridSize)]
 	Field RoomID%[ROOM4 + 1]
 End Type
 
@@ -5242,11 +5242,11 @@ Function CreateMap%()
 	Next
 	
 	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(RoomSpacing ^ 2), r_gate_b)
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(PowTwo(RoomSpacing)), r_gate_b)
 	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing ^ 2, r_gate_a)
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
 	CalculateRoomExtents(r)
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
@@ -5534,7 +5534,7 @@ RenderLoading(60, GetLocalString("loading", "core.sky"))
 
 Include "Source Code\Sky_Core.bb"
 
-Global CHUNKDATA%[64 ^ 2]
+Global CHUNKDATA%[4096]
 
 Function SetChunkDataValues%()
 	Local StrTemp$, i%, j%

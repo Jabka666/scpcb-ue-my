@@ -454,7 +454,7 @@ Function UpdateItems%()
 								yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
 								zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
 								
-								ed = (xTemp ^ 2) + (zTemp ^ 2)
+								ed = PowTwo(xTemp) + PowTwo(zTemp)
 								If ed < 0.07 And Abs(yTemp) < 0.25
 									; ~ Items are too close together, push away
 									xTemp = xTemp * (0.07 - ed)
@@ -726,19 +726,16 @@ Function IsItemInFocus%()
 End Function
 
 Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, CanUseWithHazmat% = False)
-	Local DoReturn% = False
-	
 	If (Not CanUseWithGasMask) And (wi\GasMask > 0 Lor I_1499\Using > 0)
 		CreateMsg(GetLocalString("msg", "mask.use"))
-		DoReturn = True
+		SelectedItem = Null
+		Return(False)
 	ElseIf (Not CanUseWithEyewear) And (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)
 		CreateMsg(GetLocalString("msg", "gear.use"))
-		DoReturn = True
+		SelectedItem = Null
+		Return(False)
 	ElseIf (Not CanUseWithHazmat) And wi\HazmatSuit > 0
 		CreateMsg(GetLocalString("msg", "suit.use"))
-		DoReturn = True
-	EndIf
-	If DoReturn
 		SelectedItem = Null
 		Return(False)
 	EndIf
@@ -747,31 +744,32 @@ End Function
 
 ; ~ Maybe re-work?
 Function PreventItemOverlapping%(GasMask% = False, NVG% = False, SCP1499% = False, Helmet% = False, SCRAMBLE% = False, Suit% = False, Cap% = False)
-	Local DoReturn% = False
-	
 	If (Not GasMask) And wi\GasMask > 0
 		CreateMsg(GetLocalString("msg", "mask.use.off"))
-		DoReturn = True
+		SelectedItem = Null
+		Return(True)
 	ElseIf (Not SCP1499) And I_1499\Using > 0
 		CreateMsg(GetLocalString("msg", "1499.use.off"))
-		DoReturn = True
+		SelectedItem = Null
+		Return(True)
 	ElseIf (Not NVG) And wi\NightVision > 0
 		CreateMsg(GetLocalString("msg", "goggle.use.off"))
-		DoReturn = True
+		SelectedItem = Null
+		Return(True)
 	ElseIf (Not Helmet) And wi\BallisticHelmet
 		CreateMsg(GetLocalString("msg", "helmet.use.off"))
-		DoReturn = True
+		SelectedItem = Null
+		Return(True)
 	ElseIf (Not SCRAMBLE) And wi\SCRAMBLE > 0
 		CreateMsg(GetLocalString("msg", "gear.use.off"))
-		DoReturn = True
+		SelectedItem = Null
+		Return(True)
 	ElseIf (Not Suit) And wi\HazmatSuit > 0
 		CreateMsg(GetLocalString("msg", "suit.use.off"))
-		DoReturn = True
+		SelectedItem = Null
+		Return(True)
 	ElseIf (Not Cap) And I_268\Using > 0
 		CreateMsg(GetLocalString("msg", "cap.use.off"))
-		DoReturn = True
-	EndIf
-	If DoReturn
 		SelectedItem = Null
 		Return(True)
 	EndIf
