@@ -398,6 +398,7 @@ Function UpdateItems%()
 	Local Temp%, n%
 	Local Pick%, ed#
 	Local HideDist# = PowTwo(HideDistance / 2.0)
+	Local PushDist# = HideDist * 0.04
 	Local DeletedItem% = False
 	
 	ClosestItem = Null
@@ -446,9 +447,9 @@ Function UpdateItems%()
 				EndIf
 				
 				If PlayerRoom\RoomTemplate\RoomID <> r_room2_storage
-					If i\Dist < HideDist * 0.04
+					If i\Dist < PushDist
 						For i2.Items = Each Items
-							If i <> i2 And (Not i2\Picked) And i2\Dist < HideDist * 0.04
+							If i <> i2 And (Not i2\Picked) And i2\Dist < PushDist
 								xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
 								yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
 								zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)

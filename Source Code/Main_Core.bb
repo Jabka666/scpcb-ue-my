@@ -2316,7 +2316,6 @@ Function UpdateHintMessages%()
 			EndIf
 		EndIf
 	EndIf
-	
 End Function
 
 Function RenderHintMessages%()
@@ -3010,6 +3009,7 @@ Function UpdateZoneColor%()
 	Local e.Events
 	Local i%
 	Local RID% = PlayerRoom\RoomTemplate\RoomID
+	Local PlayerY# = EntityY(me\Collider, True)
 	
 	CurrFogColor$ = ""
 	CurrAmbientColor$ = ""
@@ -3017,7 +3017,9 @@ Function UpdateZoneColor%()
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 	CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
-	If RID = r_room3_storage And EntityY(me\Collider) < (-4100.0) * RoomScale
+	
+	; ~ Handle room-specific settings
+	If RID = r_room3_storage And PlayerY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
@@ -3043,7 +3045,7 @@ Function UpdateZoneColor%()
 				Exit
 			EndIf
 		Next
-	ElseIf (RID = r_room2_mt And (EntityY(me\Collider, True) >= 8.0 And EntityY(me\Collider, True) <= 12.0)) Lor (RID = r_cont2_409 And EntityY(me\Collider) < (-3728.0) * RoomScale) Lor (RID = r_cont1_895 And EntityY(me\Collider) < (-1200.0) * RoomScale)
+	ElseIf (RID = r_room2_mt And (PlayerY >= 8.0 And PlayerY <= 12.0)) Lor (RID = r_cont2_409 And PlayerY < (-3728.0) * RoomScale) Lor (RID = r_cont1_895 And PlayerY < (-1200.0) * RoomScale)
 		SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 	ElseIf forest_event <> Null
 		If PlayerRoom = forest_event\room
@@ -3058,6 +3060,7 @@ Function UpdateZoneColor%()
 		EndIf
 	EndIf
 	
+	; ~ If unset, use standard settings based on zone
 	If CurrFogColor = ""
 		Select me\Zone
 			Case 0

@@ -50,17 +50,11 @@ End Function
 
 Function AngleDist#(a0#, a1#)
 	Local b# = a0 - a1
-	Local bb#
-	
-	If b < -180.0
-		bb = b + 360.0
-	ElseIf b > 180.0
-		bb = b - 360.0
-	Else
-		bb = b
-	EndIf
-	
-	Return(bb)
+
+	If b < -180.0 Then Return(b + 360.0)
+	If b > 180.0 Then Return(b - 360.0)
+
+	Return(b)
 End Function
 
 Function FloatToString$(n#, Count%)
@@ -105,14 +99,9 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 End Function
 
 Function ChangeAngleValueForCorrectBoneAssigning#(Value#)
-	Local Number#
+	If Value <= 180.0 Then Return(Value)
 	
-	If Value <= 180.0
-		Number = Value
-	Else
-		Number = (-360.0) + Value
-	EndIf
-	Return(Number)
+	Return((-360.0) + Value)
 End Function
 
 Function ReadPixelColor%(Pixel%, Shrid%)

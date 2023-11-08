@@ -293,12 +293,17 @@ End Function
 Global AmbientLightRoomTex%
 
 Function AmbientLightRooms%(R%, G%, B%)
+	; ~ Save the current backbuffer
 	Local OldBuffer% = BackBuffer() ; ~ Probably shouldn't make assumptions here but who cares, why wouldn't it use the BackBuffer()
 	
+	; ~ Change draw target to AmbientLightRoomTex
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
+	; ~ Clear color to provided values (R, G, B)
 	ClsColor(R, G, B)
 	Cls()
+	; ~ Reset clear color to black (default)
 	ClsColor(0, 0, 0)
+	; ~ Restore the previous buffer
 	SetBuffer(OldBuffer)
 End Function
 
@@ -360,11 +365,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	ClsColor(0, 0, 0)
 	
-	Local i%, j%, k%, x#, y#, z#, Yaw#, Pitch#, Roll#
+	Local i%, j%, k%, x#, y#, z#
 	Local Vertex%
-	Local Temp1i%, Temp2i%, Temp3i%
-	Local Temp1#, Temp2#, Temp3#
-	Local Temp1s$, Temp2s$
+	Local Temp1i% = 0, Temp2i% = 0, Temp3i% = 0
+	Local Temp1s$
 	Local CollisionMeshes% = CreatePivot()
 	;Local HasTriggerBox% = False
 	; ~ Read the file
@@ -627,6 +631,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	Local Range#, lColor$, Intensity#
 	Local R%, G%, B%
 	Local Angles$
+	Local Temp2s$
 	
 	If rt <> Null ; ~ TEMPORARY SOLUTION
 		For i = 1 To Count
@@ -642,7 +647,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					ts\z = ReadFloat(f) * RoomScale
 					
 					Temp2s = ReadString(f)
-					If Right(Temp2s, 3) = ".sc" Then ; ~ Temporary solution, either re-export Gate B with the screen as .png or update the languages that use .sc
+					If FileExtension(Temp2s) = "sc" Then ; ~ Temporary solution, either re-export Gate B with the screen as .png or update the languages that use .sc
 						If FileSize(lang\LanguagePath + "GFX\Map\Screens\" + Temp2s) = 0 Then Temp2s = Left(Temp2s, Len(Temp2s) - 2) + "png"
 					EndIf
 					ts\ImgPath = Temp2s

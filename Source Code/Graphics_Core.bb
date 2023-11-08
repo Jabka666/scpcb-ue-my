@@ -5,7 +5,7 @@ Global SMALLEST_POWER_TWO#
 Global SMALLEST_POWER_TWO_HALF#
 
 Function InitFastResize%()
-	; ~ Create Camera
+	; ~ Create and configure a camera
 	Local Cam% = CreateCamera()
 	
 	CameraProjMode(Cam, 2)
@@ -16,7 +16,7 @@ Function InitFastResize%()
 	
 	FresizeCam = Cam
 	
-	; ~ Create sprite
+	; ~ Create and configure a sprite
 	Local SPR% = CreateMesh(Cam)
 	Local SF% = CreateSurface(SPR)
 	
@@ -33,7 +33,7 @@ Function InitFastResize%()
 	EntityBlend(SPR, 1)
 	FresizeImage = SPR
 	
-	; ~ Create texture
+	; ~ Create texture and associate it with the sprite
 	FresizeTexture = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 256)
 	FresizeTexture2 = CreateTexture(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 256)
 	TextureBlend(FresizeTexture2, 3)
@@ -44,6 +44,7 @@ Function InitFastResize%()
 	EntityTexture(SPR, FresizeTexture, 0, 0)
 	EntityTexture(SPR, FresizeTexture2, 0, 1)
 	
+	; ~ Hide the camera until needed
 	HideEntity(FresizeCam)
 End Function
 
