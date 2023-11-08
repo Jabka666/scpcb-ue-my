@@ -1060,7 +1060,7 @@ Function LoadGame%(File$)
 				de\SizeChange = SizeChange
 				de\AlphaChange = AlphaChange
 				
-				ScaleSprite(de\OBJ, Size, Size)
+				ScaleEntity(de\OBJ, Size, Size, 1.0, True)
 				EntityAlpha(de\OBJ, Alpha)
 				EntityFX(de\OBJ, FX)
 				EntityBlend(de\OBJ, BlendMode)
@@ -1800,7 +1800,7 @@ Function LoadGameQuick%(File$)
 				de\SizeChange = SizeChange
 				de\AlphaChange = AlphaChange
 				
-				ScaleSprite(de\OBJ, Size, Size)
+				ScaleEntity(de\OBJ, Size, Size, 1.0, True)
 				EntityAlpha(de\OBJ, Alpha)
 				EntityFX(de\OBJ, FX)
 				EntityBlend(de\OBJ, BlendMode)
