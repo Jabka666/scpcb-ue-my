@@ -1943,19 +1943,24 @@ Function RenderLoading%(Percent%, Assets$ = "")
 End Function
 
 Function RenderTiledImageRect%(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%, Width%, Height%)
+	Local TempSrcWidth%, TempSrcHeight%
 	Local x2% = x
 	
-	While x2 < x + Width
-		If x2 + SrcWidth > x + Width Then SrcWidth = (x + Width) - x2
+    While x2 < x + Width
+        TempSrcWidth = SrcWidth
+        If x2 + SrcWidth > x + Width Then TempSrcWidth = (x + Width) - x2
+        
+        Local y2% = y
 		
-		Local y2% = y
-		
-		While y2 < y + Height
-			DrawBlockRect(Img, x2, y2, SrcX, SrcY, SrcWidth, Min((y + Height) - y2, SrcHeight))
-			y2 = y2 + SrcHeight
-		Wend
-		x2 = x2 + SrcWidth
-	Wend
+        While y2 < y + Height
+            TempSrcHeight = SrcHeight
+            If y2 + SrcHeight > y + Height Then TempSrcHeight = (y + Height) - y2
+            
+            DrawBlockRect(Img, x2, y2, SrcX, SrcY, TempSrcWidth, TempSrcHeight)
+            y2 = y2 + TempSrcHeight
+        Wend
+        x2 = x2 + TempSrcWidth
+    Wend
 End Function
 
 Function RenderFrame%(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locked% = False)
