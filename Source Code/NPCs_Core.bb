@@ -6487,33 +6487,36 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, DisableSoundOnCrouch% = False)
 	; ~ 2: Player is detected by emitting a sound
 	; ~ 3: Player is detected by a camera (only for MTF Units!)
 	
+	Local Dist2# = EntityDistanceSquared(me\Collider, n\Collider)
+	Local DeltaYawVal# = Abs(DeltaYaw(n\Collider, me\Collider))
+	Local Visible% = EntityVisible(n\Collider, me\Collider)
+	
 	If n\BlinkTimer <= 0.0 Then Return(0)
 	If I_268\InvisibilityOn Lor chs\NoTarget Then n\State2 = 0.0 : Return(0)
 	
 	If n\NPCType <> NPCTypeMTF
-		If EntityDistanceSquared(me\Collider, n\Collider) > PowTwo(Dist) Then Return(0)
-		
+		If Dist2 > PowTwo(Dist) Then Return(0)
 		; ~ Spots the player if he's either in view or making a loud sound
 		If me\SndVolume > 1.0
-			If (Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0) And EntityVisible(n\Collider, me\Collider)
+			If (DeltaYawVal > 60.0) And Visible
 				Return(1)
-			ElseIf (Not EntityVisible(n\Collider, me\Collider))
+			ElseIf (Not Visible)
 				If DisableSoundOnCrouch And me\Crouch
 					Return(0)
 				Else
 					Return(2)
 				EndIf
 			EndIf
-		Else
-			If Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0 Then Return(0)
+		ElseIf DeltaYawVal > 60.0 
+			Return(0)
 		EndIf
-		Return(EntityVisible(n\Collider, me\Collider))
+		Return(Visible)
 	Else
 		Local ReturnState% = 0 + (3 * me\Detected)
 		
-		If EntityDistanceSquared(me\Collider, n\Collider) < PowTwo(Dist)
+		If Dist2 < PowTwo(Dist)
 			If me\SndVolume > 1.0 Then ReturnState = 2
-			If EntityVisible(n\Collider, me\Collider) And Abs(DeltaYaw(n\Collider, me\Collider)) < 60.0 Then ReturnState = 1
+			If Visible And DeltaYawVal < 60.0 Then ReturnState = 1
 		EndIf
 		Return(ReturnState)
 	EndIf
