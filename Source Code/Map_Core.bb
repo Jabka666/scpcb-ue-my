@@ -5435,91 +5435,101 @@ Function CreateMap%()
 	Next
 End Function
 
-Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
+Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	; ~ Load the HeightMap
 	If HeightMap = 0 Then RuntimeError(Format(GetLocalString("runerr", "heightmap"), HeightMap))
+	; ~ Load texture and lightmaps
+	If Tex1 = 0 Then RuntimeError(Format(GetLocalString("runerr", "tex_1"), Tex1))
+	If Tex2 = 0 Then RuntimeError(Format(GetLocalString("runerr", "tex_2"), Tex2))
+	If Mask = 0 Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
 	
 	; ~ Store HeightMap dimensions
-	Local x% = ImageWidth(HeightMap) - 1
-	Local y% = ImageHeight(HeightMap) - 1
-	Local lX%, lY%, Index%
+	Local HeightMapWidth% = ImageWidth(HeightMap) - 1
+	Local HeightMapHeight% = ImageHeight(HeightMap) - 1
+	Local PosX%, PosY%, VertexIndex%
 	
-	; ~ Load texture and lightmaps and auto scale the textures to the right size
-	If t1 = 0 Then RuntimeError(Format(GetLocalString("runerr", "tex_1"), t1))
-	ScaleTexture(t1, x / 4, y / 4)
-	If t2 = 0 Then RuntimeError(Format(GetLocalString("runerr", "tex_2"), t2))
-	ScaleTexture(t2, x / 4, y / 4)
-	If Mask = 0 Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
-	ScaleTexture(Mask, x, y)
+	; ~ Scale the textures to the right size
+	ScaleTexture(Tex1, HeightMapWidth / 4.0, HeightMapHeight / 4.0)
+	ScaleTexture(Tex2, HeightMapWidth / 4.0, HeightMapHeight / 4.0)
+	ScaleTexture(Mask, HeightMapWidth, HeightMapHeight)
 	
 	; ~ Start building the terrain
 	Local Mesh% = CreateMesh()
 	Local Surf% = CreateSurface(Mesh)
 	
 	; ~ Create some verts for the terrain
-	For lY = 0 To y
-		For lX = 0 To x
-			AddVertex(Surf, lX, 0.0, lY, 1.0 / lX, 1.0 / lY)
+	For PosY = 0 To HeightMapHeight
+		For PosX = 0 To HeightMapWidth
+			AddVertex(Surf, PosX, 0.0, PosY, 1.0 / PosX, 1.0 / PosY)
 		Next
 	Next
 	RenderWorld()
 	
+	Local HeightMapWidth2% = HeightMapWidth + 1
+	
 	; ~ Connect the verts with faces
-	For lY = 0 To y - 1
-		For lX = 0 To x - 1
-			AddTriangle(Surf, lX + ((x + 1) * lY), lX + ((x + 1) * lY) + (x + 1), (lX + 1) + ((x + 1) * lY))
-			AddTriangle(Surf, (lX + 1) + ((x + 1) * lY), lX + ((x + 1) * lY) + (x + 1), (lX + 1) + ((x + 1) * lY) + (x + 1))
+	For PosY = 0 To HeightMapHeight - 1
+		For PosX = 0 To HeightMapWidth - 1
+			Local Shift% = PosX + (HeightMapWidth2 * PosY)
+			
+			AddTriangle(Surf, Shift, Shift + HeightMapWidth2, Shift + 1)
+			AddTriangle(Surf, Shift + 1, Shift + HeightMapWidth2, Shift + HeightMapWidth2 + 1)
 		Next
 	Next
 	
-	; ~ Position the terrain to center 0, 0, 0
+	; ~ Position the terrain to center 0.0, 0.0, 0.0
 	Local Mesh2% = CopyMesh(Mesh, Mesh)
 	Local Surf2% = GetSurface(Mesh2, 1)
 	
-	PositionMesh(Mesh, (-x) / 2.0, 0.0, (-y) / 2.0)
-	PositionMesh(Mesh2, (-x) / 2.0, 0.01, (-y) / 2.0)
+	PositionMesh(Mesh, (-HeightMapWidth) / 2.0, 0.0, (-HeightMapHeight) / 2.0)
+	PositionMesh(Mesh2, (-HeightMapWidth) / 2.0, 0.01, (-HeightMapHeight) / 2.0)
+	
+	Local HeightMapBuffer% = ImageBuffer(HeightMap)
+	Local MaskBuffer% = TextureBuffer(Mask)
+	Local MaskWidth% = TextureWidth(Mask)
+	Local MaskHeight% = TextureHeight(Mask)
 	
 	; ~ Alter vertice height to match the heightmap red channel
-	LockBuffer(ImageBuffer(HeightMap))
-	LockBuffer(TextureBuffer(Mask))
+	LockBuffer(HeightMapBuffer)
+	LockBuffer(MaskBuffer)
 	
-	For lX = 0 To x
-		For lY = 0 To y
+	For PosX = 0 To HeightMapWidth
+		For PosY = 0 To HeightMapHeight
 			; ~ Using vertex alpha and two meshes instead of FE_ALPHAWHATEVER
 			; ~ It doesn't look perfect but it does the job
 			; ~ You might get better results by downscaling the mask to the same size as the heightmap
-			Local MaskX# = Min(lX * Float(TextureWidth(Mask)) / Float(ImageWidth(HeightMap)), TextureWidth(Mask) - 1)
-			Local MaskY# = TextureHeight(Mask) - Min(lY * Float(TextureHeight(Mask)) / Float(ImageHeight(HeightMap)), TextureHeight(Mask) - 1)
+			Local MaskX# = Min(PosX * Float(MaskWidth) / Float(HeightMapWidth2), MaskWidth - 1)
+			Local MaskY# = MaskHeight - Min(PosY * Float(MaskHeight) / Float(HeightMapHeight + 1), MaskHeight - 1)
 			Local RGB%, RED%
 			
-			RGB = ReadPixelFast(Min(lX, x - 1.0), y - Min(lY, y - 1.0), ImageBuffer(HeightMap))
+			RGB = ReadPixelFast(Min(PosX, HeightMapWidth - 1.0), HeightMapHeight - Min(PosY, HeightMapHeight - 1.0), HeightMapBuffer)
 			RED = (RGB And $FF0000) Shr 16 ; ~ Separate out the red
 			
-			Local Alpha# = (((ReadPixelFast(Max(MaskX -5.0, 5.0), Max(MaskY - 5.0, 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
+			Local Alpha# = (((ReadPixelFast(Max(MaskX -5.0, 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			
-			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, TextureWidth(Mask) - 5.0), Min(MaskY + 5.0, TextureHeight(Mask) - 5), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
-			Alpha = Alpha + (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Min(MaskY + 5.0, TextureHeight(Mask) - 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
-			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, TextureWidth(Mask) - 5.0), Max(MaskY - 5.0, 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
+			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Min(MaskY + 5.0, MaskHeight - 5), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Alpha = Alpha + (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Min(MaskY + 5.0, MaskHeight - 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			Alpha = Alpha * 0.25
 			Alpha = Sqr(Alpha)
 			
-			Index = lX + ((x + 1) * lY)
-			VertexCoords(Surf, Index , VertexX(Surf, Index), RED * yScale, VertexZ(Surf, Index))
-			VertexCoords(Surf2, Index , VertexX(Surf2, Index), RED * yScale, VertexZ(Surf2, Index))
-			VertexColor(Surf2, Index, 255.0, 255.0, 255.0, Alpha)
+			VertexIndex = PosX + (HeightMapWidth2 * PosY)
+			VertexCoords(Surf, VertexIndex , VertexX(Surf, VertexIndex), RED * yScale, VertexZ(Surf, VertexIndex))
+			VertexCoords(Surf2, VertexIndex , VertexX(Surf2, VertexIndex), RED * yScale, VertexZ(Surf2, VertexIndex))
+			VertexColor(Surf2, VertexIndex, 255.0, 255.0, 255.0, Alpha)
 			; ~ Set the terrain texture coordinates
-			VertexTexCoords(Surf, Index, lX, -lY )
-			VertexTexCoords(Surf2, Index, lX, -lY) 
+			VertexTexCoords(Surf, VertexIndex, PosX, -PosY)
+			VertexTexCoords(Surf2, VertexIndex, PosX, -PosY) 
 		Next
 	Next
-	UnlockBuffer(TextureBuffer(Mask))
-	UnlockBuffer(ImageBuffer(HeightMap))
+	UnlockBuffer(MaskBuffer)
+	UnlockBuffer(HeightMapBuffer)
 	
 	UpdateNormals(Mesh)
 	UpdateNormals(Mesh2)
 	
-	EntityTexture(Mesh, t1, 0, 0)
-	EntityTexture(Mesh2, t2, 0, 0)
+	EntityTexture(Mesh, Tex1, 0, 0)
+	EntityTexture(Mesh2, Tex2, 0, 0)
 	
 	EntityFX(Mesh, 1)
 	EntityFX(Mesh2, 1 + 2 + 32)
