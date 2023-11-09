@@ -733,10 +733,8 @@ Function UpdateNPCs%()
 										If (Not IsPlayerOutsideFacility()) And RID <> r_dimension_106
 											For w.WayPoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1
-													x = Abs(EntityX(me\Collider) - EntityX(w\OBJ, True))
-													If x < 25.0 And x > 15.0
-														z = Abs(EntityZ(me\Collider) - EntityZ(w\OBJ, True))
-														If z < 25.0 And z > 15.0
+													If DistanceSquared(EntityX(w\OBJ, True), EntityX(me\Collider), EntityZ(w\OBJ, True), EntityZ(me\Collider)) < 625.0
+														If DistanceSquared(EntityX(w\OBJ, True), EntityX(me\Collider), EntityZ(w\OBJ, True), EntityZ(me\Collider)) > 225.0
 															PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
 															ResetEntity(n\Collider)
 															Exit
@@ -3698,12 +3696,10 @@ Function UpdateNPCs%()
 							If n\State2 < MilliSecs()
 								For w.WayPoints = Each WayPoints
 									If w\door = Null
-										If Abs(EntityX(w\OBJ, True) - EntityX(n\Collider)) < 4.0
-											If Abs(EntityZ(w\OBJ, True) - EntityZ(n\Collider)) < 4.0
-												PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
-												ResetEntity(n\Collider)
-												Exit
-											EndIf
+										If DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider), EntityZ(w\OBJ, True), EntityZ(n\Collider)) < 16.0
+											PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
+											ResetEntity(n\Collider)
+											Exit
 										EndIf
 									EndIf
 								Next
@@ -3768,9 +3764,7 @@ Function UpdateNPCs%()
 												;[Block]
 												For d.Doors = Each Doors
 													If d\Locked = 0 And d\KeyCard = 0 And d\Code = ""
-														If Abs(EntityX(d\FrameOBJ) - EntityX(n\Collider)) < 16.0
-															If Abs(EntityZ(d\FrameOBJ) - EntityZ(n\Collider)) < 16.0 Then OpenCloseDoor(d, True)
-														EndIf
+														If DistanceSquared(EntityX(d\FrameOBJ), EntityX(n\Collider), EntityZ(d\FrameOBJ), EntityZ(n\Collider)) < 256.0 Then OpenCloseDoor(d, True)
 													EndIf
 												Next
 												;[End Block]
@@ -4773,10 +4767,8 @@ Function UpdateNPCs%()
 											For w.WayPoints = Each WayPoints
 												If w\door = Null And w\room\Dist < HideDistance And Rand(3) = 1
 													If EntityDistanceSquared(w\room\OBJ, n\Collider) < EntityDistanceSquared(me\Collider, n\Collider)
-														x = Abs(EntityX(n\Collider) - EntityX(w\OBJ, True))
-														If x < 12.0 And x > 4.0
-															z = Abs(EntityZ(n\Collider) - EntityZ(w\OBJ, True))
-															If z < 12.0 And z > 4.0
+														If DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider), EntityZ(w\OBJ, True), EntityZ(n\Collider)) < 144.0
+															If DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider), EntityZ(w\OBJ, True), EntityZ(n\Collider)) > 16.0
 																If w\room\Dist > 4.0
 																	PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True), True)
 																	ResetEntity(n\Collider)
