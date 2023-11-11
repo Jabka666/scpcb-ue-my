@@ -6576,26 +6576,18 @@ Function RenderGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					Local NAV_WIDTH% = 287 * MenuScale
-					Local NAV_HEIGHT% = 256 * MenuScale
-					
 					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
 					y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
-					
-					Local PlayerX%, PlayerZ%
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x - SelectedItem\ItemTemplate\ImgWidth, y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale))
 					
 					SetFontEx(fo\FontID[Font_Digital])
 					
-					Local Offline%
+					Local Offline% = (SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300")
+					Local NAV_WIDTH% = 287 * MenuScale
+					Local NAV_HEIGHT% = 256 * MenuScale
 					
-					Offline = (SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300")
-					
-					Local NavWorks%
-					
-					NavWorks = PlayerInReachableRoom()
-					If (Not NavWorks)
+					If (Not PlayerInReachableRoom())
 						If (MilliSecs() Mod 800) < 200
 							Color(200, 0, 0)
 							TextEx(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
@@ -6603,8 +6595,8 @@ Function RenderGUI%()
 						EndIf
 					Else
 						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor RID <> r_cont1_895)
-							PlayerX = Floor(EntityX(me\Collider) / RoomSpacing + 0.5)
-							PlayerZ = Floor(EntityZ(me\Collider) / RoomSpacing + 0.5)
+							Local PlayerX% = Floor(EntityX(me\Collider) / RoomSpacing + 0.5)
+							Local PlayerZ% = Floor(EntityZ(me\Collider) / RoomSpacing + 0.5)
 							
 							SetBuffer(ImageBuffer(t\ImageID[7]))
 							
