@@ -3549,17 +3549,19 @@ Function UpdateSecurityCams%()
 		
 		If Close Lor sc = sc_I\CoffinCam
 			If sc\FollowPlayer
-				If sc <> sc_I\CoffinCam
-					If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
-				EndIf
 				If sc\Pvt = 0
 					sc\Pvt = CreatePivot(sc\BaseOBJ)
 					EntityParent(sc\Pvt, 0) ; ~ Sets position and rotation of the pivot to the cam object
 				EndIf
-				PointEntity(sc\Pvt, Camera)
-				
-				RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
-				
+				If EntityVisible(sc\CameraOBJ, Camera)
+					If sc <> sc_I\CoffinCam
+						MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
+					EndIf
+					
+					PointEntity(sc\Pvt, Camera)
+					
+					RotateEntity(sc\CameraOBJ, CurveAngle(EntityPitch(sc\Pvt), EntityPitch(sc\CameraOBJ), 75.0), CurveAngle(EntityYaw(sc\Pvt), EntityYaw(sc\CameraOBJ), 75.0), 0.0)
+				EndIf
 				PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
 			Else
 				If sc\Turn > 0.0
@@ -3574,12 +3576,6 @@ Function UpdateSecurityCams%()
 				PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
 				RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
 				
-				If (MilliSecs() Mod 1350) < 800
-					EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
-				Else
-					EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
-				EndIf
-				
 				If sc\Cam <> 0
 					PositionEntity(sc\Cam, EntityX(sc\CameraOBJ, True), EntityY(sc\CameraOBJ, True), EntityZ(sc\CameraOBJ, True))
 					RotateEntity(sc\Cam, EntityPitch(sc\CameraOBJ), EntityYaw(sc\CameraOBJ), 0.0)
@@ -3591,6 +3587,11 @@ Function UpdateSecurityCams%()
 						If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
 					EndIf
 				EndIf
+			EndIf
+			If (MilliSecs() Mod 1350) < 800
+				EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
+			Else
+				EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
 			EndIf
 		EndIf
 		
