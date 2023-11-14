@@ -1509,6 +1509,7 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y, r\z, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
             PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.132, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.032, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			it.Items = CreateItem("Document SCP-066", "paper", r\x + 340.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 235.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
