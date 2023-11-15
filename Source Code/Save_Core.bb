@@ -165,7 +165,7 @@ Function SaveGame%(File$)
 		Next
 	Next
 	
-	WriteInt(f, 113)
+	WriteInt(f, 113) ; ~ Debug line
 	
 	Temp = 0
 	For n.NPCs = Each NPCs
@@ -227,7 +227,7 @@ Function SaveGame%(File$)
 		WriteByte(f, n\HideFromNVG)
 	Next
 	
-	WriteInt(f, 632)
+	WriteInt(f, 632) ; ~ Debug line
 	
 	WriteByte(f, bk\IsBroken)
 	WriteFloat(f, bk\x)
@@ -310,7 +310,7 @@ Function SaveGame%(File$)
 		EndIf
 	Next
 	
-	WriteInt(f, 954)
+	WriteInt(f, 954) ; ~ Debug line
 	
 	Temp = 0
 	For do.Doors = Each Doors
@@ -345,7 +345,7 @@ Function SaveGame%(File$)
 		WriteByte(f, do\MTFClose)
 	Next
 	
-	WriteInt(f, 1845)
+	WriteInt(f, 1845) ; ~ Debug line
 	
 	Local de.Decals
 	
@@ -773,10 +773,7 @@ Function LoadGame%(File$)
 				EndIf
 			Next
 		EndIf
-	Next
-	
-	For n.NPCs = Each NPCs
-		If n\NPCType = NPCTypeMTF Then
+		If n\NPCType = NPCTypeMTF
 			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 	Next
@@ -973,7 +970,6 @@ Function LoadGame%(File$)
 	Next
 	
 	Temp = ReadInt(f)
-	
 	For i = 1 To Temp
 		x = ReadFloat(f)
 		y = ReadFloat(f)
@@ -1617,10 +1613,7 @@ Function LoadGameQuick%(File$)
 				EndIf
 			Next
 		EndIf
-	Next
-	
-	For n.NPCs = Each NPCs
-		If n\NPCType = NPCTypeMTF Then
+		If n\NPCType = NPCTypeMTF
 			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 	Next
@@ -1713,7 +1706,6 @@ Function LoadGameQuick%(File$)
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Temp = ReadInt(f)
-	
 	For i = 1 To Temp
 		x = ReadFloat(f)
 		y = ReadFloat(f)

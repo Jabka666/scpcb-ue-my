@@ -2285,18 +2285,18 @@ Function UpdateButton%(OBJ%)
 	Local Result% = False
 	
 	If Dist < 0.64
-		Local Temp% = CreatePivot()
+		Local Pvt% = CreatePivot()
 		
-		PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-		PointEntity(Temp, OBJ)
+		PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+		PointEntity(Pvt, OBJ)
 		
-		If EntityPick(Temp, 0.6) = OBJ
+		If EntityPick(Pvt, 0.6) = OBJ
 			If d_I\ClosestButton = 0 Lor Dist < EntityDistanceSquared(me\Collider, d_I\ClosestButton)
 				d_I\ClosestButton = OBJ
 				Result = True
 			EndIf
 		EndIf
-		FreeEntity(Temp) : Temp = 0
+		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 	Return(Result)
 End Function

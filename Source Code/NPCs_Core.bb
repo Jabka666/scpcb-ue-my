@@ -46,6 +46,8 @@ Type NPCs
 	Field HasAsset% = False
 	Field Contained% = False
 	Field TeslaHit% = False
+	Field NPCDECAL.Decals
+	Field ShadowSize#
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -106,6 +108,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			HideEntity(n\OBJ3)
 			
 			n\CollRadius = 0.32
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.2)
 			;[End Block]
 		Case NPCType106
 			;[Block]
@@ -132,6 +135,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityFX(n\OBJ2, 1 + 8)
 			SpriteViewMode(n\OBJ2, 2)
 			HideEntity(n\OBJ2)
+			
+			;n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.4)
 			;[End Block]
 		Case NPCTypeGuard
 			;[Block]
@@ -148,6 +153,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			n\Speed = IniGetFloat(NPCsFile, "Guard", "Speed") / 100.0
+			
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCTypeMTF
 			;[Block]
@@ -171,6 +178,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			If MTFSFX[1] = 0 Then MTFSFX[1] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
 			
 			n\HP = 100
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
@@ -189,6 +197,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = IniGetFloat(NPCsFile, "Class D", "Speed") / 100.0
 			
 			n\CollRadius = 0.32
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCType372
 			;[Block]
@@ -218,6 +227,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Temp = IniGetFloat(NPCsFile, "SCP-513-1", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
+			
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCType096
 			;[Block]
@@ -242,6 +253,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			HideEntity(n\OBJ2)
 			
 			n\CollRadius = 0.26
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCType049
 			;[Block]
@@ -260,6 +272,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Sound = LoadSound_Strict("SFX\Horror\Horror12.ogg")
 			
 			If HorrorSFX[13] = 0 Then HorrorSFX[13] = LoadSound_Strict("SFX\Horror\Horror13.ogg")
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCType049_2
 			;[Block]
@@ -280,6 +293,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Sound = LoadSound_Strict("SFX\SCP\049_2\Breath.ogg")
 			
 			n\HP = 100
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
@@ -326,9 +340,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EntityBlend(LightSprite, 3)
 				EntityFX(LightSprite, 1 + 8)
 			Next
-			
-			Temp = 0.7
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			ScaleEntity(n\OBJ, 0.7, 0.7, 0.7)
 			;[End Block]
 		Case NPCType035_Tentacle
 			;[Block]
@@ -343,6 +355,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			SetAnimTime(n\OBJ, 283.0)
 			
 			n\HP = 500
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.2)
 			;[End Block]
 		Case NPCType860_2
 			;[Block]
@@ -373,6 +386,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, (-MeshWidth(n\OBJ)) * 2.0, (-MeshHeight(n\OBJ)) * 2.0, (-MeshDepth(n\OBJ)) * 2.0, MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 4.0, MeshDepth(n\OBJ) * 4.0)
 			
 			n\CollRadius = 0.25
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.5)
 			;[End Block]
 		Case NPCType939
 			;[Block]
@@ -395,6 +409,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = IniGetFloat(NPCsFile, "SCP-939", "Speed") / 100.0
 			
 			n\CollRadius = 0.3
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.6)
 			;[End Block]
 		Case NPCType066
 			;[Block]
@@ -409,6 +424,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
 			n\Speed = IniGetFloat(NPCsFile, "SCP-066", "Speed") / 100.0
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.15)
 			;[End Block]
 		Case NPCType966
 			;[Block]
@@ -450,6 +466,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityAutoFade(n\OBJ, HideDistance * 2.5, HideDistance * 2.95)
 			
 			n\Speed = IniGetFloat(NPCsFile, "SCP-1499-1", "Speed") / 100.0 * Rnd(0.9, 1.1)
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCType008_1
 			;[Block]
@@ -472,6 +489,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Sound = LoadSound_Strict("SFX\SCP\008_1\Breath.ogg")
 			
 			n\HP = 120
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 		Case NPCTypeClerk
 			;[Block]
@@ -490,6 +508,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			n\CollRadius = 0.32
+			n\NPCDECAL = CreateDecal(DECAL_SHADOW, 0.0, -500.0, 0.0, 90.0, 0.0, 0.0, 0.25)
 			;[End Block]
 	End Select
 	
@@ -584,6 +603,7 @@ Function RemoveNPC%(n.NPCs)
 	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
 	FreeEntity(n\Collider) : n\Collider = 0
 	FreeEntity(n\OBJ) : n\OBJ = 0
+	If n\NPCDECAL <> Null Then RemoveDecal(n\NPCDECAL)
 	
 	Delete(n)
 	
@@ -628,6 +648,7 @@ Function UpdateNPCs%()
 		Select n\NPCType
 			Case NPCType173
 				;[Block]
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
 				If n\Idle <> 3 And (Not IsPlayerOutsideFacility())
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					
@@ -1509,8 +1530,8 @@ Function UpdateNPCs%()
 				End Select
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.03, EntityZ(n\Collider))
-				
 				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0)
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				;[End Block]
 			Case NPCType049
 				;[Block]
@@ -1956,6 +1977,7 @@ Function UpdateNPCs%()
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.22, EntityZ(n\Collider, True), True)
 				RotateEntity(n\OBJ, 0.0, n\Angle, 0.0, True)
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				
 				n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
 				;[End Block]
@@ -2181,6 +2203,7 @@ Function UpdateNPCs%()
 				EndIf
 				PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 				RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				;[End Block]
 			Case NPCTypeGuard
 				;[Block]
@@ -2607,6 +2630,7 @@ Function UpdateNPCs%()
 					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 					RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
 				EndIf
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				;[End Block]
 			Case NPCTypeMTF
 				;[Block]
@@ -2688,6 +2712,7 @@ Function UpdateNPCs%()
 				EndIf
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
 				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
@@ -2820,6 +2845,7 @@ Function UpdateNPCs%()
 							EndIf
 						EndIf
 						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2 + Sin((MilliSecs() / 8) Mod 360) * 0.1, EntityZ(n\Collider))
+						PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 						
 						Select n\State
 							Case 1.0
@@ -2889,17 +2915,17 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							Temp = CreatePivot()
-							PositionEntity(Temp, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
-							PointEntity(Temp, n\Collider)
+							Pvt = CreatePivot()
+							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+							PointEntity(Pvt, n\Collider)
 							
-							Angle = WrapAngle(EntityYaw(me\Collider) - EntityYaw(Temp))
+							Angle = WrapAngle(EntityYaw(me\Collider) - EntityYaw(Pvt))
 							If Angle < 180.0
 								RotateEntity(n\Collider, 0.0, EntityYaw(me\Collider) - 80.0, 0.0)
 							Else
 								RotateEntity(n\Collider, 0.0, EntityYaw(me\Collider) + 80.0, 0.0)
 							EndIf
-							FreeEntity(Temp) : Temp = 0
+							FreeEntity(Pvt) : Pvt = 0
 							
 							MoveEntity(n\Collider, 0.0, 0.0, 0.03 * fps\Factor[0])
 						EndIf
@@ -3163,6 +3189,7 @@ Function UpdateNPCs%()
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 				RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider) - 180.0, EntityRoll(n\Collider), True)
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				
 				n\DropSpeed = 0.0
 				
@@ -3491,6 +3518,7 @@ Function UpdateNPCs%()
 								
 								PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.23, EntityZ(n\Collider))
 								RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
+								PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 								
 								If Dist > 64.0
 									If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
@@ -3672,6 +3700,7 @@ Function UpdateNPCs%()
 					
 					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.28, EntityZ(n\Collider))
 					RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
+					PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				EndIf
 				;[End Block]
 			Case NPCType066
@@ -3836,8 +3865,8 @@ Function UpdateNPCs%()
 				If ChannelPlaying(n\SoundCHN2) Then me\BlurTimer = Max((5.0 - (Sqr(Dist)) * 300.0), 0.0)
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
-				
 				RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), 0.0)
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				;[End Block]
 			Case NPCType966
 				;[Block]
@@ -4515,6 +4544,7 @@ Function UpdateNPCs%()
 					
 					RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
+					PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 					
 					If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 				Else
@@ -4795,6 +4825,7 @@ Function UpdateNPCs%()
 				EndIf
 				PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 				RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
+				PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				;[End Block]
 		End Select
 		
@@ -6243,6 +6274,7 @@ Function UpdateMTFUnit%(n.NPCs)
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
+	PositionEntity(n\NPCDECAL\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 End Function
 
 Function TeleportCloser%(n.NPCs)

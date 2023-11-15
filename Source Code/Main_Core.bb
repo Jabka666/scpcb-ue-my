@@ -5872,7 +5872,7 @@ Function RenderGUI%()
 	CatchErrors("RenderGUI()")
 	
 	Local e.Events, it.Items, a_it.Items
-	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
+	Local x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
@@ -5916,17 +5916,17 @@ Function RenderGUI%()
 	If SelectedDifficulty\Name <> "Apollyon" And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			If d_I\ClosestButton <> 0
-				Temp = CreatePivot()
-				PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-				PointEntity(Temp, d_I\ClosestButton)
-				YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
+				Pvt = CreatePivot()
+				PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+				PointEntity(Pvt, d_I\ClosestButton)
+				YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
 				If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
 				If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-				PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
+				PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
 				If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 				If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 				
-				FreeEntity(Temp) : Temp = 0
+				FreeEntity(Pvt) : Pvt = 0
 				
 				DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
 			EndIf

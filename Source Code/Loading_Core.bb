@@ -35,6 +35,8 @@ Const DECAL_427% = 18
 Const DECAL_409% = 19
 
 Const DECAL_WATER% = 20
+
+Const DECAL_SHADOW% = 21
 ;[End Block]
 
 Function LoadDecals%()
@@ -67,6 +69,8 @@ Function LoadDecals%()
 	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427_decal.png", 1 + 2, DeleteAllTextures)
 	
 	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures)
+	
+	de_I\DecalTextureID[DECAL_SHADOW] = LoadTexture_Strict("GFX\decals\shadow_decal.png", 1 + 2, DeleteAllTextures)
 End Function
 
 Const MaxParticleTextureIDAmount% = 8
