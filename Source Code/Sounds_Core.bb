@@ -372,52 +372,33 @@ End Function
 Function GetStepSound%(Entity%)
 	Local mat.Materials
 	Local Picker%, Brush%, Texture%, Name$
+	Local i%
 	
 	Picker = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0.0, -1.0, 0.0)
 	If Picker <> 0
 		If GetEntityType(Picker) <> HIT_MAP Then Return(0)
 		Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
 		If Brush <> 0
-			Texture = GetBrushTexture(Brush, 3)
-			If Texture <> 0
-				Name = StripPath(TextureName(Texture))
-				If Name <> "" Then FreeTexture(Texture) : Texture = 0
-				For mat.Materials = Each Materials
-					If mat\Name = Name
-						If mat\StepSound > 0
-							FreeBrush(Brush) : Brush = 0
-							Return(mat\StepSound - 1)
-						EndIf
-						Exit
+			For i = 3 To 1 Step -1
+				Texture = GetBrushTexture(Brush, i)
+				If Texture <> 0
+					Name = StripPath(TextureName(Texture))
+					
+					If Name <> "" 
+					    FreeTexture(Texture) : Texture = 0
+					    
+						For mat.Materials = Each Materials
+							If mat\Name = Name
+								FreeBrush(Brush) : Brush = 0
+								If mat\StepSound > 0 Then Return(mat\StepSound - 1)
+								Exit
+							EndIf
+						Next
 					EndIf
-				Next
-			EndIf
-			Texture = GetBrushTexture(Brush, 2)
-			If Texture <> 0
-				Name = StripPath(TextureName(Texture))
-				If Name <> "" Then FreeTexture(Texture) : Texture = 0
-				For mat.Materials = Each Materials
-					If mat\Name = Name
-						If mat\StepSound > 0
-							FreeBrush(Brush) : Brush = 0
-							Return(mat\StepSound - 1)
-						EndIf
-						Exit
-					EndIf
-				Next
-			EndIf
-			Texture = GetBrushTexture(Brush, 1)
-			If Texture <> 0
-				Name = StripPath(TextureName(Texture))
-				If Name <> "" Then FreeTexture(Texture) : Texture = 0
-				FreeBrush(Brush) : Brush = 0
-				For mat.Materials = Each Materials
-					If mat\Name = Name
-						If mat\StepSound > 0 Then Return(mat\StepSound - 1)
-						Exit
-					EndIf
-				Next
-			EndIf
+				EndIf
+			Next
+			; ~ If we reach this point then no step sound found, free the brush
+			FreeBrush(Brush) : Brush = 0
 		EndIf
 	EndIf
 	Return(0)

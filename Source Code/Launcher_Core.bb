@@ -330,7 +330,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Quit = True
 			Exit
 		EndIf
-
+		
 		; ~ Driver name (tooltip)
 		If opt\GFXDriver <> 1
 			If MouseOn(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
@@ -338,6 +338,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 				Local TooltipY% = MouseY() + 10
 				Local Tooltip$ = GfxDriverName(opt\GFXDriver)
 				Local TooltipWidth% = StringWidth(Tooltip)
+				
 				If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
 				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
 				TextEx(TooltipX + 8, TooltipY + 8, Tooltip)
