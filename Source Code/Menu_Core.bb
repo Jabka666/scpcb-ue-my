@@ -2116,13 +2116,11 @@ End Function
 
 Function RenderMenuTicks%()
 	Local mt.MenuTick
-	Local Width%, Height%
+	Local Width% = 20 * MenuScale
+	Local Height% = 20 * MenuScale
 	Local IMG%
 	
 	For mt.MenuTick = Each MenuTick
-		Width = 20 * MenuScale
-		Height = 20 * MenuScale
-		
 		If mt\Locked
 			IMG = MenuGray
 		Else
@@ -2132,21 +2130,20 @@ Function RenderMenuTicks%()
 		RenderTiledImageRect(IMG, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x, mt\y, Width, Height)
 		
 		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
+		Local ColorR% = 0, ColorG% = 0, ColorB% = 0
 		
-		If Highlight
-			Color(50, 50, 50)
-		Else
-			Color(0, 0, 0)
-		EndIf
+		If Highlight Then ColorR = 50 : ColorG = 50 : ColorB = 50
+		Color(ColorR, ColorG, ColorB)
 		
 		Rect(mt\x + 2, mt\y + 2, Width - 4, Height - 4)
 		
 		If mt\Selected
 			If Highlight
-				Color(255, 255, 255)
+				ColorR = ColorR * 5.1 : ColorG = ColorG * 5.1 : ColorB = ColorB * 5.1
 			Else
-				Color(200, 200, 200)
+				ColorR = ColorR + 200 : ColorG = ColorG + 200 : ColorB = ColorB + 200
 			EndIf
+			Color(ColorR, ColorG, ColorB)
 			RenderTiledImageRect(IMG, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x + 4, mt\y + 4, Width - 8, Height - 8)
 		EndIf
 		Color(255, 255, 255)
@@ -2399,11 +2396,10 @@ Function RenderMenuSlideBars%()
 	Local msb.MenuSlideBar
 	
 	For msb.MenuSlideBar = Each MenuSlideBar
-		If MouseOn(msb\x, msb\y, msb\Width + (14 * MenuScale), 20 * MenuScale)
-			Color(0, 200, 0)
-		Else
-			Color(255, 255, 255)
-		EndIf
+		Local ColorR% = 255, ColorG% = 255, ColorB% = 255
+		
+		If MouseOn(msb\x, msb\y, msb\Width + (14 * MenuScale), 20 * MenuScale) Then ColorR = 0 : ColorG = 200 : ColorB = 0
+		Color(ColorR, ColorG, ColorB)
 		Rect(msb\x, msb\y, msb\Width + (14 * MenuScale), 20 * MenuScale, False)
 		
 		DrawBlock(BlinkMeterIMG, msb\x + msb\Width * msb\Value / 100.0 + (3 * MenuScale), msb\y + (3 * MenuScale))
@@ -2523,93 +2519,56 @@ Function RenderMenuSliders%()
 	Local ms.MenuSlider
 	
 	For ms.MenuSlider = Each MenuSlider
+		Local x1% = ms\x, y1% = ms\y - (8 * MenuScale), y2 = ms\y
+		Local w1% = ms\Width + (14 * MenuScale), w2% = 4 * MenuScale
+		Local h1% = 9 * MenuScale, h2% = 10 * MenuScale
+		Local ColorR% = 200, ColorG% = 200, ColorB% = 200
+		
+		If ms\ID = OnSliderID Lor MouseOn(x1, y1, w1, h1 + h2) Then ColorR = 0 : ColorG = 200 : ColorB = 0
+		
+		Color(ColorR, ColorG, ColorB)
+		
+		Rect(x1, y2, w1, h2)
+		Rect(x1, y1, w2, h1)
+		
+		SetFontEx(fo\FontID[Font_Default])
 		If ms\Amount = 3
-			If ms\ID = OnSliderID
-				Color(0, 200, 0)
-			Else
-				Color(200, 200, 200)
-			EndIf
-			Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale)
-			Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
-			Rect(ms\x + (ms\Width / 2) + (5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
-			Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
-			
-			If ms\ID <> OnSliderID
-				If MouseOn(ms\x, ms\y - (8 * MenuScale), ms\Width + (14 * MenuScale), 18 * MenuScale)
-					Color(0, 200, 0)
-					Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale, False)
-					Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
-					Rect(ms\x + (ms\Width / 2) + (5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
-					Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
-				EndIf
-			EndIf
-			
-			If ms\Value = 0
-				DrawBlock(BlinkMeterIMG, ms\x, ms\y - (8 * MenuScale))
-			ElseIf ms\Value = 1
-				DrawBlock(BlinkMeterIMG, ms\x + (ms\Width / 2) + (3 * MenuScale), ms\y - (8 * MenuScale))
-			Else
-				DrawBlock(BlinkMeterIMG, ms\x + ms\Width + (6 * MenuScale), ms\y - (8 * MenuScale))
-			EndIf
+			Rect(x1 + (ms\Width / 2) + (5 * MenuScale), y1, w2, h1)
+			Rect(x1 + ms\Width + (10 * MenuScale), y1, w2, h1)
 			
 			Color(170, 170, 170)
-			SetFontEx(fo\FontID[Font_Default])
 			If ms\Value = 0
-				TextEx(ms\x + (2 * MenuScale), ms\y + (12 * MenuScale), ms\Val1, True)
+				DrawBlock(BlinkMeterIMG, x1, y1)
+				TextEx(x1 + (2 * MenuScale), y2 + (12 * MenuScale), ms\Val1, True)
 			ElseIf ms\Value = 1
-				TextEx(ms\x + (ms\Width / 2) + (7 * MenuScale), ms\y + (12 * MenuScale), ms\Val2, True)
+				DrawBlock(BlinkMeterIMG, x1 + (ms\Width / 2) + (3 * MenuScale), y1)
+				TextEx(x1 + (ms\Width / 2) + (7 * MenuScale), y2 + (12 * MenuScale), ms\Val2, True)
 			Else
-				TextEx(ms\x + ms\Width + (12 * MenuScale), ms\y + (12 * MenuScale), ms\Val3, True)
+				DrawBlock(BlinkMeterIMG, x1 + ms\Width + (6 * MenuScale), y1)
+				TextEx(x1 + ms\Width + (12 * MenuScale), y2 + (12 * MenuScale), ms\Val3, True)
 			EndIf
 		ElseIf ms\Amount = 5
-			If ms\ID = OnSliderID
-				Color(0, 200, 0)
-			Else
-				Color(200, 200, 200)
-			EndIf
-			Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale)
-			Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
-			Rect(ms\x + (ms\Width / 4) + (2.5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
-			Rect(ms\x + (ms\Width / 2) + (5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
-			Rect(ms\x + (ms\Width * 0.75) + (7.5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
-			Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale)
-			
-			If ms\ID <> OnSliderID
-				If MouseOn(ms\x, ms\y - (8 * MenuScale), ms\Width + (14 * MenuScale), 18 * MenuScale)
-					Color(0, 200, 0)
-					Rect(ms\x, ms\y, ms\Width + (14 * MenuScale), 10 * MenuScale, False)
-					Rect(ms\x, ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
-					Rect(ms\x + (ms\Width / 4) + (2.5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
-					Rect(ms\x + (ms\Width / 2) + (5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
-					Rect(ms\x + (ms\Width * 0.75) + (7.5 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
-					Rect(ms\x + ms\Width + (10 * MenuScale), ms\y - (8 * MenuScale), 4 * MenuScale, 9 * MenuScale, False)
-				EndIf
-			EndIf
-			
-			If ms\Value = 0
-				DrawBlock(BlinkMeterIMG, ms\x, ms\y - (8 * MenuScale))
-			ElseIf ms\Value = 1
-				DrawBlock(BlinkMeterIMG, ms\x + (ms\Width / 4) + (1.5 * MenuScale), ms\y - (8 * MenuScale))
-			ElseIf ms\Value = 2
-				DrawBlock(BlinkMeterIMG, ms\x + (ms\Width / 2) + (3 * MenuScale), ms\y - (8 * MenuScale))
-			ElseIf ms\Value = 3
-				DrawBlock(BlinkMeterIMG, ms\x + (ms\Width * 0.75) + (4.5 * MenuScale), ms\y - (8 * MenuScale))
-			Else
-				DrawBlock(BlinkMeterIMG, ms\x + ms\Width + (6 * MenuScale), ms\y - (8 * MenuScale))
-			EndIf
+			Rect(x1 + (ms\Width / 4) + (2.5 * MenuScale), y1, w2, h1)
+			Rect(x1 + (ms\Width / 2) + (5 * MenuScale), y1, w2, h1)
+			Rect(x1 + (ms\Width * 0.75) + (7.5 * MenuScale), y1, w2, h1)
+			Rect(x1 + ms\Width + (10 * MenuScale), y1, w2, h1)
 			
 			Color(170, 170, 170)
-			SetFontEx(fo\FontID[Font_Default])
 			If ms\Value = 0
-				TextEx(ms\x + (2 * MenuScale), ms\y + (12 * MenuScale), ms\Val1, True)
+				DrawBlock(BlinkMeterIMG, x1, y1)
+				TextEx(x1 + (2 * MenuScale), y2 + (12 * MenuScale), ms\Val1, True)
 			ElseIf ms\Value = 1
-				TextEx(ms\x + (ms\Width / 4) + (4.5 * MenuScale), ms\y + (12 * MenuScale), ms\Val2, True)
+				DrawBlock(BlinkMeterIMG, x1 + (ms\Width / 4) + (1.5 * MenuScale), y1)
+				TextEx(x1 + (ms\Width / 4) + (4.5 * MenuScale), y2 + (12 * MenuScale), ms\Val2, True)
 			ElseIf ms\Value = 2
-				TextEx(ms\x + (ms\Width / 2) + (7 * MenuScale), ms\y + (12 * MenuScale), ms\Val3, True)
+				DrawBlock(BlinkMeterIMG, x1 + (ms\Width / 2) + (3 * MenuScale), y1)
+				TextEx(x1 + (ms\Width / 2) + (7 * MenuScale), y2 + (12 * MenuScale), ms\Val3, True)
 			ElseIf ms\Value = 3
-				TextEx(ms\x + (ms\Width * 0.75) + (9.5 * MenuScale), ms\y + (12 * MenuScale), ms\Val4, True)
+				DrawBlock(BlinkMeterIMG, x1 + (ms\Width * 0.75) + (4.5 * MenuScale), y1)
+				TextEx(x1 + (ms\Width * 0.75) + (9.5 * MenuScale), y2 + (12 * MenuScale), ms\Val4, True)
 			Else
-				TextEx(ms\x + ms\Width + (12 * MenuScale), ms\y + (12 * MenuScale), ms\Val5, True)
+				DrawBlock(BlinkMeterIMG, x1 + ms\Width + (6 * MenuScale), y1)
+				TextEx(x1 + ms\Width + (12 * MenuScale), y2 + (12 * MenuScale), ms\Val5, True)
 			EndIf
 		EndIf
 	Next

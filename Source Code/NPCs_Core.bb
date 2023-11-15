@@ -81,16 +81,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			If (Left(CurrentDate(), 7) = "31 Oct ")
 				n_I\IsHalloween = True
 				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
-			EndIf
-			
-			; ~ On New Year set cookie texture
-			If (Left(CurrentDate(), 7) = "01 Jan ")
+			ElseIf (Left(CurrentDate(), 7) = "01 Jan ") 
 				n_I\IsNewYear = True
 				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
-			EndIf
-			
-			; ~ On April Fools set kawaii texture
-			If (Left(CurrentDate(), 7) = "01 Apr ")
+			ElseIf (Left(CurrentDate(), 7) = "01 Apr ")
 				n_I\IsAprilFools = True
 				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
 			EndIf
