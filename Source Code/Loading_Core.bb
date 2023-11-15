@@ -1875,14 +1875,16 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		EntityRadius(w\OBJ, 0.0)
 		EntityPickMode(w\OBJ, 0, False)
 		
-		For i = 0 To 4
-			If w\connected[i] <> Null
-				Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
-				
-				EntityColor(tLine, 255.0, 0.0, 0.0)
-				EntityParent(tLine, w\OBJ)
-			EndIf
-		Next
+		If opt\DebugMode
+			For i = 0 To 4
+				If w\connected[i] <> Null
+					Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
+					
+					EntityColor(tLine, 255.0, 0.0, 0.0)
+					EntityParent(tLine, w\OBJ)
+				EndIf
+			Next
+		EndIf
 	Next
 End Function
 
