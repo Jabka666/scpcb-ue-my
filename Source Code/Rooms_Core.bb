@@ -2502,7 +2502,6 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ A door to the containment chamber
 			d.Doors = CreateDoor(r, r\x - 4352.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1368.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
-			r\RoomDoors.Doors[2] = d
 			
 			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
