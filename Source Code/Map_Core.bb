@@ -3367,6 +3367,80 @@ Function RemoveDecal%(de.Decals)
 	Delete(de)
 End Function
 
+Type ShadowDecal
+	Field OBJ%, Surf%
+	Field x#, y#, z#
+	Field SizeX#, SizeY#
+	Field SizeChangeX#, SizeChangeY#
+	Field MaxSizeX#, MaxSizeY#
+End Type
+
+Function CreateShadow.ShadowDecal(x#, y#, z#, SizeX#, SizeY#)
+	Local sh.ShadowDecal
+	
+	sh.ShadowDecal = New ShadowDecal
+	sh\SizeX = SizeX : sh\SizeY = SizeY
+	
+	sh\OBJ = CreateMesh()
+	sh\Surf = CreateSurface(sh\OBJ)
+	
+	Local v0% = AddVertex(sh\Surf, -1.0, 1.0, 0.0, 0.0, 0.0)
+	Local v1% = AddVertex(sh\Surf, 1.0, 1.0, 0.0, 1.0, 0.0)
+	Local v2% = AddVertex(sh\Surf, 1.0, -1.0, 0.0, 1.0, 1.0)
+	Local v3% = AddVertex(sh\Surf, -1.0, -1.0, 0.0, 0.0, 1.0)
+	
+	AddTriangle(sh\Surf, v0, v1, v2)
+	AddTriangle(sh\Surf, v0, v2, v3)
+	
+	PositionEntity(sh\OBJ, x, y, z, True)
+	ScaleEntity(sh\OBJ, SizeX, SizeY, 1.0, True)
+	RotateEntity(sh\OBJ, 90.0, 0.0, 0.0, True)
+	EntityTexture(sh\OBJ, de_I\DecalTextureID[DECAL_SHADOW])
+	EntityAlpha(sh\OBJ, 1.0)
+	EntityFX(sh\OBJ, 0)
+	EntityBlend(sh\OBJ, 1)
+	
+	UpdateNormals(sh\OBJ)
+	HideEntity(sh\OBJ)
+	
+	Return(sh)
+End Function
+
+Function UpdateShadows%()
+	Local sh.ShadowDecal
+	
+	For sh.ShadowDecal = Each ShadowDecal
+		If EntityDistanceSquared(sh\OBJ, me\Collider) <= PowTwo(HideDistance)
+			If EntityHidden(sh\OBJ) Then ShowEntity(sh\OBJ)
+			If sh\SizeChangeX <> 0.0
+				sh\SizeX = sh\SizeX + (sh\SizeChangeX * fps\Factor[0])
+				If sh\SizeX >= sh\MaxSizeX
+					sh\SizeChangeX = 0.0
+					sh\SizeX = sh\MaxSizeX
+				EndIf
+			EndIf
+			If sh\SizeChangeY <> 0.0
+				sh\SizeY = sh\SizeY + (sh\SizeChangeY * fps\Factor[0])
+				If sh\SizeY >= sh\MaxSizeY
+					sh\SizeChangeY = 0.0
+					sh\SizeY = sh\MaxSizeY
+				EndIf
+			EndIf
+			If sh\SizeChangeX <> 0.0 Lor sh\SizeChangeY <> 0.0
+				ScaleEntity(sh\OBJ, sh\SizeX, sh\SizeY, 1.0, True)
+			EndIf
+		Else
+			If (Not EntityHidden(sh\OBJ)) Then HideEntity(sh\OBJ)
+		EndIf
+	Next
+End Function
+
+Function RemoveShadow%(sh.ShadowDecal)
+	FreeEntity(sh\OBJ) : sh\OBJ = 0
+	sh\Surf = 0 
+	Delete(sh)
+End Function
+
 Function UpdateDecals%()
 	Local de.Decals
 	
