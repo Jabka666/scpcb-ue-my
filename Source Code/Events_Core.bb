@@ -4854,7 +4854,7 @@ Function UpdateEvents%()
 												n\IsDead = True
 												;[End Block]
 										End Select
-										If e\room\Dist < 8.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.4
+										If e\room\Dist < 8.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
 									EndIf
 								EndIf
 							Next
