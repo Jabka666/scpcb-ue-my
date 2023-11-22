@@ -7014,7 +7014,7 @@ Function UpdateNPCNearTesla%()
 			
 			If n\NPCType = NPCType106
 				If n\State3 = 1.0
-					AnimateNPC(n, 259.0, 110.0, -0.12, False)
+					AnimateNPC(n, 259.0, 110.0, -0.15, False)
 					
 					If n\Frame <= 170.0
 						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
