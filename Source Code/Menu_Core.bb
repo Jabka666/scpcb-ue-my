@@ -1201,7 +1201,7 @@ Function RenderMainMenu%()
 						End Select
 						TextEx(x + (200 * MenuScale), y + (186 * MenuScale), GetLocalString("menu", "new.savetype") + TempStr)
 						
-						; ~ Agressive NPCs
+						; ~ Aggressive NPCs
 						TextEx(x + (200 * MenuScale), y + (215 * MenuScale), GetLocalString("menu", "new.dangernpc"))
 						; ~ Inventory slots
 						TextEx(x + (200 * MenuScale), y + (246 * MenuScale), Format(GetLocalString("menu", "new.invslots"), SelectedDifficulty\InventorySlots))
