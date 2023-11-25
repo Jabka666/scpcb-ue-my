@@ -1228,6 +1228,65 @@ Function RenderMainMenu%()
 						TextEx(x + (200 * MenuScale), y + (276 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 					Else
 						RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 140 * MenuScale)
+						RenderFrame(x + (590 * MenuScale), y + (50 * MenuScale), 340 * MenuScale, 90 * MenuScale)
+					Select SelectedDifficulty\SaveType
+						Case SAVE_ANYWHERE
+							;[Block]
+							TempStr = GetLocalString("menu", "new.saveany")
+							;[End Block]
+						Case SAVE_ON_SCREENS
+							;[Block]
+							TempStr = GetLocalString("menu", "new.savescreen")
+							;[End Block]
+						Case SAVE_ON_QUIT
+							;[Block]
+							TempStr = GetLocalString("menu", "new.savequit")
+							;[End Block]
+						Case NO_SAVES
+							;[Block]
+							TempStr = GetLocalString("menu", "new.saveno")
+							;[End Block]
+					End Select
+					TextEx(x + (600 * MenuScale), y + (58 * MenuScale), GetLocalString("menu", "new.savetype") + TempStr)
+					
+					Select SelectedDifficulty\AggressiveNPCs
+						Case 0
+							;[Block]
+							TempStr = GetLocalString("menu", "no")
+							;[End Block]
+						Case 1
+							;[Block]
+							TempStr = GetLocalString("menu", "yes")
+							;[End Block]
+					End Select
+					TextEx(x + (600 * MenuScale), y + (74 * MenuScale), GetLocalString("menu", "new.dangernpc") + ": "  + TempStr)
+					
+					TextEx(x + (600 * MenuScale), y + (90 * MenuScale), Format(GetLocalString("menu", "new.invslots"), SelectedDifficulty\InventorySlots))
+					
+					
+					Select SelectedDifficulty\OtherFactors
+						Case EASY
+							;[Block]
+							TempStr = GetLocalString("menu", "new.easy")
+							;[End Block]
+						Case NORMAL
+							;[Block]
+							TempStr = GetLocalString("menu", "new.normal")
+							;[End Block]
+						Case HARD
+							;[Block]
+							TempStr = GetLocalString("menu", "new.hard")
+							;[End Block]
+						Case EXTREME
+							;[Block]
+							TempStr = GetLocalString("menu", "new.extreme")
+							;[End Block]
+					End Select
+					
+					TextEx(x + (600 * MenuScale), y + (106 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
+					
+					If SelectedDifficulty\Name = "Apollyon" Then TextEx(x + (600 * MenuScale), y + (122 * MenuScale), GetLocalString("menu", "nohud"))
+					RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (240 * MenuScale), 390 * MenuScale, 170 * MenuScale)
 					EndIf
 					
 					SetFontEx(fo\FontID[Font_Default_Big])
