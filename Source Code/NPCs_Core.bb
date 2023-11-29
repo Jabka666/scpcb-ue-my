@@ -4808,16 +4808,7 @@ Function UpdateNPCs%()
 			If n\InFacility = InFacility
 				TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 				
-				Local CollidedFloor% = False
-				
-				For i = 1 To CountCollisions(n\Collider)
-					If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01
-						CollidedFloor = True
-						Exit
-					EndIf
-				Next
-				
-				If CollidedFloor
+				If EntityCollided(n\Collider, HIT_MAP)
 					n\DropSpeed = 0.0
 				Else
 					If ShouldEntitiesFall
