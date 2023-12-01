@@ -4631,6 +4631,71 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) > 1.0
 						e\EventState = UpdateLever(e\room\RoomLevers[0]\OBJ)
 						UpdateLever(e\room\RoomLevers[1]\OBJ)
+						
+						If e\EventState = 1.0
+							Select Rand(8)
+								Case 1
+									;[Block]
+									x = 813.0
+									y = 3010.0
+									z = -152.0
+									Angle = -111.0
+									;[End Block]
+								Case 2
+									;[Block]
+									x = 818.0
+									y = 3010.0
+									z = 147.0
+									Angle = -62.0
+									;[End Block]
+								Case 3
+									;[Block]
+									x = 621.0
+									y = 3010.0
+									z = 341.0
+									Angle = -29.0
+									;[End Block]
+								Case 4
+									;[Block]
+									x = 327.0
+									y = 3010.0
+									z = 349.0
+									Angle = 25.0
+									;[End Block]
+								Case 5
+									;[Block]
+									x = 137.0
+									y = 3010.0
+									z = 143.0
+									Angle = 63.0
+									;[End Block]
+								Case 6
+									;[Block]
+									x = 137.0
+									y = 3010.0
+									z = -155.0
+									Angle = 112.0
+									;[End Block]
+								Case 7
+									;[Block]
+									x = 330.0
+									y = 3010.0
+									z = -346.0
+									Angle = 147.0
+									;[End Block]
+								Case 8
+									;[Block]
+									x = 635.0
+									y = 3010.0
+									z = -346.0
+									Angle = -152.0
+									;[End Block]
+							End Select
+							TFormPoint(x, y, z, e\room\OBJ, 0)
+							p.Particles = CreateParticle(PARTICLE_WHITE_SMOKE, TFormedX(), TFormedY(), TFormedZ(), Rnd(0.3), 0.0, Rnd(50.0, 120.0))
+							p\Speed = Rnd(0.005, 0.01) : p\AlphaChange = -0.02
+							RotateEntity(p\Pvt, -75.0, e\room\Angle - Angle, 0.0)
+						EndIf
 					EndIf
 				EndIf
 				;[End Block]
