@@ -474,7 +474,7 @@ Function UpdateQuickLoading%()
 End Function
 
 Function RenderQuickLoading%()
-	If QuickLoadPercent > -1
+	If QuickLoadPercent > -1 And opt\HUDEnabled
 		MidHandle(t\IconID[9])
 		DrawImage(t\IconID[9], opt\GraphicWidth - (90 * MenuScale), opt\GraphicHeight - (150 * MenuScale))
 		Color(255, 255, 255)
