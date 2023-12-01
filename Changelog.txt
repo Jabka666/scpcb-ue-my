@@ -1,7 +1,7 @@
 v1.2
 
 Launcher:
-- Added «Primary Driver» string for GFX driver selector.
+- Added «Primary Driver» string for GFX driver selector. Also added driver names.
 
 General:
 - Finished subtitles.
@@ -18,20 +18,28 @@ General:
 
 - Updated credits.
 
+- Freed up some RAM by getting rid of texture/image buffers for fullscreen mode.
+
 Mechanics:
 - Removed accidental item dropping.
 - Player's camera now "blinks" after putting on a gear.
+
+Menu:
+- Added descriptive info for difficulties.
 
 Rooms:
 - Added security camera in «room2C_ez» room.
 - Added «room2C_2_ez» room.
 - Added SCP-079 document to observation room in the chamber.
+- Added smoke particles under the warhead in «room2_nuke».
+- Added security cam in «room4_ic».
 
 - The doors guarded by a four-pass code are now unlocked by default in SCP-860-1's containment chamber.
 
-- Add sanity system to SCP-012's event.
-	- Cannot save at monitor and while being dragged in unless you wear SCP-714(Green) or Heavy gear.
+- Added sanity system to SCP-012's event:
+	- Cannot save at monitor and while being dragged in unless you wear SCP-714 (Green) or Heavy gear.
 	- Character will lose control when on low sanity and you'll be forced to complete the sheet.
+
 - Changes for SCP-205's containment chamber:
 	- Added Level 3 Keycard.
 	- Replaced battery with eyedrops.
@@ -56,9 +64,12 @@ Items:
 - Fine SCRAMBLE Gear now requires 18V batteries to operate.
 
 NPCs:
-- Add SCP-173-J as a skin for SCP-173 during April Fools day.
+- Added SCP-173-J as a skin for SCP-173 during April Fools day.
+- Added SCP-1048-A event for «room2_3_lcz» and «room2_5_lcz» rooms.
+
 - Can no longer use SCP-268 against SCP-096.
 - Improved SCP-008-1, SCP-049, SCP-049-2 and MTF's AI.
+- SCP-106 retreat animation used in the Tesla Gates is now faster.
 
 Bug Fixes:
 - Fixed SCP-939's texture which is too bright.
@@ -87,6 +98,8 @@ Bug Fixes:
 - Fixed an empty texture not applied to checkpoint monitors after loading the game.
 - Fixed some memory leaks.
 - Fixed bodies falling through the map.
+- Fixed some broken textures that couldn't be opened in some graphic editors.
+- Fixed some omissions in SCP-1048-A event.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.
