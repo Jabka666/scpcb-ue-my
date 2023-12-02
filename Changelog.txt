@@ -2,6 +2,7 @@ v1.2
 
 Launcher:
 - Added «Primary Driver» string for GFX driver selector. Also added driver names.
+- Added progress for downloading languages. Now the game won't freeze when downloading.
 
 General:
 - Finished subtitles.
