@@ -2174,9 +2174,6 @@ Function UpdateNPCs%()
 					; ~ Loop the breath sound
 					If n\State > 1.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 				Else
-					; ~ The NPC was killed
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
 				PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
@@ -3149,16 +3146,7 @@ Function UpdateNPCs%()
 						End Select
 					EndIf
 				Else
-					; ~ The NPC was killed
 					AnimateNPC(n, 515.0, 551.0, 0.15, False)
-					If n\Frame > 550.9
-						If (Not EntityHidden(n\OBJ))
-							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-							HideEntity(n\Collider)
-							HideEntity(n\OBJ)
-						EndIf
-					EndIf
 				EndIf
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
@@ -4788,9 +4776,6 @@ Function UpdateNPCs%()
 					; ~ Loop the breath sound
 					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 				Else
-					; ~ The NPC was killed
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
 				EndIf
 				PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
@@ -4802,6 +4787,19 @@ Function UpdateNPCs%()
 		
 		If n\IsDead And n\GravityMult = 1.0
 			EntityType(n\Collider, HIT_DEAD)
+			If n\NPCType = NPCType035_Tentacle
+				If n\Frame > 550.9 And (Not EntityHidden(n\OBJ))
+					HideEntity(n\Collider)
+					HideEntity(n\OBJ)
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+				EndIf
+			Else
+				If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+				If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+				If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+				If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+			EndIf
 			n\GravityMult = 0.0
 		EndIf
 		If GravityDist < PowTwo(HideDistance * 0.7) Lor n\NPCType = NPCType1499_1
