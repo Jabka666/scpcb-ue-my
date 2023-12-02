@@ -153,32 +153,6 @@
 		XtrithX
 		artoka
 
-*Translators
-
-		Chinese Simplified localization,
-by "ZiYueCommentary"
-
-		Russian localization,
-by "CreatorMasters", "Trill Team" and Nikita Sidorov ("Jabka")
-
-		French localization,
-by "EpicDasherFR"
-
-		Italian localization,
-by Extol ("amogussusimpostor3")
-
-		Germany localization,
-by Tillikum Soyer ("Tillikum")
-
-		Japanese localization,
-by Xing Jie ("XingJieGames")
-
-		Spanish localization,
-by kSuzukuOninuts ("SuzukuKnm")
-
-		Portuguese localization,
-by Ariel ("arielniii")
-
 *Mod Testers
 
 		Alexey Krasnov ("TaskeWSH")
