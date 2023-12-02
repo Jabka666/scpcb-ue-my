@@ -3352,6 +3352,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	EntityFX(de\OBJ, FX)
 	EntityBlend(de\OBJ, BlendMode)
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
+	EntityType(de\OBJ, 0)
 	
 	UpdateNormals(de\OBJ)
 	HideEntity(de\OBJ)
@@ -3376,6 +3377,8 @@ Type ShadowDecal
 End Type
 
 Function CreateShadow.ShadowDecal(x#, y#, z#, SizeX#, SizeY#)
+	If (Not opt\EnableShadows) Then Return(Null)
+	
 	Local sh.ShadowDecal
 	
 	sh.ShadowDecal = New ShadowDecal
@@ -3399,6 +3402,7 @@ Function CreateShadow.ShadowDecal(x#, y#, z#, SizeX#, SizeY#)
 	EntityAlpha(sh\OBJ, 1.0)
 	EntityFX(sh\OBJ, 0)
 	EntityBlend(sh\OBJ, 1)
+	EntityType(sh\OBJ, 0)
 	
 	UpdateNormals(sh\OBJ)
 	HideEntity(sh\OBJ)
@@ -3407,6 +3411,8 @@ Function CreateShadow.ShadowDecal(x#, y#, z#, SizeX#, SizeY#)
 End Function
 
 Function UpdateShadows%()
+	If (Not opt\EnableShadows) Then Return
+	
 	Local sh.ShadowDecal
 	
 	For sh.ShadowDecal = Each ShadowDecal
@@ -3435,9 +3441,15 @@ Function UpdateShadows%()
 	Next
 End Function
 
+Function PositionShadow%(sh.ShadowDecal, x#, y#, z#)
+	If (Not opt\EnableShadows) Then Return
+	
+	PositionEntity(sh.ShadowDecal\OBJ, x, y, z)
+End Function
+
 Function RemoveShadow%(sh.ShadowDecal)
 	FreeEntity(sh\OBJ) : sh\OBJ = 0
-	sh\Surf = 0 
+	sh\Surf = 0
 	Delete(sh)
 End Function
 

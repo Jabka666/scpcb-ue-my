@@ -501,7 +501,7 @@ End Function
 Function LoadGame%(File$)
 	CatchErrors("LoadGame(" + File + ")")
 	
-	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
+	Local r.Rooms, n.NPCs, do.Doors, sh.ShadowDecal, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
 	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 	
@@ -660,6 +660,10 @@ Function LoadGame%(File$)
 	Next
 	
 	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
+	
+	For sh.ShadowDecal = Each ShadowDecal
+		RemoveShadow(sh)
+	Next
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1312,7 +1316,7 @@ End Function
 Function LoadGameQuick%(File$)
 	CatchErrors("LoadGameQuick(" + File + ")")
 	
-	Local r.Rooms, n.NPCs, do.Doors
+	Local r.Rooms, n.NPCs, do.Doors, sh.ShadowDecal
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
 	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
@@ -1500,6 +1504,10 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
+	
+	For sh.ShadowDecal = Each ShadowDecal
+		RemoveShadow(sh)
+	Next
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)

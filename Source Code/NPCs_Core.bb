@@ -646,7 +646,7 @@ Function UpdateNPCs%()
 			Case NPCType173
 				;[Block]
 				ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.32 : ModelPosZ = EntityZ(n\Collider)
-				PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+				PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 				
 				If n\Idle <> 3 And (Not IsPlayerOutsideFacility())
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
@@ -1529,7 +1529,7 @@ Function UpdateNPCs%()
 				End Select
 				
 				ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.03 : ModelPosZ = EntityZ(n\Collider)
-				PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY - 0.23, ModelPosZ)
+				PositionShadow(n\shdw, ModelPosX, ModelPosY - 0.23, ModelPosZ)
 				
 				PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0)
@@ -1977,7 +1977,7 @@ Function UpdateNPCs%()
 				EndIf
 				
 				ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.22 : ModelPosZ = EntityZ(n\Collider)
-				PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+				PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 				
 				PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 				RotateEntity(n\OBJ, 0.0, n\Angle, 0.0, True)
@@ -2205,7 +2205,8 @@ Function UpdateNPCs%()
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
 				ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.2 : ModelPosZ = EntityZ(n\Collider)
-				PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+				PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
+				
 				PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 				RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 				;[End Block]
@@ -2625,7 +2626,7 @@ Function UpdateNPCs%()
 				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 				
 				ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.2 : ModelPosZ = EntityZ(n\Collider)
-				PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+				PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 				If n\OBJ2 <> 0
 					PositionEntity(n\OBJ2, ModelPosX, ModelPosY, ModelPosZ)
 					RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider), 0.0)
@@ -2716,7 +2717,7 @@ Function UpdateNPCs%()
 					End Select
 				EndIf
 				ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.32 : ModelPosZ = EntityZ(n\Collider)
-				PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+				PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 				PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
 				;[End Block]
@@ -2851,7 +2852,7 @@ Function UpdateNPCs%()
 							EndIf
 						EndIf
 						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2 + Sin((MilliSecs() / 8) Mod 360) * 0.1, EntityZ(n\Collider))
-						PositionEntity(n\shdw\OBJ, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
+						PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 						
 						Select n\State
 							Case 1.0
@@ -3523,7 +3524,7 @@ Function UpdateNPCs%()
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 								
 								ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.23 : ModelPosZ = EntityZ(n\Collider)
-								PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+								PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 								PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 								RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 								
@@ -3706,7 +3707,7 @@ Function UpdateNPCs%()
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 					
 					ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.28 : ModelPosZ = EntityZ(n\Collider)
-					PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+					PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 					PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 					RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 				EndIf
@@ -3873,7 +3874,7 @@ Function UpdateNPCs%()
 				If ChannelPlaying(n\SoundCHN2) Then me\BlurTimer = Max((5.0 - (Sqr(Dist)) * 300.0), 0.0)
 				
 				ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.2 : ModelPosZ = EntityZ(n\Collider)
-				PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+				PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 				PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 				RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), 0.0)
 				;[End Block]
@@ -4552,7 +4553,7 @@ Function UpdateNPCs%()
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 					
 					ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.2 : ModelPosZ = EntityZ(n\Collider)
-					PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+					PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 					PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 					RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 					
@@ -4834,7 +4835,7 @@ Function UpdateNPCs%()
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
 				EndIf
 				ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.2 : ModelPosZ = EntityZ(n\Collider)
-				PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+				PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 				PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 				RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 				;[End Block]
@@ -6285,7 +6286,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And EntityY(n\Collider) < -7.0 Then TeleportCloser(n)
 	EndIf
 	ModelPosX = EntityX(n\Collider) : ModelPosY = EntityY(n\Collider) - 0.2 : ModelPosZ = EntityZ(n\Collider)
-	PositionEntity(n\shdw\OBJ, ModelPosX, ModelPosY, ModelPosZ)
+	PositionShadow(n\shdw, ModelPosX, ModelPosY, ModelPosZ)
 	PositionEntity(n\OBJ, ModelPosX, ModelPosY, ModelPosZ)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 End Function

@@ -189,6 +189,7 @@ Type Options
 	Field Anisotropic%, AnisotropicLevel%
 	Field Atmosphere%
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
+	Field EnableShadows%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -327,6 +328,8 @@ Function LoadOptionsINI%()
 			;[End Block]
 	End Select
 	
+	opt\EnableShadows = IniGetInt(OptionFile, "Graphics", "Enable Shadows", True)
+	
 	; ~ [AUDIO]
 	
 	opt\PrevMasterVolume = IniGetFloat(OptionFile, "Audio", "Master Volume", 0.5)
@@ -458,6 +461,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Graphics", "Atmosphere", opt\Atmosphere)
 	
 	IniWriteString(OptionFile, "Graphics", "Security Cam Render Interval", opt\SecurityCamRenderInterval)
+	
+	IniWriteString(OptionFile, "Graphics", "Enable Shadows", opt\EnableShadows)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -587,6 +592,8 @@ Function ResetOptionsINI%()
 	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0
+	
+	opt\EnableShadows = True
 	
 	; ~ [AUDIO]
 	
