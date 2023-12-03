@@ -2375,7 +2375,10 @@ End Function
 Function UpdateCough%(Chance_%)
 	If (Not me\Terminated)
 		If Rand(Chance_) = 1
-			If (Not ChannelPlaying(CoughCHN)) Then CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
+			If (Not ChannelPlaying(CoughCHN))
+				CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
+				me\SndVolume = Max(4.0, me\SndVolume)
+			EndIf
 		EndIf
 	EndIf
 End Function
