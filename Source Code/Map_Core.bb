@@ -2519,7 +2519,7 @@ Function UpdateDoors%()
 				For i = 0 To 1
 					If d\Buttons[i] <> 0
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 And Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0
-							If UpdateButton(d\Buttons[i]) Then d_I\ClosestDoor = d
+							If UpdateButton(d\Buttons[i]) Then d_I\ClosestDoor = d : me\SndVolume = 4.0
 						EndIf
 					EndIf
 				Next
