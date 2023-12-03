@@ -5867,9 +5867,8 @@ Function UpdateEvents%()
 									
 									PickItem(SelectedItem)
 									
-									FreeEntity(e\room\Objects[0]) : e\room\Objects[2] = 0
+									FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 									
-									e\EventState = 3.0
 									RemoveEvent(e)
 								EndIf
 							EndIf
