@@ -4451,54 +4451,52 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
-					If wi\BallisticVest = 0
-						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
-						
-						If SelectedItem\ItemTemplate\TempName <> "hazmatsuit148"
-							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 4.0), 100.0)
+					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
+					
+					If SelectedItem\ItemTemplate\TempName <> "hazmatsuit148"
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 4.0), 100.0)
+					Else
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)
+					EndIf
+					
+					If SelectedItem\State = 100.0
+						me\LightBlink = 0.5
+						If wi\HazmatSuit > 0
+							CreateMsg(GetLocalString("msg", "suit.off"))
+							wi\HazmatSuit = 0
+							DropItem(SelectedItem)
 						Else
-							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
+							If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
+							wi\GasMask = 0 : wi\BallisticHelmet = False
+							I_427\Using = False : I_1499\Using = 0
+							I_268\Using = 0
+							Select SelectedItem\ItemTemplate\TempName
+								Case "hazmatsuit"
+									;[Block]
+									CreateMsg(GetLocalString("msg", "suit.on"))
+									wi\HazmatSuit = 1
+									;[End Block]
+								Case "finehazmatsuit"
+									;[Block]
+									CreateMsg(GetLocalString("msg", "suit.dry"))
+									wi\HazmatSuit = 2
+									;[End Block]
+								Case "veryfinehazmatsuit"
+									;[Block]
+									CreateMsg(GetLocalString("msg", "suit.on.easy"))
+									wi\HazmatSuit = 3
+									;[End Block]
+								Case "hazmatsuit148"
+									;[Block]
+									CreateMsg(GetLocalString("msg", "suit.on.easy"))
+									wi\HazmatSuit = 4
+									;[End Block]
+							End Select
 						EndIf
-						
-						If SelectedItem\State = 100.0
-							me\LightBlink = 0.5
-							If wi\HazmatSuit > 0
-								CreateMsg(GetLocalString("msg", "suit.off"))
-								wi\HazmatSuit = 0
-								DropItem(SelectedItem)
-							Else
-								If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
-								If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
-								If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
-								wi\GasMask = 0 : wi\BallisticHelmet = False
-								I_427\Using = False : I_1499\Using = 0
-								I_268\Using = 0
-								Select SelectedItem\ItemTemplate\TempName
-									Case "hazmatsuit"
-										;[Block]
-										CreateMsg(GetLocalString("msg", "suit.on"))
-										wi\HazmatSuit = 1
-										;[End Block]
-									Case "finehazmatsuit"
-										;[Block]
-										CreateMsg(GetLocalString("msg", "suit.dry"))
-										wi\HazmatSuit = 2
-										;[End Block]
-									Case "veryfinehazmatsuit"
-										;[Block]
-										CreateMsg(GetLocalString("msg", "suit.on.easy"))
-										wi\HazmatSuit = 3
-										;[End Block]
-									Case "hazmatsuit148"
-										;[Block]
-										CreateMsg(GetLocalString("msg", "suit.on.easy"))
-										wi\HazmatSuit = 4
-										;[End Block]
-								End Select
-							EndIf
-							SelectedItem\State = 0.0
-							SelectedItem = Null
-						EndIf
+						SelectedItem\State = 0.0
+						SelectedItem = Null
 					EndIf
 					;[End Block]
 				Case "scp513"
@@ -6379,16 +6377,14 @@ Function RenderGUI%()
 					;[End Block]
 				Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
 					;[Block]
-					If wi\BallisticVest = 0
-						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
-						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
-						x = mo\Viewport_Center_X - (Width / 2)
-						y = mo\Viewport_Center_Y + (80 * MenuScale)
-						
-						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
-					EndIf
+					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
+					
+					Width = 300 * MenuScale
+					Height = 20 * MenuScale
+					x = mo\Viewport_Center_X - (Width / 2)
+					y = mo\Viewport_Center_Y + (80 * MenuScale)
+					
+					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
 				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "hand3", "25ct", "scp005", "key", "coin", "mastercard"
 					;[Block]
