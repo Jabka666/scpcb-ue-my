@@ -1559,7 +1559,7 @@ Const r_room2_test_lcz% = 22
 Const r_cont2_012% = 23, r_cont2_427_714_860_1025% = 24, r_cont2_500_1499% = 25, r_cont2_1123% = 26
 Const r_room2c_lcz% = 27, r_room2c_2_lcz% = 28
 Const r_room2c_gw_lcz% = 29, r_room2c_gw_2_lcz% = 30
-Const r_cont2c_066% = 31, r_cont2c_1162_arc% = 32
+Const r_cont2c_066_1162_arc% = 32
 Const r_room3_storage% = 33
 Const r_room3_lcz% = 34, r_room3_2_lcz% = 35, r_room3_3_lcz% = 36
 Const r_room4_lcz% = 37, r_room4_2_lcz% = 38
@@ -1638,8 +1638,7 @@ Function FindRoomID%(RoomName$)
 		Case "room2c_2_lcz" Return(r_room2c_2_lcz)
 		Case "room2c_gw_lcz" Return(r_room2c_gw_lcz)
 		Case "room2c_gw_2_lcz" Return(r_room2c_gw_2_lcz)
-		Case "cont2c_066" Return(r_cont2c_066)
-		Case "cont2c_1162_arc" Return(r_cont2c_1162_arc)
+		Case "cont2c_066_1162_arc" Return(r_cont2c_066_1162_arc)
 		Case "room3_storage" Return(r_room3_storage)
 		Case "room3_lcz" Return(r_room3_lcz)
 		Case "room3_2_lcz" Return(r_room3_2_lcz)
@@ -5053,8 +5052,7 @@ Function CreateMap%()
 	SetRoom("room2_js", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_elevator", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
 	
-	MapRoom(ROOM2C, Floor(0.25 * Float(Room2CAmount[0]))) = "cont2c_1162_arc"
-	MapRoom(ROOM2C, Floor(0.75 * Float(Room2CAmount[0]))) = "cont2c_066"
+	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_066_1162_arc"
 	
 	MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3_storage"
 	

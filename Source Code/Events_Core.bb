@@ -29,8 +29,7 @@ Const e_cont2_409% = 12
 Const e_cont2_500_1499% = 13
 Const e_cont2_860_1% = 14
 Const e_cont2_1123% = 15
-Const e_cont2c_066% = 16
-Const e_cont2c_1162_arc% = 17
+Const e_cont2c_066_1162_arc% = 17
 Const e_cont1_035% = 18
 Const e_cont3_966% = 19
 Const e_room1_dead_end_106% = 20
@@ -146,13 +145,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont2_1123)
 			;[End Block]
-		Case "cont2c_066"
+		Case "cont2c_066_1162_arc"
 			;[Block]
-			Return(e_cont2c_066)
-			;[End Block]
-		Case "cont2c_1162_arc"
-			;[Block]
-			Return(e_cont2c_1162_arc)
+			Return(e_cont2c_066_1162_arc)
 			;[End Block]
 		Case "cont1_035"
 			;[Block]
@@ -3638,19 +3633,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_cont2c_066
-				;[Block]
-				If e\room\Dist < 7.0
-					If n_I\Curr066 = Null
-						n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
-					Else
-						PositionEntity(n_I\Curr066\Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
-						ResetEntity(n_I\Curr066\Collider)
-					EndIf
-					RemoveEvent(e)
-				EndIf
-				;[End Block]
-			Case e_cont2c_1162_arc
+			Case e_cont2c_066_1162_arc
 				;[Block]
 				; ~ e\EventState: A variable to determine the "nostalgia" items
 				; ~ 0.0 = No nostalgia item
@@ -3668,6 +3651,20 @@ Function UpdateEvents%()
 				; ~ 2.0 = the player doesn't have any items in the Inventory, giving him heavy injuries and giving him a random item
 				; ~ 3.0 = player got a memorial item (to explain a bit D-9341's background)
 				; ~ 3.1 = player got a memorial item + injuries (because he didn't have any item in his inventory before)
+				
+				; ~ e\EventState4: A check for SCP-066 to spawn in the area.
+				
+				If e\EventState4 = 0.0
+					If e\room\Dist < 7.0
+						If n_I\Curr066 = Null
+							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+						Else
+							PositionEntity(n_I\Curr066\Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+							ResetEntity(n_I\Curr066\Collider)
+						EndIf
+						e\EventState4 = 1.0
+					EndIf
+				EndIf
 				
 				If PlayerRoom = e\room
 					GrabbedEntity = 0

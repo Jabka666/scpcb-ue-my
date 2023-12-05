@@ -34,6 +34,7 @@ Rooms:
 - Added SCP-079 document to observation room in the chamber.
 - Added smoke particles under the warhead in «room2_nuke».
 - Added security cam in «room4_ic».
+- Combined both SCP-066's and SCP-1162-arc's containment chambers into one corner room.
 
 - The doors guarded by a four-pass code are now unlocked by default in SCP-860-1's containment chamber.
 

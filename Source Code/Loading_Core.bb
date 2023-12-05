@@ -1735,7 +1735,7 @@ Function LoadEvents%()
 	
 	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
 	
-	CreateEvent(e_cont2c_1162_arc, r_cont2c_1162_arc, 0)
+	CreateEvent(e_cont2c_066_1162_arc, r_cont2c_066_1162_arc, 0)
 	
 	CreateEvent(e_cont2_500_1499, r_cont2_500_1499, 0)
 	
@@ -1768,8 +1768,6 @@ Function LoadEvents%()
 	CreateEvent(e_cont1_005, r_cont1_005, 0)
 	
 	CreateEvent(e_room2_ic, r_room2_ic, 0)
-	
-	CreateEvent(e_cont2c_066, r_cont2c_066, 0.6)
 End Function
 
 Function LoadWayPoints%(LoadingStart% = 55)

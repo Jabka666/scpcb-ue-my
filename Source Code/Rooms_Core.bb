@@ -1499,30 +1499,17 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x + 815.0 * RoomScale, r\z - 815.0 * RoomScale)
 			;[End Block]
-		Case r_cont2c_066
+		Case r_cont2c_066_1162_arc
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.165, True)
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			
-			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y, r\z, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
-            PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.132, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.032, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
-			
-			it.Items = CreateItem("Document SCP-066", "paper", r\x + 340.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 235.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			RotateEntity(it\Collider, 0.0, 240.0, 0.0)
-			
-			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 657.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 50.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			;[End Block]
-		Case r_cont2c_1162_arc
-			;[Block]
+			; SCP-1162-arc chamber door
 			d.Doors = CreateDoor(r, r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			
+			; SCP-066's chamber door
+			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y, r\z, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
+            PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.132, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.032, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1012.0 * RoomScale, r\y + 128.0 * RoomScale, r\z - 640.0 * RoomScale)
@@ -1533,6 +1520,13 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			
 			it.Items = CreateItem("Document SCP-1162-ARC", "paper", r\x + 863.227 * RoomScale, r\y + 152.0 * RoomScale, r\z - 953.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Document SCP-066", "paper", r\x + 340.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 235.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			RotateEntity(it\Collider, 0.0, 240.0, 0.0)
+			
+			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 657.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 50.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room3_storage
