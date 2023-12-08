@@ -1,0 +1,89 @@
+///////////////////////
+/// SCP-1499 CHUNKS ///
+///////////////////////
+
+// WARNING: Editing this file might cause some several issues with the saving system (if you load a game)!
+// After you edited this file you should NOT load a save file where you entered "dimension1499" before!
+
+[
+    { // chunk0
+        "objects": [
+            {
+                "id": 3,
+                "x": -6,
+                "z": 18,
+                "yaw": 90
+            },
+            {
+                "id": 12,
+                "x": 1,
+                "z": -12,
+                "yaw": null // random
+            }
+        ]
+    },
+    { // chunk1
+        "objects": [
+            {
+                "id": 2,
+                "x": 10,
+                "z": -12,
+                "yaw": 0
+            },
+            {
+                "id": 6,
+                "x": -16,
+                "z": 11,
+                "yaw": null
+            },
+            {
+                "id": 9,
+                "x": 16,
+                "z": -4,
+                "yaw": null
+            }
+        ]
+    },
+    { // chunk2
+        "objects": [
+            {
+                "id": 5,
+                "x": 0,
+                "z": 0,
+                "yaw": null
+            }
+        ]
+    },
+    { // chunk3
+        "objects": [
+            {
+                "id": 3,
+                "x": 15,
+                "z": 5,
+                "yaw": 180
+            },
+            {
+                "id": 15,
+                "x": -17,
+                "z": -17,
+                "yaw": null
+            },
+            {
+                "id": 14,
+                "x": 7,
+                "z": -3,
+                "yaw": null
+            }
+        ]
+    },
+    { // chunk4
+        "objects": [
+            {
+                "id": 4,
+                "x": 1,
+                "z": -2,
+                "yaw": null
+            }
+        ]
+    }
+]

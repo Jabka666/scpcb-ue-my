@@ -5567,29 +5567,27 @@ End Type
 
 Function CreateChunkParts%(r.Rooms)
 	Local chp.ChunkPart, chp2.ChunkPart
-	Local ChunkAmount% = IniGetInt(SCP1499ChunksFile, "general", "count")
 	Local i%, StrTemp$, j%
+	Local ReadingChunk%
 	
-	StrTemp = ""
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
-	For i = 0 To ChunkAmount
-		If IniSectionExist(SCP1499ChunksFile, "chunk" + i)
-			StrTemp = IniGetString(SCP1499ChunksFile, "chunk" + i, "count")
-			chp.ChunkPart = New ChunkPart
-			chp\Amount = Int(StrTemp)
-			For j = 0 To Int(StrTemp)
-				Local OBJ_ID% = IniGetString(SCP1499ChunksFile, "chunk" + i, "obj" + j)
-				Local x$ = IniGetString(SCP1499ChunksFile, "chunk" + i, "obj" + j + "-x")
-				Local z$ = IniGetString(SCP1499ChunksFile, "chunk" + i, "obj" + j + "-z")
-				Local Yaw$ = IniGetString(SCP1499ChunksFile, "chunk" + i, "obj" + j + "-yaw")
+	For i = 0 To JsonGetArraySize(SCP1499Chunks) - 1
+		ReadingChunk = JsonGetArray(JsonGetValue(JsonGetArrayValue(SCP1499Chunks, i), "objects"))
+		chp.ChunkPart = New ChunkPart
+		chp\amount = JsonGetArraySize(ReadingChunk)
+		For j = 0 To chp\amount - 1
+				Local OBJ_ID% = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "id"))
+				Local x$ = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "x"))
+				Local z$ = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "z"))
+				Local Yaw$ = JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "yaw")
 				
 				chp\OBJ[j] = CopyEntity(r\Objects[OBJ_ID])
-				If Lower(Yaw) = "random"
+				If JsonIsNull(Yaw)
 					chp\RandomYaw[j] = Rnd(360.0)
 					RotateEntity(chp\OBJ[j], 0.0, chp\RandomYaw[j], 0.0)
 				Else
-					RotateEntity(chp\OBJ[j], 0.0, Float(Yaw), 0.0)
+					RotateEntity(chp\OBJ[j], 0.0, JsonGetFloat(Yaw), 0.0)
 				EndIf
 				PositionEntity(chp\OBJ[j], Float(x), 0, Float(z))
 				ScaleEntity(chp\OBJ[j], RoomScale, RoomScale, RoomScale)
@@ -5599,7 +5597,6 @@ Function CreateChunkParts%(r.Rooms)
 			Next
 			chp2 = Before(chp)
 			If chp2 <> Null Then chp\ID = chp2\ID + 1
-		EndIf
 	Next
 	
 	SeedRnd(MilliSecs())
