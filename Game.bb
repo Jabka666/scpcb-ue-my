@@ -36,11 +36,12 @@ Const AchievementsFile$ = "Data\achievements.ini"
 Const LoadingScreensFile$ = "Data\loading_screens.ini"
 Const SCP294File$ = "Data\SCP-294.ini"
 Const FontsFile$ = "Data\fonts.ini"
-
-Global SCP1499Chunks% = JsonGetArray(JsonParseFromFile("Data\1499chunks.jsonc")) ; ~ Unable to localize
+Const SCP1499ChunksFile$ = "Data\1499chunks.jsonc"
 
 IniWriteBuffer(LanguageFile)
-IniWriteBuffer(LoadingScreensFile)
+IniWriteBuffer(AchievementsFile)
+IniWriteBuffer(AchievementsFile)
+IniWriteBuffer(SCP294File)
 IniWriteBuffer(FontsFile)
 
 Include "Source Code\Launcher_Core.bb"

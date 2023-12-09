@@ -5541,6 +5541,7 @@ RenderLoading(60, GetLocalString("loading", "core.sky"))
 Include "Source Code\Sky_Core.bb"
 
 Global CHUNKDATA%[4096]
+Global SCP1499Chunks% = JsonGetArray(JsonParseFromFile(SCP1499ChunksFile))
 
 Function SetChunkDataValues%()
 	Local StrTemp$, i%, j%

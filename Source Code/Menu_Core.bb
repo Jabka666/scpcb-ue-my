@@ -2788,7 +2788,7 @@ Function RowText%(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 	Local s$
 	
 	While Len(Txt) > 0
-		Local Space$ = Instr(Txt, SplitSpace)
+		Local Space% = Instr(Txt, SplitSpace)
 		
 		If Space = 0 Then Space = Len(Txt)
 		
@@ -2838,7 +2838,7 @@ Function GetLineAmount%(Txt$, W%, H%, Leading# = 1.0)
 	Local s$
 	
 	While Len(Txt) > 0
-		Local Space$ = Instr(Txt, SplitSpace)
+		Local Space% = Instr(Txt, SplitSpace)
 		
 		If Space = 0 Then Space = Len(Txt)
 		

@@ -1960,10 +1960,6 @@ Function LoadData%()
 	TextureAnisotropic(opt\AnisotropicLevel)
 	AntiAlias(opt\AntiAliasing)
 	
-	IniWriteBuffer(lang\LanguagePath + AchievementsFile)
-	IniWriteBuffer(lang\LanguagePath + SCP294File)
-	IniWriteBuffer(SCP1499ChunksFile)
-	
 	LoadAchievementsFile()
 	
 	SubFile = JsonParseFromFile(SubtitlesFile)
@@ -2951,10 +2947,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	If FresizeTexture2 <> 0 Then FreeTexture(FresizeTexture2) : FresizeTexture2 = 0
 	If FresizeImage <> 0 Then FreeEntity(FresizeImage) : FresizeImage = 0
 	If FresizeCam <> 0 Then FreeEntity(FresizeCam) : FresizeCam = 0
-	
-	IniClearBuffer(lang\LanguagePath + AchievementsFile)
-	IniClearBuffer(lang\LanguagePath + SCP294File)
-	IniClearBuffer(SCP1499ChunksFile)
 	
 	ClearTextureFilters()
 	ClearCollisions()

@@ -75,7 +75,8 @@ Global lang.Language = New Language
 
 Function SetLanguage%(Language$, FromSelector% = True)
 	lang\CurrentLanguage = Language
-	;IniClearAllBuffer() ; ~ TODO:
+	IniClearBuffer(lang\LanguagePath + AchievementsFile)
+	IniClearBuffer(lang\LanguagePath + SCP294File)
 	If lang\CurrentLanguage = "en"
 		lang\LanguagePath = ""
 	Else
@@ -84,6 +85,8 @@ Function SetLanguage%(Language$, FromSelector% = True)
 		IniWriteBuffer(lang\LanguagePath + LanguageFile)
 		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
 		IniWriteBuffer(lang\LanguagePath + FontsFile)
+		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
+		IniWriteBuffer(lang\LanguagePath + SCP294File)
 	EndIf
 	If StringToBoolean(GetLocalString("global", "splitwithspace"))
 		SplitSpace = " "
