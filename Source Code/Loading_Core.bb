@@ -754,35 +754,12 @@ Function LoadMaterials%(File$)
 End Function
 
 Function InitLoadingScreens%(File$)
-	Local Loc$, i%
-	Local ls.LoadingScreens
-	Local f% = OpenFile_Strict(File)
-	
-	While (Not Eof(f))
-		Loc = Trim(ReadLine(f))
-		If Left(Loc, 1) = "["
-			Loc = Mid(Loc, 2, Len(Loc) - 2)
-			
-			ls.LoadingScreens = New LoadingScreens
-			LoadingScreenAmount = LoadingScreenAmount + 1
-			ls\ID = LoadingScreenAmount
-			
-			ls\Title = GetFileLocalString(File, Loc, "Name")
-			ls\ImgPath = GetFileLocalString(File, Loc, "ImgPath")
-			
-			For i = 0 To 3
-				ls\Txt[i] = GetFileLocalString(File, Loc, "Desc" + (i + 1))
-				If ls\Txt[i] <> "" Then ls\TxtAmount = ls\TxtAmount + 1
-			Next
-			
-			ls\DisableBackground = StringToBoolean(GetFileLocalString(File, Loc, "DisableBackground"))
-			
-			ls\AlignX = Int(GetFileLocalString(File, Loc, "AlignX"))
-			ls\AlignY = Int(GetFileLocalString(File, Loc, "AlignY"))
-		EndIf
-	Wend
-	
-	CloseFile(f)
+	Local LocalLoadingScreen% = JsonParseFromFile(lang\LanguagePath + File)
+	If JsonIsArray(LocalLoadingScreen) Then ; ~ Has localized loading screens -> Use localized only
+		LoadingScreens = JsonGetArray(LocalLoadingScreen)
+	Else
+		LoadingScreens = JsonGetArray(JsonParseFromFile(File))
+	EndIf
 End Function
 
 Const ItemsPath$ = "GFX\Items\"

@@ -1753,16 +1753,6 @@ Function RenderCursor%()
 	DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
 End Function
 
-Type LoadingScreens
-	Field ImgPath$
-	Field Img%
-	Field ID%
-	Field Title$
-	Field AlignX%, AlignY%
-	Field DisableBackground%
-	Field Txt$[5], TxtAmount%
-End Type
-
 Global TextR# = 0.0, TextG# = 0.0, TextB# = 0.0
 Global ChangeColor%
 
@@ -1791,30 +1781,30 @@ Function ResetLoadingTextColor%()
 	TextR = 0.0 : TextG = 0.0 : TextB = 0.0
 End Function
 
-Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
-Global LoadingBack%
+Global LoadingScreens%
+Global LoadingBack%, LoadingImage%
+Global SelectedLoadingScreens%, LoadingScreenTitle$
+Global Descriptions%, DescriptionIndex%
+Global ImageAlignX$, ImageAlignY$
 
 Function RenderLoading%(Percent%, Assets$ = "")
 	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
 	
-	Local x%, y%, Temp%, FirstLoop%
-	Local ls.LoadingScreens
+	Local x%, y%, FirstLoop%
 	
 	HidePointer()
 	
 	If Percent = 0
-		LoadingScreenText = 0
+		DescriptionIndex = 0
 		
-		Temp = Rand(LoadingScreenAmount)
-		For ls.LoadingScreens = Each LoadingScreens
-			If ls\ID = Temp
-				ls\Img = LoadImage_Strict("LoadingScreens\" + ls\ImgPath + ".png")
-				ls\Img = ScaleImage2(ls\Img, MenuScale, MenuScale)
-				SelectedLoadingScreen = ls
-				Exit
-			EndIf
-		Next
-		If (Not SelectedLoadingScreen\DisableBackground)
+		SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(JsonGetArraySize(LoadingScreens) - 1))
+		LoadingScreenTitle = JsonGetString(JsonGetValue(SelectedLoadingScreens, "title"))
+		Descriptions = JsonGetArray(JsonGetValue(SelectedLoadingScreens, "descriptions"))
+		ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
+		ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
+		LoadingImage = LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image")))
+		LoadingImage = ScaleImage2(LoadingImage, MenuScale, MenuScale)
+		If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background")) Then
 			LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
 			LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
 		EndIf
@@ -1827,27 +1817,27 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		Cls()
 		
 		If Percent > 20 Then UpdateMusic()
-		If Percent > (100.0 / SelectedLoadingScreen\TxtAmount) * (LoadingScreenText + 1) Then LoadingScreenText = LoadingScreenText + 1
+		If Percent > (100.0 / JsonGetArraySize(Descriptions)) * (DescriptionIndex + 1) Then DescriptionIndex = DescriptionIndex + 1
 		
-		If (Not SelectedLoadingScreen\DisableBackground) Then DrawBlock(LoadingBack, mo\Viewport_Center_X - ImageWidth(LoadingBack) / 2, mo\Viewport_Center_Y - ImageHeight(LoadingBack) / 2)
+		If LoadingBack <> 0 Then DrawBlock(LoadingBack, mo\Viewport_Center_X - ImageWidth(LoadingBack) / 2, mo\Viewport_Center_Y - ImageHeight(LoadingBack) / 2)
 		
-		If SelectedLoadingScreen\AlignX = 0
-			x = mo\Viewport_Center_X - ImageWidth(SelectedLoadingScreen\Img) / 2
-		ElseIf SelectedLoadingScreen\AlignX = 1
-			x = opt\GraphicWidth - ImageWidth(SelectedLoadingScreen\Img)
-		Else
+		If ImageAlignX = "center"
+			x = mo\Viewport_Center_X - ImageWidth(LoadingImage) / 2
+		ElseIf ImageAlignX = "right"
+			x = opt\GraphicWidth - ImageWidth(LoadingImage)
+		Else ; ~ ImageAlignX = "left"
 			x = 0
 		EndIf
 		
-		If SelectedLoadingScreen\AlignY = 0
-			y = mo\Viewport_Center_Y - ImageHeight(SelectedLoadingScreen\Img) / 2
-		ElseIf SelectedLoadingScreen\AlignY = 1
-			y = opt\GraphicHeight - ImageHeight(SelectedLoadingScreen\Img)
-		Else
+		If ImageAlignY = "center"
+			y = mo\Viewport_Center_Y - ImageHeight(LoadingImage) / 2
+		ElseIf ImageAlignY = "bottom"
+			y = opt\GraphicHeight - ImageHeight(LoadingImage)
+		Else ; ~ ImageAlignY = "top"
 			y = 0
 		EndIf
 		
-		DrawImage(SelectedLoadingScreen\Img, x, y)
+		DrawImage(LoadingImage, x, y)
 		
 		Local Width% = 300 * MenuScale
 		Local Height% = 20 * MenuScale
@@ -1862,7 +1852,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		SetFontEx(fo\FontID[Font_Default])
 		TextEx(x + (Width / 2), opt\GraphicHeight - (70 * MenuScale), Percent + "%", True, True)
 		
-		If SelectedLoadingScreen\Title = "CWM"
+		If LoadingScreenTitle = "CWM"
 			If FirstLoop
 				If Percent = 0
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
@@ -1885,79 +1875,79 @@ Function RenderLoading%(Percent%, Assets$ = "")
 					Select Rand(2)
 						Case 1
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = Format(GetLocalString("menu", "happend"), CurrentTime())
+							StrTemp = Format(GetLocalString("menu", "happend"), CurrentTime())
 							;[End Block]
 						Case 2
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = CurrentTime()
+							StrTemp = CurrentTime()
 							;[End Block]
 					End Select
 				Else
 					Select Rand(13)
 						Case 1
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_1")
+							StrTemp = GetLocalString("menu", "990_1")
 							;[End Block]
 						Case 2
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_2")
+							StrTemp = GetLocalString("menu", "990_2")
 							;[End Block]
 						Case 3
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_3")
+							StrTemp = GetLocalString("menu", "990_3")
 							;[End Block]
 						Case 4
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "eof9nsd3jue4iwe1fgj"
+							StrTemp = "eof9nsd3jue4iwe1fgj"
 						Case 5
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_4")
+							StrTemp = GetLocalString("menu", "990_4")
 							;[End Block]
 						Case 6 
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_5")
+							StrTemp = GetLocalString("menu", "990_5")
 							;[End Block]
 						Case 7
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "???____??_???__????n?"
+							StrTemp = "???____??_???__????n?"
 							;[End Block]
 						Case 8, 9
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_6")
+							StrTemp = GetLocalString("menu", "990_6")
 							;[End Block]
 						Case 10
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = "???????????"
+							StrTemp = "???????????"
 							;[End Block]
 						Case 11
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_7")
+							StrTemp = GetLocalString("menu", "990_7")
 							;[End Block]
 						Case 12
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_8")
+							StrTemp = GetLocalString("menu", "990_8")
 							;[End Block]
 						Case 13
 							;[Block]
-							SelectedLoadingScreen\Txt[0] = GetLocalString("menu", "990_9")
+							StrTemp = GetLocalString("menu", "990_9")
 							;[End Block]
 					End Select
 				EndIf
 			EndIf
 			
-			StrTemp = SelectedLoadingScreen\Txt[0]
-			Temp = Int(Len(SelectedLoadingScreen\Txt[0]) - Rand(5))
+			StrTemp = StrTemp
+			Temp = Int(Len(StrTemp) - Rand(5))
 			For i = 0 To Rand(10, 15)
-				StrTemp = Replace(SelectedLoadingScreen\Txt[0], Mid(SelectedLoadingScreen\Txt[0], Rand(Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
+				StrTemp = Replace(StrTemp, Mid(StrTemp, Rand(Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
 			Next
 			SetFontEx(fo\FontID[Font_Default])
 			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
 		Else
 			Color(255, 255, 255)
 			SetFontEx(fo\FontID[Font_Default_Big])
-			TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y - (450 * MenuScale), SelectedLoadingScreen\Title, True, True)
+			TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y - (450 * MenuScale), LoadingScreenTitle, True, True)
 			SetFontEx(fo\FontID[Font_Default])
-			RowText(SelectedLoadingScreen\Txt[LoadingScreenText], mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
+			RowText(JsonGetString(JsonGetArrayValue(Descriptions, DescriptionIndex)), mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
 		EndIf
 		
 		If Percent <> 100
@@ -1966,10 +1956,10 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			
 			ResetInput()
 		Else
-			If FirstLoop And SelectedLoadingScreen\Title <> "CWM" Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
-			If SelectedLoadingScreen\Title = "CWM"
+			If LoadingScreenTitle = "CWM"
 				StrTemp = GetLocalString("menu", "wakeup")
 			Else
+				If FirstLoop Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
 				StrTemp = GetLocalString("menu", "anykey")
 			EndIf
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), StrTemp, True, True)
@@ -1991,9 +1981,9 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			SetFontEx(fo\FontID[Font_Default])
 			Close = True
 			DeleteMenuGadgets()
-			FreeImage(SelectedLoadingScreen\Img) : SelectedLoadingScreen\Img = 0
+			FreeImage(LoadingImage) : LoadingImage = 0
 			FreeImage(LoadingBack) : LoadingBack = 0
-			SelectedLoadingScreen = Null
+			SelectedLoadingScreens = 0
 		EndIf
 	Until Close
 	
