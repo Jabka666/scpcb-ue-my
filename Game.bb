@@ -40,7 +40,6 @@ Const SCP1499ChunksFile$ = "Data\1499chunks.jsonc"
 
 IniWriteBuffer(LanguageFile)
 IniWriteBuffer(AchievementsFile)
-IniWriteBuffer(AchievementsFile)
 IniWriteBuffer(SCP294File)
 IniWriteBuffer(FontsFile)
 
