@@ -1797,9 +1797,13 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	If Percent = 0
 		DescriptionIndex = 0
 		
-		SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(JsonGetArraySize(LoadingScreens) - 1))
+		SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, 40)
 		LoadingScreenTitle = JsonGetString(JsonGetValue(SelectedLoadingScreens, "title"))
-		Descriptions = JsonGetArray(JsonGetValue(SelectedLoadingScreens, "descriptions"))
+		If JsonIsNull(JsonGetValue(SelectedLoadingScreens, "descriptions")) Then
+			Descriptions = JsonGetArray(JsonParseFromString("[" + Chr(34) + Chr(34) + "]")) ; ~ Create a empty description array
+		Else
+			Descriptions = JsonGetArray(JsonGetValue(SelectedLoadingScreens, "descriptions"))
+		EndIf
 		ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
 		ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
 		LoadingImage = LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image")))
