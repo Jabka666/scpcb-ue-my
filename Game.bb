@@ -31,13 +31,13 @@ Include "Source Code\INI_Core.bb"
 LoadOptionsINI()
 
 Const LanguageFile$ = "Data\local.ini"
-Const SubtitlesFile$ = "Data\subtitles.json"
+Const SubtitlesFile$ = "Data\subtitles.jsonc"
 Const AchievementsFile$ = "Data\achievements.ini"
 Const LoadingScreensFile$ = "Data\loading_screens.ini"
 Const SCP294File$ = "Data\SCP-294.ini"
 Const FontsFile$ = "Data\fonts.ini"
 
-Global SCP1499Chunks% = JsonGetArray(JsonParseFromFile("Data\1499chunks.json")) ; ~ Unable to localize
+Global SCP1499Chunks% = JsonGetArray(JsonParseFromFile("Data\1499chunks.jsonc")) ; ~ Unable to localize
 
 IniWriteBuffer(LanguageFile)
 IniWriteBuffer(LoadingScreensFile)

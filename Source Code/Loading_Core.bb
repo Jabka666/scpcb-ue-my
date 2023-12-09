@@ -1967,7 +1967,9 @@ Function LoadData%()
 	LoadAchievementsFile()
 	
 	SubFile = JsonParseFromFile(SubtitlesFile)
+	LocalSubFile = JsonParseFromFile(lang\LanguagePath + SubtitlesFile)
 	SubColors = JsonGetValue(SubFile, "colors")
+	LocalSubColors = JsonGetValue(LocalSubFile, "colors")
 	SubtitlesInit = True
 	
 	SubjectName = GetLocalString("misc", "subject")
@@ -2773,7 +2775,7 @@ Function NullGame%(PlayButtonSFX% = True)
 		Delete(ach)
 	Next
 	
-	SubFile = ""
+	SubFile = 0
 	SubColors = 0
 	SubtitlesInit = False
 	ClearSubtitles()
