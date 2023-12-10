@@ -7377,7 +7377,7 @@ Function RenderMenu%()
 	Local x%, y%, Width%, Height%, i%
 	Local TempStr$
 	
-	If (Not InFocus()) ; ~ Game is out of focus then pause the game
+	If ((Not InFocus()) And (Not ConsoleOpen)) ; ~ Game is out of focus then pause the game
 		MenuOpen = True
 		PauseSounds()
 		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
