@@ -3334,7 +3334,7 @@ Function UpdateGUI%()
 		msg\KeyPadMsg = ""
 	EndIf
 	
-	If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 And me\KillAnimTimer <= 400.0 And (Not ConsoleOpen)
+	If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 And me\KillAnimTimer <= 400.0
 		If MenuOpen
 			ResumeSounds()
 			If igm\OptionsMenu <> 0 Then SaveOptionsINI()
@@ -7377,7 +7377,7 @@ Function RenderMenu%()
 	Local x%, y%, Width%, Height%, i%
 	Local TempStr$
 	
-	If ((Not InFocus()) And (Not ConsoleOpen)) ; ~ Game is out of focus then pause the game
+	If (Not InFocus()) ; ~ Game is out of focus then pause the game
 		MenuOpen = True
 		PauseSounds()
 		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
