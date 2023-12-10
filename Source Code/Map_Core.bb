@@ -2524,26 +2524,28 @@ Function UpdateDoors%()
 				Next
 			EndIf
 			
+			Local FPSFactorDoubled# = fps\Factor[0] * 2.0
+			
 			If d\Open
 				If d\OpenState < 180.0
 					Select d\DoorType
 						Case DEFAULT_DOOR
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 120.0, 0.0, 0.0)
@@ -2565,7 +2567,7 @@ Function UpdateDoors%()
 							;[End Block]
 						Case ONE_SIDED_DOOR
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)
@@ -2599,21 +2601,21 @@ Function UpdateDoors%()
 					Select d\DoorType
 						Case DEFAULT_DOOR
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 120.0, 0.0, 0.0)
@@ -2649,7 +2651,7 @@ Function UpdateDoors%()
 							;[End Block]
 						Case ONE_SIDED_DOOR
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 2.0 * (d\FastOpen + 1)))
+							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
@@ -4369,13 +4371,16 @@ Function UpdateRooms%()
 	
 	Local Dist#, i%, j%, r.Rooms
 	Local x#, y#, z#, Hide%
+	Local PlayerX# = EntityX(me\Collider, True)
+	Local PlayerY# = EntityY(me\Collider, True)
+	Local PlayerZ# = EntityZ(me\Collider, True)
 	
 	; ~ The reason why it is like this:
 	; ~ When the map gets spawned by a seed, it starts from LCZ to HCZ to EZ (bottom to top)
 	; ~ A map loaded by the map creator starts from EZ to HCZ to LCZ (top to bottom) and that's why this little code thing with the (SelectedCustomMap = Null) needs to be there - ENDSHN
-	If (EntityZ(me\Collider) / RoomSpacing) < I_Zone\Transition[1] - (SelectedCustomMap = Null)
+	If (PlayerZ / RoomSpacing) < I_Zone\Transition[1] - (SelectedCustomMap = Null)
 		me\Zone = 2
-	ElseIf (EntityZ(me\Collider) / RoomSpacing) >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And (EntityZ(me\Collider) / RoomSpacing) < I_Zone\Transition[0] - (SelectedCustomMap = Null)
+	ElseIf (PlayerZ / RoomSpacing) >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And (PlayerZ / RoomSpacing) < I_Zone\Transition[0] - (SelectedCustomMap = Null)
 		me\Zone = 1
 	Else
 		me\Zone = 0
@@ -4383,21 +4388,21 @@ Function UpdateRooms%()
 	
 	Local FoundNewPlayerRoom% = False
 	
-	If Abs(EntityY(me\Collider) - EntityY(PlayerRoom\OBJ)) < 1.5
-		x = Abs(PlayerRoom\x - EntityX(me\Collider, True))
+	If Abs(PlayerY - EntityY(PlayerRoom\OBJ)) < 1.5
+		x = Abs(PlayerRoom\x - PlayerX)
 		If x < 4.0
-			z = Abs(PlayerRoom\z - EntityZ(me\Collider, True))
+			z = Abs(PlayerRoom\z - PlayerZ)
 			If z < 4.0 Then FoundNewPlayerRoom = True
 		EndIf
 		
 		If (Not FoundNewPlayerRoom) ; ~ It's likely that an adjacent room is the new player room, check for that
 			For i = 0 To MaxRoomAdjacents - 1
 				If PlayerRoom\Adjacent[i] <> Null
-					x = Abs(PlayerRoom\Adjacent[i]\x - EntityX(me\Collider, True))
+					x = Abs(PlayerRoom\Adjacent[i]\x - PlayerX)
 					If x < 4.0
-						z = Abs(PlayerRoom\Adjacent[i]\z - EntityZ(me\Collider, True))
+						z = Abs(PlayerRoom\Adjacent[i]\z - PlayerZ)
 						If z < 4.0
-							y = Abs(PlayerRoom\Adjacent[i]\y - EntityY(me\Collider, True))
+							y = Abs(PlayerRoom\Adjacent[i]\y - PlayerY)
 							If y < 4.0
 								FoundNewPlayerRoom = True
 								PlayerRoom = PlayerRoom\Adjacent[i]
@@ -4411,15 +4416,15 @@ Function UpdateRooms%()
 	EndIf
 	
 	For r.Rooms = Each Rooms
-		x = Abs(r\x - EntityX(me\Collider, True))
-		z = Abs(r\z - EntityZ(me\Collider, True))
+		x = Abs(r\x - PlayerX)
+		z = Abs(r\z - PlayerZ)
 		r\Dist = Max(x, z)
 		
 		If x < 16 And z < 16
 			If (Not FoundNewPlayerRoom) And PlayerRoom <> r
 				If x < 4.0
 					If z < 4.0
-						If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+						If Abs(PlayerY - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 						FoundNewPlayerRoom = True
 					EndIf
 				EndIf
@@ -4451,7 +4456,7 @@ Function UpdateRooms%()
 		If PlayerRoom\Adjacent[i] <> Null
 			If PlayerRoom\AdjDoor[i] <> Null
 				If PlayerRoom\Adjacent[i] <> PlayerRoom
-					If EntityY(me\Collider) > 8.0 Lor EntityY(me\Collider) < -8.0
+					If PlayerY > 8.0 Lor PlayerY < -8.0
 						HideRoomsColl(PlayerRoom\Adjacent[i])
 					Else
 						If PlayerRoom\AdjDoor[i]\OpenState = 0.0 Lor (Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera))
@@ -5576,28 +5581,28 @@ Function CreateChunkParts%(r.Rooms)
 	For i = 0 To JsonGetArraySize(SCP1499Chunks) - 1
 		ReadingChunk = JsonGetArray(JsonGetValue(JsonGetArrayValue(SCP1499Chunks, i), "objects"))
 		chp.ChunkPart = New ChunkPart
-		chp\amount = JsonGetArraySize(ReadingChunk)
-		For j = 0 To chp\amount - 1
-				Local OBJ_ID% = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "id"))
-				Local x$ = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "x"))
-				Local z$ = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "z"))
-				Local Yaw$ = JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "yaw")
-				
-				chp\OBJ[j] = CopyEntity(r\Objects[OBJ_ID])
-				If JsonIsNull(Yaw)
-					chp\RandomYaw[j] = Rnd(360.0)
-					RotateEntity(chp\OBJ[j], 0.0, chp\RandomYaw[j], 0.0)
-				Else
-					RotateEntity(chp\OBJ[j], 0.0, JsonGetFloat(Yaw), 0.0)
-				EndIf
-				PositionEntity(chp\OBJ[j], Float(x), 0, Float(z))
-				ScaleEntity(chp\OBJ[j], RoomScale, RoomScale, RoomScale)
-				EntityType(chp\OBJ[j], HIT_MAP)
-				EntityPickMode(chp\OBJ[j], 2)
-				HideEntity(chp\OBJ[j])
-			Next
-			chp2 = Before(chp)
-			If chp2 <> Null Then chp\ID = chp2\ID + 1
+		chp\Amount = JsonGetArraySize(ReadingChunk)
+		For j = 0 To chp\Amount - 1
+			Local OBJ_ID% = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "id"))
+			Local x$ = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "x"))
+			Local z$ = JsonGetInt(JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "z"))
+			Local Yaw$ = JsonGetValue(JsonGetArrayValue(ReadingChunk, j), "yaw")
+			
+			chp\OBJ[j] = CopyEntity(r\Objects[OBJ_ID])
+			If JsonIsNull(Yaw)
+				chp\RandomYaw[j] = Rnd(360.0)
+				RotateEntity(chp\OBJ[j], 0.0, chp\RandomYaw[j], 0.0)
+			Else
+				RotateEntity(chp\OBJ[j], 0.0, JsonGetFloat(Yaw), 0.0)
+			EndIf
+			PositionEntity(chp\OBJ[j], Float(x), 0, Float(z))
+			ScaleEntity(chp\OBJ[j], RoomScale, RoomScale, RoomScale)
+			EntityType(chp\OBJ[j], HIT_MAP)
+			EntityPickMode(chp\OBJ[j], 2)
+			HideEntity(chp\OBJ[j])
+		Next
+		chp2 = Before(chp)
+		If chp2 <> Null Then chp\ID = chp2\ID + 1
 	Next
 	
 	SeedRnd(MilliSecs())
@@ -5648,14 +5653,14 @@ Const ChunkMaxDistance# = 120.0
 Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	Local ch.Chunk, ch2.Chunk, n.NPCs
 	Local StrTemp$, i%, j%, x#, z#, y#
-	Local ChunkX#, ChunkZ#
-	
-	ChunkX = Int(EntityX(me\Collider) / 40.0)
-	ChunkZ = Int(EntityZ(me\Collider) / 40.0)
+	Local ChunkX# = Int(EntityX(me\Collider) / 40.0)
+	Local ChunkZ# = Int(EntityZ(me\Collider) / 40.0)
+	Local TempChunkX# = Int(EntityX(me\Collider))
+	Local TempChunkZ# = Int(EntityZ(me\Collider))
 	
 	y = EntityY(PlayerRoom\OBJ)
-	x = (-ChunkMaxDistance) + (ChunkX * 40.0)
-	z = (-ChunkMaxDistance) + (ChunkZ * 40.0)
+	x = (-ChunkMaxDistance) + TempChunkX
+	z = (-ChunkMaxDistance) + TempChunkZ
 	
 	Local CurrChunkData% = 0, MaxChunks% = IniGetInt(SCP1499ChunksFile, "general", "count")
 	
@@ -5674,11 +5679,11 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 			ch2\IsSpawnChunk = False
 		EndIf
 		x = x + 40.0
-		If x > ChunkMaxDistance + (ChunkX * 40.0)
+		If x > ChunkMaxDistance + TempChunkX
 			z = z + 40.0
-			x = (-ChunkMaxDistance) + (ChunkX * 40.0)
+			x = (-ChunkMaxDistance) + TempChunkX
 		EndIf
-	Until z > ChunkMaxDistance + (ChunkZ * 40.0)
+	Until z > ChunkMaxDistance + TempChunkZ
 	
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
@@ -5706,39 +5711,41 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 		EndIf
 	Next
 	
+	Local PlayerRoomY# = EntityY(PlayerRoom\OBJ) + 0.5
+	
 	If CurrNPCNumber < MaxNPCs
 		Select Rand(8)
 			Case 1
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 2
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 3
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 4
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 5
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 6
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 7
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 8
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), EntityY(PlayerRoom\OBJ) + 0.5, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(40.0, 80.0))
 				;[End Block]
 		End Select
 		If Rand(2) = 1 Then n\State2 = 500.0 * 3.0

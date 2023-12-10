@@ -59,7 +59,7 @@ Function UpdateSubtitles%()
 			
 			lastSubtitles.SubtitlesMsg = Last SubtitlesMsg
 			
-			; ~ Split long lines of text into multiple lines.
+			; ~ Split long lines of text into multiple lines
 			While Len(TxtLine) > 0
 				Local StringRight# = subassets\BoxLeft + (10 * MenuScale) + StringWidth(TxtLine)
 				
@@ -80,8 +80,8 @@ Function UpdateSubtitles%()
 						
 						Local NextStringRight# = subassets\BoxLeft + (10 * MenuScale) + StringWidth(NextLine)
 						
-						; ~ If a very long single word exceeds the box size, split it.
-						If NextStringRight > subassets\BoxLeft + subassets\BoxWidth- (10 * MenuScale)
+						; ~ If a very long single word exceeds the box size, split it
+						If NextStringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
 							While NextStringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
 								TxtLine = Right(NextLine, 1) + TxtLine
 								NextLine = Left(NextLine, Len(NextLine) - 1)
@@ -177,7 +177,7 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 	Local i%
 	Local Token% = JsonGetValue(LocalSubFile, SoundPath)
 	
-	If JsonIsNull(Token) Lor (Not JsonIsArray(Token)) Then
+	If JsonIsNull(Token) Lor (Not JsonIsArray(Token))
 		Token = JsonGetValue(SubFile, SoundPath)
 		If JsonIsNull(Token) Lor (Not JsonIsArray(Token)) Then Return
 	EndIf
@@ -186,33 +186,30 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 
 	For i = 0 To JsonGetArraySize(Arr) - 1
 		Local Subtitle% = JsonGetArrayValue(Arr, i)
-		
 		Local TxtVal% = JsonGetValue(Subtitle, "text")
 		Local DelayVal% = JsonGetValue(Subtitle, "delay")
 		Local LengthVal% = JsonGetValue(Subtitle, "length")
 		Local ColorArray%
 		Local Txt$ = "missingno"
-		Local Delay# = 0.0
+		Local DelayTime# = 0.0
 		Local Length# = 10.0
 		Local ColorR% = 255
 		Local ColorG% = 255
 		Local ColorB% = 255
 		
 		If JsonIsString(TxtVal) Then Txt = JsonGetString(TxtVal)
-		If JsonIsFloat(DelayVal) Then Delay = JsonGetFloat(DelayVal)
+		If JsonIsFloat(DelayVal) Then DelayTime = JsonGetFloat(DelayVal)
 		If JsonIsFloat(LengthVal) Then Length = JsonGetFloat(LengthVal)
 		If Not JsonIsNull(JsonGetValue(Subtitle, "color"))
 			ColorArray = JsonGetValue(SubColors, JsonGetString(JsonGetValue(Subtitle, "color")))
-			If Not JsonIsArray(ColorArray) Then
-				ColorArray = JsonGetValue(LocalSubColors, JsonGetString(JsonGetValue(Subtitle, "color")))
-			EndIf
-			If JsonIsArray(ColorArray) Then
+			If (Not JsonIsArray(ColorArray)) Then ColorArray = JsonGetValue(LocalSubColors, JsonGetString(JsonGetValue(Subtitle, "color")))
+			If JsonIsArray(ColorArray)
 				ColorR = JsonGetInt(JsonGetArrayValue(JsonGetArray(ColorArray), 0))
 				ColorG = JsonGetInt(JsonGetArrayValue(JsonGetArray(ColorArray), 1))
 				ColorB = JsonGetInt(JsonGetArrayValue(JsonGetArray(ColorArray), 2))
 			EndIf
 		EndIf
-		QueueSubtitlesMsg(SoundPath, sound, Txt, Delay, Length, ColorR, ColorG, ColorB)
+		QueueSubtitlesMsg(SoundPath, sound, Txt, DelayTime, Length, ColorR, ColorG, ColorB)
 	Next
 End Function
 

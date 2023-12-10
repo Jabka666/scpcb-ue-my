@@ -2832,16 +2832,19 @@ Function UpdateMouseLook%()
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
+		Local Temp# = (opt\MouseSensitivity + 0.6)
+		Local Temp2# = (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing
+		
 		If opt\InvertMouseX
-			mo\Mouse_X_Speed_1 = CurveValue(-MouseXSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+			mo\Mouse_X_Speed_1 = CurveValue(-MouseXSpeed() * Temp, mo\Mouse_X_Speed_1, Temp2)
 		Else
-			mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_X_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+			mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * Temp, mo\Mouse_X_Speed_1, Temp2)
 		EndIf
 		If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
 		If opt\InvertMouseY
-			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * Temp, mo\Mouse_Y_Speed_1, Temp2)
 		Else
-			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * (opt\MouseSensitivity + 0.6), mo\Mouse_Y_Speed_1, (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing)
+			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * Temp, mo\Mouse_Y_Speed_1, Temp2)
 		EndIf
 		If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
 		
@@ -3357,6 +3360,7 @@ Function UpdateGUI%()
 	Local ClosedInv%
 	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
 	Local INVENTORY_GFX_SPACING% = 35 * MenuScale
+	Local MaxItemAmountHalf% = MaxItemAmount / 2
 	
 	If OtherOpen <> Null
 		PrevOtherOpen = OtherOpen
@@ -3525,12 +3529,12 @@ Function UpdateGUI%()
 	ElseIf InvOpen
 		d_I\SelectedDoor = Null
 		
-		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + (INVENTORY_GFX_SPACING * ((MaxItemAmount / 2) - 1))) / 2
+		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmountHalf) + (INVENTORY_GFX_SPACING * (MaxItemAmountHalf - 1))) / 2
 		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		If MaxItemAmount = 2
 			y = y + INVENTORY_GFX_SIZE
-			x = x - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + INVENTORY_GFX_SPACING) / 2
+			x = x - ((INVENTORY_GFX_SIZE * MaxItemAmountHalf) + INVENTORY_GFX_SPACING) / 2
 		EndIf
 		
 		ItemAmount = 0
@@ -3568,9 +3572,9 @@ Function UpdateGUI%()
 			EndIf
 			
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
-			If MaxItemAmount >= 4 And n = (MaxItemAmount / 2) - 1
+			If MaxItemAmount >= 4 And n = MaxItemAmountHalf - 1
 				y = y + (INVENTORY_GFX_SIZE * 2) 
-				x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + (INVENTORY_GFX_SPACING * ((MaxItemAmount / 2) - 1))) / 2
+				x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmountHalf) + (INVENTORY_GFX_SPACING * (MaxItemAmountHalf - 1))) / 2
 			EndIf
 		Next
 		
@@ -6005,6 +6009,7 @@ Function RenderGUI%()
 	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
 	Local INVENTORY_GFX_SPACING% = 35 * MenuScale
 	Local InvImgSize% = (64 * MenuScale) / 2
+	Local MaxItemAmountHalf% = MaxItemAmount / 2
 	
 	If OtherOpen <> Null
 		PrevOtherOpen = OtherOpen
@@ -6064,12 +6069,12 @@ Function RenderGUI%()
 		
 		RenderCursor()
 	ElseIf InvOpen
-		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + (INVENTORY_GFX_SPACING * ((MaxItemAmount / 2) - 1))) / 2
+		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmountHalf) + (INVENTORY_GFX_SPACING * (MaxItemAmountHalf - 1))) / 2
 		y = mo\Viewport_Center_Y - INVENTORY_GFX_SIZE - INVENTORY_GFX_SPACING
 		
 		If MaxItemAmount = 2
 			y = y + INVENTORY_GFX_SIZE
-			x = x - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + INVENTORY_GFX_SPACING) / 2
+			x = x - ((INVENTORY_GFX_SIZE * MaxItemAmountHalf) + INVENTORY_GFX_SPACING) / 2
 		EndIf
 		
 		IsMouseOn = -1
@@ -6209,9 +6214,9 @@ Function RenderGUI%()
 			EndIf
 			
 			x = x + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING
-			If MaxItemAmount >= 4 And n = (MaxItemAmount / 2) - 1
+			If MaxItemAmount >= 4 And n = MaxItemAmountHalf - 1
 				y = y + (INVENTORY_GFX_SIZE * 2)
-				x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmount / 2) + (INVENTORY_GFX_SPACING * ((MaxItemAmount / 2) - 1))) / 2
+				x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * MaxItemAmountHalf) + (INVENTORY_GFX_SPACING * (MaxItemAmountHalf - 1))) / 2
 			EndIf
 		Next
 		

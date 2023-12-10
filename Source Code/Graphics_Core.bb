@@ -526,10 +526,11 @@ Function GetScreenshot%()
 	For x = 0 To opt\RealGraphicWidth - 1
 		For y = 0 To opt\RealGraphicHeight - 1
 			Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+			Local TempY% = (y * (opt\RealGraphicWidth * 3)) + (x * 3)
 			
-			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3), ReadPixelColor(Pixel, 0))
-			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 1, ReadPixelColor(Pixel, 8))
-			PokeByte(Bank, (y * (opt\RealGraphicWidth * 3)) + (x * 3) + 2, ReadPixelColor(Pixel, 16))
+			PokeByte(Bank, TempY, ReadPixelColor(Pixel, 0))
+			PokeByte(Bank, TempY + 1, ReadPixelColor(Pixel, 8))
+			PokeByte(Bank, TempY + 2, ReadPixelColor(Pixel, 16))
 		Next
 	Next
 	UnlockBuffer(BackBuffer())
@@ -537,7 +538,7 @@ Function GetScreenshot%()
 	Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
 	
 	FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
-	FI_Unload(fiBuffer)
+	FI_Unload(fiBuffer) : fiBuffer = 0
 	FreeBank(Bank) : Bank = 0
 	If (Not MainMenuOpen) Then CreateHintMsg(GetLocalString("msg", "screenshot"))
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
