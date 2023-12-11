@@ -2918,10 +2918,8 @@ Function UpdateMouseLook%()
 			Else
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 			EndIf
-			If wi\GasMaskFogTimer > 0.0
-				If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
-				EntityAlpha(t\OverlayID[10], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
-			EndIf
+			If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
+			EntityAlpha(t\OverlayID[10], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
