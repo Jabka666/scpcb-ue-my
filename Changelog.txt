@@ -23,7 +23,6 @@ General:
 
 Mechanics:
 - Removed accidental item dropping.
-- Player's camera now "blinks" after putting on a gear.
 
 Menu:
 - Added descriptive info for difficulties.
