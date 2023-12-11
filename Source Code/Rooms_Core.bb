@@ -1512,7 +1512,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.032, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 1012.0 * RoomScale, r\y + 128.0 * RoomScale, r\z - 640.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 996.0 * RoomScale, r\y + 128.0 * RoomScale, r\z - 640.0 * RoomScale)
 			EntityPickMode(r\Objects[0], 1)
 			EntityParent(r\Objects[0], r\OBJ)
 			
