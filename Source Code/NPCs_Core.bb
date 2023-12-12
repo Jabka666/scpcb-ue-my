@@ -848,8 +848,8 @@ Function UpdateNPCs%()
 							Local Tmp% = False
 							
 							Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
-							If (Not EntityVisible(n\Collider, n_I\MTFLeader\Collider)) And (Not EntityInView(n\OBJ, Camera))
-								If Dist > PowTwo(HideDistance / 2.0) Then Tmp = True
+							If Dist > PowTwo(HideDistance / 2.0)
+								If (Not EntityVisible(n\Collider, n_I\MTFLeader\Collider)) And (Not EntityInView(n\OBJ, Camera)) Then Tmp = True
 							EndIf
 							If (Not Tmp)
 								PointEntity(n\OBJ, n_I\MTFLeader\Collider)
@@ -2024,8 +2024,12 @@ Function UpdateNPCs%()
 								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
 								If n\PathStatus = PATH_STATUS_FOUND
 									While n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19 Then Exit
-										n\PathLocation = n\PathLocation + 1
+										If n\PathLocation > 19
+											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_FOUND
+											Exit
+										Else
+											n\PathLocation = n\PathLocation + 1
+										EndIf
 									Wend
 									If n\PathLocation < 19
 										If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -2038,8 +2042,8 @@ Function UpdateNPCs%()
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 							Else
 								; ~ Still attack if the player is too close
-								If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
-									If EntityDistanceSquared(n\Collider, me\Collider) < 0.49 Then n\State = 4.0
+								If (Not chs\NoTarget)
+									If EntityDistanceSquared(n\Collider, me\Collider) < 0.49 And EntityVisible(me\Collider, n\Collider) Then n\State = 4.0
 								EndIf
 								
 								If n\PathStatus = PATH_STATUS_FOUND
@@ -2321,11 +2325,8 @@ Function UpdateNPCs%()
 						
 						RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSecs() / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
 						
-						If EntityVisible(me\Collider, n\Collider)
-							If WrapAngle(EntityYaw(n\Collider) - DeltaYaw(n\Collider, me\Collider)) < 90.0
-								Dist = EntityDistanceSquared(n\Collider, me\Collider)
-								If Dist < 225.0 Then n\State = 1.0
-							EndIf
+						If EntityDistanceSquared(n\Collider, me\Collider) < 225.0
+							If WrapAngle(EntityYaw(n\Collider) - DeltaYaw(n\Collider, me\Collider)) < 90.0 And EntityVisible(me\Collider, n\Collider) Then n\State = 1.0
 						EndIf
 						;[End Block]
 					Case 5.0 ; ~ Following a target
@@ -2380,7 +2381,7 @@ Function UpdateNPCs%()
 							
 							Local SearchPlayer%
 							
-							SearchPlayer = (EntityVisible(n\Collider, me\Collider) And Dist < 121.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))
+							SearchPlayer = ((Not (chs\NoTarget Lor I_268\InvisibilityOn)) And Dist < 121.0 And EntityVisible(n\Collider, me\Collider))
 							If SearchPlayer
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
@@ -4009,8 +4010,12 @@ Function UpdateNPCs%()
 											n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
 											If n\PathStatus = PATH_STATUS_FOUND
 												While n\Path[n\PathLocation] = Null
-													If n\PathLocation > 19 Then Exit
-													n\PathLocation = n\PathLocation + 1
+													If n\PathLocation > 19
+														n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+														Exit
+													Else
+														n\PathLocation = n\PathLocation + 1
+													EndIf
 												Wend
 												If n\PathLocation < 19
 													If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -4023,8 +4028,8 @@ Function UpdateNPCs%()
 											n\PathTimer = 70.0 * 10.0 ; ~ Search again after 10 seconds
 										Else
 											; ~ Still attack if the player is too close
-											If EntityVisible(n\Collider, me\Collider) And (Not chs\NoTarget)
-												If Dist < 0.81 Then n\State = 9.0
+											If Dist < 0.81 And (Not chs\NoTarget)
+												If EntityVisible(n\Collider, me\Collider) Then n\State = 9.0
 											EndIf
 											
 											If n\PathStatus = PATH_STATUS_FOUND
@@ -4359,9 +4364,9 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If (n\ID Mod 2) = 0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-									If EntityVisible(n\Collider, me\Collider)
-										Dist = EntityDistanceSquared(n\Collider, me\Collider)
-										If Dist < 100.0
+									Dist = EntityDistanceSquared(n\Collider, me\Collider)
+									If Dist < 100.0
+										If EntityVisible(n\Collider, me\Collider)
 											; ~ Play the "screaming animation"
 											If Dist < 25.0
 												LoadNPCSound(n, "SFX\SCP\1499\Triggered.ogg")
@@ -4597,8 +4602,12 @@ Function UpdateNPCs%()
 								
 								If n\PathStatus = PATH_STATUS_FOUND
 									While n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19 Then Exit
-										n\PathLocation = n\PathLocation + 1
+										If n\PathLocation > 19
+											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+											Exit
+										Else
+											n\PathLocation = n\PathLocation + 1
+										EndIf
 									Wend
 									If n\PathLocation < 19
 										If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -4611,8 +4620,8 @@ Function UpdateNPCs%()
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 							Else
 								; ~ Still attack if the player is too close
-								If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
-									If Dist < 0.49 Then n\State = 4.0
+								If Dist < 0.49 And (Not chs\NoTarget)
+									If EntityVisible(me\Collider, n\Collider) Then n\State = 4.0
 								EndIf
 								
 								If n\PathStatus = PATH_STATUS_FOUND
@@ -5000,8 +5009,12 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					If n\PathStatus = PATH_STATUS_FOUND
 						While n\Path[n\PathLocation] = Null
-							If n\PathLocation > 19 Then Exit
-							n\PathLocation = n\PathLocation + 1
+							If n\PathLocation > 19
+								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+								Exit
+							Else
+								n\PathLocation = n\PathLocation + 1
+							EndIf
 						Wend
 						If n\PathLocation < 19
 							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -5596,8 +5609,12 @@ Function UpdateMTFUnit%(n.NPCs)
 					n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
 					If n\PathStatus = PATH_STATUS_FOUND
 						While n\Path[n\PathLocation] = Null
-							If n\PathLocation > 19 Then Exit
-							n\PathLocation = n\PathLocation + 1
+							If n\PathLocation > 19
+								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+								Exit
+							Else
+								n\PathLocation = n\PathLocation + 1
+							EndIf
 						Wend
 						If n\PathLocation < 19
 							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -5789,8 +5806,12 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
 						If n\PathStatus = PATH_STATUS_FOUND
 							While n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19 Then Exit
-								n\PathLocation = n\PathLocation + 1
+								If n\PathLocation > 19
+									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+									Exit
+								Else
+									n\PathLocation = n\PathLocation + 1
+								EndIf
 							Wend
 							If n\PathLocation < 19
 								If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -5901,8 +5922,12 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 						If n\PathStatus = PATH_STATUS_FOUND
 							While n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19 Then Exit
-								n\PathLocation = n\PathLocation + 1
+								If n\PathLocation > 19
+									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+									Exit
+								Else
+									n\PathLocation = n\PathLocation + 1
+								EndIf
 							Wend
 							If n\PathLocation < 19
 								If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -6006,8 +6031,12 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 						If n\PathStatus = PATH_STATUS_FOUND
 							While n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19 Then Exit
-								n\PathLocation = n\PathLocation + 1
+								If n\PathLocation > 19
+									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+									Exit
+								Else
+									n\PathLocation = n\PathLocation + 1
+								EndIf
 							Wend
 							If n\PathLocation < 19
 								If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -6145,8 +6174,12 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathStatus = FindPath(n, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider))
 							If n\PathStatus = PATH_STATUS_FOUND
 								While n\Path[n\PathLocation] = Null
-									If n\PathLocation > 19 Then Exit
-									n\PathLocation = n\PathLocation + 1
+									If n\PathLocation > 19
+										n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+										Exit
+									Else
+										n\PathLocation = n\PathLocation + 1
+									EndIf
 								Wend
 								If n\PathLocation < 19
 									If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
@@ -6466,35 +6499,39 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, DisableSoundOnCrouch% = False)
 	; ~ 3: Player is detected by a camera (only for MTF Units!)
 	
 	Local Dist2# = EntityDistanceSquared(me\Collider, n\Collider)
-	Local DeltaYawVal# = Abs(DeltaYaw(n\Collider, me\Collider))
-	Local Visible% = EntityVisible(n\Collider, me\Collider)
 	
 	If n\BlinkTimer <= 0.0 Then Return(0)
 	If I_268\InvisibilityOn Lor chs\NoTarget Then n\State2 = 0.0 : Return(0)
 	
 	If n\NPCType <> NPCTypeMTF
-		If Dist2 > PowTwo(Dist) Then Return(0)
-		; ~ Spots the player if he's either in view or making a loud sound
-		If me\SndVolume > 1.0
-			If (DeltaYawVal > 60.0) And Visible
-				Return(1)
-			ElseIf (Not Visible)
-				If DisableSoundOnCrouch And me\Crouch
-					Return(0)
-				Else
-					Return(2)
-				EndIf
-			EndIf
-		ElseIf DeltaYawVal > 60.0 
+		If Dist2 > PowTwo(Dist)
 			Return(0)
+		Else
+			Local Visible% = EntityVisible(n\Collider, me\Collider)
+			Local DeltaYawVal# = Abs(DeltaYaw(n\Collider, me\Collider))
+			
+			; ~ Spots the player if he's either in view or making a loud sound
+			If me\SndVolume > 1.0
+				If (DeltaYawVal > 60.0) And Visible
+					Return(1)
+				ElseIf (Not Visible)
+					If DisableSoundOnCrouch And me\Crouch
+						Return(0)
+					Else
+						Return(2)
+					EndIf
+				EndIf
+			ElseIf DeltaYawVal > 60.0 
+				Return(0)
+			EndIf
+			Return(Visible)
 		EndIf
-		Return(Visible)
 	Else
 		Local ReturnState% = 0 + (3 * me\Detected)
 		
 		If Dist2 < PowTwo(Dist)
-			If me\SndVolume > 1.0 Then ReturnState = 2
-			If Visible And DeltaYawVal < 60.0 Then ReturnState = 1
+			If me\SndVolume > Rnd(1.0, 1.5) Then ReturnState = 2
+			If EntityVisible(n\Collider, me\Collider) And Abs(DeltaYaw(n\Collider, me\Collider)) < 60.0 Then ReturnState = 1
 		EndIf
 		Return(ReturnState)
 	EndIf

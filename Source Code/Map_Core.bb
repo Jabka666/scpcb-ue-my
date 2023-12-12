@@ -3608,75 +3608,78 @@ Function UpdateSecurityCams%()
 					me\Sanity = -1010.0
 				EndIf
 				
-				sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
-				
-				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume) And sc\InSight
-					Local Temp% = False
-					Local RID% = sc\room\RoomTemplate\RoomID
+				sc\InSight = False
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume)
+					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
-					If RID = r_cont1_205 Lor RID = r_cont1_173_intro Then sc\CoffinEffect = 0 : Temp = True
-					
-					If sc\State < sc\RenderInterval
-						sc\State = sc\State + fps\Factor[0]
-					Else
-						sc\State = 0.0
-					EndIf
-					
-					If sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3
-						If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
-							me\Sanity = me\Sanity - (fps\Factor[0] / (1.0 + I_714\Using))
-							me\RestoreSanity = False
-							
-							Local Pvt% = CreatePivot()
-							
-							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-							PointEntity(Pvt, sc\ScrOBJ)
-							
-							RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
-							
-							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
-							CameraPitch = CameraPitch - 90.0
-							
-							FreeEntity(Pvt) : Pvt = 0
-							If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4)
-								If me\Sanity < -800.0
-									If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
-									If Rand(6) < 5
-										EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
-										If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX[1])
-										sc\PlayerState = 2
-										If (Not ChannelPlaying(sc\SoundCHN)) Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
-										If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
-									EndIf
-									me\BlurTimer = 1000.0
-									If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
-								ElseIf me\Sanity < -500.0
-									If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
-									If Rand(50) = 1
-										EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
-										If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX[0])
-										sc\PlayerState = Max(sc\PlayerState, 1)
-										If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
-									EndIf
-								Else
-									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
-								EndIf
-							EndIf
+					If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And sc\InSight
+						Local Temp% = False
+						Local RID% = sc\room\RoomTemplate\RoomID
+						
+						If RID = r_cont1_205 Lor RID = r_cont1_173_intro Then sc\CoffinEffect = 0 : Temp = True
+						
+						If sc\State < sc\RenderInterval
+							sc\State = sc\State + fps\Factor[0]
 						Else
-							EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+							sc\State = 0.0
 						EndIf
-					ElseIf (Not Temp)
-						If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
-						If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
-						If (MilliSecs() Mod sc\PlayerState) >= Rand(600)
-							EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
-						Else
-							If (Not ChannelPlaying(sc\SoundCHN))
-								sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
-								If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
+						
+						If sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3
+							If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
+								me\Sanity = me\Sanity - (fps\Factor[0] / (1.0 + I_714\Using))
+								me\RestoreSanity = False
+								
+								Local Pvt% = CreatePivot()
+								
+								PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+								PointEntity(Pvt, sc\ScrOBJ)
+								
+								RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
+								
+								TurnEntity(Pvt, 90.0, 0.0, 0.0)
+								CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
+								CameraPitch = CameraPitch - 90.0
+								
+								FreeEntity(Pvt) : Pvt = 0
+								If (sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3) And (I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4)
+									If me\Sanity < -800.0
+										If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+										If Rand(6) < 5
+											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
+											If sc\PlayerState = 1 Then PlaySound_Strict(HorrorSFX[1])
+											sc\PlayerState = 2
+											If (Not ChannelPlaying(sc\SoundCHN)) Then sc\SoundCHN = PlaySound_Strict(HorrorSFX[4])
+											If sc\CoffinEffect = 3 And Rand(200) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
+										EndIf
+										me\BlurTimer = 1000.0
+										If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
+									ElseIf me\Sanity < -500.0
+										If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+										If Rand(50) = 1
+											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
+											If sc\PlayerState = 0 Then PlaySound_Strict(HorrorSFX[0])
+											sc\PlayerState = Max(sc\PlayerState, 1)
+											If sc\CoffinEffect = 3 And Rand(100) = 1 Then sc\CoffinEffect = 2 : sc\PlayerState = Rand(10000, 20000)
+										EndIf
+									Else
+										EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+									EndIf
+								EndIf
+							Else
+								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 							EndIf
-							EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
+						ElseIf (Not Temp)
+							If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
+							If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
+							If (MilliSecs() Mod sc\PlayerState) >= Rand(600)
+								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
+							Else
+								If (Not ChannelPlaying(sc\SoundCHN))
+									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
+									If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
+								EndIf
+								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
+							EndIf
 						EndIf
 					EndIf
 				EndIf
