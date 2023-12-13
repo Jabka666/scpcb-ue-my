@@ -74,18 +74,20 @@ Const LocalizaitonPath$ = "Localization\"
 Global lang.Language = New Language
 
 Function SetLanguage%(Language$, FromSelector% = True)
-	lang\CurrentLanguage = Language
-	If lang\CurrentLanguage = "en"
-		lang\LanguagePath = ""
-	Else
-		lang\LanguagePath = LocalizaitonPath + lang\CurrentLanguage + "\"
-		
+	If lang\LanguagePath <> ""
 		; ~ Clear previous buffers info
 		IniClearBuffer(lang\LanguagePath + LanguageFile)
 		IniClearBuffer(lang\LanguagePath + LoadingScreensFile)
 		IniClearBuffer(lang\LanguagePath + FontsFile)
 		IniClearBuffer(lang\LanguagePath + AchievementsFile)
 		IniClearBuffer(lang\LanguagePath + SCP294File)
+	EndIf
+
+	lang\CurrentLanguage = Language
+	If lang\CurrentLanguage = "en"
+		lang\LanguagePath = ""
+	Else
+		lang\LanguagePath = LocalizaitonPath + lang\CurrentLanguage + "\"
 		
 		; ~ Write a new buffer
 		IniWriteBuffer(lang\LanguagePath + LanguageFile)
