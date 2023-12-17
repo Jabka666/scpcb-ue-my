@@ -738,10 +738,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.04, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.04, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			d.Doors = CreateDoor(r, r\x - 458.0 * RoomScale, r\y, r\z + 35.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
-			If r\RoomTemplate\RoomID = r_room2_gw_2 Then d\Locked = 1
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.04, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 1.035, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.04, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.09, True)
+			If r\RoomTemplate\RoomID = r_room2_gw
+				d.Doors = CreateDoor(r, r\x - 458.0 * RoomScale, r\y, r\z + 35.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
+				PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.04, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 1.035, True)
+				PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.04, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.09, True)
+			EndIf
+			
 			If r\RoomTemplate\RoomID = r_room2_gw Then r\RoomLevers.Levers[0] = CreateLever(r, r\x + 160.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 204.0 * RoomScale, 270.0)
 			
 			If r\RoomTemplate\RoomID = r_room2_gw_2
