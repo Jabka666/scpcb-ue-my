@@ -7469,6 +7469,23 @@ Function UpdateEvents%()
 					RotateEntity(p\Pvt, -60.0, e\room\Angle - 90.0, 0.0)
 					
 					e\SoundCHN = LoopSound2(AlarmSFX[2], e\SoundCHN, Camera, e\room\OBJ, 5.0)
+					
+					
+					If EntityDistanceSquared(me\Collider, e\room\Objects[1]) < 25.0
+						e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
+						If Rand(50) = 1
+							PlaySound2(e\Sound, Camera, e\room\Objects[1], 3.0, 0.4)
+								
+							If opt\ParticleAmount > 0
+								For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
+									p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.002, 0.0, 25.0)
+									p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\AlphaChange = -0.05
+									RotateEntity(p\Pvt, Rnd(-20.0, 0.0), e\room\Angle + 90.0, 0.0)
+									ScaleSprite(p\OBJ, p\Size, p\Size)
+								Next
+							EndIf
+						EndIf
+					EndIf
 				EndIf
 				;[End Block]
 			Case e_gateway
