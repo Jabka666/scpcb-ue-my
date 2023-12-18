@@ -179,6 +179,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 	Repeat
 		Cls()
 		
+		MousePosX = MouseX()
+		MousePosY = MouseY()
 		mo\MouseHit1 = MouseHit(1)
 		
 		Color(255, 255, 255)
@@ -469,6 +471,8 @@ Function UpdateLanguageSelector%()
 		SetBuffer(BackBuffer())
 		Cls()
 		
+		MousePosX = MouseX()
+		MousePosY = MouseY()
 		mo\MouseHit1 = MouseHit(1)
 		mo\MouseDown1 = MouseDown(1)
 		

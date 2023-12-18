@@ -103,11 +103,11 @@ Function ReadPixelColor%(Pixel%, Shrid%)
 End Function
 
 Function ScaledMouseX#()
-	Return(Float(MouseX() - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * Float(opt\GraphicWidth) / Float(opt\RealGraphicWidth * opt\AspectRatio))
+	Return(Float(MousePosX - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * Float(opt\GraphicWidth) / Float(opt\RealGraphicWidth * opt\AspectRatio))
 End Function
 
 Function ScaledMouseY#()
-	Return(Float(MouseY()) * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
+	Return(MousePosY * Float(opt\GraphicHeight) / Float(opt\RealGraphicHeight))
 End Function
 
 Function MouseOn%(x%, y%, Width%, Height%)

@@ -59,8 +59,12 @@ AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 Global MenuScale# = opt\GraphicHeight / 1024.0
 
 Global Input_ResetTime# = 0.0
+Global MousePosX#, MousePosY#
 
 Function UpdateMouseInput%()
+	MousePosX = MouseX()
+	MousePosY = MouseY()
+	
 	If Input_ResetTime > 0.0
 		Input_ResetTime = Max(Input_ResetTime - fps\Factor[1], 0.0)
 	Else
