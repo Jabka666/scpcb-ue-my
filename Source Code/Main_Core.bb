@@ -582,10 +582,10 @@ Function UpdateGame%()
 					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
 						CreateHintMsg(GetLocalString("save", "failed.screen"))
 					Else
-						SaveGame(CurrSave\Name) ; Can save at screen
+						SaveGame(CurrSave\Name) ; ~ Can save at screen
 					EndIf
 				Else
-					SaveGame(CurrSave\Name) ; Can save
+					SaveGame(CurrSave\Name) ; ~ Can save
 				EndIf
 			Else
 				CreateHintMsg(GetLocalString("save", "disable"))
@@ -3224,11 +3224,13 @@ Function UpdateGUI%()
 		EndIf
 	EndIf
 	
-	If SelectedScreen <> Null
-		If mo\MouseUp1 Lor mo\MouseHit2 Then
-			FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
-			mo\MouseUp1 = False
-			SelectedScreen = Null
+	If (Not (MenuOpen Lor me\Terminated))
+		If SelectedScreen <> Null
+			If mo\MouseUp1 Lor mo\MouseHit2 Then
+				FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
+				mo\MouseUp1 = False
+				SelectedScreen = Null
+			EndIf
 		EndIf
 	EndIf
 	
@@ -3245,7 +3247,7 @@ Function UpdateGUI%()
 			EndIf
 		EndIf
 		If ShouldDrawHUD
-			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((74.0) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True), EntityZ(d_I\ClosestButton, True))
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
@@ -3271,64 +3273,66 @@ Function UpdateGUI%()
 				EndIf
 			EndIf
 			
-			x = x + (44 * MenuScale * Scale)
-			y = y + (249 * MenuScale * Scale)
-			
-			For n = 0 To 3
-				For i = 0 To 2
-					xTemp = x + ((58.5 * MenuScale * Scale) * n)
-					yTemp = y + ((67 * MenuScale * Scale) * i)
-					
-					Temp = False
-					If MouseOn(xTemp, yTemp, 54 * MenuScale * Scale, 65 * MenuScale * Scale) And msg\KeyPadMsg = ""
-						If mo\MouseUp1
-							PlaySound_Strict(ButtonSFX)
-							
-							Select (n + 1) + (i * 4)
-								Case 1, 2, 3
-									;[Block]
-									msg\KeyPadInput = msg\KeyPadInput + ((n + 1) + (i * 4))
-									;[End Block]
-								Case 4
-									;[Block]
-									msg\KeyPadInput = msg\KeyPadInput + "0"
-									;[End Block]
-								Case 5, 6, 7
-									;[Block]
-									msg\KeyPadInput = msg\KeyPadInput + ((n + 1) + (i * 4) - 1)
-									;[End Block]
-								Case 8
-									;[Block]
-									UseDoor(d_I\SelectedDoor)
-									If msg\KeyPadInput = d_I\SelectedDoor\Code
-										d_I\SelectedDoor = Null
-										StopMouseMovement()
-									Else
-										msg\KeyPadMsg = GetLocalString("msg", "denied")
-										msg\KeyPadTimer = 210.0
-										msg\KeyPadInput = ""
-									EndIf
-									;[End Block]
-								Case 9, 10, 11
-									;[Block]
-									msg\KeyPadInput = msg\KeyPadInput + ((n + 1) + (i * 4) - 2)
-									;[End Block]
-								Case 12
-									;[Block]
-									msg\KeyPadInput = ""
-									;[End Block]
-							End Select
-							If Len(msg\KeyPadInput) > 4 Then msg\KeyPadInput = Left(msg\KeyPadInput, 4)
-						EndIf
-					Else
+			If (Not MenuOpen)
+				x = x + (44 * MenuScale * Scale)
+				y = y + (249 * MenuScale * Scale)
+				
+				For n = 0 To 3
+					For i = 0 To 2
+						xTemp = x + ((58.5 * MenuScale * Scale) * n)
+						yTemp = y + ((67 * MenuScale * Scale) * i)
+						
 						Temp = False
-					EndIf
+						If MouseOn(xTemp, yTemp, 54 * MenuScale * Scale, 65 * MenuScale * Scale) And msg\KeyPadMsg = ""
+							If mo\MouseUp1
+								PlaySound_Strict(ButtonSFX)
+								
+								Select (n + 1) + (i * 4)
+									Case 1, 2, 3
+										;[Block]
+										msg\KeyPadInput = msg\KeyPadInput + ((n + 1) + (i * 4))
+										;[End Block]
+									Case 4
+										;[Block]
+										msg\KeyPadInput = msg\KeyPadInput + "0"
+										;[End Block]
+									Case 5, 6, 7
+										;[Block]
+										msg\KeyPadInput = msg\KeyPadInput + ((n + 1) + (i * 4) - 1)
+										;[End Block]
+									Case 8
+										;[Block]
+										UseDoor(d_I\SelectedDoor)
+										If msg\KeyPadInput = d_I\SelectedDoor\Code
+											d_I\SelectedDoor = Null
+											StopMouseMovement()
+										Else
+											msg\KeyPadMsg = GetLocalString("msg", "denied")
+											msg\KeyPadTimer = 210.0
+											msg\KeyPadInput = ""
+										EndIf
+										;[End Block]
+									Case 9, 10, 11
+										;[Block]
+										msg\KeyPadInput = msg\KeyPadInput + ((n + 1) + (i * 4) - 2)
+										;[End Block]
+									Case 12
+										;[Block]
+										msg\KeyPadInput = ""
+										;[End Block]
+								End Select
+								If Len(msg\KeyPadInput) > 4 Then msg\KeyPadInput = Left(msg\KeyPadInput, 4)
+							EndIf
+						Else
+							Temp = False
+						EndIf
+					Next
 				Next
-			Next
-			
-			If mo\MouseHit2
-				d_I\SelectedDoor = Null
-				StopMouseMovement()
+				
+				If mo\MouseHit2
+					d_I\SelectedDoor = Null
+					StopMouseMovement()
+				EndIf
 			EndIf
 		Else
 			d_I\SelectedDoor = Null
@@ -5515,7 +5519,7 @@ Function UpdateGUI%()
 					;[End Block]
 			End Select
 			
-			If mo\MouseHit2 Lor KeyHit(key\INVENTORY) Lor me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Lor me\Zombie
+			If ((mo\MouseHit2 Lor KeyHit(key\INVENTORY)) And (Not MenuOpen)) Lor me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Lor me\Zombie
 				Select SelectedItem\ItemTemplate\TempName
 					Case "firstaid", "finefirstaid", "firstaid2", "cap", "scp268", "fine268", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
 						;[Block]
@@ -5968,6 +5972,7 @@ Function RenderGUI%()
 			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
 		EndIf
 		If ShouldDrawHUD
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True), EntityZ(d_I\ClosestButton, True))
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
@@ -5979,7 +5984,7 @@ Function RenderGUI%()
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
 			ProjY = ProjectedY()
 			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
-			Scale = (ProjectedY() - ProjY) / 462.0
+			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
 			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
 			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)

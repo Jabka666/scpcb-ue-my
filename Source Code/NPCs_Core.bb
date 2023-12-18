@@ -5278,8 +5278,9 @@ Function UpdateMTFUnit%(n.NPCs)
 				n\Speed = 0.015
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
-					If NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume) > 0 Then n\State2 = 70.0 * 15.0
-					If NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume) = 1
+					PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume)
+					If PlayerSeeAble > 0 Then n\State2 = 70.0 * 15.0
+					If PlayerSeeAble = 1
 						n\EnemyX = EntityX(me\Collider, True)
 						n\EnemyY = EntityY(me\Collider, True)
 						n\EnemyZ = EntityZ(me\Collider, True)

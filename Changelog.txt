@@ -101,6 +101,7 @@ Bug Fixes:
 - Fixed bodies falling through the map.
 - Fixed some broken textures that couldn't be opened in some graphic editors.
 - Fixed some omissions in SCP-1048-A event.
+- Fixed messages in keypad button having an incorrect position at different scales and FOV.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.
