@@ -1799,8 +1799,8 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(JsonGetArraySize(LoadingScreens) - 1))
 		LoadingScreenTitle = JsonGetString(JsonGetValue(SelectedLoadingScreens, "title"))
-		If JsonIsNull(JsonGetValue(SelectedLoadingScreens, "descriptions")) Then
-			Descriptions = JsonGetArray(JsonParseFromString("[" + Chr(34) + Chr(34) + "]")) ; ~ Create a empty description array
+		If JsonIsNull(JsonGetValue(SelectedLoadingScreens, "descriptions"))
+			Descriptions = JsonGetArray(JsonParseFromString("[" + Chr(34) + Chr(34) + "]")) ; ~ Create an empty description array
 		Else
 			Descriptions = JsonGetArray(JsonGetValue(SelectedLoadingScreens, "descriptions"))
 		EndIf
@@ -1808,7 +1808,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
 		LoadingImage = LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image")))
 		LoadingImage = ScaleImage2(LoadingImage, MenuScale, MenuScale)
-		If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background")) Then
+		If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
 			LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
 			LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
 		EndIf
@@ -1866,8 +1866,8 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			EndIf
 			
 			Local StrTemp$ = ""
+			Local Temp% = Rand(2, 9)
 			
-			Temp = Rand(2, 9)
 			For i = 0 To Temp
 				StrTemp = StrTemp + Chr(Rand(48, 122))
 			Next
