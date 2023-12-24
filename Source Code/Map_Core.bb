@@ -242,7 +242,7 @@ Function RenderLights%(Cam%)
 							
 							EntityAutoFade(l\Sprite, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 							If Dist < PowTwo(opt\CameraFogFar * 1.2)
-								If EntityVisible(Cam, l\OBJ) And EntityInView(l\OBJ, Cam)
+								If EntityInView(l\OBJ, Cam) And EntityVisible(Cam, l\OBJ)
 									If LightSpriteHidden Then ShowEntity(l\Sprite)
 									If opt\AdvancedRoomLights
 										Alpha = 1.0 - Max(Min(((Sqr(Dist) + 0.5) / 7.5), 1.0), 0.0)
@@ -3584,9 +3584,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				If sc <> sc_I\CoffinCam
-					If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0
-						If EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
-					EndIf
+					If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0 And EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
 				EndIf
 			EndIf
 			If (MilliSecs() Mod 1350) < 800

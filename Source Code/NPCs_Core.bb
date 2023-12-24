@@ -849,7 +849,7 @@ Function UpdateNPCs%()
 							
 							Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
 							If Dist > PowTwo(HideDistance / 2.0)
-								If (Not EntityVisible(n\Collider, n_I\MTFLeader\Collider)) And (Not EntityInView(n\OBJ, Camera)) Then Tmp = True
+								If (Not EntityInView(n\OBJ, Camera)) And (Not EntityVisible(n\Collider, n_I\MTFLeader\Collider)) Then Tmp = True
 							EndIf
 							If (Not Tmp)
 								PointEntity(n\OBJ, n_I\MTFLeader\Collider)
@@ -3631,7 +3631,6 @@ Function UpdateNPCs%()
 					End Select
 					
 					If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
-						
 						Dist = EntityDistanceSquared(n\Collider, me\Collider) - (EntityVisible(me\Collider, n\Collider) * 1.4641)
 						If PowTwo(me\SndVolume * 1.2) > Dist Lor Dist < 2.25
 							If n\State3 = 0.0
@@ -3641,7 +3640,6 @@ Function UpdateNPCs%()
 								PlaySound_Strict(LoadTempSound("SFX\SCP\939\Attack.ogg"))
 								n\State3 = 1.0
 							EndIf
-							
 							n\State = 3.0
 						ElseIf PowTwo(me\SndVolume * 1.6) > Dist
 							If n\State <> 1 And n\Reload <= 0.0
