@@ -2685,19 +2685,19 @@ Function UpdateDoors%()
 			If (Not (d\DoorType = WOODEN_DOOR And PlayerRoom\RoomTemplate\RoomID = r_cont2_860_1)) Then UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
+				Local TextureID%
+				
 				If d\OpenState > 0.0 And d\OpenState < 180.0
-					For i = 0 To 1
-						If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
-					Next
+					TextureID = BUTTON_YELLOW_TEXTURE
 				ElseIf d\Locked = 1
-					For i = 0 To 1
-						If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
-					Next
+					TextureID = BUTTON_RED_TEXTURE
 				Else
-					For i = 0 To 1
-						If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE])
-					Next
+					TextureID = BUTTON_GREEN_TEXTURE
 				EndIf
+				; ~ TODO: FIND SOLUTION TO PREVENT FUNCTION LOOP
+				For i = 0 To 1
+					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
+				Next
 			EndIf
 			
 			If d\DoorType = BIG_DOOR
