@@ -2446,17 +2446,17 @@ Function InitNewGame%()
 	For r.Rooms = Each Rooms
 		If (Not r\RoomTemplate\DisableDecals)
 			If Rand(4) = 1
-				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
+				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), r\x + Rnd(-2.0, 2.0), r\y + 0.005, r\z + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			If Rand(4) = 1
-				de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\OBJ) + Rnd(-2.0, 2.0), r\y + 0.005, EntityZ(r\OBJ) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
+				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + Rnd(-2.0, 2.0), r\y + 0.005, r\z + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 		EndIf
 		
 		If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
-			PositionEntity(me\Collider, EntityX(r\OBJ) + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, EntityZ(r\OBJ) + 1024.0 * RoomScale)
+			PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 1024.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
 			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
@@ -2548,7 +2548,7 @@ Function InitLoadGame%()
 	CatchErrors("InitLoadGame()")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
-	Local i%, x#, z#
+	Local i%, x#, y#, z#
 	
 	InitOtherStuff()
 	LoadWayPoints()
@@ -2615,13 +2615,14 @@ Function InitLoadGame%()
 				CreateChunkParts(e\room)
 				
 				x = EntityX(e\room\OBJ)
+				y = EntityY(e\room\OBJ)
 				z = EntityZ(e\room\OBJ)
 				
 				Local ch.Chunk
 				
 				For i = -2 To 0 Step 2
-					ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
-					ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
+					ch.Chunk = CreateChunk(-1, x * (i * 2.5), y, z, True)
+					ch.Chunk = CreateChunk(-1, x * (i * 2.5), y, z - 40.0, True)
 				Next
 				Exit
 			EndIf

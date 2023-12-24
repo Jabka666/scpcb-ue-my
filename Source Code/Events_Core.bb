@@ -488,7 +488,7 @@ Function QuickLoadEvents%()
 	
 	Local e.Events = QuickLoad_CurrEvent
 	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, n.NPCs
-	Local Scale#, Pvt%, i%, x#, z#
+	Local Scale#, Pvt%, i%, x#, y#, z#
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
 	; ~ Instead of magic values in e\EventState and e\EventStr
@@ -589,13 +589,14 @@ Function QuickLoadEvents%()
 						QuickLoadPercent = 100
 						
 						x = EntityX(e\room\OBJ)
+						y = EntityY(e\room\OBJ)
 						z = EntityZ(e\room\OBJ)
 						
 						Local ch.Chunk
 						
 						For i = -2 To 0 Step 2
-							ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z, True)
-							ch.Chunk = CreateChunk(-1, x * (i * 2.5), EntityY(e\room\OBJ), z - 40.0, True)
+							ch.Chunk = CreateChunk(-1, x * (i * 2.5), y, z, True)
+							ch.Chunk = CreateChunk(-1, x * (i * 2.5), y, z - 40.0, True)
 						Next
 						
 						e\EventState = 2.0

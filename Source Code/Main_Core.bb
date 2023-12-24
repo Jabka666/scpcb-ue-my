@@ -3247,18 +3247,22 @@ Function UpdateGUI%()
 			EndIf
 		EndIf
 		If ShouldDrawHUD
+			Local ButtonPosX# = EntityX(d_I\ClosestButton, True)
+			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
+			Local ButtonPosZ# = EntityZ(d_I\ClosestButton, True)
+			
 			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True), EntityZ(d_I\ClosestButton, True))
+			PositionEntity(Pvt, ButtonPosX, ButtonPosY, ButtonPosZ)
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
 			MoveEntity(Pvt, 0.0, 0.0, 0.22)
 			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 			PointEntity(Camera, d_I\ClosestButton)
 			FreeEntity(Pvt) : Pvt = 0
 			
-			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
+			CameraProject(Camera, ButtonPosX, ButtonPosY + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
 			ProjY = ProjectedY()
-			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
+			CameraProject(Camera, ButtonPosX, ButtonPosY - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
 			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
 			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
@@ -5972,18 +5976,22 @@ Function RenderGUI%()
 			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
 		EndIf
 		If ShouldDrawHUD
+			Local ButtonPosX# = EntityX(d_I\ClosestButton, True)
+			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
+			Local ButtonPosZ# = EntityZ(d_I\ClosestButton, True)
+			
 			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True), EntityZ(d_I\ClosestButton, True))
+			PositionEntity(Pvt, ButtonPosX, ButtonPosY, ButtonPosZ)
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
 			MoveEntity(Pvt, 0.0, 0.0, 0.22)
 			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 			PointEntity(Camera, d_I\ClosestButton)
 			FreeEntity(Pvt) : Pvt = 0
 			
-			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
+			CameraProject(Camera, ButtonPosX, ButtonPosY + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
 			ProjY = ProjectedY()
-			CameraProject(Camera, EntityX(d_I\ClosestButton, True), EntityY(d_I\ClosestButton, True) - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), EntityZ(d_I\ClosestButton, True))
+			CameraProject(Camera, ButtonPosX, ButtonPosY - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
 			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
 			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
@@ -6582,8 +6590,10 @@ Function RenderGUI%()
 						EndIf
 					Else
 						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor RID <> r_cont1_895)
-							Local PlayerX% = Floor(EntityX(me\Collider) / RoomSpacing + 0.5)
-							Local PlayerZ% = Floor(EntityZ(me\Collider) / RoomSpacing + 0.5)
+							Local ColliderX# = EntityX(me\Collider)
+							Local ColliderZ# = EntityZ(me\Collider)
+							Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
+							Local PlayerZ% = Floor(ColliderZ / RoomSpacing + 0.5)
 							
 							SetBuffer(ImageBuffer(t\ImageID[7]))
 							
@@ -6592,8 +6602,8 @@ Function RenderGUI%()
 							
 							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
 							
-							x = x - (12 * MenuScale) + ((EntityX(me\Collider) - 4.0) Mod RoomSpacing) * (3 * MenuScale)
-							y = y + (12 * MenuScale) - ((EntityZ(me\Collider) - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+							x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+							y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
 							For x2 = Max(1.0, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
 								For z2 = Max(1.0, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance
@@ -8533,7 +8543,7 @@ Function Update008%()
 						
 						msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
 						
-						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(PlayerRoom\NPC[0]\Collider), 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
+						de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(PlayerRoom\NPC[0]\Collider), PlayerRoom\y + 544.0 * RoomScale + 0.01, EntityZ(PlayerRoom\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0, 0.8)
 						EntityParent(de\OBJ, PlayerRoom\OBJ)
 						
 						Kill()

@@ -643,10 +643,10 @@ Function PickItem%(item.Items)
 End Function
 
 Function DropItem%(item.Items, PlayDropSound% = True)
-	
 	CatchErrors("DropItem()")
 	
 	Local n%
+	Local CameraYaw# = EntityYaw(Camera)
 	
 	If PlayDropSound
 		If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\SoundID])
@@ -656,9 +656,9 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	ShowEntity(item\Collider)
 	PositionEntity(item\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-	RotateEntity(item\Collider, EntityPitch(Camera), EntityYaw(Camera) + Rnd(-20.0, 20.0), 0.0)
+	RotateEntity(item\Collider, EntityPitch(Camera), CameraYaw + Rnd(-20.0, 20.0), 0.0)
 	MoveEntity(item\Collider, 0.0, -0.1, 0.1)
-	RotateEntity(item\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
+	RotateEntity(item\Collider, 0.0, CameraYaw + Rnd(-110.0, 110.0), 0.0)
 	ResetEntity(item\Collider)
 	
 	Local IN$ = item\ItemTemplate\TempName
