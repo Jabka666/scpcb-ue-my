@@ -41,12 +41,10 @@ EndIf
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 If opt\DisplayMode = 1
-	Graphics3DExt(DesktopWidth(), DesktopHeight(), 0, 4)
-	
 	opt\RealGraphicWidth = DesktopWidth()
 	opt\RealGraphicHeight = DesktopHeight()
-	
 	opt\AspectRatio = (Float(opt\GraphicWidth) / Float(opt\GraphicHeight)) / (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight))
+	Graphics3DExt(opt\RealGraphicWidth, opt\RealGraphicHeight, 0, 4)
 Else
 	opt\AspectRatio = 1.0
 	opt\RealGraphicWidth = opt\GraphicWidth
