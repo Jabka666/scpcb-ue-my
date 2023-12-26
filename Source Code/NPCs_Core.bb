@@ -157,7 +157,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_MTF_MODEL])
-			If IsPlayerOutsideFacility() Then EntityFX(n\OBJ, 1)
 			
 			Temp = IniGetFloat(NPCsFile, "MTF", "Scale") / 2.5
 			
@@ -290,10 +289,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, 0.2)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_APACHE_MODEL])
-			EntityFX(n\OBJ, 1)
 			
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_1_MODEL])
-			EntityFX(n\OBJ2, 1)
 			EntityParent(n\OBJ2, n\OBJ)
 			
 			For i = -1 To 1 Step 2
@@ -304,7 +301,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Next
 			
 			n\OBJ3 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_2_MODEL])
-			EntityFX(n\OBJ3, 1)
 			EntityParent(n\OBJ3, n\OBJ)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
 			
@@ -4909,6 +4905,7 @@ Const MTF_DISABLING_TESLA% = 11
 
 Function UpdateMTFUnit%(n.NPCs)
 	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints
+	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
@@ -5313,7 +5310,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						
 						Dist = EntityDistanceSquared(me\Collider, n\Collider)
 						; ~ If close enough, start shooting at the player
-						If Dist < 9.0
+						If Dist < 9.0 + ((RID = r_gate_a) * 16.0) 
 							For n2.NPCs = Each NPCs
 								If n2\NPCType = NPCTypeMTF And n2 <> n
 									If n2\State = MTF_WANDERING_AROUND
@@ -6254,16 +6251,18 @@ Function UpdateMTFUnit%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport companions close to the leader if they get stuck
-		If Rand(100) = 1
-			If n <> n_I\MTFLeader
-				If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
-					If EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
+		If RID <> r_gate_a
+			If Rand(100) = 1
+				If n <> n_I\MTFLeader
+					If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
+						If EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
+					EndIf
 				EndIf
 			EndIf
 		EndIf
 		
 		; ~ Teleport back to the facility if fell through the floor
-		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And EntityY(n\Collider) < -7.0 Then TeleportCloser(n)
+		If RID <> r_cont2_049 And EntityY(n\Collider) < -7.0 Then TeleportCloser(n)
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
@@ -6528,7 +6527,7 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, DisableSoundOnCrouch% = False)
 	Else
 		Local ReturnState% = 0 + (3 * me\Detected)
 		
-		If Dist2 < PowTwo(Dist)
+		If Dist2 < PowTwo(Dist + ((PlayerRoom\RoomTemplate\RoomID = r_gate_a) * 4.0))
 			If me\SndVolume > Rnd(1.0, 1.5) Then ReturnState = 2
 			If EntityVisible(n\Collider, me\Collider) And Abs(DeltaYaw(n\Collider, me\Collider)) < 60.0 Then ReturnState = 1
 		EndIf

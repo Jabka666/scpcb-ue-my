@@ -9391,10 +9391,10 @@ Function UpdateEndings%()
 						EntityParent(e\room\Objects[0], e\room\OBJ)
 						
 						e\room\Objects[9] = LoadMesh_Strict("GFX\Map\Props\lightgunbase.b3d")
-						PositionEntity(e\room\Objects[9], e\room\x + (2624.0 * RoomScale), e\room\y + (992.0 * RoomScale), e\room\z + (6157.0 * RoomScale))
+						PositionEntity(e\room\Objects[9], e\room\x + (2900.0 * RoomScale), e\room\y + (832.0 * RoomScale), e\room\z + (6157.0 * RoomScale))
 						ScaleEntity(e\room\Objects[9], RoomScale, RoomScale, RoomScale)
 						e\room\Objects[10] = LoadMesh_Strict("GFX\Map\Props\lightgun.b3d")
-						PositionEntity(e\room\Objects[10], e\room\x + (2614.0 * RoomScale), e\room\y + (1280.0 * RoomScale), e\room\z + (5981.0 * RoomScale), True)
+						PositionEntity(e\room\Objects[10], e\room\x + (2900.0 * RoomScale), e\room\y + (1120.0 * RoomScale), e\room\z + (5981.0 * RoomScale), True)
 						ScaleEntity(e\room\Objects[10], RoomScale, RoomScale, RoomScale)
 						EntityParent(e\room\Objects[10], e\room\Objects[9])
 						RotateEntity(e\room\Objects[9], 0.0, 48.0, 0.0)
@@ -9547,8 +9547,8 @@ Function UpdateEndings%()
 													e\room\NPC[i]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.3)
 													e\room\NPC[i + 1]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.3)
 													
-													e\room\NPC[i]\State = MTF_SEARCHING_PLAYER
-													e\room\NPC[i + 1]\State = MTF_SEARCHING_PLAYER
+													e\room\NPC[i]\State = MTF_SEARCHING_PLAYER : e\room\NPC[i]\State2 = 70.0 * 3600.0
+													e\room\NPC[i + 1]\State = MTF_SEARCHING_PLAYER : e\room\NPC[i + 1]\State2 = 70.0 * 3600.0
 												Next
 												If (Not EntityHidden(n_I\Curr106\OBJ)) Then HideEntity(n_I\Curr106\OBJ)
 											EndIf
@@ -9573,6 +9573,7 @@ Function UpdateEndings%()
 														ElseIf e\EventState2 < 70.0 * 14.3
 															me\CameraShake = 0.5
 															me\LightFlash = 0.3 + EntityInView(e\room\Objects[10], Camera) * 0.5
+															LightVolume = TempLightVolume * Rnd(1.0, 2.0)
 															
 															If (Not (me\Terminated Lor chs\GodMode))
 																If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 1.44

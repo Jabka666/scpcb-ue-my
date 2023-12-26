@@ -2759,50 +2759,62 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_gate_a
 			;[Block]
-			d.Doors = CreateDoor(r, r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0)
-			d\AutoClose = False
-			r\RoomDoors.Doors[0] = d
+			; ~ Misc doors
+			d.Doors = CreateDoor(r, r\x, r\y, r\z - 1024.0 * RoomScale, 0.0)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r, r\x - 630.0 * RoomScale, r\y, r\z - 480.0 * RoomScale, 0.0)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r, r\x - 1090.0 * RoomScale, r\y, r\z - 480.0 * RoomScale, 0.0)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 2336.0 * RoomScale, 0.0, True, BIG_DOOR)
+			d\Locked = 1 : d\MTFClose = False
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			
-			d.Doors = CreateDoor(r, r\x, r\y, r\z - 1024.0 * RoomScale, 0.0)
-			d\AutoClose = False : d\Locked = 1
+			d.Doors = CreateDoor(r, r\x + 5712.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 4968.0 * RoomScale, 90.0)
+			d\AutoClose = False : d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			
-			d.Doors = CreateDoor(r, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2328.0 * RoomScale, 0.0, me\SelectedEnding = Ending_A2, DEFAULT_DOOR, KEY_CARD_2)
-			PositionEntity(d\Buttons[0], r\x - 1320.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 2294.0 * RoomScale, True)
-			PositionEntity(d\Buttons[1], r\x - 1590.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 2484.0 * RoomScale, True)
-			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
-			
-			d.Doors = CreateDoor(r, r\x - 1440.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 4352.0 * RoomScale, 0.0, me\SelectedEnding = Ending_A2, DEFAULT_DOOR, KEY_CARD_2)
-			PositionEntity(d\Buttons[0], r\x - 1320.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 4378.0 * RoomScale, True)
-			RotateEntity(d\Buttons[0], 0.0, 180.0, 0.0, True)
-			PositionEntity(d\Buttons[1], r\x - 1590.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 4232.0 * RoomScale, True)
-			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			For r2.Rooms = Each Rooms
 				If r2\RoomTemplate\RoomID = r_gate_a_entrance
-					; ~ Elevator
-					d.Doors = CreateDoor(r, r\x + 1544.0 * RoomScale, r\y, r\z - 64.0 * RoomScale, -90.0, False, ELEVATOR_DOOR)
-					PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.22, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-					PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
-					PositionEntity(d\ElevatorPanel[0], EntityX(d\ElevatorPanel[0], True) + 0.031, EntityY(d\ElevatorPanel[0], True), EntityZ(d\ElevatorPanel[0], True), True)
-					PositionEntity(d\ElevatorPanel[1], EntityX(d\ElevatorPanel[1], True) - 0.22, EntityY(d\ElevatorPanel[1], True), EntityZ(d\ElevatorPanel[1], True), True)
+					; ~ Elevator door
+					d.Doors = CreateDoor(r, r\x + 1528.0 * RoomScale, r\y, r\z - 64.0 * RoomScale, -90.0, False, ELEVATOR_DOOR)
 					r\RoomDoors.Doors[1] = d
 					
 					r2\Objects[1] = CreatePivot()
-					PositionEntity(r2\Objects[1], r\x + 1848.0 * RoomScale, r\y, r\z - 64.0 * RoomScale)
+					PositionEntity(r2\Objects[1], r\x + 1832.0 * RoomScale, r\y, r\z - 64.0 * RoomScale)
 					EntityParent(r2\Objects[1], r\OBJ)
 					Exit
 				EndIf
 			Next
 			
+			; ~ The door leading to ending tunnel
+			d.Doors = CreateDoor(r, r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
+			d\AutoClose = False
+			
+			; ~ Doors inside a tiny tunnel
+			d.Doors = CreateDoor(r, r\x - 1400.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2320.0 * RoomScale, 0.0, me\SelectedEnding = Ending_A2, DEFAULT_DOOR, KEY_CARD_2)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.12, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			
+			d.Doors = CreateDoor(r, r\x - 1400.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 4352.0 * RoomScale, 0.0, me\SelectedEnding = Ending_A2, DEFAULT_DOOR, KEY_CARD_2)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.12, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			
 			; ~ SCP-106's spawnpoint
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 1216.0 * RoomScale, r\y, r\z + 2112.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x + 1188.0 * RoomScale, r\y, r\z + 1960.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			r\Objects[4] = CreatePivot()
@@ -2850,11 +2862,6 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[16], 2)
 			EntityType(r\Objects[16], HIT_MAP)
 			EntityAlpha(r\Objects[16], 0.0)
-			
-			w.WayPoints = CreateWaypoint(Null, r, r\x, r\y + 66.0 * RoomScale, r\z + 3112.0 * RoomScale)
-			w2.WayPoints = CreateWaypoint(Null, r, r\x, r\y + 66.0 * RoomScale, r\z + 2112.0 * RoomScale)
-			w\connected[0] = w2 : w\Dist[0] = EntityDistance(w\OBJ, w2\OBJ)
-			w2\connected[0] = w : w2\Dist[0] = w\Dist[0]
 			;[End Block]
 		Case r_gate_b_entrance
 			;[Block]
