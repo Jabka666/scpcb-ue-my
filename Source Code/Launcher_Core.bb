@@ -438,6 +438,11 @@ Function UpdateLanguageSelector%()
 	AppTitle(GetLocalString("language", "title"))
 	
 	Repeat
+		MousePosX = MouseX()
+		MousePosY = MouseY()
+		mo\MouseHit1 = MouseHit(1)
+		mo\MouseDown1 = MouseDown(1)
+		
 		Select CurrentStatus
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
@@ -470,11 +475,6 @@ Function UpdateLanguageSelector%()
 		
 		SetBuffer(BackBuffer())
 		Cls()
-		
-		MousePosX = MouseX()
-		MousePosY = MouseY()
-		mo\MouseHit1 = MouseHit(1)
-		mo\MouseDown1 = MouseDown(1)
 		
 		Local x#, y#, LinesAmount%
 		
@@ -920,6 +920,7 @@ Function SimpleFileSize$(Size%)
 		Return(Str(Ceil((fSize / 1024) * 100) / 100) + "KB")
 	EndIf
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

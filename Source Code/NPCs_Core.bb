@@ -674,7 +674,7 @@ Function UpdateNPCs%()
 							If (Not Move)
 								SqrValue = Sqr(Dist)
 								me\BlurVolume = Max(Max(Min((4.0 - SqrValue) / 6.0, 0.9), 0.1), me\BlurVolume)
-								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 15.0 * Max((3.5 - SqrValue) / 3.5, 0.0))
+								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 15.0 * Max((3.5 - SqrValue) / 3.5, 0.0))
 								
 								If Dist < 12.25 And MilliSecs() - n\LastSeen > 60000 And Temp
 									PlaySound_Strict(HorrorSFX[Rand(3, 4)])
@@ -860,7 +860,7 @@ Function UpdateNPCs%()
 							EndIf
 						EndIf
 						
-						SinValue = 0.05 + (Sin(MilliSecs() * 0.08) * 0.02)
+						SinValue = 0.05 + (Sin(MilliSec * 0.08) * 0.02)
 						
 						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) + SinValue, EntityZ(n\Collider))
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
@@ -967,7 +967,7 @@ Function UpdateNPCs%()
 										SqrValue = (4.0 - Sqr(Dist))
 										
 										me\BlurVolume = Max(Max(Min(SqrValue / 6.0, 0.9), 0.1), me\BlurVolume)
-										me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 20.0 * Max(SqrValue / 4.0, 0.0))
+										me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 20.0 * Max(SqrValue / 4.0, 0.0))
 										
 										If MilliSecs() - n\LastSeen > 60000
 											me\CurrCameraZoom = 40.0
@@ -1276,7 +1276,7 @@ Function UpdateNPCs%()
 							EndIf
 						Next
 						
-						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
+						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
 						
 						If n\Target = Null
 							If n\SoundCHN = 0
@@ -1301,7 +1301,7 @@ Function UpdateNPCs%()
 								Else
 									If EntityVisible(n\Target\Collider, n\Collider) Then n\LastSeen = 1
 								EndIf
-								n\State3 = MilliSecs() + 3000.0
+								n\State3 = MilliSecs() + 3000
 							EndIf
 							
 							If chs\NoTarget And n\Target = Null Then n\LastSeen = 0
@@ -1456,7 +1456,7 @@ Function UpdateNPCs%()
 											If PickedEntity() <> 0 Then n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
 											If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
 										EndIf
-										n\State3 = MilliSecs() + 3000.0
+										n\State3 = MilliSecs() + 3000
 									EndIf
 									
 									If n\LastSeen
@@ -2319,7 +2319,7 @@ Function UpdateNPCs%()
 						
 						If Rand(400) = 1 Then n\Angle = Rnd(-180.0, 180.0)
 						
-						RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSecs() / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
+						RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSec / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
 						
 						If EntityDistanceSquared(n\Collider, me\Collider) < 225.0
 							If WrapAngle(EntityYaw(n\Collider) - DeltaYaw(n\Collider, me\Collider)) < 90.0 And EntityVisible(me\Collider, n\Collider) Then n\State = 1.0
@@ -2581,7 +2581,7 @@ Function UpdateNPCs%()
 						n\PathStatus = PATH_STATUS_NO_SEARCH
 						AnimateNPC(n, 77.0, 201.0, 0.2)
 						
-						RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + n\PrevState + Sin(MilliSecs() / 50) * 2.0, EntityYaw(n\Collider), 50.0), 0.0, True)
+						RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + n\PrevState + Sin(MilliSec / 50) * 2.0, EntityYaw(n\Collider), 50.0), 0.0, True)
 						;[End Block]
 				End Select
 				
@@ -2740,7 +2740,7 @@ Function UpdateNPCs%()
 						EndIf
 						
 						Temp = Rnd(-1.0, 1.0)
-						PositionEntity(n\OBJ2, EntityX(n\Collider) + n\PrevX * Temp, EntityY(n\Collider) - 0.2 + Sin((MilliSecs() / 8 - 45) Mod 360) * 0.05, EntityZ(n\Collider) + n\PrevZ * Temp)
+						PositionEntity(n\OBJ2, EntityX(n\Collider) + n\PrevX * Temp, EntityY(n\Collider) - 0.2 + Sin((MilliSec / 8 - 45) Mod 360) * 0.05, EntityZ(n\Collider) + n\PrevZ * Temp)
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ), 0.0)
 						If Floor(AnimTime(n\OBJ2)) <> Floor(n\Frame) Then SetAnimTime(n\OBJ2, n\Frame)
 						
@@ -2813,7 +2813,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 						EndIf
-						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2 + Sin((MilliSecs() / 8) Mod 360) * 0.1, EntityZ(n\Collider))
+						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2 + Sin((MilliSec / 8) Mod 360) * 0.1, EntityZ(n\Collider))
 						
 						Select n\State
 							Case 1.0
@@ -2869,8 +2869,8 @@ Function UpdateNPCs%()
 					
 					If n\Idle = 0
 						If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
-						PositionEntity(n\OBJ, EntityX(n\Collider) + Rnd(-0.005, 0.005), EntityY(n\Collider) + 0.3 + 0.1 * Sin(MilliSecs() / 2.0), EntityZ(n\Collider) + Rnd(-0.005, 0.005))
-						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), ((MilliSecs() / 5.0) Mod 360.0))
+						PositionEntity(n\OBJ, EntityX(n\Collider) + Rnd(-0.005, 0.005), EntityY(n\Collider) + 0.3 + 0.1 * Sin(MilliSec / 2.0), EntityZ(n\Collider) + Rnd(-0.005, 0.005))
+						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), ((MilliSec / 5.0) Mod 360.0))
 						
 						AnimateNPC(n, 1.0, 300.0, Rnd(0.8, 2.5))
 						
@@ -3089,7 +3089,7 @@ Function UpdateNPCs%()
 									; ~ Randomly rotates
 									If Rand(400) = 1 Then n\Angle = Rnd(360.0)
 									
-									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSecs() / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
+									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSec / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
 								EndIf
 								
 								AnimateNPC(n, 33.0, 174.0, 0.3)
@@ -3680,7 +3680,7 @@ Function UpdateNPCs%()
 										EndIf
 									EndIf
 								Next
-								n\State2 = MilliSecs() + 5000.0
+								n\State2 = MilliSecs() + 5000
 							EndIf
 						ElseIf Dist < 64.0
 							n\LastDist = Rnd(1.0, 2.5)
@@ -3926,7 +3926,7 @@ Function UpdateNPCs%()
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									
 									If n\State3 < 900.0
-										me\BlurTimer = Float(((Sin(MilliSecs() / 50.0) + 1.0) * 200.0) / Sqr(Dist))
+										me\BlurTimer = Float(((Sin(MilliSec / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
 										If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 											If me\StaminaEffect < 1.5

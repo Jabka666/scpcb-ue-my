@@ -21,6 +21,8 @@ End Type
 
 Global fps.FramesPerSeconds = New FramesPerSeconds
 
+Global MilliSec%
+
 fps\LoopDelay = MilliSecs()
 
 Global SplitSpace$
@@ -113,7 +115,7 @@ mo\Viewport_Center_Y = opt\GraphicHeight / 2
 
 SetBuffer(BackBuffer())
 
-SeedRnd(MilliSecs())
+SeedRnd(MilliSec)
 
 PlayStartupVideos()
 
@@ -219,7 +221,8 @@ Repeat
 	
 	Local ElapsedMilliSecs%
 	
-	fps\CurrTime = MilliSecs()
+	MilliSec = MilliSecs()
+	fps\CurrTime = MilliSec
 	
 	ElapsedMilliSecs = fps\CurrTime - fps\PrevTime
 	If (ElapsedMilliSecs > 0 And ElapsedMilliSecs < 500) Then fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliSecs) * 70.0 / 1000.0)
@@ -2222,7 +2225,7 @@ End Function
 
 Function OpenConsoleOnError%(ConsoleMsg$)
 	If MenuOpen Lor ConsoleOpen Lor (Not opt\ConsoleOpening) Lor (Not opt\CanOpenConsole) Then Return
-	If (MilliSecs() Mod 1500) < 800
+	If (MilliSec Mod 1500) < 800
 		If ConsoleMsg <> "" Then CreateConsoleMsg(ConsoleMsg)
 		ConsoleOpen = True
 	EndIf
@@ -2735,7 +2738,7 @@ Function UpdateMoving%()
 	
 	If me\Injuries > 1.0
 		Temp2 = me\Bloodloss
-		me\BlurTimer = Max(Max(Sin(MilliSecs() / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
+		me\BlurTimer = Max(Max(Sin(MilliSec / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
 		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
 		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then CreateMsg(GetLocalString("msg", "bloodloss"))
 	EndIf
@@ -2760,7 +2763,7 @@ Function UpdateMoving%()
 			FreeEntity(Pvt) : Pvt = 0
 		EndIf
 		
-		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSecs()) / 20.0) + 1.0) * me\Bloodloss * 0.2)
+		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * me\Bloodloss * 0.2)
 		
 		If me\Bloodloss > 60.0 And (Not chs\NoClip)
 			If (Not me\Crouch) Then SetCrouch(True)
@@ -2875,7 +2878,7 @@ Function UpdateMouseLook%()
 		RotateEntity(Camera, WrapAngle(CameraPitch + Rnd(-ShakeTimer, ShakeTimer)), WrapAngle(EntityYaw(me\Collider) + Rnd(-ShakeTimer, ShakeTimer)), Roll) ; ~ Pitch the user's camera up and down
 		
 		If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
-			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSecs() / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
+			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSec / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 		EndIf
 	Else
 		If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
@@ -6570,7 +6573,7 @@ Function RenderGUI%()
 							
 							SetFontEx(fo\FontID[Font_Digital])
 							If StrTemp <> ""
-								StrTemp = Right(Left(StrTemp, (Int(MilliSecs() / 300) Mod Len(StrTemp))), 10)
+								StrTemp = Right(Left(StrTemp, (Int(MilliSec / 300) Mod Len(StrTemp))), 10)
 								TextEx(x - (28 * MenuScale), y + (33 * MenuScale), "          " + StrTemp + "          ")
 							EndIf
 							SetFontEx(fo\FontID[Font_Default])
@@ -6599,7 +6602,7 @@ Function RenderGUI%()
 					Local NAV_HEIGHT% = 256 * MenuScale
 					
 					If (Not PlayerInReachableRoom())
-						If (MilliSecs() Mod 800) < 200
+						If (MilliSec Mod 800) < 200
 							Color(200, 0, 0)
 							TextEx(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
 							TextEx(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
@@ -6654,7 +6657,7 @@ Function RenderGUI%()
 							Else
 								Color(30, 30, 30)
 							EndIf
-							If (MilliSecs() Mod 800) < 200 ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS
+							If (MilliSec Mod 800) < 200 ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS
 								If Offline Then TextEx(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), GetLocalString("msg", "nav.data"))
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
@@ -6669,7 +6672,7 @@ Function RenderGUI%()
 							
 							Local SCPs_Found% = 0, Dist#
 							
-							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSecs() Mod 600) < 400
+							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSec Mod 600) < 400
 								Local np.NPCs
 								
 								For np.NPCs = Each NPCs
@@ -8329,12 +8332,12 @@ Function UpdateVomit%()
 	If me\VomitTimer > 0.0
 		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
 		
-		If (MilliSecs() Mod 1600) < Rand(200, 400)
+		If (MilliSec Mod 1600) < Rand(200, 400)
 			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
 			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
-		If Rand(50) = 50 And (MilliSecs() Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
+		If Rand(50) = 50 And (MilliSec Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
 		
 		; ~ Regurgitate when timer is below 10 seconds
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0
@@ -8353,7 +8356,7 @@ Function UpdateVomit%()
 		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
 		
 		If me\VomitTimer > -5.0
-			If (MilliSecs() Mod 400) < 50 Then me\CameraShake = 4.0
+			If (MilliSec Mod 400) < 50 Then me\CameraShake = 4.0
 			mo\Mouse_X_Speed_1 = 0.0
 			MakeMeUnplayable()
 		Else
@@ -8459,7 +8462,7 @@ Function Update008%()
 	TeleportForInfect = PlayerInReachableRoom()
 	If I_008\Timer > 0.0
 		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
-		SinValue = Sin(MilliSecs() / 8.0) + 2.0
+		SinValue = Sin(MilliSec / 8.0) + 2.0
 		If I_008\Timer < 93.0
 			PrevI008Timer = I_008\Timer
 			If I_427\Timer < 70.0 * 360.0
@@ -8586,7 +8589,7 @@ Function Update008%()
 					EndIf
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
-					SinValue = Sin(MilliSecs() / 5.0)
+					SinValue = Sin(MilliSec / 5.0)
 					RotateEntity(me\Head, (1.0 + SinValue) * 15.0, PlayerRoom\Angle - 180.0, 0.0, True)
 					MoveEntity(me\Head, 0.0, 0.0, -0.4)
 					TurnEntity(me\Head, 80.0 + SinValue * 30.0, SinValue * 40.0, 0.0)

@@ -315,7 +315,7 @@ Function UpdateMainMenu%()
 						If UpdateMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start"))
 							If CurrSave\Name = "" Then CurrSave\Name = ConvertToANSI(GetLocalString("save", "untitled"))
 							
-							If RandomSeed = "" Then RandomSeed = MilliSecs()
+							If RandomSeed = "" Then RandomSeed = MilliSec
 							
 							SeedRnd(GenerateSeedNumber(RandomSeed))
 							
@@ -1010,7 +1010,7 @@ Function RenderMainMenu%()
 		HidePointer()
 	EndIf
 	DrawBlock(mma\BackGround, 0, 0)
-	If (MilliSecs() Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
+	If (MilliSec Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
 	SetFontEx(fo\FontID[Font_Default])
 	If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1]
 		Color(50, 50, 50)
@@ -2311,7 +2311,7 @@ Function UpdateInput$(aString$, MaxChr%)
 
 	If KeyDown(205) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Right arrow
 		If (MilliSecs() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
-	ElseIf KeyDown(203) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Left arrow
+	ElseIf KeyDown(203) And ((MilliSec - PrevInputBoxCtrl) > 500) ; ~ Left arrow
 		If (MilliSecs() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
 		If InsertMode
@@ -2399,7 +2399,7 @@ Function RenderMenuInputBoxes%()
 		
 		Color(255, 255, 255)
 		If SelectedInputBox = mib\ID
-			If ((MilliSecs() Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0.0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+			If ((MilliSec Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0.0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf
 		
 		SetFontEx(fo\FontID[mib\FontID])

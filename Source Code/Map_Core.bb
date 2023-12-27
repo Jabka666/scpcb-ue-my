@@ -3605,7 +3605,7 @@ Function UpdateSecurityCams%()
 					If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0 And EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
 				EndIf
 			EndIf
-			If (MilliSecs() Mod 1350) < 800
+			If (MilliSec Mod 1350) < 800
 				EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
 			Else
 				EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
@@ -3687,7 +3687,7 @@ Function UpdateSecurityCams%()
 						ElseIf (Not Temp)
 							If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
 							If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
-							If (MilliSecs() Mod sc\PlayerState) >= Rand(600)
+							If (MilliSec Mod sc\PlayerState) >= Rand(600)
 								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 							Else
 								If (Not ChannelPlaying(sc\SoundCHN))
@@ -4077,7 +4077,7 @@ Function CreateRedLight%(x#, y#, z#)
 End Function
 
 Function UpdateRedLight%(Light%, Value1#, Value2#)
-	If (MilliSecs() Mod Value1) < Value2
+	If (MilliSec Mod Value1) < Value2
 		If EntityHidden(Light) Then ShowEntity(Light)
 	Else
 		If (Not EntityHidden(Light)) Then HideEntity(Light)
@@ -5580,7 +5580,7 @@ Function SetChunkDataValues%()
 		Next
 	Next
 	
-	SeedRnd(MilliSecs())
+	SeedRnd(MilliSec)
 End Function
 
 Type ChunkPart
@@ -5624,7 +5624,7 @@ Function CreateChunkParts%(r.Rooms)
 		If chp2 <> Null Then chp\ID = chp2\ID + 1
 	Next
 	
-	SeedRnd(MilliSecs())
+	SeedRnd(MilliSec)
 End Function
 
 Type Chunk
