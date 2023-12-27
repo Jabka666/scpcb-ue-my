@@ -2675,7 +2675,16 @@ Function UpdateMoving%()
 			
 			If me\Playable Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 			
-			If EntityCollided(me\Collider, HIT_MAP)
+			Local CollidedFloor% = False
+			
+			For i = 1 To CountCollisions(me\Collider)
+				If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25
+					CollidedFloor = True
+					Exit
+				EndIf
+			Next
+			
+			If CollidedFloor
 				If me\DropSpeed < -0.07
 					Temp = GetStepSound(me\Collider)
 					If DecalStep = 1
@@ -2872,7 +2881,16 @@ Function UpdateMouseLook%()
 		If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 		PositionEntity(Camera, EntityX(me\Head), EntityY(me\Head), EntityZ(me\Head))
 		
-		If EntityCollided(me\Head, HIT_MAP)
+		Local CollidedFloor% = False
+		
+		For i = 1 To CountCollisions(me\Head)
+			If CollisionY(me\Head, i) < EntityY(me\Head) - 0.01
+				CollidedFloor = True
+				Exit
+			EndIf
+		Next
+		
+		If CollidedFloor
 			me\HeadDropSpeed = 0.0
 		Else
 			If (Not me\KillAnim)
