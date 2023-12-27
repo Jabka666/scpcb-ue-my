@@ -9367,6 +9367,7 @@ Function UpdateEndings%()
 							e\room\NPC[i]\EnemyY = EntityY(e\room\OBJ, True)
 							e\room\NPC[i]\EnemyZ = EntityZ(e\room\OBJ, True)
 							e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
+							If i = 5 Then n_I\MTFLeader = n
 						Next
 						
 						If n_I\Curr106\Contained
@@ -9391,10 +9392,10 @@ Function UpdateEndings%()
 						EntityParent(e\room\Objects[0], e\room\OBJ)
 						
 						e\room\Objects[9] = LoadMesh_Strict("GFX\Map\Props\lightgunbase.b3d")
-						PositionEntity(e\room\Objects[9], e\room\x + (2900.0 * RoomScale), e\room\y + (832.0 * RoomScale), e\room\z + (6157.0 * RoomScale))
+						PositionEntity(e\room\Objects[9], e\room\x + (2850.0 * RoomScale), e\room\y + (1008.0 * RoomScale), e\room\z + (6157.0 * RoomScale))
 						ScaleEntity(e\room\Objects[9], RoomScale, RoomScale, RoomScale)
 						e\room\Objects[10] = LoadMesh_Strict("GFX\Map\Props\lightgun.b3d")
-						PositionEntity(e\room\Objects[10], e\room\x + (2900.0 * RoomScale), e\room\y + (1120.0 * RoomScale), e\room\z + (5981.0 * RoomScale), True)
+						PositionEntity(e\room\Objects[10], e\room\x + (2850.0 * RoomScale), e\room\y + (1296.0 * RoomScale), e\room\z + (5981.0 * RoomScale), True)
 						ScaleEntity(e\room\Objects[10], RoomScale, RoomScale, RoomScale)
 						EntityParent(e\room\Objects[10], e\room\Objects[9])
 						RotateEntity(e\room\Objects[9], 0.0, 48.0, 0.0)
@@ -9631,7 +9632,7 @@ Function UpdateEndings%()
 										If EntityDistanceSquared(e\room\NPC[i]\Collider, me\Collider) > 16.0
 											e\room\NPC[i]\State = MTF_FOLLOW_PATH
 										Else
-											e\room\NPC[i]\State = MTF_SEARCHING_PLAYER
+											e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
 										EndIf
 									Next
 									
