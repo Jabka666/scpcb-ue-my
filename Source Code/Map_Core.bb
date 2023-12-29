@@ -2707,6 +2707,10 @@ Function UpdateDoors%()
 						d\OpenState = Min(d\OpenState, 48.0)
 					EndIf
 				EndIf
+			ElseIf d\DoorType = OFFICE_DOOR
+				If d\Locked > 0
+					If ChannelPlaying(d\SoundCHN) Then Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
+				EndIf
 			EndIf
 		EndIf
 	Next
@@ -3197,7 +3201,8 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 				If SelectedItem = Null
 					CreateMsg(GetLocalString("msg", "wood.wontbudge"))
 					If d\DoorType = OFFICE_DOOR
-						PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+						d\SoundCHN = PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+						SetAnimTime(d\OBJ, 1.0)
 					Else
 						PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
 					EndIf
@@ -3215,7 +3220,8 @@ Function UseDoor%(d.Doors, PlaySFX% = True)
 					EndIf
 					If (Temp > KEY_860) And (Temp <> KEY_005)
 						If d\DoorType = OFFICE_DOOR
-							PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+							d\SoundCHN = PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+							SetAnimTime(d\OBJ, 1.0)
 						Else
 							PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
 						EndIf
