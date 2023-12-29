@@ -1202,7 +1202,7 @@ Global DecalStep%
 ; ~ 3 - Cloth
 ; ~ 4 - Forest (Should be used in future. Currently doesn't work for player)
 Dim StepSFX%(5, 2, 8) ; ~ (Ground Type, Walk / Run, ID)
-Global Step2SFX%[12]
+Global Step2SFX%[15]
 
 Global VehicleSFX%[2]
 
@@ -1397,6 +1397,9 @@ Function LoadSounds%()
 	For i = 10 To 11
 		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepFluid" + (i - 9) + ".ogg")
 	Next
+	For i = 12 To 14
+		Step2SFX[i] = LoadSound_Strict("SFX\Step\SCP\StepBarefoot" + (i - 11) + ".ogg")
+	Next
 	
 	VehicleSFX[0] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
 	VehicleSFX[1] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
@@ -1479,11 +1482,9 @@ Function RemoveSoundInstances%()
 			OldManSFX[i] = 0
 		EndIf
 		If i < 11 Then RoomAmbience[i] = 0
-		If i < 12
-			IntroSFX[i] = 0
-			Step2SFX[i] = 0
-		EndIf
+		If i < 12 Then IntroSFX[i] = 0
 		If i < 14 Then DamageSFX[i] = 0
+		If i < 15 Then Step2SFX[i] = 0
 		HorrorSFX[i] = 0
 	Next
 	

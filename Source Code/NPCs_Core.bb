@@ -1433,6 +1433,8 @@ Function UpdateNPCs%()
 								n\SoundCHN_IsStream = True
 							EndIf
 							
+							PrevFrame = n\Frame
+							
 							If n\Frame >= 422.0
 								n\State2 = n\State2 + fps\Factor[0]
 								If n\State2 > 1000.0
@@ -1498,6 +1500,10 @@ Function UpdateNPCs%()
 										EndIf
 									EndIf
 								EndIf
+							EndIf
+							
+							If n\CurrSpeed > 0.001
+								If (PrevFrame < 1383.0 And n\Frame >= 1383.0) Lor (PrevFrame < 1420.0 And n\Frame >= 1420.0) Lor (PrevFrame < 1466.0 And n\Frame >= 1466.0) Then PlaySound2(Step2SFX[Rand(12, 14)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 							EndIf
 						EndIf
 						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0, 1.0, True)

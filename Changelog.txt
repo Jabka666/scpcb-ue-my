@@ -68,6 +68,7 @@ Items:
 NPCs:
 - Added SCP-173-J as a skin for SCP-173 during April Fools day.
 - Added SCP-1048-A event for «room2_3_lcz» and «room2_5_lcz» rooms.
+- Added step sounds for SCP-096.
 
 - Can no longer use SCP-268 against SCP-096.
 - Improved SCP-008-1, SCP-049, SCP-049-2 and MTF's AI.
