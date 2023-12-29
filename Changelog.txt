@@ -14,6 +14,7 @@ General:
 - Button panels now glow yellow when in use.
 - Removed additional fogging on Very Fine Gas Mask and Very Fine Hazmat Suit.
 - The camera now shakes when get hit.
+- The locked office door handle now has an animation.
 
 - Optimized the game...
 
