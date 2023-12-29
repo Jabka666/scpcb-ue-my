@@ -131,6 +131,8 @@ Function UpdateAchievementMsg%()
 End Function
 
 Function RenderAchievementMsg%()
+	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
+	
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width% = 264.0 * Scale
