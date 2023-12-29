@@ -1301,7 +1301,7 @@ Function UpdateNPCs%()
 								Else
 									If EntityVisible(n\Target\Collider, n\Collider) Then n\LastSeen = 1
 								EndIf
-								n\State3 = MilliSecs() + 3000
+								n\State3 = MilliSecs() + 2000
 							EndIf
 							
 							If chs\NoTarget And n\Target = Null Then n\LastSeen = 0
@@ -1456,7 +1456,7 @@ Function UpdateNPCs%()
 											If PickedEntity() <> 0 Then n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
 											If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
 										EndIf
-										n\State3 = MilliSecs() + 3000
+										n\State3 = MilliSecs() + 2000
 									EndIf
 									
 									If n\LastSeen

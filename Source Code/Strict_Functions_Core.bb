@@ -24,7 +24,7 @@ Function AutoReleaseSounds%()
 		For i = 0 To MaxChannelsAmount - 1
 			If ChannelPlaying(snd\Channels[i])
 				TryRelease = False
-				snd\ReleaseTime = MilliSecs() + 5000
+				snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 				Exit
 			EndIf
 		Next
