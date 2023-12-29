@@ -1786,6 +1786,7 @@ Global LoadingBack%, LoadingImage%
 Global SelectedLoadingScreens%, LoadingScreenTitle$
 Global Descriptions%, DescriptionIndex%
 Global ImageAlignX$, ImageAlignY$
+Global CWMText$
 
 Function RenderLoading%(Percent%, Assets$ = "")
 	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
@@ -1797,7 +1798,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	If Percent = 0
 		DescriptionIndex = 0
 		
-		SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(JsonGetArraySize(LoadingScreens) - 1))
+		SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(0, JsonGetArraySize(LoadingScreens) - 1))
 		LoadingScreenTitle = JsonGetString(JsonGetValue(SelectedLoadingScreens, "title"))
 		If JsonIsNull(JsonGetValue(SelectedLoadingScreens, "descriptions"))
 			Descriptions = JsonGetArray(JsonParseFromString("[" + Chr(34) + Chr(34) + "]")) ; ~ Create an empty description array
@@ -1879,70 +1880,70 @@ Function RenderLoading%(Percent%, Assets$ = "")
 					Select Rand(2)
 						Case 1
 							;[Block]
-							StrTemp = Format(GetLocalString("menu", "happend"), CurrentTime())
+							CWMText = Format(GetLocalString("menu", "happend"), CurrentTime())
 							;[End Block]
 						Case 2
 							;[Block]
-							StrTemp = CurrentTime()
+							CWMText = CurrentTime()
 							;[End Block]
 					End Select
 				Else
 					Select Rand(13)
 						Case 1
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_1")
+							CWMText = GetLocalString("menu", "990_1")
 							;[End Block]
 						Case 2
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_2")
+							CWMText = GetLocalString("menu", "990_2")
 							;[End Block]
 						Case 3
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_3")
+							CWMText = GetLocalString("menu", "990_3")
 							;[End Block]
 						Case 4
 							;[Block]
-							StrTemp = "eof9nsd3jue4iwe1fgj"
+							CWMText = "eof9nsd3jue4iwe1fgj"
 						Case 5
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_4")
+							CWMText = GetLocalString("menu", "990_4")
 							;[End Block]
 						Case 6 
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_5")
+							CWMText = GetLocalString("menu", "990_5")
 							;[End Block]
 						Case 7
 							;[Block]
-							StrTemp = "???____??_???__????n?"
+							CWMText = "???____??_???__????n?"
 							;[End Block]
 						Case 8, 9
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_6")
+							CWMText = GetLocalString("menu", "990_6")
 							;[End Block]
 						Case 10
 							;[Block]
-							StrTemp = "???????????"
+							CWMText = "???????????"
 							;[End Block]
 						Case 11
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_7")
+							CWMText = GetLocalString("menu", "990_7")
 							;[End Block]
 						Case 12
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_8")
+							CWMText = GetLocalString("menu", "990_8")
 							;[End Block]
 						Case 13
 							;[Block]
-							StrTemp = GetLocalString("menu", "990_9")
+							CWMText = GetLocalString("menu", "990_9")
 							;[End Block]
 					End Select
 				EndIf
 			EndIf
 			
-			StrTemp = StrTemp
-			Temp = Int(Len(StrTemp) - Rand(5))
+			StrTemp = CWMText
+			Temp = Int(Len(CWMText) - Rand(5))
 			For i = 0 To Rand(10, 15)
-				StrTemp = Replace(StrTemp, Mid(StrTemp, Rand(Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
+				StrTemp = Replace(CWMText, Mid(CWMText, Rand(Len(StrTemp) - 1), 1), Chr(Rand(130, 250)))
 			Next
 			SetFontEx(fo\FontID[Font_Default])
 			RowText(StrTemp, mo\Viewport_Center_X - (200 * MenuScale), mo\Viewport_Center_Y + (250 * MenuScale), 400 * MenuScale, 300 * MenuScale, True)
