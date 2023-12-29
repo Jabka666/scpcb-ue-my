@@ -1796,22 +1796,26 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	HidePointer()
 	
 	If Percent = 0
-		DescriptionIndex = 0
-		
-		SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(0, JsonGetArraySize(LoadingScreens) - 1))
-		LoadingScreenTitle = JsonGetString(JsonGetValue(SelectedLoadingScreens, "title"))
-		If JsonIsNull(JsonGetValue(SelectedLoadingScreens, "descriptions"))
-			Descriptions = JsonGetArray(JsonParseFromString("[" + Chr(34) + Chr(34) + "]")) ; ~ Create an empty description array
-		Else
-			Descriptions = JsonGetArray(JsonGetValue(SelectedLoadingScreens, "descriptions"))
-		EndIf
-		ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
-		ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
-		LoadingImage = LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image")))
-		LoadingImage = ScaleImage2(LoadingImage, MenuScale, MenuScale)
-		If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
-			LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
-			LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
+		If LoadingImage = 0
+			DescriptionIndex = 0
+			
+			SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(0, JsonGetArraySize(LoadingScreens) - 1))
+			LoadingScreenTitle = JsonGetString(JsonGetValue(SelectedLoadingScreens, "title"))
+			If JsonIsNull(JsonGetValue(SelectedLoadingScreens, "descriptions"))
+				Descriptions = JsonGetArray(JsonParseFromString("[" + Chr(34) + Chr(34) + "]")) ; ~ Create an empty description array
+			Else
+				Descriptions = JsonGetArray(JsonGetValue(SelectedLoadingScreens, "descriptions"))
+			EndIf
+			ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
+			ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
+			LoadingImage = LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image")))
+			LoadingImage = ScaleImage2(LoadingImage, MenuScale, MenuScale)
+			If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
+				If LoadingBack = 0
+					LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
+					LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
+				EndIf
+			EndIf
 		EndIf
 	EndIf
 	

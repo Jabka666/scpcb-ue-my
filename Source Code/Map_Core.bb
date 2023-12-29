@@ -5671,15 +5671,15 @@ Const ChunkMaxDistance# = 120.0
 
 Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	Local ch.Chunk, ch2.Chunk, n.NPCs
-	Local StrTemp$, i%, j%, x#, z#, y#
-	Local ChunkX# = Int(EntityX(me\Collider) / 40.0)
-	Local ChunkZ# = Int(EntityZ(me\Collider) / 40.0)
-	Local TempChunkX# = Int(EntityX(me\Collider))
-	Local TempChunkZ# = Int(EntityZ(me\Collider))
-	
-	y = EntityY(PlayerRoom\OBJ)
-	x = (-ChunkMaxDistance) + TempChunkX
-	z = (-ChunkMaxDistance) + TempChunkZ
+	Local StrTemp$, i%, j%
+	Local PlayerPosX# = EntityX(me\Collider)
+	Local y# = EntityY(PlayerRoom\OBJ)
+	Local PlayerPosZ# = EntityZ(me\Collider)
+	Local ChunkX# = Int(PlayerPosX / 40.0)
+	Local ChunkZ# = Int(PlayerPosZ / 40.0)
+	Local PlayerRoomY# = y + 0.5
+	Local x# = (-ChunkMaxDistance) + (ChunkX * 40.0)
+	Local z# = (-ChunkMaxDistance) + (ChunkZ * 40.0)
 	
 	Local CurrChunkData% = 0, MaxChunks% = IniGetInt(SCP1499ChunksFile, "general", "count")
 	
@@ -5698,15 +5698,15 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 			ch2\IsSpawnChunk = False
 		EndIf
 		x = x + 40.0
-		If x > ChunkMaxDistance + TempChunkX
+		If x > ChunkMaxDistance + (ChunkX * 40.0)
 			z = z + 40.0
-			x = (-ChunkMaxDistance) + TempChunkX
+			x = (-ChunkMaxDistance) + (ChunkX * 40.0)
 		EndIf
-	Until z > ChunkMaxDistance + TempChunkZ
+	Until z > ChunkMaxDistance + (ChunkZ * 40.0)
 	
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
-			If DistanceSquared(EntityX(me\Collider), EntityX(ch\ChunkPivot), EntityZ(me\Collider), EntityZ(ch\ChunkPivot)) > PowTwo(ChunkMaxDistance)
+			If DistanceSquared(PlayerPosX, EntityX(ch\ChunkPivot), PlayerPosZ, EntityZ(ch\ChunkPivot)) > PowTwo(ChunkMaxDistance)
 				RemoveChunk(ch)
 			EndIf
 		EndIf
@@ -5730,41 +5730,39 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 		EndIf
 	Next
 	
-	Local PlayerRoomY# = EntityY(PlayerRoom\OBJ) + 0.5
-	
 	If CurrNPCNumber < MaxNPCs
 		Select Rand(8)
 			Case 1
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, PlayerPosX + Rnd(40.0, 80.0), PlayerRoomY, PlayerPosZ + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 2
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCType1499_1, PlayerPosX + Rnd(40.0, 80.0), PlayerRoomY, PlayerPosZ + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 3
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(40.0, 80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, PlayerPosX + Rnd(40.0, 80.0), PlayerRoomY, PlayerPosZ + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 4
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, PlayerPosX + Rnd(-40.0, 40.0), PlayerRoomY, PlayerPosZ + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 5
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, -80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, PlayerPosX + Rnd(-40.0, -80.0), PlayerRoomY, PlayerPosZ + Rnd(-40.0, -80.0))
 				;[End Block]
 			Case 6
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(-40.0, 40.0))
+				n.NPCs = CreateNPC(NPCType1499_1, PlayerPosX + Rnd(-40.0, -80.0), PlayerRoomY, PlayerPosZ + Rnd(-40.0, 40.0))
 				;[End Block]
 			Case 7
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, -80.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, PlayerPosX + Rnd(-40.0, -80.0), PlayerRoomY, PlayerPosZ + Rnd(40.0, 80.0))
 				;[End Block]
 			Case 8
 				;[Block]
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-40.0, 40.0), PlayerRoomY, EntityZ(me\Collider) + Rnd(40.0, 80.0))
+				n.NPCs = CreateNPC(NPCType1499_1, PlayerPosX + Rnd(-40.0, 40.0), PlayerRoomY, PlayerPosZ + Rnd(40.0, 80.0))
 				;[End Block]
 		End Select
 		If Rand(2) = 1 Then n\State2 = 500.0 * 3.0
@@ -5774,7 +5772,7 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 			If n\NPCType = NPCType1499_1
 				If n\PrevState = 0
 					; ~ This will be updated like this so that new NPCs can spawn for the player
-					If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(ChunkMaxDistance) Lor EntityY(n\Collider) < EntityY(PlayerRoom\OBJ) - 5.0 Then RemoveNPC(n)
+					If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(ChunkMaxDistance) Lor EntityY(n\Collider) < y - 5.0 Then RemoveNPC(n)
 				EndIf
 			EndIf
 		Next

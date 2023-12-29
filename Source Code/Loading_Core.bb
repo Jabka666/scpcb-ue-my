@@ -755,7 +755,8 @@ End Function
 
 Function InitLoadingScreens%(File$)
 	Local LocalLoadingScreen% = JsonParseFromFile(lang\LanguagePath + File)
-	If JsonIsArray(LocalLoadingScreen) Then ; ~ Has localized loading screens -> Use localized only
+	
+	If JsonIsArray(LocalLoadingScreen) ; ~ Has localized loading screens -> Use localized only
 		LoadingScreens = JsonGetArray(LocalLoadingScreen)
 	Else
 		LoadingScreens = JsonGetArray(JsonParseFromFile(File))
