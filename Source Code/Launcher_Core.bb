@@ -363,6 +363,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	IniWriteString(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
+	IniWriteString(OptionFile, "Advanced", "No Progress Bar", opt\NoProgressBar)
 	
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
@@ -389,7 +390,7 @@ Function UpdateLanguageSelector%()
 	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
 	CreateDir(BasePath + "flags/")
-	DownloadFile("http://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
+	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
 	Local lan.ListLanguage
 	Local File% = OpenFile_Strict(BasePath + "temp.txt")
@@ -409,7 +410,7 @@ Function UpdateLanguageSelector%()
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				lan\FileSize = Int(ParseDomainTXT(l, "size")) ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
-				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("http://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 				If lan\FlagImg = 0 Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit
@@ -446,7 +447,13 @@ Function UpdateLanguageSelector%()
 		Select CurrentStatus
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
-				If (Not RequestLanguage\MajorOnly) Then DownloadFileThread("http://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+				If (Not RequestLanguage\MajorOnly) Then 
+					If opt\NoProgressBar Then
+						DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+					Else
+						DownloadFileThread("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+					EndIf
+				EndIf
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-ini/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.ini")
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
@@ -559,7 +566,7 @@ Function UpdateLanguageSelector%()
 		Color(100, 100, 100)
 		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
 			InfoBoxContent = GetLocalString("language", "downloading")
-			UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "0%", Font_Default, False, True)
+			If Not opt\NoProgressBar Then UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "0%", Font_Default, False, True)
 			CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
 		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
 			If RequestLanguage\MajorOnly
@@ -568,9 +575,13 @@ Function UpdateLanguageSelector%()
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
 			EndIf
 		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
-			InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(FileSize(BasePath + "/local.zip")), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
-			UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Str(Int(Ceil((Float(FileSize(BasePath + "/local.zip")) / Float(RequestLanguage\FileSize)) * 100))) + "%", Font_Default, False, True)
-			If FileSize(BasePath + "/local.zip") >= RequestLanguage\FileSize Then CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+			If Not opt\NoProgressBar Then
+				InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(FileSize(BasePath + "/local.zip")), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
+				UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Str(Int(Ceil((Float(FileSize(BasePath + "/local.zip")) / Float(RequestLanguage\FileSize)) * 100))) + "%", Font_Default, False, True)
+				If FileSize(BasePath + "/local.zip") >= RequestLanguage\FileSize Then CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+			Else
+				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+			EndIf
 		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 			InfoBoxContent = GetLocalString("language", "unpacking")
 			UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "100%", Font_Default, False, True)
@@ -584,6 +595,7 @@ Function UpdateLanguageSelector%()
 		
 		Color(0, 0, 1)
 		RowText(InfoBoxContent, LauncherWidth - 159, LauncherHeight - 281, 151, 102)
+		Local NoProgressBar%
 		
 		If SelectedLanguage <> Null
 			If SelectedLanguage\ID = opt\Language
@@ -607,6 +619,37 @@ Function UpdateLanguageSelector%()
 					EndIf
 				EndIf
 			Else
+				Color(255, 255, 255)
+				Text(LauncherWidth - 131, LauncherHeight - 148, GetLocalString("language", "speedup"), False, True)
+				NoProgressBar = UpdateLauncherTick(LauncherWidth - 161, LauncherHeight - 157, opt\NoProgressBar)
+				If NoProgressBar <> opt\NoProgressBar Then 
+					If NoProgressBar Then
+						Color(255, 255, 255)
+						Repeat
+							MousePosX = MouseX()
+							MousePosY = MouseY()
+							mo\MouseHit1 = MouseHit(1)
+							Text(320, 180, GetLocalString("language", "speedup.notice_1"), True)
+							Text(320, 200, GetLocalString("language", "speedup.notice_2"), True)
+							Text(320, 220, GetLocalString("language", "speedup.notice_3"), True)
+							Text(320, 260, GetLocalString("language", "speedup.notice_4"), True)
+							If UpdateLauncherButton(200, 300, 100, 30, GetLocalString("language", "yes"))
+								Delay(100)
+								opt\NoProgressBar = True
+								Exit
+							EndIf
+							If UpdateLauncherButton(LauncherWidth - 300, 300, 100, 30, GetLocalString("language", "no"))
+								Delay(100)
+								Exit
+							EndIf
+							Delay(10)
+							Flip(True)
+							Cls
+						Forever
+					Else
+						opt\NoProgressBar = False
+					EndIf
+				EndIf
 				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), Font_Default, ButtonImages, 1, IsDownloadingLanguage(CurrentStatus))
 					CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
 					RequestLanguage = SelectedLanguage

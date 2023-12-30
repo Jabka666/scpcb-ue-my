@@ -212,6 +212,7 @@ Type Options
 	Field TextShadow%
 	Field PlayStartup%
 	Field LauncherEnabled%
+	Field NoProgressBar%
 	; ~ [CONTROLS]
 	Field MouseSmoothing#
 	Field InvertMouseX%, InvertMouseY%
@@ -412,6 +413,8 @@ Function LoadOptionsINI%()
 	opt\PlayStartup = IniGetInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
 	opt\LauncherEnabled = IniGetInt(OptionFile, "Advanced", "Launcher Enabled", True)
+
+	opt\NoProgressBar = IniGetInt(OptionFile, "Advanced", "No Progress Bar", False)
 	
 	; ~ [GLOBAL]
 	
@@ -543,6 +546,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
+
+	IniWriteString(OptionFile, "Advanced", "No Progress Bar", opt\NoProgressBar)
 	;[End Block]
 	
 	; ~ [GLOBAL]
