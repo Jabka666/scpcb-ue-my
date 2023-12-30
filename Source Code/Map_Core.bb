@@ -3378,8 +3378,8 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	
 	Local v0% = AddVertex(de\Surf, -1.0, 1.0, 0.0, 0.0, 0.0)
 	Local v1% = AddVertex(de\Surf, 1.0, 1.0, 0.0, 1.0, 0.0)
-	Local v2% = AddVertex(de\Surf, 1.0,-1.0, 0.0, 1.0, 1.0)
-	Local v3% = AddVertex(de\Surf, -1.0,-1.0, 0.0, 0.0, 1.0)
+	Local v2% = AddVertex(de\Surf, 1.0, -1.0, 0.0, 1.0, 1.0)
+	Local v3% = AddVertex(de\Surf, -1.0, -1.0, 0.0, 0.0, 1.0)
 	
 	AddTriangle(de\Surf, v0, v1, v2)
 	AddTriangle(de\Surf, v0, v2, v3)

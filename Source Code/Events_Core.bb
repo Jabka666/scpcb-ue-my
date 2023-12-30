@@ -4424,18 +4424,15 @@ Function UpdateEvents%()
 					
 					e\EventState2 = UpdateLever(e\room\RoomLevers[1]\OBJ)
 					If (PrevState2 <> e\EventState2) And e\EventState > 0.0 Then PlaySound2(LightSFX, Camera, e\room\RoomLevers[1]\OBJ)
-					If e\EventState2
+					If e\EventState2 = 1.0
 						SecondaryLightOn = CurveValue(1.0, SecondaryLightOn, 10.0)
 					Else
 						SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
 					EndIf
 					
-					EntityPick(Camera, 1.5)
-					
-					If PickedEntity() = e\room\RoomLevers[1]\OBJ
-						If e\EventState = 0.0
+					If e\EventState = 0.0
+						If Rand(200) = 1
 							PlaySound_Strict(HorrorSFX[7])
-							PlaySound_Strict(LeverSFX)
 							e\EventState = 1.0
 						EndIf
 					EndIf
