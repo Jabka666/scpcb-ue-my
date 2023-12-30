@@ -2505,6 +2505,7 @@ Function UpdateDoors%()
 	Local d.Doors, p.Particles
 	Local x#, z#, Dist#, i%, FindButton%
 	Local SinValue#
+	Local FPSFactorEx#
 	
 	d_I\ClosestButton = 0
 	d_I\ClosestDoor = Null
@@ -2536,15 +2537,17 @@ Function UpdateDoors%()
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
+							FPSFactorEx = fps\Factor[0] / 80.0
+							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 162.0, 0.0, 0.0)
+							FPSFactorEx = fps\Factor[0] / 162.0
+							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen * 2 + 1) * FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
@@ -2557,8 +2560,9 @@ Function UpdateDoors%()
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 0.8))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * fps\Factor[0] / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-SinValue) * fps\Factor[0] / 180.0, 0.0, 0.0)
+							FPSFactorEx = fps\Factor[0] / 180.0
+							MoveEntity(d\OBJ, SinValue * FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, (-SinValue) * FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case OFFICE_DOOR, WOODEN_DOOR
 							;[Block]
@@ -2572,15 +2576,17 @@ Function UpdateDoors%()
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)
+							FPSFactorEx = fps\Factor[0] / 80.0
+							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-FPSFactorEx), 0.0, 0.0)
 							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 1.4))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * fps\Factor[0] / 114.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (-fps\Factor[0]) / 114.0, 0.0, 0.0)
+							FPSFactorEx = fps\Factor[0] / 114.0
+							MoveEntity(d\OBJ, SinValue * FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (-FPSFactorEx), 0.0, 0.0)
 							;[End Block]
 					End Select
 				Else
@@ -2631,8 +2637,9 @@ Function UpdateDoors%()
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 0.8))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) / 180.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * fps\Factor[0] / 180.0, 0.0, 0.0)
+							FPSFactorEx = fps\Factor[0] / 180.0
+							MoveEntity(d\OBJ, SinValue * (-FPSFactorEx), 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * FPSFactorEx, 0.0, 0.0)
 							If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0
 								If opt\ParticleAmount = 2
 									For i = 0 To Rand(75, 99)
@@ -2660,15 +2667,17 @@ Function UpdateDoors%()
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 80.0, 0.0, 0.0)
+							FPSFactorEx = fps\Factor[0] / 80.0
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * (-FPSFactorEx), 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState - (fps\Factor[0] * 1.4))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) / 114.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * fps\Factor[0] / 114.0, 0.0, 0.0)
+							FPSFactorEx = fps\Factor[0] / 114.0
+							MoveEntity(d\OBJ, SinValue * (-FPSFactorEx), 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 					End Select
 				Else

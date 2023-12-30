@@ -2781,9 +2781,11 @@ Function UpdateMoving%()
 	EndIf
 	
 	If me\HealTimer > 0.0
-		me\HealTimer = Max(me\HealTimer - (fps\Factor[0] / 70.0), 0.0)
-		me\Bloodloss = Min(me\Bloodloss + (fps\Factor[0] / 210.0), 100.0)
-		me\Injuries = Max(me\Injuries - (fps\Factor[0] / 70.0) / 30.0, 0.0)
+		Local FPSFactorEx# = fps\Factor[0] / 70.0
+		
+		me\HealTimer = Max(me\HealTimer - FPSFactorEx, 0.0)
+		me\Bloodloss = Min(me\Bloodloss + FPSFactorEx / 3.0, 100.0)
+		me\Injuries = Max(me\Injuries - FPSFactorEx / 30.0, 0.0)
 	EndIf
 		
 	If me\Playable
@@ -2824,9 +2826,10 @@ Function UpdateMouseLook%()
 	
 	Local p.Particles
 	Local i%
+	Local FPSFactorEx# = fps\Factor[0] / 10.0
 	
-	me\CameraShake = Max(me\CameraShake - (fps\Factor[0] / 10.0), 0.0)
-	me\BigCameraShake = Max(me\BigCameraShake - (fps\Factor[0] / 10.0), 0.0)
+	me\CameraShake = Max(me\CameraShake - FPSFactorEx, 0.0)
+	me\BigCameraShake = Max(me\BigCameraShake - FPSFactorEx, 0.0)
 	
 	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)))) / 2.0)))
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
@@ -8323,14 +8326,15 @@ Function UpdateVomit%()
 	
 	Local de.Decals
 	Local Pvt%
+	Local FPSFactorEx# = fps\Factor[0] / 70.0
 	
 	If me\CameraShakeTimer > 0.0
-		me\CameraShakeTimer = Max(me\CameraShakeTimer - (fps\Factor[0] / 70.0), 0.0)
+		me\CameraShakeTimer = Max(me\CameraShakeTimer - FPSFactorEx, 0.0)
 		me\CameraShake = 2.0
 	EndIf
 	
 	If me\VomitTimer > 0.0
-		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
+		me\VomitTimer = me\VomitTimer - FPSFactorEx
 		
 		If (MilliSec Mod 1600) < Rand(200, 400)
 			If me\BlurTimer = 0.0 Then me\BlurTimer = 70.0 * Rnd(10.0, 20.0)
@@ -8353,7 +8357,7 @@ Function UpdateVomit%()
 			me\Regurgitate = 0
 		EndIf
 	ElseIf me\VomitTimer < 0.0 ; ~ Vomit
-		me\VomitTimer = me\VomitTimer - (fps\Factor[0] / 70.0)
+		me\VomitTimer = me\VomitTimer - FPSFactorEx
 		
 		If me\VomitTimer > -5.0
 			If (MilliSec Mod 400) < 50 Then me\CameraShake = 4.0

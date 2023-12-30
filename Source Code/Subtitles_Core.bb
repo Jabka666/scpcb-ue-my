@@ -117,14 +117,15 @@ Function UpdateSubtitles%()
 	Next
 	
 	Local sub.SubtitlesMsg
+	Local FPSFactorEx# = fps\Factor[0] / 7.0
 	
 	For sub.SubtitlesMsg = Each SubtitlesMsg
 		sub\TimeLeft = sub\TimeLeft - fps\Factor[0]
 		If sub\TimeLeft < 0.0
-			sub\Alpha = Max(sub\Alpha - (fps\Factor[0] / 7.0), 0.0)
+			sub\Alpha = Max(sub\Alpha - FPSFactorEx, 0.0)
 			If sub\Alpha <= 0.0 Then Delete(sub)
 		Else
-			sub\Alpha = Min(1.0, sub\Alpha + (fps\Factor[0] / 7.0))
+			sub\Alpha = Min(1.0, sub\Alpha + FPSFactorEx)
 		EndIf
 	Next
 End Function

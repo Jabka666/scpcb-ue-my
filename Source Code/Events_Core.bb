@@ -620,6 +620,7 @@ Function UpdateEvents%()
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
 	Local Angle#, RoomExists%, RID%
 	Local SinValue#, CosValue#, SqrValue#
+	Local FPSFactorEx#
 	Local itt.ItemTemplates
 	
 	For e.Events = Each Events
@@ -968,10 +969,11 @@ Function UpdateEvents%()
 									CreateConsoleMsg("")
 								EndIf
 								
+								FPSFactorEx = fps\Factor[0] / 30.0
 								If e\EventState3 < 3.0
-									e\EventState3 = e\EventState3 + (fps\Factor[0] / 100.0)
+									e\EventState3 = e\EventState3 + FPSFactorEx / 3.33
 								ElseIf e\EventState3 < 15.0 Lor e\EventState3 >= 50.0
-									e\EventState3 = e\EventState3 + (fps\Factor[0] / 30.0)
+									e\EventState3 = e\EventState3 + FPSFactorEx
 								EndIf
 								
 								If e\EventState3 < 15.0
@@ -979,13 +981,13 @@ Function UpdateEvents%()
 									y = 136.0 * RoomScale
 									z = e\room\z + 8.0 * RoomScale
 									
-									If e\EventState3 - (fps\Factor[0] / 30.0) < 3.7 And e\EventState3 > 3.7 Then PlaySound_Strict(IntroSFX[0], True)
-									If e\EventState3 - (fps\Factor[0] / 30.0) < 9.3 And e\EventState3 > 9.3 Then PlaySound_Strict(IntroSFX[1], True)
+									If e\EventState3 - FPSFactorEx < 3.7 And e\EventState3 > 3.7 Then PlaySound_Strict(IntroSFX[0], True)
+									If e\EventState3 - FPSFactorEx < 9.3 And e\EventState3 > 9.3 Then PlaySound_Strict(IntroSFX[1], True)
 									
 									If e\EventState3 < 14.0
 										StopMouseMovement()
 										
-										If e\EventState3 - (fps\Factor[0] / 30.0) < 12.0 And e\EventState3 > 12.0 Then PlaySound2(StepSFX(0, 0, 0), Camera, me\Collider, 8.0, 0.3)
+										If e\EventState3 - FPSFactorEx < 12.0 And e\EventState3 > 12.0 Then PlaySound2(StepSFX(0, 0, 0), Camera, me\Collider, 8.0, 0.3)
 										
 										x = x + (e\room\x - 4072.0 * RoomScale - x) * Max((e\EventState3 - 10.0) / 4.0, 0.0) 
 										
@@ -1053,7 +1055,8 @@ Function UpdateEvents%()
 								Else
 									If e\room\NPC[3]\Sound2 <> 0 Then FreeSound_Strict(e\room\NPC[3]\Sound2) : e\room\NPC[3]\Sound2 = 0
 									
-									e\EventState3 = Min(e\EventState3 + fps\Factor[0] / 4.0, 699.0)
+									FPSFactorEx = fps\Factor[0] / 4.0
+									e\EventState3 = Min(e\EventState3 + FPSFactorEx, 699.0)
 									
 									; ~ Outside the cell
 									If DistanceSquared(EntityX(me\Collider), e\room\x - 4096.0 * RoomScale, EntityZ(me\Collider), e\room\z + 192.0 * RoomScale) > 2.25
@@ -1073,10 +1076,10 @@ Function UpdateEvents%()
 									Else ; ~ Inside the cell
 										e\room\NPC[3]\State = 9.0
 										
-										If e\EventState3 - (fps\Factor[0] / 4.0) < 350.0 And e\EventState3 >= 350.0
+										If e\EventState3 - FPSFactorEx  < 350.0 And e\EventState3 >= 350.0
 											LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\ExitCellRefuse" + Rand(2) + ".ogg")
 											e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
-										ElseIf e\EventState3 - (fps\Factor[0] / 4.0) < 550.0 And e\EventState3 >= 550.0 
+										ElseIf e\EventState3 - FPSFactorEx  < 550.0 And e\EventState3 >= 550.0 
 											LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\CellGas" + Rand(2) + ".ogg")
 											e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
 										ElseIf e\EventState3 > 630.0
@@ -1437,8 +1440,9 @@ Function UpdateEvents%()
 									If e\room\RoomDoors[2]\Open
 										Temp = 1.0
 										If SelectedItem <> Null Then Temp = 3.0
-										e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + (fps\Factor[0] / Temp), 50.0)
-										If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - (fps\Factor[0] / Temp) < 70.0 * 8.0 And e\room\NPC[3]\State = 9.0
+										FPSFactorEx = fps\Factor[0] / Temp
+										e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + FPSFactorEx, 50.0)
+										If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - FPSFactorEx < 70.0 * 8.0 And e\room\NPC[3]\State = 9.0
 											If e\room\NPC[3]\State2 < 2.0
 												StopChannel(e\room\NPC[3]\SoundCHN) : e\room\NPC[3]\SoundCHN = 0
 												LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\EscortRefuse" + Rand(2) + ".ogg")
@@ -1511,8 +1515,9 @@ Function UpdateEvents%()
 									EndIf
 								EndIf
 								
-								e\EventState = Min(e\EventState + (fps\Factor[0] / 3.0), 5000.0)
-								If e\EventState >= 130.0 And e\EventState - (fps\Factor[0] / 3.0) < 130.0
+								FPSFactorEx = fps\Factor[0] / 3.0
+								e\EventState = Min(e\EventState + FPSFactorEx, 5000.0)
+								If e\EventState >= 130.0 And e\EventState - FPSFactorEx < 130.0
 									LoadEventSound(e, "SFX\Room\Intro\Scientist\Franklin\EnterChamber.ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound, True)
 									
@@ -1536,13 +1541,13 @@ Function UpdateEvents%()
 									Next
 									
 									If EntityX(me\Collider) < e\room\x + 696.0 * RoomScale
-										If e\EventState >= 450.0 And e\EventState - (fps\Factor[0] / 3.0) < 450.0
+										If e\EventState >= 450.0 And e\EventState - FPSFactorEx < 450.0
 											LoadEventSound(e, "SFX\Room\Intro\Scientist\Franklin\Refuse1.ogg")
 											e\SoundCHN = PlaySound_Strict(e\Sound, True)
-										ElseIf e\EventState >= 650.0 And e\EventState - (fps\Factor[0] / 3.0) < 650.0
+										ElseIf e\EventState >= 650.0 And e\EventState - FPSFactorEx < 650.0
 											LoadEventSound(e, "SFX\Room\Intro\Scientist\Franklin\Refuse2.ogg")
 											e\SoundCHN = PlaySound_Strict(e\Sound, True)
-										ElseIf e\EventState >= 850.0 And e\EventState - (fps\Factor[0] / 3.0) < 850.0
+										ElseIf e\EventState >= 850.0 And e\EventState - FPSFactorEx < 850.0
 											LoadEventSound(e, "SFX\Room\Intro\Scientist\Franklin\Refuse3.ogg")
 											e\SoundCHN = PlaySound_Strict(e\Sound, True)
 											
@@ -4623,7 +4628,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 					
-					If EntityY(me\Collider) > 1.0
+					If EntityY(me\Collider) > 6.0
 						e\EventState = UpdateLever(e\room\RoomLevers[0]\OBJ)
 						UpdateLever(e\room\RoomLevers[1]\OBJ)
 						
@@ -5684,7 +5689,8 @@ Function UpdateEvents%()
 					If e\EventState = 0.0
 						If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState = 1.0
 					Else
-						e\EventState = (e\EventState + fps\Factor[0] * 0.7)
+						FPSFactorEx = fps\Factor[0] * 0.7
+						e\EventState = (e\EventState + FPSFactorEx)
 						If e\EventState < 50.0
 							n_I\Curr106\Idle = 1
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[0], True), EntityY(me\Collider) - 0.15, EntityZ(e\room\Objects[0], True))
@@ -5720,7 +5726,7 @@ Function UpdateEvents%()
 						PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider) - 0.15, EntityZ(n_I\Curr106\Collider))
 						RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
 						
-						If (e\EventState / 250.0) > 0.3 And ((e\EventState - fps\Factor[0] * 0.7) / 250.0) <= 0.3
+						If (e\EventState / 250.0) > 0.3 And ((e\EventState - FPSFactorEx) / 250.0) <= 0.3
 							e\SoundCHN = PlaySound_Strict(HorrorSFX[6])
 							me\BlurTimer = 800.0
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle - 90.0, Rnd(360.0), 0.1, 0.01)
@@ -5728,7 +5734,7 @@ Function UpdateEvents%()
 							EntityParent(de\OBJ, e\room\OBJ)
 						EndIf
 						
-						If (e\EventState / 250.0) > 0.65 And ((e\EventState - fps\Factor[0] * 0.7) / 250.0) <= 0.65
+						If (e\EventState / 250.0) > 0.65 And ((e\EventState - FPSFactorEx) / 250.0) <= 0.65
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.0, e\room\Angle + 90.0, Rnd(360.0), 0.1, 0.01)
 							de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
 							EntityParent(de\OBJ, e\room\OBJ)
