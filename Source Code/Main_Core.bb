@@ -3236,7 +3236,7 @@ Function UpdateGUI%()
 					If d_I\ClosestDoor\Code <> ""
 						d_I\SelectedDoor = d_I\ClosestDoor
 					ElseIf me\Playable
-						UseDoor(d_I\ClosestDoor)
+						UseDoor()
 					EndIf
 				EndIf
 			EndIf
@@ -3259,7 +3259,7 @@ Function UpdateGUI%()
 	If d_I\SelectedDoor <> Null
 		If SelectedItem <> Null
 			If SelectedItem\ItemTemplate\TempName = "scp005"
-				UseDoor(d_I\SelectedDoor)
+				UseDoor()
 				ShouldDrawHUD = False
 			Else
 				SelectedItem = Null
@@ -3325,7 +3325,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case 8
 										;[Block]
-										UseDoor(d_I\SelectedDoor)
+										UseDoor()
 										If msg\KeyPadInput = d_I\SelectedDoor\Code
 											d_I\SelectedDoor = Null
 											StopMouseMovement()

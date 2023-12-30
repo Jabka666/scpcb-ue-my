@@ -146,7 +146,7 @@ Type DoorInstance
 	Field ElevatorPanelModel%
 	Field ElevatorPanelTextureID%[MaxElevatorPanelTextureIDAmount%]
 	Field SelectedDoor.Doors, ClosestDoor.Doors
-	Field ClosestButton%
+	Field ClosestButton%, AnimButton%
 End Type
 
 Global d_I.DoorInstance
@@ -246,7 +246,7 @@ Function LoadDoors%()
 		Next
 	EndIf
 	
-	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\Button.b3d")
+	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\Button.b3d")
 	
 	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonKeycard.b3d")
 	
@@ -2821,6 +2821,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	For d.Doors = Each Doors
 		RemoveDoor(d)
 	Next
+	d_I\AnimButton = 0
 	RemoveDoorInstances()
 	For lvr.Levers = Each Levers
 		RemoveLever(lvr)
