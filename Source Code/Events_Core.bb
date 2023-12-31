@@ -2030,6 +2030,8 @@ Function UpdateEvents%()
 					Else
 						If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
 					EndIf
+					PlayerElevatorFloor = FindPlayerFloor()
+					ToElevatorFloor = FindFloor(e)
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[1], e\room\RoomDoors[2], e\room\Objects[2], e\room\Objects[3], e)
 				EndIf
 				
@@ -2177,6 +2179,8 @@ Function UpdateEvents%()
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 						SetNPCFrame(e\room\NPC[0], 17.0)
 					EndIf
+					PlayerElevatorFloor = FindPlayerFloor()
+					ToElevatorFloor = FindFloor(e)
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e)
 				Else
 					If (Not PlayerInReachableRoom())
@@ -2889,6 +2893,8 @@ Function UpdateEvents%()
 							RotateEntity(e\room\Objects[1], CurveAngle(1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
 						EndIf
 					EndIf
+					PlayerElevatorFloor = FindPlayerFloor()
+					ToElevatorFloor = FindFloor(e)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[3], e\room\RoomDoors[4], e\room\Objects[8], e\room\Objects[9], e)
 				EndIf
 				;[End Block]
@@ -3057,6 +3063,8 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room
 					If EntityY(me\Collider) > (-2848.0) * RoomScale
+						PlayerElevatorFloor = FindPlayerFloor()
+						ToElevatorFloor = FindFloor(e)
 						e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 					Else
@@ -3136,6 +3144,8 @@ Function UpdateEvents%()
 							If Temp And x
 								e\room\RoomDoors[1]\Locked = 0
 								e\room\RoomDoors[3]\Locked = 0
+								PlayerElevatorFloor = FindPlayerFloor()
+								ToElevatorFloor = FindFloor(e)
 								e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 								e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 								
@@ -3305,6 +3315,8 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					EndIf
+					PlayerElevatorFloor = FindPlayerFloor()
+					ToElevatorFloor = FindFloor(e)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 				EndIf
 				;[End Block]
@@ -4343,11 +4355,15 @@ Function UpdateEvents%()
 						
 						If n_I\Curr096 <> Null
 							If n_I\Curr096\State = 0.0 Lor n_I\Curr096\State = 5.0
+								PlayerElevatorFloor = FindPlayerFloor()
+								ToElevatorFloor = FindFloor(e)
 								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 							Else
 								e\EventState = Update096ElevatorEvent(e, e\EventState, e\room\RoomDoors[0], e\room\Objects[0])
 							EndIf
 						Else
+							PlayerElevatorFloor = FindPlayerFloor()
+							ToElevatorFloor = FindFloor(e)
 							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						EndIf
 						
@@ -4389,11 +4405,15 @@ Function UpdateEvents%()
 						
 						If n_I\Curr096 <> Null
 							If n_I\Curr096\State = 0.0 Lor n_I\Curr096\State = 5.0
+								PlayerElevatorFloor = FindPlayerFloor()
+								ToElevatorFloor = FindFloor(e)
 								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 							Else
 								e\EventState = Update096ElevatorEvent(e, e\EventState, e\room\RoomDoors[0], e\room\Objects[0])
 							EndIf
 						Else
+							PlayerElevatorFloor = FindPlayerFloor()
+							ToElevatorFloor = FindFloor(e)
 							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						EndIf
 						If (Not n_I\Curr106\Contained)
@@ -4626,6 +4646,8 @@ Function UpdateEvents%()
 				EndIf
 				
 				If PlayerRoom = e\room
+					PlayerElevatorFloor = FindPlayerFloor()
+					ToElevatorFloor = FindFloor(e)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 					
 					If EntityY(me\Collider) > 6.0
@@ -5667,6 +5689,8 @@ Function UpdateEvents%()
 					
 					UpdateMT(e\room\mt)
 					
+					PlayerElevatorFloor = FindPlayerFloor()
+					ToElevatorFloor = FindFloor(e)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e, False)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[4], e\room\Objects[5], e, False)
 				Else
@@ -6464,6 +6488,8 @@ Function UpdateEvents%()
 			Case e_room3_storage
 				;[Block]
 				If PlayerRoom = e\room
+					PlayerElevatorFloor = FindPlayerFloor()
+					ToElevatorFloor = FindFloor(e)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 					

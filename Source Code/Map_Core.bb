@@ -2812,11 +2812,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Local n.NPCs, it.Items, de.Decals
 	Local x#, z#, Dist#, Dir#, i%
 	
-	; ~ First, check the current floor the player is walking on
-	PlayerElevatorFloor = FindPlayerFloor()
-	; ~ Second, find the floor the lower or upper floor
-	ToElevatorFloor = FindFloor(event)
-	
 	; ~ After, determine if the player inside the elevator
 	PlayerInsideElevator = (IsInsideElevator(me\Collider, FirstPivot) Lor IsInsideElevator(me\Collider, SecondPivot))
 	
