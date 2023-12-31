@@ -256,8 +256,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		; ~ Launcher tick
-		Text(LauncherWidth - 620, LauncherHeight - 130, GetLocalString("launcher", "launcher"))
-		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 480, LauncherHeight - 133, opt\LauncherEnabled)
+		Text(LauncherWidth - 590, LauncherHeight - 127, GetLocalString("launcher", "launcher"))
+		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 620, LauncherHeight - 133, opt\LauncherEnabled)
 		; ~ Media buttons
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
@@ -619,35 +619,37 @@ Function UpdateLanguageSelector%()
 					EndIf
 				EndIf
 			Else
-				Color(255, 255, 255)
-				Text(LauncherWidth - 131, LauncherHeight - 148, GetLocalString("language", "speedup"), False, True)
-				NoProgressBar = UpdateLauncherTick(LauncherWidth - 161, LauncherHeight - 157, opt\NoProgressBar)
-				If NoProgressBar <> opt\NoProgressBar Then 
-					If NoProgressBar Then
-						Color(255, 255, 255)
-						Repeat
-							MousePosX = MouseX()
-							MousePosY = MouseY()
-							mo\MouseHit1 = MouseHit(1)
-							Text(320, 180, GetLocalString("language", "speedup.notice_1"), True)
-							Text(320, 200, GetLocalString("language", "speedup.notice_2"), True)
-							Text(320, 220, GetLocalString("language", "speedup.notice_3"), True)
-							Text(320, 260, GetLocalString("language", "speedup.notice_4"), True)
-							If UpdateLauncherButton(200, 300, 100, 30, GetLocalString("language", "yes"))
-								Delay(100)
-								opt\NoProgressBar = True
-								Exit
-							EndIf
-							If UpdateLauncherButton(LauncherWidth - 300, 300, 100, 30, GetLocalString("language", "no"))
-								Delay(100)
-								Exit
-							EndIf
-							Delay(10)
-							Flip(True)
-							Cls
-						Forever
-					Else
-						opt\NoProgressBar = False
+				If (CurrentStatus = LANGUAGE_STATUS_NULL) Lor (CurrentStatus = LANGUAGE_STATUS_DONE) Then
+					Color(255, 255, 255)
+					Text(LauncherWidth - 131, LauncherHeight - 148, GetLocalString("language", "speedup"), False, True)
+					NoProgressBar = UpdateLauncherTick(LauncherWidth - 161, LauncherHeight - 157, opt\NoProgressBar)
+					If NoProgressBar <> opt\NoProgressBar Then 
+						If NoProgressBar Then
+							Color(255, 255, 255)
+							Repeat
+								MousePosX = MouseX()
+								MousePosY = MouseY()
+								mo\MouseHit1 = MouseHit(1)
+								Text(320, 180, GetLocalString("language", "speedup.notice_1"), True)
+								Text(320, 200, GetLocalString("language", "speedup.notice_2"), True)
+								Text(320, 220, GetLocalString("language", "speedup.notice_3"), True)
+								Text(320, 260, GetLocalString("language", "speedup.notice_4"), True)
+								If UpdateLauncherButton(200, 300, 100, 30, GetLocalString("language", "yes"))
+									Delay(100)
+									opt\NoProgressBar = True
+									Exit
+								EndIf
+								If UpdateLauncherButton(LauncherWidth - 300, 300, 100, 30, GetLocalString("language", "no"))
+									Delay(100)
+									Exit
+								EndIf
+								Delay(10)
+								Flip(True)
+								Cls
+							Forever
+						Else
+							opt\NoProgressBar = False
+						EndIf
 					EndIf
 				EndIf
 				If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 115, 155, 30, GetLocalString("language", "download"), Font_Default, ButtonImages, 1, IsDownloadingLanguage(CurrentStatus))
