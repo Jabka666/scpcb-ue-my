@@ -2520,7 +2520,7 @@ Function UpdateDoors%()
 					If d\Buttons[i] <> 0
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 And Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0
 							If UpdateButton(d\Buttons[i])
-								d_I\ClosestDoor = d : me\SndVolume = 4.0
+								d_I\ClosestDoor = d : me\SndVolume = 4.0 : d_I\AnimButton = d_I\ClosestButton
 								Exit
 							EndIf
 						EndIf
@@ -2703,7 +2703,9 @@ Function UpdateDoors%()
 						d\OpenState = Min(d\OpenState, 48.0)
 					EndIf
 				EndIf
-			ElseIf d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
+			EndIf
+			
+			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
 				Local TextureID%
 				
 				If d\OpenState > 0.0 And d\OpenState < 180.0
@@ -2720,14 +2722,6 @@ Function UpdateDoors%()
 				
 				If d\KeyCard = KEY_MISC
 					If ChannelPlaying(d\ButtonCHN)
-						For i = 0 To 1
-							If d\Buttons[i] <> 0
-								If d\Buttons[i] = d_I\ClosestButton
-									d_I\AnimButton = d\Buttons[i]
-									Exit
-								EndIf
-							EndIf
-						Next
 						If d_I\AnimButton <> 0 Then Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
 					EndIf
 				EndIf
