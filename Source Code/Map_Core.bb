@@ -2812,6 +2812,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Local n.NPCs, it.Items, de.Decals
 	Local x#, z#, Dist#, Dir#, i%
 	
+	; ~ TODO: FIND A WAY TO DEFINE THIS VARIABLE ELSEWHERE. IF WE USE TWO "UpdateElevators", THE VARIABLE WILL BE OVERWRITED
 	; ~ After, determine if the player inside the elevator
 	PlayerInsideElevator = (IsInsideElevator(me\Collider, FirstPivot) Lor IsInsideElevator(me\Collider, SecondPivot))
 	
