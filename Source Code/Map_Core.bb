@@ -1904,9 +1904,12 @@ Function UpdateMT%(mt.MTGrid)
 	For tX = 0 To MTGridSize - 1
 		For tY = 0 To MTGridSize - 1
 			If mt\Entities[tX + (tY * MTGridSize)] <> 0
-				If Abs(EntityY(me\Collider, True) - EntityY(mt\Entities[tX + (tY * MTGridSize)], True)) > 4.0 Then Exit
+				Local PlayerPosY# = EntityY(me\Collider, True)
+				Local TunnelPosY# = EntityY(mt\Entities[tX + (tY * MTGridSize)], True)
 				
-				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(EntityY(me\Collider, True) - EntityY(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)))
+				If Abs(PlayerPosY - TunnelPosY) > 4.0 Then Exit
+				
+				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(PlayerPosY - TunnelPosY) + PowTwo(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)))
 				
 				If Dist < opt\CameraFogFar * LightVolume * 1.5
 					If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
@@ -2846,8 +2849,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		EndIf
 	EndIf
 	
-	Local OBJPosX#, OBJPosY#, OBJPosZ#
-	
 	If (Not door1\Open) And (Not door2\Open)
 		If PlayerInsideElevator Then CanSave = 0
 		door1\Locked = 1
@@ -2866,6 +2867,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			Local Minus022# = (280.0 * RoomScale) - 0.22
 			Local Plus022# = ((-280.0) * RoomScale) + 0.22
 			Local FPSFactor01# = fps\Factor[0] * 0.1
+			Local OBJPosX#, OBJPosY#, OBJPosZ#
 			
 			If State < 0.0
 				State = State - fps\Factor[0]
@@ -3432,6 +3434,8 @@ Function UpdateDecals%()
 				de\Size = de\Size + (de\SizeChange * fps\Factor[0])
 				ScaleEntity(de\OBJ, de\Size, de\Size, 1.0, True)
 				
+				Local DecalPosY# = EntityY(de\OBJ, True)
+				
 				Select de\ID
 					Case 0
 						;[Block]
@@ -3440,7 +3444,7 @@ Function UpdateDecals%()
 							Local Temp# = Rnd(de\Size)
 							Local de2.Decals
 							
-							de2.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(de\OBJ, True) + Cos(Angle) * Temp, EntityY(de\OBJ, True) - 0.0005, EntityZ(de\OBJ, True) + Sin(Angle) * Temp, EntityPitch(de\OBJ, True), EntityYaw(de\OBJ, True), EntityRoll(de\OBJ, True), Rnd(0.1, 0.5))
+							de2.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(de\OBJ, True) + Cos(Angle) * Temp, DecalPosY - 0.0005, EntityZ(de\OBJ, True) + Sin(Angle) * Temp, EntityPitch(de\OBJ, True), EntityYaw(de\OBJ, True), EntityRoll(de\OBJ, True), Rnd(0.1, 0.5))
 							EntityParent(de2\OBJ, GetParent(de\OBJ))
 							PlaySound2(DecaySFX[Rand(3)], Camera, de2\OBJ, 10.0, Rnd(0.1, 0.5))
 							de\Timer = Rnd(50.0, 100.0)
@@ -3465,7 +3469,7 @@ Function UpdateDecals%()
 			Local Dist# = DistanceSquared(EntityX(me\Collider), EntityX(de\OBJ, True), EntityZ(me\Collider), EntityZ(de\OBJ, True))
 			Local ActualSize# = PowTwo(de\Size * 0.8)
 			
-			If (Dist < ActualSize) And (Int(EntityPitch(de\OBJ, True)) = 90.0) And (Abs((EntityY(me\Collider) - 0.3) - EntityY(de\OBJ, True)) < 0.05)
+			If (Dist < ActualSize) And (Int(EntityPitch(de\OBJ, True)) = 90.0) And (Abs((EntityY(me\Collider) - 0.3) - DecalPosY) < 0.05)
 				Select de\ID
 					Case 0
 						;[Block]

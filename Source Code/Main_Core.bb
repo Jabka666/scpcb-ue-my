@@ -2538,7 +2538,9 @@ Function UpdateMoving%()
 				EndIf
 				
 				If RID = r_dimension_106
-					If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale
+					Local PlayerPosY# = EntityY(me\Collider)
+					
+					If PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale
 						me\Stamina = 0.0
 						Speed = 0.015
 						Sprint = 1.0
@@ -2881,7 +2883,9 @@ Function UpdateMouseLook%()
 		RotateEntity(Camera, WrapAngle(CameraPitch + Rnd(-ShakeTimer, ShakeTimer)), WrapAngle(EntityYaw(me\Collider) + Rnd(-ShakeTimer, ShakeTimer)), Roll) ; ~ Pitch the user's camera up and down
 		
 		If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
-			If EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale Then RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSec / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
+			Local PlayerPosY# = EntityY(me\Collider)
+			
+			If PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale Then RotateEntity(Camera, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), Roll + WrapAngle(Sin(MilliSec / 150.0) * 30.0)) ; ~ Pitch the user's camera up and down
 		EndIf
 	Else
 		If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
@@ -3021,7 +3025,7 @@ Function UpdateZoneColor%()
 	Local e.Events
 	Local i%
 	Local RID% = PlayerRoom\RoomTemplate\RoomID
-	Local PlayerY# = EntityY(me\Collider, True)
+	Local PlayerPosY# = EntityY(me\Collider, True)
 	
 	CurrFogColor$ = ""
 	CurrAmbientColor$ = ""
@@ -3031,7 +3035,7 @@ Function UpdateZoneColor%()
 	CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
 	
 	; ~ Handle room-specific settings
-	If RID = r_room3_storage And PlayerY < (-4100.0) * RoomScale
+	If RID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
@@ -3057,7 +3061,7 @@ Function UpdateZoneColor%()
 				Exit
 			EndIf
 		Next
-	ElseIf (RID = r_room2_mt And (PlayerY >= 8.0 And PlayerY <= 12.0)) Lor (RID = r_cont2_409 And PlayerY < (-3728.0) * RoomScale) Lor (RID = r_cont1_895 And PlayerY < (-1200.0) * RoomScale)
+	ElseIf (RID = r_room2_mt And (PlayerPosY >= 8.0 And PlayerPosY <= 12.0)) Lor (RID = r_cont2_409 And PlayerPosY < (-3728.0) * RoomScale) Lor (RID = r_cont1_895 And PlayerPosY < (-1200.0) * RoomScale)
 		SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 	ElseIf forest_event <> Null
 		If PlayerRoom = forest_event\room
@@ -3467,12 +3471,14 @@ Function UpdateGUI%()
 		If SelectedItem <> Null
 			If (Not mo\MouseDown1) Lor mo\MouseHit2
 				If MouseSlot = 66
+					Local CameraYaw# = EntityYaw(Camera)
+					
 					If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 					ShowEntity(SelectedItem\Collider)
 					PositionEntity(SelectedItem\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), EntityYaw(Camera) + Rnd(-20.0, 20.0), 0.0)
+					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), CameraYaw + Rnd(-20.0, 20.0), 0.0)
 					MoveEntity(SelectedItem\Collider, 0.0, -0.1, 0.1)
-					RotateEntity(SelectedItem\Collider, 0.0, EntityYaw(Camera) + Rnd(-110.0, 110.0), 0.0)
+					RotateEntity(SelectedItem\Collider, 0.0, CameraYaw + Rnd(-110.0, 110.0), 0.0)
 					ResetEntity(SelectedItem\Collider)
 					SelectedItem\Dropped = 1
 					SelectedItem\Picked = False
@@ -5606,6 +5612,7 @@ Function RenderHUD%()
 	
 	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
 	Local i%
+	Local PlayerPosY# = EntityY(me\Collider)
 	
 	Width = 200 * MenuScale
 	Height = 20 * MenuScale
@@ -5621,7 +5628,7 @@ Function RenderHUD%()
 	EndIf
 	Color(0, 0, 0)
 	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
-	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (EntityY(me\Collider) < 2000.0 * RoomScale Lor EntityY(me\Collider) > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0
+	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0
 		Color(200, 0, 0)
 		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
 	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3
@@ -9209,8 +9216,11 @@ Function UpdateLeave1499%()
 				For it.Items = Each Items
 					it\DistTimer = 0.0
 					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "fine1499"
-						If EntityY(it\Collider) >= EntityY(r1499\OBJ) - 5.0
-							PositionEntity(it\Collider, I_1499\PrevX, I_1499\PrevY + (EntityY(it\Collider) - EntityY(r1499\OBJ)), I_1499\PrevZ)
+						Local ItemPosY# = EntityY(it\Collider)
+						Local RoomPosY# = EntityY(r1499\OBJ)
+						
+						If ItemPosY >= RoomPosY - 5.0
+							PositionEntity(it\Collider, I_1499\PrevX, I_1499\PrevY + (ItemPosY - RoomPosY), I_1499\PrevZ)
 							ResetEntity(it\Collider)
 							Exit
 						EndIf
@@ -9233,10 +9243,11 @@ Function CheckForPlayerInFacility%()
 	; ~ False (= 0): Player is not in facility (mostly meant for "dimension_1499")
 	; ~ True (= 1): Player is in facility
 	; ~ 2: Player is in tunnels (maintenance tunnels / SCP-049's tunnels / SCP-939's storage room, etc...)
+	Local PlayerPosY# = EntityY(me\Collider)
 	
-	If EntityY(me\Collider) > 100.0 Then Return(0)
-	If EntityY(me\Collider) < -10.0 Then Return(2)
-	If (EntityY(me\Collider) > 7.0) And (EntityY(me\Collider) <= 100.0) Then Return(2)
+	If PlayerPosY > 100.0 Then Return(0)
+	If PlayerPosY < -10.0 Then Return(2)
+	If (PlayerPosY > 7.0) And (PlayerPosY <= 100.0) Then Return(2)
 	Return(1)
 End Function
 

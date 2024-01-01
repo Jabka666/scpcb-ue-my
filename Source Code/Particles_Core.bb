@@ -206,7 +206,6 @@ Function UpdateDust%()
 		; ~ Create a single dust particle
 		If Rand(35 + (35 * (opt\ParticleAmount = 1))) = 1
 			Pvt = CreatePivot()
-			
 			PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 			RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
 			If Rand(2) = 1
