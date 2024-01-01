@@ -149,10 +149,10 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	EndIf
 End Function
 
-Function IsInsideElevator%(OBJ%, Pvt%)
+Function IsInsideElevator%(x1#, y1#, z1#, ElevatorPivot%)
 	Local Offset# = 280.0 * RoomScale + (0.015 * fps\Factor[0])
 	
-	Return(Abs(EntityX(OBJ, True) - EntityX(Pvt, True)) < Offset And Abs(EntityZ(OBJ, True) - EntityZ(Pvt, True)) < Offset And Abs(EntityY(OBJ, True) - EntityY(Pvt, True)) < Offset)
+	Return(Abs(x1 - EntityX(ElevatorPivot, True)) < Offset And Abs(z1 - EntityZ(ElevatorPivot, True)) < Offset And Abs(y1 - EntityY(ElevatorPivot, True)) < Offset)
 End Function
 
 Function CreateLine%(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)

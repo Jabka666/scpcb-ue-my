@@ -254,7 +254,7 @@ Function LoadDoors%()
 	
 	d_I\ButtonModelID[BUTTON_SCANNER_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonScanner.b3d")
 	
-	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonElevator.b3d")
+	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\ButtonElevator.b3d")
 	
 	For i = 0 To MaxButtonModelIDAmount - 1
 		HideEntity(d_I\ButtonModelID[i])

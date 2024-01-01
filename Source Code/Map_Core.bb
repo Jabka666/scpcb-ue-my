@@ -2722,7 +2722,17 @@ Function UpdateDoors%()
 				
 				If d\KeyCard = KEY_MISC
 					If ChannelPlaying(d\ButtonCHN)
-						If d_I\AnimButton <> 0 Then Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
+						If d_I\AnimButton <> 0
+							If PlayerInsideElevator
+								If PlayerElevatorFloor = LowerFloor Lor ToElevatorFloor = UpperFloor
+									Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
+								ElseIf PlayerElevatorFloor = UpperFloor Lor ToElevatorFloor = LowerFloor
+									Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 21.0, 40.0, 2.0, False)
+								EndIf
+							Else
+								Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 			ElseIf d\DoorType = OFFICE_DOOR
@@ -2743,12 +2753,10 @@ Const NullFloor% = 0
 Const UpperFloor% = 1
 ;[End Block]
 
-Function FindPlayerFloor%()
-	Local PlayerY# = Floor(EntityY(me\Collider))
-	
+Function FindPlayerFloor%(y#)
 	; ~ Check the player's current position and return corresponding floor
-	If PlayerY < 0.0 Then Return(LowerFloor)
-	If PlayerY > 0.0 Then Return(UpperFloor)
+	If y < 0.0 Then Return(LowerFloor)
+	If y > 0.0 Then Return(UpperFloor)
 	
 	Return(NullFloor)
 End Function
@@ -2770,28 +2778,16 @@ Function UpdateElevatorPanel%(d.Doors)
 	Local TextureID%, i%
 	
 	If PlayerInsideElevator
-		If PlayerElevatorFloor = LowerFloor
+		If PlayerElevatorFloor = LowerFloor Lor ToElevatorFloor = UpperFloor
 			TextureID = ELEVATOR_PANEL_UP
-		ElseIf PlayerElevatorFloor = UpperFloor
+		ElseIf PlayerElevatorFloor = UpperFloor Lor ToElevatorFloor = LowerFloor
 			TextureID = ELEVATOR_PANEL_DOWN
-		Else
-			If ToElevatorFloor = LowerFloor
-				TextureID = ELEVATOR_PANEL_DOWN
-			Else
-				TextureID = ELEVATOR_PANEL_UP
-			EndIf
 		EndIf
 	Else
-		If PlayerElevatorFloor = LowerFloor
+		If PlayerElevatorFloor = LowerFloor Lor ToElevatorFloor = UpperFloor
 			TextureID = ELEVATOR_PANEL_DOWN
-		ElseIf PlayerElevatorFloor = UpperFloor
+		ElseIf PlayerElevatorFloor = UpperFloor Lor ToElevatorFloor = LowerFloor
 			TextureID = ELEVATOR_PANEL_UP
-		Else
-			If ToElevatorFloor = LowerFloor
-				TextureID = ELEVATOR_PANEL_UP
-			Else
-				TextureID = ELEVATOR_PANEL_DOWN
-			EndIf
 		EndIf
 	EndIf
 	
@@ -2811,10 +2807,6 @@ End Function
 Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True)
 	Local n.NPCs, it.Items, de.Decals
 	Local x#, z#, Dist#, Dir#, i%
-	
-	; ~ TODO: FIND A WAY TO DEFINE THIS VARIABLE ELSEWHERE. IF WE USE TWO "UpdateElevators", THE VARIABLE WILL BE OVERWRITED
-	; ~ After, determine if the player inside the elevator
-	PlayerInsideElevator = (IsInsideElevator(me\Collider, FirstPivot) Lor IsInsideElevator(me\Collider, SecondPivot))
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
@@ -2853,6 +2845,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			door2\IsElevatorDoor = 1
 		EndIf
 	EndIf
+	
+	Local OBJPosX#, OBJPosY#, OBJPosZ#
 	
 	If (Not door1\Open) And (Not door2\Open)
 		If PlayerInsideElevator Then CanSave = 0
@@ -2911,59 +2905,61 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 					
 					For n.NPCs = Each NPCs
-						If IsInsideElevator(n\Collider, FirstPivot)
+						OBJPosX = EntityX(n\Collider, True) : OBJPosY = EntityY(n\Collider, True) : OBJPosZ = EntityZ(n\Collider, True)
+						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
 							If (Not IgnoreRotation)
-								Dist = Distance(EntityX(n\Collider, True), FirstPivotX, EntityZ(n\Collider, True), FirstPivotZ)
-								Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), FirstPivotX, FirstPivotZ)
+								Dist = Distance(OBJPosX, FirstPivotX, OBJPosZ, FirstPivotZ)
+								Dir = PointDirection(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ)
 								Dir = Dir + SecondPivotYaw - FirstPivotYaw
 								Dir = WrapAngle(Dir)
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
 								RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
 							Else
-								x = Max(Min((EntityX(n\Collider, True) - FirstPivotX), Minus022), Plus022)
-								z = Max(Min((EntityZ(n\Collider, True) - FirstPivotZ), Minus022), Plus022)
+								x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
+								z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
 							EndIf
-							
-							TeleportEntity(n\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (EntityY(n\Collider, True) - FirstPivotY), SecondPivotZ + z, n\CollRadius, True)
+							TeleportEntity(n\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, n\CollRadius, True)
 						EndIf
 					Next
 					
 					For it.Items = Each Items
-						If IsInsideElevator(it\Collider, FirstPivot)
+						OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
+						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
 							If (Not IgnoreRotation)
-								Dist = Distance(EntityX(it\Collider, True), FirstPivotX, EntityZ(it\Collider, True), FirstPivotZ)
-								Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), FirstPivotX, FirstPivotZ)
+								Dist = Distance(OBJPosX, FirstPivotX, OBJPosZ, FirstPivotZ)
+								Dir = PointDirection(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ)
 								Dir = Dir + SecondPivotYaw - FirstPivotYaw
 								Dir = WrapAngle(Dir)
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
 								RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
 							Else
-								x = Max(Min((EntityX(it\Collider, True) - FirstPivotX), Minus022), Plus022)
-								z = Max(Min((EntityZ(it\Collider, True) - FirstPivotZ), Minus022), Plus022)
+								x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
+								z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
 							EndIf
-							TeleportEntity(it\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (EntityY(it\Collider, True) - FirstPivotY), SecondPivotZ + z, 0.01, True)
+							TeleportEntity(it\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, 0.01, True)
 							it\DistTimer = 0.0
 							UpdateItems()
 						EndIf
 					Next
 					
 					For de.Decals = Each Decals
-						If IsInsideElevator(de\OBJ, FirstPivot)
+						OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
+						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
 							If (Not IgnoreRotation)
-								Dist = Distance(EntityX(de\OBJ, True), FirstPivotX, EntityZ(de\OBJ, True), FirstPivotZ)
-								Dir = PointDirection(EntityX(de\OBJ, True), EntityZ(de\OBJ, True), FirstPivotX, FirstPivotZ)
+								Dist = Distance(OBJPosX, FirstPivotX, EntityZ(de\OBJ, True), FirstPivotZ)
+								Dir = PointDirection(OBJPosX, EntityZ(de\OBJ, True), FirstPivotX, FirstPivotZ)
 								Dir = Dir + SecondPivotYaw - FirstPivotYaw
 								Dir = WrapAngle(Dir)
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
 								RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
 							Else
-								x = Max(Min((EntityX(de\OBJ, True) - FirstPivotX), Minus022), Plus022)
-								z = Max(Min((EntityZ(de\OBJ, True) - FirstPivotZ), Minus022), Plus022)
+								x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
+								z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
 							EndIf
-							TeleportEntity(de\OBJ, SecondPivotX + x, FPSFactor01 + SecondPivotY + (EntityY(de\OBJ, True) - FirstPivotY), SecondPivotZ + z, -0.01, True)
+							TeleportEntity(de\OBJ, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, -0.01, True)
 							UpdateDecals()
 						EndIf
 					Next
@@ -3011,55 +3007,58 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 					
 					For n.NPCs = Each NPCs
-						If IsInsideElevator(n\Collider, SecondPivot)
+						OBJPosX = EntityX(n\Collider, True) : OBJPosY = EntityY(n\Collider, True) : OBJPosZ = EntityZ(n\Collider, True)
+						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
 							If (Not IgnoreRotation)
-								Dist = Distance(EntityX(n\Collider, True), SecondPivotX, EntityZ(n\Collider, True), SecondPivotZ)
-								Dir = PointDirection(EntityX(n\Collider, True), EntityZ(n\Collider, True), SecondPivotX, SecondPivotZ)
+								Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
+								Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
 								Dir = Dir + FirstPivotYaw - SecondPivotYaw
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
 								RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
 							Else
-								x = Max(Min((EntityX(n\Collider, True) - SecondPivotX), Minus022), Plus022)
-								z = Max(Min((EntityZ(n\Collider, True) - SecondPivotZ), Minus022), Plus022)
+								x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
+								z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
 							EndIf
-							TeleportEntity(n\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (EntityY(n\Collider, True) - SecondPivotY), FirstPivotZ + z, n\CollRadius, True)
+							TeleportEntity(n\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, n\CollRadius, True)
 						EndIf
 					Next
 					
 					For it.Items = Each Items
-						If IsInsideElevator(it\Collider, SecondPivot)
+						OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
+						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
 							If (Not IgnoreRotation)
-								Dist = Distance(EntityX(it\Collider, True), SecondPivotX, EntityZ(it\Collider, True), SecondPivotZ)
-								Dir = PointDirection(EntityX(it\Collider, True), EntityZ(it\Collider, True), SecondPivotX, SecondPivotZ)
+								Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
+								Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
 								Dir = Dir + FirstPivotYaw - SecondPivotYaw
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
 								RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
 							Else
-								x = Max(Min((EntityX(it\Collider, True) - SecondPivotX), Minus022), Plus022)
-								z = Max(Min((EntityZ(it\Collider, True) - SecondPivotZ), Minus022), Plus022)
+								x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
+								z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
 							EndIf
-							TeleportEntity(it\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (EntityY(it\Collider, True) - SecondPivotY), FirstPivotZ + z, 0.01, True)
+							TeleportEntity(it\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, 0.01, True)
 							it\DistTimer = 0.0
 							UpdateItems()
 						EndIf
 					Next
 					
 					For de.Decals = Each Decals
-						If IsInsideElevator(de\OBJ, SecondPivot)
+						OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
+						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
 							If (Not IgnoreRotation)
-								Dist = Distance(EntityX(de\OBJ, True), SecondPivotX, EntityZ(de\OBJ, True), SecondPivotZ)
-								Dir = PointDirection(EntityX(de\OBJ, True), EntityZ(de\OBJ, True), SecondPivotX, SecondPivotZ)
+								Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
+								Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
 								Dir = Dir + FirstPivotYaw - SecondPivotYaw
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
 								RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
 							Else
-								x = Max(Min((EntityX(de\OBJ, True) - SecondPivotX), Minus022), Plus022)
-								z = Max(Min((EntityZ(de\OBJ, True) - SecondPivotZ), Minus022), Plus022)
+								x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
+								z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
 							EndIf
-							TeleportEntity(de\OBJ, FirstPivotX + x, FPSFactor01 + FirstPivotY + (EntityY(de\OBJ, True) - SecondPivotY), FirstPivotZ + z, -0.01, True)
+							TeleportEntity(de\OBJ, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, -0.01, True)
 							UpdateDecals()
 						EndIf
 					Next
@@ -3241,57 +3240,74 @@ Function UseDoor%(PlaySFX% = True)
 				EndIf
 				Return
 			EndIf
-		ElseIf d_I\ClosestDoor\DoorType = ELEVATOR_DOOR
-			If d_I\ClosestDoor\Locked = 1
-				If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
-					CreateMsg(GetLocalString("msg", "elev.broken"))
-					d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
-					SetAnimTime(d_I\ClosestButton, 1.0)
-				Else
-					If d_I\ClosestDoor\IsElevatorDoor = 1
-						CreateMsg(GetLocalString("msg", "elev.called"))
-					ElseIf d_I\ClosestDoor\IsElevatorDoor = 3
-						CreateMsg(GetLocalString("msg", "elev.floor"))
-					ElseIf msg\Txt <> GetLocalString("msg", "elev.called")
-						Select Rand(10)
-							Case 1
-								;[Block]
-								CreateMsg(GetLocalString("msg", "elev.stop"))
-								;[End Block]
-							Case 2
-								;[Block]
-								CreateMsg(GetLocalString("msg", "elev.faster"))
-								;[End Block]
-							Case 3
-								;[Block]
-								CreateMsg(GetLocalString("msg", "elev.mav"))
-								;[End Block]
-							Default
-								;[Block]
-								CreateMsg(GetLocalString("msg", "elev.already"))
-								;[End Block]
-						End Select
-					Else
-						CreateMsg(GetLocalString("msg", "elev.already"))
-					EndIf
-					d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
-					SetAnimTime(d_I\ClosestButton, 1.0)
-				EndIf
-				Return
-			EndIf
 		Else
 			If d_I\ClosestDoor\Locked = 1
-				If d_I\ClosestDoor\Open
-					CreateMsg(GetLocalString("msg", "button.nothappend"))
+				If d_I\ClosestDoor\DoorType = ELEVATOR_DOOR
+					If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
+						CreateMsg(GetLocalString("msg", "elev.broken"))
+						d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
+						If PlayerInsideElevator
+							If PlayerElevatorFloor = LowerFloor Lor ToElevatorFloor = UpperFloor
+								SetAnimTime(d_I\ClosestButton, 1.0)
+							ElseIf PlayerElevatorFloor = UpperFloor  Lor ToElevatorFloor = LowerFloor
+								SetAnimTime(d_I\ClosestButton, 21.0)
+							EndIf
+						Else
+							SetAnimTime(d_I\ClosestButton, 1.0)
+						EndIf
+						Return
+					Else
+						If d_I\ClosestDoor\IsElevatorDoor = 1
+							CreateMsg(GetLocalString("msg", "elev.called"))
+						ElseIf d_I\ClosestDoor\IsElevatorDoor = 3
+							CreateMsg(GetLocalString("msg", "elev.floor"))
+						ElseIf msg\Txt <> GetLocalString("msg", "elev.called")
+							Select Rand(10)
+								Case 1
+									;[Block]
+									CreateMsg(GetLocalString("msg", "elev.stop"))
+									;[End Block]
+								Case 2
+									;[Block]
+									CreateMsg(GetLocalString("msg", "elev.faster"))
+									;[End Block]
+								Case 3
+									;[Block]
+									CreateMsg(GetLocalString("msg", "elev.mav"))
+									;[End Block]
+								Default
+									;[Block]
+									CreateMsg(GetLocalString("msg", "elev.already"))
+									;[End Block]
+							End Select
+						Else
+							CreateMsg(GetLocalString("msg", "elev.already"))
+						EndIf
+						d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
+						SetAnimTime(d_I\ClosestButton, 1.0)
+						Return
+					EndIf
 				Else
-					CreateMsg(GetLocalString("msg", "button.locked"))
+					If d_I\ClosestDoor\Open
+						CreateMsg(GetLocalString("msg", "button.nothappend"))
+					Else
+						CreateMsg(GetLocalString("msg", "button.locked"))
+					EndIf
+					d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
+					SetAnimTime(d_I\ClosestButton, 1.0)
+					Return
 				EndIf
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
-				SetAnimTime(d_I\ClosestButton, 1.0)
-				Return
 			Else
 				d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
-				SetAnimTime(d_I\ClosestButton, 1.0)
+				If PlayerInsideElevator
+					If PlayerElevatorFloor = LowerFloor Lor ToElevatorFloor = UpperFloor
+						SetAnimTime(d_I\ClosestButton, 1.0)
+					ElseIf PlayerElevatorFloor = UpperFloor  Lor ToElevatorFloor = LowerFloor
+						SetAnimTime(d_I\ClosestButton, 21.0)
+					EndIf
+				Else
+					SetAnimTime(d_I\ClosestButton, 1.0)
+				EndIf
 			EndIf
 		EndIf
 	EndIf
