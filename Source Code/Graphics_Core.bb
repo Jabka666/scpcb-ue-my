@@ -378,7 +378,7 @@ Function RenderWorld2%(Tween#)
 	; ~ Render sprites
 	CameraProjMode(ArkBlurCam, 2)
 	CameraProjMode(Camera, 0)
-	RenderWorld()
+	RenderWorld(RenderTween)
 	CameraProjMode(ArkBlurCam, 0)
 	
 	If HasBattery = 1

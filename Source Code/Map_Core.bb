@@ -3778,7 +3778,7 @@ Function RenderSecurityCams%()
 							RenderLights(sc\Cam)
 							
 							SetBuffer(BackBuffer())
-							RenderWorld()
+							RenderWorld(RenderTween)
 							CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(sc_I\ScreenTex))
 							
 							If (Not EntityHidden(sc\Cam))
@@ -3797,7 +3797,7 @@ Function RenderSecurityCams%()
 							RenderLights(sc_I\CoffinCam\Cam)
 							
 							SetBuffer(BackBuffer())
-							RenderWorld()
+							RenderWorld(RenderTween)
 							CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(sc_I\ScreenTex))
 							
 							If (Not EntityHidden(sc_I\CoffinCam\room\OBJ))

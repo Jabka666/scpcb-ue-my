@@ -637,12 +637,16 @@ Function UpdateGame%()
 	CatchErrors("Uncaught: UpdateGame()")
 End Function
 
+Global RenderTween#
+
 Function RenderGame%()
 	CatchErrors("RenderGame()")
 	
+	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
+	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
-	RenderWorld2(Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION)))
+	RenderWorld2(RenderTween)
 	
 	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\EndingTimer < 0.0))
 		RenderLights(Camera)

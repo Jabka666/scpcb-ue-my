@@ -2928,6 +2928,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	If FresizeImage <> 0 Then FreeEntity(FresizeImage) : FresizeImage = 0
 	If FresizeCam <> 0 Then FreeEntity(FresizeCam) : FresizeCam = 0
 	
+	RenderTween = 0.0
+	
 	ClearTextureFilters()
 	ClearCollisions()
 	ClearWorld()
