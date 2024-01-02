@@ -3430,11 +3430,12 @@ Function UpdateDecals%()
 	For de.Decals = Each Decals
 		If EntityDistanceSquared(de\OBJ, me\Collider) <= PowTwo(HideDistance)
 			If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
+			
+			Local DecalPosY# = EntityY(de\OBJ, True)
+			
 			If de\SizeChange <> 0.0
 				de\Size = de\Size + (de\SizeChange * fps\Factor[0])
 				ScaleEntity(de\OBJ, de\Size, de\Size, 1.0, True)
-				
-				Local DecalPosY# = EntityY(de\OBJ, True)
 				
 				Select de\ID
 					Case 0
