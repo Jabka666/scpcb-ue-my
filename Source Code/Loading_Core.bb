@@ -1938,8 +1938,6 @@ Function LoadData%()
 	TextureAnisotropic(opt\AnisotropicLevel)
 	AntiAlias(opt\AntiAliasing)
 	
-	LoadAchievementsFile()
-	
 	SubFile = JsonParseFromFile(SubtitlesFile)
 	LocalSubFile = JsonParseFromFile(lang\LanguagePath + SubtitlesFile)
 	SubColors = JsonGetValue(SubFile, "colors")
@@ -1998,6 +1996,7 @@ Function LoadData%()
 	bk.BrokenDoor = New BrokenDoor
 	
 	achv.Achievements = New Achievements
+	LoadAchievementsFile()
 	igm.InGameMenu = New InGameMenu
 	
 	t.Textures = New Textures
