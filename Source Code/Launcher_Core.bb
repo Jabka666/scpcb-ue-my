@@ -346,8 +346,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		
 		; ~ Driver name (tooltip)
 		If MouseOn(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
-			Local TooltipX% = MouseX() + 5
-			Local TooltipY% = MouseY() + 10
+			Local TooltipX% = MousePosX + 5
+			Local TooltipY% = MousePosY + 10
 			Local Tooltip$ = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
 			Local TooltipWidth% = StringWidth(Tooltip)
 			
@@ -690,8 +690,8 @@ Function UpdateLanguageSelector%()
 			
 			Local Width% = Max(Max(Max(Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size)), StringWidth(Compatible)), StringWidth(Prefect2)), StringWidth(LastMod))
 			
-			x = MouseX() + 10
-			y = MouseY() + 10
+			x = MousePosX + 10
+			y = MousePosY + 10
 			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long, then move tooltip to the left
 			If (y + Height + FontHeight()) > LauncherHeight Then y = y - Height - 15
 			RenderFrame(x, y, Width + FontWidth(), Height)
