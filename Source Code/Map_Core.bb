@@ -1183,7 +1183,12 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					For lX = 3 To Width - 2
 						For lY = 3 To Width - 2
 							GetColor(lX, Width - lY)
-							If ColorRed() > Rand(100, 260)
+							
+							Local ColorR% = ColorRed()
+							Local DetailEntityPosX# = (lX * Tempf4) - (Tempf3 / 2.0)
+							Local DetailEntityPosZ# = (lY * Tempf4) - (Tempf3 / 2.0)
+							
+							If ColorR > Rand(100, 260)
 								Detail_Entity = 0
 								Select Rand(0, 7)
 									Case 0, 1, 2, 3, 4, 5, 6 ; ~ Create a tree
@@ -1197,7 +1202,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 											EntityFX(d, 1)
 										Next
 										ScaleEntity(Detail_Entity, Tempf2 * 1.1, Tempf2, Tempf2 * 1.1, True)
-										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, DetailEntityPosX, ColorR * 0.03 - Rnd(3.0, 3.2), DetailEntityPosZ, True)
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
 										;[End Block]
 									Case 6 ; ~ Add a stump
@@ -1205,14 +1210,13 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										Detail_Entity = CopyEntity(fr\DetailMesh[2])
 										Tempf2 = Rnd(0.1, 0.12)
 										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
-										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, DetailEntityPosX, ColorR * 0.03 - 1.3, DetailEntityPosZ, True)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[1])
 										Tempf2 = Rnd(0.01, 0.012)
-										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
-										EntityFX(Detail_Entity, 1)
+										PositionEntity(Detail_Entity, DetailEntityPosX, ColorR * 0.03 - 1.3, DetailEntityPosZ, True)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
 										;[End Block]
 								End Select
@@ -1228,10 +1232,11 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
 					
 					Local ItemPlaced%[4], iX#, iZ#
+					Local tYFloor% = Floor(tY / 3)
 					Local it.Items = Null
 					
-					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)])
-						ItemPlaced[Floor(tY / 3)] = True
+					If (tY Mod 3) = 2 And (Not ItemPlaced[tYFloor])
+						ItemPlaced[tYFloor] = True
 						
 						If Tile_Type = ROOM1 + 1
 							iX = 0.4 : iZ = 0.0
@@ -1240,7 +1245,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						Else
 							iX = 0.0 : iZ = 0.0
 						EndIf
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.2, iZ)
+						it.Items = CreateItem("Log #" + Int(tYFloor + 1), "paper", iX, 0.2, iZ)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, Tile_Entity)
 					EndIf
@@ -1369,7 +1374,12 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					For lX = 3 To Width - 2
 						For lY = 3 To Width - 2
 							GetColor(lX, Width - lY)
-							If ColorRed() > Rand(100, 260)
+							
+							Local ColorR% = ColorRed()
+							Local DetailEntityPosX# = (lX * Tempf4) - (Tempf3 / 2.0)
+							Local DetailEntityPosZ# = (lY * Tempf4) - (Tempf3 / 2.0)
+							
+							If ColorR > Rand(100, 260)
 								Detail_Entity = 0
 								Select Rand(0, 7)
 									Case 0, 1, 2, 3, 4, 5, 6 ; ~ Create a tree
@@ -1383,7 +1393,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 											EntityFX(d, 1)
 										Next
 										ScaleEntity(Detail_Entity, Tempf2 * 1.1, Tempf2, Tempf2 * 1.1, True)
-										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - Rnd(3.0, 3.2), lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, DetailEntityPosX, ColorR * 0.03 - Rnd(3.0, 3.2), DetailEntityPosZ, True)
 										RotateEntity(Detail_Entity, Rnd(-5.0, 5.0), Rnd(360.0), 0.0, True)
 										;[End Block]
 									Case 6 ; ~ Add a stump
@@ -1391,14 +1401,13 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										Detail_Entity = CopyEntity(fr\DetailMesh[2])
 										Tempf2 = Rnd(0.1, 0.12)
 										ScaleEntity(Detail_Entity, Tempf2, Tempf2, Tempf2, True)
-										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
+										PositionEntity(Detail_Entity, DetailEntityPosX, ColorR * 0.03 - 1.3, DetailEntityPosZ, True)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
 										Detail_Entity = CopyEntity(fr\DetailMesh[1])
 										Tempf2 = Rnd(0.01, 0.012)
-										PositionEntity(Detail_Entity, (lX * Tempf4) - (Tempf3 / 2.0), ColorRed() * 0.03 - 1.3, lY * Tempf4 - (Tempf3 / 2.0), True)
-										EntityFX(Detail_Entity, 1)
+										PositionEntity(Detail_Entity, DetailEntityPosX, ColorR * 0.03 - 1.3, DetailEntityPosZ, True)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
 										;[End Block]
 								End Select
@@ -1414,10 +1423,11 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					ScaleEntity(Tile_Entity, Tempf1, Tempf1, Tempf1)
 					
 					Local ItemPlaced%[4], iX#, iZ#
+					Local tYFloor% = Floor(tY / 3)
 					Local it.Items = Null
 					
-					If (tY Mod 3) = 2 And (Not ItemPlaced[Floor(tY / 3)])
-						ItemPlaced[Floor(tY / 3)] = True
+					If (tY Mod 3) = 2 And (Not ItemPlaced[tYFloor])
+						ItemPlaced[tYFloor] = True
 						
 						If Tile_Type = ROOM1 + 1
 							iX = 0.4 : iZ = 0.0
@@ -1426,7 +1436,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						Else
 							iX = 0.0 : iZ = 0.0
 						EndIf
-						it.Items = CreateItem("Log #" + Int(Floor(tY / 3) + 1), "paper", iX, 0.2, iZ)
+						it.Items = CreateItem("Log #" + Int(tYFloor + 1), "paper", iX, 0.2, iZ)
 						EntityType(it\Collider, HIT_ITEM)
 						EntityParent(it\Collider, Tile_Entity)
 					EndIf
