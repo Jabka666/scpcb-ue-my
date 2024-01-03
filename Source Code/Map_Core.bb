@@ -106,11 +106,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
 	If room <> Null Then EntityParent(p\OBJ, room\OBJ)
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
-	If HasCollision
-		EntityType(p\OBJ, HIT_MAP)
-	Else
-		EntityType(p\OBJ, 0)
-	EndIf
+	EntityType(p\OBJ, HasCollision) ; ~ DON'T FORGET THAT Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
 	If Texture <> ""
 		Tex = LoadTexture_Strict(Texture)
