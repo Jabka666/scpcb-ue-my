@@ -1517,7 +1517,7 @@ Function UpdateForest%(fr.Forest)
 			If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0
 				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(fr\TileEntities[tX + (tY * ForestGridSize)], True)) + PowTwo(EntityZ(me\Collider, True) - EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)], True)))
 				
-				If Dist < HideDistance Then
+				If Dist < HideDistance
 					If EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 				Else
 					If (Not EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
@@ -2578,7 +2578,6 @@ Function UpdateDoors%()
 							If d\room <> Null
 								d\OpenState = CurveValue(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
 								RotateEntity(d\OBJ, 0.0, d\room\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
-								If d\DoorType = OFFICE_DOOR Then Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
 							EndIf
 							;[End Block]
 						Case ONE_SIDED_DOOR
@@ -2625,21 +2624,23 @@ Function UpdateDoors%()
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 80.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0, 0.0, 0.0)
+							FPSFactorEx = (-fps\Factor[0]) / 80.0
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 162.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0, 0.0, 0.0)
+							FPSFactorEx = (-fps\Factor[0]) / 162.0
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * (-fps\Factor[0]) * (d\FastOpen + 1) / 85.0, 0.0, 0.0)
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case BIG_DOOR
@@ -2745,9 +2746,7 @@ Function UpdateDoors%()
 					EndIf
 				EndIf
 			ElseIf d\DoorType = OFFICE_DOOR
-				If d\Locked > 0
-					If ChannelPlaying(d\ButtonCHN) Then Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
-				EndIf
+				If ChannelPlaying(d\ButtonCHN) Then Animate2(d\OBJ, AnimTime(d\OBJ), 1.0, 41.0, 1.2, False)
 			EndIf
 		EndIf
 	Next
@@ -3247,6 +3246,9 @@ Function UseDoor%(PlaySFX% = True)
 					EndIf
 				EndIf
 				Return
+			Else
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+				SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
 			EndIf
 		Else
 			If d_I\ClosestDoor\Locked = 1
