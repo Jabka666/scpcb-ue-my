@@ -2120,7 +2120,7 @@ Function LoadEntities%()
 	CreateBlurImage()
 	
 	; ~ Overlays
-	Local OverlayScale# = Float(opt\GraphicHeight) / Float(opt\GraphicWidth)
+	Local OverlayScale# = GraphicHeightFloat / GraphicWidthFloat
 	
 	;t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\fog_overlay.png", 1, DeleteAllTextures) ; ~ FOG
 	;t\OverlayID[0] = CreateSprite(ArkBlurCam)

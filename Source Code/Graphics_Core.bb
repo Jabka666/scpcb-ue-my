@@ -27,7 +27,7 @@ Function InitFastResize%()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicHeight), 1.0)
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicHeightFloat, 1.0)
 	PositionEntity(SPR, 0.0, 0.0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
@@ -143,8 +143,8 @@ Function RenderGamma%()
 			SetBuffer(BackBuffer())
 			ClsColor(0, 0, 0)
 			Cls()
-			ScaleRender(0, 0, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio, SMALLEST_POWER_TWO / Float(opt\GraphicWidth) * opt\AspectRatio)
-			; ~ Might want to replace Float(opt\GraphicWidth) with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
+			ScaleRender(0, 0, SMALLEST_POWER_TWO / GraphicWidthFloat * opt\AspectRatio, SMALLEST_POWER_TWO / GraphicWidthFloat * opt\AspectRatio)
+			; ~ Might want to replace GraphicWidthFloat with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
 			; ~ Everyone uses landscape so it's probably a non-issue
 		EndIf
 	EndIf
@@ -156,17 +156,17 @@ Function RenderGamma%()
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / RealGraphicWidthFloat, 1.0 / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat)
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 3)
 		EntityAlpha(FresizeImage, opt\ScreenGamma - 1.0)
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / RealGraphicWidthFloat, 1.0 / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat)
 	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / RealGraphicWidthFloat, 1.0 / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat)
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 2)
 		EntityAlpha(FresizeImage, 1.0)
@@ -174,7 +174,7 @@ Function RenderGamma%()
 		ClsColor(255 * opt\ScreenGamma, 255 * opt\ScreenGamma, 255 * opt\ScreenGamma)
 		Cls()
 		SetBuffer(BackBuffer())
-		ScaleRender((-1.0) / Float(opt\RealGraphicWidth), 1.0 / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth), SMALLEST_POWER_TWO / Float(opt\RealGraphicWidth))
+		ScaleRender((-1.0) / RealGraphicWidthFloat, 1.0 / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat)
 		SetBuffer(TextureBuffer(FresizeTexture2))
 		ClsColor(0, 0, 0)
 		Cls()
@@ -420,7 +420,7 @@ Function CreateBlurImage%()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / Float(opt\GraphicWidth), SMALLEST_POWER_TWO / Float(opt\GraphicWidth), 1.0)
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / GraphicWidthFloat, SMALLEST_POWER_TWO / GraphicWidthFloat, 1.0)
 	PositionEntity(SPR, 0.0, 0.0, 1.0001)
 	EntityOrder(SPR, -100000)
 	EntityBlend(SPR, 1)
@@ -453,7 +453,7 @@ Function PlayStartupVideos%()
 	; ~ The aspect ratio to target
 	Local TargetAspectRatio# = 16.0 / 9.0
 	; ~ Calculate the target height based on the screen's aspect ratio
-	Local Ratio# = Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)
+	Local Ratio# = RealGraphicWidthFloat / RealGraphicHeightFloat
 	
 	If Ratio > TargetAspectRatio
 		ScaledGraphicHeight = opt\RealGraphicHeight

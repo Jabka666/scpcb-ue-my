@@ -132,8 +132,11 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	SetBuffer(BackBuffer())
 	
-	opt\RealGraphicWidth = opt\GraphicWidth
-	opt\RealGraphicHeight = opt\GraphicHeight
+	opt\RealGraphicWidth = opt\GraphicWidth : RealGraphicWidthFloat = Float(opt\RealGraphicWidth)
+	opt\RealGraphicHeight = opt\GraphicHeight : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
+	
+	GraphicWidthFloat = Float(opt\GraphicWidth)
+	GraphicHeightFloat = Float(opt\GraphicHeight)
 	
 	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
 	SetFontEx(fo\FontID[Font_Default])

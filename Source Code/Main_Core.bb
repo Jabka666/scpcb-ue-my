@@ -41,16 +41,23 @@ If opt\LauncherEnabled
 	Delete(lnchr)
 EndIf
 
+Global GraphicWidthFloat#, RealGraphicWidthFloat#
+Global GraphicHeightFloat#, RealGraphicHeightFloat#
+
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 If opt\DisplayMode = 1
 	opt\RealGraphicWidth = DesktopWidth()
 	opt\RealGraphicHeight = DesktopHeight()
-	opt\AspectRatio = (Float(opt\GraphicWidth) / Float(opt\GraphicHeight)) / (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight))
+	GraphicWidthFloat = Float(opt\GraphicWidth) : RealGraphicWidthFloat = Float(opt\RealGraphicWidth)
+	GraphicHeightFloat = Float(opt\GraphicHeight) : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
+	opt\AspectRatio = (GraphicWidthFloat / GraphicHeightFloat) / (RealGraphicWidthFloat / RealGraphicHeightFloat)
 	Graphics3DExt(opt\RealGraphicWidth, opt\RealGraphicHeight, 0, 4)
 Else
 	opt\AspectRatio = 1.0
 	opt\RealGraphicWidth = opt\GraphicWidth
 	opt\RealGraphicHeight = opt\GraphicHeight
+	GraphicWidthFloat = Float(opt\GraphicWidth)
+	GraphicHeightFloat = Float(opt\GraphicHeight)
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
@@ -2837,7 +2844,7 @@ Function UpdateMouseLook%()
 	me\CameraShake = Max(me\CameraShake - FPSFactorEx, 0.0)
 	me\BigCameraShake = Max(me\BigCameraShake - FPSFactorEx, 0.0)
 	
-	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (Float(opt\RealGraphicWidth) / Float(opt\RealGraphicHeight)))) / 2.0)))
+	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (RealGraphicWidthFloat / RealGraphicHeightFloat))) / 2.0)))
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
 	
 	If (Not me\Terminated) And me\FallTimer >= 0.0
