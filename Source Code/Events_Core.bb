@@ -3377,6 +3377,7 @@ Function UpdateEvents%()
 						UpdateForest(fr)
 						
 						If e\EventStr = "" And QuickLoadPercent = -1
+							GiveAchievement(Achv860)
 							QuickLoadPercent = 0
 							QuickLoad_CurrEvent = e
 							e\EventStr = "Load0"
