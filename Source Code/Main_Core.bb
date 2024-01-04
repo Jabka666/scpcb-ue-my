@@ -4851,11 +4851,11 @@ Function UpdateGUI%()
 						
 						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Crystallization", "", False)) Then I_409\Timer = I_409\Timer + 0.001
 						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Mutation", "", False)) Then
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Mutation", "", False))
 							If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
 						EndIf
 						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Revitalize", "", False)) Then
+						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Revitalize", "", False))
 							For i = 0 To 6
 								I_1025\State[i] = 0.0
 							Next

@@ -268,6 +268,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 					Texture = CheckForTexture(t1, TexAlpha)
 					If Texture <> 0
 						BrushTexture(b, Texture, 0, 0)
+						DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
 					Else
 						; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
 						BrushTexture(b, MissingTexture, 0, 0)
@@ -277,6 +278,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 					If Texture <> 0
 						TextureCoords(Texture, 1)
 						BrushTexture(b, Texture, 0, 0)
+						DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
 					Else
 						BrushTexture(b, MissingTexture, 0, 0)
 					EndIf
@@ -287,6 +289,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 						If Texture <> 0
 							TextureCoords(Texture, 0)
 							BrushTexture(b, Texture, 0, 1)
+							DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
 						Else
 							BrushTexture(b, MissingTexture, 0, 1)
 						EndIf
@@ -324,6 +327,7 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 				Texture = CheckForTexture(t1, TexAlpha)
 				If Texture <> 0
 					BrushTexture(b, Texture, 0, 0)
+					DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
 				Else
 					; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
 					BrushTexture(b, MissingTexture, 0, 0)
