@@ -2862,8 +2862,8 @@ Function UpdateMouseLook%()
 		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
-		Local Temp# = (opt\MouseSensitivity + 0.6)
-		Local Temp2# = (6.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing
+		Local Temp# = (opt\MouseSensitivity + 0.5)
+		Local Temp2# = (5.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing
 		
 		If opt\InvertMouseX
 			mo\Mouse_X_Speed_1 = CurveValue(-MouseXSpeed() * Temp, mo\Mouse_X_Speed_1, Temp2)
