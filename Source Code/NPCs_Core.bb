@@ -14,7 +14,7 @@ Type NPCs
 	Field DropSpeed#, Gravity%, FallingPickDistance#
 	Field State#, State2#, State3#, PrevState%
 	Field Frame#, Angle#, AnimTimer#
-	Field Sound%, SoundCHN%, SoundTimer#
+	Field Sound%, SoundCHN%
 	Field Sound2%, SoundCHN2%
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field Speed#, CurrSpeed#
@@ -6270,7 +6270,9 @@ Function UpdateMTFUnit%(n.NPCs)
 			If Rand(100) = 1
 				If n <> n_I\MTFLeader
 					If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
-						If EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
+						If EntityDistanceSquared(n\Collider, me\Collider) < HideDistance
+							If (Not EntityInView(n\Collider, Camera)) And (Not EntityVisible(n\Collider, me\Collider)) And EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
+						EndIf
 					EndIf
 				EndIf
 			EndIf
@@ -6605,7 +6607,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
 				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - Rnd(5.0)
-				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(200.0, 300.0), (0.61 / 1.4) * DifficultyDMGMult)
+				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(200.0, 300.0), 0.43 * DifficultyDMGMult)
 				If wi\BallisticVest > 0
 					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
 				Else
@@ -6614,13 +6616,13 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 				;[End Block]
 			Case 11 ; ~ Left Leg
 				;[Block]
-				me\Stamina = me\Stamina - Rnd(20.0)
+				me\Stamina = me\Stamina - Rnd(10.0)
 				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
-				me\Stamina = me\Stamina - Rnd(20.0)
+				me\Stamina = me\Stamina - Rnd(10.0)
 				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]
@@ -6679,7 +6681,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 				For i = 0 To Rand(2, 3)
 					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PickedX(), PickedY(), PickedZ(), 0.006, 0.003, 80.0)
 					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0)
+					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0.0)
 				Next
 				
 				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
