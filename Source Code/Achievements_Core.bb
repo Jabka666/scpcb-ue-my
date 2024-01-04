@@ -61,10 +61,11 @@ Function RenderAchvIMG%(x%, y%, AchvNo%)
 	Local Row%, IMG%
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local SeparationConst2# = 76.0 * Scale
+	Local IMGSize% = 64 * Scale
 	
 	Row = (AchvNo Mod 4)
 	Color(0, 0, 0)
-	Rect((x + ((Row) * SeparationConst2)), y, 64 * Scale, 64 * Scale, True)
+	Rect((x + ((Row) * SeparationConst2)), y, IMGSize, IMGSize, True)
 	If achv\Achievement[AchvNo]
 		IMG = achv\AchvIMG[AchvNo]
 	Else
@@ -73,7 +74,7 @@ Function RenderAchvIMG%(x%, y%, AchvNo%)
 	DrawBlock(IMG, (x + (Row * SeparationConst2)), y)
 	Color(50, 50, 50)
 	
-	Rect((x + (Row * SeparationConst2)), y, 64 * Scale, 64 * Scale, False)
+	Rect((x + (Row * SeparationConst2)), y, IMGSize, IMGSize, False)
 End Function
 
 Global CurrAchvMSGID% = 0
@@ -137,6 +138,7 @@ Function RenderAchievementMsg%()
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width% = 264.0 * Scale
 	Local Height% = 84.0 * Scale
+	Local IMGSize% = 64 * Scale
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
@@ -150,10 +152,10 @@ Function RenderAchievementMsg%()
 			Next
 			RenderFrame(x, y, Width, Height)
 			Color(0, 0, 0)
-			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale)
-			DrawBlock(achv\AchvIMG[amsg\AchvID], x + (10 * Scale), y + 10 * Scale)
+			Rect(x + (10.0 * Scale), y + (10.0 * Scale), IMGSize, IMGSize)
+			DrawBlock(achv\AchvIMG[amsg\AchvID], x + (10 * Scale), y + (10 * Scale))
 			Color(50, 50, 50)
-			Rect(x + (10.0 * Scale), y + (10.0 * Scale), 64.0 * Scale, 64.0 * Scale, False)
+			Rect(x + (10.0 * Scale), y + (10.0 * Scale), IMGSize, IMGSize, False)
 			Color(255, 255, 255)
 			SetFontEx(fo\FontID[Font_Default])
 			RowText(Format(GetLocalString("msg", "achv.unlocked"), amsg\Txt), x + (84.0 * Scale), y + (10.0 * Scale), Width - (94.0 * Scale), y - (20.0 * Scale))

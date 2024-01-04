@@ -3134,7 +3134,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Cup", "cup", r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
-			it\Name = FindSCP294Drink("Coffee Drink")
+			it\Name = FindSCP294Drink("Coffee")
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3412,8 +3412,8 @@ Function FillRoom%(r.Rooms)
 			
 			If Rand(4) = 1
 				it.Items = CreateItem("Cup", "cup", r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
-				it\Name = FindSCP294Drink("Coffee Drink")
-				it\DisplayName = GetLocalString("items", "cupcoffee")
+				it\Name = FindSCP294Drink("Coffee")
+				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
 				EntityParent(it\Collider, r\OBJ)
 				
 				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
