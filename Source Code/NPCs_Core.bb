@@ -1273,6 +1273,7 @@ Function UpdateNPCs%()
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
 								If e\EventState >= 70.0 * 40.0 Then CanSave = 0
+								Exit
 							EndIf
 						Next
 						
