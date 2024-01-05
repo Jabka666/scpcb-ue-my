@@ -3322,10 +3322,14 @@ Function UseDoor%(PlaySFX% = True)
 End Function
 
 Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
-	d\Open = (Not d\Open)
 	d\PlayCautionSFX = PlayCautionSFX
 	
-	If d\LinkedDoor <> Null Then d\LinkedDoor\Open = (Not d\LinkedDoor\Open)
+	d\Open = (Not d\Open)
+	If d\LinkedDoor <> Null
+		d\LinkedDoor\Open = (Not d\LinkedDoor\Open)
+		d\PlayCautionSFX = True
+		d\LinkedDoor\PlayCautionSFX = True
+	EndIf
 	
 	If d\Open
 		If d\LinkedDoor <> Null Then d\LinkedDoor\TimerState = d\LinkedDoor\Timer
