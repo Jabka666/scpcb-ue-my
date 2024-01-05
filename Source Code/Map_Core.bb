@@ -2545,25 +2545,23 @@ Function UpdateDoors%()
 						Case DEFAULT_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
-							SinValue = Sin(d\OpenState)
-							FPSFactorEx = fps\Factor[0] / 80.0
-							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
+							FPSFactorEx = Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 80.0
+							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
-							SinValue = Sin(d\OpenState)
-							FPSFactorEx = fps\Factor[0] / 162.0
-							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen * 2 + 1) * FPSFactorEx, 0.0, 0.0)
+							FPSFactorEx = Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 162.0
+							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 85.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen * 2 + 1) * fps\Factor[0] / 120.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case BIG_DOOR
 							;[Block]
@@ -2585,7 +2583,7 @@ Function UpdateDoors%()
 							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
 							SinValue = Sin(d\OpenState)
 							FPSFactorEx = fps\Factor[0] / 80.0
-							MoveEntity(d\OBJ, SinValue * ((d\FastOpen * 2) + 1) * FPSFactorEx, 0.0, 0.0)
+							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-FPSFactorEx), 0.0, 0.0)
 							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
@@ -2623,18 +2621,16 @@ Function UpdateDoors%()
 						Case DEFAULT_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
-							SinValue = Sin(d\OpenState)
-							FPSFactorEx = (-fps\Factor[0]) / 80.0
-							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
+							FPSFactorEx = Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0
+							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
-							SinValue = Sin(d\OpenState)
-							FPSFactorEx = (-fps\Factor[0]) / 162.0
-							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
+							FPSFactorEx = Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0
+							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
