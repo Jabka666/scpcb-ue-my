@@ -7,6 +7,8 @@ Const NPCType966% = 12, NPCType1499_1% = 13
 Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 17, NPCTypeMTF% = 18
 ;[End Block]
 
+Const MaxPathLocations% = 12
+
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
 	Field NPCType%, ID%
@@ -25,7 +27,7 @@ Type NPCs
 	Field PrevX#, PrevY#, PrevZ#
 	Field Target.NPCs, TargetID%
 	Field EnemyX#, EnemyY#, EnemyZ#
-	Field Path.WayPoints[21], PathStatus%, PathTimer#, PathLocation%
+	Field Path.WayPoints[MaxPathLocations], PathStatus%, PathTimer#, PathLocation%
 	Field HideFromNVG%
 	Field NVGX#, NVGY#, NVGZ#, NVGName$
 	Field GravityMult#
@@ -69,14 +71,16 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType173
 			;[Block]
 			n\NVGName = "SCP-173"
-			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.23, 0.32)
-			EntityType(n\Collider, HIT_PLAYER)
+			n\Speed = IniGetFloat(NPCsFile, "SCP-173", "Speed") / 100.0
 			n\Gravity = True
+			
+			n\Collider = CreatePivot()
+			n\CollRadius = 0.32
+			EntityRadius(n\Collider, n\CollRadius - 0.09, n\CollRadius)
+			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_173_MODEL])
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_173_HEAD_MODEL])
-			
 			; ~ On Halloween set Jack-o'-lantern texture
 			If (Left(CurrentDate(), 7) = "31 Oct ")
 				n_I\IsHalloween = True
@@ -94,34 +98,28 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EntityTexture(n\OBJ2, TexFestive)
 				DeleteSingleTextureEntryFromCache(TexFestive)
 			EndIf
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-173", "Scale") / MeshDepth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
 			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-173", "Speed") / 100.0
-			
 			n\OBJ3 = CopyEntity(n_I\NPCModelID[NPC_173_BOX_MODEL])
 			ScaleEntity(n\OBJ3, RoomScale, RoomScale, RoomScale)
 			HideEntity(n\OBJ3)
-			
-			n\CollRadius = 0.32
 			;[End Block]
 		Case NPCType106
 			;[Block]
 			n\NVGName = "SCP-106"
-			n\Collider = CreatePivot()
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
-			EntityRadius(n\Collider, 0.2)
+			n\Speed = IniGetFloat(NPCsFile, "SCP-106", "Speed") / 100.0
+			
+			n\Collider = CreatePivot()
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_106_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-106", "Scale") / 2.2
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-106", "Speed") / 100.0
 			
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.03, 0.03)
@@ -136,80 +134,70 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeGuard
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\Speed = IniGetFloat(NPCsFile, "Guard", "Speed") / 100.0
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_GUARD_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "Guard", "Scale") / 2.5
-			
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-			
-			n\Speed = IniGetFloat(NPCsFile, "Guard", "Speed") / 100.0
 			;[End Block]
 		Case NPCTypeMTF
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\Speed = IniGetFloat(NPCsFile, "MTF", "Speed") / 100.0
+			n\HP = 100
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_MTF_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "MTF", "Scale") / 2.5
-			
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0) 
-			
-			n\Speed = IniGetFloat(NPCsFile, "MTF", "Speed") / 100.0
 			
 			If MTFSFX[0] = 0 Then MTFSFX[0] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
 			If MTFSFX[1] = 0 Then MTFSFX[1] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
-			
-			n\HP = 100
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\Speed = IniGetFloat(NPCsFile, "Class D", "Speed") / 100.0
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.32)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-			
-			n\Speed = IniGetFloat(NPCsFile, "Class D", "Speed") / 100.0
-			
-			n\CollRadius = 0.32
 			;[End Block]
 		Case NPCType372
 			;[Block]
 			n\NVGName = "SCP-372"
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_372_MODEL])
-			HideEntity(n\OBJ)
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-372", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			HideEntity(n\OBJ)
 			;[End Block]
 		Case NPCType513_1
 			;[Block]
 			n\NVGName = "SCP-513-1"
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_513_1_MODEL])
 			HideEntity(n\OBJ)
-			
 			n\OBJ2 = CopyEntity(n\OBJ)
 			EntityAlpha(n\OBJ2, 0.6)
 			HideEntity(n\OBJ2)
@@ -221,17 +209,16 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType096
 			;[Block]
 			n\NVGName = "SCP-096"
+			n\Speed = IniGetFloat(NPCsFile, "SCP-096", "Speed") / 100.0
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.26)
+			n\CollRadius = 0.23
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_096_MODEL])
-			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-096", "Speed") / 100.0
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-096", "Scale") / 3.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
 			MeshCullBox(n\OBJ, (-MeshWidth(n\OBJ)) * 2.0, (-MeshHeight(n\OBJ)) * 2.0, (-MeshDepth(n\OBJ)) * 2.0, MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 4.0, MeshDepth(n\OBJ) * 4.0)
 			
 			n\OBJ2 = CreateSprite(FindChild(n\OBJ, "Reyelid"))
@@ -239,56 +226,53 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityOrder(n\OBJ2, -5)
 			EntityTexture(n\OBJ2, t\OverlayTextureID[2])
 			HideEntity(n\OBJ2)
-			
-			n\CollRadius = 0.26
 			;[End Block]
 		Case NPCType049
 			;[Block]
 			n\NVGName = "SCP-049"
+			n\Speed = IniGetFloat(NPCsFile, "SCP-049", "Speed") / 100.0
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_MODEL])
-			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-049", "Speed") / 100.0
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-049", "Scale")
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
 			n\Sound = LoadSound_Strict("SFX\Horror\Horror12.ogg")
-			
 			If HorrorSFX[13] = 0 Then HorrorSFX[13] = LoadSound_Strict("SFX\Horror\Horror13.ogg")
 			;[End Block]
 		Case NPCType049_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\Speed = IniGetFloat(NPCsFile, "SCP-049-2", "Speed") / 100.0
+			n\HP = 100
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_2_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-049-2", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-049-2", "Speed") / 100.0
-			
 			n\Sound = LoadSound_Strict("SFX\SCP\049_2\Breath.ogg")
-			
-			n\HP = 100
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
 			n\NVGName = GetLocalString("npc", "apache")
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			n\CollRadius = 3.0
+			EntityRadius(n\Collider, n\CollRadius)
+			EntityType(n\Collider, HIT_APACHE)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_APACHE_MODEL])
+			ScaleEntity(n\OBJ, 0.7, 0.7, 0.7)
 			
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_1_MODEL])
 			EntityParent(n\OBJ2, n\OBJ)
@@ -303,9 +287,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ3 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_2_MODEL])
 			EntityParent(n\OBJ3, n\OBJ)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
-			
-			EntityType(n\Collider, HIT_APACHE)
-			EntityRadius(n\Collider, 3.0)
 			
 			For i = -1 To 1 Step 2
 				Local Light1% = CreateLight(2, n\OBJ)
@@ -322,33 +303,35 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EntityBlend(LightSprite, 3)
 				EntityFX(LightSprite, 1 + 8)
 			Next
-			
-			Temp = 0.7
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
 		Case NPCType035_Tentacle
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
+			n\HP = 500
 			
 			n\Collider = CreatePivot()
+			EntityRadius(n\Collider, n\CollRadius)
+			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-035's Tentacle", "Scale") / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			SetAnimTime(n\OBJ, 283.0)
-			
-			n\HP = 500
 			;[End Block]
 		Case NPCType860_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
+			n\Speed = IniGetFloat(NPCsFile, "SCP-860-2", "Speed") / 100.0
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.25)
+			n\CollRadius = 0.25
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
-			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_860_2_MODEL])
 			
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_860_2_MODEL])
+			Temp = IniGetFloat(NPCsFile, "SCP-860-2", "Scale") / 20.0
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			MeshCullBox(n\OBJ, (-MeshWidth(n\OBJ)) * 2.0, (-MeshHeight(n\OBJ)) * 2.0, (-MeshDepth(n\OBJ)) * 2.0, MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 4.0, MeshDepth(n\OBJ) * 4.0)
 			EntityFX(n\OBJ, 1)
 			
 			n\OBJ2 = CreateSprite()
@@ -360,15 +343,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityBlend(n\OBJ2, 3)
 			SpriteViewMode(n\OBJ2, 2)
 			HideEntity(n\OBJ2)
-			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-860-2", "Speed") / 100.0
-			
-			Temp = IniGetFloat(NPCsFile, "SCP-860-2", "Scale") / 20.0
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
-			MeshCullBox(n\OBJ, (-MeshWidth(n\OBJ)) * 2.0, (-MeshHeight(n\OBJ)) * 2.0, (-MeshDepth(n\OBJ)) * 2.0, MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 4.0, MeshDepth(n\OBJ) * 4.0)
-			
-			n\CollRadius = 0.25
 			;[End Block]
 		Case NPCType939
 			;[Block]
@@ -379,32 +353,29 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-939-" + i
+			n\Speed = IniGetFloat(NPCsFile, "SCP-939", "Speed") / 100.0
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.3)
+			n\CollRadius = 0.32
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_939_MODEL])
 			Temp = IniGetFloat(NPCsFile, "SCP-939", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-939", "Speed") / 100.0
-			
-			n\CollRadius = 0.3
 			;[End Block]
 		Case NPCType066
 			;[Block]
 			n\NVGName = "SCP-066"
+			n\Speed = IniGetFloat(NPCsFile, "SCP-066", "Speed") / 100.0
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_066_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-066", "Scale") / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-066", "Speed") / 100.0
 			;[End Block]
 		Case NPCType966
 			;[Block]
@@ -415,77 +386,63 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-966-" + i
+			n\Speed = (IniGetFloat(NPCsFile, "SCP-966", "Speed") / 100.0)
 			
 			n\Collider = CreatePivot()
-			EntityRadius n\Collider,0.2
-			
-			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_966_MODEL])
-			
-			Temp = IniGetFloat(NPCsFile, "SCP-966", "Scale") / 40.0
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
-			SetAnimTime(n\OBJ, 15.0)
-			
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			n\Speed = (IniGetFloat(NPCsFile, "SCP-966", "Speed") / 100.0)
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_966_MODEL])
+			Temp = IniGetFloat(NPCsFile, "SCP-966", "Scale") / 40.0
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			SetNPCFrame(n, 15.0)
 			;[End Block]
 		Case NPCType1499_1
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
+			n\Speed = IniGetFloat(NPCsFile, "SCP-1499-1", "Speed") / 100.0 * Rnd(0.9, 1.1)
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1499_1_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
-			
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			EntityFX(n\OBJ, 1)
 			EntityAutoFade(n\OBJ, HideDistance * 2.5, HideDistance * 2.95)
-			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-1499-1", "Speed") / 100.0 * Rnd(0.9, 1.1)
 			;[End Block]
 		Case NPCType008_1
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\Speed = IniGetFloat(NPCsFile, "SCP-008-1", "Speed") / 100.0
+			n\HP = 120
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.2)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_008_1_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "SCP-008-1", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-			
 			SetNPCFrame(n, 11.0)
 			
-			n\Speed = IniGetFloat(NPCsFile, "SCP-008-1", "Speed") / 100.0
-			
 			n\Sound = LoadSound_Strict("SFX\SCP\008_1\Breath.ogg")
-			
-			n\HP = 120
 			;[End Block]
 		Case NPCTypeClerk
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\Speed = IniGetFloat(NPCsFile, "Clerk", "Speed") / 100.0
+			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, 0.32)
+			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLERK_MODEL])
-			
 			Temp = IniGetFloat(NPCsFile, "Clerk", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			
-			n\Speed = IniGetFloat(NPCsFile, "Clerk", "Speed") / 100.0
-			
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
-			
-			n\CollRadius = 0.32
 			;[End Block]
 	End Select
 	
@@ -1014,7 +971,7 @@ Function UpdateNPCs%()
 											
 											If n\PathStatus = PATH_STATUS_FOUND
 												While n\Path[n\PathLocation] = Null
-													If n\PathLocation > 19 
+													If n\PathLocation > MaxPathLocations - 1
 														n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 														Exit
 													Else
@@ -1371,50 +1328,52 @@ Function UpdateNPCs%()
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							Else
-								If n\PathStatus = PATH_STATUS_FOUND And (Not chs\NoTarget)
-									If n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19
-											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
-										Else
-											n\PathLocation = n\PathLocation + 1
-										EndIf
+								If n\PathTimer <= 0.0
+									If n\Target <> Null
+										n\PathStatus = FindPath(n, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.2, EntityZ(n\Target\Collider))
 									Else
-										PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
-										
-										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 5.0), 0.0)
-										
-										If n\Frame > 847.0 Then n\CurrSpeed = CurveValue(n\Speed * 1.5, n\CurrSpeed, 15.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-										
-										If n\Frame < 906.0
-											AnimateNPC(n, 737.0, 906.0, n\Speed * 8.0, False)
-										Else
-											AnimateNPC(n, 907.0, 935.0, n\CurrSpeed * 8.0)
-										EndIf
-										
-										Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-										If Dist2 < 0.64
-											If n\Path[n\PathLocation]\door <> Null
-												If (Not n\Path[n\PathLocation]\door\Open)
-													n\Path[n\PathLocation]\door\Open = True
-													n\Path[n\PathLocation]\door\FastOpen = 1
-													PlaySound2(OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\OBJ)
-												EndIf
-											EndIf
-											If Dist2 < 0.49 Then n\PathLocation = n\PathLocation + 1
-										EndIf
+										n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 									EndIf
+									n\PathTimer = 70.0 * 5.0
 								Else
-									AnimateNPC(n, 1471.0, 1556.0, 0.1)
-									
-									n\PathTimer = Max(0.0, n\PathTimer - fps\Factor[0])
-									If n\PathTimer <= 0.0
-										If n\Target <> Null
-											n\PathStatus = FindPath(n, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.2, EntityZ(n\Target\Collider))
+									If n\PathStatus = PATH_STATUS_FOUND And (Not chs\NoTarget)
+										If n\Path[n\PathLocation] = Null
+											If n\PathLocation > MaxPathLocations - 1
+												n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+											Else
+												n\PathLocation = n\PathLocation + 1
+											EndIf
 										Else
-											n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
+											PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
+											
+											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 5.0), 0.0)
+											
+											If n\Frame > 847.0 Then n\CurrSpeed = CurveValue(n\Speed * 1.5, n\CurrSpeed, 15.0)
+											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+											
+											If n\Frame < 906.0
+												AnimateNPC(n, 737.0, 906.0, n\Speed * 8.0, False)
+											Else
+												AnimateNPC(n, 907.0, 935.0, n\CurrSpeed * 8.0)
+											EndIf
+											
+											Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+											If Dist2 < 0.64
+												If n\Path[n\PathLocation]\door <> Null
+													If (Not n\Path[n\PathLocation]\door\Open)
+														n\Path[n\PathLocation]\door\Open = True
+														n\Path[n\PathLocation]\door\FastOpen = 1
+														PlaySound2(OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\FrameOBJ)
+													EndIf
+												EndIf
+												If Dist2 < 0.04 Then n\PathLocation = n\PathLocation + 1
+											EndIf
 										EndIf
-										n\PathTimer = 70.0 * 5.0
+										n\PathTimer = Max(0.0, n\PathTimer - fps\Factor[0])
+									Else
+										n\CurrSpeed = 0.0
+										AnimateNPC(n, 1471.0, 1556.0, 0.1)
+										n\PathTimer = Max(0.0, n\PathTimer - fps\Factor[0] * 2.0)
 									EndIf
 								EndIf
 							EndIf
@@ -1511,7 +1470,7 @@ Function UpdateNPCs%()
 						;[End Block]
 				End Select
 				
-				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.03, EntityZ(n\Collider))
+				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 				
 				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0)
 				;[End Block]
@@ -1700,7 +1659,7 @@ Function UpdateNPCs%()
 									If PlayerSeeAble = 1 Then n\State2 = 70.0 * 2.0
 									If n\PathStatus = PATH_STATUS_FOUND ; ~ Path to player found
 										While n\Path[n\PathLocation] = Null
-											If n\PathLocation > 19
+											If n\PathLocation > MaxPathLocations - 1
 												n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 												Exit
 											Else
@@ -1806,7 +1765,7 @@ Function UpdateNPCs%()
 														If n\Path[1]\door <> Null
 															If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open)
 																Repeat
-																	If n\PathLocation > 19
+																	If n\PathLocation > MaxPathLocations - 1
 																		n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 																		Exit
 																	Else
@@ -1912,7 +1871,7 @@ Function UpdateNPCs%()
 								
 								If n\PathStatus = PATH_STATUS_FOUND
 									If n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19
+										If n\PathLocation > MaxPathLocations - 1
 											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 										Else
 											n\PathLocation = n\PathLocation + 1
@@ -2027,14 +1986,14 @@ Function UpdateNPCs%()
 								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
 								If n\PathStatus = PATH_STATUS_FOUND
 									While n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19
+										If n\PathLocation > MaxPathLocations - 1
 											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_FOUND
 											Exit
 										Else
 											n\PathLocation = n\PathLocation + 1
 										EndIf
 									Wend
-									If n\PathLocation < 19
+									If n\PathLocation < MaxPathLocations - 1
 										If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 											If n\Path[n\PathLocation]\door = Null
 												If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -2051,7 +2010,7 @@ Function UpdateNPCs%()
 								
 								If n\PathStatus = PATH_STATUS_FOUND
 									If n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19
+										If n\PathLocation > MaxPathLocations - 1
 											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 										Else
 											n\PathLocation = n\PathLocation + 1
@@ -2297,7 +2256,7 @@ Function UpdateNPCs%()
 							n\State = 0.0
 						ElseIf n\PathStatus = PATH_STATUS_FOUND
 							If n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19
+								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Else
 									n\PathLocation = n\PathLocation + 1
@@ -2427,7 +2386,7 @@ Function UpdateNPCs%()
 							Else
 								If n\PathStatus = PATH_STATUS_FOUND
 									If n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19
+										If n\PathLocation > MaxPathLocations - 1
 											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 										Else
 											n\PathLocation = n\PathLocation + 1
@@ -2525,7 +2484,7 @@ Function UpdateNPCs%()
 							n\CurrSpeed = 0.0
 						ElseIf n\PathStatus = PATH_STATUS_FOUND
 							If n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19
+								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Else
 									n\PathLocation = n\PathLocation + 1
@@ -2687,7 +2646,7 @@ Function UpdateNPCs%()
 							;[End Block]
 					End Select
 				EndIf
-				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
+				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
 				;[End Block]
 			Case NPCType513_1
@@ -4011,14 +3970,14 @@ Function UpdateNPCs%()
 											n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
 											If n\PathStatus = PATH_STATUS_FOUND
 												While n\Path[n\PathLocation] = Null
-													If n\PathLocation > 19
+													If n\PathLocation > MaxPathLocations - 1
 														n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 														Exit
 													Else
 														n\PathLocation = n\PathLocation + 1
 													EndIf
 												Wend
-												If n\PathLocation < 19
+												If n\PathLocation < MaxPathLocations - 1
 													If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 														If n\Path[n\PathLocation]\door = Null
 															If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -4035,7 +3994,7 @@ Function UpdateNPCs%()
 											
 											If n\PathStatus = PATH_STATUS_FOUND
 												If n\Path[n\PathLocation] = Null
-													If n\PathLocation > 19
+													If n\PathLocation > MaxPathLocations - 1
 														n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 													Else
 														n\PathLocation = n\PathLocation + 1
@@ -4603,14 +4562,14 @@ Function UpdateNPCs%()
 								
 								If n\PathStatus = PATH_STATUS_FOUND
 									While n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19
+										If n\PathLocation > MaxPathLocations - 1
 											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 											Exit
 										Else
 											n\PathLocation = n\PathLocation + 1
 										EndIf
 									Wend
-									If n\PathLocation < 19
+									If n\PathLocation < MaxPathLocations - 1
 										If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 											If n\Path[n\PathLocation]\door = Null
 												If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -4627,7 +4586,7 @@ Function UpdateNPCs%()
 								
 								If n\PathStatus = PATH_STATUS_FOUND
 									If n\Path[n\PathLocation] = Null
-										If n\PathLocation > 19
+										If n\PathLocation > MaxPathLocations - 1
 											n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 										Else
 											n\PathLocation = n\PathLocation + 1
@@ -5020,14 +4979,14 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					If n\PathStatus = PATH_STATUS_FOUND
 						While n\Path[n\PathLocation] = Null
-							If n\PathLocation > 19
+							If n\PathLocation > MaxPathLocations - 1
 								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Exit
 							Else
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Wend
-						If n\PathLocation < 19
+						If n\PathLocation < MaxPathLocations - 1
 							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 								If n\Path[n\PathLocation]\door = Null
 									If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -5050,7 +5009,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\PathTimer = n\PathTimer - FPSFactorEx ; ~ Timer goes down fast
 					ElseIf n\PathStatus = PATH_STATUS_FOUND
 						If n\Path[n\PathLocation] = Null
-							If n\PathLocation > 19
+							If n\PathLocation > MaxPathLocations - 1
 								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 							Else
 								n\PathLocation = n\PathLocation + 1
@@ -5407,7 +5366,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\PathTimer = n\PathTimer - FPSFactorEx ; ~ Timer goes down fast
 							ElseIf n\PathStatus = PATH_STATUS_FOUND
 								If n\Path[n\PathLocation] = Null
-									If n\PathLocation > 19
+									If n\PathLocation > MaxPathLocations - 1
 										n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 									Else
 										n\PathLocation = n\PathLocation + 1
@@ -5621,14 +5580,14 @@ Function UpdateMTFUnit%(n.NPCs)
 					n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
 					If n\PathStatus = PATH_STATUS_FOUND
 						While n\Path[n\PathLocation] = Null
-							If n\PathLocation > 19
+							If n\PathLocation > MaxPathLocations - 1
 								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Exit
 							Else
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Wend
-						If n\PathLocation < 19
+						If n\PathLocation < MaxPathLocations - 1
 							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 								If n\Path[n\PathLocation]\door = Null
 									If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -5645,7 +5604,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\PathTimer = n\PathTimer - FPSFactorEx ; ~ Timer goes down fast
 					ElseIf n\PathStatus = PATH_STATUS_FOUND
 						If n\Path[n\PathLocation] = Null
-							If n\PathLocation > 19
+							If n\PathLocation > MaxPathLocations - 1
 								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 							Else
 								n\PathLocation = n\PathLocation + 1
@@ -5818,14 +5777,14 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
 						If n\PathStatus = PATH_STATUS_FOUND
 							While n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19
+								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 									Exit
 								Else
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Wend
-							If n\PathLocation < 19
+							If n\PathLocation < MaxPathLocations - 1
 								If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 									If n\Path[n\PathLocation]\door = Null
 										If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -5843,7 +5802,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					Else
 						If n\PathStatus = PATH_STATUS_FOUND
 							If n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19
+								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Else
 									n\PathLocation = n\PathLocation + 1
@@ -5934,14 +5893,14 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 						If n\PathStatus = PATH_STATUS_FOUND
 							While n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19
+								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 									Exit
 								Else
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Wend
-							If n\PathLocation < 19
+							If n\PathLocation < MaxPathLocations - 1
 								If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 									If n\Path[n\PathLocation]\door = Null
 										If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -5958,7 +5917,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = n\PathTimer - FPSFactorEx ; ~ Timer goes down fast
 						ElseIf n\PathStatus = PATH_STATUS_FOUND
 							If n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19
+								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Else
 									n\PathLocation = n\PathLocation + 1
@@ -6043,14 +6002,14 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 						If n\PathStatus = PATH_STATUS_FOUND
 							While n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19
+								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 									Exit
 								Else
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Wend
-							If n\PathLocation < 19
+							If n\PathLocation < MaxPathLocations - 1
 								If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 									If n\Path[n\PathLocation]\door = Null
 										If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -6071,7 +6030,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = n\PathTimer - FPSFactorEx ; ~ Timer goes down fast
 						ElseIf n\PathStatus = PATH_STATUS_FOUND
 							If n\Path[n\PathLocation] = Null
-								If n\PathLocation > 19
+								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Else
 									n\PathLocation = n\PathLocation + 1
@@ -6186,14 +6145,14 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathStatus = FindPath(n, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider))
 							If n\PathStatus = PATH_STATUS_FOUND
 								While n\Path[n\PathLocation] = Null
-									If n\PathLocation > 19
+									If n\PathLocation > MaxPathLocations - 1
 										n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 										Exit
 									Else
 										n\PathLocation = n\PathLocation + 1
 									EndIf
 								Wend
-								If n\PathLocation < 19
+								If n\PathLocation < MaxPathLocations - 1
 									If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
 										If n\Path[n\PathLocation]\door = Null
 											If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
@@ -6210,7 +6169,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\PathTimer = n\PathTimer - FPSFactorEx ; ~ Timer goes down fast
 							ElseIf n\PathStatus = PATH_STATUS_FOUND
 								If n\Path[n\PathLocation] = Null
-									If n\PathLocation > 19
+									If n\PathLocation > MaxPathLocations - 1
 										n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 									Else
 										n\PathLocation = n\PathLocation + 1
@@ -6355,7 +6314,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	
 	n\PathStatus = PATH_STATUS_NO_SEARCH
 	n\PathLocation = 0
-	For i = 0 To 20
+	For i = 0 To MaxPathLocations - 1
 		n\Path[i] = Null
 	Next
 	
@@ -6479,12 +6438,12 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		Repeat
 			Length = Length + 1
 			CurrPoint = CurrPoint\parent
-			If Length > 20 Then TwentiethPoint = TwentiethPoint\parent
+			If Length > MaxPathLocations - 1 Then TwentiethPoint = TwentiethPoint\parent
 		Until CurrPoint = Null
 		
 		CurrPoint.WayPoints = EndPoint
 		While TwentiethPoint <> Null
-			Length = Min(Length - 1, 19.0)
+			Length = Min(Length - 1, MaxPathLocations - 1)
 			TwentiethPoint = TwentiethPoint\parent
 			n\Path[Length] = TwentiethPoint
 		Wend
@@ -7008,7 +6967,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			If Dist < 0.04 Then n\PathLocation = n\PathLocation + 1
 		EndIf
 	Else
-		If Dist < 0.36
+		If Dist < 0.49
 			Local Temp% = True
 			
 			If n\Path[n\PathLocation]\door <> Null
