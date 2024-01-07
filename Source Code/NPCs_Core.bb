@@ -1654,7 +1654,7 @@ Function UpdateNPCs%()
 											EndIf
 										EndIf
 									EndIf
-									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0 - (SelectedDifficulty\OtherFactors * 2.0))
 								Else ; ~ Finding a path to the player
 									If PlayerSeeAble = 1 Then n\State2 = 70.0 * 2.0
 									If n\PathStatus = PATH_STATUS_FOUND ; ~ Path to player found
@@ -1673,7 +1673,7 @@ Function UpdateNPCs%()
 											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 											
 											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
-											n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+											n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0 - (SelectedDifficulty\OtherFactors * 2.0))
 											
 											; ~ Playing a sound if he hears the player
 											If n\PrevState = 0 And (Not ChannelPlaying(n\SoundCHN2))
@@ -1881,7 +1881,7 @@ Function UpdateNPCs%()
 										PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-										n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
+										n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 										
 										UseDoorNPC(n)
 										
@@ -3517,7 +3517,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							PointEntity(n\OBJ, PlayerRoom\Objects[n\State2])
-							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
+							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0 - (SelectedDifficulty\OtherFactors * 2.0)), 0.0)
 							
 							If Dist < 0.16
 								n\State2 = n\State2 + 1.0
@@ -3573,7 +3573,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								Angle = VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider))
-								RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 15.0), 0.0)
+								RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 15.0 - (SelectedDifficulty\OtherFactors * 1.5)), 0.0)
 								
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
