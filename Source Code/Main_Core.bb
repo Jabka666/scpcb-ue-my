@@ -69,8 +69,8 @@ Global Input_ResetTime# = 0.0
 Global MousePosX#, MousePosY#
 
 Function UpdateMouseInput%()
-	MousePosX = MouseX()
-	MousePosY = MouseY()
+	MousePosX = ScaledMouseX()
+	MousePosY = ScaledMouseY()
 	
 	If Input_ResetTime > 0.0
 		Input_ResetTime = Max(Input_ResetTime - fps\Factor[1], 0.0)
@@ -844,6 +844,7 @@ Function UpdateConsole%()
 		Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#, Temp%, i%
 		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
 		Local x%, y%, Width%, Height%
+		Local CoordEx% = 15 * MenuScale
 		
 		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
@@ -856,7 +857,7 @@ Function UpdateConsole%()
 		Local ScrollBarHeight% = 0
 		
 		For cm.ConsoleMsg = Each ConsoleMsg
-			ConsoleHeight = ConsoleHeight + (15 * MenuScale)
+			ConsoleHeight = ConsoleHeight + CoordEx
 		Next
 		ScrollBarHeight = (Float(Height) / Float(ConsoleHeight)) * Height
 		If ScrollBarHeight > Height Then ScrollBarHeight = Height
@@ -868,17 +869,17 @@ Function UpdateConsole%()
 		If (Not mo\MouseDown1)
 			ConsoleScrollDragging = False
 		ElseIf ConsoleScrollDragging
-			ConsoleScroll = ConsoleScroll + ((ScaledMouseY() - ConsoleMouseMem) * Height / ScrollBarHeight)
-			ConsoleMouseMem = ScaledMouseY()
+			ConsoleScroll = ConsoleScroll + ((MousePosY - ConsoleMouseMem) * Height / ScrollBarHeight)
+			ConsoleMouseMem = MousePosY
 		EndIf
 		
 		If (Not ConsoleScrollDragging)
 			If mo\MouseHit1
 				If InBox
 					ConsoleScrollDragging = True
-					ConsoleMouseMem = ScaledMouseY()
+					ConsoleMouseMem = MousePosY
 				ElseIf InBar
-					ConsoleScroll = ConsoleScroll + ((ScaledMouseY() - (y + Height)) * ConsoleHeight / Height + (Height / 2))
+					ConsoleScroll = ConsoleScroll + ((MousePosY - (y + Height)) * ConsoleHeight / Height + (Height / 2))
 					ConsoleScroll = ConsoleScroll / 2
 				EndIf
 			EndIf
@@ -886,9 +887,9 @@ Function UpdateConsole%()
 		
 		MouseScroll = MouseZSpeed()
 		If MouseScroll = 1
-			ConsoleScroll = ConsoleScroll - (15 * MenuScale)
+			ConsoleScroll = ConsoleScroll - CoordEx
 		ElseIf MouseScroll= -1
-			ConsoleScroll = ConsoleScroll + (15 * MenuScale)
+			ConsoleScroll = ConsoleScroll + CoordEx
 		EndIf
 		
 		Local ReissuePos%
@@ -900,18 +901,18 @@ Function UpdateConsole%()
 				
 				While ConsoleReissue <> Null
 					If ConsoleReissue\IsCommand Then Exit
-					ReissuePos = ReissuePos - (15 * MenuScale)
+					ReissuePos = ReissuePos - CoordEx
 					ConsoleReissue = After ConsoleReissue
 				Wend
 			Else
 				cm.ConsoleMsg = First ConsoleMsg
 				While cm <> Null
 					If cm = ConsoleReissue Then Exit
-					ReissuePos = ReissuePos - (15 * MenuScale)
+					ReissuePos = ReissuePos - CoordEx
 					cm = After cm
 				Wend
 				ConsoleReissue = After ConsoleReissue
-				ReissuePos = ReissuePos - (15 * MenuScale)
+				ReissuePos = ReissuePos - CoordEx
 				
 				While True
 					If ConsoleReissue = Null
@@ -920,7 +921,7 @@ Function UpdateConsole%()
 					EndIf
 					
 					If ConsoleReissue\IsCommand Then Exit
-					ReissuePos = ReissuePos - (15 * MenuScale)
+					ReissuePos = ReissuePos - CoordEx
 					ConsoleReissue = After ConsoleReissue
 				Wend
 			EndIf
@@ -932,33 +933,33 @@ Function UpdateConsole%()
 		EndIf
 		
 		If KeyHit(208)
-			ReissuePos = (-ConsoleHeight) + (15 * MenuScale)
+			ReissuePos = (-ConsoleHeight) + CoordEx
 			If ConsoleReissue = Null
 				ConsoleReissue = Last ConsoleMsg
 				
 				While ConsoleReissue <> Null
 					If ConsoleReissue\IsCommand Then Exit
-					ReissuePos = ReissuePos + (15 * MenuScale)
+					ReissuePos = ReissuePos + CoordEx
 					ConsoleReissue = Before ConsoleReissue
 				Wend
 			Else
 				cm.ConsoleMsg = Last ConsoleMsg
 				While cm <> Null
 					If cm = ConsoleReissue Then Exit
-					ReissuePos = ReissuePos + (15 * MenuScale)
+					ReissuePos = ReissuePos + CoordEx
 					cm = Before cm
 				Wend
 				ConsoleReissue = Before ConsoleReissue
-				ReissuePos = ReissuePos + (15 * MenuScale)
+				ReissuePos = ReissuePos + CoordEx
 				
 				While True
 					If ConsoleReissue = Null
 						ConsoleReissue = Last ConsoleMsg
-						ReissuePos = (-ConsoleHeight) + (15 * MenuScale)
+						ReissuePos = (-ConsoleHeight) + CoordEx
 					EndIf
 					
 					If ConsoleReissue\IsCommand Then Exit
-					ReissuePos = ReissuePos + (15 * MenuScale)
+					ReissuePos = ReissuePos + CoordEx
 					ConsoleReissue = Before ConsoleReissue
 				Wend
 			EndIf
@@ -2134,6 +2135,7 @@ Function RenderConsole%()
 		Local InBar%, InBox%
 		Local x%, y%, Width%, Height%
 		Local TempStr$
+		Local CoordEx% = 26 * MenuScale
 		
 		SetFontEx(fo\FontID[Font_Console])
 		
@@ -2155,9 +2157,9 @@ Function RenderConsole%()
 		If ConsoleHeight < Height Then ConsoleHeight = Height
 		
 		Color(50, 50, 50)
-		InBar = MouseOn(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
+		InBar = MouseOn(x + Width - CoordEx, y, CoordEx, Height)
 		If InBar Then Color(70, 70, 70)
-		Rect(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
+		Rect(x + Width - CoordEx, y, CoordEx, Height)
 		
 		Color(120, 120, 120)
 		InBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
@@ -2294,8 +2296,10 @@ Function RenderMessages%()
 	EndIf
 	Color(255, 255, 255)
 	If opt\ShowFPS
+		Local CoordEx% = 20 * MenuScale
+		
 		SetFontEx(fo\FontID[Font_Console])
-		TextEx(20 * MenuScale, 20 * MenuScale, "FPS: " + fps\FPS)
+		TextEx(CoordEx, CoordEx, "FPS: " + fps\FPS)
 		SetFontEx(fo\FontID[Font_Default])
 	EndIf
 End Function
@@ -2338,7 +2342,7 @@ Function RenderHintMessages%()
 	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
-	Local Width = StringWidth(msg\HintTxt) + (20 * Scale)
+	Local Width% = StringWidth(msg\HintTxt) + (20 * Scale)
 	Local Height% = 30 * Scale
 	Local x% = mo\Viewport_Center_X - (Width / 2)
 	Local y% = (-Height) + msg\HintY
@@ -2931,7 +2935,7 @@ Function UpdateMouseLook%()
 	
 	; ~ Limit the mouse's movement. Using this method produces smoother mouselook movement than centering the mouse each loop
 	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null))
-		If (ScaledMouseX() > mo\Mouse_Right_Limit) Lor (ScaledMouseX() < mo\Mouse_Left_Limit) Lor (ScaledMouseY() > mo\Mouse_Bottom_Limit) Lor (ScaledMouseY() < mo\Mouse_Top_Limit) Then MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+		If (MousePosX > mo\Mouse_Right_Limit) Lor (MousePosX < mo\Mouse_Left_Limit) Lor (MousePosY > mo\Mouse_Bottom_Limit) Lor (MousePosY < mo\Mouse_Top_Limit) Then MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	EndIf
 	
 	If wi\GasMask > 0 Lor wi\HazmatSuit > 0 Lor I_1499\Using > 0
@@ -5624,6 +5628,13 @@ Function RenderHUD%()
 	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
 	Local i%
 	Local PlayerPosY# = EntityY(me\Collider)
+	Local IconColoredRectSize% = 36 * MenuScale
+	Local IconColoredRectSpaceX% = 53 * MenuScale
+	Local IconColoredRectSpaceY% = 3 * MenuScale
+	Local IconRectSize% = 32 * MenuScale
+	Local IconRectSpace% = 51 * MenuScale
+	Local IconSpace% = 50 * MenuScale
+	Local ySpace% = 40 * MenuScale
 	
 	Width = 200 * MenuScale
 	Height = 20 * MenuScale
@@ -5631,23 +5642,21 @@ Function RenderHUD%()
 	y = opt\GraphicHeight - (15 * MenuScale)
 	
 	Color(255, 255, 255)
-	y = y - (40 * MenuScale)
+	y = y - ySpace
 	If me\Stamina <= 25.0
 		RenderBar(t\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
 	Else
 		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 	EndIf
-	Color(0, 0, 0)
-	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
 	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0
 		Color(200, 0, 0)
-		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3
 		Color(0, 200, 0)
-		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	EndIf
 	Color(255, 255, 255)
-	Rect(x - (51 * MenuScale), y, 32 * MenuScale, 32 * MenuScale, False)
+	Rect(x - IconRectSpace, y, IconRectSize, IconRectSize, False)
 	If me\Crouch
 		WalkIconID = 2
 	ElseIf (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\CurrSpeed > 0.0 And (Not chs\NoClip) And me\Stamina > 0.0
@@ -5655,36 +5664,34 @@ Function RenderHUD%()
 	Else
 		WalkIconID = 0
 	EndIf
-	DrawBlock(t\IconID[WalkIconID], x - (50 * MenuScale), y + 1)
+	DrawBlock(t\IconID[WalkIconID], x - IconSpace, y + 1)
 	
 	Color(255, 255, 255)
-	y = y - (40 * MenuScale)
+	y = y - ySpace
 	If me\BlinkTimer < 150.0
 		RenderBar(t\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
-	Color(0, 0, 0)
-	Rect(x - (50 * MenuScale), y, 30 * MenuScale, 30 * MenuScale)
 	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink >= 0.25 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0)
 		Color(200, 0, 0)
-		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink
 		Color(0, 200, 0)
-		Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	EndIf
 	Color(255, 255, 255)
-	Rect(x - (51 * MenuScale), y, 32 * MenuScale, 32 * MenuScale, False)
+	Rect(x - IconRectSpace, y, IconRectSize, IconRectSize, False)
 	If me\BlinkTimer < 0.0
 		BlinkIconID = 4
 	Else
 		BlinkIconID = 3
 	EndIf
-	DrawBlock(t\IconID[BlinkIconID], x - (50 * MenuScale), y + 1)
+	DrawBlock(t\IconID[BlinkIconID], x - IconSpace, y + 1)
 	
 	If (I_714\Using > 0 And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0)
 		Color(255, 255, 255)
-		y = y - (40 * MenuScale)
+		y = y - ySpace
 		If wi\HazmatSuit > 0
 			If RemoveHazmatTimer < 125.0
 				RenderBar(t\ImageID[1], x, y, Width, Height, RemoveHazmatTimer, 500.0, 100, 0, 0)
@@ -5700,18 +5707,18 @@ Function RenderHUD%()
 		EndIf
 		If wi\HazmatSuit = 4
 			Color(0, 200, 0)
-			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 		ElseIf I_714\Using = 1
 			Color(200, 0, 0)
-			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 		EndIf
 		Color(255, 255, 255)
-		Rect(x - (51 * MenuScale), y, 32 * MenuScale, 32 * MenuScale, False)
-		DrawBlock(t\IconID[7], x - (50 * MenuScale), y + 1)
+		Rect(x - IconRectSpace, y, IconRectSize, IconRectSize, False)
+		DrawBlock(t\IconID[7], x - IconSpace, y + 1)
 	EndIf
 	If I_268\Using > 1
 		Color(255, 255, 255)
-		y = y - (40 * MenuScale)
+		y = y - ySpace
 		If I_268\Timer < 150.0
 			RenderBar(t\ImageID[1], x, y, Width, Height, I_268\Timer, 600.0, 100, 0, 0)
 		Else
@@ -5719,17 +5726,17 @@ Function RenderHUD%()
 		EndIf
 		If I_268\Timer =< 0.0
 			Color(150, 150, 0)
-			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 		ElseIf I_714\Using > 0
 			Color(200, 0, 0)
-			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 		ElseIf I_268\Using = 3
 			Color(0, 200, 0)
-			Rect(x - (53 * MenuScale), y - (3 * MenuScale), 36 * MenuScale, 36 * MenuScale)
+			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 		EndIf
 		Color(255, 255, 255)
-		Rect(x - (51 * MenuScale), y, 32 * MenuScale, 32 * MenuScale, False)
-		DrawBlock(t\IconID[8], x - (50 * MenuScale), y + 1)
+		Rect(x - IconRectSpace, y, IconRectSize, IconRectSize, False)
+		DrawBlock(t\IconID[8], x - IconSpace, y + 1)
 	EndIf
 End Function
 
@@ -5946,6 +5953,8 @@ Function RenderGUI%()
 	If I_294\Using Then Render294()
 	If SelectedDifficulty\Name <> "Apollyon" And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
+			Local CoordEx% = 32 * MenuScale
+			
 			If d_I\ClosestButton <> 0
 				Temp = CreatePivot()
 				PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -5959,7 +5968,7 @@ Function RenderGUI%()
 				
 				FreeEntity(Temp) : Temp = 0
 				
-				DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
+				DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx)
 			EndIf
 			
 			If ClosestItem <> Null
@@ -5970,14 +5979,14 @@ Function RenderGUI%()
 				If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 				If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 				
-				DrawBlock(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - (32 * MenuScale), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - (32 * MenuScale))
+				DrawBlock(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx)
 			EndIf
 			
-			If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - (32 * MenuScale), mo\Viewport_Center_Y - (32 * MenuScale))
+			If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - CoordEx, mo\Viewport_Center_Y - CoordEx)
 			
 			For i = 0 To 3
-				x = mo\Viewport_Center_X - (32 * MenuScale)
-				y = mo\Viewport_Center_Y - (32 * MenuScale)
+				x = mo\Viewport_Center_X - CoordEx
+				y = mo\Viewport_Center_Y - CoordEx
 				If DrawArrowIcon[i]
 					Select i
 						Case 0
@@ -6109,9 +6118,9 @@ Function RenderGUI%()
 		If SelectedItem <> Null
 			If mo\MouseDown1
 				If MouseSlot = 66
-					DrawBlock(SelectedItem\InvImg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
+					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
 				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
-					DrawBlock(SelectedItem\InvImg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
+					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
 				EndIf
 			EndIf
 		EndIf
@@ -6272,9 +6281,9 @@ Function RenderGUI%()
 		If SelectedItem <> Null
 			If mo\MouseDown1
 				If MouseSlot = 66
-					DrawBlock(SelectedItem\InvImg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
+					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
 				ElseIf SelectedItem <> Inventory(MouseSlot)
-					DrawBlock(SelectedItem\InvImg, ScaledMouseX() - InvImgSize, ScaledMouseY() - InvImgSize)
+					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
 				EndIf
 			EndIf
 		EndIf
@@ -7030,19 +7039,19 @@ Function UpdateMenu%()
 						If opt\EnableSubtitles And opt\OverrideSubColor
 							y = y + (35 * MenuScale)
 							
-							UpdateMenuPalette(x - (43 * MenuScale), y + (15 * MenuScale))
+							UpdateMenuPalette(x - (43 * MenuScale), y + (5 * MenuScale))
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorR = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), Font_Default, 14, 3), 255.0)
+							opt\SubColorR = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorR)), Font_Default, 14, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorG = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), Font_Default, 15, 3), 255.0)
+							opt\SubColorG = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorG)), Font_Default, 15, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorB = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), Font_Default, 16, 3), 255.0)
+							opt\SubColorB = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorB)), Font_Default, 16, 3), 255.0)
 						EndIf
 						;[End Block]
 					Case MenuTab_Options_Controls
@@ -7635,7 +7644,7 @@ Function RenderMenu%()
 							If MouseOn(x + (210 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							
 							If opt\OverrideSubColor
-								y = y + (30 * MenuScale)
+								y = y + (60 * MenuScale)
 								
 								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
 								If MouseOn(x + (105 * MenuScale), y, 40 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
@@ -8830,8 +8839,8 @@ Function Update294%()
 	
 	If Temp
 		If mo\MouseHit1
-			xTemp = Floor((ScaledMouseX() - x - (228 * MenuScale)) / (35.5 * MenuScale))
-			yTemp = Floor((ScaledMouseY() - y - (342 * MenuScale)) / (36.5 * MenuScale))
+			xTemp = Floor((MousePosX - x - (228 * MenuScale)) / (35.5 * MenuScale))
+			yTemp = Floor((MousePosY - y - (342 * MenuScale)) / (36.5 * MenuScale))
 			
 			Temp = False
 			

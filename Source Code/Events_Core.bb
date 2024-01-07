@@ -469,12 +469,14 @@ Function UpdateQuickLoading%()
 End Function
 
 Function RenderQuickLoading%()
+	Local CoordEx% = 90 * MenuScale
+	
 	If QuickLoadPercent > -1 And opt\HUDEnabled
 		MidHandle(t\IconID[9])
-		DrawImage(t\IconID[9], opt\GraphicWidth - (90 * MenuScale), opt\GraphicHeight - (150 * MenuScale))
+		DrawImage(t\IconID[9], opt\GraphicWidth - CoordEx, opt\GraphicHeight - (150 * MenuScale))
 		Color(255, 255, 255)
 		SetFontEx(fo\FontID[Font_Default])
-		TextEx(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - (90 * MenuScale), Format(GetLocalString("loading", "loading"), QuickLoadPercent), True)
+		TextEx(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - CoordEx, Format(GetLocalString("loading", "loading"), QuickLoadPercent), True)
 	EndIf
 End Function
 

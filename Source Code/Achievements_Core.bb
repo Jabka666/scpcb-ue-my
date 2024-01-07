@@ -36,45 +36,53 @@ End Function
 
 Function AchievementTooltip%(AchvNo%)
 	Local Scale# = opt\GraphicHeight / 768.0
-
+	Local CoordEx% = 20 * MenuScale
+	
 	SetFontEx(fo\FontID[Font_Digital])
 	
 	Local Width% = StringWidth(achv\AchievementStrings[AchvNo])
-	
-	SetFontEx(fo\FontID[Font_Default])
-	If StringWidth(achv\AchievementDescs[AchvNo]) > Width Then Width = StringWidth(achv\AchievementDescs[AchvNo])
-	Width = Width + (20 * MenuScale)
-	
 	Local Height% = 38 * Scale
 	
-	Color(25, 25, 25)
-	Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, True)
-	Color(150, 150, 150)
-	Rect(ScaledMouseX() + (20 * MenuScale), ScaledMouseY() + (20 * MenuScale), Width, Height, False)
-	SetFontEx(fo\FontID[Font_Digital])
-	TextEx(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (35 * MenuScale), achv\AchievementStrings[AchvNo], True, True)
 	SetFontEx(fo\FontID[Font_Default])
-	TextEx(ScaledMouseX() + (20 * MenuScale) + (Width / 2), ScaledMouseY() + (55 * MenuScale), achv\AchievementDescs[AchvNo], True, True)
+	
+	Local Width2% = StringWidth(achv\AchievementDescs[AchvNo])
+	
+	If Width2 > Width Then Width = Width2
+	Width = Width + CoordEx
+	
+	Local RectPosx% = MousePosX + CoordEx
+	Local RectPosY% = MousePosY + CoordEx
+	Local TextPosX% = RectPosx + (Width / 2)
+	
+	Color(25, 25, 25)
+	Rect(RectPosx, RectPosY, Width, Height, True)
+	Color(150, 150, 150)
+	Rect(RectPosx, RectPosY, Width, Height, False)
+	SetFontEx(fo\FontID[Font_Digital])
+	TextEx(TextPosX, MousePosY + (35 * MenuScale), achv\AchievementStrings[AchvNo], True, True)
+	SetFontEx(fo\FontID[Font_Default])
+	TextEx(TextPosX, MousePosY + (55 * MenuScale), achv\AchievementDescs[AchvNo], True, True)
 End Function
 
 Function RenderAchvIMG%(x%, y%, AchvNo%)
-	Local Row%, IMG%
+	Local IMG%
 	Local Scale# = opt\GraphicHeight / 768.0
+	Local Row% = (AchvNo Mod 4)
 	Local SeparationConst2# = 76.0 * Scale
 	Local IMGSize% = 64 * Scale
+	Local RectPosX% = x + (Row * SeparationConst2)
 	
-	Row = (AchvNo Mod 4)
 	Color(0, 0, 0)
-	Rect((x + ((Row) * SeparationConst2)), y, IMGSize, IMGSize, True)
+	Rect(RectPosX, y, IMGSize, IMGSize, True)
 	If achv\Achievement[AchvNo]
 		IMG = achv\AchvIMG[AchvNo]
 	Else
 		IMG = achv\AchvLocked
 	EndIf
-	DrawBlock(IMG, (x + (Row * SeparationConst2)), y)
+	DrawBlock(IMG, RectPosX, y)
 	Color(50, 50, 50)
 	
-	Rect((x + (Row * SeparationConst2)), y, IMGSize, IMGSize, False)
+	Rect(RectPosX, y, IMGSize, IMGSize, False)
 End Function
 
 Global CurrAchvMSGID% = 0
@@ -139,6 +147,7 @@ Function RenderAchievementMsg%()
 	Local Width% = 264.0 * Scale
 	Local Height% = 84.0 * Scale
 	Local IMGSize% = 64 * Scale
+	Local CoordEx% = 10 * Scale
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
@@ -152,13 +161,13 @@ Function RenderAchievementMsg%()
 			Next
 			RenderFrame(x, y, Width, Height)
 			Color(0, 0, 0)
-			Rect(x + (10.0 * Scale), y + (10.0 * Scale), IMGSize, IMGSize)
-			DrawBlock(achv\AchvIMG[amsg\AchvID], x + (10 * Scale), y + (10 * Scale))
+			Rect(x + CoordEx, y + CoordEx, IMGSize, IMGSize)
+			DrawBlock(achv\AchvIMG[amsg\AchvID], x + CoordEx, y + CoordEx)
 			Color(50, 50, 50)
-			Rect(x + (10.0 * Scale), y + (10.0 * Scale), IMGSize, IMGSize, False)
+			Rect(x + CoordEx, y + CoordEx, IMGSize, IMGSize, False)
 			Color(255, 255, 255)
 			SetFontEx(fo\FontID[Font_Default])
-			RowText(Format(GetLocalString("msg", "achv.unlocked"), amsg\Txt), x + (84.0 * Scale), y + (10.0 * Scale), Width - (94.0 * Scale), y - (20.0 * Scale))
+			RowText(Format(GetLocalString("msg", "achv.unlocked"), amsg\Txt), x + (84.0 * Scale), y + CoordEx, Width - (94.0 * Scale), y - (20.0 * Scale))
 		EndIf
 	Next
 End Function

@@ -722,19 +722,19 @@ Function UpdateMainMenu%()
 						If opt\EnableSubtitles And opt\OverrideSubColor
 							y = y + (35 * MenuScale)
 							
-							If opt\OverrideSubColor Then UpdateMenuPalette(x - (63 * MenuScale), y)
+							UpdateMenuPalette(x - (63 * MenuScale), y)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorR = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorR), Font_Default, 14, 3), 255.0)
+							opt\SubColorR = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorR)), Font_Default, 14, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorG = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorG), Font_Default, 15, 3), 255.0)
+							opt\SubColorG = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorG)), Font_Default, 15, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorB = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(opt\SubColorB), Font_Default, 16, 3), 255.0)
+							opt\SubColorB = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorB)), Font_Default, 16, 3), 255.0)
 							
 							y = y + (40 * MenuScale)
 						EndIf
@@ -1750,7 +1750,7 @@ End Function
 
 Function RenderCursor%()
 	If opt\DisplayMode <> 0 Lor OnPalette Then Return
-	DrawImage(CursorIMG, ScaledMouseX(), ScaledMouseY())
+	DrawImage(CursorIMG, MousePosX, MousePosY)
 End Function
 
 Global TextR# = 0.0, TextG# = 0.0, TextB# = 0.0
@@ -2136,7 +2136,8 @@ End Type
 Function UpdateMenuTick%(x%, y%, Selected%, Locked% = False)
 	Local mt.MenuTick, currTick.MenuTick
 	Local TickExists% = False
-	Local Width% = 20 * MenuScale, Height% = 20 * MenuScale
+	Local Width% = 20 * MenuScale
+	Local Height% = 20 * MenuScale
 	
 	For mt.MenuTick = Each MenuTick
 		If mt\x = x And mt\y = y
@@ -2245,6 +2246,7 @@ End Function
 
 Function RenderMenuPalettes%()
 	Local mp.MenuPalette
+	Local CoordEx% = 5 * MenuScale
 	
 	For mp.MenuPalette = Each MenuPalette
 		DrawImage(mp\Img, mp\x, mp\y)
@@ -2252,7 +2254,7 @@ Function RenderMenuPalettes%()
 			If mo\MouseDown1 And OnSliderID = 0
 				LockBuffer(BackBuffer())
 				
-				Local Pixel% = ReadPixelFast(ScaledMouseX(), ScaledMouseY(), BackBuffer())
+				Local Pixel% = ReadPixelFast(MousePosX, MousePosY, BackBuffer())
 				
 				UnlockBuffer(BackBuffer())
 				opt\SubColorR = ReadPixelColor(Pixel, 16)
@@ -2260,7 +2262,7 @@ Function RenderMenuPalettes%()
 				opt\SubColorB = ReadPixelColor(Pixel, 0)
 			EndIf
 			Color(0, 0, 0)
-			Oval(ScaledMouseX(), ScaledMouseY(), 5 * MenuScale, 5 * MenuScale, False)
+			Oval(MousePosX, MousePosY, CoordEx, CoordEx, False)
 		EndIf
 	Next
 End Function
@@ -2445,7 +2447,7 @@ Function UpdateMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 	If mo\MouseDown1 And OnSliderID = 0
 		If MouseOn(x, y, Width + (14 * MenuScale), (20 * MenuScale)) Then OnSliderID = ID
 	EndIf
-	If ID = OnSliderID Then Value = Min(Max((ScaledMouseX() - x) * 100 / Width, 0.0), 100.0)
+	If ID = OnSliderID Then Value = Min(Max((MousePosX - x) * 100 / Width, 0.0), 100.0)
 	Return(Value)
 End Function
 
@@ -2513,11 +2515,11 @@ Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	EndIf
 	
 	If ID = OnSliderID
-		If ScaledMouseX() <= x + (8 * MenuScale)
+		If MousePosX <= x + (8 * MenuScale)
 			Value = 0
-		ElseIf (ScaledMouseX() >= x + (Width / 2)) And (ScaledMouseX() <= x + (Width / 2) + (8 * MenuScale))
+		ElseIf (MousePosX >= x + (Width / 2)) And (MousePosX <= x + (Width / 2) + (8 * MenuScale))
 			Value = 1
-		ElseIf ScaledMouseX() >= x + Width
+		ElseIf MousePosX >= x + Width
 			Value = 2
 		EndIf
 	EndIf
@@ -2557,15 +2559,15 @@ Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Va
 	EndIf
 	
 	If ID = OnSliderID
-		If ScaledMouseX() <= x + (8 * MenuScale)
+		If MousePosX <= x + (8 * MenuScale)
 			Value = 0
-		ElseIf (ScaledMouseX() >= x + (Width / 4)) And (ScaledMouseX() <= x + (Width / 4) + (8 * MenuScale))
+		ElseIf (MousePosX >= x + (Width / 4)) And (MousePosX <= x + (Width / 4) + (8 * MenuScale))
 			Value = 1
-		ElseIf (ScaledMouseX() >= x + (Width / 2)) And (ScaledMouseX() <= x + (Width / 2) + (8 * MenuScale))
+		ElseIf (MousePosX >= x + (Width / 2)) And (MousePosX <= x + (Width / 2) + (8 * MenuScale))
 			Value = 2
-		ElseIf (ScaledMouseX() >= x + (Width * 0.75)) And (ScaledMouseX() <= x + (Width * 0.75) + (8 * MenuScale))
+		ElseIf (MousePosX >= x + (Width * 0.75)) And (MousePosX <= x + (Width * 0.75) + (8 * MenuScale))
 			Value = 3
-		ElseIf ScaledMouseX() >= x + Width
+		ElseIf MousePosX >= x + Width
 			Value = 4
 		EndIf
 	EndIf

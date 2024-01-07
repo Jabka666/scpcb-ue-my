@@ -103,15 +103,15 @@ Function ReadPixelColor%(Pixel%, Shrid%)
 End Function
 
 Function ScaledMouseX#()
-	Return(Float(MousePosX - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * GraphicWidthFloat / Float(opt\RealGraphicWidth * opt\AspectRatio))
+	Return(Float(MouseX() - (opt\RealGraphicWidth * 0.5 * (1.0 - opt\AspectRatio))) * GraphicWidthFloat / Float(opt\RealGraphicWidth * opt\AspectRatio))
 End Function
 
 Function ScaledMouseY#()
-	Return(MousePosY * GraphicHeightFloat / RealGraphicHeightFloat)
+	Return(MouseY() * GraphicHeightFloat / RealGraphicHeightFloat)
 End Function
 
 Function MouseOn%(x%, y%, Width%, Height%)
-	Return((ScaledMouseX() > x And ScaledMouseX() < x + Width) And (ScaledMouseY() > y And ScaledMouseY() < y + Height))
+	Return((MousePosX > x And MousePosX < x + Width) And (MousePosY > y And MousePosY < y + Height))
 End Function
 
 Function ResetTimingAccumulator%()

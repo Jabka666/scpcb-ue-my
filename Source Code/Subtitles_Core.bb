@@ -49,6 +49,7 @@ Function UpdateSubtitles%()
 	
 	Local queue.QueuedSubtitlesMsg
 	Local lastSubtitles.SubtitlesMsg
+	Local CoordEx% = (10 * MenuScale)
 	
 	For queue.QueuedSubtitlesMsg = Each QueuedSubtitlesMsg
 		If queue\TimeStart > 0.0
@@ -61,15 +62,15 @@ Function UpdateSubtitles%()
 			
 			; ~ Split long lines of text into multiple lines
 			While Len(TxtLine) > 0
-				Local StringRight# = subassets\BoxLeft + (10 * MenuScale) + StringWidth(TxtLine)
+				Local StringRight# = subassets\BoxLeft + CoordEx + StringWidth(TxtLine)
 				
-				If StringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
+				If StringRight > subassets\BoxLeft + subassets\BoxWidth - CoordEx
 					Local NextLine$ = ""
 					
-					While StringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
+					While StringRight > subassets\BoxLeft + subassets\BoxWidth - CoordEx
 						NextLine = Right(TxtLine, 1) + NextLine
 						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0.0))
-						StringRight = subassets\BoxLeft + (10 * MenuScale) + StringWidth(TxtLine)
+						StringRight = subassets\BoxLeft + CoordEx + StringWidth(TxtLine)
 					Wend
 					
 					Local OldTxtLine$ = TxtLine
@@ -78,14 +79,14 @@ Function UpdateSubtitles%()
 						NextLine = Right(TxtLine, 1) + NextLine
 						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0.0))
 						
-						Local NextStringRight# = subassets\BoxLeft + (10 * MenuScale) + StringWidth(NextLine)
+						Local NextStringRight# = subassets\BoxLeft + CoordEx + StringWidth(NextLine)
 						
 						; ~ If a very long single word exceeds the box size, split it
-						If NextStringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
-							While NextStringRight > subassets\BoxLeft + subassets\BoxWidth - (10 * MenuScale)
+						If NextStringRight > subassets\BoxLeft + subassets\BoxWidth - CoordEx
+							While NextStringRight > subassets\BoxLeft + subassets\BoxWidth - CoordEx
 								TxtLine = Right(NextLine, 1) + TxtLine
 								NextLine = Left(NextLine, Len(NextLine) - 1)
-								NextStringRight = subassets\BoxLeft + (10 * MenuScale) + StringWidth(NextLine)
+								NextStringRight = subassets\BoxLeft + CoordEx + StringWidth(NextLine)
 							Wend
 							Exit
 						EndIf
@@ -141,9 +142,10 @@ Function RenderSubtitles%()
 	Next
 	
 	Local BoxTop# = (subassets\BoxTop + subassets\TextHeight) - subassets\TextHeight * Lines
-	Local BoxHeight# = (subassets\TextHeight * Lines) + (5 * MenuScale)
+	Local CoordEx% = (5 * MenuScale)
+	Local BoxHeight# = (subassets\TextHeight * Lines) + CoordEx
 	
-	If Lines = 0 Then BoxHeight = BoxHeight - (5 * MenuScale)
+	If Lines = 0 Then BoxHeight = BoxHeight - CoordEx
 	
 	subassets\CurrentBoxTop = CurveValue(BoxTop, subassets\CurrentBoxTop, 7.0)
 	subassets\CurrentBoxHeight = CurveValue(BoxHeight, subassets\CurrentBoxHeight, 7.0)
@@ -160,7 +162,7 @@ Function RenderSubtitles%()
 		
 		Local Txt$ = sub\Txt
 		
-		sub\yPos = BoxTop + (subassets\TextHeight * Lines) + (10 * MenuScale)
+		sub\yPos = BoxTop + (subassets\TextHeight * Lines) + (CoordEx * 2)
 		sub\CurrYPos = CurveValue(sub\yPos, sub\CurrYPos, 7.0)
 		
 		If opt\OverrideSubColor
@@ -201,7 +203,7 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 		If JsonIsString(TxtVal) Then Txt = JsonGetString(TxtVal)
 		If JsonIsFloat(DelayVal) Then DelayTime = JsonGetFloat(DelayVal)
 		If JsonIsFloat(LengthVal) Then Length = JsonGetFloat(LengthVal)
-		If Not JsonIsNull(JsonGetValue(Subtitle, "color"))
+		If (Not JsonIsNull(JsonGetValue(Subtitle, "color")))
 			ColorArray = JsonGetValue(SubColors, JsonGetString(JsonGetValue(Subtitle, "color")))
 			If (Not JsonIsArray(ColorArray)) Then ColorArray = JsonGetValue(LocalSubColors, JsonGetString(JsonGetValue(Subtitle, "color")))
 			If JsonIsArray(ColorArray)
@@ -284,9 +286,10 @@ Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255,
 	
 	Local BoxTop# = (subassets\BoxTop + subassets\TextHeight) - subassets\TextHeight * Lines
 	Local BoxHeight# = subassets\TextHeight * Lines
+	Local CoordEx% = 10 * MenuScale
 	
-	sub\yPos = (BoxTop + BoxHeight) - subassets\TextHeight + (10 * MenuScale)
-	sub\CurrYPos = (BoxTop + BoxHeight) - subassets\TextHeight + (10 * MenuScale)
+	sub\yPos = (BoxTop + BoxHeight) - subassets\TextHeight + CoordEx
+	sub\CurrYPos = (BoxTop + BoxHeight) - subassets\TextHeight + CoordEx
 	
 	Insert sub After Last SubtitlesMsg
 End Function
