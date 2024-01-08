@@ -132,12 +132,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	SetBuffer(BackBuffer())
 	
-	opt\RealGraphicWidth = opt\GraphicWidth : RealGraphicWidthFloat = Float(opt\RealGraphicWidth)
-	opt\RealGraphicHeight = opt\GraphicHeight : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
-	
-	GraphicWidthFloat = Float(opt\GraphicWidth)
-	GraphicHeightFloat = Float(opt\GraphicHeight)
-	
 	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"), True)
 	SetFontEx(fo\FontID[Font_Default])
 	
@@ -337,8 +331,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 				opt\GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
 				opt\GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
 			EndIf
-			opt\RealGraphicWidth = opt\GraphicWidth
-			opt\RealGraphicHeight = opt\GraphicHeight
+			GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
+			opt\RealGraphicWidth = opt\GraphicWidth : RealGraphicWidthFloat = Float(opt\RealGraphicWidth)
+			opt\RealGraphicHeight = opt\GraphicHeight : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
 			Exit
 		EndIf
 		; ~ Exit button
@@ -372,6 +367,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
 	Next	
 	
+	MousePosX = 0
+	MousePosY = 0
 	mo\MouseHit1 = False
 	
 	FreeImage(LauncherBG) : LauncherBG = 0

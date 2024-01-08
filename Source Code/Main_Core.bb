@@ -46,18 +46,16 @@ Global GraphicHeightFloat#, RealGraphicHeightFloat#
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 If opt\DisplayMode = 1
-	opt\RealGraphicWidth = DesktopWidth()
-	opt\RealGraphicHeight = DesktopHeight()
-	GraphicWidthFloat = Float(opt\GraphicWidth) : RealGraphicWidthFloat = Float(opt\RealGraphicWidth)
-	GraphicHeightFloat = Float(opt\GraphicHeight) : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
+	opt\RealGraphicWidth = DesktopWidth() : opt\RealGraphicHeight = DesktopHeight()
+	GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
+	RealGraphicWidthFloat = Float(opt\RealGraphicWidth) : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
 	opt\AspectRatio = (GraphicWidthFloat / GraphicHeightFloat) / (RealGraphicWidthFloat / RealGraphicHeightFloat)
 	Graphics3DExt(opt\RealGraphicWidth, opt\RealGraphicHeight, 0, 4)
 Else
 	opt\AspectRatio = 1.0
-	opt\RealGraphicWidth = opt\GraphicWidth
-	opt\RealGraphicHeight = opt\GraphicHeight
-	GraphicWidthFloat = Float(opt\GraphicWidth)
-	GraphicHeightFloat = Float(opt\GraphicHeight)
+	opt\RealGraphicWidth = opt\GraphicWidth : opt\RealGraphicHeight = opt\GraphicHeight
+	GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
+	RealGraphicWidthFloat = Float(opt\RealGraphicWidth) : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
@@ -4814,6 +4812,7 @@ Function UpdateGUI%()
 						EndIf
 						SelectedItem\State3 = 1.0
 					EndIf
+					;[End Block]
 				Case "book"
 					;[Block]
 					CreateMsg(GetLocalString("msg", "redbook"))
@@ -6630,6 +6629,8 @@ Function RenderGUI%()
 					Local Offline% = (SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300")
 					Local NAV_WIDTH% = 287 * MenuScale
 					Local NAV_HEIGHT% = 256 * MenuScale
+					Local RectSize% = 24 * MenuScale
+					Local RectSizeHalf% = RectSize / 2
 					
 					If (Not PlayerInReachableRoom())
 						If (MilliSec Mod 800) < 200
@@ -6657,14 +6658,14 @@ Function RenderGUI%()
 								For z2 = Max(1.0, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
 									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance
 										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
-											Local DrawX% = x + (PlayerX - x2) * (24 * MenuScale), DrawY% = y - (PlayerZ - z2) * (24 * MenuScale) 
+											Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
 											
 											Color(30, 30, 30)
-											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 1, 24 * MenuScale)
-											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + (12 * MenuScale), DrawY - (12 * MenuScale), 1, 24 * MenuScale)
+											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
 											
-											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY - (12 * MenuScale), 24 * MenuScale, 1)
-											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - (12 * MenuScale), DrawY + (12 * MenuScale), 24 * MenuScale, 1)
+											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
+											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
 										EndIf
 									EndIf
 								Next
