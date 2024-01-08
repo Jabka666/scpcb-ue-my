@@ -272,7 +272,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_APACHE)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_APACHE_MODEL])
-			ScaleEntity(n\OBJ, 0.7, 0.7, 0.7)
 			
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_APACHE_ROTOR_1_MODEL])
 			EntityParent(n\OBJ2, n\OBJ)
@@ -303,6 +302,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EntityBlend(LightSprite, 3)
 				EntityFX(LightSprite, 1 + 8)
 			Next
+			ScaleEntity(n\OBJ, 0.7, 0.7, 0.7)
 			;[End Block]
 		Case NPCType035_Tentacle
 			;[Block]
