@@ -1183,7 +1183,7 @@ Function UpdateNPCs%()
 						;[Block]
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
-								If e\EventState >= 70.0 * 40.0 Then CanSave = 0
+								If e\EventState >= 70.0 * 40.0 Then CanSave = 2
 							EndIf
 						Next
 						If n\SoundCHN = 0
@@ -1229,7 +1229,7 @@ Function UpdateNPCs%()
 						;[Block]
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
-								If e\EventState >= 70.0 * 40.0 Then CanSave = 0
+								If e\EventState >= 70.0 * 40.0 Then CanSave = 2
 								Exit
 							EndIf
 						Next

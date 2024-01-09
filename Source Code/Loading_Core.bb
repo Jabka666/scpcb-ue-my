@@ -1967,7 +1967,7 @@ Function LoadData%()
 	
 	QuickLoadPercent = -1
 	
-	CanSave = 2
+	CanSave = 3
 	
 	EscapeSecondsTimer = 70.0
 	

@@ -582,6 +582,8 @@ Function UpdateGame%()
 				ElseIf CanSave = 1 ; ~ Endings / Intro location
 					CreateHintMsg(GetLocalString("save", "failed.location"))
 					If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
+				ElseIf CanSave = 2
+					CreateHintMsg(GetLocalString("save", "failed.096"))
 				ElseIf as\Timer <= 70.0 * 5.0
 					CancelAutoSave()
 				ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
@@ -7244,7 +7246,7 @@ Function UpdateMenu%()
 			Local QuitButton% = 85
 			
 			If SelectedDifficulty\SaveType = SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = SAVE_ANYWHERE
-				If CanSave = 2
+				If CanSave = 3
 					QuitButton = 160
 					If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big)
 						me\DropSpeed = 0.0

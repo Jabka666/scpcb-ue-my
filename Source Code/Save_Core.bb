@@ -2078,7 +2078,7 @@ Global CanSave%
 
 Function UpdateSaveState%()
 	If SelectedDifficulty\SaveType < SAVE_ON_QUIT
-		CanSave = 2
+		CanSave = 3
 		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Then CanSave = 0
 	EndIf
 End Function
@@ -2091,7 +2091,7 @@ End Type
 Global as.AutoSave
 
 Function UpdateAutoSave%()
-	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 2 Lor (Not me\Playable) Lor me\Zombie
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 3 Lor (Not me\Playable) Lor me\Zombie
 		CancelAutoSave()
 		Return
 	EndIf
