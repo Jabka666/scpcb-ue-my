@@ -944,7 +944,7 @@ Function UpdateNPCs%()
 										
 										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 											PointEntity(n\OBJ, me\Collider)
-											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
+											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
 										EndIf
 										
 										If (Not me\Terminated)
@@ -1012,7 +1012,7 @@ Function UpdateNPCs%()
 									
 									If (Not me\Terminated) And me\FallTimer >= 0.0
 										PointEntity(n\OBJ, me\Collider)
-										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
+										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
 										
 										If Ceil(n\Frame) = 110.0 And (Not chs\GodMode)
 											PlaySound_Strict(DamageSFX[1])
