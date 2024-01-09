@@ -582,7 +582,7 @@ Function UpdateGame%()
 				ElseIf CanSave = 1 ; ~ Endings / Intro location
 					CreateHintMsg(GetLocalString("save", "failed.location"))
 					If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
-				ElseIf CanSave = 2
+				ElseIf CanSave = 2 ; ~ Triggered SCP-096
 					CreateHintMsg(GetLocalString("save", "failed.096"))
 				ElseIf as\Timer <= 70.0 * 5.0
 					CancelAutoSave()
