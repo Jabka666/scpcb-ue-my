@@ -4610,9 +4610,9 @@ Function UpdateEvents%()
 			Case e_room2_ic
 				;[Block]
 				If PlayerRoom = e\room
-					TFormPoint(-1200.0, 83.0, 0.0, e\room\OBJ, 0)
+					TFormPoint(-1200.0, 51.2, 0.0, e\room\OBJ, 0)
 					x = TFormedX() : y = TFormedY() : z = TFormedZ()
-					de.Decals = CreateDecal(DECAL_BLOOD_2, x, y - (83.0 * RoomScale) + 0.005, z, 90.0, Rnd(360.0), 0.0)
+					de.Decals = CreateDecal(DECAL_BLOOD_2, x, y - (51.2 * RoomScale) + 0.005, z, 90.0, Rnd(360.0), 0.0)
 					EntityParent(de\OBJ, e\room\OBJ)
 					
 					e\room\NPC[0] = CreateNPC(NPCTypeD, x, y, z)
@@ -4661,7 +4661,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\room\Dist < 8.0
 					If e\room\NPC[0] = Null
-						TFormPoint(1110.0, 83.0, -208.0, e\room\OBJ, 0)
+						TFormPoint(1110.0, 51.2, -208.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 						e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
@@ -6544,14 +6544,14 @@ Function UpdateEvents%()
 								e\room\NPC[i + 1] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
 							Next
 							
-							TFormPoint(2156.0, -5550.0, 3018.0, e\room\OBJ, 0)
+							TFormPoint(2156.0, -5580.8, 3018.0, e\room\OBJ, 0)
 							e\room\NPC[4] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[4]\State3 = -1.0 : e\room\NPC[4]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[4], NPC_CLASS_D_VICTIM_939_1_TEXTURE)
 							SetNPCFrame(e\room\NPC[4], 40.0)
 							RotateEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 							
-							TFormPoint(1083.0, -5550.0, 989.0, e\room\OBJ, 0)
+							TFormPoint(1083.0, -5580.8, 989.0, e\room\OBJ, 0)
 							e\room\NPC[5] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[5]\State3 = -1.0 : e\room\NPC[5]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[5], NPC_CLASS_D_VICTIM_939_2_TEXTURE)
