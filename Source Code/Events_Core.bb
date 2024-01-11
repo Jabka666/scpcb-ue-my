@@ -2210,7 +2210,7 @@ Function UpdateEvents%()
 						If e\room\RoomDoors[1]\Open Lor e\room\RoomDoors[2]\Open
 							GiveAchievement(Achv205)
 							
-							TFormPoint(-1055.0, -43.0, 650.0, e\room\OBJ, 0)
+							TFormPoint(-1055.0, -74.8, 650.0, e\room\OBJ, 0)
 							e\room\NPC[0] = CreateNPC(NPCTypeClerk, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[0], NPC_CLERK_VICTIM_205_TEXTURE)
@@ -3264,7 +3264,7 @@ Function UpdateEvents%()
 						Temp = (I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5)
 						If e\EventState = 0.0
 							If Temp
-								TFormPoint(-4812.0, -4409.0, 1729.0, e\room\OBJ, 0)
+								TFormPoint(-4843.8, -4409.0, 1729.0, e\room\OBJ, 0)
 								x = TFormedX() : y = TFormedY() : z = TFormedZ()
 								e\room\NPC[0] = CreateNPC(NPCTypeD, x, y, z)
 								e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
@@ -7505,7 +7505,7 @@ Function UpdateEvents%()
 			Case e_room4_2_hcz
 				;[Block]
 				If e\room\Dist < 8.0
-					TFormPoint(256.0, 82.0, 256.0, e\room\OBJ, 0)
+					TFormPoint(256.0, 55.2, 256.0, e\room\OBJ, 0)
 					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
