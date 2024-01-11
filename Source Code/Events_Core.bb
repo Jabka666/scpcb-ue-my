@@ -690,13 +690,13 @@ Function UpdateEvents%()
 							SetNPCFrame(e\room\NPC[3], 286.0)
 							RotateEntity(e\room\NPC[3]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 							
-							TFormPoint(4712.0, 467.0, 1978.0, e\room\OBJ, 0)
+							TFormPoint(4712.0, 435.8, 1978.0, e\room\OBJ, 0)
 							e\room\NPC[4] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[4]\State3 = -1.0 : e\room\NPC[4]\IsDead = True
 							SetNPCFrame(e\room\NPC[4], 711.0)
 							RotateEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 							
-							TFormPoint(4340.0, 467.0, 1632.0, e\room\OBJ, 0)
+							TFormPoint(4340.0, 435.8, 1632.0, e\room\OBJ, 0)
 							e\room\NPC[5] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[5]\State3 = -1.0 : e\room\NPC[5]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[5], NPC_CLASS_D_CLASS_D_TEXTURE)
