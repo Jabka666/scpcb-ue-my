@@ -1917,7 +1917,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+					If Rand(10) = 1
+						it2.Items = CreateItem("SCP-500", "scp500", x, y, z)
+					Else
+						it2.Items = CreateItem("Upgraded Pill", "scp500pilldeath", x, y, z)
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]
