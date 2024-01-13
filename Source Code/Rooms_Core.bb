@@ -1346,13 +1346,13 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[3] = d
 			
 			; ~ Misc Doors
-			d.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y, r\z + 368.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_2)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.06, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
 			d.Doors = CreateDoor(r, r\x + 352.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0)
 			
-			d.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 368.0 * RoomScale, 0.0, True, ONE_SIDED_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 368.0 * RoomScale, 0.0, True, ONE_SIDED_DOOR, KEY_CARD_2)
 			d\Locked = 1 : d\AutoClose = False
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.12, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
