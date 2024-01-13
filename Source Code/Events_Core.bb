@@ -4026,7 +4026,6 @@ Function UpdateEvents%()
 					
 					If e\EventState3 = 0.0
 						If Rand(2) = 1
-							GiveAchievement(Achv1048)
 							e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
 							ScaleEntity(e\room\Objects[3], 0.05, 0.05, 0.05)
 							PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
@@ -4039,7 +4038,10 @@ Function UpdateEvents%()
 							PointEntity(e\room\Objects[3], me\Collider)
 							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
 							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
-							If Angle < 40.0 Lor Angle > 320.0 Then e\EventState3 = 2.0
+							If Angle < 40.0 Lor Angle > 320.0
+								GiveAchievement(Achv1048)
+								e\EventState3 = 2.0
+							EndIf
 						ElseIf e\EventState3 = 2.0
 							PointEntity(e\room\Objects[3], me\Collider)
 							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
