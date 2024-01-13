@@ -2845,14 +2845,14 @@ Function UpdateEvents%()
 						GiveAchievement(Achv008)
 						If e\EventState = 0.0
 							If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > PowTwo(HideDistance) ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
-								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), True)
+								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 								ResetEntity(n_I\Curr173\Collider)
 							EndIf
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0
 							e\SoundCHN = LoopSound2(AlarmSFX[0], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 							
-							UpdateRedLight(e\room\Objects[5], 1500, 800)
+							UpdateRedLight(e\room\Objects[6], 1500, 800)
 							
 							Dist = EntityDistanceSquared(me\Collider, e\room\Objects[0])
 							If Dist < 4.0
@@ -2861,13 +2861,17 @@ Function UpdateEvents%()
 								Next
 								
 								If e\EventState2 = 0.0
-									If EntityHidden(e\room\Objects[2]) Then ShowEntity(e\room\Objects[2])
-									If EntityDistanceSquared(n_I\Curr173\Collider, e\room\Objects[4]) < 9.0
+									For i = 2 To 3
+										If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+									Next
+									If EntityDistanceSquared(n_I\Curr173\Collider, e\room\Objects[5]) < 9.0
 										If (Not PlayerSees173(n_I\Curr173))
-											PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
+											PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True), True)
 											ResetEntity(n_I\Curr173\Collider)
 											
-											HideEntity(e\room\Objects[2])
+											For i = 2 To 3
+												HideEntity(e\room\Objects[i])
+											Next
 											
 											If wi\HazmatSuit = 0
 												InjurePlayer(0.3, 0.001, 500.0)
@@ -2894,7 +2898,7 @@ Function UpdateEvents%()
 								TurnEntity(p\Pvt, Rnd(-26.0, 26.0), Rnd(-26.0, 26.0), Rnd(360.0))
 							EndIf
 						Else
-							If (Not EntityHidden(e\room\Objects[5])) Then HideEntity(e\room\Objects[5])
+							If (Not EntityHidden(e\room\Objects[6])) Then HideEntity(e\room\Objects[6])
 							For i = 0 To 2
 								e\room\RoomDoors[i]\Locked = 0
 							Next
@@ -2902,10 +2906,10 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
-					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[8]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[9]))
+					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[9]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[10]))
 					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
-					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[3], e\room\RoomDoors[4], e\room\Objects[8], e\room\Objects[9], e)
+					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[3], e\room\RoomDoors[4], e\room\Objects[9], e\room\Objects[10], e)
 				EndIf
 				;[End Block]
 			Case e_cont2_012

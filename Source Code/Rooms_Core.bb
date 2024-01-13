@@ -2323,47 +2323,52 @@ Function FillRoom%(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
-			SpriteViewMode(r\Objects[2], 2)
-			ScaleSprite(r\Objects[2], 194.0 * RoomScale * 0.5, 194.0 * RoomScale * 0.5)
-			PositionEntity(r\Objects[2], r\x - 640.0 * RoomScale, r\y - 4881.0 * RoomScale, r\z + 800.0 * RoomScale)
-			TurnEntity(r\Objects[2], 0.0, 90.0, 0.0)
-			EntityParent(r\Objects[2], r\OBJ)
-			HideEntity(r\Objects[2])
+			
+			r\Objects[3] = CopyEntity(r\Objects[2])
+			
+			For i = 2 To 3
+				SpriteViewMode(r\Objects[i], 2)
+				ScaleSprite(r\Objects[i], 194.0 * RoomScale * 0.5, 194.0 * RoomScale * 0.5)
+				PositionEntity(r\Objects[i], r\x - 640.0 * RoomScale, r\y - 4881.0 * RoomScale, r\z + 800.0 * RoomScale)
+				TurnEntity(r\Objects[i], 0.0, 90.0 + (180 * (i = 3)), 0.0)
+				EntityParent(r\Objects[i], r\OBJ)
+				HideEntity(r\Objects[i])
+			Next
 			
 			; ~ SCP-173's spawnpoint
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 820.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 657.0 * RoomScale)
-			EntityParent(r\Objects[3], r\OBJ)
-			
-			; ~ SCP-173's attack point
 			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 384.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 752.0 * RoomScale)
+			PositionEntity(r\Objects[4], r\x - 820.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 657.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
 			
-			; ~ Red light
-			r\Objects[5] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
-			r\ScriptedObject[5] = True
+			; ~ SCP-173's attack point
+			r\Objects[5] = CreatePivot()
+			PositionEntity(r\Objects[5], r\x - 384.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 752.0 * RoomScale)
 			EntityParent(r\Objects[5], r\OBJ)
-			HideEntity(r\Objects[5])
+			
+			; ~ Red light
+			r\Objects[6] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
+			r\ScriptedObject[6] = True
+			EntityParent(r\Objects[6], r\OBJ)
+			HideEntity(r\Objects[6])
 			
 			; ~ Spawnpoint for the scientist used in the "SCP-008-1's scene"
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 160.0 * RoomScale, r\y + 670.0 * RoomScale, r\z - 384.0 * RoomScale)
-			EntityParent(r\Objects[6], r\OBJ)
-			
-			; ~ Spawnpoint for the player
 			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x, r\y + 672.0 * RoomScale, r\z + 350.0 * RoomScale)
+			PositionEntity(r\Objects[7], r\x + 160.0 * RoomScale, r\y + 670.0 * RoomScale, r\z - 384.0 * RoomScale)
 			EntityParent(r\Objects[7], r\OBJ)
 			
-			; ~ Elevators pivots
+			; ~ Spawnpoint for the player
 			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x + 752.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[8], r\x, r\y + 672.0 * RoomScale, r\z + 350.0 * RoomScale)
 			EntityParent(r\Objects[8], r\OBJ)
 			
+			; ~ Elevators pivots
 			r\Objects[9] = CreatePivot()
-			PositionEntity(r\Objects[9], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[9], r\x + 752.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
 			EntityParent(r\Objects[9], r\OBJ)
+			
+			r\Objects[10] = CreatePivot()
+			PositionEntity(r\Objects[10], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
+			EntityParent(r\Objects[10], r\OBJ)
 			
 			it.Items = CreateItem("Hazmat Suit", "hazmatsuit", r\x - 537.0 * RoomScale, r\y - 4895.0 * RoomScale, r\z - 66.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
