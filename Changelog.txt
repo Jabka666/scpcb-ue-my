@@ -107,6 +107,7 @@ Bug Fixes:
 - Fixed some omissions in SCP-1048-A event.
 - Fixed messages in keypad button having an incorrect position at different scales and FOV.
 - Fixed ability to interact with keypad and papers when menu is open.
+- Fixed SCP-008 and SCP-409 revert messages not showing.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.

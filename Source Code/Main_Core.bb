@@ -2545,66 +2545,69 @@ Function UpdateMoving%()
 	
 	If (Not (d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using))
 		If (Not chs\NoClip)
-			If (me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated) And ((KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT)))) Lor me\ForceMove > 0.0
-				If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0 And (Not me\Zombie)
-					me\Stamina = me\Stamina - (fps\Factor[0] * 0.4 * me\StaminaEffect)
-					If me\Stamina <= 0.0 Then me\Stamina = -20.0
-					Sprint = 2.5
-				EndIf
-				
-				If RID = r_dimension_106
-					Local PlayerPosY# = EntityY(me\Collider)
-					
-					If PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale
-						me\Stamina = 0.0
-						Speed = 0.015
-						Sprint = 1.0
-					EndIf
-				EndIf
-				
-				If InvOpen Lor OtherOpen <> Null Then Speed = 0.009
-				
-				If me\ForceMove > 0.0 Then Speed = Speed * me\ForceMove
-				
-				If SelectedItem <> Null
-					If (SelectedItem\ItemTemplate\TempName = "firstaid" Lor SelectedItem\ItemTemplate\TempName = "finefirstaid" Lor SelectedItem\ItemTemplate\TempName = "firstaid2") And wi\HazmatSuit = 0 Then Sprint = 0.0
-				EndIf
-				
-				Temp = (me\Shake Mod 360.0)
-				
-				If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
-				If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0
-					Temp = GetStepSound(me\Collider)
-					If DecalStep = 1
-						Temp = 2
-					ElseIf forest_event <> Null
-						If forest_event\room = PlayerRoom And forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
+			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
+				If (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT)) Lor me\ForceMove > 0.0 
+					If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0
+						me\Stamina = me\Stamina - (fps\Factor[0] * 0.4 * me\StaminaEffect)
+						If me\Stamina <= 0.0 Then me\Stamina = -20.0
+						Sprint = 2.5
 					EndIf
 					
-					Local TempCHN% = 0, TempCHN2% = 0
-					Local HasSprint% = True, StepRand% = Rand(0, 7)
-					
-					Select Temp
-						Case 2, 3, 4
-							;[Block]
-							HasSprint = False
-							StepRand = Rand(0, 2)
-							;[End Block]
-					End Select
-					
-					TempCHN = PlaySound_Strict(StepSFX(Temp, (Sprint = 2.5 And HasSprint), StepRand))
-					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
-					If DecalStep = 2
-						TempCHN2 = PlaySound_Strict(Step2SFX[Rand(10, 11)])
-						ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+					If RID = r_dimension_106
+						Local PlayerPosY# = EntityY(me\Collider)
+						
+						If PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale
+							me\Stamina = 0.0
+							Speed = 0.015
+							Sprint = 1.0
+						EndIf
 					EndIf
 					
-					If Sprint = 2.5
-						me\SndVolume = Max(4.0, me\SndVolume)
-					Else
-						me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
+					If InvOpen Lor OtherOpen <> Null Then Speed = 0.009
+					
+					If me\ForceMove > 0.0 Then Speed = Speed * me\ForceMove
+					
+					If SelectedItem <> Null
+						If (SelectedItem\ItemTemplate\TempName = "firstaid" Lor SelectedItem\ItemTemplate\TempName = "finefirstaid" Lor SelectedItem\ItemTemplate\TempName = "firstaid2") And wi\HazmatSuit = 0 Then Sprint = 0.0
+					EndIf
+					
+					Temp = (me\Shake Mod 360.0)
+					
+					If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
+					If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0
+						Temp = GetStepSound(me\Collider)
+						If DecalStep = 1
+							Temp = 2
+						ElseIf forest_event <> Null
+							If forest_event\room = PlayerRoom And forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
+						EndIf
+						
+						Local TempCHN% = 0, TempCHN2% = 0
+						Local HasSprint% = True, StepRand% = Rand(0, 7)
+						
+						Select Temp
+							Case 2, 3, 4
+								;[Block]
+								HasSprint = False
+								StepRand = Rand(0, 2)
+								;[End Block]
+						End Select
+						
+						TempCHN = PlaySound_Strict(StepSFX(Temp, (Sprint = 2.5 And HasSprint), StepRand))
+						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+						If DecalStep = 2
+							TempCHN2 = PlaySound_Strict(Step2SFX[Rand(10, 11)])
+							ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+						EndIf
+						
+						If Sprint = 2.5
+							me\SndVolume = Max(4.0, me\SndVolume)
+						Else
+							me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
+						EndIf
 					EndIf
 				EndIf
+				If KeyHit(key\CROUCH) And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then SetCrouch((Not me\Crouch))
 			EndIf
 		Else
 			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
@@ -2613,7 +2616,6 @@ Function UpdateMoving%()
 				Sprint = 0.5
 			EndIf
 		EndIf
-		If KeyHit(key\CROUCH) And me\Playable And (Not me\Zombie) And me\FallTimer >= 0.0 And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (Not chs\NoClip) And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then SetCrouch((Not me\Crouch))
 		
 		Local Temp2# = (Speed * Sprint) / (1.0 + me\CrouchState)
 		
@@ -2749,8 +2751,7 @@ Function UpdateMoving%()
 			
 			If me\Playable And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\Factor[0], 0.0)
 		EndIf
-		
-		me\ForceMove = False
+		me\ForceMove = 0.0
 	EndIf
 	
 	If me\Injuries > 1.0
@@ -8520,48 +8521,42 @@ Function Update008%()
 				EndIf
 			Next
 			
-			If I_008\Timer > 20.0 And PrevI008Timer <= 20.0
-				If I_008\Revert
+			If I_008\Revert
+				If I_008\Timer <= 20.0 And PrevI008Timer > 20.0
 					CreateMsg(GetLocalString("msg", "better_2"))
-				Else
-					CreateMsg(GetLocalString("msg", "feverish"))
-				EndIf
-			ElseIf I_008\Timer > 40.0 And PrevI008Timer <= 40.0
-				If I_008\Revert
+				ElseIf I_008\Timer <= 40.0 And PrevI008Timer > 40.0
 					CreateMsg(GetLocalString("msg", "nauseafading"))
-				Else
-					CreateMsg(GetLocalString("msg", "nausea"))
-				EndIf
-			ElseIf I_008\Timer > 60.0 And PrevI008Timer <= 60.0
-				If I_008\Revert
+				ElseIf I_008\Timer <= 60.0 And PrevI008Timer > 60.0
 					CreateMsg(GetLocalString("msg", "headachefading"))
-				Else
-					CreateMsg(GetLocalString("msg", "nauseaworse"))
-				EndIf
-			ElseIf I_008\Timer > 80.0 And PrevI008Timer <= 80.0
-				If I_008\Revert
+				ElseIf I_008\Timer <= 80.0 And PrevI008Timer > 80.0
 					CreateMsg(GetLocalString("msg", "moreener"))
-				Else
-					CreateMsg(GetLocalString("msg", "faint"))
 				EndIf
-			ElseIf I_008\Timer >= 91.5
-				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
-				me\Zombie = True
-				If I_008\Timer >= 92.7 And PrevI008Timer < 92.7
-					If TeleportForInfect
-						For r.Rooms = Each Rooms
-							If r\RoomTemplate\RoomID = r_cont2_008
-								PositionEntity(me\Collider, EntityX(r\Objects[8], True), EntityY(r\Objects[8], True), EntityZ(r\Objects[8], True), True)
-								ResetEntity(me\Collider)
-								r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True) + 0.2, EntityZ(r\Objects[7], True))
-								r\NPC[0]\State3 = -1.0 : r\NPC[0]\IsDead = True
-								r\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist1.ogg")
-								r\NPC[0]\SoundCHN = PlaySound_Strict(r\NPC[0]\Sound, True)
-								ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
-								TeleportToRoom(r)
-								Exit
-							EndIf
-						Next
+			Else
+				If I_008\Timer > 20.0 And PrevI008Timer <= 20.0
+					CreateMsg(GetLocalString("msg", "feverish"))
+				ElseIf I_008\Timer > 40.0 And PrevI008Timer <= 40.0
+					CreateMsg(GetLocalString("msg", "nausea"))
+				ElseIf I_008\Timer > 60.0 And PrevI008Timer <= 60.0
+					CreateMsg(GetLocalString("msg", "nauseaworse"))
+				ElseIf I_008\Timer > 80.0 And PrevI008Timer <= 80.0
+					CreateMsg(GetLocalString("msg", "faint"))
+				ElseIf I_008\Timer >= 91.5
+					me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
+					me\Zombie = True : MakeMeUnplayable()
+					If I_008\Timer >= 92.7 And PrevI008Timer < 92.7
+						If TeleportForInfect
+							For r.Rooms = Each Rooms
+								If r\RoomTemplate\RoomID = r_cont2_008
+									PositionEntity(me\Collider, EntityX(r\Objects[8], True), EntityY(r\Objects[8], True), EntityZ(r\Objects[8], True), True)
+									ResetEntity(me\Collider)
+									r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True) + 0.2, EntityZ(r\Objects[7], True))
+									PlaySound_Strict(LoadTempSound("SFX\SCP\008\KillScientist1.ogg"), True)
+									ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
+									TeleportToRoom(r)
+									Exit
+								EndIf
+							Next
+						EndIf
 					EndIf
 				EndIf
 			EndIf
@@ -8581,6 +8576,7 @@ Function Update008%()
 					me\ForceMove = 0.75
 					me\Injuries = 2.5
 					me\Bloodloss = 0.0
+					me\Playable = True
 					
 					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
@@ -8588,11 +8584,14 @@ Function Update008%()
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
+					MakeMeUnplayable()
 					PointEntity(Camera, PlayerRoom\NPC[0]\Collider)
 					
 					If PrevI008Timer < 94.7
-						PlayerRoom\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\008\KillScientist2.ogg")
-						PlayerRoom\NPC[0]\SoundCHN = PlaySound_Strict(PlayerRoom\NPC[0]\Sound, True)
+						PlayerRoom\NPC[0]\State3 = -1.0 : PlayerRoom\NPC[0]\IsDead = True
+						SetNPCFrame(PlayerRoom\NPC[0], 19.0)
+						
+						PlaySound_Strict(LoadTempSound("SFX\SCP\008\KillScientist2.ogg"), True)
 						
 						msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
 						
@@ -8604,14 +8603,6 @@ Function Update008%()
 						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
 					Else
 						me\Terminated = True
-					EndIf
-					
-					If PlayerRoom\NPC[0]\State2 = 0.0
-						Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 13.0, 19.0, 0.3, False)
-						If AnimTime(PlayerRoom\NPC[0]\OBJ) >= 19.0 Then PlayerRoom\NPC[0]\State2 = 1.0
-					Else
-						Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 19.0, 13.0, -0.3)
-						If AnimTime(PlayerRoom\NPC[0]\OBJ) <= 13.0 Then PlayerRoom\NPC[0]\State2 = 0.0
 					EndIf
 					
 					If opt\ParticleAmount > 0
@@ -8697,47 +8688,43 @@ Function Update409%()
 		EntityAlpha(t\OverlayID[7], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
 		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 		
-		If I_409\Timer > 40.0 And PrevI409Timer <= 40.0
-			If I_409\Revert
+		If I_409\Revert
+			If I_409\Timer <= 40.0 And PrevI409Timer > 40.0
 				CreateMsg(GetLocalString("msg", "409legs_1"))
-			Else
-				CreateMsg(GetLocalString("msg", "409legs_2"))
-			EndIf
-		ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
-			If I_409\Revert
+			ElseIf I_409\Timer <= 55.0 And PrevI409Timer > 55.0
 				CreateMsg(GetLocalString("msg", "409abdomen_1"))
-			Else
-				CreateMsg(GetLocalString("msg", "409abdomen_2"))
-			EndIf
-		ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
-			If I_409\Revert
+			ElseIf I_409\Timer <= 70.0 And PrevI409Timer > 70.0
 				CreateMsg(GetLocalString("msg", "409arms_1"))
-			Else
-				CreateMsg(GetLocalString("msg", "409arms_2"))
-			EndIf
-		ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
-			If I_409\Revert
+			ElseIf I_409\Timer <= 85.0 And PrevI409Timer > 85.0
 				CreateMsg(GetLocalString("msg", "409head_1"))
-			Else
+			EndIf
+		Else
+			If I_409\Timer > 40.0 And PrevI409Timer <= 40.0
+				CreateMsg(GetLocalString("msg", "409legs_2"))
+			ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
+				CreateMsg(GetLocalString("msg", "409abdomen_2"))
+			ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
+				CreateMsg(GetLocalString("msg", "409arms_2"))
+			ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
 				CreateMsg(GetLocalString("msg", "409head_2"))
+			ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
+				If (Not I_409\Revert)
+					PlaySound_Strict(DamageSFX[13], True)
+					me\Injuries = Max(me\Injuries, 2.0)
+				EndIf
+			ElseIf I_409\Timer > 94.0
+				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+				MakeMeUnplayable()
+				me\BlurTimer = 4.0
+				me\CameraShake = 3.0
 			EndIf
-		ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
-			If (Not I_409\Revert)
-				PlaySound_Strict(DamageSFX[13], True)
-				me\Injuries = Max(me\Injuries, 2.0)
-			EndIf
-		ElseIf I_409\Timer > 94.0
-			I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
-			MakeMeUnplayable()
-			me\BlurTimer = 4.0
-			me\CameraShake = 3.0
 		EndIf
 		If I_409\Timer >= 55.0
 			me\StaminaEffect = 1.2
 			me\StaminaEffectTimer = 1.0
 			me\Stamina = Min(me\Stamina, 60.0)
 		EndIf
-		If I_409\Timer >= 96.9222
+		If I_409\Timer >= 96.92
 			msg\DeathMsg = Format(GetLocalString("death", "409"), SubjectName)
 			Kill(True)
 		EndIf
