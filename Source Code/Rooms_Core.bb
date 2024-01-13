@@ -2664,7 +2664,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 355.0 * RoomScale, r\y + 450.0 * RoomScale, r\z + 321.0 * RoomScale, 30.0)
 			sc\Angle = -45.0 : sc\Turn = 0.0
 			
-			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 173.0 * RoomScale, r\y + 0.5, r\z + 631.0 * RoomScale)
+			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x - 284.0 * RoomScale, r\y + 0.5, r\z + 198.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
