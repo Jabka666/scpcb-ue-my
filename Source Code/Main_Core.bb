@@ -2396,11 +2396,12 @@ Function UpdateCough%(Chance_%)
 	If (Not me\Terminated)
 		If Rand(Chance_) = 1
 			If (Not ChannelPlaying(CoughCHN))
-				CoughCHN = PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
+				CoughCHN = PlaySound_Strict(CoughSFX((wi\GasMask > 0) Lor (I_1499\Using > 0) Lor (wi\HazmatSuit > 0), Rand(0, 2)), True)
 				me\SndVolume = Max(4.0, me\SndVolume)
 			EndIf
 		EndIf
 	EndIf
+	If ChannelPlaying(CoughCHN) Then StopBreathSound()
 End Function
 
 Function MakeMeUnplayable%()
@@ -8372,7 +8373,7 @@ Function UpdateVomit%()
 			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
-		If Rand(50) = 50 And (MilliSec Mod 4000) < 200 Then PlaySound_Strict(CoughSFX[Rand(0, 2)], True)
+		If Rand(50) = 50 And (MilliSec Mod 4000) < 200 Then PlaySound_Strict(CoughSFX((wi\GasMask > 0) Lor (I_1499\Using > 0) Lor (wi\HazmatSuit > 0), Rand(0, 2)), True)
 		
 		; ~ Regurgitate when timer is below 10 seconds
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0

@@ -1189,7 +1189,7 @@ Global DamageSFX%[14]
 
 Global MTFSFX%[2]
 
-Global CoughSFX%[3]
+Dim CoughSFX%(2, 3) ; ~ Normal / Gas Mask, Amount
 Global CoughCHN%, VomitCHN%
 
 Global MachineSFX%
@@ -1371,7 +1371,8 @@ Function LoadSounds%()
 	Next
 	
 	For i = 0 To 2
-		CoughSFX[i] = LoadSound_Strict("SFX\Character\D9341\Cough" + (i + 1) + ".ogg")
+		CoughSFX(0, i) = LoadSound_Strict("SFX\Character\D9341\Cough" + (i + 1) + ".ogg")
+		CoughSFX(1, i) = LoadSound_Strict("SFX\Character\D9341\Cough" + (i + 1) + "Gas.ogg")
 	Next
 	
 	ApacheSFX = LoadSound_Strict("SFX\Character\Apache\Propeller.ogg")
@@ -1450,7 +1451,8 @@ Function RemoveSoundInstances%()
 			BigDoorErrorSFX[i] = 0
 			Scp173SFX[i] = 0
 			NeckSnapSFX[i] = 0
-			CoughSFX[i] = 0
+			CoughSFX(0, i) = 0
+			CoughSFX(1, i) = 0
 		EndIf
 		If i < 4
 			DecaySFX[i] = 0
