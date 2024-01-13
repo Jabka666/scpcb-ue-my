@@ -1081,6 +1081,8 @@ Global CurrMusic% = True
 
 Dim OpenDoorSFX%(6, 3), CloseDoorSFX%(6, 3)
 Global BigDoorErrorSFX%[3]
+Global DoorClose079%
+Global DoorOpen079%
 
 Global KeyCardSFX1%
 Global KeyCardSFX2%
@@ -1235,6 +1237,8 @@ Function LoadSounds%()
 		OpenDoorSFX(WOODEN_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + (i + 1) + ".ogg")
 		BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + (i + 1) + ".ogg")
 	Next
+	DoorOpen079 = LoadSound_Strict("SFX\Door\DoorOpen079.ogg")
+	DoorClose079 = LoadSound_Strict("SFX\Door\DoorClose079.ogg")
 	
 	KeyCardSFX1 = LoadSound_Strict("SFX\Interact\KeyCardUse1.ogg")
 	KeyCardSFX2 = LoadSound_Strict("SFX\Interact\KeyCardUse2.ogg")
@@ -1489,6 +1493,8 @@ Function RemoveSoundInstances%()
 		If i < 15 Then Step2SFX[i] = 0
 		HorrorSFX[i] = 0
 	Next
+	DoorClose079 = 0
+	DoorOpen079 = 0
 	
 	KeyCardSFX1 = 0
 	KeyCardSFX2 = 0

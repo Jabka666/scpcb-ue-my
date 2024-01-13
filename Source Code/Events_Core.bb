@@ -2236,11 +2236,20 @@ Function UpdateEvents%()
 								SetAnimTime(e\room\Objects[3], 434.0)
 								SetAnimTime(e\room\Objects[4], 434.0)
 								
-								If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
+								If RemoteDoorOn
+									If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
+								EndIf
 							EndIf
 							
-							If e\EventState > 7.0
-								If Rand(150 + (150 * e\room\RoomDoors[0]\Open)) = 1 Then OpenCloseDoor(e\room\RoomDoors[0])
+							If e\EventState > 7.0 And RemoteDoorOn
+								If Rand(150 + (150 * e\room\RoomDoors[0]\Open)) = 1
+									If e\room\RoomDoors[0]\Open
+										PlaySound2(DoorClose079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
+									Else
+										PlaySound2(DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
+									EndIf
+									OpenCloseDoor(e\room\RoomDoors[0])
+								EndIf
 							EndIf
 							e\EventState2 = e\EventState2 + fps\Factor[0]
 						EndIf
@@ -7736,7 +7745,7 @@ Function UpdateEvents%()
 									If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
 								Next
 								If e\room\NPC[0]\Reload = 0.0
-									PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
+									PlaySound2(DoorOpen079, Camera, e\room\RoomDoors[1]\FrameOBJ, 7.0)
 									e\room\NPC[0]\DropSpeed = 0.0
 									e\room\NPC[0]\Reload = 1.0
 								EndIf
@@ -7848,14 +7857,14 @@ Function UpdateEvents%()
 											If e\room\RoomDoors[0]\Open
 												e\room\RoomDoors[0]\FastOpen = 1
 												OpenCloseDoor(e\room\RoomDoors[0])
-												PlaySound_Strict(LoadTempSound("SFX\Door\DoorClose079.ogg"))
+												PlaySound2(DoorClose079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
 											EndIf
 										EndIf
 									Else
 										If (Not e\room\RoomDoors[0]\Open)
 											e\room\RoomDoors[0]\FastOpen = 0
 											OpenCloseDoor(e\room\RoomDoors[0])
-											PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
+											PlaySound2(DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
 										EndIf
 									EndIf
 								EndIf
@@ -7863,7 +7872,7 @@ Function UpdateEvents%()
 								If (Not e\room\RoomDoors[0]\Open)
 									e\room\RoomDoors[0]\FastOpen = 0
 									OpenCloseDoor(e\room\RoomDoors[0])
-									PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen079.ogg"))
+									PlaySound2(DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
 								EndIf
 							EndIf
 						EndIf
