@@ -2767,11 +2767,11 @@ End Function
 
 Function FindFloor%(e.Events)
 	Select e\EventID
-		Case e_room3_storage, e_cont1_079, e_cont1_106, e_cont2_008, e_cont2_049, e_cont2_409
+		Case e_room3_storage, e_cont1_079, e_cont1_106, e_cont2_008, e_cont2_049, e_cont2_409, e_room2_nuke
 			;[Block]
 			Return(LowerFloor)
 			;[End Block]
-		Case e_room2_mt, e_room2_nuke, e_gate_a_entrance, e_gate_b_entrance
+		Case e_room2_mt, e_gate_a_entrance, e_gate_b_entrance
 			;[Block]
 			Return(UpperFloor)
 			;[End Block]
