@@ -777,7 +777,7 @@ Function IsDoubleItem%(Variable%, ID%)
 	
 	If Variable > 0 And Variable <> ID
 		Select Variable
-			Case wi\GasMask, I_1499\Using
+			Case wi\GasMask
 				;[Block]
 				Message = GetLocalString("msg", "weartwo.gas")
 				;[End Block]
@@ -785,13 +785,9 @@ Function IsDoubleItem%(Variable%, ID%)
 				;[Block]
 				Message = GetLocalString("msg", "weartwo.nvg")
 				;[End Block]
-			Case I_268\Using
+			Case I_268\Using, I_714\Using, I_1499\Using
 				;[Block]
-				Message = GetLocalString("msg", "weartwo.cap")
-				;[End Block]
-			Case I_714\Using
-				;[Block]
-				Message = GetLocalString("msg", "weartwo.ring")
+				Message = GetLocalString("msg", "weartwo.scps")
 				;[End Block]
 		End Select
 		CreateMsg(Message)
