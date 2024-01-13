@@ -6809,9 +6809,9 @@ Function UpdateMenu%()
 	If MenuOpen
 		If (Not IsPlayerOutsideFacility()) And (Not me\Terminated)
 			If me\StopHidingTimer = 0.0
-				If (EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 2.25 And n_I\Curr173\Idle < 2) Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 2.25 Then me\StopHidingTimer = 1.0
-			ElseIf me\StopHidingTimer < Rnd(60.0, 120.0)
-				me\StopHidingTimer = me\StopHidingTimer + fps\Factor[1]
+				If (EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 0.64 And n_I\Curr173\Idle < 2) Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 0.64 Lor (n_I\Curr049 <> Null And EntityDistanceSquared(n_I\Curr049\Collider, me\Collider) < 0.64) And (n_I\Curr066 <> Null And EntityDistanceSquared(n_I\Curr066\Collider, me\Collider) < 0.64) And (n_I\Curr096 <> Null And EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < 0.64) Then me\StopHidingTimer = 1.0
+			ElseIf me\StopHidingTimer < Rnd(120.0, 240.0)
+				me\StopHidingTimer = me\StopHidingTimer + 1
 			Else
 				me\StopHidingTimer = 0.0
 				PlaySound_Strict(HorrorSFX[15])
