@@ -1675,17 +1675,17 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Black Severed Hand", "hand2", r\x + xTemp * RoomScale, r\y - 5496.0 * RoomScale, r\z + zTemp * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 1 Key Card", "key1", r\x + 2154.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 2925.0 * RoomScale)
+			it.Items = CreateItem("Level 1 Key Card", "key1", r\x + 3370.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 6201.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 1991.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z - 837.0 * RoomScale)
+			it.Items = CreateItem("Night Vision Goggles", "nvg", r\x + 1248.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 981.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + 2222.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 3018.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
+			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + 3438.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 6294.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_6, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + 890.0 * RoomScale, 90.0, r\Angle + 180.0, 0.0, 0.5)

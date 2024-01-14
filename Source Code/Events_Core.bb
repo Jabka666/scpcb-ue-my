@@ -6559,7 +6559,7 @@ Function UpdateEvents%()
 								e\room\NPC[i + 1] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
 							Next
 							
-							TFormPoint(2156.0, -5580.8, 3018.0, e\room\OBJ, 0)
+							TFormPoint(3372.0, -5580.8, 6294.0, e\room\OBJ, 0)
 							e\room\NPC[4] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[4]\State3 = -1.0 : e\room\NPC[4]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[4], NPC_CLASS_D_VICTIM_939_1_TEXTURE)
