@@ -2757,14 +2757,6 @@ Const NullFloor% = 0
 Const UpperFloor% = 1
 ;[End Block]
 
-Function FindPlayerFloor%(y#)
-	; ~ Check the player's current position and return corresponding floor
-	If y < 0.0 Then Return(LowerFloor)
-	If y > 0.0 Then Return(UpperFloor)
-	
-	Return(NullFloor)
-End Function
-
 Function FindFloor%(e.Events)
 	Select e\EventID
 		Case e_room3_storage, e_cont1_079, e_cont1_106, e_cont2_008, e_cont2_049, e_cont2_409, e_room2_nuke

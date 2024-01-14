@@ -126,88 +126,92 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 End Function
 	
 Function GetRandDocument$()
-	Select Rand(0, 20)
-		Case 0
+	Select Rand(22)
+		Case 1
 			;[Block]
 			Return("005")
 			;[End Block]
-		Case 1
+		Case 2
 			;[Block]
 			Return("008")
 			;[End Block]
-		Case 2
+		Case 3
 			;[Block]
 			Return("012")
 			;[End Block]
-		Case 3
+		Case 4
 			;[Block]
 			Return("049")
 			;[End Block]
-		Case 4
-			;[Block]
-			Return("096")
-			;[End Block]
 		Case 5
 			;[Block]
-			Return("106")
+			Return("066")
 			;[End Block]
 		Case 6
 			;[Block]
-			Return("173")
+			Return("096")
 			;[End Block]
 		Case 7
 			;[Block]
-			Return("205")
+			Return("106")
 			;[End Block]
 		Case 8
 			;[Block]
-			Return("409")
+			Return("173")
 			;[End Block]
 		Case 9
 			;[Block]
-			Return("513")
+			Return("205")
 			;[End Block]
 		Case 10
 			;[Block]
-			Return("682")
-			;[Block]
+			Return("409")
+			;[End Block]
 		Case 11
 			;[Block]
-			Return("714")
+			Return("513")
 			;[End Block]
 		Case 12
 			;[Block]
-			Return("860")
-			;[End Block]
+			Return("682")
+			;[Block]
 		Case 13
 			;[Block]
-			Return("860-1")
+			Return("714")
 			;[End Block]
 		Case 14
 			;[Block]
-			Return("895")
+			Return("860")
 			;[End Block]
 		Case 15
 			;[Block]
-			Return("939")
+			Return("860-1")
 			;[End Block]
 		Case 16
 			;[Block]
-			Return("966")
+			Return("895")
 			;[End Block]
 		Case 17
 			;[Block]
-			Return("970")
+			Return("939")
 			;[End Block]
 		Case 18
 			;[Block]
-			Return("1048")
+			Return("966")
 			;[End Block]
 		Case 19
 			;[Block]
-			Return("1162-ARC")
+			Return("970")
 			;[End Block]
 		Case 20
+			;[Block]
+			Return("1048")
+			;[End Block]
+		Case 21
+			;[Block]
+			Return("1162-ARC")
+			;[End Block]
+		Case 22
 			;[Block]
 			Return("1499")
 			;[End Block]
