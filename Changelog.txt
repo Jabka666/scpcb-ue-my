@@ -6,6 +6,8 @@ Launcher:
 
 General:
 - Added pressing animation for buttons.
+- Added SCP-085 as an easter egg.
+
 - Removed additional fogging on Very Fine Gas Mask and Very Fine Hazmat Suit.
 
 - Finished subtitles.

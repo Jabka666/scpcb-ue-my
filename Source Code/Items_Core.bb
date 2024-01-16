@@ -2030,9 +2030,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Blank Paper", "paper", x, y, z)
 					;[End Block]
-				Case ONETOONE, VERYFINE, FINE
+				Case ONETOONE
 					;[Block]
 					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), "paper", x, y, z)
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					If Rand(10) = 1
+						it2.Items = CreateItem("SCP-085", "paper", x, y, z)
+					Else
+						it2.Items = CreateItem("Document SCP-" + GetRandDocument(), "paper", x, y, z)
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]

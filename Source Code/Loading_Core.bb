@@ -889,6 +889,8 @@ Function LoadItems%()
 	
 	; ~ [SCPs]
 	
+	CreateItemTemplate("SCP-085", "SCP-085", "paper", "note.b3d", "INV_note.png", "note_085.png", 0.0033, 0, "note_085.png")
+	
 	CreateItemTemplate("SCP-005", "SCP-005", "scp005", "scp_005.b3d", "INV_scp_005.png", "", 0.0004, 1)
 	CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", "scp148ingot", "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
 	CreateItemTemplate("SCP-427", "SCP-427", "scp427", "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3)
