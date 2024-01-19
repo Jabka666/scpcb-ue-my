@@ -41,7 +41,7 @@ Rooms:
 
 - Combined both SCP-066's and SCP-1162-arc's containment chambers into one corner room.
 
-- The doors guarded by a four-pass code are now unlocked by default in SCP-860-1's containment chamber.
+- The doors guarded by a four-pass code are now unlocked by default and changed to fingerprint scanners in SCP-860-1's containment chamber.
 
 - Added sanity system to SCP-012's event:
 	- Cannot save at monitor and while being dragged in unless you wear SCP-714 (Green) or Heavy gear.
