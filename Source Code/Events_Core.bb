@@ -859,7 +859,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_cont1_173_intro
+			Case e_cont1_173_intro ; ~ TODO: Write a new code
 				;[Block]
 				If PlayerRoom = e\room
 					For r.Rooms = Each Rooms
