@@ -1069,8 +1069,8 @@ Function UpdateEvents%()
 											LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\Escort" + Rand(2) + ".ogg")
 											e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
 											
-											e\room\NPC[3]\PathStatus = FindPath(e\room\NPC[3], e\room\x + 288.0 * RoomScale, 0.3, e\room\z - 713.0 * RoomScale)
-											e\room\NPC[4]\PathStatus = FindPath(e\room\NPC[4], e\room\x + 288.0 * RoomScale, 0.3, e\room\z - 713.0 * RoomScale)
+											e\room\NPC[3]\PathStatus = FindPath(e\room\NPC[3], e\room\x + 280.0 * RoomScale, e\room\y + 0.3, e\room\z - 713.0 * RoomScale)
+											e\room\NPC[4]\PathStatus = FindPath(e\room\NPC[4], e\room\x + 280.0 * RoomScale, e\room\y + 0.3, e\room\z - 713.0 * RoomScale)
 											
 											OpenCloseDoor(e\room\RoomDoors[4])
 											
@@ -6798,12 +6798,12 @@ Function UpdateEvents%()
 									If e\room\NPC[0]\State = 6.0
 										If e\room\NPC[0]\Frame >= 501.0 And e\room\NPC[0]\Frame <= 523.0
 											e\room\NPC[0]\Frame = Animate2(e\room\NPC[0]\OBJ, AnimTime(e\room\NPC[0]\OBJ), 501.0, 523.0, 0.08, False)
-											If e\room\NPC[0]\Frame = 523.0 Then e\room\NPC[0]\State = 0.0
+											If e\room\NPC[0]\Frame > 522.9 Then e\room\NPC[0]\State = 0.0
 										EndIf
 										
 										If e\room\NPC[0]\Frame >= 524.0 And e\room\NPC[0]\Frame <= 553.0
 											e\room\NPC[0]\Frame = Animate2(e\room\NPC[0]\OBJ, AnimTime(e\room\NPC[0]\OBJ), 524.0, 553.0, 0.08, False)
-											If e\room\NPC[0]\Frame = 553.0 Then e\room\NPC[0]\State = 0.0
+											If e\room\NPC[0]\Frame > 552.9 Then e\room\NPC[0]\State = 0.0
 										EndIf
 									EndIf
 									
@@ -6826,7 +6826,7 @@ Function UpdateEvents%()
 									ElseIf e\room\NPC[0]\State = 1.0
 										If e\room\NPC[0]\State2 = 1.0
 											PointEntity(e\room\NPC[0]\OBJ, e\room\Objects[1])
-											If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) < 0.04 Then e\room\NPC[0]\State = 0.0
+											If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) < 0.09 Then e\room\NPC[0]\State = 0.0
 										Else
 											RotateEntity(e\room\NPC[0]\OBJ, 0.0, e\room\Angle - 180.0, 0.0, True)
 											If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) > 4.0 Then e\room\NPC[0]\State = 0.0
@@ -6944,10 +6944,10 @@ Function UpdateEvents%()
 										If ChannelPlaying(e\room\NPC[0]\SoundCHN)
 											e\room\NPC[0]\State = 0.0
 											PointEntity(e\room\NPC[0]\OBJ, me\Collider)
-											RotateEntity(e\room\NPC[0]\Collider, 0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
+											RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
 										Else
 											PointEntity(e\room\NPC[0]\OBJ, e\room\RoomDoors[0]\FrameOBJ)
-											RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0)
+											RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
 										EndIf
 									Else
 										RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null

@@ -7,7 +7,7 @@ Const NPCType966% = 12, NPCType1499_1% = 13
 Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 17, NPCTypeMTF% = 18
 ;[End Block]
 
-Const MaxPathLocations% = 12
+Const MaxPathLocations% = 21
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
@@ -2146,7 +2146,7 @@ Function UpdateNPCs%()
 				PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 				RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 				;[End Block]
-			Case NPCTypeGuard
+			Case NPCTypeGuard ; ~ TODO: WRITE A NEW AI
 				;[Block]
 				PrevFrame = n\Frame
 				
