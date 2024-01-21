@@ -1997,6 +1997,8 @@ Function LoadGameQuick%(File$)
 	
 	UpdateLightsTimer = 0.0
 	
+	d_I\AnimButton = 0
+	
 	If wi\NightVision > 0
 		opt\CameraFogFar = 17.0
 	ElseIf wi\SCRAMBLE > 0
