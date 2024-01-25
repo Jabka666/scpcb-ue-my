@@ -118,6 +118,13 @@ Function ResetTimingAccumulator%()
 	fps\Accumulator = 0.0
 End Function
 
+Function MilliSecs2%()
+	Local RetVal% = MilliSecs()
+	
+	If RetVal < 0 Then RetVal = RetVal + 2147483648
+	Return(RetVal)
+End Function
+
 Function Find860Angle#(n.NPCs, fr.Forest)
 	TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
 	

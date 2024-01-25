@@ -290,7 +290,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
 			Color(255, 255, 255)
 			TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.failed"), False, True)
-			If (MilliSecs() - SelectorDeniedTimer) > 5000 Then SelectorDeniedTimer = 0
+			If (MilliSecs2() - SelectorDeniedTimer) > 5000 Then SelectorDeniedTimer = 0
 		Else
 			If MouseOn(LauncherWidth - 185, LauncherHeight - 186, 40, 40)
 				If KeyDown(29) ; ~ LCtrl
@@ -311,7 +311,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 					TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
 					If mo\MouseHit1
 						PlaySound_Strict(ButtonSFX)
-						If UpdateLanguageSelector() Then SelectorDeniedTimer = MilliSecs()
+						If UpdateLanguageSelector() Then SelectorDeniedTimer = MilliSecs2()
 					EndIf
 				EndIf
 			Else
@@ -466,18 +466,18 @@ Function UpdateLanguageSelector%()
 				CreateDir(LocalizaitonPath + RequestLanguage\ID + "/Data")
 				CopyFile(BasePath + "/local.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini")
 				CopyFile(BasePath + "/achievements.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/achievements.ini")
-				StatusTimer = MilliSecs()
+				StatusTimer = MilliSecs2()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
 			Case LANGUAGE_STATUS_UNINSTALLING_START
 				;[Block]
 				DeleteFolder(LocalizaitonPath + SelectedLanguage\ID)
-				StatusTimer = MilliSecs()
+				StatusTimer = MilliSecs2()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
 		End Select
 		If CurrentStatus = LANGUAGE_STATUS_DONE
-			If (MilliSecs() - StatusTimer) > 1500 Then CurrentStatus = LANGUAGE_STATUS_NULL
+			If (MilliSecs2() - StatusTimer) > 1500 Then CurrentStatus = LANGUAGE_STATUS_NULL
 		EndIf
 		
 		SetBuffer(BackBuffer())

@@ -2425,7 +2425,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont1_895
 				;[Block]
-				If e\EventState < MilliSecs()
+				If e\EventState < MilliSecs2()
 					; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
 					If me\Zone > 0
 						If EntityPitch(e\room\RoomLevers[0]\OBJ, True) > 0.0 ; ~ Camera feed on
@@ -2438,7 +2438,7 @@ Function UpdateEvents%()
 							Next
 						EndIf
 					EndIf
-					e\EventState = MilliSecs() + 3000
+					e\EventState = MilliSecs2() + 3000
 				EndIf
 				
 				If PlayerRoom = e\room
@@ -6681,7 +6681,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room4_lcz_049
 				;[Block]
-				If e\EventState < MilliSecs()
+				If e\EventState < MilliSecs2()
 					If PlayerRoom <> e\room
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 64.0
 							If n_I\Curr049 <> Null
@@ -6694,7 +6694,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					EndIf
-					If e <> Null Then e\EventState = MilliSecs() + 5000
+					If e <> Null Then e\EventState = MilliSecs2() + 5000
 				EndIf
 				;[End Block]
 			Case e_cont1_035
