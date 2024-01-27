@@ -6232,8 +6232,8 @@ Function UpdateMTFUnit%(n.NPCs)
 			If Rand(100) = 1
 				If n <> n_I\MTFLeader
 					If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
-						If EntityDistanceSquared(n\Collider, me\Collider) < HideDistance
-							If (Not EntityInView(n\Collider, Camera)) And (Not EntityVisible(n\Collider, me\Collider)) And EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0 Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
+						If EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0
+							If (Not EntityInView(n\Collider, Camera)) And (Not EntityInView(n_I\MTFLeader\Collider, Camera)) Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
 						EndIf
 					EndIf
 				EndIf
