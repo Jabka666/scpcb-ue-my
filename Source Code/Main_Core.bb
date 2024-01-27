@@ -1771,7 +1771,11 @@ Function UpdateConsole%()
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
-					opt\CameraFogFar = Clamp(StrTemp, 6.0, 17.0)
+					If opt\DebugMode = 1
+						opt\CameraFogFar = StrTemp
+					Else
+						opt\CameraFogFar = Clamp(StrTemp, 6.0, 17.0)
+					EndIf
 					CreateConsoleMsg(Format(GetLocalString("console", "fog"), opt\CameraFogFar, "{0}"))
 					;[End Block]
 				Case "spawn", "s"
@@ -3048,9 +3052,12 @@ Function UpdateZoneColor%()
 	CurrAmbientColor$ = ""
 	
 	CameraFogMode(Camera, 1)
+	If opt\DebugMode = 1
+		CameraRange(Camera, 0.01, 100.0)
+	Else
+		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
+	EndIf
 	CameraFogRange(Camera, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
-	CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
-	
 	; ~ Handle room-specific settings
 	If RID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
@@ -5291,15 +5298,15 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "nav", "nav310", "navulti", "nav300"
 					;[Block]
-					If SelectedItem\ItemTemplate\Name = "navulti" Lor SelectedItem\ItemTemplate\Name = "nav300"
-						If SelectedItem\ItemTemplate\Img = 0
-							SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-							SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
-							SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-							SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
-							MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-						EndIf
-					Else
+					If SelectedItem\ItemTemplate\Img = 0
+						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
+						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+					EndIf
+					
+					If SelectedItem\ItemTemplate\Name = "nav" Lor SelectedItem\ItemTemplate\Name = "nav310"
 						SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
 						
 						If SelectedItem\State > 0.0 And SelectedItem\State <= 20.0
@@ -6623,6 +6630,27 @@ Function RenderGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
+					Local NavType%
+					
+					Select SelectedItem\ItemTemplate\TempName
+						Case "nav300"
+							;[Block]
+							NavType = 300
+							;[End Block]
+						Case "nav310"
+							;[Block]
+							NavType = 310
+							;[End Block]
+						Case "navulti"
+							;[Block]
+							NavType = 999
+							;[End Block]
+						Default
+							;[Block]
+							NavType = 1
+							;[End Block]
+					End Select
+					
 					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
 					y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 					
@@ -6630,7 +6658,7 @@ Function RenderGUI%()
 					
 					SetFontEx(fo\FontID[Font_Digital])
 					
-					Local Offline% = (SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav300")
+					Local Offline% = (NavType = 300 Lor NavType = 1)
 					Local NAV_WIDTH% = 287 * MenuScale
 					Local NAV_HEIGHT% = 256 * MenuScale
 					Local RectSize% = 24 * MenuScale
@@ -6642,8 +6670,9 @@ Function RenderGUI%()
 							TextEx(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
 							TextEx(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
 						EndIf
+						Return
 					Else
-						If (SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "nav300" Lor SelectedItem\ItemTemplate\TempName = "navulti")) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor RID <> r_cont1_895)
+						If (SelectedItem\State > 0.0 Lor NavType = 300 Lor NavType = 999) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor RID <> r_cont1_895)
 							Local ColliderX# = EntityX(me\Collider)
 							Local ColliderZ# = EntityZ(me\Collider)
 							Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
@@ -6707,7 +6736,7 @@ Function RenderGUI%()
 							
 							Local SCPs_Found% = 0, Dist#
 							
-							If SelectedItem\ItemTemplate\TempName = "navulti" And (MilliSec Mod 600) < 400
+							If NavType = 999 And (MilliSec Mod 600) < 400
 								Local np.NPCs
 								
 								For np.NPCs = Each NPCs
@@ -6735,10 +6764,11 @@ Function RenderGUI%()
 							EndIf
 							
 							Color(30, 30, 30)
-							If Offline Lor SelectedItem\ItemTemplate\TempName = "nav310"
-								Color(100, 0, 0)
+							If SelectedItem\State > 0.0 And (NavType = 1 Lor NavType = 310)
 								xTemp = x - (NAV_WIDTH / 2) + (196 * MenuScale)
 								yTemp = y - (NAV_HEIGHT / 2) + (10 * MenuScale)
+								
+								If Offline Then Color(100, 0, 0)
 								Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
 								
 								; ~ Battery

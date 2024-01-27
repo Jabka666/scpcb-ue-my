@@ -8,6 +8,7 @@ Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 1
 ;[End Block]
 
 Const MaxPathLocations% = 21
+Const PathLocationDist# = 0.09 ; ~ 0.3 ^ 2
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
@@ -994,7 +995,7 @@ Function UpdateNPCs%()
 													AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 													If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 													
-													If Dist2 < 0.04 Then n\PathLocation = n\PathLocation + 1
+													If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 												EndIf
 											Else
 												n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
@@ -1367,7 +1368,7 @@ Function UpdateNPCs%()
 														PlaySound2(OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\FrameOBJ)
 													EndIf
 												EndIf
-												If Dist2 < 0.04 Then n\PathLocation = n\PathLocation + 1
+												If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 											EndIf
 										EndIf
 										n\PathTimer = Max(0.0, n\PathTimer - fps\Factor[0])
@@ -2273,7 +2274,7 @@ Function UpdateNPCs%()
 								
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
-								If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.04 Then n\PathLocation = n\PathLocation + 1
+								If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
 							n\CurrSpeed = 0.0
@@ -2402,7 +2403,7 @@ Function UpdateNPCs%()
 										
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 										
-										If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.04 Then n\PathLocation = n\PathLocation + 1
+										If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 									EndIf
 								Else
 									If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider))
@@ -2500,7 +2501,7 @@ Function UpdateNPCs%()
 								
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
-								If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < 0.04 Then n\PathLocation = n\PathLocation + 1
+								If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
 							n\CurrSpeed = 0.0
@@ -5035,7 +5036,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 						AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 						
-						If DistanceSquared(EntityX(n\Collider), n\PathX, EntityZ(n\Collider), n\PathZ) < 0.04
+						If DistanceSquared(EntityX(n\Collider), n\PathX, EntityZ(n\Collider), n\PathZ) < PathLocationDist
 							n\PathX = 0.0
 							n\PathZ = 0.0
 							n\PathTimer = 70.0 * Rnd(6.0, 10.0)
@@ -5384,7 +5385,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							Else
 								PositionEntity(n\OBJ, n\EnemyX, n\EnemyY, n\EnemyZ, True)
-								If DistanceSquared(EntityX(n\Collider, True), n\EnemyX, EntityZ(n\Collider, True), n\EnemyZ) < 0.04 Lor (Not EntityVisible(n\OBJ, n\Collider))
+								If DistanceSquared(EntityX(n\Collider, True), n\EnemyX, EntityZ(n\Collider, True), n\EnemyZ) < PathLocationDist Lor (Not EntityVisible(n\OBJ, n\Collider))
 									If Rand(35) = 1 Then
 										RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 										
@@ -6296,11 +6297,8 @@ Const PATH_STATUS_NOT_FOUND% = 2
 
 Function FindPath%(n.NPCs, x#, y#, z#)
 	Local Temp%, Dist#, Dist2#
-	Local xTemp#, yTemp#, zTemp#
 	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, Smallest.WayPoints
-	Local StartX% = Floor(EntityX(n\Collider, True) / 8.0 + 0.5), StartZ% = Floor(EntityZ(n\Collider, True) / 8.0 + 0.5)
-	Local EndX% = Floor(x / 8.0 + 0.5), EndZ% = Floor(z / 8.0 + 0.5)
-	Local CurrX%, CurrZ%, i%, gTemp#
+	Local i%, gTemp#
 	
 	; ~ PathStatus = PATH_STATUS_NO_SEARCH, route hasn't been searched for yet
 	; ~ PathStatus = PATH_STATUS_FOUND, route found
@@ -6328,10 +6326,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	
 	Dist = 350.0
 	For w.WayPoints = Each WayPoints
-		xTemp = EntityX(w\OBJ, True) - EntityX(Temp, True)
-		zTemp = EntityZ(w\OBJ, True) - EntityZ(Temp, True)
-		yTemp = EntityY(w\OBJ, True) - EntityY(Temp, True)
-		Dist2 = PowTwo(xTemp) + PowTwo(yTemp) + PowTwo(zTemp)
+		Dist2 = EntityDistanceSquared(w\OBJ, Temp)
 		If Dist2 < Dist
 			; ~ Prefer waypoints that are visible
 			If (Not EntityVisible(w\OBJ, Temp)) Then Dist2 = Dist2 * 3.0
@@ -6343,17 +6338,16 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	Next
 	FreeEntity(Temp) : Temp = 0
 	
-	If StartPoint = Null Then Return(PATH_STATUS_NOT_FOUND)
+	If StartPoint = Null
+		FreeEntity(Pvt) : Pvt = 0
+		Return(PATH_STATUS_NOT_FOUND)
+	EndIf
 	StartPoint\State = 1
 	
 	EndPoint = Null
 	Dist = 400.0
 	For w.WayPoints = Each WayPoints
-		xTemp = EntityX(Pvt, True) - EntityX(w\OBJ, True)
-		zTemp = EntityZ(Pvt, True) - EntityZ(w\OBJ, True)
-		yTemp = EntityY(Pvt, True) - EntityY(w\OBJ, True)
-		Dist2 = PowTwo(xTemp) + PowTwo(yTemp) + PowTwo(zTemp)
-		
+		Dist2 = EntityDistanceSquared(Pvt, w\OBJ)
 		If Dist2 < Dist
 			Dist = Dist2
 			EndPoint = w
@@ -6965,7 +6959,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 				EndIf
 			EndIf
-			If Dist < 0.04 Then n\PathLocation = n\PathLocation + 1
+			If Dist < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 		EndIf
 	Else
 		If Dist < 0.49
@@ -6981,7 +6975,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 					EndIf
 				EndIf
 			EndIf
-			If Dist < 0.04 And Temp
+			If Dist < PathLocationDist And Temp
 				n\PathLocation = n\PathLocation + 1
 			ElseIf Dist < 0.25 And (Not Temp)
 				; ~ Breaking up the path when the door in front of NPC cannot be operated by himself

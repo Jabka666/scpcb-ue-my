@@ -2301,12 +2301,13 @@ Function UpdateButton%(OBJ%)
 		If EntityPick(Temp, 0.6) = OBJ
 			If d_I\ClosestButton = 0 Lor Dist < EntityDistanceSquared(me\Collider, d_I\ClosestButton)
 				d_I\ClosestButton = OBJ
-				Result = True
+				FreeEntity(Temp) : Temp = 0
+				Return(True)
 			EndIf
 		EndIf
 		FreeEntity(Temp) : Temp = 0
 	EndIf
-	Return(Result)
+	Return(False)
 End Function
 
 Type BrokenDoor
