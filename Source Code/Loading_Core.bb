@@ -2464,11 +2464,8 @@ Function InitNewGame%()
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 		EndIf
-		
-		; ~ Spawning Player Based On Zone
-		
-		If CurrentZone = LCZ Then
-			
+		; ~ Spawning Player Based On Current Zone
+		If CurrentZone = LCZ
 			If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
 				PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 1024.0 * RoomScale)
 				PlayerRoom = r
@@ -2490,28 +2487,21 @@ Function InitNewGame%()
 				PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
 				PlayerRoom = r
 			EndIf
-			
-		ElseIf CurrentZone = HCZ Then
-			
+		ElseIf CurrentZone = HCZ
 			If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
 				PositionEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\RoomCenter, True), EntityZ(r\RoomCenter, True))
 				PlayerRoom = r
 			EndIf
-			
-		ElseIf CurrentZone = EZ Then
-			
+		ElseIf CurrentZone = EZ
 			If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
 				PositionEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\RoomCenter, True), EntityZ(r\RoomCenter, True))
 				PlayerRoom = r
 			EndIf
-			
 		Else
-			
 			If r\RoomTemplate\RoomID = r_gate_a
 				PositionEntity(me\Collider, EntityX(r\OBJ, True), EntityY(r\OBJ, True), EntityZ(r\OBJ, True))
 				PlayerRoom = r
 			EndIf
-			
 		EndIf
 		
 	Next

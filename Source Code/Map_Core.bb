@@ -4772,7 +4772,7 @@ Function CreateMap%()
 		CurrMapGrid\Grid[x + (i * MapGridSize)] = MapGrid_Tile
 	Next
 	
-	If CurrentZone <> SURFACE ; ~ Generate rooms only if they're inside the facility
+;	If CurrentZone <> SURFACE ; ~ Generate rooms only if they're inside the facility
 		Repeat
 			Width = Rand(Floor(MapGridSize * 0.6), Floor(MapGridSize * 0.85))
 			
@@ -5321,32 +5321,31 @@ Function CreateMap%()
 				EndIf
 			Next
 		Next
-		
-	Else ; ~ Spawn some rooms outside the generated map
-		If CurrentZone = SURFACE
-			r.Rooms = CreateRoom(CurrentZone, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(PowTwo(RoomSpacing)), r_gate_b)
-			CalculateRoomExtents(r)
+;	Else ; ~ Spawn some rooms outside the generated map
+;		If CurrentZone = SURFACE
+		r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(PowTwo(RoomSpacing)), r_gate_b)
+			If Zone = CurrentZone Then CalculateRoomExtents(r)
 			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 			
-			r.Rooms = CreateRoom(CurrentZone, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
-			CalculateRoomExtents(r)
+			r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
+			If Zone = CurrentZone Then CalculateRoomExtents(r)
 			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
-		Else
+;		ElseIf CurrentZone <> SURFACE
 			r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_dimension_106)
-			CalculateRoomExtents(r)
+			If Zone = CurrentZone Then CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+			
+			r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
+			If Zone = CurrentZone Then CalculateRoomExtents(r)
 			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 			
 			If opt\IntroEnabled
-				r.Rooms = CreateRoom(CurrentZone, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
-				CalculateRoomExtents(r)
+				r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
+				If Zone = CurrentZone Then CalculateRoomExtents(r)
 				CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 			EndIf
-			
-			r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
-			CalculateRoomExtents(r)
-			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
-		EndIf
-	EndIf
+;		EndIf
+;	EndIf
 	
 	; ~ Prevent room overlaps
 	For r.Rooms = Each Rooms
