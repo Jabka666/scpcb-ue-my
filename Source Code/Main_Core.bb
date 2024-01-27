@@ -23,7 +23,7 @@ Global fps.FramesPerSeconds = New FramesPerSeconds
 
 Global MilliSec%
 
-fps\LoopDelay = MilliSecs2()
+fps\LoopDelay = MilliSecs()
 
 Global SplitSpace$
 
@@ -76,8 +76,8 @@ Function UpdateMouseInput%()
 		mo\DoubleClick = False
 		mo\MouseHit1 = MouseHit(1)
 		If mo\MouseHit1
-			If MilliSecs2() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
-			mo\LastMouseHit1 = MilliSecs2()
+			If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+			mo\LastMouseHit1 = MilliSecs()
 		EndIf
 		
 		Local PrevMouseDown1% = mo\MouseDown1
@@ -224,20 +224,20 @@ Repeat
 	
 	Cls()
 	
-	Local ElapsedMilliSecs2%
+	Local ElapsedMilliSecs%
 	
-	MilliSec = MilliSecs2()
+	MilliSec = MilliSecs()
 	fps\CurrTime = MilliSec
 	
-	ElapsedMilliSecs2 = fps\CurrTime - fps\PrevTime
-	If (ElapsedMilliSecs2 > 0 And ElapsedMilliSecs2 < 500) Then fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliSecs2) * 70.0 / 1000.0)
+	ElapsedMilliSecs = fps\CurrTime - fps\PrevTime
+	If (ElapsedMilliSecs > 0 And ElapsedMilliSecs < 500) Then fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliSecs) * 70.0 / 1000.0)
 	fps\PrevTime = fps\CurrTime
 	
 	If opt\FrameLimit > 0.0
-		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs2() - fps\LoopDelay)
+		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs() - fps\LoopDelay)
 		
 		Delay(WaitingTime)
-		fps\LoopDelay = MilliSecs2()
+		fps\LoopDelay = MilliSecs()
 	EndIf
 	
 	fps\Factor[0] = TICK_DURATION
@@ -254,10 +254,10 @@ Repeat
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
 	If opt\ShowFPS
-		If fps\Goal < MilliSecs2()
+		If fps\Goal < MilliSecs()
 			fps\FPS = fps\TempFPS
 			fps\TempFPS = 0
-			fps\Goal = MilliSecs2() + 1000
+			fps\Goal = MilliSecs() + 1000
 		Else
 			fps\TempFPS = fps\TempFPS + 1
 		EndIf
@@ -6721,7 +6721,7 @@ Function RenderGUI%()
 							Else
 								Color(30, 30, 30)
 							EndIf
-							If (MilliSec Mod 800) < 200 ; ~ TODO: FIND THE WAY TO GET RID OF MilliSecs2
+							If (MilliSec Mod 800) < 200 ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS
 								If Offline Then TextEx(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), GetLocalString("msg", "nav.data"))
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
@@ -7381,7 +7381,7 @@ Function UpdateMenu%()
 							UpdateWorld(0.0)
 							
 							fps\Factor[0] = 0.0
-							fps\PrevTime = MilliSecs2()
+							fps\PrevTime = MilliSecs()
 							
 							ResetInput()
 							MenuOpen = False
@@ -7447,7 +7447,7 @@ Function UpdateMenu%()
 							UpdateWorld(0.0)
 							
 							fps\Factor[0] = 0.0
-							fps\PrevTime = MilliSecs2()
+							fps\PrevTime = MilliSecs()
 							
 							ResetInput()
 							MenuOpen = False
@@ -8409,11 +8409,11 @@ Function UpdateVomit%()
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0
 			If (Not ChannelPlaying(VomitCHN)) And me\Regurgitate = 0
 				VomitCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(2) + ".ogg"), True)
-				me\Regurgitate = MilliSecs2() + 50
+				me\Regurgitate = MilliSecs() + 50
 			EndIf
 		EndIf
 		
-		If me\Regurgitate > MilliSecs2() And me\Regurgitate <> 0
+		If me\Regurgitate > MilliSecs() And me\Regurgitate <> 0
 			mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + 1.0
 		Else
 			me\Regurgitate = 0

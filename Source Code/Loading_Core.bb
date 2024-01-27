@@ -2547,7 +2547,7 @@ Function InitNewGame%()
 	RenderLoading(100)
 	
 	fps\Factor[0] = 0.0
-	fps\PrevTime = MilliSecs2()
+	fps\PrevTime = MilliSecs()
 	
 	ResetInput()
 	
@@ -2660,7 +2660,7 @@ Function InitLoadGame%()
 	RenderLoading(100)
 	
 	fps\Factor[0] = 0.0
-	fps\PrevTime = MilliSecs2()
+	fps\PrevTime = MilliSecs()
 	
 	ResetInput()
 	

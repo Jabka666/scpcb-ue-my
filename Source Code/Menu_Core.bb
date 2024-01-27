@@ -2307,19 +2307,19 @@ Function UpdateInput$(aString$, MaxChr%)
 	
 	If Value = 30 Then
 		CursorPos = CursorPos + 1
-		PrevInputBoxCtrl = MilliSecs2()
+		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
 	If Value = 31 Then
 		CursorPos = CursorPos - 1
-		PrevInputBoxCtrl = MilliSecs2()
+		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
 
-	If KeyDown(205) And ((MilliSecs2() - PrevInputBoxCtrl) > 500) ; ~ Right arrow
-		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
+	If KeyDown(205) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Right arrow
+		If (MilliSecs() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
 	ElseIf KeyDown(203) And ((MilliSec - PrevInputBoxCtrl) > 500) ; ~ Left arrow
-		If (MilliSecs2() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
+		If (MilliSecs() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
 		If InsertMode
 			If ChrCanDisplay(Value)
