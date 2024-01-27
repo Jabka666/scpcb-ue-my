@@ -82,17 +82,24 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_173_MODEL])
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_173_HEAD_MODEL])
-			; ~ On Halloween set Jack-o'-lantern texture
-			If (Left(CurrentDate(), 7) = "31 Oct ")
-				n_I\IsHalloween = True
-				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
-			ElseIf (Left(CurrentDate(), 7) = "01 Jan ") 
-				n_I\IsNewYear = True
-				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
-			ElseIf (Left(CurrentDate(), 7) = "01 Apr ")
-				n_I\IsAprilFools = True
-				TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
-			EndIf
+			; ~ Set a fastive texture
+			Select Left(CurrentDate(), 7)
+				Case "31 Oct "
+					;[Block]
+					n_I\IsHalloween = True
+					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
+					;[End Block]
+				Case "01 Jan "
+					;[Block]
+					n_I\IsNewYear = True
+					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
+					;[End Block]
+				Case "01 Apr "
+					;[Block]
+					n_I\IsAprilFools = True
+					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
+					;[End Block]
+			End Select
 			If TexFestive <> 0
 				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
@@ -161,8 +168,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0) 
 			
-			If MTFSFX[0] = 0 Then MTFSFX[0] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
-			If MTFSFX[1] = 0 Then MTFSFX[1] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
+			If NPCSound[SOUND_NPC_MTF_BEEP] = 0 Then NPCSound[SOUND_NPC_MTF_BEEP] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
+			If NPCSound[SOUND_NPC_MTF_BREATH] = 0 Then NPCSound[SOUND_NPC_MTF_BREATH] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
@@ -241,8 +248,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Temp = IniGetFloat(NPCsFile, "SCP-049", "Scale")
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
-			n\Sound = LoadSound_Strict("SFX\Horror\Horror12.ogg")
-			If HorrorSFX[13] = 0 Then HorrorSFX[13] = LoadSound_Strict("SFX\Horror\Horror13.ogg")
+			If NPCSound[SOUND_NPC_049_BREATH] = 0 Then NPCSound[SOUND_NPC_049_BREATH] = LoadSound_Strict("SFX\SCP\049\Breath.ogg")
 			;[End Block]
 		Case NPCType049_2
 			;[Block]
@@ -259,7 +265,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
-			n\Sound = LoadSound_Strict("SFX\SCP\049_2\Breath.ogg")
+			If NPCSound[SOUND_NPC_049_2_BREATH] = 0 Then NPCSound[SOUND_NPC_049_2_BREATH] = LoadSound_Strict("SFX\SCP\049_2\Breath.ogg")
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
@@ -318,6 +324,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Temp = IniGetFloat(NPCsFile, "SCP-035's Tentacle", "Scale") / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			SetAnimTime(n\OBJ, 283.0)
+			
+			If NPCSound[SOUND_NPC_035_TENTACLE_IDLE] = 0 Then NPCSound[SOUND_NPC_035_TENTACLE_IDLE] = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
 			;[End Block]
 		Case NPCType860_2
 			;[Block]
@@ -429,7 +437,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			SetNPCFrame(n, 11.0)
 			
-			n\Sound = LoadSound_Strict("SFX\SCP\008_1\Breath.ogg")
+			If NPCSound[SOUND_NPC_008_1_BREATH] = 0 Then NPCSound[SOUND_NPC_008_1_BREATH] = LoadSound_Strict("SFX\SCP\008_1\Breath.ogg")
 			;[End Block]
 		Case NPCTypeClerk
 			;[Block]
@@ -666,7 +674,7 @@ Function UpdateNPCs%()
 											;[End Block]
 										Case 5
 											;[Block]
-											PlaySound_Strict(HorrorSFX[14])
+											PlaySound_Strict(HorrorSFX[12])
 											;[End Block]
 									End Select
 								EndIf
@@ -1561,7 +1569,7 @@ Function UpdateNPCs%()
 									msg\DeathMsg = GetLocalString("death", "049")
 									Kill() : me\KillAnim = 0
 								EndIf
-								PlaySound_Strict(HorrorSFX[13])
+								PlaySound_Strict(LoadTempSound("SFX\SCP\049\Horror.ogg"))
 								LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(2) + ".ogg", 1)
 								n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
 								n\State = 3.0
@@ -1583,7 +1591,7 @@ Function UpdateNPCs%()
 					PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 					ResetEntity(n\Collider)
 				Else
-					n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
+					n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_049_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
 					If n\Idle = 0.1
 						If PlayerInReachableRoom()
 							For i = 0 To MaxRoomAdjacents - 1
@@ -2140,7 +2148,7 @@ Function UpdateNPCs%()
 					End Select
 					
 					; ~ Loop the breath sound
-					If n\State > 1.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+					If n\State > 1.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_049_2_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 				Else
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
@@ -3022,7 +3030,7 @@ Function UpdateNPCs%()
 						Select n\State 
 							Case 0.0 ; ~ Spawns
 								;[Block]
-								If n\Frame > 283.0
+								If n\Frame > 282.0
 									me\HeartBeatVolume = Max(CurveValue(1.0, me\HeartBeatVolume, 50.0), me\HeartBeatVolume)
 									me\HeartBeatRate = Max(CurveValue(130.0, me\HeartBeatRate, 100.0), me\HeartBeatRate)
 									
@@ -3031,22 +3039,20 @@ Function UpdateNPCs%()
 									
 									AnimateNPC(n, 283.0, 389.0, 0.3, False)
 									
-									If n\Frame > 388.0
+									If n\Frame > 388.9
 										If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 										n\State = 1.0
 									EndIf
 								Else
 									If Dist < 6.25
-										SetNPCFrame(n, 284.0)
-										n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleSpawn.ogg")
-										PlaySound_Strict(n\Sound)
+										SetNPCFrame(n, 283.0)
+										PlaySound2(LoadTempSound("SFX\SCP\035_Tentacle\TentacleSpawn.ogg"), Camera, n\Collider, 5.0)
 									EndIf
 								EndIf
 								;[End Block]
 							Case 1.0 ; ~ Idles
 								;[Block]
-								If n\Sound = 0 Then n\Sound = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
-								n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider)
+								n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_035_TENTACLE_IDLE], n\SoundCHN, Camera, n\Collider)
 								
 								If Dist < 3.24 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 									If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0 Then n\State = 2.0
@@ -4747,7 +4753,7 @@ Function UpdateNPCs%()
 					End Select
 					
 					; ~ Loop the breath sound
-					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(n\Sound, n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_008_1_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 				Else
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
 				EndIf
@@ -4901,7 +4907,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		If Int(n\State) <> MTF_SEARCHING_PLAYER And Int(n\State) <> MTF_DISABLING_TESLA Then n\PrevState = 0
 		
-		n\SoundCHN2 = LoopSound2(MTFSFX[1], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
+		n\SoundCHN2 = LoopSound2(NPCSound[SOUND_NPC_MTF_BREATH], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
 		
 		Local Dist#
 		Local PrevFrame# = n\Frame
@@ -6664,7 +6670,7 @@ Function MoveToPocketDimension%()
 			
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
 			InjurePlayer(0.5, 0.0, 1500.0)
-			
+			Return
 			Exit
 		EndIf
 	Next
@@ -6817,7 +6823,8 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Default 
 			;[Block]
-			CreateConsoleMsg(GetLocalString("console", "spawn.notfound"), 255, 0, 0) : Return
+			CreateConsoleMsg(GetLocalString("console", "spawn.notfound"), 255, 0, 0)
+			Return
 			;[End Block]
 	End Select
 	
@@ -6955,7 +6962,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			If n\Path[n\PathLocation]\door <> Null
 				If (Not n\Path[n\PathLocation]\door\Open)
 					OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
-					If PlaySFX Then PlaySound2(MTFSFX[0], Camera, n\OBJ, 8.0)
+					If PlaySFX Then PlaySound2(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
 					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 				EndIf
 			EndIf
@@ -6991,9 +6998,11 @@ Function CheckForNPCInFacility%(n.NPCs)
 	; ~ True (= 1): NPC is in facility
 	; ~ 2: NPC is in tunnels (Maintenance Tunnels / SCP-049 tunnels / SCP-939 storage room, etc...)
 	
-	If EntityY(n\Collider) > 100.0 Then Return(False)
-	If EntityY(n\Collider) < -10.0 Then Return(2)
-	If EntityY(n\Collider) > 7.0 And EntityY(n\Collider) <= 100.0 Then Return(2)
+	Local NPCPosY# = EntityY(n\Collider)
+	
+	If NPCPosY > 100.0 Then Return(False)
+	If NPCPosY < -10.0 Then Return(2)
+	If NPCPosY > 7.0 And NPCPosY <= 100.0 Then Return(2)
 	
 	Return(True)
 End Function

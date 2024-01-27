@@ -111,6 +111,8 @@ Bug Fixes:
 - Fixed messages in keypad button having an incorrect position at different scales and FOV.
 - Fixed ability to interact with keypad and papers when menu is open.
 - Fixed SCP-008 and SCP-409 revert messages not showing.
+- Fixed NPCs collisions.
+- Fixed SCP-1123 ambience sound not playing correctly.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.

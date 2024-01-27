@@ -3213,7 +3213,7 @@ Function UpdateGUI%()
 								;[End Block]
 							Case 5
 								;[Block]
-								PlaySound_Strict(HorrorSFX[14])
+								PlaySound_Strict(HorrorSFX[12])
 								;[End Block]
 						End Select
 						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
@@ -6845,7 +6845,7 @@ Function UpdateMenu%()
 				me\StopHidingTimer = me\StopHidingTimer + 1
 			Else
 				me\StopHidingTimer = 0.0
-				PlaySound_Strict(HorrorSFX[15])
+				PlaySound_Strict(LoadTempSound("SFX\General\STOPHIDING.ogg"))
 				CreateHintMsg(GetLocalString("msg", "stophiding"))
 				ShouldDeleteGadgets = True
 				MenuOpen = False

@@ -1043,37 +1043,38 @@ Global TempSounds%[10]
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Global Music$[29]
+Global Music$[30]
 
 Music[0] = "LightContainmentZone"
 Music[1] = "HeavyContainmentZone"
 Music[2] = "EntranceZone"
 Music[3] = "PD"
-Music[4] = "Cont_079"
+Music[4] = "079Chamber"
 Music[5] = "Gate_B1"
 Music[6] = "Gate_B2"
 Music[7] = "Room3_storage"
-Music[8] = "Cont_049"
-Music[9] = "Cont_860_1"
+Music[8] = "049Chamber"
+Music[9] = "860_1Chamber"
 Music[10] = "106Chase"
 Music[11] = "Menu"
 Music[12] = "860_2Chase"
-Music[13] = "Cont_173_Intro"
+Music[13] = "173IntroChamber"
 Music[14] = "PDTrench"
-Music[15] = "Cont_205"
+Music[15] = "205Chamber"
 Music[16] = "Gate_A"
-Music[17] = "1499"
+Music[17] = "1499Dimension"
 Music[18] = "1499_1Chase"
 Music[19] = "049Chase"
 Music[20] = "..\Ending\MenuBreath"
-Music[21] = "Cont_914"
+Music[21] = "914Chamber"
 Music[22] = "Ending"
 Music[23] = "Credits"
 Music[24] = "SaveMeFrom"
-Music[25] = "Cont_106"
-Music[26] = "Cont_035"
-Music[27] = "Cont_409"
+Music[25] = "106Chamber"
+Music[26] = "035Chamber"
+Music[27] = "409Chamber"
 Music[28] = "MaintenanceTunnels"
+Music[29] = "1123Chamber"
 
 Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)
@@ -1167,7 +1168,7 @@ Global OldManSFX%[9]
 
 Global Scp173SFX%[3]
 
-Global HorrorSFX%[20]
+Global HorrorSFX%[13]
 
 Global MissSFX%
 
@@ -1190,8 +1191,6 @@ Global BreathGasRelaxedCHN%
 Global NeckSnapSFX%[3]
 
 Global DamageSFX%[14]
-
-Global MTFSFX%[2]
 
 Dim CoughSFX%(2, 3) ; ~ Normal / Gas Mask, Amount
 Global CoughCHN%, VomitCHN%
@@ -1220,6 +1219,18 @@ Global IntercomStreamCHN%
 Global UserTrackCheck% = 0, UserTrackCheck2% = 0
 Global UserTrackMusicAmount% = 0, CurrUserTrack%, UserTrackFlag% = False
 Global UserTrackName$[256]
+
+; ~ NPCs Sound Constants
+;[Block]
+Const SOUND_NPC_MTF_BEEP% = 0
+Const SOUND_NPC_MTF_BREATH% = 1
+Const SOUND_NPC_008_1_BREATH% = 2
+Const SOUND_NPC_035_TENTACLE_IDLE% = 3
+Const SOUND_NPC_049_BREATH% = 4
+Const SOUND_NPC_049_2_BREATH% = 5
+;[End Block]
+Const MaxNPCSounds% = 6
+Global NPCSound%[MaxNPCSounds]
 
 Function LoadSounds%()
 	Local i%
@@ -1342,10 +1353,7 @@ Function LoadSounds%()
 		Scp173SFX[i] = LoadSound_Strict("SFX\SCP\173\Rattle" + (i + 1) + ".ogg")
 	Next
 	
-	For i = 0 To 11
-		HorrorSFX[i] = LoadSound_Strict("SFX\Horror\Horror" + i + ".ogg")
-	Next
-	For i = 14 To 15
+	For i = 0 To 12
 		HorrorSFX[i] = LoadSound_Strict("SFX\Horror\Horror" + i + ".ogg")
 	Next
 	
@@ -1441,7 +1449,6 @@ Function RemoveSoundInstances%()
 			NVGSFX[i] = 0
 			LowBatterySFX[i] = 0
 			KnobSFX[i] = 0
-			MTFSFX[i] = 0
 		EndIf
 		If i < 3
 			OpenDoorSFX(DEFAULT_DOOR, i) = 0
@@ -1473,6 +1480,7 @@ Function RemoveSoundInstances%()
 		If i < 6
 			AmbientSFXAmount[i] = 0
 			RustleSFX[i] = 0
+			NPCSound[i] = 0
 		EndIf
 		If i < 8
 			StepSFX(0, 0, i) = 0
@@ -1491,9 +1499,9 @@ Function RemoveSoundInstances%()
 		EndIf
 		If i < 11 Then RoomAmbience[i] = 0
 		If i < 12 Then IntroSFX[i] = 0
+		If i < 13 Then HorrorSFX[i] = 0
 		If i < 14 Then DamageSFX[i] = 0
 		If i < 15 Then Step2SFX[i] = 0
-		HorrorSFX[i] = 0
 	Next
 	DoorClose079 = 0
 	DoorOpen079 = 0

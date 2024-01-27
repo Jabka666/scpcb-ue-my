@@ -62,7 +62,7 @@ Function PlayMTFSound%(SoundHandle%, n.NPCs)
 	If n <> Null Then n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0, 1.0, True)
 	If IsUsingRadio
 		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0
-			If SoundHandle <> MTFSFX[0] Lor (Not ChannelPlaying(RadioCHN[3]))
+			If SoundHandle <> NPCSound[SOUND_NPC_MTF_BEEP] Lor (Not ChannelPlaying(RadioCHN[3]))
 				StopChannel(RadioCHN[3]) : RadioCHN[3] = 0
 				RadioCHN[3] = PlaySound_Strict(SoundHandle, True)
 			EndIf

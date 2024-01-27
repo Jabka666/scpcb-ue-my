@@ -440,7 +440,7 @@ Function CreateEvent.Events(EventID%, RoomID%, ID%, Prob# = 0.0)
 					e\EventID = EventID
 					FindForestEvent(e)
 					e\room = r
-					Return(e)
+					Return(e) ; ~ CHECK IF THIS IS REALLY NECESSARY
 				EndIf
 			EndIf
 		Next
@@ -2506,7 +2506,7 @@ Function UpdateEvents%()
 								If e\Sound = 0
 									e\room\NPC[0]\IsDead = True
 									
-									LoadEventSound(e,"SFX\General\BodyFall.ogg")
+									LoadEventSound(e, "SFX\General\BodyFall.ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 									
 									de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
@@ -2943,7 +2943,7 @@ Function UpdateEvents%()
 								If e\Sound = 0 Then LoadEventSound(e, "SFX\Music\012Golgotha.ogg")
 								e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[1], 5.0)
 								
-								If e\Sound2 = 0 Then LoadEventSound(e, "SFX\Music\012.ogg", 1)
+								If e\Sound2 = 0 Then LoadEventSound(e, "SFX\Music\012Chamber.ogg", 1)
 								
 								e\EventState = CurveValue(90.0, e\EventState, 500)
 								PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), (-130.0 - (448.0 * Sin(e\EventState))) * RoomScale, EntityZ(e\room\Objects[0], True), True)
@@ -3557,10 +3557,7 @@ Function UpdateEvents%()
 						PointEntity(e\room\NPC[0]\Collider, me\Collider)
 						me\BlurTimer = Max(me\BlurTimer, 100.0)
 						
-						If e\EventState2 > 200.0 And e\EventState2 - fps\Factor[0] <= 200.0
-							e\Sound = LoadSound_Strict("SFX\Music\Cont_1123.ogg")
-							e\SoundCHN = PlaySound_Strict(e\Sound)
-						EndIf
+						ShouldPlay = 29
 						
 						If e\EventState2 > 1000.0
 							If (Not e\room\RoomDoors[1]\Open) Then OpenCloseDoor(e\room\RoomDoors[1])
@@ -8537,7 +8534,7 @@ Function UpdateDimension106%()
 						
 						ScaleEntity(e\room\OBJ, RoomScale, RoomScale, RoomScale)
 						If e\EventState3 = 0.0 And (e\room\RoomDoors[0]\OpenState > 150.0 Lor e\room\RoomDoors[1]\OpenState > 150.0)
-							PlaySound_Strict(LoadTempSound("SFX\Horror\Horror16.ogg"))
+							PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Horror.ogg"))
 							me\BlurTimer = 800.0
 							e\EventState3 = 1.0
 						EndIf
