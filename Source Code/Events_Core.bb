@@ -440,6 +440,7 @@ Function CreateEvent.Events(EventID%, RoomID%, ID%, Prob# = 0.0)
 					e\EventID = EventID
 					FindForestEvent(e)
 					e\room = r
+					Return(e)
 				EndIf
 			EndIf
 		Next
