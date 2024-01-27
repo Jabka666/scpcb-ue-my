@@ -415,7 +415,7 @@ Function SaveGame%(File$)
 		WriteByte(f, it\R)
 		WriteByte(f, it\G)
 		WriteByte(f, it\B)
-		WriteFloat(f, it\A)
+		WriteFloat(f, it\Alpha)
 		
 		WriteFloat(f, EntityPitch(it\Collider))
 		WriteFloat(f, EntityYaw(it\Collider))

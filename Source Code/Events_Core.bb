@@ -6432,7 +6432,7 @@ Function UpdateEvents%()
 								If it\Dropped = 1 And Abs(x) < 264.0
 									For i = -1 To 1 Step 2
 										TFormPoint(x + (1024.0 * i), y, z, e\room\OBJ, 0)
-										it2.Items = CreateItem(it\Name, it\ItemTemplate\TempName, TFormedX(), EntityY(it\Collider), TFormedZ(), it\R, it\G, it\B, it\A)
+										it2.Items = CreateItem(it\Name, it\ItemTemplate\TempName, TFormedX(), EntityY(it\Collider), TFormedZ(), it\R, it\G, it\B, it\Alpha)
 										it2\State = it\State : it2\State2 = it\State2 : it2\State3 = it\State3
 										If it\InvSlots > 0
 											it2\InvSlots = it\InvSlots

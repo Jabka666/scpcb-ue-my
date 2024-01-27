@@ -224,7 +224,7 @@ Type Items
 	Field Collider%, Model%
 	Field ItemTemplate.ItemTemplates
 	Field DropSpeed#
-	Field R%, G%, B%, A#
+	Field R%, G%, B%, Alpha#
 	Field Dist#, DistTimer#
 	Field State#, State2#, State3#
 	Field Picked%, Dropped%
@@ -242,7 +242,7 @@ Global SelectedItem.Items
 Global ClosestItem.Items
 Global OtherOpen.Items = Null
 
-Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, A# = 1.0, InvSlots% = 0)
+Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha# = 1.0, InvSlots% = 0)
 	CatchErrors("CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + A + ", " + InvSlots + ")")
 	
 	Local i.Items, it.ItemTemplates
@@ -279,7 +279,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		i\R = R
 		i\G = G
 		i\B = B
-		i\A = A
+		i\Alpha = Alpha
 		i\State = 1.0
 		
 		Local Liquid% = CopyEntity(misc_I\CupLiquid)
@@ -289,11 +289,11 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 		EntityParent(Liquid, i\Model)
 		EntityColor(Liquid, R, G, B)
 		
-		If A < 0.0
+		If Alpha < 0.0
 			EntityFX(Liquid, 1)
-			EntityAlpha(Liquid, Abs(A))
+			EntityAlpha(Liquid, Abs(Alpha))
 		Else
-			EntityAlpha(Liquid, Abs(A))
+			EntityAlpha(Liquid, Abs(Alpha))
 		EndIf
 		EntityShininess(Liquid, 1.0)
 	EndIf
