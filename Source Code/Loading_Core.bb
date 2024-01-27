@@ -2465,27 +2465,55 @@ Function InitNewGame%()
 			EndIf
 		EndIf
 		
-		If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
-			PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 1024.0 * RoomScale)
-			PlayerRoom = r
-			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
-			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-			Inventory(0) = it
-			HideEntity(it\Collider)
-			EntityType(it\Collider, HIT_ITEM)
-			EntityParent(it\Collider, 0)
-			ItemAmount = ItemAmount + 1
-			it.Items = CreateItem("Document SCP-173", "paper", 1.0, 1.0, 1.0)
-			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-			Inventory(1) = it
-			HideEntity(it\Collider)
-			EntityType(it\Collider, HIT_ITEM)
-			EntityParent(it\Collider, 0)
-			ItemAmount = ItemAmount + 1
-		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
-			PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
-			PlayerRoom = r
+		; ~ Spawning Player Based On Zone
+		
+		If CurrentZone = LCZ Then
+			
+			If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
+				PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 1024.0 * RoomScale)
+				PlayerRoom = r
+				it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
+				it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
+				Inventory(0) = it
+				HideEntity(it\Collider)
+				EntityType(it\Collider, HIT_ITEM)
+				EntityParent(it\Collider, 0)
+				ItemAmount = ItemAmount + 1
+				it.Items = CreateItem("Document SCP-173", "paper", 1.0, 1.0, 1.0)
+				it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
+				Inventory(1) = it
+				HideEntity(it\Collider)
+				EntityType(it\Collider, HIT_ITEM)
+				EntityParent(it\Collider, 0)
+				ItemAmount = ItemAmount + 1
+			ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
+				PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
+				PlayerRoom = r
+			EndIf
+			
+		ElseIf CurrentZone = HCZ Then
+			
+			If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+				PositionEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\RoomCenter, True), EntityZ(r\RoomCenter, True))
+				PlayerRoom = r
+			EndIf
+			
+		ElseIf CurrentZone = EZ Then
+			
+			If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+				PositionEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\RoomCenter, True), EntityZ(r\RoomCenter, True))
+				PlayerRoom = r
+			EndIf
+			
+		Else
+			
+			If r\RoomTemplate\RoomID = r_gate_a
+				PositionEntity(me\Collider, EntityX(r\OBJ, True), EntityY(r\OBJ, True), EntityZ(r\OBJ, True))
+				PlayerRoom = r
+			EndIf
+			
 		EndIf
+		
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates

@@ -4740,6 +4740,13 @@ End Type
 
 Global I_Zone.MapZones
 
+; ~ Zones ID Constants
+;[Block]
+Const LCZ% = 1, HCZ% = 2, EZ% = 3, SURFACE% = 4
+;[End Block]
+
+Global CurrentZone% = LCZ
+
 Function CreateMap%()
 	Local r.Rooms, r2.Rooms, d.Doors
 	Local x%, y%, Temp%, Temp2%
@@ -4765,566 +4772,581 @@ Function CreateMap%()
 		CurrMapGrid\Grid[x + (i * MapGridSize)] = MapGrid_Tile
 	Next
 	
-	Repeat
-		Width = Rand(Floor(MapGridSize * 0.6), Floor(MapGridSize * 0.85))
-		
-		If x > MapGridSize * 0.6
-			Width = -Width
-		ElseIf x > MapGridSize * 0.4
-			x = x - (Width / 2)
-		EndIf
-		
-		; ~ Make sure the hallway doesn't go outside the array
-		If x + Width > MapGridSize - 3
-			Width = MapGridSize - 3 - x
-		ElseIf x + Width < 2
-			Width = (-x) + 2
-		EndIf
-		
-		x = Min(x, x + Width)
-		Width = Abs(Width)
-		For i = x To x + Width
-			CurrMapGrid\Grid[Min(i, MapGridSize) + (y * MapGridSize)] = MapGrid_Tile
-		Next
-		
-		Height = Rand(3, 4)
-		If y - Height < 1 Then Height = y - 1
-		
-		yHallways = Rand(4, 5)
-		
-		If GetZone(y - Height) <> GetZone(y - Height + 1) Then Height = Height - 1
-		
-		For i = 1 To yHallways
-			x2 = Max(Min(Rand(x, x + Width - 1), MapGridSize - 2), 2.0)
-			While CurrMapGrid\Grid[x2 + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 + 1) + ((y - 1) * MapGridSize)]
-				x2 = x2 + 1
-			Wend
+	If CurrentZone <> SURFACE ; ~ Generate rooms only if they're inside the facility
+		Repeat
+			Width = Rand(Floor(MapGridSize * 0.6), Floor(MapGridSize * 0.85))
 			
-			If x2 < x + Width
-				If i = 1
-					TempHeight = Height
-					If Rand(2) = 1
-						x2 = x
-					Else
-						x2 = x + Width
-					EndIf
-				Else
-					TempHeight = Rand(Height)
-				EndIf
+			If x > MapGridSize * 0.6
+				Width = -Width
+			ElseIf x > MapGridSize * 0.4
+				x = x - (Width / 2)
+			EndIf
+			
+			; ~ Make sure the hallway doesn't go outside the array
+			If x + Width > MapGridSize - 3
+				Width = MapGridSize - 3 - x
+			ElseIf x + Width < 2
+				Width = (-x) + 2
+			EndIf
+			
+			x = Min(x, x + Width)
+			Width = Abs(Width)
+			For i = x To x + Width
+				CurrMapGrid\Grid[Min(i, MapGridSize) + (y * MapGridSize)] = MapGrid_Tile
+			Next
+			
+			Height = Rand(3, 4)
+			If y - Height < 1 Then Height = y - 1
+			
+			yHallways = Rand(4, 5)
+			
+			If GetZone(y - Height) <> GetZone(y - Height + 1) Then Height = Height - 1
+			
+			For i = 1 To yHallways
+				x2 = Max(Min(Rand(x, x + Width - 1), MapGridSize - 2), 2.0)
+				While CurrMapGrid\Grid[x2 + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 + 1) + ((y - 1) * MapGridSize)]
+					x2 = x2 + 1
+				Wend
 				
-				For y2 = y - TempHeight To y
-					If GetZone(y2) <> GetZone(y2 + 1) ; ~ A room leading from zone to another
-						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_CheckpointTile
-					Else
-						CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_Tile
-					EndIf
-				Next
-				If TempHeight = Height Then Temp = x2
-			EndIf
-		Next
-		x = Temp
-		y = y - Height
-	Until y < 2
-	
-	Local Room1Amount%[ZONEAMOUNT], Room2Amount%[ZONEAMOUNT], Room2CAmount%[ZONEAMOUNT], Room3Amount%[ZONEAMOUNT], Room4Amount%[ZONEAMOUNT]
-	
-	; ~ Count the amount of rooms
-	For y = 1 To MapGridSize - 1
-		Zone = GetZone(y)
-		For x = 1 To MapGridSize - 1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
-				Temp = 0
-				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
-				If CurrMapGrid\Grid[x + (y * MapGridSize)] <> MapGrid_CheckpointTile Then CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
-				Select CurrMapGrid\Grid[x + (y * MapGridSize)]
-					Case 1
-						;[Block]
-						Room1Amount[Zone] = Room1Amount[Zone] + 1
-						;[End Block]
-					Case 2
-						;[Block]
-						If Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) = 2
-							Room2Amount[Zone] = Room2Amount[Zone] + 1
-						ElseIf Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0) = 2
-							Room2Amount[Zone] = Room2Amount[Zone] + 1
+				If x2 < x + Width
+					If i = 1
+						TempHeight = Height
+						If Rand(2) = 1
+							x2 = x
 						Else
-							Room2CAmount[Zone] = Room2CAmount[Zone] + 1
+							x2 = x + Width
 						EndIf
-						;[End Block]
-					Case 3
-						;[Block]
-						Room3Amount[Zone] = Room3Amount[Zone] + 1
-						;[End Block]
-					Case 4
-						;[Block]
-						Room4Amount[Zone] = Room4Amount[Zone] + 1
-						;[End Block]
-				End Select
+					Else
+						TempHeight = Rand(Height)
+					EndIf
+					
+					For y2 = y - TempHeight To y
+						If GetZone(y2) <> GetZone(y2 + 1) ; ~ A room leading from zone to another
+							CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_CheckpointTile
+						Else
+							CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = MapGrid_Tile
+						EndIf
+					Next
+					If TempHeight = Height Then Temp = x2
+				EndIf
+			Next
+			x = Temp
+			y = y - Height
+		Until y < 2
+		
+		Local Room1Amount%[ZONEAMOUNT], Room2Amount%[ZONEAMOUNT], Room2CAmount%[ZONEAMOUNT], Room3Amount%[ZONEAMOUNT], Room4Amount%[ZONEAMOUNT]
+		
+		; ~ Count the amount of rooms
+		For y = 1 To MapGridSize - 1
+			Zone = GetZone(y)
+			For x = 1 To MapGridSize - 1
+				If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
+					Temp = 0
+					Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
+					If CurrMapGrid\Grid[x + (y * MapGridSize)] <> MapGrid_CheckpointTile Then CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
+					Select CurrMapGrid\Grid[x + (y * MapGridSize)]
+						Case 1
+							;[Block]
+							Room1Amount[Zone] = Room1Amount[Zone] + 1
+							;[End Block]
+						Case 2
+							;[Block]
+							If Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) = 2
+								Room2Amount[Zone] = Room2Amount[Zone] + 1
+							ElseIf Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0) = 2
+								Room2Amount[Zone] = Room2Amount[Zone] + 1
+							Else
+								Room2CAmount[Zone] = Room2CAmount[Zone] + 1
+							EndIf
+							;[End Block]
+						Case 3
+							;[Block]
+							Room3Amount[Zone] = Room3Amount[Zone] + 1
+							;[End Block]
+						Case 4
+							;[Block]
+							Room4Amount[Zone] = Room4Amount[Zone] + 1
+							;[End Block]
+					End Select
+				EndIf
+			Next
+		Next
+		
+		Local Placed%
+		Local y_min%, y_max%, x_min%, x_max%
+		
+		; ~ Force more room1s (if needed)
+		For i = 0 To 2
+			; ~ Need more rooms if there are less than 5 of them
+			Temp = (-Room1Amount[i]) + 5
+			If Temp > 0
+				If i = 2
+					y_min = 1
+				Else
+					y_min = I_Zone\Transition[i]
+				EndIf
+				If i = 0
+					y_max = MapGridSize - 2
+				Else
+					y_max = I_Zone\Transition[i - 1] - 1
+				EndIf
+				x_min = 1
+				x_max = MapGridSize - 2
+				
+				For y = y_min To y_max
+					For x = x_min To x_max
+						If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_NoTile
+							If (Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)) = 1
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)]
+									x2 = x + 1 : y2 = y
+								ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)]
+									x2 = x - 1 : y2 = y
+								ElseIf CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)]
+									x2 = x : y2 = y + 1
+								ElseIf CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)]
+									x2 = x : y2 = y - 1
+								EndIf
+								
+								Placed = False
+								If CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] > 1 And CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] < 4 And (y < y_max Lor y2 < y Lor i = 0)
+									Select CurrMapGrid\Grid[x2 + (y2 * MapGridSize)]
+										Case 2
+											;[Block]
+											If Min(CurrMapGrid\Grid[(x2 + 1) + (y2 * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x2 - 1) + (y2 * MapGridSize)], 1.0) = 2
+												Room2Amount[i] = Room2Amount[i] - 1
+												Room3Amount[i] = Room3Amount[i] + 1
+												Placed = True
+											ElseIf Min(CurrMapGrid\Grid[x2 + ((y2 + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x2 + ((y2 - 1) * MapGridSize)], 1.0) = 2
+												Room2Amount[i] = Room2Amount[i] - 1
+												Room3Amount[i] = Room3Amount[i] + 1
+												Placed = True
+											EndIf
+											;[End Block]
+										Case 3
+											;[Block]
+											Room3Amount[i] = Room3Amount[i] - 1
+											Room4Amount[i] = Room4Amount[i] + 1
+											Placed = True
+											;[End Block]
+									End Select
+									
+									If Placed
+										CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] + 1
+										
+										CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_Tile
+										Room1Amount[i] = Room1Amount[i] + 1
+										
+										Temp = Temp - 1
+									EndIf
+								EndIf
+							EndIf
+						EndIf
+						If Temp = 0 Then Exit
+					Next
+					If Temp = 0 Then Exit
+				Next
 			EndIf
 		Next
-	Next
-	
-	Local Placed%
-	Local y_min%, y_max%, x_min%, x_max%
-	
-	; ~ Force more room1s (if needed)
-	For i = 0 To 2
-		; ~ Need more rooms if there are less than 5 of them
-		Temp = (-Room1Amount[i]) + 5
-		If Temp > 0
+		
+		; ~ Force more ROOM4 and ROOM2C
+		For i = 0 To 2
 			If i = 2
-				y_min = 1
+				y_min = 2
 			Else
 				y_min = I_Zone\Transition[i]
 			EndIf
 			If i = 0
 				y_max = MapGridSize - 2
 			Else
-				y_max = I_Zone\Transition[i - 1] - 1
+				y_max = I_Zone\Transition[i - 1] - 2
 			EndIf
 			x_min = 1
 			x_max = MapGridSize - 2
 			
-			For y = y_min To y_max
-				For x = x_min To x_max
-					If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_NoTile
-						If (Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)) = 1
-							If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)]
-								x2 = x + 1 : y2 = y
-							ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)]
-								x2 = x - 1 : y2 = y
-							ElseIf CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)]
-								x2 = x : y2 = y + 1
-							ElseIf CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)]
-								x2 = x : y2 = y - 1
+			If Room4Amount[i] < 1 ; ~ We want at least one ROOM4
+				Temp = 0
+				For y = y_min To y_max
+					For x = x_min To x_max
+						If CurrMapGrid\Grid[x + (y * MapGridSize)] = 3
+							Select False ; ~ See if adding a ROOM1 is possible
+								Case (CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)] Lor x = x_max)
+									;[Block]
+									CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 1
+									Temp = 1
+									;[End Block]
+								Case (CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)] Lor x = x_min)
+									;[Block]
+									CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 1
+									Temp = 1
+									;[End Block]
+								Case (CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)] Lor (i = 0 And y = y_max))
+									;[Block]
+									CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 1
+									Temp = 1
+									;[End Block]
+								Case (CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)] Lor (i < 2 And y = y_min))
+									;[Block]
+									CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 1
+									Temp = 1
+									;[End Block]
+							End Select
+							If Temp = 1
+								CurrMapGrid\Grid[x + (y * MapGridSize)] = 4 ; ~ Turn this room into a ROOM4
+								Room4Amount[i] = Room4Amount[i] + 1
+								Room3Amount[i] = Room3Amount[i] - 1
+								Room1Amount[i] = Room1Amount[i] + 1
 							EndIf
-							
-							Placed = False
-							If CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] > 1 And CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] < 4 And (y < y_max Lor y2 < y Lor i = 0)
-								Select CurrMapGrid\Grid[x2 + (y2 * MapGridSize)]
-									Case 2
-										;[Block]
-										If Min(CurrMapGrid\Grid[(x2 + 1) + (y2 * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x2 - 1) + (y2 * MapGridSize)], 1.0) = 2
-											Room2Amount[i] = Room2Amount[i] - 1
-											Room3Amount[i] = Room3Amount[i] + 1
-											Placed = True
-										ElseIf Min(CurrMapGrid\Grid[x2 + ((y2 + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x2 + ((y2 - 1) * MapGridSize)], 1.0) = 2
-											Room2Amount[i] = Room2Amount[i] - 1
-											Room3Amount[i] = Room3Amount[i] + 1
-											Placed = True
+						EndIf
+						If Temp = 1 Then Exit
+					Next
+					If Temp = 1 Then Exit
+				Next
+			EndIf
+			
+			If Room2CAmount[i] < 1 ; ~ We want at least one ROOM2C
+				Temp = 0
+				For y = y_max To y_min Step -1
+					For x = x_min To x_max
+						If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_Tile
+							Select True ; ~ See if adding some rooms is possible
+								Case CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile
+									;[Block]
+									If (CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)]) = 0 And x < x_max
+										If (CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
+											CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] = 1
+											Temp = 1
+										ElseIf (CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
+											CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] = 1
+											Temp = 1
 										EndIf
-										;[End Block]
-									Case 3
-										;[Block]
-										Room3Amount[i] = Room3Amount[i] - 1
-										Room4Amount[i] = Room4Amount[i] + 1
-										Placed = True
-										;[End Block]
-								End Select
-								
-								If Placed
-									CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] + 1
-									
-									CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_Tile
-									Room1Amount[i] = Room1Amount[i] + 1
-									
-									Temp = Temp - 1
-								EndIf
+									EndIf
+									;[End Block]
+								Case CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
+									;[Block]
+									If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)]) = 0 And x > x_min
+										If (CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
+											CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] = 1
+											Temp = 1
+										ElseIf (CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
+											CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] = 1
+											Temp = 1
+										EndIf
+									EndIf
+									;[End Block]
+								Case CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile
+									;[Block]
+									If (CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
+										If (CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)]) = 0 And x > x_min
+											CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] = 1
+											Temp = 1
+										ElseIf (CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)]) = 0 And x < x_max
+											CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] = 1
+											Temp = 1
+										EndIf
+									EndIf
+									;[End Block]
+								Case CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
+									;[Block]
+									If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
+										If (CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)]) = 0 And x > x_min
+											CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] = 1
+											Temp = 1
+										ElseIf (CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)]) = 0 And x < x_max
+											CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
+											CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 2
+											CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] = 1
+											Temp = 1
+										EndIf
+									EndIf
+									;[End Block]
+							End Select
+							If Temp = 1
+								Room2CAmount[i] = Room2CAmount[i] + 1
+								Room2Amount[i] = Room2Amount[i] + 1
 							EndIf
 						EndIf
-					EndIf
-					If Temp = 0 Then Exit
-				Next
-				If Temp = 0 Then Exit
-			Next
-		EndIf
-	Next
-	
-	; ~ Force more ROOM4 and ROOM2C
-	For i = 0 To 2
-		If i = 2
-			y_min = 2
-		Else
-			y_min = I_Zone\Transition[i]
-		EndIf
-		If i = 0
-			y_max = MapGridSize - 2
-		Else
-			y_max = I_Zone\Transition[i - 1] - 2
-		EndIf
-		x_min = 1
-		x_max = MapGridSize - 2
-		
-		If Room4Amount[i] < 1 ; ~ We want at least one ROOM4
-			Temp = 0
-			For y = y_min To y_max
-				For x = x_min To x_max
-					If CurrMapGrid\Grid[x + (y * MapGridSize)] = 3
-						Select False ; ~ See if adding a ROOM1 is possible
-							Case (CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)] Lor x = x_max)
-								;[Block]
-								CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 1
-								Temp = 1
-								;[End Block]
-							Case (CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)] Lor x = x_min)
-								;[Block]
-								CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 1
-								Temp = 1
-								;[End Block]
-							Case (CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] Lor CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)] Lor (i = 0 And y = y_max))
-								;[Block]
-								CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 1
-								Temp = 1
-								;[End Block]
-							Case (CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)] Lor (i < 2 And y = y_min))
-								;[Block]
-								CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 1
-								Temp = 1
-								;[End Block]
-						End Select
-						If Temp = 1
-							CurrMapGrid\Grid[x + (y * MapGridSize)] = 4 ; ~ Turn this room into a ROOM4
-							Room4Amount[i] = Room4Amount[i] + 1
-							Room3Amount[i] = Room3Amount[i] - 1
-							Room1Amount[i] = Room1Amount[i] + 1
-						EndIf
-					EndIf
+						If Temp = 1 Then Exit
+					Next
 					If Temp = 1 Then Exit
 				Next
-				If Temp = 1 Then Exit
-			Next
-		EndIf
-		
-		If Room2CAmount[i] < 1 ; ~ We want at least one ROOM2C
-			Temp = 0
-			For y = y_max To y_min Step -1
-				For x = x_min To x_max
-					If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_Tile
-						Select True ; ~ See if adding some rooms is possible
-							Case CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile
-								;[Block]
-								If (CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + (y * MapGridSize)]) = 0 And x < x_max
-									If (CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
-										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] = 1
-										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
-										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] = 1
-										Temp = 1
-									EndIf
-								EndIf
-								;[End Block]
-							Case CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-								;[Block]
-								If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + (y * MapGridSize)]) = 0 And x > x_min
-									If (CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
-										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] = 1
-										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)] + CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
-										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] = 1
-										Temp = 1
-									EndIf
-								EndIf
-								;[End Block]
-							Case CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile
-								;[Block]
-								If (CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y + 2) * MapGridSize)]) = 0 And (y < y_max Lor i > 0)
-									If (CurrMapGrid\Grid[(x - 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y + 2) * MapGridSize)]) = 0 And x > x_min
-										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x - 1) + ((y + 1) * MapGridSize)] = 1
-										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y + 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y + 2) * MapGridSize)]) = 0 And x < x_max
-										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x + 1) + ((y + 1) * MapGridSize)] = 1
-										Temp = 1
-									EndIf
-								EndIf
-								;[End Block]
-							Case CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-								;[Block]
-								If (CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[x + ((y - 2) * MapGridSize)]) = 0 And (y > y_min Lor i = 2)
-									If (CurrMapGrid\Grid[(x - 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x - 1) + ((y - 2) * MapGridSize)]) = 0 And x > x_min
-										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x - 1) + ((y - 1) * MapGridSize)] = 1
-										Temp = 1
-									ElseIf (CurrMapGrid\Grid[(x + 2) + ((y - 1) * MapGridSize)] + CurrMapGrid\Grid[(x + 1) + ((y - 2) * MapGridSize)]) = 0 And x < x_max
-										CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-										CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] = 2
-										CurrMapGrid\Grid[(x + 1) + ((y - 1) * MapGridSize)] = 1
-										Temp = 1
-									EndIf
-								EndIf
-								;[End Block]
-						End Select
-						If Temp = 1
-							Room2CAmount[i] = Room2CAmount[i] + 1
-							Room2Amount[i] = Room2Amount[i] + 1
-						EndIf
-					EndIf
-					If Temp = 1 Then Exit
-				Next
-				If Temp = 1 Then Exit
-			Next
-		EndIf
-	Next
-	
-	Local MaxRooms% = 55 * MapGridSize / 20
-	
-	MaxRooms = Max(MaxRooms, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] + 1)
-	MaxRooms = Max(MaxRooms, Room2Amount[0] + Room2Amount[1] + Room2Amount[2] + 1)
-	MaxRooms = Max(MaxRooms, Room2CAmount[0] + Room2CAmount[1] + Room2CAmount[2] + 1)
-	MaxRooms = Max(MaxRooms, Room3Amount[0] + Room3Amount[1] + Room3Amount[2] + 1)
-	MaxRooms = Max(MaxRooms, Room4Amount[0] + Room4Amount[1] + Room4Amount[2] + 1)
-	
-	Dim MapRoom$(ROOM4 + 1, MaxRooms + 1)
-	
-	; ~ [LIGHT CONTAINMENT ZONE]
-	
-	Local MinPos% = 1, MaxPos% = Room1Amount[0] - 1
-	
-	MapRoom(ROOM1, 0) = "cont1_173"
-	
-	SetRoom("cont1_372", ROOM1, Floor(0.1 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("room1_archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), MinPos, MaxPos)
-	
-	MapRoom(ROOM2C, 0) = "room2c_gw_lcz"
-	
-	MinPos = 1
-	MaxPos = Room2Amount[0] - 1
-	
-	MapRoom(ROOM2, 0) = "room2_closets" 
-	
-	SetRoom("room2_test_lcz", ROOM2, Floor(0.1 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("cont2_427_714_860_1025", ROOM2, Floor(0.2 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_gw_2", ROOM2, Floor(0.4 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("cont2_012", ROOM2, Floor(0.55 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("cont2_500_1499", ROOM2, Floor(0.6 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("cont2_1123", ROOM2, Floor(0.75 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_js", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_elevator", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
-	
-	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_066_1162_arc"
-	
-	MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3_storage"
-	
-	MapRoom(ROOM4, Floor(0.3 * Float(Room4Amount[0]))) = "room4_ic"
-	
-	; ~ [HEAVY CONTAINMENT ZONE]
-	
-	MinPos = Room1Amount[0]
-	MaxPos = Room1Amount[0] + Room1Amount[1] - 1
-	
-	SetRoom("cont1_079", ROOM1, Room1Amount[0] + Floor(0.15 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_106", ROOM1, Room1Amount[0] + Floor(0.3 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_096", ROOM1, Room1Amount[0] + Floor(0.4 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_035", ROOM1, Room1Amount[0] + Floor(0.5 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_895", ROOM1, Room1Amount[0] + Floor(0.7 * Float(Room1Amount[1])), MinPos, MaxPos)
-	
-	MinPos = Room2Amount[0]
-	MaxPos = Room2Amount[0] + Room2Amount[1] - 1
-	
-	MapRoom(ROOM2, Room2Amount[0] + Floor(0.1 * Float(Room2Amount[1]))) = "room2_nuke"
-	
-	SetRoom("cont2_409", ROOM2, Room2Amount[0] + Floor(0.15 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_mt", ROOM2, Room2Amount[0] + Floor(0.25 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("cont2_049", ROOM2, Room2Amount[0] + Floor(0.4 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("cont2_008", ROOM2, Room2Amount[0] + Floor(0.5 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_shaft", ROOM2, Room2Amount[0] + Floor(0.6 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_test_hcz", ROOM2, Room2Amount[0] + Floor(0.7 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_servers_hcz", ROOM2, Room2Amount[0] + Floor(0.9 * Float(Room2Amount[1])), MinPos, MaxPos)
-	
-	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "room2c_maintenance"
-	
-	MapRoom(ROOM3, Room3Amount[0] + Floor(0.5 * Float(Room3Amount[1]))) = "cont3_513"
-	MapRoom(ROOM3, Room3Amount[0] + Floor(0.8 * Float(Room3Amount[1]))) = "cont3_966"
-	
-	; ~ [ENTRANCE ZONE]
-	
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gate_b_entrance"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gate_a_entrance"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "room1_o5"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1]) = "room1_lifts"
-	
-	MinPos = Room2Amount[0] + Room2Amount[1]
-	MaxPos = Room2Amount[0] + Room2Amount[1] + Room2Amount[2] - 1
-	
-	MapRoom(ROOM2, MinPos + Floor(0.1 * Float(Room2Amount[2]))) = "room2_scientists"
-	
-	SetRoom("room2_cafeteria", ROOM2, MinPos + Floor(0.2 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_6_ez", ROOM2, MinPos + Floor(0.25 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office_3", ROOM2, MinPos + Floor(0.3 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_bio", ROOM2, MinPos + Floor(0.35 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_servers_ez", ROOM2, MinPos + Floor(0.4 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office", ROOM2, MinPos + Floor(0.5 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office_2", ROOM2, MinPos + Floor(0.55 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("cont2_860_1", ROOM2, MinPos + Floor(0.6 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_medibay", ROOM2, MinPos + Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_scientists_2", ROOM2, MinPos + Floor(0.8 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_ic", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
-	
-	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2c_ec"
-	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2c_gw_ez"
-	
-	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.3 * Float(Room3Amount[2]))) = "room3_2_ez"
-	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.7 * Float(Room3Amount[2]))) = "room3_3_ez"
-	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.5 * Float(Room3Amount[2]))) = "room3_office"
-	
-	; ~ [GENERATE OTHER ROOMS]
-	
-	Temp = 0
-	For y = MapGridSize - 1 To 1 Step -1
-		If y < (MapGridSize / 3) + 1
-			Zone = 3
-		ElseIf y < MapGridSize * (2.0 / 3.0)
-			Zone = 2
-		Else
-			Zone = 1
-		EndIf
-		For x = 1 To MapGridSize - 2
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_CheckpointTile
-				If y > MapGridSize / 2
-					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, r_room2_checkpoint_lcz_hcz)
-				Else
-					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, r_room2_checkpoint_hcz_ez)
-				EndIf
-				CalculateRoomExtents(r)
-			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
-				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
-				Select Temp
-					Case 1 ; ~ Generate ROOM1
-						;[Block]
-						If CurrMapGrid\RoomID[ROOM1] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-							If MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1])
-						EndIf
-						
-						If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)]
-							CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
-						ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)]
-							CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
-						ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)]
-							CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
-						Else
-							CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
-						EndIf
-						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
-						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
-						CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
-						;[End Block]
-					Case 2 ; ~ Generate ROOM2
-						;[Block]
-						If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-							If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-								If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2])
-							EndIf
-							If Rand(2) = 1
-								CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
-							Else
-								CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
-							EndIf
-							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
-							r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
-							CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
-						ElseIf CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-							If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-								If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2])
-							EndIf
-							If Rand(2) = 1
-								CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
-							Else
-								CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
-							EndIf
-							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
-							r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
-							CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
-						Else
-							If CurrMapGrid\RoomID[ROOM2C] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-								If MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C])
-							EndIf
-							If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-								CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
-							ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-								CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
-							ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile
-								CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
-							Else
-								CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
-							EndIf
-							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
-							r.Rooms = CreateRoom(Zone, ROOM2C, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
-							CurrMapGrid\RoomID[ROOM2C] = CurrMapGrid\RoomID[ROOM2C] + 1
-						EndIf
-						;[End Block]
-					Case 3 ; ~ Generate ROOM3
-						;[Block]
-						If CurrMapGrid\RoomID[ROOM3] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-							If MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3])
-						EndIf
-						If (Not CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)])
-							CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
-						ElseIf (Not CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)])
-							CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
-						ElseIf (Not CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)])
-							CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
-						Else
-							CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
-						EndIf
-						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
-						r.Rooms = CreateRoom(Zone, ROOM3, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
-						CurrMapGrid\RoomID[ROOM3] = CurrMapGrid\RoomID[ROOM3] + 1
-						;[End Block]
-					Case 4 ; ~ Generate ROOM4
-						;[Block]
-						If CurrMapGrid\RoomID[ROOM4] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-							If MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4])
-						EndIf
-						CurrMapGrid\Angle[x + (y * MapGridSize)] = Rand(4)
-						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
-						r.Rooms = CreateRoom(Zone, ROOM4, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
-						CurrMapGrid\RoomID[ROOM4] = CurrMapGrid\RoomID[ROOM4] + 1
-						;[End Block]
-				End Select
-				CalculateRoomExtents(r)
 			EndIf
 		Next
-	Next
-	
-	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(PowTwo(RoomSpacing)), r_gate_b)
-	CalculateRoomExtents(r)
-	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
-	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
-	CalculateRoomExtents(r)
-	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
-	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_dimension_106)
-	CalculateRoomExtents(r)
-	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
-	
-	If opt\IntroEnabled
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
-		CalculateRoomExtents(r)
-		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+		
+		Local MaxRooms% = 55 * MapGridSize / 20
+		
+		MaxRooms = Max(MaxRooms, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] + 1)
+		MaxRooms = Max(MaxRooms, Room2Amount[0] + Room2Amount[1] + Room2Amount[2] + 1)
+		MaxRooms = Max(MaxRooms, Room2CAmount[0] + Room2CAmount[1] + Room2CAmount[2] + 1)
+		MaxRooms = Max(MaxRooms, Room3Amount[0] + Room3Amount[1] + Room3Amount[2] + 1)
+		MaxRooms = Max(MaxRooms, Room4Amount[0] + Room4Amount[1] + Room4Amount[2] + 1)
+		
+		Dim MapRoom$(ROOM4 + 1, MaxRooms + 1)
+		
+		; ~ [LIGHT CONTAINMENT ZONE]
+		
+		Local MinPos% = 1, MaxPos% = Room1Amount[0] - 1
+		
+		MapRoom(ROOM1, 0) = "cont1_173"
+		
+		SetRoom("cont1_372", ROOM1, Floor(0.1 * Float(Room1Amount[0])), MinPos, MaxPos)
+		SetRoom("cont1_005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), MinPos, MaxPos)
+		SetRoom("cont1_914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
+		SetRoom("cont1_205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
+		SetRoom("room1_archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), MinPos, MaxPos)
+		
+		MapRoom(ROOM2C, 0) = "room2c_gw_lcz"
+		
+		MinPos = 1
+		MaxPos = Room2Amount[0] - 1
+		
+		MapRoom(ROOM2, 0) = "room2_closets" 
+		
+		SetRoom("room2_test_lcz", ROOM2, Floor(0.1 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("cont2_427_714_860_1025", ROOM2, Floor(0.2 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("room2_storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("room2_gw_2", ROOM2, Floor(0.4 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("room2_sl", ROOM2, Floor(0.5 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("cont2_012", ROOM2, Floor(0.55 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("cont2_500_1499", ROOM2, Floor(0.6 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("cont2_1123", ROOM2, Floor(0.75 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("room2_js", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
+		SetRoom("room2_elevator", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
+		
+		MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_066_1162_arc"
+		
+		MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3_storage"
+		
+		MapRoom(ROOM4, Floor(0.3 * Float(Room4Amount[0]))) = "room4_ic"
+		
+		; ~ [HEAVY CONTAINMENT ZONE]
+		
+		MinPos = Room1Amount[0]
+		MaxPos = Room1Amount[0] + Room1Amount[1] - 1
+		
+		SetRoom("cont1_079", ROOM1, Room1Amount[0] + Floor(0.15 * Float(Room1Amount[1])), MinPos, MaxPos)
+		SetRoom("cont1_106", ROOM1, Room1Amount[0] + Floor(0.3 * Float(Room1Amount[1])), MinPos, MaxPos)
+		SetRoom("cont1_096", ROOM1, Room1Amount[0] + Floor(0.4 * Float(Room1Amount[1])), MinPos, MaxPos)
+		SetRoom("cont1_035", ROOM1, Room1Amount[0] + Floor(0.5 * Float(Room1Amount[1])), MinPos, MaxPos)
+		SetRoom("cont1_895", ROOM1, Room1Amount[0] + Floor(0.7 * Float(Room1Amount[1])), MinPos, MaxPos)
+		
+		MinPos = Room2Amount[0]
+		MaxPos = Room2Amount[0] + Room2Amount[1] - 1
+		
+		MapRoom(ROOM2, Room2Amount[0] + Floor(0.1 * Float(Room2Amount[1]))) = "room2_nuke"
+		
+		SetRoom("cont2_409", ROOM2, Room2Amount[0] + Floor(0.15 * Float(Room2Amount[1])), MinPos, MaxPos)
+		SetRoom("room2_mt", ROOM2, Room2Amount[0] + Floor(0.25 * Float(Room2Amount[1])), MinPos, MaxPos)
+		SetRoom("cont2_049", ROOM2, Room2Amount[0] + Floor(0.4 * Float(Room2Amount[1])), MinPos, MaxPos)
+		SetRoom("cont2_008", ROOM2, Room2Amount[0] + Floor(0.5 * Float(Room2Amount[1])), MinPos, MaxPos)
+		SetRoom("room2_shaft", ROOM2, Room2Amount[0] + Floor(0.6 * Float(Room2Amount[1])), MinPos, MaxPos)
+		SetRoom("room2_test_hcz", ROOM2, Room2Amount[0] + Floor(0.7 * Float(Room2Amount[1])), MinPos, MaxPos)
+		SetRoom("room2_servers_hcz", ROOM2, Room2Amount[0] + Floor(0.9 * Float(Room2Amount[1])), MinPos, MaxPos)
+		
+		MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "room2c_maintenance"
+		
+		MapRoom(ROOM3, Room3Amount[0] + Floor(0.5 * Float(Room3Amount[1]))) = "cont3_513"
+		MapRoom(ROOM3, Room3Amount[0] + Floor(0.8 * Float(Room3Amount[1]))) = "cont3_966"
+		
+		; ~ [ENTRANCE ZONE]
+		
+		MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gate_b_entrance"
+		MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gate_a_entrance"
+		MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "room1_o5"
+		MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1]) = "room1_lifts"
+		
+		MinPos = Room2Amount[0] + Room2Amount[1]
+		MaxPos = Room2Amount[0] + Room2Amount[1] + Room2Amount[2] - 1
+		
+		MapRoom(ROOM2, MinPos + Floor(0.1 * Float(Room2Amount[2]))) = "room2_scientists"
+		
+		SetRoom("room2_cafeteria", ROOM2, MinPos + Floor(0.2 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_6_ez", ROOM2, MinPos + Floor(0.25 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_office_3", ROOM2, MinPos + Floor(0.3 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_bio", ROOM2, MinPos + Floor(0.35 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_servers_ez", ROOM2, MinPos + Floor(0.4 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_office", ROOM2, MinPos + Floor(0.5 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_office_2", ROOM2, MinPos + Floor(0.55 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("cont2_860_1", ROOM2, MinPos + Floor(0.6 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_medibay", ROOM2, MinPos + Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_scientists_2", ROOM2, MinPos + Floor(0.8 * Float(Room2Amount[2])), MinPos, MaxPos)
+		SetRoom("room2_ic", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
+		
+		MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2c_ec"
+		MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2c_gw_ez"
+		
+		MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.3 * Float(Room3Amount[2]))) = "room3_2_ez"
+		MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.7 * Float(Room3Amount[2]))) = "room3_3_ez"
+		MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.5 * Float(Room3Amount[2]))) = "room3_office"
+		
+		; ~ [GENERATE OTHER ROOMS]
+		
+		Temp = 0
+		For y = MapGridSize - 1 To 1 Step -1
+			If y < (MapGridSize / 3) + 1
+				Zone = EZ
+			ElseIf y < MapGridSize * (2.0 / 3.0)
+				Zone = HCZ
+			Else
+				Zone = LCZ
+			EndIf
+			For x = 1 To MapGridSize - 2
+				If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_CheckpointTile
+					If y > MapGridSize / 2
+						If CurrentZone = LCZ Lor CurrentZone = HCZ Then r.Rooms = CreateRoom(CurrentZone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, r_room2_checkpoint_lcz_hcz)
+					Else
+						If CurrentZone = HCZ Lor CurrentZone = EZ Then r.Rooms = CreateRoom(CurrentZone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, r_room2_checkpoint_hcz_ez)
+					EndIf
+					If Zone = CurrentZone Then CalculateRoomExtents(r)
+				ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
+					Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
+					Select Temp
+						Case 1 ; ~ Generate ROOM1
+							;[Block]
+							If CurrMapGrid\RoomID[ROOM1] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
+								If MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1])
+							EndIf
+							If Zone = CurrentZone
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)]
+									CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
+								ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)]
+									CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
+								ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)]
+									CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
+								Else
+									CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
+								EndIf
+								RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+								r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							EndIf
+							CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+							;[End Block]
+						Case 2 ; ~ Generate ROOM2
+							;[Block]
+							If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
+								If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
+									If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2])
+								EndIf
+								If Zone = CurrentZone
+									If Rand(2) = 1
+										CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
+									Else
+										CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
+									EndIf
+									RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+									r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+								EndIf
+								CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
+							ElseIf CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
+								If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
+									If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2])
+								EndIf
+								If Zone = CurrentZone
+									If Rand(2) = 1
+										CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
+									Else
+										CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
+									EndIf
+									RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+									r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+								EndIf
+								CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
+							Else
+								If CurrMapGrid\RoomID[ROOM2C] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
+									If MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C])
+								EndIf
+								If Zone = CurrentZone
+									If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
+										CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
+									ElseIf CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
+										CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
+									ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile
+										CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
+									Else
+										CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
+									EndIf
+									RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+									r.Rooms = CreateRoom(Zone, ROOM2C, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+								EndIf
+								CurrMapGrid\RoomID[ROOM2C] = CurrMapGrid\RoomID[ROOM2C] + 1
+							EndIf
+							;[End Block]
+						Case 3 ; ~ Generate ROOM3
+							;[Block]
+							If CurrMapGrid\RoomID[ROOM3] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
+								If MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3])
+							EndIf
+							If Zone = CurrentZone Then
+								If (Not CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)])
+									CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
+								ElseIf (Not CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)])
+									CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
+								ElseIf (Not CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)])
+									CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
+								Else
+									CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
+								EndIf
+								RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+								r.Rooms = CreateRoom(Zone, ROOM3, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							EndIf
+							CurrMapGrid\RoomID[ROOM3] = CurrMapGrid\RoomID[ROOM3] + 1
+							;[End Block]
+						Case 4 ; ~ Generate ROOM4
+							;[Block]
+							If CurrMapGrid\RoomID[ROOM4] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
+								If MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4])
+							EndIf
+							If Zone = CurrentZone
+								CurrMapGrid\Angle[x + (y * MapGridSize)] = Rand(4)
+								RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
+								r.Rooms = CreateRoom(Zone, ROOM4, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							EndIf
+							CurrMapGrid\RoomID[ROOM4] = CurrMapGrid\RoomID[ROOM4] + 1
+							;[End Block]
+					End Select
+					If Zone = CurrentZone Then CalculateRoomExtents(r)
+				EndIf
+			Next
+		Next
+		
+	Else ; ~ Spawn some rooms outside the generated map
+		If CurrentZone = SURFACE
+			r.Rooms = CreateRoom(CurrentZone, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(PowTwo(RoomSpacing)), r_gate_b)
+			CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+			
+			r.Rooms = CreateRoom(CurrentZone, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
+			CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+		Else
+			r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_dimension_106)
+			CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+			
+			If opt\IntroEnabled
+				r.Rooms = CreateRoom(CurrentZone, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
+				CalculateRoomExtents(r)
+				CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+			EndIf
+			
+			r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
+			CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+		EndIf
 	EndIf
-	
-	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
-	CalculateRoomExtents(r)
-	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	; ~ Prevent room overlaps
 	For r.Rooms = Each Rooms
@@ -5389,11 +5411,11 @@ Function CreateMap%()
 	; ~ Create the doors between rooms
 	For y = MapGridSize To 0 Step -1
 		If y < I_Zone\Transition[1] - 1
-			Zone = 3
+			Zone = EZ
 		ElseIf y >= I_Zone\Transition[1] - 1 And y < I_Zone\Transition[0] - 1
-			Zone = 2
+			Zone = HCZ
 		Else
-			Zone = 1
+			Zone = LCZ
 		EndIf
 		For x = MapGridSize To 0 Step -1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile

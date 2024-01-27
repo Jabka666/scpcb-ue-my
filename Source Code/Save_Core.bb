@@ -1,13 +1,12 @@
 Const SavePath$ = "Saves\"
 
-Function SaveGame%(File$)
+Function SaveGame%(File$, NewZone% = -1)
 	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
 	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
 	
-	CatchErrors("SaveGame(" + File + ")")
+	CatchErrors("SaveGame(" + File + ", " + NewZone + ")")
 	
-	Local n.NPCs, r.Rooms, do.Doors
 	Local x%, y%, i%, Temp%
 	
 	GameSaved = True
@@ -111,19 +110,6 @@ Function SaveGame%(File$)
 	WriteByte(f, wi\SCRAMBLE)
 	
 	WriteByte(f, I_1499\Using)
-	WriteFloat(f, I_1499\PrevX)
-	WriteFloat(f, I_1499\PrevY)
-	WriteFloat(f, I_1499\PrevZ)
-	WriteFloat(f, I_1499\x)
-	WriteFloat(f, I_1499\y)
-	WriteFloat(f, I_1499\z)
-	If I_1499\PrevRoom <> Null
-		WriteFloat(f, I_1499\PrevRoom\x)
-		WriteFloat(f, I_1499\PrevRoom\z)
-	Else
-		WriteFloat(f, 0.0)
-		WriteFloat(f, 0.0)
-	EndIf
 	
 	WriteByte(f, I_268\Using)
 	WriteFloat(f, I_268\Timer)
@@ -157,6 +143,139 @@ Function SaveGame%(File$)
 	
 	WriteFloat(f, Remove714Timer)
 	WriteFloat(f, RemoveHazmatTimer)
+	
+	Local it.Items
+	
+	Temp = 0
+	For it.Items = Each Items
+		Temp = Temp + 1
+	Next
+	WriteInt(f, Temp)
+	For it.Items = Each Items
+		WriteString(f, it\ItemTemplate\Name)
+		WriteString(f, it\ItemTemplate\TempName)
+		
+		WriteString(f, it\Name)
+		
+		WriteFloat(f, EntityX(it\Collider, True))
+		WriteFloat(f, EntityY(it\Collider, True))
+		WriteFloat(f, EntityZ(it\Collider, True))
+		
+		WriteByte(f, it\R)
+		WriteByte(f, it\G)
+		WriteByte(f, it\B)
+		WriteFloat(f, it\Alpha)
+		
+		WriteFloat(f, EntityPitch(it\Collider))
+		WriteFloat(f, EntityYaw(it\Collider))
+		
+		WriteFloat(f, it\State)
+		WriteFloat(f, it\State2)
+		WriteFloat(f, it\State3)
+		WriteByte(f, it\Picked)
+		
+		If SelectedItem = it
+			WriteByte(f, 1) 
+		Else
+			WriteByte(f, 0)
+		EndIf
+		
+		Local ItemFound% = False
+		
+		For i = 0 To MaxItemAmount - 1
+			If Inventory(i) = it
+				ItemFound = True
+				Exit
+			EndIf
+		Next
+		If ItemFound
+			WriteByte(f, i)
+		Else
+			WriteByte(f, 66)
+		EndIf
+		
+		If it\ItemTemplate\IsAnim <> 0 Then WriteFloat(f, AnimTime(it\Model))
+		WriteByte(f, it\InvSlots)
+		WriteInt(f, it\ID)
+		If it\ItemTemplate\InvImg = it\InvImg
+			WriteByte(f, 0)
+		Else
+			WriteByte(f, 1)
+		EndIf
+	Next
+	
+	Temp = 0
+	For it.Items = Each Items
+		If it\InvSlots > 0 Then Temp = Temp + 1
+	Next
+	
+	WriteInt(f, Temp)
+	
+	For it.Items = Each Items
+		If it\InvSlots > 0
+			WriteInt(f, it\ID)
+			For i = 0 To it\InvSlots - 1
+				If it\SecondInv[i] <> Null
+					WriteInt(f, it\SecondInv[i]\ID)
+				Else
+					WriteInt(f, -1)
+				EndIf
+			Next
+		EndIf
+	Next
+	
+	Local itt.ItemTemplates
+	
+	For itt.ItemTemplates = Each ItemTemplates
+		WriteByte(f, itt\Found)
+	Next
+
+	WriteInt(f, EscapeTimer)
+	
+	If NewZone > -1 Then
+		WriteInt f, NewZone
+	Else
+		WriteInt f, CurrentZone
+	EndIf
+	
+	CloseFile(f)
+	
+	SaveZoneData(File)
+	
+	If (Not MenuOpen) And (Not MainMenuOpen)
+		If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
+		Else
+			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
+			as\Timer = 70.0 * 120.0
+		EndIf
+		CreateHintMsg(GetLocalString("save", "saved"))
+	EndIf
+	
+	CatchErrors("Uncaught: SaveGame(" + File + ")")
+End Function
+
+Function SaveZoneData(File$)
+	Local n.NPCs, r.Rooms, do.Doors
+	Local x%, y%, i%, Temp%
+	
+	CreateDir(File)
+	
+	Local f% = WriteFile(File + "\" + "zone_" + CurrentZone + ".cb")
+	
+	WriteFloat(f, I_1499\PrevX)
+	WriteFloat(f, I_1499\PrevY)
+	WriteFloat(f, I_1499\PrevZ)
+	WriteFloat(f, I_1499\x)
+	WriteFloat(f, I_1499\y)
+	WriteFloat(f, I_1499\z)
+	If I_1499\PrevRoom <> Null
+		WriteFloat(f, I_1499\PrevRoom\x)
+		WriteFloat(f, I_1499\PrevRoom\z)
+	Else
+		WriteFloat(f, 0.0)
+		WriteFloat(f, 0.0)
+	EndIf
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -395,145 +514,10 @@ Function SaveGame%(File$)
 		WriteString(f, e\EventStr)
 	Next
 	
-	Local it.Items
-	
-	Temp = 0
-	For it.Items = Each Items
-		Temp = Temp + 1
-	Next
-	WriteInt(f, Temp)
-	For it.Items = Each Items
-		WriteString(f, it\ItemTemplate\Name)
-		WriteString(f, it\ItemTemplate\TempName)
-		
-		WriteString(f, it\Name)
-		
-		WriteFloat(f, EntityX(it\Collider, True))
-		WriteFloat(f, EntityY(it\Collider, True))
-		WriteFloat(f, EntityZ(it\Collider, True))
-		
-		WriteByte(f, it\R)
-		WriteByte(f, it\G)
-		WriteByte(f, it\B)
-		WriteFloat(f, it\Alpha)
-		
-		WriteFloat(f, EntityPitch(it\Collider))
-		WriteFloat(f, EntityYaw(it\Collider))
-		
-		WriteFloat(f, it\State)
-		WriteFloat(f, it\State2)
-		WriteFloat(f, it\State3)
-		WriteByte(f, it\Picked)
-		
-		If SelectedItem = it
-			WriteByte(f, 1) 
-		Else
-			WriteByte(f, 0)
-		EndIf
-		
-		Local ItemFound% = False
-		
-		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) = it
-				ItemFound = True
-				Exit
-			EndIf
-		Next
-		If ItemFound
-			WriteByte(f, i)
-		Else
-			WriteByte(f, 66)
-		EndIf
-		
-		If it\ItemTemplate\IsAnim <> 0 Then WriteFloat(f, AnimTime(it\Model))
-		WriteByte(f, it\InvSlots)
-		WriteInt(f, it\ID)
-		If it\ItemTemplate\InvImg = it\InvImg
-			WriteByte(f, 0)
-		Else
-			WriteByte(f, 1)
-		EndIf
-	Next
-	
-	Temp = 0
-	For it.Items = Each Items
-		If it\InvSlots > 0 Then Temp = Temp + 1
-	Next
-	
-	WriteInt(f, Temp)
-	
-	For it.Items = Each Items
-		If it\InvSlots > 0
-			WriteInt(f, it\ID)
-			For i = 0 To it\InvSlots - 1
-				If it\SecondInv[i] <> Null
-					WriteInt(f, it\SecondInv[i]\ID)
-				Else
-					WriteInt(f, -1)
-				EndIf
-			Next
-		EndIf
-	Next
-	
-	Local itt.ItemTemplates
-	
-	For itt.ItemTemplates = Each ItemTemplates
-		WriteByte(f, itt\Found)
-	Next
-
-	WriteInt(f, EscapeTimer)
-	
-	CloseFile(f)
-	
-	If (Not MenuOpen) And (Not MainMenuOpen)
-		If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
-		Else
-			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
-			as\Timer = 70.0 * 120.0
-		EndIf
-		CreateHintMsg(GetLocalString("save", "saved"))
-	EndIf
-	
-	CatchErrors("Uncaught: SaveGame(" + File + ")")
 End Function
 
-Function LoadGame%(File$)
-	CatchErrors("LoadGame(" + File + ")")
-	
-	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
-	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
-	
-	me\DropSpeed = 0.0
-	
-	GameSaved = True
-	
-	StrTemp = ReadString(f)
-	StrTemp = ReadString(f)
-	
-	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
-	
-	CODE_DR_MAYNARD = Int(ReadString(f))
-	CODE_O5_COUNCIL = Int(ReadString(f))
-	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
-	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.5, z)
-	ResetEntity(me\Collider)
-	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.5, z)
-	ResetEntity(me\Head)
-	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	RotateEntity(me\Collider, x, y, 0.0)
+Function LoadPlayerData(File$, f%)
+	Local i%, j%, Temp%, x#, y#, z#, Red#, Green#, Blue#
 	
 	me\BlinkTimer = ReadFloat(f)
 	me\BLINKFREQ = ReadFloat(f)
@@ -608,15 +592,6 @@ Function LoadGame%(File$)
 	wi\SCRAMBLE = ReadByte(f)
 	
 	I_1499\Using = ReadByte(f)
-	I_1499\PrevX = ReadFloat(f)
-	I_1499\PrevY = ReadFloat(f)
-	I_1499\PrevZ = ReadFloat(f)
-	I_1499\x = ReadFloat(f)
-	I_1499\y = ReadFloat(f)
-	I_1499\z = ReadFloat(f)
-	
-	Local r1499_x# = ReadFloat(f)
-	Local r1499_z# = ReadFloat(f)
 	
 	I_268\Using = ReadByte(f)
 	I_268\Timer = ReadFloat(f)
@@ -650,6 +625,167 @@ Function LoadGame%(File$)
 	
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
+	
+	Local it.Items
+	
+	For it.Items = Each Items
+		RemoveItem(it)
+	Next
+	
+	Temp = ReadInt(f)
+	For i = 1 To Temp
+		Local IttName$ = ReadString(f)
+		Local TempName$ = ReadString(f)
+		Local Name$ = ReadString(f)
+		
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		
+		Red = ReadByte(f)
+		Green = ReadByte(f)
+		Blue = ReadByte(f)
+		
+		Local A% = ReadFloat(f)
+		
+		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
+		it\Name = Name
+		
+		EntityType(it\Collider, HIT_ITEM)
+		
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		RotateEntity(it\Collider, x, y, 0.0)
+		
+		it\State = ReadFloat(f)
+		it\State2 = ReadFloat(f)
+		it\State3 = ReadFloat(f)
+		it\Picked = ReadByte(f)
+		If it\Picked Then HideEntity(it\Collider)
+		
+		Local nt% = ReadByte(f)
+		
+		If nt = True Then SelectedItem = it
+		
+		nt = ReadByte(f)
+		If nt < 66
+			Inventory(nt) = it
+			ItemAmount = ItemAmount + 1
+		EndIf
+		
+		Local itt.ItemTemplates
+		
+		For itt.ItemTemplates = Each ItemTemplates
+			If itt\TempName = TempName
+				If itt\IsAnim <> 0
+					SetAnimTime(it\Model, ReadFloat(f))
+					Exit
+				EndIf
+			EndIf
+		Next
+		it\InvSlots = ReadByte(f)
+		it\ID = ReadInt(f)
+		
+		If it\ID > LastItemID Then LastItemID = it\ID
+		
+		If ReadByte(f) = 0
+			it\InvImg = it\ItemTemplate\InvImg
+		Else
+			it\InvImg = it\ItemTemplate\InvImg2
+		EndIf
+	Next
+	
+	Local o_i%
+	
+	Temp = ReadInt(f)
+	For i = 1 To Temp
+		o_i = ReadInt(f)
+		
+		Local ij.Items
+		
+		For ij.Items = Each Items
+			If ij\ID = o_i
+				it.Items = ij
+				Exit
+			EndIf
+		Next
+		For j = 0 To it\InvSlots - 1
+			o_i = ReadInt(f)
+			If o_i <> -1
+				For ij.Items = Each Items
+					If ij\ID = o_i
+						it\SecondInv[j] = ij
+						Exit
+					EndIf
+				Next
+			EndIf
+		Next
+	Next
+	For itt.ItemTemplates = Each ItemTemplates
+		itt\Found = ReadByte(f)
+	Next
+	
+	EscapeTimer = ReadInt(f)
+	
+	CurrentZone = ReadInt(f)
+	
+End Function
+
+Function LoadGame%(File$, ZoneToLoad% = -1)
+	CatchErrors("LoadGame(" + File + ")")
+	
+	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
+	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
+	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
+	
+	me\DropSpeed = 0.0
+	
+	GameSaved = True
+	
+	StrTemp = ReadString(f)
+	StrTemp = ReadString(f)
+	
+	StrTemp = ReadString(f)
+	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	
+	CODE_DR_MAYNARD = Int(ReadString(f))
+	CODE_O5_COUNCIL = Int(ReadString(f))
+	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
+	
+	x = ReadFloat(f)
+	y = ReadFloat(f)
+	z = ReadFloat(f)
+	PositionEntity(me\Collider, x, y + 0.5, z)
+	ResetEntity(me\Collider)
+	
+	x = ReadFloat(f)
+	y = ReadFloat(f)
+	z = ReadFloat(f)
+	PositionEntity(me\Head, x, y + 0.5, z)
+	ResetEntity(me\Head)
+	
+	x = ReadFloat(f)
+	y = ReadFloat(f)
+	RotateEntity(me\Collider, x, y, 0.0)
+	
+	LoadPlayerData(File, f)
+	
+	If ZoneToLoad > -1 Then
+		CurrentZone = ZoneToLoad
+	EndIf
+	
+	CloseFile(f)
+	
+	f% = ReadFile_Strict(SavePath + File + "\" + "zone_" + CurrentZone + ".cb")
+	
+	I_1499\PrevX = ReadFloat(f)
+	I_1499\PrevY = ReadFloat(f)
+	I_1499\PrevZ = ReadFloat(f)
+	I_1499\x = ReadFloat(f)
+	I_1499\y = ReadFloat(f)
+	I_1499\z = ReadFloat(f)
+	Local r1499_x# = ReadFloat(f)
+	Local r1499_z# = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -891,86 +1027,88 @@ Function LoadGame%(File$)
 	
 	Local Zone%, ShouldSpawnDoor%
 	
-	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
-			Zone = 3
-		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
-			Zone = 2
-		Else
-			Zone = 1
-		EndIf
-		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
-				For r.Rooms = Each Rooms
-					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 90.0)
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						If ShouldSpawnDoor
-							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									do.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[0] = do
-								EndIf
-							EndIf
-						EndIf
-						
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0)
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						If ShouldSpawnDoor
-							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-									do.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[3] = do
-								EndIf
-							EndIf
-						EndIf
-						Exit
-					EndIf
-				Next
+	If CurrentZone <> SURFACE ; ~ Generate rooms only if they're inside the facility
+		For y = MapGridSize To 0 Step -1
+			If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
+				Zone = EZ
+			ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
+				Zone = HCZ
+			Else
+				Zone = LCZ
 			EndIf
+			For x = MapGridSize To 0 Step -1
+				If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
+					For r.Rooms = Each Rooms
+						r\Angle = WrapAngle(r\Angle)
+						If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
+							Select r\RoomTemplate\Shape
+								Case ROOM1
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 90.0)
+									;[End Block]
+								Case ROOM2
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
+									;[End Block]
+								Case ROOM2C
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
+									;[End Block]
+								Case ROOM3
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
+									;[End Block]
+								Default
+									;[Block]
+									ShouldSpawnDoor = True
+									;[End Block]
+							End Select
+							If ShouldSpawnDoor
+								If x + 1 < MapGridSize + 1
+									If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
+										do.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+										r\AdjDoor[0] = do
+									EndIf
+								EndIf
+							EndIf
+							
+							Select r\RoomTemplate\Shape
+								Case ROOM1
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 180.0)
+									;[End Block]
+								Case ROOM2
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
+									;[End Block]
+								Case ROOM2C
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
+									;[End Block]
+								Case ROOM3
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
+									;[End Block]
+								Default
+									;[Block]
+									ShouldSpawnDoor = True
+									;[End Block]
+							End Select
+							If ShouldSpawnDoor
+								If y + 1 < MapGridSize + 1
+									If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
+										do.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+										r\AdjDoor[3] = do
+									EndIf
+								EndIf
+							EndIf
+							Exit
+						EndIf
+					Next
+				EndIf
+			Next
 		Next
-	Next
+	EndIf
 	
 	Temp = ReadInt(f)
 	
@@ -1137,108 +1275,6 @@ Function LoadGame%(File$)
 		End Select
 	Next
 	
-	Local it.Items
-	
-	For it.Items = Each Items
-		RemoveItem(it)
-	Next
-	
-	Temp = ReadInt(f)
-	For i = 1 To Temp
-		Local IttName$ = ReadString(f)
-		Local TempName$ = ReadString(f)
-		Local Name$ = ReadString(f)
-		
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
-		
-		Red = ReadByte(f)
-		Green = ReadByte(f)
-		Blue = ReadByte(f)
-		
-		Local A% = ReadFloat(f)
-		
-		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
-		it\Name = Name
-		
-		EntityType(it\Collider, HIT_ITEM)
-		
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		RotateEntity(it\Collider, x, y, 0.0)
-		
-		it\State = ReadFloat(f)
-		it\State2 = ReadFloat(f)
-		it\State3 = ReadFloat(f)
-		it\Picked = ReadByte(f)
-		If it\Picked Then HideEntity(it\Collider)
-		
-		Local nt% = ReadByte(f)
-		
-		If nt = True Then SelectedItem = it
-		
-		nt = ReadByte(f)
-		If nt < 66
-			Inventory(nt) = it
-			ItemAmount = ItemAmount + 1
-		EndIf
-		
-		Local itt.ItemTemplates
-		
-		For itt.ItemTemplates = Each ItemTemplates
-			If itt\TempName = TempName And itt\Name = IttName
-				If itt\IsAnim <> 0
-					SetAnimTime(it\Model, ReadFloat(f))
-					Exit
-				EndIf
-			EndIf
-		Next
-		it\InvSlots = ReadByte(f)
-		it\ID = ReadInt(f)
-		
-		If it\ID > LastItemID Then LastItemID = it\ID
-		
-		If ReadByte(f) = 0
-			it\InvImg = it\ItemTemplate\InvImg
-		Else
-			it\InvImg = it\ItemTemplate\InvImg2
-		EndIf
-	Next
-	
-	Local o_i%
-	
-	Temp = ReadInt(f)
-	For i = 1 To Temp
-		o_i = ReadInt(f)
-		
-		Local ij.Items
-		
-		For ij.Items = Each Items
-			If ij\ID = o_i
-				it.Items = ij
-				Exit
-			EndIf
-		Next
-		For j = 0 To it\InvSlots - 1
-			o_i = ReadInt(f)
-			If o_i <> -1
-				For ij.Items = Each Items
-					If ij\ID = o_i
-						it\SecondInv[j] = ij
-						Exit
-					EndIf
-				Next
-			EndIf
-		Next
-	Next
-	
-	For itt.ItemTemplates = Each ItemTemplates
-		itt\Found = ReadByte(f)
-	Next
-
-	EscapeTimer = ReadInt(f)
-	
 	CloseFile(f)
 	
 	If wi\NightVision > 0
@@ -1384,117 +1420,20 @@ Function LoadGameQuick%(File$)
 	y = ReadFloat(f)
 	RotateEntity(me\Collider, x, y, 0.0)
 	
-	me\BlinkTimer = ReadFloat(f)
-	me\BLINKFREQ = ReadFloat(f)
-	me\BlinkEffect = ReadFloat(f)
-	me\BlinkEffectTimer = ReadFloat(f)
+	LoadPlayerData(File, f)
 	
-	me\DeathTimer = ReadFloat(f)
-	me\BlurTimer = ReadFloat(f)
-	me\HealTimer = ReadFloat(f)
+	CloseFile(f)
 	
-	me\Crouch = ReadByte(f)
+	f% = ReadFile_Strict(SavePath + File + "\" + "zone_" + CurrentZone + ".cb")
 	
-	me\Stamina = ReadFloat(f)
-	me\StaminaEffect = ReadFloat(f)
-	me\StaminaEffectTimer = ReadFloat(f)
-	
-	me\EyeStuck = ReadFloat(f)
-	me\EyeIrritation = ReadFloat(f)
-	
-	me\Injuries = ReadFloat(f)
-	me\Bloodloss = ReadFloat(f)
-	
-	me\PrevInjuries = ReadFloat(f)
-	me\PrevBloodloss = ReadFloat(f)
-	
-	msg\DeathMsg = ReadString(f)
-	
-	me\Funds = ReadByte(f)
-	me\UsedMastercard = ReadByte(f)
-	
-	me\VomitTimer = ReadFloat(f)
-	me\Vomit = ReadByte(f)
-	me\CameraShakeTimer = ReadFloat(f)
-	
-	I_005\ChanceToSpawn = ReadByte(f)
-	
-	I_500\Taken = ReadByte(f)
-	
-	For i = 0 To 7
-		I_1025\State[i] = ReadFloat(f)
-	Next
-	
-	I_008\Timer = ReadFloat(f)
-	I_008\Revert = ReadByte(f)
-	I_409\Timer = ReadFloat(f)
-	I_409\Revert = ReadByte(f)
-	
-	I_035\Sad = ReadByte(f)
-	
-	Local DifficultyIndex% = ReadByte(f)
-	
-	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC
-		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
-		SelectedDifficulty\SaveType = ReadByte(f)
-		SelectedDifficulty\OtherFactors = ReadByte(f)
-	EndIf
-	SelectedDifficulty\InventorySlots = ReadByte(f)
-	
-	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount)
-	
-	me\Sanity = ReadFloat(f)
-	
-	wi\GasMaskFogTimer = ReadFloat(f)
-	
-	wi\GasMask = ReadByte(f)
-	wi\BallisticVest = ReadByte(f)
-	wi\BallisticHelmet = ReadByte(f)
-	wi\HazmatSuit = ReadByte(f)
-	wi\NightVision = ReadByte(f)
-	wi\SCRAMBLE = ReadByte(f)
-	
-	I_1499\Using = ReadByte(f)
 	I_1499\PrevX = ReadFloat(f)
 	I_1499\PrevY = ReadFloat(f)
 	I_1499\PrevZ = ReadFloat(f)
 	I_1499\x = ReadFloat(f)
 	I_1499\y = ReadFloat(f)
 	I_1499\z = ReadFloat(f)
-	
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
-	
-	I_268\Using = ReadByte(f)
-	I_268\Timer = ReadFloat(f)
-	I_427\Using = ReadByte(f)
-	I_427\Timer = ReadFloat(f)
-	I_714\Using = ReadByte(f)
-	I_294\Using = ReadByte(f)
-	
-	chs\SuperMan = ReadByte(f)
-	chs\SuperManTimer = ReadFloat(f)
-	
-	RandomSeed = ReadString(f)
-	
-	SecondaryLightOn = ReadFloat(f)
-	PrevSecondaryLightOn = ReadFloat(f)
-	RemoteDoorOn = ReadByte(f)
-	SoundTransmission = ReadByte(f)
-	
-	For i = 0 To MaxAchievements - 1
-		achv\Achievement[i] = ReadByte(f)
-	Next
-	me\RefinedItems = ReadInt(f)
-	
-	UsedConsole = (ReadInt(f) <> 994)
-	
-	MTFTimer = ReadFloat(f)
-	
-	Remove714Timer = ReadFloat(f)
-	RemoveHazmatTimer = ReadFloat(f)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -1881,107 +1820,6 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 		End Select
 	Next
-	
-	Local it.Items
-	
-	For it.Items = Each Items
-		RemoveItem(it)
-	Next
-	
-	Temp = ReadInt(f)
-	For i = 1 To Temp
-		Local IttName$ = ReadString(f)
-		Local TempName$ = ReadString(f)
-		Local Name$ = ReadString(f)
-		
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
-		
-		Red = ReadByte(f)
-		Green = ReadByte(f)
-		Blue = ReadByte(f)
-		
-		Local A% = ReadFloat(f)
-		
-		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
-		it\Name = Name
-		
-		EntityType(it\Collider, HIT_ITEM)
-		
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		RotateEntity(it\Collider, x, y, 0.0)
-		
-		it\State = ReadFloat(f)
-		it\State2 = ReadFloat(f)
-		it\State3 = ReadFloat(f)
-		it\Picked = ReadByte(f)
-		If it\Picked Then HideEntity(it\Collider)
-		
-		Local nt% = ReadByte(f)
-		
-		If nt = True Then SelectedItem = it
-		
-		nt = ReadByte(f)
-		If nt < 66
-			Inventory(nt) = it
-			ItemAmount = ItemAmount + 1
-		EndIf
-		
-		Local itt.ItemTemplates
-		
-		For itt.ItemTemplates = Each ItemTemplates
-			If itt\TempName = TempName
-				If itt\IsAnim <> 0
-					SetAnimTime(it\Model, ReadFloat(f))
-					Exit
-				EndIf
-			EndIf
-		Next
-		it\InvSlots = ReadByte(f)
-		it\ID = ReadInt(f)
-		
-		If it\ID > LastItemID Then LastItemID = it\ID
-		
-		If ReadByte(f) = 0
-			it\InvImg = it\ItemTemplate\InvImg
-		Else
-			it\InvImg = it\ItemTemplate\InvImg2
-		EndIf
-	Next
-	
-	Local o_i%
-	
-	Temp = ReadInt(f)
-	For i = 1 To Temp
-		o_i = ReadInt(f)
-		
-		Local ij.Items
-		
-		For ij.Items = Each Items
-			If ij\ID = o_i
-				it.Items = ij
-				Exit
-			EndIf
-		Next
-		For j = 0 To it\InvSlots - 1
-			o_i = ReadInt(f)
-			If o_i <> -1
-				For ij.Items = Each Items
-					If ij\ID = o_i
-						it\SecondInv[j] = ij
-						Exit
-					EndIf
-				Next
-			EndIf
-		Next
-	Next
-	For itt.ItemTemplates = Each ItemTemplates
-		itt\Found = ReadByte(f)
-	Next
-
-	EscapeTimer = ReadInt(f)
 	
 	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
 	Local sc.SecurityCams
@@ -2522,103 +2360,111 @@ Function LoadMap%(File$)
 	Local ShouldSpawnDoor%
 	Local d.Doors
 	
-	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1]
-			Zone = 3
-		ElseIf y >= I_Zone\Transition[1] And y < I_Zone\Transition[0]
-			Zone = 2
-		Else
-			Zone = 1
-		EndIf
-		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
-				For r.Rooms = Each Rooms
-					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 90.0)
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Case ROOM3
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						If ShouldSpawnDoor
-							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									d.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[0] = d
-								EndIf
-							EndIf
-						EndIf
-						
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0)
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						If ShouldSpawnDoor
-							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-									d.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[3] = d
-								EndIf
-							EndIf
-						EndIf
-						Exit
-					EndIf
-				Next
+	If CurrentZone <> SURFACE ; ~ Generate rooms only if they're inside the facility
+		For y = MapGridSize To 0 Step -1
+			If y < I_Zone\Transition[1]
+				Zone = EZ
+			ElseIf y >= I_Zone\Transition[1] And y < I_Zone\Transition[0]
+				Zone = HCZ
+			Else
+				Zone = LCZ
 			EndIf
+			For x = MapGridSize To 0 Step -1
+				If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
+					For r.Rooms = Each Rooms
+						r\Angle = WrapAngle(r\Angle)
+						If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
+							Select r\RoomTemplate\Shape
+								Case ROOM1
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 90.0)
+									;[End Block]
+								Case ROOM2
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
+									;[End Block]
+								Case ROOM2C
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
+									;[End Block]
+								Case ROOM3
+									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
+									;[End Block]
+								Default
+									;[Block]
+									ShouldSpawnDoor = True
+									;[End Block]
+							End Select
+							If ShouldSpawnDoor
+								If x + 1 < MapGridSize + 1
+									If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
+										d.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+										r\AdjDoor[0] = d
+									EndIf
+								EndIf
+							EndIf
+							
+							Select r\RoomTemplate\Shape
+								Case ROOM1
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 180.0)
+									;[End Block]
+								Case ROOM2
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
+									;[End Block]
+								Case ROOM2C
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
+									;[End Block]
+								Case ROOM3
+									;[Block]
+									ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
+									;[End Block]
+								Default
+									;[Block]
+									ShouldSpawnDoor = True
+									;[End Block]
+							End Select
+							If ShouldSpawnDoor
+								If y + 1 < MapGridSize + 1
+									If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
+										d.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+										r\AdjDoor[3] = d
+									EndIf
+								EndIf
+							EndIf
+							Exit
+						EndIf
+					Next
+				EndIf
+			Next
 		Next
-	Next
-	
-	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10, r_gate_b)
-	CreateEvent(e_gate_b, r_gate_b, 0)
-	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2, r_gate_a)
-	CreateEvent(e_gate_a, r_gate_a, 0)
-	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, r_dimension_106)
-	CreateEvent(e_dimension_106, r_dimension_106, 0) 
-	
-	If opt\IntroEnabled
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, r_cont1_173_intro)
-		CreateEvent(e_cont1_173_intro, r_cont1_173_intro, 0)
+	Else ; ~ Spawn some rooms outside the generated map
+		If CurrentZone = SURFACE
+			r.Rooms = CreateRoom(CurrentZone, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, -(PowTwo(RoomSpacing)), r_gate_b)
+			CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+			
+			r.Rooms = CreateRoom(CurrentZone, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
+			CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+		Else
+			r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_dimension_106)
+			CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+			
+			If opt\IntroEnabled
+				r.Rooms = CreateRoom(CurrentZone, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
+				CalculateRoomExtents(r)
+				CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+			EndIf
+			
+			r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
+			CalculateRoomExtents(r)
+			CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
+		EndIf
 	EndIf
-	
-	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing * 2), 800.0, 0.0, r_dimension_1499)
-	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
 	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomAdjacents - 1
