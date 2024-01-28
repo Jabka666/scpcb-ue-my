@@ -4980,13 +4980,33 @@ Function UpdateGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					If SelectedItem\ItemTemplate\TempName <> "fineradio" And SelectedItem\ItemTemplate\TempName <> "veryfineradio" Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.004)
+					Local RadioType%
+					
+					Select SelectedItem\ItemTemplate\TempName
+						Case "18vradio
+							;[Block]
+							RadioType = 1
+							;[End Block]
+						Case "fineradio"
+							;[Block]
+							RadioType = 2
+							;[End Block]
+						Case "veryfineradio"
+							;[Block]
+							RadioType = 3
+							;[End Block]
+						Default
+							;[Block]
+							RadioType = 0
+							;[End Block]
+					End Select
+					If RadioType < 2 Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.004)
 					
 					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
 					; ~ RadioState[6] = A timer for the "code channel"
 					; ~ RadioState[7] = Another timer for the "code channel"
 					
-					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio")
+					If SelectedItem\State > 0.0 Lor RadioType > 1
 						IsUsingRadio = True
 						If RadioState[5] = 0.0
 							CreateMsg(GetLocalString("msg", "radio"))
@@ -4994,7 +5014,7 @@ Function UpdateGUI%()
 							RadioState[0] = -1.0
 						EndIf
 						
-						If RID = r_dimension_106
+						If RID = r_dimension_106 Lor RID = r_dimension_1499
 							For i = 0 To 5
 								If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 							Next
@@ -5256,7 +5276,7 @@ Function UpdateGUI%()
 									;[End Block]
 							End Select
 							
-							If SelectedItem\ItemTemplate\TempName = "veryfineradio"
+							If RadioType = 3
 								SelectedItem\State2 = -1
 								If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
 								RadioState[6] = RadioState[6] + fps\Factor[0]
@@ -5286,7 +5306,7 @@ Function UpdateGUI%()
 							EndIf
 						EndIf
 						
-						If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio"
+						If RadioType < 2
 							If SelectedItem\State <= 20.0
 								UpdateBatteryTimer()
 								If BatMsgTimer >= 70.0 * 1.0
