@@ -1,6 +1,6 @@
 Const SavePath$ = "Saves\"
 
-Function SaveGame%(File$, NewZone% = -1)
+Function SaveGame%(File$, NewZone% = 0)
 	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
 	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
@@ -232,7 +232,7 @@ Function SaveGame%(File$, NewZone% = -1)
 
 	WriteInt(f, EscapeTimer)
 	
-	If NewZone > -1 Then
+	If NewZone > 0 Then
 		WriteInt f, NewZone
 	Else
 		WriteInt f, CurrentZone
@@ -261,7 +261,7 @@ Function SaveZoneData(File$)
 	
 	CreateDir(File)
 	
-	Local f% = WriteFile(File + "\" + "zone_" + CurrentZone + ".cb")
+	Local f% = WriteFile(File + "\zone_" + CurrentZone + ".cb")
 	
 	WriteFloat(f, I_1499\PrevX)
 	WriteFloat(f, I_1499\PrevY)
@@ -731,12 +731,14 @@ Function LoadPlayerData(File$, f%)
 	
 End Function
 
-Function LoadGame%(File$, ZoneToLoad% = -1)
+Function LoadGame%(File$, ZoneToLoad% = 0)
 	CatchErrors("LoadGame(" + File + ")")
+	
+	File = SavePath + File
 	
 	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
-	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
+	Local f% = ReadFile_Strict(File + "\save.cb")
 	
 	me\DropSpeed = 0.0
 	
@@ -770,13 +772,13 @@ Function LoadGame%(File$, ZoneToLoad% = -1)
 	
 	LoadPlayerData(File, f)
 	
-	If ZoneToLoad > -1 Then
+	If ZoneToLoad > 0 Then
 		CurrentZone = ZoneToLoad
 	EndIf
 	
 	CloseFile(f)
 	
-	f% = ReadFile_Strict(SavePath + File + "\" + "zone_" + CurrentZone + ".cb")
+	f% = ReadFile_Strict(File + "\zone_" + CurrentZone + ".cb")
 	
 	I_1499\PrevX = ReadFloat(f)
 	I_1499\PrevY = ReadFloat(f)
@@ -1352,11 +1354,13 @@ End Function
 Function LoadGameQuick%(File$)
 	CatchErrors("LoadGameQuick(" + File + ")")
 	
+	File = SavePath + File
+	
 	Local r.Rooms, n.NPCs, do.Doors
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
 	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
-	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
+	Local f% = ReadFile_Strict(File + "\save.cb")
 	
 	GameSaved = True
 	msg\Txt = ""
@@ -1424,7 +1428,7 @@ Function LoadGameQuick%(File$)
 	
 	CloseFile(f)
 	
-	f% = ReadFile_Strict(SavePath + File + "\" + "zone_" + CurrentZone + ".cb")
+	f% = ReadFile_Strict(File + "\zone_" + CurrentZone + ".cb")
 	
 	I_1499\PrevX = ReadFloat(f)
 	I_1499\PrevY = ReadFloat(f)

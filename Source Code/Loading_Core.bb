@@ -2014,14 +2014,14 @@ End Function
 
 Global Camera%
 
-Function LoadEntities%()
+Function LoadEntities%(LoadingZone% = False)
 	CatchErrors("LoadEntities()")
 	
 	Local i%, Tex%
 	Local b%, t1%, SF%
 	Local Name$, Test%, File$
 	
-	DeInitMainMenuAssets()
+	If (Not LoadingZone) Then DeInitMainMenuAssets()
 	
 	RenderLoading(0, GetLocalString("loading", "data"))
 	
@@ -2374,13 +2374,17 @@ Function InitOtherStuff%()
 	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 End Function
 
-Function InitNewGame%()
+Function InitNewGame%(LoadingZone% = False)
 	CatchErrors("InitNewGame()")
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
 	Local i%, Skip%
 	
-	LoadEntities()
+	If LoadingZone
+		LoadEntities(True)
+	Else
+		LoadEntities()
+	EndIf
 	LoadSounds()
 	
 	opt\CameraFogFar = 6.0
@@ -2743,6 +2747,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	CODE_MAINTENANCE_TUNNELS = 0
 	CODE_O5_COUNCIL = 0
 	
+	CurrentZone = 0
+	
 	ShouldPlay = 66
 	FreeEntity(SoundEmitter) : SoundEmitter = 0
 	SoundTransmission = False
@@ -2941,7 +2947,6 @@ Function NullGame%(PlayButtonSFX% = True)
 		Delete(snd)
 	Next
 	RemoveSoundInstances()
-	
 	For sv.Save = Each Save
 		Delete(sv)
 	Next
@@ -2973,6 +2978,245 @@ Function NullGame%(PlayButtonSFX% = True)
 	mm\MainMenuTab = MainMenuTab_Default
 	
 	CatchErrors("Uncaught: NullGame()")
+End Function
+
+Function NullZone()
+	CatchErrors("NullZone()")
+	Local i%, x%, y%, lvl
+	Local itt.ItemTemplates, s.Screens
+	Local rt.RoomTemplates
+	
+	Local PlayerRoomID% = PlayerRoom\RoomTemplate\RoomID
+	Local PlayerRoomZone% = CurrentZone
+	
+	KillSounds()
+	
+	DeleteTextureEntriesFromCache(2)
+	
+	QuickLoadPercent = -1
+	QuickLoadPercent_DisplayTimer# = 0.0
+	QuickLoad_CurrEvent = Null
+	
+	msg\DeathMsg$=""
+	
+;	SelectedCustomMap = ""
+	
+	UsedConsole = False
+	
+	RoomTempID = 0
+	
+	GameSaved = 0
+	
+	HideDistance# = 15.0
+	
+;	For lvl = 0 To 0
+;		For x = 0 To MapWidth - 1
+;			For y = 0 To MapHeight - 1
+;				MapTemp[x * MapWidth + y] = 0
+;				MapFound[x * MapWidth + y] = 0
+;			Next
+;		Next
+;	Next
+	
+	; ~ Probably useless
+	For itt.ItemTemplates = Each ItemTemplates
+		itt\Found = False
+	Next
+	
+	me\DropSpeed = 0.0
+	me\Shake = 0.0
+	me\CurrSpeed = 0.0
+	
+	me\DeathTimer=0.0
+	
+	me\HeartBeatVolume = 0.0
+	
+	me\StaminaEffect = 1.0
+	me\StaminaEffectTimer = 0.0
+	me\BlinkEffect = 1.0
+	me\BlinkEffectTimer = 0.0
+	
+	me\Bloodloss = 0.0
+	me\Injuries = 0.0
+;	I_008\Timer = 0.0
+	
+	For i = 0 To 5
+		I_1025\State[i] = 0.0
+	Next
+	
+	me\SelectedEnding = ""
+	me\EndingTimer = 0.0
+	me\ExplosionTimer = 0.0
+	
+	me\CameraShake = 0.0
+	me\BigCameraShake = 0.0
+	me\Shake = 0.0
+	me\LightFlash = 0.0
+	
+	chs\GodMode = 0.0
+	chs\NoClip = 0.0
+	WireFrameState = 0.0
+	WireFrame 0.0
+	wi\GasMask = 0.0
+	wi\HazmatSuit = 0.0
+	wi\BallisticVest = 0.0
+	I_714\Using = 0.0
+	If wi\NightVision Then
+		opt\CameraFogFar = 6.0
+		wi\NightVision = 0.0
+	EndIf
+	
+	me\ForceMove = 0.0
+	me\ForceAngle = 0.0	
+	me\Playable = True
+	
+	n_I\Curr106\Contained = False
+	n_I\Curr173\Contained = False
+	
+	MTFTimer = 0
+	
+	For s.Screens = Each Screens
+		If s\Img <> 0 Then FreeImage s\Img
+		Delete s
+	Next
+	
+	For i = 0 To MaxAchievements-1
+		achv\Achievement[i] = 0
+	Next
+	me\RefinedItems = 0
+	
+	ConsoleInput = ""
+	ConsoleOpen = False
+	
+	me\EyeIrritation = 0
+	me\EyeStuck = 0
+	
+	ShouldPlay = 66
+	
+	me\KillAnimTimer = 0
+	me\FallTimer = 0
+	me\Stamina = 100
+	me\BlurTimer = 0
+	chs\SuperMan = False
+	chs\SuperManTimer = 0
+	
+	chs\InfiniteStamina% = False
+	
+	msg\Txt = ""
+	msg\Timer = 0
+	
+	SelectedItem = Null
+	
+	For i = 0 To MaxItemAmount - 1
+		Inventory(i) = Null
+	Next
+	SelectedItem = Null
+	
+	Delete Each Doors
+	Delete Each Materials
+	Delete Each WayPoints
+	Delete Each TempWayPoints	
+	Delete Each Rooms
+	Delete Each ItemTemplates
+	Delete Each Items
+	Delete Each Props
+	Delete Each Decals
+	Delete Each NPCs
+	Delete Each TempScreens
+	Delete Each TextureInCache
+	
+	;Delete Each Player ~ TODO Check If Needed!
+	Delete Each WearableItems
+	
+	Delete Each SCP005
+	Delete Each SCP008
+	Delete Each SCP035
+	Delete Each SCP268
+	Delete Each SCP294
+	Delete Each SCP409
+	For i = 0 To 1
+		I_427\Sound[i] = 0
+	Next
+	Delete Each SCP427
+	Delete Each SCP500
+	Delete Each SCP714
+	Delete Each SCP1025
+	If I_1499\Sky <> 0 Then FreeEntity(I_1499\Sky) : I_1499\Sky = 0
+	Delete Each SCP1499
+	
+	n_I\Curr173 = Null
+	n_I\Curr106 = Null
+	n_I\Curr096 = Null
+	ForestNPC = 0
+	ForestNPCTex = 0
+	
+	Local e.Events
+	For e.Events = Each Events
+		If e\Sound<>0 Then FreeSound_Strict e\Sound
+		If e\Sound2<>0 Then FreeSound_Strict e\Sound2
+		Delete e
+	Next
+	
+	Delete Each SecurityCams
+	Delete Each Emitters
+	Delete Each Particles
+	
+	For rt.RoomTemplates = Each RoomTemplates
+		rt\OBJ = 0
+	Next
+	
+	For i = 0 To 5
+		If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i])
+	Next
+	
+	Delete Each ConsoleMsg
+	
+	chs\NoTarget% = False
+	
+	me\DeafTimer# = 0.0
+	
+	me\Zombie% = False
+	
+	Delete Each DoorInstance
+	
+	ClearWorld
+	ResetTimingAccumulator()
+	Camera = 0
+	
+	InitFastResize()
+	
+	DeleteMenuGadgets()
+	
+	CatchErrors("Uncaught: NullZone()")
+End Function
+
+Function LoadZone%(ZoneID%, PlaySFX% = True)
+	
+	DebugLog "Determined Old Zone As: (" + CurrentZone +")"
+	SaveGame(CurrSave\Name)
+	DebugLog "Saved Game Before Changing Zone"
+	NullZone()
+	If PlaySFX Then PlaySound_Strict(LoadTempSound("SFX\Door\DoorCheckpoint.ogg"))
+	DebugLog "Nulled Zone Before Changing Zone"
+	CurrentZone = ZoneID
+	DebugLog "Determined New Zone As: (" + CurrentZone +")"
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") = 1
+		DebugLog "EBAT OKLEMALSA"
+		LoadEntities(True)
+		LoadSounds()
+		LoadGame(CurrSave\Name, CurrentZone)
+		InitLoadGame()
+	Else
+		DebugLog "BLYAT SUKA"
+		InitNewGame(True)
+	EndIf
+	DebugLog "Initialised Game"
+	MainMenuOpen = False
+	FlushKeys()
+	FlushMouse()
+	ResetInput()
+	DebugLog "Successfully Changed Zone!"
+	
 End Function
 
 ;~IDEal Editor Parameters:

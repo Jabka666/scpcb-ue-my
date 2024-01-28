@@ -4742,6 +4742,7 @@ Global I_Zone.MapZones
 
 ; ~ Zones ID Constants
 ;[Block]
+Const MaxZones% = 4
 Const LCZ% = 1, HCZ% = 2, EZ% = 3, SURFACE% = 4
 ;[End Block]
 

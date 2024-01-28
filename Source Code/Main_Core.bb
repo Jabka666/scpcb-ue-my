@@ -1066,6 +1066,7 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- spawnitem [item name]")
 							CreateConsoleMsg("- giveachievement [ID / All]")
 							CreateConsoleMsg("- codes")
+							CreateConsoleMsg("- loadzone [Zone ID]")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
@@ -1291,6 +1292,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "codes"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.codes"))
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "loadzone" 
+							;[Block]
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "loadzone"))
+							CreateConsoleMsg("******************************")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.loadzone"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Default
@@ -2109,6 +2117,20 @@ Function UpdateConsole%()
 					CreateConsoleMsg(Format(GetLocalString("console", "codes_7"), CODE_CONT1_035))
 					CreateConsoleMsg("")
 					CreateConsoleMsg(GetLocalString("console", "codes_8"))
+					;[End Block]
+				Case "loadzone", "lz"
+					;[Block]
+					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					
+					If Int(StrTemp) > 0 And Int(StrTemp) < MaxZones
+						If Int(StrTemp) = CurrentZone
+							CreateConsoleMsg(Format(GetLocalString("console", "zone.1"), Int(StrTemp)), 255, 0, 0)
+						Else
+							LoadZone(Int(StrTemp), False)
+						EndIf
+					Else
+						CreateConsoleMsg(Format(GetLocalString("console", "zone.2"), Int(StrTemp)), 255, 0, 0)
+					EndIf
 					;[End Block]
 				Default
 					;[Block]
