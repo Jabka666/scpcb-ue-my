@@ -2036,7 +2036,7 @@ Function UpdateEvents%()
 					
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[2]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[3]))
-					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY )
+					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[1], e\room\RoomDoors[2], e\room\Objects[2], e\room\Objects[3], e)
 				EndIf
@@ -4382,23 +4382,11 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						
-						If n_I\Curr096 <> Null
-							If n_I\Curr096\State = 0.0 Lor n_I\Curr096\State = 5.0
-								PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
-								PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
-								PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
-								ToElevatorFloor = FindFloor(e)
-								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
-							Else
-								e\EventState = Update096ElevatorEvent(e, e\EventState, e\room\RoomDoors[0], e\room\Objects[0])
-							EndIf
-						Else
-							PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
-							PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
-							PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
-							ToElevatorFloor = FindFloor(e)
-							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
-						EndIf
+						PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
+						PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
+						PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
+						ToElevatorFloor = FindFloor(e)
+						e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[1]) < 16.0
 							gateb\RoomDoors[1]\Locked = 1
@@ -4436,23 +4424,11 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						
-						If n_I\Curr096 <> Null
-							If n_I\Curr096\State = 0.0 Lor n_I\Curr096\State = 5.0
-								PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
-								PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
-								PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
-								ToElevatorFloor = FindFloor(e)
-								e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
-							Else
-								e\EventState = Update096ElevatorEvent(e, e\EventState, e\room\RoomDoors[0], e\room\Objects[0])
-							EndIf
-						Else
-							PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
-							PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
-							PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
-							ToElevatorFloor = FindFloor(e)
-							e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
-						EndIf
+						PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
+						PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
+						PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
+						ToElevatorFloor = FindFloor(e)
+						e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						If (Not n_I\Curr106\Contained)
 							If e\EventState < -1.5 And e\EventState + fps\Factor[0] >= -1.5 Then PlaySound_Strict(OldManSFX[3], True)
 						EndIf
@@ -9895,55 +9871,6 @@ Function RemoveEvent%(e.Events)
 	If e\Img2 <> 0 Then FreeImage(e\Img2) : e\Img2 = 0
 	
 	Delete(e)
-End Function
-
-Function Update096ElevatorEvent#(e.Events, EventState#, d.Doors, ElevatorOBJ%)
-	Local PrevEventState# = EventState
-	
-	If EventState < 0.0
-		EventState = 0.0
-		PrevEventState = 0.0
-	EndIf
-	
-	d\Locked = 0
-	If d\OpenState = 0.0 And (Not d\Open)
-		If IsInsideElevator(EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), ElevatorOBJ)
-			If EventState = 0.0
-				TeleportEntity(n_I\Curr096\Collider, EntityX(d\FrameOBJ), EntityY(d\FrameOBJ) + 1.0, EntityZ(d\FrameOBJ), n_I\Curr096\CollRadius)
-				PointEntity(n_I\Curr096\Collider, ElevatorOBJ)
-				RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
-				MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
-				ResetEntity(n_I\Curr096\Collider)
-				n_I\Curr096\State = 6.0
-				SetNPCFrame(n_I\Curr096, 0.0)
-				e\Sound = LoadSound_Strict("SFX\SCP\096\ElevatorSlam.ogg")
-				EventState = EventState + (fps\Factor[0] * 1.4)
-			EndIf
-		EndIf
-	EndIf
-	
-	If EventState > 0.0
-		If PrevEventState = 0.0 Then e\SoundCHN = PlaySound_Strict(e\Sound, True)
-		
-		If EventState > 70.0 * 1.9 And EventState < (70.0 * 2.0) + fps\Factor[0]
-			me\BigCameraShake = 7.0
-		ElseIf EventState > 70.0 * 4.2 And EventState < (70.0 * 4.25) + fps\Factor[0]
-			me\BigCameraShake = 1.0
-		ElseIf EventState > 70.0 * 5.9 And EventState < (70.0 * 5.95) + fps\Factor[0]
-			me\BigCameraShake = 1.0
-		ElseIf EventState > 70.0 * 7.25 And EventState < (70.0 * 7.3) + fps\Factor[0]
-			me\BigCameraShake = 1.0
-			d\FastOpen = True : d\Open = True
-			n_I\Curr096\State = 4.0
-			n_I\Curr096\LastSeen = 1.0
-		ElseIf EventState > 70.0 * 8.1 And EventState < 70.0 * 8.15 + fps\Factor[0]
-			me\BigCameraShake = 1.0
-		EndIf
-		
-		If EventState <= 70.0 * 8.1 Then d\OpenState = Min(d\OpenState, 20.0)
-		EventState = EventState + (fps\Factor[0] * 1.4)
-	EndIf
-	Return(EventState)
 End Function
 
 Function Update035Label%(OBJ%)

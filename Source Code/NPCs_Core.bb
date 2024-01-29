@@ -1190,12 +1190,14 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 1.0, 2.0, 3.0
 						;[Block]
+						Temp = True
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
-								If e\EventState >= 70.0 * 40.0 Then CanSave = 2
+								If e\EventState > 0.0 And e\EventState < 70.0 * 40.0 Then Temp = False
 								Exit
 							EndIf
 						Next
+						If Temp Then CanSave = 2
 						If n\SoundCHN = 0
 							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
 							n\SoundCHN_IsStream = True
@@ -1237,12 +1239,14 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 4.0
 						;[Block]
+						Temp = True
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
-								If e\EventState >= 70.0 * 40.0 Then CanSave = 2
+								If e\EventState > 0.0 And e\EventState < 70.0 * 40.0 Then Temp = False
 								Exit
 							EndIf
 						Next
+						If Temp Then CanSave = 2
 						
 						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
 						

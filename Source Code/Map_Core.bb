@@ -2843,235 +2843,315 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		EndIf
 	EndIf
 	
-	If (Not door1\Open) And (Not door2\Open)
-		If PlayerInsideElevator Then CanSave = 0
-		door1\Locked = 1
-		door2\Locked = 1
-		If door1\OpenState = 0.0 And door2\OpenState = 0.0
-			Local PlayerX# = EntityX(me\Collider, True)
-			Local PlayerZ# = EntityZ(me\Collider, True)
-			Local FirstPivotX# = EntityX(FirstPivot, True)
-			Local FirstPivotY# = EntityY(FirstPivot, True)
-			Local FirstPivotZ# = EntityZ(FirstPivot, True)
-			Local FirstPivotYaw# = EntityYaw(FirstPivot, True)
-			Local SecondPivotX# = EntityX(SecondPivot, True)
-			Local SecondPivotY# = EntityY(SecondPivot, True)
-			Local SecondPivotZ# = EntityZ(SecondPivot, True)
-			Local SecondPivotYaw# = EntityYaw(SecondPivot, True)
-			Local Minus022# = (280.0 * RoomScale) - 0.22
-			Local Plus022# = ((-280.0) * RoomScale) + 0.22
-			Local FPSFactor01# = fps\Factor[0] * 0.1
-			Local OBJPosX#, OBJPosY#, OBJPosZ#
-			
-			If State < 0.0
-				State = State - fps\Factor[0]
-				If PlayerInsideElevator
-					If (Not ChannelPlaying(door1\SoundCHN2)) Then door1\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
-					
-					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
-					
-					UpdateElevatorPanel(door1)
-				EndIf
+	Local IsSceneTriggered% = False
+	Local e2.Events
+	
+	If n_I\Curr096 <> Null
+		If (n_I\Curr096\State > 0.0 Lor n_I\Curr096\State < 5.0) And (PlayerElevatorFloor = FindPlayerFloor(EntityY(n_I\Curr096\Collider))) And PlayerInsideElevator And (Not chs\NoTarget) Then IsSceneTriggered = True
+	EndIf
+	If (Not IsSceneTriggered)
+		If (Not door1\Open) And (Not door2\Open)
+			If PlayerInsideElevator Then CanSave = 0
+			door1\Locked = 1
+			door2\Locked = 1
+			If door1\OpenState = 0.0 And door2\OpenState = 0.0
+				Local PlayerX# = EntityX(me\Collider, True)
+				Local PlayerZ# = EntityZ(me\Collider, True)
+				Local FirstPivotX# = EntityX(FirstPivot, True)
+				Local FirstPivotY# = EntityY(FirstPivot, True)
+				Local FirstPivotZ# = EntityZ(FirstPivot, True)
+				Local FirstPivotYaw# = EntityYaw(FirstPivot, True)
+				Local SecondPivotX# = EntityX(SecondPivot, True)
+				Local SecondPivotY# = EntityY(SecondPivot, True)
+				Local SecondPivotZ# = EntityZ(SecondPivot, True)
+				Local SecondPivotYaw# = EntityYaw(SecondPivot, True)
+				Local Minus022# = (280.0 * RoomScale) - 0.22
+				Local Plus022# = ((-280.0) * RoomScale) + 0.22
+				Local FPSFactor01# = fps\Factor[0] * 0.1
+				Local OBJPosX#, OBJPosY#, OBJPosZ#
 				
-				If State < -500.0
-					door1\Locked = 1
-					door2\Locked = 0
-					State = 0.0
+				If State < 0.0
+					State = State - fps\Factor[0]
 					If PlayerInsideElevator
-						If (Not IgnoreRotation)
-							Dist = Distance(PlayerX, FirstPivotX, PlayerZ, FirstPivotZ)
-							Dir = PointDirection(PlayerX, PlayerZ, FirstPivotX, FirstPivotZ)
-							Dir = Dir + SecondPivotYaw - FirstPivotYaw
-							Dir = WrapAngle(Dir)
-							x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-							z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-							RotateEntity(me\Collider, EntityPitch(me\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(me\Collider, True), FirstPivotYaw), EntityRoll(me\Collider, True), True)
-						Else
-							x = Max(Min((PlayerX - FirstPivotX), Minus022), Plus022)
-							z = Max(Min((PlayerZ - FirstPivotZ), Minus022), Plus022)
-						EndIf
+						If (Not ChannelPlaying(door1\SoundCHN2)) Then door1\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 						
-						TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (EntityY(me\Collider, True) - FirstPivotY), SecondPivotZ + z, 0.3, True)
-						me\DropSpeed = 0.0
-						UpdateLightsTimer = 0.0
-						UpdateDoors()
-						UpdateRooms()
+						me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 						
-						door1\SoundCHN = PlaySound2(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door1\OBJ)
+						UpdateElevatorPanel(door1)
 					EndIf
 					
-					For n.NPCs = Each NPCs
-						OBJPosX = EntityX(n\Collider, True) : OBJPosY = EntityY(n\Collider, True) : OBJPosZ = EntityZ(n\Collider, True)
-						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
+					If State < -500.0
+						door1\Locked = 1
+						door2\Locked = 0
+						State = 0.0
+						If PlayerInsideElevator
 							If (Not IgnoreRotation)
-								Dist = Distance(OBJPosX, FirstPivotX, OBJPosZ, FirstPivotZ)
-								Dir = PointDirection(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ)
+								Dist = Distance(PlayerX, FirstPivotX, PlayerZ, FirstPivotZ)
+								Dir = PointDirection(PlayerX, PlayerZ, FirstPivotX, FirstPivotZ)
 								Dir = Dir + SecondPivotYaw - FirstPivotYaw
 								Dir = WrapAngle(Dir)
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-								RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
+								RotateEntity(me\Collider, EntityPitch(me\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(me\Collider, True), FirstPivotYaw), EntityRoll(me\Collider, True), True)
 							Else
-								x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
-								z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
+								x = Max(Min((PlayerX - FirstPivotX), Minus022), Plus022)
+								z = Max(Min((PlayerZ - FirstPivotZ), Minus022), Plus022)
 							EndIf
-							TeleportEntity(n\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, n\CollRadius, True)
+							
+							TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (EntityY(me\Collider, True) - FirstPivotY), SecondPivotZ + z, 0.3, True)
+							me\DropSpeed = 0.0
+							UpdateLightsTimer = 0.0
+							UpdateDoors()
+							UpdateRooms()
+							
+							door1\SoundCHN = PlaySound2(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door1\OBJ)
 						EndIf
-					Next
-					
-					For it.Items = Each Items
-						OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
-						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
-							If (Not IgnoreRotation)
-								Dist = Distance(OBJPosX, FirstPivotX, OBJPosZ, FirstPivotZ)
-								Dir = PointDirection(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ)
-								Dir = Dir + SecondPivotYaw - FirstPivotYaw
-								Dir = WrapAngle(Dir)
-								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-								RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
-							Else
-								x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
-								z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
-							EndIf
-							TeleportEntity(it\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, 0.01, True)
-							it\DistTimer = 0.0
-							UpdateItems()
-						EndIf
-					Next
-					
-					For de.Decals = Each Decals
-						OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
-						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
-							If (Not IgnoreRotation)
-								Dist = Distance(OBJPosX, FirstPivotX, EntityZ(de\OBJ, True), FirstPivotZ)
-								Dir = PointDirection(OBJPosX, EntityZ(de\OBJ, True), FirstPivotX, FirstPivotZ)
-								Dir = Dir + SecondPivotYaw - FirstPivotYaw
-								Dir = WrapAngle(Dir)
-								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-								RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
-							Else
-								x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
-								z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
-							EndIf
-							TeleportEntity(de\OBJ, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, -0.01, True)
-							UpdateDecals()
-						EndIf
-					Next
-					OpenCloseDoor(door2, (Not PlayerInsideElevator))
-					door1\Open = False
-					
-					; ~ Return to default panel texture
-					ClearElevatorPanelTexture(door1)
-					ClearElevatorPanelTexture(door2)
-					PlaySound2(ElevatorBeepSFX, Camera, FirstPivot, 4.0)
-				EndIf
-			Else
-				State = State + fps\Factor[0]
-				If PlayerInsideElevator
-					If (Not ChannelPlaying(door2\SoundCHN2)) Then door2\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
-					
-					me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
-					
-					UpdateElevatorPanel(door2)
-				EndIf
-				
-				If State > 500.0
-					door1\Locked = 0
-					door2\Locked = 1
-					State = 0.0
-					If PlayerInsideElevator
-						If (Not IgnoreRotation)
-							Dist = Distance(PlayerX, SecondPivotX, PlayerZ, SecondPivotZ)
-							Dir = PointDirection(PlayerX, PlayerZ, SecondPivotX, SecondPivotZ)
-							Dir = Dir + FirstPivotYaw - SecondPivotYaw
-							x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-							z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-							RotateEntity(me\Collider, EntityPitch(me\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(me\Collider, True), FirstPivotYaw), EntityRoll(me\Collider, True), True)
-						Else
-							x = Max(Min((PlayerX - SecondPivotX), Minus022), Plus022)
-							z = Max(Min((PlayerZ - SecondPivotZ), Minus022), Plus022)
-						EndIf
-						TeleportEntity(me\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (EntityY(me\Collider, True) - SecondPivotY), FirstPivotZ + z, 0.3, True)
-						me\DropSpeed = 0.0
-						UpdateLightsTimer = 0.0
-						UpdateDoors()
-						UpdateRooms()
 						
-						door2\SoundCHN = PlaySound2(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door2\OBJ)
+						For n.NPCs = Each NPCs
+							OBJPosX = EntityX(n\Collider, True) : OBJPosY = EntityY(n\Collider, True) : OBJPosZ = EntityZ(n\Collider, True)
+							If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
+								If (Not IgnoreRotation)
+									Dist = Distance(OBJPosX, FirstPivotX, OBJPosZ, FirstPivotZ)
+									Dir = PointDirection(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ)
+									Dir = Dir + SecondPivotYaw - FirstPivotYaw
+									Dir = WrapAngle(Dir)
+									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
+									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
+								Else
+									x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
+									z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
+								EndIf
+								TeleportEntity(n\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, n\CollRadius, True)
+							EndIf
+						Next
+						
+						For it.Items = Each Items
+							OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
+							If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
+								If (Not IgnoreRotation)
+									Dist = Distance(OBJPosX, FirstPivotX, OBJPosZ, FirstPivotZ)
+									Dir = PointDirection(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ)
+									Dir = Dir + SecondPivotYaw - FirstPivotYaw
+									Dir = WrapAngle(Dir)
+									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
+									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
+								Else
+									x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
+									z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
+								EndIf
+								TeleportEntity(it\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, 0.01, True)
+								it\DistTimer = 0.0
+								UpdateItems()
+							EndIf
+						Next
+						
+						For de.Decals = Each Decals
+							OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
+							If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
+								If (Not IgnoreRotation)
+									Dist = Distance(OBJPosX, FirstPivotX, EntityZ(de\OBJ, True), FirstPivotZ)
+									Dir = PointDirection(OBJPosX, EntityZ(de\OBJ, True), FirstPivotX, FirstPivotZ)
+									Dir = Dir + SecondPivotYaw - FirstPivotYaw
+									Dir = WrapAngle(Dir)
+									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
+									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
+								Else
+									x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
+									z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
+								EndIf
+								TeleportEntity(de\OBJ, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, -0.01, True)
+								UpdateDecals()
+							EndIf
+						Next
+						OpenCloseDoor(door2, (Not PlayerInsideElevator))
+						door1\Open = False
+						
+						; ~ Return to default panel texture
+						ClearElevatorPanelTexture(door1)
+						ClearElevatorPanelTexture(door2)
+						PlaySound2(ElevatorBeepSFX, Camera, FirstPivot, 4.0)
+					EndIf
+				Else
+					State = State + fps\Factor[0]
+					If PlayerInsideElevator
+						If (Not ChannelPlaying(door2\SoundCHN2)) Then door2\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
+						
+						me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
+						
+						UpdateElevatorPanel(door2)
 					EndIf
 					
-					For n.NPCs = Each NPCs
-						OBJPosX = EntityX(n\Collider, True) : OBJPosY = EntityY(n\Collider, True) : OBJPosZ = EntityZ(n\Collider, True)
-						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
+					If State > 500.0
+						door1\Locked = 0
+						door2\Locked = 1
+						State = 0.0
+						If PlayerInsideElevator
 							If (Not IgnoreRotation)
-								Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
-								Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
+								Dist = Distance(PlayerX, SecondPivotX, PlayerZ, SecondPivotZ)
+								Dir = PointDirection(PlayerX, PlayerZ, SecondPivotX, SecondPivotZ)
 								Dir = Dir + FirstPivotYaw - SecondPivotYaw
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-								RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
+								RotateEntity(me\Collider, EntityPitch(me\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(me\Collider, True), FirstPivotYaw), EntityRoll(me\Collider, True), True)
 							Else
-								x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
-								z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+								x = Max(Min((PlayerX - SecondPivotX), Minus022), Plus022)
+								z = Max(Min((PlayerZ - SecondPivotZ), Minus022), Plus022)
 							EndIf
-							TeleportEntity(n\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, n\CollRadius, True)
+							TeleportEntity(me\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (EntityY(me\Collider, True) - SecondPivotY), FirstPivotZ + z, 0.3, True)
+							me\DropSpeed = 0.0
+							UpdateLightsTimer = 0.0
+							UpdateDoors()
+							UpdateRooms()
+							
+							door2\SoundCHN = PlaySound2(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door2\OBJ)
 						EndIf
-					Next
-					
-					For it.Items = Each Items
-						OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
-						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
-							If (Not IgnoreRotation)
-								Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
-								Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
-								Dir = Dir + FirstPivotYaw - SecondPivotYaw
-								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-								RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
-							Else
-								x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
-								z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+						
+						For n.NPCs = Each NPCs
+							OBJPosX = EntityX(n\Collider, True) : OBJPosY = EntityY(n\Collider, True) : OBJPosZ = EntityZ(n\Collider, True)
+							If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
+								If (Not IgnoreRotation)
+									Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
+									Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
+									Dir = Dir + FirstPivotYaw - SecondPivotYaw
+									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
+									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
+								Else
+									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
+									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+								EndIf
+								TeleportEntity(n\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, n\CollRadius, True)
 							EndIf
-							TeleportEntity(it\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, 0.01, True)
-							it\DistTimer = 0.0
-							UpdateItems()
-						EndIf
-					Next
-					
-					For de.Decals = Each Decals
-						OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
-						If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
-							If (Not IgnoreRotation)
-								Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
-								Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
-								Dir = Dir + FirstPivotYaw - SecondPivotYaw
-								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-								RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
-							Else
-								x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
-								z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+						Next
+						
+						For it.Items = Each Items
+							OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
+							If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
+								If (Not IgnoreRotation)
+									Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
+									Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
+									Dir = Dir + FirstPivotYaw - SecondPivotYaw
+									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
+									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
+								Else
+									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
+									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+								EndIf
+								TeleportEntity(it\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, 0.01, True)
+								it\DistTimer = 0.0
+								UpdateItems()
 							EndIf
-							TeleportEntity(de\OBJ, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, -0.01, True)
-							UpdateDecals()
-						EndIf
-					Next
-					OpenCloseDoor(door1, (Not PlayerInsideElevator))
-					door2\Open = False
-					
-					; ~ Return to default panel texture
-					ClearElevatorPanelTexture(door1)
-					ClearElevatorPanelTexture(door2)
-					PlaySound2(ElevatorBeepSFX, Camera, SecondPivot, 4.0)
+						Next
+						
+						For de.Decals = Each Decals
+							OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
+							If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivot)
+								If (Not IgnoreRotation)
+									Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
+									Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
+									Dir = Dir + FirstPivotYaw - SecondPivotYaw
+									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
+									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
+								Else
+									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
+									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+								EndIf
+								TeleportEntity(de\OBJ, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, -0.01, True)
+								UpdateDecals()
+							EndIf
+						Next
+						OpenCloseDoor(door1, (Not PlayerInsideElevator))
+						door2\Open = False
+						
+						; ~ Return to default panel texture
+						ClearElevatorPanelTexture(door1)
+						ClearElevatorPanelTexture(door2)
+						PlaySound2(ElevatorBeepSFX, Camera, SecondPivot, 4.0)
+					EndIf
+				EndIf
+			EndIf
+			For i = 0 To 1
+				EntityTexture(door1\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
+				EntityTexture(door2\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
+			Next
+		EndIf
+	Else
+		If (Not door1\Open) And (Not door2\Open)
+			door1\Locked = 1
+			door2\Locked = 1
+			If door1\OpenState = 0.0 And door2\OpenState = 0.0
+				If State < 0.0
+					State = State - fps\Factor[0]
+					If State < -1.0 And State + fps\Factor[0] >= -1.0
+						UpdateElevatorPanel(door1)
+						TeleportEntity(n_I\Curr096\Collider, EntityX(door1\FrameOBJ), EntityY(door1\FrameOBJ) + 1.0, EntityZ(door1\FrameOBJ), n_I\Curr096\CollRadius)
+						PointEntity(n_I\Curr096\Collider, FirstPivot)
+						RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
+						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
+						ResetEntity(n_I\Curr096\Collider)
+						n_I\Curr096\State = 4.9
+						SetNPCFrame(n_I\Curr096, 0.0)
+						LoadEventSound(event, "SFX\SCP\096\ElevatorSlam.ogg")
+						event\SoundCHN = PlaySound_Strict(event\Sound, True)
+						State = State - (fps\Factor[0] * 1.4)
+					EndIf
+					If State < -70.0 * 1.5 And State > (-70.0 * 1.6) + fps\Factor[0]
+						me\BigCameraShake = 7.0
+					ElseIf State < -70.0 * 4.2 And State > (-70.0 * 4.25) + fps\Factor[0]
+						me\BigCameraShake = 2.0
+					ElseIf State < -70.0 * 5.9 And State > (-70.0 * 5.95) + fps\Factor[0]
+						me\BigCameraShake = 2.0
+					ElseIf State < -70.0 * 7.25 And State > (-70.0 * 7.3) + fps\Factor[0]
+						me\BigCameraShake = 2.0
+						door1\FastOpen = True
+					ElseIf State < -70.0 * 8.1
+						PlaySound_Strict(OpenDoorFastSFX)
+						me\BigCameraShake = 2.0
+						n_I\Curr096\State = 4.0
+						n_I\Curr096\LastSeen = 1.0
+						State = 0.0
+						door1\Open = True
+					EndIf
+				ElseIf State > 0.0
+					State = State + fps\Factor[0]
+					If State >= 1.0 And State + fps\Factor[0] < 1.0
+						UpdateElevatorPanel(door2)
+						TeleportEntity(n_I\Curr096\Collider, EntityX(door2\FrameOBJ), EntityY(door2\FrameOBJ) + 1.0, EntityZ(door2\FrameOBJ), n_I\Curr096\CollRadius)
+						PointEntity(n_I\Curr096\Collider, SecondPivot)
+						RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
+						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
+						ResetEntity(n_I\Curr096\Collider)
+						n_I\Curr096\State = 4.9
+						SetNPCFrame(n_I\Curr096, 0.0)
+						LoadEventSound(event, "SFX\SCP\096\ElevatorSlam.ogg")
+						event\SoundCHN = PlaySound_Strict(event\Sound, True)
+						State = State + (fps\Factor[0] * 1.4)
+					EndIf
+					If State > 70.0 * 1.5 And State < (70.0 * 1.6) + fps\Factor[0]
+						me\BigCameraShake = 7.0
+					ElseIf State > 70.0 * 4.2 And State < (70.0 * 4.25) + fps\Factor[0]
+						me\BigCameraShake = 2.0
+					ElseIf State > 70.0 * 5.9 And State < (70.0 * 5.95) + fps\Factor[0]
+						me\BigCameraShake = 2.0
+					ElseIf State > 70.0 * 7.25 And State < (70.0 * 7.3) + fps\Factor[0]
+						me\BigCameraShake = 2.0
+						door2\FastOpen = True
+					ElseIf State > 70.0 * 8.1
+						PlaySound_Strict(OpenDoorFastSFX)
+						me\BigCameraShake = 2.0
+						n_I\Curr096\State = 4.0
+						n_I\Curr096\LastSeen = 1.0
+						State = 0.0
+						door2\Open = True
+					EndIf
 				EndIf
 			EndIf
 		EndIf
-		For i = 0 To 1
-			EntityTexture(door1\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
-			EntityTexture(door2\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
-		Next
 	EndIf
 	Return(State)
 End Function
