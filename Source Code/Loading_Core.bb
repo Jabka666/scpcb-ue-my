@@ -2642,8 +2642,8 @@ Function InitLoadGame%()
 					ch.Chunk = CreateChunk(-1, x * (i * 2.5), y, z, True)
 					ch.Chunk = CreateChunk(-1, x * (i * 2.5), y, z - 40.0, True)
 				Next
-				Exit
 			EndIf
+			Exit
 		EndIf
 	Next
 	
