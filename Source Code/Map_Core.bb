@@ -3100,16 +3100,16 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						event\SoundCHN = PlaySound_Strict(event\Sound, True)
 						State = State - (fps\Factor[0] * 1.4)
 					EndIf
-					If State < -70.0 * 1.5 And State > (-70.0 * 1.6) + fps\Factor[0]
+					If State < (-70.0) * 1.5 And State > ((-70.0) * 1.6) + fps\Factor[0]
 						me\BigCameraShake = 7.0
-					ElseIf State < -70.0 * 4.2 And State > (-70.0 * 4.25) + fps\Factor[0]
+					ElseIf State < (-70.0) * 4.2 And State > ((-70.0) * 4.25) + fps\Factor[0]
 						me\BigCameraShake = 2.0
-					ElseIf State < -70.0 * 5.9 And State > (-70.0 * 5.95) + fps\Factor[0]
+					ElseIf State < (-70.0) * 5.9 And State > ((-70.0) * 5.95) + fps\Factor[0]
 						me\BigCameraShake = 2.0
-					ElseIf State < -70.0 * 7.25 And State > (-70.0 * 7.3) + fps\Factor[0]
+					ElseIf State < (-70.0) * 7.25 And State > ((-70.0) * 7.3) + fps\Factor[0]
 						me\BigCameraShake = 2.0
 						door1\FastOpen = True
-					ElseIf State < -70.0 * 8.1
+					ElseIf State < (-70.0) * 8.1
 						PlaySound_Strict(OpenDoorFastSFX)
 						me\BigCameraShake = 2.0
 						n_I\Curr096\State = 4.0
@@ -3316,8 +3316,10 @@ Function UseDoor%(PlaySFX% = True)
 				EndIf
 				Return
 			Else
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
-				SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
+				If d_I\ClosestDoor\DoorType = OFFICE_DOOR
+					d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+					SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
+				EndIf
 			EndIf
 		Else
 			If d_I\ClosestDoor\Locked = 1
