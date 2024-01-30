@@ -3579,11 +3579,6 @@ Function UpdateEvents%()
 						EndIf
 					ElseIf e\EventState = 3.0
 						If e\room\RoomDoors[0]\OpenState > 160.0
-							If e\Sound = 0
-								e\Sound = LoadSound_Strict("SFX\Music\1123.ogg")
-								e\SoundCHN = PlaySound_Strict(e\Sound)
-							EndIf
-							
 							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
 							ResetEntity(e\room\NPC[0]\Collider)
 							
