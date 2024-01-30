@@ -1192,11 +1192,13 @@ Function UpdateNPCs%()
 						;[Block]
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
-								For i = 0 To 1
-									e\room\RoomDoors[i]\Locked = 0
-								Next
-								e\EventState = 70.0 * 50.0
-								RemoveEvent(e)
+								If e\EventState < 70.0 * 50.0
+									For i = 0 To 1
+										e\room\RoomDoors[i]\Locked = 0
+									Next
+									e\EventState = 70.0 * 50.0
+									RemoveEvent(e)
+								EndIf
 								Exit
 							EndIf
 						Next
@@ -1246,11 +1248,13 @@ Function UpdateNPCs%()
 						Temp = True
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
-								For i = 0 To 1
-									e\room\RoomDoors[i]\Locked = 0
-								Next
-								e\EventState = 70.0 * 50.0
-								RemoveEvent(e)
+								If e\EventState < 70.0 * 50.0
+									For i = 0 To 1
+										e\room\RoomDoors[i]\Locked = 0
+									Next
+									e\EventState = 70.0 * 50.0
+									RemoveEvent(e)
+								EndIf
 								Exit
 							EndIf
 						Next
