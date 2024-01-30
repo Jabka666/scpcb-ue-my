@@ -2162,11 +2162,9 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_servers_hcz
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 224.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, True)
-			d\Locked = 1
 			r\RoomDoors.Doors[0] = d
 			
 			d.Doors = CreateDoor(r, r\x - 224.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 90.0, True)
-			d\Locked = 1
 			r\RoomDoors.Doors[1] = d
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 1260.0 * RoomScale, r\y + 234.0 * RoomScale, r\z + 750.0 * RoomScale, 0.0, True)

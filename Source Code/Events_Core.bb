@@ -5975,6 +5975,10 @@ Function UpdateEvents%()
 						
 						GiveAchievement(Achv096)
 						
+						For i = 0 To 1
+							e\room\RoomDoors[i]\Locked = 1
+						Next
+						
 						e\EventState = 1.0
 					EndIf
 				ElseIf e\EventState < 70.0 * 45.0

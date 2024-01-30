@@ -1190,14 +1190,18 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 1.0, 2.0, 3.0
 						;[Block]
-						Temp = True
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
-								If e\EventState > 0.0 And e\EventState < 70.0 * 40.0 Then Temp = False
+								For i = 0 To 1
+									e\room\RoomDoors[i]\Locked = 0
+								Next
+								e\EventState = 70.0 * 50.0
+								RemoveEvent(e)
 								Exit
 							EndIf
 						Next
-						If Temp Then CanSave = 2
+						CanSave = 2
+						
 						If n\SoundCHN = 0
 							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
 							n\SoundCHN_IsStream = True
@@ -1242,7 +1246,11 @@ Function UpdateNPCs%()
 						Temp = True
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
-								If e\EventState > 0.0 And e\EventState < 70.0 * 40.0 Then Temp = False
+								For i = 0 To 1
+									e\room\RoomDoors[i]\Locked = 0
+								Next
+								e\EventState = 70.0 * 50.0
+								RemoveEvent(e)
 								Exit
 							EndIf
 						Next
