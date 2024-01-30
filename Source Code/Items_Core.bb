@@ -243,7 +243,7 @@ Global ClosestItem.Items
 Global OtherOpen.Items = Null
 
 Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha# = 1.0, InvSlots% = 0)
-	CatchErrors("CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + A + ", " + InvSlots + ")")
+	CatchErrors("CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + Alpha + ", " + InvSlots + ")")
 	
 	Local i.Items, it.ItemTemplates
 	
@@ -313,7 +313,7 @@ Function CreateItem.Items(Name$, TempName$, x#, y#, z#, R% = 0, G% = 0, B% = 0, 
 	i\ID = LastItemID + 1
 	LastItemID = i\ID
 	
-	CatchErrors("Uncaught: CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + A + ", " + InvSlots + ")")
+	CatchErrors("Uncaught: CreateItem.Items(" + Name + ", " + TempName + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + Alpha + ", " + InvSlots + ")")
 	
 	Return(i)
 End Function
