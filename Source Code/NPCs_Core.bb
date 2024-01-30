@@ -1245,7 +1245,6 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 4.0
 						;[Block]
-						Temp = True
 						For e.Events = Each Events
 							If e\EventID = e_room2_servers_hcz
 								If e\EventState < 70.0 * 50.0
@@ -1258,7 +1257,7 @@ Function UpdateNPCs%()
 								Exit
 							EndIf
 						Next
-						If Temp Then CanSave = 2
+						CanSave = 2
 						
 						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
 						
