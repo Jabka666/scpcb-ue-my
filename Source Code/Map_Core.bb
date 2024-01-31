@@ -2847,16 +2847,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Local e2.Events
 	
 	If n_I\Curr096 <> Null
-		If (n_I\Curr096\State > 0.0 And n_I\Curr096\State < 5.0) And (PlayerElevatorFloor = FindPlayerFloor(EntityY(n_I\Curr096\Collider))) And PlayerInsideElevator And (Not chs\NoTarget)
-			Temp = True
-			For e.Events = Each Events
-				If e\EventID = e_room2_servers_hcz
-					If e\EventState > 0.0 And e\EventState < 70.0 * 40.0 Then Temp = False
-					Exit
-				EndIf
-			Next
-			If Temp Then IsSceneTriggered = True
-		EndIf
+		If (n_I\Curr096\State <> 0.0 And n_I\Curr096\State <> 5.0) And n_I\Curr096\Target = Null And (PlayerElevatorFloor = FindPlayerFloor(EntityY(n_I\Curr096\Collider))) And PlayerInsideElevator And (Not chs\NoTarget) Then IsSceneTriggered = True
 	EndIf
 	If (Not IsSceneTriggered)
 		If (Not door1\Open) And (Not door2\Open)
@@ -3091,7 +3082,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		EndIf
 	Else
 		If (Not door1\Open) And (Not door2\Open)
-			CanSave = 2
 			door1\Locked = 1
 			door2\Locked = 1
 			If door1\OpenState = 0.0 And door2\OpenState = 0.0
@@ -3099,12 +3089,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					State = State - fps\Factor[0]
 					If State < -1.0 And State + fps\Factor[0] >= -1.0
 						UpdateElevatorPanel(door1)
-						TeleportEntity(n_I\Curr096\Collider, EntityX(door1\FrameOBJ), EntityY(door1\FrameOBJ) + 1.0, EntityZ(door1\FrameOBJ), n_I\Curr096\CollRadius)
+						TeleportEntity(n_I\Curr096\Collider, EntityX(door1\FrameOBJ, True), EntityY(door1\FrameOBJ, True) + 1.0, EntityZ(door1\FrameOBJ, True), n_I\Curr096\CollRadius)
 						PointEntity(n_I\Curr096\Collider, FirstPivot)
 						RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
 						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
 						ResetEntity(n_I\Curr096\Collider)
-						n_I\Curr096\State = 4.9
+						n_I\Curr096\State = 6.0
 						SetNPCFrame(n_I\Curr096, 0.0)
 						LoadEventSound(event, "SFX\SCP\096\ElevatorSlam.ogg")
 						event\SoundCHN = PlaySound_Strict(event\Sound, True)
@@ -3131,12 +3121,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					State = State + fps\Factor[0]
 					If State >= 1.0 And State + fps\Factor[0] < 1.0
 						UpdateElevatorPanel(door2)
-						TeleportEntity(n_I\Curr096\Collider, EntityX(door2\FrameOBJ), EntityY(door2\FrameOBJ) + 1.0, EntityZ(door2\FrameOBJ), n_I\Curr096\CollRadius)
+						TeleportEntity(n_I\Curr096\Collider, EntityX(door2\FrameOBJ, True), EntityY(door2\FrameOBJ, True) + 1.0, EntityZ(door2\FrameOBJ, True), n_I\Curr096\CollRadius)
 						PointEntity(n_I\Curr096\Collider, SecondPivot)
 						RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
 						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
 						ResetEntity(n_I\Curr096\Collider)
-						n_I\Curr096\State = 4.9
+						n_I\Curr096\State = 6.0
 						SetNPCFrame(n_I\Curr096, 0.0)
 						LoadEventSound(event, "SFX\SCP\096\ElevatorSlam.ogg")
 						event\SoundCHN = PlaySound_Strict(event\Sound, True)
@@ -4244,6 +4234,7 @@ Function TeleportToRoom%(r.Rooms)
 	
 	PlayerRoom = r
 	UpdateRender()
+	PlayerInsideElevator = False
 End Function
 
 Function HideRoomsNoColl%(room.Rooms)
