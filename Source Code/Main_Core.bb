@@ -4983,7 +4983,7 @@ Function UpdateGUI%()
 					Local RadioType%
 					
 					Select SelectedItem\ItemTemplate\TempName
-						Case "18vradio
+						Case "18vradio"
 							;[Block]
 							RadioType = 1
 							;[End Block]
