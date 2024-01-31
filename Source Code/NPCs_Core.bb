@@ -1359,7 +1359,7 @@ Function UpdateNPCs%()
 												If n\Path[n\PathLocation]\door <> Null
 													If (Not n\Path[n\PathLocation]\door\Open)
 														n\Path[n\PathLocation]\door\Open = True
-														n\Path[n\PathLocation]\door\FastOpen = 1
+														n\Path[n\PathLocation]\door\FastOpen = True
 														PlaySound2(OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\FrameOBJ)
 													EndIf
 												EndIf

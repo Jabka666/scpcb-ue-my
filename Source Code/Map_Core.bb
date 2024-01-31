@@ -2597,7 +2597,7 @@ Function UpdateDoors%()
 							;[End Block]
 					End Select
 				Else
-					d\FastOpen = 0
+					d\FastOpen = False
 					ResetEntity(d\OBJ)
 					If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
 					If d\TimerState > 0.0
@@ -2688,7 +2688,7 @@ Function UpdateDoors%()
 							;[End Block]
 					End Select
 				Else
-					d\FastOpen = 0
+					d\FastOpen = False
 					PositionEntity(d\OBJ, FrameX, FrameY, FrameZ)
 					If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR
 						MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
@@ -2807,7 +2807,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	
 	door1\IsElevatorDoor = 1
 	door2\IsElevatorDoor = 1
-	If door1\Open And (Not door2\Open) And door1\OpenState = 180.0
+	If door1\Open And (Not door2\Open) And door1\OpenState = 180.0 And State < 70.0 * 7.4
 		State = -1.0
 		door1\Locked = 0
 		If (d_I\ClosestButton = door2\Buttons[0] Lor d_I\ClosestButton = door2\Buttons[1]) And mo\MouseHit1
@@ -2831,7 +2831,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	If door1\Open
 		door1\IsElevatorDoor = 3
 		If PlayerInsideElevator
-			door1\Locked = 0
+			If State < 70.0 * 7.4 Then door1\Locked = 0
 			door1\IsElevatorDoor = 1
 		EndIf
 	EndIf
@@ -2844,10 +2844,9 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	EndIf
 	
 	Local IsSceneTriggered% = False
-	Local e2.Events
 	
 	If n_I\Curr096 <> Null
-		If (n_I\Curr096\State <> 0.0 And n_I\Curr096\State <> 5.0) And n_I\Curr096\Target = Null And (PlayerElevatorFloor = FindPlayerFloor(EntityY(n_I\Curr096\Collider))) And PlayerInsideElevator And (Not chs\NoTarget) Then IsSceneTriggered = True
+		If (n_I\Curr096\State <> 0.0 And n_I\Curr096\State <> 5.0) And n_I\Curr096\Target = Null And (PlayerElevatorFloor = NullFloor) And PlayerInsideElevator And (Not chs\NoTarget) Then IsSceneTriggered = True
 	EndIf
 	If (Not IsSceneTriggered)
 		If (Not door1\Open) And (Not door2\Open)
@@ -3081,76 +3080,51 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			Next
 		EndIf
 	Else
-		If (Not door1\Open) And (Not door2\Open)
-			door1\Locked = 1
-			door2\Locked = 1
-			If door1\OpenState = 0.0 And door2\OpenState = 0.0
-				If State < 0.0
-					State = State - fps\Factor[0]
-					If State < -1.0 And State + fps\Factor[0] >= -1.0
-						UpdateElevatorPanel(door1)
-						TeleportEntity(n_I\Curr096\Collider, EntityX(door1\FrameOBJ, True), EntityY(door1\FrameOBJ, True) + 1.0, EntityZ(door1\FrameOBJ, True), n_I\Curr096\CollRadius)
-						PointEntity(n_I\Curr096\Collider, FirstPivot)
-						RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
-						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
-						ResetEntity(n_I\Curr096\Collider)
-						n_I\Curr096\State = 6.0
-						SetNPCFrame(n_I\Curr096, 0.0)
-						LoadEventSound(event, "SFX\SCP\096\ElevatorSlam.ogg")
-						event\SoundCHN = PlaySound_Strict(event\Sound, True)
-						State = State - (fps\Factor[0] * 1.4)
-					EndIf
-					If State < (-70.0) * 1.5 And State > ((-70.0) * 1.6) + fps\Factor[0]
-						me\BigCameraShake = 7.0
-					ElseIf State < (-70.0) * 4.2 And State > ((-70.0) * 4.25) + fps\Factor[0]
-						me\BigCameraShake = 2.0
-					ElseIf State < (-70.0) * 5.9 And State > ((-70.0) * 5.95) + fps\Factor[0]
-						me\BigCameraShake = 2.0
-					ElseIf State < (-70.0) * 7.25 And State > ((-70.0) * 7.3) + fps\Factor[0]
-						me\BigCameraShake = 2.0
-						door1\FastOpen = True
-					ElseIf State < (-70.0) * 8.1
-						PlaySound_Strict(OpenDoorFastSFX)
-						me\BigCameraShake = 2.0
-						n_I\Curr096\State = 4.0
-						n_I\Curr096\LastSeen = 1.0
-						State = 0.0
-						door1\Open = True
-					EndIf
-				ElseIf State > 0.0
-					State = State + fps\Factor[0]
-					If State >= 1.0 And State + fps\Factor[0] < 1.0
-						UpdateElevatorPanel(door2)
-						TeleportEntity(n_I\Curr096\Collider, EntityX(door2\FrameOBJ, True), EntityY(door2\FrameOBJ, True) + 1.0, EntityZ(door2\FrameOBJ, True), n_I\Curr096\CollRadius)
-						PointEntity(n_I\Curr096\Collider, SecondPivot)
-						RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
-						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
-						ResetEntity(n_I\Curr096\Collider)
-						n_I\Curr096\State = 6.0
-						SetNPCFrame(n_I\Curr096, 0.0)
-						LoadEventSound(event, "SFX\SCP\096\ElevatorSlam.ogg")
-						event\SoundCHN = PlaySound_Strict(event\Sound, True)
-						State = State + (fps\Factor[0] * 1.4)
-					EndIf
-					If State > 70.0 * 1.5 And State < (70.0 * 1.6) + fps\Factor[0]
-						me\BigCameraShake = 7.0
-					ElseIf State > 70.0 * 4.2 And State < (70.0 * 4.25) + fps\Factor[0]
-						me\BigCameraShake = 2.0
-					ElseIf State > 70.0 * 5.9 And State < (70.0 * 5.95) + fps\Factor[0]
-						me\BigCameraShake = 2.0
-					ElseIf State > 70.0 * 7.25 And State < (70.0 * 7.3) + fps\Factor[0]
-						me\BigCameraShake = 2.0
-						door2\FastOpen = True
-					ElseIf State > 70.0 * 8.1
-						PlaySound_Strict(OpenDoorFastSFX)
-						me\BigCameraShake = 2.0
-						n_I\Curr096\State = 4.0
-						n_I\Curr096\LastSeen = 1.0
-						State = 0.0
-						door2\Open = True
-					EndIf
+		Local PrevEventState# = State
+		
+		If State < 0.0
+			State = 0.0
+			PrevEventState = 0.0
+		EndIf
+		
+		If door1\OpenState = 0.0 And (Not door1\Open)
+			If PlayerInsideElevator
+				If State = 0.0
+					TeleportEntity(n_I\Curr096\Collider, EntityX(door1\FrameOBJ), EntityY(door1\FrameOBJ) + 1.0, EntityZ(door1\FrameOBJ), n_I\Curr096\CollRadius)
+					PointEntity(n_I\Curr096\Collider, FirstPivot)
+					RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
+					MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
+					ResetEntity(n_I\Curr096\Collider)
+					n_I\Curr096\State = 6.0
+					SetNPCFrame(n_I\Curr096, 0.0)
+					LoadEventSound(event, "SFX\SCP\096\ElevatorSlam.ogg")
+					State = State + (fps\Factor[0] * 1.4)
+					door1\Locked = 1
+					UpdateElevatorPanel(door1)
 				EndIf
 			EndIf
+		EndIf
+		
+		If State > 0.0
+			If PrevEventState = 0.0 Then event\SoundCHN = PlaySound_Strict(event\Sound, True)
+			
+			If State > 70.0 * 1.9 And State < (70.0 * 2.0) + fps\Factor[0]
+				me\BigCameraShake = 7.0
+			ElseIf State > 70.0 * 4.2 And State < (70.0 * 4.25) + fps\Factor[0]
+				me\BigCameraShake = 2.0
+			ElseIf State > 70.0 * 5.9 And State < (70.0 * 5.95) + fps\Factor[0]
+				me\BigCameraShake = 2.0
+			ElseIf State > 70.0 * 7.25 And State < (70.0 * 7.3) + fps\Factor[0]
+				me\BigCameraShake = 2.0
+				door1\FastOpen = True : door1\Open = True
+				n_I\Curr096\State = 4.0
+				n_I\Curr096\LastSeen = 1.0
+			ElseIf State > 70.0 * 8.1 And State < 70.0 * 8.15 + fps\Factor[0]
+				me\BigCameraShake = 2.0
+			EndIf
+			
+			If State <= 70.0 * 8.1 Then door1\OpenState = Min(door1\OpenState, 20.0)
+			State = State + fps\Factor[0]
 		EndIf
 	EndIf
 	Return(State)
