@@ -2847,7 +2847,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Local e2.Events
 	
 	If n_I\Curr096 <> Null
-		If (n_I\Curr096\State > 0.0 Lor n_I\Curr096\State < 5.0) And (PlayerElevatorFloor = FindPlayerFloor(EntityY(n_I\Curr096\Collider))) And PlayerInsideElevator And (Not chs\NoTarget) Then IsSceneTriggered = True
+		If (n_I\Curr096\State > 0.0 And n_I\Curr096\State < 5.0) And (PlayerElevatorFloor = FindPlayerFloor(EntityY(n_I\Curr096\Collider))) And PlayerInsideElevator And (Not chs\NoTarget) Then IsSceneTriggered = True
 	EndIf
 	If (Not IsSceneTriggered)
 		If (Not door1\Open) And (Not door2\Open)
