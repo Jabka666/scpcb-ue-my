@@ -1771,7 +1771,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "eyedrops", "eyedrops2", "fineeyedrops", "supereyedrops"
+		Case "eyedrops", "eyedrops2", "fineeyedrops", "veryfineeyedrops"
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -1792,7 +1792,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Eyedrops", "supereyedrops", x, y, z)
+					it2.Items = CreateItem("Eyedrops", "veryfineeyedrops", x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]

@@ -4762,7 +4762,7 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem()
 						me\BlinkEffect = 0.7
-						me\BlinkEffectTimer = Rnd(25.0, 35.0)
+						me\BlinkEffectTimer = Rnd(30.0, 35.0)
 						me\BlurTimer = 200.0
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
@@ -4774,7 +4774,7 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem()
 						me\BlinkEffect = 0.5
-						me\BlinkEffectTimer = Rnd(35.0, 45.0)
+						me\BlinkEffectTimer = Rnd(40.0, 45.0)
 						me\Bloodloss = Max(me\Bloodloss - 1.0, 0.0)
 						me\BlurTimer = 200.0
 						
@@ -4783,7 +4783,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "supereyedrops"
+				Case "veryfineeyedrops"
 					;[Block]
 					If CanUseItem()
 						me\BlinkEffect = 0.0
