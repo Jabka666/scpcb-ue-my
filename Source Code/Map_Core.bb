@@ -3082,6 +3082,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		EndIf
 	Else
 		If (Not door1\Open) And (Not door2\Open)
+			CanSave = 2
 			door1\Locked = 1
 			door2\Locked = 1
 			If door1\OpenState = 0.0 And door2\OpenState = 0.0
