@@ -488,51 +488,51 @@ Function SaveZoneData(File$)
 		WriteString(f, e\EventStr)
 	Next
 	
-;	Local it.Items
-;	
-;	For it = Each Items
-;		If (Not IsItemInInventory(it))
-;			WriteByte f, 1
-;			WriteString f, it\ItemTemplate\Name
-;			WriteString f, it\ItemTemplate\TempName
-;			WriteString f, it\Name
-;			WriteFloat f, EntityX(it\Collider, True)
-;			WriteFloat f, EntityY(it\Collider, True)
-;			WriteFloat f, EntityZ(it\Collider, True)
-;			WriteByte f, it\R
-;			WriteByte f, it\G
-;			WriteByte f, it\B
-;			WriteFloat f, it\Alpha
-;			WriteFloat f, EntityPitch(it\Collider)
-;			WriteFloat f, EntityYaw(it\Collider)
-;			WriteFloat f, it\State
-;			WriteFloat f, it\State2
-;			WriteFloat f, it\State3
-;			If it\ItemTemplate\IsAnim <> 0
-;				WriteFloat f, AnimTime(it\Model)
-;			EndIf
-;			WriteByte f,it\InvSlots
-;			WriteInt f,it\ID
-;			If it\ItemTemplate\InvImg = it\InvImg
-;				WriteByte f, 0
-;			Else
-;				WriteByte f, 1
-;			EndIf
-;		EndIf
-;	Next
-;	WriteByte f, 0
-;	
-;	For it = Each Items
-;		If (Not IsItemInInventory(it)) And it\InvSlots > 0
-;			For i = 0 To it\InvSlots - 1
-;				If it\SecondInv[i] <> Null
-;					WriteInt f, it\SecondInv[i]\ID
-;				Else
-;					WriteInt f, -1
-;				EndIf
-;			Next
-;		EndIf
-;	Next
+	Local it.Items
+	
+	For it = Each Items
+		If (Not IsItemInInventory(it))
+			WriteByte f, 1
+			WriteString f, it\ItemTemplate\Name
+			WriteString f, it\ItemTemplate\TempName
+			WriteString f, it\Name
+			WriteFloat f, EntityX(it\Collider, True)
+			WriteFloat f, EntityY(it\Collider, True)
+			WriteFloat f, EntityZ(it\Collider, True)
+			WriteByte f, it\R
+			WriteByte f, it\G
+			WriteByte f, it\B
+			WriteFloat f, it\Alpha
+			WriteFloat f, EntityPitch(it\Collider)
+			WriteFloat f, EntityYaw(it\Collider)
+			WriteFloat f, it\State
+			WriteFloat f, it\State2
+			WriteFloat f, it\State3
+			If it\ItemTemplate\IsAnim <> 0
+				WriteFloat f, AnimTime(it\Model)
+			EndIf
+			WriteByte f,it\InvSlots
+			WriteInt f,it\ID
+			If it\ItemTemplate\InvImg = it\InvImg
+				WriteByte f, 0
+			Else
+				WriteByte f, 1
+			EndIf
+		EndIf
+	Next
+	WriteByte f, 0
+	
+	For it = Each Items
+		If (Not IsItemInInventory(it)) And it\InvSlots > 0
+			For i = 0 To it\InvSlots - 1
+				If it\SecondInv[i] <> Null
+					WriteInt f, it\SecondInv[i]\ID
+				Else
+					WriteInt f, -1
+				EndIf
+			Next
+		EndIf
+	Next
 	
 	CloseFile(f)
 	
@@ -1317,70 +1317,68 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		End Select
 	Next
 	
-;	Local it.Items, it2.Items, itt.ItemTemplates
-;	
-;	For it.Items = Each Items
-;		If (Not IsItemInInventory(it)) Then
-;			RemoveItem(it)
-;		EndIf
-;	Next
-;	
-;	Temp = ReadByte(f)
-;	While Temp
-;		Local ittName$ = ReadString(f)
-;		Local tempName$ = ReadString(f)
-;		Local Name$ = ReadString(f)
-;		x = ReadFloat(f)
-;		y = ReadFloat(f)
-;		z = ReadFloat(f)
-;		Red% = ReadByte(f)
-;		Green% = ReadByte(f)
-;		Blue% = ReadByte(f)
-;		Alpha# = ReadFloat(f)
-;		it.Items = CreateItem(ittName, tempName, x, y, z, Red,Green,Blue,Alpha)
-;		it\Name = Name
-;		EntityType it\Collider, HIT_ITEM
-;		x = ReadFloat(f)
-;		y = ReadFloat(f)
-;		RotateEntity(it\Collider, x, y, 0)
-;		it\State = ReadFloat(f)
-;		it\State2 = ReadFloat(f)
-;		it\State3 = ReadFloat(f)
-;		For itt.ItemTemplates = Each ItemTemplates
-;			If (itt\TempName = tempName) And (itt\Name = ittName) Then
-;				If itt\IsAnim <> 0
-;					SetAnimTime it\Model, ReadFloat(f) : Exit
-;				EndIf
-;			EndIf
-;		Next
-;		it\InvSlots = ReadByte(f)
-;		it\ID = ReadInt(f)
-;		If it\ID > LastItemID
-;			LastItemID = it\ID
-;		EndIf
-;		If ReadByte(f) = 0
-;			it\InvImg = it\ItemTemplate\InvImg
-;		Else
-;			it\InvImg = it\ItemTemplate\InvImg2
-;		EndIf	
-;		Temp = ReadByte(f)
-;	Wend
-;	
-;	For it = Each Items
-;		If (Not IsItemInInventory(it)) And it\InvSlots > 0
-;			For i = 0 To it\InvSlots - 1
-;				Temp2 = ReadInt(f)
-;				If Temp2 > -1
-;					For it2 = Each Items
-;						If it2\ID = Temp2
-;							it\SecondInv[i] = it2
-;							Exit
-;						EndIf
-;					Next
-;				EndIf
-;			Next
-;		EndIf
-;	Next
+	Local it.Items, it2.Items, itt.ItemTemplates
+	
+	For it.Items = Each Items
+		If (Not IsItemInInventory(it)) Then RemoveItem(it)
+	Next
+	
+	Temp = ReadByte(f)
+	While Temp
+		Local ittName$ = ReadString(f)
+		Local tempName$ = ReadString(f)
+		Local Name$ = ReadString(f)
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		Red% = ReadByte(f)
+		Green% = ReadByte(f)
+		Blue% = ReadByte(f)
+		Alpha# = ReadFloat(f)
+		it.Items = CreateItem(ittName, tempName, x, y, z, Red,Green,Blue,Alpha)
+		it\Name = Name
+		EntityType it\Collider, HIT_ITEM
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		RotateEntity(it\Collider, x, y, 0)
+		it\State = ReadFloat(f)
+		it\State2 = ReadFloat(f)
+		it\State3 = ReadFloat(f)
+		For itt.ItemTemplates = Each ItemTemplates
+			If (itt\TempName = tempName) And (itt\Name = ittName) Then
+				If itt\IsAnim <> 0
+					SetAnimTime it\Model, ReadFloat(f) : Exit
+				EndIf
+			EndIf
+		Next
+		it\InvSlots = ReadByte(f)
+		it\ID = ReadInt(f)
+		If it\ID > LastItemID
+			LastItemID = it\ID
+		EndIf
+		If ReadByte(f) = 0
+			it\InvImg = it\ItemTemplate\InvImg
+		Else
+			it\InvImg = it\ItemTemplate\InvImg2
+		EndIf	
+		Temp = ReadByte(f)
+	Wend
+	
+	For it = Each Items
+		If (Not IsItemInInventory(it)) And it\InvSlots > 0
+			For i = 0 To it\InvSlots - 1
+				Temp2 = ReadInt(f)
+				If Temp2 > -1
+					For it2 = Each Items
+						If it2\ID = Temp2
+							it\SecondInv[i] = it2
+							Exit
+						EndIf
+					Next
+				EndIf
+			Next
+		EndIf
+	Next
 	
 	CloseFile(f)
 	
@@ -1463,6 +1461,7 @@ Function LoadGameQuick%(File$)
 	
 	Local r.Rooms, n.NPCs, do.Doors
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
+	Local it.Items, it2.Items, itt.ItemTemplates
 	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
 	Local f% = ReadFile_Strict(File + "\save.cb")
@@ -1529,6 +1528,14 @@ Function LoadGameQuick%(File$)
 	y = ReadFloat(f)
 	RotateEntity(me\Collider, x, y, 0.0)
 	
+	For n.NPCs = Each NPCs
+		RemoveNPC(n)
+	Next
+	
+	For it.Items = Each Items
+		RemoveItem(it)
+	Next
+	
 	LoadPlayerData(File, f)
 	
 	CloseFile(f)
@@ -1552,10 +1559,6 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
-	
-	For n.NPCs = Each NPCs
-		RemoveNPC(n)
-	Next
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1930,64 +1933,58 @@ Function LoadGameQuick%(File$)
 		End Select
 	Next
 	
-;	Local it.Items, it2.Items, itt.ItemTemplates
-;	
-;	Temp = ReadByte(f)
-;	While Temp
-;		Local ittName$ = ReadString(f)
-;		Local tempName$ = ReadString(f)
-;		Local Name$ = ReadString(f)
-;		x = ReadFloat(f)
-;		y = ReadFloat(f)
-;		z = ReadFloat(f)
-;		Red% = ReadByte(f)
-;		Green% = ReadByte(f)
-;		Blue% = ReadByte(f)
-;		Alpha# = ReadFloat(f)
-;		it.Items = CreateItem(ittName, tempName, x, y, z, Red,Green,Blue,Alpha)
-;		it\Name = Name
-;		EntityType it\Collider, HIT_ITEM
-;		x = ReadFloat(f)
-;		y = ReadFloat(f)
-;		RotateEntity(it\Collider, x, y, 0)
-;		it\State = ReadFloat(f)
-;		it\State2 = ReadFloat(f)
-;		it\State3 = ReadFloat(f)
-;		For itt.ItemTemplates = Each ItemTemplates
-;			If (itt\TempName = tempName) And (itt\Name = ittName) Then
-;				If itt\IsAnim <> 0
-;					SetAnimTime it\Model, ReadFloat(f) : Exit
-;				EndIf
-;			EndIf
-;		Next
-;		it\InvSlots = ReadByte(f)
-;		it\ID = ReadInt(f)
-;		If it\ID > LastItemID
-;			LastItemID = it\ID
-;		EndIf
-;		If ReadByte(f) = 0
-;			it\InvImg = it\ItemTemplate\InvImg
-;		Else
-;			it\InvImg = it\ItemTemplate\InvImg2
-;		EndIf	
-;		Temp = ReadByte(f)
-;	Wend
-;	
-;	For it = Each Items
-;		If (Not IsItemInInventory(it)) And it\InvSlots > 0
-;			For i = 0 To it\InvSlots - 1
-;				Temp2 = ReadInt(f)
-;				If Temp2 > -1
-;					For it2 = Each Items
-;						If it2\ID = Temp2
-;							it\SecondInv[i] = it2
-;							Exit
-;						EndIf
-;					Next
-;				EndIf
-;			Next
-;		EndIf
-;	Next
+	Temp = ReadByte(f)
+	While Temp
+		Local ittName$ = ReadString(f)
+		Local tempName$ = ReadString(f)
+		Local Name$ = ReadString(f)
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		Red% = ReadByte(f)
+		Green% = ReadByte(f)
+		Blue% = ReadByte(f)
+		Alpha# = ReadFloat(f)
+		it.Items = CreateItem(ittName, tempName, x, y, z, Red,Green,Blue,Alpha)
+		it\Name = Name
+		EntityType it\Collider, HIT_ITEM
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		RotateEntity(it\Collider, x, y, 0)
+		it\State = ReadFloat(f)
+		For itt.ItemTemplates = Each ItemTemplates
+			If (itt\TempName = tempName) And (itt\Name = ittName)
+				If itt\IsAnim <> 0 Then SetAnimTime it\Model, ReadFloat(f) : Exit
+			EndIf
+		Next
+		it\InvSlots = ReadByte(f)
+		it\ID = ReadInt(f)
+		If it\ID > LastItemID
+			LastItemID = it\ID
+		EndIf
+		If ReadByte(f) = 0
+			it\InvImg = it\ItemTemplate\InvImg
+		Else
+			it\InvImg = it\ItemTemplate\InvImg2
+		EndIf	
+		Temp = ReadByte(f)
+	Wend
+	
+	For it = Each Items
+		If (Not IsItemInInventory(it)) And it\InvSlots > 0
+			For i = 0 To it\InvSlots - 1
+				Temp2 = ReadInt(f)
+				If Temp2 > -1
+					For it2 = Each Items
+						If it2\ID = Temp2
+							it\SecondInv[i] = it2
+							Exit
+						EndIf
+					Next
+				EndIf
+			Next
+		EndIf
+	Next
 	
 	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
 	Local sc.SecurityCams
