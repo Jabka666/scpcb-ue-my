@@ -2302,5 +2302,25 @@ Function CreateRandomBattery.Items(x#, y#, z#)
 	Return(CreateItem(BatteryName, BatteryTempName, x, y, z))
 End Function
 
+Function IsItemInInventory(it.Items)
+	Local i%, j%
+	
+	For i = 0 To MaxItemAmount - 1
+		If Inventory(i) <> Null
+			If it = Inventory(i)
+				Return(True)
+			ElseIf Inventory(i)\InvSlots > 0
+				For j = 0 To Inventory(i)\InvSlots - 1
+					If it = Inventory(i)\SecondInv[j]
+						Return(True)
+					EndIf
+				Next
+			EndIf
+		EndIf
+	Next
+	
+	Return(False)
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

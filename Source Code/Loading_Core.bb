@@ -2031,90 +2031,106 @@ Function LoadEntities%(LoadingZone% = False)
 	
 	RenderLoading(3, GetLocalString("loading", "player"))
 	
-	SoundEmitter = CreatePivot()
+	If SoundEmitter = 0 Then SoundEmitter = CreatePivot()
 	
-	me\Collider = CreatePivot()
-	EntityRadius(me\Collider, 0.15, 0.30)
-	EntityPickMode(me\Collider, 1)
-	EntityType(me\Collider, HIT_PLAYER)
+	If me\Collider = 0
+		me\Collider = CreatePivot()
+		EntityRadius(me\Collider, 0.15, 0.30)
+		EntityPickMode(me\Collider, 1)
+		EntityType(me\Collider, HIT_PLAYER)
+	EndIf
 	
-	me\Head = CreatePivot()
-	EntityRadius(me\Head, 0.15)
-	EntityType(me\Head, HIT_PLAYER)
+	If me\Head = 0 
+		me\Head = CreatePivot()
+		EntityRadius(me\Head, 0.15)
+		EntityType(me\Head, HIT_PLAYER)
+	EndIf
 	
-	Camera = CreateCamera()
-	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-	CameraRange(Camera, 0.01, opt\CameraFogFar)
-	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, 0.1, opt\CameraFogFar)
-	CameraFogColor(Camera, 30.0, 30.0, 30.0)
-	CameraClsColor(Camera, 30.0, 30.0, 30.0)
-	AmbientLight(30.0, 30.0, 30.0)
+	If Camera = 0
+		Camera = CreateCamera()
+		CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
+		CameraRange(Camera, 0.01, opt\CameraFogFar)
+		CameraFogMode(Camera, 1)
+		CameraFogRange(Camera, 0.1, opt\CameraFogFar)
+		CameraFogColor(Camera, 30.0, 30.0, 30.0)
+		CameraClsColor(Camera, 30.0, 30.0, 30.0)
+		AmbientLight(30.0, 30.0, 30.0)
+	EndIf
 	
 	RenderLoading(5, GetLocalString("loading", "icons"))
 	
-	t\IconID[0] = LoadImage_Strict("GFX\HUD\walk_icon.png")
-	t\IconID[0] = ScaleImage2(t\IconID[0], MenuScale, MenuScale)
-	t\IconID[1] = LoadImage_Strict("GFX\HUD\sprint_icon.png")
-	t\IconID[1] = ScaleImage2(t\IconID[1], MenuScale, MenuScale)
-	t\IconID[2] = LoadImage_Strict("GFX\HUD\crouch_icon.png")
-	t\IconID[2] = ScaleImage2(t\IconID[2], MenuScale, MenuScale)
-	For i = 3 To 4
-		t\IconID[i] = LoadImage_Strict("GFX\HUD\blink_icon(" + (i - 2) + ").png")
-		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
-	Next
-	For i = 5 To 6
-		t\IconID[i] = LoadImage_Strict("GFX\HUD\hand_symbol(" + (i - 4) + ").png")
-		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
-	Next
-	t\IconID[7] = LoadImage_Strict("GFX\HUD\shield_icon.png")
-	t\IconID[7] = ScaleImage2(t\IconID[7], MenuScale, MenuScale)
-	
-	t\IconID[8] = LoadImage_Strict("GFX\HUD\scp_268_icon.png")
-	t\IconID[8] = ScaleImage2(t\IconID[8], MenuScale, MenuScale)
-	
-	t\IconID[9] = LoadImage_Strict("GFX\Menu\QuickLoading.png")
-	t\IconID[9] = ScaleImage2(t\IconID[9], MenuScale, MenuScale)
-	
-	For i = 0 To 3
-		t\IconID[i + 10] = LoadImage_Strict("GFX\HUD\arrow_symbol.png")
-		t\IconID[i + 10] = ScaleImage2(t\IconID[i + 10], MenuScale, MenuScale)
-		RotateImage(t\IconID[i + 10], i * 90.0)
-		HandleImage(t\IconID[i + 10], 0, 0)
+	For i = 0 To 13
+		If t\IconID[i] = 0
+			t\IconID[0] = LoadImage_Strict("GFX\HUD\walk_icon.png")
+			t\IconID[0] = ScaleImage2(t\IconID[0], MenuScale, MenuScale)
+			t\IconID[1] = LoadImage_Strict("GFX\HUD\sprint_icon.png")
+			t\IconID[1] = ScaleImage2(t\IconID[1], MenuScale, MenuScale)
+			t\IconID[2] = LoadImage_Strict("GFX\HUD\crouch_icon.png")
+			t\IconID[2] = ScaleImage2(t\IconID[2], MenuScale, MenuScale)
+			For i = 3 To 4
+				t\IconID[i] = LoadImage_Strict("GFX\HUD\blink_icon(" + (i - 2) + ").png")
+				t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
+			Next
+			For i = 5 To 6
+				t\IconID[i] = LoadImage_Strict("GFX\HUD\hand_symbol(" + (i - 4) + ").png")
+				t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
+			Next
+			t\IconID[7] = LoadImage_Strict("GFX\HUD\shield_icon.png")
+			t\IconID[7] = ScaleImage2(t\IconID[7], MenuScale, MenuScale)
+			
+			t\IconID[8] = LoadImage_Strict("GFX\HUD\scp_268_icon.png")
+			t\IconID[8] = ScaleImage2(t\IconID[8], MenuScale, MenuScale)
+			
+			t\IconID[9] = LoadImage_Strict("GFX\Menu\QuickLoading.png")
+			t\IconID[9] = ScaleImage2(t\IconID[9], MenuScale, MenuScale)
+			
+			For i = 0 To 3
+				t\IconID[i + 10] = LoadImage_Strict("GFX\HUD\arrow_symbol.png")
+				t\IconID[i + 10] = ScaleImage2(t\IconID[i + 10], MenuScale, MenuScale)
+				RotateImage(t\IconID[i + 10], i * 90.0)
+				HandleImage(t\IconID[i + 10], 0, 0)
+			Next
+		EndIf
 	Next
 	
 	For i = 0 To MaxAchievements - 1
 		Local Loc$ = "a" + Str(i)
 		
-		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, Loc, "AchvName")
-		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, Loc, "AchvDesc")
+		If achv\AchievementStrings[i] = 0 Then achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, Loc, "AchvName")
+		If achv\AchievementDescs[i] = 0 Then achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, Loc, "AchvDesc")
 	Next
 	
-	achv\AchvLocked = LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png")
-	achv\AchvLocked = ScaleImage2(achv\AchvLocked, opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+	If achv\AchvLocked = 0
+		achv\AchvLocked = LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png")
+		achv\AchvLocked = ScaleImage2(achv\AchvLocked, opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+	EndIf
 	
-	t\ImageID[0] = LoadImage_Strict("GFX\Menu\pause_menu.png")
-	t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
-	
-	t\ImageID[1] = LoadImage_Strict("GFX\HUD\blink_meter(2).png")
-	t\ImageID[1] = ScaleImage2(t\ImageID[1], MenuScale, MenuScale)
-	
-	For i = 2 To 3
-		t\ImageID[i] = LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png")
-		t\ImageID[i] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
+	For i = 0 To 7
+		If t\ImageID[i] = 0
+			t\ImageID[0] = LoadImage_Strict("GFX\Menu\pause_menu.png")
+			t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
+			
+			t\ImageID[1] = LoadImage_Strict("GFX\HUD\blink_meter(2).png")
+			t\ImageID[1] = ScaleImage2(t\ImageID[1], MenuScale, MenuScale)
+			
+			For i = 2 To 3
+				t\ImageID[i] = LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png")
+				t\ImageID[i] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
+			Next
+			
+			t\ImageID[4] = LoadImage_Strict("GFX\HUD\keypad_HUD.png")
+			t\ImageID[4] = ScaleImage2(t\ImageID[4], MenuScale, MenuScale)
+			
+			t\ImageID[5] = LoadImage_Strict("GFX\Overlays\scp_294_overlay.png")
+			t\ImageID[5] = ScaleImage2(t\ImageID[5], MenuScale, MenuScale)
+			
+			t\ImageID[6] = LoadImage_Strict("GFX\HUD\night_vision_goggles_battery.png")
+			t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale)
+			MaskImage(t\ImageID[6], 255, 0, 255)
+			
+			t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
+		EndIf
 	Next
-	
-	t\ImageID[4] = LoadImage_Strict("GFX\HUD\keypad_HUD.png")
-	t\ImageID[4] = ScaleImage2(t\ImageID[4], MenuScale, MenuScale)
-	
-	t\ImageID[5] = LoadImage_Strict("GFX\Overlays\scp_294_overlay.png")
-	t\ImageID[5] = ScaleImage2(t\ImageID[5], MenuScale, MenuScale)
-	
-	t\ImageID[6] = LoadImage_Strict("GFX\HUD\night_vision_goggles_battery.png")
-	t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale)
-	MaskImage(t\ImageID[6], 255, 0, 255)
-	
-	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
 	
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
@@ -2132,124 +2148,128 @@ Function LoadEntities%(LoadingZone% = False)
 	; ~ Overlays
 	Local OverlayScale# = GraphicHeightFloat / GraphicWidthFloat
 	
-	;t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\fog_overlay.png", 1, DeleteAllTextures) ; ~ FOG
-	;t\OverlayID[0] = CreateSprite(ArkBlurCam)
-	;ScaleSprite(t\OverlayID[0], 1.0, OverlayScale)
-	;EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
-	;EntityBlend(t\OverlayID[0], 2)
-	;EntityOrder(t\OverlayID[0], -1000)
-	;MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
-	
-	Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
-	t\OverlayID[1] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[1], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[1], Tex)
-	EntityBlend(t\OverlayID[1], 2)
-	EntityFX(t\OverlayID[1], 1)
-	EntityOrder(t\OverlayID[1], -1003)
-	MoveEntity(t\OverlayID[1], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteAllTextures) ; ~ HAZMAT SUIT
-	t\OverlayID[2] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[2], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[2], Tex)
-	EntityBlend(t\OverlayID[2], 2)
-	EntityFX(t\OverlayID[2], 1)
-	EntityOrder(t\OverlayID[2], -1003)
-	MoveEntity(t\OverlayID[2], 0, 0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteAllTextures) ; ~ SCP-008
-	t\OverlayID[3] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[3], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[3], Tex)
-	EntityBlend(t\OverlayID[3], 3)
-	EntityFX(t\OverlayID[3], 1)
-	EntityOrder(t\OverlayID[3], -1003)
-	MoveEntity(t\OverlayID[3], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures) ; ~ NIGHT VISION GOGGLES
-	t\OverlayID[4] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[4], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
-	EntityBlend(t\OverlayID[4], 2)
-	EntityFX(t\OverlayID[4], 1)
-	EntityOrder(t\OverlayID[4], -1003)
-	MoveEntity(t\OverlayID[4], 0.0, 0.0, 1.0)
-	
-	t\OverlayTextureID[2] = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2) ; ~ DARK
-	SetBuffer(TextureBuffer(t\OverlayTextureID[2]))
-	Cls()
-	SetBuffer(BackBuffer())
-	t\OverlayID[5] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[5], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[5], t\OverlayTextureID[2])
-	EntityBlend(t\OverlayID[5], 1)
-	EntityOrder(t\OverlayID[5], -1002)
-	MoveEntity(t\OverlayID[5], 0.0, 0.0, 1.0)
-	EntityAlpha(t\OverlayID[5], 0.0)
-	
-	Tex = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2) ; ~ LIGHT
-	SetBuffer(TextureBuffer(Tex))
-	ClsColor(255, 255, 255)
-	Cls()
-	ClsColor(0, 0, 0)
-	SetBuffer(BackBuffer())
-	t\OverlayID[6] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[6], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[6], Tex)
-	EntityBlend(t\OverlayID[6], 1)
-	EntityOrder(t\OverlayID[6], -1002)
-	MoveEntity(t\OverlayID[6], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	Tex = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png", 1, DeleteAllTextures) ; ~ SCP-409
-	t\OverlayID[7] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[7], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[7], Tex)
-	EntityBlend(t\OverlayID[7], 3)
-	EntityFX(t\OverlayID[7], 1)
-	EntityOrder(t\OverlayID[7], -1003)
-	MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	Tex = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
-	t\OverlayID[8] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[8], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[8], Tex)
-	EntityBlend(t\OverlayID[8], 2)
-	EntityFX(t\OverlayID[8], 1)
-	EntityOrder(t\OverlayID[8], -1003)
-	MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	Tex = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteAllTextures) ; ~ BLOOD
-	t\OverlayID[9] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[9], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[9], Tex)
-	EntityBlend(t\OverlayID[9], 2)
-	EntityFX(t\OverlayID[9], 1)
-	EntityOrder(t\OverlayID[9], -1003)
-	MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
-	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ FOG IN GAS MASK
-	t\OverlayID[10] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[10], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[10], Tex)
-	EntityBlend(t\OverlayID[10], 3)
-	EntityFX(t\OverlayID[10], 1)
-	EntityOrder(t\OverlayID[10], -1002)
-	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
-	
 	For i = 1 To 10
-		HideEntity(t\OverlayID[i])
+		If t\OverlayID[i] = 0
+		;t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\fog_overlay.png", 1, DeleteAllTextures) ; ~ FOG
+		;t\OverlayID[0] = CreateSprite(ArkBlurCam)
+		;ScaleSprite(t\OverlayID[0], 1.0, OverlayScale)
+		;EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
+		;EntityBlend(t\OverlayID[0], 2)
+		;EntityOrder(t\OverlayID[0], -1000)
+		;MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
+			
+			Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
+			t\OverlayID[1] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[1], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[1], Tex)
+			EntityBlend(t\OverlayID[1], 2)
+			EntityFX(t\OverlayID[1], 1)
+			EntityOrder(t\OverlayID[1], -1003)
+			MoveEntity(t\OverlayID[1], 0.0, 0.0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteAllTextures) ; ~ HAZMAT SUIT
+			t\OverlayID[2] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[2], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[2], Tex)
+			EntityBlend(t\OverlayID[2], 2)
+			EntityFX(t\OverlayID[2], 1)
+			EntityOrder(t\OverlayID[2], -1003)
+			MoveEntity(t\OverlayID[2], 0, 0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteAllTextures) ; ~ SCP-008
+			t\OverlayID[3] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[3], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[3], Tex)
+			EntityBlend(t\OverlayID[3], 3)
+			EntityFX(t\OverlayID[3], 1)
+			EntityOrder(t\OverlayID[3], -1003)
+			MoveEntity(t\OverlayID[3], 0.0, 0.0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures) ; ~ NIGHT VISION GOGGLES
+			t\OverlayID[4] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[4], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+			EntityBlend(t\OverlayID[4], 2)
+			EntityFX(t\OverlayID[4], 1)
+			EntityOrder(t\OverlayID[4], -1003)
+			MoveEntity(t\OverlayID[4], 0.0, 0.0, 1.0)
+			
+			t\OverlayTextureID[2] = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2) ; ~ DARK
+			SetBuffer(TextureBuffer(t\OverlayTextureID[2]))
+			Cls()
+			SetBuffer(BackBuffer())
+			t\OverlayID[5] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[5], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[5], t\OverlayTextureID[2])
+			EntityBlend(t\OverlayID[5], 1)
+			EntityOrder(t\OverlayID[5], -1002)
+			MoveEntity(t\OverlayID[5], 0.0, 0.0, 1.0)
+			EntityAlpha(t\OverlayID[5], 0.0)
+			
+			Tex = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2) ; ~ LIGHT
+			SetBuffer(TextureBuffer(Tex))
+			ClsColor(255, 255, 255)
+			Cls()
+			ClsColor(0, 0, 0)
+			SetBuffer(BackBuffer())
+			t\OverlayID[6] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[6], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[6], Tex)
+			EntityBlend(t\OverlayID[6], 1)
+			EntityOrder(t\OverlayID[6], -1002)
+			MoveEntity(t\OverlayID[6], 0.0, 0.0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			Tex = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png", 1, DeleteAllTextures) ; ~ SCP-409
+			t\OverlayID[7] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[7], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[7], Tex)
+			EntityBlend(t\OverlayID[7], 3)
+			EntityFX(t\OverlayID[7], 1)
+			EntityOrder(t\OverlayID[7], -1003)
+			MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			Tex = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
+			t\OverlayID[8] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[8], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[8], Tex)
+			EntityBlend(t\OverlayID[8], 2)
+			EntityFX(t\OverlayID[8], 1)
+			EntityOrder(t\OverlayID[8], -1003)
+			MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			Tex = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteAllTextures) ; ~ BLOOD
+			t\OverlayID[9] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[9], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[9], Tex)
+			EntityBlend(t\OverlayID[9], 2)
+			EntityFX(t\OverlayID[9], 1)
+			EntityOrder(t\OverlayID[9], -1003)
+			MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ FOG IN GAS MASK
+			t\OverlayID[10] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[10], 1.0, OverlayScale)
+			EntityTexture(t\OverlayID[10], Tex)
+			EntityBlend(t\OverlayID[10], 3)
+			EntityFX(t\OverlayID[10], 1)
+			EntityOrder(t\OverlayID[10], -1002)
+			MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex)
+			
+			For i = 1 To 10
+				HideEntity(t\OverlayID[i])
+			Next
+			t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
+		;t\OverlayTextureID[12] = LoadTexture_Strict("GFX\Overlays\fog_night_vision_goggles_overlay.png", 1, DeleteAllTextures)
+		EndIf
 	Next
-	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
-	;t\OverlayTextureID[12] = LoadTexture_Strict("GFX\Overlays\fog_night_vision_goggles_overlay.png", 1, DeleteAllTextures)
 	
 	LoadDecals()
 	
@@ -2384,8 +2404,8 @@ Function InitNewGame%(LoadingZone% = False)
 		LoadEntities(True)
 	Else
 		LoadEntities()
+		LoadSounds()
 	EndIf
-	LoadSounds()
 	
 	opt\CameraFogFar = 6.0
 	
@@ -2747,7 +2767,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CODE_MAINTENANCE_TUNNELS = 0
 	CODE_O5_COUNCIL = 0
 	
-	CurrentZone = 0
+	CurrentZone = 0 ; ~ TODO: Check If Needed! - Wolfnaya
 	
 	ShouldPlay = 66
 	FreeEntity(SoundEmitter) : SoundEmitter = 0
@@ -2997,9 +3017,9 @@ Function NullZone()
 	QuickLoadPercent_DisplayTimer# = 0.0
 	QuickLoad_CurrEvent = Null
 	
-	msg\DeathMsg$=""
+	msg\DeathMsg$ = ""
 	
-;	SelectedCustomMap = ""
+	SelectedCustomMap = Null
 	
 	UsedConsole = False
 	
@@ -3125,7 +3145,7 @@ Function NullZone()
 	Delete Each TempScreens
 	Delete Each TextureInCache
 	
-	;Delete Each Player ~ TODO Check If Needed!
+	;Delete Each Player ; ~ TODO: Check If Needed! - Wolfnaya
 	Delete Each WearableItems
 	
 	Delete Each SCP005
@@ -3201,21 +3221,21 @@ Function LoadZone%(ZoneID%, PlaySFX% = True)
 	CurrentZone = ZoneID
 	DebugLog "Determined New Zone As: (" + CurrentZone +")"
 	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") = 1
-		DebugLog "EBAT OKLEMALSA"
+		DebugLog "Loading Into New Zone..."
 		LoadEntities(True)
 		LoadSounds()
 		LoadGame(CurrSave\Name, CurrentZone)
 		InitLoadGame()
 	Else
-		DebugLog "BLYAT SUKA"
+		DebugLog "Creating New Zone..."
 		InitNewGame(True)
+		;LoadZoneData(CurrSave\Name)
 	EndIf
-	DebugLog "Initialised Game"
 	MainMenuOpen = False
 	FlushKeys()
 	FlushMouse()
 	ResetInput()
-	DebugLog "Successfully Changed Zone!"
+	DebugLog "Successfully Changed Zone! Current Zone Is: (" + CurrentZone + ")"
 	
 End Function
 

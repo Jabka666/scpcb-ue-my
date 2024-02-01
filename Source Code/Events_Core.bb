@@ -4107,7 +4107,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Next
-					; ~ TODO - Make Zone Transitioning!
+					; ~ TODO: Make Zone Transitioning! - Wolfnaya
 ;					If e\room\RoomDoors[0]\Open
 ;						e\room\RoomDoors[0]\Open = False
 ;						If CurrentZone = LCZ Lor CurrentZone = EZ Then LoadZone(HCZ)

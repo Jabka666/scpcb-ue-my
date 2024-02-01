@@ -2124,12 +2124,12 @@ Function UpdateConsole%()
 					
 					If Int(StrTemp) > 0 And Int(StrTemp) < MaxZones
 						If Int(StrTemp) = CurrentZone
-							CreateConsoleMsg(Format(GetLocalString("console", "zone.1"), Int(StrTemp)), 255, 0, 0)
+							CreateConsoleMsg(Format(GetLocalString("console", "loadzone_1"), Int(StrTemp)), 255, 0, 0)
 						Else
 							LoadZone(Int(StrTemp), False)
 						EndIf
 					Else
-						CreateConsoleMsg(Format(GetLocalString("console", "zone.2"), Int(StrTemp)), 255, 0, 0)
+						CreateConsoleMsg(Format(GetLocalString("console", "loadzone_2"), Int(StrTemp)), 255, 0, 0)
 					EndIf
 					;[End Block]
 				Default
