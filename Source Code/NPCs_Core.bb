@@ -1151,7 +1151,7 @@ Function UpdateNPCs%()
 								If n\Frame >= 1262.9
 									SetNPCFrame(n, 312.0)
 									n\State3 = 0.0
-									n\State = 5.0
+									n\State = 1.0
 								EndIf
 							Else
 								AnimateNPC(n, 936.0, 1263.0, 0.1)
@@ -1180,7 +1180,7 @@ Function UpdateNPCs%()
 											n\Sound = 0
 											
 											n\State3 = 0.0
-											n\State = 1.0
+											n\State = 2.0
 										EndIf
 									EndIf
 								EndIf
@@ -1188,7 +1188,90 @@ Function UpdateNPCs%()
 						EndIf
 						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0, True)
 						;[End Block]
-					Case 1.0, 2.0, 3.0 ; ~ Triggered
+					Case 1.0
+						;[Block]
+						If Dist < 256.0
+							If n\SoundCHN = 0
+								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
+								n\SoundCHN_IsStream = True
+							EndIf
+							
+							PrevFrame = n\Frame
+							
+							If n\Frame >= 422.0
+								n\State2 = n\State2 + fps\Factor[0]
+								If n\State2 > 1000.0
+									If n\State2 > 1600.0 Then n\State2 = Rnd(0.0, 500.0)
+									
+									If n\Frame < 1382.0
+										n\CurrSpeed = CurveValue(n\Speed * 0.1, n\CurrSpeed, 5.0)
+										AnimateNPC(n, 1369.0, 1382.0, n\CurrSpeed * 45.0, False)
+									Else
+										n\CurrSpeed = CurveValue(n\Speed * 0.1, n\CurrSpeed, 5.0)
+										AnimateNPC(n, 1383.0, 1456.0, n\CurrSpeed * 45.0)
+									EndIf
+									
+									If MilliSecs() > n\State3
+										n\LastSeen = 0
+										If EntityVisible(me\Collider, n\Collider)
+											n\LastSeen = 1
+										Else
+											If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider)
+											EntityPick(n\Collider, 1.5)
+											If PickedEntity() <> 0 Then n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
+											If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
+										EndIf
+										n\State3 = MilliSecs() + 2000
+									EndIf
+									
+									If n\LastSeen
+										PointEntity(n\OBJ, me\Collider)
+										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 130.0), 0.0)
+										If Dist < 2.25 Then n\State2 = 0.0
+									Else
+										RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 50.0), 0.0)
+									EndIf
+								Else
+									If n\Frame > 472.0 ; ~ Walk to idle
+										n\CurrSpeed = CurveValue(n\Speed * 0.05, n\CurrSpeed, 8.0)
+										AnimateNPC(n, 1383.0, 1469.0, n\CurrSpeed * 45.0, False)
+										If n\Frame >= 1468.9 Then SetNPCFrame(n, 423.0)
+									Else
+										n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 4.0)
+										AnimateNPC(n, 423.0, 471.0, 0.2)
+									EndIf
+								EndIf
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							Else
+								AnimateNPC(n, 312.0, 422.0, 0.3, False)
+							EndIf
+							
+							If (Not chs\NoTarget)
+								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
+									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
+										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink < 0.25
+											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+											
+											me\CurrCameraZoom = 10.0
+											
+											If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
+											
+											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+											n\Sound = 0
+											
+											n\State = 3.0
+										EndIf
+									EndIf
+								EndIf
+							EndIf
+							
+							If n\CurrSpeed > 0.001
+								If (PrevFrame < 1383.0 And n\Frame >= 1383.0) Lor (PrevFrame < 1420.0 And n\Frame >= 1420.0) Lor (PrevFrame < 1466.0 And n\Frame >= 1466.0) Then PlaySound2(Step2SFX[Rand(12, 14)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+							EndIf
+						EndIf
+						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0, 1.0, True)
+						;[End Block]
+					Case 2.0, 3.0, 4.0 ; ~ Triggered
 						;[Block]
 						If n\SoundCHN = 0
 							n\SoundCHN = StreamSound_Strict("SFX\Music\096Angered.ogg", 0)
@@ -1196,12 +1279,12 @@ Function UpdateNPCs%()
 						EndIf
 						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 						
-						If n\State = 1.0 ; ~ Get up
+						If n\State = 2.0 ; ~ Get up
 							If n\Frame < 312.0
 								AnimateNPC(n, 193.0, 311.0, 0.3, False)
 								If n\Frame > 310.9
 									SetNPCFrame(n, 737.0)
-									n\State = 2.0
+									n\State = 3.0
 								EndIf
 							ElseIf n\Frame >= 312.0 And n\Frame <= 422.0
 								AnimateNPC(n, 312.0, 422.0, 0.3, False)
@@ -1210,26 +1293,26 @@ Function UpdateNPCs%()
 								AnimateNPC(n, 677.0, 736.0, 0.3, False)
 								If n\Frame > 735.9
 									SetNPCFrame(n, 737.0)
-									n\State = 2.0
+									n\State = 3.0
 								EndIf
 							EndIf
-						ElseIf n\State = 2.0
-							AnimateNPC(n, 677.0, 737.0, 0.3, False)
-							If n\Frame >= 737.0 Then n\State2 = 0.0 : n\State = 3.0
 						ElseIf n\State = 3.0
+							AnimateNPC(n, 677.0, 737.0, 0.3, False)
+							If n\Frame >= 737.0 Then n\State2 = 0.0 : n\State = 4.0
+						ElseIf n\State = 4.0
 							n\State2 = n\State2 + fps\Factor[0]
 							If n\State2 > 70.0 * 26.0
 								AnimateNPC(n, 823.0, 847.0, n\Speed * 8.0, False)
 								If n\Frame > 846.9
 									StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-									n\State = 4.0
+									n\State = 5.0
 								EndIf
 							Else
 								AnimateNPC(n, 1471.0, 1556.0, 0.4)
 							EndIf
 						EndIf
 						;[End Block]
-					Case 4.0 ; ~ Chasing player
+					Case 5.0 ; ~ Chasing player
 						;[Block]
 						me\CurrCameraZoom = CurveValue(Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 10.0), me\CurrCameraZoom, 8.0)
 						
@@ -1382,92 +1465,9 @@ Function UpdateNPCs%()
 							AnimateNPC(n, Min(27.0, AnimTime(n\OBJ)), 193.0, 0.5)
 						EndIf
 						;[End Block]
-					Case 5.0
-						;[Block]
-						If Dist < 256.0
-							If n\SoundCHN = 0
-								n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0)
-								n\SoundCHN_IsStream = True
-							EndIf
-							
-							PrevFrame = n\Frame
-							
-							If n\Frame >= 422.0
-								n\State2 = n\State2 + fps\Factor[0]
-								If n\State2 > 1000.0
-									If n\State2 > 1600.0 Then n\State2 = Rnd(0.0, 500.0)
-									
-									If n\Frame < 1382.0
-										n\CurrSpeed = CurveValue(n\Speed * 0.1, n\CurrSpeed, 5.0)
-										AnimateNPC(n, 1369.0, 1382.0, n\CurrSpeed * 45.0, False)
-									Else
-										n\CurrSpeed = CurveValue(n\Speed * 0.1, n\CurrSpeed, 5.0)
-										AnimateNPC(n, 1383.0, 1456.0, n\CurrSpeed * 45.0)
-									EndIf
-									
-									If MilliSecs() > n\State3
-										n\LastSeen = 0
-										If EntityVisible(me\Collider, n\Collider)
-											n\LastSeen = 1
-										Else
-											If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider)
-											EntityPick(n\Collider, 1.5)
-											If PickedEntity() <> 0 Then n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
-											If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
-										EndIf
-										n\State3 = MilliSecs() + 2000
-									EndIf
-									
-									If n\LastSeen
-										PointEntity(n\OBJ, me\Collider)
-										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 130.0), 0.0)
-										If Dist < 2.25 Then n\State2 = 0.0
-									Else
-										RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle, EntityYaw(n\Collider), 50.0), 0.0)
-									EndIf
-								Else
-									If n\Frame > 472.0 ; ~ Walk to idle
-										n\CurrSpeed = CurveValue(n\Speed * 0.05, n\CurrSpeed, 8.0)
-										AnimateNPC(n, 1383.0, 1469.0, n\CurrSpeed * 45.0, False)
-										If n\Frame >= 1468.9 Then SetNPCFrame(n, 423.0)
-									Else
-										n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 4.0)
-										AnimateNPC(n, 423.0, 471.0, 0.2)
-									EndIf
-								EndIf
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-							Else
-								AnimateNPC(n, 312.0, 422.0, 0.3, False)
-							EndIf
-							
-							If (Not chs\NoTarget)
-								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
-									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink < 0.25
-											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
-											
-											me\CurrCameraZoom = 10.0
-											
-											If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
-											
-											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-											n\Sound = 0
-											
-											n\State = 2.0
-										EndIf
-									EndIf
-								EndIf
-							EndIf
-							
-							If n\CurrSpeed > 0.001
-								If (PrevFrame < 1383.0 And n\Frame >= 1383.0) Lor (PrevFrame < 1420.0 And n\Frame >= 1420.0) Lor (PrevFrame < 1466.0 And n\Frame >= 1466.0) Then PlaySound2(Step2SFX[Rand(12, 14)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
-							EndIf
-						EndIf
-						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0, 1.0, True)
-						;[End Block]
 				End Select
 				
-				If n\State <> 0.0 And n\State <> 5.0
+				If n\State > 1.0
 					For e.Events = Each Events
 						If e\EventID = e_room2_servers_hcz
 							If e\EventState = 0.0
@@ -6742,7 +6742,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 		Case "096", "scp096", "scp-096", "shyguy"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			n\State = 5.0
+			n\State = 1.0
 			n_I\Curr096 = n
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-096")
 			;[End Block]

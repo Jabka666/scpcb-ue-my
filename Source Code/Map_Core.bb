@@ -2846,7 +2846,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Local IsSceneTriggered% = False
 	
 	If n_I\Curr096 <> Null
-		If (n_I\Curr096\State <> 0.0 And n_I\Curr096\State <> 5.0) And n_I\Curr096\Target = Null And (PlayerElevatorFloor = NullFloor) And PlayerInsideElevator And (Not chs\NoTarget) Then IsSceneTriggered = True
+		If n_I\Curr096\State > 1.0 And n_I\Curr096\Target = Null And (PlayerElevatorFloor = NullFloor) And PlayerInsideElevator And (Not chs\NoTarget) Then IsSceneTriggered = True
 	EndIf
 	If (Not IsSceneTriggered)
 		If (Not door1\Open) And (Not door2\Open)
@@ -3117,7 +3117,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			ElseIf State > 70.0 * 7.25 And State < (70.0 * 7.3) + fps\Factor[0]
 				me\BigCameraShake = 2.0
 				door1\FastOpen = True : door1\Open = True
-				n_I\Curr096\State = 4.0
+				n_I\Curr096\State = 5.0
 				n_I\Curr096\LastSeen = 1.0
 			ElseIf State > 70.0 * 8.1 And State < 70.0 * 8.15 + fps\Factor[0]
 				me\BigCameraShake = 2.0

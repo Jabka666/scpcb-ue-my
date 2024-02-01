@@ -5997,7 +5997,7 @@ Function UpdateEvents%()
 								If n_I\Curr096\Frame >= 554.5
 									n_I\Curr096\Frame = 677.0
 									SetNPCFrame(n_I\Curr096, n_I\Curr096\Frame)
-									n_I\Curr096\State = 1.0
+									n_I\Curr096\State = 2.0
 									TurnEntity(n_I\Curr096\Collider, 0.0, 180.0, 0.0)
 									MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, 0.3)
 									e\EventState = 70.0 * 10.0
@@ -6007,7 +6007,7 @@ Function UpdateEvents%()
 								If n_I\Curr096\Frame >= 589.5
 									n_I\Curr096\Frame = 677.0
 									SetNPCFrame(n_I\Curr096, n_I\Curr096\Frame)
-									n_I\Curr096\State = 1.0
+									n_I\Curr096\State = 2.0
 									TurnEntity(n_I\Curr096\Collider, 0.0, 180.0, 0.0)
 									MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, 0.3)
 									e\EventState = 70.0 * 10.0
@@ -6015,7 +6015,7 @@ Function UpdateEvents%()
 							EndIf
 							PointEntity(e\room\NPC[0]\Collider, n_I\Curr096\Collider)
 						ElseIf e\EventState >= 70.0 * 10.0 And e\EventState < 70.0 * 20.0
-							n_I\Curr096\State = Min(Max(1.0, n_I\Curr096\State), 3.0)
+							n_I\Curr096\State = Min(Max(2.0, n_I\Curr096\State), 4.0)
 							n_I\Curr096\State2 = Max(n_I\Curr096\State2, 70.0 * 12.0)
 							If e\EventState - fps\Factor[0] <= 70.0 * 15.0 ; ~ Walk to the doorway
 								If e\EventState > 70.0 * 15.0
@@ -6032,7 +6032,7 @@ Function UpdateEvents%()
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 30.0), 0.0)
 							EndIf
 						Else
-							If n_I\Curr096\State = 4.0 ; ~ Shoot at SCP-096 when it starts attacking
+							If n_I\Curr096\State = 5.0 ; ~ Shoot at SCP-096 when it starts attacking
 								n_I\Curr096\LastSeen = 1.0
 								e\room\NPC[0]\State = 2.0
 								PointEntity(e\room\NPC[0]\OBJ, n_I\Curr096\Collider)
@@ -6040,7 +6040,7 @@ Function UpdateEvents%()
 								If PlayerRoom = e\room Then me\LightBlink = (e\room\NPC[0]\Reload) + Rnd(0.5, 2.0)
 								n_I\Curr096\Target = e\room\NPC[0]
 							Else
-								If e\EventState > 70.0 * 22.0 Then n_I\Curr096\State = 4.0
+								If e\EventState > 70.0 * 22.0 Then n_I\Curr096\State = 5.0
 								If e\room\NPC[0]\State = 13.0
 									e\room\NPC[0]\State = 14.0
 									e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\OBJ, True), 0.4, EntityZ(e\room\OBJ, True))
@@ -6086,7 +6086,7 @@ Function UpdateEvents%()
 							
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 							
-							n_I\Curr096\State = 5.0
+							n_I\Curr096\State = 1.0
 						EndIf
 					Else
 						If e\EventState >= 70.0 * 40.0 And e\EventState - fps\Factor[0] < 70.0 * 40.0 ; ~ Open them again to let the player in
@@ -7935,7 +7935,7 @@ Function UpdateEvents%()
 								EndIf
 							Next
 							
-							If n_I\Curr096\State <> 5.0 Then e\EventState = 2.0
+							If n_I\Curr096\State <> 1.0 Then e\EventState = 2.0
 							If EntityDistanceSquared(n_I\Curr096\Collider, e\room\OBJ) > EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) Then e\EventState = 2.0
 						EndIf
 						
@@ -7989,7 +7989,7 @@ Function UpdateEvents%()
 						Else
 							n_I\Curr096 = CreateNPC(NPCType096, EntityX(Pvt, True), e\room\y + 0.5, EntityZ(Pvt, True))
 						EndIf
-						n_I\Curr096\State = 5.0
+						n_I\Curr096\State = 1.0
 						PointEntity(n_I\Curr096\Collider, me\Collider)
 						RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider) + 180.0, 0.0)
 						FreeEntity(Pvt) : Pvt = 0
