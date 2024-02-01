@@ -3277,7 +3277,7 @@ Function UpdateEvents%()
 						Temp = (I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5)
 						If e\EventState = 0.0
 							If Temp
-								TFormPoint(-4843.8, -4409.0, 1729.0, e\room\OBJ, 0)
+								TFormPoint(-4843.8, -4440.8, 1729.0, e\room\OBJ, 0)
 								x = TFormedX() : y = TFormedY() : z = TFormedZ()
 								e\room\NPC[0] = CreateNPC(NPCTypeD, x, y, z)
 								e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
@@ -3285,7 +3285,7 @@ Function UpdateEvents%()
 								SetNPCFrame(e\room\NPC[0], 19.0)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
 								
-								de.Decals = CreateDecal(DECAL_409, x, y - (88.0 * RoomScale) + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
+								de.Decals = CreateDecal(DECAL_409, x, y - (56.2 * RoomScale) + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
 								EntityParent(de\OBJ, e\room\OBJ)
 								
 								TFormPoint(-5000.0, -4409.0, 1578.0, e\room\OBJ, 0)
@@ -3304,7 +3304,7 @@ Function UpdateEvents%()
 						Else
 							If I_409\Timer = 0.0
 								If Temp
-									If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.7225
+									If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.81
 										GiveAchievement(Achv409)
 										If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
 											me\BlurTimer = 1000.0
