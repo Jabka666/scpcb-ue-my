@@ -13,9 +13,7 @@ Function SaveGame%(File$, NewZone% = 0)
 	
 	File = SavePath + File
 	
-	If FileType(File) <> 2 Then
-		CreateDir(File)
-	EndIf
+	If FileType(File) <> 2 Then CreateDir(File)
 	
 	Local f% = WriteFile(File + "\save.cb")
 	
@@ -171,7 +169,7 @@ Function SaveGame%(File$, NewZone% = 0)
 			Else
 				WriteByte f, 0
 			EndIf
-			If it\ItemTemplate\IsAnim<>0 Then
+			If it\ItemTemplate\IsAnim <> 0
 				WriteFloat f, AnimTime(it\Model)
 			EndIf
 			WriteByte f,it\InvSlots
@@ -208,7 +206,7 @@ Function SaveGame%(File$, NewZone% = 0)
 
 	WriteInt(f, EscapeTimer)
 	
-	If NewZone > 0 Then
+	If NewZone > 0
 		WriteInt f, NewZone
 	Else
 		WriteInt f, CurrentZone
@@ -235,9 +233,7 @@ Function SaveZoneData(File$)
 	Local n.NPCs, r.Rooms, do.Doors
 	Local x%, y%, i%, Temp%
 	
-	If FileType(File) <> 2 Then
-		CreateDir(File)
-	EndIf
+	If FileType(File) <> 2 Then CreateDir(File)
 	
 	Local f% = WriteFile(File + "\zone_" + CurrentZone + ".cb")
 	
@@ -538,6 +534,8 @@ Function SaveZoneData(File$)
 ;		EndIf
 ;	Next
 	
+	CloseFile(f)
+	
 End Function
 
 Function LoadPlayerData(File$, f%)
@@ -700,7 +698,7 @@ Function LoadPlayerData(File$, f%)
 	
 	For i = 0 To MaxItemAmount - 1
 		Temp = ReadInt(f)
-		If Temp > -1 Then
+		If Temp > -1
 			For it = Each Items
 				If it\ID = Temp
 					Inventory(i) = it
@@ -734,42 +732,44 @@ Function LoadPlayerData(File$, f%)
 	
 End Function
 
-;Function LoadZoneData(File$)
-;	
-;	File = SavePath + File
-;	
-;	Local x#, y#, z#, StrTemp$
-;	Local f% = ReadFile_Strict(File + "\save.cb")
-;	
-;	StrTemp = ReadString(f)
-;	StrTemp = ReadString(f)
-;	
-;	StrTemp = ReadString(f)
-;	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
-;	
-;	CODE_DR_MAYNARD = Int(ReadString(f))
-;	CODE_O5_COUNCIL = Int(ReadString(f))
-;	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
-;	
-;	x = ReadFloat(f)
-;	y = ReadFloat(f)
-;	z = ReadFloat(f)
-;	PositionEntity(me\Collider, x, y + 0.5, z)
-;	ResetEntity(me\Collider)
-;	
-;	x = ReadFloat(f)
-;	y = ReadFloat(f)
-;	z = ReadFloat(f)
-;	PositionEntity(me\Head, x, y + 0.5, z)
-;	ResetEntity(me\Head)
-;	
-;	x = ReadFloat(f)
-;	y = ReadFloat(f)
-;	RotateEntity(me\Collider, x, y, 0.0)
-;	
-;	LoadPlayerData(File, f)
-;	
-;End Function
+Function LoadZoneData(File$)
+	
+	File = SavePath + File
+	
+	Local x#, y#, z#, StrTemp$
+	Local f% = ReadFile_Strict(File + "\save.cb")
+	
+	StrTemp = ReadString(f)
+	StrTemp = ReadString(f)
+	
+	StrTemp = ReadString(f)
+	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	
+	CODE_DR_MAYNARD = Int(ReadString(f))
+	CODE_O5_COUNCIL = Int(ReadString(f))
+	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
+	
+	x = ReadFloat(f)
+	y = ReadFloat(f)
+	z = ReadFloat(f)
+	PositionEntity(me\Collider, x, y + 0.5, z)
+	ResetEntity(me\Collider)
+	
+	x = ReadFloat(f)
+	y = ReadFloat(f)
+	z = ReadFloat(f)
+	PositionEntity(me\Head, x, y + 0.5, z)
+	ResetEntity(me\Head)
+	
+	x = ReadFloat(f)
+	y = ReadFloat(f)
+	RotateEntity(me\Collider, x, y, 0.0)
+	
+	LoadPlayerData(File, f)
+	
+	CloseFile(f)
+	
+End Function
 
 Function LoadGame%(File$, ZoneToLoad% = 0)
 	CatchErrors("LoadGame(" + File + ")")
@@ -812,9 +812,7 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	
 	LoadPlayerData(File, f)
 	
-	If ZoneToLoad > 0 Then
-		CurrentZone = ZoneToLoad
-	EndIf
+	If ZoneToLoad > 0 Then CurrentZone = ZoneToLoad
 	
 	CloseFile(f)
 	
@@ -954,7 +952,7 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\NPCType = NPCTypeMTF Then
+		If n\NPCType = NPCTypeMTF
 			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 	Next
@@ -1069,88 +1067,90 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	
 	Local Zone%, ShouldSpawnDoor%
 	
-	If CurrentZone <> SURFACE ; ~ Generate rooms only if they're inside the facility
-		For y = MapGridSize To 0 Step -1
-			If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
-				Zone = EZ
-			ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
-				Zone = HCZ
-			Else
-				Zone = LCZ
-			EndIf
-			For x = MapGridSize To 0 Step -1
-				If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
-					For r.Rooms = Each Rooms
-						r\Angle = WrapAngle(r\Angle)
-						If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
-							Select r\RoomTemplate\Shape
-								Case ROOM1
-									;[Block]
-									ShouldSpawnDoor = (r\Angle = 90.0)
-									;[End Block]
-								Case ROOM2
-									;[Block]
-									ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
-									;[End Block]
-								Case ROOM2C
-									;[Block]
-									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
-									;[End Block]
-								Case ROOM3
-									;[Block]
-									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
-									;[End Block]
-								Default
-									;[Block]
-									ShouldSpawnDoor = True
-									;[End Block]
-							End Select
-							If ShouldSpawnDoor
-								If x + 1 < MapGridSize + 1
-									If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-										do.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-										r\AdjDoor[0] = do
-									EndIf
+;	CreateMap()
+	
+;	If CurrentZone <> SURFACE ; ~ Generate rooms only if they're inside the facility
+	For y = MapGridSize To 0 Step -1
+		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
+			Zone = EZ
+		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
+			Zone = HCZ
+		Else
+			Zone = LCZ
+		EndIf
+		For x = MapGridSize To 0 Step -1
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
+				For r.Rooms = Each Rooms
+					r\Angle = WrapAngle(r\Angle)
+					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
+						Select r\RoomTemplate\Shape
+							Case ROOM1
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 90.0)
+								;[End Block]
+							Case ROOM2
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
+								;[End Block]
+							Case ROOM2C
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
+								;[End Block]
+							Case ROOM3
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
+								;[End Block]
+							Default
+								;[Block]
+								ShouldSpawnDoor = True
+								;[End Block]
+						End Select
+						If ShouldSpawnDoor
+							If x + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
+									do.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+									r\AdjDoor[0] = do
 								EndIf
 							EndIf
-							
-							Select r\RoomTemplate\Shape
-								Case ROOM1
-									;[Block]
-									ShouldSpawnDoor = (r\Angle = 180.0)
-									;[End Block]
-								Case ROOM2
-									;[Block]
-									ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
-									;[End Block]
-								Case ROOM2C
-									;[Block]
-									ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
-									;[End Block]
-								Case ROOM3
-									;[Block]
-									ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
-									;[End Block]
-								Default
-									;[Block]
-									ShouldSpawnDoor = True
-									;[End Block]
-							End Select
-							If ShouldSpawnDoor
-								If y + 1 < MapGridSize + 1
-									If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-										do.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-										r\AdjDoor[3] = do
-									EndIf
-								EndIf
-							EndIf
-							Exit
 						EndIf
-					Next
-				EndIf
-			Next
+						
+						Select r\RoomTemplate\Shape
+							Case ROOM1
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 180.0)
+								;[End Block]
+							Case ROOM2
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
+								;[End Block]
+							Case ROOM2C
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
+								;[End Block]
+							Case ROOM3
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
+								;[End Block]
+							Default
+								;[Block]
+								ShouldSpawnDoor = True
+								;[End Block]
+						End Select
+						If ShouldSpawnDoor
+							If y + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
+									do.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+									r\AdjDoor[3] = do
+								EndIf
+							EndIf
+						EndIf
+						Exit
+					EndIf
+				Next
+			EndIf
 		Next
-	EndIf
+	Next
+;	EndIf
 	
 	Temp = ReadInt(f)
 	
@@ -1668,7 +1668,7 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\NPCType = NPCTypeMTF Then
+		If n\NPCType = NPCTypeMTF
 			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 	Next
