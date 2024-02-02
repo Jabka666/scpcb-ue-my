@@ -2489,44 +2489,53 @@ Function InitNewGame%(LoadingZone% = False)
 			EndIf
 		EndIf
 		; ~ Spawning Player Based On Current Zone
-		If CurrentZone = LCZ
-			If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
-				PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 1024.0 * RoomScale)
-				PlayerRoom = r
-				it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
-				it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-				Inventory(0) = it
-				HideEntity(it\Collider)
-				EntityType(it\Collider, HIT_ITEM)
-				EntityParent(it\Collider, 0)
-				ItemAmount = ItemAmount + 1
-				it.Items = CreateItem("Document SCP-173", "paper", 1.0, 1.0, 1.0)
-				it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-				Inventory(1) = it
-				HideEntity(it\Collider)
-				EntityType(it\Collider, HIT_ITEM)
-				EntityParent(it\Collider, 0)
-				ItemAmount = ItemAmount + 1
-			ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
-				PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
-				PlayerRoom = r
-			EndIf
-		ElseIf CurrentZone = HCZ
-			If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
-				PositionEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\RoomCenter, True), EntityZ(r\RoomCenter, True))
-				PlayerRoom = r
-			EndIf
-		ElseIf CurrentZone = EZ
-			If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
-				PositionEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\RoomCenter, True), EntityZ(r\RoomCenter, True))
-				PlayerRoom = r
-			EndIf
-		Else
-			If r\RoomTemplate\RoomID = r_gate_a
-				PositionEntity(me\Collider, EntityX(r\OBJ, True), EntityY(r\OBJ, True), EntityZ(r\OBJ, True))
-				PlayerRoom = r
-			EndIf
-		EndIf
+		Select CurrentZone
+			Case LCZ
+				;[Block]
+				If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
+					PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 1024.0 * RoomScale)
+					PlayerRoom = r
+					it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
+					it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
+					Inventory(0) = it
+					HideEntity(it\Collider)
+					EntityType(it\Collider, HIT_ITEM)
+					EntityParent(it\Collider, 0)
+					ItemAmount = ItemAmount + 1
+					it.Items = CreateItem("Document SCP-173", "paper", 1.0, 1.0, 1.0)
+					it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
+					Inventory(1) = it
+					HideEntity(it\Collider)
+					EntityType(it\Collider, HIT_ITEM)
+					EntityParent(it\Collider, 0)
+					ItemAmount = ItemAmount + 1
+				ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
+					PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
+					PlayerRoom = r
+				EndIf
+				;[End Block]
+			Case HCZ
+				;[Block]
+				If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+					PositionEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\RoomCenter, True), EntityZ(r\RoomCenter, True))
+					PlayerRoom = r
+				EndIf
+				;[End Block]
+			Case EZ
+				;[Block]
+				If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+					PositionEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\RoomCenter, True), EntityZ(r\RoomCenter, True))
+					PlayerRoom = r
+				EndIf
+				;[End Block]
+			Default
+				;[Block]
+				If r\RoomTemplate\RoomID = r_gate_a
+					PositionEntity(me\Collider, EntityX(r\OBJ, True), EntityY(r\OBJ, True), EntityZ(r\OBJ, True))
+					PlayerRoom = r
+				EndIf
+				;[End Block]
+		End Select
 		
 	Next
 	
@@ -3210,16 +3219,88 @@ Function NullZone()
 	CatchErrors("Uncaught: NullZone()")
 End Function
 
+Function PlacePlayerInZone%(ZoneID%)
+	Local r.Rooms
+	
+;	For r.Rooms = Each Rooms
+;		
+;		If CurrentZone = ZoneID
+;			Select CurrentZone
+;				Case LCZ
+;					;[Block]
+;					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+;						If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+;							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, EntityZ(r\RoomCenter, True))
+;							PlayerRoom = r
+;						EndIf
+;					EndIf
+;					;[End Block]
+;				Case HCZ
+;					;[Block]
+;					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+;						If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+;							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, (-EntityZ(r\RoomCenter, True)))
+;							PlayerRoom = r
+;						EndIf
+;					ElseIf PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+;						If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+;							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, EntityZ(r\RoomCenter, True))
+;							PlayerRoom = r
+;						EndIf
+;					EndIf
+;					;[End Block]
+;				Case EZ
+;					;[Block]
+;					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+;						If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+;							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, (-EntityZ(r\RoomCenter, True)))
+;							PlayerRoom = r
+;						EndIf
+;					EndIf
+;					;[End Block]
+;			End Select
+;		EndIf
+;	Next
+	
+	TurnEntity(me\Collider, 0.0, Rnd(160.0, 200.0), 0.0)
+	ResetEntity(me\Collider)
+	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+	HidePointer()
+	me\DropSpeed = 0.0
+	
+End Function
+
 Function LoadZone%(ZoneID%, PlaySFX% = True)
 	
 	DebugLog "Determined Old Zone As: (" + CurrentZone +")"
-	SaveGame(CurrSave\Name)
-	DebugLog "Saved Game Before Changing Zone"
+	DebugLog "------------------------------------------------------------------"
+	
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then SaveGame(CurrSave\Name)
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "Attemp To Save Failed, Trying Again"
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "------------------------------------------------------------------"
+	
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then SaveGame(CurrSave\Name)
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "Attemp To Save Failed, Trying Again (2)"
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "------------------------------------------------------------------"
+	
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then SaveGame(CurrSave\Name)
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "Attemp To Save Failed, Trying Again (3)"
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "------------------------------------------------------------------"
+	
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then RuntimeError "Couldn't Save The Game."
+	
+	DebugLog "Saved Game With Name: '" + CurrSave\Name + "' Before Changing Zone"
+	DebugLog "------------------------------------------------------------------"
+	
 	NullZone()
 	If PlaySFX Then PlaySound_Strict(LoadTempSound("SFX\Door\DoorCheckpoint.ogg"))
 	DebugLog "Nulled Zone Before Changing Zone"
+	DebugLog "------------------------------------------------------------------"
+	
 	CurrentZone = ZoneID
 	DebugLog "Determined New Zone As: (" + CurrentZone +")"
+	DebugLog "------------------------------------------------------------------"
+	
 	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") = 1
 		DebugLog "Loading Into New Zone..."
 		LoadEntities(True)
@@ -3229,13 +3310,20 @@ Function LoadZone%(ZoneID%, PlaySFX% = True)
 	Else
 		DebugLog "Creating New Zone..."
 		InitNewGame(True)
-		;LoadZoneData(CurrSave\Name)
+		LoadZoneData(CurrSave\Name)
 	EndIf
+	DebugLog "------------------------------------------------------------------"
+	
+	PlacePlayerInZone(CurrentZone)
+	DebugLog "Teleported Player To The Right Room"
+	DebugLog "------------------------------------------------------------------"
+	
 	MainMenuOpen = False
 	FlushKeys()
 	FlushMouse()
 	ResetInput()
 	DebugLog "Successfully Changed Zone! Current Zone Is: (" + CurrentZone + ")"
+	DebugLog "=================================================================="
 	
 End Function
 

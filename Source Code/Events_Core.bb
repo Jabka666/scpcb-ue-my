@@ -4108,22 +4108,22 @@ Function UpdateEvents%()
 						EndIf
 					Next
 					; ~ TODO: Make Zone Transitioning! - Wolfnaya
-;					If e\room\RoomDoors[0]\Open
-;						e\room\RoomDoors[0]\Open = False
-;						If CurrentZone = LCZ Lor CurrentZone = EZ Then LoadZone(HCZ)
-;						If CurrentZone = HCZ And e\room\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz Then LoadZone(LCZ) Else LoadZone(EZ)
-;					EndIf
+					If e\room\RoomDoors[0]\Open
+						e\room\RoomDoors[0]\Open = False
+						If CurrentZone = LCZ Lor CurrentZone = EZ Then LoadZone(HCZ)
+						If CurrentZone = HCZ And e\room\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz Then LoadZone(LCZ) Else LoadZone(EZ)
+					EndIf
 				EndIf
 				
-				If e\room\RoomDoors[0]\Open <> e\EventState
-					If e\Sound = 0 Then LoadEventSound(e, "SFX\Door\DoorCheckpoint.ogg")
-					e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\RoomDoors[0]\OBJ)
-					e\SoundCHN2 = PlaySound2(e\Sound, Camera, e\room\RoomDoors[1]\OBJ)
-				EndIf
-				e\EventState = e\room\RoomDoors[0]\Open
-				
-				UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
-				UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
+;				If e\room\RoomDoors[0]\Open <> e\EventState
+;					If e\Sound = 0 Then LoadEventSound(e, "SFX\Door\DoorCheckpoint.ogg")
+;					e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\RoomDoors[0]\OBJ)
+;					e\SoundCHN2 = PlaySound2(e\Sound, Camera, e\room\RoomDoors[1]\OBJ)
+;				EndIf
+;				e\EventState = e\room\RoomDoors[0]\Open
+;				
+;				UpdateSoundOrigin(e\SoundCHN, Camera, e\room\RoomDoors[0]\OBJ)
+;				UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[1]\OBJ)
 				;[End Block]
 			Case e_room1_dead_end_106
 				;[Block]

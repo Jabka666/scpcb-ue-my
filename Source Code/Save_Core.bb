@@ -169,9 +169,7 @@ Function SaveGame%(File$, NewZone% = 0)
 			Else
 				WriteByte f, 0
 			EndIf
-			If it\ItemTemplate\IsAnim <> 0
-				WriteFloat f, AnimTime(it\Model)
-			EndIf
+			If it\ItemTemplate\IsAnim <> 0 Then WriteFloat f, AnimTime(it\Model)
 			WriteByte f,it\InvSlots
 			WriteInt f,it\ID
 			If it\ItemTemplate\InvImg = it\InvImg
@@ -231,7 +229,7 @@ End Function
 
 Function SaveZoneData(File$)
 	Local n.NPCs, r.Rooms, do.Doors
-	Local x%, y%, i%, Temp%
+	Local x%, y%, i%, Temp%, it.Items
 	
 	If FileType(File) <> 2 Then CreateDir(File)
 	
@@ -488,8 +486,6 @@ Function SaveZoneData(File$)
 		WriteString(f, e\EventStr)
 	Next
 	
-	Local it.Items
-	
 	For it = Each Items
 		If (Not IsItemInInventory(it))
 			WriteByte f, 1
@@ -508,9 +504,7 @@ Function SaveZoneData(File$)
 			WriteFloat f, it\State
 			WriteFloat f, it\State2
 			WriteFloat f, it\State3
-			If it\ItemTemplate\IsAnim <> 0
-				WriteFloat f, AnimTime(it\Model)
-			EndIf
+			If it\ItemTemplate\IsAnim <> 0 Then WriteFloat f, AnimTime(it\Model)
 			WriteByte f,it\InvSlots
 			WriteInt f,it\ID
 			If it\ItemTemplate\InvImg = it\InvImg
@@ -539,7 +533,7 @@ Function SaveZoneData(File$)
 End Function
 
 Function LoadPlayerData(File$, f%)
-	Local i%, j%, Temp%, Temp2%, X#, Y#, Z#
+	Local i%, j%, Temp%, Temp2%, X#, Y#, Z#, it.Items, it2.Items
 	
 	me\BlinkTimer = ReadFloat(f)
 	me\BLINKFREQ = ReadFloat(f)
@@ -648,8 +642,6 @@ Function LoadPlayerData(File$, f%)
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
 	
-	Local it.Items, it2.Items
-	
 	Temp = ReadByte(f)
 	While Temp
 		Local ittName$ = ReadString(f)
@@ -678,16 +670,12 @@ Function LoadPlayerData(File$, f%)
 		Local itt.ItemTemplates
 		For itt.ItemTemplates = Each ItemTemplates
 			If (itt\TempName = tempName) And (itt\Name = ittName)
-				If itt\IsAnim <> 0
-					SetAnimTime it\Model, ReadFloat(f) : Exit
-				EndIf
+				If itt\IsAnim <> 0 Then SetAnimTime it\Model, ReadFloat(f) : Exit
 			EndIf
 		Next
 		it\InvSlots = ReadByte(f)
 		it\ID = ReadInt(f)
-		If it\ID > LastItemID
-			LastItemID = it\ID
-		EndIf
+		If it\ID > LastItemID Then LastItemID = it\ID
 		If ReadByte(f) = 0
 			it\InvImg = it\ItemTemplate\InvImg
 		Else
@@ -709,8 +697,7 @@ Function LoadPlayerData(File$, f%)
 							If Temp2 > -1
 								For it2 = Each Items
 									If it2\ID = Temp2
-										it\SecondInv[j] = it2
-										Exit
+										it\SecondInv[j] = it2 : Exit
 									EndIf
 								Next
 							EndIf
@@ -736,7 +723,7 @@ Function LoadZoneData(File$)
 	
 	File = SavePath + File
 	
-	Local x#, y#, z#, StrTemp$
+	Local X#, Y#, Z#, StrTemp$
 	Local f% = ReadFile_Strict(File + "\save.cb")
 	
 	StrTemp = ReadString(f)
@@ -749,23 +736,23 @@ Function LoadZoneData(File$)
 	CODE_O5_COUNCIL = Int(ReadString(f))
 	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
 	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.5, z)
+	X = ReadFloat(f)
+	Y = ReadFloat(f)
+	Z = ReadFloat(f)
+	PositionEntity(me\Collider, X, Y + 0.5, Z)
 	ResetEntity(me\Collider)
 	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.5, z)
+	X = ReadFloat(f)
+	Y = ReadFloat(f)
+	Z = ReadFloat(f)
+	PositionEntity(me\Head, X, Y + 0.5, Z)
 	ResetEntity(me\Head)
 	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	RotateEntity(me\Collider, x, y, 0.0)
+	X = ReadFloat(f)
+	Y = ReadFloat(f)
+	RotateEntity(me\Collider, X, Y, 0.0)
 	
-	LoadPlayerData(File, f)
+;	LoadPlayerData(File, f)
 	
 	CloseFile(f)
 	
@@ -777,7 +764,8 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	File = SavePath + File
 	
 	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
+	Local X#, Y#, Z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
+	Local it.Items, it2.Items, itt.ItemTemplates
 	Local f% = ReadFile_Strict(File + "\save.cb")
 	
 	me\DropSpeed = 0.0
@@ -794,21 +782,21 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	CODE_O5_COUNCIL = Int(ReadString(f))
 	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
 	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.5, z)
+	X = ReadFloat(f)
+	Y = ReadFloat(f)
+	Z = ReadFloat(f)
+	PositionEntity(me\Collider, X, Y + 0.5, Z)
 	ResetEntity(me\Collider)
 	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.5, z)
+	X = ReadFloat(f)
+	Y = ReadFloat(f)
+	Z = ReadFloat(f)
+	PositionEntity(me\Head, X, Y + 0.5, Z)
 	ResetEntity(me\Head)
 	
-	x = ReadFloat(f)
-	y = ReadFloat(f)
-	RotateEntity(me\Collider, x, y, 0.0)
+	X = ReadFloat(f)
+	Y = ReadFloat(f)
+	RotateEntity(me\Collider, X, Y, 0.0)
 	
 	LoadPlayerData(File, f)
 	
@@ -828,10 +816,10 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	Local r1499_z# = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
-	For x = 0 To MapGridSize
-		For y = 0 To MapGridSize
-			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadByte(f)
-			CurrMapGrid\Found[x + (y * MapGridSize)] = ReadByte(f)
+	For X = 0 To MapGridSize
+		For Y = 0 To MapGridSize
+			CurrMapGrid\Grid[X + (Y * MapGridSize)] = ReadByte(f)
+			CurrMapGrid\Found[X + (Y * MapGridSize)] = ReadByte(f)
 		Next
 	Next
 	
@@ -845,11 +833,11 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	For i = 1 To Temp
 		Local NPCType% = ReadByte(f)
 		
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		Z = ReadFloat(f)
 		
-		n.NPCs = CreateNPC(NPCType, x, y, z)
+		n.NPCs = CreateNPC(NPCType, X, Y, Z)
 		Select NPCType
 			Case NPCType173
 				;[Block]
@@ -873,10 +861,10 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 				;[End Block]
 		End Select
 		
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
-		RotateEntity(n\Collider, x, y, z)
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		Z = ReadFloat(f)
+		RotateEntity(n\Collider, X, Y, Z)
 		
 		n\State = ReadFloat(f)
 		n\State2 = ReadFloat(f)
@@ -973,9 +961,9 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		Local RoomTemplateID% = ReadInt(f)
 		Local Angle% = ReadInt(f)
 		
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		Z = ReadFloat(f)
 		
 		Local Found% = ReadByte(f)
 		Local Level% = ReadInt(f)
@@ -986,7 +974,7 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		
 		For rt.RoomTemplates = Each RoomTemplates
 			If rt\ID = RoomTemplateID
-				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\RoomID, Angle)
+				r.Rooms = CreateRoom(Level, rt\Shape, X, Y, Z, rt\RoomID, Angle)
 				;SetupTriggerBoxes(r)
 				r\Found = Found
 				Exit
@@ -995,24 +983,24 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		
 		If Temp2 = 1 Then PlayerRoom = r
 		
-		For x = 0 To MaxRoomNPCs - 1
+		For X = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
 			If ID > 0
 				For n.NPCs = Each NPCs
 					If n\ID = ID
-						r\NPC[x] = n
+						r\NPC[X] = n
 						Exit
 					EndIf
 				Next
 			EndIf
 		Next
 		
-		For x = 0 To MaxRoomLevers - 1
+		For X = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
 			If ID = 1
-				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+				RotateEntity(r\RoomLevers[X]\OBJ, 80.0, EntityYaw(r\RoomLevers[X]\OBJ), 0.0)
 			ElseIf ID = 0
-				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+				RotateEntity(r\RoomLevers[X]\OBJ, -80.0, EntityYaw(r\RoomLevers[X]\OBJ), 0.0)
 			EndIf
 		Next
 		
@@ -1023,10 +1011,10 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 			EndIf
 			r\mt.MTGrid = New MTGrid
 			
-			For y = 0 To MTGridSize - 1
-				For x = 0 To MTGridSize - 1
-					r\mt\Grid[x + (y * MTGridSize)] = ReadByte(f)
-					r\mt\Angles[x + (y * MTGridSize)] = ReadByte(f)
+			For Y = 0 To MTGridSize - 1
+				For X = 0 To MTGridSize - 1
+					r\mt\Grid[X + (Y * MTGridSize)] = ReadByte(f)
+					r\mt\Angles[X + (Y * MTGridSize)] = ReadByte(f)
 					; ~ Get only the necessary data, make the event handle the meshes and waypoints separately
 				Next
 			Next
@@ -1040,9 +1028,9 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 			Else
 				r\fr.Forest = New Forest
 			EndIf
-			For y = 0 To ForestGridSize - 1
-				For x = 0 To ForestGridSize - 1
-					r\fr\Grid[x + (y * ForestGridSize)] = ReadByte(f)
+			For Y = 0 To ForestGridSize - 1
+				For X = 0 To ForestGridSize - 1
+					r\fr\Grid[X + (Y * ForestGridSize)] = ReadByte(f)
 				Next
 			Next
 			
@@ -1070,19 +1058,19 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 ;	CreateMap()
 	
 ;	If CurrentZone <> SURFACE ; ~ Generate rooms only if they're inside the facility
-	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
+	For Y = MapGridSize To 0 Step -1
+		If Y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
 			Zone = EZ
-		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
+		ElseIf Y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And Y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
 			Zone = HCZ
 		Else
 			Zone = LCZ
 		EndIf
-		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
+		For X = MapGridSize To 0 Step -1
+			If CurrMapGrid\Grid[X + (Y * MapGridSize)] > MapGrid_NoTile
 				For r.Rooms = Each Rooms
 					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
+					If Int(r\x / RoomSpacing) = X And Int(r\z / RoomSpacing) = Y
 						Select r\RoomTemplate\Shape
 							Case ROOM1
 								;[Block]
@@ -1106,9 +1094,9 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									do.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+							If X + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[(X + 1) + (Y * MapGridSize)] > MapGrid_NoTile
+									do.Doors = CreateDoor(r, Float(X) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(Y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[0] = do
 								EndIf
 							EndIf
@@ -1137,9 +1125,9 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 								;[End Block]
 						End Select
 						If ShouldSpawnDoor
-							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-									do.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+							If Y + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[X + ((Y + 1) * MapGridSize)] > MapGrid_NoTile
+									do.Doors = CreateDoor(r, Float(X) * RoomSpacing, 0.0, Float(Y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 									r\AdjDoor[3] = do
 								EndIf
 							EndIf
@@ -1155,9 +1143,9 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	Temp = ReadInt(f)
 	
 	For i = 1 To Temp
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		Z = ReadFloat(f)
 		
 		Local Open% = ReadByte(f)
 		Local OpenState# = ReadFloat(f)
@@ -1178,7 +1166,7 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		Local MTFClose% = ReadByte(f)
 		
 		For do.Doors = Each Doors
-			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z
+			If EntityX(do\FrameOBJ, True) = X And EntityY(do\FrameOBJ, True) = Y And EntityZ(do\FrameOBJ, True) = Z
 				do\Open = Open
 				do\OpenState = OpenState
 				do\Locked = Locked
@@ -1188,9 +1176,9 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 				do\IsElevatorDoor = IsElevDoor
 				do\MTFClose = MTFClose
 				
-				PositionEntity(do\OBJ, OBJX, y, OBJZ, True)
+				PositionEntity(do\OBJ, OBJX, Y, OBJZ, True)
 				RotateEntity(do\OBJ, 0.0, OBJYaw, 0.0, True)
-				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, y, OBJ2Z, True)
+				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, Y, OBJ2Z, True)
 				Exit
 			EndIf
 		Next
@@ -1207,15 +1195,15 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		ID = ReadInt(f)
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		Z = ReadFloat(f)
 		
 		Local Pitch# = ReadFloat(f)
 		Local Yaw# = ReadFloat(f)
 		Local Roll# = ReadFloat(f)
 		
-		de.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
+		de.Decals = CreateDecal(ID, X, Y, Z, Pitch, Yaw, Roll)
 		
 		Local Size# = ReadFloat(f)
 		Local Alpha# = ReadFloat(f)
@@ -1229,7 +1217,7 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		Local AlphaChange# = ReadFloat(f)
 		
 		For de.Decals = Each Decals
-			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z
+			If EntityX(de\OBJ, True) = X And EntityY(de\OBJ, True) = Y And EntityZ(de\OBJ, True) = Z
 				de\Size = Size
 				de\Alpha = Alpha
 				de\FX = FX
@@ -1264,10 +1252,10 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		e\EventState2 = ReadFloat(f)
 		e\EventState3 = ReadFloat(f)
 		e\EventState4 = ReadFloat(f)
-		x = ReadFloat(f)
-		z = ReadFloat(f)
+		X = ReadFloat(f)
+		Z = ReadFloat(f)
 		For r.Rooms = Each Rooms
-			If EntityX(r\OBJ) = x And EntityZ(r\OBJ) = z
+			If EntityX(r\OBJ) = X And EntityZ(r\OBJ) = Z
 				e\room = r
 				Exit
 			EndIf
@@ -1317,8 +1305,6 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		End Select
 	Next
 	
-	Local it.Items, it2.Items, itt.ItemTemplates
-	
 	For it.Items = Each Items
 		If (Not IsItemInInventory(it)) Then RemoveItem(it)
 	Next
@@ -1328,34 +1314,30 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 		Local ittName$ = ReadString(f)
 		Local tempName$ = ReadString(f)
 		Local Name$ = ReadString(f)
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		Z = ReadFloat(f)
 		Red% = ReadByte(f)
 		Green% = ReadByte(f)
 		Blue% = ReadByte(f)
 		Alpha# = ReadFloat(f)
-		it.Items = CreateItem(ittName, tempName, x, y, z, Red,Green,Blue,Alpha)
+		it.Items = CreateItem(ittName, tempName, X, Y, Z, Red,Green,Blue,Alpha)
 		it\Name = Name
 		EntityType it\Collider, HIT_ITEM
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		RotateEntity(it\Collider, x, y, 0)
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		RotateEntity(it\Collider, X, Y, 0)
 		it\State = ReadFloat(f)
 		it\State2 = ReadFloat(f)
 		it\State3 = ReadFloat(f)
 		For itt.ItemTemplates = Each ItemTemplates
-			If (itt\TempName = tempName) And (itt\Name = ittName) Then
-				If itt\IsAnim <> 0
-					SetAnimTime it\Model, ReadFloat(f) : Exit
-				EndIf
+			If (itt\TempName = tempName) And (itt\Name = ittName)
+				If itt\IsAnim <> 0 Then SetAnimTime it\Model, ReadFloat(f) : Exit
 			EndIf
 		Next
 		it\InvSlots = ReadByte(f)
 		it\ID = ReadInt(f)
-		If it\ID > LastItemID
-			LastItemID = it\ID
-		EndIf
+		If it\ID > LastItemID Then LastItemID = it\ID
 		If ReadByte(f) = 0
 			it\InvImg = it\ItemTemplate\InvImg
 		Else
@@ -1371,8 +1353,7 @@ Function LoadGame%(File$, ZoneToLoad% = 0)
 				If Temp2 > -1
 					For it2 = Each Items
 						If it2\ID = Temp2
-							it\SecondInv[i] = it2
-							Exit
+							it\SecondInv[i] = it2 : Exit
 						EndIf
 					Next
 				EndIf
@@ -1527,15 +1508,11 @@ Function LoadGameQuick%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	RotateEntity(me\Collider, x, y, 0.0)
-	
-	For n.NPCs = Each NPCs
-		RemoveNPC(n)
-	Next
-	
-	For it.Items = Each Items
-		RemoveItem(it)
-	Next
-	
+;	
+;	For it.Items = Each Items
+;		RemoveItem(it)
+;	Next
+;	
 	LoadPlayerData(File, f)
 	
 	CloseFile(f)
@@ -1559,6 +1536,10 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
+	
+	For n.NPCs = Each NPCs
+		RemoveNPC(n)
+	Next
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1933,6 +1914,18 @@ Function LoadGameQuick%(File$)
 		End Select
 	Next
 	
+	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
+	Local sc.SecurityCams
+	
+	For sc.SecurityCams = Each SecurityCams
+		sc\PlayerState = 0
+	Next
+	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+	
+	For it.Items = Each Items
+		If (Not IsItemInInventory(it)) Then RemoveItem(it)
+	Next
+	
 	Temp = ReadByte(f)
 	While Temp
 		Local ittName$ = ReadString(f)
@@ -1952,6 +1945,8 @@ Function LoadGameQuick%(File$)
 		y = ReadFloat(f)
 		RotateEntity(it\Collider, x, y, 0)
 		it\State = ReadFloat(f)
+		it\State2 = ReadFloat(f)
+		it\State3 = ReadFloat(f)
 		For itt.ItemTemplates = Each ItemTemplates
 			If (itt\TempName = tempName) And (itt\Name = ittName)
 				If itt\IsAnim <> 0 Then SetAnimTime it\Model, ReadFloat(f) : Exit
@@ -1959,9 +1954,7 @@ Function LoadGameQuick%(File$)
 		Next
 		it\InvSlots = ReadByte(f)
 		it\ID = ReadInt(f)
-		If it\ID > LastItemID
-			LastItemID = it\ID
-		EndIf
+		If it\ID > LastItemID Then LastItemID = it\ID
 		If ReadByte(f) = 0
 			it\InvImg = it\ItemTemplate\InvImg
 		Else
@@ -1977,22 +1970,13 @@ Function LoadGameQuick%(File$)
 				If Temp2 > -1
 					For it2 = Each Items
 						If it2\ID = Temp2
-							it\SecondInv[i] = it2
-							Exit
+							it\SecondInv[i] = it2 : Exit
 						EndIf
 					Next
 				EndIf
 			Next
 		EndIf
 	Next
-	
-	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
-	Local sc.SecurityCams
-	
-	For sc.SecurityCams = Each SecurityCams
-		sc\PlayerState = 0
-	Next
-	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
 	
 	CloseFile(f)
 	
