@@ -2503,21 +2503,22 @@ Function UpdateEvents%()
 								e\EventState = e\EventState + fps\Factor[0]
 								AnimateNPC(e\room\NPC[0], 270.0, 286.0, 0.4, False)
 								If e\Sound = 0
-									e\room\NPC[0]\IsDead = True
-									
 									LoadEventSound(e, "SFX\General\BodyFall.ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 									
 									de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
 									EntityParent(de\OBJ, e\room\OBJ)
-									
+								EndIf
+								If e\room\NPC[0]\Frame = 286.0 Then
 									it.Items = CreateItem("Unknown Note", "paper", e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
 									
 									it.Items = CreateItem("Level 3 Key Card", "key3", e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
+								
+									e\room\NPC[0]\IsDead = True
+									e\room\NPC[0]\PrevState = 2
 								EndIf
-								If e\room\NPC[0]\Frame = 286.0 Then e\room\NPC[0]\PrevState = 2
 							EndIf
 							If e\room\NPC[0]\SoundCHN2 = 0
 								e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\Room\895Chamber\GuardRadio.ogg")
