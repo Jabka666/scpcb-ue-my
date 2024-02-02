@@ -1138,7 +1138,7 @@ Function UpdateNPCs%()
 				If Dist < 16.0 Then GiveAchievement(Achv096)
 				
 				Select n\State
-					Case 0.0
+					Case 0.0 ; ~ Sitting
 						;[Block]
 						If Dist < 64.0
 							If n\SoundCHN = 0
@@ -1188,7 +1188,7 @@ Function UpdateNPCs%()
 						EndIf
 						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0, True)
 						;[End Block]
-					Case 1.0
+					Case 1.0 ; ~ Walking around
 						;[Block]
 						If Dist < 256.0
 							If n\SoundCHN = 0
