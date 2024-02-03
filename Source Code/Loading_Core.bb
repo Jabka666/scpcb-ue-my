@@ -3222,45 +3222,44 @@ End Function
 Function PlacePlayerInZone%(ZoneID%)
 	Local r.Rooms
 	
-;	For r.Rooms = Each Rooms
-;		
-;		If CurrentZone = ZoneID
-;			Select CurrentZone
-;				Case LCZ
-;					;[Block]
-;					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
-;						If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
-;							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, EntityZ(r\RoomCenter, True))
-;							PlayerRoom = r
-;						EndIf
-;					EndIf
-;					;[End Block]
-;				Case HCZ
-;					;[Block]
-;					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
-;						If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
-;							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, (-EntityZ(r\RoomCenter, True)))
-;							PlayerRoom = r
-;						EndIf
-;					ElseIf PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
-;						If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
-;							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, EntityZ(r\RoomCenter, True))
-;							PlayerRoom = r
-;						EndIf
-;					EndIf
-;					;[End Block]
-;				Case EZ
-;					;[Block]
-;					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
-;						If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
-;							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, (-EntityZ(r\RoomCenter, True)))
-;							PlayerRoom = r
-;						EndIf
-;					EndIf
-;					;[End Block]
-;			End Select
-;		EndIf
-;	Next
+	For r.Rooms = Each Rooms
+		If CurrentZone = ZoneID
+			Select CurrentZone
+				Case LCZ
+					;[Block]
+					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+						If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, EntityZ(r\RoomCenter, True))
+							PlayerRoom = r
+						EndIf
+					EndIf
+					;[End Block]
+				Case HCZ
+					;[Block]
+					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+						If r\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz
+							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, r\z - 500.0 * RoomScale)
+							PlayerRoom = r
+						EndIf
+					ElseIf PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+						If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, EntityZ(r\RoomCenter, True))
+							PlayerRoom = r
+						EndIf
+					EndIf
+					;[End Block]
+				Case EZ
+					;[Block]
+					If PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+						If r\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
+							PositionEntity(me\Collider, EntityX(r\RoomCenter, True), r\y + 80.0 * RoomScale, r\z - 500.0 * RoomScale)
+							PlayerRoom = r
+						EndIf
+					EndIf
+					;[End Block]
+			End Select
+		EndIf
+	Next
 	
 	TurnEntity(me\Collider, 0.0, Rnd(160.0, 200.0), 0.0)
 	ResetEntity(me\Collider)
@@ -3300,7 +3299,7 @@ Function LoadZone%(ZoneID%, PlaySFX% = True)
 	Else
 		DebugLog "Creating New Zone..."
 		InitNewGame(True)
-		LoadZoneData(CurrSave\Name)
+		LoadPlayerAndZoneData(CurrSave\Name)
 	EndIf
 	DebugLog "------------------------------------------------------------------"
 	PlacePlayerInZone(CurrentZone)

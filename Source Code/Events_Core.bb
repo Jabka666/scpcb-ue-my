@@ -4108,10 +4108,15 @@ Function UpdateEvents%()
 						EndIf
 					Next
 					; ~ TODO: Make Zone Transitioning! - Wolfnaya
-					If e\room\RoomDoors[0]\Open
-						e\room\RoomDoors[0]\Open = False
-						If CurrentZone = LCZ Lor CurrentZone = EZ Then LoadZone(HCZ)
-						If CurrentZone = HCZ And e\room\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz Then LoadZone(LCZ) Else LoadZone(EZ)
+					If e\room\RoomDoors[0]\Open And e\room\RoomDoors[1]\Open
+						e\room\RoomDoors[0]\Open = False : e\room\RoomDoors[0]\OpenState = 0.0
+						e\room\RoomDoors[1]\Open = False : e\room\RoomDoors[1]\OpenState = 0.0
+						
+						LoadZone(HCZ)
+						
+						;If CurrentZone = LCZ Lor CurrentZone = EZ Then LoadZone(HCZ)
+						;If CurrentZone = HCZ And PlayerRoom\RoomTemplate\RoomID = r_room2_checkpoint_lcz_hcz Then LoadZone(LCZ) Else LoadZone(EZ)
+						
 					EndIf
 				EndIf
 				

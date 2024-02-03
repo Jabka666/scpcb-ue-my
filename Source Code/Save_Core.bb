@@ -719,7 +719,7 @@ Function LoadPlayerData(File$, f%)
 	
 End Function
 
-Function LoadZoneData(File$)
+Function LoadPlayerAndZoneData(File$)
 	
 	File = SavePath + File
 	
@@ -730,7 +730,6 @@ Function LoadZoneData(File$)
 	StrTemp = ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	CODE_DR_MAYNARD = Int(ReadString(f))
 	CODE_O5_COUNCIL = Int(ReadString(f))
@@ -752,7 +751,187 @@ Function LoadZoneData(File$)
 	Y = ReadFloat(f)
 	RotateEntity(me\Collider, X, Y, 0.0)
 	
-;	LoadPlayerData(File, f)
+	Local i%, j%, Temp%, Temp2%, it.Items, it2.Items
+	
+	me\BlinkTimer = ReadFloat(f)
+	me\BLINKFREQ = ReadFloat(f)
+	me\BlinkEffect = ReadFloat(f)
+	me\BlinkEffectTimer = ReadFloat(f)
+	
+	me\DeathTimer = ReadFloat(f)
+	me\BlurTimer = ReadFloat(f)
+	me\HealTimer = ReadFloat(f)
+	
+	me\Crouch = ReadByte(f)
+	
+	me\Stamina = ReadFloat(f)
+	me\StaminaEffect = ReadFloat(f)
+	me\StaminaEffectTimer = ReadFloat(f)
+	
+	me\EyeStuck = ReadFloat(f)
+	me\EyeIrritation = ReadFloat(f)
+	
+	me\Injuries = ReadFloat(f)
+	me\Bloodloss = ReadFloat(f)
+	
+	me\PrevInjuries = ReadFloat(f)
+	me\PrevBloodloss = ReadFloat(f)
+	
+	msg\DeathMsg = ReadString(f)
+	
+	me\Funds = ReadByte(f)
+	me\UsedMastercard = ReadByte(f)
+	
+	me\VomitTimer = ReadFloat(f)
+	me\Vomit = ReadByte(f)
+	me\CameraShakeTimer = ReadFloat(f)
+	
+	I_005\ChanceToSpawn = ReadByte(f)
+	
+	I_500\Taken = ReadByte(f)
+	
+	For i = 0 To 7
+		I_1025\State[i] = ReadFloat(f)
+	Next
+	
+	I_008\Timer = ReadFloat(f)
+	I_008\Revert = ReadByte(f)
+	I_409\Timer = ReadFloat(f)
+	I_409\Revert = ReadByte(f)
+	
+	I_035\Sad = ReadByte(f)
+	
+	Local DifficultyIndex% = ReadByte(f)
+	
+	SelectedDifficulty = difficulties[DifficultyIndex]
+	If DifficultyIndex = ESOTERIC
+		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
+		SelectedDifficulty\SaveType = ReadByte(f)
+		SelectedDifficulty\OtherFactors = ReadByte(f)
+	EndIf
+	SelectedDifficulty\InventorySlots = ReadByte(f)
+	
+	MaxItemAmount = SelectedDifficulty\InventorySlots
+	Dim Inventory.Items(MaxItemAmount)
+	
+	me\Sanity = ReadFloat(f)
+	
+	wi\GasMaskFogTimer = ReadFloat(f)
+	
+	wi\GasMask = ReadByte(f)
+	wi\BallisticVest = ReadByte(f)
+	wi\BallisticHelmet = ReadByte(f)
+	wi\HazmatSuit = ReadByte(f)
+	wi\NightVision = ReadByte(f)
+	wi\SCRAMBLE = ReadByte(f)
+	
+	I_1499\Using = ReadByte(f)
+	
+	I_268\Using = ReadByte(f)
+	I_268\Timer = ReadFloat(f)
+	I_427\Using = ReadByte(f)
+	I_427\Timer = ReadFloat(f)
+	I_714\Using = ReadByte(f)
+	I_294\Using = ReadByte(f)
+	
+	chs\SuperMan = ReadByte(f)
+	chs\SuperManTimer = ReadFloat(f)
+	
+	RandomSeed = ReadString(f)
+	
+	SecondaryLightOn = ReadFloat(f)
+	PrevSecondaryLightOn = ReadFloat(f)
+	RemoteDoorOn = ReadByte(f)
+	SoundTransmission = ReadByte(f)
+	
+	For i = 0 To MaxAchievements - 1
+		achv\Achievement[i] = ReadByte(f)
+		If achv\Achievement[i] = True
+			achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + GetFileLocalString(AchievementsFile, "a" + i, "AchvImage") + ".png")
+			achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+		EndIf
+	Next
+	me\RefinedItems = ReadInt(f)
+	
+	UsedConsole = (ReadInt(f) <> 994)
+	
+	MTFTimer = ReadFloat(f)
+	
+	Remove714Timer = ReadFloat(f)
+	RemoveHazmatTimer = ReadFloat(f)
+	
+	Temp = ReadByte(f)
+	While Temp
+		Local ittName$ = ReadString(f)
+		Local tempName$ = ReadString(f)
+		Local Name$ = ReadString(f)
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		Z = ReadFloat(f)
+		Local Red% = ReadByte(f)
+		Local Green% = ReadByte(f)
+		Local Blue% = ReadByte(f)		
+		Local Alpha# = ReadFloat(f)
+		it.Items = CreateItem(ittName, tempName, X, Y, Z, Red,Green,Blue,Alpha)
+		it\Name = Name
+		EntityType it\Collider, HIT_ITEM
+		X = ReadFloat(f)
+		Y = ReadFloat(f)
+		RotateEntity(it\Collider, X, Y, 0)
+		it\State = ReadFloat(f)
+		it\State2 = ReadFloat(f)
+		it\State3 = ReadFloat(f)
+		it\Picked = True
+		HideEntity(it\Collider)
+		Local nt% = ReadByte(f)
+		If nt = True Then SelectedItem = it
+		Local itt.ItemTemplates
+		For itt.ItemTemplates = Each ItemTemplates
+			If (itt\TempName = tempName) And (itt\Name = ittName)
+				If itt\IsAnim <> 0 Then SetAnimTime it\Model, ReadFloat(f) : Exit
+			EndIf
+		Next
+		it\InvSlots = ReadByte(f)
+		it\ID = ReadInt(f)
+		If it\ID > LastItemID Then LastItemID = it\ID
+		If ReadByte(f) = 0
+			it\InvImg = it\ItemTemplate\InvImg
+		Else
+			it\InvImg = it\ItemTemplate\InvImg2
+		EndIf	
+		Temp = ReadByte(f)
+	Wend
+	
+	For i = 0 To MaxItemAmount - 1
+		Temp = ReadInt(f)
+		If Temp > -1
+			For it = Each Items
+				If it\ID = Temp
+					Inventory(i) = it
+					ItemAmount = ItemAmount + 1
+					If it\InvSlots > 0
+						For j = 0 To it\InvSlots - 1
+							Temp2 = ReadInt(f)
+							If Temp2 > -1
+								For it2 = Each Items
+									If it2\ID = Temp2
+										it\SecondInv[j] = it2 : Exit
+									EndIf
+								Next
+							EndIf
+						Next
+					EndIf
+					Exit
+				EndIf
+			Next
+		EndIf
+	Next
+	
+	For itt.ItemTemplates = Each ItemTemplates
+		itt\Found = ReadByte(f)
+	Next
+	
+	EscapeTimer = ReadInt(f)
 	
 	CloseFile(f)
 	
