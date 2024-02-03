@@ -25,6 +25,7 @@
 */
 
 {
+	"fallback": true, // If you want the game shows the localized subtitles only, set this as false.
 	"colors": {
 		// Put RGB-Colors that subtitles used here
 		"announcement": [130, 130, 130],
