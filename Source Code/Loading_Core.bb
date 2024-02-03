@@ -3274,33 +3274,23 @@ Function LoadZone%(ZoneID%, PlaySFX% = True)
 	
 	DebugLog "Determined Old Zone As: (" + CurrentZone +")"
 	DebugLog "------------------------------------------------------------------"
-	
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then SaveGame(CurrSave\Name)
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "Attemp To Save Failed, Trying Again"
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "------------------------------------------------------------------"
-	
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then SaveGame(CurrSave\Name)
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "Attemp To Save Failed, Trying Again (2)"
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "------------------------------------------------------------------"
-	
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then SaveGame(CurrSave\Name)
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "Attemp To Save Failed, Trying Again (3)"
-	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then DebugLog "------------------------------------------------------------------"
-	
+	me\Playable = True
+	me\Zombie = False
+	me\Terminated = False
+	me\DropSpeed = 0.0
+	DebugLog "Applied Important Variables"
+	DebugLog "------------------------------------------------------------------"
+	SaveGame(CurrSave\Name)
 	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then RuntimeError "Couldn't Save The Game."
-	
 	DebugLog "Saved Game With Name: '" + CurrSave\Name + "' Before Changing Zone"
 	DebugLog "------------------------------------------------------------------"
-	
 	NullZone()
 	If PlaySFX Then PlaySound_Strict(LoadTempSound("SFX\Door\DoorCheckpoint.ogg"))
-	DebugLog "Nulled Zone Before Changing Zone"
+	DebugLog "Nulled Current Zone Before Changing Into New Zone"
 	DebugLog "------------------------------------------------------------------"
-	
 	CurrentZone = ZoneID
 	DebugLog "Determined New Zone As: (" + CurrentZone +")"
 	DebugLog "------------------------------------------------------------------"
-	
 	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") = 1
 		DebugLog "Loading Into New Zone..."
 		LoadEntities(True)
@@ -3313,11 +3303,13 @@ Function LoadZone%(ZoneID%, PlaySFX% = True)
 		LoadZoneData(CurrSave\Name)
 	EndIf
 	DebugLog "------------------------------------------------------------------"
-	
 	PlacePlayerInZone(CurrentZone)
 	DebugLog "Teleported Player To The Right Room"
 	DebugLog "------------------------------------------------------------------"
-	
+	SaveGame(CurrSave\Name)
+	If FileType(SavePath + CurrSave\Name + "\zone_" + CurrentZone + ".cb") <> 1 Then RuntimeError "Couldn't Save The Game."
+	DebugLog "Saved Game With Name: '" + CurrSave\Name + "' After Changing Zone"
+	DebugLog "------------------------------------------------------------------"
 	MainMenuOpen = False
 	FlushKeys()
 	FlushMouse()

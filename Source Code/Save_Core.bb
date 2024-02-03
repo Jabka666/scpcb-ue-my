@@ -3,7 +3,7 @@ Const SavePath$ = "Saves\"
 Function SaveGame%(File$, NewZone% = 0)
 	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
-	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
+	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return ; ~ TODO: This is a cause of Saving problem for SZL - Wolfnaya
 	
 	CatchErrors("SaveGame(" + File + ", " + NewZone + ")")
 	
