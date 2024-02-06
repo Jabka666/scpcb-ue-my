@@ -320,7 +320,7 @@ Function UpdateGame%()
 			me\RestoreSanity = True
 			ShouldEntitiesFall = True
 			
-			If PlayerInReachableRoom(False, True)
+			If PlayerInReachableRoom(True, True)
 				ShouldPlay = Min(me\Zone, 2.0)
 				
 				If Rand(1500) = 1
@@ -8288,7 +8288,7 @@ Function UpdateMTF%()
 			If entrance <> Null
 				If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 36.0
 					If me\Zone = 2
-						If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
+						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
 						
 						MTFTimer = fps\Factor[0]
 						
@@ -8304,43 +8304,41 @@ Function UpdateMTF%()
 		If MTFTimer <= 70.0 * 120.0
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
-			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
+			PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
 			MTFTimer = 10000.0
 		ElseIf MTFTimer >= 10000.0 And MTFTimer <= 10000.0 + (70.0 * 120.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
-			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
+			PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
 			MTFTimer = 20000.0
 		ElseIf MTFTimer >= 20000.0 And MTFTimer <= 20000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 20000.0 + (70.0 * 60.0) And MTFTimer < 25000.0
-			If PlayerInReachableRoom()
-				Local Temp% = False
-				
-				; ~ If the player has an SCP in their inventory play special voice line
-				For i = 0 To MaxItemAmount - 1
-					If Inventory(i) <> Null
-						If (Left(Inventory(i)\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-093")
-							Temp = True
-							Exit
-						EndIf
+			Local Temp% = False
+			
+			; ~ If the player has an SCP in their inventory play special voice line
+			For i = 0 To MaxItemAmount - 1
+				If Inventory(i) <> Null
+					If (Left(Inventory(i)\ItemTemplate\Name, 4) = "SCP-") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-035") And (Left(Inventory(i)\ItemTemplate\Name, 7) <> "SCP-093")
+						Temp = True
+						Exit
 					EndIf
-				Next
-				If Temp
-					PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
-				Else
-					PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(3) + ".ogg")
 				EndIf
+			Next
+			If Temp
+				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
+			Else
+				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(3) + ".ogg")
 			EndIf
 			MTFTimer = 25000.0
 		ElseIf MTFTimer >= 25000.0 And MTFTimer <= 25000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
-			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
+			PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
 			MTFTimer = 30000.0
 		EndIf
 		If n_I\MTFLeader = Null And MTFTimer < 35000.0
-			If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
+			PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
 			MTFTimer = 35000.0
 		EndIf
 	EndIf
@@ -8353,11 +8351,11 @@ Function UpdateCameraCheck%()
 		MTFCameraCheckTimer = 0.0
 		If (Not me\Detected)
 			If MTFCameraCheckDetected
-				If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(2) + ".ogg")
+				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraFound" + Rand(2) + ".ogg")
 				me\Detected = True
 				MTFCameraCheckTimer = 70.0 * 60.0
 			Else
-				If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
+				PlayAnnouncement("SFX\Character\MTF\AnnouncCameraNoFound.ogg")
 			EndIf
 		EndIf
 		MTFCameraCheckDetected = False
