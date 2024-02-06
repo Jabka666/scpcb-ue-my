@@ -272,9 +272,9 @@ Function SaveGame%(File$)
 				WriteByte(f, 2)
 			Else
 				If EntityPitch(r\RoomLevers[i]\OBJ, True) > 0.0
-					WriteByte(f, 1)
-				Else
 					WriteByte(f, 0)
+				Else
+					WriteByte(f, 1)
 				EndIf
 			EndIf
 		Next
@@ -833,9 +833,9 @@ Function LoadGame%(File$)
 		
 		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
-			If ID = 1
+			If ID = 0
 				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
-			ElseIf ID = 0
+			ElseIf ID = 1
 				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			EndIf
 		Next
@@ -1672,9 +1672,9 @@ Function LoadGameQuick%(File$)
 		
 		For x = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
-			If ID = 1
+			If ID = 0
 				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
-			ElseIf ID = 0
+			ElseIf ID = 1
 				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			EndIf
 		Next

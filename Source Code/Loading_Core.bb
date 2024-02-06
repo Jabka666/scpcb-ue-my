@@ -2527,9 +2527,20 @@ Function InitNewGame%()
 	If SelectedCustomMap = Null Then LoadEvents()
 	
 	For e.Events = Each Events
-		If e\EventID = e_room2_nuke Then e\EventState = 1.0
-		If e\EventID = e_cont1_106 Then e\EventState2 = 1.0
-		If e\EventID = e_room2_sl Then e\EventState3 = 1.0
+		Select e\EventID
+			Case e_room2_nuke
+				;[Block]
+				e\EventState = 1.0
+				;[End Block]
+			Case e_cont1_106
+				;[Block]
+				e\EventState2 = 1.0
+				;[End Block]
+			Case e_room2_sl
+				;[Block]
+				e\EventState3 = 1.0
+				;[End Block]
+		End Select
 	Next
 	
 	RenderLoading(90, GetLocalString("loading", "pos"))

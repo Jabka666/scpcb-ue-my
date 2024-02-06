@@ -1858,7 +1858,7 @@ Function UpdateConsole%()
 					For e2.Events = Each Events
 						If e2\EventID = e_room2c_ec
 							UpdateLever(e2\room\RoomLevers[2]\OBJ)
-							RotateEntity(e2\room\RoomLevers[2]\OBJ, -80.0 + (160.0 * RemoteDoorOn), EntityYaw(e2\room\RoomLevers[2]\OBJ), 0.0)
+							RotateEntity(e2\room\RoomLevers[2]\OBJ, 80.0 + (-160.0 * RemoteDoorOn), EntityYaw(e2\room\RoomLevers[2]\OBJ), 0.0)
 							Exit
 						EndIf
 					Next
@@ -1869,11 +1869,11 @@ Function UpdateConsole%()
 						If e2\EventID = e_room2_sl
 							e2\EventState3 = 0.0
 							UpdateLever(e2\room\RoomLevers[0]\OBJ)
-							RotateEntity(e2\room\RoomLevers[0]\OBJ, -80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
+							RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
 						ElseIf e2\EventID = e_cont2_008
 							e2\EventState = 2.0
 							UpdateLever(e2\room\Objects[1])
-							RotateEntity(e2\room\Objects[1], -80.0, EntityYaw(e2\room\Objects[1]), 30.0)
+							RotateEntity(e2\room\Objects[1], 80.0, EntityYaw(e2\room\Objects[1]), 30.0)
 						EndIf
 					Next
 					

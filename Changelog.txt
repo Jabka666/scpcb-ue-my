@@ -28,6 +28,7 @@ General:
 
 Mechanics:
 - Removed accidental item dropping.
+- Blast doors can kill the player.
 
 Menu:
 - Added descriptive info for difficulties.

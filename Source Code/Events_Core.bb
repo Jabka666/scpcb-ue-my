@@ -2428,7 +2428,7 @@ Function UpdateEvents%()
 				If e\EventState < MilliSecs()
 					; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
 					If me\Zone > 0
-						If EntityPitch(e\room\RoomLevers[0]\OBJ, True) > 0.0 ; ~ Camera feed on
+						If EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0 ; ~ Camera feed on
 							For sc.SecurityCams = Each SecurityCams
 								If sc\CoffinEffect = 0 Then sc\CoffinEffect = 2
 							Next
@@ -2912,7 +2912,7 @@ Function UpdateEvents%()
 							For i = 0 To 2
 								e\room\RoomDoors[i]\Locked = 0
 							Next
-							RotateEntity(e\room\Objects[1], CurveAngle(1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
+							RotateEntity(e\room\Objects[1], CurveAngle(-1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
 						EndIf
 					EndIf
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
@@ -3128,9 +3128,9 @@ Function UpdateEvents%()
 							
 							e\EventState = 1.0
 						ElseIf e\EventState > 0.0
-							Local PrevGenLever% = (EntityPitch(e\room\RoomLevers[1]\OBJ, True) > 0.0)
+							Local PrevGenLever% = (EntityPitch(e\room\RoomLevers[1]\OBJ, True) < 0.0)
 							
-							Temp = (Not UpdateLever(e\room\RoomLevers[0]\OBJ)) ; ~ Power feed
+							Temp = UpdateLever(e\room\RoomLevers[0]\OBJ) ; ~ Power feed
 							x = UpdateLever(e\room\RoomLevers[1]\OBJ) ; ~ Generator
 							
 							e\room\RoomDoors[1]\Locked = 1
@@ -4472,8 +4472,8 @@ Function UpdateEvents%()
 					EndIf
 					
 					If e\EventState = 1.0
-						RotateEntity(e\room\RoomLevers[1]\OBJ, CurveValue(-80.0, EntityPitch(e\room\RoomLevers[1]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[1]\OBJ), 0.0)
-						If EntityPitch(e\room\RoomLevers[1]\OBJ) = -80.0 Then e\EventState = 2.0
+						RotateEntity(e\room\RoomLevers[1]\OBJ, CurveValue(80.0, EntityPitch(e\room\RoomLevers[1]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[1]\OBJ), 0.0)
+						If EntityPitch(e\room\RoomLevers[1]\OBJ) = 80.0 Then e\EventState = 2.0
 					EndIf
 					
 					; ~ Remote Door Control
@@ -6143,7 +6143,7 @@ Function UpdateEvents%()
 					If e\EventState2 > 0.0 Then e\SoundCHN = LoopSound2(RoomAmbience[7], e\SoundCHN, Camera, e\room\RoomLevers[1]\BaseOBJ, 5.0, e\EventState2 * 0.8)
 					If e\EventState3 > 0.0 Then e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\RoomLevers[1]\BaseOBJ, 6.0, e\EventState3)
 					
-					If (Not Temp) And x And z
+					If Temp And x And z
 						For i = 0 To 1
 							e\room\RoomDoors[i]\Locked = 0
 						Next
@@ -6584,10 +6584,11 @@ Function UpdateEvents%()
 										Exit
 									EndIf
 								Next
+							Else
+								For i = 0 To 1
+									UpdateLever(e\room\RoomLevers[i]\OBJ, True)
+								Next
 							EndIf
-							
-							UpdateLever(e\room\RoomLevers[0]\OBJ, e\room\RoomDoors[4]\Open)
-							UpdateLever(e\room\RoomLevers[1]\OBJ, e\room\RoomDoors[4]\Open)
 							
 							;e\room\NPC[0]\IgnorePlayer = False
 							;e\room\NPC[2]\IgnorePlayer = False
@@ -6706,7 +6707,7 @@ Function UpdateEvents%()
 							; ~ The door is closed
 							If (Not UpdateLever(e\room\RoomLevers[0]\OBJ, (e\EventState2 = 20.0)))
 								; ~ The gas valves are open
-								Temp = UpdateLever(e\room\RoomLevers[1]\OBJ, False)
+								Temp = UpdateLever(e\room\RoomLevers[1]\OBJ)
 								If Temp Lor (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0)
 									If Temp
 										For i = 0 To 1
@@ -6946,7 +6947,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else ; ~ SCP-035 has left
-						If UpdateLever(e\room\RoomLevers[1]\OBJ, False)
+						If UpdateLever(e\room\RoomLevers[1]\OBJ)
 							For i = 0 To 1
 								If e\room\RoomEmitters[i] = Null
 									If i = 0
@@ -7545,6 +7546,8 @@ Function UpdateEvents%()
 				
 				; ~ e\EventState3: Checks if the player had left the airlock or not
 				
+				; ~ e\EventState4: Checks if airlock is turned on
+				
 				Local BrokenDoor%
 				
 				BrokenDoor = (e\room\Objects[1] <> 0)
@@ -7552,7 +7555,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					e\EventState4 = UpdateLever(e\room\RoomLevers[0]\OBJ)
 					If e\EventState = 0.0
-						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.64 And e\EventState3 = 0.0 And e\EventState4 = 0.0
+						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.64 And e\EventState3 = 0.0 And e\EventState4 = 1.0
 							If BrokenDoor
 								LoadEventSound(e, "SFX\Door\DoorSparks.ogg", 1)
 								e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\Objects[1], 5.0)
@@ -8477,7 +8480,7 @@ Function UpdateDimension106%()
 											If e2\EventID = e_room2_sl
 												e2\EventState3 = 0.0
 												UpdateLever(e2\room\RoomLevers[0]\OBJ)
-												RotateEntity(e2\room\RoomLevers[0]\OBJ, 0.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
+												RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
 												Exit
 											EndIf
 										Next
@@ -8700,7 +8703,7 @@ Function UpdateDimension106%()
 												If e2\EventID = e_room2_sl
 													e2\EventState3 = 0.0
 													UpdateLever(e2\room\RoomLevers[0]\OBJ)
-													RotateEntity(e2\room\RoomLevers[0]\OBJ, 0.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
+													RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
 													Exit
 												EndIf
 											Next

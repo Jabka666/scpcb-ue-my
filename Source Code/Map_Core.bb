@@ -4095,16 +4095,16 @@ Function CreateLever.Levers(room.Rooms, x#, y#, z#, Rotation# = 0.0, TurnedOn% =
 	lvr\room = room
 	
 	lvr\BaseOBJ = CopyEntity(lvr_I\LeverModelID[LEVER_BASE_MODEL])
-	ScaleEntity(lvr\BaseOBJ, 0.04, 0.04, 0.04)
+	ScaleEntity(lvr\BaseOBJ, 0.036, 0.036, 0.036)
 	PositionEntity(lvr\BaseOBJ, x, y, z, True)
 	EntityParent(lvr\BaseOBJ, room\OBJ)
 	RotateEntity(lvr\BaseOBJ, 0.0, Rotation, 0.0)
 	
 	lvr\OBJ = CopyEntity(lvr_I\LeverModelID[LEVER_HANDLE_MODEL])
-	ScaleEntity(lvr\OBJ, 0.04, 0.04, 0.04)
+	ScaleEntity(lvr\OBJ, 0.036, 0.036, 0.036)
 	PositionEntity(lvr\OBJ, x, y, z, True)
 	EntityParent(lvr\OBJ, room\OBJ)
-	RotateEntity(lvr\OBJ, -80.0 + (160.0 * TurnedOn), Rotation - 180.0, 0.0)
+	RotateEntity(lvr\OBJ, 80.0 + (-160.0 * TurnedOn), Rotation - 180.0, 0.0)
 	EntityRadius(lvr\OBJ, 0.1)
 	EntityPickMode(lvr\OBJ, 1, False)
 	
@@ -4158,9 +4158,9 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 	
 	RefValue = EntityPitch(OBJ, True)
 	If RefValue > ((MaxValue + MinValue) / 2.0)
-		Return(True)
-	Else
 		Return(False)
+	Else
+		Return(True)
 	EndIf
 End Function
 
