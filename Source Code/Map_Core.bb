@@ -2708,6 +2708,14 @@ Function UpdateDoors%()
 					If d\OpenState > 48.0
 						d\Open = False
 						d\OpenState = Min(d\OpenState, 48.0)
+					Else
+						If EntityDistanceSquared(me\Collider, d\FrameOBJ) < 0.16
+							If d\OpenState > 6.0 And d\Open = False And (Not chs\Godmode)
+								If (Not me\Terminated) Then PlaySound_Strict(Death914SFX)
+								msg\DeathMsg = Format(GetLocalString("death", "door"), SubjectName)
+								Kill(True)
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 			EndIf
