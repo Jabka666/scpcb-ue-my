@@ -6684,7 +6684,7 @@ Function RenderGUI%()
 					Local RectSize% = 24 * MenuScale
 					Local RectSizeHalf% = RectSize / 2
 					
-					If (Not PlayerInReachableRoom())
+					If (Not PlayerInReachableRoom(True)) Lor FindPlayerFloor(EntityY(me\Collider)) <> NullFloor
 						If (MilliSec Mod 800) < 200
 							Color(200, 0, 0)
 							TextEx(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
