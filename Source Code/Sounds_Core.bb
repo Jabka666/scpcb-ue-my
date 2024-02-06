@@ -408,6 +408,8 @@ Function GetStepSound%(Entity%)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
+	If (Not PlayerInReachableRoom(True, True)) Then Return
+	
 	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
 	IntercomStreamCHN = StreamSound_Strict(File, opt\VoiceVolume * opt\MasterVolume, 0)
 End Function
@@ -427,7 +429,7 @@ Function UpdateStreamSounds%()
 		Next
 	EndIf
 	
-	If (Not PlayerInReachableRoom())
+	If (Not PlayerInReachableRoom(True))
 		If (Not IsPlayerOutsideFacility())
 			If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
 			If PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499

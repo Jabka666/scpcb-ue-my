@@ -2831,7 +2831,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType372
 				;[Block]
-				If PlayerInReachableRoom()
+				If PlayerInReachableRoom(True)
 					If n\Idle = 1
 						If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 						If Rand(50) = 1 And (me\BlinkTimer < -5.0 And me\BlinkTimer > -15.0)
@@ -4723,7 +4723,7 @@ Function UpdateNPCs%()
 							If n\Idle > 0
 								n\Idle = Max(n\Idle - (1 + (1 * SelectedDifficulty\AggressiveNPCs)) * fps\Factor[0], 0.0)
 							Else
-								If PlayerInReachableRoom() ; ~ Player is in a room where SCP-008-1 can teleport to
+								If PlayerInReachableRoom(True) ; ~ Player is in a room where SCP-008-1 can teleport to
 									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1
 										If EntityHidden(n\OBJ)
 											ShowEntity(n\OBJ)
@@ -4979,7 +4979,7 @@ Function UpdateMTFUnit%(n.NPCs)
 										n_I\Curr173\Idle = 3
 										LoadNPCSound(n, "SFX\Character\MTF\173\Cont" + Rand(4) + ".ogg")
 										PlayMTFSound(n\Sound, n)
-										If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
+										PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
 										If r\RoomDoors[0]\Open Then OpenCloseDoor(r\RoomDoors[0])
 										Exit
 									EndIf
@@ -5432,7 +5432,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetlost" + Rand(3) + ".ogg"), n)
 						If MTFCameraCheckTimer = 0.0
 							If Rand(15 - (7 * SelectedDifficulty\AggressiveNPCs)) = 1 ; ~ Maybe change this to another chance -- ENDSHN
-								If PlayerInReachableRoom() Then PlayAnnouncement("SFX\Character\MTF\AnnouncCameraCheck.ogg")
+								PlayAnnouncement("SFX\Character\MTF\AnnouncCameraCheck.ogg")
 								MTFCameraCheckTimer = fps\Factor[0]
 							EndIf
 						EndIf

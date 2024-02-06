@@ -2191,7 +2191,7 @@ Function UpdateEvents%()
 					ToElevatorFloor = FindFloor(e)
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e)
 				Else
-					If (Not PlayerInReachableRoom())
+					If (Not PlayerInReachableRoom(True))
 						If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 						If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 					EndIf
@@ -7355,7 +7355,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0
 					If PlayerRoom = e\room Then e\EventState = 70.0 * Rnd(50.0, 100.0)
-				ElseIf PlayerInReachableRoom()
+				ElseIf PlayerInReachableRoom(True)
 					e\EventState = e\EventState - fps\Factor[0]
 					
 					If e\EventState < 70.0 * 17.0
