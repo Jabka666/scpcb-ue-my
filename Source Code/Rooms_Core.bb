@@ -1000,7 +1000,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x + 352.0 * RoomScale, r\y + 112.0 * RoomScale, r\z + 448.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Empty Cup", "emptycup", r\x - 672.0 * RoomScale, 240.0 * RoomScale, r\z + 288.0 * RoomScale)
+			it.Items = CreateItem("Empty Cup", "emptycup", r\x - 672.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 288.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Level 0 Key Card", "key0", r\x - 672.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 224.0 * RoomScale)
@@ -1008,6 +1008,13 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_tesla_lcz, r_room2_tesla_hcz, r_room2_tesla_ez
 			;[Block]
+			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			
+			r\RoomLevers[0] = CreateLever(r, r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 212.0 * RoomScale, -90.0, True)
+			
+			sc.SecurityCams = CreateSecurityCam(r, r\x, r\y + 704.0 * RoomScale, r\z - 953.0 * RoomScale, 30.0, True, r\x - 390.0 * RoomScale, r\y + 204.0 * RoomScale, r\z + 34.0 * RoomScale, 0.0, -90.0, 0.0)
+			sc\Turn = 0.0
+			
 			r\Objects[0] = CreateSprite()
 			r\ScriptedObject[0] = True
 			EntityTexture(r\Objects[0], t\OverlayTextureID[3])

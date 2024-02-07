@@ -29,6 +29,7 @@ General:
 Mechanics:
 - Removed accidental item dropping.
 - Blast doors can kill the player.
+- The player can disable Tesla Gates.
 
 Menu:
 - Added descriptive info for difficulties.

@@ -5727,7 +5727,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				If n\State3 =< 0.0 Then
 					For n2.NPCs = Each NPCs
 						If n2\NPCType = NPCTypeMTF And n2 <> n
-							If EntityDistanceSquared(n\Collider, n2\Collider) < 4.0 Then n2\State = MTF_WANDERING_AROUND
+							If EntityDistanceSquared(n\Collider, n2\Collider) < 16.0 Then n2\State = MTF_WANDERING_AROUND
 						EndIf
 					Next
 					n\State = MTF_WANDERING_AROUND

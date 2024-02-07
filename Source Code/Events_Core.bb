@@ -4852,6 +4852,23 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 					
+					Local PrevLever% = (EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)
+					
+					x = UpdateLever(e\room\RoomLevers[0]\OBJ)
+					
+					If (Not x)
+						StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						e\EventState = 3.0
+						e\EventState2 = (-70.0) * 90.0
+					Else
+						If PrevLever <> x
+							If x
+								PlaySound_Strict(TeslaPowerUpSFX)
+								e\EventState = 0.0
+							EndIf
+						EndIf
+					EndIf
+					
 					UpdateNPCNearTesla()
 					
 					Select e\EventState
@@ -4972,7 +4989,9 @@ Function UpdateEvents%()
 						Case 3.0 ; ~ Recharge state
 							;[Block]
 							e\EventState2 = e\EventState2 + fps\Factor[0]
-							If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
+							For i = 0 To 1
+								If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
+							Next
 							If e\EventState2 >= 0.0 Then e\EventState = 0.0
 							;[End Block]
 					End Select
