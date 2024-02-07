@@ -4193,9 +4193,9 @@ Function UpdateGUI%()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						If SelectedItem\ItemTemplate\TempName <> "gasmask148"
-							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.5), 100.0)
+							SelectedItem\State = Min(SelectedItem\State + fps\Factor[0], 100.0)
 						Else
-							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 2.0), 100.0)
+							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.6), 100.0)
 						EndIf
 						
 						If SelectedItem\State = 100.0
@@ -4249,7 +4249,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.6), 100.0)
+						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.5), 100.0)
 						
 						If SelectedItem\State = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
@@ -4331,7 +4331,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 1.5), 100.0)
+						SelectedItem\State3 = Min(SelectedItem\State3 + fps\Factor[0], 100.0)
 						
 						If SelectedItem\State3 = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
@@ -4381,7 +4381,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 1.5), 100.0)
+						SelectedItem\State3 = Min(SelectedItem\State3 + fps\Factor[0], 100.0)
 						
 						If SelectedItem\State3 = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
