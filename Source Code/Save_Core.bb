@@ -522,13 +522,15 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.5, z)
+	PositionEntity(me\Collider, x, y + 0.4, z)
+	
 	ResetEntity(me\Collider)
+	ShowEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.5, z)
+	PositionEntity(me\Head, x, y + 0.4, z)
 	ResetEntity(me\Head)
 	
 	x = ReadFloat(f)
@@ -1308,8 +1310,6 @@ Function LoadGame%(File$)
 		TeleportToRoom(I_1499\PrevRoom)
 	EndIf
 	
-	ShowEntity(me\Collider)
-	
 	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
 
@@ -1364,20 +1364,19 @@ Function LoadGameQuick%(File$)
 	CODE_O5_COUNCIL = Int(ReadString(f))
 	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
 	
-	ResetEntity(me\Collider)
-	HideEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.5, z)
+	PositionEntity(me\Collider, x, y + 0.4, z)
 	
+	ResetEntity(me\Collider)
 	ShowEntity(me\Collider)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.5, z)
+	PositionEntity(me\Head, x, y + 0.4, z)
 	ResetEntity(me\Head)
 	
 	x = ReadFloat(f)
@@ -1992,8 +1991,6 @@ Function LoadGameQuick%(File$)
 	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
 	
 	CloseFile(f)
-	
-	ShowEntity(me\Collider)
 	
 	UpdateLightsTimer = 0.0
 	
