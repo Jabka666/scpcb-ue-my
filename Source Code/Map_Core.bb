@@ -2710,7 +2710,7 @@ Function UpdateDoors%()
 						d\OpenState = Min(d\OpenState, 48.0)
 					Else
 						If EntityDistanceSquared(me\Collider, d\FrameOBJ) < 0.16
-							If d\OpenState > 6.0 And d\Open = False And (Not chs\Godmode)
+							If d\OpenState > 6.0 And d\Open = False And (Not chs\GodMode)
 								If (Not me\Terminated) Then PlaySound_Strict(Death914SFX)
 								msg\DeathMsg = Format(GetLocalString("death", "door"), SubjectName)
 								Kill(True)
@@ -2863,6 +2863,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			door2\Locked = 1
 			If door1\OpenState = 0.0 And door2\OpenState = 0.0
 				Local PlayerX# = EntityX(me\Collider, True)
+				Local PlayerY# = EntityY(me\Collider, True)
 				Local PlayerZ# = EntityZ(me\Collider, True)
 				Local FirstPivotX# = EntityX(FirstPivot, True)
 				Local FirstPivotY# = EntityY(FirstPivot, True)
@@ -2876,10 +2877,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				Local Plus022# = ((-280.0) * RoomScale) + 0.22
 				Local FPSFactor01# = fps\Factor[0] * 0.1
 				Local OBJPosX#, OBJPosY#, OBJPosZ#
+				Local IsInside% = False
 				
 				If State < 0.0
 					State = State - fps\Factor[0]
-					If PlayerInsideElevator
+					IsInside = IsInsideElevator(PlayerX, PlayerY, PlayerZ, FirstPivot)
+					If IsInside
 						If (Not ChannelPlaying(door1\SoundCHN2)) Then door1\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 						
 						me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
@@ -2891,7 +2894,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						door1\Locked = 1
 						door2\Locked = 0
 						State = 0.0
-						If PlayerInsideElevator
+						If IsInside
 							If (Not IgnoreRotation)
 								Dist = Distance(PlayerX, FirstPivotX, PlayerZ, FirstPivotZ)
 								Dir = PointDirection(PlayerX, PlayerZ, FirstPivotX, FirstPivotZ)
@@ -2905,7 +2908,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								z = Max(Min((PlayerZ - FirstPivotZ), Minus022), Plus022)
 							EndIf
 							
-							TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (EntityY(me\Collider, True) - FirstPivotY), SecondPivotZ + z, 0.3, True)
+							TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (PlayerY - FirstPivotY), SecondPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							UpdateLightsTimer = 0.0
 							UpdateDoors()
@@ -2983,7 +2986,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 				Else
 					State = State + fps\Factor[0]
-					If PlayerInsideElevator
+					IsInside = IsInsideElevator(PlayerX, PlayerY, PlayerZ, SecondPivot)
+					If IsInside
 						If (Not ChannelPlaying(door2\SoundCHN2)) Then door2\SoundCHN2 = PlaySound_Strict(ElevatorMoveSFX)
 						
 						me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
@@ -2995,7 +2999,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						door1\Locked = 0
 						door2\Locked = 1
 						State = 0.0
-						If PlayerInsideElevator
+						If IsInside
 							If (Not IgnoreRotation)
 								Dist = Distance(PlayerX, SecondPivotX, PlayerZ, SecondPivotZ)
 								Dir = PointDirection(PlayerX, PlayerZ, SecondPivotX, SecondPivotZ)
@@ -3007,7 +3011,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								x = Max(Min((PlayerX - SecondPivotX), Minus022), Plus022)
 								z = Max(Min((PlayerZ - SecondPivotZ), Minus022), Plus022)
 							EndIf
-							TeleportEntity(me\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (EntityY(me\Collider, True) - SecondPivotY), FirstPivotZ + z, 0.3, True)
+							TeleportEntity(me\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (PlayerY - SecondPivotY), FirstPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							UpdateLightsTimer = 0.0
 							UpdateDoors()
