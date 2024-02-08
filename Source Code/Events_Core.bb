@@ -4815,12 +4815,21 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_tesla
 				;[Block]
+				If e\EventState3 = 0
+					If Rand(8) = 1
+						RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
+						e\EventState3 = 1
+					Else
+						e\EventState3 = 2
+					EndIf
+				EndIf
+					
 				If e\room\Dist < 16.0
 					If PlayerRoom = e\room
 						Temp = True
 						For e2.Events = Each Events
 							If e2\EventID = e\EventID And e2 <> e
-								If e2\room\NPC[0] <> Null
+								If e2\room\NPC[0] <> Null Lor e\EventState3 = 1
 									Temp = False
 									Exit
 								EndIf
@@ -4828,6 +4837,7 @@ Function UpdateEvents%()
 						Next
 						
 						If e\room\NPC[0] = Null And Temp
+							e\room\RoomDoors[0]\Locked = 1
 							If (e\room\Angle Mod 180 = 90.0)
 								If Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True))
 									x = 800.0
@@ -4912,6 +4922,7 @@ Function UpdateEvents%()
 								If e\room\NPC[1]\State3 <= 0.0
 									StopChannel(e\SoundCHN) : e\SoundCHN = 0
 									PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(3) + ".ogg")
+									RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
 									e\EventState = 3.0
 									e\EventState2 = (-70.0) * 90.0
 									e\room\NPC[1] = Null
@@ -4940,8 +4951,8 @@ Function UpdateEvents%()
 							For n.NPCs = Each NPCs
 								If n\NPCType <> NPCType966 And n\NPCType <> NPCType513_1 And (Not n\IsDead)
 									If n\NPCType = NPCTypeClerk
+										e\room\RoomDoors[0]\Locked = 0
 										n\State3 = 1.0
-										n\IsDead = True
 									EndIf
 									If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.5 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.5 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 										n\CurrSpeed = 0.0 : n\TeslaHit = True

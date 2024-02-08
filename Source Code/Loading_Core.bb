@@ -1720,9 +1720,9 @@ Function LoadEvents%()
 	
 	CreateEvent(e_cont2_1123, r_cont2_1123, 0)
 	
-	CreateEvent(e_room2_tesla, r_room2_tesla_lcz, 0, 0.9)
-	CreateEvent(e_room2_tesla, r_room2_tesla_hcz, 0, 0.9)
-	CreateEvent(e_room2_tesla, r_room2_tesla_ez, 0, 0.9)
+	CreateEvent(e_room2_tesla, r_room2_tesla_lcz, 0, 1.0)
+	CreateEvent(e_room2_tesla, r_room2_tesla_hcz, 0, 1.0)
+	CreateEvent(e_room2_tesla, r_room2_tesla_ez, 0, 1.0)
 	
 	CreateEvent(e_room4_2_hcz, r_room4_2_hcz, 0)
 	

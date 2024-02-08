@@ -1009,6 +1009,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_tesla_lcz, r_room2_tesla_hcz, r_room2_tesla_ez
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			r\RoomDoors.Doors[0] = d
 			
 			r\RoomLevers[0] = CreateLever(r, r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 212.0 * RoomScale, -90.0, True)
 			
