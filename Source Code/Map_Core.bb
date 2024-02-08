@@ -3731,6 +3731,7 @@ Function UpdateSecurityCams%()
 					If me\VomitTimer < -10.0 Then Kill()
 				EndIf
 				
+				sc\InSight = False
 				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume)
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
