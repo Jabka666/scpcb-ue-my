@@ -2964,7 +2964,6 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		If wi\GasMask <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
-			; ~ TODO: Make more realistic
 			If ChannelPlaying(BreathCHN)
 				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.5, 1.6)), 100.0)
 			Else

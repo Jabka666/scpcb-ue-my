@@ -1613,116 +1613,446 @@ Const r_dimension_106% = 108, r_dimension_1499% = 109
 
 Function FindRoomID%(RoomName$)
 	Select RoomName
-		Case "room1_archive" Return(r_room1_archive)
-		Case "room1_dead_end_lcz" Return(r_room1_dead_end_lcz)
-		Case "cont1_005" Return(r_cont1_005)
-		Case "cont1_173" Return(r_cont1_173)
-		Case "cont1_173_intro" Return(r_cont1_173_intro)
-		Case "cont1_205" Return(r_cont1_205)
-		Case "cont1_372" Return(r_cont1_372)
-		Case "cont1_914" Return(r_cont1_914)
-		Case "room2_lcz" Return(r_room2_lcz)
-		Case "room2_2_lcz" Return(r_room2_2_lcz)
-		Case "room2_3_lcz" Return(r_room2_3_lcz)
-		Case "room2_4_lcz" Return(r_room2_4_lcz)
-		Case "room2_5_lcz" Return(r_room2_5_lcz)
-		Case "room2_6_lcz" Return(r_room2_6_lcz)
-		Case "room2_closets" Return(r_room2_closets)
-		Case "room2_elevator" Return(r_room2_elevator)
-		Case "room2_gw" Return(r_room2_gw)
-		Case "room2_gw_2" Return(r_room2_gw_2)
-		Case "room2_js" Return(r_room2_js)
-		Case "room2_sl" Return(r_room2_sl)
-		Case "room2_storage" Return(r_room2_storage)
-		Case "room2_tesla_lcz" Return(r_room2_tesla_lcz)
-		Case "room2_test_lcz" Return(r_room2_test_lcz)
-		Case "cont2_012" Return(r_cont2_012)
-		Case "cont2_427_714_860_1025" Return(r_cont2_427_714_860_1025)
-		Case "cont2_500_1499" Return(r_cont2_500_1499)
-		Case "cont2_1123" Return(r_cont2_1123)
-		Case "room2c_lcz" Return(r_room2c_lcz)
-		Case "room2c_2_lcz" Return(r_room2c_2_lcz)
-		Case "room2c_gw_lcz" Return(r_room2c_gw_lcz)
-		Case "room2c_gw_2_lcz" Return(r_room2c_gw_2_lcz)
-		Case "cont2c_066_1162_arc" Return(r_cont2c_066_1162_arc)
-		Case "room3_storage" Return(r_room3_storage)
-		Case "room3_lcz" Return(r_room3_lcz)
-		Case "room3_2_lcz" Return(r_room3_2_lcz)
-		Case "room3_3_lcz" Return(r_room3_3_lcz)
-		Case "room4_lcz" Return(r_room4_lcz)
-		Case "room4_2_lcz" Return(r_room4_2_lcz)
-		Case "room4_ic" Return(r_room4_ic)
-		Case "room2_checkpoint_lcz_hcz" Return(r_room2_checkpoint_lcz_hcz)
-		Case "room1_dead_end_hcz" Return(r_room1_dead_end_hcz)
-		Case "cont1_035" Return(r_cont1_035)
-		Case "cont1_079" Return(r_cont1_079)
-		Case "cont1_096" Return(r_cont1_096)
-		Case "cont1_106" Return(r_cont1_106)
-		Case "cont1_895" Return(r_cont1_895)
-		Case "room2_hcz" Return(r_room2_hcz)
-		Case "room2_2_hcz" Return(r_room2_2_hcz)
-		Case "room2_3_hcz" Return(r_room2_3_hcz)
-		Case "room2_4_hcz" Return(r_room2_4_hcz)
-		Case "room2_5_hcz" Return(r_room2_5_hcz)
-		Case "room2_6_hcz" Return(r_room2_6_hcz)
-		Case "room2_mt" Return(r_room2_mt)
-		Case "room2_nuke" Return(r_room2_nuke)
-		Case "room2_servers_hcz" Return(r_room2_servers_hcz)
-		Case "room2_shaft" Return(r_room2_shaft)
-		Case "room2_tesla_hcz" Return(r_room2_tesla_hcz)
-		Case "room2_test_hcz" Return(r_room2_test_hcz)
-		Case "cont2_008" Return(r_cont2_008)
-		Case "cont2_049" Return(r_cont2_049)
-		Case "cont2_409" Return(r_cont2_409)
-		Case "room2c_hcz" Return(r_room2c_hcz)
-		Case "room2c_maintenance" Return(r_room2c_maintenance)
-		Case "room3_hcz" Return(r_room3_hcz)
-		Case "room3_2_hcz" Return(r_room3_2_hcz)
-		Case "room3_3_hcz" Return(r_room3_3_hcz)
-		Case "cont3_513" Return(r_cont3_513)
-		Case "cont3_966" Return(r_cont3_966)
-		Case "room4_hcz" Return(r_room4_hcz)
-		Case "room4_2_hcz" Return(r_room4_2_hcz)
-		Case "room2_checkpoint_hcz_ez" Return(r_room2_checkpoint_hcz_ez)
-		Case "gate_a_entrance" Return(r_gate_a_entrance)
-		Case "gate_a" Return(r_gate_a)
-		Case "gate_b_entrance" Return(r_gate_b_entrance)
-		Case "gate_b" Return(r_gate_b)
-		Case "room1_dead_end_ez" Return(r_room1_dead_end_ez)
-		Case "room1_lifts" Return(r_room1_lifts)
-		Case "room1_o5" Return(r_room1_o5)
-		Case "room2_ez" Return(r_room2_ez)
-		Case "room2_2_ez" Return(r_room2_2_ez)
-		Case "room2_3_ez" Return(r_room2_3_ez)
-		Case "room2_4_ez" Return(r_room2_4_ez)
-		Case "room2_5_ez" Return(r_room2_5_ez)
-		Case "room2_6_ez" Return(r_room2_6_ez)
-		Case "room2_bio" Return(r_room2_bio)
-		Case "room2_cafeteria" Return(r_room2_cafeteria)
-		Case "room2_ic" Return(r_room2_ic)
-		Case "room2_medibay" Return(r_room2_medibay)
-		Case "room2_office" Return(r_room2_office)
-		Case "room2_office_2" Return(r_room2_office_2)
-		Case "room2_office_3" Return(r_room2_office_3)
-		Case "room2_servers_ez" Return(r_room2_servers_ez)
-		Case "room2_scientists" Return(r_room2_scientists)
-		Case "room2_scientists_2" Return(r_room2_scientists_2)
-		Case "room2_tesla_ez" Return(r_room2_tesla_ez)
-		Case "cont2_860_1" Return(r_cont2_860_1)
-		Case "room2c_ez" Return(r_room2c_ez)
-		Case "room2c_2_ez" Return(r_room2c_2_ez)
-		Case "room2c_ec" Return(r_room2c_ec)
-		Case "room2c_gw_ez" Return(r_room2c_gw_ez)
-		Case "room3_gw" Return(r_room3_gw)
-		Case "room3_office" Return(r_room3_office)
-		Case "room3_ez" Return(r_room3_ez)
-		Case "room3_2_ez" Return(r_room3_2_ez)
-		Case "room3_3_ez" Return(r_room3_3_ez)
-		Case "room3_4_ez" Return(r_room3_4_ez)
-		Case "room4_ez" Return(r_room4_ez)
-		Case "dimension_106" Return(r_dimension_106)
-		Case "dimension_1499" Return(r_dimension_1499)
-		Default Return(-1)
+		Case "room1_archive"
+			;[Block]
+			Return(r_room1_archive)
+			;[End Block]
+		Case "room1_dead_end_lcz"
+			;[Block]
+			Return(r_room1_dead_end_lcz)
+			;[End Block]
+		Case "cont1_005"
+			;[Block]
+			Return(r_cont1_005)
+			;[End Block]
+		Case "cont1_173"
+			;[Block]
+			Return(r_cont1_173)
+			;[End Block]
+		Case "cont1_173_intro"
+			;[Block]
+			Return(r_cont1_173_intro)
+			;[End Block]
+		Case "cont1_205"
+			;[Block]
+			Return(r_cont1_205)
+			;[End Block]
+		Case "cont1_372"
+			;[Block]
+			Return(r_cont1_372)
+			;[End Block]
+		Case "cont1_914"
+			;[Block]
+			Return(r_cont1_914)
+			;[End Block]
+		Case "room2_lcz"
+			;[Block]
+			Return(r_room2_lcz)
+			;[End Block]
+		Case "room2_2_lcz"
+			;[Block]
+			Return(r_room2_2_lcz)
+			;[End Block]
+		Case "room2_3_lcz"
+			;[Block]
+			Return(r_room2_3_lcz)
+			;[End Block]
+		Case "room2_4_lcz"
+			;[Block]
+			Return(r_room2_4_lcz)
+			;[End Block]
+		Case "room2_5_lcz"
+			;[Block]
+			Return(r_room2_5_lcz)
+			;[End Block]
+		Case "room2_6_lcz"
+			;[Block]
+			Return(r_room2_6_lcz)
+			;[End Block]
+		Case "room2_closets"
+			;[Block]
+			Return(r_room2_closets)
+			;[End Block]
+		Case "room2_elevator"
+			;[Block]
+			Return(r_room2_elevator)
+			;[End Block]
+		Case "room2_gw"
+			;[Block]
+			Return(r_room2_gw)
+			;[End Block]
+		Case "room2_gw_2"
+			;[Block]
+			Return(r_room2_gw_2)
+			;[End Block]
+		Case "room2_js"
+			;[Block]
+			Return(r_room2_js)
+			;[End Block]
+		Case "room2_sl"
+			;[Block]
+			Return(r_room2_sl)
+			;[End Block]
+		Case "room2_storage"
+			;[Block]
+			Return(r_room2_storage)
+			;[End Block]
+		Case "room2_tesla_lcz"
+			;[Block]
+			Return(r_room2_tesla_lcz)
+			;[End Block]
+		Case "room2_test_lcz"
+			;[Block]
+			Return(r_room2_test_lcz)
+			;[End Block]
+		Case "cont2_012"
+			;[Block]
+			Return(r_cont2_012)
+			;[End Block]
+		Case "cont2_427_714_860_1025"
+			;[Block]
+			Return(r_cont2_427_714_860_1025)
+			;[End Block]
+		Case "cont2_500_1499"
+			;[Block]
+			Return(r_cont2_500_1499)
+			;[End Block]
+		Case "cont2_1123"
+			;[Block]
+			Return(r_cont2_1123)
+			;[End Block]
+		Case "room2c_lcz"
+			;[Block]
+			Return(r_room2c_lcz)
+			;[End Block]
+		Case "room2c_2_lcz"
+			;[Block]
+			Return(r_room2c_2_lcz)
+			;[End Block]
+		Case "room2c_gw_lcz"
+			;[Block]
+			Return(r_room2c_gw_lcz)
+			;[End Block]
+		Case "room2c_gw_2_lcz"
+			;[Block]
+			Return(r_room2c_gw_2_lcz)
+			;[End Block]
+		Case "cont2c_066_1162_arc"
+			;[Block]
+			Return(r_cont2c_066_1162_arc)
+			;[End Block]
+		Case "room3_storage"
+			;[Block]
+			Return(r_room3_storage)
+			;[End Block]
+		Case "room3_lcz"
+			;[Block]
+			Return(r_room3_lcz)
+			;[End Block]
+		Case "room3_2_lcz"
+			;[Block]
+			Return(r_room3_2_lcz)
+			;[End Block]
+		Case "room3_3_lcz"
+			;[Block]
+			Return(r_room3_3_lcz)
+			;[End Block]
+		Case "room4_lcz"
+			;[Block]
+			Return(r_room4_lcz)
+			;[End Block]
+		Case "room4_2_lcz"
+			;[Block]
+			Return(r_room4_2_lcz)
+			;[End Block]
+		Case "room4_ic"
+			;[Block]
+			Return(r_room4_ic)
+			;[End Block]
+		Case "room2_checkpoint_lcz_hcz"
+			;[Block]
+			Return(r_room2_checkpoint_lcz_hcz)
+			;[End Block]
+		Case "room1_dead_end_hcz"
+			;[Block]
+			Return(r_room1_dead_end_hcz)
+			;[End Block]
+		Case "cont1_035"
+			;[Block]
+			Return(r_cont1_035)
+			;[End Block]
+		Case "cont1_079"
+			;[Block]
+			Return(r_cont1_079)
+			;[End Block]
+		Case "cont1_096"
+			;[Block]
+			Return(r_cont1_096)
+			;[End Block]
+		Case "cont1_106"
+			;[Block]
+			Return(r_cont1_106)
+			;[End Block]
+		Case "cont1_895"
+			;[Block]
+			Return(r_cont1_895)
+			;[End Block]
+		Case "room2_hcz"
+			;[Block]
+			Return(r_room2_hcz)
+			;[End Block]
+		Case "room2_2_hcz"
+			;[Block]
+			Return(r_room2_2_hcz)
+			;[End Block]
+		Case "room2_3_hcz"
+			;[Block]
+			Return(r_room2_3_hcz)
+			;[End Block]
+		Case "room2_4_hcz"
+			;[Block]
+			Return(r_room2_4_hcz)
+			;[End Block]
+		Case "room2_5_hcz"
+			;[Block]
+			Return(r_room2_5_hcz)
+			;[End Block]
+		Case "room2_6_hcz"
+			;[Block]
+			Return(r_room2_6_hcz)
+			;[End Block]
+		Case "room2_mt"
+			;[Block]
+			Return(r_room2_mt)
+			;[End Block]
+		Case "room2_nuke"
+			;[Block]
+			Return(r_room2_nuke)
+			;[End Block]
+		Case "room2_servers_hcz"
+			;[Block]
+			Return(r_room2_servers_hcz)
+			;[End Block]
+		Case "room2_shaft"
+			;[Block]
+			Return(r_room2_shaft)
+			;[End Block]
+		Case "room2_tesla_hcz"
+			;[Block]
+			Return(r_room2_tesla_hcz)
+			;[End Block]
+		Case "room2_test_hcz"
+			;[Block]
+			Return(r_room2_test_hcz)
+			;[End Block]
+		Case "cont2_008"
+			;[Block]
+			Return(r_cont2_008)
+			;[End Block]
+		Case "cont2_049"
+			;[Block]
+			Return(r_cont2_049)
+			;[End Block]
+		Case "cont2_409"
+			;[Block]
+			Return(r_cont2_409)
+			;[End Block]
+		Case "room2c_hcz"
+			;[Block]
+			Return(r_room2c_hcz)
+			;[End Block]
+		Case "room2c_maintenance"
+			;[Block]
+			Return(r_room2c_maintenance)
+			;[End Block]
+		Case "room3_hcz"
+			;[Block]
+			Return(r_room3_hcz)
+			;[End Block]
+		Case "room3_2_hcz"
+			;[Block]
+			Return(r_room3_2_hcz)
+			;[End Block]
+		Case "room3_3_hcz"
+			;[Block]
+			Return(r_room3_3_hcz)
+			;[End Block]
+		Case "cont3_513"
+			;[Block]
+			Return(r_cont3_513)
+			;[End Block]
+		Case "cont3_966"
+			;[Block]
+			Return(r_cont3_966)
+			;[End Block]
+		Case "room4_hcz"
+			;[Block]
+			Return(r_room4_hcz)
+			;[End Block]
+		Case "room4_2_hcz"
+			;[Block]
+			Return(r_room4_2_hcz)
+			;[End Block]
+		Case "room2_checkpoint_hcz_ez"
+			;[Block]
+			Return(r_room2_checkpoint_hcz_ez)
+			;[End Block]
+		Case "gate_a_entrance"
+			;[Block]
+			Return(r_gate_a_entrance)
+			;[End Block]
+		Case "gate_a"
+			;[Block]
+			Return(r_gate_a)
+			;[End Block]
+		Case "gate_b_entrance"
+			;[Block]
+			Return(r_gate_b_entrance)
+			;[End Block]
+		Case "gate_b"
+			;[Block]
+			Return(r_gate_b)
+			;[End Block]
+		Case "room1_dead_end_ez"
+			;[Block]
+			Return(r_room1_dead_end_ez)
+			;[End Block]
+		Case "room1_lifts"
+			;[Block]
+			Return(r_room1_lifts)
+			;[End Block]
+		Case "room1_o5"
+			;[Block]
+			Return(r_room1_o5)
+			;[End Block]
+		Case "room2_ez"
+			;[Block]
+			Return(r_room2_ez)
+			;[End Block]
+		Case "room2_2_ez"
+			;[Block]
+			Return(r_room2_2_ez)
+			;[End Block]
+		Case "room2_3_ez"
+			;[Block]
+			Return(r_room2_3_ez)
+			;[End Block]
+		Case "room2_4_ez"
+			;[Block]
+			Return(r_room2_4_ez)
+			;[End Block]
+		Case "room2_5_ez"
+			;[Block]
+			Return(r_room2_5_ez)
+			;[End Block]
+		Case "room2_6_ez"
+			;[Block]
+			Return(r_room2_6_ez)
+			;[End Block]
+		Case "room2_bio"
+			;[Block]
+			Return(r_room2_bio)
+			;[End Block]
+		Case "room2_cafeteria"
+			;[Block]
+			Return(r_room2_cafeteria)
+			;[End Block]
+		Case "room2_ic"
+			;[Block]
+			Return(r_room2_ic)
+			;[End Block]
+		Case "room2_medibay"
+			;[Block]
+			Return(r_room2_medibay)
+			;[End Block]
+		Case "room2_office"
+			;[Block]
+			Return(r_room2_office)
+			;[End Block]
+		Case "room2_office_2"
+			;[Block]
+			Return(r_room2_office_2)
+			;[End Block]
+		Case "room2_office_3"
+			;[Block]
+			Return(r_room2_office_3)
+			;[End Block]
+		Case "room2_servers_ez"
+			;[Block]
+			Return(r_room2_servers_ez)
+			;[End Block]
+		Case "room2_scientists"
+			;[Block]
+			Return(r_room2_scientists)
+			;[End Block]
+		Case "room2_scientists_2"
+			;[Block]
+			Return(r_room2_scientists_2)
+			;[End Block]
+		Case "room2_tesla_ez"
+			;[Block]
+			Return(r_room2_tesla_ez)
+			;[End Block]
+		Case "cont2_860_1"
+			;[Block]
+			Return(r_cont2_860_1)
+			;[End Block]
+		Case "room2c_ez"
+			;[Block]
+			Return(r_room2c_ez)
+			;[End Block]
+		Case "room2c_2_ez"
+			;[Block]
+			Return(r_room2c_2_ez)
+			;[End Block]
+		Case "room2c_ec"
+			;[Block]
+			Return(r_room2c_ec)
+			;[End Block]
+		Case "room2c_gw_ez"
+			;[Block]
+			Return(r_room2c_gw_ez)
+			;[End Block]
+		Case "room3_gw"
+			;[Block]
+			Return(r_room3_gw)
+			;[End Block]
+		Case "room3_office"
+			;[Block]
+			Return(r_room3_office)
+			;[End Block]
+		Case "room3_ez"
+			;[Block]
+			Return(r_room3_ez)
+			;[End Block]
+		Case "room3_2_ez"
+			;[Block]
+			Return(r_room3_2_ez)
+			;[End Block]
+		Case "room3_3_ez"
+			;[Block]
+			Return(r_room3_3_ez)
+			;[End Block]
+		Case "room3_4_ez"
+			;[Block]
+			Return(r_room3_4_ez)
+			;[End Block]
+		Case "room4_ez"
+			;[Block]
+			Return(r_room4_ez)
+			;[End Block]
+		Case "dimension_106"
+			;[Block]
+			Return(r_dimension_106)
+			;[End Block]
+		Case "dimension_1499"
+			;[Block]
+			Return(r_dimension_1499)
+			;[End Block]
+		Default
+			;[Block]
+			Return(-1)
+			;[End Block]
 	End Select
 End Function
 

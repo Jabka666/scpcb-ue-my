@@ -554,6 +554,7 @@ End Function
 
 Global RemoveHazmatTimer#, Remove714Timer#
 
+; ~ TODO: FIND A REASON WHY MASSIVE LAG APPEAR AFTER TRYING TO FIND WAYPOINT THROUGH THE LOCKED DOOR
 Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
