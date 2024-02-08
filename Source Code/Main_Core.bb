@@ -500,6 +500,7 @@ Function UpdateGame%()
 			EndIf
 			
 			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
+			; ~ TODO: USE "SecondaryLightOn" instead of "DarkAlpha"
 			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkAlpha = Min(Max(DarkAlpha, me\LightBlink * Rnd(0.3, 0.8)), 0.93)
 			
 			If I_294\Using Then DarkAlpha = 1.0

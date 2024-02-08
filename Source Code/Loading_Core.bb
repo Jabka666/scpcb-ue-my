@@ -1980,8 +1980,7 @@ Function LoadData%()
 	
 	RemoteDoorOn = True
 	
-	SecondaryLightOn = 1.0
-	PrevSecondaryLightOn = 1.0
+	SecondaryLightOn = 1.0 : PrevSecondaryLightOn = 1.0
 	
 	QuickLoadPercent = -1
 	
@@ -2727,8 +2726,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	HideDistance = 0.0
 	CoffinDistance = 0.0
 	
-	SecondaryLightOn = 0.0
-	PrevSecondaryLightOn = 0.0
+	SecondaryLightOn = 0.0 : PrevSecondaryLightOn = 0.0
 	UpdateLightsTimer = 0.0
 	
 	RemoteDoorOn = False

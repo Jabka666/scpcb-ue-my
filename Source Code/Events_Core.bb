@@ -3473,8 +3473,7 @@ Function UpdateEvents%()
 							e\room\RoomDoors[0]\Open = False
 							e\room\RoomDoors[0]\Locked = 1
 							
-							PrevSecondaryLightOn = SecondaryLightOn
-							SecondaryLightOn = True
+							PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = 1.0
 							
 							Pvt = CreatePivot()
 							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -3535,8 +3534,7 @@ Function UpdateEvents%()
 						; ~ Saving me\Injuries and me\Bloodloss, so that the player won't be healed automatically
 						me\PrevInjuries = me\Injuries
 						me\PrevBloodloss = me\Bloodloss
-						PrevSecondaryLightOn = SecondaryLightOn
-						SecondaryLightOn = True
+						PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = 1.0
 						
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 						FreeEntity(e\room\NPC[0]\OBJ) : e\room\NPC[0]\OBJ = 0
@@ -3647,14 +3645,10 @@ Function UpdateEvents%()
 					ElseIf e\EventState = 7.0
 						PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(me\Collider)
-						me\LightFlash = 6.0
-						me\BlurTimer = 500.0
-						me\Injuries = me\PrevInjuries
-						me\Bloodloss = me\PrevBloodloss
-						SecondaryLightOn = PrevSecondaryLightOn
-						me\PrevInjuries = 0.0
-						me\PrevBloodloss = 0.0
-						PrevSecondaryLightOn = 0.0
+						me\LightFlash = 6.0 : me\BlurTimer = 500.0
+						me\Injuries = me\PrevInjuries : me\PrevInjuries = 0.0
+						me\Bloodloss = me\PrevBloodloss : me\PrevBloodloss = 0.0
+						SecondaryLightOn = PrevSecondaryLightOn : PrevSecondaryLightOn = 0.0
 						If (Not me\Crouch) Then SetCrouch(True)
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
@@ -4815,12 +4809,12 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_tesla
 				;[Block]
-				If e\EventState3 = 0
+				If e\EventState3 = 0.0
 					If Rand(8) = 1
 						RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
-						e\EventState3 = 1
+						e\EventState3 = 1.0
 					Else
-						e\EventState3 = 2
+						e\EventState3 = 2.0
 					EndIf
 				EndIf
 					
@@ -8199,7 +8193,7 @@ Function UpdateDimension106%()
 				ShowRoomsNoColl(e\room)
 				
 				PlayerFallingPickDistance = 0.0
-				PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = True
+				PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = 1.0
 				; ~ SCP-106 attacks if close enough to player
 				If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 0.09 Then n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 				If e\EventState2 <> PD_FakeTunnelRoom
@@ -8490,8 +8484,7 @@ Function UpdateDimension106%()
 										
 										GiveAchievement(AchvPD)
 										
-										SecondaryLightOn = PrevSecondaryLightOn
-										PrevSecondaryLightOn = 0.0
+										SecondaryLightOn = PrevSecondaryLightOn : PrevSecondaryLightOn = 0.0
 										
 										me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
 										
@@ -8714,8 +8707,7 @@ Function UpdateDimension106%()
 									If RoomExist
 										GiveAchievement(AchvPD)
 										
-										SecondaryLightOn = PrevSecondaryLightOn
-										PrevSecondaryLightOn = 0.0
+										SecondaryLightOn = PrevSecondaryLightOn : PrevSecondaryLightOn = 0.0
 										
 										me\LightBlink = 5.0
 										
@@ -9128,7 +9120,7 @@ Function UpdateEndings%()
 						
 						RenderLoading(90, GetLocalString("loading", "ending"))
 						
-						SecondaryLightOn = True
+						SecondaryLightOn = 1.0
 						
 						HideDistance = 68.0
 						
@@ -9489,7 +9481,7 @@ Function UpdateEndings%()
 						
 						If (Not n_I\Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
 						
-						SecondaryLightOn = True
+						SecondaryLightOn = 1.0
 						
 						HideDistance = 68.0
 						

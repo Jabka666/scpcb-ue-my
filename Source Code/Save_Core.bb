@@ -139,7 +139,9 @@ Function SaveGame%(File$)
 	
 	WriteFloat(f, SecondaryLightOn)
 	WriteFloat(f, PrevSecondaryLightOn)
+	
 	WriteByte(f, RemoteDoorOn)
+	
 	WriteByte(f, SoundTransmission)
 	
 	For i = 0 To MaxAchievements - 1
@@ -634,7 +636,9 @@ Function LoadGame%(File$)
 	
 	SecondaryLightOn = ReadFloat(f)
 	PrevSecondaryLightOn = ReadFloat(f)
+	
 	RemoteDoorOn = ReadByte(f)
+	
 	SoundTransmission = ReadByte(f)
 	
 	For i = 0 To MaxAchievements - 1
@@ -1480,7 +1484,9 @@ Function LoadGameQuick%(File$)
 	
 	SecondaryLightOn = ReadFloat(f)
 	PrevSecondaryLightOn = ReadFloat(f)
+	
 	RemoteDoorOn = ReadByte(f)
+	
 	SoundTransmission = ReadByte(f)
 	
 	For i = 0 To MaxAchievements - 1
