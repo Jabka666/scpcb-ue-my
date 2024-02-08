@@ -9953,6 +9953,10 @@ Function Update035Label%(OBJ%)
 			Exit
 		EndIf
 	Next
+	
+	If achv\AchvIMG[Achv035] <> 0 Then FreeImage(achv\AchvIMG[Achv035]) : achv\AchvIMG[Achv035] = 0
+	achv\AchvIMG[Achv035] = LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png")
+	achv\AchvIMG[Achv035] = ScaleImage2(achv\AchvIMG[Achv035], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 End Function
 
 ;~IDEal Editor Parameters:
