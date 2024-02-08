@@ -3724,17 +3724,13 @@ Function UpdateSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If me\Sanity < -1000.0
+				If me\Sanity < -800.0
+					me\RestoreSanity = False
+					me\Sanity = -1010.0
 					msg\DeathMsg = GetLocalString("death", "895")
 					If me\VomitTimer < -10.0 Then Kill()
 				EndIf
 				
-				If me\VomitTimer < 0.0 And me\Sanity < -800.0
-					me\RestoreSanity = False
-					me\Sanity = -1010.0
-				EndIf
-				
-				sc\InSight = False
 				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume)
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
