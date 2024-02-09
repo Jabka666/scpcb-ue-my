@@ -2454,7 +2454,6 @@ Function UpdateEvents%()
 							SetNPCFrame(e\room\NPC[0], 270.0)
 							
 							e\room\RoomDoors[0]\Open = True
-							e\room\RoomDoors[0]\Locked = 0
 						EndIf
 						If (Not n_I\Curr106\Contained) And e\EventState2 = 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 							TFormPoint(0.0, -1531.0, 2356.0, e\room\OBJ, 0)
