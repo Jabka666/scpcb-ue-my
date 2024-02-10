@@ -1776,6 +1776,7 @@ Function UpdateEvents%()
 													TeleportToRoom(r)
 													
 													me\DropSpeed = 0.0
+													opt\CameraFogFar = 6.0
 													
 													For i = 0 To 2
 														PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(e\room\NPC[i]\Collider), z + (EntityZ(e\room\NPC[i]\Collider) - e\room\z))
@@ -7678,7 +7679,7 @@ Function UpdateEvents%()
 						If e\EventState2 = (-70.0) * 5.0
 							For sc.SecurityCams = Each SecurityCams
 								If sc\room = e\room
-									If sc\InSight And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
+									If sc\InSight And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
 									Exit
 								EndIf
 							Next

@@ -3055,7 +3055,7 @@ Function UpdateZoneColor%()
 	If opt\DebugMode = 1
 		CameraRange(Camera, 0.01, 100.0)
 	Else
-		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.5, HideDistance * 1.2))
+		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.3, HideDistance * 1.2))
 	EndIf
 	CameraFogRange(Camera, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 	; ~ Handle room-specific settings
@@ -3063,13 +3063,16 @@ Function UpdateZoneColor%()
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
+		opt\CameraFogFar = 30.0
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.01, 60.0)
 	ElseIf RID = r_cont1_173_intro
+		opt\CameraFogFar = 30.0
 		CameraFogRange(Camera, 5.0, 30.0)
 		CameraRange(Camera, 0.01, 45.0)
 	ElseIf RID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
+		opt\CameraFogFar = 80.0
 		CameraFogRange(Camera, 40.0, 80.0)
 		CameraRange(Camera, 0.01, 90.0)
 	ElseIf RID = r_dimension_106
@@ -9287,6 +9290,7 @@ Function UpdateLeave1499%()
 				Next
 				r1499 = Null
 				ShouldEntitiesFall = False
+				opt\CameraFogFar = 6.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Exit.ogg"))
 				I_1499\PrevX = 0.0
 				I_1499\PrevY = 0.0

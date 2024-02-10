@@ -2247,7 +2247,7 @@ Function UpdateMT%(mt.MTGrid)
 				
 				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(PlayerPosY - TunnelPosY) + PowTwo(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)))
 				
-				If Dist < opt\CameraFogFar * LightVolume * 1.5
+				If Dist < opt\CameraFogFar * LightVolume * 1.3
 					If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
 				Else
 					If (Not EntityHidden(mt\Entities[tX + (tY * MTGridSize)])) Then HideEntity(mt\Entities[tX + (tY * MTGridSize)])
@@ -3827,7 +3827,7 @@ Function UpdateDecals%()
 	Local de.Decals
 	
 	For de.Decals = Each Decals
-		If EntityDistanceSquared(de\OBJ, me\Collider) <= PowTwo(HideDistance)
+		If EntityDistanceSquared(de\OBJ, me\Collider) <= PowTwo(opt\CameraFogFar * LightVolume * 1.3)
 			If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
 			
 			Local DecalPosY# = EntityY(de\OBJ, True)
@@ -4062,7 +4062,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume)
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2)
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
 					If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And sc\InSight
@@ -4157,7 +4157,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume) And sc\InSight
+				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And sc\InSight
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
