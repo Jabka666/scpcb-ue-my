@@ -4785,7 +4785,7 @@ Function UpdateNPCs%()
 			EndIf
 			n\GravityMult = 0.0
 		EndIf
-		If GravityDist < PowTwo(HideDistance * 0.7) Lor n\NPCType = NPCType1499_1
+		If GravityDist < PowTwo(HideDistance * 0.6) Lor n\NPCType = NPCType1499_1
 			If n\InFacility = InFacility
 				TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 				
