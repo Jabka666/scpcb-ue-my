@@ -7578,9 +7578,9 @@ Function UpdateEvents%()
 				BrokenDoor = (e\room\Objects[1] <> 0)
 				
 				If PlayerRoom = e\room
-					e\EventState4 = UpdateLever(e\room\RoomLevers[0]\OBJ)
+					e\EventState3 = UpdateLever(e\room\RoomLevers[0]\OBJ)
 					If e\EventState = 0.0
-						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.64 And e\EventState3 = 0.0 And e\EventState4 = 1.0
+						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.64 And e\EventState2 = 0.0 And e\EventState3 = 1.0
 							If BrokenDoor
 								LoadEventSound(e, "SFX\Door\DoorSparks.ogg", 1)
 								e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\Objects[1], 5.0)
@@ -7591,16 +7591,16 @@ Function UpdateEvents%()
 								OpenCloseDoor(e\room\RoomDoors[i])
 							Next
 							PlaySound_Strict(AlarmSFX[3])
-							e\EventState = 1.0
-						ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > 5.76
-							e\EventState3 = 0.0
+							e\EventState = 0.01
+						ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > 5.29
+							e\EventState2 = 0.0
 						EndIf
 					Else
-						If e\EventState2 < 70.0 * 7.0
-							e\EventState2 = e\EventState2 + fps\Factor[0]
+						If e\EventState < 70.0 * 7.0
+							e\EventState = e\EventState + fps\Factor[0]
 							e\room\RoomDoors[0]\Open = False
 							e\room\RoomDoors[1]\Open = False
-							If e\EventState2 < 70.0 * 1.0
+							If e\EventState < 70.0 * 1.0
 								If BrokenDoor
 									Pvt = CreatePivot()
 									
@@ -7620,7 +7620,7 @@ Function UpdateEvents%()
 									EndIf
 									FreeEntity(Pvt) : Pvt = 0
 								EndIf
-							ElseIf e\EventState2 > 70.0 * 3.0 And e\EventState2 < 70.0 * 6.0
+							ElseIf e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 6.0
 								Pvt = CreatePivot(e\room\OBJ)
 								For i = 0 To 1
 									If e\room\RoomTemplate\RoomID = r_room3_gw
@@ -7645,8 +7645,7 @@ Function UpdateEvents%()
 							EndIf
 						Else
 							e\EventState = 0.0
-							e\EventState2 = 0.0
-							e\EventState3 = 1.0
+							e\EventState2 = 1.0
 							For i = 0 To 1
 								If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
 							Next
@@ -7656,7 +7655,7 @@ Function UpdateEvents%()
 					If BrokenDoor Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
 					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 				Else
-					e\EventState3 = 0.0
+					e\EventState2 = 0.0
 				EndIf
 				;[End Block]
 			Case e_room2_sl
