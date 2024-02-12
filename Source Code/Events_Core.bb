@@ -4918,8 +4918,6 @@ Function UpdateEvents%()
 									StopChannel(e\SoundCHN) : e\SoundCHN = 0
 									PlayAnnouncement("SFX\Character\MTF\Tesla" + Rand(3) + ".ogg")
 									RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
-									e\EventState = 3.0
-									e\EventState2 = (-70.0) * 90.0
 									e\room\NPC[1] = Null
 								EndIf
 							EndIf
