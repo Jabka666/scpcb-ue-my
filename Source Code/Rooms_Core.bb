@@ -2974,7 +2974,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[11], r\x - 5424.0 * RoomScale, r\y, r\z - 1068.0 * RoomScale)
 			EntityParent(r\Objects[11], r\OBJ)
 			
-			CreateCustomCenter(r, r\x - 5424.0 * RoomScale, r\y, r\z - 1700.0 * RoomScale)
+			CreateCustomCenter(r, r\x - 5424.0 * RoomScale, r\z - 1700.0 * RoomScale)
 			;[End Block]
 		Case r_room1_lifts
 			;[Block]
