@@ -1919,7 +1919,10 @@ Function UpdateEvents%()
 										
 										If e\EventState2 > 0.2 And n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
 										
-										If e\EventState2 = 2.0 Then MoveToPocketDimension()
+										If e\EventState2 = 2.0
+											MoveToPocketDimension()
+											n_I\Curr106\State = 250.0
+										EndIf
 									Else
 										If chs\NoClip Then me\Playable = True
 									EndIf
