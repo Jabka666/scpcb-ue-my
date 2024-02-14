@@ -192,7 +192,7 @@ Global PrevSecondaryLightOn#
 
 Global UpdateLightsTimer#
 
-Function UpdateLights%()
+Function UpdateLightVolume%()
 	Local l.Lights
 	
 	If SecondaryLightOn > 0.5
@@ -201,9 +201,11 @@ Function UpdateLights%()
 		For l.Lights = Each Lights
 			If l\room <> Null
 				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
-					Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
-					
-					If Dist < PowTwo(HideDistance) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((HideDistance - Sqr(Dist)) / HideDistance)) / 4.5, 1.0)
+					If UpdateLightsTimer = 0.0
+						Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
+						
+						If Dist < PowTwo(HideDistance) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((HideDistance - Sqr(Dist)) / HideDistance)) / 4.5, 1.0)
+					EndIf
 				EndIf
 			EndIf
 		Next
@@ -214,7 +216,7 @@ Function UpdateLights%()
 	EndIf
 End Function
 
-Function RenderLights%(Cam%)
+Function UpdateLights%(Cam%)
 	Local l.Lights, i%, Random#, Alpha#
 	
 	For l.Lights = Each Lights
@@ -3241,6 +3243,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (PlayerY - FirstPivotY), SecondPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							UpdateLightsTimer = 0.0
+							UpdateLightVolume()
 							UpdateDoors()
 							UpdateRooms()
 							
@@ -3344,6 +3347,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							TeleportEntity(me\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (PlayerY - SecondPivotY), FirstPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							UpdateLightsTimer = 0.0
+							UpdateLightVolume()
 							UpdateDoors()
 							UpdateRooms()
 							
@@ -4074,6 +4078,11 @@ Function UpdateSecurityCams%()
 						If sc\State < sc\RenderInterval
 							sc\State = sc\State + fps\Factor[0]
 						Else
+							If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
+								UpdateLights(sc\Cam)
+							Else
+								UpdateLights(sc_I\CoffinCam\Cam)
+							EndIf
 							sc\State = 0.0
 						EndIf
 						
@@ -4171,8 +4180,6 @@ Function RenderSecurityCams%()
 							EndIf
 							Cls()
 							
-							RenderLights(sc\Cam)
-							
 							SetBuffer(BackBuffer())
 							RenderWorld(RenderTween)
 							CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(sc_I\ScreenTex))
@@ -4189,8 +4196,6 @@ Function RenderSecurityCams%()
 								ShowEntity(sc_I\CoffinCam\Cam)
 							EndIf
 							Cls()
-							
-							RenderLights(sc_I\CoffinCam\Cam)
 							
 							SetBuffer(BackBuffer())
 							RenderWorld(RenderTween)
@@ -4532,6 +4537,7 @@ Function UpdateRender%()
 	Local it.Items
 	
 	UpdateLightsTimer = 0.0
+	UpdateLightVolume()
 	UpdateDoors()
 	UpdateDecals()
 	UpdateRooms()

@@ -397,7 +397,8 @@ Function UpdateGame%()
 				UpdateSoundEmitters()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			Else
-				UpdateLights()
+				UpdateLightVolume()
+				UpdateLights(Camera)
 				UpdateEmitters()
 				UpdateDoors()
 				UpdateSecurityCams()
@@ -655,10 +656,6 @@ Function RenderGame%()
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
 	RenderWorld2(RenderTween)
-	
-	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\EndingTimer < 0.0))
-		RenderLights(Camera)
-	EndIf
 	
 	RenderBlur(me\BlurVolume)
 	

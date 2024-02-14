@@ -8531,7 +8531,7 @@ Function UpdateDimension106%()
 						
 						GiveAchievement(AchvPD)
 						
-						UpdateLights()
+						UpdateLightVolume()
 						UpdateDoors()
 						
 						ScaleEntity(e\room\OBJ, RoomScale, RoomScale, RoomScale)
