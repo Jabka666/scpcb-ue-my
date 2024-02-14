@@ -861,6 +861,8 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "badge"), "Emily Ross' Badge", "badge", "badge.b3d", "INV_Emily_badge.png", "Emily_badge.png", 0.0001, 1)
 	
+	CreateItemTemplate(GetLocalString("items", "burntbadge"), "George Maynard's Badge", "burntbadge", "badge.b3d", "INV_Maynard_badge.png", "Maynard_badge.png", 0.0001, 1, "Maynard_badge.png")
+	
 	CreateItemTemplate(GetLocalString("items", "docjournal"), "Journal Page", "paper", "paper.b3d", "INV_note.png", "note_Gonzales.png", 0.0025, 0, "note_Gonzales.png")
 	
 	CreateItemTemplate(GetLocalString("items", "docleaflet"), "Leaflet", "paper", "paper.b3d", "INV_note.png", "leaflet.png", 0.003, 0, "leaflet.png")

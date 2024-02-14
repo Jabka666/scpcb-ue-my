@@ -3757,7 +3757,7 @@ Function UpdateGUI%()
 						PrevItem = Inventory(MouseSlot)
 						
 						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "oldpaper", "origami", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "badge", "oldbadge", "ticket", "25ct", "coin", "key", "scp860", "scp714", "coarse714", "fine714", "ring", "scp500pill", "scp500pilldeath", "pill"
+							Case "paper", "oldpaper", "origami", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "badge", "oldbadge", "burntbadge", "ticket", "25ct", "coin", "key", "scp860", "scp714", "coarse714", "fine714", "ring", "scp500pill", "scp500pilldeath", "pill"
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard"
 									; ~ Add an item to clipboard
@@ -3792,7 +3792,7 @@ Function UpdateGUI%()
 										Else
 											If added\ItemTemplate\TempName = "paper" Lor added\ItemTemplate\TempName = "oldpaper"
 												CreateMsg(GetLocalString("msg", "clipboard.paper"))
-											ElseIf added\ItemTemplate\TempName = "badge" Lor added\ItemTemplate\TempName = "oldbadge"
+											ElseIf added\ItemTemplate\TempName = "badge" Lor added\ItemTemplate\TempName = "oldbadge" Lor added\ItemTemplate\TempName = "burntbadge"
 												CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\Name))
 											Else
 												CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\Name))
@@ -5463,7 +5463,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case "badge"
+				Case "badge", "burntbadge"
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -6808,7 +6808,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "badge"
+				Case "badge", "burntbadge"
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)

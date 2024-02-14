@@ -3763,7 +3763,8 @@ Function FillRoom%(r.Rooms)
 				HideEntity(r\Objects[i + 1])
 			Next
 			
-			it.Items = CreateItem("Burnt Note", "paper", r\x, r\y + 0.5, r\z + 3.5)
+			it.Items = CreateItem("Burnt Note", "paper", r\x, r\y + 0.5, r\z + 896.0 * RoomScale)
+			it.Items = CreateItem("George Maynard's Badge", "burntbadge", r\x - 1300 * RoomScale, r\y + 0.5, r\z + 8700 * RoomScale)
 			;[End Block]
 		Case r_dimension_1499
 			;[Block]
