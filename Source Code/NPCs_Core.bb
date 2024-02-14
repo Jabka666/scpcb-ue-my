@@ -795,7 +795,7 @@ Function UpdateNPCs%()
 										Else
 											If Rand(400) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 10.0)
 											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
-											If me\LightBlink < 0.25 And (Not chs\NoTarget)
+											If (Not chs\NoTarget)
 												n\Angle = Rnd(-120.0, 120.0)
 											Else
 												n\Angle = 0.0
@@ -1170,7 +1170,7 @@ Function UpdateNPCs%()
 							If (Not chs\NoTarget)
 								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
 									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink < 0.25
+										If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
 											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 											
 											me\CurrCameraZoom = 10.0
@@ -1250,7 +1250,7 @@ Function UpdateNPCs%()
 							If (Not chs\NoTarget)
 								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
 									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And me\LightBlink < 0.25
+										If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
 											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 											
 											me\CurrCameraZoom = 10.0
@@ -6524,7 +6524,7 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, DisableSoundOnCrouch% = False)
 End Function
 
 Function PlayerSees173%(n.NPCs)
-	If (Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\LightBlink >= 0.25 And wi\NightVision = 0) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))
+	If (Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))
 		Return(False)
 	Else
 		Return(True)

@@ -3153,7 +3153,7 @@ Function UpdateEvents%()
 							If e\EventState >= 70.0
 								If x
 									ShouldPlay = 8
-									SecondaryLightOn = CurveValue(1.0, SecondaryLightOn, 10.0)
+									IsBlackOut = False
 									If e\Sound2 = 0 Then LoadEventSound(e, "SFX\Ambient\Room Ambience\FuelPump.ogg", 1)
 									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[6], 6.0)
 									For i = 4 To 7
@@ -3161,7 +3161,7 @@ Function UpdateEvents%()
 									Next
 									e\EventState = Max(e\EventState, 70.0 * 180.0)
 								Else
-									SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
+									IsBlackOut = True
 									If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 									For i = 4 To 7
 										e\room\RoomDoors[i]\Locked = 1
@@ -3450,7 +3450,14 @@ Function UpdateEvents%()
 								
 								UpdateRender()
 								
-								SecondaryLightOn = PrevSecondaryLightOn
+								IsBlackOut = PrevIsBlackOut
+								If wi\NightVision > 0
+									opt\CameraFogFar = 17.0
+								ElseIf wi\SCRAMBLE > 0
+									opt\CameraFogFar = 9.0
+								Else
+									opt\CameraFogFar = 6.0
+								EndIf
 								
 								e\EventState = 0.0
 								e\EventState3 = 0.0
@@ -3477,7 +3484,7 @@ Function UpdateEvents%()
 							e\room\RoomDoors[0]\Open = False
 							e\room\RoomDoors[0]\Locked = 1
 							
-							PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = 1.0
+							PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 							
 							Pvt = CreatePivot()
 							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -3538,7 +3545,7 @@ Function UpdateEvents%()
 						; ~ Saving me\Injuries and me\Bloodloss, so that the player won't be healed automatically
 						me\PrevInjuries = me\Injuries
 						me\PrevBloodloss = me\Bloodloss
-						PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = 1.0
+						PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 						
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 						FreeEntity(e\room\NPC[0]\OBJ) : e\room\NPC[0]\OBJ = 0
@@ -3652,7 +3659,7 @@ Function UpdateEvents%()
 						me\LightFlash = 6.0 : me\BlurTimer = 500.0
 						me\Injuries = me\PrevInjuries : me\PrevInjuries = 0.0
 						me\Bloodloss = me\PrevBloodloss : me\PrevBloodloss = 0.0
-						SecondaryLightOn = PrevSecondaryLightOn : PrevSecondaryLightOn = 0.0
+						IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
 						If (Not me\Crouch) Then SetCrouch(True)
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
@@ -4456,11 +4463,7 @@ Function UpdateEvents%()
 					
 					e\EventState2 = UpdateLever(e\room\RoomLevers[1]\OBJ)
 					If (PrevState2 <> e\EventState2) And e\EventState > 0.0 Then PlaySound2(LightSFX, Camera, e\room\RoomLevers[1]\OBJ)
-					If e\EventState2 = 1.0
-						SecondaryLightOn = CurveValue(1.0, SecondaryLightOn, 10.0)
-					Else
-						SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
-					EndIf
+					IsBlackOut = (e\EventState2 = 0.0)
 					
 					If e\EventState = 0.0
 						If Rand(200) = 1
@@ -8194,7 +8197,7 @@ Function UpdateDimension106%()
 				ShowRoomsNoColl(e\room)
 				
 				PlayerFallingPickDistance = 0.0
-				PrevSecondaryLightOn = SecondaryLightOn : SecondaryLightOn = 1.0
+				PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 				; ~ SCP-106 attacks if close enough to player
 				If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 0.09 Then n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 				If e\EventState2 <> PD_FakeTunnelRoom
@@ -8364,7 +8367,8 @@ Function UpdateDimension106%()
 						ShouldPlay = 14
 						
 						DecalStep = 1
-						CameraFogRange(Camera, 0.01, 8.0)
+						opt\CameraFogFar = 8.0
+						CameraFogRange(Camera, 0.1, 8.0)
 						
 						For i = 17 To 20
 							If i > 18
@@ -8485,7 +8489,7 @@ Function UpdateDimension106%()
 										
 										GiveAchievement(AchvPD)
 										
-										SecondaryLightOn = PrevSecondaryLightOn : PrevSecondaryLightOn = 0.0
+										IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
 										
 										me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
 										
@@ -8708,7 +8712,7 @@ Function UpdateDimension106%()
 									If RoomExist
 										GiveAchievement(AchvPD)
 										
-										SecondaryLightOn = PrevSecondaryLightOn : PrevSecondaryLightOn = 0.0
+										IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
 										
 										me\LightBlink = 5.0
 										
@@ -9121,7 +9125,7 @@ Function UpdateEndings%()
 						
 						RenderLoading(90, GetLocalString("loading", "ending"))
 						
-						SecondaryLightOn = 1.0
+						IsBlackOut = False
 						
 						HideDistance = 68.0
 						
@@ -9482,7 +9486,7 @@ Function UpdateEndings%()
 						
 						If (Not n_I\Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
 						
-						SecondaryLightOn = 1.0
+						IsBlackOut = False
 						
 						HideDistance = 68.0
 						

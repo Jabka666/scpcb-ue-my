@@ -371,7 +371,7 @@ Function UpdateGame%()
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
 				If Rand(50000) = 3
-					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 36.0 Then me\LightBlink = Rnd(1.0, 2.0)
+					me\LightBlink = Rnd(1.0, 2.0)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"), True)
 				EndIf
 			EndIf
@@ -393,7 +393,6 @@ Function UpdateGame%()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
 				UpdateLeave1499()
 			ElseIf RID = r_dimension_106
-				LightVolume = 1.0
 				UpdateSoundEmitters()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			Else
@@ -501,8 +500,15 @@ Function UpdateGame%()
 			EndIf
 			
 			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
-			; ~ TODO: USE "SecondaryLightOn" instead of "DarkAlpha"
-			If me\LightBlink > 0.0 And wi\NightVision = 0 Then DarkAlpha = Min(Max(DarkAlpha, me\LightBlink * Rnd(0.3, 0.8)), 0.93)
+			If IsBlackOut
+				SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
+			Else
+				If me\LightBlink > 0.0
+					SecondaryLightOn = CurveValue(0.0, SecondaryLightOn, 10.0)
+				Else
+					SecondaryLightOn = CurveValue(1.0, SecondaryLightOn, 10.0)
+				EndIf
+			EndIf
 			
 			If I_294\Using Then DarkAlpha = 1.0
 			
@@ -3049,12 +3055,12 @@ Function UpdateZoneColor%()
 	CurrAmbientColor$ = ""
 	
 	CameraFogMode(Camera, 1)
+	CameraFogRange(Camera, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 	If opt\DebugMode = 1
 		CameraRange(Camera, 0.01, 100.0)
 	Else
-		CameraRange(Camera, 0.01, Min(opt\CameraFogFar * LightVolume * 1.3, HideDistance * 1.2))
+		CameraRange(Camera, 0.01, opt\CameraFogFar * LightVolume * 1.3)
 	EndIf
-	CameraFogRange(Camera, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 	; ~ Handle room-specific settings
 	If RID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
@@ -3070,11 +3076,13 @@ Function UpdateZoneColor%()
 	ElseIf RID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
 		opt\CameraFogFar = 80.0
+		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, 80.0)
 		CameraRange(Camera, 0.01, 90.0)
 	ElseIf RID = r_dimension_106
 		For e.Events = Each Events
 			If e\EventID = e_dimension_106
+				LightVolume = 1.0
 				If e\EventState2 = PD_TrenchesRoom Lor e\EventState2 = PD_TowerRoom
 					SetZoneColor(FogColorPDTrench)
 				ElseIf e\EventState2 = PD_FakeTunnelRoom
@@ -3094,8 +3102,10 @@ Function UpdateZoneColor%()
 				If forest_event\room\NPC[0] <> Null
 					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 				EndIf
+				opt\CameraFogFar = 8.0
+				LightVolume = 1.0
+				CameraFogRange(Camera, 0.1, 8.0)
 				CameraRange(Camera, 0.01, 8.5)
-				CameraFogRange(Camera, 0.01, 8.0)
 			EndIf
 		EndIf
 	EndIf
@@ -5703,7 +5713,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
-	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (((me\LightBlink >= 0.25 And (Not chs\NoBlink)) Lor me\EyeIrritation > 0.0) And wi\NightVision = 0)
+	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor ((SecondaryLightOn < 0.3 Lor me\EyeIrritation > 0.0) And wi\NightVision = 0)
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink

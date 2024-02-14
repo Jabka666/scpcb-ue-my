@@ -143,6 +143,7 @@ Type Lights
 	Field Range#
 	Field R%, G%, B%
 	Field Intensity#
+	Field Flickers% = False
 	Field room.Rooms
 End Type
 
@@ -183,19 +184,20 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%)
 	HideEntity(l\AdvancedSprite)
 	
 	l\Intensity = (R + G + B) / 255.0 / 3.0
+	If Rand(50) = 1 Then l\Flickers = True
 	
 	Return(l)
 End Function
 
+Global IsBlackOut%, PrevIsBlackOut%
 Global SecondaryLightOn#
-Global PrevSecondaryLightOn#
 
 Global UpdateLightsTimer#
 
 Function UpdateLightVolume%()
 	Local l.Lights
 	
-	If SecondaryLightOn > 0.5
+	If SecondaryLightOn > 0.3
 		UpdateLightsTimer = UpdateLightsTimer + fps\Factor[0]
 		If UpdateLightsTimer >= 8.0 Then UpdateLightsTimer = 0.0
 		For l.Lights = Each Lights
@@ -211,8 +213,8 @@ Function UpdateLightVolume%()
 		Next
 		LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 	Else
+		LightVolume = 1.0
 		UpdateLightsTimer = 0.0
-		TempLightVolume = 0.0
 	EndIf
 End Function
 
@@ -220,7 +222,7 @@ Function UpdateLights%(Cam%)
 	Local l.Lights, i%, Random#, Alpha#
 	
 	For l.Lights = Each Lights
-		If SecondaryLightOn > 0.5
+		If SecondaryLightOn > 0.3
 			If l\room <> Null
 				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
 					If Cam = Camera ; ~ The lights are rendered by player's cam
@@ -240,7 +242,22 @@ Function UpdateLights%(Cam%)
 							
 							EntityAutoFade(l\Sprite, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 							If Dist < PowTwo(opt\CameraFogFar * 1.2)
-								If EntityInView(l\OBJ, Cam) And EntityVisible(Cam, l\OBJ)
+								Local LightVisible% = EntityVisible(Cam, l\OBJ)
+								Local LightInView% = EntityInView(l\OBJ, Cam)
+								
+								If l\Flickers And Rand(13) = 1 And LightVisible And me\LightBlink =< 0.0
+									PlaySound2(IntroSFX[Rand(8, 10)], Cam, l\OBJ, 4.0)
+									If LightInView
+										If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
+										If opt\AdvancedRoomLights
+											If (Not  LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
+										EndIf
+									EndIf
+									Random = Rnd(0.3, 0.7)
+									SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
+									TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
+								EndIf
+								If LightInView And LightVisible
 									If LightSpriteHidden Then ShowEntity(l\Sprite)
 									If opt\AdvancedRoomLights
 										Alpha = 1.0 - Max(Min(((Sqr(Dist) + 0.5) / 7.5), 1.0), 0.0)
@@ -4069,7 +4086,7 @@ Function UpdateSecurityCams%()
 				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2)
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
-					If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And sc\InSight
+					If me\BlinkTimer > -10.0 And sc\InSight
 						Local Temp% = False
 						Local RID% = sc\room\RoomTemplate\RoomID
 						
@@ -4166,7 +4183,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -10.0 And me\LightBlink < 0.25) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And sc\InSight
+				If me\BlinkTimer > -10.0 And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And sc\InSight
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)

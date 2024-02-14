@@ -28,6 +28,8 @@ General:
 - Freed up some RAM by getting rid of texture/image buffers for fullscreen mode.
 
 Mechanics:
+- Added random light flickering.
+
 - Removed accidental item dropping.
 - Blast doors can kill the player.
 - The player can disable Tesla Gates.

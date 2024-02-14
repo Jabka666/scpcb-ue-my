@@ -1980,10 +1980,6 @@ Function LoadData%()
 	HideDistance = 17.0
 	CoffinDistance = 100.0
 	
-	RemoteDoorOn = True
-	
-	SecondaryLightOn = 1.0 : PrevSecondaryLightOn = 1.0
-	
 	QuickLoadPercent = -1
 	
 	CanSave = 3
@@ -2053,10 +2049,10 @@ Function LoadEntities%()
 	
 	Camera = CreateCamera()
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-	CameraRange(Camera, 0.01, opt\CameraFogFar)
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1, opt\CameraFogFar)
 	CameraFogColor(Camera, 30.0, 30.0, 30.0)
+	CameraRange(Camera, 0.01, opt\CameraFogFar)
 	CameraClsColor(Camera, 30.0, 30.0, 30.0)
 	AmbientLight(30.0, 30.0, 30.0)
 	
@@ -2394,6 +2390,9 @@ Function InitNewGame%()
 	
 	opt\CameraFogFar = 6.0
 	
+	IsBlackOut = False : PrevIsBlackOut = False
+	RemoteDoorOn = True
+	
 	InitOtherStuff()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
@@ -2728,7 +2727,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	HideDistance = 0.0
 	CoffinDistance = 0.0
 	
-	SecondaryLightOn = 0.0 : PrevSecondaryLightOn = 0.0
+	SecondaryLightOn = 0.0
+	IsBlackOut = False : PrevIsBlackOut = False
 	UpdateLightsTimer = 0.0
 	
 	RemoteDoorOn = False

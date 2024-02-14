@@ -138,7 +138,8 @@ Function SaveGame%(File$)
 	WriteString(f, RandomSeed)
 	
 	WriteFloat(f, SecondaryLightOn)
-	WriteFloat(f, PrevSecondaryLightOn)
+	WriteByte(f, IsBlackOut)
+	WriteByte(f, PrevIsBlackOut)
 	
 	WriteByte(f, RemoteDoorOn)
 	
@@ -635,7 +636,8 @@ Function LoadGame%(File$)
 	RandomSeed = ReadString(f)
 	
 	SecondaryLightOn = ReadFloat(f)
-	PrevSecondaryLightOn = ReadFloat(f)
+	IsBlackOut = ReadByte(f)
+	PrevIsBlackOut = ReadByte(f)
 	
 	RemoteDoorOn = ReadByte(f)
 	
@@ -1483,7 +1485,8 @@ Function LoadGameQuick%(File$)
 	RandomSeed = ReadString(f)
 	
 	SecondaryLightOn = ReadFloat(f)
-	PrevSecondaryLightOn = ReadFloat(f)
+	IsBlackOut = ReadByte(f)
+	PrevIsBlackOut = ReadByte(f)
 	
 	RemoteDoorOn = ReadByte(f)
 	
