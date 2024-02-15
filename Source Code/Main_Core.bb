@@ -2566,9 +2566,12 @@ Function UpdateMoving%()
 						Local PlayerPosY# = EntityY(me\Collider)
 						
 						If PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale
-							me\Stamina = 0.0
 							Speed = 0.015
-							Sprint = 1.0
+							If me\Stamina > 0.0
+								me\Stamina = me\Stamina - (fps\Factor[0] * 0.5)
+							Else
+								me\Stamina = -20.0
+							EndIf
 						EndIf
 					EndIf
 					

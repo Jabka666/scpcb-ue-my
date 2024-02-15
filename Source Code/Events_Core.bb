@@ -8200,9 +8200,8 @@ Function UpdateDimension106%()
 				PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 				; ~ SCP-106 attacks if close enough to player
 				If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 0.09 Then n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
+				CanSave = 1
 				If e\EventState2 <> PD_FakeTunnelRoom
-					CanSave = 1
-					
 					ShouldPlay = 3
 					
 					InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
@@ -8215,6 +8214,13 @@ Function UpdateDimension106%()
 					For i = 9 To 10
 						ScaleEntity(e\room\Objects[i], RoomScale * (1.5 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
 					Next
+				Else
+					If KeyHit(key\SAVE)
+						If SelectedDifficulty\SaveType = SAVE_ANYWHERE
+							PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
+							CreateHintMsg(GetLocalString("save", "saved"))
+						EndIf
+					EndIf
 				EndIf
 				
 				Local RoomExist%
@@ -8436,7 +8442,7 @@ Function UpdateDimension106%()
 							If I_714\Using = 1
 								InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0002))
 							Else
-								InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0003))
+								InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0004))
 							EndIf
 							
 							If Dist < 49.0
@@ -8451,7 +8457,7 @@ Function UpdateDimension106%()
 							EndIf
 						ElseIf Dist < 64.0
 							EntityTexture(e\room\Objects[19], e\room\Textures[0])
-							InjurePlayer((8.0 - Sqr(Dist)) * (fps\Factor[0] * 0.00015))
+							InjurePlayer((8.0 - Sqr(Dist)) * (fps\Factor[0] * 0.0001))
 						EndIf
 						
 						me\BigCameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
