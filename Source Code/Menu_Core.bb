@@ -1228,7 +1228,7 @@ Function RenderMainMenu%()
 						TextEx(x + (200 * MenuScale), y + (276 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 					Else
 						RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 140 * MenuScale)
-						RenderFrame(x + (590 * MenuScale), y + (50 * MenuScale), 340 * MenuScale, 90 * MenuScale)
+						RenderFrame(x + (590 * MenuScale), y + (50 * MenuScale), 350 * MenuScale, 90 * MenuScale)
 						Select SelectedDifficulty\SaveType
 							Case SAVE_ANYWHERE
 								;[Block]
