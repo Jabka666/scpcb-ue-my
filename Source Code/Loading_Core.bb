@@ -2137,13 +2137,13 @@ Function LoadEntities%()
 	; ~ Overlays
 	Local OverlayScale# = GraphicHeightFloat / GraphicWidthFloat
 	
-	;t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\fog_overlay.png", 1, DeleteAllTextures) ; ~ FOG
-	;t\OverlayID[0] = CreateSprite(ArkBlurCam)
-	;ScaleSprite(t\OverlayID[0], 1.0, OverlayScale)
-	;EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
-	;EntityBlend(t\OverlayID[0], 2)
-	;EntityOrder(t\OverlayID[0], -1000)
-	;MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\vignette_overlay.png", 1, DeleteAllTextures) ; ~ VIGNETTE
+	t\OverlayID[0] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[0], 1.0, OverlayScale)
+	EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
+	EntityBlend(t\OverlayID[0], 2)
+	EntityOrder(t\OverlayID[0], -1000)
+	MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
 	t\OverlayID[1] = CreateSprite(ArkBlurCam)
@@ -2254,7 +2254,6 @@ Function LoadEntities%()
 		HideEntity(t\OverlayID[i])
 	Next
 	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
-	;t\OverlayTextureID[12] = LoadTexture_Strict("GFX\Overlays\fog_night_vision_goggles_overlay.png", 1, DeleteAllTextures)
 	
 	LoadDecals()
 	

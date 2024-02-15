@@ -2475,10 +2475,10 @@ Function UpdateMoving%()
 		If chs\SuperManTimer > 70.0 * 50.0
 			msg\DeathMsg = GetLocalString("console", "superman")
 			Kill()
-			;If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
+			If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 		Else
 			me\BlurTimer = 500.0
-			;If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
+			If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 		EndIf
 	EndIf
 	
@@ -2994,6 +2994,7 @@ Function UpdateMouseLook%()
 	
 	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
 		If EntityHidden(t\OverlayID[4]) Then ShowEntity(t\OverlayID[4])
+		If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
 		If wi\NightVision = 2
 			EntityColor(t\OverlayID[4], 0.0, 100.0, 200.0)
 		ElseIf wi\NightVision = 3
@@ -3003,10 +3004,9 @@ Function UpdateMouseLook%()
 		Else
 			EntityColor(t\OverlayID[4], 200.0, 200.0, 200.0)
 		EndIf
-		;EntityTexture(t\OverlayID[0], t\OverlayTextureID[12])
 	Else
 		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
-		;EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
+		If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 	EndIf
 	
 	Update1025()
