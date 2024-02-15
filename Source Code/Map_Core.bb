@@ -184,8 +184,11 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%)
 	HideEntity(l\AdvancedSprite)
 	
 	l\Intensity = (R + G + B) / 255.0 / 3.0
-	If Rand(50) = 1 Then l\Flickers = True
-	
+	If Rand(50) = 1
+		Local RID% = room\RoomTemplate\RoomID
+		
+		If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499 Then l\Flickers = True
+	EndIf
 	Return(l)
 End Function
 
