@@ -4784,7 +4784,7 @@ Function UpdateEvents%()
 				If Is035Released
 					If e\room\Dist < 8.0
 						If e\room\NPC[0] = Null
-							e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x, 0.32, e\room\z)
+							e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 52.0 * RoomScale, e\room\z)
 							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 							SetNPCFrame(e\room\NPC[0], 19.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
