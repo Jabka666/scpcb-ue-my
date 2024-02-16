@@ -2681,6 +2681,9 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Level 3 Key Card", "key3", r\x + 237.0 * RoomScale, r\y + 0.5, r\z - 368.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			CreateCustomCenter(r, r\x + 490.0 * RoomScale, r\z - 490.0 * RoomScale)
 			;[End Block]
 		Case r_room4_hcz
