@@ -6195,21 +6195,24 @@ Function UpdateEvents%()
 						e\room\RoomDoors[1]\Locked = 0
 						e\room\RoomDoors[4]\Locked = 0
 						
-						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 64.0 Lor EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 64.0
+						If EntityDistanceSquared(e\room\OBJ, n_I\Curr173\Collider) < 64.0 Lor EntityDistanceSquared(e\room\OBJ, n_I\Curr106\Collider) < 64.0
 							e\room\RoomDoors[1]\Locked = 1
+							e\room\RoomDoors[1]\Open = False
 							e\room\RoomDoors[4]\Locked = 1
-						Else
-							For n.NPCs = Each NPCs
-								If n\NPCType = NPCTypeMTF
-									If EntityDistanceSquared(n\Collider, n_I\Curr173\Collider) < 64.0
-										e\room\RoomDoors[1]\Locked = 1
-										e\room\RoomDoors[4]\Locked = 1
-										Exit
-									EndIf
-								EndIf
-							Next
+							e\room\RoomDoors[4]\Open = False
 						EndIf
-						e\EventState2 = 70.0 * 5.0
+						For n.NPCs = Each NPCs
+							If n\NPCType = NPCTypeMTF
+								If EntityDistanceSquared(n\Collider, e\room\OBJ) < 36.0
+									e\room\RoomDoors[1]\Locked = 1
+									e\room\RoomDoors[1]\Open = False
+									e\room\RoomDoors[4]\Locked = 1
+									e\room\RoomDoors[4]\Open = False
+									Exit
+								EndIf
+							EndIf
+						Next
+						e\EventState2 = 70.0 * 2.5
 					Else
 						e\EventState2 = e\EventState2 - fps\Factor[0]
 					EndIf
