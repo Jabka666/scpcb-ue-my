@@ -962,7 +962,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			d.Doors = CreateDoor(r, r\x - 760.0 * RoomScale, r\y, r\z, 270.0)
-			d\MTFClose = False
+			d\MTFClose = False d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			r\RoomDoors.Doors[1] = d
 			
@@ -973,7 +973,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[3] = d
 			
 			d.Doors = CreateDoor(r, r\x + 760.0 * RoomScale, r\y, r\z, 90.0)
-			d\MTFClose = False
+			d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			r\RoomDoors.Doors[4] = d
 			
