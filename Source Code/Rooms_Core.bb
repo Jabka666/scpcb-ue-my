@@ -1567,24 +1567,22 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[4] = d
 			
 			; ~ Misc doors
+			
+			; ~ Storage Area 3E Door
 			d.Doors = CreateDoor(r, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 660.0 * RoomScale, 0.0, False, HEAVY_DOOR)
 			d\AutoClose = False : d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			
-			d.Doors = CreateDoor(r, r\x + 219.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 5276.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			d\AutoClose = False : d\Locked = 1
-			For i = 0 To 1
-				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-			Next
-			
+			; ~ Storage Area 3C Door
 			d.Doors = CreateDoor(r, r\x + 3446.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 6300.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			d\AutoClose = False : d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			
+			; ~ Shortcut Door
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 3096.0 * RoomScale, r\y - 5464.0 * RoomScale, r\z + 6569.0 * RoomScale)
