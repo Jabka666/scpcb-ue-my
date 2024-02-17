@@ -1578,7 +1578,7 @@
 	/* MTF ANNOUNCEMENTS */
 	"SFX\\Character\\MTF\\Announc.ogg": [
 		{
-			"text": "Mobile Task Force unit Epsilon-11, designated \u00c2\u00abNine-Tailed Fox\u00c2\u00bb has entered the facility.",
+			"text": "Mobile Task Force unit Epsilon-11, designated «Nine-Tailed Fox» has entered the facility.",
 			"delay": 1.7,
 			"color": "announcement"
 		},
@@ -1891,7 +1891,7 @@
 	],
 	"SFX\\Character\\MTF\\Searching6.ogg": [
 		{
-			"text": "J\u00c3\u00a4vla helvete, come out!",
+			"text": "Javla helvete, come out!",
 			"color": "mtf"
 		}
 	],
@@ -2407,7 +2407,7 @@
 			"delay": 5.25
 		},
 		{
-			"text": "I offer you some help and you try thank me by suffocating me?",
+			"text": "I offer you some help and you try thank me by «suffocating» me?",
 			"delay": 7.5
 		}
 	],
@@ -2492,7 +2492,7 @@
 			"color": "035"
 		},
 		{
-			"text": "I have no intentions of taking a person who \u00c2\u00abearned\u00c2\u00bb their imprisonment with me.",
+			"text": "I have no intentions of taking a person who «earned» their imprisonment with me.",
 			"delay": 4.9,
 			"color": "035"
 		},
@@ -3127,7 +3127,7 @@
 	],
 	"SFX\\SCP\\939\\2Lure10.ogg": [
 		{
-			"text": "Where \u00c2\u00abare\u00c2\u00bb you?",
+			"text": "Where are you?",
 			"color": "crew"
 		}
 	],
