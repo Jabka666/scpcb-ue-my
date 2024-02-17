@@ -9166,7 +9166,6 @@ Function UpdateEndings%()
 							EndIf
 							
 							If EntityDistanceSquared(me\Collider, e\room\Objects[5]) < PowTwo(320.0 * RoomScale)
-								e\EventState = 2.0
 								For i = 2 To 3
 									e\room\RoomDoors[i]\Open = False : e\room\RoomDoors[i]\Locked = 1
 								Next
@@ -9180,10 +9179,14 @@ Function UpdateEndings%()
 								e\room\NPC[0]\State = 3.0
 								
 								If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
-								PlayAnnouncement("SFX\Ending\GateB\682Battle.ogg")
+								e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\682Battle.ogg", opt\VoiceVolume * opt\MasterVolume, 0)
+								e\SoundCHN_IsStream = True
+								
+								e\EventState = 2.0
 							EndIf
-							ShouldPlay = 6
 						Else
+							ShouldPlay = 6
+							
 							e\EventState = e\EventState + fps\Factor[0]
 							
 							If e\EventState < 70.0 * 40.0
@@ -9267,14 +9270,13 @@ Function UpdateEndings%()
 									
 									If Temp = 1.0 ; ~ Explode
 										ShouldPlay = 66
-										me\SelectedEnding = Ending_B2
 										me\ExplosionTimer = Max(me\ExplosionTimer, 0.1)
+										me\SelectedEnding = Ending_B2
 									Else
 										SelectedItem = Null
 										
-										me\SelectedEnding = Ending_B1
-										
-										PlayAnnouncement("SFX\Ending\GateB\AlphaWarheadsFail.ogg")
+										e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\AlphaWarheadsFail.ogg", opt\VoiceVolume * opt\MasterVolume, 0)
+										e\SoundCHN2_IsStream = True
 										
 										n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True) + 0.29, EntityZ(e\room\Objects[8], True))
 										e\room\NPC[4] = n
@@ -9288,6 +9290,7 @@ Function UpdateEndings%()
 											e\room\NPC[i]\State = MTF_FOLLOW_PATH
 										Next
 										
+										me\SelectedEnding = Ending_B1
 										e\EventState = 70.0 * 85.0
 									EndIf
 								Else

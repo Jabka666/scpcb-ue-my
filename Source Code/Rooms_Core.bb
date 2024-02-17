@@ -2941,11 +2941,7 @@ Function FillRoom%(r.Rooms)
 			For r2.Rooms = Each Rooms
 				If r2\RoomTemplate\RoomID = r_gate_b_entrance
 					; ~ Elevator
-					d.Doors = CreateDoor(r, r\x - 5424.0 * RoomScale, r\y, r\z - 1380.0 * RoomScale, 0.0, False, ELEVATOR_DOOR)
-					PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.031, True)
-					PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.031, True)
-					PositionEntity(d\ElevatorPanel[0], EntityX(d\ElevatorPanel[0], True), EntityY(d\ElevatorPanel[0], True), EntityZ(d\ElevatorPanel[0], True) - 0.031, True)
-					PositionEntity(d\ElevatorPanel[1], EntityX(d\ElevatorPanel[1], True), EntityY(d\ElevatorPanel[1], True), EntityZ(d\ElevatorPanel[1], True) + 0.031, True)
+					d.Doors = CreateDoor(r, r\x - 5424.0 * RoomScale, r\y, r\z - 1372.0 * RoomScale, 0.0, False, ELEVATOR_DOOR)
 					r\RoomDoors.Doors[1] = d
 					
 					r2\Objects[1] = CreatePivot()
