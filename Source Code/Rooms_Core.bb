@@ -2237,7 +2237,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_shaft
 			;[Block]
 			; ~ Side of Elevator Shaft room door 1
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 744.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
+			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 744.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_1)
 			
 			; ~ Side of Elevator Shaft room door 2
 			d.Doors = CreateDoor(r, r\x + 1551.0 * RoomScale, r\y, r\z + 496.0 * RoomScale, 0.0)
