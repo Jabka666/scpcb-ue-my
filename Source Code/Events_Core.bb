@@ -8478,16 +8478,8 @@ Function UpdateDimension106%()
 						
 						; ~ Check if player is at the sinkhole (the exit from the trench room)
 						If EntityY(me\Collider) < 24.5
-							; ~ Move to the "exit room"
-							me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
-							
-							StopChannel(e\SoundCHN) : e\SoundCHN = 0
-							StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-							
-							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y + 16.0 - 304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
-							ResetEntity(me\Collider)
-							
-							e\EventState2 = PD_ExitRoom
+							Teleport = True
+							Random = 13
 						EndIf
 						;[End Block]
 					Case PD_ExitRoom
@@ -8511,34 +8503,40 @@ Function UpdateDimension106%()
 										
 										IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
 										
-										me\BlinkTimer = -10.0 : me\LightBlink = 5.0 : me\BlurTimer = 1500.0
+										me\BlinkTimer = -10.0 : me\BlurTimer = 1500.0
 										
-										PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Exit.ogg"))
-										
-										TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.6, EntityZ(r\Objects[0], True), 0.3, True)
-										TeleportToRoom(r)
-										
-										n_I\Curr106\State = 10000.0 : n_I\Curr106\Idle = 0
-										
-										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
-										EntityParent(de\OBJ, e\room\OBJ)
-										TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
-										
-										For e2.Events = Each Events
-											If e2\EventID = e_room2_sl
-												e2\EventState3 = 0.0
-												UpdateLever(e2\room\RoomLevers[0]\OBJ)
-												RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
-												Exit
-											EndIf
-										Next
-										
-										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-										If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-										
-										e\EventState = 0.0
-										e\EventState3 = 0.0
-										e\EventState2 = PD_StartRoom
+										If me\Playable
+											e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Exit.ogg"))
+											MakeMeUnplayable()
+										EndIf
+										If (Not ChannelPlaying(e\SoundCHN))
+											TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.6, EntityZ(r\Objects[0], True), 0.3, True)
+											TeleportToRoom(r)
+											
+											n_I\Curr106\State = 10000.0 : n_I\Curr106\Idle = 0
+											
+											de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
+											EntityParent(de\OBJ, e\room\OBJ)
+											TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
+											
+											For e2.Events = Each Events
+												If e2\EventID = e_room2_sl
+													e2\EventState3 = 0.0
+													UpdateLever(e2\room\RoomLevers[0]\OBJ)
+													RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
+													Exit
+												EndIf
+											Next
+											
+											me\Playable = True
+											
+											If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+											If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+											
+											e\EventState = 0.0
+											e\EventState3 = 0.0
+											e\EventState2 = PD_StartRoom
+										EndIf
 										Exit
 									EndIf
 								Next
@@ -8669,7 +8667,7 @@ Function UpdateDimension106%()
 				End Select
 				
 				If Teleport
-					me\BlinkTimer = -10.0 : me\BlurTimer = 1000.0
+					me\BlinkTimer = -10.0 : me\BlurTimer = 1500.0
 					
 					Select Random
 						Case 1, 2, 3, 4 ; ~ Rotate the player and close by the wall
@@ -8716,6 +8714,11 @@ Function UpdateDimension106%()
 							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y + 16.0 - 304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 							ResetEntity(me\Collider)
 							
+							me\LightBlink = 5.0
+							
+							StopChannel(e\SoundCHN) : e\SoundCHN = 0
+							StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
+							
 							e\EventState3 = 0.0
 							e\EventState2 = PD_ExitRoom
 							;[End Block]
@@ -8753,13 +8756,12 @@ Function UpdateDimension106%()
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = RoomID
 									RoomExist = True
-									
 									If RoomExist
 										GiveAchievement(AchvPD)
 										
 										IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
 										
-										me\LightBlink = 5.0
+										me\BlinkTimer = -10.0
 										
 										If r\RoomCenter <> 0
 											TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.4, EntityZ(r\RoomCenter, True), 0.3, True)
