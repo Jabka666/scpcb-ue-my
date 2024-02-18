@@ -6133,12 +6133,12 @@ Function UpdateEvents%()
 							EndIf
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 ; ~ Lock the player inside
-								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.3 
+								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.12
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 									e\EventState = 70.0 * 50.0
 								EndIf
 							Else
-								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.3 
+								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.12 
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 									e\EventState = 70.0 * 50.0
 								EndIf
