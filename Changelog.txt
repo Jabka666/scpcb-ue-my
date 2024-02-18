@@ -86,7 +86,9 @@ NPCs:
 
 - Can no longer use SCP-268 against SCP-096.
 - Improved SCP-008-1, SCP-049, SCP-049-2 and MTF's AI.
-- SCP-106 retreat animation used in the Tesla Gates is now faster.
+- Changes for SCP-106:
+	- SCP-106 retreat animation used in the Tesla Gates is now faster.
+	- SCP-106's chase theme doesn't play in the Pocket Dimension anymore.
 
 Bug Fixes:
 - Fixed SCP-939's texture which is too bright.
@@ -122,6 +124,7 @@ Bug Fixes:
 - Fixed SCP-008 and SCP-409 revert messages not showing.
 - Fixed NPCs collisions.
 - Fixed SCP-1123 ambience sound not playing correctly.
+- Fixed SCP-294 not working when playing with different languages.
 
 - Hopefully fixed a MAV after entering SCP-1499's dimension.
 - Hopefully fixed a bug with items getting stuck under the floor.
