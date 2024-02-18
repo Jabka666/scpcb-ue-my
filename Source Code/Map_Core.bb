@@ -667,9 +667,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					ts\z = ReadFloat(f) * RoomScale
 					
 					Temp2s = ReadString(f)
-					If FileExtension(Temp2s) = "sc" Then ; ~ Temporary solution, either re-export Gate B with the screen as .png or update the languages that use .sc
-						If FileSize(lang\LanguagePath + "GFX\Map\Screens\" + Temp2s) = 0 Then Temp2s = Left(Temp2s, Len(Temp2s) - 2) + "png"
-					EndIf
 					ts\ImgPath = Temp2s
 					;[End Block]
 				Case "waypoint"
