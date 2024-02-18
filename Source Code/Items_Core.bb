@@ -401,7 +401,7 @@ Function UpdateItems%()
 	Local xTemp#, yTemp#, zTemp#
 	Local Temp%, n%
 	Local Pick%, ed#
-	Local HideDist# = PowTwo(opt\CameraFogFar * LightVolume * 1.3)
+	Local HideDist# = PowTwo(opt\CameraFogFar * LightVolume * 1.2)
 	Local PushDist# = HideDist * 0.04
 	Local DeletedItem% = False
 	
