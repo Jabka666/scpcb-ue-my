@@ -2265,7 +2265,7 @@ Function UpdateMT%(mt.MTGrid)
 				
 				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(PlayerPosY - TunnelPosY) + PowTwo(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)))
 				
-				If Dist < opt\CameraFogFar * LightVolume * 1.2
+				If Dist < opt\CameraFogFar * LightVolume * 1.5
 					If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
 				Else
 					If (Not EntityHidden(mt\Entities[tX + (tY * MTGridSize)])) Then HideEntity(mt\Entities[tX + (tY * MTGridSize)])
@@ -3847,7 +3847,7 @@ Function UpdateDecals%()
 	Local de.Decals
 	
 	For de.Decals = Each Decals
-		If EntityDistanceSquared(de\OBJ, me\Collider) <= PowTwo(opt\CameraFogFar * LightVolume * 1.2)
+		If EntityDistanceSquared(de\OBJ, me\Collider) <= PowTwo(HideDistance)
 			If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
 			
 			Local DecalPosY# = EntityY(de\OBJ, True)

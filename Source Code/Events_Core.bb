@@ -1776,7 +1776,6 @@ Function UpdateEvents%()
 													TeleportToRoom(r)
 													
 													me\DropSpeed = 0.0
-													opt\CameraFogFar = 6.0
 													
 													For i = 0 To 2
 														PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(e\room\NPC[i]\Collider), z + (EntityZ(e\room\NPC[i]\Collider) - e\room\z))

@@ -3062,23 +3062,20 @@ Function UpdateZoneColor%()
 	If opt\DebugMode = 1
 		CameraRange(Camera, 0.01, 100.0)
 	Else
-		CameraRange(Camera, 0.01, opt\CameraFogFar * LightVolume * 1.2)
+		CameraRange(Camera, 0.01, opt\CameraFogFar * LightVolume * 1.5)
 	EndIf
 	; ~ Handle room-specific settings
 	If RID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
-		opt\CameraFogFar = 60.0
 		CameraFogRange(Camera, 5.0, 60.0)
 		CameraRange(Camera, 0.01, 72.0)
 	ElseIf RID = r_cont1_173_intro
-		opt\CameraFogFar = 45.0
 		CameraFogRange(Camera, 5.0, 45.0)
 		CameraRange(Camera, 0.01, 54.0)
 	ElseIf RID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
-		opt\CameraFogFar = 80.0
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, 80.0)
 		CameraRange(Camera, 0.01, 96.0)
@@ -3106,7 +3103,6 @@ Function UpdateZoneColor%()
 				If forest_event\room\NPC[0] <> Null
 					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 				EndIf
-				opt\CameraFogFar = 8.0
 				LightVolume = 1.0
 				CameraFogRange(Camera, 0.1, 8.0)
 				CameraRange(Camera, 0.01, 9.6)
