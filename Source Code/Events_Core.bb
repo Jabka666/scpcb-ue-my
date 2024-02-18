@@ -8177,10 +8177,11 @@ Const PD_TrenchesRoom% = 3
 Const PD_ExitRoom% = 4
 Const PD_FakeTunnelRoom% = 5
 Const PD_TowerRoom% = 6
+Const PD_Labyrinth% = 7
 ;[End Block]
 
 Function UpdateDimension106%()
-	Local e.Events, e2.Events, r.Rooms, it.Items, p.Particles, de.Decals
+	Local e.Events, e2.Events, r.Rooms, d.Doors, it.Items, p.Particles, de.Decals
 	Local i%, Angle#, Dist#, Pvt%, Temp%
 	Local SinValue#, CosValue#, SqrValue#
 	Local x#, y#, z#
@@ -8226,8 +8227,18 @@ Function UpdateDimension106%()
 					EndIf
 				EndIf
 				
+				Temp = False
+				For i = 0 To MaxItemAmount - 1
+					If Inventory(i) <> Null
+						If Inventory(i)\ItemTemplate\TempName = "scp005"
+							Temp = True
+							Exit
+						EndIf
+					EndIf
+				Next
+				
 				Local RoomExist%
-				Local Teleport% = False, Random% = Rand(30)
+				Local Teleport% = False, Random% = Rand(32 + (Temp * 4))
 				
 				Select e\EventState2
 					Case PD_StartRoom
@@ -8322,8 +8333,8 @@ Function UpdateDimension106%()
 							EndIf
 						EndIf
 						
-						Temp = EntityDistanceSquared(me\Collider, e\room\Objects[17])
-						If Temp < PowTwo(2000.0 * RoomScale)
+						Dist = EntityDistanceSquared(me\Collider, e\room\Objects[17])
+						If Dist < PowTwo(2000.0 * RoomScale)
 							LoadEventSound(e, "SFX\Room\PocketDimension\Screech.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\Kneel.ogg", 1)
 							e\EventState2 = PD_ThroneRoom
@@ -8331,10 +8342,10 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_ThroneRoom
 						;[Block]
-						Temp = EntityDistanceSquared(me\Collider, e\room\Objects[17])
-						SqrValue = Sqr(Temp)
+						Dist = EntityDistanceSquared(me\Collider, e\room\Objects[17])
+						SqrValue = Sqr(Dist)
 						
-						If Temp >= PowTwo(2000.0 * RoomScale)
+						If Dist >= PowTwo(2000.0 * RoomScale)
 							LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
 							e\EventState2 = PD_FourWayRoom
@@ -8481,16 +8492,16 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_ExitRoom
 						;[Block]
-						Temp = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
+						Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
 						
-						If Temp < PowTwo(640.0 * RoomScale)
-							SqrValue = Sqr(Temp)
+						If Dist < PowTwo(640.0 * RoomScale)
+							SqrValue = Sqr(Dist)
 							me\BlurTimer = ((640.0 * RoomScale) - SqrValue) * 3000.0
 							
 							e\SoundCHN2 = LoopSound2(DecaySFX[Rand(3)], e\SoundCHN2, Camera, me\Collider, 2.0, (640.0 * RoomScale - SqrValue) * Abs(me\CurrSpeed) * 100.0)
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, SqrValue * 10.0)
 							
-							If Temp < PowTwo(130.0 * RoomScale)
+							If Dist < PowTwo(130.0 * RoomScale)
 								RoomExist = False
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\RoomID = r_room2_shaft
@@ -8628,6 +8639,30 @@ Function UpdateDimension106%()
 									me\Terminated = True
 								EndIf
 							EndIf
+						EndIf
+						;[End Block]
+					Case PD_Labyrinth
+						;[Block]
+						UpdateDoors()
+						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
+						
+						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
+							n_I\Curr106\Speed = n_I\Curr106\Speed * 2.8
+							For d.Doors = Each Doors
+								If d\room = e\room
+									d\Open = False
+									d\OpenState = 0.0
+								EndIf
+							Next
+							If wi\NightVision > 0
+								opt\CameraFogFar = 17.0
+							ElseIf wi\SCRAMBLE > 0
+								opt\CameraFogFar = 9.0
+							Else
+								opt\CameraFogFar = 6.0
+							EndIf
+							Teleport = True
+							Random = Rand(13, 22)
 						EndIf
 						;[End Block]
 				End Select
@@ -8776,6 +8811,21 @@ Function UpdateDimension106%()
 							
 							e\EventState3 = 0.0
 							e\EventState2 = PD_FakeTunnelRoom
+							;[End Block]
+						Case 31, 32, 33, 34, 35, 36
+							;[Block]
+							PlaySound_Strict(OldManSFX[3], True)
+							
+							Temp = Rand(24, 27)
+							PositionEntity(me\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True))
+							ResetEntity(me\Collider)
+							
+							n_I\Curr106\Speed = n_I\Curr106\Speed / 2.8
+							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[23], True), EntityY(e\room\Objects[23], True), EntityZ(e\room\Objects[23], True))
+							ResetEntity(n_I\Curr106\Collider)
+							
+							e\EventState3 = 0.0
+							e\EventState2 = PD_Labyrinth
 							;[End Block]
 					End Select
 					UpdateRender()

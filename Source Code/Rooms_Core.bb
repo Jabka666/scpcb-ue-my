@@ -3695,14 +3695,47 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_dimension_106
 			;[Block]
+			; ~ The doors inside labyrinth
+			d.Doors = CreateDoor(r, r\x + 5187.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 2523.0 * RoomScale, 180.0)
+			d.Doors = CreateDoor(r, r\x + 5521.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1641.0 * RoomScale, 180.0)
+			d.Doors = CreateDoor(r, r\x + 9128.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 2160.0 * RoomScale, 180.0)
+			d.Doors = CreateDoor(r, r\x + 8523.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1728.0 * RoomScale, 180.0)
+			d.Doors = CreateDoor(r, r\x + 9880.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1212.0 * RoomScale, 180.0)
+			d.Doors = CreateDoor(r, r\x + 5299.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 360.0 * RoomScale, 90.0)
+			d.Doors = CreateDoor(r, r\x + 7807.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1259.0 * RoomScale, 90.0)
+			d.Doors = CreateDoor(r, r\x + 8196.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1404.0 * RoomScale, 90.0)
+			d.Doors = CreateDoor(r, r\x + 8143.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 360.0 * RoomScale, 90.0)
+			d.Doors = CreateDoor(r, r\x + 9709.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 888.0 * RoomScale, 90.0)
+			
+			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
+			For d.Doors = Each Doors
+				If d\room\RoomTemplate\RoomID = r\RoomTemplate\RoomID
+					EntityTexture(d\OBJ, Tex)
+					EntityTexture(d\OBJ2, Tex)
+					EntityTexture(d\FrameOBJ, Tex)
+				EndIf
+			Next
+			DeleteSingleTextureEntryFromCache(Tex)
+			
 			; ~ The doors inside fake tunnel
 			d.Doors = CreateDoor(r, r\x, r\y + 2060.0 * RoomScale, r\z + 32.0 - 1024.0 * RoomScale, 0.0, False, HEAVY_DOOR)
 			d\AutoClose = False
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors= CreateDoor(r, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 + 1024.0 * RoomScale, 180.0, False, HEAVY_DOOR)
+			d.Doors = CreateDoor(r, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 + 1024.0 * RoomScale, 180.0, False, HEAVY_DOOR)
 			d\AutoClose = False
 			r\RoomDoors.Doors[1] = d
+			
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 5187.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 2523.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 5521.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1641.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 9128.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 2160.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 8523.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1728.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 9880.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1212.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 5299.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 360.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 7807.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1259.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 8196.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1404.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 8143.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 360.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 9709.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 888.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
 			
 			de.Decals = CreateDecal(DECAL_PD_6, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1, 2)
 			
@@ -3816,6 +3849,37 @@ Function FillRoom%(r.Rooms)
 				HideEntity(r\Objects[i])
 				HideEntity(r\Objects[i + 1])
 			Next
+			
+			; ~ Exits from labyrinth
+			r\Objects[21] = CreatePivot()
+			PositionEntity(r\Objects[21], r\x + 10939.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 1822.0 * RoomScale)
+			EntityParent(r\Objects[21], r\OBJ)
+			
+			r\Objects[22] = CreatePivot()
+			PositionEntity(r\Objects[22], r\x + 3396.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 1641.0 * RoomScale)
+			EntityParent(r\Objects[22], r\OBJ)
+			
+			; ~ SCP-106 spawnpoint in labyrinth
+			r\Objects[23] = CreatePivot()
+			PositionEntity(r\Objects[23], r\x + 7211.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 1566.0 * RoomScale)
+			EntityParent(r\Objects[23], r\OBJ)
+			
+			; ~ Player spawnpoints in labyrinth
+			r\Objects[24] = CreatePivot()
+			PositionEntity(r\Objects[24], r\x + 5261.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2700.0 * RoomScale)
+			EntityParent(r\Objects[24], r\OBJ)
+			
+			r\Objects[25] = CreatePivot()
+			PositionEntity(r\Objects[25], r\x + 6835.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2378.0 * RoomScale)
+			EntityParent(r\Objects[25], r\OBJ)
+			
+			r\Objects[26] = CreatePivot()
+			PositionEntity(r\Objects[26], r\x + 6343.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 266.0 * RoomScale)
+			EntityParent(r\Objects[26], r\OBJ)
+			
+			r\Objects[27] = CreatePivot()
+			PositionEntity(r\Objects[27], r\x + 8380.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2301.0 * RoomScale)
+			EntityParent(r\Objects[27], r\OBJ)
 			
 			it.Items = CreateItem("Burnt Note", "paper", r\x, r\y + 0.5, r\z + 896.0 * RoomScale)
 			it.Items = CreateItem("George Maynard's Badge", "burntbadge", r\x - 1300 * RoomScale, r\y + 0.5, r\z + 8700 * RoomScale)

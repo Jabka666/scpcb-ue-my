@@ -918,7 +918,7 @@ Function UpdateNPCs%()
 									n\State = -10.0
 								EndIf
 							Else
-								If RID <> r_gate_a Then ShouldPlay = 10
+								If RID <> r_gate_a And RID <> r_dimension_106 Then ShouldPlay = 10
 								
 								Local Visible% = False
 								
