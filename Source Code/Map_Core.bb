@@ -238,18 +238,12 @@ Function UpdateLights%(Cam%)
 							Local LightSpriteHidden% = EntityHidden(l\Sprite)
 							Local LightAdvancedSpriteHidden% = EntityHidden(l\AdvancedSprite)
 							
-							If Dist < 64.0
-								If LightOBJHidden Then ShowEntity(l\OBJ)
-							Else
-								; ~ Hide the sprites and light emitter because they are too far
-								If (Not LightOBJHidden) Then HideEntity(l\OBJ)
-							EndIf
-							
 							EntityAutoFade(l\Sprite, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
 							If Dist < PowTwo(opt\CameraFogFar * 1.2)
 								Local LightVisible% = EntityVisible(Cam, l\OBJ)
 								Local LightInView% = EntityInView(l\OBJ, Cam)
 								
+								If LightOBJHidden Then ShowEntity(l\OBJ)
 								If l\Flickers And Rand(13) = 1 And LightVisible And me\LightBlink =< 0.0
 									PlaySound2(IntroSFX[Rand(8, 10)], Cam, l\OBJ, 4.0)
 									If LightInView
@@ -287,6 +281,9 @@ Function UpdateLights%(Cam%)
 										If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
 									EndIf
 								EndIf
+							Else
+								; ~ Hide the light emitter because it is too far
+								If (Not LightOBJHidden) Then HideEntity(l\OBJ)
 							EndIf
 						EndIf
 					Else
