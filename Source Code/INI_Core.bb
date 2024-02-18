@@ -63,11 +63,8 @@ Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", Check
 	Else
 		DefaultValue1 = DefaultValue
 	EndIf
-	If FileType(lang\LanguagePath + File) = 1 Then
-		Return(IniGetBufferString(lang\LanguagePath + File, Name, Parameter, DefaultValue1))
-	Else
-		Return(IniGetBufferString(File, Name, Parameter, DefaultValue1))
-	EndIf
+
+	Return(IniGetBufferString(lang\LanguagePath + File, Name, Parameter, DefaultValue1))
 End Function
 
 Function GetLocalString$(Section$, Parameter$)
