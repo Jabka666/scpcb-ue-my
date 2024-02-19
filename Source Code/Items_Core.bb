@@ -1383,7 +1383,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case 3
 							;[Block]
-							If Rand(10 + (5 * SelectedDifficulty\OtherFactors)) = 1
+							If Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Level 4 Key Card", "key4", x, y, z)
 							Else
 								it2.Items = CreateItem("Playing Card", "playcard", x, y, z)
@@ -1433,7 +1433,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							If Rand(0, ((MaxAchievements - 1) * (2 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * 2)) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
-								If Rand(10 + (5 * SelectedDifficulty\OtherFactors)) = 1
+								If Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
 									it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 								Else
 									it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1442,7 +1442,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case 6
 							;[Block]
-							If Rand(4 + (2 * SelectedDifficulty\OtherFactors)) = 1
+							If Rand(6 + (3 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
@@ -1457,10 +1457,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 					Next
 					
-					If Rand(0, ((MaxAchievements - 1) * (3 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * 3)) = 0
+					If Rand(0, ((MaxAchievements - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * 4)) = 0
 						it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 					Else
-						If Rand(20 + (5 * SelectedDifficulty\OtherFactors)) = 1
+						If Rand(24 + (6 * SelectedDifficulty\OtherFactors)) = 1
 							it2.Items = CreateItem("Level 6 Key Card", "key6", x, y, z)
 						Else
 							it2.Items = CreateItem("Mastercard", "mastercard", x, y, z)
