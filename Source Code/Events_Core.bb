@@ -8322,7 +8322,7 @@ Function UpdateDimension106%()
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)
 								Teleport = True
-								Random = Rand(11, 32)
+								Random = Rand(11, 32+ (Temp * 8))
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
 									PlaySound_Strict(HorrorSFX[8])
@@ -8629,7 +8629,7 @@ Function UpdateDimension106%()
 							; ~ Player is at the exit
 							If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
 								Teleport = True
-								Random = Rand(11, 30)
+								Random = Rand(11, 32 + (Temp * 8))
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
 									PlaySound_Strict(HorrorSFX[8])

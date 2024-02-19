@@ -186,6 +186,7 @@ Const BUTTON_ELEVATOR_MODEL% = 4
 Const BUTTON_GREEN_TEXTURE% = 0
 Const BUTTON_YELLOW_TEXTURE% = 1
 Const BUTTON_RED_TEXTURE% = 2
+Const BUTTON_106_TEXTURE% = 3
 ;[End Block]
 
 ; ~ Elevator Panel Texture ID Constants
@@ -263,9 +264,10 @@ Function LoadDoors%()
 	d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad.jpg", 1, DeleteAllTextures)
 	d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_using.png", 1, DeleteAllTextures)
 	d_I\ButtonTextureID[BUTTON_RED_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_locked.png", 1, DeleteAllTextures)
+	d_I\ButtonTextureID[BUTTON_106_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_106.png", 1, DeleteAllTextures)
 	
 	If opt\Atmosphere
-		For i = BUTTON_GREEN_TEXTURE To BUTTON_RED_TEXTURE
+		For i = BUTTON_GREEN_TEXTURE To BUTTON_106_TEXTURE
 			TextureBlend(d_I\ButtonTextureID[i], 5)
 		Next
 	EndIf
@@ -287,7 +289,7 @@ Function RemoveDoorInstances%()
 	For i = ELEVATOR_PANEL_DOWN To ELEVATOR_PANEL_IDLE
 		d_I\ElevatorPanelTextureID[i] = 0
 	Next
-	For i = BUTTON_GREEN_TEXTURE To BUTTON_RED_TEXTURE
+	For i = BUTTON_GREEN_TEXTURE To BUTTON_106_TEXTURE
 		d_I\ButtonTextureID[i] = 0
 	Next
 	Delete Each DoorInstance

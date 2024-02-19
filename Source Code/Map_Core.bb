@@ -3070,8 +3070,9 @@ Function UpdateDoors%()
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
 				Local TextureID%
-				
-				If d\OpenState > 0.0 And d\OpenState < 180.0
+				If d\KeyCard = KEY_005
+					TextureID = BUTTON_106_TEXTURE
+				ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
 					TextureID = BUTTON_YELLOW_TEXTURE
 				ElseIf d\Locked = 1
 					TextureID = BUTTON_RED_TEXTURE
@@ -3528,7 +3529,11 @@ Function UseDoor%(PlaySFX% = True)
 							CreateMsg(GetLocalString("msg", "key.005"))
 						Else
 							If Temp < d_I\ClosestDoor\KeyCard
-								CreateMsg(Format(GetLocalString("msg", "key.higher"), d_I\ClosestDoor\KeyCard - 2))
+								If d_I\ClosestDoor\KeyCard = KEY_005
+									CreateMsg(GetLocalString("msg", "key.required.106"))
+								Else
+									CreateMsg(Format(GetLocalString("msg", "key.higher"), d_I\ClosestDoor\KeyCard - 2))
+								EndIf
 							Else
 								CreateMsg(GetLocalString("msg", "key.slot"))
 							EndIf
