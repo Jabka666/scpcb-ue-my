@@ -2294,13 +2294,16 @@ Function RenderMessages%()
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
 		SetFontEx(fo\FontID[Font_Default])
+		Color(Temp2, Temp2, Temp2)
+		
+		Local PosY%
+		
 		If (Not Temp)
-			Color(Temp2, Temp2, Temp2)
-			TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y + (200 * MenuScale), msg\Txt, True)
+			PosY = mo\Viewport_Center_Y + (200 * MenuScale)
 		Else
-			Color(Temp2, Temp2, Temp2)
-			TextEx(mo\Viewport_Center_X, opt\GraphicHeight * 0.94, msg\Txt, True)
+			PosY = opt\GraphicHeight * 0.94
 		EndIf
+		TextEx(mo\Viewport_Center_X, PosY, msg\Txt, True)
 	EndIf
 	Color(255, 255, 255)
 	If opt\ShowFPS
@@ -6057,7 +6060,7 @@ Function RenderGUI%()
 	EndIf
 	If chs\DebugHUD <> 0 Then RenderDebugHUD()
 	
-	If SelectedScreen <> Null Then DrawBlock(SelectedScreen\Img, mo\Viewport_Center_X - ImageWidth(SelectedScreen\Img) / 2, mo\Viewport_Center_Y - ImageHeight(SelectedScreen\Img) / 2)
+	If SelectedScreen <> Null Then DrawBlock(SelectedScreen\Img, mo\Viewport_Center_X - 512.0, mo\Viewport_Center_Y - 384.0) ; ~ 1024x768
 	
 	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
 	Local ShouldDrawHUD% = True

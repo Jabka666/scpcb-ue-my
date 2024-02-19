@@ -1782,7 +1782,7 @@ Function ResetLoadingTextColor%()
 End Function
 
 Global LoadingScreens%
-Global LoadingBack%, LoadingImage%
+Global LoadingBack%, LoadingBackWidth%, LoadingBackHeight%, LoadingImage%
 Global SelectedLoadingScreens%, LoadingScreenTitle$
 Global Descriptions%, DescriptionIndex%
 Global ImageAlignX$, ImageAlignY$
@@ -1814,6 +1814,8 @@ Function RenderLoading%(Percent%, Assets$ = "")
 				If LoadingBack = 0
 					LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
 					LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
+					LoadingBackWidth = ImageWidth(LoadingBack) / 2
+					LoadingBackHeight = ImageHeight(LoadingBack) / 2
 				EndIf
 			EndIf
 		EndIf
@@ -1828,7 +1830,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		If Percent > 20 Then UpdateMusic()
 		If Percent > (100.0 / JsonGetArraySize(Descriptions)) * (DescriptionIndex + 1) Then DescriptionIndex = DescriptionIndex + 1
 		
-		If LoadingBack <> 0 Then DrawBlock(LoadingBack, mo\Viewport_Center_X - ImageWidth(LoadingBack) / 2, mo\Viewport_Center_Y - ImageHeight(LoadingBack) / 2)
+		If LoadingBack <> 0 Then DrawBlock(LoadingBack, mo\Viewport_Center_X - LoadingBackWidth, mo\Viewport_Center_Y - LoadingBackHeight)
 		
 		If ImageAlignX = "center"
 			x = mo\Viewport_Center_X - ImageWidth(LoadingImage) / 2
@@ -1992,6 +1994,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			DeleteMenuGadgets()
 			FreeImage(LoadingImage) : LoadingImage = 0
 			FreeImage(LoadingBack) : LoadingBack = 0
+			LoadingBackWidth = 0 : LoadingBackHeight = 0
 			SelectedLoadingScreens = 0
 		EndIf
 	Until Close
