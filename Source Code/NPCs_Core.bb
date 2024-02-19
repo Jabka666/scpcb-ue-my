@@ -4785,7 +4785,7 @@ Function UpdateNPCs%()
 			EndIf
 			n\GravityMult = 0.0
 		EndIf
-		If GravityDist < PowTwo(opt\CameraFogFar * LightVolume * 1.2) Lor n\NPCType = NPCType1499_1
+		If GravityDist < PowTwo(HideDistance) Lor n\NPCType = NPCType1499_1
 			EntityAlpha(n\OBJ, 1.0)
 		Else
 			EntityAlpha(n\OBJ, 0.0)
@@ -7051,7 +7051,7 @@ End Function
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If Abs(n\Frame - Frame) < 0.001 Then Return
 	
-	If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(opt\CameraFogFar * LightVolume * 1.2)
+	If EntityDistanceSquared(n\Collider, me\Collider) >= PowTwo(HideDistance)
 		If n\AnimTimer <= 0.0
 			SetAnimTime(n\OBJ, Frame)
 			n\AnimTimer = fps\Factor[0] * 4.0

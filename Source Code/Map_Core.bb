@@ -3847,7 +3847,7 @@ Function UpdateDecals%()
 	Local de.Decals
 	
 	For de.Decals = Each Decals
-		If EntityDistanceSquared(de\OBJ, me\Collider) <= PowTwo(opt\CameraFogFar * LightVolume * 1.2)
+		If EntityDistanceSquared(de\OBJ, me\Collider) < PowTwo(HideDistance)
 			If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
 			
 			Local DecalPosY# = EntityY(de\OBJ, True)
