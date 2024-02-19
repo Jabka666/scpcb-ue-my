@@ -8673,7 +8673,7 @@ Function UpdateDimension106%()
 							Pvt = CreatePivot()
 							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 							PointEntity(Pvt, e\room\OBJ)
-							MoveEntity(Pvt, 0.0, 0.0, Sqr(EntityDistanceSquared(me\Collider, e\room\OBJ)) * 1.9)
+							MoveEntity(Pvt, 0.0, 0.0, EntityDistance(me\Collider, e\room\OBJ) * 1.9)
 							PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider) + 0.1, EntityZ(Pvt))
 							ResetEntity(me\Collider)
 							
