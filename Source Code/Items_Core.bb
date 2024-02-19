@@ -1430,7 +1430,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 							Next
 							
-							If Rand(0, ((MaxAchievements - 1) * (2 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * 2)) = 0
+							If Rand(0, ((MaxAchievements - 1) * (2 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (2 + SelectedDifficulty\OtherFactors))) = 0
 								it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 							Else
 								If Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
@@ -1457,7 +1457,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 					Next
 					
-					If Rand(0, ((MaxAchievements - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * 4)) = 0
+					If Rand(0, ((MaxAchievements - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))) = 0
 						it2.Items = CreateItem("Key Card Omni", "keyomni", x, y, z)
 					Else
 						If Rand(24 + (6 * SelectedDifficulty\OtherFactors)) = 1
