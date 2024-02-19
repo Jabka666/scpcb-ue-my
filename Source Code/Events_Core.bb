@@ -8238,7 +8238,7 @@ Function UpdateDimension106%()
 				Next
 				
 				Local RoomExist%
-				Local Teleport% = False, Random% = Rand(32 + (Temp * 4))
+				Local Teleport% = False, Random% = Rand(32 + (Temp * 8))
 				
 				Select e\EventState2
 					Case PD_StartRoom
@@ -8322,7 +8322,7 @@ Function UpdateDimension106%()
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)
 								Teleport = True
-								Random = Rand(11, 30)
+								Random = Rand(11, 32)
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
 									PlaySound_Strict(HorrorSFX[8])
@@ -8815,7 +8815,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_FakeTunnelRoom
 							;[End Block]
-						Case 31, 32, 33, 34, 35, 36
+						Case 31, 32, 33, 34, 35, 36, 37, 38, 39, 40
 							;[Block]
 							PlaySound_Strict(OldManSFX[3], True)
 							

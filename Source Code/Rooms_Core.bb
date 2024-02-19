@@ -3696,16 +3696,16 @@ Function FillRoom%(r.Rooms)
 		Case r_dimension_106
 			;[Block]
 			; ~ The doors inside labyrinth
-			d.Doors = CreateDoor(r, r\x + 5187.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 2523.0 * RoomScale, 180.0)
-			d.Doors = CreateDoor(r, r\x + 5521.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1641.0 * RoomScale, 180.0)
-			d.Doors = CreateDoor(r, r\x + 9128.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 2160.0 * RoomScale, 180.0)
-			d.Doors = CreateDoor(r, r\x + 8523.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1728.0 * RoomScale, 180.0)
-			d.Doors = CreateDoor(r, r\x + 9880.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1212.0 * RoomScale, 180.0)
-			d.Doors = CreateDoor(r, r\x + 5299.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 360.0 * RoomScale, 90.0)
-			d.Doors = CreateDoor(r, r\x + 7807.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1259.0 * RoomScale, 90.0)
-			d.Doors = CreateDoor(r, r\x + 8196.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1404.0 * RoomScale, 90.0)
-			d.Doors = CreateDoor(r, r\x + 8143.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 360.0 * RoomScale, 90.0)
-			d.Doors = CreateDoor(r, r\x + 9709.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 888.0 * RoomScale, 90.0)
+			d.Doors = CreateDoor(r, r\x + 5187.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 2523.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 5521.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1641.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 9128.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 2160.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 8523.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1728.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 9880.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1212.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 5299.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 360.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 7807.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1259.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 8196.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1404.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 8143.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 360.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
+			d.Doors = CreateDoor(r, r\x + 9709.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 888.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
 			
 			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
 			For d.Doors = Each Doors
@@ -3874,7 +3874,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[25], r\OBJ)
 			
 			r\Objects[26] = CreatePivot()
-			PositionEntity(r\Objects[26], r\x + 6343.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 266.0 * RoomScale)
+			PositionEntity(r\Objects[26], r\x + 7925.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 201.0 * RoomScale)
 			EntityParent(r\Objects[26], r\OBJ)
 			
 			r\Objects[27] = CreatePivot()
