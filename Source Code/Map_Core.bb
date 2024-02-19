@@ -3088,9 +3088,9 @@ Function UpdateDoors%()
 					If ChannelPlaying(d\ButtonCHN)
 						If d_I\AnimButton <> 0
 							If PlayerInsideElevator
-								If InFacility = LowerFloor Lor ToElevatorFloor = UpperFloor
+								If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 									Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
-								ElseIf InFacility = UpperFloor Lor ToElevatorFloor = LowerFloor
+								Else
 									Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 21.0, 40.0, 2.0, False)
 								EndIf
 							Else
@@ -3116,32 +3116,19 @@ Const UpperFloor% = 1
 Const Floor1499% = 2
 ;[End Block]
 
-Function FindFloor%(e.Events)
-	Select e\EventID
-		Case e_room3_storage, e_cont1_079, e_cont1_106, e_cont2_008, e_cont2_049, e_cont2_409, e_room2_nuke
-			;[Block]
-			Return(LowerFloor)
-			;[End Block]
-		Case e_room2_mt, e_gate_a_entrance, e_gate_b_entrance
-			;[Block]
-			Return(UpperFloor)
-			;[End Block]
-	End Select
-End Function
-
 Function UpdateElevatorPanel%(d.Doors)
 	Local TextureID%, i%
 	
 	If PlayerInsideElevator
-		If InFacility = LowerFloor Lor ToElevatorFloor = UpperFloor
+		If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 			TextureID = ELEVATOR_PANEL_UP
-		ElseIf InFacility = UpperFloor Lor ToElevatorFloor = LowerFloor
+		Else
 			TextureID = ELEVATOR_PANEL_DOWN
 		EndIf
 	Else
-		If InFacility = LowerFloor Lor ToElevatorFloor = UpperFloor
+		If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 			TextureID = ELEVATOR_PANEL_DOWN
-		ElseIf InFacility = UpperFloor Lor ToElevatorFloor = LowerFloor
+		Else
 			TextureID = ELEVATOR_PANEL_UP
 		EndIf
 	EndIf
@@ -3670,9 +3657,9 @@ Function UseDoor%(PlaySFX% = True)
 						CreateMsg(GetLocalString("msg", "elev.broken"))
 						d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
 						If PlayerInsideElevator
-							If InFacility = LowerFloor Lor ToElevatorFloor = UpperFloor
+							If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 								SetAnimTime(d_I\ClosestButton, 1.0)
-							ElseIf InFacility = UpperFloor  Lor ToElevatorFloor = LowerFloor
+							Else
 								SetAnimTime(d_I\ClosestButton, 21.0)
 							EndIf
 						Else
@@ -3723,9 +3710,9 @@ Function UseDoor%(PlaySFX% = True)
 			Else
 				d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
 				If PlayerInsideElevator
-					If InFacility = LowerFloor Lor ToElevatorFloor = UpperFloor
+					If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 						SetAnimTime(d_I\ClosestButton, 1.0)
-					ElseIf InFacility = UpperFloor  Lor ToElevatorFloor = LowerFloor
+					Else
 						SetAnimTime(d_I\ClosestButton, 21.0)
 					EndIf
 				Else
