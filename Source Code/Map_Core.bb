@@ -3088,9 +3088,9 @@ Function UpdateDoors%()
 					If ChannelPlaying(d\ButtonCHN)
 						If d_I\AnimButton <> 0
 							If PlayerInsideElevator
-								If InFacility = LowerFloor Lor InFacility = UpperFloor
+								If InFacility = LowerFloor Lor ToElevatorFloor = UpperFloor
 									Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
-								ElseIf InFacility = UpperFloor Lor InFacility = LowerFloor
+								ElseIf InFacility = UpperFloor Lor ToElevatorFloor = LowerFloor
 									Animate2(d_I\AnimButton, AnimTime(d_I\AnimButton), 21.0, 40.0, 2.0, False)
 								EndIf
 							Else
