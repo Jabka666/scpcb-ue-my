@@ -8270,8 +8270,7 @@ Function UpdateDimension106%()
 								e\EventState = 601.0
 							EndIf
 						EndIf
-						Dist = EntityDistanceSquared(me\Collider, e\room\OBJ)
-						If Dist > PowTwo(-1200.0 * RoomScale) Then Teleport = True
+						If EntityDistanceSquared(me\Collider, e\room\OBJ) > PowTwo(-1200.0 * RoomScale) Then Teleport = True
 						;[End Block]
 					Case PD_FourWayRoom
 						;[Block]
@@ -8332,8 +8331,7 @@ Function UpdateDimension106%()
 							EndIf
 						EndIf
 						
-						Dist = EntityDistanceSquared(me\Collider, e\room\Objects[17])
-						If Dist < PowTwo(2000.0 * RoomScale)
+						If EntityDistanceSquared(me\Collider, e\room\Objects[17]) < PowTwo(2000.0 * RoomScale)
 							LoadEventSound(e, "SFX\Room\PocketDimension\Screech.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\Kneel.ogg", 1)
 							e\EventState2 = PD_ThroneRoom
@@ -8484,7 +8482,6 @@ Function UpdateDimension106%()
 					Case PD_ExitRoom
 						;[Block]
 						Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
-						
 						If Dist < PowTwo(640.0 * RoomScale)
 							SqrValue = Sqr(Dist)
 							me\BlurTimer = ((640.0 * RoomScale) - SqrValue) * 3000.0
@@ -8676,7 +8673,7 @@ Function UpdateDimension106%()
 							Pvt = CreatePivot()
 							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 							PointEntity(Pvt, e\room\OBJ)
-							MoveEntity(Pvt, 0.0, 0.0, Sqr(Dist) * 1.9)
+							MoveEntity(Pvt, 0.0, 0.0, Sqr(EntityDistanceSquared(me\Collider, e\room\OBJ)) * 1.9)
 							PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider) + 0.1, EntityZ(Pvt))
 							ResetEntity(me\Collider)
 							
