@@ -40,7 +40,7 @@ Type NPCs
 	Field BoneToManipulate$
 	Field BonePitch#, BoneYaw#, BoneRoll#
 	Field NPCNameInSection$
-	Field InFacility% = True
+	Field InFacility%
 	Field HP%
 	Field PathX#, PathZ#
 	Field Model$
@@ -586,7 +586,7 @@ Function UpdateNPCs%()
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
-		n\InFacility = CheckForNPCInFacility(n)
+		n\InFacility = IsInFacility(EntityY(n\Collider))
 		
 		Select n\NPCType
 			Case NPCType173
@@ -1815,7 +1815,7 @@ Function UpdateNPCs%()
 							ElseIf n\Idle = 0
 								If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 								If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-								If PlayerInReachableRoom(True) And InFacility = 1 ; ~ Player is in a room where SCP-049 can teleport to
+								If PlayerInReachableRoom(True) And InFacility = NullFloor ; ~ Player is in a room where SCP-049 can teleport to
 									If Rand(4 - SelectedDifficulty\OtherFactors) = 1
 										TeleportCloser(n)
 									Else
@@ -4811,7 +4811,7 @@ Function UpdateNPCs%()
 						Local UpdateGravity% = False
 						Local MaxX#, MinX#, MaxZ#, MinZ#
 						
-						If n\InFacility = 1
+						If n\InFacility = NullFloor
 							If RID <> r_cont1_173_intro
 								If forest_event <> Null
 									If PlayerRoom = forest_event\room
@@ -6293,7 +6293,7 @@ Function TeleportCloser%(n.NPCs)
 	Local ShouldTeleport%
 	
 	If closestWaypoint <> Null
-		ShouldTeleport = ((n\InFacility <> 1 Lor SelectedDifficulty\AggressiveNPCs) Lor (EntityY(closestWaypoint\OBJ, True) <= (10.0 - ((n\NPCType = NPCTypeMTF) * 8.0)) And EntityY(closestWaypoint\OBJ, True) >= -(10.0 - ((n\NPCType = NPCTypeMTF) * 8.0))))
+		ShouldTeleport = ((n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs) Lor (EntityY(closestWaypoint\OBJ, True) <= (10.0 - ((n\NPCType = NPCTypeMTF) * 8.0)) And EntityY(closestWaypoint\OBJ, True) >= -(10.0 - ((n\NPCType = NPCTypeMTF) * 8.0))))
 		If ShouldTeleport
 			PositionEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 200.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), True)
 			ResetEntity(n\Collider)
@@ -7001,20 +7001,6 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			EndIf
 		EndIf
 	EndIf
-End Function
-
-Function CheckForNPCInFacility%(n.NPCs)
-	; ~ False (= 0): NPC is not in facility (mostly meant for "dimension_1499")
-	; ~ True (= 1): NPC is in facility
-	; ~ 2: NPC is in tunnels (Maintenance Tunnels / SCP-049 tunnels / SCP-939 storage room, etc...)
-	
-	Local NPCPosY# = EntityY(n\Collider)
-	
-	If NPCPosY > 100.0 Then Return(False)
-	If NPCPosY < -10.0 Then Return(2)
-	If NPCPosY > 7.0 And NPCPosY <= 100.0 Then Return(2)
-	
-	Return(True)
 End Function
 
 Function UpdateNPCNearTesla%()

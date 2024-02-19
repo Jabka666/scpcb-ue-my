@@ -377,7 +377,7 @@ Function UpdateGame%()
 			EndIf
 			
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
-			
+			InFacility = IsInFacility(EntityY(me\Collider))
 			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
 			UpdateDeaf()
 			UpdateDecals()
@@ -386,7 +386,6 @@ Function UpdateGame%()
 			UpdateSaveState()
 			UpdateVomit()
 			UpdateEscapeTimer()
-			InFacility = CheckForPlayerInFacility()
 			DecalStep = 0
 			If RID = r_dimension_1499
 				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
@@ -5834,7 +5833,7 @@ Function RenderDebugHUD%()
 				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), "Null"))
 			EndIf
 			
-			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), PlayerElevatorFloor))
+			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), InFacility))
 			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.roomflo"), ToElevatorFloor))
 			If PlayerInsideElevator
 				TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "True"))
@@ -6699,7 +6698,7 @@ Function RenderGUI%()
 					Local RectSize% = 24 * MenuScale
 					Local RectSizeHalf% = RectSize / 2
 					
-					If (Not PlayerInReachableRoom(True)) Lor FindPlayerFloor(EntityY(me\Collider)) <> NullFloor
+					If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
 						If (MilliSec Mod 800) < 200
 							Color(200, 0, 0)
 							TextEx(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
@@ -9329,18 +9328,6 @@ Function UpdateLeave1499%()
 			EndIf
 		Next
 	EndIf
-End Function
-
-Function CheckForPlayerInFacility%()
-	; ~ False (= 0): Player is not in facility (mostly meant for "dimension_1499")
-	; ~ True (= 1): Player is in facility
-	; ~ 2: Player is in tunnels (maintenance tunnels / SCP-049's tunnels / SCP-939's storage room, etc...)
-	Local PlayerPosY# = EntityY(me\Collider)
-	
-	If PlayerPosY > 100.0 Then Return(0)
-	If PlayerPosY < -10.0 Then Return(2)
-	If (PlayerPosY > 7.0) And (PlayerPosY <= 100.0) Then Return(2)
-	Return(1)
 End Function
 
 Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = False)

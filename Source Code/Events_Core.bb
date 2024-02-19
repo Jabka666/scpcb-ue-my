@@ -2040,7 +2040,6 @@ Function UpdateEvents%()
 					
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[2]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[3]))
-					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[1], e\room\RoomDoors[2], e\room\Objects[2], e\room\Objects[3], e)
 				EndIf
@@ -2191,7 +2190,6 @@ Function UpdateEvents%()
 					EndIf
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[2]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[3]))
-					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
 					e\EventState4 = UpdateElevators(e\EventState4, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e)
 				Else
@@ -2921,7 +2919,6 @@ Function UpdateEvents%()
 					EndIf
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[9]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[10]))
-					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[3], e\room\RoomDoors[4], e\room\Objects[9], e\room\Objects[10], e)
 				EndIf
@@ -3093,7 +3090,6 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) > (-2848.0) * RoomScale
 						PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 						PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[2]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[3]))
-						PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 						ToElevatorFloor = FindFloor(e)
 						e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
@@ -3176,7 +3172,6 @@ Function UpdateEvents%()
 								e\room\RoomDoors[3]\Locked = 0
 								PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 								PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[2]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[3]))
-								PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 								ToElevatorFloor = FindFloor(e)
 								e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 								e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
@@ -3348,7 +3343,6 @@ Function UpdateEvents%()
 					EndIf
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
-					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 				EndIf
@@ -4384,7 +4378,6 @@ Function UpdateEvents%()
 						
 						PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 						PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
-						PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 						ToElevatorFloor = FindFloor(e)
 						e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						
@@ -4426,7 +4419,6 @@ Function UpdateEvents%()
 						
 						PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 						PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
-						PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 						ToElevatorFloor = FindFloor(e)
 						e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gatea\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 						If (Not n_I\Curr106\Contained)
@@ -4657,7 +4649,6 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]))
-					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 					
@@ -5730,7 +5721,6 @@ Function UpdateEvents%()
 					
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[2]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[3]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[4]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[5]))
-					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[2], e\room\Objects[3], e, False)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[4], e\room\Objects[5], e, False)
@@ -6538,7 +6528,6 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[0]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[1]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[2]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[3]))
-					PlayerElevatorFloor = FindPlayerFloor(PlayerPosY)
 					ToElevatorFloor = FindFloor(e)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)

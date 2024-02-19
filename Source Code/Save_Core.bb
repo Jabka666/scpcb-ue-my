@@ -1116,7 +1116,7 @@ Function LoadGame%(File$)
 					Next
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1
-							If n\InFacility = 0 Then RemoveNPC(n)
+							If n\InFacility = Floor1499 Then RemoveNPC(n)
 						EndIf
 					Next
 					
@@ -1867,7 +1867,7 @@ Function LoadGameQuick%(File$)
 					Next
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1
-							If n\InFacility = 0 Then RemoveNPC(n)
+							If n\InFacility = Floor1499 Then RemoveNPC(n)
 						EndIf
 					Next
 					

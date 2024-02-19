@@ -292,13 +292,12 @@ Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
 	Return(True)
 End Function
 
-Function FindPlayerFloor%(y#)
-	Local y2# = Floor(y)
+Function IsInFacility%(y#)
+	Local Y2# = Floor(y)
 	
-	; ~ Check the player's current position and return corresponding floor
-	If y2 < -6.0 Then Return(LowerFloor)
-	If y2 > 6.0 Then Return(UpperFloor)
-	
+	If Y2 > 100.0 Then Return(Floor1499)
+	If Y2 < -6.5 Then Return(LowerFloor)
+	If Y2 > 6.5 And Y2 <= 100.0 Then Return(UpperFloor)
 	Return(NullFloor)
 End Function
 

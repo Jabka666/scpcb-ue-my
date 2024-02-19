@@ -1967,7 +1967,6 @@ Function LoadData%()
 	SubtitlesInit = True
 	
 	SubjectName = GetLocalString("misc", "subject")
-	InFacility = True
 	PlayerFallingPickDistance = 10.0
 	
 	Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
@@ -2719,10 +2718,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	
 	SubjectName = ""
-	InFacility = False
+	InFacility = NullFloor
 	PlayerFallingPickDistance = 0.0
 	PlayerInsideElevator = False
-	PlayerElevatorFloor = 0
 	ToElevatorFloor = 0
 	
 	ShouldEntitiesFall = False
