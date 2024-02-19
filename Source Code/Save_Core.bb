@@ -1357,6 +1357,8 @@ Function LoadGameQuick%(File$)
 	me\LightFlash = 0.0
 	me\BlurTimer = 0.0
 	
+	me\StopHidingTimer = 0.0
+	
 	me\Terminated = False
 	me\FallTimer = 0.0
 	MenuOpen = False
