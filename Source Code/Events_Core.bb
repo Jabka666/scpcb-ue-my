@@ -1851,7 +1851,7 @@ Function UpdateEvents%()
 			Case e_cont1_005
 				;[Block]
 				If (Not n_I\Curr106\Contained)
-					If I_005\ChanceToSpawn < 3
+					If I_005\ChanceToSpawn = 1
 						If PlayerRoom = e\room
 							If e\EventState = 0.0
 								TFormPoint(-362.0, 0.0, -420.0, e\room\OBJ, 0)
@@ -1933,7 +1933,7 @@ Function UpdateEvents%()
 						EndIf
 					Else
 						If e\room\Dist < 8.0
-							If I_005\ChanceToSpawn >= 5
+							If I_005\ChanceToSpawn = 3
 								TFormPoint(375.0, 52.0, -875.0, e\room\OBJ, 0)
 								e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 								e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
@@ -3279,9 +3279,8 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-3728.0) * RoomScale
 						ShouldPlay = 27
 						
-						Temp = (I_005\ChanceToSpawn > 2 And I_005\ChanceToSpawn < 5)
 						If e\EventState = 0.0
-							If Temp
+							If I_005\ChanceToSpawn = 2
 								TFormPoint(-4843.8, -4440.8, 1729.0, e\room\OBJ, 0)
 								x = TFormedX() : y = TFormedY() : z = TFormedZ()
 								e\room\NPC[0] = CreateNPC(NPCTypeD, x, y, z)
@@ -3308,7 +3307,7 @@ Function UpdateEvents%()
 							e\EventState = 1.0
 						Else
 							If I_409\Timer = 0.0
-								If Temp
+								If I_005\ChanceToSpawn = 2
 									If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.81
 										GiveAchievement(Achv409)
 										If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0

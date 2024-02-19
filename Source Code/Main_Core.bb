@@ -5936,11 +5936,11 @@ Function RenderDebugHUD%()
 				TextEx(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			
-			If I_005\ChanceToSpawn < 3
+			If I_005\ChanceToSpawn = 1
 				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
-			ElseIf I_005\ChanceToSpawn < 5
+			ElseIf I_005\ChanceToSpawn = 2
 				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.409"))
-			ElseIf I_005\ChanceToSpawn =< 10
+			Else
 				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			;[End Block]
