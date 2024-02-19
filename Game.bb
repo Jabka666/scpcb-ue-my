@@ -34,13 +34,12 @@ Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.jsonc"
 Const AchievementsFile$ = "Data\achievements.ini"
 Const LoadingScreensFile$ = "Data\loading_screens.jsonc"
-Const SCP294File$ = "Data\SCP-294.ini"
+Const SCP294File$ = "Data\SCP-294.jsonc"
 Const FontsFile$ = "Data\fonts.ini"
 Const SCP1499ChunksFile$ = "Data\1499chunks.jsonc"
 
 IniWriteBuffer(LanguageFile)
 IniWriteBuffer(AchievementsFile)
-IniWriteBuffer(SCP294File)
 IniWriteBuffer(FontsFile)
 
 Include "Source Code\Launcher_Core.bb"

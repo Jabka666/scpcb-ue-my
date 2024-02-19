@@ -4846,69 +4846,66 @@ Function UpdateGUI%()
 				Case "cup"
 					;[Block]
 					If CanUseItem(True)
-						Local Drink$ = Trim(SelectedItem\Name)
+						Local Drink% = Int(SelectedItem\Name)
 						
-						If Lower(Left(Drink, Min(6, Len(Drink)))) = "cup of"
-							Drink = Right(Drink, Len(Drink) - 7)
-						ElseIf Lower(Left(Drink, Min(8, Len(Drink)))) = "a cup of"
-							Drink = Right(Drink, Len(Drink) - 9)
-						EndIf
-						
-						StrTemp = GetFileLocalString(SCP294File, Drink, "Message", "", True)
-						If StrTemp <> "" Then CreateMsg(StrTemp)
-						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Lethal", "", True))
-							msg\DeathMsg = GetFileLocalString(SCP294File, Drink, "Death Message", "", True)
-							Kill()
-						EndIf
-						me\BlurTimer = Max(Int(GetFileLocalString(SCP294File, Drink, "Blur", "", True)) * 70.0, 0.0)
-						If me\VomitTimer = 0.0
-							me\VomitTimer = Int(GetFileLocalString(SCP294File, Drink, "Vomit", "", True))
-						Else
-							me\VomitTimer = Min(me\VomitTimer, Int(GetFileLocalString(SCP294File, Drink, "Vomit", "", True)))
-						EndIf
-						me\CameraShakeTimer = GetFileLocalString(SCP294File, Drink, "Camera Shake", "", True)
-						me\DeafTimer = Max(me\DeafTimer + Int(GetFileLocalString(SCP294File, Drink, "Deaf Timer", "", True)), 0.0)
-						me\Injuries = Max(me\Injuries + Float(GetFileLocalString(SCP294File, Drink, "Damage", "", True)), 0.0)
-						me\Bloodloss = Max(me\Bloodloss + Int(GetFileLocalString(SCP294File, Drink, "Blood Loss", "", True)), 0.0)
-						StrTemp = GetFileLocalString(SCP294File, Drink, "Sound", "", True)
-						If StrTemp <> "" Then PlaySound_Strict(LoadTempSound(StrTemp), True)
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Stomach Ache", "", True)) Then I_1025\State[3] = 1.0
-						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Infection", "", True)) Then I_008\Timer = I_008\Timer + 0.001
-						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Crystallization", "", True)) Then I_409\Timer = I_409\Timer + 0.001
-						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Mutation", "", True))
-							If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
-						EndIf
-						
-						If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Revitalize", "", True))
-							For i = 0 To 6
-								I_1025\State[i] = 0.0
-							Next
-						EndIf
-						
-						If me\DeathTimer = 0.0
-							me\DeathTimer = Int(GetFileLocalString(SCP294File, Drink, "Death Timer", "", True)) * 70.0
-						Else
-							me\DeathTimer = Min(me\DeathTimer, Int(GetFileLocalString(SCP294File, Drink, "Death Timer", "", True)) * 70.0)
-						EndIf
-						
-						; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
-						StrTemp = GetFileLocalString(SCP294File, Drink, "Blink Effect", "", True)
-						If StrTemp <> "" Then me\BlinkEffect = Float(StrTemp) ^ SelectedItem\State
-						StrTemp = GetFileLocalString(SCP294File, Drink, "Blink Effect Timer", "", True)
-						If StrTemp <> "" Then me\BlinkEffectTimer = Float(StrTemp) * SelectedItem\State
-						StrTemp = GetFileLocalString(SCP294File, Drink, "Stamina Effect", "", True)
-						If StrTemp <> "" Then me\StaminaEffect = Float(StrTemp) ^ SelectedItem\State
-						StrTemp = GetFileLocalString(SCP294File, Drink, "Stamina Effect Timer", "", True)
-						If StrTemp <> "" Then me\StaminaEffectTimer = Float(StrTemp) * SelectedItem\State
-						StrTemp = GetFileLocalString(SCP294File, Drink, "Refuse Message", "", True)
-						If StrTemp <> ""
-							CreateMsg(StrTemp)
-							SelectedItem = Null
-						Else
+						If JsonIsNull(JsonGetValue(Drink, "refuse_message"))
+							If Not JsonIsNull(JsonGetValue(Drink, "drink_message"))
+								CreateMsg(JsonGetString(JsonGetValue(Drink, "drink_message")))
+							EndIf
+
+							me\BlurTimer = Max(JsonGetFloat(JsonGetValue(Drink, "blur")) * 70.0, 0.0)
+							If me\VomitTimer = 0.0
+								me\VomitTimer = JsonGetFloat(JsonGetValue(Drink, "vomit"))
+							Else
+								me\VomitTimer = Min(me\VomitTimer, JsonGetFloat(JsonGetValue(Drink, "vomit")))
+							EndIf
+							me\CameraShakeTimer = JsonGetFloat(JsonGetValue(Drink, "camera_shake"))
+							me\DeafTimer = Max(me\DeafTimer + JsonGetFloat(JsonGetValue(Drink, "deaf_timer")), 0.0)
+							me\Injuries = Max(me\Injuries + JsonGetFloat(JsonGetValue(Drink, "damage")), 0.0)
+							me\Bloodloss = Max(me\Bloodloss + JsonGetFloat(JsonGetValue(Drink, "bloodloss")), 0.0)
+
+							If Not JsonIsNull(JsonGetValue(Drink, "drink_sound"))
+								PlaySound_Strict(JsonGetString(JsonGetValue(Drink, "drink_sound")), True)
+							EndIf
+							If JsonGetBool(JsonGetValue(Drink, "stomachache")) Then I_1025\State[3] = 1.0
+
+							If JsonGetBool(JsonGetValue(Drink, "infection")) Then I_008\Timer = I_008\Timer + 0.001
+
+							If JsonGetBool(JsonGetValue(Drink, "crystallization")) Then I_409\Timer = I_409\Timer + 0.001
+
+							If JsonGetBool(JsonGetValue(Drink, "mutation"))
+								If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
+							EndIf
+
+							If JsonGetBool(JsonGetValue(Drink, "revitalize"))
+								For i = 0 To 6
+									I_1025\State[i] = 0.0
+								Next
+							EndIf
+
+							If Not JsonIsNull(JsonGetValue(Drink, "death_timer"))
+								If Not JsonIsNull(JsonGetValue(Drink, "death_message"))
+									msg\DeathMsg = JsonGetString(JsonGetValue(Drink, "death_message"))
+								Else
+									msg\DeathMsg = ""
+								EndIf
+
+								Local DeathTimer1% = JsonGetFloat(JsonGetValue(Drink, "death_timer"))
+								If DeathTimer1 = 0 
+									Kill()
+								ElseIf me\DeathTimer = 0.0
+									me\DeathTimer = DeathTimer1 * 70.0
+								Else
+									me\DeathTimer = Min(me\DeathTimer, DeathTimer1)
+								EndIf
+							EndIf
+
+							; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
+							If Not JsonIsNull(JsonGetValue(Drink, "blink_effect")) Then me\BlinkEffect = JsonGetFloat(JsonGetValue(Drink, "blink_effect")) ^ SelectedItem\State
+							If Not JsonIsNull(JsonGetValue(Drink, "blink_timer")) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "blink_timer")) * SelectedItem\State
+							If Not JsonIsNull(JsonGetValue(Drink, "stamina_effect")) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_effect")) ^ SelectedItem\State
+							If Not JsonIsNull(JsonGetValue(Drink, "stamina_timer")) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_timer")) * SelectedItem\State
+
 							it.Items = CreateItem("Empty Cup", "emptycup", 0.0, 0.0, 0.0)
 							it\Picked = True
 							For i = 0 To MaxItemAmount - 1
@@ -4920,6 +4917,9 @@ Function UpdateGUI%()
 							EntityType(it\Collider, HIT_ITEM)
 							
 							RemoveItem(SelectedItem)
+						Else
+							CreateMsg(JsonGetString(JsonGetValue(Drink, "refuse_message")))
+							SelectedItem = Null
 						EndIf
 					EndIf
 					;[End Block]
@@ -8875,14 +8875,34 @@ End Function
 Type SCP294
 	Field Using%
 	Field ToInput$
+	Field DrinksMap%
+	Field Drinks%
 End Type
 
 Global I_294.SCP294
 
+Function Init294Drinks%()
+	Local LocalDrinks% = JsonParseFromFile(lang\LanguagePath + SCP294File)
+	
+	If JsonIsArray(LocalDrinks) ; ~ Has localized scp294 drinks -> Use localized only
+		I_294\Drinks = JsonGetArray(LocalDrinks)
+	Else
+		I_294\Drinks = JsonGetArray(JsonParseFromFile(SCP294File))
+	EndIf
+
+	I_294\DrinksMap = CreateS2IMap()
+	For i = 0 To JsonGetArraySize(I_294\Drinks) - 1
+		Local DrinkNames% = JsonGetArray(JsonGetValue(JsonGetArrayValue(I_294\Drinks, i), "name"))
+		For j = 0 To JsonGetArraySize(DrinkNames) - 1
+			S2IMapSet(I_294\DrinksMap, Upper(JsonGetString(JsonGetArrayValue(DrinkNames, j))), i)
+		Next
+	Next
+End Function
+
 Function Update294%()
 	Local it.Items
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%
-	Local Sep1%, Sep2%, Alpha#, Glow%
+	Local Alpha#, Glow%
 	Local R%, G%, B%
 	
 	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[5]) / 2)
@@ -9057,16 +9077,11 @@ Function Update294%()
 					I_294\ToInput = Right(I_294\ToInput, Len(I_294\ToInput) - 9)
 				EndIf
 				
-				If I_294\ToInput <> ""
-					Local Drink$ = FindSCP294Drink(I_294\ToInput, True)
-				EndIf
-				
-				If Drink <> "Null"
-					StrTemp = GetFileLocalString(SCP294File, Drink, "Dispense Sound", "", False)
-					If StrTemp = ""
-						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
-					Else
-						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(StrTemp))
+				If S2IMapContains(I_294\DrinksMap, I_294\ToInput)
+					Local Drink% = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, I_294\ToInput))
+
+					If Not JsonIsNull(JsonGetValue(Drink, "dispense_sound"))
+						PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(JsonGetString(JsonGetValue(Drink, "dispense_sound"))))
 					EndIf
 					
 					If me\UsedMastercard
@@ -9094,25 +9109,26 @@ Function Update294%()
 						EndIf
 					EndIf
 					
-					If StringToBoolean(GetFileLocalString(SCP294File, Drink, "Explosion", "", False))
+					If JsonGetBool(JsonGetValue(Drink, "explosion"))
 						me\ExplosionTimer = 135.0
-						msg\DeathMsg = GetFileLocalString(SCP294File, Drink, "Death Message", "", False)
+						If JsonIsNull(JsonGetValue(Drink, "death_message"))
+							msg\DeathMsg = ""
+						Else
+							JsonGetString(JsonGetValue(Drink, "death_message"))
+						EndIf
 					EndIf
+
+					Local DrinkColor% = JsonGetArray(JsonGetValue(Drink, "color"))
+					R = JsonGetInt(JsonGetArrayValue(DrinkColor, 0))
+					G = JsonGetInt(JsonGetArrayValue(DrinkColor, 1))
+					B = JsonGetInt(JsonGetArrayValue(DrinkColor, 2))
 					
-					StrTemp = GetFileLocalString(SCP294File, Drink, "Color", "", False)
-					
-					Sep1 = Instr(StrTemp, ", ", 1)
-					Sep2 = Instr(StrTemp, ", ", Sep1 + 1)
-					R = Trim(Left(StrTemp, Sep1 - 1))
-					G = Trim(Mid(StrTemp, Sep1 + 1, Sep2 - Sep1 - 1))
-					B = Trim(Right(StrTemp, Len(StrTemp) - Sep2))
-					
-					Alpha = Float(GetFileLocalString(SCP294File, Drink, "Alpha", 1.0, False))
-					Glow = StringToBoolean(GetFileLocalString(SCP294File, Drink, "Glow", "", False))
+					Alpha = JsonGetFloat(JsonGetValue(Drink, "alpha"))
+					Glow = JsonGetBool(JsonGetValue(Drink, "glow"))
 					If Glow Then Alpha = -Alpha
 					
 					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
-					it\Name = "Cup of " + Drink
+					it\Name = Drink
 					it\DisplayName = Format(GetLocalString("items", "cupof"), I_294\ToInput)
 					EntityType(it\Collider, HIT_ITEM)
 				Else

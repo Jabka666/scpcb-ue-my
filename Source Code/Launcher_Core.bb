@@ -80,7 +80,6 @@ Function SetLanguage%(Language$, FromSelector% = True)
 		IniClearBuffer(lang\LanguagePath + LoadingScreensFile)
 		IniClearBuffer(lang\LanguagePath + FontsFile)
 		IniClearBuffer(lang\LanguagePath + AchievementsFile)
-		IniClearBuffer(lang\LanguagePath + SCP294File)
 	EndIf
 
 	lang\CurrentLanguage = Language
@@ -94,7 +93,6 @@ Function SetLanguage%(Language$, FromSelector% = True)
 		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
 		IniWriteBuffer(lang\LanguagePath + FontsFile)
 		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
-		IniWriteBuffer(lang\LanguagePath + SCP294File)
 	EndIf
 	If StringToBoolean(GetLocalString("global", "splitwithspace"))
 		SplitSpace = " "
