@@ -64,7 +64,7 @@
         "refuse_message": "\"Hmm... There should be more cuprite.\""
     },
     {
-        "name": ["Antimatter", "Anti-matter", "Anti Matter", "Annighilation", "Void", "Atoms As-synthesized In The Sun", "Antiwater", "Anti-water", "Anti Water"],
+        "name": ["Antimatter", "Anti-matter", "Anti Matter", "Annighilation", "Void", "Atoms As-synthesized In The Sun", "Antiwater", "Anti-water", "Anti Water", "God"],
         "color": [0, 0, 0],
         "alpha": 1.0,
         "glow": false,
