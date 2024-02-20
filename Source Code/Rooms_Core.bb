@@ -3696,24 +3696,75 @@ Function FillRoom%(r.Rooms)
 		Case r_dimension_106
 			;[Block]
 			; ~ The doors inside labyrinth
-			d.Doors = CreateDoor(r, r\x + 5187.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 2523.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 5521.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1641.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 9128.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 2160.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 8523.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1728.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 9880.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1212.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 5299.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 360.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 7807.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1259.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 8196.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 1404.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 8143.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 360.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
-			d.Doors = CreateDoor(r, r\x + 9709.0 * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + 888.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_005)
-			
 			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
-			For d.Doors = Each Doors
-				If d\room\RoomTemplate\RoomID = r\RoomTemplate\RoomID
-					EntityTexture(d\OBJ, Tex)
-					EntityTexture(d\OBJ2, Tex)
-					EntityTexture(d\FrameOBJ, Tex)
-				EndIf
+			For i = 0 To 9
+				Select i
+					Case 0
+						;[Block]
+						xTemp = 5187.0
+						zTemp = 2523.0
+						Angle = 180.0
+						;[End Block]
+					Case 1
+						;[Block]
+						xTemp = 5521.0
+						zTemp = 1641.0
+						Angle = 180.0
+						;[End Block]
+					Case 2
+						;[Block]
+						xTemp = 9128.0
+						zTemp = 2160.0
+						Angle = 180.0
+						;[End Block]
+					Case 3
+						;[Block]
+						xTemp = 8523.0
+						zTemp = 1728.0
+						Angle = 180.0
+						;[End Block]
+					Case 4
+						;[Block]
+						xTemp = 9880.0
+						zTemp = 1212.0
+						Angle = 180.0
+						;[End Block]
+					Case 5
+						;[Block]
+						xTemp = 5299.0
+						zTemp = 360.0
+						Angle = 90.0
+						;[End Block]
+					Case 6
+						;[Block]
+						xTemp = 7807.0
+						zTemp = 1259.0
+						Angle = 90.0
+						;[End Block]
+					Case 7
+						;[Block]
+						xTemp = 8196.0
+						zTemp = 1404.0
+						Angle = 90.0
+						;[End Block]
+					Case 8
+						;[Block]
+						xTemp = 8143.0
+						zTemp = 360.0
+						Angle = 90.0
+						;[End Block]
+					Case 9
+						;[Block]
+						xTemp = 9709.0
+						zTemp = 888.0
+						Angle = 90.0
+						;[End Block]
+				End Select
+				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + xTemp * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + zTemp * RoomScale, 90.0, 0.0, 0.0, Rnd(0.8, 1.0))
+				d.Doors = CreateDoor(r, r\x + xTemp * RoomScale, r\y + 2574.0 * RoomScale, r\z + 32.0 + zTemp * RoomScale, Angle, False, DEFAULT_DOOR, KEY_005)
+				EntityTexture(d\OBJ, Tex)
+				If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
+				EntityTexture(d\FrameOBJ, Tex)
 			Next
 			DeleteSingleTextureEntryFromCache(Tex)
 			
@@ -3725,17 +3776,6 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x, r\y + 2048.0 * RoomScale, r\z + 32.0 + 1024.0 * RoomScale, 180.0, False, HEAVY_DOOR)
 			d\AutoClose = False
 			r\RoomDoors.Doors[1] = d
-			
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 5187.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 2523.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 5521.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1641.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 9128.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 2160.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 8523.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1728.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 9880.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1212.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 5299.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 360.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 7807.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1259.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 8196.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 1404.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 8143.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 360.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 9709.0 * RoomScale, r\y + 2574.0 * RoomScale + 0.05, r\z + 32.0 + 888.0 * RoomScale, 90.0, 0.0, 0.0, 0.8)
 			
 			de.Decals = CreateDecal(DECAL_PD_6, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1, 2)
 			
