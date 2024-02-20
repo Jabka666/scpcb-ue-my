@@ -35,9 +35,9 @@ Mechanics:
 - Pocket Dimension drains stamina instead of instantly setting it to 0.
 
 - SCP-914's Keycard refining system has been rebalanced
-	- Omni's Keycard base rarity increased.
-	- Achievements now grant 4 points towards the Omni Keycard chance. (previously 3 points)
-	- Achievements points now scale with the difficulty like the Omni base rarity does.
+	- Omni Key Card's base rarity achievement multiplier increased to 4 from 3.
+	- Achievements now grant 4 points towards the Omni Key Card chance. (previously 3 points)
+	- Achievements points now scale with the difficulty like the Omni Key Card base rarity does.
 	- Level 4 Key Card base rarity inceased from 10 to 12.
 	- Level 4 Key Card's increasing rarity is increased from 5 to 6.
 
