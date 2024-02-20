@@ -29,11 +29,16 @@ General:
 
 Mechanics:
 - Added random light flickering.
-
 - Removed accidental item dropping.
 - Blast doors can kill the player.
 - The player can disable Tesla Gates.
 - Pocket Dimension drains stamina instead of instantly setting it to 0.
+
+- SCP-914's Keycard refining system has been rebalanced
+	- Omni's Keycard base rarity increased.
+	- Achievements now grant 4 points towards the Omni Keycard chance. (previously 3 points)
+	- Level 4 Key Card base rarity inceased from 10 to 12.
+	- Level 4 Key Card's increasing rarity is increased from 5 to 6.
 
 Menu:
 - Added descriptive info for difficulties.
