@@ -5800,7 +5800,7 @@ Function RenderDebugHUD%()
 			TextEx(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom
-					TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_1.event"), ev\EventID))
+					TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_1.event_new"), ev\EventID))
 					TextEx(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_1.state_1"), ev\EventState))
 					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_1.state_2"), ev\EventState2))
 					TextEx(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_1.state_3"), ev\EventState3))
