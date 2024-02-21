@@ -1559,7 +1559,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 192.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			
-			it.Items = CreateItem("Document SCP-1162-ARC", "paper", r\x + 863.227 * RoomScale, r\y + 152.0 * RoomScale, r\z - 953.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-1162-ARC", "paper", r\x + 752.227 * RoomScale, r\y + 152.0 * RoomScale, r\z - 299.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-066", "paper", r\x + 340.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 235.0 * RoomScale)
