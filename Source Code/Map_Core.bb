@@ -231,15 +231,16 @@ Function UpdateLights%(Cam%)
 			If l\room <> Null
 				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
 					If Cam = Camera ; ~ The lights are rendered by player's cam
-						If opt\AdvancedRoomLights Then EntityOrder(l\AdvancedSprite, -1)
+						EntityOrder(l\AdvancedSprite, -1)
 						If UpdateLightsTimer = 0.0
 							Local Dist# = EntityDistanceSquared(Cam, l\OBJ)
 							Local LightOBJHidden% = EntityHidden(l\OBJ)
 							Local LightSpriteHidden% = EntityHidden(l\Sprite)
 							Local LightAdvancedSpriteHidden% = EntityHidden(l\AdvancedSprite)
 							
-							EntityAutoFade(l\Sprite, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
-							If Dist < PowTwo(opt\CameraFogFar * 1.2)
+							If Dist < PowTwo(opt\CameraFogFar * LightVolume)
+								EntityAutoFade(l\Sprite, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
+								
 								Local LightVisible% = EntityVisible(Cam, l\OBJ)
 								Local LightInView% = EntityInView(l\OBJ, Cam)
 								
@@ -248,9 +249,7 @@ Function UpdateLights%(Cam%)
 									PlaySound2(IntroSFX[Rand(8, 10)], Cam, l\OBJ, 4.0)
 									If LightInView
 										If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
-										If opt\AdvancedRoomLights
-											If (Not  LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
-										EndIf
+										If (Not  LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
 									EndIf
 									Random = Rnd(0.3, 0.7)
 									SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
@@ -277,9 +276,7 @@ Function UpdateLights%(Cam%)
 								Else
 									; ~ Hide the sprites because they aren't visible
 									If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
-									If opt\AdvancedRoomLights
-										If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
-									EndIf
+									If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
 								EndIf
 							Else
 								; ~ Hide the light emitter because it is too far
@@ -288,16 +285,14 @@ Function UpdateLights%(Cam%)
 						EndIf
 					Else
 						; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
-						If opt\AdvancedRoomLights Then EntityOrder(l\AdvancedSprite, 0)
+						EntityOrder(l\AdvancedSprite, 0)
 					EndIf
 				EndIf
 			EndIf
 		Else
 			; ~ The lights were turned off
 			If (Not EntityHidden(l\Sprite)) Then HideEntity(l\Sprite)
-			If opt\AdvancedRoomLights
-				If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
-			EndIf
+			If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
 			If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
 		EndIf
 	Next
