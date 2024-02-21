@@ -269,7 +269,6 @@ Forever
 Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
 	Local i%, TempStr$
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	If SelectedCustomMap = Null
 		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
@@ -281,7 +280,7 @@ Function UpdateGame%()
 		EndIf
 	EndIf
 	SetErrorMsg(6, TempStr)
-	SetErrorMsg(7, Format(GetLocalString("misc", "room"), RID))
+	SetErrorMsg(7, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\RoomID))
 	
 	For ev.Events = Each Events
 		If ev\room = PlayerRoom
@@ -334,7 +333,7 @@ Function UpdateGame%()
 					
 					If Rand(3) = 1 Then me\Zone = 3
 					
-					If RID = r_cont1_173_intro
+					If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 						me\Zone = 4
 					ElseIf forest_event <> Null
 						If PlayerRoom = forest_event\room
@@ -387,11 +386,11 @@ Function UpdateGame%()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			DecalStep = 0
-			If RID = r_dimension_1499
+			If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
 				UpdateLeave1499()
-			ElseIf RID = r_dimension_106
+			ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 				UpdateSoundEmitters()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			Else
@@ -480,7 +479,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select
 					me\BlinkTimer = me\BLINKFREQ
-					If (Not (RID = r_room3_storage And EntityY(me\Collider) =< (-4100.0) * RoomScale)) Then me\BlurTimer = Max(me\BlurTimer - Rnd(50.0, 150.0), 0.0)
+					If (Not (PlayerRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider) =< (-4100.0) * RoomScale)) Then me\BlurTimer = Max(me\BlurTimer - Rnd(50.0, 150.0), 0.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
@@ -8086,7 +8085,7 @@ Function RenderEnding%()
 					For r.Rooms = Each Rooms
 						Local RID% = r\RoomTemplate\RoomID
 						
-						If RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
+						If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
 							RoomAmount = RoomAmount + 1
 							RoomsFound = RoomsFound + r\Found
 						EndIf
