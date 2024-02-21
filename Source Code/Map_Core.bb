@@ -4543,17 +4543,22 @@ End Function
 Include "Source Code\Rooms_Core.bb"
 
 Function UpdateRender%()
-	Local it.Items
+	Local it.Items, n.NPCs
 	
 	UpdateLightsTimer = 0.0
 	UpdateLightVolume()
+	UpdateLights(Camera)
 	UpdateDoors()
 	UpdateDecals()
-	UpdateRooms()
 	For it.Items = Each Items
 		it\DistTimer = 0.0
 	Next
 	UpdateItems()
+	For n.NPCs = Each NPCs
+		n\AnimTimer = 0.0
+	Next
+	UpdateNPCs()
+	UpdateRooms()
 End Function
 
 Function TeleportToRoom%(r.Rooms)

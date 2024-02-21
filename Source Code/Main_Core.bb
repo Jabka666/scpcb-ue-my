@@ -9276,10 +9276,9 @@ Global I_1499.SCP1499
 
 Function UpdateLeave1499%()
 	Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	Local i%
 	
-	If I_1499\Using = 0 And RID = r_dimension_1499
+	If I_1499\Using = 0 And PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		For r.Rooms = Each Rooms
 			If r = I_1499\PrevRoom
 				me\BlinkTimer = -1.0
@@ -9288,7 +9287,7 @@ Function UpdateLeave1499%()
 				I_1499\z = EntityZ(me\Collider)
 				TeleportEntity(me\Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
 				TeleportToRoom(r)
-				If RID = r_room3_storage And EntityY(me\Collider) < (-4600.0) * RoomScale
+				If I_1499\PrevRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider) < (-4600.0) * RoomScale
 					For i = 0 To 3
 						PlayerRoom\NPC[i]\State = 2.0
 						PositionEntity(PlayerRoom\NPC[i]\Collider, EntityX(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True), EntityY(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True) + 0.2, EntityZ(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True))

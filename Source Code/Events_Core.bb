@@ -4817,13 +4817,13 @@ Function UpdateEvents%()
 						e\EventState3 = 2.0
 					EndIf
 				EndIf
-					
+				
 				If e\room\Dist < 16.0
 					If PlayerRoom = e\room
 						Temp = True
 						For e2.Events = Each Events
 							If e2\EventID = e\EventID And e2 <> e
-								If e2\room\NPC[0] <> Null Lor e\EventState3 = 1
+								If e2\room\NPC[0] <> Null Lor e\EventState3 = 1.0
 									Temp = False
 									Exit
 								EndIf
