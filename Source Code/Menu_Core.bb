@@ -676,8 +676,6 @@ Function UpdateMainMenu%()
 							EndIf
 						EndIf
 						
-						If PrevEnableUserTracks Then ShouldDeleteGadgets = (PrevEnableUserTracks <> opt\UserTrackMode)
-						
 						If opt\UserTrackMode > 0
 							If UpdateMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"))
 								UserTrackCheck = 0
@@ -717,8 +715,6 @@ Function UpdateMainMenu%()
 							opt\OverrideSubColor = UpdateMenuTick(x, y, opt\OverrideSubColor)
 						EndIf
 						
-						If PrevEnableSubtitles Lor PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor)
-						
 						If opt\EnableSubtitles And opt\OverrideSubColor
 							y = y + (35 * MenuScale)
 							
@@ -738,6 +734,7 @@ Function UpdateMainMenu%()
 							
 							y = y + (40 * MenuScale)
 						EndIf
+						If PrevEnableSubtitles Lor PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor) Lor (PrevEnableUserTracks > 0) <> opt\UserTrackMode
 						;[End Block]
 					Case MainMenuTab_Options_Controls
 						;[Block]
