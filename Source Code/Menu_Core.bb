@@ -314,6 +314,7 @@ Function UpdateMainMenu%()
 						
 						If UpdateMenuButton(x + (420 * MenuScale), y + Height + (20 * MenuScale), 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "start"))
 							If CurrSave\Name = "" Then CurrSave\Name = ConvertToANSI(GetLocalString("save", "untitled"))
+							CurrSave\Name = Trim(CurrSave\Name)
 							
 							If RandomSeed = "" Then RandomSeed = MilliSec
 							
