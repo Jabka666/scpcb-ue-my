@@ -3,6 +3,9 @@ v1.2.1
 General:
 - Some tiny optimizations.
 
+Mechanics:
+- Crouch consumes the player's stamina only standing up.
+
 Rooms:
 - Improved some textures.
 

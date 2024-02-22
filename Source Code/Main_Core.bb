@@ -2440,12 +2440,11 @@ End Function
 Function SetCrouch%(NewCrouch%)
 	Local Temp%
 	
-	If me\Stamina > 0.0
-		If NewCrouch <> me\Crouch
-			PlaySound_Strict(CrouchSFX)
+	If NewCrouch <> me\Crouch
+		PlaySound_Strict(CrouchSFX)
+		me\SndVolume = Max(2.0, me\SndVolume)
+		If (Not NewCrouch) And me\Stamina > 0.0
 			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
-			me\SndVolume = Max(2.0, me\SndVolume)
-			
 			If me\Stamina < 10.0
 				If (Not ChannelPlaying(BreathCHN))
 					Temp = 0
@@ -2453,9 +2452,8 @@ Function SetCrouch%(NewCrouch%)
 					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
 				EndIf
 			EndIf
-			
-			me\Crouch = NewCrouch
 		EndIf
+		me\Crouch = NewCrouch
 	EndIf
 End Function
 
