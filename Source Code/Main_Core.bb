@@ -7688,9 +7688,10 @@ Function RenderMenu%()
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
 						If opt\UserTrackMode > 0
 							If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
+							y = y + (40 * MenuScale)
 						EndIf
 						
-						y = y + (70 * MenuScale)
+						y = y + (30 * MenuScale)
 						
 						Color(255, 255, 255)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
