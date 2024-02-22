@@ -355,9 +355,7 @@ Function LoadOptionsINI%()
 	opt\EnableSFXRelease = IniGetInt(OptionFile, "Audio", "SFX Release", True)
 	opt\PrevEnableSFXRelease = opt\EnableSFXRelease
 	
-	opt\EnableUserTracks = IniGetInt(OptionFile, "Audio", "Enable User Tracks", False)
-	
-	opt\UserTrackMode = IniGetInt(OptionFile, "Audio", "User Track Setting", False)
+	opt\UserTrackMode = IniGetInt(OptionFile, "Audio", "User Track Setting", 0)
 	
 	opt\EnableSubtitles = IniGetInt(OptionFile, "Audio", "Enable Subtitles", False)
 	
@@ -487,8 +485,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Audio", "SFX Release", opt\EnableSFXRelease)
 	
-	IniWriteString(OptionFile, "Audio", "Enable User Tracks", opt\EnableUserTracks)
-	
 	IniWriteString(OptionFile, "Audio", "User Track Setting", opt\UserTrackMode)
 	
 	IniWriteString(OptionFile, "Audio", "Enable Subtitles", opt\EnableSubtitles)
@@ -617,8 +613,6 @@ Function ResetOptionsINI%()
 	opt\VoiceVolume = 0.5
 	
 	opt\EnableSFXRelease = True
-	
-	opt\EnableUserTracks = False
 	
 	opt\UserTrackMode = False
 	

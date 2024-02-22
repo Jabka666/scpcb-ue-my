@@ -5043,7 +5043,7 @@ Function UpdateGUI%()
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
-									If (Not opt\EnableUserTracks)
+									If opt\UserTrackMode = 0
 										If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
 									ElseIf UserTrackMusicAmount < 1
 										If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
@@ -5052,14 +5052,14 @@ Function UpdateGUI%()
 										
 										If (Not ChannelPlaying(RadioCHN[0]))
 											If (Not UserTrackFlag)
-												If opt\UserTrackMode
+												If opt\UserTrackMode = 1
 													If RadioState[0] < (UserTrackMusicAmount - 1)
 														RadioState[0] = RadioState[0] + 1.0
 													Else
 														RadioState[0] = 0.0
 													EndIf
 													UserTrackFlag = True
-												Else
+												ElseIf opt\UserTrackMode = 2
 													RadioState[0] = Rand(0.0, UserTrackMusicAmount - 1)
 												EndIf
 											EndIf
@@ -5073,14 +5073,14 @@ Function UpdateGUI%()
 										If KeyHit(2)
 											PlaySound_Strict(RadioSquelch)
 											If (Not UserTrackFlag)
-												If opt\UserTrackMode
+												If opt\UserTrackMode = 1
 													If RadioState[0] < (UserTrackMusicAmount - 1)
 														RadioState[0] = RadioState[0] + 1.0
 													Else
 														RadioState[0] = 0.0
 													EndIf
 													UserTrackFlag = True
-												Else
+												ElseIf opt\UserTrackMode = 2
 													RadioState[0] = Rand(0.0, UserTrackMusicAmount - 1)
 												EndIf
 											EndIf
@@ -7074,11 +7074,24 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\UserTrackMode = UpdateMenuTick(x, y, opt\UserTrackMode)
+						Local PrevEnableUserTracks% = opt\UserTrackMode
 						
-						UpdateMenuButton(x - (270 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), Font_Default, False, True)
+						If UpdateMenuButton(x, y, 20 * MenuScale, 20 * MenuScale, ">")
+							If opt\UserTrackMode < 2
+								opt\UserTrackMode = opt\UserTrackMode + 1
+							Else
+								opt\UserTrackMode = 0
+							EndIf
+						EndIf
 						
-						y = y + (70 * MenuScale)
+						If PrevEnableUserTracks Then ShouldDeleteGadgets = (PrevEnableUserTracks <> opt\UserTrackMode)
+						
+						If opt\UserTrackMode > 0
+							UpdateMenuButton(x - (270 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), Font_Default, False, True)
+							y = y + (40 * MenuScale)
+						EndIf
+						
+						y = y + (30 * MenuScale)
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
 						Local PrevOverrideSubColor% = opt\OverrideSubColor
@@ -7669,14 +7682,18 @@ Function RenderMenu%()
 						
 						Color(255, 255, 255)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
-						If opt\UserTrackMode
+						If opt\UserTrackMode = 0
+							TempStr = GetLocalString("options", "track.disabled")
+						ElseIf opt\UserTrackMode = 1
 							TempStr = GetLocalString("options", "track.repeat")
-						Else
+						ElseIf opt\UserTrackMode = 2
 							TempStr = GetLocalString("options", "track.random")
 						EndIf
 						TextEx(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
-						If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
+						If opt\UserTrackMode > 0
+							If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
+						EndIf
 						
 						y = y + (70 * MenuScale)
 						

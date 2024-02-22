@@ -666,32 +666,45 @@ Function UpdateMainMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\UserTrackMode = UpdateMenuTick(x, y, opt\UserTrackMode)
+						Local PrevEnableUserTracks% = opt\UserTrackMode
 						
-						If UpdateMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"))
-							UserTrackCheck = 0
-							UserTrackCheck2 = 0
-							
-							Local DirPath$ = "SFX\Radio\UserTracks\"
-								
-							If FileType(DirPath) <> 2 Then CreateDir(DirPath)
-							
-							Local Dir% = ReadDir(DirPath)
-							
-							Repeat
-								File = NextFile(Dir)
-								If File = "" Then Exit
-								If FileType(DirPath + File) = 1
-									UserTrackCheck = UserTrackCheck + 1
-									Test = LoadSound(DirPath + File)
-									If Test <> 0 Then UserTrackCheck2 = UserTrackCheck2 + 1
-									FreeSound(Test) : Test = 0
-								EndIf
-							Forever
-							CloseDir(Dir)
+						If UpdateMenuButton(x, y, 20 * MenuScale, 20 * MenuScale, ">")
+							If opt\UserTrackMode < 2
+								opt\UserTrackMode = opt\UserTrackMode + 1
+							Else
+								opt\UserTrackMode = 0
+							EndIf
 						EndIf
 						
-						y = y + (70 * MenuScale)
+						If PrevEnableUserTracks Then ShouldDeleteGadgets = (PrevEnableUserTracks <> opt\UserTrackMode)
+						
+						If opt\UserTrackMode > 0
+							If UpdateMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"))
+								UserTrackCheck = 0
+								UserTrackCheck2 = 0
+								
+								Local DirPath$ = "SFX\Radio\UserTracks\"
+									
+								If FileType(DirPath) <> 2 Then CreateDir(DirPath)
+								
+								Local Dir% = ReadDir(DirPath)
+								
+								Repeat
+									File = NextFile(Dir)
+									If File = "" Then Exit
+									If FileType(DirPath + File) = 1
+										UserTrackCheck = UserTrackCheck + 1
+										Test = LoadSound(DirPath + File)
+										If Test <> 0 Then UserTrackCheck2 = UserTrackCheck2 + 1
+										FreeSound(Test) : Test = 0
+									EndIf
+								Forever
+								CloseDir(Dir)
+							EndIf
+							y = y + (40 * MenuScale)
+						EndIf
+						
+						y = y + (30 * MenuScale)
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
 						Local PrevOverrideSubColor% = opt\OverrideSubColor
@@ -1514,17 +1527,22 @@ Function RenderMainMenu%()
 					y = y + (30 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
-					If opt\UserTrackMode
+					If opt\UserTrackMode = 0
+						TempStr = GetLocalString("options", "track.disabled")
+					ElseIf opt\UserTrackMode = 1
 						TempStr = GetLocalString("options", "track.repeat")
-					Else
+					ElseIf opt\UserTrackMode = 2
 						TempStr = GetLocalString("options", "track.random")
 					EndIf
 					TextEx(x + (330 * MenuScale), y + (5 * MenuScale), TempStr)
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
-					If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
-					If UserTrackCheck > 0 Then TextEx(x, y + (100 * MenuScale), Format(Format(GetLocalString("options", "track.found"), UserTrackCheck2, "{0}"), UserTrackCheck, "{1}"))
+					If opt\UserTrackMode > 0
+						If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
+						If UserTrackCheck > 0 Then TextEx(x, y + (100 * MenuScale), Format(Format(GetLocalString("options", "track.found"), UserTrackCheck2, "{0}"), UserTrackCheck, "{1}"))
+						y = y + (40 * MenuScale)
+					EndIf
 					
-					y = y + (70 * MenuScale)
+					y = y + (30 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
