@@ -7120,7 +7120,7 @@ Function UpdateMenu%()
 							
 							opt\SubColorB = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorB)), Font_Default, 16, 3), 255.0)
 						EndIf
-						If PrevEnableSubtitles Lor PrevOverrideSubColor Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor) Lor (PrevEnableUserTracks > 0) <> opt\UserTrackMode
+						If PrevEnableSubtitles Lor PrevOverrideSubColor Lor PrevEnableUserTracks <> 1 Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor) Lor PrevEnableUserTracks <> opt\UserTrackMode
 						;[End Block]
 					Case MenuTab_Options_Controls
 						;[Block]
