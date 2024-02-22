@@ -207,7 +207,6 @@ Type Options
 	Field SFXVolume#
 	Field VoiceVolume#
 	Field EnableSFXRelease%, PrevEnableSFXRelease%
-	Field EnableUserTracks%
 	Field UserTrackMode%
 	Field EnableSubtitles%
 	Field OverrideSubColor%
