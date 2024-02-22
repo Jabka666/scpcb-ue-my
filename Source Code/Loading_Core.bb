@@ -2286,7 +2286,7 @@ Function LoadEntities%()
 	RenderLoading(20, GetLocalString("loading", "tracks"))
 	
 	UserTrackMusicAmount = 0
-	If opt\EnableUserTracks
+	If opt\UserTrackMode > 0
 		Local DirPath$ = "SFX\Radio\UserTracks\"
 		
 		If FileType(DirPath) <> 2 Then CreateDir(DirPath)

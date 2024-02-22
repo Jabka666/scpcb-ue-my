@@ -6593,7 +6593,7 @@ Function RenderGUI%()
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
-									If (Not opt\EnableUserTracks)
+									If opt\UserTrackMode = 0
 										StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "notenable"))
 									ElseIf UserTrackMusicAmount < 1
 										StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "nofound"))
