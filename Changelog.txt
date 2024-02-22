@@ -3,6 +3,9 @@ v1.2.1
 General:
 - Some tiny optimizations.
 
+Menu:
+- Combined the User tracks toggle into User Track mode as «Disabled».
+
 Mechanics:
 - Crouch consumes the player's stamina only standing up.
 
@@ -12,7 +15,7 @@ Rooms:
 Bug Fixes:
 - Fixed pipes overlapping in «room2_gw» rooms.
 - Fixed SCP-939 AI not working after returning from SCP-1499 dimension (also fixed this problem after loading the game).
-- Fixed document SCP-1162-ARC not having the ARC prefix.
+- Fixed document SCP-1162-ARC not having the ARC suffix.
 
 v1.2
 
