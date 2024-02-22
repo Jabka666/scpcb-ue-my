@@ -289,10 +289,10 @@ Function UpdateMainMenu%()
 							SelectedDifficulty\AggressiveNPCs = UpdateMenuTick(x + (160 * MenuScale), y + (210 * MenuScale), SelectedDifficulty\AggressiveNPCs)
 							
 							; ~ Inventory slots
-							If UpdateMenuButton(x + (405 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, "<")
+							If UpdateMenuButton(x + (160 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, "<")
 								SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots - 2
 								If SelectedDifficulty\InventorySlots <= 0 Then SelectedDifficulty\InventorySlots = 10
-							ElseIf UpdateMenuButton(x + (160 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">")
+							ElseIf UpdateMenuButton(x + (405 * MenuScale), y + (240 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">")
 								SelectedDifficulty\InventorySlots = SelectedDifficulty\InventorySlots + 2
 								If SelectedDifficulty\InventorySlots > 10 Then SelectedDifficulty\InventorySlots = 2
 							EndIf
