@@ -3153,7 +3153,9 @@ Function UpdateZoneColor%()
 	Else
 		AmbientLightRooms(CurrAmbientColorR / 5.0, CurrAmbientColorG / 5.0, CurrAmbientColorB / 5.0)
 		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
-		If forest_event <> Null
+		If RID = r_cont1_173_intro
+			CurrR = CurrAmbientColorR * 1.5 : CurrG = CurrAmbientColorG * 1.5 : CurrB = CurrAmbientColorB * 1.5
+		ElseIf forest_event <> Null
 			If PlayerRoom = forest_event\room
 				If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
 			EndIf

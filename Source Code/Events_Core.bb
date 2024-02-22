@@ -1824,9 +1824,10 @@ Function UpdateEvents%()
 													
 													e\EventState2 = 1.0
 													
+													RemoveEvent(e)
+													Return
 													Exit
 												EndIf
-												RemoveEvent(e)
 											Next
 										EndIf
 									EndIf
@@ -6773,7 +6774,7 @@ Function UpdateEvents%()
 											If e\room\NPC[0]\State = 6.0
 												me\Sanity = -150.0 * Sin(AnimTime(e\room\NPC[0]\OBJ) - 524.0) * 9.0
 												AnimateNPC(e\room\NPC[0], 524.0, 553.0, 0.08, False)
-												If e\room\NPC[0]\Frame = 553.0 Then e\room\NPC[0]\State = 0.0
+												If e\room\NPC[0]\Frame > 552.9 Then e\room\NPC[0]\State = 0.0
 											EndIf
 											
 											If e\EventState3 - fps\Factor[0] <= 70.0 * 35.0 
@@ -6948,9 +6949,6 @@ Function UpdateEvents%()
 										EndIf
 									Else
 										RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
-										e\EventState = -1.0
-										e\EventState2 = 0.0
-										e\EventState3 = 0.0
 										For i = 0 To 2
 											e\room\RoomDoors[i]\Locked = 0
 										Next
@@ -6965,6 +6963,9 @@ Function UpdateEvents%()
 												EndIf
 											EndIf
 										Next
+										e\EventState2 = 0.0
+										e\EventState3 = 0.0
+										e\EventState = -1.0
 									EndIf
 								EndIf
 							EndIf
@@ -9376,6 +9377,7 @@ Function UpdateEndings%()
 											Next
 											
 											RemoveEvent(e)
+											Return
 											Exit
 										EndIf
 									EndIf
@@ -9857,6 +9859,7 @@ Function UpdateEndings%()
 											msg\DeathMsg = ""
 											
 											RemoveEvent(e)
+											Return
 											Exit
 										EndIf
 									EndIf
@@ -9917,6 +9920,7 @@ Function UpdateEndings%()
 											me\BlinkTimer = -10.0
 											
 											RemoveEvent(e)
+											Return
 											Exit
 										EndIf
 									EndIf

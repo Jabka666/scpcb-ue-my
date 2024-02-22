@@ -4545,15 +4545,16 @@ Function UpdateRender%()
 	UpdateLights(Camera)
 	UpdateDoors()
 	UpdateDecals()
+	UpdateRooms()
 	For it.Items = Each Items
 		it\DistTimer = 0.0
 	Next
 	UpdateItems()
 	For n.NPCs = Each NPCs
 		n\AnimTimer = 0.0
+		n\DropSpeed = 0.0
 	Next
 	UpdateNPCs()
-	UpdateRooms()
 End Function
 
 Function TeleportToRoom%(r.Rooms)
