@@ -666,46 +666,32 @@ Function UpdateMainMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						Local PrevEnableUserTracks% = opt\EnableUserTracks
+						opt\UserTrackMode = UpdateMenuTick(x, y, opt\UserTrackMode)
 						
-						opt\EnableUserTracks = UpdateMenuTick(x, y, opt\EnableUserTracks)
-						
-						If PrevEnableUserTracks Then ShouldDeleteGadgets = (PrevEnableUserTracks <> opt\EnableUserTracks)
-						
-						If opt\EnableUserTracks
-							y = y + (30 * MenuScale)
-							
-							opt\UserTrackMode = UpdateMenuTick(x, y, opt\UserTrackMode)
-							
-							If UpdateMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"))
-								UserTrackCheck = 0
-								UserTrackCheck2 = 0
-								
-								Local DirPath$ = "SFX\Radio\UserTracks\"
-								
-								If FileType(DirPath) <> 2 Then CreateDir(DirPath)
-								
-								Local Dir% = ReadDir(DirPath)
-								
-								Repeat
-									File = NextFile(Dir)
-									If File = "" Then Exit
-									If FileType(DirPath + File) = 1
-										UserTrackCheck = UserTrackCheck + 1
-										Test = LoadSound(DirPath + File)
-										If Test <> 0 Then UserTrackCheck2 = UserTrackCheck2 + 1
-										FreeSound(Test) : Test = 0
-									EndIf
-								Forever
-								CloseDir(Dir)
-							EndIf
-							
-							y = y + (40 * MenuScale)
-						Else
+						If UpdateMenuButton(x - (290 * MenuScale), y + (30 * MenuScale), 220 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"))
 							UserTrackCheck = 0
+							UserTrackCheck2 = 0
+							
+							Local DirPath$ = "SFX\Radio\UserTracks\"
+								
+							If FileType(DirPath) <> 2 Then CreateDir(DirPath)
+							
+							Local Dir% = ReadDir(DirPath)
+							
+							Repeat
+								File = NextFile(Dir)
+								If File = "" Then Exit
+								If FileType(DirPath + File) = 1
+									UserTrackCheck = UserTrackCheck + 1
+									Test = LoadSound(DirPath + File)
+									If Test <> 0 Then UserTrackCheck2 = UserTrackCheck2 + 1
+									FreeSound(Test) : Test = 0
+								EndIf
+							Forever
+							CloseDir(Dir)
 						EndIf
 						
-						y = y + (30 * MenuScale)
+						y = y + (70 * MenuScale)
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
 						Local PrevOverrideSubColor% = opt\OverrideSubColor
@@ -1496,7 +1482,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
-					Height = ((280 + (70 * opt\EnableUserTracks)) + (30 * opt\EnableSubtitles) + (155 * (opt\EnableSubtitles And opt\OverrideSubColor))) * MenuScale
+					Height = (320 + (30 * opt\EnableSubtitles) + (155 * (opt\EnableSubtitles And opt\OverrideSubColor))) * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1527,27 +1513,18 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
-					
-					If opt\EnableUserTracks
-						y = y + (30 * MenuScale)
-						
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
-						If opt\UserTrackMode
-							TempStr = GetLocalString("options", "track.repeat")
-						Else
-							TempStr = GetLocalString("options", "track.random")
-						EndIf
-						TextEx(x + (330 * MenuScale), y + (5 * MenuScale), TempStr)
-						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
-						If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
-						If UserTrackCheck > 0 Then TextEx(x, y + (100 * MenuScale), Format(Format(GetLocalString("options", "track.found"), UserTrackCheck2, "{0}"), UserTrackCheck, "{1}"))
-						
-						y = y + (40 * MenuScale)
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
+					If opt\UserTrackMode
+						TempStr = GetLocalString("options", "track.repeat")
+					Else
+						TempStr = GetLocalString("options", "track.random")
 					EndIf
+					TextEx(x + (330 * MenuScale), y + (5 * MenuScale), TempStr)
+					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
+					If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
+					If UserTrackCheck > 0 Then TextEx(x, y + (100 * MenuScale), Format(Format(GetLocalString("options", "track.found"), UserTrackCheck2, "{0}"), UserTrackCheck, "{1}"))
 					
-					y = y + (30 * MenuScale)
+					y = y + (70 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
@@ -2892,36 +2869,35 @@ Const Tooltip_MusicVolume% = 13
 Const Tooltip_SoundVolume% = 14
 Const Tooltip_VoiceVolume% = 15
 Const Tooltip_SoundAutoRelease% = 16
-Const Tooltip_UserTracks% = 17
-Const Tooltip_UserTracksMode% = 18
-Const Tooltip_UserTrackScan% = 19
+Const Tooltip_UserTracksMode% = 17
+Const Tooltip_UserTrackScan% = 18
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 20
-Const Tooltip_MouseInvertX% = 21
-Const Tooltip_MouseInvertY% = 22
-Const Tooltip_MouseSmoothing% = 23
-Const Tooltip_ControlConfiguration% = 24
+Const Tooltip_MouseSensitivity% = 19
+Const Tooltip_MouseInvertX% = 20
+Const Tooltip_MouseInvertY% = 21
+Const Tooltip_MouseSmoothing% = 22
+Const Tooltip_ControlConfiguration% = 23
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 25
-Const Tooltip_Console% = 26
-Const Tooltip_ConsoleOnError% = 27
-Const Tooltip_AchievementPopups% = 28
-Const Tooltip_FPS% = 29
-Const Tooltip_FrameLimit% = 30
-Const Tooltip_AutoSave% = 31
-Const Tooltip_TextShadow% = 32
-Const Tooltip_SmoothBars% = 33
-Const Tooltip_StartupVideos% = 34
-Const Tooltip_Launcher% = 35
-Const Tooltip_Subtitles% = 36
-Const Tooltip_SubtitlesColor% = 37
-Const Tooltip_ResetOptions% = 38
+Const Tooltip_HUD% = 24
+Const Tooltip_Console% = 25
+Const Tooltip_ConsoleOnError% = 26
+Const Tooltip_AchievementPopups% = 27
+Const Tooltip_FPS% = 28
+Const Tooltip_FrameLimit% = 29
+Const Tooltip_AutoSave% = 30
+Const Tooltip_TextShadow% = 31
+Const Tooltip_SmoothBars% = 32
+Const Tooltip_StartupVideos% = 33
+Const Tooltip_Launcher% = 34
+Const Tooltip_Subtitles% = 35
+Const Tooltip_SubtitlesColor% = 36
+Const Tooltip_ResetOptions% = 37
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3043,12 +3019,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_SoundAutoRelease
 			;[Block]
 			Txt = GetLocalString("tooltip", "autorelease")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "cantchange")
-			;[End Block]
-		Case Tooltip_UserTracks
-			;[Block]
-			Txt = GetLocalString("tooltip", "usertrack")
 			R = 255
 			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]

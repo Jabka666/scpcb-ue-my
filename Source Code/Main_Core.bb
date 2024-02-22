@@ -7074,19 +7074,11 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\EnableUserTracks = UpdateMenuTick(x, y, opt\EnableUserTracks, True)
+						opt\UserTrackMode = UpdateMenuTick(x, y, opt\UserTrackMode)
 						
-						If opt\EnableUserTracks
-							y = y + (30 * MenuScale)
-							
-							opt\UserTrackMode = UpdateMenuTick(x, y, opt\UserTrackMode)
-							
-							UpdateMenuButton(x - (270 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), Font_Default, False, True)
-							
-							y = y + (40 * MenuScale)
-						EndIf
+						UpdateMenuButton(x - (270 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), Font_Default, False, True)
 						
-						y = y + (30 * MenuScale)
+						y = y + (70 * MenuScale)
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
 						Local PrevOverrideSubColor% = opt\OverrideSubColor
@@ -7675,28 +7667,18 @@ Function RenderMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						Color(100, 100, 100)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "enabletracks"))
-						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracks)
-						
-						If opt\EnableUserTracks
-							y = y + (30 * MenuScale)
-							
-							Color(255, 255, 255)
-							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
-							If opt\UserTrackMode
-								TempStr = GetLocalString("options", "track.repeat")
-							Else
-								TempStr = GetLocalString("options", "track.random")
-							EndIf
-							TextEx(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
-							If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
-							If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
-							
-							y = y + (40 * MenuScale)
+						Color(255, 255, 255)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
+						If opt\UserTrackMode
+							TempStr = GetLocalString("options", "track.repeat")
+						Else
+							TempStr = GetLocalString("options", "track.random")
 						EndIf
+						TextEx(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
+						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
+						If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
 						
-						y = y + (30 * MenuScale)
+						y = y + (70 * MenuScale)
 						
 						Color(255, 255, 255)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
