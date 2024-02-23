@@ -2065,15 +2065,14 @@ Function UpdateConsole%()
 					EndIf
 					
 					If StrTemp = "all"
-						For i = 0 To MaxAchievements - 2 Step 2
-							achv\Achievement[i] = True
-							achv\Achievement[i + 1] = True
+						For i = 0 To MaxAchievements - 1
+							GiveAchievement(i)
 						Next
 						CreateConsoleMsg(GetLocalString("console", "ga.all"))
 					EndIf
 					
 					If Int(StrTemp) >= 0 And Int(StrTemp) < MaxAchievements And StrTemp <> "all"
-						achv\Achievement[Int(StrTemp)] = True
+						GiveAchievement(Int(StrTemp))
 						CreateConsoleMsg(Format(GetLocalString("console", "ga.success"), achv\AchievementStrings[Int(StrTemp)]))
 					ElseIf StrTemp <> "all"
 						CreateConsoleMsg(Format(GetLocalString("console", "ga.failed"), Int(StrTemp)), 255, 0, 0)
