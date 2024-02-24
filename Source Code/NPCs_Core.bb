@@ -4768,113 +4768,116 @@ Function UpdateNPCs%()
 		
 		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
-		If n\IsDead And n\GravityMult = 1.0
-			EntityType(n\Collider, HIT_DEAD)
-			If n\NPCType = NPCType035_Tentacle
-				If n\Frame > 550.9 And (Not EntityHidden(n\OBJ))
-					HideEntity(n\Collider)
-					HideEntity(n\OBJ)
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-				EndIf
-			Else
-				If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-				If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-				If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-				If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
-			EndIf
-			n\GravityMult = 0.0
-		EndIf
 		If GravityDist < PowTwo(HideDistance) Lor n\NPCType = NPCType1499_1
 			EntityAlpha(n\OBJ, 1.0)
 		Else
 			EntityAlpha(n\OBJ, 0.0)
 		EndIf
 		
-		If GravityDist < PowTwo(HideDistance * 0.6) Lor n\NPCType = NPCType1499_1
-			If n\InFacility = InFacility
-				TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
-				
-				Local CollidedFloor% = False
-				
-				For i = 1 To CountCollisions(n\Collider)
-					If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01
-						CollidedFloor = True
-						Exit
+		If n\IsDead
+			If n\GravityMult = 1.0
+				EntityType(n\Collider, HIT_DEAD)
+				If n\NPCType = NPCType035_Tentacle
+					If n\Frame > 550.9 And (Not EntityHidden(n\OBJ))
+						HideEntity(n\Collider)
+						HideEntity(n\OBJ)
+						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					EndIf
-				Next
-				
-				If CollidedFloor
-					n\DropSpeed = 0.0
 				Else
-					If ShouldEntitiesFall
-						Local UpdateGravity% = False
-						Local MaxX#, MinX#, MaxZ#, MinZ#
-						
-						If n\InFacility = NullFloor
-							If RID <> r_cont1_173_intro
-								If forest_event <> Null
-									If PlayerRoom = forest_event\room
-										If forest_event\EventState = 1.0 Then UpdateGravity = True
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+				EndIf
+				n\GravityMult = 0.0
+			EndIf
+		Else
+			If GravityDist < PowTwo(HideDistance * 0.6) Lor n\NPCType = NPCType1499_1
+				If n\InFacility = InFacility
+					TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
+					
+					Local CollidedFloor% = False
+					
+					For i = 1 To CountCollisions(n\Collider)
+						If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01
+							CollidedFloor = True
+							Exit
+						EndIf
+					Next
+					
+					If CollidedFloor
+						n\DropSpeed = 0.0
+					Else
+						If ShouldEntitiesFall
+							Local UpdateGravity% = False
+							Local MaxX#, MinX#, MaxZ#, MinZ#
+							
+							If n\InFacility = NullFloor
+								If RID <> r_cont1_173_intro
+									If forest_event <> Null
+										If PlayerRoom = forest_event\room
+											If forest_event\EventState = 1.0 Then UpdateGravity = True
+										EndIf
 									EndIf
+								Else
+									UpdateGravity = True
+								EndIf
+								If (Not UpdateGravity)
+									For r.Rooms = Each Rooms
+										If r\MaxX <> 0.0 Lor r\MinX <> 0.0 Lor r\MaxZ <> 0.0 Lor r\MinZ <> 0.0
+											MaxX = r\MaxX
+											MinX = r\MinX
+											MaxZ = r\MaxZ
+											MinZ = r\MinZ
+										Else
+											MaxX = 4.0
+											MinX = 0.0
+											MaxZ = 4.0
+											MinZ = 0.0
+										EndIf
+										If Abs(EntityX(n\Collider) - EntityX(r\OBJ)) <= Abs(MaxX - MinX)
+											If Abs(EntityZ(n\Collider) - EntityZ(r\OBJ)) <= Abs(MaxZ - MinZ)
+												If r = PlayerRoom
+													UpdateGravity = True
+													Exit
+												EndIf
+												If IsRoomAdjacent(PlayerRoom, r)
+													UpdateGravity = True
+													Exit
+												EndIf
+												For i = 0 To MaxRoomAdjacents - 1
+													If IsRoomAdjacent(PlayerRoom\Adjacent[i], r)
+														UpdateGravity = True
+														Exit
+													EndIf
+												Next
+											EndIf
+										EndIf
+									Next
 								EndIf
 							Else
 								UpdateGravity = True
 							EndIf
-							If (Not UpdateGravity)
-								For r.Rooms = Each Rooms
-									If r\MaxX <> 0.0 Lor r\MinX <> 0.0 Lor r\MaxZ <> 0.0 Lor r\MinZ <> 0.0
-										MaxX = r\MaxX
-										MinX = r\MinX
-										MaxZ = r\MaxZ
-										MinZ = r\MinZ
-									Else
-										MaxX = 4.0
-										MinX = 0.0
-										MaxZ = 4.0
-										MinZ = 0.0
-									EndIf
-									If Abs(EntityX(n\Collider) - EntityX(r\OBJ)) <= Abs(MaxX - MinX)
-										If Abs(EntityZ(n\Collider) - EntityZ(r\OBJ)) <= Abs(MaxZ - MinZ)
-											If r = PlayerRoom
-												UpdateGravity = True
-												Exit
-											EndIf
-											If IsRoomAdjacent(PlayerRoom, r)
-												UpdateGravity = True
-												Exit
-											EndIf
-											For i = 0 To MaxRoomAdjacents - 1
-												If IsRoomAdjacent(PlayerRoom\Adjacent[i], r)
-													UpdateGravity = True
-													Exit
-												EndIf
-											Next
-										EndIf
-									EndIf
-								Next
-							EndIf
-						Else
-							UpdateGravity = True
-						EndIf
-						If UpdateGravity
-							n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, -n\MaxGravity)
-						Else
-							If n\FallingPickDistance > 0.0
-								n\DropSpeed = 0.0
-							Else
+							If UpdateGravity
 								n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, -n\MaxGravity)
+							Else
+								If n\FallingPickDistance > 0.0
+									n\DropSpeed = 0.0
+								Else
+									n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, -n\MaxGravity)
+								EndIf
 							EndIf
+						Else
+							n\DropSpeed = 0.0
 						EndIf
-					Else
-						n\DropSpeed = 0.0
 					EndIf
+				Else
+					n\DropSpeed = 0.0
 				EndIf
 			Else
 				n\DropSpeed = 0.0
 			EndIf
-		Else
-			n\DropSpeed = 0.0
 		EndIf
 		CatchErrors("Uncaught: UpdateNPCs(NPC Name: " + Chr(34) + n\NVGName + Chr(34) + ", ID: " + n\NPCType + ")")
 	Next
