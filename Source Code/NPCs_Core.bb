@@ -2265,10 +2265,7 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 3.0 ; ~ Follows a path
 						;[Block]
-						If n\PathStatus = PATH_STATUS_NOT_FOUND
-							n\CurrSpeed = 0.0
-							n\State = 0.0
-						ElseIf n\PathStatus = PATH_STATUS_FOUND
+						If n\PathStatus = PATH_STATUS_FOUND
 							If n\Path[n\PathLocation] = Null
 								If n\PathLocation > MaxPathLocations - 1
 									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -2276,21 +2273,50 @@ Function UpdateNPCs%()
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Else
+								AnimateNPC(n, 1.0, 38.0, n\CurrSpeed * 40.0)
+								
+								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+								
 								PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 								
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 								
-								AnimateNPC(n, 1.0, 38.0, n\CurrSpeed * 40.0)
-								
-								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-								
-								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-								
 								If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
-							n\CurrSpeed = 0.0
-							n\State = 4.0
+							If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.5, n\EnemyZ)
+							
+							wayPointCloseToPlayer = Null
+							
+							Pvt = CreatePivot()
+							PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ)
+							For wp.WayPoints = Each WayPoints
+								If EntityDistanceSquared(wp\OBJ, Pvt) < 4.0
+									wayPointCloseToPlayer = wp
+									Exit
+								EndIf
+							Next
+							FreeEntity(Pvt) : Pvt = 0
+							
+							If wayPointCloseToPlayer <> Null
+								n\PathTimer = 1.0
+								If EntityVisible(wayPointCloseToPlayer\OBJ, n\Collider)
+									If Abs(DeltaYaw(n\Collider, wayPointCloseToPlayer\OBJ)) > 0.0
+										PointEntity(n\OBJ, wayPointCloseToPlayer\OBJ)
+										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
+									EndIf
+								EndIf
+							Else
+								n\PathTimer = 0.0
+							EndIf
+							
+							If n\PathTimer = 1.0
+								AnimateNPC(n, 1.0, 38.0, n\CurrSpeed * 40.0)
+								
+								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							EndIf
 						EndIf
 						;[End Block]
 					Case 4.0 ; ~ Standing and looking around randomly
@@ -2321,11 +2347,11 @@ Function UpdateNPCs%()
 						
 						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 						;[End Block]
-					Case 7.0 ; ~ Just walking
+					Case 7.0 ; ~ Idle
 						;[Block]
 						AnimateNPC(n, 77.0, 201.0, 0.2)
 						;[End Block]
-					Case 8.0 ; ~ Idles
+					Case 8.0 ; ~ None
 						;[Block]
 						;[End Block]
 					Case 9.0 ; ~ Looks at the player
@@ -2337,7 +2363,7 @@ Function UpdateNPCs%()
 						n\ManipulationType = 0
 						n\Angle = EntityYaw(n\Collider)
 						;[End Block]
-					Case 10.0
+					Case 10.0 ; ~ Just walking
 						;[Block]
 						AnimateNPC(n, 1.0, 38.0, n\CurrSpeed * 40.0)
 						

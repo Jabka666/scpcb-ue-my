@@ -401,7 +401,10 @@ Function UpdateGame%()
 				UpdateSecurityCams()
 				UpdateScreens()
 				UpdateSoundEmitters()
-				If IsPlayerOutsideFacility()
+				If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
+					UpdateRooms()
+					UpdateIntro()
+				ElseIf IsPlayerOutsideFacility()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
 					UpdateRooms()
