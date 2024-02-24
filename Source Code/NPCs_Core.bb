@@ -2593,6 +2593,8 @@ Function UpdateNPCs%()
 				
 				If n\CurrSpeed > 0.01
 					If (PrevFrame < 5.0 And n\Frame >= 5.0) Lor (PrevFrame < 23.0 And n\Frame >= 23.0) Then PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+				ElseIf n\CurrSpeed < -0.01
+					If (PrevFrame >= 23.0 And n\Frame < 23.0) Lor (PrevFrame >= 5.0 And n\Frame < 5.0) Then PlaySound2(Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 				EndIf
 				
 				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
