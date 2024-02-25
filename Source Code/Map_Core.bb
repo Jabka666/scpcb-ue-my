@@ -3065,6 +3065,7 @@ Function UpdateDoors%()
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
 				Local TextureID%
+				
 				If d\KeyCard = KEY_005
 					TextureID = BUTTON_106_TEXTURE
 				ElseIf d\OpenState > 0.0 And d\OpenState < 180.0

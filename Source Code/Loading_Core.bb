@@ -1800,7 +1800,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		Else
 			ClosestRoom = d\room
 		EndIf
-		If (Not d\DisableWaypoint) And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then CreateWaypoint(d, ClosestRoom, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True) + 0.18, EntityZ(d\FrameOBJ, True))
+		If (Not d\DisableWaypoint) And d\DoorType <> WOODEN_DOOR Then CreateWaypoint(d, ClosestRoom, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True) + 0.18, EntityZ(d\FrameOBJ, True))
 	Next
 	
 	Local Amount% = 0

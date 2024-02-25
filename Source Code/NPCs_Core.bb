@@ -709,7 +709,7 @@ Function UpdateNPCs%()
 									; ~ Tries to open doors
 									If Rand(20 - (10 * SelectedDifficulty\AggressiveNPCs)) = 1
 										For d.Doors = Each Doors
-											If d\Locked = 0 And (Not d\Open) And d\Code = "" And d\KeyCard = 0
+											If d\Locked = 0 And (Not d\Open) And d\Code = "" And d\KeyCard = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
 												For i = 0 To 1
 													If d\Buttons[i] <> 0
 														If Abs(EntityX(n\Collider) - EntityX(d\Buttons[i])) < 0.5
@@ -723,6 +723,8 @@ Function UpdateNPCs%()
 																	If EntityPick(Pvt, 0.5) = d\Buttons[i]
 																		PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
 																		OpenCloseDoor(d, True)
+																		FreeEntity(Pvt) : Pvt = 0
+																		Exit
 																	EndIf
 																	FreeEntity(Pvt) : Pvt = 0
 																EndIf
@@ -7001,7 +7003,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 	If n\NPCType = NPCTypeMTF
 		If Dist < 1.0
 			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open)
+				If (Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType <> OFFICE_DOOR
 					OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
 					If PlaySFX Then PlaySound2(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
 					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
@@ -7014,7 +7016,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			Local Temp% = True
 			
 			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\IsElevatorDoor > 0 Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "" Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1]))
+				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\IsElevatorDoor > 0 Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "" Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1]) Lor ((Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType = OFFICE_DOOR))
 					Temp = False
 				Else
 					If (Not n\Path[n\PathLocation]\door\Open)

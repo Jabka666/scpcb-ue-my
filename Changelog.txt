@@ -2,6 +2,7 @@ v1.2.1
 
 General:
 - Some tiny optimizations.
+- Agent Ulrgin no longer gives the player SCP-173's document.
 
 Menu:
 - Combined the User tracks toggle into User Track mode as «Disabled».
@@ -18,6 +19,7 @@ Bug Fixes:
 - Fixed document SCP-1162-ARC not having the ARC suffix.
 - Fixed crash when creating a save with a space at the end of the name.
 - Fixed crash when viewing achievements after using giveachievement console command.
+- Fixed NPCs operating wooden and office doors.
 
 v1.2
 
