@@ -425,6 +425,17 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[18], r\x - 320.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 1312.0 * RoomScale)
 			EntityParent(r\Objects[18], r\OBJ)
 			
+			r\Objects[19] = LoadRMesh("GFX\map\cont1_173_intro_player_cell.rmesh", Null)
+			ScaleEntity(r\Objects[19], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[19], r\x, r\y, r\z)
+			EntityParent(r\Objects[19], r\OBJ)
+			
+			r\Objects[20] = LoadRMesh("GFX\map\cont1_173_intro_cells.rmesh", Null, False)
+			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[20], r\x, r\y, r\z)
+			EntityParent(r\Objects[20], r\OBJ)
+			HideEntity(r\Objects[20])
+			
 			For i = 0 To 4
 				Select i
 					Case 0

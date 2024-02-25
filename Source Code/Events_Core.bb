@@ -8982,7 +8982,7 @@ Const INTRO_IN_CHAMBER% = 6
 ;[End Block]
 
 Function UpdateIntro%()
-	Local e.Events, r.Rooms, em.Emitters
+	Local e.Events, r.Rooms, em.Emitters, d.Doors, p.Props, sc.SecurityCams, l.Lights
 	Local i%, Temp%, FPSFactorEx#
 	Local x#, y#, z#
 	Local Dist#
@@ -9071,6 +9071,33 @@ Function UpdateIntro%()
 					SetNPCFrame(e\room\NPC[7], 182.0)
 					ChangeNPCTextureID(e\room\NPC[7], NPC_CLASS_D_SCIENTIST_TEXTURE)
 					HideEntity(e\room\NPC[7]\OBJ)
+					
+					e\room\NPC[8] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[12], True), EntityY(e\room\Objects[12], True), EntityZ(e\room\Objects[12], True))
+					e\room\NPC[8]\State = 7.0
+					HideEntity(e\room\NPC[8]\OBJ)
+					
+					e\room\NPC[9] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[13], True), EntityY(e\room\Objects[13], True), EntityZ(e\room\Objects[13], True))
+					e\room\NPC[9]\State = 7.0
+					HideEntity(e\room\NPC[9]\OBJ)
+					
+					e\room\NPC[10] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[14], True), EntityY(e\room\Objects[14], True), EntityZ(e\room\Objects[14], True))
+					e\room\NPC[10]\State2 = 1.0
+					ChangeNPCTextureID(e\room\NPC[10], NPC_CLASS_D_D9341_TEXTURE)
+					HideEntity(e\room\NPC[10]\OBJ)
+					
+					Local Pvt% = CreatePivot()
+					
+					RotateEntity(Pvt, 90.0, 0.0, 0.0)
+					For i = 8 To 10
+						PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
+						EntityPick(Pvt, 20.0)
+						If PickedEntity() <> 0
+							PositionEntity(e\room\NPC[i]\Collider, PickedX(), PickedY(), PickedZ(), True)
+							AlignToVector(e\room\NPC[i]\Collider, -PickedNX(), -PickedNY(), -PickedNZ(), 3.0)
+							RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
+						EndIf
+					Next
+					FreeEntity(Pvt) : Pvt = 0
 					
 					x = e\room\x - 4248.0 * RoomScale
 					y = e\room\y + 136.0 * RoomScale
@@ -9205,7 +9232,14 @@ Function UpdateIntro%()
 									
 									OpenCloseDoor(e\room\RoomDoors[4])
 								EndIf
-								If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN)) Then e\EventState = INTRO_MOVING_TO_CHAMBER
+								If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN))
+									FreeEntity(e\room\Objects[19]) : e\room\Objects[19] = 0
+									For i = 6 To 10
+										ShowEntity(e\room\NPC[i]\OBJ)
+									Next
+									ShowEntity(e\room\Objects[20])
+									e\EventState = INTRO_MOVING_TO_CHAMBER
+								EndIf
 							Else ; ~ Inside the cell
 								FPSFactorEx = fps\Factor[0] / 4.0
 								e\EventState2 = Min(e\EventState2 + FPSFactorEx, 630.0)
@@ -9360,9 +9394,6 @@ Function UpdateIntro%()
 												FreeSound_Strict(e\room\NPC[i]\Sound2) : e\room\NPC[i]\Sound2 = 0
 											Next
 										EndIf
-										For i = 6 To 7
-											ShowEntity(e\room\NPC[i]\OBJ)
-										Next
 										
 										e\EventStr = "Done"
 									EndIf
@@ -9396,6 +9427,22 @@ Function UpdateIntro%()
 							RotateEntity(e\room\NPC[7]\Collider, 0.0, 180.0 + Sin(MilliSec / 20.0) * 3.0, 0.0, True)
 							UpdateSoundOrigin(e\room\NPC[7]\SoundCHN, Camera, e\room\NPC[7]\Collider, 7.0, 1.0, True)
 							
+							If e\room\NPC[8] <> Null
+								If e\room\NPC[8]\State = 7.0
+									If DistanceSquared(EntityX(me\Collider), e\room\x - 6688.0 * RoomScale, EntityZ(me\Collider), e\room\z - 1252.0 * RoomScale) < 6.25
+										e\room\NPC[8]\State = 10.0
+										e\room\NPC[9]\State = 10.0
+										e\room\NPC[10]\State = 1.0
+									EndIf
+								Else
+									If EntityX(e\room\NPC[8]\Collider) < e\room\x - 7100.0 * RoomScale
+										For i = 8 To 10
+											RemoveNPC(e\room\NPC[i])
+										Next
+									EndIf
+								EndIf
+							EndIf
+								
 							If e\room\NPC[3]\State <> 11.0
 								If DistanceSquared(EntityX(e\room\NPC[3]\Collider), EntityX(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(e\room\NPC[3]\Collider), EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
 									e\room\NPC[3]\State = 9.0
@@ -9404,6 +9451,7 @@ Function UpdateIntro%()
 										DeleteSingleTextureEntryFromCache(n_I\NPCTextureID[NPC_CLASS_D_D9341_TEXTURE])
 										
 										RemoveNPC(e\room\NPC[5])
+										RemoveNPC(e\room\NPC[7])
 										
 										For i = 3 To 4
 											If e\room\NPC[i]\Sound <> 0 Then FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
@@ -9418,6 +9466,8 @@ Function UpdateIntro%()
 										For i = 2 To 3
 											OpenCloseDoor(e\room\RoomDoors[i])
 										Next
+										
+										FreeEntity(e\room\Objects[20]) : e\room\Objects[20] = 0
 										
 										e\EventState = INTRO_ESCORT_DONE
 									EndIf
@@ -9448,6 +9498,13 @@ Function UpdateIntro%()
 							;[End Block]
 						Case INTRO_IN_CHAMBER
 							;[Block]
+							If e\room\NPC[3] <> Null
+								If e\room\RoomDoors[2]\OpenState < 1.0
+									RemoveNPC(e\room\NPC[4])
+									RemoveNPC(e\room\NPC[3])
+								EndIf
+							EndIf
+							
 							;[End Block]
 					End Select
 					
@@ -9457,7 +9514,7 @@ Function UpdateIntro%()
 							
 							If e\room\NPC[5] <> Null
 								If e\room\NPC[5]\State <> 11.0
-									If DistanceSquared(EntityX(me\Collider), EntityX(e\room\NPC[5]\Collider), EntityZ(me\Collider), EntityZ(e\room\NPC[5]\Collider)) < 25.0 And Dist > 25.0
+									If DistanceSquared(EntityX(me\Collider), EntityX(e\room\NPC[5]\Collider), EntityZ(me\Collider), EntityZ(e\room\NPC[5]\Collider)) < 25.0 And Dist > 25.0 And DistanceSquared(EntityX(me\Collider), EntityX(e\room\NPC[4]\Collider), EntityZ(me\Collider), EntityZ(e\room\NPC[4]\Collider)) > 25.0
 										If EntityVisible(me\Collider, e\room\NPC[5]\Collider)
 											For i = 3 To 5
 												If i < 5
