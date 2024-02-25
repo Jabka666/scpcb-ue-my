@@ -319,9 +319,7 @@ Function UpdateGame%()
 			me\RestoreSanity = True
 			ShouldEntitiesFall = True
 			
-			If PlayerInReachableRoom(True, True)
-				ShouldPlay = Min(me\Zone, 2.0)
-				
+			If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499 And (Not IsPlayerOutsideFacility())
 				If Rand(1500) = 1
 					For i = 0 To 5
 						If AmbientSFX(i, CurrAmbientSFX) <> 0
@@ -369,9 +367,13 @@ Function UpdateGame%()
 				EndIf
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
-				If Rand(50000) = 3
-					me\LightBlink = Rnd(1.0, 2.0)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"), True)
+				If PlayerInReachableRoom(True)
+					ShouldPlay = Min(me\Zone, 2.0)
+					
+					If Rand(50000) = 3
+						me\LightBlink = Rnd(1.0, 2.0)
+						PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(8) + ".ogg"), True)
+					EndIf
 				EndIf
 			EndIf
 			
