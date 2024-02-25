@@ -8411,7 +8411,7 @@ Function UpdateIntro%()
 						Case INTRO_CELL_OPENED
 							;[Block]
 							; ~ Outside the cell
-							If DistanceSquared(EntityX(me\Collider), e\room\x - 4096.0 * RoomScale, EntityZ(me\Collider), e\room\z + 192.0 * RoomScale) > 2.25
+							If DistanceSquared(EntityX(me\Collider), e\room\x - 4096.0 * RoomScale, EntityZ(me\Collider), e\room\z + 192.0 * RoomScale) > 2.4025
 								If e\room\RoomDoors[4]\Open
 									StopChannel(e\room\NPC[3]\SoundCHN) : e\room\NPC[3]\SoundCHN = 0
 									
@@ -8442,16 +8442,16 @@ Function UpdateIntro%()
 									e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
 								ElseIf e\EventState2 >= 630.0
 									PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(EntityZ(me\Collider), e\room\z + 490.0 * RoomScale))
-									If e\room\RoomDoors[4]\Open
-										OpenCloseDoor(e\room\RoomDoors[4])
-										
-										em.Emitters = CreateEmitter(e\room, e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
-										em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003
-										TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
-										
-										em.Emitters = CreateEmitter(e\room, e\room\x - 4000.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
-										em\RandAngle = 7.0 : em\Speed = 0.03 : em\SizeChange = 0.003
-										TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
+									If e\room\RoomDoors[4]\Open OpenCloseDoor(e\room\RoomDoors[4])
+									If e\room\RoomEmitters[0] = Null	
+										e\room\RoomEmitters.Emitters[0] = CreateEmitter(e\room, e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
+										e\room\RoomEmitters[0]\RandAngle = 7.0 : e\room\RoomEmitters[0]\Speed = 0.03 : e\room\RoomEmitters[0]\SizeChange = 0.003
+										TurnEntity(e\room\RoomEmitters[0]\OBJ, 90.0, 0.0, 0.0, True)
+									EndIf
+									If e\room\RoomEmitters[1] = Null
+										e\room\RoomEmitters.Emitters[1] = CreateEmitter(e\room, e\room\x - 4000.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
+										e\room\RoomEmitters[1]\RandAngle = 7.0 : e\room\RoomEmitters[1]\Speed = 0.03 : e\room\RoomEmitters[1]\SizeChange = 0.003
+										TurnEntity(e\room\RoomEmitters[1]\OBJ, 90.0, 0.0, 0.0, True)
 									EndIf
 									me\EyeIrritation = Max(me\EyeIrritation + (fps\Factor[0] * 4.0), 1.0)
 									If Rand(1000) = 1 Then Kill()
