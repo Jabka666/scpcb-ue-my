@@ -237,6 +237,9 @@ Function FillRoom%(r.Rooms)
 				de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 386.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
 				EntityParent(de\OBJ, r\OBJ)
 			Next
+			
+			it.Items = CreateItem("Document SCP-173", "paper", r\x + 173.0 * 4.85 * RoomScale, r\y + 173.0 * RoomScale, r\z + 173.0 * 2.5 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_cont1_173_intro
 			;[Block]
