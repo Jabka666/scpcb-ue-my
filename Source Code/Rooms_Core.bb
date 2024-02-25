@@ -436,6 +436,11 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[20], r\OBJ)
 			HideEntity(r\Objects[20])
 			
+			; ~ Janitor position
+			r\Objects[21] = CreatePivot()
+			PositionEntity(r\Objects[21], r\x - 5675.0 * RoomScale, r\y - 1020.0 * RoomScale, r\z - 3717.0 * RoomScale)
+			EntityParent(r\Objects[21], r\OBJ)
+			
 			For i = 0 To 4
 				Select i
 					Case 0
@@ -471,6 +476,7 @@ Function FillRoom%(r.Rooms)
 				End Select
 				de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
 			Next
+			de.Decals = CreateDecal(DECAL_WATER, r\x - 5062.0 * RoomScale, r\y - 1089.0 * RoomScale + 0.05, r\z - 3614.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.6, 1.0))
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 3940.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1248.0 * RoomScale, 20.0, True, r\x - 1970.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 270.0 : sc\Turn = 45.0
