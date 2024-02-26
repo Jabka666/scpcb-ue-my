@@ -873,7 +873,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "doclog_2"), "Log #2", "paper", "paper.b3d", "INV_note.png", "note_forest(2).png", 0.002, 0, "note_forest(2).png")
 	CreateItemTemplate(GetLocalString("items", "doclog_3"), "Log #3", "paper", "paper.b3d", "INV_note.png", "note_forest(3).png", 0.002, 0, "note_forest(3).png")
 	
-	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", "ticket", "badge.b3d", "INV_ticket.png", "ticket.png", 0.0001, 0, "ticket.png", "", 0, 1 + 2 + 8)
+	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", "ticket", "badge.b3d", "INV_ticket.png", "ticket.png", 0.0001, 0, "ticket.png", "", False, 1 + 2 + 8)
 	
 	CreateItemTemplate(GetLocalString("items", "docmn"), "Mysterious Note", "paper", "paper.b3d", "INV_note.png", "note_mysterious.png", 0.003, 0, "note_mysterious.png")
 	
@@ -881,7 +881,7 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "docrand"), "Notification", "paper", "paper.b3d", "INV_note.png", "doc_RAND.png", 0.003, 0, "doc_RAND.png")
 	
-	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", "oldbadge", "badge.b3d", "INV_D_9341_badge.png", "D_9341_badge.png", 0.0001, 1, "D_9341_badge.png", "", 0, 1 + 2 + 8)
+	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", "oldbadge", "badge.b3d", "INV_D_9341_badge.png", "D_9341_badge.png", 0.0001, 1, "D_9341_badge.png", "", False, 1 + 2 + 8)
 	
 	CreateItemTemplate(GetLocalString("items", "origami"), "Origami", "origami", "origami.b3d", "INV_origami.png", "", 0.003, 0)
 	
@@ -946,7 +946,7 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "cup"), "Cup", "cup", "cup.b3d", "INV_cup.png", "", 0.04, 2)
 	
-	CreateItemTemplate(GetLocalString("items", "clipboard"), "Clipboard", "clipboard", "clipboard.b3d", "INV_clipboard.png", "", 0.003, 1, "", "INV_clipboard(2).png", 1)
+	CreateItemTemplate(GetLocalString("items", "clipboard"), "Clipboard", "clipboard", "clipboard.b3d", "INV_clipboard.png", "", 0.003, 1, "", "INV_clipboard(2).png", True)
 	
 	CreateItemTemplate(GetLocalString("items", "electronics"), "Electronical Components", "electronics", "circuits.b3d", "INV_circuits.png", "", 0.0011, 1)
 	
@@ -967,10 +967,10 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", "veryfinegasmask", "gas_mask.b3d", "INV_gas_mask.png", "", 0.02, 2)
 	CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", "gasmask148", "gas_mask.b3d", "INV_gas_mask_heavy.png", "", 0.02, 2, "gas_mask_heavy.png")
 	
-	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "hazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
-	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "finehazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
-	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "veryfinehazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", 1)
-	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", "hazmatsuit148", "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", 1)
+	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "hazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
+	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "finehazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
+	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", "veryfinehazmatsuit", "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
+	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", "hazmatsuit148", "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", True)
 	
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "nvg", "night_vision_goggles.b3d", "INV_night_vision_goggles.png", "", 0.02, 2)
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", "finenvg", "night_vision_goggles.b3d", "INV_night_vision_goggles(2).png", "", 0.02, 2)
@@ -1006,7 +1006,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "veryfinesyringe", "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", "syringeinf", "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png")
 	
-	CreateItemTemplate(GetLocalString("items", "wallet"), "Wallet", "wallet", "wallet.b3d", "INV_wallet.png", "", 0.0006, 2, "", "", 1)
+	CreateItemTemplate(GetLocalString("items", "wallet"), "Wallet", "wallet", "wallet.b3d", "INV_wallet.png", "", 0.0006, 2, "", "", True)
 	
 	; ~ [KEYCARDS, KEYS, CARDS, COINS]
 	
