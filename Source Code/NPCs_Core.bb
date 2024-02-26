@@ -323,7 +323,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
 			Temp = IniGetFloat(NPCsFile, "SCP-035's Tentacle", "Scale") / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			SetAnimTime(n\OBJ, 283.0)
+			SetNPCFrame(n, 283.0)
 			
 			If NPCSound[SOUND_NPC_035_TENTACLE_IDLE] = 0 Then NPCSound[SOUND_NPC_035_TENTACLE_IDLE] = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
 			;[End Block]
@@ -896,7 +896,7 @@ Function UpdateNPCs%()
 								
 								n\PrevY = EntityY(me\Collider)
 								
-								SetAnimTime(n\OBJ, 110.0)
+								SetNPCFrame(n, 110.0)
 								
 								If RID <> r_cont1_895 Then PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
 								
