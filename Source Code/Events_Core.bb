@@ -8442,7 +8442,7 @@ Function UpdateIntro%()
 									e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
 								ElseIf e\EventState2 >= 630.0
 									PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(EntityZ(me\Collider), e\room\z + 490.0 * RoomScale))
-									If e\room\RoomDoors[4]\Open OpenCloseDoor(e\room\RoomDoors[4])
+									If e\room\RoomDoors[4]\Open Then OpenCloseDoor(e\room\RoomDoors[4])
 									If e\room\RoomEmitters[0] = Null	
 										e\room\RoomEmitters.Emitters[0] = CreateEmitter(e\room, e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
 										e\room\RoomEmitters[0]\RandAngle = 7.0 : e\room\RoomEmitters[0]\Speed = 0.03 : e\room\RoomEmitters[0]\SizeChange = 0.003
