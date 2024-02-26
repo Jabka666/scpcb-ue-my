@@ -2677,6 +2677,7 @@ Type Doors
 	Field MTFClose% = True
 	Field ElevatorPanel%[2]
 	Field PlayCautionSFX%
+	Field ButtonsUpdateTimer#
 End Type
 
 ; ~ Door ID Constants
@@ -3064,21 +3065,25 @@ Function UpdateDoors%()
 			EndIf
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
-				Local TextureID%
-				
-				If d\KeyCard = KEY_005
-					TextureID = BUTTON_106_TEXTURE
-				ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
-					TextureID = BUTTON_YELLOW_TEXTURE
-				ElseIf d\Locked = 1
-					TextureID = BUTTON_RED_TEXTURE
+				If d\ButtonsUpdateTimer =< 0.0
+					Local TextureID%
+					
+					If d\KeyCard = KEY_005
+						TextureID = BUTTON_106_TEXTURE
+					ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
+						TextureID = BUTTON_YELLOW_TEXTURE
+					ElseIf d\Locked = 1
+						TextureID = BUTTON_RED_TEXTURE
+					Else
+						TextureID = BUTTON_GREEN_TEXTURE
+					EndIf
+					For i = 0 To 1
+						If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
+					Next
+					d\ButtonsUpdateTimer = fps\Factor[0] * 4.0
 				Else
-					TextureID = BUTTON_GREEN_TEXTURE
+					d\ButtonsUpdateTimer = d\ButtonsUpdateTimer - fps\Factor[0]
 				EndIf
-				; ~ TODO: FIND SOLUTION TO PREVENT FUNCTION LOOP
-				For i = 0 To 1
-					If d\Buttons[i] <> 0 Then EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
-				Next
 				
 				If d\KeyCard = KEY_MISC
 					If ChannelPlaying(d\ButtonCHN)
