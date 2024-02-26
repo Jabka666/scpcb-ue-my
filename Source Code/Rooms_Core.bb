@@ -1458,7 +1458,7 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_BLOOD_3, r\x + 180.0 * RoomScale, r\y + 769.0 * RoomScale + 0.005, r\z + 797.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.6, 0.7), Rnd(0.8, 1.0))
 			EntityParent(de\OBJ, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-1123", "paper", r\x + 606.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 936.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-1123", "paper", r\x + 542.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 936.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Gas Mask", "gasmask", r\x + 609.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 961.0 * RoomScale)
@@ -1561,15 +1561,18 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_cont2c_066_1162_arc
 			;[Block]
-			; SCP-1162-arc chamber door
+			; ~ SCP-1162-arc's chamber door
 			d.Doors = CreateDoor(r, r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			; SCP-066's chamber door
-			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y, r\z, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
-            PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.132, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.032, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			; ~ SCP-066's observation room door
+			d.Doors = CreateDoor(r, r\x, r\y, r\z + 288.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_3)
+            PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.132, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			
+			; ~ SCP-066's chamber door
+			d.Doors = CreateDoor(r, r\x - 608.0 * RoomScale, r\y, r\z + 288.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.032, True)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 996.0 * RoomScale, r\y + 128.0 * RoomScale, r\z - 640.0 * RoomScale)
@@ -1586,7 +1589,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			RotateEntity(it\Collider, 0.0, 240.0, 0.0)
 			
-			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 657.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 50.0 * RoomScale)
+			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 241.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 806.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room3_storage
