@@ -2539,7 +2539,7 @@ Function InitNewGame%()
 	
 	RenderLoading(90, GetLocalString("loading", "pos"))
 	
-	TurnEntity(me\Collider, 0.0, Rnd(160.0, 200.0), 0.0)
+	TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 	
 	ResetEntity(me\Collider)
 	
@@ -2553,7 +2553,7 @@ Function InitNewGame%()
 	
 	UpdateWorld()
 	UpdateNPCs()
-	UpdateRender()
+	ResetRender()
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
@@ -2666,7 +2666,7 @@ Function InitLoadGame%()
 	
 	UpdateWorld()
 	UpdateNPCs()
-	UpdateRender()
+	ResetRender()
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	

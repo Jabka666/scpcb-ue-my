@@ -2452,7 +2452,7 @@ Function UpdateEvents%()
 								
 								ResetEntity(me\Collider)
 								
-								UpdateRender()
+								ResetRender()
 								
 								IsBlackOut = PrevIsBlackOut
 								If wi\NightVision > 0
@@ -4033,7 +4033,7 @@ Function UpdateEvents%()
 							PositionEntity(me\Collider, EntityX(Pvt), EntityY(Pvt) + 0.05, EntityZ(Pvt))
 							TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 							
-							UpdateRender()
+							ResetRender()
 							
 							FreeEntity(Pvt) : Pvt = 0
 							RemoveEvent(e)
@@ -5256,7 +5256,7 @@ Function UpdateEvents%()
 						PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider), TFormedZ(), True)
 						ResetEntity(me\Collider)
 						
-						UpdateRender()
+						ResetRender()
 						
 						Temp = True
 					ElseIf TFormedX() < -730.0
@@ -5289,7 +5289,7 @@ Function UpdateEvents%()
 						PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider), TFormedZ(), True)
 						ResetEntity(me\Collider)
 						
-						UpdateRender()
+						ResetRender()
 						
 						Temp = True
 					EndIf
@@ -7830,7 +7830,7 @@ Function UpdateDimension106%()
 							e\EventState2 = PD_Labyrinth
 							;[End Block]
 					End Select
-					UpdateRender()
+					ResetRender()
 				EndIf
 			Else
 				HideRoomsNoColl(e\room)

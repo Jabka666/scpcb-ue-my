@@ -518,7 +518,7 @@ Function UpdateGame%()
 			If wi\NightVision = 0 Then DarkAlpha = Max((1.0 - SecondaryLightOn) * 0.9, DarkAlpha)
 			
 			If me\Terminated
-				NullSelectedStuff()
+				ResetSelectedStuff()
 				me\BlurTimer = me\KillAnimTimer * 5.0
 				If me\SelectedEnding <> -1
 					MenuOpen = True
@@ -534,7 +534,7 @@ Function UpdateGame%()
 			EndIf
 			
 			If me\FallTimer < 0.0
-				NullSelectedStuff()
+				ResetSelectedStuff()
 				me\BlurTimer = Abs(me\FallTimer * 10.0)
 				me\FallTimer = me\FallTimer - fps\Factor[0]
 				DarkAlpha = Max(DarkAlpha, Min(Abs(me\FallTimer / 400.0), 1.0))
@@ -2419,7 +2419,7 @@ End Function
 
 Function MakeMeUnplayable%()
 	If me\Playable
-		NullSelectedStuff()
+		ResetSelectedStuff()
 		me\Playable = False
 	EndIf
 End Function
@@ -3168,7 +3168,7 @@ Function UpdateZoneColor%()
 	AmbientLight(CurrR, CurrG, CurrB)
 End Function
 
-Function NullSelectedStuff%()
+Function ResetSelectedStuff%()
 	InvOpen = False
 	I_294\Using = False
 	d_I\SelectedDoor = Null
@@ -7398,7 +7398,7 @@ Function UpdateMenu%()
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
 							
-							UpdateRender()
+							ResetRender()
 							
 							For r.Rooms = Each Rooms
 								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
@@ -7464,7 +7464,7 @@ Function UpdateMenu%()
 							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 							HidePointer()
 							
-							UpdateRender()
+							ResetRender()
 							
 							For r.Rooms = Each Rooms
 								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))

@@ -4543,7 +4543,7 @@ End Function
 
 Include "Source Code\Rooms_Core.bb"
 
-Function UpdateRender%()
+Function ResetRender%()
 	Local it.Items, n.NPCs
 	
 	UpdateLightsTimer = 0.0
@@ -4567,7 +4567,7 @@ Function TeleportToRoom%(r.Rooms)
 	Local it.Items
 	
 	PlayerRoom = r
-	UpdateRender()
+	ResetRender()
 	PlayerInsideElevator = False
 End Function
 
