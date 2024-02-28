@@ -4554,6 +4554,7 @@ Function ResetRender%()
 	UpdateRooms()
 	For it.Items = Each Items
 		it\DistTimer = 0.0
+		it\DropSpeed = 0.0
 	Next
 	UpdateItems()
 	For n.NPCs = Each NPCs
@@ -4561,6 +4562,8 @@ Function ResetRender%()
 		n\DropSpeed = 0.0
 	Next
 	UpdateNPCs()
+	me\DropSpeed = 0.0
+	ShouldEntitiesFall = False
 End Function
 
 Function TeleportToRoom%(r.Rooms)

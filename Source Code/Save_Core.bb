@@ -1312,7 +1312,6 @@ Function LoadGame%(File$)
 	
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		me\BlinkTimer = -1.0
-		ShouldEntitiesFall = False
 		TeleportToRoom(I_1499\PrevRoom)
 	EndIf
 	

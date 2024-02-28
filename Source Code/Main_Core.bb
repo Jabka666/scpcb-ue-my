@@ -9303,7 +9303,6 @@ Function UpdateLeave1499%()
 					EndIf
 				Next
 				For it.Items = Each Items
-					it\DistTimer = 0.0
 					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "fine1499"
 						Local ItemPosY# = EntityY(it\Collider)
 						Local RoomPosY# = EntityY(r1499\OBJ)
@@ -9316,7 +9315,6 @@ Function UpdateLeave1499%()
 					EndIf
 				Next
 				r1499 = Null
-				ShouldEntitiesFall = False
 				opt\CameraFogFar = 6.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Exit.ogg"))
 				I_1499\PrevX = 0.0
