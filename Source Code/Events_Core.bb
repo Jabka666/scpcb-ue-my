@@ -6049,10 +6049,10 @@ Function UpdateEvents%()
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
 					EndIf
-					If e\room\NPC[0] <> Null
-						If Floor(EntityY(e\room\NPC[0]\Collider)) < 0.0 Then Temp = True
-						UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
-					EndIf
+					
+					If Floor(EntityY(e\room\NPC[0]\Collider)) < 0.0 Then Temp = True
+					UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
+					
 					If Temp Then
 						RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 						For i = 0 To 2
