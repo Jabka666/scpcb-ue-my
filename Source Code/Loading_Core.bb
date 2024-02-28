@@ -1208,8 +1208,8 @@ Global DecalStep%
 ; ~ 2 - PD
 ; ~ 3 - Cloth
 ; ~ 4 - Forest (Should be used in future. Currently doesn't work for player)
-Dim StepSFX%(5, 2, 8) ; ~ (Ground Type, Walk / Run, ID)
-Global Step2SFX%[15]
+Dim StepSFX%(6, 2, 8) ; ~ (Ground Type, Walk / Run, ID)
+Global Step2SFX%[13]
 
 Global VehicleSFX%[2]
 
@@ -1405,6 +1405,7 @@ Function LoadSounds%()
 			StepSFX(3, 0, i) = LoadSound_Strict("SFX\Step\StepCloth" + (i + 1) + ".ogg")
 			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + (i + 1) + ".ogg")
 		EndIf
+		If i < 2 Then StepSFX(5, 0, i) = LoadSound_Strict("SFX\Step\StepFluid" + (i + 1) + ".ogg")
 	Next
 	
 	For i = 0 To 2
@@ -1413,11 +1414,8 @@ Function LoadSounds%()
 	For i = 3 To 9
 		Step2SFX[i] = LoadSound_Strict("SFX\Step\SCP\StepMetal" + (i - 2) + ".ogg")
 	Next
-	For i = 10 To 11
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\StepFluid" + (i - 9) + ".ogg")
-	Next
-	For i = 12 To 14
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\SCP\StepBarefoot" + (i - 11) + ".ogg")
+	For i = 10 To 12
+		Step2SFX[i] = LoadSound_Strict("SFX\Step\SCP\StepBarefoot" + (i - 9) + ".ogg")
 	Next
 	
 	VehicleSFX[0] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
@@ -1496,6 +1494,7 @@ Function RemoveSoundInstances%()
 				StepSFX(3, 0, i) = 0
 				StepSFX(4, 0, i) = 0
 			EndIf
+			If i < 2 Then StepSFX(5, 0, i) = 0
 		EndIf
 		If i < 9
 			RadioSFX(1, i) = 0
@@ -1503,9 +1502,11 @@ Function RemoveSoundInstances%()
 		EndIf
 		If i < 11 Then RoomAmbience[i] = 0
 		If i < 12 Then IntroSFX[i] = 0
-		If i < 13 Then HorrorSFX[i] = 0
+		If i < 13
+			HorrorSFX[i] = 0
+			Step2SFX[i] = 0
+		EndIf
 		If i < 14 Then DamageSFX[i] = 0
-		If i < 15 Then Step2SFX[i] = 0
 	Next
 	DoorClose079 = 0
 	DoorOpen079 = 0

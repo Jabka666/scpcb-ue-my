@@ -484,37 +484,40 @@ Function CreateNPCAsset%(n.NPCs)
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
-			Local Save%
-			
-			Save = False
 			If n\OBJ2 <> 0
 				EntityParent(n\OBJ2, 0)
 				
-				Local x# = EntityX(n\OBJ2)
-				Local y# = EntityY(n\OBJ2)
-				Local z# = EntityZ(n\OBJ2)
-				Local Pitch# = EntityPitch(n\OBJ2)
-				Local Yaw# = EntityYaw(n\OBJ2)
-				Local Roll# = EntityRoll(n\OBJ2)
-				
 				FreeEntity(n\OBJ2) : n\OBJ2 = 0
-				
-				Save = True
 			EndIf
 			
+			; ~ Save model parameters
+			Local PrevYaw# = EntityYaw(n\OBJ)
+			Local PrevX# = EntityX(n\OBJ)
+			Local PrevY# = EntityY(n\OBJ)
+			Local PrevZ# = EntityZ(n\OBJ)
+			Local PrevFrame# = AnimTime(n\OBJ)
+			
+			; ~ Reset parameters
+			RotateEntity(n\OBJ, 0.0, 0.0, 0.0)
+			PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
+			SetNPCFrame(n, 1.0)
+			
+			; ~ Load the mask and apply to model
 			If I_035\Sad
 				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
-				If Save
-					RotateEntity(n\OBJ2, Pitch, Yaw, Roll)
-					PositionEntity(n\OBJ2, x, y, z)
-				EndIf
 			Else
 				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
 			EndIf
 			Temp = IniGetFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
-			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
-			If (Not Save) Then PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) + 0.85, EntityZ(n\OBJ) - 0.095)
+			ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
+			PositionEntity(n\OBJ2, 0.0, 0.86, -0.1, True)
+			RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
 			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
+			
+			; ~ Bring back the model
+			RotateEntity(n\OBJ, 0.0, PrevYaw, 0.0)
+			PositionEntity(n\OBJ, PrevX, PrevY, PrevZ)
+			SetNPCFrame(n, PrevFrame)
 			;[End Block]
 	End Select
 	
@@ -1269,7 +1272,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If n\CurrSpeed > 0.001
-								If (PrevFrame < 1383.0 And n\Frame >= 1383.0) Lor (PrevFrame < 1420.0 And n\Frame >= 1420.0) Lor (PrevFrame < 1466.0 And n\Frame >= 1466.0) Then PlaySound2(Step2SFX[Rand(12, 14)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+								If (PrevFrame < 1383.0 And n\Frame >= 1383.0) Lor (PrevFrame < 1420.0 And n\Frame >= 1420.0) Lor (PrevFrame < 1466.0 And n\Frame >= 1466.0) Then PlaySound2(Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 							EndIf
 						EndIf
 						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0, 1.0, True)

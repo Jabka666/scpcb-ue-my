@@ -407,6 +407,47 @@ Function GetStepSound%(Entity%)
 	Return(0)
 End Function
 
+Function PlayStepSound%(IncludeSprint% = True)
+	Local Temp%
+	
+	Temp = GetStepSound(me\Collider)
+	If DecalStep = 1
+		Temp = 2
+	ElseIf forest_event <> Null
+		If forest_event\room = PlayerRoom And forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
+	EndIf
+	
+	Local TempCHN% = 0
+	Local TempCHN2 = 0
+	Local SoundHasSprint% = True
+	Local SoundRand% = Rand(0, 7)
+	
+	Select Temp
+		Case 2, 3, 4
+			;[Block]
+			SoundHasSprint = False
+			SoundRand = Rand(0, 2)
+			;[End Block]
+		Case 5
+			;[Block]
+			SoundHasSprint = False
+			SoundRand = Rand(0, 1)
+			;[End Block]
+	End Select
+	
+	TempCHN = PlaySound_Strict(StepSFX(Temp, (IncludeSprint And SoundHasSprint), SoundRand))
+	ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+	If DecalStep = 2 And Temp <> 5
+		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)))
+		ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+	EndIf
+	If IncludeSprint
+		me\SndVolume = Max(4.0, me\SndVolume)
+	Else
+		me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
+	EndIf
+End Function
+
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
 	If (Not PlayerInReachableRoom(True, True)) Then Return
 	

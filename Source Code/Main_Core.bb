@@ -2589,38 +2589,7 @@ Function UpdateMoving%()
 					Temp = (me\Shake Mod 360.0)
 					
 					If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
-					If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0
-						Temp = GetStepSound(me\Collider)
-						If DecalStep = 1
-							Temp = 2
-						ElseIf forest_event <> Null
-							If forest_event\room = PlayerRoom And forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
-						EndIf
-						
-						Local TempCHN% = 0, TempCHN2% = 0
-						Local HasSprint% = True, StepRand% = Rand(0, 7)
-						
-						Select Temp
-							Case 2, 3, 4
-								;[Block]
-								HasSprint = False
-								StepRand = Rand(0, 2)
-								;[End Block]
-						End Select
-						
-						TempCHN = PlaySound_Strict(StepSFX(Temp, (Sprint = 2.5 And HasSprint), StepRand))
-						ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
-						If DecalStep = 2
-							TempCHN2 = PlaySound_Strict(Step2SFX[Rand(10, 11)])
-							ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
-						EndIf
-						
-						If Sprint = 2.5
-							me\SndVolume = Max(4.0, me\SndVolume)
-						Else
-							me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
-						EndIf
-					EndIf
+					If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 Then PlayStepSound(Sprint = 2.5)
 				EndIf
 				If KeyHit(key\CROUCH) And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then SetCrouch((Not me\Crouch))
 			EndIf
@@ -2722,32 +2691,7 @@ Function UpdateMoving%()
 			Next
 			
 			If CollidedFloor
-				If me\DropSpeed < -0.07
-					Temp = GetStepSound(me\Collider)
-					If DecalStep = 1
-						Temp = 2
-					ElseIf forest_event <> Null
-						If forest_event\room = PlayerRoom And forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
-					EndIf
-					
-					TempCHN = 0 : TempCHN2 = 0
-					HasSprint = True : StepRand = Rand(0, 7)
-					
-					Select Temp
-						Case 2, 3, 4
-							;[Block]
-							HasSprint = False
-							StepRand = Rand(0, 2)
-							;[End Block]
-					End Select
-					
-					TempCHN = PlaySound_Strict(StepSFX(Temp, (Sprint = 2.5 And HasSprint), StepRand))
-					ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
-					If DecalStep = 2
-						TempCHN2 = PlaySound_Strict(Step2SFX[Rand(10, 11)])
-						ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
-					EndIf
-				EndIf
+				If me\DropSpeed < -0.07 Then PlayStepSound(Sprint = 2.5)
 				me\DropSpeed = 0.0
 			Else
 				If PlayerFallingPickDistance <> 0.0

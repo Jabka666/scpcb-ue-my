@@ -214,6 +214,8 @@ Function SaveGame%(File$)
 		
 		WriteString(f, n\Texture)
 		
+		WriteByte(f, n\HasAsset)
+		
 		WriteFloat(f, AnimTime(n\OBJ))
 		
 		WriteByte(f, n\Contained)
@@ -225,7 +227,6 @@ Function SaveGame%(File$)
 		WriteFloat(f, n\ModelScaleX)
 		WriteFloat(f, n\ModelScaleY)
 		WriteFloat(f, n\ModelScaleZ)
-		WriteByte(f, n\HasAsset)
 		WriteByte(f, n\TextureID)
 		WriteByte(f, n\HideFromNVG)
 	Next
@@ -738,6 +739,9 @@ Function LoadGame%(File$)
 			DeleteSingleTextureEntryFromCache(Tex)
 		EndIf
 		
+		n\HasAsset = ReadByte(f)
+		If n\HasAsset Then CreateNPCAsset(n)
+		
 		Local Frame# = ReadFloat(f)
 		
 		Select NPCType
@@ -763,8 +767,6 @@ Function LoadGame%(File$)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
-		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
 		n\TextureID = ReadByte(f)
 		If n\TextureID > 0
 			ChangeNPCTextureID(n, n\TextureID - 1)
@@ -1583,6 +1585,9 @@ Function LoadGameQuick%(File$)
 			DeleteSingleTextureEntryFromCache(Tex)
 		EndIf
 		
+		n\HasAsset = ReadByte(f)
+		If n\HasAsset Then CreateNPCAsset(n)
+		
 		Local Frame# = ReadFloat(f)
 		
 		Select NPCType
@@ -1608,8 +1613,6 @@ Function LoadGameQuick%(File$)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
-		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
 		n\TextureID = ReadByte(f)
 		If n\TextureID > 0
 			ChangeNPCTextureID(n, n\TextureID - 1)
