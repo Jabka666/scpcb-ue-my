@@ -5713,16 +5713,14 @@ Function UpdateEvents%()
 					; ~ EventState3: has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
 					
 					If e\EventState = 0.0
-						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 4.0
-							e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
-							e\room\NPC[0]\State = 6.0
-							CreateNPCAsset(e\room\NPC[0])
-							ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
-							SetNPCFrame(e\room\NPC[0], 501.0)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
-							
-							e\EventState = 1.0
-						EndIf
+						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
+						e\room\NPC[0]\State = 6.0
+						CreateNPCAsset(e\room\NPC[0])
+						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
+						SetNPCFrame(e\room\NPC[0], 501.0)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+						
+						e\EventState = 1.0
 					ElseIf e\EventState > 0.0
 						ShouldPlay = 26
 						
@@ -6067,6 +6065,7 @@ Function UpdateEvents%()
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
 					EndIf
+					If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
 				Else
 					If e\EventState = 0.0
 						If e\Sound = 0
@@ -6079,6 +6078,8 @@ Function UpdateEvents%()
 						For i = 0 To 1
 							If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i]) : e\room\NPC[i] = Null
 						Next
+					Else
+						If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
 					EndIf
 				EndIf
 				;[End Block]
