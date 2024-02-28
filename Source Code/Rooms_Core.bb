@@ -987,41 +987,42 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_storage
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 1288.0 * RoomScale, r\y, r\z, 270.0)
+			d\AutoClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			MoveEntity(d\Buttons[1], 0.0, 0.0, -8.0)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			r\RoomDoors.Doors[0] = d
 			
 			d.Doors = CreateDoor(r, r\x - 760.0 * RoomScale, r\y, r\z, 270.0)
-			d\MTFClose = False d\DisableWaypoint = True
+			d\AutoClose = False : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			MoveEntity(d\Buttons[1], 0.0, 0.0, -8.0)
 			r\RoomDoors.Doors[1] = d
 			
 			d.Doors = CreateDoor(r, r\x - 264.0 * RoomScale, r\y, r\z, 270.0)
+			MoveEntity(d\Buttons[0], 0.0, 0.0, -8.0)
+			MoveEntity(d\Buttons[1], 0.0, 0.0, -8.0)
+			d\AutoClose = False
 			r\RoomDoors.Doors[2] = d
 			
 			d.Doors = CreateDoor(r, r\x + 264.0 * RoomScale, r\y, r\z, 270.0)
+			MoveEntity(d\Buttons[0], 0.0, 0.0, -8.0)
+			MoveEntity(d\Buttons[1], 0.0, 0.0, -8.0)
+			d\AutoClose = False
 			r\RoomDoors.Doors[3] = d
 			
 			d.Doors = CreateDoor(r, r\x + 760.0 * RoomScale, r\y, r\z, 90.0)
-			d\MTFClose = False : d\DisableWaypoint = True
+			d\AutoClose = False : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			MoveEntity(d\Buttons[1], 0.0, 0.0, -8.0)
 			r\RoomDoors.Doors[4] = d
 			
 			d.Doors = CreateDoor(r, r\x + 1288.0 * RoomScale, r\y, r\z, 90.0)
+			d\AutoClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			MoveEntity(d\Buttons[1], 0.0, 0.0, -8.0)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			r\RoomDoors.Doors[5] = d
-			
-			For i = 2 To 3
-				MoveEntity(r\RoomDoors[i]\Buttons[0], 0.0, 0.0, -8.0)
-			Next
-			
-			For i = 0 To 4 Step 2
-				r\RoomDoors[i]\AutoClose = False
-				MoveEntity(r\RoomDoors[i]\Buttons[1], 0.0, 0.0, -8.0)
-				r\RoomDoors[i + 1]\AutoClose = False
-				MoveEntity(r\RoomDoors[i + 1]\Buttons[1], 0.0, 0.0, -8.0)
-			Next
 			
 			it.Items = CreateItem("Document SCP-939", "paper", r\x + 352.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 256.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, r\Angle + 4.0, 0.0)
