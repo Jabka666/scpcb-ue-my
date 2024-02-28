@@ -5712,6 +5712,7 @@ Function UpdateEvents%()
 					
 					; ~ EventState3: has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
 					
+					Temp = False
 					If e\EventState = 0.0
 						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 						e\room\NPC[0]\State = 6.0
@@ -5956,24 +5957,7 @@ Function UpdateEvents%()
 											RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
 										EndIf
 									Else
-										RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
-										For i = 0 To 2
-											e\room\RoomDoors[i]\Locked = 0
-										Next
-										OpenCloseDoor(e\room\RoomDoors[1])
-										For do.Doors = Each Doors
-											If do\DoorType = HEAVY_DOOR
-												If Abs(EntityX(e\room\OBJ) - EntityX(do\FrameOBJ, True)) < 4.5 
-													If Abs(EntityZ(e\room\OBJ) - EntityZ(do\FrameOBJ, True)) < 4.5 
-														OpenCloseDoor(do)
-														Exit
-													EndIf
-												EndIf
-											EndIf
-										Next
-										e\EventState2 = 0.0
-										e\EventState3 = 0.0
-										e\EventState = -1.0
+										Temp = True
 									EndIf
 								EndIf
 							EndIf
@@ -6065,7 +6049,30 @@ Function UpdateEvents%()
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
 						EndIf
 					EndIf
-					If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
+					If e\room\NPC[0] <> Null
+						If Floor(EntityY(e\room\NPC[0]\Collider)) < 0.0 Then Temp = True
+						UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
+					EndIf
+					If Temp Then
+						RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
+						For i = 0 To 2
+							e\room\RoomDoors[i]\Locked = 0
+						Next
+						OpenCloseDoor(e\room\RoomDoors[1])
+						For do.Doors = Each Doors
+							If do\DoorType = HEAVY_DOOR
+								If Abs(EntityX(e\room\OBJ) - EntityX(do\FrameOBJ, True)) < 4.5 
+									If Abs(EntityZ(e\room\OBJ) - EntityZ(do\FrameOBJ, True)) < 4.5 
+										OpenCloseDoor(do)
+										Exit
+									EndIf
+								EndIf
+							EndIf
+						Next
+						e\EventState2 = 0.0
+						e\EventState3 = 0.0
+						e\EventState = -1.0
+					EndIf
 				Else
 					If e\EventState = 0.0
 						If e\Sound = 0
