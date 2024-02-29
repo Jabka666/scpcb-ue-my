@@ -1956,7 +1956,7 @@
 			"color": "mtf"
 		}
 	],
-	"SFX\\Character\\MTF\\Targetterminated1.ogg": [
+	"SFX\\Character\\MTF\\TargetTerminated1.ogg": [
 		{
 			"text": "Target terminated.",
 			"delay": 1.08,
@@ -2035,14 +2035,14 @@
 			"color": "mtf"
 		}
 	],
-	"SFX\\Character\\MTF\\049\\Player0492_1.ogg": [
+	"SFX\\Character\\MTF\\049\\Spotted.ogg": [
 		{
 			"text": "Nine-Tailed Fox to control, an active SCP-049-2 instance detected.",
 			"delay": 0.2,
 			"color": "mtf"
 		}
 	],
-	"SFX\\Character\\MTF\\049\\Player0492_2.ogg": [
+	"SFX\\Character\\MTF\\049\\TargetTerminated.ogg": [
 		{
 			"text": "SCP-049-2 terminated.",
 			"color": "mtf"
@@ -2137,7 +2137,7 @@
 			"color": "mtf"
 		}
 	],
-	"SFX\\Character\\MTF\\173\\BLINKING.ogg": [
+	"SFX\\Character\\MTF\\173\\Blinking.ogg": [
 		{
 			"text": "Blinking.",
 			"color": "mtf",
@@ -2757,31 +2757,31 @@
 	],
 	"SFX\\SCP\\079\\TestroomWarning.ogg": [
 		{
-			"text": "You..-",
+			"text": "YOU..-",
 			"delay": 3.4,
 			"color": "announcement",
 			"length": 2.0
 		},
 		{
-			"text": "Are..-",
+			"text": "ARE..-",
 			"delay": 4.4,
 			"color": "announcement",
 			"length": 2.0
 		},
 		{
-			"text": "Not..-",
+			"text": "NOT..-",
 			"delay": 5.4,
 			"color": "announcement",
 			"length": 2.0
 		},
 		{
-			"text": "Getting..-",
+			"text": "GETTING..-",
 			"delay": 6.4,
 			"color": "announcement",
 			"length": 2.0
 		},
 		{
-			"text": "Out..!",
+			"text": "OUT..!",
 			"delay": 7.4,
 			"color": "announcement",
 			"length": 1.0
@@ -2804,7 +2804,7 @@
 	],
 	"SFX\\SCP\\079\\Broadcast6.ogg": [
 		{
-			"text": "[Parsing...]",
+			"text": "*INCOHERENT SOUNDS* PARSING...",
 			"delay": 3.4,
 			"color": "announcement",
 			"length": 1.0
@@ -2812,26 +2812,26 @@
 	],
 	"SFX\\SCP\\079\\Broadcast7.ogg": [
 		{
-			"text": "*INCOHERENT SOUNDS* area...",
+			"text": "*INCOHERENT SOUNDS* AREA...",
 			"color": "announcement",
 			"length": 2.0
 		}
 	],
 	"SFX\\SCP\\079\\Broadcast8.ogg": [
 		{
-			"text": "I think..-",
+			"text": "I THINK..-",
 			"delay": 0.15,
 			"color": "announcement",
 			"length": 2.0
 		},
 		{
-			"text": "Therefore..-",
+			"text": "THEREFORE..-",
 			"delay": 1.65,
 			"color": "announcement",
 			"length": 1.0
 		},
 		{
-			"text": "I am..-",
+			"text": "I AM..-",
 			"delay": 2.7,
 			"color": "announcement",
 			"length": 1.0
