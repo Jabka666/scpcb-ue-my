@@ -1562,7 +1562,7 @@ End Type
 
 ; ~ Room ID constants
 ;[Block]
-Const r_room1_archive% = 0
+Const r_room1_storage% = 0
 Const r_room1_dead_end_lcz% = 1
 Const r_cont1_005% = 2
 Const r_cont1_173% = 3, r_cont1_173_intro% = 4, r_cont1_205% = 5, r_cont1_372% = 6, r_cont1_914% = 7
@@ -1626,9 +1626,9 @@ Const r_dimension_106% = 108, r_dimension_1499% = 109
 
 Function FindRoomID%(RoomName$)
 	Select RoomName
-		Case "room1_archive"
+		Case "room1_storage"
 			;[Block]
-			Return(r_room1_archive)
+			Return(r_room1_storage)
 			;[End Block]
 		Case "room1_dead_end_lcz"
 			;[Block]
@@ -5518,7 +5518,7 @@ Function CreateMap%()
 	SetRoom("cont1_005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("cont1_914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
 	SetRoom("cont1_205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("room1_archive", ROOM1, Floor(0.6 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("room1_storage", ROOM1, Floor(0.6 * Float(Room1Amount[0])), MinPos, MaxPos)
 	
 	MapRoom(ROOM2C, 0) = "room2c_gw_lcz"
 	

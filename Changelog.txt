@@ -13,6 +13,8 @@ Mechanics:
 Rooms:
 - Changed step sound inside SCP-035's containment chamber.
 
+- Renamed «room1_archive» to «room1_storage».
+
 - Improved some textures.
 - Update SCP-066's chamber by adding an observation room.
 - Adjust SCP-1123's observation room walls to not clip into other rooms.

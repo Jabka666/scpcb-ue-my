@@ -10,7 +10,7 @@ Function FillRoom%(r.Rooms)
 	Local SinValue#, CosValue#
 	
 	Select r\RoomTemplate\RoomID
-		Case r_room1_archive
+		Case r_room1_storage
 			;[Block]
 			; ~ Storage Room 6H door
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 512.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
