@@ -1563,11 +1563,6 @@ Function UpdateEvents%()
 							me\RestoreSanity = False
 							me\BlurTimer = Sin(MilliSec / 10) * Abs(me\Sanity)
 							
-							If me\VomitTimer < 0.0
-								me\RestoreSanity = False
-								me\Sanity = -1010.0
-							EndIf
-							
 							If me\Sanity < -1000.0
 								If wi\NightVision > 1
 									msg\DeathMsg = GetLocalString("death", "895.nvg.914")
@@ -1619,6 +1614,7 @@ Function UpdateEvents%()
 									EndIf
 								Next
 							EndIf
+							If me\Sanity < -800.0 Then me\Sanity = -1010.0
 						EndIf
 					EndIf
 					
