@@ -4688,7 +4688,7 @@ Function UpdateEvents%()
 						Next
 					EndIf
 					
-					If EntityY(me\Collider, True) > 4.0
+					If InFacility = UpperFloor
 						ShouldPlay = 28
 						
 						If e\EventState = 0.0
