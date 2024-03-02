@@ -157,7 +157,7 @@ Function LoadEntities%()
 	
 	; ~ [MISC]
 	
-	o\MiscModelID[0] = LoadRMesh("GFX\map\scp_860_1_wall.rmesh", Null)
+	o\MiscModelID[0] = LoadRMesh("GFX\map\cont2_860_1_wall.rmesh", Null)
 	HideEntity(o\MiscModelID[0])
 End Function
 
