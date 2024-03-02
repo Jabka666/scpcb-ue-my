@@ -1559,7 +1559,7 @@ Function UpdateEvents%()
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
-							me\Sanity = me\Sanity - ((fps\Factor[0] * 1.1 / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+							me\Sanity = me\Sanity - ((fps\Factor[0] * 1.2 / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 							me\RestoreSanity = False
 							me\BlurTimer = Sin(MilliSec / 10) * Abs(me\Sanity)
 							
