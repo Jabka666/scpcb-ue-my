@@ -3329,7 +3329,10 @@ Function UpdateEvents%()
 							GiveAchievement(Achv294)
 							
 							I_294\Using = Temp
-							If I_294\Using Then mo\MouseHit1 = False
+							If I_294\Using
+								SelectedItem = Null
+								mo\MouseHit1 = False
+							EndIf
 						ElseIf e\EventState2 = 1.0 And (Not Inserted) And (Not me\UsedMastercard)
 							I_294\Using = False
 							CreateMsg(GetLocalString("msg", "294.another"))
