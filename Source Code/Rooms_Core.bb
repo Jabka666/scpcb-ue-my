@@ -1572,7 +1572,7 @@ Function FillRoom%(r.Rooms)
             PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.132, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			
 			; ~ SCP-066's chamber door
-			d.Doors = CreateDoor(r, r\x - 608.0 * RoomScale, r\y, r\z + 288.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x - 608.0 * RoomScale, r\y, r\z + 288.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.032, True)
 			
 			r\Objects[0] = CreatePivot()
