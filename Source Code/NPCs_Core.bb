@@ -1060,10 +1060,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If me\FallTimer < -250.0
-								MoveToPocketDimension()
-								n\State = 250.0 ; ~ Make SCP-106 idle for a while
-							EndIf
+							If me\FallTimer < -250.0 Then MoveToPocketDimension()
 							
 							If n\Reload = 0.0
 								If Dist > 100.0 And (Not IsPlayerOutsideFacility()) And RID <> r_dimension_106 And n\State < -5.0 ; ~ Timer idea -- Juanjpro
@@ -6702,10 +6699,13 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 End Function
 
 Function MoveToPocketDimension%()
-	Local r.Rooms
+	Local r.Rooms, e.Events
 	
+	n_I\Curr106\State = 250.0 ; ~ Make SCP-106 idle for a while
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\RoomID = r_dimension_106
+			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
+			InjurePlayer(0.5, 0.0, 1500.0)
 			HideEntity(me\Head)
 			ShowEntity(me\Collider)
 			PlaySound_Strict(Use914SFX)
@@ -6714,8 +6714,12 @@ Function MoveToPocketDimension%()
 			TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.5, EntityZ(r\OBJ))
 			TeleportToRoom(r)
 			
-			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
-			InjurePlayer(0.5, 0.0, 1500.0)
+			For e.Events = Each Events
+				If r = e\room
+					e\EventState2 = PD_StartRoom
+					Exit
+				EndIf
+			Next
 			Return
 			Exit
 		EndIf

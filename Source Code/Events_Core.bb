@@ -930,10 +930,7 @@ Function UpdateEvents%()
 										
 										If e\EventState2 > 0.2 And n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
 										
-										If e\EventState2 = 2.0
-											MoveToPocketDimension()
-											n_I\Curr106\State = 250.0
-										EndIf
+										If e\EventState2 = 2.0 Then MoveToPocketDimension()
 									Else
 										If chs\NoClip Then me\Playable = True
 									EndIf
@@ -6374,9 +6371,7 @@ Function UpdateEvents%()
 						e\EventState2 = Min(e\EventState2 + fps\Factor[0] / 200.0, 2.0)
 						
 						me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
-						If wi\NightVision > 0
-							If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
-						EndIf
+						If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
 						me\BlurTimer = e\EventState2 * 500.0
 						
 						If e\EventState2 = 2.0 Then MoveToPocketDimension()

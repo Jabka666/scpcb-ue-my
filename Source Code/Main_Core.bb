@@ -4612,16 +4612,7 @@ Function UpdateGUI%()
 									me\Injuries = 2.5
 									CreateMsg(GetLocalString("msg", "bleed"))
 								Else
-									For r.Rooms = Each Rooms
-										If r\RoomTemplate\RoomID = r_dimension_106
-											TeleportToRoom(r)
-											TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.5, EntityZ(r\OBJ))
-											PlaySound_Strict(Use914SFX)
-											me\DropSpeed = 0.0
-											n_I\Curr106\State = -2500.0
-											Exit
-										EndIf
-									Next
+									MoveToPocketDimension()
 									CreateMsg(GetLocalString("msg", "aid.106"))
 								EndIf
 								;[End Block]
