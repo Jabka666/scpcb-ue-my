@@ -903,35 +903,31 @@ Function UpdateEvents%()
 								EndIf
 							Else
 								Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ))
-								If Dist < 4.0
-									me\CrouchState = (2.0 - Sqr(Dist)) / 2.0
+								If Dist < 0.16 And (Not chs\NoTarget)
+									If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 									
-									If Dist < 0.16
-										If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
-										
-										MakeMeUnplayable()
-										
-										x = CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityX(me\Collider), 10.0)
-										y = CurveValue(EntityY(e\room\RoomDoors[0]\FrameOBJ) - e\EventState2, EntityY(me\Collider), 25.0)
-										z = CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), 10.0)
-										PositionEntity(me\Collider, x, y, z, True)
-										
-										me\DropSpeed = 0.0
-										
-										ResetEntity(me\Collider)
-										
-										e\EventState2 = Min(e\EventState2 + fps\Factor[0] / 200.0, 2.0)
-										
-										me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
-										If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
-										me\BlurTimer = e\EventState2 * 500.0
-										
-										If e\EventState2 > 0.2 And n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
-										
-										If e\EventState2 = 2.0 Then MoveToPocketDimension()
-									Else
-										If chs\NoClip Then me\Playable = True
-									EndIf
+									MakeMeUnplayable()
+									
+									x = CurveValue(EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityX(me\Collider), 10.0)
+									y = CurveValue(EntityY(e\room\RoomDoors[0]\FrameOBJ) - e\EventState2, EntityY(me\Collider), 25.0)
+									z = CurveValue(EntityZ(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), 10.0)
+									PositionEntity(me\Collider, x, y, z, True)
+									
+									me\DropSpeed = 0.0
+									
+									ResetEntity(me\Collider)
+									
+									e\EventState2 = Min(e\EventState2 + fps\Factor[0] / 200.0, 2.0)
+									
+									me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
+									If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
+									me\BlurTimer = e\EventState2 * 500.0
+									
+									If e\EventState2 > 0.2 And n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
+									
+									If e\EventState2 = 2.0 Then MoveToPocketDimension()
+								Else
+									If chs\NoClip Then me\Playable = True
 								EndIf
 							EndIf
 						Else
@@ -6355,7 +6351,7 @@ Function UpdateEvents%()
 					e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 4.5, 1.5)
 					
 					Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ))
-					If Dist < 0.25
+					If Dist < 0.25 And (Not chs\NoTarget)
 						If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 						
 						MakeMeUnplayable()
@@ -6374,6 +6370,8 @@ Function UpdateEvents%()
 						me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
 						If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
 						me\BlurTimer = e\EventState2 * 500.0
+						
+						If e\EventState2 > 0.2 And n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
 						
 						If e\EventState2 = 2.0 Then MoveToPocketDimension()
 					Else
