@@ -2949,7 +2949,7 @@ Function UpdateEvents%()
 							me\LightBlink = 4.0
 							For i = 0 To 1
 								If (Not e\room\RoomDoors[i]\Open)
-									e\room\RoomDoors[i]\SoundCHN = PlaySound2(LoadTempSound("SFX\Door\DoorSparks.ogg"), Camera, e\room\RoomDoors[i]\FrameOBJ, 5.0)
+									e\room\RoomDoors[i]\SoundCHN = PlaySound2(DoorOpen079, Camera, e\room\RoomDoors[i]\FrameOBJ, 5.0)
 									OpenCloseDoor(e\room\RoomDoors[i])
 								EndIf
 							Next
