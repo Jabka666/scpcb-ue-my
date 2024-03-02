@@ -2071,6 +2071,50 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x, r\y - 1532.0 * RoomScale, r\z + 2508.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
+			; ~ Dust decals
+			For i = 0 To 5
+				Select i
+					Case 0
+						;[Block]
+						xTemp = -667.0
+						zTemp = 105
+						Scale = Rnd(0.4, 0.5)
+						;[End Block]
+					Case 1
+						;[Block]
+						xTemp = -679.0
+						zTemp = 157.0
+						Scale = Rnd(0.4, 0.5)
+						;[End Block]
+					Case 2
+						;[Block]
+						xTemp = -542.0
+						zTemp = 138.0
+						Scale = Rnd(0.6, 0.7)
+						;[End Block]
+					Case 3
+						;[Block]
+						xTemp = -636.0
+						zTemp = 204.0
+						Scale = Rnd(0.1, 0.2)
+						;[End Block]
+					Case 4
+						;[Block]
+						xTemp = -819.0
+						zTemp = 261.0
+						Scale = Rnd(0.6, 0.7)
+						;[End Block]
+					Case 5
+						;[Block]
+						xTemp = -672.0
+						zTemp = 299.0
+						Scale = Rnd(0.7, 0.8)
+						;[End Block]
+				End Select
+				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + xTemp * RoomScale, r\y + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, Scale, Rnd(0.6, 0.8), 1)
+				EntityParent(de\OBJ, r\OBJ)
+			Next
+			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, 120.06, True, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale, 0.0, 180.0, 0.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0 : sc\CoffinEffect = 1 : sc_I\CoffinCam = sc
 			
