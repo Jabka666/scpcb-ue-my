@@ -1948,7 +1948,7 @@ Function UpdateEvents%()
 								EndIf
 							Else
 								If e\Sound = 0 Then LoadEventSound(e, "SFX\Music\012Golgotha.ogg")
-								e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[1], 5.0)
+								e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[0])
 								
 								If e\Sound2 = 0 Then LoadEventSound(e, "SFX\Music\012Chamber.ogg", 1)
 								
@@ -1974,7 +1974,7 @@ Function UpdateEvents%()
 										
 										me\RestoreSanity = False
 										
-										e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[1], 10.0, e\EventState2 / (86.0 * 70.0))
+										e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[0], 10.0, e\EventState2 / (86.0 * 70.0))
 										
 										Pvt = CreatePivot()
 										PositionEntity(Pvt, EntityX(Camera), EntityY(e\room\Objects[0], True) - 0.05, EntityZ(Camera))
