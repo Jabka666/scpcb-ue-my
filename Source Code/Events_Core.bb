@@ -923,9 +923,7 @@ Function UpdateEvents%()
 										e\EventState2 = Min(e\EventState2 + fps\Factor[0] / 200.0, 2.0)
 										
 										me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
-										If wi\NightVision > 0
-											If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
-										EndIf
+										If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
 										me\BlurTimer = e\EventState2 * 500.0
 										
 										If e\EventState2 > 0.2 And n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
@@ -1968,7 +1966,7 @@ Function UpdateEvents%()
 										RotateEntity(me\Collider, 0.0, e\room\Angle, 0.0, True)
 										ResetEntity(me\Collider)
 										me\LightBlink = 5.0
-										If wi\NightVision > 0 Then me\BlinkTimer = -10.0
+										me\BlinkTimer = -10.0
 										e\EventState3 = 1.0
 									EndIf
 									If EntityVisible(e\room\Objects[0], Camera)
