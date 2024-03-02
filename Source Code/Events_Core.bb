@@ -3984,7 +3984,7 @@ Function UpdateEvents%()
 							If Rand(5) < 5
 								PositionTexture(t\OverlayTextureID[3], 0.0, Rnd(0.0, 1.0))
 								If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-								If e\room\Dist < 8.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
+								If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
 							EndIf
 							e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
 							If e\EventState2 <= 0.0
