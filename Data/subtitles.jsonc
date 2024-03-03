@@ -1645,6 +1645,13 @@
 			"color": "announcement"
 		}
 	],
+	"SFX\\Character\\MTF\\Announc106Contained.ogg": [
+		{
+			"text": "SCP-106 contained successfully by Foxtrot unit one.",
+			"delay": 1.07,
+			"color": "announcement"
+		}
+	],
 	"SFX\\Character\\MTF\\Announc173Contained.ogg": [
 		{
 			"text": "SCP-173 contained successfully by Foxtrot unit one.",
@@ -2090,6 +2097,29 @@
 			"delay": 0.5,
 			"color": "mtf"
 		}
+	],
+	"SFX\\Character\\MTF\\106\\AlreadyCaptured.ogg": [
+		{
+			"text": "Someone seems to have already captured SCP-106. Proceeding to the secondary objectives.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\106\\FoundChamber.ogg": [
+		{
+			"text": "We've reached the containment room of SCP-106.",
+			"color": "mtf"
+		}
+	],
+	"SFX\\Character\\MTF\\106\\Protocol.ogg": [
+		{
+			"text": "Initiating the recall protocol...",
+			"color": "mtf"
+		}
+		{
+			"text": "SCP-106 contained successfully.",
+			"delay": 8.0,
+			"color": "mtf"
+		},
 	],
 	"SFX\\Character\\MTF\\106\\Spotted1.ogg": [
 		{
