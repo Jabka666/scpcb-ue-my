@@ -18,6 +18,7 @@ Rooms:
 - Improved some textures.
 - Update SCP-066's chamber by adding an observation room.
 - Adjust SCP-1123's observation room walls to not clip into other rooms.
+- Some doors now have a corrosive appearance.
 
 Bug Fixes:
 - Fixed pipes overlapping in «room2_gw» rooms.
