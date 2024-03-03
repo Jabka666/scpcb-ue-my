@@ -2675,7 +2675,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.031, True)
 			
 			; ~ Dust decals
-			For i = 0 To 9
+			For i = 0 To 10
 				Select i
 					Case 0
 						;[Block]
@@ -2736,6 +2736,12 @@ Function FillRoom%(r.Rooms)
 						xTemp = 52.0
 						zTemp = 200.0
 						Scale = Rnd(0.2, 0.3)
+						;[End Block]
+					Case 10
+						;[Block]
+						xTemp = 26.0
+						zTemp = 86.0
+						Scale = Rnd(0.8, 1.0)
 						;[End Block]
 				End Select
 				If i < 3
