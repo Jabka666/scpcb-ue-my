@@ -1825,11 +1825,18 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], r\x - 164.0 * RoomScale, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			r\RoomDoors.Doors[0] = d
 			
+			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+			TextureBlend(Tex, 5)
+			
 			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR)
 			d\AutoClose = False : d\Locked = 1
 			PositionEntity(d\Buttons[0], r\x - 438.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 480.0 * RoomScale, True)
 			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			EntityTexture(d\OBJ, Tex)
+			EntityTexture(d\OBJ2, Tex)
+			EntityTexture(d\FrameOBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			r\RoomDoors.Doors[1] = d
 			
 			r\RoomDoors[0]\LinkedDoor = r\RoomDoors[1]
@@ -3460,7 +3467,7 @@ Function FillRoom%(r.Rooms)
 			d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			EntityTexture(d\OBJ, Tex)
-			If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
+			EntityTexture(d\OBJ2, Tex)
 			EntityTexture(d\FrameOBJ, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			r\RoomDoors.Doors[0] = d
