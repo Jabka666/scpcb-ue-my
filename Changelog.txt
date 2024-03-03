@@ -8,7 +8,7 @@ Menu:
 - Combined the User tracks toggle into User Track mode as «Disabled».
 
 Mechanics:
-- Crouch consumes the player's stamina only standing up.
+- Crouch consumes the player's stamina only after standing up.
 
 Rooms:
 - Changed step sound inside SCP-035's containment chamber.
@@ -61,11 +61,12 @@ General:
 
 Mechanics:
 - Added random light flickering.
+
 - Removed accidental item dropping.
+
 - Blast doors can kill the player.
 - The player can disable Tesla Gates.
 - Pocket Dimension drains stamina instead of instantly setting it to 0.
-
 - SCP-914's Keycard refining system has been rebalanced
 	- Omni Key Card's base rarity achievement multiplier increased to 4 from 3.
 	- Achievements now grant 4 points towards the Omni Key Card chance. (previously 3 points)
@@ -83,21 +84,19 @@ Rooms:
 - Added smoke particles under the warhead in «room2_nuke».
 - Added security cam in «room4_ic».
 - Added new location in the Pocket Dimension.
-
-- Combined both SCP-066's and SCP-1162-arc's containment chambers into one corner room.
-
-- Removed the chat screen from SCP-895
-
-- The doors guarded by a four-pass code are now unlocked by default and changed to fingerprint scanners in SCP-860-1's containment chamber.
-
 - Added sanity system to SCP-012's event:
 	- Cannot save at monitor and while being dragged in unless you wear SCP-714 (Green) or Heavy gear.
 	- Character will lose control when on low sanity and you'll be forced to complete the sheet.
+
+- Removed the chat screen from SCP-895
 
 - Changes for SCP-205's containment chamber:
 	- Added Level 3 Keycard.
 	- Replaced battery with eyedrops.
 - Changed «room2_4_hcz_106» event.
+
+- Combined both SCP-066's and SCP-1162-arc's containment chambers into one corner room.
+- The doors guarded by a four-pass code are now unlocked by default and changed to fingerprint scanners in SCP-860-1's containment chamber.
 
 - Updated elevators design.
 
@@ -122,11 +121,12 @@ NPCs:
 - Added SCP-1048-A event for «room2_3_lcz» and «room2_5_lcz» rooms.
 - Added step sounds for SCP-096.
 
-- Can no longer use SCP-268 against SCP-096.
-- Improved SCP-008-1, SCP-049, SCP-049-2 and MTF's AI.
 - Changes for SCP-106:
 	- SCP-106 retreat animation used in the Tesla Gates is now faster.
 	- SCP-106's chase theme doesn't play in the Pocket Dimension anymore.
+
+- Improved SCP-008-1, SCP-049, SCP-049-2 and MTF's AI.
+- Can no longer use SCP-268 against SCP-096.
 
 Bug Fixes:
 - Fixed SCP-939's texture which is too bright.
@@ -175,13 +175,12 @@ Bug Fixes:
 v1.1.3
 
 General:
+- Added Sanity timer to the Debug Hud 2.
+
 - Updated spark texture.
-
 - Improvements for Bright atmosphere.
-
 - Player won't receive the crystallization effect if wearing SCP-427 and touching SCP-409.
 
-- Added Sanity timer to the Debug Hud 2.
 
 Rooms:
 - The door to SCP-005's containment chamber will be opened if SCP-005 appears inside SCP-409's containment chamber.
@@ -206,7 +205,6 @@ General:
 - Added Voice Volume slider.
 
 - Reduced chances of obtaining Key Card Omni from SCP-914 with Level 6 Key Card.
-
 - The Heavy Ballistic Vest can be modified by SCP-914.
 
 Rooms:
@@ -221,7 +219,6 @@ Items:
 - Added SCP-268.
 
 - Renamed «Small First Aid Kit» to «Compact First Aid Kit».
-
 - Tiny improvement for Compact First Aid Kit.
 - Tiny improvement for Ballistic Vests.
 
@@ -230,7 +227,6 @@ Items:
 NPCs:
 
 - NPCs that deal damage now have their damage scale with difficulty.
-
 - SCP-008-1's walk speed is slower than their chase speed.
 
 Bug fixes:
@@ -281,14 +277,12 @@ General:
 - Removed «playmusic» console command.
 - Removed SCP-106 from SCP-005's containment chamber event.
 
-- Improved fluid step sounds.
-
 - Changed color of the decal created in SCP-914 on «ROUGH» mode.
 
+- Improved fluid step sounds.
 - Converted .ini files to UTF-8 format.
 - Finally made the «Bright mode» similar to original game.
-
-- Optimized game a lot.
+- Optimized game a lot...
 
 Mechanics and effects:
 - Added a small chance to accidentally drop an item when trying to use it.
@@ -299,7 +293,6 @@ Mechanics and effects:
 
 - Can no longer save inside the gate elevators, the Pocket Dimension, inside elevators and when SCP-914 is refining items.
 - Every document, note and chatscreen has it's own texture.
-
 - Some improvements for player's room detection. Might fix some problems with custom maps and new optimization system.
 
 Rooms:
@@ -314,16 +307,11 @@ Rooms:
 - Improved SCP-205's containment chamber.
 - Improved SCP-096's containment chamber design.
 - Improved some rooms design.
-
 - Tiny corrections for rooms description.
-
 - Batteries on the map are now randomized.
 - Dr. L's office harm player like inside the Pocket Dimension.
-
 - Returned «Pipes_NoRust» texture.
-
 - Level 3 Keycard located in SCP-895's containment chamber now drops from a fallen guard.
-
 - Increased SCP-005's spawnrate in the containment chamber.
 
 Items:
@@ -357,12 +345,10 @@ Menu:
 	- Added in-game versions of the «Use launcher», «Subtitles», «Startup videos» and «Smooth bars» settings.
 - Added highlight effect for slidebars.
 
-- Tiny improvement for difficulties color.
-
 - Removed extra spacing in credits.
 
+- Tiny improvement for difficulties color.
 - The subtitles setting has been moved to the «AUDIO» category.
-
 - Remade options menu.
 
 NPCs:
@@ -432,17 +418,14 @@ General:
 - Added smoke particles for all NPCs hit by the Tesla Gate.
 
 - Improved gas mask fogging overlay.
-
 - Updated TSS startup video.
-
 - The HUD will be hidden when the player dies.
 - SCP-005 can no longer be placed into the wallet.
 - The player must use SCP-513 to get an achievement.
 - SCP-914 changes:
 	- Added new refinement for SCP-500.
 	- SCP-914 is now slightly rebalanced.
-	
-- Optimized game.
+- Optimized the game...
 
 Menu:
 - Added «Master volume» and «Invert mouse by X-axis» options.
@@ -558,9 +541,7 @@ v1.0.2
 
 General:
 - Improved SCP-939's texture.
-
 - Tiny code optimizations.
-
 - Nerfed SCP-005's chamber event.
 
 Mechanics and effects:
@@ -570,7 +551,6 @@ Mechanics and effects:
 	- Also the green gas kills the player.
 
 - Improved SCP-106's retreat animation in the tesla gate.
-
 - The tesla gate stops NPCs.
 
 Rooms:
@@ -597,18 +577,12 @@ General:
 - Added death message for guard.
 
 - Improved auto save system. If you saved badly, you can return to the previous save.
-
 - Renamed «Smooth HUD» option to «Smooth Bars».
-
 - Reworked bright atmosphere mode.
-
 - Optimized the game while using 100% of gamma.
 - Optimized some rooms a little bit.
-
 - Hopyfully optimized game on different resolutions.
-
 - Tiny overlay optimization.
-
 - Finished «SL_monitors.png» file.
 - Unlocked all difficulties.
 - Decreased colored fog brightness.
@@ -621,10 +595,9 @@ Rooms:
 - Removed «room2_7_hcz».
 - Removed «room2_3_ez» event.
 
-- Improved SCP-1123's event.
-
 - Changed «096_spawn» event rooms (from «room2_2_hcz» to «room2_3_hcz»).
 
+- Improved SCP-1123's event.
 - Separated «room2_elevator» and «room2_elevator_2» events.
 - Some props are brighter now.
 
@@ -719,12 +692,9 @@ General:
 - Removed Antialiased Text feature.
 
 - Renamed most files.
-
-- Optimized game.
-
+- Optimized the game...
 - Converted most files to .PNG.
 - Converted most .X files to .B3D.
-
 - To obtain a new difficulty, the previous one must be completed.
 - The Keter difficulty achievement will be saved after beating the one.
 - Anti-aliasing option is automatically disabled for non-fullscreen modes.
@@ -772,11 +742,10 @@ Menu:
 	
 - Removed unnecesary files.
 
-- Improved SCP-682 and Night Vision Goggles loading screens.
-- Improved loading screen itself.
-
 - Changed the name of the «Custom» difficulty to «Esoteric».
 
+- Improved SCP-682 and Night Vision Goggles loading screens.
+- Improved loading screen itself.
 - Using the «ESC» button has «BACK» button effect.
 
 NPCs:
@@ -831,7 +800,6 @@ NPCs:
 - Changed SCP-372's model.
 
 - Renamed SCP-1162 to SCP-1162-ARC.
-
 - Combined SCP-1048 and SCP-1048 Pen models.
 - Combined texture for SCP-173's cell.
 
@@ -875,9 +843,7 @@ Rooms:
 	- Improved office seat model.
 	
 	- Changed some rooms to Heavy Containment Zone style.
-
 - Renamed all rooms.
-
 - Rebalanced some keycard buttons.
 
 Items:
@@ -923,7 +889,6 @@ Mechanics and effects:
 
 - Improved glass break and elevator beep sounds.
 - Improved white smoke texture.
-
 - Inventory, save screens, code doors and SCP-294 don't stop the game anymore.
 - Crouching reduces stamina.
 - Battery charges are now randomized.
