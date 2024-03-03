@@ -7010,7 +7010,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 	If n\NPCType = NPCTypeMTF
 		If Dist < 1.0
 			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType <> OFFICE_DOOR
+				If (Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType <> OFFICE_DOOR And n\Path[n\PathLocation]\door\DoorType <> ELEVATOR_DOOR
 					OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
 					If PlaySFX Then PlaySound2(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
 					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
@@ -7023,7 +7023,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			Local Temp% = True
 			
 			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\IsElevatorDoor > 0 Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "" Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1]) Lor ((Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType = OFFICE_DOOR))
+				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "" Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1]) Lor ((Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType = OFFICE_DOOR))
 					Temp = False
 				Else
 					If (Not n\Path[n\PathLocation]\door\Open)

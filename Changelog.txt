@@ -28,6 +28,7 @@ Bug Fixes:
 - Fixed NPCs operating wooden and office doors.
 - Fixed softlocking in SCP-035's containment chamber when using SCP-1499.
 - Fixed SCP-035 mask has a wrong position after loading the game.
+- Fixed MTFs being able to operate elevator doors.
 
 v1.2
 
