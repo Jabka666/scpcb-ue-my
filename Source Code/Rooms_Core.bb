@@ -3447,10 +3447,16 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_scientists_2
 			;[Block]
+			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+			TextureBlend(Tex, 5)
 			; ~ Dr. L's office door
 			d.Doors = CreateDoor(r, r\x - 448.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
 			d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			EntityTexture(d\OBJ, Tex)
+			If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
+			EntityTexture(d\FrameOBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
 			r\RoomDoors.Doors[0] = d
 			
 			; ~ Conference Room 9B door
