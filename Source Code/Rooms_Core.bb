@@ -1592,6 +1592,13 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 241.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 806.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Gas Mask", "gasmask", r\x + 590.0 * RoomScale, r\y + 50.0 * RoomScale, r\z - 313.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			RotateEntity(it\Collider, 0.0, 30.0, 0.0)
+			
+			it.Items = CreateItem("9V Battery", "bat", r\x + 652.0 * RoomScale, r\y + 50.0 * RoomScale, r\z - 340.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room3_storage
 			;[Block]
