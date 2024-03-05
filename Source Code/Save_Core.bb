@@ -411,6 +411,7 @@ Function SaveGame%(File$)
 		WriteString(f, it\ItemTemplate\TempName)
 		
 		WriteString(f, it\Name)
+		WriteString(f, it\DisplayName)
 		
 		WriteFloat(f, EntityX(it\Collider, True))
 		WriteFloat(f, EntityY(it\Collider, True))
@@ -1158,6 +1159,7 @@ Function LoadGame%(File$)
 		Local IttName$ = ReadString(f)
 		Local TempName$ = ReadString(f)
 		Local Name$ = ReadString(f)
+		Local DisplayName$ = ReadString(f)
 		
 		x = ReadFloat(f)
 		y = ReadFloat(f)
@@ -1171,6 +1173,7 @@ Function LoadGame%(File$)
 		
 		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
 		it\Name = Name
+		it\DisplayName = DisplayName
 		
 		EntityType(it\Collider, HIT_ITEM)
 		
@@ -1197,7 +1200,7 @@ Function LoadGame%(File$)
 		Local itt.ItemTemplates
 		
 		For itt.ItemTemplates = Each ItemTemplates
-			If itt\TempName = TempName And itt\Name = IttName
+			If itt\TempName = TempName And itt\Name = IttName; And itt\DisplayName = DisplayName ; ~ Not sure about that
 				If itt\IsAnim <> 0
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit
@@ -1905,6 +1908,7 @@ Function LoadGameQuick%(File$)
 		Local IttName$ = ReadString(f)
 		Local TempName$ = ReadString(f)
 		Local Name$ = ReadString(f)
+		Local DisplayName$ = ReadString(f)
 		
 		x = ReadFloat(f)
 		y = ReadFloat(f)
@@ -1918,6 +1922,7 @@ Function LoadGameQuick%(File$)
 		
 		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
 		it\Name = Name
+		it\DisplayName = DisplayName
 		
 		EntityType(it\Collider, HIT_ITEM)
 		
@@ -1944,7 +1949,7 @@ Function LoadGameQuick%(File$)
 		Local itt.ItemTemplates
 		
 		For itt.ItemTemplates = Each ItemTemplates
-			If itt\TempName = TempName
+			If itt\TempName = TempName And itt\Name = Name; And itt\DisplayName = DisplayName ; ~ Not sure about that
 				If itt\IsAnim <> 0
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit

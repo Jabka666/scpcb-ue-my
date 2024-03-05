@@ -8816,26 +8816,6 @@ End Type
 
 Global I_294.SCP294
 
-Function Init294Drinks%()
-	Local LocalDrinks% = JsonParseFromFile(lang\LanguagePath + SCP294File)
-	Local i%, j%
-	
-	If JsonIsArray(LocalDrinks) ; ~ Has localized scp294 drinks -> Use localized only
-		I_294\Drinks = JsonGetArray(LocalDrinks)
-	Else
-		I_294\Drinks = JsonGetArray(JsonParseFromFile(SCP294File))
-	EndIf
-
-	I_294\DrinksMap = CreateS2IMap()
-	For i = 0 To JsonGetArraySize(I_294\Drinks) - 1
-		Local DrinkNames% = JsonGetArray(JsonGetValue(JsonGetArrayValue(I_294\Drinks, i), "name"))
-		
-		For j = 0 To JsonGetArraySize(DrinkNames) - 1
-			S2IMapSet(I_294\DrinksMap, Upper(JsonGetString(JsonGetArrayValue(DrinkNames, j))), i)
-		Next
-	Next
-End Function
-
 Function Update294%()
 	Local it.Items
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%

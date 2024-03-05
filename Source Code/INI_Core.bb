@@ -92,15 +92,6 @@ Function StringToBoolean%(String_$, DefaultValue% = False)
 	End Select
 End Function
 
-Function FindSCP294Drink$(Drink$, Update294Panel% = False)
-	Local StrTemp$ = FindSCP294Drink_(lang\LanguagePath + SCP294File, Drink)
-	
-	If StrTemp = "Null" Then StrTemp = FindSCP294Drink_(SCP294File, Drink)
-	If StrTemp = "Null" Then Return(StrTemp)
-	If Update294Panel Then I_294\ToInput = Right(StrTemp, Len(StrTemp) - Instr(StrTemp, ","))
-	Return(Left(StrTemp, Instr(StrTemp, ",") - 1))
-End Function
-
 Function StripFileName$(File$)
 	Local LastSlash% = 0
 	Local FileLen% = Len(File)

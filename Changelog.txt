@@ -1,8 +1,9 @@
 v1.2.1
 
 General:
-- Some tiny optimizations.
 - Agent Ulrgin no longer gives the player SCP-173's document.
+
+- Optimized the game...
 
 Menu:
 - Combined the User tracks toggle into User Track mode as «Disabled».
@@ -16,6 +17,7 @@ Rooms:
 - Renamed «room1_archive» to «room1_storage».
 
 - Improved some textures.
+- Design improvements...
 - Update SCP-066's chamber by adding an observation room.
 - Adjust SCP-1123's observation room walls to not clip into other rooms.
 - Some doors now have a corrosive appearance.
@@ -30,6 +32,7 @@ Bug Fixes:
 - Fixed softlocking in SCP-035's containment chamber when using SCP-1499.
 - Fixed SCP-035 mask has a wrong position after loading the game.
 - Fixed MTFs being able to operate elevator doors.
+- Fixed drinks name being erased after loading.
 
 v1.2
 

@@ -2367,18 +2367,24 @@ Function RemoveTextureInstances%()
 	Delete Each Textures
 End Function
 
-Function InitOtherStuff%()
-	Local sv.Save, cm.CustomMaps
+Function Init294Drinks%()
+	Local LocalDrinks% = JsonParseFromFile(lang\LanguagePath + SCP294File)
+	Local i%, j%
 	
-	me\Playable = True : me\SelectedEnding = -1
+	If JsonIsArray(LocalDrinks) ; ~ Has localized scp294 drinks -> Use localized only
+		I_294\Drinks = JsonGetArray(LocalDrinks)
+	Else
+		I_294\Drinks = JsonGetArray(JsonParseFromFile(SCP294File))
+	EndIf
 	
-	opt\MasterVolume = opt\PrevMasterVolume
-	
-	chs\NoClipSpeed = 2.0
-	If opt\DebugMode Then InitCheats()
-	
-	as\Timer = 70.0 * 120.0
-	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
+	I_294\DrinksMap = CreateS2IMap()
+	For i = 0 To JsonGetArraySize(I_294\Drinks) - 1
+		Local DrinkNames% = JsonGetArray(JsonGetValue(JsonGetArrayValue(I_294\Drinks, i), "name"))
+		
+		For j = 0 To JsonGetArraySize(DrinkNames) - 1
+			S2IMapSet(I_294\DrinksMap, Upper(JsonGetString(JsonGetArrayValue(DrinkNames, j))), i)
+		Next
+	Next
 End Function
 
 Function InitNewGame%()
@@ -2681,6 +2687,20 @@ Function InitLoadGame%()
 	CatchErrors("Uncaught: InitLoadGame()")
 End Function
 
+Function InitOtherStuff%()
+	Local sv.Save, cm.CustomMaps
+	
+	me\Playable = True : me\SelectedEnding = -1
+	
+	opt\MasterVolume = opt\PrevMasterVolume
+	
+	chs\NoClipSpeed = 2.0
+	If opt\DebugMode Then InitCheats()
+	
+	as\Timer = 70.0 * 120.0
+	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
+End Function
+
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
@@ -2790,6 +2810,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete Each SCP008
 	Delete Each SCP035
 	Delete Each SCP268
+	DestroyS2IMap(I_294\DrinksMap)
 	Delete Each SCP294
 	Delete Each SCP409
 	For i = 0 To 1

@@ -102,9 +102,9 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, TempName$, OBJPat
 		it\ImgPath = ImgPath
 	EndIf
 	
-	it\DisplayName = DisplayName
 	it\TempName = TempName
 	it\Name = Name
+	it\DisplayName = DisplayName
 	
 	it\SoundID = SoundID
 	
