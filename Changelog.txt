@@ -9,6 +9,8 @@ Menu:
 - Combined the User tracks toggle into User Track mode as «Disabled».
 
 Mechanics:
+- Added more combinations for wearable items.
+
 - Crouch consumes the player's stamina only after standing up.
 
 Rooms:

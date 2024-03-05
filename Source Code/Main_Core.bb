@@ -2723,6 +2723,8 @@ Function UpdateMoving%()
 	Update008()
 	Update409()
 	
+	Local TempCHN% = 0
+	
 	If me\Bloodloss > 0.0 And me\VomitTimer >= 0.0
 		If Rnd(200.0) < Min(me\Injuries, 4.0)
 			Pvt = CreatePivot()
@@ -4133,7 +4135,7 @@ Function UpdateGUI%()
 			Select SelectedItem\ItemTemplate\TempName
 				Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 					;[Block]
-					If (Not PreventItemOverlapping(True))
+					If (Not PreventItemOverlapping(True, False, False, True, False, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
@@ -4198,7 +4200,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scp1499", "fine1499"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, True))
+					If (Not PreventItemOverlapping(False, False, True, True, False, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "scp1499"
 								;[Block]
@@ -4276,7 +4278,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "nvg", "veryfinenvg", "finenvg"
 					;[Block]
-					If (Not PreventItemOverlapping(False, True))
+					If (Not PreventItemOverlapping(False, True, False, True, False, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "nvg"
 								;[Block]
@@ -4330,7 +4332,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "scramble", "finescramble"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, False, False, True))
+					If (Not PreventItemOverlapping(False, False, False, True, True, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "scramble"
 								;[Block]
@@ -4374,7 +4376,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "helmet"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, False, True))
+					If (Not PreventItemOverlapping(True, True, True, True, True))
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
 						SelectedItem\State = Min(SelectedItem\State + fps\Factor[0], 100.0)
@@ -4396,7 +4398,7 @@ Function UpdateGUI%()
 					;[End Block]
 				Case "cap", "scp268", "fine268"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, False, False, False, False, True))
+					If (Not PreventItemOverlapping(True, True, True, False, True, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "cap"
 								;[Block]
@@ -6276,7 +6278,7 @@ Function RenderGUI%()
 			Select SelectedItem\ItemTemplate\TempName
 				Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
 					;[Block]
-					If (Not PreventItemOverlapping(True))
+					If (Not PreventItemOverlapping(True, False, False, True, False, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "gasmask"
 								;[Block]
@@ -6308,7 +6310,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "scp1499", "fine1499"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, True))
+					If (Not PreventItemOverlapping(False, False, True, True, False, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "scp1499"
 								;[Block]
@@ -6332,7 +6334,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "nvg", "veryfinenvg", "finenvg"
 					;[Block]
-					If (Not PreventItemOverlapping(False, True))
+					If (Not PreventItemOverlapping(False, True, False, True, False, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "nvg"
 								;[Block]
@@ -6360,7 +6362,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "scramble", "finescramble"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, False, False, True))
+					If (Not PreventItemOverlapping(False, False, False, True, True, False, True))
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
@@ -6373,7 +6375,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "helmet"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, False, True))
+					If (Not PreventItemOverlapping(True, True, True, True, True))
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
 						Width = 300 * MenuScale
@@ -6386,7 +6388,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case "cap", "scp268", "fine268"
 					;[Block]
-					If (Not PreventItemOverlapping(False, False, False, False, False, False, True))
+					If (Not PreventItemOverlapping(True, True, True, False, True, False, True))
 						Select SelectedItem\ItemTemplate\TempName
 							Case "cap"
 								;[Block]
