@@ -2901,11 +2901,7 @@ Function UpdateMouseLook%()
 	EndIf
 	
 	If wi\GasMask > 0 Lor wi\HazmatSuit > 0 Lor I_1499\Using > 0
-		If wi\HazmatSuit > 0
-			If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
-		Else
-			If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
-		EndIf
+		If EntityHidden(t\OverlayID[1 + (wi\HazmatSuit > 0)]) Then ShowEntity(t\OverlayID[1 + (wi\HazmatSuit > 0)])
 		
 		If (Not me\Terminated)
 			If (Not ChannelPlaying(BreathCHN))
@@ -2924,8 +2920,10 @@ Function UpdateMouseLook%()
 			Else
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 			EndIf
-			If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
-			EntityAlpha(t\OverlayID[10], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
+			If wi\GasMaskFogTimer > 0.0
+				EntityAlpha(t\OverlayID[10], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
+				If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
+			EndIf
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0

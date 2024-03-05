@@ -35,6 +35,7 @@ Bug Fixes:
 - Fixed SCP-035 mask has a wrong position after loading the game.
 - Fixed MTFs being able to operate elevator doors.
 - Fixed drinks name being erased after loading.
+- Fixed fog rendering in a Gas Mask/Hazmat Suit during one frame.
 
 v1.2
 
