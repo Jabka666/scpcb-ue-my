@@ -217,6 +217,9 @@ by "Scantron"
 		SCP-079 is based on "SCP-079 - Old AI",
 by "far2"
 
+		SCP-085 is based on "SCP-085 - Drawn Cassandra",
+by "FritzWillie"
+
 		SCP-096 is based on "SCP-096 - The 'Shy Guy'",
 by "Dr. Dan"
 
@@ -231,6 +234,9 @@ by "Moto42"
 
 		SCP-205 is based on "SCP-205 - Shadow Lamps", 
 by "Sorts"
+
+		SCP-268 is based on "SCP-268 - Invisibility Cap", 
+by "Pair Of Ducks"
 
 		SCP-294 is based on "SCP-294 - The Coffee Machine",
 by "far2"
