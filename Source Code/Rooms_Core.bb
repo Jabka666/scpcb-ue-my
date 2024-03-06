@@ -1927,7 +1927,7 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\079.b3d")
+			r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\scp_079.b3d")
 			r\ScriptedObject[0] = True
 			PositionEntity(r\Objects[0], r\x + 166.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1606.0 * RoomScale)
 			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
