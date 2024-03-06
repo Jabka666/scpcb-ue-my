@@ -482,7 +482,7 @@ Function RemoveMonitorInstances%()
 End Function
 
 Const MaxNPCModelIDAmount% = 32
-Const MaxNPCTextureID% = 17
+Const MaxNPCTextureID% = 18
 
 Type NPCInstance
 	Field NPCModelID%[MaxNPCModelIDAmount]
