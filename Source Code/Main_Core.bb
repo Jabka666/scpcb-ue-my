@@ -2923,6 +2923,8 @@ Function UpdateMouseLook%()
 			If wi\GasMaskFogTimer > 0.0
 				EntityAlpha(t\OverlayID[10], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
 				If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
+			Else
+				If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
 			EndIf
 		EndIf
 	Else
