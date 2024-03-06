@@ -1492,7 +1492,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
-					Height = (320 + (30 * opt\EnableSubtitles) + (155 * (opt\EnableSubtitles And opt\OverrideSubColor))) * MenuScale
+					Height = (280 + (40 * (opt\UserTrackMode > 0)) + (30 * opt\EnableSubtitles) + (155 * (opt\EnableSubtitles And opt\OverrideSubColor))) * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
