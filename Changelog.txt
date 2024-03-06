@@ -36,6 +36,7 @@ Bug Fixes:
 - Fixed MTFs being able to operate elevator doors.
 - Fixed drinks name being erased after loading.
 - Fixed fog rendering in a Gas Mask/Hazmat Suit during one frame.
+- Fixed subtitles options placed out of menu.
 
 v1.2
 
