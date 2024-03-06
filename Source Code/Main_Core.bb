@@ -489,11 +489,10 @@ Function UpdateGame%()
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
 				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * 0.6 * me\BlinkEffect)
-				If wi\NightVision = 0 And wi\SCRAMBLE = 0
-					If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
+				If me\EyeIrritation > 0.0
+					If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
 				EndIf
 			EndIf
-			
 			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\Factor[0])
 			
 			If me\BlinkEffectTimer > 0.0
@@ -5657,7 +5656,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
-	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor ((SecondaryLightOn < 0.3 Lor me\EyeIrritation > 0.0) And wi\NightVision = 0)
+	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn < 0.3  And wi\NightVision = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0)
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink
