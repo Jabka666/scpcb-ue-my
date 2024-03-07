@@ -1,3 +1,8 @@
+v1.2.2
+
+General:
+- Optimized the game...
+
 v1.2.1
 
 General:
