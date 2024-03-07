@@ -5225,6 +5225,17 @@ Function UpdateEvents%()
 					
 					TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 					
+					If e\room\RoomDoors[1]\OpenState = 0.0
+						If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
+					Else
+						If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
+					EndIf
+					If e\room\RoomDoors[4]\OpenState = 0.0
+						If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+					Else
+						If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+					EndIf
+					
 					Temp = 0
 					
 					Local src.Doors, dest.Doors
@@ -5232,7 +5243,7 @@ Function UpdateEvents%()
 					If TFormedX() > 730.0
 						GiveAchievement(Achv970)
 						
-						me\LightBlink = 2.0
+						me\BlinkTimer = -10.0
 						UpdateWorld()
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 						
@@ -5265,7 +5276,7 @@ Function UpdateEvents%()
 					ElseIf TFormedX() < -730.0
 						GiveAchievement(Achv970)
 						
-						me\LightBlink = 2.0
+						me\BlinkTimer = -10.0
 						UpdateWorld()
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 						

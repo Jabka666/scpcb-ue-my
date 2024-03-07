@@ -1024,6 +1024,19 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			r\RoomDoors.Doors[5] = d
 			
+			r\Objects[0] = LoadRMesh("GFX\map\room2_storage_fake_hall.rmesh", Null)
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[0], r\x - 1024.0 * RoomScale, r\y, r\z)
+			EntityParent(r\Objects[0], r\OBJ)
+			HideEntity(r\Objects[0])
+			
+			r\Objects[1] = CopyEntity(r\Objects[0])
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[1], r\x + 1024.0 * RoomScale, r\y, r\z)
+			RotateEntity(r\Objects[1], 0.0, 180.0, 0.0)
+			EntityParent(r\Objects[1], r\OBJ)
+			HideEntity(r\Objects[1])
+			
 			it.Items = CreateItem("Document SCP-939", "paper", r\x + 352.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 256.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, r\Angle + 4.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
