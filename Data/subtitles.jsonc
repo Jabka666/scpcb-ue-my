@@ -3541,7 +3541,7 @@
 	],
 	"SFX\\Ending\\GateB\\DetonatingAlphaWarheads.ogg": [
 		{
-			"text": "We're detonating the Alpha warheads in T-minus 90 seconds! All personnel are advised to board the nearest helicopter or enter the nearest black shelter immediately.",
+			"text": "We're detonating the Alpha warheads in T-minus 90 seconds! All personnel are advised to board the nearest helicopter or enter the nearest blast shelter immediately.",
 			"delay": 0.42,
 			"color": "announcement"
 		}
