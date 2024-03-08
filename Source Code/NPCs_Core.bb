@@ -4953,7 +4953,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		Local Dist#, FoundChamber%, Pvt%
 		Local PrevFrame# = n\Frame
-		Local x#, y#, z#
+		Local x# = 0.0, y# = 0.0, z# = 0.0
 		Local SqrValue#, PlayerSeeAble%
 		Local FPSFactorEx# = fps\Factor[0] * 2.0
 		
@@ -4998,7 +4998,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									
 									If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1726.0 * RoomScale) > 2.56 And (Not FoundChamber)
 										x = r\x + 4736.0 * RoomScale
-										y = 0.1
+										y = r\y + 420.0 * RoomScale
 										z = r\z + 1726.0 * RoomScale
 										Exit
 									ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1726.0 * RoomScale) > 2.56 And FoundChamber
@@ -5007,85 +5007,85 @@ Function UpdateMTFUnit%(n.NPCs)
 										n\EnemyZ = r\z + 1726.0 * RoomScale
 										Exit
 									Else
-										n_I\Curr173\Idle = 3
 										LoadNPCSound(n, "SFX\Character\MTF\173\Cont" + Rand(4) + ".ogg")
 										PlayMTFSound(n\Sound, n)
 										PlayAnnouncement("SFX\Character\MTF\Announc173Contain.ogg")
 										If r\RoomDoors[0]\Open Then OpenCloseDoor(r\RoomDoors[0])
+										n_I\Curr173\Idle = 3
 										Exit
 									EndIf
 								EndIf
 							Next
-						ElseIf (Not n_I\Curr106\Contained) And n_I\Curr173\Idle = 3 And RID <> r_cont1_106
-							For r.Rooms = Each Rooms
-								If r\RoomTemplate\RoomID = r_cont1_106
-									If n\InFacility = NullFloor
-										FoundChamber = False
-										Pvt = CreatePivot()
-										
-										PositionEntity(Pvt, EntityX(r\RoomDoors[0]\FrameOBJ), r\y + 420.0 * RoomScale, EntityZ(r\RoomDoors[0]\FrameOBJ), True)
-										
-										If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
-										
-										FreeEntity(Pvt) : Pvt = 0
-										
-										If DistanceSquared(EntityX(n\Collider), EntityX(r\RoomDoors[0]\FrameOBJ), EntityZ(n\Collider), EntityZ(r\RoomDoors[0]\FrameOBJ)) > 2.56 And (Not FoundChamber)
-											x = EntityX(r\RoomDoors[0]\FrameOBJ)
-											y = 0.1
-											z = EntityZ(r\RoomDoors[0]\FrameOBJ)
-											Exit
-										ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\RoomDoors[0]\FrameOBJ), EntityZ(n\Collider), EntityZ(r\RoomDoors[0]\FrameOBJ)) > 2.56 And FoundChamber
-											n\EnemyX = EntityX(r\RoomDoors[0]\FrameOBJ)
-											n\EnemyY = 0.1
-											n\EnemyZ = EntityZ(r\RoomDoors[0]\FrameOBJ)
-											Exit
-										Else
-											LoadNPCSound(n, "SFX\Character\MTF\106\FoundChamber.ogg")
-											PlayMTFSound(n\Sound, n)
-											PositionEntity(n\Collider, 0.0, 500.0, 0.0, True)
-											ResetEntity(n\Collider)
-											n\IdleTimer = 3.0
-											Exit
-										EndIf
-									Else
-										If n\IdleTimer > 0.0
-											If n\IdleTimer = 2.0
-												LoadNPCSound(n, "SFX\Character\MTF\106\Protocol.ogg")
-												PlayMTFSound(n\Sound, n)
-											EndIf
-											n\IdleTimer = n\IdleTimer - 1.0
-											Exit
-										Else
-											LoadNPCSound(n, "SFX\Character\MTF\106\Cont.ogg")
-											PlayMTFSound(n\Sound, n)
-											PlayAnnouncement("SFX\Character\MTF\Announc106Contain.ogg")
-											
-											UpdateLever(r\RoomLevers[0]\OBJ)
-											RotateEntity(r\RoomLevers[0]\OBJ, -80.0, EntityYaw(r\RoomLevers[0]\OBJ), 0.0)
-											
-											de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\RoomSecurityCams[0]\CameraOBJ, True), EntityY(r\RoomSecurityCams[0]\CameraOBJ, True), EntityZ(r\RoomSecurityCams[0]\CameraOBJ, True), 0.0, 0.0, 0.0, 0.05, 0.01) 
-											de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.002
-											RotateEntity(de\OBJ, EntityPitch(r\RoomSecurityCams[0]\CameraOBJ, True) + Rnd(10.0, 20.0), EntityYaw(r\RoomSecurityCams[0]\CameraOBJ, True) + 30.0, EntityRoll(de\OBJ))
-											MoveEntity(de\OBJ, 0.0, 0.05, 0.2) 
-											RotateEntity(de\OBJ, EntityPitch(r\RoomSecurityCams[0]\CameraOBJ, True), EntityYaw(r\RoomSecurityCams[0]\CameraOBJ, True), EntityRoll(de\OBJ))
-											EntityParent(de\OBJ, r\RoomSecurityCams[0]\CameraOBJ)
-											
-											For e.Events = Each Events
-												If r = e\room
-													e\EventState = 1.0
-													e\EventState2 = 1.0
-													e\EventState3 = 4000.0
-													Exit
-												EndIf
-											Next
-											PositionEntity(n\Collider, EntityX(r\RoomCenter, True), r\y + 0.3, EntityZ(r\RoomCenter, True), True)
-											ResetEntity(n\Collider)
-											n_I\Curr106\Contained = True
-											Exit
-										EndIf
-									EndIf
-								EndIf
-							Next
+;						ElseIf (Not n_I\Curr106\Contained) And n_I\Curr173\Idle = 3 And RID <> r_cont1_106
+;							For r.Rooms = Each Rooms
+;								If r\RoomTemplate\RoomID = r_cont1_106
+;									If n\IdleTimer = 0.0
+;										FoundChamber = False
+;										Pvt = CreatePivot()
+;										
+;										PositionEntity(Pvt, EntityX(r\RoomDoors[0]\FrameOBJ), r\y + 0.1, EntityZ(r\RoomDoors[0]\FrameOBJ), True)
+;										
+;										If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
+;										
+;										FreeEntity(Pvt) : Pvt = 0
+;										
+;										If DistanceSquared(EntityX(n\Collider), EntityX(r\RoomDoors[0]\FrameOBJ), EntityZ(n\Collider), EntityZ(r\RoomDoors[0]\FrameOBJ)) > 2.56 And (Not FoundChamber)
+;											x = EntityX(r\RoomDoors[0]\FrameOBJ)
+;											y = 0.1
+;											z = EntityZ(r\RoomDoors[0]\FrameOBJ)
+;											Exit
+;										ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\RoomDoors[0]\FrameOBJ), EntityZ(n\Collider), EntityZ(r\RoomDoors[0]\FrameOBJ)) > 2.56 And FoundChamber
+;											n\EnemyX = EntityX(r\RoomDoors[0]\FrameOBJ)
+;											n\EnemyY = 0.1
+;											n\EnemyZ = EntityZ(r\RoomDoors[0]\FrameOBJ)
+;											Exit
+;										Else
+;											LoadNPCSound(n, "SFX\Character\MTF\106\FoundChamber.ogg")
+;											PlayMTFSound(n\Sound, n)
+;											PositionEntity(n\Collider, 0.0, 500.0, 0.0, True)
+;											ResetEntity(n\Collider)
+;											n\IdleTimer = 3.0
+;											Exit
+;										EndIf
+;									Else
+;										If n\IdleTimer > 0.0
+;											If n\IdleTimer = 2.0
+;												LoadNPCSound(n, "SFX\Character\MTF\106\Protocol.ogg")
+;												PlayMTFSound(n\Sound, n)
+;											EndIf
+;											n\IdleTimer = n\IdleTimer - 1.0
+;											Exit
+;										Else
+;											LoadNPCSound(n, "SFX\Character\MTF\106\Cont.ogg")
+;											PlayMTFSound(n\Sound, n)
+;											PlayAnnouncement("SFX\Character\MTF\Announc106Contain.ogg")
+;											
+;											UpdateLever(r\RoomLevers[0]\OBJ)
+;											RotateEntity(r\RoomLevers[0]\OBJ, -80.0, EntityYaw(r\RoomLevers[0]\OBJ), 0.0)
+;											
+;											de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\RoomSecurityCams[0]\CameraOBJ, True), EntityY(r\RoomSecurityCams[0]\CameraOBJ, True), EntityZ(r\RoomSecurityCams[0]\CameraOBJ, True), 0.0, 0.0, 0.0, 0.05, 0.01) 
+;											de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.002
+;											RotateEntity(de\OBJ, EntityPitch(r\RoomSecurityCams[0]\CameraOBJ, True) + Rnd(10.0, 20.0), EntityYaw(r\RoomSecurityCams[0]\CameraOBJ, True) + 30.0, EntityRoll(de\OBJ))
+;											MoveEntity(de\OBJ, 0.0, 0.05, 0.2) 
+;											RotateEntity(de\OBJ, EntityPitch(r\RoomSecurityCams[0]\CameraOBJ, True), EntityYaw(r\RoomSecurityCams[0]\CameraOBJ, True), EntityRoll(de\OBJ))
+;											EntityParent(de\OBJ, r\RoomSecurityCams[0]\CameraOBJ)
+;											
+;											For e.Events = Each Events
+;												If r = e\room
+;													e\EventState = 1.0
+;													e\EventState2 = 1.0
+;													e\EventState3 = 4000.0
+;													Exit
+;												EndIf
+;											Next
+;											PositionEntity(n\Collider, EntityX(r\RoomCenter, True), r\y + 0.3, EntityZ(r\RoomCenter, True), True)
+;											ResetEntity(n\Collider)
+;											n_I\Curr106\Contained = True
+;											Exit
+;										EndIf
+;									EndIf
+;								EndIf
+;							Next
 						Else
 							For r.Rooms = Each Rooms
 								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2.0)) = 1)
@@ -6428,7 +6428,7 @@ Const PATH_STATUS_NOT_FOUND% = 2
 ;[End Block]
 
 Function FindPath%(n.NPCs, x#, y#, z#)
-	Local Temp%, Dist#, Dist2#
+	Local Dist#, Dist2#
 	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, Smallest.WayPoints
 	Local i%, gTemp#
 	
@@ -6453,7 +6453,8 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	
 	PositionEntity(Pvt, x, y, z, True)
 	
-	Temp = CreatePivot()
+	Local Temp% = CreatePivot()
+	
 	PositionEntity(Temp, EntityX(n\Collider, True), EntityY(n\Collider, True) + 0.15, EntityZ(n\Collider, True))
 	
 	Dist = 350.0
@@ -6497,13 +6498,15 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	EndIf
 	If EndPoint = Null Then Return(PATH_STATUS_NOT_FOUND)
 	
+	Local Temp2%
+	
 	Repeat
-		Temp = False
+		Temp2 = False
 		Smallest.WayPoints = Null
 		Dist = 10000.0
 		For w.WayPoints = Each WayPoints
 			If w\State = 1
-				Temp = True
+				Temp2 = True
 				If w\Fcost < Dist
 					Dist = w\Fcost
 					Smallest = w
@@ -6555,7 +6558,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 			EndPoint\State = 2
 			Exit
 		EndIf
-	Until (Not Temp)
+	Until (Not Temp2)
 	
 	If EndPoint\State > 0
 		Local CurrPoint.WayPoints = EndPoint
