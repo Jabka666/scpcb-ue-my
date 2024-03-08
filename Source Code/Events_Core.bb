@@ -3245,7 +3245,7 @@ Function UpdateEvents%()
 							
 							PlaySound2(NeckSnapSFX[0], Camera, e\room\NPC[0]\Collider, 8.0)
 							
-							PositionEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[0]\Collider, True) + 0.35, EntityY(e\room\NPC[0]\Collider, True) + 0.1, EntityZ(e\room\NPC[0]\Collider, True))
+							PositionEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[0]\Collider, True) + 0.35, EntityY(e\room\NPC[0]\Collider, True) + 0.15, EntityZ(e\room\NPC[0]\Collider, True))
 							PointEntity(n_I\Curr173\Collider, e\room\NPC[0]\Collider)
 							ResetEntity(n_I\Curr173\Collider)
 							n_I\Curr173\Idle = 1
@@ -3255,7 +3255,7 @@ Function UpdateEvents%()
 							
 							PlaySound2(NeckSnapSFX[1], Camera, e\room\NPC[1]\Collider, 8.0)
 							
-							PositionEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[1]\Collider, True) + 0.35, EntityY(e\room\NPC[1]\Collider, True) + 0.1, EntityZ(e\room\NPC[1]\Collider, True))
+							PositionEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[1]\Collider, True) + 0.35, EntityY(e\room\NPC[1]\Collider, True) + 0.15, EntityZ(e\room\NPC[1]\Collider, True))
 							PointEntity(n_I\Curr173\Collider, e\room\NPC[1]\Collider)
 							ResetEntity(n_I\Curr173\Collider)
 							n_I\Curr173\Idle = 0
