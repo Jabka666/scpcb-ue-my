@@ -2475,7 +2475,7 @@ Function UpdateMoving%()
 		me\CameraShake = Sin(chs\SuperManTimer / 5.0) * (chs\SuperManTimer / 1500.0)
 		
 		If chs\SuperManTimer > 70.0 * 50.0
-			msg\DeathMsg = GetLocalString("console", "superman")
+			msg\DeathMsg = GetLocalString("death", "superman")
 			Kill()
 			If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
 		Else
