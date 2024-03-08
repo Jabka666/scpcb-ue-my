@@ -3902,7 +3902,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(100.0)
+										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "nav310"
@@ -3917,7 +3917,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(100.0)
+										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "18vradio"
@@ -3932,7 +3932,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(0.0, 1000.0)
+										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "finenvg"
@@ -3947,7 +3947,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(0.0, 1000.0)
+										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
 									Case "finescramble"
@@ -3978,7 +3978,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(0.0, 200.0)
+										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "navulti", "nav300"
@@ -3993,7 +3993,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(0.0, 200.0)
+										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "fineradio", "veryfineradio"
@@ -4012,7 +4012,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(1000.0)
+										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "scramble"
@@ -4046,7 +4046,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(0.0, 1000.0)
+										Inventory(MouseSlot)\State = 1000.0
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
 									Case "nav310"
@@ -4061,7 +4061,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(0.0, 1000.0)
+										Inventory(MouseSlot)\State = 1000.0
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
 									Case "18vradio"
@@ -4076,7 +4076,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(10000.0)
+										Inventory(MouseSlot)\State = 10000.0
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
 									Case "finenvg"
@@ -4091,7 +4091,7 @@ Function UpdateGUI%()
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(10000.0)
+										Inventory(MouseSlot)\State = 10000.0
 										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
 									Case "finescramble"
@@ -4939,6 +4939,7 @@ Function UpdateGUI%()
 						Case "18vradio"
 							;[Block]
 							RadioType = 1
+							SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.002)
 							;[End Block]
 						Case "fineradio"
 							;[Block]
@@ -4951,9 +4952,9 @@ Function UpdateGUI%()
 						Default
 							;[Block]
 							RadioType = 0
+							SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.004)
 							;[End Block]
 					End Select
-					If RadioType < 2 Then SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.004)
 					
 					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
 					; ~ RadioState[6] = A timer for the "code channel"
@@ -5279,8 +5280,12 @@ Function UpdateGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					If SelectedItem\ItemTemplate\Name = "nav" Lor SelectedItem\ItemTemplate\Name = "nav310"
-						SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
+					If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav310"
+						If SelectedItem\ItemTemplate\TempName = "nav"
+							SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
+						Else
+							SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.0025)
+						EndIf
 						
 						If SelectedItem\State > 0.0 And SelectedItem\State <= 20.0
 							UpdateBatteryTimer()
