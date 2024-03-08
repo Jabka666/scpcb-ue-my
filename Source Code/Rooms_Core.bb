@@ -132,7 +132,7 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 				
-				de.Decals = CreateDecal(DECAL_BLOOD_2,  r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
+				de.Decals = CreateDecal(DECAL_BLOOD_2,  r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale, 0.0, 270.0, 0.0, 0.3)
 				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			
@@ -558,7 +558,7 @@ Function FillRoom%(r.Rooms)
 			EntityAlpha(r\Objects[0], 0.0)
 			
 			it.Items = CreateItem("Document SCP-372", "paper", r\x + 800.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 1108.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Radio Transceiver", "radio", r\x + 800.0 * RoomScale, r\y + 112.0 * RoomScale, r\z + 944.0 * RoomScale)
@@ -934,31 +934,31 @@ Function FillRoom%(r.Rooms)
 			
 			For i = 0 To 2
 				PositionEntity(r\Objects[i], r\x - 207.94 * RoomScale, r\y + (648.0 + (112.0 * i)) * RoomScale, r\z - 60.0686 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 105.0 + r\Angle, 0.0)
+				RotateEntity(r\Objects[i], 0.0, 105.0, 0.0)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
 			For i = 3 To 5
 				PositionEntity(r\Objects[i], r\x - 231.489 * RoomScale, r\y + (648.0 + (112.0 * (i - 3))) * RoomScale, r\z + 95.7443 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 90.0 + r\Angle, 0.0)
+				RotateEntity(r\Objects[i], 0.0, 90.0, 0.0)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
 			For i = 6 To 8 Step 2
 				PositionEntity(r\Objects[i], r\x - 231.489 * RoomScale, r\y + (648.0 + (112.0 * (i - 6))) * RoomScale, r\z + 255.744 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 90.0 + r\Angle, 0.0)
+				RotateEntity(r\Objects[i], 0.0, 90.0, 0.0)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
 			For i = 9 To 11
 				PositionEntity(r\Objects[i], r\x - 231.489 * RoomScale, r\y + (648.0 + (112.0 * (i - 9))) * RoomScale, r\z + 415.744 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 90.0 + r\Angle, 0.0)
+				RotateEntity(r\Objects[i], 0.0, 90.0, 0.0)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
 			For i = 12 To 14
 				PositionEntity(r\Objects[i], r\x - 208.138 * RoomScale, r\y + (648.0 + (112.0 * (i - 12))) * RoomScale, r\z + 571.583 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 75.0 + r\Angle, 0.0)
+				RotateEntity(r\Objects[i], 0.0, 75.0, 0.0)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -1038,7 +1038,7 @@ Function FillRoom%(r.Rooms)
 			HideEntity(r\Objects[1])
 			
 			it.Items = CreateItem("Document SCP-939", "paper", r\x + 352.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 256.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle + 4.0, 0.0)
+			RotateEntity(it\Collider, 0.0, 4.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateRandomBattery(r\x + 352.0 * RoomScale, r\y + 112.0 * RoomScale, r\z + 448.0 * RoomScale)
@@ -1324,11 +1324,11 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-714", "paper", r\x - 728.0 * RoomScale, r\y + 290.0 * RoomScale, r\z - 360.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-860", "paper", r\x + 728.0 * RoomScale, r\y + 290.0 * RoomScale, r\z + 360.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_cont2_500_1499
@@ -1373,7 +1373,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			it.Items = CreateItem("SCP-1499", "scp1499", r\x + 616.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 234.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-1499", "paper", r\x + 837.0 * RoomScale, r\y + 260.0 * RoomScale, r\z + 211.0 * RoomScale)
@@ -1761,10 +1761,10 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + 3438.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 6294.0 * RoomScale, 0.0, r\Angle + 270.0, 0.0, 0.3)
+			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + 3438.0 * RoomScale, r\y - 5510.0 * RoomScale, r\z + 6294.0 * RoomScale, 0.0, 270.0, 0.0, 0.3)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(DECAL_BLOOD_6, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + 890.0 * RoomScale, 90.0, r\Angle + 180.0, 0.0, 0.5)
+			de.Decals = CreateDecal(DECAL_BLOOD_6, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + 890.0 * RoomScale, 90.0, 180.0, 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
 		Case r_room4_ic
@@ -1898,7 +1898,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[4], r\OBJ)
 			
 			it.Items = CreateItem("SCP-035 Addendum", "paper", r\x + 687.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 127.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Radio Transceiver", "radio", r\x - 544.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
@@ -1944,7 +1944,7 @@ Function FillRoom%(r.Rooms)
 			r\ScriptedObject[0] = True
 			PositionEntity(r\Objects[0], r\x + 166.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1606.0 * RoomScale)
 			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
-			RotateEntity(r\Objects[0], 0.0, r\Angle - 90.0, 0.0, True)
+			RotateEntity(r\Objects[0], 0.0, -90.0, 0.0, True)
 			EntityParent(r\Objects[0], r\OBJ)
 			HideEntity(r\Objects[0])
 			
@@ -2899,9 +2899,9 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 360.0 * RoomScale, 0.0, False, BIG_DOOR, KEY_CARD_5)
 			d\DisableWaypoint = True : d\MTFClose = False
 			PositionEntity(d\Buttons[1], r\x + 422.0 * RoomScale, EntityY(d\Buttons[1], True), r\z - 576.0 * RoomScale, True)
-			RotateEntity(d\Buttons[1], 0.0, r\Angle - 90.0, 0.0, True)
-			PositionEntity(d\Buttons[0], r\x - 522.0 * RoomScale, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			RotateEntity(d\Buttons[0], 0.0, r\Angle - 225.0, 0.0, True)
+			RotateEntity(d\Buttons[1], 0.0, -90.0, 0.0, True)
+			PositionEntity(d\Buttons[0], r\x - 541.0 * RoomScale, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			RotateEntity(d\Buttons[0], 0.0, -220.0, 0.0, True)
 			r\RoomDoors.Doors[1] = d
 			
 			; ~ Elevator pivot
@@ -3026,9 +3026,9 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 320.0 * RoomScale, 0.0, False, BIG_DOOR, KEY_CARD_5)
 			d\DisableWaypoint = True : d\MTFClose = False
 			PositionEntity(d\Buttons[1], r\x + 390.0 * RoomScale, EntityY(d\Buttons[1], True), r\z - 528.0 * RoomScale, True)
-			RotateEntity(d\Buttons[1], 0.0, r\Angle - 90.0, 0.0, True)
+			RotateEntity(d\Buttons[1], 0.0, -90.0, 0.0, True)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), r\z - 198.0 * RoomScale, True)
-			RotateEntity(d\Buttons[0], 0.0, r\Angle - 180.0, 0.0, True)
+			RotateEntity(d\Buttons[0], 0.0, -180.0, 0.0, True)
 			r\RoomDoors.Doors[1] = d
 			
 			r\Objects[0] = CreatePivot()
@@ -3416,10 +3416,11 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Level 5 Key Card", "key5", r\x + 2272.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 387.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Nuclear Device Document", "paper", r\x + 2272.0 * RoomScale, r\y + 440.0 * RoomScale, r\z + 372.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Radio Transceiver", "radio", r\x + 2272.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 128.0 * RoomScale)
@@ -3540,7 +3541,7 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			it.Items = CreateItem("Document SCP-860-1", "paper", r\x + 1158.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 17.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x + 927.0 * RoomScale, r\z)
@@ -3732,7 +3733,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room3_3_ez
 			;[Block]
 			it.Items = CreateItem("Document SCP-970", "paper", r\x + 960.0 * RoomScale, r\y - 448.0 * RoomScale, r\z + 251.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, r\Angle, 0.0)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Gas Mask", "gasmask", r\x + 954.0 * RoomScale, r\y - 504.0 * RoomScale, r\z + 235.0 * RoomScale)
