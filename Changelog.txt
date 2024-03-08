@@ -3,6 +3,9 @@ v1.2.2
 General:
 - Optimized the game...
 
+NPCs:
+- MTFs can contain SCP-106.
+
 Bug Fixes:
 - Fixed some typos in subtitles.
 - Fixed NPCs not teleporting correctly.

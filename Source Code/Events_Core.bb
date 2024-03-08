@@ -6747,8 +6747,8 @@ Function UpdateEvents%()
 						
 						e\room\NPC[0] = n_I\Curr049
 						e\room\NPC[0]\HideFromNVG = False
-						e\room\NPC[0]\PathX = EntityX(me\Collider)
-						e\room\NPC[0]\PathZ = EntityZ(me\Collider)
+						e\room\NPC[0]\EnemyX = EntityX(me\Collider)
+						e\room\NPC[0]\EnemyZ = EntityZ(me\Collider)
 						e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\PrevState = 2
 						
 						e\EventState2 = 1.0
@@ -6829,7 +6829,7 @@ Function UpdateEvents%()
 										;[End Block]
 									Case 4.0
 										;[Block]
-										e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], e\room\NPC[0]\PathX, 0.1, e\room\NPC[0]\PathZ)
+										e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], e\room\NPC[0]\EnemyX, 0.1, e\room\NPC[0]\EnemyZ)
 										e\room\NPC[0]\PrevState = 2
 										;[End Block]
 									Case 5.0

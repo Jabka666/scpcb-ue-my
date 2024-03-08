@@ -42,7 +42,6 @@ Type NPCs
 	Field NPCNameInSection$
 	Field InFacility%
 	Field HP%
-	Field PathX#, PathZ#
 	Field Model$
 	Field ModelScaleX#, ModelScaleY#, ModelScaleZ#
 	Field TextureID% = -1
@@ -4930,7 +4929,7 @@ Const MTF_DISABLING_TESLA% = 11
 ;[End Block]
 
 Function UpdateMTFUnit%(n.NPCs)
-	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints
+	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events
 	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	If n\IsDead
@@ -4952,7 +4951,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		n\SoundCHN2 = LoopSound2(NPCSound[SOUND_NPC_MTF_BREATH], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
 		
-		Local Dist#
+		Local Dist#, FoundChamber%, Pvt%
 		Local PrevFrame# = n\Frame
 		Local x#, y#, z#
 		Local SqrValue#, PlayerSeeAble%
@@ -4985,35 +4984,27 @@ Function UpdateMTFUnit%(n.NPCs)
 					If n <> n_I\MTFLeader ; ~ I'll follow the leader
 						n\PathStatus = FindPath(n, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.1, EntityZ(n_I\MTFLeader\Collider, True)) ; ~ Whatever you say boss
 					Else ; ~ I am the leader
-						If n_I\Curr173\Idle <> 2
-							For r.Rooms = Each Rooms
-								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2.0)) = 1)
-									x = r\x
-									y = 0.1
-									z = r\z
-									Exit
-								EndIf
-							Next
-						Else
+						If n_I\Curr173\Idle = 2
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = r_cont1_173
-									Local FoundChamber% = False
-									Local Pvt% = CreatePivot()
+									FoundChamber = False
+									Pvt = CreatePivot()
 									
-									PositionEntity(Pvt, EntityX(r\OBJ, True) + 4736.0 * RoomScale, 0.5, EntityZ(r\OBJ, True) + 1692.0 * RoomScale)
+									PositionEntity(Pvt, EntityX(r\OBJ, True) + 4736.0 * RoomScale, r\y + 420.0 * RoomScale, EntityZ(r\OBJ, True) + 1726.0 * RoomScale, True)
 									
 									If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
 									
 									FreeEntity(Pvt) : Pvt = 0
 									
-									If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And (Not FoundChamber)
+									If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1726.0 * RoomScale) > 2.56 And (Not FoundChamber)
 										x = r\x + 4736.0 * RoomScale
 										y = 0.1
-										z = r\z + 1722.0 * RoomScale
+										z = r\z + 1726.0 * RoomScale
 										Exit
-									ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1692.0 * RoomScale) > 2.56 And FoundChamber
-										n\PathX = r\x + 4736.0 * RoomScale
-										n\PathZ = r\z + 1722.0 * RoomScale
+									ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1726.0 * RoomScale) > 2.56 And FoundChamber
+										n\EnemyX = r\x + 4736.0 * RoomScale
+										n\EnemyY = r\y + 420.0 * RoomScale
+										n\EnemyZ = r\z + 1726.0 * RoomScale
 										Exit
 									Else
 										n_I\Curr173\Idle = 3
@@ -5025,8 +5016,91 @@ Function UpdateMTFUnit%(n.NPCs)
 									EndIf
 								EndIf
 							Next
+						ElseIf (Not n_I\Curr106\Contained) And n_I\Curr173\Idle = 3 And RID <> r_cont1_106
+							For r.Rooms = Each Rooms
+								If r\RoomTemplate\RoomID = r_cont1_106
+									If n\InFacility = NullFloor
+										FoundChamber = False
+										Pvt = CreatePivot()
+										
+										PositionEntity(Pvt, EntityX(r\RoomDoors[0]\FrameOBJ), r\y + 420.0 * RoomScale, EntityZ(r\RoomDoors[0]\FrameOBJ), True)
+										
+										If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
+										
+										FreeEntity(Pvt) : Pvt = 0
+										
+										If DistanceSquared(EntityX(n\Collider), EntityX(r\RoomDoors[0]\FrameOBJ), EntityZ(n\Collider), EntityZ(r\RoomDoors[0]\FrameOBJ)) > 2.56 And (Not FoundChamber)
+											x = EntityX(r\RoomDoors[0]\FrameOBJ)
+											y = 0.1
+											z = EntityZ(r\RoomDoors[0]\FrameOBJ)
+											Exit
+										ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\RoomDoors[0]\FrameOBJ), EntityZ(n\Collider), EntityZ(r\RoomDoors[0]\FrameOBJ)) > 2.56 And FoundChamber
+											n\EnemyX = EntityX(r\RoomDoors[0]\FrameOBJ)
+											n\EnemyY = 0.1
+											n\EnemyZ = EntityZ(r\RoomDoors[0]\FrameOBJ)
+											Exit
+										Else
+											LoadNPCSound(n, "SFX\Character\MTF\106\FoundChamber.ogg")
+											PlayMTFSound(n\Sound, n)
+											PositionEntity(n\Collider, 0.0, 500.0, 0.0, True)
+											ResetEntity(n\Collider)
+											n\IdleTimer = 3.0
+											Exit
+										EndIf
+									Else
+										If n\IdleTimer > 0.0
+											If n\IdleTimer = 2.0
+												LoadNPCSound(n, "SFX\Character\MTF\106\Protocol.ogg")
+												PlayMTFSound(n\Sound, n)
+											EndIf
+											n\IdleTimer = n\IdleTimer - 1.0
+											Exit
+										Else
+											LoadNPCSound(n, "SFX\Character\MTF\106\Cont.ogg")
+											PlayMTFSound(n\Sound, n)
+											PlayAnnouncement("SFX\Character\MTF\Announc106Contain.ogg")
+											
+											UpdateLever(r\RoomLevers[0]\OBJ)
+											RotateEntity(r\RoomLevers[0]\OBJ, -80.0, EntityYaw(r\RoomLevers[0]\OBJ), 0.0)
+											
+											de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\RoomSecurityCams[0]\CameraOBJ, True), EntityY(r\RoomSecurityCams[0]\CameraOBJ, True), EntityZ(r\RoomSecurityCams[0]\CameraOBJ, True), 0.0, 0.0, 0.0, 0.05, 0.01) 
+											de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.002
+											RotateEntity(de\OBJ, EntityPitch(r\RoomSecurityCams[0]\CameraOBJ, True) + Rnd(10.0, 20.0), EntityYaw(r\RoomSecurityCams[0]\CameraOBJ, True) + 30.0, EntityRoll(de\OBJ))
+											MoveEntity(de\OBJ, 0.0, 0.05, 0.2) 
+											RotateEntity(de\OBJ, EntityPitch(r\RoomSecurityCams[0]\CameraOBJ, True), EntityYaw(r\RoomSecurityCams[0]\CameraOBJ, True), EntityRoll(de\OBJ))
+											EntityParent(de\OBJ, r\RoomSecurityCams[0]\CameraOBJ)
+											
+											For e.Events = Each Events
+												If r = e\room
+													e\EventState = 1.0
+													e\EventState2 = 1.0
+													e\EventState3 = 4000.0
+													Exit
+												EndIf
+											Next
+											PositionEntity(n\Collider, EntityX(r\RoomCenter, True), r\y + 0.3, EntityZ(r\RoomCenter, True), True)
+											ResetEntity(n\Collider)
+											n_I\Curr106\Contained = True
+											Exit
+										EndIf
+									EndIf
+								EndIf
+							Next
+						Else
+							For r.Rooms = Each Rooms
+								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2.0)) = 1)
+									x = r\x
+									y = 0.1
+									z = r\z
+									Exit
+								EndIf
+							Next
 						EndIf
-						If n\PathX = 0.0 Then n\PathStatus = FindPath(n, x, y, z) ; ~ We're going to this room for no particular reason
+						If n\EnemyX = 0.0 And n\EnemyZ = 0.0
+							n\PathStatus = FindPath(n, x, y, z) ; ~ We're going to this room for no particular reason
+						Else
+							n\State = MTF_FOLLOW_PATH
+						EndIf
 					EndIf
 					If n\PathStatus = PATH_STATUS_FOUND
 						While n\Path[n\PathLocation] = Null
@@ -5075,23 +5149,6 @@ Function UpdateMTFUnit%(n.NPCs)
 							UseDoorNPC(n, True, True)
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
-					ElseIf n\PathX <> 0.0
-						Pvt = CreatePivot()
-						PositionEntity(Pvt, n\PathX, 0.5, n\PathZ)
-						
-						PointEntity(n\Collider, Pvt)
-						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-						TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
-						AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
-						
-						If DistanceSquared(EntityX(n\Collider), n\PathX, EntityZ(n\Collider), n\PathZ) < PathLocationDist
-							n\PathX = 0.0
-							n\PathZ = 0.0
-							n\PathTimer = 70.0 * Rnd(6.0, 10.0)
-						EndIf
-						
-						FreeEntity(Pvt) : Pvt = 0
 					Else
 						If n = n_I\MTFLeader
 							n\CurrSpeed = 0.0
@@ -5477,6 +5534,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							EndIf
 						EndIf
 					EndIf
+					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				
@@ -5627,57 +5685,67 @@ Function UpdateMTFUnit%(n.NPCs)
 				;[End Block]
 			Case MTF_FOLLOW_PATH
 				;[Block]
-				If n\PathTimer <= 0.0 ; ~ Update path
-					n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
-					If n\PathStatus = PATH_STATUS_FOUND
-						While n\Path[n\PathLocation] = Null
-							If n\PathLocation > MaxPathLocations - 1
-								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
-								Exit
-							Else
-								n\PathLocation = n\PathLocation + 1
-							EndIf
-						Wend
-						If n\PathLocation < MaxPathLocations - 1
-							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-								If n\Path[n\PathLocation]\door = Null
-									If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-								EndIf
-							EndIf
-						EndIf
-					EndIf
-					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-				Else
-					If n\PathStatus = PATH_STATUS_NOT_FOUND
-						n\CurrSpeed = 0.0
-						If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
-						FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
-						n\PathTimer = n\PathTimer - FPSFactorEx ; ~ Timer goes down fast
-					ElseIf n\PathStatus = PATH_STATUS_FOUND
-						If n\Path[n\PathLocation] = Null
-							If n\PathLocation > MaxPathLocations - 1
-								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
-							Else
-								n\PathLocation = n\PathLocation + 1
-							EndIf
-						Else
-							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
-							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
-							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
-							
-							UseDoorNPC(n, True, True)
-						EndIf
-						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
-					Else
-						n\CurrSpeed = 0.0
-						If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
-						FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
-						n\PathTimer = n\PathTimer - FPSFactorEx ; ~ Timer goes down fast
-					EndIf
-					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+				Pvt = CreatePivot()
+				PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ, True)
+				
+				If DistanceSquared(EntityX(n\Collider), EntityX(Pvt), EntityX(n\Collider), EntityX(Pvt)) < 0.25
+					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+					FreeEntity(Pvt) : Pvt = 0
+					n\State = MTF_WANDERING_AROUND
+					Return
 				EndIf
+				FreeEntity(Pvt) : Pvt = 0
+				
+				If n\PathStatus = PATH_STATUS_FOUND
+					If n\Path[n\PathLocation] = Null
+						If n\PathLocation > MaxPathLocations - 1
+							n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+						Else
+							n\PathLocation = n\PathLocation + 1
+						EndIf
+					Else
+						PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+						TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
+						AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
+						
+						UseDoorNPC(n, True, True)
+					EndIf
+				Else
+					If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.2, n\EnemyZ)
+					
+					Local ClosestWaypoint.WayPoints = Null
+					
+					Pvt = CreatePivot()
+					PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ)
+					For w.WayPoints = Each WayPoints
+						If EntityDistanceSquared(w\OBJ, Pvt) < 4.0
+							ClosestWaypoint = w
+							Exit
+						EndIf
+					Next
+					FreeEntity(Pvt) : Pvt = 0
+					
+					If ClosestWaypoint <> Null
+						n\PathTimer = 1.0
+						If EntityVisible(ClosestWaypoint\OBJ, n\Collider)
+							If Abs(DeltaYaw(n\Collider, ClosestWaypoint\OBJ)) > 0.0
+								PointEntity(n\OBJ, ClosestWaypoint\OBJ)
+								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
+							EndIf
+						EndIf
+					Else
+						n\PathTimer = 0.0
+					EndIf
+					
+					If n\PathTimer = 1.0
+						AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
+						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+						TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
+					EndIf
+				EndIf
+				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 				;[End Block]
 			Case MTF_LOOKING_AT_SOME_TARGET
 				;[Block]
@@ -5767,9 +5835,13 @@ Function UpdateMTFUnit%(n.NPCs)
 				If n\State3 =< 0.0 Then
 					For n2.NPCs = Each NPCs
 						If n2\NPCType = NPCTypeMTF And n2 <> n
-							If EntityDistanceSquared(n\Collider, n2\Collider) < 16.0 Then n2\State = MTF_WANDERING_AROUND
+							If EntityDistanceSquared(n\Collider, n2\Collider) < 16.0
+								n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+								n2\State = MTF_WANDERING_AROUND
+							EndIf
 						EndIf
 					Next
+					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				;[End Block]
@@ -5903,6 +5975,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					n\State2 = 0.0
 					n\State3 = 0.0
 					n\Target = Null
+					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				;[End Block]
@@ -6007,6 +6080,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 				Else
 					n\Target = Null
+					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				;[End Block]
@@ -6128,6 +6202,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					PlaySound2(NVGSFX[1], Camera, n\Collider, 5.0)
 					n\Target = Null
+					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				;[End Block]
@@ -6185,6 +6260,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								EndIf
 								n\Target\IsDead = True
 								n\Target = Null
+								n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 								n\State = MTF_WANDERING_AROUND
 								Return
 							EndIf
@@ -6260,11 +6336,13 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 				Else
 					n\Target = Null
+					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				
 				If n\Target\IsDead
 					n\Target = Null
+					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
 				EndIf
 				;[End Block]
