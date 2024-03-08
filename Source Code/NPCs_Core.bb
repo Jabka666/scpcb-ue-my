@@ -1462,7 +1462,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If Rand(50) = 1
-								If Dist > 1024.0 Lor EntityY(n\Collider) < -50.0 Then TeleportCloser(n)
+								If Dist > 400.0 Then TeleportCloser(n)
 							EndIf
 						Else
 							AnimateNPC(n, Min(27.0, AnimTime(n\OBJ)), 193.0, 0.5)
@@ -6290,7 +6290,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport back to the facility if fell through the floor
-		If RID <> r_cont2_049 And EntityY(n\Collider) < -7.0 Then TeleportCloser(n)
+		If RID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
@@ -6300,8 +6300,9 @@ Function TeleportCloser%(n.NPCs)
 	Local ClosestDist# = 0.0
 	Local closestWaypoint.WayPoints
 	Local w.WayPoints
-	
 	Local xTemp#, zTemp#
+	
+	If InFacility > UpperFloor Then Return
 	
 	For w.WayPoints = Each WayPoints
 		If w\door = Null
@@ -6323,12 +6324,16 @@ Function TeleportCloser%(n.NPCs)
 		EndIf
 	Next
 	
-	Local ShouldTeleport%
+	Local ShouldTeleport% = False
 	
 	If closestWaypoint <> Null
-		ShouldTeleport = ((n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs) Lor (EntityY(closestWaypoint\OBJ, True) <= (10.0 - ((n\NPCType = NPCTypeMTF) * 8.0)) And EntityY(closestWaypoint\OBJ, True) >= -(10.0 - ((n\NPCType = NPCTypeMTF) * 8.0))))
+		If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs Then
+			ShouldTeleport = True
+		ElseIf EntityY(closestWaypoint\OBJ, True) <= 6.5 And EntityY(closestWaypoint\OBJ, True) >= -6.5
+			ShouldTeleport = True
+		EndIf
 		If ShouldTeleport
-			PositionEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 200.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), True)
+			PositionEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 150.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), True)
 			ResetEntity(n\Collider)
 			n\PathStatus = PATH_STATUS_NO_SEARCH
 			n\PathTimer = 0.0

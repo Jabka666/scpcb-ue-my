@@ -3115,7 +3115,8 @@ Global ToElevatorFloor%, PlayerInsideElevator%
 Const LowerFloor% = -1
 Const NullFloor% = 0
 Const UpperFloor% = 1
-Const Floor1499% = 2
+Const FloorOther% = 2
+Const Floor1499% = 3
 ;[End Block]
 
 Function UpdateElevatorPanel%(d.Doors)

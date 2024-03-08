@@ -295,9 +295,15 @@ End Function
 Function IsInFacility%(y#)
 	Local Y2# = Floor(y)
 	
-	If Y2 > 100.0 Then Return(Floor1499)
-	If Y2 < -6.5 Then Return(LowerFloor)
-	If Y2 > 6.5 And Y2 <= 100.0 Then Return(UpperFloor)
+	If Y2 < -6.5
+		Return(LowerFloor)
+	ElseIf Y2 > 6.5 And Y2 <= 100.0
+		Return(UpperFloor)
+	ElseIf Y2 > 100.0 And Y2 < 700.0
+		Return(FloorOther)
+	ElseIf Y2 > 400.0
+		Return(Floor1499)
+	EndIf
 	Return(NullFloor)
 End Function
 
