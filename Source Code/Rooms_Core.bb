@@ -126,14 +126,18 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("SCP-005", "scp005", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 				
+				Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+				TextureBlend(Tex, 5)
+				EntityTexture(r\RoomDoors[0]\OBJ, Tex)
+				EntityTexture(r\RoomDoors[0]\OBJ2, Tex)
+				EntityTexture(r\RoomDoors[0]\FrameOBJ, Tex)
+				DeleteSingleTextureEntryFromCache(Tex)
+				
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 				EntityParent(de\OBJ, r\OBJ)
 			ElseIf I_005\ChanceToSpawn = 3
 				it.Items = CreateItem("Note from Maynard", "paper", r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-				
-				de.Decals = CreateDecal(DECAL_BLOOD_2,  r\x + 380.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 875.0 * RoomScale, 0.0, 270.0, 0.0, 0.3)
-				EntityParent(de\OBJ, r\OBJ)
 			EndIf
 			
 			CreateCustomCenter(r, r\x, r\z - 830.0 * RoomScale)

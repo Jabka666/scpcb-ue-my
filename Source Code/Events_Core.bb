@@ -861,23 +861,10 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont1_005
 				;[Block]
-				If (Not n_I\Curr106\Contained)
-					If I_005\ChanceToSpawn = 1
+				If I_005\ChanceToSpawn = 1
+					If (Not n_I\Curr106\Contained)
 						If PlayerRoom = e\room
 							If e\EventState = 0.0
-								TFormPoint(-362.0, 0.0, -420.0, e\room\OBJ, 0)
-								de.Decals = CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0)
-								EntityParent(de\OBJ, e\room\OBJ)
-								
-								Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-								TextureBlend(Tex, 5)
-								EntityTexture(e\room\RoomDoors[0]\OBJ, Tex)
-								EntityTexture(e\room\RoomDoors[0]\OBJ2, Tex)
-								EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
-								DeleteSingleTextureEntryFromCache(Tex)
-								
-								e\EventState = 1.0
-							ElseIf e\EventState = 1.0
 								If e\room\Objects[0] = 0
 									TFormPoint(0.0, 0.0, 238.0, e\room\OBJ, 0)
 									e\room\Objects[0] = CreatePivot()
@@ -904,7 +891,7 @@ Function UpdateEvents%()
 											ShowEntity(n_I\Curr106\OBJ)
 											
 											FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-											e\EventState = 2.0
+											e\EventState = 1.0
 										EndIf
 									EndIf
 								EndIf
@@ -927,12 +914,16 @@ Function UpdateEvents%()
 									e\EventState2 = Min(e\EventState2 + fps\Factor[0] / 200.0, 2.0)
 									
 									me\LightBlink = Min(e\EventState2 * 5.0, 10.0)
-									If e\EventState2 >= 0.2 Then me\BlinkTimer = -10.0
+									If e\EventState2 >= 0.2
+										me\BlinkTimer = -10.0
+										If n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
+									EndIf
 									me\BlurTimer = e\EventState2 * 500.0
 									
-									If e\EventState2 > 0.2 And n_I\Curr106\State <= 0.0 Then n_I\Curr106\CurrSpeed = 0.0
-									
-									If e\EventState2 = 2.0 Then MoveToPocketDimension()
+									If e\EventState2 = 2.0
+										MoveToPocketDimension()
+										RemoveEvent(e)
+									EndIf
 								Else
 									If chs\NoClip Then me\Playable = True
 								EndIf
@@ -941,23 +932,23 @@ Function UpdateEvents%()
 							e\EventState2 = 0.0
 						EndIf
 					Else
-						If e\room\Dist < 8.0
-							If I_005\ChanceToSpawn = 3
-								TFormPoint(375.0, 52.0, -875.0, e\room\OBJ, 0)
-								e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-								e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-								SetNPCFrame(e\room\NPC[0], 287.0)
-								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
-								
-								TFormPoint(382.0, 150.0, -875.0, e\room\OBJ, 0)
-								de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
-								EntityParent(de\OBJ, e\room\OBJ)
-							EndIf
-							RemoveEvent(e)
-						EndIf
+						RemoveEvent(e)
 					EndIf
 				Else
-					RemoveEvent(e)
+					If e\room\Dist < 8.0
+						If I_005\ChanceToSpawn = 3
+							TFormPoint(375.0, 52.0, -875.0, e\room\OBJ, 0)
+							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
+							SetNPCFrame(e\room\NPC[0], 287.0)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+							
+							TFormPoint(382.0, 150.0, -875.0, e\room\OBJ, 0)
+							de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
+							EntityParent(de\OBJ, e\room\OBJ)
+						EndIf
+						RemoveEvent(e)
+					EndIf
 				EndIf
 				;[End Block]
 			Case e_cont1_079
