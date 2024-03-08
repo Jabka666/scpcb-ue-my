@@ -8,7 +8,7 @@ Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 1
 ;[End Block]
 
 Const MaxPathLocations% = 21
-Const PathLocationDist# = 0.09 ; ~ 0.3 ^ 2
+Const PathLocationDist# = 0.04 ; ~ 0.25 ^ 2
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
@@ -6307,9 +6307,9 @@ Function TeleportCloser%(n.NPCs)
 	For w.WayPoints = Each WayPoints
 		If w\door = Null
 			xTemp = Abs(EntityX(w\OBJ, True) - EntityX(n\Collider, True))
-			If xTemp < 10.0 And xTemp > 1.0
+			If xTemp > 1.0 And xTemp < 10.0
 				zTemp = Abs(EntityZ(w\OBJ, True) - EntityZ(n\Collider, True))
-				If zTemp < 10.0 And zTemp > 1.0
+				If zTemp > 1.0 And zTemp < 10.0
 					If EntityDistanceSquared(me\Collider, w\OBJ) > PowTwo(16.0 - (8.0 * SelectedDifficulty\AggressiveNPCs))
 						; ~ Teleports to the nearby waypoint that takes it closest to the player
 						Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
@@ -6333,8 +6333,8 @@ Function TeleportCloser%(n.NPCs)
 			ShouldTeleport = True
 		EndIf
 		If ShouldTeleport
-			PositionEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 150.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), True)
-			ResetEntity(n\Collider)
+			TeleportEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 60.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), n\Collider, True)
+			n\CurrSpeed = 0.0
 			n\PathStatus = PATH_STATUS_NO_SEARCH
 			n\PathTimer = 0.0
 			n\PathLocation = 0

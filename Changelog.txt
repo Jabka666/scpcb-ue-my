@@ -3,6 +3,11 @@ v1.2.2
 General:
 - Optimized the game...
 
+Bug Fixes:
+- Fixed some typos in subtitles.
+- Fixed NPCs not teleporting correctly.
+- Fixed NPCs cannot find the path correctly.
+
 v1.2.1
 
 General:
