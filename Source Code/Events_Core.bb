@@ -936,15 +936,23 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					If e\room\Dist < 8.0
-						TFormPoint(375.0, 52.0, -875.0, e\room\OBJ, 0)
-						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-						e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-						SetNPCFrame(e\room\NPC[0], 287.0)
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
-						
-						TFormPoint(382.0, 150.0, -875.0, e\room\OBJ, 0)
-						de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
-						EntityParent(de\OBJ, e\room\OBJ)
+						If I_005\ChanceToSpawn = 3
+							TFormPoint(375.0, 52.0, -875.0, e\room\OBJ, 0)
+							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
+							SetNPCFrame(e\room\NPC[0], 287.0)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+							
+							TFormPoint(382.0, 150.0, -875.0, e\room\OBJ, 0)
+							de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
+							EntityParent(de\OBJ, e\room\OBJ)
+						Else
+							TFormPoint(-296.0, 52.0, -240.0, e\room\OBJ, 0)
+							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
+							SetNPCFrame(e\room\NPC[0], 288.0)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 125.0, 0.0, True)
+						EndIf
 						RemoveEvent(e)
 					EndIf
 				EndIf
