@@ -2208,6 +2208,7 @@ Type Rooms
 	Field NPC.NPCs[MaxRoomNPCs]
 	Field RoomSecurityCams.SecurityCams[MaxRoomSecurityCams]
 	Field RoomEmitters.Emitters[MaxRoomEmitters]
+	Field RoomDevilEmitters.DevilEmitters[MaxRoomEmitters]
 	Field mt.MTGrid
 	Field Adjacent.Rooms[MaxRoomAdjacents]
 	Field AdjDoor.Doors[MaxRoomAdjacents]
@@ -4021,6 +4022,7 @@ Function UpdateSecurityCams%()
 	; ~ CoffinEffect = 2, SCP-079 can broadcast SCP-895 feed on this screen
 	; ~ CoffinEffect = 3, SCP-079 broadcasting SCP-895 feed
 	
+	ParticleCam = Camera
 	For sc.SecurityCams = Each SecurityCams
 		Local Close% = (sc\room\Dist < 6.0 Lor PlayerRoom = sc\room)
 		
@@ -4084,6 +4086,8 @@ Function UpdateSecurityCams%()
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
 					If me\BlinkTimer > -10.0 And sc\InSight
+						ParticleCam = sc\Cam
+						
 						Local Temp% = False
 						Local RID% = sc\room\RoomTemplate\RoomID
 						

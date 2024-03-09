@@ -6472,21 +6472,16 @@ Function UpdateEvents%()
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 225.0, 0.0, True)
 					EndIf
 					
-					p.Particles = CreateParticle(PARTICLE_WHITE_SMOKE, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 0.2, 0.0, 10.0)
-					p\Speed = 0.01 : p\AlphaChange = -0.02
-					RotateEntity(p\Pvt, -60.0, e\room\Angle - 90.0, 0.0)
-					
 					e\SoundCHN = LoopSound2(AlarmSFX[2], e\SoundCHN, Camera, e\room\OBJ, 5.0)
 					
-					
-					If EntityDistanceSquared(me\Collider, e\room\Objects[1]) < 25.0
-						e\Sound = LoadSound_Strict("SFX\Room\SparkShort.ogg")
+					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 25.0
+						e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
 						If Rand(50) = 1
-							PlaySound2(e\Sound, Camera, e\room\Objects[1], 3.0, 0.4)
+							PlaySound2(e\Sound, Camera, e\room\Objects[0], 3.0, 0.4)
 							
 							If opt\ParticleAmount > 0
 								For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
-									p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.002, 0.0, 25.0)
+									p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 0.002, 0.0, 25.0)
 									p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\AlphaChange = -0.05
 									RotateEntity(p\Pvt, Rnd(-20.0, 0.0), e\room\Angle + 90.0, 0.0)
 									ScaleSprite(p\OBJ, p\Size, p\Size)
@@ -6554,29 +6549,30 @@ Function UpdateEvents%()
 									FreeEntity(Pvt) : Pvt = 0
 								EndIf
 							ElseIf e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 6.0
-								Pvt = CreatePivot(e\room\OBJ)
 								For i = 0 To 1
-									If e\room\RoomTemplate\RoomID = r_room3_gw
-										If i = 0
-											PositionEntity(Pvt, -81.0, 416.0, 320.0)
+									If e\room\RoomDevilEmitters[i] = Null
+										If e\room\RoomTemplate\RoomID = r_room3_gw
+											If i = 0
+												TFormPoint(-81.0, 416.0, 320.0, e\room\OBJ, 0)
+											Else
+												TFormPoint(143, 416.0, 320.0, e\room\OBJ, 0)
+											EndIf
 										Else
-											PositionEntity(Pvt, 143.0, 416.0, 320.0)
+											If i = 0
+												TFormPoint(320, 416.0, -81.0, e\room\OBJ, 0)
+											Else
+												TFormPoint(320.0, 416.0, 143.0, e\room\OBJ, 0)
+											EndIf
 										EndIf
-									Else
-										If i = 0
-											PositionEntity(Pvt, 320.0, 416.0, -81.0)
-										Else
-											PositionEntity(Pvt, 320.0, 416.0, 143.0)
-										EndIf
+										e\room\RoomDevilEmitters[i] = CreateDevilEmitter(TFormedX(), TFormedY(), TFormedZ(), e\room, 2, 2.0)
 									EndIf
-									p.Particles = CreateParticle(PARTICLE_WHITE_SMOKE, EntityX(Pvt, True), EntityY(Pvt, True), EntityZ(Pvt, True), 0.8, 0.0, 50.0)
-									p\Speed = 0.025 : p\AlphaChange = -0.02
-									RotateEntity(p\Pvt, 90.0, 0.0, 0.0)
 								Next
-								FreeEntity(Pvt) : Pvt = 0
 								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 5.0)
 							EndIf
 						Else
+							For i = 0 To 1
+								If e\room\RoomDevilEmitters[i] <> Null Then RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
+							Next
 							e\EventState = 0.0
 							e\EventState2 = 1.0
 							For i = 0 To 1

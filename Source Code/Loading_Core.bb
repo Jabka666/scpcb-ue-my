@@ -121,6 +121,47 @@ Function LoadParticles%()
 	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\Particles\blood.png", 1 + 2, DeleteAllTextures)
 	
 	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures)
+	
+	; ~ Black smoke in "room2C_gw_lcz"
+	ParticleEffect[0] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[0], 1)
+	SetTemplateInterval(ParticleEffect[0], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[0], 6)
+	SetTemplateParticleLifeTime(ParticleEffect[0], 12, 17)
+	SetTemplateTexture(ParticleEffect[0], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[0], -0.25, 0.15, -0.25, 0.15, -0.25, 0.15)
+	SetTemplateVelocity(ParticleEffect[0], -0.04, 0.04, -0.012, -0.02, -0.04, 0.04)
+	SetTemplateSize(ParticleEffect[0], 0.3, 0.3, 0.5, 1.5)
+	SetTemplateSizeVel(ParticleEffect[0], 0.01, 1.01)
+	SetTemplateGravity(ParticleEffect[0], 0.005)
+	
+	; ~ White smoke in "room2_gw_2"
+	ParticleEffect[1] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[1], 1)
+	SetTemplateInterval(ParticleEffect[1], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[1], 5)
+	SetTemplateParticleLifeTime(ParticleEffect[1], 10, 15)
+	SetTemplateTexture(ParticleEffect[1], PARTICLE_WHITE_SMOKE, True, 4)
+	SetTemplateOffset(ParticleEffect[1], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[1], -0.004, 0.004, 0.0013, 0.0017, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[1], True)
+	SetTemplateSize(ParticleEffect[1], 0.22, 0.22, 0.5, 1.5)
+	SetTemplateSizeVel(ParticleEffect[1], 0.01, 1.01)
+	SetTemplateGravity(ParticleEffect[1], -0.003)
+	
+	; ~ White smoke in "room2_gw/room3_gw"
+	ParticleEffect[2] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[2], 1)
+	SetTemplateInterval(ParticleEffect[2], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[2], 5)
+	SetTemplateParticleLifeTime(ParticleEffect[2], 30, 45)
+	SetTemplateTexture(ParticleEffect[2], PARTICLE_WHITE_SMOKE, True, 4)
+	SetTemplateOffset(ParticleEffect[2], -0.12, 0.12, -0.1, 0.1, -0.12, 0.12)
+	SetTemplateVelocity(ParticleEffect[2], -0.005, 0.005, 0.0005, 0.01, -0.005, 0.005)
+	SetTemplateAlphaVel(ParticleEffect[2], True)
+	SetTemplateSize(ParticleEffect[2], 0.53, 0.53, 0.53, 1.5)
+	SetTemplateSizeVel(ParticleEffect[2], .01, 1.01)
+	SetTemplateGravity(ParticleEffect[2], 0.005)
 End Function
 
 Function RemoveParticleInstances%()
@@ -2057,6 +2098,9 @@ Function LoadEntities%()
 	CameraClsColor(Camera, 30.0, 30.0, 30.0)
 	AmbientLight(30.0, 30.0, 30.0)
 	
+	ParticleCam = Camera
+	ParticlePiv = CreatePivot()
+	
 	RenderLoading(5, GetLocalString("loading", "icons"))
 	
 	t\IconID[0] = LoadImage_Strict("GFX\HUD\walk_icon.png")
@@ -2704,7 +2748,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, em.Emitters, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, dem.DevilEmitters
 	
 	Local i%, x%, y%, Lvl%
 	
@@ -2852,12 +2896,26 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveDecal(de)
 	Next
 	RemoveDecalInstances()
+	ParticleCam = 0
+	FreeEntity(ParticlePiv) : ParticlePiv = 0
+	For tmp.Template = Each Template
+		FreeTemplate(Handle(tmp))
+	Next
+	For emit.Emitter = Each Emitter
+		FreeEmitter(emit\Ent)
+	Next
+	Delete Each Template
+	Delete Each Emitter
+	Delete Each Particle
 	For p.Particles = Each Particles
 		RemoveParticle(p)
 	Next
 	RemoveParticleInstances()
 	For em.Emitters = Each Emitters
 		RemoveEmitter(em)
+	Next
+	For dem.DevilEmitters = Each DevilEmitters
+		RemoveDevilEmitter(dem)
 	Next
 	Delete Each BrokenDoor
 	For d.Doors = Each Doors

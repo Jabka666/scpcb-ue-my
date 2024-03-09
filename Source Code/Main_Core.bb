@@ -172,6 +172,7 @@ Include "Source Code\Items_Core.bb"
 RenderLoading(35, GetLocalString("loading", "core.particle"))
 
 Include "Source Code\Particles_Core.bb"
+Include "Source Code\Devil_Particles_Core.bb"
 
 RenderLoading(40, GetLocalString("loading", "core.grap"))
 
@@ -398,6 +399,12 @@ Function UpdateGame%()
 				UpdateLightVolume()
 				UpdateLights(Camera)
 				UpdateEmitters()
+				UpdateDevilParticlesTimer = Min(1.0, UpdateDevilParticlesTimer + fps\Factor[0])
+				If UpdateDevilParticlesTimer = 1.0
+					UpdateDevilEmitters()
+					UpdateParticles_Devil()
+					UpdateDevilParticlesTimer = 0.0
+				EndIf
 				UpdateDoors()
 				UpdateSecurityCams()
 				UpdateScreens()
