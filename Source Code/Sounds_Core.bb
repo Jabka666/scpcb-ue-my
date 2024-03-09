@@ -126,7 +126,7 @@ Function UpdateMusic%()
 End Function
 
 Function PauseSounds%()
-	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, em.Emitters, r.Rooms, se.SoundEmitters
+	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, em.Emitters, r.Rooms, se.SoundEmitters, dem.DevilEmitters
 	Local i%
 	
 	For e.Events = Each Events
@@ -177,6 +177,10 @@ Function PauseSounds%()
 		PauseChannel(se\SoundCHN)
 	Next
 	
+	For dem.DevilEmitters = Each DevilEmitters
+		PauseChannel(dem\SoundCHN)
+	Next
+	
 	PauseChannel(AmbientSFXCHN)
 	PauseChannel(BreathCHN)
 	PauseChannel(BreathGasRelaxedCHN)
@@ -196,7 +200,7 @@ Function PauseSounds%()
 End Function
 
 Function ResumeSounds%()
-	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, em.Emitters, r.Rooms, se.SoundEmitters
+	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, em.Emitters, r.Rooms, se.SoundEmitters, dem.DevilEmitters
 	Local i%
 	
 	For e.Events = Each Events
@@ -247,6 +251,10 @@ Function ResumeSounds%()
 		ResumeChannel(se\SoundCHN)
 	Next
 	
+	For dem.DevilEmitters = Each DevilEmitters
+		ResumeChannel(dem\SoundCHN)
+	Next
+	
 	ResumeChannel(AmbientSFXCHN)
 	ResumeChannel(BreathCHN)
 	ResumeChannel(BreathGasRelaxedCHN)
@@ -269,7 +277,7 @@ Function ResumeSounds%()
 End Function
 
 Function KillSounds%(EraseSounds% = True)
-	Local e.Events, n.NPCs, d.Doors, snd.Sound, sc.SecurityCams, em.Emitters, r.Rooms, se.SoundEmitters
+	Local e.Events, n.NPCs, d.Doors, snd.Sound, sc.SecurityCams, em.Emitters, r.Rooms, se.SoundEmitters, dem.DevilEmitters
 	Local i%
 	
 	For i = 0 To 8 Step 2
@@ -327,6 +335,10 @@ Function KillSounds%(EraseSounds% = True)
 	
 	For se.SoundEmitters = Each SoundEmitters
 		StopChannel(se\SoundCHN) : se\SoundCHN = 0
+	Next
+	
+	For dem.DevilEmitters = Each DevilEmitters
+		StopChannel(dem\SoundCHN) : dem\SoundCHN = 0
 	Next
 	
 	StopChannel(AmbientSFXCHN) : AmbientSFXCHN = 0
