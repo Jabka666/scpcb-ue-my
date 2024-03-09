@@ -160,7 +160,7 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[2], -0.005, 0.005, 0.0005, 0.01, -0.005, 0.005)
 	SetTemplateAlphaVel(ParticleEffect[2], True)
 	SetTemplateSize(ParticleEffect[2], 0.53, 0.53, 0.53, 1.5)
-	SetTemplateSizeVel(ParticleEffect[2], .01, 1.01)
+	SetTemplateSizeVel(ParticleEffect[2], 0.01, 1.01)
 	SetTemplateGravity(ParticleEffect[2], 0.005)
 End Function
 

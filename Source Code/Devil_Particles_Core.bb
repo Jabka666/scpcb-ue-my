@@ -33,7 +33,7 @@ Type Emitter
 	Field LoopAmount#, Age#, MaxTime#
 	Field tmp.Template
 	Field Owner%, Ent%, Surf%
-	Field Del%, Frozen%
+	Field Del%
 End Type
 
 Type Particle
@@ -285,7 +285,7 @@ Function SetEmitter%(Owner%, Template%, Fixed% = False)
 	e\tmp = Object.Template(Template)
 	e\MaxTime = e\tmp\EmitterMaxTime
 	EntityBlend(e\Ent, e\tmp\EmitterBlend)
-	EntityFX(e\Ent, 2 + 32)
+	EntityFX(e\Ent, 1 + 2 + 32)
 	If e\tmp\Tex Then EntityTexture(e\Ent, e\tmp\Tex)
 	For i = 0 To 7
 		If e\tmp\subtemplate[i] <> Null
@@ -341,29 +341,27 @@ Function UpdateParticles_Devil()
 				e\Age = e\Age + 1
 			EndIf
 		EndIf
-		If (Not e\Frozen)
-			e\LoopAmount = (e\LoopAmount + 1) Mod e\tmp\Interval
-			If e\LoopAmount = 0 And (Not e\Del)
-				For i = 1 To e\tmp\ParticlesPerInterval
-					If (e\tmp\MaxParticles > -1 And ParticlesAmount < e\tmp\MaxParticles) Lor e\tmp\MaxParticles = -1
-						p.Particle = New Particle
-						p\emitter = e
-						p\MaxTime = Rand(e\tmp\MinTime, e\tmp\MaxTime)
-						p\x = EntityX(e\Owner, True) + Rnd(e\tmp\MinOX, e\tmp\MaxOX)
-						p\y = EntityY(e\Owner, True) + Rnd(e\tmp\MinOY, e\tmp\MaxOY)
-						p\z = EntityZ(e\Owner, True) + Rnd(e\tmp\MinOZ, e\tmp\MaxOZ)
-						p\XV = Rnd(e\tmp\MinXV, e\tmp\MaxXV)
-						p\YV = Rnd(e\tmp\MinYV, e\tmp\MaxYV)
-						p\ZV = Rnd(e\tmp\MinZV, e\tmp\MaxZV)
-						p\RotVel = Rnd(e\tmp\RotVel1, e\tmp\RotVel2)
-						
-						Local SM# = Rnd(e\tmp\SizeMultiplicator1, e\tmp\SizeMultiplicator2)
-						
-						p\sX = p\emitter\tmp\sX * SM
-						p\sY = p\emitter\tmp\sY * SM
-					EndIf
-				Next
-			EndIf
+		e\LoopAmount = (e\LoopAmount + 1) Mod e\tmp\Interval
+		If e\LoopAmount = 0 And (Not e\Del)
+			For i = 1 To e\tmp\ParticlesPerInterval
+				If (e\tmp\MaxParticles > -1 And ParticlesAmount < e\tmp\MaxParticles) Lor e\tmp\MaxParticles = -1
+					p.Particle = New Particle
+					p\emitter = e
+					p\MaxTime = Rand(e\tmp\MinTime, e\tmp\MaxTime)
+					p\x = EntityX(e\Owner, True) + Rnd(e\tmp\MinOX, e\tmp\MaxOX)
+					p\y = EntityY(e\Owner, True) + Rnd(e\tmp\MinOY, e\tmp\MaxOY)
+					p\z = EntityZ(e\Owner, True) + Rnd(e\tmp\MinOZ, e\tmp\MaxOZ)
+					p\XV = Rnd(e\tmp\MinXV, e\tmp\MaxXV)
+					p\YV = Rnd(e\tmp\MinYV, e\tmp\MaxYV)
+					p\ZV = Rnd(e\tmp\MinZV, e\tmp\MaxZV)
+					p\RotVel = Rnd(e\tmp\RotVel1, e\tmp\RotVel2)
+					
+					Local SM# = Rnd(e\tmp\SizeMultiplicator1, e\tmp\SizeMultiplicator2)
+					
+					p\sX = p\emitter\tmp\sX * SM
+					p\sY = p\emitter\tmp\sY * SM
+				EndIf
+			Next
 		EndIf
 		If e\tmp\AnimTex
 			e\tmp\TexFrame = e\tmp\TexFrame + e\tmp\TexSpeed
@@ -394,21 +392,20 @@ Function UpdateParticles_Devil()
 		If p\Age > p\MaxTime
 			Delete(p)
 		Else
-			If (Not p\emitter\Frozen)
-				p\Age = p\Age + 1
-				If p\emitter\tmp\AlignToFall
-					p\Rot = (p\emitter\tmp\AlignToFallOffset - ATan2(p\XV, p\YV))
-				Else
-					p\Rot = (p\Rot + p\RotVel)
-				EndIf
-				p\YV = p\YV - p\emitter\tmp\Gravity
-				p\x = p\x + p\XV
-				p\y = p\y + p\YV
-				p\z = p\z + p\ZV
-				If p\y < p\emitter\tmp\FloorY Then p\YV = p\YV * (-p\emitter\tmp\FloorBounce)
-				p\sX = (p\sX + p\emitter\tmp\SizeAdd) * p\emitter\tmp\SizeMult
-				p\sY = (p\sY + p\emitter\tmp\SizeAdd) * p\emitter\tmp\SizeMult
+			p\Age = p\Age + 1
+			If p\emitter\tmp\AlignToFall
+				p\Rot = (p\emitter\tmp\AlignToFallOffset - ATan2(p\XV, p\YV))
+			Else
+				p\Rot = (p\Rot + p\RotVel)
 			EndIf
+			p\YV = p\YV - p\emitter\tmp\Gravity
+			p\x = p\x + p\XV
+			p\y = p\y + p\YV
+			p\z = p\z + p\ZV
+			If p\y < p\emitter\tmp\FloorY Then p\YV = p\YV * (-p\emitter\tmp\FloorBounce)
+			p\sX = (p\sX + p\emitter\tmp\SizeAdd) * p\emitter\tmp\SizeMult
+			p\sY = (p\sY + p\emitter\tmp\SizeAdd) * p\emitter\tmp\SizeMult
+			
 			RotateEntity(ParticlePiv, CamPitch, CamYaw, CamRoll + (p\Rot + p\emitter\tmp\AlignToFallOffset))
 			If p\emitter\tmp\PitchFix > -1 Then RotateEntity(ParticlePiv, p\emitter\tmp\PitchFix, EntityYaw(ParticlePiv), EntityRoll(ParticlePiv))
 			If p\emitter\tmp\YawFix > -1 Then RotateEntity(ParticlePiv, EntityPitch(ParticlePiv), p\emitter\tmp\YawFix, EntityRoll(ParticlePiv))
@@ -419,25 +416,25 @@ Function UpdateParticles_Devil()
 			Local sX# = p\sX
 			Local sY# = p\sY
 			
-			TFormVector(sX, -sY, 0, ParticlePiv, 0)
+			TFormVector(sX, -sY, 0.0, ParticlePiv, 0)
 			
 			Local v1x# = TFormedX() + x
 			Local v1y# = TFormedY() + y
 			Local v1z# = TFormedZ() + z
 			
-			TFormVector(-sX, -sY, 0, ParticlePiv, 0)
+			TFormVector(-sX, -sY, 0.0, ParticlePiv, 0)
 			
 			Local v2x# = TFormedX() + x
 			Local v2y# = TFormedY() + y
 			Local v2z# = TFormedZ() + z
 			
-			TFormVector(sX, sY, 0, ParticlePiv, 0)
+			TFormVector(sX, sY, 0.0, ParticlePiv, 0)
 			
 			Local v3x# = TFormedX() + x
 			Local v3y# = TFormedY() + y
 			Local v3z# = TFormedZ() + z
 			
-			TFormVector(-sX, sY, 0, ParticlePiv, 0)
+			TFormVector(-sX, sY, 0.0, ParticlePiv, 0)
 			
 			Local v4x# = TFormedX() + x
 			Local v4y# = TFormedY() + y
