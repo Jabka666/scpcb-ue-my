@@ -1116,12 +1116,12 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[2], r\OBJ)
 			HideEntity(r\Objects[2])
 			
-			it.Items = CreateItem("Level 2 Key Card", "key2", r\x - 342.0 * RoomScale, r\y + 264.0 * RoomScale, r\z + 102.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 180.0, 0.0)
+			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 460.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 108.0 * RoomScale)
+			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 930.0 * RoomScale, r\y + 137.0 * RoomScale, r\z + 190.0 * RoomScale)
-			it\State = Rnd(100.0)
+			it.Items = CreateItem("Level 2 Key Card", "key2", r\x - 939.0 * RoomScale, r\y + 137.0 * RoomScale, r\z + 116.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 180.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_cont2_012
