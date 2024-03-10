@@ -186,7 +186,7 @@ Type Options
 	Field SaveTexturesInVRAM%
 	Field AdvancedRoomLights%
 	Field VSync%
-	Field ScreenGamma#
+	Field ScreenGamma#, PrevScreenGamma#
 	Field TextureDetails%, TextureDetailsLevel#
 	Field FOV#, CurrFOV#
 	Field Anisotropic%, AnisotropicLevel%
@@ -245,6 +245,7 @@ Function LoadOptionsINI%()
 	opt\AdvancedRoomLights = IniGetInt(OptionFile, "Graphics", "Advanced Room Lighting", True)
 	
 	opt\ScreenGamma = IniGetFloat(OptionFile, "Graphics", "Screen Gamma", 1.0)
+	opt\PrevScreenGamma = 1.0
 	
 	opt\ParticleAmount = IniGetInt(OptionFile, "Graphics", "Particle Amount", 2)
 	
@@ -572,6 +573,7 @@ Function ResetOptionsINI%()
 	opt\AdvancedRoomLights = True
 	
 	opt\ScreenGamma = 1.0
+	opt\PrevScreenGamma = 1.0
 	
 	opt\ParticleAmount = 2
 	

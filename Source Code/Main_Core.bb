@@ -4760,6 +4760,7 @@ Function UpdateGUI%()
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+						AdaptScreenGamma()
 					EndIf
 					
 					If SelectedItem\State3 = 0.0
@@ -5410,6 +5411,7 @@ Function UpdateGUI%()
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+						AdaptScreenGamma()
 					EndIf
 					
 					If SelectedItem\State = 0.0
@@ -5425,6 +5427,7 @@ Function UpdateGUI%()
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						AdaptScreenGamma()
 					EndIf
 					
 					If SelectedItem\State = 0.0
@@ -5440,6 +5443,7 @@ Function UpdateGUI%()
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+						AdaptScreenGamma()
 					EndIf
 					
 					If SelectedItem\State = 0.0
@@ -5455,6 +5459,7 @@ Function UpdateGUI%()
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						AdaptScreenGamma()
 					EndIf
 					
 					If SelectedItem\State = 0.0
@@ -5576,7 +5581,13 @@ Function UpdateGUI%()
 						;[End Block]
 				End Select
 				If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
-				If SelectedItem\ItemTemplate\Img <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
+				If SelectedItem\ItemTemplate\Img <> 0
+					FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
+					If opt\PrevScreenGamma <> 1.0
+						If opt\ScreenGamma > 1.0 Then opt\ScreenGamma = opt\PrevScreenGamma
+						opt\PrevScreenGamma = 1.0
+					EndIf
+				EndIf
 				
 				For i = 0 To 6
 					If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
@@ -5892,6 +5903,13 @@ Function RenderDebugHUD%()
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
+End Function
+
+Function AdaptScreenGamma%()
+	If opt\ScreenGamma =< 1.0 Then Return
+	
+	opt\PrevScreenGamma = opt\ScreenGamma
+	opt\ScreenGamma = 1.0
 End Function
 
 Function RenderGUI%()
@@ -6501,6 +6519,7 @@ Function RenderGUI%()
 						End Select
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						AdaptScreenGamma()
 					EndIf
 					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
@@ -6511,6 +6530,7 @@ Function RenderGUI%()
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						AdaptScreenGamma()
 					EndIf
 					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
@@ -6770,6 +6790,7 @@ Function RenderGUI%()
 						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						AdaptScreenGamma()
 					EndIf
 					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
@@ -6781,6 +6802,7 @@ Function RenderGUI%()
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+						AdaptScreenGamma()
 					EndIf
 					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]

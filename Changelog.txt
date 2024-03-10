@@ -3,6 +3,9 @@ v1.2.2
 General:
 - Optimized the game...
 
+Mechanics:
+- The game's gamma will be automatically changed while reading the document/ticket/badge and etc.
+
 NPCs:
 - MTFs can contain SCP-106.
 
