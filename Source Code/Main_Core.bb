@@ -6003,7 +6003,7 @@ Function RenderGUI%()
 	EndIf
 	If chs\DebugHUD <> 0 Then RenderDebugHUD()
 	
-	If SelectedScreen <> Null Then DrawBlock(SelectedScreen\Img, mo\Viewport_Center_X - 512.0, mo\Viewport_Center_Y - 384.0) ; ~ 1024x768
+	If SelectedScreen <> Null Then DrawBlock(SelectedScreen\Img, mo\Viewport_Center_X - 512 * MenuScale, mo\Viewport_Center_Y - 384 * MenuScale) ; ~ 1024x768
 	
 	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
 	Local ShouldDrawHUD% = True
