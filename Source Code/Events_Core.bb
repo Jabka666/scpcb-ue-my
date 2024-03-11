@@ -7679,7 +7679,7 @@ Function UpdateDimension106%()
 				End Select
 				
 				If Teleport
-					me\BlinkTimer = -10.0 : me\BlurTimer = 1500.0
+					me\BlinkTimer = -10.0 : me\BlurTimer = 1150.0
 					
 					Select Random
 						Case 1, 2, 3, 4 ; ~ Rotate the player and close by the wall
