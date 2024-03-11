@@ -821,6 +821,8 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "doco52"), "Groups of Interest Log", "paper", "paper.b3d", "INV_paper.png", "doc_O5(2).png", 0.003, 0, "doc_O5(2).png")
 	
+	CreateItemTemplate(GetLocalString("items", "docir066"), "Incident Report SCP-066-2", "paper", "paper.b3d", "INV_paper.png", "doc_IR_066.png", 0.003, 0, "doc_IR_066.png")
+	
 	CreateItemTemplate(GetLocalString("items", "docir106"), "Incident Report SCP-106-0204", "paper", "paper.b3d", "INV_paper.png", "doc_IR_106.png", 0.003, 0, "doc_IR_106.png")
 	
 	CreateItemTemplate(GetLocalString("items", "docmtf"), "Mobile Task Forces", "paper", "paper.b3d", "INV_paper.png", "doc_MTF.png", 0.003, 0, "doc_MTF.png")

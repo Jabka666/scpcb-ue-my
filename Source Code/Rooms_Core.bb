@@ -1607,6 +1607,9 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			RotateEntity(it\Collider, 0.0, 240.0, 0.0)
 			
+			it.Items = CreateItem("Incident Report SCP-066-2", "paper", r\x + 525.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 380.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			it.Items = CreateItem("S-NAV Navigator", "nav", r\x - 241.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 806.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
