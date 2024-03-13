@@ -2114,12 +2114,12 @@
 		{
 			"text": "Initiating the recall protocol...",
 			"color": "mtf"
-		}
+		},
 		{
 			"text": "SCP-106 contained successfully.",
 			"delay": 8.0,
 			"color": "mtf"
-		},
+		}
 	],
 	"SFX\\Character\\MTF\\106\\Spotted1.ogg": [
 		{
