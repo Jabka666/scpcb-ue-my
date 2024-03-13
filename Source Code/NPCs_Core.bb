@@ -1476,7 +1476,7 @@ Function UpdateNPCs%()
 								For i = 0 To 1
 									e\room\RoomDoors[i]\Locked = 0
 								Next
-								e\EventState = 70.0 * 50.0
+								e\EventState = 70.0 * 45.0
 								RemoveEvent(e)
 							EndIf
 							Exit

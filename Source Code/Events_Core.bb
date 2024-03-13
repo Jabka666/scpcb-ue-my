@@ -5017,7 +5017,7 @@ Function UpdateEvents%()
 						e\EventState = 1.0
 					EndIf
 				ElseIf e\EventState < 70.0 * 45.0
-					If Rand(200) < 5 And PlayerRoom = e\room
+					If Rand(40) = 1 And PlayerRoom = e\room
 						me\LightBlink = Rnd(1.0, 2.0)
 						If Rand(5) = 1 Then PlaySound2(IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 					EndIf
@@ -5129,7 +5129,7 @@ Function UpdateEvents%()
 							n_I\Curr096\State = 1.0
 						EndIf
 					Else
-						If e\EventState >= 70.0 * 40.0 And e\EventState - fps\Factor[0] < 70.0 * 40.0 ; ~ Open them again to let the player in
+						If e\EventState >= 70.0 * 35.0 And e\EventState - fps\Factor[0] < 70.0 * 35.0 ; ~ Open them again to let the player in
 							For i = 0 To 1
 								OpenCloseDoor(e\room\RoomDoors[i])
 							Next
@@ -5143,14 +5143,14 @@ Function UpdateEvents%()
 							EndIf
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 ; ~ Lock the player inside
-								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.12
+								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.16
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-									e\EventState = 70.0 * 50.0
+									e\EventState = 70.0 * 45.0
 								EndIf
 							Else
-								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.12 
+								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.16
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-									e\EventState = 70.0 * 50.0
+									e\EventState = 70.0 * 45.0
 								EndIf
 							EndIf
 						EndIf
@@ -5187,7 +5187,7 @@ Function UpdateEvents%()
 							e\room\RoomDoors[i]\Locked = 0
 						Next
 					Else
-						If Rand(200) < 5 Then me\LightBlink = Rnd(0.5, 1.0)
+						If Rand(40) = 1 Then me\LightBlink = Rnd(0.5, 1.0)
 						
 						For i = 0 To 1
 							If e\room\RoomDoors[i]\Open
