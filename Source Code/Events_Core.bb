@@ -616,7 +616,7 @@ Function UpdateEvents%()
 	CatchErrors("UpdateEvents()")
 	
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.WayPoints, pr.Props, l.Lights, se.SoundEmitters
-	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors
+	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors, s.Screens
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
@@ -2541,7 +2541,12 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 					; ~ The event is started when the player picks up SCP-1123 (in Items.bb/UpdateItems())
-					If e\EventState > 0.0 Then CanSave = 0
+					If e\EventState > 0.0
+						CanSave = 0
+						If EntityHidden(e\room\Objects[7]) Then ShowEntity(e\room\Objects[7])
+					Else
+						If (Not EntityHidden(e\room\Objects[7])) Then HideEntity(e\room\Objects[7])
+					EndIf
 					If e\EventState = 1.0
 						; ~ Saving me\Injuries and me\Bloodloss, so that the player won't be healed automatically
 						me\PrevInjuries = me\Injuries
@@ -2676,6 +2681,8 @@ Function UpdateEvents%()
 						If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 						
 						If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
+						FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
+						; ~ TODO: REMOVE ALL PROPS/LIGHTS/DOORS. THE MAIN REASON WHY I DIDN'T DO THAT I CANNOT SAVE/LOAD THEM PROPERLY
 						RemoveEvent(e)
 					EndIf
 				EndIf

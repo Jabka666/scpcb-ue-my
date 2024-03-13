@@ -1888,6 +1888,17 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
 				;[End Block]
+			Case e_cont2_1123
+				;[Block]
+				If e\room\Objects[7] = 0
+					e\room\Objects[7] = LoadRMesh("GFX\map\cont2_1123_cell.rmesh", Null)
+					ScaleEntity(e\room\Objects[7], RoomScale, RoomScale, RoomScale)
+					PositionEntity(e\room\Objects[7], e\room\x, e\room\y, e\room\z)
+					RotateEntity(e\room\Objects[7], 0.0, e\room\Angle, 0.0)
+					EntityParent(e\room\Objects[7], e\room\OBJ)
+					HideEntity(e\room\Objects[7])
+				EndIf
+				;[End Block]
 		End Select
 	Next
 	

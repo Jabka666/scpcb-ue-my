@@ -1470,6 +1470,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[6], r\x - 468.0 * RoomScale, r\y + 850.0 * RoomScale, r\z - 273.0 * RoomScale)
 			EntityParent(r\Objects[6], r\OBJ)
 			
+			r\Objects[7] = LoadRMesh("GFX\map\cont2_1123_cell.rmesh", Null)
+			ScaleEntity(r\Objects[7], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[7], r\x, r\y, r\z)
+			EntityParent(r\Objects[7], r\OBJ)
+			HideEntity(r\Objects[7])
+			
 			de.Decals = CreateDecal(DECAL_BLOOD_5, r\x - 550.0 * RoomScale, r\y + 769.0 * RoomScale + 0.005, r\z + 568.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.4, 0.5), Rnd(0.8, 1.0))
 			EntityParent(de\OBJ, r\OBJ)
 			
