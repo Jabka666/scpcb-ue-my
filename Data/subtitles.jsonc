@@ -1103,7 +1103,7 @@
 	"SFX\\Room\\Storeroom\\Escape1.ogg": [
 		{
 			"text": "I think the shortest way out is through the South-East wing. Follow me.",
-			"color": "janitor"
+			"color": "crew"
 		}
 	],
 	"SFX\\Room\\Storeroom\\Escape2.ogg": [
