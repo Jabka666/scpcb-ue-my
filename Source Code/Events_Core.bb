@@ -5017,7 +5017,7 @@ Function UpdateEvents%()
 						e\EventState = 1.0
 					EndIf
 				ElseIf e\EventState < 70.0 * 45.0
-					If Rand(40) = 1 And PlayerRoom = e\room
+					If Rand(50) = 1 And PlayerRoom = e\room
 						me\LightBlink = Rnd(1.0, 2.0)
 						If Rand(5) = 1 Then PlaySound2(IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 					EndIf
@@ -5187,7 +5187,7 @@ Function UpdateEvents%()
 							e\room\RoomDoors[i]\Locked = 0
 						Next
 					Else
-						If Rand(40) = 1 Then me\LightBlink = Rnd(0.5, 1.0)
+						If Rand(50) = 1 Then me\LightBlink = Rnd(0.5, 1.0)
 						
 						For i = 0 To 1
 							If e\room\RoomDoors[i]\Open
