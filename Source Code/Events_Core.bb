@@ -5504,7 +5504,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 6.25
 						For do.Doors = Each Doors
-							If e\room\Dist < 2.0
+							If DistanceSquared(EntityX(do\FrameOBJ, True), EntityX(me\Collider), EntityZ(do\FrameOBJ, True), EntityZ(me\Collider)) < 4.0
 								If (Not EntityInView(do\FrameOBJ, Camera))
 									If do\Open
 										do\Open = False
@@ -5977,11 +5977,9 @@ Function UpdateEvents%()
 										OpenCloseDoor(e\room\RoomDoors[1])
 										For do.Doors = Each Doors
 											If do\DoorType = HEAVY_DOOR
-												If Abs(EntityX(e\room\OBJ) - EntityX(do\FrameOBJ, True)) < 4.5 
-													If Abs(EntityZ(e\room\OBJ) - EntityZ(do\FrameOBJ, True)) < 4.5 
-														OpenCloseDoor(do)
-														Exit
-													EndIf
+												If DistanceSquared(EntityX(e\room\OBJ), EntityX(do\FrameOBJ, True), EntityZ(e\room\OBJ), EntityZ(do\FrameOBJ, True)) < 20.25
+													OpenCloseDoor(do)
+													Exit
 												EndIf
 											EndIf
 										Next
@@ -6370,8 +6368,7 @@ Function UpdateEvents%()
 					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Room\Sinkhole.ogg")
 					e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 4.5, 1.5)
 					
-					Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ))
-					If Dist < 0.25 And (Not chs\NoTarget)
+					If e\room\Dist < 0.5 And (Not chs\NoTarget)
 						If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 						
 						MakeMeUnplayable()
