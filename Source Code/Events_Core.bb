@@ -5022,7 +5022,7 @@ Function UpdateEvents%()
 						If Rand(5) = 1 Then PlaySound2(IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 					EndIf
 					
-					e\EventState = Min(e\EventState + fps\Factor[0], 70.0 * 43.0)
+					e\EventState = Min(e\EventState + fps\Factor[0], 70.0 * 40.0)
 					
 					If e\room\NPC[0] <> Null
 						n_I\Curr096\Target = e\room\NPC[0]
@@ -5143,14 +5143,18 @@ Function UpdateEvents%()
 							EndIf
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 ; ~ Lock the player inside
-								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.16
-									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-									e\EventState = 70.0 * 45.0
+								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.12
+									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
+										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+										e\EventState = 70.0 * 45.0
+									EndIf
 								EndIf
 							Else
-								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.16
-									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-									e\EventState = 70.0 * 45.0
+								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.12
+									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
+										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+										e\EventState = 70.0 * 45.0
+									EndIf
 								EndIf
 							EndIf
 						EndIf
