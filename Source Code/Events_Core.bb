@@ -4992,6 +4992,7 @@ Function UpdateEvents%()
 						; ~ Close the doors when the player enters the room
 						For i = 0 To 1
 							OpenCloseDoor(e\room\RoomDoors[i])
+							e\room\RoomDoors[i]\Locked = 1
 						Next
 						
 						If n_I\Curr096 <> Null
@@ -5009,10 +5010,6 @@ Function UpdateEvents%()
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 						
 						GiveAchievement(Achv096)
-						
-						For i = 0 To 1
-							e\room\RoomDoors[i]\Locked = 1
-						Next
 						
 						e\EventState = 1.0
 					EndIf
