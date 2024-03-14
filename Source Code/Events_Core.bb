@@ -5486,7 +5486,7 @@ Function UpdateEvents%()
 				EndIf
 				
 				If e\EventState >= 26.0
-					If EntityDistanceSquared(me\Collider, e\room\OBJ) < 100.0
+					If EntityDistanceSquared(me\Collider, e\room\OBJ) < 64.0
 						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\SCP\970\Corpse.ogg")
 						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ)
 						If e\EventState > 60.0
