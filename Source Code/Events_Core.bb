@@ -5486,17 +5486,15 @@ Function UpdateEvents%()
 				EndIf
 				
 				If e\EventState >= 26.0
-					If Abs(EntityX(me\Collider) - e\room\x) < 8.0
-						If Abs(EntityZ(me\Collider) - e\room\z) < 8.0
-							If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\SCP\970\Corpse.ogg")
-							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ)
-							If e\EventState > 60.0
-								AnimateNPC(e\room\NPC[0], 80.0, 61.0, -0.02, False)
-								e\room\NPC[0]\DropSpeed = 0.0
-								y = CurveValue(1.5 + Sin(Float(MilliSec) / 20.0) * 0.1, EntityY(e\room\NPC[0]\Collider), 50.0)
-								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\NPC[0]\Collider), y, EntityZ(e\room\NPC[0]\Collider))
-								TurnEntity(e\room\NPC[0]\Collider, 0.0, fps\Factor[0] * 0.1, 0.0)
-							EndIf
+					If EntityDistanceSquared(me\Collider, e\room\OBJ) < 100.0
+						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\SCP\970\Corpse.ogg")
+						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ)
+						If e\EventState > 60.0
+							AnimateNPC(e\room\NPC[0], 80.0, 61.0, -0.02, False)
+							e\room\NPC[0]\DropSpeed = 0.0
+							y = CurveValue(1.5 + Sin(Float(MilliSec) / 20.0) * 0.1, EntityY(e\room\NPC[0]\Collider), 50.0)
+							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\NPC[0]\Collider), y, EntityZ(e\room\NPC[0]\Collider))
+							TurnEntity(e\room\NPC[0]\Collider, 0.0, fps\Factor[0] * 0.1, 0.0)
 						EndIf
 					EndIf
 				EndIf
