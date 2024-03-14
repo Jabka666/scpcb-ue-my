@@ -5504,18 +5504,16 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 6.25
 						For do.Doors = Each Doors
-							If Abs(EntityX(do\FrameOBJ, True) - EntityX(me\Collider)) < 2.0
-								If Abs(EntityZ(do\FrameOBJ, True) - EntityZ(me\Collider)) < 2.0
-									If (Not EntityInView(do\FrameOBJ, Camera))
-										If do\Open
-											do\Open = False
-											do\OpenState = 0.0
-											me\BlurTimer = 100.0
-											me\BigCameraShake = 3.0
-										EndIf
+							If DistanceSquared(EntityX(do\FrameOBJ, True), EntityX(me\Collider), EntityZ(do\FrameOBJ, True), EntityZ(me\Collider)) < 4.0
+								If (Not EntityInView(do\FrameOBJ, Camera))
+									If do\Open
+										do\Open = False
+										do\OpenState = 0.0
+										me\BlurTimer = 100.0
+										me\BigCameraShake = 3.0
 									EndIf
-									Exit
 								EndIf
+								Exit
 							EndIf
 						Next
 						RemoveEvent(e)
@@ -5707,7 +5705,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState < MilliSecs()
 					If PlayerRoom <> e\room
-						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 64.0
+						If e\room\Dist < 8.0
 							If n_I\Curr049 <> Null
 								If n_I\Curr049\State = 2.0 And EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) > 256.0
 									n_I\Curr049\PathStatus = PATH_STATUS_NO_SEARCH : n_I\Curr049\State = 4.0 : n_I\Curr049\State2 = 0.0 : n_I\Curr049\State3 = 0.0
@@ -6173,7 +6171,7 @@ Function UpdateEvents%()
 						RemoveEvent(e)
 					Else
 						If e\EventState = 0.0
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\OBJ), EntityZ(me\Collider), EntityZ(e\room\OBJ)) < 12.25
+							If e\room\Dist < 3.5
 								PlaySound_Strict(LightSFX)
 								
 								me\LightBlink = 5.0
