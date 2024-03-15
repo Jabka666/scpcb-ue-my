@@ -1444,14 +1444,11 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "reset096", "r096"
 					;[Block]
-					For n.NPCs = Each NPCs
-						If n\NPCType = NPCType096
-							n\State = 0.0
-							StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-							If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
-							Exit
-						EndIf
-					Next
+					If n_I\Curr096 <> Null
+						n_I\Curr096\State = 0.0
+						StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
+						If n_I\Curr096\SoundCHN2 <> 0 Then StopStream_Strict(n_I\Curr096\SoundCHN2) : n_I\Curr096\SoundCHN2 = 0 : n_I\Curr096\SoundCHN2_IsStream = False
+					EndIf
 					CreateConsoleMsg(GetLocalString("console", "r096"))
 					;[End Block]
 				Case "reset372", "r372"
