@@ -5991,7 +5991,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					If n\State2 > 70.0 And Dist > PowTwo(HideDistance) Then n\State2 = 70.0
 					
 					; ~ Set a timer to step back
-					If EntityDistanceSquared(n\Target\Collider, n\Collider) < (9.0 - (n\Target = n_I\Curr066) * 8.0) Then n\State3 = 70.0 * 3.0
+					If Dist < (9.0 - (n\Target = n_I\Curr066) * 8.0) Then n\State3 = 70.0 * 3.0
 					If n\State3 > 0.0
 						n\Speed = 0.02
 						n\PathStatus = PATH_STATUS_NO_SEARCH
