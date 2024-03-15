@@ -9,6 +9,7 @@ Mechanics:
 Rooms:
 - The «room2_servers_hcz»» entrance doors open sooner after SCP-096 kills the guard.
 - Add Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
+- «cont2_860_1» observation room fingerprint scanners are now locked if Remote Door Control is on.
 
 NPCs:
 - MTFs can contain SCP-106.
