@@ -6,6 +6,10 @@ General:
 Mechanics:
 - The game's gamma will be automatically changed while reading the document/ticket/badge and etc.
 
+Rooms:
+- The «room2_servers_hcz»» entrance doors open sooner after SCP-096 kills the guard.
+- Add Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
+
 NPCs:
 - MTFs can contain SCP-106.
 
@@ -13,6 +17,7 @@ Bug Fixes:
 - Fixed some typos in subtitles.
 - Fixed NPCs not teleporting correctly.
 - Fixed NPCs cannot find the path correctly.
+- Fixed subititles not showing.
 
 v1.2.1
 
