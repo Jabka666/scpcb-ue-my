@@ -8696,6 +8696,14 @@ Function UpdateIntro%()
 										
 										FreeEntity(e\room\Objects[20]) : e\room\Objects[20] = 0
 										
+										For i = 0 To 4
+											If i > 2
+												e\room\NPC[i]\State = 7.0
+											Else
+												ShowEntity(e\room\NPC[i]\OBJ)
+											EndIf
+										Next
+										
 										e\EventState = INTRO_ESCORT_DONE
 									EndIf
 								EndIf
@@ -8704,16 +8712,9 @@ Function UpdateIntro%()
 						Case INTRO_ESCORT_DONE
 							;[Block]
 							If e\room\RoomDoors[2]\Open
-								If DistanceSquared(EntityX(me\Collider), e\room\x, EntityZ(me\Collider), e\room\z) < 13.0
+								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) < 2.0
 									For i = 1 To 2
 										OpenCloseDoor(e\room\RoomDoors[i])
-									Next
-									For i = 0 To 4
-										If i > 2
-											e\room\NPC[i]\State = 7.0
-										Else
-											ShowEntity(e\room\NPC[i]\OBJ)
-										EndIf
 									Next
 									ShowEntity(e\room\NPC[6]\OBJ)
 									PointEntity(e\room\NPC[6]\Collider, e\room\OBJ)
