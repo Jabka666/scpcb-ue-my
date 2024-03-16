@@ -675,6 +675,8 @@ Function ResetOptionsINI%()
 	
 	; ~ [GLOBAL]
 	
+	ShouldDeleteGadgets = 1
+	
 	opt\CameraFogFar = 6.0
 	
 	opt\IntroEnabled = True
