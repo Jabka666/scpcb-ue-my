@@ -5526,7 +5526,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 				Else
 					If n = n_I\MTFLeader
-						PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetlost" + Rand(3) + ".ogg"), n)
+						PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetLost" + Rand(3) + ".ogg"), n)
 						If MTFCameraCheckTimer = 0.0
 							If Rand(15 - (7 * SelectedDifficulty\AggressiveNPCs)) = 1 ; ~ Maybe change this to another chance -- ENDSHN
 								PlayAnnouncement("SFX\Character\MTF\AnnouncCameraCheck.ogg")
