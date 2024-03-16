@@ -867,7 +867,7 @@ Function UpdateMainMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\AutoSaveEnabled = UpdateMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
+						opt\AutoSaveEnabled = UpdateMenuTick(x, y, opt\AutoSaveEnabled)
 						
 						y = y + (30 * MenuScale)
 						
@@ -1668,13 +1668,11 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "txtshadow"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_TextShadow)
 					
