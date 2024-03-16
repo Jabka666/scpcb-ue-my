@@ -3950,10 +3950,10 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		
 		sc\RenderInterval = opt\SecurityCamRenderIntervalLevel
 		
-		Local Scale# = RoomScale * 4.5 * 0.4
+		Local Scale# = RoomScale * 1.8
 		
 		sc\ScrOBJ = CreateSprite()
-		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
+		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475)
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
 		RotateEntity(sc\ScrOBJ, Pitch2, Yaw2, Roll2)
 		EntityFX(sc\ScrOBJ, 17)
