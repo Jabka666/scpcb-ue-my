@@ -5974,11 +5974,12 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 				EndIf
 				If n\State2 =< 0.0 Lor n\Target\Idle = 2
-					n\State2 = 0.0
-					n\State3 = 0.0
 					n\Target = Null
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+					n\State2 = 0.0
+					n\State3 = 0.0
 					n\State = MTF_WANDERING_AROUND
+					Return
 				EndIf
 				;[End Block]
 			Case MTF_049_066_106_SPOTTED
@@ -6083,7 +6084,10 @@ Function UpdateMTFUnit%(n.NPCs)
 				Else
 					n\Target = Null
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+					n\State2 = 0.0
+					n\State3 = 0.0
 					n\State = MTF_WANDERING_AROUND
+					Return
 				EndIf
 				;[End Block]
 			Case MTF_096_SPOTTED
@@ -6205,13 +6209,16 @@ Function UpdateMTFUnit%(n.NPCs)
 					PlaySound2(NVGSFX[1], Camera, n\Collider, 5.0)
 					n\Target = Null
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+					n\State2 = 0.0
+					n\State3 = 0.0
 					n\State = MTF_WANDERING_AROUND
+					Return
 				EndIf
 				;[End Block]
 			Case MTF_ZOMBIES_SPOTTED
 				;[Block]
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-				If n\State2 > 0.0
+				If n\State2 > 0.0 And (Not n\Target\IsDead)
 					Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
 					If NPCSeesNPC(n\Target, n) = 1
 						n\State2 = 70.0 * 15.0
@@ -6232,7 +6239,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
 						
-						If n\Reload <= 0.0 And (Not n\Target\IsDead)
+						If n\Reload <= 0.0
 							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
 							
 							Pvt = CreatePivot()
@@ -6263,6 +6270,8 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\Target\IsDead = True
 								n\Target = Null
 								n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+								n\State2 = 0.0
+								n\State3 = 0.0
 								n\State = MTF_WANDERING_AROUND
 								Return
 							EndIf
@@ -6339,13 +6348,10 @@ Function UpdateMTFUnit%(n.NPCs)
 				Else
 					n\Target = Null
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+					n\State2 = 0.0
+					n\State3 = 0.0
 					n\State = MTF_WANDERING_AROUND
-				EndIf
-				
-				If n\Target\IsDead
-					n\Target = Null
-					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
-					n\State = MTF_WANDERING_AROUND
+					Return
 				EndIf
 				;[End Block]
 		End Select

@@ -25,6 +25,7 @@ Bug Fixes:
 - Fixed NPCs not teleporting correctly.
 - Fixed NPCs cannot find the path correctly.
 - Fixed subititles not showing.
+- Fixed MAV after loading the game.
 
 v1.2.1
 
