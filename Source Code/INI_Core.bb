@@ -423,7 +423,7 @@ Function LoadOptionsINI%()
 	
 	opt\GraphicHeight = IniGetInt(OptionFile, "Global", "Height", DesktopHeight())
 	
-	opt\DisplayMode = IniGetInt(OptionFile, "Global", "Display Mode", 0)
+	opt\DisplayMode = IniGetInt(OptionFile, "Global", "Display Mode", 1)
 	
 	opt\GFXDriver = IniGetInt(OptionFile, "Global", "GFX Driver", 1)
 	
