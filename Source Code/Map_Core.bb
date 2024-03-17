@@ -457,7 +457,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 				EndIf
 				If Tex[j] <> 0
 					If Temp1i = 1 Then TextureBlend(Tex[j], 2 + (3 * opt\Atmosphere))
-					If Instr(Lower(Temp1s), "_lm") <> 0 Then TextureBlend(Tex[j], 3 - (Not opt\Atmosphere))
+					If Instr(Lower(Temp1s), "_lm") <> 0 Then TextureBlend(Tex[j], 2 + opt\Atmosphere)
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
 					TextureCoords(Tex[j], 1 - j)
