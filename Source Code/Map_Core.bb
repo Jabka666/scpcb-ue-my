@@ -2866,8 +2866,6 @@ Function UpdateDoors%()
 	d_I\ClosestDoor = Null
 	For d.Doors = Each Doors
 		If (EntityDistanceSquared(d\FrameOBJ, me\Collider) <= PowTwo(HideDistance * 1.75)) Lor (d\IsElevatorDoor > 0) ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
-			; ~ Automatically disable d\AutoClose parameter in order to prevent player get stuck -- Jabka
-			If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
 			FindButton = (1 - (d\Open And ((d\DoorType = OFFICE_DOOR) Lor (d\DoorType = WOODEN_DOOR))))
 			
 			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
@@ -3067,6 +3065,9 @@ Function UpdateDoors%()
 			
 			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
 				If d\ButtonsUpdateTimer =< 0.0
+					; ~ Automatically disable d\AutoClose parameter in order to prevent player get stuck -- Jabka
+					If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
+					
 					Local TextureID%
 					
 					If d\KeyCard = KEY_005
