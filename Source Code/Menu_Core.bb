@@ -744,15 +744,15 @@ Function UpdateMainMenu%()
 						
 						y = y + (40 * MenuScale)
 						
+						opt\MouseSmoothing = UpdateMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
+						
+						y = y + (40 * MenuScale)
+						
 						opt\InvertMouseX = UpdateMenuTick(x, y, opt\InvertMouseX)
 						
 						y = y + (40 * MenuScale)
 						
 						opt\InvertMouseY = UpdateMenuTick(x, y, opt\InvertMouseY)
-						
-						y = y + (40 * MenuScale)
-						
-						opt\MouseSmoothing = UpdateMenuSlideBar(x, y, 150 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
 						
 						y = y + (80 * MenuScale)
 						
@@ -1589,6 +1589,11 @@ Function RenderMainMenu%()
 					
 					y = y + (40 * MenuScale)
 					
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
+					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
+					
+					y = y + (40 * MenuScale)
+					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
 					
@@ -1596,11 +1601,6 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
-					
-					y = y + (40 * MenuScale)
-					
-					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
-					If (MouseOn(x + (290 * MenuScale), y, 164 * MenuScale, 20 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
 					
 					y = y + (40 * MenuScale)
 					
@@ -2889,9 +2889,9 @@ Const Tooltip_UserTrackScan% = 18
 ; ~ Controls Tooltips Constants
 ;[Block]
 Const Tooltip_MouseSensitivity% = 19
-Const Tooltip_MouseInvertX% = 20
-Const Tooltip_MouseInvertY% = 21
-Const Tooltip_MouseSmoothing% = 22
+Const Tooltip_MouseSmoothing% = 20
+Const Tooltip_MouseInvertX% = 21
+Const Tooltip_MouseInvertY% = 22
 Const Tooltip_ControlConfiguration% = 23
 ;[End Block]
 
