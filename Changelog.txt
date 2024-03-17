@@ -3,6 +3,9 @@ v1.2.2
 General:
 - Optimized the game...
 
+Launcher:
+- Default Display Mode is now Borderless.
+
 Menu:
 - Moved Mouse Smoothing beneath Mouse Sensitivity.
 
