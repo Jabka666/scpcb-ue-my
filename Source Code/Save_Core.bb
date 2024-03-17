@@ -71,6 +71,12 @@ Function SaveGame%(File$)
 	WriteByte(f, me\Vomit)
 	WriteFloat(f, me\CameraShakeTimer)
 	
+	WriteFloat(f, me\CameraShake)
+	WriteFloat(f, me\BigCameraShake)
+	
+	WriteFloat(f, me\LightBlink)
+	WriteFloat(f, me\LightFlash)
+	
 	WriteByte(f, I_005\ChanceToSpawn)
 	
 	WriteByte(f, I_500\Taken)
@@ -138,6 +144,7 @@ Function SaveGame%(File$)
 	WriteString(f, RandomSeed)
 	
 	WriteFloat(f, SecondaryLightOn)
+	WriteFloat(f, LightVolume)
 	WriteByte(f, IsBlackOut)
 	WriteByte(f, PrevIsBlackOut)
 	
@@ -573,6 +580,12 @@ Function LoadGame%(File$)
 	me\Vomit = ReadByte(f)
 	me\CameraShakeTimer = ReadFloat(f)
 	
+	me\CameraShake = ReadFloat(f)
+	me\BigCameraShake = ReadFloat(f)
+	
+	me\LightBlink = ReadFloat(f)
+	me\LightFlash = ReadFloat(f)
+	
 	I_005\ChanceToSpawn = ReadByte(f)
 	
 	I_500\Taken = ReadByte(f)
@@ -636,6 +649,7 @@ Function LoadGame%(File$)
 	RandomSeed = ReadString(f)
 	
 	SecondaryLightOn = ReadFloat(f)
+	LightVolume = ReadFloat(f)
 	IsBlackOut = ReadByte(f)
 	PrevIsBlackOut = ReadByte(f)
 	
@@ -1347,14 +1361,8 @@ Function LoadGameQuick%(File$)
 	me\DropSpeed = -0.1
 	me\HeadDropSpeed = 0.0
 	me\CurrSpeed = 0.0
-	
-	me\HeartBeatVolume = 0.0
-	
-	me\CameraShake = 0.0
-	me\BigCameraShake = 0.0
 	me\Shake = 0.0
-	me\LightFlash = 0.0
-	me\BlurTimer = 0.0
+	me\HeartBeatVolume = 0.0
 	
 	me\StopHidingTimer = 0.0
 	
@@ -1423,6 +1431,12 @@ Function LoadGameQuick%(File$)
 	me\Vomit = ReadByte(f)
 	me\CameraShakeTimer = ReadFloat(f)
 	
+	me\CameraShake = ReadFloat(f)
+	me\BigCameraShake = ReadFloat(f)
+	
+	me\LightBlink = ReadFloat(f)
+	me\LightFlash = ReadFloat(f)
+	
 	I_005\ChanceToSpawn = ReadByte(f)
 	
 	I_500\Taken = ReadByte(f)
@@ -1486,6 +1500,7 @@ Function LoadGameQuick%(File$)
 	RandomSeed = ReadString(f)
 	
 	SecondaryLightOn = ReadFloat(f)
+	LightVolume = ReadFloat(f)
 	IsBlackOut = ReadByte(f)
 	PrevIsBlackOut = ReadByte(f)
 	
