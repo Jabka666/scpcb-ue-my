@@ -2311,9 +2311,11 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ Generator room doors
 			d.Doors = CreateDoor(r, r\x - 224.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, True)
+			d\AutoClose = False
 			r\RoomDoors.Doors[0] = d
 			
 			d.Doors = CreateDoor(r, r\x - 224.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 90.0, True)
+			d\AutoClose = False
 			r\RoomDoors.Doors[1] = d
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 1260.0 * RoomScale, r\y + 234.0 * RoomScale, r\z + 753.0 * RoomScale)

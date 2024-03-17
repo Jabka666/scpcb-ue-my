@@ -26,6 +26,7 @@ Bug Fixes:
 - Fixed NPCs cannot find the path correctly.
 - Fixed subititles not showing.
 - Fixed MAV after loading the game.
+- Fixed doors to the HCZ server room can be opened by SCP-079.
 
 v1.2.1
 
