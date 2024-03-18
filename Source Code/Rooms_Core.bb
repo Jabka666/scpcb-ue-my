@@ -127,7 +127,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 				
 				Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-				TextureBlend(Tex, 5)
+				If opt\Atmosphere Then TextureBlend(Tex, 5)
 				EntityTexture(r\RoomDoors[0]\OBJ, Tex)
 				EntityTexture(r\RoomDoors[0]\OBJ2, Tex)
 				EntityTexture(r\RoomDoors[0]\FrameOBJ, Tex)
@@ -1859,7 +1859,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-			TextureBlend(Tex, 5)
+			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			
 			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR)
 			d\AutoClose = False : d\Locked = 1
@@ -2834,9 +2834,6 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 3 Key Card", "key3", r\x + 237.0 * RoomScale, r\y + 0.5, r\z - 368.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
 			CreateCustomCenter(r, r\x + 490.0 * RoomScale, r\z - 490.0 * RoomScale)
 			;[End Block]
 		Case r_room4_hcz
@@ -3497,7 +3494,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_scientists_2
 			;[Block]
 			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-			TextureBlend(Tex, 5)
+			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			; ~ Dr. L's office door
 			d.Doors = CreateDoor(r, r\x - 448.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
 			d\MTFClose = False : d\DisableWaypoint = True

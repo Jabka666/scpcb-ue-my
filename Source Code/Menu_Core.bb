@@ -851,11 +851,13 @@ Function UpdateMainMenu%()
 						
 						y = y + (30 * MenuScale)
 						
+						Local PrevCanOpenConsole% = opt\CanOpenConsole
+						
 						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
 						
 						y = y + (30 * MenuScale)
 						
-						opt\ConsoleOpening = UpdateMenuTick(x, y, opt\ConsoleOpening, (Not opt\CanOpenConsole))
+						If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMenuTick(x, y, opt\ConsoleOpening)
 						
 						y = y + (30 * MenuScale)
 						
@@ -890,7 +892,7 @@ Function UpdateMainMenu%()
 							y = y + (30 * MenuScale)
 						EndIf
 						
-						If PrevCurrFrameLimit Then ShouldDeleteGadgets = (PrevCurrFrameLimit <> opt\CurrFrameLimit)
+						If PrevCurrFrameLimit Lor PrevCanOpenConsole Then ShouldDeleteGadgets = ((PrevCurrFrameLimit <> opt\CurrFrameLimit) Lor (PrevCanOpenConsole <> opt\CanOpenConsole))
 						
 						
 						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)
@@ -1655,13 +1657,13 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255 - (155 * (Not opt\CanOpenConsole)), 255 - (155 * (Not opt\CanOpenConsole)), 255 - (155 * (Not opt\CanOpenConsole)))
-					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "error"))
-					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
+					If opt\CanOpenConsole
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "error"))
+						If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
+					EndIf
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
 					If MouseOn(x + (290 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 					
