@@ -5579,11 +5579,11 @@ Function UpdateGUI%()
 				End Select
 				If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 				If SelectedItem\ItemTemplate\Img <> 0
-					FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
 					If opt\PrevScreenGamma <> 1.0
-						If opt\ScreenGamma > 1.0 Then opt\ScreenGamma = opt\PrevScreenGamma
+						opt\ScreenGamma = opt\PrevScreenGamma
 						opt\PrevScreenGamma = 1.0
 					EndIf
+					FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
 				EndIf
 				
 				For i = 0 To 6
@@ -7220,7 +7220,6 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						
 						If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMenuTick(x, y, opt\ConsoleOpening)
 						
 						y = y + (30 * MenuScale)
@@ -7774,6 +7773,7 @@ Function RenderMenu%()
 						If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 						
 						y = y + (30 * MenuScale)
+						
 						If opt\CanOpenConsole
 							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "error"))
 							If MouseOn(x + (270 * MenuScale), y, 20 * MenuScale, 20 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
