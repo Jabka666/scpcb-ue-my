@@ -5740,7 +5740,7 @@ Function CreateMap%()
 	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	If opt\IntroEnabled
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 250.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
 		CalculateRoomExtents(r)
 		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	EndIf

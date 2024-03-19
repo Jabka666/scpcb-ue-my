@@ -2646,7 +2646,7 @@ Function LoadMap%(File$)
 	CreateEvent(e_dimension_106, r_dimension_106, 0) 
 	
 	If opt\IntroEnabled
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, r_cont1_173_intro)
+		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 250.0, (MapGridSize + 2) * RoomSpacing, r_cont1_173_intro)
 		CreateEvent(e_cont1_173_intro, r_cont1_173_intro, 0)
 	EndIf
 	

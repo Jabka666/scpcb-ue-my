@@ -1540,7 +1540,7 @@ Function UpdateConsole%()
 					;[Block]
 					If n_I\Curr106\State <= 0.0
 						n_I\Curr106\State = Rnd(22000.0, 27000.0)
-						PositionEntity(n_I\Curr106\Collider, 0.0, 500.0, 0.0)
+						PositionEntity(n_I\Curr106\Collider, 0.0, -500.0, 0.0)
 						ResetEntity(n_I\Curr106\Collider)
 						CreateConsoleMsg(GetLocalString("console", "106r"))
 					Else

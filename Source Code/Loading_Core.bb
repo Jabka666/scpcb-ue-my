@@ -2484,7 +2484,7 @@ Function InitNewGame%()
 		EndIf
 		
 		If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
-			PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 640.0 * RoomScale, r\z + 1024.0 * RoomScale)
+			PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 640.0 * RoomScale, r\z + 3096.0 * RoomScale)
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", "paper", 1.0, 1.0, 1.0)
 			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True

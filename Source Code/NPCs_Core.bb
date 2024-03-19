@@ -853,7 +853,7 @@ Function UpdateNPCs%()
 						n\Idle = 1
 						HideEntity(n\OBJ)
 						HideEntity(n\OBJ2)
-						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 						ResetEntity(n\Collider)
 					EndIf
 				Else
@@ -882,7 +882,7 @@ Function UpdateNPCs%()
 					Next
 					
 					If (Not Spawn106) And n\State <= 0.0
-						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 						ResetEntity(n\Collider)
 						n\State = Rnd(22000.0, 27000.0)
 					EndIf
@@ -1053,7 +1053,7 @@ Function UpdateNPCs%()
 							
 							If n\State <= Rnd(-3500.0, -3000.0)
 								If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
-									PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+									PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 									ResetEntity(n\Collider)
 									n\State = Rnd(22000.0, 27000.0)
 								EndIf
@@ -2909,7 +2909,7 @@ Function UpdateNPCs%()
 						n\State = n\State - (fps\Factor[0] * 0.8)
 						If n\State <= 0.0
 							n\Idle = 1
-							PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+							PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 						EndIf
 					EndIf
 					n\DropSpeed = 0.0
@@ -4747,7 +4747,7 @@ Function UpdateNPCs%()
 								HideEntity(n\OBJ)
 								HideEntity(n\Collider)
 								n\DropSpeed = 0.0
-								PositionEntity(n\Collider, 0.0, 500.0, 0.0, True)
+								PositionEntity(n\Collider, 0.0, -500.0, 0.0, True)
 								ResetEntity(n\Collider)
 							EndIf
 							If n\Idle > 0
@@ -4990,21 +4990,21 @@ Function UpdateMTFUnit%(n.NPCs)
 									FoundChamber = False
 									Pvt = CreatePivot()
 									
-									PositionEntity(Pvt, EntityX(r\OBJ, True) + 4736.0 * RoomScale, r\y + 420.0 * RoomScale, EntityZ(r\OBJ, True) + 1726.0 * RoomScale, True)
+									PositionEntity(Pvt, r\x + 4736.0 * RoomScale, r\y + 420.0 * RoomScale, r\x + 3774.0 * RoomScale, True)
 									
 									If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
 									
 									FreeEntity(Pvt) : Pvt = 0
 									
-									If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1726.0 * RoomScale) > 2.56 And (Not FoundChamber)
+									If DistanceSquared(EntityX(n\Collider), r\x + 4736.0 * RoomScale, EntityZ(n\Collider), r\z + 3774.0 * RoomScale) > 2.56 And (Not FoundChamber)
 										x = r\x + 4736.0 * RoomScale
 										y = r\y + 420.0 * RoomScale
-										z = r\z + 1726.0 * RoomScale
+										z = r\z + 3774.0 * RoomScale
 										Exit
-									ElseIf DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ, True) + 4736.0 * RoomScale, EntityZ(n\Collider), EntityZ(r\OBJ, True) + 1726.0 * RoomScale) > 2.56 And FoundChamber
+									ElseIf DistanceSquared(EntityX(n\Collider), r\x + 4736.0 * RoomScale, EntityZ(n\Collider), r\z + 3774.0 * RoomScale) > 2.56 And FoundChamber
 										n\EnemyX = r\x + 4736.0 * RoomScale
 										n\EnemyY = r\y + 420.0 * RoomScale
-										n\EnemyZ = r\z + 1726.0 * RoomScale
+										n\EnemyZ = r\z + 3774.0 * RoomScale
 										Exit
 									Else
 										LoadNPCSound(n, "SFX\Character\MTF\173\Cont" + Rand(4) + ".ogg")
@@ -5042,7 +5042,7 @@ Function UpdateMTFUnit%(n.NPCs)
 ;										Else
 ;											LoadNPCSound(n, "SFX\Character\MTF\106\FoundChamber.ogg")
 ;											PlayMTFSound(n\Sound, n)
-;											PositionEntity(n\Collider, 0.0, 500.0, 0.0, True)
+;											PositionEntity(n\Collider, 0.0, -500.0, 0.0, True)
 ;											ResetEntity(n\Collider)
 ;											n\IdleTimer = 3.0
 ;											Exit
@@ -7155,7 +7155,7 @@ Function UpdateNPCNearTesla%()
 					AnimateNPC(n, 259.0, 110.0, -0.15, False)
 					
 					If n\Frame <= 170.0
-						PositionEntity(n\Collider, 0.0, 500.0, 0.0)
+						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 						ResetEntity(n\Collider)
 						
 						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 13.0) : n\TeslaHit = False : n\State3 = 0.0

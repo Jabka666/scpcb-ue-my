@@ -630,16 +630,6 @@ Function UpdateEvents%()
 		Select e\EventID
 			Case e_cont1_173
 				;[Block]
-				If e\room\RoomDoors[3] = Null
-					For i = 0 To MaxRoomAdjacents - 1
-						If e\room\AdjDoor[i] <> Null
-							e\room\RoomDoors[3] = e\room\AdjDoor[i]
-							e\room\RoomDoors[3]\Open = True
-							Exit
-						EndIf
-					Next
-				EndIf
-				
 				If e\EventState = 0.0
 					If PlayerRoom = e\room
 						e\room\RoomDoors[1]\Open = True
@@ -665,44 +655,45 @@ Function UpdateEvents%()
 						EndIf
 						
 						If e\room\NPC[1] <> Null
-							PositionEntity(e\room\NPC[1]\Collider, e\room\x, e\room\y + 0.5, e\room\z - 1.0, True)
+							PositionEntity(e\room\NPC[1]\Collider, e\room\x, e\room\y + 0.5, e\room\z - 1.0 + 2048.0 * RoomScale, True)
 							ResetEntity(e\room\NPC[1]\Collider)
 						Else
-							e\room\NPC[1] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 0.5, e\room\z - 1.0)
+							e\room\NPC[1] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 0.5, e\room\z - 1.0 + 2048.0 * RoomScale)
 							ChangeNPCTextureID(e\room\NPC[1], NPC_CLASS_D_FRANKLIN_TEXTURE)
 						EndIf
 						SetNPCFrame(e\room\NPC[1], 210.0)
 						
 						If e\room\NPC[2] <> Null
-							PositionEntity(e\room\NPC[2]\Collider, e\room\x, 0.5, e\room\z + 528.0 * RoomScale, True)
+							PositionEntity(e\room\NPC[2]\Collider, e\room\x, 0.5, e\room\z + 2576.0 * RoomScale, True)
 							ResetEntity(e\room\NPC[2]\Collider)
 						Else
-							e\room\NPC[2] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y + 0.5, e\room\z + 528.0 * RoomScale)
+							e\room\NPC[2] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y + 0.5, e\room\z + 2576.0 * RoomScale)
 						EndIf
 						e\room\NPC[2]\State = 7.0
 						PointEntity(e\room\NPC[2]\Collider, e\room\NPC[1]\Collider)
 						PointEntity(e\room\NPC[1]\Collider, e\room\NPC[2]\Collider)
 						
 						If e\room\NPC[0] = Null
-							TFormPoint(3512.0, 820.0, 2634.0, e\room\OBJ, 0)
+							TFormPoint(3512.0, 827.0, 4682.0, e\room\OBJ, 0)
 							e\room\NPC[3] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[3]\State = 8.0 : e\room\NPC[3]\IsDead = True
 							SetNPCFrame(e\room\NPC[3], 286.0)
 							RotateEntity(e\room\NPC[3]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 							
-							TFormPoint(4712.0, 435.8, 1978.0, e\room\OBJ, 0)
+							TFormPoint(4712.0, 435.8, 4026.0, e\room\OBJ, 0)
 							e\room\NPC[4] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[4]\State3 = -1.0 : e\room\NPC[4]\IsDead = True
 							SetNPCFrame(e\room\NPC[4], 711.0)
 							RotateEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 							
-							TFormPoint(4340.0, 435.8, 1632.0, e\room\OBJ, 0)
+							TFormPoint(4340.0, 435.8, 3680.0, e\room\OBJ, 0)
 							e\room\NPC[5] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[5]\State3 = -1.0 : e\room\NPC[5]\IsDead = True
 							ChangeNPCTextureID(e\room\NPC[5], NPC_CLASS_D_CLASS_D_TEXTURE)
 							SetNPCFrame(e\room\NPC[5], 779.0)
 							RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 						EndIf
+						me\CurrSpeed = 0.0 : me\Playable = True
 						e\EventState = 1.0
 					EndIf
 				Else
@@ -714,7 +705,7 @@ Function UpdateEvents%()
 						If e\EventState2 = 0.0
 							If e\EventState > 900.0 And e\room\RoomDoors[3]\Open
 								If e\EventState - fps\Factor[0] <= 900.0 
-									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
+									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 3120.0 * RoomScale, True)
 									ResetEntity(n_I\Curr173\Collider)
 									
 									e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe1a.ogg")
@@ -734,7 +725,7 @@ Function UpdateEvents%()
 										MoveEntity(e\room\NPC[2]\Collider, 0.0, 0.0, e\room\NPC[2]\CurrSpeed * fps\Factor[0])
 										e\room\NPC[2]\State = 8.0
 										
-										If EntityZ(e\room\NPC[2]\Collider) < e\room\z
+										If EntityZ(e\room\NPC[2]\Collider) < e\room\z + 2048.0 * RoomScale
 											PointEntity(e\room\NPC[2]\OBJ, e\room\NPC[1]\Collider)
 											RotateEntity(e\room\NPC[2]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[2]\OBJ) - 180.0, EntityYaw(e\room\NPC[2]\Collider), 15.0), 0.0)
 										Else
@@ -744,7 +735,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								If e\EventState < 900.0 + (70.0 * 4.0)
-									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 1072.0 * RoomScale, True)
+									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 3120.0 * RoomScale, True)
 									ResetEntity(n_I\Curr173\Collider)
 									RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 									
@@ -760,14 +751,14 @@ Function UpdateEvents%()
 										PlaySound2(StoneDragSFX, Camera, n_I\Curr173\Collider)
 										PointEntity(n_I\Curr173\Collider, e\room\NPC[2]\Collider)
 									EndIf
-									PositionEntity(n_I\Curr173\Collider, e\room\x - 96.0 * RoomScale, 0.31, e\room\z + 592.0 * RoomScale, True)
+									PositionEntity(n_I\Curr173\Collider, e\room\x - 96.0 * RoomScale, 0.31, e\room\z + 2640.0 * RoomScale, True)
 									ResetEntity(n_I\Curr173\Collider)
 									RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 									
 									n_I\Curr173\Idle = (1 - (me\LightBlink >= 0.25))
 									
 									If e\room\NPC[2]\State <> 1.0 And (Not me\Terminated)
-										If EntityZ(e\room\NPC[2]\Collider) < e\room\z - 1150.0 * RoomScale
+										If EntityZ(e\room\NPC[2]\Collider) < e\room\z + 898.0 * RoomScale
 											e\room\RoomDoors[3]\Open = False
 											me\LightBlink = 3.0
 											PlaySound_Strict(IntroSFX[Rand(8, 10)])
@@ -6877,7 +6868,7 @@ Function UpdateEvents%()
 							If PlayerRoom = e\room Then ShouldPlay = 19
 							If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
 								e\room\NPC[0]\Idle = 70.0 * 60.0 ; ~ Making SCP-049 idle for one minute (twice as fast for AggressiveNPCs = True)
-								PositionEntity(e\room\NPC[0]\Collider, 0.0, 500.0, 0.0)
+								PositionEntity(e\room\NPC[0]\Collider, 0.0, -500.0, 0.0)
 								ResetEntity(e\room\NPC[0]\Collider)
 								e\EventState2 = 7.0
 							EndIf
@@ -8210,9 +8201,6 @@ Function UpdateIntro%()
 					
 					HideDistance = 68.0
 					
-					PositionEntity(me\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
-					ResetEntity(me\Collider)
-					
 					n_I\Curr173\Angle = 90.0 : n_I\Curr173\Idle = 1
 					PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
 					RotateEntity(n_I\Curr173\Collider, 0.0, 0.0, 0.0, True)
@@ -8224,12 +8212,12 @@ Function UpdateIntro%()
 					e\room\NPC[0]\Angle = 180.0
 					HideEntity(e\room\NPC[0]\OBJ)
 					
-					e\room\NPC[1] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
+					e\room\NPC[1] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 					e\room\NPC[1]\State3 = 4.0
 					PointEntity(e\room\NPC[1]\Collider, e\room\Objects[6])
 					HideEntity(e\room\NPC[1]\OBJ)
 					
-					e\room\NPC[2] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), 0.5, EntityZ(e\room\Objects[2], True))
+					e\room\NPC[2] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 					e\room\NPC[2]\State3 = 5.0
 					PointEntity(e\room\NPC[2]\Collider, e\room\Objects[6])
 					ChangeNPCTextureID(e\room\NPC[2], NPC_CLASS_D_CLASS_D_TEXTURE)
@@ -8317,7 +8305,7 @@ Function UpdateIntro%()
 					
 					PositionEntity(Camera, x, y, z)
 					HideEntity(me\Collider)
-					PositionEntity(me\Collider, x, 0.302, z)
+					PositionEntity(me\Collider, x, e\room\y + 0.302, z)
 					RotateEntity(Camera, -70.0, 0.0, 0.0)
 					
 					PlaySound_Strict(IntroSFX[Rand(8, 10)])
@@ -8367,7 +8355,7 @@ Function UpdateIntro%()
 									If e\EventState2 < 10.0
 										y = y + (0.2 * Min(Max((e\EventState2 - 3.0) / 5.0, 0.0), 1.0))
 									Else
-										y = (y + 0.2) + (0.302 + 0.6 - (y + 0.2)) * Max((e\EventState2 - 10.0) / 4.0, 0.0) 
+										y = (y + 0.2) + (e\room\y + 0.302 + 0.6 - (y + 0.2)) * Max((e\EventState2 - 10.0) / 4.0, 0.0) 
 									EndIf
 									z = z + (e\room\z + (104.0 * RoomScale) - z) * Min(Max((e\EventState2 - 3.0) / 5.0, 0.0), 1.0)
 									
@@ -8375,10 +8363,10 @@ Function UpdateIntro%()
 									RotateEntity(Camera, (-70.0) + 70.0 * Min(Max((e\EventState2 - 3.0) / 5.0, 0.0), 1.0) + Sin(e\EventState2 * 12.857) * 5.0, (-60.0) * Max((e\EventState2 - 10.0) / 4.0, 0.0), Sin(e\EventState2 * 25.7) * 8.0)
 									PositionEntity(Camera, x, y, z)
 									If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
-									PositionEntity(me\Collider, x, 0.302, z)
+									PositionEntity(me\Collider, x, e\room\y + 0.302, z)
 									me\DropSpeed = 0.0
 								Else
-									PositionEntity(me\Collider, EntityX(me\Collider), 0.302, EntityZ(me\Collider))
+									PositionEntity(me\Collider, EntityX(me\Collider), e\room\y + 0.302, EntityZ(me\Collider))
 									ResetEntity(me\Collider)
 									ShowEntity(me\Collider)
 									me\DropSpeed = 0.0
@@ -8677,6 +8665,7 @@ Function UpdateIntro%()
 										
 										RemoveNPC(e\room\NPC[5])
 										RemoveNPC(e\room\NPC[7])
+										RemoveNPC(e\room\NPC[12])
 										
 										For i = 3 To 4
 											If e\room\NPC[i]\Sound <> 0 Then FreeSound_Strict(e\room\NPC[i]\Sound) : e\room\NPC[i]\Sound = 0
@@ -9002,6 +8991,9 @@ Function UpdateIntro%()
 											me\BlinkTimer = -10.0
 											me\LightBlink = 1.0
 											me\BigCameraShake = 3.0
+											me\CurrSpeed = 0.0
+											me\Playable = False
+											
 											PlaySound_Strict(IntroSFX[Rand(8, 10)])
 											
 											If e\room\NPC[0]\Sound <> 0 Then FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
@@ -9011,23 +9003,22 @@ Function UpdateIntro%()
 											
 											PlaySound_Strict(IntroSFX[11])
 											
-											PositionEntity(n_I\Curr173\Collider, 0.0, 500.0, 0.0)
+											PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
 											ResetEntity(n_I\Curr173\Collider)
 											
 											For r.Rooms = Each Rooms
 												If r\RoomTemplate\RoomID = r_cont1_173
-													x = EntityX(r\OBJ, True) + 3712.0 * RoomScale
-													y = 384.0 * RoomScale
-													z = EntityZ(r\OBJ, True) + 1312.0 * RoomScale
+													x = r\x + 3712.0 * RoomScale
+													y = r\y + 384.0 * RoomScale
+													z = r\z + 3360.0 * RoomScale
 													
-													TeleportEntity(me\Collider, x + (EntityX(me\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(me\Collider) + 0.4, z + (EntityZ(me\Collider) - e\room\z))
+													TeleportEntity(me\Collider, x + (EntityX(me\Collider) - e\room\x - 288.0 * RoomScale), y + (EntityY(me\Collider) - e\room\y + 0.4), z + (EntityZ(me\Collider) - e\room\z + 32.0 * RoomScale))
 													TeleportToRoom(r)
 													
-													me\DropSpeed = 0.0
 													opt\CameraFogFar = 6.0
 													
 													For i = 0 To 2
-														PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(e\room\NPC[i]\Collider), z + (EntityZ(e\room\NPC[i]\Collider) - e\room\z))
+														PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(e\room\NPC[i]\Collider), z + (EntityZ(e\room\NPC[i]\Collider) - e\room\z + 32.0 * RoomScale))
 														ResetEntity(e\room\NPC[i]\Collider)
 													Next
 													
@@ -9054,6 +9045,14 @@ Function UpdateIntro%()
 													
 													For se.SoundEmitters = Each SoundEmitters
 														If se\room = e\room Then RemoveSoundEmitter(se)
+													Next
+													
+													For sc.SecurityCams = Each SecurityCams
+														If sc\room = e\room Then RemoveSecurityCam(sc)
+													Next
+													
+													For w.WayPoints = Each WayPoints
+														If w\room = e\room Then RemoveWaypoint(w)
 													Next
 													
 													RemoveRoom(e\room)
