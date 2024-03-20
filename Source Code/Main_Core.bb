@@ -2448,7 +2448,7 @@ Function SetCrouch%(NewCrouch%)
 			If me\Stamina < 10.0
 				If (Not ChannelPlaying(BreathCHN))
 					Temp = 0
-					If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp = 1
+					If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp = 1
 					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
 				EndIf
 			EndIf
@@ -2509,14 +2509,14 @@ Function UpdateMoving%()
 		If me\Stamina < 5.0
 			If (Not ChannelPlaying(BreathCHN))
 				Temp3 = 0
-				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp3 = 1
+				If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp3 = 1
 				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), 0), True)
 				ChannelVolume(BreathCHN, opt\VoiceVolume * opt\MasterVolume)
 			EndIf
 		ElseIf me\Stamina < 40.0
 			If (Not ChannelPlaying(BreathCHN))
 				Temp3 = 0
-				If wi\GasMask > 0 Lor I_1499\Using > 0 Then Temp3 = 1
+				If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp3 = 1
 				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), Rand(3)), True)
 				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\VoiceVolume * opt\MasterVolume)
 			EndIf

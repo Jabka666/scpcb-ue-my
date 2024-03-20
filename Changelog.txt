@@ -29,6 +29,7 @@ Bug Fixes:
 - Fixed doors to the HCZ server room can be opened by SCP-079.
 - Fixed jumping out of bounds in the intro scene.
 - Fixed overlapping of the intro location with the main map.
+- Fixed player's voice inside hazmat suit.
 
 v1.2.1
 
