@@ -1846,6 +1846,11 @@ Function UpdateEvents%()
 			Case e_cont2_008
 				;[Block]
 				If PlayerRoom = e\room
+					If I_008\Timer >= 92.7
+						If EntityHidden(e\room\Objects[11]) Then ShowEntity(e\room\Objects[11])
+					Else
+						If (Not EntityHidden(e\room\Objects[11])) Then HideEntity(e\room\Objects[11])
+					EndIf
 					If EntityY(me\Collider) < (-4496.0) * RoomScale
 						GiveAchievement(Achv008)
 						If e\EventState = 0.0

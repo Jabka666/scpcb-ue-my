@@ -2069,7 +2069,6 @@ Function FillRoom%(r.Rooms)
 			; ~ Chamber
 			r\Objects[1] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null, False)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
-			EntityPickMode(r\Objects[1], 2)
 			PositionEntity(r\Objects[1], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
@@ -2527,6 +2526,12 @@ Function FillRoom%(r.Rooms)
 			r\Objects[10] = CreatePivot()
 			PositionEntity(r\Objects[10], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
 			EntityParent(r\Objects[10], r\OBJ)
+			
+			r\Objects[11] = LoadRMesh("GFX\map\cont2_008_mt_generator.rmesh", Null)
+			ScaleEntity(r\Objects[11], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[11], r\x, r\y, r\z)
+			EntityParent(r\Objects[11], r\OBJ)
+			HideEntity(r\Objects[11])
 			
 			it.Items = CreateItem("Hazmat Suit", "hazmatsuit", r\x - 537.0 * RoomScale, r\y - 4895.0 * RoomScale, r\z - 66.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
