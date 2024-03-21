@@ -5250,6 +5250,12 @@ Function UpdateEvents%()
 						If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 					EndIf
 					
+					If e\EventState < 8.0
+						If (Not EntityHidden(e\room\Objects[2])) Then HideEntity(e\room\Objects[2])
+					Else
+						If EntityHidden(e\room\Objects[2]) Then ShowEntity(e\room\Objects[2])
+					EndIf
+					
 					Temp = 0
 					
 					Local src.Doors, dest.Doors
