@@ -1758,7 +1758,7 @@ Function UpdateConsole%()
 					For e.Events = Each Events
 						If e\EventID = e_cont1_173
 							For i = 0 To 2
-								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
+								RemoveNPC(e\room\NPC[i])
 								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
 							Next
 							If n_I\Curr173\Idle = 1 Then n_I\Curr173\Idle = 0
@@ -1984,7 +1984,7 @@ Function UpdateConsole%()
 					For e.Events = Each Events
 						If e\EventID = e_cont1_173
 							For i = 0 To 2
-								If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
+								RemoveNPC(e\room\NPC[i])
 								If i < 2 Then FreeEntity(e\room\Objects[i]) : e\room\Objects[i] = 0
 							Next
 							If n_I\Curr173\Idle = 1 Then n_I\Curr173\Idle = 0

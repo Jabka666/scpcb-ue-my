@@ -791,7 +791,7 @@ Function UpdateEvents%()
 									
 									If e\room\RoomDoors[3]\OpenState = 0.0
 										For i = 1 To 2
-											If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i])
+											RemoveNPC(e\room\NPC[i])
 										Next
 										e\EventState2 = 1.0
 									EndIf
@@ -843,7 +843,7 @@ Function UpdateEvents%()
 						EndIf
 						
 						If i > 26 
-							If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
+							RemoveNPC(e\room\NPC[0])
 							
 							RemoveEvent(e)
 						EndIf
@@ -2689,7 +2689,7 @@ Function UpdateEvents%()
 						StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 						If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 						
-						If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
+						RemoveNPC(e\room\NPC[0])
 						FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
 						; ~ TODO: REMOVE ALL PROPS/LIGHTS/DOORS. THE MAIN REASON WHY I DIDN'T DO THAT I CANNOT SAVE/LOAD THEM PROPERLY
 						RemoveEvent(e)
@@ -3212,7 +3212,7 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 				Else
-					If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0])
+					RemoveNPC(e\room\NPC[0])
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
@@ -3596,7 +3596,7 @@ Function UpdateEvents%()
 							EntityTexture(e\room\RoomDoors[0]\Buttons[0], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
 							If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4
 								me\BigCameraShake = 7.4 - (e\EventState / 70.0)
-								If e\room\NPC[0] <> Null Then RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
+								RemoveNPC(e\room\NPC[0])
 							ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
 								me\BigCameraShake = 10.6 - (e\EventState / 70.0)
 							ElseIf e\EventState >= 70.0 * 13.0
@@ -3824,9 +3824,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else
-						If e\room\Dist > HideDistance
-							If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1]) : e\room\NPC[1] = Null
-						EndIf
+						If e\room\Dist > HideDistance Then RemoveNPC(e\room\NPC[1])
 					EndIf
 				EndIf
 				
@@ -5432,7 +5430,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 52.0
 								;[Block]
-								If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1]) : e\room\NPC[1] = Null
+								RemoveNPC(e\room\NPC[1])
 								;[End block]
 							Case 60.0
 								;[Block]
@@ -5986,7 +5984,7 @@ Function UpdateEvents%()
 											RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
 										EndIf
 									Else
-										RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
+										RemoveNPC(e\room\NPC[0])
 										For i = 0 To 2
 											e\room\RoomDoors[i]\Locked = 0
 										Next
@@ -6105,7 +6103,7 @@ Function UpdateEvents%()
 						EndIf
 					ElseIf e\EventState < 0.0
 						For i = 0 To 1
-							If e\room\NPC[i] <> Null Then RemoveNPC(e\room\NPC[i]) : e\room\NPC[i] = Null
+							RemoveNPC(e\room\NPC[i])
 						Next
 					Else
 						If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
@@ -9255,7 +9253,7 @@ Function UpdateEndings%()
 								
 								e\room\NPC[0]\State = 3.0
 								
-								If e\room\NPC[1] <> Null Then RemoveNPC(e\room\NPC[1])
+								RemoveNPC(e\room\NPC[1])
 								e\SoundCHN = StreamSound_Strict("SFX\Ending\GateB\682Battle.ogg", opt\VoiceVolume * opt\MasterVolume, 0)
 								e\SoundCHN_IsStream = True
 								
@@ -9789,7 +9787,7 @@ Function UpdateEndings%()
 											e\room\RoomDoors[0]\Open = True
 											
 											For i = 2 To 4
-												RemoveNPC(e\room\NPC[i]) : e\room\NPC[i] = Null
+												RemoveNPC(e\room\NPC[i])
 											Next
 											
 											e\EventState3 = 1.0
