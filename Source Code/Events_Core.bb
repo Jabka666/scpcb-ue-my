@@ -1554,7 +1554,7 @@ Function UpdateEvents%()
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0), 1.0)) * 0.2)
 							
-							me\Sanity = me\Sanity - (((fps\Factor[0] * 1.2 + (1.2 * SelectedDifficulty\AggressiveNPCs)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+							me\Sanity = me\Sanity - ((fps\Factor[0] * (1.2 + (1.2 * SelectedDifficulty\AggressiveNPCs)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 							me\RestoreSanity = False
 							me\BlurTimer = Sin(MilliSec / 10) * Abs(me\Sanity)
 							
@@ -2040,7 +2040,7 @@ Function UpdateEvents%()
 											
 											RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(me\Collider) + Sin(e\EventState2 * (e\EventState2 / 2000.0)) * (e\EventState2 / 300.0), EntityYaw(me\Collider), 80.0), 0.0)
 										Else
-											me\Sanity = Max(me\Sanity - ((fps\Factor[0] * 0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs)) / (1.0 + I_714\Using)), -1000.0)
+											me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs)) / (1.0 + I_714\Using)), -1000.0)
 											Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(me\Collider))
 											If Angle < 40.0
 												me\ForceMove = (40.0 - Angle) * 0.02
@@ -2053,7 +2053,7 @@ Function UpdateEvents%()
 									ElseIf DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ)) < 21.25 And EntityY(me\Collider) < -2.5
 										CanSave = 0
 										
-										me\Sanity = Max(me\Sanity - ((fps\Factor[0] * 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs)) / (1.0 + I_714\Using)), -1000.0)
+										me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs)) / (1.0 + I_714\Using)), -1000.0)
 										me\RestoreSanity = False
 										
 										Pvt = CreatePivot()
