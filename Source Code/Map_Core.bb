@@ -4101,7 +4101,7 @@ Function UpdateSecurityCams%()
 						
 						If sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3
 							If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
-								me\Sanity = me\Sanity - (fps\Factor[0] / (1.0 + I_714\Using))
+								me\Sanity = me\Sanity - (fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs) / (1.0 + I_714\Using))
 								me\RestoreSanity = False
 								If SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then CanSave = 0
 								
