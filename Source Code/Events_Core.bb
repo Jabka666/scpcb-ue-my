@@ -1514,7 +1514,7 @@ Function UpdateEvents%()
 									
 									it.Items = CreateItem("Level 3 Key Card", "key3", e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
-								
+									
 									e\room\NPC[0]\IsDead = True
 									e\room\NPC[0]\PrevState = 2
 								EndIf
@@ -5127,6 +5127,9 @@ Function UpdateEvents%()
 							StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 							
 							ShowEntity(e\room\Objects[2])
+							
+							it.Items = CreateItem("Level 3 Key Card", "key3", EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.1, EntityZ(e\room\NPC[0]\Collider))
+							EntityType(it\Collider, HIT_ITEM)
 							
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 							
