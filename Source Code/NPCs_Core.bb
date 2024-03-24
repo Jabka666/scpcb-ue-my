@@ -2015,6 +2015,7 @@ Function UpdateNPCs%()
 											EndIf
 										EndIf
 									EndIf
+									UseDoorNPC(n)
 								EndIf
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 							Else
@@ -2040,10 +2041,11 @@ Function UpdateNPCs%()
 										
 										UseDoorNPC(n)
 									EndIf
+									n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 								Else
 									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
+									n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0) ; ~ Timer goes down fast
 								EndIf
-								n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							EndIf
 							If n\CurrSpeed < 0.005
 								If n\Frame > 713.0
@@ -4025,6 +4027,7 @@ Function UpdateNPCs%()
 														EndIf
 													EndIf
 												EndIf
+												UseDoorNPC(n)
 											EndIf
 											n\PathTimer = 70.0 * 10.0 ; ~ Search again after 10 seconds
 										Else
@@ -4617,6 +4620,7 @@ Function UpdateNPCs%()
 											EndIf
 										EndIf
 									EndIf
+									UseDoorNPC(n)
 								EndIf
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 							Else
@@ -4642,10 +4646,11 @@ Function UpdateNPCs%()
 										
 										UseDoorNPC(n)
 									EndIf
+									n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 								Else
 									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
+									n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0) ; ~ Timer goes down fast
 								EndIf
-								n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							EndIf
 							
 							If n\CurrSpeed < 0.005
@@ -5118,6 +5123,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								EndIf
 							EndIf
 						EndIf
+						UseDoorNPC(n)
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				ElseIf n\PathTimer <= 70.0 * 2.5 And n = n_I\MTFLeader
@@ -5916,6 +5922,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									EndIf
 								EndIf
 							EndIf
+							UseDoorNPC(n)
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 					ElseIf n\PathTimer <= 70.0 * 2.5
@@ -6034,6 +6041,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									EndIf
 								EndIf
 							EndIf
+							UseDoorNPC(n)
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 					Else
@@ -6147,6 +6155,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									EndIf
 								EndIf
 							EndIf
+							UseDoorNPC(n)
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 					ElseIf n\PathTimer <= 70.0 * 2.5 And n = n_I\MTFLeader
@@ -6297,6 +6306,7 @@ Function UpdateMTFUnit%(n.NPCs)
 										EndIf
 									EndIf
 								EndIf
+								UseDoorNPC(n)
 							EndIf
 							n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 						Else
@@ -7131,7 +7141,8 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			ElseIf Dist < 0.25 And (Not Temp)
 				; ~ Breaking up the path when the door in front of NPC cannot be operated by himself
 				n\PathStatus = PATH_STATUS_NO_SEARCH
-				n\PathTimer = 0.0
+				n\PathTimer = 70.0 * 6.0
+				n\PathLocation = 0
 			EndIf
 		EndIf
 	EndIf
