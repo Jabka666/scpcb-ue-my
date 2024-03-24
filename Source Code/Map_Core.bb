@@ -4559,12 +4559,10 @@ Function ResetRender%()
 		it\DistTimer = 0.0
 		it\DropSpeed = 0.0
 	Next
-	UpdateItems()
 	For n.NPCs = Each NPCs
 		n\AnimTimer = 0.0
 		n\DropSpeed = 0.0
 	Next
-	UpdateNPCs()
 	me\DropSpeed = 0.0
 	ShouldEntitiesFall = False
 End Function

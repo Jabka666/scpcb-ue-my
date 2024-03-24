@@ -2560,9 +2560,9 @@ Function InitNewGame%()
 	
 	me\DropSpeed = 0.0
 	
-	UpdateWorld()
-	UpdateNPCs()
 	ResetRender()
+	UpdateNPCs()
+	UpdateWorld()
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
@@ -2673,9 +2673,9 @@ Function InitLoadGame%()
 	
 	me\DropSpeed = 0.0
 	
-	UpdateWorld()
-	UpdateNPCs()
 	ResetRender()
+	UpdateNPCs()
+	UpdateWorld()
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
