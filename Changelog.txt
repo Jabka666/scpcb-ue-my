@@ -17,6 +17,8 @@ Rooms:
 - Add Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
 - «cont2_860_1» observation room fingerprint scanners are now locked if Remote Door Control is on.
 
+- Design improvements...
+
 NPCs:
 - MTFs can contain SCP-106.
 
@@ -30,6 +32,7 @@ Bug Fixes:
 - Fixed jumping out of bounds in the intro scene.
 - Fixed overlapping of the intro location with the main map.
 - Fixed player's voice inside hazmat suit.
+- Fixed the «Secondary Lighting» lever being difficult to use.
 
 v1.2.1
 

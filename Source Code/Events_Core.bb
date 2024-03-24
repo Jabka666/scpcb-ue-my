@@ -3492,7 +3492,7 @@ Function UpdateEvents%()
 					
 					If e\EventState = 1.0
 						RotateEntity(e\room\RoomLevers[1]\OBJ, CurveValue(80.0, EntityPitch(e\room\RoomLevers[1]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[1]\OBJ), 0.0)
-						If EntityPitch(e\room\RoomLevers[1]\OBJ) = 80.0 Then e\EventState = 2.0
+						If EntityPitch(e\room\RoomLevers[1]\OBJ) > 79.0 Then e\EventState = 2.0
 					EndIf
 					
 					; ~ Remote Door Control
