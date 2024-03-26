@@ -1395,19 +1395,19 @@ Function UpdateConsole%()
 						If Lower(itt\Name) = StrTemp
 							Temp = True
 							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
-							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
+							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						ElseIf Lower(itt\DisplayName) = StrTemp
 							Temp = True
 							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
-							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
+							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
-						ElseIf Lower(itt\TempName) = StrTemp
+						ElseIf itt\ID = StrTemp
 							Temp = True
 							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
-							it.Items = CreateItem(itt\Name, itt\TempName, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
+							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
 						EndIf
@@ -1624,12 +1624,12 @@ Function UpdateConsole%()
 					For i = 1 To 20
 						If Rand(2) = 1
 							StrTemp = "Some SCP-420-J"
-							StrTemp2 = "scp420j"
+							Temp = it_scp420j
 						Else
 							StrTemp = "Joint"
-							StrTemp2 = "joint"
+							Temp = it_joint
 						EndIf
-						it.Items = CreateItem(StrTemp, StrTemp2, EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+						it.Items = CreateItem(StrTemp, Temp, EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 						EntityType(it\Collider, HIT_ITEM)
 					Next
 					PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
@@ -1824,12 +1824,12 @@ Function UpdateConsole%()
 					For i = 1 To 20
 						If Rand(2) = 1
 							StrTemp = "Quarter"
-							StrTemp2 = "25ct"
+							Temp = it_25ct
 						Else
 							StrTemp = "Coin"
-							StrTemp2 = "coin"
+							Temp = it_coin
 						EndIf
-						it.Items = CreateItem(StrTemp, StrTemp2, EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
+						it.Items = CreateItem(StrTemp, Temp, EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
 						EntityType(it\Collider, HIT_ITEM)
 					Next
 					;[End Block]
@@ -2287,7 +2287,7 @@ Function RenderMessages%()
 	If msg\Timer > 0.0
 		Local Temp%
 		
-		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\TempName = "paper" Lor SelectedItem\ItemTemplate\TempName = "oldpaper")))
+		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID= it_paper Lor SelectedItem\ItemTemplate\ID = it_oldpaper)))
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
@@ -2579,7 +2579,7 @@ Function UpdateMoving%()
 					If me\ForceMove > 0.0 Then Speed = Speed * me\ForceMove
 					
 					If SelectedItem <> Null
-						If (SelectedItem\ItemTemplate\TempName = "firstaid" Lor SelectedItem\ItemTemplate\TempName = "finefirstaid" Lor SelectedItem\ItemTemplate\TempName = "firstaid2") And wi\HazmatSuit = 0 Then Sprint = 0.0
+						If (SelectedItem\ItemTemplate\ID = it_firstaid Lor SelectedItem\ItemTemplate\ID = it_finefirstaid Lor SelectedItem\ItemTemplate\ID = it_firstaid2) And wi\HazmatSuit = 0 Then Sprint = 0.0
 					EndIf
 					
 					Temp = (me\Shake Mod 360.0)
@@ -2587,7 +2587,7 @@ Function UpdateMoving%()
 					If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 					If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 Then PlayStepSound(Sprint = 2.5)
 				EndIf
-				If KeyHit(key\CROUCH) And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\TempName <> "firstaid" And SelectedItem\ItemTemplate\TempName <> "finefirstaid" And SelectedItem\ItemTemplate\TempName <> "firstaid2")) Then SetCrouch((Not me\Crouch))
+				If KeyHit(key\CROUCH) And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\ID <> it_firstaid And SelectedItem\ItemTemplate\ID <> it_finefirstaid And SelectedItem\ItemTemplate\ID <> it_firstaid2)) Then SetCrouch((Not me\Crouch))
 			EndIf
 		Else
 			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
@@ -3250,7 +3250,7 @@ Function UpdateGUI%()
 	
 	If d_I\SelectedDoor <> Null
 		If SelectedItem <> Null
-			If SelectedItem\ItemTemplate\TempName = "scp005"
+			If SelectedItem\ItemTemplate\ID = it_scp005
 				UseDoor()
 				ShouldDrawHUD = False
 			Else
@@ -3414,7 +3414,7 @@ Function UpdateGUI%()
 							SelectedItem = OtherOpen\SecondInv[n]
 							
 							If mo\DoubleClick And mo\DoubleClickSlot = n
-								If SelectedItem\ItemTemplate\TempName = "scp714" Lor SelectedItem\ItemTemplate\TempName = "coarse714" Lor SelectedItem\ItemTemplate\TempName = "fine714" Lor SelectedItem\ItemTemplate\TempName = "ring"
+								If SelectedItem\ItemTemplate\ID = it_scp714 Lor SelectedItem\ItemTemplate\ID = it_coarse714 Lor SelectedItem\ItemTemplate\ID = it_fine714 Lor SelectedItem\ItemTemplate\ID = it_ring
 									CreateMsg(GetLocalString("msg", "wallet.714"))
 									SelectedItem = Null
 									Return
@@ -3475,13 +3475,13 @@ Function UpdateGUI%()
 					Next
 					
 					IsEmpty = True
-					If OtherOpen\ItemTemplate\TempName = "wallet"
+					If OtherOpen\ItemTemplate\ID = it_wallet
 						If (Not IsEmpty)
 							For z = 0 To OtherSize - 1
 								If OtherOpen\SecondInv[z] <> Null
-									Local Name$ = OtherOpen\SecondInv[z]\ItemTemplate\TempName
+									Local ID% = OtherOpen\SecondInv[z]\ItemTemplate\ID
 									
-									If Name <> "25ct" And Name <> "coin" And Name <> "key" And Name <> "scp860" And Name <> "scp714" And Name <> "coarse714" And Name <> "fine714" And Name <> "ring" And Name <> "scp500pill" And Name <> "scp500pilldeath" And Name <> "pill"
+									If ID <> it_25ct And ID <> it_coin And ID <> it_key And ID <> it_scp860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_fine714 And ID <> it_ring And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill
 										IsEmpty = False
 										Exit
 									EndIf
@@ -3498,10 +3498,10 @@ Function UpdateGUI%()
 					EndIf
 					
 					If IsEmpty
-						If OtherOpen\ItemTemplate\TempName = "clipboard"
+						If OtherOpen\ItemTemplate\ID = it_clipboard
 							OtherOpen\InvImg = OtherOpen\ItemTemplate\InvImg2
 							SetAnimTime(OtherOpen\Model, 17.0)
-						ElseIf OtherOpen\ItemTemplate\TempName = "wallet"
+						ElseIf OtherOpen\ItemTemplate\ID = it_wallet
 							SetAnimTime(OtherOpen\Model, 0.0)
 						EndIf
 					EndIf
@@ -3526,7 +3526,7 @@ Function UpdateGUI%()
 					ElseIf PrevOtherOpen\SecondInv[MouseSlot] <> SelectedItem
 						PrevItem = PrevOtherOpen\SecondInv[MouseSlot]
 						
-						Select SelectedItem\ItemTemplate\TempName
+						Select SelectedItem\ItemTemplate\ID
 							Default
 								;[Block]
 								For z = 0 To OtherSize - 1
@@ -3608,80 +3608,80 @@ Function UpdateGUI%()
 				If MouseSlot = 66
 					Local ShouldPreventDropping%
 					
-					Select SelectedItem\ItemTemplate\TempName
-						Case "vest", "finevest", "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+					Select SelectedItem\ItemTemplate\ID
+						Case it_vest, it_finevest, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 							;[Block]
 							ShouldPreventDropping = True
 							;[End Block]
-						Case "gasmask"
+						Case it_gasmask
 							;[Block]
 							ShouldPreventDropping = (wi\GasMask = 1)
 							;[End Block]
-						Case "finegasmask"
+						Case it_finegasmask
 							;[Block]
 							ShouldPreventDropping = (wi\GasMask = 2)
 							;[End Block]
-						Case "veryfinegasmask"
+						Case it_veryfinegasmask
 							;[Block]
 							ShouldPreventDropping = (wi\GasMask = 3)
 							;[End Block]
-						Case "gasmask148"
+						Case it_gasmask148
 							;[Block]
 							ShouldPreventDropping = (wi\GasMask = 4)
 							;[End Block]
-						Case "scp1499"
+						Case it_scp1499
 							;[Block]
 							ShouldPreventDropping = (I_1499\Using = 1)
 							;[End Block]
-						Case "fine1499"
+						Case it_fine1499
 							;[Block]
 							ShouldPreventDropping = (I_1499\Using = 2)
 							;[End Block]
-						Case "nvg"
+						Case it_nvg
 							;[Block]
 							ShouldPreventDropping = (wi\NightVision = 1)
 							;[End Block]
-						Case "veryfinenvg"
+						Case it_veryfinenvg
 							;[Block]
 							ShouldPreventDropping = (wi\NightVision = 2)
 							;[End Block]
-						Case "finenvg"
+						Case it_finenvg
 							;[Block]
 							ShouldPreventDropping = (wi\NightVision = 3)
 							;[End Block]
-						Case "scramble"
+						Case it_scramble
 							;[Block]
 							ShouldPreventDropping = (wi\SCRAMBLE = 1)
 							;[End Block]
-						Case "finescramble"
+						Case it_finescramble
 							;[Block]
 							ShouldPreventDropping = (wi\SCRAMBLE = 2)
 							;[End Block]
-						Case "helmet"
+						Case it_helmet
 							;[Block]
 							ShouldPreventDropping = wi\BallisticHelmet
 							;[End Block] 
-						Case "cap"
+						Case it_cap
 							;[Block]
 							ShouldPreventDropping = (I_268\Using = 1)
 							;[End Block]
-						Case "scp268"
+						Case it_scp268
 							;[Block]
 							ShouldPreventDropping = (I_268\Using = 2)
 							;[End Block]
-						Case "fine268"
+						Case it_fine268
 							;[Block]
 							ShouldPreventDropping = (I_268\Using = 3)
 							;[End Block]
-						Case "scp714"
+						Case it_scp714
 							;[Block]
 							ShouldPreventDropping = (I_714\Using = 2)
 							;[End Block]
-						Case "coarse714"
+						Case it_coarse714
 							;[Block]
 							ShouldPreventDropping = (I_714\Using = 1)
 							;[End Block]
-						Case "scp427"
+						Case it_scp427
 							;[Block]
 							ShouldPreventDropping = I_427\Using
 							;[End Block]
@@ -3714,16 +3714,17 @@ Function UpdateGUI%()
 					ElseIf Inventory(MouseSlot) <> SelectedItem
 						PrevItem = Inventory(MouseSlot)
 						
-						Select SelectedItem\ItemTemplate\TempName
-							Case "paper", "oldpaper", "origami", "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "playcard", "mastercard", "badge", "oldbadge", "burntbadge", "ticket", "25ct", "coin", "key", "scp860", "scp714", "coarse714", "fine714", "ring", "scp500pill", "scp500pilldeath", "pill"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_ticket, it_25ct, it_coin, it_key, it_scp860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill
 								;[Block]
-								If Inventory(MouseSlot)\ItemTemplate\TempName = "clipboard"
+								If Inventory(MouseSlot)\ItemTemplate\ID = it_clipboard
 									; ~ Add an item to clipboard
 									Local added.Items = Null
-									Local b$ = SelectedItem\ItemTemplate\TempName
 									Local c%, ri%
 									
-									If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp714" And b <> "coarse714" And b <> "fine714" And b <> "ring" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill"
+									ID% = SelectedItem\ItemTemplate\ID
+									
+									If ID <> it_25ct And ID <> it_coin And ID <> it_key And ID <> it_scp860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_fine714 And ID <> it_ring And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If Inventory(MouseSlot)\SecondInv[c] = Null
 												If SelectedItem <> Null
@@ -3748,9 +3749,9 @@ Function UpdateGUI%()
 										If SelectedItem <> Null
 											CreateMsg(GetLocalString("msg", "clipboard.full"))
 										Else
-											If added\ItemTemplate\TempName = "paper" Lor added\ItemTemplate\TempName = "oldpaper"
+											If added\ItemTemplate\ID = it_paper Lor added\ItemTemplate\ID = it_oldpaper
 												CreateMsg(GetLocalString("msg", "clipboard.paper"))
-											ElseIf added\ItemTemplate\TempName = "badge" Lor added\ItemTemplate\TempName = "oldbadge" Lor added\ItemTemplate\TempName = "burntbadge"
+											ElseIf added\ItemTemplate\ID = it_badge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_burntbadge
 												CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\Name))
 											Else
 												CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\Name))
@@ -3765,12 +3766,12 @@ Function UpdateGUI%()
 										Next
 										Inventory(MouseSlot) = SelectedItem
 									EndIf
-								ElseIf Inventory(MouseSlot)\ItemTemplate\TempName = "wallet"
+								ElseIf Inventory(MouseSlot)\ItemTemplate\ID = it_wallet
 									; ~ Add an item to wallet
 									added.Items = Null
-									b = SelectedItem\ItemTemplate\TempName
-									If b <> "paper" And b <> "oldpaper" And b <> "origami"
-										If (SelectedItem\ItemTemplate\TempName = "scp714" And I_714\Using = 2) Lor (SelectedItem\ItemTemplate\TempName = "coarse714" And I_714\Using = 1)
+									ID = SelectedItem\ItemTemplate\ID
+									If ID <> it_paper And ID <> it_oldpaper And ID <> it_origami
+										If (SelectedItem\ItemTemplate\ID = it_scp714 And I_714\Using = 2) Lor (SelectedItem\ItemTemplate\ID = it_coarse714 And I_714\Using = 1)
 											CreateMsg(GetLocalString("msg", "takeoff"))
 											SelectedItem = Null
 											Return
@@ -3780,7 +3781,7 @@ Function UpdateGUI%()
 											If Inventory(MouseSlot)\SecondInv[c] = Null
 												Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 												Inventory(MouseSlot)\State = 1.0
-												If b <> "25ct" And b <> "coin" And b <> "key" And b <> "scp860" And b <> "scp714" And b <> "coarse714" And b <> "scp500pill" And b <> "scp500pilldeath" And b <> "pill" Then SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
+												If ID <> it_25ct And ID <> it_coin And ID <> it_key And ID <> it_scp860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill Then SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
 												Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
 												
 												For ri = 0 To MaxItemAmount - 1
@@ -3820,62 +3821,62 @@ Function UpdateGUI%()
 								EndIf
 								SelectedItem = Null
 								;[End Block]
-							Case "coarsebat"
+							Case it_coarsebat
 								;[Block]
-								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav"
+								Select Inventory(MouseSlot)\ItemTemplate\ID
+									Case it_nav
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
-									Case "nav310"
+									Case it_nav310
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case "navulti", "nav300"
+									Case it_navulti, it_nav300
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
-									Case "radio"
+									Case it_radio
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
-									Case "18vradio"
+									Case it_18vradio
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.notfit"))
 										;[End Block]
-									Case "fineradio", "veryfineradio"
+									Case it_fineradio, it_veryfineradio
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
-									Case "nvg"
+									Case it_nvg
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case "finenvg"
+									Case it_finenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
-									Case "veryfinenvg"
+									Case it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
-									Case "scramble"
+									Case it_scramble
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
-									Case "finescramble"
+									Case it_finescramble
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
@@ -3892,62 +3893,62 @@ Function UpdateGUI%()
 										;[End Block]
 								End Select
 								;[End Block]
-							Case "bat"
+							Case it_bat
 								;[Block]
-								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav"
+								Select Inventory(MouseSlot)\ItemTemplate\ID
+									Case it_nav
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
-									Case "nav310"
+									Case it_nav310
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case "navulti", "nav300"
+									Case it_navulti, it_nav300
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
-									Case "radio"
+									Case it_radio
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
-									Case "18vradio"
+									Case it_18vradio
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.notfit"))
 										;[End Block]
-									Case "fineradio", "veryfineradio"
+									Case it_fineradio, it_veryfineradio
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
-									Case "nvg"
+									Case it_nvg
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case "finenvg"
+									Case it_finenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
-									Case "veryfinenvg"
+									Case it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
-									Case "scramble"
+									Case it_scramble
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
-									Case "finescramble"
+									Case it_finescramble
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
@@ -3964,59 +3965,59 @@ Function UpdateGUI%()
 										;[End Block]
 								End Select
 								;[End Block]
-							Case "finebat"
+							Case it_finebat
 								;[Block]
-								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav"
+								Select Inventory(MouseSlot)\ItemTemplate\ID
+									Case it_nav
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case "nav310"
+									Case it_nav310
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
-									Case "navulti", "nav300"
+									Case it_navulti, it_nav300
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
-									Case "radio"
+									Case it_radio
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.notfit"))
 										;[End Block]
-									Case "18vradio"
+									Case it_18vradio
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
-									Case "fineradio", "veryfineradio"
+									Case it_fineradio, it_veryfineradio
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
-									Case "nvg"
+									Case it_nvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
-									Case "finenvg"
+									Case it_finenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
-									Case "veryfinenvg"
+									Case it_veryfinenvg
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case "scramble"
+									Case it_scramble
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
-									Case "finescramble"
+									Case it_finescramble
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
@@ -4036,62 +4037,62 @@ Function UpdateGUI%()
 										;[End Block]
 								End Select
 								;[End Block]
-							Case "veryfinebat", "killbat"
+							Case it_veryfinebat, it_killbat
 								;[Block]
-								Select Inventory(MouseSlot)\ItemTemplate\TempName
-									Case "nav"
+								Select Inventory(MouseSlot)\ItemTemplate\ID
+									Case it_nav
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = 1000.0
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
-									Case "nav310"
+									Case it_nav310
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case "navulti", "nav300"
+									Case it_navulti, it_nav300
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
-									Case "radio"
+									Case it_radio
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = 1000.0
 										CreateMsg(GetLocalString("msg", "radio.bat"))
 										;[End Block]
-									Case "18vradio"
+									Case it_18vradio
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.notfit"))
 										;[End Block]
-									Case "fineradio", "veryfineradio"
+									Case it_fineradio, it_veryfineradio
 										;[Block]
 										CreateMsg(GetLocalString("msg", "radio.bat.no"))
 										;[End Block]
-									Case "nvg"
+									Case it_nvg
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = 10000.0
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case "finenvg"
+									Case it_finenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
 										;[End Block]
-									Case "veryfinenvg"
+									Case it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
-									Case "scramble"
+									Case it_scramble
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = 10000.0
 										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
-									Case "finescramble"
+									Case it_finescramble
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
@@ -4128,24 +4129,24 @@ Function UpdateGUI%()
 		If (Not InvOpen) Then StopMouseMovement()
 	Else
 		If SelectedItem <> Null
-			Select SelectedItem\ItemTemplate\TempName
-				Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
+			Select SelectedItem\ItemTemplate\ID
+				Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
 					;[Block]
 					If (Not PreventItemOverlapping(True, False, False, True, False, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "gasmask"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_gasmask
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 1) Then Return
 								;[End Block]
-							Case "finegasmask"
+							Case it_finegasmask
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 2) Then Return
 								;[End Block]
-							Case "veryfinegasmask"
+							Case it_veryfinegasmask
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 3) Then Return
 								;[End Block]
-							Case "gasmask148"
+							Case it_gasmask148
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 4) Then Return
 								;[End Block]
@@ -4153,7 +4154,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						If SelectedItem\ItemTemplate\TempName <> "gasmask148"
+						If SelectedItem\ItemTemplate\ID <> it_gasmask148
 							SelectedItem\State = Min(SelectedItem\State + fps\Factor[0], 100.0)
 						Else
 							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.6), 100.0)
@@ -4166,23 +4167,23 @@ Function UpdateGUI%()
 								CreateMsg(GetLocalString("msg", "mask.off"))
 								wi\GasMask = 0
 							Else
-								Select SelectedItem\ItemTemplate\TempName
-									Case "gasmask"
+								Select SelectedItem\ItemTemplate\ID
+									Case it_gasmask
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on"))
 										wi\GasMask = 1
 										;[End Block]
-									Case "finegasmask"
+									Case it_finegasmask
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on.dry"))
 										wi\GasMask = 2
 										;[End Block]
-									Case "veryfinegasmask"
+									Case it_veryfinegasmask
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on.easy"))
 										wi\GasMask = 3
 										;[End Block]
-									Case "gasmask148"
+									Case it_gasmask148
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on.easy"))
 										wi\GasMask = 4
@@ -4194,15 +4195,15 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scp1499", "fine1499"
+				Case it_scp1499, it_fine1499
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, True, True, False, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "scp1499"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_scp1499
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 1) Then Return
 								;[End Block]
-							Case "fine1499"
+							Case it_fine1499
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 2) Then Return
 								;[End Block]
@@ -4254,13 +4255,13 @@ Function UpdateGUI%()
 										Exit
 									EndIf
 								Next
-								Select SelectedItem\ItemTemplate\TempName
-									Case "scp1499"
+								Select SelectedItem\ItemTemplate\ID
+									Case it_scp1499
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on"))
 										I_1499\Using = 1
 										;[End Block]
-									Case "fine1499"
+									Case it_fine1499
 										;[Block]
 										CreateMsg(GetLocalString("msg", "mask.on.easy"))
 										I_1499\Using = 2
@@ -4272,19 +4273,19 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "nvg", "veryfinenvg", "finenvg"
+				Case it_nvg, it_veryfinenvg, it_finenvg
 					;[Block]
 					If (Not PreventItemOverlapping(False, True, False, True, False, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "nvg"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_nvg
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 1) Then Return
 								;[End Block]
-							Case "veryfinenvg"
+							Case it_veryfinenvg
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 2) Then Return
 								;[End Block]
-							Case "finenvg"
+							Case it_finenvg
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 3) Then Return
 								;[End Block]
@@ -4305,16 +4306,16 @@ Function UpdateGUI%()
 							Else
 								CreateMsg(GetLocalString("msg", "nvg.on"))
 								opt\CameraFogFar = 17.0
-								Select SelectedItem\ItemTemplate\TempName
-									Case "nvg"
+								Select SelectedItem\ItemTemplate\ID
+									Case it_nvg
 										;[Block]
 										wi\NightVision = 1
 										;[End Block]
-									Case "veryfinenvg"
+									Case it_veryfinenvg
 										;[Block]
 										wi\NightVision = 2
 										;[End Block]
-									Case "finenvg"
+									Case it_finenvg
 										;[Block]
 										wi\NightVision = 3
 										;[End Block]
@@ -4326,15 +4327,15 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "scramble", "finescramble"
+				Case it_scramble, it_finescramble
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, False, True, True, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "scramble"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_scramble
 								;[Block]
 								If IsDoubleItem(wi\SCRAMBLE, 1) Then Return
 								;[End Block]
-							Case "finescramble"
+							Case it_finescramble
 								;[Block]
 								If IsDoubleItem(wi\SCRAMBLE, 2) Then Return
 								;[End Block]
@@ -4354,12 +4355,12 @@ Function UpdateGUI%()
 							Else
 								CreateMsg(GetLocalString("msg", "gear.on"))
 								opt\CameraFogFar = 9.0
-								Select SelectedItem\ItemTemplate\TempName
-									Case "scramble"
+								Select SelectedItem\ItemTemplate\ID
+									Case it_scramble
 										;[Block]
 										wi\SCRAMBLE = 1
 										;[End Block]
-									Case "finescramble"
+									Case it_finescramble
 										;[Block]
 										wi\SCRAMBLE = 2
 										;[End Block]
@@ -4370,7 +4371,7 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "helmet"
+				Case it_helmet
 					;[Block]
 					If (Not PreventItemOverlapping(True, True, True, True, True))
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
@@ -4392,19 +4393,19 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "cap", "scp268", "fine268"
+				Case it_cap, it_scp268, it_fine268
 					;[Block]
 					If (Not PreventItemOverlapping(True, True, True, False, True, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "cap"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_cap
 								;[Block]
 								If IsDoubleItem(I_268\Using, 1) Then Return
 								;[End Block]
-							Case "scp268"
+							Case it_scp268
 								;[Block]
 								If IsDoubleItem(I_268\Using, 2) Then Return
 								;[End Block]
-							Case "fine268"
+							Case it_fine268
 								;[Block]
 								If IsDoubleItem(I_268\Using, 3) Then Return
 								;[End Block]
@@ -4423,16 +4424,16 @@ Function UpdateGUI%()
 							Else
 								GiveAchievement(Achv268)
 								CreateMsg(GetLocalString("msg", "cap.on"))
-								Select SelectedItem\ItemTemplate\TempName
-									Case "cap"
+								Select SelectedItem\ItemTemplate\ID
+									Case it_cap
 										;[Block]
 										I_268\Using = 1
 										;[End Block]
-									Case "scp268"
+									Case it_scp268
 										;[Block]
 										I_268\Using = 2
 										;[End Block]
-									Case "fine268"
+									Case it_fine268
 										;[Block]
 										I_268\Using = 3
 										;[End Block]
@@ -4444,11 +4445,11 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "vest", "finevest"
+				Case it_vest, it_finevest
 					;[Block]
 					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 					
-					SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\TempName = "finevest")))), 100)
+					SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\ID = it_finevest)))), 100)
 					
 					If SelectedItem\State = 100.0
 						If wi\BallisticVest > 0
@@ -4457,13 +4458,13 @@ Function UpdateGUI%()
 							DropItem(SelectedItem)
 						Else
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
-							Select SelectedItem\ItemTemplate\TempName
-								Case "vest"
+							Select SelectedItem\ItemTemplate\ID
+								Case it_vest
 									;[Block]
 									CreateMsg(GetLocalString("msg", "vest.on.slight"))
 									wi\BallisticVest = 1
 									;[End Block]
-								Case "finevest"
+								Case it_finevest
 									;[Block]
 									CreateMsg(GetLocalString("msg", "vest.on.heavy"))
 									wi\BallisticVest = 2
@@ -4474,11 +4475,11 @@ Function UpdateGUI%()
 						SelectedItem = Null
 					EndIf
 					;[End Block]
-				Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+				Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 					;[Block]
 					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 					
-					If SelectedItem\ItemTemplate\TempName <> "hazmatsuit148"
+					If SelectedItem\ItemTemplate\ID <> it_hazmatsuit148
 						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 4.0), 100.0)
 					Else
 						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)
@@ -4496,23 +4497,23 @@ Function UpdateGUI%()
 							wi\GasMask = 0 : wi\BallisticHelmet = False
 							I_427\Using = False : I_1499\Using = 0
 							I_268\Using = 0
-							Select SelectedItem\ItemTemplate\TempName
-								Case "hazmatsuit"
+							Select SelectedItem\ItemTemplate\ID
+								Case it_hazmatsuit
 									;[Block]
 									CreateMsg(GetLocalString("msg", "suit.on"))
 									wi\HazmatSuit = 1
 									;[End Block]
-								Case "finehazmatsuit"
+								Case it_finehazmatsuit
 									;[Block]
 									CreateMsg(GetLocalString("msg", "suit.dry"))
 									wi\HazmatSuit = 2
 									;[End Block]
-								Case "veryfinehazmatsuit"
+								Case it_veryfinehazmatsuit
 									;[Block]
 									CreateMsg(GetLocalString("msg", "suit.on.easy"))
 									wi\HazmatSuit = 3
 									;[End Block]
-								Case "hazmatsuit148"
+								Case it_hazmatsuit148
 									;[Block]
 									CreateMsg(GetLocalString("msg", "suit.on.easy"))
 									wi\HazmatSuit = 4
@@ -4523,7 +4524,7 @@ Function UpdateGUI%()
 						SelectedItem = Null
 					EndIf
 					;[End Block]
-				Case "scp513"
+				Case it_scp513
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell.ogg"))
 					
@@ -4532,7 +4533,7 @@ Function UpdateGUI%()
 					If n_I\Curr513_1 = Null And (Not me\Deaf) Then n_I\Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
 					SelectedItem = Null
 					;[End Block]
-				Case "scp500pill"
+				Case it_scp500pill
 					;[Block]
 					If CanUseItem(True)
 						GiveAchievement(Achv500)
@@ -4575,7 +4576,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "veryfinefirstaid"
+				Case it_veryfinefirstaid
 					;[Block]
 					If CanUseItem(True)
 						Select Rand(5)
@@ -4618,7 +4619,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "firstaid", "finefirstaid", "firstaid2"
+				Case it_firstaid, it_finefirstaid, it_firstaid2
 					;[Block]
 					If CanUseItem(True, True)
 						If me\Bloodloss = 0.0 And me\Injuries = 0.0
@@ -4629,14 +4630,10 @@ Function UpdateGUI%()
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 							If (Not me\Crouch) Then SetCrouch(True)
 							
-							If SelectedItem\ItemTemplate\TempName = "firstaid"
-								SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 5.0), 100.0)
-							Else
-								SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 4.0), 100.0)
-							EndIf
+							SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / (4.0 + (SelectedItem\ItemTemplate\ID = it_firstaid))), 100.0)
 							
 							If SelectedItem\State = 100.0
-								If SelectedItem\ItemTemplate\TempName = "finefirstaid"
+								If SelectedItem\ItemTemplate\ID = it_finefirstaid
 									me\Bloodloss = 0.0
 									me\Injuries = Max(0.0, me\Injuries - 2.0)
 									If me\Injuries = 0.0
@@ -4668,7 +4665,7 @@ Function UpdateGUI%()
 										EndIf
 									EndIf
 									
-									If SelectedItem\ItemTemplate\TempName = "firstaid2"
+									If SelectedItem\ItemTemplate\ID = it_firstaid2
 										Select Rand(6)
 											Case 1
 												;[Block]
@@ -4710,7 +4707,7 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "eyedrops", "eyedrops2"
+				Case it_eyedrops, it_eyedrops2
 					;[Block]
 					If CanUseItem()
 						me\BlinkEffect = 0.7
@@ -4722,7 +4719,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "fineeyedrops"
+				Case it_fineeyedrops
 					;[Block]
 					If CanUseItem()
 						me\BlinkEffect = 0.5
@@ -4735,7 +4732,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "veryfineeyedrops"
+				Case it_veryfineeyedrops
 					;[Block]
 					If CanUseItem()
 						me\BlinkEffect = 0.0
@@ -4748,7 +4745,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "scp1025"
+				Case it_scp1025
 					;[Block]
 					GiveAchievement(Achv1025)
 					If SelectedItem\ItemTemplate\Img = 0
@@ -4777,12 +4774,12 @@ Function UpdateGUI%()
 						SelectedItem\State3 = 1.0
 					EndIf
 					;[End Block]
-				Case "book"
+				Case it_book
 					;[Block]
 					CreateMsg(GetLocalString("msg", "redbook"))
 					SelectedItem = Null
 					;[End Block]
-				Case "cup"
+				Case it_cup
 					;[Block]
 					If CanUseItem(True)
 						Local Drink% = Int(SelectedItem\Name)
@@ -4843,7 +4840,7 @@ Function UpdateGUI%()
 							If (Not JsonIsNull(JsonGetValue(Drink, "stamina_effect"))) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_effect")) ^ SelectedItem\State
 							If (Not JsonIsNull(JsonGetValue(Drink, "stamina_timer"))) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_timer")) * SelectedItem\State
 							
-							it.Items = CreateItem("Empty Cup", "emptycup", 0.0, 0.0, 0.0)
+							it.Items = CreateItem("Empty Cup", it_emptycup, 0.0, 0.0, 0.0)
 							it\Picked = True
 							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = SelectedItem
@@ -4860,7 +4857,7 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "syringe"
+				Case it_syringe
 					;[Block]
 					If CanUseItem(True, True)
 						me\HealTimer = 30.0
@@ -4872,7 +4869,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "finesyringe"
+				Case it_finesyringe
 					;[Block]
 					If CanUseItem(True, True)
 						me\HealTimer = Rnd(20.0, 40.0)
@@ -4884,7 +4881,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "veryfinesyringe"
+				Case it_veryfinesyringe
 					;[Block]
 					If CanUseItem(True, True)
 						Select Rand(3)
@@ -4910,7 +4907,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "syringeinf"
+				Case it_syringeinf
 					;[Block]
 					If CanUseItem(True, True)
 						CreateMsg(GetLocalString("msg", "syringe_6"))
@@ -4921,7 +4918,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "radio", "18vradio", "fineradio", "veryfineradio"
+				Case it_radio, it_18vradio, it_fineradio, it_veryfineradio
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -4933,17 +4930,17 @@ Function UpdateGUI%()
 					
 					Local RadioType%
 					
-					Select SelectedItem\ItemTemplate\TempName
-						Case "18vradio"
+					Select SelectedItem\ItemTemplate\ID
+						Case it_18vradio
 							;[Block]
 							RadioType = 1
 							SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.002)
 							;[End Block]
-						Case "fineradio"
+						Case it_fineradio
 							;[Block]
 							RadioType = 2
 							;[End Block]
-						Case "veryfineradio"
+						Case it_veryfineradio
 							;[Block]
 							RadioType = 3
 							;[End Block]
@@ -5268,7 +5265,7 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "nav", "nav310", "navulti", "nav300"
+				Case it_nav, it_nav310, it_navulti, it_nav300
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -5278,12 +5275,8 @@ Function UpdateGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					If SelectedItem\ItemTemplate\TempName = "nav" Lor SelectedItem\ItemTemplate\TempName = "nav310"
-						If SelectedItem\ItemTemplate\TempName = "nav"
-							SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
-						Else
-							SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.0025)
-						EndIf
+					If SelectedItem\ItemTemplate\ID = it_nav Lor SelectedItem\ItemTemplate\ID = it_nav310
+						SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.0025 + (0.0025 * (SelectedItem\ItemTemplate\ID = it_nav)))
 						
 						If SelectedItem\State > 0.0 And SelectedItem\State <= 20.0
 							UpdateBatteryTimer()
@@ -5293,7 +5286,7 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "cigarette"
+				Case it_cigarette
 					;[Block]
 					If CanUseItem(True)
 						Select Rand(6)
@@ -5325,7 +5318,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "scp420j"
+				Case it_scp420j
 					;[Block]
 					If CanUseItem(True)
 						If I_714\Using > 0
@@ -5340,7 +5333,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "joint", "scp420s"
+				Case it_joint, it_scp420s
 					;[Block]
 					If CanUseItem(True)
 						If I_714\Using > 0
@@ -5353,15 +5346,15 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "scp714", "coarse714"
+				Case it_scp714, it_coarse714
 					;[Block]
 					If CanUseItem(True, True)
-						Select SelectedItem\ItemTemplate\TempName
-							Case "coarse714"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_coarse714
 								;[Block]
 								If IsDoubleItem(I_714\Using, 1) Then Return
 								;[End Block]
-							Case "scp714"
+							Case it_scp714
 								;[Block]
 								If IsDoubleItem(I_714\Using, 2) Then Return
 								;[End Block]
@@ -5373,12 +5366,12 @@ Function UpdateGUI%()
 						Else
 							GiveAchievement(Achv714)
 							CreateMsg(GetLocalString("msg", "714.on"))
-							Select SelectedItem\ItemTemplate\TempName
-								Case "coarse714"
+							Select SelectedItem\ItemTemplate\ID
+								Case it_coarse714
 									;[Block]
 									I_714\Using = 1
 									;[End Block]
-								Case "scp714"
+								Case it_scp714
 									;[Block]
 									I_714\Using = 2
 									;[End Block]
@@ -5387,10 +5380,10 @@ Function UpdateGUI%()
 						SelectedItem = Null
 					EndIf
 					;[End Block]
-				Case "fine714", "ring"
+				Case it_fine714, it_ring
 					;[Block]
 					If CanUseItem(True, True)
-						If SelectedItem\ItemTemplate\TempName = "fine714"
+						If SelectedItem\ItemTemplate\ID = "fine714"
 							CreateMsg(GetLocalString("msg", "714.sleep"))
 							msg\DeathMsg = Format(GetLocalString("death", "ringsleep"), SubjectName)
 							Kill()
@@ -5400,7 +5393,7 @@ Function UpdateGUI%()
 						SelectedItem = Null
 					EndIf
 					;[End Block]
-				Case "ticket"
+				Case it_ticket
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -5417,7 +5410,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case "badge", "burntbadge"
+				Case it_badge, it_burntbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -5432,7 +5425,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case "oldbadge"
+				Case it_oldbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -5449,7 +5442,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case "oldpaper"
+				Case it_oldpaper
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -5466,7 +5459,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case "key"
+				Case it_key
 					;[Block]
 					If SelectedItem\State = 0.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(6, 10) + ".ogg"))
@@ -5474,14 +5467,14 @@ Function UpdateGUI%()
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case "coin"
+				Case it_coin
 					;[Block]
 					If SelectedItem\State = 0.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5) + ".ogg"))
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case "scp427"
+				Case it_scp427
 					;[Block]
 					If I_427\Using
 						CreateMsg(GetLocalString("msg", "427.off"))
@@ -5493,7 +5486,7 @@ Function UpdateGUI%()
 					EndIf
 					SelectedItem = Null
 					;[End Block]
-				Case "pill"
+				Case it_pill
 					;[Block]
 					If CanUseItem(True)
 						CreateMsg(GetLocalString("msg", "pill"))
@@ -5501,7 +5494,7 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "scp500pilldeath"
+				Case it_scp500pilldeath
 					;[Block]
 					If CanUseItem(True)
 						CreateMsg(GetLocalString("msg", "pill"))
@@ -5511,13 +5504,13 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "scp500"
+				Case it_scp500
 					;[Block]
 					If I_500\Taken < Rand(20)
 						If ItemAmount < MaxItemAmount
 							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = Null
-									Inventory(i) = CreateItem("SCP-500-01", "scp500pill", 0.0, 0.0, 0.0)
+									Inventory(i) = CreateItem("SCP-500-01", it_scp500pill, 0.0, 0.0, 0.0)
 									Inventory(i)\Picked = True
 									Inventory(i)\Dropped = -1
 									Inventory(i)\ItemTemplate\Found = True
@@ -5538,12 +5531,12 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
-				Case "scp1123"
+				Case it_scp1123
 					;[Block]
 					Use1123()
 					SelectedItem = Null
 					;[End Block]
-				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "hand3", "25ct", "scp005", "key", "coin", "mastercard", "paper"
+				Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard, it_paper
 					;[Block]
 					; ~ Skip this line
 					;[End Block]
@@ -5557,22 +5550,22 @@ Function UpdateGUI%()
 			End Select
 			
 			If ((mo\MouseHit2 Lor KeyHit(key\INVENTORY)) And (Not MenuOpen)) Lor me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Lor me\Zombie
-				Select SelectedItem\ItemTemplate\TempName
-					Case "firstaid", "finefirstaid", "firstaid2", "cap", "scp268", "fine268", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
+				Select SelectedItem\ItemTemplate\ID
+					Case it_firstaid, it_finefirstaid, it_firstaid2, it_cap, it_scp268, it_fine268, it_scp1499, it_fine1499, it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_helmet
 						;[Block]
 						SelectedItem\State = 0.0
 						;[End Block]
-					Case "vest", "finevest"
+					Case it_vest, it_finevest
 						;[Block]
 						SelectedItem\State = 0.0
 						If wi\BallisticVest = 0 Then DropItem(SelectedItem, False)
 						;[End Block]
-					Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+					Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 						;[Block]
 						SelectedItem\State = 0.0
 						If wi\HazmatSuit = 0 Then DropItem(SelectedItem, False)
 						;[End Block]
-					Case "nvg", "veryfinenvg", "finenvg", "scramble", "finescramble", "scp1025"
+					Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025
 						;[Block]
 						SelectedItem\State3 = 0.0
 						;[End Block]
@@ -5600,12 +5593,12 @@ Function UpdateGUI%()
 	
 	For it.Items = Each Items
 		If it <> SelectedItem
-			Select it\ItemTemplate\TempName
-				Case "firstaid", "finefirstaid", "firstaid2", "vest", "finevest", "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148", "cap", "scp268", "fine268", "scp1499", "fine1499", "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "helmet"
+			Select it\ItemTemplate\ID
+				Case it_firstaid, it_finefirstaid, it_firstaid2, it_vest, it_finevest, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148, it_cap, it_scp268, it_fine268, it_scp1499, it_fine1499, it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_helmet
 					;[Block]
 					it\State = 0.0
 					;[End Block]
-				Case "nvg", "veryfinenvg", "finenvg", "scramble", "finescramble", "scp1025"
+				Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025
 					;[Block]
 					it\State3 = 0.0
 					;[End Block]
@@ -6025,7 +6018,7 @@ Function RenderGUI%()
 	
 	If d_I\SelectedDoor <> Null
 		If SelectedItem <> Null
-			If SelectedItem\ItemTemplate\TempName = "scp005" Then ShouldDrawHUD = False
+			If SelectedItem\ItemTemplate\ID = it_scp005 Then ShouldDrawHUD = False
 		EndIf
 		If ShouldDrawHUD
 			Local ButtonPosX# = EntityX(d_I\ClosestButton, True)
@@ -6146,100 +6139,100 @@ Function RenderGUI%()
 				Local ShouldDrawRect%
 				
 				Color(200, 200, 200)
-				Select Inventory(n)\ItemTemplate\TempName 
-					Case "gasmask"
+				Select Inventory(n)\ItemTemplate\ID
+					Case it_gasmask
 						;[Block]
 						ShouldDrawRect = (wi\GasMask = 1)
 						;[End Block]
-					Case "finegasmask"
+					Case it_finegasmask
 						;[Block]
 						ShouldDrawRect = (wi\GasMask = 2)
 						;[End Block]
-					Case "veryfinegasmask"
+					Case it_veryfinegasmask
 						;[Block]
 						ShouldDrawRect = (wi\GasMask = 3)
 						;[End Block]
-					Case "gasmask148"
+					Case it_gasmask148
 						;[Block]
 						ShouldDrawRect = (wi\GasMask = 4)
 						;[End Block]
-					Case "scp1499"
+					Case it_scp1499
 						;[Block]
 						ShouldDrawRect = (I_1499\Using = 1)
 						;[End Block]
-					Case "fine1499"
+					Case it_fine1499
 						;[Block]
 						ShouldDrawRect = (I_1499\Using = 2)
 						;[End Block]
-					Case "nvg"
+					Case it_nvg
 						;[Block]
 						ShouldDrawRect = (wi\NightVision = 1)
 						;[End Block]
-					Case "veryfinenvg"
+					Case it_veryfinenvg
 						;[Block]
 						ShouldDrawRect = (wi\NightVision = 2)
 						;[End Block]
-					Case "finenvg"
+					Case it_finenvg
 						;[Block]
 						ShouldDrawRect = (wi\NightVision = 3)
 						;[End Block]
-					Case "scramble"
+					Case it_scramble
 						;[Block]
 						ShouldDrawRect = (wi\SCRAMBLE = 1)
 						;[End Block]
-					Case "finescramble"
+					Case it_finescramble
 						;[Block]
 						ShouldDrawRect = (wi\SCRAMBLE = 2)
 						;[End Block]
-					Case "helmet"
+					Case it_helmet
 						;[Block]
 						ShouldDrawRect = wi\BallisticHelmet
 						;[End Block]
-					Case "cap"
+					Case it_cap
 						;[Block]
 						ShouldDrawRect = (I_268\Using = 1)
 						;[End Block]
-					Case "scp268"
+					Case it_scp268
 						;[Block]
 						ShouldDrawRect = (I_268\Using = 2)
 						;[End Block]
-					Case "fine268"
+					Case it_fine268
 						;[Block]
 						ShouldDrawRect = (I_268\Using = 3)
 						;[End Block]
-					Case "vest"
+					Case it_vest
 						;[Block]
 						ShouldDrawRect = (wi\BallisticVest = 1)
 						;[End Block]
-					Case "finevest"
+					Case it_finevest
 						;[Block]
 						ShouldDrawRect = (wi\BallisticVest = 2)
 						;[End Block]
-					Case "hazmatsuit"
+					Case it_hazmatsuit
 						;[Block]
 						ShouldDrawRect = (wi\HazmatSuit = 1)
 						;[End Block]
-					Case "finehazmatsuit"
+					Case it_finehazmatsuit
 						;[Block]
 						ShouldDrawRect = (wi\HazmatSuit = 2)
 						;[End Block]
-					Case "veryfinehazmatsuit"
+					Case it_veryfinehazmatsuit
 						;[Block]
 						ShouldDrawRect = (wi\HazmatSuit = 3)
 						;[End Block]
-					Case "hazmatsuit148"
+					Case it_hazmatsuit148
 						;[Block]"
 						ShouldDrawRect = (wi\HazmatSuit = 4)
 						;[End Block]
-					Case "scp427"
+					Case it_scp427
 						;[Block]
 						ShouldDrawRect = (I_427\Using)
 						;[End Block]
-					Case "scp714"
+					Case it_scp714
 						;[Block]
 						ShouldDrawRect = (I_714\Using = 2)
 						;[End Block]
-					Case "coarse714"
+					Case it_coarse714
 						;[Block]
 						ShouldDrawRect = (I_714\Using = 1)
 						;[End Block]
@@ -6294,24 +6287,24 @@ Function RenderGUI%()
 		RenderCursor()
 	Else
 		If SelectedItem <> Null
-			Select SelectedItem\ItemTemplate\TempName
-				Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148"
+			Select SelectedItem\ItemTemplate\ID
+				Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
 					;[Block]
 					If (Not PreventItemOverlapping(True, False, False, True, False, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "gasmask"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_gasmask
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 1) Then Return
 								;[End Block]
-							Case "finegasmask"
+							Case it_finegasmask
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 2) Then Return
 								;[End Block]
-							Case "veryfinegasmask"
+							Case it_veryfinegasmask
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 3) Then Return
 								;[End Block]
-							Case "gasmask148"
+							Case it_gasmask148
 								;[Block]
 								If IsDoubleItem(wi\GasMask, 4) Then Return
 								;[End Block]
@@ -6327,15 +6320,15 @@ Function RenderGUI%()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case "scp1499", "fine1499"
+				Case it_scp1499, it_fine1499
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, True, True, False, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "scp1499"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_scp1499
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 1) Then Return
 								;[End Block]
-							Case "fine1499"
+							Case it_fine1499
 								;[Block]
 								If IsDoubleItem(I_1499\Using, 2) Then Return
 								;[End Block]
@@ -6351,19 +6344,19 @@ Function RenderGUI%()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case "nvg", "veryfinenvg", "finenvg"
+				Case it_nvg, it_veryfinenvg, it_finenvg
 					;[Block]
 					If (Not PreventItemOverlapping(False, True, False, True, False, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "nvg"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_nvg
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 1) Then Return
 								;[End Block]
-							Case "veryfinenvg"
+							Case it_veryfinenvg
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 2) Then Return
 								;[End Block]
-							Case "finenvg"
+							Case it_finenvg
 								;[Block]
 								If IsDoubleItem(wi\NightVision, 3) Then Return
 								;[End Block]
@@ -6379,7 +6372,7 @@ Function RenderGUI%()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
-				Case "scramble", "finescramble"
+				Case it_scramble, it_finescramble
 					;[Block]
 					If (Not PreventItemOverlapping(False, False, False, True, True, False, True))
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
@@ -6392,7 +6385,7 @@ Function RenderGUI%()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
-				Case "helmet"
+				Case it_helmet
 					;[Block]
 					If (Not PreventItemOverlapping(True, True, True, True, True))
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
@@ -6405,19 +6398,19 @@ Function RenderGUI%()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case "cap", "scp268", "fine268"
+				Case it_cap, it_scp268, it_fine268
 					;[Block]
 					If (Not PreventItemOverlapping(True, True, True, False, True, False, True))
-						Select SelectedItem\ItemTemplate\TempName
-							Case "cap"
+						Select SelectedItem\ItemTemplate\ID
+							Case it_cap
 								;[Block]
 								If IsDoubleItem(I_268\Using, 1) Then Return
 								;[End Block]
-							Case "scp268"
+							Case it_scp268
 								;[Block]
 								If IsDoubleItem(I_268\Using, 2) Then Return
 								;[End Block]
-							Case "fine268"
+							Case it_fine268
 								;[Block]
 								If IsDoubleItem(I_268\Using, 3) Then Return
 								;[End Block]
@@ -6433,7 +6426,7 @@ Function RenderGUI%()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case "vest", "finevest"
+				Case it_vest, it_finevest
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					
@@ -6444,7 +6437,7 @@ Function RenderGUI%()
 					
 					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
-				Case "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+				Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					
@@ -6455,11 +6448,11 @@ Function RenderGUI%()
 					
 					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
-				Case "key0", "key1", "key2", "key3", "key4", "key5", "key6", "keyomni", "scp860", "hand", "hand2", "hand3", "25ct", "scp005", "key", "coin", "mastercard"
+				Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					;[End Block]
-				Case "firstaid", "finefirstaid", "firstaid2"
+				Case it_firstaid, it_finefirstaid, it_firstaid2
 					;[Block]
 					If (me\Bloodloss <> 0.0 Lor me\Injuries <> 0.0) And wi\HazmatSuit = 0
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
@@ -6472,7 +6465,7 @@ Function RenderGUI%()
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					EndIf
 					;[End Block]
-				Case "paper", "oldpaper"
+				Case it_paper, it_oldpaper
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						Select SelectedItem\ItemTemplate\Name
@@ -6520,7 +6513,7 @@ Function RenderGUI%()
 					EndIf
 					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
-				Case "scp1025"
+				Case it_scp1025
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
@@ -6531,7 +6524,7 @@ Function RenderGUI%()
 					EndIf
 					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
-				Case "radio", "18vradio", "fineradio", "veryfineradio"
+				Case it_radio, it_18vradio, it_fineradio, it_veryfineradio
 					;[Block]
 					; ~ RadioState[5] = Has the "use the number keys" -message been shown yet (True / False)
 					; ~ RadioState[6] = A timer for the "code channel"
@@ -6552,7 +6545,7 @@ Function RenderGUI%()
 					
 					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 					
-					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\TempName = "fineradio" Lor SelectedItem\ItemTemplate\TempName = "veryfineradio")
+					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\ID = it_fineradio Lor SelectedItem\ItemTemplate\ID = it_veryfineradio)
 						If RID <> r_dimension_106 And CoffinDistance >= 8.0
 							Select Int(SelectedItem\State2)
 								Case 0
@@ -6584,7 +6577,7 @@ Function RenderGUI%()
 							
 							; ~ Battery
 							Color(30, 30, 30)
-							If SelectedItem\ItemTemplate\TempName = "radio" Lor SelectedItem\ItemTemplate\TempName = "18vradio"
+							If SelectedItem\ItemTemplate\ID = it_radio Lor SelectedItem\ItemTemplate\ID = it_18vradio
 								For i = 0 To 4
 									Rect(x, y + ((8 * i) * MenuScale), (43 * MenuScale) - ((i * 6) * MenuScale), 4 * MenuScale, Ceil(SelectedItem\State / 20.0) > 4 - i )
 								Next
@@ -6593,7 +6586,7 @@ Function RenderGUI%()
 							SetFontEx(fo\FontID[Font_Digital])
 							TextEx(x + (60 * MenuScale), y, GetLocalString("radio", "chn"))
 							
-							If SelectedItem\ItemTemplate\TempName = "veryfineradio"
+							If SelectedItem\ItemTemplate\ID = it_veryfineradio
 								StrTemp = ""
 								For i = 0 To Rand(5, 30)
 									StrTemp = StrTemp + Chr(Rand(100))
@@ -6615,7 +6608,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "nav", "nav300", "nav310", "navulti"
+				Case it_nav, it_nav300, it_nav310, it_navulti
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -6627,16 +6620,16 @@ Function RenderGUI%()
 					
 					Local NavType%
 					
-					Select SelectedItem\ItemTemplate\TempName
-						Case "nav300"
+					Select SelectedItem\ItemTemplate\ID
+						Case it_nav300
 							;[Block]
 							NavType = 300
 							;[End Block]
-						Case "nav310"
+						Case it_nav310
 							;[Block]
 							NavType = 310
 							;[End Block]
-						Case "navulti"
+						Case it_navulti
 							;[Block]
 							NavType = 999
 							;[End Block]
@@ -6780,7 +6773,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case "badge", "burntbadge"
+				Case it_badge, it_burntbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -6791,7 +6784,7 @@ Function RenderGUI%()
 					EndIf
 					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
-				Case "oldbadge", "ticket"
+				Case it_oldbadge, it_ticket
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
@@ -8056,7 +8049,7 @@ Function RenderEnding%()
 					Local DocAmount% = 0, DocsFound% = 0
 					
 					For itt.ItemTemplates = Each ItemTemplates
-						If itt\TempName = "paper"
+						If itt\ID = it_paper
 							DocAmount = DocAmount + 1
 							DocsFound = DocsFound + itt\Found
 						EndIf
@@ -9033,7 +9026,7 @@ Function Update294%()
 						If ItemAmount < MaxItemAmount
 							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = Null
-									Inventory(i) = CreateItem("Mastercard", "mastercard", 1.0, 1.0, 1.0)
+									Inventory(i) = CreateItem("Mastercard", it_mastercard, 1.0, 1.0, 1.0)
 									Inventory(i)\Picked = True
 									Inventory(i)\Dropped = -1
 									Inventory(i)\ItemTemplate\Found = True
@@ -9044,7 +9037,7 @@ Function Update294%()
 								EndIf
 							Next
 						Else
-							it.Items = CreateItem("Mastercard", "mastercard", EntityX(me\Collider), EntityY(me\Collider) + 0.3, EntityZ(me\Collider))
+							it.Items = CreateItem("Mastercard", it_mastercard, EntityX(me\Collider), EntityY(me\Collider) + 0.3, EntityZ(me\Collider))
 							it\ItemTemplate\Found = True
 							EntityType(it\Collider, HIT_ITEM)
 						EndIf
@@ -9069,7 +9062,7 @@ Function Update294%()
 					Glow = JsonGetBool(JsonGetValue(Drink, "glow"))
 					If Glow Then Alpha = -Alpha
 					
-					it.Items = CreateItem("Cup", "cup", EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
+					it.Items = CreateItem("Cup", it_cup, EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
 					it\Name = Drink
 					it\DisplayName = Format(GetLocalString("items", "cupof"), I_294\ToInput)
 					EntityType(it\Collider, HIT_ITEM)
@@ -9244,7 +9237,7 @@ Function UpdateLeave1499%()
 					EndIf
 				Next
 				For it.Items = Each Items
-					If it\ItemTemplate\TempName = "scp1499" Lor it\ItemTemplate\TempName = "fine1499"
+					If it\ItemTemplate\ID = it_scp1499 Lor it\ItemTemplate\ID = it_fine1499
 						Local ItemPosY# = EntityY(it\Collider)
 						Local RoomPosY# = EntityY(r1499\OBJ)
 						

@@ -413,7 +413,7 @@ Function SaveGame%(File$)
 	WriteInt(f, Temp)
 	For it.Items = Each Items
 		WriteString(f, it\ItemTemplate\Name)
-		WriteString(f, it\ItemTemplate\TempName)
+		WriteInt(f, it\ItemTemplate\ID)
 		
 		WriteString(f, it\Name)
 		WriteString(f, it\DisplayName)
@@ -1166,7 +1166,9 @@ Function LoadGame%(File$)
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		Local IttName$ = ReadString(f)
-		Local TempName$ = ReadString(f)
+		
+		ID = ReadInt(f)
+		
 		Local Name$ = ReadString(f)
 		Local DisplayName$ = ReadString(f)
 		
@@ -1180,7 +1182,7 @@ Function LoadGame%(File$)
 		
 		Local A% = ReadFloat(f)
 		
-		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
+		it.Items = CreateItem(IttName, ID, x, y, z, Red, Green, Blue, A)
 		it\Name = Name
 		it\DisplayName = DisplayName
 		
@@ -1209,7 +1211,7 @@ Function LoadGame%(File$)
 		Local itt.ItemTemplates
 		
 		For itt.ItemTemplates = Each ItemTemplates
-			If itt\TempName = TempName And itt\Name = IttName; And itt\DisplayName = DisplayName ; ~ Not sure about that
+			If itt\ID = ID And itt\Name = IttName; And itt\DisplayName = DisplayName ; ~ Not sure about that
 				If itt\IsAnim <> 0
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit
@@ -1924,7 +1926,9 @@ Function LoadGameQuick%(File$)
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		Local IttName$ = ReadString(f)
-		Local TempName$ = ReadString(f)
+		
+		ID = ReadInt(f)
+		
 		Local Name$ = ReadString(f)
 		Local DisplayName$ = ReadString(f)
 		
@@ -1938,7 +1942,7 @@ Function LoadGameQuick%(File$)
 		
 		Local A% = ReadFloat(f)
 		
-		it.Items = CreateItem(IttName, TempName, x, y, z, Red, Green, Blue, A)
+		it.Items = CreateItem(IttName, ID, x, y, z, Red, Green, Blue, A)
 		it\Name = Name
 		it\DisplayName = DisplayName
 		
@@ -1967,7 +1971,7 @@ Function LoadGameQuick%(File$)
 		Local itt.ItemTemplates
 		
 		For itt.ItemTemplates = Each ItemTemplates
-			If itt\TempName = TempName And itt\Name = Name; And itt\DisplayName = DisplayName ; ~ Not sure about that
+			If itt\ID = ID And itt\Name = Name; And itt\DisplayName = DisplayName ; ~ Not sure about that
 				If itt\IsAnim <> 0
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit

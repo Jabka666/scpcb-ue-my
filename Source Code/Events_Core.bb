@@ -964,7 +964,7 @@ Function UpdateEvents%()
 							EntityParent(de\OBJ, e\room\OBJ)
 							
 							TFormPoint(-897.0, -10534.0, 783.0, e\room\OBJ, 0)
-							it.Items = CreateItem("Document SCP-079", "paper", TFormedX(), TFormedY(), TFormedZ())
+							it.Items = CreateItem("Document SCP-079", it_paper, TFormedX(), TFormedY(), TFormedZ())
 							EntityType(it\Collider, HIT_ITEM)
 							
 							e\EventState = 1.0
@@ -1509,10 +1509,10 @@ Function UpdateEvents%()
 									EntityParent(de\OBJ, e\room\OBJ)
 								EndIf
 								If e\room\NPC[0]\Frame = 286.0 Then
-									it.Items = CreateItem("Unknown Note", "paper", e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
+									it.Items = CreateItem("Unknown Note", it_paper, e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
 									
-									it.Items = CreateItem("Level 3 Key Card", "key3", e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
+									it.Items = CreateItem("Level 3 Key Card", it_key3, e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
 									
 									e\room\NPC[0]\IsDead = True
@@ -1542,8 +1542,8 @@ Function UpdateEvents%()
 						
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
-								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "veryfinenvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg")) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\TempName = "finescramble"))
-									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\TempName = "finenvg")
+								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
+									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\ID = it_finenvg)
 										HasBatteryFor895 = True
 										Exit
 									EndIf
@@ -1574,7 +1574,7 @@ Function UpdateEvents%()
 									EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null
-											If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "veryfinenvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg")) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\TempName = "finescramble"))
+											If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
 												If Inventory(i)\State2 = 1.0 Then PlaySound_Strict(HorrorSFX[1])
 												Inventory(i)\State2 = 2.0
 												Exit
@@ -1590,7 +1590,7 @@ Function UpdateEvents%()
 									EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_6)])
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null
-											If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "veryfinenvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg")) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\TempName = "finescramble"))
+											If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
 												If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(HorrorSFX[0])
 												Inventory(i)\State2 = 1.0
 												Exit
@@ -1602,7 +1602,7 @@ Function UpdateEvents%()
 								EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null
-										If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\TempName = "nvg" Lor Inventory(i)\ItemTemplate\TempName = "veryfinenvg" Lor Inventory(i)\ItemTemplate\TempName = "finenvg")) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\TempName = "scramble") Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\TempName = "finescramble"))
+										If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
 											Inventory(i)\State2 = 0.0
 											Exit
 										EndIf
@@ -2118,9 +2118,9 @@ Function UpdateEvents%()
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
 							If EntityDistanceSquared(e\room\Objects[7], me\Collider) < EntityDistanceSquared(e\room\Objects[8], me\Collider)
-								it.Items = CreateItem("Research Sector-02 Scheme", "paper", EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
+								it.Items = CreateItem("Research Sector-02 Scheme", it_paper, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
 							Else
-								it.Items = CreateItem("Research Sector-02 Scheme", "paper", EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True))
+								it.Items = CreateItem("Research Sector-02 Scheme", it_paper, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True))
 							EndIf
 							EntityType(it\Collider, HIT_ITEM)
 							
@@ -2286,14 +2286,14 @@ Function UpdateEvents%()
 								EntityParent(de\OBJ, e\room\OBJ)
 								
 								TFormPoint(-5000.0, -4409.0, 1578.0, e\room\OBJ, 0)
-								it.Items = CreateItem("SCP-005", "scp005", TFormedX(), TFormedY(), TFormedZ())
+								it.Items = CreateItem("SCP-005", it_scp005, TFormedX(), TFormedY(), TFormedZ())
 								EntityType(it\Collider, HIT_ITEM)
 							EndIf
 							
 							e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
 							
 							TFormPoint(-4105.0, -4336.0, 2207.0, e\room\OBJ, 0)
-							it.Items = CreateItem("Document SCP-409", "paper", TFormedX(), TFormedY(), TFormedZ())
+							it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
 							RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 							EntityType(it\Collider, HIT_ITEM)
 							
@@ -2820,34 +2820,34 @@ Function UpdateEvents%()
 							
 							For itt.ItemTemplates = Each ItemTemplates
 								If IsItemGoodFor1162ARC(itt)
-									Select Inventory(e\EventState2)\ItemTemplate\TempName
-										Case "key"
+									Select Inventory(e\EventState2)\ItemTemplate\ID
+										Case it_key
 											;[Block]
-											If itt\TempName = "key0" Lor itt\TempName = "key1" And Rand(2) = 1 Then ShouldCreateItem = True
+											If itt\ID = it_key0 Lor itt\ID = it_key1 And Rand(2) = 1 Then ShouldCreateItem = True
 											;[End Block]
-										Case "paper", "oldpaper"
+										Case it_paper, it_oldpaper
 											;[Block]
-											If itt\TempName = "paper" And Rand(12) = 1 Then ShouldCreateItem = True
+											If itt\ID = it_paper And Rand(12) = 1 Then ShouldCreateItem = True
 											;[End Block]
-										Case "gasmask", "finegasmask", "veryfinegasmask", "gasmask148", "hazmatsuit", "finehazmatsuit", "veryfinehazmatsuit", "hazmatsuit148"
+										Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 											;[Block]
-											If itt\TempName = "gasmask" Lor itt\TempName = "finegasmask" Lor itt\TempName = "veryfinegasmask" Lor itt\TempName = "gasmask148" Lor itt\TempName = "hazmatsuit" Lor itt\TempName = "finehazmatsuit" Lor itt\TempName = "veryfinehazmatsuit" Lor itt\TempName = "hazmatsuit148" And Rand(2) = 1 Then ShouldCreateItem = True
+											If itt\ID = it_gasmask Lor itt\ID = it_finegasmask Lor itt\ID = it_veryfinegasmask Lor itt\ID = it_gasmask148 Lor itt\ID = it_hazmatsuit Lor itt\ID = it_finehazmatsuit Lor itt\ID = it_veryfinehazmatsuit Lor itt\ID = it_hazmatsuit148 And Rand(2) = 1 Then ShouldCreateItem = True
 											;[End Block]
-										Case "key0", "key1", "key2", "key3"
+										Case it_key0, it_key1, it_key2, it_key3
 											;[Block]
-											If itt\TempName = "key0" Lor itt\TempName = "key1" Lor itt\TempName = "key2" Lor itt\TempName = "key3" And Rand(6) = 1 Then ShouldCreateItem = True
+											If itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3 And Rand(6) = 1 Then ShouldCreateItem = True
 											;[End Block]
-										Case "mastercard", "playcard", "origami", "electronics"
+										Case it_mastercard, it_playcard, it_origami, it_electronics
 											;[Block]
-											If itt\TempName = "mastercard" Lor itt\TempName = "playcard" Lor itt\TempName = "origami" Lor itt\TempName = "electronics" And Rand(5) = 1 Then ShouldCreateItem = True
+											If itt\ID = it_mastercard Lor itt\ID = it_playcard Lor itt\ID = it_origami Lor itt\ID = it_electronics And Rand(5) = 1 Then ShouldCreateItem = True
 											;[End Block]
-										Case "vest", "finevest"
+										Case it_vest, it_finevest
 											;[Block]
-											If itt\TempName = "vest" Lor itt\TempName = "finevest" And Rand(1) = 1 Then ShouldCreateItem = True
+											If itt\ID = it_vest Lor itt\ID = it_finevest And Rand(1) = 1 Then ShouldCreateItem = True
 											;[End Block]
 										Default
 											;[Block]
-											If itt\TempName = "mastercard" Lor itt\TempName = "playcard" And Rand(6) = 1 Then ShouldCreateItem = True
+											If itt\ID = it_mastercard Lor itt\ID = it_playcard And Rand(6) = 1 Then ShouldCreateItem = True
 											;[End Block]
 									End Select
 								EndIf
@@ -2856,7 +2856,7 @@ Function UpdateEvents%()
 									RemoveWearableItems(Inventory(e\EventState2))
 									RemoveItem(Inventory(e\EventState2))
 									
-									it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 									EntityType(it\Collider, HIT_ITEM)
 									
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
@@ -2879,7 +2879,7 @@ Function UpdateEvents%()
 							FreeEntity(Pvt) : Pvt = 0
 							For itt.ItemTemplates = Each ItemTemplates
 								If IsItemGoodFor1162ARC(itt) And Rand(6) = 1
-									it.Items = CreateItem(itt\Name, itt\TempName, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 									EntityType(it\Collider, HIT_ITEM)
 									
 									GiveAchievement(Achv1162_ARC)
@@ -2929,23 +2929,23 @@ Function UpdateEvents%()
 							Select e\EventState
 								Case 1.0
 									;[Block]
-									it.Items = CreateItem("Lost Key", "key", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									it.Items = CreateItem("Lost Key", it_key, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 									;[End Block]
 								Case 2.0
 									;[Block]
-									it.Items = CreateItem("Disciplinary Hearing DH-S-4137-17092", "oldpaper", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									it.Items = CreateItem("Disciplinary Hearing DH-S-4137-17092", it_oldpaper, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 									;[End Block]
 								Case 3.0
 									;[Block]
-									it.Items = CreateItem("Coin", "coin", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									it.Items = CreateItem("Coin", it_coin, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 									;[End Block]
 								Case 4.0
 									;[Block]
-									it.Items = CreateItem("Movie Ticket", "ticket", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									it.Items = CreateItem("Movie Ticket", it_ticket, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 									;[End Block]
 								Case 5.0
 									;[Block]
-									it.Items = CreateItem("Old Badge", "oldbadge", EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+									it.Items = CreateItem("Old Badge", it_oldbadge, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 									;[End Block]
 							End Select
 							EntityType(it\Collider, HIT_ITEM)
@@ -3284,13 +3284,13 @@ Function UpdateEvents%()
 							ResetEntity(n_I\Curr173\Collider)
 							n_I\Curr173\Idle = 0
 						ElseIf e\EventState > 70.0 * 9.0 And e\EventState - fps\Factor[0] <= 70.0 * 9.0
-							it.Items = CreateItem("Wallet", "wallet", EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+							it.Items = CreateItem("Wallet", it_wallet, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 							EntityType(it\Collider, HIT_ITEM)
 							PointEntity(it\Collider, e\room\NPC[0]\Collider)
 							RotateEntity(it\Collider, 0.0, Rnd(360.0), 0.0)
 							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10.0)
 							For i = 0 To 1
-								it2.Items = CreateItem("Quarter", "25ct", 0.0, 0.0, 0.0)
+								it2.Items = CreateItem("Quarter", it_25ct, 0.0, 0.0, 0.0)
 								it2\Picked = True : it2\Dropped = -1
 								it\SecondInv[i] = it2
 								HideEntity(it2\Collider)
@@ -3322,13 +3322,13 @@ Function UpdateEvents%()
 						
 						If e\EventState2 < 2.0
 							If SelectedItem <> Null
-								If SelectedItem\ItemTemplate\TempName = "25ct" Lor SelectedItem\ItemTemplate\TempName = "coin"
+								If SelectedItem\ItemTemplate\ID = it_25ct Lor SelectedItem\ItemTemplate\ID = it_coin
 									RemoveItem(SelectedItem)
 									PlaySound_Strict(LoadTempSound("SFX\SCP\294\CoinDrop.ogg"))
 									Inserted = True
 									
 									e\EventState2 = e\EventState2 + 1.0
-								ElseIf SelectedItem\ItemTemplate\TempName = "mastercard"
+								ElseIf SelectedItem\ItemTemplate\ID = it_mastercard
 									If me\Funds > 0
 										me\Funds = me\Funds - 1
 										
@@ -4340,10 +4340,10 @@ Function UpdateEvents%()
 										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
 										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
 										
-										it.Items = CreateItem("SCP-500-01", "scp500pill", e\room\x + (iX * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
+										it.Items = CreateItem("SCP-500-01", it_scp500pill, e\room\x + (iX * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 										EntityType(it\Collider, HIT_ITEM)
 										
-										it.Items = CreateItem("Night Vision Goggles", "nvg", e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale))
+										it.Items = CreateItem("Night Vision Goggles", it_nvg, e\room\x + (iX * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (90.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale))
 										EntityType(it\Collider, HIT_ITEM)
 									ElseIf e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_FIRST_ELEVATOR Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
@@ -4945,7 +4945,7 @@ Function UpdateEvents%()
 								If ItemAmount >= MaxItemAmount
 									CreateMsg(GetLocalString("msg", "cantcarry"))
 								Else
-									SelectedItem = CreateItem("Drawing", "paper", 0.0, 0.0, 0.0)
+									SelectedItem = CreateItem("Drawing", it_paper, 0.0, 0.0, 0.0)
 									EntityType(SelectedItem\Collider, HIT_ITEM)
 									EntityParent(SelectedItem\Collider, 0)
 									
@@ -5128,7 +5128,7 @@ Function UpdateEvents%()
 							
 							ShowEntity(e\room\Objects[2])
 							
-							it.Items = CreateItem("Level 3 Key Card", "key3", EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.1, EntityZ(e\room\NPC[0]\Collider))
+							it.Items = CreateItem("Level 3 Key Card", it_key3, EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.1, EntityZ(e\room\NPC[0]\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
@@ -5375,11 +5375,11 @@ Function UpdateEvents%()
 								;[Block]
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null
-										If Inventory(i)\ItemTemplate\TempName = "paper"
+										If Inventory(i)\ItemTemplate\ID = it_paper
 											RemoveItem(Inventory(i))
 											For itt.ItemTemplates = Each ItemTemplates
-												If itt\TempName = "paper" And Rand(6) = 1
-													Inventory(i) = CreateItem(itt\Name, itt\TempName, 1.0, 1.0, 1.0)
+												If itt\ID = it_paper And Rand(6) = 1
+													Inventory(i) = CreateItem(itt\Name, itt\ID, 1.0, 1.0, 1.0)
 													HideEntity(Inventory(i)\Collider)
 													Inventory(i)\Picked = True
 													Exit
@@ -5393,7 +5393,7 @@ Function UpdateEvents%()
 							Case 18.0
 								;[Block]
 								TFormPoint(-344.0, 176.0, 272.0, e\room\OBJ, 0)
-								it.Items = CreateItem("Strange Note", "paper", TFormedX(), TFormedY(), TFormedZ())
+								it.Items = CreateItem("Strange Note", it_paper, TFormedX(), TFormedY(), TFormedZ())
 								EntityType(it\Collider, HIT_ITEM)
 								;[End Block]
 							Case 25.0
@@ -5411,7 +5411,7 @@ Function UpdateEvents%()
 									RemoveWearableItems(Inventory(i))
 									RemoveItem(Inventory(i))
 								EndIf
-								Inventory(i) = CreateItem("Strange Note", "paper", 1.0, 1.0, 1.0)
+								Inventory(i) = CreateItem("Strange Note", it_paper, 1.0, 1.0, 1.0)
 								HideEntity(Inventory(i)\Collider)
 								Inventory(i)\Picked = True
 								Inventory(i)\ItemTemplate\Found = True
@@ -5479,7 +5479,7 @@ Function UpdateEvents%()
 								If it\Dropped = 1 And Abs(x) < 264.0
 									For i = -1 To 1 Step 2
 										TFormPoint(x + (1024.0 * i), y, z, e\room\OBJ, 0)
-										it2.Items = CreateItem(it\Name, it\ItemTemplate\TempName, TFormedX(), EntityY(it\Collider), TFormedZ(), it\R, it\G, it\B, it\Alpha)
+										it2.Items = CreateItem(it\Name, it\ItemTemplate\ID, TFormedX(), EntityY(it\Collider), TFormedZ(), it\R, it\G, it\B, it\Alpha)
 										it2\State = it\State : it2\State2 = it\State2 : it2\State3 = it\State3
 										If it\InvSlots > 0
 											it2\InvSlots = it\InvSlots
@@ -7266,7 +7266,7 @@ Function UpdateDimension106%()
 				Temp = False
 				For i = 0 To MaxItemAmount - 1
 					If Inventory(i) <> Null
-						If Inventory(i)\ItemTemplate\TempName = "scp005"
+						If Inventory(i)\ItemTemplate\ID = it_scp005
 							Temp = True
 							Exit
 						EndIf
@@ -8401,7 +8401,7 @@ Function UpdateIntro%()
 									CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]))
 									e\EventState2 = 40.0
 								Else
-									CreateHintMsg(GetLocalString("msg", "paper"))
+									CreateHintMsg(GetLocalString("msg", it_paper))
 								EndIf
 							ElseIf e\EventState2 < 50.0
 								If InvOpen

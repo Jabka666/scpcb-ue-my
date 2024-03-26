@@ -1519,9 +1519,10 @@ Function UpdateNPCs%()
 										If i = 2
 											For i = 0 To MaxItemAmount - 1
 												If Inventory(i) <> Null
-													If Instr(Inventory(i)\ItemTemplate\TempName, "hazmatsuit")
+													If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_veryfinehazmatsuit
 														CreateMsg(GetLocalString("msg", "suit.destroyed"))
-														wi\HazmatSuit = 0 : RemoveItem(Inventory(i))
+														wi\HazmatSuit = 0
+														RemoveItem(Inventory(i))
 														Exit
 													EndIf
 												EndIf
@@ -1541,7 +1542,7 @@ Function UpdateNPCs%()
 								ElseIf Remove714Timer =< 0.0
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null
-											If Inventory(i)\ItemTemplate\TempName = "scp714" Lor Inventory(i)\ItemTemplate\TempName = "coarse714"
+											If Inventory(i)\ItemTemplate\ID = it_scp714 Lor Inventory(i)\ItemTemplate\ID = it_coarse714
 												CreateMsg(GetLocalString("msg", "714.forceremoved"))
 												I_714\Using = 0 : DropItem(Inventory(i))
 												Exit
