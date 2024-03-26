@@ -5151,17 +5151,21 @@ Function UpdateEvents%()
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 ; ~ Lock the player inside
 								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.12
-									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
-										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-										e\EventState = 70.0 * 45.0
-									EndIf
+									For i = 0 To 1
+										If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
+											If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+											e\EventState = 70.0 * 45.0
+										EndIf
+									Next
 								EndIf
 							Else
 								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.12
-									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
-										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-										e\EventState = 70.0 * 45.0
-									EndIf
+									For i = 0 To 1
+										If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
+											If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+											e\EventState = 70.0 * 45.0
+										EndIf
+									Next
 								EndIf
 							EndIf
 						EndIf
