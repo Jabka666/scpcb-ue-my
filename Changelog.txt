@@ -1,6 +1,8 @@
 v1.2.2
 
 General:
+- Added new console commands: «roomlist» and «itemlist».
+
 - Optimized the game...
 
 Launcher:

@@ -846,7 +846,7 @@ Function UpdateConsole%()
 	EndIf
 	
 	If ConsoleOpen
-		Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, cm.ConsoleMsg, itt.ItemTemplates
+		Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, cm.ConsoleMsg, itt.ItemTemplates, rt.RoomTemplates
 		Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#, Temp%, i%
 		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
 		Local x%, y%, Width%, Height%
@@ -1012,6 +1012,10 @@ Function UpdateConsole%()
 							;[Block]
 							CreateConsoleMsg(GetLocalString("console", "help_1.1"))
 							CreateConsoleMsg("******************************")
+							CreateConsoleMsg("- teleport [room name]")
+							CreateConsoleMsg("- roomlist")
+							CreateConsoleMsg("- spawnitem [item name / ID]")
+							CreateConsoleMsg("- itemlist")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
 							CreateConsoleMsg("- godmode")
@@ -1022,13 +1026,9 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- asd")
 							CreateConsoleMsg("- revive")
 							CreateConsoleMsg("- heal")
-							CreateConsoleMsg("- wireframe")
-							CreateConsoleMsg("- halloween")
-							CreateConsoleMsg("- newyear")
-							CreateConsoleMsg("- sanic")
-							CreateConsoleMsg("- weed")
 							CreateConsoleMsg("- money")
 							CreateConsoleMsg("- debughud")
+							CreateConsoleMsg("- codes")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg(GetLocalString("console", "help_1.2"))
 							CreateConsoleMsg(GetLocalString("console", "help.command"))
@@ -1068,10 +1068,12 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- injure [value]")
 							CreateConsoleMsg("- infect [value]")
 							CreateConsoleMsg("- crystal [value]")
-							CreateConsoleMsg("- teleport [room name]")
-							CreateConsoleMsg("- spawnitem [item name]")
 							CreateConsoleMsg("- giveachievement [ID / All]")
-							CreateConsoleMsg("- codes")
+							CreateConsoleMsg("- wireframe")
+							CreateConsoleMsg("- halloween")
+							CreateConsoleMsg("- newyear")
+							CreateConsoleMsg("- sanic")
+							CreateConsoleMsg("- weed")
 							CreateConsoleMsg("******************************")
 							CreateConsoleMsg(GetLocalString("console", "help.command"))
 							CreateConsoleMsg("******************************")
@@ -1387,6 +1389,12 @@ Function UpdateConsole%()
 					
 					If PlayerRoom\RoomTemplate\RoomID <> Temp Then CreateConsoleMsg(GetLocalString("console", "tp.failed"), 255, 0, 0)
 					;[End Block]
+				Case "roomlist", "roomslist", "rooms"
+					;[Block]
+					For rt.RoomTemplates = Each RoomTemplates
+						CreateConsoleMsg("ID: " + rt\RoomID + "; Name: " + rt\Name)
+					Next
+					;[End Block]
 				Case "spawnitem", "si", "giveitem", "gi"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
@@ -1404,7 +1412,7 @@ Function UpdateConsole%()
 							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
-						ElseIf itt\ID = StrTemp
+						ElseIf itt\ID = Int(StrTemp)
 							Temp = True
 							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
@@ -1414,6 +1422,12 @@ Function UpdateConsole%()
 					Next
 					
 					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "si.failed"), 255, 0, 0)
+					;[End Block]
+				Case "itemlist", "itemslist", "items"
+					;[Block]
+					For itt.ItemTemplates = Each ItemTemplates
+						CreateConsoleMsg("ID: " + itt\ID + "; Name: " + itt\Name)
+					Next
 					;[End Block]
 				Case "wireframe", "wf"
 					;[Block]
@@ -2223,6 +2237,7 @@ Function ClearConsole%()
 	CreateConsoleMsg("Console commands: ")
 	CreateConsoleMsg(" - help [page]")
 	CreateConsoleMsg(" - teleport [room name]")
+	CreateConsoleMsg(" - roomlist")
 	CreateConsoleMsg(" - godmode [on / off]")
 	CreateConsoleMsg(" - noclip [on / off]")
 	CreateConsoleMsg(" - infinitestamina [on / off]")
@@ -2235,7 +2250,8 @@ Function ClearConsole%()
 	CreateConsoleMsg(" - heal")
 	CreateConsoleMsg(" - revive")
 	CreateConsoleMsg(" - asd")
-	CreateConsoleMsg(" - spawnitem [item name]")
+	CreateConsoleMsg(" - spawnitem [item name / ID]")
+	CreateConsoleMsg(" - itemlist")
 	CreateConsoleMsg(" - 106retreat")
 	CreateConsoleMsg(" - disable173 / enable173")
 	CreateConsoleMsg(" - disable106 / enable106")
@@ -5742,7 +5758,7 @@ Function RenderDebugHUD%()
 	Select chs\DebugHUD
 		Case 1
 			;[Block]
-			TextEx(x, y, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\RoomID))
+			TextEx(x, y, Format(GetLocalString("misc", "room"), "ID: " + PlayerRoom\RoomTemplate\RoomID + "; Name: " + PlayerRoom\RoomTemplate\Name))
 			TextEx(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
 			For ev.Events = Each Events
 				If ev\room = PlayerRoom
@@ -5773,7 +5789,7 @@ Function RenderDebugHUD%()
 			EndIf
 			
 			If SelectedItem <> Null
-				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.curritem"), SelectedItem\ItemTemplate\Name))
+				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.curritem"), "ID: " + SelectedItem\ItemTemplate\ID + "; Name: " + SelectedItem\ItemTemplate\Name))
 			ElseIf d_I\ClosestButton = 0
 				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), "Null"))
 			EndIf

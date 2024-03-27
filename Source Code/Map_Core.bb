@@ -1550,7 +1550,7 @@ Type RoomTemplates
 	Field OBJ%, ID%
 	Field OBJPath$
 	Field Zone%[5]
-	Field Shape%, RoomID%
+	Field Shape%, Name$, RoomID% ; ~ Name is for debugging
 	Field Commonness%, Large%
 	Field DisableDecals%
 	;Field TempTriggerBoxAmount%
@@ -2097,6 +2097,7 @@ Function LoadRoomTemplates%(File$)
 				StrTemp = IniGetString(File, Loc, "Mesh Path")
 				
 				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
+				rt\Name = Lower(Loc)
 				rt\RoomID = FindRoomID(Lower(Loc))
 				
 				StrTemp = IniGetString(File, Loc, "Shape")
