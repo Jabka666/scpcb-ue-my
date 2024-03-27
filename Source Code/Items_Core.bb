@@ -467,7 +467,7 @@ Function RemoveWearableItems%(item.Items)
 			;[Block]
 			wi\BallisticVest = 0
 			;[End Block]
-		Case vhazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
+		Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 			;[Block]
 			wi\HazmatSuit = 0
 			;[End Block]

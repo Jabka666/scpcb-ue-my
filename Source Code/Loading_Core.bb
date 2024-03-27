@@ -813,7 +813,7 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "doccdol"), "Class D Orientation Leaflet", it_paper, "paper.b3d", "INV_paper.png", "doc_OL.png", 0.003, 0, "doc_OL.png")
 	
-	CreateItemTemplate(GetLocalString("items", "docdh"), "Disciplinary Hearing DH-S-4137-17092", "oldpaper", "paper.b3d", "INV_paper.png", "doc_DH.png", 0.003, 0, "doc_DH.png")
+	CreateItemTemplate(GetLocalString("items", "docdh"), "Disciplinary Hearing DH-S-4137-17092", it_oldpaper, "paper.b3d", "INV_paper.png", "doc_DH.png", 0.003, 0, "doc_DH.png")
 	
 	CreateItemTemplate(GetLocalString("items", "doc"), "Document", it_paper, "paper.b3d", "INV_paper.png", "doc_RAND(3).png", 0.003, 0, "doc_RAND(3).png")
 	
