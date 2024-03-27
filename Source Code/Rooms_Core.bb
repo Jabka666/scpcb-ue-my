@@ -156,9 +156,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.048, True)
 			
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 3262.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_3)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			d.Doors = CreateDoor(r, r\x + 2176.0 * RoomScale, r\y + 768.0 * RoomScale, r\z + 4158.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			d.Doors = CreateDoor(r, r\x + 2128.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 1630.0 * RoomScale, 0.0)
 			
@@ -253,11 +252,6 @@ Function FillRoom%(r.Rooms)
 		Case r_cont1_173_intro
 			;[Block]
 			; ~ Misc doors
-			d.Doors = CreateDoor(r, r\x - 2784.0 * RoomScale, r\y, r\z + 768.0 * RoomScale, 90.0)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			
 			d.Doors = CreateDoor(r, r\x - 5760.0 * RoomScale, r\y, r\z + 1216.0 * RoomScale, 180.0)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
