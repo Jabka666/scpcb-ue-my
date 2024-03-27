@@ -6824,7 +6824,7 @@ Global MenuOpen%
 Function UpdateMenu%()
 	CatchErrors("UpdateMenu()")
 	
-	Local r.Rooms, sc.SecurityCams
+	Local r.Rooms, sc.SecurityCams, amsg.AchievementMsg 
 	Local x%, y%, z%, Width%, Height%, i%
 	
 	If MenuOpen
@@ -7365,6 +7365,9 @@ Function UpdateMenu%()
 									EndIf
 								EndIf
 							Next
+							For amsg.AchievementMsg = Each AchievementMsg
+								Delete(amsg)
+							Next
 							
 							RenderLoading(100)
 							
@@ -7430,6 +7433,9 @@ Function UpdateMenu%()
 										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 									EndIf
 								EndIf
+							Next
+							For amsg.AchievementMsg = Each AchievementMsg
+								Delete(amsg)
 							Next
 							
 							RenderLoading(100)
