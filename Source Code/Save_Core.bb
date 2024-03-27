@@ -1381,7 +1381,6 @@ Function LoadGameQuick%(File$)
 	CODE_O5_COUNCIL = Int(ReadString(f))
 	CODE_MAINTENANCE_TUNNELS = Int(ReadString(f))
 	
-	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)

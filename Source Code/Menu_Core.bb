@@ -914,7 +914,7 @@ Function UpdateMainMenu%()
 						EndIf
 						;[End Block]
 				End Select
-			EndIf	
+			EndIf
 			
 			x = 159 * MenuScale
 			y = 286 * MenuScale
