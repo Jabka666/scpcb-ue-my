@@ -3542,20 +3542,20 @@ Function FillRoom%(r.Rooms)
 		Case r_cont2_860_1
 			;[Block]
 			; ~ Doors to observation room
-			d.Doors = CreateDoor(r, r\x + 928.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_HAND_YELLOW)
+			d.Doors = CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			d\MTFClose = False
 			r\RoomDoors.Doors[1] = d
 			
-			d.Doors = CreateDoor(r, r\x + 928.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_HAND_YELLOW)
+			d.Doors = CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			d\MTFClose = False
 			
 			; ~ Doors to SCP-860-1's door itself
-			d.Doors = CreateDoor(r, r\x + 416.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
-			d.Doors = CreateDoor(r, r\x + 416.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ SCP-860-1's door
-			d.Doors = CreateDoor(r, r\x + 184.0 * RoomScale, r\y, r\z, 0.0, False, WOODEN_DOOR, KEY_860)
+			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, False, WOODEN_DOOR, KEY_860)
 			d\Locked = 1 : d\DisableWaypoint = True
 			r\RoomDoors.Doors[0] = d
 			
@@ -3567,11 +3567,11 @@ Function FillRoom%(r.Rooms)
 				PlaceForest(fr, r\x, r\y + 30.0, r\z, r)
 			EndIf
 			
-			it.Items = CreateItem("Document SCP-860-1", it_paper, r\x + 1158.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 17.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-860-1", it_paper, r\x + 974.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 17.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			CreateCustomCenter(r, r\x + 927.0 * RoomScale, r\z)
+			CreateCustomCenter(r, r\x + 743.0 * RoomScale, r\z)
 			;[End Block]
 		Case r_room2c_ez
 			;[Block]
