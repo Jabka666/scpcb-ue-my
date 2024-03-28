@@ -757,18 +757,26 @@ Function UpdateEvents%()
 									
 									n_I\Curr173\Idle = (1 - (me\LightBlink >= 0.25))
 									
+									If (Not me\Terminated)
+										If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 6.25 And Abs(EntityY(me\Collider) - EntityY(n_I\Curr173\Collider)) < 1.0
+											me\LightBlink = 3.0
+											me\BlinkTimer = -10.0
+											PlaySound_Strict(IntroSFX[Rand(8, 10)])
+											PlaySound2(StoneDragSFX, Camera, n_I\Curr173\Collider)
+											PositionEntity(n_I\Curr173\Collider, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+											ResetEntity(n_I\Curr173\Collider)
+											n_I\Curr173\Idle = 0
+										EndIf
+									EndIf
+									
 									If e\room\NPC[2]\State <> 1.0 And (Not me\Terminated)
 										If EntityZ(e\room\NPC[2]\Collider) < e\room\z + 898.0 * RoomScale
 											e\room\RoomDoors[3]\Open = False
 											me\LightBlink = 3.0
-											PlaySound_Strict(IntroSFX[Rand(8, 10)])
 											me\BlinkTimer = -10.0
+											PlaySound_Strict(IntroSFX[Rand(8, 10)])
 											PlaySound2(StoneDragSFX, Camera, n_I\Curr173\Collider)
-											If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 6.25 And Abs(EntityY(me\Collider) - EntityY(n_I\Curr173\Collider)) < 1.0
-												PositionEntity(n_I\Curr173\Collider, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
-											Else
-												PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
-											EndIf
+											PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
 											ResetEntity(n_I\Curr173\Collider)
 											n_I\Curr173\Idle = 0
 											CreateHintMsg(Format(GetLocalString("msg", "run"), key\Name[key\SPRINT]))
