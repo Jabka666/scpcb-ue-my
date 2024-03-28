@@ -248,6 +248,16 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Document SCP-173", it_paper, r\x + 173.0 * 4.85 * RoomScale, r\y + 173.0 * RoomScale, r\z + 173.0 * 14.33 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			If Rand(4) > 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 1850.0 * RoomScale, r\y + 505.0 * RoomScale, r\z + 1087.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(3) = 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 1920.0 * RoomScale, r\y + 505.0 * RoomScale, r\z + 1087.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			;[End Block]
 		Case r_cont1_173_intro
 			;[Block]
