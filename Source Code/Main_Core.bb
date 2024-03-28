@@ -5963,7 +5963,7 @@ Function RenderGUI%()
 	EndIf
 	
 	If I_294\Using Then Render294()
-	If SelectedDifficulty\Name <> "Apollyon" And opt\HUDEnabled
+	If SelectedDifficulty\Name <> GetLocalString("menu", "new.apollyon") And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			Local CoordEx% = 32 * MenuScale
 			
