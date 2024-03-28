@@ -2281,14 +2281,14 @@ End Type
 Global msg.Messages
 
 Function CreateMsg%(Txt$, Sec# = 6.0)
-	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
 	
 	msg\Txt = Txt
 	msg\Timer = 70.0 * Sec
 End Function
 
 Function UpdateMessages%()
-	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
 	
 	If msg\Timer > 0.0
 		msg\Timer = msg\Timer - fps\Factor[0]
@@ -2298,7 +2298,7 @@ Function UpdateMessages%()
 End Function
 
 Function RenderMessages%()
-	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
 	
 	If msg\Timer > 0.0
 		Local Temp%
@@ -2330,14 +2330,14 @@ Function RenderMessages%()
 End Function
 
 Function CreateHintMsg%(Txt$, Sec# = 6.0)
-	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
 	
 	msg\HintTxt = Txt
 	msg\HintTimer = 70.0 * Sec
 End Function
 
 Function UpdateHintMessages%()
-	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width = StringWidth(msg\HintTxt) + (20 * Scale)
@@ -2364,7 +2364,7 @@ Function UpdateHintMessages%()
 End Function
 
 Function RenderHintMessages%()
-	If SelectedDifficulty\Name = "Apollyon" Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width% = StringWidth(msg\HintTxt) + (20 * Scale)
@@ -7938,7 +7938,7 @@ Function UpdateEnding%()
 	GiveAchievement(Achv055)
 	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedCustomMap = Null
 		GiveAchievement(AchvConsole)
-		If SelectedDifficulty\Name = "Keter" Lor SelectedDifficulty\Name = "Apollyon"
+		If SelectedDifficulty\Name = GetLocalString("menu", "new.keter") Lor SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon")
 			GiveAchievement(AchvKeter)
 			SaveAchievementsFile()
 		EndIf
