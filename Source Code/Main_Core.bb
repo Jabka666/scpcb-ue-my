@@ -382,9 +382,9 @@ Function UpdateGame%()
 			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
 			UpdateDeaf()
 			UpdateDecals()
+			UpdateSaveState()
 			UpdateMouseLook()
 			UpdateMoving()
-			UpdateSaveState()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			DecalStep = 0
@@ -2481,6 +2481,8 @@ Function UpdateMoving%()
 	Local Pvt%, i%, Angle#
 	
 	If chs\SuperMan
+		CanSave = 0
+		
 		Speed = Speed * 3.0
 		
 		chs\SuperManTimer = chs\SuperManTimer + fps\Factor[0]
