@@ -77,7 +77,6 @@ Function SetLanguage%(Language$, FromSelector% = True)
 	If lang\LanguagePath <> ""
 		; ~ Clear previous buffers info
 		IniClearBuffer(lang\LanguagePath + LanguageFile)
-		IniClearBuffer(lang\LanguagePath + LoadingScreensFile)
 		IniClearBuffer(lang\LanguagePath + FontsFile)
 		IniClearBuffer(lang\LanguagePath + AchievementsFile)
 	EndIf
@@ -90,7 +89,6 @@ Function SetLanguage%(Language$, FromSelector% = True)
 		
 		; ~ Write a new buffer
 		IniWriteBuffer(lang\LanguagePath + LanguageFile)
-		IniWriteBuffer(lang\LanguagePath + LoadingScreensFile)
 		IniWriteBuffer(lang\LanguagePath + FontsFile)
 		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
 	EndIf
