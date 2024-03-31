@@ -2723,49 +2723,50 @@ Function UpdateMoving%()
 		me\ForceMove = 0.0
 	EndIf
 	
-	If me\Injuries > 1.0
-		Temp2 = me\Bloodloss
-		me\BlurTimer = Max(Max(Sin(MilliSec / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
-		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
-		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then CreateMsg(GetLocalString("msg", "bloodloss"))
-	EndIf
 	
 	Update008()
 	Update409()
 	
 	Local TempCHN% = 0
 	
-	If me\Bloodloss > 0.0 And me\VomitTimer >= 0.0
-		If Rnd(200.0) < Min(me\Injuries, 4.0)
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
-			TurnEntity(Pvt, 90.0, 0.0, 0.0)
-			EntityPick(Pvt, 0.3)
+	If me\Injuries > 1.0
+		Temp2 = me\Bloodloss
+		me\BlurTimer = Max(Max(Sin(MilliSec / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
+		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
+		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then CreateMsg(GetLocalString("msg", "bloodloss"))
+		If me\Bloodloss > 0.0 And me\VomitTimer >= 0.0
+			If Rnd(200.0) < Min(me\Injuries, 4.0)
+				Pvt = CreatePivot()
+				PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
+				TurnEntity(Pvt, 90.0, 0.0, 0.0)
+				EntityPick(Pvt, 0.3)
+				
+				de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
+				de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+				EntityParent(de\OBJ, PlayerRoom\OBJ)
+				TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
+				ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
+				ChannelPitch(TempCHN, Rand(20000, 30000))
+				
+				FreeEntity(Pvt) : Pvt = 0
+			EndIf
 			
-			de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
-			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
-			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
-			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
-			ChannelPitch(TempCHN, Rand(20000, 30000))
+			me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * me\Bloodloss * 0.2)
 			
-			FreeEntity(Pvt) : Pvt = 0
-		EndIf
-		
-		me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * me\Bloodloss * 0.2)
-		
-		If me\Bloodloss > 60.0 And (Not chs\NoClip)
-			If (Not me\Crouch) Then SetCrouch(True)
-		EndIf
-		If me\Bloodloss >= 100.0
-			me\HeartBeatVolume = 0.0
-			Kill(True)
-		ElseIf me\Bloodloss > 80.0
-			me\HeartBeatRate = Max(150.0 - (me\Bloodloss - 80.0) * 5.0, me\HeartBeatRate)
-			me\HeartBeatVolume = Max(me\HeartBeatVolume, 0.75 + (me\Bloodloss - 80.0) * 0.0125)
-		ElseIf me\Bloodloss > 35.0
-			me\HeartBeatRate = Max(70.0 + me\Bloodloss, me\HeartBeatRate)
-			me\HeartBeatVolume = Max(me\HeartBeatVolume, (me\Bloodloss - 35.0) / 60.0)
+			If me\Bloodloss > 60.0
+				CanSave = 0
+				If (Not me\Crouch) And (Not chs\NoClip) Then SetCrouch(True)
+			EndIf
+			If me\Bloodloss >= 100.0
+				me\HeartBeatVolume = 0.0
+				Kill(True)
+			ElseIf me\Bloodloss > 80.0
+				me\HeartBeatRate = Max(150.0 - (me\Bloodloss - 80.0) * 5.0, me\HeartBeatRate)
+				me\HeartBeatVolume = Max(me\HeartBeatVolume, 0.75 + (me\Bloodloss - 80.0) * 0.0125)
+			ElseIf me\Bloodloss > 35.0
+				me\HeartBeatRate = Max(70.0 + me\Bloodloss, me\HeartBeatRate)
+				me\HeartBeatVolume = Max(me\HeartBeatVolume, (me\Bloodloss - 35.0) / 60.0)
+			EndIf
 		EndIf
 	EndIf
 	
