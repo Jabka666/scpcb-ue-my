@@ -2520,6 +2520,24 @@ Function UpdateMoving%()
 		me\StaminaEffect = 1.0
 	EndIf
 	
+	me\StaminaMax = 100.0
+	
+	If I_714\Using = 2
+		me\Stamina = CurveValue(Min(10.0, me\Stamina), me\Stamina, 10.0)
+		me\StaminaMax = Min(me\StaminaMax, 10.0)
+		me\Sanity = Max(-850.0, me\Sanity)
+	ElseIf I_714\Using = 1
+		me\Stamina = CurveValue(Min(25.0, me\Stamina), me\Stamina, 15.0)
+		me\StaminaMax = Min(me\StaminaMax, 25.0)
+	Else
+		If wi\BallisticVest = 2 Lor wi\HazmatSuit = 1
+			me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
+			me\StaminaMax = Min(me\StaminaMax, 60.0)
+		EndIf
+		If wi\GasMask = 3 Lor wi\HazmatSuit = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.002 * fps\Factor[0])
+		If wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
+	EndIf
+	
 	Local Temp#, Temp3%
 	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
@@ -2539,24 +2557,6 @@ Function UpdateMoving%()
 				ChannelVolume(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\VoiceVolume * opt\MasterVolume)
 			EndIf
 		EndIf
-	EndIf
-	
-	me\StaminaMax = 100.0
-	
-	If I_714\Using = 2
-		me\Stamina = CurveValue(Min(10.0, me\Stamina), me\Stamina, 10.0)
-		me\StaminaMax = Min(me\StaminaMax, 10.0)
-		me\Sanity = Max(-850.0, me\Sanity)
-	ElseIf I_714\Using = 1
-		me\Stamina = CurveValue(Min(25.0, me\Stamina), me\Stamina, 15.0)
-		me\StaminaMax = Min(me\StaminaMax, 25.0)
-	Else
-		If wi\BallisticVest = 2 Lor wi\HazmatSuit = 1
-			me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
-			me\StaminaMax = Min(me\StaminaMax, 60.0)
-		EndIf
-		If wi\GasMask = 3 Lor wi\HazmatSuit = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.002 * fps\Factor[0])
-		If wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 	EndIf
 	
 	If me\Zombie
