@@ -8540,7 +8540,7 @@ Function Update008%()
 			PrevI008Timer = I_008\Timer
 			If I_427\Timer < 70.0 * 360.0
 				If I_008\Revert
-					I_008\Timer = Max(0.0, I_008\Timer - (fps\Factor[0] * 0.01))
+					I_008\Timer = Max(0.0, I_008\Timer - (fps\Factor[0] * 0.02))
 				Else
 					If (Not I_427\Using) Then I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
 				EndIf
@@ -8718,7 +8718,7 @@ Function Update409%()
 		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
 		If I_427\Timer < 70.0 * 360.0
 			If I_409\Revert
-				I_409\Timer = Max(0.0, I_409\Timer - (fps\Factor[0] * 0.01))
+				I_409\Timer = Max(0.0, I_409\Timer - (fps\Factor[0] * 0.02))
 			Else
 				If (Not I_427\Using) Then I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 			EndIf
