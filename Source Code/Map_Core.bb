@@ -1566,7 +1566,7 @@ End Type
 Const r_room1_storage% = 0
 Const r_room1_dead_end_lcz% = 1
 Const r_cont1_005% = 2
-Const r_cont1_173% = 3, r_cont1_173_intro% = 4, r_cont1_205% = 5, r_cont1_372% = 6, r_cont1_914% = 7
+Const r_cont1_173% = 3, r_cont1_173_intro% = 4, r_cont1_205% = 5, r_cont3_372% = 6, r_cont1_914% = 7
 Const r_room2_lcz% = 8, r_room2_2_lcz% = 9, r_room2_3_lcz% = 10, r_room2_4_lcz% = 11, r_room2_5_lcz% = 12, r_room2_6_lcz% = 13
 Const r_room2_closets% = 14
 Const r_room2_elevator% = 15
@@ -1651,9 +1651,9 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_cont1_205)
 			;[End Block]
-		Case "cont1_372"
+		Case "cont3_372"
 			;[Block]
-			Return(r_cont1_372)
+			Return(r_cont3_372)
 			;[End Block]
 		Case "cont1_914"
 			;[Block]
@@ -5516,13 +5516,10 @@ Function CreateMap%()
 	
 	MapRoom(ROOM1, 0) = "cont1_173"
 	
-	SetRoom("cont1_372", ROOM1, Floor(0.1 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_005", ROOM1, Floor(0.3 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_914", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_205", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("room1_storage", ROOM1, Floor(0.6 * Float(Room1Amount[0])), MinPos, MaxPos)
-	
-	MapRoom(ROOM2C, 0) = "room2c_gw_lcz"
+	SetRoom("cont1_205", ROOM1, Floor(0.2 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("cont1_005", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("room1_storage", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("cont1_914", ROOM1, Floor(0.65 * Float(Room1Amount[0])), MinPos, MaxPos)
 	
 	MinPos = 1
 	MaxPos = Room2Amount[0] - 1
@@ -5540,9 +5537,12 @@ Function CreateMap%()
 	SetRoom("room2_js", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
 	SetRoom("room2_elevator", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
 	
+	MapRoom(ROOM2C, 0) = "room2c_gw_lcz"
+	
 	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_066_1162_arc"
 	
-	MapRoom(ROOM3, Floor(Rnd(0.2, 0.8) * Float(Room3Amount[0]))) = "room3_storage"
+	MapRoom(ROOM3, Floor(Rnd(0.2, 0.6) * Float(Room3Amount[0]))) = "room3_storage"
+	MapRoom(ROOM3, Floor(0.8 * Float(Room3Amount[0]))) = "cont3_372"
 	
 	MapRoom(ROOM4, Floor(0.3 * Float(Room4Amount[0]))) = "room4_ic"
 	

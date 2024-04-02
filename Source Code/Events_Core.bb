@@ -19,7 +19,7 @@ Const e_cont1_005% = 2
 Const e_cont1_079% = 3
 Const e_cont1_106% = 4
 Const e_cont1_205% = 5
-Const e_cont1_372% = 6
+Const e_cont3_372% = 6
 Const e_cont1_895% = 7
 Const e_cont1_914% = 8
 Const e_cont2_008% = 9
@@ -33,6 +33,7 @@ Const e_cont2c_066_1162_arc% = 17
 Const e_cont1_035% = 18
 Const e_cont3_966% = 19
 Const e_room1_dead_end_106% = 20
+Const e_room1_dead_end_guard% = 73
 Const e_trick% = 21
 Const e_1048_a% = 22
 Const e_682_roar% = 23
@@ -105,9 +106,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont1_205)
 			;[End Block]
-		Case "cont1_372"
+		Case "cont3_372"
 			;[Block]
-			Return(e_cont1_372)
+			Return(e_cont3_372)
 			;[End Block]
 		Case "cont1_895"
 			;[Block]
@@ -160,6 +161,10 @@ Function FindEventID%(EventName$)
 		Case "room1_dead_end_106"
 			;[Block]
 			Return(e_room1_dead_end_106)
+			;[End Block]
+		Case "room1_dead_end_guard"
+			;[Block]
+			Return(e_room1_dead_end_guard)
 			;[End Block]
 		Case "trick"
 			;[Block]
@@ -1418,15 +1423,13 @@ Function UpdateEvents%()
 					e\EventStr = ""
 				EndIf
 				;[End block]
-			Case e_cont1_372
+			Case e_cont3_372
 				;[Block]
 				If PlayerRoom = e\room
-					If e\EventState = 0.0
-						If EntityDistanceSquared(me\Collider, e\room\OBJ) < 2.25
-							PlaySound_Strict(RustleSFX[Rand(0, 5)])
-							CreateNPC(NPCType372, 0.0, 0.0, 0.0)
-							RemoveEvent(e)
-						EndIf
+					If e\room\RoomDoors[0]\Open
+						PlaySound_Strict(RustleSFX[Rand(0, 5)])
+						CreateNPC(NPCType372, 0.0, 0.0, 0.0)
+						RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
@@ -3032,13 +3035,13 @@ Function UpdateEvents%()
 					Temp = False
 					If e\room\Dist < 8.0 And PlayerRoom <> e\room
 						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard1.ogg")
-						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0, 1.0, True)
+						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 					ElseIf PlayerRoom = e\room
 						If me\SndVolume > 1.0
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard2.ogg")
-							e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 15.0, 1.0, True)
+							e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 							Temp = True
 						EndIf
 						If Temp Then RemoveEvent(e)
@@ -3150,15 +3153,12 @@ Function UpdateEvents%()
 							If n_I\Curr106\State =< 0.0
 								RemoveEvent(e)
 							Else
-								e\room\RoomDoors[0]\Open = True
-								
 								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\RoomDoors[0]\OBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\OBJ, True))
 								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_JANITOR_TEXTURE)
 								PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
 								MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, 0.5) 
 								
-								e\room\RoomDoors[0]\Open = False
 								PlaySound2(LoadTempSound("SFX\Door\EndroomDoor.ogg"), Camera, e\room\OBJ, 15.0)
 								
 								e\EventState = 1.0
@@ -3166,8 +3166,6 @@ Function UpdateEvents%()
 						EndIf
 					ElseIf e\EventState = 1.0
 						If PlayerRoom = e\room
-							e\room\NPC[0]\State = 1.0
-							
 							e\Sound = LoadSound_Strict("SFX\Character\Janitor\106Abduct.ogg")
 							PlaySound_Strict(e\Sound, True)
 							
@@ -3179,7 +3177,9 @@ Function UpdateEvents%()
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ, 15.0, 1.0, True)
 						EndIf
 					ElseIf e\EventState = 2.0
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\OBJ) < 2.25
+						e\EventState2 = e\EventState2 + fps\Factor[0]
+						If e\EventState2 > 85.0 Then e\room\NPC[0]\State = 1.0
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\OBJ) > 3.49
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05)
 							de\SizeChange = 0.008 : de\Timer = 10000.0
 							EntityParent(de\OBJ, e\room\OBJ)
@@ -3192,7 +3192,7 @@ Function UpdateEvents%()
 						
 						n_I\Curr106\Idle = 1
 						
-						If DistanceSquared(EntityX(e\room\NPC[0]\Collider), EntityX(e\room\OBJ), EntityZ(e\room\NPC[0]\Collider), EntityZ(e\room\OBJ)) < 0.16
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\OBJ) > 7.74
 							If e\room\NPC[0]\State = 1.0 Then SetNPCFrame(e\room\NPC[0], 41.0)
 							e\room\NPC[0]\State = 6.0
 							e\room\NPC[0]\CurrSpeed = CurveValue(0.0, e\room\NPC[0]\CurrSpeed, 25.0)
@@ -3222,6 +3222,38 @@ Function UpdateEvents%()
 				Else
 					RemoveNPC(e\room\NPC[0])
 					RemoveEvent(e)
+				EndIf
+				;[End Block]
+			Case e_room1_dead_end_guard
+				;[Block]
+				If e\EventState = 0.0
+					If e\room\Dist < 8.0
+						TFormPoint(-944.0, 448.0, 20.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
+						
+						e\room\RoomDoors[0]\Open = True
+						
+						e\EventState = 1.0
+					EndIf
+				Else
+					If e\EventState = 1.0
+						If e\room\Dist < 2.5
+							e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
+							e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[0], True)
+							e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[0], True)
+							e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[0], True)
+							
+							e\EventState = 2.0
+						EndIf
+					Else
+						e\EventState = e\EventState + fps\Factor[0]
+						If e\EventState > 70.0 * 3.6 And e\room\RoomDoors[0]\Open Then OpenCloseDoor(e\room\RoomDoors[0])
+						If e\room\RoomDoors[0]\OpenState = 0.0
+							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
+							RemoveEvent(e)
+						EndIf
+					EndIf
 				EndIf
 				;[End Block]
 			Case e_room2_closets

@@ -1611,7 +1611,7 @@ Function LoadEvents%()
 	CreateEvent(e_room2c_gw_ez_096, r_room2c_gw_ez, 0)
 	
 	CreateEvent(e_room1_dead_end_106, r_room1_dead_end_lcz, Rand(0, 1))
-	CreateEvent(e_room1_dead_end_106, r_room1_dead_end_ez, Rand(0, 1))
+	CreateEvent(e_room1_dead_end_guard, r_room1_dead_end_ez, Rand(0, 1))
 	
 	CreateEvent(e_room2_scientists_2, r_room2_scientists_2, 0)
 	
@@ -1622,7 +1622,7 @@ Function LoadEvents%()
 	CreateEvent(e_room3_storage, r_room3_storage, 0)
 	
 	CreateEvent(e_room2_6_hcz_smoke, r_room2_6_hcz, 0, 0.2)
-	CreateEvent(e_room2_6_hcz, r_room2_6_hcz, 0, (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_6_hcz, r_room2_6_hcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ SCP-173 appears in half of the r_room2_6_lcz-rooms
 	CreateEvent(e_173_appearing, r_room2_6_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
@@ -1696,7 +1696,7 @@ Function LoadEvents%()
 	
 	CreateEvent(e_cont1_106, r_cont1_106, 0)
 	
-	CreateEvent(e_cont1_372, r_cont1_372, 0)
+	CreateEvent(e_cont3_372, r_cont3_372, 0)
 	
 	CreateEvent(e_cont1_914, r_cont1_914, 0)
 	

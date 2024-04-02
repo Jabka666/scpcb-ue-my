@@ -100,7 +100,17 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
-		Case r_room1_dead_end_lcz, r_room1_dead_end_ez
+		Case r_room1_dead_end_lcz
+			;[Block]
+			; ~ Evacuation shelter doors
+			d.Doors = CreateDoor(r, r\x, r\y, r\z + 786.0 * RoomScale, r\y, False, BIG_DOOR)
+			d\MTFClose = False : d\DisableWaypoint = True
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
+			r\RoomDoors.Doors[0] = d
+			;[End Block]
+		Case r_room1_dead_end_ez
 			;[Block]
 			; ~ Evacuation shelter doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 1202.0 * RoomScale, r\y, False, BIG_DOOR)
@@ -108,7 +118,18 @@ Function FillRoom%(r.Rooms)
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
+			
+			; ~ Upper view door
+			d.Doors = CreateDoor(r, r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 921.0 * RoomScale, 0.0, False)
+			d\MTFClose = False : d\DisableWaypoint = True
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
 			r\RoomDoors.Doors[0] = d
+			
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 1460.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 		Case r_cont1_005
 			;[Block]
@@ -555,30 +576,31 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x + 188.0 * RoomScale, r\z - 724.0 * RoomScale)
 			;[End Block]
-		Case r_cont1_372
+		Case r_cont3_372
 			;[Block]
 			; ~ SCP-372 Chamber door
-			d.Doors = CreateDoor(r, r\x, r\y, r\z - 368.0 * RoomScale, 0.0, False, BIG_DOOR, KEY_CARD_2)
-			PositionEntity(d\Buttons[0], r\x - 496.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 278.0 * RoomScale, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.025, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			d.Doors = CreateDoor(r, r\x + 576.0 * RoomScale, r\y, r\z + 176.0 * RoomScale, 90.0, False, BIG_DOOR, KEY_CARD_2)
+			PositionEntity(d\Buttons[0], r\x + 496.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 278.0 * RoomScale, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.025, True)
 			TurnEntity(d\Buttons[0], 0.0, 90.0, 0.0)
+			r\RoomDoors.Doors[0] = d
 			
 			; ~ Hit Box
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\cont1_372_hb.b3d", r\OBJ)
-			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
-			EntityType(r\Objects[0], HIT_MAP)
-			EntityAlpha(r\Objects[0], 0.0)
+			;r\Objects[0] = LoadMesh_Strict("GFX\Map\cont1_372_hb.b3d", r\OBJ)
+			;r\ScriptedObject[0] = True
+			;EntityPickMode(r\Objects[0], 2)
+			;EntityType(r\Objects[0], HIT_MAP)
+			;EntityAlpha(r\Objects[0], 0.0)
 			
-			it.Items = CreateItem("Document SCP-372", it_paper, r\x + 800.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 1108.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-372", it_paper, r\x + 350.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 564.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 800.0 * RoomScale, r\y + 112.0 * RoomScale, r\z + 944.0 * RoomScale)
+			it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 186.0 * RoomScale, r\y + 112.0 * RoomScale, r\z - 427.0 * RoomScale)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			CreateCustomCenter(r, r\x, r\z - 704.0 * RoomScale)
+			CreateCustomCenter(r, r\x + 704.0 * RoomScale, r\z)
 			;[End Block]
 		Case r_cont1_914
 			;[Block]

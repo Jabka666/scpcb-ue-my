@@ -1470,7 +1470,7 @@ Function UpdateConsole%()
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType372
 							RemoveNPC(n)
-							CreateEvent(e_cont1_372, r_cont1_372, 0, 0.0)
+							CreateEvent(e_cont3_372, r_cont3_372, 0, 0.0)
 							Exit
 						EndIf
 					Next
