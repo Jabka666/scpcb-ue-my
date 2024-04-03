@@ -698,13 +698,13 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_6_lcz
 			;[Block]
-			d.Doors = CreateDoor(r, r\x, r\y, r\z + 528.0 * RoomScale, 0.0)
+			d.Doors = CreateDoor(r, r\x, r\y, r\z + 529.0 * RoomScale, 0.0)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], r\x - 998.0 * RoomScale, EntityY(d\Buttons[0], True), r\z, True)
 			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.061, True)
 			
-			d2.Doors = CreateDoor(r, r\x, r\y, r\z - 528.0 * RoomScale, 180.0, True)
+			d2.Doors = CreateDoor(r, r\x, r\y, r\z - 529.0 * RoomScale, 180.0, True)
 			d2\AutoClose = False
 			FreeEntity(d2\Buttons[0]) : d2\Buttons[0] = 0
 			PositionEntity(d2\Buttons[1], EntityX(d2\Buttons[1], True), EntityY(d2\Buttons[1], True), EntityZ(d2\Buttons[1], True) + 0.061, True)
