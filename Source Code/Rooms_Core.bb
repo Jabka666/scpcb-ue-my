@@ -580,7 +580,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ SCP-372 Chamber door
 			d.Doors = CreateDoor(r, r\x + 576.0 * RoomScale, r\y, r\z + 176.0 * RoomScale, 90.0, False, BIG_DOOR, KEY_CARD_2)
-			PositionEntity(d\Buttons[0], r\x + 496.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 278.0 * RoomScale, True)
+			PositionEntity(d\Buttons[0], r\x + 486.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 296.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.025, True)
 			TurnEntity(d\Buttons[0], 0.0, 90.0, 0.0)
 			r\RoomDoors.Doors[0] = d
