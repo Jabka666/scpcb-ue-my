@@ -585,6 +585,19 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(d\Buttons[0], 0.0, 90.0, 0.0)
 			r\RoomDoors.Doors[0] = d
 			
+			; ~ Observation Room door
+			d.Doors = CreateDoor(r, r\x + 113.0 * RoomScale, r\y, r\z + 380.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_2)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.057, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.057, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			d\MTFClose = False : d\AutoClose = False
+			
+			; ~ Maintenance Room 4D door
+			d.Doors = CreateDoor(r, r\x - 840.0 * RoomScale, r\y, r\z + 258.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_2)
+			d\Locked = 1 : d\DisableWaypoint = True
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
 			; ~ Hit Box
 			;r\Objects[0] = LoadMesh_Strict("GFX\Map\cont1_372_hb.b3d", r\OBJ)
 			;r\ScriptedObject[0] = True
