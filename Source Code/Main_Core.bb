@@ -3128,6 +3128,7 @@ End Function
 Function ResetSelectedStuff%()
 	InvOpen = False
 	I_294\Using = False
+	I_294\ToInput = ""
 	d_I\SelectedDoor = Null
 	SelectedScreen = Null
 	sc_I\SelectedMonitor = Null
