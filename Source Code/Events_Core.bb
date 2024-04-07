@@ -1254,6 +1254,7 @@ Function UpdateEvents%()
 							EndIf
 							
 							If e\EventState > 7.0 And RemoteDoorOn
+								RotateEntity(e\room\RoomLevers[0]\OBJ, CurveAngle(80.0 - (e\room\RoomDoors[0]\Open * 160.0), EntityPitch(e\room\RoomLevers[0]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
 								If Rand(150 + (150 * e\room\RoomDoors[0]\Open)) = 1
 									If e\room\RoomDoors[0]\Open
 										PlaySound2(DoorClose079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)

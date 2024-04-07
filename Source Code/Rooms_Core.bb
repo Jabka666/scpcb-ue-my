@@ -541,6 +541,9 @@ Function FillRoom%(r.Rooms)
 			; ~ Storage Room 1C Door
 			d.Doors = CreateDoor(r, r\x + 472.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_1)
 			
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 80.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 163.0 * RoomScale, 270.0, True)
+			RotateEntity(r\RoomLevers[0]\OBJ, 80.0, EntityYaw(r\RoomLevers[0]\OBJ), 0.0)
+			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
 			sc\ScriptedCamera = True : sc\ScriptedMonitor = True
