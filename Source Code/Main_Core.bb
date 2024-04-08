@@ -1898,13 +1898,13 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "disablenuke"
 					;[Block]
-					For e2.Events = Each Events
-						If e2\EventID = e_room2_nuke
-							e2\EventState = 0.0
-							UpdateLever(e2\room\RoomLevers[0]\OBJ)
-							UpdateLever(e2\room\RoomLevers[1]\OBJ)
-							RotateEntity(e2\room\RoomLevers[0]\OBJ, -80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
-							RotateEntity(e2\room\RoomLevers[1]\OBJ, -80.0, EntityYaw(e2\room\RoomLevers[1]\OBJ), 0.0)
+					For e.Events = Each Events
+						If e\EventID = e_room2_nuke
+							e\EventState = 0.0
+							UpdateLever(e\room\RoomLevers[0]\OBJ)
+							UpdateLever(e\room\RoomLevers[1]\OBJ)
+							RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
+							RotateEntity(e\room\RoomLevers[1]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[1]\OBJ), 0.0)
 							Exit
 						EndIf
 					Next
