@@ -2098,6 +2098,8 @@ Function UpdateConsole%()
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
 					I_427\Timer = 70.0 * Float(StrTemp)
+					
+					CreateConsoleMsg(Format(GetLocalString("console", "427"), StrTemp))
 					;[End Block]
 				Case "teleport106"
 					;[Block]
