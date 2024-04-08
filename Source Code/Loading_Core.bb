@@ -1034,7 +1034,9 @@ Function LoadItems%()
 		If it\Tex <> 0
 			If it\TexPath <> ""
 				For it2.ItemTemplates = Each ItemTemplates
-					If it2 <> it And it2\Tex = it\Tex Then it2\Tex = 0
+					If it2 <> it And it2\Tex = it\Tex
+						DeleteSingleTextureEntryFromCache(it2\Tex) : it2\Tex = 0
+					EndIf
 				Next
 			EndIf
 			DeleteSingleTextureEntryFromCache(it\Tex) : it\Tex = 0
