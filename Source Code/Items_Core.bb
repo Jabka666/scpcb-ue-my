@@ -930,7 +930,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If Rand(50) = 1
 						it2.Items = CreateItem("SCP-1499", it_scp1499, x, y, z)
 					Else
-						Remove = False
+						it2.Items = CreateItem("Gas Mask", it_gasmask, x, y, z)
 					EndIf
 					;[End Block]
 				Case FINE
