@@ -762,7 +762,7 @@ Function UpdateEvents%()
 									
 									n_I\Curr173\Idle = (1 - (me\LightBlink >= 0.25))
 									
-									If (Not me\Terminated)
+									If (Not me\Terminated) And (Not chs\NoTarget)
 										If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 6.25 And Abs(EntityY(me\Collider) - EntityY(n_I\Curr173\Collider)) < 1.0
 											me\LightBlink = 3.0
 											me\BlinkTimer = -10.0
