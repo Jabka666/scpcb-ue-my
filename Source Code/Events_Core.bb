@@ -3072,41 +3072,19 @@ Function UpdateEvents%()
 					
 					If e\EventState3 = 0.0
 						If Rand(2) = 1
-							e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
-							ScaleEntity(e\room\Objects[3], 0.05, 0.05, 0.05)
-							PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
-							SetAnimTime(e\room\Objects[3], 267.0)
+							TFormPoint(877.0, 121.0, 333.0, e\room\OBJ, 0)
+							e\room\NPC[0] = CreateNPC(NPCType1048, TFormedX(), TFormedY(), TFormedZ())
+							e\room\NPC[0]\State = 2.0
 						EndIf
-						
 						e\EventState3 = 1.0
-					ElseIf e\room\Objects[3] <> 0
-						If e\EventState3 = 1.0
-							PointEntity(e\room\Objects[3], me\Collider)
-							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
-							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
-							If Angle < 40.0 Lor Angle > 320.0
-								GiveAchievement(Achv1048)
-								e\EventState3 = 2.0
-							EndIf
-						ElseIf e\EventState3 = 2.0
-							PointEntity(e\room\Objects[3], me\Collider)
-							RotateEntity(e\room\Objects[3], -90.0, EntityYaw(e\room\Objects[3]), 0.0)
-							Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 267.0, 283.0, 0.3, False)
-							If AnimTime(e\room\Objects[3]) = 283.0 Then e\EventState3 = 3.0
-						ElseIf e\EventState3 = 3.0
-							Animate2(e\room\Objects[3], AnimTime(e\room\Objects[3]), 283.0, 267.0, -0.2, False)
-							If AnimTime(e\room\Objects[3]) = 267.0 Then e\EventState3 = 4.0
-						ElseIf e\EventState3 = 4.0
-							Angle = WrapAngle(DeltaYaw(me\Collider, e\room\Objects[3]))
-							If Angle > 90.0 And Angle < 270.0
-								FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
-								e\EventState3 = 5.0
-							EndIf
-						EndIf
 					EndIf
 				EndIf
 				
 				If e\room\Dist < 12.0
+					If e\room\NPC[0] <> Null
+						If e\room\NPC[0]\State2 = 3.0 Then RemoveNPC(e\room\NPC[0])
+					EndIf
+					
 					For e2.Events = Each Events
 						If e\room\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
 							If e2\EventID = e_cont2_008
@@ -4934,11 +4912,10 @@ Function UpdateEvents%()
 			Case e_room3_hcz_1048
 				;[Block]
 				If PlayerRoom = e\room
-					If e\room\Objects[0] = 0
-						TFormPoint(704.0, 112.0, -416.0, e\room\OBJ, 0)
-						e\room\Objects[0] =	CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
-						ScaleEntity(e\room\Objects[0], 0.05, 0.05, 0.05)
-						SetAnimTime(e\room\Objects[0], 488.0)
+					If e\EventState = 0.0
+						TFormPoint(704.0, 132.0, -416.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCType1048, TFormedX(), TFormedY(), TFormedZ())
+						e\room\NPC[0]\State = 3.0
 						
 						Local DrawingName$ = "drawing_1048(" + Rand(25) + ").png"
 						
@@ -4957,8 +4934,8 @@ Function UpdateEvents%()
 						
 						Local Brush% = GetRescaledTexture(ItemHUDTexturePath + DrawingName, 1, 256, 256, True)
 						
-						For i = 1 To CountSurfaces(e\room\Objects[0])
-							SF = GetSurface(e\room\Objects[0], i)
+						For i = 1 To CountSurfaces(e\room\NPC[0]\OBJ)
+							SF = GetSurface(e\room\NPC[0]\OBJ, i)
 							b = GetSurfaceBrush(SF)
 							BT = GetBrushTexture(b, 0)
 							TexName = StripPath(TextureName(BT))
@@ -4970,25 +4947,10 @@ Function UpdateEvents%()
 						FreeBrush(Brush) : Brush = 0
 						TexName = ""
 						
-						PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ())
-						EntityParent(e\room\Objects[0], e\room\OBJ)
+						e\EventState = 1.0
 					Else
-						PointEntity(e\room\Objects[0], me\Collider)
-						RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
-						
-						If e\EventState = 0.0
-							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 9.0
-								If EntityInView(e\room\Objects[0], Camera)
-									GiveAchievement(Achv1048)
-									e\EventState = 1.0
-								EndIf
-							EndIf
-						ElseIf e\EventState = 1.0
-							Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 488.0, 634.0, 0.5, False)
-							If AnimTime(e\room\Objects[0]) = 634.0 Then e\EventState = 2.0
-						ElseIf e\EventState = 2.0
-							Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 339.0, 487.0, 1.0)
-							If InteractObject(e\room\Objects[0], 2.25)
+						If e\room\NPC[0]\Frame > 474.0
+							If InteractObject(e\room\NPC[0]\OBJ, 2.25)
 								If ItemAmount >= MaxItemAmount
 									CreateMsg(GetLocalString("msg", "cantcarry"))
 								Else
@@ -4998,7 +4960,7 @@ Function UpdateEvents%()
 									
 									PickItem(SelectedItem)
 									
-									FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+									RemoveNPC(e\room\NPC[0])
 									
 									RemoveEvent(e)
 								EndIf
@@ -6168,32 +6130,24 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0
 					If PlayerRoom = e\room
-						e\room\Objects[7] = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
-						ScaleEntity(e\room\Objects[7], 0.05, 0.05, 0.05)
-						
 						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
 						If TFormedZ() = 0.0
 							Temp = -1
 						Else
 							Temp = -Sgn(TFormedZ())
 						EndIf
-						TFormPoint(-720.0, 0.0, 816.0 * Temp, e\room\OBJ, 0)
-						PositionEntity(e\room\Objects[7], TFormedX(), 0.0, TFormedZ(), True)
-						RotateEntity(e\room\Objects[7], -90.0, e\room\Angle - 90.0, 0.0)
-						SetAnimTime(e\room\Objects[7], 297.0)
+						TFormPoint(-720.0, 25.0, 816.0 * Temp, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCType1048, TFormedX(), TFormedY(), TFormedZ())
+						e\room\NPC[0]\State = 1.0
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
 						
 						e\EventState = 1.0
 					EndIf
 				ElseIf e\EventState = 1.0
-					If e\room\Objects[7] <> 0
-						Animate2(e\room\Objects[7], AnimTime(e\room\Objects[7]), 284.0, 295.0, 0.3)
-						MoveEntity(e\room\Objects[7], 0.0, (-0.008) * fps\Factor[0], 0.0)
-						TFormPoint(EntityX(e\room\Objects[7]), EntityY(e\room\Objects[7]), EntityZ(e\room\Objects[7]), 0.0, e\room\OBJ)
-						
-						If Abs(TFormedX()) > 725.0 Lor e\room\RoomDoors[0]\Open
-							FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
-							e\EventState = 2.0
-						EndIf
+					e\EventState2 = e\EventState2 + fps\Factor[0]
+					If e\EventState2 > 70.0 * 10.5 Lor e\room\RoomDoors[0]\Open
+						RemoveNPC(e\room\NPC[0])
+						e\EventState = 2.0
 					EndIf
 				EndIf
 				

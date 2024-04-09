@@ -2,13 +2,13 @@
 ;[Block]
 Const NPCType008_1% = 0, NPCType035_Tentacle% = 1, NPCType049% = 2, NPCType049_2% = 3, NPCType066% = 4, NPCType096% = 5
 Const NPCType106% = 6, NPCType173% = 7, NPCType372% = 8, NPCType513_1% = 9, NPCType860_2% = 10, NPCType939% = 11
-Const NPCType966% = 12, NPCType1499_1% = 13
+Const NPCType966% = 12, NPCType1048% = 13, NPCType1499_1% = 14
 
-Const NPCTypeApache% = 14, NPCTypeClerk% = 15, NPCTypeD% = 16, NPCTypeGuard% = 17, NPCTypeMTF% = 18
+Const NPCTypeApache% = 15, NPCTypeClerk% = 16, NPCTypeD% = 17, NPCTypeGuard% = 18, NPCTypeMTF% = 19
 ;[End Block]
 
 Const MaxPathLocations% = 21
-Const PathLocationDist# = 0.04 ; ~ 0.25 ^ 2
+Const PathLocationDist# = 0.04 ; ~ 0.2 ^ 2
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
@@ -451,6 +451,21 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Temp = IniGetFloat(NPCsFile, "Clerk", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
+			;[End Block]
+		Case NPCType1048
+			;[Block]
+			n\NVGName = "SCP-1048"
+			n\GravityMult = 0.0
+			n\MaxGravity = 0.0
+			
+			n\Collider = CreatePivot()
+			n\CollRadius = 0.08
+			EntityRadius(n\Collider, n\CollRadius)
+			EntityType(n\Collider, HIT_PLAYER)
+			
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
+			Temp = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
 	End Select
 	
@@ -2693,6 +2708,69 @@ Function UpdateNPCs%()
 				EndIf
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.2, EntityZ(n\Collider))
 				RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
+				;[End Block]
+			Case NPCType1048
+				;[Block]
+				n\Speed = 0.3
+				Visible = (EntityDistanceSquared(me\Collider, n\Collider) < 4.0 And EntityInView(n\OBJ, Camera))
+				
+				If Visible Then GiveAchievement(Achv1048)
+				
+				Select n\State
+					Case 0.0 ; ~ Idle
+						;[Block]
+						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						
+						AnimateNPC(n, 2.0, 151.0, n\Speed)
+						;[End Block]
+					Case 1.0 ; ~ Walks
+						;[Block]
+						If n\Frame < 262.0
+							AnimateNPC(n, 249.0, 262.0, n\Speed, False)
+						Else
+							n\Speed = 0.008
+							
+							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							
+							AnimateNPC(n, 263.0, 290.0, n\CurrSpeed * 37.5)
+						EndIf
+						;[End Block]
+					Case 2.0 ; ~ Happy :]
+						;[End Block]
+						PointEntity(n\Collider, me\Collider)
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+						
+						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						If n\State2 = 0.0
+							If Visible Then n\State2 = 1.0
+						ElseIf n\State2 = 1.0
+							AnimateNPC(n, 305.0, 325.0, n\Speed, False)
+							If n\Frame > 324.9 Then n\State2 = 2.0
+						ElseIf n\State2 = 2.0
+							AnimateNPC(n, 325.0, 305.0, (-n\Speed) / 1.5, False)
+							If n\Frame < 305.1 And (Not EntityInView(n\OBJ, Camera)) Then n\State2 = 3.0
+						EndIf
+						;[End Block]
+					Case 3.0 ; ~ Gives a paper
+						;[Block]
+						PointEntity(n\Collider, me\Collider)
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+						
+						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+						If n\Frame < 474.0
+							AnimateNPC(n, 326.0, 474.0, n\Speed, False)
+						Else
+							AnimateNPC(n, 475.0, 623.0, n\Speed)
+						EndIf
+						;[End Block]
+				End Select
+				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.08, EntityZ(n\Collider))
+				RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
@@ -6938,7 +7016,8 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "1048", "scp1048", "scp-1048", "scp-1048", "bear", "builderbear"
 			;[Block]
-			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-1048"), 255, 0, 0)
+			n.NPCs = CreateNPC(NPCType1048, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-1048")
 			;[End Block]
 		Case "1499-1", "14991", "scp-1499-1", "scp1499-1", "scp-14991", "scp14991"
 			n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
