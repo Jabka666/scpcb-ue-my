@@ -1556,7 +1556,6 @@ Function UpdateNPCs%()
 							me\BlurTimer = 500.0
 							
 							If (Not chs\GodMode)
-								I_268\Using = 0
 								If RID = r_cont2_049
 									For e.Events = Each Events
 										If e\EventID = e_cont2_049

@@ -2236,7 +2236,14 @@ Function UpdateEvents%()
 									If e\EventState <= (-70.0) * 4.0
 										HideEntity(me\Head)
 										ShowEntity(me\Collider)
+										
+										I_268\Using = 0 : wi\GasMask = 0 : wi\BallisticHelmet = 0
+										If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
+										If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
+										
 										me\DropSpeed = 0.0 : me\BlinkTimer = -10.0 : I_008\Timer = 0.0 : I_409\Timer = 0.0 : me\FallTimer = 0.0
+										
+										me\Zombie = True
 										
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
 										ResetEntity(e\room\NPC[0]\Collider)
@@ -2257,7 +2264,6 @@ Function UpdateEvents%()
 										
 										LoadEventSound(e, "SFX\SCP\049_2\Breath.ogg")
 										
-										me\Zombie = True
 									EndIf
 								EndIf
 							Else
