@@ -186,6 +186,7 @@ Function PauseSounds%()
 	
 	For i = 0 To 1
 		PauseChannel(LowBatteryCHN[i])
+		PauseChannel(I_427\SoundCHN[i])
 	Next
 	
 	PauseChannel(I_1048A\SoundCHN)
@@ -258,6 +259,7 @@ Function ResumeSounds%()
 	
 	For i = 0 To 1
 		ResumeChannel(LowBatteryCHN[i])
+		ResumeChannel(I_427\SoundCHN[i])
 	Next
 	
 	ResumeChannel(I_1048A\SoundCHN)
@@ -342,6 +344,7 @@ Function KillSounds%(EraseSounds% = True)
 	
 	For i = 0 To 1
 		StopChannel(LowBatteryCHN[i]) : LowBatteryCHN[i] = 0
+		StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
 	Next
 	
 	StopChannel(I_1048A\SoundCHN) : I_1048A\SoundCHN = 0
