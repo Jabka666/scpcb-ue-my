@@ -324,7 +324,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
 			Temp = IniGetFloat(NPCsFile, "SCP-035's Tentacle", "Scale") / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			SetNPCFrame(n, 283.0)
+			SetNPCFrame(n, 282.0)
 			
 			If NPCSound[SOUND_NPC_035_TENTACLE_IDLE] = 0 Then NPCSound[SOUND_NPC_035_TENTACLE_IDLE] = LoadSound_Strict("SFX\SCP\035_Tentacle\TentacleIdle.ogg")
 			;[End Block]
@@ -3225,10 +3225,14 @@ Function UpdateNPCs%()
 				If (Not n\IsDead)
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					If Dist < PowTwo(HideDistance)
+						PrevFrame = n\Frame
 						Select n\State 
 							Case 0.0 ; ~ Spawns
 								;[Block]
-								If n\Frame > 282.0
+								If n\Frame = 282.0
+									PlaySound2(LoadTempSound("SFX\SCP\035_Tentacle\TentacleSpawn.ogg"), Camera, n\Collider, 5.0)
+									SetNPCFrame(n, 283.0)
+								Else
 									me\HeartBeatVolume = Max(CurveValue(1.0, me\HeartBeatVolume, 50.0), me\HeartBeatVolume)
 									me\HeartBeatRate = Max(CurveValue(130.0, me\HeartBeatRate, 100.0), me\HeartBeatRate)
 									
@@ -3237,49 +3241,35 @@ Function UpdateNPCs%()
 									
 									AnimateNPC(n, 283.0, 389.0, 0.3, False)
 									
-									If n\Frame > 388.9
-										If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-										n\State = 1.0
-									EndIf
-								Else
-									If Dist < 6.25
-										PlaySound2(LoadTempSound("SFX\SCP\035_Tentacle\TentacleSpawn.ogg"), Camera, n\Collider, 5.0)
-										SetNPCFrame(n, 283.0)
-									EndIf
+									If n\Frame > 388.9 Then n\State = 1.0
 								EndIf
 								;[End Block]
 							Case 1.0 ; ~ Idles
 								;[Block]
-								n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_035_TENTACLE_IDLE], n\SoundCHN, Camera, n\Collider)
+								AnimateNPC(n, 33.0, 174.0, 0.3)
 								
 								If Dist < 3.24 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-									If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0 Then n\State = 2.0
-									
-									PointEntity(n\OBJ, me\Collider)
-									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 25.0), 0.0)
+									n\State = 2.0
 								Else
 									; ~ Randomly rotates
 									If Rand(400) = 1 Then n\Angle = Rnd(360.0)
 									
 									RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSec / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
 								EndIf
-								
-								AnimateNPC(n, 33.0, 174.0, 0.3)
 								;[End Block]
 							Case 2.0 ; ~ Attacks
 								;[Block]
 								; ~ Finish the idle animation before playing the attack animation
-								If n\Frame > 33.0 And n\Frame < 174.0
+								If n\Frame > 32.0 And n\Frame < 174.0
 									AnimateNPC(n, 33.0, 174.0, 2.0, False)
+									If n\Frame > 173.9 Then SetNPCFrame(n, 2.0)
 								Else
 									PointEntity(n\OBJ, me\Collider)
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 									
-									If n\Frame > 33.0 Then n\Frame = 2.0
-									
 									AnimateNPC(n, 2.0, 32.0, 0.3, False)
 									
-									If n\Frame >= 5.0 And n\Frame < 6.0
+									If n\Frame > 5.0 And PrevFrame <= 5.0
 										If Dist < 3.24
 											If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0
 												If wi\HazmatSuit > 0
@@ -3305,14 +3295,14 @@ Function UpdateNPCs%()
 										Else
 											PlaySound2(MissSFX, Camera, n\Collider, 3.0)
 										EndIf
-										n\Frame = 6.0
-									ElseIf n\Frame = 32.0
-										n\Frame = 173.0
+									ElseIf n\Frame > 31.9
+										SetNPCFrame(n, 173.0)
 										n\State = 1.0
 									EndIf
 								EndIf
 								;[End Block]
 						End Select
+						If n\State <> 0.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_035_TENTACLE_IDLE], n\SoundCHN, Camera, n\Collider)
 					EndIf
 				Else
 					AnimateNPC(n, 515.0, 551.0, 0.15, False)
