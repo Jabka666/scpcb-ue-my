@@ -253,7 +253,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
 			n\Speed = IniGetFloat(NPCsFile, "SCP-049-2", "Speed") / 100.0
-			n\HP = 100
+			n\HP = 150
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -424,7 +424,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
 			n\Speed = IniGetFloat(NPCsFile, "SCP-008-1", "Speed") / 100.0
-			n\HP = 120
+			n\HP = 100
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -2159,7 +2159,7 @@ Function UpdateNPCs%()
 											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
 												If n\Target\HP > 0
 													PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
-													n\Target\HP = Max(n\Target\HP - Rnd(20.0, 30.0), 0.0)
+													n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
 												Else
 													n\Target\IsDead = True
 													n\Target = Null
