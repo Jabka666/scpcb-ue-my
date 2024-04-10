@@ -799,6 +799,7 @@ Function ResetNegativeStats%(Revive% = False)
 	If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
 	I_008\Timer = 0.0
 	I_409\Timer = 0.0
+	I_1048A\EarGrowTimer = 0.0
 	
 	If Revive
 		ClearCheats()
@@ -2725,9 +2726,9 @@ Function UpdateMoving%()
 		me\ForceMove = 0.0
 	EndIf
 	
-	
 	Update008()
 	Update409()
+	Update1048AEars()
 	
 	Local TempCHN% = 0
 	
@@ -4562,6 +4563,10 @@ Function UpdateGUI%()
 						ElseIf I_409\Timer > 0.0
 							CreateMsg(GetLocalString("msg", "pill.crystals"))
 							I_409\Revert = True
+						ElseIf I_1048A\EarGrowTimer > 0.0
+							I_1048A\Revert = True
+							StopChannel(I_1048A\SoundCHN) : I_1048A\SoundCHN = 0
+							CreateMsg(GetLocalString("msg", "pill.ears"))
 						Else
 							CreateMsg(GetLocalString("msg", "pill"))
 						EndIf
@@ -4582,15 +4587,6 @@ Function UpdateGUI%()
 							me\BlinkEffect = 1.0
 							me\BlinkEffectTimer = 0.0
 						EndIf
-						
-						For e.Events = Each Events
-							If e\EventID = e_1048_a
-								If e\EventState2 > 0.0
-									CreateMsg(GetLocalString("msg", "pill.ears"))
-									e\EventState3 = 1.0
-								EndIf
-							EndIf
-						Next
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
@@ -5896,17 +5892,18 @@ Function RenderDebugHUD%()
 			
 			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
 			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
-			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.427"), Int(I_427\Timer / 70.0)))
+			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
+			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_3.1048a"), I_1048A\EarGrowTimer))
 			For i = 0 To 7
-				TextEx(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
+				TextEx(x, y + ((380 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			
 			If I_005\ChanceToSpawn = 1
-				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
+				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
 			ElseIf I_005\ChanceToSpawn = 2
-				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.409"))
+				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.409"))
 			Else
-				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
+				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			;[End Block]
 	End Select
@@ -8543,7 +8540,7 @@ Function Update008%()
 			PrevI008Timer = I_008\Timer
 			If I_427\Timer < 70.0 * 360.0
 				If I_008\Revert
-					I_008\Timer = Max(0.0, I_008\Timer - (fps\Factor[0] * 0.02))
+					I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.02), 0.0)
 				Else
 					If (Not I_427\Using) Then I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
 				EndIf
@@ -8721,13 +8718,15 @@ Function Update409%()
 		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
 		If I_427\Timer < 70.0 * 360.0
 			If I_409\Revert
-				I_409\Timer = Max(0.0, I_409\Timer - (fps\Factor[0] * 0.02))
+				I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.02), 0.0)
 			Else
-				If (Not I_427\Using) Then I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+				If (Not I_427\Using)
+					I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+					me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
+				EndIf
 			EndIf
 		EndIf
 		EntityAlpha(t\OverlayID[7], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
-		me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 		
 		If I_409\Revert
 			If I_409\Timer <= 40.0 And PrevI409Timer > 40.0
@@ -8775,6 +8774,82 @@ Function Update409%()
 	EndIf
 End Function
 
+Type SCP1048A
+	Field EarGrowTimer#
+	Field Revert%
+	Field SoundCHN%
+End Type
+
+Global I_1048A.SCP1048A
+
+Function Update1048AEars()
+	Local PrevI1048EarGrowTimer# = I_1048A\EarGrowTimer
+	
+	If I_1048A\EarGrowTimer > 0.0
+		If I_427\Timer < 70.0 * 360.0
+			If I_1048A\Revert
+				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] * 0.5), 0.0)
+			Else
+				If (Not I_427\Using)
+					I_1048A\EarGrowTimer = I_1048A\EarGrowTimer + fps\Factor[0]
+					me\BlurTimer = I_1048A\EarGrowTimer * 2.0
+				EndIf
+			EndIf
+		EndIf
+		
+		If I_1048A\Revert
+			If I_1048A\EarGrowTimer <= 250.0 And PrevI1048EarGrowTimer > 250.0
+				CreateMsg(GetLocalString("msg", "1048a_rev2"))
+			ElseIf I_1048A\EarGrowTimer <= 600.0 And PrevI1048EarGrowTimer > 600.0
+				CreateMsg(GetLocalString("msg", "1048a_rev1"))
+			EndIf
+		Else
+			If I_1048A\EarGrowTimer > 250.0 And PrevI1048EarGrowTimer <= 250.0
+				Select Rand(3)
+					Case 1
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_2"))
+						;[End Block]
+					Case 2
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_3"))
+						;[End Block]
+					Case 3
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_4"))
+						;[End Block]
+				End Select
+			ElseIf I_1048A\EarGrowTimer > 600.0 And PrevI1048EarGrowTimer <= 600.0
+				Select Rand(4)
+					Case 1
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_5"))
+						;[End Block]
+					Case 2
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_6"))
+						;[End Block]
+					Case 3
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_7"))
+						;[End Block]
+					Case 4
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_8"))
+						;[End Block]
+				End Select
+			EndIf
+		EndIf
+		
+		If I_1048A\EarGrowTimer > 70.0 * 15.0
+			msg\DeathMsg = GetLocalString("death", "1048a")
+			Kill()
+		EndIf
+	Else
+		I_1048A\Revert = False
+	EndIf
+End Function
+
 Type SCP427
 	Field Using%
 	Field Timer#
@@ -8796,6 +8871,7 @@ Function Update427%()
 			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
 			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
 			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
+			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] * 0.5), 0.0)
 			For i = 0 To 6
 				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0] * I_1025\State[7]), 0.0)
 			Next

@@ -2,9 +2,9 @@
 ;[Block]
 Const NPCType008_1% = 0, NPCType035_Tentacle% = 1, NPCType049% = 2, NPCType049_2% = 3, NPCType066% = 4, NPCType096% = 5
 Const NPCType106% = 6, NPCType173% = 7, NPCType372% = 8, NPCType513_1% = 9, NPCType860_2% = 10, NPCType939% = 11
-Const NPCType966% = 12, NPCType1048% = 13, NPCType1499_1% = 14
+Const NPCType966% = 12, NPCType1048% = 13, NPCType1048_A% = 14, NPCType1499_1% = 15
 
-Const NPCTypeApache% = 15, NPCTypeClerk% = 16, NPCTypeD% = 17, NPCTypeGuard% = 18, NPCTypeMTF% = 19
+Const NPCTypeApache% = 16, NPCTypeClerk% = 17, NPCTypeD% = 18, NPCTypeGuard% = 19, NPCTypeMTF% = 20
 ;[End Block]
 
 Const MaxPathLocations% = 21
@@ -459,11 +459,25 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\MaxGravity = 0.0
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.08
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
+			Temp = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			;[End Block]
+		Case NPCType1048_A
+			;[Block]
+			n\NVGName = GetLocalString("npc", "undefine")
+			n\Speed = IniGetFloat(NPCsFile, "SCP-1048", "Speed")
+			n\HP = 60
+			
+			n\Collider = CreatePivot()
+			n\CollRadius = 0.1
+			EntityRadius(n\Collider, n\CollRadius, 0.15)
+			EntityType(n\Collider, HIT_PLAYER)
+			
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
 			Temp = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
@@ -2712,7 +2726,7 @@ Function UpdateNPCs%()
 			Case NPCType1048
 				;[Block]
 				n\Speed = 0.3
-				Visible = (EntityDistanceSquared(me\Collider, n\Collider) < 4.0 And EntityInView(n\OBJ, Camera))
+				Visible = (EntityDistanceSquared(me\Collider, n\Collider) < 4.0 And EntityInView(n\OBJ, Camera) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn))
 				
 				If Visible Then GiveAchievement(Achv1048)
 				
@@ -2771,6 +2785,75 @@ Function UpdateNPCs%()
 				End Select
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.08, EntityZ(n\Collider))
 				RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
+				;[End Block]
+			Case NPCType1048_A
+				;[Block]
+				If (Not n\IsDead)
+					n\Speed = 1.0
+					Dist = EntityDistanceSquared(n\Collider, me\Collider)
+					Visible = (Dist < 6.0 And EntityVisible(n\Collider, me\Collider) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn))
+					
+					Select n\State
+						Case 0.0 ; ~ Idle
+							;[Block]
+							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+							
+							AnimateNPC(n, 2.0, 399.0, n\Speed)
+							
+							If Rand(300) = 1
+								If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\1048A\Random" + Rand(1, 5) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
+							EndIf
+							If Visible Then n\State = 2.0
+							;[End Block]
+						Case 1.0 ; ~ Walks
+							;[Block]
+							n\Speed = 0.008
+							
+							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							
+							AnimateNPC(n, 649.0, 677.0, n\CurrSpeed * 125.0)
+							;[End Block]
+						Case 2.0 ; ~ Scream
+							;[Block]
+							PrevFrame = n\Frame
+							
+							AnimateNPC(n, Max(PrevFrame, 2.0), 647.0, 1.0, False)
+							
+							If PrevFrame <= 400.0 And n\Frame > 400.0
+								n\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
+								n\SoundCHN = PlaySound_Strict(n\Sound)
+							EndIf
+							
+							Local Volume# = Max(1.0 - Abs(PrevFrame - 600.0) / 100.0, 0.0)
+							
+							me\BlurTimer = Volume * 1000.0 / Max(Dist / 8.0, 1.0)
+							me\CameraShake = Volume * 10.0 / Max(Dist / 4.0, 1.0)
+							
+							If (Not chs\NoTarget) And (Not I_268\InvisibilityOn)
+								PointEntity(n\Collider, me\Collider)
+								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
+							EndIf
+							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+							
+							If PrevFrame > 646.0
+								If Dist < 16.0 And (Not chs\GodMode) And I_1048A\EarGrowTimer = 0.0
+									I_1048A\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Growth.ogg"), True)
+									me\BlurTimer = 1000.0
+									me\CameraShake = 2.0
+									I_1048A\EarGrowTimer = 0.01
+								EndIf
+								n\State = 0.0
+							EndIf
+							;[End Block]
+					End Select
+					UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0, True)
+					
+					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.15, EntityZ(n\Collider))
+					RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
+				EndIf
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
@@ -4889,19 +4972,45 @@ Function UpdateNPCs%()
 		If n\IsDead
 			If n\GravityMult = 1.0
 				EntityType(n\Collider, HIT_DEAD)
-				If n\NPCType = NPCType035_Tentacle
-					If n\Frame > 550.9 And (Not EntityHidden(n\OBJ))
-						HideEntity(n\Collider)
-						HideEntity(n\OBJ)
+				Select n\NPCType
+					Case NPCType035_Tentacle
+						;[Block]
+						If n\Frame > 550.9 And (Not EntityHidden(n\OBJ))
+							HideEntity(n\Collider)
+							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+							HideEntity(n\OBJ)
+						EndIf
+						;[End Block]
+					Case NPCType1048_A
+						;[Block]
+						If (Not EntityHidden(n\OBJ))
+							HideEntity(n\Collider)
+							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+							
+							PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
+							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
+							EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+							RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+							p\AlphaChange = -Rnd(0.02, 0.03)
+							For i = 0 To 1
+								p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider) + Rnd(-0.2, 0.2), EntityY(n\Collider) + 0.25, EntityZ(n\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
+								EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+								RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+								p\AlphaChange = -Rnd(0.02, 0.03)
+							Next
+							HideEntity(n\OBJ)
+						EndIf
+						;[End Block]
+					Default
+						;[Block]
 						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-					EndIf
-				Else
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
-				EndIf
+						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+						If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+						;[End Block]
+				End Select
 				n\GravityMult = 0.0
 			EndIf
 		Else
@@ -5432,6 +5541,20 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\State = MTF_ZOMBIES_SPOTTED
 							Exit
 						EndIf
+					ElseIf n2\NPCType = NPCType1048_A And (Not n2\IsDead)
+						If NPCSeesNPC(n2, n) = 1
+							n\EnemyX = EntityX(n2\Collider, True)
+							n\EnemyY = EntityY(n2\Collider, True)
+							n\EnemyZ = EntityZ(n2\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n2
+							n\Reload = 70.0 * 3.0
+							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+							n\State3 = 0.0
+							n\State = MTF_ZOMBIES_SPOTTED
+							Exit
+						EndIf
 					EndIf
 				Next
 				;[End Block]
@@ -5752,6 +5875,20 @@ Function UpdateMTFUnit%(n.NPCs)
 								Exit
 							EndIf
 						ElseIf n2\NPCType = NPCType035_Tentacle
+							If NPCSeesNPC(n2, n) = 1
+								n\EnemyX = EntityX(n2\Collider, True)
+								n\EnemyY = EntityY(n2\Collider, True)
+								n\EnemyZ = EntityZ(n2\Collider, True)
+								n\PathTimer = 0.0
+								n\PathStatus = PATH_STATUS_NO_SEARCH
+								n\Target = n2
+								n\Reload = 70.0 * 3.0
+								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+								n\State3 = 0.0
+								n\State = MTF_ZOMBIES_SPOTTED
+								Exit
+							EndIf
+						ElseIf n2\NPCType = NPCType1048_A And (Not n2\IsDead)
 							If NPCSeesNPC(n2, n) = 1
 								n\EnemyX = EntityX(n2\Collider, True)
 								n\EnemyY = EntityY(n2\Collider, True)
@@ -7010,9 +7147,10 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType966, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "966"))
 			;[End Block]
-		Case "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a", "earbear"
+		Case "1048a", "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a", "earbear"
 			;[Block]
-			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-1048-A"), 255, 0, 0)
+			n.NPCs = CreateNPC(NPCType1048_A, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-1048-A")
 			;[End Block]
 		Case "1048", "scp1048", "scp-1048", "scp-1048", "bear", "builderbear"
 			;[Block]

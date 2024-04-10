@@ -6437,126 +6437,15 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_1048_a
 				;[Block]
-				If e\room\Dist < HideDistance
-					If e\room\Objects[0] = 0
-						e\room\Objects[0] =	CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
-						ScaleEntity(e\room\Objects[0], 0.05, 0.05, 0.05)
-						SetAnimTime(e\room\Objects[0], 2)
-						PositionEntity(e\room\Objects[0], e\room\x, e\room\y, e\room\z)
-						RotateEntity(e\room\Objects[0], -90.0, Rnd(360.0), 0.0)
-						EntityParent(e\room\Objects[0], e\room\OBJ)
-					Else
-						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
-						If chs\NoTarget Lor I_268\InvisibilityOn Then e\EventState = 0.0
-						
-						Select e\EventState
-							Case 0.0 ; ~ Searching for a player
-								;[Block]
-								Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
-								
-								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 6.25 Then e\EventState = 1.0
-								;[End Block]
-							Case 1.0 ; ~ Squeals
-								;[Block]
-								Local PrevFrame# = AnimTime(e\room\Objects[0])
-								
-								Animate2(e\room\Objects[0], PrevFrame, 2.0, 647.0, 1.0, False)
-								
-								If PrevFrame <= 400.0 And AnimTime(e\room\Objects[0]) > 400.0 Then e\SoundCHN = PlaySound_Strict(e\Sound, True)
-								
-								UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 8.0, 1.0, True)
-								
-								Local Volume# = Max(1.0 - Abs(PrevFrame - 600.0) / 100.0, 0.0)
-								
-								If PlayerRoom = e\room
-									me\BlurTimer = Volume * 1000.0
-									me\CameraShake = Volume * 10.0
-								EndIf
-								
-								PointEntity(e\room\Objects[0], me\Collider)
-								RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
-								
-								If PrevFrame > 646.0
-									If PlayerRoom = e\room
-										e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Growth.ogg"), True)
-										
-										CreateMsg(GetLocalString("msg", "1048a_1"))
-										e\EventState2 = 0.01
-									EndIf
-									e\EventState = 2.0
-								EndIf
-								;[End Block]
-							Case 2.0 ; ~ Idle, growth state
-								;[Block]
-								Animate2(e\room\Objects[0], AnimTime(e\room\Objects[0]), 2.0, 395.0, 1.0)
-								
-								PointEntity(e\room\Objects[0], me\Collider)
-								RotateEntity(e\room\Objects[0], -90.0, EntityYaw(e\room\Objects[0]), 0.0)
-								;[End Block]
-						End Select
+				If e\room\Dist < HideDistance * 0.7
+					If e\EventState = 0.0
+						e\room\NPC[0] = CreateNPC(NPCType1048_A, e\room\x, e\room\y + 50.0 * RoomScale, e\room\z)
+						e\EventState = 1.0
 					EndIf
-				EndIf
-				
-				If e\EventState = 2.0
-					; ~ Remove event when the player wasn't infected/cured
-					If e\EventState2 = 0.0 Then e\EventState3 = 1.0
-					
-					If e\EventState3 = 0.0
-						If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
-							If e\EventState2 > 0.0
-								e\EventState2 = e\EventState2 + fps\Factor[0]
-								me\BlurTimer = e\EventState2 * 2.0
-								
-								If e\EventState2 > 250.0 And e\EventState2 - fps\Factor[0] <= 250.0
-									Select Rand(3)
-										Case 1
-											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a_2"))
-											;[End Block]
-										Case 2
-											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a_3"))
-											;[End Block]
-										Case 3
-											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a_4"))
-											;[End Block]
-									End Select
-								ElseIf e\EventState2 > 600.0 And e\EventState2 - fps\Factor[0] <= 600.0
-									Select Rand(4)
-										Case 1
-											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a_5"))
-											;[End Block]
-										Case 2
-											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a_6"))
-											;[End Block]
-										Case 3
-											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a_7"))
-											;[End Block]
-										Case 4
-											;[Block]
-											CreateMsg(GetLocalString("msg", "1048a_8"))
-											;[End Block]
-									End Select
-								EndIf
-								
-								; ~ Kill the player after 15.0 secs
-								If e\EventState2 > 70.0 * 15.0
-									msg\DeathMsg = GetLocalString("death", "1048a")
-									Kill()
-								EndIf
-							EndIf
-						Else
-							e\EventState2 = Max(e\EventState2 - (fps\Factor[0] * 0.5), 0.0)
-						EndIf
-					Else
-						If (Not EntityInView(e\room\Objects[0], Camera))
-							FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-							RemoveEvent(e)
-						EndIf
+				ElseIf e\EventState = 1.0
+					If (Not EntityInView(e\room\NPC[0]\OBJ, Camera))
+						RemoveNPC(e\room\NPC[0])
+						RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]

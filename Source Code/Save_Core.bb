@@ -168,6 +168,9 @@ Function SaveGame%(File$)
 	WriteFloat(f, Remove714Timer)
 	WriteFloat(f, RemoveHazmatTimer)
 	
+	WriteFloat(f, I_1048A\EarGrowTimer)
+	WriteByte(f, I_1048A\Revert)
+	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
 			WriteByte(f, CurrMapGrid\Grid[x + (y * MapGridSize)])
@@ -673,6 +676,9 @@ Function LoadGame%(File$)
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
 	
+	I_1048A\EarGrowTimer = ReadFloat(f)
+	I_1048A\Revert = ReadByte(f)
+	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -758,7 +764,7 @@ Function LoadGame%(File$)
 		Local Frame# = ReadFloat(f)
 		
 		Select NPCType
-			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035_Tentacle, NPCType1499_1, NPCType860_2, NPCType966, NPCType1048
+			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035_Tentacle, NPCType1499_1, NPCType860_2, NPCType966, NPCType1048, NPCType1048_A
 				;[Block]
 				SetAnimTime(n\OBJ, Frame)
 				;[End Block]
@@ -1521,6 +1527,9 @@ Function LoadGameQuick%(File$)
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
 	
+	I_1048A\EarGrowTimer = ReadFloat(f)
+	I_1048A\Revert = ReadByte(f)
+	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
 			CurrMapGrid\Grid[x + (y * MapGridSize)] = ReadByte(f)
@@ -1605,7 +1614,7 @@ Function LoadGameQuick%(File$)
 		Local Frame# = ReadFloat(f)
 		
 		Select NPCType
-			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035_Tentacle, NPCType1499_1, NPCType860_2, NPCType966, NPCType1048
+			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035_Tentacle, NPCType1499_1, NPCType860_2, NPCType966, NPCType1048, NPCtype1048_A
 				;[Block]
 				SetAnimTime(n\OBJ, Frame)
 				;[End Block]

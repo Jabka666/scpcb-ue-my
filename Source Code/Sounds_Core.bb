@@ -188,6 +188,8 @@ Function PauseSounds%()
 		PauseChannel(LowBatteryCHN[i])
 	Next
 	
+	PauseChannel(I_1048A\SoundCHN)
+	
 	For i = 0 To 6
 		PauseChannel(RadioCHN[i])
 	Next
@@ -257,6 +259,8 @@ Function ResumeSounds%()
 	For i = 0 To 1
 		ResumeChannel(LowBatteryCHN[i])
 	Next
+	
+	ResumeChannel(I_1048A\SoundCHN)
 	
 	If IsUsingRadio
 		For i = 0 To 5
@@ -339,7 +343,9 @@ Function KillSounds%(EraseSounds% = True)
 	For i = 0 To 1
 		StopChannel(LowBatteryCHN[i]) : LowBatteryCHN[i] = 0
 	Next
-		
+	
+	StopChannel(I_1048A\SoundCHN) : I_1048A\SoundCHN = 0
+	
 	For i = 0 To 6
 		StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
 	Next
