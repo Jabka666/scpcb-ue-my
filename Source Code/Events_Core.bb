@@ -6689,7 +6689,7 @@ Function UpdateEvents%()
 					ElseIf e\EventState2 = 3.0
 						If e\room\NPC[0]\State <> 5.0 Then e\EventState2 = 7.0
 						
-						If NPCSeesPlayer(e\room\NPC[0], True) = 2 Then e\EventState2 = 4.0
+						If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState + me\SndVolume, 60.0, True) = 2 Then e\EventState2 = 4.0
 						
 						If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
 							If e\room\NPC[0]\PathTimer = 0.0
@@ -6767,7 +6767,7 @@ Function UpdateEvents%()
 							EndIf
 						Next
 					ElseIf e\EventState2 = 6.0
-						If NPCSeesPlayer(e\room\NPC[0], True) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0
+						If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState + me\SndVolume, 60.0, True) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0
 							e\EventState2 = 7.0
 						Else
 							; ~ Still playing the Music for SCP-049 (in the real, SCP-049's State will be set to 2, causing it to stop playing the chasing track)

@@ -1887,7 +1887,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 5.0 ; ~ Going to surveillance room
 							;[Block]
-							PlayerSeeAble = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, True)
+							PlayerSeeAble = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, 60.0, True)
 							If PlayerSeeAble = 1
 								PlaySound_Strict(LoadTempSound("SFX\Room\Room2SL049Spawn.ogg"))
 								n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -6829,7 +6829,7 @@ Function NPCSeesNPC%(n.NPCs, n2.NPCs, Dist# = 36.0)
 	Return(0)
 End Function
 
-Function NPCSeesPlayer%(n.NPCs, Dist#, DisableSoundOnCrouch% = False)
+Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 60.0, DisableSoundOnCrouch% = False)
 	; ~ Return values:
 	; ~ 0: Player is not detected anyhow
 	; ~ 1: Player is detected by vision
@@ -6850,7 +6850,7 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, DisableSoundOnCrouch% = False)
 			
 			; ~ Spots the player if he's either in view or making a loud sound
 			If me\SndVolume > 1.0
-				If (DeltaYawVal > 60.0) And Visible
+				If (DeltaYawVal > Angle) And Visible
 					Return(1)
 				ElseIf (Not Visible)
 					If DisableSoundOnCrouch And me\Crouch
@@ -6869,7 +6869,7 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, DisableSoundOnCrouch% = False)
 		
 		If Dist2 < PowTwo(Dist + ((PlayerRoom\RoomTemplate\RoomID = r_gate_a) * 4.0))
 			If me\SndVolume > Rnd(1.0, 1.5) Then ReturnState = 2
-			If EntityVisible(n\Collider, me\Collider) And Abs(DeltaYaw(n\Collider, me\Collider)) < 60.0 Then ReturnState = 1
+			If EntityVisible(n\Collider, me\Collider) And Abs(DeltaYaw(n\Collider, me\Collider)) < Angle Then ReturnState = 1
 		EndIf
 		Return(ReturnState)
 	EndIf
