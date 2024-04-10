@@ -6817,8 +6817,8 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	EndIf
 End Function
 
-Function NPCSeesNPC%(n.NPCs, n2.NPCs)
-	If EntityDistanceSquared(n\Collider, n2\Collider) < 36.0
+Function NPCSeesNPC%(n.NPCs, n2.NPCs, Dist# = 36.0)
+	If EntityDistanceSquared(n\Collider, n2\Collider) < Dist
 		If EntityVisible(n\Collider, n2\Collider) Then Return(1)
 		If n = n_I\Curr173
 			Local SoundVol173# = Max(Min((Distance(EntityX(n_I\Curr173\Collider), n_I\Curr173\PrevX, EntityZ(n_I\Curr173\Collider), n_I\Curr173\PrevZ) * 2.5), 1.0), 0.0)
