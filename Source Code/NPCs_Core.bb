@@ -313,6 +313,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType035_Tentacle
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
+			n\GravityMult = 0.0
+			n\MaxGravity = 0.0
 			n\HP = 500
 			
 			n\Collider = CreatePivot()
@@ -3241,8 +3243,8 @@ Function UpdateNPCs%()
 									EndIf
 								Else
 									If Dist < 6.25
-										SetNPCFrame(n, 283.0)
 										PlaySound2(LoadTempSound("SFX\SCP\035_Tentacle\TentacleSpawn.ogg"), Camera, n\Collider, 5.0)
+										SetNPCFrame(n, 283.0)
 									EndIf
 								EndIf
 								;[End Block]
@@ -3318,10 +3320,6 @@ Function UpdateNPCs%()
 				
 				PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 				RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider) - 180.0, EntityRoll(n\Collider), True)
-				
-				n\DropSpeed = 0.0
-				
-				ResetEntity(n\Collider)
 				;[End Block]
 			Case NPCType860_2
 				;[Block]
