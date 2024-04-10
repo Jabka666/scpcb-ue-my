@@ -2159,8 +2159,8 @@ Function UpdateNPCs%()
 											EndIf
 										Else
 											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
+												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 												If n\Target\HP > 0
-													PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 													n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
 												Else
 													n\Target\IsDead = True
@@ -4873,8 +4873,8 @@ Function UpdateNPCs%()
 										EndIf
 									Else
 										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
+											PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 											If n\Target\HP > 0
-												PlaySound2(DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
 											Else
 												n\Target\IsDead = True
@@ -6477,9 +6477,9 @@ Function UpdateMTFUnit%(n.NPCs)
 							
 							FreeEntity(Pvt) : Pvt = 0
 							
+							PlaySound2(BulletHitSFX, Camera, n\Target\Collider, 5.0)
 							If n\Target\HP > 0
 								n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0.0)
-								PlaySound2(BulletHitSFX, Camera, n\Target\Collider, 5.0)
 							Else
 								If (Not n\Target\IsDead)
 									If n\Target\NPCType = NPCType049_2
