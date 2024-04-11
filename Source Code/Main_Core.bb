@@ -1413,7 +1413,7 @@ Function UpdateConsole%()
 							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							Exit
-						ElseIf itt\ID = Int(StrTemp)
+						ElseIf Str(itt\ID) = StrTemp
 							Temp = True
 							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
@@ -1427,7 +1427,7 @@ Function UpdateConsole%()
 				Case "itemlist", "itemslist", "items"
 					;[Block]
 					For itt.ItemTemplates = Each ItemTemplates
-						CreateConsoleMsg("ID: " + itt\ID + "; Name: " + itt\Name)
+						CreateConsoleMsg("ID: " + itt\ID + "; Name: " + itt\DisplayName)
 					Next
 					;[End Block]
 				Case "wireframe", "wf"
