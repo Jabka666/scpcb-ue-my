@@ -8712,9 +8712,9 @@ End Type
 Global I_409.SCP409
 
 Function Update409%()
-	Local PrevI409Timer# = I_409\Timer
-	
 	If I_409\Timer > 0.0
+		Local PrevI409Timer# = I_409\Timer
+		
 		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
 		If I_427\Timer < 70.0 * 360.0
 			If I_409\Revert
@@ -8783,9 +8783,9 @@ End Type
 Global I_1048A.SCP1048A
 
 Function Update1048AEars()
-	Local PrevI1048EarGrowTimer# = I_1048A\EarGrowTimer
-	
 	If I_1048A\EarGrowTimer > 0.0
+		Local PrevI1048EarGrowTimer# = I_1048A\EarGrowTimer
+		
 		If I_427\Timer < 70.0 * 360.0
 			If I_1048A\Revert
 				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] * 0.5), 0.0)
