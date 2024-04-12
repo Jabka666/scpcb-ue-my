@@ -205,11 +205,10 @@ Type DevilEmitters
 	Field IsBlackSmoke%
 	Field room.Rooms
 	Field Timer# = 0.0
-	Field MaxTimer#
 	Field SoundCHN%
 End Type
 
-Function CreateDevilEmitter.DevilEmitters(x#, y#, z#, room.Rooms, ParticleID%, MaxTime#)
+Function CreateDevilEmitter.DevilEmitters(room.Rooms, x#, y#, z#, ParticleID%)
 	Local dem.DevilEmitters
 	
 	dem.DevilEmitters = New DevilEmitters
@@ -221,7 +220,6 @@ Function CreateDevilEmitter.DevilEmitters(x#, y#, z#, room.Rooms, ParticleID%, M
 	dem\y = y
 	dem\z = z
 	dem\ParticleID = ParticleID
-	dem\MaxTimer = MaxTime
 	
 	Return(dem)
 End Function
@@ -263,6 +261,7 @@ Function UpdateDevilEmitters()
 End Function
 
 Function RemoveDevilEmitter%(dem.DevilEmitters)
+	FreeEmitter(dem\OBJ)
 	FreeEntity(dem\OBJ) : dem\OBJ = 0
 	Delete(dem)
 End Function

@@ -621,7 +621,7 @@ Function UpdateEvents%()
 	CatchErrors("UpdateEvents()")
 	
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.WayPoints, pr.Props, l.Lights, se.SoundEmitters
-	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors, s.Screens
+	Local it.Items, it2.Items, em.Emitters, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors, s.Screens, dem.DevilEmitters
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
@@ -5787,20 +5787,19 @@ Function UpdateEvents%()
 								If Temp Lor (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0)
 									If Temp
 										For i = 0 To 1
-											If e\room\RoomEmitters[i] = Null
+											If e\room\RoomDevilEmitters[i] = Null
 												If i = 0
 													TFormPoint(-269.0, 400.0, 624.0, e\room\OBJ, 0)
 												Else
 													TFormPoint(-269.0, 400.0, 135.0, e\room\OBJ, 0)
 												EndIf
-												e\room\RoomEmitters[i] = CreateEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-												e\room\RoomEmitters[i]\RandAngle = 15.0 : e\room\RoomEmitters[i]\Speed = 0.05 : e\room\RoomEmitters[i]\SizeChange = 0.007 : e\room\RoomEmitters[i]\AlphaChange = -0.006 : e\room\RoomEmitters[i]\Gravity = -0.24
-												TurnEntity(e\room\RoomEmitters[i]\OBJ, 90.0, 0.0, 0.0)
+												e\room\RoomDevilEmitters.DevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+												e\room\RoomDevilEmitters[i]\IsBlackSmoke = True
 											EndIf
 										Next
 									Else
 										For i = 0 To 1
-											If e\room\RoomEmitters[i] <> Null Then RemoveEmitter(e\room\RoomEmitters[i])
+											If e\room\RoomDevilEmitters[i] <> Null Then RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
 										Next
 									EndIf
 									
@@ -5858,7 +5857,7 @@ Function UpdateEvents%()
 									EndIf
 									
 									For i = 0 To 1
-										If e\room\RoomEmitters[i] <> Null Then RemoveEmitter(e\room\RoomEmitters[i])
+										If e\room\RoomDevilEmitters[i] <> Null Then RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
 									Next
 									
 									If e\room\NPC[0]\State = 0.0
@@ -6023,20 +6022,19 @@ Function UpdateEvents%()
 					Else ; ~ SCP-035 has left
 						If UpdateLever(e\room\RoomLevers[1]\OBJ)
 							For i = 0 To 1
-								If e\room\RoomEmitters[i] = Null
+								If e\room\RoomDevilEmitters[i] = Null
 									If i = 0
 										TFormPoint(-269.0, 400.0, 624.0, e\room\OBJ, 0)
 									Else
 										TFormPoint(-269.0, 400.0, 135.0, e\room\OBJ, 0)
 									EndIf
-									e\room\RoomEmitters[i] = CreateEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-									e\room\RoomEmitters[i]\RandAngle = 15.0 : e\room\RoomEmitters[i]\Speed = 0.05 : e\room\RoomEmitters[i]\SizeChange = 0.007 : e\room\RoomEmitters[i]\AlphaChange = -0.006 : e\room\RoomEmitters[i]\Gravity = -0.24
-									TurnEntity(e\room\RoomEmitters[i]\OBJ, 90.0, 0.0, 0.0)
+									e\room\RoomDevilEmitters.DevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+									e\room\RoomDevilEmitters[i]\IsBlackSmoke = True
 								EndIf
 							Next
 						Else
 							For i = 0 To 1
-								If e\room\RoomEmitters[i] <> Null Then RemoveEmitter(e\room\RoomEmitters[i])
+								If e\room\RoomDevilEmitters[i] <> Null Then RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
 							Next
 						EndIf
 						
@@ -6156,9 +6154,8 @@ Function UpdateEvents%()
 						If EntityDistanceSquared(me\Collider, e\room\Objects[6]) < 6.25 And e\EventState > 0.0
 							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"), True)
 							For i = 0 To 5
-								em.Emitters = CreateEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
-								em\RandAngle = 5.0 : em\Speed = 0.042 : em\SizeChange = 0.0025
-								TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
+								dem.DevilEmitters = CreateDevilEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 4)
+								dem\IsBlackSmoke = True
 							Next
 							RemoveEvent(e)
 						EndIf
@@ -6564,7 +6561,7 @@ Function UpdateEvents%()
 												TFormPoint(320.0, 416.0, 143.0, e\room\OBJ, 0)
 											EndIf
 										EndIf
-										e\room\RoomDevilEmitters[i] = CreateDevilEmitter(TFormedX(), TFormedY(), TFormedZ(), e\room, 2, 2.0)
+										e\room\RoomDevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 2)
 									EndIf
 								Next
 								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 5.0)
