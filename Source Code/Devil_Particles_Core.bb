@@ -389,7 +389,7 @@ Function UpdateParticles_Devil()
 	Local CamRoll# = EntityRoll(ParticleCam, True)
 	
 	For p.Particle = Each Particle
-		If p\Age > p\MaxTime
+		If p\Age > p\MaxTime Lor EntityDistanceSquared(p\emitter\Owner, me\Collider) > PowTwo(HideDistance)
 			Delete(p)
 		Else
 			p\Age = p\Age + 1
