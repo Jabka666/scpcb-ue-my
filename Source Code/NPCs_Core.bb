@@ -4952,9 +4952,17 @@ Function UpdateNPCs%()
 		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
 		If GravityDist < PowTwo(HideDistance) Lor n\NPCType = NPCType1499_1
-			EntityAlpha(n\OBJ, 1.0)
+			If n\IsDead
+				If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
+			Else
+				EntityAlpha(n\OBJ, 1.0)
+			EndIf
 		Else
-			EntityAlpha(n\OBJ, 0.0)
+			If n\IsDead
+				If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
+			Else
+				EntityAlpha(n\OBJ, 0.0)
+			EndIf
 		EndIf
 		
 		If n\IsDead
