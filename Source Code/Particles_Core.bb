@@ -234,12 +234,9 @@ Function UpdateDevilEmitters()
 		If fps\Factor[0] > 0.0 And (PlayerRoom = dem\room Lor dem\room\Dist < 8.0)
 			If dem\Timer = 0.0
 				SetEmitter(dem\OBJ, ParticleEffect[dem\ParticleID])
-				dem\Timer = fps\Factor[0]
-			ElseIf dem\Timer < dem\MaxTimer
-				dem\Timer = Min(dem\Timer + fps\Factor[0], dem\MaxTimer)
-			Else
-				dem\Timer = 0.0
+				dem\Timer = 1.0
 			EndIf
+			
 			If dem\IsBlackSmoke
 				dem\SoundCHN = LoopSound2(HissSFX, dem\SoundCHN, Camera, dem\OBJ)
 				If (Not InSmoke)

@@ -830,7 +830,7 @@ Function FillRoom%(r.Rooms)
 				PositionEntity(r\Objects[0], r\x - 447.0 * RoomScale, r\y + 177.0 * RoomScale, r\z - 98.0 * RoomScale)
 				EntityParent(r\Objects[0], r\OBJ)
 				
-				dem.DevilEmitters = CreateDevilEmitter(r\x + 262.0 * RoomScale, r\y + 325.0 * RoomScale, r\z - 345.0 * RoomScale, r, 1, 2.0)
+				dem.DevilEmitters = CreateDevilEmitter(r\x + 262.0 * RoomScale, r\y + 330.0 * RoomScale, r\z - 345.0 * RoomScale, r, 1, 2.0)
 			Else
 				r\Objects[0] = CreatePivot()
 				PositionEntity(r\Objects[0], r\x + 344.0 * RoomScale, r\y + 128.0 * RoomScale, r\z)
@@ -1594,10 +1594,10 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			
 			; ~ Smoke
-			dem.DevilEmitters = CreateDevilEmitter(r\x - 175.0 * RoomScale, r\y + 330.0 * RoomScale, r\z + 655.0 * RoomScale, r, PARTICLE_BLACK_SMOKE, 2.0)
+			dem.DevilEmitters = CreateDevilEmitter(r\x - 175.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 655.0 * RoomScale, r, PARTICLE_BLACK_SMOKE, 2.0)
 			dem\IsBlackSmoke = True
 			
-			dem.DevilEmitters = CreateDevilEmitter(r\x - 655.0 * RoomScale, r\y + 330.0 * RoomScale, r\z + 240.0 * RoomScale, r, PARTICLE_BLACK_SMOKE, 2.0)
+			dem.DevilEmitters = CreateDevilEmitter(r\x - 655.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 240.0 * RoomScale, r, PARTICLE_BLACK_SMOKE, 2.0)
 			dem\IsBlackSmoke = True
 			
 			CreateCustomCenter(r, r\x - 736.0 * RoomScale, r\z - 352.0 * RoomScale)
