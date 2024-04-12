@@ -6167,16 +6167,15 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					If e\room\Dist < 3.5
 						PlaySound2(BurstSFX, Camera, e\room\OBJ)
-						For i = 0 To 1
-							em.Emitters = CreateEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 0)
-							em\Size = 0.05 : em\RandAngle = 10.0 : em\Speed = 0.06 : em\SizeChange = 0.007
-							TurnEntity(em\OBJ, 90.0, 0.0, 0.0, True)
-							For z = 0 To Ceil(3.3333 * (opt\ParticleAmount + 1))
-								p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(em\OBJ, True), 448.0 * RoomScale, EntityZ(em\OBJ, True), em\Size, em\Gravity, em\LifeTime)
-								p\Speed = em\Speed : p\Size = 0.05 : p\SizeChange = 0.008
-								RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0, True)
-							Next
-						Next
+						
+						TFormPoint(0.0, 460.0, 512.0, e\room\OBJ, 0)
+						dem.DevilEmitters = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+						dem\IsBlackSmoke = True
+						
+						TFormPoint(0.0, 460.0, -512.0, e\room\OBJ, 0)
+						dem.DevilEmitters = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+						dem\IsBlackSmoke = True
+						
 						RemoveEvent(e)
 					EndIf
 				EndIf

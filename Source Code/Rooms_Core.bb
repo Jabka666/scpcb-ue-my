@@ -2259,16 +2259,6 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 864.0 * RoomScale, r\y - 477.0 * RoomScale, r\z - 632.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
-		Case r_room2_6_hcz
-			;[Block]
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y + 544.0 * RoomScale, r\z + 512.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
-			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x, r\y + 544.0 * RoomScale, r\z - 512.0 * RoomScale)
-			EntityParent(r\Objects[1], r\OBJ)
-			;[End Block]
 		Case r_room2_mt
 			;[Block]
 			; ~ Elevators doors
