@@ -183,6 +183,18 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[4], -0.01, 0.01, -0.053, -0.043, -0.01, 0.01)
 	SetTemplateSize(ParticleEffect[4], 0.02, 0.02, 1.0, 1.3)
 	SetTemplateSizeVel(ParticleEffect[4], 0.03, 1.01)
+	
+	; ~ Black smoke in "cont1_173_intro"
+	ParticleEffect[5] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[5], 1)
+	SetTemplateInterval(ParticleEffect[5], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[5], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[5], 18, 20)
+	SetTemplateTexture(ParticleEffect[5], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[5], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[5], -0.01, 0.01, -0.053, -0.043, -0.01, 0.01)
+	SetTemplateSize(ParticleEffect[5], 0.01, 0.01, 1.0, 1.3)
+	SetTemplateSizeVel(ParticleEffect[5], 0.0125, 1.012)
 End Function
 
 Function RemoveParticleInstances%()

@@ -8356,15 +8356,13 @@ Function UpdateIntro%()
 								ElseIf e\EventState2 >= 630.0
 									PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(EntityZ(me\Collider), e\room\z + 490.0 * RoomScale))
 									If e\room\RoomDoors[4]\Open Then OpenCloseDoor(e\room\RoomDoors[4])
-									If e\room\RoomEmitters[0] = Null	
-										e\room\RoomEmitters.Emitters[0] = CreateEmitter(e\room, e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
-										e\room\RoomEmitters[0]\RandAngle = 7.0 : e\room\RoomEmitters[0]\Speed = 0.03 : e\room\RoomEmitters[0]\SizeChange = 0.003
-										TurnEntity(e\room\RoomEmitters[0]\OBJ, 90.0, 0.0, 0.0, True)
+									If e\room\RoomDevilEmitters[0] = Null	
+										e\room\RoomDevilEmitters.DevilEmitters[0] = CreateDevilEmitter(e\room, e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 5)
+										e\room\RoomDevilEmitters[0]\IsBlackSmoke = True
 									EndIf
-									If e\room\RoomEmitters[1] = Null
-										e\room\RoomEmitters.Emitters[1] = CreateEmitter(e\room, e\room\x - 4000.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 0)
-										e\room\RoomEmitters[1]\RandAngle = 7.0 : e\room\RoomEmitters[1]\Speed = 0.03 : e\room\RoomEmitters[1]\SizeChange = 0.003
-										TurnEntity(e\room\RoomEmitters[1]\OBJ, 90.0, 0.0, 0.0, True)
+									If e\room\RoomDevilEmitters[1] = Null
+										e\room\RoomDevilEmitters.DevilEmitters[1] = CreateDevilEmitter(e\room, e\room\x - 4000.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 5)
+										e\room\RoomDevilEmitters[1]\IsBlackSmoke = True
 									EndIf
 									me\EyeIrritation = Max(me\EyeIrritation + (fps\Factor[0] * 4.0), 1.0)
 									If Rand(1000) = 1 Then Kill()
