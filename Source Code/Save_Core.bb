@@ -500,9 +500,9 @@ Function SaveGame%(File$)
 	
 	If (Not MenuOpen) And (Not MainMenuOpen)
 		If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-			PlaySound_Strict(LoadTempSound("SFX\General\Save2.ogg"))
-		Else
 			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
+		Else
+			PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
 			as\Timer = 70.0 * 120.0
 		EndIf
 		CreateHintMsg(GetLocalString("save", "saved"))

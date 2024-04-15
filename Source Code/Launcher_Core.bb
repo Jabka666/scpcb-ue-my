@@ -135,8 +135,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 	MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
 	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 	
-	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
-	ButtonSFX2 = LoadSound_Strict("SFX\Interact\Button2.ogg")
+	For i = 0 To 1
+		ButtonSFX[i] = LoadSound_Strict("SFX\Interact\Button" + i + ".ogg")
+	Next
 	
 	Local LauncherIMG%[2]
 	Local LauncherMediaWidth%
@@ -256,7 +257,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
 			If mo\MouseHit1
-				PlaySound_Strict(ButtonSFX)
+				PlaySound_Strict(ButtonSFX[0])
 				ExecFile_Strict("https://discord.gg/n7KdW4u")
 			EndIf
 		EndIf
@@ -265,7 +266,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Rect(LauncherWidth - 511, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 510 + LauncherMediaWidth, LauncherHeight - 106, "MODDB", True)
 			If mo\MouseHit1
-				PlaySound_Strict(ButtonSFX)
+				PlaySound_Strict(ButtonSFX[0])
 				ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 			EndIf
 		EndIf
@@ -274,7 +275,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Rect(LauncherWidth - 401, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 400 + LauncherMediaWidth, LauncherHeight - 106, "YOUTUBE", True)
 			If mo\MouseHit1
-				PlaySound_Strict(ButtonSFX)
+				PlaySound_Strict(ButtonSFX[0])
 				ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 			EndIf
 		EndIf
@@ -294,7 +295,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 					Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
 					TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language.iter"), False, True)
 					If mo\MouseHit1
-						PlaySound_Strict(ButtonSFX)
+						PlaySound_Strict(ButtonSFX[0])
 						If FileType("Localization") = 2
 							SetLanguage(FindNextDirectory("Localization", opt\Language, "en"), False)
 							FreeImage(LauncherBG) : LauncherBG = 0
@@ -306,7 +307,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 					Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
 					TextEx(LauncherWidth - 185 + 45, LauncherHeight - 166, GetLocalString("launcher", "language"), False, True)
 					If mo\MouseHit1
-						PlaySound_Strict(ButtonSFX)
+						PlaySound_Strict(ButtonSFX[0])
 						If UpdateLanguageSelector() Then SelectorDeniedTimer = MilliSecs()
 					EndIf
 				EndIf
@@ -372,8 +373,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 	FreeImage(MenuGray) : MenuGray = 0
 	FreeImage(MenuWhite) : MenuWhite = 0
 	
-	FreeSound_Strict(ButtonSFX) : ButtonSFX = 0
-	FreeSound_Strict(ButtonSFX2) : ButtonSFX2 = 0
+	FreeSound_Strict(ButtonSFX[0]) : ButtonSFX[0] = 0
+	FreeSound_Strict(ButtonSFX[1]) : ButtonSFX[1] = 0
 	
 	EndGraphics()
 	
@@ -751,10 +752,10 @@ Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Def
 		Color(30, 30, 30)
 		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp)
 			If Locked
-				PlaySound_Strict(ButtonSFX2)
+				PlaySound_Strict(ButtonSFX[1])
 			Else
 				Clicked = True
-				PlaySound_Strict(ButtonSFX)
+				PlaySound_Strict(ButtonSFX[0])
 			EndIf
 		EndIf
 		Rect(x + 3, y + 3, Width - 6, Height - 6)
@@ -818,7 +819,7 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 	Color(0, 0, 0)
 	
 	If Pushed And mo\MouseHit1
-		PlaySound_Strict(ButtonSFX)
+		PlaySound_Strict(ButtonSFX[0])
 		Return(True)
 	EndIf
 End Function
@@ -849,12 +850,12 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 	If Highlight
 		If Locked
 			Color(0, 0, 0)
-			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX2)
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX[1])
 		Else
 			Color(50, 50, 50)
 			If mo\MouseHit1
 				Selected = (Not Selected)
-				PlaySound_Strict(ButtonSFX)
+				PlaySound_Strict(ButtonSFX[0])
 			EndIf
 		EndIf
 	Else

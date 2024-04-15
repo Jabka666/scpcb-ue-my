@@ -23,6 +23,8 @@ MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
 MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 
 Function InitMainMenuAssets%()
+	Local i%
+	
 	mm.MainMenu = New MainMenu
 	mma.MainMenuAssets = New MainMenuAssets
 	
@@ -38,8 +40,9 @@ Function InitMainMenuAssets%()
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
 	
-	ButtonSFX = LoadSound_Strict("SFX\Interact\Button.ogg")
-	ButtonSFX2 = LoadSound_Strict("SFX\Interact\Button2.ogg")
+	For i = 0 To 1
+		ButtonSFX[i] = LoadSound_Strict("SFX\Interact\Button" + i + ".ogg")
+	Next
 End Function
 
 Function DeInitMainMenuAssets%()
@@ -1862,9 +1865,9 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		If LoadingScreenTitle = "CWM"
 			If FirstLoop
 				If Percent = 0
-					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
+					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm0.cwm"))
 				ElseIf Percent = 100
-					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm2.cwm"))
+					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
 				EndIf
 			EndIf
 			
@@ -2086,10 +2089,10 @@ Function UpdateMenuButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default
 	If MouseOn(x, y, Width, Height)
 		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp)
 			If Locked
-				PlaySound_Strict(ButtonSFX2)
+				PlaySound_Strict(ButtonSFX[1])
 			Else
 				Clicked = True
-				PlaySound_Strict(ButtonSFX)
+				PlaySound_Strict(ButtonSFX[0])
 			EndIf
 		EndIf
 	EndIf
@@ -2161,10 +2164,10 @@ Function UpdateMenuTick%(x%, y%, Selected%, Locked% = False)
 	If Highlight
 		If mo\MouseHit1
 			If Locked
-				PlaySound_Strict(ButtonSFX2)
+				PlaySound_Strict(ButtonSFX[1])
 			Else
 				Selected = (Not Selected)
-				PlaySound_Strict(ButtonSFX)
+				PlaySound_Strict(ButtonSFX[0])
 			EndIf
 		EndIf
 	EndIf
@@ -2686,9 +2689,9 @@ Global ScrollMenuHeight# = 0.0
 ;	If OnScrollBar
 ;		If mo\MouseHit1
 ;			If Locked
-;				PlaySound_Strict(ButtonSFX2)
+;				PlaySound_Strict(ButtonSFX[1])
 ;			Else
-;				PlaySound_Strict(ButtonSFX)
+;				PlaySound_Strict(ButtonSFX[0])
 ;			EndIf
 ;		EndIf
 ;		If (Not Vertical)

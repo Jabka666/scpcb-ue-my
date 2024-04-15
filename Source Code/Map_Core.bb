@@ -3502,7 +3502,7 @@ Function UseDoor%(PlaySFX% = True)
 	If d_I\ClosestDoor\KeyCard > KEY_MISC
 		If SelectedItem = Null
 			CreateMsg(GetLocalString("msg", "key.require"))
-			d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
+			d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX[0], Camera, d_I\ClosestButton)
 			Return
 		Else
 			If Temp <= KEY_MISC
@@ -3536,12 +3536,12 @@ Function UseDoor%(PlaySFX% = True)
 				SelectedItem = Null
 			EndIf
 			If (d_I\ClosestDoor\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d_I\ClosestDoor\KeyCard)) Lor (Temp = KEY_005))
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(KeyCardSFX1, Camera, d_I\ClosestButton)
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(KeyCardSFX[0], Camera, d_I\ClosestButton)
 			Else
 				If Temp <= KEY_MISC
-					d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
+					d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX[0], Camera, d_I\ClosestButton)
 				Else
-					d_I\ClosestDoor\ButtonCHN = PlaySound2(KeyCardSFX2, Camera, d_I\ClosestButton)
+					d_I\ClosestDoor\ButtonCHN = PlaySound2(KeyCardSFX[1], Camera, d_I\ClosestButton)
 				EndIf
 				Return
 			EndIf
@@ -3549,7 +3549,7 @@ Function UseDoor%(PlaySFX% = True)
 	ElseIf d_I\ClosestDoor\KeyCard > KEY_860 And d_I\ClosestDoor\KeyCard < KEY_MISC
 		If SelectedItem = Null
 			CreateMsg(GetLocalString("msg", "dna.denied_1"))
-			d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+			d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX[1], Camera, d_I\ClosestButton)
 			Return
 		Else
 			If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005)
@@ -3575,18 +3575,18 @@ Function UseDoor%(PlaySFX% = True)
 				SelectedItem = Null
 			EndIf
 			If (d_I\ClosestDoor\Locked = 0) And ((Temp = d_I\ClosestDoor\KeyCard) Lor (Temp = KEY_005))
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX[0], Camera, d_I\ClosestButton)
 			Else
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX[1], Camera, d_I\ClosestButton)
 				Return
 			EndIf
 		EndIf
 	ElseIf d_I\ClosestDoor\Code <> ""
 		If SelectedItem = Null
 			If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (d_I\ClosestDoor\Code = msg\KeyPadInput)
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX[0], Camera, d_I\ClosestButton)
 			Else
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX[1], Camera, d_I\ClosestButton)
 				Return
 			EndIf
 		Else
@@ -3600,9 +3600,9 @@ Function UseDoor%(PlaySFX% = True)
 			SelectedItem = Null
 			
 			If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (Temp = KEY_005)
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX1, Camera, d_I\ClosestButton)
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX[0], Camera, d_I\ClosestButton)
 			Else
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX2, Camera, d_I\ClosestButton)
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(ScannerSFX[1], Camera, d_I\ClosestButton)
 				Return
 			EndIf
 		EndIf
@@ -3620,10 +3620,10 @@ Function UseDoor%(PlaySFX% = True)
 				If SelectedItem = Null
 					CreateMsg(GetLocalString("msg", "wood.wontbudge"))
 					If d_I\ClosestDoor\DoorType = OFFICE_DOOR
-						d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+						d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX[0], Camera, d_I\ClosestButton)
 						SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
 					Else
-						d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
+						d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX[1], Camera, d_I\ClosestButton)
 					EndIf
 				Else
 					If (Temp > KEY_860) And (Temp <> KEY_005)
@@ -3639,10 +3639,10 @@ Function UseDoor%(PlaySFX% = True)
 					EndIf
 					If (Temp > KEY_860) And (Temp <> KEY_005)
 						If d_I\ClosestDoor\DoorType = OFFICE_DOOR
-							d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+							d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX[0], Camera, d_I\ClosestButton)
 							SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
 						Else
-							d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX2, Camera, d_I\ClosestButton)
+							d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX[1], Camera, d_I\ClosestButton)
 						EndIf
 					Else
 						d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorLockSFX, Camera, d_I\ClosestButton)
@@ -3651,7 +3651,7 @@ Function UseDoor%(PlaySFX% = True)
 				Return
 			Else
 				If d_I\ClosestDoor\DoorType = OFFICE_DOOR
-					d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX1, Camera, d_I\ClosestButton)
+					d_I\ClosestDoor\ButtonCHN = PlaySound2(DoorBudgeSFX[0], Camera, d_I\ClosestButton)
 					SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
 				EndIf
 			EndIf
@@ -3660,7 +3660,7 @@ Function UseDoor%(PlaySFX% = True)
 				If d_I\ClosestDoor\DoorType = ELEVATOR_DOOR
 					If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
 						CreateMsg(GetLocalString("msg", "elev.broken"))
-						d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
+						d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX[1], Camera, d_I\ClosestButton)
 						If PlayerInsideElevator
 							If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 								SetAnimTime(d_I\ClosestButton, 1.0)
@@ -3698,7 +3698,7 @@ Function UseDoor%(PlaySFX% = True)
 						Else
 							CreateMsg(GetLocalString("msg", "elev.already"))
 						EndIf
-						d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
+						d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX[0], Camera, d_I\ClosestButton)
 						SetAnimTime(d_I\ClosestButton, 1.0)
 						Return
 					EndIf
@@ -3708,12 +3708,12 @@ Function UseDoor%(PlaySFX% = True)
 					Else
 						CreateMsg(GetLocalString("msg", "button.locked"))
 					EndIf
-					d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX2, Camera, d_I\ClosestButton)
+					d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX[1], Camera, d_I\ClosestButton)
 					SetAnimTime(d_I\ClosestButton, 1.0)
 					Return
 				EndIf
 			Else
-				d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX, Camera, d_I\ClosestButton)
+				d_I\ClosestDoor\ButtonCHN = PlaySound2(ButtonSFX[0], Camera, d_I\ClosestButton)
 				If PlayerInsideElevator
 					If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 						SetAnimTime(d_I\ClosestButton, 1.0)
@@ -4150,7 +4150,7 @@ Function UpdateSecurityCams%()
 								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 							Else
 								If (Not ChannelPlaying(sc\SoundCHN))
-									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(3) + ".ogg"))
+									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
 									If sc\CoffinEffect = 2 Then sc\CoffinEffect = 3 : sc\PlayerState = 0
 								EndIf
 								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
@@ -4416,7 +4416,7 @@ Function UpdateScreens%()
 						SelectedScreen = s
 						s\Img = LoadImage_Strict("GFX\Map\Screens\" + s\ImgPath)
 						s\Img = ScaleImage2(s\Img, MenuScale, MenuScale)
-						PlaySound_Strict(ButtonSFX)
+						PlaySound_Strict(ButtonSFX[0])
 						mo\MouseUp1 = False
 					EndIf
 				EndIf
