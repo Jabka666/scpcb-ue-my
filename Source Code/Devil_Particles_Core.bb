@@ -238,7 +238,7 @@ Function SetTemplateBrightness%(Template%, Brightness%)
 	tmp\Brightness = Brightness
 End Function
 
-Function SetTemplateFloor%(Template%, FloorY#, FloorBounce# = .5)
+Function SetTemplateFloor%(Template%, FloorY#, FloorBounce# = 0.5)
 	Local tmp.Template
 	
 	tmp.Template = Object.Template(Template)
