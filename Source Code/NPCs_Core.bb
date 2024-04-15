@@ -1891,7 +1891,7 @@ Function UpdateNPCs%()
 							;[Block]
 							PlayerSeeAble = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, 60.0, True)
 							If PlayerSeeAble = 1
-								PlaySound_Strict(LoadTempSound("SFX\Room\Room2SL049Spawn.ogg"))
+								PlaySound_Strict(LoadTempSound("SFX\SCP\049\Room2SL049Spawn.ogg"))
 								n\PathStatus = PATH_STATUS_NO_SEARCH
 								n\PathLocation = 0
 								n\PathTimer = 0.0
@@ -2248,7 +2248,7 @@ Function UpdateNPCs%()
 											msg\DeathMsg = GetLocalString("death", "guard.gateb")
 										EndIf
 										
-										PlaySound2(GunshotSFX, Camera, n\Collider, 35.0)
+										PlaySound2(GunshotSFX[0], Camera, n\Collider, 35.0)
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
@@ -2289,7 +2289,7 @@ Function UpdateNPCs%()
 						;[Block]
 						AnimateNPC(n, 245.0, 248.0, 0.35)
 						If n\Reload = 0.0
-							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+							PlaySound2(GunshotSFX[0], Camera, n\Collider, 15.0)
 							p.Particles = CreateParticle(PARTICLE_FLASH, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 0.2, 0.0, 5.0)
 							PositionEntity(p\Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							RotateEntity(p\Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
@@ -2436,7 +2436,7 @@ Function UpdateNPCs%()
 										
 										msg\DeathMsg = ""
 										
-										PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+										PlaySound2(GunshotSFX[0], Camera, n\Collider, 15.0)
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
@@ -3161,7 +3161,7 @@ Function UpdateNPCs%()
 												PointEntity(Pvt, Target)
 												
 												If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0
-													PlaySound2(Gunshot2SFX, Camera, n\Collider, 20.0)
+													PlaySound2(GunshotSFX[1], Camera, n\Collider, 20.0)
 													
 													SqrValue = Sqr(Dist)
 													
@@ -3273,7 +3273,7 @@ Function UpdateNPCs%()
 										If Dist < 3.24
 											If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0
 												If wi\HazmatSuit > 0
-													PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
+													PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
 													InjurePlayer(Rnd(0.5))
 												Else
 													PlaySound_Strict(DamageSFX[Rand(9, 10)])
@@ -3912,7 +3912,7 @@ Function UpdateNPCs%()
 													EntityParent(de\OBJ, PlayerRoom\OBJ)
 												EndIf
 												me\BigCameraShake = 5.0
-												PlaySound_Strict(LoadTempSound("SFX\General\BodyFall.ogg"))
+												PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
 												If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.3, 0.5), 0.0, 200.0)
 												;[End Block]
 											Case 5, 6 ; ~ No effect
@@ -5571,7 +5571,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						If n\Reload <= 0.0 And (Not me\Terminated)
 							Local PrevTerminated# = me\Terminated
 							
-							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+							PlaySound2(GunshotSFX[0], Camera, n\Collider, 15.0)
 							
 							Pvt = CreatePivot()
 							
@@ -5989,7 +5989,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				If n\Reload <= 0.0 And (Not me\Terminated)
 					PrevTerminated = me\Terminated
 					
-					PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+					PlaySound2(GunshotSFX[0], Camera, n\Collider, 15.0)
 					
 					Pvt = CreatePivot()
 					
@@ -6460,7 +6460,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
 						
 						If n\Reload <= 0.0
-							PlaySound2(GunshotSFX, Camera, n\Collider, 15.0)
+							PlaySound2(GunshotSFX[0], Camera, n\Collider, 15.0)
 							
 							Pvt = CreatePivot()
 							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
@@ -6990,7 +6990,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 		EntityPick(Pvt, 2.5)
 		
 		If PickedEntity() <> 0
-			PlaySound2(Gunshot3SFX, Camera, Pvt, 0.4, Rnd(0.8, 1.0))
+			PlaySound2(BulletMissSFX, Camera, Pvt, 0.4, Rnd(0.8, 1.0))
 			
 			If Particles
 				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PickedX(), PickedY(), PickedZ(), 0.03, 0.0, 80.0)

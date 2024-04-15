@@ -1514,7 +1514,7 @@ Function UpdateEvents%()
 								e\EventState = e\EventState + fps\Factor[0]
 								AnimateNPC(e\room\NPC[0], 270.0, 286.0, 0.4, False)
 								If e\Sound = 0
-									LoadEventSound(e, "SFX\General\BodyFall.ogg")
+									LoadEventSound(e, "SFX\Character\BodyFall.ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound)
 									
 									de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
@@ -1899,7 +1899,7 @@ Function UpdateEvents%()
 												InjurePlayer(0.3, 0.001, 500.0)
 												CreateMsg(GetLocalString("msg", "008.173"))
 											EndIf
-											PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
+											PlaySound2(LoadTempSound("SFX\Room\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 											
 											e\EventState2 = 1.0
 										EndIf
@@ -2308,7 +2308,7 @@ Function UpdateEvents%()
 								EntityType(it\Collider, HIT_ITEM)
 							EndIf
 							
-							e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
+							e\Sound = LoadSound_Strict("SFX\Room\SparkShort.ogg")
 							
 							TFormPoint(-4105.0, -4336.0, 2207.0, e\room\OBJ, 0)
 							it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
@@ -5193,7 +5193,7 @@ Function UpdateEvents%()
 						
 						; ~ Generator on
 						If z
-							If e\Sound2 = 0 Then LoadEventSound(e, "SFX\General\GeneratorOn.ogg", 1)
+							If e\Sound2 = 0 Then LoadEventSound(e, "SFX\Room\GeneratorOn.ogg", 1)
 							e\EventState3 = Min(1.0, e\EventState3 + fps\Factor[0] / 450.0)
 						Else
 							e\EventState3 = Min(0.0, e\EventState3 - fps\Factor[0] / 450.0)
@@ -6308,7 +6308,7 @@ Function UpdateEvents%()
 										; ~ Remove event, if SCP-173 is far away from the room (perhaps because the player left and SCP-173 moved to some other room?) 
 										RemoveEvent(e)
 									Else
-										PlaySound2(LoadTempSound("SFX\General\GlassBreak.ogg"), Camera, n_I\Curr173\OBJ) 
+										PlaySound2(LoadTempSound("SFX\Room\GlassBreak.ogg"), Camera, n_I\Curr173\OBJ) 
 										HideEntity(e\room\Objects[2])
 										PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 										ResetEntity(n_I\Curr173\Collider)
@@ -6363,7 +6363,7 @@ Function UpdateEvents%()
 							Else
 								AnimateNPC(e\room\NPC[0], 11.0, 19.0, 0.25, False)
 								If e\Sound = 0
-									LoadEventSound(e, "SFX\General\BodyFall.ogg")
+									LoadEventSound(e, "SFX\Character\BodyFall.ogg")
 									PlaySound2(e\Sound, Camera, e\room\NPC[0]\Collider)
 									
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4, 0.8)
@@ -6480,10 +6480,10 @@ Function UpdateEvents%()
 					
 					
 					If EntityDistanceSquared(me\Collider, e\room\Objects[1]) < 25.0
-						e\Sound = LoadSound_Strict("SFX\General\SparkShort.ogg")
+						e\Sound = LoadSound_Strict("SFX\Room\SparkShort.ogg")
 						If Rand(50) = 1
 							PlaySound2(e\Sound, Camera, e\room\Objects[1], 3.0, 0.4)
-								
+							
 							If opt\ParticleAmount > 0
 								For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
 									p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 0.002, 0.0, 25.0)
@@ -6515,11 +6515,11 @@ Function UpdateEvents%()
 					If e\EventState = 0.0
 						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 0.64 And e\EventState2 = 0.0 And e\EventState3 = 1.0
 							If BrokenDoor
-								LoadEventSound(e, "SFX\Door\DoorSparks.ogg", 1)
+								LoadEventSound(e, "SFX\Room\SparkLong.ogg", 1)
 								e\SoundCHN2 = PlaySound2(e\Sound2, Camera, e\room\Objects[1], 5.0)
 							EndIf
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
-							LoadEventSound(e, "SFX\Door\Airlock.ogg")
+							LoadEventSound(e, "SFX\Room\Airlock.ogg")
 							For i = 0 To 1
 								OpenCloseDoor(e\room\RoomDoors[i])
 							Next

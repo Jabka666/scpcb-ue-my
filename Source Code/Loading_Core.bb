@@ -1113,9 +1113,8 @@ Global CameraSFX%
 
 Global StoneDragSFX%
 
-Global GunshotSFX%
-Global Gunshot2SFX%
-Global Gunshot3SFX%
+Global GunshotSFX%[2]
+Global BulletMissSFX%
 Global BulletHitSFX%
 
 Global TeslaIdleSFX%
@@ -1274,14 +1273,15 @@ Function LoadSounds%()
 	OpenDoorFastSFX = LoadSound_Strict("SFX\Door\DoorOpenFast.ogg")
 	CautionSFX = LoadSound_Strict("SFX\Room\LockroomSiren.ogg")
 	
-	CameraSFX = LoadSound_Strict("SFX\General\Camera.ogg") 
+	CameraSFX = LoadSound_Strict("SFX\Room\Camera.ogg")
 	
 	StoneDragSFX = LoadSound_Strict("SFX\SCP\173\StoneDrag.ogg")
 	
-	GunshotSFX = LoadSound_Strict("SFX\General\Gunshot.ogg")
-	Gunshot2SFX = LoadSound_Strict("SFX\General\Gunshot2.ogg")
-	Gunshot3SFX = LoadSound_Strict("SFX\General\BulletMiss.ogg")
-	BulletHitSFX = LoadSound_Strict("SFX\General\BulletHit.ogg")
+	For i = 0 To 1
+		GunshotSFX[i] = LoadSound_Strict("SFX\Character\Gunshot" + i + ".ogg")
+	Next
+	BulletMissSFX = LoadSound_Strict("SFX\Character\BulletMiss.ogg")
+	BulletHitSFX = LoadSound_Strict("SFX\Character\BulletHit.ogg")
 	
 	TeslaIdleSFX = LoadSound_Strict("SFX\Room\Tesla\Idle.ogg")
 	TeslaActivateSFX = LoadSound_Strict("SFX\Room\Tesla\WindUp.ogg")
@@ -1297,7 +1297,7 @@ Function LoadSounds%()
 	
 	BurstSFX = LoadSound_Strict("SFX\Room\TunnelBurst.ogg")
 	
-	HissSFX = LoadSound_Strict("SFX\General\Hiss.ogg")
+	HissSFX = LoadSound_Strict("SFX\Room\Hiss.ogg")
 	
 	For i = 0 To 5
 		RustleSFX[i] = LoadSound_Strict("SFX\SCP\372\Rustle" + i + ".ogg")
@@ -1313,7 +1313,7 @@ Function LoadSounds%()
 	
 	LeverSFX = LoadSound_Strict("SFX\Interact\LeverFlip.ogg") 
 	
-	LightSFX = LoadSound_Strict("SFX\General\LightSwitch.ogg")
+	LightSFX = LoadSound_Strict("SFX\Room\LightSwitch.ogg")
 	
 	ButtGhostSFX = LoadSound_Strict("SFX\SCP\Joke\789J.ogg")
 	
@@ -1425,19 +1425,19 @@ Function LoadSounds%()
 	VehicleSFX[0] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
 	VehicleSFX[1] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
 	
-	MissSFX = LoadSound_Strict("SFX\General\Miss.ogg")
+	MissSFX = LoadSound_Strict("SFX\Character\Miss.ogg")
 	
 	BreathGasRelaxedSFX = LoadSound_Strict("SFX\Character\D9341\BreathGasRelaxed.ogg")
 	
 	CrouchSFX = LoadSound_Strict("SFX\Character\D9341\Crouch.ogg")
 	
-	SCRAMBLESFX = LoadSound_Strict("SFX\General\SCRAMBLE.ogg")
+	SCRAMBLESFX = LoadSound_Strict("SFX\Interact\SCRAMBLE.ogg")
 	
-	NVGSFX[0] = LoadSound_Strict("SFX\General\NVGOn.ogg")
-	NVGSFX[1] = LoadSound_Strict("SFX\General\NVGOff.ogg")
+	NVGSFX[0] = LoadSound_Strict("SFX\Interact\NVGOn.ogg")
+	NVGSFX[1] = LoadSound_Strict("SFX\Interact\NVGOff.ogg")
 	
 	For i = 0 To 1
-		LowBatterySFX[i] = LoadSound_Strict("SFX\General\LowBattery" + (i + 1) + ".ogg")
+		LowBatterySFX[i] = LoadSound_Strict("SFX\Interact\LowBattery" + i + ".ogg")
 	Next
 	
 	For i = 0 To 1
@@ -1455,6 +1455,7 @@ Function RemoveSoundInstances%()
 			NVGSFX[i] = 0
 			LowBatterySFX[i] = 0
 			KnobSFX[i] = 0
+			GunshotSFX[i] = 0
 		EndIf
 		If i < 3
 			OpenDoorSFX(DEFAULT_DOOR, i) = 0
@@ -1532,9 +1533,7 @@ Function RemoveSoundInstances%()
 	
 	StoneDragSFX = 0
 	
-	GunshotSFX = 0
-	Gunshot2SFX = 0
-	Gunshot3SFX = 0
+	BulletMissSFX = 0
 	BulletHitSFX = 0
 	
 	TeslaIdleSFX = 0
