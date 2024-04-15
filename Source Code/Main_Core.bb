@@ -8800,7 +8800,7 @@ Function Update1048AEars()
 		
 		If I_1048A\Revert
 			If I_1048A\EarGrowTimer <= 250.0 And PrevI1048EarGrowTimer > 250.0
-				CreateMsg(GetLocalString("msg", "1048a_rev2"))
+				CreateMsg(GetLocalString("msg", "better_1"))
 			ElseIf I_1048A\EarGrowTimer <= 600.0 And PrevI1048EarGrowTimer > 600.0
 				CreateMsg(GetLocalString("msg", "1048a_rev1"))
 			EndIf
