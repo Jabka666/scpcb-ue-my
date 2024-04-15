@@ -2207,7 +2207,6 @@ Type Rooms
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
 	Field RoomSecurityCams.SecurityCams[MaxRoomSecurityCams]
-	Field RoomEmitters.Emitters[MaxRoomEmitters]
 	Field RoomDevilEmitters.DevilEmitters[MaxRoomEmitters]
 	Field mt.MTGrid
 	Field Adjacent.Rooms[MaxRoomAdjacents]

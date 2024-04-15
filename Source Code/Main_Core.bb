@@ -398,7 +398,6 @@ Function UpdateGame%()
 			Else
 				UpdateLightVolume()
 				UpdateLights(Camera)
-				UpdateEmitters()
 				UpdateDevilParticlesTimer = Min(1.0, UpdateDevilParticlesTimer + fps\Factor[0])
 				If UpdateDevilParticlesTimer = 1.0
 					UpdateDevilEmitters()

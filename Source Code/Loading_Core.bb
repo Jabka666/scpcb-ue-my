@@ -122,27 +122,29 @@ Function LoadParticles%()
 	
 	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures)
 	
-	; ~ Black smoke in "room2C_gw_lcz"
+	; ~ Black smoke in "room2C_gw_lcz"/"room2_6_hcz"/"cont1_035"
 	ParticleEffect[0] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[0], 1)
 	SetTemplateInterval(ParticleEffect[0], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[0], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[0], 17, 19)
+	SetTemplateParticleLifeTime(ParticleEffect[0], 53, 56)
 	SetTemplateTexture(ParticleEffect[0], PARTICLE_BLACK_SMOKE)
 	SetTemplateOffset(ParticleEffect[0], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
 	SetTemplateVelocity(ParticleEffect[0], -0.03, 0.03, -0.063, -0.043, -0.03, 0.03)
+	SetTemplateAlphaVel(ParticleEffect[0], True)
 	SetTemplateSize(ParticleEffect[0], 0.02, 0.02, 1.5, 1.8)
-	SetTemplateSizeVel(ParticleEffect[0], 0.028, 1.013)
+	SetTemplateSizeVel(ParticleEffect[0], 0.025, 1.013)
+	SetTemplateGravity(ParticleEffect[0], -0.001)
 	
 	; ~ White smoke in "room2_gw_2"
 	ParticleEffect[1] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[1], 1)
 	SetTemplateInterval(ParticleEffect[1], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[1], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[1], 5, 8)
+	SetTemplateParticleLifeTime(ParticleEffect[1], 7, 10)
 	SetTemplateTexture(ParticleEffect[1], PARTICLE_WHITE_SMOKE)
 	SetTemplateOffset(ParticleEffect[1], -0.03, 0.03, 0.0, 0.0, -0.03, 0.03)
-	SetTemplateVelocity(ParticleEffect[1], -0.04, 0.04, 0.03, 0.05, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[1], -0.02, 0.02, 0.027, 0.045, -0.02, 0.02)
 	SetTemplateAlphaVel(ParticleEffect[1], True)
 	SetTemplateSize(ParticleEffect[1], 0.18, 0.2, 0.5, 1.5)
 	SetTemplateSizeVel(ParticleEffect[1], 0.02, 1.01)
@@ -152,49 +154,96 @@ Function LoadParticles%()
 	SetTemplateEmitterBlend(ParticleEffect[2], 1)
 	SetTemplateInterval(ParticleEffect[2], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[2], 70.0 * 3.0)
-	SetTemplateParticleLifeTime(ParticleEffect[2], 15, 17)
+	SetTemplateParticleLifeTime(ParticleEffect[2], 30, 45)
 	SetTemplateTexture(ParticleEffect[2], PARTICLE_WHITE_SMOKE)
-	SetTemplateOffset(ParticleEffect[2], -0.03, 0.03, 0.0, 0.0, -0.03, 0.03)
-	SetTemplateVelocity(ParticleEffect[2], -0.05, 0.05, -0.09, -0.1, -0.05, 0.05)
+	SetTemplateOffset(ParticleEffect[2], -0.1, 0.1, -0.1, 0.1, -0.1, 0.1)
+	SetTemplateVelocity(ParticleEffect[2], -0.005, 0.005, 0.0, -0.03, -0.005, 0.005)
 	SetTemplateAlphaVel(ParticleEffect[2], True)
-	SetTemplateSize(ParticleEffect[2], 0.45, 0.55, 0.5, 1.5)
-	SetTemplateSizeVel(ParticleEffect[2], 0.02, 1.03)
+	SetTemplateSize(ParticleEffect[2], 0.4, 0.4, 0.5, 1.5)
+	SetTemplateSizeVel(ParticleEffect[2], 0.01, 1.01)
+	SetTemplateGravity(ParticleEffect[2], 0.005)
 	
-	; ~ Black smoke in "room2C_maintenance"/"room3_hcz"/"room4_hcz"
+	; ~ Black smoke in "room2C_maintenance"/"room3_hcz"/"room4_hcz"/"room2_4_hcz"
 	ParticleEffect[3] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[3], 1)
 	SetTemplateInterval(ParticleEffect[3], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[3], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[3], 28, 30)
+	SetTemplateParticleLifeTime(ParticleEffect[3], 70, 80)
 	SetTemplateTexture(ParticleEffect[3], PARTICLE_BLACK_SMOKE)
 	SetTemplateOffset(ParticleEffect[3], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[3], -0.01, 0.01, 0.053, 0.043, -0.01, 0.01)
+	SetTemplateVelocity(ParticleEffect[3], -0.01, 0.01, 0.051, 0.061, -0.01, 0.01)
+	SetTemplateAlphaVel(ParticleEffect[3], True)
 	SetTemplateSize(ParticleEffect[3], 0.02, 0.02, 1.0, 1.2)
-	SetTemplateSizeVel(ParticleEffect[3], 0.013, 1.011)
+	SetTemplateSizeVel(ParticleEffect[3], 0.0058, 1.01)
+	SetTemplateGravity(ParticleEffect[3], 0.001)
 	
 	; ~ Black smoke in "room2_test_hcz"
 	ParticleEffect[4] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[4], 1)
 	SetTemplateInterval(ParticleEffect[4], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[4], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[4], 28, 33)
+	SetTemplateParticleLifeTime(ParticleEffect[4], 58, 63)
 	SetTemplateTexture(ParticleEffect[4], PARTICLE_BLACK_SMOKE)
 	SetTemplateOffset(ParticleEffect[4], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[4], -0.01, 0.01, -0.053, -0.043, -0.01, 0.01)
-	SetTemplateSize(ParticleEffect[4], 0.02, 0.02, 1.0, 1.3)
-	SetTemplateSizeVel(ParticleEffect[4], 0.03, 1.01)
+	SetTemplateVelocity(ParticleEffect[4], -0.01, 0.01, -0.0865, -0.0765, -0.01, 0.01)
+	SetTemplateAlphaVel(ParticleEffect[4], True)
+	SetTemplateSize(ParticleEffect[4], 0.023, 0.023, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[4], 0.018, 1.01)
+	SetTemplateGravity(ParticleEffect[4], -0.0024)
 	
 	; ~ Black smoke in "cont1_173_intro"
 	ParticleEffect[5] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[5], 1)
 	SetTemplateInterval(ParticleEffect[5], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[5], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[5], 18, 20)
+	SetTemplateParticleLifeTime(ParticleEffect[5], 28, 30)
 	SetTemplateTexture(ParticleEffect[5], PARTICLE_BLACK_SMOKE)
 	SetTemplateOffset(ParticleEffect[5], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[5], -0.01, 0.01, -0.053, -0.043, -0.01, 0.01)
+	SetTemplateVelocity(ParticleEffect[5], -0.01, 0.01, -0.035, -0.025, -0.01, 0.01)
+	SetTemplateAlphaVel(ParticleEffect[5], True)
 	SetTemplateSize(ParticleEffect[5], 0.01, 0.01, 1.0, 1.3)
 	SetTemplateSizeVel(ParticleEffect[5], 0.0125, 1.012)
+	SetTemplateGravity(ParticleEffect[4], -0.002)
+	
+	; ~ Black smoke in "room3_storage"
+	ParticleEffect[6] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[6], 1)
+	SetTemplateInterval(ParticleEffect[6], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[6], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[6], 50, 60)
+	SetTemplateTexture(ParticleEffect[6], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[6], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[6], 0.0, 0.0, 0.01, 0.01, -0.04, -0.05)
+	SetTemplateAlphaVel(ParticleEffect[6], True)
+	SetTemplateSize(ParticleEffect[6], 0.04, 0.04, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[6], 0.01, 1.01)
+	SetTemplateGravity(ParticleEffect[6], -0.0005)
+	
+	; ~ White smoke in "cont1_173"
+	ParticleEffect[7] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[7], 1)
+	SetTemplateInterval(ParticleEffect[7], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[7], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[7], 30, 45)
+	SetTemplateTexture(ParticleEffect[7], PARTICLE_WHITE_SMOKE)
+	SetTemplateOffset(ParticleEffect[7], -0.07, 0.07, -0.1, 0.1, -0.07, 0.07)
+	SetTemplateVelocity(ParticleEffect[7], 0.0, 0.0, 0.02, 0.025, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[7], True)
+	SetTemplateSize(ParticleEffect[7], 0.4, 0.4, 0.5, 1.5)
+	SetTemplateSizeVel(ParticleEffect[7], 0.018, 1.01)
+	
+	; ~ Black smoke from Apache Helicopter
+	ParticleEffect[8] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[8], 1)
+	SetTemplateInterval(ParticleEffect[8], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[8], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[8], 230, 250)
+	SetTemplateTexture(ParticleEffect[8], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[8], -0.2, 0.2, -0.1, 0.1, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[8], -0.05, 0.05, 0.05, 0.07, -0.05, 0.05)
+	SetTemplateAlphaVel(ParticleEffect[8], True)
+	SetTemplateSize(ParticleEffect[8], 0.02, 0.02, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[8], 0.01, 1.01)
 End Function
 
 Function RemoveParticleInstances%()
@@ -1204,7 +1253,7 @@ Global DecaySFX%[5]
 
 Global BurstSFX%
 
-Global HissSFX%
+Global HissSFX%[2]
 
 Global RustleSFX%[6]
 
@@ -1369,7 +1418,9 @@ Function LoadSounds%()
 	
 	BurstSFX = LoadSound_Strict("SFX\Room\TunnelBurst.ogg")
 	
-	HissSFX = LoadSound_Strict("SFX\Room\Hiss.ogg")
+	For i = 0 To 1
+		HissSFX[i] = LoadSound_Strict("SFX\Room\Hiss" + i + ".ogg")
+	Next
 	
 	For i = 0 To 5
 		RustleSFX[i] = LoadSound_Strict("SFX\SCP\372\Rustle" + i + ".ogg")
@@ -1532,6 +1583,7 @@ Function RemoveSoundInstances%()
 			DoorBudgeSFX[i] = 0
 			KeyCardSFX[i] = 0
 			ScannerSFX[i] = 0
+			HissSFX[i] = 0
 		EndIf
 		If i < 3
 			OpenDoorSFX(DEFAULT_DOOR, i) = 0
@@ -1613,8 +1665,6 @@ Function RemoveSoundInstances%()
 	MagnetDownSFX = 0
 	
 	BurstSFX = 0
-	
-	HissSFX = 0
 	
 	Death914SFX = 0
 	Use914SFX = 0
@@ -2779,7 +2829,7 @@ End Function
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
-	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, em.Emitters, d.Doors, lvr.Levers, sc.SecurityCams
+	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
 	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, dem.DevilEmitters
 	
@@ -2944,9 +2994,6 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveParticle(p)
 	Next
 	RemoveParticleInstances()
-	For em.Emitters = Each Emitters
-		RemoveEmitter(em)
-	Next
 	For dem.DevilEmitters = Each DevilEmitters
 		RemoveDevilEmitter(dem)
 	Next

@@ -47,7 +47,7 @@ End Type
 
 Global ParticleCam%
 Global ParticlePiv%
-Global ParticleEffect%[6]
+Global ParticleEffect%[9]
 Global UpdateDevilParticlesTimer# = 0.0
 
 Function CreateTemplate()
@@ -394,9 +394,9 @@ Function UpdateParticles_Devil()
 		Else
 			p\Age = p\Age + 1
 			If p\emitter\tmp\AlignToFall
-				p\Rot = (p\emitter\tmp\AlignToFallOffset - ATan2(p\XV, p\YV))
+				p\Rot = p\emitter\tmp\AlignToFallOffset - ATan2(p\XV, p\YV)
 			Else
-				p\Rot = (p\Rot + p\RotVel)
+				p\Rot = p\Rot + p\RotVel
 			EndIf
 			p\YV = p\YV - p\emitter\tmp\Gravity
 			p\x = p\x + p\XV

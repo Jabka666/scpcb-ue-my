@@ -2,7 +2,7 @@ Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom()")
 	
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, fr.Forest, dem.DevilEmitters
-	Local it.Items, it2.Items, em.Emitters, w.WayPoints, w2.WayPoints, l.Lights
+	Local it.Items, it2.Items, w.WayPoints, w2.WayPoints, l.Lights
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%, SF%, b%, Name$
 	Local t1%, Tex%, Screen%, Scale#
 	Local i%, k%, Temp%, Temp3%, Angle#
@@ -279,6 +279,9 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 1920.0 * RoomScale, r\y + 505.0 * RoomScale, r\z + 1087.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
+			
+			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 3384.0 * RoomScale, r\y + 500.0 * RoomScale, r\z + 4500.0 * RoomScale, 7)
+			dem\State = 2
 			;[End Block]
 		Case r_cont1_173_intro
 			;[Block]
@@ -831,6 +834,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(r\Objects[0], r\OBJ)
 				
 				dem.DevilEmitters = CreateDevilEmitter(r, r\x + 262.0 * RoomScale, r\y + 330.0 * RoomScale, r\z - 345.0 * RoomScale, 1)
+				dem\State = 2
 			Else
 				r\Objects[0] = CreatePivot()
 				PositionEntity(r\Objects[0], r\x + 344.0 * RoomScale, r\y + 128.0 * RoomScale, r\z)
@@ -1595,10 +1599,10 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Smoke
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 175.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 655.0 * RoomScale, 0)
-			dem\IsBlackSmoke = True
+			dem\State = 1
 			
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 655.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
-			dem\IsBlackSmoke = True
+			dem\State = 1
 			
 			CreateCustomCenter(r, r\x - 736.0 * RoomScale, r\z - 352.0 * RoomScale)
 			;[End Block]
@@ -1789,9 +1793,9 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[15], r\x - 456.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 3023.0 * RoomScale)
 			EntityParent(r\Objects[15], r\OBJ)
 			
-			em.Emitters = CreateEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 0)
-			em\RandAngle = 15.0 : em\Speed = 0.03 : em\SizeChange = 0.01 : em\AlphaChange = -0.006 : em\Gravity = -0.2 
-			TurnEntity(em\OBJ, 20.0, -100.0, 0.0)
+			; ~ TODO: FIND A WAY TO ROTATE PARTICLES/EMITTER
+			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 6)
+			dem\State = 1
 			
 			Select Rand(3)
 				Case 1
@@ -2240,17 +2244,13 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
+			; ~ TODO: FIND A WAY TO ROTATE PARTICLES/EMITTER
 			; ~ Smoke
 			i = 0
 			For xTemp = -1 To 1 Step 2
 				For zTemp = -1 To 1
-					em.Emitters = CreateEmitter(r, r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 0)
-					em\RandAngle = 30.0 : em\Speed = 0.0045 : em\SizeChange = 0.007 : em\AlphaChange = -0.016
-					If i < 3
-						TurnEntity(em\OBJ, -45.0, -90.0, 0.0)
-					Else
-						TurnEntity(em\OBJ, -45.0, 90.0, 0.0)
-					EndIf
+					dem.DevilEmitters = CreateDevilEmitter(r, r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 3)
+					dem\State = 1
 					i = i + 1
 				Next
 			Next
@@ -2735,7 +2735,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\IsBlackSmoke = True
+			dem\State = 1
 			
 			it.Items = CreateItem("Dr. L's Note #2", it_paper, r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2745,10 +2745,11 @@ Function FillRoom%(r.Rooms)
 		Case r_room3_hcz
 			;[Block]
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\IsBlackSmoke = True
+			dem\State = 1
 			
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\IsBlackSmoke = True
+			dem\State = 1
+			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)
 			;[End Block]
 		Case r_cont3_513
@@ -2880,16 +2881,16 @@ Function FillRoom%(r.Rooms)
 		Case r_room4_hcz
 			;[Block]
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\IsBlackSmoke = True
+			dem\State = 1
 			
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\IsBlackSmoke = True
+			dem\State = 1
 			
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 3)
-			dem\IsBlackSmoke = True
+			dem\State = 1
 			
 			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 3)
-			dem\IsBlackSmoke = True
+			dem\State = 1
 			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)
 			;[End Block]

@@ -2,6 +2,7 @@ v1.2.2
 
 General:
 - Added new console commands: «roomlist» and «itemlist».
+- Added new hiss sound for white gas.
 
 - Optimized the game...
 
@@ -13,6 +14,7 @@ Menu:
 
 Mechanics:
 - The game's gamma will be automatically changed while reading the document/ticket/badge and etc.
+- Improved gas emitters.
 
 Rooms:
 - Added Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
