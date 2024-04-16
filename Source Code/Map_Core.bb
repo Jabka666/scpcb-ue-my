@@ -1596,7 +1596,7 @@ Const r_room2_tesla_hcz% = 57
 Const r_room2_test_hcz% = 58
 Const r_cont2_008% = 59, r_cont2_049% = 60, r_cont2_409% = 61
 Const r_room2c_hcz% = 62
-Const r_room2c_maintenance% = 63
+Const r_cont2c_096% = 63
 Const r_room3_hcz% = 64, r_room3_2_hcz% = 65, r_room3_3_hcz% = 66
 Const r_cont3_513% = 67, r_cont3_966% = 68
 Const r_room4_hcz% = 69, r_room4_2_hcz% = 70
@@ -1875,9 +1875,9 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_room2c_hcz)
 			;[End Block]
-		Case "room2c_maintenance"
+		Case "cont2c_096"
 			;[Block]
-			Return(r_room2c_maintenance)
+			Return(r_cont2c_096)
 			;[End Block]
 		Case "room3_hcz"
 			;[Block]
@@ -5556,8 +5556,7 @@ Function CreateMap%()
 	
 	SetRoom("cont1_079", ROOM1, Room1Amount[0] + Floor(0.15 * Float(Room1Amount[1])), MinPos, MaxPos)
 	SetRoom("cont1_106", ROOM1, Room1Amount[0] + Floor(0.3 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_096", ROOM1, Room1Amount[0] + Floor(0.4 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_035", ROOM1, Room1Amount[0] + Floor(0.5 * Float(Room1Amount[1])), MinPos, MaxPos)
+	SetRoom("cont1_035", ROOM1, Room1Amount[0] + Floor(0.45 * Float(Room1Amount[1])), MinPos, MaxPos)
 	SetRoom("cont1_895", ROOM1, Room1Amount[0] + Floor(0.7 * Float(Room1Amount[1])), MinPos, MaxPos)
 	
 	MinPos = Room2Amount[0]
@@ -5573,7 +5572,7 @@ Function CreateMap%()
 	SetRoom("room2_test_hcz", ROOM2, Room2Amount[0] + Floor(0.7 * Float(Room2Amount[1])), MinPos, MaxPos)
 	SetRoom("room2_servers_hcz", ROOM2, Room2Amount[0] + Floor(0.9 * Float(Room2Amount[1])), MinPos, MaxPos)
 	
-	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "room2c_maintenance"
+	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "cont2c_096"
 	
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.5 * Float(Room3Amount[1]))) = "cont3_513"
 	MapRoom(ROOM3, Room3Amount[0] + Floor(0.8 * Float(Room3Amount[1]))) = "cont3_966"

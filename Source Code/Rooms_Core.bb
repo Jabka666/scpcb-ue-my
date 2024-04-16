@@ -2728,17 +2728,52 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			;[End Block]
-		Case r_room2c_maintenance
+		Case r_cont2c_096
 			;[Block]
-			d.Doors = CreateDoor(r, r\x - 272.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, False, HEAVY_DOOR, KEY_CARD_3)
-			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			; ~ Door to stairs
+			d.Doors = CreateDoor(r, r\x - 272.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 270.0, True, ONE_SIDED_DOOR, KEY_CARD_3)
+			d\MTFClose = False
 			
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\State = 1
+			; ~ Observation room doors
+			d.Doors = CreateDoor(r, r\x - 60.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			
+			d.Doors = CreateDoor(r, r\x + 260.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 1272.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			
+			d.Doors = CreateDoor(r, r\x - 732.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
+			
+			; ~ Maintenance room 2A room
+			d.Doors = CreateDoor(r, r\x - 1755.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			de.Decals = CreateDecal(DECAL_BLOOD_1, r\x - 108.0 * RoomScale, r\y + 4.0 * RoomScale + 0.005, r\z - 544.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
+			EntityParent(de\OBJ, r\OBJ)
+			
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 384.0 * RoomScale, r\y + 0.005, r\z - 512.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.5, 1)
+			EntityParent(de\OBJ, r\OBJ)
+			
+			it.Items = CreateItem("Data Report", it_paper, r\x + 0.0 * RoomScale, r\y - 0.0 * RoomScale, r\z + 0.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x + 0.0 * RoomScale, r\y + 0.0 * RoomScale, r\z + 0.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Document SCP-096", it_paper, r\x + 0.0 * RoomScale, r\y - 0.0 * RoomScale, r\z + 0.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("SCRAMBLE Gear", it_scramble, r\x + 0.0 * RoomScale, r\y - 0.0 * RoomScale, r\z + 0.0 * RoomScale)
+			it\State = Rnd(0.0, 1000.0)
+			EntityParent(it\Collider, r\OBJ)
+			
 			
 			it.Items = CreateItem("Dr. L's Note #2", it_paper, r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			dem\State = 1
 			
 			CreateCustomCenter(r, r\x + 340.0 * RoomScale, r\z - 340.0 * RoomScale)
 			;[End Block]
