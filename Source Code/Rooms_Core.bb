@@ -2753,18 +2753,17 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 384.0 * RoomScale, r\y + 0.005, r\z - 512.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.5, 1)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			it.Items = CreateItem("Data Report", it_paper, r\x + 0.0 * RoomScale, r\y - 0.0 * RoomScale, r\z + 0.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			it.Items = CreateItem("Data Report", it_paper, r\x - 1169.0 * RoomScale, r\y - 563.0 * RoomScale, r\z + 721.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateRandomBattery(r\x + 0.0 * RoomScale, r\y + 0.0 * RoomScale, r\z + 0.0 * RoomScale)
+			it.Items = CreateRandomBattery(r\x, r\y - 445.0 * RoomScale, r\z + 1525.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-096", it_paper, r\x + 0.0 * RoomScale, r\y - 0.0 * RoomScale, r\z + 0.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			it.Items = CreateItem("Document SCP-096", it_paper, r\x + 14.0 * RoomScale, r\y - 445.0 * RoomScale, r\z + 1427.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCRAMBLE Gear", it_scramble, r\x + 0.0 * RoomScale, r\y - 0.0 * RoomScale, r\z + 0.0 * RoomScale)
+			it.Items = CreateItem("SCRAMBLE Gear", it_scramble, r\x + 22.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 1808.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
