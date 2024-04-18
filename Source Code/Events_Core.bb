@@ -1866,7 +1866,7 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-4496.0) * RoomScale
 						GiveAchievement(Achv008)
 						If e\EventState = 0.0
-							If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > PowTwo(HideDistance) ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
+							If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > 64.0 ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
 								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 								ResetEntity(n_I\Curr173\Collider)
 							EndIf
@@ -1877,7 +1877,7 @@ Function UpdateEvents%()
 							UpdateRedLight(e\room\Objects[6], 1500, 800)
 							
 							Dist = EntityDistanceSquared(me\Collider, e\room\Objects[0])
-							If Dist < 4.0
+							If Dist < 4.5
 								For i = 0 To 1
 									e\room\RoomDoors[i]\Locked = 1
 								Next
@@ -1926,6 +1926,8 @@ Function UpdateEvents%()
 							Next
 							RotateEntity(e\room\Objects[1], CurveAngle(-1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
 						EndIf
+					ElseIf e\EventState = 1.0
+						e\EventState = 0.0
 					EndIf
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[9]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[10]))
