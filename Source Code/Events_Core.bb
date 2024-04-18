@@ -1866,7 +1866,7 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-4496.0) * RoomScale
 						GiveAchievement(Achv008)
 						If e\EventState = 0.0
-							If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > 64.0 ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
+							If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > 36.0 ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
 								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 								ResetEntity(n_I\Curr173\Collider)
 							EndIf
