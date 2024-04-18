@@ -809,7 +809,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors= CreateDoor(r, r\x + 338.0 * RoomScale, r\y, r\z + 462.0 * RoomScale, 180.0, True)
+			d.Doors = CreateDoor(r, r\x + 338.0 * RoomScale, r\y, r\z + 462.0 * RoomScale, 180.0, True)
 			d\Locked = 1 : d\MTFClose = False
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
@@ -833,7 +833,7 @@ Function FillRoom%(r.Rooms)
 				PositionEntity(r\Objects[0], r\x - 447.0 * RoomScale, r\y + 177.0 * RoomScale, r\z - 98.0 * RoomScale)
 				EntityParent(r\Objects[0], r\OBJ)
 				
-				dem.DevilEmitters = CreateDevilEmitter(r, r\x + 262.0 * RoomScale, r\y + 330.0 * RoomScale, r\z - 345.0 * RoomScale, 1)
+				dem.DevilEmitters = CreateDevilEmitter(r, r\x + 262.0 * RoomScale, r\y + 328.0 * RoomScale, r\z - 345.0 * RoomScale, 1)
 				dem\State = 2
 			Else
 				r\Objects[0] = CreatePivot()

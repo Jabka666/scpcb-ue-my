@@ -402,7 +402,15 @@ Function UpdateParticles_Devil()
 			p\x = p\x + p\XV
 			p\y = p\y + p\YV
 			p\z = p\z + p\ZV
-			If p\y < p\emitter\tmp\FloorY Then p\YV = p\YV * (-p\emitter\tmp\FloorBounce)
+			
+			Local Bounce% = False
+			
+			If p\emitter\tmp\FloorY > 0.0
+				If p\y >= p\emitter\tmp\FloorY Then Bounce = True
+			Else
+				If p\y < p\emitter\tmp\FloorY Then Bounce = True
+			EndIf
+			If Bounce Then p\YV = p\YV * (-p\emitter\tmp\FloorBounce)
 			p\sX = (p\sX + p\emitter\tmp\SizeAdd) * p\emitter\tmp\SizeMult
 			p\sY = (p\sY + p\emitter\tmp\SizeAdd) * p\emitter\tmp\SizeMult
 			
