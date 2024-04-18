@@ -3,6 +3,8 @@ v1.2.2
 General:
 - Added new console commands: «roomlist» and «itemlist».
 - Added new hiss sound for white gas.
+- Can no longer save when «chs\superman» is active.
+- Can no longer save when nearly dying from bleeding out.
 
 - Optimized the game...
 
