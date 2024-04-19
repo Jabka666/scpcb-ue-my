@@ -5910,6 +5910,16 @@ Function RenderDebugHUD%()
 			Else
 				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
+			
+			Local CurrAchvAmount% = 0
+	
+			For i = 0 To MaxAchievements - 1
+				If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
+			Next
+			Temp = ((MaxAchievements - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))
+			
+			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp))
+			TextEx(x, y + (620 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), Temp / 2))
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
