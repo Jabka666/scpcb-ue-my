@@ -6938,9 +6938,6 @@ Function UpdateMenu%()
 					ResetInput()
 					SaveOptionsINI()
 					
-					AntiAlias(opt\AntiAliasing)
-					TextureLodBias(opt\TextureDetailsLevel)
-					TextureAnisotropic(opt\AnisotropicLevel)
 					ShouldDeleteGadgets = True
 				EndIf
 				

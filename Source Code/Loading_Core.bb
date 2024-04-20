@@ -2068,10 +2068,6 @@ End Type
 Global me.Player
 
 Function LoadData%()
-	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
-	TextureAnisotropic(opt\AnisotropicLevel)
-	AntiAlias(opt\AntiAliasing)
-	
 	SubFile = JsonParseFromFile(SubtitlesFile)
 	LocalSubFile = JsonParseFromFile(lang\LanguagePath + SubtitlesFile)
 	SubColors = JsonGetValue(SubFile, "colors")
@@ -3100,7 +3096,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	RenderTween = 0.0
 	
-	ClearTextureFilters()
 	ClearCollisions()
 	ClearWorld()
 	ResetTimingAccumulator()
