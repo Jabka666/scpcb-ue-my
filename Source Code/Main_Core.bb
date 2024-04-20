@@ -4886,8 +4886,8 @@ Function UpdateGUI%()
 							; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
 							If (Not JsonIsNull(JsonGetValue(Drink, "blink_effect"))) Then me\BlinkEffect = JsonGetFloat(JsonGetValue(Drink, "blink_effect")) ^ SelectedItem\State
 							If (Not JsonIsNull(JsonGetValue(Drink, "blink_timer"))) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "blink_timer")) * SelectedItem\State
-							If (Not JsonIsNull(JsonGetValue(Drink, "stamina_effect"))) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_effect")) ^ SelectedItem\State
-							If (Not JsonIsNull(JsonGetValue(Drink, "stamina_timer"))) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_timer")) * SelectedItem\State
+							If (Not JsonIsNull(JsonGetValue(Drink, "stamina_effect"))) Then me\StaminaEffect = JsonGetFloat(JsonGetValue(Drink, "stamina_effect")) ^ SelectedItem\State
+							If (Not JsonIsNull(JsonGetValue(Drink, "stamina_timer"))) Then me\StaminaEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_timer")) * SelectedItem\State
 							
 							it.Items = CreateItem("Empty Cup", it_emptycup, 0.0, 0.0, 0.0)
 							it\Picked = True
