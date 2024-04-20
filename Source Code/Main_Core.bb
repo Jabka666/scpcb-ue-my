@@ -2472,7 +2472,7 @@ Function RefillCup%()
 					If Inventory(i) <> Null
 						If Inventory(i)\ItemTemplate\ID = it_emptycup
 							RemoveItem(Inventory(i))
-							it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 240, 175, 70)
+							it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 200, 200, 200)
 							it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
 							it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
 							it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
