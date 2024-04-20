@@ -2858,7 +2858,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 End Function
 
 Function UpdateDoors%()
-	Local d.Doors, p.Particles
+	Local d.Doors, dem.DevilEmitters
 	Local x#, z#, Dist#, i%, FindButton%
 	Local SinValue#
 	Local FPSFactorEx#
@@ -2991,23 +2991,7 @@ Function UpdateDoors%()
 							FPSFactorEx = fps\Factor[0] / 180.0
 							MoveEntity(d\OBJ, SinValue * (-FPSFactorEx), 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * FPSFactorEx, 0.0, 0.0)
-							If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0
-								If opt\ParticleAmount = 2
-									For i = 0 To Rand(75, 99)
-										Local Pvt% = CreatePivot()
-										
-										PositionEntity(Pvt, FrameX + Rnd(-0.2, 0.2), FrameY + Rnd(0.0, 1.2), FrameZ + Rnd(-0.2, 0.2))
-										RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
-										
-										p.Particles = CreateParticle(PARTICLE_DUST, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
-										p\Speed = 0.005 : p\SizeChange = -0.00001 : p\Size = 0.01 : p\AlphaChange = -0.01
-										RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
-										ScaleSprite(p\OBJ, p\Size, p\Size)
-										EntityOrder(p\OBJ, -1)
-										FreeEntity(Pvt) : Pvt = 0
-									Next
-								EndIf
-							EndIf
+							If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0 Then dem.DevilEmitters = CreateDevilEmitter(Null, FrameX, FrameY, FrameZ, 11)
 							;[End Block]
 						Case OFFICE_DOOR, WOODEN_DOOR
 							;[Block]

@@ -23,7 +23,7 @@ Type Template
 	Field SizeAdd#, SizeMult#										; ~ Size velocity
 	Field R1%, G1%, B1%, R2%, G2%, B2%								; ~ Colors
 	Field Brightness%												; ~ Brightness
-	Field FloorY#, FloorBounce#										; ~ Floor
+	Field FloorY#, FloorBounce#, FloorUp%							; ~ Floor
 	Field PitchFix%, YawFix%										; ~ Fix angles
 	Field Yaw#
 End Type
@@ -47,7 +47,7 @@ End Type
 
 Global ParticleCam%
 Global ParticlePiv%
-Global ParticleEffect%[9]
+Global ParticleEffect%[14]
 Global UpdateDevilParticlesTimer# = 0.0
 
 Function CreateTemplate()
@@ -238,12 +238,13 @@ Function SetTemplateBrightness%(Template%, Brightness%)
 	tmp\Brightness = Brightness
 End Function
 
-Function SetTemplateFloor%(Template%, FloorY#, FloorBounce# = 0.5)
+Function SetTemplateFloor%(Template%, FloorY#, FloorBounce# = 0.5, FloorUp% = -1)
 	Local tmp.Template
 	
 	tmp.Template = Object.Template(Template)
 	tmp\FloorY = FloorY
 	tmp\FloorBounce = FloorBounce
+	tmp\FloorUp = FloorUp
 End Function
 
 Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
@@ -295,7 +296,7 @@ Function SetEmitter%(Owner%, Template%, Fixed% = False)
 	Return(e\Ent)
 End Function
 
-Function FreeEmitter%(Ent%, DeleteParticles% = True)
+Function FreeEmitter%(Ent%, DeleteParticles% = False)
 	Local e.Emitter, p.Particle
 	
 	For e.Emitter = Each Emitter
@@ -322,7 +323,7 @@ Function SetTemplateYaw%(Template%, Yaw#)
 End Function
 
 Function UpdateParticles_Devil()
-	Local e.Emitter, p.Particle
+	Local e.Emitter, p.Particle, dem.DevilEmitters
 	Local i%
 	
 	For e.Emitter = Each Emitter
@@ -376,6 +377,12 @@ Function UpdateParticles_Devil()
 				If p\emitter = e Then Del = False
 			Next
 			If Del
+				For dem.DevilEmitters = Each DevilEmitters
+					If e\Owner = dem\OBJ
+						dem\OBJ = 0
+						Delete(dem)
+					EndIf
+				Next
 				FreeEntity(e\Ent) : e\Ent = 0
 				If e\Fixed And e\Owner Then FreeEntity(e\Owner) : e\Owner = 0
 				Delete(e)
@@ -405,9 +412,9 @@ Function UpdateParticles_Devil()
 			
 			Local Bounce% = False
 			
-			If p\emitter\tmp\FloorY > 0.0
+			If p\emitter\tmp\FloorUp = 1
 				If p\y >= p\emitter\tmp\FloorY Then Bounce = True
-			Else
+			ElseIf p\emitter\tmp\FloorUp = 0
 				If p\y < p\emitter\tmp\FloorY Then Bounce = True
 			EndIf
 			If Bounce Then p\YV = p\YV * (-p\emitter\tmp\FloorBounce)

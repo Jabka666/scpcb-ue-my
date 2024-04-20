@@ -129,7 +129,7 @@ Function LoadParticles%()
 	SetTemplateParticleLifeTime(ParticleEffect[0], 53, 56)
 	SetTemplateTexture(ParticleEffect[0], PARTICLE_BLACK_SMOKE)
 	SetTemplateOffset(ParticleEffect[0], 0.0, 0.0, 0.05, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[0], -0.03, 0.03, -0.053, -0.043, -0.03, 0.03)
+	SetTemplateVelocity(ParticleEffect[0], -0.03, 0.03, -0.05, -0.04, -0.03, 0.03)
 	SetTemplateAlphaVel(ParticleEffect[0], True)
 	SetTemplateSize(ParticleEffect[0], 0.02, 0.02, 1.5, 1.8)
 	SetTemplateSizeVel(ParticleEffect[0], 0.025, 1.013)
@@ -171,7 +171,7 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[3], True)
 	SetTemplateSize(ParticleEffect[3], 0.02, 0.02, 1.0, 1.2)
 	SetTemplateSizeVel(ParticleEffect[3], 0.01, 1.01)
-	SetTemplateFloor(ParticleEffect[3], 1.3, 0.12)
+	SetTemplateFloor(ParticleEffect[3], 1.3, 0.12, True)
 	
 	; ~ Black smoke in "room2_test_hcz"
 	ParticleEffect[4] = CreateTemplate()
@@ -184,7 +184,7 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[4], True)
 	SetTemplateSize(ParticleEffect[4], 0.022, 0.022, 1.2, 1.4)
 	SetTemplateSizeVel(ParticleEffect[4], 0.01, 1.012)
-	SetTemplateFloor(ParticleEffect[4], -4.45, 0.2)
+	SetTemplateFloor(ParticleEffect[4], -4.45, 0.2, False)
 	
 	; ~ Black smoke in "cont1_173_intro"
 	ParticleEffect[5] = CreateTemplate()
@@ -234,6 +234,68 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[8], True)
 	SetTemplateSize(ParticleEffect[8], 0.02, 0.02, 1.0, 1.2)
 	SetTemplateSizeVel(ParticleEffect[8], 0.01, 1.01)
+	
+	; ~ White smoke in "cont2_008"
+	ParticleEffect[9] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[9], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[9], -1)
+	SetTemplateInterval(ParticleEffect[9], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[9], 40, 45)
+	SetTemplateTexture(ParticleEffect[9], PARTICLE_WHITE_SMOKE)
+	SetTemplateOffset(ParticleEffect[9], -0.01, 0.01, 0.03, 0.04, -0.01, 0.01)
+	SetTemplateVelocity(ParticleEffect[9], 0.0, 0.0, 0.025, 0.03, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[9], True)
+	SetTemplateSize(ParticleEffect[9], 0.07, 0.07, 0.5, 1.0)
+	SetTemplateSizeVel(ParticleEffect[9], 0.02, 1.02)
+	SetTemplateFloor(ParticleEffect[9], -18.2, 0.1, True)
+	
+	; ~ White smoke in "room2_nuke"
+	ParticleEffect[10] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[10], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[10], -1)
+	SetTemplateInterval(ParticleEffect[10], 40)
+	SetTemplateParticlesPerInterval(ParticleEffect[10], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[10], 40, 45)
+	SetTemplateTexture(ParticleEffect[10], PARTICLE_WHITE_SMOKE)
+	SetTemplateOffset(ParticleEffect[10], -0.03, 0.03, 0.1, 0.15, -0.03, 0.03)
+	SetTemplateVelocity(ParticleEffect[10], 0.0, 0.0, 0.02, 0.03, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[10], True)
+	SetTemplateSize(ParticleEffect[10], 0.02, 0.02, 0.7, 0.9)
+	SetTemplateSizeVel(ParticleEffect[10], 0.016, 1.01)
+	
+	; ~ Dust at blast doors
+	ParticleEffect[11] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[11], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[11], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[11], 30)
+	SetTemplateParticleLifeTime(ParticleEffect[11], 70, 80)
+	SetTemplateTexture(ParticleEffect[11], PARTICLE_DUST)
+	SetTemplateOffset(ParticleEffect[11], -0.2, 0.2, 0.0, 1.2, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[11], -0.004, 0.004, -0.0001, 0.0001, -0.004, 0.004)
+	SetTemplateSize(ParticleEffect[11], 0.01, 0.01, 1.0, 1.2)
+	SetTemplateAlphaVel(ParticleEffect[11], True)
+	
+	; ~ A simple dust particle
+	ParticleEffect[12] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[12], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[12], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[12], 100, 120)
+	SetTemplateMaxParticles(ParticleEffect[12], 100)
+	SetTemplateTexture(ParticleEffect[12], PARTICLE_DUST)
+	SetTemplateOffset(ParticleEffect[12], -0.5, 0.5, -0.05, 0.05, -0.5, 0.5)
+	SetTemplateVelocity(ParticleEffect[12], -0.001, 0.001, -0.001, 0.001, -0.001, 0.001)
+	SetTemplateSize(ParticleEffect[12], 0.002, 0.002, 1.0, 1.2)
+	SetTemplateAlphaVel(ParticleEffect[12], True)
+	
+	; ~ A simple flash particle
+	ParticleEffect[13] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[13], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[13], 2, 3)
+	SetTemplateTexture(ParticleEffect[13], PARTICLE_FLASH)
+	SetTemplateOffset(ParticleEffect[13], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
+	SetTemplateSize(ParticleEffect[13], 0.08, 0.1)
+	SetTemplateRotation(ParticleEffect[13], 0.0, 360.0)
+	SetTemplateAlphaVel(ParticleEffect[13], True)
 End Function
 
 Function RemoveParticleInstances%()
@@ -2971,7 +3033,7 @@ Function NullGame%(PlayButtonSFX% = True)
 		FreeTemplate(Handle(tmp))
 	Next
 	For emit.Emitter = Each Emitter
-		FreeEmitter(emit\Ent)
+		FreeEmitter(emit\Ent, True)
 	Next
 	Delete Each Template
 	Delete Each Emitter

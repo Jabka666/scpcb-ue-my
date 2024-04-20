@@ -112,7 +112,8 @@ Function CreateDevilEmitter.DevilEmitters(room.Rooms, x#, y#, z#, ParticleID%)
 	dem.DevilEmitters = New DevilEmitters
 	dem\OBJ = CreatePivot()
 	PositionEntity(dem\OBJ, x, y, z, True)
-	EntityParent(dem\OBJ, room\OBJ)
+	If room <> Null Then EntityParent(dem\OBJ, room\OBJ)
+	
 	dem\room = room
 	dem\x = x
 	dem\y = y
@@ -127,7 +128,7 @@ Function UpdateDevilEmitters()
 	Local InSmoke% = False
 	
 	For dem.DevilEmitters = Each DevilEmitters
-		If fps\Factor[0] > 0.0 And (PlayerRoom = dem\room Lor dem\room\Dist < 8.0)
+		If fps\Factor[0] > 0.0 And (dem\room = Null Lor (PlayerRoom = dem\room Lor dem\room\Dist < 8.0))
 			If dem\Timer = 0.0
 				SetEmitter(dem\OBJ, ParticleEffect[dem\ParticleID])
 				dem\Timer = 1.0
@@ -165,52 +166,22 @@ Function UpdateDevilEmitters()
 	EndIf
 End Function
 
-Function RemoveDevilEmitter%(dem.DevilEmitters)
-	FreeEmitter(dem\OBJ)
+Function RemoveDevilEmitter%(dem.DevilEmitters, RemoveParticles% = False)
+	FreeEmitter(dem\OBJ, RemoveParticles)
 	FreeEntity(dem\OBJ) : dem\OBJ = 0
 	Delete(dem)
 End Function
 
 Function UpdateDust%()
-	Local p.Particles
+	Local p.Particles, dem.DevilEmitters
 	Local i%, Pvt%
 	
-	If opt\ParticleAmount > 0
-		; ~ Create a single dust particle
-		If Rand(35 + (35 * (opt\ParticleAmount = 1))) = 1
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
-			RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
-			If Rand(2) = 1
-				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-			Else
-				MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-			EndIf
-			
-			p.Particles = CreateParticle(PARTICLE_DUST, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 300.0)
-			p\Speed = 0.001 : p\SizeChange = -0.00001
-			RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
-			FreeEntity(Pvt) : Pvt = 0
-		EndIf
-		
-		; ~ Create extra dust particles while the camera is shaking
-		If me\BigCameraShake > 0.0
-			For i = 0 To 2 + (2 * (opt\ParticleAmount - 1))
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
-				RotateEntity(Pvt, 0.0, Rnd(360.0), 0.0)
-				If Rand(2) = 1
-					MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-				Else
-					MoveEntity(Pvt, 0.0, Rnd(-0.5, 0.5), Rnd(0.5, 1.0))
-				EndIf
-				
-				p.Particles = CreateParticle(PARTICLE_DUST, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 200.0)
-				p\Speed = 0.001 : p\SizeChange = -0.00001
-				RotateEntity(p\Pvt, Rnd(-20.0, 20.0), Rnd(360.0), 0.0)
-				FreeEntity(Pvt) : Pvt = 0
-			Next
-		EndIf
+	; ~ Create a single dust particle
+	If Rand(35 + (25 * (opt\ParticleAmount = 1))) = 1 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
+	
+	; ~ Create extra dust particles while the camera is shaking
+	If me\BigCameraShake > 0.0
+		dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
 	EndIf
 End Function
 

@@ -1912,12 +1912,13 @@ Function UpdateEvents%()
 							
 							If EntityPitch(e\room\Objects[1], True) < 40.0
 								PlaySound_Strict(LeverSFX)
+								RemoveDevilEmitter(e\room\RoomDevilEmitters[0])
 								e\EventState = 2.0
 							Else
-								p.Particles = CreateParticle(PARTICLE_WHITE_SMOKE, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 0.02, -0.12)
-								p\SizeChange = 0.012 : p\AlphaChange = -0.015
-								RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
-								TurnEntity(p\Pvt, Rnd(-26.0, 26.0), Rnd(-26.0, 26.0), Rnd(360.0))
+								If e\room\RoomDevilEmitters[0] = Null
+									e\room\RoomDevilEmitters[0] = CreateDevilEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 9)
+									e\room\RoomDevilEmitters[0]\State = 2
+								EndIf
 							EndIf
 						Else
 							If (Not EntityHidden(e\room\Objects[6])) Then HideEntity(e\room\Objects[6])
@@ -3714,68 +3715,63 @@ Function UpdateEvents%()
 						UpdateLever(e\room\RoomLevers[1]\OBJ)
 						
 						If e\EventState = 1.0
-							Select Rand(8)
-								Case 1
-									;[Block]
-									x = 813.0
-									y = 3010.0
-									z = -152.0
-									Angle = -111.0
-									;[End Block]
-								Case 2
-									;[Block]
-									x = 818.0
-									y = 3010.0
-									z = 147.0
-									Angle = -62.0
-									;[End Block]
-								Case 3
-									;[Block]
-									x = 621.0
-									y = 3010.0
-									z = 341.0
-									Angle = -29.0
-									;[End Block]
-								Case 4
-									;[Block]
-									x = 327.0
-									y = 3010.0
-									z = 349.0
-									Angle = 25.0
-									;[End Block]
-								Case 5
-									;[Block]
-									x = 137.0
-									y = 3010.0
-									z = 143.0
-									Angle = 63.0
-									;[End Block]
-								Case 6
-									;[Block]
-									x = 137.0
-									y = 3010.0
-									z = -155.0
-									Angle = 112.0
-									;[End Block]
-								Case 7
-									;[Block]
-									x = 330.0
-									y = 3010.0
-									z = -346.0
-									Angle = 147.0
-									;[End Block]
-								Case 8
-									;[Block]
-									x = 635.0
-									y = 3010.0
-									z = -346.0
-									Angle = -152.0
-									;[End Block]
-							End Select
-							TFormPoint(x, y, z, e\room\OBJ, 0)
-							p.Particles = CreateParticle(PARTICLE_WHITE_SMOKE, TFormedX(), TFormedY(), TFormedZ(), Rnd(0.3), 0.0, Rnd(50.0, 120.0))
-							p\Speed = Rnd(0.005, 0.01) : p\AlphaChange = -0.02
-							RotateEntity(p\Pvt, -75.0, e\room\Angle - Angle, 0.0)
+							If e\room\RoomDevilEmitters[7] = Null
+								For i = 0 To 7
+									If e\room\RoomDevilEmitters[i] = Null And Rand(100) = 1
+										Select i
+											Case 0
+												;[Block]
+												x = 813.0
+												z = -152.0
+												;[End Block]
+											Case 1
+												;[Block]
+												x = 818.0
+												z = 147.0
+												;[End Block]
+											Case 2
+												;[Block]
+												x = 621.0
+												z = 341.0
+												;[End Block]
+											Case 3
+												;[Block]
+												x = 327.0
+												z = 349.0
+												;[End Block]
+											Case 4
+												;[Block]
+												x = 137.0
+												z = 143.0
+												;[End Block]
+											Case 5
+												;[Block]
+												x = 137.0
+												z = -155.0
+												;[End Block]
+											Case 6
+												;[Block]
+												x = 330.0
+												z = -346.0
+												;[End Block]
+											Case 7
+												;[Block]
+												x = 635.0
+												z = -346.0
+												;[End Block]
+										End Select
+										y = 3010.0
+										TFormPoint(x, y, z, e\room\OBJ, 0)
+										e\room\RoomDevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 10)
+									EndIf
+								Next
+							EndIf
+						Else
+							If e\room\RoomDevilEmitters[7] <> Null
+								For i = 0 To 7
+									RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
+								Next
+							EndIf
 						EndIf
 					EndIf
 				EndIf
@@ -9326,21 +9322,6 @@ Function UpdateEndings%()
 											
 											dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 8)
 											EntityParent(dem\OBJ, e\room\NPC[3]\Collider)
-											
-											If opt\ParticleAmount > 0
-												For i = 0 To (3 + (4 * (opt\ParticleAmount - 1)))
-													p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), Rnd(0.5, 1.0), -0.1, 200.0)
-													p\Speed = 0.01 : p\SizeChange = 0.01 : p\Alpha = 1.0 : p\AlphaChange = -0.005
-													RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
-													MoveEntity(p\Pvt, 0.0, 0.0, 0.3)
-												Next
-												
-												For i = 0 To (6 + (6 * (opt\ParticleAmount - 1)))
-													p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 0.02, 0.003, 200.0)
-													p\Speed = 0.04 : p\Alpha = 1.0 : p\AlphaChange = -0.005
-													RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
-												Next
-											EndIf
 										EndIf
 									Else
 										FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
@@ -9351,14 +9332,6 @@ Function UpdateEndings%()
 					EndIf
 					
 					Angle = Max(Sin(EntityYaw(me\Collider)), 0.0)
-					
-					If opt\ParticleAmount > 0
-						If Rand(3) = 1
-							p.Particles = CreateParticle(PARTICLE_DUST, EntityX(Camera) + Rnd(-2.0, 2.0), EntityY(Camera) + Rnd(0.9, 2.0), EntityZ(Camera) + Rnd(-2.0, 2.0), 0.006, 0.0, 300.0)
-							p\Speed = Rnd(0.002, 0.003) : p\SizeChange = -0.00001
-							RotateEntity(p\Pvt, Rnd(-20.0, 20.0), e\room\Angle - 90.0 + Rnd(-15.0, 15.0), 0.0, 0.0)
-						EndIf
-					EndIf
 					
 					If e\room\NPC[1] <> Null
 						; ~ Helicopter spots or player is within range --> Start shooting
