@@ -3666,6 +3666,7 @@ Function UpdateEvents%()
 					TurnEntity(e\room\Objects[0], e\EventState3 * fps\Factor[0], 0.0, 0.0)
 					If e\EventState3 > 0.01 Then e\room\SoundCHN = LoopSound2(RoomAmbience[8], e\room\SoundCHN, Camera, e\room\Objects[0], 5.0, (e\EventState3 / 4.0))
 					e\EventState3 = CurveValue(e\EventState2 * 5.0, e\EventState3, 150.0)
+					RefillCup(e\room\Objects[1])
 				EndIf
 				
 				If e\room\Dist < 16.0

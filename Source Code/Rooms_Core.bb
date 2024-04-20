@@ -702,6 +702,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
 			
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x + 353.0 * RoomScale, r\y + 128.0 * RoomScale, r\z - 256.0 * RoomScale)
+			EntityParent(r\Objects[1], r\OBJ)
+			
 			If Rand(2) = 1
 				it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 490.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + -232.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
