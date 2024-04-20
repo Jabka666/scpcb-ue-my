@@ -1870,6 +1870,9 @@ Function UpdateEvents%()
 								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 								ResetEntity(n_I\Curr173\Collider)
 							EndIf
+							For i = 2 To 3
+								If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+							Next
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0
 							e\SoundCHN = LoopSound2(AlarmSFX[0], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
@@ -1883,9 +1886,6 @@ Function UpdateEvents%()
 								Next
 								
 								If e\EventState2 = 0.0
-									For i = 2 To 3
-										If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
-									Next
 									If EntityDistanceSquared(n_I\Curr173\Collider, e\room\Objects[5]) < 9.0
 										If (Not PlayerSees173(n_I\Curr173))
 											PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True), True)
