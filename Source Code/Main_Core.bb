@@ -427,6 +427,7 @@ Function UpdateGame%()
 			UpdateParticles()
 			Update268()
 			Update427()
+			RefillCup()
 			
 			If chs\InfiniteStamina Then me\Stamina = 100.0
 			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
@@ -2461,26 +2462,32 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 	Return(False)
 End Function
 
-Function RefillCup%(OBJ%)
-	If InteractObject%(OBJ, 0.64)
-		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) <> Null
-				If Inventory(i)\ItemTemplate\ID = it_emptycup
-					RemoveItem(Inventory(i))
-					it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 240, 175, 70)
-					it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
-					it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
-					it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-					Inventory(i) = it
-					HideEntity(it\Collider)
-					EntityType(it\Collider, HIT_ITEM)
-					EntityParent(it\Collider, 0)
-					CreateMsg(GetLocalString("msg", "refill"))
-					Exit
-				EndIf
+Function RefillCup%()
+	Local p.Props
+	
+	For p.Props = Each Props
+		If p\Name = "GFX\Map\Props\water_cooler.b3d"
+			If InteractObject%(p\OBJ, 0.64)
+				For i = 0 To MaxItemAmount - 1
+					If Inventory(i) <> Null
+						If Inventory(i)\ItemTemplate\ID = it_emptycup
+							RemoveItem(Inventory(i))
+							it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 240, 175, 70)
+							it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
+							it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+							it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
+							Inventory(i) = it
+							HideEntity(it\Collider)
+							EntityType(it\Collider, HIT_ITEM)
+							EntityParent(it\Collider, 0)
+							CreateMsg(GetLocalString("msg", "refill"))
+							Exit
+						EndIf
+					EndIf
+				Next
 			EndIf
-		Next
-	EndIf
+		EndIf
+	Next
 	Return(False)
 End Function
 
