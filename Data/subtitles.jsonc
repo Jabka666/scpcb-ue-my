@@ -1138,13 +1138,13 @@
 		}
 	],
 	/* CHARACTERS */
-	"SFX\\Room\\Storeroom\\Escape0.ogg": [
+	"SFX\\Character\\Maintenance\\EscapeFromClosets.ogg": [
 		{
 			"text": "I think the shortest way out is through the South-East wing. Follow me.",
 			"color": "crew"
 		}
 	],
-	"SFX\\Room\\Storeroom\\Escape1.ogg": [
+	"SFX\\Character\\Scientist\\EscapeFromClosets.ogg": [
 		{
 			"text": "Did you hear that?"
 		},
