@@ -7371,17 +7371,11 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 End Function
 
 Function UpdateNPCNearTesla%()
-	Local n.NPCs, p.Particles
+	Local n.NPCs, dem.DevilEmitters
 	
 	For n.NPCs = Each NPCs
 		If n\TeslaHit
-			If opt\ParticleAmount > 0
-				If Rand(10 - (5 * (opt\ParticleAmount - 1))) = 1
-					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(n\OBJ, True) + (Rnd(-0.15, 0.15)), EntityY(n\OBJ, True) + Rnd(0.3, 0.9), EntityZ(n\OBJ) + (Rnd(-0.15, 0.15)), Rnd(0.04, 0.06), -0.001, 700.0)
-					p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-					RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
-				EndIf
-			EndIf
+			If opt\ParticleAmount > 0 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
 			
 			If n\NPCType = NPCType106
 				If n\State3 = 1.0

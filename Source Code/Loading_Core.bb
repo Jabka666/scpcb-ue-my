@@ -260,7 +260,7 @@ Function LoadParticles%()
 	SetTemplateOffset(ParticleEffect[10], -0.03, 0.03, 0.1, 0.15, -0.03, 0.03)
 	SetTemplateVelocity(ParticleEffect[10], 0.0, 0.0, 0.02, 0.03, 0.0, 0.0)
 	SetTemplateAlphaVel(ParticleEffect[10], True)
-	SetTemplateSize(ParticleEffect[10], 0.02, 0.02, 0.7, 0.9)
+	SetTemplateSize(ParticleEffect[10], 0.02, 0.02, 0.8, 1.0)
 	SetTemplateSizeVel(ParticleEffect[10], 0.016, 1.01)
 	
 	; ~ Dust at blast doors
@@ -293,9 +293,22 @@ Function LoadParticles%()
 	SetTemplateParticleLifeTime(ParticleEffect[13], 2, 3)
 	SetTemplateTexture(ParticleEffect[13], PARTICLE_FLASH)
 	SetTemplateOffset(ParticleEffect[13], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
-	SetTemplateSize(ParticleEffect[13], 0.08, 0.1)
+	SetTemplateSize(ParticleEffect[13], 0.08, 0.08, 0.8, 1.0)
 	SetTemplateRotation(ParticleEffect[13], 0.0, 360.0)
 	SetTemplateAlphaVel(ParticleEffect[13], True)
+	
+	; ~ Black smoke in tesla rooms
+	ParticleEffect[14] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[14], 1)
+	SetTemplateInterval(ParticleEffect[14], 20)
+	SetTemplateEmitterLifeTime(ParticleEffect[14], 70.0)
+	SetTemplateParticleLifeTime(ParticleEffect[14], 60, 70)
+	SetTemplateTexture(ParticleEffect[14], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[14], -0.2, 0.2, 0.2, 0.8, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[14], -0.003, 0.003, 0.005, 0.008, -0.003, 0.003)
+	SetTemplateSize(ParticleEffect[14], 0.04, 0.04, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[14], 0.001, 1.0)
+	SetTemplateAlphaVel(ParticleEffect[14], True)
 End Function
 
 Function RemoveParticleInstances%()
