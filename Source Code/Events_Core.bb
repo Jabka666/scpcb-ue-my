@@ -1934,6 +1934,8 @@ Function UpdateEvents%()
 					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[9]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[10]))
 					ToElevatorFloor = LowerFloor
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[3], e\room\RoomDoors[4], e\room\Objects[9], e\room\Objects[10], e)
+				Else
+					If (Not EntityHidden(e\room\Objects[11])) Then HideEntity(e\room\Objects[11])
 				EndIf
 				;[End Block]
 			Case e_cont2_012
@@ -2715,6 +2717,8 @@ Function UpdateEvents%()
 						; ~ TODO: REMOVE ALL PROPS/LIGHTS/DOORS. THE MAIN REASON WHY I DIDN'T DO THAT I CANNOT SAVE/LOAD THEM PROPERLY
 						RemoveEvent(e)
 					EndIf
+				Else
+					If (Not EntityHidden(e\room\Objects[7])) Then HideEntity(e\room\Objects[7])
 				EndIf
 				;[End Block]
 			Case e_cont2c_066_1162_arc
@@ -5511,6 +5515,10 @@ Function UpdateEvents%()
 							EndIf
 						Next
 					EndIf
+				Else
+					If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
+					If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+					If (Not EntityHidden(e\room\Objects[2])) Then HideEntity(e\room\Objects[2])
 				EndIf
 				
 				If e\EventState >= 26.0
