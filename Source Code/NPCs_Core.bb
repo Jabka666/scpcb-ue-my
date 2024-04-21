@@ -4952,17 +4952,9 @@ Function UpdateNPCs%()
 		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
 		If GravityDist < PowTwo(HideDistance) Lor n\NPCType = NPCType1499_1
-			If n\IsDead
-				If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
-			Else
-				EntityAlpha(n\OBJ, 1.0)
-			EndIf
+			EntityAlpha(n\OBJ, 1.0)
 		Else
-			If n\IsDead
-				If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
-			Else
-				EntityAlpha(n\OBJ, 0.0)
-			EndIf
+			EntityAlpha(n\OBJ, 0.0)
 		EndIf
 		
 		If n\IsDead
@@ -4971,33 +4963,34 @@ Function UpdateNPCs%()
 				Select n\NPCType
 					Case NPCType035_Tentacle
 						;[Block]
-						If n\Frame > 550.9 And (Not EntityHidden(n\OBJ))
+						If n\Frame > 550.9
 							HideEntity(n\Collider)
+							HideEntity(n\OBJ)
 							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-							HideEntity(n\OBJ)
+							n\GravityMult = 0.0
 						EndIf
 						;[End Block]
 					Case NPCType1048_A
 						;[Block]
-						If (Not EntityHidden(n\OBJ))
-							HideEntity(n\Collider)
-							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-							
-							PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
-							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
+						HideEntity(n\Collider)
+						HideEntity(n\OBJ)
+						
+						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+						
+						PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
+						p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
+						EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+						RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+						p\AlphaChange = -Rnd(0.02, 0.03)
+						For i = 0 To 1
+							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider) + Rnd(-0.2, 0.2), EntityY(n\Collider) + 0.25, EntityZ(n\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
 							EntityColor(p\OBJ, 100.0, 100.0, 100.0)
 							RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
 							p\AlphaChange = -Rnd(0.02, 0.03)
-							For i = 0 To 1
-								p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider) + Rnd(-0.2, 0.2), EntityY(n\Collider) + 0.25, EntityZ(n\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
-								EntityColor(p\OBJ, 100.0, 100.0, 100.0)
-								RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
-								p\AlphaChange = -Rnd(0.02, 0.03)
-							Next
-							HideEntity(n\OBJ)
-						EndIf
+						Next
+						n\GravityMult = 0.0
 						;[End Block]
 					Default
 						;[Block]
@@ -5005,9 +4998,9 @@ Function UpdateNPCs%()
 						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 						If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+						n\GravityMult = 0.0
 						;[End Block]
 				End Select
-				n\GravityMult = 0.0
 			EndIf
 		Else
 			If GravityDist < PowTwo(HideDistance * 0.6) Lor n\NPCType = NPCType1499_1
