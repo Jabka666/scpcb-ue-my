@@ -2467,7 +2467,7 @@ Function RefillCup%()
 	
 	For p.Props = Each Props
 		If p\Name = "GFX\Map\Props\water_cooler.b3d"
-			If InteractObject%(p\OBJ, 0.64)
+			If InteractObject%(p\OBJ, 0.49)
 				For i = 0 To MaxItemAmount - 1
 					If Inventory(i) <> Null
 						If Inventory(i)\ItemTemplate\ID = it_emptycup
@@ -2480,6 +2480,7 @@ Function RefillCup%()
 							HideEntity(it\Collider)
 							EntityType(it\Collider, HIT_ITEM)
 							EntityParent(it\Collider, 0)
+							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
 							CreateMsg(GetLocalString("msg", "refill"))
 							Exit
 						EndIf
@@ -4831,78 +4832,85 @@ Function UpdateGUI%()
 				Case it_cup
 					;[Block]
 					If CanUseItem(True)
-						Local Drink% = Int(SelectedItem\Name)
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						If JsonIsNull(JsonGetValue(Drink, "refuse_message"))
-							If (Not JsonIsNull(JsonGetValue(Drink, "drink_message"))) Then CreateMsg(JsonGetString(JsonGetValue(Drink, "drink_message")))
+						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 0.8), 100.0)
+						
+						If SelectedItem\State3 = 100.0
+							Local Drink% = Int(SelectedItem\Name)
 							
-							me\BlurTimer = Max(JsonGetFloat(JsonGetValue(Drink, "blur")) * 70.0, 0.0)
-							If me\VomitTimer = 0.0
-								me\VomitTimer = JsonGetFloat(JsonGetValue(Drink, "vomit"))
-							Else
-								me\VomitTimer = Min(me\VomitTimer, JsonGetFloat(JsonGetValue(Drink, "vomit")))
-							EndIf
-							me\CameraShakeTimer = JsonGetFloat(JsonGetValue(Drink, "camera_shake"))
-							me\DeafTimer = Max(me\DeafTimer + JsonGetFloat(JsonGetValue(Drink, "deaf_timer")), 0.0)
-							me\Injuries = Max(me\Injuries + JsonGetFloat(JsonGetValue(Drink, "damage")), 0.0)
-							me\Bloodloss = Max(me\Bloodloss + JsonGetFloat(JsonGetValue(Drink, "bloodloss")), 0.0)
-							
-							If (Not JsonIsNull(JsonGetValue(Drink, "drink_sound"))) Then PlaySound_Strict(LoadTempSound(JsonGetString(JsonGetValue(Drink, "drink_sound"))), True)
-							
-							If JsonGetBool(JsonGetValue(Drink, "stomachache")) Then I_1025\State[3] = 1.0
-							
-							If JsonGetBool(JsonGetValue(Drink, "infection")) Then I_008\Timer = I_008\Timer + 0.001
-							
-							If JsonGetBool(JsonGetValue(Drink, "crystallization")) Then I_409\Timer = I_409\Timer + 0.001
-							
-							If JsonGetBool(JsonGetValue(Drink, "mutation"))
-								If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
-							EndIf
-							
-							If JsonGetBool(JsonGetValue(Drink, "revitalize"))
-								For i = 0 To 6
-									I_1025\State[i] = 0.0
+							If JsonIsNull(JsonGetValue(Drink, "refuse_message"))
+								If (Not JsonIsNull(JsonGetValue(Drink, "drink_message"))) Then CreateMsg(JsonGetString(JsonGetValue(Drink, "drink_message")))
+								
+								me\BlurTimer = Max(JsonGetFloat(JsonGetValue(Drink, "blur")) * 70.0, 0.0)
+								If me\VomitTimer = 0.0
+									me\VomitTimer = JsonGetFloat(JsonGetValue(Drink, "vomit"))
+								Else
+									me\VomitTimer = Min(me\VomitTimer, JsonGetFloat(JsonGetValue(Drink, "vomit")))
+								EndIf
+								me\CameraShakeTimer = JsonGetFloat(JsonGetValue(Drink, "camera_shake"))
+								me\DeafTimer = Max(me\DeafTimer + JsonGetFloat(JsonGetValue(Drink, "deaf_timer")), 0.0)
+								me\Injuries = Max(me\Injuries + JsonGetFloat(JsonGetValue(Drink, "damage")), 0.0)
+								me\Bloodloss = Max(me\Bloodloss + JsonGetFloat(JsonGetValue(Drink, "bloodloss")), 0.0)
+								me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(JsonGetValue(Drink, "energy")) / 4.0, JsonGetFloat(JsonGetValue(Drink, "energy"))), 100.0)
+								
+								If (Not JsonIsNull(JsonGetValue(Drink, "drink_sound"))) Then PlaySound_Strict(LoadTempSound(JsonGetString(JsonGetValue(Drink, "drink_sound"))), True)
+								
+								If JsonGetBool(JsonGetValue(Drink, "stomachache")) Then I_1025\State[3] = 1.0
+								
+								If JsonGetBool(JsonGetValue(Drink, "infection")) Then I_008\Timer = I_008\Timer + 0.001
+								
+								If JsonGetBool(JsonGetValue(Drink, "crystallization")) Then I_409\Timer = I_409\Timer + 0.001
+								
+								If JsonGetBool(JsonGetValue(Drink, "mutation"))
+									If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
+								EndIf
+								
+								If JsonGetBool(JsonGetValue(Drink, "revitalize"))
+									For i = 0 To 6
+										I_1025\State[i] = 0.0
+									Next
+								EndIf
+								
+								If (Not JsonIsNull(JsonGetValue(Drink, "death_timer")))
+									If (Not JsonIsNull(JsonGetValue(Drink, "death_message")))
+										msg\DeathMsg = JsonGetString(JsonGetValue(Drink, "death_message"))
+									Else
+										msg\DeathMsg = ""
+									EndIf
+									
+									Local DeathTimer1% = JsonGetFloat(JsonGetValue(Drink, "death_timer"))
+									
+									If DeathTimer1 = 0 
+										Kill()
+									ElseIf me\DeathTimer = 0.0
+										me\DeathTimer = DeathTimer1 * 70.0
+									Else
+										me\DeathTimer = Min(me\DeathTimer, DeathTimer1)
+									EndIf
+								EndIf
+								
+								; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
+								If (Not JsonIsNull(JsonGetValue(Drink, "blink_effect"))) Then me\BlinkEffect = JsonGetFloat(JsonGetValue(Drink, "blink_effect")) ^ SelectedItem\State
+								If (Not JsonIsNull(JsonGetValue(Drink, "blink_timer"))) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "blink_timer")) * SelectedItem\State
+								If (Not JsonIsNull(JsonGetValue(Drink, "stamina_effect"))) Then me\StaminaEffect = JsonGetFloat(JsonGetValue(Drink, "stamina_effect")) ^ SelectedItem\State
+								If (Not JsonIsNull(JsonGetValue(Drink, "stamina_timer"))) Then me\StaminaEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_timer")) * SelectedItem\State
+								
+								it.Items = CreateItem("Empty Cup", it_emptycup, 0.0, 0.0, 0.0)
+								it\Picked = True
+								For i = 0 To MaxItemAmount - 1
+									If Inventory(i) = SelectedItem
+										Inventory(i) = it
+										Exit
+									EndIf
 								Next
-							EndIf
-							
-							If (Not JsonIsNull(JsonGetValue(Drink, "death_timer")))
-								If (Not JsonIsNull(JsonGetValue(Drink, "death_message")))
-									msg\DeathMsg = JsonGetString(JsonGetValue(Drink, "death_message"))
-								Else
-									msg\DeathMsg = ""
-								EndIf
+								EntityType(it\Collider, HIT_ITEM)
 								
-								Local DeathTimer1% = JsonGetFloat(JsonGetValue(Drink, "death_timer"))
-								
-								If DeathTimer1 = 0 
-									Kill()
-								ElseIf me\DeathTimer = 0.0
-									me\DeathTimer = DeathTimer1 * 70.0
-								Else
-									me\DeathTimer = Min(me\DeathTimer, DeathTimer1)
-								EndIf
+								RemoveItem(SelectedItem)
+							Else
+								CreateMsg(JsonGetString(JsonGetValue(Drink, "refuse_message")))
+								SelectedItem = Null
 							EndIf
-							
-							; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
-							If (Not JsonIsNull(JsonGetValue(Drink, "blink_effect"))) Then me\BlinkEffect = JsonGetFloat(JsonGetValue(Drink, "blink_effect")) ^ SelectedItem\State
-							If (Not JsonIsNull(JsonGetValue(Drink, "blink_timer"))) Then me\BlinkEffectTimer = JsonGetFloat(JsonGetValue(Drink, "blink_timer")) * SelectedItem\State
-							If (Not JsonIsNull(JsonGetValue(Drink, "stamina_effect"))) Then me\StaminaEffect = JsonGetFloat(JsonGetValue(Drink, "stamina_effect")) ^ SelectedItem\State
-							If (Not JsonIsNull(JsonGetValue(Drink, "stamina_timer"))) Then me\StaminaEffectTimer = JsonGetFloat(JsonGetValue(Drink, "stamina_timer")) * SelectedItem\State
-							
-							it.Items = CreateItem("Empty Cup", it_emptycup, 0.0, 0.0, 0.0)
-							it\Picked = True
-							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) = SelectedItem
-									Inventory(i) = it
-									Exit
-								EndIf
-							Next
-							EntityType(it\Collider, HIT_ITEM)
-							
-							RemoveItem(SelectedItem)
-						Else
-							CreateMsg(JsonGetString(JsonGetValue(Drink, "refuse_message")))
-							SelectedItem = Null
 						EndIf
 					EndIf
 					;[End Block]
@@ -5614,7 +5622,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 0.0
 						If wi\HazmatSuit = 0 Then DropItem(SelectedItem, False)
 						;[End Block]
-					Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025
+					Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025, it_cup
 						;[Block]
 						SelectedItem\State3 = 0.0
 						;[End Block]
@@ -5647,7 +5655,7 @@ Function UpdateGUI%()
 					;[Block]
 					it\State = 0.0
 					;[End Block]
-				Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025
+				Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025, it_cup
 					;[Block]
 					it\State3 = 0.0
 					;[End Block]
@@ -6523,6 +6531,19 @@ Function RenderGUI%()
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
 						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
+					EndIf
+					;[End Block]
+				Case it_cup
+					;[Block]
+					If CanUseItem(True)
+						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
+						
+						Width = 300 * MenuScale
+						Height = 20 * MenuScale
+						x = mo\Viewport_Center_X - (Width / 2)
+						y = mo\Viewport_Center_Y + (80 * MenuScale)
+						
+						RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State3)
 					EndIf
 					;[End Block]
 				Case it_paper, it_oldpaper

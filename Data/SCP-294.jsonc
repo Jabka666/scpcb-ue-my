@@ -3027,6 +3027,7 @@
         "camera_shake": 0.0,
         "bloodloss": 0.0,
         "deaf_timer": 0.0,
+		"energy": 20.0,
         "infection": false,
         "crystallization": false,
         "mutation": false,
