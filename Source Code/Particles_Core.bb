@@ -177,7 +177,7 @@ Function UpdateDust%()
 	Local i%, Pvt%
 	
 	; ~ Create a single dust particle
-	If Rand(45 + (25 * (opt\ParticleAmount = 1))) = 1 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
+	If Rand(35 + (25 * (opt\ParticleAmount = 1))) = 1 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
 	
 	; ~ Create extra dust particles while the camera is shaking
 	If me\BigCameraShake > 0.0
