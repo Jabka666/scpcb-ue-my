@@ -2539,6 +2539,7 @@ Function UpdateMoving%()
 	EndIf
 	
 	If me\DeathTimer > 0.0
+		CanSave = 0
 		me\DeathTimer = me\DeathTimer - fps\Factor[0]
 		If me\DeathTimer < 1.0 Then me\DeathTimer = -1.0
 	ElseIf me\DeathTimer < 0.0 
