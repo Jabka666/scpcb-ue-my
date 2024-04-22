@@ -5,6 +5,7 @@ General:
 - Added new hiss sound for white gas.
 - Can no longer save when «chs\superman» or «me\deathtimer» are active, or when nearly dying from bleeding out(«me\Bloodloss» > 65.0 and «me\injury» > 1.0).
 - Added viewable Omni Key Card chances to Debug Hud 3.
+- Add console text for «427state» command.
 
 - Optimized the game...
 
