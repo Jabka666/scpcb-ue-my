@@ -1779,15 +1779,15 @@ Function LoadEvents%()
 	
 	; ~ The chance for SCP-173 appearing in the first r_room2c_gw_lcz is about 66%
 	; ~ There's a 30% chance that it appears in the later r_room2c_gw_lcz
-	If Rand(3) < 3 Then CreateEvent(e_173_appearing, r_room2c_gw_lcz, 1)
-	CreateEvent(e_173_appearing, r_room2c_gw_lcz, 0, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
+	If Rand(3) < 3 Then CreateEvent(e_173_appearing, r_room2c_gw_lcz, 0)
+	CreateEvent(e_173_appearing, r_room2c_gw_lcz, 1, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_trick, r_room2_lcz, 0, 0.15)
 	CreateEvent(e_trick, r_room2_3_lcz, 0, 0.15)
 	
 	CreateEvent(e_1048_a, r_room2_lcz, 1, 1.0)
-	CreateEvent(e_1048_a, r_room2_3_lcz, 1, Rnd(0.8))
-	CreateEvent(e_1048_a, r_room2_5_lcz, 1, Rnd(0.6))
+	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_room2_storage, r_room2_storage, 0)
 	
