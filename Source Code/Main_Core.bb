@@ -8418,7 +8418,6 @@ Function UpdateCameraCheck%()
 End Function
 
 Function UpdateExplosion%()
-	Local p.Particles
 	Local i%
 	
 	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
@@ -8438,11 +8437,6 @@ Function UpdateExplosion%()
 				me\BlinkTimer = 1.0
 				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
 				PlaySound_Strict(ExplosionSFX)
-				For i = 0 To (10 + (10 * (opt\ParticleAmount + 1)))
-					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(me\Collider) + Rnd(-0.5, 0.5), EntityY(me\Collider) - Rnd(0.2, 1.5), EntityZ(me\Collider) + Rnd(-0.5, 0.5), Rnd(0.2, 0.6), 0.0, 350.0)
-					RotateEntity(p\Pvt, -90.0, 0.0, 0.0, True)
-					p\Speed = Rnd(0.05, 0.07)
-				Next
 			EndIf
 			me\LightFlash = Min((me\ExplosionTimer - 140.0) / 10.0, 5.0)
 			
