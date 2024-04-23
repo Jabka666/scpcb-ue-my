@@ -1917,7 +1917,7 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room4_2_hcz, r_room4_2_hcz, 0)
 	
-	CreateEvent(e_room2_gw_2, r_room2_gw_2, Rand(0, 1))
+	CreateEvent(e_room2_gw_2, r_room2_gw_2, 0)
 	CreateEvent(e_gateway, r_room2_gw, 0, 1.0)
 	CreateEvent(e_gateway, r_room3_gw, 0, 1.0)
 	
