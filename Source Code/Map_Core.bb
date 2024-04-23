@@ -3929,10 +3929,12 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 	ScaleEntity(sc\BaseOBJ, 0.0015, 0.0015, 0.0015)
 	PositionEntity(sc\BaseOBJ, x1, y1, z1)
 	If room <> Null Then EntityParent(sc\BaseOBJ, room\OBJ)
+	HideEntity(sc\BaseOBJ)
 	
 	sc\CameraOBJ = CopyEntity(sc_I\CamModelID[CAM_HEAD_MODEL])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
 	RotateEntity(sc\CameraOBJ, Pitch1, 0.0, 0.0)
+	HideEntity(sc\CameraOBJ)
 	
 	sc\Screen = Screen
 	If Screen

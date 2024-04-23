@@ -222,6 +222,8 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 516.0 * RoomScale, r\y + 352.0 * RoomScale, r\z + 2143.0 * RoomScale, 20.0, True, r\x + 1454.0 * RoomScale, r\y + 608.0 * RoomScale, r\z + 2462.0 * RoomScale, 0.0, 90.0, 0.0)
+			ShowEntity(sc\BaseOBJ)
+			ShowEntity(sc\CameraOBJ)
 			sc\Angle = 270.0 : sc\Turn = 45.0
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 272.0 * RoomScale, r\y + 0.005, r\z + 2310.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
@@ -552,8 +554,6 @@ Function FillRoom%(r.Rooms)
 			sc\ScriptedCamera = True : sc\ScriptedMonitor = True
 			ScaleSprite(sc\ScrOBJ, 896.0 * 0.5 * RoomScale, 896.0 * 0.5 * RoomScale)
 			CameraZoom(sc\Cam, 1.5)
-			HideEntity(sc\BaseOBJ)
-			HideEntity(sc\CameraOBJ)
 			HideEntity(sc\MonitorOBJ)
 			r\RoomSecurityCams[0] = sc
 			
