@@ -1429,30 +1429,93 @@ Function LoadSounds%()
 	
 	RenderLoading(45, GetLocalString("loading", "sounds"))
 	
-	For i = 0 To 2
-		OpenDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorOpen" + i + ".ogg") ; ~ Also one-sided door
-		CloseDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorClose" + i + ".ogg") ; ~ Also one-sided door
-		OpenDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + i + ".ogg")
-		CloseDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + i + ".ogg")
-		OpenDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Open" + i + ".ogg")
-		CloseDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Close" + i + ".ogg")
-		OpenDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + i + ".ogg")
-		CloseDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + i + ".ogg")
-		OpenDoorSFX(OFFICE_DOOR, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + i + ".ogg")
-		OpenDoorSFX(WOODEN_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + i + ".ogg")
-		BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + i + ".ogg")
+	For i = 0 To 13
+		If i < 2
+			KeyCardSFX[i] = LoadSound_Strict("SFX\Interact\KeyCardUse" + i + ".ogg")
+			ScannerSFX[i] = LoadSound_Strict("SFX\Interact\ScannerUse" + i + ".ogg")
+			
+			DoorBudgeSFX[i] = LoadSound_Strict("SFX\Interact\DoorBudge" + i + ".ogg")
+			
+			GunshotSFX[i] = LoadSound_Strict("SFX\Character\Gunshot" + i + ".ogg")
+			
+			HissSFX[i] = LoadSound_Strict("SFX\Room\Hiss" + i + ".ogg")
+			
+			RadioSFX(0, i) = LoadSound_Strict("SFX\Radio\RadioAlarm" + i + ".ogg")
+			
+			LowBatterySFX[i] = LoadSound_Strict("SFX\Interact\LowBattery" + i + ".ogg")
+			KnobSFX[i] = LoadSound_Strict("SFX\Room\914Chamber\Knob" + i + ".ogg")
+			
+			StepSFX(5, 0, i) = LoadSound_Strict("SFX\Step\StepFluid" + i + ".ogg")
+		EndIf
+		If i < 3
+			OpenDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorOpen" + i + ".ogg") ; ~ Also one-sided door
+			CloseDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorClose" + i + ".ogg") ; ~ Also one-sided door
+			OpenDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + i + ".ogg")
+			CloseDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + i + ".ogg")
+			OpenDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Open" + i + ".ogg")
+			CloseDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Close" + i + ".ogg")
+			OpenDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + i + ".ogg")
+			CloseDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + i + ".ogg")
+			OpenDoorSFX(OFFICE_DOOR, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + i + ".ogg")
+			OpenDoorSFX(WOODEN_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + i + ".ogg")
+			BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + i + ".ogg")
+			
+			NeckSnapSFX[i] = LoadSound_Strict("SFX\SCP\173\NeckSnap" + i + ".ogg")
+			CoughSFX(0, i) = LoadSound_Strict("SFX\Character\D9341\Cough" + i + ".ogg")
+			CoughSFX(1, i) = LoadSound_Strict("SFX\Character\D9341\Cough" + i + "Gas.ogg")
+			
+			SCP106SFX[i] = LoadSound_Strict("SFX\SCP\106\Corrosion" + i + ".ogg")
+			SCP106SFX[i + 6] = LoadSound_Strict("SFX\SCP\106\WallDecay" + i + ".ogg")
+			
+			SCP173SFX[i] = LoadSound_Strict("SFX\SCP\173\Rattle" + i + ".ogg")
+			
+			IntroSFX[i + 5] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
+			IntroSFX[i + 8] = LoadSound_Strict("SFX\Room\Light" + i + ".ogg")
+			
+			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + i + ".ogg")
+			StepSFX(3, 0, i) = LoadSound_Strict("SFX\Step\StepCloth" + i + ".ogg")
+			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + i + ".ogg")
+		EndIf
+		If i < 4
+			DecaySFX[i] = LoadSound_Strict("SFX\SCP\106\Decay" + i + ".ogg")
+			
+			DripSFX[i] = LoadSound_Strict("SFX\Character\D9341\BloodDrip" + i + ".ogg")
+			
+			PickSFX[i] = LoadSound_Strict("SFX\Interact\PickItem" + i + ".ogg")
+			
+			AlarmSFX[i] = LoadSound_Strict("SFX\Alarm\Alarm" + i + ".ogg")
+			
+			Step2SFX[i + 3] = LoadSound_Strict("SFX\Step\NPCs\939_966\StepMetal" + i + ".ogg")
+			If i < 3
+				Step2SFX[i] = LoadSound_Strict("SFX\Step\NPCs\MTF\StepMetal" + i + ".ogg")
+				Step2SFX[i + 7] = LoadSound_Strict("SFX\Step\NPCs\049\StepMetal" + i + ".ogg")
+				Step2SFX[i + 10] = LoadSound_Strict("SFX\Step\NPCs\096\Step" + i + ".ogg")
+			EndIf
+		EndIf
+		If i < 5
+			BreathSFX(0, i) = LoadSound_Strict("SFX\Character\D9341\Breath" + i + ".ogg")
+			BreathSFX(1, i) = LoadSound_Strict("SFX\Character\D9341\Breath" + i + "Gas.ogg")
+		EndIf
+		If i < 6
+			RustleSFX[i] = LoadSound_Strict("SFX\SCP\372\Rustle" + i + ".ogg")
+		EndIf
+		If i < 8
+			StepSFX(0, 0, i) = LoadSound_Strict("SFX\Step\Step" + i + ".ogg")
+			StepSFX(0, 1, i) = LoadSound_Strict("SFX\Step\Run" + i + ".ogg")
+			StepSFX(1, 0, i) = LoadSound_Strict("SFX\Step\StepMetal" + i + ".ogg")
+			StepSFX(1, 1, i) = LoadSound_Strict("SFX\Step\RunMetal" + i + ".ogg")
+		EndIf
+		If i < 9
+			RadioSFX(1, i) = LoadSound_Strict("SFX\Radio\SCPRadio" + i + ".ogg")
+		EndIf
+		If i < 13
+			HorrorSFX[i] = LoadSound_Strict("SFX\Horror\Horror" + i + ".ogg")
+		EndIf
+		DamageSFX[i] = LoadSound_Strict("SFX\Character\D9341\Damage" + i + ".ogg")
 	Next
+	
 	DoorOpen079 = LoadSound_Strict("SFX\Door\DoorOpen079.ogg")
 	DoorClose079 = LoadSound_Strict("SFX\Door\DoorClose079.ogg")
-	
-	For i = 0 To 1
-		KeyCardSFX[i] = LoadSound_Strict("SFX\Interact\KeyCardUse" + i + ".ogg")
-		ScannerSFX[i] = LoadSound_Strict("SFX\Interact\ScannerUse" + i + ".ogg")
-	Next
-	
-	For i = 0 To 1
-		DoorBudgeSFX[i] = LoadSound_Strict("SFX\Interact\DoorBudge" + i + ".ogg")
-	Next
 	
 	DoorLockSFX = LoadSound_Strict("SFX\Interact\DoorLock.ogg")
 	
@@ -1463,9 +1526,6 @@ Function LoadSounds%()
 	
 	StoneDragSFX = LoadSound_Strict("SFX\SCP\173\StoneDrag.ogg")
 	
-	For i = 0 To 1
-		GunshotSFX[i] = LoadSound_Strict("SFX\Character\Gunshot" + i + ".ogg")
-	Next
 	BulletMissSFX = LoadSound_Strict("SFX\Character\BulletMiss.ogg")
 	BulletHitSFX = LoadSound_Strict("SFX\Character\BulletHit.ogg")
 	
@@ -1477,27 +1537,11 @@ Function LoadSounds%()
 	MagnetUpSFX = LoadSound_Strict("SFX\Room\106Chamber\MagnetUp.ogg") 
 	MagnetDownSFX = LoadSound_Strict("SFX\Room\106Chamber\MagnetDown.ogg")
 	
-	For i = 0 To 3
-		DecaySFX[i] = LoadSound_Strict("SFX\SCP\106\Decay" + i + ".ogg")
-	Next
-	
 	BurstSFX = LoadSound_Strict("SFX\Room\TunnelBurst.ogg")
-	
-	For i = 0 To 1
-		HissSFX[i] = LoadSound_Strict("SFX\Room\Hiss" + i + ".ogg")
-	Next
-	
-	For i = 0 To 5
-		RustleSFX[i] = LoadSound_Strict("SFX\SCP\372\Rustle" + i + ".ogg")
-	Next
 	
 	Death914SFX = LoadSound_Strict("SFX\SCP\914\PlayerDeath.ogg") 
 	Use914SFX = LoadSound_Strict("SFX\SCP\914\PlayerUse.ogg")
 	MachineSFX = LoadSound_Strict("SFX\SCP\914\Refining.ogg")
-	
-	For i = 0 To 3
-		DripSFX[i] = LoadSound_Strict("SFX\Character\D9341\BloodDrip" + i + ".ogg")
-	Next
 	
 	LeverSFX = LoadSound_Strict("SFX\Interact\LeverFlip.ogg") 
 	
@@ -1505,12 +1549,6 @@ Function LoadSounds%()
 	
 	ButtGhostSFX = LoadSound_Strict("SFX\SCP\Joke\789J.ogg")
 	
-	For i = 0 To 1
-		RadioSFX(0, i) = LoadSound_Strict("SFX\Radio\RadioAlarm" + i + ".ogg")
-	Next
-	For i = 0 To 8
-		RadioSFX(1, i) = LoadSound_Strict("SFX\Radio\SCPRadio" + i + ".ogg")
-	Next
 	RadioSquelch = LoadSound_Strict("SFX\Radio\Squelch.ogg")
 	RadioStatic = LoadSound_Strict("SFX\Radio\Static.ogg")
 	RadioStatic895 = LoadSound_Strict("SFX\Radio\Static895.ogg")
@@ -1518,10 +1556,6 @@ Function LoadSounds%()
 	
 	ElevatorBeepSFX = LoadSound_Strict("SFX\General\Elevator\Beep.ogg") 
 	ElevatorMoveSFX = LoadSound_Strict("SFX\General\Elevator\Moving.ogg") 
-	
-	For i = 0 To 3
-		PickSFX[i] = LoadSound_Strict("SFX\Interact\PickItem" + i + ".ogg")
-	Next
 	
 	; ~ 0 = Light Containment Zone
 	; ~ 1 = Heavy Containment Zone
@@ -1536,83 +1570,15 @@ Function LoadSounds%()
 	AmbientSFXAmount[4] = 5
 	AmbientSFXAmount[5] = 10
 	
-	For i = 0 To 2
-		SCP106SFX[i] = LoadSound_Strict("SFX\SCP\106\Corrosion" + i + ".ogg")
-	Next
 	SCP106SFX[3] = LoadSound_Strict("SFX\SCP\106\Laugh.ogg")
 	SCP106SFX[4] = LoadSound_Strict("SFX\SCP\106\Breathing.ogg")
 	SCP106SFX[5] = LoadSound_Strict("SFX\Room\PocketDimension\Enter.ogg")
-	For i = 0 To 2
-		SCP106SFX[i + 6] = LoadSound_Strict("SFX\SCP\106\WallDecay" + i + ".ogg")
-	Next
 	
-	For i = 0 To 2
-		SCP173SFX[i] = LoadSound_Strict("SFX\SCP\173\Rattle" + i + ".ogg")
-	Next
-	
-	For i = 0 To 12
-		HorrorSFX[i] = LoadSound_Strict("SFX\Horror\Horror" + i + ".ogg")
-	Next
-	
-	For i = 0 To 2
-		IntroSFX[i + 5] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
-	Next
-	For i = 0 To 2
-		IntroSFX[i + 8] = LoadSound_Strict("SFX\Room\Light" + i + ".ogg")
-	Next
 	IntroSFX[11] = LoadSound_Strict("SFX\Room\Intro\173Vent.ogg")
-	
-	For i = 0 To 3
-		AlarmSFX[i] = LoadSound_Strict("SFX\Alarm\Alarm" + i + ".ogg")
-	Next
 	
 	HeartBeatSFX = LoadSound_Strict("SFX\Character\D9341\HeartBeat.ogg")
 	
-	For i = 0 To 4
-		BreathSFX(0, i) = LoadSound_Strict("SFX\Character\D9341\Breath" + i + ".ogg")
-		BreathSFX(1, i) = LoadSound_Strict("SFX\Character\D9341\Breath" + i + "Gas.ogg")
-	Next
-	
-	For i = 0 To 2
-		NeckSnapSFX[i] = LoadSound_Strict("SFX\SCP\173\NeckSnap" + i + ".ogg")
-	Next
-	
-	For i = 0 To 13
-		DamageSFX[i] = LoadSound_Strict("SFX\Character\D9341\Damage" + i + ".ogg")
-	Next
-	
-	For i = 0 To 2
-		CoughSFX(0, i) = LoadSound_Strict("SFX\Character\D9341\Cough" + i + ".ogg")
-		CoughSFX(1, i) = LoadSound_Strict("SFX\Character\D9341\Cough" + i + "Gas.ogg")
-	Next
-	
 	ApacheSFX = LoadSound_Strict("SFX\Character\Apache\Propeller.ogg")
-	
-	For i = 0 To 7
-		StepSFX(0, 0, i) = LoadSound_Strict("SFX\Step\Step" + i + ".ogg")
-		StepSFX(0, 1, i) = LoadSound_Strict("SFX\Step\Run" + i + ".ogg")
-		StepSFX(1, 0, i) = LoadSound_Strict("SFX\Step\StepMetal" + i + ".ogg")
-		StepSFX(1, 1, i) = LoadSound_Strict("SFX\Step\RunMetal" + i + ".ogg")
-		If i < 3
-			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + i + ".ogg")
-			StepSFX(3, 0, i) = LoadSound_Strict("SFX\Step\StepCloth" + i + ".ogg")
-			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + i + ".ogg")
-		EndIf
-		If i < 2 Then StepSFX(5, 0, i) = LoadSound_Strict("SFX\Step\StepFluid" + i + ".ogg")
-	Next
-	
-	For i = 0 To 2
-		Step2SFX[i] = LoadSound_Strict("SFX\Step\NPCs\MTF\StepMetal" + i + ".ogg")
-	Next
-	For i = 0 To 3
-		Step2SFX[i + 3] = LoadSound_Strict("SFX\Step\NPCs\939_966\StepMetal" + i + ".ogg")
-	Next
-	For i = 0 To 2
-		Step2SFX[i + 7] = LoadSound_Strict("SFX\Step\NPCs\049\StepMetal" + i + ".ogg")
-	Next
-	For i = 0 To 2
-		Step2SFX[i + 10] = LoadSound_Strict("SFX\Step\NPCs\096\Step" + i + ".ogg")
-	Next
 	
 	VehicleSFX[0] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
 	VehicleSFX[1] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
@@ -1627,11 +1593,6 @@ Function LoadSounds%()
 	
 	NVGSFX[0] = LoadSound_Strict("SFX\Interact\NVGOn.ogg")
 	NVGSFX[1] = LoadSound_Strict("SFX\Interact\NVGOff.ogg")
-	
-	For i = 0 To 1
-		LowBatterySFX[i] = LoadSound_Strict("SFX\Interact\LowBattery" + i + ".ogg")
-		KnobSFX[i] = LoadSound_Strict("SFX\Room\914Chamber\Knob" + i + ".ogg")
-	Next
 End Function
 
 Function RemoveSoundInstances%()
