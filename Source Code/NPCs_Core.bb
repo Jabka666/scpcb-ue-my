@@ -6987,7 +6987,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 	ElseIf Particles And opt\ParticleAmount > 0
 		Pvt = CreatePivot()
 		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
-		PointEntity(Pvt, p\OBJ)
+		PointEntity(Pvt, dem\OBJ)
 		TurnEntity(Pvt, 0.0, 180.0, 0.0)
 		EntityPick(Pvt, 2.5)
 		
