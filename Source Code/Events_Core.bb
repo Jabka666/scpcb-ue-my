@@ -3986,6 +3986,7 @@ Function UpdateEvents%()
 							;[Block]
 							If Abs(EntityX(me\Collider, True) - EntityX(e\room\OBJ, True)) < 0.75 And Abs(EntityZ(me\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.75 And Abs(EntityY(me\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 								If (Not me\Terminated)
+									If opt\ParticleAmount > 0 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
 									me\LightFlash = 0.4
 									me\CameraShake = 1.0
 									msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
