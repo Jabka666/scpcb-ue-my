@@ -3731,7 +3731,7 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 	
 	Local DoorType% = d\DoorType
 	
-	If d\DoorType = ONE_SIDED_DOOR Then DoorType = DEFAULT_DOOR
+	If DoorType = ONE_SIDED_DOOR Lor DoorType = SCP_914_DOOR Then DoorType = DEFAULT_DOOR
 	
 	If PlaySFX
 		Local SoundRand% = Rand(0, 2)
@@ -3744,10 +3744,14 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 			EndIf
 		EndIf
 		
-		Local SoundOpen% = OpenDoorSFX(DoorType, SoundRand)
+		Local SoundOpen%
 		Local SoundClose% = CloseDoorSFX(DoorType, SoundRand)
 		
-		If DoorType = BIG_DOOR And d\Locked = 2 Then SoundOpen = BigDoorErrorSFX[Rand(0, 2)]
+		If DoorType = BIG_DOOR And d\Locked = 2
+			SoundOpen = BigDoorErrorSFX[Rand(0, 2)]
+		Else
+			SoundOpen = OpenDoorSFX(DoorType, SoundRand)
+		EndIf
 		
 		If d\Open
 			d\SoundCHN = PlaySound2(SoundOpen, Camera, d\OBJ)
