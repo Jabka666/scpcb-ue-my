@@ -2495,12 +2495,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x + 96.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 576.0 * RoomScale, 90.0)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.162, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
 			
-			d.Doors = CreateDoor(r, r\x - 456.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 736.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			d.Doors = CreateDoor(r, r\x - 456.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 768.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			d\Locked = 1
+			r\RoomDoors.Doors[5] = d
 			
 			; ~ The container
 			r\Objects[0] = CreatePivot()

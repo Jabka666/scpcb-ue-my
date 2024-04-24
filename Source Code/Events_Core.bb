@@ -1925,6 +1925,7 @@ Function UpdateEvents%()
 							For i = 0 To 2
 								e\room\RoomDoors[i]\Locked = 0
 							Next
+							e\room\RoomDoors[5]\Locked = 0
 							RotateEntity(e\room\Objects[1], CurveAngle(-1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
 						EndIf
 					ElseIf e\EventState = 1.0
