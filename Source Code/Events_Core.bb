@@ -1859,9 +1859,9 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room
 					If I_008\Timer >= 92.7
-						If EntityHidden(e\room\Objects[11]) Then ShowEntity(e\room\Objects[11])
+						If EntityHidden(e\room\Objects[10]) Then ShowEntity(e\room\Objects[10])
 					Else
-						If (Not EntityHidden(e\room\Objects[11])) Then HideEntity(e\room\Objects[11])
+						If (Not EntityHidden(e\room\Objects[10])) Then HideEntity(e\room\Objects[10])
 					EndIf
 					If EntityY(me\Collider) < (-4496.0) * RoomScale
 						GiveAchievement(Achv008)
@@ -1870,25 +1870,28 @@ Function UpdateEvents%()
 								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
 								ResetEntity(n_I\Curr173\Collider)
 							EndIf
-							For i = 2 To 3
-								If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
-							Next
 							e\EventState = 1.0
 						ElseIf e\EventState = 1.0
+							If e\EventState2 = 0.0
+								For i = 2 To 3
+									If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+								Next
+							EndIf
 							e\SoundCHN = LoopSound2(AlarmSFX[0], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 							
-							UpdateRedLight(e\room\Objects[6], 1500, 800)
+							UpdateRedLight(e\room\Objects[5], 1500, 800)
 							
-							Dist = EntityDistanceSquared(me\Collider, e\room\Objects[0])
-							If Dist < 4.5
+							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 4.5
 								For i = 0 To 1
 									e\room\RoomDoors[i]\Locked = 1
 								Next
 								
 								If e\EventState2 = 0.0
-									If EntityDistanceSquared(n_I\Curr173\Collider, e\room\Objects[5]) < 9.0
+									If EntityDistanceSquared(n_I\Curr173\Collider, e\room\Objects[4]) < 9.0
 										If (Not PlayerSees173(n_I\Curr173))
-											PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True), True)
+											; ~ SCP-173's attack point
+											TFormPoint(-448.0, -4985, 752.0, e\room\OBJ, 0)
+											PositionEntity(n_I\Curr173\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
 											ResetEntity(n_I\Curr173\Collider)
 											
 											For i = 2 To 3
@@ -1921,22 +1924,21 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 						Else
-							If (Not EntityHidden(e\room\Objects[6])) Then HideEntity(e\room\Objects[6])
-							For i = 0 To 2
+							If (Not EntityHidden(e\room\Objects[5])) Then HideEntity(e\room\Objects[5])
+							For i = 0 To 3
 								e\room\RoomDoors[i]\Locked = 0
 							Next
-							e\room\RoomDoors[5]\Locked = 0
 							RotateEntity(e\room\Objects[1], CurveAngle(-1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
 						EndIf
 					ElseIf e\EventState = 1.0
 						e\EventState = 0.0
 					EndIf
 					PlayerPosX = EntityX(me\Collider, True) : PlayerPosY = EntityY(me\Collider, True) : PlayerPosZ = EntityZ(me\Collider, True)
-					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[9]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[10]))
+					PlayerInsideElevator = (IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[8]) Lor IsInsideElevator(PlayerPosX, PlayerPosY, PlayerPosZ, e\room\Objects[9]))
 					ToElevatorFloor = LowerFloor
-					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[3], e\room\RoomDoors[4], e\room\Objects[9], e\room\Objects[10], e)
+					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[4], e\room\RoomDoors[5], e\room\Objects[8], e\room\Objects[9], e)
 				Else
-					If (Not EntityHidden(e\room\Objects[11])) Then HideEntity(e\room\Objects[11])
+					If (Not EntityHidden(e\room\Objects[10])) Then HideEntity(e\room\Objects[10])
 				EndIf
 				;[End Block]
 			Case e_cont2_012

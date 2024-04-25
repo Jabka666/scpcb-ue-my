@@ -8645,9 +8645,9 @@ Function Update008%()
 						If TeleportForInfect
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = r_cont2_008
-									PositionEntity(me\Collider, EntityX(r\Objects[8], True), EntityY(r\Objects[8], True), EntityZ(r\Objects[8], True), True)
+									PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
 									ResetEntity(me\Collider)
-									r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True) + 0.2, EntityZ(r\Objects[7], True))
+									r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
 									PlaySound_Strict(LoadTempSound("SFX\SCP\008\KillScientist0.ogg"), True)
 									ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
 									TeleportToRoom(r)

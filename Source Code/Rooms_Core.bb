@@ -2480,26 +2480,27 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[0]\LinkedDoor = r\RoomDoors[1]
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
+			; ~ Lab door
+			d.Doors = CreateDoor(r, r\x - 456.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 768.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			d\Locked = 1
+			r\RoomDoors.Doors[2] = d
+			
 			; ~ Observation room door
 			d.Doors = CreateDoor(r, r\x - 816.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			d\Locked = 1
-			r\RoomDoors.Doors[2] = d
+			r\RoomDoors.Doors[3] = d
 			
 			; ~ Elevators doors
 			d.Doors = CreateDoor(r, r\x + 448.0 * RoomScale, r\y, r\z, -90.0, True, ELEVATOR_DOOR)
-			r\RoomDoors.Doors[3] = d
-			
-			d.Doors = CreateDoor(r, r\x + 448.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z, -90.0, False, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[4] = d
 			
-			; ~ Misc doors
+			d.Doors = CreateDoor(r, r\x + 448.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z, -90.0, False, ELEVATOR_DOOR)
+			r\RoomDoors.Doors[5] = d
+			
+			; ~ Misc door
 			d.Doors = CreateDoor(r, r\x + 96.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 576.0 * RoomScale, 90.0)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
-			
-			d.Doors = CreateDoor(r, r\x - 456.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 768.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
-			d\Locked = 1
-			r\RoomDoors.Doors[5] = d
 			
 			; ~ The container
 			r\Objects[0] = CreatePivot()
@@ -2535,41 +2536,36 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[4], r\x - 820.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 657.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
 			
-			; ~ SCP-173's attack point
-			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x - 384.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 752.0 * RoomScale)
-			EntityParent(r\Objects[5], r\OBJ)
-			
 			; ~ Red light
-			r\Objects[6] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
-			r\ScriptedObject[6] = True
-			EntityParent(r\Objects[6], r\OBJ)
-			HideEntity(r\Objects[6])
+			r\Objects[5] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
+			r\ScriptedObject[5] = True
+			EntityParent(r\Objects[5], r\OBJ)
+			HideEntity(r\Objects[5])
 			
 			; ~ Spawnpoint for the scientist used in the "SCP-008-1's scene"
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x + 160.0 * RoomScale, r\y + 670.0 * RoomScale, r\z - 384.0 * RoomScale)
-			EntityParent(r\Objects[7], r\OBJ)
+			r\Objects[6] = CreatePivot()
+			PositionEntity(r\Objects[6], r\x + 160.0 * RoomScale, r\y + 670.0 * RoomScale, r\z - 384.0 * RoomScale)
+			EntityParent(r\Objects[6], r\OBJ)
 			
 			; ~ Spawnpoint for the player
-			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x, r\y + 672.0 * RoomScale, r\z + 350.0 * RoomScale)
-			EntityParent(r\Objects[8], r\OBJ)
+			r\Objects[7] = CreatePivot()
+			PositionEntity(r\Objects[7], r\x, r\y + 672.0 * RoomScale, r\z + 350.0 * RoomScale)
+			EntityParent(r\Objects[7], r\OBJ)
 			
 			; ~ Elevators pivots
+			r\Objects[8] = CreatePivot()
+			PositionEntity(r\Objects[8], r\x + 752.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			EntityParent(r\Objects[8], r\OBJ)
+			
 			r\Objects[9] = CreatePivot()
-			PositionEntity(r\Objects[9], r\x + 752.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[9], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
 			EntityParent(r\Objects[9], r\OBJ)
 			
-			r\Objects[10] = CreatePivot()
-			PositionEntity(r\Objects[10], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
+			r\Objects[10] = LoadRMesh("GFX\map\cont2_008_mt_generator.rmesh", Null)
+			ScaleEntity(r\Objects[10], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[10], r\x, r\y, r\z)
 			EntityParent(r\Objects[10], r\OBJ)
-			
-			r\Objects[11] = LoadRMesh("GFX\map\cont2_008_mt_generator.rmesh", Null)
-			ScaleEntity(r\Objects[11], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[11], r\x, r\y, r\z)
-			EntityParent(r\Objects[11], r\OBJ)
-			HideEntity(r\Objects[11])
+			HideEntity(r\Objects[10])
 			
 			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 537.0 * RoomScale, r\y - 4895.0 * RoomScale, r\z - 66.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
@@ -2577,6 +2573,12 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Document SCP-008", it_paper, r\x - 944.0 * RoomScale, r\y - 5008.0 * RoomScale, r\z + 672.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x - 940.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 804.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Syringe", it_syringeinf, r\x - 819.0 * RoomScale, r\y - 4960.0 * RoomScale, r\z - 1452.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 384.0 * RoomScale, r\y - 4654.0 * RoomScale, r\z + 1168.0 * RoomScale, 20.0)
