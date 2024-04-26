@@ -1925,9 +1925,17 @@ Function UpdateEvents%()
 							EndIf
 						Else
 							If (Not EntityHidden(e\room\Objects[5])) Then HideEntity(e\room\Objects[5])
-							For i = 0 To 3
-								e\room\RoomDoors[i]\Locked = 0
-							Next
+							If e\EventState2 < 2.0
+								For i = 0 To 3
+									e\room\RoomDoors[i]\Locked = 0
+								Next
+								OpenCloseDoor(e\room\RoomDoors[2])
+								TFormPoint(-456.0, -5052.8, -688.0, e\room\OBJ, 0)
+								e\room\NPC[0] = CreateNPC(NPCType008_1, TFormedX(), TFormedY(), TFormedZ())
+								e\room\NPC[0]\State = 3.0
+								
+								e\EventState2 = 2.0
+							EndIf
 							RotateEntity(e\room\Objects[1], CurveAngle(-1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
 						EndIf
 					ElseIf e\EventState = 1.0
