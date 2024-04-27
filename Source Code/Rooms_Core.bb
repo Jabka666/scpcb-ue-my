@@ -2733,10 +2733,10 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			de.Decals = CreateDecal(DECAL_BLOOD_1, r\x - 108.0 * RoomScale, r\y + 4.0 * RoomScale + 0.005, r\z - 544.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
+			de.Decals = CreateDecal(DECAL_BLOOD_1, r\x - 1212.0 * RoomScale, r\y - 604.0 * RoomScale + 0.005, r\z + 846.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 384.0 * RoomScale, r\y + 0.005, r\z - 512.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.5, 1)
+			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 1244.0 * RoomScale, r\y - 608 * RoomScale + 0.005, r\z + 570.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.5, 1)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			it.Items = CreateItem("Data Report", it_paper, r\x - 1169.0 * RoomScale, r\y - 563.0 * RoomScale, r\z + 721.0 * RoomScale)
