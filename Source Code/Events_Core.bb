@@ -2387,28 +2387,31 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_cont2_500_1499
 				;[Block]
-				If e\room\Dist < 15.0
-					If e\EventState = 0.0
+				If e\EventState = 0.0
+					If e\room\Dist < 15.0
 						If (Not n_I\Curr106\Contained) And n_I\Curr106\State > 0.0
 							LoadEventSound(e, "SFX\Character\Scientist\EmilyScream.ogg")
-							e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 100.0, 1.0, True)
+							e\SoundCHN = PlaySound_Strict(e\Sound, True)
+							
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
 							EntityParent(de\OBJ, e\room\OBJ)
+							
 							Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
 							If opt\Atmosphere Then TextureBlend(Tex, 5)
 							EntityTexture(e\room\RoomDoors[0]\OBJ, Tex)
 							EntityTexture(e\room\RoomDoors[0]\OBJ2, Tex)
 							EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
 							DeleteSingleTextureEntryFromCache(Tex)
+							
 							e\EventState = 1.0
 						EndIf
-					ElseIf e\EventState = 1.0
-						If (Not ChannelPlaying(e\SoundCHN))
-							e\room\RoomDoors[0]\Locked = 0
-							RemoveEvent(e)
-						Else
-							UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 100.0, 1.0, True)
-						EndIf
+					EndIf
+				ElseIf e\EventState = 1.0
+					If (Not ChannelPlaying(e\SoundCHN))
+						e\room\RoomDoors[0]\Locked = 0
+						RemoveEvent(e)
+					Else
+						UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 30.0, 1.0, True)
 					EndIf
 				EndIf
 				;[End Block]
