@@ -761,18 +761,6 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 1180.0 * RoomScale, r\y - 256.0 * RoomScale, r\z + 896.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
-			
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 1292.0 * RoomScale, r\y - 256.0 * RoomScale, r\z - 160.0 * RoomScale)
-			EntityParent(r\Objects[1], r\OBJ)
-			
-			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 1065.0 * RoomScale, r\y - 380.0 * RoomScale, r\z + 50.0 * RoomScale)
-			EntityParent(r\Objects[2], r\OBJ)
-			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 184.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 952.0 * RoomScale, 20.0)
 			sc\Angle = 130.0 : sc\Turn = 40.0
 			
@@ -1044,7 +1032,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_storage
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 1288.0 * RoomScale, r\y, r\z, 270.0)
-			d\AutoClose = False
+			d\AutoClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			MoveEntity(d\Buttons[1], 0.0, 0.0, -8.0)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
@@ -1075,7 +1063,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[4] = d
 			
 			d.Doors = CreateDoor(r, r\x + 1288.0 * RoomScale, r\y, r\z, 90.0)
-			d\AutoClose = False
+			d\AutoClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			MoveEntity(d\Buttons[1], 0.0, 0.0, -8.0)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0

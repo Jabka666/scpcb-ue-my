@@ -3268,14 +3268,16 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0
 					If PlayerRoom = e\room And n_I\Curr173\Idle < 2
-						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+						TFormPoint(-1180.0, -256.0, 896.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 						e\room\NPC[0]\State3 = 2.0
 						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_MAINTENANCE)
 						
 						e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Maintenance\EscapeFromClosets.ogg")
 						e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 						
-						e\room\NPC[1] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+						TFormPoint(-1292.0, -256.0, -160.0, e\room\OBJ, 0)
+						e\room\NPC[1] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 						e\room\NPC[1]\State3 = 3.0
 						ChangeNPCTextureID(e\room\NPC[1], NPC_CLASS_D_SCIENTIST_TEXTURE)
 						
@@ -3332,11 +3334,9 @@ Function UpdateEvents%()
 							ResetEntity(n_I\Curr173\Collider)
 							n_I\Curr173\Idle = 0
 						ElseIf e\EventState > 70.0 * 9.0 And e\EventState - fps\Factor[0] <= 70.0 * 9.0
-							it.Items = CreateItem("Wallet", it_wallet, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+							TFormPoint(-1065.0, -380.0, 50.0, e\room\OBJ, 0)
+							it.Items = CreateItem("Wallet", it_wallet, TFormedX(), TFormedY(), TFormedZ())
 							EntityType(it\Collider, HIT_ITEM)
-							PointEntity(it\Collider, e\room\NPC[0]\Collider)
-							RotateEntity(it\Collider, 0.0, Rnd(360.0), 0.0)
-							TeleportEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), -0.02, True, 10.0)
 							For i = 0 To 1
 								it2.Items = CreateItem("Quarter", it_25ct, 0.0, 0.0, 0.0)
 								it2\Picked = True : it2\Dropped = -1
@@ -5274,13 +5274,25 @@ Function UpdateEvents%()
 					
 					If e\room\RoomDoors[1]\OpenState = 0.0
 						If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
+						If (Not EntityHidden(e\room\RoomDoors[0]\OBJ)) Then HideEntity(e\room\RoomDoors[0]\OBJ)
+						If (Not EntityHidden(e\room\RoomDoors[0]\FrameOBJ)) Then HideEntity(e\room\RoomDoors[0]\FrameOBJ)
+						If (Not EntityHidden(e\room\RoomDoors[0]\Buttons[1])) Then HideEntity(e\room\RoomDoors[0]\Buttons[1])
 					Else
 						If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
+						If EntityHidden(e\room\RoomDoors[0]\OBJ) Then ShowEntity(e\room\RoomDoors[0]\OBJ)
+						If EntityHidden(e\room\RoomDoors[0]\FrameOBJ) Then ShowEntity(e\room\RoomDoors[0]\FrameOBJ)
+						If EntityHidden(e\room\RoomDoors[0]\Buttons[1]) Then ShowEntity(e\room\RoomDoors[0]\Buttons[1])
 					EndIf
 					If e\room\RoomDoors[4]\OpenState = 0.0
 						If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+						If (Not EntityHidden(e\room\RoomDoors[5]\OBJ)) Then HideEntity(e\room\RoomDoors[5]\OBJ)
+						If (Not EntityHidden(e\room\RoomDoors[5]\FrameOBJ)) Then HideEntity(e\room\RoomDoors[5]\FrameOBJ)
+						If (Not EntityHidden(e\room\RoomDoors[5]\Buttons[1])) Then HideEntity(e\room\RoomDoors[5]\Buttons[1])
 					Else
 						If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+						If EntityHidden(e\room\RoomDoors[5]\OBJ) Then ShowEntity(e\room\RoomDoors[5]\OBJ)
+						If EntityHidden(e\room\RoomDoors[5]\FrameOBJ) Then ShowEntity(e\room\RoomDoors[5]\FrameOBJ)
+						If EntityHidden(e\room\RoomDoors[5]\Buttons[1]) Then ShowEntity(e\room\RoomDoors[5]\Buttons[1])
 					EndIf
 					
 					If e\EventState < 8.0
