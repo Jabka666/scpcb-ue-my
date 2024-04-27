@@ -2123,32 +2123,37 @@ Function UpdateEvents%()
 						ShouldPlay = 24
 						
 						If e\EventState = 0.0
-							n.NPCs = CreateNPC(NPCType049_2, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True))
+							TFormPoint(528.0, -3440.0, 96.0, e\room\OBJ, 0)
+							n.NPCs = CreateNPC(NPCType049_2, TFormedX(), TFormedY(), TFormedZ())
 							PointEntity(n\Collider, e\room\OBJ)
 							TurnEntity(n\Collider, 0.0, e\room\Angle, 0.0)
 							
-							n.NPCs = CreateNPC(NPCType049_2, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True))
+							TFormPoint(64.0, -3440.0, -1000.0, e\room\OBJ, 0)
+							n.NPCs = CreateNPC(NPCType049_2, TFormedX(), TFormedY(), TFormedZ())
 							PointEntity(n\Collider, e\room\OBJ)
 							TurnEntity(n\Collider, 0.0, e\room\Angle + 60.0, 0.0)
 							
+							TFormPoint(528.0, -2672.0, 96.0, e\room\OBJ, 0)
 							If n_I\Curr049 <> Null
 								e\room\NPC[0] = n_I\Curr049
 								e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Idle = 1 : e\room\NPC[0]\HideFromNVG = True
-								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3.0, EntityZ(e\room\Objects[4], True))
+								PositionEntity(e\room\NPC[0]\Collider, TFormedX(), TFormedY(), TFormedZ())
 								ResetEntity(e\room\NPC[0]\Collider)
 								PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 							Else
-								n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True) + 3.0, EntityZ(e\room\Objects[4], True))
+								n_I\Curr049 = CreateNPC(NPCType049, TFormedX(), TFormedY(), TFormedZ())
 								n_I\Curr049\State = 2.0 : n_I\Curr049\Idle = 1 : n_I\Curr049\HideFromNVG = True
 								PointEntity(n_I\Curr049\Collider, e\room\OBJ)
 								e\room\NPC[0] = n_I\Curr049
 							EndIf
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
-							If EntityDistanceSquared(e\room\Objects[7], me\Collider) < EntityDistanceSquared(e\room\Objects[8], me\Collider)
-								it.Items = CreateItem("Research Sector-02 Scheme", it_paper, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
+							If EntityDistanceSquared(e\room\Objects[1], me\Collider) < EntityDistanceSquared(e\room\Objects[3], me\Collider)
+								TFormPoint(2720.0, -3516.0, 1824.0, e\room\OBJ, 0)
+								it.Items = CreateItem("Research Sector-02 Scheme", it_paper, TFormedX(), TFormedY(), TFormedZ())
 							Else
-								it.Items = CreateItem("Research Sector-02 Scheme", it_paper, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True))
+								TFormPoint(-2720.0, -3516.0, -1824.0, e\room\OBJ, 0)
+								it.Items = CreateItem("Research Sector-02 Scheme", it_paper, TFormedX(), TFormedY(), TFormedZ())
 							EndIf
 							EntityType(it\Collider, HIT_ITEM)
 							
@@ -2177,7 +2182,7 @@ Function UpdateEvents%()
 									ShouldPlay = 8
 									IsBlackOut = False
 									If e\Sound2 = 0 Then LoadEventSound(e, "SFX\Ambient\Room Ambience\FuelPump.ogg", 1)
-									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[6], 6.0)
+									e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[4], 6.0)
 									For i = 4 To 7
 										e\room\RoomDoors[i]\Locked = 0
 									Next

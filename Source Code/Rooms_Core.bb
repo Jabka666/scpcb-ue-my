@@ -2664,29 +2664,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[3], r\x - 2766.0 * RoomScale, r\y - 3280.0 * RoomScale, r\z - 1296.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			; ~ Zombie # 1
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 528.0 * RoomScale, r\y - 3440.0 * RoomScale, r\z + 96.0 * RoomScale)
-			EntityParent(r\Objects[4], r\OBJ)
-			
-			; ~ Zombie # 2
-			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x + 64.0 * RoomScale, r\y - 3440.0 * RoomScale, r\z - 1000.0 * RoomScale)
-			EntityParent(r\Objects[5], r\OBJ)
-			
 			; ~ Fuel pump sound emitter
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x - 832.0 * RoomScale, r\y - 3484.0 * RoomScale, r\z + 1572.0 * RoomScale)
-			EntityParent(r\Objects[6], r\OBJ)
-			
-			; ~ Spawnpoint for the map layout document
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x + 2720.0 * RoomScale, r\y - 3516.0 * RoomScale, r\z + 1824.0 * RoomScale)
-			EntityParent(r\Objects[7], r\OBJ)
-			
-			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x - 2720.0 * RoomScale, r\y - 3516.0 * RoomScale, r\z - 1824.0 * RoomScale)
-			EntityParent(r\Objects[8], r\OBJ)
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x - 832.0 * RoomScale, r\y - 3484.0 * RoomScale, r\z + 1572.0 * RoomScale)
+			EntityParent(r\Objects[4], r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-049", it_paper, r\x - 693.0 * RoomScale, r\y - 3332.0 * RoomScale, r\z + 702.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
