@@ -1930,9 +1930,10 @@ Function UpdateEvents%()
 									e\room\RoomDoors[i]\Locked = 0
 								Next
 								OpenCloseDoor(e\room\RoomDoors[2])
+								
 								TFormPoint(-456.0, -5052.8, -688.0, e\room\OBJ, 0)
-								e\room\NPC[0] = CreateNPC(NPCType008_1, TFormedX(), TFormedY(), TFormedZ())
-								e\room\NPC[0]\State = 3.0
+								n.NPCs = CreateNPC(NPCType008_1, TFormedX(), TFormedY(), TFormedZ())
+								n\State = 3.0
 								
 								e\EventState2 = 2.0
 							EndIf
