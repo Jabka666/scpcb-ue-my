@@ -2745,7 +2745,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x, r\y - 445.0 * RoomScale, r\z + 1525.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-096", it_paper, r\x + 14.0 * RoomScale, r\y - 445.0 * RoomScale, r\z + 1427.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-096", it_paper, r\x + 14.0 * RoomScale, r\y - 390.0 * RoomScale, r\z + 1427.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
