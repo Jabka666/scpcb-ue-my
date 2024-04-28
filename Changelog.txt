@@ -1,4 +1,4 @@
-v1.2.2
+v1.3
 
 General:
 - Added new console commands: «roomlist» and «itemlist».

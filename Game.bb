@@ -1,6 +1,6 @@
 ; ~ The main file of the game
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
-; ~ SCP - Containment Breach Ultimate Edition Reborn v1.2.2
+; ~ SCP - Containment Breach Ultimate Edition Reborn v1.3
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ This is a modification of the game "SCP - Containment Breach"
 ; ~ The mod is developed by the "Ultimate Edition Team" (https://www.moddb.com/company/ultimate-edition-team)
