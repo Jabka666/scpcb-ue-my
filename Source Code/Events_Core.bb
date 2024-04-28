@@ -4886,15 +4886,17 @@ Function UpdateEvents%()
 						If e\EventState = 0.0
 							If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState = 1.0
 						ElseIf e\EventState = 1.0
-							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y - 447.0 * RoomScale + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+							TFormPoint(-864.0, -447.0, -632.0, e\room\OBJ, 0)
+							x = TFormedX() : y = TFormedY() : z = TFormedZ()
+							de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, y + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 							de\SizeChange = 0.001
 							EntityParent(de\OBJ, e\room\OBJ)
 							
-							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+							PositionEntity(n_I\Curr106\Collider, x, y, z)
 							ResetEntity(n_I\Curr106\Collider)
 							SetNPCFrame(n_I\Curr106, 110.0)
 							n_I\Curr106\State = -0.1
-							n_I\Curr106\PrevY = EntityY(e\room\Objects[0], True)
+							n_I\Curr106\PrevY = y
 							
 							RemoveEvent(e)
 						EndIf
