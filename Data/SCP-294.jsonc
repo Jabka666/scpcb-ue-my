@@ -3517,14 +3517,14 @@
         "refuse_message": "\"Why the hell would I want to drink this?\""
     },
     {
-        "name": ["Regalis", "Reglias", "Undertow Games", "Third Subvision Studio", "Developers", "Ultimate Edition", "Vane Brain", "Jabka", "Chumnaya Karkusa", "Mleczyk", "ADMClef", "ENDSHN", "Meow", "Ne4to", "Aesthetical", "Juanjp600", "EnnocentSam", "FireFox", "Slender", "Ayylien", "Quote"],
+        "name": ["Regalis", "Reglias", "Undertow Games", "Third Subdivision Studio", "Developers", "Ultimate Edition", "Vane Brain", "Jabka", "Chumnaya Karkusa", "Mleczyk", "ADMClef", "ENDSHN", "Meow", "Ne4to", "Aesthetical", "Juanjp600", "EnnocentSam", "FireFox", "Slender", "Ayylien", "Quote", "SnoeBrawler", "Ziyue", "XtrithX"],
         "color": [0, 0, 0],
         "alpha": 1.0,
         "glow": true,
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Cough.ogg",
-        "drink_message": "\"Wow! Stop! What the hell!? There's a something inside me!\"",
+        "drink_message": "\"Wow! Stop! What the hell!? There's something inside me!\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
