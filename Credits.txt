@@ -125,6 +125,7 @@
 *Development Helpers
 
 		Shaun Gaylard ("ENDSHN")
+		juanjp600
 		Alexander Deshko ("CmElektrik") 
 		neptuneprogamertv
 		The KMan
