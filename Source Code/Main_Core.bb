@@ -8346,7 +8346,7 @@ Function UpdateMTF%()
 			If entrance <> Null
 				If Abs(EntityZ(entrance\OBJ) - EntityZ(me\Collider)) < 36.0
 					If me\Zone = 2
-						PlayAnnouncement("SFX\Character\MTF\Announc.ogg")
+						PlayAnnouncement("SFX\Character\MTF\AnnouncEnter.ogg")
 						
 						MTFTimer = fps\Factor[0]
 						
