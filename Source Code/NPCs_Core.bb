@@ -2825,10 +2825,7 @@ Function UpdateNPCs%()
 							
 							AnimateNPC(n, Max(PrevFrame, 2.0), 647.0, 1.0, False)
 							
-							If PrevFrame <= 400.0 And n\Frame > 400.0
-								n\Sound = LoadSound_Strict("SFX\SCP\1048A\Shriek.ogg")
-								n\SoundCHN = PlaySound_Strict(n\Sound)
-							EndIf
+							If PrevFrame <= 400.0 And n\Frame > 400.0 Then n\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Shriek.ogg"))
 							
 							Local Volume# = Max(1.0 - Abs(PrevFrame - 600.0) / 100.0, 0.0)
 							
