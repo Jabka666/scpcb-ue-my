@@ -6480,7 +6480,7 @@ Function UpdateEvents%()
 						e\EventState = 1.0
 					EndIf
 				ElseIf e\EventState = 1.0
-					If (Not EntityInView(e\room\NPC[0]\OBJ, Camera))
+					If (Not EntityInView(e\room\NPC[0]\OBJ, Camera)) Lor e\room\NPC[0]\IsDead
 						RemoveNPC(e\room\NPC[0])
 						RemoveEvent(e)
 					EndIf
