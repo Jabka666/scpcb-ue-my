@@ -1910,7 +1910,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								If InteractObject(e\room\Objects[1], 0.81, True, 2, True) Then RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
-								If me\Bloodloss > 0.0 And I_008\Timer = 0.0 Then InjurePlayer(0.0, 0.001)
+								If (me\Bloodloss > 0.0 And I_008\Timer = 0.0) Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
 							EndIf
 							
 							If EntityPitch(e\room\Objects[1], True) < 40.0
