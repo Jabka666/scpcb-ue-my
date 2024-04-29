@@ -568,13 +568,16 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x - 1400.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-205", it_paper, r\x - 357.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 150.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-205", it_paper, r\x - 357.0 * RoomScale, r\y + 70.0 * RoomScale, r\z + 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x + 206.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 80.0 * RoomScale)
+			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x + 206.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 80.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 206.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 180.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x + 745.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 60.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Level 3 Key Card", it_key3, r\x - 975.0 * RoomScale, r\y - 10.0 * RoomScale, r\z + 650.0 * RoomScale)

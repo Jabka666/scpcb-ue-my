@@ -24,6 +24,7 @@ Mechanics:
 Rooms:
 - Added Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
 - Added Level 3 Keycard in «room2_servers_hcz» room.
+- Added 9V Battery in «cont1_205» storage room.
 - Added a buffer hallway leading to SCP-173's containment chamber.
 - Changed SCP-096's room to a corner styled room replacing the maintenance room.
 - Changed SCP-372's room to a 3-way styled room.
