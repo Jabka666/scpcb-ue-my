@@ -2471,24 +2471,26 @@ Function RefillCup%()
 				EntityPick(Camera, 0.65)
 				If PickedEntity() = p\OBJ
 					DrawHandIcon = True
-					For i = 0 To MaxItemAmount - 1
-						If Inventory(i) <> Null
-							If Inventory(i)\ItemTemplate\ID = it_emptycup
-								RemoveItem(Inventory(i))
-								it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 200, 200, 200)
-								it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
-								it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
-								it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-								Inventory(i) = it
-								HideEntity(it\Collider)
-								EntityType(it\Collider, HIT_ITEM)
-								EntityParent(it\Collider, 0)
-								PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
-								CreateMsg(GetLocalString("msg", "refill"))
-								Exit
+					If mo\MouseHit1
+						For i = 0 To MaxItemAmount - 1
+							If Inventory(i) <> Null
+								If Inventory(i)\ItemTemplate\ID = it_emptycup
+									RemoveItem(Inventory(i))
+									it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 200, 200, 200)
+									it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
+									it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+									it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
+									Inventory(i) = it
+									HideEntity(it\Collider)
+									EntityType(it\Collider, HIT_ITEM)
+									EntityParent(it\Collider, 0)
+									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
+									CreateMsg(GetLocalString("msg", "refill"))
+									Exit
+								EndIf
 							EndIf
-						EndIf
-					Next
+						Next
+					EndIf
 				EndIf
 			EndIf
 		EndIf
