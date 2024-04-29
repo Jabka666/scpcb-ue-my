@@ -1,4 +1,4 @@
-Const MaxAchievements% = 43
+Const MaxAchievements% = 44
 
 Type Achievements
 	Field Achievement%[MaxAchievements]
@@ -20,7 +20,7 @@ Const Achv714% = 19, Achv789_J% = 20, Achv860% = 21, Achv895% = 22, Achv914% = 2
 Const Achv1025% = 27, Achv1048% = 28, Achv1123% = 29, Achv1162_ARC% = 30, Achv1499% = 31
 
 Const AchvConsole% = 32, AchvHarp% = 33, AchvKeter% = 34, AchvKeyCard6% = 35, AchvMaynard% = 36, AchvOmni% = 37
-Const AchvO5% = 38, AchvPD% = 39, AchvSNAV% = 40, AchvTesla% = 41, Achv268% = 42
+Const AchvO5% = 38, AchvPD% = 39, AchvSNAV% = 40, AchvTesla% = 41, Achv268% = 42, Achv458% = 43
 ;[End Block]
 
 Function GiveAchievement%(AchvName%, ShowMessage% = True)

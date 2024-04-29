@@ -3313,25 +3313,34 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_cafeteria
 			;[Block]
 			; ~ Misc doors
-			d.Doors = CreateDoor(r, r\x + 1712.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x + 1712.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			d.Doors = CreateDoor(r, r\x - 464.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x - 464.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_1)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			; ~ SCP-458
+			d.Doors = CreateDoor(r, r\x + 232.0 * RoomScale, r\y - 384.0 * RoomScale, r\z + 612.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_1)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
 			
 			; ~ SCP-294
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1847.0 * RoomScale, r\y - 240.0 * RoomScale, r\z - 321.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			; ~ Spawnpoint for the cups
+			; ~ SCP-458
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 1780.0 * RoomScale, r\y - 248.0 * RoomScale, r\z - 276.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x, r\y - 192.0 * RoomScale, r\z + 833.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
+			
+			; ~ Spawnpoint for the cups
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x + 1780.0 * RoomScale, r\y - 248.0 * RoomScale, r\z - 276.0 * RoomScale)
+			EntityParent(r\Objects[2], r\OBJ)
 			
 			it.Items = CreateItem("Cup", it_cup, r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
 			it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "ORANGE JUICE"))
@@ -3341,6 +3350,18 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Cup", it_cup, r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
 			it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "COFFEE"))
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Pizza Slice", it_pizza, r\x - 560.0 * RoomScale, r\y - 226.0 * RoomScale, r\z + 261.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Pizza Slice", it_pizza, r\x + 1059.0 * RoomScale, r\y - 226.0 * RoomScale, r\z + 722.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Pizza Slice", it_pizza, r\x + 1141.0 * RoomScale, r\y - 226.0 * RoomScale, r\z + 886.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Pizza Slice", it_pizza, r\x + 1618.0 * RoomScale, r\y - 226.0 * RoomScale, r\z + 878.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Empty Cup", it_emptycup, r\x - 540.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 124.0 * RoomScale)

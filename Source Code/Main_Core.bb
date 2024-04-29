@@ -4931,6 +4931,14 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
+				Case it_pizza
+					;[Block]
+					If CanUseItem(True)
+						CreateMsg(GetLocalString("msg", "pizza"))
+						
+						RemoveItem(SelectedItem)
+					EndIf
+					;[End Block]
 				Case it_finesyringe
 					;[Block]
 					If CanUseItem(True, True)

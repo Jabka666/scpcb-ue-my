@@ -3360,8 +3360,8 @@ Function UpdateEvents%()
 						Temp = True
 						For it.Items = Each Items
 							If (Not it\Picked)
-								If EntityX(it\Collider) - EntityX(e\room\Objects[1], True) = 0.0
-									If EntityZ(it\Collider) - EntityZ(e\room\Objects[1], True) = 0.0
+								If EntityX(it\Collider) - EntityX(e\room\Objects[2], True) = 0.0
+									If EntityZ(it\Collider) - EntityZ(e\room\Objects[2], True) = 0.0
 										Temp = False
 										Exit
 									EndIf
@@ -3410,6 +3410,22 @@ Function UpdateEvents%()
 							CreateMsg(GetLocalString("msg", "294.two"))
 						ElseIf me\UsedMastercard
 							CreateMsg(GetLocalString("msg", "294.funds"))
+						EndIf
+					EndIf
+					
+					If InteractObject(e\room\Objects[1], 0.64)
+						If ItemAmount < MaxItemAmount
+							GiveAchievement(Achv458)
+							CreateMsg(GetLocalString("msg", "458"))
+							it.Items = CreateItem("Pizza Slice", it_pizza, 1.0, 1.0, 1.0)
+							it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
+							Inventory(ItemAmount) = it
+							HideEntity(it\Collider)
+							EntityType(it\Collider, HIT_ITEM)
+							EntityParent(it\Collider, 0)
+							ItemAmount = ItemAmount + 1
+						Else
+							CreateMsg(GetLocalString("msg", "cantcarry"))
 						EndIf
 					EndIf
 				EndIf

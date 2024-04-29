@@ -116,6 +116,7 @@ Const it_playcard% = 93
 Const it_key% = 94
 Const it_25ct% = 95
 Const it_coin% = 96
+Const it_pizza% = 97
 ;[End Block]
 
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
