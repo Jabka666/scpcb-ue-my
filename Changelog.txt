@@ -7,6 +7,7 @@ General:
 - Added viewable Omni Key Card chances to Debug Hud 3.
 - Add console text for «427state» command.
 - SCP-008 can now infect players not wearing a gas mask even if they are not bleeding.
+- Add SCP-458.
 
 - Optimized the game...
 
@@ -40,6 +41,7 @@ Rooms:
 Items:
 - Minimum recharge range of 9V and 18V increased from 0% to 50%
 - Cups now have a short use timer.
+- Added pizza item.
 
 NPCs:
 - MTFs can contain SCP-106.
