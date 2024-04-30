@@ -5548,15 +5548,17 @@ Function UpdateGUI%()
 					;[End Block]
 				Case it_scp427
 					;[Block]
-					If I_427\Using
-						CreateMsg(GetLocalString("msg", "427.off"))
-						I_427\Using = False
-					Else
-						GiveAchievement(Achv427)
-						CreateMsg(GetLocalString("msg", "427.on"))
-						I_427\Using = True
+					If CanUseItem(True, True)
+						If I_427\Using
+							CreateMsg(GetLocalString("msg", "427.off"))
+							I_427\Using = False
+						Else
+							GiveAchievement(Achv427)
+							CreateMsg(GetLocalString("msg", "427.on"))
+							I_427\Using = True
+						EndIf
+						SelectedItem = Null
 					EndIf
-					SelectedItem = Null
 					;[End Block]
 				Case it_pill
 					;[Block]
