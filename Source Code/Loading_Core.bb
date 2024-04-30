@@ -323,7 +323,7 @@ End Function
 Const MaxDoorModelIDAmount% = 9
 Const MaxDoorFrameModelIDAmount% = 4
 Const MaxButtonModelIDAmount% = 5
-Const MaxButtonTextureIDAmount% = 3
+Const MaxButtonTextureIDAmount% = 4
 Const MaxElevatorPanelTextureIDAmount% = 3
 
 Type DoorInstance
