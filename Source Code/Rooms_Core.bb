@@ -816,9 +816,11 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.04, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			If r\RoomTemplate\RoomID = r_room2_gw_2
-				r\Objects[0] = CreatePivot()
-				PositionEntity(r\Objects[0], r\x - 447.0 * RoomScale, r\y + 177.0 * RoomScale, r\z - 98.0 * RoomScale)
+				r\Objects[0] = CreateButton(BUTTON_KEYCARD, r\x - 473.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 103.0 * RoomScale, 0.0, 270.0, 25.0, 0, True)
 				EntityParent(r\Objects[0], r\OBJ)
+				
+				r\Objects[1] = CreateButton(BUTTON_KEYCARD, r\x - 443.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 79.0 * RoomScale, 0.0, 90.0, 0.0, 0, True)
+				EntityParent(r\Objects[1], r\OBJ)
 				
 				dem.DevilEmitters = CreateDevilEmitter(r, r\x + 262.0 * RoomScale, r\y + 328.0 * RoomScale, r\z - 345.0 * RoomScale, 1)
 				dem\State = 2
@@ -2691,9 +2693,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x - 4917.0 * RoomScale, r\y - 4310.0 * RoomScale, r\z + 2095.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			; ~ Sparks pivot
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 4523.0 * RoomScale, r\y - 4060.0 * RoomScale, r\z - 2097.0 * RoomScale)
+			; ~ Broken button
+			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x - 4523.0 * RoomScale, r\y - 4068.0 * RoomScale, r\z - 2095.0 * RoomScale, 0.0, 180.0, 25.0, 0, True)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 3635.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 1729.0 * RoomScale, 20.0)
@@ -2717,6 +2718,12 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			r\Objects[0] = CreateButton(BUTTON_KEYCARD, r\x - 1399.0 * RoomScale, r\y - 432.0 * RoomScale, r\z + 596.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
+			EntityParent(r\Objects[0], r\OBJ)
+			
+			r\Objects[1] = CreateButton(BUTTON_KEYCARD, r\x - 1089.0 * RoomScale, r\y - 432.0 * RoomScale, r\z + 544.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
+			EntityParent(r\Objects[1], r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_1, r\x - 1212.0 * RoomScale, r\y - 604.0 * RoomScale + 0.005, r\z + 846.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
