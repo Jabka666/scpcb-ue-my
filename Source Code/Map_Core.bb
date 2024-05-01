@@ -4095,7 +4095,7 @@ Function UpdateSecurityCams%()
 						
 						If sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3
 							If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
-								me\Sanity = me\Sanity - (fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs) / (1.0 + I_714\Using))
+								me\Sanity = me\Sanity - (fps\Factor[0] * (1.0 + (0.5 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using))
 								me\RestoreSanity = False
 								If SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then CanSave = 0
 								
@@ -4137,7 +4137,7 @@ Function UpdateSecurityCams%()
 								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 							EndIf
 						ElseIf (Not Temp)
-							If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000)
+							If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000) - (20000 * SelectedDifficulty\AggressiveNPCs)
 							If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
 							If (MilliSec Mod sc\PlayerState) >= Rand(600)
 								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
