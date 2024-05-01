@@ -595,9 +595,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			; ~ Observation Room door
-			d.Doors = CreateDoor(r, r\x + 113.0 * RoomScale, r\y, r\z + 380.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_2)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.057, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.057, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			d.Doors = CreateDoor(r, r\x + 101.0 * RoomScale, r\y, r\z + 380.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_2)
 			d\MTFClose = False : d\AutoClose = False
 			
 			; ~ Maintenance Room 4D door
