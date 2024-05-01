@@ -1167,6 +1167,9 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[2], r\OBJ)
 			HideEntity(r\Objects[2])
 			
+			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x - 994.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 456.0 * RoomScale, 0.0, 90.0, 0.0, 0, True)
+			EntityParent(r\Objects[3], r\OBJ)
+			
 			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x - 460.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 108.0 * RoomScale)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
