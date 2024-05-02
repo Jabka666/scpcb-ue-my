@@ -1646,7 +1646,7 @@ Function UpdateEvents%()
 						e\EventState2 = 1.0
 					EndIf
 					
-					x = UpdateLever(e\room\RoomLevers[0]\OBJ)
+					UpdateLever(e\room\RoomLevers[0]\OBJ)
 					
 					If EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
 						e\EventState3 = Min(e\EventState3 + fps\Factor[0], 212.0)
