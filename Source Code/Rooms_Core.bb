@@ -650,6 +650,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.057, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			r\RoomDoors.Doors[3] = d
 			
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 1012.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 976.0 * RoomScale, 180.0, False)
+			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\scp_914_key.b3d")
 			PositionEntity(r\Objects[0], r\x - 416.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
@@ -669,6 +671,11 @@ Function FillRoom%(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x + 308.0 * RoomScale, r\y + 0.5, r\z + 640.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
+			
+			r\Objects[4] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null)
+			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[4], r\x, r\y, r\z)
+			EntityParent(r\Objects[4], r\OBJ)
 			
 			it.Items = CreateItem("Addendum: 5/14 Test Log", it_paper, r\x + 538.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 127.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)

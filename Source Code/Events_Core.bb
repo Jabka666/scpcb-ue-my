@@ -1641,10 +1641,20 @@ Function UpdateEvents%()
 			Case e_cont1_914
 				;[Block]
 				If PlayerRoom = e\room
-					If e\room\RoomDoors[2]\Open Lor e\room\RoomDoors[3]\Open
+					If e\room\RoomDoors[2]\Open Lor EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
 						GiveAchievement(Achv914)
 						e\EventState2 = 1.0
 					EndIf
+					
+					x = UpdateLever(e\room\RoomLevers[0]\OBJ)
+					
+					If EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
+						e\EventState3 = Min(e\EventState3 + fps\Factor[0], 212.0)
+					Else
+						e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
+					EndIf
+					
+					PositionEntity(e\room\Objects[4], 0.0, e\EventState3, 0.0)
 					
 					If e\EventState2 = 1.0 Then ShouldPlay = 21
 					EntityPick(Camera, 1.0)
