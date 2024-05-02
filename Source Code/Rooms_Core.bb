@@ -672,10 +672,13 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[3], r\x + 308.0 * RoomScale, r\y + 0.5, r\z + 640.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			r\Objects[4] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null)
-			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[4], r\x, r\y, r\z)
+			r\Objects[4] = CreateButton(BUTTON_DEFAULT, r\x - 1224.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 990.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
 			EntityParent(r\Objects[4], r\OBJ)
+			
+			r\Objects[5] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null)
+			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[5], r\x, r\y, r\z)
+			EntityParent(r\Objects[5], r\OBJ)
 			
 			it.Items = CreateItem("Addendum: 5/14 Test Log", it_paper, r\x + 538.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 127.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
