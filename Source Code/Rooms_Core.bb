@@ -680,6 +680,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[5], r\x, r\y, r\z)
 			EntityParent(r\Objects[5], r\OBJ)
 			
+			r\Objects[6] = CreatePivot()
+			PositionEntity(r\Objects[6], r\x - 936.0 * RoomScale, r\y + 132.0 * RoomScale, r\z - 296.0 * RoomScale)
+			EntityParent(r\Objects[6], r\OBJ)
+			
 			it.Items = CreateItem("Addendum: 5/14 Test Log", it_paper, r\x + 538.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 127.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)

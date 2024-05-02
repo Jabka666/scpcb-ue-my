@@ -1653,6 +1653,12 @@ Function UpdateEvents%()
 					Else
 						e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
 					EndIf
+					If e\EventState3 > 0.0 And e\EventState3 < 212.0
+						If (Not ChannelPlaying(e\SoundCHN2)) Then e\SoundCHN2 = LoopSound2(LoadTempSound("SFX\Room\Blinds.ogg"), e\SoundCHN2, Camera, e\room\Objects[6])
+						ResumeChannel(e\SoundCHN2)
+					Else
+						PauseChannel(e\SoundCHN2)
+					EndIf
 					
 					PositionEntity(e\room\Objects[5], 0.0, e\EventState3, 0.0)
 					
