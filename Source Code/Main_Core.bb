@@ -4937,6 +4937,7 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(True)
 						CreateMsg(GetLocalString("msg", "pizza"))
+						PlaySound_Strict(LoadTempSound("SFX\SCP\458\Eating.ogg"))
 						
 						RemoveItem(SelectedItem)
 					EndIf
@@ -5595,6 +5596,7 @@ Function UpdateGUI%()
 								EndIf
 							Next
 							CreateMsg(GetLocalString("msg", "500"))
+							PlaySound_Strict(LoadTempSound("SFX\SCP\500\OpenBottle.ogg"))
 							I_500\Taken = I_500\Taken + 1
 						Else
 							CreateMsg(GetLocalString("msg", "cantcarry"))

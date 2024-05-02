@@ -155,6 +155,7 @@
 		artoka
 		Morgan Dusty
 		racer_216
+		RhythmicReverie
 
 *Mod Testers
 
