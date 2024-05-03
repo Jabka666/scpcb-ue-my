@@ -1344,6 +1344,8 @@ Global RadioBuzz%
 Global SCRAMBLESFX%
 Global SCRAMBLECHN%
 
+Global BLINDSCHN%
+
 Global NVGSFX%[2]
 
 Global LowBatterySFX%[2]

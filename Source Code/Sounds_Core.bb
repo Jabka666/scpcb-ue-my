@@ -183,6 +183,7 @@ Function PauseSounds%()
 	PauseChannel(VomitCHN)
 	PauseChannel(CoughCHN)
 	PauseChannel(SCRAMBLECHN)
+	PauseChannel(BLINDSCHN)
 	
 	For i = 0 To 1
 		PauseChannel(LowBatteryCHN[i])
@@ -256,6 +257,7 @@ Function ResumeSounds%()
 	ResumeChannel(VomitCHN)
 	ResumeChannel(CoughCHN)
 	ResumeChannel(SCRAMBLECHN)
+	ResumeChannel(BLINDSCHN)
 	
 	For i = 0 To 1
 		ResumeChannel(LowBatteryCHN[i])
@@ -341,6 +343,7 @@ Function KillSounds%(EraseSounds% = True)
 	StopChannel(VomitCHN) : VomitCHN = 0
 	StopChannel(CoughCHN) : CoughCHN = 0
 	StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+	StopChannel(BLINDSCHN) : BLINDSCHN = 0
 	
 	For i = 0 To 1
 		StopChannel(LowBatteryCHN[i]) : LowBatteryCHN[i] = 0
