@@ -6109,7 +6109,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 		ch\Amount = JsonGetArraySize(JsonGetArray(JsonGetArrayValue(SCP1499Chunks, OBJ)))
 		For chp.ChunkPart = Each ChunkPart
 			If chp\ID = OBJ
-				For i = 0 To ch\Amount
+				For i = 0 To ch\Amount - 1
 					ch\OBJ[i] = CopyEntity(chp\OBJ[i], ch\ChunkPivot)
 				Next
 			EndIf
