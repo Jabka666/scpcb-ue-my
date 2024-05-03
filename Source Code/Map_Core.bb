@@ -6031,8 +6031,8 @@ Function SetChunkDataValues%()
 	
 	For i = 0 To 62 Step 2
 		For j = 0 To 62 Step 2
-			CHUNKDATA[i + (j * 64)] = Rand(0, JsonGetArraySize(SCP1499Chunks))
-			CHUNKDATA[(i + 1) + ((j + 1) * 64)] = Rand(0, JsonGetArraySize(SCP1499Chunks))
+			CHUNKDATA[i + (j * 64)] = Rand(0, JsonGetArraySize(SCP1499Chunks) - 1)
+			CHUNKDATA[(i + 1) + ((j + 1) * 64)] = Rand(0, JsonGetArraySize(SCP1499Chunks) - 1)
 		Next
 	Next
 	
@@ -6106,7 +6106,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	ch\IsSpawnChunk = IsSpawnChunk
 	
 	If OBJ > -1
-		ch\Amount = JsonGetArraySize(JsonGetArray(JsonGetArrayValue(SCP1499Chunks, OBJ)))
+		ch\Amount = JsonGetArraySize(JsonGetArray(JsonGetValue(JsonGetArrayValue(SCP1499Chunks, OBJ), "objects")))
 		For chp.ChunkPart = Each ChunkPart
 			If chp\ID = OBJ
 				For i = 0 To ch\Amount - 1
