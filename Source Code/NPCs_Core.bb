@@ -5999,8 +5999,14 @@ Function UpdateMTFUnit%(n.NPCs)
 					RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 					PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 					MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
-					
-					SqrValue = Sqr(Dist)
+
+                                        If Dist > 4.0 Lor Dist < 1.0
+					   n\CurrSpeed = CurveValue(-n\Speed, n\CurrSpeed, 20.0)
+					Else
+					   n\CurrSpeed = 0.0
+					EndIf
+
+                                        SqrValue = Sqr(Dist)
 					
 					Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
 					
