@@ -6036,7 +6036,7 @@ Function SetChunkDataValues%()
 		Next
 	Next
 	
-	SeedRnd(MilliSec)
+	SeedRnd(MilliSecs())
 End Function
 
 Type ChunkPart
@@ -6080,7 +6080,7 @@ Function CreateChunkParts%(r.Rooms)
 		If chp2 <> Null Then chp\ID = chp2\ID + 1
 	Next
 	
-	SeedRnd(MilliSec)
+	SeedRnd(MilliSecs())
 End Function
 
 Type Chunk

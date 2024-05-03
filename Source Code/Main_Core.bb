@@ -119,7 +119,7 @@ mo\Viewport_Center_Y = opt\GraphicHeight / 2
 
 SetBuffer(BackBuffer())
 
-SeedRnd(MilliSec)
+SeedRnd(MilliSecs())
 
 PlayStartupVideos()
 
