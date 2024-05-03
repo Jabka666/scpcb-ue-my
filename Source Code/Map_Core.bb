@@ -6031,8 +6031,8 @@ Function SetChunkDataValues%()
 	
 	For i = 0 To 62 Step 2
 		For j = 0 To 62 Step 2
-			CHUNKDATA[i + (j * 64)] = Rand(0, IniGetInt(SCP1499ChunksFile, "general", "count"))
-			CHUNKDATA[(i + 1) + ((j + 1) * 64)] = Rand(0, IniGetInt(SCP1499ChunksFile, "general", "count"))
+			CHUNKDATA[i + (j * 64)] = Rand(0, JsonGetArraySize(SCP1499Chunks))
+			CHUNKDATA[(i + 1) + ((j + 1) * 64)] = Rand(0, JsonGetArraySize(SCP1499Chunks))
 		Next
 	Next
 	
@@ -6106,7 +6106,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	ch\IsSpawnChunk = IsSpawnChunk
 	
 	If OBJ > -1
-		ch\Amount = IniGetInt(SCP1499ChunksFile, "chunk" + OBJ, "count")
+		ch\Amount = JsonGetArraySize(JsonGetArray(JsonGetArrayValue(SCP1499Chunks, OBJ)))
 		For chp.ChunkPart = Each ChunkPart
 			If chp\ID = OBJ
 				For i = 0 To ch\Amount
@@ -6137,7 +6137,7 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	Local x# = (-ChunkMaxDistance) + (ChunkX * 40.0)
 	Local z# = (-ChunkMaxDistance) + (ChunkZ * 40.0)
 	
-	Local CurrChunkData% = 0, MaxChunks% = IniGetInt(SCP1499ChunksFile, "general", "count")
+	Local CurrChunkData% = 0, MaxChunks% = JsonGetArraySize(SCP1499Chunks)
 	
 	Repeat
 		Local ChunkFound% = False
@@ -6259,7 +6259,7 @@ End Function
 
 Function RemoveChunkPart%(chp.ChunkPart)
 	Local i%
-	Local ChunkAmount% = IniGetInt(SCP1499ChunksFile, "general", "count")
+	Local ChunkAmount% = JsonGetArraySize(SCP1499Chunks)
 	
 	For i = 0 To 127
 		If chp\OBJ[i] <> 0 Then FreeEntity(chp\OBJ[i]) : chp\OBJ[i] = 0
