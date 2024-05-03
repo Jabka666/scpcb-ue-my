@@ -648,7 +648,6 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x - 449.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.057, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.057, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
-			r\RoomDoors.Doors[3] = d
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 1012.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 976.0 * RoomScale, 180.0, False)
 			
@@ -677,7 +676,6 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[5] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null)
 			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[5], r\x, r\y, r\z)
 			EntityParent(r\Objects[5], r\OBJ)
 			
 			r\Objects[6] = CreatePivot()
