@@ -8520,10 +8520,16 @@ Function UpdateVomit%()
 			me\PrevInjuries = me\Injuries
 			me\PrevBloodloss = me\Bloodloss
 			If (Not me\Crouch) Then SetCrouch(True)
-			me\Injuries = 1.5
-			me\Bloodloss = 70.0
 			me\EyeIrritation = 70.0 * 9.0
-			
+
+                       If me\Sanity < -200.0
+                           me\Injuries = 1.5
+                           me\Bloodloss = 70.0
+                       Else 
+                           me\Injuries = 0
+                           me\Bloodloss = 0
+                       EndIf
+
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
