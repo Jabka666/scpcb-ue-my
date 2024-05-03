@@ -575,7 +575,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-        "drink_message": "You feel refreshed.",
+        "drink_message": "You take a sip from your trusty SCP-109 canteen.",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
