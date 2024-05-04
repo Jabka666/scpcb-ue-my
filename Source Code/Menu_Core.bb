@@ -319,7 +319,7 @@ Function UpdateMainMenu%()
 							If CurrSave\Name = "" Then CurrSave\Name = ConvertToANSI(GetLocalString("save", "untitled"))
 							CurrSave\Name = Trim(CurrSave\Name)
 							
-							If RandomSeed = "" Then RandomSeed = MilliSec
+							If RandomSeed = "" Then RandomSeed = MilliSecs()
 							
 							SeedRnd(GenerateSeedNumber(RandomSeed))
 							
