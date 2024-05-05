@@ -983,7 +983,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "A dead organic mass later identified as D-9341 through DNA tests was discovered with parts of the body frozen at near Absolute Zero temperatures. What was left of the throat and mouth cavity contained traces of near negative temperature Bosonic Particles, therefore making it a substance at a Bose-Einstein Condensate phase of matter the cause of death.",
+        "death_message": "A dead organic mass later identified as D-9341 through DNA tests was discovered with parts of the body frozen at near absolute zero temperatures. What was left of the throat and mouth cavity contained traces of near negative temperature Bosonic particles, therefore making it a substance at a Bose-Einstein condensate phase of matter the cause of death.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -1128,7 +1128,7 @@
         "explosion": false
     },
     {
-        "name": ["Something Than Woman Likes", "French Champagne 1934s"],
+        "name": ["Something That Women Like", "French Champagne 1934s"],
         "color": [235, 165, 40],
         "alpha": 0.8,
         "glow": false,
@@ -1304,7 +1304,7 @@
         "explosion": false
     },
     {
-        "name": ["Chocolate Puding", "Cocoa", "Hot Chocolate", "Hot Cocoa", "Alpen Gold Chocolate", "Alpengold Chocolate", "Black Chocolate", "Cocoa Milk", "Cocoa With Milk", "Bitter Chocolate", "Babayevskiy Chocolate"],
+        "name": ["Chocolate Pudding", "Cocoa", "Hot Chocolate", "Hot Cocoa", "Alpen Gold Chocolate", "Alpengold Chocolate", "Black Chocolate", "Cocoa Milk", "Cocoa With Milk", "Bitter Chocolate", "Babayevskiy Chocolate"],
         "color": [170, 75, 0],
         "alpha": 1.0,
         "glow": false,
@@ -2112,7 +2112,7 @@
         "explosion": true
     },
     {
-        "name": ["The Meaning Of Life", "Meaning Of Life", "Sence Of Life", "Purpose Of Life", "Biography Of His Life", "My Biography"],
+        "name": ["The Meaning Of Life", "Meaning Of Life", "Sense Of Life", "Purpose Of Life", "Biography Of His Life", "My Biography"],
         "color": [100, 100, 100],
         "alpha": 1.0,
         "glow": true,
@@ -2483,7 +2483,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "\"THIS DRINK MAKE ME GO CRAZY AROUND THE HOUSE!!!\"",
+        "drink_message": "\"THIS DRINK MAKES ME GO CRAZY AROUND THE HOUSE!!!\"",
         "stomachache": true,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -3896,7 +3896,7 @@
         "dispense_sound": "SFX\\General\\Elevator\\Beep.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-        "drink_message": "\"It's... Very great drink...\"",
+        "drink_message": "\"It's... a very great drink...\"",
         "stomachache": false,
         "stamina_effect": 0.0,
         "stamina_timer": 999.0,
@@ -4024,7 +4024,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "A large scorch mark measuring 30 meters in diameter with a Glowing hot white crater was found in Sector [DATA REDACTED]. Everything within a 10 meter radius appears to have completely disintegrated, save for a 5 meter radius surrounding SCP-294. Tests are being conducted to determine the cause of this anomaly, although it is presumably related to SCP-294.",
+        "death_message": "A large scorch mark measuring 30 meters in diameter with a glowing hot white crater was found in Sector [DATA REDACTED]. Everything within a 10 meter radius appears to have completely disintegrated, save for a 5 meter radius surrounding SCP-294. Tests are being conducted to determine the cause of this anomaly, although it is presumably related to SCP-294.",
         "death_timer": null,
         "explosion": true
     },
@@ -4324,7 +4324,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Cough.ogg",
-        "drink_message": "You feel like feverfish.",
+        "drink_message": "You feel feverish.",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -5104,7 +5104,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Subject D-9341 was found dead [DATA REDACTED]. The cup the Class-D Subject drank was labled 'Cyanide'.",
+        "death_message": "Subject D-9341 was found dead in [DATA REDACTED]. The cup the Class-D Subject drank was labelled 'Cyanide'.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -5216,7 +5216,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Camera's show SCP-173 killed [DATA REDACTED] at the [DATA REDACTED] near Gate B.",
+        "death_message": "The cameras show SCP-173 killed [DATA REDACTED] at the [DATA REDACTED] near Gate B.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -6156,7 +6156,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "\"Hey! I'm drank it in Russia!\"",
+        "drink_message": "\"Hey! I drank it in Russia!\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -6284,7 +6284,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "A Class-D was found lying dead at the [DATA REDACTED]. He has no designation nor prints. He also doesn't figure out in any of our databases. ",
+        "death_message": "A Class-D was found lying dead at the [DATA REDACTED]. He has no designation nor prints. He also doesn't stand out in any of our databases. ",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -6684,7 +6684,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Subject D-9341 was burned. The corpse is covered by sugar, flowers and much Colors.",
+        "death_message": "Subject D-9341 was burned. The corpse is covered by sugar, flowers and many colors.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -7692,7 +7692,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Body of the Subject D-9341 was found in the [DATA REDACTED]. It suffered changes associated with SCP-686. Subject terminated.",
+        "death_message": "Body of Subject D-9341 was found in [DATA REDACTED]. It suffered changes associated with SCP-686. Subject terminated.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -7758,7 +7758,7 @@
         "alpha": 0.9,
         "glow": false,
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
-        "refuse_message": "\"No way, I'm don't drink it.\""
+        "refuse_message": "\"No way, I don't want to drink it.\""
     },
     {
         "name": ["Vaseline", "Ointment", "Paste", "Toothpaste"],
@@ -8412,7 +8412,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "\"The drink tastes like cold aple tea.\"",
+        "drink_message": "\"The drink tastes like cold apple tea.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -8924,7 +8924,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Cough.ogg",
-        "drink_message": "\"The liquid tastes like terrible and very bitter.\"",
+        "drink_message": "\"The liquid tastes terrible and very bitter.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -9108,7 +9108,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Nine-Tailed-Fox found Subject D-9341 unconscious at the [DATA REDACTED]. Six SCP-1610-2 and Subject D-9341 terminated. ",
+        "death_message": "Nine-Tailed-Fox found Subject D-9341 unconscious at the [DATA REDACTED]. Six SCP-1610-2 instances and Subject D-9341 were terminated.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -9456,7 +9456,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "\"Hey! I'm drank it in Russia!\"",
+        "drink_message": "\"Hey! I drank it in Russia!\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -9484,7 +9484,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "\"Hey! I'm drank this drink in Russia.\"",
+        "drink_message": "\"Hey! I drank this drink in Russia.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -10012,19 +10012,19 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Subject D-9341 was found unconscious at the [DATA REDACTED]. Subject terminated.",
+        "death_message": "Subject D-9341 was found unconscious at [DATA REDACTED]. Subject terminated.",
         "death_timer": 0.0,
         "explosion": false
     },
     {
-        "name": ["Who Is I am", "Who Is Im"],
+        "name": ["Who Am I", "Who I Am", "Lore", "Backstory"],
         "color": [200, 200, 200],
         "alpha": 0.5,
         "glow": false,
         "dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\1162_ARC\\NostalgiaCancer3.ogg",
-        "drink_message": "\"My name - Benjamin Oliver. I'm - former scientist. My clearance level - 4. But I though now Class-D.\"",
+        "drink_message": "\"My name - Benjamin Oliver. Occupation - Former scientist. My clearance level - 4. But now I'm Class-D.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -10220,7 +10220,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Burn.ogg",
-        "drink_message": "The liquid burn in your throat.",
+        "drink_message": "The liquid burns in your throat.",
         "stomachache": true,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -10676,7 +10676,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-        "drink_message": "\"The drink tastes like an veryv tasty average super energy drink.\"",
+        "drink_message": "\"The drink tastes like an very tasty average super energy drink.\"",
         "stomachache": false,
         "stamina_effect": 1.2,
         "stamina_timer": 400.0,
@@ -10944,7 +10944,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Subject D-9341 was found dead inside the [DATA REDACTED] with 10 scars up his neck, also an iPod 5 was located beside him. The iPod 5 had Flappy Bird on. He must of went crazy and killed him self.",
+        "death_message": "Subject D-9341 was found dead inside the [DATA REDACTED] with 10 scars up his neck, also an iPod 5 was located beside him. The iPod 5 had Flappy Bird on. He must of went crazy and killed himself.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -10972,7 +10972,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Nine Tailed Fox found subject D-9341 dead inside the [DATA REDACTED]. Tests shown that a Lego block was stuck in his wind tube. Leading to his death.",
+        "death_message": "Nine Tailed Fox found subject D-9341 dead inside the [DATA REDACTED]. Tests shown that a Lego block was stuck in his wind tube, leading to his death.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -11112,7 +11112,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Nine Tailed Fox found Subject D-9341 dead beside a puddle of radioactive liquids. No doubt cause of death was due to SCP-294.",
+        "death_message": "Nine Tailed Fox found Subject D-9341 dead beside a puddle of radioactive liquids. There is no doubt the cause of death was due to SCP-294.",
         "death_timer": 300.0,
         "explosion": false
     },
@@ -11199,5 +11199,41 @@
         "death_message": null,
         "death_timer": null,
         "explosion": false
-    }
+    },
+    {
+        "name": [“FEV”, “Forced Evolutionary Virus”, “Radioactive Goo”, “Mutant Juice”],
+        "color": [0, 255, 0],
+        "alpha": 1.0
+        "glow": true,
+        "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
+        "refuse_message": null,
+        "drink_sound": "SFX\\SCP\\294\\Spit.ogg",
+        "drink_message": “\”This drink tastes awful… What even is this stuff?\””
+        "stomachache": false,
+        "stamina_effect": null,
+        "stamina_timer": null,
+        "blink_effect": null,
+        "blink_timer": null,
+        "blur": 90.0
+        "damage": 0.0,
+        "vomit": 0.0,
+        "camera_shake": null
+        "bloodloss": 0.0,
+        "deaf_timer": 0.0
+        "infection": false,
+        "crystallization": false,
+        "mutation": true,
+        "revitalize": false,
+        "death_message": null
+        "death_timer": null
+        "explosion": false
+    },
+    {
+        “name": [“SCP-055”, “055”],
+        "color": [230, 230, 150],
+        "alpha": 0.1
+        "glow": false,
+        "dispense_sound": "SFX\\SCP\\294\\Dispense0.ogg",
+        "refuse_message": “\”Wait, didn’t I already drink this?\”” 
+   }
 ]
