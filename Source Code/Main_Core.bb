@@ -5456,7 +5456,7 @@ Function UpdateGUI%()
 				Case it_fine714, it_ring
 					;[Block]
 					If CanUseItem(True, True)
-						If SelectedItem\ItemTemplate\ID = "fine714"
+						If SelectedItem\ItemTemplate\ID = it_fine714
 							CreateMsg(GetLocalString("msg", "714.sleep"))
 							msg\DeathMsg = Format(GetLocalString("death", "ringsleep"), SubjectName)
 							Kill()
