@@ -1395,7 +1395,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-        "drink_message": "\"The drink has a boost, and taste faintly hot with a hint of cinnamon.\"",
+        "drink_message": "\"The drink has a boost, and tastes faintly hot with a hint of cinnamon.\"",
         "stomachache": false,
         "stamina_effect": 1.2,
         "stamina_timer": 200.0,
@@ -1507,7 +1507,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "\"The drink tastes like a blueberries.\"",
+        "drink_message": "\"The drink tastes like blueberries.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -1815,7 +1815,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Burn.ogg",
-        "drink_message": "You didn't think Biotic Powers were real? Right?",
+        "drink_message": "You didn't think Biotic powers were real? Right?",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -1951,7 +1951,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Subject D-9341 found dead in the [DATA REDACTED]. The subject died of multiple gunshot wounds cal. 5, 7, while his clothes were intact.",
+        "death_message": "Subject D-9341 found dead in the [DATA REDACTED]. The subject died of multiple gunshot wounds from 5mm and 7mm calliber bullets while his clothes were intact.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -2055,7 +2055,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "\"The drink tastes like a between a gin & tonic, Margarita, and Scotch whiskey.\"",
+        "drink_message": "\"The drink tastes like a mixture between a gin & tonic, margarita, and Scotch whiskey.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -2163,7 +2163,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "Nine-Tailed Fox discovered the body of D-9341 near the [DATA REDACTED] at Sector [DATAREDACTED]. Tests concluded that the cause of death was cardiac arrest, presumably related to SCP-294.",
+        "death_message": "Nine-Tailed Fox discovered the body of D-9341 near the [DATA REDACTED] at Sector [DATA REDACTED]. Tests concluded that the cause of death was cardiac arrest, presumably related to SCP-294.",
         "death_timer": 2,
         "explosion": false
     },
@@ -3664,7 +3664,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Cough.ogg",
-        "drink_message": "\"Mind! WHY THE FUCK WOULD I DRINK IS?\"",
+        "drink_message": "\"Mind! WHY THE FUCK WOULD I DRINK THIS?\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -4620,7 +4620,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "A portion of the facility was transformed into some form of grey Colored goo-like substance before being demagnetized. Further analysis is being done.",
+        "death_message": "A portion of the facility was transformed into some form of grey colored goo-like substance before being demagnetized. Further analysis is being done.",
         "death_timer": 0.0,
         "explosion": false
     },
@@ -4884,7 +4884,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "\"Cheer's mate.\"",
+        "drink_message": "\"Cheers mate.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -6238,7 +6238,7 @@
         "alpha": 1.0,
         "glow": false,
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
-        "refuse_message": "\"Smells like coins and bullets. No way, I'm drinking it.\""
+        "refuse_message": "\"Smells like coins and bullets. No way, I'm not drinking it.\""
     },
     {
         "name": ["Toilet Water", "Cologne"],
@@ -7020,7 +7020,7 @@
         "crystallization": false,
         "mutation": false,
         "revitalize": false,
-        "death_message": "A class-D commited sucuide in a similar manner to those killed by SCP-012.",
+        "death_message": "A class-D commited suicide in a similar manner to those killed by SCP-012.",
         "death_timer": 25.0,
         "explosion": false
     },
@@ -7228,7 +7228,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\Ending\\GateA\\Bell0.ogg",
-        "drink_message": "You hear the Sound of music inside your head.",
+        "drink_message": "You hear the sound of music inside your head.",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -7312,7 +7312,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-        "drink_message": "This drink gives you the strength to continue on your journey to escape the SCP facility",
+        "drink_message": "This drink gives you the strength to continue on your journey to escape the SCP facility.",
         "stomachache": false,
         "stamina_effect": 0.3,
         "stamina_timer": 555.0,
@@ -7340,7 +7340,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\008\\KillScientist1.ogg",
-        "drink_message": "\"Very taste choco... Oh shit! Who eats me?!...\"",
+        "drink_message": "\"Very tasty choco... Oh shit! Who's eating me?!...\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -7613,7 +7613,7 @@
         "explosion": false
     },
     {
-        "name": ["Story Of My Live", "Story Of My Life", "My Life Story", "My Live Story"],
+        "name": ["Biography", "Story Of My Life", "My Life Story", "My Life's Story", "Autobiography"],
         "color": [100, 100, 100],
         "alpha": 1.0,
         "glow": true,
@@ -8265,7 +8265,7 @@
         "explosion": false
     },
     {
-        "name": ["Apendicitis", "Stomach Ache"],
+        "name": ["Appendicitis", "Stomach Ache"],
         "color": [84, 39, 39],
         "alpha": 1.0,
         "glow": false,
@@ -8293,7 +8293,7 @@
         "explosion": false
     },
     {
-        "name": ["Juice", "Apple Juice", "Grape Juice", "Apple-grape Juice", "Grape-apple Juice", "Apple Jelly", "Apple Cocktail", "Apple Caramel", "Apple Jam", "Plum Jam", "Apple Lemonade", "Plum Lemonade", "Pear Juice", "Pear-apple Juice", "Apple-pear Juice", "Grape-pear Juice", "Pear-grape Juice"],
+        "name": ["Juice", "Apple Juice", "Grape Juice", "Apple-Grape Juice", "Grape-Apple Juice", "Apple Jelly", "Apple Cocktail", "Apple Caramel", "Apple Jam", "Plum Jam", "Apple Lemonade", "Plum Lemonade", "Pear Juice", "Pear-Apple Juice", "Apple-Pear Juice", "Grape-Pear Juice", "Pear-Grape Juice"],
         "color": [254, 219, 93],
         "alpha": 0.5,
         "glow": false,
@@ -8433,7 +8433,7 @@
         "explosion": false
     },
     {
-        "name": ["Food From My Stomach", "Liquid From My Stomach", "Drink From My Stomach", "Foods From My Stomach", "Liquids From My stomach", "Drinks From My Stomach", "Food Out Of My Stomach", "Liquid Out Of My Stomach", "Drink Out Of My Stomach", "Foods Out Of My Stomach", "Liquids Out Of My Stomach", "Drinks Out Of My Stomach", "Food From My Intestines", "Liquid From My Intestines", "Drink From My Intestines", "Foods From My Intestines", "Liquids From My Intestines", "Drinks From My Intestines", "Food Out Of My Intestines", "Liquid Out Of My Intestines", "Drink Out Of My Intestines", "Foods Out Of My Intestines", "Liquids Out Of My Intestines", "Drinks Out Of My Intestines"],
+        "name": ["Food From My Stomach", "Liquid From My Stomach", "Drink From My Stomach", "Foods From My Stomach", "Liquids From My Stomach", "Drinks From My Stomach", "Food Out Of My Stomach", "Liquid Out Of My Stomach", "Drink Out Of My Stomach", "Foods Out Of My Stomach", "Liquids Out Of My Stomach", "Drinks Out Of My Stomach", "Food From My Intestines", "Liquid From My Intestines", "Drink From My Intestines", "Foods From My Intestines", "Liquids From My Intestines", "Drinks From My Intestines", "Food Out Of My Intestines", "Liquid Out Of My Intestines", "Drink Out Of My Intestines", "Foods Out Of My Intestines", "Liquids Out Of My Intestines", "Drinks Out Of My Intestines"],
         "color": [170, 150, 100],
         "alpha": 1.0,
         "glow": false,
@@ -8461,7 +8461,7 @@
         "explosion": false
     },
     {
-        "name": ["Apple Milk Cocktail", "Apple Puding", "Apple Yoghurt"],
+        "name": ["Apple Milk Cocktail", "Apple Pudding", "Apple Yoghurt"],
         "color": [254, 219, 93],
         "alpha": 1.0,
         "glow": false,
@@ -8517,7 +8517,7 @@
         "explosion": false
     },
     {
-        "name": ["Apple Gin With Tonic", "Apple Gin And Tonic", "Apple Gin-Tonic", "Apple Tonic", "Apple-grape Gin With Tonic", "Apple-grape Gin And Tonic", "Apple-grape Gin-Tonic", "Apple-grape Tonic", "Grape-apple Gin With Tonic", "Grape-Apple Gin And Tonic", "Grape-Apple Gin-Tonic", "Grape-Apple Tonic", "Grape Gin With Tonic", "Grape Gin And Tonic", "Grape Gin-Tonic", "Grape Tonic"],
+        "name": ["Apple Gin With Tonic", "Apple Gin And Tonic", "Apple Gin-Tonic", "Apple Tonic", "Apple-Grape Gin With Tonic", "Apple-Grape Gin And Tonic", "Apple-Grape Gin-Tonic", "Apple-Grape Tonic", "Grape-Apple Gin With Tonic", "Grape-Apple Gin And Tonic", "Grape-Apple Gin-Tonic", "Grape-Apple Tonic", "Grape Gin With Tonic", "Grape Gin And Tonic", "Grape Gin-Tonic", "Grape Tonic"],
         "color": [254, 219, 93],
         "alpha": 0.2,
         "glow": false,
@@ -9393,7 +9393,7 @@
         "explosion": false
     },
     {
-        "name": ["Apple Braga", "Apple Brew Drink", "Apple Brewing Drink", "Pear Braga", "Grape Braga", "Grape-apple Braga", "Apple-grape Braga", "Pear Brew Drink", "Grape Brew Drink", "Grape-apple Brew Drink", "Apple-grape Brew Drink", "Pear Brewing Drink", "Grape Brewing Drink", "Grape-apple Brewing Drink", "Apple-grape Brewing Drink", "Pear-Grape Braga", "Pear-Grape Brew Drink", "Pear-grape Brewing Drink", "Grape-pear Brewing Drink", "Grape-pear Brew Drink", "Grape-pear Braga"],
+        "name": ["Apple Braga", "Apple Brew Drink", "Apple Brewing Drink", "Pear Braga", "Grape Braga", "Grape-Apple Braga", "Apple-Grape Braga", "Pear Brew Drink", "Grape Brew Drink", "Grape-Apple Brew Drink", "Apple-Grape Brew Drink", "Pear Brewing Drink", "Grape Brewing Drink", "Grape-Apple Brewing Drink", "Apple-Grape Brewing Drink", "Pear-Grape Braga", "Pear-Grape Brew Drink", "Pear-Grape Brewing Drink", "Grape-Pear Brewing Drink", "Grape-Pear Brew Drink", "Grape-Pear Braga"],
         "color": [240, 190, 50],
         "alpha": 0.8,
         "glow": false,
@@ -9421,7 +9421,7 @@
         "explosion": false
     },
     {
-        "name": ["Grape Yoghurt", "Grape Milk Cocktail", "Grape Puding", "Grape Milk Cocktail"],
+        "name": ["Grape Yoghurt", "Grape Milk Cocktail", "Grape Pudding", "Grape Milk Cocktail"],
         "color": [174, 45, 223],
         "alpha": 1.0,
         "glow": false,
@@ -9884,7 +9884,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\1162_ARC\\NostalgiaCancer3.ogg",
-        "drink_message": "\"My name - Benjamin Oliver. Occupation - Former scientist. My clearance level - 4. But now I'm Class-D.\"",
+        "drink_message": "\"My name - Benjamin Oliver Walker. Occupation - Former scientist. My clearance level - 4. But now I'm Class-D.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -10101,7 +10101,7 @@
         "explosion": false
     },
     {
-        "name": ["Common Life", "Routine Life", "Common Live", "Routine Live"],
+        "name": ["Common Life", "Routine Life", "Common Lives", "Routine Lives"],
         "color": [340, 29, 94],
         "alpha": 1.0,
         "glow": false,
@@ -10333,7 +10333,7 @@
         "explosion": false
     },
     {
-        "name": ["Orange Paint For hairs", "Orange Ink"],
+        "name": ["Orange Paint For Hairs", "Orange Ink"],
         "color": [240, 175, 70],
         "alpha": 1.0,
         "glow": false,
@@ -10536,7 +10536,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-        "drink_message": "\"The drink tastes like an very tasty average super energy drink.\"",
+        "drink_message": "\"The drink tastes like a very tasty average super energy drink.\"",
         "stomachache": false,
         "stamina_effect": 1.2,
         "stamina_timer": 400.0,
@@ -10788,7 +10788,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Burn.ogg",
-        "drink_message": "\"No, No, No, I can't take it anymore!\"",
+        "drink_message": "\"No, no, no! I can't take it anymore!\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
