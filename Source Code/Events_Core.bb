@@ -2289,11 +2289,12 @@ Function UpdateEvents%()
 											If n\NPCType = NPCType049_2 Then n\IsDead = True
 										Next
 										
-										n.NPCs = CreateNPC(NPCTypeMTF, EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True) + 0.2, EntityZ(e\room\Objects[5], True))
+										TFormPoint(64.0, -3388.8, 1000.0, e\room\OBJ, 0)
+										n.NPCs = CreateNPC(NPCTypeMTF, TFormedX(), TFormedY(), TFormedZ())
 										n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0
 										e\room\NPC[1] = n
 										
-										PositionEntity(me\Collider, EntityX(e\room\OBJ, True), e\room\y - (3440.0 * RoomScale) + 0.2, EntityZ(e\room\OBJ, True))
+										PositionEntity(me\Collider, EntityX(e\room\OBJ, True), e\room\y - (3388.8 * RoomScale), EntityZ(e\room\OBJ, True))
 										ResetEntity(me\Collider)
 										PointEntity(me\Collider, e\room\NPC[1]\Collider)
 										
