@@ -11201,39 +11201,39 @@
         "explosion": false
     },
     {
-        "name": [“FEV”, “Forced Evolutionary Virus”, “Radioactive Goo”, “Mutant Juice”],
+        "name": ["FEV", "Forced Evolutionary Virus", "Radioactive Goo", "Mutant Juice"],
         "color": [0, 255, 0],
-        "alpha": 1.0
+        "alpha": 1.0,
         "glow": true,
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Spit.ogg",
-        "drink_message": “\”This drink tastes awful… What even is this stuff?\””
+        "drink_message": "\"This drink tastes awful... What even is this stuff?\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
         "blink_effect": null,
         "blink_timer": null,
-        "blur": 90.0
+        "blur": 90.0,
         "damage": 0.0,
         "vomit": 0.0,
-        "camera_shake": null
+        "camera_shake": null,
         "bloodloss": 0.0,
-        "deaf_timer": 0.0
+        "deaf_timer": 0.0,
         "infection": false,
         "crystallization": false,
         "mutation": true,
         "revitalize": false,
-        "death_message": null
-        "death_timer": null
+        "death_message": null,
+        "death_timer": null,
         "explosion": false
     },
     {
-        “name": [“SCP-055”, “055”],
+        "name": ["SCP-055", "055"],
         "color": [230, 230, 150],
-        "alpha": 0.1
+        "alpha": 0.1,
         "glow": false,
         "dispense_sound": "SFX\\SCP\\294\\Dispense0.ogg",
-        "refuse_message": “\”Wait, didn’t I already drink this?\”” 
+        "refuse_message": "\"Wait, didn’t I already drink this?\"" 
    }
 ]
