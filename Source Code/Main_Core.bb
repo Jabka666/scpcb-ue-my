@@ -8610,7 +8610,7 @@ End Type
 Global I_008.SCP008
 
 Function Update008%()
-	Local r.Rooms, e.Events, p.Particles, de.Decals
+	Local r.Rooms, e.Events, dem.DevilEmitters, de.Decals
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect%
 	Local SinValue#
@@ -8728,11 +8728,7 @@ Function Update008%()
 					EndIf
 					
 					If opt\ParticleAmount > 0
-						If Rand(50) = 1
-							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), Rnd(0.05, 0.1), 0.15, 200.0)
-							p\Speed = 0.01 : p\SizeChange = 0.01 : p\Alpha = 0.5 : p\AlphaChange = -0.01
-							RotateEntity(p\Pvt, Rnd(360.0), Rnd(360.0), 0.0)
-						EndIf
+						If Rand(25) = 1 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 15)
 					EndIf
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
@@ -9470,6 +9466,7 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	FreeEntity(Pvt) : Pvt = 0
 	ResetEntity(Entity)
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

@@ -6473,6 +6473,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							If EntityDistanceSquared(me\Collider, n\Collider) < PowTwo(opt\CameraFogFar) Then LightVolume = TempLightVolume * 1.2
 							
 							dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
+							dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider), 15)
 							
 							FreeEntity(Pvt) : Pvt = 0
 							
@@ -6920,8 +6921,10 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 				;[End Block]
 		End Select
 		
+		Local MsgRand% = Rand(17)
+		
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
-		Select Rand(17)
+		Select MsgRand
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
 				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - Rnd(5.0)
@@ -6979,6 +6982,8 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 		End Select
 		If msg\Timer < 70.0 * 5.0 Then CreateMsg(ShotMessageUpdate)
 		If me\Injuries >= 6.0 Then Kill(True)
+		
+		If MsgRand > 10 And MsgRand < 16 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 15)
 		
 		PlaySound_Strict(BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0

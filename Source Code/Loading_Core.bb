@@ -309,6 +309,18 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[14], 0.04, 0.04, 1.0, 1.2)
 	SetTemplateSizeVel(ParticleEffect[14], 0.001, 1.0)
 	SetTemplateAlphaVel(ParticleEffect[14], True)
+	
+	; ~ A simple blood sprite
+	ParticleEffect[15] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[15], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[15], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[15], 110, 120)
+	SetTemplateTexture(ParticleEffect[15], PARTICLE_BLOOD)
+	SetTemplateOffset(ParticleEffect[15], -0.1, 0.1, 0.1, 0.6, -0.1, 0.1)
+	SetTemplateVelocity(ParticleEffect[15], -0.015, 0.015, 0.015, 0.02, -0.015, 0.015)
+	SetTemplateSize(ParticleEffect[15], 0.01, 0.01, 1.0, 2.0)
+	SetTemplateAlphaVel(ParticleEffect[15], True)
+	SetTemplateGravity(ParticleEffect[15], 0.0022)
 End Function
 
 Function RemoveParticleInstances%()
