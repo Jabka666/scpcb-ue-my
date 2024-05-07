@@ -35,6 +35,7 @@ Type NPCs
 	Field MaxGravity#
 	Field IsDead%
 	Field BlinkTimer# = 1.0
+	;Field IgnorePlayer%
 	Field ManipulateBone%, ManipulationType%
 	Field BoneToManipulate$
 	Field BonePitch#, BoneYaw#, BoneRoll#
@@ -3780,7 +3781,7 @@ Function UpdateNPCs%()
 							;[End Block]
 					End Select
 					
-					If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+					If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
 						Dist = EntityDistanceSquared(n\Collider, me\Collider) - (EntityVisible(me\Collider, n\Collider) * 1.4641)
 						If PowTwo(me\SndVolume * 1.2) > Dist Lor Dist < 2.25
 							If n\State3 = 0.0
