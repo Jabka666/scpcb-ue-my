@@ -8822,12 +8822,16 @@ Function Update409%()
 		Else
 			If I_409\Timer > 40.0 And PrevI409Timer <= 40.0
 				CreateMsg(GetLocalString("msg", "409legs_2"))
+				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
 			ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
 				CreateMsg(GetLocalString("msg", "409abdomen_2"))
+				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
 			ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
 				CreateMsg(GetLocalString("msg", "409arms_2"))
+				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
 			ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
 				CreateMsg(GetLocalString("msg", "409head_2"))
+				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling1.ogg"))
 			ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
 				If (Not I_409\Revert)
 					PlaySound_Strict(DamageSFX[13], True)
