@@ -1644,19 +1644,19 @@
 		}
 	],
 	/* NAZI */
-	"SFX\\SCP\\1123\\Officer1.ogg": [
+	"SFX\\SCP\\1123\\Officer0.ogg": [
 		{
 			"text": "Friedhelm, come.",
 			"color": "nazi"
 		}
 	],
-	"SFX\\SCP\\1123\\Officer2.ogg": [
+	"SFX\\SCP\\1123\\Officer1.ogg": [
 		{
 			"text": "Come on, now!",
 			"color": "nazi"
 		}
 	],
-	"SFX\\SCP\\1123\\Officer3.ogg": [
+	"SFX\\SCP\\1123\\Officer2.ogg": [
 		{
 			"text": "I had this feeling from the beginning.",
 			"color": "nazi"
