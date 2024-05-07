@@ -1875,10 +1875,14 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					If I_008\Timer >= 92.7
 						If EntityHidden(e\room\Objects[10]) Then ShowEntity(e\room\Objects[10])
+						
+						ShouldPlay = 31
 					Else
 						If (Not EntityHidden(e\room\Objects[10])) Then HideEntity(e\room\Objects[10])
 					EndIf
 					If EntityY(me\Collider) < (-4496.0) * RoomScale
+						ShouldPlay = 30
+						
 						GiveAchievement(Achv008)
 						If e\EventState = 0.0
 							If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > 36.0 ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
