@@ -434,7 +434,10 @@ Function RemoveItem%(i.Items)
 		EndIf
 	Next
 	
-	If SelectedItem = i Then SelectedItem = Null
+	If SelectedItem = i
+		ItemAmount = ItemAmount - 1
+		SelectedItem = Null
+	EndIf
 	
 	If i\ItemTemplate\Img <> 0 Then FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
 	Delete(i)

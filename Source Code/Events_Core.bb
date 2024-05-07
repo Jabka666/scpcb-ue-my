@@ -3440,12 +3440,8 @@ Function UpdateEvents%()
 							GiveAchievement(Achv458)
 							CreateMsg(GetLocalString("msg", "458"))
 							it.Items = CreateItem("Pizza Slice", it_pizza, 1.0, 1.0, 1.0)
-							it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-							Inventory(ItemAmount) = it
-							HideEntity(it\Collider)
 							EntityType(it\Collider, HIT_ITEM)
-							EntityParent(it\Collider, 0)
-							ItemAmount = ItemAmount + 1
+							PickItem(it)
 						Else
 							CreateMsg(GetLocalString("msg", "cantcarry"))
 						EndIf
