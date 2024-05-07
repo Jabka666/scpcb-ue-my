@@ -5743,6 +5743,7 @@ Function UpdateEvents%()
 							Else
 								For i = 0 To 1
 									UpdateLever(e\room\RoomLevers[i]\OBJ, True)
+									If EntityPitch(e\room\RoomLevers[i]\OBJ, True) >= 0.0 Then RotateEntity(e\room\RoomLevers[i]\OBJ, -80.0, EntityYaw(e\room\RoomLevers[i]\OBJ), 0.0)
 								Next
 							EndIf
 							
