@@ -2319,6 +2319,12 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 						EndIf
+						UpdateButton(e\room\Objects[5])
+						If d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1
+							CreateMsg(GetLocalString("msg", "button.nothappend"))
+							PlaySound2(ButtonSFX[1], Camera, e\room\Objects[5])
+							mo\MouseHit1 = False
+						EndIf
 					EndIf
 				EndIf
 				;[End Block]

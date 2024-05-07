@@ -2669,6 +2669,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[4], r\x - 832.0 * RoomScale, r\y - 3484.0 * RoomScale, r\z + 1572.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
 			
+			; ~ Water sprinklers
+			r\Objects[5] = CreateButton(BUTTON_DEFAULT, r\x - 314.0 * RoomScale, r\y - 3368.0 * RoomScale, r\z - 612.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
+			EntityParent(r\Objects[5], r\OBJ)
+			
 			it.Items = CreateItem("Document SCP-049", it_paper, r\x - 693.0 * RoomScale, r\y - 3332.0 * RoomScale, r\z + 702.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
