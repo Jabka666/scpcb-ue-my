@@ -2463,7 +2463,8 @@ Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% 
 End Function
 
 Function RefillCup%()
-	Local p.Props
+	Local p.Props, it.Items
+	Local i%
 	
 	For p.Props = Each Props
 		If p\Name = "GFX\Map\Props\water_cooler.b3d"
@@ -9242,7 +9243,7 @@ Function Update294%()
 					Glow = JsonGetBool(JsonGetValue(Drink, "glow"))
 					If Glow Then Alpha = -Alpha
 					
-					it.Items = CreateItem("Cup", it_cup, EntityX(PlayerRoom\Objects[1], True), EntityY(PlayerRoom\Objects[1], True), EntityZ(PlayerRoom\Objects[1], True), R, G, B, Alpha)
+					it.Items = CreateItem("Cup", it_cup, EntityX(PlayerRoom\Objects[2], True), EntityY(PlayerRoom\Objects[2], True), EntityZ(PlayerRoom\Objects[2], True), R, G, B, Alpha)
 					it\Name = Drink
 					it\DisplayName = Format(GetLocalString("items", "cupof"), I_294\ToInput)
 					EntityType(it\Collider, HIT_ITEM)
