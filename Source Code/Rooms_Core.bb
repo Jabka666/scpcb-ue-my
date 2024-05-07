@@ -902,7 +902,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 49.0 * RoomScale, r\y + 689.0 * RoomScale, r\z + 913.0 * RoomScale, 0.0, True)
 			
-			Scale = RoomScale * 4.5 * 0.4
+			Scale = RoomScale * 1.8
 			
 			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
 			r\Textures[1] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors.png", 1, 512, 512, 0, 10, DeleteAllTextures)
@@ -916,7 +916,7 @@ Function FillRoom%(r.Rooms)
 						Screen = CreateSprite()
 						EntityFX(Screen, 17)
 						SpriteViewMode(Screen, 2)
-						ScaleSprite(Screen, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5)
+						ScaleSprite(Screen, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475)
 						Select i
 							Case 0
 								;[Block]
@@ -964,14 +964,14 @@ Function FillRoom%(r.Rooms)
 						r\Objects[18] = CreateSprite()
 						EntityFX(r\Objects[18], 17)
 						SpriteViewMode(r\Objects[18], 2)
-						ScaleSprite(r\Objects[18], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.95 * 0.5)
+						ScaleSprite(r\Objects[18], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.475)
 						EntityTexture(r\Objects[18], r\Textures[0], 2)
 						EntityParent(r\Objects[18], r\Objects[i])
 					Else
 						r\Objects[19] = CreateSprite()
 						EntityFX(r\Objects[19], 17)
 						SpriteViewMode(r\Objects[19], 2)
-						ScaleSprite(r\Objects[19], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.95 * 0.5, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.95 * 0.5)
+						ScaleSprite(r\Objects[19], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.475)
 						EntityTexture(r\Objects[19], r\Textures[1], 6)
 						EntityParent(r\Objects[19], r\Objects[i])
 					EndIf
