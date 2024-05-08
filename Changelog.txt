@@ -3,7 +3,6 @@ v1.3
 General:
 - Added new console commands: «roomlist» and «itemlist».
 - Added new hiss sound for white gas.
-- Can no longer save when «chs\superman» or «me\deathtimer» are active, or when nearly dying from bleeding out(«me\Bloodloss» > 65.0 and «me\injury» > 1.0).
 - Added viewable Omni Key Card chances to Debug Hud 3.
 - Add console text for «427state» command.
 - SCP-008 can now infect players not wearing a gas mask even if they are not bleeding.
@@ -23,6 +22,8 @@ Mechanics:
 - The game's gamma will be automatically changed while reading the document/ticket/badge and etc.
 - Improved gas emitters.
 - You can refill cups at water coolers.
+- Can no longer save when «chs\superman» or «me\deathtimer» are active, or when nearly dying from bleeding out(«me\Bloodloss» > 65.0 and «me\injury» > 1.0).
+- Monitors are now off while there is a blackout preventing you from saving on them.
 
 Rooms:
 - Added Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
