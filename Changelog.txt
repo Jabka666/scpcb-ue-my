@@ -8,6 +8,8 @@ General:
 - Add console text for «427state» command.
 - SCP-008 can now infect players not wearing a gas mask even if they are not bleeding.
 - Add SCP-458.
+- SCP-409 stages now have crackling sounds.
+- SCP-500 makes a new sound when used.
 
 - Optimized the game...
 
@@ -32,6 +34,9 @@ Rooms:
 - Changed SCP-372's room to a 3-way styled room.
 - Added a laboratory to SCP-008's chamber.
 - Inaccessible/broken panels are now red.
+- Levers in Storage Area 6 now share the same positions after usage.
+
+- New room ambience for SCP-008's chamber and cutscene.
 
 - The «room2_servers_hcz» entrance doors open sooner after SCP-096 kills the guard.
 - «cont2_860_1» observation room fingerprint scanners are now locked if Remote Door Control is on.
@@ -43,6 +48,7 @@ Items:
 - Minimum recharge range of 9V and 18V increased from 0% to 50%
 - Cups now have a short use timer.
 - Added pizza item.
+- New texture for SCP-1025.
 
 NPCs:
 - MTFs can contain SCP-106.
@@ -66,6 +72,7 @@ Bug Fixes:
 - Fixed many effects from SCP-294 not working.
 - Fixed inconsistent spawning of SCP-173 at SCP-008.
 - Fixed Apollyon not hiding the Hud when playing in different languages.
+- Multiple grammatical fixes for SCP-294's drinks.
 
 v1.2.1
 
