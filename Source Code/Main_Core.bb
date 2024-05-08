@@ -8673,8 +8673,10 @@ Function Update008%()
 									PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
 									ResetEntity(me\Collider)
 									r\NPC[0] = CreateNPC(NPCTypeD, EntityX(r\Objects[6], True), EntityY(r\Objects[6], True) + 0.2, EntityZ(r\Objects[6], True))
-									PlaySound_Strict(LoadTempSound("SFX\SCP\008\KillScientist0.ogg"), True)
+									r\NPC[0]\State = -1.0
+									SetNPCFrame(r\NPC[0], 357.0)
 									ChangeNPCTextureID(r\NPC[0], NPC_CLASS_D_VICTIM_008_TEXTURE)
+									PlaySound_Strict(LoadTempSound("SFX\SCP\008\KillScientist0.ogg"), True)
 									TeleportToRoom(r)
 									Exit
 								EndIf
