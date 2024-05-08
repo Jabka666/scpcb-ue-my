@@ -6628,15 +6628,15 @@ Function UpdateEvents%()
 									If e\room\RoomDevilEmitters[i] = Null
 										If e\room\RoomTemplate\RoomID = r_room3_gw
 											If i = 0
-												TFormPoint(-81.0, 416.0, 320.0, e\room\OBJ, 0)
+												TFormPoint(-81.0, 360.0, 320.0, e\room\OBJ, 0)
 											Else
-												TFormPoint(143, 416.0, 320.0, e\room\OBJ, 0)
+												TFormPoint(143, 360.0, 320.0, e\room\OBJ, 0)
 											EndIf
 										Else
 											If i = 0
-												TFormPoint(320, 416.0, -81.0, e\room\OBJ, 0)
+												TFormPoint(320, 360.0, -81.0, e\room\OBJ, 0)
 											Else
-												TFormPoint(320.0, 416.0, 143.0, e\room\OBJ, 0)
+												TFormPoint(320.0, 360.0, 143.0, e\room\OBJ, 0)
 											EndIf
 										EndIf
 										e\room\RoomDevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 2)

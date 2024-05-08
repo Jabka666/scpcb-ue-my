@@ -122,7 +122,7 @@ Function LoadParticles%()
 	
 	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures)
 	
-	; ~ Black smoke in "room2C_gw_lcz"/"room2_6_hcz"/"cont1_035"
+	; ~ Black smoke in "room2c_gw_lcz"/"room2_6_hcz"/"cont1_035"
 	ParticleEffect[0] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[0], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[0], -1)
@@ -151,16 +151,15 @@ Function LoadParticles%()
 	ParticleEffect[2] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[2], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[2], 70.0 * 3.0)
-	SetTemplateParticleLifeTime(ParticleEffect[2], 30, 45)
+	SetTemplateParticleLifeTime(ParticleEffect[2], 35, 40)
 	SetTemplateTexture(ParticleEffect[2], PARTICLE_WHITE_SMOKE)
-	SetTemplateOffset(ParticleEffect[2], -0.1, 0.1, -0.1, 0.1, -0.1, 0.1)
-	SetTemplateVelocity(ParticleEffect[2], -0.005, 0.005, 0.0, -0.03, -0.005, 0.005)
+	SetTemplateOffset(ParticleEffect[2], -0.2, 0.2, -0.1, 0.1, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[2], -0.015, 0.015, -0.04, -0.035, -0.015, 0.015)
 	SetTemplateAlphaVel(ParticleEffect[2], True)
-	SetTemplateSize(ParticleEffect[2], 0.4, 0.4, 0.5, 1.5)
+	SetTemplateSize(ParticleEffect[2], 0.5, 0.5, 1.0, 1.5)
 	SetTemplateSizeVel(ParticleEffect[2], 0.01, 1.01)
-	SetTemplateGravity(ParticleEffect[2], 0.005)
 	
-	; ~ Black smoke in "room2C_maintenance"/"room3_hcz"/"room4_hcz"/"room2_4_hcz"
+	; ~ Black smoke in "cont2c_096"/"room3_hcz"/"room4_hcz"/"room2_4_hcz"
 	ParticleEffect[3] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[3], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[3], -1)
@@ -310,7 +309,7 @@ Function LoadParticles%()
 	SetTemplateSizeVel(ParticleEffect[14], 0.001, 1.0)
 	SetTemplateAlphaVel(ParticleEffect[14], True)
 	
-	; ~ A simple blood sprite
+	; ~ Blood sprites fountain
 	ParticleEffect[15] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[15], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[15], 1)
