@@ -22,7 +22,7 @@ Mechanics:
 - The game's gamma will be automatically changed while reading the document/ticket/badge and etc.
 - Improved gas emitters.
 - You can refill cups at water coolers.
-- Can no longer save when «chs\superman» or «me\deathtimer» are active, or when nearly dying from bleeding out(«me\Bloodloss» > 65.0 and «me\injury» > 1.0).
+- Can no longer save when «chs\superman» or «me\deathtimer» are active, or when nearly dying from bleeding out(«me\Bloodloss» > 60.0 and «me\injury» > 1.0).
 - Monitors are now off while there is a blackout preventing you from saving on them.
 
 Rooms:
