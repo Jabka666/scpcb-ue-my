@@ -1097,7 +1097,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
 	fr\DetailMesh[1] = LoadMesh_Strict("GFX\Map\Props\rock.b3d")
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
-	fr\DetailMesh[3] = LoadRMesh("GFX\Map\cont2_860_1_wall.rmesh", Null, False)
+	fr\DetailMesh[3] = LoadRMesh("GFX\Map\cont2_860_1_wall.rmesh", Null)
 	
 	For i = 0 To 3
 		HideEntity(fr\DetailMesh[i])
@@ -1353,7 +1353,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
 	fr\DetailMesh[1] = LoadMesh_Strict("GFX\Map\Props\rock.b3d")
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
-	fr\DetailMesh[3] = LoadRMesh("GFX\Map\cont2_860_1_wall.rmesh", Null, False)
+	fr\DetailMesh[3] = LoadRMesh("GFX\Map\cont2_860_1_wall.rmesh", Null)
 	
 	For i = 0 To 3
 		HideEntity(fr\DetailMesh[i])
