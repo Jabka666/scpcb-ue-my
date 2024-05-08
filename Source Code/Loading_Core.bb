@@ -1252,7 +1252,7 @@ Global TempSounds%[10]
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Global Music$[32]
+Global Music$[33]
 
 Music[0] = "LightContainmentZone"
 Music[1] = "HeavyContainmentZone"
@@ -1286,6 +1286,7 @@ Music[28] = "MaintenanceTunnels"
 Music[29] = "1123Chamber"
 Music[30] = "008Chamber"
 Music[31] = "008Cutscene"
+Music[32] = "035PreChamber"
 
 Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)
