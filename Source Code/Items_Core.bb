@@ -430,14 +430,12 @@ Function RemoveItem%(i.Items)
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = i
 			Inventory(n) = Null
+			ItemAmount = ItemAmount - 1
 			Exit
 		EndIf
 	Next
 	
-	If SelectedItem = i
-		ItemAmount = ItemAmount - 1
-		SelectedItem = Null
-	EndIf
+	If SelectedItem = i Then SelectedItem = Null
 	
 	If i\ItemTemplate\Img <> 0 Then FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
 	Delete(i)
