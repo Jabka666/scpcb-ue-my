@@ -1723,20 +1723,20 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_scientists_2, r_room2_scientists_2, 0)
 	
-	CreateEvent(e_room2_2_lcz, r_room2_2_lcz, 0, 1.0)
+	CreateEvent(e_room2_2_lcz_fan, r_room2_2_lcz, 0, 1.0)
 	
 	CreateEvent(e_room2_elevator, r_room2_elevator, Rand(0, 1))
 	
 	CreateEvent(e_room3_storage, r_room3_storage, 0)
 	
 	CreateEvent(e_room2_6_hcz_smoke, r_room2_6_hcz, 0, 0.2)
-	CreateEvent(e_room2_6_hcz, r_room2_6_hcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_6_hcz_173, r_room2_6_hcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ SCP-173 appears in half of the r_room2_6_lcz-rooms
 	CreateEvent(e_173_appearing, r_room2_6_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The anomalous duck in r_room2_2_ez-rooms
-	CreateEvent(e_room2_2_ez, r_room2_2_ez, 0, 0.7)
+	CreateEvent(e_room2_2_ez_duck, r_room2_2_ez, 0, 0.7)
 	
 	CreateEvent(e_room2_closets, r_room2_closets, 0)
 	
@@ -1752,12 +1752,12 @@ Function LoadEvents%()
 	CreateEvent(e_173_appearing, r_room3_3_ez, 0)
 	
 	; ~ The dead guard
-	CreateEvent(e_room3_2_hcz, r_room3_2_hcz, 0, 0.1)
+	CreateEvent(e_room3_2_hcz_guard, r_room3_2_hcz, 0, 0.1)
 	
 	CreateEvent(e_room4_lcz_049, r_room4_lcz, 0)
 	
 	If Rand(5) < 5
-		Select Rand(3)
+		Select Rand(4)
 			Case 1
 				;[Block]
 				CreateEvent(e_682_roar, r_room2_5_hcz, Rand(0, 2))
@@ -1770,6 +1770,10 @@ Function LoadEvents%()
 				;[Block]
 				CreateEvent(e_682_roar, r_room2_5_ez, 0)
 				;[End Block]
+			Case 4
+				;[Block]
+				CreateEvent(e_682_roar, r_room4_ez, 0)
+				;[End Block]
 		End Select
 	EndIf
 	
@@ -1777,8 +1781,8 @@ Function LoadEvents%()
 	
 	CreateEvent(e_cont1_895, r_cont1_895, 0)
 	
-	CreateEvent(e_room2_checkpoint, r_room2_checkpoint_lcz_hcz, 0, 1.0)
-	CreateEvent(e_room2_checkpoint, r_room2_checkpoint_hcz_ez, 0, 1.0)
+	CreateEvent(e_checkpoint, r_room2_checkpoint_lcz_hcz, 0, 1.0)
+	CreateEvent(e_checkpoint, r_room2_checkpoint_hcz_ez, 0, 1.0)
 	
 	CreateEvent(e_door_closing, r_room3_lcz, 0, 0.1)
 	CreateEvent(e_door_closing, r_room3_2_hcz, 0, 0.1)
@@ -1808,8 +1812,8 @@ Function LoadEvents%()
 	
 	CreateEvent(e_cont1_914, r_cont1_914, 0)
 	
-	CreateEvent(e_butt_ghost, r_room2_6_ez, 0)
-	CreateEvent(e_toilet_guard, r_room2_6_ez, 1)
+	CreateEvent(e_room2_6_ez_789_j, r_room2_6_ez, 0)
+	CreateEvent(e_room2_6_ez_guard, r_room2_6_ez, 1)
 	
 	CreateEvent(e_room2_2_hcz_106, r_room2_2_hcz, Rand(0, 3))
 	
@@ -1835,11 +1839,11 @@ Function LoadEvents%()
 	
 	CreateEvent(e_cont2_1123, r_cont2_1123, 0)
 	
-	CreateEvent(e_room2_tesla, r_room2_tesla_lcz, 0, 1.0)
-	CreateEvent(e_room2_tesla, r_room2_tesla_hcz, 0, 1.0)
-	CreateEvent(e_room2_tesla, r_room2_tesla_ez, 0, 1.0)
+	CreateEvent(e_tesla, r_room2_tesla_lcz, 0, 1.0)
+	CreateEvent(e_tesla, r_room2_tesla_hcz, 0, 1.0)
+	CreateEvent(e_tesla, r_room2_tesla_ez, 0, 1.0)
 	
-	CreateEvent(e_room4_2_hcz, r_room4_2_hcz, 0)
+	CreateEvent(e_room4_2_hcz_d, r_room4_2_hcz, 0)
 	
 	CreateEvent(e_room2_gw_2, r_room2_gw_2, 0)
 	CreateEvent(e_gateway, r_room2_gw, 0, 1.0)

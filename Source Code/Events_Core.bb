@@ -14,74 +14,89 @@ Global skull_event.Events
 
 ; ~ Events ID Constants
 ;[Block]
-Const e_cont1_173% = 0, e_cont1_173_intro% = 1
-Const e_cont1_005% = 2
-Const e_cont1_079% = 3
-Const e_cont1_106% = 4
-Const e_cont1_205% = 5
-Const e_cont3_372% = 6
-Const e_cont1_895% = 7
-Const e_cont1_914% = 8
-Const e_cont2_008% = 9
-Const e_cont2_012% = 10
-Const e_cont2_049% = 11
-Const e_cont2_409% = 12
-Const e_cont2_500_1499% = 13
-Const e_cont2_860_1% = 14
+; ~ LCZ
+Const e_room1_dead_end_106% = 0
+Const e_cont1_005% = 1
+Const e_cont1_173% = 2, e_cont1_173_intro% = 3
+Const e_cont1_205% = 4
+Const e_cont1_914% = 5
+Const e_room2_2_lcz_fan% = 6
+Const e_room2_closets% = 7
+Const e_room2_elevator% = 8
+Const e_room2_gw_2% = 9
+Const e_room2_storage% = 10
+Const e_room2_sl% = 11
+Const e_room2_test_lcz_173% = 12
+Const e_cont2_012% = 13
+Const e_cont2_500_1499% = 14
 Const e_cont2_1123% = 15
-Const e_cont2c_066_1162_arc% = 17
-Const e_cont1_035% = 18
-Const e_cont3_966% = 19
-Const e_room1_dead_end_106% = 20
-Const e_room1_dead_end_guard% = 73
-Const e_trick% = 21
-Const e_1048_a% = 22
-Const e_682_roar% = 23
-Const e_butt_ghost% = 24, e_toilet_guard% = 25
-Const e_173_appearing% = 26
-Const e_room2_checkpoint% = 27
-Const e_room2_cafeteria% = 28
-Const e_room2_closets% = 29
-Const e_room2c_ec% = 30
-Const e_room2c_gw_ez_096% = 31
-Const e_room2_elevator% = 32
-Const e_room2_ic% = 33
-Const e_room2_2_lcz% = 34
-Const e_room2_nuke% = 35
-Const e_room2_2_ez% = 36, e_room2_ez_035% = 37
-Const e_room2_medibay% = 38
-Const e_room2_shaft% = 39
-Const e_room2_tesla% = 40
-Const e_room2_mt% = 41
-Const e_room2_scientists_2% = 42
-Const e_room2_servers_hcz% = 43
-Const e_room2_storage% = 44
-Const e_room2_2_hcz_106% = 45
-Const e_room2_4_hcz_106% = 46
-Const e_room2_5_hcz_106% = 47
-Const e_room2_6_hcz_smoke% = 48, e_room2_6_hcz% = 49
-Const e_room2_test_hcz% = 50, e_room2_test_lcz_173% = 51
-Const e_room2_gw_2% = 52, e_gateway% = 53
-Const e_room2_sl% = 54
-Const e_door_closing% = 55
-Const e_room3_storage% = 56
-Const e_room3_2_hcz% = 57
-Const e_room3_hcz_duck% = 58, e_room3_hcz_1048% = 59
-Const e_room3_2_ez_duck% = 60
+Const e_cont2c_066_1162_arc% = 16
+Const e_room3_storage% = 17
+Const e_cont3_372% = 18
+Const e_room4_lcz_049% = 19
+Const e_room4_ic% = 20
+; ~ HCZ
+Const e_cont1_035% = 21
+Const e_cont1_079% = 22
+Const e_cont1_106% = 23
+Const e_cont1_895% = 24
+Const e_room2_2_hcz_106% = 25
+Const e_room2_4_hcz_106% = 26
+Const e_room2_5_hcz_106% = 27
+Const e_room2_6_hcz_smoke% = 28, e_room2_6_hcz_173% = 29
+Const e_room2_mt% = 30
+Const e_room2_nuke% = 31
+Const e_room2_servers_hcz% = 32
+Const e_room2_shaft% = 33
+Const e_room2_test_hcz% = 34
+Const e_cont2_008% = 35
+Const e_cont2_049% = 36
+Const e_cont2_409% = 37
+Const e_room3_hcz_duck% = 38, e_room3_hcz_1048% = 39
+Const e_room3_2_hcz_guard% = 40
+Const e_cont3_966% = 41
+Const e_room4_2_hcz_d% = 42
+; ~ EZ
+Const e_gate_b_entrance% = 43, e_gate_b% = 44
+Const e_gate_a_entrance% = 45, e_gate_a% = 46
+Const e_room1_dead_end_guard% = 47
+Const e_room2_ez_035% = 48
+Const e_room2_2_ez_duck% = 49
+Const e_room2_6_ez_789_j% = 50, e_room2_6_ez_guard% = 51
+Const e_room2_cafeteria% = 52
+Const e_room2_ic% = 53
+Const e_room2_medibay% = 54
+Const e_room2_scientists_2% = 55
+Const e_cont2_860_1% = 56
+Const e_room2c_ec% = 57
+Const e_room2c_gw_ez_096% = 58
+Const e_room3_2_ez_duck% = 59
+; ~ OTHERS
+Const e_096_spawn% = 60
 Const e_106_victim% = 61
 Const e_106_sinkhole% = 62
-Const e_room4_2_hcz% = 63
-Const e_096_spawn% = 64
-Const e_room4_ic% = 65
-Const e_room4_lcz_049% = 66
-Const e_dimension_106% = 67, e_dimension_1499% = 68
-Const e_gate_b_entrance% = 69, e_gate_b% = 70
-Const e_gate_a_entrance% = 71, e_gate_a% = 72
+Const e_173_appearing% = 63
+Const e_682_roar% = 64
+Const e_1048_a% = 65
+Const e_checkpoint% = 66
+Const e_door_closing% = 67
+Const e_gateway% = 68
+Const e_tesla% = 69
+Const e_trick% = 70
+Const e_dimension_106% = 71, e_dimension_1499% = 72
 ;[End Block]
 
 ; ~ For Map Creator
 Function FindEventID%(EventName$)
 	Select Lower(EventName)
+		Case "room1_dead_end_106"
+			;[Block]
+			Return(e_room1_dead_end_106)
+			;[End Block]
+		Case "cont1_005"
+			;[Block]
+			Return(e_cont1_005)
+			;[End Block]
 		Case "cont1_173"
 			;[Block]
 			Return(e_cont1_173)
@@ -90,57 +105,49 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont1_173_intro)
 			;[End Block]
-		Case "cont1_005"
-			;[Block]
-			Return(e_cont1_005)
-			;[End Block]
-		Case "cont1_079"
-			;[Block]
-			Return(e_cont1_079)
-			;[End Block]
-		Case "cont1_106"
-			;[Block]
-			Return(e_cont1_106)
-			;[End Block]
 		Case "cont1_205"
 			;[Block]
 			Return(e_cont1_205)
-			;[End Block]
-		Case "cont3_372"
-			;[Block]
-			Return(e_cont3_372)
-			;[End Block]
-		Case "cont1_895"
-			;[Block]
-			Return(e_cont1_895)
 			;[End Block]
 		Case "cont1_914"
 			;[Block]
 			Return(e_cont1_914)
 			;[End Block]
-		Case "cont2_008"
+		Case "room2_2_lcz_fan"
 			;[Block]
-			Return(e_cont2_008)
+			Return(e_room2_2_lcz_fan)
+			;[End Block]
+		Case "room2_gw_2"
+			;[Block]
+			Return(e_room2_gw_2)
+			;[End Block]
+		Case "room2_closets"
+			;[Block]
+			Return(e_room2_closets)
+			;[End Block]
+		Case "room2_elevator"
+			;[Block]
+			Return(e_room2_elevator)
+			;[End Block]
+		Case "room2_sl"
+			;[Block]
+			Return(e_room2_sl)
+			;[End Block]
+		Case "room2_storage"
+			;[Block]
+			Return(e_room2_storage)
+			;[End Block]
+		Case "room2_test_lcz_173"
+			;[Block]
+			Return(e_room2_test_lcz_173)
 			;[End Block]
 		Case "cont2_012"
 			;[Block]
 			Return(e_cont2_012)
 			;[End Block]
-		Case "cont2_049"
-			;[Block]
-			Return(e_cont2_049)
-			;[End Block]
-		Case "cont2_409"
-			;[Block]
-			Return(e_cont2_409)
-			;[End Block]
 		Case "cont2_500_1499"
 			;[Block]
 			Return(e_cont2_500_1499)
-			;[End Block]
-		Case "cont2_860_1"
-			;[Block]
-			Return(e_cont2_860_1)
 			;[End Block]
 		Case "cont2_1123"
 			;[Block]
@@ -150,117 +157,37 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont2c_066_1162_arc)
 			;[End Block]
+		Case "room3_storage"
+			;[Block]
+			Return(e_room3_storage)
+			;[End Block]
+		Case "cont3_372"
+			;[Block]
+			Return(e_cont3_372)
+			;[End Block]
+		Case "room4_lcz_049"
+			;[Block]
+			Return(e_room4_lcz_049)
+			;[End Block]
+		Case "room4_ic"
+			;[Block]
+			Return(e_room4_ic)
+			;[End Block]
 		Case "cont1_035"
 			;[Block]
 			Return(e_cont1_035)
 			;[End Block]
-		Case "cont3_966"
+		Case "cont1_079"
 			;[Block]
-			Return(e_cont3_966)
+			Return(e_cont1_079)
 			;[End Block]
-		Case "room1_dead_end_106"
+		Case "cont1_106"
 			;[Block]
-			Return(e_room1_dead_end_106)
+			Return(e_cont1_106)
 			;[End Block]
-		Case "room1_dead_end_guard"
+		Case "cont1_895"
 			;[Block]
-			Return(e_room1_dead_end_guard)
-			;[End Block]
-		Case "trick"
-			;[Block]
-			Return(e_trick)
-			;[End Block]
-		Case "1048_a"
-			;[Block]
-			Return(e_1048_a)
-			;[End Block]
-		Case "682_roar"
-			;[Block]
-			Return(e_682_roar)
-			;[End Block]
-		Case "butt_ghost"
-			;[Block]
-			Return(e_butt_ghost)
-			;[End Block]
-		Case "toilet_guard"
-			;[Block]
-			Return(e_toilet_guard)
-			;[End Block]
-		Case "173_appearing"
-			;[Block]
-			Return(e_173_appearing)
-			;[End Block]
-		Case "room2_checkpoint"
-			;[Block]
-			Return(e_room2_checkpoint)
-			;[End Block]
-		Case "room2_cafeteria"
-			;[Block]
-			Return(e_room2_cafeteria)
-			;[End Block]
-		Case "room2_closets"
-			;[Block]
-			Return(e_room2_closets)
-			;[End Block]
-		Case "room2c_ec"
-			;[Block]
-			Return(e_room2c_ec)
-			;[End Block]
-		Case "room2c_gw_ez_096"
-			;[Block]
-			Return(e_room2c_gw_ez_096)
-			;[End Block]
-		Case "room2_elevator"
-			;[Block]
-			Return(e_room2_elevator)
-			;[End Block]
-		Case "room2_ic"
-			;[Block]
-			Return(e_room2_ic)
-			;[End Block]
-		Case "room2_2_lcz"
-			;[Block]
-			Return(e_room2_2_lcz)
-			;[End Block]
-		Case "room2_nuke"
-			;[Block]
-			Return(e_room2_nuke)
-			;[End Block]
-		Case "room2_2_ez"
-			;[Block]
-			Return(e_room2_2_ez)
-			;[End Block]
-		Case "room2_ez_035"
-			;[Block]
-			Return(e_room2_ez_035)
-			;[End Block]
-		Case "room2_medibay"
-			;[Block]
-			Return(e_room2_medibay)
-			;[End Block]
-		Case "room2_shaft"
-			;[Block]
-			Return(e_room2_shaft)
-			;[End Block]
-		Case "room2_tesla"
-			;[Block]
-			Return(e_room2_tesla)
-			;[End Block]
-		Case "room2_mt"
-			;[Block]
-			Return(e_room2_mt)
-			;[End Block]
-		Case "room2_scientists_2"
-			;[Block]
-			Return(e_room2_scientists_2)
-			;[End Block]
-		Case "room2_servers_hcz"
-			;[Block]
-			Return(e_room2_servers_hcz)
-			;[End Block]
-		Case "room2_storage"
-			;[Block]
-			Return(e_room2_storage)
+			Return(e_cont1_895)
 			;[End Block]
 		Case "room2_2_hcz_106"
 			;[Block]
@@ -278,37 +205,41 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_6_hcz_smoke)
 			;[End Block]
-		Case "room2_6_hcz"
+		Case "room2_6_hcz_173"
 			;[Block]
-			Return(e_room2_6_hcz)
+			Return(e_room2_6_hcz_173)
 			;[End Block]
-		Case "room2_test_lcz_173"
+		Case "room2_mt"
 			;[Block]
-			Return(e_room2_test_lcz_173)
+			Return(e_room2_mt)
+			;[End Block]
+		Case "room2_nuke"
+			;[Block]
+			Return(e_room2_nuke)
+			;[End Block]
+		Case "room2_shaft"
+			;[Block]
+			Return(e_room2_shaft)
+			;[End Block]
+		Case "room2_servers_hcz"
+			;[Block]
+			Return(e_room2_servers_hcz)
 			;[End Block]
 		Case "room2_test_hcz"
 			;[Block]
 			Return(e_room2_test_hcz)
 			;[End Block]
-		Case "room2_gw_2"
+		Case "cont2_008"
 			;[Block]
-			Return(e_room2_gw_2)
+			Return(e_cont2_008)
 			;[End Block]
-		Case "gateway"
+		Case "cont2_049"
 			;[Block]
-			Return(e_gateway)
+			Return(e_cont2_049)
 			;[End Block]
-		Case "room2_sl"
+		Case "cont2_409"
 			;[Block]
-			Return(e_room2_sl)
-			;[End Block]
-		Case "door_closing"
-			;[Block]
-			Return(e_door_closing)
-			;[End Block]
-		Case "room3_storage"
-			;[Block]
-			Return(e_room3_storage)
+			Return(e_cont2_409)
 			;[End Block]
 		Case "room3_hcz_duck"
 			;[Block]
@@ -318,45 +249,29 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room3_hcz_1048)
 			;[End Block]
-		Case "room3_2_ez_duck"
+		Case "room3_2_hcz_guard"
 			;[Block]
-			Return(e_room3_2_ez_duck)
+			Return(e_room3_2_hcz_guard)
 			;[End Block]
-		Case "room3_2_hcz"
+		Case "cont3_966"
 			;[Block]
-			Return(e_room3_2_hcz)
+			Return(e_cont3_966)
 			;[End Block]
-		Case "106_victim"
+		Case "room4_2_hcz_d"
 			;[Block]
-			Return(e_106_victim)
+			Return(e_room4_2_hcz_d)
 			;[End Block]
-		Case "106_sinkhole"
+		Case "room1_dead_end_guard"
 			;[Block]
-			Return(e_106_sinkhole)
+			Return(e_room1_dead_end_guard)
 			;[End Block]
-		Case "room4_2_hcz"
+		Case "gate_a_entrance"
 			;[Block]
-			Return(e_room4_2_hcz)
+			Return(e_gate_a_entrance)
 			;[End Block]
-		Case "096_spawn"
+		Case "gate_a"
 			;[Block]
-			Return(e_096_spawn)
-			;[End Block]
-		Case "room4_lcz_049"
-			;[Block]
-			Return(e_room4_lcz_049)
-			;[End Block]
-		Case "room4_ic"
-			;[Block]
-			Return(e_room4_ic)
-			;[End Block]
-		Case "dimension_106"
-			;[Block]
-			Return(e_dimension_106)
-			;[End Block]
-		Case "dimension_1499"
-			;[Block]
-			Return(e_dimension_1499)
+			Return(e_gate_a)
 			;[End Block]
 		Case "gate_b_entrance"
 			;[Block]
@@ -366,13 +281,105 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_gate_b)
 			;[End Block]
-		Case "gate_a_entrance"
+		Case "room2_6_ez_789_j"
 			;[Block]
-			Return(e_gate_a_entrance)
+			Return(e_room2_6_ez_789_j)
 			;[End Block]
-		Case "gate_a"
+		Case "room2_6_ez_guard"
 			;[Block]
-			Return(e_gate_a)
+			Return(e_room2_6_ez_guard)
+			;[End Block]
+		Case "room2_cafeteria"
+			;[Block]
+			Return(e_room2_cafeteria)
+			;[End Block]
+		Case "room2c_ec"
+			;[Block]
+			Return(e_room2c_ec)
+			;[End Block]
+		Case "room2c_gw_ez_096"
+			;[Block]
+			Return(e_room2c_gw_ez_096)
+			;[End Block]
+		Case "room2_ic"
+			;[Block]
+			Return(e_room2_ic)
+			;[End Block]
+		Case "room2_ez_035"
+			;[Block]
+			Return(e_room2_ez_035)
+			;[End Block]
+		Case "room2_2_ez_duck"
+			;[Block]
+			Return(e_room2_2_ez_duck)
+			;[End Block]
+		Case "room2_medibay"
+			;[Block]
+			Return(e_room2_medibay)
+			;[End Block]
+		Case "room2_scientists_2"
+			;[Block]
+			Return(e_room2_scientists_2)
+			;[End Block]
+		Case "cont2_860_1"
+			;[Block]
+			Return(e_cont2_860_1)
+			;[End Block]
+		Case "room3_2_ez_duck"
+			;[Block]
+			Return(e_room3_2_ez_duck)
+			;[End Block]
+		Case "096_spawn"
+			;[Block]
+			Return(e_096_spawn)
+			;[End Block]
+		Case "106_victim"
+			;[Block]
+			Return(e_106_victim)
+			;[End Block]
+		Case "106_sinkhole"
+			;[Block]
+			Return(e_106_sinkhole)
+			;[End Block]
+		Case "173_appearing"
+			;[Block]
+			Return(e_173_appearing)
+			;[End Block]
+		Case "682_roar"
+			;[Block]
+			Return(e_682_roar)
+			;[End Block]
+		Case "1048_a"
+			;[Block]
+			Return(e_1048_a)
+			;[End Block]
+		Case "checkpoint"
+			;[Block]
+			Return(e_checkpoint)
+			;[End Block]
+		Case "door_closing"
+			;[Block]
+			Return(e_door_closing)
+			;[End Block]
+		Case "gateway"
+			;[Block]
+			Return(e_gateway)
+			;[End Block]
+		Case "tesla"
+			;[Block]
+			Return(e_tesla)
+			;[End Block]
+		Case "trick"
+			;[Block]
+			Return(e_trick)
+			;[End Block]
+		Case "dimension_106"
+			;[Block]
+			Return(e_dimension_106)
+			;[End Block]
+		Case "dimension_1499"
+			;[Block]
+			Return(e_dimension_1499)
 			;[End Block]
 		Default
 			;[Block]
@@ -3053,7 +3060,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_butt_ghost
+			Case e_room2_6_ez_789_j
 				;[Block]
 				If PlayerRoom = e\room
 					If e\room\Objects[0] = 0
@@ -3077,7 +3084,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_toilet_guard
+			Case e_room2_6_ez_guard
 				;[Block]
 				If e\room\NPC[0] = Null
 					If e\room\Dist < 8.0 Lor PlayerRoom = e\room
@@ -3108,7 +3115,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2_checkpoint
+			Case e_checkpoint
 				;[Block]
 				If PlayerRoom = e\room
 					; ~ Play a sound clip when the player passes through the gate
@@ -3717,7 +3724,7 @@ Function UpdateEvents%()
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case e_room2_2_lcz
+			Case e_room2_2_lcz_fan
 				;[Block]
 				; ~ EventState: Timer for turning the fan on / off
 				
@@ -3838,7 +3845,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2_2_ez
+			Case e_room2_2_ez_duck
 				;[Block]
 				If PlayerRoom = e\room
 					If e\room\Objects[0] = 0
@@ -3917,7 +3924,7 @@ Function UpdateEvents%()
 					If e\room\NPC[1]\IsDead Then RemoveEvent(e)
 				EndIf
 				;[End Block]
-			Case e_room2_tesla
+			Case e_tesla
 				;[Block]
 				If e\EventState3 = 0.0
 					If Rand(8) = 1
@@ -5794,7 +5801,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room3_2_hcz
+			Case e_room3_2_hcz_guard
 				;[Block]
 				If e\room\Dist < 8.0
 					If e\EventState = 0.0
@@ -6257,7 +6264,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room2_6_hcz
+			Case e_room2_6_hcz_173
 				;[Block]
 				If PlayerRoom = e\room
 					If n_I\Curr173\Idle > 1
@@ -6522,7 +6529,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room4_2_hcz
+			Case e_room4_2_hcz_d
 				;[Block]
 				If e\room\Dist < 8.0
 					TFormPoint(256.0, 55.2, 256.0, e\room\OBJ, 0)
