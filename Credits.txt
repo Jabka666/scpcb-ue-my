@@ -238,7 +238,7 @@ by "Moto42"
 		SCP-205 is based on "SCP-205 - Shadow Lamps", 
 by "Sorts"
 
-		SCP-268 is based on "SCP-268 - Invisibility Cap", 
+		SCP-268 is based on "SCP-268 - Cap of Neglect", 
 by "Pair Of Ducks"
 
 		SCP-294 is based on "SCP-294 - The Coffee Machine",
@@ -256,10 +256,13 @@ by "Quikngruvn"
 		SCP-427 is based on "SCP-427 - Lovecraftian Locket",
 by "Dr. Ouros"
 
+		SCP-458 is based on "SCP-458 - The Never-Ending Pizza Box",
+by "Palhinuk"
+
 		SCP-500 is based on "SCP-500 - Panacea",
 by "far2"
 
-		SCP-513-1 is based on "SCP-513 - A Cowbell",
+		SCP-513 is based on "SCP-513 - A Cowbell",
 by "beefwit"
 
 		SCP-682 is based on "SCP-682 - Hard-to-Destroy Reptile",
