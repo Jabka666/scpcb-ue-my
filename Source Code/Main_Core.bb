@@ -2399,7 +2399,7 @@ Function Kill%(IsBloody% = False)
 		EndIf
 		
 		me\KillAnim = Rand(0, 1) : me\ForceMove = 0.0
-		PlaySound_Strict(DamageSFX[0])
+		PlaySound_Strict(snd_I\DamageSFX[0])
 		If SelectedDifficulty\SaveType => SAVE_ON_QUIT
 			DeleteGame(CurrSave)
 			GameSaved = False
@@ -2497,7 +2497,7 @@ Function SetCrouch%(NewCrouch%)
 	Local Temp%
 	
 	If NewCrouch <> me\Crouch
-		PlaySound_Strict(CrouchSFX)
+		PlaySound_Strict(snd_I\CrouchSFX)
 		me\SndVolume = Max(2.0, me\SndVolume)
 		If (Not NewCrouch) And me\Stamina > 0.0
 			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
@@ -2785,7 +2785,7 @@ Function UpdateMoving%()
 				de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
 				de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
 				EntityParent(de\OBJ, PlayerRoom\OBJ)
-				TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
+				TempCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
 				ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
 				ChannelPitch(TempCHN, Rand(20000, 30000))
 				
@@ -2826,7 +2826,7 @@ Function UpdateMoving%()
 	
 	If me\HeartBeatVolume > 0.0
 		If me\HeartBeatTimer <= 0.0
-			TempCHN = PlaySound_Strict(HeartBeatSFX)
+			TempCHN = PlaySound_Strict(snd_I\HeartBeatSFX)
 			ChannelVolume(TempCHN, me\HeartBeatVolume * opt\SFXVolume * opt\MasterVolume)
 			
 			me\HeartBeatTimer = 70.0 * (60.0 / Max(me\HeartBeatRate, 1.0))
@@ -2958,7 +2958,7 @@ Function UpdateMouseLook%()
 		If (Not me\Terminated)
 			If (Not ChannelPlaying(BreathCHN))
 				If (Not ChannelPlaying(BreathGasRelaxedCHN))
-					BreathGasRelaxedCHN = PlaySound_Strict(BreathGasRelaxedSFX, True)
+					BreathGasRelaxedCHN = PlaySound_Strict(snd_I\BreathGasRelaxedSFX, True)
 					ChannelVolume(BreathGasRelaxedCHN, opt\VoiceVolume * opt\MasterVolume)
 				EndIf
 			Else
@@ -3213,23 +3213,23 @@ Function UpdateGUI%()
 						Select Rand(5)
 							Case 1
 								;[Block]
-								PlaySound_Strict(HorrorSFX[1])
+								PlaySound_Strict(snd_I\HorrorSFX[1])
 								;[End Block]
 							Case 2
 								;[Block]
-								PlaySound_Strict(HorrorSFX[2])
+								PlaySound_Strict(snd_I\HorrorSFX[2])
 								;[End Block]
 							Case 3
 								;[Block]
-								PlaySound_Strict(HorrorSFX[9])
+								PlaySound_Strict(snd_I\HorrorSFX[9])
 								;[End Block]
 							Case 4
 								;[Block]
-								PlaySound_Strict(HorrorSFX[10])
+								PlaySound_Strict(snd_I\HorrorSFX[10])
 								;[End Block]
 							Case 5
 								;[Block]
-								PlaySound_Strict(HorrorSFX[12])
+								PlaySound_Strict(snd_I\HorrorSFX[12])
 								;[End Block]
 						End Select
 						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
@@ -3237,7 +3237,7 @@ Function UpdateGUI%()
 					Else
 						wi\IsNVGBlinking = True
 						If Rand(30) = 1
-							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
+							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
 						EndIf
 					EndIf
 				Else
@@ -3474,7 +3474,7 @@ Function UpdateGUI%()
 									SelectedItem = Null
 									Return
 								EndIf
-								If OtherOpen\SecondInv[n]\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[OtherOpen\SecondInv[n]\ItemTemplate\SoundID])
+								If OtherOpen\SecondInv[n]\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[OtherOpen\SecondInv[n]\ItemTemplate\SoundID])
 								OtherOpen = Null
 								ClosedInv = True
 								InvOpen = False
@@ -3513,7 +3513,7 @@ Function UpdateGUI%()
 				If MouseSlot = 66
 					Local CameraYaw# = EntityYaw(Camera)
 					
-					If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+					If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 					ShowEntity(SelectedItem\Collider)
 					PositionEntity(SelectedItem\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), CameraYaw + Rnd(-20.0, 20.0), 0.0)
@@ -3628,7 +3628,7 @@ Function UpdateGUI%()
 						If mo\MouseHit1
 							SelectedItem = Inventory(n)
 							If mo\DoubleClick And mo\DoubleClickSlot = n
-								If Inventory(n)\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[Inventory(n)\ItemTemplate\SoundID])
+								If Inventory(n)\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[Inventory(n)\ItemTemplate\SoundID])
 								InvOpen = False
 								mo\DoubleClick = False
 							EndIf
@@ -3791,7 +3791,7 @@ Function UpdateGUI%()
 													For ri = 0 To MaxItemAmount - 1
 														If Inventory(ri) = SelectedItem
 															Inventory(ri) = Null
-															PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+															PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 															Exit
 														EndIf
 													Next
@@ -3842,7 +3842,7 @@ Function UpdateGUI%()
 												For ri = 0 To MaxItemAmount - 1
 													If Inventory(ri) = SelectedItem
 														Inventory(ri) = Null
-														PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+														PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 														Exit
 													EndIf
 												Next
@@ -3881,7 +3881,7 @@ Function UpdateGUI%()
 								Select Inventory(MouseSlot)\ItemTemplate\ID
 									Case it_nav
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
@@ -3896,7 +3896,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_radio
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
@@ -3911,7 +3911,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_nvg
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
@@ -3922,7 +3922,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_scramble
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
@@ -3949,7 +3949,7 @@ Function UpdateGUI%()
 								Select Inventory(MouseSlot)\ItemTemplate\ID
 									Case it_nav
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
@@ -3964,7 +3964,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_radio
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
@@ -3979,7 +3979,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_nvg
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
@@ -3990,7 +3990,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_scramble
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
@@ -4021,7 +4021,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_nav310
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
@@ -4036,7 +4036,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_18vradio
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "radio.bat"))
@@ -4051,7 +4051,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_finenvg, it_veryfinenvg
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
@@ -4062,7 +4062,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_finescramble
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
@@ -4085,7 +4085,7 @@ Function UpdateGUI%()
 								Select Inventory(MouseSlot)\ItemTemplate\ID
 									Case it_nav
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = 1000.0
 										CreateMsg(GetLocalString("msg", "nav.bat"))
@@ -4100,7 +4100,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_radio
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = 1000.0
 										CreateMsg(GetLocalString("msg", "radio.bat"))
@@ -4115,7 +4115,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_nvg
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = 10000.0
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
@@ -4130,7 +4130,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_scramble
 										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = 10000.0
 										CreateMsg(GetLocalString("msg", "gear.bat"))
@@ -4204,7 +4204,7 @@ Function UpdateGUI%()
 						EndIf
 						
 						If SelectedItem\State = 100.0
-							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
 							If wi\GasMask > 0
 								CreateMsg(GetLocalString("msg", "mask.off"))
@@ -4257,7 +4257,7 @@ Function UpdateGUI%()
 						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 1.5), 100.0)
 						
 						If SelectedItem\State = 100.0
-							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
 							If I_1499\Using > 0
 								CreateMsg(GetLocalString("msg", "mask.off"))
@@ -4339,13 +4339,13 @@ Function UpdateGUI%()
 						SelectedItem\State3 = Min(SelectedItem\State3 + fps\Factor[0], 100.0)
 						
 						If SelectedItem\State3 = 100.0
-							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
 							If wi\NightVision > 0
 								CreateMsg(GetLocalString("msg", "nvg.off"))
 								opt\CameraFogFar = 6.0
 								wi\NightVision = 0
-								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[1])
+								If SelectedItem\State > 0.0 Then PlaySound_Strict(snd_I\NVGSFX[1])
 							Else
 								CreateMsg(GetLocalString("msg", "nvg.on"))
 								opt\CameraFogFar = 17.0
@@ -4363,7 +4363,7 @@ Function UpdateGUI%()
 										wi\NightVision = 3
 										;[End Block]
 								End Select
-								If SelectedItem\State > 0.0 Then PlaySound_Strict(NVGSFX[0])
+								If SelectedItem\State > 0.0 Then PlaySound_Strict(snd_I\NVGSFX[0])
 							EndIf
 							SelectedItem\State3 = 0.0
 							SelectedItem = Null
@@ -4389,7 +4389,7 @@ Function UpdateGUI%()
 						SelectedItem\State3 = Min(SelectedItem\State3 + fps\Factor[0], 100.0)
 						
 						If SelectedItem\State3 = 100.0
-							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
 							If wi\SCRAMBLE > 0
 								CreateMsg(GetLocalString("msg", "gear.off"))
@@ -4422,7 +4422,7 @@ Function UpdateGUI%()
 						SelectedItem\State = Min(SelectedItem\State + fps\Factor[0], 100.0)
 						
 						If SelectedItem\State = 100.0
-							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
 							If wi\BallisticHelmet
 								CreateMsg(GetLocalString("msg", "helmet.off"))
@@ -4458,7 +4458,7 @@ Function UpdateGUI%()
 						SelectedItem\State = Min(SelectedItem\State + fps\Factor[0], 100.0)
 						
 						If SelectedItem\State = 100.0
-							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
 							If I_268\Using > 0
 								If I_268\Using > 1 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
@@ -4500,7 +4500,7 @@ Function UpdateGUI%()
 							wi\BallisticVest = 0
 							DropItem(SelectedItem)
 						Else
-							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							Select SelectedItem\ItemTemplate\ID
 								Case it_vest
 									;[Block]
@@ -4534,7 +4534,7 @@ Function UpdateGUI%()
 							wi\HazmatSuit = 0
 							DropItem(SelectedItem)
 						Else
-							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
 							If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
 							wi\GasMask = 0 : wi\BallisticHelmet = False
@@ -5022,21 +5022,21 @@ Function UpdateGUI%()
 								If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 							Next
 							
-							If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
+							If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 						ElseIf CoffinDistance < 8.0
 							For i = 0 To 5
 								If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 							Next
 							
-							If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic895)
+							If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic895)
 						Else
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
 									If opt\UserTrackMode = 0
-										If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
+										If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 									ElseIf UserTrackMusicAmount < 1
-										If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
+										If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 									Else
 										If ChannelPlaying(RadioCHN[6]) Then StopChannel(RadioCHN[6]) : RadioCHN[6] = 0
 										
@@ -5061,7 +5061,7 @@ Function UpdateGUI%()
 										EndIf
 										
 										If KeyHit(2)
-											PlaySound_Strict(RadioSquelch)
+											PlaySound_Strict(snd_I\RadioSquelch)
 											If (Not UserTrackFlag)
 												If opt\UserTrackMode = 1
 													If RadioState[0] < (UserTrackMusicAmount - 1)
@@ -5110,7 +5110,7 @@ Function UpdateGUI%()
 									;[End Block]
 								Case 3
 									;[Block]
-									If (Not ChannelPlaying(RadioCHN[6])) And (Not ChannelPlaying(RadioCHN[3])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
+									If (Not ChannelPlaying(RadioCHN[6])) And (Not ChannelPlaying(RadioCHN[3])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 									
 									If MTFTimer > 0.0
 										If (Not RadioState2[6]) Then RadioState[3] = RadioState[3] + Max(Rand(-10, 1), 0.0)
@@ -5176,7 +5176,7 @@ Function UpdateGUI%()
 									;[End Block]
 								Case 4
 									;[Block]
-									If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
+									If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 									
 									If (Not ChannelPlaying(RadioCHN[4]))
 										If (Not RemoteDoorOn) And RadioState[8] = 0
@@ -5275,17 +5275,17 @@ Function UpdateGUI%()
 								Case 5
 									;[Block]
 									If ChannelPlaying(RadioCHN[6]) Then StopChannel(RadioCHN[6]) : RadioCHN[6] = 0
-									If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(RadioStatic)
+									If (Not ChannelPlaying(RadioCHN[5])) Then RadioCHN[5] = PlaySound_Strict(snd_I\RadioStatic)
 									;[End Block]
 							End Select
 							
 							If RadioType = 3
 								SelectedItem\State2 = -1
-								If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(RadioStatic)
+								If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 								RadioState[6] = RadioState[6] + fps\Factor[0]
 								Temp = Mid(Str(CODE_DR_MAYNARD), RadioState[8] + 1.0, 1)
 								If RadioState[6] - fps\Factor[0] <= RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0
-									PlaySound_Strict(RadioBuzz)
+									PlaySound_Strict(snd_I\RadioBuzz)
 									RadioState[7] = RadioState[7] + 1.0
 									If RadioState[7] >= Temp
 										RadioState[7] = 0.0
@@ -5298,7 +5298,7 @@ Function UpdateGUI%()
 								For i = 2 To 6
 									If KeyHit(i)
 										If SelectedItem\State2 <> i - 2
-											PlaySound_Strict(RadioSquelch)
+											PlaySound_Strict(snd_I\RadioSquelch)
 											PauseChannel(RadioCHN[Int(SelectedItem\State2)])
 										EndIf
 										SelectedItem\State2 = i - 2
@@ -5313,7 +5313,7 @@ Function UpdateGUI%()
 							If SelectedItem\State <= 20.0
 								UpdateBatteryTimer()
 								If BatMsgTimer >= 70.0
-									If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
+									If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
 								EndIf
 							EndIf
 						EndIf
@@ -5335,7 +5335,7 @@ Function UpdateGUI%()
 						If SelectedItem\State > 0.0 And SelectedItem\State <= 20.0
 							UpdateBatteryTimer()
 							If BatMsgTimer >= 70.0
-								If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
+								If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
 							EndIf
 						EndIf
 					EndIf
@@ -5627,7 +5627,7 @@ Function UpdateGUI%()
 						SelectedItem\State3 = 0.0
 						;[End Block]
 				End Select
-				If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
+				If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 				If SelectedItem\ItemTemplate\Img <> 0
 					If opt\PrevScreenGamma <> 1.0
 						opt\ScreenGamma = opt\PrevScreenGamma
@@ -8019,7 +8019,7 @@ Function UpdateEnding%()
 			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[22] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, 0)
 			NowPlaying = ShouldPlay
 			
-			PlaySound_Strict(LightSFX)
+			PlaySound_Strict(snd_I\LightSFX)
 		EndIf
 		
 		If me\EndingTimer > -700.0
@@ -8419,8 +8419,8 @@ Function UpdateExplosion%()
 		me\ExplosionTimer = me\ExplosionTimer + fps\Factor[0]
 		If me\ExplosionTimer < 140.0
 			If me\ExplosionTimer - fps\Factor[0] < 5.0
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke0.ogg")
-				PlaySound_Strict(ExplosionSFX)
+				snd_I\ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke0.ogg")
+				PlaySound_Strict(snd_I\ExplosionSFX)
 				me\BigCameraShake = 10.0
 				me\ExplosionTimer = 5.0
 			EndIf
@@ -8429,8 +8429,8 @@ Function UpdateExplosion%()
 			me\BigCameraShake = Min((me\ExplosionTimer / 20.0), 20.0)
 			If me\ExplosionTimer - fps\Factor[0] < 140.0
 				me\BlinkTimer = 1.0
-				ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
-				PlaySound_Strict(ExplosionSFX)
+				snd_I\ExplosionSFX = LoadSound_Strict("SFX\Ending\GateB\Nuke1.ogg")
+				PlaySound_Strict(snd_I\ExplosionSFX)
 			EndIf
 			me\LightFlash = Min((me\ExplosionTimer - 140.0) / 10.0, 5.0)
 			
@@ -8491,8 +8491,8 @@ Function UpdateVomit%()
 		
 		If (Not me\Vomit)
 			me\BlurTimer = 70.0 * 40.0
-			VomitSFX = LoadSound_Strict("SFX\SCP\294\Vomit.ogg")
-			VomitCHN = PlaySound_Strict(VomitSFX, True)
+			snd_I\VomitSFX = LoadSound_Strict("SFX\SCP\294\Vomit.ogg")
+			VomitCHN = PlaySound_Strict(snd_I\VomitSFX, True)
 			me\PrevInjuries = me\Injuries
 			me\PrevBloodloss = me\Bloodloss
 			If (Not me\Crouch) Then SetCrouch(True)
@@ -8520,7 +8520,7 @@ Function UpdateVomit%()
 		mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
 		
 		If me\VomitTimer < -15.0
-			FreeSound_Strict(VomitSFX)
+			FreeSound_Strict(snd_I\VomitSFX)
 			me\VomitTimer = 0.0
 			If (Not me\Terminated) Then PlaySound_Strict(BreathSFX(0, 0), True)
 			me\Injuries = me\PrevInjuries
@@ -8811,7 +8811,7 @@ Function Update409%()
 				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling1.ogg"))
 			ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
 				If (Not I_409\Revert)
-					PlaySound_Strict(DamageSFX[13], True)
+					PlaySound_Strict(snd_I\DamageSFX[13], True)
 					me\Injuries = Max(me\Injuries, 2.0)
 				EndIf
 			ElseIf I_409\Timer > 94.0
@@ -8973,7 +8973,7 @@ Function Update427%()
 			de.Decals = CreateDecal(DECAL_427, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			TempCHN = PlaySound_Strict(DripSFX[Rand(0, 3)])
+			TempCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
 			ChannelVolume(TempCHN, Rnd(0.0, 0.8) * opt\SFXVolume * opt\MasterVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
 			FreeEntity(Pvt) : Pvt = 0

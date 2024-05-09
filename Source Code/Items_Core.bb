@@ -631,7 +631,7 @@ Function PickItem%(item.Items)
 					Case it_killbat
 						;[Block]
 						me\LightFlash = 1.0
-						PlaySound_Strict(IntroSFX[Rand(8, 10)])
+						PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
 						msg\DeathMsg = Format(GetLocalString("death", "killbat"), SubjectName)
 						Kill()
 						;[End Block]
@@ -717,7 +717,7 @@ Function PickItem%(item.Items)
 						;[End Block]
 				End Select
 				
-				If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\SoundID])
+				If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 				item\Picked = True
 				item\Dropped = -1
 				
@@ -749,7 +749,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	Local CameraYaw# = EntityYaw(Camera)
 	
 	If PlayDropSound
-		If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[item\ItemTemplate\SoundID])
+		If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 	EndIf
 	
 	item\Dropped = 1

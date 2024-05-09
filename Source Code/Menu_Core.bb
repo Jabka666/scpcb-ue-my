@@ -110,12 +110,12 @@ Function UpdateMainMenu%()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
 		If ShouldPlay = 20
-			EndBreathSFX = LoadSound_Strict("SFX\Ending\MenuBreath.ogg")
-			EndBreathCHN = PlaySound_Strict(EndBreathSFX, True)
+			snd_I\EndBreathSFX = LoadSound_Strict("SFX\Ending\MenuBreath.ogg")
+			EndBreathCHN = PlaySound_Strict(snd_I\EndBreathSFX, True)
 			ShouldPlay = 66
 		ElseIf ShouldPlay = 66
 			If (Not ChannelPlaying(EndBreathCHN))
-				FreeSound_Strict(EndBreathSFX)
+				FreeSound_Strict(snd_I\EndBreathSFX)
 				ShouldPlay = 11
 			EndIf
 		Else

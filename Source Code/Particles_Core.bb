@@ -136,7 +136,7 @@ Function UpdateDevilEmitters()
 				Select dem\State
 					Case 1
 						;[Block]
-						dem\SoundCHN = LoopSound2(HissSFX[0], dem\SoundCHN, Camera, dem\OBJ)
+						dem\SoundCHN = LoopSound2(snd_I\HissSFX[0], dem\SoundCHN, Camera, dem\OBJ)
 						If (Not InSmoke)
 							If wi\GasMask = 0 And wi\HazmatSuit = 0
 								If DistanceSquared(EntityX(Camera, True), EntityX(dem\OBJ, True), EntityZ(Camera, True), EntityZ(dem\OBJ, True)) < 0.64
@@ -147,7 +147,7 @@ Function UpdateDevilEmitters()
 						;[End Block]
 					Case 2
 						;[Block]
-						dem\SoundCHN = LoopSound2(HissSFX[1], dem\SoundCHN, Camera, dem\OBJ, 5.0)
+						dem\SoundCHN = LoopSound2(snd_I\HissSFX[1], dem\SoundCHN, Camera, dem\OBJ, 5.0)
 						;[End Block]
 				End Select
 			EndIf
