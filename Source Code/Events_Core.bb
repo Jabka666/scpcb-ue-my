@@ -1453,6 +1453,7 @@ Function UpdateEvents%()
 				EndIf
 				
 				If PlayerRoom = e\room
+					me\Zone = 1
 					CoffinDistance = EntityDistance(me\Collider, e\room\Objects[0])
 					If CoffinDistance < 2.0
 						GiveAchievement(Achv895)
@@ -2337,6 +2338,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					If EntityY(me\Collider) < (-3728.0) * RoomScale
 						ShouldPlay = 27
+						me\Zone = 1
 						
 						If e\EventState = 0.0
 							If I_005\ChanceToSpawn = 2
@@ -4791,6 +4793,7 @@ Function UpdateEvents%()
 					
 					If InFacility = UpperFloor
 						ShouldPlay = 28
+						me\Zone = 1
 						
 						If e\EventState = 0.0
 							Temp = (1 - (EntityDistanceSquared(me\Collider, e\room\Objects[0]) < EntityDistanceSquared(me\Collider, e\room\Objects[1])))

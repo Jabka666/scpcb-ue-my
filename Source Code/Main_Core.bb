@@ -3104,8 +3104,6 @@ Function UpdateZoneColor%()
 				Exit
 			EndIf
 		Next
-	ElseIf (RID = r_room2_mt And (PlayerPosY >= 8.0 And PlayerPosY <= 12.0)) Lor (RID = r_cont2_409 And PlayerPosY < (-3728.0) * RoomScale) Lor (RID = r_cont1_895 And PlayerPosY < (-1200.0) * RoomScale)
-		SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 	ElseIf forest_event <> Null
 		If PlayerRoom = forest_event\room
 			If forest_event\EventState = 1.0
