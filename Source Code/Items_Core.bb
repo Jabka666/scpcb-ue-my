@@ -1219,7 +1219,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						Case 2
 							;[Block]
 							If Rand(2) = 1
-								it2.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, x, y, z)
+								it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
 							Else
 								it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
 								it2\State = Rnd(0.0, 100.0)
@@ -1724,16 +1724,26 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(3) = 1
-						it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
-					Else
-						it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
-						it2\State = Rnd(0.0, 100.0)
-					EndIf
+					it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
+					it2\State = Rnd(0.0, 100.0)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, x, y, z)
+					Local RoomAmount% = 0, RoomsFound% = 0
+					
+					For r.Rooms = Each Rooms
+						Local RID% = r\RoomTemplate\RoomID
+						
+						If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
+							RoomAmount = RoomAmount + 1
+							RoomsFound = RoomsFound + r\Found
+						EndIf
+					Next
+					If Rand(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))
+						it2.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, x, y, z)
+					Else
+						it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]

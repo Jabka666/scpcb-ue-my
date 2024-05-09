@@ -50,6 +50,9 @@ Items:
 - Cups now have a short use timer.
 - Added pizza item.
 - New texture for SCP-1025.
+- Red Night Vision Goggles require 18V battery.
+- S-NAV Navigator Ultimate is no longer guaranteed and the chances are based on rooms found.
+- SCRAMBLE Gear battery drain speed slowed.
 
 NPCs:
 - MTFs can contain SCP-106.

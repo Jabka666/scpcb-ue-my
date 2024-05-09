@@ -57,7 +57,7 @@ difficulties[EUCLID] = New Difficulty
 difficulties[EUCLID]\Name = GetLocalString("menu", "new.euclid")
 difficulties[EUCLID]\Description = GetLocalString("msg", "diff.euclid")
 difficulties[EUCLID]\AggressiveNPCs = False
-difficulties[EUCLID]\InventorySlots = 6
+difficulties[EUCLID]\InventorySlots = 8
 difficulties[EUCLID]\SaveType = SAVE_ON_SCREENS
 difficulties[EUCLID]\OtherFactors = NORMAL
 SetDifficultyColor(EUCLID, 200, 200, 50)
@@ -66,7 +66,7 @@ difficulties[KETER] = New Difficulty
 difficulties[KETER]\Name = GetLocalString("menu", "new.keter")
 difficulties[KETER]\Description = GetLocalString("msg", "diff.keter")
 difficulties[KETER]\AggressiveNPCs = True
-difficulties[KETER]\InventorySlots = 4
+difficulties[KETER]\InventorySlots = 6
 difficulties[KETER]\SaveType = SAVE_ON_QUIT
 difficulties[KETER]\OtherFactors = HARD
 SetDifficultyColor(KETER, 200, 50, 50)

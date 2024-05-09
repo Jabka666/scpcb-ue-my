@@ -3924,11 +3924,7 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case it_finenvg
-										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
-										;[End Block]
-									Case it_veryfinenvg
+									Case it_finenvg, it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
@@ -3996,11 +3992,7 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case it_finenvg
-										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
-										;[End Block]
-									Case it_veryfinenvg
+									Case it_finenvg, it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
@@ -4065,11 +4057,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
-									Case it_finenvg
-										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
-										;[End Block]
-									Case it_veryfinenvg
+									Case it_finenvg, it_veryfinenvg
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
@@ -5976,8 +5964,20 @@ Function RenderDebugHUD%()
 			Next
 			Temp = ((MaxAchievements - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))
 			
+			Local RoomAmount% = 0, RoomsFound% = 0
+					
+			For r.Rooms = Each Rooms
+				Local RID% = r\RoomTemplate\RoomID
+				
+				If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
+					RoomAmount = RoomAmount + 1
+					RoomsFound = RoomsFound + r\Found
+				EndIf
+			Next
+			
 			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp))
 			TextEx(x, y + (620 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), Temp / 2))
+			TextEx(x, y + (640 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))))
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
