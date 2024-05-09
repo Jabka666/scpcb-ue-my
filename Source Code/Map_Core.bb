@@ -4067,7 +4067,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2)
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And (Not IsBlackOut)
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
 					If me\BlinkTimer > -10.0 And sc\InSight
