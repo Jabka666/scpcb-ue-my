@@ -4065,7 +4065,10 @@ Function UpdateSecurityCams%()
 						Local Temp% = False
 						Local RID% = sc\room\RoomTemplate\RoomID
 						
-						If RID = r_cont1_205 Lor RID = r_cont1_173_intro Then sc\CoffinEffect = 0 : Temp = True
+						If RID = r_cont1_205 Lor RID = r_cont1_173_intro
+							sc\CoffinEffect = 0
+							Temp = True
+						EndIf
 						
 						If sc\State < sc\RenderInterval
 							sc\State = sc\State + fps\Factor[0]
@@ -4079,7 +4082,7 @@ Function UpdateSecurityCams%()
 						EndIf
 						
 						If sc\CoffinEffect = 1 Lor sc\CoffinEffect = 3
-							If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
+							If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4 And (Not chs\NoTarget)
 								me\Sanity = me\Sanity - (fps\Factor[0] * (1.0 + (0.5 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using))
 								me\RestoreSanity = False
 								If SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then CanSave = 0
