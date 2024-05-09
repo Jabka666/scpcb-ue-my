@@ -143,7 +143,7 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 	Texture = LoadTextureCheckingIfInCache(Name, TexFlags)
 	If Texture <> 0
 		If ((TexFlags Shr 1) Mod 2) = 0
-			TextureBlend(Texture, 2 + (3 * opt\Atmosphere))
+			TextureBlend(Texture, 5)
 		Else
 			TextureBlend(Texture, 1)
 		EndIf

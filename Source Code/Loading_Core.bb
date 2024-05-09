@@ -43,30 +43,30 @@ Function LoadDecals%()
 	de_I.DecalInstance = New DecalInstance
 	
 	For i = DECAL_CORROSIVE_1 To DECAL_CORROSIVE_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\corrosive_decal(" + i + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\corrosive_decal(" + i + ").png", 1 + 2, DeleteAllTextures, False)
 	Next
 	
 	For i = DECAL_BLOOD_1 To DECAL_BLOOD_6
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_decal(" + (i - DECAL_BLOOD_1) + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_decal(" + (i - DECAL_BLOOD_1) + ").png", 1 + 2, DeleteAllTextures, False)
 	Next
 	
 	For i = DECAL_PD_1 To DECAL_PD_6
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\pd_decal(" + (i - DECAL_PD_1) + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\pd_decal(" + (i - DECAL_PD_1) + ").png", 1 + 2, DeleteAllTextures, False)
 	Next
 	
 	For i = DECAL_BULLET_HOLE_1 To DECAL_BULLET_HOLE_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\bullet_hole_decal(" + (i - DECAL_BULLET_HOLE_1) + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\bullet_hole_decal(" + (i - DECAL_BULLET_HOLE_1) + ").png", 1 + 2, DeleteAllTextures, False)
 	Next
 	
 	For i = DECAL_BLOOD_DROP_1 To DECAL_BLOOD_DROP_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_drop_decal(" + (i - DECAL_BLOOD_DROP_1) + ").png", 1 + 2, DeleteAllTextures)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_drop_decal(" + (i - DECAL_BLOOD_DROP_1) + ").png", 1 + 2, DeleteAllTextures, False)
 	Next
 	
-	de_I\DecalTextureID[DECAL_409] = LoadTexture_Strict("GFX\Decals\scp_409_decal.png", 1 + 2, DeleteAllTextures)
+	de_I\DecalTextureID[DECAL_409] = LoadTexture_Strict("GFX\Decals\scp_409_decal.png", 1 + 2, DeleteAllTextures, False)
 	
-	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427_decal.png", 1 + 2, DeleteAllTextures)
+	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427_decal.png", 1 + 2, DeleteAllTextures, False)
 	
-	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures)
+	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures, False)
 End Function
 
 Const MaxParticleTextureIDAmount% = 8
@@ -107,20 +107,20 @@ Const PARTICLE_SPARK% = 7
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
 	
-	p_I\ParticleTextureID[PARTICLE_BLACK_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(0).png", 1 + 2, DeleteAllTextures)
-	p_I\ParticleTextureID[PARTICLE_WHITE_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(1).png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_BLACK_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(0).png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_WHITE_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(1).png", 1 + 2, DeleteAllTextures, False)
 	
-	p_I\ParticleTextureID[PARTICLE_FLASH] = LoadTexture_Strict("GFX\Particles\flash.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_FLASH] = LoadTexture_Strict("GFX\Particles\flash.png", 1 + 2, DeleteAllTextures, False)
 	
-	p_I\ParticleTextureID[PARTICLE_DUST] = LoadTexture_Strict("GFX\Particles\dust.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_DUST] = LoadTexture_Strict("GFX\Particles\dust.png", 1 + 2, DeleteAllTextures, False)
 	
-	p_I\ParticleTextureID[PARTICLE_SHADOW] = LoadTexture_Strict("GFX\NPCs\hg.pt", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_SHADOW] = LoadTexture_Strict("GFX\NPCs\hg.pt", 1 + 2, DeleteAllTextures, False)
 	
-	p_I\ParticleTextureID[PARTICLE_SUN] = LoadTexture_Strict("GFX\Map\Textures\sun.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_SUN] = LoadTexture_Strict("GFX\Map\Textures\sun.png", 1 + 2, DeleteAllTextures, False)
 	
-	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\Particles\blood.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\Particles\blood.png", 1 + 2, DeleteAllTextures, False)
 	
-	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures, False)
 	
 	; ~ Black smoke in "room2c_gw_lcz"/"room2_6_hcz"/"cont1_035"
 	ParticleEffect[0] = CreateTemplate()
@@ -440,12 +440,6 @@ Function LoadDoors%()
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_UP] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_up.png", 1, DeleteAllTextures)
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_idle.png", 1, DeleteAllTextures)
 	
-	If opt\Atmosphere
-		For i = ELEVATOR_PANEL_DOWN To ELEVATOR_PANEL_IDLE
-			TextureBlend(d_I\ElevatorPanelTextureID[i], 5)
-		Next
-	EndIf
-	
 	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\Button.b3d")
 	
 	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonKeycard.b3d")
@@ -464,12 +458,6 @@ Function LoadDoors%()
 	d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_using.png", 1, DeleteAllTextures)
 	d_I\ButtonTextureID[BUTTON_RED_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_locked.png", 1, DeleteAllTextures)
 	d_I\ButtonTextureID[BUTTON_106_TEXTURE] = LoadTexture_Strict("GFX\Map\Textures\keypad_106.png", 1, DeleteAllTextures)
-	
-	If opt\Atmosphere
-		For i = BUTTON_GREEN_TEXTURE To BUTTON_106_TEXTURE
-			TextureBlend(d_I\ButtonTextureID[i], 5)
-		Next
-	EndIf
 End Function
 
 Function RemoveDoorInstances%()
@@ -572,7 +560,6 @@ Function LoadSecurityCams%()
 	
 	For i = CAM_HEAD_DEFAULT_TEXTURE To CAM_HEAD_RED_LIGHT_TEXTURE
 		sc_I\CamTextureID[i] = LoadTexture_Strict("GFX\Map\Textures\camera(" + (i + 1) + ").png", 1, DeleteAllTextures)
-		If opt\Atmosphere Then TextureBlend(sc_I\CamTextureID[i], 5)
 	Next
 End Function
 
@@ -641,10 +628,9 @@ Function LoadMonitors%()
 		HideEntity(mon_I\MonitorModelID[i])
 	Next
 	
-	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\Overlays\monitor_overlay.png", 1, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\Overlays\monitor_overlay.png", 1, DeleteAllTextures, False)
 	For i = MONITOR_LOCKDOWN_1_OVERLAY To MONITOR_LOCKDOWN_3_OVERLAY
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Map\Textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures)
-		If opt\Atmosphere Then TextureBlend(mon_I\MonitorOverlayID[i], 5)
+		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Map\Textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures, False)
 	Next
 	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
 	SetBuffer(TextureBuffer(mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY]))
@@ -653,11 +639,11 @@ Function LoadMonitors%()
 	SetBuffer(BackBuffer())
 	
 	For i = MONITOR_079_OVERLAY_1 To MONITOR_079_OVERLAY_7
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_079_overlay(" + (i - 4) + ").png", 1, DeleteAllTextures)
+		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_079_overlay(" + (i - 4) + ").png", 1, DeleteAllTextures, False)
 	Next
 	
 	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_6
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - 11) + ").png", 1, DeleteAllTextures)
+		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - 11) + ").png", 1, DeleteAllTextures, False)
 	Next
 End Function
 
@@ -841,15 +827,6 @@ Function LoadNPCs%()
 	n_I\NPCTextureID[NPC_CLERK_VICTIM_205_TEXTURE] = LoadTexture_Strict("GFX\NPCs\clerk(2).png", 1, DeleteAllTextures)
 	
 	n_I\NPCTextureID[NPC_096_BLOODY_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_096_bloody.png", 1, DeleteAllTextures)
-	
-	If opt\Atmosphere
-		For i = NPC_CLASS_D_GONZALES_TEXTURE To NPC_096_BLOODY_TEXTURE
-			Local Skip%
-			
-			Skip = ((Not opt\IntroEnabled) And i = NPC_CLASS_D_D9341_TEXTURE)
-			If (Not Skip) Then TextureBlend(n_I\NPCTextureID[i], 5)
-		Next
-	EndIf
 End Function
 
 Function RemoveNPCInstances%()
@@ -903,9 +880,9 @@ Function LoadMisc%()
 	HideEntity(misc_I\CupLiquid)
 	
 	For i = LIGHT_SPRITE_DEFAULT To LIGHT_SPRITE_RED
-		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\Particles\light(" + i + ").png", 1, DeleteAllTextures)
+		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\Particles\light(" + i + ").png", 1, DeleteAllTextures, False)
 	Next
-	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\Particles\advanced_light.png", 1, DeleteAllTextures)
+	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\Particles\advanced_light.png", 1, DeleteAllTextures, False)
 End Function
 
 Function RemoveMiscInstances%()
@@ -939,7 +916,7 @@ Function LoadMaterials%(File$)
 			If opt\BumpEnabled
 				StrTemp = IniGetString(File, Loc, "bump")
 				If StrTemp <> ""
-					mat\Bump = LoadTexture_Strict(StrTemp, 256)
+					mat\Bump = LoadTexture_Strict(StrTemp, 1 + 256, DeleteMapTextures, False)
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
@@ -2295,7 +2272,7 @@ Function LoadEntities%()
 	LoadMissingTexture()
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 0)
-	TextureBlend(AmbientLightRoomTex, 3 - opt\Atmosphere)
+	TextureBlend(AmbientLightRoomTex, 2)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()
@@ -2306,7 +2283,7 @@ Function LoadEntities%()
 	; ~ Overlays
 	Local OverlayScale# = GraphicHeightFloat / GraphicWidthFloat
 	
-	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\vignette_overlay.png", 1, DeleteAllTextures) ; ~ VIGNETTE
+	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\vignette_overlay.png", 1, DeleteAllTextures, False) ; ~ VIGNETTE
 	t\OverlayID[0] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[0], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
@@ -2314,7 +2291,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[0], -1000)
 	MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ GAS MASK
+	Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteAllTextures, False) ; ~ GAS MASK
 	t\OverlayID[1] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[1], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[1], Tex)
@@ -2324,7 +2301,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[1], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteAllTextures) ; ~ HAZMAT SUIT
+	Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteAllTextures, False) ; ~ HAZMAT SUIT
 	t\OverlayID[2] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[2], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[2], Tex)
@@ -2334,7 +2311,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[2], 0, 0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteAllTextures) ; ~ SCP-008
+	Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteAllTextures, False) ; ~ SCP-008
 	t\OverlayID[3] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[3], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[3], Tex)
@@ -2344,7 +2321,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[3], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures) ; ~ NIGHT VISION GOGGLES
+	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures, False) ; ~ NIGHT VISION GOGGLES
 	t\OverlayID[4] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[4], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
@@ -2379,7 +2356,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[6], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png", 1, DeleteAllTextures) ; ~ SCP-409
+	Tex = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png", 1, DeleteAllTextures, False) ; ~ SCP-409
 	t\OverlayID[7] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[7], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[7], Tex)
@@ -2389,7 +2366,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png", 1, DeleteAllTextures) ; ~ HELMET
+	Tex = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png", 1, DeleteAllTextures, False) ; ~ HELMET
 	t\OverlayID[8] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[8], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[8], Tex)
@@ -2399,7 +2376,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteAllTextures) ; ~ BLOOD
+	Tex = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteAllTextures, False) ; ~ BLOOD
 	t\OverlayID[9] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[9], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[9], Tex)
@@ -2409,7 +2386,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex)
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteAllTextures) ; ~ FOG IN GAS MASK
+	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteAllTextures, False) ; ~ FOG IN GAS MASK
 	t\OverlayID[10] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[10], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[10], Tex)
@@ -2422,7 +2399,7 @@ Function LoadEntities%()
 	For i = 1 To 10
 		HideEntity(t\OverlayID[i])
 	Next
-	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
+	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures, False)
 	
 	LoadDecals()
 	

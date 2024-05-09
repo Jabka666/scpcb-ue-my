@@ -100,7 +100,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 					;[End Block]
 			End Select
 			If TexFestive <> 0
-				If opt\Atmosphere Then TextureBlend(TexFestive, 5)
 				EntityTexture(n\OBJ, TexFestive)
 				EntityTexture(n\OBJ2, TexFestive)
 				DeleteSingleTextureEntryFromCache(TexFestive)
@@ -130,7 +129,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.03, 0.03)
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures, False)
 			EntityTexture(n\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			EntityBlend(n\OBJ2, 3)
@@ -347,7 +346,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.1, 0.1)
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_860_2_eyes.png", 1 + 2, DeleteAllTextures)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_860_2_eyes.png", 1 + 2, DeleteAllTextures, False)
 			EntityTexture(n\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			EntityFX(n\OBJ2, 1 + 8)

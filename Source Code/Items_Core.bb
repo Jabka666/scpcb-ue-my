@@ -154,7 +154,6 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 		For it2.ItemTemplates = Each ItemTemplates
 			If it2\TexPath = TexturePath And it2\Tex <> 0
 				Texture = it2\Tex
-				If opt\Atmosphere Then TextureBlend(Texture, 5)
 				Exit
 			EndIf
 		Next
@@ -164,7 +163,6 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 			Else
 				Texture = LoadTexture_Strict(TexturePath, TexFlags)
 			EndIf
-			If opt\Atmosphere Then TextureBlend(Texture, 5)
 			it\TexPath = TexturePath
 		EndIf
 		EntityTexture(it\OBJ, Texture)

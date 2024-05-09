@@ -190,7 +190,6 @@ Type Options
 	Field TextureDetails%, TextureDetailsLevel#
 	Field FOV#, CurrFOV#
 	Field Anisotropic%, AnisotropicLevel%
-	Field Atmosphere%
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
@@ -303,8 +302,6 @@ Function LoadOptionsINI%()
 			opt\AnisotropicLevel = 16
 			;[End Block]
 	End Select
-	
-	opt\Atmosphere = IniGetInt(OptionFile, "Graphics", "Atmosphere", True)
 	
 	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
 	
@@ -459,8 +456,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
 	
-	IniWriteString(OptionFile, "Graphics", "Atmosphere", opt\Atmosphere)
-	
 	IniWriteString(OptionFile, "Graphics", "Security Cam Render Interval", opt\SecurityCamRenderInterval)
 	;[End Block]
 	
@@ -587,8 +582,6 @@ Function ResetOptionsINI%()
 	
 	opt\Anisotropic = 4
 	opt\AnisotropicLevel = 16
-	
-	opt\Atmosphere = True
 	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0

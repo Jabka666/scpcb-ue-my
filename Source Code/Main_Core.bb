@@ -1573,7 +1573,6 @@ Function UpdateConsole%()
 					n_I\IsHalloween = (Not n_I\IsHalloween)
 					If n_I\IsHalloween
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
@@ -1582,7 +1581,6 @@ Function UpdateConsole%()
 						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
 						If n_I\IsAprilFools Then n_I\IsAprilFools = (Not n_I\IsAprilFools)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
@@ -1594,7 +1592,6 @@ Function UpdateConsole%()
 					n_I\IsNewYear = (Not n_I\IsNewYear)
 					If n_I\IsNewYear
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
@@ -1603,7 +1600,6 @@ Function UpdateConsole%()
 						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
 						If n_I\IsAprilFools Then n_I\IsAprilFools = (Not n_I\IsAprilFools)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
@@ -1615,7 +1611,6 @@ Function UpdateConsole%()
 					n_I\IsAprilFools = (Not n_I\IsAprilFools)
 					If n_I\IsAprilFools
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_J.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
@@ -1624,7 +1619,6 @@ Function UpdateConsole%()
 						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
 						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
-						If opt\Atmosphere Then TextureBlend(Tex2, 5)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
 						DeleteSingleTextureEntryFromCache(Tex2)
@@ -7071,10 +7065,6 @@ Function UpdateMenu%()
 						End Select
 						TextureAnisotropic(opt\AnisotropicLevel)
 						
-						y = y + (35 * MenuScale)
-						
-						opt\Atmosphere = UpdateMenuTick(x, y, opt\Atmosphere, True)
-						
 						y = y + (45 * MenuScale)
 						
 						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\SecurityCamRenderInterval, 17, "24.0", "18.0", "12.0", "6.0", "0.0")
@@ -7691,17 +7681,6 @@ Function RenderMenu%()
 						Color(255, 255, 255)
 						TextEx(x, y, GetLocalString("options", "filter"))
 						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 5.7, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
-						
-						y = y + (35 * MenuScale)
-						
-						Color(100, 100, 100)
-						If opt\Atmosphere
-							TempStr = GetLocalString("options", "atmo.bright")
-						Else
-							TempStr = GetLocalString("options", "atmo.dark")
-						EndIf
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 						
 						y = y + (45 * MenuScale)
 						

@@ -592,10 +592,6 @@ Function UpdateMainMenu%()
 						End Select
 						TextureAnisotropic(opt\AnisotropicLevel)
 						
-						y = y + (35 * MenuScale)
-						
-						opt\Atmosphere = UpdateMenuTick(x, y, opt\Atmosphere)
-						
 						y = y + (45 * MenuScale)
 						
 						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 150 * MenuScale, opt\SecurityCamRenderInterval, 17, "24.0", "18.0", "12.0", "6.0", "0.0")
@@ -1480,16 +1476,6 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y, GetLocalString("options", "filter"))
 					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 8.2, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
-					
-					y = y + (35 * MenuScale)
-					
-					If opt\Atmosphere
-						TempStr = GetLocalString("options", "atmo.bright")
-					Else
-						TempStr = GetLocalString("options", "atmo.dark")
-					EndIf
-					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "atmo") + TempStr)
-					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
 					
 					y = y + (45 * MenuScale)
 					
@@ -2879,8 +2865,7 @@ Const Tooltip_ParticleAmount% = 6
 Const Tooltip_SaveTexturesInVRAM% = 7
 Const Tooltip_FOV% = 8
 Const Tooltip_AnisotropicFiltering% = 9
-Const Tooltip_Atmosphere% = 10
-Const Tooltip_SecurityCamRenderInterval% = 11
+Const Tooltip_SecurityCamRenderInterval% = 10
 ;[End Block]
 
 ; ~ Audio Tooltips Constants
@@ -3001,12 +2986,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_AnisotropicFiltering
 			;[Block]
 			Txt = GetLocalString("tooltip", "anisotropic")
-			;[End Block]
-		Case Tooltip_Atmosphere
-			;[Block]
-			Txt = GetLocalString("tooltip", "atmo")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_SecurityCamRenderInterval
 			;[Block]

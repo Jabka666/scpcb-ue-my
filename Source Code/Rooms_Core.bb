@@ -148,7 +148,6 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 				
 				Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-				If opt\Atmosphere Then TextureBlend(Tex, 5)
 				EntityTexture(r\RoomDoors[0]\OBJ, Tex)
 				EntityTexture(r\RoomDoors[0]\OBJ2, Tex)
 				EntityTexture(r\RoomDoors[0]\FrameOBJ, Tex)
@@ -363,7 +362,6 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			EntityTexture(d\OBJ, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
@@ -1160,7 +1158,8 @@ Function FillRoom%(r.Rooms)
 			; ~ Glass panel
 			r\Objects[2] = CreateSprite()
 			r\ScriptedObject[2] = True
-			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
+			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2, DeleteMapTextures, False)
+			TextureBlend(Tex, 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			SpriteViewMode(r\Objects[2], 2)
@@ -1914,8 +1913,6 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
-			
 			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR)
 			d\AutoClose = False : d\Locked = 1
 			PositionEntity(d\Buttons[0], r\x - 438.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 480.0 * RoomScale, True)
@@ -2475,7 +2472,8 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[2] = CreateSprite()
 			r\ScriptedObject[2] = True
-			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2)
+			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2, DeleteMapTextures, False)
+			TextureBlend(Tex, 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			
@@ -3537,7 +3535,6 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_scientists_2
 			;[Block]
 			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-			If opt\Atmosphere Then TextureBlend(Tex, 5)
 			; ~ Dr. L's office door
 			d.Doors = CreateDoor(r, r\x - 448.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
 			d\MTFClose = False : d\DisableWaypoint = True
@@ -4007,13 +4004,13 @@ Function FillRoom%(r.Rooms)
 				End Select
 			Next
 			
-			r\Textures[0] = LoadTexture_Strict("GFX\NPCs\pd_plane.png", 1 + 2, DeleteAllTextures)
+			r\Textures[0] = LoadTexture_Strict("GFX\NPCs\pd_plane.png", 1 + 2, DeleteAllTextures, False)
 			
-			r\Textures[1] = LoadTexture_Strict("GFX\NPCs\pd_plane_eye.png", 1 + 2, DeleteAllTextures)
+			r\Textures[1] = LoadTexture_Strict("GFX\NPCs\pd_plane_eye.png", 1 + 2, DeleteAllTextures, False)
 			
 			r\Objects[17] = CreateSprite()
 			r\ScriptedObject[17] = True
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures, False)
 			EntityTexture(r\Objects[17], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)
