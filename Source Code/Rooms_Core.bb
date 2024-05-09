@@ -2037,40 +2037,6 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
 			;[End Block]
-		Case r_cont1_096
-			;[Block]
-			; ~ Observation room doors
-			d.Doors = CreateDoor(r, r\x - 320.0 * RoomScale, r\y, r\z + 320.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
-			
-			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
-			
-			de.Decals = CreateDecal(DECAL_BLOOD_1, r\x - 108.0 * RoomScale, r\y + 4.0 * RoomScale + 0.005, r\z - 544.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
-			EntityParent(de\OBJ, r\OBJ)
-			
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 384.0 * RoomScale, r\y + 0.005, r\z - 512.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.5, 1)
-			EntityParent(de\OBJ, r\OBJ)
-			
-			it.Items = CreateItem("Data Report", it_paper, r\x - 152.0 * RoomScale, r\y + 90.0 * RoomScale, r\z - 594.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateRandomBattery(r\x - 514.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 63.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Document SCP-096", it_paper, r\x - 500.0 * RoomScale, r\y + 220.0 * RoomScale, r\z + 63.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("SCRAMBLE Gear", it_scramble, r\x - 860.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 80.0 * RoomScale)
-			it\State = Rnd(0.0, 1000.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			CreateCustomCenter(r, r\x, r\z - 512.0 * RoomScale)
-			;[End Block]
 		Case r_cont1_106
 			;[Block]
 			; ~ Elevators' doors

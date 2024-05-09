@@ -1586,43 +1586,43 @@ Const r_room4_lcz% = 37, r_room4_2_lcz% = 38
 Const r_room4_ic% = 39
 Const r_room2_checkpoint_lcz_hcz% = 40
 Const r_room1_dead_end_hcz% = 41
-Const r_cont1_035% = 42, r_cont1_079% = 43, r_cont1_096% = 44, r_cont1_106% = 45, r_cont1_895% = 46
-Const r_room2_hcz% = 47, r_room2_2_hcz% = 48, r_room2_3_hcz% = 49, r_room2_4_hcz% = 50, r_room2_5_hcz% = 51, r_room2_6_hcz% = 52
-Const r_room2_mt% = 53
-Const r_room2_nuke% = 54
-Const r_room2_servers_hcz% = 55
-Const r_room2_shaft% = 56
-Const r_room2_tesla_hcz% = 57
-Const r_room2_test_hcz% = 58
-Const r_cont2_008% = 59, r_cont2_049% = 60, r_cont2_409% = 61
-Const r_room2c_hcz% = 62
-Const r_cont2c_096% = 63
-Const r_room3_hcz% = 64, r_room3_2_hcz% = 65, r_room3_3_hcz% = 66
-Const r_cont3_513% = 67, r_cont3_966% = 68
-Const r_room4_hcz% = 69, r_room4_2_hcz% = 70
-Const r_room2_checkpoint_hcz_ez% = 71
-Const r_gate_a_entrance% = 72, r_gate_a% = 73, r_gate_b_entrance% = 74, r_gate_b% = 75
-Const r_room1_dead_end_ez% = 76
-Const r_room1_lifts% = 77
-Const r_room1_o5% = 78
-Const r_room2_ez% = 79, r_room2_2_ez% = 80, r_room2_3_ez% = 81, r_room2_4_ez% = 82, r_room2_5_ez% = 83, r_room2_6_ez% = 84
-Const r_room2_bio% = 85
-Const r_room2_cafeteria% = 86
-Const r_room2_ic% = 87
-Const r_room2_medibay% = 88
-Const r_room2_office% = 89, r_room2_office_2% = 90, r_room2_office_3% = 91
-Const r_room2_servers_ez% = 92
-Const r_room2_scientists% = 93, r_room2_scientists_2% = 94
-Const r_room2_tesla_ez% = 95
-Const r_cont2_860_1% = 96
-Const r_room2c_ez% = 97, r_room2c_2_ez% = 98
-Const r_room2c_ec% = 99
-Const r_room2c_gw_ez% = 100
-Const r_room3_gw% = 101
-Const r_room3_office% = 102
-Const r_room3_ez% = 103, r_room3_2_ez% = 104, r_room3_3_ez% = 105, r_room3_4_ez% = 106
-Const r_room4_ez% = 107
-Const r_dimension_106% = 108, r_dimension_1499% = 109
+Const r_cont1_035% = 42, r_cont1_079% = 43, r_cont1_106% = 44, r_cont1_895% = 45
+Const r_room2_hcz% = 46, r_room2_2_hcz% = 47, r_room2_3_hcz% = 48, r_room2_4_hcz% = 49, r_room2_5_hcz% = 50, r_room2_6_hcz% = 51
+Const r_room2_mt% = 52
+Const r_room2_nuke% = 53
+Const r_room2_servers_hcz% = 54
+Const r_room2_shaft% = 55
+Const r_room2_tesla_hcz% = 56
+Const r_room2_test_hcz% = 57
+Const r_cont2_008% = 58, r_cont2_049% = 59, r_cont2_409% = 60
+Const r_room2c_hcz% = 61
+Const r_cont2c_096% = 62
+Const r_room3_hcz% = 63, r_room3_2_hcz% = 64, r_room3_3_hcz% = 65
+Const r_cont3_513% = 66, r_cont3_966% = 67
+Const r_room4_hcz% = 68, r_room4_2_hcz% = 69
+Const r_room2_checkpoint_hcz_ez% = 70
+Const r_gate_a_entrance% = 71, r_gate_a% = 72, r_gate_b_entrance% = 73, r_gate_b% = 74
+Const r_room1_dead_end_ez% = 75
+Const r_room1_lifts% = 76
+Const r_room1_o5% = 77
+Const r_room2_ez% = 78, r_room2_2_ez% = 79, r_room2_3_ez% = 80, r_room2_4_ez% = 81, r_room2_5_ez% = 82, r_room2_6_ez% = 83
+Const r_room2_bio% = 84
+Const r_room2_cafeteria% = 85
+Const r_room2_ic% = 86
+Const r_room2_medibay% = 87
+Const r_room2_office% = 88, r_room2_office_2% = 89, r_room2_office_3% = 90
+Const r_room2_servers_ez% = 91
+Const r_room2_scientists% = 92, r_room2_scientists_2% = 93
+Const r_room2_tesla_ez% = 94
+Const r_cont2_860_1% = 95
+Const r_room2c_ez% = 96, r_room2c_2_ez% = 97
+Const r_room2c_ec% = 98
+Const r_room2c_gw_ez% = 99
+Const r_room3_gw% = 100
+Const r_room3_office% = 101
+Const r_room3_ez% = 102, r_room3_2_ez% = 103, r_room3_3_ez% = 104, r_room3_4_ez% = 105
+Const r_room4_ez% = 106
+Const r_dimension_106% = 107, r_dimension_1499% = 108
 ;[End Block]
 
 Function FindRoomID%(RoomName$)
@@ -1798,10 +1798,6 @@ Function FindRoomID%(RoomName$)
 		Case "cont1_079"
 			;[Block]
 			Return(r_cont1_079)
-			;[End Block]
-		Case "cont1_096"
-			;[Block]
-			Return(r_cont1_096)
 			;[End Block]
 		Case "cont1_106"
 			;[Block]

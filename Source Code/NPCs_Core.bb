@@ -4812,7 +4812,7 @@ Function UpdateNPCs%()
 								If n\State3 < 70.0 * (15.0 + (10.0 * SelectedDifficulty\AggressiveNPCs))
 									n\State3 = n\State3 + fps\Factor[0]
 								Else
-									n\State3 = 70.0 * (6.0 * 60.0)
+									n\State3 = 70.0 * 360.0
 									n\State = 5.0
 								EndIf
 							EndIf
