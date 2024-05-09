@@ -1795,8 +1795,8 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[15], r\OBJ)
 			
 			; ~ TODO: FIND A WAY TO ROTATE PARTICLES/EMITTER
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 6)
-			dem\State = 1
+			;dem.DevilEmitters = CreateDevilEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 6)
+			;dem\State = 1
 			
 			Select Rand(3)
 				Case 1
