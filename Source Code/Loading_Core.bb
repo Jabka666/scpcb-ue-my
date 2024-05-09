@@ -1438,8 +1438,9 @@ Const SOUND_NPC_008_1_BREATH% = 2
 Const SOUND_NPC_035_TENTACLE_IDLE% = 3
 Const SOUND_NPC_049_BREATH% = 4
 Const SOUND_NPC_049_2_BREATH% = 5
+Const SOUND_NPC_049_2_RESTING% = 6
 ;[End Block]
-Const MaxNPCSounds% = 6
+Const MaxNPCSounds% = 7
 Global NPCSound%[MaxNPCSounds]
 
 Function LoadSounds%()

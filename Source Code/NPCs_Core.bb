@@ -265,6 +265,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshWidth(n\OBJ), -MeshHeight(n\OBJ), -MeshDepth(n\OBJ), MeshWidth(n\OBJ) * 2.0, MeshHeight(n\OBJ) * 2.0, MeshDepth(n\OBJ) * 2.0)
 			
 			If NPCSound[SOUND_NPC_049_2_BREATH] = 0 Then NPCSound[SOUND_NPC_049_2_BREATH] = LoadSound_Strict("SFX\SCP\049_2\Breath.ogg")
+			If NPCSound[SOUND_NPC_049_2_RESTING] = 0 Then NPCSound[SOUND_NPC_049_2_RESTING] = LoadSound_Strict("SFX\SCP\049_2\Resting.ogg")
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
@@ -1980,8 +1981,9 @@ Function UpdateNPCs%()
 					Select n\State
 						Case 0.0 ; ~ Just lies
 							;[Block]
+							n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_049_2_RESTING], n\SoundCHN, Camera, n\Collider, 4.0, 1.0, True)
 							If Rand(2000) = 1
-								If EntityDistanceSquared(n\Collider, me\Collider) < 25.0 Then n\State = 1.0
+								If EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 4.5) Then n\State = 1.0
 							EndIf
 							;[End Block]
 						Case 1.0 ; ~ Stands up
