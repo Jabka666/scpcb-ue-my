@@ -1898,6 +1898,12 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
 			
+			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 646.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
+			EntityParent(r\Objects[3], r\OBJ)
+			
+			r\Objects[4] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 645.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
+			EntityParent(r\Objects[4], r\OBJ)
+			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 960.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 0.0
 			
@@ -2920,6 +2926,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
 			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
+			
+			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 645.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
+			EntityParent(r\Objects[3], r\OBJ)
+			
+			r\Objects[4] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 646.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
+			EntityParent(r\Objects[4], r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, 20.0)
 			sc\Angle = 45.0 : sc\Turn = 0.0
