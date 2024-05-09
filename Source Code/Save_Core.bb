@@ -1168,6 +1168,7 @@ Function LoadGame%(File$)
 	For it.Items = Each Items
 		RemoveItem(it)
 	Next
+	ItemAmount = 0
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1614,7 +1615,7 @@ Function LoadGameQuick%(File$)
 		Local Frame# = ReadFloat(f)
 		
 		Select NPCType
-			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035_Tentacle, NPCType1499_1, NPCType860_2, NPCType966, NPCType1048, NPCtype1048_A
+			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035_Tentacle, NPCType1499_1, NPCType860_2, NPCType966, NPCType1048, NPCType1048_A
 				;[Block]
 				SetAnimTime(n\OBJ, Frame)
 				;[End Block]
@@ -1930,6 +1931,7 @@ Function LoadGameQuick%(File$)
 	For it.Items = Each Items
 		RemoveItem(it)
 	Next
+	ItemAmount = 0
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp

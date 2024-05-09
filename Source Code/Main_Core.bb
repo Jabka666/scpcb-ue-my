@@ -5795,7 +5795,7 @@ Function RenderHUD%()
 End Function
 
 Function RenderDebugHUD%()
-	Local ev.Events, ch.Chunk
+	Local ev.Events, ch.Chunk, r.Rooms
 	Local x%, y%, i%
 	
 	x = 20 * MenuScale
@@ -5958,14 +5958,14 @@ Function RenderDebugHUD%()
 			EndIf
 			
 			Local CurrAchvAmount% = 0
-	
+			
 			For i = 0 To MaxAchievements - 1
 				If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 			Next
-			Temp = ((MaxAchievements - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))
 			
+			Local Temp% = ((MaxAchievements - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))
 			Local RoomAmount% = 0, RoomsFound% = 0
-					
+			
 			For r.Rooms = Each Rooms
 				Local RID% = r\RoomTemplate\RoomID
 				

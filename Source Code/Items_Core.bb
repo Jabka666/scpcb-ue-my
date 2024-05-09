@@ -915,7 +915,7 @@ Const VERYFINE% = 2
 Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
-	Local it.Items, it2.Items, it3.Items, it4.Items, it5.Items, de.Decals, n.NPCs
+	Local it.Items, it2.Items, it3.Items, it4.Items, it5.Items, de.Decals, n.NPCs, r.Rooms
 	Local Remove% = True, i%
 	Local MakeDecal% = False
 	

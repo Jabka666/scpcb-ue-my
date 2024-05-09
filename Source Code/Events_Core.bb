@@ -5013,9 +5013,7 @@ Function UpdateEvents%()
 					Else
 						If e\room\NPC[0]\Frame > 474.0
 							If InteractObject(e\room\NPC[0]\OBJ, 2.25)
-								If ItemAmount >= MaxItemAmount
-									CreateMsg(GetLocalString("msg", "cantcarry"))
-								Else
+								If ItemAmount < MaxItemAmount
 									SelectedItem = CreateItem("Drawing", it_paper, 0.0, 0.0, 0.0)
 									EntityType(SelectedItem\Collider, HIT_ITEM)
 									EntityParent(SelectedItem\Collider, 0)
@@ -5025,6 +5023,8 @@ Function UpdateEvents%()
 									RemoveNPC(e\room\NPC[0])
 									
 									RemoveEvent(e)
+								Else
+									CreateMsg(GetLocalString("msg", "cantcarry"))
 								EndIf
 							EndIf
 						EndIf
