@@ -1081,6 +1081,7 @@ Function UpdateEvents%()
 					If e\room\NPC[0] <> Null
 						If EntityY(me\Collider) < (-6900.0) * RoomScale
 							ShouldPlay = 25
+							me\Zone = 1
 							
 							Temp = e\EventState2
 							
@@ -1883,6 +1884,7 @@ Function UpdateEvents%()
 					EndIf
 					If EntityY(me\Collider) < (-4496.0) * RoomScale
 						ShouldPlay = 30
+						me\Zone = 1
 						
 						GiveAchievement(Achv008)
 						If e\EventState = 0.0
@@ -2139,6 +2141,7 @@ Function UpdateEvents%()
 						e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 					Else
 						ShouldPlay = 24
+						me\Zone = 1
 						
 						If e\EventState = 0.0
 							TFormPoint(528.0, -3440.0, 96.0, e\room\OBJ, 0)
