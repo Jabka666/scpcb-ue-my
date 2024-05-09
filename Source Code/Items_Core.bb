@@ -333,6 +333,7 @@ Type Items
 	Field SecondInv.Items[20]
 	Field ID%
 	Field InvSlots%
+	Field IsOpt% = False
 End Type
 
 Dim Inventory.Items(0)
@@ -520,11 +521,26 @@ Function UpdateItems%()
 			
 			If i\Dist < HideDist
 				If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
+				
+				Local InView% = EntityInView(i\Model, Camera)
+				Local IsVisible% = EntityVisible(i\Collider, Camera)
+				
+				If InView Lor IsVisible
+					If (Not i\IsOpt)
+						EntityAlpha(i\Model, 1.0)
+						i\IsOpt = True
+					EndIf
+				Else
+					If i\IsOpt
+						EntityAlpha(i\Model, 0.0)
+						i\IsOpt = False
+					EndIf
+				EndIf
 				If i\Dist < 1.44
 					If ClosestItem = Null
-						If EntityInView(i\Model, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
+						If InView And IsVisible Then ClosestItem = i
 					ElseIf ClosestItem = i Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)
-						If EntityInView(i\Model, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
+						If InView And IsVisible Then ClosestItem = i
 					EndIf
 				EndIf
 				
