@@ -254,7 +254,7 @@ Function UpdateWorld2%()
 	
 	If HasBattery = 1
 		UpdateBatteryTimer()
-		If BatMsgTimer >= 70.0 * 1.0
+		If BatMsgTimer >= 70.0
 			If (Not ChannelPlaying(LowBatteryCHN[1])) Then LowBatteryCHN[1] = PlaySound_Strict(LowBatterySFX[1])
 		EndIf
 	EndIf
@@ -387,7 +387,7 @@ Function RenderWorld2%(Tween#)
 	CameraProjMode(ArkBlurCam, 0)
 	
 	If HasBattery = 1
-		If BatMsgTimer >= 70.0 * 1.0
+		If BatMsgTimer >= 70.0
 			Color(255, 0, 0)
 			SetFontEx(fo\FontID[Font_Digital])
 			

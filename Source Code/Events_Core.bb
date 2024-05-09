@@ -1497,7 +1497,7 @@ Function UpdateEvents%()
 						If e\room\NPC[0]\PrevState = 0
 							e\room\NPC[0]\GravityMult = 0.0
 						ElseIf e\room\NPC[0]\PrevState = 1
-							If e\room\NPC[0]\State2 < 70.0 * 1.0
+							If e\room\NPC[0]\State2 < 70.0
 								e\room\NPC[0]\State2 = e\room\NPC[0]\State2 + fps\Factor[0] : e\room\NPC[0]\GravityMult = 0.0
 							Else
 								e\room\NPC[0]\GravityMult = 1.0
@@ -2040,7 +2040,7 @@ Function UpdateEvents%()
 											If me\Sanity < -800.0 Then MakeMeUnplayable()
 											me\Sanity = Max(me\Sanity - (fps\Factor[0] * (1.0 + (0.5 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
 											e\EventState2 = Min(e\EventState2 + fps\Factor[0], 70.0 * 86.0)
-											If e\EventState2 > 70.0 * 1.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 1.0
+											If e\EventState2 > 70.0 And e\EventState2 - fps\Factor[0] <= 70.0
 												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech0.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 13.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 13.0
 												CreateMsg(GetLocalString("msg", "012_1"))
@@ -6506,7 +6506,7 @@ Function UpdateEvents%()
 						If e\EventState + fps\Factor[0] >= 70.0 * 17.0 Then LoadEventSound(e, "SFX\SCP\682\Roar.ogg") : e\SoundCHN = PlaySound_Strict(e\Sound)
 						If e\EventState > (70.0 * 17.0) - (70.0 * 3.0) Then me\BigCameraShake = 0.5
 						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\BigCameraShake = 2.0
-						If e\EventState < 70.0 * 1.0 Then RemoveEvent(e)
+						If e\EventState < 70.0 Then RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
@@ -6603,7 +6603,7 @@ Function UpdateEvents%()
 							e\EventState = e\EventState + fps\Factor[0]
 							e\room\RoomDoors[0]\Open = False
 							e\room\RoomDoors[1]\Open = False
-							If e\EventState < 70.0 * 1.0
+							If e\EventState < 70.0
 								If BrokenDoor
 									Pvt = CreatePivot()
 									

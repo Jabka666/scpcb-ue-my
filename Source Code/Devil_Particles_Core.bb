@@ -306,7 +306,7 @@ Function FreeEmitter%(Ent%, DeleteParticles% = False)
 					If p\emitter = e Then Delete(p)
 				Next
 				FreeEntity(e\Ent) : e\Ent = 0
-				If e\Fixed And e\Owner Then FreeEntity(e\Owner) : e\Owner = 0
+				If e\Fixed And e\Owner <> 0 Then FreeEntity(e\Owner) : e\Owner = 0
 				Delete(e)
 			Else
 				e\Del = True
@@ -384,7 +384,7 @@ Function UpdateParticles_Devil()
 					EndIf
 				Next
 				FreeEntity(e\Ent) : e\Ent = 0
-				If e\Fixed And e\Owner Then FreeEntity(e\Owner) : e\Owner = 0
+				If e\Fixed And e\Owner <> 0 Then FreeEntity(e\Owner) : e\Owner = 0
 				Delete(e)
 			EndIf
 		EndIf

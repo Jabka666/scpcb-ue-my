@@ -1137,7 +1137,7 @@ Function UpdateNPCs%()
 						
 						PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-						MoveEntity(n\OBJ2, 0.0, 8.6 * 0.11, -1.5 * 0.11)
+						MoveEntity(n\OBJ2, 0.0, 0.946, -0.165)
 						
 						If RID = r_dimension_106 Lor IsPlayerOutsideFacility()
 							If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
@@ -3157,7 +3157,7 @@ Function UpdateNPCs%()
 												Pvt = CreatePivot()
 												PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 												RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider))
-												MoveEntity(Pvt, 0.0, 8.87 * (0.21 / 9.0), 8.87 * (1.7 / 9.0))
+												MoveEntity(Pvt, 0.0, 0.023, 0.188)
 												PointEntity(Pvt, Target)
 												
 												If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0
@@ -3640,7 +3640,7 @@ Function UpdateNPCs%()
 									
 									PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) , EntityZ(n\OBJ))
 									RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-									MoveEntity(n\OBJ2, 0.0, 30.0 * 0.025, (-33.0) * 0.025)
+									MoveEntity(n\OBJ2, 0.0, 0.75, -0.825)
 									
 									; ~ Render distance is set to 8.5 inside the forest,
 									; ~ So we need to cheat a bit to make the eyes visible if they're further than that
@@ -3721,7 +3721,7 @@ Function UpdateNPCs%()
 							If EntityVisible(me\Collider, n\Collider)
 								n\EnemyX = EntityX(me\Collider)
 								n\EnemyZ = EntityZ(me\Collider)
-								n\LastSeen = 70.0 * 1.0
+								n\LastSeen = 70.0
 							EndIf
 							
 							If n\LastSeen > 0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
@@ -3748,7 +3748,7 @@ Function UpdateNPCs%()
 										Kill(True)
 									EndIf
 								Else
-									If n\LastSeen = 70.0 * 1.0
+									If n\LastSeen = 70.0
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										
 										AnimateNPC(n, 449.0, 464.0, n\CurrSpeed * 6.0)

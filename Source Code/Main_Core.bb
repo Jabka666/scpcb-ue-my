@@ -4974,7 +4974,7 @@ Function UpdateGUI%()
 					If CanUseItem(True, True)
 						CreateMsg(GetLocalString("msg", "syringe_6"))
 						
-						me\VomitTimer = 70.0 * 1.0
+						me\VomitTimer = 70.0
 						
 						I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
 						RemoveItem(SelectedItem)
@@ -5320,7 +5320,7 @@ Function UpdateGUI%()
 						If RadioType < 2
 							If SelectedItem\State <= 20.0
 								UpdateBatteryTimer()
-								If BatMsgTimer >= 70.0 * 1.0
+								If BatMsgTimer >= 70.0
 									If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 								EndIf
 							EndIf
@@ -5342,7 +5342,7 @@ Function UpdateGUI%()
 						
 						If SelectedItem\State > 0.0 And SelectedItem\State <= 20.0
 							UpdateBatteryTimer()
-							If BatMsgTimer >= 70.0 * 1.0
+							If BatMsgTimer >= 70.0
 								If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(LowBatterySFX[0])
 							EndIf
 						EndIf
