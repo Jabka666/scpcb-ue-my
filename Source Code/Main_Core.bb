@@ -9304,7 +9304,7 @@ Function Update1025%()
 				Case 0 ; ~ Common cold
 					;[Block]
 					UpdateCough(1000)
-					me\Stamina = me\Stamina - (Factor1025 * 0.3)
+					me\Stamina = me\Stamina - (Factor1025 * 0.2)
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
@@ -9313,7 +9313,7 @@ Function Update1025%()
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
 					UpdateCough(800)
-					me\Stamina = me\Stamina - (Factor1025 * 0.1)
+					If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then me\Stamina = me\Stamina - (Factor1025 * 0.3)
 					;[End Block]
 				Case 3 ; ~ Appendicitis
 					; ~ 0.035 / sec = 2.1 / min
