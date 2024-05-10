@@ -8225,10 +8225,9 @@ Function UpdateCredits%()
 	Next
 	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
 		me\CreditsTimer = me\CreditsTimer + (0.5 * fps\Factor[1])
-		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
+		If me\CreditsTimer >= 0.0
 			; ~ Just save this line, ok?
-		ElseIf me\CreditsTimer >= 255.0
-			If me\CreditsTimer > 500.0 Then me\CreditsTimer = -255.0
+			If me\CreditsTimer > 700.0 Then me\CreditsTimer = -255.0
 		Else
 			If me\CreditsTimer >= -1.0 Then me\CreditsTimer = -1.0
 		EndIf
