@@ -3284,10 +3284,14 @@ Function UpdateEvents%()
 				Else
 					If e\EventState = 1.0
 						If e\room\Dist < 2.5
+							Pvt = CreatePivot()
+							TFormPoint(-944.0, 320.0, 1460.0, e\room\OBJ, 0)
+							PositionEntity(Pvt, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
-							e\room\NPC[0]\EnemyX = EntityX(e\room\Objects[0], True)
-							e\room\NPC[0]\EnemyY = EntityY(e\room\Objects[0], True)
-							e\room\NPC[0]\EnemyZ = EntityZ(e\room\Objects[0], True)
+							e\room\NPC[0]\EnemyX = EntityX(Pvt, True)
+							e\room\NPC[0]\EnemyY = EntityY(Pvt, True)
+							e\room\NPC[0]\EnemyZ = EntityZ(Pvt, True)
+							FreeEntity(Pvt) : Pvt = 0
 							
 							e\EventState = 2.0
 						EndIf
@@ -5080,11 +5084,12 @@ Function UpdateEvents%()
 							e\room\RoomDoors[i]\Locked = 1
 						Next
 						
+						TFormPoint(-352.0, 150.0, 0.0, e\room\OBJ, 0)
 						If n_I\Curr096 <> Null
-							PositionEntity(n_I\Curr096\Collider, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True) + 0.1, EntityZ(e\room\Objects[0], True), True)
+							PositionEntity(n_I\Curr096\Collider, TFormedX(), TFormedY(), TFormedZ())
 							ResetEntity(n_I\Curr096\Collider)
 						Else
-							n_I\Curr096 = CreateNPC(NPCType096, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True) + 0.1, EntityZ(e\room\Objects[0], True))
+							n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
 						EndIf
 						n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
 						RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
@@ -5092,7 +5097,8 @@ Function UpdateEvents%()
 						LoadEventSound(e, "SFX\Character\Guard\096ServerRoom0.ogg")
 						e\SoundCHN = PlaySound2(e\Sound, Camera, n_I\Curr096\OBJ, 10.0, 1.0, True)
 						
-						e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+						TFormPoint(-1328.0, 150.0, 528.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 						
 						GiveAchievement(Achv096)
 						
@@ -5204,7 +5210,7 @@ Function UpdateEvents%()
 							
 							StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 							
-							ShowEntity(e\room\Objects[2])
+							ShowEntity(e\room\Objects[0])
 							
 							it.Items = CreateItem("Level 3 Key Card", it_key3, EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.1, EntityZ(e\room\NPC[0]\Collider))
 							EntityType(it\Collider, HIT_ITEM)
@@ -5253,8 +5259,6 @@ Function UpdateEvents%()
 					Temp = UpdateLever(e\room\RoomLevers[0]\OBJ) ; ~ Power switch
 					x = UpdateLever(e\room\RoomLevers[1]\OBJ) ; ~ Fuel pump
 					z = UpdateLever(e\room\RoomLevers[2]\OBJ) ; ~ Generator
-					
-					If EntityHidden(e\room\Objects[2]) Then ShowEntity(e\room\Objects[2])
 					
 					; ~ Fuel pump on
 					If x

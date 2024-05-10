@@ -126,10 +126,6 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[0] = d
-			
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 1460.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 		Case r_cont1_005
 			;[Block]
@@ -1005,12 +1001,11 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
-			r\Objects[2] = LoadRMesh("GFX\Map\Room2_Storage_Posters.rmesh", Null)
+			r\Objects[2] = LoadRMesh("GFX\Map\room2_storage_posters.rmesh", Null)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)
 			EntityParent(r\Objects[2], r\OBJ)
 			HideEntity(r\Objects[2])
-			
 			
 			it.Items = CreateItem("Document SCP-939", it_paper, r\x + 352.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 256.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 4.0, 0.0)
@@ -1801,27 +1796,22 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			EndIf
 			
-			; ~ SCP-1048 spawnpoint
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 877.0 * RoomScale, r\y + 96.0 * RoomScale, r\z + 333.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
-			
 			; ~ Monitors at the both sides
+			r\Objects[0] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			PositionEntity(r\Objects[0], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
+			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[0], 0.0, 180.0, 0.0)
+			
 			r\Objects[1] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
-			PositionEntity(r\Objects[1], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
+			PositionEntity(r\Objects[1], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
 			ScaleEntity(r\Objects[1], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[1], 0.0, 180.0, 0.0)
+			RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
 			
-			r\Objects[2] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
-			PositionEntity(r\Objects[2], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
-			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
+			r\Objects[2] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 646.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
+			EntityParent(r\Objects[2], r\OBJ)
 			
-			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 646.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
+			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 645.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
 			EntityParent(r\Objects[3], r\OBJ)
-			
-			r\Objects[4] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 645.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
-			EntityParent(r\Objects[4], r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 960.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 0.0
@@ -2250,21 +2240,11 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR)
 			d\Locked = 1
 			
-			; ~ SCP-096's spawnpoint
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 352.0 * RoomScale, r\y + 0.5, r\z)
-			EntityParent(r\Objects[0], r\OBJ)
-			
-			; ~ Guard's spawnpoint
-			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 1328.0 * RoomScale, r\y + 0.5, r\z + 528.0 * RoomScale)
-			EntityParent(r\Objects[1], r\OBJ)
-			
-			r\Objects[2] = LoadMesh_Strict("GFX\Map\room2_servers_hcz_hb.b3d", r\OBJ)
-			r\ScriptedObject[2] = True
-			EntityPickMode(r\Objects[2], 2)
-			EntityAlpha(r\Objects[2], 0.0)
-			HideEntity(r\Objects[2])
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_servers_hcz_hb.b3d", r\OBJ)
+			r\ScriptedObject[0] = True
+			EntityPickMode(r\Objects[0], 2)
+			EntityAlpha(r\Objects[0], 0.0)
+			HideEntity(r\Objects[0])
 			
 			CreateCustomCenter(r, r\x, r\z - 756.0 * RoomScale)
 			;[End Block]
@@ -2830,27 +2810,22 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			EndIf
 			
-			; ~ SCP-1048 spawnpoint
-			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 877.0 * RoomScale, r\y + 96.0 * RoomScale, r\z + 333.0 * RoomScale)
-			EntityParent(r\Objects[0], r\OBJ)
-			
 			; ~ Monitors at the both sides
+			r\Objects[0] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			PositionEntity(r\Objects[0], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
+			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[0], 0.0, 180.0, 0.0)
+			
 			r\Objects[1] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
-			PositionEntity(r\Objects[1], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
+			PositionEntity(r\Objects[1], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
 			ScaleEntity(r\Objects[1], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[1], 0.0, 180.0, 0.0)
+			RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
 			
-			r\Objects[2] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
-			PositionEntity(r\Objects[2], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
-			ScaleEntity(r\Objects[2], 2.0, 2.0, 2.0)
-			RotateEntity(r\Objects[2], 0.0, 0.0, 0.0)
+			r\Objects[2] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 645.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
+			EntityParent(r\Objects[2], r\OBJ)
 			
-			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 645.0 * RoomScale, 0.0, 0.0, 0.0, 0, True)
+			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 646.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
 			EntityParent(r\Objects[3], r\OBJ)
-			
-			r\Objects[4] = CreateButton(BUTTON_KEYCARD, r\x + 1160.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 646.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
-			EntityParent(r\Objects[4], r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z - 960.0 * RoomScale, 20.0)
 			sc\Angle = 45.0 : sc\Turn = 0.0
@@ -3238,7 +3213,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			; ~ SCP-458
+			; ~ SCP-458 door
 			d.Doors = CreateDoor(r, r\x + 232.0 * RoomScale, r\y - 384.0 * RoomScale, r\z + 612.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_1)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
 			
