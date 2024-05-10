@@ -2491,10 +2491,6 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			d.Doors = CreateDoor(r, r\x - 2990.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z - 1824.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			
 			d.Doors = CreateDoor(r, r\x - 2766.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z - 2048.0 * RoomScale, 0.0, False, HEAVY_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
@@ -2535,7 +2531,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[5] = CreateButton(BUTTON_DEFAULT, r\x - 314.0 * RoomScale, r\y - 3368.0 * RoomScale, r\z - 612.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
 			EntityParent(r\Objects[5], r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-049", it_paper, r\x - 693.0 * RoomScale, r\y - 3332.0 * RoomScale, r\z + 702.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-049", it_paper, r\x - 841.0 * RoomScale, r\y - 3404.0 * RoomScale, r\z - 866.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x - 564.0 * RoomScale, r\y - 3412.0 * RoomScale, r\z + 698.0 * RoomScale)
