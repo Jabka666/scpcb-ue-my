@@ -6301,7 +6301,7 @@ Function RenderGUI%()
 						ShouldDrawRect = (wi\HazmatSuit = 3)
 						;[End Block]
 					Case it_hazmatsuit148
-						;[Block]"
+						;[Block]
 						ShouldDrawRect = (wi\HazmatSuit = 4)
 						;[End Block]
 					Case it_scp427
@@ -8019,7 +8019,7 @@ Function UpdateEnding%()
 			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[22] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, 0)
 			NowPlaying = ShouldPlay
 			
-			PlaySound_Strict(snd_I\LightSFX)
+			PlaySound_Strict(snd_I\LightOffSFX)
 		EndIf
 		
 		If me\EndingTimer > -700.0

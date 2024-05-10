@@ -1299,7 +1299,8 @@ Type SoundInstance
 	Field DripSFX%[4]
 	Field KnobSFX%[2]
 	Field LeverSFX%
-	Field LightSFX%
+	Field LightSFX%[3]
+	Field LightOffSFX%
 	Field ButtGhostSFX%
 	Field RadioSquelch%
 	Field RadioStatic%
@@ -1314,7 +1315,7 @@ Type SoundInstance
 	Field SCP173SFX%[3]
 	Field HorrorSFX%[13]
 	Field MissSFX%
-	Field IntroSFX%[12]
+	Field IntroSFX%[8]
 	Field AlarmSFX%[4]
 	Field DamageSFX%[14]
 	Field HeartBeatSFX%
@@ -1431,8 +1432,7 @@ Function LoadSounds%()
 			
 			snd_I\SCP173SFX[i] = LoadSound_Strict("SFX\SCP\173\Rattle" + i + ".ogg")
 			
-			snd_I\IntroSFX[i + 5] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
-			snd_I\IntroSFX[i + 8] = LoadSound_Strict("SFX\Room\Light" + i + ".ogg")
+			snd_I\LightSFX[i] = LoadSound_Strict("SFX\Room\Light" + i + ".ogg")
 			
 			StepSFX(2, 0, i) = LoadSound_Strict("SFX\Step\StepPD" + i + ".ogg")
 			StepSFX(3, 0, i) = LoadSound_Strict("SFX\Step\StepCloth" + i + ".ogg")
@@ -1507,7 +1507,7 @@ Function LoadSounds%()
 	
 	snd_I\LeverSFX = LoadSound_Strict("SFX\Interact\LeverFlip.ogg") 
 	
-	snd_I\LightSFX = LoadSound_Strict("SFX\Room\LightSwitch.ogg")
+	snd_I\LightOffSFX = LoadSound_Strict("SFX\Room\LightSwitch.ogg")
 	
 	snd_I\ButtGhostSFX = LoadSound_Strict("SFX\SCP\Joke\789J.ogg")
 	
@@ -1535,8 +1535,6 @@ Function LoadSounds%()
 	snd_I\SCP106SFX[3] = LoadSound_Strict("SFX\SCP\106\Laugh.ogg")
 	snd_I\SCP106SFX[4] = LoadSound_Strict("SFX\SCP\106\Breathing.ogg")
 	snd_I\SCP106SFX[5] = LoadSound_Strict("SFX\Room\PocketDimension\Enter.ogg")
-	
-	snd_I\IntroSFX[11] = LoadSound_Strict("SFX\Room\Intro\173Vent.ogg")
 	
 	snd_I\HeartBeatSFX = LoadSound_Strict("SFX\Character\D9341\HeartBeat.ogg")
 	
@@ -1589,6 +1587,7 @@ Function RemoveSoundInstances%()
 			snd_I\NeckSnapSFX[i] = 0
 			CoughSFX(0, i) = 0
 			CoughSFX(1, i) = 0
+			snd_I\LightSFX[i] = 0
 		EndIf
 		If i < 4
 			snd_I\DecaySFX[i] = 0
@@ -1616,13 +1615,15 @@ Function RemoveSoundInstances%()
 				StepSFX(4, 0, i) = 0
 			EndIf
 			If i < 2 Then StepSFX(5, 0, i) = 0
+			snd_I\IntroSFX[i] = 0
 		EndIf
 		If i < 9
 			RadioSFX(1, i) = 0
 			snd_I\SCP106SFX[i] = 0
 		EndIf
-		If i < 11 Then RoomAmbience[i] = 0
-		If i < 12 Then snd_I\IntroSFX[i] = 0
+		If i < 11
+			RoomAmbience[i] = 0
+		EndIf
 		If i < 13
 			snd_I\HorrorSFX[i] = 0
 			snd_I\Step2SFX[i] = 0
@@ -1660,7 +1661,7 @@ Function RemoveSoundInstances%()
 	
 	snd_I\LeverSFX = 0
 	
-	snd_I\LightSFX = 0
+	snd_I\LightOffSFX = 0
 	
 	snd_I\ButtGhostSFX = 0
 	
@@ -2596,7 +2597,8 @@ Function InitNewGame%()
 		EndIf
 		
 		If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
-			PositionEntity(me\Collider, r\x + 3584.0 * RoomScale, r\y + 640.0 * RoomScale, r\z + 3096.0 * RoomScale)
+			TFormPoint(3584.0, 640.0, 3096.0, r\OBJ, 0)
+			PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ())
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", it_paper, 1.0, 1.0, 1.0)
 			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
@@ -2606,7 +2608,8 @@ Function InitNewGame%()
 			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
 		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
-			PositionEntity(me\Collider, EntityX(r\Objects[5], True), EntityY(r\Objects[5], True), EntityZ(r\Objects[5], True))
+			TFormPoint(-4096.0 * RoomScale, 0.0, 0.0, r\OBJ, 0)
+			PositionEntity(me\Collider, TFormedX(), 0.0, TFormedZ())
 			PlayerRoom = r
 		EndIf
 	Next

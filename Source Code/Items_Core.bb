@@ -647,7 +647,7 @@ Function PickItem%(item.Items)
 					Case it_killbat
 						;[Block]
 						me\LightFlash = 1.0
-						PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+						PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 						msg\DeathMsg = Format(GetLocalString("death", "killbat"), SubjectName)
 						Kill()
 						;[End Block]

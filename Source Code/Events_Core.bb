@@ -758,7 +758,7 @@ Function UpdateEvents%()
 									EndIf
 								Else
 									If e\EventState - fps\Factor[0] < 900.0 + (70.0 * 4.0)
-										PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+										PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 										me\LightBlink = 3.0
 										PlaySound2(snd_I\StoneDragSFX, Camera, n_I\Curr173\Collider)
 										PointEntity(n_I\Curr173\Collider, e\room\NPC[2]\Collider)
@@ -773,7 +773,7 @@ Function UpdateEvents%()
 										If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 6.25 And Abs(EntityY(me\Collider) - EntityY(n_I\Curr173\Collider)) < 1.0
 											me\LightBlink = 3.0
 											me\BlinkTimer = -10.0
-											PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+											PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 											PlaySound2(snd_I\StoneDragSFX, Camera, n_I\Curr173\Collider)
 											PositionEntity(n_I\Curr173\Collider, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 											ResetEntity(n_I\Curr173\Collider)
@@ -786,7 +786,7 @@ Function UpdateEvents%()
 											e\room\RoomDoors[3]\Open = False
 											me\LightBlink = 3.0
 											me\BlinkTimer = -10.0
-											PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+											PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 											PlaySound2(snd_I\StoneDragSFX, Camera, n_I\Curr173\Collider)
 											PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
 											ResetEntity(n_I\Curr173\Collider)
@@ -2199,7 +2199,7 @@ Function UpdateEvents%()
 							
 							If PrevGenLever <> x
 								If (Not x)
-									PlaySound_Strict(snd_I\LightSFX)
+									PlaySound_Strict(snd_I\LightOffSFX)
 								Else
 									PlaySound_Strict(snd_I\TeslaPowerUpSFX)
 								EndIf
@@ -3041,7 +3041,7 @@ Function UpdateEvents%()
 				If PlayerRoom = e\room
 					If e\EventState = 0.0 And Rand(50) = 1
 						If RemoteDoorOn
-							PlaySound_Strict(snd_I\LightSFX)
+							PlaySound_Strict(snd_I\LightOffSFX)
 							me\LightBlink = 4.0
 							For i = 0 To 1
 								If (Not e\room\RoomDoors[i]\Open)
@@ -3328,7 +3328,7 @@ Function UpdateEvents%()
 					If e\EventState < 70.0 * 3.0
 						RotateEntity(e\room\NPC[1]\Collider, 0.0, CurveAngle(e\room\Angle + 90.0, EntityYaw(e\room\NPC[1]\Collider), 100.0), 0.0, True)
 						e\room\NPC[0]\State = 1.0
-						If e\EventState > 70.0 * 2.9 And e\EventState - fps\Factor[0] <= 70.0 * 2.9 Then PlaySound2(snd_I\IntroSFX[11], Camera, e\room\OBJ, 15.0)
+						If e\EventState > 70.0 * 2.9 And e\EventState - fps\Factor[0] <= 70.0 * 2.9 Then PlaySound2(LoadTempSound("SFX\Room\Intro\173Vent.ogg"), Camera, e\room\OBJ, 15.0)
 					ElseIf e\EventState < 70.0 * 6.5
 						If e\EventState - fps\Factor[0] < 70.0 * 3.0
 							e\room\NPC[0]\State = 0.0
@@ -3346,7 +3346,7 @@ Function UpdateEvents%()
 					Else
 						If e\EventState - fps\Factor[0] < 70.0 * 6.5
 							PlaySound_Strict(snd_I\HorrorSFX[0])
-							PlaySound_Strict(snd_I\LightSFX)
+							PlaySound_Strict(snd_I\LightOffSFX)
 							me\LightBlink = 10.0
 						EndIf
 						
@@ -3577,7 +3577,7 @@ Function UpdateEvents%()
 					Local PrevState2# = e\EventState2
 					
 					e\EventState2 = UpdateLever(e\room\RoomLevers[1]\OBJ)
-					If (PrevState2 <> e\EventState2) And e\EventState > 0.0 Then PlaySound2(snd_I\LightSFX, Camera, e\room\RoomLevers[1]\OBJ)
+					If (PrevState2 <> e\EventState2) And e\EventState > 0.0 Then PlaySound2(snd_I\LightOffSFX, Camera, e\room\RoomLevers[1]\OBJ)
 					IsBlackOut = (e\EventState2 = 0.0)
 					
 					If e\EventState = 0.0
@@ -5101,7 +5101,7 @@ Function UpdateEvents%()
 				ElseIf e\EventState < 70.0 * 45.0
 					If Rand(50) = 1 And PlayerRoom = e\room
 						me\LightBlink = Rnd(1.0, 2.0)
-						If Rand(5) = 1 Then PlaySound2(snd_I\IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
+						If Rand(5) = 1 Then PlaySound2(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 					EndIf
 					
 					e\EventState = Min(e\EventState + fps\Factor[0], 70.0 * 40.0)
@@ -5224,7 +5224,7 @@ Function UpdateEvents%()
 						If PlayerRoom = e\room
 							If ChannelPlaying(e\SoundCHN)
 								me\LightBlink = Rnd(0.5, 6.0)
-								If Rand(50) = 1 Then PlaySound2(snd_I\IntroSFX[Rand(8, 10)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
+								If Rand(50) = 1 Then PlaySound2(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 							EndIf
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 ; ~ Lock the player inside
@@ -6272,7 +6272,7 @@ Function UpdateEvents%()
 					Else
 						If e\EventState = 0.0
 							If e\room\Dist < 3.5
-								PlaySound_Strict(snd_I\LightSFX)
+								PlaySound_Strict(snd_I\LightOffSFX)
 								
 								me\LightBlink = 5.0
 								e\EventState = 1.0
@@ -7068,7 +7068,7 @@ Function UpdateEvents%()
 					ElseIf e\EventState = 1.0
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 1.96
 							me\LightBlink = 10.0
-							PlaySound_Strict(snd_I\LightSFX)
+							PlaySound_Strict(snd_I\LightOffSFX)
 							e\room\NPC[0]\State = 1.0
 							e\EventState = 2.0
 						EndIf
@@ -8177,33 +8177,41 @@ Function UpdateIntro%()
 					Next
 					snd_I\IntroSFX[2] = LoadSound_Strict("SFX\Room\Intro\Horror.ogg")
 					snd_I\IntroSFX[3] = LoadSound_Strict("SFX\Room\Intro\See173.ogg")
-					snd_I\IntroSFX[4] = LoadSound_Strict("SFX\Room\Intro\173Chamber.ogg")
+					For i = 0 To 2
+						snd_I\IntroSFX[i + 4] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
+					Next
+					snd_I\IntroSFX[7] = LoadSound_Strict("SFX\Room\Intro\173Vent.ogg")
 					
 					HideDistance = 68.0
 					
 					n_I\Curr173\Angle = 90.0 : n_I\Curr173\Idle = 1
-					PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True))
+					PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
 					RotateEntity(n_I\Curr173\Collider, 0.0, 0.0, 0.0, True)
 					ResetEntity(n_I\Curr173\Collider)
 					HideEntity(n_I\Curr173\OBJ)
 					HideEntity(n_I\Curr173\OBJ2)
 					
-					e\room\NPC[0] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True))
+					TFormPoint(328.0, 480.0, 1072.0, e\room\OBJ, 0)
+					e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[0]\Angle = 180.0
 					HideEntity(e\room\NPC[0]\OBJ)
 					
-					e\room\NPC[1] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
+					TFormPoint(208.0, 200.0, 480.0, e\room\OBJ, 0)
+					y = TFormedY()
+					e\room\NPC[1] = CreateNPC(NPCTypeD, TFormedX(), y, TFormedZ())
 					e\room\NPC[1]\State3 = 4.0
-					PointEntity(e\room\NPC[1]\Collider, e\room\Objects[6])
+					PointEntity(e\room\NPC[1]\Collider, e\room\Objects[2])
 					HideEntity(e\room\NPC[1]\OBJ)
 					
-					e\room\NPC[2] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True))
+					TFormPoint(160.0, 0.0, 320.0, e\room\OBJ, 0)
+					e\room\NPC[2] = CreateNPC(NPCTypeD, TFormedX(), y, TFormedZ())
 					e\room\NPC[2]\State3 = 5.0
-					PointEntity(e\room\NPC[2]\Collider, e\room\Objects[6])
+					PointEntity(e\room\NPC[2]\Collider, e\room\Objects[2])
 					ChangeNPCTextureID(e\room\NPC[2], NPC_CLASS_D_CLASS_D_TEXTURE)
 					HideEntity(e\room\NPC[2]\OBJ)
 					
-					e\room\NPC[3] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True))
+					TFormPoint(-4205.0, 0.0, 870.0, e\room\OBJ, 0)
+					e\room\NPC[3] = CreateNPC(NPCTypeGuard, TFormedX(), y, TFormedZ())
 					e\room\NPC[3]\State = 7.0
 					; ~ Preload this sound cause of huge file size
 					Temp = Rand(0, 4)
@@ -8211,24 +8219,28 @@ Function UpdateIntro%()
 					RotateEntity(e\room\NPC[3]\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 					HideEntity(e\room\NPC[3]\OBJ)
 					
-					e\room\NPC[4] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True))
+					TFormPoint(-3985.0, 0.0, 786.0, e\room\OBJ, 0)
+					e\room\NPC[4] = CreateNPC(NPCTypeGuard, TFormedX(), y, TFormedZ())
 					e\room\NPC[4]\State = 7.0
 					; ~ Preload this sound cause of huge file size
 					e\room\NPC[4]\Sound2 = LoadSound_Strict("SFX\Room\Intro\Guard\Conversation" + Temp + "b.ogg")
 					RotateEntity(e\room\NPC[4]\Collider, 0.0, e\room\Angle + 135.0, 0.0)
 					HideEntity(e\room\NPC[4]\OBJ)
 					
-					e\room\NPC[5] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[9], True), EntityY(e\room\Objects[9], True), EntityZ(e\room\Objects[9], True))
+					TFormPoint(-8064.0, 0.0, 1096.0, e\room\OBJ, 0)
+					e\room\NPC[5] = CreateNPC(NPCTypeGuard, TFormedX(), y, TFormedZ())
 					e\room\NPC[5]\State = 7.0
 					e\room\NPC[5]\Sound2 = LoadSound_Strict("SFX\Room\Intro\Guard\Music" + Rand(0, 4) + ".ogg")
 					RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 					HideEntity(e\room\NPC[5]\OBJ)
 					
-					e\room\NPC[6] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[10], True), EntityY(e\room\Objects[10], True), EntityZ(e\room\Objects[10], True))
+					TFormPoint(-3424.0, -100.0, -2208.0, e\room\OBJ, 0)
+					e\room\NPC[6] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					ChangeNPCTextureID(e\room\NPC[6], NPC_CLASS_D_FRANKLIN_TEXTURE)
 					HideEntity(e\room\NPC[6]\OBJ)
 					
-					e\room\NPC[7] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True), EntityZ(e\room\Objects[11], True))
+					TFormPoint(-3073.0, -315.0, -2165.0, e\room\OBJ, 0)
+					e\room\NPC[7] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[7]\State = -1.0
 					; ~ Preload this sound cause of huge file size
 					e\room\NPC[7]\Sound = LoadSound_Strict("SFX\Room\Intro\Scientist\Conversation.ogg")
@@ -8236,48 +8248,45 @@ Function UpdateIntro%()
 					ChangeNPCTextureID(e\room\NPC[7], NPC_CLASS_D_SCIENTIST_TEXTURE)
 					HideEntity(e\room\NPC[7]\OBJ)
 					
-					e\room\NPC[8] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[12], True), EntityY(e\room\Objects[12], True), EntityZ(e\room\Objects[12], True))
+					TFormPoint(-3800.0, 250.0, -4088.0, e\room\OBJ, 0)
+					y = TFormedY() : z = TFormedZ()
+					e\room\NPC[8] = CreateNPC(NPCTypeGuard, TFormedX(), y, z)
 					e\room\NPC[8]\State = 7.0
 					HideEntity(e\room\NPC[8]\OBJ)
 					
-					e\room\NPC[9] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[13], True), EntityY(e\room\Objects[13], True), EntityZ(e\room\Objects[13], True))
+					TFormPoint(-4200.0, 0.0, 0.0, e\room\OBJ, 0)
+					e\room\NPC[9] = CreateNPC(NPCTypeGuard, TFormedX(), y, z)
 					e\room\NPC[9]\State = 7.0
 					HideEntity(e\room\NPC[9]\OBJ)
 					
-					e\room\NPC[10] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[14], True), EntityY(e\room\Objects[14], True), EntityZ(e\room\Objects[14], True))
+					TFormPoint(-4000.0, 0.0, 0.0, e\room\OBJ, 0)
+					e\room\NPC[10] = CreateNPC(NPCTypeD, TFormedX(), y, z)
 					e\room\NPC[10]\State2 = 1.0
 					ChangeNPCTextureID(e\room\NPC[10], NPC_CLASS_D_D9341_TEXTURE)
 					HideEntity(e\room\NPC[10]\OBJ)
 					
-					e\room\NPC[11] = CreateNPC(NPCTypeGuard, EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
+					TFormPoint(-7208.0, -600.0, -3104.0, e\room\OBJ, 0)
+					e\room\NPC[11] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[11]\State = 15.0
 					CreateNPCAsset(e\room\NPC[11])
 					HideEntity(e\room\NPC[11]\OBJ)
 					HideEntity(e\room\NPC[11]\OBJ2)
 					
-					e\room\NPC[12] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[21], True), EntityY(e\room\Objects[21], True), EntityZ(e\room\Objects[21], True))
+					TFormPoint(-5675.0, -1020.0, -3717.0, e\room\OBJ, 0)
+					e\room\NPC[12] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[12]\State = -1.0
 					RotateEntity(e\room\NPC[12]\Collider, 0.0, 154.0, 0.0)
 					SetNPCFrame(e\room\NPC[12], 357.0)
 					ChangeNPCTextureID(e\room\NPC[12], NPC_CLASS_D_JANITOR_TEXTURE)
 					HideEntity(e\room\NPC[12]\OBJ)
 					
-					Pvt = CreatePivot()
-					RotateEntity(Pvt, 90.0, 0.0, 0.0)
 					For i = 8 To 11
-						PositionEntity(Pvt, EntityX(e\room\NPC[i]\Collider), EntityY(e\room\NPC[i]\Collider), EntityZ(e\room\NPC[i]\Collider))
-						EntityPick(Pvt, 20.0)
-						If PickedEntity() <> 0
-							PositionEntity(e\room\NPC[i]\Collider, PickedX(), PickedY(), PickedZ(), True)
-							AlignToVector(e\room\NPC[i]\Collider, -PickedNX(), -PickedNY(), -PickedNZ(), 3.0)
-							If i < 11
-								RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
-							Else
-								RotateEntity(e\room\NPC[i]\Collider, 0.0, -90.0, 0.0)
-							EndIf
+						If i < 11
+							RotateEntity(e\room\NPC[i]\Collider, 0.0, 90.0, 0.0)
+						Else
+							RotateEntity(e\room\NPC[i]\Collider, 0.0, -90.0, 0.0)
 						EndIf
 					Next
-					FreeEntity(Pvt) : Pvt = 0
 					
 					x = e\room\x - 4248.0 * RoomScale
 					y = e\room\y + 136.0 * RoomScale
@@ -8288,7 +8297,7 @@ Function UpdateIntro%()
 					PositionEntity(me\Collider, x, e\room\y + 0.302, z)
 					RotateEntity(Camera, -70.0, 0.0, 0.0)
 					
-					PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+					PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 					me\BlurTimer = 1000.0
 					me\LightFlash = 1.0
 					MakeMeUnplayable()
@@ -8416,12 +8425,12 @@ Function UpdateIntro%()
 									OpenCloseDoor(e\room\RoomDoors[4])
 								EndIf
 								If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN))
-									FreeEntity(e\room\Objects[19]) : e\room\Objects[19] = 0
+									FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
 									For i = 6 To 12
 										ShowEntity(e\room\NPC[i]\OBJ)
 									Next
 									ShowEntity(e\room\NPC[11]\OBJ2)
-									ShowEntity(e\room\Objects[20])
+									ShowEntity(e\room\Objects[4])
 									
 									e\EventState = INTRO_MOVING_TO_CHAMBER
 								EndIf
@@ -8661,7 +8670,7 @@ Function UpdateIntro%()
 											OpenCloseDoor(e\room\RoomDoors[i])
 										Next
 										
-										FreeEntity(e\room\Objects[20]) : e\room\Objects[20] = 0
+										FreeEntity(e\room\Objects[4]) : e\room\Objects[4] = 0
 										
 										For i = 0 To 2
 											ShowEntity(e\room\NPC[i]\OBJ)
@@ -8682,7 +8691,8 @@ Function UpdateIntro%()
 									ShowEntity(e\room\NPC[6]\OBJ)
 									PointEntity(e\room\NPC[6]\Collider, e\room\OBJ)
 									RotateEntity(e\room\NPC[6]\Collider, 0.0, EntityYaw(e\room\NPC[6]\Collider), 0.0)
-									PositionEntity(e\room\NPC[6]\Collider, EntityX(e\room\Objects[16], True), EntityY(e\room\Objects[16], True), EntityZ(e\room\Objects[16], True))
+									TFormPoint(-902.0, 500.0, 456.0, e\room\OBJ, 0)
+									PositionEntity(e\room\NPC[6]\Collider, TFormedX(), TFormedY(), TFormedZ())
 									ResetEntity(e\room\NPC[6]\Collider)
 									
 									ShowEntity(n_I\Curr173\OBJ)
@@ -8695,8 +8705,6 @@ Function UpdateIntro%()
 							;[End Block]
 						Case INTRO_IN_CHAMBER
 							;[Block]
-							e\SoundCHN2 = LoopSound2(snd_I\IntroSFX[4], e\SoundCHN2, Camera, e\room\Objects[4], 6.0)
-							
 							If snd_I\IntroSFX[3] <> 0
 								If EntityVisible(Camera, n_I\Curr173\OBJ) And EntityInView(n_I\Curr173\OBJ, Camera)
 									CreateHintMsg(Format(GetLocalString("msg", "blink"), key\Name[key\BLINK]))
@@ -8760,15 +8768,15 @@ Function UpdateIntro%()
 								ElseIf e\EventState3 > 230.0
 									Temp = True
 									For i = 1 To 2
-										If DistanceSquared(EntityX(e\room\NPC[i]\Collider), EntityX(e\room\Objects[i + 2], True), EntityZ(e\room\NPC[i]\Collider), EntityZ(e\room\Objects[i + 2], True)) > 0.09
-											PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[i + 2])
+										If DistanceSquared(EntityX(e\room\NPC[i]\Collider), EntityX(e\room\Objects[i - 1], True), EntityZ(e\room\NPC[i]\Collider), EntityZ(e\room\Objects[i - 1], True)) > 0.09
+											PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[i - 1])
 											RotateEntity(e\room\NPC[i]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[i]\OBJ), EntityYaw(e\room\NPC[i]\Collider), 15.0), 0.0)
 											If e\EventState3 > (200.0 + (i * 30.0)) Then e\room\NPC[i]\State = 1.0
 											Temp = False
 										Else
 											e\room\NPC[i]\State = 0.0
 											
-											PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[6])
+											PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[2])
 											RotateEntity(e\room\NPC[i]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[i]\OBJ), EntityYaw(e\room\NPC[i]\Collider), 15.0), 0.0)
 										EndIf
 									Next
@@ -8800,7 +8808,7 @@ Function UpdateIntro%()
 								e\EventState3 = Min(e\EventState3 + fps\Factor[0], 13000.0)
 								
 								For i = 1 To 2
-									PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[6])
+									PointEntity(e\room\NPC[i]\OBJ, e\room\Objects[2])
 									RotateEntity(e\room\NPC[i]\Collider, 0.0, CurveValue(EntityYaw(e\room\NPC[i]\OBJ), EntityYaw(e\room\NPC[i]\Collider), 15.0), 0.0)
 								Next
 								; ~ Do not let the player leave the chamber
@@ -8815,7 +8823,7 @@ Function UpdateIntro%()
 									LoadEventSound(e, "SFX\Room\Intro\Scientist\Franklin\Problem.ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound, True)
 								ElseIf e\EventState3 >= 11145.0 And e\EventState3 - fps\Factor[0] < 11145.0
-									PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+									PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 									e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Intro\ClassD\DontLikeThis.ogg")
 									e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider, 10.0, 1.0, True)
 								ElseIf e\EventState3 >= 11561.0 And e\EventState3 - fps\Factor[0] < 11561.0
@@ -8881,6 +8889,8 @@ Function UpdateIntro%()
 										If (Not e\room\NPC[1]\IsDead)
 											PlaySound2(snd_I\NeckSnapSFX[Rand(0, 2)], Camera, n_I\Curr173\Collider)
 											e\room\NPC[1]\IsDead = True
+											PlaySound_Strict(snd_I\IntroSFX[4])
+											me\BigCameraShake = 3.0
 										EndIf
 										PositionEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[1]\OBJ), EntityY(n_I\Curr173\Collider), EntityZ(e\room\NPC[1]\OBJ))
 										ResetEntity(n_I\Curr173\Collider)
@@ -8902,7 +8912,7 @@ Function UpdateIntro%()
 										EndIf
 									EndIf
 									
-									If e\EventState3 > 14080.0 And e\EventState3 - fps\Factor[0] < 14080.0 Then PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+									If e\EventState3 > 14080.0 And e\EventState3 - fps\Factor[0] < 14080.0 Then PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 									me\BigCameraShake = 3.0
 								ElseIf e\EventState3 < 14200.0
 									e\room\NPC[0]\State = 8.0
@@ -8922,7 +8932,7 @@ Function UpdateIntro%()
 									Else
 										n_I\Curr173\Idle = 0
 									EndIf
-									If e\EventState3 >= 14100.0 And e\EventState3 - fps\Factor[0] < 14100.0 Then PlaySound_Strict(snd_I\IntroSFX[6])
+									If e\EventState3 >= 14100.0 And e\EventState3 - fps\Factor[0] < 14100.0 Then PlaySound_Strict(snd_I\IntroSFX[5])
 									If e\EventState3 < 14150.0 Then me\BigCameraShake = 5.0
 								Else
 									If e\EventState3 > 14300.0
@@ -8940,18 +8950,19 @@ Function UpdateIntro%()
 								Else
 									If e\EventState3 < 20200.0
 										If e\EventState3 > 20105.0 And e\EventState3 - fps\Factor[0] < 20105.0
-											PlaySound_Strict(snd_I\IntroSFX[7])
-											PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
+											PlaySound_Strict(snd_I\IntroSFX[6])
+											TFormPoint(128.0, 480.0, 1280.0, e\room\OBJ, 0)
+											PositionEntity(e\room\NPC[0]\Collider, TFormedX(), TFormedY(), TFormedZ())
 											ResetEntity(e\room\NPC[0]\Collider)
 											
 											StopChannel(e\room\NPC[0]\SoundCHN) : e\room\NPC[0]\SoundCHN = 0
 											LoadNPCSound(e\room\NPC[0], "SFX\Room\Intro\Guard\Balcony\OhShit.ogg")
 											e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 20.0, 1.0, True)
-										EndIf
-										If e\EventState3 > 20105.0
-											n_I\Curr173\Idle = 1
+											
+											n_I\Curr173\Angle = 0.0 : n_I\Curr173\Idle = 1
 											PointEntity(e\room\NPC[0]\Collider, n_I\Curr173\OBJ)
-											PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[18], True), EntityY(e\room\Objects[18], True), EntityZ(e\room\Objects[18], True))
+											TFormPoint(-320.0, 480.0, 1312.0, e\room\OBJ, 0)
+											PositionEntity(n_I\Curr173\Collider, TFormedX(), TFormedY(), TFormedZ())
 											ResetEntity(n_I\Curr173\Collider)
 											PointEntity(n_I\Curr173\Collider, e\room\NPC[0]\Collider)
 										EndIf
@@ -8959,7 +8970,7 @@ Function UpdateIntro%()
 									ElseIf e\EventState3 < 20300.0
 										PointEntity(e\room\NPC[0]\Collider, n_I\Curr173\Collider)
 										e\room\NPC[0]\State = 2.0
-										If e\EventState3 > 20260.0 And e\EventState3 - fps\Factor[0] < 20260.0 Then PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+										If e\EventState3 > 20260.0 And e\EventState3 - fps\Factor[0] < 20260.0 Then PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 									Else
 										If e\EventState3 - fps\Factor[0] < 20300.0
 											me\BlinkTimer = -10.0
@@ -8968,14 +8979,14 @@ Function UpdateIntro%()
 											me\CurrSpeed = 0.0
 											me\Playable = False
 											
-											PlaySound_Strict(snd_I\IntroSFX[Rand(8, 10)])
+											PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 											
 											If e\room\NPC[0]\Sound <> 0 Then FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 											e\room\NPC[0]\SoundCHN = PlaySound2(snd_I\NeckSnapSFX[1], Camera, e\room\NPC[0]\Collider, 8.0)
 											
 											n_I\Curr173\Idle = 0
 											
-											PlaySound_Strict(snd_I\IntroSFX[11])
+											PlaySound_Strict(snd_I\IntroSFX[7])
 											
 											PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
 											ResetEntity(n_I\Curr173\Collider)
@@ -8992,11 +9003,12 @@ Function UpdateIntro%()
 													opt\CameraFogFar = 6.0
 													
 													For i = 0 To 2
-														PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(e\room\NPC[i]\Collider), z + (EntityZ(e\room\NPC[i]\Collider) - e\room\z + 32.0 * RoomScale))
+														PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(e\room\NPC[i]\Collider) - e\room\y, z + (EntityZ(e\room\NPC[i]\Collider) - e\room\z + 32.0 * RoomScale))
 														ResetEntity(e\room\NPC[i]\Collider)
 													Next
 													
-													For i = 2 To 4 Step 2
+													FreeSound_Strict(snd_I\IntroSFX[2]) : snd_I\IntroSFX[2] = 0
+													For i = 4 To 7
 														FreeSound_Strict(snd_I\IntroSFX[i]) : snd_I\IntroSFX[i] = 0
 													Next
 													
@@ -9881,7 +9893,7 @@ Function UpdateEndings%()
 										If (Not ChannelPlaying(e\SoundCHN))
 											ClearCheats()
 											
-											PlaySound_Strict(snd_I\IntroSFX[7])
+											PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Bang2.ogg"))
 											
 											For n.NPCs = Each NPCs
 												If n\NPCType = NPCTypeMTF Then RemoveNPC(n)

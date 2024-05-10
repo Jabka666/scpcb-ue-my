@@ -376,110 +376,29 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			r\RoomDoors.Doors[5] = d
 			
-			; ~ Balcony guard spawnpoint
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 328.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 1072.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 948.0 * RoomScale, r\y + 0.3, r\z + 526.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			; ~ Class-D spawnpoint
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 208.0 * RoomScale, r\y + 0.3, r\z + 480.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x + 980.0 * RoomScale, r\y + 0.3, r\z + 320.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
+			; ~ SCP-173 spawnpoint
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 160.0 * RoomScale, r\y + 0.3, r\z + 320.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 1760.0 * RoomScale, r\y + 0.4, r\z + 912.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 948.0 * RoomScale, r\y + 0.3, r\z + 526.0 * RoomScale)
+			r\Objects[3] = LoadRMesh("GFX\map\cont1_173_intro_player_cell.rmesh", Null)
+			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[3], r\x, r\y, r\z)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x + 980.0 * RoomScale, r\y + 0.3, r\z + 320.0 * RoomScale)
+			r\Objects[4] = LoadRMesh("GFX\map\cont1_173_intro_cells.rmesh", Null, False)
+			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[4], r\x, r\y, r\z)
 			EntityParent(r\Objects[4], r\OBJ)
-			
-			; ~ Player spawnpoint
-			r\Objects[5] = CreatePivot()
-			PositionEntity(r\Objects[5], r\x - 4096.0 * RoomScale, r\y + 0.3, r\z)
-			EntityParent(r\Objects[5], r\OBJ)
-			
-			; ~ SCP-173 spawnpoint
-			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 1760.0 * RoomScale, r\y + 0.4, r\z + 912.0 * RoomScale)
-			EntityParent(r\Objects[6], r\OBJ)
-			
-			; ~ Guard conwoy #1 spawnpoint
-			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x - 4096.0 * RoomScale + Rnd(-0.3, 0.3), r\y + 0.3, r\z + Rnd(860.0, 896.0) * RoomScale)
-			EntityParent(r\Objects[7], r\OBJ)
-			
-			r\Objects[8] = CreatePivot()
-			PositionEntity(r\Objects[8], r\x - 3840.0 * RoomScale + Rnd(-0.3, 0.3), r\y + 0.3, r\z + 786.0 * RoomScale)
-			EntityParent(r\Objects[8], r\OBJ)
-			
-			; ~ Music guard spawnpoint
-			r\Objects[9] = CreatePivot()
-			PositionEntity(r\Objects[9], r\x - 8064.0 * RoomScale, r\y + 0.3, r\z + 1096.0 * RoomScale)
-			EntityParent(r\Objects[9], r\OBJ)
-			
-			; ~ Franklin spawnpoint
-			r\Objects[10] = CreatePivot()
-			PositionEntity(r\Objects[10], r\x - 3424.0 * RoomScale, r\y - 0.3, r\z - 2208.0 * RoomScale)
-			EntityParent(r\Objects[10], r\OBJ)
-			
-			; ~ Sitting scientist spawnpoint
-			r\Objects[11] = CreatePivot()
-			PositionEntity(r\Objects[11], r\x - 3073.0 * RoomScale, r\y - 315.0 * RoomScale, r\z - 2165.0 * RoomScale)
-			EntityParent(r\Objects[11], r\OBJ)
-			
-			; ~ Guard convoy #2 spawnpoint
-			r\Objects[12] = CreatePivot()
-			PositionEntity(r\Objects[12], r\x - 3800.0 * RoomScale, r\y + 1.1, r\z - 4088.0 * RoomScale)
-			EntityParent(r\Objects[12], r\OBJ)
-			
-			r\Objects[13] = CreatePivot()
-			PositionEntity(r\Objects[13], r\x - 4200.0 * RoomScale, r\y + 1.1, r\z - 4088.0 * RoomScale)
-			EntityParent(r\Objects[13], r\OBJ)
-			
-			; ~ Class-D inside convoy
-			r\Objects[14] = CreatePivot()
-			PositionEntity(r\Objects[14], r\x - 4000.0 * RoomScale, r\y + 1.1, r\z - 4088.0 * RoomScale)
-			EntityParent(r\Objects[14], r\OBJ)
-			
-			r\Objects[15] = CreatePivot()
-			PositionEntity(r\Objects[15], r\x - 7208.0 * RoomScale, r\y - 0.6, r\z - 3104.0 * RoomScale)
-			EntityParent(r\Objects[15], r\OBJ)
-			
-			; ~ Sitting Frankling spawnpoint
-			r\Objects[16] = CreatePivot()
-			PositionEntity(r\Objects[16], r\x - 902.0 * RoomScale, r\y + 500.0 * RoomScale, r\z + 456.0 * RoomScale)
-			EntityParent(r\Objects[16], r\OBJ)
-			
-			; ~ Balcony guard positon after breach
-			r\Objects[17] = CreatePivot()
-			PositionEntity(r\Objects[17], r\x + 128.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 1280.0 * RoomScale)
-			EntityParent(r\Objects[17], r\OBJ)
-			
-			; ~ SCP-173 position after breach
-			r\Objects[18] = CreatePivot()
-			PositionEntity(r\Objects[18], r\x - 320.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 1312.0 * RoomScale)
-			EntityParent(r\Objects[18], r\OBJ)
-			
-			r\Objects[19] = LoadRMesh("GFX\map\cont1_173_intro_player_cell.rmesh", Null)
-			ScaleEntity(r\Objects[19], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[19], r\x, r\y, r\z)
-			EntityParent(r\Objects[19], r\OBJ)
-			
-			r\Objects[20] = LoadRMesh("GFX\map\cont1_173_intro_cells.rmesh", Null, False)
-			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[20], r\x, r\y, r\z)
-			EntityParent(r\Objects[20], r\OBJ)
-			HideEntity(r\Objects[20])
-			
-			; ~ Janitor position
-			r\Objects[21] = CreatePivot()
-			PositionEntity(r\Objects[21], r\x - 5675.0 * RoomScale, r\y - 1020.0 * RoomScale, r\z - 3717.0 * RoomScale)
-			EntityParent(r\Objects[21], r\OBJ)
+			HideEntity(r\Objects[4])
 			
 			For i = 0 To 4
 				Select i

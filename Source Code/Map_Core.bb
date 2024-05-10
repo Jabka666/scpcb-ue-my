@@ -246,7 +246,7 @@ Function UpdateLights%(Cam%)
 								If LightOBJHidden Then ShowEntity(l\OBJ)
 								If l\Flickers And Rand(13) = 1 And LightVisible And me\LightBlink =< 0.0
 									If (Not LightOBJHidden) Then HideEntity(l\OBJ)
-									PlaySound2(snd_I\IntroSFX[Rand(8, 10)], Cam, l\OBJ, 4.0)
+									PlaySound2(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
 									If LightInView
 										If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
 										If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
@@ -1533,7 +1533,7 @@ Function UpdateForest%(fr.Forest)
 End Function
 
 Global RoomTempID%
-Global RoomAmbience%[10]
+Global RoomAmbience%[11]
 
 Type RoomTemplates
 	Field OBJ%, ID%
