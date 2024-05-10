@@ -592,7 +592,7 @@ Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints, dem.DevilEmitters
-	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%
+	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, Visible%
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	Local SinValue#, SqrValue#
 	Local DifficultyDMGMult#
@@ -955,7 +955,7 @@ Function UpdateNPCs%()
 							Else
 								If RID <> r_gate_a And RID <> r_dimension_106 Then ShouldPlay = 10
 								
-								Local Visible% = False
+								Visible = False
 								
 								If Dist < 64.0 Then Visible = EntityVisible(n\Collider, me\Collider)
 								
@@ -982,7 +982,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If Dist > 0.64
-									If (Dist > 625.0 Lor RID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND And (Not chs\NoTarget) And (Not I_268\InvisibilityOn))) And RID <> r_gate_a
+									If (Dist > 625.0 Lor RID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))) And RID <> r_gate_a
 										If (Dist > 1600.0 Lor RID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
@@ -2731,7 +2731,7 @@ Function UpdateNPCs%()
 			Case NPCType1048
 				;[Block]
 				n\Speed = 0.3
-				Visible = (EntityDistanceSquared(me\Collider, n\Collider) < 4.0 And EntityInView(n\OBJ, Camera) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn))
+				Visible = (EntityDistanceSquared(me\Collider, n\Collider) < 4.0 And EntityInView(n\OBJ, Camera))
 				
 				If Visible Then GiveAchievement(Achv1048)
 				
@@ -2759,13 +2759,16 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 2.0 ; ~ Happy :]
 						;[End Block]
-						PointEntity(n\Collider, me\Collider)
-						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+						PlayerSeeAble = (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+						If Visible And PlayerSeeAble
+							PointEntity(n\Collider, me\Collider)
+							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+						EndIf
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 						
 						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 						If n\State2 = 0.0
-							If Visible Then n\State2 = 1.0
+							If Visible And PlayerSeeAble Then n\State2 = 1.0
 						ElseIf n\State2 = 1.0
 							AnimateNPC(n, 305.0, 325.0, n\Speed, False)
 							If n\Frame > 324.9 Then n\State2 = 2.0
@@ -2776,8 +2779,10 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case 3.0 ; ~ Gives a paper
 						;[Block]
-						PointEntity(n\Collider, me\Collider)
-						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+						If Visible And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+							PointEntity(n\Collider, me\Collider)
+							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+						EndIf
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 						
 						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -2796,7 +2801,9 @@ Function UpdateNPCs%()
 				If (Not n\IsDead)
 					n\Speed = 1.0
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
-					Visible = (Dist < 6.0 And EntityVisible(n\Collider, me\Collider) And (Not chs\NoTarget) And (Not I_268\InvisibilityOn))
+					Visible = (Dist < 6.0 And EntityVisible(n\Collider, me\Collider))
+					
+					If Visible Then GiveAchievement(Achv1048)
 					
 					Select n\State
 						Case 0.0 ; ~ Idle
@@ -2808,7 +2815,7 @@ Function UpdateNPCs%()
 							If Rand(300) = 1
 								If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\1048A\Random" + Rand(0, 4) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 							EndIf
-							If Visible Then n\State = 2.0
+							If Visible And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then n\State = 2.0
 							;[End Block]
 						Case 1.0 ; ~ Walks
 							;[Block]
@@ -2834,7 +2841,7 @@ Function UpdateNPCs%()
 							me\BlurTimer = Volume * 1000.0 / Max(Dist / 8.0, 1.0)
 							me\CameraShake = Volume * 10.0 / Max(Dist / 4.0, 1.0)
 							
-							If (Not chs\NoTarget) And (Not I_268\InvisibilityOn)
+							If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 								PointEntity(n\Collider, me\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
 							EndIf
