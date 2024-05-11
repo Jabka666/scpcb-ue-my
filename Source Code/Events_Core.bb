@@ -7449,7 +7449,7 @@ Function UpdateDimension106%()
 						Dist = EntityDistanceSquared(me\Collider, e\room\Objects[19])
 						SqrValue = Sqr(Dist)
 						
-						e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.6)
+						e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.4 + (Not Safe) * 0.7)
 						
 						If Safe Lor chs\NoTarget Lor I_268\InvisibilityOn
 							EntityTexture(e\room\Objects[19], e\room\Textures[0])
@@ -7476,10 +7476,14 @@ Function UpdateDimension106%()
 							EntityTexture(e\room\Objects[19], e\room\Textures[0])
 							InjurePlayer((8.0 - Sqr(Dist)) * (fps\Factor[0] * 0.0001))
 						EndIf
+					
+                                                If I_714\Using <> 2 Lor chs\NoTarget Lor I_268\InvisibilityOn
+                                                   me\CameraShake = Max(2.0 + ((Not Safe) * 2.0) - SqrValue, 0.0)
+					        Else                        
+                                                   me\BigCameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
+                                                EndIf
 						
-						me\BigCameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
-						
-						; ~ Check if player is at the sinkhole (the exit from the trench room)
+                                            ; ~ Check if player is at the sinkhole (the exit from the trench room)
 						If EntityY(me\Collider) < 24.5
 							Teleport = True
 							Random = 13
