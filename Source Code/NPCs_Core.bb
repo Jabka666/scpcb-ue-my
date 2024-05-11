@@ -1848,7 +1848,7 @@ Function UpdateNPCs%()
 								If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 								If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 								If PlayerInReachableRoom(True) And InFacility = NullFloor ; ~ Player is in a room where SCP-049 can teleport to
-									If Rand(4 - SelectedDifficulty\OtherFactors) = 1
+									If Rand(4 - (2 * SelectedDifficulty\AggressiveNPCs)) = 1
 										TeleportCloser(n)
 									Else
 										n\Idle = 70.0 * 60.0
