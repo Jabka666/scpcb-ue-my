@@ -4691,34 +4691,23 @@ Function HideRoomsColl%(room.Rooms)
 		
 		For d.Doors = Each Doors
 			If d\room = room
-				; ~ What the fuck is this? I really "like" how the adjacent door system works. Fuck this shit, I'm out -- Jabka
 				Local Hide% = True
 				
 				For i = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\AdjDoor[i] <> Null
-						If d = PlayerRoom\AdjDoor[i] Then Hide = False
-					EndIf
-					If PlayerRoom\Adjacent[i] <> Null
-						For j = 0 To MaxRoomAdjacents - 1
-							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null
-								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
-							EndIf
-							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
-								For k = 0 To MaxRoomAdjacents - 1 
-									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null
-										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
-									EndIf
-								Next
-							EndIf
-						Next
+					If room\AdjDoor[i] <> Null
+						If room\AdjDoor[i] = d
+							Hide = False
+							Exit
+						EndIf
 					EndIf
 				Next
+				
 				If Hide
 					EntityAlpha(d\OBJ, 0.0)
 					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
 					For i = 0 To 1
 						If d\Buttons[i] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[i], 0.0)
-						; ~ Hide collider anyway because player's collider cannot interact with it
+						; ~ Hide it anyway because player's collider cannot interact with it
 						If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
 					Next
 					EntityAlpha(d\FrameOBJ, 0.0)
@@ -4726,7 +4715,7 @@ Function HideRoomsColl%(room.Rooms)
 			EndIf
 		Next
 		
-		; ~ Hide collider anyway because the player/NPC cannot interact with it
+		; ~ Hide it anyway because the player/NPC cannot interact with it
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
 				If sc\MonitorOBJ <> 0
@@ -4739,7 +4728,7 @@ Function HideRoomsColl%(room.Rooms)
 			EndIf
 		Next
 		
-		; ~ Hide collider anyway because the player/NPC cannot interact with it
+		; ~ Hide it anyway because the player/NPC cannot interact with it
 		For lvr.Levers = Each Levers
 			If lvr\room = room
 				HideEntity(lvr\OBJ)
@@ -4747,7 +4736,7 @@ Function HideRoomsColl%(room.Rooms)
 			EndIf
 		Next
 		
-		; ~ Hide collider anyway because the player/NPC cannot interact with it
+		; ~ Hide it anyway because the player/NPC cannot interact with it
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
 				If (Not room\ScriptedObject[i]) Then HideEntity(room\Objects[i])
@@ -4772,36 +4761,13 @@ Function ShowRoomsColl%(room.Rooms)
 		
 		For d.Doors = Each Doors
 			If d\room = room
-				Local Hide% = True
-				
-				For i = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\AdjDoor[i] <> Null
-						If d = PlayerRoom\AdjDoor[i] Then Hide = False
-					EndIf
-					If PlayerRoom\Adjacent[i] <> Null
-						For j = 0 To MaxRoomAdjacents - 1
-							If PlayerRoom\Adjacent[i]\AdjDoor[j] <> Null
-								If d = PlayerRoom\Adjacent[i]\AdjDoor[j] Then Hide = False
-							EndIf
-							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
-								For k = 0 To MaxRoomAdjacents - 1 
-									If PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] <> Null
-										If d = PlayerRoom\Adjacent[i]\Adjacent[j]\AdjDoor[k] Then Hide = False
-									EndIf
-								Next
-							EndIf
-						Next
-					EndIf
+				EntityAlpha(d\OBJ, 1.0)
+				If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 1.0)
+				For i = 0 To 1
+					If d\Buttons[i] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[i], 1.0)
+					If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
 				Next
-				If Hide
-					EntityAlpha(d\OBJ, 1.0)
-					If d\OBJ2 <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\OBJ2, 1.0)
-					For i = 0 To 1
-						If d\Buttons[i] <> 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then EntityAlpha(d\Buttons[i], 1.0)
-						If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
-					Next
-					EntityAlpha(d\FrameOBJ, 1.0)
-				EndIf
+				EntityAlpha(d\FrameOBJ, 1.0)
 			EndIf
 		Next
 		
