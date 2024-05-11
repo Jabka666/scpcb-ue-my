@@ -7462,8 +7462,8 @@ Function UpdateDimension106%()
 						EndIf
 					
                                                 If I_714\Using <> 2 Lor chs\NoTarget Lor I_268\InvisibilityOn
-                                                   me\BigCameraShake = Max(2.0 + ((Not Safe) * 2.0) - SqrValue, 0.0)
-					        Else
+                                                   me\CameraShake = Max(2.0 + ((Not Safe) * 2.0) - SqrValue, 0.0)
+					        Else                        
                                                    me\BigCameraShake = Max(4.0 + ((Not Safe) * 4.0) - SqrValue, 0.0)
                                                 EndIf
 						
