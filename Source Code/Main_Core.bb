@@ -8751,7 +8751,7 @@ Function Update268%()
     If I_268\Using > 1
 		I_268\InvisibilityOn = (I_268\Timer > 0.0)
 		If I_268\Using = 3 
-            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.5) * (1.0 + I_714\Using)), 0.0)
+            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.75) * (1.0 + I_714\Using)), 0.0)
         Else
             I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
         EndIf
