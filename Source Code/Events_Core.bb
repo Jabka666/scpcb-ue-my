@@ -2617,10 +2617,10 @@ Function UpdateEvents%()
 			Case e_cont2_1123
 				;[Block]
 				If PlayerRoom = e\room
-					If I_714\Using = 0 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
+					If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
 						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 0.81 Lor e\EventState > 0.0
-							If e\EventState = 0.0 Then me\BlurTimer = 1000.0
-							me\CameraShake = 1.0
+							If e\EventState = 0.0 Then me\BlurTimer = 1000.0 - (200.0 * (I_714\Using = 1))
+							me\CameraShake = 1.0  - (0.5 * (I_714\Using = 1))
 							If e\Sound2 = 0 Then e\Sound2 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, me\Collider, 4.0, 4.0)
 						EndIf
