@@ -396,6 +396,15 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[4], r\OBJ)
 			HideEntity(r\Objects[4])
 			
+			r\Objects[5] = CreateButton(BUTTON_DEFAULT, r\x - 5448.0 * RoomScale, r\y - 912.0 * RoomScale, r\z - 3870.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
+			EntityParent(r\Objects[5], r\OBJ)
+			
+			r\Objects[6] = CreateButton(BUTTON_DEFAULT, r\x - 6470.0 * RoomScale, r\y - 912.0 * RoomScale, r\z - 1964.0 * RoomScale, 0.0, 90.0, 0.0, 0, True)
+			EntityParent(r\Objects[6], r\OBJ)
+			
+			r\Objects[7] = CreateButton(BUTTON_DEFAULT, r\x - 4090.0 * RoomScale, r\y - 912.0 * RoomScale, r\z - 2300.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
+			EntityParent(r\Objects[7], r\OBJ)
+			
 			For i = 0 To 4
 				Select i
 					Case 0
@@ -3048,6 +3057,21 @@ Function FillRoom%(r.Rooms)
 			r\Objects[11] = CreatePivot()
 			PositionEntity(r\Objects[11], r\x - 5424.0 * RoomScale, r\y, r\z - 1068.0 * RoomScale)
 			EntityParent(r\Objects[11], r\OBJ)
+			
+			r\Objects[12] = CreateButton(BUTTON_DEFAULT, r\x - 5678.0 * RoomScale, r\y - 368.0 * RoomScale, r\z - 3986.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
+			EntityParent(r\Objects[12], r\OBJ)
+			
+			r\Objects[13] = CreateButton(BUTTON_DEFAULT, r\x + 1707.0 * RoomScale, r\y + 182.0 * RoomScale, r\z - 4226.0 * RoomScale, 0.0, 180.0, 0.0, 0, True)
+			EntityParent(r\Objects[13], r\OBJ)
+			
+			r\Objects[14] = CreateButton(BUTTON_DEFAULT, r\x + 3226.0 * RoomScale, r\y + 182.0 * RoomScale, r\z - 5447.0 * RoomScale, 0.0, 90.0, 0.0, 0, True)
+			EntityParent(r\Objects[14], r\OBJ)
+			
+			r\Objects[15] = CreateButton(BUTTON_DEFAULT, r\x + 3974.0 * RoomScale, r\y - 144.0 * RoomScale, r\z + 5643.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
+			EntityParent(r\Objects[15], r\OBJ)
+			
+			r\Objects[16] = CreateButton(BUTTON_DEFAULT, r\x + 4039.0 * RoomScale, r\y - 753.0 * RoomScale, r\z + 6488.0 * RoomScale, 0.0, 270.0, 0.0, 0, True)
+			EntityParent(r\Objects[16], r\OBJ)
 			
 			CreateCustomCenter(r, r\x - 5424.0 * RoomScale, r\z - 1700.0 * RoomScale)
 			;[End Block]
