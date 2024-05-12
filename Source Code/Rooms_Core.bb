@@ -1057,9 +1057,15 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
-			If r\RoomTemplate\RoomID = r_room2_tesla_lcz Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_lcz_blinds.rmesh", Null)
-			If r\RoomTemplate\RoomID = r_room2_tesla_hcz Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_hcz_blinds.rmesh", Null)
-			If r\RoomTemplate\RoomID = r_room2_tesla_ez Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_ez_blinds.rmesh", Null)
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room2_tesla_lcz Lor r2\RoomTemplate\RoomID = r_room2_tesla_hcz Lor r2\RoomTemplate\RoomID = r_room2_tesla_ez
+						r\Objects[2] = CopyEntity(r2\Objects[2]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[2] = 0 Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_lcz_blinds.rmesh", Null, False)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			

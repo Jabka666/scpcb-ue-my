@@ -1873,7 +1873,7 @@ Function UpdateEvents%()
 						e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
 					EndIf
 					If e\EventState3 > 0.0 And e\EventState3 < 212.0
-						If (Not ChannelPlaying(e\BlindsCHN)) Then e\BlindsCHN = LoopSound2(LoadTempSound("SFX\Room\Blinds.ogg"), e\BlindsCHN, Camera, e\room\Objects[6])
+						If (Not ChannelPlaying(e\BlindsCHN)) Then e\BlindsCHN = LoopSound2(snd_I\BlindsSFX, e\BlindsCHN, Camera, e\room\Objects[6])
 					Else
 						StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
 					EndIf
@@ -4134,7 +4134,7 @@ Function UpdateEvents%()
 						e\EventState4 = Max(e\EventState4 - fps\Factor[0], -196.0)
 					EndIf
 					If e\EventState4 < 0.0 And e\EventState4 > -196.0
-						If (Not ChannelPlaying(e\BlindsCHN)) Then e\BlindsCHN = LoopSound2(LoadTempSound("SFX\Room\Blinds.ogg"), e\BlindsCHN, Camera, e\room\Objects[3])
+						If (Not ChannelPlaying(e\BlindsCHN)) Then e\BlindsCHN = LoopSound2(snd_I\BlindsSFX, e\BlindsCHN, Camera, e\room\Objects[3])
 					Else
 						StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
 					EndIf
@@ -10028,6 +10028,7 @@ Function Update035Label%(OBJ%)
 	achv\AchvIMG[Achv035] = LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png")
 	achv\AchvIMG[Achv035] = ScaleImage2(achv\AchvIMG[Achv035], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

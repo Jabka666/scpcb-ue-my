@@ -1327,6 +1327,7 @@ Type SoundInstance
 	Field ExplosionSFX%
 	Field MachineSFX%
 	Field ApacheSFX%
+	Field BlindsSFX%
 End Type
 
 Global snd_I.SoundInstance
@@ -1551,6 +1552,8 @@ Function LoadSounds%()
 	
 	snd_I\NVGSFX[0] = LoadSound_Strict("SFX\Interact\NVGOn.ogg")
 	snd_I\NVGSFX[1] = LoadSound_Strict("SFX\Interact\NVGOff.ogg")
+	
+	snd_I\BlindsSFX = LoadSound_Strict("SFX\Room\Blinds.ogg")
 End Function
 
 Function RemoveSoundInstances%()
@@ -1688,6 +1691,9 @@ Function RemoveSoundInstances%()
 	snd_I\ExplosionSFX = 0
 	
 	snd_I\VomitSFX = 0
+	
+	snd_I\BlindsSFX = 0
+	
 	Delete Each SoundInstance
 End Function
 
