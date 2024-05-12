@@ -4,6 +4,7 @@ Type Events
 	Field EventState#, EventState2#, EventState3#, EventState4#
 	Field SoundCHN%, SoundCHN2%
 	Field Sound%, Sound2%
+	Field BlindsCHN%
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field EventStr$
 	Field Img%, Img2%
@@ -1657,19 +1658,6 @@ Function UpdateEvents%()
 					
 					UpdateLever(e\room\RoomLevers[0]\OBJ)
 					
-					If EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
-						e\EventState3 = Min(e\EventState3 + fps\Factor[0], 212.0)
-					Else
-						e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
-					EndIf
-					If e\EventState3 > 0.0 And e\EventState3 < 212.0
-						If (Not ChannelPlaying(BLINDSCHN)) Then BLINDSCHN = LoopSound2(LoadTempSound("SFX\Room\Blinds.ogg"), BLINDSCHN, Camera, e\room\Objects[6])
-					Else
-						StopChannel(BLINDSCHN) : BLINDSCHN = 0
-					EndIf
-					
-					PositionEntity(e\room\Objects[5], 0.0, e\EventState3, 0.0)
-					
 					If e\EventState2 = 1.0 Then ShouldPlay = 21
 					EntityPick(Camera, 1.0)
 					For i = 0 To 1
@@ -1877,6 +1865,22 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
+				EndIf
+				If e\room\Dist < 12.0
+					If EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
+						e\EventState3 = Min(e\EventState3 + fps\Factor[0], 212.0)
+					Else
+						e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
+					EndIf
+					If e\EventState3 > 0.0 And e\EventState3 < 212.0
+						If (Not ChannelPlaying(e\BlindsCHN)) Then e\BlindsCHN = LoopSound2(LoadTempSound("SFX\Room\Blinds.ogg"), e\BlindsCHN, Camera, e\room\Objects[6])
+					Else
+						StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
+					EndIf
+					
+					PositionEntity(e\room\Objects[5], 0.0, e\EventState3, 0.0)
+					
+					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[6])
 				EndIf
 				;[End Block]
 			Case e_cont2_008
@@ -3933,7 +3937,9 @@ Function UpdateEvents%()
 				If e\EventState3 = 0.0
 					If Rand(8) = 1
 						RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
+						RotateEntity(e\room\RoomLevers[1]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[1]\OBJ), 0.0)
 						e\EventState3 = 1.0
+						e\EventState4 = -196.0
 					Else
 						e\EventState3 = 2.0
 					EndIf
@@ -3993,6 +3999,8 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					EndIf
+					
+					UpdateLever(e\room\RoomLevers[1]\OBJ)
 					
 					UpdateNPCNearTesla()
 					
@@ -4120,6 +4128,19 @@ Function UpdateEvents%()
 							If e\EventState2 >= 0.0 Then e\EventState = 0.0
 							;[End Block]
 					End Select
+					If EntityPitch(e\room\RoomLevers[1]\OBJ) < 0.0
+						e\EventState4 = Min(e\EventState4 + fps\Factor[0], 0.0)
+					Else
+						e\EventState4 = Max(e\EventState4 - fps\Factor[0], -196.0)
+					EndIf
+					If e\EventState4 < 0.0 And e\EventState4 > -196.0
+						If (Not ChannelPlaying(e\BlindsCHN)) Then e\BlindsCHN = LoopSound2(LoadTempSound("SFX\Room\Blinds.ogg"), e\BlindsCHN, Camera, e\room\Objects[3])
+					Else
+						StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
+					EndIf
+					
+					PositionEntity(e\room\Objects[2], 0.0, e\EventState4, 0.0)
+					UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[3])
 				EndIf
 				;[End Block]
 			Case e_trick

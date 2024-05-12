@@ -1037,6 +1037,8 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 212.0 * RoomScale, -90.0, True)
 			
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 132.0 * RoomScale, -90.0, True)
+			
 			sc.SecurityCams = CreateSecurityCam(r, r\x, r\y + 704.0 * RoomScale, r\z - 953.0 * RoomScale, 30.0, True, r\x - 390.0 * RoomScale, r\y + 204.0 * RoomScale, r\z + 34.0 * RoomScale, 0.0, -90.0, 0.0)
 			sc\Turn = 0.0
 			
@@ -1054,6 +1056,16 @@ Function FillRoom%(r.Rooms)
 			r\ScriptedObject[1] = True
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
+			
+			If r\RoomTemplate\RoomID = r_room2_tesla_lcz Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_lcz_blinds.rmesh", Null)
+			If r\RoomTemplate\RoomID = r_room2_tesla_hcz Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_hcz_blinds.rmesh", Null)
+			If r\RoomTemplate\RoomID = r_room2_tesla_ez Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_ez_blinds.rmesh", Null)
+			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
+			EntityParent(r\Objects[2], r\OBJ)
+			
+			r\Objects[3] = CreatePivot()
+			PositionEntity(r\Objects[3], r\x - 326.0 * RoomScale, r\y + 132.0 * RoomScale, r\z - 576.0 * RoomScale)
+			EntityParent(r\Objects[3], r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
 			;[End Block]

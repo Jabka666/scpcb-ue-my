@@ -1337,8 +1337,6 @@ Global EndBreathCHN%
 
 Global SCRAMBLECHN%
 
-Global BLINDSCHN%
-
 Global LowBatteryCHN%[2]
 
 Global AmbientSFXCHN%, CurrAmbientSFX%
