@@ -56,7 +56,7 @@ Items:
 - Red Night Vision Goggles require 18V battery.
 - S-NAV Navigator Ultimate is no longer guaranteed and the chances are based on rooms found.
 - SCRAMBLE Gear battery drain speed slowed.
-- Fine SCP-268 last longer.
+- Fine SCP-268 now lasts longer.
 
 NPCs:
 - MTFs can contain SCP-106.
