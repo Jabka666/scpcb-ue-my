@@ -2317,7 +2317,6 @@ Function UpdateEvents%()
 										PlaySound_Strict(LoadTempSound("SFX\Character\MTF\049_2\Spotted.ogg"), True)
 										
 										LoadEventSound(e, "SFX\SCP\049_2\Breath.ogg")
-										
 									EndIf
 								EndIf
 							Else
@@ -2369,8 +2368,6 @@ Function UpdateEvents%()
 								EntityType(it\Collider, HIT_ITEM)
 							EndIf
 							
-							e\Sound = LoadSound_Strict("SFX\Room\SparkShort.ogg")
-							
 							TFormPoint(-4105.0, -4336.0, 2207.0, e\room\OBJ, 0)
 							it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
 							RotateEntity(it\Collider, 0.0, 0.0, 0.0)
@@ -2405,7 +2402,9 @@ Function UpdateEvents%()
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
 							If Rand(50) = 1
-								PlaySound2(e\Sound, Camera, e\room\Objects[3], 3.0, 0.4)
+								If snd_I\SparkShortSFX = 0 Then snd_I\SparkShortSFX = LoadSound_Strict("SFX\Room\SparkShort.ogg")
+								
+								PlaySound2(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
 								
 								If opt\ParticleAmount > 0
 									For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
@@ -2667,9 +2666,9 @@ Function UpdateEvents%()
 							If (Not e\room\RoomDoors[1]\Open) Then OpenCloseDoor(e\room\RoomDoors[1])
 							
 							If e\EventState2 >= 1040.0 And e\EventState2 - fps\Factor[0] < 1040.0 
-								PlaySound2(LoadTempSound("SFX\SCP\1123\Officer0.ogg"), Camera, e\room\NPC[0]\OBJ, 10.0, 1.0, True)
+								e\room\NPC[0]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\1123\Officer0.ogg"), Camera, e\room\NPC[0]\OBJ, 10.0, 1.0, True)
 							ElseIf e\EventState2 >= 1400.0 And e\EventState2 - fps\Factor[0] < 1400.0
-								PlaySound2(LoadTempSound("SFX\SCP\1123\Officer1.ogg"), Camera, e\room\NPC[0]\OBJ, 10.0, 1.0, True)
+								e\room\NPC[0]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\1123\Officer1.ogg"), Camera, e\room\NPC[0]\OBJ, 10.0, 1.0, True)
 							EndIf
 							e\room\NPC[0]\State = 3.0
 							AnimateNPC(e\room\NPC[0], 3.0, 26.0, 0.2)
@@ -2735,8 +2734,7 @@ Function UpdateEvents%()
 							de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(me\Collider, True), e\room\y + 769.0 * RoomScale + 0.005, EntityZ(me\Collider, True), 90.0, Rnd(360.0), 0.0, 0.5)
 							EntityParent(de\OBJ, e\room\OBJ)
 							
-							e\room\NPC[0]\Sound = LoadSound_Strict("SFX\SCP\1123\Officer2.ogg")
-							e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 7.0, 1.0, True)
+							e\room\NPC[0]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\1123\Officer2.ogg"), Camera, e\room\NPC[0]\Collider, 7.0, 1.0, True)
 							
 							e\EventState = 6.0
 						EndIf
@@ -2745,7 +2743,6 @@ Function UpdateEvents%()
 						AnimateNPC(e\room\NPC[0], 75.0, 128.0, 0.04)
 						If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN))
 							PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Gunshot.ogg"))
-							If e\room\NPC[0]\Sound <> 0 Then FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 							e\EventState = 7.0
 						EndIf
 					ElseIf e\EventState = 7.0
@@ -3215,10 +3212,9 @@ Function UpdateEvents%()
 						EndIf
 					ElseIf e\EventState = 1.0
 						If PlayerRoom = e\room
-							e\Sound = LoadSound_Strict("SFX\Character\Janitor\106Abduct.ogg")
-							PlaySound_Strict(e\Sound, True)
-							
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
+							
+							e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Janitor\106Abduct.ogg"), True)
 							
 							e\EventState = 2.0
 						ElseIf e\room\Dist < 8.0
@@ -3318,8 +3314,7 @@ Function UpdateEvents%()
 						e\room\NPC[0]\State3 = 2.0
 						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_MAINTENANCE)
 						
-						e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Maintenance\EscapeFromClosets.ogg")
-						e\room\NPC[0]\SoundCHN = PlaySound2(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
+						e\room\NPC[0]\SoundCHN = PlaySound2(LoadTempSound("SFX\Character\Maintenance\EscapeFromClosets.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 						
 						TFormPoint(-1292.0, -256.0, -160.0, e\room\OBJ, 0)
 						e\room\NPC[1] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
@@ -3340,8 +3335,7 @@ Function UpdateEvents%()
 					ElseIf e\EventState < 70.0 * 6.5
 						If e\EventState - fps\Factor[0] < 70.0 * 3.0
 							e\room\NPC[0]\State = 0.0
-							e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Character\Scientist\EscapeFromClosets.ogg")
-							e\room\NPC[1]\SoundCHN = PlaySound2(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider, 12.0, 1.0, True)
+							e\room\NPC[1]\SoundCHN = PlaySound2(LoadTempSound("SFX\Character\Scientist\EscapeFromClosets.ogg"), Camera, e\room\NPC[1]\Collider, 12.0, 1.0, True)
 						EndIf
 						
 						If e\EventState > 70.0 * 4.5
@@ -4055,7 +4049,7 @@ Function UpdateEvents%()
 							UpdateRedLight(e\room\Objects[1], 100, 50)
 							e\EventState2 = e\EventState2 + fps\Factor[0]
 							If e\EventState2 >= 35.0
-								PlaySound2(LoadTempSound("SFX\Room\Tesla\Shock.ogg"), Camera, e\room\Objects[0])
+								PlaySound2(snd_I\TeslaShockSFX, Camera, e\room\Objects[0])
 								e\EventState = 2.0
 							EndIf
 							;[End Block]
@@ -4989,13 +4983,11 @@ Function UpdateEvents%()
 						EntityTexture(e\room\Objects[0], Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						EntityParent(e\room\Objects[0], e\room\OBJ)
-						
-						e\Sound = LoadSound_Strict("SFX\SCP\Joke\Saxophone.ogg")
 					Else
 						If (Not EntityInView(e\room\Objects[0], Camera))
 							e\EventState = e\EventState + fps\Factor[0]
 							If Rand(200) = 1 And e\EventState > 300.0
-								e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 6.0)
+								e\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\Joke\Saxophone.ogg"), Camera, e\room\Objects[0], 6.0)
 								e\EventState = 0.0
 							EndIf
 						Else
@@ -6495,8 +6487,8 @@ Function UpdateEvents%()
 					EntityParent(de\OBJ, e\room\OBJ)
 					e\EventState = 1.0
 				ElseIf PlayerRoom = e\room
-					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Room\Sinkhole.ogg")
-					e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 4.5, 1.5)
+					If snd_I\SinkHoleSFX = 0 Then snd_I\SinkHoleSFX = LoadSound_Strict("SFX\Room\Sinkhole.ogg")
+					e\SoundCHN = LoopSound2(snd_I\SinkHoleSFX, e\SoundCHN, Camera, e\room\OBJ, 4.5, 1.5)
 					
 					If e\room\Dist < 0.5 And (Not chs\NoTarget)
 						If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
@@ -6536,7 +6528,7 @@ Function UpdateEvents%()
 					e\EventState = e\EventState - fps\Factor[0]
 					
 					If e\EventState < 70.0 * 17.0
-						If e\EventState + fps\Factor[0] >= 70.0 * 17.0 Then LoadEventSound(e, "SFX\SCP\682\Roar.ogg") : e\SoundCHN = PlaySound_Strict(e\Sound)
+						If e\EventState + fps\Factor[0] >= 70.0 * 17.0 Then e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\682\Roar.ogg"))
 						If e\EventState > (70.0 * 17.0) - (70.0 * 3.0) Then me\BigCameraShake = 0.5
 						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\BigCameraShake = 2.0
 						If e\EventState < 70.0 Then RemoveEvent(e)
@@ -6583,9 +6575,9 @@ Function UpdateEvents%()
 					e\SoundCHN = LoopSound2(snd_I\AlarmSFX[2], e\SoundCHN, Camera, e\room\OBJ, 5.0)
 					
 					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 25.0
-						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Room\SparkShort.ogg")
 						If Rand(50) = 1
-							PlaySound2(e\Sound, Camera, e\room\Objects[0], 3.0, 0.4)
+							If snd_I\SparkShortSFX = 0 Then snd_I\SparkShortSFX = LoadSound_Strict("SFX\Room\SparkShort.ogg")
+							PlaySound2(snd_I\SparkShortSFX, Camera, e\room\Objects[0], 3.0, 0.4)
 							
 							If opt\ParticleAmount > 0
 								For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))

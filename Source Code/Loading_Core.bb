@@ -1328,6 +1328,8 @@ Type SoundInstance
 	Field MachineSFX%
 	Field ApacheSFX%
 	Field BlindsSFX%
+	Field SparkShortSFX%
+	Field SinkHoleSFX%
 End Type
 
 Global snd_I.SoundInstance
@@ -1693,6 +1695,10 @@ Function RemoveSoundInstances%()
 	snd_I\VomitSFX = 0
 	
 	snd_I\BlindsSFX = 0
+	
+	snd_I\SparkShortSFX = 0
+	
+	snd_I\SinkHoleSFX = 0
 	
 	Delete Each SoundInstance
 End Function

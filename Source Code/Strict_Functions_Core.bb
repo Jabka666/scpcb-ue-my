@@ -1,3 +1,4 @@
+; ~ Author: RifRaf, further modified by MonocleBios
 ; ~ Safe loads for MAV trapping media issues
 ; ~ Functions with extra parameters
 ; ~ Basic wrapper functions that check to make sure that the file exists before attempting to load it, raises an RTE if it doesn't
