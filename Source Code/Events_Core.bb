@@ -5055,7 +5055,11 @@ Function UpdateEvents%()
 							If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 2.25 And RemoteDoorOn Then e\room\RoomDoors[0]\Open = True
 						EndIf
 					Else
-						If e\room\Objects[0] = 0
+                                                If e\room\RoomDoors[0]\Open
+                                                   PlaySound2(snd_I\DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
+                                                EndIf
+                                            
+                                                If e\room\Objects[0] = 0
 							TFormPoint(-808.0, 150.0, -72.0, e\room\OBJ, 0)
 							e\room\Objects[0] = CreatePivot()
 							PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ())
