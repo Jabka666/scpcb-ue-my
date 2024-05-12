@@ -1476,8 +1476,8 @@ Function LoadSounds%()
 		snd_I\DamageSFX[i] = LoadSound_Strict("SFX\Character\D9341\Damage" + i + ".ogg")
 	Next
 	
-	snd_I\DoorOpen079 = LoadSound_Strict("SFX\Door\snd_I\DoorOpen079.ogg")
-	snd_I\DoorClose079 = LoadSound_Strict("SFX\Door\snd_I\DoorClose079.ogg")
+	snd_I\DoorOpen079 = LoadSound_Strict("SFX\Door\DoorOpen079.ogg")
+	snd_I\DoorClose079 = LoadSound_Strict("SFX\Door\DoorClose079.ogg")
 	
 	snd_I\DoorLockSFX = LoadSound_Strict("SFX\Interact\DoorLock.ogg")
 	
