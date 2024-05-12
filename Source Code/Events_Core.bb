@@ -5052,7 +5052,7 @@ Function UpdateEvents%()
 								e\EventState = 1.0
 							EndIf
 						Else
-							If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 2.25 And RemoteDoorOn Then e\room\RoomDoors[0]\Open = True
+							If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 2.25 And RemoteDoorOn Then OpenCloseDoor(e\room\RoomDoors[0])
 						EndIf
 					Else
                                                 If e\room\RoomDoors[0]\Open
