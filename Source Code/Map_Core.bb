@@ -244,7 +244,7 @@ Function UpdateLights%(Cam%)
 								Local LightInView% = EntityInView(l\OBJ, Cam)
 								
 								If LightOBJHidden Then ShowEntity(l\OBJ)
-								If l\Flickers And Rand(13) = 1 And LightVisible And me\LightBlink =< 0.0
+								If l\Flickers And Rand(13) = 1 And LightVisible
 									If (Not LightOBJHidden) Then HideEntity(l\OBJ)
 									PlaySound2(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
 									If LightInView
