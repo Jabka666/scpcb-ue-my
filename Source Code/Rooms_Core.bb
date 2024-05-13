@@ -3513,12 +3513,9 @@ Function FillRoom%(r.Rooms)
 		Case r_cont2_860_1
 			;[Block]
 			; ~ Doors to observation room
-			d.Doors = CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_HAND_YELLOW)
-			d\MTFClose = False
-			r\RoomDoors.Doors[1] = d
+			d.Doors = CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			
-			d.Doors = CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_HAND_YELLOW)
-			d\MTFClose = False
+			d.Doors = CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, TFalse, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			
 			; ~ Doors to SCP-860-1's door itself
 			d.Doors = CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)

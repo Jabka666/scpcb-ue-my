@@ -2461,19 +2461,6 @@ Function UpdateEvents%()
 				
 				Local fr.Forest = e\room\fr
 				
-				If RemoteDoorOn
-					If EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) < 2.0
-						If e\room\RoomDoors[1]\Open
-							PlaySound2(snd_I\DoorClose079, Camera, e\room\RoomDoors[1]\FrameOBJ, 7.0)
-							OpenCloseDoor(e\room\RoomDoors[1])
-							e\room\RoomDoors[1]\FastOpen = True
-							e\room\RoomDoors[1]\Locked = 1
-						EndIf
-					EndIf
-				Else
-					e\room\RoomDoors[1]\FastOpen = False
-					e\room\RoomDoors[1]\Locked = 0
-				EndIf
 				If PlayerRoom = e\room And fr <> Null
 					If e\EventState = 1.0 ; ~ The player is in the forest
 						n_I\Curr106\Idle = 1
