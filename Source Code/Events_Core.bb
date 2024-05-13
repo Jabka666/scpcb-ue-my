@@ -4015,7 +4015,7 @@ Function UpdateEvents%()
 											e\room\NPC[1] = n
 										EndIf
 									Else
-										If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.8 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.8 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
+										If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.81 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.81 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 											If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 											e\SoundCHN = PlaySound2(snd_I\TeslaActivateSFX, Camera, e\room\Objects[0], 4.0, 0.5)
 											e\EventState = 1.0
@@ -4058,7 +4058,7 @@ Function UpdateEvents%()
 										e\room\RoomDoors[0]\Locked = 0
 										n\State3 = 1.0
 									EndIf
-									If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.5 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.5 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
+									If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.64 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.64 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 										n\CurrSpeed = 0.0 : n\TeslaHit = True
 										Select n\NPCType
 											Case NPCType106
