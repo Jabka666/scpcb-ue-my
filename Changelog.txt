@@ -25,6 +25,7 @@ Mechanics:
 - You can refill cups at water coolers.
 - Can no longer save when «chs\superman» or «me\deathtimer» are active, or when nearly dying from bleeding out(«me\Bloodloss» > 60.0 and «me\injury» > 1.0).
 - Monitors are now off while there is a blackout preventing you from saving on them.
+- All Blast doors can kill the player.
 
 Rooms:
 - Added Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
@@ -37,6 +38,7 @@ Rooms:
 - Added a laboratory to SCP-008's chamber.
 - Inaccessible/broken panels are now red.
 - Levers in Storage Area 6 now share the same positions after usage.
+- Player can now open and close blinds of most windows.
 
 - Added a Save point in «cont2_049» observation room.
 
@@ -155,7 +157,7 @@ Mechanics:
 
 - Removed accidental item dropping.
 
-- Blast doors can kill the player.
+- Blast doors shut by SCP-079 can kill the player.
 - The player can disable Tesla Gates.
 - Pocket Dimension drains stamina instead of instantly setting it to 0.
 - SCP-914's Keycard refining system has been rebalanced
