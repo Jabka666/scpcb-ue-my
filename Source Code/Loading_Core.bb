@@ -1377,13 +1377,14 @@ Global UserTrackName$[256]
 ;[Block]
 Const SOUND_NPC_MTF_BEEP% = 0
 Const SOUND_NPC_MTF_BREATH% = 1
-Const SOUND_NPC_008_1_BREATH% = 2
-Const SOUND_NPC_035_TENTACLE_IDLE% = 3
-Const SOUND_NPC_049_BREATH% = 4
-Const SOUND_NPC_049_2_BREATH% = 5
-Const SOUND_NPC_049_2_RESTING% = 6
+Const SOUND_NPC_MTF_BLINKING% = 2
+Const SOUND_NPC_008_1_BREATH% = 3
+Const SOUND_NPC_035_TENTACLE_IDLE% = 4
+Const SOUND_NPC_049_BREATH% = 5
+Const SOUND_NPC_049_2_BREATH% = 6
+Const SOUND_NPC_049_2_RESTING% = 7
 ;[End Block]
-Const MaxNPCSounds% = 7
+Const MaxNPCSounds% = 8
 Global NPCSound%[MaxNPCSounds]
 
 Function LoadSounds%()
@@ -1605,7 +1606,6 @@ Function RemoveSoundInstances%()
 		If i < 6
 			AmbientSFXAmount[i] = 0
 			snd_I\RustleSFX[i] = 0
-			NPCSound[i] = 0
 		EndIf
 		If i < 8
 			StepSFX(0, 0, i) = 0
@@ -1619,6 +1619,7 @@ Function RemoveSoundInstances%()
 			EndIf
 			If i < 2 Then StepSFX(5, 0, i) = 0
 			snd_I\IntroSFX[i] = 0
+			NPCSound[i] = 0
 		EndIf
 		If i < 9
 			RadioSFX(1, i) = 0

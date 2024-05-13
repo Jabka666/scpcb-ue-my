@@ -5010,6 +5010,8 @@ Function UpdateNPCs%()
 						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 						If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+						n\Target = Null
+						n\BlinkTimer = -1.0
 						n\GravityMult = 0.0
 						;[End Block]
 				End Select
@@ -5127,9 +5129,6 @@ Function UpdateMTFUnit%(n.NPCs)
 	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
-		n\BlinkTimer = -1.0
-		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0 ; ~ Breath channel
 		If n = n_I\MTFLeader Then n_I\MTFLeader = Null
 	Else
 		If n_I\MTFLeader = Null Then n_I\MTFLeader = n
@@ -6042,6 +6041,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						If EntityDistanceSquared(n\Collider, n2\Collider) < 4.0 And n2\State <> MTF_LOOKING_AT_SOME_TARGET
 							n2\PrevState = 0
 							n2\PathTimer = 0.0
+							n2\PathLocation = 0
 							n2\PathStatus = PATH_STATUS_NO_SEARCH
 							n2\EnemyX = EntityX(n\Collider)
 							n2\EnemyY = EntityY(n\Collider)
@@ -6069,23 +6069,27 @@ Function UpdateMTFUnit%(n.NPCs)
 				EndIf
 				
 				n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
-				If n\State3 =< 0.0 Then
+				If n\State3 =< 0.0 Lor n\IsDead
 					For n2.NPCs = Each NPCs
 						If n2\NPCType = NPCTypeMTF And n2 <> n
-							If EntityDistanceSquared(n\Collider, n2\Collider) < 16.0
-								n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+							If EntityDistanceSquared(n\Collider, n2\Collider) < 6.0
+								n2\EnemyX = 0.0 : n2\EnemyY = 0.0 : n2\EnemyZ = 0.0
 								n2\State = MTF_WANDERING_AROUND
 							EndIf
 						EndIf
 					Next
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
+					Return
 				EndIf
 				;[End Block]
 			Case MTF_173_SPOTTED
 				;[Block]
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-				If n\BlinkTimer <= 0.0 Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\173\BLINKING.ogg"), n)
+				If n\BlinkTimer <= 0.0
+					If NPCSound[SOUND_NPC_MTF_BLINKING] = 0 Then NPCSound[SOUND_NPC_MTF_BLINKING] = LoadSound_Strict("SFX\Character\MTF\173\BLINKING.ogg")
+					PlayMTFSound(NPCSound[SOUND_NPC_MTF_BLINKING], n)
+				EndIf
 				If NPCSeesNPC(n\Target, n) = 1
 					n\EnemyX = EntityX(n\Target\Collider, True)
 					n\EnemyY = EntityY(n\Target\Collider, True)
@@ -6615,6 +6619,10 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		; ~ Teleport back to the facility if fell through the floor
 		If RID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
+	EndIf
+	If n_I\MTFLeader = Null And MTFTimer > 0.0 And MTFTimer < 35000.0
+		PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
+		MTFTimer = 35000.0
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)

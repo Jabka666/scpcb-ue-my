@@ -8384,10 +8384,6 @@ Function UpdateMTF%()
 			PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
 			MTFTimer = 30000.0
 		EndIf
-		If n_I\MTFLeader = Null And MTFTimer < 35000.0
-			PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
-			MTFTimer = 35000.0
-		EndIf
 	EndIf
 End Function
 
