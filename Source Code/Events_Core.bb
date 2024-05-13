@@ -3927,7 +3927,27 @@ Function UpdateEvents%()
 				EndIf
 				
 				If e\room\Dist < 16.0
+				
+					Local PrevLever% = (EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)
+					
+					x = UpdateLever(e\room\RoomLevers[0]\OBJ)
+					
+					If (Not x)
+						StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						e\EventState = 3.0
+						e\EventState2 = (-70.0) * 90.0
+					Else
+						If PrevLever <> x
+							If x
+								PlaySound_Strict(snd_I\TeslaPowerUpSFX)
+								e\EventState = 0.0
+							EndIf
+						EndIf
+					EndIf
+					
 					If PlayerRoom = e\room
+						UpdateLever(e\room\RoomLevers[1]\OBJ)
+						
 						Temp = True
 						For e2.Events = Each Events
 							If e2\EventID = e\EventID And e2 <> e
@@ -3963,25 +3983,6 @@ Function UpdateEvents%()
 							e\EventState = 0.0
 						EndIf
 					EndIf
-					
-					Local PrevLever% = (EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)
-					
-					x = UpdateLever(e\room\RoomLevers[0]\OBJ)
-					
-					If (Not x)
-						StopChannel(e\SoundCHN) : e\SoundCHN = 0
-						e\EventState = 3.0
-						e\EventState2 = (-70.0) * 90.0
-					Else
-						If PrevLever <> x
-							If x
-								PlaySound_Strict(snd_I\TeslaPowerUpSFX)
-								e\EventState = 0.0
-							EndIf
-						EndIf
-					EndIf
-					
-					UpdateLever(e\room\RoomLevers[1]\OBJ)
 					
 					UpdateNPCNearTesla()
 					
