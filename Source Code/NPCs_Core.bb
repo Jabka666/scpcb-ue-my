@@ -5496,7 +5496,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\PathTimer = 0.0
 						n\PathStatus = PATH_STATUS_NO_SEARCH
 						n\Target = n_I\Curr066
-						n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+						n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 						n\State3 = 0.0
 						n\State = MTF_049_066_106_SPOTTED
 					EndIf
