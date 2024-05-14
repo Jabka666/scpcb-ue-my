@@ -8949,6 +8949,7 @@ Function Update427%()
 			Next
 		EndIf
 	Else
+		CanSave = 0
 		If PrevI427Timer - fps\Factor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0
 			CreateMsg(GetLocalString("msg", "muscleswelling"))
 		ElseIf PrevI427Timer - fps\Factor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0
