@@ -5682,6 +5682,7 @@ Function UpdateEvents%()
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 					
 					If EntityY(me\Collider) < (-4600.0) * RoomScale
+						me\Zone = 0
 						GiveAchievement(Achv939)
 						
 						If wi\GasMask = 0 And wi\HazmatSuit = 0
