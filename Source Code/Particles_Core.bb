@@ -166,12 +166,6 @@ Function UpdateDevilEmitters()
 	EndIf
 End Function
 
-Function RemoveDevilEmitter%(dem.DevilEmitters, RemoveParticles% = False)
-	FreeEmitter(dem\OBJ, RemoveParticles)
-	FreeEntity(dem\OBJ) : dem\OBJ = 0
-	Delete(dem)
-End Function
-
 Function UpdateDust%()
 	Local p.Particles, dem.DevilEmitters
 	Local i%, Pvt%

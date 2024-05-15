@@ -2988,7 +2988,7 @@ Function NullGame%(PlayButtonSFX% = True)
 		FreeTemplate(Handle(tmp))
 	Next
 	For emit.Emitter = Each Emitter
-		FreeEmitter(emit\Ent, True)
+		FreeEmitter(emit\Owner, True)
 	Next
 	Delete Each Template
 	Delete Each Emitter
@@ -2997,9 +2997,6 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveParticle(p)
 	Next
 	RemoveParticleInstances()
-	For dem.DevilEmitters = Each DevilEmitters
-		RemoveDevilEmitter(dem)
-	Next
 	Delete Each BrokenDoor
 	For d.Doors = Each Doors
 		RemoveDoor(d)

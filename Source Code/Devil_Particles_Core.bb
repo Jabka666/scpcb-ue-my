@@ -297,7 +297,7 @@ Function SetEmitter%(Owner%, Template%, Fixed% = False)
 End Function
 
 Function FreeEmitter%(Ent%, DeleteParticles% = False)
-	Local e.Emitter, p.Particle
+	Local e.Emitter, p.Particle, dem.DevilEmitters
 	
 	For e.Emitter = Each Emitter
 		If e\Owner = Ent Then
@@ -306,7 +306,19 @@ Function FreeEmitter%(Ent%, DeleteParticles% = False)
 					If p\emitter = e Then Delete(p)
 				Next
 				FreeEntity(e\Ent) : e\Ent = 0
-				If e\Fixed And e\Owner <> 0 Then FreeEntity(e\Owner) : e\Owner = 0
+				e\Surf = 0
+				If e\Fixed
+					If e\Owner <> 0 Then FreeEntity(e\Owner) : e\Owner = 0
+				Else
+					For dem.DevilEmitters = Each DevilEmitters
+						If e\Owner = dem\OBJ
+							e\Owner = 0
+							FreeEntity(dem\OBJ) : dem\OBJ = 0
+							Delete(dem)
+							Exit
+						EndIf
+					Next
+				EndIf
 				Delete(e)
 			Else
 				e\Del = True
@@ -377,14 +389,20 @@ Function UpdateParticles_Devil()
 				If p\emitter = e Then Del = False
 			Next
 			If Del
-				For dem.DevilEmitters = Each DevilEmitters
-					If e\Owner = dem\OBJ
-						dem\OBJ = 0
-						Delete(dem)
-					EndIf
-				Next
 				FreeEntity(e\Ent) : e\Ent = 0
-				If e\Fixed And e\Owner <> 0 Then FreeEntity(e\Owner) : e\Owner = 0
+				e\Surf = 0
+				If e\Fixed
+					If e\Owner <> 0 Then FreeEntity(e\Owner) : e\Owner = 0
+				Else
+					For dem.DevilEmitters = Each DevilEmitters
+						If e\Owner = dem\OBJ
+							e\Owner = 0
+							FreeEntity(dem\OBJ) : dem\OBJ = 0
+							Delete(dem)
+							Exit
+						EndIf
+					Next
+				EndIf
 				Delete(e)
 			EndIf
 		EndIf

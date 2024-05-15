@@ -1948,7 +1948,7 @@ Function UpdateEvents%()
 							
 							If EntityPitch(e\room\Objects[1], True) < 40.0
 								PlaySound_Strict(snd_I\LeverSFX)
-								RemoveDevilEmitter(e\room\RoomDevilEmitters[0])
+								FreeEmitter(e\room\RoomDevilEmitters[0]\OBJ)
 								e\EventState = 2.0
 							Else
 								If e\room\RoomDevilEmitters[0] = Null
@@ -3827,7 +3827,7 @@ Function UpdateEvents%()
 						Else
 							If e\room\RoomDevilEmitters[7] <> Null
 								For i = 0 To 7
-									RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
+									FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
 								Next
 							EndIf
 						EndIf
@@ -5892,7 +5892,7 @@ Function UpdateEvents%()
 										Next
 									Else
 										For i = 0 To 1
-											If e\room\RoomDevilEmitters[i] <> Null Then RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
+											If e\room\RoomDevilEmitters[i] <> Null Then FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
 										Next
 									EndIf
 									
@@ -5950,7 +5950,7 @@ Function UpdateEvents%()
 									EndIf
 									
 									For i = 0 To 1
-										If e\room\RoomDevilEmitters[i] <> Null Then RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
+										If e\room\RoomDevilEmitters[i] <> Null Then FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
 									Next
 									
 									If e\room\NPC[0]\State = 0.0
@@ -6127,7 +6127,7 @@ Function UpdateEvents%()
 							Next
 						Else
 							For i = 0 To 1
-								If e\room\RoomDevilEmitters[i] <> Null Then RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
+								If e\room\RoomDevilEmitters[i] <> Null Then FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
 							Next
 						EndIf
 						
@@ -6660,7 +6660,7 @@ Function UpdateEvents%()
 							EndIf
 						Else
 							For i = 0 To 1
-								If e\room\RoomDevilEmitters[i] <> Null Then RemoveDevilEmitter(e\room\RoomDevilEmitters[i])
+								If e\room\RoomDevilEmitters[i] <> Null Then FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
 							Next
 							e\EventState = 0.0
 							e\EventState2 = 1.0
