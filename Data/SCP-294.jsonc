@@ -1044,7 +1044,7 @@
         "explosion": false
     },
     {
-        "name": ["Vidya", "Videogames", "Video Games", "VG", "Playstation 3 Has No Games", "Ps3 Has No Games", "No Games", "4chan.com", "2ch.ru", "Ochan", "2ch.hk", "2-ch.ru", "7chan", "Crautchan", "2ch.so", "Imageboard", "Internet", "Reddit"],
+        "name": ["Vidya", "Videogames", "Video Games", "VG", "Playstation 3 Has No Games", "Ps3 Has No Games", "No Games", "4chan.com", "2ch.ru", "Ochan", "2ch.hk", "2-ch.ru", "7chan", "Crautchan", "2ch.so", "Imageboard", "Internet", "Reddit", "Twitter"],
         "color": [100, 100, 100],
         "alpha": 0.7,
         "glow": false,
@@ -1156,7 +1156,7 @@
         "explosion": false
     },
     {
-        "name": ["Ipecac"],
+        "name": ["Ipecac", "Syrup of Ipecac"],
         "color": [28, 0, 0],
         "alpha": 0.94,
         "glow": false,
@@ -1339,7 +1339,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Spit.ogg",
-        "drink_message": "\"What the? Oh my God. So this is me? I don't exist. But you do, please help me.\"",
+        "drink_message": "\"What the? Oh my God. So this is me? I don't exist, but you do. Please help me.\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -1360,7 +1360,7 @@
         "explosion": false
     },
     {
-        "name": ["Grey Paint For Hairs", "Gray Paint", "Grey Ink", "Gray Ink"],
+        "name": ["Grey Dye", "Gray Dye", "Grey Paint", "Gray Paint", "Grey Ink", "Gray Ink"],
         "color": [61, 61, 61],
         "alpha": 1.0,
         "glow": false,
@@ -1444,7 +1444,7 @@
         "explosion": false
     },
     {
-        "name": ["Yellow Paint For Hairs", "Yellow Ink"],
+        "name": ["Yellow Dye", "Yellow Ink"],
         "color": [230, 230, 150],
         "alpha": 1.0,
         "glow": false,
@@ -2588,7 +2588,7 @@
         "explosion": false
     },
     {
-        "name": ["Ink", "Black Paint For Hairs", "Black Ink"],
+        "name": ["Ink", "Black Dye", "Black Ink"],
         "color": [0, 0, 0],
         "alpha": 1.0,
         "glow": false,
@@ -3749,7 +3749,7 @@
         "explosion": false
     },
     {
-        "name": ["White Paint For Hairs", "Paint For Hairs", "Correction Fluid", "White Ink"],
+        "name": ["White Dye", "Dye", "Correction Fluid", "White Ink"],
         "color": [255, 255, 255],
         "alpha": 1.0,
         "glow": false,
@@ -4457,7 +4457,7 @@
         "explosion": false
     },
     {
-        "name": ["Brown Paint For Hairs", "Brown Ink", "Painting", "Drawing"],
+        "name": ["Brown Dye", "Brown Ink", "Painting", "Drawing"],
         "color": [120, 60, 0],
         "alpha": 1.0,
         "glow": false,
@@ -5292,7 +5292,7 @@
         "dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
         "refuse_message": null,
         "drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-        "drink_message": "\"Please please please gimme some more...\"",
+        "drink_message": "\"Please, please, please, gimme some more...\"",
         "stomachache": false,
         "stamina_effect": null,
         "stamina_timer": null,
@@ -5730,34 +5730,6 @@
         "drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
         "drink_message": null,
         "stomachache": false,
-        "stamina_effect": null,
-        "stamina_timer": null,
-        "blink_effect": null,
-        "blink_timer": null,
-        "blur": 0.0,
-        "damage": 0.0,
-        "vomit": 0.0,
-        "camera_shake": 0.0,
-        "bloodloss": 0.0,
-        "deaf_timer": 0.0,
-        "infection": false,
-        "crystallization": false,
-        "mutation": false,
-        "revitalize": false,
-        "death_message": null,
-        "death_timer": null,
-        "explosion": false
-    },
-    {
-        "name": ["Syrup of Ipecac"],
-        "color": [106, 89, 30],
-        "alpha": 1.0,
-        "glow": false,
-        "dispense_sound": "SFX/SCP/294/Dispense1.ogg",
-        "refuse_message": null,
-        "drink_sound": "SFX/SCP/294/Slurp.ogg",
-        "drink_message": "You feel very sick.",
-        "stomachache": true,
         "stamina_effect": null,
         "stamina_timer": null,
         "blink_effect": null,
@@ -6633,7 +6605,7 @@
         "explosion": false
     },
     {
-        "name": ["Green Paint For Hairs", "Green Ink"],
+        "name": ["Green Dye", "Green Ink"],
         "color": [54, 177, 30],
         "alpha": 1.0,
         "glow": false,
@@ -7249,7 +7221,7 @@
         "explosion": false
     },
     {
-        "name": ["Prune Paint For Hairs", "Prune Ink"],
+        "name": ["Prune Dye", "Prune Ink"],
         "color": [73, 23, 102],
         "alpha": 1.0,
         "glow": false,
@@ -7929,7 +7901,7 @@
         "explosion": false
     },
     {
-        "name": ["Purple Paint For Hairs", "Purple Ink"],
+        "name": ["Purple Dye", "Purple Ink"],
         "color": [163, 73, 164],
         "alpha": 1.0,
         "glow": false,
@@ -9113,7 +9085,7 @@
         "explosion": false
     },
     {
-        "name": ["Blue Paint For Hairs", "Cyan Paint For Hairs", "Blue Ink", "Cyan Ink"],
+        "name": ["Blue Dye", "Cyan Dye", "Blue Ink", "Cyan Ink"],
         "color": [100, 100, 255],
         "alpha": 1.0,
         "glow": false,
@@ -10305,7 +10277,7 @@
         "explosion": false
     },
     {
-        "name": ["Red Paint For Hairs", "Red Ink"],
+        "name": ["Red Dye", "Red Ink"],
         "color": [220, 16, 5],
         "alpha": 1.0,
         "glow": false,
@@ -10333,7 +10305,7 @@
         "explosion": false
     },
     {
-        "name": ["Orange Paint For Hairs", "Orange Ink"],
+        "name": ["Orange Dye", "Orange Ink"],
         "color": [240, 175, 70],
         "alpha": 1.0,
         "glow": false,
@@ -10361,7 +10333,7 @@
         "explosion": false
     },
     {
-        "name": ["Pink Paint For Hairs", "Pink Ink"],
+        "name": ["Pink Dye", "Pink Ink"],
         "color": [255, 0, 230],
         "alpha": 1.0,
         "glow": false,
