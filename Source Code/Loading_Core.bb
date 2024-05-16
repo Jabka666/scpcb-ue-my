@@ -1287,7 +1287,6 @@ Type SoundInstance
 	Field TeslaIdleSFX%, TeslaActivateSFX%, TeslaPowerUpSFX%, TeslaShockSFX%
 	Field MagnetUpSFX%, MagnetDownSFX%
 	Field FemurBreakerSFX%
-	Field EndBreathSFX%
 	Field CrouchSFX%
 	Field DecaySFX%[5]
 	Field BurstSFX%
@@ -1334,6 +1333,7 @@ Global snd_I.SoundInstance
 
 Dim RadioSFX%(2, 9)
 
+Global EndBreathSFX%
 Global EndBreathCHN%
 
 Global SCRAMBLECHN%
