@@ -7570,7 +7570,7 @@ Function UpdateDimension106%()
 						
 						ScaleEntity(e\room\OBJ, RoomScale, RoomScale, RoomScale)
 						If e\EventState3 = 0.0 And (e\room\RoomDoors[0]\OpenState > 150.0 Lor e\room\RoomDoors[1]\OpenState > 150.0)
-							PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Horror.ogg"))
+							PlaySound_Strict(snd_I\HorrorSFX[13])
 							me\BlurTimer = 800.0
 							e\EventState3 = 1.0
 						EndIf
