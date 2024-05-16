@@ -4830,51 +4830,57 @@ Function UpdateGUI%()
 							If JsonIsNull(JsonGetValue(Drink, "refuse_message"))
 								If (Not JsonIsNull(JsonGetValue(Drink, "drink_message"))) Then CreateMsg(JsonGetString(JsonGetValue(Drink, "drink_message")))
 								
-								me\BlurTimer = Max(JsonGetFloat(JsonGetValue(Drink, "blur")) * 70.0, 0.0)
 								If me\VomitTimer = 0.0
 									me\VomitTimer = JsonGetFloat(JsonGetValue(Drink, "vomit"))
 								Else
 									me\VomitTimer = Min(me\VomitTimer, JsonGetFloat(JsonGetValue(Drink, "vomit")))
 								EndIf
-								me\CameraShakeTimer = JsonGetFloat(JsonGetValue(Drink, "camera_shake"))
-								me\DeafTimer = Max(me\DeafTimer + JsonGetFloat(JsonGetValue(Drink, "deaf_timer")), 0.0)
-								me\Injuries = Max(me\Injuries + JsonGetFloat(JsonGetValue(Drink, "damage")), 0.0)
-								me\Bloodloss = Max(me\Bloodloss + JsonGetFloat(JsonGetValue(Drink, "bloodloss")), 0.0)
-								me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(JsonGetValue(Drink, "energy")) / 4.0, JsonGetFloat(JsonGetValue(Drink, "energy"))), 100.0)
+								
+								If (Not JsonIsNull(JsonGetValue(Drink, "blur"))) me\BlurTimer = JsonGetFloat(JsonGetValue(Drink, "blur"))
+								If (Not JsonIsNull(JsonGetValue(Drink, "vomit"))) me\VomitTimer = JsonGetFloat(JsonGetValue(Drink, "vomit"))
+								If (Not JsonIsNull(JsonGetValue(Drink, "camera_shake"))) me\CameraShakeTimer = JsonGetFloat(JsonGetValue(Drink, "camera_shake"))
+								If (Not JsonIsNull(JsonGetValue(Drink, "deaf_timer"))) me\DeafTimer = JsonGetFloat(JsonGetValue(Drink, "deaf_timer"))
+								If (Not JsonIsNull(JsonGetValue(Drink, "damage"))) me\Injuries = me\Injuries + JsonGetFloat(JsonGetValue(Drink, "damage"))
+								If (Not JsonIsNull(JsonGetValue(Drink, "bloodloss"))) me\Bloodloss = me\Bloodloss + JsonGetFloat(JsonGetValue(Drink, "bloodloss"))
+								If (Not JsonIsNull(JsonGetValue(Drink, "energy"))) me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(JsonGetValue(Drink, "energy")) / 4.0, JsonGetFloat(JsonGetValue(Drink, "energy"))), 100.0)
 								
 								If (Not JsonIsNull(JsonGetValue(Drink, "drink_sound"))) Then PlaySound_Strict(LoadTempSound(JsonGetString(JsonGetValue(Drink, "drink_sound"))), True)
 								
-								If JsonGetBool(JsonGetValue(Drink, "stomachache")) Then I_1025\State[3] = 1.0
-								
-								If JsonGetBool(JsonGetValue(Drink, "infection")) Then I_008\Timer = I_008\Timer + 0.001
-								
-								If JsonGetBool(JsonGetValue(Drink, "crystallization")) Then I_409\Timer = I_409\Timer + 0.001
-								
-								If JsonGetBool(JsonGetValue(Drink, "mutation"))
-									If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
+								If (Not JsonIsNull(JsonGetValue(Drink, "stomachache")))
+									If JsonGetBool(JsonGetValue(Drink, "stomachache")) Then I_1025\State[3] = 1.0
 								EndIf
 								
-								If JsonGetBool(JsonGetValue(Drink, "revitalize"))
-									For i = 0 To 6
-										I_1025\State[i] = 0.0
-									Next
+								If (Not JsonIsNull(JsonGetValue(Drink, "infection")))
+									If JsonGetBool(JsonGetValue(Drink, "infection")) Then I_008\Timer = I_008\Timer + 0.001
+								EndIf
+								
+								If (Not JsonIsNull(JsonGetValue(Drink, "crystallization")))
+									If JsonGetBool(JsonGetValue(Drink, "crystallization")) Then I_409\Timer = I_409\Timer + 0.001
+								EndIf
+								
+								If (Not JsonIsNull(JsonGetValue(Drink, "mutation")))
+									If JsonGetBool(JsonGetValue(Drink, "mutation"))
+										If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
+									EndIf
+								EndIf
+								
+								If (Not JsonIsNull(JsonGetValue(Drink, "revitalize")))
+									If JsonGetBool(JsonGetValue(Drink, "revitalize"))
+										For i = 0 To 6
+											I_1025\State[i] = 0.0
+										Next
+									EndIf
 								EndIf
 								
 								If (Not JsonIsNull(JsonGetValue(Drink, "death_timer")))
-									If (Not JsonIsNull(JsonGetValue(Drink, "death_message")))
-										msg\DeathMsg = JsonGetString(JsonGetValue(Drink, "death_message"))
-									Else
-										msg\DeathMsg = ""
-									EndIf
+									If (Not JsonIsNull(JsonGetValue(Drink, "death_message"))) Then msg\DeathMsg = JsonGetString(JsonGetValue(Drink, "death_message"))
 									
 									Local DeathTimer1% = JsonGetFloat(JsonGetValue(Drink, "death_timer"))
 									
-									If DeathTimer1 = 0 
+									If DeathTimer1 = 0.0
 										Kill()
 									ElseIf me\DeathTimer = 0.0
 										me\DeathTimer = DeathTimer1 * 70.0
-									Else
-										me\DeathTimer = Min(me\DeathTimer, DeathTimer1)
 									EndIf
 								EndIf
 								
@@ -9201,12 +9207,10 @@ Function Update294%()
 						EndIf
 					EndIf
 					
-					If JsonGetBool(JsonGetValue(Drink, "explosion"))
-						me\ExplosionTimer = 135.0
-						If JsonIsNull(JsonGetValue(Drink, "death_message"))
-							msg\DeathMsg = ""
-						Else
-							JsonGetString(JsonGetValue(Drink, "death_message"))
+					If (Not JsonIsNull(JsonGetValue(Drink, "explosion")))
+						If JsonGetBool(JsonGetValue(Drink, "explosion"))
+							me\ExplosionTimer = 135.0
+							If (Not JsonIsNull(JsonGetValue(Drink, "death_message"))) Then msg\DeathMsg = JsonGetString(JsonGetValue(Drink, "death_message"))
 						EndIf
 					EndIf
 					
