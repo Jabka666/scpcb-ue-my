@@ -2668,9 +2668,12 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_cont3_513
 			;[Block]
-			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y, r\z + 304.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y + 64.0 * RoomScale, r\z + 304.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.061, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.031, True)
+			
+			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y + 64.0 * RoomScale, r\z + 654.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
+			d\MTFClose = False
 			
 			; ~ Dust decals
 			For i = 0 To 10
@@ -2760,7 +2763,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Blood-stained Note", it_paper, r\x + 736.0 * RoomScale, r\y + 1.0, r\z + 48.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-513", it_paper, r\x - 480.0 * RoomScale, r\y + 104.0 * RoomScale, r\z - 176.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-513", it_paper, r\x - 470.0 * RoomScale, r\y + 104.0 * RoomScale, r\z - 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_cont3_966
