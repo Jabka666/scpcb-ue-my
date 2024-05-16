@@ -1311,7 +1311,7 @@ Type SoundInstance
 	Field PickSFX%[4]
 	Field SCP106SFX%[9]
 	Field SCP173SFX%[3]
-	Field HorrorSFX%[13]
+	Field HorrorSFX%[14]
 	Field MissSFX%
 	Field IntroSFX%[8]
 	Field AlarmSFX%[4]
@@ -1470,7 +1470,7 @@ Function LoadSounds%()
 		If i < 9
 			RadioSFX(1, i) = LoadSound_Strict("SFX\Radio\SCPRadio" + i + ".ogg")
 		EndIf
-		If i < 13
+		If i < 14
 			snd_I\HorrorSFX[i] = LoadSound_Strict("SFX\Horror\Horror" + i + ".ogg")
 		EndIf
 		snd_I\DamageSFX[i] = LoadSound_Strict("SFX\Character\D9341\Damage" + i + ".ogg")
@@ -1627,8 +1627,10 @@ Function RemoveSoundInstances%()
 			RoomAmbience[i] = 0
 		EndIf
 		If i < 13
-			snd_I\HorrorSFX[i] = 0
 			snd_I\Step2SFX[i] = 0
+		EndIf
+		If i < 14
+			snd_I\HorrorSFX[i] = 0
 		EndIf
 		snd_I\DamageSFX[i] = 0
 	Next
