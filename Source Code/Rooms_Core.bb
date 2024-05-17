@@ -2117,7 +2117,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 320.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 288.0 * RoomScale, 120.06, True, r\x - 800.0 * RoomScale, r\y + 288.0 * RoomScale, r\z - 340.0 * RoomScale, 0.0, 180.0, 0.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0 : sc\CoffinEffect = 1 : sc_I\CoffinCam = sc
 			
-			it.Items = CreateItem("Document SCP-895", it_paper, r\x - 688.0 * RoomScale, r\y + 133.0 * RoomScale, r\z - 304.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-895", it_paper, r\x - 593.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 78.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x + 50.0 * RoomScale, r\y - 1302.0 * RoomScale, r\z + 2415.0 * RoomScale)
