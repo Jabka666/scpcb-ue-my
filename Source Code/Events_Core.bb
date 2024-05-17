@@ -2154,6 +2154,13 @@ Function UpdateEvents%()
 						ShouldPlay = 24
 						me\Zone = 1
 						
+						UpdateButton(e\room\Objects[5])
+						If d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1
+							CreateMsg(GetLocalString("msg", "button.nothappend"))
+							PlaySound2(ButtonSFX[1], Camera, e\room\Objects[5])
+							mo\MouseHit1 = False
+						EndIf
+						
 						If e\EventState = 0.0
 							TFormPoint(528.0, -3440.0, 96.0, e\room\OBJ, 0)
 							n.NPCs = CreateNPC(NPCType049_2, TFormedX(), TFormedY(), TFormedZ())
@@ -2333,12 +2340,6 @@ Function UpdateEvents%()
 									If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound, True)
 								EndIf
 							EndIf
-						EndIf
-						UpdateButton(e\room\Objects[5])
-						If d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1
-							CreateMsg(GetLocalString("msg", "button.nothappend"))
-							PlaySound2(ButtonSFX[1], Camera, e\room\Objects[5])
-							mo\MouseHit1 = False
 						EndIf
 					EndIf
 				EndIf
