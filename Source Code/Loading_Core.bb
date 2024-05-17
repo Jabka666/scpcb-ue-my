@@ -283,7 +283,7 @@ Function LoadParticles%()
 	SetTemplateTexture(ParticleEffect[12], PARTICLE_DUST)
 	SetTemplateOffset(ParticleEffect[12], -0.5, 0.5, -0.05, 0.05, -0.5, 0.5)
 	SetTemplateVelocity(ParticleEffect[12], -0.001, 0.001, -0.001, 0.001, -0.001, 0.001)
-	SetTemplateSize(ParticleEffect[12], 0.002, 0.002, 1.0, 1.2)
+	SetTemplateSize(ParticleEffect[12], 0.0018, 0.0018, 1.0, 1.2)
 	SetTemplateAlphaVel(ParticleEffect[12], True)
 	
 	; ~ A simple flash particle
