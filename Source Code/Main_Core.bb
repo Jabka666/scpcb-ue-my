@@ -8640,6 +8640,7 @@ Function Update008%()
 				ElseIf I_008\Timer > 80.0 And PrevI008Timer <= 80.0
 					CreateMsg(GetLocalString("msg", "faint"))
 				ElseIf I_008\Timer >= 91.5
+					If PrevI008Timer < 91.5 Then PlaySound_Strict(LoadTempSound("SFX\Character\D9341\Infected.ogg"), True)
 					me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
 					me\Zombie = True : MakeMeUnplayable()
 					If I_008\Timer >= 92.7 And PrevI008Timer < 92.7
