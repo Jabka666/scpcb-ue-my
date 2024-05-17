@@ -7,7 +7,6 @@
 
 
 Type Template
-	Field subtemplate.Template[8]									; ~ Sub templates
 	Field EmitterMaxTime%											; ~ Emitter life time
 	Field EmitterBlend%												; ~ Blendmode of emitter entity
 	Field Interval%, ParticlesPerInterval%							; ~ Particle interval
@@ -79,9 +78,6 @@ Function FreeTemplate%(Template%)
 	
 	tmp.Template = Object.Template(Template)
 	If tmp\Tex <> 0 Then DeleteSingleTextureEntryFromCache(tmp\Tex)
-	For i = 0 To 7
-		If tmp\subtemplate[i] <> Null Then FreeTemplate(Handle(tmp\subtemplate[i]))
-	Next
 	Delete(tmp)
 End Function
 
@@ -255,19 +251,6 @@ Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
 	tmp\YawFix = YawFix
 End Function
 
-Function SetTemplateSubTemplate%(Template%, SubTemplate%)
-	Local tmp.Template
-	Local i%
-	
-	tmp.Template = Object.Template(Template)
-	For i = 0 To 7
-		If tmp\subtemplate[i] = Null
-			tmp\subtemplate[i] = Object.Template(SubTemplate)
-			Exit
-		EndIf
-	Next
-End Function
-
 Function SetEmitter%(Owner%, Template%, Fixed% = False)
 	Local e.Emitter
 	Local i%
@@ -288,11 +271,6 @@ Function SetEmitter%(Owner%, Template%, Fixed% = False)
 	EntityBlend(e\Ent, e\tmp\EmitterBlend)
 	EntityFX(e\Ent, 1 + 2 + 32)
 	If e\tmp\Tex Then EntityTexture(e\Ent, e\tmp\Tex)
-	For i = 0 To 7
-		If e\tmp\subtemplate[i] <> Null
-			If e\tmp\subtemplate[i]\Tex Then SetEmitter(Owner, Handle(e\tmp\subtemplate[i]), Fixed)
-		EndIf
-	Next
 	Return(e\Ent)
 End Function
 
@@ -300,24 +278,24 @@ Function FreeEmitter%(Ent%, DeleteParticles% = False)
 	Local e.Emitter, p.Particle, dem.DevilEmitters
 	
 	For e.Emitter = Each Emitter
-		If e\Owner = Ent Then
-			If DeleteParticles Then
+		If e\Owner = Ent
+			If DeleteParticles
 				For p.Particle = Each Particle
 					If p\emitter = e Then Delete(p)
 				Next
 				FreeEntity(e\Ent) : e\Ent = 0
 				e\Surf = 0
 				If e\Fixed
-					If e\Owner <> 0 Then FreeEntity(e\Owner) : e\Owner = 0
+					FreeEntity(e\Owner) : e\Owner = 0
 				Else
 					For dem.DevilEmitters = Each DevilEmitters
-						If e\Owner = dem\OBJ
-							e\Owner = 0
+						If Ent = dem\OBJ
 							FreeEntity(dem\OBJ) : dem\OBJ = 0
 							Delete(dem)
 							Exit
 						EndIf
 					Next
+					e\Owner = 0
 				EndIf
 				Delete(e)
 			Else
@@ -392,16 +370,16 @@ Function UpdateParticles_Devil()
 				FreeEntity(e\Ent) : e\Ent = 0
 				e\Surf = 0
 				If e\Fixed
-					If e\Owner <> 0 Then FreeEntity(e\Owner) : e\Owner = 0
+					FreeEntity(e\Owner) : e\Owner = 0
 				Else
 					For dem.DevilEmitters = Each DevilEmitters
 						If e\Owner = dem\OBJ
-							e\Owner = 0
 							FreeEntity(dem\OBJ) : dem\OBJ = 0
 							Delete(dem)
 							Exit
 						EndIf
 					Next
+					e\Owner = 0
 				EndIf
 				Delete(e)
 			EndIf

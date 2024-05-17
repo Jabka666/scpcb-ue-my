@@ -2987,9 +2987,10 @@ Function NullGame%(PlayButtonSFX% = True)
 	For tmp.Template = Each Template
 		FreeTemplate(Handle(tmp))
 	Next
-	For emit.Emitter = Each Emitter
-		FreeEmitter(emit\Owner, True)
+	For dem.DevilEmitters = Each DevilEmitters
+		FreeEmitter(dem\OBJ, True)
 	Next
+	
 	Delete Each Template
 	Delete Each Emitter
 	Delete Each Particle

@@ -101,7 +101,7 @@ Type DevilEmitters
 	Field x#, y#, z#
 	Field ParticleID%
 	Field room.Rooms
-	Field Timer# = 0.0
+	Field Spawn% = False
 	Field SoundCHN%
 	Field State%
 End Type
@@ -129,9 +129,9 @@ Function UpdateDevilEmitters()
 	
 	For dem.DevilEmitters = Each DevilEmitters
 		If fps\Factor[0] > 0.0 And (dem\room = Null Lor (PlayerRoom = dem\room Lor dem\room\Dist < 8.0))
-			If dem\Timer = 0.0
+			If (Not dem\Spawn)
 				SetEmitter(dem\OBJ, ParticleEffect[dem\ParticleID])
-				dem\Timer = 1.0
+				dem\Spawn = True
 			Else
 				Select dem\State
 					Case 1
