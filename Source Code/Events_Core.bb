@@ -2076,8 +2076,6 @@ Function UpdateEvents%()
                        PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 												If (Not me\Crouch) Then SetCrouch(True)
 											
-                       it.Items = CreateItem(“White Severed Hand”, “hand”, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
-                       EntityType(it\Collider, HIT_ITEM)
 												de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
 												de\MaxSize = 0.45 : de\SizeChange = 0.0002
 												EntityParent(de\OBJ, e\room\OBJ)
