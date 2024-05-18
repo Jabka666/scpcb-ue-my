@@ -400,7 +400,6 @@ Function UpdateGame%()
 				UpdateLights(Camera)
 				UpdateDevilParticlesTimer = Min(1.0, UpdateDevilParticlesTimer + fps\Factor[0])
 				If UpdateDevilParticlesTimer = 1.0
-					UpdateDevilEmitters()
 					UpdateParticles_Devil()
 					UpdateDevilParticlesTimer = 0.0
 				EndIf
@@ -8587,7 +8586,7 @@ End Type
 Global I_008.SCP008
 
 Function Update008%()
-	Local r.Rooms, e.Events, dem.DevilEmitters, de.Decals
+	Local r.Rooms, e.Events, de.Decals
 	Local PrevI008Timer#, i%
 	Local TeleportForInfect%
 	Local SinValue#
@@ -8708,7 +8707,7 @@ Function Update008%()
 					EndIf
 					
 					If opt\ParticleAmount > 0
-						If Rand(25) = 1 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 15)
+						If Rand(25) = 1 Then SetEmitter(Null, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 15)
 					EndIf
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)

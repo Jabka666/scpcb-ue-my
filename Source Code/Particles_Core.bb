@@ -96,85 +96,15 @@ Function RemoveParticle%(p.Particles)
 	CatchErrors("Uncaught: RemoveParticles()")
 End Function
 
-Type DevilEmitters
-	Field OBJ%
-	Field x#, y#, z#
-	Field ParticleID%
-	Field room.Rooms
-	Field Spawn% = False
-	Field SoundCHN%
-	Field State%
-End Type
-
-Function CreateDevilEmitter.DevilEmitters(room.Rooms, x#, y#, z#, ParticleID%)
-	Local dem.DevilEmitters
-	
-	dem.DevilEmitters = New DevilEmitters
-	dem\OBJ = CreatePivot()
-	PositionEntity(dem\OBJ, x, y, z, True)
-	If room <> Null Then EntityParent(dem\OBJ, room\OBJ)
-	
-	dem\room = room
-	dem\x = x
-	dem\y = y
-	dem\z = z
-	dem\ParticleID = ParticleID
-	
-	Return(dem)
-End Function
-
-Function UpdateDevilEmitters()
-	Local dem.DevilEmitters
-	Local InSmoke% = False
-	
-	For dem.DevilEmitters = Each DevilEmitters
-		If fps\Factor[0] > 0.0 And (dem\room = Null Lor (PlayerRoom = dem\room Lor dem\room\Dist < 8.0))
-			If (Not dem\Spawn)
-				SetEmitter(dem\OBJ, ParticleEffect[dem\ParticleID])
-				dem\Spawn = True
-			Else
-				Select dem\State
-					Case 1
-						;[Block]
-						dem\SoundCHN = LoopSound2(snd_I\HissSFX[0], dem\SoundCHN, Camera, dem\OBJ)
-						If (Not InSmoke)
-							If wi\GasMask = 0 And wi\HazmatSuit = 0
-								If DistanceSquared(EntityX(Camera, True), EntityX(dem\OBJ, True), EntityZ(Camera, True), EntityZ(dem\OBJ, True)) < 0.64
-									If Abs(EntityY(Camera, True) - EntityY(dem\OBJ, True)) < 5.0 Then InSmoke = True
-								EndIf
-							EndIf
-						EndIf
-						;[End Block]
-					Case 2
-						;[Block]
-						dem\SoundCHN = LoopSound2(snd_I\HissSFX[1], dem\SoundCHN, Camera, dem\OBJ, 5.0)
-						;[End Block]
-				End Select
-			EndIf
-		EndIf
-	Next
-	
-	If InSmoke
-		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
-		If me\EyeIrritation > 70.0 * 24.0
-			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
-			Kill()
-		EndIf
-		
-		UpdateCough(150)
-		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
-	EndIf
-End Function
-
 Function UpdateDust%()
-	Local dem.DevilEmitters
+	Local emit.Emitter
 	Local i%, Pvt%
 	
 	; ~ Create a single dust particle
-	If Rand(35 + (25 * (opt\ParticleAmount = 1))) = 1 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
+	If Rand(35 + (25 * (opt\ParticleAmount = 1))) = 1 Then SetEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
 	
 	; ~ Create extra dust particles while the camera is shaking
-	If me\BigCameraShake > 0.0 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
+	If me\BigCameraShake > 0.0 Then SetEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
 End Function
 
 ;~IDEal Editor Parameters:

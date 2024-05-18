@@ -2834,7 +2834,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, dem.DevilEmitters
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter
 	
 	Local i%, x%, y%, Lvl%
 	
@@ -2984,16 +2984,13 @@ Function NullGame%(PlayButtonSFX% = True)
 	RemoveDecalInstances()
 	ParticleCam = 0
 	FreeEntity(ParticlePiv) : ParticlePiv = 0
+	For emit.Emitter = Each Emitter
+		FreeEmitter(emit, True)
+	Next
 	For tmp.Template = Each Template
 		FreeTemplate(Handle(tmp))
 	Next
-	For dem.DevilEmitters = Each DevilEmitters
-		FreeEmitter(dem\OBJ, True)
-	Next
-	
 	Delete Each Template
-	Delete Each Emitter
-	Delete Each Particle
 	For p.Particles = Each Particles
 		RemoveParticle(p)
 	Next

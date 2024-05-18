@@ -591,7 +591,7 @@ Global RemoveHazmatTimer#, Remove714Timer#
 Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
-	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints, dem.DevilEmitters
+	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, Visible%
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	Local SinValue#, SqrValue#
@@ -2296,7 +2296,7 @@ Function UpdateNPCs%()
 							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							
-							dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
+							SetEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
 							n\Reload = 8.0
 						EndIf
 						;[End Block]
@@ -5124,7 +5124,7 @@ Const MTF_DISABLING_TESLA% = 11
 ;[End Block]
 
 Function UpdateMTFUnit%(n.NPCs)
-	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events, dem.DevilEmitters
+	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events
 	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	If n\IsDead
@@ -6491,8 +6491,8 @@ Function UpdateMTFUnit%(n.NPCs)
 							
 							If EntityDistanceSquared(me\Collider, n\Collider) < PowTwo(opt\CameraFogFar) Then LightVolume = TempLightVolume * 1.2
 							
-							dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
-							dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider), 15)
+							SetEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
+							SetEmitter(Null, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider), 15)
 							
 							FreeEntity(Pvt) : Pvt = 0
 							
@@ -6910,11 +6910,11 @@ Function UpdateNPCBlinking%(n.NPCs)
 End Function
 
 Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)
-	Local p.Particles, de.Decals, n.NPCs, dem.DevilEmitters
+	Local p.Particles, de.Decals, n.NPCs, emit.Emitter
 	Local Pvt%, ShotMessageUpdate$, i%
 	Local DifficultyDMGMult#
 	
-	dem.DevilEmitters = CreateDevilEmitter(Null, x, y, z, 13)
+	SetEmitter(Null, x, y, z, 13)
 	
 	LightVolume = TempLightVolume * 1.2
 	
@@ -7006,13 +7006,13 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 		If msg\Timer < 70.0 * 5.0 Then CreateMsg(ShotMessageUpdate)
 		If me\Injuries >= 6.0 Then Kill(True)
 		
-		If MsgRand > 10 And MsgRand < 16 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 15)
+		If MsgRand > 10 And MsgRand < 16 Then emit.Emitter = SetEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 15)
 		
 		PlaySound_Strict(snd_I\BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0
 		Pvt = CreatePivot()
 		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
-		PointEntity(Pvt, dem\OBJ)
+		If emit <> Null Then PointEntity(Pvt, emit\Owner)
 		TurnEntity(Pvt, 0.0, 180.0, 0.0)
 		EntityPick(Pvt, 2.5)
 		
@@ -7389,11 +7389,11 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 End Function
 
 Function UpdateNPCNearTesla%()
-	Local n.NPCs, dem.DevilEmitters
+	Local n.NPCs
 	
 	For n.NPCs = Each NPCs
 		If n\TeslaHit
-			If opt\ParticleAmount > 0 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
+			If opt\ParticleAmount > 0 Then SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
 			
 			If n\NPCType = NPCType106
 				If n\State3 = 1.0

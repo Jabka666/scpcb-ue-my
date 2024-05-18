@@ -7,7 +7,7 @@ Function SaveGame%(File$)
 	
 	CatchErrors("SaveGame(" + File + ")")
 	
-	Local n.NPCs, r.Rooms, do.Doors
+	Local n.NPCs, r.Rooms, d.Doors
 	Local x%, y%, i%, Temp%
 	
 	GameSaved = True
@@ -325,36 +325,36 @@ Function SaveGame%(File$)
 	WriteInt(f, 954)
 	
 	Temp = 0
-	For do.Doors = Each Doors
+	For d.Doors = Each Doors
 		Temp = Temp + 1
 	Next
 	WriteInt(f, Temp)
-	For do.Doors = Each Doors
-		WriteFloat(f, EntityX(do\FrameOBJ, True))
-		WriteFloat(f, EntityY(do\FrameOBJ, True))
-		WriteFloat(f, EntityZ(do\FrameOBJ, True))
-		WriteByte(f, do\Open)
-		WriteFloat(f, do\OpenState)
-		WriteByte(f, do\Locked)
-		WriteByte(f, do\AutoClose)
+	For d.Doors = Each Doors
+		WriteFloat(f, EntityX(d\FrameOBJ, True))
+		WriteFloat(f, EntityY(d\FrameOBJ, True))
+		WriteFloat(f, EntityZ(d\FrameOBJ, True))
+		WriteByte(f, d\Open)
+		WriteFloat(f, d\OpenState)
+		WriteByte(f, d\Locked)
+		WriteByte(f, d\AutoClose)
 		
-		WriteFloat(f, EntityX(do\OBJ, True))
-		WriteFloat(f, EntityZ(do\OBJ, True))
-		WriteFloat(f, EntityYaw(do\OBJ, True))
+		WriteFloat(f, EntityX(d\OBJ, True))
+		WriteFloat(f, EntityZ(d\OBJ, True))
+		WriteFloat(f, EntityYaw(d\OBJ, True))
 		
-		If do\OBJ2 <> 0
-			WriteFloat(f, EntityX(do\OBJ2, True))
-			WriteFloat(f, EntityZ(do\OBJ2, True))
+		If d\OBJ2 <> 0
+			WriteFloat(f, EntityX(d\OBJ2, True))
+			WriteFloat(f, EntityZ(d\OBJ2, True))
 		Else
 			WriteFloat(f, 0.0)
 			WriteFloat(f, 0.0)
 		EndIf
 		
-		WriteFloat(f, do\Timer)
-		WriteFloat(f, do\TimerState)
+		WriteFloat(f, d\Timer)
+		WriteFloat(f, d\TimerState)
 		
-		WriteByte(f, do\IsElevatorDoor)
-		WriteByte(f, do\MTFClose)
+		WriteByte(f, d\IsElevatorDoor)
+		WriteByte(f, d\MTFClose)
 	Next
 	
 	WriteInt(f, 1845)
@@ -514,7 +514,7 @@ End Function
 Function LoadGame%(File$)
 	CatchErrors("LoadGame(" + File + ")")
 	
-	Local r.Rooms, n.NPCs, do.Doors, rt.RoomTemplates
+	Local r.Rooms, n.NPCs, d.Doors, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
 	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 	
@@ -954,8 +954,8 @@ Function LoadGame%(File$)
 						If ShouldSpawnDoor
 							If x + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									do.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[0] = do
+									d.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+									r\AdjDoor[0] = d
 								EndIf
 							EndIf
 						EndIf
@@ -985,8 +985,8 @@ Function LoadGame%(File$)
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-									do.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[3] = do
+									d.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+									r\AdjDoor[3] = d
 								EndIf
 							EndIf
 						EndIf
@@ -1022,20 +1022,20 @@ Function LoadGame%(File$)
 		Local IsElevDoor% = ReadByte(f)
 		Local MTFClose% = ReadByte(f)
 		
-		For do.Doors = Each Doors
-			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z
-				do\Open = Open
-				do\OpenState = OpenState
-				do\Locked = Locked
-				do\AutoClose = AutoClose
-				do\Timer = Timer
-				do\TimerState = TimerState
-				do\IsElevatorDoor = IsElevDoor
-				do\MTFClose = MTFClose
+		For d.Doors = Each Doors
+			If EntityX(d\FrameOBJ, True) = x And EntityY(d\FrameOBJ, True) = y And EntityZ(d\FrameOBJ, True) = z
+				d\Open = Open
+				d\OpenState = OpenState
+				d\Locked = Locked
+				d\AutoClose = AutoClose
+				d\Timer = Timer
+				d\TimerState = TimerState
+				d\IsElevatorDoor = IsElevDoor
+				d\MTFClose = MTFClose
 				
-				PositionEntity(do\OBJ, OBJX, y, OBJZ, True)
-				RotateEntity(do\OBJ, 0.0, OBJYaw, 0.0, True)
-				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, y, OBJ2Z, True)
+				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
+				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
+				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
 				Exit
 			EndIf
 		Next
@@ -1313,19 +1313,19 @@ Function LoadGame%(File$)
 			If r\Adjacent[0] <> Null And r\Adjacent[1] <> Null And r\Adjacent[2] <> Null And r\Adjacent[3] <> Null Then Exit
 		Next
 		
-		For do.Doors = Each Doors
-			If do\KeyCard = 0 And do\Code = ""
-				If EntityZ(do\FrameOBJ, True) = r\z
-					If EntityX(do\FrameOBJ, True) = r\x + 4.0
-						r\AdjDoor[0] = do
-					ElseIf EntityX(do\FrameOBJ, True) = r\x - 4.0
-						r\AdjDoor[2] = do
+		For d.Doors = Each Doors
+			If d\KeyCard = 0 And d\Code = ""
+				If EntityZ(d\FrameOBJ, True) = r\z
+					If EntityX(d\FrameOBJ, True) = r\x + 4.0
+						r\AdjDoor[0] = d
+					ElseIf EntityX(d\FrameOBJ, True) = r\x - 4.0
+						r\AdjDoor[2] = d
 					EndIf
-				ElseIf EntityX(do\FrameOBJ, True) = r\x
-					If EntityZ(do\FrameOBJ, True) = r\z + 4.0
-						r\AdjDoor[3] = do
-					ElseIf EntityZ(do\FrameOBJ, True) = r\z - 4.0
-						r\AdjDoor[1] = do
+				ElseIf EntityX(d\FrameOBJ, True) = r\x
+					If EntityZ(d\FrameOBJ, True) = r\z + 4.0
+						r\AdjDoor[3] = d
+					ElseIf EntityZ(d\FrameOBJ, True) = r\z - 4.0
+						r\AdjDoor[1] = d
 					EndIf
 				EndIf
 			EndIf
@@ -1343,7 +1343,7 @@ End Function
 Function LoadGameQuick%(File$)
 	CatchErrors("LoadGameQuick(" + File + ")")
 	
-	Local r.Rooms, n.NPCs, do.Doors
+	Local r.Rooms, n.NPCs, d.Doors
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
 	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
@@ -1768,20 +1768,20 @@ Function LoadGameQuick%(File$)
 		Local IsElevDoor% = ReadByte(f)
 		Local MTFClose% = ReadByte(f)
 		
-		For do.Doors = Each Doors
-			If EntityX(do\FrameOBJ, True) = x And EntityY(do\FrameOBJ, True) = y And EntityZ(do\FrameOBJ, True) = z
-				do\Open = Open
-				do\OpenState = OpenState
-				do\Locked = Locked
-				do\AutoClose = AutoClose
-				do\Timer = Timer
-				do\TimerState = TimerState
-				do\IsElevatorDoor = IsElevDoor
-				do\MTFClose = MTFClose
+		For d.Doors = Each Doors
+			If EntityX(d\FrameOBJ, True) = x And EntityY(d\FrameOBJ, True) = y And EntityZ(d\FrameOBJ, True) = z
+				d\Open = Open
+				d\OpenState = OpenState
+				d\Locked = Locked
+				d\AutoClose = AutoClose
+				d\Timer = Timer
+				d\TimerState = TimerState
+				d\IsElevatorDoor = IsElevDoor
+				d\MTFClose = MTFClose
 				
-				PositionEntity(do\OBJ, OBJX, y, OBJZ, True)
-				RotateEntity(do\OBJ, 0.0, OBJYaw, 0.0, True)
-				If do\OBJ2 <> 0 Then PositionEntity(do\OBJ2, OBJ2X, y, OBJ2Z, True)
+				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
+				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
+				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
 				Exit
 			EndIf
 		Next
@@ -2563,9 +2563,9 @@ Function LoadMap%(File$)
 	
 	CloseFile(f)
 	
+	Local d.Doors
 	Local Zone%
 	Local ShouldSpawnDoor%
-	Local d.Doors
 	
 	For y = MapGridSize To 0 Step -1
 		If y < I_Zone\Transition[1]

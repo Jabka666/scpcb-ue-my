@@ -1,7 +1,7 @@
 Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom()")
 	
-	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, fr.Forest, dem.DevilEmitters
+	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, fr.Forest, emit.Emitter
 	Local it.Items, it2.Items, w.WayPoints, w2.WayPoints, l.Lights
 	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%, SF%, b%, Name$
 	Local t1%, Tex%, Screen%, Scale#
@@ -13,7 +13,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room1_storage
 			;[Block]
 			; ~ Storage Room 6H door
-			d.Doors = CreateDoor(r, r\x, r\y, r\z - 512.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
+			CreateDoor(r, r\x, r\y, r\z - 512.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 256.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 640.0 * RoomScale, 20.0)
 			sc\Angle = 180.0 : sc\Turn = 45.0
@@ -171,11 +171,11 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.048, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.048, True)
 			
-			d.Doors = CreateDoor(r, r\x, r\y, r\z + 3262.0 * RoomScale, 180.0, True, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x, r\y, r\z + 3262.0 * RoomScale, 180.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			
-			d.Doors = CreateDoor(r, r\x + 2176.0 * RoomScale, r\y + 768.0 * RoomScale, r\z + 4158.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 2176.0 * RoomScale, r\y + 768.0 * RoomScale, r\z + 4158.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			
-			d.Doors = CreateDoor(r, r\x + 2128.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 1630.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_0)
+			CreateDoor(r, r\x + 2128.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 1630.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_0)
 			
 			d.Doors = CreateDoor(r, r\x + 272.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.061, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
@@ -277,8 +277,8 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 3384.0 * RoomScale, r\y + 500.0 * RoomScale, r\z + 4500.0 * RoomScale, 7)
-			dem\State = 2
+			emit.Emitter = SetEmitter(r, r\x + 3384.0 * RoomScale, r\y + 500.0 * RoomScale, r\z + 4500.0 * RoomScale, 7)
+			emit\State = 2
 			;[End Block]
 		Case r_cont1_173_intro
 			;[Block]
@@ -466,7 +466,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[2] = d
 			
 			; ~ Storage Room 1C Door
-			d.Doors = CreateDoor(r, r\x + 472.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_1)
+			CreateDoor(r, r\x + 472.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_1)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 80.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 163.0 * RoomScale, 270.0, True)
 			RotateEntity(r\RoomLevers[0]\OBJ, 80.0, EntityYaw(r\RoomLevers[0]\OBJ), 0.0)
@@ -747,8 +747,8 @@ Function FillRoom%(r.Rooms)
 				r\Objects[1] = CreateButton(BUTTON_KEYCARD, r\x - 443.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 79.0 * RoomScale, 0.0, 90.0, 0.0, 0, True)
 				EntityParent(r\Objects[1], r\OBJ)
 				
-				dem.DevilEmitters = CreateDevilEmitter(r, r\x + 262.0 * RoomScale, r\y + 328.0 * RoomScale, r\z - 345.0 * RoomScale, 1)
-				dem\State = 2
+				emit.Emitter = SetEmitter(r, r\x + 262.0 * RoomScale, r\y + 328.0 * RoomScale, r\z - 345.0 * RoomScale, 1)
+				emit\State = 2
 			Else
 				d.Doors = CreateDoor(r, r\x - 458.0 * RoomScale, r\y, r\z + 35.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 				PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.04, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 1.035, True)
@@ -785,7 +785,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_js
 			;[Block]
 			; ~ Janitorial Lockers
-			d.Doors = CreateDoor(r, r\x + 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_0)
+			CreateDoor(r, r\x + 288.0 * RoomScale, r\y, r\z + 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_0)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 1646.0 * RoomScale, r\y + 435.0 * RoomScale, r\z + 193.0 * RoomScale, 20.0)
 			sc\Angle = 30.0 : sc\Turn = 30.0
@@ -1086,7 +1086,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y, r\z + 376.0 * RoomScale, 0.0)
+			CreateDoor(r, r\x - 512.0 * RoomScale, r\y, r\z + 376.0 * RoomScale, 0.0)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x - 640.0 * RoomScale, r\y + 0.5, r\z - 912.0 * RoomScale)
@@ -1124,7 +1124,7 @@ Function FillRoom%(r.Rooms)
 		Case r_cont2_012
 			;[Block]
 			; ~ Observation room door
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ SCP-012 chamber door
 			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 320.0 * RoomScale, 0.0)
@@ -1154,8 +1154,8 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[3], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[3], r\Objects[0])
-
-                        it.Items = CreateItem("White Severed Hand", it_hand, r\x - 784.0 * RoomScale, r\y - 576.0 * RoomScale + 0.3, r\z + 640.0 * RoomScale)
+			
+            it.Items = CreateItem("White Severed Hand", it_hand, r\x - 784.0 * RoomScale, r\y - 576.0 * RoomScale + 0.3, r\z + 640.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-012", it_paper, r\x - 56.0 * RoomScale, r\y - 576.0 * RoomScale, r\z - 408.0 * RoomScale)
@@ -1177,16 +1177,16 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.061, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			; ~ SCP-714 Door
-			d.Doors = CreateDoor(r, r\x - 560.0 * RoomScale, r\y, r\z - 272.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 560.0 * RoomScale, r\y, r\z - 272.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ SCP-427 Door
-			d.Doors = CreateDoor(r, r\x - 560.0 * RoomScale, r\y, r\z + 272.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 560.0 * RoomScale, r\y, r\z + 272.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ SCP-1025 Door
-			d.Doors = CreateDoor(r, r\x + 560.0 * RoomScale, r\y, r\z - 272.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 560.0 * RoomScale, r\y, r\z - 272.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ SCP-860 Door
-			d.Doors = CreateDoor(r, r\x + 560.0 * RoomScale, r\y, r\z + 272.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 560.0 * RoomScale, r\y, r\z + 272.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ Misc. doors
 			d.Doors = CreateDoor(r, r\x - 816.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_CARD_3)
@@ -1340,10 +1340,10 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			; ~ SCP-500 door
-			d.Doors = CreateDoor(r, r\x + 784.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x + 784.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ SCP-1499 door
-			d.Doors = CreateDoor(r, r\x + 556.0 * RoomScale, r\y, r\z + 288.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x + 556.0 * RoomScale, r\y, r\z + 288.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 576.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 632.0 * RoomScale)
@@ -1418,7 +1418,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.031, True)
 			
 			; ~ Observation room door
-			d.Doors = CreateDoor(r, r\x + 352.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0)
+			CreateDoor(r, r\x + 352.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0)
 			
 			; ~ Fake SCP-1123 Chamber door
 			d.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y + 769.0 * RoomScale, r\z + 360.0 * RoomScale, 0.0, True, ONE_SIDED_DOOR, KEY_CARD_2)
@@ -1539,11 +1539,11 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			
 			; ~ Smoke
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 175.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 655.0 * RoomScale, 0)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x - 175.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 655.0 * RoomScale, 0)
+			emit\State = 1
 			
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 655.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x - 655.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
+			emit\State = 1
 			
 			CreateCustomCenter(r, r\x - 736.0 * RoomScale, r\z - 352.0 * RoomScale)
 			;[End Block]
@@ -1661,7 +1661,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			; ~ DNA door
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 3096.0 * RoomScale, r\y - 5464.0 * RoomScale, r\z + 6569.0 * RoomScale)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 1216.0 * RoomScale, r\y - 5464.0 * RoomScale, r\z + 3240.0 * RoomScale)
@@ -1735,8 +1735,8 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[15], r\OBJ)
 			
 			; ~ TODO: FIND A WAY TO ROTATE PARTICLES/EMITTER
-			;dem.DevilEmitters = CreateDevilEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 6)
-			;dem\State = 1
+			;emit.Emitter = SetEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 6)
+			;emit\State = 1
 			
 			Select Rand(3)
 				Case 1
@@ -1778,7 +1778,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room4_ic
 			;[Block]
 			; ~ Information Center door
-			d.Doors = CreateDoor(r, r\x + 704.0 * RoomScale, r\y, r\z - 336.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 704.0 * RoomScale, r\y, r\z - 336.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 320.0 * RoomScale, r\y + 544.0 * RoomScale, r\z - 320.0 * RoomScale, 30.0)
 			sc\FollowPlayer = True
@@ -1801,7 +1801,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_checkpoint_lcz_hcz
 			;[Block]
-			d.Doors= CreateDoor(r, r\x + 200.0 * RoomScale, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x + 200.0 * RoomScale, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			d\Timer = 70.0 * 5.0
 			PositionEntity(d\Buttons[0], r\x, EntityY(d\Buttons[0], True), r\z - 217.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], r\x, EntityY(d\Buttons[1], True), r\z + 217.0 * RoomScale, True)
@@ -1940,7 +1940,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[2] = d
 			
 			; ~ Observation room door
-			d.Doors = CreateDoor(r, r\x - 1202.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 872.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)
+			CreateDoor(r, r\x - 1202.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 872.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)
 			
 			; ~ Misc Doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 64.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_4)
@@ -1986,12 +1986,12 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[1] = d
 			
 			; ~ Door to the containment area
-			d.Doors = CreateDoor(r, r\x - 178.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 422.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 178.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 422.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ Doors to the lower area
-			d.Doors = CreateDoor(r, r\x - 1140.0 * RoomScale, r\y - 8100.0 * RoomScale, r\z + 1613.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 1140.0 * RoomScale, r\y - 8100.0 * RoomScale, r\z + 1613.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
-			d.Doors = CreateDoor(r, r\x - 762.0 * RoomScale, r\y - 8608.0 * RoomScale, r\z + 51.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 762.0 * RoomScale, r\y - 8608.0 * RoomScale, r\z + 51.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x + 384.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, False, HEAVY_DOOR, KEY_CARD_4)
@@ -2062,7 +2062,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			; ~ Observation room door
-			d.Doors = CreateDoor(r, r\x - 417.0 * RoomScale, r\y, r\z, 90.0, True, DEFAULT_DOOR, KEY_CARD_2)
+			CreateDoor(r, r\x - 417.0 * RoomScale, r\y, r\z, 90.0, True, DEFAULT_DOOR, KEY_CARD_2)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 800.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 339.0 * RoomScale, 180.0, True)
 			
@@ -2155,8 +2155,8 @@ Function FillRoom%(r.Rooms)
 			i = 0
 			For xTemp = -1 To 1 Step 2
 				For zTemp = -1 To 1
-					dem.DevilEmitters = CreateDevilEmitter(r, r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 3)
-					dem\State = 1
+					emit.Emitter = SetEmitter(r, r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 3)
+					emit\State = 1
 					i = i + 1
 				Next
 			Next
@@ -2278,10 +2278,10 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_shaft
 			;[Block]
 			; ~ Side of Elevator Shaft room door 1
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 744.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_1)
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 744.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_1)
 			
 			; ~ Side of Elevator Shaft room door 2
-			d.Doors = CreateDoor(r, r\x + 1551.0 * RoomScale, r\y, r\z + 496.0 * RoomScale, 0.0)
+			CreateDoor(r, r\x + 1551.0 * RoomScale, r\y, r\z + 496.0 * RoomScale, 0.0)
 			
 			; ~ Misc. door
 			d.Doors = CreateDoor(r, r\x + 1984.0 * RoomScale, r\y, r\z + 744.0 * RoomScale, 90.0)
@@ -2512,7 +2512,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[7] = d
 			
 			; ~ Misc doors
-			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_BLACK)
+			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_BLACK)
 			
 			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -2579,7 +2579,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[1] = d
 			
 			; ~ SCP-409 Chamber door
-			d.Doors = CreateDoor(r, r\x - 4352.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1368.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 4352.0 * RoomScale, r\y - 4256.0 * RoomScale, r\z + 1368.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
@@ -2609,11 +2609,11 @@ Function FillRoom%(r.Rooms)
 			d\MTFClose = False
 			
 			; ~ Observation room doors
-			d.Doors = CreateDoor(r, r\x - 60.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 60.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
-			d.Doors = CreateDoor(r, r\x + 260.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 1272.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 260.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 1272.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
-			d.Doors = CreateDoor(r, r\x - 732.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 732.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ Maintenance room 2A room
 			d.Doors = CreateDoor(r, r\x - 1755.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_3)
@@ -2651,18 +2651,18 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Dr. L's Note #2", it_paper, r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit\State = 1
 			
 			CreateCustomCenter(r, r\x + 340.0 * RoomScale, r\z - 340.0 * RoomScale)
 			;[End Block]
 		Case r_room3_hcz
 			;[Block]
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit\State = 1
 			
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit\State = 1
 			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)
 			;[End Block]
@@ -2776,7 +2776,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[1] = d
 			
 			; ~ DNA door
-			d.Doors = CreateDoor(r, r\x - 712.0 * RoomScale, r\y, r\z - 288.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_HAND_BLACK)
+			CreateDoor(r, r\x - 712.0 * RoomScale, r\y, r\z - 288.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_HAND_BLACK)
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y + 0.5, r\z + 512.0 * RoomScale)
@@ -2797,17 +2797,17 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room4_hcz
 			;[Block]
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit\State = 1
 			
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit\State = 1
 			
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 3)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 3)
+			emit\State = 1
 			
-			dem.DevilEmitters = CreateDevilEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 3)
-			dem\State = 1
+			emit.Emitter = SetEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z + 688.0 * RoomScale, 3)
+			emit\State = 1
 			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)
 			;[End Block]
@@ -3034,7 +3034,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			r\RoomDoors.Doors[4] = d
 			
-			d.Doors = CreateDoor(r, r\x + 3072.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 5800.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 3072.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 5800.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ Guard spawnpoint
 			r\Objects[2] = CreatePivot()
@@ -3114,7 +3114,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room1_o5
 			;[Block]
-			d.Doors = CreateDoor(r, r\x, r\y, r\z - 240.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_O5_COUNCIL)
+			CreateDoor(r, r\x, r\y, r\z - 240.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_O5_COUNCIL)
 			
 			it.Items = CreateItem("Field Agent Log #235-001-CO5", it_paper, r\x, r\y + 200.0 * RoomScale, r\z + 870.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3175,7 +3175,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ Misc doors
 			; ~ Upper floor office door
-			d.Doors = CreateDoor(r, r\x - 1056.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 1056.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ Upper floor Storage room door
 			d.Doors = CreateDoor(r, r\x - 1056.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 736.0 * RoomScale, 270.0, True, ONE_SIDED_DOOR, KEY_CARD_2)
@@ -3328,10 +3328,10 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_medibay
 			;[Block]
 			; ~ Medical bay door 1
-			d.Doors = CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ Medical bay door 2
-			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y, r\z + 378.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x - 512.0 * RoomScale, r\y, r\z + 378.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
 			; ~ Misc. door
 			d.Doors = CreateDoor(r, r\x - 1104.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_3)
@@ -3381,7 +3381,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_office_2
 			;[Block]
 			; ~ Misc. door
-			d.Doors = CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z, 90.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z, 90.0, False, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_office_2_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
@@ -3428,9 +3428,9 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_servers_ez
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
-			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 320.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 320.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
 			
 			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 1040.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -3444,7 +3444,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_scientists
 			;[Block]
 			; ~ Dr. Maynard's office door
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_MAYNARD))
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_MAYNARD))
 			
 			; ~ Dr.Gear's inaccessible office door
 			d.Doors = CreateDoor(r, r\x - 352.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_LOCKED)
@@ -3453,7 +3453,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			; ~ Dr. Harp's office door
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_HARP))
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_HARP))
 			
 			it.Items = CreateItem("Mysterious Note", it_paper, r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 544.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3493,7 +3493,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			; ~ Conference Room 9B door
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_CARD_5)
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_CARD_5)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 712.0 * RoomScale, r\y + 0.005, r\z - 72.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
@@ -3516,14 +3516,14 @@ Function FillRoom%(r.Rooms)
 		Case r_cont2_860_1
 			;[Block]
 			; ~ Doors to observation room
-			d.Doors = CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
+			CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			
-			d.Doors = CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, TFalse, DEFAULT_DOOR, KEY_HAND_YELLOW)
+			CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
 			
 			; ~ Doors to SCP-860-1's door itself
-			d.Doors = CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
-			d.Doors = CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ SCP-860-1's door
 			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, False, WOODEN_DOOR, KEY_860)
@@ -3552,7 +3552,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2c_2_ez
 			;[Block]
 			; ~ Corner office door
-			d.Doors = CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
@@ -3599,7 +3599,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.1, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			; ~ Electrical Center controls door
-			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y + 896.0 * RoomScale, r\z + 736.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 704.0 * RoomScale, r\y + 896.0 * RoomScale, r\z + 736.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 239.0 * RoomScale, r\y + 1104.0 * RoomScale, r\z + 632.0 * RoomScale, -90.0, True)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 239.0 * RoomScale, r\y + 1104.0 * RoomScale, r\z + 568.0 * RoomScale, -90.0, True)
@@ -3657,9 +3657,9 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room3_ez
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
-			d.Doors = CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
@@ -3788,7 +3788,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room3_office
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, True, OFFICE_DOOR)
+			CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, True, OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_office_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
@@ -4082,6 +4082,7 @@ Function FillRoom%(r.Rooms)
 	
 	CatchErrors("Uncaught: FillRoom(Room ID: " + r\RoomTemplate\RoomID + ")")
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

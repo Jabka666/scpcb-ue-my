@@ -629,7 +629,7 @@ Function UpdateEvents%()
 	CatchErrors("UpdateEvents()")
 	
 	Local p.Particles, n.NPCs, r.Rooms, e.Events, e2.Events, de.Decals, du.Dummy1499_1, w.WayPoints, pr.Props, l.Lights, se.SoundEmitters
-	Local it.Items, it2.Items, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, do.Doors, s.Screens, dem.DevilEmitters
+	Local it.Items, it2.Items, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, d.Doors, s.Screens, emit.Emitter
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
@@ -1948,12 +1948,12 @@ Function UpdateEvents%()
 							
 							If EntityPitch(e\room\Objects[1], True) < 40.0
 								PlaySound_Strict(snd_I\LeverSFX)
-								FreeEmitter(e\room\RoomDevilEmitters[0]\OBJ)
+								FreeEmitter(e\room\RoomEmitters[0])
 								e\EventState = 2.0
 							Else
-								If e\room\RoomDevilEmitters[0] = Null
-									e\room\RoomDevilEmitters[0] = CreateDevilEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 9)
-									e\room\RoomDevilEmitters[0]\State = 2
+								If e\room\RoomEmitters[0] = Null
+									e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 9)
+									e\room\RoomEmitters[0]\State = 2
 								EndIf
 							EndIf
 						Else
@@ -2085,12 +2085,12 @@ Function UpdateEvents%()
 												DeleteSingleTextureEntryFromCache(Tex)
 												
 												CreateMsg(GetLocalString("msg", "012_4"))
-                       me\CameraShake = 2.0
+												me\CameraShake = 2.0
 												InjurePlayer(0.8)
 												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
-                       PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+												PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 												If (Not me\Crouch) Then SetCrouch(True)
-											
+												
 												de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
 												de\MaxSize = 0.45 : de\SizeChange = 0.0002
 												EntityParent(de\OBJ, e\room\OBJ)
@@ -3776,9 +3776,9 @@ Function UpdateEvents%()
 						UpdateLever(e\room\RoomLevers[1]\OBJ)
 						
 						If e\EventState = 1.0
-							If e\room\RoomDevilEmitters[7] = Null
+							If e\room\RoomEmitters[7] = Null
 								For i = 0 To 7
-									If e\room\RoomDevilEmitters[i] = Null And Rand(100) = 1
+									If e\room\RoomEmitters[i] = Null And Rand(100) = 1
 										Select i
 											Case 0
 												;[Block]
@@ -3823,14 +3823,14 @@ Function UpdateEvents%()
 										End Select
 										y = 3010.0
 										TFormPoint(x, y, z, e\room\OBJ, 0)
-										e\room\RoomDevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 10)
+										e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 10)
 									EndIf
 								Next
 							EndIf
 						Else
-							If e\room\RoomDevilEmitters[7] <> Null
+							If e\room\RoomEmitters[7] <> Null
 								For i = 0 To 7
-									FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
+									FreeEmitter(e\room\RoomEmitters[i])
 								Next
 							EndIf
 						EndIf
@@ -4048,7 +4048,7 @@ Function UpdateEvents%()
 							;[Block]
 							If Abs(EntityX(me\Collider, True) - EntityX(e\room\OBJ, True)) < 0.75 And Abs(EntityZ(me\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.75 And Abs(EntityY(me\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 								If (Not me\Terminated)
-									If opt\ParticleAmount > 0 Then dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
+									If opt\ParticleAmount > 0 Then SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
 									me\LightFlash = 0.4
 									me\CameraShake = 1.0
 									msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
@@ -4164,7 +4164,6 @@ Function UpdateEvents%()
 					Local Meshes%[MaxMTModelIDAmount]
 					Local TempStr$
 					Local iA%, iB%, iC%, iD%
-					Local dr.Doors
 					Local TempInt%, TempInt2%
 					Local iX%, iY%
 					
@@ -4453,19 +4452,19 @@ Function UpdateEvents%()
 										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 										
-										dr.Doors = CreateDoor(Null, e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, False, ELEVATOR_DOOR)
-										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
-										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
+										d.Doors = CreateDoor(Null, e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, False, ELEVATOR_DOOR)
+										PositionEntity(d\ElevatorPanel[1], EntityX(d\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(d\ElevatorPanel[1], True) + 0.1, EntityZ(d\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
+										RotateEntity(d\ElevatorPanel[1], EntityPitch(d\ElevatorPanel[1], True) + 45.0, EntityYaw(d\ElevatorPanel[1], True), EntityRoll(d\ElevatorPanel[1], True), True)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (CosValue * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 552.0 * RoomScale))
 										If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 											If e\room\RoomDoors[1] <> Null
-												RemoveDoor(dr)
+												RemoveDoor(d)
 											Else
-												dr\Open = (Not e\room\RoomDoors[0]\Open)
-												e\room\RoomDoors[1] = dr
+												d\Open = (Not e\room\RoomDoors[0]\Open)
+												e\room\RoomDoors[1] = d
 											EndIf
 											If e\room\Objects[3] = 0
 												e\room\Objects[3] = TempInt2
@@ -4475,10 +4474,10 @@ Function UpdateEvents%()
 											EndIf
 										Else
 											If e\room\RoomDoors[3] <> Null
-												RemoveDoor(dr)
+												RemoveDoor(d)
 											Else
-												dr\Open = (Not e\room\RoomDoors[2]\Open)
-												e\room\RoomDoors[3] = dr
+												d\Open = (Not e\room\RoomDoors[2]\Open)
+												e\room\RoomDoors[3] = d
 											EndIf
 											If e\room\Objects[5] = 0
 												e\room\Objects[5] = TempInt2
@@ -4655,19 +4654,19 @@ Function UpdateEvents%()
 										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, EntityYaw(TempInt, True) + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 										
-										dr.Doors = CreateDoor(Null, e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, False, ELEVATOR_DOOR)
-										PositionEntity(dr\ElevatorPanel[1], EntityX(dr\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(dr\ElevatorPanel[1], True) + 0.1, EntityZ(dr\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
-										RotateEntity(dr\ElevatorPanel[1], EntityPitch(dr\ElevatorPanel[1], True) + 45.0, EntityYaw(dr\ElevatorPanel[1], True), EntityRoll(dr\ElevatorPanel[1], True), True)
+										d.Doors = CreateDoor(Null, e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(TempInt, True) - 90.0, False, ELEVATOR_DOOR)
+										PositionEntity(d\ElevatorPanel[1], EntityX(d\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(d\ElevatorPanel[1], True) + 0.1, EntityZ(d\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
+										RotateEntity(d\ElevatorPanel[1], EntityPitch(d\ElevatorPanel[1], True) + 45.0, EntityYaw(d\ElevatorPanel[1], True), EntityRoll(d\ElevatorPanel[1], True), True)
 										
 										TempInt2 = CreatePivot()
 										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (CosValue * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 552.0 * RoomScale))
 										If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 											If e\room\RoomDoors[1] <> Null
-												RemoveDoor(dr)
+												RemoveDoor(d)
 											Else
-												dr\Open = (Not e\room\RoomDoors[0]\Open)
-												e\room\RoomDoors[1] = dr
+												d\Open = (Not e\room\RoomDoors[0]\Open)
+												e\room\RoomDoors[1] = d
 											EndIf
 											If e\room\Objects[3] = 0
 												e\room\Objects[3] = TempInt2
@@ -4677,10 +4676,10 @@ Function UpdateEvents%()
 											EndIf
 										Else
 											If e\room\RoomDoors[3] <> Null
-												RemoveDoor(dr)
+												RemoveDoor(d)
 											Else
-												dr\Open = (Not e\room\RoomDoors[2]\Open)
-												e\room\RoomDoors[3] = dr
+												d\Open = (Not e\room\RoomDoors[2]\Open)
+												e\room\RoomDoors[3] = d
 											EndIf
 											If e\room\Objects[5] = 0
 												e\room\Objects[5] = TempInt2
@@ -5628,12 +5627,12 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room
 					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 6.25
-						For do.Doors = Each Doors
-							If DistanceSquared(EntityX(do\FrameOBJ, True), EntityX(me\Collider), EntityZ(do\FrameOBJ, True), EntityZ(me\Collider)) < 4.0
-								If (Not EntityInView(do\FrameOBJ, Camera))
-									If do\Open
-										do\Open = False
-										do\OpenState = 0.0
+						For d.Doors = Each Doors
+							If DistanceSquared(EntityX(d\FrameOBJ, True), EntityX(me\Collider), EntityZ(d\FrameOBJ, True), EntityZ(me\Collider)) < 4.0
+								If (Not EntityInView(d\FrameOBJ, Camera))
+									If d\Open
+										d\Open = False
+										d\OpenState = 0.0
 										me\BlurTimer = 100.0
 										me\BigCameraShake = 3.0
 									EndIf
@@ -5883,19 +5882,19 @@ Function UpdateEvents%()
 								If Temp Lor (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0)
 									If Temp
 										For i = 0 To 1
-											If e\room\RoomDevilEmitters[i] = Null
+											If e\room\RoomEmitters[i] = Null
 												If i = 0
 													TFormPoint(-269.0, 400.0, 624.0, e\room\OBJ, 0)
 												Else
 													TFormPoint(-269.0, 400.0, 135.0, e\room\OBJ, 0)
 												EndIf
-												e\room\RoomDevilEmitters.DevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-												e\room\RoomDevilEmitters[i]\State = 1
+												e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+												e\room\RoomEmitters[i]\State = 1
 											EndIf
 										Next
 									Else
 										For i = 0 To 1
-											If e\room\RoomDevilEmitters[i] <> Null Then FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
+											If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
 										Next
 									EndIf
 									
@@ -5953,7 +5952,7 @@ Function UpdateEvents%()
 									EndIf
 									
 									For i = 0 To 1
-										If e\room\RoomDevilEmitters[i] <> Null Then FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
+										If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
 									Next
 									
 									If e\room\NPC[0]\State = 0.0
@@ -6100,10 +6099,10 @@ Function UpdateEvents%()
 											e\room\RoomDoors[i]\Locked = 0
 										Next
 										OpenCloseDoor(e\room\RoomDoors[1])
-										For do.Doors = Each Doors
-											If do\DoorType = HEAVY_DOOR
-												If DistanceSquared(EntityX(e\room\OBJ), EntityX(do\FrameOBJ, True), EntityZ(e\room\OBJ), EntityZ(do\FrameOBJ, True)) < 20.25
-													OpenCloseDoor(do)
+										For d.Doors = Each Doors
+											If d\DoorType = HEAVY_DOOR
+												If DistanceSquared(EntityX(e\room\OBJ), EntityX(d\FrameOBJ, True), EntityZ(e\room\OBJ), EntityZ(d\FrameOBJ, True)) < 20.25
+													OpenCloseDoor(d)
 													Exit
 												EndIf
 											EndIf
@@ -6118,19 +6117,19 @@ Function UpdateEvents%()
 					Else ; ~ SCP-035 has left
 						If UpdateLever(e\room\RoomLevers[1]\OBJ)
 							For i = 0 To 1
-								If e\room\RoomDevilEmitters[i] = Null
+								If e\room\RoomEmitters[i] = Null
 									If i = 0
 										TFormPoint(-269.0, 400.0, 624.0, e\room\OBJ, 0)
 									Else
 										TFormPoint(-269.0, 400.0, 135.0, e\room\OBJ, 0)
 									EndIf
-									e\room\RoomDevilEmitters.DevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-									e\room\RoomDevilEmitters[i]\State = 1
+									e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+									e\room\RoomEmitters[i]\State = 1
 								EndIf
 							Next
 						Else
 							For i = 0 To 1
-								If e\room\RoomDevilEmitters[i] <> Null Then FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
+								If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
 							Next
 						EndIf
 						
@@ -6250,8 +6249,8 @@ Function UpdateEvents%()
 						If EntityDistanceSquared(me\Collider, e\room\Objects[6]) < 6.25 And e\EventState > 0.0
 							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"), True)
 							For i = 0 To 5
-								dem.DevilEmitters = CreateDevilEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 4)
-								dem\State = 1
+								emit.Emitter = SetEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 4)
+								emit\State = 1
 							Next
 							RemoveEvent(e)
 						EndIf
@@ -6265,12 +6264,12 @@ Function UpdateEvents%()
 						PlaySound2(snd_I\BurstSFX, Camera, e\room\OBJ)
 						
 						TFormPoint(0.0, 460.0, 512.0, e\room\OBJ, 0)
-						dem.DevilEmitters = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-						dem\State = 1
+						emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+						emit\State = 1
 						
 						TFormPoint(0.0, 460.0, -512.0, e\room\OBJ, 0)
-						dem.DevilEmitters = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-						dem\State = 1
+						emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+						emit\State = 1
 						
 						RemoveEvent(e)
 					EndIf
@@ -6642,7 +6641,7 @@ Function UpdateEvents%()
 								EndIf
 							ElseIf e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 6.0
 								For i = 0 To 1
-									If e\room\RoomDevilEmitters[i] = Null
+									If e\room\RoomEmitters[i] = Null
 										If e\room\RoomTemplate\RoomID = r_room3_gw
 											If i = 0
 												TFormPoint(-81.0, 360.0, 320.0, e\room\OBJ, 0)
@@ -6656,14 +6655,14 @@ Function UpdateEvents%()
 												TFormPoint(320.0, 360.0, 143.0, e\room\OBJ, 0)
 											EndIf
 										EndIf
-										e\room\RoomDevilEmitters[i] = CreateDevilEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 2)
+										e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 2)
 									EndIf
 								Next
 								If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound2(e\Sound, Camera, e\room\Objects[0], 5.0)
 							EndIf
 						Else
 							For i = 0 To 1
-								If e\room\RoomDevilEmitters[i] <> Null Then FreeEmitter(e\room\RoomDevilEmitters[i]\OBJ)
+								If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
 							Next
 							e\EventState = 0.0
 							e\EventState2 = 1.0
@@ -8463,13 +8462,13 @@ Function UpdateIntro%()
 								ElseIf e\EventState2 >= 630.0
 									PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(EntityZ(me\Collider), e\room\z + 490.0 * RoomScale))
 									If e\room\RoomDoors[4]\Open Then OpenCloseDoor(e\room\RoomDoors[4])
-									If e\room\RoomDevilEmitters[0] = Null	
-										e\room\RoomDevilEmitters.DevilEmitters[0] = CreateDevilEmitter(e\room, e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 5)
-										e\room\RoomDevilEmitters[0]\State = 1
+									If e\room\RoomEmitters[0] = Null	
+										e\room\RoomEmitters.Emitter[0] = SetEmitter(e\room, e\room\x - 4191.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 5)
+										e\room\RoomEmitters[0]\State = 1
 									EndIf
-									If e\room\RoomDevilEmitters[1] = Null
-										e\room\RoomDevilEmitters.DevilEmitters[1] = CreateDevilEmitter(e\room, e\room\x - 4000.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 5)
-										e\room\RoomDevilEmitters[1]\State = 1
+									If e\room\RoomEmitters[1] = Null
+										e\room\RoomEmitters.Emitter[1] = SetEmitter(e\room, e\room\x - 4000.0 * RoomScale, e\room\y + 373.0 * RoomScale, e\room\z + 159.0 * RoomScale, 5)
+										e\room\RoomEmitters[1]\State = 1
 									EndIf
 									me\EyeIrritation = Max(me\EyeIrritation + (fps\Factor[0] * 4.0), 1.0)
 									If Rand(1000) = 1 Then Kill()
@@ -9157,7 +9156,7 @@ Function UpdateIntro%()
 End Function
 
 Function UpdateEndings%()
-	Local e.Events, e2.Events, n.NPCs, r.Rooms, p.Particles, de.Decals, du.Dummy1499_1, dem.DevilEmitters
+	Local e.Events, e2.Events, n.NPCs, r.Rooms, p.Particles, de.Decals, du.Dummy1499_1, emit.Emitter
 	Local Dist#, i%, k%, Pvt%, Temp%, xTemp#, zTemp#, Angle#, OBJ%
 	Local SinValue#, SqrValue#
 	
@@ -9432,8 +9431,8 @@ Function UpdateEndings%()
 											e\room\NPC[3]\EnemyY = EntityY(e\room\Objects[4], True) - 2.5
 											e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[4], True)
 											
-											dem.DevilEmitters = CreateDevilEmitter(Null, EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 8)
-											EntityParent(dem\OBJ, e\room\NPC[3]\Collider)
+											emit.Emitter = SetEmitter(Null, EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 8)
+											EntityParent(emit\owner, e\room\NPC[3]\Collider)
 										EndIf
 									Else
 										FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0

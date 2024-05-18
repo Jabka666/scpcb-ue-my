@@ -28,11 +28,13 @@ Type Template
 End Type
 
 Type Emitter
-	Field Fixed%
 	Field LoopAmount#, Age#, MaxTime#
 	Field tmp.Template
 	Field Owner%, Ent%, Surf%
 	Field Del%
+	Field room.Rooms
+	Field State%
+	Field SoundCHN%
 End Type
 
 Type Particle
@@ -77,7 +79,7 @@ Function FreeTemplate%(Template%)
 	Local i%
 	
 	tmp.Template = Object.Template(Template)
-	If tmp\Tex <> 0 Then DeleteSingleTextureEntryFromCache(tmp\Tex)
+	If tmp\Tex <> 0 Then DeleteSingleTextureEntryFromCache(tmp\Tex) : tmp\Tex = 0
 	Delete(tmp)
 End Function
 
@@ -251,58 +253,43 @@ Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
 	tmp\YawFix = YawFix
 End Function
 
-Function SetEmitter%(Owner%, Template%, Fixed% = False)
-	Local e.Emitter
+Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ID%)
+	Local emit.Emitter
 	Local i%
 	
-	e.Emitter = New Emitter
-	If Fixed
-		e\Owner = CreatePivot()
-		PositionEntity(e\Owner, EntityX(Owner), EntityY(Owner), EntityZ(Owner))
-		e\Fixed = True
-	Else
-		e\Owner = Owner
-	EndIf
+	emit.Emitter = New Emitter
+	emit\room = room
 	
-	e\Ent = CreateMesh()
-	e\Surf = CreateSurface(e\Ent)
-	e\tmp = Object.Template(Template)
-	e\MaxTime = e\tmp\EmitterMaxTime
-	EntityBlend(e\Ent, e\tmp\EmitterBlend)
-	EntityFX(e\Ent, 1 + 2 + 32)
-	If e\tmp\Tex Then EntityTexture(e\Ent, e\tmp\Tex)
-	Return(e\Ent)
+	emit\Owner = CreatePivot()
+	PositionEntity(emit\Owner, x, y, z)
+	If room <> Null Then EntityParent(emit\Owner, room\OBJ)
+	
+	emit\Ent = CreateMesh()
+	emit\Surf = CreateSurface(emit\Ent)
+	
+	emit\tmp = Object.Template(ParticleEffect[ID])
+	emit\MaxTime = emit\tmp\EmitterMaxTime
+	EntityBlend(emit\Ent, emit\tmp\EmitterBlend)
+	EntityFX(emit\Ent, 1 + 2 + 32)
+	If emit\tmp\Tex Then EntityTexture(emit\Ent, emit\tmp\Tex)
+	
+	Return(emit)
 End Function
 
-Function FreeEmitter%(Ent%, DeleteParticles% = False)
-	Local e.Emitter, p.Particle, dem.DevilEmitters
+Function FreeEmitter%(emit.Emitter, DeleteParticles% = False)
+	Local p.Particle
 	
-	For e.Emitter = Each Emitter
-		If e\Owner = Ent
-			If DeleteParticles
-				For p.Particle = Each Particle
-					If p\emitter = e Then Delete(p)
-				Next
-				FreeEntity(e\Ent) : e\Ent = 0
-				e\Surf = 0
-				If e\Fixed
-					FreeEntity(e\Owner) : e\Owner = 0
-				Else
-					For dem.DevilEmitters = Each DevilEmitters
-						If Ent = dem\OBJ
-							FreeEntity(dem\OBJ) : dem\OBJ = 0
-							Delete(dem)
-							Exit
-						EndIf
-					Next
-					e\Owner = 0
-				EndIf
-				Delete(e)
-			Else
-				e\Del = True
-			EndIf
-		EndIf
-	Next
+	If DeleteParticles
+		For p.Particle = Each Particle
+			If p\emitter = emit Then Delete(p)
+		Next
+		FreeEntity(emit\Ent) : emit\Ent = 0
+		emit\Surf = 0
+		FreeEntity(emit\Owner) : emit\Owner = 0
+		Delete(emit)
+	Else
+		emit\Del = True
+	EndIf
 End Function
 
 Function SetTemplateYaw%(Template%, Yaw#)
@@ -313,75 +300,97 @@ Function SetTemplateYaw%(Template%, Yaw#)
 End Function
 
 Function UpdateParticles_Devil()
-	Local e.Emitter, p.Particle, dem.DevilEmitters
+	Local emit.Emitter, p.Particle
 	Local i%
 	
-	For e.Emitter = Each Emitter
-		If e\tmp\MaxParticles > -1
+	For emit.Emitter = Each Emitter
+		If emit\tmp\MaxParticles > -1
 			Local ParticlesAmount% = 0
 			
 			For p.Particle = Each Particle
-				If p\emitter = e Then ParticlesAmount = ParticlesAmount + 1
+				If p\emitter = emit Then ParticlesAmount = ParticlesAmount + 1
 			Next
 		EndIf
-		ClearSurface(e\Surf)
-		If e\MaxTime > -1
-			If e\Age > e\MaxTime
-				e\Del = True
+		ClearSurface(emit\Surf)
+		If emit\MaxTime > -1
+			If emit\Age > emit\MaxTime
+				emit\Del = True
 			Else
-				e\Age = e\Age + 1
+				emit\Age = emit\Age + 1
 			EndIf
 		EndIf
-		e\LoopAmount = (e\LoopAmount + 1) Mod e\tmp\Interval
-		If e\LoopAmount = 0 And (Not e\Del)
-			For i = 1 To e\tmp\ParticlesPerInterval
-				If (e\tmp\MaxParticles > -1 And ParticlesAmount < e\tmp\MaxParticles) Lor e\tmp\MaxParticles = -1
+		emit\LoopAmount = (emit\LoopAmount + 1) Mod emit\tmp\Interval
+		If emit\LoopAmount = 0 And (Not emit\Del)
+			For i = 1 To emit\tmp\ParticlesPerInterval
+				If (emit\tmp\MaxParticles > -1 And ParticlesAmount < emit\tmp\MaxParticles) Lor emit\tmp\MaxParticles = -1
 					p.Particle = New Particle
-					p\emitter = e
-					p\MaxTime = Rand(e\tmp\MinTime, e\tmp\MaxTime)
-					p\x = EntityX(e\Owner, True) + Rnd(e\tmp\MinOX, e\tmp\MaxOX)
-					p\y = EntityY(e\Owner, True) + Rnd(e\tmp\MinOY, e\tmp\MaxOY)
-					p\z = EntityZ(e\Owner, True) + Rnd(e\tmp\MinOZ, e\tmp\MaxOZ)
-					p\XV = Rnd(e\tmp\MinXV, e\tmp\MaxXV)
-					p\YV = Rnd(e\tmp\MinYV, e\tmp\MaxYV)
-					p\ZV = Rnd(e\tmp\MinZV, e\tmp\MaxZV)
-					p\RotVel = Rnd(e\tmp\RotVel1, e\tmp\RotVel2)
+					p\emitter = emit
+					p\MaxTime = Rand(emit\tmp\MinTime, emit\tmp\MaxTime)
+					p\x = EntityX(emit\Owner, True) + Rnd(emit\tmp\MinOX, emit\tmp\MaxOX)
+					p\y = EntityY(emit\Owner, True) + Rnd(emit\tmp\MinOY, emit\tmp\MaxOY)
+					p\z = EntityZ(emit\Owner, True) + Rnd(emit\tmp\MinOZ, emit\tmp\MaxOZ)
+					p\XV = Rnd(emit\tmp\MinXV, emit\tmp\MaxXV)
+					p\YV = Rnd(emit\tmp\MinYV, emit\tmp\MaxYV)
+					p\ZV = Rnd(emit\tmp\MinZV, emit\tmp\MaxZV)
+					p\RotVel = Rnd(emit\tmp\RotVel1, emit\tmp\RotVel2)
 					
-					Local SM# = Rnd(e\tmp\SizeMultiplicator1, e\tmp\SizeMultiplicator2)
+					Local SM# = Rnd(emit\tmp\SizeMultiplicator1, emit\tmp\SizeMultiplicator2)
 					
 					p\sX = p\emitter\tmp\sX * SM
 					p\sY = p\emitter\tmp\sY * SM
 				EndIf
 			Next
 		EndIf
-		If e\tmp\AnimTex
-			e\tmp\TexFrame = e\tmp\TexFrame + e\tmp\TexSpeed
-			If e\tmp\TexFrame > e\tmp\MaxTexFrames - 1 Then e\tmp\TexFrame = 0
-			EntityTexture(e\Ent, e\tmp\Tex, e\tmp\TexFrame)
+		If emit\tmp\AnimTex
+			emit\tmp\TexFrame = emit\tmp\TexFrame + emit\tmp\TexSpeed
+			If emit\tmp\TexFrame > emit\tmp\MaxTexFrames - 1 Then emit\tmp\TexFrame = 0
+			EntityTexture(emit\Ent, emit\tmp\Tex, emit\tmp\TexFrame)
 		EndIf
 		
-		If e\Del
+		Local InSmoke% = False
+		
+		If fps\Factor[0] > 0.0 And (emit\room = Null Lor (PlayerRoom = emit\room Lor emit\room\Dist < 8.0))
+			Select emit\State
+				Case 1
+					;[Block]
+					emit\SoundCHN = LoopSound2(snd_I\HissSFX[0], emit\SoundCHN, Camera, emit\Owner)
+					If (Not InSmoke)
+						If wi\GasMask = 0 And wi\HazmatSuit = 0
+							If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64
+								If Abs(EntityY(Camera, True) - EntityY(emit\Owner, True)) < 5.0 Then InSmoke = True
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+				Case 2
+					;[Block]
+					emit\SoundCHN = LoopSound2(snd_I\HissSFX[1], emit\SoundCHN, Camera, emit\Owner, 5.0)
+					;[End Block]
+			End Select
+			
+			If InSmoke
+				If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
+				If me\EyeIrritation > 70.0 * 24.0
+					msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
+					Kill()
+				EndIf
+				
+				UpdateCough(150)
+				me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
+			EndIf
+		EndIf
+		
+		If emit\Del
 			Local Del% = True
 			
 			For p.Particle = Each Particle
-				If p\emitter = e Then Del = False
+				If p\emitter = emit Then Del = False
 			Next
 			If Del
-				FreeEntity(e\Ent) : e\Ent = 0
-				e\Surf = 0
-				If e\Fixed
-					FreeEntity(e\Owner) : e\Owner = 0
-				Else
-					For dem.DevilEmitters = Each DevilEmitters
-						If e\Owner = dem\OBJ
-							FreeEntity(dem\OBJ) : dem\OBJ = 0
-							Delete(dem)
-							Exit
-						EndIf
-					Next
-					e\Owner = 0
-				EndIf
-				Delete(e)
+				FreeEntity(emit\Ent) : emit\Ent = 0
+				emit\Surf = 0
+				FreeEntity(emit\Owner) : emit\Owner = 0
+				Delete(emit)
 			EndIf
 		EndIf
 	Next
