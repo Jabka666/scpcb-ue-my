@@ -2085,10 +2085,12 @@ Function UpdateEvents%()
 												DeleteSingleTextureEntryFromCache(Tex)
 												
 												CreateMsg(GetLocalString("msg", "012_4"))
+                       me\CameraShake = 2.0
 												InjurePlayer(0.8)
 												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
+                       PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 												If (Not me\Crouch) Then SetCrouch(True)
-												
+											
 												de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
 												de\MaxSize = 0.45 : de\SizeChange = 0.0002
 												EntityParent(de\OBJ, e\room\OBJ)

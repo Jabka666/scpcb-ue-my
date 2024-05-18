@@ -1154,11 +1154,11 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[3], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[3], r\Objects[0])
-			
-			it.Items = CreateItem("Document SCP-012", it_paper, r\x - 56.0 * RoomScale, r\y - 576.0 * RoomScale, r\z - 408.0 * RoomScale)
+
+                        it.Items = CreateItem("White Severed Hand", it_hand, r\x - 784.0 * RoomScale, r\y - 576.0 * RoomScale + 0.3, r\z + 640.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("White Severed Hand", it_hand, r\x - 784.0 * RoomScale, r\y - 576.0 * RoomScale + 0.3, r\z + 640.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-012", it_paper, r\x - 56.0 * RoomScale, r\y - 576.0 * RoomScale, r\z - 408.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x - 784.0 * RoomScale, r\y - 768.0 * RoomScale + 0.01, r\z + 640.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
