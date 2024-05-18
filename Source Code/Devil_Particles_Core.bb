@@ -304,13 +304,6 @@ Function UpdateParticles_Devil()
 	Local i%
 	
 	For emit.Emitter = Each Emitter
-		If emit\tmp\MaxParticles > -1
-			Local ParticlesAmount% = 0
-			
-			For p.Particle = Each Particle
-				If p\emitter = emit Then ParticlesAmount = ParticlesAmount + 1
-			Next
-		EndIf
 		ClearSurface(emit\Surf)
 		If emit\MaxTime > -1
 			If emit\Age > emit\MaxTime
@@ -319,37 +312,44 @@ Function UpdateParticles_Devil()
 				emit\Age = emit\Age + 1
 			EndIf
 		EndIf
-		emit\LoopAmount = (emit\LoopAmount + 1) Mod emit\tmp\Interval
-		If emit\LoopAmount = 0 And (Not emit\Del)
-			For i = 1 To emit\tmp\ParticlesPerInterval
-				If (emit\tmp\MaxParticles > -1 And ParticlesAmount < emit\tmp\MaxParticles) Lor emit\tmp\MaxParticles = -1
-					p.Particle = New Particle
-					p\emitter = emit
-					p\MaxTime = Rand(emit\tmp\MinTime, emit\tmp\MaxTime)
-					p\x = EntityX(emit\Owner, True) + Rnd(emit\tmp\MinOX, emit\tmp\MaxOX)
-					p\y = EntityY(emit\Owner, True) + Rnd(emit\tmp\MinOY, emit\tmp\MaxOY)
-					p\z = EntityZ(emit\Owner, True) + Rnd(emit\tmp\MinOZ, emit\tmp\MaxOZ)
-					p\XV = Rnd(emit\tmp\MinXV, emit\tmp\MaxXV)
-					p\YV = Rnd(emit\tmp\MinYV, emit\tmp\MaxYV)
-					p\ZV = Rnd(emit\tmp\MinZV, emit\tmp\MaxZV)
-					p\RotVel = Rnd(emit\tmp\RotVel1, emit\tmp\RotVel2)
-					
-					Local SM# = Rnd(emit\tmp\SizeMultiplicator1, emit\tmp\SizeMultiplicator2)
-					
-					p\sX = p\emitter\tmp\sX * SM
-					p\sY = p\emitter\tmp\sY * SM
-				EndIf
-			Next
-		EndIf
-		If emit\tmp\AnimTex
-			emit\tmp\TexFrame = emit\tmp\TexFrame + emit\tmp\TexSpeed
-			If emit\tmp\TexFrame > emit\tmp\MaxTexFrames - 1 Then emit\tmp\TexFrame = 0
-			EntityTexture(emit\Ent, emit\tmp\Tex, emit\tmp\TexFrame)
-		EndIf
-		
-		Local InSmoke% = False
-		
 		If fps\Factor[0] > 0.0 And (emit\room = Null Lor (PlayerRoom = emit\room Lor emit\room\Dist < 8.0))
+			If emit\tmp\MaxParticles > -1
+				Local ParticlesAmount% = 0
+				
+				For p.Particle = Each Particle
+					If p\emitter = emit Then ParticlesAmount = ParticlesAmount + 1
+				Next
+			EndIf
+			emit\LoopAmount = (emit\LoopAmount + 1) Mod emit\tmp\Interval
+			If emit\LoopAmount = 0 And (Not emit\Del)
+				For i = 1 To emit\tmp\ParticlesPerInterval
+					If (emit\tmp\MaxParticles > -1 And ParticlesAmount < emit\tmp\MaxParticles) Lor emit\tmp\MaxParticles = -1
+						p.Particle = New Particle
+						p\emitter = emit
+						p\MaxTime = Rand(emit\tmp\MinTime, emit\tmp\MaxTime)
+						p\x = EntityX(emit\Owner, True) + Rnd(emit\tmp\MinOX, emit\tmp\MaxOX)
+						p\y = EntityY(emit\Owner, True) + Rnd(emit\tmp\MinOY, emit\tmp\MaxOY)
+						p\z = EntityZ(emit\Owner, True) + Rnd(emit\tmp\MinOZ, emit\tmp\MaxOZ)
+						p\XV = Rnd(emit\tmp\MinXV, emit\tmp\MaxXV)
+						p\YV = Rnd(emit\tmp\MinYV, emit\tmp\MaxYV)
+						p\ZV = Rnd(emit\tmp\MinZV, emit\tmp\MaxZV)
+						p\RotVel = Rnd(emit\tmp\RotVel1, emit\tmp\RotVel2)
+						
+						Local SM# = Rnd(emit\tmp\SizeMultiplicator1, emit\tmp\SizeMultiplicator2)
+						
+						p\sX = p\emitter\tmp\sX * SM
+						p\sY = p\emitter\tmp\sY * SM
+					EndIf
+				Next
+			EndIf
+			If emit\tmp\AnimTex
+				emit\tmp\TexFrame = emit\tmp\TexFrame + emit\tmp\TexSpeed
+				If emit\tmp\TexFrame > emit\tmp\MaxTexFrames - 1 Then emit\tmp\TexFrame = 0
+				EntityTexture(emit\Ent, emit\tmp\Tex, emit\tmp\TexFrame)
+			EndIf
+			
+			Local InSmoke% = False
+			
 			Select emit\State
 				Case 1
 					;[Block]
@@ -401,7 +401,7 @@ Function UpdateParticles_Devil()
 	Local CamRoll# = EntityRoll(ParticleCam, True)
 	
 	For p.Particle = Each Particle
-		If p\Age > p\MaxTime Lor EntityDistanceSquared(p\emitter\Owner, me\Collider) > PowTwo(HideDistance)
+		If EntityDistanceSquared(p\emitter\Owner, me\Collider) > PowTwo(HideDistance) Lor p\Age > p\MaxTime
 			Delete(p)
 		Else
 			p\Age = p\Age + 1
