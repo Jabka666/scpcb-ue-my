@@ -2073,6 +2073,7 @@ Function UpdateEvents%()
                        me\CameraShake = 2.0
 												InjurePlayer(0.8)
 												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
+                       PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 												If (Not me\Crouch) Then SetCrouch(True)
 											
                        it.Items = CreateItem(“White Severed Hand”, “hand”, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
