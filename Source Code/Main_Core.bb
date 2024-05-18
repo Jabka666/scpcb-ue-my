@@ -2115,6 +2115,7 @@ Function UpdateConsole%()
 					CreateConsoleMsg(Format(GetLocalString("console", "codes_5"), CODE_O5_COUNCIL))
 					CreateConsoleMsg(Format(GetLocalString("console", "codes_6"), CODE_MAINTENANCE_TUNNELS))
 					CreateConsoleMsg(Format(GetLocalString("console", "codes_7"), CODE_CONT1_035))
+					CreateConsoleMsg(Format(GetLocalString("console", "codes_9"), CODE_DR_GEARS))
 					CreateConsoleMsg("")
 					CreateConsoleMsg(GetLocalString("console", "codes_8"))
 					;[End Block]
