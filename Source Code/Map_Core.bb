@@ -4063,7 +4063,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And (Not IsBlackOut)
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And SecondaryLightOn > 0.3
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
 					If me\BlinkTimer > -10.0 And sc\InSight
@@ -4168,7 +4168,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If me\BlinkTimer > -10.0 And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And sc\InSight And (Not IsBlackOut)
+				If me\BlinkTimer > -10.0 And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And sc\InSight And SecondaryLightOn > 0.3
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
@@ -4240,7 +4240,7 @@ Function RemoveSecurityCam%(sc.SecurityCams)
 End Function
 
 Function UpdateMonitorSaving%()
-	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor IsBlackOut Then Return
+	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn =< 0.3 Then Return
 	
 	Local sc.SecurityCams
 	
@@ -4390,7 +4390,7 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, ImgPath$)
 End Function
 
 Function UpdateScreens%()
-	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor IsBlackOut Then Return
+	If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor SecondaryLightOn =< 0.3 Then Return
 	
 	Local s.Screens
 	

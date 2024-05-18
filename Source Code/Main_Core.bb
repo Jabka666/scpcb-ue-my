@@ -5724,7 +5724,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
-	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn < 0.3  And wi\NightVision = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0)
+	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn =< 0.3  And wi\NightVision = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0)
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink
