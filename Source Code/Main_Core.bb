@@ -1378,10 +1378,12 @@ Function UpdateConsole%()
 				Case "teleport", "tp"
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-					Temp = FindRoomID(StrTemp)
+					Temp = False
+					i = FindRoomID(StrTemp)
 					
 					For r.Rooms = Each Rooms
-						If r\RoomTemplate\RoomID = Temp
+						If r\RoomTemplate\RoomID = i Lor Str(r\RoomTemplate\RoomID) = StrTemp
+							Temp = True
 							If r\RoomCenter <> 0
 								TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.5, EntityZ(r\RoomCenter, True), 0.3, True)
 							Else
@@ -1393,7 +1395,7 @@ Function UpdateConsole%()
 						EndIf
 					Next
 					
-					If PlayerRoom\RoomTemplate\RoomID <> Temp Then CreateConsoleMsg(GetLocalString("console", "tp.failed"), 255, 0, 0)
+					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "tp.failed"), 255, 0, 0)
 					;[End Block]
 				Case "roomlist", "roomslist", "rooms"
 					;[Block]
@@ -1406,19 +1408,7 @@ Function UpdateConsole%()
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					Temp = False 
 					For itt.ItemTemplates = Each ItemTemplates
-						If Lower(itt\Name) = StrTemp
-							Temp = True
-							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
-							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
-							EntityType(it\Collider, HIT_ITEM)
-							Exit
-						ElseIf Lower(itt\DisplayName) = StrTemp
-							Temp = True
-							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
-							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
-							EntityType(it\Collider, HIT_ITEM)
-							Exit
-						ElseIf Str(itt\ID) = StrTemp
+						If Lower(itt\Name) = StrTemp Lor Lower(itt\DisplayName) = StrTemp Lor Str(itt\ID) = StrTemp
 							Temp = True
 							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
@@ -5940,18 +5930,17 @@ Function RenderDebugHUD%()
 			
 			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
 			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
-			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
-			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_3.1048a"), I_1048A\EarGrowTimer))
+			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.1048a"), I_1048A\EarGrowTimer))
 			For i = 0 To 7
-				TextEx(x, y + ((380 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
+				TextEx(x, y + ((360 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			
 			If I_005\ChanceToSpawn = 1
-				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
+				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
 			ElseIf I_005\ChanceToSpawn = 2
-				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.409"))
+				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.409"))
 			Else
-				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
+				TextEx(x, y + (540 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			
 			Local CurrAchvAmount% = 0
@@ -5972,9 +5961,9 @@ Function RenderDebugHUD%()
 				EndIf
 			Next
 			
-			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp))
-			TextEx(x, y + (620 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), Temp / 2))
-			TextEx(x, y + (640 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))))
+			TextEx(x, y + (580 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp))
+			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), Temp / 2))
+			TextEx(x, y + (620 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))))
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
