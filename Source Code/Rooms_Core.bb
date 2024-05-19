@@ -2010,6 +2010,10 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
+			CreateDoor(r, r\x + 91.0 * RoomScale, r\y - 8100.0 * RoomScale, r\z + 2978.0 * RoomScale, 90.0, False, OFFICE_DOOR)
+			
+			CreateDoor(r, r\x + 300.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z + 2486.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			
 			; ~ Levers
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 744.0 * RoomScale, r\y - 7908.0 * RoomScale, r\z + 3123.0 * RoomScale, 0.0, True)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 665.0 * RoomScale, r\y - 7908.0 * RoomScale, r\z + 3123.0 * RoomScale)
