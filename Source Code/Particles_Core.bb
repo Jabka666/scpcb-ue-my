@@ -98,7 +98,6 @@ End Function
 
 Function UpdateDust%()
 	Local emit.Emitter
-	Local i%, Pvt%
 	
 	; ~ Create a single dust particle
 	If Rand(35 + (25 * (opt\ParticleAmount = 1))) = 1 Then SetEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
