@@ -48,7 +48,6 @@ Type NPCs
 	Field HasAsset% = False
 	Field Contained% = False
 	Field TeslaHit% = False
-	Field IsOpt% = False
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -4958,15 +4957,9 @@ Function UpdateNPCs%()
 		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		
 		If GravityDist < PowTwo(HideDistance) Lor n\NPCType = NPCType1499_1
-			If (Not n\IsOpt)
-				EntityAlpha(n\OBJ, 1.0)
-				n\IsOpt = True
-			EndIf
+			If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 		Else
-			If n\IsOpt
-				EntityAlpha(n\OBJ, 0.0)
-				n\IsOpt = False
-			EndIf
+			If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 		EndIf
 		
 		If n\IsDead
