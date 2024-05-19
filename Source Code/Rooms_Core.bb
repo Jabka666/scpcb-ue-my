@@ -1773,6 +1773,11 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_BLOOD_6, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + 890.0 * RoomScale, 90.0, 180.0, 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
+		Case r_room3_lcz, r_room2c_2_lcz
+			;[Block]
+			r\Objects[0] = CreateButton(BUTTON_KEYCARD, r\x - 230.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 834.0 * RoomScale, 0.0, 90.0, 0.0, 0, True)
+			EntityParent(r\Objects[0], r\OBJ)
+			;[End Block]
 		Case r_room4_ic
 			;[Block]
 			; ~ Information Center door
