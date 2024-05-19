@@ -4832,7 +4832,7 @@ Function UpdateGUI%()
 								If (Not JsonIsNull(JsonGetValue(Drink, "deaf_timer"))) me\DeafTimer = JsonGetFloat(JsonGetValue(Drink, "deaf_timer"))
 								If (Not JsonIsNull(JsonGetValue(Drink, "damage"))) me\Injuries = me\Injuries + JsonGetFloat(JsonGetValue(Drink, "damage"))
 								If (Not JsonIsNull(JsonGetValue(Drink, "bloodloss"))) me\Bloodloss = me\Bloodloss + JsonGetFloat(JsonGetValue(Drink, "bloodloss"))
-								If (Not JsonIsNull(JsonGetValue(Drink, "energy"))) me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(JsonGetValue(Drink, "energy")) / 4.0, JsonGetFloat(JsonGetValue(Drink, "energy"))), 100.0)
+								If (Not JsonIsNull(JsonGetValue(Drink, "energy"))) me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(JsonGetValue(Drink, "energy")) / 2.0, JsonGetFloat(JsonGetValue(Drink, "energy"))), 100.0)
 								
 								If (Not JsonIsNull(JsonGetValue(Drink, "drink_sound"))) Then PlaySound_Strict(LoadTempSound(JsonGetString(JsonGetValue(Drink, "drink_sound"))), True)
 								
