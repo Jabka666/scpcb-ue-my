@@ -4408,6 +4408,7 @@ Function UpdateScreens%()
 						PlaySound_Strict(ButtonSFX[0])
 						mo\MouseUp1 = False
 					EndIf
+					Exit
 				EndIf
 			EndIf
 		EndIf
