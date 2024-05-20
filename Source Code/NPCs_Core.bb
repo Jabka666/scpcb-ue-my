@@ -892,13 +892,12 @@ Function UpdateNPCs%()
 					Local Spawn106% = True
 					
 					; ~ Checking if SCP-106 is allowed to spawn
-					If RID = r_dimension_1499 Then Spawn106 = False
+					If RID = r_dimension_1499 Lor (RID = r_cont2_049 And EntityY(me\Collider) <= -2848.0 * RoomScale) Then Spawn106 = False
 					If forest_event <> Null
 						If PlayerRoom = forest_event\room
 							If forest_event\EventState = 1.0 Then Spawn106 = False
 						EndIf
 					EndIf
-					If RID = r_cont2_049 And EntityY(me\Collider) <= -2848.0 * RoomScale Then Spawn106 = False
 					; ~ Gate A event has been triggered. Don't make SCP-106 disappear!
 					; ~ The reason why this is a seperate for loop is because we need to make sure that cont2_860_1 would not be able to overwrite the "Spawn106" variable
 					For e.Events = Each Events
@@ -956,9 +955,9 @@ Function UpdateNPCs%()
 								
 								Visible = False
 								
-								If Dist < 64.0 Then Visible = EntityVisible(n\Collider, me\Collider)
-								
-								If chs\NoTarget Lor I_268\InvisibilityOn Then Visible = False
+								If Dist < 64.0
+									If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Visible = EntityVisible(n\Collider, me\Collider)
+								EndIf
 								
 								If Visible
 									If RID <> r_gate_a Then n\PathTimer = 0.0
@@ -981,15 +980,13 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If Dist > 0.64
-									If (Dist > 625.0 Lor RID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))) And RID <> r_gate_a
+									If ((Dist > 625.0 Lor RID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND) And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))) And RID <> r_gate_a
 										If (Dist > 1600.0 Lor RID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 										
-										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-											PointEntity(n\OBJ, me\Collider)
-											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
-										EndIf
+										PointEntity(n\OBJ, me\Collider)
+										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
 										
 										If (Not me\Terminated)
 											PrevFrame = n\Frame
@@ -1006,11 +1003,7 @@ Function UpdateNPCs%()
 											n\PathTimer = 70.0 * 10.0
 										EndIf
 									Else
-										If n\PathTimer <= 0.0
-											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
-											n\PathTimer = 70.0 * 10.0
-											n\CurrSpeed = 0.0
-										Else
+										If n\PathTimer > 0.0
 											n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 											
 											If n\PathStatus = PATH_STATUS_FOUND
@@ -1044,9 +1037,13 @@ Function UpdateNPCs%()
 												n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
 												If n\State3 = 0.0 Then AnimateNPC(n, 334.0, 494.0, 0.3)
 											EndIf
+										Else
+											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
+											n\PathTimer = 70.0 * 10.0
+											n\CurrSpeed = 0.0
 										EndIf
 									EndIf
-								ElseIf (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+								ElseIf (Not chs\NoTarget)
 									If Dist > 0.25
 										n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
 									Else
@@ -1081,7 +1078,7 @@ Function UpdateNPCs%()
 							EndIf
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
-							If n\State <= Rnd(-3500.0, -3000.0)
+							If n\State < Rnd(-3500.0, -3000.0)
 								If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
 									PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 									ResetEntity(n\Collider)
