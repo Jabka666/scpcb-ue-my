@@ -228,7 +228,7 @@ Function UpdateLights%(Cam%)
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.3
 			If l\room <> Null
-				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
+				If l\room\Dist < 8.0 Lor l\room = PlayerRoom
 					If Cam = Camera ; ~ The lights are rendered by player's cam
 						EntityOrder(l\AdvancedSprite, -1)
 						If UpdateLightsTimer = 0.0
