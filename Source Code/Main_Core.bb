@@ -2618,7 +2618,7 @@ Function UpdateMoving%()
 						
 						If PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale
 							Speed = 0.015
-							me\Stamina = Max(me\Stamina - (fps\Factor[0] * 0.5), -20.0)
+							me\Stamina = Max(me\Stamina - (fps\Factor[0] * 0.4), -20.0)
 						EndIf
 					EndIf
 					
