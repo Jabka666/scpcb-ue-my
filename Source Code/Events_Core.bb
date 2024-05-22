@@ -7676,7 +7676,7 @@ Function UpdateDimension106%()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
-							n_I\Curr106\Speed = n_I\Curr106\Speed * 2.8
+							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.0
 							For d.Doors = Each Doors
 								If d\room = e\room
 									d\Open = False
@@ -7853,7 +7853,7 @@ Function UpdateDimension106%()
 							PositionEntity(me\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True))
 							ResetEntity(me\Collider)
 							
-							n_I\Curr106\Speed = n_I\Curr106\Speed / 2.8
+							n_I\Curr106\Speed = n_I\Curr106\Speed / 3.0
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[23], True), EntityY(e\room\Objects[23], True), EntityZ(e\room\Objects[23], True))
 							ResetEntity(n_I\Curr106\Collider)
 							
