@@ -2430,19 +2430,24 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState = 0.0
 					If e\room\Dist < 15.0
-						If (Not n_I\Curr106\Contained) And n_I\Curr106\State > 0.0
-							e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Scientist\EmilyScream.ogg"), True)
-							
-							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
-							EntityParent(de\OBJ, e\room\OBJ)
-							
-							Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-							EntityTexture(e\room\RoomDoors[0]\OBJ, Tex)
-							EntityTexture(e\room\RoomDoors[0]\OBJ2, Tex)
-							EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
-							DeleteSingleTextureEntryFromCache(Tex)
-							
-							e\EventState = 1.0
+						If (Not n_I\Curr106\Contained)
+							If n_I\Curr106\State > 0.0
+								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Scientist\EmilyScream.ogg"), True)
+								
+								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
+								EntityParent(de\OBJ, e\room\OBJ)
+								
+								Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+								EntityTexture(e\room\RoomDoors[0]\OBJ, Tex)
+								EntityTexture(e\room\RoomDoors[0]\OBJ2, Tex)
+								EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
+								DeleteSingleTextureEntryFromCache(Tex)
+								
+								e\EventState = 1.0
+							EndIf
+						Else
+							RemoveEvent(e)
+							Return
 						EndIf
 					EndIf
 				ElseIf e\EventState = 1.0
