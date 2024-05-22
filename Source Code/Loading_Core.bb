@@ -1298,7 +1298,6 @@ Type SoundInstance
 	Field LeverSFX%
 	Field LightSFX%[3]
 	Field LightOffSFX%
-	Field ButtGhostSFX%
 	Field RadioSquelch%
 	Field RadioStatic%
 	Field RadioStatic895%
@@ -1509,8 +1508,6 @@ Function LoadSounds%()
 	
 	snd_I\LightOffSFX = LoadSound_Strict("SFX\Room\LightSwitch.ogg")
 	
-	snd_I\ButtGhostSFX = LoadSound_Strict("SFX\SCP\Joke\789J.ogg")
-	
 	snd_I\RadioSquelch = LoadSound_Strict("SFX\Radio\Squelch.ogg")
 	snd_I\RadioStatic = LoadSound_Strict("SFX\Radio\Static.ogg")
 	snd_I\RadioStatic895 = LoadSound_Strict("SFX\Radio\Static895.ogg")
@@ -1666,8 +1663,6 @@ Function RemoveSoundInstances%()
 	snd_I\LeverSFX = 0
 	
 	snd_I\LightOffSFX = 0
-	
-	snd_I\ButtGhostSFX = 0
 	
 	snd_I\RadioSquelch = 0
 	snd_I\RadioStatic = 0
