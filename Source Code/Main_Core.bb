@@ -6187,11 +6187,7 @@ Function RenderGUI%()
 		
 		If SelectedItem <> Null
 			If mo\MouseDown1
-				If MouseSlot = 66
-					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
-				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
-					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
-				EndIf
+				If MouseSlot = 66 Lor SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot] Then DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
 			EndIf
 		EndIf
 		
@@ -6350,11 +6346,7 @@ Function RenderGUI%()
 		
 		If SelectedItem <> Null
 			If mo\MouseDown1
-				If MouseSlot = 66
-					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
-				ElseIf SelectedItem <> Inventory(MouseSlot)
-					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
-				EndIf
+				If MouseSlot = 66 Lor SelectedItem <> Inventory(MouseSlot) Then DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSize, MousePosY - InvImgSize)
 			EndIf
 		EndIf
 		
