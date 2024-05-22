@@ -5981,6 +5981,25 @@ Function AdaptScreenGamma%()
 	opt\ScreenGamma = 1.0
 End Function
 
+Function Draw3DHandIcon%(Icon%, OBJ%)
+	Local PitchValue#, YawValue#
+	Local CoordEx% = 32 * MenuScale
+	Local Pvt% = CreatePivot()
+	
+	PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+	PointEntity(Pvt, OBJ)
+	YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
+	If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
+	If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+	PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
+	If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
+	If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
+	
+	FreeEntity(Pvt) : Pvt = 0
+	
+	DrawBlock(Icon, mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx)
+End Function
+
 Function RenderGUI%()
 	CatchErrors("RenderGUI()")
 	
@@ -6030,32 +6049,8 @@ Function RenderGUI%()
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			Local CoordEx% = 32 * MenuScale
 			
-			If d_I\ClosestButton <> 0
-				Temp = CreatePivot()
-				PositionEntity(Temp, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-				PointEntity(Temp, d_I\ClosestButton)
-				YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
-				If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
-				If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-				PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
-				If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
-				If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
-				
-				FreeEntity(Temp) : Temp = 0
-				
-				DrawBlock(t\IconID[5], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx)
-			EndIf
-			
-			If ClosestItem <> Null
-				YawValue = -DeltaYaw(Camera, ClosestItem\Collider)
-				If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
-				If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-				PitchValue = -DeltaPitch(Camera, ClosestItem\Collider)
-				If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
-				If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
-				
-				DrawBlock(t\IconID[6], mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx)
-			EndIf
+			If d_I\ClosestButton <> 0 Then Draw3DHandIcon(t\IconID[5], d_I\ClosestButton)
+			If ClosestItem <> Null Then Draw3DHandIcon(t\IconID[6], ClosestItem\Collider)
 			
 			If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - CoordEx, mo\Viewport_Center_Y - CoordEx)
 			
