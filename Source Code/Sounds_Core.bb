@@ -38,23 +38,23 @@ Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volu
 End Function
 
 Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False, SFXVolume% = True)
-	If ChannelPlaying(SoundCHN)
-		Range = Max(Range, 1.0)
+	If (Not ChannelPlaying(SoundCHN)) Lor Entity = 0 Then Return
+	
+	Range = Max(Range, 1.0)
+	
+	If Volume > 0.0
+		Local Dist# = EntityDistance(Cam, Entity) / Range
 		
-		If Volume > 0.0
-			Local Dist# = EntityDistance(Cam, Entity) / Range
+		If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0)
+			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			If (1.0 - Dist > 0.0) And (1.0 - Dist < 1.0)
-				Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-				
-				ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)))
-				ChannelPan(SoundCHN, PanValue)
-			Else
-				ChannelVolume(SoundCHN, 0.0)
-			EndIf
+			ChannelVolume(SoundCHN, Volume * (1.0 - Dist) * ((Not SFXVolume) + (SFXVolume * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)))
+			ChannelPan(SoundCHN, PanValue)
 		Else
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf
+	Else
+		ChannelVolume(SoundCHN, 0.0)
 	EndIf
 End Function
 
