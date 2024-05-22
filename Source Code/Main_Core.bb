@@ -7465,6 +7465,7 @@ Function UpdateMenu%()
 							
 							ResetInput()
 							MenuOpen = False
+							DeleteTextureEntriesFromCache(DeleteMapTextures)
 							Return
 						EndIf
 					Else
@@ -7534,6 +7535,7 @@ Function UpdateMenu%()
 							
 							ResetInput()
 							MenuOpen = False
+							DeleteTextureEntriesFromCache(DeleteMapTextures)
 							Return
 						EndIf
 					Else
