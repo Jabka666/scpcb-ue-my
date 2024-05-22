@@ -947,7 +947,7 @@ Function UpdateEvents%()
 						RemoveEvent(e)
 					EndIf
 				Else
-					If e\room\Dist < 8.0
+					If e\room\Dist < 6.0
 						If I_005\ChanceToSpawn = 3
 							TFormPoint(375.0, 52.0, -875.0, e\room\OBJ, 0)
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
@@ -2429,7 +2429,7 @@ Function UpdateEvents%()
 			Case e_cont2_500_1499
 				;[Block]
 				If e\EventState = 0.0
-					If e\room\Dist < 15.0
+					If e\room\Dist < 12.0
 						If (Not n_I\Curr106\Contained)
 							If n_I\Curr106\State > 0.0
 								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Scientist\EmilyScream.ogg"), True)
@@ -2792,7 +2792,7 @@ Function UpdateEvents%()
 				; ~ e\EventState4: A check for SCP-066 to spawn in the area.
 				
 				If e\EventState4 = 0.0
-					If e\room\Dist < 7.0
+					If e\room\Dist < 6.0
 						If n_I\Curr066 = Null
 							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
 						Else
@@ -3083,7 +3083,7 @@ Function UpdateEvents%()
 			Case e_room2_6_ez_guard
 				;[Block]
 				If e\room\NPC[0] = Null
-					If e\room\Dist < 8.0 Lor PlayerRoom = e\room
+					If e\room\Dist < 6.0 Lor PlayerRoom = e\room
 						TFormPoint(1290.0, 52.0, 491.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 						e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
@@ -3096,7 +3096,7 @@ Function UpdateEvents%()
 					EndIf
 				Else
 					Temp = False
-					If e\room\Dist < 8.0 And PlayerRoom <> e\room
+					If e\room\Dist < 6.0 And PlayerRoom <> e\room
 						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard1.ogg")
 						e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 					ElseIf PlayerRoom = e\room
@@ -3267,7 +3267,7 @@ Function UpdateEvents%()
 			Case e_room1_dead_end_guard
 				;[Block]
 				If e\EventState = 0.0
-					If e\room\Dist < 8.0
+					If e\room\Dist < 6.0
 						TFormPoint(-944.0, 448.0, 20.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
@@ -3457,7 +3457,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				
-				If e\room\Dist < 7.0
+				If e\room\Dist < 6.0
 					If e\EventState = 0.0
 						If n_I\Curr066 = Null
 							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
@@ -3595,7 +3595,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_173_appearing
 				;[Block]
-				If e\room\Dist < 6.0 And PlayerRoom <> e\room
+				If e\room\Dist < 6.0 Lor PlayerRoom = e\room
 					If n_I\Curr173\Idle > 1
 						RemoveEvent(e)
 					Else
@@ -3756,7 +3756,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_nuke
 				;[Block]
-				If e\room\Dist < 8.0
+				If e\room\Dist < 6.0
 					If e\room\NPC[0] = Null
 						TFormPoint(1110.0, 51.2, -208.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
@@ -3891,7 +3891,7 @@ Function UpdateEvents%()
 				Next
 				
 				If Is035Released
-					If e\room\Dist < 8.0
+					If e\room\Dist < 6.0
 						If e\room\NPC[0] = Null
 							e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 52.0 * RoomScale, e\room\z)
 							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
@@ -3935,7 +3935,6 @@ Function UpdateEvents%()
 				EndIf
 				
 				If e\room\Dist < 16.0
-				
 					Local PrevLever% = (EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)
 					
 					x = UpdateLever(e\room\RoomLevers[0]\OBJ)
@@ -4092,7 +4091,7 @@ Function UpdateEvents%()
 												n\IsDead = True
 												;[End Block]
 										End Select
-										If e\room\Dist < 8.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
+										If e\room\Dist < 6.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
 									EndIf
 								EndIf
 							Next
@@ -5819,7 +5818,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room3_2_hcz_guard
 				;[Block]
-				If e\room\Dist < 8.0
+				If e\room\Dist < 6.0
 					If e\EventState = 0.0
 						TFormPoint(-190.0, 60.0, 190.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
@@ -6533,7 +6532,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_1048_a
 				;[Block]
-				If e\room\Dist < HideDistance * 0.7
+				If e\room\Dist < 8.0
 					If e\EventState = 0.0
 						e\room\NPC[0] = CreateNPC(NPCType1048_A, e\room\x, e\room\y + 50.0 * RoomScale, e\room\z)
 						e\EventState = 1.0
@@ -6547,7 +6546,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room4_2_hcz_d
 				;[Block]
-				If e\room\Dist < 8.0
+				If e\room\Dist < 6.0
 					TFormPoint(256.0, 55.2, 256.0, e\room\OBJ, 0)
 					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
@@ -6559,7 +6558,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_gw_2
 				;[Block]
-				If e\room\Dist < 8.0
+				If e\room\Dist < 6.0
 					If e\room\NPC[0] = Null
 						TFormPoint(-156.0, 55.0, 121.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
@@ -6567,7 +6566,9 @@ Function UpdateEvents%()
 						SetNPCFrame(e\room\NPC[0], 288.0)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 225.0, 0.0, True)
 					EndIf
-					
+				EndIf
+				
+				If PlayerRoom = e\room
 					e\SoundCHN = LoopSound2(snd_I\AlarmSFX[2], e\SoundCHN, Camera, e\room\OBJ, 5.0)
 					
 					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 25.0
