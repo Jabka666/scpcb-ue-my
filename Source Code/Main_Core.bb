@@ -5981,7 +5981,7 @@ Function AdaptScreenGamma%()
 	opt\ScreenGamma = 1.0
 End Function
 
-Function Draw3DHandIcon%(Icon%, OBJ%)
+Function Render3DHandIcon%(Icon%, OBJ%)
 	Local PitchValue#, YawValue#
 	Local CoordEx% = 32 * MenuScale
 	Local Pvt% = CreatePivot()
@@ -6049,9 +6049,10 @@ Function RenderGUI%()
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			Local CoordEx% = 32 * MenuScale
 			
-			If d_I\ClosestButton <> 0 Then Draw3DHandIcon(t\IconID[5], d_I\ClosestButton)
-			If ClosestItem <> Null Then Draw3DHandIcon(t\IconID[6], ClosestItem\Collider)
+			If d_I\ClosestButton <> 0 Then Render3DHandIcon(t\IconID[5], d_I\ClosestButton)
+			If ClosestItem <> Null Then Render3DHandIcon(t\IconID[6], ClosestItem\Collider)
 			
+			; ~ TODO: Use Render3DHandIcon
 			If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - CoordEx, mo\Viewport_Center_Y - CoordEx)
 			
 			For i = 0 To 3
