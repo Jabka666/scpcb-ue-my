@@ -2787,11 +2787,11 @@ Function FillRoom%(r.Rooms)
 			CreateDoor(r, r\x - 712.0 * RoomScale, r\y, r\z - 288.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_HAND_BLACK)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y + 0.5, r\z + 512.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x, r\y + 0.4, r\z + 512.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x, r\y + 0.5, r\z)
+			PositionEntity(r\Objects[1], r\x, r\y + 0.4, r\z)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 355.0 * RoomScale, r\y + 450.0 * RoomScale, r\z + 321.0 * RoomScale, 30.0)
