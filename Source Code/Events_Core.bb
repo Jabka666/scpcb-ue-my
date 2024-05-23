@@ -2794,9 +2794,9 @@ Function UpdateEvents%()
 				If e\EventState4 = 0.0
 					If e\room\Dist < 8.0
 						If n_I\Curr066 = Null
-							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.4, EntityZ(e\room\OBJ))
 						Else
-							PositionEntity(n_I\Curr066\Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+							PositionEntity(n_I\Curr066\Collider, EntityX(e\room\OBJ), 0.4, EntityZ(e\room\OBJ))
 							ResetEntity(n_I\Curr066\Collider)
 						EndIf
 						e\EventState4 = 1.0
@@ -3471,9 +3471,9 @@ Function UpdateEvents%()
 				If e\room\Dist < 8.0
 					If e\EventState = 0.0
 						If n_I\Curr066 = Null
-							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.4, EntityZ(e\room\OBJ))
 						Else
-							PositionEntity(n_I\Curr066\Collider, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
+							PositionEntity(n_I\Curr066\Collider, EntityX(e\room\OBJ), 0.4, EntityZ(e\room\OBJ))
 							ResetEntity(n_I\Curr066\Collider)
 						EndIf
 						e\EventState = 1.0
