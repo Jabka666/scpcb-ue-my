@@ -1583,7 +1583,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_cont2c_066_1162_arc
 			;[Block]
-			; ~ SCP-1162-arc's chamber door
+			; ~ SCP-1162-ARC's chamber door
 			d.Doors = CreateDoor(r, r\x + 248.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.031, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
@@ -1596,8 +1596,10 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x - 608.0 * RoomScale, r\y, r\z + 288.0 * RoomScale, 0.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.032, True)
 			
+			; ~ SCP-1162-ARC's touching pivot
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 996.0 * RoomScale, r\y + 128.0 * RoomScale, r\z - 640.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 1005.0 * RoomScale, r\y + 128.0 * RoomScale, r\z - 624.0 * RoomScale)
+			EntityRadius(r\Objects[0], 0.1)
 			EntityPickMode(r\Objects[0], 1)
 			EntityParent(r\Objects[0], r\OBJ)
 			
@@ -2601,6 +2603,8 @@ Function FillRoom%(r.Rooms)
 			; ~ Touching pivot
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x - 4917.0 * RoomScale, r\y - 4310.0 * RoomScale, r\z + 2095.0 * RoomScale)
+			EntityRadius(r\Objects[2], 0.2)
+			EntityPickMode(r\Objects[2], 1)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			; ~ Broken button
@@ -3268,12 +3272,16 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ SCP-294
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 1847.0 * RoomScale, r\y - 240.0 * RoomScale, r\z - 321.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 1779.0 * RoomScale, r\y - 165.0 * RoomScale, r\z - 308.0 * RoomScale)
+			EntityRadius(r\Objects[0], 0.1)
+			EntityPickMode(r\Objects[0], 1)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ SCP-458
 			r\Objects[1] = CreatePivot()
 			PositionEntity(r\Objects[1], r\x, r\y - 192.0 * RoomScale, r\z + 833.0 * RoomScale)
+			EntityRadius(r\Objects[1], 0.2)
+			EntityPickMode(r\Objects[1], 1)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			; ~ Spawnpoint for the cups

@@ -4251,7 +4251,7 @@ Function UpdateMonitorSaving%()
 			
 			If Close
 				If sc\InSight And EntityDistanceSquared(sc\ScrOBJ, Camera) < 1.0 And GrabbedEntity = 0 And d_I\ClosestButton = 0
-					DrawHandIcon = True
+					HandEntity = sc\MonitorOBJ
 					If mo\MouseHit1 Then sc_I\SelectedMonitor = sc
 					
 					If sc_I\SelectedMonitor = sc
@@ -4397,19 +4397,13 @@ Function UpdateScreens%()
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom
-			If EntityDistanceSquared(me\Collider, s\OBJ) < 1.44
-				EntityPick(Camera, 1.2)
-				If PickedEntity() = s\OBJ And s\ImgPath <> ""
-					DrawHandIcon = True
-					If mo\MouseUp1
-						SelectedScreen = s
-						s\Img = LoadImage_Strict("GFX\Map\Screens\" + s\ImgPath)
-						s\Img = ScaleImage2(s\Img, MenuScale, MenuScale)
-						PlaySound_Strict(ButtonSFX[0])
-						mo\MouseUp1 = False
-					EndIf
-					Exit
-				EndIf
+			If InteractObject(s\OBJ, 1.0, -1, 2)
+				SelectedScreen = s
+				s\Img = LoadImage_Strict("GFX\Map\Screens\" + s\ImgPath)
+				s\Img = ScaleImage2(s\Img, MenuScale, MenuScale)
+				PlaySound_Strict(ButtonSFX[0])
+				mo\MouseUp1 = False
+				Exit
 			EndIf
 		EndIf
 	Next
@@ -4456,35 +4450,34 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 	
 	If Dist < 4.0 
 		If Dist <= 0.65 And (Not Locked) 
-			If EntityVisible(OBJ, Camera) 
-				EntityPick(Camera, 0.65)
-				
-				If PickedEntity() = OBJ
-					DrawHandIcon = True
-					If mo\MouseHit1 Then GrabbedEntity = OBJ
-				EndIf
-				
-				PrevValue = EntityPitch(OBJ)
-				
-				If (mo\MouseDown1 Lor mo\MouseHit1)
-					If GrabbedEntity <> 0
-						If GrabbedEntity = OBJ
-							DrawHandIcon = True
-							RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), MaxValue), MinValue), EntityYaw(OBJ), 0.0)
-							DrawArrowIcon[0] = True
-							DrawArrowIcon[2] = True
-						EndIf
+			EntityPick(Camera, 0.8)
+			
+			If PickedEntity() = OBJ
+				HandEntity = OBJ
+				If mo\MouseHit1 Then GrabbedEntity = OBJ
+			EndIf
+			
+			PrevValue = EntityPitch(OBJ)
+			
+			If (mo\MouseDown1 Lor mo\MouseHit1)
+				If GrabbedEntity <> 0
+					If GrabbedEntity = OBJ
+						HandEntity = OBJ
+						RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), MaxValue), MinValue), EntityYaw(OBJ), 0.0)
+						DrawArrowIcon[0] = True
+						DrawArrowIcon[2] = True
 					EndIf
 				EndIf
-				
-				RefValue = EntityPitch(OBJ, True)
-				If RefValue > (MaxValue - 5.0)
-					If PrevValue =< (MaxValue - 5.0) Then PlaySound2(snd_I\LeverSFX, Camera, OBJ, 1.0)
-				ElseIf RefValue < (MinValue + 5.0)
-					If PrevValue => (MinValue + 5.0) Then PlaySound2(snd_I\LeverSFX, Camera, OBJ, 1.0)	
-				EndIf
+			EndIf
+			
+			RefValue = EntityPitch(OBJ, True)
+			If RefValue > (MaxValue - 5.0)
+				If PrevValue =< (MaxValue - 5.0) Then PlaySound2(snd_I\LeverSFX, Camera, OBJ, 1.0)
+			ElseIf RefValue < (MinValue + 5.0)
+				If PrevValue => (MinValue + 5.0) Then PlaySound2(snd_I\LeverSFX, Camera, OBJ, 1.0)	
 			EndIf
 		EndIf
+		
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		If GrabbedEntity = 0 Lor Dist > 0.65
 			If EntityPitch(OBJ, True) > ((MaxValue + MinValue) / 2.0)

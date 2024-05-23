@@ -299,6 +299,7 @@ Function UpdateGame%()
 		
 		UpdateMouseInput()
 		
+		HandEntity = 0
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
 		
 		If ShouldDeleteGadgets Then DeleteMenuGadgets()
@@ -310,7 +311,6 @@ Function UpdateGame%()
 		UpdateStreamSounds()
 		
 		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
-			DrawHandIcon = False
 			For i = 0 To 2 Step 2
 				DrawArrowIcon[i] = False
 				DrawArrowIcon[i + 1] = False
@@ -2429,18 +2429,30 @@ Function MakeMeUnplayable%()
 	EndIf
 End Function
 
-Function InteractObject%(OBJ%, Dist#, Arrow% = False, ArrowID% = 0, MouseDown_% = False)
+Function InteractObject%(OBJ%, Dist#, ArrowID% = -1, MouseType% = 0)
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
 	
 	If EntityDistanceSquared(me\Collider, OBJ) < Dist
-		If EntityInView(OBJ, Camera)
-			DrawArrowIcon[ArrowID] = Arrow
-			DrawHandIcon = True
-			If MouseDown_
-				If mo\MouseDown1 Then Return(True)
-			Else
-				If mo\MouseHit1 Then Return(True)
-			EndIf
+		Local DistSqr# = Sqr(Dist)
+		
+		EntityPick(Camera, DistSqr)
+		If PickedEntity() = OBJ
+			If ArrowID <> -1 Then DrawArrowIcon[ArrowID] = True
+			HandEntity = OBJ
+			Select MouseType
+				Case 0
+					;[Block]
+					If mo\MouseHit1 Then Return(True)
+					;[End Block]
+				Case 1
+					;[Block]
+					If mo\MouseDown1 Then Return(True)
+					;[End Block]
+				Case 2
+					;[Block]
+					If mo\MouseUp1 Then Return(True)
+					;[End Block]
+			End Select
 		EndIf
 	EndIf
 	Return(False)
@@ -2453,32 +2465,26 @@ Function RefillCup%()
 	For p.Props = Each Props
 		If p\Name = "GFX\Map\Props\water_cooler.b3d"
 			If PlayerRoom = p\room
-				If EntityDistanceSquared(me\Collider, p\OBJ) < 0.4225
-					EntityPick(Camera, 0.65)
-					If PickedEntity() = p\OBJ
-						DrawHandIcon = True
-						If mo\MouseHit1
-							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) <> Null
-									If Inventory(i)\ItemTemplate\ID = it_emptycup
-										RemoveItem(Inventory(i))
-										it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 200, 200, 200)
-										it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
-										it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
-										it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-										Inventory(i) = it
-										HideEntity(it\Collider)
-										EntityType(it\Collider, HIT_ITEM)
-										EntityParent(it\Collider, 0)
-										PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
-										CreateMsg(GetLocalString("msg", "refill"))
-										Exit
-									EndIf
-								EndIf
-							Next
+				If InteractObject(p\OBJ, 0.4225)
+					For i = 0 To MaxItemAmount - 1
+						If Inventory(i) <> Null
+							If Inventory(i)\ItemTemplate\ID = it_emptycup
+								RemoveItem(Inventory(i))
+								it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 200, 200, 200)
+								it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
+								it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+								it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
+								Inventory(i) = it
+								HideEntity(it\Collider)
+								EntityType(it\Collider, HIT_ITEM)
+								EntityParent(it\Collider, 0)
+								PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
+								CreateMsg(GetLocalString("msg", "refill"))
+								Exit
+							EndIf
 						EndIf
-						Exit
-					EndIf
+					Next
+					Exit
 				EndIf
 			EndIf
 		EndIf
@@ -3172,13 +3178,13 @@ End Function
 
 Global IsUsingRadio%
 
+Global HandEntity%
 Global GrabbedEntity%
 
 Global RadioState#[9]
 Global RadioState2%[9]
 Global RadioState3%[10]
 
-Global DrawHandIcon%
 Global DrawArrowIcon%[4]
 
 Global InvOpen%
@@ -5981,7 +5987,7 @@ Function AdaptScreenGamma%()
 	opt\ScreenGamma = 1.0
 End Function
 
-Function Render3DHandIcon%(Icon%, OBJ%)
+Function Render3DHandIcon%(Icon%, OBJ%, ArrowID% = -1)
 	Local PitchValue#, YawValue#
 	Local CoordEx% = 32 * MenuScale
 	Local Pvt% = CreatePivot()
@@ -5997,7 +6003,32 @@ Function Render3DHandIcon%(Icon%, OBJ%)
 	
 	FreeEntity(Pvt) : Pvt = 0
 	
-	DrawBlock(Icon, mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx, mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx)
+	Local x# = mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx
+	Local y# = mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx
+	
+	If ArrowID <> -1
+		Local ArrowCoord% = 69 * MenuScale
+		
+		Select ArrowID
+			Case 0
+				;[Block]
+				y = y - ArrowCoord
+				;[End Block]
+			Case 1
+				;[Block]
+				x = x + ArrowCoord
+				;[End Block]
+			Case 2
+				;[Block]
+				y = y + ArrowCoord
+				;[End Block]
+			Case 3
+				;[Block]
+				x = x - ArrowCoord
+				;[End Block]
+		End Select
+	EndIf
+	DrawBlock(Icon, x, y)
 End Function
 
 Function RenderGUI%()
@@ -6049,37 +6080,15 @@ Function RenderGUI%()
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			Local CoordEx% = 32 * MenuScale
 			
-			If d_I\ClosestButton <> 0 Then Render3DHandIcon(t\IconID[5], d_I\ClosestButton)
-			If ClosestItem <> Null Then Render3DHandIcon(t\IconID[6], ClosestItem\Collider)
+			If d_I\ClosestButton <> 0 Then Render3DHandIcon(t\IconID[5], d_I\ClosestButton, -1)
+			If ClosestItem <> Null Then Render3DHandIcon(t\IconID[6], ClosestItem\Collider, -1)
 			
-			; ~ TODO: Use Render3DHandIcon
-			If DrawHandIcon Then DrawBlock(t\IconID[5], mo\Viewport_Center_X - CoordEx, mo\Viewport_Center_Y - CoordEx)
-			
-			For i = 0 To 3
-				x = mo\Viewport_Center_X - CoordEx
-				y = mo\Viewport_Center_Y - CoordEx
-				If DrawArrowIcon[i]
-					Select i
-						Case 0
-							;[Block]
-							y = y - (69 * MenuScale)
-							;[End Block]
-						Case 1
-							;[Block]
-							x = x + (69 * MenuScale)
-							;[End Block]
-						Case 2
-							;[Block]
-							y = y + (69 * MenuScale)
-							;[End Block]
-						Case 3
-							;[Block]
-							x = x - (69 * MenuScale)
-							;[End Block]
-					End Select
-					DrawBlock(t\IconID[i + 10], x, y)
-				EndIf
-			Next
+			If HandEntity <> 0
+				Render3DHandIcon(t\IconID[5], HandEntity, -1)
+				For i = 0 To 3
+					If DrawArrowIcon[i] Then Render3DHandIcon(t\IconID[i + 10], HandEntity, i)
+				Next
+			EndIf
 		EndIf
 		
 		RenderHUD()

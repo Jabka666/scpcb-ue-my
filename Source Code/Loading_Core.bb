@@ -2895,7 +2895,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	GrabbedEntity = 0
 	CameraPitch = 0.0
 	
-	DrawHandIcon = False
+	HandEntity = 0
 	For i = 0 To 3
 		DrawArrowIcon[i] = False
 	Next

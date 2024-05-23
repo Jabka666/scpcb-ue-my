@@ -1095,7 +1095,7 @@ Function UpdateEvents%()
 							
 							Local LeverState# = UpdateLever(e\room\RoomLevers[0]\OBJ, ((EntityY(e\room\Objects[1], True) < -8318.0 * RoomScale) And (EntityY(e\room\Objects[1], True) > -8603.0 * RoomScale)))
 							
-							If GrabbedEntity = e\room\RoomLevers[0]\OBJ And DrawHandIcon Then e\EventState2 = LeverState
+							If GrabbedEntity = e\room\RoomLevers[0]\OBJ And HandEntity <> 0 Then e\EventState2 = LeverState
 							
 							If e\EventState2 <> Temp
 								If e\EventState2 = 0.0
@@ -1659,10 +1659,12 @@ Function UpdateEvents%()
 					UpdateLever(e\room\RoomLevers[0]\OBJ)
 					
 					If e\EventState2 = 1.0 Then ShouldPlay = 21
+					
+					; ~ TODO: OPTIMIZE THIS SH*T
 					EntityPick(Camera, 1.0)
 					For i = 0 To 1
 						If PickedEntity() = e\room\Objects[i]
-							DrawHandIcon = True
+							HandEntity = e\room\Objects[i]
 							If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[i]
 							Exit
 						EndIf
@@ -1672,7 +1674,7 @@ Function UpdateEvents%()
 						If GrabbedEntity <> 0 ; ~ Avain
 							If GrabbedEntity = e\room\Objects[0]
 								If e\EventState = 0.0
-									DrawHandIcon = True
+									HandEntity = e\room\Objects[0]
 									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[0]))
@@ -1703,7 +1705,7 @@ Function UpdateEvents%()
 								EndIf
 							ElseIf GrabbedEntity = e\room\Objects[1]
 								If e\EventState = 0.0
-									DrawHandIcon = True
+									HandEntity = e\room\Objects[1]
 									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 									
 									Angle = WrapAngle(EntityRoll(e\room\Objects[1]))
@@ -1942,7 +1944,7 @@ Function UpdateEvents%()
 									EndIf
 								EndIf
 								
-								If InteractObject(e\room\Objects[1], 0.81, True, 2, True) Then RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
+								If InteractObject(e\room\Objects[1], 0.81, 2, 1) Then RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
 								If (me\Bloodloss > 0.0 And I_008\Timer = 0.0) Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
 							EndIf
 							
@@ -2819,174 +2821,145 @@ Function UpdateEvents%()
 						EndIf
 					Next
 					
-					If Pick1162ARC
-						If InteractObject(e\room\Objects[0], 0.5625)
-							e\EventState2 = Rand(0, MaxItemAmount - 1)
-							If Inventory(e\EventState2) <> Null
-								; ~ Randomly picked item slot has an item in it, using this slot
-								e\EventState3 = 1.0
-							Else
-								; ~ Randomly picked item slot is empty, getting the first available slot
-								For i = 0 To MaxItemAmount - 1
-									Local IsSlotEmpty% = (Inventory((i + e\EventState2) Mod MaxItemAmount) = Null)
-									
-									; ~ Successful
-									If (Not IsSlotEmpty) Then e\EventState2 = (i + e\EventState2) Mod MaxItemAmount
-									
-									If Rand(8) = 1
-										If IsSlotEmpty
-											e\EventState3 = 3.1
-										Else
-											e\EventState3 = 3.0
-										EndIf
-										
-										e\EventState = Rand(5)
-										
-										; ~ Checking if the selected nostalgia item already exists or not
-										Local ItemName$ = ""
-										
-										Select e\EventState
-											Case 1.0
-												;[Block]
-												ItemName = "Lost Key"
-												;[End Block]
-											Case 2.0
-												;[Block]
-												ItemName = "Disciplinary Hearing DH-S-4137-17092"
-												;[End Block]
-											Case 3.0
-												;[Block]
-												ItemName = "Coin"
-												;[End Block]
-											Case 4.0
-												;[Block]
-												ItemName = "Movie Ticket"
-												;[End Block]
-											Case 5.0
-												;[Block]
-												ItemName = "Old Badge"
-												;[End Block]
-										End Select
-										
-										For it.Items = Each Items
-											If it\Name = ItemName
-												e\EventState3 = 1.0
-												e\EventState = 0.0
-												Exit
-											EndIf
-										Next
-										If (Not IsSlotEmpty) Then Exit
+					If Pick1162ARC And InteractObject(e\room\Objects[0], 0.5625)
+						e\EventState2 = Rand(0, MaxItemAmount - 1)
+						If Inventory(e\EventState2) <> Null
+							; ~ Randomly picked item slot has an item in it, using this slot
+							e\EventState3 = 1.0
+						Else
+							; ~ Randomly picked item slot is empty, getting the first available slot
+							For i = 0 To MaxItemAmount - 1
+								Local IsSlotEmpty% = (Inventory((i + e\EventState2) Mod MaxItemAmount) = Null)
+								
+								; ~ Successful
+								If (Not IsSlotEmpty) Then e\EventState2 = (i + e\EventState2) Mod MaxItemAmount
+								
+								If Rand(8) = 1
+									If IsSlotEmpty
+										e\EventState3 = 3.1
 									Else
-										If IsSlotEmpty
-											e\EventState3 = 2.0
-										Else
-											e\EventState3 = 1.0
-											Exit
-										EndIf
+										e\EventState3 = 3.0
 									EndIf
-								Next
-							EndIf
-						EndIf
-						
-						; ~ Trade successful
-						If e\EventState3 = 1.0
-							Local ShouldCreateItem% = False
-							
-							For itt.ItemTemplates = Each ItemTemplates
-								If IsItemGoodFor1162ARC(itt)
-									Select Inventory(e\EventState2)\ItemTemplate\ID
-										Case it_key
+									
+									e\EventState = Rand(5)
+									
+									; ~ Checking if the selected nostalgia item already exists or not
+									Local ItemName$ = ""
+									
+									Select e\EventState
+										Case 1.0
 											;[Block]
-											If itt\ID = it_key0 Lor itt\ID = it_key1 And Rand(2) = 1 Then ShouldCreateItem = True
+											ItemName = "Lost Key"
 											;[End Block]
-										Case it_paper, it_oldpaper
+										Case 2.0
 											;[Block]
-											If itt\ID = it_paper And Rand(12) = 1 Then ShouldCreateItem = True
+											ItemName = "Disciplinary Hearing DH-S-4137-17092"
 											;[End Block]
-										Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
+										Case 3.0
 											;[Block]
-											If itt\ID = it_gasmask Lor itt\ID = it_finegasmask Lor itt\ID = it_veryfinegasmask Lor itt\ID = it_gasmask148 Lor itt\ID = it_hazmatsuit Lor itt\ID = it_finehazmatsuit Lor itt\ID = it_veryfinehazmatsuit Lor itt\ID = it_hazmatsuit148 And Rand(2) = 1 Then ShouldCreateItem = True
+											ItemName = "Coin"
 											;[End Block]
-										Case it_key0, it_key1, it_key2, it_key3
+										Case 4.0
 											;[Block]
-											If itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3 And Rand(6) = 1 Then ShouldCreateItem = True
+											ItemName = "Movie Ticket"
 											;[End Block]
-										Case it_mastercard, it_playcard, it_origami, it_electronics
+										Case 5.0
 											;[Block]
-											If itt\ID = it_mastercard Lor itt\ID = it_playcard Lor itt\ID = it_origami Lor itt\ID = it_electronics And Rand(5) = 1 Then ShouldCreateItem = True
-											;[End Block]
-										Case it_vest, it_finevest
-											;[Block]
-											If itt\ID = it_vest Lor itt\ID = it_finevest And Rand(1) = 1 Then ShouldCreateItem = True
-											;[End Block]
-										Default
-											;[Block]
-											If itt\ID = it_mastercard Lor itt\ID = it_playcard And Rand(6) = 1 Then ShouldCreateItem = True
+											ItemName = "Old Badge"
 											;[End Block]
 									End Select
-								EndIf
-								
-								If ShouldCreateItem
-									RemoveWearableItems(Inventory(e\EventState2))
-									RemoveItem(Inventory(e\EventState2))
 									
-									it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-									EntityType(it\Collider, HIT_ITEM)
-									
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
-									e\EventState3 = 0.0
-									
-									GiveAchievement(Achv1162_ARC)
-									mo\MouseHit1 = False
-									Exit
-								EndIf
-							Next
-						; ~ Trade not sucessful (player got in return to injuries a new item)
-						ElseIf e\EventState3 = 2.0
-							InjurePlayer(5.0)
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
-							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							EntityPick(Pvt, 0.3)
-							de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
-							EntityParent(de\OBJ, e\room\OBJ)
-							FreeEntity(Pvt) : Pvt = 0
-							For itt.ItemTemplates = Each ItemTemplates
-								If IsItemGoodFor1162ARC(itt) And Rand(6) = 1
-									it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-									EntityType(it\Collider, HIT_ITEM)
-									
-									GiveAchievement(Achv1162_ARC)
-									mo\MouseHit1 = False
-									e\EventState3 = 0.0
-									If me\Injuries > 15.0
-										msg\DeathMsg = GetLocalString("death", "1162")
-										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
-										me\LightFlash = 5.0
-										Kill(True)
+									For it.Items = Each Items
+										If it\Name = ItemName
+											e\EventState3 = 1.0
+											e\EventState = 0.0
+											Exit
+										EndIf
+									Next
+									If (Not IsSlotEmpty) Then Exit
+								Else
+									If IsSlotEmpty
+										e\EventState3 = 2.0
 									Else
-										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
-										me\LightFlash = 5.0
-										CreateMsg(GetLocalString("msg", "1162_1"))
+										e\EventState3 = 1.0
+										Exit
 									EndIf
-									Exit
 								EndIf
 							Next
-						; ~ Trade with nostalgia item
-						ElseIf e\EventState3 >= 3.0
-							If e\EventState3 < 3.1
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
+						EndIf
+					EndIf
+					
+					; ~ Trade successful
+					If e\EventState3 = 1.0
+						Local ShouldCreateItem% = False
+						
+						For itt.ItemTemplates = Each ItemTemplates
+							If IsItemGoodFor1162ARC(itt)
+								Select Inventory(e\EventState2)\ItemTemplate\ID
+									Case it_key
+										;[Block]
+										If itt\ID = it_key0 Lor itt\ID = it_key1 And Rand(2) = 1 Then ShouldCreateItem = True
+										;[End Block]
+									Case it_paper, it_oldpaper
+										;[Block]
+										If itt\ID = it_paper And Rand(12) = 1 Then ShouldCreateItem = True
+										;[End Block]
+									Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
+										;[Block]
+										If itt\ID = it_gasmask Lor itt\ID = it_finegasmask Lor itt\ID = it_veryfinegasmask Lor itt\ID = it_gasmask148 Lor itt\ID = it_hazmatsuit Lor itt\ID = it_finehazmatsuit Lor itt\ID = it_veryfinehazmatsuit Lor itt\ID = it_hazmatsuit148 And Rand(2) = 1 Then ShouldCreateItem = True
+										;[End Block]
+									Case it_key0, it_key1, it_key2, it_key3
+										;[Block]
+										If itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3 And Rand(6) = 1 Then ShouldCreateItem = True
+										;[End Block]
+									Case it_mastercard, it_playcard, it_origami, it_electronics
+										;[Block]
+										If itt\ID = it_mastercard Lor itt\ID = it_playcard Lor itt\ID = it_origami Lor itt\ID = it_electronics And Rand(5) = 1 Then ShouldCreateItem = True
+										;[End Block]
+									Case it_vest, it_finevest
+										;[Block]
+										If itt\ID = it_vest Lor itt\ID = it_finevest And Rand(1) = 1 Then ShouldCreateItem = True
+										;[End Block]
+									Default
+										;[Block]
+										If itt\ID = it_mastercard Lor itt\ID = it_playcard And Rand(6) = 1 Then ShouldCreateItem = True
+										;[End Block]
+								End Select
+							EndIf
+							
+							If ShouldCreateItem
 								RemoveWearableItems(Inventory(e\EventState2))
 								RemoveItem(Inventory(e\EventState2))
-							Else
-								InjurePlayer(5.0)
-								Pvt = CreatePivot()
-								PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
-								TurnEntity(Pvt, 90.0, 0.0, 0.0)
-								EntityPick(Pvt, 0.3)
-								de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
-								EntityParent(de\OBJ, e\room\OBJ)
-								FreeEntity(Pvt) : Pvt = 0
+								
+								it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								EntityType(it\Collider, HIT_ITEM)
+								
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
+								e\EventState3 = 0.0
+								
+								GiveAchievement(Achv1162_ARC)
+								mo\MouseHit1 = False
+								Exit
+							EndIf
+						Next
+					; ~ Trade not sucessful (player got in return to injuries a new item)
+					ElseIf e\EventState3 = 2.0
+						InjurePlayer(5.0)
+						Pvt = CreatePivot()
+						PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
+						TurnEntity(Pvt, 90.0, 0.0, 0.0)
+						EntityPick(Pvt, 0.3)
+						de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
+						EntityParent(de\OBJ, e\room\OBJ)
+						FreeEntity(Pvt) : Pvt = 0
+						For itt.ItemTemplates = Each ItemTemplates
+							If IsItemGoodFor1162ARC(itt) And Rand(6) = 1
+								it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								EntityType(it\Collider, HIT_ITEM)
+								
+								GiveAchievement(Achv1162_ARC)
+								mo\MouseHit1 = False
+								e\EventState3 = 0.0
 								If me\Injuries > 15.0
 									msg\DeathMsg = GetLocalString("death", "1162")
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
@@ -2995,41 +2968,69 @@ Function UpdateEvents%()
 								Else
 									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 									me\LightFlash = 5.0
-									CreateMsg(GetLocalString("msg", "1162_2"))
+									CreateMsg(GetLocalString("msg", "1162_1"))
 								EndIf
-								e\EventState2 = 0.0
+								Exit
 							EndIf
-							
-							Select e\EventState
-								Case 1.0
-									;[Block]
-									it.Items = CreateItem("Lost Key", it_key, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-									;[End Block]
-								Case 2.0
-									;[Block]
-									it.Items = CreateItem("Disciplinary Hearing DH-S-4137-17092", it_oldpaper, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-									;[End Block]
-								Case 3.0
-									;[Block]
-									it.Items = CreateItem("Coin", it_coin, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-									;[End Block]
-								Case 4.0
-									;[Block]
-									it.Items = CreateItem("Movie Ticket", it_ticket, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-									;[End Block]
-								Case 5.0
-									;[Block]
-									it.Items = CreateItem("Old Badge", it_oldbadge, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
-									;[End Block]
-							End Select
-							EntityType(it\Collider, HIT_ITEM)
-							
-							GiveAchievement(Achv1162_ARC)
-							mo\MouseHit1 = False
-							e\EventState3 = 0.0
+						Next
+					; ~ Trade with nostalgia item
+					ElseIf e\EventState3 >= 3.0
+						If e\EventState3 < 3.1
+							PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
+							RemoveWearableItems(Inventory(e\EventState2))
+							RemoveItem(Inventory(e\EventState2))
+						Else
+							InjurePlayer(5.0)
+							Pvt = CreatePivot()
+							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
+							TurnEntity(Pvt, 90.0, 0.0, 0.0)
+							EntityPick(Pvt, 0.3)
+							de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
+							EntityParent(de\OBJ, e\room\OBJ)
+							FreeEntity(Pvt) : Pvt = 0
+							If me\Injuries > 15.0
+								msg\DeathMsg = GetLocalString("death", "1162")
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+								me\LightFlash = 5.0
+								Kill(True)
+							Else
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+								me\LightFlash = 5.0
+								CreateMsg(GetLocalString("msg", "1162_2"))
+							EndIf
+							e\EventState2 = 0.0
 						EndIf
-						FreeEntity(pp) : pp = 0
+						
+						Select e\EventState
+							Case 1.0
+								;[Block]
+								it.Items = CreateItem("Lost Key", it_key, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
+							Case 2.0
+								;[Block]
+								it.Items = CreateItem("Disciplinary Hearing DH-S-4137-17092", it_oldpaper, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
+							Case 3.0
+								;[Block]
+								it.Items = CreateItem("Coin", it_coin, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
+							Case 4.0
+								;[Block]
+								it.Items = CreateItem("Movie Ticket", it_ticket, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
+							Case 5.0
+								;[Block]
+								it.Items = CreateItem("Old Badge", it_oldbadge, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								;[End Block]
+						End Select
+						EntityType(it\Collider, HIT_ITEM)
+						
+						GiveAchievement(Achv1162_ARC)
+						mo\MouseHit1 = False
+						e\EventState3 = 0.0
 					EndIf
+					FreeEntity(pp) : pp = 0
+						
 				EndIf
 				;[End Block]
 			Case e_cont3_966
