@@ -2479,7 +2479,7 @@ Function RefillCup%()
 	For p.Props = Each Props
 		If p\Name = "GFX\Map\Props\water_cooler.b3d"
 			If PlayerRoom = p\room
-				If InteractObject(p\OBJ, 0.4225)
+				If InteractObject(p\OBJ, 0.64)
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null
 							If Inventory(i)\ItemTemplate\ID = it_emptycup
