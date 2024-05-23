@@ -947,7 +947,7 @@ Function UpdateEvents%()
 						RemoveEvent(e)
 					EndIf
 				Else
-					If e\room\Dist < 6.0
+					If e\room\Dist < 7.0
 						If I_005\ChanceToSpawn = 3
 							TFormPoint(375.0, 52.0, -875.0, e\room\OBJ, 0)
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
