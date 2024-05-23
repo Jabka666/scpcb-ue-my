@@ -2792,7 +2792,7 @@ Function UpdateEvents%()
 				; ~ e\EventState4: A check for SCP-066 to spawn in the area.
 				
 				If e\EventState4 = 0.0
-					If e\room\Dist < 6.0
+					If e\room\Dist < 8.0
 						If n_I\Curr066 = Null
 							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
 						Else
@@ -3468,7 +3468,7 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				
-				If e\room\Dist < 6.0
+				If e\room\Dist < 8.0
 					If e\EventState = 0.0
 						If n_I\Curr066 = Null
 							n_I\Curr066 = CreateNPC(NPCType066, EntityX(e\room\OBJ), 0.5, EntityZ(e\room\OBJ))
@@ -3902,7 +3902,7 @@ Function UpdateEvents%()
 				Next
 				
 				If Is035Released
-					If e\room\Dist < 6.0
+					If e\room\Dist < 8.0
 						If e\room\NPC[0] = Null
 							e\room\NPC[0] = CreateNPC(NPCTypeD, e\room\x, e\room\y + 52.0 * RoomScale, e\room\z)
 							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
@@ -5829,7 +5829,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room3_2_hcz_guard
 				;[Block]
-				If e\room\Dist < 6.0
+				If e\room\Dist < 8.0
 					If e\EventState = 0.0
 						TFormPoint(-190.0, 60.0, 190.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
@@ -6557,7 +6557,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room4_2_hcz_d
 				;[Block]
-				If e\room\Dist < 6.0
+				If e\room\Dist < 8.0
 					TFormPoint(256.0, 55.2, 256.0, e\room\OBJ, 0)
 					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
