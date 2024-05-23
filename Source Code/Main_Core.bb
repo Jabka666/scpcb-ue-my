@@ -2429,31 +2429,45 @@ Function MakeMeUnplayable%()
 	EndIf
 End Function
 
-Function InteractObject%(OBJ%, Dist#, ArrowID% = -1, MouseType% = 0)
-	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
+Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
+	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor GrabbedEntity <> 0 Then Return(False)
 	
 	If EntityDistanceSquared(me\Collider, OBJ) < Dist
-		Local DistSqr# = Sqr(Dist)
+		If (Not EntityInView(OBJ, Camera)) Then Return(False)
 		
-		EntityPick(Camera, DistSqr)
-		If PickedEntity() = OBJ
-			If ArrowID <> -1 Then DrawArrowIcon[ArrowID] = True
+		Local DistSqr# = Sqr(Dist)
+		Local Pvt% = CreatePivot()
+		
+		PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+		PointEntity(Pvt, OBJ)
+		
+		If EntityPick(Pvt, DistSqr) = OBJ
 			HandEntity = OBJ
 			Select MouseType
 				Case 0
 					;[Block]
-					If mo\MouseHit1 Then Return(True)
+					If mo\MouseHit1
+						FreeEntity(Pvt) : Pvt = 0
+						Return(True)
+					EndIf
 					;[End Block]
 				Case 1
 					;[Block]
-					If mo\MouseDown1 Then Return(True)
+					If mo\MouseDown1
+						FreeEntity(Pvt) : Pvt = 0
+						Return(True)
+					EndIf
 					;[End Block]
 				Case 2
 					;[Block]
-					If mo\MouseUp1 Then Return(True)
+					If mo\MouseUp1
+						FreeEntity(Pvt) : Pvt = 0
+						Return(True)
+					EndIf
 					;[End Block]
 			End Select
 		EndIf
+		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 	Return(False)
 End Function
@@ -8490,15 +8504,15 @@ Function UpdateVomit%()
 			me\PrevBloodloss = me\Bloodloss
 			If (Not me\Crouch) Then SetCrouch(True)
 			me\EyeIrritation = 70.0 * 9.0
-
-                       If me\Sanity < -200.0
-                           me\Injuries = 1.5
-                           me\Bloodloss = 70.0
-                       Else 
-                           me\Injuries = 0
-                           me\Bloodloss = 0
-                       EndIf
-
+			
+			If me\Sanity < -200.0
+				me\Injuries = 1.5
+				me\Bloodloss = 70.0
+			Else 
+				me\Injuries = 0
+				me\Bloodloss = 0
+			EndIf
+			
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
@@ -9418,7 +9432,7 @@ Function UpdateLeave1499%()
 End Function
 
 Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = False)
-	Local Pvt%, Pick#
+	Local Pvt%
 	; ~ Dir = 0 - towards the floor (default)
 	; ~ Dir = 1 - towrads the ceiling (mostly for PD decal after leaving dimension)
 	
@@ -9429,8 +9443,7 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	Else
 		RotateEntity(Pvt, -90.0, 0.0, 0.0)
 	EndIf
-	Pick = EntityPick(Pvt, PickRange)
-	If Pick <> 0
+	If EntityPick(Pvt, PickRange) <> 0
 		If (Not Dir)
 			PositionEntity(Entity, x, PickedY() + CustomRadius + 0.02, z, IsGlobal)
 		Else

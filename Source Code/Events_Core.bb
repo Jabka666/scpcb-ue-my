@@ -1660,77 +1660,80 @@ Function UpdateEvents%()
 					
 					If e\EventState2 = 1.0 Then ShouldPlay = 21
 					
-					; ~ TODO: OPTIMIZE THIS SH*T
-					EntityPick(Camera, 1.0)
-					For i = 0 To 1
-						If PickedEntity() = e\room\Objects[i]
-							HandEntity = e\room\Objects[i]
-							If mo\MouseHit1 Then GrabbedEntity = e\room\Objects[i]
-							Exit
-						EndIf
-					Next
-					
-					If mo\MouseDown1 Lor mo\MouseHit1
-						If GrabbedEntity <> 0 ; ~ Avain
-							If GrabbedEntity = e\room\Objects[0]
-								If e\EventState = 0.0
-									HandEntity = e\room\Objects[0]
-									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
-									
-									Angle = WrapAngle(EntityRoll(e\room\Objects[0]))
-									DrawArrowIcon[3] = (Angle > 181.0)
-									DrawArrowIcon[1] = True
-									
-									If Angle < 90.0
-										RotateEntity(GrabbedEntity, 0.0, 0.0, 361.0)
-									ElseIf Angle < 180.0
-										RotateEntity(GrabbedEntity, 0.0, 0.0, 180.0)
-									EndIf
-									
-									If Angle < 181.0 And Angle > 90.0
-										For it.Items = Each Items
-											If it\Collider <> 0 And (Not it\Picked)
-												If Abs(EntityX(it\Collider) - (e\room\x - 712.0 * RoomScale)) < 200.0
-													If Abs(EntityY(it\Collider) - (e\room\y + 648.0 * RoomScale)) < 104.0
-														e\SoundCHN = PlaySound2(snd_I\MachineSFX, Camera, e\room\Objects[1])
-														e\room\RoomDoors[1]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[1]\OBJ)
-														
-														e\EventState = 1.0
-														Exit
-													EndIf
+					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 0.64
+						EntityPick(Camera, 0.8)
+						For i = 0 To 1
+							If PickedEntity() = e\room\Objects[i]
+								HandEntity = e\room\Objects[i]
+								If mo\MouseHit1 Lor mo\MouseDown1 Then GrabbedEntity = e\room\Objects[i]
+								Exit
+							EndIf
+						Next
+						
+						If GrabbedEntity = e\room\Objects[0]
+							If e\EventState = 0.0
+								HandEntity = e\room\Objects[0]
+								TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
+								
+								Angle = WrapAngle(EntityRoll(e\room\Objects[0]))
+								DrawArrowIcon[3] = (Angle > 181.0)
+								DrawArrowIcon[1] = True
+								
+								If Angle < 90.0
+									RotateEntity(GrabbedEntity, 0.0, 0.0, 361.0)
+								ElseIf Angle < 180.0
+									RotateEntity(GrabbedEntity, 0.0, 0.0, 180.0)
+								EndIf
+								
+								If Angle < 181.0 And Angle > 90.0
+									For it.Items = Each Items
+										If it\Collider <> 0 And (Not it\Picked)
+											If Abs(EntityX(it\Collider) - (e\room\x - 712.0 * RoomScale)) < 200.0
+												If Abs(EntityY(it\Collider) - (e\room\y + 648.0 * RoomScale)) < 104.0
+													e\SoundCHN = PlaySound2(snd_I\MachineSFX, Camera, e\room\Objects[1])
+													e\room\RoomDoors[1]\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[1]\OBJ)
+													
+													e\EventState = 1.0
+													Exit
 												EndIf
 											EndIf
-										Next
+										EndIf
+									Next
+								EndIf
+							EndIf
+						ElseIf GrabbedEntity = e\room\Objects[1]
+							If e\EventState = 0.0
+								HandEntity = e\room\Objects[1]
+								TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
+								
+								Angle = WrapAngle(EntityRoll(e\room\Objects[1]))
+								DrawArrowIcon[3] = True
+								DrawArrowIcon[1] = True
+								
+								If Angle > 90.0
+									If Angle < 180.0
+										RotateEntity(GrabbedEntity, 0.0, 0.0, 90.0)
+									ElseIf Angle < 270.0
+										RotateEntity(GrabbedEntity, 0.0, 0.0, 270.0)
 									EndIf
 								EndIf
-							ElseIf GrabbedEntity = e\room\Objects[1]
-								If e\EventState = 0.0
-									HandEntity = e\room\Objects[1]
-									TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
-									
-									Angle = WrapAngle(EntityRoll(e\room\Objects[1]))
-									DrawArrowIcon[3] = True
-									DrawArrowIcon[1] = True
-									
-									If Angle > 90.0
-										If Angle < 180.0
-											RotateEntity(GrabbedEntity, 0.0, 0.0, 90.0)
-										ElseIf Angle < 270.0
-											RotateEntity(GrabbedEntity, 0.0, 0.0, 270.0)
-										EndIf
-									EndIf
-									
-									Local Rotation# = Floor(EntityRoll(e\room\Objects[1]))
-									
-									e\SoundCHN2 = 0
-									If (Rotation > -94.0 And Rotation < -86.0) Lor (Rotation > -44.0 And Rotation < -36.0) Lor (Rotation > -4.0 And Rotation < 4.0) Lor (Rotation > 36.0 And Rotation < 44.0) Lor (Rotation > 86.0 And Rotation < 94.0)
-										If e\SoundCHN = 0 Then e\SoundCHN = PlaySound2(snd_I\KnobSFX[Rand(0, 1)], Camera, e\room\Objects[1], 2.0, 0.5)
-									Else
-										e\SoundCHN = 0
-									EndIf
+								
+								Local Rotation# = Floor(EntityRoll(e\room\Objects[1]))
+								
+								e\SoundCHN2 = 0
+								If (Rotation > -94.0 And Rotation < -86.0) Lor (Rotation > -44.0 And Rotation < -36.0) Lor (Rotation > -4.0 And Rotation < 4.0) Lor (Rotation > 36.0 And Rotation < 44.0) Lor (Rotation > 86.0 And Rotation < 94.0)
+									If e\SoundCHN = 0 Then e\SoundCHN = PlaySound2(snd_I\KnobSFX[Rand(0, 1)], Camera, e\room\Objects[1], 2.0, 0.5)
+								Else
+									e\SoundCHN = 0
 								EndIf
 							EndIf
 						EndIf
+						For i = 0 To 1
+							If GrabbedEntity = e\room\Objects[i]
+								If (Not EntityInView(e\room\Objects[i], Camera)) Then GrabbedEntity = 0
+								Exit
+							EndIf
+						Next
 					Else
 						GrabbedEntity = 0
 					EndIf
@@ -1763,17 +1766,6 @@ Function UpdateEvents%()
 							If e\SoundCHN2 = 0 Then e\SoundCHN2 = PlaySound2(snd_I\KnobSFX[Rand(0, 1)], Camera, e\room\Objects[1], 2.0, 0.5)
 						EndIf
 					EndIf
-					
-					For i = 0 To 1
-						If GrabbedEntity = e\room\Objects[i]
-							If (Not EntityInView(e\room\Objects[i], Camera))
-								GrabbedEntity = 0
-							ElseIf EntityDistanceSquared(e\room\Objects[i], Camera) > 1.0
-								GrabbedEntity = 0
-							EndIf
-							Exit
-						EndIf
-					Next
 					
 					If e\EventState > 0.0
 						e\EventState = e\EventState + fps\Factor[0]
@@ -1944,7 +1936,10 @@ Function UpdateEvents%()
 									EndIf
 								EndIf
 								
-								If InteractObject(e\room\Objects[1], 0.81, 2, 1) Then RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
+								If InteractObject(e\room\Objects[1], 0.81, 1)
+									DrawArrowIcon[2] = True
+									RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
+								EndIf
 								If (me\Bloodloss > 0.0 And I_008\Timer = 0.0) Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
 							EndIf
 							
@@ -2806,8 +2801,6 @@ Function UpdateEvents%()
 				EndIf
 				
 				If PlayerRoom = e\room
-					GrabbedEntity = 0
-					
 					e\EventState = 0.0
 					
 					Local Pick1162ARC% = True
