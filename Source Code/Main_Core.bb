@@ -4746,8 +4746,9 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem()
 						me\BlinkEffect = 0.7
-						me\BlinkEffectTimer = Rnd(30.0, 35.0)
+						me\BlinkEffectTimer = Rnd(30.0, 40.0)
 						me\BlurTimer = 200.0
+						If SelectedItem\ItemTemplate\ID = it_eyedrops2 Then me\Bloodloss = Max(me\Bloodloss - 5.0, 0.0)
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
 						
@@ -4758,8 +4759,7 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem()
 						me\BlinkEffect = 0.5
-						me\BlinkEffectTimer = Rnd(40.0, 45.0)
-						me\Bloodloss = Max(me\Bloodloss - 1.0, 0.0)
+						me\BlinkEffectTimer = Rnd(40.0, 50.0)
 						me\BlurTimer = 200.0
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.very"))
@@ -4905,18 +4905,6 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case it_syringe
-					;[Block]
-					If CanUseItem(True, True)
-						me\HealTimer = 30.0
-						me\StaminaEffect = 0.5
-						me\StaminaEffectTimer = 20.0
-						
-						CreateMsg(GetLocalString("msg", "syringe_1"))
-						
-						RemoveItem(SelectedItem)
-					EndIf
-					;[End Block]
 				Case it_pizza
 					;[Block]
 					If CanUseItem(True)
@@ -4926,12 +4914,24 @@ Function UpdateGUI%()
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
+				Case it_syringe
+					;[Block]
+					If CanUseItem(True, True)
+						me\HealTimer = Rnd(20.0, 30.0)
+						me\StaminaEffect = 0.7
+						me\StaminaEffectTimer = Rand(20.0, 30.0)
+						
+						CreateMsg(GetLocalString("msg", "syringe_1"))
+						
+						RemoveItem(SelectedItem)
+					EndIf
+					;[End Block]
 				Case it_finesyringe
 					;[Block]
 					If CanUseItem(True, True)
-						me\HealTimer = Rnd(20.0, 40.0)
-						me\StaminaEffect = Rnd(0.4, 0.6)
-						me\StaminaEffectTimer = Rnd(20.0, 30.0)
+						me\HealTimer = Rnd(30.0, 40.0)
+						me\StaminaEffect = 0.5
+						me\StaminaEffectTimer = Rnd(30.0, 40.0)
 						
 						CreateMsg(GetLocalString("msg", "syringe_2"))
 						
@@ -4944,9 +4944,9 @@ Function UpdateGUI%()
 						Select Rand(3)
 							Case 1
 								;[Block]
-								me\HealTimer = Rnd(40.0, 60.0)
+								me\HealTimer = 60.0
 								me\StaminaEffect = 0.1
-								me\StaminaEffectTimer = 30.0
+								me\StaminaEffectTimer = 60.0
 								CreateMsg(GetLocalString("msg", "syringe_3"))
 								;[End Block]
 							Case 2
