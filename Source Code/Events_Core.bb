@@ -1735,7 +1735,12 @@ Function UpdateEvents%()
 							EndIf
 						Next
 					Else
-						GrabbedEntity = 0
+						For i = 0 To 1
+							If GrabbedEntity = e\room\Objects[i]
+								GrabbedEntity = 0
+								Exit
+							EndIf
+						Next
 					EndIf
 					
 					Local Setting%

@@ -4457,7 +4457,7 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 			
 			If GrabbedEntity = OBJ
 				HandEntity = OBJ
-				RotateEntity(GrabbedEntity, Max(Min(PrevValue + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), MaxValue), MinValue), EntityYaw(OBJ), 0.0)
+				RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), MaxValue), MinValue), EntityYaw(OBJ), 0.0)
 				DrawArrowIcon[0] = True
 				DrawArrowIcon[2] = True
 			EndIf
@@ -4471,7 +4471,7 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 		Else
 			GrabbedEntity = 0
 		EndIf
-		If GrabbedEntity = 0 Lor Dist > 0.65
+		If GrabbedEntity = 0 Lor Dist > 0.64
 			If EntityPitch(OBJ, True) > ((MaxValue + MinValue) / 2.0)
 				RotateEntity(OBJ, CurveValue(MaxValue, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			Else
