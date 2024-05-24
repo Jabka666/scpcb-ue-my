@@ -4969,14 +4969,16 @@ Function UpdateNPCs%()
 		If n\IsDead
 			If n\GravityMult = 1.0
 				EntityType(n\Collider, HIT_DEAD)
+				
+				Local RemoveSound% = False
+				
 				Select n\NPCType
 					Case NPCType035_Tentacle
 						;[Block]
 						If n\Frame > 550.9
 							HideEntity(n\Collider)
 							HideEntity(n\OBJ)
-							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-							If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+							RemoveSound = True
 							n\GravityMult = 0.0
 						EndIf
 						;[End Block]
@@ -4985,8 +4987,7 @@ Function UpdateNPCs%()
 						HideEntity(n\Collider)
 						HideEntity(n\OBJ)
 						
-						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+						RemoveSound = True
 						
 						PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
 						p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
@@ -5003,15 +5004,18 @@ Function UpdateNPCs%()
 						;[End Block]
 					Default
 						;[Block]
-						If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-						If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-						If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-						If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+						RemoveSound = True
 						n\Target = Null
 						n\BlinkTimer = -1.0
 						n\GravityMult = 0.0
 						;[End Block]
 				End Select
+				If RemoveSound
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+				EndIf
 			EndIf
 		Else
 			If GravityDist < PowTwo(HideDistance * 0.6) Lor n\NPCType = NPCType1499_1

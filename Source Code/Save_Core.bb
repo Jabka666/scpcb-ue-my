@@ -792,8 +792,8 @@ Function LoadGame%(File$)
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\NPCType = NPCTypeMTF Then
-			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
+		If n\NPCType = NPCTypeMTF
+			If (Not n\IsDead) And n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 		If n\TargetID <> 0
 			Local n2.NPCs
@@ -1642,8 +1642,8 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\NPCType = NPCTypeMTF Then
-			If n_I\MTFLeader = Null Then n_I\MTFLeader = n
+		If n\NPCType = NPCTypeMTF
+			If (Not n\IsDead) And n_I\MTFLeader = Null Then n_I\MTFLeader = n
 		EndIf
 		If n\TargetID <> 0
 			Local n2.NPCs
