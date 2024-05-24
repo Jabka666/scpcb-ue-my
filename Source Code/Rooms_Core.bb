@@ -3487,6 +3487,15 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("SCP-085", it_paper, r\x - 498.0 * RoomScale, r\y + 183.0 * RoomScale, r\z + 430.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Syringe", it_syringe, r\x - 996.0 * RoomScale, r\y + 170.0 * RoomScale, r\z + 132.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Pizza Slice", it_pizza, r\x - 805.0 * RoomScale, r\y + 170.0 * RoomScale, r\z + 260.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			If I_005\ChanceToSpawn = 3
 				it.Items = CreateItem("SCP-005", it_scp005, r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 755.0 * RoomScale)
 			Else
