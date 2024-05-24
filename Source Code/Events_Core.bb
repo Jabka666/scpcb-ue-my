@@ -4685,7 +4685,20 @@ Function UpdateEvents%()
 									
 									Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True))
 									SqrValue = Sqr(Dist)
+
+                                                                         If Dist < 0.36 And e\EventState3 > 70.0 * 1.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 1.0 Then
+                                                                       	    If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0 Then
+							                	  If (Not e\Img) Then
+								            	  PlaySound_Strict(HorrorSFX[11])
+								             	  e\Img = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
+								              	  e\Img = ScaleImage2(e\Img2, MenuScale, MenuScale)
+                                                                             Else
+						                                  DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
+                                                                             EndIf
+                                                                         EndIf
+                                                                     EndIf
 									
+                                                                      
 									me\HeartBeatRate = 150.0
 									me\HeartBeatVolume = Max(3.0 - SqrValue, 0.0) / 3.0
 									SinValue = Sin(Float(MilliSecs()) / 20.0) + 1.0
