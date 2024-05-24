@@ -1936,7 +1936,7 @@ Function UpdateEvents%()
 									EndIf
 								EndIf
 								
-								If InteractObject(e\room\Objects[1], 0.81, 1)
+								If InteractObject(e\room\Objects[1], 0.8, 1)
 									DrawArrowIcon[2] = True
 									RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
 								EndIf
@@ -2387,7 +2387,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								; ~ Touching SCP-409
-								If InteractObject(e\room\Objects[2], 0.64)
+								If InteractObject(e\room\Objects[2], 0.8)
 									GiveAchievement(Achv409)
 									If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
 										CreateMsg(GetLocalString("msg", "409"))
@@ -2814,7 +2814,7 @@ Function UpdateEvents%()
 						EndIf
 					Next
 					
-					If Pick1162ARC And InteractObject(e\room\Objects[0], 0.5625)
+					If Pick1162ARC And InteractObject(e\room\Objects[0], 0.75)
 						e\EventState2 = Rand(0, MaxItemAmount - 1)
 						If Inventory(e\EventState2) <> Null
 							; ~ Randomly picked item slot has an item in it, using this slot
@@ -3392,7 +3392,7 @@ Function UpdateEvents%()
 			Case e_room2_cafeteria
 				;[Block]
 				If PlayerRoom = e\room
-					If InteractObject(e\room\Objects[0], 0.64)
+					If InteractObject(e\room\Objects[0], 0.8)
 						Temp = True
 						For it.Items = Each Items
 							If (Not it\Picked)
@@ -3449,7 +3449,7 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 					
-					If InteractObject(e\room\Objects[1], 0.64)
+					If InteractObject(e\room\Objects[1], 0.8)
 						If ItemAmount < MaxItemAmount
 							GiveAchievement(Achv458)
 							CreateMsg(GetLocalString("msg", "458"))
@@ -5035,7 +5035,7 @@ Function UpdateEvents%()
 						e\EventState = 1.0
 					Else
 						If e\room\NPC[0]\Frame > 474.0
-							If InteractObject(e\room\NPC[0]\OBJ, 2.25)
+							If InteractObject(e\room\NPC[0]\OBJ, 1.5)
 								If ItemAmount < MaxItemAmount
 									SelectedItem = CreateItem("Drawing", it_paper, 0.0, 0.0, 0.0)
 									EntityType(SelectedItem\Collider, HIT_ITEM)
@@ -7107,7 +7107,7 @@ Function UpdateEvents%()
 						DeleteSingleTextureEntryFromCache(Tex)
 						EntityParent(e\room\Objects[1], e\room\OBJ)
 					Else
-						If InteractObject(e\room\Objects[1], 0.49)
+						If InteractObject(e\room\Objects[1], 0.7)
 							CreateMsg(GetLocalString("msg", "breeze"))
 							me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 							me\Bloodloss = 0.0

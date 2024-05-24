@@ -4395,7 +4395,7 @@ Function UpdateScreens%()
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom
-			If InteractObject(s\OBJ, 0.64, 2)
+			If InteractObject(s\OBJ, 1.0, 2)
 				SelectedScreen = s
 				s\Img = LoadImage_Strict("GFX\Map\Screens\" + s\ImgPath)
 				s\Img = ScaleImage2(s\Img, MenuScale, MenuScale)

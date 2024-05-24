@@ -2430,44 +2430,27 @@ Function MakeMeUnplayable%()
 End Function
 
 Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
+	; ~ Set the real distance, not squared
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor GrabbedEntity <> 0 Then Return(False)
 	
-	If EntityDistanceSquared(me\Collider, OBJ) < Dist
-		If (Not EntityInView(OBJ, Camera)) Then Return(False)
-		
-		Local DistSqr# = Sqr(Dist)
-		Local Pvt% = CreatePivot()
-		
-		PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-		PointEntity(Pvt, OBJ)
-		
-		If EntityPick(Pvt, DistSqr) = OBJ
+	If EntityDistanceSquared(me\Collider, OBJ) < Dist * Dist
+		If EntityPick(Camera, Dist) = OBJ
 			HandEntity = OBJ
 			Select MouseType
 				Case 0
 					;[Block]
-					If mo\MouseHit1
-						FreeEntity(Pvt) : Pvt = 0
-						Return(True)
-					EndIf
+					If mo\MouseHit1 Then Return(True)
 					;[End Block]
 				Case 1
 					;[Block]
-					If mo\MouseDown1
-						FreeEntity(Pvt) : Pvt = 0
-						Return(True)
-					EndIf
+					If mo\MouseDown1 Then Return(True)
 					;[End Block]
 				Case 2
 					;[Block]
-					If mo\MouseUp1
-						FreeEntity(Pvt) : Pvt = 0
-						Return(True)
-					EndIf
+					If mo\MouseUp1 Then Return(True)
 					;[End Block]
 			End Select
 		EndIf
-		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 	Return(False)
 End Function
@@ -2481,7 +2464,7 @@ Function RefillCup%()
 				Local it.Items
 				Local i%
 				
-				If InteractObject(p\OBJ, 0.64)
+				If InteractObject(p\OBJ, 0.8)
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null
 							If Inventory(i)\ItemTemplate\ID = it_emptycup
@@ -2505,7 +2488,6 @@ Function RefillCup%()
 			EndIf
 		EndIf
 	Next
-	Return(False)
 End Function
 
 Function SetCrouch%(NewCrouch%)
