@@ -2009,15 +2009,6 @@ Function UpdateEvents%()
 								RotateEntity(e\room\RoomLevers[0]\OBJ, CurveAngle(-80.0, EntityPitch(e\room\RoomLevers[0]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
 								
 								UpdateRedLight(e\room\Objects[1], 1500, 800)
-
-                If Dist < 0.36 And me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
-							    If e\Img2 = 0
-								    e\Img2 = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
-								    e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
-							   Else
-								    DrawBlock(e\Img2, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
-							    EndIf
-						    EndIf
 								
 								If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 									If me\Sanity < -800.0 And e\EventState3 = 0.0
