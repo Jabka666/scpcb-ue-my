@@ -23,9 +23,14 @@ Mechanics:
 - The game's gamma will be automatically changed while reading the document/ticket/badge and etc.
 - Improved gas emitters.
 - You can refill cups at water coolers.
-- Can no longer save when «chs\superman» or «me\deathtimer» are active, or when nearly dying from bleeding out(«me\Bloodloss» > 60.0 and «me\injury» > 1.0).
+- Can no longer save during certain conditions:
+	- When «chs\superman» or «me\deathtimer» are active.
+	- When nearly dying from bleeding out(«me\Bloodloss» > 60.0 and «me\injury» > 1.0)
+	- When SCP-427's mutation state is above 360 seconds.
 - Monitors are now off while there is a blackout preventing you from saving on them.
 - All Blast doors can kill the player.
+- Hand icon now follows the position of levers and chat screens.
+- Reduce stamina drain speed in pocket dimension.
 
 Rooms:
 - Added Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
@@ -41,7 +46,8 @@ Rooms:
 - Player can now open and close blinds of most windows.
 - Dr. Gears office is now accessible!
 
-- Added a Save point in «cont2_049» observation room.
+- Moved most wall save points to computer screens.
+- Added a save point in «cont2_049» observation room.
 
 - New room ambience for SCP-008's chamber and cutscene.
 
@@ -59,10 +65,12 @@ Items:
 - S-NAV Navigator Ultimate is no longer guaranteed and the chances are based on rooms found.
 - SCRAMBLE Gear battery drain speed slowed.
 - Fine SCP-268 now lasts longer.
+- Very Fine Radio gives the code to Dr. Gears' instead of Dr. Maynard's.
 
 NPCs:
-- MTFs can contain SCP-106.
 - Can now detect SCP-1048 and SCP-1048-A using the blue variant of Night Vision Goggles.
+- Increased range tesla gates can shock NPCs.
+- Reduced SCP-106's speed in the labyrinth.
 
 Bug Fixes:
 - Fixed some typos in subtitles.
@@ -83,6 +91,7 @@ Bug Fixes:
 - Fixed inconsistent spawning of SCP-173 at SCP-008.
 - Fixed Apollyon not hiding the Hud when playing in different languages.
 - Multiple grammatical fixes for SCP-294's drinks.
+- Fixed SCP-049 killing players in «chs\notarget».
 
 v1.2.1
 
