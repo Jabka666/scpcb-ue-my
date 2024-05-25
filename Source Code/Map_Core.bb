@@ -3461,13 +3461,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 	Return(State)
 End Function
 
-Global CODE_DR_MAYNARD%, CODE_O5_COUNCIL%, CODE_MAINTENANCE_TUNNELS%
+Global CODE_DR_MAYNARD%, CODE_DR_GEARS, CODE_O5_COUNCIL%, CODE_MAINTENANCE_TUNNELS%
 ; ~ Doors Code Constants
 ;[Block]
 Const CODE_DR_HARP% = 7816
 Const CODE_DR_L% = 2411
 Const CODE_CONT1_035% = 5731
-Const CODE_DR_GEARS% = 9089
 Const CODE_LOCKED$ = "ABCD"
 ;[End Block]
 

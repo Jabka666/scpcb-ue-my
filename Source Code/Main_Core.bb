@@ -5286,7 +5286,7 @@ Function UpdateGUI%()
 								SelectedItem\State2 = -1
 								If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 								RadioState[6] = RadioState[6] + fps\Factor[0]
-								Temp = Mid(Str(CODE_DR_MAYNARD), RadioState[8] + 1.0, 1)
+								Temp = Mid(Str(CODE_DR_GEARS), RadioState[8] + 1.0, 1)
 								If RadioState[6] - fps\Factor[0] <= RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0
 									PlaySound_Strict(snd_I\RadioBuzz)
 									RadioState[7] = RadioState[7] + 1.0
