@@ -2368,7 +2368,7 @@ Function UpdateEvents%()
 								de.Decals = CreateDecal(DECAL_409, x, y - (56.2 * RoomScale) + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
 								EntityParent(de\OBJ, e\room\OBJ)
 								
-								TFormPoint(-5000.0, -4409.0, 1578.0, e\room\OBJ, 0)
+								TFormPoint(-5000.0, -4409.0, 1520.0, e\room\OBJ, 0)
 								it.Items = CreateItem("SCP-005", it_scp005, TFormedX(), TFormedY(), TFormedZ())
 								EntityType(it\Collider, HIT_ITEM)
 							EndIf
