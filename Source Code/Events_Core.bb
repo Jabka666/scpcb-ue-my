@@ -4691,7 +4691,7 @@ Function UpdateEvents%()
 							                	  If (Not e\Img) Then
 								            	  PlaySound_Strict(HorrorSFX[11])
 								             	  e\Img = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
-								              	  e\Img = ScaleImage2(e\Img2, MenuScale, MenuScale)
+								              	  e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
                                                                              Else
 						                                  DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
                                                                              EndIf
