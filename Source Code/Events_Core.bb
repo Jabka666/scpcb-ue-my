@@ -2044,18 +2044,6 @@ Function UpdateEvents%()
 										Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True))
 										SqrValue = Sqr(Dist)
 										
-										If Dist < 0.36 And e\EventState3 > 70.0 * 1.0 And e\EventState3 - fps\Factor[0] <= 70.0 * 1.0
-											If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
-												If (Not e\Img)
-													PlaySound_Strict(HorrorSFX[11])
-													e\Img = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
-													e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
-												Else
-													DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
-												EndIf
-											EndIf
-										EndIf
-										
 										me\HeartBeatRate = 150.0
 										me\HeartBeatVolume = Max(3.0 - SqrValue, 0.0) / 3.0
 										SinValue = Sin(Float(MilliSec) / 20.0) + 1.0
@@ -2067,7 +2055,7 @@ Function UpdateEvents%()
 										If Dist < 0.36
 											If me\Sanity < -800.0 Then MakeMeUnplayable()
 											me\Sanity = Max(me\Sanity - (fps\Factor[0] * (1.0 + (0.25 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
-											e\EventState2 = Min(e\EventState2 + fps\Factor[0], 70.0 * 86.0)
+											If e\EventState3 = 1.0 Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 70.0 * 86.0)
 											If e\EventState2 > 70.0 And e\EventState2 - fps\Factor[0] <= 70.0
 												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech0.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 13.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 13.0

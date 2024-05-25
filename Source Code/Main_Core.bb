@@ -6071,6 +6071,24 @@ Function RenderGUI%()
 				Exit
 			EndIf
 		Next
+	ElseIf RID = r_cont2_012
+		For e.Events = Each Events
+			If e\room = PlayerRoom
+				If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 0.36
+					If e\EventState2 < 70.0 And e\EventState3 = 1.0
+						me\BlinkTimer = -10.0
+						If (Not e\Img)
+							PlaySound_Strict(snd_I\HorrorSFX[11])
+							e\Img = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
+							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
+						Else
+							DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
+						EndIf
+					EndIf
+				EndIf
+				Exit
+			EndIf
+		Next
 	EndIf
 	
 	If I_294\Using Then Render294()
