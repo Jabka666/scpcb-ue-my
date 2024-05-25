@@ -39,6 +39,7 @@ Rooms:
 - Inaccessible/broken panels are now red.
 - Levers in Storage Area 6 now share the same positions after usage.
 - Player can now open and close blinds of most windows.
+- Dr. Gears office is now accessible!
 
 - Added a Save point in «cont2_049» observation room.
 
