@@ -879,6 +879,7 @@ End Function
 Function UpdateLauncherScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarHeight%, Value#, Vertical% = False)
 	Local MouseSpeedX# = MouseXSpeed()
 	Local MouseSpeedY# = MouseYSpeed()
+	Local BarHeightHalf% = BarHeight / 2
 	
 	Color(0, 0, 0)
 	UpdateLauncherDownloadButton(BarX, BarY, BarWidth, BarHeight, "")
@@ -886,16 +887,16 @@ Function UpdateLauncherScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarH
 	If (Not Vertical) ; ~ Horizontal
 		If Height > 10
 			Color(255, 255, 255)
-			Rect(BarX + (BarWidth / 2), BarY + 5, 2, BarHeight - 10)
-			Rect(BarX + (BarWidth / 2) - 3, BarY + 5, 2, BarHeight - 10)
-			Rect(BarX + (BarWidth / 2) + 3, BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + BarHeightHalf, BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + BarHeightHalf - 3, BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + BarHeightHalf + 3, BarY + 5, 2, BarHeight - 10)
 		EndIf
 	Else ; ~ Vertical
 		If Width > 10
 			Color(255, 255, 255)
-			Rect(BarX + 4, BarY + (BarHeight / 2), BarWidth - 10, 2)
-			Rect(BarX + 4, BarY + (BarHeight / 2) - 3, BarWidth - 10, 2)
-			Rect(BarX + 4, BarY + (BarHeight / 2) + 3, BarWidth - 10, 2)
+			Rect(BarX + 4, BarY + BarHeightHalf, BarWidth - 10, 2)
+			Rect(BarX + 4, BarY + BarHeightHalf - 3, BarWidth - 10, 2)
+			Rect(BarX + 4, BarY + BarHeightHalf + 3, BarWidth - 10, 2)
 		EndIf
 	EndIf
 	

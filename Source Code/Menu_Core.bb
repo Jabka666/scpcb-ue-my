@@ -2475,6 +2475,7 @@ Global OnSliderID%
 Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	Local ms.MenuSlider, currSlider.MenuSlider
 	Local Slider3Exists% = False
+	Local WidthHalf% = Width / 2
 	
 	For ms.MenuSlider = Each MenuSlider
 		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 3
@@ -2505,7 +2506,7 @@ Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	If ID = OnSliderID
 		If MousePosX <= x + (8 * MenuScale)
 			Value = 0
-		ElseIf (MousePosX >= x + (Width / 2)) And (MousePosX <= x + (Width / 2) + (8 * MenuScale))
+		ElseIf (MousePosX >= x + WidthHalf) And (MousePosX <= x + WidthHalf + (8 * MenuScale))
 			Value = 1
 		ElseIf MousePosX >= x + Width
 			Value = 2

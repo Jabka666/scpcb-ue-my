@@ -457,7 +457,7 @@ Function UpdateGame%()
 				me\BlinkTimer = me\BLINKFREQ
 				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
 				
-				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) * 0.5)
+				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) / 2.0)
 				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
 				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
 			EndIf
@@ -858,16 +858,15 @@ Function UpdateConsole%()
 		Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, cm.ConsoleMsg, itt.ItemTemplates, rt.RoomTemplates
 		Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#, Temp%, i%
 		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
-		Local x%, y%, Width%, Height%
 		Local CoordEx% = 15 * MenuScale
 		
 		ConsoleR = 255 : ConsoleG = 255 : ConsoleB = 255
 		
-		x = 0
-		y = opt\GraphicHeight - 300 * MenuScale
-		Width = opt\GraphicWidth
-		Height = 270 * MenuScale
-		
+		Local x% = 0
+		Local y% = opt\GraphicHeight - 300 * MenuScale
+		Local Width% = opt\GraphicWidth
+		Local Height% = 270 * MenuScale
+		Local HeightHalf% = Height / 2
 		Local ConsoleHeight% = 0
 		Local ScrollBarHeight% = 0
 		
@@ -894,7 +893,7 @@ Function UpdateConsole%()
 					ConsoleScrollDragging = True
 					ConsoleMouseMem = MousePosY
 				ElseIf InBar
-					ConsoleScroll = ConsoleScroll + ((MousePosY - (y + Height)) * ConsoleHeight / Height + (Height / 2))
+					ConsoleScroll = ConsoleScroll + ((MousePosY - (y + Height)) * ConsoleHeight / Height + HeightHalf)
 					ConsoleScroll = ConsoleScroll / 2
 				EndIf
 			EndIf
@@ -943,7 +942,7 @@ Function UpdateConsole%()
 			
 			If ConsoleReissue <> Null
 				ConsoleInput = ConsoleReissue\Txt
-				ConsoleScroll = ReissuePos + (Height / 2)
+				ConsoleScroll = ReissuePos + HeightHalf
 			EndIf
 		EndIf
 		
@@ -981,7 +980,7 @@ Function UpdateConsole%()
 			
 			If ConsoleReissue <> Null
 				ConsoleInput = ConsoleReissue\Txt
-				ConsoleScroll = ReissuePos + (Height / 2)
+				ConsoleScroll = ReissuePos + HeightHalf
 			EndIf
 		EndIf
 		
@@ -2877,7 +2876,7 @@ Function UpdateMouseLook%()
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0)
 		
 		PositionEntity(Camera, EntityX(me\Collider), EntityY(me\Collider) + Up + 0.6 + me\CrouchState * (-0.3), EntityZ(me\Collider))
-		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll * 0.5)
+		RotateEntity(Camera, 0.0, EntityYaw(me\Collider), Roll / 2.0)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
 		Local Temp# = (opt\MouseSensitivity + 0.5)
@@ -3331,8 +3330,10 @@ Function UpdateGUI%()
 			CameraProject(Camera, ButtonPosX, ButtonPosY - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
 			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
-			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
-			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)
+			Local ScaleHalf# = Scale / 2.0
+			
+			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * ScaleHalf
+			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * ScaleHalf
 			
 			If msg\KeyPadMsg <> ""
 				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[0]
@@ -6144,8 +6145,10 @@ Function RenderGUI%()
 			CameraProject(Camera, ButtonPosX, ButtonPosY - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
 			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
-			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * (Scale / 2)
-			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * (Scale / 2)
+			Local ScaleHalf# = Scale / 2.0
+			
+			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * ScaleHalf
+			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * ScaleHalf
 			
 			SetFontEx(fo\FontID[Font_Digital])
 			Color(255, 255, 255)
@@ -6761,12 +6764,14 @@ Function RenderGUI%()
 					Local NAV_HEIGHT% = 256 * MenuScale
 					Local RectSize% = 24 * MenuScale
 					Local RectSizeHalf% = RectSize / 2
+					Local NAV_WIDTH_HALF% = NAV_WIDTH / 2
+					Local NAV_HEIGHT_HALF% = NAV_HEIGHT / 2
 					
 					If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
 						If (MilliSec Mod 800) < 200
 							Color(200, 0, 0)
-							TextEx(x, y + (NAV_HEIGHT / 2) - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
-							TextEx(x, y + (NAV_HEIGHT / 2) - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
+							TextEx(x, y + NAV_HEIGHT_HALF - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
+							TextEx(x, y + NAV_HEIGHT_HALF - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
 						EndIf
 						Return
 					Else
@@ -6820,7 +6825,7 @@ Function RenderGUI%()
 								Color(30, 30, 30)
 							EndIf
 							If (MilliSec Mod 800) < 200 ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS
-								If Offline Then TextEx(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (10 * MenuScale), GetLocalString("msg", "nav.data"))
+								If Offline Then TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), GetLocalString("msg", "nav.data"))
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
 								x1 = x + Cos(YawValue) * (6.0 * MenuScale) : y1 = y - Sin(YawValue) * (6.0 * MenuScale)
@@ -6845,7 +6850,7 @@ Function RenderGUI%()
 												SqrValue = Sqr(Dist)
 												Color(100, 0, 0)
 												Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-												TextEx(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
+												TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
 												SCPs_Found = SCPs_Found + 1
 											EndIf
 										EndIf
@@ -6856,15 +6861,15 @@ Function RenderGUI%()
 										Dist = Rnd(4.0, 8.0)
 										Color(100, 0, 0)
 										Oval(x - (Dist * (1.5 * MenuScale)), y - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
-										TextEx(x - (NAV_WIDTH / 2) + (10 * MenuScale), y - (NAV_HEIGHT / 2) + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
+										TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
 									EndIf
 								EndIf
 							EndIf
 							
 							Color(30, 30, 30)
 							If SelectedItem\State > 0.0 And (NavType = 1 Lor NavType = 310)
-								xTemp = x - (NAV_WIDTH / 2) + (196 * MenuScale)
-								yTemp = y - (NAV_HEIGHT / 2) + (10 * MenuScale)
+								xTemp = x - NAV_WIDTH_HALF + (196 * MenuScale)
+								yTemp = y - NAV_HEIGHT_HALF + (10 * MenuScale)
 								
 								If Offline Then Color(100, 0, 0)
 								Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
@@ -8866,7 +8871,7 @@ Function Update1048AEars()
 		CanSave = 0
 		If I_427\Timer < 70.0 * 360.0
 			If I_1048A\Revert
-				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] * 0.5), 0.0)
+				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
 			Else
 				If (Not I_427\Using)
 					I_1048A\EarGrowTimer = Min(I_1048A\EarGrowTimer + fps\Factor[0], 1100.0)
@@ -8949,7 +8954,7 @@ Function Update427%()
 			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
 			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
 			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
-			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] * 0.5), 0.0)
+			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
 			For i = 0 To 6
 				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0] * I_1025\State[7]), 0.0)
 			Next

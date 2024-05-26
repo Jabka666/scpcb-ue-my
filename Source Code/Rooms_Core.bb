@@ -472,7 +472,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
 			sc\ScriptedCamera = True : sc\ScriptedMonitor = True
-			ScaleSprite(sc\ScrOBJ, 896.0 * 0.5 * RoomScale, 896.0 * 0.5 * RoomScale)
+			ScaleSprite(sc\ScrOBJ, 448.0 * RoomScale, 448.0 * RoomScale)
 			CameraZoom(sc\Cam, 1.5)
 			HideEntity(sc\MonitorOBJ)
 			r\RoomSecurityCams[0] = sc
@@ -1109,7 +1109,7 @@ Function FillRoom%(r.Rooms)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			SpriteViewMode(r\Objects[2], 2)
-			ScaleSprite(r\Objects[2], 182.0 * RoomScale * 0.5, 190.0 * RoomScale * 0.5)
+			ScaleSprite(r\Objects[2], 91.0 * RoomScale, 95.0 * RoomScale)
 			PositionEntity(r\Objects[2], r\x - 640 * RoomScale, r\y + 224.0 * RoomScale, r\z - 208.0 * RoomScale)
 			TurnEntity(r\Objects[2], 0.0, 180.0, 0.0)
 			EntityParent(r\Objects[2], r\OBJ)
@@ -2427,7 +2427,7 @@ Function FillRoom%(r.Rooms)
 			
 			For i = 2 To 3
 				SpriteViewMode(r\Objects[i], 2)
-				ScaleSprite(r\Objects[i], 194.0 * RoomScale * 0.5, 194.0 * RoomScale * 0.5)
+				ScaleSprite(r\Objects[i], 97.0 * RoomScale, 97.0 * RoomScale)
 				PositionEntity(r\Objects[i], r\x - 640.0 * RoomScale, r\y - 4881.0 * RoomScale, r\z + 800.0 * RoomScale)
 				TurnEntity(r\Objects[i], 0.0, 90.0 + (180 * (i = 3)), 0.0)
 				EntityParent(r\Objects[i], r\OBJ)
