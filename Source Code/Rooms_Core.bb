@@ -539,12 +539,14 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ SCP-914 doors
 			d.Doors = CreateDoor(r, r\x - 1037.0 * RoomScale, r\y, r\z + 528.0 * RoomScale, 180.0, True, SCP_914_DOOR)
+			d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[0] = d
 			
 			d.Doors = CreateDoor(r, r\x + 404.0 * RoomScale, r\y, r\z + 528.0 * RoomScale, 180.0, True, SCP_914_DOOR)
+			d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next

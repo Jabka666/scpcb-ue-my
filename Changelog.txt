@@ -92,6 +92,7 @@ Bug Fixes:
 - Fixed Apollyon not hiding the Hud when playing in different languages.
 - Multiple grammatical fixes for SCP-294's drinks.
 - Fixed SCP-049 killing players in «chs\notarget».
+- Fixed SCP-066 closing SCP-914's doors.
 
 v1.2.1
 
