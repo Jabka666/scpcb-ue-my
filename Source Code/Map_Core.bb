@@ -3126,7 +3126,7 @@ Function ClearElevatorPanelTexture%(d.Doors)
 	Next
 End Function
 
-Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True)
+Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True, Blackout% = False)
 	Local n.NPCs, it.Items, de.Decals
 	Local x#, z#, Dist#, Dir#, i%
 	
@@ -3200,14 +3200,40 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					State = State - fps\Factor[0]
 					IsInside = IsInsideElevator(PlayerX, PlayerY, PlayerZ, FirstPivot)
 					If IsInside
-						If (Not ChannelPlaying(door1\SoundCHN2)) Then door1\SoundCHN2 = PlaySound_Strict(snd_I\ElevatorMoveSFX)
-						
-						me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
-						
-						UpdateElevatorPanel(door1)
+						; ~ Not sure if using local ``Blackout`` is a good idea. Better to rewrite this part cause I don't like it. This code was a hot idea, so the code is kinda dumb
+						If Blackout
+							If State > -250.0 Lor State =< -500.0
+								If (Not ChannelPlaying(door1\SoundCHN2))
+									door1\SoundCHN2 = PlaySound_Strict(snd_I\ElevatorMoveSFX)
+									UpdateElevatorPanel(door1)
+								EndIf
+								
+								Local PowerUp% = 1.0 + (State =< -500.0)
+								
+								me\CameraShake = Sin(Abs(State) / (3.0 * PowerUp)) * (0.3 * PowerUp)
+								If State >= -235.0 And State - fps\Factor[0] < -235.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
+							ElseIf State > -500.0
+								If ChannelPlaying(door1\SoundCHN2)
+									PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Bang2.ogg"))
+									me\LightBlink = 6.5
+									StopChannel(door1\SoundCHN2) : door1\SoundCHN2 = 0
+									ClearElevatorPanelTexture(door1)
+									ClearElevatorPanelTexture(door2)
+									me\BigCameraShake = 5.3
+								EndIf
+								If State >= -490.0 And State - fps\Factor[0] < -490.0 Then PlaySound_Strict(snd_I\TeslaPowerUpSFX)
+							EndIf
+						Else
+							If (Not ChannelPlaying(door1\SoundCHN2))
+								door1\SoundCHN2 = PlaySound_Strict(snd_I\ElevatorMoveSFX)
+								UpdateElevatorPanel(door1)
+							EndIf
+							
+							me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
+						EndIf
 					EndIf
 					
-					If State < -500.0
+					If ((Not Blackout) And State < -500.0) Lor State < -1000.0
 						door1\Locked = 1
 						door2\Locked = 0
 						State = 0.0
@@ -3306,11 +3332,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					State = State + fps\Factor[0]
 					IsInside = IsInsideElevator(PlayerX, PlayerY, PlayerZ, SecondPivot)
 					If IsInside
-						If (Not ChannelPlaying(door2\SoundCHN2)) Then door2\SoundCHN2 = PlaySound_Strict(snd_I\ElevatorMoveSFX)
+						If (Not ChannelPlaying(door2\SoundCHN2))
+							door2\SoundCHN2 = PlaySound_Strict(snd_I\ElevatorMoveSFX)
+							UpdateElevatorPanel(door2)
+						EndIf
 						
 						me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
-						
-						UpdateElevatorPanel(door2)
 					EndIf
 					
 					If State > 500.0
