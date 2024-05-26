@@ -103,7 +103,7 @@ Function ResetInput%()
 	mo\MouseUp1 = False
 	mo\LastMouseHit1 = False
 	GrabbedEntity = 0
-	Input_ResetTime = 10.0
+	Input_ResetTime = 20.0
 End Function
 
 mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
