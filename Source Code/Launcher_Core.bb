@@ -934,7 +934,10 @@ End Function
 
 Function LimitTextWithImage%(Txt$, x%, y%, Width%, Img%, Frame% = 0)
 	DrawBlock(Img, x, y + (StringHeight(Txt) / 2) - (ImageHeight(Img) / 2) - 1, Frame)
-	LimitText(Txt, x + 3 + ImageWidth(Img), y, Width - ImageWidth(Img) - 3)
+	
+	Local ImgWidth% = ImageWidth(Img)
+	
+	LimitText(Txt, x + 3 + ImgWidth, y, Width - ImgWidth - 3)
 End Function
 
 Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, ColorR2%, ColorG2%, ColorB2%)
