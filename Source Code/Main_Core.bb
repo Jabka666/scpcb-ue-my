@@ -219,8 +219,11 @@ Function CatchErrors%(Location$)
 End Function
 
 Repeat
-	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
-	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
+	Local TotalVidMemory% = TotalVidMem()
+	Local TotalPhysMemory% = TotalPhys()
+	
+	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMemory / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMemory / 1024), "{2}"))
+	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhysMemory / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhysMemory / 1024), "{1}"))
 	
 	Cls()
 	
@@ -5847,8 +5850,12 @@ Function RenderDebugHUD%()
 			EndIf
 			
 			TextEx(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{0}"), (TotalVidMem() / 1024), "{1}"))
-			TextEx(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
+			
+			Local TotalPhysMemory% = TotalPhys()
+			Local TotalVidMemory% = TotalVidMem()
+			
+			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMemory / 1024) - (AvailVidMem() / 1024)), "{0}"), (TotalVidMemory / 1024), "{1}"))
+			TextEx(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhysMemory / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhysMemory / 1024), "{1}"))
 			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
 			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
 			;[End Block]
@@ -6094,8 +6101,6 @@ Function RenderGUI%()
 	If I_294\Using Then Render294()
 	If SelectedDifficulty\Name <> GetLocalString("menu", "new.apollyon") And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
-			Local CoordEx% = 32 * MenuScale
-			
 			If d_I\ClosestButton <> 0 Then Render3DHandIcon(t\IconID[5], d_I\ClosestButton, -1)
 			If ClosestItem <> Null Then Render3DHandIcon(t\IconID[6], ClosestItem\Collider, -1)
 			
@@ -8529,7 +8534,7 @@ Function UpdateVomit%()
 		mo\Mouse_Y_Speed_1 = mo\Mouse_Y_Speed_1 + Max((1.0 + me\VomitTimer / 10.0), 0.0)
 		
 		If me\VomitTimer < -15.0
-			FreeSound_Strict(snd_I\VomitSFX)
+			FreeSound_Strict(snd_I\VomitSFX) : snd_I\VomitSFX = 0
 			me\VomitTimer = 0.0
 			If (Not me\Terminated) Then PlaySound_Strict(BreathSFX(0, 0), True)
 			me\Injuries = me\PrevInjuries

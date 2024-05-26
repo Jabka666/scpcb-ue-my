@@ -6214,9 +6214,7 @@ Function HideChunks%()
 	Local ch.Chunk, i%
 	
 	For ch.Chunk = Each Chunk
-		If (Not ch\IsSpawnChunk)
-			RemoveChunk(ch)
-		EndIf
+		If (Not ch\IsSpawnChunk) Then RemoveChunk(ch)
 	Next
 End Function
 
@@ -6233,7 +6231,6 @@ End Function
 
 Function RemoveChunkPart%(chp.ChunkPart)
 	Local i%
-	Local ChunkAmount% = JsonGetArraySize(SCP1499Chunks)
 	
 	For i = 0 To 127
 		If chp\OBJ[i] <> 0 Then FreeEntity(chp\OBJ[i]) : chp\OBJ[i] = 0

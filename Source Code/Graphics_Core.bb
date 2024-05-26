@@ -442,9 +442,9 @@ Function RenderBlur%(Power#)
 End Function
 
 Function FreeBlur%()
-	If ArkBlurTexture <> 0 Then ArkBlurTexture = 0
-	If ArkBlurImage <> 0 Then FreeEntity(ArkBlurImage) : ArkBlurImage = 0
-	If ArkBlurCam <> 0 Then FreeEntity(ArkBlurCam) : ArkBlurCam = 0
+	ArkBlurTexture = 0
+	FreeEntity(ArkBlurImage) : ArkBlurImage = 0
+	FreeEntity(ArkBlurCam) : ArkBlurCam = 0
 End Function
 
 Function PlayStartupVideos%()
