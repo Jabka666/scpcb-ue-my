@@ -466,6 +466,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
+			EntityPickMode(n\OBJ, 2) ; ~ We can use that because SCP-1048 is a fully scripted NPC
 			Temp = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]

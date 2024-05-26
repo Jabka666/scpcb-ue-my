@@ -5047,10 +5047,9 @@ Function UpdateEvents%()
 									EntityParent(SelectedItem\Collider, 0)
 									
 									PickItem(SelectedItem)
-									
 									RemoveNPC(e\room\NPC[0])
-									
 									RemoveEvent(e)
+									Return
 								Else
 									CreateMsg(GetLocalString("msg", "cantcarry"))
 								EndIf
