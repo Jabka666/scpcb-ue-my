@@ -6438,7 +6438,7 @@
     },
     {
         "name": ["Ketup", "Ketchup"],
-        "color": [555, 555, 555],
+        "color": [255, 55, 55],
         "alpha": 1.0,
         "glow": false,
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -7367,7 +7367,7 @@
         "glow": false,
         "dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 
-        "drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
+        "drink_sound": "SFX\\SCP\\173\\NeckSnap0.ogg",
         "drink_message": "You don't know what flavour it is, but it tastes delicious.",
 
 
