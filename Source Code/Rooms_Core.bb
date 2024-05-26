@@ -2504,19 +2504,15 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Storage room doors
 			d.Doors = CreateDoor(r, r\x + 272.0 * RoomScale, r\y - 3552.0 * RoomScale, r\z + 104.0 * RoomScale, 90.0, True)
-			d\Locked = 1
 			r\RoomDoors.Doors[4] = d
 			
 			d.Doors = CreateDoor(r, r\x + 272.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z - 1824.0 * RoomScale, 90.0)
-			d\Locked = 1
 			r\RoomDoors.Doors[5] = d
 			
 			d.Doors = CreateDoor(r, r\x - 272.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z + 1824.0 * RoomScale, 90.0, True)
-			d\Locked = 1
 			r\RoomDoors.Doors[6] = d
 			
 			d.Doors = CreateDoor(r, r\x - 272.0 * RoomScale, r\y - 3552.0 * RoomScale, r\z + 98.0 * RoomScale, -90.0, False, BIG_DOOR, KEY_CARD_3)
-			d\MTFClose = False : d\Locked = 1
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.91, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.2 , True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.85, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.2, True)
 			RotateEntity(d\Buttons[0], 0.0, -90.0, 0.0, True)
