@@ -5999,14 +5999,15 @@ Global SCP1499Chunks% = JsonGetArray(JsonParseFromFile(SCP1499ChunksFile))
 
 Function SetChunkDataValues%()
 	Local StrTemp$, i%, j%
+	Local ChunkArray% = JsonGetArraySize(SCP1499Chunks)
 	
 	StrTemp = ""
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
 	For i = 0 To 62 Step 2
 		For j = 0 To 62 Step 2
-			CHUNKDATA[i + (j * 64)] = Rand(0, JsonGetArraySize(SCP1499Chunks) - 1)
-			CHUNKDATA[(i + 1) + ((j + 1) * 64)] = Rand(0, JsonGetArraySize(SCP1499Chunks) - 1)
+			CHUNKDATA[i + (j * 64)] = Rand(0, ChunkArray - 1)
+			CHUNKDATA[(i + 1) + ((j + 1) * 64)] = Rand(0, ChunkArray - 1)
 		Next
 	Next
 	
