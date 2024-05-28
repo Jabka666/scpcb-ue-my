@@ -7347,8 +7347,8 @@ Function UpdateDimension106%()
 						
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)
-								Teleport = True
 								Random = Rand(11, 32+ (Temp * 8))
+								Teleport = True
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
 									PlaySound_Strict(snd_I\HorrorSFX[8])
@@ -7507,8 +7507,8 @@ Function UpdateDimension106%()
 						
 						; ~ Check if player is at the sinkhole (the exit from the trench room)
 						If EntityY(me\Collider) < 24.5
-							Teleport = True
 							Random = 13
+							Teleport = True
 						EndIf
 						;[End Block]
 					Case PD_ExitRoom
@@ -7569,8 +7569,8 @@ Function UpdateDimension106%()
 									EndIf
 								Next
 								If (Not RoomExist)
-									Teleport = True
 									Random = Rand(16, 22)
+									Teleport = True
 								EndIf
 							EndIf
 						EndIf
@@ -7674,7 +7674,7 @@ Function UpdateDimension106%()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
-							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.0
+							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.5
 							For d.Doors = Each Doors
 								If d\room = e\room
 									d\Open = False
@@ -7688,8 +7688,8 @@ Function UpdateDimension106%()
 							Else
 								opt\CameraFogFar = 6.0
 							EndIf
-							Teleport = True
 							Random = Rand(13, 22)
+							Teleport = True
 						EndIf
 						;[End Block]
 				End Select
@@ -7784,40 +7784,39 @@ Function UpdateDimension106%()
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = RoomID
 									RoomExist = True
-									If RoomExist
-										GiveAchievement(AchvPD)
-										
-										IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
-										
-										me\BlinkTimer = -10.0
-										
-										If r\RoomCenter <> 0
-											TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.4, EntityZ(r\RoomCenter, True), 0.3, True)
-										Else
-											TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.4, EntityZ(r\OBJ), 0.3, True)
-										EndIf
-										TeleportToRoom(r)
-										
-										n_I\Curr106\State = 10000.0 : n_I\Curr106\Idle = 0
-										
-										If (Not LCZ)
-											For e2.Events = Each Events
-												If e2\EventID = e_room2_sl
-													e2\EventState3 = 0.0
-													UpdateLever(e2\room\RoomLevers[0]\OBJ)
-													RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
-													Exit
-												EndIf
-											Next
-										EndIf
-										
-										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-										If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+									
+									GiveAchievement(AchvPD)
+									
+									IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
+									
+									me\BlinkTimer = -10.0
+									
+									If r\RoomCenter <> 0
+										TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.4, EntityZ(r\RoomCenter, True), 0.3, True)
+									Else
+										TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.4, EntityZ(r\OBJ), 0.3, True)
 									EndIf
-									e\EventState = 0.0
-									e\EventState3 = 0.0
-									Exit
+									TeleportToRoom(r)
+									
+									n_I\Curr106\State = 10000.0 : n_I\Curr106\Idle = 0
+									
+									If (Not LCZ)
+										For e2.Events = Each Events
+											If e2\EventID = e_room2_sl
+												e2\EventState3 = 0.0
+												UpdateLever(e2\room\RoomLevers[0]\OBJ)
+												RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
+												Exit
+											EndIf
+										Next
+									EndIf
+									
+									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+									If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 								EndIf
+								e\EventState = 0.0
+								e\EventState3 = 0.0
+								Exit
 							Next
 							If (Not RoomExist)
 								PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
@@ -7851,7 +7850,7 @@ Function UpdateDimension106%()
 							PositionEntity(me\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True))
 							ResetEntity(me\Collider)
 							
-							n_I\Curr106\Speed = n_I\Curr106\Speed / 3.0
+							n_I\Curr106\Speed = n_I\Curr106\Speed / 3.5
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[23], True), EntityY(e\room\Objects[23], True), EntityZ(e\room\Objects[23], True))
 							ResetEntity(n_I\Curr106\Collider)
 							
