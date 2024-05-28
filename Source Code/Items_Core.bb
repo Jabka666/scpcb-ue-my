@@ -2136,18 +2136,21 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Cup", it_cup, x, y, z, 255.0 - item\R, 255.0 - item\G, 255.0 - item\B)
 					it2\Name = item\Name
+					it2\DisplayName = item\DisplayName
 					it2\State = item\State
 					;[End Block]
 				Case FINE
 					;[Block]
 					it2.Items = CreateItem("Cup", it_cup, x, y, z, Min(item\R * Rnd(0.9, 1.1), 255.0), Min(item\G * Rnd(0.9, 1.1), 255.0), Min(item\B * Rnd(0.9, 1.1), 255.0))
 					it2\Name = item\Name
+					it2\DisplayName = item\DisplayName
 					it2\State = item\State + 1.0
 					;[End Block]
 				Case VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Cup", it_cup, x, y, z, Min(item\R * Rnd(0.5, 1.5), 255.0), Min(item\G * Rnd(0.5, 1.5), 255.0), Min(item\B * Rnd(0.5, 1.5), 255.0))
 					it2\Name = item\Name
+					it2\DisplayName = item\DisplayName
 					it2\State = item\State * 2.0
 					If Rand(5) = 1 Then me\ExplosionTimer = 135.0
 					;[End Block]
