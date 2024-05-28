@@ -3611,9 +3611,11 @@ Function UseDoor%(PlaySFX% = True)
 		
 		If d_I\ClosestDoor\Code = Str(CODE_DR_MAYNARD)
 			GiveAchievement(AchvMaynard)
-		ElseIf d_I\ClosestDoor\Code = CODE_DR_HARP
+		ElseIf d_I\ClosestDoor\Code = Str(CODE_DR_GEARS)
+			GiveAchievement(AchvGears)
+		ElseIf d_I\ClosestDoor\Code = Str(CODE_DR_HARP)
 			GiveAchievement(AchvHarp)
-		ElseIf d_I\ClosestDoor\Code = CODE_O5_COUNCIL
+		ElseIf d_I\ClosestDoor\Code = Str(CODE_O5_COUNCIL)
 			GiveAchievement(AchvO5)
 		EndIf
 	Else
