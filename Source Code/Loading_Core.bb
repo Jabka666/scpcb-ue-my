@@ -2078,6 +2078,8 @@ End Type
 Global me.Player
 
 Function LoadData%()
+	Local TempStr$
+	
 	SubFile = JsonParseFromFile(SubtitlesFile)
 	LocalSubFile = JsonParseFromFile(lang\LanguagePath + SubtitlesFile)
 	SubColors = JsonGetValue(SubFile, "colors")
@@ -2136,6 +2138,19 @@ Function LoadData%()
 	igm.InGameMenu = New InGameMenu
 	
 	t.Textures = New Textures
+	
+	If SelectedCustomMap = Null
+		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
+	Else
+		Local Name$ = ConvertToUTF8(SelectedCustomMap\Name)
+		
+		If Len(Name) > 15
+			TempStr = GetLocalString("menu", "new.map") + Left(Name, 14) + ".."
+		Else
+			TempStr = GetLocalString("menu", "new.map") + Name
+		EndIf
+	EndIf
+	SetErrorMsg(6, TempStr)
 End Function
 
 Global Camera%

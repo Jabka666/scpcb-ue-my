@@ -23,6 +23,14 @@ Function SaveGame%(File$)
 	
 	WriteString(f, VersionNumber)
 	
+	If SelectedCustomMap = Null
+		WriteByte(f, 0)
+		WriteString(f, RandomSeed)
+	Else
+		WriteByte(f, 1)
+		WriteString(f, SelectedCustomMap\Name)
+	EndIf
+	
 	WriteString(f, Str(CODE_DR_MAYNARD))
 	WriteString(f, Str(CODE_O5_COUNCIL))
 	WriteString(f, Str(CODE_MAINTENANCE_TUNNELS))
@@ -522,11 +530,14 @@ Function LoadGame%(File$)
 	
 	GameSaved = True
 	
-	StrTemp = ReadString(f)
-	StrTemp = ReadString(f)
+	ReadString(f)
+	ReadString(f)
 	
 	StrTemp = ReadString(f)
 	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	
+	ReadByte(f)
+	ReadString(f)
 	
 	CODE_DR_MAYNARD = Int(ReadString(f))
 	CODE_O5_COUNCIL = Int(ReadString(f))
@@ -1360,11 +1371,14 @@ Function LoadGameQuick%(File$)
 	me\Playable = True
 	me\SelectedEnding = -1
 	
-	StrTemp = ReadString(f)
-	StrTemp = ReadString(f)
+	ReadString(f)
+	ReadString(f)
 	
 	StrTemp = ReadString(f)
 	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	
+	ReadByte(f)
+	ReadString(f)
 	
 	me\DropSpeed = -0.1
 	me\HeadDropSpeed = 0.0
@@ -2182,6 +2196,7 @@ Type Save
 	Field Time$
 	Field Date$
 	Field Version$
+	Field Seed$
 End Type
 
 Global CurrSave.Save
@@ -2217,6 +2232,11 @@ Function LoadSavedGames%()
 			newsv\Time = ReadString(f)
 			newsv\Date = ReadString(f)
 			newsv\Version = ReadString(f)
+			If ReadByte(f) = 0
+				newsv\Seed = ReadString(f)
+			Else
+				newsv\Seed = "mc_" + ReadString(f)
+			EndIf
 			
 			CloseFile(f)
 			SavedGamesAmount = SavedGamesAmount + 1

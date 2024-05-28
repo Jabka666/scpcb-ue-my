@@ -273,16 +273,6 @@ Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
 	Local i%, TempStr$
 	
-	If SelectedCustomMap = Null
-		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
-	Else
-		If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15
-			TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..."
-		Else
-			TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedCustomMap\Name)
-		EndIf
-	EndIf
-	SetErrorMsg(6, TempStr)
 	SetErrorMsg(7, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\RoomID))
 	
 	For ev.Events = Each Events
@@ -7969,7 +7959,7 @@ Function RenderMenu%()
 				TempStr = GetLocalString("menu", "new.seed") + RandomSeed
 			Else
 				If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15
-					TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..."
+					TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + ".."
 				Else
 					TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedCustomMap\Name)
 				EndIf

@@ -929,7 +929,7 @@ Function LimitText%(Txt$, x%, y%, Width%)
 		TextEx(x, y, Txt, 0, 0)
 	Else
 		LetterWidth = TextLength / Len(Txt)
-		TextEx(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "...", 0, 0)
+		TextEx(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "..", 0, 0)
 	EndIf
 End Function
 

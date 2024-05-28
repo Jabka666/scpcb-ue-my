@@ -382,9 +382,9 @@ Function UpdateMainMenu%()
 								If i >= (5 * mm\CurrMenuPage)
 									If DelSave = Null
 										If CurrSave\Version <> VersionNumber
-											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True, 255, 0, 0)
+											UpdateMenuButton(x + (300 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True, 255, 0, 0)
 										Else
-											If UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"))
+											If UpdateMenuButton(x + (300 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"))
 												LoadEntities()
 												LoadSounds()
 												LoadGame(CurrSave\Name)
@@ -395,17 +395,17 @@ Function UpdateMainMenu%()
 											EndIf
 										EndIf
 										
-										If UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"))
+										If UpdateMenuButton(x + (420 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"))
 											DelSave = CurrSave
 											Exit
 										EndIf
 									Else
 										If CurrSave\Version <> VersionNumber
-											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True, 255, 0, 0)
+											UpdateMenuButton(x + (300 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True, 255, 0, 0)
 										Else
-											UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True)
+											UpdateMenuButton(x + (300 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True)
 										EndIf
-										UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), Font_Default, False, True)
+										UpdateMenuButton(x + (420 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), Font_Default, False, True)
 									EndIf
 									If CurrSave = Last Save Then Exit
 									y = y + (80 * MenuScale)
@@ -454,19 +454,19 @@ Function UpdateMainMenu%()
 								If CurrCustomMap = Null Then Exit
 								If i >= (5 * mm\CurrMenuPage)
 									If DelCustomMap = Null
-										If UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"))
+										If UpdateMenuButton(x + (300 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"))
 											SelectedCustomMap = CurrCustomMap
 											mm\MainMenuTab = MainMenuTab_New_Game
 											ShouldDeleteGadgets = True
 										EndIf
 										
-										If UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"))
+										If UpdateMenuButton(x + (420 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"))
 											DelCustomMap = CurrCustomMap
 											Exit
 										EndIf
 									Else
-										UpdateMenuButton(x + (280 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True)
-										UpdateMenuButton(x + (400 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), Font_Default, False, True)
+										UpdateMenuButton(x + (300 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "btnload"), Font_Default, False, True)
+										UpdateMenuButton(x + (420 * MenuScale), y + (20 * MenuScale), 100 * MenuScale, 30 * MenuScale, GetLocalString("menu", "delete"), Font_Default, False, True)
 									EndIf
 									If CurrCustomMap = Last CustomMaps Then Exit
 									y = y + (80 * MenuScale)
@@ -999,7 +999,7 @@ Function RenderMainMenu%()
 	
 	Local x%, y%, Width%, Height%, Temp%, i%, n%
 	Local tX#, tY#, tW#, tH#
-	Local TempStr$, TempStr2$
+	Local TempStr$, TempStr2$, Name$
 	
 	If (Not OnPalette)
 		ShowPointer()
@@ -1155,10 +1155,11 @@ Function RenderMainMenu%()
 						RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
 						
 						Color(255, 0, 0)
-						If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15
-							TempStr2 = Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..."
+						Name = ConvertToUTF8(SelectedCustomMap\Name)
+						If Len(Name) > 15
+							TempStr2 = Left(Name, 14) + ".."
 						Else
-							TempStr2 = ConvertToUTF8(SelectedCustomMap\Name)
+							TempStr2 = Name
 						EndIf
 						TextEx(x + (250 * MenuScale), y + (70 * MenuScale), TempStr2, True, True)
 					EndIf
@@ -1260,7 +1261,6 @@ Function RenderMainMenu%()
 						
 						TextEx(x + (600 * MenuScale), y + (90 * MenuScale), Format(GetLocalString("menu", "new.invslots"), SelectedDifficulty\InventorySlots))
 						
-						
 						Select SelectedDifficulty\OtherFactors
 							Case EASY
 								;[Block]
@@ -1324,10 +1324,22 @@ Function RenderMainMenu%()
 									Color(255, 255, 255)
 								EndIf
 								
-								TextEx(x + (20 * MenuScale), y + (10 * MenuScale), ConvertToUTF8(CurrSave\Name))
+								Name = ConvertToUTF8(CurrSave\Name)
+								If Len(Name) > 10
+									TempStr2 = Left(Name, 9) + ".."
+								Else
+									TempStr2 = Name
+								EndIf
+								TextEx(x + (20 * MenuScale), y + (10 * MenuScale), TempStr2)
+								If Len(CurrSave\Seed) > 16
+									TempStr2 = Left(CurrSave\Seed, 15) + ".."
+								Else
+									TempStr2 = CurrSave\Seed
+								EndIf
+								TextEx(x + (150 * MenuScale), y + (10 * MenuScale), TempStr2)
 								TextEx(x + (20 * MenuScale), y + (30 * MenuScale), CurrSave\Time)
-								TextEx(x + (120 * MenuScale), y + (30 * MenuScale), CurrSave\Date)
-								TextEx(x + (20 * MenuScale), y + (50 * MenuScale), CurrSave\Version)
+								TextEx(x + (150 * MenuScale), y + (30 * MenuScale), CurrSave\Date)
+								TextEx(x + (20 * MenuScale), y + (50 * MenuScale), "v" + CurrSave\Version)
 								
 								If CurrSave = Last Save Then Exit
 								y = y + (80 * MenuScale)
@@ -1378,10 +1390,11 @@ Function RenderMainMenu%()
 							If i >= (5 * mm\CurrMenuPage)
 								RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 								
-								If Len(ConvertToUTF8(CurrCustomMap\Name)) > 20
-									TextEx(x + (20 * MenuScale), y + (15 * MenuScale), Left(ConvertToUTF8(CurrCustomMap\Name), 19) + "...")
+								Name = ConvertToUTF8(CurrCustomMap\Name)
+								If Len(Name) > 20
+									TextEx(x + (20 * MenuScale), y + (15 * MenuScale), Left(Name, 19) + "..")
 								Else
-									TextEx(x + (20 * MenuScale), y + (15 * MenuScale), ConvertToUTF8(CurrCustomMap\Name))
+									TextEx(x + (20 * MenuScale), y + (15 * MenuScale), Name)
 								EndIf
 								TextEx(x + (20 * MenuScale), y + (45 * MenuScale), ConvertToUTF8(CurrCustomMap\Author))
 								
@@ -3155,7 +3168,9 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	Local Txt$[6]
 	
 	If Right(MapName, 6) = "cbmap2"
-		Txt[0] = Left(ConvertToUTF8(MapName), Len(ConvertToUTF8(MapName)) - 7)
+		Local Name$ = ConvertToUTF8(MapName)
+		
+		Txt[0] = Left(Name, Len(Name) - 7)
 		
 		Local f% = OpenFile_Strict(CustomMapsPath + MapName)
 		Local Author$ = ConvertToUTF8(ReadLine(f))

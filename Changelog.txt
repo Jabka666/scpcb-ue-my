@@ -4,6 +4,8 @@ General:
 - Added new console commands: «roomlist» and «itemlist».
 - Added new hiss sound for white gas.
 - Added viewable Omni Key Card chances to Debug Hud 3.
+- Added seed/custom map name to Load Game page.
+
 - Add console text for «427state» command.
 - SCP-008 can now infect players not wearing a gas mask even if they are not bleeding.
 - Added SCP-458.
