@@ -3793,53 +3793,51 @@ Function UpdateEvents%()
 						If e\EventState = 1.0
 							If e\room\RoomEmitters[7] = Null
 								For i = 0 To 7
-									If e\room\RoomEmitters[i] = Null And Rand(100) = 1
-										Select i
-											Case 0
-												;[Block]
-												x = 813.0
-												z = -152.0
-												;[End Block]
-											Case 1
-												;[Block]
-												x = 818.0
-												z = 147.0
-												;[End Block]
-											Case 2
-												;[Block]
-												x = 621.0
-												z = 341.0
-												;[End Block]
-											Case 3
-												;[Block]
-												x = 327.0
-												z = 349.0
-												;[End Block]
-											Case 4
-												;[Block]
-												x = 137.0
-												z = 143.0
-												;[End Block]
-											Case 5
-												;[Block]
-												x = 137.0
-												z = -155.0
-												;[End Block]
-											Case 6
-												;[Block]
-												x = 330.0
-												z = -346.0
-												;[End Block]
-											Case 7
-												;[Block]
-												x = 635.0
-												z = -346.0
-												;[End Block]
-										End Select
-										y = 3010.0
-										TFormPoint(x, y, z, e\room\OBJ, 0)
-										e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 10)
-									EndIf
+									Select i
+										Case 0
+											;[Block]
+											x = 813.0
+											z = -152.0
+											;[End Block]
+										Case 1
+											;[Block]
+											x = 818.0
+											z = 147.0
+											;[End Block]
+										Case 2
+											;[Block]
+											x = 621.0
+											z = 341.0
+											;[End Block]
+										Case 3
+											;[Block]
+											x = 327.0
+											z = 349.0
+											;[End Block]
+										Case 4
+											;[Block]
+											x = 137.0
+											z = 143.0
+											;[End Block]
+										Case 5
+											;[Block]
+											x = 137.0
+											z = -155.0
+											;[End Block]
+										Case 6
+											;[Block]
+											x = 330.0
+											z = -346.0
+											;[End Block]
+										Case 7
+											;[Block]
+											x = 635.0
+											z = -346.0
+											;[End Block]
+									End Select
+									y = 3010.0
+									TFormPoint(x, y, z, e\room\OBJ, 0)
+									e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 10)
 								Next
 							EndIf
 						Else
