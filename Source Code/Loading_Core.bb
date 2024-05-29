@@ -1261,7 +1261,7 @@ Music[28] = "MaintenanceTunnels"
 Music[29] = "1123Chamber"
 Music[30] = "008Chamber"
 Music[31] = "008Cutscene"
-Music[32] = "035PreChamber"
+Music[32] = "012Chamber"
 
 Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)

@@ -1934,7 +1934,7 @@ Function UpdateEvents%()
 												InjurePlayer(0.3, 0.001, 500.0)
 												CreateMsg(GetLocalString("msg", "008.173"))
 											EndIf
-											PlaySound2(LoadTempSound("SFX\Room\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
+											e\SoundCHN2 = PlaySound2(LoadTempSound("SFX\Room\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 											
 											e\EventState2 = 1.0
 										EndIf
@@ -2003,10 +2003,8 @@ Function UpdateEvents%()
 									e\EventState = 1.0
 								EndIf
 							Else
-								If e\Sound = 0 Then LoadEventSound(e, "SFX\Music\012Golgotha.ogg")
+								If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Music\012Golgotha.ogg")
 								e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[0])
-								
-								If e\Sound2 = 0 Then LoadEventSound(e, "SFX\Music\012Chamber.ogg", 1)
 								
 								e\EventState = CurveValue(90.0, e\EventState, 500)
 								PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), (-130.0 - (448.0 * Sin(e\EventState))) * RoomScale, EntityZ(e\room\Objects[0], True), True)
@@ -2030,7 +2028,7 @@ Function UpdateEvents%()
 										
 										me\RestoreSanity = False
 										
-										e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, e\room\Objects[0], 10.0, e\EventState2 / (86.0 * 70.0))
+										ShouldPlay = 32
 										
 										Pvt = CreatePivot()
 										PositionEntity(Pvt, EntityX(Camera), EntityY(e\room\Objects[0], True) - 0.05, EntityZ(Camera))
@@ -2057,11 +2055,11 @@ Function UpdateEvents%()
 											me\Sanity = Max(me\Sanity - (fps\Factor[0] * (1.0 + (0.25 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
 											If e\EventState3 = 1.0 Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 70.0 * 86.0)
 											If e\EventState2 > 70.0 And e\EventState2 - fps\Factor[0] <= 70.0
-												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech0.ogg"), True)
+												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech0.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 13.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 13.0
 												CreateMsg(GetLocalString("msg", "012_1"))
 												InjurePlayer(0.5)
-												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"), True)
+												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 31.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 31.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(2).png")
 												EntityTexture(e\room\Objects[3], Tex)
@@ -2069,18 +2067,18 @@ Function UpdateEvents%()
 												
 												CreateMsg(GetLocalString("msg", "012_2"))
 												me\Injuries = Max(me\Injuries, 1.5)
-												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(2, 3) + ".ogg"), True)
+												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(2, 3) + ".ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 49.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 49.0
 												CreateMsg(GetLocalString("msg", "012_3"))
 												InjurePlayer(0.3)
-												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech4.ogg"), True)
+												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech4.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 63.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 63.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(3).png")
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex)
 												
 												InjurePlayer(0.5)
-												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"), True)
+												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 74.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 74.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(4).png")
 												EntityTexture(e\room\Objects[3], Tex)
@@ -2089,7 +2087,7 @@ Function UpdateEvents%()
 												CreateMsg(GetLocalString("msg", "012_4"))
 												me\CameraShake = 2.0
 												InjurePlayer(0.8)
-												PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
+												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
 												PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 												If (Not me\Crouch) Then SetCrouch(True)
 												
@@ -2141,7 +2139,6 @@ Function UpdateEvents%()
 						If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 						If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 						If ChannelPlaying(e\SoundCHN2) Then StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-						If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 					EndIf
 				EndIf
 				;[End Block]
@@ -2190,7 +2187,7 @@ Function UpdateEvents%()
 								e\room\NPC[0] = n_I\Curr049
 							EndIf
 							
-							PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
+							e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
 							If EntityDistanceSquared(e\room\Objects[1], me\Collider) < EntityDistanceSquared(e\room\Objects[3], me\Collider)
 								TFormPoint(2720.0, -3516.0, 1824.0, e\room\OBJ, 0)
 								it.Items = CreateItem("Research Sector-02 Scheme", it_paper, TFormedX(), TFormedY(), TFormedZ())
@@ -2337,12 +2334,6 @@ Function UpdateEvents%()
 								PointEntity(me\Collider, Pvt)
 								PointEntity(Camera, Pvt, EntityRoll(Camera))
 								FreeEntity(Pvt) : Pvt = 0
-								
-								If me\Terminated
-									RemoveEvent(e)
-								Else
-									If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(e\Sound, True)
-								EndIf
 							EndIf
 						EndIf
 					EndIf
@@ -2695,7 +2686,7 @@ Function UpdateEvents%()
 							PointEntity(e\room\NPC[0]\Collider, me\Collider)
 							AnimateNPC(e\room\NPC[0], 27.0, 54.0, 0.5, False)
 							If e\room\NPC[0]\Frame >= 54.0
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
+								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
 								
 								me\BlinkTimer = -10.0
 								me\BlurTimer = 500.0
@@ -2759,9 +2750,6 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						GiveAchievement(Achv1123)
-						
-						StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-						If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 						
 						RemoveNPC(e\room\NPC[0])
 						FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
@@ -3690,20 +3678,20 @@ Function UpdateEvents%()
 								For i = 0 To 1
 									EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[i], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN])
 								Next
+								EntityTexture(e\room\RoomDoors[0]\Buttons[0], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
 								
-								PlaySound_Strict(LoadTempSound("SFX\Room\ElevatorDeath.ogg"))
+								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\ElevatorDeath.ogg"))
 								
 								e\EventState = 3.0
 							EndIf
-						ElseIf e\EventState < 70.0 * 13.0
+						Else
 							e\EventState = e\EventState + fps\Factor[0]
-							EntityTexture(e\room\RoomDoors[0]\Buttons[0], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
 							If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4
 								me\BigCameraShake = 7.4 - (e\EventState / 70.0)
 								RemoveNPC(e\room\NPC[0])
 							ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
 								me\BigCameraShake = 10.6 - (e\EventState / 70.0)
-							ElseIf e\EventState >= 70.0 * 13.0
+							ElseIf e\EventState >= 70.0 * 13.0 And (Not ChannelPlaying(e\SoundCHN))
 								For i = 0 To 1
 									EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[i], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
 								Next
@@ -3741,7 +3729,7 @@ Function UpdateEvents%()
 				
 				If PlayerRoom = e\room
 					TurnEntity(e\room\Objects[0], e\EventState3 * fps\Factor[0], 0.0, 0.0)
-					If e\EventState3 > 0.01 Then e\room\SoundCHN = LoopSound2(RoomAmbience[8], e\room\SoundCHN, Camera, e\room\Objects[0], 5.0, (e\EventState3 / 4.0))
+					If e\EventState3 > 0.01 Then e\SoundCHN = LoopSound2(RoomAmbience[8], e\SoundCHN, Camera, e\room\Objects[0], 5.0, (e\EventState3 / 4.0))
 					e\EventState3 = CurveValue(e\EventState2 * 5.0, e\EventState3, 150.0)
 				EndIf
 				
@@ -3753,9 +3741,9 @@ Function UpdateEvents%()
 							e\EventState3 = e\EventState2 * 5.0
 						Else
 							If Temp = 0.0 And e\EventState2 = 1.0 ; ~ Turn on the fan
-								PlaySound2(LoadTempSound("SFX\Ambient\Room Ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
+								e\SoundCHN2 = PlaySound2(LoadTempSound("SFX\Ambient\Room Ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
 							ElseIf Temp = 1.0 And e\EventState2 = 0.0 ; ~ Turn off the fan
-								PlaySound2(LoadTempSound("SFX\Ambient\Room Ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
+								e\SoundCHN2 = PlaySound2(LoadTempSound("SFX\Ambient\Room Ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
 							EndIf
 						EndIf
 						e\EventState = 70.0 * Rnd(15.0, 30.0)
@@ -4054,7 +4042,8 @@ Function UpdateEvents%()
 							UpdateRedLight(e\room\Objects[1], 100, 50)
 							e\EventState2 = e\EventState2 + fps\Factor[0]
 							If e\EventState2 >= 35.0
-								PlaySound2(snd_I\TeslaShockSFX, Camera, e\room\Objects[0])
+								StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
+								e\SoundCHN2 = PlaySound2(snd_I\TeslaShockSFX, Camera, e\room\Objects[0])
 								e\EventState = 2.0
 							EndIf
 							;[End Block]
@@ -4083,7 +4072,7 @@ Function UpdateEvents%()
 												If n\State3 = 0.0
 													GiveAchievement(AchvTesla)
 													
-													PlaySound2(LoadTempSound("SFX\Ending\GateA\106Retreat.ogg"), Camera, n\OBJ, 10.0, 1.0, True)
+													n\SoundCHN = PlaySound2(LoadTempSound("SFX\Ending\GateA\106Retreat.ogg"), Camera, n\OBJ, 10.0, 1.0, True)
 													
 													de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), e\room\y + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
 													de\SizeChange = 0.004 : de\Timer = 90000.0
@@ -5541,7 +5530,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 40.0
 								;[Block]
-								PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin3.ogg"), True)
+								e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\Radio\Franklin3.ogg"), True)
 								;[End Block]
 							Case 50.0
 								;[Block]
