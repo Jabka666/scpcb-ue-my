@@ -6740,27 +6740,6 @@ Function RenderGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					Local NavType%
-					
-					Select SelectedItem\ItemTemplate\ID
-						Case it_nav300
-							;[Block]
-							NavType = 300
-							;[End Block]
-						Case it_nav310
-							;[Block]
-							NavType = 310
-							;[End Block]
-						Case it_navulti
-							;[Block]
-							NavType = 999
-							;[End Block]
-						Default
-							;[Block]
-							NavType = 1
-							;[End Block]
-					End Select
-					
 					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
 					y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 					
@@ -6768,7 +6747,7 @@ Function RenderGUI%()
 					
 					SetFontEx(fo\FontID[Font_Digital])
 					
-					Local Offline% = (NavType = 300 Lor NavType = 1)
+					Local Offline% = (SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_nav)
 					Local NAV_WIDTH% = 287 * MenuScale
 					Local NAV_HEIGHT% = 256 * MenuScale
 					Local RectSize% = 24 * MenuScale
@@ -6782,41 +6761,44 @@ Function RenderGUI%()
 							TextEx(x, y + NAV_HEIGHT_HALF - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
 							TextEx(x, y + NAV_HEIGHT_HALF - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
 						EndIf
-						Return
 					Else
-						If (SelectedItem\State > 0.0 Lor NavType = 300 Lor NavType = 999) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor RID <> r_cont1_895)
-							Local ColliderX# = EntityX(me\Collider)
-							Local ColliderZ# = EntityZ(me\Collider)
-							Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
-							Local PlayerZ% = Floor(ColliderZ / RoomSpacing + 0.5)
-							
-							SetBuffer(ImageBuffer(t\ImageID[7]))
-							
+						If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor RID <> r_cont1_895)
 							Local xx% = x - SelectedItem\ItemTemplate\ImgWidth
 							Local yy% = y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale)
 							
-							DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
-							
-							x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
-							y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
-							For x2 = Max(1.0, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
-								For z2 = Max(1.0, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
-									If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance
-										If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
-											Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
-											
-											Color(30, 30, 30)
-											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-											
-											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
-											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
+							If SelectedItem\State2 = 0.0
+								Local ColliderX# = EntityX(me\Collider)
+								Local ColliderZ# = EntityZ(me\Collider)
+								Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
+								Local PlayerZ% = Floor(ColliderZ / RoomSpacing + 0.5)
+								
+								SetBuffer(ImageBuffer(t\ImageID[7]))
+								DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
+								
+								x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+								y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+								For x2 = Max(1.0, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
+									For z2 = Max(1.0, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
+										If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance
+											If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
+												Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
+												
+												Color(30, 30, 30)
+												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+												
+												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
+												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
+											EndIf
 										EndIf
-									EndIf
+									Next
 								Next
-							Next
-							
-							SetBuffer(BackBuffer())
+								
+								SetBuffer(BackBuffer())
+								SelectedItem\State2 = 2.0
+							Else
+								SelectedItem\State2 = Max(0.0, SelectedItem\State2 - fps\Factor[0])
+							EndIf
 							DrawBlockRect(t\ImageID[7], xx + (80 * MenuScale), yy + (70 * MenuScale), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
 							If Offline
 								Color(100, 0, 0)
@@ -6848,7 +6830,7 @@ Function RenderGUI%()
 							
 							Local SCPs_Found% = 0, Dist#
 							
-							If NavType = 999 And (MilliSec Mod 600) < 400
+							If SelectedItem\ItemTemplate\ID = it_navulti And (MilliSec Mod 600) < 400
 								Local np.NPCs
 								
 								For np.NPCs = Each NPCs
@@ -6876,7 +6858,7 @@ Function RenderGUI%()
 							EndIf
 							
 							Color(30, 30, 30)
-							If SelectedItem\State > 0.0 And (NavType = 1 Lor NavType = 310)
+							If SelectedItem\State > 0.0 And (SelectedItem\ItemTemplate\ID = it_nav Lor SelectedItem\ItemTemplate\ID = it_nav310)
 								xTemp = x - NAV_WIDTH_HALF + (196 * MenuScale)
 								yTemp = y - NAV_HEIGHT_HALF + (10 * MenuScale)
 								
