@@ -2222,7 +2222,7 @@ Function UpdateNPCs%()
 								DetectDistance = 484.0
 								
 								; ~ Increase accuracy if the player is going slow
-								ShootAccuracy = 0.53 - (10.0 * me\CurrSpeed)
+								ShootAccuracy = 0.51 - (10.0 * me\CurrSpeed)
 							EndIf
 							
 							If Dist < PowTwo(DetectDistance)
