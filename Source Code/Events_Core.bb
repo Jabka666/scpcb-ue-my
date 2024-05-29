@@ -6233,59 +6233,136 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_test_hcz
 				;[Block]
-				If e\EventState = 0.0
-					If PlayerRoom = e\room
-						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
-						If TFormedZ() = 0.0
-							Temp = -1
-						Else
-							Temp = -Sgn(TFormedZ())
-						EndIf
-						TFormPoint(-720.0, 25.0, 816.0 * Temp, e\room\OBJ, 0)
-						e\room\NPC[0] = CreateNPC(NPCType1048, TFormedX(), TFormedY(), TFormedZ())
-						e\room\NPC[0]\State = 1.0
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
-						
-						e\EventState = 1.0
-					EndIf
-				ElseIf e\EventState = 1.0
-					e\EventState2 = e\EventState2 + fps\Factor[0]
-					If e\EventState2 > 70.0 * 10.5 Lor e\room\RoomDoors[0]\Open
-						RemoveNPC(e\room\NPC[0])
-						e\EventState = 2.0
+				If e\EventState < 3.0
+					If e\room\RoomEmitters[5] <> Null
+						For i = 0 To 5
+							FreeEmitter(e\room\RoomEmitters[i], True)
+						Next
 					EndIf
 				EndIf
-				
-				If PlayerRoom = e\room
-					If e\EventState = 2.0
-						If EntityDistanceSquared(me\Collider, e\room\Objects[6]) < 6.25 And e\EventState > 0.0
-							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"), True)
+				Select e\EventState
+					Case 0.0
+						;[Block]
+						If PlayerRoom = e\room
+							TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
+							If TFormedZ() = 0.0
+								Temp = -1
+							Else
+								Temp = -Sgn(TFormedZ())
+							EndIf
+							TFormPoint(-720.0, 25.0, 816.0 * Temp, e\room\OBJ, 0)
+							e\room\NPC[0] = CreateNPC(NPCType1048, TFormedX(), TFormedY(), TFormedZ())
+							e\room\NPC[0]\State = 1.0
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
+							e\EventState = 1.0
+						EndIf
+						;[End Block]
+					Case 1.0
+						;[Block]
+						e\EventState2 = e\EventState2 + fps\Factor[0]
+						If e\EventState2 > 70.0 * 10.5 Lor e\room\RoomDoors[0]\Open
+							RemoveNPC(e\room\NPC[0])
+							e\EventState = 2.0
+						EndIf
+						;[End Block]
+					Case 2.0
+						;[Block]
+						If PlayerRoom = e\room
+							If EntityDistanceSquared(me\Collider, e\room\Objects[6]) < 6.25
+								PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"), True)
+								e\EventState = 3.0
+							EndIf
+						EndIf
+						;[End Block]
+					Case 3.0
+						;[Block]
+						If e\room\RoomEmitters[5] = Null
 							For i = 0 To 5
-								emit.Emitter = SetEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 4)
-								emit\State = 1
+								e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 4)
+								e\room\RoomEmitters[i] = 1
 							Next
-							RemoveEvent(e)
 						EndIf
-					EndIf
-				EndIf
+						;[End Block]
+				End Select
+				
+;				If e\EventState = 0.0
+;					If PlayerRoom = e\room
+;						TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, e\room\OBJ)
+;						If TFormedZ() = 0.0
+;							Temp = -1
+;						Else
+;							Temp = -Sgn(TFormedZ())
+;						EndIf
+;						TFormPoint(-720.0, 25.0, 816.0 * Temp, e\room\OBJ, 0)
+;						e\room\NPC[0] = CreateNPC(NPCType1048, TFormedX(), TFormedY(), TFormedZ())
+;						e\room\NPC[0]\State = 1.0
+;						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 90.0, 0.0)
+;						
+;						e\EventState = 1.0
+;					EndIf
+;				ElseIf e\EventState = 1.0
+;					e\EventState2 = e\EventState2 + fps\Factor[0]
+;					If e\EventState2 > 70.0 * 10.5 Lor e\room\RoomDoors[0]\Open
+;						RemoveNPC(e\room\NPC[0])
+;						e\EventState = 2.0
+;					EndIf
+;				EndIf
+;				
+;				If PlayerRoom = e\room
+;					If e\EventState = 2.0
+;						If EntityDistanceSquared(me\Collider, e\room\Objects[6]) < 6.25 And e\EventState > 0.0
+;							PlaySound_Strict(LoadTempSound("SFX\SCP\079\TestroomWarning.ogg"), True)
+;							For i = 0 To 5
+;								emit.Emitter = SetEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 4)
+;								emit\State = 1
+;							Next
+;							RemoveEvent(e)
+;						EndIf
+;					EndIf
+;				EndIf
 				;[End Block]
 			Case e_room2_6_hcz_smoke
 				;[Block]
-				If PlayerRoom = e\room
-					If e\room\Dist < 3.5
-						PlaySound2(snd_I\BurstSFX, Camera, e\room\OBJ)
-						
-						TFormPoint(0.0, 460.0, 512.0, e\room\OBJ, 0)
-						emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-						emit\State = 1
-						
-						TFormPoint(0.0, 460.0, -512.0, e\room\OBJ, 0)
-						emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-						emit\State = 1
-						
-						RemoveEvent(e)
-					EndIf
-				EndIf
+				Select e\EventState
+					Case 0.0
+						;[Block]
+						If e\room\Dist < 3.5
+							PlaySound2(snd_I\BurstSFX, Camera, e\room\OBJ)
+							e\EventState = 1.0
+						EndIf
+						If e\room\RoomEmitters[1] <> Null
+							For i = 0 To 1
+								FreeEmitter(e\room\RoomEmitters[i], True)
+							Next
+						EndIf
+						;[End Block]
+					Case 1.0
+						;[Block]
+						If e\room\RoomEmitters[1] = Null
+							For i = 0 To 1
+								TFormPoint(0.0, 460.0, ((i = 0) * 512.0) + ((i = 1) * (-512.0)), e\room\OBJ, 0)
+								e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+								e\room\RoomEmitters[i]\State = 1
+							Next
+						EndIf
+						;[End Block]
+				End Select
+				
+;				If PlayerRoom = e\room
+;					If e\room\Dist < 3.5
+;						PlaySound2(snd_I\BurstSFX, Camera, e\room\OBJ)
+;						
+;						TFormPoint(0.0, 460.0, 512.0, e\room\OBJ, 0)
+;						emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+;						emit\State = 1
+;						
+;						TFormPoint(0.0, 460.0, -512.0, e\room\OBJ, 0)
+;						emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+;						emit\State = 1
+;						
+;						RemoveEvent(e)
+;					EndIf
+;				EndIf
 				;[End Block]
 			Case e_room2_6_hcz_173
 				;[Block]
@@ -9445,7 +9522,7 @@ Function UpdateEndings%()
 											e\room\NPC[3]\EnemyZ = EntityZ(e\room\Objects[4], True)
 											
 											emit.Emitter = SetEmitter(Null, EntityX(e\room\NPC[3]\Collider), EntityY(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[3]\Collider), 8)
-											EntityParent(emit\owner, e\room\NPC[3]\Collider)
+											EntityParent(emit\Owner, e\room\NPC[3]\Collider)
 										EndIf
 									Else
 										FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0

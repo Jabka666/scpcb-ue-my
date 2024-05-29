@@ -253,6 +253,7 @@ Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
 	tmp\YawFix = YawFix
 End Function
 
+; ~ TODO: Find a way to remove and create emitters during the save loading without loosing the parent object
 Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ID%)
 	Local emit.Emitter
 	Local i%
