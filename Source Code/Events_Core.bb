@@ -6279,7 +6279,7 @@ Function UpdateEvents%()
 						If e\room\RoomEmitters[5] = Null
 							For i = 0 To 5
 								e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True), 4)
-								e\room\RoomEmitters[i] = 1
+								e\room\RoomEmitters[i]\State = 1
 							Next
 						EndIf
 						;[End Block]
