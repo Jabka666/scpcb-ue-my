@@ -2747,8 +2747,20 @@ Function UpdateEvents%()
 									RemoveItem(Inventory(i))
 									Exit
 								EndIf
+								If Inventory(i)\ItemTemplate\ID = it_clipboard
+									Temp = False
+									For k = 0 To Inventory(i)\InvSlots - 1
+										If Inventory(i)\SecondInv[k]\ItemTemplate\Name = "Leaflet"
+											RemoveItem(Inventory(i)\SecondInv[k])
+											Temp = True
+											Exit
+										EndIf
+									Next
+									If Temp Then Exit
+								EndIf
 							EndIf
 						Next
+						
 						GiveAchievement(Achv1123)
 						
 						RemoveNPC(e\room\NPC[0])

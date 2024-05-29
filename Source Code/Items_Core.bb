@@ -432,7 +432,6 @@ Function RemoveItem%(i.Items)
 			Exit
 		EndIf
 	Next
-	
 	If SelectedItem = i Then SelectedItem = Null
 	
 	If i\ItemTemplate\Img <> 0 Then FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
@@ -489,7 +488,7 @@ End Function
 Function ClearSecondInv%(item.Items, From% = 0)
 	Local i%
 	
-	For i = From To 19
+	For i = From To item\InvSlots - 1
 		If item\SecondInv[i] <> Null Then RemoveItem(item\SecondInv[i]) : item\SecondInv[i] = Null
 	Next
 End Function
