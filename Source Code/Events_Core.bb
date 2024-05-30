@@ -7583,6 +7583,8 @@ Function UpdateDimension106%()
 						
 						; ~ Check if player is at the sinkhole (the exit from the trench room)
 						If EntityY(me\Collider) < 24.5
+							StopChannel(e\SoundCHN) : e\SoundCHN = 0
+							StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 							Random = 13
 							Teleport = True
 						EndIf
