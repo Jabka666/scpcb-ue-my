@@ -2128,6 +2128,13 @@ Function LoadGameQuick%(File$)
 		End Select
 	Next
 	
+	; ~ Remove old emitters and particles immediately
+	Local emit.Emitter
+	
+	For emit.Emitter = Each Emitter
+		If emit\room = Null Then FreeEmitter(emit, True)
+	Next
+	
 	; ~ Resetting some stuff (those get changed when going to the endings)
 	HideDistance = 17.0
 	
