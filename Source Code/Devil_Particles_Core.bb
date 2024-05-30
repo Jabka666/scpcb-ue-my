@@ -79,7 +79,6 @@ Function FreeTemplate%(Template%)
 	Local i%
 	
 	tmp.Template = Object.Template(Template)
-	If tmp\Tex <> 0 Then DeleteSingleTextureEntryFromCache(tmp\Tex) : tmp\Tex = 0
 	Delete(tmp)
 End Function
 
@@ -272,7 +271,7 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ID%)
 	emit\MaxTime = emit\tmp\EmitterMaxTime
 	EntityBlend(emit\Ent, emit\tmp\EmitterBlend)
 	EntityFX(emit\Ent, 1 + 2 + 32)
-	If emit\tmp\Tex Then EntityTexture(emit\Ent, emit\tmp\Tex)
+	If emit\tmp\Tex <> 0 Then EntityTexture(emit\Ent, emit\tmp\Tex)
 	
 	Return(emit)
 End Function
