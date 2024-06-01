@@ -4872,14 +4872,10 @@ Function UpdateRooms%()
 		z = Abs(r\z - PlayerZ)
 		r\Dist = Max(x, z)
 		
-		If x < 16 And z < 16
+		If x < 4.0 And z < 4.0
 			If (Not FoundNewPlayerRoom) And PlayerRoom <> r
-				If x < 4.0
-					If z < 4.0
-						If Abs(PlayerY - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-						FoundNewPlayerRoom = True
-					EndIf
-				EndIf
+				If Abs(PlayerY - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+				FoundNewPlayerRoom = True
 			EndIf
 		EndIf
 		
