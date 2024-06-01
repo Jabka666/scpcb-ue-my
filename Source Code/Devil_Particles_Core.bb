@@ -24,7 +24,6 @@ Type Template
 	Field Brightness%												; ~ Brightness
 	Field FloorY#, FloorBounce#, FloorUp%							; ~ Floor
 	Field PitchFix%, YawFix%										; ~ Fix angles
-	Field Yaw#
 End Type
 
 Type Emitter
@@ -290,13 +289,6 @@ Function FreeEmitter%(emit.Emitter, DeleteParticles% = False)
 	Else
 		emit\Del = True
 	EndIf
-End Function
-
-Function SetTemplateYaw%(Template%, Yaw#)
-	Local tmp.Template
-	
-	tmp.Template = Object.Template(Template)
-	tmp\Yaw = Yaw
 End Function
 
 Function UpdateParticles_Devil()
