@@ -96,7 +96,7 @@ Bug Fixes:
 - Fixed SCP-049 killing players in «chs\notarget».
 - Fixed SCP-066 closing SCP-914's doors.
 - Fixed display name of refined drinks.
-
+- Fixed credits flashing in fullscreen mode.
 v1.2.1
 
 General:

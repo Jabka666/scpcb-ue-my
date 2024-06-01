@@ -8179,16 +8179,14 @@ Function RenderEnding%()
 				Else
 					RenderMenu()
 				EndIf
+				RenderMenuButtons()
+				RenderCursor()
 			; ~ Credits
 			ElseIf me\EndingTimer <= -2000.0
 				RenderCredits()
 			EndIf
 		EndIf
 	EndIf
-	
-	RenderMenuButtons()
-	
-	RenderCursor()
 	
 	SetFontEx(fo\FontID[Font_Default])
 End Function
@@ -8269,6 +8267,7 @@ Function RenderCredits%()
 	Local EndLinesAmount%
 	
 	Cls()
+	HidePointer()
 	
 	If Rand(300) > 1 Then DrawBlock(me\CreditsScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 	
@@ -8314,8 +8313,6 @@ Function RenderCredits%()
 	EndIf
 	
 	RenderLoadingText(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"))
-	
-	Flip(True)
 	
 	If me\CreditsTimer = -1.0
 		FreeFont(fo\FontID[Font_Credits]) : fo\FontID[Font_Credits] = 0
