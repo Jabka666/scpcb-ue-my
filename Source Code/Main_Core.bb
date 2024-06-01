@@ -5853,7 +5853,7 @@ Function RenderDebugHUD%()
 			
 			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), InFacility))
 			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.roomflo"), ToElevatorFloor))
-			If PlayerInsideElevator
+			If me\InsideElevator
 				TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "True"))
 			Else
 				TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "False"))

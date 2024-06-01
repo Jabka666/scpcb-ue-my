@@ -2073,6 +2073,7 @@ Type Player
 	Field Collider%, Head%
 	Field StopHidingTimer#
 	Field Funds%, UsedMastercard%
+	Field InsideElevator%
 End Type
 
 Global me.Player
@@ -2875,7 +2876,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	SubjectName = ""
 	InFacility = NullFloor
 	PlayerFallingPickDistance = 0.0
-	PlayerInsideElevator = False
 	ToElevatorFloor = 0
 	
 	ShouldEntitiesFall = False
