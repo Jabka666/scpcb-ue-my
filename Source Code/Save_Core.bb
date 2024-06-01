@@ -2621,6 +2621,7 @@ Function LoadMap%(File$)
 								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Case ROOM3
+								;[Block]
 								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
 								;[End Block]
 							Default
