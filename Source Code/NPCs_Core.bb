@@ -4319,7 +4319,7 @@ Function UpdateNPCs%()
 						RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 					Else
 						If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
-						If Rand(600) = 1 Then TeleportCloser(n)
+						If Rand(850) = 1 Then TeleportCloser(n)
 					EndIf
 				EndIf
 				;[End Block]
