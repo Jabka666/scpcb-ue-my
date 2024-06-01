@@ -1867,7 +1867,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR)
+			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_5)
 			d\AutoClose = False : d\Locked = 1
 			PositionEntity(d\Buttons[0], r\x - 438.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 480.0 * RoomScale, True)
 			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
