@@ -919,7 +919,6 @@ Function LoadGame%(File$)
 			DestroyForest(r\fr)
 			Delete(r\fr)
 		EndIf
-		
 		If r\x = r1499_x And r\z = r1499_z Then I_1499\PrevRoom = r
 	Next
 	
@@ -964,10 +963,7 @@ Function LoadGame%(File$)
 						End Select
 						If ShouldSpawnDoor
 							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									d.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[0] = d
-								EndIf
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						
@@ -995,10 +991,7 @@ Function LoadGame%(File$)
 						End Select
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-									d.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[3] = d
-								EndIf
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						Exit
@@ -1692,16 +1685,15 @@ Function LoadGameQuick%(File$)
 		
 		Local Found% = ReadByte(f)
 		Local Level% = ReadInt(f)
-		
 		Local Temp2% = ReadByte(f)
 		
-		If Angle >= 360.0
-			Angle = Angle - 360.0
-		EndIf
+		If Angle >= 360.0 Then Angle = Angle - 360.0
 		
 		For r.Rooms = Each Rooms
 			If r\x = x And r\z = z Then Exit
 		Next
+		
+		If Temp2 = 1 Then PlayerRoom = r
 		
 		For x = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
@@ -1749,9 +1741,6 @@ Function LoadGameQuick%(File$)
 			DestroyForest(r\fr)
 			Delete(r\fr)
 		EndIf
-		
-		If Temp2 = 1 Then PlayerRoom = r
-		
 		If r\x = r1499_x And r\z = r1499_z Then I_1499\PrevRoom = r
 	Next
 	
@@ -2631,10 +2620,7 @@ Function LoadMap%(File$)
 						End Select
 						If ShouldSpawnDoor
 							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									d.Doors = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[0] = d
-								EndIf
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						
@@ -2662,10 +2648,7 @@ Function LoadMap%(File$)
 						End Select
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-									d.Doors = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
-									r\AdjDoor[3] = d
-								EndIf
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						Exit
