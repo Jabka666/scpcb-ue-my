@@ -1601,7 +1601,6 @@ Const r_room1_dead_end_ez% = 74
 Const r_room1_lifts% = 75
 Const r_room1_o5% = 76
 Const r_room2_ez% = 77, r_room2_2_ez% = 78, r_room2_3_ez% = 79, r_room2_4_ez% = 80, r_room2_5_ez% = 81, r_room2_6_ez% = 82
-Const r_room2_bio% = 83
 Const r_room2_cafeteria% = 84
 Const r_room2_ic% = 85
 Const r_room2_medibay% = 86
@@ -1954,10 +1953,6 @@ Function FindRoomID%(RoomName$)
 		Case "room2_6_ez"
 			;[Block]
 			Return(r_room2_6_ez)
-			;[End Block]
-		Case "room2_bio"
-			;[Block]
-			Return(r_room2_bio)
 			;[End Block]
 		Case "room2_cafeteria"
 			;[Block]
@@ -5407,7 +5402,7 @@ Function CreateMap%()
 			Next
 		EndIf
 		
-		If Room2CAmount[i] < 1 ; ~ We want at least one ROOM2C
+		If Room2CAmount[i] < 2 ; ~ We want at least two ROOM2C
 			Temp = 0
 			For y = y_max To y_min Step -1
 				For x = x_min To x_max
