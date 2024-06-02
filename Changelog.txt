@@ -43,6 +43,7 @@ Rooms:
 - Added a buffer hallway leading to SCP-173's containment chamber.
 - Changed SCP-096's room to a corner styled room replacing the maintenance room.
 - Changed SCP-372's room to a 3-way styled room.
+- Combined «room2_bio» and «room2_office_3».
 - Added a laboratory to SCP-008's chamber.
 - Inaccessible/broken panels are now red.
 - Levers in Storage Area 6 now share the same positions after usage.
