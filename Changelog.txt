@@ -12,6 +12,7 @@ General:
 - SCP-409 stages now have crackling sounds.
 - SCP-500 makes a new sound when used.
 - Increased inventory slots of Euclid and Keter by 2.
+- Added Dr. Gears achievement.
 
 - Optimized the game...
 
@@ -47,6 +48,7 @@ Rooms:
 - Levers in Storage Area 6 now share the same positions after usage.
 - Player can now open and close blinds of most windows.
 - Dr. Gears office is now accessible!
+- Require Level 5 Key Card to enter SCP-035's chamber.
 
 - Moved most wall save points to computer screens.
 - Added a save point in «cont2_049» observation room.
@@ -54,6 +56,7 @@ Rooms:
 - New room ambience for SCP-008's chamber and cutscene.
 
 - The «room2_servers_hcz» entrance doors open sooner after SCP-096 kills the guard.
+- Elevators of «room2_mt» blackout if players attempt to escape from SCP-106 when spawning in the tunnels.
 
 - Improved some textures.
 - Design improvements...
@@ -73,6 +76,8 @@ NPCs:
 - Can now detect SCP-1048 and SCP-1048-A using the blue variant of Night Vision Goggles.
 - Increased range tesla gates can shock NPCs.
 - Reduced SCP-106's speed in the labyrinth.
+- Lowered the spawnrate of SCP-966s.
+- Reduced the accuracy of the Gate B guard.
 
 Bug Fixes:
 - Fixed some typos in subtitles.
@@ -97,6 +102,8 @@ Bug Fixes:
 - Fixed SCP-066 closing SCP-914's doors.
 - Fixed display name of refined drinks.
 - Fixed credits flashing in fullscreen mode.
+- Fixed leaflet not being removed from inventory if it was inside clipboard.
+
 v1.2.1
 
 General:
