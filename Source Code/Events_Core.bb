@@ -3277,7 +3277,7 @@ Function UpdateEvents%()
 			Case e_room1_dead_end_guard
 				;[Block]
 				If e\EventState = 0.0
-					If e\room\Dist < 6.0
+					If PlayerRoom = e\room
 						TFormPoint(-944.0, 448.0, 20.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
