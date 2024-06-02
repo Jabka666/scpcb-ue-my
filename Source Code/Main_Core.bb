@@ -6002,7 +6002,7 @@ Function AdaptScreenGamma%()
 	opt\ScreenGamma = 1.0
 End Function
 
-Function Render3DHandIcon%(Icon%, OBJ%, ArrowID% = -1)
+Function Render3DHandIcon%(IconID%, OBJ%, ArrowID% = -1)
 	Local PitchValue#, YawValue#
 	Local CoordEx% = 32 * MenuScale
 	Local Pvt% = CreatePivot()
@@ -6043,7 +6043,7 @@ Function Render3DHandIcon%(Icon%, OBJ%, ArrowID% = -1)
 				;[End Block]
 		End Select
 	EndIf
-	DrawBlock(Icon, x, y)
+	DrawBlock(t\IconID[IconID], x, y)
 End Function
 
 Function RenderGUI%()
@@ -6111,17 +6111,16 @@ Function RenderGUI%()
 	If I_294\Using Then Render294()
 	If SelectedDifficulty\Name <> GetLocalString("menu", "new.apollyon") And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
-			If d_I\ClosestButton <> 0 Then Render3DHandIcon(t\IconID[5], d_I\ClosestButton, -1)
-			If ClosestItem <> Null Then Render3DHandIcon(t\IconID[6], ClosestItem\Collider, -1)
+			If d_I\ClosestButton <> 0 Then Render3DHandIcon(5, d_I\ClosestButton, -1)
+			If ClosestItem <> Null Then Render3DHandIcon(6, ClosestItem\Collider, -1)
 			
 			If HandEntity <> 0
-				Render3DHandIcon(t\IconID[5], HandEntity, -1)
+				Render3DHandIcon(5, HandEntity, -1)
 				For i = 0 To 3
-					If DrawArrowIcon[i] Then Render3DHandIcon(t\IconID[i + 10], HandEntity, i)
+					If DrawArrowIcon[i] Then Render3DHandIcon(i + 10, HandEntity, i)
 				Next
 			EndIf
 		EndIf
-		
 		RenderHUD()
 	EndIf
 	If chs\DebugHUD <> 0 Then RenderDebugHUD()

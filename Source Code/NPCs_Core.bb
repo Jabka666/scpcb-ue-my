@@ -5005,6 +5005,17 @@ Function UpdateNPCs%()
 						Next
 						n\GravityMult = 0.0
 						;[End Block]
+					Case NPCTypeGuard
+						;[Block]
+						n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
+						EntityRadius(n\OBJ3, 0.3)
+						EntityPickMode(n\OBJ3, 1, False)
+						
+						RemoveSound = True
+						n\Target = Null
+						n\BlinkTimer = -1.0
+						n\GravityMult = 0.0
+						;[End Block]
 					Default
 						;[Block]
 						RemoveSound = True
@@ -5018,6 +5029,27 @@ Function UpdateNPCs%()
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+				EndIf
+			EndIf
+			If n\NPCType = NPCTypeGuard
+				If n\OBJ3 <> 0
+					If EntityDistanceSquared(n\OBJ3, me\Collider) < 1.0
+						If EntityPick(Camera, 1.0) = n\OBJ3
+							HandEntity = n\OBJ3
+							If mo\MouseHit1
+								Local RandomChance% = Rand(5)
+								
+								; ~ Special message for suicide guy
+								If PlayerRoom\RoomTemplate\ID = r_room2_6_ez Then RandomChance = 6
+								
+								CreateMsg(GetLocalString("msg", "pickup.wpn_" + RandomChance))
+								; ~ Remove the pivot for optimization. Do not allow the player pick up this weapon again. Can be restored by reloading the game, it's normal
+								HandEntity = 0
+								FreeEntity(n\OBJ3) : n\OBJ3 = 0
+								;Exit
+							EndIf
+						EndIf
+					EndIf
 				EndIf
 			EndIf
 		Else
