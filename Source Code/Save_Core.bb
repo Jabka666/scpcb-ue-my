@@ -146,9 +146,6 @@ Function SaveGame%(File$)
 	WriteByte(f, I_714\Using)
 	WriteByte(f, I_294\Using)
 	
-	WriteByte(f, chs\SuperMan)
-	WriteFloat(f, chs\SuperManTimer)
-	
 	WriteString(f, RandomSeed)
 	
 	WriteFloat(f, SecondaryLightOn)
@@ -656,9 +653,6 @@ Function LoadGame%(File$)
 	I_427\Timer = ReadFloat(f)
 	I_714\Using = ReadByte(f)
 	I_294\Using = ReadByte(f)
-	
-	chs\SuperMan = ReadByte(f)
-	chs\SuperManTimer = ReadFloat(f)
 	
 	RandomSeed = ReadString(f)
 	
@@ -1507,9 +1501,6 @@ Function LoadGameQuick%(File$)
 	I_427\Timer = ReadFloat(f)
 	I_714\Using = ReadByte(f)
 	I_294\Using = ReadByte(f)
-	
-	chs\SuperMan = ReadByte(f)
-	chs\SuperManTimer = ReadFloat(f)
 	
 	RandomSeed = ReadString(f)
 	
