@@ -3420,10 +3420,10 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x - 234.0 * RoomScale, r\y, r\z + 768.0 * RoomScale, 270.0, False, OFFICE_DOOR)
 			d\Locked = 2 : d\MTFClose = False
 			
-			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1680.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
+			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1870.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1762.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 435.0 * RoomScale)
+			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1766.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 433.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Level 5 Key Card", it_key5, r\x + 2176.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 387.0 * RoomScale)
