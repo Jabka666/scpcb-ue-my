@@ -51,7 +51,6 @@ Function SaveGame%(File$)
 	WriteFloat(f, me\BlinkEffect)
 	WriteFloat(f, me\BlinkEffectTimer)
 	
-	WriteFloat(f, me\DeathTimer)
 	WriteFloat(f, me\BlurTimer)
 	WriteFloat(f, me\HealTimer)
 	
@@ -563,7 +562,6 @@ Function LoadGame%(File$)
 	me\BlinkEffect = ReadFloat(f)
 	me\BlinkEffectTimer = ReadFloat(f)
 	
-	me\DeathTimer = ReadFloat(f)
 	me\BlurTimer = ReadFloat(f)
 	me\HealTimer = ReadFloat(f)
 	
@@ -1376,6 +1374,7 @@ Function LoadGameQuick%(File$)
 	me\StopHidingTimer = 0.0
 	
 	me\Terminated = False
+	me\DeathTimer = 0.0
 	me\FallTimer = 0.0
 	MenuOpen = False
 	
@@ -1411,7 +1410,6 @@ Function LoadGameQuick%(File$)
 	me\BlinkEffect = ReadFloat(f)
 	me\BlinkEffectTimer = ReadFloat(f)
 	
-	me\DeathTimer = ReadFloat(f)
 	me\BlurTimer = ReadFloat(f)
 	me\HealTimer = ReadFloat(f)
 	
