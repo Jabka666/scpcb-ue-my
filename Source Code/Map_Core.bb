@@ -2656,7 +2656,7 @@ Type Doors
 	Field DisableWaypoint%
 	Field SoundCHN%, SoundCHN2%
 	Field ButtonCHN%
-	Field Code$
+	Field Code%
 	Field AutoClose%
 	Field LinkedDoor.Doors
 	Field IsElevatorDoor% = False
@@ -2678,7 +2678,7 @@ Const ONE_SIDED_DOOR% = 6
 Const SCP_914_DOOR% = 7
 ;[End Block]
 
-Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorType% = DEFAULT_DOOR, Keycard% = KEY_MISC, Code$ = "", CustomParent% = 0)
+Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorType% = DEFAULT_DOOR, Keycard% = KEY_MISC, Code% = 0, CustomParent% = 0)
 	Local d.Doors
 	Local Parent%, i%
 	Local FrameScaleX#, FrameScaleY#, FrameScaleZ#
@@ -2711,7 +2711,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	If DoorType = SCP_914_DOOR Then DoorType = ONE_SIDED_DOOR
 	
 	d\MTFClose = True
-	d\AutoClose = (Open And ((DoorType = DEFAULT_DOOR) Lor (DoorType = HEAVY_DOOR)) And (Keycard = 0) And (Code = "") And Rand(10) = 1)
+	d\AutoClose = (Open And ((DoorType = DEFAULT_DOOR) Lor (DoorType = HEAVY_DOOR)) And (Keycard = 0) And (Code = 0) And Rand(10) = 1)
 	
 	d\room = room
 	
@@ -2822,7 +2822,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 				PositionEntity(d\ElevatorPanel[i], x, y + 1.27, z + 0.13 + (i * (-0.26)))
 				EntityParent(d\ElevatorPanel[i], d\FrameOBJ)
 			Else
-				If Code <> ""
+				If Code <> 0
 					ButtonID = BUTTON_KEYPAD
 				ElseIf Keycard > KEY_MISC
 					ButtonID = BUTTON_KEYCARD
@@ -3514,7 +3514,7 @@ Global CODE_DR_MAYNARD%, CODE_DR_GEARS, CODE_O5_COUNCIL%, CODE_MAINTENANCE_TUNNE
 Const CODE_DR_HARP% = 7816
 Const CODE_DR_L% = 2411
 Const CODE_CONT1_035% = 5731
-Const CODE_LOCKED$ = "ABCD"
+Const CODE_LOCKED% = -1
 ;[End Block]
 
 Function UseDoor%(PlaySFX% = True)
@@ -3603,9 +3603,9 @@ Function UseDoor%(PlaySFX% = True)
 				Return
 			EndIf
 		EndIf
-	ElseIf d_I\ClosestDoor\Code <> ""
+	ElseIf d_I\ClosestDoor\Code <> 0
 		If SelectedItem = Null
-			If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (d_I\ClosestDoor\Code = msg\KeyPadInput)
+			If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (d_I\ClosestDoor\Code = Int(msg\KeyPadInput))
 				d_I\ClosestDoor\ButtonCHN = PlaySound2(snd_I\ScannerSFX[0], Camera, d_I\ClosestButton)
 			Else
 				d_I\ClosestDoor\ButtonCHN = PlaySound2(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
@@ -3629,13 +3629,13 @@ Function UseDoor%(PlaySFX% = True)
 			EndIf
 		EndIf
 		
-		If d_I\ClosestDoor\Code = Str(CODE_DR_MAYNARD)
+		If d_I\ClosestDoor\Code = CODE_DR_MAYNARD
 			GiveAchievement(AchvMaynard)
-		ElseIf d_I\ClosestDoor\Code = Str(CODE_DR_GEARS)
+		ElseIf d_I\ClosestDoor\Code = CODE_DR_GEARS
 			GiveAchievement(AchvGears)
-		ElseIf d_I\ClosestDoor\Code = Str(CODE_DR_HARP)
+		ElseIf d_I\ClosestDoor\Code = CODE_DR_HARP
 			GiveAchievement(AchvHarp)
-		ElseIf d_I\ClosestDoor\Code = Str(CODE_O5_COUNCIL)
+		ElseIf d_I\ClosestDoor\Code = CODE_O5_COUNCIL
 			GiveAchievement(AchvO5)
 		EndIf
 	Else

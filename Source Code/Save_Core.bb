@@ -1312,7 +1312,7 @@ Function LoadGame%(File$)
 		Next
 		
 		For d.Doors = Each Doors
-			If d\KeyCard = 0 And d\Code = ""
+			If d\KeyCard = 0 And d\Code = 0
 				If EntityZ(d\FrameOBJ, True) = r\z
 					If EntityX(d\FrameOBJ, True) = r\x + 4.0
 						r\AdjDoor[0] = d

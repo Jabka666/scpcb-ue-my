@@ -743,7 +743,7 @@ Function UpdateNPCs%()
 									; ~ Tries to open doors
 									If Rand(20 - (10 * SelectedDifficulty\AggressiveNPCs)) = 1
 										For d.Doors = Each Doors
-											If d\Locked = 0 And (Not d\Open) And d\Code = "" And d\KeyCard = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
+											If d\Locked = 0 And (Not d\Open) And d\Code = 0 And d\KeyCard = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
 												For i = 0 To 1
 													If d\Buttons[i] <> 0
 														If Abs(EntityX(n\Collider) - EntityX(d\Buttons[i])) < 0.5
@@ -1809,7 +1809,7 @@ Function UpdateNPCs%()
 												If n\PathStatus = PATH_STATUS_FOUND
 													If n\Path[1] <> Null
 														If n\Path[1]\door <> Null
-															If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open)
+															If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> 0) And (Not n\Path[1]\door\Open)
 																Repeat
 																	If n\PathLocation > MaxPathLocations - 1
 																		n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -3906,7 +3906,7 @@ Function UpdateNPCs%()
 											Case 3
 												;[Block]
 												For d.Doors = Each Doors
-													If d\Locked = 0 And d\KeyCard = 0 And d\Code = "" And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
+													If d\Locked = 0 And d\KeyCard = 0 And d\Code = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
 														If EntityDistanceSquared(d\FrameOBJ, n\Collider) < 256.0 Then OpenCloseDoor(d)
 													EndIf
 												Next
@@ -7371,7 +7371,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			Local Temp% = True
 			
 			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "" Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1]) Lor ((Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType = OFFICE_DOOR))
+				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1]) Lor ((Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType = OFFICE_DOOR))
 					Temp = False
 				Else
 					If (Not n\Path[n\PathLocation]\door\Open)

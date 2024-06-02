@@ -1886,7 +1886,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[2] = d
 			
 			; ~ The door to the storage room
-			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_CONT1_035))
+			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_CONT1_035)
 			r\RoomDoors.Doors[3] = d
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 209.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 205.0 * RoomScale, -270.0)
@@ -3455,13 +3455,13 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_scientists
 			;[Block]
 			; ~ Dr. Maynard's office door
-			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_MAYNARD))
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_MAYNARD)
 			
 			; ~ Dr.Gear's inaccessible office door
-			d.Doors = CreateDoor(r, r\x - 352.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_GEARS))
+			d.Doors = CreateDoor(r, r\x - 352.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_GEARS)
 			
 			; ~ Dr. Harp's office door
-			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, Str(CODE_DR_HARP))
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_HARP)
 			
 			it.Items = CreateItem("Mysterious Note", it_paper, r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 544.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
