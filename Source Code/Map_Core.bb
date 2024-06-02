@@ -5766,21 +5766,9 @@ Function CreateMap%()
 							Color(255, 255, 255)
 						EndIf
 						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
-					EndIf
-				Next
-				i = i - 1
-			Next
-			
-			i = MapGridSize - 1
-			For x = 0 To MapGridSize - 1
-				For y = 0 To MapGridSize - 1
-					If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale)
-						Color(255, 0, 0)
-						TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)] + " " + CurrMapGrid\RoomName[x + (y * MapGridSize)])
-					Else
-						If CurrMapGrid\RoomName[x + (y * MapGridSize)] <> ""
-							Color(0, 0, 0)
-							TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)])
+						If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale)
+							Color(255, 0, 0)
+							TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)] + " " + CurrMapGrid\RoomName[x + (y * MapGridSize)])
 						EndIf
 					EndIf
 				Next
