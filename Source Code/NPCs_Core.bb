@@ -2146,7 +2146,7 @@ Function UpdateNPCs%()
 									EndIf
 									If Attack
 										If n\Target = Null
-											If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
+											If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 												PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 												InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, Rnd(0.25, 0.3) * DifficultyDMGMult, 0.2)
 												me\CameraShake = 2.5
@@ -2159,7 +2159,7 @@ Function UpdateNPCs%()
 												PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
 											EndIf
 										Else
-											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
+											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.5625
 												PlaySound2(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 												If n\Target\HP > 0
 													n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
@@ -4070,7 +4070,7 @@ Function UpdateNPCs%()
 									
 									; ~ Echo / Stares off / Walking around periodically
 									If n\Frame > 213.9
-										If Rand(3) = 1 And Dist < 16.0
+										If Rand(3) = 1 And Dist < 12.0
 											n\State = Rand(1.0, 4.0)
 										Else
 											n\State = Rand(5.0, 6.0)
@@ -4162,7 +4162,7 @@ Function UpdateNPCs%()
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\PathLocation = 0
 										
-										If Dist < 0.81 Then n\State = 9.0
+										If Dist < 0.7225 Then n\State = 9.0
 									Else ; ~ Trying to find the player
 										If n\PathTimer <= 0.0 ; ~ Update the path
 											n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
@@ -4855,7 +4855,7 @@ Function UpdateNPCs%()
 								AnimateNPC(n, 126.0, 165.0, 0.6, False)
 								If n\Frame >= 146.0 And PrevFrame < 146.0
 									If n\Target = Null
-										If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
+										If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 											PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0 + SelectedDifficulty\AggressiveNPCs, 0.0, Rnd(0.175, 0.225) * DifficultyDMGMult, 0.2)
 											me\CameraShake = 2.5
@@ -4868,7 +4868,7 @@ Function UpdateNPCs%()
 											PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
 										EndIf
 									Else
-										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
+										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.5625
 											PlaySound2(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 											If n\Target\HP > 0
 												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
