@@ -3245,14 +3245,6 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case r_room2_bio
-			;[Block]
-			d.Doors = CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 90.0, False, OFFICE_DOOR)
-			d\Locked = 2 : d\MTFClose = False
-			
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, 20.0)
-			sc\Angle = 225.0 : sc\Turn = 30.0
-			;[End Block]
 		Case r_room2_cafeteria
 			;[Block]
 			; ~ Misc doors
@@ -3424,6 +3416,9 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x + 367.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.1, True)
+			
+			d.Doors = CreateDoor(r, r\x - 234.0 * RoomScale, r\y, r\z + 768.0 * RoomScale, 270.0, False, OFFICE_DOOR)
+			d\Locked = 2 : d\MTFClose = False
 			
 			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1680.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
