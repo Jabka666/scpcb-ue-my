@@ -991,9 +991,13 @@ Function GenForestGrid%(fr.Forest)
 	If opt\DebugMode
 		Local x%, y%
 		
-		ShowPointer()
 		Repeat
+			ShowPointer()
 			Cls()
+			
+			MousePosX = ScaledMouseX()
+			MousePosY = ScaledMouseY()
+			
 			i = ForestGridSize - 1
 			For x = 0 To ForestGridSize - 1
 				For y = 0 To ForestGridSize - 1
@@ -5737,9 +5741,13 @@ Function CreateMap%()
 	Next
 	
 	If opt\DebugMode
-		ShowPointer()
 		Repeat
+			ShowPointer()
 			Cls()
+			
+			MousePosX = ScaledMouseX()
+			MousePosY = ScaledMouseY()
+			
 			i = MapGridSize - 1
 			For x = 0 To MapGridSize - 1
 				For y = 0 To MapGridSize - 1
