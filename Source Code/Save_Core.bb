@@ -2141,7 +2141,7 @@ Global as.AutoSave
 
 Function UpdateAutoSave%()
 	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 3 Lor (Not me\Playable) Lor me\Zombie
-		CancelAutoSave()
+		If as\Timer <= 70.0 * 5.0 Then CancelAutoSave()
 		Return
 	EndIf
 	
@@ -2156,7 +2156,7 @@ Function UpdateAutoSave%()
 End Function
 
 Function CancelAutoSave%()
-	If as\Timer <= 70.0 * 5.0 Then CreateHintMsg(GetLocalString("save", "autosave.canceled"))
+	CreateHintMsg(GetLocalString("save", "autosave.canceled"))
 	as\Timer = 70.0 * 120.0
 End Function
 
