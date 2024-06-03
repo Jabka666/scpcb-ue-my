@@ -8859,8 +8859,8 @@ Function Update1048AEars()
 			If I_1048A\Revert
 				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
 			Else
+				CanSave = 0
 				If (Not I_427\Using)
-					CanSave = 0
 					I_1048A\EarGrowTimer = Min(I_1048A\EarGrowTimer + fps\Factor[0], 1100.0)
 					me\BlurTimer = I_1048A\EarGrowTimer * 2.0
 				EndIf
