@@ -6041,10 +6041,6 @@ Function Render3DHandIcon%(IconID%, OBJ%, ArrowID% = -1)
 				;[Block]
 				x = x - ArrowCoord
 				;[End Block]
-			Case 4
-				;[Block]
-				TextEx(mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3), mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - ArrowCoord, ClosestItem\ItemTemplate\Name, True, False)
-				;[End Block]
 		End Select
 	EndIf
 	DrawBlock(t\IconID[IconID], x, y)
@@ -6116,7 +6112,7 @@ Function RenderGUI%()
 	If SelectedDifficulty\Name <> GetLocalString("menu", "new.apollyon") And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			If d_I\ClosestButton <> 0 Then Render3DHandIcon(5, d_I\ClosestButton, -1)
-			If ClosestItem <> Null Then Render3DHandIcon(6, ClosestItem\Collider, 4)
+			If ClosestItem <> Null Then Render3DHandIcon(6, ClosestItem\Collider, -1)
 			
 			If HandEntity <> 0
 				Render3DHandIcon(5, HandEntity, -1)
