@@ -585,7 +585,13 @@ Function UpdateGame%()
 		
 		If KeyHit(key\SAVE)
 			If SelectedDifficulty\SaveType < SAVE_ON_QUIT
-				If CanSave = 0 ; ~ Scripted location
+				If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
+						CreateHintMsg(GetLocalString("save", "failed.screen"))
+					Else
+						SaveGame(CurrSave\Name) ; ~ Can save at screen
+					EndIf
+				ElseIf CanSave = 0 ; ~ Scripted location
 					CreateHintMsg(GetLocalString("save", "failed.now"))
 				ElseIf CanSave = 1 ; ~ Endings / Intro location
 					CreateHintMsg(GetLocalString("save", "failed.location"))
@@ -594,12 +600,6 @@ Function UpdateGame%()
 					CreateHintMsg(GetLocalString("save", "failed.096"))
 				ElseIf as\Timer <= 70.0 * 5.0
 					CancelAutoSave()
-				ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
-						CreateHintMsg(GetLocalString("save", "failed.screen"))
-					Else
-						SaveGame(CurrSave\Name) ; ~ Can save at screen
-					EndIf
 				Else
 					SaveGame(CurrSave\Name) ; ~ Can save
 				EndIf
