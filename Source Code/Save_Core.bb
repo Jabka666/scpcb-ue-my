@@ -1385,10 +1385,10 @@ Function LoadGameQuick%(File$)
 	WireFrameState = 0
 	WireFrame(0)
 	
-	CODE_DR_MAYNARD = ReadInt(f)
-	CODE_O5_COUNCIL = ReadInt(f)
-	CODE_MAINTENANCE_TUNNELS = ReadInt(f)
-	CODE_DR_GEARS = ReadInt(f)
+	ReadInt(f)
+	ReadInt(f)
+	ReadInt(f)
+	ReadInt(f)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
