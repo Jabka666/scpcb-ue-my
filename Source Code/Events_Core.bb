@@ -633,7 +633,7 @@ Function UpdateEvents%()
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
 	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
-	Local Angle#, RoomExists%, RID%
+	Local Angle#, RoomExists%
 	Local SinValue#, CosValue#, SqrValue#
 	Local PlayerPosX#, PlayerPosY#, PlayerPosZ#
 	Local FPSFactorEx#
@@ -7092,7 +7092,8 @@ Function UpdateEvents%()
 					EndIf
 					
 					If e\EventState = 0.0
-						RID = e\room\RoomTemplate\RoomID
+						Local RID% = e\room\RoomTemplate\RoomID
+						
 						Select RID
 							Case r_room3_hcz, r_room3_2_hcz, r_room3_3_hcz, r_room4_hcz, r_room4_2_hcz
 								;[Block]
