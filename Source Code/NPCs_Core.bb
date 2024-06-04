@@ -3848,7 +3848,7 @@ Function UpdateNPCs%()
 								Next
 								n\State2 = MilliSecs() + 5000
 							EndIf
-						ElseIf Dist < 64.0
+						ElseIf Dist < 6.0
 							n\LastDist = Rnd(1.0, 2.5)
 							n\State = 1.0
 						EndIf
@@ -3893,7 +3893,7 @@ Function UpdateNPCs%()
 									EndIf
 									
 									If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-										Select Rand(6)
+										Select Rand(7)
 											Case 1
 												;[Block]
 												PlaySound_Strict(LoadTempSound("SFX\SCP\066\Beethoven.ogg"))
@@ -3926,6 +3926,11 @@ Function UpdateNPCs%()
 											Case 5, 6 ; ~ No effect
 												;[Block]
 												;[End Block]
+                                                                                       Case 7  
+                                                                                                ;[Block]
+                                                                                                me\StaminaEffect = 1.0 
+											        me\StaminaEffectTimer = 1000.0
+                                                                                                ;[End Block]
 										End Select
 									EndIf
 								EndIf
