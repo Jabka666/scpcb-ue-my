@@ -5056,8 +5056,6 @@ Function UpdateNPCs%()
 			EndIf
 		Else
 			If GravityDist < PowTwo(HideDistance * 0.6) Lor n\NPCType = NPCType1499_1
-				CreateConsoleMsg(n\NVGName + ": " + n\GravityMult + ", " + n\DropSpeed)
-				CreateConsoleMsg("InFacility: " + n\InFacility)
 				If n\InFacility = InFacility
 					TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 					
@@ -5123,7 +5121,6 @@ Function UpdateNPCs%()
 							Else
 								UpdateGravity = True
 							EndIf
-							CreateConsoleMsg("UpdateGravity: " + UpdateGravity)
 							If UpdateGravity
 								n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, -n\MaxGravity)
 							Else
@@ -5140,7 +5137,6 @@ Function UpdateNPCs%()
 				Else
 					n\DropSpeed = 0.0
 				EndIf
-				CreateConsoleMsg("------------------------------------")
 			Else
 				n\DropSpeed = 0.0
 			EndIf

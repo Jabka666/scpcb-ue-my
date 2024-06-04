@@ -834,6 +834,7 @@ Function LoadGame%(File$)
 		For rt.RoomTemplates = Each RoomTemplates
 			If rt\ID = RoomTemplateID
 				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\RoomID, Angle)
+				CalculateRoomExtents(r)
 				;SetupTriggerBoxes(r)
 				r\Found = Found
 				Exit
@@ -2353,9 +2354,8 @@ Function LoadMap%(File$)
 					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
 					Angle = WrapAngle(Angle)
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
-					
+					CalculateRoomExtents(r)
 					;SetupTriggerBoxes(r)
-					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
 					Exit
 				EndIf
@@ -2525,6 +2525,7 @@ Function LoadMap%(File$)
 					Angle = WrapAngle(Angle)
 					
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
+					CalculateRoomExtents(r)
 					;SetupTriggerBoxes(r)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
@@ -2637,20 +2638,25 @@ Function LoadMap%(File$)
 	
 	; ~ Spawn some rooms outside the map
 	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10, r_gate_b)
+	CalculateRoomExtents(r)
 	CreateEvent(e_gate_b, r_gate_b, 0)
 	
 	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2, r_gate_a)
+	CalculateRoomExtents(r)
 	CreateEvent(e_gate_a, r_gate_a, 0)
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, r_dimension_106)
+	CalculateRoomExtents(r)
 	CreateEvent(e_dimension_106, r_dimension_106, 0) 
 	
 	If opt\IntroEnabled
 		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 250.0, (MapGridSize + 2) * RoomSpacing, r_cont1_173_intro)
+		CalculateRoomExtents(r)
 		CreateEvent(e_cont1_173_intro, r_cont1_173_intro, 0)
 	EndIf
 	
 	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing * 2), 800.0, 0.0, r_dimension_1499)
+	CalculateRoomExtents(r)
 	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
 	
 	For r.Rooms = Each Rooms
