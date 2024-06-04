@@ -789,10 +789,7 @@ Function LoadGame%(File$)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\TextureID = ReadByte(f)
-		If n\TextureID > 0
-			ChangeNPCTextureID(n, n\TextureID - 1)
-			SetAnimTime(n\OBJ, Frame)
-		EndIf
+		If n\TextureID > 0 Then ChangeNPCTextureID(n, n\TextureID - 1)
 		n\HideFromNVG = ReadByte(f)
 	Next
 	
@@ -1633,10 +1630,7 @@ Function LoadGameQuick%(File$)
 			SetAnimTime(n\OBJ, Frame)
 		EndIf
 		n\TextureID = ReadByte(f)
-		If n\TextureID > 0
-			ChangeNPCTextureID(n, n\TextureID - 1)
-			SetAnimTime(n\OBJ, Frame)
-		EndIf
+		If n\TextureID > 0 Then ChangeNPCTextureID(n, n\TextureID - 1)
 		n\HideFromNVG = ReadByte(f)
 	Next
 	
