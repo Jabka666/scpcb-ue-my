@@ -104,6 +104,8 @@ Bug Fixes:
 - Fixed display name of refined drinks.
 - Fixed credits flashing in fullscreen mode.
 - Fixed leaflet not being removed from inventory if it was inside clipboard.
+- Fixed NPCs gravity not updating after loading the game from main menu (and loading custom maps).
+- Fixed items animation not saving properly.
 
 v1.2.1
 
