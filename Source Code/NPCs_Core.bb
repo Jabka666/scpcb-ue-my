@@ -4050,9 +4050,9 @@ Function UpdateNPCs%()
 								For n2.NPCs = Each NPCs
 									If n2\NPCType = n\NPCType Then n2\State3 = 1000.0 
 								Next
+								n\State3 = 1000.0
 							EndIf
 							n\State = Max(n\State, 8.0)
-							n\State3 = 1000.0
 						EndIf
 						
 						If me\Stamina < 10.0
@@ -4115,11 +4115,11 @@ Function UpdateNPCs%()
 														;[End Block]
 												End Select
 											EndIf
-											me\BlinkEffect = Max(me\BlinkEffect, 1.5 - (0.25 * I_714\Using))
-											me\BlinkEffectTimer = 1000.0
+											me\BlinkEffect = 1.5 - (0.25 * I_714\Using)
+											me\BlinkEffectTimer = 1000.0 - (500.0 * I_714\Using)
 											
 											me\StaminaEffect = 2.0 - (0.5 * I_714\Using)
-											me\StaminaEffectTimer = 1000.0
+											me\StaminaEffectTimer = 1000.0 - (500.0 * I_714\Using)
 										EndIf
 									EndIf
 									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
