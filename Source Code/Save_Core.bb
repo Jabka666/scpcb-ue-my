@@ -1181,9 +1181,9 @@ Function LoadGame%(File$)
 		Green = ReadByte(f)
 		Blue = ReadByte(f)
 		
-		Local A% = ReadFloat(f)
+		Alpha = ReadFloat(f)
 		
-		it.Items = CreateItem(IttName, ID, x, y, z, Red, Green, Blue, A)
+		it.Items = CreateItem(IttName, ID, x, y, z, Red, Green, Blue, Alpha)
 		it\Name = Name
 		it\DisplayName = DisplayName
 		
@@ -1937,9 +1937,9 @@ Function LoadGameQuick%(File$)
 		Green = ReadByte(f)
 		Blue = ReadByte(f)
 		
-		Local A% = ReadFloat(f)
+		Alpha = ReadFloat(f)
 		
-		it.Items = CreateItem(IttName, ID, x, y, z, Red, Green, Blue, A)
+		it.Items = CreateItem(IttName, ID, x, y, z, Red, Green, Blue, Alpha)
 		it\Name = Name
 		it\DisplayName = DisplayName
 		
