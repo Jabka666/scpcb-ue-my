@@ -463,7 +463,7 @@ Function SaveGame%(File$)
 			WriteByte(f, 66)
 		EndIf
 		
-		If it\ItemTemplate\IsAnim <> 0 Then WriteFloat(f, AnimTime(it\Model))
+		If it\ItemTemplate\IsAnim Then WriteFloat(f, AnimTime(it\Model))
 		WriteByte(f, it\InvSlots)
 		WriteInt(f, it\ID)
 		If it\ItemTemplate\InvImg = it\InvImg
@@ -1216,7 +1216,7 @@ Function LoadGame%(File$)
 		
 		For itt.ItemTemplates = Each ItemTemplates
 			If itt\ID = ID And itt\Name = IttName; And itt\DisplayName = DisplayName ; ~ Not sure about that
-				If itt\IsAnim <> 0
+				If itt\IsAnim
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit
 				EndIf
@@ -1975,7 +1975,7 @@ Function LoadGameQuick%(File$)
 		
 		For itt.ItemTemplates = Each ItemTemplates
 			If itt\ID = ID And itt\Name = Name; And itt\DisplayName = DisplayName ; ~ Not sure about that
-				If itt\IsAnim <> 0
+				If itt\IsAnim
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit
 				EndIf

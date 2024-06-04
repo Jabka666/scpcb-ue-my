@@ -135,12 +135,11 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	If it\OBJ = 0
 		If HasAnim
 			it\OBJ = LoadAnimMesh_Strict(OBJPath)
-			it\IsAnim = True
 		Else
 			it\OBJ = LoadMesh_Strict(OBJPath)
-			it\IsAnim = False
 		EndIf
 	EndIf
+	it\IsAnim = HasAnim
 	it\OBJPath = OBJPath
 	
 	Local Texture%
