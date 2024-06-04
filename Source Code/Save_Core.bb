@@ -230,8 +230,9 @@ Function SaveGame%(File$)
 		WriteString(f, n\Texture)
 		
 		WriteByte(f, n\HasAsset)
+		WriteByte(f, n\HasAnim)
 		
-		WriteFloat(f, AnimTime(n\OBJ))
+		If n\HasAnim Then WriteFloat(f, AnimTime(n\OBJ))
 		
 		WriteByte(f, n\Contained)
 		WriteByte(f, n\IsDead)
@@ -764,17 +765,12 @@ Function LoadGame%(File$)
 		
 		n\HasAsset = ReadByte(f)
 		If n\HasAsset Then CreateNPCAsset(n)
+		n\HasAnim = ReadByte(f)
+		If n\HasAnim
+			n\Frame = ReadFloat(f)
+			SetAnimTime(n\OBJ, n\Frame)
+		EndIf
 		
-		Local Frame# = ReadFloat(f)
-		
-		Select NPCType
-			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035_Tentacle, NPCType1499_1, NPCType860_2, NPCType966, NPCType1048, NPCType1048_A
-				;[Block]
-				SetAnimTime(n\OBJ, Frame)
-				;[End Block]
-		End Select
-		
-		n\Frame = Frame
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)
 		n\HP = ReadInt(f)
@@ -786,7 +782,7 @@ Function LoadGame%(File$)
 			FreeEntity(n\OBJ) : n\OBJ = 0
 			n\OBJ = LoadAnimMesh_Strict(n\Model)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
-			SetAnimTime(n\OBJ, Frame)
+			If n\HasAnim Then SetAnimTime(n\OBJ, n\Frame)
 		EndIf
 		n\TextureID = ReadByte(f)
 		If n\TextureID > 0 Then ChangeNPCTextureID(n, n\TextureID - 1)
@@ -1605,17 +1601,12 @@ Function LoadGameQuick%(File$)
 		
 		n\HasAsset = ReadByte(f)
 		If n\HasAsset Then CreateNPCAsset(n)
+		n\HasAnim = ReadByte(f)
+		If n\HasAnim
+			n\Frame = ReadFloat(f)
+			SetAnimTime(n\OBJ, n\Frame)
+		EndIf
 		
-		Local Frame# = ReadFloat(f)
-		
-		Select NPCType
-			Case NPCType106, NPCTypeD, NPCType096, NPCTypeMTF, NPCTypeGuard, NPCType049, NPCType049_2, NPCTypeClerk, NPCType008_1, NPCType035_Tentacle, NPCType1499_1, NPCType860_2, NPCType966, NPCType1048, NPCType1048_A
-				;[Block]
-				SetAnimTime(n\OBJ, Frame)
-				;[End Block]
-		End Select
-		
-		n\Frame = Frame
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)
 		n\HP = ReadInt(f)
@@ -1627,7 +1618,7 @@ Function LoadGameQuick%(File$)
 			FreeEntity(n\OBJ) : n\OBJ = 0
 			n\OBJ = LoadAnimMesh_Strict(n\Model)
 			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
-			SetAnimTime(n\OBJ, Frame)
+			If n\HasAnim Then SetAnimTime(n\OBJ, n\Frame)
 		EndIf
 		n\TextureID = ReadByte(f)
 		If n\TextureID > 0 Then ChangeNPCTextureID(n, n\TextureID - 1)

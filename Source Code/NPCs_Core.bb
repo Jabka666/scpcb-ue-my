@@ -46,6 +46,7 @@ Type NPCs
 	Field ModelScaleX#, ModelScaleY#, ModelScaleZ#
 	Field TextureID% = -1
 	Field HasAsset% = False
+	Field HasAnim%
 	Field Contained% = False
 	Field TeslaHit% = False
 	Field IsOpt% = False
@@ -68,10 +69,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n\MaxGravity = 0.2
 	n\CollRadius = 0.2
 	n\FallingPickDistance = 10.0
+	n\HasAnim = True
 	Select NPCType
 		Case NPCType173
 			;[Block]
 			n\NVGName = "SCP-173"
+			n\HasAnim = False
 			n\Speed = IniGetFloat(NPCsFile, "SCP-173", "Speed") / 100.0
 			n\Gravity = True
 			
