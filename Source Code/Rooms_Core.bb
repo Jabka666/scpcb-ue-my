@@ -3402,30 +3402,30 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_office_3
 			;[Block]
 			; ~ Director Rosewood door
-			d.Doors = CreateDoor(r, r\x + 1360.0 * RoomScale, r\y + 224.0 * RoomScale, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
+			d.Doors = CreateDoor(r, r\x + 1284.0 * RoomScale, r\y + 224.0 * RoomScale, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
 			
-			d.Doors = CreateDoor(r, r\x + 367.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
+			d.Doors = CreateDoor(r, r\x + 320.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.1, True)
 			
 			d.Doors = CreateDoor(r, r\x - 234.0 * RoomScale, r\y, r\z + 768.0 * RoomScale, 270.0, False, OFFICE_DOOR)
 			d\Locked = 2 : d\MTFClose = False
 			
-			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1870.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
+			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1794.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1766.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 433.0 * RoomScale)
+			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1690.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 433.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 5 Key Card", it_key5, r\x + 2176.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 387.0 * RoomScale)
+			it.Items = CreateItem("Level 5 Key Card", it_key5, r\x + 2100.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 387.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Nuclear Device Document", it_paper, r\x + 2176.0 * RoomScale, r\y + 440.0 * RoomScale, r\z + 372.0 * RoomScale)
+			it.Items = CreateItem("Nuclear Device Document", it_paper, r\x + 2100.0 * RoomScale, r\y + 440.0 * RoomScale, r\z + 372.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 2176.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 128.0 * RoomScale)
+			it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 2100.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 128.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_servers_ez

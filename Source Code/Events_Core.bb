@@ -4074,7 +4074,7 @@ Function UpdateEvents%()
 										e\room\RoomDoors[0]\Locked = 0
 										n\State3 = 1.0
 									EndIf
-									If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.64 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.64 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
+									If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.6 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.6 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 										n\CurrSpeed = 0.0 : n\TeslaHit = True
 										Select n\NPCType
 											Case NPCType106

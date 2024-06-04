@@ -585,7 +585,13 @@ Function UpdateGame%()
 		
 		If KeyHit(key\SAVE)
 			If SelectedDifficulty\SaveType < SAVE_ON_QUIT
-				If CanSave = 0 ; ~ Scripted location
+				If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
+						CreateHintMsg(GetLocalString("save", "failed.screen"))
+					Else
+						SaveGame(CurrSave\Name) ; ~ Can save at screen
+					EndIf
+				ElseIf CanSave = 0 ; ~ Scripted location
 					CreateHintMsg(GetLocalString("save", "failed.now"))
 				ElseIf CanSave = 1 ; ~ Endings / Intro location
 					CreateHintMsg(GetLocalString("save", "failed.location"))
@@ -594,12 +600,6 @@ Function UpdateGame%()
 					CreateHintMsg(GetLocalString("save", "failed.096"))
 				ElseIf as\Timer <= 70.0 * 5.0
 					CancelAutoSave()
-				ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
-						CreateHintMsg(GetLocalString("save", "failed.screen"))
-					Else
-						SaveGame(CurrSave\Name) ; ~ Can save at screen
-					EndIf
 				Else
 					SaveGame(CurrSave\Name) ; ~ Can save
 				EndIf
@@ -8855,11 +8855,11 @@ Function Update1048AEars()
 	If I_1048A\EarGrowTimer > 0.0
 		Local PrevI1048EarGrowTimer# = I_1048A\EarGrowTimer
 		
-		CanSave = 0
 		If I_427\Timer < 70.0 * 360.0
 			If I_1048A\Revert
 				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
 			Else
+				CanSave = 0
 				If (Not I_427\Using)
 					I_1048A\EarGrowTimer = Min(I_1048A\EarGrowTimer + fps\Factor[0], 1100.0)
 					me\BlurTimer = I_1048A\EarGrowTimer * 2.0

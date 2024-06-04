@@ -2104,8 +2104,6 @@ Function LoadData%()
 	
 	QuickLoadPercent = -1
 	
-	CanSave = 3
-	
 	EscapeSecondsTimer = 70.0
 	
 	chs.Cheats = New Cheats
