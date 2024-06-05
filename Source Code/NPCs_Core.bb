@@ -3848,7 +3848,7 @@ Function UpdateNPCs%()
 								Next
 								n\State2 = MilliSecs() + 5000
 							EndIf
-						ElseIf Dist < 64.0
+						ElseIf Dist < 6.0
 							n\LastDist = Rnd(1.0, 2.5)
 							n\State = 1.0
 						EndIf
