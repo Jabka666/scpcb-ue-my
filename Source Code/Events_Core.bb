@@ -7332,18 +7332,8 @@ Function UpdateDimension106%()
 					EndIf
 				EndIf
 				
-				Temp = False
-				For i = 0 To MaxItemAmount - 1
-					If Inventory(i) <> Null
-						If Inventory(i)\ItemTemplate\ID = it_scp005
-							Temp = True
-							Exit
-						EndIf
-					EndIf
-				Next
-				
 				Local RoomExist%
-				Local Teleport% = False, Random% = Rand(32 + (Temp * 8))
+				Local Teleport% = False, Random% = Rand(30)
 				
 				Select e\EventState2
 					Case PD_StartRoom
@@ -7376,7 +7366,17 @@ Function UpdateDimension106%()
 								e\EventState = 601.0
 							EndIf
 						EndIf
-						If EntityDistanceSquared(me\Collider, e\room\OBJ) > PowTwo(-1200.0 * RoomScale) Then Teleport = True
+						If EntityDistanceSquared(me\Collider, e\room\OBJ) > PowTwo(-1200.0 * RoomScale)
+							For i = 0 To MaxItemAmount - 1
+								If Inventory(i) <> Null
+									If Inventory(i)\ItemTemplate\ID = it_scp005
+										Random = 31
+										Exit
+									EndIf
+								EndIf
+							Next
+							Teleport = True
+						EndIf
 						;[End Block]
 					Case PD_FourWayRoom
 						;[Block]
@@ -7425,7 +7425,7 @@ Function UpdateDimension106%()
 						
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)
-								Random = Rand(11, 32+ (Temp * 8))
+								Random = Rand(11, 30)
 								Teleport = True
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
@@ -7737,7 +7737,7 @@ Function UpdateDimension106%()
 							; ~ Player is at the exit
 							If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
 								Teleport = True
-								Random = Rand(11, 32 + (Temp * 8))
+								Random = Rand(11, 30)
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
 									PlaySound_Strict(snd_I\HorrorSFX[8])
@@ -7753,8 +7753,11 @@ Function UpdateDimension106%()
 						UpdateDoors()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
+						InjurePlayer(fps\Factor[0] * 0.0001)
+						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
-							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.5
+							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.0
+							n_I\Curr106\State = 250.0
 							For d.Doors = Each Doors
 								If d\room = e\room
 									d\Open = False
@@ -7768,7 +7771,7 @@ Function UpdateDimension106%()
 							Else
 								opt\CameraFogFar = 6.0
 							EndIf
-							Random = Rand(13, 22)
+							Random = 13
 							Teleport = True
 						EndIf
 						;[End Block]
@@ -7922,7 +7925,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_FakeTunnelRoom
 							;[End Block]
-						Case 31, 32, 33, 34, 35, 36, 37, 38, 39, 40
+						Case 31
 							;[Block]
 							PlaySound_Strict(snd_I\SCP106SFX[3], True)
 							
@@ -7930,7 +7933,7 @@ Function UpdateDimension106%()
 							PositionEntity(me\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True))
 							ResetEntity(me\Collider)
 							
-							n_I\Curr106\Speed = n_I\Curr106\Speed / 3.5
+							n_I\Curr106\Speed = n_I\Curr106\Speed / 3.0
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[23], True), EntityY(e\room\Objects[23], True), EntityZ(e\room\Objects[23], True))
 							ResetEntity(n_I\Curr106\Collider)
 							
