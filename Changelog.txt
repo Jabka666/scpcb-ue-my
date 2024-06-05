@@ -78,6 +78,8 @@ NPCs:
 - Increased range tesla gates can shock NPCs.
 - Reduced SCP-106's speed in the labyrinth.
 - Lowered the spawnrate of SCP-966s. Original spawnrate with «SelectedDifficulty\AggressiveNPCs» enabled.
+- Reduced attack startup distance of SCP-966.
+- Increased attack hit distance of SCP-049-2 and SCP-008-1.
 - Reduced the accuracy of the Gate B guard.
 
 Bug Fixes:
