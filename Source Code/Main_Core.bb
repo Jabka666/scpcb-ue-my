@@ -5972,7 +5972,7 @@ Function RenderDebugHUD%()
 				If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
 			Next
 			
-			Local Temp% = ((MaxAchievements - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))
+			Local Temp% = ((MaxAchievements - 1) - (CurrAchvAmount - 1)) * (4 + SelectedDifficulty\OtherFactors)
 			Local RoomAmount% = 0, RoomsFound% = 0
 			
 			For r.Rooms = Each Rooms
