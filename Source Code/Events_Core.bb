@@ -7757,7 +7757,6 @@ Function UpdateDimension106%()
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
 							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.0
-							n_I\Curr106\State = 250.0
 							For d.Doors = Each Doors
 								If d\room = e\room
 									d\Open = False
@@ -7779,6 +7778,7 @@ Function UpdateDimension106%()
 				
 				If Teleport
 					me\BlinkTimer = -10.0 : me\BlurTimer = 1150.0
+					n_I\Curr106\State = 250.0
 					
 					Select Random
 						Case 1, 2, 3, 4 ; ~ Rotate the player and close by the wall
