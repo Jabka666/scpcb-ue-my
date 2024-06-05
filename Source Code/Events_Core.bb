@@ -7778,7 +7778,7 @@ Function UpdateDimension106%()
 				
 				If Teleport
 					me\BlinkTimer = -10.0 : me\BlurTimer = 1150.0
-					n_I\Curr106\State = 250.0
+					n_I\Curr106\State = 250.0 : n_I\Curr106\Idle = 1
 					
 					Select Random
 						Case 1, 2, 3, 4 ; ~ Rotate the player and close by the wall
