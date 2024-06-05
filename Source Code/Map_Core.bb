@@ -3588,7 +3588,7 @@ Function UseDoor%(PlaySFX% = True)
 						If Temp = KEY_005
 							CreateMsg(GetLocalString("msg", "key.nothappend.005"))
 						Else
-							CreateMsg(GetLocalString("msg", "key.nothappend"))
+							CreateMsg(GetLocalString("msg", "dna.nothappend"))
 						EndIf
 					Else
 						If Temp = KEY_005
