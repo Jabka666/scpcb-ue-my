@@ -1173,8 +1173,7 @@ Function UpdateEvents%()
 										de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.002
 										RotateEntity(de\OBJ, EntityPitch(e\room\RoomSecurityCams[0]\CameraOBJ, True) + Rnd(10.0, 20.0), EntityYaw(e\room\RoomSecurityCams[0]\CameraOBJ, True) + 30.0, EntityRoll(de\OBJ))
 										MoveEntity(de\OBJ, 0.0, 0.05, 0.2) 
-										RotateEntity(de\OBJ, EntityPitch(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityYaw(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityRoll(de\OBJ))
-										EntityParent(de\OBJ, e\room\RoomSecurityCams[0]\CameraOBJ)
+										EntityParent(de\OBJ, e\room\OBJ)
 									ElseIf e\EventState3 > 3200.0
 										If e\EventState2 = 1.0
 											n_I\Curr106\Contained = True
@@ -1201,7 +1200,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else
-						TFormPoint(1088.0, -6208.0, 1824.0, e\room\OBJ, 0)
+						TFormPoint(1088.0, -6234.0, 1824.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 						e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True : e\room\NPC[0]\HideFromNVG = True
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
