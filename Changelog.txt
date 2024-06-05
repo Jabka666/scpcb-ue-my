@@ -77,7 +77,7 @@ NPCs:
 - Can now detect SCP-1048 and SCP-1048-A using the blue variant of Night Vision Goggles.
 - Increased range tesla gates can shock NPCs.
 - Reduced SCP-106's speed in the labyrinth.
-- Lowered the spawnrate of SCP-966s.
+- Lowered the spawnrate of SCP-966s. Original spawnrate with «SelectedDifficulty\AggressiveNPCs» enabled.
 - Reduced the accuracy of the Gate B guard.
 
 Bug Fixes:
