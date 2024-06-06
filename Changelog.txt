@@ -72,6 +72,7 @@ Items:
 - SCRAMBLE Gear battery drain speed slowed.
 - Fine SCP-268 now lasts longer.
 - Very Fine Radio gives the code to Dr. Gears' instead of Dr. Maynard's.
+- Increased chances for 18V batteries to spawn.
 
 NPCs:
 - Can now detect SCP-1048 and SCP-1048-A using the blue variant of Night Vision Goggles.
