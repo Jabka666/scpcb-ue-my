@@ -2397,7 +2397,7 @@ End Function
 
 Function CreateRandomBattery.Items(x#, y#, z#)
 	Local BatteryName$, BatteryID%
-	Local BatteryChance%, RandomChance%
+	Local BatteryChance%
 	
 	Select SelectedDifficulty\OtherFactors
 		Case SAFE
@@ -2418,11 +2418,12 @@ Function CreateRandomBattery.Items(x#, y#, z#)
 			;[End Block]
 	End Select
 	
-	RandomChance = Rand(BatteryChance)
-	If RandomChance >= 1 And RandomChance <= 7
+	Local RandomChance% = Rand(BatteryChance)
+	
+	If RandomChance > 0 And RandomChance <= 6
 		BatteryName = "9V Battery"
 		BatteryID = it_bat
-	ElseIf RandomChance >= 8 And RandomChance < BatteryChance
+	ElseIf RandomChance > 6 And RandomChance < BatteryChance - 1
 		BatteryName = "4.5V Battery"
 		BatteryID = it_coarsebat
 	Else
