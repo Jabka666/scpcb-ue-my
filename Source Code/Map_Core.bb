@@ -206,7 +206,7 @@ Function UpdateLightVolume%()
 		If UpdateLightsTimer >= 8.0 Then UpdateLightsTimer = 0.0
 		For l.Lights = Each Lights
 			If l\room <> Null
-				If l\room\Dist < 6.0 Lor l\room = PlayerRoom
+				If l\room\Dist < 8.0 Lor l\room = PlayerRoom
 					If UpdateLightsTimer = 0.0
 						Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 						
