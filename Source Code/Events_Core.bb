@@ -7549,7 +7549,7 @@ Function UpdateDimension106%()
 						Dist = EntityDistanceSquared(me\Collider, e\room\Objects[19])
 						SqrValue = Sqr(Dist)
 						
-						e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.4 + (Not Safe) * 0.7)
+						e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, Camera, 10.0, 0.3 + (Not Safe) * 0.7)
 						
 						If Safe Lor chs\NoTarget Lor I_268\InvisibilityOn
 							EntityTexture(e\room\Objects[19], e\room\Textures[0])
