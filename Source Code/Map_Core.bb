@@ -245,11 +245,11 @@ Function UpdateLights%(Cam%)
 								
 								If LightOBJHidden Then ShowEntity(l\OBJ)
 								If l\Flickers And Rand(13) = 1 And LightVisible
-									If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+									HideEntity(l\OBJ)
 									PlaySound2(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
 									If LightInView
-										If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
-										If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
+										HideEntity(l\Sprite)
+										HideEntity(l\AdvancedSprite)
 									EndIf
 									Random = Rnd(0.35, 0.8)
 									SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
