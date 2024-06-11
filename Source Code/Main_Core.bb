@@ -4981,7 +4981,7 @@ Function UpdateGUI%()
 						
 						me\VomitTimer = 70.0
 						
-						I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
+						I_008\Timer = I_008\Timer + 1.0 + SelectedDifficulty\AggressiveNPCs
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
