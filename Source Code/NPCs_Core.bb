@@ -4913,7 +4913,7 @@ Function UpdateNPCs%()
 								ResetEntity(n\Collider)
 							EndIf
 							If n\Idle > 0
-								n\Idle = Max(n\Idle - (1 + (1 * SelectedDifficulty\AggressiveNPCs)) * fps\Factor[0], 0.0)
+								n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.0)
 							Else
 								If PlayerInReachableRoom(True) ; ~ Player is in a room where SCP-008-1 can teleport to
 									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1
