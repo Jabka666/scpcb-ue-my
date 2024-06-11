@@ -110,6 +110,13 @@ Bug Fixes:
 - Fixed NPCs gravity not updating after loading the game from main menu (and loading custom maps).
 - Fixed items animation not saving properly.
 
+Known issues:
+ - Cups crash the game sometimes.
+ - Objects aren't properly hidden on new games.
+ - SCP-500-01 may not spawn correctly in Maintenance tunnels.
+ - Maintenance Tunnels elevator flips player around.
+ - Surveillance room clips into closets room often.
+
 v1.2.1
 
 General:
