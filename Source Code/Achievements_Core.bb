@@ -26,10 +26,10 @@ Const AchvO5% = 41, AchvPD% = 42, AchvSNAV% = 43, AchvTesla% = 44
 Function GiveAchievement%(AchvName%, ShowMessage% = True)
 	If achv\Achievement[AchvName] <> True
 		achv\Achievement[AchvName] = True
-		If opt\AchvMsgEnabled And ShowMessage
+		If opt\AchvMsgEnabled
 			Local AchievementName$ = GetFileLocalString(AchievementsFile, "a" + AchvName, "AchvName")
 			
-			CreateAchievementMsg(AchvName, AchievementName)
+			CreateAchievementMsg(AchvName, AchievementName, ShowMessage)
 		EndIf
 	EndIf
 End Function
@@ -95,16 +95,17 @@ Type AchievementMsg
 	Field MsgID%
 End Type
 
-Function CreateAchievementMsg.AchievementMsg(ID%, Txt$)
+Function CreateAchievementMsg.AchievementMsg(ID%, Txt$, ShowMessage%)
 	Local amsg.AchievementMsg
-	
-	amsg.AchievementMsg = New AchievementMsg
-	amsg\AchvID = ID
-	amsg\Txt = Txt
-	amsg\MsgX = 0.0
-	amsg\MsgTime = fps\Factor[1]
-	amsg\MsgID = CurrAchvMSGID
-	CurrAchvMSGID = CurrAchvMSGID + 1
+	If ShowMessage
+		amsg.AchievementMsg = New AchievementMsg
+		amsg\AchvID = ID
+		amsg\Txt = Txt
+		amsg\MsgX = 0.0
+		amsg\MsgTime = fps\Factor[1]
+		amsg\MsgID = CurrAchvMSGID
+		CurrAchvMSGID = CurrAchvMSGID + 1
+	EndIf
 	
 	achv\AchvIMG[ID] = LoadImage_Strict("GFX\Menu\achievements\" + GetFileLocalString(AchievementsFile, "a" + ID, "AchvImage") + ".png")
 	achv\AchvIMG[ID] = ScaleImage2(achv\AchvIMG[ID], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
