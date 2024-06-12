@@ -1544,7 +1544,7 @@ Type RoomTemplates
 	Field OBJPath$
 	Field Zone%[5]
 	Field Shape%, Name$, RoomID% ; ~ Name is for debugging
-	Field Commonness%, Large%
+	Field Commonness%
 	Field DisableDecals%
 	;Field TempTriggerBoxAmount%
 	;Field TempTriggerBox%[8]
