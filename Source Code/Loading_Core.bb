@@ -943,7 +943,6 @@ End Function
 
 Const ItemsPath$ = "GFX\Items\"
 Const ItemHUDTexturePath$ = "GFX\Items\HUD Textures\"
-Const ItemTexturePath$ = "GFX\Items\"
 Const ItemINVIconPath$ = "GFX\Items\Inventory Icons\"
 
 Function LoadItems%()
