@@ -5701,7 +5701,6 @@ Function UpdateEvents%()
 					
 					If EntityY(me\Collider) < (-4600.0) * RoomScale
 						me\Zone = 0
-						GiveAchievement(Achv939)
 						
 						If wi\GasMask = 0 And wi\HazmatSuit = 0
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)

@@ -3789,13 +3789,17 @@ Function UpdateNPCs%()
 							;[End Block]
 					End Select
 					
+					If EntityDistanceSquared(n\Collider, me\Collider) < 16.0
+						If EntityVisible(me\Collider, n\Collider) And EntityInView(n\Collider, Camera) Then GiveAchievement(Achv939)
+					EndIf
+					
 					If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
 						Dist = EntityDistanceSquared(n\Collider, me\Collider) - (EntityVisible(me\Collider, n\Collider) * 1.4641)
 						If PowTwo(me\SndVolume * 1.2) > Dist Lor Dist < 2.25
 							If n\State3 = 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-								
+								GiveAchievement(Achv939)
 								PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 								n\State3 = 1.0
 							EndIf
@@ -3804,7 +3808,7 @@ Function UpdateNPCs%()
 							If n\State <> 1 And n\Reload <= 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
 								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-								
+								GiveAchievement(Achv939)
 								SetNPCFrame(n, 175.0)
 								
 								n\Reload = 70.0 * 3.0
