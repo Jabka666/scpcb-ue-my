@@ -2524,8 +2524,8 @@ End Function
 Function InitNewGame%()
 	CatchErrors("InitNewGame()")
 	
-	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
-	Local i%, Skip%
+	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates, p.Props
+	Local i%, Tex%
 	
 	LoadEntities()
 	LoadSounds()
@@ -2604,6 +2604,16 @@ Function InitNewGame%()
 	For sc.SecurityCams = Each SecurityCams
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
+	Next
+	
+	For p.Props = Each Props
+		If p\TexPath <> ""
+			; ~ Such a stupid way, but it works
+			Tex = LoadTexture_Strict(p\TexPath)
+			EntityTexture(p\OBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
+			p\TexPath = ""
+		EndIf
 	Next
 	
 	For r.Rooms = Each Rooms
@@ -2716,8 +2726,8 @@ End Function
 Function InitLoadGame%()
 	CatchErrors("InitLoadGame()")
 	
-	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
-	Local i%, x#, y#, z#
+	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, p.Props
+	Local i%, x#, y#, z#, Tex%
 	
 	InitOtherStuff()
 	LoadWayPoints()
@@ -2735,6 +2745,16 @@ Function InitLoadGame%()
 	For sc.SecurityCams = Each SecurityCams
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
+	Next
+	
+	For p.Props = Each Props
+		If p\TexPath <> ""
+			; ~ Such a stupid way, but it works
+			Tex = LoadTexture_Strict(p\TexPath)
+			EntityTexture(p\OBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex)
+			p\TexPath = ""
+		EndIf
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates

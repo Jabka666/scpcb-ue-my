@@ -10,6 +10,7 @@ Type Props
 	Field Name$
 	Field OBJ%
 	Field room.Rooms
+	Field TexPath$
 End Type
 
 Type TempProps
@@ -84,22 +85,21 @@ Function CheckForPropModel%(File$)
 	End Select
 End Function
 
-Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, Texture$)
+Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, TexturePath$)
 	Local p.Props, p2.Props
 	Local Tex%
 	
 	p.Props = New Props
 	For p2.Props = Each Props
-		If p2 <> p
-			If p2\Name = Name
-				p\OBJ = CopyEntity(p2\OBJ)
-				Exit
-			EndIf
+		If p2\Name = Name
+			p\OBJ = CopyEntity(p2\OBJ)
+			Exit
 		EndIf
 	Next
 	
 	p\Name = Name
 	p\room = room
+	p\TexPath = TexturePath
 	
 	If p\OBJ = 0 Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes models folder if the CBRE was used
 	PositionEntity(p\OBJ, x, y, z)
@@ -108,11 +108,6 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
 	EntityType(p\OBJ, HasCollision) ; ~ DON'T FORGET THAT Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
-	If Texture <> ""
-		Tex = LoadTexture_Strict(Texture)
-		EntityTexture(p\OBJ, Tex)
-		DeleteSingleTextureEntryFromCache(Tex)
-	EndIf
 	EntityPickMode(p\OBJ, 2)
 	
 	Return(p)

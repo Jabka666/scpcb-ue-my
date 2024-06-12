@@ -142,7 +142,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	it\IsAnim = HasAnim
 	it\OBJPath = OBJPath
 	
-	Local Texture%
+	Local Texture% = 0
 	
 	If TexturePath <> ""
 		If (TexturePath = ImgPath) And (FileType(ItemsPath + TexturePath) = 0)
