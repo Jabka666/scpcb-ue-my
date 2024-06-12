@@ -3789,7 +3789,7 @@ Function UpdateNPCs%()
 							;[End Block]
 					End Select
 					
-					If EntityDistanceSquared(n\Collider, me\Collider) < 16.0
+					If EntityDistanceSquared(n\Collider, me\Collider) < 49.0
 						If EntityVisible(me\Collider, n\Collider) And EntityInView(n\Collider, Camera) Then GiveAchievement(Achv939)
 					EndIf
 					
