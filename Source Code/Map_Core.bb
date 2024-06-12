@@ -2094,23 +2094,23 @@ Function LoadRoomTemplates%(File$)
 				StrTemp = IniGetString(File, Loc, "Shape")
 				
 				Select StrTemp
-					Case "room1", "1"
+					Case "1"
 						;[Block]
 						rt\Shape = ROOM1
 						;[End Block]
-					Case "room2", "2"
+					Case "2"
 						;[Block]
 						rt\Shape = ROOM2
 						;[End Block]
-					Case "room2C", "2C"
+					Case "2C"
 						;[Block]
 						rt\Shape = ROOM2C
 						;[End Block]
-					Case "room3", "3"
+					Case "3"
 						;[Block]
 						rt\Shape = ROOM3
 						;[End Block]
-					Case "room4", "4"
+					Case "4"
 						;[Block]
 						rt\Shape = ROOM4
 						;[End Block]
