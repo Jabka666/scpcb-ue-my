@@ -1450,6 +1450,7 @@ Function UpdateConsole%()
 						n_I\Curr096\State = 0.0
 						StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 						If n_I\Curr096\SoundCHN2 <> 0 Then StopStream_Strict(n_I\Curr096\SoundCHN2) : n_I\Curr096\SoundCHN2 = 0 : n_I\Curr096\SoundCHN2_IsStream = False
+						GiveAchievement(Achv096, False)
 					EndIf
 					CreateConsoleMsg(GetLocalString("console", "r096"))
 					;[End Block]
