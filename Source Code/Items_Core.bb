@@ -669,7 +669,6 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case it_vest, it_finevest
 						;[Block]
-						CanPickItem = 1
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null
 								If Inventory(z)\ItemTemplate\ID = it_vest Lor Inventory(z)\ItemTemplate\ID = it_finevest
@@ -692,7 +691,6 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 						;[Block]
-						CanPickItem = 1
 						For z = 0 To MaxItemAmount - 1
 							If Inventory(z) <> Null
 								If Inventory(z)\ItemTemplate\ID = it_hazmatsuit Lor Inventory(z)\ItemTemplate\ID = it_finehazmatsuit Lor Inventory(z)\ItemTemplate\ID = it_veryfinehazmatsuit Lor Inventory(z)\ItemTemplate\ID = it_hazmatsuit148
