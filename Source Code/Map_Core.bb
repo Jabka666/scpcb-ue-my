@@ -1605,23 +1605,23 @@ Const r_room1_dead_end_ez% = 74
 Const r_room1_lifts% = 75
 Const r_room1_o5% = 76
 Const r_room2_ez% = 77, r_room2_2_ez% = 78, r_room2_3_ez% = 79, r_room2_4_ez% = 80, r_room2_5_ez% = 81, r_room2_6_ez% = 82
-Const r_room2_cafeteria% = 84
-Const r_room2_ic% = 85
-Const r_room2_medibay% = 86
-Const r_room2_office% = 87, r_room2_office_2% = 88, r_room2_office_3% = 89
-Const r_room2_servers_ez% = 90
-Const r_room2_scientists% = 91, r_room2_scientists_2% = 92
-Const r_room2_tesla_ez% = 93
-Const r_cont2_860_1% = 94
-Const r_room2c_ez% = 95, r_room2c_2_ez% = 96
-Const r_room2c_ec% = 97
-Const r_room2c_gw_ez% = 98
-Const r_room3_gw% = 99
-Const r_room3_office% = 100
-Const r_room3_ez% = 101, r_room3_2_ez% = 102, r_room3_3_ez% = 103, r_room3_4_ez% = 104
-Const r_room4_ez% = 105
+Const r_room2_cafeteria% = 83
+Const r_room2_ic% = 84
+Const r_room2_medibay% = 85
+Const r_room2_office% = 86, r_room2_office_2% = 87, r_room2_office_3% = 88
+Const r_room2_servers_ez% = 89
+Const r_room2_scientists% = 90, r_room2_scientists_2% = 91
+Const r_room2_tesla_ez% = 92
+Const r_cont2_860_1% = 93
+Const r_room2c_ez% = 94, r_room2c_2_ez% = 95
+Const r_room2c_ec% = 96
+Const r_room2c_gw_ez% = 97
+Const r_room3_gw% = 98
+Const r_room3_office% = 99
+Const r_room3_ez% = 100, r_room3_2_ez% = 101, r_room3_3_ez% = 102, r_room3_4_ez% = 103
+Const r_room4_ez% = 104
 ; ~ OTHERS
-Const r_dimension_106% = 106, r_dimension_1499% = 107
+Const r_dimension_106% = 105, r_dimension_1499% = 106
 ;[End Block]
 
 Function FindRoomID%(RoomName$)
