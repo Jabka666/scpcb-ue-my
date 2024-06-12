@@ -1160,15 +1160,15 @@ Function UpdateNPCs%()
 				;[Block]
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
+				Local IsLooking% = Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
 				
-				If wi\SCRAMBLE > 0 And Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2)
+				If wi\SCRAMBLE > 0 And IsLooking
 					If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
 					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
 					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
 				Else
 					If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 				EndIf
-				If Dist < 16.0 Then GiveAchievement(Achv096)
 				
 				Select n\State
 					Case 0.0 ; ~ Sitting
@@ -1200,21 +1200,21 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If (Not chs\NoTarget)
-								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
-									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
-											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
-											
-											me\CurrCameraZoom = 10.0
-											
-											SetNPCFrame(n, 194.0)
-											
-											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-											n\Sound = 0
-											
-											n\State3 = 0.0
-											n\State = 2.0
-										EndIf
+								If wi\SCRAMBLE = 0 And IsLooking
+									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
+										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+										
+										achv\Achievement[Achv096] = False
+										
+										me\CurrCameraZoom = 10.0
+										
+										SetNPCFrame(n, 194.0)
+										
+										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+										n\Sound = 0
+										
+										n\State3 = 0.0
+										n\State = 2.0
 									EndIf
 								EndIf
 							EndIf
@@ -1280,20 +1280,20 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If (Not chs\NoTarget)
-								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
-									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
-											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
-											
-											me\CurrCameraZoom = 10.0
-											
-											If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
-											
-											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-											n\Sound = 0
-											
-											n\State = 3.0
-										EndIf
+								If wi\SCRAMBLE = 0 And IsLooking
+									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
+										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+										
+										achv\Achievement[Achv096] = False
+										
+										me\CurrCameraZoom = 10.0
+										
+										If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
+										
+										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+										n\Sound = 0
+										
+										n\State = 3.0
 									EndIf
 								EndIf
 							EndIf
@@ -7170,6 +7170,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			n_I\Curr096 = n
+			GiveAchievement(Achv096)
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-096")
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"

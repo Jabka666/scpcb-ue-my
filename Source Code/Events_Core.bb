@@ -3569,6 +3569,7 @@ Function UpdateEvents%()
 					If n_I\Curr096 = Null
 						n_I\Curr096 = CreateNPC(NPCType096, e\room\x, 0.3, e\room\z)
 						RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 45.0, 0.0, True)
+						GiveAchievement(Achv096)
 					EndIf
 					RemoveEvent(e)
 				EndIf
@@ -5109,6 +5110,7 @@ Function UpdateEvents%()
 							ResetEntity(n_I\Curr096\Collider)
 						Else
 							n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
+							GiveAchievement(Achv096)
 						EndIf
 						n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
 						RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
