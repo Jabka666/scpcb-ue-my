@@ -4966,10 +4966,8 @@ End Function
 Dim MapRoom$(0, 0)
 
 Function SetRoom%(RoomName$, RoomType%, RoomPosition%, MinPos%, MaxPos%) ; ~ Place a room without overwriting others
-	Local Looped%, CanPlace%
+	Local Looped% = False, CanPlace% = True
 	
-	Looped = False
-	CanPlace = True
 	While MapRoom(RoomType, RoomPosition) <> ""
 		RoomPosition = RoomPosition + 1
 		If RoomPosition > MaxPos
