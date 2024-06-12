@@ -2184,6 +2184,7 @@ Function UpdateEvents%()
 								n_I\Curr049\State = 2.0 : n_I\Curr049\Idle = 1 : n_I\Curr049\HideFromNVG = True
 								PointEntity(n_I\Curr049\Collider, e\room\OBJ)
 								e\room\NPC[0] = n_I\Curr049
+								GiveAchievement(Achv049)
 							EndIf
 							
 							e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
@@ -6823,6 +6824,7 @@ Function UpdateEvents%()
 							Else
 								n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
 							EndIf
+							GiveAchievement(Achv049)
 						Else
 							If AdjDist1 > AdjDist2
 								PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ), True)

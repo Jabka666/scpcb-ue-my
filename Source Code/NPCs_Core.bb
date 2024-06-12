@@ -1615,9 +1615,6 @@ Function UpdateNPCs%()
 						EndIf
 					EndIf
 				EndIf
-				If Dist < 16.0
-					If EntityInView(n\Collider, Camera) Then GiveAchievement(Achv049)
-				EndIf
 				
 				If n\Idle > 0.1
 					If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049
@@ -7151,6 +7148,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			n_I\Curr049 = n
+			GiveAchievement(Achv049)
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-049")
 			;[End Block]
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492", "049_2", "scp_049_2"
