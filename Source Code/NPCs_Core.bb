@@ -1161,13 +1161,30 @@ Function UpdateNPCs%()
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
 				Local IsLooking% = Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
-				
 				If wi\SCRAMBLE > 0 And IsLooking
-					If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
-					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
-					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
+					Local HasBatteryForScramble% = False
+					For i = 0 To MaxItemAmount - 1
+						If Inventory(i) <> Null
+							If Inventory(i)\ItemTemplate\ID = it_scramble Lor Inventory(i)\ItemTemplate\ID = it_finescramble
+								If Inventory(i)\State > 0.0
+									HasBatteryForScramble = True
+									Exit
+								EndIf
+							EndIf
+						EndIf
+					Next
+					If HasBatteryForScramble
+						If (Not ChannelPlaying(SCRAMBLECHN)) Then SCRAMBLECHN = PlaySound_Strict(snd_I\SCRAMBLESFX)
+						If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
+						ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
+						PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
+					Else
+						If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
+						If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+					EndIf
 				Else
 					If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
+					If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 				EndIf
 				
 				Select n\State
