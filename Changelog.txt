@@ -69,7 +69,7 @@ Items:
 - New texture for SCP-1025.
 - Red Night Vision Goggles require 18V battery.
 - S-NAV Navigator Ultimate is no longer guaranteed and the chances are based on rooms found.
-- SCRAMBLE Gear battery drain speed slowed.
+- SCRAMBLE Gear battery drain reworked to drain slow when idle, but drain fast when viewing SCP-096's face.
 - Fine SCP-268 now lasts longer.
 - Very Fine Radio gives the code to Dr. Gears' instead of Dr. Maynard's.
 - Increased chances for 18V batteries to spawn.
