@@ -211,7 +211,7 @@ Function UpdateWorld2%()
 					ElseIf wi\NightVision > 0
 						Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.03 * wi\NightVision)))
 					EndIf
-					If wi\SCRAMBLE > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.12 / wi\SCRAMBLE)))
+					If wi\SCRAMBLE > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.08 / wi\SCRAMBLE)))
 					Power = Int(Inventory(i)\State)
 					If Power = 0 ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
