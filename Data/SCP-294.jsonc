@@ -3607,5 +3607,20 @@
 		"alpha": 0.1,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense0.ogg",
 		"refuse_message": "\"Wait, didn’t I already drink this?\"" 
-	}
-]
+ 
+	},
+        {
+                "name": ["Spamton", "Big Shot"],
+		"color": [555, 555, 555],
+		"alpha": 0.1,
+                “glow:” true,
+		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
+                "drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
+		"drink_message": “NOW’S YOUR CHANCE TO BE A BIG SHOT!”,
+                “stamina_effect": 1.2,
+		"stamina_timer": 300.0
+                "blur": 20.0,
+		"damage": -6.0,
+		"bloodloss": -90.0
+         }
+  ]
