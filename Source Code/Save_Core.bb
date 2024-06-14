@@ -108,10 +108,10 @@ Function SaveGame%(File$)
 				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
 				WriteByte(f, SelectedDifficulty\SaveType)
 				WriteByte(f, SelectedDifficulty\OtherFactors)
+				WriteByte(f, SelectedDifficulty\InventorySlots)
 			EndIf
 		EndIf
 	Next
-	WriteByte(f, SelectedDifficulty\InventorySlots)
 	
 	WriteFloat(f, me\Sanity)
 	
@@ -162,11 +162,7 @@ Function SaveGame%(File$)
 	Next
 	WriteInt(f, me\RefinedItems)
 	
-	If UsedConsole
-		WriteInt(f, 100)
-	Else
-		WriteInt(f, 994)
-	EndIf
+	WriteByte(f, UsedConsole)
 	
 	WriteFloat(f, MTFTimer)
 	
@@ -620,8 +616,8 @@ Function LoadGame%(File$)
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
+		SelectedDifficulty\InventorySlots = ReadByte(f)
 	EndIf
-	SelectedDifficulty\InventorySlots = ReadByte(f)
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
@@ -675,7 +671,7 @@ Function LoadGame%(File$)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
-	UsedConsole = (ReadInt(f) <> 994)
+	UsedConsole = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
 	
@@ -1459,14 +1455,11 @@ Function LoadGameQuick%(File$)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
 	If DifficultyIndex = ESOTERIC
-		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
-		SelectedDifficulty\SaveType = ReadByte(f)
-		SelectedDifficulty\OtherFactors = ReadByte(f)
+		ReadByte(f)
+		ReadByte(f)
+		ReadByte(f)
+		ReadByte(f)
 	EndIf
-	SelectedDifficulty\InventorySlots = ReadByte(f)
-	
-	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount)
 	
 	me\Sanity = ReadFloat(f)
 	
@@ -1513,7 +1506,7 @@ Function LoadGameQuick%(File$)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
-	UsedConsole = (ReadInt(f) <> 994)
+	UsedConsole = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
 	
