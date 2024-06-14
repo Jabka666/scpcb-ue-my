@@ -106,8 +106,9 @@ Function ResetInput%()
 	Input_ResetTime = 20.0
 End Function
 
-mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
-mo\Mouselook_Y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+Const Mouselook_X_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
+Const Mouselook_Y_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+
 mo\Mouse_Left_Limit = 250 * MenuScale
 mo\Mouse_Right_Limit = opt\GraphicWidth - mo\Mouse_Left_Limit
 mo\Mouse_Top_Limit = 150 * MenuScale
@@ -2887,14 +2888,13 @@ Function UpdateMouseLook%()
 		
 		If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then StopMouseMovement()
 		
-		Local The_Yaw# = ((mo\Mouse_X_Speed_1)) * mo\Mouselook_X_Inc / (1.0 + wi\BallisticVest)
-		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
+		Local The_Yaw# = mo\Mouse_X_Speed_1 * Mouselook_X_Inc / (1.0 + wi\BallisticVest)
+		Local The_Pitch# = mo\Mouse_Y_Speed_1 * Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
 		
 		TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 		CameraPitch = CameraPitch + The_Pitch
 		; ~ Limit the user's camera to within 180.0 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch
-		If CameraPitch > 70.0 Then CameraPitch = 70.0
-		If CameraPitch < -70.0 Then CameraPitch = -70.0
+		CameraPitch = Clamp(CameraPitch, -70.0, 70.0)
 		
 		Local ShakeTimer# = me\CameraShake + me\BigCameraShake
 		
