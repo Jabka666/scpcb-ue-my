@@ -7435,7 +7435,7 @@ Function UpdateMenu%()
 				
 				y = y + (75 * MenuScale)
 				
-				If SelectedDifficulty\SaveType <> NO_SAVES
+				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					If GameSaved
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
@@ -7505,7 +7505,7 @@ Function UpdateMenu%()
 			Else
 				y = y + (75 * MenuScale)
 				
-				If SelectedDifficulty\SaveType <> NO_SAVES
+				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					If GameSaved
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
@@ -7965,7 +7965,7 @@ Function RenderMenu%()
 			
 			If me\Terminated And me\SelectedEnding = -1
 				y = y + (175 * MenuScale)
-				If SelectedDifficulty\SaveType <> NO_SAVES
+				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					y = y + (75 * MenuScale)
 				EndIf
 				SetFontEx(fo\FontID[Font_Default])
