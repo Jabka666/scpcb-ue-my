@@ -497,7 +497,6 @@ Function UpdateItems%()
 	
 	Local i.Items, i2.Items, np.NPCs
 	Local xTemp#, yTemp#, zTemp#
-	Local Temp%, n%
 	Local Pick%, ed#
 	Local HideDist# = PowTwo(HideDistance)
 	Local PushDist# = HideDist * 0.04
@@ -557,12 +556,17 @@ Function UpdateItems%()
 								ed = PowTwo(xTemp) + PowTwo(zTemp)
 								If ed < 0.07 And Abs(yTemp) < 0.25
 									; ~ Items are too close together, push away
-									xTemp = xTemp * (0.07 - ed)
-									zTemp = zTemp * (0.07 - ed)
+									Local Temp# = 0.07 - ed
+									
+									xTemp = xTemp * Temp
+									zTemp = zTemp * Temp
 									
 									While Abs(xTemp) + Abs(zTemp) < 0.001
-										xTemp = xTemp + Rnd(-0.002, 0.002)
-										zTemp = zTemp + Rnd(-0.002, 0.002)
+										; ~ No difference, can be the same for x and y
+										Local RandomVal# = Rnd(-0.002, 0.002)
+										
+										xTemp = xTemp + RandomVal
+										zTemp = zTemp + RandomVal
 									Wend
 									
 									TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
