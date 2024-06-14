@@ -519,9 +519,7 @@ Function UpdateItems%()
 				If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
 				
 				If i\Dist < 1.44
-					If ClosestItem = Null
-						If EntityInView(i\Model, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
-					ElseIf ClosestItem = i Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)
+					If ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)
 						If EntityInView(i\Model, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
 					EndIf
 				EndIf
