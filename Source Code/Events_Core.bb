@@ -3034,7 +3034,7 @@ Function UpdateEvents%()
 			Case e_cont3_966
 				;[Block]
 				If PlayerRoom = e\room
-					If e\EventState = 0.0 And Rand(50) = 1
+					If Rand(50) = 1
 						If RemoteDoorOn
 							PlaySound_Strict(snd_I\LightOffSFX)
 							me\LightBlink = 4.0
