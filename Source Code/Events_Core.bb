@@ -3401,11 +3401,9 @@ Function UpdateEvents%()
 						Temp = True
 						For it.Items = Each Items
 							If (Not it\Picked)
-								If EntityX(it\Collider) - EntityX(e\room\Objects[2], True) = 0.0
-									If EntityZ(it\Collider) - EntityZ(e\room\Objects[2], True) = 0.0
-										Temp = False
-										Exit
-									EndIf
+								If DistanceSquared(EntityX(it\Collider), EntityX(e\room\Objects[2], True), EntityZ(it\Collider), EntityZ(e\room\Objects[2], True)) = 0.0
+									Temp = False
+									Exit
 								EndIf
 							EndIf
 						Next
