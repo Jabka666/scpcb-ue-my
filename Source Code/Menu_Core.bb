@@ -95,7 +95,7 @@ Function UpdateMainMenu%()
 	CatchErrors("UpdateMainMenu()")
 	
 	Local sv.Save, cm.CustomMaps, snd.Sound
-	Local x%, y%, Width%, Height%, Temp%, i%, n%, j%
+	Local x%, y%, Width%, Height%, Temp%, i%, j%
 	Local File$, Test%
 	
 	While fps\Accumulator > 0.0
@@ -997,7 +997,7 @@ End Function
 Function RenderMainMenu%()
 	CatchErrors("RenderMainMenu()")
 	
-	Local x%, y%, Width%, Height%, Temp%, i%, n%
+	Local x%, y%, Width%, Height%, Temp%, i%
 	Local tX#, tY#, tW#, tH#
 	Local TempStr$, TempStr2$, Name$
 	
