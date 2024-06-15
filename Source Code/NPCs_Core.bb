@@ -2239,10 +2239,10 @@ Function UpdateNPCs%()
 								DetectDistance = 484.0
 								
 								; ~ Increase accuracy if the player is going slow
-								ShootAccuracy = 0.51 - (10.0 * me\CurrSpeed)
+								ShootAccuracy = 0.5 - (12.0 * me\CurrSpeed)
 							EndIf
 							
-							If Dist < PowTwo(DetectDistance)
+							If Dist < DetectDistance
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 								PointEntity(Pvt, me\Collider)
