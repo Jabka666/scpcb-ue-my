@@ -2485,8 +2485,6 @@ Function RefillCup%()
 End Function
 
 Function SetCrouch%(NewCrouch%)
-	Local Temp%
-	
 	If NewCrouch <> me\Crouch
 		PlaySound_Strict(snd_I\CrouchSFX)
 		me\SndVolume = Max(2.0, me\SndVolume)
@@ -2494,7 +2492,7 @@ Function SetCrouch%(NewCrouch%)
 			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
 			If me\Stamina < 10.0
 				If (Not ChannelPlaying(BreathCHN))
-					Temp = 0
+					Local Temp% = 0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp = 1
 					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
 				EndIf
@@ -3419,8 +3417,6 @@ Function UpdateGUI%()
 	EndIf
 	
 	Local PrevOtherOpen.Items, PrevItem.Items
-	Local OtherSize%, OtherAmount%
-	Local IsEmpty%
 	Local IsMouseOn%
 	Local ClosedInv%
 	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
@@ -3429,7 +3425,8 @@ Function UpdateGUI%()
 	
 	If OtherOpen <> Null
 		PrevOtherOpen = OtherOpen
-		OtherSize = OtherOpen\InvSlots
+		Local OtherSize% = OtherOpen\InvSlots
+		Local OtherAmount%
 		
 		For i = 0 To OtherSize - 1
 			If OtherOpen\SecondInv[i] <> Null Then OtherAmount = OtherAmount + 1
@@ -3518,7 +3515,7 @@ Function UpdateGUI%()
 						EndIf
 					Next
 					
-					IsEmpty = True
+					Local IsEmpty% = True
 					If OtherOpen\ItemTemplate\ID = it_wallet
 						If (Not IsEmpty)
 							For z = 0 To OtherSize - 1
@@ -6169,8 +6166,6 @@ Function RenderGUI%()
 	EndIf
 	
 	Local PrevOtherOpen.Items
-	Local OtherSize%, OtherAmount%
-	Local IsEmpty%
 	Local IsMouseOn%
 	Local ClosedInv%
 	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
@@ -6180,7 +6175,8 @@ Function RenderGUI%()
 	
 	If OtherOpen <> Null
 		PrevOtherOpen = OtherOpen
-		OtherSize = OtherOpen\InvSlots
+		Local OtherSize% = OtherOpen\InvSlots
+		Local OtherAmount%
 		
 		For i = 0 To OtherSize - 1
 			If OtherOpen\SecondInv[i] <> Null Then OtherAmount = OtherAmount + 1
