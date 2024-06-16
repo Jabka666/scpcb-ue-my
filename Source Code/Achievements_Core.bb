@@ -10,7 +10,7 @@ Function InitAchievements%()
 	UnlockedAchievements = CreateS2IMap()
 
 	AchievementsArray = JsonParseFromFile(AchievementsFile)
-	LocalAchievementsArray = JsonParseFromFile(LocalizaitonPath + AchievementsFile)
+	LocalAchievementsArray = JsonParseFromFile(lang\LanguagePath + AchievementsFile)
 
 	Local Defines% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 
