@@ -5682,7 +5682,9 @@ End Function
 Function RenderHUD%()
 	If me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Then Return
 	
-	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
+	Local x% = 80 * MenuScale, y% = opt\GraphicHeight - (15 * MenuScale)
+	Local Width% = 200 * MenuScale, Height% = 20 * MenuScale
+	Local WalkIconID%, BlinkIconID%
 	Local i%
 	Local PlayerPosY# = EntityY(me\Collider)
 	Local IconColoredRectSize% = 36 * MenuScale
@@ -5692,11 +5694,6 @@ Function RenderHUD%()
 	Local IconRectSpace% = 51 * MenuScale
 	Local IconSpace% = 50 * MenuScale
 	Local ySpace% = 40 * MenuScale
-	
-	Width = 200 * MenuScale
-	Height = 20 * MenuScale
-	x = 80 * MenuScale
-	y = opt\GraphicHeight - (15 * MenuScale)
 	
 	Color(255, 255, 255)
 	y = y - ySpace
@@ -5799,10 +5796,8 @@ End Function
 
 Function RenderDebugHUD%()
 	Local ev.Events, ch.Chunk, r.Rooms
-	Local x%, y%, i%
-	
-	x = 20 * MenuScale
-	y = 40 * MenuScale
+	Local x% = 20 * MenuScale, y% = 40 * MenuScale
+	Local i%
 	
 	Color(255, 255, 255)
 	SetFontEx(fo\FontID[Font_Console])
@@ -5998,16 +5993,15 @@ Function AdaptScreenGamma%()
 End Function
 
 Function Render3DHandIcon%(IconID%, OBJ%, ArrowID% = -1)
-	Local PitchValue#, YawValue#
 	Local CoordEx% = 32 * MenuScale
 	Local Pvt% = CreatePivot()
 	
 	PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 	PointEntity(Pvt, OBJ)
-	YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
+	Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
 	If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
 	If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-	PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
+	Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
 	If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 	If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 	
@@ -6923,7 +6917,7 @@ Function UpdateMenu%()
 	CatchErrors("UpdateMenu()")
 	
 	Local r.Rooms, sc.SecurityCams, amsg.AchievementMsg 
-	Local x%, y%, z%, Width%, Height%, i%
+	Local z%, i%
 	
 	If MenuOpen
 		If (Not IsPlayerOutsideFacility()) And (Not me\Terminated)
@@ -6943,10 +6937,10 @@ Function UpdateMenu%()
 		
 		InvOpen = False
 		
-		Width = ImageWidth(t\ImageID[0])
-		Height = ImageHeight(t\ImageID[0])
-		x = mo\Viewport_Center_X - (Width / 2)
-		y = mo\Viewport_Center_Y - (Height / 2)
+		Local Width% = ImageWidth(t\ImageID[0])
+		Local Height% = ImageHeight(t\ImageID[0])
+		Local x% = mo\Viewport_Center_X - (Width / 2)
+		Local y% = mo\Viewport_Center_Y - (Height / 2)
 		
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
@@ -7565,19 +7559,18 @@ End Function
 Function RenderMenu%()
 	CatchErrors("RenderMenu()")
 	
-	Local x%, y%, Width%, Height%, i%
-	Local TempStr$
-	
 	If (Not InFocus()) ; ~ Game is out of focus then pause the game
 		MenuOpen = True
 		PauseSounds()
 		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
 	EndIf
 	If MenuOpen
-		Width = ImageWidth(t\ImageID[0])
-		Height = ImageHeight(t\ImageID[0])
-		x = mo\Viewport_Center_X - (Width / 2)
-		y = mo\Viewport_Center_Y - (Height / 2)
+		Local Width% = ImageWidth(t\ImageID[0])
+		Local Height% = ImageHeight(t\ImageID[0])
+		Local x% = mo\Viewport_Center_X - (Width / 2)
+		Local y% = mo\Viewport_Center_Y - (Height / 2)
+		Local TempStr$
+		Local i%
 		
 		If (Not OnPalette)
 			ShowPointer()
@@ -7993,7 +7986,6 @@ Const Ending_B2% = 3
 ;[End Block]
 
 Function UpdateEnding%()
-	Local x%, y%, Width%, Height%, i%
 	
 	fps\Factor[0] = 0.0
 	If me\EndingTimer > -2000.0
@@ -8034,10 +8026,12 @@ Function UpdateEnding%()
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0
 				If igm\AchievementsMenu =< 0
-					Width = ImageWidth(t\ImageID[0])
-					Height = ImageHeight(t\ImageID[0])
-					x = mo\Viewport_Center_X - (Width / 2)
-					y = mo\Viewport_Center_Y - (Height / 2)
+					Local Width% = ImageWidth(t\ImageID[0])
+					Local Height% = ImageHeight(t\ImageID[0])
+					Local x% = mo\Viewport_Center_X - (Width / 2)
+					Local y% = mo\Viewport_Center_Y - (Height / 2)
+					Local i%
+					
 					x = x + (132 * MenuScale)
 					y = y + (432 * MenuScale)
 					
@@ -8080,7 +8074,6 @@ Function RenderEnding%()
 	ShowPointer()
 	
 	Local itt.ItemTemplates, r.Rooms
-	Local x%, y%, Width%, Height%, i%
 	
 	Select me\SelectedEnding
 		Case Ending_A1, Ending_B2
@@ -8108,10 +8101,10 @@ Function RenderEnding%()
 			DrawBlock(me\EndingScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 			
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0
-				Width = ImageWidth(t\ImageID[0])
-				Height = ImageHeight(t\ImageID[0])
-				x = mo\Viewport_Center_X - (Width / 2)
-				y = mo\Viewport_Center_Y - (Height / 2)
+				Local Width% = ImageWidth(t\ImageID[0])
+				Local Height% = ImageHeight(t\ImageID[0])
+				Local x% = mo\Viewport_Center_X - (Width / 2)
+				Local y% = mo\Viewport_Center_Y - (Height / 2)
 				
 				DrawBlock(t\ImageID[0], x, y)
 				
@@ -8121,6 +8114,8 @@ Function RenderEnding%()
 				SetFontEx(fo\FontID[Font_Default])
 				
 				If igm\AchievementsMenu =< 0
+					Local i%
+					
 					x = x + (132 * MenuScale)
 					y = y + (122 * MenuScale)
 					
@@ -8215,11 +8210,9 @@ End Function
 Function UpdateCredits%()
 	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = ((me\EndingTimer + 2000.0) / 2) + (opt\GraphicHeight + 10.0)
-	Local ID%
-	Local EndLinesAmount%
+	Local ID% = 0
+	Local EndLinesAmount% = 0
 	
-	ID = 0
-	EndLinesAmount = 0
 	LastCreditLine = Null
 	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
@@ -8255,16 +8248,14 @@ End Function
 Function RenderCredits%()
 	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
-	Local ID%
-	Local EndLinesAmount%
+	Local ID% = 0
+	Local EndLinesAmount% = 0
 	
 	Cls()
 	HidePointer()
 	
 	If Rand(300) > 1 Then DrawBlock(me\CreditsScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 	
-	ID = 0
-	EndLinesAmount = 0
 	LastCreditLine = Null
 	Color(255, 255, 255)
 	For cl.CreditsLine = Each CreditsLine
@@ -8323,7 +8314,7 @@ Function UpdateMTF%()
 	If PlayerRoom\RoomTemplate\RoomID = r_gate_a_entrance Then Return
 	
 	Local r.Rooms, n.NPCs
-	Local Dist#, i%
+	Local i%
 	
 	If MTFTimer = 0.0
 		If Rand(200) = 1 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499

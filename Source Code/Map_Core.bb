@@ -87,7 +87,6 @@ End Function
 
 Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, TexturePath$)
 	Local p.Props, p2.Props
-	Local Tex%
 	
 	p.Props = New Props
 	For p2.Props = Each Props
@@ -142,7 +141,7 @@ Type Lights
 End Type
 
 Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%)
-	Local i%, l.Lights, l2.Lights
+	Local l.Lights, l2.Lights
 	
 	l.Lights = New Lights
 	l\room = room
@@ -352,7 +351,6 @@ End Function
 
 Function UpdateSoundEmitters%()
 	Local se.SoundEmitters
-	Local i%
 	
 	For se.SoundEmitters = Each SoundEmitters
 		If se\room <> Null
@@ -398,20 +396,16 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	Local FilePath$ = StripFileName(File)
 	
-	Local Count%, Count2%
-	
 	; ~ Drawn meshes
-	Local Opaque%, Alpha%
-	
-	Opaque = CreateMesh()
-	Alpha = CreateMesh()
+	Local Opaque% = CreateMesh(), Alpha% = CreateMesh()
 	
 	Local ChildMesh%
 	Local Surf%, Tex%[2], Brush%
 	Local IsAlpha%
 	Local u#, v#
 	
-	Count = ReadInt(f)
+	Local Count% = ReadInt(f)
+	Local Count2%
 	
 	For i = 1 To Count ; ~ Drawn mesh
 		ChildMesh = CreateMesh()
@@ -782,8 +776,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 		Next
 	EndIf
 	
-	Local OBJ%
-	
 	Temp1i = CopyMesh(Alpha)
 	FlipMesh(Temp1i)
 	AddMesh(Temp1i, Alpha)
@@ -804,7 +796,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	EndIf
 	EntityAlpha(Opaque, 1.0)
 	
-	OBJ = CreatePivot()
+	Local OBJ% = CreatePivot()
 	CreatePivot(OBJ) ; ~ Skip "meshes" object
 	EntityParent(Opaque, OBJ)
 	EntityParent(HiddenMesh, OBJ)
@@ -2605,9 +2597,8 @@ Const BUTTON_ELEVATOR% = 4
 ;[End Block]
 
 Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
-	Local OBJ%
 	
-	OBJ = CopyEntity(d_I\ButtonModelID[ButtonID])
+	Local OBJ% = CopyEntity(d_I\ButtonModelID[ButtonID])
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
@@ -2620,7 +2611,6 @@ End Function
 
 Function UpdateButton%(OBJ%)
 	Local Dist# = EntityDistanceSquared(me\Collider, OBJ)
-	Local Result% = False
 	
 	If Dist < 0.64
 		Local Pvt% = CreatePivot()
@@ -4322,9 +4312,9 @@ End Function
 
 Function UpdateCheckpointMonitors%(LCZ% = True)
 	Local i%, SF%, b%, t1%
-	Local Entity%, Name$
+	Local Name$
 	
-	Entity = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
+	Local Entity% = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
 	
 	For i = 2 To CountSurfaces(Entity)
 		SF = GetSurface(Entity, i)
@@ -4359,10 +4349,10 @@ End Function
 
 Function TurnCheckpointMonitorsOff%(LCZ% = True)
 	Local i%, SF%, b%, t1%
-	Local Entity%, Name$
+	Local Name$
 	
 	If mon_I\UpdateCheckpoint[(1 - LCZ)]
-		Entity = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
+		Local Entity% = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
 		
 		For i = 2 To CountSurfaces(Entity)
 			SF = GetSurface(Entity, i)
