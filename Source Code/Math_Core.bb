@@ -199,9 +199,9 @@ Function GetMeshExtents%(Mesh%)
 	
 	For su = 1 To SurfCount
 		s = GetSurface(Mesh, su)
-		VertCount = CountVertices(s)
+		VertCount = CountVertices(s) - 1
 		
-		For v = 0 To VertCount - 1
+		For v = 0 To VertCount
 			x = VertexX(s, v)
 			y = VertexY(s, v)
 			z = VertexZ(s, v)
