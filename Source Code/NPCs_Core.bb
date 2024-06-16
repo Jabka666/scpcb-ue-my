@@ -5075,8 +5075,9 @@ Function UpdateNPCs%()
 					TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 					
 					Local CollidedFloor% = False
+					Local CollCount% = CountCollisions(n\Collider)
 					
-					For i = 1 To CountCollisions(n\Collider)
+					For i = 1 To CollCount
 						If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01
 							CollidedFloor = True
 							Exit

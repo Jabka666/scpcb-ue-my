@@ -220,11 +220,8 @@ Function CatchErrors%(Location$)
 End Function
 
 Repeat
-	Local TotalVidMemory% = TotalVidMem()
-	Local TotalPhysMemory% = TotalPhys()
-	
-	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMemory / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMemory / 1024), "{2}"))
-	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhysMemory / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhysMemory / 1024), "{1}"))
+	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(opt\GFXDriver), "{0}"), (opt\TotalVidMemory - (AvailVidMem() / 1024)), "{1}"), opt\TotalVidMemory, "{2}"))
+	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
 	
 	Cls()
 	
@@ -2729,8 +2726,9 @@ Function UpdateMoving%()
 			If me\Playable Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 			
 			Local CollidedFloor% = False
+			Local CollCount% = CountCollisions(me\Collider)
 			
-			For i = 1 To CountCollisions(me\Collider)
+			For i = 1 To CollCount
 				If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25
 					CollidedFloor = True
 					Exit
@@ -2916,8 +2914,9 @@ Function UpdateMouseLook%()
 		PositionEntity(Camera, EntityX(me\Head), EntityY(me\Head), EntityZ(me\Head))
 		
 		Local CollidedFloor% = False
+		Local CollCount% = CountCollisions(me\Head)
 		
-		For i = 1 To CountCollisions(me\Head)
+		For i = 1 To CollCount
 			If CollisionY(me\Head, i) < EntityY(me\Head) - 0.01
 				CollidedFloor = True
 				Exit
@@ -5860,11 +5859,8 @@ Function RenderDebugHUD%()
 			
 			TextEx(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
 			
-			Local TotalPhysMemory% = TotalPhys()
-			Local TotalVidMemory% = TotalVidMem()
-			
-			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), ((TotalVidMemory / 1024) - (AvailVidMem() / 1024)), "{0}"), (TotalVidMemory / 1024), "{1}"))
-			TextEx(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), ((TotalPhysMemory / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhysMemory / 1024), "{1}"))
+			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), (opt\TotalVidMemory - (AvailVidMem() / 1024)), "{0}"), opt\TotalVidMemory, "{1}"))
+			TextEx(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
 			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
 			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
 			;[End Block]

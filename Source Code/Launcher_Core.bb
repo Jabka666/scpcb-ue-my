@@ -217,7 +217,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		EndIf
 		TextEx(LauncherWidth - 107.5, LauncherHeight - 273, DriverName, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 283, 30, 30, ">", False) Then opt\GFXDriver = (opt\GFXDriver + 1)
-		If opt\GFXDriver > CountGfxDrivers() Then opt\GFXDriver = 1
+		If opt\GFXDriver > GFXDriversAmount Then opt\GFXDriver = 1
 		
 		; ~ Display selector
 		TextEx(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
