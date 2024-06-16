@@ -3568,7 +3568,7 @@ Function UpdateEvents%()
 					If n_I\Curr096 = Null
 						n_I\Curr096 = CreateNPC(NPCType096, e\room\x, 0.3, e\room\z)
 						RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 45.0, 0.0, True)
-						GiveAchievement(Achv096)
+						GiveAchievement("096")
 					EndIf
 					RemoveEvent(e)
 				EndIf
@@ -5109,7 +5109,7 @@ Function UpdateEvents%()
 							ResetEntity(n_I\Curr096\Collider)
 						Else
 							n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
-							GiveAchievement(Achv096)
+							GiveAchievement("096")
 						EndIf
 						n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
 						RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
@@ -6822,7 +6822,7 @@ Function UpdateEvents%()
 							Else
 								n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
 							EndIf
-							GiveAchievement(Achv049)
+							GiveAchievement("049")
 						Else
 							If AdjDist1 > AdjDist2
 								PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ), True)

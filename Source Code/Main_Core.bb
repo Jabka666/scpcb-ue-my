@@ -106,8 +106,9 @@ Function ResetInput%()
 	Input_ResetTime = 20.0
 End Function
 
-mo\Mouselook_X_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
-mo\Mouselook_Y_Inc = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+Const Mouselook_X_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
+Const Mouselook_Y_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
+
 mo\Mouse_Left_Limit = 250 * MenuScale
 mo\Mouse_Right_Limit = opt\GraphicWidth - mo\Mouse_Left_Limit
 mo\Mouse_Top_Limit = 150 * MenuScale
@@ -1450,6 +1451,7 @@ Function UpdateConsole%()
 						n_I\Curr096\State = 0.0
 						StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 						If n_I\Curr096\SoundCHN2 <> 0 Then StopStream_Strict(n_I\Curr096\SoundCHN2) : n_I\Curr096\SoundCHN2 = 0 : n_I\Curr096\SoundCHN2_IsStream = False
+						GiveAchievement("096", False)
 					EndIf
 					CreateConsoleMsg(GetLocalString("console", "r096"))
 					;[End Block]
@@ -2489,8 +2491,6 @@ Function RefillCup%()
 End Function
 
 Function SetCrouch%(NewCrouch%)
-	Local Temp%
-	
 	If NewCrouch <> me\Crouch
 		PlaySound_Strict(snd_I\CrouchSFX)
 		me\SndVolume = Max(2.0, me\SndVolume)
@@ -2498,7 +2498,7 @@ Function SetCrouch%(NewCrouch%)
 			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
 			If me\Stamina < 10.0
 				If (Not ChannelPlaying(BreathCHN))
-					Temp = 0
+					Local Temp% = 0
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp = 1
 					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
 				EndIf
@@ -2575,9 +2575,8 @@ Function UpdateMoving%()
 	EndIf
 	
 	Local Temp#, Temp3%
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
-	If (Not me\Terminated) And (Not chs\NoClip) And (RID <> r_dimension_106) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
+	If (Not me\Terminated) And (Not chs\NoClip) And (PlayerRoom\RoomTemplate\RoomID <> r_dimension_106) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
 		If me\Stamina < 5.0
 			If (Not ChannelPlaying(BreathCHN))
 				Temp3 = 0
@@ -2615,7 +2614,7 @@ Function UpdateMoving%()
 						Sprint = 2.5
 					EndIf
 					
-					If RID = r_dimension_106
+					If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 						Local PlayerPosY# = EntityY(me\Collider)
 						
 						If PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale
@@ -2893,14 +2892,13 @@ Function UpdateMouseLook%()
 		
 		If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then StopMouseMovement()
 		
-		Local The_Yaw# = ((mo\Mouse_X_Speed_1)) * mo\Mouselook_X_Inc / (1.0 + wi\BallisticVest)
-		Local The_Pitch# = ((mo\Mouse_Y_Speed_1)) * mo\Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
+		Local The_Yaw# = mo\Mouse_X_Speed_1 * Mouselook_X_Inc / (1.0 + wi\BallisticVest)
+		Local The_Pitch# = mo\Mouse_Y_Speed_1 * Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
 		
 		TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 		CameraPitch = CameraPitch + The_Pitch
 		; ~ Limit the user's camera to within 180.0 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch
-		If CameraPitch > 70.0 Then CameraPitch = 70.0
-		If CameraPitch < -70.0 Then CameraPitch = -70.0
+		CameraPitch = Clamp(CameraPitch, -70.0, 70.0)
 		
 		Local ShakeTimer# = me\CameraShake + me\BigCameraShake
 		
@@ -3047,7 +3045,6 @@ End Function
 Function UpdateZoneColor%()
 	Local e.Events
 	Local i%
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	Local PlayerPosY# = EntityY(me\Collider, True)
 	
 	CurrFogColor$ = ""
@@ -3061,24 +3058,24 @@ Function UpdateZoneColor%()
 		CameraRange(Camera, 0.01, opt\CameraFogFar * LightVolume * 1.2)
 	EndIf
 	; ~ Handle room-specific settings
-	If RID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
+	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
 		opt\CameraFogFar = 60.0
 		CameraFogRange(Camera, 5.0, 60.0)
 		CameraRange(Camera, 0.01, 72.0)
-	ElseIf RID = r_cont1_173_intro
+	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 		opt\CameraFogFar = 45.0
 		CameraFogRange(Camera, 5.0, 45.0)
 		CameraRange(Camera, 0.01, 54.0)
-	ElseIf RID = r_dimension_1499
+	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
 		opt\CameraFogFar = 80.0
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, 80.0)
 		CameraRange(Camera, 0.01, 96.0)
-	ElseIf RID = r_dimension_106
+	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 		For e.Events = Each Events
 			If e\EventID = e_dimension_106
 				LightVolume = 1.0
@@ -3148,7 +3145,7 @@ Function UpdateZoneColor%()
 	Else
 		AmbientLightRooms(CurrAmbientColorR / 5.0, CurrAmbientColorG / 5.0, CurrAmbientColorB / 5.0)
 		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
-		If RID = r_cont1_173_intro
+		If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 			CurrR = CurrAmbientColorR * 1.5 : CurrG = CurrAmbientColorG * 1.5 : CurrB = CurrAmbientColorB * 1.5
 		ElseIf forest_event <> Null
 			If PlayerRoom = forest_event\room
@@ -3192,9 +3189,8 @@ Function UpdateGUI%()
 	Local Temp%, x%, y%, z%, i%
 	Local x2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
-	If RID = r_dimension_106
+	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 		For e.Events = Each Events
 			If e\room = PlayerRoom
 				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom
@@ -3275,7 +3271,7 @@ Function UpdateGUI%()
 			If mo\MouseUp1
 				mo\MouseUp1 = False
 				If d_I\ClosestDoor <> Null
-					If d_I\ClosestDoor\Code <> ""
+					If d_I\ClosestDoor\Code <> 0
 						d_I\SelectedDoor = d_I\ClosestDoor
 					ElseIf me\Playable
 						UseDoor()
@@ -3370,7 +3366,7 @@ Function UpdateGUI%()
 									Case 8
 										;[Block]
 										UseDoor()
-										If msg\KeyPadInput = d_I\SelectedDoor\Code
+										If Int(msg\KeyPadInput) = d_I\SelectedDoor\Code
 											d_I\SelectedDoor = Null
 											StopMouseMovement()
 										Else
@@ -3427,8 +3423,6 @@ Function UpdateGUI%()
 	EndIf
 	
 	Local PrevOtherOpen.Items, PrevItem.Items
-	Local OtherSize%, OtherAmount%
-	Local IsEmpty%
 	Local IsMouseOn%
 	Local ClosedInv%
 	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
@@ -3437,7 +3431,8 @@ Function UpdateGUI%()
 	
 	If OtherOpen <> Null
 		PrevOtherOpen = OtherOpen
-		OtherSize = OtherOpen\InvSlots
+		Local OtherSize% = OtherOpen\InvSlots
+		Local OtherAmount%
 		
 		For i = 0 To OtherSize - 1
 			If OtherOpen\SecondInv[i] <> Null Then OtherAmount = OtherAmount + 1
@@ -3526,7 +3521,7 @@ Function UpdateGUI%()
 						EndIf
 					Next
 					
-					IsEmpty = True
+					Local IsEmpty% = True
 					If OtherOpen\ItemTemplate\ID = it_wallet
 						If (Not IsEmpty)
 							For z = 0 To OtherSize - 1
@@ -4642,7 +4637,7 @@ Function UpdateGUI%()
 								;[Block]
 								me\BlinkTimer = -10.0
 								
-								If RID = r_dimension_1499 Lor IsPlayerOutsideFacility()
+								If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor IsPlayerOutsideFacility()
 									me\Injuries = 2.5
 									CreateMsg(GetLocalString("msg", "bleed"))
 								Else
@@ -4990,7 +4985,7 @@ Function UpdateGUI%()
 						
 						me\VomitTimer = 70.0
 						
-						I_008\Timer = I_008\Timer + (1.0 + (1.0 * SelectedDifficulty\AggressiveNPCs))
+						I_008\Timer = I_008\Timer + 1.0 + SelectedDifficulty\AggressiveNPCs
 						RemoveItem(SelectedItem)
 					EndIf
 					;[End Block]
@@ -5039,7 +5034,7 @@ Function UpdateGUI%()
 							RadioState[0] = -1.0
 						EndIf
 						
-						If RID = r_dimension_106 Lor RID = r_dimension_1499
+						If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 							For i = 0 To 5
 								If ChannelPlaying(RadioCHN[i]) Then PauseChannel(RadioCHN[i])
 							Next
@@ -5305,7 +5300,7 @@ Function UpdateGUI%()
 								SelectedItem\State2 = -1
 								If (Not ChannelPlaying(RadioCHN[6])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 								RadioState[6] = RadioState[6] + fps\Factor[0]
-								Temp = Mid(Str(CODE_DR_GEARS), RadioState[8] + 1.0, 1)
+								Temp = Mid(CODE_DR_GEARS, RadioState[8] + 1.0, 1)
 								If RadioState[6] - fps\Factor[0] <= RadioState[7] * 50.0 And RadioState[6] > RadioState[7] * 50.0
 									PlaySound_Strict(snd_I\RadioBuzz)
 									RadioState[7] = RadioState[7] + 1.0
@@ -5693,7 +5688,9 @@ End Function
 Function RenderHUD%()
 	If me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Then Return
 	
-	Local x%, y%, Width%, Height%, WalkIconID%, BlinkIconID%
+	Local x% = 80 * MenuScale, y% = opt\GraphicHeight - (15 * MenuScale)
+	Local Width% = 200 * MenuScale, Height% = 20 * MenuScale
+	Local WalkIconID%, BlinkIconID%
 	Local i%
 	Local PlayerPosY# = EntityY(me\Collider)
 	Local IconColoredRectSize% = 36 * MenuScale
@@ -5703,11 +5700,6 @@ Function RenderHUD%()
 	Local IconRectSpace% = 51 * MenuScale
 	Local IconSpace% = 50 * MenuScale
 	Local ySpace% = 40 * MenuScale
-	
-	Width = 200 * MenuScale
-	Height = 20 * MenuScale
-	x = 80 * MenuScale
-	y = opt\GraphicHeight - (15 * MenuScale)
 	
 	Color(255, 255, 255)
 	y = y - ySpace
@@ -5810,10 +5802,8 @@ End Function
 
 Function RenderDebugHUD%()
 	Local ev.Events, ch.Chunk, r.Rooms
-	Local x%, y%, i%
-	
-	x = 20 * MenuScale
-	y = 40 * MenuScale
+	Local x% = 20 * MenuScale, y% = 40 * MenuScale
+	Local i%
 	
 	Color(255, 255, 255)
 	SetFontEx(fo\FontID[Font_Console])
@@ -6004,17 +5994,16 @@ Function AdaptScreenGamma%()
 	opt\ScreenGamma = 1.0
 End Function
 
-Function Render3DHandIcon%(Icon%, OBJ%, ArrowID% = -1)
-	Local PitchValue#, YawValue#
+Function Render3DHandIcon%(IconID%, OBJ%, ArrowID% = -1)
 	Local CoordEx% = 32 * MenuScale
 	Local Pvt% = CreatePivot()
 	
 	PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 	PointEntity(Pvt, OBJ)
-	YawValue = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
+	Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
 	If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
 	If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-	PitchValue = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
+	Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
 	If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 	If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 	
@@ -6045,7 +6034,7 @@ Function Render3DHandIcon%(Icon%, OBJ%, ArrowID% = -1)
 				;[End Block]
 		End Select
 	EndIf
-	DrawBlock(Icon, x, y)
+	DrawBlock(t\IconID[IconID], x, y)
 End Function
 
 Function RenderGUI%()
@@ -6057,7 +6046,6 @@ Function RenderGUI%()
 	Local n%, xTemp%, yTemp%, StrTemp$
 	Local Width%, Height%
 	Local SqrValue#
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor me\EndingTimer < 0.0
 		ShowPointer()
@@ -6065,7 +6053,7 @@ Function RenderGUI%()
 		HidePointer()
 	EndIf
 	
-	If RID = r_dimension_106
+	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 		For e.Events = Each Events
 			If e\room = PlayerRoom
 				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom
@@ -6090,7 +6078,7 @@ Function RenderGUI%()
 				Exit
 			EndIf
 		Next
-	ElseIf RID = r_cont2_012
+	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont2_012
 		For e.Events = Each Events
 			If e\room = PlayerRoom
 				If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 0.36
@@ -6113,17 +6101,16 @@ Function RenderGUI%()
 	If I_294\Using Then Render294()
 	If SelectedDifficulty\Name <> GetLocalString("menu", "new.apollyon") And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
-			If d_I\ClosestButton <> 0 Then Render3DHandIcon(t\IconID[5], d_I\ClosestButton, -1)
-			If ClosestItem <> Null Then Render3DHandIcon(t\IconID[6], ClosestItem\Collider, -1)
+			If d_I\ClosestButton <> 0 Then Render3DHandIcon(5, d_I\ClosestButton, -1)
+			If ClosestItem <> Null Then Render3DHandIcon(6, ClosestItem\Collider, -1)
 			
 			If HandEntity <> 0
-				Render3DHandIcon(t\IconID[5], HandEntity, -1)
+				Render3DHandIcon(5, HandEntity, -1)
 				For i = 0 To 3
-					If DrawArrowIcon[i] Then Render3DHandIcon(t\IconID[i + 10], HandEntity, i)
+					If DrawArrowIcon[i] Then Render3DHandIcon(i + 10, HandEntity, i)
 				Next
 			EndIf
 		EndIf
-		
 		RenderHUD()
 	EndIf
 	If chs\DebugHUD <> 0 Then RenderDebugHUD()
@@ -6175,8 +6162,6 @@ Function RenderGUI%()
 	EndIf
 	
 	Local PrevOtherOpen.Items
-	Local OtherSize%, OtherAmount%
-	Local IsEmpty%
 	Local IsMouseOn%
 	Local ClosedInv%
 	Local INVENTORY_GFX_SIZE% = 70 * MenuScale
@@ -6186,7 +6171,8 @@ Function RenderGUI%()
 	
 	If OtherOpen <> Null
 		PrevOtherOpen = OtherOpen
-		OtherSize = OtherOpen\InvSlots
+		Local OtherSize% = OtherOpen\InvSlots
+		Local OtherAmount%
 		
 		For i = 0 To OtherSize - 1
 			If OtherOpen\SecondInv[i] <> Null Then OtherAmount = OtherAmount + 1
@@ -6670,7 +6656,7 @@ Function RenderGUI%()
 					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 					
 					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\ID = it_fineradio Lor SelectedItem\ItemTemplate\ID = it_veryfineradio)
-						If RID <> r_dimension_106 And CoffinDistance >= 8.0
+						If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And CoffinDistance >= 8.0
 							Select Int(SelectedItem\State2)
 								Case 0
 									;[Block]
@@ -6764,7 +6750,7 @@ Function RenderGUI%()
 							TextEx(x, y + NAV_HEIGHT_HALF - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
 						EndIf
 					Else
-						If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor RID <> r_cont1_895)
+						If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\RoomID <> r_cont1_895)
 							Local xx% = x - SelectedItem\ItemTemplate\ImgWidth
 							Local yy% = y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale)
 							
@@ -6849,7 +6835,7 @@ Function RenderGUI%()
 										EndIf
 									EndIf
 								Next
-								If RID = r_cont1_895
+								If PlayerRoom\RoomTemplate\RoomID = r_cont1_895
 									If CoffinDistance < 8.0
 										Dist = Rnd(4.0, 8.0)
 										Color(100, 0, 0)
@@ -6933,7 +6919,7 @@ Function UpdateMenu%()
 	CatchErrors("UpdateMenu()")
 	
 	Local r.Rooms, sc.SecurityCams, amsg.AchievementMsg 
-	Local x%, y%, z%, Width%, Height%, i%
+	Local z%, i%
 	
 	If MenuOpen
 		If (Not IsPlayerOutsideFacility()) And (Not me\Terminated)
@@ -6953,10 +6939,10 @@ Function UpdateMenu%()
 		
 		InvOpen = False
 		
-		Width = ImageWidth(t\ImageID[0])
-		Height = ImageHeight(t\ImageID[0])
-		x = mo\Viewport_Center_X - (Width / 2)
-		y = mo\Viewport_Center_Y - (Height / 2)
+		Local Width% = ImageWidth(t\ImageID[0])
+		Local Height% = ImageHeight(t\ImageID[0])
+		Local x% = mo\Viewport_Center_X - (Width / 2)
+		Local y% = mo\Viewport_Center_Y - (Height / 2)
 		
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
@@ -7441,7 +7427,7 @@ Function UpdateMenu%()
 				
 				y = y + (75 * MenuScale)
 				
-				If SelectedDifficulty\SaveType <> NO_SAVES
+				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					If GameSaved
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
@@ -7511,7 +7497,7 @@ Function UpdateMenu%()
 			Else
 				y = y + (75 * MenuScale)
 				
-				If SelectedDifficulty\SaveType <> NO_SAVES
+				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					If GameSaved
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
@@ -7575,19 +7561,18 @@ End Function
 Function RenderMenu%()
 	CatchErrors("RenderMenu()")
 	
-	Local x%, y%, Width%, Height%, i%
-	Local TempStr$
-	
 	If (Not InFocus()) ; ~ Game is out of focus then pause the game
 		MenuOpen = True
 		PauseSounds()
 		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
 	EndIf
 	If MenuOpen
-		Width = ImageWidth(t\ImageID[0])
-		Height = ImageHeight(t\ImageID[0])
-		x = mo\Viewport_Center_X - (Width / 2)
-		y = mo\Viewport_Center_Y - (Height / 2)
+		Local Width% = ImageWidth(t\ImageID[0])
+		Local Height% = ImageHeight(t\ImageID[0])
+		Local x% = mo\Viewport_Center_X - (Width / 2)
+		Local y% = mo\Viewport_Center_Y - (Height / 2)
+		Local TempStr$
+		Local i%
 		
 		If (Not OnPalette)
 			ShowPointer()
@@ -7972,7 +7957,7 @@ Function RenderMenu%()
 			
 			If me\Terminated And me\SelectedEnding = -1
 				y = y + (175 * MenuScale)
-				If SelectedDifficulty\SaveType <> NO_SAVES
+				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					y = y + (75 * MenuScale)
 				EndIf
 				SetFontEx(fo\FontID[Font_Default])
@@ -8004,7 +7989,6 @@ Const Ending_B2% = 3
 ;[End Block]
 
 Function UpdateEnding%()
-	Local x%, y%, Width%, Height%, i%
 	
 	fps\Factor[0] = 0.0
 	If me\EndingTimer > -2000.0
@@ -8045,10 +8029,12 @@ Function UpdateEnding%()
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0
 				If igm\AchievementsMenu =< 0
-					Width = ImageWidth(t\ImageID[0])
-					Height = ImageHeight(t\ImageID[0])
-					x = mo\Viewport_Center_X - (Width / 2)
-					y = mo\Viewport_Center_Y - (Height / 2)
+					Local Width% = ImageWidth(t\ImageID[0])
+					Local Height% = ImageHeight(t\ImageID[0])
+					Local x% = mo\Viewport_Center_X - (Width / 2)
+					Local y% = mo\Viewport_Center_Y - (Height / 2)
+					Local i%
+					
 					x = x + (132 * MenuScale)
 					y = y + (432 * MenuScale)
 					
@@ -8091,7 +8077,6 @@ Function RenderEnding%()
 	ShowPointer()
 	
 	Local itt.ItemTemplates, r.Rooms
-	Local x%, y%, Width%, Height%, i%
 	
 	Select me\SelectedEnding
 		Case Ending_A1, Ending_B2
@@ -8119,10 +8104,10 @@ Function RenderEnding%()
 			DrawBlock(me\EndingScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 			
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0
-				Width = ImageWidth(t\ImageID[0])
-				Height = ImageHeight(t\ImageID[0])
-				x = mo\Viewport_Center_X - (Width / 2)
-				y = mo\Viewport_Center_Y - (Height / 2)
+				Local Width% = ImageWidth(t\ImageID[0])
+				Local Height% = ImageHeight(t\ImageID[0])
+				Local x% = mo\Viewport_Center_X - (Width / 2)
+				Local y% = mo\Viewport_Center_Y - (Height / 2)
 				
 				DrawBlock(t\ImageID[0], x, y)
 				
@@ -8132,6 +8117,8 @@ Function RenderEnding%()
 				SetFontEx(fo\FontID[Font_Default])
 				
 				If igm\AchievementsMenu =< 0
+					Local i%
+					
 					x = x + (132 * MenuScale)
 					y = y + (122 * MenuScale)
 					
@@ -8185,16 +8172,14 @@ Function RenderEnding%()
 				Else
 					RenderMenu()
 				EndIf
+				RenderMenuButtons()
+				RenderCursor()
 			; ~ Credits
 			ElseIf me\EndingTimer <= -2000.0
 				RenderCredits()
 			EndIf
 		EndIf
 	EndIf
-	
-	RenderMenuButtons()
-	
-	RenderCursor()
 	
 	SetFontEx(fo\FontID[Font_Default])
 End Function
@@ -8231,11 +8216,9 @@ End Function
 Function UpdateCredits%()
 	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = ((me\EndingTimer + 2000.0) / 2) + (opt\GraphicHeight + 10.0)
-	Local ID%
-	Local EndLinesAmount%
+	Local ID% = 0
+	Local EndLinesAmount% = 0
 	
-	ID = 0
-	EndLinesAmount = 0
 	LastCreditLine = Null
 	For cl.CreditsLine = Each CreditsLine
 		cl\ID = ID
@@ -8271,15 +8254,14 @@ End Function
 Function RenderCredits%()
 	Local cl.CreditsLine, LastCreditLine.CreditsLine
 	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
-	Local ID%
-	Local EndLinesAmount%
+	Local ID% = 0
+	Local EndLinesAmount% = 0
 	
 	Cls()
+	HidePointer()
 	
 	If Rand(300) > 1 Then DrawBlock(me\CreditsScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 	
-	ID = 0
-	EndLinesAmount = 0
 	LastCreditLine = Null
 	Color(255, 255, 255)
 	For cl.CreditsLine = Each CreditsLine
@@ -8321,8 +8303,6 @@ Function RenderCredits%()
 	
 	RenderLoadingText(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"))
 	
-	Flip(True)
-	
 	If me\CreditsTimer = -1.0
 		FreeFont(fo\FontID[Font_Credits]) : fo\FontID[Font_Credits] = 0
 		FreeFont(fo\FontID[Font_Credits_Big]) : fo\FontID[Font_Credits_Big] = 0
@@ -8337,15 +8317,13 @@ Global MTFCameraCheckTimer#
 Global MTFCameraCheckDetected%
 
 Function UpdateMTF%()
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
-	
-	If RID = r_gate_a_entrance Then Return
+	If PlayerRoom\RoomTemplate\RoomID = r_gate_a_entrance Then Return
 	
 	Local r.Rooms, n.NPCs
-	Local Dist#, i%
+	Local i%
 	
 	If MTFTimer = 0.0
-		If Rand(200) = 1 And RID <> r_dimension_1499
+		If Rand(200) = 1 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
 			Local entrance.Rooms = Null
 			
 			For r.Rooms = Each Rooms
@@ -8733,14 +8711,12 @@ Function Update008%()
 					TurnEntity(me\Head, 80.0 + SinValue * 30.0, SinValue * 40.0, 0.0)
 				EndIf
 			Else
-				Local RID% = PlayerRoom\RoomTemplate\RoomID
-				
 				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
-				If RID = r_dimension_1499
+				If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 					msg\DeathMsg = GetLocalString("death", "14991")
 				ElseIf IsPlayerOutsideFacility()
 					msg\DeathMsg = Format(GetLocalString("death", "008gate"), SubjectName, "{0}")
-					If RID = r_gate_a
+					If PlayerRoom\RoomTemplate\RoomID = r_gate_a
 						msg\DeathMsg = Format(msg\DeathMsg, "A", "{1}")
 					Else
 						msg\DeathMsg = Format(msg\DeathMsg, "B", "{1}")
@@ -8865,11 +8841,11 @@ Function Update1048AEars()
 	If I_1048A\EarGrowTimer > 0.0
 		Local PrevI1048EarGrowTimer# = I_1048A\EarGrowTimer
 		
-		CanSave = 0
 		If I_427\Timer < 70.0 * 360.0
 			If I_1048A\Revert
 				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
 			Else
+				CanSave = 0
 				If (Not I_427\Using)
 					I_1048A\EarGrowTimer = Min(I_1048A\EarGrowTimer + fps\Factor[0], 1100.0)
 					me\BlurTimer = I_1048A\EarGrowTimer * 2.0

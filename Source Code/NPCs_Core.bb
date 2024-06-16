@@ -46,6 +46,7 @@ Type NPCs
 	Field ModelScaleX#, ModelScaleY#, ModelScaleZ#
 	Field TextureID% = -1
 	Field HasAsset% = False
+	Field HasAnim%
 	Field Contained% = False
 	Field TeslaHit% = False
 	Field IsOpt% = False
@@ -68,10 +69,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n\MaxGravity = 0.2
 	n\CollRadius = 0.2
 	n\FallingPickDistance = 10.0
+	n\HasAnim = True
 	Select NPCType
 		Case NPCType173
 			;[Block]
 			n\NVGName = "SCP-173"
+			n\HasAnim = False
 			n\Speed = IniGetFloat(NPCsFile, "SCP-173", "Speed") / 100.0
 			n\Gravity = True
 			
@@ -597,7 +600,6 @@ Function UpdateNPCs%()
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	Local SinValue#, SqrValue#
 	Local DifficultyDMGMult#
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	Select SelectedDifficulty\OtherFactors
 		Case EASY
@@ -721,7 +723,7 @@ Function UpdateNPCs%()
 								; ~ Teleport to a room closer to the player
 								If Dist > 2500.0
 									If Rand(70) = 1
-										If (Not IsPlayerOutsideFacility()) And RID <> r_dimension_106
+										If (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106
 											For w.WayPoints = Each WayPoints
 												If w\door = Null And Rand(5) = 1
 													If DistanceSquared(EntityX(w\OBJ, True), EntityX(me\Collider), EntityZ(w\OBJ, True), EntityZ(me\Collider)) < 625.0
@@ -743,7 +745,7 @@ Function UpdateNPCs%()
 									; ~ Tries to open doors
 									If Rand(20 - (10 * SelectedDifficulty\AggressiveNPCs)) = 1
 										For d.Doors = Each Doors
-											If d\Locked = 0 And (Not d\Open) And d\Code = "" And d\KeyCard = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
+											If d\Locked = 0 And (Not d\Open) And d\Code = 0 And d\KeyCard = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
 												For i = 0 To 1
 													If d\Buttons[i] <> 0
 														If Abs(EntityX(n\Collider) - EntityX(d\Buttons[i])) < 0.5
@@ -782,7 +784,7 @@ Function UpdateNPCs%()
 										If (Not I_268\InvisibilityOn) Then n\Angle = DeltaYaw(n\Collider, Camera)
 										If Dist < 0.4225
 											If (Not me\Terminated) And (Not chs\GodMode)
-												Select RID
+												Select PlayerRoom\RoomTemplate\RoomID
 													Case r_room2c_gw_lcz, r_room2_closets, r_cont1_895
 														;[Block]
 														msg\DeathMsg = Format(GetLocalString("death", "173.gw"), SubjectName)
@@ -880,7 +882,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType106
 				;[Block]
-				If n\Contained Lor RID = r_gate_b
+				If n\Contained Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b
 					If (Not EntityHidden(n\OBJ))
 						n\Idle = 1
 						HideEntity(n\OBJ)
@@ -894,7 +896,7 @@ Function UpdateNPCs%()
 					Local Spawn106% = True
 					
 					; ~ Checking if SCP-106 is allowed to spawn
-					If RID = r_dimension_1499 Lor (RID = r_cont2_049 And EntityY(me\Collider) <= -2848.0 * RoomScale) Then Spawn106 = False
+					If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And EntityY(me\Collider) <= -2848.0 * RoomScale) Then Spawn106 = False
 					If forest_event <> Null
 						If PlayerRoom = forest_event\room
 							If forest_event\EventState = 1.0 Then Spawn106 = False
@@ -906,7 +908,7 @@ Function UpdateNPCs%()
 						If e\EventID = e_gate_a
 							If e\EventState <> 0.0
 								Spawn106 = True
-								n\Idle = (RID = r_dimension_1499)
+								n\Idle = (PlayerRoom\RoomTemplate\RoomID = r_dimension_1499)
 							EndIf
 							Exit
 						EndIf
@@ -920,7 +922,7 @@ Function UpdateNPCs%()
 					
 					If n\Idle = 0 And Spawn106
 						If n\State <= 0.0
-							If EntityY(n\Collider) < EntityY(me\Collider) - 20.0 - 0.55
+							If EntityY(n\Collider) < EntityY(me\Collider) - 20.55
 								If (Not PlayerRoom\RoomTemplate\DisableDecals)
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
@@ -931,7 +933,7 @@ Function UpdateNPCs%()
 								
 								SetNPCFrame(n, 110.0)
 								
-								If RID <> r_cont1_895 Then PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
+								If PlayerRoom\RoomTemplate\RoomID <> r_cont1_895 Then PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
 								
 								PlaySound_Strict(snd_I\DecaySFX[0])
 							EndIf
@@ -953,7 +955,7 @@ Function UpdateNPCs%()
 									n\State = -10.0
 								EndIf
 							Else
-								If RID <> r_gate_a And RID <> r_dimension_106 Then ShouldPlay = 10
+								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
 								
 								Visible = False
 								
@@ -962,7 +964,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If Visible
-									If RID <> r_gate_a Then n\PathTimer = 0.0
+									If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\PathTimer = 0.0
 									If EntityInView(n\Collider, Camera)
 										GiveAchievement("106")
 										
@@ -982,8 +984,8 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If Dist > 0.64
-									If ((Dist > 625.0 Lor RID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND) And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))) And RID <> r_gate_a
-										If (Dist > 1600.0 Lor RID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
+									If ((Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND) And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a
+										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 										
@@ -1060,10 +1062,10 @@ Function UpdateNPCs%()
 										If Ceil(n\Frame) = 110.0 And (Not chs\GodMode)
 											PlaySound_Strict(snd_I\DamageSFX[1])
 											PlaySound_Strict(snd_I\HorrorSFX[5])
-											If RID = r_dimension_106
+											If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 												msg\DeathMsg = Format(GetLocalString("death", "106.dimension"), SubjectName)
 												Kill(True)
-											ElseIf RID = r_gate_a
+											ElseIf PlayerRoom\RoomTemplate\RoomID = r_gate_a
 												msg\DeathMsg = Format(GetLocalString("death", "106.gatea"), SubjectName)
 												Kill(True)
 											Else
@@ -1091,7 +1093,7 @@ Function UpdateNPCs%()
 							If me\FallTimer < -250.0 Then MoveToPocketDimension()
 							
 							If n\Reload = 0.0
-								If Dist > 100.0 And (Not IsPlayerOutsideFacility()) And RID <> r_dimension_106 And n\State < -5.0 ; ~ Timer idea -- Juanjpro
+								If Dist > 100.0 And (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And n\State < -5.0 ; ~ Timer idea -- Juanjpro
 									If (Not EntityInView(n\OBJ, Camera))
 										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
@@ -1123,7 +1125,7 @@ Function UpdateNPCs%()
 							SetNPCFrame(n, 110.0)
 							
 							If (Not PlayerRoom\RoomTemplate\DisableDecals)
-								If RID <> r_gate_a Then n\State = n\State - (fps\Factor[0] * (1.0 + (SelectedDifficulty\AggressiveNPCs)))
+								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\State = n\State - (fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs))
 							EndIf
 						EndIf
 						
@@ -1137,7 +1139,7 @@ Function UpdateNPCs%()
 						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 						MoveEntity(n\OBJ2, 0.0, 0.946, -0.165)
 						
-						If RID = r_dimension_106 Lor IsPlayerOutsideFacility()
+						If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor IsPlayerOutsideFacility()
 							If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 						Else
 							If Dist < PowTwo(opt\CameraFogFar * LightVolume * 0.6)
@@ -1158,15 +1160,33 @@ Function UpdateNPCs%()
 				;[Block]
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
-				
-				If wi\SCRAMBLE > 0 And Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2)
-					If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
-					ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
-					PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
+				Local IsLooking% = Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
+				If wi\SCRAMBLE > 0 And IsLooking
+					Local HasBatteryForScramble% = False
+					For i = 0 To MaxItemAmount - 1
+						If Inventory(i) <> Null
+							If (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
+								If Inventory(i)\State > 0.0
+									Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.08 / wi\SCRAMBLE)))
+									HasBatteryForScramble = True
+									Exit
+								EndIf
+							EndIf
+						EndIf
+					Next
+					If HasBatteryForScramble
+						If (Not ChannelPlaying(SCRAMBLECHN)) Then SCRAMBLECHN = PlaySound_Strict(snd_I\SCRAMBLESFX)
+						If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
+						ScaleSprite(n\OBJ2, Rnd(0.06, 0.08), Rnd(0.07, 0.09))
+						PositionEntity(n\OBJ2, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05, Rnd(0.1) - 0.05)
+					Else
+						If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
+						If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+					EndIf
 				Else
 					If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
+					If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 				EndIf
-				If Dist < 16.0 Then GiveAchievement("096")
 				
 				Select n\State
 					Case 0.0 ; ~ Sitting
@@ -1198,21 +1218,19 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If (Not chs\NoTarget)
-								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
-									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
-											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
-											
-											me\CurrCameraZoom = 10.0
-											
-											SetNPCFrame(n, 194.0)
-											
-											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-											n\Sound = 0
-											
-											n\State3 = 0.0
-											n\State = 2.0
-										EndIf
+								If wi\SCRAMBLE = 0 And IsLooking
+									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
+										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+										
+										me\CurrCameraZoom = 10.0
+										
+										SetNPCFrame(n, 194.0)
+										
+										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+										n\Sound = 0
+										
+										n\State3 = 0.0
+										n\State = 2.0
 									EndIf
 								EndIf
 							EndIf
@@ -1278,20 +1296,18 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If (Not chs\NoTarget)
-								If Dist < PowTwo(opt\CameraFogFar * LightVolume)
-									If wi\SCRAMBLE = 0 And (Angle < 135.0 Lor Angle > 225.0) And (EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera))
-										If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
-											PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
-											
-											me\CurrCameraZoom = 10.0
-											
-											If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
-											
-											StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
-											n\Sound = 0
-											
-											n\State = 3.0
-										EndIf
+								If wi\SCRAMBLE = 0 And IsLooking
+									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
+										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+										
+										me\CurrCameraZoom = 10.0
+										
+										If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
+										
+										StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+										n\Sound = 0
+										
+										n\State = 3.0
 									EndIf
 								EndIf
 							EndIf
@@ -1586,7 +1602,7 @@ Function UpdateNPCs%()
 								me\BlurTimer = 500.0
 								
 								If (Not chs\GodMode)
-									If RID = r_cont2_049
+									If PlayerRoom\RoomTemplate\RoomID = r_cont2_049
 										For e.Events = Each Events
 											If e\EventID = e_cont2_049
 												e\EventState = -1.0
@@ -1613,12 +1629,9 @@ Function UpdateNPCs%()
 						EndIf
 					EndIf
 				EndIf
-				If Dist < 16.0
-					If EntityInView(n\Collider, Camera) Then GiveAchievement("049")
-				EndIf
 				
 				If n\Idle > 0.1
-					If RID <> r_cont2_049
+					If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049
 						n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 					EndIf
 					n\DropSpeed = 0.0
@@ -1809,7 +1822,7 @@ Function UpdateNPCs%()
 												If n\PathStatus = PATH_STATUS_FOUND
 													If n\Path[1] <> Null
 														If n\Path[1]\door <> Null
-															If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> "") And (Not n\Path[1]\door\Open)
+															If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> 0) And (Not n\Path[1]\door\Open)
 																Repeat
 																	If n\PathLocation > MaxPathLocations - 1
 																		n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -1951,7 +1964,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 							
-							If RID = r_room2_sl Then ShouldPlay = 19
+							If PlayerRoom\RoomTemplate\RoomID = r_room2_sl Then ShouldPlay = 19
 							
 							If n\CurrSpeed > 0.005
 								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySound2(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
@@ -2146,7 +2159,7 @@ Function UpdateNPCs%()
 									EndIf
 									If Attack
 										If n\Target = Null
-											If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
+											If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 												PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 												InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, Rnd(0.25, 0.3) * DifficultyDMGMult, 0.2)
 												me\CameraShake = 2.5
@@ -2159,7 +2172,7 @@ Function UpdateNPCs%()
 												PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
 											EndIf
 										Else
-											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
+											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.5625
 												PlaySound2(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 												If n\Target\HP > 0
 													n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
@@ -2218,14 +2231,14 @@ Function UpdateNPCs%()
 							Local DetectDistance# = 121.0
 							
 							; ~ If at Gate B increase his distance so that he can shoot the player from a distance after they are spotted.
-							If RID = r_gate_b
+							If PlayerRoom\RoomTemplate\RoomID = r_gate_b
 								DetectDistance = 484.0
 								
 								; ~ Increase accuracy if the player is going slow
-								ShootAccuracy = 0.51 - (10.0 * me\CurrSpeed)
+								ShootAccuracy = 0.5 - (12.0 * me\CurrSpeed)
 							EndIf
 							
-							If Dist < PowTwo(DetectDistance)
+							If Dist < DetectDistance
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 								PointEntity(Pvt, me\Collider)
@@ -2242,10 +2255,10 @@ Function UpdateNPCs%()
 										Local InstaKillPlayer% = False
 										
 										msg\DeathMsg = Format(GetLocalString("death", "guard.default"), SubjectName)
-										If RID = r_cont1_173 
+										If PlayerRoom\RoomTemplate\RoomID = r_cont1_173 
 											msg\DeathMsg = Format(GetLocalString("death", "guard.173"), SubjectName)
 											InstaKillPlayer = True
-										ElseIf RID = r_gate_b
+										ElseIf PlayerRoom\RoomTemplate\RoomID = r_gate_b
 											msg\DeathMsg = GetLocalString("death", "guard.gateb")
 										EndIf
 										
@@ -2866,7 +2879,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
-				If RID <> r_dimension_106
+				If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106
 					If n\Idle = 1
 						If (Not EntityHidden(n\OBJ))
 							HideEntity(n\OBJ)
@@ -3092,7 +3105,7 @@ Function UpdateNPCs%()
 				;[Block]
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				If Dist < 3600.0
-					If RID = r_gate_b
+					If PlayerRoom\RoomTemplate\RoomID = r_gate_b
 						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 1.0), 0.0)
 					Else
 						Dist2 = 1.0
@@ -3175,7 +3188,7 @@ Function UpdateNPCs%()
 													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / SqrValue) * (1.0 / SqrValue)) * (n\State = 2.0), (n\State = 2.0))
 													
 													If me\Terminated And n\State <> 3
-														If RID = r_gate_b
+														If PlayerRoom\RoomTemplate\RoomID = r_gate_b
 															msg\DeathMsg = GetLocalString("death", "apache.gateb")
 														Else
 															msg\DeathMsg = GetLocalString("death", "apache.gatea")
@@ -3286,7 +3299,7 @@ Function UpdateNPCs%()
 													InjurePlayer(Rnd(0.75, 1.15) * DifficultyDMGMult, 0.0, 100.0, Rnd(0.35, 0.4) * DifficultyDMGMult, 0.2)
 													
 													If me\Injuries > 3.0
-														If RID = r_room2_ez
+														If PlayerRoom\RoomTemplate\RoomID = r_room2_ez
 															msg\DeathMsg = GetLocalString("death", "035.offices")
 														Else
 															msg\DeathMsg = GetLocalString("death", "035.default")
@@ -3668,7 +3681,7 @@ Function UpdateNPCs%()
 			Case NPCType939
 				;[Block]
 				; ~ State is set to 66 in the room3_storage-event if player isn't inside the room
-				If RID <> r_room3_storage Then n\State = 66.0
+				If PlayerRoom\RoomTemplate\RoomID <> r_room3_storage Then n\State = 66.0
 				If n\State < 66.0
 					Select n\State
 						Case 0.0 ; ~ Idles
@@ -3790,13 +3803,17 @@ Function UpdateNPCs%()
 							;[End Block]
 					End Select
 					
+					If EntityDistanceSquared(n\Collider, me\Collider) < 49.0
+						If EntityVisible(me\Collider, n\Collider) And EntityInView(n\Collider, Camera) Then GiveAchievement("939")
+					EndIf
+					
 					If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
 						Dist = EntityDistanceSquared(n\Collider, me\Collider) - (EntityVisible(me\Collider, n\Collider) * 1.4641)
 						If PowTwo(me\SndVolume * 1.2) > Dist Lor Dist < 2.25
 							If n\State3 = 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-								
+								GiveAchievement("939")
 								PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 								n\State3 = 1.0
 							EndIf
@@ -3805,7 +3822,7 @@ Function UpdateNPCs%()
 							If n\State <> 1 And n\Reload <= 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
 								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-								
+								GiveAchievement("939")
 								SetNPCFrame(n, 175.0)
 								
 								n\Reload = 70.0 * 3.0
@@ -3906,7 +3923,7 @@ Function UpdateNPCs%()
 											Case 3
 												;[Block]
 												For d.Doors = Each Doors
-													If d\Locked = 0 And d\KeyCard = 0 And d\Code = "" And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
+													If d\Locked = 0 And d\KeyCard = 0 And d\Code = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
 														If EntityDistanceSquared(d\FrameOBJ, n\Collider) < 256.0 Then OpenCloseDoor(d)
 													EndIf
 												Next
@@ -4048,9 +4065,9 @@ Function UpdateNPCs%()
 								For n2.NPCs = Each NPCs
 									If n2\NPCType = n\NPCType Then n2\State3 = 1000.0 
 								Next
+								n\State3 = 1000.0
 							EndIf
 							n\State = Max(n\State, 8.0)
-							n\State3 = 1000.0
 						EndIf
 						
 						If me\Stamina < 10.0
@@ -4070,7 +4087,7 @@ Function UpdateNPCs%()
 									
 									; ~ Echo / Stares off / Walking around periodically
 									If n\Frame > 213.9
-										If Rand(3) = 1 And Dist < 16.0
+										If Rand(3) = 1 And Dist < 12.0
 											n\State = Rand(1.0, 4.0)
 										Else
 											n\State = Rand(5.0, 6.0)
@@ -4113,11 +4130,11 @@ Function UpdateNPCs%()
 														;[End Block]
 												End Select
 											EndIf
-											me\BlinkEffect = Max(me\BlinkEffect, 1.5 - (0.25 * I_714\Using))
-											me\BlinkEffectTimer = 1000.0
+											me\BlinkEffect = 1.5 - (0.25 * I_714\Using)
+											me\BlinkEffectTimer = 1000.0 - (500.0 * I_714\Using)
 											
 											me\StaminaEffect = 2.0 - (0.5 * I_714\Using)
-											me\StaminaEffectTimer = 1000.0
+											me\StaminaEffectTimer = 1000.0 - (500.0 * I_714\Using)
 										EndIf
 									EndIf
 									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -4162,7 +4179,7 @@ Function UpdateNPCs%()
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\PathLocation = 0
 										
-										If Dist < 0.81 Then n\State = 9.0
+										If Dist < 0.7225 Then n\State = 9.0
 									Else ; ~ Trying to find the player
 										If n\PathTimer <= 0.0 ; ~ Update the path
 											n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
@@ -4319,7 +4336,7 @@ Function UpdateNPCs%()
 						RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 					Else
 						If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
-						If Rand(600) = 1 Then TeleportCloser(n)
+						If Rand(850 - (250 * SelectedDifficulty\AggressiveNPCs)) = 1 Then TeleportCloser(n)
 					EndIf
 				EndIf
 				;[End Block]
@@ -4568,7 +4585,7 @@ Function UpdateNPCs%()
 							;[Block]
 							If chs\NoTarget Lor I_268\InvisibilityOn Then n\State = 0.0
 							
-							If RID = r_dimension_1499 And n\PrevState = 0 Then ShouldPlay = 18
+							If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 And n\PrevState = 0 Then ShouldPlay = 18
 							
 							PointEntity(n\OBJ, me\Collider)
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
@@ -4640,7 +4657,7 @@ Function UpdateNPCs%()
 									me\CameraShake = 2.5
 									
 									If me\Injuries > 10.0
-										If RID = r_dimension_1499
+										If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 											msg\DeathMsg = GetLocalString("death", "1499.dimension")
 										Else
 											msg\DeathMsg = GetLocalString("death", "1499")
@@ -4855,7 +4872,7 @@ Function UpdateNPCs%()
 								AnimateNPC(n, 126.0, 165.0, 0.6, False)
 								If n\Frame >= 146.0 And PrevFrame < 146.0
 									If n\Target = Null
-										If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
+										If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 											PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0 + SelectedDifficulty\AggressiveNPCs, 0.0, Rnd(0.175, 0.225) * DifficultyDMGMult, 0.2)
 											me\CameraShake = 2.5
@@ -4868,7 +4885,7 @@ Function UpdateNPCs%()
 											PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
 										EndIf
 									Else
-										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.49
+										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.5625
 											PlaySound2(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 											If n\Target\HP > 0
 												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
@@ -4911,7 +4928,7 @@ Function UpdateNPCs%()
 								ResetEntity(n\Collider)
 							EndIf
 							If n\Idle > 0
-								n\Idle = Max(n\Idle - (1 + (1 * SelectedDifficulty\AggressiveNPCs)) * fps\Factor[0], 0.0)
+								n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.0)
 							Else
 								If PlayerInReachableRoom(True) ; ~ Player is in a room where SCP-008-1 can teleport to
 									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1
@@ -5005,6 +5022,17 @@ Function UpdateNPCs%()
 						Next
 						n\GravityMult = 0.0
 						;[End Block]
+					Case NPCTypeGuard
+						;[Block]
+						n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
+						EntityRadius(n\OBJ3, 0.3)
+						EntityPickMode(n\OBJ3, 1, False)
+						
+						RemoveSound = True
+						n\Target = Null
+						n\BlinkTimer = -1.0
+						n\GravityMult = 0.0
+						;[End Block]
 					Default
 						;[Block]
 						RemoveSound = True
@@ -5018,6 +5046,27 @@ Function UpdateNPCs%()
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+				EndIf
+			EndIf
+			If n\NPCType = NPCTypeGuard
+				If n\OBJ3 <> 0
+					If EntityDistanceSquared(n\OBJ3, me\Collider) < 1.0
+						If EntityPick(Camera, 1.0) = n\OBJ3
+							HandEntity = n\OBJ3
+							If mo\MouseHit1
+								Local RandomChance% = Rand(5)
+								
+								; ~ Special message for suicide guy
+								If PlayerRoom\RoomTemplate\ID = r_room2_6_ez Then RandomChance = 6
+								
+								CreateMsg(GetLocalString("msg", "pickup.wpn_" + RandomChance))
+								; ~ Remove the pivot for optimization. Do not allow the player pick up this weapon again. Can be restored by reloading the game, it's normal
+								HandEntity = 0
+								FreeEntity(n\OBJ3) : n\OBJ3 = 0
+								;Exit
+							EndIf
+						EndIf
+					EndIf
 				EndIf
 			EndIf
 		Else
@@ -5042,7 +5091,7 @@ Function UpdateNPCs%()
 							Local MaxX#, MinX#, MaxZ#, MinZ#
 							
 							If n\InFacility = NullFloor
-								If RID <> r_cont1_173_intro
+								If PlayerRoom\RoomTemplate\RoomID <> r_cont1_173_intro
 									If forest_event <> Null
 										If PlayerRoom = forest_event\room
 											If forest_event\EventState = 1.0 Then UpdateGravity = True
@@ -5129,7 +5178,6 @@ Const MTF_DISABLING_TESLA% = 11
 
 Function UpdateMTFUnit%(n.NPCs)
 	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
@@ -5212,7 +5260,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									EndIf
 								EndIf
 							Next
-;						ElseIf (Not n_I\Curr106\Contained) And n_I\Curr173\Idle = 3 And RID <> r_cont1_106
+;						ElseIf (Not n_I\Curr106\Contained) And n_I\Curr173\Idle = 3 And PlayerRoom\RoomTemplate\RoomID <> r_cont1_106
 ;							For r.Rooms = Each Rooms
 ;								If r\RoomTemplate\RoomID = r_cont1_106
 ;									If n\IdleTimer = 0.0
@@ -5613,7 +5661,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						
 						Dist = EntityDistanceSquared(me\Collider, n\Collider)
 						; ~ If close enough, start shooting at the player
-						If Dist < 9.0 + ((RID = r_gate_a) * 16.0) 
+						If Dist < 9.0 + ((PlayerRoom\RoomTemplate\RoomID = r_gate_a) * 16.0) 
 							For n2.NPCs = Each NPCs
 								If n2\NPCType = NPCTypeMTF And n2 <> n
 									If n2\State = MTF_WANDERING_AROUND
@@ -6609,7 +6657,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport companions close to the leader if they get stuck
-		If RID <> r_gate_a
+		If PlayerRoom\RoomTemplate\RoomID <> r_gate_a
 			If Rand(100) = 1
 				If n <> n_I\MTFLeader
 					If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
@@ -6622,7 +6670,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport back to the facility if fell through the floor
-		If RID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
+		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
 	EndIf
 	If n_I\MTFLeader = Null And MTFTimer > 0.0 And MTFTimer < 35000.0
 		PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
@@ -7118,6 +7166,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			n_I\Curr049 = n
+			GiveAchievement("049")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-049")
 			;[End Block]
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492", "049_2", "scp_049_2"
@@ -7137,6 +7186,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			n_I\Curr096 = n
+			GiveAchievement("096")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-096")
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"
@@ -7320,18 +7370,15 @@ Function NPCSpeedChange%(n.NPCs)
 End Function
 
 Function IsPlayerOutsideFacility%()
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
-	
-	If RID = r_gate_a Lor RID = r_gate_b Then Return(True)
+	If PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b Then Return(True)
 	Return(False)
 End Function
 
 Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	Local e.Events
-	Local RID% = PlayerRoom\RoomTemplate\RoomID
 	
 	; ~ Player is in these rooms, returning false
-	If RID = r_dimension_106 Lor RID = r_dimension_1499 Lor (RID = r_cont1_173_intro And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
+	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
 	If forest_event <> Null
 		If PlayerRoom = forest_event\room
@@ -7345,7 +7392,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	
 	If (Not CanSpawnIn049Chamber)
 		If (Not SelectedDifficulty\AggressiveNPCs)
-			If RID = r_cont2_049 And EntityY(me\Collider) <= (-2848.0) * RoomScale Then Return(False)
+			If PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And EntityY(me\Collider) <= (-2848.0) * RoomScale Then Return(False)
 		EndIf
 	EndIf
 	; ~ Return true, this means player is in reachable room
@@ -7371,7 +7418,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			Local Temp% = True
 			
 			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> "" Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1]) Lor ((Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType = OFFICE_DOOR))
+				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor (Not n\Path[n\PathLocation]\door\Buttons[0]) Lor (Not n\Path[n\PathLocation]\door\Buttons[1]) Lor ((Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType = OFFICE_DOOR))
 					Temp = False
 				Else
 					If (Not n\Path[n\PathLocation]\door\Open)
