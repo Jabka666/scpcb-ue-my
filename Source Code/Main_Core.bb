@@ -975,8 +975,7 @@ Function UpdateConsole%()
 			EndIf
 		EndIf
 		
-		If ConsoleScroll < (-ConsoleHeight) + Height Then ConsoleScroll = (-ConsoleHeight) + Height
-		If ConsoleScroll > 0 Then ConsoleScroll = 0
+		ConsoleScroll = Clamp(ConsoleScroll, (-ConsoleHeight) + Height, 0)
 		
 		SelectedInputBox = 2
 		
@@ -2065,8 +2064,11 @@ Function UpdateConsole%()
 					
 					If StrTemp = "all"
 						Local Defines% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-						For i = 0 To JsonGetArraySize(Defines) - 1
+						Local ArraySize% = JsonGetArraySize(Defines)
+						
+						For i = 0 To ArraySize - 1
 							Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "id"))
+							
 							GiveAchievement(ID)
 						Next
 						CreateConsoleMsg(GetLocalString("console", "ga.all"))
@@ -2165,9 +2167,8 @@ Function RenderConsole%()
 		For cm.ConsoleMsg = Each ConsoleMsg
 			ConsoleHeight = ConsoleHeight + (15 * MenuScale)
 		Next
-		ScrollBarHeight = (Float(Height) / Float(ConsoleHeight)) * Height
-		If ScrollBarHeight > Height Then ScrollBarHeight = Height
-		If ConsoleHeight < Height Then ConsoleHeight = Height
+		ScrollBarHeight = Min((Float(Height) / Float(ConsoleHeight)) * Height, Height)
+		ConsoleHeight = Max(ConsoleHeight, Height)
 		
 		Color(50, 50, 50)
 		InBar = MouseOn(x + Width - CoordEx, y, CoordEx, Height)
@@ -2499,6 +2500,7 @@ Function SetCrouch%(NewCrouch%)
 			If me\Stamina < 10.0
 				If (Not ChannelPlaying(BreathCHN))
 					Local Temp% = 0
+					
 					If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp = 1
 					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
 				EndIf
@@ -3522,6 +3524,7 @@ Function UpdateGUI%()
 					Next
 					
 					Local IsEmpty% = True
+					
 					If OtherOpen\ItemTemplate\ID = it_wallet
 						If (Not IsEmpty)
 							For z = 0 To OtherSize - 1
@@ -6000,10 +6003,14 @@ Function Render3DHandIcon%(IconID%, OBJ%, ArrowID% = -1)
 	
 	PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 	PointEntity(Pvt, OBJ)
+	
 	Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
+	
 	If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
 	If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+	
 	Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
+	
 	If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 	If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 	
@@ -7916,6 +7923,7 @@ Function RenderMenu%()
 		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
 			If igm\AchievementsMenu > 0
 				Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+				
 				For i = 0 To 11
 					If i + ((igm\AchievementsMenu - 1) * 12) < S2IMapSize(AchievementsIndex)
 						RenderAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i, JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i + ((igm\AchievementsMenu - 1) * 12)), "id")))
@@ -8143,20 +8151,18 @@ Function RenderEnding%()
 					Next
 					
 					Local SCPsEncountered% = 1
-					
 					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-
-					For i = 0 To JsonGetArraySize(Achievements) - 1
+					Local ArraySize% = JsonGetArraySize(Achievements)
+					
+					For i = 0 To ArraySize - 1
 						Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+						
 						If S2IMapContains(UnlockedAchievements, ID)
-							If JsonGetBool(JsonGetValue(JsonGetArrayValue(Achievements, i), "scp"))
-								SCPsEncountered = SCPsEncountered + 1
-							EndIf
+							If JsonGetBool(JsonGetValue(JsonGetArrayValue(Achievements, i), "scp")) Then SCPsEncountered = SCPsEncountered + 1
 						EndIf
 					Next
 					
 					Local AchievementsUnlocked% = S2IMapSize(UnlockedAchievements)
-					
 					Local EscapeSeconds% = EscapeTimer Mod 60
 					Local EscapeMinutes% = Floor(EscapeTimer / 60)
 					Local EscapeHours% = Floor(EscapeMinutes / 60)

@@ -1790,6 +1790,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
 	
 	Local x%, y%, FirstLoop%
+	Local ArraySize% = JsonGetArraySize(LoadingScreens)
 	
 	HidePointer()
 	
@@ -1797,7 +1798,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		If LoadingImage = 0
 			DescriptionIndex = 0
 			
-			SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(0, JsonGetArraySize(LoadingScreens) - 1))
+			SelectedLoadingScreens = JsonGetArrayValue(LoadingScreens, Rand(0, ArraySize - 1))
 			LoadingScreenTitle = JsonGetString(JsonGetValue(SelectedLoadingScreens, "title"))
 			If JsonIsNull(JsonGetValue(SelectedLoadingScreens, "descriptions"))
 				Descriptions = JsonGetArray(JsonParseFromString("[" + Chr(34) + Chr(34) + "]")) ; ~ Create an empty description array
@@ -1821,12 +1822,14 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	
 	FirstLoop = True
 	
+	Local DescrArraySize% = JsonGetArraySize(Descriptions)
+	
 	Repeat 
 		ClsColor(0, 0, 0)
 		Cls()
 		
 		If Percent > 20 Then UpdateMusic()
-		If Percent > (100.0 / JsonGetArraySize(Descriptions)) * (DescriptionIndex + 1) Then DescriptionIndex = DescriptionIndex + 1
+		If Percent > (100.0 / DescrArraySize) * (DescriptionIndex + 1) Then DescriptionIndex = DescriptionIndex + 1
 		
 		If LoadingBack <> 0 Then DrawBlock(LoadingBack, mo\Viewport_Center_X - LoadingBackWidth, mo\Viewport_Center_Y - LoadingBackHeight)
 		

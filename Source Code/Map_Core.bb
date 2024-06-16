@@ -3619,13 +3619,13 @@ Function UseDoor%(PlaySFX% = True)
 		EndIf
 		
 		If d_I\ClosestDoor\Code = CODE_DR_MAYNARD
-			GiveAchievement(AchvMaynard)
+			GiveAchievement("maynard")
 		ElseIf d_I\ClosestDoor\Code = CODE_DR_GEARS
-			GiveAchievement(AchvGears)
+			GiveAchievement("gears")
 		ElseIf d_I\ClosestDoor\Code = CODE_DR_HARP
-			GiveAchievement(AchvHarp)
+			GiveAchievement("harp")
 		ElseIf d_I\ClosestDoor\Code = CODE_O5_COUNCIL
-			GiveAchievement(AchvO5)
+			GiveAchievement("o5")
 		EndIf
 	Else
 		If d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR
@@ -4313,10 +4313,10 @@ End Function
 Function UpdateCheckpointMonitors%(LCZ% = True)
 	Local i%, SF%, b%, t1%
 	Local Name$
-	
 	Local Entity% = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
+	Local SurfCount% = CountSurfaces(Entity)
 	
-	For i = 2 To CountSurfaces(Entity)
+	For i = 2 To SurfCount
 		SF = GetSurface(Entity, i)
 		b = GetSurfaceBrush(SF)
 		If b <> 0
@@ -4353,8 +4353,9 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 	
 	If mon_I\UpdateCheckpoint[(1 - LCZ)]
 		Local Entity% = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
+		Local SurfCount% = CountSurfaces(Entity)
 		
-		For i = 2 To CountSurfaces(Entity)
+		For i = 2 To SurfCount
 			SF = GetSurface(Entity, i)
 			b = GetSurfaceBrush(SF)
 			If b <> 0
@@ -6011,10 +6012,11 @@ Function CreateChunkParts%(r.Rooms)
 	Local chp.ChunkPart, chp2.ChunkPart
 	Local i%, StrTemp$, j%
 	Local ReadingChunk%
+	Local ArraySize% = JsonGetArraySize(SCP1499Chunks)
 	
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
-	For i = 0 To JsonGetArraySize(SCP1499Chunks) - 1
+	For i = 0 To ArraySize - 1
 		ReadingChunk = JsonGetArray(JsonGetValue(JsonGetArrayValue(SCP1499Chunks, i), "objects"))
 		chp.ChunkPart = New ChunkPart
 		chp\Amount = JsonGetArraySize(ReadingChunk)

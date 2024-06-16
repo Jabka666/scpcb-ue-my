@@ -2471,7 +2471,9 @@ Function RemoveTextureInstances%()
 	Local i%
 	
 	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-	For i = 0 To JsonGetArraySize(Achievements) - 1
+	Local ArraySize% = JsonGetArraySize(Achievements)
+	
+	For i = 0 To ArraySize - 1
 		FreeImage(S2IMapGet(AchievementsImages, JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))))
 	Next
 	FreeImage(S2IMapGet(AchievementsImages, "locked"))
@@ -2505,10 +2507,14 @@ Function Init294Drinks%()
 	EndIf
 	
 	I_294\DrinksMap = CreateS2IMap()
-	For i = 0 To JsonGetArraySize(I_294\Drinks) - 1
+	
+	Local ArraySize% = JsonGetArraySize(I_294\Drinks)
+	
+	For i = 0 To ArraySize - 1
 		Local DrinkNames% = JsonGetArray(JsonGetValue(JsonGetArrayValue(I_294\Drinks, i), "name"))
+		Local DrinkArraySize% = JsonGetArraySize(DrinkNames)
 		
-		For j = 0 To JsonGetArraySize(DrinkNames) - 1
+		For j = 0 To DrinkArraySize - 1
 			S2IMapSet(I_294\DrinksMap, Upper(JsonGetString(JsonGetArrayValue(DrinkNames, j))), i)
 		Next
 	Next

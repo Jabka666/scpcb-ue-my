@@ -194,19 +194,24 @@ Function GetMeshExtents%(Mesh%)
 	Local MaxX# = -Infinity
 	Local MaxY# = -Infinity
 	Local MaxZ# = -Infinity
+	Local SurfCount% = CountSurfaces(Mesh)
+	Local VertCount%
 	
-	For su = 1 To CountSurfaces(Mesh)
+	For su = 1 To SurfCount
 		s = GetSurface(Mesh, su)
-		For v = 0 To CountVertices(s) - 1
+		VertCount = CountVertices(s)
+		
+		For v = 0 To VertCount - 1
 			x = VertexX(s, v)
 			y = VertexY(s, v)
 			z = VertexZ(s, v)
-			If x > MaxX Then MaxX = x
-			If x < MinX Then MinX = x
-			If y > MaxY Then MaxY = y
-			If y < MinY Then MinY = y
-			If z > MaxZ Then MaxZ = z
-			If z < MinZ Then MinZ = z
+			
+			MinX = Min(MinX, x)
+			MaxX = Max(MaxX, x)
+			MinY = Min(MinY, y)
+			MaxY = Max(MaxY, y)
+			MinZ = Min(MinZ, z)
+			MaxZ = Max(MaxZ, z)
 		Next
 	Next
 	

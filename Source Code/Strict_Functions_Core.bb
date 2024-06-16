@@ -256,7 +256,9 @@ Function LoadMesh_Strict%(File$, Parent% = 0)
 		If Tmp = 0 Then RuntimeError(Format(GetLocalString("runerr", "mesh.failed.load"), File))
 	EndIf
 	
-	For i = 1 To CountSurfaces(Tmp)
+	Local SurfCount% = CountSurfaces(Tmp)
+	
+	For i = 1 To SurfCount
 		SF = GetSurface(Tmp, i)
 		b = GetSurfaceBrush(SF)
 		If b <> 0
@@ -316,7 +318,9 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0)
 		If Tmp = 0 Then RuntimeError(Format(GetLocalString("runerr", "animmesh.failed.load"), File))
 	EndIf
 	
-	For i = 1 To CountSurfaces(Tmp)
+	Local SurfCount% = CountSurfaces(Tmp)
+	
+	For i = 1 To SurfCount
 		SF = GetSurface(Tmp, i)
 		b = GetSurfaceBrush(SF)
 		If b <> 0

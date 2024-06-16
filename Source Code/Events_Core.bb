@@ -632,7 +632,7 @@ Function UpdateEvents%()
 	Local it.Items, it2.Items, sc.SecurityCams, sc2.SecurityCams, wayp.WayPoints, d.Doors, s.Screens, emit.Emitter
 	Local Dist#, i%, Temp%, Pvt%, StrTemp$, j%, k%
 	Local fDir#, Scale#, Tex%, t1%, Name$ ;CurrTrigger$ = "",
-	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$
+	Local x#, y#, z#, xTemp#, yTemp#, b%, BT%, SF%, TexName$, SurfCount%
 	Local Angle#, RoomExists%
 	Local SinValue#, CosValue#, SqrValue#
 	Local PlayerPosX#, PlayerPosY#, PlayerPosZ#
@@ -2184,7 +2184,7 @@ Function UpdateEvents%()
 								n_I\Curr049\State = 2.0 : n_I\Curr049\Idle = 1 : n_I\Curr049\HideFromNVG = True
 								PointEntity(n_I\Curr049\Collider, e\room\OBJ)
 								e\room\NPC[0] = n_I\Curr049
-								GiveAchievement(Achv049)
+								GiveAchievement("049")
 							EndIf
 							
 							e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
@@ -5024,7 +5024,8 @@ Function UpdateEvents%()
 						
 						Local Brush% = GetRescaledTexture(ItemHUDTexturePath + DrawingName, 1, 256, 256, True)
 						
-						For i = 1 To CountSurfaces(e\room\NPC[0]\OBJ)
+						SurfCount = CountSurfaces(e\room\NPC[0]\OBJ)
+						For i = 1 To SurfCount
 							SF = GetSurface(e\room\NPC[0]\OBJ, i)
 							b = GetSurfaceBrush(SF)
 							BT = GetBrushTexture(b, 0)
@@ -10063,6 +10064,7 @@ Function Update035Label%(OBJ%)
 	Local itt.ItemTemplates, it.Items
 	Local Tex%, i%, LabelPath$, CurrTex$
 	Local SF%, b%, Brush%, t1%, TexName$
+	Local SurfCount% = CountSurfaces(OBJ)
 	
 	If I_035\Sad
 		CurrTex = "035_sad"
@@ -10072,7 +10074,7 @@ Function Update035Label%(OBJ%)
 	LabelPath = "GFX\Map\Textures\label" + CurrTex + ".png"
 	
 	Brush = LoadBrush_Strict(LabelPath)
-	For i = 1 To CountSurfaces(OBJ)
+	For i = 1 To SurfCount
 		SF = GetSurface(OBJ, i)
 		b = GetSurfaceBrush(SF)
 		t1 = GetBrushTexture(b, 0)

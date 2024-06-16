@@ -5,6 +5,8 @@ Global UnlockedAchievements%
 Global AchievementsArray%, LocalAchievementsArray%
 
 Function InitAchievements%()
+	Local i%
+	
 	AchievementsIndex = CreateS2IMap()
 	AchievementsImages = CreateS2IMap()
 	UnlockedAchievements = CreateS2IMap()
@@ -13,11 +15,12 @@ Function InitAchievements%()
 	LocalAchievementsArray = JsonParseFromFile(lang\LanguagePath + AchievementsFile)
 
 	Local Defines% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-
-	For i = 0 To JsonGetArraySize(Defines) - 1
+	Local ArraySize% = JsonGetArraySize(Defines)
+	
+	For i = 0 To ArraySize - 1
 		Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "id"))
 		Local Image$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "image"))
-
+		
 		S2IMapSet(AchievementsIndex, ID, i)
 		S2IMapSet(AchievementsImages, ID, ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\" + Image), opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0))
 	Next
@@ -40,9 +43,12 @@ Function AchievementTooltip%(AchvID$)
 	SetFontEx(fo\FontID[Font_Digital])
 
 	Local Width%
-	Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), AchvID), "name")
+	Local LocValue% = JsonGetValue(LocalAchievementsArray, "translations")
+	Local Value% = JsonGetValue(AchievementsArray, "translations")
+	Local AchvName% = JsonGetValue(JsonGetValue(LocValue, AchvID), "name")
+	
 	If JsonIsNull(AchvName)
-		AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), AchvID), "name")
+		AchvName = JsonGetValue(JsonGetValue(Value, AchvID), "name")
 		Width = StringWidth(JsonGetString(AchvName))
 	Else
 		Width = StringWidth(JsonGetString(AchvName))
@@ -53,9 +59,10 @@ Function AchievementTooltip%(AchvID$)
 	SetFontEx(fo\FontID[Font_Default])
 	
 	Local Width2%
-	Local AchvDesc% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), AchvID), "description")
+	Local AchvDesc% = JsonGetValue(JsonGetValue(LocValue, AchvID), "description")
+	
 	If JsonIsNull(AchvDesc)
-		AchvDesc = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), AchvID), "description")
+		AchvDesc = JsonGetValue(JsonGetValue(Value, AchvID), "description")
 		Width2 = StringWidth(JsonGetString(AchvDesc))
 	Else
 		Width2 = StringWidth(JsonGetString(AchvDesc))
@@ -114,17 +121,22 @@ Function CreateAchievementMsg.AchievementMsg(AchvID$)
 	Local amsg.AchievementMsg
 	
 	amsg.AchievementMsg = New AchievementMsg
-
-	Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), AchvID), "name")
+	
+	Local LocValue% = JsonGetValue(LocalAchievementsArray, "translations")
+	Local Value% = JsonGetValue(AchievementsArray, "translations")
+	Local AchvName% = JsonGetValue(JsonGetValue(LocValue, AchvID), "name")
+	
 	If JsonIsNull(AchvName)
-		AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), AchvID), "name")
+		AchvName = JsonGetValue(JsonGetValue(Value, AchvID), "name")
 		amsg\Txt = JsonGetString(AchvName)
 	Else
 		amsg\Txt = JsonGetString(AchvName)
 	EndIf
-	Local AchvDesc% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), AchvID), "description")
+	
+	Local AchvDesc% = JsonGetValue(JsonGetValue(LocValue, AchvID), "description")
+	
 	If JsonIsNull(AchvDesc)
-		AchvDesc = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), AchvID), "description")
+		AchvDesc = JsonGetValue(JsonGetValue(Value, AchvID), "description")
 		amsg\Desc = JsonGetString(AchvDesc)
 	Else
 		amsg\Desc = JsonGetString(AchvDesc)

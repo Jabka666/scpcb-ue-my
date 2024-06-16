@@ -158,8 +158,11 @@ Function SaveGame%(File$)
 	WriteByte(f, SoundTransmission)
 	
 	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-	For i = 0 To JsonGetArraySize(Achievements) - 1
+	Local ArraySize% = JsonGetArraySize(Achievements)
+	
+	For i = 0 To ArraySize - 1
 		Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+		
 		WriteByte(f, S2IMapContains(UnlockedAchievements, ID))
 	Next
 
@@ -666,8 +669,11 @@ Function LoadGame%(File$)
 	SoundTransmission = ReadByte(f)
 	
 	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-	For i = 0 To JsonGetArraySize(Achievements) - 1
+	Local ArraySize% = JsonGetArraySize(Achievements)
+	
+	For i = 0 To ArraySize - 1
 		Local AchvID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+		
 		If ReadByte(f) Then S2IMapSet(UnlockedAchievements, AchvID, True)
 	Next
 
@@ -1504,8 +1510,11 @@ Function LoadGameQuick%(File$)
 	SoundTransmission = ReadByte(f)
 	
 	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-	For i = 0 To JsonGetArraySize(Achievements) - 1
+	Local ArraySize% = JsonGetArraySize(Achievements)
+	
+	For i = 0 To ArraySize - 1
 		Local AchvID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+		
 		If ReadByte(f) Then S2IMapSet(UnlockedAchievements, AchvID, True)
 	Next
 	me\RefinedItems = ReadInt(f)

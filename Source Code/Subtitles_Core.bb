@@ -186,8 +186,9 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 	EndIf
 	
 	Local Arr% = JsonGetArray(Token)
-
-	For i = 0 To JsonGetArraySize(Arr) - 1
+	Local ArraySize% = JsonGetArraySize(Arr)
+	
+	For i = 0 To ArraySize - 1
 		Local Subtitle% = JsonGetArrayValue(Arr, i)
 		Local TxtVal% = JsonGetValue(Subtitle, "text")
 		Local DelayVal% = JsonGetValue(Subtitle, "delay")
