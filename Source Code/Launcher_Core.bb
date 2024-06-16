@@ -451,7 +451,7 @@ Function UpdateLanguageSelector%()
 					EndIf
 				EndIf
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
-				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-ini/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.ini")
+				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/achievements-jsonc/" + RequestLanguage\ID + "/file/", BasePath + "/achievements.jsonc")
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
@@ -461,7 +461,7 @@ Function UpdateLanguageSelector%()
 				If (Not RequestLanguage\MajorOnly) Then Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
 				CreateDir(LocalizaitonPath + RequestLanguage\ID + "/Data")
 				CopyFile(BasePath + "/local.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini")
-				CopyFile(BasePath + "/achievements.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/achievements.ini")
+				CopyFile(BasePath + "/achievements.jsonc", LocalizaitonPath + RequestLanguage\ID + "/Data/achievements.jsonc")
 				StatusTimer = MilliSecs()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]

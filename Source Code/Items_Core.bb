@@ -637,19 +637,19 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case it_scp148
 						;[Block]
-						GiveAchievement(Achv148)
+						GiveAchievement("148")
 						;[End Block]
 					Case it_key6
 						;[Block]
-						GiveAchievement(AchvKeyCard6)
+						GiveAchievement("keycard6")
 						;[End Block]
 					Case it_keyomni
 						;[Block]
-						GiveAchievement(AchvOmni)
+						GiveAchievement("omni")
 						;[End Block]
 					Case it_scp005
 						;[Block]
-						GiveAchievement(Achv005)
+						GiveAchievement("005")
 						;[End Block]
 					Case it_veryfinevest
 						;[Block]
@@ -667,7 +667,7 @@ Function PickItem%(item.Items)
 						;[End Block]
 					Case it_navulti
 						;[Block]
-						GiveAchievement(AchvSNAV)
+						GiveAchievement("snav")
 						;[End Block]
 					Case it_vest, it_finevest
 						;[Block]
@@ -1545,13 +1545,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key5
 							;[Block]
-							Local CurrAchvAmount% = 0
+							Local CurrAchvAmount% = S2IMapSize(UnlockedAchievements)
 							
-							For i = 0 To MaxAchievements - 1
-								If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
-							Next
-							
-							If Rand(0, ((MaxAchievements - 1) - (CurrAchvAmount - 1)) * (2 + SelectedDifficulty\OtherFactors)) = 0
+							If Rand(0, ((S2IMapSize(AchievementsIndex) - 1) * (2 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (2 + SelectedDifficulty\OtherFactors))) = 0
 								it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 							ElseIf Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
@@ -1571,12 +1567,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					CurrAchvAmount = 0
-					For i = 0 To MaxAchievements - 1
-						If achv\Achievement[i] = True Then CurrAchvAmount = CurrAchvAmount + 1
-					Next
+					CurrAchvAmount = S2IMapSize(UnlockedAchievements)
 					
-					If Rand(0, ((MaxAchievements - 1) - (CurrAchvAmount - 1)) * (4 + SelectedDifficulty\OtherFactors)) = 0
+					If Rand(0, ((S2IMapSize(AchievementsIndex) - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))) = 0
 						it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 					ElseIf Rand(24 + (6 * SelectedDifficulty\OtherFactors)) = 1
 						it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)

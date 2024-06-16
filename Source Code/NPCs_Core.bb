@@ -966,7 +966,7 @@ Function UpdateNPCs%()
 								If Visible
 									If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\PathTimer = 0.0
 									If EntityInView(n\Collider, Camera)
-										GiveAchievement(Achv106)
+										GiveAchievement("106")
 										
 										SqrValue = (4.0 - Sqr(Dist))
 										
@@ -1222,8 +1222,6 @@ Function UpdateNPCs%()
 									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 										
-										achv\Achievement[Achv096] = False
-										
 										me\CurrCameraZoom = 10.0
 										
 										SetNPCFrame(n, 194.0)
@@ -1301,8 +1299,6 @@ Function UpdateNPCs%()
 								If wi\SCRAMBLE = 0 And IsLooking
 									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
-										
-										achv\Achievement[Achv096] = False
 										
 										me\CurrCameraZoom = 10.0
 										
@@ -2750,7 +2746,7 @@ Function UpdateNPCs%()
 				n\Speed = 0.3
 				Visible = (EntityDistanceSquared(me\Collider, n\Collider) < 4.0 And EntityInView(n\OBJ, Camera))
 				
-				If Visible Then GiveAchievement(Achv1048)
+				If Visible Then GiveAchievement("1048")
 				
 				Select n\State
 					Case 0.0 ; ~ Idle
@@ -2820,7 +2816,7 @@ Function UpdateNPCs%()
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					Visible = (Dist < 6.0 And EntityVisible(n\Collider, me\Collider))
 					
-					If Visible Then GiveAchievement(Achv1048)
+					If Visible Then GiveAchievement("1048")
 					
 					Select n\State
 						Case 0.0 ; ~ Idle
@@ -3073,7 +3069,7 @@ Function UpdateNPCs%()
 						AnimateNPC(n, 1.0, 300.0, Rnd(0.8, 2.5))
 						
 						If EntityInView(n\OBJ, Camera) And (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
-							GiveAchievement(Achv372)
+							GiveAchievement("372")
 							
 							If Rand(30) = 1
 								If EntityVisible(Camera, n\OBJ)
@@ -3808,7 +3804,7 @@ Function UpdateNPCs%()
 					End Select
 					
 					If EntityDistanceSquared(n\Collider, me\Collider) < 49.0
-						If EntityVisible(me\Collider, n\Collider) And EntityInView(n\Collider, Camera) Then GiveAchievement(Achv939)
+						If EntityVisible(me\Collider, n\Collider) And EntityInView(n\Collider, Camera) Then GiveAchievement("939")
 					EndIf
 					
 					If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
@@ -3817,7 +3813,7 @@ Function UpdateNPCs%()
 							If n\State3 = 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-								GiveAchievement(Achv939)
+								GiveAchievement("939")
 								PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 								n\State3 = 1.0
 							EndIf
@@ -3826,7 +3822,7 @@ Function UpdateNPCs%()
 							If n\State <> 1 And n\Reload <= 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
 								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-								GiveAchievement(Achv939)
+								GiveAchievement("939")
 								SetNPCFrame(n, 175.0)
 								
 								n\Reload = 70.0 * 3.0
@@ -3887,7 +3883,7 @@ Function UpdateNPCs%()
 						
 						If Dist < 1.0 + PowTwo(n\LastDist)
 							If EntityVisible(me\Collider, n\Collider)
-								GiveAchievement(Achv066)
+								GiveAchievement("066")
 								n\State = Rand(2.0, 3.0)
 							EndIf
 						EndIf
@@ -4059,7 +4055,7 @@ Function UpdateNPCs%()
 								EndIf
 							EndIf
 						Else
-							If EntityVisible(n\Collider, me\Collider) Then GiveAchievement(Achv966)
+							If EntityVisible(n\Collider, me\Collider) Then GiveAchievement("966")
 							If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 						EndIf
 						n\Reload = n\Reload - fps\Factor[0]
@@ -7170,7 +7166,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			n_I\Curr049 = n
-			GiveAchievement(Achv049)
+			GiveAchievement("049")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-049")
 			;[End Block]
 		Case "049-2", "0492", "scp-049-2", "scp049-2", "049zombie", "curedhuman", "scp0492", "scp-0492", "049_2", "scp_049_2"
@@ -7190,7 +7186,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType096, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			n_I\Curr096 = n
-			GiveAchievement(Achv096)
+			GiveAchievement("096")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-096")
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"

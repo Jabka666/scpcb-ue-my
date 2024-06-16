@@ -1002,7 +1002,7 @@ Function UpdateEvents%()
 								e\EventState = 2.0
 							ElseIf e\EventState = 2.0
 								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 9.0
-									GiveAchievement(Achv079)
+									GiveAchievement("079")
 									
 									If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 									e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\VoiceVolume * opt\MasterVolume, 0)
@@ -1228,7 +1228,7 @@ Function UpdateEvents%()
 						EndIf
 						
 						If e\room\RoomDoors[1]\Open Lor e\room\RoomDoors[2]\Open
-							GiveAchievement(Achv205)
+							GiveAchievement("205")
 							
 							TFormPoint(-1055.0, -74.8, 650.0, e\room\OBJ, 0)
 							e\room\NPC[0] = CreateNPC(NPCTypeClerk, TFormedX(), TFormedY(), TFormedZ())
@@ -1464,7 +1464,7 @@ Function UpdateEvents%()
 					me\Zone = 1
 					CoffinDistance = EntityDistance(me\Collider, e\room\Objects[0])
 					If CoffinDistance < 2.0
-						GiveAchievement(Achv895)
+						GiveAchievement("895")
 						If e\room\NPC[0] = Null
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y, e\room\z)
 							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\GravityMult = 0.0 : e\room\NPC[0]\FallingPickDistance = 0.0
@@ -1651,7 +1651,7 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room
 					If e\room\RoomDoors[2]\Open Lor EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
-						GiveAchievement(Achv914)
+						GiveAchievement("914")
 						e\EventState2 = 1.0
 					EndIf
 					
@@ -1895,7 +1895,7 @@ Function UpdateEvents%()
 						ShouldPlay = 30
 						me\Zone = 1
 						
-						GiveAchievement(Achv008)
+						GiveAchievement("008")
 						If e\EventState = 0.0
 							If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > 36.0 ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
 								PositionEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), True)
@@ -1992,7 +1992,7 @@ Function UpdateEvents%()
 						If (Not me\Terminated)
 							If e\EventState = 0.0
 								If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25 And RemoteDoorOn
-									GiveAchievement(Achv012)
+									GiveAchievement("012")
 									
 									PlaySound_Strict(snd_I\HorrorSFX[7])
 									PlaySound2(snd_I\LeverSFX, Camera, e\room\RoomDoors[0]\OBJ)
@@ -2374,7 +2374,7 @@ Function UpdateEvents%()
 							If I_409\Timer = 0.0
 								If I_005\ChanceToSpawn = 2
 									If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.81
-										GiveAchievement(Achv409)
+										GiveAchievement("409")
 										If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
 											me\BlurTimer = 1000.0
 											I_409\Timer = 0.001
@@ -2384,7 +2384,7 @@ Function UpdateEvents%()
 								
 								; ~ Touching SCP-409
 								If InteractObject(e\room\Objects[2], 0.8)
-									GiveAchievement(Achv409)
+									GiveAchievement("409")
 									If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
 										CreateMsg(GetLocalString("msg", "409"))
 										me\BlurTimer = 1000.0
@@ -2474,7 +2474,7 @@ Function UpdateEvents%()
 						UpdateForest(fr)
 						
 						If e\EventStr = "" And QuickLoadPercent = -1
-							GiveAchievement(Achv860)
+							GiveAchievement("860")
 							QuickLoadPercent = 0
 							QuickLoad_CurrEvent = e
 							e\EventStr = "Load0"
@@ -2761,7 +2761,7 @@ Function UpdateEvents%()
 							EndIf
 						Next
 						
-						GiveAchievement(Achv1123)
+						GiveAchievement("1123")
 						
 						RemoveNPC(e\room\NPC[0])
 						FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
@@ -2935,7 +2935,7 @@ Function UpdateEvents%()
 								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
 								e\EventState3 = 0.0
 								
-								GiveAchievement(Achv1162_ARC)
+								GiveAchievement("1162arc")
 								mo\MouseHit1 = False
 								Exit
 							EndIf
@@ -2955,7 +2955,7 @@ Function UpdateEvents%()
 								it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								EntityType(it\Collider, HIT_ITEM)
 								
-								GiveAchievement(Achv1162_ARC)
+								GiveAchievement("1162arc")
 								mo\MouseHit1 = False
 								e\EventState3 = 0.0
 								If me\Injuries > 15.0
@@ -3023,7 +3023,7 @@ Function UpdateEvents%()
 						End Select
 						EntityType(it\Collider, HIT_ITEM)
 						
-						GiveAchievement(Achv1162_ARC)
+						GiveAchievement("1162arc")
 						mo\MouseHit1 = False
 						e\EventState3 = 0.0
 					EndIf
@@ -3066,7 +3066,7 @@ Function UpdateEvents%()
 							EntityParent(e\room\Objects[0], e\room\OBJ)
 						Else
 							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 4.0
-								GiveAchievement(Achv789_J)
+								GiveAchievement("789j")
 								e\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\Joke\789J.ogg"), Camera, e\room\Objects[0], 10.0, 1.0, True)
 								e\EventState = 1.0
 							EndIf
@@ -3434,7 +3434,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 						If e\EventState2 = 2.0
-							GiveAchievement(Achv294)
+							GiveAchievement("294")
 							
 							I_294\Using = Temp
 							If I_294\Using
@@ -3454,7 +3454,7 @@ Function UpdateEvents%()
 					
 					If InteractObject(e\room\Objects[1], 0.8)
 						If ItemAmount < MaxItemAmount
-							GiveAchievement(Achv458)
+							GiveAchievement("458")
 							CreateMsg(GetLocalString("msg", "458"))
 							it.Items = CreateItem("Pizza Slice", it_pizza, 1.0, 1.0, 1.0)
 							EntityType(it\Collider, HIT_ITEM)
@@ -3568,7 +3568,7 @@ Function UpdateEvents%()
 					If n_I\Curr096 = Null
 						n_I\Curr096 = CreateNPC(NPCType096, e\room\x, 0.3, e\room\z)
 						RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 45.0, 0.0, True)
-						GiveAchievement(Achv096)
+						GiveAchievement("096")
 					EndIf
 					RemoveEvent(e)
 				EndIf
@@ -4079,7 +4079,7 @@ Function UpdateEvents%()
 											Case NPCType106
 												;[Block]
 												If n\State3 = 0.0
-													GiveAchievement(AchvTesla)
+													GiveAchievement("tesla")
 													
 													n\SoundCHN = PlaySound2(LoadTempSound("SFX\Ending\GateA\106Retreat.ogg"), Camera, n\OBJ, 10.0, 1.0, True)
 													
@@ -5109,7 +5109,7 @@ Function UpdateEvents%()
 							ResetEntity(n_I\Curr096\Collider)
 						Else
 							n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
-							GiveAchievement(Achv096)
+							GiveAchievement("096")
 						EndIf
 						n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
 						RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
@@ -5120,7 +5120,7 @@ Function UpdateEvents%()
 						TFormPoint(-1328.0, 150.0, 528.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 						
-						GiveAchievement(Achv096)
+						GiveAchievement("096")
 						
 						e\EventState = 1.0
 					EndIf
@@ -5380,7 +5380,7 @@ Function UpdateEvents%()
 					Local src.Doors, dest.Doors
 					
 					If TFormedX() > 730.0
-						GiveAchievement(Achv970)
+						GiveAchievement("970")
 						
 						me\BlinkTimer = -10.0
 						UpdateWorld()
@@ -5413,7 +5413,7 @@ Function UpdateEvents%()
 						
 						Temp = True
 					ElseIf TFormedX() < -730.0
-						GiveAchievement(Achv970)
+						GiveAchievement("970")
 						
 						me\BlinkTimer = -10.0
 						UpdateWorld()
@@ -5699,6 +5699,7 @@ Function UpdateEvents%()
 					
 					If EntityY(me\Collider) < (-4600.0) * RoomScale
 						me\Zone = 0
+						GiveAchievement("939")
 						
 						If wi\GasMask = 0 And wi\HazmatSuit = 0
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
@@ -5881,7 +5882,7 @@ Function UpdateEvents%()
 						If e\EventState = 1.0
 							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.44
 								If EntityInView(e\room\NPC[0]\OBJ, Camera)
-									GiveAchievement(Achv035)
+									GiveAchievement("035")
 									PlaySound_Strict(LoadTempSound("SFX\SCP\035\GetUp.ogg"))
 									e\EventState = 1.5
 								EndIf
@@ -6821,7 +6822,7 @@ Function UpdateEvents%()
 							Else
 								n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
 							EndIf
-							GiveAchievement(Achv049)
+							GiveAchievement("049")
 						Else
 							If AdjDist1 > AdjDist2
 								PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ), True)
@@ -7608,7 +7609,7 @@ Function UpdateDimension106%()
 									If r\RoomTemplate\RoomID = r_room2_shaft
 										RoomExist = True
 										
-										GiveAchievement(AchvPD)
+										GiveAchievement("pocketdimension")
 										
 										IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
 										
@@ -7660,7 +7661,7 @@ Function UpdateDimension106%()
 						;[Block]
 						ShouldPlay = 1
 						
-						GiveAchievement(AchvPD)
+						GiveAchievement("pocketdimension")
 						
 						UpdateLightVolume()
 						UpdateLights(Camera)
@@ -7681,7 +7682,7 @@ Function UpdateDimension106%()
 								e\room\RoomDoors[i]\OpenState = 0.0
 							Next
 							
-							achv\Achievement[AchvPD] = False
+							;achv\Achievement[AchvPD] = False
 							
 							LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
@@ -7869,7 +7870,7 @@ Function UpdateDimension106%()
 								If r\RoomTemplate\RoomID = RoomID
 									RoomExist = True
 									
-									GiveAchievement(AchvPD)
+									GiveAchievement("pocketdimension")
 									
 									IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
 									
@@ -10105,9 +10106,8 @@ Function Update035Label%(OBJ%)
 		EndIf
 	Next
 	
-	If achv\AchvIMG[Achv035] <> 0 Then FreeImage(achv\AchvIMG[Achv035]) : achv\AchvIMG[Achv035] = 0
-	achv\AchvIMG[Achv035] = LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png")
-	achv\AchvIMG[Achv035] = ScaleImage2(achv\AchvIMG[Achv035], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+	FreeImage(S2IMapGet(AchievementsImages, "035"))
+	S2IMapSet(AchievementsImages, "035", ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png"), opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0))
 End Function
 
 

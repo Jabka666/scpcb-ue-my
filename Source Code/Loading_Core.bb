@@ -2131,7 +2131,7 @@ Function LoadData%()
 	
 	bk.BrokenDoor = New BrokenDoor
 	
-	achv.Achievements = New Achievements
+	InitAchievements()
 	LoadAchievementsFile()
 	igm.InGameMenu = New InGameMenu
 	
@@ -2224,16 +2224,6 @@ Function LoadEntities%()
 		RotateImage(t\IconID[i + 10], i * 90.0)
 		HandleImage(t\IconID[i + 10], 0, 0)
 	Next
-	
-	For i = 0 To MaxAchievements - 1
-		Local Loc$ = "a" + Str(i)
-		
-		achv\AchievementStrings[i] = GetFileLocalString(AchievementsFile, Loc, "AchvName")
-		achv\AchievementDescs[i] = GetFileLocalString(AchievementsFile, Loc, "AchvDesc")
-	Next
-	
-	achv\AchvLocked = LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png")
-	achv\AchvLocked = ScaleImage2(achv\AchvLocked, opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
 	
 	t\ImageID[0] = LoadImage_Strict("GFX\Menu\pause_menu.png")
 	t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
@@ -2480,10 +2470,14 @@ End Function
 Function RemoveTextureInstances%()
 	Local i%
 	
-	For i = 0 To MaxAchievements - 1
-		If achv\AchvIMG[i] <> 0 Then FreeImage(achv\AchvIMG[i]) : achv\AchvIMG[i] = 0
+	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+	For i = 0 To JsonGetArraySize(Achievements) - 1
+		FreeImage(S2IMapGet(AchievementsImages, JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))))
 	Next
-	FreeImage(achv\AchvLocked) : achv\AchvLocked = 0
+	FreeImage(S2IMapGet(AchievementsImages, "locked"))
+	DestroyS2IMap(AchievementsIndex)
+	DestroyS2IMap(AchievementsImages)
+	DestroyS2IMap(UnlockedAchievements)
 	
 	For i = 0 To MaxIconIDAmount - 1
 		FreeImage(t\IconID[i]) : t\IconID[i] = 0
@@ -2497,7 +2491,6 @@ Function RemoveTextureInstances%()
 	For i = 0 To MaxOverlayIDAmount - 1
 		FreeEntity(t\OverlayID[i]) : t\OverlayID[i] = 0
 	Next
-	Delete Each Achievements
 	Delete Each Textures
 End Function
 

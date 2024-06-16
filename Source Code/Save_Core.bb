@@ -157,9 +157,12 @@ Function SaveGame%(File$)
 	
 	WriteByte(f, SoundTransmission)
 	
-	For i = 0 To MaxAchievements - 1
-		WriteByte(f, achv\Achievement[i])
+	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+	For i = 0 To JsonGetArraySize(Achievements) - 1
+		Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+		WriteByte(f, S2IMapContains(UnlockedAchievements, ID))
 	Next
+
 	WriteInt(f, me\RefinedItems)
 	
 	WriteByte(f, UsedConsole)
@@ -662,13 +665,12 @@ Function LoadGame%(File$)
 	
 	SoundTransmission = ReadByte(f)
 	
-	For i = 0 To MaxAchievements - 1
-		achv\Achievement[i] = ReadByte(f)
-		If achv\Achievement[i] = True
-			achv\AchvIMG[i] = LoadImage_Strict("GFX\Menu\achievements\" + GetFileLocalString(AchievementsFile, "a" + i, "AchvImage") + ".png")
-			achv\AchvIMG[i] = ScaleImage2(achv\AchvIMG[i], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
-		EndIf
+	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+	For i = 0 To JsonGetArraySize(Achievements) - 1
+		Local AchvID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+		If ReadByte(f) Then S2IMapSet(UnlockedAchievements, AchvID, True)
 	Next
+
 	me\RefinedItems = ReadInt(f)
 	
 	UsedConsole = ReadByte(f)
@@ -1501,8 +1503,10 @@ Function LoadGameQuick%(File$)
 	
 	SoundTransmission = ReadByte(f)
 	
-	For i = 0 To MaxAchievements - 1
-		achv\Achievement[i] = ReadByte(f)
+	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+	For i = 0 To JsonGetArraySize(Achievements) - 1
+		Local AchvID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+		If ReadByte(f) Then S2IMapSet(UnlockedAchievements, AchvID, True)
 	Next
 	me\RefinedItems = ReadInt(f)
 	
@@ -2143,7 +2147,7 @@ Function SaveAchievementsFile%()
 	Local File$
 	
 	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
-	WriteByte(File, achv\Achievement[AchvKeter])
+	WriteByte(File, S2IMapContains(UnlockedAchievements, "keter"))
 	CloseFile(File)
 End Function
 
@@ -2154,7 +2158,7 @@ Function LoadAchievementsFile%()
 	Local File$
 	
 	File = OpenFile_Strict(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
-	achv\Achievement[AchvKeter] = ReadByte(File)
+	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
 	CloseFile(File)
 End Function
 
