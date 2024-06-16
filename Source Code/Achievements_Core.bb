@@ -1,51 +1,65 @@
-Const MaxAchievements% = 45
-
-Type Achievements
-	Field Achievement%[MaxAchievements]
-	Field AchievementStrings$[MaxAchievements]
-	Field AchievementDescs$[MaxAchievements]
-	Field AchvIMG%[MaxAchievements]
-	Field AchvLocked%
-End Type
-
-Global achv.Achievements
-
 Global UsedConsole%
+Global AchievementsIndex%
+Global AchievementsImages%
+Global UnlockedAchievements%
+Global AchievementsArray%, LocalAchievementsArray%
 
-; ~ Achievements ID Constants
-;[Block]
-Const Achv005% = 0, Achv008% = 1, Achv012% = 2, Achv035% = 3, Achv049% = 4, Achv055% = 5, Achv066% = 6, Achv079% = 7, Achv096% = 8, Achv106% = 9
-Const Achv148% = 10, Achv205% = 11, Achv268% = 12, Achv294% = 13, Achv372% = 14, Achv409% = 15, Achv420_J% = 16, Achv427% = 17, Achv458% = 18
-Const Achv500% = 19, Achv513% = 20, Achv714% = 21, Achv789_J% = 22, Achv860% = 23, Achv895% = 24, Achv914% = 25, Achv939% = 26, Achv966% = 27
-Const Achv970% = 28, Achv1025% = 29, Achv1048% = 30, Achv1123% = 31, Achv1162_ARC% = 32, Achv1499% = 33
+Function InitAchievements%()
+	AchievementsIndex = CreateS2IMap()
+	AchievementsImages = CreateS2IMap()
+	UnlockedAchievements = CreateS2IMap()
 
-Const AchvConsole% = 34, AchvGears% = 35, AchvHarp% = 36, AchvKeter% = 37, AchvKeyCard6% = 38, AchvMaynard% = 39, AchvOmni% = 40
-Const AchvO5% = 41, AchvPD% = 42, AchvSNAV% = 43, AchvTesla% = 44
-;[End Block]
+	AchievementsArray = JsonParseFromFile(AchievementsFile)
+	LocalAchievementsArray = JsonParseFromFile(LocalizaitonPath + AchievementsFile)
 
-Function GiveAchievement%(AchvName%, ShowMessage% = True)
-	If achv\Achievement[AchvName] <> True
-		achv\Achievement[AchvName] = True
-		If opt\AchvMsgEnabled
-			Local AchievementName$ = GetFileLocalString(AchievementsFile, "a" + AchvName, "AchvName")
-			
-			CreateAchievementMsg(AchvName, AchievementName, ShowMessage)
-		EndIf
+	Local Defines% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+
+	For i = 0 To JsonGetArraySize(Defines) - 1
+		Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "id"))
+		Local Image$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "image"))
+
+		S2IMapSet(AchievementsIndex, ID, i)
+		S2IMapSet(AchievementsImages, ID, ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\" + Image), opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0))
+	Next
+	S2IMapSet(AchievementsImages, "locked", ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png"), opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0))
+End Function
+
+Function GiveAchievement%(AchvID$, ShowMessage% = True)
+	If S2IMapContains(UnlockedAchievements, AchvID) Then Return
+
+	S2IMapSet(UnlockedAchievements, AchvID, True)
+	If opt\AchvMsgEnabled And ShowMessage Then
+		CreateAchievementMsg(AchvID)
 	EndIf
 End Function
 
-Function AchievementTooltip%(AchvNo%)
+Function AchievementTooltip%(AchvID$)
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local CoordEx% = 20 * MenuScale
 	
 	SetFontEx(fo\FontID[Font_Digital])
-	
-	Local Width% = StringWidth(achv\AchievementStrings[AchvNo])
+
+	Local Width%
+	Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), AchvID), "name")
+	If JsonIsNull(AchvName)
+		AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), AchvID), "name")
+		Width = StringWidth(JsonGetString(AchvName))
+	Else
+		Width = StringWidth(JsonGetString(AchvName))
+	EndIf
+
 	Local Height% = 38 * Scale
 	
 	SetFontEx(fo\FontID[Font_Default])
 	
-	Local Width2% = StringWidth(achv\AchievementDescs[AchvNo])
+	Local Width2%
+	Local AchvDesc% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), AchvID), "description")
+	If JsonIsNull(AchvDesc)
+		AchvDesc = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), AchvID), "description")
+		Width2 = StringWidth(JsonGetString(AchvDesc))
+	Else
+		Width2 = StringWidth(JsonGetString(AchvDesc))
+	EndIf
 	
 	If Width2 > Width Then Width = Width2
 	Width = Width + CoordEx
@@ -59,25 +73,25 @@ Function AchievementTooltip%(AchvNo%)
 	Color(150, 150, 150)
 	Rect(RectPosx, RectPosY, Width, Height, False)
 	SetFontEx(fo\FontID[Font_Digital])
-	TextEx(TextPosX, MousePosY + (35 * MenuScale), achv\AchievementStrings[AchvNo], True, True)
+	TextEx(TextPosX, MousePosY + (35 * MenuScale), JsonGetString(AchvName), True, True)
 	SetFontEx(fo\FontID[Font_Default])
-	TextEx(TextPosX, MousePosY + (55 * MenuScale), achv\AchievementDescs[AchvNo], True, True)
+	TextEx(TextPosX, MousePosY + (55 * MenuScale), JsonGetString(AchvDesc), True, True)
 End Function
 
-Function RenderAchvIMG%(x%, y%, AchvNo%)
+Function RenderAchvIMG%(x%, y%, i%, AchvID$)
 	Local IMG%
 	Local Scale# = opt\GraphicHeight / 768.0
-	Local Row% = (AchvNo Mod 4)
+	Local Row% = (i Mod 4)
 	Local SeparationConst2# = 76.0 * Scale
 	Local IMGSize% = 64 * Scale
 	Local RectPosX% = x + (Row * SeparationConst2)
 	
 	Color(0, 0, 0)
 	Rect(RectPosX, y, IMGSize, IMGSize, True)
-	If achv\Achievement[AchvNo]
-		IMG = achv\AchvIMG[AchvNo]
+	If S2IMapContains(UnlockedAchievements, AchvID)
+		IMG = S2IMapGet(AchievementsImages, AchvID)
 	Else
-		IMG = achv\AchvLocked
+		IMG = S2IMapGet(AchievementsImages, "locked")
 	EndIf
 	DrawBlock(IMG, RectPosX, y)
 	Color(50, 50, 50)
@@ -88,27 +102,38 @@ End Function
 Global CurrAchvMSGID% = 0
 
 Type AchievementMsg
-	Field AchvID%
 	Field Txt$
+	Field Desc$
 	Field MsgX#
 	Field MsgTime#
 	Field MsgID%
+	Field Image%
 End Type
 
-Function CreateAchievementMsg.AchievementMsg(ID%, Txt$, ShowMessage%)
+Function CreateAchievementMsg.AchievementMsg(AchvID$)
 	Local amsg.AchievementMsg
-	If ShowMessage
-		amsg.AchievementMsg = New AchievementMsg
-		amsg\AchvID = ID
-		amsg\Txt = Txt
-		amsg\MsgX = 0.0
-		amsg\MsgTime = fps\Factor[1]
-		amsg\MsgID = CurrAchvMSGID
-		CurrAchvMSGID = CurrAchvMSGID + 1
-	EndIf
 	
-	achv\AchvIMG[ID] = LoadImage_Strict("GFX\Menu\achievements\" + GetFileLocalString(AchievementsFile, "a" + ID, "AchvImage") + ".png")
-	achv\AchvIMG[ID] = ScaleImage2(achv\AchvIMG[ID], opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0)
+	amsg.AchievementMsg = New AchievementMsg
+
+	Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), AchvID), "name")
+	If JsonIsNull(AchvName)
+		AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), AchvID), "name")
+		amsg\Txt = JsonGetString(AchvName)
+	Else
+		amsg\Txt = JsonGetString(AchvName)
+	EndIf
+	Local AchvDesc% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), AchvID), "description")
+	If JsonIsNull(AchvDesc)
+		AchvDesc = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), AchvID), "description")
+		amsg\Desc = JsonGetString(AchvDesc)
+	Else
+		amsg\Desc = JsonGetString(AchvDesc)
+	EndIf
+	amsg\MsgX = 0.0
+	amsg\MsgTime = fps\Factor[1]
+	amsg\MsgID = CurrAchvMSGID
+	amsg\Image = S2IMapGet(AchievementsImages, AchvID)
+	CurrAchvMSGID = CurrAchvMSGID + 1
 	
 	Return(amsg)
 End Function
@@ -163,7 +188,7 @@ Function RenderAchievementMsg%()
 			RenderFrame(x, y, Width, Height)
 			Color(0, 0, 0)
 			Rect(x + CoordEx, y + CoordEx, IMGSize, IMGSize)
-			DrawBlock(achv\AchvIMG[amsg\AchvID], x + CoordEx, y + CoordEx)
+			DrawBlock(amsg\Image, x + CoordEx, y + CoordEx)
 			Color(50, 50, 50)
 			Rect(x + CoordEx, y + CoordEx, IMGSize, IMGSize, False)
 			Color(255, 255, 255)

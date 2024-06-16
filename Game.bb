@@ -32,7 +32,7 @@ LoadOptionsINI()
 
 Const LanguageFile$ = "Data\local.ini"
 Const SubtitlesFile$ = "Data\subtitles.jsonc"
-Const AchievementsFile$ = "Data\achievements.ini"
+Const AchievementsFile$ = "Data\achievements.jsonc"
 Const LoadingScreensFile$ = "Data\loading_screens.jsonc"
 Const SCP294File$ = "Data\SCP-294.jsonc"
 Const FontsFile$ = "Data\fonts.ini"
