@@ -5781,10 +5781,10 @@ Function RenderHUD%()
 	If I_268\Using > 1
 		Color(255, 255, 255)
 		y = y - ySpace
-		If I_268\Timer < 150.0
-			RenderBar(t\ImageID[1], x, y, Width, Height, I_268\Timer, 600.0, 100, 0, 0)
+		If I_268\Timer < 175.0
+			RenderBar(t\ImageID[1], x, y, Width, Height, I_268\Timer, 700.0, 100, 0, 0)
 		Else
-			RenderBar(BlinkMeterIMG, x, y, Width, Height, I_268\Timer, 600.0)
+			RenderBar(BlinkMeterIMG, x, y, Width, Height, I_268\Timer, 700.0)
 		EndIf
 		If I_268\Timer =< 0.0
 			Color(150, 150, 0)
@@ -8747,12 +8747,12 @@ Function Update268%()
     If I_268\Using > 1
 		I_268\InvisibilityOn = (I_268\Timer > 0.0)
 		If I_268\Using = 3 
-            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.75) * (1.0 + I_714\Using)), 0.0)
+            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 2.0) * (1.0 + I_714\Using)), 0.0)
         Else
             I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
         EndIf
     Else
-        I_268\Timer = Min(I_268\Timer + fps\Factor[0], 600.0)
+        I_268\Timer = Min(I_268\Timer + (fps\Factor[0] / 1.5), 700.0)
 		I_268\InvisibilityOn = False
     EndIf
 End Function 
