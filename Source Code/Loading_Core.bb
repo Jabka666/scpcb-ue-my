@@ -2157,7 +2157,6 @@ Function LoadEntities%()
 	CatchErrors("LoadEntities()")
 	
 	Local i%, Tex%
-	Local b%, t1%, SF%
 	Local Name$, Test%, File$
 	
 	DeInitMainMenuAssets()
@@ -2866,7 +2865,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
 	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter
 	
-	Local i%, x%, y%, Lvl%
+	Local i%
 	
 	DeleteTextureEntriesFromCache(DeleteAllTextures)
 	

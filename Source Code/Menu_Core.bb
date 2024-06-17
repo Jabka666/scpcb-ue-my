@@ -3163,7 +3163,7 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 	Local fY# = y + (6.0 * MenuScale)
 	Local fW# = Width - (12.0 * MenuScale)
 	Local fH# = Height - (12.0 * MenuScale)
-	Local Lines% = 0, Temp%
+	Local Lines% = 0
 	
 	SetFontEx(fo\FontID[Font_Default])
 	Color(255, 255, 255)
