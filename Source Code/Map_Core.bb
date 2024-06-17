@@ -3618,15 +3618,25 @@ Function UseDoor%(PlaySFX% = True)
 			EndIf
 		EndIf
 		
-		If d_I\ClosestDoor\Code = CODE_DR_MAYNARD
-			GiveAchievement("maynard")
-		ElseIf d_I\ClosestDoor\Code = CODE_DR_GEARS
-			GiveAchievement("gears")
-		ElseIf d_I\ClosestDoor\Code = CODE_DR_HARP
-			GiveAchievement("harp")
-		ElseIf d_I\ClosestDoor\Code = CODE_O5_COUNCIL
-			GiveAchievement("o5")
-		EndIf
+		
+		Select d_I\ClosestDoor\Code
+			Case CODE_DR_MAYNARD
+				;[Break]
+				GiveAchievement("maynard")
+				;[End Break]
+			Case CODE_DR_GEARS
+				;[Break]
+				GiveAchievement("gears")
+				;[End Break]
+			Case CODE_DR_HARP
+				;[Break]
+				GiveAchievement("harp")
+				;[End Break]
+			Case CODE_O5_COUNCIL
+				;[Break]
+				GiveAchievement("o5")
+				;[End Break]
+		End Select
 	Else
 		If d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR
 			If d_I\ClosestDoor\Locked > 0
