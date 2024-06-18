@@ -6047,7 +6047,6 @@ Function RenderGUI%()
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
-	Local Width%, Height%
 	Local SqrValue#
 	
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor me\EndingTimer < 0.0
@@ -6387,6 +6386,7 @@ Function RenderGUI%()
 		RenderCursor()
 	Else
 		If SelectedItem <> Null
+			Local Width% = 300 * MenuScale, Height% = 20 * MenuScale
 			Select SelectedItem\ItemTemplate\ID
 				Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
 					;[Block]
@@ -6412,8 +6412,6 @@ Function RenderGUI%()
 						
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6436,8 +6434,6 @@ Function RenderGUI%()
 						
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6464,8 +6460,6 @@ Function RenderGUI%()
 						
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6477,8 +6471,6 @@ Function RenderGUI%()
 					If (Not PreventItemOverlapping(False, False, False, True, True, False, True))
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6490,8 +6482,6 @@ Function RenderGUI%()
 					If (Not PreventItemOverlapping(True, True, True, True, True))
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6518,8 +6508,6 @@ Function RenderGUI%()
 						
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6530,8 +6518,6 @@ Function RenderGUI%()
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					
-					Width = 300 * MenuScale
-					Height = 20 * MenuScale
 					x = mo\Viewport_Center_X - (Width / 2)
 					y = mo\Viewport_Center_Y + (80 * MenuScale)
 					
@@ -6541,8 +6527,6 @@ Function RenderGUI%()
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					
-					Width = 300 * MenuScale
-					Height = 20 * MenuScale
 					x = mo\Viewport_Center_X - (Width / 2)
 					y = mo\Viewport_Center_Y + (80 * MenuScale)
 					
@@ -6557,8 +6541,6 @@ Function RenderGUI%()
 					If (me\Bloodloss <> 0.0 Lor me\Injuries <> 0.0) And wi\HazmatSuit = 0
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6570,8 +6552,6 @@ Function RenderGUI%()
 					If CanUseItem(True)
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
