@@ -8732,7 +8732,7 @@ Function Update268%()
             I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
         EndIf
     Else
-        I_268\Timer = Min(I_268\Timer + (fps\Factor[0] / 1.5), 700.0)
+        I_268\Timer = Min(I_268\Timer + fps\Factor[0], 700.0)
 		I_268\InvisibilityOn = False
     EndIf
 End Function 
