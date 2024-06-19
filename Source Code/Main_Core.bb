@@ -1769,11 +1769,11 @@ Function UpdateConsole%()
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
 					If opt\DebugMode = 1
-						opt\CameraFogFar = StrTemp
+						me\CameraFogDist = StrTemp
 					Else
-						opt\CameraFogFar = Clamp(StrTemp, 6.0, 17.0)
+						me\CameraFogDist = Clamp(StrTemp, 6.0, 17.0)
 					EndIf
-					CreateConsoleMsg(Format(GetLocalString("console", "fog"), opt\CameraFogFar, "{0}"))
+					CreateConsoleMsg(Format(GetLocalString("console", "fog"), me\CameraFogDist, "{0}"))
 					;[End Block]
 				Case "spawn", "s"
 					;[Block]
@@ -1971,7 +1971,7 @@ Function UpdateConsole%()
 					chs\GodMode = True
 					chs\InfiniteStamina = True
 					
-					opt\CameraFogFar = 17.0
+					me\CameraFogDist = 17.0
 					
 					KillSounds()
 					
@@ -3052,27 +3052,27 @@ Function UpdateZoneColor%()
 	CurrAmbientColor$ = ""
 	
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
+	CameraFogRange(Camera, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
 	If opt\DebugMode = 1
 		CameraRange(Camera, 0.01, 100.0)
 	Else
-		CameraRange(Camera, 0.01, opt\CameraFogFar * LightVolume * 1.2)
+		CameraRange(Camera, 0.01, me\CameraFogDist * LightVolume * 1.2)
 	EndIf
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
-		opt\CameraFogFar = 60.0
+		me\CameraFogDist = 60.0
 		CameraFogRange(Camera, 5.0, 60.0)
 		CameraRange(Camera, 0.01, 72.0)
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-		opt\CameraFogFar = 45.0
+		me\CameraFogDist = 45.0
 		CameraFogRange(Camera, 5.0, 45.0)
 		CameraRange(Camera, 0.01, 54.0)
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
-		opt\CameraFogFar = 80.0
+		me\CameraFogDist = 80.0
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, 80.0)
 		CameraRange(Camera, 0.01, 96.0)
@@ -3085,7 +3085,7 @@ Function UpdateZoneColor%()
 				ElseIf e\EventState2 = PD_FakeTunnelRoom
 					SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 				Else
-					If e\EventState2 = PD_Labyrinth Then opt\CameraFogFar = 3.5
+					If e\EventState2 = PD_Labyrinth Then me\CameraFogDist = 3.5
 					SetZoneColor(FogColorPD)
 				EndIf
 				Exit
@@ -3098,7 +3098,7 @@ Function UpdateZoneColor%()
 				If forest_event\room\NPC[0] <> Null
 					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 				EndIf
-				opt\CameraFogFar = 8.0
+				me\CameraFogDist = 8.0
 				LightVolume = 1.0
 				CameraFogRange(Camera, 0.1, 8.0)
 				CameraRange(Camera, 0.01, 9.6)
@@ -4337,12 +4337,12 @@ Function UpdateGUI%()
 							
 							If wi\NightVision > 0
 								CreateMsg(GetLocalString("msg", "nvg.off"))
-								opt\CameraFogFar = 6.0
+								me\CameraFogDist = 6.0
 								wi\NightVision = 0
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(snd_I\NVGSFX[1])
 							Else
 								CreateMsg(GetLocalString("msg", "nvg.on"))
-								opt\CameraFogFar = 17.0
+								me\CameraFogDist = 17.0
 								Select SelectedItem\ItemTemplate\ID
 									Case it_nvg
 										;[Block]
@@ -4387,11 +4387,11 @@ Function UpdateGUI%()
 							
 							If wi\SCRAMBLE > 0
 								CreateMsg(GetLocalString("msg", "gear.off"))
-								opt\CameraFogFar = 6.0
+								me\CameraFogDist = 6.0
 								wi\SCRAMBLE = 0
 							Else
 								CreateMsg(GetLocalString("msg", "gear.on"))
-								opt\CameraFogFar = 9.0
+								me\CameraFogDist = 9.0
 								Select SelectedItem\ItemTemplate\ID
 									Case it_scramble
 										;[Block]
@@ -4529,8 +4529,8 @@ Function UpdateGUI%()
 							DropItem(SelectedItem)
 						Else
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-							If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
-							If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
+							If wi\NightVision > 0 Then me\CameraFogDist = 6.0 : wi\NightVision = 0
+							If wi\SCRAMBLE > 0 Then me\CameraFogDist = 6.0 : wi\SCRAMBLE = 0
 							wi\GasMask = 0 : wi\BallisticHelmet = False
 							I_427\Using = False : I_1499\Using = 0
 							I_268\Using = 0
@@ -9374,7 +9374,7 @@ Function UpdateLeave1499%()
 					EndIf
 				Next
 				r1499 = Null
-				opt\CameraFogFar = 6.0
+				me\CameraFogDist = 6.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Exit.ogg"))
 				I_1499\PrevX = 0.0
 				I_1499\PrevY = 0.0

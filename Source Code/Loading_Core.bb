@@ -2063,6 +2063,7 @@ Type Player
 	Field BlurVolume#, BlurTimer#
 	Field LightBlink#, LightFlash#
 	Field CurrCameraZoom#
+	Field CameraFogDist#
 	Field RefinedItems%
 	Field Deaf%, DeafTimer#
 	Field Zombie%
@@ -2183,9 +2184,9 @@ Function LoadEntities%()
 	Camera = CreateCamera()
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, 0.1, opt\CameraFogFar)
+	CameraFogRange(Camera, 0.1, me\CameraFogDist)
 	CameraFogColor(Camera, 30.0, 30.0, 30.0)
-	CameraRange(Camera, 0.01, opt\CameraFogFar)
+	CameraRange(Camera, 0.01, me\CameraFogDist)
 	CameraClsColor(Camera, 30.0, 30.0, 30.0)
 	AmbientLight(30.0, 30.0, 30.0)
 	
@@ -2528,7 +2529,7 @@ Function InitNewGame%()
 	LoadEntities()
 	LoadSounds()
 	
-	opt\CameraFogFar = 6.0
+	me\CameraFogDist = 6.0
 	
 	IsBlackOut = False : PrevIsBlackOut = False
 	RemoteDoorOn = True
@@ -2957,7 +2958,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete Each Messages
 	Delete Each AutoSave
 	
-	opt\CameraFogFar = 0.0
 	FreeEntity(me\Collider) : me\Collider = 0
 	FreeEntity(me\Head) : me\Head = 0
 	Delete Each Player

@@ -231,8 +231,8 @@ Function UpdateLights%(Cam%)
 							Local LightSpriteHidden% = EntityHidden(l\Sprite)
 							Local LightAdvancedSpriteHidden% = EntityHidden(l\AdvancedSprite)
 							
-							If Dist < PowTwo(opt\CameraFogFar * LightVolume)
-								EntityAutoFade(l\Sprite, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
+							If Dist < PowTwo(me\CameraFogDist * LightVolume)
+								EntityAutoFade(l\Sprite, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
 								
 								Local LightVisible% = EntityVisible(Cam, l\OBJ)
 								Local LightInView% = EntityInView(l\OBJ, Cam)
@@ -2239,7 +2239,7 @@ Function UpdateMT%(mt.MTGrid)
 				
 				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(PlayerPosY - TunnelPosY) + PowTwo(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)))
 				
-				If Dist < opt\CameraFogFar * LightVolume * 1.2
+				If Dist < me\CameraFogDist * LightVolume * 1.2
 					If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
 				Else
 					If (Not EntityHidden(mt\Entities[tX + (tY * MTGridSize)])) Then HideEntity(mt\Entities[tX + (tY * MTGridSize)])
@@ -4109,7 +4109,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And SecondaryLightOn > 0.3
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(me\CameraFogDist * LightVolume * 1.2) And SecondaryLightOn > 0.3
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
 					If me\BlinkTimer > -10.0 And sc\InSight
@@ -4214,7 +4214,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If me\BlinkTimer > -10.0 And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) And sc\InSight And SecondaryLightOn > 0.3
+				If me\BlinkTimer > -10.0 And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(me\CameraFogDist * LightVolume * 1.2) And sc\InSight And SecondaryLightOn > 0.3
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)

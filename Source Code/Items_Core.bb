@@ -451,11 +451,11 @@ Function RemoveWearableItems%(item.Items)
 			;[End Block]
 		Case it_nvg, it_finenvg, it_veryfinenvg
 			;[Block]
-			If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
+			If wi\NightVision > 0 Then me\CameraFogDist = 6.0 : wi\NightVision = 0
 			;[End Block]
 		Case it_scramble, it_finescramble
 			;[Block]
-			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
+			If wi\SCRAMBLE > 0 Then me\CameraFogDist = 6.0 : wi\SCRAMBLE = 0
 			;[End Block]
 		Case it_helmet
 			;[Block]
