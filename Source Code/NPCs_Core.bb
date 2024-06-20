@@ -1222,6 +1222,8 @@ Function UpdateNPCs%()
 									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 										
+										S2IMapErase(UnlockedAchievements, "096")
+										
 										me\CurrCameraZoom = 10.0
 										
 										SetNPCFrame(n, 194.0)
@@ -1299,6 +1301,8 @@ Function UpdateNPCs%()
 								If wi\SCRAMBLE = 0 And IsLooking
 									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+										
+										S2IMapErase(UnlockedAchievements, "096")
 										
 										me\CurrCameraZoom = 10.0
 										
