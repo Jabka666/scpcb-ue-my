@@ -7682,7 +7682,7 @@ Function UpdateDimension106%()
 								e\room\RoomDoors[i]\OpenState = 0.0
 							Next
 							
-							;achv\Achievement[AchvPD] = False
+							S2IMapErase(UnlockedAchievements, "pocketdimension")
 							
 							LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
