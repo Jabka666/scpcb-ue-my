@@ -1769,11 +1769,11 @@ Function UpdateConsole%()
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
 					If opt\DebugMode = 1
-						opt\CameraFogFar = StrTemp
+						me\CameraFogDist = StrTemp
 					Else
-						opt\CameraFogFar = Clamp(StrTemp, 6.0, 17.0)
+						me\CameraFogDist = Clamp(StrTemp, 6.0, 17.0)
 					EndIf
-					CreateConsoleMsg(Format(GetLocalString("console", "fog"), opt\CameraFogFar, "{0}"))
+					CreateConsoleMsg(Format(GetLocalString("console", "fog"), me\CameraFogDist, "{0}"))
 					;[End Block]
 				Case "spawn", "s"
 					;[Block]
@@ -1971,7 +1971,7 @@ Function UpdateConsole%()
 					chs\GodMode = True
 					chs\InfiniteStamina = True
 					
-					opt\CameraFogFar = 17.0
+					me\CameraFogDist = 17.0
 					
 					KillSounds()
 					
@@ -3052,27 +3052,27 @@ Function UpdateZoneColor%()
 	CurrAmbientColor$ = ""
 	
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, 0.1 * LightVolume, opt\CameraFogFar * LightVolume)
+	CameraFogRange(Camera, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
 	If opt\DebugMode = 1
 		CameraRange(Camera, 0.01, 100.0)
 	Else
-		CameraRange(Camera, 0.01, opt\CameraFogFar * LightVolume * 1.2)
+		CameraRange(Camera, 0.01, me\CameraFogDist * LightVolume * 1.2)
 	EndIf
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsPlayerOutsideFacility()
 		SetZoneColor(FogColorOutside)
-		opt\CameraFogFar = 60.0
+		me\CameraFogDist = 60.0
 		CameraFogRange(Camera, 5.0, 60.0)
 		CameraRange(Camera, 0.01, 72.0)
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-		opt\CameraFogFar = 45.0
+		me\CameraFogDist = 45.0
 		CameraFogRange(Camera, 5.0, 45.0)
 		CameraRange(Camera, 0.01, 54.0)
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
-		opt\CameraFogFar = 80.0
+		me\CameraFogDist = 80.0
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, 80.0)
 		CameraRange(Camera, 0.01, 96.0)
@@ -3085,7 +3085,7 @@ Function UpdateZoneColor%()
 				ElseIf e\EventState2 = PD_FakeTunnelRoom
 					SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 				Else
-					If e\EventState2 = PD_Labyrinth Then opt\CameraFogFar = 3.5
+					If e\EventState2 = PD_Labyrinth Then me\CameraFogDist = 3.5
 					SetZoneColor(FogColorPD)
 				EndIf
 				Exit
@@ -3098,7 +3098,7 @@ Function UpdateZoneColor%()
 				If forest_event\room\NPC[0] <> Null
 					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 				EndIf
-				opt\CameraFogFar = 8.0
+				me\CameraFogDist = 8.0
 				LightVolume = 1.0
 				CameraFogRange(Camera, 0.1, 8.0)
 				CameraRange(Camera, 0.01, 9.6)
@@ -4337,12 +4337,12 @@ Function UpdateGUI%()
 							
 							If wi\NightVision > 0
 								CreateMsg(GetLocalString("msg", "nvg.off"))
-								opt\CameraFogFar = 6.0
+								me\CameraFogDist = 6.0
 								wi\NightVision = 0
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(snd_I\NVGSFX[1])
 							Else
 								CreateMsg(GetLocalString("msg", "nvg.on"))
-								opt\CameraFogFar = 17.0
+								me\CameraFogDist = 17.0
 								Select SelectedItem\ItemTemplate\ID
 									Case it_nvg
 										;[Block]
@@ -4387,11 +4387,11 @@ Function UpdateGUI%()
 							
 							If wi\SCRAMBLE > 0
 								CreateMsg(GetLocalString("msg", "gear.off"))
-								opt\CameraFogFar = 6.0
+								me\CameraFogDist = 6.0
 								wi\SCRAMBLE = 0
 							Else
 								CreateMsg(GetLocalString("msg", "gear.on"))
-								opt\CameraFogFar = 9.0
+								me\CameraFogDist = 9.0
 								Select SelectedItem\ItemTemplate\ID
 									Case it_scramble
 										;[Block]
@@ -4529,8 +4529,8 @@ Function UpdateGUI%()
 							DropItem(SelectedItem)
 						Else
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-							If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
-							If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
+							If wi\NightVision > 0 Then me\CameraFogDist = 6.0 : wi\NightVision = 0
+							If wi\SCRAMBLE > 0 Then me\CameraFogDist = 6.0 : wi\SCRAMBLE = 0
 							wi\GasMask = 0 : wi\BallisticHelmet = False
 							I_427\Using = False : I_1499\Using = 0
 							I_268\Using = 0
@@ -5781,10 +5781,10 @@ Function RenderHUD%()
 	If I_268\Using > 1
 		Color(255, 255, 255)
 		y = y - ySpace
-		If I_268\Timer < 150.0
-			RenderBar(t\ImageID[1], x, y, Width, Height, I_268\Timer, 600.0, 100, 0, 0)
+		If I_268\Timer < 175.0
+			RenderBar(t\ImageID[1], x, y, Width, Height, I_268\Timer, 700.0, 100, 0, 0)
 		Else
-			RenderBar(BlinkMeterIMG, x, y, Width, Height, I_268\Timer, 600.0)
+			RenderBar(BlinkMeterIMG, x, y, Width, Height, I_268\Timer, 700.0)
 		EndIf
 		If I_268\Timer =< 0.0
 			Color(150, 150, 0)
@@ -5967,20 +5967,9 @@ Function RenderDebugHUD%()
 			Local CurrAchvAmount% = S2IMapSize(UnlockedAchievements)
 			
 			Local Temp% = ((S2IMapSize(AchievementsIndex) - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))
-			Local RoomAmount% = 0, RoomsFound% = 0
-			
-			For r.Rooms = Each Rooms
-				Local RID% = r\RoomTemplate\RoomID
-				
-				If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
-					RoomAmount = RoomAmount + 1
-					RoomsFound = RoomsFound + r\Found
-				EndIf
-			Next
 			
 			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
 			TextEx(x, y + (620 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), (Temp / 2) + 1))
-			TextEx(x, y + (640 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))))
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
@@ -6047,7 +6036,6 @@ Function RenderGUI%()
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
-	Local Width%, Height%
 	Local SqrValue#
 	
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor me\EndingTimer < 0.0
@@ -6387,6 +6375,7 @@ Function RenderGUI%()
 		RenderCursor()
 	Else
 		If SelectedItem <> Null
+			Local Width% = 300 * MenuScale, Height% = 20 * MenuScale
 			Select SelectedItem\ItemTemplate\ID
 				Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
 					;[Block]
@@ -6412,8 +6401,6 @@ Function RenderGUI%()
 						
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6436,8 +6423,6 @@ Function RenderGUI%()
 						
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6464,8 +6449,6 @@ Function RenderGUI%()
 						
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6477,8 +6460,6 @@ Function RenderGUI%()
 					If (Not PreventItemOverlapping(False, False, False, True, True, False, True))
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6490,8 +6471,6 @@ Function RenderGUI%()
 					If (Not PreventItemOverlapping(True, True, True, True, True))
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6518,8 +6497,6 @@ Function RenderGUI%()
 						
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6530,8 +6507,6 @@ Function RenderGUI%()
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					
-					Width = 300 * MenuScale
-					Height = 20 * MenuScale
 					x = mo\Viewport_Center_X - (Width / 2)
 					y = mo\Viewport_Center_Y + (80 * MenuScale)
 					
@@ -6541,8 +6516,6 @@ Function RenderGUI%()
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					
-					Width = 300 * MenuScale
-					Height = 20 * MenuScale
 					x = mo\Viewport_Center_X - (Width / 2)
 					y = mo\Viewport_Center_Y + (80 * MenuScale)
 					
@@ -6557,8 +6530,6 @@ Function RenderGUI%()
 					If (me\Bloodloss <> 0.0 Lor me\Injuries <> 0.0) And wi\HazmatSuit = 0
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -6570,8 +6541,6 @@ Function RenderGUI%()
 					If CanUseItem(True)
 						DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 						
-						Width = 300 * MenuScale
-						Height = 20 * MenuScale
 						x = mo\Viewport_Center_X - (Width / 2)
 						y = mo\Viewport_Center_Y + (80 * MenuScale)
 						
@@ -8747,12 +8716,12 @@ Function Update268%()
     If I_268\Using > 1
 		I_268\InvisibilityOn = (I_268\Timer > 0.0)
 		If I_268\Using = 3 
-            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 1.75) * (1.0 + I_714\Using)), 0.0)
+            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 2.0) * (1.0 + I_714\Using)), 0.0)
         Else
             I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
         EndIf
     Else
-        I_268\Timer = Min(I_268\Timer + fps\Factor[0], 600.0)
+        I_268\Timer = Min(I_268\Timer + fps\Factor[0], 700.0)
 		I_268\InvisibilityOn = False
     EndIf
 End Function 
@@ -9405,7 +9374,7 @@ Function UpdateLeave1499%()
 					EndIf
 				Next
 				r1499 = Null
-				opt\CameraFogFar = 6.0
+				me\CameraFogDist = 6.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Exit.ogg"))
 				I_1499\PrevX = 0.0
 				I_1499\PrevY = 0.0

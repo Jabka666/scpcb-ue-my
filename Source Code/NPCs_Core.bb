@@ -1142,12 +1142,12 @@ Function UpdateNPCs%()
 						If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor IsPlayerOutsideFacility()
 							If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 						Else
-							If Dist < PowTwo(opt\CameraFogFar * LightVolume * 0.6)
+							If Dist < PowTwo(me\CameraFogDist * LightVolume * 0.6)
 								If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 							Else
 								If n\State <= -10.0
 									If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
-									EntityAlpha(n\OBJ2, Min(Sqr(Dist) - opt\CameraFogFar * LightVolume * 0.6, 1.0))
+									EntityAlpha(n\OBJ2, Min(Sqr(Dist) - me\CameraFogDist * LightVolume * 0.6, 1.0))
 								EndIf
 							EndIf
 						EndIf
@@ -1160,7 +1160,7 @@ Function UpdateNPCs%()
 				;[Block]
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
-				Local IsLooking% = Dist < PowTwo(opt\CameraFogFar * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
+				Local IsLooking% = Dist < PowTwo(me\CameraFogDist * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
 				If wi\SCRAMBLE > 0 And IsLooking
 					Local HasBatteryForScramble% = False
 					For i = 0 To MaxItemAmount - 1
@@ -1221,6 +1221,8 @@ Function UpdateNPCs%()
 								If wi\SCRAMBLE = 0 And IsLooking
 									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+										
+										S2IMapErase(UnlockedAchievements, "096")
 										
 										me\CurrCameraZoom = 10.0
 										
@@ -1299,6 +1301,8 @@ Function UpdateNPCs%()
 								If wi\SCRAMBLE = 0 And IsLooking
 									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+										
+										S2IMapErase(UnlockedAchievements, "096")
 										
 										me\CurrCameraZoom = 10.0
 										
@@ -6542,7 +6546,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							
-							If EntityDistanceSquared(me\Collider, n\Collider) < PowTwo(opt\CameraFogFar) Then LightVolume = TempLightVolume * 1.2
+							If EntityDistanceSquared(me\Collider, n\Collider) < PowTwo(me\CameraFogDist) Then LightVolume = TempLightVolume * 1.2
 							
 							SetEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
 							SetEmitter(Null, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider), 15)

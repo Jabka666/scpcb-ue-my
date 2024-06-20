@@ -1268,11 +1268,11 @@ Function LoadGame%(File$)
 	CloseFile(f)
 	
 	If wi\NightVision > 0
-		opt\CameraFogFar = 17.0
+		me\CameraFogDist = 17.0
 	ElseIf wi\SCRAMBLE > 0
-		opt\CameraFogFar = 9.0
+		me\CameraFogDist = 9.0
 	Else
-		opt\CameraFogFar = 6.0
+		me\CameraFogDist = 6.0
 	EndIf
 	
 	For i = 0 To 1
@@ -2032,11 +2032,11 @@ Function LoadGameQuick%(File$)
 	d_I\AnimButton = 0
 	
 	If wi\NightVision > 0
-		opt\CameraFogFar = 17.0
+		me\CameraFogDist = 17.0
 	ElseIf wi\SCRAMBLE > 0
-		opt\CameraFogFar = 9.0
+		me\CameraFogDist = 9.0
 	Else
-		opt\CameraFogFar = 6.0
+		me\CameraFogDist = 6.0
 	EndIf
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)

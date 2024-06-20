@@ -451,11 +451,11 @@ Function RemoveWearableItems%(item.Items)
 			;[End Block]
 		Case it_nvg, it_finenvg, it_veryfinenvg
 			;[Block]
-			If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
+			If wi\NightVision > 0 Then me\CameraFogDist = 6.0 : wi\NightVision = 0
 			;[End Block]
 		Case it_scramble, it_finescramble
 			;[Block]
-			If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
+			If wi\SCRAMBLE > 0 Then me\CameraFogDist = 6.0 : wi\SCRAMBLE = 0
 			;[End Block]
 		Case it_helmet
 			;[Block]
@@ -1709,26 +1709,16 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
-					it2\State = Rnd(0.0, 100.0)
+					If Rand(2) = 1
+						it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
+						it2\State = Rnd(0.0, 100.0)
+					Else
+							it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
+					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					Local RoomAmount% = 0, RoomsFound% = 0
-					
-					For r.Rooms = Each Rooms
-						Local RID% = r\RoomTemplate\RoomID
-						
-						If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
-							RoomAmount = RoomAmount + 1
-							RoomsFound = RoomsFound + r\Found
-						EndIf
-					Next
-					If Rand(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))
-						it2.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, x, y, z)
-					Else
-						it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
-					EndIf
+					it2.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]

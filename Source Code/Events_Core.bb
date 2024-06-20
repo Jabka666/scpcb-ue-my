@@ -2299,8 +2299,8 @@ Function UpdateEvents%()
 										ShowEntity(me\Collider)
 										
 										I_268\Using = 0 : wi\GasMask = 0 : wi\BallisticHelmet = 0
-										If wi\NightVision > 0 Then opt\CameraFogFar = 6.0 : wi\NightVision = 0
-										If wi\SCRAMBLE > 0 Then opt\CameraFogFar = 6.0 : wi\SCRAMBLE = 0
+										If wi\NightVision > 0 Then me\CameraFogDist = 6.0 : wi\NightVision = 0
+										If wi\SCRAMBLE > 0 Then me\CameraFogDist = 6.0 : wi\SCRAMBLE = 0
 										
 										me\DropSpeed = 0.0 : me\BlinkTimer = -10.0 : I_008\Timer = 0.0 : I_409\Timer = 0.0 : me\FallTimer = 0.0
 										
@@ -2529,11 +2529,11 @@ Function UpdateEvents%()
 								
 								IsBlackOut = PrevIsBlackOut
 								If wi\NightVision > 0
-									opt\CameraFogFar = 17.0
+									me\CameraFogDist = 17.0
 								ElseIf wi\SCRAMBLE > 0
-									opt\CameraFogFar = 9.0
+									me\CameraFogDist = 9.0
 								Else
-									opt\CameraFogFar = 6.0
+									me\CameraFogDist = 6.0
 								EndIf
 								
 								e\EventState = 0.0
@@ -5700,7 +5700,6 @@ Function UpdateEvents%()
 					
 					If EntityY(me\Collider) < (-4600.0) * RoomScale
 						me\Zone = 0
-						GiveAchievement("939")
 						
 						If wi\GasMask = 0 And wi\HazmatSuit = 0
 							me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
@@ -6792,7 +6791,7 @@ Function UpdateEvents%()
 						If e\EventState2 = (-70.0) * 5.0
 							For sc.SecurityCams = Each SecurityCams
 								If sc\room = e\room
-									If sc\InSight And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(opt\CameraFogFar * LightVolume * 1.2) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
+									If sc\InSight And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(me\CameraFogDist * LightVolume * 1.2) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
 									Exit
 								EndIf
 							Next
@@ -7493,7 +7492,7 @@ Function UpdateDimension106%()
 						ShouldPlay = 14
 						
 						DecalStep = 1
-						opt\CameraFogFar = 8.0
+						me\CameraFogDist = 8.0
 						CameraFogRange(Camera, 0.1, 8.0)
 						
 						For i = 17 To 20
@@ -7683,7 +7682,7 @@ Function UpdateDimension106%()
 								e\room\RoomDoors[i]\OpenState = 0.0
 							Next
 							
-							;achv\Achievement[AchvPD] = False
+							S2IMapErase(UnlockedAchievements, "pocketdimension")
 							
 							LoadEventSound(e, "SFX\Room\PocketDimension\Rumble.ogg")
 							LoadEventSound(e, "SFX\Room\PocketDimension\PrisonVoices.ogg", 1)
@@ -7767,11 +7766,11 @@ Function UpdateDimension106%()
 								EndIf
 							Next
 							If wi\NightVision > 0
-								opt\CameraFogFar = 17.0
+								me\CameraFogDist = 17.0
 							ElseIf wi\SCRAMBLE > 0
-								opt\CameraFogFar = 9.0
+								me\CameraFogDist = 9.0
 							Else
-								opt\CameraFogFar = 6.0
+								me\CameraFogDist = 6.0
 							EndIf
 							Random = 13
 							Teleport = True
@@ -9115,7 +9114,7 @@ Function UpdateIntro%()
 													TeleportEntity(me\Collider, x + (EntityX(me\Collider) - e\room\x - 288.0 * RoomScale), y + (EntityY(me\Collider) - e\room\y + 0.4), z + (EntityZ(me\Collider) - e\room\z + 32.0 * RoomScale))
 													TeleportToRoom(r)
 													
-													opt\CameraFogFar = 6.0
+													me\CameraFogDist = 6.0
 													
 													For i = 0 To 2
 														PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(e\room\NPC[i]\Collider) - e\room\y, z + (EntityZ(e\room\NPC[i]\Collider) - e\room\z + 32.0 * RoomScale))
