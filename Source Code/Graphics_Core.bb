@@ -249,7 +249,10 @@ Function UpdateWorld2%()
 	If HasBattery = 1
 		UpdateBatteryTimer()
 		If BatMsgTimer >= 70.0
-			If (Not ChannelPlaying(LowBatteryCHN[1])) Then LowBatteryCHN[1] = PlaySound_Strict(snd_I\LowBatterySFX[1])
+			If (Not ChannelPlaying(LowBatteryCHN[1]))
+				me\SndVolume = Max(3.0, me\SndVolume)
+				LowBatteryCHN[1] = PlaySound_Strict(snd_I\LowBatterySFX[1])
+			EndIf
 		EndIf
 	EndIf
 End Function

@@ -5332,7 +5332,10 @@ Function UpdateGUI%()
 							If SelectedItem\State <= 20.0
 								UpdateBatteryTimer()
 								If BatMsgTimer >= 70.0
-									If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
+									If (Not ChannelPlaying(LowBatteryCHN[0]))
+										me\SndVolume = Max(3.0, me\SndVolume)
+										LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
+									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -5354,7 +5357,10 @@ Function UpdateGUI%()
 						If SelectedItem\State > 0.0 And SelectedItem\State <= 20.0
 							UpdateBatteryTimer()
 							If BatMsgTimer >= 70.0
-								If (Not ChannelPlaying(LowBatteryCHN[0])) Then LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
+								If (Not ChannelPlaying(LowBatteryCHN[0]))
+									me\SndVolume = Max(3.0, me\SndVolume)
+									LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
+								EndIf
 							EndIf
 						EndIf
 					EndIf
