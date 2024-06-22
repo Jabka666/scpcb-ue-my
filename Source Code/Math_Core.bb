@@ -285,9 +285,13 @@ Function CalculateRoomExtents%(r.Rooms)
 		r\MinZ = TempZ
 	EndIf
 	
-	r\MinX = r\MinX + ShrinkAmount + r\x : r\MaxX = r\MaxX - ShrinkAmount + r\x
-	r\MinY = r\MinY + ShrinkAmount : r\MaxY = r\MaxY - ShrinkAmount
-	r\MinZ = r\MinZ + ShrinkAmount + r\z : r\MaxZ = r\MaxZ - ShrinkAmount + r\z
+	r\MinX = r\MinX + ShrinkAmount + r\x
+	r\MinY = r\MinY + ShrinkAmount
+	r\MinZ = r\MinZ + ShrinkAmount + r\z
+	
+	r\MaxX = r\MaxX - ShrinkAmount - r\x
+	r\MaxY = r\MaxY - ShrinkAmount
+	r\MaxZ = r\MaxZ - ShrinkAmount - r\z
 End Function
 
 Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
