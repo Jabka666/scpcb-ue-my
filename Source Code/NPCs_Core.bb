@@ -61,7 +61,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	
 	Local n.NPCs, n2.NPCs
 	Local Temp#, i%, Tex%, TexFestive%
-	Local SF%, b%, t1%
 	
 	n.NPCs = New NPCs
 	n\NPCType = NPCType
@@ -506,7 +505,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 End Function
 
 Function CreateNPCAsset%(n.NPCs)
-	Local Temp#, Tex%
+	Local Temp#
 	
 	Select n\NPCType
 		Case NPCTypeGuard
@@ -721,23 +720,7 @@ Function UpdateNPCs%()
 								n\State = Max(0.0, n\State - fps\Factor[0] / 20.0)
 							Else
 								; ~ Teleport to a room closer to the player
-								If Dist > 2500.0
-									If Rand(70) = 1
-										If (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106
-											For w.WayPoints = Each WayPoints
-												If w\door = Null And Rand(5) = 1
-													If DistanceSquared(EntityX(w\OBJ, True), EntityX(me\Collider), EntityZ(w\OBJ, True), EntityZ(me\Collider)) < 625.0
-														If DistanceSquared(EntityX(w\OBJ, True), EntityX(me\Collider), EntityZ(w\OBJ, True), EntityZ(me\Collider)) > 225.0
-															PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
-															ResetEntity(n\Collider)
-															Exit
-														EndIf
-													EndIf
-												EndIf
-											Next
-										EndIf
-									EndIf
-								ElseIf Dist > PowTwo(HideDistance * 0.8) ; ~ Move randomly from waypoint to another
+								If Dist > PowTwo(HideDistance * 0.8) ; ~ Move randomly from waypoint to another
 									If Rand(70) = 1 Then TeleportCloser(n)
 								Else ; ~ Actively move towards the player
 									n\State = CurveValue(SoundVol, n\State, 3.0)
@@ -6689,33 +6672,30 @@ Function TeleportCloser%(n.NPCs)
 	Local ClosestDist# = 0.0
 	Local closestWaypoint.WayPoints
 	Local w.WayPoints
-	Local xTemp#, zTemp#
+	Local Dist#
 	
 	If InFacility > UpperFloor Then Return
 	
 	For w.WayPoints = Each WayPoints
 		If w\door = Null
-			xTemp = Abs(EntityX(w\OBJ, True) - EntityX(n\Collider, True))
-			If xTemp > 1.0 And xTemp < 10.0
-				zTemp = Abs(EntityZ(w\OBJ, True) - EntityZ(n\Collider, True))
-				If zTemp > 1.0 And zTemp < 10.0
-					If EntityDistanceSquared(me\Collider, w\OBJ) > PowTwo(16.0 - (8.0 * SelectedDifficulty\AggressiveNPCs))
-						; ~ Teleports to the nearby waypoint that takes it closest to the player
-						Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
-						
-						If NewDist < ClosestDist Lor closestWaypoint = Null
-							ClosestDist = NewDist
-							closestWaypoint = w
-						EndIf
+			Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
+			If Dist > 1.0 And Dist < 100.0
+				If EntityDistanceSquared(me\Collider, w\OBJ) > PowTwo(16.0 - (8.0 * SelectedDifficulty\AggressiveNPCs))
+					; ~ Teleports to the nearby waypoint that takes it closest to the player
+					Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
+					
+					If NewDist < ClosestDist Lor closestWaypoint = Null
+						ClosestDist = NewDist
+						closestWaypoint = w
 					EndIf
 				EndIf
 			EndIf
 		EndIf
 	Next
 	
-	Local ShouldTeleport% = False
 	
 	If closestWaypoint <> Null
+		Local ShouldTeleport% = False
 		If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs Then
 			ShouldTeleport = True
 		ElseIf EntityY(closestWaypoint\OBJ, True) <= 6.5 And EntityY(closestWaypoint\OBJ, True) >= -6.5
@@ -7547,10 +7527,8 @@ Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True
 End Function
 
 Function FinishWalking%(n.NPCs, StartFrame#, EndFrame#, Speed#)
-	Local CenterFrame#
-	
 	If n <> Null
-		CenterFrame = (EndFrame - StartFrame) / 2.0
+		Local CenterFrame# = (EndFrame - StartFrame) / 2.0
 		If n\Frame >= CenterFrame
 			AnimateNPC(n, StartFrame, EndFrame, Speed, False)
 		Else
@@ -7560,8 +7538,6 @@ Function FinishWalking%(n.NPCs, StartFrame#, EndFrame#, Speed#)
 End Function
 
 Function ChangeNPCTextureID%(n.NPCs, TextureID%)
-	Local Temp#
-	
 	If n = Null
 		OpenConsoleOnError(GetLocalString("msg", "spawn.invaildtex"))
 		Return
