@@ -482,9 +482,9 @@ Function UpdateQuickLoading%()
 End Function
 
 Function RenderQuickLoading%()
-	Local CoordEx% = 90 * MenuScale
-	
 	If QuickLoadPercent > -1 And opt\HUDEnabled
+		Local CoordEx% = 90 * MenuScale
+		
 		MidHandle(t\IconID[9])
 		DrawImage(t\IconID[9], opt\GraphicWidth - CoordEx, opt\GraphicHeight - (150 * MenuScale))
 		Color(255, 255, 255)
@@ -503,7 +503,7 @@ Function QuickLoadEvents%()
 	
 	Local e.Events = QuickLoad_CurrEvent
 	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, n.NPCs
-	Local Scale#, Pvt%, i%, x#, y#, z#
+	Local i%, x#, y#, z#
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
 	; ~ Instead of magic values in e\EventState and e\EventStr
