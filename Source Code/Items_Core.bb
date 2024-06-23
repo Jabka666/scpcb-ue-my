@@ -609,7 +609,6 @@ Function PickItem%(item.Items)
 	
 	Local e.Events
 	Local n% = 0, z%
-	Local CanPickItem% = 1
 	Local FullINV% = True
 	
 	For n = 0 To MaxItemAmount - 1
@@ -620,6 +619,7 @@ Function PickItem%(item.Items)
 	Next
 	
 	If (Not FullINV)
+		Local CanPickItem% = 1
 		For n = 0 To MaxItemAmount - 1
 			If Inventory(n) = Null
 				Select item\ItemTemplate\ID
