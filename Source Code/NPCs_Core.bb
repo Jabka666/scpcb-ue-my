@@ -2875,23 +2875,20 @@ Function UpdateNPCs%()
 						If Rand(200) = 1
 							For w.WayPoints = Each WayPoints
 								If w\room <> PlayerRoom
-									x = Abs(EntityX(me\Collider) - EntityX(w\OBJ, True))
-									If x > 3.0 And x < 9.0
-										z = Abs(EntityZ(me\Collider) - EntityZ(w\OBJ, True))
-										If z > 3.0 And z < 9.0
-											PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 20.0 * RoomScale, EntityZ(w\OBJ, True))
-											ResetEntity(n\Collider)
-											
-											n\LastSeen = 0
-											
-											n\Path[0] = w
-											
-											n\Idle = 0
-											n\State2 = 70.0 * Rnd(15.0, 20.0)
-											n\State = Max(Rand(-1.0, 2.0), 0.0)
-											n\PrevState = Rand(0, 1)
-											Exit
-										EndIf
+									Dist = DistanceSquared(EntityX(me\Collider), EntityX(w\OBJ, True), EntityZ(me\Collider), EntityZ(w\OBJ, True))
+									If Dist > 9.0 And Dist < 81.0
+										PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 20.0 * RoomScale, EntityZ(w\OBJ, True))
+										ResetEntity(n\Collider)
+										
+										n\LastSeen = 0
+										
+										n\Path[0] = w
+										
+										n\Idle = 0
+										n\State2 = 70.0 * Rnd(15.0, 20.0)
+										n\State = Max(Rand(-1.0, 2.0), 0.0)
+										n\PrevState = Rand(0, 1)
+										Exit
 									EndIf
 								EndIf
 							Next
