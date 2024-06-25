@@ -1551,14 +1551,14 @@ Function UpdateConsole%()
 					;[Block]
 					n_I\IsHalloween = (Not n_I\IsHalloween)
 					If n_I\IsHalloween
+						n_I\IsNewYear = False
+						n_I\IsAprilFools = False
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg(GetLocalString("console", "halloween.on"))
 					Else
-						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
-						If n_I\IsAprilFools Then n_I\IsAprilFools = (Not n_I\IsAprilFools)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
@@ -1570,14 +1570,14 @@ Function UpdateConsole%()
 					;[Block]
 					n_I\IsNewYear = (Not n_I\IsNewYear)
 					If n_I\IsNewYear
+						n_I\IsHalloween = False
+						n_I\IsAprilFools = False
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg(GetLocalString("console", "newyear.on"))
 					Else
-						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
-						If n_I\IsAprilFools Then n_I\IsAprilFools = (Not n_I\IsAprilFools)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
@@ -1589,14 +1589,14 @@ Function UpdateConsole%()
 					;[Block]
 					n_I\IsAprilFools = (Not n_I\IsAprilFools)
 					If n_I\IsAprilFools
+						n_I\IsHalloween = False
+						n_I\IsNewYear = False
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_J.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
 						DeleteSingleTextureEntryFromCache(Tex)
 						CreateConsoleMsg(GetLocalString("console", "aprilfools.on"))
 					Else
-						If n_I\IsHalloween Then n_I\IsHalloween = (Not n_I\IsHalloween)
-						If n_I\IsNewYear Then n_I\IsNewYear = (Not n_I\IsNewYear)
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
