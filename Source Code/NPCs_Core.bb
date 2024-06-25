@@ -2944,17 +2944,14 @@ Function UpdateNPCs%()
 						Else
 							If n\Path[0] = Null
 								; ~ Move towards a waypoint that is:
-								; ~ 1: Max 8 units away from SCP-513-1
+								; ~ 1: Max 64 units away from SCP-513-1
 								; ~ 2: Further away from the player than SCP-513-1's current position 
 								For w.WayPoints = Each WayPoints
-									x = Abs(EntityX(n\Collider, True) - EntityX(w\OBJ, True))
-									If x < 8.0 And x > 1.0
-										z = Abs(EntityZ(n\Collider, True) - EntityZ(w\OBJ, True))
-										If z < 8.0 And z > 1.0
-											If EntityDistanceSquared(me\Collider, w\OBJ) > Dist
-												n\Path[0] = w
-												Exit
-											EndIf
+									Dist2 = EntityDistanceSquared(me\Collider, w\OBJ)
+									If Dist2 < 64.0 And Dist2 > 1.0
+										If Dist2 > Dist
+											n\Path[0] = w
+											Exit
 										EndIf
 									EndIf
 								Next
@@ -3991,9 +3988,9 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType966
 				;[Block]
-				Dist = EntityDistanceSquared(n\Collider, me\Collider)
 				
 				If n\State > -1.0
+					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					If Dist < PowTwo(HideDistance)
 						; ~ n\State: The "general" state (Idles / Wanders off/ Attacks / Echo and etc.)
 						
