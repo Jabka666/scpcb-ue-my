@@ -2845,7 +2845,7 @@ Function UpdateDoors%()
 			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
 				For i = 0 To 1
 					If d\Buttons[i] <> 0
-						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 And Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0
+						If DistanceSquared(EntityX(me\Collider), EntityX(d\Buttons[i], True), EntityZ(me\Collider), EntityZ(d\Buttons[i], True)) < 1.0
 							If UpdateButton(d\Buttons[i])
 								d_I\ClosestDoor = d : me\SndVolume = 4.0 : d_I\AnimButton = d_I\ClosestButton
 								Exit
@@ -4842,7 +4842,7 @@ Function UpdateRooms%()
 	CatchErrors("UpdateRooms()")
 	
 	Local Dist#, i%, j%, r.Rooms
-	Local x#, y#, z#, Hide%
+	Local Hide%, x#, z#
 	Local PlayerX# = EntityX(me\Collider, True)
 	Local PlayerY# = EntityY(me\Collider, True)
 	Local PlayerZ# = EntityZ(me\Collider, True)
@@ -4861,26 +4861,14 @@ Function UpdateRooms%()
 	Local FoundNewPlayerRoom% = False
 	
 	If Abs(PlayerY - EntityY(PlayerRoom\OBJ)) < 1.5
-		x = Abs(PlayerRoom\x - PlayerX)
-		If x < 4.0
-			z = Abs(PlayerRoom\z - PlayerZ)
-			If z < 4.0 Then FoundNewPlayerRoom = True
-		EndIf
-		
+		If DistanceSquared(EntityX(PlayerRoom\OBJ), PlayerX, EntityZ(PlayerRoom\OBJ), PlayerZ) < 16.0 Then FoundNewPlayerRoom = True
 		If (Not FoundNewPlayerRoom) ; ~ It's likely that an adjacent room is the new player room, check for that
 			For i = 0 To MaxRoomAdjacents - 1
 				If PlayerRoom\Adjacent[i] <> Null
-					x = Abs(PlayerRoom\Adjacent[i]\x - PlayerX)
-					If x < 4.0
-						z = Abs(PlayerRoom\Adjacent[i]\z - PlayerZ)
-						If z < 4.0
-							y = Abs(PlayerRoom\Adjacent[i]\y - PlayerY)
-							If y < 4.0
-								FoundNewPlayerRoom = True
-								PlayerRoom = PlayerRoom\Adjacent[i]
-								Exit
-							EndIf
-						EndIf
+					If EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, me\Collider) < 16.0
+						FoundNewPlayerRoom = True
+						PlayerRoom = PlayerRoom\Adjacent[i]
+						Exit
 					EndIf
 				EndIf
 			Next
@@ -4892,7 +4880,7 @@ Function UpdateRooms%()
 		z = Abs(r\z - PlayerZ)
 		r\Dist = Max(x, z)
 		
-		If x < 4.0 And z < 4.0
+		If r\Dist < 4.0 ; ~ Check if this works correctly
 			If (Not FoundNewPlayerRoom) And PlayerRoom <> r
 				If Abs(PlayerY - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 				FoundNewPlayerRoom = True
