@@ -3084,8 +3084,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCTypeApache
 				;[Block]
-				Dist = EntityDistanceSquared(me\Collider, n\Collider)
-				If Dist < 3600.0
+				If EntityDistanceSquared(me\Collider, n\Collider) < 3600.0
 					If PlayerRoom\RoomTemplate\RoomID = r_gate_b
 						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 1.0), 0.0)
 					Else
@@ -3103,14 +3102,12 @@ Function UpdateNPCs%()
 						TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 						
 						If n\State = 1.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-							If Abs(EntityX(me\Collider) - EntityX(n\Collider)) < 30.0
-								If Abs(EntityZ(me\Collider) - EntityZ(n\Collider)) < 30.0
+							If Rand(20) = 1
+								If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 900.0
 									If Abs(EntityY(me\Collider) - EntityY(n\Collider)) < 20.0
-										If Rand(20) = 1
-											If EntityVisible(me\Collider, n\Collider)
-												PlaySound2(snd_I\AlarmSFX[1], Camera, n\Collider, 50.0, 1.0)
-												n\State = 2.0
-											EndIf
+										If EntityVisible(me\Collider, n\Collider)
+											PlaySound2(snd_I\AlarmSFX[1], Camera, n\Collider, 50.0, 1.0)
+											n\State = 2.0
 										EndIf
 									EndIf
 								EndIf
@@ -3129,64 +3126,62 @@ Function UpdateNPCs%()
 						TurnEntity(n\OBJ2, 0.0, 20.0 * fps\Factor[0], 0.0)
 						TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 						
-						If Abs(EntityX(Target) - EntityX(n\Collider)) < 55.0
-							If Abs(EntityZ(Target) - EntityZ(n\Collider)) < 55.0
-								If Abs(EntityY(Target) - EntityY(n\Collider)) < 20.0
-									PointEntity(n\OBJ, Target)
-									RotateEntity(n\Collider, CurveAngle(Min(WrapAngle(EntityPitch(n\OBJ)), 40.0), EntityPitch(n\Collider), 40.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 90.0), EntityRoll(n\Collider), True)
-									PositionEntity(n\Collider, EntityX(n\Collider), CurveValue(EntityY(Target) + 8.0, EntityY(n\Collider), 70.0), EntityZ(n\Collider))
-									
-									Dist = DistanceSquared(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider))
-									
-									n\CurrSpeed = CurveValue(Min(Sqr(Dist) - 6.5, 6.5) * 0.008, n\CurrSpeed, 50.0)
-									
-									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-									
-									Visible = False
-									If n\PathTimer = 0.0
-										Visible = EntityVisible(n\Collider, Target)
-										n\PathTimer = Rnd(100.0, 200.0)
-									Else
-										n\PathTimer = Min(n\PathTimer - fps\Factor[0], 0.0)
-									EndIf
-									If chs\NoTarget Lor I_268\InvisibilityOn And n\State = 2.0 Then Visible = False
-									
-									If Visible ; ~ Player visible
-										RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(0.0, EntityRoll(n\Collider), 40.0), True)
-										If n\Reload <= 0.0
-											If Dist < 400.0
-												Pvt = CreatePivot()
-												PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
-												RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider))
-												MoveEntity(Pvt, 0.0, 0.023, 0.188)
-												PointEntity(Pvt, Target)
+						If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 3025.0
+							If Abs(EntityY(Target) - EntityY(n\Collider)) < 20.0
+								PointEntity(n\OBJ, Target)
+								RotateEntity(n\Collider, CurveAngle(Min(WrapAngle(EntityPitch(n\OBJ)), 40.0), EntityPitch(n\Collider), 40.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 90.0), EntityRoll(n\Collider), True)
+								PositionEntity(n\Collider, EntityX(n\Collider), CurveValue(EntityY(Target) + 8.0, EntityY(n\Collider), 70.0), EntityZ(n\Collider))
+								
+								Dist = DistanceSquared(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider))
+								
+								n\CurrSpeed = CurveValue(Min(Sqr(Dist) - 6.5, 6.5) * 0.008, n\CurrSpeed, 50.0)
+								
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+								
+								Visible = False
+								If n\PathTimer = 0.0
+									Visible = EntityVisible(n\Collider, Target)
+									n\PathTimer = Rnd(100.0, 200.0)
+								Else
+									n\PathTimer = Min(n\PathTimer - fps\Factor[0], 0.0)
+								EndIf
+								If (chs\NoTarget Lor I_268\InvisibilityOn) And n\State = 2.0 Then Visible = False
+								
+								If Visible ; ~ Player visible
+									RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(0.0, EntityRoll(n\Collider), 40.0), True)
+									If n\Reload <= 0.0
+										If Dist < 400.0
+											Pvt = CreatePivot()
+											PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+											RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider))
+											MoveEntity(Pvt, 0.0, 0.023, 0.188)
+											PointEntity(Pvt, Target)
+											
+											If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0
+												PlaySound2(snd_I\GunshotSFX[1], Camera, n\Collider, 20.0)
 												
-												If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0
-													PlaySound2(snd_I\GunshotSFX[1], Camera, n\Collider, 20.0)
-													
-													SqrValue = Sqr(Dist)
-													
-													Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / SqrValue) * (1.0 / SqrValue)) * (n\State = 2.0), (n\State = 2.0))
-													
-													If me\Terminated And n\State <> 3
-														If PlayerRoom\RoomTemplate\RoomID = r_gate_b
-															msg\DeathMsg = GetLocalString("death", "apache.gateb")
-														Else
-															msg\DeathMsg = GetLocalString("death", "apache.gatea")
-														EndIf
+												SqrValue = Sqr(Dist)
+												
+												Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / SqrValue) * (1.0 / SqrValue)) * (n\State = 2.0), (n\State = 2.0))
+												
+												If me\Terminated And n\State <> 3
+													If PlayerRoom\RoomTemplate\RoomID = r_gate_b
+														msg\DeathMsg = GetLocalString("death", "apache.gateb")
+													Else
+														msg\DeathMsg = GetLocalString("death", "apache.gatea")
 													EndIf
 												EndIf
-												FreeEntity(Pvt) : Pvt = 0
 											EndIf
-											n\Reload = 5.0
-										EndIf
-									Else
-										RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(-20.0, EntityRoll(n\Collider), 40.0), True)
+											FreeEntity(Pvt) : Pvt = 0
+											EndIf
+										n\Reload = 5.0
 									EndIf
-									MoveEntity(n\Collider, (-EntityRoll(n\Collider)) * 0.002, 0.0, 0.0)
-									
-									n\Reload = n\Reload - fps\Factor[0]
+								Else
+									RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(-20.0, EntityRoll(n\Collider), 40.0), True)
 								EndIf
+								MoveEntity(n\Collider, (-EntityRoll(n\Collider)) * 0.002, 0.0, 0.0)
+								
+								n\Reload = n\Reload - fps\Factor[0]
 							EndIf
 						EndIf
 						If n\State = 3 Then FreeEntity(Target) : Target = 0
