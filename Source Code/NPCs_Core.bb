@@ -731,20 +731,22 @@ Function UpdateNPCs%()
 											If d\Locked = 0 And (Not d\Open) And d\Code = 0 And d\KeyCard = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
 												For i = 0 To 1
 													If d\Buttons[i] <> 0
-														If DistanceSquared(EntityX(n\Collider), EntityX(d\Buttons[i]), EntityZ(n\Collider), EntityZ(d\Buttons[i])) < 0.25
-															If (d\OpenState >= 180.0 Lor d\OpenState <= 0.0)
-																Pvt = CreatePivot()
-																PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
-																PointEntity(Pvt, d\Buttons[i])
-																MoveEntity(Pvt, 0.0, 0.0, n\Speed * 0.6)
-																
-																If EntityPick(Pvt, 0.5) = d\Buttons[i]
-																	PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
-																	OpenCloseDoor(d, True)
+														If Abs(EntityX(n\Collider) - EntityX(d\Buttons[i])) < 0.5
+															If Abs(EntityZ(n\Collider) - EntityZ(d\Buttons[i])) < 0.5
+																If (d\OpenState >= 180.0 Lor d\OpenState <= 0.0)
+																	Pvt = CreatePivot()
+																	PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
+																	PointEntity(Pvt, d\Buttons[i])
+																	MoveEntity(Pvt, 0.0, 0.0, n\Speed * 0.6)
+																	
+																	If EntityPick(Pvt, 0.5) = d\Buttons[i]
+																		PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
+																		OpenCloseDoor(d, True)
+																		FreeEntity(Pvt) : Pvt = 0
+																		Exit
+																	EndIf
 																	FreeEntity(Pvt) : Pvt = 0
-																	Exit
 																EndIf
-																FreeEntity(Pvt) : Pvt = 0
 															EndIf
 														EndIf
 													EndIf
@@ -2945,9 +2947,9 @@ Function UpdateNPCs%()
 								; ~ 1: Max 64 units away from SCP-513-1
 								; ~ 2: Further away from the player than SCP-513-1's current position 
 								For w.WayPoints = Each WayPoints
-									Dist2 = DistanceSquared(EntityX(n\Collider), EntityX(w\OBJ), EntityZ(n\Collider), EntityZ(w\OBJ))
-									If Dist2 > 1.0 And Dist2 < 64.0
-										If EntityDistanceSquared(me\Collider, w\OBJ) > Dist
+									Dist2 = EntityDistanceSquared(me\Collider, w\OBJ)
+									If Dist2 < 64.0 And Dist2 > 1.0
+										If Dist2 > Dist
 											n\Path[0] = w
 											Exit
 										EndIf
@@ -3124,7 +3126,7 @@ Function UpdateNPCs%()
 						TurnEntity(n\OBJ2, 0.0, 20.0 * fps\Factor[0], 0.0)
 						TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 						
-						If DistanceSquared(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider)) < 3025.0
+						If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 3025.0
 							If Abs(EntityY(Target) - EntityY(n\Collider)) < 20.0
 								PointEntity(n\OBJ, Target)
 								RotateEntity(n\Collider, CurveAngle(Min(WrapAngle(EntityPitch(n\OBJ)), 40.0), EntityPitch(n\Collider), 40.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 90.0), EntityRoll(n\Collider), True)
@@ -3171,7 +3173,7 @@ Function UpdateNPCs%()
 												EndIf
 											EndIf
 											FreeEntity(Pvt) : Pvt = 0
-										EndIf
+											EndIf
 										n\Reload = 5.0
 									EndIf
 								Else
@@ -5088,21 +5090,23 @@ Function UpdateNPCs%()
 											MaxZ = 4.0
 											MinZ = 0.0
 										EndIf
-										If DistanceSquared(EntityX(n\Collider), EntityX(r\OBJ), EntityZ(n\Collider), EntityZ(r\OBJ)) < PowTwo(MaxX - MinX)
-											If r = PlayerRoom
-												UpdateGravity = True
-												Exit
-											EndIf
-											If IsRoomAdjacent(PlayerRoom, r)
-												UpdateGravity = True
-												Exit
-											EndIf
-											For i = 0 To MaxRoomAdjacents - 1
-												If IsRoomAdjacent(PlayerRoom\Adjacent[i], r)
+										If Abs(EntityX(n\Collider) - EntityX(r\OBJ)) <= Abs(MaxX - MinX)
+											If Abs(EntityZ(n\Collider) - EntityZ(r\OBJ)) <= Abs(MaxZ - MinZ)
+												If r = PlayerRoom
 													UpdateGravity = True
 													Exit
 												EndIf
-											Next
+												If IsRoomAdjacent(PlayerRoom, r)
+													UpdateGravity = True
+													Exit
+												EndIf
+												For i = 0 To MaxRoomAdjacents - 1
+													If IsRoomAdjacent(PlayerRoom\Adjacent[i], r)
+														UpdateGravity = True
+														Exit
+													EndIf
+												Next
+											EndIf
 										EndIf
 									Next
 								EndIf

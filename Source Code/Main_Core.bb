@@ -7390,8 +7390,6 @@ Function UpdateMenu%()
 				EndIf
 			EndIf
 		Else
-			Local Dist#
-			
 			y = y + (10 * MenuScale)
 			
 			If (Not me\Terminated) Lor me\SelectedEnding <> - 1
@@ -7421,10 +7419,12 @@ Function UpdateMenu%()
 							ResetRender()
 							
 							For r.Rooms = Each Rooms
-								Dist = DistanceSquared(EntityX(me\Collider), EntityX(r\OBJ), EntityZ(me\Collider), EntityZ(r\OBJ))
-								If Dist < 144.0
+								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
+								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
+								
+								If x < 12.0 And z < 12.0
 									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)], 1.0)
-									If Dist < 16.0
+									If x < 4.0 And z < 4.0
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 									EndIf
@@ -7489,10 +7489,12 @@ Function UpdateMenu%()
 							ResetRender()
 							
 							For r.Rooms = Each Rooms
-								Dist = DistanceSquared(EntityX(me\Collider), EntityX(r\OBJ), EntityZ(me\Collider), EntityZ(r\OBJ))
-								If Dist < 144.0
+								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
+								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
+								
+								If x < 12.0 And z < 12.0
 									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)], 1.0)
-									If Dist < 16.0
+									If x < 4.0 And z < 4.0
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 									EndIf

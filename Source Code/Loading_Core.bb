@@ -1908,11 +1908,15 @@ Function LoadWayPoints%(LoadingStart% = 55)
 			ClosestRoom.Rooms = Null
 			Dist = 30.0
 			For r.Rooms = Each Rooms
-				If DistanceSquared(EntityX(r\OBJ, True), EntityX(d\FrameOBJ, True), EntityZ(r\OBJ, True), EntityZ(d\FrameOBJ, True)) < 400.0
-					Dist2 = (x * x) + (z * z)
-					If Dist2 < Dist
-						ClosestRoom = r
-						Dist = Dist2
+				x = Abs(EntityX(r\OBJ, True) - EntityX(d\FrameOBJ, True))
+				If x < 20.0
+					z = Abs(EntityZ(r\OBJ, True) - EntityZ(d\FrameOBJ, True))
+					If z < 20.0
+						Dist2 = (x * x) + (z * z)
+						If Dist2 < Dist
+							ClosestRoom = r
+							Dist = Dist2
+						EndIf
 					EndIf
 				EndIf
 			Next

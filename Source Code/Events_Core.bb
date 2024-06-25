@@ -4007,7 +4007,7 @@ Function UpdateEvents%()
 							HideEntity(e\room\Objects[0])
 							e\SoundCHN = LoopSound2(snd_I\TeslaIdleSFX, e\SoundCHN, Camera, e\room\Objects[0], 4.0, 0.5)
 							e\EventState2 = 0.0
-							If EntityDistanceSquared(me\Collider, e\room\OBJ) < 1.0
+							If Abs(EntityX(me\Collider, True) - EntityX(e\room\OBJ, True)) < 1.0 And Abs(EntityZ(me\Collider, True) - EntityZ(e\room\OBJ, True)) < 1.0 And Abs(EntityY(me\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 								If (Not me\Terminated) And (Not chs\NoTarget)
 									If e\room\NPC[0] = Null Lor e\room\NPC[0]\IsDead
 										If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
@@ -4019,7 +4019,7 @@ Function UpdateEvents%()
 							For n.NPCs = Each NPCs
 								If n\NPCType <> NPCType966 And n\NPCType <> NPCType513_1 And (Not n\IsDead)
 									If n\NPCType = NPCTypeMTF And e\room\NPC[1] = Null
-										If EntityDistanceSquared(n\Collider, e\room\OBJ) < 4.0
+										If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 2.0 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 2.0 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 											n\PrevState = 1
 											n\PathTimer = 0.0
 											n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -4029,7 +4029,7 @@ Function UpdateEvents%()
 											e\room\NPC[1] = n
 										EndIf
 									Else
-										If EntityDistanceSquared(n\Collider, e\room\OBJ) < 1.0
+										If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.81 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.81 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 											If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 											e\SoundCHN = PlaySound2(snd_I\TeslaActivateSFX, Camera, e\room\Objects[0], 4.0, 0.5)
 											e\EventState = 1.0
@@ -4058,7 +4058,7 @@ Function UpdateEvents%()
 							;[End Block]
 						Case 2.0 ; ~ Zap state
 							;[Block]
-							If EntityDistanceSquared(me\Collider, e\room\OBJ) < 0.5625
+							If Abs(EntityX(me\Collider, True) - EntityX(e\room\OBJ, True)) < 0.75 And Abs(EntityZ(me\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.75 And Abs(EntityY(me\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 								If (Not me\Terminated)
 									If opt\ParticleAmount > 0 Then SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
 									me\LightFlash = 0.4
@@ -4073,7 +4073,7 @@ Function UpdateEvents%()
 										e\room\RoomDoors[0]\Locked = 0
 										n\State3 = 1.0
 									EndIf
-									If EntityDistanceSquared(n\Collider, e\room\OBJ) < 0.5625
+									If Abs(EntityX(n\Collider, True) - EntityX(e\room\OBJ, True)) < 0.6 And Abs(EntityZ(n\Collider, True) - EntityZ(e\room\OBJ, True)) < 0.6 And Abs(EntityY(n\Collider, True) - EntityY(e\room\OBJ, True)) < 1.3
 										n\CurrSpeed = 0.0 : n\TeslaHit = True
 										Select n\NPCType
 											Case NPCType106
