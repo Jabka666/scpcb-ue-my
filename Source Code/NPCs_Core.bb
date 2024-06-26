@@ -2947,9 +2947,9 @@ Function UpdateNPCs%()
 								; ~ 1: Max 64 units away from SCP-513-1
 								; ~ 2: Further away from the player than SCP-513-1's current position 
 								For w.WayPoints = Each WayPoints
-									Dist2 = EntityDistanceSquared(me\Collider, w\OBJ)
+									Dist2 = DistanceSquared(EntityX(n\Collider), EntityX(w\OBJ), EntityZ(n\Collider), EntityZ(w\OBJ))
 									If Dist2 < 64.0 And Dist2 > 1.0
-										If Dist2 > Dist
+										If EntityDistanceSquared(me\Collider, w\OBJ) > Dist
 											n\Path[0] = w
 											Exit
 										EndIf
@@ -3126,7 +3126,7 @@ Function UpdateNPCs%()
 						TurnEntity(n\OBJ2, 0.0, 20.0 * fps\Factor[0], 0.0)
 						TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 						
-						If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 3025.0
+						If DistanceSquared(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider)) < 3025.0
 							If Abs(EntityY(Target) - EntityY(n\Collider)) < 20.0
 								PointEntity(n\OBJ, Target)
 								RotateEntity(n\Collider, CurveAngle(Min(WrapAngle(EntityPitch(n\OBJ)), 40.0), EntityPitch(n\Collider), 40.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 90.0), EntityRoll(n\Collider), True)
@@ -3173,7 +3173,7 @@ Function UpdateNPCs%()
 												EndIf
 											EndIf
 											FreeEntity(Pvt) : Pvt = 0
-											EndIf
+										EndIf
 										n\Reload = 5.0
 									EndIf
 								Else
