@@ -6382,6 +6382,7 @@ Function RenderGUI%()
 	Else
 		If SelectedItem <> Null
 			Local Width% = 300 * MenuScale, Height% = 20 * MenuScale
+			
 			Select SelectedItem\ItemTemplate\ID
 				Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
 					;[Block]

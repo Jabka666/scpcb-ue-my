@@ -849,6 +849,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	EntityAlpha(Opaque, 1.0)
 	
 	Local OBJ% = CreatePivot()
+	
 	CreatePivot(OBJ) ; ~ Skip "meshes" object
 	EntityParent(Opaque, OBJ)
 	EntityParent(HiddenMesh, OBJ)
@@ -1556,7 +1557,6 @@ Function UpdateForest%(fr.Forest)
 	CatchErrors("UpdateForest()")
 	
 	Local tX%, tY%
-	Local Dist#
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
@@ -2277,7 +2277,6 @@ Function UpdateMT%(mt.MTGrid)
 	CatchErrors("UpdateMT()")
 	
 	Local tX%, tY%
-	Local Dist#
 	
 	For tX = 0 To MTGridSize - 1
 		For tY = 0 To MTGridSize - 1
@@ -2645,8 +2644,8 @@ Const BUTTON_ELEVATOR% = 4
 ;[End Block]
 
 Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
-	
 	Local OBJ% = CopyEntity(d_I\ButtonModelID[ButtonID])
+	
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
@@ -4402,6 +4401,8 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 			FreeBrush(b) : b = 0
 		EndIf
 	Next
+	SF = 0
+	Entity = 0
 	mon_I\UpdateCheckpoint[(1 - LCZ)] = True
 End Function
 

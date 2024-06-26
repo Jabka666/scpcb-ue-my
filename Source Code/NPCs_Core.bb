@@ -6685,6 +6685,7 @@ Function TeleportCloser%(n.NPCs)
 	
 	If closestWaypoint <> Null
 		Local ShouldTeleport% = False
+		
 		If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs Then
 			ShouldTeleport = True
 		ElseIf EntityY(closestWaypoint\OBJ, True) <= 6.5 And EntityY(closestWaypoint\OBJ, True) >= -6.5
@@ -7518,6 +7519,7 @@ End Function
 Function FinishWalking%(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	If n <> Null
 		Local CenterFrame# = (EndFrame - StartFrame) / 2.0
+		
 		If n\Frame >= CenterFrame
 			AnimateNPC(n, StartFrame, EndFrame, Speed, False)
 		Else
