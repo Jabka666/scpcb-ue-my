@@ -1561,9 +1561,7 @@ Function UpdateForest%(fr.Forest)
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
 			If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0
-				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(fr\TileEntities[tX + (tY * ForestGridSize)], True)) + PowTwo(EntityZ(me\Collider, True) - EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)], True)))
-				
-				If Dist < HideDistance
+				If DistanceSquared(EntityX(me\Collider), EntityX(fr\TileEntities[tX + (tY * ForestGridSize)]), EntityZ(me\Collider), EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)])) < PowTwo(HideDistance)
 					If EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 				Else
 					If (Not EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
@@ -2289,9 +2287,7 @@ Function UpdateMT%(mt.MTGrid)
 				
 				If Abs(PlayerPosY - TunnelPosY) > 4.0 Then Exit
 				
-				Dist = Sqr(PowTwo(EntityX(me\Collider, True) - EntityX(mt\Entities[tX + (tY * MTGridSize)], True)) + PowTwo(PlayerPosY - TunnelPosY) + PowTwo(EntityZ(me\Collider, True) - EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)))
-				
-				If Dist < me\CameraFogDist * LightVolume * 1.2
+				If DistanceSquared(EntityX(me\Collider, True), EntityX(mt\Entities[tX + (tY * MTGridSize)], True), EntityZ(me\Collider, True), EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)) < PowTwo(me\CameraFogDist * LightVolume * 1.2)
 					If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
 				Else
 					If (Not EntityHidden(mt\Entities[tX + (tY * MTGridSize)])) Then HideEntity(mt\Entities[tX + (tY * MTGridSize)])
