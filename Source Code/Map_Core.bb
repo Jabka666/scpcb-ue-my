@@ -125,6 +125,7 @@ Type TempLights
 	Field R%, G%, B%
 	Field Pitch#, Yaw#
 	Field InnerConeAngle%, OuterConeAngle#
+	Field HasSprite%
 End Type
 
 Global LightVolume#, TempLightVolume#
@@ -140,7 +141,7 @@ Type Lights
 	Field room.Rooms
 End Type
 
-Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%)
+Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, HasSprite% = True)
 	Local l.Lights, l2.Lights
 	
 	l.Lights = New Lights
@@ -153,28 +154,30 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%)
 	If room <> Null Then EntityParent(l\OBJ, room\OBJ)
 	HideEntity(l\OBJ)
 	
-	l\Sprite = CreateSprite()
-	PositionEntity(l\Sprite, x, y, z)
-	ScaleSprite(l\Sprite, 0.13 , 0.13)
-	EntityTexture(l\Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
-	EntityFX(l\Sprite, 1 + 8)
-	EntityBlend(l\Sprite, 3)
-	EntityColor(l\Sprite, R, G, B)
-	EntityParent(l\Sprite, l\OBJ)
-	HideEntity(l\Sprite)
-	
-	l\AdvancedSprite = CreateSprite()
-	PositionEntity(l\AdvancedSprite, x, y, z)
-	ScaleSprite(l\AdvancedSprite, Rnd(0.36, 0.4), Rnd(0.36, 0.4))
-	EntityTexture(l\AdvancedSprite, misc_I\AdvancedLightSprite)
-	EntityFX(l\AdvancedSprite, 1 + 8)
-	EntityBlend(l\AdvancedSprite, 3)
-	EntityOrder(l\AdvancedSprite, -1)
-	EntityColor(l\AdvancedSprite, R, G, B)
-	RotateEntity(l\AdvancedSprite, 0.0, 0.0, Rnd(360.0))
-	SpriteViewMode(l\AdvancedSprite, 1)
-	EntityParent(l\AdvancedSprite, l\OBJ)
-	HideEntity(l\AdvancedSprite)
+	If HasSprite
+		l\Sprite = CreateSprite()
+		PositionEntity(l\Sprite, x, y, z)
+		ScaleSprite(l\Sprite, 0.13 , 0.13)
+		EntityTexture(l\Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
+		EntityFX(l\Sprite, 1 + 8)
+		EntityBlend(l\Sprite, 3)
+		EntityColor(l\Sprite, R, G, B)
+		EntityParent(l\Sprite, l\OBJ)
+		HideEntity(l\Sprite)
+		
+		l\AdvancedSprite = CreateSprite()
+		PositionEntity(l\AdvancedSprite, x, y, z)
+		ScaleSprite(l\AdvancedSprite, Rnd(0.36, 0.4), Rnd(0.36, 0.4))
+		EntityTexture(l\AdvancedSprite, misc_I\AdvancedLightSprite)
+		EntityFX(l\AdvancedSprite, 1 + 8)
+		EntityBlend(l\AdvancedSprite, 3)
+		EntityOrder(l\AdvancedSprite, -1)
+		EntityColor(l\AdvancedSprite, R, G, B)
+		RotateEntity(l\AdvancedSprite, 0.0, 0.0, Rnd(360.0))
+		SpriteViewMode(l\AdvancedSprite, 1)
+		EntityParent(l\AdvancedSprite, l\OBJ)
+		HideEntity(l\AdvancedSprite)
+	EndIf
 	
 	l\Intensity = (R + G + B) / 255.0 / 3.0
 	If room <> Null
@@ -223,78 +226,106 @@ Function UpdateLights%(Cam%)
 		If SecondaryLightOn > 0.3
 			If l\room <> Null
 				If l\room\Dist < 8.0 Lor l\room = PlayerRoom
-					If Cam = Camera ; ~ The lights are rendered by player's cam
-						EntityOrder(l\AdvancedSprite, -1)
-						If UpdateLightsTimer = 0.0
-							Local Dist# = EntityDistanceSquared(Cam, l\OBJ)
-							Local LightOBJHidden% = EntityHidden(l\OBJ)
-							Local LightSpriteHidden% = EntityHidden(l\Sprite)
-							Local LightAdvancedSpriteHidden% = EntityHidden(l\AdvancedSprite)
-							
-							If Dist < PowTwo(me\CameraFogDist * LightVolume)
-								EntityAutoFade(l\Sprite, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
+					Local LightOBJHidden%
+					
+					If l\Sprite <> 0
+						If Cam = Camera ; ~ The lights are rendered by player's cam
+							EntityOrder(l\AdvancedSprite, -1)
+							If UpdateLightsTimer = 0.0
+								Local Dist# = EntityDistanceSquared(Cam, l\OBJ)
+								Local LightSpriteHidden% = EntityHidden(l\Sprite)
+								Local LightAdvancedSpriteHidden% = EntityHidden(l\AdvancedSprite)
 								
-								Local LightVisible% = EntityVisible(Cam, l\OBJ)
-								Local LightInView% = EntityInView(l\OBJ, Cam)
-								
-								If LightOBJHidden Then ShowEntity(l\OBJ)
-								If l\Flickers And Rand(13) = 1 And LightVisible
-									HideEntity(l\OBJ)
-									PlaySound2(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
-									If LightInView
-										HideEntity(l\Sprite)
-										HideEntity(l\AdvancedSprite)
+								LightOBJHidden = EntityHidden(l\OBJ)
+								If Dist < 64.0
+									EntityAutoFade(l\Sprite, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
+									
+									Local LightVisible% = EntityVisible(Cam, l\OBJ)
+									Local LightInView% = EntityInView(l\OBJ, Cam)
+									
+									If LightOBJHidden Then ShowEntity(l\OBJ)
+									If l\Flickers And Rand(13) = 1 And LightVisible
+										If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+										PlaySound2(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
+										If LightInView
+											If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
+											If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
+										EndIf
+										Random = Rnd(0.35, 0.8)
+										SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
+										TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
 									EndIf
-									Random = Rnd(0.35, 0.8)
-									SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
-									TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
-								EndIf
-								If LightInView And LightVisible
-									If LightSpriteHidden Then ShowEntity(l\Sprite)
-									If opt\AdvancedRoomLights
-										Alpha = 1.0 - Max(Min(((Sqr(Dist) + 0.5) / 7.5), 1.0), 0.0)
-										If Alpha > 0.0
-											If LightAdvancedSpriteHidden Then ShowEntity(l\AdvancedSprite)
-											EntityAlpha(l\AdvancedSprite, Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (l\Intensity / 2.0), 1.0) * Alpha)
-											
-											Random = Rnd(0.36, 0.4)
-											ScaleSprite(l\AdvancedSprite, Random, Random)
+									If LightInView And LightVisible
+										If LightSpriteHidden Then ShowEntity(l\Sprite)
+										If opt\AdvancedRoomLights
+											Alpha = 1.0 - Max(Min(((Sqr(Dist) + 0.5) / 7.5), 1.0), 0.0)
+											If Alpha > 0.0
+												If LightAdvancedSpriteHidden Then ShowEntity(l\AdvancedSprite)
+												EntityAlpha(l\AdvancedSprite, Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (l\Intensity / 2.0), 1.0) * Alpha)
+												
+												Random = Rnd(0.36, 0.4)
+												ScaleSprite(l\AdvancedSprite, Random, Random)
+											Else
+												; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
+												If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
+											EndIf
 										Else
-											; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
+											; ~ The additional sprites option is disabled, hide the sprites
 											If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
 										EndIf
 									Else
-										; ~ The additional sprites option is disabled, hide the sprites
+										; ~ Hide the sprites because they aren't visible
+										If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
 										If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
 									EndIf
 								Else
-									; ~ Hide the sprites because they aren't visible
-									If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
-									If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
+									; ~ Hide the light emitter because it is too far
+									If (Not LightOBJHidden) Then HideEntity(l\OBJ)
 								EndIf
-							Else
-								; ~ Hide the light emitter because it is too far
-								If (Not LightOBJHidden) Then HideEntity(l\OBJ)
 							EndIf
+						Else
+							; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
+							EntityOrder(l\AdvancedSprite, 0)
 						EndIf
 					Else
-						; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
-						EntityOrder(l\AdvancedSprite, 0)
+						If Cam = Camera ; ~ The lights are rendered by player's cam
+							If UpdateLightsTimer = 0.0
+								LightOBJHidden = EntityHidden(l\OBJ)
+								
+								If EntityDistanceSquared(Cam, l\OBJ) < 64.0
+									If LightOBJHidden Then ShowEntity(l\OBJ)
+									If l\Flickers And Rand(13) = 1 And EntityVisible(Cam, l\OBJ)
+										If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+										PlaySound2(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
+										Random = Rnd(0.35, 0.8)
+										SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
+										TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
+									EndIf
+								Else
+									; ~ Hide the light emitter because it is too far
+									If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+								EndIf
+							EndIf
+						EndIf
 					EndIf
 				EndIf
 			EndIf
 		Else
 			; ~ The lights were turned off
-			If (Not EntityHidden(l\Sprite)) Then HideEntity(l\Sprite)
-			If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
+			If l\Sprite <> 0
+				If (Not EntityHidden(l\Sprite)) Then HideEntity(l\Sprite)
+				If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
+			EndIf
 			If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
 		EndIf
 	Next
 End Function
 
 Function RemoveLight%(l.Lights)
-	FreeEntity(l\Sprite) : l\Sprite = 0
-	FreeEntity(l\AdvancedSprite) : l\AdvancedSprite = 0
+	If l\Sprite <> 0
+		FreeEntity(l\Sprite) : l\Sprite = 0
+		FreeEntity(l\AdvancedSprite) : l\AdvancedSprite = 0
+	EndIf
 	FreeEntity(l\OBJ) : l\OBJ = 0
 	Delete(l)
 End Function
@@ -678,6 +709,27 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
 					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
 					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					
+					tl\HasSprite = True
+					;[End Block]
+				Case "light_fix"
+					;[Block]
+					tl.TempLights = New TempLights
+					tl\RoomTemplate = rt
+					
+					tl\x = ReadFloat(f) * RoomScale
+					tl\y = ReadFloat(f) * RoomScale
+					tl\z = ReadFloat(f) * RoomScale
+					tl\lType = 2
+					
+					lColor = ReadString(f)
+					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
+					tl\Range = ReadFloat(f) / 2000.0
+					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
+					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
+					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					
+					tl\HasSprite = False
 					;[End Block]
 				Case "spotlight"
 					;[Block]
