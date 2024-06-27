@@ -4114,11 +4114,7 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = 10000.0
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case it_finenvg
-										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.no"))
-										;[End Block]
-									Case it_veryfinenvg
+									Case it_finenvg, it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
