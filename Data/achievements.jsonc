@@ -223,6 +223,11 @@
             "id": "snav",
             "image": "AchvSNAV.png",
             "scp": false
+        },
+		{
+            "id": "tesla",
+            "image": "AchvTesla.png",
+            "scp": false
         }
     ],
     "translations": {
@@ -401,6 +406,10 @@
         "snav": {
             "name": "Technical Accomplishments",
             "description": "Acquired the S-NAV Navigator Ultimate."
+        },
+		"tesla": {
+            "name": "Shell Shocked",
+            "description": "Lured the Old Man through a Tesla gate."
         }
     }
 }
