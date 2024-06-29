@@ -158,6 +158,7 @@
 		RhythmicReverie
 		Xstallm
 		aciu
+		"A9ent Zer0" as a wiki redactor
 
 *Mod Testers
 
