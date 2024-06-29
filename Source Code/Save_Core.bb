@@ -446,11 +446,7 @@ Function SaveGame%(File$)
 		WriteFloat(f, it\State3)
 		WriteByte(f, it\Picked)
 		
-		If SelectedItem = it
-			WriteByte(f, 1) 
-		Else
-			WriteByte(f, 0)
-		EndIf
+		WriteByte(f, SelectedItem = it)
 		
 		Local ItemFound% = False
 		
