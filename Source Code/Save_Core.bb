@@ -162,9 +162,9 @@ Function SaveGame%(File$)
 	
 	For i = 0 To ArraySize - 1
 		Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
-		
-		WriteByte(f, S2IMapContains(UnlockedAchievements, ID))
+		If S2IMapContains(UnlockedAchievements, ID) Then WriteString(f, ID)
 	Next
+	WriteString(f, "EOA") ; ~ End of achievements
 
 	WriteInt(f, me\RefinedItems)
 	
@@ -446,11 +446,7 @@ Function SaveGame%(File$)
 		WriteFloat(f, it\State3)
 		WriteByte(f, it\Picked)
 		
-		If SelectedItem = it
-			WriteByte(f, 1) 
-		Else
-			WriteByte(f, 0)
-		EndIf
+		WriteByte(f, SelectedItem = it)
 		
 		Local ItemFound% = False
 		
@@ -667,15 +663,12 @@ Function LoadGame%(File$)
 	RemoteDoorOn = ReadByte(f)
 	
 	SoundTransmission = ReadByte(f)
-	
-	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-	Local ArraySize% = JsonGetArraySize(Achievements)
-	
-	For i = 0 To ArraySize - 1
-		Local AchvID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
-		
-		If ReadByte(f) Then S2IMapSet(UnlockedAchievements, AchvID, True)
-	Next
+
+	Repeat
+		Local Achv$ = ReadString(f)
+		If Achv = "EOA" Then Exit
+		S2IMapSet(UnlockedAchievements, Achv, True)
+	Forever
 
 	me\RefinedItems = ReadInt(f)
 	
@@ -1509,14 +1502,13 @@ Function LoadGameQuick%(File$)
 	
 	SoundTransmission = ReadByte(f)
 	
-	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
-	Local ArraySize% = JsonGetArraySize(Achievements)
-	
-	For i = 0 To ArraySize - 1
-		Local AchvID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
-		
-		If ReadByte(f) Then S2IMapSet(UnlockedAchievements, AchvID, True)
-	Next
+	ClearS2IMap(UnlockedAchievements)
+	Repeat
+		Local Achv$ = ReadString(f)
+		If Achv = "EOA" Then Exit
+		S2IMapSet(UnlockedAchievements, Achv, True)
+	Forever
+
 	me\RefinedItems = ReadInt(f)
 	
 	UsedConsole = ReadByte(f)
