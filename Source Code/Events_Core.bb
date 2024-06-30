@@ -4472,7 +4472,6 @@ Function UpdateEvents%()
 										RotateEntity(d\ElevatorPanel[1], EntityPitch(d\ElevatorPanel[1], True) + 45.0, EntityYaw(d\ElevatorPanel[1], True), EntityRoll(d\ElevatorPanel[1], True), True)
 										
 										TempInt2 = CreatePivot()
-										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (CosValue * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 552.0 * RoomScale))
 										If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 											If e\room\RoomDoors[1] <> Null
@@ -4483,6 +4482,7 @@ Function UpdateEvents%()
 											EndIf
 											If e\room\Objects[3] = 0
 												e\room\Objects[3] = TempInt2
+												RotateEntity(e\room\Objects[3], 0.0, EntityYaw(TempInt, True), 0.0, True)
 												PositionEntity(e\room\Objects[1], e\room\x + (iX * 2.0), EntityY(e\room\Objects[1], True), e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2) : TempInt2 = 0
@@ -4496,6 +4496,7 @@ Function UpdateEvents%()
 											EndIf
 											If e\room\Objects[5] = 0
 												e\room\Objects[5] = TempInt2
+												RotateEntity(e\room\Objects[5], 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 												PositionEntity(e\room\Objects[0], e\room\x + (iX * 2.0), EntityY(e\room\Objects[0], True), e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2) : TempInt2 = 0
@@ -4674,7 +4675,6 @@ Function UpdateEvents%()
 										RotateEntity(d\ElevatorPanel[1], EntityPitch(d\ElevatorPanel[1], True) + 45.0, EntityYaw(d\ElevatorPanel[1], True), EntityRoll(d\ElevatorPanel[1], True), True)
 										
 										TempInt2 = CreatePivot()
-										RotateEntity(TempInt2, 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 										PositionEntity(TempInt2, e\room\x + (iX * 2.0) + (CosValue * 552.0 * RoomScale), e\room\y + MTGridY + (240.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 552.0 * RoomScale))
 										If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 											If e\room\RoomDoors[1] <> Null
@@ -4685,6 +4685,7 @@ Function UpdateEvents%()
 											EndIf
 											If e\room\Objects[3] = 0
 												e\room\Objects[3] = TempInt2
+												RotateEntity(e\room\Objects[3], 0.0, EntityYaw(TempInt, True), 0.0, True)
 												PositionEntity(e\room\Objects[1], e\room\x + (iX * 2.0), EntityY(e\room\Objects[1], True), e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2) : TempInt2 = 0
@@ -4698,6 +4699,7 @@ Function UpdateEvents%()
 											EndIf
 											If e\room\Objects[5] = 0
 												e\room\Objects[5] = TempInt2
+												RotateEntity(e\room\Objects[5], 0.0, EntityYaw(TempInt, True) + 180.0, 0.0, True)
 												PositionEntity(e\room\Objects[0], e\room\x + (iX * 2.0), EntityY(e\room\Objects[0], True), e\room\z + (iY * 2.0), True)
 											Else
 												FreeEntity(TempInt2) : TempInt2 = 0

@@ -2364,15 +2364,16 @@ Function PlaceMapCreatorMT%(r.Rooms)
 						
 						Local TempInt2% = CreatePivot()
 						
-						RotateEntity(TempInt2, 0.0, EntityYaw(Tile_Entity, True) + 180.0, 0.0, True)
 						PositionEntity(TempInt2, r\x + (x * 2.0) + (CosValue * 552.0 * RoomScale), r\y + MTGridY + (240.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 552.0 * RoomScale))
 						If r\RoomDoors[1] = Null
 							r\RoomDoors[1] = d
 							r\Objects[3] = TempInt2
+							RotateEntity(r\Objects[3], 0.0, EntityYaw(Tile_Entity, True), 0.0, True)
 							PositionEntity(r\Objects[0], r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
 						ElseIf r\RoomDoors[1] <> Null And r\RoomDoors[3] = Null
 							r\RoomDoors[3] = d
 							r\Objects[5] = TempInt2
+							RotateEntity(r\Objects[5], 0.0, EntityYaw(Tile_Entity, True) + 180.0, 0.0, True)
 							PositionEntity(r\Objects[1], r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
 						EndIf
 						;[End Block]
@@ -3407,7 +3408,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								Dir = Dir + FirstPivotYaw - SecondPivotYaw
 								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-								RotateEntity(me\Collider, EntityPitch(me\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(me\Collider, True), FirstPivotYaw), EntityRoll(me\Collider, True), True)
+								RotateEntity(me\Collider, EntityPitch(me\Collider, True), FirstPivotYaw + AngleDist(EntityYaw(me\Collider, True), SecondPivotYaw), EntityRoll(me\Collider, True), True)
 							Else
 								x = Max(Min((PlayerX - SecondPivotX), Minus022), Plus022)
 								z = Max(Min((PlayerZ - SecondPivotZ), Minus022), Plus022)
@@ -3431,7 +3432,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dir = Dir + FirstPivotYaw - SecondPivotYaw
 									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-									RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
+									RotateEntity(n\Collider, EntityPitch(n\Collider, True), FirstPivotYaw + AngleDist(EntityYaw(n\Collider, True), SecondPivotYaw), EntityRoll(n\Collider, True), True)
 								Else
 									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
 									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
@@ -3449,7 +3450,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dir = Dir + FirstPivotYaw - SecondPivotYaw
 									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-									RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
+									RotateEntity(it\Collider, EntityPitch(it\Collider, True), FirstPivotYaw + AngleDist(EntityYaw(it\Collider, True), SecondPivotYaw), EntityRoll(it\Collider, True), True)
 								Else
 									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
 									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
@@ -3469,7 +3470,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dir = Dir + FirstPivotYaw - SecondPivotYaw
 									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
 									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
-									RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
+									RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), FirstPivotYaw + AngleDist(EntityYaw(de\OBJ, True), SecondPivotYaw), EntityRoll(de\OBJ, True), True)
 								Else
 									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
 									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
