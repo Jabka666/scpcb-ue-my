@@ -2281,10 +2281,7 @@ Function UpdateMT%(mt.MTGrid)
 	For tX = 0 To MTGridSize - 1
 		For tY = 0 To MTGridSize - 1
 			If mt\Entities[tX + (tY * MTGridSize)] <> 0
-				Local PlayerPosY# = EntityY(me\Collider, True)
-				Local TunnelPosY# = EntityY(mt\Entities[tX + (tY * MTGridSize)], True)
-				
-				If Abs(PlayerPosY - TunnelPosY) > 4.0 Then Exit
+				If Abs(EntityY(me\Collider, True) - EntityY(mt\Entities[tX + (tY * MTGridSize)], True)) > 4.0 Then Exit
 				
 				If DistanceSquared(EntityX(me\Collider, True), EntityX(mt\Entities[tX + (tY * MTGridSize)], True), EntityZ(me\Collider, True), EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)) < PowTwo(me\CameraFogDist * LightVolume * 1.2)
 					If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
