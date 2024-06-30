@@ -5326,7 +5326,7 @@ Function UpdateEvents%()
 						e\room\RoomDoors[1]\Locked = 0
 						e\room\RoomDoors[4]\Locked = 0
 						
-						If EntityDistanceSquared(e\room\OBJ, n_I\Curr173\Collider) < 64.0 Lor n_I\Curr106\State <= 0.0
+						If EntityDistanceSquared(e\room\OBJ, n_I\Curr173\Collider) < 64.0 Lor EntityDistanceSquared(e\room\OBJ, n_I\Curr106\Collider) < 64.0
 							e\room\RoomDoors[1]\Locked = 1
 							e\room\RoomDoors[1]\Open = False
 							e\room\RoomDoors[4]\Locked = 1
