@@ -1561,7 +1561,7 @@ Function UpdateForest%(fr.Forest)
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
 			If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0
-				If DistanceSquared(EntityX(me\Collider), EntityX(fr\TileEntities[tX + (tY * ForestGridSize)]), EntityZ(me\Collider), EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)])) < PowTwo(HideDistance)
+				If DistanceSquared(EntityX(me\Collider, True), EntityX(fr\TileEntities[tX + (tY * ForestGridSize)], True), EntityZ(me\Collider, True), EntityZ(fr\TileEntities[tX + (tY * ForestGridSize)], True)) < PowTwo(HideDistance)
 					If EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 				Else
 					If (Not EntityHidden(fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
