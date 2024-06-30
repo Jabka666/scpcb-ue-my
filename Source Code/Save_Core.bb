@@ -1120,6 +1120,7 @@ Function LoadGame%(File$)
 					For chp.ChunkPart = Each ChunkPart
 						RemoveChunkPart(chp)
 					Next
+					FreeEntity(I_1499\Sky) : I_1499\Sky = 0
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1
 							If n\InFacility = Floor1499 Then RemoveNPC(n)
@@ -1865,6 +1866,7 @@ Function LoadGameQuick%(File$)
 					For chp.ChunkPart = Each ChunkPart
 						RemoveChunkPart(chp)
 					Next
+					FreeEntity(I_1499\Sky) : I_1499\Sky = 0
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCType1499_1
 							If n\InFacility = Floor1499 Then RemoveNPC(n)
