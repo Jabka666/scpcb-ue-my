@@ -347,7 +347,7 @@ Function AmbientLightRooms%(R%, G%, B%)
 	SetBuffer(OldBuffer)
 End Function
 
-Const RoomScale# = 8.0 / 2048.0
+Const RoomScale# = 0.00390625 ; ~ 8.0 / 2048.0
 
 Type SoundEmitters
 	Field OBJ%
