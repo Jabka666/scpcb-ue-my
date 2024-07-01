@@ -72,6 +72,7 @@ Items:
 - SCP-268's timer last longer.
 - Very Fine Radio gives the code to Dr. Gears' instead of Dr. Maynard's.
 - Increased chances for 18V batteries to spawn.
+- Added Storage Transfers document to «room2_office_3».
 
 NPCs:
 - Can now detect SCP-1048 and SCP-1048-A using the blue variant of Night Vision Goggles.
@@ -108,12 +109,12 @@ Bug Fixes:
 - Fixed leaflet not being removed from inventory if it was inside clipboard.
 - Fixed NPCs gravity not updating after loading the game from main menu (and loading custom maps).
 - Fixed items animation not saving properly.
+- Fixed player rotation in the maintenance tunnel elevators.
 
 Known issues:
  - Cups crash the game sometimes.
  - Objects aren't properly hidden on new games.
  - SCP-500-01 may not spawn correctly in Maintenance tunnels.
- - Maintenance Tunnels elevator flips player around.
  - Surveillance room clips into closets room often.
 
 v1.2.1
