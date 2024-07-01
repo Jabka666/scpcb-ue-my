@@ -2185,7 +2185,6 @@ Function UpdateEvents%()
 								n_I\Curr049\State = 2.0 : n_I\Curr049\Idle = 1 : n_I\Curr049\HideFromNVG = True
 								PointEntity(n_I\Curr049\Collider, e\room\OBJ)
 								e\room\NPC[0] = n_I\Curr049
-								GiveAchievement("049")
 							EndIf
 							
 							e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
@@ -2258,6 +2257,7 @@ Function UpdateEvents%()
 									If i > 0
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 										ResetEntity(e\room\NPC[0]\Collider)
+										GiveAchievement("049")
 										PlaySound2(snd_I\ElevatorBeepSFX, Camera, e\room\Objects[i], 4.0)
 										e\room\RoomDoors[i]\Locked = 0
 										OpenCloseDoor(e\room\RoomDoors[i])
