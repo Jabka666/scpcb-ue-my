@@ -237,7 +237,7 @@ Function UpdateLights%(Cam%)
 								Local LightAdvancedSpriteHidden% = EntityHidden(l\AdvancedSprite)
 								
 								LightOBJHidden = EntityHidden(l\OBJ)
-								If Dist < 64.0
+								If Dist < 64.0 * LightVolume
 									EntityAutoFade(l\Sprite, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
 									
 									Local LightVisible% = EntityVisible(Cam, l\OBJ)
@@ -292,7 +292,7 @@ Function UpdateLights%(Cam%)
 							If UpdateLightsTimer = 0.0
 								LightOBJHidden = EntityHidden(l\OBJ)
 								
-								If EntityDistanceSquared(Cam, l\OBJ) < 64.0
+								If EntityDistanceSquared(Cam, l\OBJ) < 64.0 * LightVolume
 									If LightOBJHidden Then ShowEntity(l\OBJ)
 									If l\Flickers And Rand(13) = 1 And EntityVisible(Cam, l\OBJ)
 										If (Not LightOBJHidden) Then HideEntity(l\OBJ)
