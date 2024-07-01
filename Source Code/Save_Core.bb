@@ -273,11 +273,7 @@ Function SaveGame%(File$)
 		WriteByte(f, r\Found)
 		WriteInt(f, r\Zone)
 		
-		If PlayerRoom = r
-			WriteByte(f, 1)
-		Else
-			WriteByte(f, 0)
-		EndIf
+		WriteByte(f, PlayerRoom = r)
 		
 		For i = 0 To MaxRoomNPCs - 1
 			If r\NPC[i] = Null
