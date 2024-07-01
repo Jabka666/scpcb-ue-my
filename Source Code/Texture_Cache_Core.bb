@@ -27,6 +27,7 @@ Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = De
 	Next
 	
 	Local CurrPath$ = TexName
+	
 	tic.TextureInCache = New TextureInCache
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
@@ -51,6 +52,7 @@ Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Heig
 	Next
 	
 	Local CurrPath$ = TexName
+	
 	tic.TextureInCache = New TextureInCache
 	tic\TexName = StripPath(TexName)
 	tic\TexDeleteType = DeleteType
@@ -139,7 +141,9 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 ; ~ If not, check the MapTexturesFolder
 		Name = MapTexturesFolder + StripPath(TextureName(Tex))
 	EndIf
+	
 	Local Texture% = LoadTextureCheckingIfInCache(Name, TexFlags)
+	
 	If Texture <> 0
 		If ((TexFlags Shr 1) Mod 2) = 0
 			TextureBlend(Texture, 5)

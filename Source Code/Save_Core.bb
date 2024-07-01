@@ -162,6 +162,7 @@ Function SaveGame%(File$)
 	
 	For i = 0 To ArraySize - 1
 		Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+		
 		If S2IMapContains(UnlockedAchievements, ID) Then WriteString(f, ID)
 	Next
 	WriteString(f, "EOA") ; ~ End of achievements
@@ -662,6 +663,7 @@ Function LoadGame%(File$)
 
 	Repeat
 		Local Achv$ = ReadString(f)
+		
 		If Achv = "EOA" Then Exit
 		S2IMapSet(UnlockedAchievements, Achv, True)
 	Forever
@@ -1508,6 +1510,7 @@ Function LoadGameQuick%(File$)
 	ClearS2IMap(UnlockedAchievements)
 	Repeat
 		Local Achv$ = ReadString(f)
+		
 		If Achv = "EOA" Then Exit
 		S2IMapSet(UnlockedAchievements, Achv, True)
 	Forever
