@@ -904,7 +904,12 @@ Function LoadGame%(File$)
 			DestroyForest(r\fr)
 			Delete(r\fr)
 		EndIf
-		If r\x = r1499_x And r\z = r1499_z Then I_1499\PrevRoom = r
+	Next
+	For r.Rooms = Each Rooms
+		If r\x = r1499_x And r\z = r1499_z
+			I_1499\PrevRoom = r
+			Exit
+		EndIf
 	Next
 	
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
@@ -1108,7 +1113,8 @@ Function LoadGame%(File$)
 		Next
 		e\EventStr = ReadString(f)
 		FindForestEvent(e)
-		
+	Next
+	For e.Events = Each Events
 		Select e\EventID
 			Case e_dimension_1499
 				;[Block]
@@ -1718,9 +1724,13 @@ Function LoadGameQuick%(File$)
 			DestroyForest(r\fr)
 			Delete(r\fr)
 		EndIf
-		If r\x = r1499_x And r\z = r1499_z Then I_1499\PrevRoom = r
 	Next
-	
+	For r.Rooms = Each Rooms
+		If r\x = r1499_x And r\z = r1499_z
+			I_1499\PrevRoom = r
+			Exit
+		EndIf
+	Next
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Temp = ReadInt(f)
@@ -1845,7 +1855,8 @@ Function LoadGameQuick%(File$)
 		Next
 		e\EventStr = ReadString(f)
 		FindForestEvent(e)
-		
+	Next
+	For e.Events = Each Events
 		Select e\EventID
 			Case e_cont1_173
 				;[Block]
@@ -1858,7 +1869,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case e_dimension_1499
 				;[Block]
-				If e\EventState > 0.0
+				If e\EventState = 1.0
 					HideChunks()
 					For ch.Chunk = Each Chunk
 						RemoveChunk(ch)
