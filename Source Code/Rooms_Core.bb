@@ -488,7 +488,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-205", it_paper, r\x - 357.0 * RoomScale, r\y + 70.0 * RoomScale, r\z + 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x + 206.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 80.0 * RoomScale)
+			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x + 206.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 80.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 206.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 180.0 * RoomScale)
@@ -497,7 +497,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x + 745.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 60.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 3 Key Card", it_key3, r\x - 975.0 * RoomScale, r\y - 10.0 * RoomScale, r\z + 650.0 * RoomScale)
+			it.Items = CreateItem("Level 3 Key Card", it_key3, r\x - 975.0 * RoomScale, r\y - 15.0 * RoomScale, r\z + 650.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x + 188.0 * RoomScale, r\z - 724.0 * RoomScale)
@@ -632,7 +632,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			If Rand(2) = 1
-				it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 490.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + -232.0 * RoomScale)
+				it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 490.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + -232.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
@@ -793,14 +793,14 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_WATER, r\x + 103.0 * RoomScale, r\y + 0.005, r\z + 161.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.8, 1.0), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			it.Items = CreateItem("Level 1 Key Card", it_key1, r\x + 1715.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 718.0 * RoomScale)
+			it.Items = CreateItem("Level 1 Key Card", it_key1, r\x + 1715.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 718.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Origami", it_origami, r\x + 1467.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 961.0 * RoomScale)
+			it.Items = CreateItem("Origami", it_origami, r\x + 1467.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 961.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateRandomBattery(r\x + 1714.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 936.0 * RoomScale)
+			it.Items = CreateRandomBattery(r\x + 1714.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 936.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_sl
@@ -1323,7 +1323,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("SCP-860", it_scp860, r\x + 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z + 765.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-427", it_paper, r\x - 608.0 * RoomScale, r\y + 185.0 * RoomScale, r\z + 636.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-427", it_paper, r\x - 608.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 636.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-714", it_paper, r\x - 728.0 * RoomScale, r\y + 290.0 * RoomScale, r\z - 360.0 * RoomScale)
@@ -2192,7 +2192,7 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			it.Items = CreateItem("Scorched Note", it_paper, r\x + 64.0 * RoomScale, r\y + 144.0 * RoomScale, r\z - 384.0 * RoomScale)
+			it.Items = CreateItem("Scorched Note", it_paper, r\x + 64.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 384.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 656.0 * RoomScale)
