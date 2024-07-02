@@ -2006,7 +2006,7 @@ Function UpdateEvents%()
 								If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Music\012Golgotha.ogg")
 								e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[0])
 								
-								e\EventState = CurveValue(90.0, e\EventState, 500)
+								e\EventState = CurveValue(90.0, e\EventState, 500.0)
 								PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), (-130.0 - (448.0 * Sin(e\EventState))) * RoomScale, EntityZ(e\room\Objects[0], True), True)
 								
 								RotateEntity(e\room\RoomLevers[0]\OBJ, CurveAngle(-80.0, EntityPitch(e\room\RoomLevers[0]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
@@ -2612,7 +2612,7 @@ Function UpdateEvents%()
 					If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
 						If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 0.81 Lor e\EventState > 0.0
 							If e\EventState = 0.0 Then me\BlurTimer = 1000.0 - (200.0 * (I_714\Using = 1))
-							me\CameraShake = 1.0  - (0.5 * (I_714\Using = 1))
+							me\CameraShake = 1.0 - (0.5 * (I_714\Using = 1))
 							If e\Sound2 = 0 Then e\Sound2 = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
 							e\SoundCHN2 = LoopSound2(e\Sound2, e\SoundCHN2, Camera, me\Collider, 4.0, 4.0)
 						EndIf
