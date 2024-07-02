@@ -113,8 +113,6 @@ Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
 	FreeImage(ScratchImage) : ScratchImage = 0
 	; ~ Free the source image
 	FreeImage(SrcImage) : SrcImage = 0
-	SrcWidth = 0 : SrcHeight = 0
-	DestWidth = 0 : DestHeight = 0
 	
 	; ~ Return the new image
 	Return(DestImage)
@@ -152,30 +150,41 @@ Function RenderGamma%()
 	
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
+	Local RenderScale#
+	Local Ratio#
+	
 	If opt\ScreenGamma > 1.0
+		RenderScale = 1.0 / RealGraphicWidthFloat
+		Ratio = SMALLEST_POWER_TWO / RealGraphicWidthFloat
+		
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
-		ScaleRender((-1.0) / RealGraphicWidthFloat, 1.0 / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat)
+		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 3)
 		EntityAlpha(FresizeImage, opt\ScreenGamma - 1.0)
-		ScaleRender((-1.0) / RealGraphicWidthFloat, 1.0 / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat)
+		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
 	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
+		RenderScale = 1.0 / RealGraphicWidthFloat
+		Ratio = SMALLEST_POWER_TWO / RealGraphicWidthFloat
+		
+		Local Gamma% = 255 * opt\ScreenGamma
+		
 		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
-		ScaleRender((-1.0) / RealGraphicWidthFloat, 1.0 / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat)
+		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 2)
 		EntityAlpha(FresizeImage, 1.0)
 		SetBuffer(TextureBuffer(FresizeTexture2))
-		ClsColor(255 * opt\ScreenGamma, 255 * opt\ScreenGamma, 255 * opt\ScreenGamma)
+		ClsColor(Gamma, Gamma, Gamma)
 		Cls()
 		SetBuffer(BackBuffer())
-		ScaleRender((-1.0) / RealGraphicWidthFloat, 1.0 / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicWidthFloat)
+		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
 		SetBuffer(TextureBuffer(FresizeTexture2))
 		ClsColor(0, 0, 0)
 		Cls()
