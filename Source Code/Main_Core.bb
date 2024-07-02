@@ -2308,7 +2308,7 @@ Function RenderMessages%()
 		Else
 			PosY = opt\GraphicHeight * 0.94
 		EndIf
-		TextEx(mo\Viewport_Center_X, PosY, msg\Txt, True)
+		TextEx(mo\Viewport_Center_X + ((me\Sanity < -200.0) * Rand(-10, 10) * MenuScale), PosY + ((me\Sanity < -200.0) * Rand(-10, 10) * MenuScale), msg\Txt, True)
 	EndIf
 	Color(255, 255, 255)
 	If opt\ShowFPS
