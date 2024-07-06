@@ -613,7 +613,6 @@ Const MONITOR_895_OVERLAY_2% = 13
 Const MONITOR_895_OVERLAY_3% = 14
 Const MONITOR_895_OVERLAY_4% = 15
 Const MONITOR_895_OVERLAY_5% = 16
-Const MONITOR_895_OVERLAY_6% = 17
 ;[End Block]
 
 Function LoadMonitors%()
@@ -642,7 +641,7 @@ Function LoadMonitors%()
 		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_079_overlay(" + (i - 4) + ").png", 1, DeleteAllTextures, False)
 	Next
 	
-	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_6
+	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_5
 		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - 11) + ").png", 1, DeleteAllTextures, False)
 	Next
 End Function
@@ -660,7 +659,7 @@ Function RemoveMonitorInstances%()
 	For i = MONITOR_079_OVERLAY_1 To MONITOR_079_OVERLAY_7
 		mon_I\MonitorOverlayID[i] = 0
 	Next
-	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_6
+	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_5
 		mon_I\MonitorOverlayID[i] = 0
 	Next
 	Delete Each MonitorInstance
