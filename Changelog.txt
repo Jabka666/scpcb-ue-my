@@ -74,6 +74,8 @@ Items:
 - Very Fine Radio gives the code to Dr. Gears' instead of Dr. Maynard's.
 - Increased chances for 18V batteries to spawn.
 - Added Storage Transfers document to «room2_office_3».
+- Fine Eyedrops no longer heal 1% bloodloss.
+- Redvision Eyedrops heal 5% - 10% bloodloss.
 
 NPCs:
 - Can now detect SCP-1048 and SCP-1048-A using the blue variant of Night Vision Goggles.
