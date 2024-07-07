@@ -34,57 +34,56 @@ Const e_cont2_1123% = 15
 Const e_cont2c_066_1162_arc% = 16
 Const e_room3_storage% = 17
 Const e_cont3_372% = 18
-Const e_room4_lcz_049% = 19
-Const e_room4_ic% = 20
+Const e_room4_ic% = 19
 ; ~ HCZ
-Const e_cont1_035% = 21
-Const e_cont1_079% = 22
-Const e_cont1_106% = 23
-Const e_cont1_895% = 24
-Const e_room2_2_hcz_106% = 25
-Const e_room2_4_hcz_106% = 26
-Const e_room2_5_hcz_106% = 27
-Const e_room2_6_hcz_smoke% = 28, e_room2_6_hcz_173% = 29
-Const e_room2_mt% = 30
-Const e_room2_nuke% = 31
-Const e_room2_servers_hcz% = 32
-Const e_room2_shaft% = 33
-Const e_room2_test_hcz% = 34
-Const e_cont2_008% = 35
-Const e_cont2_049% = 36
-Const e_cont2_409% = 37
-Const e_room3_hcz_duck% = 38, e_room3_hcz_1048% = 39
-Const e_room3_2_hcz_guard% = 40
-Const e_cont3_966% = 41
-Const e_room4_2_hcz_d% = 42
+Const e_cont1_035% = 20
+Const e_cont1_079% = 21
+Const e_cont1_106% = 22
+Const e_cont1_895% = 23
+Const e_room2_2_hcz_106% = 24
+Const e_room2_4_hcz_106% = 25
+Const e_room2_5_hcz_106% = 26
+Const e_room2_6_hcz_smoke% = 27, e_room2_6_hcz_173% = 28
+Const e_room2_mt% = 29
+Const e_room2_nuke% = 30
+Const e_room2_servers_hcz% = 31
+Const e_room2_shaft% = 32
+Const e_room2_test_hcz% = 33
+Const e_cont2_008% = 34
+Const e_cont2_049% = 35
+Const e_cont2_409% = 36
+Const e_room3_hcz_duck% = 37, e_room3_hcz_1048% = 38
+Const e_room3_2_hcz_guard% = 39
+Const e_cont3_966% = 40
+Const e_room4_2_hcz_d% = 41
 ; ~ EZ
-Const e_gate_b_entrance% = 43, e_gate_b% = 44
-Const e_gate_a_entrance% = 45, e_gate_a% = 46
-Const e_room1_dead_end_guard% = 47
-Const e_room2_ez_035% = 48
-Const e_room2_2_ez_duck% = 49
-Const e_room2_6_ez_789_j% = 50, e_room2_6_ez_guard% = 51
-Const e_room2_cafeteria% = 52
-Const e_room2_ic% = 53
-Const e_room2_medibay% = 54
-Const e_room2_scientists_2% = 55
-Const e_cont2_860_1% = 56
-Const e_room2c_ec% = 57
-Const e_room2c_gw_ez_096% = 58
-Const e_room3_2_ez_duck% = 59
+Const e_gate_b_entrance% = 42, e_gate_b% = 43
+Const e_gate_a_entrance% = 44, e_gate_a% = 45
+Const e_room1_dead_end_guard% = 46
+Const e_room2_ez_035% = 47
+Const e_room2_2_ez_duck% = 48
+Const e_room2_6_ez_789_j% = 49, e_room2_6_ez_guard% = 50
+Const e_room2_cafeteria% = 51
+Const e_room2_ic% = 52
+Const e_room2_medibay% = 53
+Const e_room2_scientists_2% = 54
+Const e_cont2_860_1% = 55
+Const e_room2c_ec% = 56
+Const e_room2c_gw_ez_096% = 57
+Const e_room3_2_ez_duck% = 58
 ; ~ OTHERS
-Const e_096_spawn% = 60
-Const e_106_victim% = 61
-Const e_106_sinkhole% = 62
-Const e_173_appearing% = 63
-Const e_682_roar% = 64
-Const e_1048_a% = 65
-Const e_checkpoint% = 66
-Const e_door_closing% = 67
-Const e_gateway% = 68
-Const e_tesla% = 69
-Const e_trick% = 70
-Const e_dimension_106% = 71, e_dimension_1499% = 72
+Const e_096_spawn% = 59
+Const e_106_victim% = 60
+Const e_106_sinkhole% = 61
+Const e_173_appearing% = 62
+Const e_682_roar% = 63
+Const e_1048_a% = 64
+Const e_checkpoint% = 65
+Const e_door_closing% = 66
+Const e_gateway% = 67
+Const e_tesla% = 68
+Const e_trick% = 69
+Const e_dimension_106% = 70, e_dimension_1499% = 71
 ;[End Block]
 
 ; ~ For Map Creator
@@ -165,10 +164,6 @@ Function FindEventID%(EventName$)
 		Case "cont3_372"
 			;[Block]
 			Return(e_cont3_372)
-			;[End Block]
-		Case "room4_lcz_049"
-			;[Block]
-			Return(e_room4_lcz_049)
 			;[End Block]
 		Case "room4_ic"
 			;[Block]
@@ -5840,24 +5835,6 @@ Function UpdateEvents%()
 					EndIf
 				EndIf
 				;[End Block]
-			Case e_room4_lcz_049
-				;[Block]
-				If e\EventState < MilliSecs()
-					If PlayerRoom <> e\room
-						If e\room\Dist < 8.0
-							If n_I\Curr049 <> Null
-								If n_I\Curr049\State = 2.0 And EntityDistanceSquared(me\Collider, n_I\Curr049\Collider) > 256.0
-									n_I\Curr049\PathStatus = PATH_STATUS_NO_SEARCH : n_I\Curr049\State = 4.0 : n_I\Curr049\State2 = 0.0 : n_I\Curr049\State3 = 0.0
-									TFormPoint(368.0, 528.0, 176.0, e\room\OBJ, 0)
-									TeleportEntity(n_I\Curr049\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr049\CollRadius, True)
-									RemoveEvent(e)
-								EndIf
-							EndIf
-						EndIf
-					EndIf
-					If e <> Null Then e\EventState = MilliSecs() + 5000
-				EndIf
-				;[End Block]
 			Case e_cont1_035
 				;[Block]
 				If PlayerRoom = e\room
@@ -6838,7 +6815,7 @@ Function UpdateEvents%()
 						e\room\NPC[0]\HideFromNVG = False
 						e\room\NPC[0]\EnemyX = EntityX(me\Collider)
 						e\room\NPC[0]\EnemyZ = EntityZ(me\Collider)
-						e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\PrevState = 2
+						e\room\NPC[0]\State = 4.0 : e\room\NPC[0]\PrevState = 2
 						
 						e\EventState2 = 1.0
 					ElseIf e\EventState2 = 1.0
@@ -6866,9 +6843,9 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 						
-						If e\room\NPC[0]\State <> 5.0 Then e\EventState2 = 7.0
+						If e\room\NPC[0]\State <> 4.0 Then e\EventState2 = 7.0
 					ElseIf e\EventState2 = 3.0
-						If e\room\NPC[0]\State <> 5.0 Then e\EventState2 = 7.0
+						If e\room\NPC[0]\State <> 4.0 Then e\EventState2 = 7.0
 						
 						If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState + me\SndVolume, 60.0, True) = 2 Then e\EventState2 = 4.0
 						
@@ -6931,7 +6908,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					ElseIf e\EventState2 = 4.0
-						If e\room\NPC[0]\State <> 5.0
+						If e\room\NPC[0]\State <> 4.0
 							e\EventState2 = 7.0
 							e\room\NPC[0]\State3 = 6.0
 						EndIf

@@ -1863,31 +1863,7 @@ Function UpdateNPCs%()
 							PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(me\Collider) - 180.0, EntityYaw(n\Collider), 40.0), 0.0)
 							;[End Block]
-						Case 4.0 ; ~ Standing on catwalk
-							;[Block]
-							If Dist < 64.0
-								PointEntity(n\Collider, me\Collider)
-								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-								AnimateNPC(n, 18.0, 19.0, 0.05)
-								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-								
-								n\State3 = 1.0
-							ElseIf Dist > PowTwo(HideDistance * 0.8) And n\State3 > 0.0
-								For r.Rooms = Each Rooms
-									If EntityDistanceSquared(r\OBJ, n\Collider) < 16.0
-										If r\RoomCenter <> 0
-											TeleportEntity(n\Collider, EntityX(r\RoomCenter, True), EntityY(r\OBJ) + 0.5, EntityZ(r\RoomCenter, True), n\CollRadius, True)
-										Else
-											TeleportEntity(n\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.5, EntityZ(r\OBJ), n\CollRadius, True)
-										EndIf
-										Exit
-									EndIf
-								Next
-								n\State3 = 0.0
-								n\State = 2.0
-							EndIf
-							;[End Block]
-						Case 5.0 ; ~ Going to surveillance room
+						Case 4.0 ; ~ Going to surveillance room
 							;[Block]
 							PlayerSeeAble = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, 60.0, True)
 							If PlayerSeeAble = 1

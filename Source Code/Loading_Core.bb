@@ -1761,8 +1761,6 @@ Function LoadEvents%()
 	; ~ The dead guard
 	CreateEvent(e_room3_2_hcz_guard, r_room3_2_hcz, 0, 0.1)
 	
-	CreateEvent(e_room4_lcz_049, r_room4_lcz, 0)
-	
 	If Rand(5) < 5
 		Select Rand(4)
 			Case 1
