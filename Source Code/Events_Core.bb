@@ -859,16 +859,11 @@ Function UpdateEvents%()
 						If i = 0 Then PlayAnnouncement("SFX\Room\Intro\IA\Scripted\Scripted5.ogg")
 						If i > 0 And i < 26
 							If (Not CommotionState[i]) ; ~ Prevents the same commotion file from playing more then once
-								PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Commotion\Commotion" + (i + 1) + ".ogg"))
+								PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Commotion\Commotion" + (i - 1) + ".ogg"))
 								CommotionState[i] = True
 							EndIf
 						EndIf
-						
-						If i > 26 
-							RemoveNPC(e\room\NPC[0])
-							
-							RemoveEvent(e)
-						EndIf
+						If i > 26 Then RemoveEvent(e)
 					EndIf
 				EndIf
 				;[End Block]
