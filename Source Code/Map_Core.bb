@@ -770,29 +770,31 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					;[End Block]
 				Case "model"
 					;[Block]
-					tp.TempProps = New TempProps
-					tp\RoomTemplate = rt
-					
+;					tp.TempProps = New TempProps
+;					tp\RoomTemplate = rt
+;					
 					Temp2s = ReadString(f)
 					; ~ A hacky way to use .b3d format
 					If FileExtension(Temp2s) = "x" Then Temp2s = Left(Temp2s, Len(Temp2s) - 1) + "b3d"
-					tp\Name = "GFX\Map\Props\" + Temp2s
-					
-					tp\x = ReadFloat(f) * RoomScale
-					tp\y = ReadFloat(f) * RoomScale
-					tp\z = ReadFloat(f) * RoomScale
-					
-					tp\Pitch = ReadFloat(f)
-					tp\Yaw = ReadFloat(f)
-					tp\Roll = ReadFloat(f)
-					
-					tp\ScaleX = ReadFloat(f)
-					tp\ScaleY = ReadFloat(f)
-					tp\ScaleZ = ReadFloat(f)
-					
-					tp\HasCollision = True
-					tp\FX = 0
-					tp\Texture = ""
+;					tp\Name = "GFX\Map\Props\" + Temp2s
+;
+					RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), rt\Name, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
+;					
+;					tp\x = ReadFloat(f) * RoomScale
+;					tp\y = ReadFloat(f) * RoomScale
+;					tp\z = ReadFloat(f) * RoomScale
+;					
+;					tp\Pitch = ReadFloat(f)
+;					tp\Yaw = ReadFloat(f)
+;					tp\Roll = ReadFloat(f)
+;					
+;					tp\ScaleX = ReadFloat(f)
+;					tp\ScaleY = ReadFloat(f)
+;					tp\ScaleZ = ReadFloat(f)
+;					
+;					tp\HasCollision = True
+;					tp\FX = 0
+;					tp\Texture = ""
 					;[End Block]
 				Case "mesh"
 					;[Block]
