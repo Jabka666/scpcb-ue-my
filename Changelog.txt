@@ -18,6 +18,7 @@ General:
 
 Launcher:
 - Default Display Mode is now Borderless.
+- Removed the 32-bit indicator.
 
 Menu:
 - Moved Mouse Smoothing beneath Mouse Sensitivity.
