@@ -4830,7 +4830,7 @@ Function UpdateGUI%()
 									EndIf
 								EndIf
 								Temp = JsonGetValue(Drink, "blur")
-								If (Not JsonIsNull(Temp)) Then me\BlurTimer = Max(me\BlurTimer + JsonGetFloat(Temp), 0.0)
+								If (Not JsonIsNull(Temp)) Then me\BlurTimer = Max(me\BlurTimer + (JsonGetFloat(Temp) * 70.0), 0.0)
 								Temp = JsonGetValue(Drink, "camera_shake")
 								If (Not JsonIsNull(Temp)) Then me\CameraShakeTimer = Max(me\CameraShakeTimer + JsonGetFloat(Temp), 0.0)
 								Temp = JsonGetValue(Drink, "deaf_timer")
@@ -4878,9 +4878,10 @@ Function UpdateGUI%()
 								
 								Temp = JsonGetValue(Drink, "death_timer")
 								If (Not JsonIsNull(Temp))
-									If (Not JsonIsNull(Temp)) Then msg\DeathMsg = JsonGetString(Temp)
-									
 									Local DeathTimer1% = JsonGetFloat(Temp)
+									
+									Temp = JsonGetValue(Drink, "death_message")
+									If (Not JsonIsNull(Temp)) Then msg\DeathMsg = JsonGetString(Temp)
 									
 									If DeathTimer1 = 0.0
 										Kill()
