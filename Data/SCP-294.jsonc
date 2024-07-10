@@ -433,7 +433,7 @@
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg"
 	},
 	{
-		"name": ["Chocolate Pudding", "Cocoa", "Hot Chocolate", "Hot Cocoa", "Alpen Gold Chocolate", "Alpengold Chocolate", "Black Chocolate", "Cocoa Milk", "Cocoa With Milk", "Bitter Chocolate", "Babayevskiy Chocolate"],
+		"name": ["Chocolate Pudding", "Cocoa", "Chocolate", "Hot Chocolate", "Hot Cocoa", "Alpen Gold Chocolate", "Alpengold Chocolate", "Black Chocolate", "Cocoa Milk", "Cocoa With Milk", "Bitter Chocolate", "Babayevskiy Chocolate"],
 		"color": [170, 75, 0],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
