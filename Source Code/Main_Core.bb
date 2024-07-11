@@ -3080,7 +3080,6 @@ Function UpdateZoneColor%()
 				ElseIf e\EventState2 = PD_FakeTunnelRoom
 					SetZoneColor(FogColorHCZ, AmbientColorHCZ)
 				Else
-					If e\EventState2 = PD_Labyrinth Then me\CameraFogDist = 3.5
 					SetZoneColor(FogColorPD)
 				EndIf
 				Exit

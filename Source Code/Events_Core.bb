@@ -7294,9 +7294,9 @@ Function UpdateDimension106%()
 				If e\EventState2 <> PD_FakeTunnelRoom
 					ShouldPlay = 3
 					
-					InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
+					me\CameraFogDist = 6.0
 					
-					If e\EventState = 0.0 Then e\EventState = 0.1
+					InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
 					
 					e\EventState = e\EventState + fps\Factor[0]
 					
@@ -7617,6 +7617,14 @@ Function UpdateDimension106%()
 												EndIf
 											Next
 											
+											If wi\NightVision > 0
+												me\CameraFogDist = 17.0
+											ElseIf wi\SCRAMBLE > 0
+												me\CameraFogDist = 9.0
+											Else
+												me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
+											EndIf
+											
 											me\Playable = True
 											
 											If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
@@ -7731,6 +7739,8 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_Labyrinth
 						;[Block]
+						me\CameraFogDist = 3.5
+						
 						UpdateDoors()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
@@ -7744,13 +7754,6 @@ Function UpdateDimension106%()
 									d\OpenState = 0.0
 								EndIf
 							Next
-							If wi\NightVision > 0
-								me\CameraFogDist = 17.0
-							ElseIf wi\SCRAMBLE > 0
-								me\CameraFogDist = 9.0
-							Else
-								me\CameraFogDist = 6.0
-							EndIf
 							Random = 13
 							Teleport = True
 						EndIf
@@ -7873,6 +7876,14 @@ Function UpdateDimension106%()
 												Exit
 											EndIf
 										Next
+									EndIf
+									
+									If wi\NightVision > 0
+										me\CameraFogDist = 17.0
+									ElseIf wi\SCRAMBLE > 0
+										me\CameraFogDist = 9.0
+									Else
+										me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 									EndIf
 									
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
