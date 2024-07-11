@@ -3357,6 +3357,12 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Sticky Note", it_paper, r\x - 991.0 * RoomScale, r\y - 242.0 * RoomScale, r\z + 904.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x - 1507.0 * RoomScale, r\y - 221.0 * RoomScale, r\z - 508.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x - 530.0 * RoomScale, r\y - 221.0 * RoomScale, r\z + 943.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_office_2
 			;[Block]
@@ -3372,11 +3378,16 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 30.0
 			
-			it.Items = CreateRandomBattery(r\x + 360.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+			it.Items = CreateRandomBattery(r\x + 574.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If Rand(2) = 1
-				it.Items = CreateRandomBattery(r\x + 435.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+				it.Items = CreateRandomBattery(r\x + 424.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(3) = 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 546.0 * RoomScale, r\y + 162.0 * RoomScale, r\z - 959.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
@@ -3784,6 +3795,19 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
+			
+			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 957.0 * RoomScale, r\y + 220.0 * RoomScale, r\z + 659.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If Rand(2) = 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 957.0 * RoomScale, r\y + 157.0 * RoomScale, r\z + 885.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(2) = 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 307.0 * RoomScale, r\y + 140.0 * RoomScale, r\z + 811.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			
 			de.Decals = CreateDecal(DECAL_WATER, r\x + 236.0 * RoomScale, r\y + 0.005, r\z - 68.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
