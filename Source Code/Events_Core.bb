@@ -3770,7 +3770,7 @@ Function UpdateEvents%()
 				EndIf
 				
 				If PlayerRoom = e\room
-					If y2 > 6.0
+					If EntityY(me\Collider, True) > 6.0
 						InFacility = LowerFloor
 						
 						e\EventState = UpdateLever(e\room\RoomLevers[0]\OBJ)
