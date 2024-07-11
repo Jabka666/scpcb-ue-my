@@ -399,7 +399,6 @@ Function UpdateGame%()
 				UpdateScreens()
 				UpdateSoundEmitters()
 				If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-					UpdateRooms()
 					UpdateIntro()
 				ElseIf IsPlayerOutsideFacility()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
@@ -3061,15 +3060,11 @@ Function UpdateZoneColor%()
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
-	ElseIf IsPlayerOutsideFacility()
+	ElseIf IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 		SetZoneColor(FogColorOutside)
 		me\CameraFogDist = 60.0
 		CameraFogRange(Camera, 5.0, 60.0)
 		CameraRange(Camera, 0.01, 72.0)
-	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-		me\CameraFogDist = 45.0
-		CameraFogRange(Camera, 5.0, 45.0)
-		CameraRange(Camera, 0.01, 54.0)
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
 		me\CameraFogDist = 80.0
@@ -3146,9 +3141,7 @@ Function UpdateZoneColor%()
 	Else
 		AmbientLightRooms(CurrAmbientColorR / 5.0, CurrAmbientColorG / 5.0, CurrAmbientColorB / 5.0)
 		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
-		If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-			CurrR = CurrAmbientColorR * 1.5 : CurrG = CurrAmbientColorG * 1.5 : CurrB = CurrAmbientColorB * 1.5
-		ElseIf forest_event <> Null
+		If forest_event <> Null
 			If PlayerRoom = forest_event\room
 				If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
 			EndIf

@@ -8257,13 +8257,6 @@ Function UpdateIntro%()
 			; ~ e\EventState3 = Timer in chamber location
 			
 			If PlayerRoom = e\room
-				For r.Rooms = Each Rooms
-					HideRoomsNoColl(r)
-				Next
-				ShowRoomsNoColl(e\room)
-				
-				CanSave = 1
-				
 				If e\EventState = 0.0
 					For i = 0 To 1
 						snd_I\IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Ew" + i + ".ogg")
@@ -8401,6 +8394,13 @@ Function UpdateIntro%()
 					
 					e\EventState = INTRO_IN_CELL
 				Else
+					For r.Rooms = Each Rooms
+						HideRoomsNoColl(r)
+					Next
+					ShowRoomsNoColl(e\room)
+					
+					CanSave = 1
+					
 					If e\EventState < INTRO_IN_CHAMBER
 						ShouldPlay = 13
 					Else
