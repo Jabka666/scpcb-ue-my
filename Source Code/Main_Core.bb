@@ -4333,7 +4333,7 @@ Function UpdateGUI%()
 							
 							If wi\NightVision > 0
 								CreateMsg(GetLocalString("msg", "nvg.off"))
-								me\CameraFogDist = 6.0
+								me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 								wi\NightVision = 0
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(snd_I\NVGSFX[1])
 							Else
@@ -4383,7 +4383,7 @@ Function UpdateGUI%()
 							
 							If wi\SCRAMBLE > 0
 								CreateMsg(GetLocalString("msg", "gear.off"))
-								me\CameraFogDist = 6.0
+								me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 								wi\SCRAMBLE = 0
 							Else
 								CreateMsg(GetLocalString("msg", "gear.on"))
@@ -4525,8 +4525,8 @@ Function UpdateGUI%()
 							DropItem(SelectedItem)
 						Else
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-							If wi\NightVision > 0 Then me\CameraFogDist = 6.0 : wi\NightVision = 0
-							If wi\SCRAMBLE > 0 Then me\CameraFogDist = 6.0 : wi\SCRAMBLE = 0
+							If wi\NightVision > 0 Then me\CameraFogDist = 6.0 - (2.0 * IsBlackOut) : wi\NightVision = 0
+							If wi\SCRAMBLE > 0 Then me\CameraFogDist = 6.0 - (2.0 * IsBlackOut): wi\SCRAMBLE = 0
 							wi\GasMask = 0 : wi\BallisticHelmet = False
 							I_427\Using = False : I_1499\Using = 0
 							I_268\Using = 0
@@ -9378,7 +9378,7 @@ Function UpdateLeave1499%()
 					EndIf
 				Next
 				r1499 = Null
-				me\CameraFogDist = 6.0
+				me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Exit.ogg"))
 				I_1499\PrevX = 0.0
 				I_1499\PrevY = 0.0

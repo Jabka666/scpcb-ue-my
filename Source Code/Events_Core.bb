@@ -2208,6 +2208,7 @@ Function UpdateEvents%()
 							EndIf
 							
 							If e\EventState >= 70.0
+								If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 								If x2
 									ShouldPlay = 8
 									IsBlackOut = False
@@ -3576,6 +3577,7 @@ Function UpdateEvents%()
 					e\EventState2 = UpdateLever(e\room\RoomLevers[1]\OBJ)
 					If (PrevState2 <> e\EventState2) And e\EventState > 0.0 Then PlaySound2(snd_I\LightOffSFX, Camera, e\room\RoomLevers[1]\OBJ)
 					IsBlackOut = (e\EventState2 = 0.0)
+					If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 					
 					If e\EventState = 0.0
 						If Rand(200) = 1
