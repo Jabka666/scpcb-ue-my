@@ -3606,7 +3606,7 @@ Function UpdateEvents%()
 								Select e\room\RoomTemplate\RoomID
 									Case r_room2_4_lcz, r_room2_4_hcz
 										;[Block]
-										TFormPoint(640.0, 100.0, 896.0, e\room\OBJ, 0)
+										TFormPoint(640.0, 100.0, -896.0, e\room\OBJ, 0)
 										;[End Block]
 									Case r_room2_6_lcz
 										;[Block]
