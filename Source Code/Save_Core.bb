@@ -1274,7 +1274,7 @@ Function LoadGame%(File$)
 	ElseIf wi\SCRAMBLE > 0
 		me\CameraFogDist = 9.0
 	Else
-		me\CameraFogDist = 6.0
+		me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 	EndIf
 	
 	For i = 0 To 1
@@ -2048,7 +2048,7 @@ Function LoadGameQuick%(File$)
 	ElseIf wi\SCRAMBLE > 0
 		me\CameraFogDist = 9.0
 	Else
-		me\CameraFogDist = 6.0
+		me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 	EndIf
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)
