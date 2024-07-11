@@ -6189,6 +6189,7 @@ Function RenderGUI%()
 			EndIf
 			If OtherOpen\SecondInv[n] <> Null And SelectedItem <> OtherOpen\SecondInv[n]
 				If IsMouseOn = n
+					SetFontEx(fo\FontID[Font_Default])
 					Color(255, 255, 255)
 					TextEx(x + (INVENTORY_GFX_SIZE / 2), y + INVENTORY_GFX_SIZE + INVENTORY_GFX_SPACING - (15 * MenuScale), OtherOpen\SecondInv[n]\ItemTemplate\DisplayName, True)
 				EndIf
