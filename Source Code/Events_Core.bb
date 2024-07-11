@@ -2525,7 +2525,7 @@ Function UpdateEvents%()
 								ElseIf wi\SCRAMBLE > 0
 									me\CameraFogDist = 9.0
 								Else
-									me\CameraFogDist = 6.0
+									me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 								EndIf
 								
 								e\EventState = 0.0
