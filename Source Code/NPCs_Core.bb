@@ -2545,7 +2545,7 @@ Function UpdateNPCs%()
 							Else
 								PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 								
-								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
+								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
 								
 								AnimateNPC(n, 39.0, 76.0, n\CurrSpeed * 40.0)
 								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)

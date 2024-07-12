@@ -5191,7 +5191,7 @@ Function UpdateEvents%()
 									e\room\NPC[0]\State = 14.0
 									e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\OBJ, True), 0.4, EntityZ(e\room\OBJ, True))
 									e\room\NPC[0]\PathTimer = 300.0
-									e\room\NPC[0]\Speed = e\room\NPC[0]\Speed * 1.8 ; ~ Making the guard walking a bit faster
+									e\room\NPC[0]\Speed = e\room\NPC[0]\Speed * 1.5 ; ~ Making the guard walking a bit faster
 								EndIf
 							EndIf
 						EndIf
