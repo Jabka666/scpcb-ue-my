@@ -3597,12 +3597,12 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_173_appearing
 				;[Block]
-				If e\room\Dist < 6.0 Lor PlayerRoom = e\room
+				If e\room\Dist < 6.0 And PlayerRoom <> e\room
 					If n_I\Curr173\Idle > 1
 						RemoveEvent(e)
 					Else
 						If n_I\Curr173\Idle = 0
-							If (Not EntityInView(n_I\Curr173\OBJ, Camera)) And (Not EntityInView(n_I\Curr173\OBJ2, Camera)) And EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 36.0
+							If (Not PlayerSees173(n_I\Curr173)) And EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 36.0
 								Select e\room\RoomTemplate\RoomID
 									Case r_room2_4_lcz, r_room2_4_hcz
 										;[Block]
