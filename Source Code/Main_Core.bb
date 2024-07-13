@@ -215,9 +215,10 @@ SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemP
 SetErrorMsg(10, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
 SetErrorMsg(11, GetLocalString("error", "shot")) 
 
+Global ErrorMsg$ = GetLocalString("error", "error")
+
 Function CatchErrors%(Location$)
-	; ~ TODO: THAT'S TOO HEAVY. TRY TO OPTIMIZE
-	SetErrorMsg(9, Format(GetLocalString("error", "error"), Location))
+	SetErrorMsg(9, ErrorMsg + Location)
 End Function
 
 Repeat
