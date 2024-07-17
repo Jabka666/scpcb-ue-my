@@ -5,6 +5,8 @@ Function SaveGame%(File$)
 	
 	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
 	
+	If MenuOpen Lor MainMenuOpen Then Return
+	
 	CatchErrors("SaveGame(" + File + ")")
 	
 	Local n.NPCs, r.Rooms, d.Doors
@@ -85,6 +87,10 @@ Function SaveGame%(File$)
 	WriteFloat(f, me\LightBlink)
 	WriteFloat(f, me\LightFlash)
 	
+	WriteFloat(f, me\Sanity)
+	
+	WriteInt(f, me\RefinedItems)
+	
 	WriteByte(f, I_005\ChanceToSpawn)
 	
 	WriteByte(f, I_500\Taken)
@@ -113,8 +119,6 @@ Function SaveGame%(File$)
 		EndIf
 	Next
 	
-	WriteFloat(f, me\Sanity)
-	
 	WriteFloat(f, wi\GasMaskFogTimer)
 	
 	WriteByte(f, wi\GasMask)
@@ -138,6 +142,9 @@ Function SaveGame%(File$)
 		WriteFloat(f, 0.0)
 		WriteFloat(f, 0.0)
 	EndIf
+	
+	WriteFloat(f, I_1048A\EarGrowTimer)
+	WriteByte(f, I_1048A\Revert)
 	
 	WriteByte(f, I_268\Using)
 	WriteFloat(f, I_268\Timer)
@@ -166,8 +173,6 @@ Function SaveGame%(File$)
 		If S2IMapContains(UnlockedAchievements, ID) Then WriteString(f, ID)
 	Next
 	WriteString(f, "EOA") ; ~ End of achievements
-
-	WriteInt(f, me\RefinedItems)
 	
 	WriteByte(f, UsedConsole)
 	
@@ -176,8 +181,6 @@ Function SaveGame%(File$)
 	WriteFloat(f, Remove714Timer)
 	WriteFloat(f, RemoveHazmatTimer)
 	
-	WriteFloat(f, I_1048A\EarGrowTimer)
-	WriteByte(f, I_1048A\Revert)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -499,15 +502,13 @@ Function SaveGame%(File$)
 	
 	CloseFile(f)
 	
-	If (Not MenuOpen) And (Not MainMenuOpen)
-		If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-			PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
-		Else
-			PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
-			as\Timer = 70.0 * 120.0
-		EndIf
-		CreateHintMsg(GetLocalString("save", "saved"))
+	If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+		PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
+	Else
+		PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
+		as\Timer = 70.0 * 120.0
 	EndIf
+	CreateHintMsg(GetLocalString("save", "saved"))
 	
 	CatchErrors("Uncaught: SaveGame(" + File + ")")
 End Function
@@ -593,6 +594,10 @@ Function LoadGame%(File$)
 	me\LightBlink = ReadFloat(f)
 	me\LightFlash = ReadFloat(f)
 	
+	me\Sanity = ReadFloat(f)
+	
+	me\RefinedItems = ReadInt(f)
+	
 	I_005\ChanceToSpawn = ReadByte(f)
 	
 	I_500\Taken = ReadByte(f)
@@ -621,8 +626,6 @@ Function LoadGame%(File$)
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount)
 	
-	me\Sanity = ReadFloat(f)
-	
 	wi\GasMaskFogTimer = ReadFloat(f)
 	
 	wi\GasMask = ReadByte(f)
@@ -642,6 +645,9 @@ Function LoadGame%(File$)
 	
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
+	
+	I_1048A\EarGrowTimer = ReadFloat(f)
+	I_1048A\Revert = ReadByte(f)
 	
 	I_268\Using = ReadByte(f)
 	I_268\Timer = ReadFloat(f)
@@ -667,8 +673,6 @@ Function LoadGame%(File$)
 		If Achv = "EOA" Then Exit
 		S2IMapSet(UnlockedAchievements, Achv, True)
 	Forever
-
-	me\RefinedItems = ReadInt(f)
 	
 	UsedConsole = ReadByte(f)
 	
@@ -676,9 +680,6 @@ Function LoadGame%(File$)
 	
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
-	
-	I_1048A\EarGrowTimer = ReadFloat(f)
-	I_1048A\Revert = ReadByte(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -1446,6 +1447,10 @@ Function LoadGameQuick%(File$)
 	me\LightBlink = ReadFloat(f)
 	me\LightFlash = ReadFloat(f)
 	
+	me\Sanity = ReadFloat(f)
+	
+	me\RefinedItems = ReadInt(f)
+	
 	I_005\ChanceToSpawn = ReadByte(f)
 	
 	I_500\Taken = ReadByte(f)
@@ -1471,8 +1476,6 @@ Function LoadGameQuick%(File$)
 		ReadByte(f)
 	EndIf
 	
-	me\Sanity = ReadFloat(f)
-	
 	wi\GasMaskFogTimer = ReadFloat(f)
 	
 	wi\GasMask = ReadByte(f)
@@ -1492,6 +1495,9 @@ Function LoadGameQuick%(File$)
 	
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
+	
+	I_1048A\EarGrowTimer = ReadFloat(f)
+	I_1048A\Revert = ReadByte(f)
 	
 	I_268\Using = ReadByte(f)
 	I_268\Timer = ReadFloat(f)
@@ -1518,8 +1524,6 @@ Function LoadGameQuick%(File$)
 		If Achv = "EOA" Then Exit
 		S2IMapSet(UnlockedAchievements, Achv, True)
 	Forever
-
-	me\RefinedItems = ReadInt(f)
 	
 	UsedConsole = ReadByte(f)
 	
@@ -1527,9 +1531,6 @@ Function LoadGameQuick%(File$)
 	
 	Remove714Timer = ReadFloat(f)
 	RemoveHazmatTimer = ReadFloat(f)
-	
-	I_1048A\EarGrowTimer = ReadFloat(f)
-	I_1048A\Revert = ReadByte(f)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
