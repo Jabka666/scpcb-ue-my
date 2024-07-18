@@ -956,10 +956,6 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	For n.NPCs = Each NPCs
-		RemoveNPC(n)
-	Next
-	
 	Local Zone%, ShouldSpawnDoor%
 	
 	For y = MapGridSize To 0 Step -1
