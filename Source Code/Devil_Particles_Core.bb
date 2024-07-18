@@ -29,6 +29,7 @@ End Type
 Type Emitter
 	Field LoopAmount#, Age#, MaxTime#
 	Field tmp.Template
+	Field ID%
 	Field Owner%, Ent%, Surf%
 	Field Del%
 	Field room.Rooms
@@ -251,13 +252,13 @@ Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
 	tmp\YawFix = YawFix
 End Function
 
-; ~ TODO: Find a way to remove and create emitters during the save loading without loosing the parent object
 Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ID%)
 	Local emit.Emitter
 	Local i%
 	
 	emit.Emitter = New Emitter
 	emit\room = room
+	emit\ID = ID
 	
 	emit\Owner = CreatePivot()
 	PositionEntity(emit\Owner, x, y, z)

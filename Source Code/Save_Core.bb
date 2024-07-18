@@ -9,7 +9,7 @@ Function SaveGame%(File$)
 	
 	CatchErrors("SaveGame(" + File + ")")
 	
-	Local n.NPCs, r.Rooms, d.Doors
+	Local n.NPCs, r.Rooms, d.Doors, emit.Emitter
 	Local x%, y%, i%, Temp%
 	
 	GameSaved = True
@@ -333,6 +333,24 @@ Function SaveGame%(File$)
 	WriteInt(f, 954)
 	
 	Temp = 0
+	For emit.Emitter = Each Emitter
+		Temp = Temp + 1
+	Next
+	WriteInt(f, Temp)
+	For emit.Emitter = Each Emitter
+		WriteFloat(f, EntityX(emit\Owner, True))
+		WriteFloat(f, EntityY(emit\Owner, True))
+		WriteFloat(f, EntityZ(emit\Owner, True))
+		
+		WriteInt(f, emit\ID)
+		WriteByte(f, emit\State)
+		
+		For r.Rooms = Each Rooms
+			WriteByte(f, emit\room = r)
+		Next
+	Next
+	
+	Temp = 0
 	For d.Doors = Each Doors
 		Temp = Temp + 1
 	Next
@@ -516,7 +534,7 @@ End Function
 Function LoadGame%(File$)
 	CatchErrors("LoadGame(" + File + ")")
 	
-	Local r.Rooms, n.NPCs, d.Doors, rt.RoomTemplates
+	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
 	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 	
@@ -916,6 +934,31 @@ Function LoadGame%(File$)
 	Next
 	
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
+	
+	For emit.Emitter = Each Emitter
+		FreeEmitter(emit, True)
+	Next
+	
+	Temp = ReadInt(f)
+	For i = 1 To Temp
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		
+		ID = ReadInt(f)
+		Temp2 = ReadByte(f)
+		
+		For r.Rooms = Each Rooms
+			If ReadByte(f) = 1
+				emit.Emitter = SetEmitter(r, x, y, z, ID)
+				emit\State = Temp2
+			EndIf
+		Next
+	Next
+	
+	For n.NPCs = Each NPCs
+		RemoveNPC(n)
+	Next
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1342,7 +1385,7 @@ End Function
 Function LoadGameQuick%(File$)
 	CatchErrors("LoadGameQuick(" + File + ")")
 	
-	Local r.Rooms, n.NPCs, d.Doors
+	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter
 	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
 	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
@@ -1741,6 +1784,27 @@ Function LoadGameQuick%(File$)
 	Next
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
+	For emit.Emitter = Each Emitter
+		FreeEmitter(emit, True)
+	Next
+	
+	Temp = ReadInt(f)
+	For i = 1 To Temp
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		
+		ID = ReadInt(f)
+		Temp2 = ReadByte(f)
+		
+		For r.Rooms = Each Rooms
+			If ReadByte(f) = 1
+				emit.Emitter = SetEmitter(r, x, y, z, ID)
+				emit\State = Temp2
+			EndIf
+		Next
+	Next
+	
 	Temp = ReadInt(f)
 	
 	For i = 1 To Temp
@@ -2112,13 +2176,6 @@ Function LoadGameQuick%(File$)
 				Update035Label(r\Objects[4])
 				;[End Block]
 		End Select
-	Next
-	
-	; ~ Remove old emitters and particles immediately
-	Local emit.Emitter
-	
-	For emit.Emitter = Each Emitter
-		If emit\room = Null Then FreeEmitter(emit, True)
 	Next
 	
 	; ~ Resetting some stuff (those get changed when going to the endings)
