@@ -833,7 +833,7 @@ Function UpdateNPCs%()
 							
 							Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
 							If Dist > PowTwo(HideDistance / 2.0)
-								If (Not EntityInView(n\OBJ, Camera)) And (Not EntityVisible(n\Collider, n_I\MTFLeader\Collider)) Then Tmp = True
+								If (Not EntityInView(n\OBJ, Camera)) Then Tmp = True
 							EndIf
 							If (Not Tmp)
 								PointEntity(n\OBJ, n_I\MTFLeader\Collider)
