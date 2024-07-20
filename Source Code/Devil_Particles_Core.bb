@@ -456,13 +456,15 @@ Function UpdateParticles_Devil()
 			Local v2% = AddVertex(p\emitter\Surf, v2x, v2y, v2z, 1.0, 0.0)
 			Local v3% = AddVertex(p\emitter\Surf, v3x, v3y, v3z, 0.0, 1.0)
 			Local v4% = AddVertex(p\emitter\Surf, v4x, v4y, v4z, 1.0, 1.0)
-			Local R% = p\emitter\tmp\R1 + (p\emitter\tmp\R2 - p\emitter\tmp\R1) * Float(p\Age) / Float(p\MaxTime)
-			Local G% = p\emitter\tmp\G1 + (p\emitter\tmp\G2 - p\emitter\tmp\G1) * Float(p\Age) / Float(p\MaxTime)
-			Local B% = p\emitter\tmp\B1 + (p\emitter\tmp\B2 - p\emitter\tmp\B1) * Float(p\Age) / Float(p\MaxTime)
+			Local AgeFloat# = Float(p\Age)
+			Local MaxTimeFloat# = Float(p\MaxTime)
+			Local R% = p\emitter\tmp\R1 + (p\emitter\tmp\R2 - p\emitter\tmp\R1) * AgeFloat / MaxTimeFloat
+			Local G% = p\emitter\tmp\G1 + (p\emitter\tmp\G2 - p\emitter\tmp\G1) * AgeFloat / MaxTimeFloat
+			Local B% = p\emitter\tmp\B1 + (p\emitter\tmp\B2 - p\emitter\tmp\B1) * AgeFloat / MaxTimeFloat
 			Local CurrAlpha#
 			
 			If p\emitter\tmp\AlphaVel
-				CurrAlpha = (1 - Float(p\Age) / Float(p\MaxTime)) * p\emitter\tmp\Alpha
+				CurrAlpha = (1 - AgeFloat / MaxTimeFloat) * p\emitter\tmp\Alpha
 			Else
 				CurrAlpha = p\emitter\tmp\Alpha
 			EndIf

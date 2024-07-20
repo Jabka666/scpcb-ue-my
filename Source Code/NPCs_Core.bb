@@ -5144,7 +5144,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		n\Reload = Max(n\Reload - fps\Factor[0], 0.0)
 		
-		If Int(n\State) <> MTF_SEARCHING_PLAYER And Int(n\State) <> MTF_DISABLING_TESLA Then n\PrevState = 0
+		If n\State <> MTF_SEARCHING_PLAYER And n\State <> MTF_DISABLING_TESLA Then n\PrevState = 0
 		
 		n\SoundCHN2 = LoopSound2(NPCSound[SOUND_NPC_MTF_BREATH], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
 		
@@ -5154,7 +5154,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		Local SqrValue#, PlayerSeeAble%
 		Local FPSFactorEx# = fps\Factor[0] * 2.0
 		
-		Select Int(n\State) ; ~ What is this MTF doing
+		Select n\State ; ~ What is this MTF doing
 			Case MTF_WANDERING_AROUND
 				;[Block]
 				n\Speed = 0.015

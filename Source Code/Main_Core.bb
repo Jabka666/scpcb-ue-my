@@ -215,6 +215,9 @@ SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemP
 SetErrorMsg(10, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
 SetErrorMsg(11, GetLocalString("error", "shot")) 
 
+Global GPUName$ = GfxDriverName(opt\GFXDriver)
+Global ErrorGPUMsg$ = GetLocalString("error", "gpu")
+Global ErrorMemStatusMsg$ = GetLocalString("error", "status")
 Global ErrorMsg$ = GetLocalString("error", "error")
 
 Function CatchErrors%(Location$)
@@ -222,8 +225,8 @@ Function CatchErrors%(Location$)
 End Function
 
 Repeat
-	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(opt\GFXDriver), "{0}"), (opt\TotalVidMemory - (AvailVidMem() / 1024)), "{1}"), opt\TotalVidMemory, "{2}"))
-	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
+	SetErrorMsg(4, Format(Format(Format(ErrorGPUMsg, GPUName, "{0}"), (opt\TotalVidMemory - (AvailVidMem() / 1024)), "{1}"), opt\TotalVidMemory, "{2}"))
+	SetErrorMsg(5, Format(Format(ErrorMemStatusMsg, (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
 	
 	Cls()
 	
@@ -269,15 +272,18 @@ Repeat
 	Flip(opt\VSync)
 Forever
 
+Global ErrorRoomMsg$ = GetLocalString("misc", "room")
+Global ErrorEventMsg$ = GetLocalString("misc", "event")
+
 Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
 	Local i%, TempStr$
 	
-	SetErrorMsg(7, Format(GetLocalString("misc", "room"), PlayerRoom\RoomTemplate\RoomID))
+	SetErrorMsg(7, Format(ErrorRoomMsg, PlayerRoom\RoomTemplate\RoomID))
 	
 	For ev.Events = Each Events
 		If ev\room = PlayerRoom
-			SetErrorMsg(8, Format(Format(Format(Format(Format(GetLocalString("misc", "event"), ev\EventID, "{0}"), ev\EventState, "{1}"), ev\EventState2, "{2}"), ev\EventState3, "{3}"), ev\EventState4, "{4}") + Chr(10))
+			SetErrorMsg(8, Format(Format(Format(Format(Format(ErrorEventMsg, ev\EventID, "{0}"), ev\EventState, "{1}"), ev\EventState2, "{2}"), ev\EventState3, "{3}"), ev\EventState4, "{4}") + Chr(10))
 			Exit
 		EndIf
 	Next
@@ -2273,14 +2279,14 @@ End Type
 Global msg.Messages
 
 Function CreateMsg%(Txt$, Sec# = 6.0)
-	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
 	msg\Txt = Txt
 	msg\Timer = 70.0 * Sec
 End Function
 
 Function UpdateMessages%()
-	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
 	If msg\Timer > 0.0
 		msg\Timer = msg\Timer - fps\Factor[0]
@@ -2290,7 +2296,7 @@ Function UpdateMessages%()
 End Function
 
 Function RenderMessages%()
-	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
 	If msg\Timer > 0.0
 		Local Temp%
@@ -2322,14 +2328,14 @@ Function RenderMessages%()
 End Function
 
 Function CreateHintMsg%(Txt$, Sec# = 6.0)
-	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
 	msg\HintTxt = Txt
 	msg\HintTimer = 70.0 * Sec
 End Function
 
 Function UpdateHintMessages%()
-	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width = StringWidth(msg\HintTxt) + (20 * Scale)
@@ -2356,7 +2362,7 @@ Function UpdateHintMessages%()
 End Function
 
 Function RenderHintMessages%()
-	If SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon") Lor (Not opt\HUDEnabled) Then Return
+	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
 	Local Scale# = opt\GraphicHeight / 768.0
 	Local Width% = StringWidth(msg\HintTxt) + (20 * Scale)
@@ -6087,7 +6093,7 @@ Function RenderGUI%()
 	EndIf
 	
 	If I_294\Using Then Render294()
-	If SelectedDifficulty\Name <> GetLocalString("menu", "new.apollyon") And opt\HUDEnabled
+	If SelectedDifficulty\Name <> difficulties[APOLLYON]\Name And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			If d_I\ClosestButton <> 0 Then Render3DHandIcon(5, d_I\ClosestButton, -1)
 			If ClosestItem <> Null Then Render3DHandIcon(6, ClosestItem\Collider, -1)
@@ -7972,7 +7978,7 @@ Function UpdateEnding%()
 	GiveAchievement("055")
 	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedCustomMap = Null
 		GiveAchievement("console")
-		If SelectedDifficulty\Name = GetLocalString("menu", "new.keter") Lor SelectedDifficulty\Name = GetLocalString("menu", "new.apollyon")
+		If SelectedDifficulty\Name = GetLocalString("menu", "new.keter") Lor SelectedDifficulty\Name = difficulties[APOLLYON]\Name
 			GiveAchievement("keter")
 			SaveAchievementsFile()
 		EndIf

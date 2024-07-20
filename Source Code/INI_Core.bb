@@ -136,7 +136,7 @@ Function Piece$(s$, Entry%, Char$ = " ")
 	Wend
 	For n = 1 To Entry - 1
 		p = Instr(s, Char)
-		s = Right(s, Len(s) - p)
+		s = Mid(s, p + 1)
 	Next
 	p = Instr(s, Char)
 	If p < 1

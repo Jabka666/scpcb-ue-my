@@ -927,8 +927,10 @@ Function LimitText%(Txt$, x%, y%, Width%)
 	If UnFitting <= 0
 		TextEx(x, y, Txt, 0, 0)
 	Else
-		LetterWidth = TextLength / Len(Txt)
-		TextEx(x, y, Left(Txt, Max(Len(Txt) - UnFitting / LetterWidth - 4, 1)) + "..", 0, 0)
+		Local LenTxt% = Len(Txt)
+		
+		LetterWidth = TextLength / LenTxt
+		TextEx(x, y, Left(Txt, Max(LenTxt - UnFitting / LetterWidth - 4, 1)) + "..", 0, 0)
 	EndIf
 End Function
 

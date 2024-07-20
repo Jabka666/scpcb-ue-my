@@ -585,17 +585,19 @@ Function QuickLoadEvents%()
 					I_1499\Sky = CreateSky("GFX\Map\Textures\1499sky")
 					e\EventStr = 1
 				Else
-					If Int(e\EventStr) < 16
+					Local EventStrInt% = Int(e\EventStr)
+					
+					If EventStrInt < 16
 						QuickLoadPercent = QuickLoadPercent + 2
-						e\room\Objects[Int(e\EventStr)] = LoadRMesh("GFX\Map\dimension1499\dimension_1499_object(" + (Int(e\EventStr)) + ").rmesh", Null, False)
-						ScaleEntity(e\room\Objects[Int(e\EventStr)], RoomScale, RoomScale, RoomScale)
-						HideEntity(e\room\Objects[Int(e\EventStr)])
-						e\EventStr = Int(e\EventStr) + 1
-					ElseIf Int(e\EventStr) = 16
+						e\room\Objects[EventStrInt] = LoadRMesh("GFX\Map\dimension1499\dimension_1499_object(" + (EventStrInt) + ").rmesh", Null, False)
+						ScaleEntity(e\room\Objects[EventStrInt], RoomScale, RoomScale, RoomScale)
+						HideEntity(e\room\Objects[EventStrInt])
+						e\EventStr = EventStrInt + 1
+					ElseIf EventStrInt = 16
 						QuickLoadPercent = 90
 						CreateChunkParts(e\room)
 						e\EventStr = 17
-					ElseIf Int(e\EventStr) = 17
+					ElseIf EventStrInt = 17
 						QuickLoadPercent = 100
 						
 						x = EntityX(e\room\OBJ)
@@ -1572,12 +1574,13 @@ Function UpdateEvents%()
 							
 							If me\Sanity < -1000.0
 								If wi\NightVision > 1
-									msg\DeathMsg = GetLocalString("death", "895.nvg.914")
+									StrTemp = "895.nvg.914"
 								ElseIf wi\SCRAMBLE > 0
-									msg\DeathMsg = GetLocalString("death", "895.nvg.096")
+									StrTemp = "895.nvg.096"
 								Else
-									msg\DeathMsg = GetLocalString("death", "895.nvg")
+									StrTemp = "895.nvg"
 								EndIf
+								msg\DeathMsg = GetLocalString("death", StrTemp)
 								EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
 								If me\VomitTimer < -10.0 Then Kill()
 							ElseIf me\Sanity < -800.0
@@ -2757,7 +2760,6 @@ Function UpdateEvents%()
 						
 						RemoveNPC(e\room\NPC[0])
 						FreeEntity(e\room\Objects[7]) : e\room\Objects[7] = 0
-						; ~ TODO: REMOVE ALL PROPS/LIGHTS/DOORS. THE MAIN REASON WHY I DIDN'T DO THAT I CANNOT SAVE/LOAD THEM PROPERLY
 						RemoveEvent(e)
 					EndIf
 				Else
@@ -4169,7 +4171,6 @@ Function UpdateEvents%()
 				;[Block]
 				If PlayerRoom = e\room
 					Local Meshes%[MaxMTModelIDAmount]
-					Local TempStr$
 					Local iA%, iB%, iC%, iD%
 					Local TempInt%, TempInt2%
 					Local iX%, iY%
