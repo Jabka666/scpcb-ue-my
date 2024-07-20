@@ -759,6 +759,7 @@ Function UpdateEvents%()
 									If e\EventState - fps\Factor[0] < 900.0 + (70.0 * 4.0)
 										PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 										me\LightBlink = 3.0
+										me\BlinkTimer = -10.0
 										PlaySound2(snd_I\StoneDragSFX, Camera, n_I\Curr173\Collider)
 										PointEntity(n_I\Curr173\Collider, e\room\NPC[2]\Collider)
 									EndIf
