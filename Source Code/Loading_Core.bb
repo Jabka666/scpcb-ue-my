@@ -2476,9 +2476,9 @@ Function RemoveTextureInstances%()
 		FreeImage(S2IMapGet(AchievementsImages, JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))))
 	Next
 	FreeImage(S2IMapGet(AchievementsImages, "locked"))
-	DestroyS2IMap(AchievementsIndex)
-	DestroyS2IMap(AchievementsImages)
-	DestroyS2IMap(UnlockedAchievements)
+	DestroyS2IMap(AchievementsIndex) : AchievementsIndex = 0
+	DestroyS2IMap(AchievementsImages) : AchievementsImages = 0
+	DestroyS2IMap(UnlockedAchievements) : UnlockedAchievements = 0
 	
 	For i = 0 To MaxIconIDAmount - 1
 		FreeImage(t\IconID[i]) : t\IconID[i] = 0
@@ -2950,7 +2950,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	
 	SubFile = 0
+	LocalSubFile = 0
 	SubColors = 0
+	LocalSubColors = 0
 	SubtitlesInit = False
 	ClearSubtitles()
 	DeInitSubtitlesAssets()
@@ -2966,7 +2968,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete Each SCP008
 	Delete Each SCP035
 	Delete Each SCP268
-	DestroyS2IMap(I_294\DrinksMap)
+	DestroyS2IMap(I_294\DrinksMap) : I_294\DrinksMap = 0
 	Delete Each SCP294
 	Delete Each SCP409
 	For i = 0 To 1

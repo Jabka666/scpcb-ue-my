@@ -312,10 +312,11 @@ Function RenderWorld2%(Tween#)
 			If HasBattery = 1 Then PlusY = 40
 			
 			Local RefreshHint$ = GetLocalString("msg", "refresh")
+			Local InstrRefreshHint% = Instr(RefreshHint, "%s")
 			
-			TextEx(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, Trim(Left(RefreshHint, Instr(RefreshHint, "%s") - 1)), True, False)
+			TextEx(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, Trim(Left(RefreshHint, InstrRefreshHint - 1)), True, False)
 			TextEx(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-			TextEx(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - Instr(RefreshHint, "%s") - 1)), True, False)
+			TextEx(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - InstrRefreshHint - 1)), True, False)
 			
 			Local Temp% = CreatePivot()
 			Local Temp2% = CreatePivot()

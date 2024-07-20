@@ -2128,7 +2128,7 @@ Function LoadRoomTemplates%(File$)
 				
 				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
 				rt\Name = Lower(Loc)
-				rt\RoomID = FindRoomID(Lower(Loc))
+				rt\RoomID = FindRoomID(rt\Name)
 				
 				StrTemp = IniGetString(File, Loc, "Shape")
 				
