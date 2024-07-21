@@ -2322,10 +2322,10 @@ Function UpdateInput$(aString$, MaxChr%)
 		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
-
+	
 	If KeyDown(205) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Right arrow
 		If (MilliSecs() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
-	ElseIf KeyDown(203) And ((MilliSec - PrevInputBoxCtrl) > 500) ; ~ Left arrow
+	ElseIf KeyDown(203) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Left arrow
 		If (MilliSecs() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
 	Else
 		If InsertMode
