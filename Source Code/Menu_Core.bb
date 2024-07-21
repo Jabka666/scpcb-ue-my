@@ -49,8 +49,8 @@ Function DeInitMainMenuAssets%()
 	FreeImage(mma\BackGround) : mma\BackGround = 0
 	FreeImage(mma\SECURE_CONTAIN_PROTECT) : mma\SECURE_CONTAIN_PROTECT = 0
 	FreeImage(mma\SCP173) : mma\SCP173 = 0
-	Delete Each MainMenuAssets
-	Delete Each MainMenu
+	Delete(mma) : mma = Null
+	Delete(mm) : mm = Null
 End Function
 
 Global RandomSeed$
@@ -1777,6 +1777,7 @@ End Function
 
 Function ResetLoadingTextColor%()
 	TextR = 0.0 : TextG = 0.0 : TextB = 0.0
+	ChangeColor = True
 End Function
 
 Global LoadingScreens%
@@ -1997,6 +1998,8 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			FreeImage(LoadingBack) : LoadingBack = 0
 			LoadingBackWidth = 0 : LoadingBackHeight = 0
 			SelectedLoadingScreens = 0
+			Descriptions = 0 : DescriptionIndex = 0
+			ImageAlignX = "" : ImageAlignY = ""
 		EndIf
 	Until Close
 	

@@ -301,7 +301,7 @@ Function DeInitSubtitlesAssets%()
 	For snd.Sound = Each Sound
 		RemoveSubtitlesToken(snd)
 	Next
-	Delete Each SubtitlesAssets
+	Delete(subassets) : subassets = Null
 End Function
 
 ;~IDEal Editor Parameters:

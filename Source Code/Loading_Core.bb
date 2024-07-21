@@ -77,7 +77,7 @@ Function RemoveDecalInstances%()
 	For i = 0 To MaxDecalTextureIDAmount - 1
 		de_I\DecalTextureID[i] = 0
 	Next
-	Delete Each DecalInstance
+	Delete(de_I) : de_I = Null
 End Function
 
 Type ParticleInstance
@@ -328,7 +328,7 @@ Function RemoveParticleInstances%()
 	For i = 0 To MaxParticleTextureIDAmount - 1
 		p_I\ParticleTextureID[i] = 0
 	Next
-	Delete Each ParticleInstance
+	Delete(p_I) : p_I = Null
 End Function
 
 Const MaxDoorModelIDAmount% = 9
@@ -479,7 +479,7 @@ Function RemoveDoorInstances%()
 	For i = BUTTON_GREEN_TEXTURE To BUTTON_106_TEXTURE
 		d_I\ButtonTextureID[i] = 0
 	Next
-	Delete Each DoorInstance
+	Delete(d_I) : d_I = Null
 End Function
 
 Const MaxLeverModelIDAmount% = 2
@@ -516,7 +516,7 @@ Function RemoveLeverInstances%()
 	For i = 0 To MaxLeverModelIDAmount - 1
 		FreeEntity(lvr_I\LeverModelID[i]) : lvr_I\LeverModelID[i] = 0
 	Next
-	Delete Each LeverInstance
+	Delete(lvr_I) : lvr_I = Null
 End Function
 
 Const MaxCamModelIDAmount% = 2
@@ -573,7 +573,7 @@ Function RemoveSecurityCamInstances%()
 	For i = CAM_HEAD_DEFAULT_TEXTURE To CAM_HEAD_RED_LIGHT_TEXTURE
 		sc_I\CamTextureID[i] = 0
 	Next
-	Delete Each SecurityCamInstance
+	Delete(sc_I) : sc_I = Null
 End Function
 
 Const MaxMonitorModelIDAmount% = 2
@@ -662,7 +662,7 @@ Function RemoveMonitorInstances%()
 	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_5
 		mon_I\MonitorOverlayID[i] = 0
 	Next
-	Delete Each MonitorInstance
+	Delete(mon_I) : mon_I = Null
 End Function
 
 Const MaxNPCModelIDAmount% = 32
@@ -837,7 +837,7 @@ Function RemoveNPCInstances%()
 	For i = NPC_CLASS_D_GONZALES_TEXTURE To NPC_096_BLOODY_TEXTURE
 		n_I\NPCTextureID[i] = 0
 	Next
-	Delete Each NPCInstance
+	Delete(n_I) : n_I = Null
 End Function
 
 Const MaxMTModelIDAmount% = 7
@@ -895,7 +895,7 @@ Function RemoveMiscInstances%()
 		misc_I\LightSpriteID[i] = 0
 	Next
 	misc_I\AdvancedLightSprite = 0
-	Delete Each MiscInstance
+	Delete(misc_I) : misc_I = Null
 End Function
 
 Function LoadMaterials%(File$)
@@ -1696,7 +1696,7 @@ Function RemoveSoundInstances%()
 	
 	snd_I\SinkHoleSFX = 0
 	
-	Delete Each SoundInstance
+	Delete(snd_I) : snd_I = Null
 End Function
 
 Function LoadEvents%()
@@ -2085,6 +2085,8 @@ Function LoadData%()
 	SubColors = JsonGetValue(SubFile, "colors")
 	LocalSubColors = JsonGetValue(LocalSubFile, "colors")
 	SubtitlesInit = True
+	
+	SCP1499Chunks = JsonGetArray(JsonParseFromFile(SCP1499ChunksFile))
 	
 	SubjectName = GetLocalString("misc", "subject")
 	PlayerFallingPickDistance = 10.0
@@ -2479,6 +2481,8 @@ Function RemoveTextureInstances%()
 	DestroyS2IMap(AchievementsIndex) : AchievementsIndex = 0
 	DestroyS2IMap(AchievementsImages) : AchievementsImages = 0
 	DestroyS2IMap(UnlockedAchievements) : UnlockedAchievements = 0
+	AchievementsArray = 0
+	LocalAchievementsArray = 0
 	
 	For i = 0 To MaxIconIDAmount - 1
 		FreeImage(t\IconID[i]) : t\IconID[i] = 0
@@ -2492,7 +2496,7 @@ Function RemoveTextureInstances%()
 	For i = 0 To MaxOverlayIDAmount - 1
 		FreeEntity(t\OverlayID[i]) : t\OverlayID[i] = 0
 	Next
-	Delete Each Textures
+	Delete(t) : t = Null
 End Function
 
 Function Init294Drinks%()
@@ -2876,7 +2880,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	RandomSeed = ""
 	
 	UsedConsole = False
-	Delete Each Cheats
+	Delete(chs) : chs = Null
 	WireFrameState = 0
 	WireFrame(0)
 	ConsoleOpen = False
@@ -2956,31 +2960,32 @@ Function NullGame%(PlayButtonSFX% = True)
 	SubtitlesInit = False
 	ClearSubtitles()
 	DeInitSubtitlesAssets()
-	Delete Each Messages
-	Delete Each AutoSave
+	Delete(msg) : msg = Null
+	Delete(as) : as = Null
 	
 	FreeEntity(me\Collider) : me\Collider = 0
 	FreeEntity(me\Head) : me\Head = 0
-	Delete Each Player
-	Delete Each WearableItems
+	Delete(me) : me = Null
+	Delete(wi) : wi = Null
 	
-	Delete Each SCP005
-	Delete Each SCP008
-	Delete Each SCP035
-	Delete Each SCP268
+	Delete(I_005) : I_005 = Null
+	Delete(I_008) : I_008 = Null
+	Delete(I_035) : I_035 = Null
+	Delete(I_268) : I_268 = Null
 	DestroyS2IMap(I_294\DrinksMap) : I_294\DrinksMap = 0
-	Delete Each SCP294
-	Delete Each SCP409
+	Delete(I_294) : I_294 = Null
+	Delete(I_409) : I_409 = Null
 	For i = 0 To 1
 		I_427\Sound[i] = 0
 	Next
-	Delete Each SCP427
-	Delete Each SCP500
-	Delete Each SCP714
-	Delete Each SCP1025
+	Delete(I_427) : I_427 = Null
+	Delete(I_500) : I_500 = Null
+	Delete(I_714) : I_714 = Null
+	Delete(I_1025) : I_1025 = Null
 	If I_1499\Sky <> 0 Then FreeEntity(I_1499\Sky) : I_1499\Sky = 0
-	Delete Each SCP1499
-	Delete Each SCP1048A
+	Delete(I_1499) : I_1499 = Null
+	SCP1499Chunks = 0
+	Delete(I_1048A) : I_1048A = Null
 	
 	QuickLoadPercent = 0
 	QuickLoadPercent_DisplayTimer = 0.0
@@ -3025,7 +3030,7 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveParticle(p)
 	Next
 	RemoveParticleInstances()
-	Delete Each BrokenDoor
+	Delete(bk) : bk = Null
 	For d.Doors = Each Doors
 		RemoveDoor(d)
 	Next
@@ -3073,8 +3078,8 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveChunkPart(chp)
 	Next
 	Dim MapRoom$(0, 0)
-	Delete Each MapGrid
-	Delete Each MapZones
+	Delete(CurrMapGrid) : CurrMapGrid = Null
+	Delete(I_Zone) : I_Zone = Null
 	RoomTempID = 0
 	For r.Rooms = Each Rooms
 		RemoveRoom(r)
@@ -3148,7 +3153,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	DeleteMenuGadgets()
 	InitMainMenuAssets()
 	MenuOpen = False
-	Delete Each InGameMenu
+	Delete(igm) : igm = Null
 	MainMenuOpen = True
 	mm\MainMenuTab = MainMenuTab_Default
 	
