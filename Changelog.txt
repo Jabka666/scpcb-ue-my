@@ -42,6 +42,8 @@ Rooms:
 - Added Level 3 Keycard in «room2_servers_hcz» room.
 - Added Battery in «cont1_205» storage room.
 - Added Battery in «cont2_008» observation room.
+- Added Battery in «room2_office» lower floor.
+- Added possible Revision Eyedrops to «room2_office_2»
 - Added a buffer hallway leading to SCP-173's containment chamber.
 - Changed SCP-096's room to a corner styled room replacing the maintenance room.
 - Changed SCP-372's room to a 3-way styled room.
