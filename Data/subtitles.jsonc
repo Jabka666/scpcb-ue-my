@@ -1688,7 +1688,7 @@
 		}
 	],
 	/* MTF ANNOUNCEMENTS */
-	"SFX\\Character\\MTF\\Announc.ogg": [
+	"SFX\\Character\\MTF\\AnnouncEnter.ogg": [
 		{
 			"text": "Mobile Task Force unit Epsilon-11, designated «Nine-Tailed Fox» has entered the facility.",
 			"delay": 1.7,
