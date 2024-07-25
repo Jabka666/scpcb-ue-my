@@ -118,10 +118,11 @@ Bug Fixes:
 - Fixed player rotation in the maintenance tunnel elevators.
 
 Known issues:
- - Cups crash the game sometimes.
- - Objects aren't properly hidden on new games.
- - SCP-500-01 may not spawn correctly in Maintenance tunnels.
- - Surveillance room clips into closets room often.
+- Cups crash the game sometimes.
+- Objects aren't properly hidden on new games.
+- SCP-500-01 may not spawn correctly in Maintenance tunnels.
+- Surveillance room clips into closets room often.
+- PD teleport points don't work sometimes.
 
 v1.2.1
 
