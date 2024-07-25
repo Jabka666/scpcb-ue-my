@@ -7221,8 +7221,6 @@ Function UpdateDimension106%()
 					
 					me\CameraFogDist = 6.0
 					
-					InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
-					
 					e\EventState = e\EventState + fps\Factor[0]
 					
 					ScaleEntity(e\room\OBJ, RoomScale, RoomScale * (1.0 + Sin(e\EventState / 14.0) * 0.2), RoomScale)
@@ -7248,6 +7246,8 @@ Function UpdateDimension106%()
 							ScaleEntity(e\room\Objects[i], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
 							ScaleEntity(e\room\Objects[i + 1], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + (i + 1) * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + (i + 1) * 20.0) * 0.1), RoomScale, True)
 						Next
+						
+						InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
 						
 						If n_I\Curr106\State > 0.0 ; ~ SCP-106 circles around the starting room
 							Angle = (e\EventState / 10.0 Mod 360.0)
@@ -7288,6 +7288,8 @@ Function UpdateDimension106%()
 						;[Block]
 						SinValue = Sin(e\EventState * 1.6) * 4.0
 						CosValue = Cos(e\EventState * 0.8) * 5.0
+						
+						InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
 						
 						PositionEntity(e\room\Objects[9], EntityX(e\room\Objects[8], True) + 3384.0 * RoomScale, 0.0, EntityZ(e\room\Objects[8], True))
 						
@@ -7499,6 +7501,8 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_ExitRoom
 						;[Block]
+						InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
+						
 						Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
 						If Dist < PowTwo(640.0 * RoomScale)
 							SqrValue = Sqr(Dist)
@@ -7606,6 +7610,8 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_TowerRoom
 						;[Block]
+						InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
+						
 						If opt\ParticleAmount > 0
 							If Rand(800) = 1
 								Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)
@@ -7669,7 +7675,7 @@ Function UpdateDimension106%()
 						UpdateDoors()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
-						InjurePlayer(fps\Factor[0] * 0.0001)
+						InjurePlayer(fps\Factor[0] * 0.00006)
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
 							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.0
