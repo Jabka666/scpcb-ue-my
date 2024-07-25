@@ -2898,6 +2898,11 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
+			; ~ The door leading to ending tunnel
+			d.Doors = CreateDoor(r, r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
+			d\AutoClose = False
+			r\RoomDoors.Doors[0] = d
+			
 			For r2.Rooms = Each Rooms
 				If r2\RoomTemplate\RoomID = r_gate_a_entrance
 					; ~ Elevator door
@@ -2910,10 +2915,6 @@ Function FillRoom%(r.Rooms)
 					Exit
 				EndIf
 			Next
-			
-			; ~ The door leading to ending tunnel
-			d.Doors = CreateDoor(r, r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
-			d\AutoClose = False
 			
 			; ~ Doors inside a tiny tunnel
 			d.Doors = CreateDoor(r, r\x - 1400.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 2320.0 * RoomScale, 0.0, me\SelectedEnding = Ending_A2, DEFAULT_DOOR, KEY_CARD_2)
