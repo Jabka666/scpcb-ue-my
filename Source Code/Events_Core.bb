@@ -2204,10 +2204,10 @@ Function UpdateEvents%()
 							e\room\RoomDoors[3]\IsElevatorDoor = 0
 							
 							If PrevGenLever <> x2
-								If (Not x2)
-									PlaySound_Strict(snd_I\LightOffSFX)
-								Else
+								If x2
 									PlaySound_Strict(snd_I\TeslaPowerUpSFX)
+								Else
+									PlaySound_Strict(snd_I\LightOffSFX)
 								EndIf
 							EndIf
 							
@@ -3941,17 +3941,17 @@ Function UpdateEvents%()
 					
 					Temp = UpdateLever(e\room\RoomLevers[0]\OBJ)
 					
-					If (Not Temp)
-						StopChannel(e\SoundCHN) : e\SoundCHN = 0
-						e\EventState = 3.0
-						e\EventState2 = (-70.0) * 90.0
-					Else
+					If Temp
 						If PrevLever <> Temp
 							If Temp
 								PlaySound_Strict(snd_I\TeslaPowerUpSFX)
 								e\EventState = 0.0
 							EndIf
 						EndIf
+					Else
+						StopChannel(e\SoundCHN) : e\SoundCHN = 0
+						e\EventState = 3.0
+						e\EventState2 = (-70.0) * 90.0
 					EndIf
 					
 					If PlayerRoom = e\room
@@ -5347,26 +5347,34 @@ Function UpdateEvents%()
 					TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 					
 					If e\room\RoomDoors[1]\OpenState = 0.0
-						If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
-						If (Not EntityHidden(e\room\RoomDoors[0]\OBJ)) Then HideEntity(e\room\RoomDoors[0]\OBJ)
-						If (Not EntityHidden(e\room\RoomDoors[0]\FrameOBJ)) Then HideEntity(e\room\RoomDoors[0]\FrameOBJ)
-						If (Not EntityHidden(e\room\RoomDoors[0]\Buttons[1])) Then HideEntity(e\room\RoomDoors[0]\Buttons[1])
+						If (Not EntityHidden(e\room\RoomDoors[0]\FrameOBJ))
+							HideEntity(e\room\Objects[0])
+							HideEntity(e\room\RoomDoors[0]\OBJ)
+							HideEntity(e\room\RoomDoors[0]\Buttons[1])
+							HideEntity(e\room\RoomDoors[0]\FrameOBJ)
+						EndIf
 					Else
-						If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-						If EntityHidden(e\room\RoomDoors[0]\OBJ) Then ShowEntity(e\room\RoomDoors[0]\OBJ)
-						If EntityHidden(e\room\RoomDoors[0]\FrameOBJ) Then ShowEntity(e\room\RoomDoors[0]\FrameOBJ)
-						If EntityHidden(e\room\RoomDoors[0]\Buttons[1]) Then ShowEntity(e\room\RoomDoors[0]\Buttons[1])
+						If EntityHidden(e\room\RoomDoors[0]\FrameOBJ)
+							ShowEntity(e\room\Objects[0])
+							ShowEntity(e\room\RoomDoors[0]\OBJ)
+							ShowEntity(e\room\RoomDoors[0]\Buttons[1])
+							ShowEntity(e\room\RoomDoors[0]\FrameOBJ)
+						EndIf
 					EndIf
 					If e\room\RoomDoors[4]\OpenState = 0.0
-						If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
-						If (Not EntityHidden(e\room\RoomDoors[5]\OBJ)) Then HideEntity(e\room\RoomDoors[5]\OBJ)
-						If (Not EntityHidden(e\room\RoomDoors[5]\FrameOBJ)) Then HideEntity(e\room\RoomDoors[5]\FrameOBJ)
-						If (Not EntityHidden(e\room\RoomDoors[5]\Buttons[1])) Then HideEntity(e\room\RoomDoors[5]\Buttons[1])
+						If (Not EntityHidden(e\room\RoomDoors[5]\FrameOBJ))
+							HideEntity(e\room\Objects[1])
+							HideEntity(e\room\RoomDoors[5]\OBJ)
+							HideEntity(e\room\RoomDoors[5]\Buttons[1])
+							HideEntity(e\room\RoomDoors[5]\FrameOBJ)
+						EndIf
 					Else
-						If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-						If EntityHidden(e\room\RoomDoors[5]\OBJ) Then ShowEntity(e\room\RoomDoors[5]\OBJ)
-						If EntityHidden(e\room\RoomDoors[5]\FrameOBJ) Then ShowEntity(e\room\RoomDoors[5]\FrameOBJ)
-						If EntityHidden(e\room\RoomDoors[5]\Buttons[1]) Then ShowEntity(e\room\RoomDoors[5]\Buttons[1])
+						If EntityHidden(e\room\RoomDoors[5]\FrameOBJ)
+							ShowEntity(e\room\Objects[1])
+							ShowEntity(e\room\RoomDoors[5]\OBJ)
+							ShowEntity(e\room\RoomDoors[5]\Buttons[1])
+							ShowEntity(e\room\RoomDoors[5]\FrameOBJ)
+						EndIf
 					EndIf
 					
 					If e\EventState < 8.0

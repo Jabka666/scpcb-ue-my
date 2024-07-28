@@ -64,16 +64,16 @@ End Function
 Function MoveForward%(Dir%, PathX%, PathY%, RetVal% = False)
 	; ~ Move 1 unit along the grid in the designated direction
 	If Dir = 1
-		If (Not RetVal)
-			Return(PathX)
-		Else
+		If RetVal
 			Return(PathY + 1)
+		Else
+			Return(PathX)
 		EndIf
 	EndIf
-	If (Not RetVal)
-		Return(PathX - 1 + Dir)
-	Else
+	If RetVal
 		Return(PathY)
+	Else
+		Return(PathX - 1 + Dir)
 	EndIf
 End Function
 
@@ -85,10 +85,10 @@ Function TurnIfDeviating%(Max_Deviation_Distance_%, Pathx%, Center_%, Dir%, RetV
 	
 	If Deviated Then Dir = ((Dir + 2) Mod 4)
 	
-	If (Not RetVal)
-		Return(Dir)
-	Else
+	If RetVal
 		Return(Deviated)
+	Else
+		Return(Dir)
 	EndIf
 End Function
 

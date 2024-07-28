@@ -816,10 +816,10 @@ Function UpdateNPCs%()
 										Else
 											If Rand(400) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 10.0)
 											TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider) + 90.0) * n\Speed * fps\Factor[0])
-											If (Not chs\NoTarget)
-												n\Angle = Rnd(-120.0, 120.0)
-											Else
+											If chs\NoTarget
 												n\Angle = 0.0
+											Else
+												n\Angle = Rnd(-120.0, 120.0)
 											EndIf
 										EndIf
 									EndIf

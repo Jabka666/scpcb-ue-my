@@ -2032,10 +2032,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Exit
 						EndIf
 					Next
-					If (Not NO427Spawn)
-						it2.Items = CreateItem("SCP-427", it_scp427, x, y, z)
-					Else
+					If NO427Spawn
 						it2.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+					Else
+						it2.Items = CreateItem("SCP-427", it_scp427, x, y, z)
 					EndIf
 					;[End Block]
 				Case VERYFINE
@@ -2085,9 +2085,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						EndIf
 					Next
 					If (Not NO427Spawn)
-						it2.Items = CreateItem("SCP-427", it_scp427, x, y, z)
-					Else
 						it2.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+					Else
+						it2.Items = CreateItem("SCP-427", it_scp427, x, y, z)
 					EndIf
 					;[End Block]
 				Case VERYFINE

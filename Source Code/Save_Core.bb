@@ -314,10 +314,10 @@ Function SaveGame%(File$)
 		If r\fr = Null ; ~ This room doesn't have a forest
 			WriteByte(f, 0)
 		Else ; ~ This room has a forest
-			If (Not I_Zone\HasCustomForest)
-				WriteByte(f, 1)
-			Else
+			If I_Zone\HasCustomForest
 				WriteByte(f, 2)
+			Else
+				WriteByte(f, 1)
 			EndIf
 			For y = 0 To ForestGridSize - 1
 				For x = 0 To ForestGridSize - 1
@@ -2103,9 +2103,6 @@ Function LoadGameQuick%(File$)
 	UpdateLightsTimer = 0.0
 	
 	d_I\AnimButton = 0
-	
-	If wi\GasMask = 0 Then HideEntity(t\OverlayID[1])
-	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[2])
 	
 	If wi\NightVision > 0
 		me\CameraFogDist = 17.0

@@ -443,7 +443,7 @@ Function UpdateLanguageSelector%()
 		Select CurrentStatus
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
-				If (Not RequestLanguage\MajorOnly) Then 
+				If (Not RequestLanguage\MajorOnly)
 					If opt\NoProgressBar Then
 						DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 					Else
@@ -667,12 +667,12 @@ Function UpdateLanguageSelector%()
 				Local Prefect2$ = Format(GetLocalString("language", "full"), GetLocalString("language", "no"))
 				Local Compatible$ = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
 				
-				If (Not MouseHoverLanguage\MajorOnly) 
+				If MouseHoverLanguage\MajorOnly
+					Height = FontHeight() * 10
+				Else
 					Local Size$ = Format(GetLocalString("language", "size"), SimpleFileSize(MouseHoverLanguage\FileSize))
 					Local LastMod$ = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
 					Local Height% = FontHeight() * 13
-				Else
-					Height = FontHeight() * 10
 				EndIf
 			Else
 				Author = ""
@@ -883,28 +883,28 @@ Function UpdateLauncherScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarH
 	Color(0, 0, 0)
 	UpdateLauncherDownloadButton(BarX, BarY, BarWidth, BarHeight, "")
 	
-	If (Not Vertical) ; ~ Horizontal
-		If Height > 10
-			Color(255, 255, 255)
-			Rect(BarX + BarHeightHalf, BarY + 5, 2, BarHeight - 10)
-			Rect(BarX + BarHeightHalf - 3, BarY + 5, 2, BarHeight - 10)
-			Rect(BarX + BarHeightHalf + 3, BarY + 5, 2, BarHeight - 10)
-		EndIf
-	Else ; ~ Vertical
+	If Vertical ; ~ Vertical
 		If Width > 10
 			Color(255, 255, 255)
 			Rect(BarX + 4, BarY + BarHeightHalf, BarWidth - 10, 2)
 			Rect(BarX + 4, BarY + BarHeightHalf - 3, BarWidth - 10, 2)
 			Rect(BarX + 4, BarY + BarHeightHalf + 3, BarWidth - 10, 2)
 		EndIf
+	Else ; ~ Horizontal
+		If Height > 10
+			Color(255, 255, 255)
+			Rect(BarX + BarHeightHalf, BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + BarHeightHalf - 3, BarY + 5, 2, BarHeight - 10)
+			Rect(BarX + BarHeightHalf + 3, BarY + 5, 2, BarHeight - 10)
+		EndIf
 	EndIf
 	
 	OnScrollBar = (mo\MouseDown1 And MouseOn(BarX, BarY, BarWidth, BarHeight))
 	If OnScrollBar
-		If (Not Vertical)
-			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
-		Else
+		If Vertical
 			Return(Min(Max(Value + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
+		Else
+			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
 		EndIf
 	EndIf
 	

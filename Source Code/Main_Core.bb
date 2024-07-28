@@ -2016,10 +2016,10 @@ Function UpdateConsole%()
 							;[End Block]
 					End Select
 					
-					If (Not chs\NoTarget)
-						CreateConsoleMsg(GetLocalString("console", "nt.off"))
-					Else
+					If chs\NoTarget
 						CreateConsoleMsg(GetLocalString("console", "nt.on"))
+					Else
+						CreateConsoleMsg(GetLocalString("console", "nt.off"))
 					EndIf
 					;[End Block]
 				Case "spawnpumpkin", "pumpkin"
@@ -2080,7 +2080,9 @@ Function UpdateConsole%()
 					
 					If S2IMapContains(AchievementsIndex, StrTemp)
 						GiveAchievement(StrTemp)
+						
 						Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), StrTemp), "name")
+						
 						If JsonIsNull(AchvName)
 							AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), StrTemp), "name")
 						EndIf
@@ -2310,10 +2312,10 @@ Function RenderMessages%()
 		
 		Local PosY%
 		
-		If (Not Temp)
-			PosY = mo\Viewport_Center_Y + (200 * MenuScale)
-		Else
+		If Temp
 			PosY = opt\GraphicHeight * 0.94
+		Else
+			PosY = mo\Viewport_Center_Y + (200 * MenuScale)
 		EndIf
 		TextEx(mo\Viewport_Center_X + ((me\Sanity < -200.0) * Rand(-10, 10) * MenuScale), PosY + ((me\Sanity < -200.0) * Rand(-10, 10) * MenuScale), msg\Txt, True)
 	EndIf
@@ -2957,13 +2959,13 @@ Function UpdateMouseLook%()
 		If EntityHidden(t\OverlayID[1 + (wi\HazmatSuit > 0)]) Then ShowEntity(t\OverlayID[1 + (wi\HazmatSuit > 0)])
 		
 		If (Not me\Terminated)
-			If (Not ChannelPlaying(BreathCHN))
+			If ChannelPlaying(BreathCHN)
+				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+			Else
 				If (Not ChannelPlaying(BreathGasRelaxedCHN))
 					BreathGasRelaxedCHN = PlaySound_Strict(snd_I\BreathGasRelaxedSFX, True)
 					ChannelVolume(BreathGasRelaxedCHN, opt\VoiceVolume * opt\MasterVolume)
 				EndIf
-			Else
-				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 			EndIf
 		EndIf
 		
@@ -7551,10 +7553,10 @@ Function RenderMenu%()
 		Local TempStr$
 		Local i%
 		
-		If (Not OnPalette)
-			ShowPointer()
-		Else
+		If OnPalette
 			HidePointer()
+		Else
+			ShowPointer()
 		EndIf
 		
 		DrawBlock(t\ImageID[0], x, y)
@@ -9398,16 +9400,16 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	
 	Pvt = CreatePivot()
 	PositionEntity(Pvt, x, y + 0.05, z, IsGlobal)
-	If (Not Dir)
-		RotateEntity(Pvt, 90.0, 0.0, 0.0)
-	Else
+	If Dir
 		RotateEntity(Pvt, -90.0, 0.0, 0.0)
+	Else
+		RotateEntity(Pvt, 90.0, 0.0, 0.0)
 	EndIf
 	If EntityPick(Pvt, PickRange) <> 0
-		If (Not Dir)
-			PositionEntity(Entity, x, PickedY() + CustomRadius + 0.02, z, IsGlobal)
-		Else
+		If Dir
 			PositionEntity(Entity, x, PickedY() + CustomRadius - 0.02, z, IsGlobal)
+		Else
+			PositionEntity(Entity, x, PickedY() + CustomRadius + 0.02, z, IsGlobal)
 		EndIf
 	Else
 		PositionEntity(Entity, x, y, z, IsGlobal)
