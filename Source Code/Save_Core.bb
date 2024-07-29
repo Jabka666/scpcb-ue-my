@@ -2104,6 +2104,9 @@ Function LoadGameQuick%(File$)
 	
 	d_I\AnimButton = 0
 	
+	If wi\GasMask = 0 Then HideEntity(t\OverlayID[1])
+	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[2])
+	
 	If wi\NightVision > 0
 		me\CameraFogDist = 17.0
 	ElseIf wi\SCRAMBLE > 0
