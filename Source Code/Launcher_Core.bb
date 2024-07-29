@@ -672,7 +672,7 @@ Function UpdateLanguageSelector%()
 				Else
 					Local Size$ = Format(GetLocalString("language", "size"), SimpleFileSize(MouseHoverLanguage\FileSize))
 					Local LastMod$ = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
-					Local Height% = FontHeight() * 13
+					Height% = FontHeight() * 13
 				EndIf
 			Else
 				Author = ""
