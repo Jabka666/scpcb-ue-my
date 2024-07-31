@@ -3245,7 +3245,7 @@ Function UpdateNPCs%()
 											If Abs(DeltaYaw(n\Collider, me\Collider)) < 20.0
 												If wi\HazmatSuit > 0
 													PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
-													InjurePlayer(Rnd(0.5))
+													me\Injuries = me\Injuries + Rnd(0.5)
 												Else
 													PlaySound_Strict(snd_I\DamageSFX[Rand(9, 10)])
 													InjurePlayer(Rnd(0.75, 1.15) * DifficultyDMGMult, 0.0, 100.0, 0.4 * DifficultyDMGMult, 0.2)
@@ -6991,7 +6991,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 			Case 16, 17 ; ~ Helmet, Face or Head
 				;[Block]
 				If wi\BallisticHelmet
-					InjurePlayer(0.1)
+					me\Injuries = me\Injuries + 0.1
 				Else
 					For n.NPCs = Each NPCs
 						If n\NPCType = NPCTypeMTF Lor n\NPCType = NPCTypeApache Lor n\NPCType = NPCTypeGuard
@@ -7050,7 +7050,8 @@ Function MoveToPocketDimension%()
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\RoomID = r_dimension_106
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
-			InjurePlayer(0.5, 0.0, 1500.0)
+			me\Injuries = me\Injuries + 0.5
+			me\BlurTimer = 1600.0
 			HideEntity(me\Head)
 			ShowEntity(me\Collider)
 			PlaySound_Strict(snd_I\Use914SFX)

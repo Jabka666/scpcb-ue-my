@@ -2052,7 +2052,7 @@ Function UpdateEvents%()
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech0.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 13.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 13.0
 												CreateMsg(GetLocalString("msg", "012_1"))
-												InjurePlayer(0.5)
+												me\Injuries = me\Injuries + 0.5
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 31.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 31.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(2).png")
@@ -2064,14 +2064,14 @@ Function UpdateEvents%()
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(2, 3) + ".ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 49.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 49.0
 												CreateMsg(GetLocalString("msg", "012_3"))
-												InjurePlayer(0.3)
+												me\Injuries = me\Injuries + 0.3
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech4.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 63.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 63.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(3).png")
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex)
 												
-												InjurePlayer(0.5)
+												me\Injuries = me\Injuries + 0.5
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 74.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 74.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(4).png")
@@ -2080,7 +2080,7 @@ Function UpdateEvents%()
 												
 												CreateMsg(GetLocalString("msg", "012_4"))
 												me\CameraShake = 2.0
-												InjurePlayer(0.8)
+												me\Injuries = me\Injuries + 0.8
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
 												PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 												If (Not me\Crouch) Then SetCrouch(True)
@@ -2937,7 +2937,7 @@ Function UpdateEvents%()
 						Next
 					; ~ Trade not sucessful (player got in return to injuries a new item)
 					ElseIf e\EventState3 = 2.0
-						InjurePlayer(5.0)
+						me\Injuries = me\Injuries + 5.0
 						Pvt = CreatePivot()
 						PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
@@ -2973,7 +2973,7 @@ Function UpdateEvents%()
 							RemoveWearableItems(Inventory(e\EventState2))
 							RemoveItem(Inventory(e\EventState2))
 						Else
-							InjurePlayer(5.0)
+							me\Injuries = me\Injuries + 5.0
 							Pvt = CreatePivot()
 							PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
@@ -3903,11 +3903,7 @@ Function UpdateEvents%()
 							ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
 						EndIf
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 6.25
-							If wi\HazmatSuit = 0
-								InjurePlayer(fps\Factor[0] / 5000.0)
-							Else
-								InjurePlayer(fps\Factor[0] / 10000.0)
-							EndIf
+								me\Injuries = me\Injuries + (fps\Factor[0] / (5000.0 * (1.0 + (wi\HazmatSuit > 0))))
 							If e\room\NPC[1] = Null
 								e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.13, EntityZ(e\room\NPC[0]\Collider))
 								RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle, 0.0)
@@ -5087,7 +5083,7 @@ Function UpdateEvents%()
 								If (Not n_I\Curr106\Contained)
 									If n_I\Curr106\State > 0.0 Then n_I\Curr106\State = n_I\Curr106\State - (fps\Factor[0] * 3.0)
 								EndIf
-								InjurePlayer(fps\Factor[0] * 0.00005)
+								me\Injuries = me\Injuries + (fps\Factor[0] * 0.00005)
 							EndIf
 						EndIf
 					EndIf
@@ -5486,7 +5482,7 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 5.0
 								;[Block]
-								InjurePlayer(0.3)
+								me\Injuries = me\Injuries + 0.3
 								;[End Block]
 							Case 10.0
 								;[Block]
@@ -6168,11 +6164,7 @@ Function UpdateEvents%()
 											me\BlurTimer = Sin(MilliSec / 10.0) * Abs(me\Sanity)
 										EndIf
 										
-										If wi\HazmatSuit = 0
-											InjurePlayer(fps\Factor[0] / 5000.0)
-										Else
-											InjurePlayer(fps\Factor[0] / 10000.0)
-										EndIf
+										me\Injuries = me\Injuries + (fps\Factor[0] / (5000.0 * (1.0 + (wi\HazmatSuit > 0))))
 										
 										If me\Terminated And me\Bloodloss >= 100.0 Then msg\DeathMsg = Format(GetLocalString("death", "035"), SubjectName)
 									EndIf
@@ -7227,6 +7219,8 @@ Function UpdateDimension106%()
 				If e\EventState2 <> PD_FakeTunnelRoom
 					ShouldPlay = 3
 					
+					me\Injuries = me\Injuries + (fps\Factor[0] * 0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)))
+					
 					me\CameraFogDist = 6.0
 					
 					e\EventState = e\EventState + fps\Factor[0]
@@ -7254,8 +7248,6 @@ Function UpdateDimension106%()
 							ScaleEntity(e\room\Objects[i], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
 							ScaleEntity(e\room\Objects[i + 1], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + (i + 1) * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + (i + 1) * 20.0) * 0.1), RoomScale, True)
 						Next
-						
-						InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
 						
 						If n_I\Curr106\State > 0.0 ; ~ SCP-106 circles around the starting room
 							Angle = (e\EventState / 10.0 Mod 360.0)
@@ -7296,8 +7288,6 @@ Function UpdateDimension106%()
 						;[Block]
 						SinValue = Sin(e\EventState * 1.6) * 4.0
 						CosValue = Cos(e\EventState * 0.8) * 5.0
-						
-						InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
 						
 						PositionEntity(e\room\Objects[9], EntityX(e\room\Objects[8], True) + 3384.0 * RoomScale, 0.0, EntityZ(e\room\Objects[8], True))
 						
@@ -7509,7 +7499,6 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_ExitRoom
 						;[Block]
-						InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
 						
 						Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
 						If Dist < PowTwo(640.0 * RoomScale)
@@ -7618,7 +7607,6 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_TowerRoom
 						;[Block]
-						InjurePlayer(fps\Factor[0] * (0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0))))
 						
 						If opt\ParticleAmount > 0
 							If Rand(800) = 1
@@ -7683,7 +7671,7 @@ Function UpdateDimension106%()
 						UpdateDoors()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
-						InjurePlayer(fps\Factor[0] * 0.00006)
+						me\Injuries = me \Injuries + (fps\Factor[0] * 0.00005)
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
 							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.0
