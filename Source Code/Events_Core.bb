@@ -1383,8 +1383,6 @@ Function UpdateEvents%()
 								;[Block]
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[1], True), EntityZ(me\Collider), EntityZ(e\room\Objects[1], True)) < 7.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 									If Rand(100) = 1
-										msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
-										
 										InjurePlayer(Rnd(0.3, 0.6), 0.0, 300.0)
 										PlaySound_Strict(snd_I\DamageSFX[Rand(2, 3)])
 										me\CameraShake = 0.5
@@ -1392,7 +1390,10 @@ Function UpdateEvents%()
 										e\EventState2 = Rnd(-0.1, 0.1)
 										e\EventState3 = Rnd(-0.1, 0.1)
 										
-										If me\Injuries > 5.0 Then Kill(True)
+										If me\Injuries > 5.0
+											msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
+											Kill(True)
+										EndIf
 									EndIf
 								EndIf
 								
@@ -7364,7 +7365,7 @@ Function UpdateDimension106%()
 							If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 						Next
 						
-						InjurePlayer(fps\Factor[0] / 4000.0)
+						me\Injuries = me\Injuries + (fps\Factor[0] / 4000.0)
 						
 						me\Sanity = Max(me\Sanity - fps\Factor[0] / SqrValue / 8.0, -1000.0)
 						
@@ -7463,9 +7464,9 @@ Function UpdateDimension106%()
 							e\SoundCHN = LoopSound2(e\Sound, e\SoundCHN, Camera, e\room\Objects[19], 8.0)
 							EntityTexture(e\room\Objects[19], e\room\Textures[1])
 							If I_714\Using = 1
-								InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0002))
+								me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * 0.0002))
 							Else
-								InjurePlayer((8.0 - SqrValue) * (fps\Factor[0] * 0.0004))
+								me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * 0.0004))
 							EndIf
 							
 							If Dist < 49.0
@@ -7480,7 +7481,7 @@ Function UpdateDimension106%()
 							EndIf
 						ElseIf Dist < 64.0
 							EntityTexture(e\room\Objects[19], e\room\Textures[0])
-							InjurePlayer((8.0 - Sqr(Dist)) * (fps\Factor[0] * 0.0001))
+							me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * 0.0001))
 						EndIf
 						
 						If I_714\Using = 2 Lor chs\NoTarget Lor I_268\InvisibilityOn
