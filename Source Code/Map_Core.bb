@@ -3495,6 +3495,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		EndIf
 	Else
 		Local PrevEventState# = State
+		Local emit.Emitter
 		
 		If State < 0.0
 			State = 0.0
@@ -3531,6 +3532,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			ElseIf State > 70.0 * 7.25 And State < (70.0 * 7.3) + fps\Factor[0]
 				me\BigCameraShake = 2.0
 				door1\FastOpen = True : door1\Open = True
+				emit.Emitter = SetEmitter(Null, EntityX(door1\OBJ, True), EntityY(door1\OBJ, True), EntityZ(door1\OBJ, True), 16)
+				EntityParent(emit\Owner, door1\OBJ)
 				n_I\Curr096\State = 5.0
 				n_I\Curr096\LastSeen = 1.0
 			ElseIf State > 70.0 * 8.1 And State < 70.0 * 8.15 + fps\Factor[0]
