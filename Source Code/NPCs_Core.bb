@@ -7396,11 +7396,14 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 End Function
 
 Function UpdateNPCNearTesla%()
-	Local n.NPCs
+	Local n.NPCs, emit.Emitter
 	
 	For n.NPCs = Each NPCs
 		If n\TeslaHit
-			If opt\ParticleAmount > 0 Then SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
+			If opt\ParticleAmount > 0
+				emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
+				EntityParent(emit\Owner, n\OBJ)
+			EndIf
 			
 			If n\NPCType = NPCType106
 				If n\State3 = 1.0
