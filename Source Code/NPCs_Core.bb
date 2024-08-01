@@ -594,7 +594,7 @@ Global RemoveHazmatTimer#, Remove714Timer#
 Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
-	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints
+	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints, emit.Emitter
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, Visible%
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	Local SinValue#, SqrValue#
@@ -1477,6 +1477,10 @@ Function UpdateNPCs%()
 													If (Not n\Path[n\PathLocation]\door\Open)
 														n\Path[n\PathLocation]\door\Open = True
 														n\Path[n\PathLocation]\door\FastOpen = True
+														If Dist < 36.0 Then me\BigCameraShake = 3.0
+														
+														emit.Emitter = SetEmitter(Null, EntityX(n\Path[n\PathLocation]\door\OBJ, True), EntityY(n\Path[n\PathLocation]\door\OBJ, True), EntityZ(n\Path[n\PathLocation]\door\OBJ, True), 16)
+														EntityParent(emit\Owner, n\Path[n\PathLocation]\door\OBJ)
 														PlaySound2(snd_I\OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\FrameOBJ)
 													EndIf
 												EndIf

@@ -320,6 +320,18 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[15], 0.01, 0.01, 1.0, 2.0)
 	SetTemplateAlphaVel(ParticleEffect[15], True)
 	SetTemplateGravity(ParticleEffect[15], 0.0022)
+	
+	; ~ Sparks effect for fast opened door
+	ParticleEffect[16] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[16], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[16], 15.0)
+	SetTemplateParticlesPerInterval(ParticleEffect[16], 30)
+	SetTemplateParticleLifeTime(ParticleEffect[16], 60, 70)
+	SetTemplateTexture(ParticleEffect[16], PARTICLE_SPARK)
+	SetTemplateOffset(ParticleEffect[16], -0.03, 0.03, 0.0, 0.05, -0.03, 0.03)
+	SetTemplateVelocity(ParticleEffect[16], -0.008, 0.008, -0.008, 0.008, -0.008, 0.008)
+	SetTemplateSize(ParticleEffect[16], 0.007, 0.007, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[16], True)
 End Function
 
 Function RemoveParticleInstances%()
