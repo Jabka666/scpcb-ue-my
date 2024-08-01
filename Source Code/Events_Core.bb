@@ -4055,7 +4055,10 @@ Function UpdateEvents%()
 							x2 = EntityX(e\room\OBJ, True) : z2 = EntityZ(e\room\OBJ, True) : y2 = EntityY(e\room\OBJ, True)
 							If Abs(EntityX(me\Collider, True) - x2) < 0.75 And Abs(EntityZ(me\Collider, True) - z2) < 0.75 And Abs(EntityY(me\Collider, True) - y2) < 1.3
 								If (Not me\Terminated)
-									If opt\ParticleAmount > 0 Then SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
+									If opt\ParticleAmount > 0
+										emit.Emitter = SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
+										EntityParent(emit\Owner, me\Collider)
+									EndIf
 									me\LightFlash = 0.4
 									me\CameraShake = 1.0
 									msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
