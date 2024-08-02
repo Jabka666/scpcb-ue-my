@@ -381,12 +381,19 @@ Function UpdateLauncher%(lnchr.Launcher)
 End Function
 
 Function UpdateLanguageSelector%()
+	Local ServerURI$
+	If GetUserLanguage() = "zh-CN" Then 
+		ServerURI = "https://filescenter-1301852054.cos.ap-nanjing.myqcloud.com/cbue/"
+	Else
+		ServerURI = "https://files.ziyuesinicization.site/cbue/"
+	EndIf
+	
 	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
 	
 	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
-	CreateDir(BasePath + "flags/")
-	DownloadFile("https://files.ziyuesinicization.site/cbue/list.txt", BasePath + "temp.txt") ; ~ List of languages
+	CreateDir(BasePath + "/flags/")
+	DownloadFile(ServerURI + "list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
 	Local lan.ListLanguage
 	Local File% = OpenFile_Strict(BasePath + "temp.txt")
@@ -406,7 +413,7 @@ Function UpdateLanguageSelector%()
 				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
 				lan\FileSize = Int(ParseDomainTXT(l, "size")) ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
-				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile("https://files.ziyuesinicization.site/cbue/flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURI + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
 				If lan\FlagImg = 0 Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
 			Else
 				Exit
@@ -445,9 +452,9 @@ Function UpdateLanguageSelector%()
 				;[Block]
 				If (Not RequestLanguage\MajorOnly)
 					If opt\NoProgressBar Then
-						DownloadFile("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+						DownloadFile(ServerURI + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 					Else
-						DownloadFileThread("https://files.ziyuesinicization.site/cbue/" + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+						DownloadFileThread(ServerURI + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 					EndIf
 				EndIf
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
