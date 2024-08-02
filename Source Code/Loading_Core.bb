@@ -345,10 +345,10 @@ Function LoadParticles%()
 	SetTemplateParticleLifeTime(ParticleEffect[17], 110, 120)
 	SetTemplateTexture(ParticleEffect[17], PARTICLE_WATER_DROP)
 	SetTemplateOffset(ParticleEffect[17], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[17], -0.0001, 0.0001, -0.006, -0.003, -0.0001, 0.0001)
+	SetTemplateVelocity(ParticleEffect[17], -0.0001, 0.0001, -0.008, -0.005, -0.0001, 0.0001)
 	SetTemplateSize(ParticleEffect[17], 0.008, 0.008, 1.0, 1.5)
 	SetTemplateAlphaVel(ParticleEffect[17], True)
-	SetTemplateFloor(ParticleEffect[17], 0.4, 0.1, 0)
+	SetTemplateFloor(ParticleEffect[17], 0.4, 0.02, 0)
 End Function
 
 Function RemoveParticleInstances%()
