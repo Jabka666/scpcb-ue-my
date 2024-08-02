@@ -903,7 +903,7 @@ Function UpdateEvents%()
 								EndIf
 							Else
 								Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ))
-								If Dist < 0.16 And (Not chs\NoTarget)
+								If Dist < 0.16 And e\room\RoomDoors[0]\OpenState > 0.0 And (Not chs\NoTarget)
 									If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 									
 									MakeMeUnplayable()
