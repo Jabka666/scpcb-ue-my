@@ -1559,7 +1559,7 @@ Function UpdateEvents%()
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
 								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
-									If Inventory(i)\State > 0.0
+									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\ID = it_finenvg)
 										HasBatteryFor895 = True
 										Exit
 									EndIf

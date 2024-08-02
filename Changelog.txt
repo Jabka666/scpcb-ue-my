@@ -71,7 +71,6 @@ Items:
 - Cups now have a short use timer.
 - Added pizza item.
 - New texture for SCP-1025.
-- Red Night Vision Goggles require 18V battery.
 - SCRAMBLE Gear battery drain reworked to drain slow when idle, but drain fast when viewing SCP-096's face.
 - SCP-268's timer last longer.
 - Very Fine Radio gives the code to Dr. Gears' instead of Dr. Maynard's.

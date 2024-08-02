@@ -3912,9 +3912,13 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(500.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case it_finenvg, it_veryfinenvg
+									Case it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
+										;[End Block]
+									Case it_finenvg
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
 										;[End Block]
 									Case it_scramble
 										;[Block]
@@ -3980,9 +3984,13 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case it_finenvg, it_veryfinenvg
+									Case it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
+										;[End Block]
+									Case it_finenvg
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
 										;[End Block]
 									Case it_scramble
 										;[Block]
@@ -4045,12 +4053,16 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
-									Case it_finenvg, it_veryfinenvg
+									Case it_veryfinenvg
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
+										;[End Block]
+									Case it_finenvg
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
 										;[End Block]
 									Case it_scramble
 										;[Block]
@@ -4116,9 +4128,13 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = 10000.0
 										CreateMsg(GetLocalString("msg", "nvg.bat"))
 										;[End Block]
-									Case it_finenvg, it_veryfinenvg
+									Case it_veryfinenvg
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
+										;[End Block]
+									Case it_finenvg
+										;[Block]
+										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
 										;[End Block]
 									Case it_scramble
 										;[Block]
