@@ -3053,27 +3053,32 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_6_ez_789_j
 				;[Block]
-				If e\EventState = 0.0
-					If PlayerRoom = e\room
-						If e\room\Objects[0] = 0
-							TFormPoint(1040.0, 50.0, 0.0, e\room\OBJ, 0)
-							e\room\Objects[0] = CreatePivot()
-							PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ())
-							EntityParent(e\room\Objects[0], e\room\OBJ)
-						Else
-							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 4.0
-								GiveAchievement("789j")
-								e\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\Joke\789J.ogg"), Camera, e\room\Objects[0], 10.0, 1.0, True)
-								e\EventState = 1.0
+				If e\room\Objects[0] = 0
+					TFormPoint(1040.0, 50.0, 0.0, e\room\OBJ, 0)
+					e\room\Objects[0] = CreatePivot()
+					PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ())
+					EntityParent(e\room\Objects[0], e\room\OBJ)
+				Else
+					Select e\EventState
+						Case 0.0
+							;[Block]
+							If PlayerRoom = e\room
+								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 4.0
+									GiveAchievement("789j")
+									e\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\Joke\789J.ogg"), Camera, e\room\Objects[0], 10.0, 1.0, True)
+									e\EventState = 1.0
+								EndIf
 							EndIf
-						EndIf
-					EndIf
-				ElseIf e\EventState = 1.0
-					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 10.0, 1.5)
-					If (Not ChannelPlaying(e\SoundCHN))
-						If e\room\Objects[0] <> 0 Then FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-						RemoveEvent(e)
-					EndIf
+							;[End Block]
+						Case 1.0
+							;[Block]
+							UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 10.0, 1.5)
+							If (Not ChannelPlaying(e\SoundCHN))
+								If e\room\Objects[0] <> 0 Then FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
+								RemoveEvent(e)
+							EndIf
+							;[End Block]
+					End Select
 				EndIf
 				;[End Block]
 			Case e_room2_6_ez_guard

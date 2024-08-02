@@ -48,7 +48,7 @@ End Type
 
 Global ParticleCam%
 Global ParticlePiv%
-Global ParticleEffect%[17]
+Global ParticleEffect%[18]
 Global UpdateDevilParticlesTimer# = 0.0
 
 Function CreateTemplate()
@@ -355,9 +355,9 @@ Function UpdateParticles_Devil()
 						EndIf
 					EndIf
 					;[End Block]
-				Case 2
+				Case 2, 3
 					;[Block]
-					emit\SoundCHN = LoopSound2(snd_I\HissSFX[1], emit\SoundCHN, Camera, emit\Owner, 5.0)
+					emit\SoundCHN = LoopSound2(snd_I\HissSFX[1], emit\SoundCHN, Camera, emit\Owner, 5.0 - (3.0 * (emit\State = 3.0)), 1.0 - (0.6 * (emit\State = 3.0)))
 					;[End Block]
 			End Select
 			

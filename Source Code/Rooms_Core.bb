@@ -3216,6 +3216,35 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
+		Case r_room2_6_ez
+			;[Block]
+			If Rand(3) = 1
+				Select Rand(4)
+					Case 1
+						;[Block]
+						xTemp = 893.0
+						zTemp = 735.0
+						;[End Block]
+					Case 2
+						;[Block]
+						xTemp = 1077.0
+						zTemp = 735.0
+						;[End Block]
+					Case 3
+						;[Block]
+						xTemp = 893.0
+						zTemp = -735.0
+						;[End Block]
+					Case 4
+						;[Block]
+						xTemp = 1077.0
+						zTemp = -735.0
+						;[End Block]
+				End Select
+				emit.Emitter = SetEmitter(r, r\x + xTemp * RoomScale, r\y + 141.0 * RoomScale, r\z + zTemp * RoomScale, 17)
+				emit\State = 3
+			EndIf
+			;[End Block]
 		Case r_room2_cafeteria
 			;[Block]
 			; ~ Misc doors

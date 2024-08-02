@@ -69,7 +69,7 @@ Function LoadDecals%()
 	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures, False)
 End Function
 
-Const MaxParticleTextureIDAmount% = 8
+Const MaxParticleTextureIDAmount% = 9
 
 Function RemoveDecalInstances%()
 	Local i%
@@ -102,6 +102,8 @@ Const PARTICLE_SUN% = 5
 Const PARTICLE_BLOOD% = 6
 
 Const PARTICLE_SPARK% = 7
+
+Const PARTICLE_WATER_DROP% = 8
 ;[End Block]
 
 Function LoadParticles%()
@@ -121,6 +123,8 @@ Function LoadParticles%()
 	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\Particles\blood.png", 1 + 2, DeleteAllTextures, False)
 	
 	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures, False)
+	
+	p_I\ParticleTextureID[PARTICLE_WATER_DROP] = LoadTexture_Strict("GFX\Particles\water_drop.png", 1 + 2, DeleteAllTextures, False)
 	
 	; ~ Black smoke in "room2c_gw_lcz"/"room2_6_hcz"/"cont1_035"
 	ParticleEffect[0] = CreateTemplate()
@@ -246,7 +250,7 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[9], True)
 	SetTemplateSize(ParticleEffect[9], 0.07, 0.07, 0.5, 1.0)
 	SetTemplateSizeVel(ParticleEffect[9], 0.02, 1.02)
-	SetTemplateFloor(ParticleEffect[9], -18.2, 0.1, True)
+	SetTemplateFloor(ParticleEffect[9], -18.2, 0.1, 1)
 	
 	; ~ White smoke in "room2_nuke"
 	ParticleEffect[10] = CreateTemplate()
@@ -300,7 +304,7 @@ Function LoadParticles%()
 	ParticleEffect[14] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[14], 1)
 	SetTemplateInterval(ParticleEffect[14], 20)
-	SetTemplateEmitterLifeTime(ParticleEffect[14], 70.0)
+	SetTemplateEmitterLifeTime(ParticleEffect[14], 70)
 	SetTemplateParticleLifeTime(ParticleEffect[14], 60, 70)
 	SetTemplateTexture(ParticleEffect[14], PARTICLE_BLACK_SMOKE)
 	SetTemplateOffset(ParticleEffect[14], -0.2, 0.2, 0.2, 0.8, -0.2, 0.2)
@@ -324,7 +328,7 @@ Function LoadParticles%()
 	; ~ Sparks effect for fast opened door
 	ParticleEffect[16] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[16], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[16], 15.0)
+	SetTemplateEmitterLifeTime(ParticleEffect[16], 15)
 	SetTemplateParticlesPerInterval(ParticleEffect[16], 30)
 	SetTemplateParticleLifeTime(ParticleEffect[16], 60, 70)
 	SetTemplateTexture(ParticleEffect[16], PARTICLE_SPARK)
@@ -332,6 +336,19 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[16], -0.008, 0.008, -0.008, 0.008, -0.008, 0.008)
 	SetTemplateSize(ParticleEffect[16], 0.007, 0.007, 1.0, 1.5)
 	SetTemplateAlphaVel(ParticleEffect[16], True)
+	
+	; ~ Water drop particle
+	ParticleEffect[17] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[17], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[17], -1)
+	SetTemplateParticlesPerInterval(ParticleEffect[17], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[17], 110, 120)
+	SetTemplateTexture(ParticleEffect[17], PARTICLE_WATER_DROP)
+	SetTemplateOffset(ParticleEffect[17], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[17], -0.0001, 0.0001, -0.006, -0.003, -0.0001, 0.0001)
+	SetTemplateSize(ParticleEffect[17], 0.008, 0.008, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[17], True)
+	SetTemplateFloor(ParticleEffect[17], 0.4, 0.1, 0)
 End Function
 
 Function RemoveParticleInstances%()
