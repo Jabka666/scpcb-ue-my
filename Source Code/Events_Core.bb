@@ -903,7 +903,7 @@ Function UpdateEvents%()
 								EndIf
 							Else
 								Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ))
-								If Dist < 0.16 And (Not chs\NoTarget)
+								If Dist < 0.16 And e\room\RoomDoors[0]\OpenState > 0.0 And (Not chs\NoTarget)
 									If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 									
 									MakeMeUnplayable()
@@ -926,10 +926,7 @@ Function UpdateEvents%()
 									EndIf
 									me\BlurTimer = e\EventState2 * 500.0
 									
-									If e\EventState2 = 2.0
-										MoveToPocketDimension()
-										RemoveEvent(e)
-									EndIf
+									If e\EventState2 = 2.0 Then MoveToPocketDimension()
 								Else
 									If chs\NoClip Then me\Playable = True
 								EndIf
@@ -1559,7 +1556,7 @@ Function UpdateEvents%()
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
 								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
-									If Inventory(i)\State > 0.0
+									If Inventory(i)\State > 0.0 Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\ID = it_finenvg)
 										HasBatteryFor895 = True
 										Exit
 									EndIf
@@ -7282,12 +7279,11 @@ Function UpdateDimension106%()
 							EndIf
 						EndIf
 						If EntityDistanceSquared(me\Collider, e\room\OBJ) > PowTwo(-1200.0 * RoomScale)
-							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) <> Null
-									If Inventory(i)\ItemTemplate\ID = it_scp005
-										Random = 31
-										Exit
-									EndIf
+							Random = Rand(30)
+							For e2.Events = Each Events
+								If e2\EventID = e_cont1_005
+									If e2\EventState = 1.0 Then Random = 31
+									Exit
 								EndIf
 							Next
 							Teleport = True
@@ -7661,8 +7657,8 @@ Function UpdateDimension106%()
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							; ~ Player is at the exit
 							If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
-								Teleport = True
 								Random = Rand(11, 30)
+								Teleport = True
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
 									PlaySound_Strict(snd_I\HorrorSFX[8])
@@ -7680,7 +7676,7 @@ Function UpdateDimension106%()
 						UpdateDoors()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
-						me\Injuries = me \Injuries + (fps\Factor[0] * 0.00005)
+						me\Injuries = me \Injuries + (fps\Factor[0] * 0.0001)
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
 							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.0
@@ -7690,7 +7686,7 @@ Function UpdateDimension106%()
 									d\OpenState = 0.0
 								EndIf
 							Next
-							Random = 13
+							Random = 32
 							Teleport = True
 						EndIf
 						;[End Block]
@@ -7867,6 +7863,66 @@ Function UpdateDimension106%()
 							
 							e\EventState3 = 0.0
 							e\EventState2 = PD_Labyrinth
+							;[End Block]
+						Case 32
+							;[Block]
+							RoomExist = False
+							For r.Rooms = Each Rooms
+								If r\RoomTemplate\RoomID = r_cont1_005
+									RoomExist = True
+									
+									GiveAchievement("pocketdimension")
+									
+									IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
+									
+									me\BlinkTimer = -10.0 : me\BlurTimer = 1500.0
+									
+									If me\Playable
+										e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\PocketDimension\Exit.ogg"))
+										MakeMeUnplayable()
+									EndIf
+									If (Not ChannelPlaying(e\SoundCHN))
+										TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), 0.5, EntityZ(r\RoomCenter, True), 0.3, True)
+										TeleportToRoom(r)
+										
+										n_I\Curr106\State = 10000.0 : n_I\Curr106\Idle = 0
+										
+										For e2.Events = Each Events
+											If e2\EventID = e_room2_sl
+												e2\EventState3 = 0.0
+													UpdateLever(e2\room\RoomLevers[0]\OBJ)
+												RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
+												Exit
+											EndIf
+										Next
+										
+										For e2.Events = Each Events
+											If e2\EventID = e_cont1_005
+												RemoveEvent(e2)
+												Exit
+											EndIf
+										Next
+										
+										If wi\NightVision > 0
+											me\CameraFogDist = 17.0
+										ElseIf wi\SCRAMBLE > 0
+											me\CameraFogDist = 9.0
+										Else
+											me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
+										EndIf
+										
+										me\Playable = True
+										
+										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+										If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+									
+										e\EventState = 0.0
+										e\EventState3 = 0.0
+										e\EventState2 = PD_StartRoom
+									EndIf
+									Exit
+								EndIf
+							Next
 							;[End Block]
 					End Select
 					ResetRender()

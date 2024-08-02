@@ -211,15 +211,11 @@ Function UpdateWorld2%()
 	Local HasBattery%
 	Local Power%
 	
-	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
+	If (wi\NightVision > 0 And wi\NightVision <> 3)  Lor wi\SCRAMBLE > 0
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\ID = it_nvg) Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\ID = it_veryfinenvg) Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\ID = it_finenvg) Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
-					If wi\NightVision = 3
-						Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * 0.015))
-					ElseIf wi\NightVision > 0
-						Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.03 * wi\NightVision)))
-					EndIf
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\ID = it_nvg) Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\ID = it_veryfinenvg) Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
+					If wi\NightVision > 0 Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision)))
 					If wi\SCRAMBLE > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.08 / wi\SCRAMBLE)))
 					Power = Int(Inventory(i)\State)
 					If Power = 0 ; ~ This NVG or SCRAMBLE can't be used
@@ -279,10 +275,10 @@ Function RenderWorld2%(Tween#)
 	Local HasBattery%
 	Local Power%
 	
-	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\ID = it_nvg) Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\ID = it_veryfinenvg) Lor (wi\NightVision = 3 And Inventory(i)\ItemTemplate\ID = it_finenvg) Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\ID = it_nvg) Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\ID = it_veryfinenvg) Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
 					Power = Int(Inventory(i)\State)
 					If Power = 0 ; ~ This NVG or SCRAMBLE can't be used
 						HasBattery = 0
