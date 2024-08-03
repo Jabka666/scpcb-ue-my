@@ -102,7 +102,7 @@ v1.3
 - Fixed overlapping of the intro location with the main map.
 - Fixed player's voice inside hazmat suit.
 - Fixed the «Secondary Lighting» lever being difficult to use.
-- Fixes for [NPCs]
+- Fixes for NPCs:
 	- Fixed NPCs still trying to pass the locked doors.
 	- Fixed NPCs not teleporting correctly.
 	- Fixed NPCs cannot find the path correctly.
@@ -634,7 +634,7 @@ v1.0.3
 - Fixed removal voice lines being spammable by repeatedly approaching and backing away from SCP-049.
 - Fixed an ability to move the head after death.
 - Fixed 4th blood drop sound not playing.
-- Fixes for pause [Menu]
+- Fixes for pause menu:
 	- Fixed «YOU DIED» screen sometimes appearing in place of «THE END» screen.
 	- Fixed being able to unpause for one frame while dead.
 	- Fixed mouse click not working in credits.
