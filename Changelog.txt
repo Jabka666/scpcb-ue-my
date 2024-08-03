@@ -13,6 +13,8 @@ General:
 - SCP-500 makes a new sound when used.
 - Increased inventory slots of Euclid and Keter by 2.
 - Added Dr. Gears achievement.
+- Keter achievement gives bonus points towards Omni Key Card chances.
+- SCP-005 event always returns you back to the chamber after escaping labyrinth.
 
 - Optimized the game...
 
@@ -115,6 +117,8 @@ Bug Fixes:
 - Fixed NPCs gravity not updating after loading the game from main menu (and loading custom maps).
 - Fixed items animation not saving properly.
 - Fixed player rotation in the maintenance tunnel elevators.
+- Fixed hazmat suit and gas mask overlays combining when reloading a save.
+- Fixed clipping into SCP-005 door when entering trap if door was closed.
 
 Known issues:
 - Cups crash the game sometimes.
