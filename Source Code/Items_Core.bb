@@ -1554,9 +1554,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key5
 							;[Block]
-							Local CurrAchvAmount% = S2IMapSize(UnlockedAchievements)
-							
-							If Rand(0, ((S2IMapSize(AchievementsIndex) - 1) * (2 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (2 + SelectedDifficulty\OtherFactors))) = 0
+							Local CurrAchvAmount% = ((S2IMapSize(AchievementsIndex) - 1) - (S2IMapSize(UnlockedAchievements) - 1)) * (2 + SelectedDifficulty\OtherFactors)
+							If S2IMapContains(UnlockedAchievements, "keter") Then CurrAchvAmount = CurrAchvAmount - (2 + SelectedDifficulty\OtherFactors)
+							If CurrAchvAmount < 0 Then CurrAchvAmount = 0
+							If Rand(0, CurrAchvAmount) = 0
 								it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 							ElseIf Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
@@ -1576,9 +1577,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					CurrAchvAmount = S2IMapSize(UnlockedAchievements)
-					
-					If Rand(0, ((S2IMapSize(AchievementsIndex) - 1) * (4 + SelectedDifficulty\OtherFactors)) - ((CurrAchvAmount - 1) * (4 + SelectedDifficulty\OtherFactors))) = 0
+					CurrAchvAmount = ((S2IMapSize(AchievementsIndex) - 1) - (S2IMapSize(UnlockedAchievements) - 1)) * (4 + SelectedDifficulty\OtherFactors)
+					If S2IMapContains(UnlockedAchievements, "keter") Then CurrAchvAmount = CurrAchvAmount - (2 + SelectedDifficulty\OtherFactors)
+					If CurrAchvAmount < 0 Then CurrAchvAmount = 0
+					If Rand(0, CurrAchvAmount) = 0
 						it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 					ElseIf Rand(24 + (6 * SelectedDifficulty\OtherFactors)) = 1
 						it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
