@@ -3222,22 +3222,22 @@ Function FillRoom%(r.Rooms)
 				Select Rand(4)
 					Case 1
 						;[Block]
-						xTemp = 893.0
+						xTemp = 925.0
 						zTemp = 735.0
 						;[End Block]
 					Case 2
 						;[Block]
-						xTemp = 1077.0
+						xTemp = 1109.0
 						zTemp = 735.0
 						;[End Block]
 					Case 3
 						;[Block]
-						xTemp = 893.0
+						xTemp = 925.0
 						zTemp = -735.0
 						;[End Block]
 					Case 4
 						;[Block]
-						xTemp = 1077.0
+						xTemp = 1109.0
 						zTemp = -735.0
 						;[End Block]
 				End Select

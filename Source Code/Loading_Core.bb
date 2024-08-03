@@ -2933,6 +2933,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	SecondaryLightOn = 0.0
 	IsBlackOut = False : PrevIsBlackOut = False
 	UpdateLightsTimer = 0.0
+	LightRenderDistance = 0.0
 	
 	RemoteDoorOn = False
 	

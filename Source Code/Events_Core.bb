@@ -3051,7 +3051,7 @@ Function UpdateEvents%()
 			Case e_room2_6_ez_789_j
 				;[Block]
 				If e\room\Objects[0] = 0
-					TFormPoint(1040.0, 50.0, 0.0, e\room\OBJ, 0)
+					TFormPoint(1072.0, 50.0, 0.0, e\room\OBJ, 0)
 					e\room\Objects[0] = CreatePivot()
 					PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ())
 					EntityParent(e\room\Objects[0], e\room\OBJ)
@@ -3084,13 +3084,13 @@ Function UpdateEvents%()
 					Case 0.0
 						;[Block]
 						If e\room\Dist < 6.0 And e\room\Dist > 0.0
-							TFormPoint(1290.0, 52.0, 491.0, e\room\OBJ, 0)
+							TFormPoint(1322.0, 52.0, 491.0, e\room\OBJ, 0)
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 							SetNPCFrame(e\room\NPC[0], 287.0)
 							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 							
-							TFormPoint(1295.0, 150.0, 491.0, e\room\OBJ, 0)
+							TFormPoint(1328.0, 150.0, 491.0, e\room\OBJ, 0)
 							de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
 							EntityParent(de\OBJ, e\room\OBJ)
 							
@@ -7504,7 +7504,6 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_ExitRoom
 						;[Block]
-						
 						Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
 						If Dist < PowTwo(640.0 * RoomScale)
 							SqrValue = Sqr(Dist)
@@ -7581,6 +7580,7 @@ Function UpdateDimension106%()
 						
 						GiveAchievement("pocketdimension")
 						
+						LightRenderDistance = 64.0
 						UpdateLightVolume()
 						UpdateLights(Camera)
 						UpdateDoors()
@@ -7612,7 +7612,6 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_TowerRoom
 						;[Block]
-						
 						If opt\ParticleAmount > 0
 							If Rand(800) = 1
 								Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)
@@ -8260,6 +8259,7 @@ Function UpdateIntro%()
 			; ~ e\EventState3 = Timer in chamber location
 			
 			If PlayerRoom = e\room
+				LightRenderDistance = 64.0
 				If e\EventState = 0.0
 					For i = 0 To 1
 						snd_I\IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Ew" + i + ".ogg")
@@ -8412,6 +8412,8 @@ Function UpdateIntro%()
 					Select e\EventState
 						Case INTRO_IN_CELL
 							;[Block]
+							LightRenderDistance = 16.0
+							
 							FPSFactorEx = fps\Factor[0] / 30.0
 							
 							If e\EventState2 < 3.0
@@ -8494,6 +8496,8 @@ Function UpdateIntro%()
 							;[Block]
 						Case INTRO_CELL_REQUESTING
 							;[Block]
+							LightRenderDistance = 16.0
+							
 							If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN))
 								LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\ExitCell.ogg")
 								e\room\NPC[3]\SoundCHN = PlaySound2(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
@@ -8531,6 +8535,8 @@ Function UpdateIntro%()
 									e\EventState = INTRO_MOVING_TO_CHAMBER
 								EndIf
 							Else ; ~ Inside the cell
+								LightRenderDistance = 16.0
+								
 								FPSFactorEx = fps\Factor[0] / 4.0
 								e\EventState2 = Min(e\EventState2 + FPSFactorEx, 630.0)
 								

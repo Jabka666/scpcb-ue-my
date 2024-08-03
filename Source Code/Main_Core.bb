@@ -409,8 +409,10 @@ Function UpdateGame%()
 				If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 					UpdateIntro()
 				ElseIf IsPlayerOutsideFacility()
+					LightRenderDistance = 100.0
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
+					LightRenderDistance = 49.0
 					UpdateRooms()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEvents()
 				EndIf
