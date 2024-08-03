@@ -7,7 +7,7 @@ Type Materials
 End Type
 
 Function LoadMaterials%(File$)
-	CatchErrors("Uncaught (LoadMaterials")
+	CatchErrors("LoadMaterials")
 	
 	Local TemporaryString$
 	Local mat.Materials = Null
@@ -17,7 +17,7 @@ Function LoadMaterials%(File$)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
-		If Left(TemporaryString, 1) = "[" Then
+		If Left(TemporaryString, 1) = "["
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			
 			mat.Materials = New Materials
@@ -30,7 +30,7 @@ Function LoadMaterials%(File$)
 	
 	CloseFile(f)
 	
-	CatchErrors("LoadMaterials")
+	CatchErrors("Uncaught (LoadMaterials)")
 End Function
 
 ;~IDEal Editor Parameters:

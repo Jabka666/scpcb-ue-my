@@ -12,7 +12,7 @@ Const LanguageFile$ = "Data\local.ini"
 IniWriteBuffer("..\" + LanguageFile)
 
 Function SetLanguage%()
-	If Language = "en" Then
+	If Language = "en"
 		LanguagePath = ""
 	Else
 		LanguagePath = "Localization\" + Language + "\"
@@ -95,16 +95,12 @@ Global CurrSelectedRoom.Rooms
 
 ; ~ Objects Constants
 ;[Block]
-Const MaxButtonModelIDAmount% = 2
-Const MaxDoorModelIDAmount% = 5
-Const MaxLeverModelIDAmount% = 2
+Const MaxDoorModelIDAmount% = 3
 Const MaxMiscModelIDAmount% = 1
 ;[End Block]
 
 Type Objects
-	Field ButtonModelID[MaxButtonModelIDAmount]
 	Field DoorModelID[MaxDoorModelIDAmount]
-	Field LeverModelID[MaxLeverModelIDAmount]
 	Field MiscModelID%[MaxMiscModelIDAmount]
 End Type
 
@@ -119,16 +115,6 @@ Global ConsoleFont% = LoadFont_Strict("GFX\fonts\" + IniGetString(LanguagePath +
 Function LoadEntities%()
 	Local i%
 
-	; ~ [BUTTONS]
-	
-	o\ButtonModelID[0] = LoadMesh_Strict("GFX\map\Props\Button.b3d") ; ~ Button
-	
-	o\ButtonModelID[1] = LoadMesh_Strict("GFX\map\Props\ButtonKeycard.b3d") ; ~ Keycard Button
-	
-	For i = 0 To MaxButtonModelIDAmount - 1
-		HideEntity(o\ButtonModelID[i])
-	Next
-	
 	; ~ [DOORS]
 	
 	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
@@ -137,22 +123,8 @@ Function LoadEntities%()
 	
 	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\ContDoorRight.x") ; ~ Big Door Right
 	
-	o\DoorModelID[3] = LoadMesh_Strict("GFX\map\Props\DoorFrame.b3d") ; ~ Door Frame
-	
-	o\DoorModelID[4] = LoadMesh_Strict("GFX\map\Props\ContDoorFrame.b3d") ; ~ Big Door Frame
-	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		HideEntity(o\DoorModelID[i])
-	Next
-	
-	; ~ [LEVERS]
-	
-	o\LeverModelID[0] = LoadMesh_Strict("GFX\map\Props\LeverBase.b3d") ; ~ Lever Base
-	
-	o\LeverModelID[1] = LoadMesh_Strict("GFX\map\Props\LeverHandle.b3d") ; ~ Lever Handle
-	
-	For i = 0 To MaxLeverModelIDAmount - 1
-		HideEntity(o\LeverModelID[i])
 	Next
 	
 	; ~ [MISC]
@@ -207,27 +179,34 @@ Const Period# = 1000.0 / 60.0
 Global PrevTime% = MilliSecs()
 Global ElapsedTime#
 
+Global GPUName$ = GfxDriverName(CountGfxDrivers())
+Global ErrorGPUMsg$ = GetLocalString("error", "gpu")
+Global ErrorMemStatusMsg$ = GetLocalString("error", "status")
+Global ErrorMsg$ = GetLocalString("error", "error")
+Global TotalVidMemory% = TotalVidMem()
+Global TotalPhysMemory% = TotalPhys()
+
 InitErrorMsgs(9, True)
 SetErrorMsg(0, Format(GetLocalString("error", "title.mc"), SystemProperty("blitzversion")) + Chr(10))
 SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
-SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
+SetErrorMsg(2, Format(Format(Format(ErrorGPUMsg, Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
+SetErrorMsg(3, Format(Format(Format(ErrorGPUMsg, GPUName, "{0}"), ((TotalVidMemory / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMemory / 1024), "{2}"))
 
-SetErrorMsg(7, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
-SetErrorMsg(8, GetLocalString("error", "shot")) 
+SetErrorMsg(6, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
+SetErrorMsg(7, GetLocalString("error", "shot")) 
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(6, Format(GetLocalString("error", "error"), Location))
+	SetErrorMsg(8, ErrorMsg + Location)
 End Function
 
 Repeat
-	SetErrorMsg(4, Format(Format(Format(GetLocalString("error", "gpu"), GfxDriverName(CountGfxDrivers()), "{0}"), ((TotalVidMem() / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMem() / 1024), "{2}"))
-	SetErrorMsg(5, Format(Format(GetLocalString("error", "status"), ((TotalPhys() / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhys() / 1024), "{1}"))
+	SetErrorMsg(4, Format(Format(Format(ErrorGPUMsg, GPUName, "{0}"), ((TotalVidMemory / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMemory / 1024), "{2}"))
+	SetErrorMsg(5, Format(Format( ErrorMemStatusMsg, ((TotalPhysMemory / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhysMemory / 1024), "{1}"))
 	
 	Cls()
 	
-	If opt\ShowFPS Then
-		If CheckFPS < MilliSecs() Then
+	If opt\ShowFPS
+		If CheckFPS < MilliSecs()
 			FPS = ElapsedLoops
 			ElapsedLoops = 0
 			CheckFPS = MilliSecs() + 1000
@@ -240,7 +219,7 @@ Repeat
 	
 	Local f%
 	
-	If FileType("CONFIG_OPTINIT.SI") = 1 Then
+	If FileType("CONFIG_OPTINIT.SI") = 1
 		f = ReadFile("CONFIG_OPTINIT.SI")
 		
 		opt\FogR = ReadInt(f) : opt\FogG = ReadInt(f) : opt\FogB = ReadInt(f)
@@ -263,14 +242,14 @@ Repeat
 	Local Name$, Angle%
 	Local eName$, eProb#
 	
-	If FileType("CONFIG_MAPINIT.SI") = 1 Then
+	If FileType("CONFIG_MAPINIT.SI") = 1
 		DeleteTextureEntriesFromCache(DeleteAllTextures)
 		For r.Rooms = Each Rooms
 			FreeEntity(r\OBJ)
-			DeleteSingleTextureEntryFromCache(r\OverlayTex)
+			DeleteSingleTextureEntryFromCache(r\OverlayTex) : r\OverlayTex = 0
 			Delete(r)
 		Next
-		If CurrGrid <> Null Then
+		If CurrGrid <> Null
 			Delete(CurrGrid) : CurrGrid = Null
 		EndIf
 		CurrGrid = New MapGrid
@@ -303,15 +282,13 @@ Repeat
 					eProb = ReadFloat(f)
 					
 					For rt.RoomTemplates = Each RoomTemplates
-						If Lower(rt\Name) = Name Then
+						If Lower(rt\Name) = Name
 							r = PlaceRoom(Name, MapGridSize - x, y, GetZone(y), rt\Shape, eName, eProb)
 							r\GridX = x
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90 And r\Angle <> 270 Then
-								r\Angle = r\Angle + 180
-							EndIf
+							If r\Angle <> 90 And r\Angle <> 270 Then r\Angle = r\Angle + 180
 							r\Angle = WrapAngle(r\Angle)
 							
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
@@ -324,7 +301,7 @@ Repeat
 					
 					Local IsSelRoom% = ReadByte(f)
 					
-					If IsSelRoom Then
+					If IsSelRoom
 						PositionEntity(Camera, (MapGridSize - x) * 8.0, 1.0, y * 8.0)
 						RotateEntity(Camera, 0.0, Angle, 0.0)
 						MXS = -Angle
@@ -353,15 +330,13 @@ Repeat
 					Angle = ReadByte(f) * 90
 					
 					For rt.RoomTemplates = Each RoomTemplates
-						If Lower(rt\Name) = Name Then
+						If Lower(rt\Name) = Name
 							r = PlaceRoom(Name, ForestGridSize - x, y, GetZone(y), rt\Shape, "", 0.0, 1)
 							r\GridX = x
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90 And r\Angle <> 270 Then
-								r\Angle = r\Angle + 180
-							EndIf
+							If r\Angle <> 90 And r\Angle <> 270 Then r\Angle = r\Angle + 180
 							
 							r\Angle = WrapAngle(r\Angle)
 							
@@ -372,7 +347,7 @@ Repeat
 					Next
 					
 					IsSelRoom = ReadByte(f)
-					If IsSelRoom Then
+					If IsSelRoom
 						PositionEntity(Camera, (ForestGridSize - x) * 12.0, 1.0, y * 12.0)
 						RotateEntity(Camera, 0.0, Angle, 0.0)
 						MXS = -Angle
@@ -409,18 +384,14 @@ Repeat
 					Angle = ReadByte(f) * 90
 					
 					For rt.RoomTemplates = Each RoomTemplates
-						If Lower(rt\Name) = Name Then
+						If Lower(rt\Name) = Name
 							r = PlaceRoom(Name, MT_GridSize - x, y, GetZone(y), rt\Shape, "", 0.0, 2)
 							r\GridX = x
 							r\GridZ = y
 							
 							r\Angle = Angle
-							If r\Angle <> 90 And r\Angle <> 270 Then
-								r\Angle = r\Angle + 180
-							EndIf
-							If rt\Shape = ROOM2C Lor rt\Shape = ROOM3 Then
-								r\Angle = r\Angle - 90
-							EndIf
+							If r\Angle <> 90 And r\Angle <> 270 Then r\Angle = r\Angle + 180
+							If rt\Shape = ROOM2C Lor rt\Shape = ROOM3 Then r\Angle = r\Angle - 90
 							r\Angle = WrapAngle(r\Angle)
 							
 							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
@@ -430,7 +401,7 @@ Repeat
 					Next
 					
 					IsSelRoom = ReadByte(f)
-					If IsSelRoom Then
+					If IsSelRoom
 						PositionEntity(Camera, (MT_GridSize - x) * 2.0, 1.0, y * 2.0)
 						RotateEntity(Camera, 0.0, Angle, 0.0)
 						MXS = -Angle
@@ -450,7 +421,7 @@ Repeat
 	While ElapsedTime > 0.0
 		MouseHit1 = MouseHit(1)
 		
-		If MouseHit(2) Then
+		If MouseHit(2)
 			IsRemote = (Not IsRemote)
 			MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 		EndIf
@@ -458,7 +429,7 @@ Repeat
 		For r.Rooms = Each Rooms
 			If r\ResetOverlayTex And r <> PickedRoom
 				SetBuffer(TextureBuffer(r\OverlayTex))
-				If CurrMapGrid <> 1 Then
+				If CurrMapGrid <> 1
 					ClsColor(0, 0, 0)
 				Else
 					ClsColor(255, 255, 255)
@@ -468,7 +439,7 @@ Repeat
 				r\ResetOverlayTex = False
 			EndIf
 			PickedRoom = Null
-			If CurrMapGrid <> 1 Then
+			If CurrMapGrid <> 1
 				If EntityDistanceSquared(Camera, r\OBJ) > PowTwo(opt\CamRange) Lor (Not EntityInView(GetChild(r\OBJ, 2), Camera))
 					If (Not EntityHidden(r\OBJ)) Then HideEntity(r\OBJ)
 				Else
@@ -483,7 +454,7 @@ Repeat
 			EndIf
 		Next
 		
-		If (Not IsRemote) Then
+		If (Not IsRemote)
 			HidePointer()
 			
 			If (MouseX() > mo\Mouse_Right_Limit) Lor (MouseX() < mo\Mouse_Left_Limit) Lor (MouseY() > mo\Mouse_Bottom_Limit) Lor (MouseY() < mo\Mouse_Top_Limit)
@@ -509,9 +480,9 @@ Repeat
 			
 			Local Picker% = EntityPick(Camera, opt\CamRange / (2.5 - (CurrMapGrid = 1)))
 			
-			If Picker <> 0 Then
+			If Picker <> 0
 				For r.Rooms = Each Rooms
-					If CurrMapGrid <> 1 Then
+					If CurrMapGrid <> 1
 						If PickedEntity() = GetChild(r\OBJ, 2)
 							SetBuffer(TextureBuffer(r\OverlayTex))
 							ClsColor(70, 70, 20 + (Float(Sin(MilliSecs() / 4.0)) * 20))
@@ -534,8 +505,8 @@ Repeat
 					EndIf
 				Next
 			EndIf
-			If MouseHit1 Then
-				If PickedRoom <> Null Then
+			If MouseHit1
+				If PickedRoom <> Null
 					CurrSelectedRoom = PickedRoom
 					f = WriteFile("CONFIG_TO2D.SI")
 					WriteInt(f, CurrSelectedRoom\GridX)
@@ -555,9 +526,9 @@ Repeat
 	Wend
 	RenderWorld(1.0 - Max(Min(ElapsedTime, 0.0), -1.0))
 	
-	If (Not IsRemote) Then
+	If (Not IsRemote)
 		SetFont(ConsoleFont)
-		If opt\ShowFPS Then
+		If opt\ShowFPS
 			Color(0, 0, 0)
 			Rect(2, 2, StringWidth("FPS: " + FPS), StringHeight("FPS: " + FPS))
 			
@@ -565,7 +536,7 @@ Repeat
 			Text(2, 2, "FPS: " + FPS)
 		EndIf
 		
-		If PickedRoom <> Null Then
+		If PickedRoom <> Null
 			Local rName$ = PickedRoom\RoomTemplate\Name
 			Local rX% = Int(PickedRoom\x)
 			Local rZ% = Int(PickedRoom\z)
@@ -581,7 +552,7 @@ Repeat
 			Text(2, 52, Format(GetLocalString("mc", "room.x"), rX))
 			Text(2, 72, Format(GetLocalString("mc", "room.z"), rZ))
 			
-			If PickedRoom\Event <> "" Then
+			If PickedRoom\Event <> ""
 				eName$ = PickedRoom\Event
 				
 				Local eChance# = PickedRoom\EventChance
@@ -596,7 +567,7 @@ Repeat
 			EndIf
 		EndIf
 		
-		If CurrSelectedRoom <> Null Then
+		If CurrSelectedRoom <> Null
 			rName = CurrSelectedRoom\RoomTemplate\Name
 			
 			Color(0, 0, 0)
@@ -613,11 +584,7 @@ Repeat
 		Rect((ResWidth / 2) - 2.5, (ResHeight / 2) + 5, 5, 20, True)
 	EndIf
 	
-	If opt\VSync Then
-		Flip(True)
-	Else
-		Flip(False)
-	EndIf
+	Flip(opt\VSync)
 Until (Not api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Reborn Map Creator"))
 End()
 
@@ -640,24 +607,24 @@ Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 End Function
 
 Function LoadRoomTemplates%(File$)
-	CatchErrors("Uncaught (LoadRoomTemplates)")
+	CatchErrors("LoadRoomTemplates(" + File + ")")
 	
-	Local TemporaryString$, i%
+	Local Loc$, i%
 	Local rt.RoomTemplates = Null
 	Local StrTemp$ = ""
 	Local f% = OpenFile(File)
 	
 	While (Not Eof(f))
-		TemporaryString = Trim(ReadLine(f))
-		If Left(TemporaryString, 1) = "[" Then
-			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
-			If TemporaryString <> "room ambience" Then
-				StrTemp = IniGetString(File, TemporaryString, "Mesh Path")
+		Loc = Trim(ReadLine(f))
+		If Left(Loc, 1) = "["
+			Loc = Mid(Loc, 2, Len(Loc) - 2)
+			If Loc <> "room ambience"
+				StrTemp = IniGetString(File, Loc, "Mesh Path")
 				
 				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
-				rt\Name = Lower(TemporaryString)
+				rt\Name = Lower(Loc)
 				
-				StrTemp = IniGetString(File, TemporaryString, "Shape")
+				StrTemp = IniGetString(File, Loc, "Shape")
 				
 				Select StrTemp
 					Case "room1", "1"
@@ -683,7 +650,7 @@ Function LoadRoomTemplates%(File$)
 				End Select
 				
 				For i = 0 To 4
-					rt\Zone[i] = IniGetInt(File, TemporaryString, "Zone" + (i + 1))
+					rt\Zone[i] = IniGetInt(File, Loc, "Zone" + (i + 1))
 				Next
 			EndIf
 		EndIf
@@ -691,7 +658,7 @@ Function LoadRoomTemplates%(File$)
 	
 	CloseFile(f)
 	
-	CatchErrors("LoadRoomTemplates")
+	CatchErrors("Uncaught: LoadRoomTemplates(" + File + ")")
 End Function
 
 Function LoadRoomTemplateMeshes%()
@@ -730,14 +697,12 @@ Function LoadRoomTemplateMeshes%()
 	rt\Shape = ROOM1
 	
 	For rt.RoomTemplates = Each RoomTemplates
-		If rt\OBJPath <> "" Then
-			LoadRoomMesh(rt)
-		EndIf
+		If rt\OBJPath <> "" Then LoadRoomMesh(rt)
 	Next
 	
-	Local hMap%[ROOM4 + 1], Mask%[ROOM4 + 1]
-	Local GroundTexture% = LoadTexture_Strict("GFX\map\textures\forestfloor.jpg")
-	Local PathTexture% = LoadTexture_Strict("GFX\map\textures\forestpath.jpg")
+	Local hMap%[5], Mask%[5]
+	Local GroundTexture% = LoadTexture_Strict("GFX\map\textures\forestfloor.jpg", 1)
+	Local PathTexture% = LoadTexture_Strict("GFX\map\textures\forestpath.jpg", 1)
 	
 	hMap[ROOM1] = LoadImage_Strict("GFX\map\forest\forest1h.png")
 	Mask[ROOM1] = LoadTexture_Strict("GFX\map\forest\forest1h_mask.png", 1 + 2)
@@ -784,11 +749,11 @@ Function LoadRoomTemplateMeshes%()
 	rt\Shape = ROOM4
 	HideEntity(rt\OBJ)
 	
-	DeleteSingleTextureEntryFromCache(GroundTexture)
-	DeleteSingleTextureEntryFromCache(PathTexture)
+	DeleteSingleTextureEntryFromCache(GroundTexture) : GroundTexture = 0
+	DeleteSingleTextureEntryFromCache(PathTexture) : PathTexture = 0
 	For i = ROOM1 To ROOM4
-		FreeImage(hMap[i])
-		DeleteSingleTextureEntryFromCache(Mask[i])
+		FreeImage(hMap[i]) : hMap[i] = 0
+		DeleteSingleTextureEntryFromCache(Mask[i]) : Mask[i] = 0
 	Next
 	
 	CatchErrors("LoadRoomTemplatesMeshes")
@@ -839,14 +804,6 @@ Function CheckForPropModel%(File$)
 	Local Path$ = "GFX\map\Props\"
 	
 	Select File
-		Case Path + "button.b3d"
-			;[Block]
-			Return(CopyEntity(o\ButtonModelID[0]))
-			;[End Block]
-		Case Path + "buttonkeycard.b3d"
-			;[Block]
-			Return(CopyEntity(o\ButtonModelID[1]))
-			;[End Block]
 		Case Path + "door01.b3d"
 			;[Block]
 			Return(CopyEntity(o\DoorModelID[0]))
@@ -859,22 +816,6 @@ Function CheckForPropModel%(File$)
 			;[Block]
 			Return(CopyEntity(o\DoorModelID[2]))
 			;[End Block]
-		Case Path + "doorframe.b3d"
-			;[Block]
-			Return(CopyEntity(o\DoorModelID[3]))
-			;[End Block]
-		Case Path + "contdoorframe.b3d"
-			;[Block]
-			Return(CopyEntity(o\DoorModelID[4]))
-			;[End Block]
-		Case Path + "leverbase.b3d"
-			;[Block]
-			Return(CopyEntity(o\LeverModelID[0]))
-			;[End Block]
-		Case Path + "leverhandle.b3d"
-			;[Block]
-			Return(CopyEntity(o\LeverModelID[1]))
-			;[End Block]
 		Default
 			;[Block]
 			Return(LoadMesh_Strict(File))
@@ -886,7 +827,7 @@ Function CreateProp%(File$)
 	Local p.Props
 	
 	; ~ A hacky way to use .b3d format
-	If Right(File, 2) = ".x" Then
+	If Right(File, 2) = ".x"
 		File = Left(File, Len(File) - 2)
 	ElseIf Right(File, 4) = ".b3d"
 		File = Left(File, Len(File) - 4)
@@ -894,9 +835,7 @@ Function CreateProp%(File$)
 	File = File + ".b3d"
 	
 	For p.Props = Each Props
-		If p\File = File Then
-			Return(CopyEntity(p\OBJ))
-		EndIf
+		If p\File = File Then Return(CopyEntity(p\OBJ))
 	Next
 	
 	p.Props = New Props
@@ -925,7 +864,7 @@ Type Rooms
 End Type 
 
 Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
-	CatchErrors("Uncaught (CreateRoom)")
+	CatchErrors("CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + ")")
 	
 	Local r.Rooms
 	Local rt.RoomTemplates
@@ -936,14 +875,14 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	r\RoomType = RoomShape
 	r\x = x : r\y = y : r\z = z
 	
-	If Name <> "" Then
+	If Name <> ""
 		Name = Lower(Name)
 		For rt.RoomTemplates = Each RoomTemplates
-			If rt\Name = Name Then
+			If rt\Name = Name
 				r\RoomTemplate = rt
 				
 				r\OBJ = CopyEntity(rt\OBJ)
-				If CurrMapGrid <> 1 Then
+				If CurrMapGrid <> 1
 					ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
 				Else
 					Tempf3 = ForestMeshWidth
@@ -953,7 +892,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 				
 				PositionEntity(r\OBJ, x, y, z)
 				
-				If Name = "scp-860-1 door" Then
+				If Name = "scp-860-1 door"
 					r\ForestWallOBJ = CopyEntity(o\MiscModelID[0])
 					ScaleEntity(r\ForestWallOBJ, RoomScale, RoomScale, RoomScale)
 					PositionEntity(r\ForestWallOBJ, x, y, z, True)
@@ -962,7 +901,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					MoveEntity(r\ForestWallOBJ, 0.0, 0.0, -(14.0 + Tempf1))
 				EndIf
 				
-				If CurrMapGrid <> 1 Then
+				If CurrMapGrid <> 1
 					r\OverlayTex = CreateTextureUsingCacheSystem(1, 1)
 					SetBuffer(TextureBuffer(r\OverlayTex))
 					ClsColor(0, 0, 0)
@@ -984,7 +923,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 		Next
 	EndIf
 	
-	CatchErrors("CreateRoom")
+	CatchErrors("Uncaught: CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + "))")
 End Function
 
 Function CreateOverLapBox%(r.Rooms)
@@ -999,8 +938,7 @@ Function CreateOverLapBox%(r.Rooms)
 	If r\RoomTemplate\Name = "room3_storage" Then Return
 	If r\RoomTemplate\Name = "cont1_106" Then Return
 	If r\RoomTemplate\Name = "cont1_079" Then Return
-	If r\RoomTemplate\Name = "gate_b_entrance" Then Return
-	If r\RoomTemplate\Name = "gate_a_entrance" Then Return
+	If r\RoomTemplate\Name = "cont1_173" Then Return
 	
 	r\OverlapCheckBox = CreateMesh()
 	GetMeshExtents(GetChild(r\OBJ, 2))
@@ -1036,7 +974,7 @@ Function CreateOverLapBox%(r.Rooms)
 End Function
 
 Function LoadRoomMesh%(rt.RoomTemplates)
-	If Instr(rt\OBJPath, ".rmesh") <> 0 Then ; ~ File is RoomMesh
+	If Instr(rt\OBJPath, ".rmesh") <> 0 ; ~ File is RoomMesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
 		RuntimeError(Format(GetLocalString("runerr", "b3d"), rt\OBJPath))
@@ -1044,41 +982,34 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 		RuntimeError(Format(GetLocalString("runerr", "notfound"), rt\OBJPath))
 	EndIf
 	
-	If (Not rt\OBJ) Then RuntimeError(Format(GetLocalString("runerr", "failedload"), rt\OBJPath))
+	If rt\OBJ = 0 Then RuntimeError(Format(GetLocalString("runerr", "failedload"), rt\OBJPath))
 	
 	HideEntity(rt\OBJ)
 End Function
 
 Function LoadRMesh%(File$, rt.RoomTemplates)
-	CatchErrors("Uncaught (LoadRMesh)")
+	CatchErrors("LoadRMesh(" + File + ")")
 	
 	ClsColor(0, 0, 0)
 	
 	; ~ Read the file
-	Local f% = ReadFile(File)
 	Local i%, j%, k%, x#, y#, z#, Yaw#
 	Local Vertex%
 	Local Temp1i%, Temp2i%, Temp3i%
 	Local Temp1#, Temp2#, Temp3#
 	Local Temp1s$, Temp2s$
 	Local CollisionMeshes% = CreatePivot()
-	Local HasTriggerBox% = False
+	;Local HasTriggerBox% = False
+	Local f% = ReadFile(File)
 	
-	For i = 0 To 3 ; ~ Reattempt up to 3 times
-		If f = 0 Then
-			f = ReadFile(File)
-		Else
-			Exit
-		EndIf
-	Next
 	If f = 0 Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
 	
 	If IsRMesh = "RoomMesh"
 		; ~ Continue
-	ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
-		HasTriggerBox = True
+	;ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
+	;	HasTriggerBox = True
 	Else
 		RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
 	EndIf
@@ -1113,24 +1044,24 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 		
 		For j = 0 To 1
 			Temp1i = ReadByte(f)
-			If Temp1i <> 0 Then
+			If Temp1i <> 0
 				Temp1s = ReadString(f)
 				If FileType(File + Temp1s) = 1 ; ~ Check if texture is existing in original path
-					If Temp1i < 3 Then
+					If Temp1i < 3
 						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s)
 					Else
 						Tex[j] = LoadTextureCheckingIfInCache(File + Temp1s, 3)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
-					If Temp1i < 3 Then
+					If Temp1i < 3
 						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s)
 					Else
 						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3)
 					EndIf
 				EndIf
-				If Tex[j] <> 0 Then
+				If Tex[j] <> 0
 					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
-					If Instr(Lower(Temp1s), "_lm") <> 0 Then
+					If Instr(Lower(Temp1s), "_lm") <> 0
 						TextureBlend(Tex[j], 3)
 					EndIf
 					IsAlpha = 2
@@ -1140,22 +1071,22 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			EndIf
 		Next
 		
-		If IsAlpha = 1 Then
-			If Tex[1] <> 0 Then
+		If IsAlpha = 1
+			If Tex[1] <> 0
 				TextureBlend(Tex[1], 2)
 				BrushTexture(Brush, Tex[1], 0, 1)
 			Else
 				BrushTexture(Brush, MissingTexture, 0, 1)
 			EndIf
 		Else
-			If Tex[0] <> 0 And Tex[1] <> 0 Then
+			If Tex[0] <> 0 And Tex[1] <> 0
 				For j = 0 To 1
 					BrushTexture(Brush, Tex[j], 0, j + 2)
 				Next
 				BrushTexture(Brush, AmbientLightRoomTex, 1)
 			Else
 				For j = 0 To 1
-					If Tex[j] <> 0 Then
+					If Tex[j] <> 0
 						BrushTexture(Brush, Tex[j], 0, j + 1)
 					Else
 						BrushTexture(Brush, MissingTexture, 0, j + 1)
@@ -1196,7 +1127,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			AddTriangle(Surf, Temp1i, Temp2i, Temp3i)
 		Next
 		
-		If IsAlpha = 1 Then
+		If IsAlpha = 1
 			AddMesh(ChildMesh, Alpha)
 			EntityParent(ChildMesh, CollisionMeshes)
 			EntityAlpha(ChildMesh, 0.0)
@@ -1231,25 +1162,25 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	Next
 	
 	; ~ Trigger boxes
-	If HasTriggerBox Then
-		Local Numb%, TB%
-		
-		Numb = ReadInt(f)
-		For TB = 0 To Numb - 1
-			Count = ReadInt(f)
-			For i = 1 To Count
-				Count2 = ReadInt(f)
-				For j = 1 To Count2
-					ReadFloat(f) : ReadFloat(f) : ReadFloat(f)
-				Next
-				Count2 = ReadInt(f)
-				For j = 1 To Count2
-					ReadInt(f) : ReadInt(f) : ReadInt(f)
-				Next
-			Next
-			ReadString(f)
-		Next
-	EndIf
+;	If HasTriggerBox
+;		Local Numb%, TB%
+;		
+;		Numb = ReadInt(f)
+;		For TB = 0 To Numb - 1
+;			Count = ReadInt(f)
+;			For i = 1 To Count
+;				Count2 = ReadInt(f)
+;				For j = 1 To Count2
+;					ReadFloat(f) : ReadFloat(f) : ReadFloat(f)
+;				Next
+;				Count2 = ReadInt(f)
+;				For j = 1 To Count2
+;					ReadInt(f) : ReadInt(f) : ReadInt(f)
+;				Next
+;			Next
+;			ReadString(f)
+;		Next
+;	EndIf
 	
 	Local Model%
 	
@@ -1277,6 +1208,13 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				ReadFloat(f)
 				ReadFloat(f) : ReadString(f) : ReadFloat(f)
 				;[End Block]
+			Case "light_fix"
+				;[Block]
+				ReadFloat(f)
+				ReadFloat(f)
+				ReadFloat(f)
+				ReadString(f) : ReadFloat(f) : ReadFloat(f)
+				;[End Block]
 			Case "spotlight"
 				;[Block]
 				ReadFloat(f)
@@ -1292,27 +1230,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				ReadInt(f)
 				ReadFloat(f)
 				;[End Block]
-			Case "playerstart"
-				;[Block]
-				ReadFloat(f) : ReadFloat(f) : ReadFloat(f)
-				ReadString(f)
-				;[End Block]
 			Case "model"
 				;[Block]
-				File = ReadString(f)
-				
-				Model = CreateProp("GFX\map\Props\" + File)
-				
-				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-				PositionEntity(Model, Temp1, Temp2, Temp3)
-				
-				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-				RotateEntity(Model, Temp1, Temp2, Temp3)
-				
-				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
-				ScaleEntity(Model, Temp1, Temp2, Temp3)
-				
-				EntityParent(Model, Opaque)
+				Temp2s = ReadString(f)
+				RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), rt\Name, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
 				;[End Block]
 			Case "mesh"
 				;[Block]
@@ -1331,8 +1252,15 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				
 				EntityParent(Model, Opaque)
 				ReadByte(f)
-				ReadInt(f)
-				ReadString(f)
+				EntityFX(Model, ReadInt(f))
+				
+				Temp2s = ReadString(f)
+				If Temp2s <> ""
+					Local Texture% = LoadTextureCheckingIfInCache(Temp2s)
+					
+					EntityTexture(Model, Texture)
+					DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
+				EndIf
 				;[End Block]
 		End Select
 	Next
@@ -1367,100 +1295,107 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 	
 	Return(OBJ)
 	
-	CatchErrors("LoadRMesh")
+	CatchErrors("Uncaught: LoadRMesh(" + File + ")")
 End Function
 
-Function LoadTerrain%(HeightMap%, yScale# = 0.7, t1%, t2%, Mask%)
+Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	; ~ Load the HeightMap
-	If (Not HeightMap) Then RuntimeError(Format(GetLocalString("runerr", "heightmap"), HeightMap))
-	
-	; ~ Store heightmap dimensions
-	Local x% = ImageWidth(HeightMap) - 1, y% = ImageHeight(HeightMap) - 1
-	Local lX%, lY%, Index%
-	
+	If HeightMap = 0 Then RuntimeError(Format(GetLocalString("runerr", "heightmap"), HeightMap))
 	; ~ Load texture and lightmaps
-	If (Not t1) Then RuntimeError(Format(GetLocalString("runerr", "tex_1"), t1))
-	If (Not t2) Then RuntimeError(Format(GetLocalString("runerr", "tex_2"), t2))
-	If (Not Mask) Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
+	If Tex1 = 0 Then RuntimeError(Format(GetLocalString("runerr", "tex_1"), Tex1))
+	If Tex2 = 0 Then RuntimeError(Format(GetLocalString("runerr", "tex_2"), Tex2))
+	If Mask = 0 Then RuntimeError(Format(GetLocalString("runerr", "mask"), Mask))
 	
-	; ~ Auto scale the textures to the right size
-	If t1 Then ScaleTexture(t1, x / 4.0, y / 4.0)
-	If t2 Then ScaleTexture(t2, x / 4.0, y / 4.0)
-	If Mask Then ScaleTexture(Mask, x, y)
+	; ~ Store HeightMap dimensions
+	Local HeightMapWidth% = ImageWidth(HeightMap) - 1
+	Local HeightMapHeight% = ImageHeight(HeightMap) - 1
+	Local PosX%, PosY%, VertexIndex%
+	
+	; ~ Scale the textures to the right size
+	ScaleTexture(Tex1, HeightMapWidth / 4.0, HeightMapHeight / 4.0)
+	ScaleTexture(Tex2, HeightMapWidth / 4.0, HeightMapHeight / 4.0)
+	ScaleTexture(Mask, HeightMapWidth, HeightMapHeight)
 	
 	; ~ Start building the terrain
 	Local Mesh% = CreateMesh()
 	Local Surf% = CreateSurface(Mesh)
 	
 	; ~ Create some verts for the terrain
-	For lY = 0 To y
-		For lX = 0 To x
-			AddVertex(Surf, lX, 0.0, lY, 1.0 / lX, 1.0 / lY)
+	For PosY = 0 To HeightMapHeight
+		For PosX = 0 To HeightMapWidth
+			AddVertex(Surf, PosX, 0.0, PosY, 1.0 / PosX, 1.0 / PosY)
 		Next
 	Next
 	RenderWorld()
 	
+	Local HeightMapWidth2% = HeightMapWidth + 1
+	
 	; ~ Connect the verts with faces
-	For lY = 0 To y - 1
-		For lX = 0 To x - 1
-			AddTriangle(Surf, lX + ((x + 1) * lY), lX + ((x + 1) * lY) + (x + 1), (lX + 1) + ((x + 1) * lY))
-			AddTriangle(Surf, (lX + 1) + ((x + 1) * lY), lX + ((x + 1) * lY) + (x + 1), (lX + 1) + ((x + 1) * lY) + (x + 1))
+	For PosY = 0 To HeightMapHeight - 1
+		For PosX = 0 To HeightMapWidth - 1
+			Local Shift% = PosX + (HeightMapWidth2 * PosY)
+			
+			AddTriangle(Surf, Shift, Shift + HeightMapWidth2, Shift + 1)
+			AddTriangle(Surf, Shift + 1, Shift + HeightMapWidth2, Shift + HeightMapWidth2 + 1)
 		Next
 	Next
 	
-	; ~ Position the terrain to center
+	; ~ Position the terrain to center 0.0, 0.0, 0.0
 	Local Mesh2% = CopyMesh(Mesh, Mesh)
 	Local Surf2% = GetSurface(Mesh2, 1)
 	
-	PositionMesh(Mesh, (-x) / 2.0, 0.0, (-y) / 2.0)
-	PositionMesh(Mesh2, (-x) / 2.0, 0.01, (-y) / 2.0)
+	PositionMesh(Mesh, (-HeightMapWidth) / 2.0, 0.0, (-HeightMapHeight) / 2.0)
+	PositionMesh(Mesh2, (-HeightMapWidth) / 2.0, 0.01, (-HeightMapHeight) / 2.0)
+	
+	Local HeightMapBuffer% = ImageBuffer(HeightMap)
+	Local MaskBuffer% = TextureBuffer(Mask)
+	Local MaskWidth% = TextureWidth(Mask)
+	Local MaskHeight% = TextureHeight(Mask)
 	
 	; ~ Alter vertice height to match the heightmap red channel
-	LockBuffer(ImageBuffer(HeightMap))
-	LockBuffer(TextureBuffer(Mask))
+	LockBuffer(HeightMapBuffer)
+	LockBuffer(MaskBuffer)
 	
-	For lX = 0 To x
-		For lY = 0 To y
-			; ~ Ising vertex alpha and two meshes instead of FE_ALPHAWHATEVER
+	For PosX = 0 To HeightMapWidth
+		For PosY = 0 To HeightMapHeight
+			; ~ Using vertex alpha and two meshes instead of FE_ALPHAWHATEVER
 			; ~ It doesn't look perfect but it does the job
 			; ~ You might get better results by downscaling the mask to the same size as the heightmap
-			Local MaskX# = Min(lX * Float(TextureWidth(Mask)) / Float(ImageWidth(HeightMap)), TextureWidth(Mask) - 1.0)
-			Local MaskY# = TextureHeight(Mask) - Min(lY * Float(TextureHeight(Mask)) / Float(ImageHeight(HeightMap)), TextureHeight(Mask) - 1.0)
+			Local MaskX# = Min(PosX * Float(MaskWidth) / Float(HeightMapWidth2), MaskWidth - 1)
+			Local MaskY# = MaskHeight - Min(PosY * Float(MaskHeight) / Float(HeightMapHeight + 1), MaskHeight - 1)
 			Local RGB%, RED%
 			
-			RGB = ReadPixelFast(Min(lX, x - 1.0), y - Min(lY, y - 1.0), ImageBuffer(HeightMap))
+			RGB = ReadPixelFast(Min(PosX, HeightMapWidth - 1.0), HeightMapHeight - Min(PosY, HeightMapHeight - 1.0), HeightMapBuffer)
 			RED = (RGB And $FF0000) Shr 16 ; ~ Separate out the red
 			
-			Local Alpha# = (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Max(MaskY - 5.0, 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
+			Local Alpha# = (((ReadPixelFast(Max(MaskX -5.0, 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			
-			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, TextureWidth(Mask) - 5.0), Min(MaskY + 5.0, TextureHeight(Mask) - 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
-			Alpha = Alpha + (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Min(MaskY + 5.0, TextureHeight(Mask) - 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
-			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, TextureWidth(Mask) - 5.0), Max(MaskY - 5.0, 5.0), TextureBuffer(Mask)) And $FF000000) Shr 24) / $FF)
+			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Min(MaskY + 5.0, MaskHeight - 5), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Alpha = Alpha + (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Min(MaskY + 5.0, MaskHeight - 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			Alpha = Alpha * 0.25
 			Alpha = Sqr(Alpha)
 			
-			Index = lX + ((x + 1) * lY)
-			VertexCoords(Surf, Index , VertexX(Surf, Index), RED * yScale, VertexZ(Surf, Index))
-			VertexCoords(Surf2, Index , VertexX(Surf2, Index), RED * yScale, VertexZ(Surf2, Index))
-			VertexColor(Surf2, Index, 255.0, 255.0, 255.0, Alpha)
+			VertexIndex = PosX + (HeightMapWidth2 * PosY)
+			VertexCoords(Surf, VertexIndex , VertexX(Surf, VertexIndex), RED * yScale, VertexZ(Surf, VertexIndex))
+			VertexCoords(Surf2, VertexIndex , VertexX(Surf2, VertexIndex), RED * yScale, VertexZ(Surf2, VertexIndex))
+			VertexColor(Surf2, VertexIndex, 255.0, 255.0, 255.0, Alpha)
 			; ~ Set the terrain texture coordinates
-			VertexTexCoords(Surf, Index, lX, -lY )
-			VertexTexCoords(Surf2, Index, lX, -lY) 
+			VertexTexCoords(Surf, VertexIndex, PosX, -PosY)
+			VertexTexCoords(Surf2, VertexIndex, PosX, -PosY) 
 		Next
 	Next
-	UnlockBuffer(TextureBuffer(Mask))
-	UnlockBuffer(ImageBuffer(HeightMap))
+	UnlockBuffer(MaskBuffer)
+	UnlockBuffer(HeightMapBuffer)
 	
 	UpdateNormals(Mesh)
 	UpdateNormals(Mesh2)
 	
-	EntityTexture(Mesh, t1, 0, 1)
-	EntityTexture(Mesh2, t2, 0, 1)
+	EntityTexture(Mesh, Tex1, 0, 1)
+	EntityTexture(Mesh2, Tex2, 0, 1)
 	
 	EntityFX(Mesh, 1)
 	EntityFX(Mesh2, 1 + 2 + 32)
-	
-	EntityPickMode(Mesh, 2)
 	
 	Return(Mesh)
 End Function

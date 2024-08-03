@@ -41,7 +41,7 @@ End Function
 Function GetLocalString$(Section$, Parameter$, CheckRootFile% = True)
 	Local DefaultValue$
 	
-	If CheckRootFile Then
+	If CheckRootFile
 		DefaultValue = IniGetBufferString("..\" + LanguageFile, Section, Parameter, Section + "," + Parameter)
 	Else 
 		DefaultValue = Section + "," + Parameter
@@ -54,28 +54,39 @@ Function Format$(String_$, Parameter$, Replace_$ = "%s")
 End Function
 
 Function StripFileName$(File$)
-	Local mi$ = "", LastSlash% = 0, i%
+	Local LastSlash% = 0
+	Local FileLen% = Len(File)
+	Local i%
 	
-	If Len(File) > 0 Then
-		For i = 1 To Len(File)
-			mi = Mid(File, i, 1)
-			If mi = "\" Lor mi = "/" Then LastSlash = i
-		Next
-	EndIf
+	If FileLen = 0 Then Return("")
+	
+	For i = FileLen To 1 Step -1
+		Local Middle$ = Mid(File, i, 1)
+		
+		If Middle = "\" Lor Middle = "/" ; ~ Detect a delimiter
+			LastSlash = i
+			Exit
+		EndIf
+	Next
 	Return(Left(File, LastSlash))
 End Function
 
-Function StripPath$(File$) 
-	Local Name$ = "", i%, mi$
+Function StripPath$(File$)
+	Local LastSlash% = 0
+	Local FileLen% = Len(File)
+	Local i%
 	
-	If Len(File) > 0 Then
-		For i = Len(File) To 1 Step -1 
-			mi = Mid(File, i, 1) 
-			If mi = "\" Lor mi = "/" Then Return(Name)
-			Name = mi + Name 
-		Next 
-	EndIf 
-	Return(Name) 
+	If FileLen = 0 Then Return("")
+	
+	For i = FileLen To 1 Step -1
+		Local Middle$ = Mid(File, i, 1)
+		
+		If Middle = "\" Lor Middle = "/" ; ~ Detect a delimiter
+			LastSlash = i
+			Exit
+		EndIf
+	Next
+	Return(Right(File, FileLen - LastSlash))
 End Function
 
 Global OptionFileMC$ = GetEnv("AppData") + "\scpcb-ue\Data\options_MC.ini"

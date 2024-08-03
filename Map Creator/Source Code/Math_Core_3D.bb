@@ -1,6 +1,6 @@
 Function WrapAngle#(Angle#)
 	If Angle = Infinity Then Return(0.0)
-	If Angle < 0.0 Then
+	If Angle < 0.0
 		Return(360.0 + (Angle Mod 360.0))
 	Else
 		Return(Angle Mod 360.0)
@@ -18,30 +18,31 @@ Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
 Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
 
 Function GetMeshExtents%(Mesh%)
-	Local su%, s%, i%, x#, y#, z#
+	Local su%, s%, v%, x#, y#, z#
 	Local MinX# = Infinity
 	Local MinY# = Infinity
 	Local MinZ# = Infinity
 	Local MaxX# = -Infinity
 	Local MaxY# = -Infinity
 	Local MaxZ# = -Infinity
+	Local SurfCount% = CountSurfaces(Mesh)
+	Local VertCount%
 	
-	For su = 1 To CountSurfaces(Mesh)
+	For su = 1 To SurfCount
 		s = GetSurface(Mesh, su)
-		For i = 0 To CountVertices(s) - 1
-			x = VertexX(s, i)
-			y = VertexY(s, i)
-			z = VertexZ(s, i)
-			TFormPoint(x, y, z, Mesh, 0)
-			x = TFormedX()
-			y = TFormedY()
-			z = TFormedZ()
-			If x > MaxX Then MaxX = x
-			If x < MinX Then MinX = x
-			If y > MaxY Then MaxY = y
-			If y < MinY Then MinY = y
-			If z > MaxZ Then MaxZ = z
-			If z < MinZ Then MinZ = z
+		VertCount = CountVertices(s) - 1
+		
+		For v = 0 To VertCount
+			x = VertexX(s, v)
+			y = VertexY(s, v)
+			z = VertexZ(s, v)
+			
+			MinX = Min(MinX, x)
+			MaxX = Max(MaxX, x)
+			MinY = Min(MinY, y)
+			MaxY = Max(MaxY, y)
+			MinZ = Min(MinZ, z)
+			MaxZ = Max(MaxZ, z)
 		Next
 	Next
 	
