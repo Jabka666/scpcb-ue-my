@@ -2310,7 +2310,7 @@ Function LoadEntities%()
 	EntityFX(t\OverlayID[1], 1)
 	EntityOrder(t\OverlayID[1], -1003)
 	MoveEntity(t\OverlayID[1], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteAllTextures, False) ; ~ HAZMAT SUIT
 	t\OverlayID[2] = CreateSprite(ArkBlurCam)
@@ -2320,7 +2320,7 @@ Function LoadEntities%()
 	EntityFX(t\OverlayID[2], 1)
 	EntityOrder(t\OverlayID[2], -1003)
 	MoveEntity(t\OverlayID[2], 0, 0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteAllTextures, False) ; ~ SCP-008
 	t\OverlayID[3] = CreateSprite(ArkBlurCam)
@@ -2330,7 +2330,7 @@ Function LoadEntities%()
 	EntityFX(t\OverlayID[3], 1)
 	EntityOrder(t\OverlayID[3], -1003)
 	MoveEntity(t\OverlayID[3], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures, False) ; ~ NIGHT VISION GOGGLES
 	t\OverlayID[4] = CreateSprite(ArkBlurCam)
@@ -2365,7 +2365,7 @@ Function LoadEntities%()
 	EntityBlend(t\OverlayID[6], 1)
 	EntityOrder(t\OverlayID[6], -1002)
 	MoveEntity(t\OverlayID[6], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png", 1, DeleteAllTextures, False) ; ~ SCP-409
 	t\OverlayID[7] = CreateSprite(ArkBlurCam)
@@ -2375,7 +2375,7 @@ Function LoadEntities%()
 	EntityFX(t\OverlayID[7], 1)
 	EntityOrder(t\OverlayID[7], -1003)
 	MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0	
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png", 1, DeleteAllTextures, False) ; ~ HELMET
 	t\OverlayID[8] = CreateSprite(ArkBlurCam)
@@ -2385,7 +2385,7 @@ Function LoadEntities%()
 	EntityFX(t\OverlayID[8], 1)
 	EntityOrder(t\OverlayID[8], -1003)
 	MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteAllTextures, False) ; ~ BLOOD
 	t\OverlayID[9] = CreateSprite(ArkBlurCam)
@@ -2395,7 +2395,7 @@ Function LoadEntities%()
 	EntityFX(t\OverlayID[9], 1)
 	EntityOrder(t\OverlayID[9], -1003)
 	MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteAllTextures, False) ; ~ FOG IN GAS MASK
 	t\OverlayID[10] = CreateSprite(ArkBlurCam)
@@ -2405,7 +2405,7 @@ Function LoadEntities%()
 	EntityFX(t\OverlayID[10], 1)
 	EntityOrder(t\OverlayID[10], -1002)
 	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	For i = 1 To 10
 		HideEntity(t\OverlayID[i])
@@ -2642,7 +2642,7 @@ Function InitNewGame%()
 			; ~ Such a stupid way, but it works
 			Tex = LoadTexture_Strict(p\TexPath)
 			EntityTexture(p\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			p\TexPath = ""
 		EndIf
 	Next
@@ -2783,7 +2783,7 @@ Function InitLoadGame%()
 			; ~ Such a stupid way, but it works
 			Tex = LoadTexture_Strict(p\TexPath)
 			EntityTexture(p\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			p\TexPath = ""
 		EndIf
 	Next

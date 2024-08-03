@@ -105,7 +105,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			If TexFestive <> 0
 				EntityTexture(n\OBJ, TexFestive)
 				EntityTexture(n\OBJ2, TexFestive)
-				DeleteSingleTextureEntryFromCache(TexFestive)
+				DeleteSingleTextureEntryFromCache(TexFestive) : TexFestive = 0
 			EndIf
 			Temp = IniGetFloat(NPCsFile, "SCP-173", "Scale") / MeshDepth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -134,7 +134,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleSprite(n\OBJ2, 0.03, 0.03)
 			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures, False)
 			EntityTexture(n\OBJ2, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			EntityBlend(n\OBJ2, 3)
 			EntityFX(n\OBJ2, 1 + 8)
 			SpriteViewMode(n\OBJ2, 2)
@@ -351,7 +351,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleSprite(n\OBJ2, 0.1, 0.1)
 			Tex = LoadTexture_Strict("GFX\NPCs\scp_860_2_eyes.png", 1 + 2, DeleteAllTextures, False)
 			EntityTexture(n\OBJ2, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			EntityFX(n\OBJ2, 1 + 8)
 			EntityBlend(n\OBJ2, 3)
 			SpriteViewMode(n\OBJ2, 2)

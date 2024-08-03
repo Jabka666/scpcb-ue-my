@@ -778,7 +778,7 @@ Function LoadGame%(File$)
 		If n\Texture <> ""
 			Tex = LoadTexture_Strict(n\Texture)
 			EntityTexture(n\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 		EndIf
 		
 		n\HasAsset = ReadByte(f)
@@ -1649,7 +1649,7 @@ Function LoadGameQuick%(File$)
 		If n\Texture <> ""
 			Tex = LoadTexture_Strict(n\Texture)
 			EntityTexture(n\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 		EndIf
 		
 		n\HasAsset = ReadByte(f)

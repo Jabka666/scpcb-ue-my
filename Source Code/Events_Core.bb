@@ -2055,7 +2055,7 @@ Function UpdateEvents%()
 											ElseIf e\EventState2 > 70.0 * 31.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 31.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(2).png")
 												EntityTexture(e\room\Objects[3], Tex)
-												DeleteSingleTextureEntryFromCache(Tex)
+												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
 												CreateMsg(GetLocalString("msg", "012_2"))
 												me\Injuries = Max(me\Injuries, 1.5)
@@ -2067,14 +2067,14 @@ Function UpdateEvents%()
 											ElseIf e\EventState2 > 70.0 * 63.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 63.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(3).png")
 												EntityTexture(e\room\Objects[3], Tex)
-												DeleteSingleTextureEntryFromCache(Tex)
+												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
 												me\Injuries = me\Injuries + 0.5
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 74.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 74.0
 												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(4).png")
 												EntityTexture(e\room\Objects[3], Tex)
-												DeleteSingleTextureEntryFromCache(Tex)
+												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
 												CreateMsg(GetLocalString("msg", "012_4"))
 												me\CameraShake = 2.0
@@ -2428,7 +2428,7 @@ Function UpdateEvents%()
 								EntityTexture(e\room\RoomDoors[0]\OBJ, Tex)
 								EntityTexture(e\room\RoomDoors[0]\OBJ2, Tex)
 								EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
-								DeleteSingleTextureEntryFromCache(Tex)
+								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 								
 								e\EventState = 1.0
 							EndIf
@@ -4986,7 +4986,7 @@ Function UpdateEvents%()
 						RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0)
 						Tex = LoadTexture_Strict("GFX\NPCs\duck(3).png")
 						EntityTexture(e\room\Objects[0], Tex)
-						DeleteSingleTextureEntryFromCache(Tex)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						EntityParent(e\room\Objects[0], e\room\OBJ)
 					Else
 						If (Not EntityInView(e\room\Objects[0], Camera))
@@ -5018,7 +5018,7 @@ Function UpdateEvents%()
 								itt\TexPath = itt\ImgPath
 								Tex = GetRescaledTexture(itt\TexPath, 1, 256, 256)
 								EntityTexture(itt\OBJ, Tex)
-								DeleteSingleTextureEntryFromCache(Tex)
+								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 								Exit
 							EndIf
 						Next
@@ -5569,7 +5569,7 @@ Function UpdateEvents%()
 									Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
 									EntityTexture(n_I\Curr173\OBJ, Tex)
 									EntityTexture(n_I\Curr173\OBJ2, Tex)
-									DeleteSingleTextureEntryFromCache(Tex)
+									DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 								EndIf
 								;[End Block]
 						End Select
@@ -5678,7 +5678,7 @@ Function UpdateEvents%()
 						PositionEntity(e\room\Objects[3], TFormedX(), TFormedY(), TFormedZ())
 						Tex = LoadTexture_Strict("GFX\NPCs\duck(2).png")
 						EntityTexture(e\room\Objects[3], Tex)
-						DeleteSingleTextureEntryFromCache(Tex)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						EntityParent(e\room\Objects[3], e\room\OBJ)
 					Else
 						If me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0
@@ -7098,7 +7098,7 @@ Function UpdateEvents%()
 						RotateEntity(e\room\Objects[1], 6.0, e\room\Angle + 180.0, 0.0)
 						Tex = LoadTexture_Strict("GFX\NPCs\duck(4).png")
 						EntityTexture(e\room\Objects[1], Tex)
-						DeleteSingleTextureEntryFromCache(Tex)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						EntityParent(e\room\Objects[1], e\room\OBJ)
 					Else
 						If InteractObject(e\room\Objects[1], 0.7)
@@ -8001,7 +8001,7 @@ Function UpdateDimension1499%()
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\NPC[0]\Angle, 0.0)
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_1499_1_king.png")
 						EntityTexture(e\room\NPC[0]\OBJ, Tex)
-						DeleteSingleTextureEntryFromCache(Tex)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						; ~ Guard next to king
 						e\room\NPC.NPCs[1] = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2052.0 * RoomScale)
 						e\room\NPC[1]\PrevState = 1 : e\room\NPC[1]\Angle = 270.0
@@ -8750,7 +8750,7 @@ Function UpdateIntro%()
 									e\room\NPC[3]\State = 9.0
 									If DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
 										; ~ Remove D-9341 texture
-										DeleteSingleTextureEntryFromCache(n_I\NPCTextureID[NPC_CLASS_D_D9341_TEXTURE])
+										DeleteSingleTextureEntryFromCache(n_I\NPCTextureID[NPC_CLASS_D_D9341_TEXTURE]) : n_I\NPCTextureID[NPC_CLASS_D_D9341_TEXTURE] = 0
 										
 										RemoveNPC(e\room\NPC[5])
 										RemoveNPC(e\room\NPC[7])
@@ -10087,7 +10087,7 @@ Function Update035Label%(OBJ%)
 				If it\ItemTemplate\Name = itt\Name
 					Tex = GetRescaledTexture(itt\TexPath, 1, 256, 256)
 					EntityTexture(it\Model, Tex)
-					DeleteSingleTextureEntryFromCache(Tex)
+					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 					Exit
 				EndIf
 			Next

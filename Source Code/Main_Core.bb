@@ -1565,13 +1565,13 @@ Function UpdateConsole%()
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
-						DeleteSingleTextureEntryFromCache(Tex)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						CreateConsoleMsg(GetLocalString("console", "halloween.on"))
 					Else
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
-						DeleteSingleTextureEntryFromCache(Tex2)
+						DeleteSingleTextureEntryFromCache(Tex2) : Tex2 = 0
 						CreateConsoleMsg(GetLocalString("console", "halloween.off"))
 					EndIf
 					;[End Block]
@@ -1584,13 +1584,13 @@ Function UpdateConsole%()
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
-						DeleteSingleTextureEntryFromCache(Tex)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						CreateConsoleMsg(GetLocalString("console", "newyear.on"))
 					Else
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
-						DeleteSingleTextureEntryFromCache(Tex2)
+						DeleteSingleTextureEntryFromCache(Tex2) : Tex2 = 0
 						CreateConsoleMsg(GetLocalString("console", "newyear.off"))
 					EndIf
 					;[End Block]
@@ -1603,13 +1603,13 @@ Function UpdateConsole%()
 						Tex = LoadTexture_Strict("GFX\NPCs\scp_173_J.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex)
 						EntityTexture(n_I\Curr173\OBJ2, Tex)
-						DeleteSingleTextureEntryFromCache(Tex)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						CreateConsoleMsg(GetLocalString("console", "aprilfools.on"))
 					Else
 						Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png", 1)
 						EntityTexture(n_I\Curr173\OBJ, Tex2)
 						EntityTexture(n_I\Curr173\OBJ2, Tex2)
-						DeleteSingleTextureEntryFromCache(Tex2)
+						DeleteSingleTextureEntryFromCache(Tex2) : Tex2 = 0
 						CreateConsoleMsg(GetLocalString("console", "aprilfools.off"))
 					EndIf
 					;[End Block]

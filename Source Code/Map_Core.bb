@@ -771,31 +771,8 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					;[End Block]
 				Case "model"
 					;[Block]
-;					tp.TempProps = New TempProps
-;					tp\RoomTemplate = rt
-;					
 					Temp2s = ReadString(f)
-					; ~ A hacky way to use .b3d format
-					If FileExtension(Temp2s) = "x" Then Temp2s = Left(Temp2s, Len(Temp2s) - 1) + "b3d"
-;					tp\Name = "GFX\Map\Props\" + Temp2s
-;
 					RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), rt\Name, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
-;					
-;					tp\x = ReadFloat(f) * RoomScale
-;					tp\y = ReadFloat(f) * RoomScale
-;					tp\z = ReadFloat(f) * RoomScale
-;					
-;					tp\Pitch = ReadFloat(f)
-;					tp\Yaw = ReadFloat(f)
-;					tp\Roll = ReadFloat(f)
-;					
-;					tp\ScaleX = ReadFloat(f)
-;					tp\ScaleY = ReadFloat(f)
-;					tp\ScaleZ = ReadFloat(f)
-;					
-;					tp\HasCollision = True
-;					tp\FX = 0
-;					tp\Texture = ""
 					;[End Block]
 				Case "mesh"
 					;[Block]
@@ -1129,10 +1106,10 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
 		HideEntity(fr\TileMesh[i])
-		DeleteSingleTextureEntryFromCache(Mask[i])
+		DeleteSingleTextureEntryFromCache(Mask[i]) : Mask[i] = 0
 	Next
-	DeleteSingleTextureEntryFromCache(GroundTexture)
-	DeleteSingleTextureEntryFromCache(PathTexture)
+	DeleteSingleTextureEntryFromCache(GroundTexture) : GroundTexture = 0
+	DeleteSingleTextureEntryFromCache(PathTexture) : PathTexture = 0
 	
 	; ~ Detail meshes
 	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
@@ -1380,10 +1357,10 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
 		HideEntity(fr\TileMesh[i])
-		DeleteSingleTextureEntryFromCache(Mask[i])
+		DeleteSingleTextureEntryFromCache(Mask[i]) : Mask[i] = 0
 	Next
-	DeleteSingleTextureEntryFromCache(GroundTexture)
-	DeleteSingleTextureEntryFromCache(PathTexture)
+	DeleteSingleTextureEntryFromCache(GroundTexture) : GroundTexture = 0
+	DeleteSingleTextureEntryFromCache(PathTexture) : PathTexture = 0
 	
 	; ~ Detail meshes
 	fr\DetailMesh[0] = LoadMesh_Strict("GFX\Map\Props\tree1.b3d")
@@ -6031,8 +6008,8 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	UpdateNormals(Mesh)
 	UpdateNormals(Mesh2)
 	
-	EntityTexture(Mesh, Tex1, 0, 0)
-	EntityTexture(Mesh2, Tex2, 0, 0)
+	EntityTexture(Mesh, Tex1, 0, 1)
+	EntityTexture(Mesh2, Tex2, 0, 1)
 	
 	EntityFX(Mesh, 1)
 	EntityFX(Mesh2, 1 + 2 + 32)

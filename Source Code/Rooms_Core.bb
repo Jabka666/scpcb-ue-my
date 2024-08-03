@@ -147,7 +147,7 @@ Function FillRoom%(r.Rooms)
 				EntityTexture(r\RoomDoors[0]\OBJ, Tex)
 				EntityTexture(r\RoomDoors[0]\OBJ2, Tex)
 				EntityTexture(r\RoomDoors[0]\FrameOBJ, Tex)
-				DeleteSingleTextureEntryFromCache(Tex)
+				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 				EntityParent(de\OBJ, r\OBJ)
@@ -355,7 +355,7 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
 			EntityTexture(d\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
@@ -1101,7 +1101,7 @@ Function FillRoom%(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2, DeleteMapTextures, False)
 			TextureBlend(Tex, 2)
 			EntityTexture(r\Objects[2], Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			SpriteViewMode(r\Objects[2], 2)
 			ScaleSprite(r\Objects[2], 91.0 * RoomScale, 95.0 * RoomScale)
 			PositionEntity(r\Objects[2], r\x - 640 * RoomScale, r\y + 224.0 * RoomScale, r\z - 208.0 * RoomScale)
@@ -1858,7 +1858,7 @@ Function FillRoom%(r.Rooms)
 			EntityTexture(d\OBJ, Tex)
 			EntityTexture(d\OBJ2, Tex)
 			EntityTexture(d\FrameOBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			r\RoomDoors.Doors[1] = d
 			
 			r\RoomDoors[0]\LinkedDoor = r\RoomDoors[1]
@@ -2402,7 +2402,7 @@ Function FillRoom%(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2, DeleteMapTextures, False)
 			TextureBlend(Tex, 2)
 			EntityTexture(r\Objects[2], Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			
 			r\Objects[3] = CopyEntity(r\Objects[2])
 			
@@ -3517,7 +3517,7 @@ Function FillRoom%(r.Rooms)
 			EntityTexture(d\OBJ, Tex)
 			EntityTexture(d\OBJ2, Tex)
 			EntityTexture(d\FrameOBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			r\RoomDoors.Doors[0] = d
 			
 			; ~ Conference Room 9B door
@@ -3913,7 +3913,7 @@ Function FillRoom%(r.Rooms)
 				If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
 				EntityTexture(d\FrameOBJ, Tex)
 			Next
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			
 			; ~ The doors inside fake tunnel
 			d.Doors = CreateDoor(r, r\x, r\y + 2060.0 * RoomScale, r\z + 32.0 - 1024.0 * RoomScale, 0.0, False, HEAVY_DOOR)
@@ -3997,7 +3997,7 @@ Function FillRoom%(r.Rooms)
 			r\ScriptedObject[17] = True
 			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteAllTextures, False)
 			EntityTexture(r\Objects[17], Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)
 			RotateEntity(r\Objects[17], 0.0, 180.0, 0.0)
 			ScaleSprite(r\Objects[17], 0.03, 0.03)
@@ -4027,7 +4027,7 @@ Function FillRoom%(r.Rooms)
 			r\ScriptedObject[20] = True
 			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
 			EntityTexture(r\Objects[20], Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
 			EntityType(r\Objects[20], HIT_MAP)
 			PositionEntity(r\Objects[20], r\x, r\y + 16.0 + 2944.0 * RoomScale, r\z + 32.0, True)
