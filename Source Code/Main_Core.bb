@@ -3056,33 +3056,33 @@ End Function
 
 Function UpdateZoneColor%()
 	Local e.Events
-	Local i%
-	Local PlayerPosY# = EntityY(me\Collider, True)
+	Local IsOutSide% = (IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro)
 	
-	CurrFogColor$ = ""
-	CurrAmbientColor$ = ""
+	CurrFogColor = ""
+	CurrAmbientColor = ""
 	
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
-	If opt\DebugMode = 1
+	If opt\DebugMode = 1 ; ~ Allow to use big range for debugging
 		CameraRange(Camera, 0.01, 100.0)
 	Else
 		CameraRange(Camera, 0.01, me\CameraFogDist * LightVolume * 1.2)
 	EndIf
 	; ~ Handle room-specific settings
-	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And PlayerPosY < (-4100.0) * RoomScale
+	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider, True) < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
-	ElseIf IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
+	ElseIf IsOutSide
 		SetZoneColor(FogColorOutside)
 		me\CameraFogDist = 60.0
-		CameraFogRange(Camera, 5.0, 60.0)
-		CameraRange(Camera, 0.01, 72.0)
+		LightVolume = 1.0
+		CameraFogRange(Camera, 5.0, me\CameraFogDist)
+		CameraRange(Camera, 0.01, 72.0) ; ~ me\CameraFogDist * 1.2
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
 		me\CameraFogDist = 80.0
 		LightVolume = 1.0
-		CameraFogRange(Camera, 40.0, 80.0)
-		CameraRange(Camera, 0.01, 96.0)
+		CameraFogRange(Camera, 40.0, me\CameraFogDist)
+		CameraRange(Camera, 0.01, 96.0) ; ~ me\CameraFogDist * 1.2
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 		For e.Events = Each Events
 			If e\EventID = e_dimension_106
@@ -3107,7 +3107,7 @@ Function UpdateZoneColor%()
 				me\CameraFogDist = 8.0
 				LightVolume = 1.0
 				CameraFogRange(Camera, 0.1, 8.0)
-				CameraRange(Camera, 0.01, 9.6)
+				CameraRange(Camera, 0.01, 9.6) ; ~ me\CameraFogDist * 1.2
 			EndIf
 		EndIf
 	EndIf
@@ -3130,13 +3130,21 @@ Function UpdateZoneColor%()
 		End Select
 	EndIf
 	
+	; ~ Calculate the current fog color
 	CurrFogColorR = CurveValue(Left(CurrFogColor, 3), CurrFogColorR, ZoneColorChangeSpeed)
 	CurrFogColorG = CurveValue(Mid(CurrFogColor, 4, 3), CurrFogColorG, ZoneColorChangeSpeed)
 	CurrFogColorB = CurveValue(Right(CurrFogColor, 3), CurrFogColorB, ZoneColorChangeSpeed)
 	
+	; ~ Set the camera fog color
 	CameraFogColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
-	CameraClsColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
+	If IsOutSide
+		; ~ Keep it black. That will reduce white artifacts
+		CameraClsColor(Camera, 0, 0, 0)
+	Else
+		CameraClsColor(Camera, CurrFogColorR, CurrFogColorG, CurrFogColorB)
+	EndIf
 	
+	; ~ Calculate the current ambient color which affects the lighting of props/objects/NPCs/items
 	CurrAmbientColorR = CurveValue(Left(CurrAmbientColor, 3), CurrAmbientColorR, ZoneColorChangeSpeed)
 	CurrAmbientColorG = CurveValue(Mid(CurrAmbientColor, 4, 3), CurrAmbientColorG, ZoneColorChangeSpeed)
 	CurrAmbientColorB = CurveValue(Right(CurrAmbientColor, 3), CurrAmbientColorB, ZoneColorChangeSpeed)
