@@ -488,7 +488,7 @@ Function RenderQuickLoading%()
 	EndIf
 End Function
 
-Function QuickLoadEvents%()
+Function QuickLoadEvents%() ; ~ Get rid of this shit - Jabka
 	If QuickLoad_CurrEvent = Null
 		QuickLoadPercent = -1
 		Return
@@ -507,69 +507,81 @@ Function QuickLoadEvents%()
 		Case e_cont1_205
 			;[Block]
 			If e\EventState = 0.0 Lor e\EventStr <> "LoadDone"
-				If e\EventStr = "Load0"
-					e\room\Objects[2] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_1_MODEL])
-					e\room\ScriptedObject[2] = True
-					QuickLoadPercent = 10
-					e\EventStr = "Load1"
-				ElseIf e\EventStr = "Load1"
-					e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_2_MODEL])
-					e\room\ScriptedObject[3] = True
-					QuickLoadPercent = 20
-					e\EventStr = "Load2"
-				ElseIf e\EventStr = "Load2"
-					e\room\Objects[4] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_3_MODEL])
-					e\room\ScriptedObject[4] = True
-					QuickLoadPercent = 30
-					e\EventStr = "Load3"
-				ElseIf e\EventStr = "Load3"
-					e\room\Objects[5] = CopyEntity(n_I\NPCModelID[NPC_205_WOMAN_MODEL])
-					e\room\ScriptedObject[5] = True
-					QuickLoadPercent = 40
-					e\EventStr = "Load4"
-				ElseIf e\EventStr = "Load4"
-					QuickLoadPercent = 50
-					e\EventStr = "Load5"
-				ElseIf e\EventStr = "Load5"
-					For i = 2 To 5
-						PositionEntity(e\room\Objects[i], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
-						RotateEntity(e\room\Objects[i], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
-						ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
-					Next
-					QuickLoadPercent = 70
-					e\EventStr = "Load6"
-				ElseIf e\EventStr = "Load6"
-					For i = 2 To 5
-						HideEntity(e\room\Objects[i])
-					Next
-					QuickLoadPercent = 100
-					e\EventStr = "LoadDone"
-				EndIf
+				Select e\EventStr
+					Case "Load0"
+						;[Block]
+						e\room\Objects[2] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_1_MODEL])
+						e\room\ScriptedObject[2] = True
+						QuickLoadPercent = 15
+						e\EventStr = "Load1"
+						;[End Block]
+					Case "Load1"
+						;[Block]
+						e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_2_MODEL])
+						e\room\ScriptedObject[3] = True
+						QuickLoadPercent = 30
+						e\EventStr = "Load2"
+						;[End Block]
+					Case "Load2"
+						;[Block]
+						e\room\Objects[4] = CopyEntity(n_I\NPCModelID[NPC_205_DEMON_3_MODEL])
+						e\room\ScriptedObject[4] = True
+						QuickLoadPercent = 45
+						e\EventStr = "Load3"
+						;[End Block]
+					Case "Load3"
+						;[Block]
+						e\room\Objects[5] = CopyEntity(n_I\NPCModelID[NPC_205_WOMAN_MODEL])
+						e\room\ScriptedObject[5] = True
+						QuickLoadPercent = 60
+						e\EventStr = "Load4"
+						;[End Block]
+					Case "Load4"
+						;[Block]
+						For i = 2 To 5
+							PositionEntity(e\room\Objects[i], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
+							RotateEntity(e\room\Objects[i], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
+							ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
+						Next
+						QuickLoadPercent = 75
+						e\EventStr = "Load5"
+						;[End Block]
+					Case "Load5"
+						;[Block]
+						For i = 2 To 5
+							HideEntity(e\room\Objects[i])
+						Next
+						QuickLoadPercent = 100
+						e\EventStr = "LoadDone"
+						;[End Block]
+				End Select
 			EndIf
 			;[End Block]
 		Case e_cont2_860_1
 			;[Block]
-			If e\EventStr = "Load0"
-				QuickLoadPercent = 15
-				ForestNPC = CreateSprite()
-				ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
-				SpriteViewMode(ForestNPC, 4)
-				EntityFX(ForestNPC, 1 + 8)
-				ForestNPCTex = LoadAnimTexture_Strict("GFX\NPCs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
-				ForestNPCData[0] = 0.0
-				EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
-				ForestNPCData[1] = 0.0
-				ForestNPCData[2] = 0.0
-				HideEntity(ForestNPC)
-				e\EventStr = "Load1"
-			ElseIf e\EventStr = "Load1"
-				QuickLoadPercent = 40
-				e\EventStr = "Load2"
-			ElseIf e\EventStr = "Load2"
-				QuickLoadPercent = 100
-				If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
-				e\EventStr = "LoadDone"
-			EndIf
+			Select e\EventStr
+				Case "Load0"
+					;[Block]
+					QuickLoadPercent = 50
+					ForestNPC = CreateSprite()
+					ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
+					SpriteViewMode(ForestNPC, 4)
+					EntityFX(ForestNPC, 1 + 8)
+					ForestNPCTex = LoadAnimTexture_Strict("GFX\NPCs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
+					ForestNPCData[0] = 0.0
+					EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
+					ForestNPCData[1] = 0.0
+					ForestNPCData[2] = 0.0
+					HideEntity(ForestNPC)
+					e\EventStr = "Load1"
+					;[End Block]
+				Case "Load1"
+					;[Block]
+					QuickLoadPercent = 100
+					If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
+					e\EventStr = "LoadDone"
+					;[End Block]
+			End Select
 			;[End Block]
 		Case e_dimension_1499
 			;[Block]
@@ -4193,12 +4205,7 @@ Function UpdateEvents%()
 						iY = (MTGridSize) / 2 + Rand(-2, 2)
 						
 						e\room\mt\Grid[iX + (iY * MTGridSize)] = 1
-						
-						If Dir = 2
-							e\room\mt\Grid[(iX + 1) + (iY * MTGridSize)] = 1
-						Else
-							e\room\mt\Grid[(iX - 1) + (iY * MTGridSize)] = 1
-						EndIf
+						e\room\mt\Grid[(iX + (Dir = 2) - (Dir <> 2)) + (iY * MTGridSize)] = 1
 						
 						Local Count% = 2
 						

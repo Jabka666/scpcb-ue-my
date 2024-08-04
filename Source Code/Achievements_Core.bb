@@ -118,21 +118,13 @@ Function CreateAchievementMsg.AchievementMsg(AchvID$)
 	Local Value% = JsonGetValue(AchievementsArray, "translations")
 	Local AchvName% = JsonGetValue(JsonGetValue(LocValue, AchvID), "name")
 	
-	If JsonIsNull(AchvName)
-		AchvName = JsonGetValue(JsonGetValue(Value, AchvID), "name")
-		amsg\Txt = JsonGetString(AchvName)
-	Else
-		amsg\Txt = JsonGetString(AchvName)
-	EndIf
+	If JsonIsNull(AchvName) Then AchvName = JsonGetValue(JsonGetValue(Value, AchvID), "name")
+	amsg\Txt = JsonGetString(AchvName)
 	
 	Local AchvDesc% = JsonGetValue(JsonGetValue(LocValue, AchvID), "description")
 	
-	If JsonIsNull(AchvDesc)
-		AchvDesc = JsonGetValue(JsonGetValue(Value, AchvID), "description")
-		amsg\Desc = JsonGetString(AchvDesc)
-	Else
-		amsg\Desc = JsonGetString(AchvDesc)
-	EndIf
+	If JsonIsNull(AchvDesc) Then AchvDesc = JsonGetValue(JsonGetValue(Value, AchvID), "description")
+	amsg\Desc = JsonGetString(AchvDesc)
 	amsg\MsgX = 0.0
 	amsg\MsgTime = fps\Factor[1]
 	amsg\MsgID = CurrAchvMSGID
