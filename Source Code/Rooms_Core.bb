@@ -3774,7 +3774,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ Gateway control room door
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 458.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.04, True)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.04, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 1.12, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.04, True)
 			
 			; ~ Misc doors
