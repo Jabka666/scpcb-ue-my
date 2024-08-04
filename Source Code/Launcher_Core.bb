@@ -145,6 +145,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 	LauncherMediaWidth = ImageWidth(LauncherIMG[0]) / 2
 	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 4)
 	
+	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 7)
+	
 	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
 		
@@ -168,6 +170,10 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	Local Quit% = False
 	Local SelectorDeniedTimer% = 0
+	Local TooltipX% = 0
+	Local TooltipY% = 0
+	Local ToolTip$ = ""
+	Local TooltipWidth% = 0
 	
 	Repeat
 		Cls()
@@ -248,6 +254,35 @@ Function UpdateLauncher%(lnchr.Launcher)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 155, 30)
 		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
+		
+		; ~ Driver name (tooltip)
+		If MouseOn(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
+			TooltipX = MousePosX + 5
+			TooltipY = MousePosY + 10
+			ToolTip = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
+			TooltipWidth = StringWidth(ToolTip)
+			
+			If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
+			RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
+			TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
+		EndIf
+		
+		; ~ Fullscreen mode caution (tooltip)
+		If opt\DisplayMode = 0
+			DrawImage(ButtonImages, LauncherWidth - 30, LauncherHeight - 250, 6)
+			If MouseOn(LauncherWidth - 30, LauncherHeight - 250, 21, 21)
+				TooltipX = MousePosX + 5
+				TooltipY = MousePosY + 10
+				ToolTip = GetLocalString("launcher", "display.caution")
+				TooltipWidth = StringWidth(ToolTip)
+				
+				If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
+				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
+				TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
+				Rect(LauncherWidth - 30, LauncherHeight - 250, 21, 21, False)
+			EndIf
+		EndIf
+		
 		; ~ Launcher tick
 		Text(LauncherWidth - 590, LauncherHeight - 127, GetLocalString("launcher", "launcher"))
 		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 620, LauncherHeight - 133, opt\LauncherEnabled)
@@ -337,18 +372,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Quit = True
 			Exit
 		EndIf
-		
-		; ~ Driver name (tooltip)
-		If MouseOn(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
-			Local TooltipX% = MousePosX + 5
-			Local TooltipY% = MousePosY + 10
-			Local Tooltip$ = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
-			Local TooltipWidth% = StringWidth(Tooltip)
-			
-			If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
-			RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
-			TextEx(TooltipX + 8, TooltipY + 8, Tooltip)
-		EndIf
 		Flip()
 	Forever
 	
@@ -362,6 +385,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
 	Next	
+	FreeImage(ButtonImages) : ButtonImages = 0
 	
 	MousePosX = 0
 	MousePosY = 0
@@ -431,7 +455,7 @@ Function UpdateLanguageSelector%()
 	
 	Local LanguageBG%
 	Local LanguageIMG% = CreateImage(452, 254)
-	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 6)
+	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 7)
 	Local CurrFontHeight% = FontHeight() / 2
 	Local SelectedLanguage.ListLanguage = Null
 	Local MouseHoverLanguage.ListLanguage = Null
@@ -667,37 +691,34 @@ Function UpdateLanguageSelector%()
 			Color(255, 255, 255)
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
 			Local ID$ = Format(GetLocalString("language", "id"), MouseHoverLanguage\ID)
+			Local Size$ = "", LastMod$ = ""
+			Local Author$ = "", Prefect$ = "", Prefect2$ = "", Compatible$ = ""
+			Local FontWidthVal% = FontWidth()
+			Local FontHeightVal% = FontHeight()
+			Local Height% = FontHeightVal * 4.5
 			
 			If MouseHoverLanguage\ID <> "en"
-				Local Author$ = Format(GetLocalString("language", "author"), MouseHoverLanguage\Author)
-				Local Prefect$ = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
-				Local Prefect2$ = Format(GetLocalString("language", "full"), GetLocalString("language", "no"))
-				Local Compatible$ = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
+				Author = Format(GetLocalString("language", "author"), MouseHoverLanguage\Author)
+				Prefect = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
+				Prefect2 = Format(GetLocalString("language", "full"), GetLocalString("language", "no"))
+				Compatible = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
 				
 				If MouseHoverLanguage\MajorOnly
-					Height = FontHeight() * 10
+					Height = FontHeightVal * 10
 				Else
-					Local Size$ = Format(GetLocalString("language", "size"), SimpleFileSize(MouseHoverLanguage\FileSize))
-					Local LastMod$ = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
-					Height% = FontHeight() * 13
+					Size = Format(GetLocalString("language", "size"), SimpleFileSize(MouseHoverLanguage\FileSize))
+					LastMod = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
+					Height = FontHeightVal * 13
 				EndIf
-			Else
-				Author = ""
-				LastMod	= ""
-				Prefect = ""
-				Compatible = ""
-				Prefect2 = ""
-				Size = ""
-				Height = FontHeight() * 4.5
 			EndIf
 			
 			Local Width% = Max(Max(Max(Max(Max(Max(Max(StringWidth(Name), StringWidth(ID)), StringWidth(Author)), StringWidth(Prefect)), StringWidth(Size)), StringWidth(Compatible)), StringWidth(Prefect2)), StringWidth(LastMod))
 			
 			x = MousePosX + 10
 			y = MousePosY + 10
-			If (x + Width + FontWidth()) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long, then move tooltip to the left
-			If (y + Height + FontHeight()) > LauncherHeight Then y = y - Height - 15
-			RenderFrame(x, y, Width + FontWidth(), Height)
+			If (x + Width + FontWidthVal) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long, then move tooltip to the left
+			If (y + Height + FontHeightVal) > LauncherHeight Then y = y - Height - 15
+			RenderFrame(x, y, Width + FontWidthVal, Height)
 			x = x + 5
 			TextEx(x, y + 8, Name)
 			TextEx(x, y + 23, ID)
