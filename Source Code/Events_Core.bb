@@ -8768,9 +8768,9 @@ Function UpdateIntro%()
 										
 										e\room\NPC[4]\State = 9.0
 										
-										For i = 2 To 3
-											OpenCloseDoor(e\room\RoomDoors[i])
-										Next
+										CreateHintMsg(GetLocalString("msg", "enterchmbr"))
+										
+										OpenCloseDoor(e\room\RoomDoors[3])
 										
 										FreeEntity(e\room\Objects[4]) : e\room\Objects[4] = 0
 										
