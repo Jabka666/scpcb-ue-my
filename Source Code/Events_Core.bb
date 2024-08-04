@@ -3969,21 +3969,13 @@ Function UpdateEvents%()
 						If e\room\NPC[0] = Null And Temp
 							e\room\RoomDoors[0]\Locked = 1
 							If (e\room\Angle Mod 180 = 90.0)
-								If Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True))
-									x1 = 800.0
-									z1 = 0.0
-								Else
-									x1 = -800.0
-									z1 = 0.0
-								EndIf
+								i = Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True))
+								x1 = i * 800.0 + (Not i) * (-800.0)
+								z1 = 0.0
 							Else
-								If Abs(EntityZ(me\Collider, True) < EntityZ(e\room\OBJ, True))
-									x1 = 0.0
-									z1 = 800.0
-								Else
-									x1 = 0.0
-									z1 = -800.0
-								EndIf
+								i = Abs(EntityZ(me\Collider, True)) < EntityZ(e\room\OBJ, True)
+								x1 = 0.0
+								z1 = i * 800.0 + (Not i) * (-800.0)
 							EndIf
 							e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\OBJ, True) + x1 * RoomScale, 0.4, EntityZ(e\room\OBJ, True) + z1 * RoomScale)
 							e\room\NPC[0]\State = 2.0

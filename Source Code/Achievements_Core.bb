@@ -47,13 +47,9 @@ Function AchievementTooltip%(AchvID$)
 	Local Value% = JsonGetValue(AchievementsArray, "translations")
 	Local AchvName% = JsonGetValue(JsonGetValue(LocValue, AchvID), "name")
 	
-	If JsonIsNull(AchvName)
-		AchvName = JsonGetValue(JsonGetValue(Value, AchvID), "name")
-		Width = StringWidth(JsonGetString(AchvName))
-	Else
-		Width = StringWidth(JsonGetString(AchvName))
-	EndIf
-
+	If JsonIsNull(AchvName) Then AchvName = JsonGetValue(JsonGetValue(Value, AchvID), "name")
+	Width = StringWidth(JsonGetString(AchvName))
+	
 	Local Height% = 38 * Scale
 	
 	SetFontEx(fo\FontID[Font_Default])
@@ -61,12 +57,8 @@ Function AchievementTooltip%(AchvID$)
 	Local Width2%
 	Local AchvDesc% = JsonGetValue(JsonGetValue(LocValue, AchvID), "description")
 	
-	If JsonIsNull(AchvDesc)
-		AchvDesc = JsonGetValue(JsonGetValue(Value, AchvID), "description")
-		Width2 = StringWidth(JsonGetString(AchvDesc))
-	Else
-		Width2 = StringWidth(JsonGetString(AchvDesc))
-	EndIf
+	If JsonIsNull(AchvDesc) Then AchvDesc = JsonGetValue(JsonGetValue(Value, AchvID), "description")
+	Width2 = StringWidth(JsonGetString(AchvDesc))
 	
 	If Width2 > Width Then Width = Width2
 	Width = Width + CoordEx
