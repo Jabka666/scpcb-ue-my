@@ -1365,11 +1365,7 @@ Function FillRoom%(r.Rooms)
 						;[End Block]
 				End Select
 				sc.SecurityCams = CreateSecurityCam(r, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale, 30.0)
-				If i = 0
-					sc\Angle = 220.0
-				Else
-					sc\Angle = 180.0
-				EndIf
+				sc\Angle = 220.0 - (i * 40.0)
 				sc\Turn = 30.0
 			Next
 			
@@ -2342,6 +2338,8 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Document SCP-682", it_paper, r\x + 656.0 * RoomScale, r\y - 1200.0 * RoomScale, r\z - 16.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateCustomCenter(r, r\x, r\z - 816.0 * RoomScale)
 			;[End Block]
 		Case r_cont2_008
 			;[Block]
