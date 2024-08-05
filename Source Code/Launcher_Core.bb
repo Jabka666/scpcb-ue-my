@@ -276,10 +276,10 @@ Function UpdateLauncher%(lnchr.Launcher)
 				ToolTip = GetLocalString("launcher", "display.caution")
 				TooltipWidth = StringWidth(ToolTip)
 				
+				Rect(LauncherWidth - 30, LauncherHeight - 250, 21, 21, False)
 				If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
 				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
 				TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
-				Rect(LauncherWidth - 30, LauncherHeight - 250, 21, 21, False)
 			EndIf
 		EndIf
 		
