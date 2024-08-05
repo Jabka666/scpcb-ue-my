@@ -8378,15 +8378,15 @@ Function UpdateMTF%()
 				EndIf
 			Next
 			If Temp
-				PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncPossession.ogg")
+				PlayAnnouncement("SFX\Character\MTF\AnnouncThreatPossession.ogg")
 			Else
-				PlayAnnouncement("SFX\Character\MTF\ThreatAnnounc" + Rand(3) + ".ogg")
+				PlayAnnouncement("SFX\Character\MTF\AnnouncThreat" + Rand(0, 2) + ".ogg")
 			EndIf
 			MTFTimer = 25000.0
 		ElseIf MTFTimer >= 25000.0 And MTFTimer <= 25000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 25000.0 + (70.0 * 60.0) And MTFTimer < 30000.0
-			PlayAnnouncement("SFX\Character\MTF\ThreatAnnouncFinal.ogg")
+			PlayAnnouncement("SFX\Character\MTF\AnnouncThreatFinal.ogg")
 			MTFTimer = 30000.0
 		EndIf
 	EndIf
