@@ -5887,11 +5887,7 @@ Function UpdateEvents%()
 									If Temp
 										For i = 0 To 1
 											If e\room\RoomEmitters[i] = Null
-												If i = 0
-													TFormPoint(-269.0, 400.0, 624.0, e\room\OBJ, 0)
-												Else
-													TFormPoint(-269.0, 400.0, 135.0, e\room\OBJ, 0)
-												EndIf
+												TFormPoint(-269.0, 400.0, 135.0 + (i * 489.0), e\room\OBJ, 0)
 												e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
 												e\room\RoomEmitters[i]\State = 1
 											EndIf
@@ -6122,11 +6118,7 @@ Function UpdateEvents%()
 						If UpdateLever(e\room\RoomLevers[1]\OBJ)
 							For i = 0 To 1
 								If e\room\RoomEmitters[i] = Null
-									If i = 0
-										TFormPoint(-269.0, 400.0, 624.0, e\room\OBJ, 0)
-									Else
-										TFormPoint(-269.0, 400.0, 135.0, e\room\OBJ, 0)
-									EndIf
+									TFormPoint(-269.0, 400.0, 135.0 + (i * 489.0), e\room\OBJ, 0)
 									e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
 									e\room\RoomEmitters[i]\State = 1
 								EndIf
@@ -6183,7 +6175,7 @@ Function UpdateEvents%()
 							
 							If Angle > 90.0 
 								If Angle < 225.0
-									RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle - 89.0 - 180.0, 0.0)
+									RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle - 269.0, 0.0)
 								Else
 									RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle - 1.0, 0.0)
 								EndIf

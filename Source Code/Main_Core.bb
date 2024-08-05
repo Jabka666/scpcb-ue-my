@@ -106,9 +106,6 @@ Function ResetInput%()
 	Input_ResetTime = 20.0
 End Function
 
-Const Mouselook_X_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X axis
-Const Mouselook_Y_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the Y axis
-
 mo\Mouse_Left_Limit = 250 * MenuScale
 mo\Mouse_Right_Limit = opt\GraphicWidth - mo\Mouse_Left_Limit
 mo\Mouse_Top_Limit = 150 * MenuScale
@@ -853,7 +850,7 @@ Function UpdateConsole%()
 	
 	If ConsoleOpen
 		Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, cm.ConsoleMsg, itt.ItemTemplates, rt.RoomTemplates
-		Local Tex%, Tex2%, InBar%, InBox%, MouseScroll#, Temp%, i%
+		Local Tex%, Tex2%, InBar%, InBox%, Temp%, i%
 		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
 		Local CoordEx% = 15 * MenuScale
 		
@@ -896,12 +893,7 @@ Function UpdateConsole%()
 			EndIf
 		EndIf
 		
-		MouseScroll = MouseZSpeed()
-		If MouseScroll = 1
-			ConsoleScroll = ConsoleScroll - CoordEx
-		ElseIf MouseScroll= -1
-			ConsoleScroll = ConsoleScroll + CoordEx
-		EndIf
+		ConsoleScroll = ConsoleScroll + (-MouseZSpeed()) * CoordEx
 		
 		Local ReissuePos%
 		
@@ -2524,6 +2516,7 @@ Function UpdateMoving%()
 	Local de.Decals
 	Local Sprint# = 1.0, Speed# = 0.018
 	Local Pvt%, i%, Angle#
+	Local Temp3%
 	
 	If chs\SuperMan
 		CanSave = 0
@@ -2553,19 +2546,14 @@ Function UpdateMoving%()
 	EndIf
 	
 	If me\Stamina < me\StaminaMax
-		If me\CurrSpeed > 0.0
-			me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] / 1.25), 100.0)
-		Else
-			me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] * 1.25), 100.0)
-		EndIf
+		Temp3 = (me\CurrSpeed > 0.0)
+		me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] * (Temp3 / 1.25) + (Not Temp3) * 1.25), 100.0)
 	EndIf
-	
 	If me\StaminaEffectTimer > 0.0
 		me\StaminaEffectTimer = me\StaminaEffectTimer - (fps\Factor[0] / 70.0)
 	Else
 		me\StaminaEffect = 1.0
 	EndIf
-	
 	me\StaminaMax = 100.0
 	
 	If I_714\Using = 2
@@ -2584,7 +2572,7 @@ Function UpdateMoving%()
 		If wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
 	EndIf
 	
-	Local Temp#, Temp3%
+	Local Temp#
 	
 	If (Not me\Terminated) And (Not chs\NoClip) And (PlayerRoom\RoomTemplate\RoomID <> r_dimension_106) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
 		If me\Stamina < 5.0
@@ -2857,6 +2845,8 @@ Global wi.WearableItems
 
 Global CameraPitch#
 
+Const Mouselook_Inc# = 0.3 ; ~ This sets both the sensitivity and direction (+ / -) of the mouse on the X and Y axis
+
 Function UpdateMouseLook%()
 	CatchErrors("UpdateMouseLook()")
 	
@@ -2888,23 +2878,16 @@ Function UpdateMouseLook%()
 		Local Temp# = (opt\MouseSensitivity + 0.5)
 		Local Temp2# = (5.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing
 		
-		If opt\InvertMouseX
-			mo\Mouse_X_Speed_1 = CurveValue(-MouseXSpeed() * Temp, mo\Mouse_X_Speed_1, Temp2)
-		Else
-			mo\Mouse_X_Speed_1 = CurveValue(MouseXSpeed() * Temp, mo\Mouse_X_Speed_1, Temp2)
-		EndIf
+		mo\Mouse_X_Speed_1 = CurveValue((1 - 2 * opt\InvertMouseX) * MouseXSpeed() * Temp, mo\Mouse_X_Speed_1, Temp2)
 		If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
-		If opt\InvertMouseY
-			mo\Mouse_Y_Speed_1 = CurveValue(-MouseYSpeed() * Temp, mo\Mouse_Y_Speed_1, Temp2)
-		Else
-			mo\Mouse_Y_Speed_1 = CurveValue(MouseYSpeed() * Temp, mo\Mouse_Y_Speed_1, Temp2)
-		EndIf
+		mo\Mouse_Y_Speed_1 = CurveValue((1 - 2 * opt\InvertMouseY) * MouseYSpeed() * Temp, mo\Mouse_Y_Speed_1, Temp2)
 		If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
 		
 		If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then StopMouseMovement()
 		
-		Local The_Yaw# = mo\Mouse_X_Speed_1 * Mouselook_X_Inc / (1.0 + wi\BallisticVest)
-		Local The_Pitch# = mo\Mouse_Y_Speed_1 * Mouselook_Y_Inc / (1.0 + wi\BallisticVest)
+		Local MouselookInc# = Mouselook_Inc / (1.0 + wi\BallisticVest)
+		Local The_Yaw# = mo\Mouse_X_Speed_1 * MouseLookInc
+		Local The_Pitch# = mo\Mouse_Y_Speed_1 * MouseLookInc
 		
 		TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 		CameraPitch = CameraPitch + The_Pitch
@@ -3063,11 +3046,8 @@ Function UpdateZoneColor%()
 	
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
-	If opt\DebugMode = 1 ; ~ Allow to use big range for debugging
-		CameraRange(Camera, 0.01, 100.0)
-	Else
-		CameraRange(Camera, 0.01, me\CameraFogDist * LightVolume * 1.2)
-	EndIf
+	; ~ Allow to use big range for debugging
+	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * me\CameraFogDist * LightVolume * 1.2)
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider, True) < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
@@ -5882,11 +5862,8 @@ Function RenderDebugHUD%()
 			
 			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), InFacility))
 			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.roomflo"), ToElevatorFloor))
-			If me\InsideElevator
-				TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "True"))
-			Else
-				TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "False"))
-			EndIf
+			
+			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), me\InsideElevator))
 			
 			TextEx(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
 			
@@ -5925,11 +5902,7 @@ Function RenderDebugHUD%()
 			
 			x = x + (700 * MenuScale)
 			
-			If me\Terminated
-				TextEx(x, y, Format(GetLocalString("console", "debug_2.terminated"), "True"))
-			Else
-				TextEx(x, y, Format(GetLocalString("console", "debug_2.terminated"), "False"))
-			EndIf
+			TextEx(x, y, Format(GetLocalString("console", "debug_2.terminated"), me\Terminated))
 			
 			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_2.death"), me\DeathTimer))
 			TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_2.fall"), me\FallTimer))
@@ -5947,11 +5920,7 @@ Function RenderDebugHUD%()
 			
 			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.vomit"), me\VomitTimer))
 			
-			If me\Playable
-				TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "True"))
-			Else
-				TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), "False"))
-			EndIf
+			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), me\Playable))
 			
 			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
 			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
@@ -6795,21 +6764,13 @@ Function RenderGUI%()
 								SelectedItem\State2 = Max(0.0, SelectedItem\State2 - fps\Factor[0])
 							EndIf
 							DrawBlockRect(t\ImageID[7], xx + (80 * MenuScale), yy + (70 * MenuScale), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
-							If Offline
-								Color(100, 0, 0)
-							Else
-								Color(30, 30, 30)
-							EndIf
+							Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
 							Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 							
 							x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
 							y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 							
-							If Offline
-								Color(100, 0, 0)
-							Else
-								Color(30, 30, 30)
-							EndIf
+							Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
 							If (MilliSec Mod 800) < 200 ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS
 								If Offline Then TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), GetLocalString("msg", "nav.data"))
 								
@@ -6861,11 +6822,8 @@ Function RenderGUI%()
 								Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
 								
 								; ~ Battery
-								If SelectedItem\State <= 20.0
-									Color(100, 0, 0)
-								Else
-									Color(30, 30, 30)
-								EndIf
+								Temp = (SelectedItem\State <= 20.0)
+								Color(70 * Temp + 30, 30 * Temp, 30 * Temp)
 								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
 									Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 								Next
@@ -9428,17 +9386,9 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	
 	Pvt = CreatePivot()
 	PositionEntity(Pvt, x, y + 0.05, z, IsGlobal)
-	If Dir
-		RotateEntity(Pvt, -90.0, 0.0, 0.0)
-	Else
-		RotateEntity(Pvt, 90.0, 0.0, 0.0)
-	EndIf
+	RotateEntity(Pvt, (1 - 2 * Dir) * 90.0, 0.0, 0.0)
 	If EntityPick(Pvt, PickRange) <> 0
-		If Dir
-			PositionEntity(Entity, x, PickedY() + CustomRadius - 0.02, z, IsGlobal)
-		Else
-			PositionEntity(Entity, x, PickedY() + CustomRadius + 0.02, z, IsGlobal)
-		EndIf
+		PositionEntity(Entity, x, PickedY() + CustomRadius + (1 - 2 * Dir) * 0.02, z, IsGlobal)
 	Else
 		PositionEntity(Entity, x, y, z, IsGlobal)
 	EndIf

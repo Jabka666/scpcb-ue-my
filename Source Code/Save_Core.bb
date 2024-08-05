@@ -291,11 +291,7 @@ Function SaveGame%(File$)
 			If r\RoomLevers[i] = Null
 				WriteByte(f, 2)
 			Else
-				If EntityPitch(r\RoomLevers[i]\OBJ, True) > 0.0
-					WriteByte(f, 0)
-				Else
-					WriteByte(f, 1)
-				EndIf
+				WriteByte(f, EntityPitch(r\RoomLevers[i]\OBJ, True) =< 0.0)
 			EndIf
 		Next
 		
@@ -483,11 +479,7 @@ Function SaveGame%(File$)
 		If it\ItemTemplate\IsAnim Then WriteFloat(f, AnimTime(it\Model))
 		WriteByte(f, it\InvSlots)
 		WriteInt(f, it\ID)
-		If it\ItemTemplate\InvImg = it\InvImg
-			WriteByte(f, 0)
-		Else
-			WriteByte(f, 1)
-		EndIf
+		WriteByte(f, it\ItemTemplate\InvImg <> it\InvImg)
 	Next
 	
 	Temp = 0

@@ -105,7 +105,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
 	If room <> Null Then EntityParent(p\OBJ, room\OBJ)
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
-	EntityType(p\OBJ, HasCollision) ; ~ DON'T FORGET THAT Const HIT_MAP% = 1
+	EntityType(p\OBJ, HasCollision) ; ~ DO NOT FORGET THAT Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
 	EntityPickMode(p\OBJ, 2)
 	
@@ -595,11 +595,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			AddMesh(ChildMesh, Opaque)
 			EntityParent(ChildMesh, CollisionMeshes)
 			EntityAlpha(ChildMesh, 0.0)
-			If HasCollision
-				EntityType(ChildMesh, HIT_MAP)
-			Else
-				EntityType(ChildMesh, 0)
-			EndIf
+			EntityType(ChildMesh, HasCollision) ; ~ DO NOT FORGET THAT Const HIT_MAP% = 1
 			EntityPickMode(ChildMesh, 2)
 			
 			; ~ Make collision double-sided
@@ -821,11 +817,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	EntityFX(Opaque, 3)
 	
 	EntityAlpha(HiddenMesh, 0.0)
-	If HasCollision
-		EntityType(HiddenMesh, HIT_MAP)
-	Else
-		EntityType(HiddenMesh, 0)
-	EndIf
+	EntityType(HiddenMesh, HasCollision) ; ~ DO NOT FORGET THAT Const HIT_MAP% = 1
 	EntityAlpha(Opaque, 1.0)
 	
 	Local OBJ% = CreatePivot()
@@ -963,8 +955,8 @@ Function GenForestGrid%(fr.Forest)
 			RightMost = 0
 			For i = 0 To ForestGridSize - 1
 				If fr\Grid[((ForestGridSize - 1 - NewY) * ForestGridSize) + i] = 1
-					If i < LeftMost Then LeftMost = i
-					If i > RightMost Then RightMost = i
+					LeftMost = Min(LeftMost, i)
+					RightMost = Max(RightMost, i)
 				EndIf
 			Next
 			If BranchPos = 0
@@ -988,11 +980,7 @@ Function GenForestGrid%(fr.Forest)
 						i = i + 1
 						If Chance(Branch_Die_Chance) Then Exit
 						If Rand(0, 3) = 0 ; ~ Have a higher chance to go up to confuse the player
-							If BranchPos = 0
-								NewX = NewX - 1
-							Else
-								NewX = NewX + 1
-							EndIf
+							NewX = NewX + (1 - 2 * (BranchPos = 0))
 						Else
 							TempY = TempY + 1
 						EndIf
@@ -1147,8 +1135,6 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 							Angle = 270.0
 						ElseIf fr\Grid[(tY * ForestGridSize) + (tX + 1)] > 0
 							Angle = 90.0
-						Else
-							Angle = 0.0
 						EndIf
 						
 						Tile_Type = ROOM1 + 1
@@ -1186,8 +1172,6 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 							Angle = 90.0
 						ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] = 0
 							Angle = 270.0
-						Else
-							Angle = 0.0
 						EndIf
 						
 						Tile_Type = ROOM3 + 1
@@ -4423,14 +4407,14 @@ End Function
 Function TimeCheckpointMonitors%()
 	If mon_I\UpdateCheckpoint[0]
 		If mon_I\MonitorTimer[0] < 100.0
-			mon_I\MonitorTimer[0] = Min(mon_I\MonitorTimer[0] + fps\Factor[0], 100.0)
+			mon_I\MonitorTimer[0] = mon_I\MonitorTimer[0] + fps\Factor[0]
 		Else
 			mon_I\MonitorTimer[0] = 0.0
 		EndIf
 	EndIf
 	If mon_I\UpdateCheckpoint[1]
 		If mon_I\MonitorTimer[1] < 100.0
-			mon_I\MonitorTimer[1] = Min(mon_I\MonitorTimer[1] + fps\Factor[0], 100.0)
+			mon_I\MonitorTimer[1] = mon_I\MonitorTimer[1] + fps\Factor[0]
 		Else
 			mon_I\MonitorTimer[1] = 0.0
 		EndIf
@@ -4561,11 +4545,7 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 	EndIf
 	
 	RefValue = EntityPitch(OBJ, True)
-	If RefValue > ((MaxValue + MinValue) / 2.0)
-		Return(False)
-	Else
-		Return(True)
-	EndIf
+	Return(Not (RefValue > ((MaxValue + MinValue) / 2.0)))
 End Function
 
 Function RemoveLever(lvr.Levers)

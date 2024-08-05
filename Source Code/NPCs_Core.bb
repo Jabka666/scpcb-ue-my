@@ -1146,6 +1146,7 @@ Function UpdateNPCs%()
 				Local IsLooking% = Dist < PowTwo(me\CameraFogDist * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
 				If wi\SCRAMBLE > 0 And IsLooking
 					Local HasBatteryForScramble% = False
+					
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null
 							If (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
