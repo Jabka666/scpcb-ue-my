@@ -5966,8 +5966,7 @@ Function RenderDebugHUD%()
 			
 			Local CurrAchvAmount% = S2IMapSize(UnlockedAchievements)
 			
-			Local Temp% = ((S2IMapSize(AchievementsIndex) - 1) - (CurrAchvAmount - 1)) * (4 + SelectedDifficulty\OtherFactors)
-			If S2IMapContains(UnlockedAchievements, "keter") Then Temp = Temp - (4 + SelectedDifficulty\OtherFactors)
+			Local Temp% = ((S2IMapSize(AchievementsIndex) - 1) - (CurrAchvAmount - 1) - S2IMapContains(UnlockedAchievements, "keter")) * (4 + SelectedDifficulty\OtherFactors)
 			If Temp < 0 Then Temp = 0
 			
 			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
