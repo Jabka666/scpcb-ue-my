@@ -701,10 +701,6 @@ Function LoadGame%(File$)
 	
 	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
 	
-	For n.NPCs = Each NPCs
-		RemoveNPC(n)
-	Next
-	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		Local NPCType% = ReadByte(f)
