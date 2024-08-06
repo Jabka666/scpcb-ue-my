@@ -18,6 +18,7 @@ v1.3
 
 [Launcher]
 - Default Display Mode is now Borderless.
+- Fullscren Display Mode has a warning for Alt + TAB usage.
 - Removed the 32-bit indicator.
 
 [Menu]
