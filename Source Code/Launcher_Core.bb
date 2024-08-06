@@ -229,6 +229,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		TextEx(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
 		
 		Local Txt$
+		Local DesktopW% = DesktopWidth()
+		Local DesktopH% = DesktopHeight()
 		
 		Select opt\DisplayMode
 			Case 0
@@ -238,10 +240,10 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Case 1
 				;[Block]
 				Txt = GetLocalString("launcher", "display.borderless")
-				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopWidth()
-					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
-				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopWidth()
-					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopWidth(), "{0}"), DesktopHeight(), "{1}"))
+				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopW
+					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopW, "{0}"), DesktopH, "{1}"))
+				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopW
+					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopW, "{0}"), DesktopH, "{1}"))
 				EndIf
 				;[End Block]
 			Case 2
@@ -356,8 +358,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		; ~ Launch button
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"))
 			If opt\DisplayMode = 1
-				opt\GraphicWidth = DesktopWidth()
-				opt\GraphicHeight = DesktopHeight()
+				opt\GraphicWidth = DesktopW
+				opt\GraphicHeight = DesktopH
 			Else
 				opt\GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
 				opt\GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]

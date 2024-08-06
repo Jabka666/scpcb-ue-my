@@ -2838,12 +2838,7 @@ Function UpdateEvents%()
 								If (Not IsSlotEmpty) Then e\EventState2 = (i + e\EventState2) Mod MaxItemAmount
 								
 								If Rand(8) = 1
-									If IsSlotEmpty
-										e\EventState3 = 3.1
-									Else
-										e\EventState3 = 3.0
-									EndIf
-									
+									e\EventState3 = 3.0 + (0.1 * IsSlotEmpty)
 									e\EventState = Rand(5)
 									
 									; ~ Checking if the selected nostalgia item already exists or not
@@ -3981,11 +3976,11 @@ Function UpdateEvents%()
 						If e\room\NPC[0] = Null And Temp
 							e\room\RoomDoors[0]\Locked = 1
 							If (e\room\Angle Mod 180 = 90.0)
-								i = Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True))
+								i = (Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True)))
 								x1 = i * 800.0 + (Not i) * (-800.0)
 								z1 = 0.0
 							Else
-								i = Abs(EntityZ(me\Collider, True)) < EntityZ(e\room\OBJ, True)
+								i = (Abs(EntityZ(me\Collider, True)) < EntityZ(e\room\OBJ, True))
 								x1 = 0.0
 								z1 = i * 800.0 + (Not i) * (-800.0)
 							EndIf
@@ -5960,11 +5955,7 @@ Function UpdateEvents%()
 										RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
 										
 										If Rand(500) = 1
-											If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) > 4.0
-												e\room\NPC[0]\State2 = 1.0
-											Else
-												e\room\NPC[0]\State2 = 0.0
-											EndIf
+											e\room\NPC[0]\State2 = (EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) > 4.0)
 											e\room\NPC[0]\State = 1.0
 										EndIf
 									ElseIf e\room\NPC[0]\State = 1.0
@@ -6995,19 +6986,28 @@ Function UpdateEvents%()
 									Place = Rand(0, 2)
 								EndIf
 								
-								If Place = 0
-									x1 = -608.0
-									z1 = 0.0
-								ElseIf Place = 1
-									x1 = 0.0
-									z1 = -608.0
-								ElseIf Place = 2
-									x1 = 608.0
-									z1 = 0.0
-								Else
-									x1 = 0.0
-									z1 = 608.0
-								EndIf
+								Select Place
+									Case 0
+										;[Block]
+										x1 = -608.0
+										z1 = 0.0
+										;[End Block]
+									Case 1
+										;[Block]
+										x1 = 0.0
+										z1 = -608.0
+										;[End Block]
+									Case 2
+										;[Block]
+										x1 = 608.0
+										z1 = 0.0
+										;[End Block]
+									Case 3
+										;[Block]
+										x1 = 0.0
+										z1 = 608.0
+										;[End Block]
+								End Select
 								;[End Block]
 							Default
 								;[Block]
@@ -7044,13 +7044,7 @@ Function UpdateEvents%()
 						e\EventState = 2.0
 					EndIf
 				Else
-					If e\EventState = 2.0
-						If Rand(-1, 1 + (2 * SelectedDifficulty\AggressiveNPCs)) > 0
-							e\EventState = 0.0
-						Else
-							e\EventState = 3.0
-						EndIf
-					EndIf
+					If e\EventState = 2.0 Then e\EventState = 3.0 - (3.0 * (Rand(-1, 1 + (2 * SelectedDifficulty\AggressiveNPCs)) > 0))
 				EndIf
 				;[End Block]
 			Case e_room2_medibay
@@ -8090,11 +8084,7 @@ Function UpdateDimension1499%()
 									Animate2(du\OBJ, AnimTime(du\OBJ), 362.0, 402.0, 0.2, False)
 								Else
 									Temp = Rand(False, True)
-									If Temp
-										SetAnimTime(du\OBJ, 362.0)
-									Else
-										SetAnimTime(du\OBJ, 321.0)
-									EndIf
+									SetAnimTime(du\OBJ, 321.0 + (41.0 * Temp))
 								EndIf
 							Else
 								If AnimTime(du\OBJ) <= 452.5
@@ -8103,11 +8093,7 @@ Function UpdateDimension1499%()
 									Animate2(du\OBJ, AnimTime(du\OBJ), 454.0, 498.0, 0.2, False)
 								Else
 									Temp = Rand(False, True)
-									If Temp
-										SetAnimTime(du\OBJ, 454.0)
-									Else
-										SetAnimTime(du\OBJ, 413.0)
-									EndIf
+									SetAnimTime(du\OBJ, 413.0 + (41.0 * Temp))
 								EndIf
 							EndIf
 						Else
