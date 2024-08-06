@@ -7008,8 +7008,8 @@ Function UpdateEvents%()
 								;[End Block]
 							Default
 								;[Block]
-								x1 = Rnd(-100.0, 100.0)
-								z1 = Rnd(-100.0, 100.0)
+								x1 = Rnd(-50.0, 50.0)
+								z1 = Rnd(-50.0, 50.0)
 								;[End Block]
 						End Select
 						Pvt = CreatePivot(e\room\OBJ)
