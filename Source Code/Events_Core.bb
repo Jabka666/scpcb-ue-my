@@ -2486,12 +2486,9 @@ Function UpdateEvents%()
 							e\EventStr = "Load0"
 						EndIf
 						
+						ShouldPlay = 9
 						If e\room\NPC[0] <> Null
-							If (e\room\NPC[0]\State2 = 1.0 And e\room\NPC[0]\State > 1.0) Lor e\room\NPC[0]\State > 2.0 ; ~ The monster is chasing the player
-								ShouldPlay = 12
-							Else
-								ShouldPlay = 9
-							EndIf
+							If (e\room\NPC[0]\State2 = 1.0 And e\room\NPC[0]\State > 1.0) Lor e\room\NPC[0]\State > 2.0 Then ShouldPlay = 12 ; ~ The monster is chasing the player
 						EndIf
 						
 						; ~ The player fell
