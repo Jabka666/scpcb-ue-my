@@ -1557,7 +1557,7 @@ Function UpdateNPCs%()
 											If i = 2
 												For i = 0 To MaxItemAmount - 1
 													If Inventory(i) <> Null
-														If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_veryfinehazmatsuit
+														If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
 															CreateMsg(GetLocalString("msg", "suit.destroyed"))
 															wi\HazmatSuit = 0
 															RemoveItem(Inventory(i))
