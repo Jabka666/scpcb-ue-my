@@ -6673,7 +6673,7 @@ Function TeleportCloser%(n.NPCs)
 			ShouldTeleport = True
 		EndIf
 		If ShouldTeleport
-			TeleportEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 70.0 * RoomScale, EntityZ(closestWaypoint\OBJ, True), n\Collider, True)
+			TeleportEntity(n\Collider, EntityX(closestWaypoint\OBJ, True), EntityY(closestWaypoint\OBJ, True) + 0.2, EntityZ(closestWaypoint\OBJ, True), n\CollRadius, True)
 			n\CurrSpeed = 0.0
 			n\PathStatus = PATH_STATUS_NO_SEARCH
 			n\PathTimer = 0.0
