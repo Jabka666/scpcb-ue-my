@@ -93,6 +93,7 @@ v1.3
 - Reduced attack startup distance of SCP-966.
 - Increased attack hit distance of SCP-049-2 and SCP-008-1.
 - Reduced the accuracy of the Gate B guard.
+- Nerfed teleportations on aggressive NPCs mode.
 
 [Bug Fixes]
 - Fixed some typos in subtitles.
