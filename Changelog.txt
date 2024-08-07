@@ -123,6 +123,7 @@ v1.3
 - Fixed player rotation in the maintenance tunnel elevators.
 - Fixed hazmat suit and gas mask overlays combining when reloading a save.
 - Fixed clipping into SCP-005 door when entering trap if door was closed.
+- Fixed MAV at Gate B area.
 
 [Known issues]
 - Cups crash the game sometimes.
