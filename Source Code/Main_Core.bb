@@ -7965,7 +7965,7 @@ Function UpdateEnding%()
 	GiveAchievement("055")
 	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedCustomMap = Null
 		GiveAchievement("console")
-		If SelectedDifficulty\Name = GetLocalString("menu", "new.keter") Lor SelectedDifficulty\Name = difficulties[APOLLYON]\Name
+		If SelectedDifficulty\Name = difficulties[KETER]\Name Lor SelectedDifficulty\Name = difficulties[APOLLYON]\Name
 			GiveAchievement("keter")
 			SaveAchievementsFile()
 		EndIf
