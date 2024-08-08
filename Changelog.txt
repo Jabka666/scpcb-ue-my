@@ -84,6 +84,7 @@ v1.3
 - Increased chances for 18V batteries to spawn.
 - Fine Eyedrops no longer heal 1% bloodloss.
 - Redvision Eyedrops heal 5% - 10% bloodloss.
+- Can place joints into wallet.
 
 [NPCs]
 - Can now detect SCP-1048 and SCP-1048-A using the blue variant of Night Vision Goggles.
