@@ -5964,11 +5964,23 @@ Function RenderDebugHUD%()
 				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			
-			Local CurrAchvAmount% = S2IMapSize(UnlockedAchievements)
-			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 1) - (CurrAchvAmount - 1) - S2IMapContains(UnlockedAchievements, "keter")) * (4 + SelectedDifficulty\OtherFactors), 0)
+			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 1) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "keter")) * (4 + SelectedDifficulty\OtherFactors), 0)
 			
 			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
 			TextEx(x, y + (620 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), (Temp / 2) + 1))
+			
+			Local RoomAmount% = 0, RoomsFound% = 0
+			
+			For r.Rooms = Each Rooms
+				Local RID% = r\RoomTemplate\RoomID
+				
+				If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
+					RoomAmount = RoomAmount + 1
+					RoomsFound = RoomsFound + r\Found
+				EndIf
+			Next
+			
+			TextEx(x, y + (640 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))))
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
