@@ -9285,7 +9285,8 @@ Function UpdateEndings%()
 							
 							If EntityDistanceSquared(me\Collider, e\room\Objects[5]) < PowTwo(320.0 * RoomScale)
 								For i = 2 To 3
-									e\room\RoomDoors[i]\Open = False : e\room\RoomDoors[i]\Locked = 1
+									e\room\RoomDoors[i]\Open = False
+									e\room\RoomDoors[i]\Locked = 1
 								Next
 								
 								e\room\NPC[2] = CreateNPC(NPCTypeApache, EntityX(e\room\Objects[11], True), EntityY(e\room\Objects[11], True) + 0.5, EntityZ(e\room\Objects[11], True))

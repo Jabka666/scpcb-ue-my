@@ -1769,7 +1769,7 @@ Function UpdateConsole%()
 					;[Block]
 					StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 					
-					If opt\DebugMode = 1
+					If opt\DebugMode = 1 ; ~ Allow using infinite value for debugging
 						me\CameraFogDist = StrTemp
 					Else
 						me\CameraFogDist = Clamp(StrTemp, 6.0, 17.0)

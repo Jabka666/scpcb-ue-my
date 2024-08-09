@@ -181,7 +181,6 @@ Function SaveGame%(File$)
 	WriteFloat(f, Remove714Timer)
 	WriteFloat(f, RemoveHazmatTimer)
 	
-	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
 			WriteByte(f, CurrMapGrid\Grid[x + (y * MapGridSize)])

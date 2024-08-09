@@ -2732,11 +2732,7 @@ Function FillRoom%(r.Rooms)
 						Scale = Rnd(0.8, 1.0)
 						;[End Block]
 				End Select
-				If i < 3
-					yTemp = 0.0
-				Else
-					yTemp = 3.0
-				EndIf
+				yTemp = 3.0 * (i > 2)
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, Scale, Rnd(0.6, 0.8), 1)
 				EntityParent(de\OBJ, r\OBJ)
 			Next

@@ -295,6 +295,7 @@ End Function
 Function UpdateParticles_Devil()
 	Local emit.Emitter, p.Particle
 	Local i%
+	Local InSmoke% = False
 	
 	For emit.Emitter = Each Emitter
 		ClearSurface(emit\Surf)
@@ -341,8 +342,6 @@ Function UpdateParticles_Devil()
 				EntityTexture(emit\Ent, emit\tmp\Tex, emit\tmp\TexFrame)
 			EndIf
 			
-			Local InSmoke% = False
-			
 			Select emit\State
 				Case 1
 					;[Block]
@@ -360,17 +359,6 @@ Function UpdateParticles_Devil()
 					emit\SoundCHN = LoopSound2(snd_I\HissSFX[1], emit\SoundCHN, Camera, emit\Owner, 5.0 - (3.0 * (emit\State = 3.0)), 1.0 - (0.6 * (emit\State = 3.0)))
 					;[End Block]
 			End Select
-			
-			If InSmoke
-				If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
-				If me\EyeIrritation > 70.0 * 24.0
-					msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
-					Kill()
-				EndIf
-				
-				UpdateCough(150)
-				me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
-			EndIf
 		EndIf
 		
 		If emit\Del
@@ -387,6 +375,17 @@ Function UpdateParticles_Devil()
 			EndIf
 		EndIf
 	Next
+	If InSmoke
+		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
+		If me\EyeIrritation > 70.0 * 24.0
+			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
+			Kill()
+		EndIf
+		
+		UpdateCough(150)
+		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
+	EndIf
+	
 	PositionEntity(ParticlePiv, EntityX(ParticleCam, True), EntityY(ParticleCam, True), EntityZ(ParticleCam, True))
 	
 	Local CamPitch# = EntityPitch(ParticleCam, True)

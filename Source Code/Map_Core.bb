@@ -2804,24 +2804,17 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	Local Temp% = (DoorType = BIG_DOOR)
 	
 	For i = 0 To 1
-		If (DoorType = OFFICE_DOOR) Lor (DoorType = WOODEN_DOOR)
-			If (Not d\Open)
+		Select DoorType
+			Case OFFICE_DOOR, WOODEN_DOOR
+				;[Block]
 				d\Buttons[i] = CreatePivot()
 				PositionEntity(d\Buttons[i], x - 0.22, y + 0.6, z + 0.1 + (i * (-0.2)))
 				EntityRadius(d\Buttons[i], 0.1)
 				EntityPickMode(d\Buttons[i], 1)
 				EntityParent(d\Buttons[i], d\FrameOBJ)
-			EndIf
-		Else
-			If DoorType = ELEVATOR_DOOR
-				ButtonID = i * BUTTON_ELEVATOR
-				
-				d\ElevatorPanel[i] = CopyEntity(d_I\ElevatorPanelModel)
-				ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
-				RotateEntity(d\ElevatorPanel[i], 0.0, i * 180.0, 0.0)
-				PositionEntity(d\ElevatorPanel[i], x, y + 1.27, z + 0.13 + (i * (-0.26)))
-				EntityParent(d\ElevatorPanel[i], d\FrameOBJ)
-			Else
+				;[End Block]
+			Default
+				;[Block]
 				If Code <> 0
 					ButtonID = BUTTON_KEYPAD
 				ElseIf Keycard > KEY_MISC
@@ -2830,10 +2823,19 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 					ButtonID = BUTTON_SCANNER
 				Else
 					ButtonID = BUTTON_DEFAULT
+					If DoorType = ELEVATOR_DOOR
+						ButtonID = i * BUTTON_ELEVATOR
+						
+						d\ElevatorPanel[i] = CopyEntity(d_I\ElevatorPanelModel)
+						ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
+						RotateEntity(d\ElevatorPanel[i], 0.0, i * 180.0, 0.0)
+						PositionEntity(d\ElevatorPanel[i], x, y + 1.27, z + 0.13 + (i * (-0.26)))
+						EntityParent(d\ElevatorPanel[i], d\FrameOBJ)
+					EndIf
 				EndIf
-			EndIf
-			d\Buttons[i] = CreateButton(ButtonID, x + ((Not Temp) * (0.6 + (i * (-1.2)))) + (Temp * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Not Temp) * ((-0.1) + (i * 0.2))) + (Temp * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Not Temp) * (i * 180.0)) + (Temp * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
-		EndIf
+				d\Buttons[i] = CreateButton(ButtonID, x + ((Not Temp) * (0.6 + (i * (-1.2)))) + (Temp * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Not Temp) * ((-0.1) + (i * 0.2))) + (Temp * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Not Temp) * (i * 180.0)) + (Temp * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
+				;[End Block]
+		End Select
 	Next
 	RotateEntity(d\FrameOBJ, 0.0, Angle, 0.0)
 	EntityParent(d\FrameOBJ, Parent)
@@ -2858,7 +2860,9 @@ Function UpdateDoors%()
 					If d\Buttons[i] <> 0
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 And Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0
 							If UpdateButton(d\Buttons[i])
-								d_I\ClosestDoor = d : me\SndVolume = 4.0 : d_I\AnimButton = d_I\ClosestButton
+								d_I\ClosestDoor = d
+								me\SndVolume = 4.0
+								d_I\AnimButton = d_I\ClosestButton
 								Exit
 							EndIf
 						EndIf
