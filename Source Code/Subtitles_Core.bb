@@ -175,7 +175,8 @@ Function RenderSubtitles%()
 End Function
 
 Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
-	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\EnableSubtitles) Lor (Not SubtitlesInit) Then Return
+	If (Not opt\EnableSubtitles) Lor (Not SubtitlesInit) Then Return
+	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Then Return ; ~ Call this line when first line is passed
 	
 	Local i%
 	Local Token% = JsonGetValue(LocalSubFile, SoundPath)
