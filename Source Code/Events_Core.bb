@@ -2160,9 +2160,16 @@ Function UpdateEvents%()
 						me\Zone = 1
 						
 						UpdateButton(e\room\Objects[5])
-						If d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1
-							CreateMsg(GetLocalString("msg", "button.nothappend"))
-							PlaySound2(ButtonSFX[1], Camera, e\room\Objects[5])
+						
+						If e\EventState4 = 1.0
+							If opt\ParticleAmount > 0
+								emit.Emitter = SetEmitter(r, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), 18)
+								emit\State = 3
+							EndIf
+							e\EventState4 = 2.0
+						ElseIf d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1
+							If e\EventState4 = 0.0 Then e\EventState4 = 1.0
+							PlaySound2(ButtonSFX[0], Camera, e\room\Objects[5])
 							mo\MouseHit1 = False
 						EndIf
 						

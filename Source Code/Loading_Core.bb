@@ -349,6 +349,19 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[17], 0.008, 0.008, 1.0, 1.5)
 	SetTemplateAlphaVel(ParticleEffect[17], True)
 	SetTemplateFloor(ParticleEffect[17], 0.4, 0.02, 0)
+	
+	; ~ Water sprinklet particle
+	ParticleEffect[18] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[18], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[18], -1)
+	SetTemplateParticlesPerInterval(ParticleEffect[18], 10)
+	SetTemplateParticleLifeTime(ParticleEffect[18], 110, 120)
+	SetTemplateTexture(ParticleEffect[18], PARTICLE_WATER_DROP)
+	SetTemplateOffset(ParticleEffect[18], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[18], -0.0025, 0.0025, -0.008, -0.005, -0.0025, 0.0025)
+	SetTemplateSize(ParticleEffect[18], 0.008, 0.008, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[18], True)
+	SetTemplateFloor(ParticleEffect[18], -13.2, 0.08, 0)
 End Function
 
 Function RemoveParticleInstances%()

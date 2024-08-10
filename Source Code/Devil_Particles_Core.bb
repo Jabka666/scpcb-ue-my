@@ -48,7 +48,7 @@ End Type
 
 Global ParticleCam%
 Global ParticlePiv%
-Global ParticleEffect%[18]
+Global ParticleEffect%[19]
 Global UpdateDevilParticlesTimer# = 0.0
 
 Function CreateTemplate()
