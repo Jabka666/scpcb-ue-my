@@ -960,7 +960,7 @@ Function LimitText%(Txt$, x%, y%, Width%)
 		Local LenTxt% = Len(Txt)
 		
 		LetterWidth = TextLength / LenTxt
-		TextEx(x, y, Left(Txt, Max(LenTxt - UnFitting / LetterWidth - 4, 1)) + "..", 0, 0)
+		TextEx(x, y, Left(Txt, Max(LenTxt - UnFitting / LetterWidth - 4, 1)) + "..")
 	EndIf
 End Function
 

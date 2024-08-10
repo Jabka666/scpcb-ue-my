@@ -755,33 +755,33 @@ Function UpdateMainMenu%()
 						
 						y = y + (80 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], Font_Default, 3)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], Font_Default, 8)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210)], Font_Default, 3)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210)], Font_Default, 8)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], Font_Default, 4)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], Font_Default, 9)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210)], Font_Default, 4)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210)], Font_Default, 9)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], Font_Default, 5)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], Font_Default, 10)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210)], Font_Default, 5)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210)], Font_Default, 10)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], Font_Default, 6)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], Font_Default, 11)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210)], Font_Default, 6)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210)], Font_Default, 11)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], Font_Default, 7)
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], Font_Default, 13)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210)], Font_Default, 7)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210)], Font_Default, 13)
 						
 						If opt\CanOpenConsole
 							y = y + (20 * MenuScale)
 							
-							UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], Font_Default, 12)
+							UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210)], Font_Default, 12)
 						EndIf
 						
 						Local TempKey%
@@ -2290,13 +2290,13 @@ Function UpdateInput$(aString$, MaxChr%)
 	Local Length% = Len(aString)
 	
 	If (CursorPos < 0) And (CursorPos <> -1) Then CursorPos = Length
-	If CursorPos < 0 Then CursorPos = 0
+	CursorPos = Max(CursorPos, 0)
 	
 	If KeyHit(210) Then InsertMode = (Not InsertMode) ; ~ Insert key
 	If KeyHit(199) Then CursorPos = 0 ; ~ Home key
 	If KeyHit(207) Then CursorPos = Length ; ~ End key
 	If KeyHit(211) ; ~ Delete key
-		aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0))
+		aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
 		CursorPos = CursorPos + 1
 	EndIf
 	
@@ -2326,7 +2326,7 @@ Function UpdateInput$(aString$, MaxChr%)
 	If KeyDown(205) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Right arrow
 		If (MilliSecs() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
 	ElseIf KeyDown(203) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Left arrow
-		If (MilliSecs() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0.0)
+		If (MilliSecs() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0)
 	Else
 		If InsertMode
 			If ChrCanDisplay(Value)
@@ -2335,7 +2335,7 @@ Function UpdateInput$(aString$, MaxChr%)
 			ElseIf Value = 8 ; ~ Backspace
 				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
 			ElseIf Value = 4 ; ~ Delete
-				aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0.0))
+				aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
 			EndIf
 		Else
 			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
@@ -2413,7 +2413,7 @@ Function RenderMenuInputBoxes%()
 		
 		Color(255, 255, 255)
 		If SelectedInputBox = mib\ID
-			If ((MilliSec Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0.0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
+			If ((MilliSec Mod 800) < 400) Lor KeyDown(205) Lor KeyDown(203) Lor InsertMode Then Rect(mib\x + (mib\Width / 2) - (StringWidth(mib\Txt) / 2) + StringWidth(Left(mib\Txt, Max(CursorPos, 0))), mib\y + (mib\Height / 2) - (5 * MenuScale), 2 * MenuScale, 12 * MenuScale)
 		EndIf
 		
 		SetFontEx(fo\FontID[mib\FontID])
@@ -2454,7 +2454,7 @@ Function UpdateMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 	If mo\MouseDown1 And OnSliderID = 0
 		If MouseOn(x, y, Width + (14 * MenuScale), (20 * MenuScale)) Then OnSliderID = ID
 	EndIf
-	If ID = OnSliderID Then Value = Min(Max((MousePosX - x) * 100 / Width, 0.0), 100.0)
+	If ID = OnSliderID Then Value = Min(Max((MousePosX - x) * 100.0 / Width, 0.0), 100.0)
 	Return(Value)
 End Function
 

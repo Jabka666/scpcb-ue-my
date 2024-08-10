@@ -5212,7 +5212,7 @@ Function CreateMap%()
 		If GetZone(y - Height) <> GetZone(y - Height + 1) Then Height = Height - 1
 		
 		For i = 1 To yHallways
-			x2 = Max(Min(Rand(x, x + Width - 1), MapGridSize - 2), 2.0)
+			x2 = Max(Min(Rand(x, x + Width - 1), MapGridSize - 2), 2)
 			While CurrMapGrid\Grid[x2 + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 + 1) + ((y - 1) * MapGridSize)]
 				x2 = x2 + 1
 			Wend
@@ -5251,7 +5251,7 @@ Function CreateMap%()
 		For x = 1 To MapGridSize - 1
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
 				Temp = 0
-				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
+				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1)
 				If CurrMapGrid\Grid[x + (y * MapGridSize)] <> MapGrid_CheckpointTile Then CurrMapGrid\Grid[x + (y * MapGridSize)] = Temp
 				Select CurrMapGrid\Grid[x + (y * MapGridSize)]
 					Case 1
@@ -5260,9 +5260,9 @@ Function CreateMap%()
 						;[End Block]
 					Case 2
 						;[Block]
-						If Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) = 2
+						If Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) = 2
 							Room2Amount[Zone] = Room2Amount[Zone] + 1
-						ElseIf Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0) = 2
+						ElseIf Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1) = 2
 							Room2Amount[Zone] = Room2Amount[Zone] + 1
 						Else
 							Room2CAmount[Zone] = Room2CAmount[Zone] + 1
@@ -5305,7 +5305,7 @@ Function CreateMap%()
 			For y = y_min To y_max
 				For x = x_min To x_max
 					If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_NoTile
-						If (Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)) = 1
+						If (Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1)) = 1
 							If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)]
 								x2 = x + 1 : y2 = y
 							ElseIf CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)]
@@ -5321,11 +5321,11 @@ Function CreateMap%()
 								Select CurrMapGrid\Grid[x2 + (y2 * MapGridSize)]
 									Case 2
 										;[Block]
-										If Min(CurrMapGrid\Grid[(x2 + 1) + (y2 * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x2 - 1) + (y2 * MapGridSize)], 1.0) = 2
+										If Min(CurrMapGrid\Grid[(x2 + 1) + (y2 * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x2 - 1) + (y2 * MapGridSize)], 1) = 2
 											Room2Amount[i] = Room2Amount[i] - 1
 											Room3Amount[i] = Room3Amount[i] + 1
 											Placed = True
-										ElseIf Min(CurrMapGrid\Grid[x2 + ((y2 + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x2 + ((y2 - 1) * MapGridSize)], 1.0) = 2
+										ElseIf Min(CurrMapGrid\Grid[x2 + ((y2 + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x2 + ((y2 - 1) * MapGridSize)], 1) = 2
 											Room2Amount[i] = Room2Amount[i] - 1
 											Room3Amount[i] = Room3Amount[i] + 1
 											Placed = True
@@ -5619,7 +5619,7 @@ Function CreateMap%()
 				EndIf
 				CalculateRoomExtents(r)
 			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
-				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1.0) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1.0)
+				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1)
 				Select Temp
 					Case 1 ; ~ Generate ROOM1
 						;[Block]
@@ -5789,7 +5789,7 @@ Function CreateMap%()
 	
 	For y = 0 To MapGridSize
 		For x = 0 To MapGridSize
-			CurrMapGrid\Grid[x + (y * MapGridSize)] = Min(CurrMapGrid\Grid[x + (y * MapGridSize)], 1.0)
+			CurrMapGrid\Grid[x + (y * MapGridSize)] = Min(CurrMapGrid\Grid[x + (y * MapGridSize)], 1)
 		Next
 	Next
 	
@@ -5832,7 +5832,7 @@ Function CreateMap%()
 						
 						If ShouldSpawnDoor
 							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						
@@ -5860,7 +5860,7 @@ Function CreateMap%()
 						End Select
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						Exit
@@ -5968,10 +5968,10 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 			Local MaskY# = MaskHeight - Min(PosY * Float(MaskHeight) / Float(HeightMapHeight + 1), MaskHeight - 1)
 			Local RGB%, RED%
 			
-			RGB = ReadPixelFast(Min(PosX, HeightMapWidth - 1.0), HeightMapHeight - Min(PosY, HeightMapHeight - 1.0), HeightMapBuffer)
+			RGB = ReadPixelFast(Min(PosX, HeightMapWidth - 1), HeightMapHeight - Min(PosY, HeightMapHeight - 1), HeightMapBuffer)
 			RED = (RGB And $FF0000) Shr 16 ; ~ Separate out the red
 			
-			Local Alpha# = (((ReadPixelFast(Max(MaskX -5.0, 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Local Alpha# = (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			
 			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Min(MaskY + 5.0, MaskHeight - 5), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			Alpha = Alpha + (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Min(MaskY + 5.0, MaskHeight - 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)

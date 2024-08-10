@@ -69,7 +69,7 @@ Function UpdateSubtitles%()
 					
 					While StringRight > subassets\BoxLeft + subassets\BoxWidth - CoordEx
 						NextLine = Right(TxtLine, 1) + NextLine
-						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0.0))
+						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0))
 						StringRight = subassets\BoxLeft + CoordEx + StringWidth(TxtLine)
 					Wend
 					
@@ -77,7 +77,7 @@ Function UpdateSubtitles%()
 					
 					While Right(TxtLine, 1) <> " "
 						NextLine = Right(TxtLine, 1) + NextLine
-						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0.0))
+						TxtLine = Left(TxtLine, Max(Len(TxtLine) - 1, 0))
 						
 						Local NextStringRight# = subassets\BoxLeft + CoordEx + StringWidth(NextLine)
 						

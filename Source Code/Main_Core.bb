@@ -357,7 +357,7 @@ Function UpdateGame%()
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
 				If PlayerInReachableRoom(True)
-					ShouldPlay = Min(me\Zone, 2.0)
+					ShouldPlay = Min(me\Zone, 2)
 					
 					If Rand(50000) = 3
 						me\LightBlink = Rnd(1.0, 2.0)
@@ -5130,7 +5130,7 @@ Function UpdateGUI%()
 									If (Not ChannelPlaying(RadioCHN[6])) And (Not ChannelPlaying(RadioCHN[3])) Then RadioCHN[6] = PlaySound_Strict(snd_I\RadioStatic)
 									
 									If MTFTimer > 0.0
-										If (Not RadioState2[6]) Then RadioState[3] = RadioState[3] + Max(Rand(-10, 1), 0.0)
+										If (Not RadioState2[6]) Then RadioState[3] = RadioState[3] + Max(Rand(-10, 1), 0)
 										Select RadioState[3]
 											Case 40
 												;[Block]
@@ -5200,7 +5200,7 @@ Function UpdateGUI%()
 											RadioCHN[4] = PlaySound_Strict(LoadTempSound("SFX\Radio\Chatter2.ogg"), True)
 											RadioState[8] = 1
 										Else
-											RadioState[4] = RadioState[4] + Max(Rand(-10, 1), 0.0)
+											RadioState[4] = RadioState[4] + Max(Rand(-10, 1), 0)
 											
 											Select RadioState[4]
 												Case 10
@@ -6743,8 +6743,8 @@ Function RenderGUI%()
 								
 								x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
 								y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
-								For x2 = Max(1.0, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
-									For z2 = Max(1.0, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
+								For x2 = Max(1, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
+									For z2 = Max(1, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
 										If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance
 											If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
 												Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
@@ -6825,7 +6825,7 @@ Function RenderGUI%()
 								; ~ Battery
 								Temp = (SelectedItem\State <= 20.0)
 								Color(70 * Temp + 30, 30 * Temp, 30 * Temp)
-								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10.0)
+								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10)
 									Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 								Next
 								SetFontEx(fo\FontID[Font_Digital])
@@ -7152,48 +7152,48 @@ Function UpdateMenu%()
 						
 						y = y + (80 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210.0)], Font_Default, 3)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210)], Font_Default, 3)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210.0)], Font_Default, 4)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210)], Font_Default, 4)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210.0)], Font_Default, 5)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210)], Font_Default, 5)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210.0)], Font_Default, 6)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210)], Font_Default, 6)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210.0)], Font_Default, 7)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210)], Font_Default, 7)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210.0)], Font_Default, 8)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210)], Font_Default, 8)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210.0)], Font_Default, 9)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210)], Font_Default, 9)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210.0)], Font_Default, 10)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210)], Font_Default, 10)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210.0)], Font_Default, 11)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210)], Font_Default, 11)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210.0)], Font_Default, 13)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210)], Font_Default, 13)
 						
 						If opt\CanOpenConsole
 							y = y + (20 * MenuScale)
 							
-							UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210.0)], Font_Default, 12)
+							UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210)], Font_Default, 12)
 						EndIf
 						
 						Local TempKey%
@@ -7411,7 +7411,7 @@ Function UpdateMenu%()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0
-									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)], 1.0)
+									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)], 1)
 									If x < 4.0 And z < 4.0
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
 										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
@@ -9114,7 +9114,7 @@ Function Update294%()
 								;[End Block]
 							Case 9
 								;[Block]
-								I_294\ToInput = Left(I_294\ToInput, Max(Len(I_294\ToInput) - 1, 0.0))
+								I_294\ToInput = Left(I_294\ToInput, Max(Len(I_294\ToInput) - 1, 0))
 								;[End Block]
 						End Select
 					Case 4

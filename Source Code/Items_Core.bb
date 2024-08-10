@@ -1160,7 +1160,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If item\InvSlots = 1
 						item\InvSlots = 5
 					Else
-						item\InvSlots = Min(20.0, item\InvSlots + 5.0)
+						item\InvSlots = Min(20, item\InvSlots + 5)
 					EndIf
 					Remove = False
 					;[End Block]
@@ -1169,7 +1169,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If item\InvSlots = 1
 						item\InvSlots = 10
 					Else
-						item\InvSlots = Min(20.0, item\InvSlots + 10.0)
+						item\InvSlots = Min(20, item\InvSlots + 10)
 					EndIf
 					Remove = False
 					;[End Block]

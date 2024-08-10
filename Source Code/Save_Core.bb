@@ -986,7 +986,7 @@ Function LoadGame%(File$)
 						End Select
 						If ShouldSpawnDoor
 							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						
@@ -1014,7 +1014,7 @@ Function LoadGame%(File$)
 						End Select
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						Exit
@@ -2664,7 +2664,7 @@ Function LoadMap%(File$)
 						End Select
 						If ShouldSpawnDoor
 							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						
@@ -2692,7 +2692,7 @@ Function LoadMap%(File$)
 						End Select
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0.0), ((Zone - 1) Mod 2) * 2)
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
 							EndIf
 						EndIf
 						Exit

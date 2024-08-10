@@ -2867,7 +2867,7 @@ Function UpdateNPCs%()
 										
 										n\Idle = 0
 										n\State2 = 70.0 * Rnd(15.0, 20.0)
-										n\State = Max(Rand(-1.0, 2.0), 0.0)
+										n\State = Max(Rand(-1, 2), 0)
 										n\PrevState = Rand(0, 1)
 										Exit
 									EndIf
@@ -3344,8 +3344,8 @@ Function UpdateNPCs%()
 										z = Floor((TFormedZ() + 6.0) / 12.0)
 										
 										; ~ Step through nearby cells
-										For x2 = Max(x - 1, 1.0) To Min(x + 1, ForestGridSize) Step 2
-											For z2 = Max(z - 1, 1.0) To Min(z + 1, ForestGridSize) Step 2
+										For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize) Step 2
+											For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize) Step 2
 												; ~ Choose an empty cell (not on the path)
 												If fr\Grid[(z2 * ForestGridSize) + x2] = 0
 													; ~ Spawn the monster between the empty cell and the cell the player is in
@@ -5290,7 +5290,7 @@ Function UpdateMTFUnit%(n.NPCs)
 ;							Next
 						Else
 							For r.Rooms = Each Rooms
-								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2.0)) = 1)
+								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
 									x = r\x
 									y = 0.1
 									z = r\z
