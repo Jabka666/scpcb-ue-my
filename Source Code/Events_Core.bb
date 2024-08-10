@@ -6911,19 +6911,19 @@ Function UpdateEvents%()
 							EndIf
 						Next
 					EndIf
-				EndIf
-				
-				For e2.Events = Each Events
-					If e2\EventID = e_cont2_008
-						If e2\EventState = 2.0
-							EntityTexture(e\room\Objects[19], e\room\Textures[0], 3)
-						Else
-							UpdateCheckpointMonitors(False)
-							EntityTexture(e\room\Objects[19], e\room\Textures[1], 6 + (mon_I\MonitorTimer[1] < 50.0))
+					For e2.Events = Each Events
+						If e2\EventID = e_cont2_008
+							If e2\EventState = 2.0
+								mon_I\UpdateCheckpoint[1] = False
+								EntityTexture(e\room\Objects[19], e\room\Textures[0], 3)
+							Else
+								mon_I\UpdateCheckpoint[1] = True
+								EntityTexture(e\room\Objects[19], e\room\Textures[1], 6 + (mon_I\MonitorTimer[1] < 50.0))
+							EndIf
+							Exit
 						EndIf
-						Exit
-					EndIf
-				Next
+					Next
+				EndIf
 				;[End Block]
 			Case e_096_spawn
 				;[Block]
