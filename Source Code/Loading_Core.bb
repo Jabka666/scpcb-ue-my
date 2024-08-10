@@ -2179,7 +2179,7 @@ Function LoadData%()
 			TempStr = GetLocalString("menu", "new.map") + Name
 		EndIf
 	EndIf
-	SetErrorMsg(6, TempStr)
+	SetErrorMsg(8, TempStr)
 End Function
 
 Global Camera%

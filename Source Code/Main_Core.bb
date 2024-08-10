@@ -202,28 +202,25 @@ ResetInput()
 
 RenderLoading(100)
 
-InitErrorMsgs(12, True)
+InitErrorMsgs(13, True)
 SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
+SetErrorMsg(1, GetLocalString("error", "shot")) 
+SetErrorMsg(2, "---------------------------------------------------")
+SetErrorMsg(3, "Date and time: " + CurrentDate() + ", " + CurrentTime())
+SetErrorMsg(4, "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " Bit (Build: " + SystemProperty("osbuild") + ")")
+SetErrorMsg(5, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
 
-SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-SetErrorMsg(2, Format(Format(Format(GetLocalString("error", "os"), SystemProperty("os"), "{0}"), (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32), "{1}"), SystemProperty("osbuild"), "{2}"))
-SetErrorMsg(3, Format(Format(Format(GetLocalString("error", "cpu"), Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
-
-SetErrorMsg(10, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
-SetErrorMsg(11, GetLocalString("error", "shot")) 
+SetErrorMsg(12, "Caught exception: " + "_CaughtError_")
 
 Global GPUName$ = GfxDriverName(opt\GFXDriver)
-Global ErrorGPUMsg$ = GetLocalString("error", "gpu")
-Global ErrorMemStatusMsg$ = GetLocalString("error", "status")
-Global ErrorMsg$ = GetLocalString("error", "error")
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(9, Format(ErrorMsg, Location))
+	SetErrorMsg(11, "Error located in: " + Location)
 End Function
 
 Repeat
-	SetErrorMsg(4, Format(Format(Format(ErrorGPUMsg, GPUName, "{0}"), (opt\TotalVidMemory - (AvailVidMem() / 1024)), "{1}"), opt\TotalVidMemory, "{2}"))
-	SetErrorMsg(5, Format(Format(ErrorMemStatusMsg, (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
+	SetErrorMsg(6, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
+	SetErrorMsg(7, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
 	
 	Cls()
 	
@@ -269,18 +266,14 @@ Repeat
 	Flip(opt\VSync)
 Forever
 
-Global ErrorRoomMsg$ = GetLocalString("misc", "room")
-Global ErrorEventMsg$ = GetLocalString("misc", "event")
-
 Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
 	Local i%, TempStr$
 	
-	SetErrorMsg(7, Format(ErrorRoomMsg, PlayerRoom\RoomTemplate\RoomID))
-	
+	SetErrorMsg(9, "Room ID: " + PlayerRoom\RoomTemplate\RoomID)
 	For ev.Events = Each Events
 		If ev\room = PlayerRoom
-			SetErrorMsg(8, Format(Format(Format(Format(Format(ErrorEventMsg, ev\EventID, "{0}"), ev\EventState, "{1}"), ev\EventState2, "{2}"), ev\EventState3, "{3}"), ev\EventState4, "{4}") + Chr(10))
+			SetErrorMsg(10, "Event ID: " + ev\EventID + "; State: " + ev\EventState + ", " + ev\EventState2 + ", " + ev\EventState3 + ", " + ev\EventState4)
 			Exit
 		EndIf
 	Next
