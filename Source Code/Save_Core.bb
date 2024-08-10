@@ -930,6 +930,7 @@ Function LoadGame%(File$)
 		FreeEmitter(emit, True)
 	Next
 	
+	; ~ TODO: r\RoomEmitters vars aren't saved
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		x = ReadFloat(f)
@@ -2760,4 +2761,4 @@ Function LoadMap%(File$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS

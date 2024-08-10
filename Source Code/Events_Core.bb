@@ -6917,7 +6917,7 @@ Function UpdateEvents%()
 								mon_I\UpdateCheckpoint[1] = False
 								EntityTexture(e\room\Objects[19], e\room\Textures[0], 3)
 							Else
-								mon_I\UpdateCheckpoint[1] = True
+								mon_I\UpdateCheckpoint[1] = True ; ~ Used to update the timer only
 								EntityTexture(e\room\Objects[19], e\room\Textures[1], 6 + (mon_I\MonitorTimer[1] < 50.0))
 							EndIf
 							Exit
