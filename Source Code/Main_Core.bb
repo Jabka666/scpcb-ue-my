@@ -218,7 +218,7 @@ Global ErrorMemStatusMsg$ = GetLocalString("error", "status")
 Global ErrorMsg$ = GetLocalString("error", "error")
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(9, ErrorMsg + Location)
+	SetErrorMsg(9, Format(ErrorMsg, Location))
 End Function
 
 Repeat
