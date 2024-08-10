@@ -6880,11 +6880,7 @@ Function UpdateEvents%()
 						EntityTexture(e\room\Objects[18], e\room\Textures[0], 0)
 					Else
 						UpdateCheckpointMonitors()
-						If mon_I\MonitorTimer[0] < 50.0
-							EntityTexture(e\room\Objects[18], e\room\Textures[0], 1)
-						Else
-							EntityTexture(e\room\Objects[18], e\room\Textures[0], 2)
-						EndIf
+						EntityTexture(e\room\Objects[18], e\room\Textures[0], 1 + (mon_I\MonitorTimer[0] < 50.0))
 					EndIf
 					
 					; ~ Checking if the monitors and such should be rendered or not
@@ -6922,7 +6918,8 @@ Function UpdateEvents%()
 						If e2\EventState = 2.0
 							EntityTexture(e\room\Objects[19], e\room\Textures[0], 3)
 						Else
-							EntityTexture(e\room\Objects[19], e\room\Textures[1], 6)
+							UpdateCheckpointMonitors(False)
+							EntityTexture(e\room\Objects[19], e\room\Textures[1], 6 + (mon_I\MonitorTimer[1] < 50.0))
 						EndIf
 						Exit
 					EndIf

@@ -825,7 +825,7 @@ Function FillRoom%(r.Rooms)
 			Scale = RoomScale * 1.8
 			
 			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
-			r\Textures[1] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors.png", 1, 512, 512, 0, 10, DeleteAllTextures)
+			r\Textures[1] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors.png", 1, 512, 512, 0, 11, DeleteAllTextures)
 			
 			; ~ Monitor Objects
 			For i = 0 To 14
@@ -844,7 +844,7 @@ Function FillRoom%(r.Rooms)
 								;[End Block]
 							Case 1
 								;[Block]
-								EntityTexture(Screen, r\Textures[1], 9)
+								EntityTexture(Screen, r\Textures[1], 10)
 								;[End Block]
 							Case 2
 								;[Block]
@@ -856,7 +856,7 @@ Function FillRoom%(r.Rooms)
 								;[End Block]
 							Case 5
 								;[Block]
-								EntityTexture(Screen, r\Textures[1], 8)
+								EntityTexture(Screen, r\Textures[1], 9)
 								;[End Block]
 							Case 8
 								;[Block]
@@ -872,7 +872,7 @@ Function FillRoom%(r.Rooms)
 								;[End Block]
 							Case 11
 								;[Block]
-								EntityTexture(Screen, r\Textures[1], 7)
+								EntityTexture(Screen, r\Textures[1], 8)
 								;[End Block]
 							Default
 								;[Block]
@@ -892,7 +892,7 @@ Function FillRoom%(r.Rooms)
 						EntityFX(r\Objects[19], 17)
 						SpriteViewMode(r\Objects[19], 2)
 						ScaleSprite(r\Objects[19], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.475)
-						EntityTexture(r\Objects[19], r\Textures[1], 6)
+						EntityTexture(r\Objects[19], r\Textures[1], 7)
 						EntityParent(r\Objects[19], r\Objects[i])
 					EndIf
 					HideEntity(r\Objects[i])
