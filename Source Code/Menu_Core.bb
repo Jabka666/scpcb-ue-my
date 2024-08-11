@@ -1558,23 +1558,27 @@ Function RenderMainMenu%()
 						
 						y = y + (5 * MenuScale)
 						
-						If MouseOn(x + (230 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+						If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 						
 						If opt\OverrideSubColor
-							y = y + (60 * MenuScale)
+							y = y + (30 * MenuScale)
+							
+							If MouseOn(x + (227 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							
+							y = y + (30 * MenuScale)
 							
 							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
-							If MouseOn(x + (125 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							
 							y = y + (30 * MenuScale)
 							
 							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
-							If MouseOn(x + (125 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							
 							y = y + (30 * MenuScale)
 							
 							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
-							If MouseOn(x + (125 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
+							If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							
 							Color(20, 20, 20)
 							Rect(x - (20 * MenuScale), Height + (390 * MenuScale), Width, 20 * MenuScale)
