@@ -422,7 +422,7 @@ Function UpdateLanguageSelector%()
 	DownloadFile(ServerURI + "list.txt", BasePath + "temp.txt") ; ~ List of languages
 	
 	Local lan.ListLanguage
-	Local File% = OpenFile_Strict(BasePath + "temp.txt")
+	Local File% = OpenFile(BasePath + "temp.txt") ; ~ Please do not modify this
 	Local l$
 	
 	If File <> 0
@@ -440,7 +440,8 @@ Function UpdateLanguageSelector%()
 				lan\FileSize = Int(ParseDomainTXT(l, "size")) ; ~ Size of localization
 				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
 				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURI + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
-				If lan\FlagImg = 0 Then lan\FlagImg = LoadImage_Strict(BasePath + "flags\" + lan\Flag)
+				If lan\FlagImg = 0 Then lan\FlagImg = LoadImage(BasePath + "flags\" + lan\Flag)
+				If lan\FlagImg = 0 Then Return(True)
 			Else
 				Exit
 			EndIf
