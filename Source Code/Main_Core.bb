@@ -7655,6 +7655,11 @@ Function RenderMenu%()
 						Color(255, 255, 255)
 						TextEx(x, y, GetLocalString("options", "screnderinterval"))
 						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 5.7, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 17 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SecurityCamRenderInterval)
+						
+						RenderMenuButtons()
+						RenderMenuTicks()
+						RenderMenuSlideBars()
+						RenderMenuSliders()
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
@@ -7732,6 +7737,11 @@ Function RenderMenu%()
 								If MouseOn(x + (105 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
 							EndIf
 						EndIf
+						
+						RenderMenuButtons()
+						RenderMenuTicks()
+						RenderMenuSlideBars()
+						RenderMenuPalettes()
 						;[End Block]
 					Case MenuTab_Options_Controls
 						;[Block]
@@ -7804,6 +7814,11 @@ Function RenderMenu%()
 						EndIf
 						
 						If MouseOn(x, y - ((180 + (20 * opt\CanOpenConsole)) * MenuScale), 380 * MenuScale, ((200 + (20 * opt\CanOpenConsole)) * MenuScale)) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+						
+						RenderMenuButtons()
+						RenderMenuTicks()
+						RenderMenuInputBoxes()
+						RenderMenuSlideBars()
 						;[End Block]
 					Case MenuTab_Options_Advanced
 						;[Block]
@@ -7852,6 +7867,7 @@ Function RenderMenu%()
 							Color(255, 255, 0)
 							TextEx(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
 							If (MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+							RenderMenuSliders()
 							y = y + (50 * MenuScale)
 						EndIf
 						
@@ -7874,12 +7890,20 @@ Function RenderMenu%()
 						y = y + (40 * MenuScale)
 						
 						If MouseOn(x, y, 195 * MenuScale, 30 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ResetOptions)
+						
+						RenderMenuButtons()
+						RenderMenuTicks()
+						RenderMenuInputBoxes()
 						;[End Block]
 				End Select
+			Else
+				RenderMenuButtons()
 			EndIf
 		ElseIf igm\AchievementsMenu <= 0 And igm\OptionsMenu <= 0 And igm\QuitMenu > 0
-			; ~ Just save this line, ok?
+			RenderMenuButtons()
 		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
+			RenderMenuButtons()
+			
 			If igm\AchievementsMenu > 0
 				Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 				
@@ -7902,6 +7926,8 @@ Function RenderMenu%()
 				Next
 			EndIf
 		Else
+			RenderMenuButtons()
+			
 			SetFontEx(fo\FontID[Font_Default])
 			TextEx(x, y, GetLocalString("menu", "new.diff") + SelectedDifficulty\Name)
 			If CurrSave = Null
@@ -7924,21 +7950,11 @@ Function RenderMenu%()
 			
 			If me\Terminated And me\SelectedEnding = -1
 				y = y + (175 * MenuScale)
-				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
-					y = y + (75 * MenuScale)
-				EndIf
+				If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then y = y + (75 * MenuScale)
 				SetFontEx(fo\FontID[Font_Default])
 				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
 			EndIf
 		EndIf
-		
-		RenderMenuButtons()
-		RenderMenuPalettes()
-		RenderMenuTicks()
-		RenderMenuInputBoxes()
-		RenderMenuSlideBars()
-		RenderMenuSliders()
-		
 		RenderCursor()
 	EndIf
 	
@@ -8134,12 +8150,13 @@ Function RenderEnding%()
 					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocAmount, "{1}"))
 					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
 					TextEx(x, y + (100 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
+					
+					RenderMenuButtons()
+					RenderCursor()
 				Else
 					RenderMenu()
 				EndIf
-				RenderMenuButtons()
-				RenderCursor()
-			; ~ Credits
+				; ~ Credits
 			ElseIf me\EndingTimer <= -2000.0
 				RenderCredits()
 			EndIf
