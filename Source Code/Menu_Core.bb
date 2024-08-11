@@ -1576,7 +1576,7 @@ Function RenderMainMenu%()
 							
 							Color(20, 20, 20)
 							Rect(x - (20 * MenuScale), Height + (390 * MenuScale), Width, 20 * MenuScale)
-							Color(opt\SubColorR, opt\SubColorG, opt\SubColorB)
+							Color((130 + opt\SubColorR) / 2.0, (130 + opt\SubColorG) / 2.0, (130 + opt\SubColorB) / 2.0)
 							TextEx(x, Height + (396 * MenuScale), GetLocalString("options", "subtitles.example"))
 						EndIf
 					EndIf
