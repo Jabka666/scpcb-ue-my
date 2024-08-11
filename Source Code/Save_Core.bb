@@ -2227,7 +2227,7 @@ Function LoadAchievementsFile%()
 	
 	Local File$
 	
-	File = OpenFile_Strict(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
 	CloseFile(File)
 End Function
@@ -2761,4 +2761,4 @@ Function LoadMap%(File$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS
