@@ -286,6 +286,7 @@ Function FreeEmitter%(emit.Emitter, DeleteParticles% = False)
 		FreeEntity(emit\Ent) : emit\Ent = 0
 		emit\Surf = 0
 		FreeEntity(emit\Owner) : emit\Owner = 0
+		StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
 		Delete(emit)
 	Else
 		emit\Del = True
@@ -371,6 +372,7 @@ Function UpdateParticles_Devil()
 				FreeEntity(emit\Ent) : emit\Ent = 0
 				emit\Surf = 0
 				FreeEntity(emit\Owner) : emit\Owner = 0
+				StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
 				Delete(emit)
 			EndIf
 		EndIf
