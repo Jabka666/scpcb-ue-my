@@ -7741,6 +7741,7 @@ Function RenderMenu%()
 						RenderMenuButtons()
 						RenderMenuTicks()
 						RenderMenuSlideBars()
+						RenderMenuInputBoxes()
 						RenderMenuPalettes()
 						;[End Block]
 					Case MenuTab_Options_Controls
