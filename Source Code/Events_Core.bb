@@ -2159,20 +2159,6 @@ Function UpdateEvents%()
 						ShouldPlay = 24
 						me\Zone = 1
 						
-						UpdateButton(e\room\Objects[5])
-						
-						If e\EventState4 = 1.0
-							If opt\ParticleAmount > 0
-								emit.Emitter = SetEmitter(r, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), 18)
-								emit\State = 3
-							EndIf
-							e\EventState4 = 2.0
-						ElseIf d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1
-							If e\EventState4 = 0.0 Then e\EventState4 = 1.0
-							PlaySound2(ButtonSFX[0], Camera, e\room\Objects[5])
-							mo\MouseHit1 = False
-						EndIf
-						
 						If e\EventState = 0.0
 							TFormPoint(528.0, -3440.0, 96.0, e\room\OBJ, 0)
 							n.NPCs = CreateNPC(NPCType049_2, TFormedX(), TFormedY(), TFormedZ())
@@ -2225,6 +2211,28 @@ Function UpdateEvents%()
 									PlaySound_Strict(snd_I\TeslaPowerUpSFX)
 								Else
 									PlaySound_Strict(snd_I\LightOffSFX)
+								EndIf
+							EndIf
+							
+							UpdateButton(e\room\Objects[5])
+						
+							If e\EventState4 > 0.0
+								e\EventState4 = e\EventState4 + fps\Factor[0]
+								EntityTexture(e\room\Objects[5], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
+								If e\EventState4 > 350.0
+									If e\room\RoomEmitters[0] <> Null Then FreeEmitter(e\room\RoomEmitters[0])
+									EntityTexture(e\room\Objects[5], d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE])
+									e\EventState4 = 0.0
+								EndIf
+							ElseIf d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1 And x2
+								PlaySound2(ButtonSFX[0], Camera, e\room\Objects[5])
+								mo\MouseHit1 = False
+								If e\EventState4 = 0.0
+									If opt\ParticleAmount > 0
+										e\room\RoomEmitters[0] = SetEmitter(r, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), 18)
+										e\room\RoomEmitters[0]\State = 3
+									EndIf
+									e\EventState4 = 0.01
 								EndIf
 							EndIf
 							
