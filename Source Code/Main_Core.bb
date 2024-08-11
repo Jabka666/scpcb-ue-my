@@ -6903,6 +6903,7 @@ Function UpdateMenu%()
 			EndIf
 		EndIf
 		
+		OnPalette = False
 		InvOpen = False
 		
 		Local Width% = ImageWidth(t\ImageID[0])

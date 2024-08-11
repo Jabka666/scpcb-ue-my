@@ -106,6 +106,8 @@ Function UpdateMainMenu%()
 		If ShouldDeleteGadgets Then DeleteMenuGadgets()
 		ShouldDeleteGadgets = False
 		
+		OnPalette = False
+		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
