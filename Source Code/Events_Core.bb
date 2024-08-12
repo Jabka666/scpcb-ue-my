@@ -2215,7 +2215,7 @@ Function UpdateEvents%()
 							EndIf
 							
 							UpdateButton(e\room\Objects[5])
-						
+							
 							If e\EventState4 > 0.0
 								e\EventState4 = e\EventState4 + fps\Factor[0]
 								EntityTexture(e\room\Objects[5], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])

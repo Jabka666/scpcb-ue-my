@@ -3153,16 +3153,20 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 	End Select
 	
 	Lines = GetLineAmount(Txt, fW, fH)
+	
+	Local StringHeightTxt% = StringHeight(Txt) * Lines
+	Local CoordEx% = (10 + Lines) * MenuScale
+	
 	If Txt2 = ""
-		RenderFrame(x, y, Width, ((StringHeight(Txt) * Lines) + (10 + Lines) * MenuScale))
+		RenderFrame(x, y, Width, StringHeightTxt + CoordEx)
 	Else
 		Lines2 = GetLineAmount(Txt2, fW, fH)
-		RenderFrame(x, y, Width, (((StringHeight(Txt) * Lines) + (10 + Lines) * MenuScale) + (StringHeight(Txt2) * Lines2) + (10 + Lines2) * MenuScale))
+		RenderFrame(x, y, Width, (StringHeightTxt + CoordEx) + (StringHeight(Txt2) * Lines2) + (10 + Lines2) * MenuScale)
 	EndIf
 	RowText(Txt, fX, fY, fW, fH)
 	If Txt2 <> ""
 		Color(R, G, B)
-		RowText(Txt2, fX, (fY + (StringHeight(Txt) * Lines) + (5 + Lines) * MenuScale), fW, fH)
+		RowText(Txt2, fX, fY + StringHeightTxt + (5 + Lines) * MenuScale, fW, fH)
 		Color(255, 255, 255)
 	EndIf
 End Function
@@ -3224,16 +3228,20 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 		Txt[5] = Format(GetLocalString("creator", "mt"), GetLocalString("creator", "no"))
 	EndIf
 	
+	Local StringHeightTxt0% = StringHeight(Txt[0])
+	Local StringHeightTxt2% = StringHeight(Txt[2])
+	Local CoordEx% = 5 * MenuScale
+	
 	Lines = GetLineAmount(Txt[2], fW, fH)
-	RenderFrame(x, y, Width, (StringHeight(Txt[0]) * 6) + StringHeight(Txt[2]) * Lines + (5 * MenuScale))
+	RenderFrame(x, y, Width, (StringHeightTxt0 * 6) + StringHeightTxt2 * Lines + CoordEx)
 	
 	Color(255, 255, 255)
 	TextEx(fX, fY,Txt[0])
-	TextEx(fX, fY + StringHeight(Txt[0]), Txt[1])
-	RowText(Txt[2], fX, fY + (StringHeight(Txt[0]) * 2), fW, fH)
-	TextEx(fX, fY + ((StringHeight(Txt[0]) * 2) + StringHeight(Txt[2]) * Lines + (5 * MenuScale)), Txt[3])
-	TextEx(fX, fY + ((StringHeight(Txt[0]) * 3) + StringHeight(Txt[2]) * Lines + (5 * MenuScale)), Txt[4])
-	TextEx(fX, fY + ((StringHeight(Txt[0]) * 4) + StringHeight(Txt[2]) * Lines + (5 * MenuScale)), Txt[5])
+	TextEx(fX, fY + StringHeightTxt0, Txt[1])
+	RowText(Txt[2], fX, fY + (StringHeightTxt0 * 2), fW, fH)
+	TextEx(fX, fY + ((StringHeightTxt0 * 2) + StringHeightTxt2 * Lines + CoordEx), Txt[3])
+	TextEx(fX, fY + ((StringHeightTxt0 * 3) + StringHeightTxt2 * Lines + CoordEx), Txt[4])
+	TextEx(fX, fY + ((StringHeightTxt0 * 4) + StringHeightTxt2 * Lines + CoordEx), Txt[5])
 End Function
 
 ;~IDEal Editor Parameters:

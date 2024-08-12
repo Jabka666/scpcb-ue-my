@@ -310,9 +310,9 @@ Function RenderWorld2%(Tween#)
 			Local RefreshHint$ = GetLocalString("msg", "refresh")
 			Local InstrRefreshHint% = Instr(RefreshHint, "%s")
 			
-			TextEx(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, Trim(Left(RefreshHint, InstrRefreshHint - 1)), True, False)
-			TextEx(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True, False)
-			TextEx(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - InstrRefreshHint - 1)), True, False)
+			TextEx(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, Trim(Left(RefreshHint, InstrRefreshHint - 1)), True)
+			TextEx(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True)
+			TextEx(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - InstrRefreshHint - 1)), True)
 			
 			Local Temp% = CreatePivot()
 			Local Temp2% = CreatePivot()
@@ -394,7 +394,7 @@ Function RenderWorld2%(Tween#)
 			Color(255, 0, 0)
 			SetFontEx(fo\FontID[Font_Digital])
 			
-			TextEx(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True, False)
+			TextEx(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True)
 		EndIf
 	EndIf
 	Color(255, 255, 255)
