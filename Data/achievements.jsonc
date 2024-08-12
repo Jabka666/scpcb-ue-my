@@ -3,413 +3,422 @@
 ////////////////////////
 
 {
-    "achievements": [
-        {
-            "id": "005",
-            "image": "Achv005.png",
-            "scp": true
+	"achievements": [
+		{
+			"id": "005",
+			"image": "Achv005.png",
+			"scp": true
+		},
+		{
+			"id": "008",
+			"image": "Achv008.png",
+			"scp": true
+		},
+		{
+			"id": "012",
+			"image": "Achv012.png",
+			"scp": true
+		},
+		{
+			"id": "035",
+			"image": "Achv035_Smile.png",
+			"scp": true
+		},
+		{
+			"id": "049",
+			"image": "Achv049.png",
+			"scp": true
+		},
+		{
+			"id": "055",
+			"image": "Achv055.png",
+			"scp": true
+		},
+		{
+			"id": "066",
+			"image": "Achv066.png",
+			"scp": true
+		},
+		{
+			"id": "079",
+			"image": "Achv079.png",
+			"scp": true
+		},
+		{
+			"id": "096",
+			"image": "Achv096.png",
+			"scp": true
+		},
+		{
+			"id": "106",
+			"image": "Achv106.png",
+			"scp": true
+		},
+		{
+			"id": "148",
+			"image": "Achv148.png",
+			"scp": true
+		},
+		{
+			"id": "205",
+			"image": "Achv205.png",
+			"scp": true
+		},
+		{
+			"id": "268",
+			"image": "Achv268.png",
+			"scp": true
+		},
+		{
+			"id": "294",
+			"image": "Achv294.png",
+			"scp": true
+		},
+		{
+			"id": "372",
+			"image": "Achv372.png",
+			"scp": true
+		},
+		{
+			"id": "409",
+			"image": "Achv409.png",
+			"scp": true
+		},
+		{
+			"id": "420j",
+			"image": "Achv420_J.png",
+			"scp": true
+ 		},
+		{
+			"id": "427",
+			"image": "Achv427.png",
+			"scp": true
+ 		},
+		{
+			"id": "458",
+			"image": "Achv458.png",
+			"scp": true
+		},
+		{
+			"id": "500",
+			"image": "Achv500.png",
+			"scp": true
+ 		},
+		{
+			"id": "513",
+			"image": "Achv513.png",
+			"scp": true
+		},
+		{
+			"id": "714",
+			"image": "Achv714.png",
+			"scp": true
+		},
+		{
+			"id": "789j",
+			"image": "Achv789_J.png",
+			"scp": true
+		},
+		{
+			"id": "860",
+			"image": "Achv860.png",
+			"scp": true
+		},
+		{
+			"id": "895",
+			"image": "Achv895.png",
+			"scp": true
+  		},
+		{
+			"id": "914",
+			"image": "Achv914.png",
+			"scp": true
+		},
+		{
+			"id": "939",
+			"image": "Achv939.png",
+			"scp": true
+		},
+		{
+			"id": "966",
+			"image": "Achv966.png",
+			"scp": true
+		},
+		{
+			"id": "970",
+			"image": "Achv970.png",
+			"scp": true
+		},
+		{
+			"id": "1025",
+			"image": "Achv1025.png",
+			"scp": true
+		},
+		{
+			"id": "1048",
+			"image": "Achv1048.png",
+			"scp": true
+		},
+ 		{
+			"id": "1123",
+			"image": "Achv1123.png",
+			"scp": true
+ 		},
+ 		{
+			"id": "1162arc",
+			"image": "Achv1162_ARC.png",
+			"scp": true
+		},
+		{
+			"id": "1499",
+			"image": "Achv1499.png",
+			"scp": true
+		},
+  		{
+			"id": "console",
+			"image": "AchvConsole.png",
+			"scp": false
+		},
+		{
+			"id": "gears",
+			"image": "AchvGears.png",
+			"scp": false
+		},
+		{
+			"id": "harp",
+			"image": "AchvHarp.png",
+			"scp": false
+		},
+		{
+			"id": "maynard",
+			"image": "AchvMaynard.png",
+			"scp": false
+		},
+  		{
+			"id": "keycard6",
+			"image": "AchvKeyCard6.png",
+			"scp": false
         },
-        {
-            "id": "008",
-            "image": "Achv008.png",
-            "scp": true
-        },
-        {
-            "id": "012",
-            "image": "Achv012.png",
-            "scp": true
-        },
-        {
-            "id": "035",
-            "image": "Achv035_Smile.png",
-            "scp": true
-        },
-        {
-            "id": "049",
-            "image": "Achv049.png",
-            "scp": true
-        },
-        {
-            "id": "055",
-            "image": "Achv055.png",
-            "scp": true
-        },
-        {
-            "id": "066",
-            "image": "Achv066.png",
-            "scp": true
-        },
-        {
-            "id": "079",
-            "image": "Achv079.png",
-            "scp": true
-        },
-        {
-            "id": "096",
-            "image": "Achv096.png",
-            "scp": true
-        },
-        {
-            "id": "106",
-            "image": "Achv106.png",
-            "scp": true
-        },
-        {
-            "id": "148",
-            "image": "Achv148.png",
-            "scp": true
-        },
-        {
-            "id": "205",
-            "image": "Achv205.png",
-            "scp": true
-        },
-        {
-            "id": "268",
-            "image": "Achv268.png",
-            "scp": true
-        },
-        {
-            "id": "294",
-            "image": "Achv294.png",
-            "scp": true
-        },
-        {
-            "id": "372",
-            "image": "Achv372.png",
-            "scp": true
-        },
-        {
-            "id": "409",
-            "image": "Achv409.png",
-            "scp": true
-        },
-        {
-            "id": "420j",
-            "image": "Achv420_J.png",
-            "scp": true
-        },
-        {
-            "id": "427",
-            "image": "Achv427.png",
-            "scp": true
-        },
-        {
-            "id": "458",
-            "image": "Achv458.png",
-            "scp": true
-        },
-        {
-            "id": "500",
-            "image": "Achv500.png",
-            "scp": true
-        },
-        {
-            "id": "513",
-            "image": "Achv513.png",
-            "scp": true
-        },
-        {
-            "id": "714",
-            "image": "Achv714.png",
-            "scp": true
-        },
-        {
-            "id": "789j",
-            "image": "Achv789_J.png",
-            "scp": true
-        },
-        {
-            "id": "860",
-            "image": "Achv860.png",
-            "scp": true
-        },
-        {
-            "id": "895",
-            "image": "Achv895.png",
-            "scp": true
-        },
-        {
-            "id": "914",
-            "image": "Achv914.png",
-            "scp": true
-        },
-        {
-            "id": "939",
-            "image": "Achv939.png",
-            "scp": true
-        },
-        {
-            "id": "966",
-            "image": "Achv966.png",
-            "scp": true
-        },
-        {
-            "id": "970",
-            "image": "Achv970.png",
-            "scp": true
-        },
-        {
-            "id": "1025",
-            "image": "Achv1025.png",
-            "scp": true
-        },
-        {
-            "id": "1048",
-            "image": "Achv1048.png",
-            "scp": true
-        },
-        {
-            "id": "1123",
-            "image": "Achv1123.png",
-            "scp": true
-        },
-        {
-            "id": "1162arc",
-            "image": "Achv1162_ARC.png",
-            "scp": true
-        },
-        {
-            "id": "1499",
-            "image": "Achv1499.png",
-            "scp": true
-        },
-        {
-            "id": "console",
-            "image": "AchvConsole.png",
-            "scp": false
-        },
-        {
-            "id": "gears",
-            "image": "AchvGears.png",
-            "scp": false
-        },
-        {
-            "id": "harp",
-            "image": "AchvHarp.png",
-            "scp": false
-        },
-        {
+ 		{
+			"id": "omni",
+			"image": "AchvOmni.png",
+			"scp": false
+		},
+   		{
+			"id": "o5",
+			"image": "AchvO5.png",
+			"scp": false
+		},
+  		{
+			"id": "pocketdimension",
+			"image": "AchvPD.png",
+			"scp": false
+		},
+   		{
+			"id": "snav",
+			"image": "AchvSNAV.png",
+			"scp": false
+		},
+		{
+			"id": "tesla",
+			"image": "AchvTesla.png",
+			"scp": false
+		},
+		{
             "id": "keter",
             "image": "AchvKeter.png",
             "scp": false
-        },
-        {
-            "id": "keycard6",
-            "image": "AchvKeyCard6.png",
-            "scp": false
-        },
-        {
-            "id": "maynard",
-            "image": "AchvMaynard.png",
-            "scp": false
-        },
-        {
-            "id": "omni",
-            "image": "AchvOmni.png",
-            "scp": false
-        },
-        {
-            "id": "o5",
-            "image": "AchvO5.png",
-            "scp": false
-        },
-        {
-            "id": "pocketdimension",
-            "image": "AchvPD.png",
-            "scp": false
-        },
-        {
-            "id": "snav",
-            "image": "AchvSNAV.png",
-            "scp": false
-        },
+		},
 		{
-            "id": "tesla",
-            "image": "AchvTesla.png",
+            "id": "apollyon",
+            "image": "AchvApollyon.png",
             "scp": false
-        }
-    ],
-    "translations": {
-        "106": {
-            "name": "A Decayed March",
-            "description": "Encountered the Old Man."
-        },
-        "148": {
-            "name": "Dirty Metal",
-            "description": "Acquired the \"Telekill Alloy\"."
-        },
-        "205": {
-            "name": "Femme Fatale",
-            "description": "Observed the Shadow Lamps."
-        },
-        "268": {
-            "name": "Forget-Me-Not",
-            "description": "Found and equipped the Cap of Neglect."
-        },
-        "294": {
-            "name": "OUT OF RANGE",
-            "description": "Dispensed a drink from the Coffee Machine."
-        },
-        "372": {
-            "name": "The Corner of Your Eye...",
-            "description": "Saw a glimpse of the Peripheral Jumper."
-        },
-        "409": {
-            "name": "Crystal Death",
-            "description": "Got close to the Contagious Crystal."
-        },
-        "427": {
-            "name": "Light of Life",
-            "description": "Found and equipped the \"Lovecraftian Locket\"."
-        },
-        "458": {
-            "name": "Today Is Pizza Day!",
-            "description": "Took a slice from the Never-ending Pizza Box."
-        },
-        "500": {
-            "name": "A Taste of Immortality",
-            "description": "Swallowed a sample of Panacea."
-        },
-        "513": {
-            "name": "If You Ring It, He Will Come",
-            "description": "Ring the Old Cowbell."
-        },
-        "714": {
-            "name": "Mental Exhaustion",
-            "description": "Found and equipped the Jaded Ring."
-        },
-        "860": {
-            "name": "Blue Hue",
-            "description": "Used a Blue Key."
-        },
-        "895": {
-            "name": "Interference",
-            "description": "Stepped near the Old Coffin."
-        },
-        "914": {
-            "name": "Refinery",
-            "description": "Entered the Clockworks Machine's chamber."
-        },
-        "939": {
-            "name": "Show Yourself!",
-            "description": "Found the Creatures with Many Voices."
-        },
-        "966": {
-            "name": "Rapid Eye Movement",
-            "description": "Came across the Sleep Killers."
-        },
-        "970": {
-            "name": "Recursive Spacial Phenomenon",
-            "description": "Enter a Recursive Room."
-        },
-        "1025": {
-            "name": "\"Potential Bioweapon\"",
-            "description": "Read the Encyclopedia of Common Diseases."
-        },
-        "1048": {
-            "name": "The Architect",
-            "description": "Found the Builder Bear."
-        },
-        "1123": {
-            "name": "The Final Solution",
-            "description": "Touched the Atrocity Skull."
-        },
-        "1499": {
-            "name": "Screams Of The Present",
-            "description": "Wore a GP-5 Gas Mask."
-        },
-        "005": {
-            "name": "Trespasser",
-            "description": "Found the Skeleton Key."
-        },
-        "008": {
-            "name": "Biohazard",
-            "description": "Entered the Zombie Plague's chamber."
-        },
-        "012": {
-            "name": "Scribe",
-            "description": "Came across the Bad Composition."
-        },
-        "035": {
-            "name": "Curtains Down",
-            "description": "Talked to the Possessive Mask."
-        },
-        "049": {
-            "name": "Doctor, Doctor!",
-            "description": "Found the cure."
-        },
-        "055": {
-            "name": "Anti-Meme",
-            "description": "Recontained SCP-055."
-        },
-        "066": {
-            "name": "\"Eric?\"",
-            "description": "Interacted with Eric's Toy."
-        },
-        "079": {
-            "name": "Deductive Reasoning",
-            "description": "Made a deal with the Old AI."
-        },
-        "096": {
-            "name": "Don't Look at Me",
-            "description": "Avoided the Shy Guy's face."
-        },
-        "420j": {
-            "name": "\"Reggae, man.\"",
-            "description": "Smoked some good ass shit."
-        },
-        "789j": {
-            "name": "\"by researcher james, age 11\"",
-            "description": "Protected your butt from the Butt Ghost."
-        },
-        "1162arc": {
-            "name": "Pieces of the Past",
-            "description": "Took from the Hole In The Wall."
-        },
-        "console": {
-            "name": "Fair Play",
-            "description": "Didn't use console commands."
-        },
-        "gears": {
-            "name": "The Last Hope",
-            "description": "Entered Doctor Gears' office."
-        },
-        "harp": {
-            "name": "World-Ending Scenario",
-            "description": "Entered Doctor Harp's office."
-        },
-        "keter": {
-            "name": "Survival In a Nightmare",
-            "description": "Beat the game on \"Keter\" difficulty."
-        },
-        "keycard6": {
-            "name": "Yes or No?",
-            "description": "Acquired a Level 6 Key Card."
-        },
-        "maynard": {
-            "name": "The Containment Breach",
-            "description": "Entered Doctor Maynard's office."
-        },
-        "omni": {
-            "name": "Unlimited Access",
-            "description": "Acquired an Omni-level Keycard."
-        },
-        "o5": {
-            "name": "Control Over the Foundation",
-            "description": "Entered O5 Council's Office."
-        },
-        "pocketdimension": {
-            "name": "No Man's Land",
-            "description": "Escaped the Old Man's Pocket Dimension."
-        },
-        "snav": {
-            "name": "Technical Accomplishments",
-            "description": "Acquired the S-NAV Navigator Ultimate."
-        },
+		}
+	],
+	"translations": {
+		"106": {
+			"name": "A Decayed March",
+			"description": "Encountered the Old Man."
+		},
+		"148": {
+			"name": "Dirty Metal",
+			"description": "Acquired the \"Telekill Alloy\"."
+		},
+		"205": {
+			"name": "Femme Fatale",
+			"description": "Observed the Shadow Lamps."
+		},
+		"268": {
+			"name": "Forget-Me-Not",
+			"description": "Found and equipped the Cap of Neglect."
+		},
+		"294": {
+			"name": "OUT OF RANGE",
+			"description": "Dispensed a drink from the Coffee Machine."
+		},
+		"372": {
+			"name": "The Corner of Your Eye...",
+			"description": "Saw a glimpse of the Peripheral Jumper."
+		},
+		"409": {
+			"name": "Crystal Death",
+			"description": "Got close to the Contagious Crystal."
+		},
+		"427": {
+			"name": "Light of Life",
+			"description": "Found and equipped the \"Lovecraftian Locket\"."
+		},
+		"458": {
+			"name": "Today Is Pizza Day!",
+			"description": "Took a slice from the Never-ending Pizza Box."
+		},
+		"500": {
+			"name": "A Taste of Immortality",
+			"description": "Swallowed a sample of Panacea."
+		},
+		"513": {
+			"name": "If You Ring It, He Will Come",
+			"description": "Ring the Old Cowbell."
+		},
+		"714": {
+			"name": "Mental Exhaustion",
+			"description": "Found and equipped the Jaded Ring."
+		},
+		"860": {
+			"name": "Blue Hue",
+			"description": "Used a Blue Key."
+		},
+		"895": {
+			"name": "Interference",
+			"description": "Stepped near the Old Coffin."
+		},
+		"914": {
+			"name": "Refinery",
+			"description": "Entered the Clockworks Machine's chamber."
+		},
+		"939": {
+			"name": "Show Yourself!",
+			"description": "Found the Creatures with Many Voices."
+		},
+		"966": {
+			"name": "Rapid Eye Movement",
+			"description": "Came across the Sleep Killers."
+		},
+		"970": {
+			"name": "Recursive Spacial Phenomenon",
+			"description": "Enter a Recursive Room."
+		},
+		"1025": {
+			"name": "\"Potential Bioweapon\"",
+			"description": "Read the Encyclopedia of Common Diseases."
+		},
+		"1048": {
+			"name": "The Architect",
+			"description": "Found the Builder Bear."
+		},
+		"1123": {
+			"name": "The Final Solution",
+			"description": "Touched the Atrocity Skull."
+		},
+		"1499": {
+			"name": "Screams Of The Present",
+			"description": "Wore a GP-5 Gas Mask."
+		},
+		"005": {
+			"name": "Trespasser",
+			"description": "Found the Skeleton Key."
+		},
+		"008": {
+			"name": "Biohazard",
+			"description": "Entered the Zombie Plague's chamber."
+		},
+		"012": {
+			"name": "Scribe",
+			"description": "Came across the Bad Composition."
+		},
+		"035": {
+			"name": "Curtains Down",
+			"description": "Talked to the Possessive Mask."
+		},
+		"049": {
+			"name": "Doctor, Doctor!",
+			"description": "Found the cure."
+		},
+		"055": {
+			"name": "Anti-Meme",
+			"description": "Recontained SCP-055."
+		},
+		"066": {
+			"name": "\"Eric?\"",
+			"description": "Interacted with Eric's Toy."
+		},
+		"079": {
+			"name": "Deductive Reasoning",
+			"description": "Made a deal with the Old AI."
+		},
+		"096": {
+			"name": "Don't Look at Me",
+			"description": "Avoided the Shy Guy's face."
+		},
+		"420j": {
+			"name": "\"Reggae, man.\"",
+			"description": "Smoked some good ass shit."
+		},
+		"789j": {
+			"name": "\"by researcher james, age 11\"",
+			"description": "Protected your butt from the Butt Ghost."
+		},
+		"1162arc": {
+			"name": "Pieces of the Past",
+			"description": "Took from the Hole In The Wall."
+		},
+		"console": {
+			"name": "Fair Play",
+			"description": "Didn't use console commands."
+		},
+		"gears": {
+			"name": "The Last Hope",
+			"description": "Entered Doctor Gears' office."
+		},
+		"harp": {
+			"name": "World-Ending Scenario",
+			"description": "Entered Doctor Harp's office."
+		},
+		"maynard": {
+			"name": "The Containment Breach",
+			"description": "Entered Doctor Maynard's office."
+		},
+		"keycard6": {
+			"name": "Yes or No?",
+			"description": "Acquired a Level 6 Key Card."
+		},
+		"omni": {
+			"name": "Unlimited Access",
+			"description": "Acquired an Omni-level Keycard."
+		},
+		"o5": {
+			"name": "Control Over the Foundation",
+			"description": "Entered O5 Council's Office."
+		},
+		"pocketdimension": {
+			"name": "No Man's Land",
+			"description": "Escaped the Old Man's Pocket Dimension."
+		},
+		"snav": {
+			"name": "Technical Accomplishments",
+			"description": "Acquired the S-NAV Navigator Ultimate."
+		},
 		"tesla": {
-            "name": "Shell Shocked",
-            "description": "Lured the Old Man through a Tesla gate."
-        }
-    }
+			"name": "Shell Shocked",
+			"description": "Lured the Old Man through a Tesla gate."
+		},
+		"keter": {
+			"name": "Survival In a Nightmare",
+			"description": "Beat the game on \"Keter\" difficulty."
+		},
+		"apollyon": {
+			"name": "The Great Survivor",
+			"description": "Beat the game on \"Apollyon\" difficulty."
+		}
+	}
 }

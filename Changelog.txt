@@ -7,6 +7,7 @@ v1.3
 - Added console text for «427state» command.
 - Added SCP-458.
 - Added Dr. Gears achievement.
+- Added Apollyon achievement.
 
 - Increased inventory slots of Euclid and Keter by 2.
 

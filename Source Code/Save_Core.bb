@@ -2218,6 +2218,7 @@ Function SaveAchievementsFile%()
 	
 	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "keter"))
+	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	CloseFile(File)
 End Function
 
@@ -2229,6 +2230,7 @@ Function LoadAchievementsFile%()
 	
 	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
+	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	CloseFile(File)
 End Function
 

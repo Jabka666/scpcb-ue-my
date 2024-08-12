@@ -2060,7 +2060,11 @@ Function UpdateConsole%()
 						For i = 0 To ArraySize - 1
 							Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "id"))
 							
-							GiveAchievement(ID)
+							If opt\DebugMode
+								GiveAchievement(ID)
+							Else
+								If ID <> "console" And ID <> "keter" And ID <> "apollyon" Then GiveAchievement(ID)
+							EndIf
 						Next
 						CreateConsoleMsg(GetLocalString("console", "ga.all"))
 					EndIf
@@ -5955,6 +5959,7 @@ Function RenderDebugHUD%()
 				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			
+			; ~ Even here!
 			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 1) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "keter")) * (4 + SelectedDifficulty\OtherFactors), 0)
 			
 			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
@@ -7985,10 +7990,18 @@ Function UpdateEnding%()
 	GiveAchievement("055")
 	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedCustomMap = Null
 		GiveAchievement("console")
-		If SelectedDifficulty\Name = difficulties[KETER]\Name Lor SelectedDifficulty\Name = difficulties[APOLLYON]\Name
-			GiveAchievement("keter")
-			SaveAchievementsFile()
-		EndIf
+		Select SelectedDifficulty\Name
+			Case difficulties[KETER]\Name
+				;[Block]
+				GiveAchievement("keter")
+				SaveAchievementsFile()
+				;[End Block]
+			Case difficulties[APOLLYON]\Name
+				;[Block]
+				GiveAchievement("apollyon")
+				SaveAchievementsFile()
+				;[End Block]
+		End Select
 	EndIf
 	
 	ShouldPlay = 66
