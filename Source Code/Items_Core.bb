@@ -1554,7 +1554,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key5
 							;[Block]
-							; ~ Snoe, add apollyon!
 							Local CurrAchvAmount% = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (2 + SelectedDifficulty\OtherFactors), 0)
 							
 							If Rand(0, CurrAchvAmount) = 0
@@ -1577,7 +1576,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					; ~ And here!
 					CurrAchvAmount = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (4 + SelectedDifficulty\OtherFactors), 0)
 					If Rand(0, CurrAchvAmount) = 0
 						it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
