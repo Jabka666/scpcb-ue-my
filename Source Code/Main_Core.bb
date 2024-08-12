@@ -2326,9 +2326,8 @@ End Function
 Function UpdateHintMessages%()
 	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
-	Local Scale# = opt\GraphicHeight / 768.0
-	Local Width = StringWidth(msg\HintTxt) + (20 * Scale)
-	Local Height% = 30 * Scale
+	Local Width = StringWidth(msg\HintTxt) + (20 * MenuScale)
+	Local Height% = 30 * MenuScale
 	
 	If msg\HintTxt <> ""
 		If msg\HintTimer > 0.0
@@ -2353,9 +2352,8 @@ End Function
 Function RenderHintMessages%()
 	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
-	Local Scale# = opt\GraphicHeight / 768.0
-	Local Width% = StringWidth(msg\HintTxt) + (20 * Scale)
-	Local Height% = 30 * Scale
+	Local Width% = StringWidth(msg\HintTxt) + (20 * MenuScale)
+	Local Height% = 30 * MenuScale
 	Local x% = mo\Viewport_Center_X - (Width / 2)
 	Local y% = (-Height) + msg\HintY
 	
@@ -7579,10 +7577,6 @@ Function RenderMenu%()
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
 		
-		Local AchvXIMG% = x + (22 * MenuScale)
-		Local Scale# = opt\GraphicHeight / 768.0
-		Local SeparationConst% = 76 * Scale
-		
 		If igm\AchievementsMenu <= 0 And igm\OptionsMenu > 0 And igm\QuitMenu <= 0
 			If igm\OptionsMenu > 1
 				Local tX# = mo\Viewport_Center_X + (Width / 2)
@@ -7912,6 +7906,8 @@ Function RenderMenu%()
 			
 			If igm\AchievementsMenu > 0
 				Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+				Local AchvXIMG% = x + (22 * MenuScale)
+				Local SeparationConst% = 101 * MenuScale
 				
 				For i = 0 To 11
 					If i + ((igm\AchievementsMenu - 1) * 12) < S2IMapSize(AchievementsIndex)
@@ -7922,7 +7918,7 @@ Function RenderMenu%()
 				Next
 				For i = 0 To 11
 					If i + ((igm\AchievementsMenu - 1) * 12) < S2IMapSize(AchievementsIndex)
-						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 64 * Scale, 64 * Scale)
+						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 85 * MenuScale, 85 * MenuScale)
 							AchievementTooltip(JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i + ((igm\AchievementsMenu - 1) * 12)), "id")))
 							Exit
 						EndIf

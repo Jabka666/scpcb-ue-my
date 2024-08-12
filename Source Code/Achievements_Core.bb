@@ -22,9 +22,9 @@ Function InitAchievements%()
 		Local Image$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "image"))
 		
 		S2IMapSet(AchievementsIndex, ID, i)
-		S2IMapSet(AchievementsImages, ID, ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\" + Image), opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0))
+		S2IMapSet(AchievementsImages, ID, ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\" + Image), MenuScale, MenuScale))
 	Next
-	S2IMapSet(AchievementsImages, "locked", ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png"), opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0))
+	S2IMapSet(AchievementsImages, "locked", ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png"), MenuScale, MenuScale))
 End Function
 
 Function GiveAchievement%(AchvID$, ShowMessage% = True)
@@ -37,7 +37,6 @@ Function GiveAchievement%(AchvID$, ShowMessage% = True)
 End Function
 
 Function AchievementTooltip%(AchvID$)
-	Local Scale# = opt\GraphicHeight / 768.0
 	Local CoordEx% = 20 * MenuScale
 	
 	SetFontEx(fo\FontID[Font_Digital])
@@ -50,7 +49,7 @@ Function AchievementTooltip%(AchvID$)
 	If JsonIsNull(AchvName) Then AchvName = JsonGetValue(JsonGetValue(Value, AchvID), "name")
 	Width = StringWidth(JsonGetString(AchvName))
 	
-	Local Height% = 38 * Scale
+	Local Height% = 50 * MenuScale
 	
 	SetFontEx(fo\FontID[Font_Default])
 	
@@ -79,10 +78,9 @@ End Function
 
 Function RenderAchvIMG%(x%, y%, i%, AchvID$)
 	Local IMG%
-	Local Scale# = opt\GraphicHeight / 768.0
 	Local Row% = (i Mod 4)
-	Local SeparationConst2# = 76.0 * Scale
-	Local IMGSize% = 64 * Scale
+	Local SeparationConst2# = 101.0 * MenuScale
+	Local IMGSize% = 85 * MenuScale
 	Local RectPosX% = x + (Row * SeparationConst2)
 	
 	Color(0, 0, 0)
@@ -136,9 +134,8 @@ End Function
 
 Function UpdateAchievementMsg%()
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
-	Local Scale# = opt\GraphicHeight / 768.0
-	Local Width% = 264.0 * Scale
-	Local Height% = 84.0 * Scale
+	Local Width% = 351 * MenuScale
+	Local Height% = 111 * MenuScale
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
@@ -165,11 +162,10 @@ Function RenderAchievementMsg%()
 	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
-	Local Scale# = opt\GraphicHeight / 768.0
-	Local Width% = 264.0 * Scale
-	Local Height% = 84.0 * Scale
-	Local IMGSize% = 64 * Scale
-	Local CoordEx% = 10 * Scale
+	Local Width% = 351 * MenuScale
+	Local Height% = 111 * MenuScale
+	Local IMGSize% = 85 * MenuScale
+	Local CoordEx% = 10 * MenuScale
 	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
@@ -189,7 +185,7 @@ Function RenderAchievementMsg%()
 			Rect(x + CoordEx, y + CoordEx, IMGSize, IMGSize, False)
 			Color(255, 255, 255)
 			SetFontEx(fo\FontID[Font_Default])
-			RowText(Format(GetLocalString("msg", "achv.unlocked"), amsg\Txt), x + (84.0 * Scale), y + CoordEx, Width - (94.0 * Scale), y - (20.0 * Scale))
+			RowText(Format(GetLocalString("msg", "achv.unlocked"), amsg\Txt), x + (111 * MenuScale), y + CoordEx, Width - (125 * MenuScale), y - (26 * MenuScale))
 		EndIf
 	Next
 End Function

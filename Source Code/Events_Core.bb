@@ -10073,7 +10073,7 @@ Function Update035Label%(OBJ%)
 	Next
 	
 	FreeImage(S2IMapGet(AchievementsImages, "035"))
-	S2IMapSet(AchievementsImages, "035", ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png"), opt\GraphicHeight / 768.0, opt\GraphicHeight / 768.0))
+	S2IMapSet(AchievementsImages, "035", ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png"), MenuScale, MenuScale))
 End Function
 
 
