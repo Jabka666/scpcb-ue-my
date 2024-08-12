@@ -12,7 +12,10 @@ v1.3
 - Increased inventory slots of Euclid and Keter by 2.
 
 - SCP-008 can now infect players not wearing a gas mask even if they are not bleeding.
-- Keter achievement gives bonus points towards Omni Key Card chances.
+
+- Keter and Apollyon no longer affect the base rarity of Omni Key Card but still increase your chances when unlocked.
+	- Apollyon gives extra chance increase for Omni Key Card.
+ 
 - SCP-005 event always returns you back to the chamber after escaping labyrinth.
 
 - Optimized the game...
