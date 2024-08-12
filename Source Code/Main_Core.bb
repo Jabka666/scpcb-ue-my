@@ -483,7 +483,7 @@ Function UpdateGame%()
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
-				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * 0.6 * me\BlinkEffect)
+				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * (0.6 + (0.6 * I_966\HasInsomnia)) * me\BlinkEffect)
 				If me\EyeIrritation > 0.0
 					If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
 				EndIf
@@ -2549,12 +2549,19 @@ Function UpdateMoving%()
 		EndIf
 		;me\Stamina = Min(me\Stamina + (0.15 * fps\Factor[0] * (Temp3 / 1.25) + (Not Temp3) * 1.25), 100.0)
 	EndIf
+	me\StaminaMax = 100.0
+	
 	If me\StaminaEffectTimer > 0.0
 		me\StaminaEffectTimer = me\StaminaEffectTimer - (fps\Factor[0] / 70.0)
 	Else
 		me\StaminaEffect = 1.0
 	EndIf
-	me\StaminaMax = 100.0
+	
+	If I_966\InsomniaEffectTimer > 0.0
+		I_966\InsomniaEffectTimer = I_966\InsomniaEffectTimer - fps\Factor[0]
+	Else
+		I_966\HasInsomnia = 0.0
+	EndIf
 	
 	If I_714\Using = 2
 		me\Stamina = CurveValue(Min(10.0, me\Stamina), me\Stamina, 10.0)
@@ -2607,7 +2614,7 @@ Function UpdateMoving%()
 			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT)) Lor me\ForceMove > 0.0 
 					If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0
-						me\Stamina = me\Stamina - (fps\Factor[0] * 0.4 * me\StaminaEffect)
+						me\Stamina = me\Stamina - (fps\Factor[0] * (0.4  + (0.4 * I_966\HasInsomnia)) * me\StaminaEffect)
 						If me\Stamina <= 0.0 Then me\Stamina = -20.0
 						Sprint = 2.5
 					EndIf
@@ -5721,7 +5728,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 	EndIf
-	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0
+	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3
@@ -5746,7 +5753,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
-	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn =< 0.3  And wi\NightVision = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0)
+	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn =< 0.3  And wi\NightVision = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor I_966\HasInsomnia > 0.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink
@@ -5964,7 +5971,6 @@ Function RenderDebugHUD%()
 				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			
-			; ~ Even here!
 			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (4 + SelectedDifficulty\OtherFactors), 0)
 			
 			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
@@ -8830,6 +8836,13 @@ Function Update409%()
 		If (Not EntityHidden(t\OverlayID[7])) Then HideEntity(t\OverlayID[7])
 	EndIf
 End Function
+
+Type SCP966
+	Field InsomniaEffectTimer#
+	Field HasInsomnia%
+End Type
+
+Global I_966.SCP966
 
 Type SCP1048A
 	Field EarGrowTimer#

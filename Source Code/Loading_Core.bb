@@ -2165,6 +2165,7 @@ Function LoadData%()
 	I_714.SCP714 = New SCP714
 	I_1025.SCP1025 = New SCP1025
 	I_1499.SCP1499 = New SCP1499
+	I_966.SCP966 = New SCP966
 	I_1048A.SCP1048A = New SCP1048A
 	
 	as.AutoSave = New AutoSave
@@ -3029,6 +3030,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(I_1499) : I_1499 = Null
 	SCP1499Chunks = 0
 	Delete(I_1048A) : I_1048A = Null
+	Delete(I_966) : I_966 = Null
 	
 	QuickLoadPercent = 0
 	QuickLoadPercent_DisplayTimer = 0.0

@@ -4067,7 +4067,7 @@ Function UpdateNPCs%()
 										me\BlurTimer = Float(((Sin(MilliSec / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
 										If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
-											If me\StaminaEffect < 1.5
+											If I_966\HasInsomnia = 0.0
 												Select Rand(4)
 													Case 1
 														;[Block]
@@ -4087,11 +4087,8 @@ Function UpdateNPCs%()
 														;[End Block]
 												End Select
 											EndIf
-											me\BlinkEffect = 1.5 - (0.25 * I_714\Using)
-											me\BlinkEffectTimer = 1000.0 - (500.0 * I_714\Using)
-											
-											me\StaminaEffect = 2.0 - (0.5 * I_714\Using)
-											me\StaminaEffectTimer = 1000.0 - (500.0 * I_714\Using)
+											I_966\HasInsomnia = 1.0 - (0.5 * I_714\Using)
+											I_966\InsomniaEffectTimer = 560.0 - (230.0 * I_714\Using)
 										EndIf
 									EndIf
 									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -4293,7 +4290,10 @@ Function UpdateNPCs%()
 						RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 					Else
 						If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
-						If Rand(850 - (250 * SelectedDifficulty\AggressiveNPCs)) = 1 Then TeleportCloser(n)
+						If Rand(850 - (250 * SelectedDifficulty\AggressiveNPCs)) = 1
+							TeleportCloser(n)
+							n\State3 = 0.0
+						EndIf
 					EndIf
 				EndIf
 				;[End Block]
