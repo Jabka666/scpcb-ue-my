@@ -4856,7 +4856,7 @@ Function UpdateEvents%()
 								If spawnPoint <> Null Then e\room\NPC[i] = CreateNPC(NPCType966, EntityX(spawnPoint\OBJ, True), EntityY(spawnPoint\OBJ, True), EntityZ(spawnPoint\OBJ, True))
 							Next
 							e\EventState = 1.0
-						ElseIf n_I\Curr106\State > 0.0
+						ElseIf n_I\Curr106\State > 0.0 Lor n_I\Curr106\Contained
 							e\EventState = 2.0
 						EndIf
 					Else
