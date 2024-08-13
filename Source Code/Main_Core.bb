@@ -4600,6 +4600,9 @@ Function UpdateGUI%()
 							CreateMsg(GetLocalString("msg", "pill"))
 						EndIf
 						
+						I_966\HasInsomnia = 0.0
+						I_966\InsomniaEffectTimer = 0.0
+						
 						me\DeathTimer = 0.0
 						me\Stamina = 100.0
 						

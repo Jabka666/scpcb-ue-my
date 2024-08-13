@@ -4008,7 +4008,7 @@ Function UpdateNPCs%()
 											CreateMsg(GetLocalString("msg", "966_6"))
 											;[End Block]
 									End Select
-									n\Reload = 70.0 * 30.0
+									n\Reload = 70.0 * 24.0
 								EndIf
 							EndIf
 						Else
