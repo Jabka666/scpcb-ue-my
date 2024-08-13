@@ -4017,11 +4017,11 @@ Function UpdateNPCs%()
 						EndIf
 						n\Reload = n\Reload - fps\Factor[0]
 						
-						If n\State3 > 70.0 * 5.0 Then n\State = Max(n\State, 8.0)
+						If n\State3 > 350.0 Then n\State = Max(n\State, 8.0)
 						
 						If me\Stamina < 10.0
 							n\State3 = n\State3 + fps\Factor[0]
-						ElseIf n\State3 < 900.0
+						ElseIf n\State3 < 350.0
 							n\State3 = Max(n\State3 - fps\Factor[0] * 0.2, 0.0)
 						EndIf
 						
@@ -4055,7 +4055,7 @@ Function UpdateNPCs%()
 									PointEntity(n\Collider, me\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									
-									If n\State3 < 900.0
+									If n\State3 < 350.0
 										me\BlurTimer = Float(((Sin(MilliSec / 50.0) + 1.0) * 200.0) / Sqr(Dist))
 										
 										If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
