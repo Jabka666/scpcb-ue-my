@@ -94,11 +94,16 @@ v1.3
 - Can now detect SCP-1048 and SCP-1048-A using the blue variant of Night Vision Goggles.
 - Increased range tesla gates can shock NPCs.
 - Reduced SCP-106's speed in the labyrinth.
-- Lowered the spawnrate of SCP-966s. Original spawnrate with «SelectedDifficulty\AggressiveNPCs» enabled.
 - Reduced attack startup distance of SCP-966.
 - Increased attack hit distance of SCP-049-2 and SCP-008-1.
 - Reduced the accuracy of the Gate B guard.
 - Nerfed teleportations on aggressive NPCs mode.
+
+- Reworked SCP-966
+	- Lowered the spawnrate of SCP-966s. Original spawnrate with «SelectedDifficulty\AggressiveNPCs» enabled.
+	- SCP-966 Insomnia timer reduced from 14 minutes to 30 seconds
+	- SCP-966 effects cannot be cured by syringes or drinks anymore
+	- SCP-966 will no longer stay in attack mode and upon respawning elsewhere will return to echo/idle mode.
 
 [Bug Fixes]
 - Fixed some typos in subtitles.
