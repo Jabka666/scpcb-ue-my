@@ -4017,6 +4017,8 @@ Function UpdateNPCs%()
 						EndIf
 						n\Reload = n\Reload - fps\Factor[0]
 						
+						If n\State3 > 70.0 * 5.0 Then n\State = Max(n\State, 8.0)
+						
 						If me\Stamina < 10.0
 							n\State3 = n\State3 + fps\Factor[0]
 						ElseIf n\State3 < 900.0
