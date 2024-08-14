@@ -2460,6 +2460,7 @@ Function UpdateEvents%()
 								e\EventState = 1.0
 							EndIf
 						Else
+							e\room\RoomDoors[0]\Locked = 0
 							RemoveEvent(e)
 							Return
 						EndIf
