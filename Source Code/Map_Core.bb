@@ -200,19 +200,20 @@ Function UpdateLightVolume%()
 	Local l.Lights
 	
 	If SecondaryLightOn > 0.3
-		UpdateLightsTimer = UpdateLightsTimer + fps\Factor[0]
-		If UpdateLightsTimer >= 8.0 Then UpdateLightsTimer = 0.0
-		For l.Lights = Each Lights
-			If l\room <> Null
-				If l\room\Dist < 8.0 Lor l\room = PlayerRoom
-					If UpdateLightsTimer = 0.0
+		If UpdateLightsTimer < 8.0
+			UpdateLightsTimer = UpdateLightsTimer + fps\Factor[0]
+		Else
+			For l.Lights = Each Lights
+				If l\room <> Null
+					If l\room\Dist < 8.0 Lor l\room = PlayerRoom
 						Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 						
 						If Dist < PowTwo(HideDistance) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((HideDistance - Sqr(Dist)) / HideDistance)) / 4.5, 1.0)
 					EndIf
 				EndIf
-			EndIf
-		Next
+			Next
+			UpdateLightsTimer = 0.0
+		EndIf
 		LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
 	Else
 		LightVolume = 1.0
