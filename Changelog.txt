@@ -47,6 +47,7 @@ v1.3
 - Hand icon now follows the position of levers and chat screens.
 - Reduce stamina drain speed in pocket dimension.
 - Messages shake when low on sanity.
+- The player can lean.
 
 [Rooms]
 - Added Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.

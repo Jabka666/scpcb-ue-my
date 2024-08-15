@@ -2,6 +2,7 @@ Type Keys
 	Field Name$[211]
 	Field MOVEMENT_LEFT%, MOVEMENT_RIGHT%, MOVEMENT_UP%, MOVEMENT_DOWN%
 	Field CONSOLE%, INVENTORY%, SPRINT%, BLINK%, SAVE%, CROUCH%, SCREENSHOT%
+	Field LEAN_LEFT%, LEAN_RIGHT%
 End Type
 
 Global key.Keys = New Keys

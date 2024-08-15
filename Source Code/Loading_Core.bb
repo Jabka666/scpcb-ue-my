@@ -2097,7 +2097,7 @@ Type Player
 	Field HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
 	Field Injuries#, Bloodloss#, PrevInjuries#, PrevBloodloss#, HealTimer#
 	Field DropSpeed#, HeadDropSpeed#, CurrSpeed#
-	Field Crouch%, CrouchState#
+	Field Crouch%, CrouchState#, Lean#
 	Field SndVolume#
 	Field SelectedEnding%, EndingScreen%, EndingTimer#
 	Field CreditsScreen%, CreditsTimer#
@@ -3194,6 +3194,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	InitFastResize()
 	
 	; ~ Load main menu assets and open main menu
+	SelectedInputBox = 0
 	ShouldDeleteGadgets = True
 	DeleteMenuGadgets()
 	InitMainMenuAssets()

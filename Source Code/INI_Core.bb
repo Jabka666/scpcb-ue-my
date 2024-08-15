@@ -392,6 +392,9 @@ Function LoadOptionsINI%()
 	
 	key\SCREENSHOT = IniGetInt(OptionFile, "Controls", "Screenshot Key", 59)
 	
+	key\LEAN_LEFT = IniGetInt(OptionFile, "Controls", "Lean Left Key", 18)
+	
+	key\LEAN_RIGHT = IniGetInt(OptionFile, "Controls", "Lean Right Key", 16)
 	; ~ [ADVANCED]
 	
 	opt\HUDEnabled = IniGetInt(OptionFile, "Advanced", "Enable HUD", True)
@@ -518,6 +521,10 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Controls", "Console Key", key\CONSOLE)
 	
 	IniWriteString(OptionFile, "Controls", "Screenshot Key", key\SCREENSHOT)
+	
+	IniWriteString(OptionFile, "Controls", "Lean Left key", key\LEAN_LEFT)
+	
+	IniWriteString(OptionFile, "Controls", "Lean Right Key", key\LEAN_RIGHT)
 	;[End Block]
 	
 	; ~ [ADVANCED]
@@ -640,6 +647,9 @@ Function ResetOptionsINI%()
 	
 	key\SCREENSHOT = 59
 	
+	key\LEAN_LEFT = 18
+	
+	key\LEAN_RIGHT = 16
 	; ~ [ADVANCED]
 	
 	opt\HUDEnabled = True

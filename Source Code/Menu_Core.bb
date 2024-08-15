@@ -723,15 +723,15 @@ Function UpdateMainMenu%()
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorR = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorR)), Font_Default, 14, 3), 255.0)
+							opt\SubColorR = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorR)), Font_Default, 16, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorG = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorG)), Font_Default, 15, 3), 255.0)
+							opt\SubColorG = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorG)), Font_Default, 17, 3), 255.0)
 							
 							y = y + (30 * MenuScale)
 							
-							opt\SubColorB = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorB)), Font_Default, 16, 3), 255.0)
+							opt\SubColorB = Min(UpdateMenuInputBox(x - (135 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorB)), Font_Default, 18, 3), 255.0)
 							
 							y = y + (40 * MenuScale)
 						EndIf
@@ -755,7 +755,7 @@ Function UpdateMainMenu%()
 						
 						opt\InvertMouseY = UpdateMenuTick(x, y, opt\InvertMouseY)
 						
-						y = y + (80 * MenuScale)
+						y = y + (60 * MenuScale)
 						
 						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210)], Font_Default, 3)
 						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210)], Font_Default, 8)
@@ -779,6 +779,11 @@ Function UpdateMainMenu%()
 						
 						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210)], Font_Default, 7)
 						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210)], Font_Default, 13)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_LEFT, 210)], Font_Default, 14)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_RIGHT, 210)], Font_Default, 15)
 						
 						If opt\CanOpenConsole
 							y = y + (20 * MenuScale)
@@ -839,6 +844,14 @@ Function UpdateMainMenu%()
 								Case 13
 									;[Block]
 									key\SCREENSHOT = TempKey
+									;[End Block]
+								Case 14
+									;[Block]
+									key\LEAN_LEFT = TempKey
+									;[End Block]
+								Case 15
+									;[Block]
+									key\LEAN_RIGHT = TempKey
 									;[End Block]
 							End Select
 							SelectedInputBox = 0
@@ -1613,41 +1626,47 @@ Function RenderMainMenu%()
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
 					
-					y = y + (40 * MenuScale)
+					y = y + (30 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("menu", "controlconfig"))
 					
-					y = y + (40 * MenuScale)
+					y = y + (30 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.forward"))
-					TextEx(x + (260 * MenuScale), y, GetLocalString("options", "key.crouch"))
+					TextEx(x + (260 * MenuScale), y + (5 * MenuScale), GetLocalString("options", "key.crouch"))
 					
 					y = y + (20 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.left"))
-					TextEx(x + (260 * MenuScale), y, GetLocalString("options", "key.blink"))
+					TextEx(x + (260 * MenuScale), y + (5 * MenuScale), GetLocalString("options", "key.blink"))
 					
 					y = y + (20 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.backward"))
-					TextEx(x + (260 * MenuScale), y, GetLocalString("options", "key.inv"))
+					TextEx(x + (260 * MenuScale), y + (5 * MenuScale), GetLocalString("options", "key.inv"))
 					
 					y = y + (20 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.right"))
-					TextEx(x + (260 * MenuScale), y, GetLocalString("options", "key.save"))
+					TextEx(x + (260 * MenuScale), y + (5 * MenuScale), GetLocalString("options", "key.save"))
 					
 					y = y + (20 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.sprint"))
-					TextEx(x + (260 * MenuScale), y, GetLocalString("options", "key.screenshot"))
+					TextEx(x + (260 * MenuScale), y + (5 * MenuScale), GetLocalString("options", "key.screenshot"))
+					
+					y = y + (20 * MenuScale)
+					
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.lean.left"))
+					TextEx(x + (260 * MenuScale), y + (5 * MenuScale), GetLocalString("options", "key.lean.right"))
 					
 					If opt\CanOpenConsole
 						y = y + (20 * MenuScale)
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.console"))
 					EndIf
-					If MouseOn(x, y - ((80 + (20 * opt\CanOpenConsole)) * MenuScale), Width - MouseOnCoord * 2, (100 + (20 * opt\CanOpenConsole)) * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+					
+					If MouseOn(x, y - ((60 + (20 * opt\CanOpenConsole)) * MenuScale), Width - MouseOnCoord * 2, (120 + (20 * opt\CanOpenConsole)) * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
 					;[End Block]
 				Case MainMenuTab_Options_Advanced
 					;[Block]
