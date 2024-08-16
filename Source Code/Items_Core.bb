@@ -373,38 +373,44 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	i\Dist = EntityDistanceSquared(me\Collider, i\Collider)
 	i\DropSpeed = 0.0
 	
-	If ID = it_cup
-		i\R = R
-		i\G = G
-		i\B = B
-		i\Alpha = Alpha
-		i\State = 1.0
-		
-		Local Liquid% = CopyEntity(misc_I\CupLiquid)
-		
-		ScaleEntity(Liquid, i\ItemTemplate\Scale, i\ItemTemplate\Scale, i\ItemTemplate\Scale, True)
-		PositionEntity(Liquid, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True))
-		EntityParent(Liquid, i\Model)
-		EntityColor(Liquid, R, G, B)
-		
-		If Alpha < 0.0
-			EntityFX(Liquid, 1)
-			EntityAlpha(Liquid, Abs(Alpha))
-		Else
-			EntityAlpha(Liquid, Abs(Alpha))
-		EndIf
-		EntityShininess(Liquid, 1.0)
-	EndIf
-	
 	i\InvImg = i\ItemTemplate\InvImg
-	If ID = it_clipboard And InvSlots = 0
-		InvSlots = 10
-		SetAnimTime(i\Model, 17.0)
-		i\InvImg = i\ItemTemplate\InvImg2
-	ElseIf ID = it_wallet And InvSlots = 0
-		InvSlots = 10
-		SetAnimTime(i\Model, 0.0)
-	EndIf
+	
+	Select ID
+		Case it_cup
+			;[Block]
+			i\R = R
+			i\G = G
+			i\B = B
+			i\Alpha = Alpha
+			i\State = 1.0
+			
+			Local Liquid% = CopyEntity(misc_I\CupLiquid)
+			
+			ScaleEntity(Liquid, i\ItemTemplate\Scale, i\ItemTemplate\Scale, i\ItemTemplate\Scale, True)
+			PositionEntity(Liquid, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True))
+			EntityParent(Liquid, i\Model)
+			EntityColor(Liquid, R, G, B)
+			
+			If Alpha < 0.0 Then EntityFX(Liquid, 1)
+			EntityAlpha(Liquid, Abs(Alpha))
+			EntityShininess(Liquid, 1.0)
+			;[End Block]
+		Case it_clipboard
+			;[Block]
+			If InvSlots = 0
+				InvSlots = 10
+				SetAnimTime(i\Model, 17.0)
+				i\InvImg = i\ItemTemplate\InvImg2
+			EndIf
+			;[End Block]
+		Case it_wallet
+			;[Block]
+			If InvSlots = 0
+				InvSlots = 10
+				SetAnimTime(i\Model, 0.0)
+			EndIf
+			;[End Block]
+	End Select
 	
 	i\InvSlots = InvSlots
 	
