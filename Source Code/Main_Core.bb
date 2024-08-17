@@ -2609,13 +2609,10 @@ Function UpdateMoving%()
 		If (Not chs\NoClip)
 			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT)) Lor me\ForceMove > 0.0 
-					If (Not me\Zombie)
-						If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0
-							me\Stamina = me\Stamina - (fps\Factor[0] * (0.4  + (0.4 * I_966\HasInsomnia)) * me\StaminaEffect)
-							If me\Stamina <= 0.0 Then me\Stamina = -20.0
-							Sprint = 2.5
-						EndIf
-						If KeyHit(key\CROUCH) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\ID <> it_firstaid And SelectedItem\ItemTemplate\ID <> it_finefirstaid And SelectedItem\ItemTemplate\ID <> it_firstaid2)) Then SetCrouch((Not me\Crouch))
+					If (Not me\Crouch) And (Not me\Zombie) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0
+						me\Stamina = me\Stamina - (fps\Factor[0] * (0.4  + (0.4 * I_966\HasInsomnia)) * me\StaminaEffect)
+						If me\Stamina <= 0.0 Then me\Stamina = -20.0
+						Sprint = 2.5
 					EndIf
 					
 					If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
@@ -2640,12 +2637,7 @@ Function UpdateMoving%()
 					If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 					If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 Then PlayStepSound(Sprint = 2.5)
 				EndIf
-			EndIf
-		Else
-			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
-				Sprint = 2.5
-			ElseIf KeyDown(key\CROUCH)
-				Sprint = 0.5
+				If KeyHit(key\CROUCH) And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\ID <> it_firstaid And SelectedItem\ItemTemplate\ID <> it_finefirstaid And SelectedItem\ItemTemplate\ID <> it_firstaid2)) Then SetCrouch((Not me\Crouch))
 			EndIf
 		EndIf
 		
