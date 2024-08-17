@@ -2040,7 +2040,7 @@ Function LoadGameQuick%(File$)
 		Local itt.ItemTemplates
 		
 		For itt.ItemTemplates = Each ItemTemplates
-			If itt\ID = ID And itt\Name = Name; And itt\DisplayName = DisplayName ; ~ Not sure about that
+			If itt\ID = ID And itt\Name = IttName; And itt\DisplayName = DisplayName ; ~ Not sure about that
 				If itt\IsAnim
 					SetAnimTime(it\Model, ReadFloat(f))
 					Exit
