@@ -2639,6 +2639,12 @@ Function UpdateMoving%()
 				EndIf
 				If KeyHit(key\CROUCH) And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\ID <> it_firstaid And SelectedItem\ItemTemplate\ID <> it_finefirstaid And SelectedItem\ItemTemplate\ID <> it_firstaid2)) Then SetCrouch((Not me\Crouch))
 			EndIf
+		Else
+			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
+				Sprint = 2.5
+			ElseIf KeyDown(key\CROUCH)
+				Sprint = 0.5
+			EndIf
 		EndIf
 		
 		Local Temp2# = (Speed * Sprint) / (1.0 + me\CrouchState)
