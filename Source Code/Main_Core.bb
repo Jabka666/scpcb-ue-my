@@ -3533,18 +3533,21 @@ Function UpdateGUI%()
 					Local IsEmpty% = True
 					
 					If OtherOpen\ItemTemplate\ID = it_wallet
-						If (Not IsEmpty)
-							For z = 0 To OtherSize - 1
-								If OtherOpen\SecondInv[z] <> Null
-									Local ID% = OtherOpen\SecondInv[z]\ItemTemplate\ID
-									
-									If ID <> it_scp420j And ID <> it_scp420s And ID <> it_joint And ID <> it_cigarette And ID <> it_coin And ID <> it_key And ID <> it_scp860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_fine714 And ID <> it_ring And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill
+						For z = 0 To OtherSize - 1
+							If OtherOpen\SecondInv[z] <> Null
+								Select OtherOpen\SecondInv[z]\ItemTemplate\ID
+									Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge
+										;[Block]
 										IsEmpty = False
 										Exit
-									EndIf
-								EndIf
-							Next
-						EndIf
+										;[End Block]
+									Default
+										;[Block]
+										IsEmpty = True
+										;[End Block]
+								End Select
+							EndIf
+						Next
 					Else
 						For z = 0 To OtherSize - 1
 							If OtherOpen\SecondInv[z] <> Null
@@ -3559,6 +3562,7 @@ Function UpdateGUI%()
 							OtherOpen\InvImg = OtherOpen\ItemTemplate\InvImg2
 							SetAnimTime(OtherOpen\Model, 17.0)
 						ElseIf OtherOpen\ItemTemplate\ID = it_wallet
+							OtherOpen\InvImg = OtherOpen\ItemTemplate\InvImg2
 							SetAnimTime(OtherOpen\Model, 0.0)
 						EndIf
 					EndIf
@@ -3779,7 +3783,7 @@ Function UpdateGUI%()
 									Local added.Items = Null
 									Local c%, ri%
 									
-									ID% = SelectedItem\ItemTemplate\ID
+									Local ID% = SelectedItem\ItemTemplate\ID
 									
 									If ID <> it_scp420j And ID <> it_scp420s And ID <> it_joint And ID <> it_cigarette And ID <> it_25ct And ID <> it_coin And ID <> it_key And ID <> it_scp860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_fine714 And ID <> it_ring And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
@@ -3836,21 +3840,28 @@ Function UpdateGUI%()
 										
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If Inventory(MouseSlot)\SecondInv[c] = Null
-												Inventory(MouseSlot)\SecondInv[c] = SelectedItem
-												Inventory(MouseSlot)\State = 1.0
-												If ID <> it_scp420j And ID <> it_scp420s And ID <> it_joint And ID <> it_cigarette And ID <> it_25ct And ID <> it_coin And ID <> it_key And ID <> it_scp860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill Then SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
-												Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
-												
-												For ri = 0 To MaxItemAmount - 1
-													If Inventory(ri) = SelectedItem
-														Inventory(ri) = Null
-														PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-														Exit
-													EndIf
-												Next
-												added = SelectedItem
-												SelectedItem = Null
-												Exit
+												If SelectedItem <> Null
+													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
+													Inventory(MouseSlot)\State = 1.0
+													Select ID
+														Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge
+															;[Block]
+															SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
+															Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
+															;[End Block]
+													End Select
+													
+													For ri = 0 To MaxItemAmount - 1
+														If Inventory(ri) = SelectedItem
+															Inventory(ri) = Null
+															PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
+															Exit
+														EndIf
+													Next
+													added = SelectedItem
+													SelectedItem = Null
+													Exit
+												EndIf
 											EndIf
 										Next
 										If SelectedItem <> Null

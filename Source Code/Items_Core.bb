@@ -408,6 +408,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			If InvSlots = 0
 				InvSlots = 10
 				SetAnimTime(i\Model, 0.0)
+				i\InvImg = i\ItemTemplate\InvImg2
 			EndIf
 			;[End Block]
 	End Select
