@@ -2577,7 +2577,7 @@ Function UpdateMoving%()
 	
 	Local Temp#
 	
-	If (Not me\Terminated) And (Not chs\NoClip) And (PlayerRoom\RoomTemplate\RoomID <> r_dimension_106) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
+	If (Not me\Terminated) And (Not chs\NoClip) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
 		If me\Stamina < 5.0
 			If (Not ChannelPlaying(BreathCHN))
 				Temp3 = 0
@@ -2609,10 +2609,13 @@ Function UpdateMoving%()
 		If (Not chs\NoClip)
 			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT)) Lor me\ForceMove > 0.0 
-					If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0
-						me\Stamina = me\Stamina - (fps\Factor[0] * (0.4  + (0.4 * I_966\HasInsomnia)) * me\StaminaEffect)
-						If me\Stamina <= 0.0 Then me\Stamina = -20.0
-						Sprint = 2.5
+					If (Not me\Zombie)
+						If (Not me\Crouch) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0
+							me\Stamina = me\Stamina - (fps\Factor[0] * (0.4  + (0.4 * I_966\HasInsomnia)) * me\StaminaEffect)
+							If me\Stamina <= 0.0 Then me\Stamina = -20.0
+							Sprint = 2.5
+						EndIf
+						If KeyHit(key\CROUCH) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\ID <> it_firstaid And SelectedItem\ItemTemplate\ID <> it_finefirstaid And SelectedItem\ItemTemplate\ID <> it_firstaid2)) Then SetCrouch((Not me\Crouch))
 					EndIf
 					
 					If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
@@ -2637,7 +2640,6 @@ Function UpdateMoving%()
 					If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 					If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 Then PlayStepSound(Sprint = 2.5)
 				EndIf
-				If KeyHit(key\CROUCH) And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\ID <> it_firstaid And SelectedItem\ItemTemplate\ID <> it_finefirstaid And SelectedItem\ItemTemplate\ID <> it_firstaid2)) Then SetCrouch((Not me\Crouch))
 			EndIf
 		Else
 			If (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
@@ -2670,24 +2672,47 @@ Function UpdateMoving%()
 			If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0)
 			Temp = False
 			me\Lean = CurveValue(1.0, me\Lean, 12.0)
-			If (Not me\Zombie) And me\FallTimer >= 0.0
-				If (Not KeyDown(key\SPRINT)) And (Not InvOpen)
-					If KeyDown(key\LEAN_LEFT)
-						If (Not KeyDown(key\LEAN_RIGHT)) me\Lean = CurveValue(-15.0, me\Lean, 6.0)
-					ElseIf KeyDown(key\LEAN_RIGHT)
-						If (Not KeyDown(key\LEAN_LEFT)) me\Lean = CurveValue(15.0, me\Lean, 6.0)
-					EndIf
-				EndIf
-				
-				If KeyDown(key\MOVEMENT_DOWN) And me\Playable
-					If (Not KeyDown(key\MOVEMENT_UP))
-						Temp = True
-						Angle = 180.0
-						If KeyDown(key\MOVEMENT_LEFT)
-							If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 135.0
-						ElseIf KeyDown(key\MOVEMENT_RIGHT)
-							Angle = -135.0
+			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
+				If (Not me\Zombie)
+					If (Not KeyDown(key\SPRINT)) And (Not InvOpen)
+						If KeyDown(key\LEAN_LEFT)
+							If (Not KeyDown(key\LEAN_RIGHT)) me\Lean = CurveValue(-15.0, me\Lean, 6.0)
+						ElseIf KeyDown(key\LEAN_RIGHT)
+							me\Lean = CurveValue(15.0, me\Lean, 6.0)
 						EndIf
+					EndIf
+					
+					If KeyDown(key\MOVEMENT_DOWN)
+						If (Not KeyDown(key\MOVEMENT_UP))
+							Temp = True
+							Angle = 180.0
+							If KeyDown(key\MOVEMENT_LEFT)
+								If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 135.0
+							ElseIf KeyDown(key\MOVEMENT_RIGHT)
+								Angle = -135.0
+							EndIf
+						Else
+							If KeyDown(key\MOVEMENT_LEFT)
+								If (Not KeyDown(key\MOVEMENT_RIGHT))
+									Temp = True
+									Angle = 90.0
+								EndIf
+							ElseIf KeyDown(key\MOVEMENT_RIGHT)
+								Temp = True
+								Angle = -90.0
+							EndIf
+						EndIf
+					ElseIf KeyDown(key\MOVEMENT_UP)
+						Temp = True
+						Angle = 0.0
+						If KeyDown(key\MOVEMENT_LEFT)
+							If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 45.0
+						ElseIf KeyDown(key\MOVEMENT_RIGHT)
+							Angle = -45.0
+						EndIf
+					ElseIf me\ForceMove > 0.0
+						Temp = True
+						Angle = me\ForceAngle
 					Else
 						If KeyDown(key\MOVEMENT_LEFT)
 							If (Not KeyDown(key\MOVEMENT_RIGHT))
@@ -2699,31 +2724,10 @@ Function UpdateMoving%()
 							Angle = -90.0
 						EndIf
 					EndIf
-				ElseIf KeyDown(key\MOVEMENT_UP) And me\Playable
-					Temp = True
-					Angle = 0.0
-					If KeyDown(key\MOVEMENT_LEFT)
-						If (Not KeyDown(key\MOVEMENT_RIGHT)) Then Angle = 45.0
-					ElseIf KeyDown(key\MOVEMENT_RIGHT)
-						Angle = -45.0
-					EndIf
-				ElseIf me\ForceMove > 0.0
+				Else
 					Temp = True
 					Angle = me\ForceAngle
-				ElseIf me\Playable
-					If KeyDown(key\MOVEMENT_LEFT)
-						If (Not KeyDown(key\MOVEMENT_RIGHT))
-							Temp = True
-							Angle = 90.0
-						EndIf
-					ElseIf KeyDown(key\MOVEMENT_RIGHT)
-						Temp = True
-						Angle = -90.0
-					EndIf
 				EndIf
-			Else
-				Temp = True
-				Angle = me\ForceAngle
 			EndIf
 			
 			Angle = WrapAngle(EntityYaw(me\Collider, True) + Angle + 90.0)
