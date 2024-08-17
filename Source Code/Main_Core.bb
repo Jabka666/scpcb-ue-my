@@ -2673,9 +2673,9 @@ Function UpdateMoving%()
 			If (Not me\Zombie) And me\FallTimer >= 0.0
 				If (Not KeyDown(key\SPRINT)) And (Not InvOpen)
 					If KeyDown(key\LEAN_LEFT)
-						me\Lean = CurveValue(-15.0, me\Lean, 6.0)
+						If (Not KeyDown(key\LEAN_RIGHT)) me\Lean = CurveValue(-15.0, me\Lean, 6.0)
 					ElseIf KeyDown(key\LEAN_RIGHT)
-						me\Lean = CurveValue(15.0, me\Lean, 6.0)
+						If (Not KeyDown(key\LEAN_LEFT)) me\Lean = CurveValue(15.0, me\Lean, 6.0)
 					EndIf
 				EndIf
 				
