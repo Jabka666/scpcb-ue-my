@@ -858,7 +858,7 @@
 		"drink_message": "\"The warm liquid has a salty after-taste, almost like tears.\""
 	},
 	{
-		"name": ["Ice Tea", "Cold Tea"],
+		"name": ["Ice Tea", "Cold Tea", "Tea"],
 		"color": [137, 139, 65],
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
