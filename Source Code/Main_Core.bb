@@ -2672,7 +2672,7 @@ Function UpdateMoving%()
 			me\Lean = CurveValue(1.0, me\Lean, 12.0)
 			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (Not me\Zombie)
-					If (Not KeyDown(key\SPRINT)) And (Not InvOpen)
+					If (Not KeyDown(key\SPRINT)) And (Not InvOpen) And OtherOpen = Null
 						If KeyDown(key\LEAN_LEFT)
 							If (Not KeyDown(key\LEAN_RIGHT)) me\Lean = CurveValue(-15.0, me\Lean, 6.0)
 						ElseIf KeyDown(key\LEAN_RIGHT)
