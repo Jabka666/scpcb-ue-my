@@ -2561,15 +2561,15 @@ Function UpdateMoving%()
 	
 	If I_714\Using = 2
 		me\Stamina = CurveValue(Min(10.0, me\Stamina), me\Stamina, 10.0)
-		me\StaminaMax = Min(me\StaminaMax, 10.0)
+		me\StaminaMax = 10.0
 		me\Sanity = Max(-850.0, me\Sanity)
 	ElseIf I_714\Using = 1
 		me\Stamina = CurveValue(Min(25.0, me\Stamina), me\Stamina, 15.0)
-		me\StaminaMax = Min(me\StaminaMax, 25.0)
+		me\StaminaMax = 25.0
 	Else
 		If wi\BallisticVest = 2 Lor wi\HazmatSuit = 1
 			me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
-			me\StaminaMax = Min(me\StaminaMax, 60.0)
+			me\StaminaMax = 60.0
 		EndIf
 		If wi\GasMask = 3 Lor wi\HazmatSuit = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.002 * fps\Factor[0])
 		If wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
