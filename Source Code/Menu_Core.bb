@@ -1297,7 +1297,7 @@ Function RenderMainMenu%()
 						
 						TextEx(x + (600 * MenuScale), y + (106 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 						
-						If SelectedDifficulty\Name = "Apollyon" Then TextEx(x + (600 * MenuScale), y + (122 * MenuScale), GetLocalString("menu", "nohud"))
+						If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Then TextEx(x + (600 * MenuScale), y + (122 * MenuScale), GetLocalString("menu", "nohud"))
 					EndIf
 					
 					SetFontEx(fo\FontID[Font_Default_Big])
