@@ -524,6 +524,10 @@ Function UpdateGame%()
 				EndIf
 				DarkAlpha = Max(DarkAlpha, Min(Abs(me\Terminated / 400.0), 1.0))
 			Else
+				If me\Playable
+					If KeyHit(key\BLINK) Then me\BlinkTimer = 0.0
+					If KeyDown(key\BLINK) And me\BlinkTimer < -10.0 Then me\BlinkTimer = -10.0
+				EndIf
 				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
 				me\KillAnimTimer = 0.0
 			EndIf
@@ -2726,17 +2730,17 @@ Function UpdateMoving%()
 					Temp = True
 					Angle = me\ForceAngle
 				EndIf
+				Angle = WrapAngle(EntityYaw(me\Collider, True) + Angle + 90.0)
+				
+				If Temp
+					me\CurrSpeed = CurveValue(Temp2, me\CurrSpeed, 20.0)
+				Else
+					me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
+				EndIf
+				
+				TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 			EndIf
 			
-			Angle = WrapAngle(EntityYaw(me\Collider, True) + Angle + 90.0)
-			
-			If Temp
-				me\CurrSpeed = CurveValue(Temp2, me\CurrSpeed, 20.0)
-			Else
-				me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
-			EndIf
-			
-			If me\Playable Then TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 			
 			Local CollidedFloor% = False
 			Local CollCount% = CountCollisions(me\Collider)
@@ -2824,11 +2828,6 @@ Function UpdateMoving%()
 		me\HealTimer = Max(me\HealTimer - FPSFactorEx, 0.0)
 		me\Bloodloss = Min(me\Bloodloss + FPSFactorEx / 3.0, 100.0)
 		me\Injuries = Max(me\Injuries - FPSFactorEx / 30.0, 0.0)
-	EndIf
-		
-	If me\Playable
-		If KeyHit(key\BLINK) Then me\BlinkTimer = 0.0
-		If KeyDown(key\BLINK) And me\BlinkTimer < -10.0 Then me\BlinkTimer = -10.0
 	EndIf
 	
 	If me\HeartBeatVolume > 0.0
