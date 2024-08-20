@@ -3765,8 +3765,8 @@ Function UpdateNPCs%()
 					EndIf
 					
 					If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
-						Dist = EntityDistanceSquared(n\Collider, me\Collider) - (EntityVisible(me\Collider, n\Collider) * 1.4641)
-						If PowTwo(me\SndVolume * 1.2) > Dist Lor Dist < 2.25
+						Dist = EntityDistanceSquared(n\Collider, me\Collider) - (EntityVisible(me\Collider, n\Collider) * 1.5)
+						If PowTwo(me\SndVolume * 1.2) > Dist Lor Dist < 2.0
 							If n\State3 = 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
