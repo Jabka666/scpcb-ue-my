@@ -1084,10 +1084,11 @@ Function UpdateEvents%()
 				; ~ EventState2: Are the magnets on
 
 				If SoundTransmission
-					If e\EventState = 1.0 Then e\EventState3 = Min(e\EventState3 + fps\Factor[0], 4000.0)
 					If (Not ChannelPlaying(e\SoundCHN2)) Then e\SoundCHN2 = PlaySound_Strict(snd_I\RadioStatic)
 				EndIf
 				
+				If ((SoundTransmission) Lor (e\EventState3 + fps\Factor[0] >= 2500)) And (e\EventState = 1.0) Then e\EventState3 = Min(e\EventState3 + fps\Factor[0], 4000.0)
+
 				If PlayerRoom = e\room
 					If e\room\NPC[0] <> Null
 						If EntityY(me\Collider) < (-6900.0) * RoomScale
@@ -1108,7 +1109,7 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 							
-							If ((e\EventState3 > 3200.0) Lor (e\EventState3 < 2500.0)) Lor (e\EventState <> 1.0) Then Temp = UpdateLever(e\room\RoomLevers[1]\OBJ)
+							Temp = UpdateLever(e\room\RoomLevers[1]\OBJ)
 
 							If SoundTransmission <> Temp Then
 								If SoundTransmission
@@ -1123,12 +1124,12 @@ Function UpdateEvents%()
 										e\SoundCHN2 = 0
 									EndIf
 								Else
-									ChannelVolume(e\SoundCHN, ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
-									ChannelVolume(e\SoundCHN2, ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
+									ChannelVolume(e\SoundCHN, opt\VoiceVolume * opt\MasterVolume)
+									ChannelVolume(e\SoundCHN2, opt\VoiceVolume * opt\MasterVolume)
 								EndIf
-							EndIf
 
-							SoundTransmission = Temp
+								SoundTransmission = Temp
+							EndIf
 
 							If e\EventState = 0.0
 								If SoundTransmission And Rand(100) = 1
