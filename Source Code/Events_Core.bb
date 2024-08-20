@@ -2013,8 +2013,8 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < 0.0
 						If (Not me\Terminated)
 							If e\EventState = 0.0
-								If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25 And RemoteDoorOn
-									If me\FallTimer >= 0.0
+								If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25
+									If me\FallTimer >= 0.0 And RemoteDoorOn
 										GiveAchievement("012")
 										
 										PlaySound_Strict(snd_I\HorrorSFX[7])
