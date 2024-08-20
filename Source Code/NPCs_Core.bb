@@ -3880,8 +3880,8 @@ Function UpdateNPCs%()
 											Case 3
 												;[Block]
 												For d.Doors = Each Doors
-													If d\Locked = 0 And d\KeyCard = 0 And d\Code = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
-														If EntityDistanceSquared(d\FrameOBJ, n\Collider) < 256.0 Then OpenCloseDoor(d)
+													If EntityDistanceSquared(d\FrameOBJ, n\Collider) < 256.0
+														If d\Locked = 0 And d\KeyCard = 0 And d\Code = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR Then OpenCloseDoor(d)
 													EndIf
 												Next
 												;[End Block]
