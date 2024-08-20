@@ -6968,8 +6968,6 @@ Function UpdateEvents%()
 					; ~ Checking some statements in order to determine if SCP-096 can spawn in this room
 					If e\EventState <> 2.0
 						If n_I\Curr096 <> Null
-							If EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < 1600.0 Then e\EventState = 2.0
-							
 							For e2.Events = Each Events
 								If e2\EventID = e_room2_servers_hcz
 									If e2\EventState > 0.0 And e2\room\NPC[0] <> Null
@@ -6988,8 +6986,7 @@ Function UpdateEvents%()
 								EndIf
 							Next
 							
-							If n_I\Curr096\State <> 1.0 Then e\EventState = 2.0
-							If EntityDistanceSquared(n_I\Curr096\Collider, e\room\OBJ) > EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) Then e\EventState = 2.0
+							If n_I\Curr096\State <> 1.0 Lor EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < 1600.0 Lor EntityDistanceSquared(n_I\Curr096\Collider, e\room\OBJ) > EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) Then e\EventState = 2.0
 						EndIf
 						
 						For e2.Events = Each Events
