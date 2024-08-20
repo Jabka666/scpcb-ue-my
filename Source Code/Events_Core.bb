@@ -4080,7 +4080,7 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 							For n.NPCs = Each NPCs
-								If n\NPCType <> NPCType966 And n\NPCType <> NPCType513_1 And (Not n\IsDead)
+								If n\NPCType <> NPCType513_1 And (Not n\IsDead)
 									If n\NPCType = NPCTypeClerk
 										e\room\RoomDoors[0]\Locked = 0
 										n\State3 = 1.0
@@ -4102,7 +4102,7 @@ Function UpdateEvents%()
 													n\Idle = 1 : n\State3 = 1.0
 												EndIf
 												;[End Block]
-											Case NPCType049, NPCType096, NPCType173, NPCType066, NPCType1499_1
+											Case NPCType049, NPCType096, NPCType173, NPCType066, NPCType1499_1, NPCType966
 												;[Block]
 												; ~ Skip
 												;[End Block]

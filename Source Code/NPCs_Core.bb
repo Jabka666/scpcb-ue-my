@@ -3978,7 +3978,7 @@ Function UpdateNPCs%()
 						
 						PrevFrame = n\Frame
 						
-						If wi\NightVision = 0
+						If wi\NightVision = 0 And (Not n\TeslaHit)
 							If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 							If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 								If Dist < 1.0 And n\Reload <= 0.0
