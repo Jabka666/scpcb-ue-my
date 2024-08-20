@@ -1779,7 +1779,7 @@ Function LoadEvents%()
 	CreateEvent(e_room3_storage, r_room3_storage, 0)
 	
 	CreateEvent(e_room2_6_hcz_smoke, r_room2_6_hcz, 0, 0.2)
-	CreateEvent(e_room2_6_hcz_173, r_room2_6_hcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_6_hcz_173, r_room2_6_hcz, 0, 0.3 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ SCP-173 appears in half of the r_room2_6_lcz-rooms
 	CreateEvent(e_173_appearing, r_room2_6_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
@@ -1911,7 +1911,7 @@ Function LoadEvents%()
 	CreateEvent(e_096_spawn, r_room2_3_hcz, 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room2_4_hcz, 0, 0.5 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room2_5_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, r_room2_6_hcz, 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_096_spawn, r_room2_hcz, 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room3_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room3_2_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room3_3_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
