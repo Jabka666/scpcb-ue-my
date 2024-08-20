@@ -3625,7 +3625,7 @@ Function UpdateEvents%()
 					If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 					
 					If e\EventState = 0.0
-						If Rand(200) = 1
+						If Rand(200) = 1 Lor EntityY(me\Collider, True) > 2.0
 							PlaySound_Strict(snd_I\HorrorSFX[7])
 							e\EventState = 1.0
 						EndIf
