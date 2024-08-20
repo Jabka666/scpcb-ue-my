@@ -38,10 +38,12 @@ v1.3
 - The game's gamma will be automatically changed while reading the document/ticket/badge and etc.
 - Improved gas emitters.
 - You can refill cups at water coolers.
+
 - Can no longer save during certain conditions:
 	- When «chs\superman» or «me\deathtimer» are active.
 	- When nearly dying from bleeding out(«me\Bloodloss» > 60.0 and «me\injury» > 1.0)
 	- When SCP-427's mutation state is above 360 seconds.
+	
 - Monitors are now off while there is a blackout preventing you from saving on them.
 - All Blast doors can kill the player.
 - Hand icon now follows the position of levers and chat screens.
@@ -105,6 +107,7 @@ v1.3
 	- SCP-966 Insomnia timer reduced from 14 minutes to 30 seconds
 	- SCP-966 effects cannot be cured by syringes or drinks anymore
 	- SCP-966 will no longer stay in attack mode and upon respawning elsewhere will return to echo/idle mode.
+	- Are visible when being struck by a tesla gates.
 
 [Bug Fixes]
 - Fixed some typos in subtitles.
@@ -136,12 +139,13 @@ v1.3
 - Fixed hazmat suit and gas mask overlays combining when reloading a save.
 - Fixed clipping into SCP-005 door when entering trap if door was closed.
 - Fixed MAV at Gate B area.
+- Fixed being able to blink when dead.
+- Fixed player contstantly moving forward when grabbed by SCP-106.
 
 [Known issues]
 - Cups crash the game sometimes.
 - Objects aren't properly hidden on new games.
 - SCP-500-01 may not spawn correctly in Maintenance tunnels.
-- Surveillance room clips into closets room often.
 - PD teleport points don't work sometimes.
 
 v1.2.1
