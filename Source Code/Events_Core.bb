@@ -1997,14 +1997,16 @@ Function UpdateEvents%()
 						If (Not me\Terminated)
 							If e\EventState = 0.0
 								If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25 And RemoteDoorOn
-									GiveAchievement("012")
-									
-									PlaySound_Strict(snd_I\HorrorSFX[7])
-									PlaySound2(snd_I\LeverSFX, Camera, e\room\RoomDoors[0]\OBJ)
-									
-									If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
-									
-									e\EventState = 1.0
+									If me\FallTimer >= 0.0
+										GiveAchievement("012")
+										
+										PlaySound_Strict(snd_I\HorrorSFX[7])
+										PlaySound2(snd_I\LeverSFX, Camera, e\room\RoomDoors[0]\OBJ)
+										
+										If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
+										
+										e\EventState = 1.0
+									EndIf
 								EndIf
 							Else
 								If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Music\012Golgotha.ogg")
