@@ -56,6 +56,26 @@
 		]
 	},
 	{
+		"title": "Dr. Maynard",
+		"image": "maynard.png",
+		"align_x": "right",
+		"align_y": "bottom",
+		"background": false,
+		"descriptions": [
+			"A recent transfer from Site-15, George Maynard is a reserved man, working alongside the Engineering & Technical Service Department to make their Modular Site Project a reality."
+		]
+	},
+	{
+		"title": "Security Chief Franklin",
+		"image": "franklin.png",
+		"align_x": "left",
+		"align_y": "bottom",
+		"background": false,
+		"descriptions": [
+			"Once a former US Army Lieutenant dishonorably discharged under mysterious pretenses, Carey Franklin was recruited by the SCP Foundation into the Security Department where he works diligently to keep the facility safe."
+		]
+	},
+	{
 		"title": "SCP-005",
 		"image": "005.png",
 		"align_x": "center",
