@@ -120,7 +120,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			; ~ Upper view door
-			d.Doors = CreateDoor(r, r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 921.0 * RoomScale, 0.0, False)
+			d.Doors = CreateDoor(r, r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 924.0 * RoomScale, 0.0, False)
 			d\MTFClose = False : d\DisableWaypoint = True
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
