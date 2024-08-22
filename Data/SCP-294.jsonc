@@ -2,8 +2,6 @@
 ////// SCP-294 DRINKS //////
 ////////////////////////////
 
-
-
 [
 	{
 		"name": ["Cosmopolitan Cocktail", "Fresh Сosmopolitan Сocktail"],
@@ -1193,7 +1191,7 @@
 		"refuse_message": "\"Why the hell would I want to drink this?\""
 	},
 	{
-		"name": ["Regalis", "Reglias", "Undertow Games", "Third Subdivision Studio", "Developers", "Ultimate Edition", "Vane Brain", "Jabka", "Chumnaya Karkusa", "Mleczyk", "ADMClef", "ENDSHN", "Meow", "Ne4to", "Aesthetical", "Juanjp600", "EnnocentSam", "FireFox", "Slender", "Ayylien", "Quote", "SnoeBrawler", "Ziyue", "XtrithX", "Artoka"],
+		"name": ["Regalis", "Reglias", "Undertow Games", "Third Subdivision Studio", "Developers", "Ultimate Edition", "Vane Brain", "Jabka", "Chumnaya Karkusa", "Mleczyk", "ADMClef", "ENDSHN", "Meow", "Ne4to", "Aesthetical", "Juanjp600", "EnnocentSam", "FireFox", "Slender", "Ayylien", "Quote", "SnoeBrawler", "ZiYue", "XtrithX", "Artoka"],
 		"color": [0, 0, 0],
 		"alpha": 1.0,
 		"glow": true,
