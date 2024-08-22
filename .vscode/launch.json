@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "blitz3d",
+            "request": "launch",
+            "name": "Run blitz program",
+            "bbfile": "Game.bb"
+        }
+    ]
+}
