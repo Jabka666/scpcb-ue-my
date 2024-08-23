@@ -586,27 +586,29 @@ Function UpdateGame%()
 		EndIf
 		
 		If KeyHit(key\SAVE)
-			If SelectedDifficulty\SaveType < SAVE_ON_QUIT
-				If CanSave = 0 ; ~ Scripted location
-					CreateHintMsg(GetLocalString("save", "failed.now"))
-				ElseIf CanSave = 1 ; ~ Endings / Intro location
-					CreateHintMsg(GetLocalString("save", "failed.location"))
-					If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
-				ElseIf CanSave = 2 ; ~ Triggered SCP-096
-					CreateHintMsg(GetLocalString("save", "failed.096"))
-				ElseIf as\Timer <= 70.0 * 5.0
-					CancelAutoSave()
-				ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-					If SelectedScreen = Null And sc_I\SelectedMonitor = Null
-						CreateHintMsg(GetLocalString("save", "failed.screen"))
+			If (Not MenuOpen)
+				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
+					If CanSave = 0 ; ~ Scripted location
+						CreateHintMsg(GetLocalString("save", "failed.now"))
+					ElseIf CanSave = 1 ; ~ Endings / Intro location
+						CreateHintMsg(GetLocalString("save", "failed.location"))
+						If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
+					ElseIf CanSave = 2 ; ~ Triggered SCP-096
+						CreateHintMsg(GetLocalString("save", "failed.096"))
+					ElseIf as\Timer <= 70.0 * 5.0
+						CancelAutoSave()
+					ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+						If SelectedScreen = Null And sc_I\SelectedMonitor = Null
+							CreateHintMsg(GetLocalString("save", "failed.screen"))
+						Else
+							SaveGame(CurrSave\Name) ; ~ Can save at screen
+						EndIf
 					Else
-						SaveGame(CurrSave\Name) ; ~ Can save at screen
+						SaveGame(CurrSave\Name) ; ~ Can save
 					EndIf
 				Else
-					SaveGame(CurrSave\Name) ; ~ Can save
+					CreateHintMsg(GetLocalString("save", "disable"))
 				EndIf
-			Else
-				CreateHintMsg(GetLocalString("save", "disable"))
 			EndIf
 		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
 			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
