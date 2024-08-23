@@ -5,8 +5,6 @@ Function SaveGame%(File$)
 	
 	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
 	
-	If MenuOpen Lor MainMenuOpen Then Return
-	
 	CatchErrors("SaveGame(" + File + ")")
 	
 	Local n.NPCs, r.Rooms, d.Doors, emit.Emitter
