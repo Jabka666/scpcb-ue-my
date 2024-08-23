@@ -177,30 +177,30 @@ Const Period# = 1000.0 / 60.0
 
 Global PrevTime% = MilliSecs()
 Global ElapsedTime#
+Global ErrorGPUMsg$ 
 
 Global GPUName$ = GfxDriverName(CountGfxDrivers())
-Global ErrorGPUMsg$ = GetLocalString("error", "gpu")
 Global ErrorMemStatusMsg$ = GetLocalString("error", "status")
 Global ErrorMsg$ = GetLocalString("error", "error")
-Global TotalVidMemory% = TotalVidMem()
-Global TotalPhysMemory% = TotalPhys()
 
-InitErrorMsgs(9, True)
-SetErrorMsg(0, Format(GetLocalString("error", "title.mc"), SystemProperty("blitzversion")) + Chr(10))
-SetErrorMsg(1, Format(Format(GetLocalString("error", "date"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
-SetErrorMsg(2, Format(Format(Format(ErrorGPUMsg, Trim(SystemProperty("cpuname")), "{0}"), SystemProperty("cpuarch"), "{1}"), GetEnv("NUMBER_OF_PROCESSORS"), "{2}"))
-SetErrorMsg(3, Format(Format(Format(ErrorGPUMsg, GPUName, "{0}"), ((TotalVidMemory / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMemory / 1024), "{2}"))
+InitErrorMsgs(10, True)
+SetErrorMsg(0, GetLocalString("error", "title.mc"))
+SetErrorMsg(1, GetLocalString("error", "shot"))
+SetErrorMsg(2, "---------------------------------------------------")
 
-SetErrorMsg(6, Format(GetLocalString("error", "ex"), "_CaughtError_") + Chr(10))
-SetErrorMsg(7, GetLocalString("error", "shot")) 
+SetErrorMsg(3, "Date and time: " + CurrentDate() + ", " + CurrentTime())
+SetErrorMsg(4, "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " Bit (Build: " + SystemProperty("osbuild") + ")")
+SetErrorMsg(5, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
+
+SetErrorMsg(9, "Caught exception: " + "_CaughtError_")
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(8, ErrorMsg + Location)
+	SetErrorMsg(8, Format(ErrorMsg, Location))
 End Function
 
 Repeat
-	SetErrorMsg(4, Format(Format(Format(ErrorGPUMsg, GPUName, "{0}"), ((TotalVidMemory / 1024) - (AvailVidMem() / 1024)), "{1}"), (TotalVidMemory / 1024), "{2}"))
-	SetErrorMsg(5, Format(Format( ErrorMemStatusMsg, ((TotalPhysMemory / 1024) - (AvailPhys() / 1024)), "{0}"), (TotalPhysMemory / 1024), "{1}"))
+	SetErrorMsg(6, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
+	SetErrorMsg(7, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
 	
 	Cls()
 	
@@ -216,7 +216,7 @@ Repeat
 	ElapsedTime = ElapsedTime + Float(MilliSecs() - PrevTime) / Float(Period)
 	PrevTime = MilliSecs()
 	
-	Local f%
+	Local f% = 0
 	
 	If FileType("CONFIG_OPTINIT.SI") = 1
 		f = ReadFile("CONFIG_OPTINIT.SI")
@@ -244,13 +244,11 @@ Repeat
 	If FileType("CONFIG_MAPINIT.SI") = 1
 		DeleteTextureEntriesFromCache(DeleteAllTextures)
 		For r.Rooms = Each Rooms
-			FreeEntity(r\OBJ)
+			FreeEntity(r\OBJ) : r\OBJ = 0
 			DeleteSingleTextureEntryFromCache(r\OverlayTex) : r\OverlayTex = 0
 			Delete(r)
 		Next
-		If CurrGrid <> Null
-			Delete(CurrGrid) : CurrGrid = Null
-		EndIf
+		If CurrGrid <> Null Then Delete(CurrGrid) : CurrGrid = Null
 		CurrGrid = New MapGrid
 		
 		f = ReadFile("CONFIG_MAPINIT.SI")
@@ -523,9 +521,9 @@ Repeat
 		
 		CaptureWorld() ; ~ Capture this game state, tweening will make it look smooth
 	Wend
-	AmbientLight(30.0, 30.0, 30.0)
 	RenderWorld(1.0 - Max(Min(ElapsedTime, 0.0), -1.0))
 	
+	AmbientLight(30.0, 30.0, 30.0)
 	If (Not IsRemote)
 		SetFont(ConsoleFont)
 		If opt\ShowFPS
@@ -565,6 +563,7 @@ Repeat
 				Text(2, 92, Format(GetLocalString("mc", "room.event"),  eName))
 				Text(2, 112, Format(GetLocalString("mc", "room.event.chance"), Int(eChance * 100)))
 			EndIf
+			AmbientLight(70.0, 70.0, 20.0)
 		EndIf
 		
 		If CurrSelectedRoom <> Null

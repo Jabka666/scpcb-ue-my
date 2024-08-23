@@ -97,6 +97,7 @@ Type Options
 	Field VSync%
 	Field ShowFPS%
 	Field CamRange#
+	Field TotalVidMemory%, TotalPhysMemory%
 End Type
 
 Global opt.Options = New Options
@@ -123,6 +124,9 @@ Function LoadOptionsINI%()
 	
 	opt\CamRange# = IniGetFloat(OptionFileMC, "3-D Scene", "Camera Range", 50.0)
 End Function
+
+opt\TotalVidMemory = TotalVidMem()
+opt\TotalPhysMemory = TotalPhys()
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS
