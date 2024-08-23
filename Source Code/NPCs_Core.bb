@@ -966,6 +966,30 @@ Function UpdateNPCs%()
 									n\State = n\State - fps\Factor[0]
 								EndIf
 								
+								For d.Doors = Each Doors
+									If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25
+										If (Not d\Open)
+											If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR And d\DoorType <> BIG_DOOR
+												Select d\DoorType
+													Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+														;[Block]
+														Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+														;[End Block]
+													Case HEAVY_DOOR
+														;[Block]
+														Tex = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
+														;[End Block]
+												End Select
+												EntityTexture(d\OBJ, Tex)
+												If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
+												EntityTexture(d\FrameOBJ, Tex)
+												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+												Exit
+											EndIf
+										EndIf
+									EndIf
+								Next
+								
 								If Dist > 0.64
 									If ((Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND) And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a
 										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
