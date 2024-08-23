@@ -5499,7 +5499,7 @@ Function UpdateEvents%()
 										PositionEntity(it\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
 										ResetEntity(it\Collider)
 									ElseIf x1 <= -264.0 And x1 >= -760.0
-										TFormPoint(x1 + 1024.0, 1, z1, e\room\OBJ, 0)
+										TFormPoint(x1 + 1024.0, y1, z1, e\room\OBJ, 0)
 										PositionEntity(it\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
 										ResetEntity(it\Collider)
 									EndIf
