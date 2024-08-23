@@ -47,9 +47,8 @@ CameraClsColor(Camera, opt\FogR, opt\FogG, opt\FogB)
 CameraRange(Camera, 0.05, opt\CamRange)
 PositionEntity(Camera, 0.0, 1.0, 0.0)
 
-Global AmbientLightRoomTex%
+Global AmbientLightRoomTex% = CreateTextureUsingCacheSystem(2, 2, 1 + 256)
 
-AmbientLightRoomTex = CreateTextureUsingCacheSystem(2, 2, 1 + 256)
 TextureBlend(AmbientLightRoomTex, 5)
 SetBuffer(TextureBuffer(AmbientLightRoomTex))
 ClsColor(0, 0, 0)
@@ -129,7 +128,7 @@ Function LoadEntities%()
 	
 	; ~ [MISC]
 	
-	o\MiscModelID[0] = LoadRMesh("GFX\map\cont2_860_1_wall.rmesh", Null)
+	o\MiscModelID[0] = LoadRMesh("GFX\map\cont2_860_1_wall.rmesh")
 	HideEntity(o\MiscModelID[0])
 End Function
 
@@ -524,6 +523,7 @@ Repeat
 		
 		CaptureWorld() ; ~ Capture this game state, tweening will make it look smooth
 	Wend
+	AmbientLight(30.0, 30.0, 30.0)
 	RenderWorld(1.0 - Max(Min(ElapsedTime, 0.0), -1.0))
 	
 	If (Not IsRemote)
@@ -975,7 +975,7 @@ End Function
 
 Function LoadRoomMesh%(rt.RoomTemplates)
 	If Instr(rt\OBJPath, ".rmesh") <> 0 ; ~ File is RoomMesh
-		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
+		rt\OBJ = LoadRMesh(rt\OBJPath)
 	ElseIf Instr(rt\OBJPath, ".b3d") <> 0 ; ~ File is .b3d
 		RuntimeError(Format(GetLocalString("runerr", "b3d"), rt\OBJPath))
 	Else ; ~ File not found
@@ -987,7 +987,7 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 	HideEntity(rt\OBJ)
 End Function
 
-Function LoadRMesh%(File$, rt.RoomTemplates)
+Function LoadRMesh%(File$)
 	CatchErrors("LoadRMesh(" + File + ")")
 	
 	ClsColor(0, 0, 0)
@@ -1061,9 +1061,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 				EndIf
 				If Tex[j] <> 0
 					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
-					If Instr(Lower(Temp1s), "_lm") <> 0
-						TextureBlend(Tex[j], 3)
-					EndIf
+					If Instr(Lower(Temp1s), "_lm") <> 0 Then TextureBlend(Tex[j], 3)
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
 					TextureCoords(Tex[j], 1 - j)
@@ -1233,7 +1231,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates)
 			Case "model"
 				;[Block]
 				Temp2s = ReadString(f)
-				RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), rt\Name, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
+				RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), File, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
 				;[End Block]
 			Case "mesh"
 				;[Block]
