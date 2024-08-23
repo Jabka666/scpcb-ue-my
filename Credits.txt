@@ -122,6 +122,15 @@
 		ZiYueCommentary
 		Snoe
 
+*EX-developers
+
+		Ashad Jackson ("ashadttt") 
+		C45
+		Yuri Novikov ("BayanForce")
+		Stefan Koch ("Salvage")
+		Dmitriy Sazanov ("Dmitriy-Bars")
+		Leonard Blackmore ("UnknownDev")
+
 *Development Helpers
 
 		Shaun Gaylard ("ENDSHN")
@@ -133,20 +142,14 @@
 		Levi The Boss
 		Seth Smith ("Faust")
 		Sehnor
-		Leonard Blackmore ("UnknownDev")
 		Ivan Mikhailov ("Redbull.Ivan")
 		Elan S.
-		Ashad Jackson ("ashadttt") 
 		Vladislav Borisevich ("Vane Brain")
 		Dmitry Afanasenko ("Ne4to")
 		BerkeliumΛsset
-		Dmitriy Sazanov ("Dmitriy-Bars")
-		C45
-		Stefan Koch ("Salvage")
 		Quote
 		Dreamanchik
 		Time_the_Creator
-		Yuri Novikov ("BayanForce")
 		TheHappyJammer
 		Femcube Zero
 		Kacey Roberts ("I8aDOG")
@@ -158,7 +161,7 @@
 		RhythmicReverie
 		Xstallm
 		aciu
-		"MidnightFirefly" as a wiki redactor
+		MidnightFirefly as a wiki redactor
 
 *Mod Testers
 
@@ -195,6 +198,9 @@
 
 		SCP - Containment Breach Nine Tailed Fox:
 		https://store.steampowered.com/app/1304510/SCP_NineTailed_Fox/
+
+		SCP - Containment Breach Director's Cut mod for "SCP - Containment Breach":
+		https://www.moddb.com/mods/scp-containment-breach-directors-cut-edition
 
 *The game is based on the works of the SCP Foundation community.
 
