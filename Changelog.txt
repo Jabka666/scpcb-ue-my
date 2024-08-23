@@ -101,6 +101,7 @@ v1.3
 - Increased attack hit distance of SCP-049-2 and SCP-008-1.
 - Reduced the accuracy of the Gate B guard.
 - Nerfed teleportations on aggressive NPCs mode.
+- SCP-106 corrodes doors when walking through them.
 
 - Reworked SCP-966
 	- Lowered the spawnrate of SCP-966s. Original spawnrate with «SelectedDifficulty\AggressiveNPCs» enabled.
@@ -141,6 +142,7 @@ v1.3
 - Fixed MAV at Gate B area.
 - Fixed being able to blink when dead.
 - Fixed player contstantly moving forward when grabbed by SCP-106.
+- Fixed SCP-970 having items go into the ground and not be interactable.
 
 [Known issues]
 - Cups crash the game sometimes.
