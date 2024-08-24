@@ -8740,7 +8740,6 @@ Function Update008%()
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
-					MakeMeUnplayable()
 					PointEntity(Camera, PlayerRoom\NPC[0]\Collider)
 					
 					If PrevI008Timer < 94.7

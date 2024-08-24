@@ -1,7 +1,7 @@
 Const SavePath$ = "Saves\"
 
 Function SaveGame%(File$)
-	If (Not me\Playable) Lor me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
+	If me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player can't move at all
 	
 	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
 	
@@ -2188,7 +2188,7 @@ Global CanSave%
 Function UpdateSaveState%()
 	If SelectedDifficulty\SaveType <> NO_SAVES
 		CanSave = 3
-		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Then CanSave = 0
+		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Lor (Not me\Playable) Then CanSave = 0
 	EndIf
 End Function
 
