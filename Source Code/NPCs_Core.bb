@@ -885,6 +885,9 @@ Function UpdateNPCs%()
 							If forest_event\EventState = 1.0 Then Spawn106 = False
 						EndIf
 					EndIf
+					If skull_event <> Null
+						If skull_event\EventState > 0.0 Then Spawn106 = False
+					EndIf
 					; ~ Gate A event has been triggered. Don't make SCP-106 disappear!
 					; ~ The reason why this is a seperate for loop is because we need to make sure that cont2_860_1 would not be able to overwrite the "Spawn106" variable
 					For e.Events = Each Events
