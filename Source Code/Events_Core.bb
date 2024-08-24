@@ -2342,9 +2342,17 @@ Function UpdateEvents%()
 										If wi\NightVision > 0 Then me\CameraFogDist = 6.0 : wi\NightVision = 0
 										If wi\SCRAMBLE > 0 Then me\CameraFogDist = 6.0 : wi\SCRAMBLE = 0
 										
-										me\DropSpeed = 0.0 : me\BlinkTimer = -10.0 : I_008\Timer = 0.0 : I_409\Timer = 0.0 : me\FallTimer = 0.0
-										
 										me\Zombie = True
+										
+										If SelectedDifficulty\SaveType => SAVE_ON_QUIT
+											DeleteGame(CurrSave)
+											GameSaved = False
+											LoadSavedGames()
+										EndIf
+										
+										msg\DeathMsg = GetLocalString("death", "0492")
+										
+										me\DropSpeed = 0.0 : me\BlinkTimer = -10.0 : I_008\Timer = 0.0 : I_409\Timer = 0.0 : me\FallTimer = 0.0
 										
 										PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
 										ResetEntity(e\room\NPC[0]\Collider)

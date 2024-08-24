@@ -7433,7 +7433,7 @@ Function UpdateMenu%()
 		Else
 			y = y + (10 * MenuScale)
 			
-			If (Not me\Terminated) Lor me\SelectedEnding <> - 1
+			If (Not (me\Terminated Lor me\Zombie)) Lor me\SelectedEnding <> -1
 				y = y + (75 * MenuScale)
 				
 				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "resume"), Font_Default_Big, True)
@@ -7619,7 +7619,7 @@ Function RenderMenu%()
 			EndIf
 		ElseIf igm\QuitMenu > 0
 			TempStr = GetLocalString("menu", "quit?")
-		ElseIf (Not me\Terminated) Lor me\SelectedEnding <> -1
+		ElseIf (Not (me\Terminated Lor me\Zombie)) Lor me\SelectedEnding <> -1
 			TempStr = GetLocalString("menu", "paused")
 		Else
 			TempStr = GetLocalString("menu", "died")
@@ -8012,7 +8012,7 @@ Function RenderMenu%()
 			EndIf
 			TextEx(x, y + (40 * MenuScale), TempStr)
 			
-			If me\Terminated And me\SelectedEnding = -1
+			If (me\Terminated Lor me\Zombie) And me\SelectedEnding = -1
 				y = y + (175 * MenuScale)
 				If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then y = y + (75 * MenuScale)
 				SetFontEx(fo\FontID[Font_Default])
@@ -8689,9 +8689,16 @@ Function Update008%()
 				ElseIf I_008\Timer >= 91.5
 					If PrevI008Timer < 91.5 Then PlaySound_Strict(LoadTempSound("SFX\Character\D9341\Infected.ogg"), True)
 					me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
-					me\Zombie = True : MakeMeUnplayable()
+					MakeMeUnplayable()
 					If I_008\Timer >= 92.7 And PrevI008Timer < 92.7
 						If TeleportForInfect
+							me\Zombie = True
+							msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
+							If SelectedDifficulty\SaveType => SAVE_ON_QUIT
+								DeleteGame(CurrSave)
+								GameSaved = False
+								LoadSavedGames()
+							EndIf
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = r_cont2_008
 									PositionEntity(me\Collider, EntityX(r\Objects[7], True), EntityY(r\Objects[7], True), EntityZ(r\Objects[7], True), True)
