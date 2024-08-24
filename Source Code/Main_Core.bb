@@ -3274,22 +3274,22 @@ Function UpdateGUI%()
 	EndIf
 	
 	If I_294\Using Then Update294()
-	If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
-		If d_I\ClosestButton <> 0
-			If mo\MouseUp1
-				mo\MouseUp1 = False
-				If d_I\ClosestDoor <> Null
-					If d_I\ClosestDoor\Code <> 0
-						d_I\SelectedDoor = d_I\ClosestDoor
-					ElseIf me\Playable
-						UseDoor()
+	If (Not (MenuOpen Lor me\Terminated Lor ConsoleOpen))
+		If (Not (InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null))
+			If d_I\ClosestButton <> 0
+				If mo\MouseUp1
+					mo\MouseUp1 = False
+					If d_I\ClosestDoor <> Null
+						If d_I\ClosestDoor\Code <> 0
+							d_I\SelectedDoor = d_I\ClosestDoor
+						ElseIf me\Playable
+							UseDoor()
+						EndIf
 					EndIf
 				EndIf
 			EndIf
 		EndIf
-	EndIf
 	
-	If (Not (MenuOpen Lor me\Terminated))
 		If SelectedScreen <> Null
 			If mo\MouseUp1 Lor mo\MouseHit2 Then
 				FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
@@ -6924,7 +6924,7 @@ Function UpdateMenu%()
 	Local z%, i%
 	
 	If MenuOpen
-		If (Not IsPlayerOutsideFacility()) And (Not me\Terminated)
+		If (Not (IsPlayerOutsideFacility() Lor me\Terminated Lor me\Zombie))
 			If me\StopHidingTimer = 0.0
 				If (EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 0.64 And n_I\Curr173\Idle < 2) Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 0.64 Lor (n_I\Curr049 <> Null And EntityDistanceSquared(n_I\Curr049\Collider, me\Collider) < 0.64) And (n_I\Curr066 <> Null And EntityDistanceSquared(n_I\Curr066\Collider, me\Collider) < 0.64) And (n_I\Curr096 <> Null And EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < 0.64) Then me\StopHidingTimer = 1.0
 			ElseIf me\StopHidingTimer < Rnd(120.0, 240.0)
