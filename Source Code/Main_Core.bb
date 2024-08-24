@@ -2640,7 +2640,7 @@ Function UpdateMoving%()
 					
 					Temp = (me\Shake Mod 360.0)
 					
-					If me\Playable Then me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
+					me\Shake = ((me\Shake + fps\Factor[0] * Min(Sprint, 1.5) * 7.0) Mod 720.0)
 					If Temp < 180.0 And (me\Shake Mod 360.0) >= 180.0 Then PlayStepSound(Sprint = 2.5)
 				EndIf
 				If KeyHit(key\CROUCH) And (Not me\Zombie) And me\Bloodloss < 60.0 And I_427\Timer < 70.0 * 390.0 And (SelectedItem = Null Lor (SelectedItem\ItemTemplate\ID <> it_firstaid And SelectedItem\ItemTemplate\ID <> it_finefirstaid And SelectedItem\ItemTemplate\ID <> it_firstaid2)) Then SetCrouch((Not me\Crouch))
