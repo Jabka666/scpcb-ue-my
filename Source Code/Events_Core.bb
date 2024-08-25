@@ -3745,9 +3745,11 @@ Function UpdateEvents%()
 							e\EventState = e\EventState + fps\Factor[0]
 							If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4
 								me\BigCameraShake = 7.4 - (e\EventState / 70.0)
+								TempLightVolume = 0.6
 								RemoveNPC(e\room\NPC[0])
 							ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
 								me\BigCameraShake = 10.6 - (e\EventState / 70.0)
+								TempLightVolume = 0.6
 							ElseIf e\EventState >= 70.0 * 13.0 And (Not ChannelPlaying(e\SoundCHN))
 								For i = 0 To 1
 									EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[i], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
