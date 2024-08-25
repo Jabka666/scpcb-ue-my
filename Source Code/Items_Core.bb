@@ -1739,7 +1739,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							RoomsFound = RoomsFound + r\Found
 						EndIf
 					Next
-					If Rand(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))
+					If Rand(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1)) = 1
 						it2.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, x, y, z)
 					Else
 						it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
