@@ -3940,6 +3940,8 @@ Function UpdateDecals%()
 							DecalStep = 1
 							me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, Max(100.0 - (Sqr(ActualSize - Dist)) * 15.0, 1.0))
 							me\CrouchState = Max(me\CrouchState, (ActualSize - Dist) / 2.0)
+						Else
+							DustParticleChance = Max(DustParticleChance - 10, 10)
 						EndIf
 						;[End Block]
 					Case 2, 3, 4, 5, 6, 7, 16, 17, 18, 20

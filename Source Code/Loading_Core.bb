@@ -282,12 +282,12 @@ Function LoadParticles%()
 	ParticleEffect[12] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[12], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[12], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[12], 100, 120)
+	SetTemplateParticleLifeTime(ParticleEffect[12], 100, 130)
 	SetTemplateMaxParticles(ParticleEffect[12], 100)
 	SetTemplateTexture(ParticleEffect[12], PARTICLE_DUST)
-	SetTemplateOffset(ParticleEffect[12], -0.5, 0.5, -0.05, 0.05, -0.5, 0.5)
+	SetTemplateOffset(ParticleEffect[12], -0.55, 0.55, -0.1, 0.3, -0.55, 0.55)
 	SetTemplateVelocity(ParticleEffect[12], -0.001, 0.001, -0.001, 0.001, -0.001, 0.001)
-	SetTemplateSize(ParticleEffect[12], 0.0018, 0.0018, 1.0, 1.2)
+	SetTemplateSize(ParticleEffect[12], 0.0018, 0.0018, 1.0, 1.25)
 	SetTemplateAlphaVel(ParticleEffect[12], True)
 	
 	; ~ A simple flash particle
@@ -3064,6 +3064,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	RemoveDecalInstances()
 	ParticleCam = 0
 	FreeEntity(ParticlePiv) : ParticlePiv = 0
+	DustParticleChance = 0
 	For emit.Emitter = Each Emitter
 		FreeEmitter(emit, True)
 	Next
