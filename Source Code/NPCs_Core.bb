@@ -595,7 +595,7 @@ Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints, emit.Emitter
-	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, Visible%
+	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, Visible%, Tex%
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
 	Local SinValue#, SqrValue#
 	Local DifficultyDMGMult#
@@ -4996,6 +4996,15 @@ Function UpdateNPCs%()
 							RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
 							p\AlphaChange = -Rnd(0.02, 0.03)
 						Next
+						
+						Pvt = CreatePivot()
+						PositionEntity(Pvt, EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
+						TurnEntity(Pvt, 90.0, 0.0, 0.0)
+						If EntityPick(Pvt, 0.3)
+							de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
+							de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+						EndIf
+						
 						n\GravityMult = 0.0
 						;[End Block]
 					Case NPCTypeGuard
