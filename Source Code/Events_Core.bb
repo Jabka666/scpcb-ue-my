@@ -5043,11 +5043,12 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room3_hcz_1048
 				;[Block]
-				If PlayerRoom = e\room
+				If e\room\Dist < 5.0
 					If e\EventState = 0.0
 						TFormPoint(704.0, 132.0, -416.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCType1048, TFormedX(), TFormedY(), TFormedZ())
 						e\room\NPC[0]\State = 3.0
+						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 						
 						Local DrawingName$ = "drawing_1048(" + Rand(25) + ").png"
 						
