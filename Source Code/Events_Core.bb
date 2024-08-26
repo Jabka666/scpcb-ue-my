@@ -5049,6 +5049,7 @@ Function UpdateEvents%()
 						e\room\NPC[0] = CreateNPC(NPCType1048, TFormedX(), TFormedY(), TFormedZ())
 						e\room\NPC[0]\State = 3.0
 						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+						SetNPCFrame(e\room\NPC[0], 326.0)
 						
 						Local DrawingName$ = "drawing_1048(" + Rand(25) + ").png"
 						

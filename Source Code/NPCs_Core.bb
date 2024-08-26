@@ -2790,14 +2790,18 @@ Function UpdateNPCs%()
 						If Visible And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 							PointEntity(n\Collider, me\Collider)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+							n\State2 = 1.0
 						EndIf
+						
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 						
-						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-						If n\Frame < 474.0
-							AnimateNPC(n, 326.0, 474.0, n\Speed, False)
-						Else
-							AnimateNPC(n, 475.0, 623.0, n\Speed)
+						If n\State2 = 1.0
+							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+							If n\Frame < 474.0
+								AnimateNPC(n, 326.0, 474.0, n\Speed, False)
+							Else
+								AnimateNPC(n, 475.0, 623.0, n\Speed)
+							EndIf
 						EndIf
 						;[End Block]
 				End Select
