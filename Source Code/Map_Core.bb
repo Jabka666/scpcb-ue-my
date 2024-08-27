@@ -5514,10 +5514,10 @@ Function CreateMap%()
 	
 	MapRoom(ROOM1, 0) = "cont1_173"
 	
-	SetRoom("cont1_205", ROOM1, Floor(0.15 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_005", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("room1_storage", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_914", ROOM1, Floor(0.65 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("cont1_005", ROOM1, Floor(0.15 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("room1_storage", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("cont1_914", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom("cont1_205", ROOM1, Floor(0.65 * Float(Room1Amount[0])), MinPos, MaxPos)
 	
 	MinPos = 1
 	MaxPos = Room2Amount[0] - 1
