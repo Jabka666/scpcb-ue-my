@@ -29,7 +29,7 @@ End Type
 Type Emitter
 	Field LoopAmount#, Age#, MaxTime#
 	Field tmp.Template
-	Field ID%
+	Field ParticleID%, EmitterID%
 	Field Owner%, Ent%, Surf%
 	Field Del%
 	Field room.Rooms
@@ -252,13 +252,13 @@ Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
 	tmp\YawFix = YawFix
 End Function
 
-Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ID%)
+Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	Local emit.Emitter
 	Local i%
 	
 	emit.Emitter = New Emitter
 	emit\room = room
-	emit\ID = ID
+	emit\ParticleID = ParticleID
 	
 	emit\Owner = CreatePivot()
 	PositionEntity(emit\Owner, x, y, z)
@@ -267,13 +267,46 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ID%)
 	emit\Ent = CreateMesh()
 	emit\Surf = CreateSurface(emit\Ent)
 	
-	emit\tmp = Object.Template(ParticleEffect[ID])
+	emit\tmp = Object.Template(ParticleEffect[ParticleID])
 	emit\MaxTime = emit\tmp\EmitterMaxTime
 	EntityBlend(emit\Ent, emit\tmp\EmitterBlend)
 	EntityFX(emit\Ent, 1 + 2 + 32)
 	If emit\tmp\Tex <> 0 Then EntityTexture(emit\Ent, emit\tmp\Tex)
 	
+	emit\EmitterID = 0
+	emit\EmitterID = FindFreeEmitterID()
+	
 	Return(emit)
+End Function
+
+Function FindFreeEmitterID%()
+	Local emit2.Emitter
+	Local ID% = 1
+	
+	While True
+		Local Taken% = False
+		
+		For emit2.Emitter = Each Emitter
+			If emit2\EmitterID = ID
+				Taken = True
+				Exit
+			EndIf
+		Next
+		If (Not Taken) Then Return(ID)
+		ID = ID + 1
+	Wend
+End Function
+
+Function ForceSetEmitterID%(emit.Emitter, NewID%)
+	Local emit2.Emitter
+	
+	emit\EmitterID = NewID
+	
+	For emit2.Emitter = Each Emitter
+		If emit2 <> emit
+			If emit2\EmitterID = NewID Then emit2\EmitterID = FindFreeEmitterID()
+		EndIf
+	Next
 End Function
 
 Function FreeEmitter%(emit.Emitter, DeleteParticles% = False)

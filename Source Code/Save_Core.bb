@@ -257,6 +257,22 @@ Function SaveGame%(File$)
 	WriteFloat(f, bk\x)
 	WriteFloat(f, bk\z)
 	
+	Temp = 0
+	For emit.Emitter = Each Emitter
+		Temp = Temp + 1
+	Next
+	WriteInt(f, Temp)
+	For emit.Emitter = Each Emitter
+		WriteFloat(f, EntityX(emit\Owner, True))
+		WriteFloat(f, EntityY(emit\Owner, True))
+		WriteFloat(f, EntityZ(emit\Owner, True))
+		
+		WriteInt(f, emit\ParticleID)
+		WriteByte(f, emit\State)
+		
+		WriteInt(f, emit\EmitterID)
+	Next
+	
 	WriteByte(f, I_Zone\Transition[0])
 	WriteByte(f, I_Zone\Transition[1])
 	WriteByte(f, I_Zone\HasCustomForest)
@@ -295,6 +311,14 @@ Function SaveGame%(File$)
 			EndIf
 		Next
 		
+		For i = 0 To MaxRoomEmitters - 1
+			If r\RoomEmitters[i] = Null
+				WriteInt(f, 0)
+			Else
+				WriteInt(f, r\RoomEmitters[i]\EmitterID)
+			EndIf
+		Next
+		
 		If r\mt = Null ; ~ This room doesn't have a grid
 			WriteByte(f, 0)
 		Else ; ~ This room has a grid
@@ -326,25 +350,18 @@ Function SaveGame%(File$)
 		EndIf
 	Next
 	
-	WriteInt(f, 954)
-	
-	Temp = 0
 	For emit.Emitter = Each Emitter
-		Temp = Temp + 1
-	Next
-	WriteInt(f, Temp)
-	For emit.Emitter = Each Emitter
-		WriteFloat(f, EntityX(emit\Owner, True))
-		WriteFloat(f, EntityY(emit\Owner, True))
-		WriteFloat(f, EntityZ(emit\Owner, True))
-		
-		WriteInt(f, emit\ID)
-		WriteByte(f, emit\State)
-		
 		For r.Rooms = Each Rooms
-			WriteByte(f, emit\room = r)
+			If emit\room = r
+				WriteByte(f, 1)
+				Exit
+			Else
+				WriteByte(f, 0)
+			EndIf
 		Next
 	Next
+	
+	WriteInt(f, 954)
 	
 	Temp = 0
 	For d.Doors = Each Doors
@@ -823,6 +840,25 @@ Function LoadGame%(File$)
 	bk\x = ReadFloat(f)
 	bk\z = ReadFloat(f)
 	
+	For emit.Emitter = Each Emitter
+		FreeEmitter(emit, True)
+	Next
+	
+	Temp = ReadInt(f)
+	For i = 1 To Temp
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		
+		ID = ReadInt(f)
+		
+		Local Temp2% = ReadByte(f)
+		
+		emit.Emitter = SetEmitter(Null, x, y, z, ID)
+		emit\State = Temp2
+		ForceSetEmitterID(emit, ReadInt(f))
+	Next
+	
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
 	I_Zone\HasCustomForest = ReadByte(f)
@@ -840,7 +876,7 @@ Function LoadGame%(File$)
 		Local Found% = ReadByte(f)
 		Local Level% = ReadInt(f)
 		
-		Local Temp2% = ReadByte(f)
+		Temp2 = ReadByte(f)
 		
 		Angle = WrapAngle(Angle)
 		
@@ -874,6 +910,18 @@ Function LoadGame%(File$)
 				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			ElseIf ID = 1
 				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+			EndIf
+		Next
+		
+		For x = 0 To MaxRoomEmitters - 1
+			ID = ReadInt(f)
+			If ID > 0
+				For emit.Emitter = Each Emitter
+					If emit\EmitterID = ID
+						r\RoomEmitters[x] = emit
+						Exit
+					EndIf
+				Next
 			EndIf
 		Next
 		
@@ -927,30 +975,17 @@ Function LoadGame%(File$)
 			Exit
 		EndIf
 	Next
-	
-	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
-	
 	For emit.Emitter = Each Emitter
-		FreeEmitter(emit, True)
-	Next
-	
-	; ~ TODO: r\RoomEmitters vars aren't saved
-	Temp = ReadInt(f)
-	For i = 1 To Temp
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
-		
-		ID = ReadInt(f)
-		Temp2 = ReadByte(f)
-		
 		For r.Rooms = Each Rooms
 			If ReadByte(f) = 1
-				emit.Emitter = SetEmitter(r, x, y, z, ID)
-				emit\State = Temp2
+				emit\room = r
+				EntityParent(emit\Owner, r\OBJ)
+				Exit
 			EndIf
 		Next
 	Next
+	
+	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1698,6 +1733,25 @@ Function LoadGameQuick%(File$)
 	bk\x = ReadFloat(f)
 	bk\z = ReadFloat(f)
 	
+	For emit.Emitter = Each Emitter
+		FreeEmitter(emit, True)
+	Next
+	
+	Temp = ReadInt(f)
+	For i = 1 To Temp
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		
+		ID = ReadInt(f)
+		
+		Local Temp2% = ReadByte(f)
+		
+		emit.Emitter = SetEmitter(r, x, y, z, ID)
+		emit\State = Temp2
+		ForceSetEmitterID(emit, ReadInt(f))
+	Next
+	
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
 	I_Zone\HasCustomForest = ReadByte(f)
@@ -1714,7 +1768,8 @@ Function LoadGameQuick%(File$)
 		
 		Local Found% = ReadByte(f)
 		Local Level% = ReadInt(f)
-		Local Temp2% = ReadByte(f)
+		
+		Temp2 = ReadByte(f)
 		
 		If Angle >= 360.0 Then Angle = Angle - 360.0
 		
@@ -1742,6 +1797,18 @@ Function LoadGameQuick%(File$)
 				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
 			ElseIf ID = 1
 				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+			EndIf
+		Next
+		
+		For x = 0 To MaxRoomEmitters - 1
+			ID = ReadInt(f)
+			If ID > 0
+				For emit.Emitter = Each Emitter
+					If emit\EmitterID = ID
+						r\RoomEmitters[x] = emit
+						Exit
+					EndIf
+				Next
 			EndIf
 		Next
 		
@@ -1777,28 +1844,16 @@ Function LoadGameQuick%(File$)
 			Exit
 		EndIf
 	Next
-	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
-	
 	For emit.Emitter = Each Emitter
-		FreeEmitter(emit, True)
-	Next
-	
-	Temp = ReadInt(f)
-	For i = 1 To Temp
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
-		
-		ID = ReadInt(f)
-		Temp2 = ReadByte(f)
-		
 		For r.Rooms = Each Rooms
 			If ReadByte(f) = 1
-				emit.Emitter = SetEmitter(r, x, y, z, ID)
-				emit\State = Temp2
+				emit\room = r
+				EntityParent(emit\Owner, r\OBJ)
+				Exit
 			EndIf
 		Next
 	Next
+	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Temp = ReadInt(f)
 	
