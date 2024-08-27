@@ -544,7 +544,7 @@ Function LoadGame%(File$)
 	CatchErrors("LoadGame(" + File + ")")
 	
 	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter, rt.RoomTemplates
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, Tex%, ID%
+	Local x#, y#, z#, i%, j%, Temp% = 0, Temp2% = 0, StrTemp$ = "", Tex%, ID%
 	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 	
 	me\DropSpeed = 0.0
@@ -852,7 +852,7 @@ Function LoadGame%(File$)
 		
 		ID = ReadInt(f)
 		
-		Local Temp2% = ReadByte(f)
+		Temp2 = ReadByte(f)
 		
 		emit.Emitter = SetEmitter(Null, x, y, z, ID)
 		emit\State = Temp2
@@ -892,33 +892,33 @@ Function LoadGame%(File$)
 		
 		If Temp2 = 1 Then PlayerRoom = r
 		
-		For x = 0 To MaxRoomNPCs - 1
+		For j = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
 			If ID > 0
 				For n.NPCs = Each NPCs
 					If n\ID = ID
-						r\NPC[x] = n
+						r\NPC[j] = n
 						Exit
 					EndIf
 				Next
 			EndIf
 		Next
 		
-		For x = 0 To MaxRoomLevers - 1
+		For j = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
 			If ID = 0
-				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+				RotateEntity(r\RoomLevers[j]\OBJ, 80.0, EntityYaw(r\RoomLevers[j]\OBJ), 0.0)
 			ElseIf ID = 1
-				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+				RotateEntity(r\RoomLevers[j]\OBJ, -80.0, EntityYaw(r\RoomLevers[j]\OBJ), 0.0)
 			EndIf
 		Next
 		
-		For x = 0 To MaxRoomEmitters - 1
+		For j = 0 To MaxRoomEmitters - 1
 			ID = ReadInt(f)
 			If ID > 0
 				For emit.Emitter = Each Emitter
 					If emit\EmitterID = ID
-						r\RoomEmitters[x] = emit
+						r\RoomEmitters[j] = emit
 						Exit
 					EndIf
 				Next
@@ -1413,7 +1413,7 @@ Function LoadGameQuick%(File$)
 	CatchErrors("LoadGameQuick(" + File + ")")
 	
 	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter
-	Local x#, y#, z#, i%, j%, Temp%, StrTemp$, ID%, Tex%
+	Local x#, y#, z#, i%, j%, Temp% = 0, Temp2% = 0, StrTemp$ = "", ID%, Tex%
 	Local SF%, b%, t1%
 	Local Player_X#, Player_Y#, Player_Z#
 	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
@@ -1745,7 +1745,7 @@ Function LoadGameQuick%(File$)
 		
 		ID = ReadInt(f)
 		
-		Local Temp2% = ReadByte(f)
+		Temp2 = ReadByte(f)
 		
 		emit.Emitter = SetEmitter(r, x, y, z, ID)
 		emit\State = Temp2
@@ -1779,33 +1779,33 @@ Function LoadGameQuick%(File$)
 		
 		If Temp2 = 1 Then PlayerRoom = r
 		
-		For x = 0 To MaxRoomNPCs - 1
+		For j = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
 			If ID > 0
 				For n.NPCs = Each NPCs
 					If n\ID = ID
-						r\NPC[x] = n
+						r\NPC[j] = n
 						Exit
 					EndIf
 				Next
 			EndIf
 		Next
 		
-		For x = 0 To MaxRoomLevers - 1
+		For j = 0 To MaxRoomLevers - 1
 			ID = ReadByte(f)
 			If ID = 0
-				RotateEntity(r\RoomLevers[x]\OBJ, 80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+				RotateEntity(r\RoomLevers[j]\OBJ, 80.0, EntityYaw(r\RoomLevers[j]\OBJ), 0.0)
 			ElseIf ID = 1
-				RotateEntity(r\RoomLevers[x]\OBJ, -80.0, EntityYaw(r\RoomLevers[x]\OBJ), 0.0)
+				RotateEntity(r\RoomLevers[j]\OBJ, -80.0, EntityYaw(r\RoomLevers[j]\OBJ), 0.0)
 			EndIf
 		Next
 		
-		For x = 0 To MaxRoomEmitters - 1
+		For j = 0 To MaxRoomEmitters - 1
 			ID = ReadInt(f)
 			If ID > 0
 				For emit.Emitter = Each Emitter
 					If emit\EmitterID = ID
-						r\RoomEmitters[x] = emit
+						r\RoomEmitters[j] = emit
 						Exit
 					EndIf
 				Next
@@ -1815,7 +1815,8 @@ Function LoadGameQuick%(File$)
 		If ReadByte(f) = 1 ; ~ This room has a grid
 			For y = 0 To MTGridSize - 1
 				For x = 0 To MTGridSize - 1
-					ReadByte(f) : ReadByte(f)
+					ReadByte(f)
+					ReadByte(f)
 				Next
 			Next
 		ElseIf r\mt <> Null ; ~ Remove the old grid
