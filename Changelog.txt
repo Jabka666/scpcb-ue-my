@@ -50,6 +50,7 @@ v1.3
 - Reduce stamina drain speed in pocket dimension.
 - Messages shake when low on sanity.
 - The player can lean.
+- Security cameras have a fog now.
 
 [Rooms]
 - Added Incident Report SCP-066-2 to «cont2c_066_1162_arc» observation room.
@@ -102,6 +103,7 @@ v1.3
 - Reduced the accuracy of the Gate B guard.
 - Nerfed teleportations on aggressive NPCs mode.
 - SCP-106 corrodes doors when walking through them.
+- SCP-096 can now lock doors after opening them.
 
 - Reworked SCP-966
 	- Lowered the spawnrate of SCP-966s. Original spawnrate with «SelectedDifficulty\AggressiveNPCs» enabled.
