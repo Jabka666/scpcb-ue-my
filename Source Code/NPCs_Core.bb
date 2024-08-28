@@ -4854,7 +4854,7 @@ Function UpdateNPCs%()
 									If n\Target = Null
 										If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 											PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
-											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0 + SelectedDifficulty\AggressiveNPCs, 0.0, 0.225 * DifficultyDMGMult, 0.2)
+											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.2)
 											me\CameraShake = 2.5
 											
 											If me\Injuries > 3.0
