@@ -1505,6 +1505,7 @@ Function UpdateNPCs%()
 													If (Not n\Path[n\PathLocation]\door\Open)
 														n\Path[n\PathLocation]\door\Open = True
 														n\Path[n\PathLocation]\door\FastOpen = True
+                                                                                                                n\Path[n\PathLocation]\door\Locked = True
 														If Dist < 36.0 Then me\BigCameraShake = 3.0
 														
 														emit.Emitter = SetEmitter(Null, EntityX(n\Path[n\PathLocation]\door\OBJ, True), EntityY(n\Path[n\PathLocation]\door\OBJ, True), EntityZ(n\Path[n\PathLocation]\door\OBJ, True), 16)
