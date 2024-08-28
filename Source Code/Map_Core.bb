@@ -4031,6 +4031,11 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
 		CameraRange(sc\Cam, 0.05, 8.0)
 		CameraZoom(sc\Cam, 0.8)
+		If sc\room\RoomTemplate\RoomID <> r_cont1_173_intro
+			CameraFogMode(sc\Cam, 1)
+			CameraFogRange(sc\Cam, 0.1, 6.0)
+		EndIf
+		
 		HideEntity(sc\Cam)
 	EndIf
 	
@@ -4144,6 +4149,9 @@ Function UpdateSecurityCams%()
 						If RID = r_cont1_205 Lor RID = r_cont1_173_intro
 							sc\CoffinEffect = 0
 							Temp = True
+						Else
+							CameraFogColor(sc\Cam, CurrFogColorR, CurrFogColorG, CurrFogColorB)
+							CameraClsColor(sc\Cam, CurrFogColorR, CurrFogColorG, CurrFogColorB)
 						EndIf
 						
 						If sc\State < sc\RenderInterval
