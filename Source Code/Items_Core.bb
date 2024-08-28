@@ -508,6 +508,7 @@ Function UpdateItems%()
 	Local HideDist# = PowTwo(HideDistance)
 	Local PushDist# = HideDist * 0.04
 	Local DeletedItem% = False
+	Local RandomVal# = Rnd(-0.002, 0.002)
 	
 	ClosestItem = Null
 	For i.Items = Each Items
@@ -563,15 +564,12 @@ Function UpdateItems%()
 								ed = PowTwo(xTemp) + PowTwo(zTemp)
 								If ed < 0.07 And Abs(yTemp) < 0.25
 									; ~ Items are too close together, push away
-									Local Temp# = 0.07 - ed
+									Local PushVal# = 0.07 - ed
 									
-									xTemp = xTemp * Temp
-									zTemp = zTemp * Temp
+									xTemp = xTemp * PushVal
+									zTemp = zTemp * PushVal
 									
 									While Abs(xTemp) + Abs(zTemp) < 0.001
-										; ~ No difference, can be the same for x and y
-										Local RandomVal# = Rnd(-0.002, 0.002)
-										
 										xTemp = xTemp + RandomVal
 										zTemp = zTemp + RandomVal
 									Wend
@@ -2442,4 +2440,4 @@ Function CreateRandomBattery.Items(x#, y#, z#)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS

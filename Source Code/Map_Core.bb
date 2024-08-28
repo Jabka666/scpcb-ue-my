@@ -4002,9 +4002,11 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		sc\RenderInterval = opt\SecurityCamRenderIntervalLevel
 		
 		Local Scale# = RoomScale * 1.8
+		Local MonWidth# = MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
+		Local MonHeight# = MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
 		
 		sc\ScrOBJ = CreateSprite()
-		ScaleSprite(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475)
+		ScaleSprite(sc\ScrOBJ, MonWidth, MonHeight)
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
 		RotateEntity(sc\ScrOBJ, Pitch2, Yaw2, Roll2)
 		EntityFX(sc\ScrOBJ, 17)
@@ -4014,7 +4016,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		HideEntity(sc\ScrOBJ)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
-		ScaleSprite(sc\ScrOverlay, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475)
+		ScaleSprite(sc\ScrOverlay, MonWidth, MonHeight)
 		MoveEntity(sc\ScrOverlay, 0.0, 0.0, -0.005)
 		EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 		SpriteViewMode(sc\ScrOverlay, 2)
