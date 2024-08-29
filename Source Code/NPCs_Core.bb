@@ -1426,19 +1426,19 @@ Function UpdateNPCs%()
 											If (Not chs\GodMode)
 												PlaySound_Strict(snd_I\DamageSFX[4])
 												
-												Pvt = CreatePivot()
 												me\CameraShake = 30.0
 												me\BlurTimer = 2000.0
 												msg\DeathMsg = Format(GetLocalString("death", "096"), SubjectName)
-												For i = 0 To 6
-													PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.1, 0.1), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.1, 0.1))
+												For i = 0 To 9
+													Pvt = CreatePivot()
+													PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.8, 0.8), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.8, 0.8))
 													TurnEntity(Pvt, 90.0, 0.0, 0.0)
 													EntityPick(Pvt, 0.3)
 													
-													de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.6))
+													de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.3))
 													EntityParent(de\OBJ, PlayerRoom\OBJ)
+													FreeEntity(Pvt) : Pvt = 0
 												Next
-												FreeEntity(Pvt) : Pvt = 0
 												Kill(True) : me\KillAnim = 1
 											EndIf
 										EndIf
@@ -1505,7 +1505,7 @@ Function UpdateNPCs%()
 													If (Not n\Path[n\PathLocation]\door\Open)
 														n\Path[n\PathLocation]\door\Open = True
 														n\Path[n\PathLocation]\door\FastOpen = True
-                                                                                                                n\Path[n\PathLocation]\door\Locked = True
+                                                        n\Path[n\PathLocation]\door\Locked = 1
 														If Dist < 36.0 Then me\BigCameraShake = 3.0
 														
 														emit.Emitter = SetEmitter(Null, EntityX(n\Path[n\PathLocation]\door\OBJ, True), EntityY(n\Path[n\PathLocation]\door\OBJ, True), EntityZ(n\Path[n\PathLocation]\door\OBJ, True), 16)
