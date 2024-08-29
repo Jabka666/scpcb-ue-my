@@ -1082,13 +1082,13 @@ Function UpdateEvents%()
 			Case e_cont1_106
 				;[Block]
 				; ~ EventState2: Are the magnets on
-
+				
 				If SoundTransmission
 					If (Not ChannelPlaying(e\SoundCHN2)) Then e\SoundCHN2 = PlaySound_Strict(snd_I\RadioStatic)
 				EndIf
 				
-				If ((SoundTransmission) Lor (e\EventState3 + fps\Factor[0] >= 2500)) And (e\EventState = 1.0) Then e\EventState3 = Min(e\EventState3 + fps\Factor[0], 4000.0)
-
+				If ((SoundTransmission) Lor (e\EventState3 + fps\Factor[0] >= 2500.0)) And (e\EventState = 1.0) Then e\EventState3 = Min(e\EventState3 + fps\Factor[0], 4000.0)
+				
 				If PlayerRoom = e\room
 					If e\room\NPC[0] <> Null
 						If EntityY(me\Collider) < (-6900.0) * RoomScale
@@ -1110,7 +1110,7 @@ Function UpdateEvents%()
 							EndIf
 							
 							Temp = UpdateLever(e\room\RoomLevers[1]\OBJ)
-
+							
 							If SoundTransmission <> Temp Then
 								If SoundTransmission
 									If ChannelPlaying(e\SoundCHN) 
@@ -1127,10 +1127,9 @@ Function UpdateEvents%()
 									ChannelVolume(e\SoundCHN, opt\VoiceVolume * opt\MasterVolume)
 									ChannelVolume(e\SoundCHN2, opt\VoiceVolume * opt\MasterVolume)
 								EndIf
-
 								SoundTransmission = Temp
 							EndIf
-
+							
 							If e\EventState = 0.0
 								If SoundTransmission And Rand(100) = 1
 									If (Not ChannelPlaying(e\SoundCHN))
@@ -10110,7 +10109,6 @@ Function Update035Label%(OBJ%)
 	FreeImage(S2IMapGet(AchievementsImages, "035"))
 	S2IMapSet(AchievementsImages, "035", ScaleImage2(LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png"), MenuScale, MenuScale))
 End Function
-
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

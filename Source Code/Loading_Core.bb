@@ -2401,27 +2401,17 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteAllTextures, False) ; ~ BLOOD
+	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteAllTextures, False) ; ~ FOG IN GAS MASK
 	t\OverlayID[9] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[9], 1.0, OverlayScale)
 	EntityTexture(t\OverlayID[9], Tex)
-	EntityBlend(t\OverlayID[9], 2)
+	EntityBlend(t\OverlayID[9], 3)
 	EntityFX(t\OverlayID[9], 1)
-	EntityOrder(t\OverlayID[9], -1003)
+	EntityOrder(t\OverlayID[9], -1002)
 	MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteAllTextures, False) ; ~ FOG IN GAS MASK
-	t\OverlayID[10] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[10], 1.0, OverlayScale)
-	EntityTexture(t\OverlayID[10], Tex)
-	EntityBlend(t\OverlayID[10], 3)
-	EntityFX(t\OverlayID[10], 1)
-	EntityOrder(t\OverlayID[10], -1002)
-	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-	
-	For i = 1 To 10
+	For i = 1 To 9
 		HideEntity(t\OverlayID[i])
 	Next
 	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures, False)
@@ -2537,7 +2527,7 @@ Function RemoveTextureInstances%()
 		t\OverlayTextureID[i] = 0
 	Next
 	For i = 0 To MaxOverlayIDAmount - 1
-		FreeEntity(t\OverlayID[i]) : t\OverlayID[i] = 0
+		If t\OverlayID[i] <> 0 Then FreeEntity(t\OverlayID[i]) : t\OverlayID[i] = 0
 	Next
 	Delete(t) : t = Null
 End Function
@@ -2931,6 +2921,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	ConsoleScroll = 0.0 : ConsoleScrollDragging = 0
 	ConsoleMouseMem = 0
 	ConsoleR = 0 : ConsoleG = 0 : ConsoleB = 0
+	ConsoleInBox = 0 : ConsoleInBar = 0
 	For c.ConsoleMsg = Each ConsoleMsg
 		Delete(c)
 	Next

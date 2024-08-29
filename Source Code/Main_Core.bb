@@ -528,7 +528,6 @@ Function UpdateGame%()
 					If KeyHit(key\BLINK) Then me\BlinkTimer = 0.0
 					If KeyDown(key\BLINK) And me\BlinkTimer < -10.0 Then me\BlinkTimer = -10.0
 				EndIf
-				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
 				me\KillAnimTimer = 0.0
 			EndIf
 			
@@ -697,6 +696,7 @@ Global ConsoleScroll#, ConsoleScrollDragging%
 Global ConsoleMouseMem%
 Global ConsoleReissue.ConsoleMsg = Null
 Global ConsoleR%, ConsoleG%, ConsoleB%
+Global ConsoleInBox% = False, ConsoleInBar% = False
 
 Type ConsoleMsg
 	Field Txt$
@@ -850,7 +850,7 @@ Function UpdateConsole%()
 	
 	If ConsoleOpen
 		Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, cm.ConsoleMsg, itt.ItemTemplates, rt.RoomTemplates
-		Local Tex%, Tex2%, InBar%, InBox%, Temp%, i%
+		Local Tex%, Tex2%, Temp%, i%
 		Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
 		Local CoordEx% = 15 * MenuScale
 		
@@ -871,8 +871,8 @@ Function UpdateConsole%()
 		If ScrollBarHeight > Height Then ScrollBarHeight = Height
 		If ConsoleHeight < Height Then ConsoleHeight = Height
 		
-		InBar = MouseOn(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
-		InBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
+		ConsoleInBar = MouseOn(x + Width - (26 * MenuScale), y, 26 * MenuScale, Height)
+		ConsoleInBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
 		
 		If (Not mo\MouseDown1)
 			ConsoleScrollDragging = False
@@ -883,10 +883,10 @@ Function UpdateConsole%()
 		
 		If (Not ConsoleScrollDragging)
 			If mo\MouseHit1
-				If InBox
+				If ConsoleInBox
 					ConsoleScrollDragging = True
 					ConsoleMouseMem = MousePosY
-				ElseIf InBar
+				ElseIf ConsoleInBar
 					ConsoleScroll = ConsoleScroll + ((MousePosY - (y + Height)) * ConsoleHeight / Height + HeightHalf)
 					ConsoleScroll = ConsoleScroll / 2
 				EndIf
@@ -1656,6 +1656,7 @@ Function UpdateConsole%()
 				Case "revive", "undead", "resurrect"
 					;[Block]
 					ResetNegativeStats(True)
+					If t\OverlayID[10] <> 0 Then FreeEntity(t\OverlayID[10]) : t\OverlayID[10] = 0
 					;[End Block]
 				Case "noclip", "fly"
 					;[Block]
@@ -2151,7 +2152,6 @@ Function RenderConsole%()
 	
 	If ConsoleOpen
 		Local cm.ConsoleMsg
-		Local InBar%, InBox%
 		Local x%, y%, Width%, Height%
 		Local TempStr$
 		Local CoordEx% = 26 * MenuScale
@@ -2174,15 +2174,12 @@ Function RenderConsole%()
 		ScrollBarHeight = Min((Float(Height) / Float(ConsoleHeight)) * Height, Height)
 		ConsoleHeight = Max(ConsoleHeight, Height)
 		
-		Color(50, 50, 50)
-		InBar = MouseOn(x + Width - CoordEx, y, CoordEx, Height)
-		If InBar Then Color(70, 70, 70)
+		ConsoleInBar = MouseOn(x + Width - CoordEx, y, CoordEx, Height)
+		Color(50 + (20 * ConsoleInBar), 50 + (20 * ConsoleInBar), 50 + (20 * ConsoleInBar))
 		Rect(x + Width - CoordEx, y, CoordEx, Height)
 		
-		Color(120, 120, 120)
-		InBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
-		If InBox Then Color(200, 200, 200)
-		If ConsoleScrollDragging Then Color(255, 255, 255)
+		ConsoleInBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
+		Color(120 + (80 * ConsoleInBox) + (55 * ConsoleScrollDragging), 120 + (80 * ConsoleInBox) + (55 * ConsoleScrollDragging), 120 + (80 * ConsoleInBox) + (55 * ConsoleScrollDragging))
 		Rect(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
 		
 		Color(255, 255, 255)
@@ -2337,16 +2334,11 @@ End Function
 Function UpdateHintMessages%()
 	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
-	Local Width = StringWidth(msg\HintTxt) + (20 * MenuScale)
 	Local Height% = 30 * MenuScale
 	
 	If msg\HintTxt <> ""
 		If msg\HintTimer > 0.0
-			If msg\HintY < Height
-				msg\HintY = Min(msg\HintY + (2.0 * fps\Factor[0]), Height)
-			Else
-				msg\HintY = Height
-			EndIf
+			msg\HintY = Min(msg\HintY + (2.0 * fps\Factor[0]), Height)
 			msg\HintTimer = msg\HintTimer - fps\Factor[0]
 		Else
 			If msg\HintY > 0.0
@@ -2385,10 +2377,28 @@ Function Kill%(IsBloody% = False)
 		Local de.Decals
 		
 		If IsBloody
-			If EntityHidden(t\OverlayID[9]) Then ShowEntity(t\OverlayID[9])
+			Local Tex% = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteMapTextures, False)
+			
+			t\OverlayID[10] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[10], 1.0, GraphicHeightFloat / GraphicWidthFloat)
+			EntityTexture(t\OverlayID[10], Tex)
+			EntityBlend(t\OverlayID[10], 2)
+			EntityFX(t\OverlayID[10], 1)
+			EntityOrder(t\OverlayID[10], -1003)
+			MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+			
+			Local Pvt% = CreatePivot()
+			
+			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.8, 0.8), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.8, 0.8))
+			TurnEntity(Pvt, 90.0, 0.0, 0.0)
+			EntityPick(Pvt, 0.3)
+			
 			de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
 			de\SizeChange = 0.0025
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
+			
+			FreeEntity(Pvt) : Pvt = 0
 		EndIf
 		
 		me\KillAnim = Rand(0, 1) : me\ForceMove = 0.0
@@ -2399,11 +2409,12 @@ Function Kill%(IsBloody% = False)
 			LoadSavedGames()
 		EndIf
 		
-		me\Terminated = True
 		ShowEntity(me\Head)
 		PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
 		ResetEntity(me\Head)
 		RotateEntity(me\Head, 0.0, EntityYaw(Camera), 0.0)
+		
+		me\Terminated = True
 	EndIf
 End Function
 
@@ -2743,7 +2754,6 @@ Function UpdateMoving%()
 				TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
 			EndIf
 			
-			
 			Local CollidedFloor% = False
 			Local CollCount% = CountCollisions(me\Collider)
 			
@@ -2976,10 +2986,10 @@ Function UpdateMouseLook%()
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 			EndIf
 			If wi\GasMaskFogTimer > 0.0
-				EntityAlpha(t\OverlayID[10], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
-				If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
+				EntityAlpha(t\OverlayID[9], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
+				If EntityHidden(t\OverlayID[9]) Then ShowEntity(t\OverlayID[9])
 			Else
-				If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
+				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
 			EndIf
 		EndIf
 	Else
@@ -2987,7 +2997,7 @@ Function UpdateMouseLook%()
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
 		If (Not EntityHidden(t\OverlayID[2])) Then HideEntity(t\OverlayID[2])
-		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
+		If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
 	EndIf
 	
 	If wi\BallisticHelmet
@@ -6809,7 +6819,7 @@ Function RenderGUI%()
 							y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 							
 							Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
-							If (MilliSec Mod 800) < 200 ; ~ TODO: FIND THE WAY TO GET RID OF MILLISECS
+							If (MilliSec Mod 800) < 200
 								If Offline Then TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), GetLocalString("msg", "nav.data"))
 								
 								YawValue = EntityYaw(me\Collider) - 90.0
@@ -7451,6 +7461,7 @@ Function UpdateMenu%()
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
+							If t\OverlayID[10] <> 0 Then FreeEntity(t\OverlayID[10]) : t\OverlayID[10] = 0
 							KillSounds()
 							LoadGameQuick(CurrSave\Name)
 							
@@ -7521,6 +7532,7 @@ Function UpdateMenu%()
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
+							If t\OverlayID[10] <> 0 Then FreeEntity(t\OverlayID[10]) : t\OverlayID[10] = 0
 							KillSounds()
 							LoadGameQuick(CurrSave\Name)
 							
