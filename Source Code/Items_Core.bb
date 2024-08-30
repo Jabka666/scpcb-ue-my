@@ -328,7 +328,6 @@ Type Items
 	Field State#, State2#, State3#
 	Field Picked%, Dropped%
 	Field InvImg%
-	Field xSpeed#, zSpeed#
 	Field SecondInv.Items[20]
 	Field ID%
 	Field InvSlots%
@@ -533,23 +532,17 @@ Function UpdateItems%()
 				
 				If EntityCollided(i\Collider, HIT_MAP)
 					i\DropSpeed = 0.0
-					i\xSpeed = 0.0
-					i\zSpeed = 0.0
 				Else
 					If ShouldEntitiesFall
-						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -10.0, 0.0)
+						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -3.0, 0.0)
 						If Pick
-							i\DropSpeed = i\DropSpeed - (0.0004 * fps\Factor[0])
-							TranslateEntity(i\Collider, i\xSpeed * fps\Factor[0], i\DropSpeed * fps\Factor[0], i\zSpeed * fps\Factor[0])
+							i\DropSpeed = Max(i\DropSpeed - 0.0004 * fps\Factor[0], -0.03)
+							TranslateEntity(i\Collider, 0.0, i\DropSpeed * fps\Factor[0], 0.0)
 						Else
 							i\DropSpeed = 0.0
-							i\xSpeed = 0.0
-							i\zSpeed = 0.0
 						EndIf
 					Else
 						i\DropSpeed = 0.0
-						i\xSpeed = 0.0
-						i\zSpeed = 0.0
 					EndIf
 				EndIf
 				
@@ -587,11 +580,10 @@ Function UpdateItems%()
 				EndIf
 			Else
 				If (Not EntityHidden(i\Collider)) Then HideEntity(i\Collider)
+				i\DropSpeed = 0.0
 			EndIf
 		Else
 			i\DropSpeed = 0.0
-			i\xSpeed = 0.0
-			i\zSpeed = 0.0
 		EndIf
 		
 		If (Not DeletedItem)
@@ -2440,4 +2432,4 @@ Function CreateRandomBattery.Items(x#, y#, z#)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS

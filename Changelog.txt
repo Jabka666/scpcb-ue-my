@@ -145,11 +145,10 @@ v1.3
 - Fixed being able to blink when dead.
 - Fixed player contstantly moving forward when grabbed by SCP-106.
 - Fixed SCP-970 having items go into the ground and not be interactable.
+- Fixed an issue where items would fall through the Maintenance Tunnel meshes.
 
 [Known issues]
 - Cups crash the game sometimes.
-- Objects aren't properly hidden on new games.
-- SCP-500-01 may not spawn correctly in Maintenance tunnels.
 - PD teleport points don't work sometimes.
 
 v1.2.1
