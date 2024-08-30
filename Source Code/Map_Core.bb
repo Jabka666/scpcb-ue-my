@@ -5550,7 +5550,7 @@ Function CreateMap%()
 	MapRoom(ROOM3, Floor(Rnd(0.2, 0.6) * Float(Room3Amount[0]))) = "room3_storage"
 	MapRoom(ROOM3, Floor(0.8 * Float(Room3Amount[0]))) = "cont3_372"
 	
-	MapRoom(ROOM4, Floor(0.3 * Float(Room4Amount[0]))) = "room4_ic"
+	SetRoom("room4_ic", ROOM4, Floor(0.3 * Float(Room4Amount[0])), MinPos, MaxPos)
 	
 	; ~ [HEAVY CONTAINMENT ZONE]
 	
