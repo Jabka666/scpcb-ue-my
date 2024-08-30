@@ -610,10 +610,8 @@ Function TextEx%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 		EndIf
 		Text(x + CoordEx, y + TextOffset + CoordEx, Txt, AlignX, AlignY)
 		Color(ColorR, ColorG, ColorB)
-		Text(x, y + TextOffset, Txt, AlignX, AlignY)
-	Else
-		Text(x, y + TextOffset, Txt, AlignX, AlignY)
 	EndIf
+	Text(x, y + TextOffset, Txt, AlignX, AlignY)
 End Function
 
 Function GetRescaledTexture%(Texture$, Flags%, Width%, Height%, Brush% = False)
