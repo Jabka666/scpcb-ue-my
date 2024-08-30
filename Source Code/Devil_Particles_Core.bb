@@ -48,7 +48,7 @@ End Type
 
 Global ParticleCam%
 Global ParticlePiv%
-Global ParticleEffect%[19]
+Global ParticleEffect%[20]
 Global UpdateDevilParticlesTimer# = 0.0
 
 Function CreateTemplate()
@@ -438,9 +438,19 @@ Function UpdateParticles_Devil()
 				p\Rot = p\Rot + p\RotVel
 			EndIf
 			p\YV = p\YV - p\emitter\tmp\Gravity
-			p\x = p\x + p\XV
-			p\y = p\y + p\YV
-			p\z = p\z + p\ZV
+			If p\emitter\room <> Null
+				Local RoomYaw# = EntityYaw(p\emitter\room\OBJ)
+				Local SinValue# = Sin(RoomYaw)
+				Local CosValue# = Cos(RoomYaw)
+				
+				p\x = p\x + (p\XV * CosValue + p\ZV * SinValue)
+				p\y = p\y + p\YV
+				p\z = p\z + (p\XV * SinValue + p\ZV * CosValue)
+			Else
+				p\x = p\x + p\XV
+				p\y = p\y + p\YV
+				p\z = p\z + p\ZV
+			EndIf
 			
 			Local Bounce% = False
 			

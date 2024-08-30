@@ -767,7 +767,7 @@ Function FillRoom%(r.Rooms)
 					ScaleEntity(r\Objects[1], (204.0 * RoomScale) / MeshWidth(r\Objects[1]), 313.0 * RoomScale / MeshHeight(r\Objects[1]), 16.0 * RoomScale / MeshDepth(r\Objects[1]))
 					EntityType(r\Objects[1], HIT_MAP)
 					PositionEntity(r\Objects[1], r\x + 336.0 * RoomScale, r\y, r\z + 461.0 * RoomScale)
-					RotateEntity(r\Objects[1], 0.0, 180.0 + 180.0, 0.0)
+					RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
 					EntityParent(r\Objects[1], r\OBJ)
 					MoveEntity(r\Objects[1], 120.0, 0.0, 5.0)
 					
@@ -1723,9 +1723,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[15], r\x - 456.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 3023.0 * RoomScale)
 			EntityParent(r\Objects[15], r\OBJ)
 			
-			; ~ TODO: FIND A WAY TO ROTATE PARTICLES/EMITTER
-			;emit.Emitter = SetEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 6)
-			;emit\State = 1
+			emit.Emitter = SetEmitter(r, r\x + 5245.0 * RoomScale, r\y - 5584.0 * RoomScale, r\z - 575.0 * RoomScale, 6)
+			emit\State = 1
 			
 			Select Rand(3)
 				Case 1

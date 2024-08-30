@@ -2445,18 +2445,9 @@ Function UpdateEvents%()
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
 							If Rand(50) = 1
-								If snd_I\SparkShortSFX = 0 Then snd_I\SparkShortSFX = LoadSound_Strict("SFX\Room\SparkShort.ogg")
-								
+								SetTemplateVelocity(ParticleEffect[19], -0.007, 0.008, -0.001, 0.0012, -0.007, -0.008)
+								SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
 								PlaySound2(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
-								
-								If opt\ParticleAmount > 0
-									For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
-										p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.002, 0.0, 25.0)
-										p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\AlphaChange = -0.05
-										RotateEntity(p\Pvt, Rnd(-20.0, 0.0), e\room\Angle, 0.0)
-										ScaleSprite(p\OBJ, p\Size, p\Size)
-									Next
-								EndIf
 							EndIf
 						EndIf
 					EndIf
@@ -6592,17 +6583,9 @@ Function UpdateEvents%()
 					
 					If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 25.0
 						If Rand(50) = 1
-							If snd_I\SparkShortSFX = 0 Then snd_I\SparkShortSFX = LoadSound_Strict("SFX\Room\SparkShort.ogg")
+							SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
+							SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 19)
 							PlaySound2(snd_I\SparkShortSFX, Camera, e\room\Objects[0], 3.0, 0.4)
-							
-							If opt\ParticleAmount > 0
-								For i = 0 To (2 + (1 * (opt\ParticleAmount - 1)))
-									p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 0.002, 0.0, 25.0)
-									p\Speed = Rnd(0.005, 0.03) : p\Size = Rnd(0.005, 0.0075) : p\AlphaChange = -0.05
-									RotateEntity(p\Pvt, Rnd(-20.0, 0.0), e\room\Angle + 90.0, 0.0)
-									ScaleSprite(p\OBJ, p\Size, p\Size)
-								Next
-							EndIf
 						EndIf
 					EndIf
 				EndIf
@@ -6642,29 +6625,14 @@ Function UpdateEvents%()
 					Else
 						If e\EventState < 70.0 * 7.0
 							e\EventState = e\EventState + fps\Factor[0]
-							e\room\RoomDoors[0]\Open = False
-							e\room\RoomDoors[1]\Open = False
+							If e\room\RoomDoors[0]\Locked = 0 Then e\room\RoomDoors[0]\Open = False
+							If e\room\RoomDoors[1]\Locked = 0 Then e\room\RoomDoors[1]\Open = False
 							If e\EventState < 70.0
 								If BrokenDoor
-									Pvt = CreatePivot()
-									
-									Local d_Ent% = e\room\Objects[1]
-									
-									PositionEntity(Pvt, EntityX(d_Ent, True), EntityY(d_Ent, True) + Rnd(0.0, 0.05), EntityZ(d_Ent, True))
-									RotateEntity(Pvt, 0.0, EntityYaw(d_Ent, True) + 90.0, 0.0)
-									MoveEntity(Pvt, 0.0, 0.0, 0.2)
-									
-									If opt\ParticleAmount > 0
-										For i = 0 To (1 + (2 * (opt\ParticleAmount - 1)))
-											p.Particles = CreateParticle(PARTICLE_SPARK, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.002, 0.0, 25.0)
-											p\Speed = Rnd(0.01, 0.05) : p\Size = 0.0075 : p\AlphaChange = -0.05
-											RotateEntity(p\Pvt, Rnd(-45.0, 0.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0.0)
-											ScaleSprite(p\OBJ, p\Size, p\Size)
-										Next
-									EndIf
-									FreeEntity(Pvt) : Pvt = 0
+									If e\room\RoomEmitters[2] = Null Then e\room\RoomEmitters[2] = SetEmitter(e\room, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 16)
 								EndIf
 							ElseIf e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 6.0
+								If e\room\RoomEmitters[2] <> Null Then FreeEmitter(e\room\RoomEmitters[2])
 								For i = 0 To 1
 									If e\room\RoomEmitters[i] = Null
 										Temp = (e\room\RoomTemplate\RoomID = r_room3_gw)
