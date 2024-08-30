@@ -159,6 +159,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = GetLocalString("npc", "human")
 			n\Speed = IniGetFloat(NPCsFile, "MTF", "Speed") / 100.0
 			n\HP = 100
+			n\MaxGravity = 0.03
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -5175,8 +5176,6 @@ Function UpdateMTFUnit%(n.NPCs)
 		If n = n_I\MTFLeader Then n_I\MTFLeader = Null
 	Else
 		If n_I\MTFLeader = Null Then n_I\MTFLeader = n
-		
-		n\MaxGravity = 0.03
 		
 		UpdateNPCBlinking(n)
 		

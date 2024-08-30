@@ -4849,18 +4849,13 @@ Function UpdateEvents%()
 						Next
 						
 						SeedRnd(OldSeed)
-						
-						For it.Items = Each Items
-							If (EntityY(it\Collider, True) >= 8.0) And (EntityY(it\Collider, True) <= 12.0) And (EntityX(it\Collider, True) >= e\room\x - 6.0) And (EntityX(it\Collider, True) <= (e\room\x + (2.0 * MTGridSize) + 6.0)) And (EntityZ(it\Collider, True) >= e\room\z - 6.0) And (EntityZ(it\Collider, True) <= (e\room\z + (2.0 * MTGridSize) + 6.0))
-								TranslateEntity(it\Collider, 0.0, 0.3, 0.0, True)
-								ResetEntity(it\Collider)
-							EndIf
-						Next
 					EndIf
 					
 					If InFacility = UpperFloor
 						ShouldPlay = 28
 						me\Zone = 1
+						
+						UpdateMT(e\room\mt)
 						
 						If e\EventState = 0.0
 							Temp = (1 - (EntityDistanceSquared(me\Collider, e\room\Objects[0]) < EntityDistanceSquared(me\Collider, e\room\Objects[1])))
@@ -4901,8 +4896,6 @@ Function UpdateEvents%()
 							Next
 						Next
 					EndIf
-					
-					UpdateMT(e\room\mt)
 					
 					x1 = EntityX(me\Collider, True) : y1 = EntityY(me\Collider, True) : z1 = EntityZ(me\Collider, True)
 					me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[2]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[3]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[4]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[5]))

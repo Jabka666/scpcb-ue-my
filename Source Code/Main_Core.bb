@@ -2769,7 +2769,7 @@ Function UpdateMoving%()
 				me\DropSpeed = 0.0
 			Else
 				If PlayerFallingPickDistance <> 0.0
-					Local Pick# = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
+					Local Pick% = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
 					
 					If Pick
 						me\DropSpeed = Min(Max(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0), 0.0)
