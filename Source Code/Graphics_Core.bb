@@ -597,20 +597,6 @@ Function SetFontEx%(Font%)
 End Function
 
 Function TextEx%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
-	If opt\TextShadow
-		Local ColorR# = ColorRed()
-		Local ColorG# = ColorGreen()
-		Local ColorB# = ColorBlue()
-		Local CoordEx% = 2 * MenuScale
-		
-		If ColorR = 0.0 And ColorG = 0.0 And ColorB = 1.0
-			Color(200, 200, 200)
-		Else
-			Color(55, 55, 55)
-		EndIf
-		Text(x + CoordEx, y + TextOffset + CoordEx, Txt, AlignX, AlignY)
-		Color(ColorR, ColorG, ColorB)
-	EndIf
 	Text(x, y + TextOffset, Txt, AlignX, AlignY)
 End Function
 

@@ -9,6 +9,8 @@ v1.3
 - Added Dr. Gears achievement.
 - Added Apollyon achievement.
 
+- Removed «Text shadow» option.
+
 - Increased inventory slots of Euclid and Keter by 2.
 
 - SCP-008 can now infect players not wearing a gas mask even if they are not bleeding.
@@ -430,7 +432,7 @@ v1.1
 - Added escape time.
 - Added sound volume for dropping the items, so NPCs can hear your activity. Increased crouch and picking up sound volumes.
 - Added more parameters for debug menu.
-- Added text shadow option.
+- Added «Text shadow» option.
 
 - Removed «playmusic» console command.
 - Removed SCP-106 from SCP-005's containment chamber event.

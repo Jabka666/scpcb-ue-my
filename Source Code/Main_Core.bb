@@ -7344,10 +7344,6 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\TextShadow = UpdateMenuTick(x, y, opt\TextShadow)
-						
-						y = y + (30 * MenuScale)
-						
 						opt\ShowFPS = UpdateMenuTick(x, y, opt\ShowFPS)
 						
 						y = y + (30 * MenuScale)
@@ -7924,12 +7920,6 @@ Function RenderMenu%()
 						Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
-						
-						y = y + (30 * MenuScale)
-						
-						Color(255, 255, 255)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "txtshadow"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_TextShadow)
 						
 						y = y + (30 * MenuScale)
 						

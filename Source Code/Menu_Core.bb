@@ -883,10 +883,6 @@ Function UpdateMainMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\TextShadow = UpdateMenuTick(x, y, opt\TextShadow)
-						
-						y = y + (30 * MenuScale)
-						
 						opt\ShowFPS = UpdateMenuTick(x, y, opt\ShowFPS)
 						
 						y = y + (30 * MenuScale)
@@ -1670,7 +1666,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Advanced
 					;[Block]
-					Height = (460 - (50.0 * (opt\CurrFrameLimit = 0.0))) * MenuScale
+					Height = (430 - (50.0 * (opt\CurrFrameLimit = 0.0))) * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1700,11 +1696,6 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
-					
-					y = y + (30 * MenuScale)
-					
-					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "txtshadow"))
-					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_TextShadow)
 					
 					y = y + (30 * MenuScale)
 					
@@ -2942,13 +2933,12 @@ Const Tooltip_AchievementPopups% = 27
 Const Tooltip_FPS% = 28
 Const Tooltip_FrameLimit% = 29
 Const Tooltip_AutoSave% = 30
-Const Tooltip_TextShadow% = 31
-Const Tooltip_SmoothBars% = 32
-Const Tooltip_StartupVideos% = 33
-Const Tooltip_Launcher% = 34
-Const Tooltip_Subtitles% = 35
-Const Tooltip_SubtitlesColor% = 36
-Const Tooltip_ResetOptions% = 37
+Const Tooltip_SmoothBars% = 31
+Const Tooltip_StartupVideos% = 32
+Const Tooltip_Launcher% = 33
+Const Tooltip_Subtitles% = 34
+Const Tooltip_SubtitlesColor% = 35
+Const Tooltip_ResetOptions% = 36
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3134,10 +3124,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			Txt = Format(GetLocalString("tooltip", "autosave"), key\Name[key\SAVE])
 			R = 255 : G = 255
 			Txt2 = GetLocalString("tooltip", "autosave.note")
-			;[End Block]
-		Case Tooltip_TextShadow
-			;[Block]
-			Txt = GetLocalString("tooltip", "txtshadow")
 			;[End Block]
 		Case Tooltip_FPS
 			;[Block]
