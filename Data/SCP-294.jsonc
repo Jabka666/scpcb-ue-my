@@ -698,7 +698,7 @@
 		"refuse_message": "\"Yeah, I'm not drinking that.\""
 	},
 	{
-		"name": ["Godmode", "God Mode", "Immortality", "Invincibility", "Ressurection", "Revive", "Undead"],
+		"name": ["Godmode", "God Mode", "Immortality", "Invincibility", "Resurrection", "Revive", "Undead"],
 		"color": [255, 255, 255],
 		"alpha": 1.0,
 		"glow": true,
@@ -799,12 +799,13 @@
 		"drink_sound": "SFX\\SCP\\294\\Ew1.ogg"
 	},
 	{
-		"name": ["Hydroflouric Acid", "Hydrochloric Acid", "Corrosive Acid"],
+		"name": ["Hydroflouric Acid", "Hydrochloric Acid", "Corrosive Acid", "Sulfuric Acid"],
 		"color": [200, 200, 200],
 		"alpha": 0.2,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
 		"death_message": "Subject D-9341 was found dead at Sector [DATA REDACTED]. Autopsy reveals that severe acid burns are present within his digestive system, presumably related to SCP-294.",
+		"blur": 5.0,
 		"death_timer": 0.0
 	},
 	{
@@ -1546,15 +1547,6 @@
 		"drink_sound": "SFX\\SCP\\106\\Decay1.ogg",
 		"death_message": "A portion of the facility was transformed into some form of grey colored goo-like substance before being demagnetized. Further analysis is being done.",
 		"death_timer": 0.0
-	},
-	{
-		"name": ["Sulfuric Acid"],
-		"color": [200, 200, 200],
-		"alpha": 0.5,
-		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
-		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
-		"blur": 5.0,
-		"death_timer": 5
 	},
 	{
 		"name": ["Superfluid Helium", "Helium-4", "Liquid Helium"],
@@ -3152,7 +3144,7 @@
 		"drink_sound": "SFX\\SCP\\294\\Cough.ogg"
 	},
 	{
-		"name": ["Glue", "Superglue"],
+		"name": ["Glue", "Super Glue", "Gorrila Glue", "Wood Glue", "Fabric Glue"],
 		"color": [250, 200, 15],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -3540,7 +3532,7 @@
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_message": "You feel the knife cutting your throat open.",
 		"blur": 100.0,
-		"death_message": "Nine Tailed Fox found subject D-9341 with a knife loged down his throat. Cause of death is unknown.",
+		"death_message": "Nine Tailed Fox found subject D-9341 with a knife lodged down his throat. Cause of death is unknown.",
 		"death_timer": 0.0
 	},
 	{
