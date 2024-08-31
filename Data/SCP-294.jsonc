@@ -1305,7 +1305,7 @@
 		"drink_message": "42"
 	},
 	{
-		"name": ["Purple Drank", "Sizzurp", "Cough Syrup"],
+		"name": ["Purple Drank", "Sizzurp", "Cough Syrup", "Lean"],
 		"color": [163, 73, 164],
 		"alpha": 0.8,
 		"dispense_sound": null,
