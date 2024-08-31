@@ -1,3 +1,10 @@
+v1.3.1
+[General]
+- SCP-860 can be refinied in SCP-914.
+
+[Bug Fixes]
+- Fixed fake hallways (SCP-970 loop) not showing properly.
+
 v1.3
 
 [General]
