@@ -971,7 +971,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								For d.Doors = Each Doors
-									If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25
+									If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room\RoomTemplate\RoomID <> r_dimension_106)
 										If (Not d\Open)
 											If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR And d\DoorType <> BIG_DOOR
 												Select d\DoorType

@@ -4034,36 +4034,27 @@ Function FillRoom%(r.Rooms)
 				HideEntity(r\Objects[i + 1])
 			Next
 			
-			; ~ Exits from labyrinth
+			; ~ SCP-106 spawnpoint in labyrinth
 			r\Objects[21] = CreatePivot()
-			PositionEntity(r\Objects[21], r\x + 10939.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 1822.0 * RoomScale)
+			PositionEntity(r\Objects[21], r\x + 7211.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 1566.0 * RoomScale)
 			EntityParent(r\Objects[21], r\OBJ)
 			
+			; ~ Player spawnpoints in labyrinth
 			r\Objects[22] = CreatePivot()
-			PositionEntity(r\Objects[22], r\x + 3396.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 1641.0 * RoomScale)
+			PositionEntity(r\Objects[22], r\x + 5261.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2700.0 * RoomScale)
 			EntityParent(r\Objects[22], r\OBJ)
 			
-			; ~ SCP-106 spawnpoint in labyrinth
 			r\Objects[23] = CreatePivot()
-			PositionEntity(r\Objects[23], r\x + 7211.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 1566.0 * RoomScale)
+			PositionEntity(r\Objects[23], r\x + 6835.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2378.0 * RoomScale)
 			EntityParent(r\Objects[23], r\OBJ)
 			
-			; ~ Player spawnpoints in labyrinth
 			r\Objects[24] = CreatePivot()
-			PositionEntity(r\Objects[24], r\x + 5261.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2700.0 * RoomScale)
+			PositionEntity(r\Objects[24], r\x + 7925.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 201.0 * RoomScale)
 			EntityParent(r\Objects[24], r\OBJ)
 			
 			r\Objects[25] = CreatePivot()
-			PositionEntity(r\Objects[25], r\x + 6835.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2378.0 * RoomScale)
+			PositionEntity(r\Objects[25], r\x + 8380.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2301.0 * RoomScale)
 			EntityParent(r\Objects[25], r\OBJ)
-			
-			r\Objects[26] = CreatePivot()
-			PositionEntity(r\Objects[26], r\x + 7925.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 201.0 * RoomScale)
-			EntityParent(r\Objects[26], r\OBJ)
-			
-			r\Objects[27] = CreatePivot()
-			PositionEntity(r\Objects[27], r\x + 8380.0 * RoomScale, r\y + 2650.0 * RoomScale, r\z + 32.0 + 2301.0 * RoomScale)
-			EntityParent(r\Objects[27], r\OBJ)
 			
 			it.Items = CreateItem("Burnt Note", it_paper, r\x, r\y + 0.5, r\z + 896.0 * RoomScale)
 			it.Items = CreateItem("George Maynard's Badge", it_burntbadge, r\x - 1300 * RoomScale, r\y + 0.5, r\z + 8700 * RoomScale)

@@ -7649,14 +7649,14 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_Labyrinth
 						;[Block]
-						me\CameraFogDist = 3.5
+						me\CameraFogDist = 4.0
 						
 						UpdateDoors()
 						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
-						me\Injuries = me \Injuries + (fps\Factor[0] * 0.0001)
+						me\Injuries = me\Injuries + (fps\Factor[0] * 0.0001)
 						
-						If EntityDistanceSquared(me\Collider, e\room\Objects[22]) < 4.0 Lor EntityDistanceSquared(me\Collider, e\room\Objects[21]) < 4.0
+						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 7202.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True) + 1502.0 * RoomScale) > PowTwo(3678.0 * RoomScale)
 							n_I\Curr106\Speed = n_I\Curr106\Speed * 3.0
 							For d.Doors = Each Doors
 								If d\room = e\room
@@ -7831,12 +7831,12 @@ Function UpdateDimension106%()
 							;[Block]
 							PlaySound_Strict(snd_I\SCP106SFX[3], True)
 							
-							Temp = Rand(24, 27)
+							Temp = Rand(21, 24)
 							PositionEntity(me\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True))
 							ResetEntity(me\Collider)
 							
 							n_I\Curr106\Speed = n_I\Curr106\Speed / 3.0
-							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[23], True), EntityY(e\room\Objects[23], True), EntityZ(e\room\Objects[23], True))
+							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[25], True), EntityY(e\room\Objects[25], True), EntityZ(e\room\Objects[25], True))
 							ResetEntity(n_I\Curr106\Collider)
 							
 							e\EventState3 = 0.0
@@ -7893,7 +7893,7 @@ Function UpdateDimension106%()
 										
 										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 										If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
-									
+										
 										e\EventState = 0.0
 										e\EventState3 = 0.0
 										e\EventState2 = PD_StartRoom
