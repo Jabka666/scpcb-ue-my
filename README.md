@@ -1,4 +1,4 @@
-# SCP - Containment Breach Ultimate Edition
+# SCP - Containment Breach Ultimate Edition Reborn
 
 The game is based on the works of the SCP Foundation community (http://www.scp-wiki.net/).
 
@@ -8,9 +8,9 @@ http://creativecommons.org/licenses/by-sa/3.0/
 
 Requirements:
 
--	[Blitz3D TSS (ZiYueCommentary)](https://github.com/ZiYueCommentary/Blitz3D/releases) v1.132
+-	[Blitz3D TSS (ZiYueCommentary)](https://github.com/ZiYueCommentary/Blitz3D/releases) v1.133
 
--	[IDEal for Blitz3D](https://web.archive.org/web/20070704181040/http://www.fungamesfactory.com/download.php?get=IDEalSetup_0.8.87.exe) v0.8.87
+-	[IDEal for Blitz3D](https://web.archive.org/web/20070704181040/http://www.fungamesfactory.com/download.php?get=IDEalSetup_0.8.87.exe) v0.8.87 or higher
 
 Beware - the source code is perhaps more horrifying than the game itself!
 
