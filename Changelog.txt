@@ -146,6 +146,7 @@ v1.3
 - Fixed player contstantly moving forward when grabbed by SCP-106.
 - Fixed SCP-970 having items go into the ground and not be interactable.
 - Fixed an issue where items would fall through the Maintenance Tunnel meshes.
+- Fixed a bug with exit points in the Pocket Dimension labyrinth room.
 
 [Known issues]
 - Cups crash the game sometimes.
