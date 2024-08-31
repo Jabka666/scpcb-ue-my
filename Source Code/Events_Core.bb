@@ -5374,34 +5374,26 @@ Function UpdateEvents%()
 					TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 					
 					If e\room\RoomDoors[1]\OpenState = 0.0
-						If (Not EntityHidden(e\room\RoomDoors[0]\FrameOBJ))
-							HideEntity(e\room\Objects[0])
-							HideEntity(e\room\RoomDoors[0]\OBJ)
-							HideEntity(e\room\RoomDoors[0]\Buttons[1])
-							HideEntity(e\room\RoomDoors[0]\FrameOBJ)
-						EndIf
+						If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
+						HideEntity(e\room\RoomDoors[0]\OBJ)
+						HideEntity(e\room\RoomDoors[0]\Buttons[1])
+						HideEntity(e\room\RoomDoors[0]\FrameOBJ)
 					Else
-						If EntityHidden(e\room\RoomDoors[0]\FrameOBJ)
-							ShowEntity(e\room\Objects[0])
-							ShowEntity(e\room\RoomDoors[0]\OBJ)
-							ShowEntity(e\room\RoomDoors[0]\Buttons[1])
-							ShowEntity(e\room\RoomDoors[0]\FrameOBJ)
-						EndIf
+						If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
+						ShowEntity(e\room\RoomDoors[0]\OBJ)
+						ShowEntity(e\room\RoomDoors[0]\Buttons[1])
+						ShowEntity(e\room\RoomDoors[0]\FrameOBJ)
 					EndIf
 					If e\room\RoomDoors[4]\OpenState = 0.0
-						If (Not EntityHidden(e\room\RoomDoors[5]\FrameOBJ))
-							HideEntity(e\room\Objects[1])
-							HideEntity(e\room\RoomDoors[5]\OBJ)
-							HideEntity(e\room\RoomDoors[5]\Buttons[1])
-							HideEntity(e\room\RoomDoors[5]\FrameOBJ)
-						EndIf
+						If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+						HideEntity(e\room\RoomDoors[5]\OBJ)
+						HideEntity(e\room\RoomDoors[5]\Buttons[1])
+						HideEntity(e\room\RoomDoors[5]\FrameOBJ)
 					Else
-						If EntityHidden(e\room\RoomDoors[5]\FrameOBJ)
-							ShowEntity(e\room\Objects[1])
-							ShowEntity(e\room\RoomDoors[5]\OBJ)
-							ShowEntity(e\room\RoomDoors[5]\Buttons[1])
-							ShowEntity(e\room\RoomDoors[5]\FrameOBJ)
-						EndIf
+						If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+						ShowEntity(e\room\RoomDoors[5]\OBJ)
+						ShowEntity(e\room\RoomDoors[5]\Buttons[1])
+						ShowEntity(e\room\RoomDoors[5]\FrameOBJ)
 					EndIf
 					
 					If e\EventState < 8.0
