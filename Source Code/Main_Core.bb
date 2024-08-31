@@ -2897,7 +2897,10 @@ Function UpdateMouseLook%()
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0) + me\Lean
 		
 		RotateEntity(Camera, EntityPitch(me\Collider), EntityYaw(me\Collider), Roll# / 2.0)
-		PositionEntity(Camera, EntityX(me\Collider) - Cos(EntityYaw(Camera)) * me\Lean * 0.005, EntityY(me\Collider) + Up + 0.6 + me\CrouchState * (-0.3), EntityZ(me\Collider) - Sin(EntityYaw(Camera)) * me\Lean * 0.005)
+		
+		Local Yaw# = EntityYaw(Camera)
+		
+		PositionEntity(Camera, EntityX(me\Collider) - Cos(Yaw) * me\Lean * 0.0055, EntityY(me\Collider) + Up + 0.6 + me\CrouchState * (-0.3), EntityZ(me\Collider) - Sin(Yaw) * me\Lean * 0.0055)
 		
 		; ~ Update the smoothing que to smooth the movement of the mouse
 		Local Temp# = (opt\MouseSensitivity + 0.5)
