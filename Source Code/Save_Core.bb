@@ -350,17 +350,6 @@ Function SaveGame%(File$)
 		EndIf
 	Next
 	
-	For emit.Emitter = Each Emitter
-		For r.Rooms = Each Rooms
-			If emit\room = r
-				WriteByte(f, 1)
-				Exit
-			Else
-				WriteByte(f, 0)
-			EndIf
-		Next
-	Next
-	
 	WriteInt(f, 954)
 	
 	Temp = 0
@@ -524,7 +513,13 @@ Function SaveGame%(File$)
 	For itt.ItemTemplates = Each ItemTemplates
 		WriteByte(f, itt\Found)
 	Next
-
+	
+	For emit.Emitter = Each Emitter
+		For r.Rooms = Each Rooms
+			WriteByte(f, emit\room = r)
+		Next
+	Next
+	
 	WriteInt(f, EscapeTimer)
 	
 	CloseFile(f)
@@ -975,15 +970,6 @@ Function LoadGame%(File$)
 			Exit
 		EndIf
 	Next
-	For emit.Emitter = Each Emitter
-		For r.Rooms = Each Rooms
-			If ReadByte(f) = 1
-				emit\room = r
-				EntityParent(emit\Owner, r\OBJ)
-				Exit
-			EndIf
-		Next
-	Next
 	
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
@@ -1331,11 +1317,20 @@ Function LoadGame%(File$)
 			EndIf
 		Next
 	Next
-	
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = ReadByte(f)
 	Next
-
+	
+	For emit.Emitter = Each Emitter
+		For r.Rooms = Each Rooms
+			ID = ReadByte(f)
+			If ID = 1
+				emit\room = r
+				EntityParent(emit\Owner, r\OBJ)
+			EndIf
+		Next
+	Next
+	
 	EscapeTimer = ReadInt(f)
 	
 	CloseFile(f)
@@ -1845,15 +1840,7 @@ Function LoadGameQuick%(File$)
 			Exit
 		EndIf
 	Next
-	For emit.Emitter = Each Emitter
-		For r.Rooms = Each Rooms
-			If ReadByte(f) = 1
-				emit\room = r
-				EntityParent(emit\Owner, r\OBJ)
-				Exit
-			EndIf
-		Next
-	Next
+	
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
 	Temp = ReadInt(f)
@@ -2142,7 +2129,17 @@ Function LoadGameQuick%(File$)
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = ReadByte(f)
 	Next
-
+	
+	For emit.Emitter = Each Emitter
+		For r.Rooms = Each Rooms
+			ID = ReadByte(f)
+			If ID = 1
+				emit\room = r
+				EntityParent(emit\Owner, r\OBJ)
+			EndIf
+		Next
+	Next
+	
 	EscapeTimer = ReadInt(f)
 	
 	; ~ This will hopefully fix the SCP-895 crash bug after the player died by it's sanity effect and then quickloaded the game -- ENDSHN
