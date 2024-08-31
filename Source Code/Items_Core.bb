@@ -1670,6 +1670,27 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case it_scp860
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Lost Key", it_key, x, y, z)
+					;[End Block]
+				Case FINE
+					;[Block]
+					it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+					;[End Block]
+			End Select
+			;[End Block]
 		Case it_radio, it_18vradio, it_fineradio, it_veryfineradio
 			;[Block]
 			Select Setting
@@ -2228,9 +2249,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 		Case it_book
 			;[Block]
 			Select Setting
-				Case ROUGH, COARSE
+				Case ROUGH
 					;[Block]
 					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Blank Paper", it_paper, x, y, z)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
