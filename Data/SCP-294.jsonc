@@ -1111,7 +1111,7 @@
 		"drink_message": "You dream of playing Galaga."
 	},
 	{
-		"name": ["Milk Soup", "Milk Cocktail", "Boiled Milk", "Cow Milk", "Goat Milk", "Goats Milk", "Cows Milk", "Milk Of Cow", "Milk Of Goat", "Milk Puding", "Curds", "Cottage Cheese", "Kefir", "Ryazhenka", "Varenets", "Kumys"],
+		"name": ["Milk Soup", "Milk Cocktail", "Boiled Milk", "Cow Milk", "Goat Milk", "Goats Milk", "Cows Milk", "Milk Of Cow", "Milk Of Goat", "Milk", "Milk Puding", "Curds", "Cottage Cheese", "Kefir", "Ryazhenka", "Varenets", "Kumys"],
 		"color": [255, 255, 255],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
