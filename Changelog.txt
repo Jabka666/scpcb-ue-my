@@ -4,6 +4,7 @@ v1.3.1
 
 [Bug Fixes]
 - Fixed fake hallways (SCP-970 loop) not showing properly.
+- Fixed an issue where the player couldn't return to facility from the Pocket Dimension.
 
 v1.3
 

@@ -7724,7 +7724,7 @@ Function UpdateDimension106%()
 							Local RoomID% = -1
 							Local LCZ% = False
 							
-							Select Rand(5)
+							Select Rand(7)
 								Case 1
 									;[Block]
 									RoomID = r_room2_5_hcz
@@ -7736,16 +7736,25 @@ Function UpdateDimension106%()
 									;[End Block]
 								Case 3
 									;[Block]
-									RoomID = r_room3_lcz
+									RoomID = r_room3_2_lcz
 									LCZ = True
 									;[End Block]
 								Case 4
 									;[Block]
-									RoomID = r_cont1_106
+									RoomID = r_room3_lcz
+									LCZ = True
 									;[End Block]
 								Case 5
 									;[Block]
+									RoomID = r_cont1_106
+									;[End Block]
+								Case 6
+									;[Block]
 									RoomID = r_room2_3_hcz
+									;[End Block]
+								Case 7
+									;[Block]
+									RoomID = r_room3_2_hcz
 									;[End Block]
 							End Select
 							
@@ -7790,10 +7799,11 @@ Function UpdateDimension106%()
 									
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 									If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+									
+									e\EventState = 0.0
+									e\EventState3 = 0.0
+									Exit
 								EndIf
-								e\EventState = 0.0
-								e\EventState3 = 0.0
-								Exit
 							Next
 							If (Not RoomExist)
 								PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
