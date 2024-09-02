@@ -6900,7 +6900,10 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 60.0, DisableSoundOnCrouch% = Fa
 	Local Dist2# = EntityDistanceSquared(me\Collider, n\Collider)
 	
 	If n\BlinkTimer <= 0.0 Then Return(0)
-	If I_268\InvisibilityOn Lor chs\NoTarget Then n\State2 = 0.0 : Return(0)
+	If I_268\InvisibilityOn Lor chs\NoTarget
+		n\State2 = 0.0
+		Return(0)
+	EndIf
 	
 	If n\NPCType <> NPCTypeMTF
 		If Dist2 > PowTwo(Dist)
@@ -6937,11 +6940,7 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 60.0, DisableSoundOnCrouch% = Fa
 End Function
 
 Function PlayerSees173%(n.NPCs)
-	If (Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))
-		Return(False)
-	Else
-		Return(True)
-	EndIf
+	Return(Not ((Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))))
 End Function
 
 Function UpdateNPCBlinking%(n.NPCs)
