@@ -7358,8 +7358,7 @@ Function NPCSpeedChange%(n.NPCs)
 End Function
 
 Function IsPlayerOutsideFacility%()
-	If PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b Then Return(True)
-	Return(False)
+	Return(PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)
 End Function
 
 Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
