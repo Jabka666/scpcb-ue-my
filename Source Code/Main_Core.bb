@@ -497,14 +497,10 @@ Function UpdateGame%()
 			EndIf
 			
 			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
-			If IsBlackOut
+			If IsBlackOut Lor me\LightBlink > 0.0
 				SecondaryLightOn = CurveValue(0.0, SecondaryLightOn * LightVolume, 10.0)
 			Else
-				If me\LightBlink > 0.0
-					SecondaryLightOn = CurveValue(0.0, SecondaryLightOn * LightVolume, 10.0)
-				Else
-					SecondaryLightOn = CurveValue(1.0, SecondaryLightOn * LightVolume, 10.0)
-				EndIf
+				SecondaryLightOn = CurveValue(1.0, SecondaryLightOn * LightVolume, 10.0)
 			EndIf
 			
 			If I_294\Using Then DarkAlpha = 1.0
