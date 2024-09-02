@@ -2740,7 +2740,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 450.0 * RoomScale, r\y + 420.0 * RoomScale, r\z + 250.0 * RoomScale, 20.0)
+			sc.SecurityCams = CreateSecurityCam(r, r\x - 450.0 * RoomScale, r\y + 448.0 * RoomScale, r\z + 250.0 * RoomScale, 20.0)
 			sc\Angle = 135.0 : sc\Turn = 0.0
 			
 			it.Items = CreateItem("SCP-513", it_scp513, r\x, r\y + 196.0 * RoomScale, r\z + 655.0 * RoomScale)
