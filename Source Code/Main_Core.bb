@@ -454,19 +454,19 @@ Function UpdateGame%()
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							me\BLINKFREQ = Rnd(600.0, 700.0)
+							me\BLINKFREQ = Rnd(850.0, 1000.0)
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							me\BLINKFREQ = Rnd(500.0, 600.0)
+							me\BLINKFREQ = Rnd(700.0, 850.0)
 							;[End Block]
 						Case HARD
 							;[Block]
-							me\BLINKFREQ = Rnd(400.0, 500.0)
+							me\BLINKFREQ = Rnd(550.0, 700.0)
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							me\BLINKFREQ = Rnd(300.0, 400.0)
+							me\BLINKFREQ = Rnd(400.0, 550.0)
 							;[End Block]
 					End Select
 					me\BlinkTimer = me\BLINKFREQ
@@ -474,9 +474,9 @@ Function UpdateGame%()
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
-				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * (0.6 + (0.3 * I_966\HasInsomnia)) * me\BlinkEffect)
+				me\BlinkTimer = me\BlinkTimer - (fps\Factor[0] * (1.0 + (0.5 * I_966\HasInsomnia)) * me\BlinkEffect)
 				If me\EyeIrritation > 0.0
-					If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 100.0) + 1.0, 4.0) * fps\Factor[0]
+					If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 70.0) + 1.0, 4.0) * fps\Factor[0]
 				EndIf
 			EndIf
 			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\Factor[0])
