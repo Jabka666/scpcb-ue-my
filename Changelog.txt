@@ -1,7 +1,11 @@
 v1.3.1
+
 [General]
 - SCP-860 can be refinied in SCP-914.
 - White smoke in certain events cause player to blink faster.
+
+[Items]
+- Changed clearance level for SCP-895's document.
 
 [Bug Fixes]
 - Fixed fake hallways (SCP-970 loop) not showing properly.
