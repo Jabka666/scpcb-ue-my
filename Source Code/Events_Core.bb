@@ -1966,6 +1966,8 @@ Function UpdateEvents%()
 									RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
 								EndIf
 								If (me\Bloodloss > 0.0 And I_008\Timer = 0.0) Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
+								
+								If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = 70.0
 							EndIf
 							
 							If EntityPitch(e\room\Objects[1], True) < 40.0
@@ -6624,6 +6626,9 @@ Function UpdateEvents%()
 									If e\room\RoomEmitters[2] = Null Then e\room\RoomEmitters[2] = SetEmitter(e\room, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 16)
 								EndIf
 							ElseIf e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 6.0
+								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 4.0
+									If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = 70.0
+								EndIf
 								If e\room\RoomEmitters[2] <> Null Then FreeEmitter(e\room\RoomEmitters[2])
 								For i = 0 To 1
 									If e\room\RoomEmitters[i] = Null
