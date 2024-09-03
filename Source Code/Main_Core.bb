@@ -440,15 +440,6 @@ Function UpdateGame%()
 				EndIf
 			EndIf
 			
-			If me\EyeStuck > 0.0
-				me\BlinkTimer = me\BLINKFREQ
-				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
-				
-				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) / 2.0)
-				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
-				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
-			EndIf
-			
 			If me\BlinkTimer < 0.0
 				If me\BlinkTimer > -5.0
 					DarkAlpha = Max(DarkAlpha, Sin(Abs(me\BlinkTimer * 18.0)))
@@ -525,6 +516,15 @@ Function UpdateGame%()
 					If KeyDown(key\BLINK) And me\BlinkTimer < -10.0 Then me\BlinkTimer = -10.0
 				EndIf
 				me\KillAnimTimer = 0.0
+			EndIf
+			
+			If me\EyeStuck > 0.0
+				me\BlinkTimer = me\BLINKFREQ
+				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
+				
+				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) / 2.0)
+				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
+				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
 			EndIf
 			
 			If me\FallTimer < 0.0
