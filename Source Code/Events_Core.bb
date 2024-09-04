@@ -12,6 +12,8 @@ End Type
 
 Global forest_event.Events
 Global skull_event.Events
+Global PD_event.Events
+Global scribe_event.Events
 
 ; ~ Events ID Constants
 ;[Block]
@@ -384,15 +386,23 @@ Function FindEventID%(EventName$)
 	End Select
 End Function
 
-Function FindForestEvent%(e.Events)
+Function FindEventVariable%(e.Events)
 	Select e\EventID
-		Case e_cont2_860_1
+		Case e_cont2_012
 			;[Block]
-			forest_event = e
+			scribe_event = e
 			;[End Block]
 		Case e_cont2_1123
 			;[Block]
 			skull_event = e
+			;[End Block]
+		Case e_cont2_860_1
+			;[Block]
+			forest_event = e
+			;[End Block]
+		Case e_dimension_106
+			;[Block]
+			PD_event = e
 			;[End Block]
 	End Select
 End Function
@@ -426,7 +436,7 @@ Function CreateEvent.Events(EventID%, RoomID%, ID%, Prob# = 0.0)
 				If i >= ID And (Not Temp)
 					e.Events = New Events
 					e\EventID = EventID
-					FindForestEvent(e)
+					FindEventVariable(e)
 					e\room = r
 					Return(e)
 				EndIf
@@ -446,7 +456,7 @@ Function CreateEvent.Events(EventID%, RoomID%, ID%, Prob# = 0.0)
 				If Rnd(0.0, 1.0) <= Prob And (Not Temp)
 					e.Events = New Events
 					e\EventID = EventID
-					FindForestEvent(e)
+					FindEventVariable(e)
 					e\room = r
 				EndIf
 			EndIf

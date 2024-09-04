@@ -322,12 +322,10 @@ Function UpdateGame%()
 					
 					If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 						me\Zone = 4
-					ElseIf forest_event <> Null
-						If PlayerRoom = forest_event\room
-							If forest_event\EventState = 1.0
-								me\Zone = 5
-								PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-							EndIf
+					ElseIf forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+						If forest_event\EventState = 1.0
+							me\Zone = 5
+							PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 						EndIf
 					EndIf
 					
@@ -3087,32 +3085,25 @@ Function UpdateZoneColor%()
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, me\CameraFogDist)
 		CameraRange(Camera, 0.01, 96.0) ; ~ me\CameraFogDist * 1.2
-	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_106
-		For e.Events = Each Events
-			If e\EventID = e_dimension_106
-				LightVolume = 1.0
-				If e\EventState2 = PD_TrenchesRoom Lor e\EventState2 = PD_TowerRoom
-					SetZoneColor(FogColorPDTrench)
-				ElseIf e\EventState2 = PD_FakeTunnelRoom
-					SetZoneColor(FogColorHCZ, AmbientColorHCZ)
-				Else
-					SetZoneColor(FogColorPD)
-				EndIf
-				Exit
+	ElseIf PD_event <> Null And PD_event\room = PlayerRoom ; ~ TODO: Check if PD_event <> Null really needed!
+		LightVolume = 1.0
+		If PD_event\EventState2 = PD_TrenchesRoom Lor PD_event\EventState2 = PD_TowerRoom
+			SetZoneColor(FogColorPDTrench)
+		ElseIf PD_event\EventState2 = PD_FakeTunnelRoom
+			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+		Else
+			SetZoneColor(FogColorPD)
+		EndIf
+	ElseIf forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+		If forest_event\EventState = 1.0
+			LightVolume = 1.0
+			SetZoneColor(FogColorForest)
+			If forest_event\room\NPC[0] <> Null
+				If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 			EndIf
-		Next
-	ElseIf forest_event <> Null
-		If PlayerRoom = forest_event\room
-			If forest_event\EventState = 1.0
-				SetZoneColor(FogColorForest)
-				If forest_event\room\NPC[0] <> Null
-					If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
-				EndIf
-				me\CameraFogDist = 8.0
-				LightVolume = 1.0
-				CameraFogRange(Camera, 0.1, 8.0)
-				CameraRange(Camera, 0.01, 9.6) ; ~ me\CameraFogDist * 1.2
-			EndIf
+			me\CameraFogDist = 8.0
+			CameraFogRange(Camera, 0.1, 8.0)
+			CameraRange(Camera, 0.01, 9.6) ; ~ me\CameraFogDist * 1.2
 		EndIf
 	EndIf
 	
@@ -3164,10 +3155,8 @@ Function UpdateZoneColor%()
 	Else
 		AmbientLightRooms(CurrAmbientColorR / 5.0, CurrAmbientColorG / 5.0, CurrAmbientColorB / 5.0)
 		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
-		If forest_event <> Null
-			If PlayerRoom = forest_event\room
-				If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
-			EndIf
+		If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+			If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
 		EndIf
 	EndIf
 	AmbientLight(CurrR, CurrG, CurrB)
@@ -3207,80 +3196,75 @@ Function UpdateGUI%()
 	Local x2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
 	
-	; ~ TODO: Get rid of this
-	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
-		For e.Events = Each Events
-			If e\room = PlayerRoom
-				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom
-					If e\Img2 <> 0
-						StopChannel(e\SoundCHN)
-						FreeImage(e\Img2) : e\Img2 = 0
-					EndIf
-					
-					If e\Img = 0
-						StopChannel(e\SoundCHN) : e\SoundCHN = 0
-						Select Rand(5)
-							Case 1
-								;[Block]
-								PlaySound_Strict(snd_I\HorrorSFX[1])
-								;[End Block]
-							Case 2
-								;[Block]
-								PlaySound_Strict(snd_I\HorrorSFX[2])
-								;[End Block]
-							Case 3
-								;[Block]
-								PlaySound_Strict(snd_I\HorrorSFX[9])
-								;[End Block]
-							Case 4
-								;[Block]
-								PlaySound_Strict(snd_I\HorrorSFX[10])
-								;[End Block]
-							Case 5
-								;[Block]
-								PlaySound_Strict(snd_I\HorrorSFX[12])
-								;[End Block]
-						End Select
-						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
-						e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
+	; ~ TODO: Get rid of this as soon as possible. Currently optimized by making a variable instead of calling array
+	If PD_event <> Null And PD_event\room = PlayerRoom ; ~ TODO: Check if PD_event <> Null really needed!
+		If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And PD_event\EventState2 <> PD_FakeTunnelRoom
+			If PD_event\Img2 <> 0
+				StopChannel(PD_event\SoundCHN)
+				FreeImage(PD_event\Img2) : PD_event\Img2 = 0
+			EndIf
+			
+			If PD_event\Img = 0
+				StopChannel(PD_event\SoundCHN) : PD_event\SoundCHN = 0
+				Select Rand(5)
+					Case 1
+						;[Block]
+						PlaySound_Strict(snd_I\HorrorSFX[1])
+						;[End Block]
+					Case 2
+						;[Block]
+						PlaySound_Strict(snd_I\HorrorSFX[2])
+						;[End Block]
+					Case 3
+						;[Block]
+						PlaySound_Strict(snd_I\HorrorSFX[9])
+						;[End Block]
+					Case 4
+						;[Block]
+						PlaySound_Strict(snd_I\HorrorSFX[10])
+						;[End Block]
+					Case 5
+						;[Block]
+						PlaySound_Strict(snd_I\HorrorSFX[12])
+						;[End Block]
+				End Select
+				PD_event\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
+				PD_event\Img = ScaleImage2(PD_event\Img, MenuScale, MenuScale)
+			Else
+				wi\IsNVGBlinking = True
+				If Rand(30) = 1
+					If (Not ChannelPlaying(PD_event\SoundCHN)) Then PD_event\SoundCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
+				EndIf
+			EndIf
+		Else
+			If PD_event\Img <> 0
+				StopChannel(PD_event\SoundCHN)
+				FreeImage(PD_event\Img) : PD_event\Img = 0
+			EndIf
+			
+			If PD_event\EventState2 = PD_ThroneRoom
+				If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
+					If PD_event\Img2 = 0
+						StopChannel(PD_event\SoundCHN) : PD_event\SoundCHN = 0
+						PlaySound_Strict(PD_event\Sound2, True)
+						PD_event\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
+						PD_event\Img2 = ScaleImage2(PD_event\Img2, MenuScale, MenuScale)
 					Else
-						wi\IsNVGBlinking = True
-						If Rand(30) = 1
-							If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
+						If (Not ChannelPlaying(PD_event\SoundCHN))
+							PD_event\SoundCHN = PlaySound_Strict(PD_event\Sound)
+							ChannelVolume(PD_event\SoundCHN, opt\VoiceVolume * opt\MasterVolume)
 						EndIf
 					EndIf
 				Else
-					If e\Img <> 0
-						StopChannel(e\SoundCHN)
-						FreeImage(e\Img) : e\Img = 0
-					EndIf
-					
-					If e\EventState2 = PD_ThroneRoom
-						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
-							If e\Img2 = 0
-								StopChannel(e\SoundCHN) : e\SoundCHN = 0
-								PlaySound_Strict(e\Sound2, True)
-								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
-								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
-							Else
-								If (Not ChannelPlaying(e\SoundCHN))
-									e\SoundCHN = PlaySound_Strict(e\Sound)
-									ChannelVolume(e\SoundCHN, opt\VoiceVolume * opt\MasterVolume)
-								EndIf
-							EndIf
-						Else
-							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
-						EndIf
-					Else
-						If e\Img2 <> 0
-							FreeImage(e\Img2) : e\Img2 = 0
-							StopChannel(e\SoundCHN) : e\SoundCHN = 0
-						EndIf
-					EndIf
+					If ChannelPlaying(PD_event\SoundCHN) Then StopChannel(PD_event\SoundCHN) : PD_event\SoundCHN = 0
 				EndIf
-				Exit
+			Else
+				If PD_event\Img2 <> 0
+					FreeImage(PD_event\Img2) : PD_event\Img2 = 0
+					StopChannel(PD_event\SoundCHN) : PD_event\SoundCHN = 0
+				EndIf
 			EndIf
-		Next
+		EndIf
 	EndIf
 	
 	If I_294\Using Then Update294()
@@ -6094,50 +6078,40 @@ Function RenderGUI%()
 		HidePointer()
 	EndIf
 	
-	; ~ TODO: Get rid of this
-	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
-		For e.Events = Each Events
-			If e\room = PlayerRoom
-				If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And e\EventState2 <> PD_FakeTunnelRoom
-					If e\Img = 0
-						e\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
-						e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
+	; ~ TODO: Get rid of this as soon as possible. Currently optimized by making a variable instead of calling array
+	If PD_event <> Null And PD_event\room = PlayerRoom ; ~ TODO: Check if PD_event <> Null really needed!
+		If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And PD_event\EventState2 <> PD_FakeTunnelRoom
+			If PD_event\Img = 0
+				PD_event\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
+				PD_event\Img = ScaleImage2(PD_event\Img, MenuScale, MenuScale)
+			Else
+				DrawBlock(PD_event\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
+			EndIf
+		Else
+			If PD_event\EventState2 = PD_ThroneRoom
+				If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
+					If PD_event\Img2 = 0
+						PD_event\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
+						PD_event\Img2 = ScaleImage2(PD_event\Img2, MenuScale, MenuScale)
 					Else
-						DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
+						DrawBlock(PD_event\Img2, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 					EndIf
+				EndIf
+			EndIf
+		EndIf
+	ElseIf scribe_event <> Null And scribe_event\room = PlayerRoom ; ~ TODO: Check if scribe_event really needed!
+		If DistanceSquared(EntityX(me\Collider), EntityX(scribe_event\room\Objects[0], True), EntityZ(me\Collider), EntityZ(scribe_event\room\Objects[0], True)) < 0.36
+			If scribe_event\EventState2 < 70.0 And scribe_event\EventState3 = 1.0
+				me\BlinkTimer = -10.0
+				If (Not scribe_event\Img)
+					PlaySound_Strict(snd_I\HorrorSFX[11])
+					scribe_event\Img = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
+					scribe_event\Img = ScaleImage2(scribe_event\Img, MenuScale, MenuScale)
 				Else
-					If e\EventState2 = PD_ThroneRoom
-						If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
-							If e\Img2 = 0
-								e\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
-								e\Img2 = ScaleImage2(e\Img2, MenuScale, MenuScale)
-							Else
-								DrawBlock(e\Img2, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
-							EndIf
-						EndIf
-					EndIf
+					DrawBlock(scribe_event\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 				EndIf
-				Exit
 			EndIf
-		Next
-	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont2_012
-		For e.Events = Each Events
-			If e\room = PlayerRoom
-				If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True)) < 0.36
-					If e\EventState2 < 70.0 And e\EventState3 = 1.0
-						me\BlinkTimer = -10.0
-						If (Not e\Img)
-							PlaySound_Strict(snd_I\HorrorSFX[11])
-							e\Img = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
-							e\Img = ScaleImage2(e\Img, MenuScale, MenuScale)
-						Else
-							DrawBlock(e\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
-						EndIf
-					EndIf
-				EndIf
-				Exit
-			EndIf
-		Next
+		EndIf
 	EndIf
 	
 	If I_294\Using Then Render294()

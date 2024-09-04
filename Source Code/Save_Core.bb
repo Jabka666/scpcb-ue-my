@@ -1171,7 +1171,7 @@ Function LoadGame%(File$)
 			EndIf
 		Next
 		e\EventStr = ReadString(f)
-		FindForestEvent(e)
+		FindEventVariable(e)
 	Next
 	For e.Events = Each Events
 		Select e\EventID
@@ -1964,7 +1964,7 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next
 		e\EventStr = ReadString(f)
-		FindForestEvent(e)
+		FindEventVariable(e)
 	Next
 	For e.Events = Each Events
 		Select e\EventID
@@ -2499,13 +2499,13 @@ Function LoadMap%(File$)
 					If Rnd(0.0, 1.0) <= Prob
 						e.Events = New Events
 						e\EventID = ID
-						FindForestEvent(e)
+						FindEventVariable(e)
 						e\room = r
 					EndIf
 				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
 					e\EventID = ID
-					FindForestEvent(e)
+					FindEventVariable(e)
 					e\room = r
 				EndIf
 			EndIf
@@ -2671,13 +2671,13 @@ Function LoadMap%(File$)
 					If Rnd(0.0, 1.0) <= Prob
 						e.Events = New Events
 						e\EventID = ID
-						FindForestEvent(e)
+						FindEventVariable(e)
 						e\room = r
 					EndIf
 				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
 					e\EventID = ID
-					FindForestEvent(e)
+					FindEventVariable(e)
 					e\room = r
 				EndIf
 			EndIf
