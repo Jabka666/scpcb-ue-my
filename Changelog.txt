@@ -7,7 +7,7 @@ v1.3.1
 - Optimized the game...
 
 [Rooms]
-- Added wallet in the hallway near SCP-513's containment chamber
+- Added a wallet in the hallway near SCP-513's containment chamber
 
 [Items]
 - Changed clearance level for SCP-895's document.

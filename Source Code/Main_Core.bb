@@ -3207,6 +3207,7 @@ Function UpdateGUI%()
 	Local x2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
 	
+	; ~ TODO: Get rid of this
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 		For e.Events = Each Events
 			If e\room = PlayerRoom
@@ -6093,6 +6094,7 @@ Function RenderGUI%()
 		HidePointer()
 	EndIf
 	
+	; ~ TODO: Get rid of this
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 		For e.Events = Each Events
 			If e\room = PlayerRoom
