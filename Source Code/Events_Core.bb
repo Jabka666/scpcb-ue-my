@@ -1967,7 +1967,7 @@ Function UpdateEvents%()
 								EndIf
 								If (me\Bloodloss > 0.0 And I_008\Timer = 0.0) Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
 								
-								If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = 70.0
+								If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = Max(70.0, me\EyeIrritation)
 							EndIf
 							
 							If EntityPitch(e\room\Objects[1], True) < 40.0
@@ -6627,7 +6627,7 @@ Function UpdateEvents%()
 								EndIf
 							ElseIf e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 6.0
 								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 4.0
-									If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = 70.0
+									If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = Max(70.0, me\EyeIrritation)
 								EndIf
 								If e\room\RoomEmitters[2] <> Null Then FreeEmitter(e\room\RoomEmitters[2])
 								For i = 0 To 1
