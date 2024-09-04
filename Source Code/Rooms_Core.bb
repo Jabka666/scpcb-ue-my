@@ -2751,6 +2751,9 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Document SCP-513", it_paper, r\x - 470.0 * RoomScale, r\y + 104.0 * RoomScale, r\z - 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Wallet", it_wallet, r\x - 422.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 948.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_cont3_966
 			;[Block]
