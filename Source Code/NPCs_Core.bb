@@ -969,8 +969,8 @@ Function UpdateNPCs%()
 								EndIf
 								
 								For d.Doors = Each Doors
-									If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room\RoomTemplate\RoomID <> r_dimension_106)
-										If (Not d\Open)
+									If (Not d\IsAffected) And (Not d\Open)
+										If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And d\room\RoomTemplate\RoomID <> r_dimension_106
 											If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR And d\DoorType <> BIG_DOOR And d\DoorType <> SCP_914_DOOR
 												Select d\DoorType
 													Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
@@ -986,6 +986,7 @@ Function UpdateNPCs%()
 												If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
 												EntityTexture(d\FrameOBJ, Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+												d\IsAffected = True
 												Exit
 											EndIf
 										EndIf

@@ -5,6 +5,7 @@ v1.3.1
 
 - SCP-860 can be refinied in SCP-914.
 - White smoke in certain events cause player to blink faster.
+- Corrosive doors take longer to open/close.
 
 - Optimized the game...
 

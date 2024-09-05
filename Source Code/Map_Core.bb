@@ -2661,6 +2661,7 @@ Type Doors
 	Field ElevatorPanel%[2]
 	Field PlayCautionSFX%
 	Field ButtonsUpdateTimer#
+	Field IsAffected% = False
 End Type
 
 ; ~ Door ID Constants
@@ -2870,29 +2871,30 @@ Function UpdateDoors%()
 			EndIf
 			
 			Local FPSFactorDoubled# = fps\Factor[0] * 2.0
+			Local OpenFactor# = (d\FastOpen + 1 - d\IsAffected * 0.5)
 			
 			If d\Open
 				If d\OpenState < 180.0
 					Select d\DoorType
 						Case DEFAULT_DOOR
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
-							FPSFactorEx = Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 80.0
+							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
+							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
 							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
-							FPSFactorEx = Sin(d\OpenState) * (d\FastOpen + 1) * fps\Factor[0] / 162.0
+							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
+							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 162.0
 							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
+							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 85.0, 0.0, 0.0)
+							MoveEntity(d\OBJ, SinValue * OpenFactor * fps\Factor[0] / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * fps\Factor[0] / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case BIG_DOOR
@@ -2912,10 +2914,10 @@ Function UpdateDoors%()
 							;[End Block]
 						Case ONE_SIDED_DOOR
 							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * (d\FastOpen + 1)))
+							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
 							SinValue = Sin(d\OpenState)
 							FPSFactorEx = fps\Factor[0] / 80.0
-							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
+							MoveEntity(d\OBJ, SinValue * OpenFactor * FPSFactorEx, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-FPSFactorEx), 0.0, 0.0)
 							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
@@ -2952,23 +2954,23 @@ Function UpdateDoors%()
 					Select d\DoorType
 						Case DEFAULT_DOOR
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
-							FPSFactorEx = Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 80.0
+							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
+							FPSFactorEx = Sin(d\OpenState) * OpenFactor * (-fps\Factor[0]) / 80.0
 							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case ELEVATOR_DOOR
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
-							FPSFactorEx = Sin(d\OpenState) * (d\FastOpen + 1) * (-fps\Factor[0]) / 162.0
+							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
+							FPSFactorEx = Sin(d\OpenState) * OpenFactor * (-fps\Factor[0]) / 162.0
 							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
+							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
 							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 85.0, 0.0, 0.0)
+							MoveEntity(d\OBJ, SinValue * OpenFactor * (-fps\Factor[0]) / 85.0, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * (-fps\Factor[0]) / 120.0, 0.0, 0.0)
 							;[End Block]
 						Case BIG_DOOR
@@ -2987,10 +2989,10 @@ Function UpdateDoors%()
 							;[End Block]
 						Case ONE_SIDED_DOOR
 							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * (d\FastOpen + 1)))
+							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
 							SinValue = Sin(d\OpenState)
 							FPSFactorEx = fps\Factor[0] / 80.0
-							MoveEntity(d\OBJ, SinValue * (d\FastOpen + 1) * (-FPSFactorEx), 0.0, 0.0)
+							MoveEntity(d\OBJ, SinValue * OpenFactor * (-FPSFactorEx), 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * (d\FastOpen + 1) * FPSFactorEx, 0.0, 0.0)
 							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
@@ -3005,15 +3007,18 @@ Function UpdateDoors%()
 				Else
 					d\FastOpen = False
 					PositionEntity(d\OBJ, FrameX, FrameY, FrameZ)
-					If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR
-						MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-					ElseIf d\DoorType = OFFICE_DOOR Lor d\DoorType = WOODEN_DOOR
-						MoveEntity(d\OBJ, (((d\DoorType = OFFICE_DOOR) * 92.0) + ((d\DoorType = WOODEN_DOOR) * 68.0)) * RoomScale, 0.0, 0.0)
-					EndIf
-					If d\OBJ2 <> 0
-						PositionEntity(d\OBJ2, FrameX, FrameY, FrameZ)
-						If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
-					EndIf
+					If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, FrameX, FrameY, FrameZ)
+					Select d\DoorType
+						Case DEFAULT_DOOR, ONE_SIDED_DOOR, SCP_914_DOOR
+							;[Block]
+							MoveEntity(d\OBJ, 0.0, 0.0, RoomSpacing * RoomScale)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, RoomSpacing * RoomScale)
+							;[End Block]
+						Case OFFICE_DOOR, WOODEN_DOOR
+							;[Block]
+							MoveEntity(d\OBJ, (((d\DoorType = OFFICE_DOOR) * 92.0) + ((d\DoorType = WOODEN_DOOR) * 68.0)) * RoomScale, 0.0, 0.0)
+							;[End Block]
+					End Select
 				EndIf
 			EndIf
 			If (Not (d\DoorType = WOODEN_DOOR And PlayerRoom\RoomTemplate\RoomID = r_cont2_860_1)) Then UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)

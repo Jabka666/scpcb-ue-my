@@ -383,6 +383,8 @@ Function SaveGame%(File$)
 		
 		WriteByte(f, d\IsElevatorDoor)
 		WriteByte(f, d\MTFClose)
+		
+		WriteByte(f, d\IsAffected)
 	Next
 	
 	WriteInt(f, 1845)
@@ -1050,6 +1052,9 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
+	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
+	
 	Temp = ReadInt(f)
 	
 	For i = 1 To Temp
@@ -1075,6 +1080,8 @@ Function LoadGame%(File$)
 		Local IsElevDoor% = ReadByte(f)
 		Local MTFClose% = ReadByte(f)
 		
+		Local IsAffected% = ReadByte(f)
+		
 		For d.Doors = Each Doors
 			If EntityX(d\FrameOBJ, True) = x And EntityY(d\FrameOBJ, True) = y And EntityZ(d\FrameOBJ, True) = z
 				d\Open = Open
@@ -1085,14 +1092,46 @@ Function LoadGame%(File$)
 				d\TimerState = TimerState
 				d\IsElevatorDoor = IsElevDoor
 				d\MTFClose = MTFClose
+				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
+				If IsAffected
+					Select d\DoorType
+						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+							;[Block]
+							EntityTexture(d\OBJ, TexDefault)
+							EntityTexture(d\FrameOBJ, TexDefault)
+							;[End Block]
+						Case HEAVY_DOOR
+							;[Block]
+							EntityTexture(d\OBJ, TexHeavy)
+							EntityTexture(d\FrameOBJ, TexHeavy)
+							;[End Block]
+					End Select
+				EndIf
+				
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+				If d\OBJ2 <> 0
+					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+					If IsAffected
+						Select d\DoorType
+							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+								;[Block]
+								EntityTexture(d\OBJ2, TexDefault)
+								;[End Block]
+							Case HEAVY_DOOR
+								;[Block]
+								EntityTexture(d\OBJ2, TexHeavy)
+								;[End Block]
+						End Select
+					EndIf
+				EndIf
 				Exit
 			EndIf
 		Next
 	Next
+	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
+	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
 	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
 	
@@ -1843,6 +1882,9 @@ Function LoadGameQuick%(File$)
 	
 	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
 	
+	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
+	
 	Temp = ReadInt(f)
 	
 	For i = 1 To Temp
@@ -1868,6 +1910,8 @@ Function LoadGameQuick%(File$)
 		Local IsElevDoor% = ReadByte(f)
 		Local MTFClose% = ReadByte(f)
 		
+		Local IsAffected% = ReadByte(f)
+		
 		For d.Doors = Each Doors
 			If EntityX(d\FrameOBJ, True) = x And EntityY(d\FrameOBJ, True) = y And EntityZ(d\FrameOBJ, True) = z
 				d\Open = Open
@@ -1878,14 +1922,46 @@ Function LoadGameQuick%(File$)
 				d\TimerState = TimerState
 				d\IsElevatorDoor = IsElevDoor
 				d\MTFClose = MTFClose
+				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
+				If IsAffected
+					Select d\DoorType
+						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+							;[Block]
+							EntityTexture(d\OBJ, TexDefault)
+							EntityTexture(d\FrameOBJ, TexDefault)
+							;[End Block]
+						Case HEAVY_DOOR
+							;[Block]
+							EntityTexture(d\OBJ, TexHeavy)
+							EntityTexture(d\FrameOBJ, TexHeavy)
+							;[End Block]
+					End Select
+				EndIf
+				
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+				If d\OBJ2 <> 0
+					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+					If IsAffected
+						Select d\DoorType
+							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+								;[Block]
+								EntityTexture(d\OBJ2, TexDefault)
+								;[End Block]
+							Case HEAVY_DOOR
+								;[Block]
+								EntityTexture(d\OBJ2, TexHeavy)
+								;[End Block]
+						End Select
+					EndIf
+				EndIf
 				Exit
 			EndIf
 		Next
 	Next
+	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
+	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
 	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
 	
