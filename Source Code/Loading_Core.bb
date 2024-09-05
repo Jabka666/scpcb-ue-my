@@ -1766,6 +1766,13 @@ Function LoadEvents%()
 	CreateEvent(e_trick, r_room2_lcz, 0, 0.15)
 	CreateEvent(e_trick, r_room2_3_lcz, 0, 0.15)
 	
+	CreateEvent(e_room2_ez_035, r_room2_ez, 0)
+	
+	CreateEvent(e_trick_item, r_room2c_2_lcz, 0, 0.15)
+	CreateEvent(e_trick_item, r_room2c_2_ez, 0, 0.15)
+	CreateEvent(e_trick_item, r_room2_ez, 1, 0.15)
+	CreateEvent(e_trick_item, r_room2_4_ez, 1, 0.2)
+	
 	CreateEvent(e_1048_a, r_room2_lcz, 1, 1.0)
 	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
@@ -1927,8 +1934,6 @@ Function LoadEvents%()
 	CreateEvent(e_096_spawn, r_room4_2_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_173_appearing, r_room2_4_lcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
-	
-	CreateEvent(e_room2_ez_035, r_room2_ez, 0)
 	
 	CreateEvent(e_room2_4_hcz_106, r_room2_4_hcz, 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	

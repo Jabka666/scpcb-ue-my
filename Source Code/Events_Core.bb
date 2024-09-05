@@ -84,8 +84,8 @@ Const e_checkpoint% = 65
 Const e_door_closing% = 66
 Const e_gateway% = 67
 Const e_tesla% = 68
-Const e_trick% = 69
-Const e_dimension_106% = 70, e_dimension_1499% = 71
+Const e_trick% = 69, e_trick_item% = 70
+Const e_dimension_106% = 71, e_dimension_1499% = 72
 ;[End Block]
 
 ; ~ For Map Creator
@@ -370,6 +370,10 @@ Function FindEventID%(EventName$)
 		Case "trick"
 			;[Block]
 			Return(e_trick)
+			;[End Block]
+		Case "trick_item"
+			;[Block]
+			Return(e_trick_item)
 			;[End Block]
 		Case "dimension_106"
 			;[Block]
@@ -4186,7 +4190,7 @@ Function UpdateEvents%()
 			Case e_trick
 				;[Block]
 				If PlayerRoom = e\room
-					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 4.0
+					If e\room\Dist < 2.0
 						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 36.0 Lor EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 36.0
 							RemoveEvent(e)
 						Else
@@ -4209,6 +4213,58 @@ Function UpdateEvents%()
 							
 							FreeEntity(Pvt) : Pvt = 0
 							RemoveEvent(e)
+						EndIf
+					EndIf
+				EndIf
+				;[End Block]
+			Case e_trick_item
+				;[Block]
+				If e\room\Dist < 4.0
+					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 16.0
+						RemoveEvent(e)
+					Else
+						If e\room\Objects[MaxRoomObjects - 1] = 0 ; ~ Use the latest object ID to prevent overlapping
+							Select Rand(3)
+								Case 1
+									;[Block]
+									Temp = it_scp500pill
+									;[End Block]
+								Case 2
+									;[Block]
+									Temp = it_key4
+									;[End Block]
+								Case 3
+									;[Block]
+									Temp = it_veryfinenvg
+									;[End Block]
+							End Select
+							
+							For itt.ItemTemplates = Each ItemTemplates
+								If itt\ID = Temp
+									e\room\Objects[MaxRoomObjects - 1] = CopyEntity(itt\OBJ)
+									If e\room\RoomCenter <> 0
+										PositionEntity(e\room\Objects[MaxRoomObjects - 1], EntityX(e\room\RoomCenter), e\room\y + 0.1, EntityZ(e\room\RoomCenter))
+									Else
+										PositionEntity(e\room\Objects[MaxRoomObjects - 1], e\room\x, e\room\y, e\room\z)
+									EndIf
+									RotateEntity(e\room\Objects[MaxRoomObjects - 1], 0.0, Rnd(360.0), 0.0)
+									EntityParent(e\room\Objects[MaxRoomObjects - 1], e\room\OBJ)
+									Exit
+								EndIf
+							Next
+						Else
+							If EntityDistanceSquared(me\Collider, e\room\Objects[MaxRoomObjects - 1]) < 4.0
+								me\BlurTimer = 500.0
+								me\BlinkTimer = -10.0
+								
+								PlaySound_Strict(snd_I\HorrorSFX[11])
+								
+								de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
+								EntityParent(de\OBJ, e\room\OBJ)
+								
+								FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
+								RemoveEvent(e)
+							EndIf
 						EndIf
 					EndIf
 				EndIf
