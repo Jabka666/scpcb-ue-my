@@ -9413,6 +9413,7 @@ Function UpdateLeave1499%()
 	If I_1499\Using = 0 And PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		For r.Rooms = Each Rooms
 			If r = I_1499\PrevRoom
+				IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
 				me\BlinkTimer = -1.0
 				I_1499\x = EntityX(me\Collider)
 				I_1499\y = EntityY(me\Collider)

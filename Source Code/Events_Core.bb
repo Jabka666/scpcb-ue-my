@@ -8014,6 +8014,8 @@ Function UpdateDimension1499%()
 			; ~ e\EventState3: Variable used for the SCP-1499's church event
 			
 			If PlayerRoom = e\room
+				PrevIsBlackOut = IsBlackOut : IsBlackOut = False
+				
 				If e\EventState < 2.0
 					; ~ SCP-1499's random generator
 					If e\EventState = 0.0
