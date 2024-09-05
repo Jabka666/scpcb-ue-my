@@ -2095,7 +2095,7 @@ Function UpdateEvents%()
 											If e\EventState2 > 70.0 And e\EventState2 - fps\Factor[0] <= 70.0
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech0.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 13.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 13.0
-												CreateMsg(GetLocalString("msg", "012_1"))
+												CreateMsg(GetLocalString("msg", "012_1"), 8.0)
 												me\Injuries = me\Injuries + 0.5
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 31.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 31.0
@@ -2103,11 +2103,11 @@ Function UpdateEvents%()
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
-												CreateMsg(GetLocalString("msg", "012_2"))
+												CreateMsg(GetLocalString("msg", "012_2"), 8.0)
 												me\Injuries = Max(me\Injuries, 1.5)
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(2, 3) + ".ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 49.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 49.0
-												CreateMsg(GetLocalString("msg", "012_3"))
+												CreateMsg(GetLocalString("msg", "012_3"), 8.0)
 												me\Injuries = me\Injuries + 0.3
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech4.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 63.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 63.0
@@ -2122,7 +2122,7 @@ Function UpdateEvents%()
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
-												CreateMsg(GetLocalString("msg", "012_4"))
+												CreateMsg(GetLocalString("msg", "012_4"), 8.0)
 												me\CameraShake = 2.0
 												me\Injuries = me\Injuries + 0.8
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
