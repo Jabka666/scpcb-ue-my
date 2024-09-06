@@ -6673,6 +6673,7 @@ Function UpdateEvents%()
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							LoadEventSound(e, "SFX\Room\Airlock.ogg")
 							For i = 0 To 1
+								e\room\RoomDoors[i]\FastOpen = True
 								OpenCloseDoor(e\room\RoomDoors[i])
 							Next
 							PlaySound_Strict(snd_I\AlarmSFX[3])
@@ -6707,12 +6708,11 @@ Function UpdateEvents%()
 						Else
 							For i = 0 To 1
 								If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
+								If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
+								e\room\RoomDoors[i]\FastOpen = False
 							Next
 							e\EventState = 0.0
 							e\EventState2 = 1.0
-							For i = 0 To 1
-								If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
-							Next
 						EndIf
 					EndIf
 					
