@@ -1,0 +1,45 @@
+name: Bug Report
+description: Help improve Ultimate Edition Reborn by reporting bugs.
+labels: [ "bug" ]
+body:
+  - type: checkboxes
+    attributes:
+      label: Before reporting, I have confirmed that
+      options:
+        - label: This bug does not appear to be reported on [GitHub Issues](https://github.com/Jabka666/scpcb-ue-my/issues) before.
+          required: true
+        - label: This bug still exists in the latest version of the Ultimate Edition Reborn.
+          required: true
+  - type: textarea
+    attributes:
+      label: Describe the Bug
+      description: |
+        A clear and concise description of what the bug is, and what you were expecting instead.  
+        You may use screenshots or videos to demonstrate the bug **in addition to your description.**
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction Steps
+      description: Please list the steps needed to recreate your bug.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Operating System Information
+      description: Please specify the operating system, CPU, GPU, total physical memory, etc, you are using that can recreate the bug.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Extra Information
+      description: If you have any insights or noticed any other odd behaviors that may be causing this, please provide them here.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! Note that further inquiries may be made on this issue if necessary to identify the problem.
