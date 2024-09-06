@@ -2490,6 +2490,8 @@ Function UpdateEvents%()
 								EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
 								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 								
+								e\room\RoomDoors[0]\IsAffected = True
+								
 								e\EventState = 1.0
 							EndIf
 						Else
