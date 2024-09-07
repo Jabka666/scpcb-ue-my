@@ -796,6 +796,8 @@ Function ResetNegativeStats%(Revive% = False)
 	I_008\Timer = 0.0
 	I_409\Timer = 0.0
 	I_1048A\EarGrowTimer = 0.0
+	I_966\HasInsomnia = 0.0
+	I_966\InsomniaEffectTimer = 0.0
 	
 	If Revive
 		ClearCheats()

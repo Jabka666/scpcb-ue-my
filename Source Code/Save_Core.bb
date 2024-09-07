@@ -142,7 +142,7 @@ Function SaveGame%(File$)
 	EndIf
 	
 	WriteFloat(f, I_966\HasInsomnia)
-	WriteByte(f, I_966\InsomniaEffectTimer)
+	WriteFloat(f, I_966\InsomniaEffectTimer)
 	
 	WriteFloat(f, I_1048A\EarGrowTimer)
 	WriteByte(f, I_1048A\Revert)
@@ -670,7 +670,7 @@ Function LoadGame%(File$)
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
 	
-	I_966\HasInsomnia = ReadByte(f)
+	I_966\HasInsomnia = ReadFloat(f)
 	I_966\InsomniaEffectTimer = ReadFloat(f)
 	
 	I_1048A\EarGrowTimer = ReadFloat(f)
@@ -1600,7 +1600,7 @@ Function LoadGameQuick%(File$)
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
 	
-	I_966\HasInsomnia = ReadByte(f)
+	I_966\HasInsomnia = ReadFloat(f)
 	I_966\InsomniaEffectTimer = ReadFloat(f)
 	
 	I_1048A\EarGrowTimer = ReadFloat(f)
