@@ -2490,6 +2490,8 @@ Function UpdateEvents%()
 								EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
 								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 								
+								e\room\RoomDoors[0]\IsAffected = True
+								
 								e\EventState = 1.0
 							EndIf
 						Else
@@ -5350,21 +5352,17 @@ Function UpdateEvents%()
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 ; ~ Lock the player inside
 								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.12
-									For i = 0 To 1
-										If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
-											If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-											e\EventState = 70.0 * 45.0
-										EndIf
-									Next
+									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) > 2.0 And EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) > 2.0
+										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+										e\EventState = 70.0 * 45.0
+									EndIf
 								EndIf
 							Else
 								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.12
-									For i = 0 To 1
-										If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
-											If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-											e\EventState = 70.0 * 45.0
-										EndIf
-									Next
+									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) > 2.0 And EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) > 2.0
+										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+										e\EventState = 70.0 * 45.0
+									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -6675,6 +6673,7 @@ Function UpdateEvents%()
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							LoadEventSound(e, "SFX\Room\Airlock.ogg")
 							For i = 0 To 1
+								e\room\RoomDoors[i]\FastOpen = True
 								OpenCloseDoor(e\room\RoomDoors[i])
 							Next
 							PlaySound_Strict(snd_I\AlarmSFX[3])
@@ -6709,12 +6708,11 @@ Function UpdateEvents%()
 						Else
 							For i = 0 To 1
 								If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
+								If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
+								e\room\RoomDoors[i]\FastOpen = False
 							Next
 							e\EventState = 0.0
 							e\EventState2 = 1.0
-							For i = 0 To 1
-								If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
-							Next
 						EndIf
 					EndIf
 					

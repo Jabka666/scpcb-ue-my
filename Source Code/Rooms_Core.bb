@@ -149,6 +149,8 @@ Function FillRoom%(r.Rooms)
 				EntityTexture(r\RoomDoors[0]\FrameOBJ, Tex)
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				
+				r\RoomDoors[0]\IsAffected = True
+				
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 				EntityParent(de\OBJ, r\OBJ)
 			ElseIf I_005\ChanceToSpawn = 3
@@ -1846,7 +1848,7 @@ Function FillRoom%(r.Rooms)
 			
 			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
 			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_5)
-			d\AutoClose = False : d\Locked = 1
+			d\AutoClose = False : d\Locked = 1 : d\IsAffected = True
 			PositionEntity(d\Buttons[0], r\x - 438.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 480.0 * RoomScale, True)
 			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
@@ -3512,7 +3514,7 @@ Function FillRoom%(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
 			; ~ Dr. L's office door
 			d.Doors = CreateDoor(r, r\x - 352.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
-			d\MTFClose = False : d\DisableWaypoint = True
+			d\MTFClose = False : d\DisableWaypoint = True : d\IsAffected = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			EntityTexture(d\OBJ, Tex)
 			EntityTexture(d\OBJ2, Tex)

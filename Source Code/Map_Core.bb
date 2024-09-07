@@ -2871,7 +2871,7 @@ Function UpdateDoors%()
 			EndIf
 			
 			Local FPSFactorDoubled# = fps\Factor[0] * 2.0
-			Local OpenFactor# = (d\FastOpen + 1 - d\IsAffected * 0.5)
+			Local OpenFactor# = (d\FastOpen + 1 - (d\IsAffected * 0.375))
 			
 			If d\Open
 				If d\OpenState < 180.0
