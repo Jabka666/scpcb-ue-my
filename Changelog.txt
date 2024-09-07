@@ -20,6 +20,7 @@ v1.3.1
 - Fixed an issue where the player couldn't return to facility from the Pocket Dimension.
 - Fixed crash with SCP-106 touching SCP-914's doors.
 - Fixed darkness in SCP-1499's dimension if facility is under blackout.
+- Fixed grammatical issues in some achievement names.
 
 v1.3
 
