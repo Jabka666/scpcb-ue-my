@@ -30,6 +30,12 @@ body:
       required: true
   - type: textarea
     attributes:
+      label: Error Message Screenshot
+      description: Please put the "catastrophic error message" screenshot right here.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
       label: Operating System Information
       description: Please specify the operating system, CPU, GPU, RAM, etc, you are using that can recreate the bug.
     validations:
