@@ -31,7 +31,7 @@ body:
   - type: textarea
     attributes:
       label: Operating System Information
-      description: Please specify the operating system, CPU, GPU, total physical memory, etc, you are using that can recreate the bug.
+      description: Please specify the operating system, CPU, GPU, RAM, etc, you are using that can recreate the bug.
     validations:
       required: true
   - type: textarea
