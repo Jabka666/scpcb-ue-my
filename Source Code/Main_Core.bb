@@ -5011,6 +5011,10 @@ Function UpdateGUI%()
 				Case it_syringeinf
 					;[Block]
 					If CanUseItem(True, True)
+						me\HealTimer = Rnd(10.0, 20.0)
+						me\StaminaEffect = 0.8
+						me\StaminaEffectTimer = Rand(10.0, 20.0)
+						
 						CreateMsg(GetLocalString("msg", "syringe_6"))
 						
 						me\VomitTimer = 70.0
