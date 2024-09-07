@@ -15,12 +15,18 @@ v1.3.1
 [Items]
 - Changed clearance level for SCP-895's document.
 
+[NPCs]
+- SCP-966's insomnia timer scales longer with the «SelectedDifficulty\OtherFactors» setting.
+- SCP-066 deaf timer scales with «SelectedDifficulty\OtherFactors» instead of «SelectedDifficulty\AggressiveNPCs».
+
 [Bug Fixes]
 - Fixed fake hallways (SCP-970 loop) not showing properly.
 - Fixed an issue where the player couldn't return to facility from the Pocket Dimension.
 - Fixed crash with SCP-106 touching SCP-914's doors.
 - Fixed darkness in SCP-1499's dimension if facility is under blackout.
 - Fixed grammatical issues in some achievement names.
+- Fixed Insomnia not saving properly.
+- Fixed Insomnia not being removed with «Heal».
 
 v1.3
 
