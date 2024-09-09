@@ -416,9 +416,6 @@ Function UpdateGame%()
 			Update427()
 			RefillCup()
 			
-			If chs\InfiniteStamina Then me\Stamina = 100.0
-			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
-			
 			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
 			If me\BlurTimer > 0.0
 				me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
@@ -524,6 +521,9 @@ Function UpdateGame%()
 				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
 				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
 			EndIf
+			
+			If chs\InfiniteStamina Then me\Stamina = 100.0
+			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
 			
 			If me\FallTimer < 0.0
 				ResetSelectedStuff()
