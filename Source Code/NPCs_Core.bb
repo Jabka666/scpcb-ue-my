@@ -4318,6 +4318,10 @@ Function UpdateNPCs%()
 							n\State3 = 0.0
 						EndIf
 					EndIf
+					If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
+						n\State3 = 0.0
+						n\State = 0.0
+					EndIf
 				EndIf
 				;[End Block]
 			Case NPCType1499_1
