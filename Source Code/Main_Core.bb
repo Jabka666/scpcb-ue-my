@@ -449,19 +449,19 @@ Function UpdateGame%()
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							me\BLINKFREQ = Rnd(770.0, 910.0)
+							me\BLINKFREQ = Rnd(840.0, 980.0)
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							me\BLINKFREQ = Rnd(630.0, 770.0)
+							me\BLINKFREQ = Rnd(700.0, 840.0)
 							;[End Block]
 						Case HARD
 							;[Block]
-							me\BLINKFREQ = Rnd(490.0, 630.0)
+							me\BLINKFREQ = Rnd(560.0, 700.0)
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							me\BLINKFREQ = Rnd(350.0, 490.0)
+							me\BLINKFREQ = Rnd(420.0, 560.0)
 							;[End Block]
 					End Select
 					me\BlinkTimer = me\BLINKFREQ
