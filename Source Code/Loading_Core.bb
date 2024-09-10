@@ -2659,7 +2659,7 @@ Function InitNewGame%()
 			; ~ Such a stupid way, but it works
 			Tex = LoadTexture_Strict(p\TexPath)
 			EntityTexture(p\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+			;DeleteSingleTextureEntryFromCache(Tex) : Tex = 0 ; ~ Actually we don't need this
 			p\TexPath = ""
 		EndIf
 	Next
@@ -2800,7 +2800,7 @@ Function InitLoadGame%()
 			; ~ Such a stupid way, but it works
 			Tex = LoadTexture_Strict(p\TexPath)
 			EntityTexture(p\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+			;DeleteSingleTextureEntryFromCache(Tex) : Tex = 0 ; ~ Actually we don't need this
 			p\TexPath = ""
 		EndIf
 	Next
