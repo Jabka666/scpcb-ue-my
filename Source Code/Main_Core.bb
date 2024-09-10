@@ -1653,6 +1653,7 @@ Function UpdateConsole%()
 					;[Block]
 					ResetNegativeStats(True)
 					If t\OverlayID[10] <> 0 Then FreeEntity(t\OverlayID[10]) : t\OverlayID[10] = 0
+					me\Playable = True
 					;[End Block]
 				Case "noclip", "fly"
 					;[Block]
