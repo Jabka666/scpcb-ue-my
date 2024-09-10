@@ -3900,7 +3900,7 @@ Function UpdateNPCs%()
 											Case 1
 												;[Block]
 												PlaySound_Strict(LoadTempSound("SFX\SCP\066\Beethoven.ogg"))
-												me\DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
+												me\DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\OtherFactors))
 												me\Deaf = True
 												me\BigCameraShake = 10.0
 												;[End Block]
@@ -4111,7 +4111,7 @@ Function UpdateNPCs%()
 												End Select
 											EndIf
 											I_966\HasInsomnia = 1.0 - (0.5 * I_714\Using)
-											I_966\InsomniaEffectTimer = 2100.0 - (1050.0 * I_714\Using)
+											I_966\InsomniaEffectTimer = 70.0 * (30.0 + (10.0 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)
 										EndIf
 									EndIf
 									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -4317,6 +4317,10 @@ Function UpdateNPCs%()
 							TeleportCloser(n)
 							n\State3 = 0.0
 						EndIf
+					EndIf
+					If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
+						n\State3 = 0.0
+						n\State = 0.0
 					EndIf
 				EndIf
 				;[End Block]
@@ -7083,7 +7087,7 @@ Function MoveToPocketDimension%()
 		If r\RoomTemplate\RoomID = r_dimension_106
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
 			me\Injuries = me\Injuries + 0.5
-			me\BlurTimer = 1600.0
+			me\BlurTimer = 1750.0
 			HideEntity(me\Head)
 			ShowEntity(me\Collider)
 			PlaySound_Strict(snd_I\Use914SFX)

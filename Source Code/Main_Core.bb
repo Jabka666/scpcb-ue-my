@@ -416,9 +416,6 @@ Function UpdateGame%()
 			Update427()
 			RefillCup()
 			
-			If chs\InfiniteStamina Then me\Stamina = 100.0
-			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
-			
 			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
 			If me\BlurTimer > 0.0
 				me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
@@ -452,19 +449,19 @@ Function UpdateGame%()
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							me\BLINKFREQ = Rnd(770.0, 910.0)
+							me\BLINKFREQ = Rnd(840.0, 980.0)
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							me\BLINKFREQ = Rnd(630.0, 770.0)
+							me\BLINKFREQ = Rnd(700.0, 840.0)
 							;[End Block]
 						Case HARD
 							;[Block]
-							me\BLINKFREQ = Rnd(490.0, 630.0)
+							me\BLINKFREQ = Rnd(560.0, 700.0)
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							me\BLINKFREQ = Rnd(350.0, 490.0)
+							me\BLINKFREQ = Rnd(420.0, 560.0)
 							;[End Block]
 					End Select
 					me\BlinkTimer = me\BLINKFREQ
@@ -524,6 +521,9 @@ Function UpdateGame%()
 				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
 				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
 			EndIf
+			
+			If chs\InfiniteStamina Then me\Stamina = 100.0
+			If chs\NoBlink Then me\BlinkTimer = me\BLINKFREQ
 			
 			If me\FallTimer < 0.0
 				ResetSelectedStuff()
@@ -796,6 +796,8 @@ Function ResetNegativeStats%(Revive% = False)
 	I_008\Timer = 0.0
 	I_409\Timer = 0.0
 	I_1048A\EarGrowTimer = 0.0
+	I_966\HasInsomnia = 0.0
+	I_966\InsomniaEffectTimer = 0.0
 	
 	If Revive
 		ClearCheats()
@@ -5011,6 +5013,10 @@ Function UpdateGUI%()
 				Case it_syringeinf
 					;[Block]
 					If CanUseItem(True, True)
+						me\HealTimer = Rnd(10.0, 20.0)
+						me\StaminaEffect = 0.8
+						me\StaminaEffectTimer = Rand(10.0, 20.0)
+						
 						CreateMsg(GetLocalString("msg", "syringe_6"))
 						
 						me\VomitTimer = 70.0
