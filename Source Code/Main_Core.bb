@@ -2688,9 +2688,9 @@ Function UpdateMoving%()
 				If (Not me\Zombie)
 					If (Not KeyDown(key\SPRINT)) And (Not InvOpen) And OtherOpen = Null
 						If KeyDown(key\LEAN_LEFT)
-							If (Not KeyDown(key\LEAN_RIGHT)) Then me\Lean = CurveValue(-20.0, me\Lean, 6.0)
+							If (Not KeyDown(key\LEAN_RIGHT)) Then me\Lean = CurveValue(-20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
 						ElseIf KeyDown(key\LEAN_RIGHT)
-							me\Lean = CurveValue(20.0, me\Lean, 6.0)
+							me\Lean = CurveValue(20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
 						EndIf
 					EndIf
 					
