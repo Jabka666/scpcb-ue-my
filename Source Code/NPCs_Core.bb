@@ -7087,7 +7087,7 @@ Function MoveToPocketDimension%()
 		If r\RoomTemplate\RoomID = r_dimension_106
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
 			me\Injuries = me\Injuries + 0.5
-			me\BlurTimer = 1600.0
+			me\BlurTimer = 1750.0
 			HideEntity(me\Head)
 			ShowEntity(me\Collider)
 			PlaySound_Strict(snd_I\Use914SFX)
