@@ -375,6 +375,11 @@ Function UpdateGame%()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			DecalStep = 0
+			UpdateDevilParticlesTimer = Min(1.0, UpdateDevilParticlesTimer + fps\Factor[0])
+			If UpdateDevilParticlesTimer = 1.0
+				UpdateParticles_Devil()
+				UpdateDevilParticlesTimer = 0.0
+			EndIf
 			If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
@@ -385,11 +390,6 @@ Function UpdateGame%()
 			Else
 				UpdateLightVolume()
 				UpdateLights(Camera)
-				UpdateDevilParticlesTimer = Min(1.0, UpdateDevilParticlesTimer + fps\Factor[0])
-				If UpdateDevilParticlesTimer = 1.0
-					UpdateParticles_Devil()
-					UpdateDevilParticlesTimer = 0.0
-				EndIf
 				UpdateDoors()
 				UpdateSecurityCams()
 				UpdateScreens()
