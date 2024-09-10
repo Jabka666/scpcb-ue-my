@@ -581,24 +581,35 @@ Function UpdateGame%()
 		If KeyHit(key\SAVE)
 			If (Not MenuOpen)
 				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
-					If CanSave = 0 ; ~ Scripted location
-						CreateHintMsg(GetLocalString("save", "failed.now"))
-					ElseIf CanSave = 1 ; ~ Endings / Intro location
-						CreateHintMsg(GetLocalString("save", "failed.location"))
-						If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
-					ElseIf CanSave = 2 ; ~ Triggered SCP-096
-						CreateHintMsg(GetLocalString("save", "failed.096"))
-					ElseIf as\Timer <= 70.0 * 5.0
-						CancelAutoSave()
-					ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-						If SelectedScreen = Null And sc_I\SelectedMonitor = Null
-							CreateHintMsg(GetLocalString("save", "failed.screen"))
-						Else
-							SaveGame(CurrSave\Name) ; ~ Can save at screen
-						EndIf
-					Else
-						SaveGame(CurrSave\Name) ; ~ Can save
-					EndIf
+					Select CanSave
+						Case 0 ; ~ Scripted location
+							;[Break]
+							CreateHintMsg(GetLocalString("save", "failed.now"))
+							;[End Break]
+						Case 1 ; ~ Endings / Intro location
+							;[Break]
+							CreateHintMsg(GetLocalString("save", "failed.location"))
+							If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
+							;[End Break]
+						Case 2 ; ~ Triggered SCP-096
+							;[Break]
+							CreateHintMsg(GetLocalString("save", "failed.096"))
+							;[End Break]
+						Case 3 ; ~ Scripted location
+							;[Break]
+							If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+								If SelectedScreen = Null And sc_I\SelectedMonitor = Null
+									CreateHintMsg(GetLocalString("save", "failed.screen"))
+								Else
+									SaveGame(CurrSave\Name) ; ~ Can save at screen
+								EndIf
+							ElseIf as\Timer <= 70.0 * 5.0
+								CancelAutoSave()
+							Else
+								SaveGame(CurrSave\Name) ; ~ Can save
+							EndIf
+							;[End Break]
+					End Select
 				Else
 					CreateHintMsg(GetLocalString("save", "disable"))
 				EndIf
