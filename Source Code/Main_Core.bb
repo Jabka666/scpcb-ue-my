@@ -595,7 +595,7 @@ Function UpdateGame%()
 							;[Break]
 							CreateHintMsg(GetLocalString("save", "failed.096"))
 							;[End Break]
-						Case 3 ; ~ Scripted location
+						Case 3 ; ~ Allowed To Save
 							;[Break]
 							If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
 								If SelectedScreen = Null And sc_I\SelectedMonitor = Null
