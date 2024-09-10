@@ -7275,11 +7275,13 @@ Function UpdateDimension106%()
 					For i = 9 To 10
 						ScaleEntity(e\room\Objects[i], RoomScale * (1.5 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
 					Next
-				Else
+				ElseIf SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					If KeyHit(key\SAVE)
 						If SelectedDifficulty\SaveType = SAVE_ANYWHERE
 							PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
 							CreateHintMsg(GetLocalString("save", "saved"))
+						ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+							CreateHintMsg(GetLocalString("save", "failed.screen"))
 						EndIf
 					EndIf
 				EndIf
