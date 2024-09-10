@@ -589,7 +589,7 @@ Function UpdateGame%()
 						Case 1 ; ~ Endings / Intro location
 							;[Break]
 							CreateHintMsg(GetLocalString("save", "failed.location"))
-						If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
+							If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
 							;[End Break]
 						Case 2 ; ~ Triggered SCP-096
 							;[Break]
