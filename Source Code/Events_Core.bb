@@ -7793,37 +7793,41 @@ Function UpdateDimension106%()
 							Local RoomID% = -1
 							Local LCZ% = False
 							
-							Select Rand(7)
+							Select Rand(8)
 								Case 1
 									;[Block]
-									RoomID = r_room2_5_hcz
+									RoomID = r_cont1_914
+									LCZ = True
 									;[End Block]
 								Case 2
 									;[Block]
-									RoomID = r_room2_lcz
+									RoomID = r_room2_2_lcz
 									LCZ = True
 									;[End Block]
 								Case 3
 									;[Block]
-									RoomID = r_room3_2_lcz
+									RoomID = r_room2_5_lcz
 									LCZ = True
 									;[End Block]
 								Case 4
 									;[Block]
-									RoomID = r_room3_lcz
-									LCZ = True
+									RoomID = r_cont1_106
 									;[End Block]
 								Case 5
 									;[Block]
-									RoomID = r_cont1_106
+									RoomID = r_room2_3_hcz
 									;[End Block]
 								Case 6
 									;[Block]
-									RoomID = r_room2_3_hcz
+									RoomID = r_room2_5_hcz
 									;[End Block]
 								Case 7
 									;[Block]
 									RoomID = r_room3_2_hcz
+									;[End Block]
+								Case 8
+									;[Block]
+									RoomID = r_room4_hcz
 									;[End Block]
 							End Select
 							

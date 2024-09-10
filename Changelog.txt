@@ -13,6 +13,10 @@ v1.3.1
 	- Hard: 8-10 seconds (Previously 9.5-11.9)
 	- Extreme: 6-8 seconds (Previously 7.14-9.5)
 
+- Rebalanced exits from the Pocket Dimension:
+	- Added: cont1_914, room2_2_lcz, room2_5_lcz, room4_hcz
+	- Removed: room2_lcz, room3_lcz, room3_2_lcz
+
 - Optimized the game...
 
 [Rooms]
