@@ -2678,7 +2678,7 @@ Function UpdateMoving%()
 			ResetEntity(me\Collider)
 		Else
 			Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
-			If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0)
+			If me\Injuries > 0.5 Then Temp2 = Max(Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0), 0.005)
 			Temp = False
 			me\Lean = CurveValue(1.0, me\Lean, 12.0)
 			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
