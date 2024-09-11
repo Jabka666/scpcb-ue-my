@@ -47,6 +47,7 @@ v1.3.1
 	- Fixed king texture not saving properly.
 	- Fixed model scale not saving properly.
 - Fixed room names on debug map.
+- Fixed «room4_ic» spawning in HCZ sometimes.
 
 v1.3
 

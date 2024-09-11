@@ -4990,13 +4990,16 @@ End Function
 Dim MapRoom$(0, 0)
 
 Function SetRoom%(RoomName$, RoomType%, RoomPosition%, MinPos%, MaxPos%) ; ~ Place a room without overwriting others
+	If MaxPos < MinPos Then Return(False)
+	
 	Local Looped% = False, CanPlace% = True
 	
+	RoomPosition = MinPos + RoomPosition
 	While MapRoom(RoomType, RoomPosition) <> ""
 		RoomPosition = RoomPosition + 1
 		If RoomPosition > MaxPos
 			If (Not Looped)
-				RoomPosition = MinPos + 1 : Looped = True
+				RoomPosition = MinPos : Looped = True
 			Else
 				CanPlace = False
 				Exit
@@ -5555,6 +5558,9 @@ Function CreateMap%()
 	MapRoom(ROOM3, Floor(Rnd(0.2, 0.6) * Float(Room3Amount[0]))) = "room3_storage"
 	MapRoom(ROOM3, Floor(0.8 * Float(Room3Amount[0]))) = "cont3_372"
 	
+	MinPos = 0
+	MaxPos = Room4Amount[0] - 1
+	
 	SetRoom("room4_ic", ROOM4, Floor(0.3 * Float(Room4Amount[0])), MinPos, MaxPos)
 	
 	; ~ [HEAVY CONTAINMENT ZONE]
@@ -5562,23 +5568,23 @@ Function CreateMap%()
 	MinPos = Room1Amount[0]
 	MaxPos = Room1Amount[0] + Room1Amount[1] - 1
 	
-	SetRoom("cont1_079", ROOM1, Room1Amount[0] + Floor(0.15 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_106", ROOM1, Room1Amount[0] + Floor(0.3 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_035", ROOM1, Room1Amount[0] + Floor(0.45 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_895", ROOM1, Room1Amount[0] + Floor(0.7 * Float(Room1Amount[1])), MinPos, MaxPos)
+	SetRoom("cont1_079", ROOM1, Floor(0.15 * Float(Room1Amount[1])), MinPos, MaxPos)
+	SetRoom("cont1_106", ROOM1, Floor(0.3 * Float(Room1Amount[1])), MinPos, MaxPos)
+	SetRoom("cont1_035", ROOM1, Floor(0.45 * Float(Room1Amount[1])), MinPos, MaxPos)
+	SetRoom("cont1_895", ROOM1, Floor(0.7 * Float(Room1Amount[1])), MinPos, MaxPos)
 	
 	MinPos = Room2Amount[0]
 	MaxPos = Room2Amount[0] + Room2Amount[1] - 1
 	
 	MapRoom(ROOM2, Room2Amount[0] + Floor(0.1 * Float(Room2Amount[1]))) = "room2_nuke"
 	
-	SetRoom("cont2_409", ROOM2, Room2Amount[0] + Floor(0.15 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_mt", ROOM2, Room2Amount[0] + Floor(0.25 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("cont2_008", ROOM2, Room2Amount[0] + Floor(0.4 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_shaft", ROOM2, Room2Amount[0] + Floor(0.5 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("cont2_049", ROOM2, Room2Amount[0] + Floor(0.6 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_test_hcz", ROOM2, Room2Amount[0] + Floor(0.7 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_servers_hcz", ROOM2, Room2Amount[0] + Floor(0.9 * Float(Room2Amount[1])), MinPos, MaxPos)
+	SetRoom("cont2_409", ROOM2, Floor(0.15 * Float(Room2Amount[1])), MinPos, MaxPos)
+	SetRoom("room2_mt", ROOM2, Floor(0.25 * Float(Room2Amount[1])), MinPos, MaxPos)
+	SetRoom("cont2_008", ROOM2, Floor(0.4 * Float(Room2Amount[1])), MinPos, MaxPos)
+	SetRoom("room2_shaft", ROOM2, Floor(0.5 * Float(Room2Amount[1])), MinPos, MaxPos)
+	SetRoom("cont2_049", ROOM2, Floor(0.6 * Float(Room2Amount[1])), MinPos, MaxPos)
+	SetRoom("room2_test_hcz", ROOM2, Floor(0.7 * Float(Room2Amount[1])), MinPos, MaxPos)
+	SetRoom("room2_servers_hcz", ROOM2, Floor(0.9 * Float(Room2Amount[1])), MinPos, MaxPos)
 	
 	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "cont2c_096"
 	
@@ -5595,18 +5601,17 @@ Function CreateMap%()
 	MinPos = Room2Amount[0] + Room2Amount[1]
 	MaxPos = Room2Amount[0] + Room2Amount[1] + Room2Amount[2] - 1
 	
-	MapRoom(ROOM2, MinPos + Floor(0.1 * Float(Room2Amount[2]))) = "room2_scientists"
-	
-	SetRoom("room2_cafeteria", ROOM2, MinPos + Floor(0.2 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_6_ez", ROOM2, MinPos + Floor(0.25 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office_3", ROOM2, MinPos + Floor(0.3 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_servers_ez", ROOM2, MinPos + Floor(0.4 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office", ROOM2, MinPos + Floor(0.5 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office_2", ROOM2, MinPos + Floor(0.55 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("cont2_860_1", ROOM2, MinPos + Floor(0.6 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_medibay", ROOM2, MinPos + Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_scientists_2", ROOM2, MinPos + Floor(0.8 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_ic", ROOM2, MinPos + Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_scientists", ROOM2, Floor(0.1 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_cafeteria", ROOM2, Floor(0.2 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_6_ez", ROOM2, Floor(0.25 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_office_3", ROOM2, Floor(0.3 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_servers_ez", ROOM2, Floor(0.4 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_office", ROOM2, Floor(0.5 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_office_2", ROOM2, Floor(0.55 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("cont2_860_1", ROOM2, Floor(0.6 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_medibay", ROOM2, Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_scientists_2", ROOM2, Floor(0.8 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom("room2_ic", ROOM2, Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
 	
 	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2c_ec"
 	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2c_gw_ez"
