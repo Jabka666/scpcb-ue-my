@@ -59,7 +59,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	CatchErrors("CreateNPC(" + NPCType + ", " + x + ", " + y + ", " + z)
 	
 	Local n.NPCs, n2.NPCs
-	Local Temp#, i%, Tex%, TexFestive%
+	Local Temp#, i%, Tex%
 	
 	n.NPCs = New NPCs
 	n\NPCType = NPCType
@@ -83,28 +83,29 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_173_MODEL])
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_173_HEAD_MODEL])
+			
 			; ~ Set a fastive texture
 			Select Left(CurrentDate(), 7)
 				Case "31 Oct "
 					;[Block]
 					n_I\IsHalloween = True
-					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
+					Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
 					;[End Block]
 				Case "01 Jan "
 					;[Block]
 					n_I\IsNewYear = True
-					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
+					Tex = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
 					;[End Block]
 				Case "01 Apr "
 					;[Block]
 					n_I\IsAprilFools = True
-					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
+					Tex = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
 					;[End Block]
 			End Select
-			If TexFestive <> 0
-				EntityTexture(n\OBJ, TexFestive)
-				EntityTexture(n\OBJ2, TexFestive)
-				DeleteSingleTextureEntryFromCache(TexFestive) : TexFestive = 0
+			If Tex <> 0
+				EntityTexture(n\OBJ, Tex)
+				EntityTexture(n\OBJ2, Tex)
+				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			EndIf
 			Temp = IniGetFloat(NPCsFile, "SCP-173", "Scale") / MeshDepth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -1169,7 +1170,9 @@ Function UpdateNPCs%()
 				;[Block]
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
+				
 				Local IsLooking% = Dist < PowTwo(me\CameraFogDist * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
+				
 				If wi\SCRAMBLE > 0 And IsLooking
 					Local HasBatteryForScramble% = False
 					
