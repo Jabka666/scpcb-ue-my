@@ -15,7 +15,7 @@ v1.3.1
 
 - Rebalanced exits from the Pocket Dimension:
 	- Added: cont1_914, room2_2_lcz, room2_5_lcz, room4_hcz
-	- Removed: room2_lcz, room3_lcz, room3_2_lcz
+	- Removed: cont1_106, room2_lcz, room3_lcz, room3_2_lcz
 
 - Optimized the game...
 
