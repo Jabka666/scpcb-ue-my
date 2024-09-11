@@ -499,7 +499,7 @@ Function PlayStartupVideos%()
 			Cls()
 			DrawMovie(Movie, 0, (opt\RealGraphicHeight / 2 - ScaledGraphicHeight / 2), opt\RealGraphicWidth, ScaledGraphicHeight)
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
-			Flip()
+			Flip(True)
 			
 			Local Close% = False
 			
