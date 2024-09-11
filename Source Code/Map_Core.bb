@@ -5201,9 +5201,9 @@ Function CreateMap%()
 	Repeat
 		Width = Rand(Floor(MapGridSize * 0.6), Floor(MapGridSize * 0.85))
 		
-		If x > MapGridSize * 0.6
+		If x > Floor(MapGridSize * 0.6)
 			Width = -Width
-		ElseIf x > MapGridSize * 0.4
+		ElseIf x > Floor(MapGridSize * 0.4)
 			x = x - (Width / 2)
 		EndIf
 		
@@ -5615,8 +5615,6 @@ Function CreateMap%()
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.7 * Float(Room3Amount[2]))) = "room3_3_ez"
 	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.5 * Float(Room3Amount[2]))) = "room3_office"
 	
-	; ~ [GENERATE OTHER ROOMS]
-	
 	Temp = 0
 	For y = MapGridSize - 1 To 1 Step -1
 		If y < (MapGridSize / 3) + 1
@@ -5629,10 +5627,12 @@ Function CreateMap%()
 		For x = 1 To MapGridSize - 2
 			If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_CheckpointTile
 				If y > MapGridSize / 2
-					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, r_room2_checkpoint_lcz_hcz)
+					RoomID = r_room2_checkpoint_lcz_hcz
 				Else
-					r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, r_room2_checkpoint_hcz_ez)
+					RoomID = r_room2_checkpoint_hcz_ez
 				EndIf
+				r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID)
+				CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
 				CalculateRoomExtents(r)
 			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1)
