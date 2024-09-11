@@ -9195,6 +9195,8 @@ Function UpdateIntro%()
 													
 													ClearConsole()
 													
+													CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
+													
 													RemoveEvent(e)
 													Return
 													Exit
