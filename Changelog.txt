@@ -23,6 +23,9 @@ v1.3.1
 - Added a wallet in the hallway near SCP-513's containment chamber
 
 [Items]
+- Added icon for Compact First Aid Kit.
+
+- Changed size of Blue First Aid Kit icon.
 - Changed clearance level for SCP-895's document.
 - Infected syringes will now slightly heal and give a very small stamina boost.
 
