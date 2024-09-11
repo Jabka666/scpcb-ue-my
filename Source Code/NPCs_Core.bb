@@ -42,8 +42,7 @@ Type NPCs
 	Field NPCNameInSection$
 	Field InFacility%
 	Field HP%
-	Field Model$
-	Field ModelScaleX#, ModelScaleY#, ModelScaleZ#
+	Field ModelScale#
 	Field TextureID% = -1
 	Field HasAsset% = False
 	Field HasAnim%
@@ -421,8 +420,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1499_1_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			n\ModelScale = IniGetFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
+			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			EntityFX(n\OBJ, 1)
 			EntityAutoFade(n\OBJ, HideDistance * 2.5, HideDistance * 2.95)
 			;[End Block]
