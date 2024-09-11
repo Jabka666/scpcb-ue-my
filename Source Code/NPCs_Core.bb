@@ -4995,26 +4995,6 @@ Function UpdateNPCs%()
 						
 						RemoveSound = True
 						
-						PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
-						p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
-						EntityColor(p\OBJ, 100.0, 100.0, 100.0)
-						RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
-						p\AlphaChange = -Rnd(0.02, 0.03)
-						For i = 0 To 1
-							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider) + Rnd(-0.2, 0.2), EntityY(n\Collider) + 0.25, EntityZ(n\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
-							EntityColor(p\OBJ, 100.0, 100.0, 100.0)
-							RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
-							p\AlphaChange = -Rnd(0.02, 0.03)
-						Next
-						
-						Pvt = CreatePivot()
-						PositionEntity(Pvt, EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
-						TurnEntity(Pvt, 90.0, 0.0, 0.0)
-						If EntityPick(Pvt, 0.3)
-							de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
-							de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
-						EndIf
-						
 						n\GravityMult = 0.0
 						;[End Block]
 					Case NPCTypeGuard
@@ -5172,6 +5152,7 @@ Const MTF_DISABLING_TESLA% = 11
 
 Function UpdateMTFUnit%(n.NPCs)
 	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events
+	Local i%
 	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
@@ -6545,12 +6526,37 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0.0)
 							Else
 								If (Not n\Target\IsDead)
-									If n\Target\NPCType = NPCType049_2
-										If n = n_I\MTFLeader
-											LoadNPCSound(n, "SFX\Character\MTF\049_2\TargetTerminated.ogg")
-											PlayMTFSound(n\Sound, n)
-										EndIf
-									EndIf
+									Select n\Target\NPCType
+										Case NPCType049_2
+											;[Block]
+											If n = n_I\MTFLeader
+												LoadNPCSound(n, "SFX\Character\MTF\049_2\TargetTerminated.ogg")
+												PlayMTFSound(n\Sound, n)
+											EndIf
+											;[End Block]
+										Case NPCType1048_A
+											;[Block]
+											PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Target\Collider, 8.0)
+											p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.2, EntityZ(n\Target\Collider), 0.25, 0.0)
+											EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+											RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+											p\AlphaChange = -Rnd(0.02, 0.03)
+											For i = 0 To 1
+												p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Target\Collider) + Rnd(-0.2, 0.2), EntityY(n\Target\Collider) + 0.25, EntityZ(n\Target\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
+												EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+												RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+												p\AlphaChange = -Rnd(0.02, 0.03)
+											Next
+											
+											Pvt = CreatePivot()
+											PositionEntity(Pvt, EntityX(n\Target\Collider) + Rnd(-0.05, 0.05), EntityY(n\Target\Collider) - 0.05, EntityZ(n\Target\Collider) + Rnd(-0.05, 0.05))
+											TurnEntity(Pvt, 90.0, 0.0, 0.0)
+											If EntityPick(Pvt, 0.3)
+												de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
+												de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+											EndIf
+											;[End Block]
+									End Select
 								EndIf
 								n\Target\IsDead = True
 								n\Target = Null
