@@ -5779,17 +5779,28 @@ Function CreateMap%()
 						Color((50 * Zone) + 50, (50 * Zone) + 50, (50 * Zone) + 50)
 						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
 					Else
-						If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_CheckpointTile
-							Color(0, 200, 0)
-						ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] = 4
-							Color(50, 50, 255)
-						ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] = 3
-							Color(50, 255, 255)
-						ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] = 2
-							Color(255, 255, 50)
-						Else
-							Color(255, 255, 255)
-						EndIf
+						Select CurrMapGrid\Grid[x + (y * MapGridSize)]
+							Case MapGrid_CheckpointTile
+								;[Block]
+								Color(0, 200, 0)
+								;[End Block]
+							Case 4
+								;[Block]
+								Color(50, 50, 255)
+								;[End Block]
+							Case 3
+								;[Block]
+								Color(50, 255, 255)
+								;[End Block]
+							Case 2
+								;[Block]
+								Color(255, 255, 50)
+								;[End Block]
+							Case 1
+								;[Block]
+								Color(255, 255, 255)
+								;[End Block]
+						End Select
 						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
 						If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale)
 							Color(255, 0, 0)
