@@ -4025,7 +4025,7 @@ Function UpdateEvents%()
 						
 						If e\room\NPC[0] = Null And Temp
 							e\room\RoomDoors[0]\Locked = 1
-							If (e\room\Angle Mod 180 = 90.0)
+							If (e\room\Angle Mod 180) = 90.0
 								i = (Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True)))
 								x1 = i * 800.0 + (Not i) * (-800.0)
 								z1 = 0.0
