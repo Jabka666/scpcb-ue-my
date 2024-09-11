@@ -5635,12 +5635,13 @@ Function CreateMap%()
 				CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
 				CalculateRoomExtents(r)
 			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
+				RoomID = -1
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1)
 				Select Temp
 					Case 1 ; ~ Generate ROOM1
 						;[Block]
-						If CurrMapGrid\RoomID[ROOM1] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-							If MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1])
+						If CurrMapGrid\RoomID[ROOM1] < MaxRooms
+							If MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1]) <> "" Then RoomID = FindRoomID(MapRoom(ROOM1, CurrMapGrid\RoomID[ROOM1]))
 						EndIf
 						
 						If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)]
@@ -5652,39 +5653,39 @@ Function CreateMap%()
 						Else
 							CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
 						EndIf
-						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
 						r.Rooms = CreateRoom(Zone, ROOM1, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
 						CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 						;[End Block]
 					Case 2 ; ~ Generate ROOM2
 						;[Block]
 						If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-							If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-								If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2])
+							If CurrMapGrid\RoomID[ROOM2] < MaxRooms
+								If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then RoomID = FindRoomID(MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]))
 							EndIf
 							If Rand(2) = 1
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 1
 							Else
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 3
 							EndIf
-							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
 							r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
 							CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
 						ElseIf CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-							If CurrMapGrid\RoomID[ROOM2] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-								If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2])
+							If CurrMapGrid\RoomID[ROOM2] < MaxRooms
+								If MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]) <> "" Then RoomID = FindRoomID(MapRoom(ROOM2, CurrMapGrid\RoomID[ROOM2]))
 							EndIf
 							If Rand(2) = 1
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
 							Else
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
 							EndIf
-							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
 							r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
 							CurrMapGrid\RoomID[ROOM2] = CurrMapGrid\RoomID[ROOM2] + 1
 						Else
-							If CurrMapGrid\RoomID[ROOM2C] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-								If MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C])
+							If CurrMapGrid\RoomID[ROOM2C] < MaxRooms
+								If MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C]) <> "" Then RoomID = FindRoomID(MapRoom(ROOM2C, CurrMapGrid\RoomID[ROOM2C]))
 							EndIf
 							If CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)] > MapGrid_NoTile And CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
@@ -5695,15 +5696,15 @@ Function CreateMap%()
 							Else
 								CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
 							EndIf
-							RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
 							r.Rooms = CreateRoom(Zone, ROOM2C, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+							CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
 							CurrMapGrid\RoomID[ROOM2C] = CurrMapGrid\RoomID[ROOM2C] + 1
 						EndIf
 						;[End Block]
 					Case 3 ; ~ Generate ROOM3
 						;[Block]
-						If CurrMapGrid\RoomID[ROOM3] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-							If MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3])
+						If CurrMapGrid\RoomID[ROOM3] < MaxRooms
+							If MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3]) <> "" Then RoomID = FindRoomID(MapRoom(ROOM3, CurrMapGrid\RoomID[ROOM3]))
 						EndIf
 						If (Not CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)])
 							CurrMapGrid\Angle[x + (y * MapGridSize)] = 2
@@ -5714,18 +5715,18 @@ Function CreateMap%()
 						Else
 							CurrMapGrid\Angle[x + (y * MapGridSize)] = 0
 						EndIf
-						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
 						r.Rooms = CreateRoom(Zone, ROOM3, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
 						CurrMapGrid\RoomID[ROOM3] = CurrMapGrid\RoomID[ROOM3] + 1
 						;[End Block]
 					Case 4 ; ~ Generate ROOM4
 						;[Block]
-						If CurrMapGrid\RoomID[ROOM4] < MaxRooms And CurrMapGrid\RoomName[x + (y * MapGridSize)] = ""
-							If MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4]) <> "" Then CurrMapGrid\RoomName[x + (y * MapGridSize)] = MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4])
+						If CurrMapGrid\RoomID[ROOM4] < MaxRooms
+							If MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4]) <> "" Then RoomID = FindRoomID(MapRoom(ROOM4, CurrMapGrid\RoomID[ROOM4]))
 						EndIf
 						CurrMapGrid\Angle[x + (y * MapGridSize)] = Rand(4)
-						RoomID = FindRoomID(CurrMapGrid\RoomName[x + (y * MapGridSize)])
 						r.Rooms = CreateRoom(Zone, ROOM4, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID, CurrMapGrid\Angle[x + (y * MapGridSize)] * 90.0)
+						CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
 						CurrMapGrid\RoomID[ROOM4] = CurrMapGrid\RoomID[ROOM4] + 1
 						;[End Block]
 				End Select
