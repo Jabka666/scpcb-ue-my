@@ -485,8 +485,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			n\ModelScale = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0 * Rnd(0.9, 1.1)
+			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			;[End Block]
 	End Select
 	
