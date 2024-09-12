@@ -20,7 +20,8 @@ v1.3.1
 - Optimized the game...
 
 [Rooms]
-- Added a wallet in the hallway near SCP-513's containment chamber
+- Added a wallet in the hallway near SCP-513's containment chamber.
+- Reduced clearance level for ``room_gw`` control room.
 
 [Items]
 - Added icon for Compact First Aid Kit.
