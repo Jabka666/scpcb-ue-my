@@ -4988,30 +4988,41 @@ Function IsRoomAdjacent%(this.Rooms, that.Rooms)
 End Function
 
 Dim MapRoom$(0, 0)
+Dim RoomAmount%(0, 0)
 
-Function SetRoom%(RoomName$, RoomType%, RoomPosition%, MinPos%, MaxPos%) ; ~ Place a room without overwriting others
+Function SetRoom%(RoomZone%, RoomType%, RoomName$, RoomPosWeight# = 0.0) ; ~ Place a room without overwriting others
+	Local Zone%, Offset%
+	Local MinPos% = 0
+	
+	For Zone% = 0 To RoomZone - 1
+		MinPos = MinPos + RoomAmount(RoomType, Zone)
+	Next
+	
+	Local MaxPos% = MinPos + RoomAmount(RoomType, RoomZone) - 1
+	
 	If MaxPos < MinPos Then Return(False)
 	
-	Local Looped% = False, CanPlace% = True
+	RoomPosWeight = Clamp(RoomPosWeight, 0.0, 1.0)
 	
-	RoomPosition = MinPos + RoomPosition
-	While MapRoom(RoomType, RoomPosition) <> ""
-		RoomPosition = RoomPosition + 1
-		If RoomPosition > MaxPos
-			If (Not Looped)
-				RoomPosition = MinPos : Looped = True
-			Else
-				CanPlace = False
-				Exit
-			EndIf
-		EndIf
-	Wend
-	If CanPlace
-		MapRoom(RoomType, RoomPosition) = RoomName
+	Local RoomPos% = MinPos + Floor(RoomPosWeight * (MaxPos - MinPos))
+	
+	If MapRoom(RoomType, RoomPos) = "" Then
+		MapRoom(RoomType, RoomPos) = RoomName
 		Return(True)
-	Else
-		Return(False)
 	EndIf
+	
+	For Offset = 1 To Max(MaxPos - RoomPos, RoomPos - MinPos)	
+		If RoomPos + Offset <= MaxPos And MapRoom(RoomType, RoomPos + Offset) = ""
+			MapRoom(RoomType, RoomPos + Offset) = RoomName
+			Return(True)
+		EndIf
+		If RoomPos - Offset >= MinPos And MapRoom(RoomType, RoomPos - Offset) = ""
+			MapRoom(RoomType, RoomPos - Offset) = RoomName
+			Return(True)
+		EndIf
+	Next
+	
+	Return(False)
 End Function
 
 Function PreventRoomOverlap%(r.Rooms)
@@ -5262,7 +5273,7 @@ Function CreateMap%()
 		y = y - Height
 	Until y < 2
 	
-	Local Room1Amount%[ZONEAMOUNT], Room2Amount%[ZONEAMOUNT], Room2CAmount%[ZONEAMOUNT], Room3Amount%[ZONEAMOUNT], Room4Amount%[ZONEAMOUNT]
+	Dim RoomAmount%(ROOM4 + 1, ZONEAMOUNT)
 	
 	; ~ Count the amount of rooms
 	For y = 1 To MapGridSize - 1
@@ -5275,25 +5286,25 @@ Function CreateMap%()
 				Select CurrMapGrid\Grid[x + (y * MapGridSize)]
 					Case 1
 						;[Block]
-						Room1Amount[Zone] = Room1Amount[Zone] + 1
+						RoomAmount(ROOM1, Zone) = RoomAmount(ROOM1, Zone) + 1
 						;[End Block]
 					Case 2
 						;[Block]
 						If Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) = 2
-							Room2Amount[Zone] = Room2Amount[Zone] + 1
+							RoomAmount(ROOM2, Zone) = RoomAmount(ROOM2, Zone) + 1
 						ElseIf Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1) = 2
-							Room2Amount[Zone] = Room2Amount[Zone] + 1
+							RoomAmount(ROOM2, Zone) = RoomAmount(ROOM2, Zone) + 1
 						Else
-							Room2CAmount[Zone] = Room2CAmount[Zone] + 1
+							RoomAmount(ROOM2C, Zone) = RoomAmount(ROOM2C, Zone) + 1
 						EndIf
 						;[End Block]
 					Case 3
 						;[Block]
-						Room3Amount[Zone] = Room3Amount[Zone] + 1
+						RoomAmount(ROOM3, Zone) = RoomAmount(ROOM3, Zone) + 1
 						;[End Block]
 					Case 4
 						;[Block]
-						Room4Amount[Zone] = Room4Amount[Zone] + 1
+						RoomAmount(ROOM4, Zone) = RoomAmount(ROOM4, Zone) + 1
 						;[End Block]
 				End Select
 			EndIf
@@ -5303,10 +5314,10 @@ Function CreateMap%()
 	Local Placed%
 	Local y_min%, y_max%, x_min%, x_max%
 	
-	; ~ Force more room1s (if needed)
+	; ~ Force more ROOM1 (if needed)
 	For i = 0 To 2
 		; ~ Need more rooms if there are less than 5 of them
-		Temp = (-Room1Amount[i]) + 5
+		Temp = (-RoomAmount(ROOM1, i)) + 5
 		If Temp > 0
 			If i = 2
 				y_min = 1
@@ -5341,19 +5352,19 @@ Function CreateMap%()
 									Case 2
 										;[Block]
 										If Min(CurrMapGrid\Grid[(x2 + 1) + (y2 * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x2 - 1) + (y2 * MapGridSize)], 1) = 2
-											Room2Amount[i] = Room2Amount[i] - 1
-											Room3Amount[i] = Room3Amount[i] + 1
+											RoomAmount(ROOM2, i) = RoomAmount(ROOM2, i) - 1
+											RoomAmount(ROOM3, i) = RoomAmount(ROOM3, i) + 1
 											Placed = True
 										ElseIf Min(CurrMapGrid\Grid[x2 + ((y2 + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x2 + ((y2 - 1) * MapGridSize)], 1) = 2
-											Room2Amount[i] = Room2Amount[i] - 1
-											Room3Amount[i] = Room3Amount[i] + 1
+											RoomAmount(ROOM2, i) = RoomAmount(ROOM2, i) - 1
+											RoomAmount(ROOM3, i) = RoomAmount(ROOM3, i) + 1
 											Placed = True
 										EndIf
 										;[End Block]
 									Case 3
 										;[Block]
-										Room3Amount[i] = Room3Amount[i] - 1
-										Room4Amount[i] = Room4Amount[i] + 1
+										RoomAmount(ROOM3, i) = RoomAmount(ROOM3, i) - 1
+										RoomAmount(ROOM4, i) = RoomAmount(ROOM4, i) + 1
 										Placed = True
 										;[End Block]
 								End Select
@@ -5362,7 +5373,7 @@ Function CreateMap%()
 									CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] = CurrMapGrid\Grid[x2 + (y2 * MapGridSize)] + 1
 									
 									CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_Tile
-									Room1Amount[i] = Room1Amount[i] + 1
+									RoomAmount(ROOM1, i) = RoomAmount(ROOM1, i) + 1
 									
 									Temp = Temp - 1
 								EndIf
@@ -5391,7 +5402,7 @@ Function CreateMap%()
 		x_min = 1
 		x_max = MapGridSize - 2
 		
-		If Room4Amount[i] < 1 ; ~ We want at least one ROOM4
+		If RoomAmount(ROOM4, i) < 1 ; ~ We want at least one ROOM4
 			Temp = 0
 			For y = y_min To y_max
 				For x = x_min To x_max
@@ -5420,9 +5431,9 @@ Function CreateMap%()
 						End Select
 						If Temp = 1
 							CurrMapGrid\Grid[x + (y * MapGridSize)] = 4 ; ~ Turn this room into a ROOM4
-							Room4Amount[i] = Room4Amount[i] + 1
-							Room3Amount[i] = Room3Amount[i] - 1
-							Room1Amount[i] = Room1Amount[i] + 1
+							RoomAmount(ROOM4, i) = RoomAmount(ROOM4, i) + 1
+							RoomAmount(ROOM3, i) = RoomAmount(ROOM3, i) - 1
+							RoomAmount(ROOM1, i) = RoomAmount(ROOM1, i) + 1
 						EndIf
 					EndIf
 					If Temp = 1 Then Exit
@@ -5431,7 +5442,7 @@ Function CreateMap%()
 			Next
 		EndIf
 		
-		If Room2CAmount[i] < 2 ; ~ We want at least two ROOM2C
+		If RoomAmount(ROOM2C, i) < 2 ; ~ We want at least two ROOM2C
 			Temp = 0
 			For y = y_max To y_min Step -1
 				For x = x_min To x_max
@@ -5503,8 +5514,8 @@ Function CreateMap%()
 								;[End Block]
 						End Select
 						If Temp = 1
-							Room2CAmount[i] = Room2CAmount[i] + 1
-							Room2Amount[i] = Room2Amount[i] + 1
+							RoomAmount(ROOM2C, i) = RoomAmount(ROOM2C, i) + 1
+							RoomAmount(ROOM2, i) = RoomAmount(ROOM2, i) + 1
 						EndIf
 					EndIf
 					If Temp = 1 Then Exit
@@ -5514,111 +5525,92 @@ Function CreateMap%()
 		EndIf
 	Next
 	
-	Local MaxRooms% = 55 * MapGridSize / 20
+	Local MaxRooms% = RoomAmount(ROOM1, 0) + RoomAmount(ROOM1, 1) + RoomAmount(ROOM1, 2)
 	
-	MaxRooms = Max(MaxRooms, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] + 1)
-	MaxRooms = Max(MaxRooms, Room2Amount[0] + Room2Amount[1] + Room2Amount[2] + 1)
-	MaxRooms = Max(MaxRooms, Room2CAmount[0] + Room2CAmount[1] + Room2CAmount[2] + 1)
-	MaxRooms = Max(MaxRooms, Room3Amount[0] + Room3Amount[1] + Room3Amount[2] + 1)
-	MaxRooms = Max(MaxRooms, Room4Amount[0] + Room4Amount[1] + Room4Amount[2] + 1)
+	MaxRooms = Max(MaxRooms, RoomAmount(ROOM2, 0) + RoomAmount(ROOM2, 1) + RoomAmount(ROOM2, 2))
+	MaxRooms = Max(MaxRooms, RoomAmount(ROOM2C, 0) + RoomAmount(ROOM2C, 1) + RoomAmount(ROOM2C, 2))
+	MaxRooms = Max(MaxRooms, RoomAmount(ROOM3, 0) + RoomAmount(ROOM3, 1) + RoomAmount(ROOM3, 2))
+	MaxRooms = Max(MaxRooms, RoomAmount(ROOM4, 0) + RoomAmount(ROOM4, 1) + RoomAmount(ROOM4, 2))
 	
-	Dim MapRoom$(ROOM4 + 1, MaxRooms + 1)
+	Dim MapRoom$(ROOM4 + 1, MaxRooms)
+	
+	; ~ Forced room assignments
+	; ~ Earlier SetRoom calls in each block take priority, so set important rooms first!
 	
 	; ~ [LIGHT CONTAINMENT ZONE]
 	
-	Local MinPos% = 1, MaxPos% = Room1Amount[0] - 1
+	SetRoom(0, ROOM1, "cont1_173", 0.0)
+	SetRoom(0, ROOM1, "cont1_005", 0.15)
+	SetRoom(0, ROOM1, "room1_storage", 0.35)
+	SetRoom(0, ROOM1, "cont1_914", 0.5)
+	SetRoom(0, ROOM1, "cont1_205", 0.65)
 	
-	MapRoom(ROOM1, 0) = "cont1_173"
+	SetRoom(0, ROOM2, "room2_closets", 0.0)
+	SetRoom(0, ROOM2, "room2_test_lcz", 0.1)
+	SetRoom(0, ROOM2, "cont2_427_714_860_1025", 0.2)
+	SetRoom(0, ROOM2, "room2_storage", 0.3)
+	SetRoom(0, ROOM2, "room2_gw_2", 0.4)
+	SetRoom(0, ROOM2, "cont2_012", 0.5)
+	SetRoom(0, ROOM2, "room2_sl", 0.55)
+	SetRoom(0, ROOM2, "cont2_500_1499", 0.6)
+	SetRoom(0, ROOM2, "cont2_1123", 0.75)
+	SetRoom(0, ROOM2, "room2_js", 0.85)
+	SetRoom(0, ROOM2, "room2_elevator", 0.9)
 	
-	SetRoom("cont1_005", ROOM1, Floor(0.15 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("room1_storage", ROOM1, Floor(0.35 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_914", ROOM1, Floor(0.5 * Float(Room1Amount[0])), MinPos, MaxPos)
-	SetRoom("cont1_205", ROOM1, Floor(0.65 * Float(Room1Amount[0])), MinPos, MaxPos)
+	SetRoom(0, ROOM2C, "room2c_gw_lcz", 0.0)
+	SetRoom(0, ROOM2C, "cont2c_066_1162_arc", 0.5)
 	
-	MinPos = 1
-	MaxPos = Room2Amount[0] - 1
+	SetRoom(0, ROOM3, "room3_storage", Rnd(0.2, 0.6))
+	SetRoom(0, ROOM3, "cont3_372", 0.8)
 	
-	MapRoom(ROOM2, 0) = "room2_closets" 
-	
-	SetRoom("room2_test_lcz", ROOM2, Floor(0.1 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("cont2_427_714_860_1025", ROOM2, Floor(0.2 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_storage", ROOM2, Floor(0.3 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_gw_2", ROOM2, Floor(0.4 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("cont2_012", ROOM2, Floor(0.5 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_sl", ROOM2, Floor(0.55 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("cont2_500_1499", ROOM2, Floor(0.6 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("cont2_1123", ROOM2, Floor(0.75 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_js", ROOM2, Floor(0.85 * Float(Room2Amount[0])), MinPos, MaxPos)
-	SetRoom("room2_elevator", ROOM2, Floor(0.9 * Float(Room2Amount[0])), MinPos, MaxPos)
-	
-	MapRoom(ROOM2C, 0) = "room2c_gw_lcz"
-	
-	MapRoom(ROOM2C, Floor(0.5 * Float(Room2CAmount[0]))) = "cont2c_066_1162_arc"
-	
-	MapRoom(ROOM3, Floor(Rnd(0.2, 0.6) * Float(Room3Amount[0]))) = "room3_storage"
-	MapRoom(ROOM3, Floor(0.8 * Float(Room3Amount[0]))) = "cont3_372"
-	
-	MinPos = 0
-	MaxPos = Room4Amount[0] - 1
-	
-	SetRoom("room4_ic", ROOM4, Floor(0.3 * Float(Room4Amount[0])), MinPos, MaxPos)
+	SetRoom(0, ROOM4, "room4_ic", 0.3)
 	
 	; ~ [HEAVY CONTAINMENT ZONE]
 	
-	MinPos = Room1Amount[0]
-	MaxPos = Room1Amount[0] + Room1Amount[1] - 1
+	SetRoom(1, ROOM1, "cont1_079", 0.15)
+	SetRoom(1, ROOM1, "cont1_106", 0.3)
+	SetRoom(1, ROOM1, "cont1_035", 0.45)
+	SetRoom(1, ROOM1, "cont1_895", 0.7)
 	
-	SetRoom("cont1_079", ROOM1, Floor(0.15 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_106", ROOM1, Floor(0.3 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_035", ROOM1, Floor(0.45 * Float(Room1Amount[1])), MinPos, MaxPos)
-	SetRoom("cont1_895", ROOM1, Floor(0.7 * Float(Room1Amount[1])), MinPos, MaxPos)
+	SetRoom(1, ROOM2, "room2_nuke", 0.1)
+	SetRoom(1, ROOM2, "cont2_409", 0.15)
+	SetRoom(1, ROOM2, "room2_mt", 0.25)
+	SetRoom(1, ROOM2, "cont2_008", 0.4)
+	SetRoom(1, ROOM2, "room2_shaft", 0.5)
+	SetRoom(1, ROOM2, "cont2_049", 0.6)
+	SetRoom(1, ROOM2, "room2_test_hcz", 0.7)
+	SetRoom(1, ROOM2, "room2_servers_hcz", 0.9)
 	
-	MinPos = Room2Amount[0]
-	MaxPos = Room2Amount[0] + Room2Amount[1] - 1
+	SetRoom(1, ROOM2C, "cont2c_096", 0.5)
 	
-	MapRoom(ROOM2, Room2Amount[0] + Floor(0.1 * Float(Room2Amount[1]))) = "room2_nuke"
-	
-	SetRoom("cont2_409", ROOM2, Floor(0.15 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_mt", ROOM2, Floor(0.25 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("cont2_008", ROOM2, Floor(0.4 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_shaft", ROOM2, Floor(0.5 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("cont2_049", ROOM2, Floor(0.6 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_test_hcz", ROOM2, Floor(0.7 * Float(Room2Amount[1])), MinPos, MaxPos)
-	SetRoom("room2_servers_hcz", ROOM2, Floor(0.9 * Float(Room2Amount[1])), MinPos, MaxPos)
-	
-	MapRoom(ROOM2C, Room2CAmount[0] + Floor(0.5 * Float(Room2CAmount[1]))) = "cont2c_096"
-	
-	MapRoom(ROOM3, Room3Amount[0] + Floor(0.5 * Float(Room3Amount[1]))) = "cont3_513"
-	MapRoom(ROOM3, Room3Amount[0] + Floor(0.8 * Float(Room3Amount[1]))) = "cont3_966"
+	SetRoom(1, ROOM3, "cont3_513", 0.5)
+	SetRoom(1, ROOM3, "cont3_966", 0.8)
 	
 	; ~ [ENTRANCE ZONE]
 	
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 3) = "gate_b_entrance"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 2) = "gate_a_entrance"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1] + Room1Amount[2] - 1) = "room1_o5"
-	MapRoom(ROOM1, Room1Amount[0] + Room1Amount[1]) = "room1_lifts"
+	SetRoom(2, ROOM1, "gate_b_entrance", 1.0)
+	SetRoom(2, ROOM1, "gate_a_entrance", 1.0)
+	SetRoom(2, ROOM1, "room1_o5", 1.0)
+	SetRoom(2, ROOM1, "room1_lifts", 0.0)
 	
-	MinPos = Room2Amount[0] + Room2Amount[1]
-	MaxPos = Room2Amount[0] + Room2Amount[1] + Room2Amount[2] - 1
+	SetRoom(2, ROOM2, "room2_scientists", 0.1)
+	SetRoom(2, ROOM2, "room2_cafeteria", 0.2)
+	SetRoom(2, ROOM2, "room2_6_ez", 0.25)
+	SetRoom(2, ROOM2, "room2_office_3", 0.3)
+	SetRoom(2, ROOM2, "room2_servers_ez", 0.4)
+	SetRoom(2, ROOM2, "room2_office", 0.5)
+	SetRoom(2, ROOM2, "room2_office_2", 0.55)
+	SetRoom(2, ROOM2, "cont2_860_1", 0.6)
+	SetRoom(2, ROOM2, "room2_medibay", 0.7)
+	SetRoom(2, ROOM2, "room2_scientists_2", 0.8)
+	SetRoom(2, ROOM2, "room2_ic", 0.9)
 	
-	SetRoom("room2_scientists", ROOM2, Floor(0.1 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_cafeteria", ROOM2, Floor(0.2 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_6_ez", ROOM2, Floor(0.25 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office_3", ROOM2, Floor(0.3 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_servers_ez", ROOM2, Floor(0.4 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office", ROOM2, Floor(0.5 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_office_2", ROOM2, Floor(0.55 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("cont2_860_1", ROOM2, Floor(0.6 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_medibay", ROOM2, Floor(0.7 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_scientists_2", ROOM2, Floor(0.8 * Float(Room2Amount[2])), MinPos, MaxPos)
-	SetRoom("room2_ic", ROOM2, Floor(0.9 * Float(Room2Amount[2])), MinPos, MaxPos)
+	SetRoom(2, ROOM2C, "room2c_ec", 0.0)
+	SetRoom(2, ROOM2C, "room2c_gw_ez", 0.0)
 	
-	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1]) = "room2c_ec"
-	MapRoom(ROOM2C, Room2CAmount[0] + Room2CAmount[1] + 1) = "room2c_gw_ez"
-	
-	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.3 * Float(Room3Amount[2]))) = "room3_2_ez"
-	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.7 * Float(Room3Amount[2]))) = "room3_3_ez"
-	MapRoom(ROOM3, Room3Amount[0] + Room3Amount[1] + Floor(0.5 * Float(Room3Amount[2]))) = "room3_office"
+	SetRoom(2, ROOM3, "room3_2_ez", 0.3)
+	SetRoom(2, ROOM3, "room3_office", 0.5)
+	SetRoom(2, ROOM3, "room3_3_ez", 0.7)
 	
 	Temp = 0
 	For y = MapGridSize - 1 To 1 Step -1

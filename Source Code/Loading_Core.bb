@@ -3132,6 +3132,7 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveChunkPart(chp)
 	Next
 	Dim MapRoom$(0, 0)
+	Dim RoomAmount%(0, 0)
 	Delete(CurrMapGrid) : CurrMapGrid = Null
 	Delete(I_Zone) : I_Zone = Null
 	RoomTempID = 0
