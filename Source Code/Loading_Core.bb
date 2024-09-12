@@ -2200,14 +2200,14 @@ Function LoadData%()
 	t.Textures = New Textures
 	
 	If SelectedCustomMap = Null
-		TempStr = GetLocalString("menu", "new.seed") + RandomSeed
+		TempStr = Format(GetLocalString("menu", "new.seed"), RandomSeed)
 	Else
 		Local Name$ = ConvertToUTF8(SelectedCustomMap\Name)
 		
 		If Len(Name) > 15
-			TempStr = GetLocalString("menu", "new.map") + Left(Name, 14) + ".."
+			TempStr = Format(GetLocalString("menu", "new.map"), Left(Name, 14) + "..")
 		Else
-			TempStr = GetLocalString("menu", "new.map") + Name
+			TempStr = Format(GetLocalString("menu", "new.map"), Name)
 		EndIf
 	EndIf
 	SetErrorMsg(8, TempStr)

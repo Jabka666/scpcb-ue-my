@@ -7997,12 +7997,12 @@ Function RenderMenu%()
 			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
 			
 			If SelectedCustomMap = Null
-				TempStr = GetLocalString("menu", "new.seed") + RandomSeed
+				TempStr = Format(GetLocalString("menu", "new.seed"), RandomSeed)
 			Else
 				If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15
-					TempStr = GetLocalString("menu", "new.map") + Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + ".."
+					TempStr = Format(GetLocalString("menu", "new.map"), Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..")
 				Else
-					TempStr = GetLocalString("menu", "new.map") + ConvertToUTF8(SelectedCustomMap\Name)
+					TempStr = Format(GetLocalString("menu", "new.map"), ConvertToUTF8(SelectedCustomMap\Name))
 				EndIf
 			EndIf
 			TextEx(x, y + (40 * MenuScale), TempStr)
