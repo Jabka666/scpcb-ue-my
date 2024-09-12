@@ -20,8 +20,9 @@ v1.3.1
 - Optimized the game...
 
 [Rooms]
+- Added «Press any key to continue» message for debug maps.
 - Added a wallet in the hallway near SCP-513's containment chamber.
-- Reduced clearance level for ``room_gw`` control room.
+- Reduced clearance level for «room_gw» control room.
 
 [Items]
 - Added icon for Compact First Aid Kit.
@@ -351,7 +352,7 @@ v1.2
 - Fixed wrong textures are applied for SCP-1048's drawings.
 - Fixed deaf effect.
 - Fixed SCP-427's texture.
-- Fixed SCP-066's attack not working in a room with "DisableDecals" parameter.
+- Fixed SCP-066's attack not working in a room with «DisableDecals» parameter.
 - Fixed an event with janitor staying in the dead end when SCP-106 was contained after the event was triggered.
 - Fixed softlock in SCP-513's containment chamber.
 - Fixed text flashing white after disappearing.
@@ -366,7 +367,7 @@ v1.2
 - Fixed SCP-012 event activating while terminated from above.
 - Fixed achievement spam in Pocket Dimension.
 - Fixed the most problems in MTF's AI.
-- Fixed rings "overlapping".
+- Fixed rings «overlapping».
 - Fixed not being able to open inventory after failing to use an item.
 - Fixed light sprites and props disappearing in Maintenance Tunnels.
 - Fixed/improved ranges of room-forcing code.

@@ -1033,6 +1033,9 @@ Function GenForestGrid%(fr.Forest)
 				Next
 				i = i - 1
 			Next
+			
+			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
+			
 			Flip()
 			RenderCursor()
 		Until (GetKey() <> 0 Lor MouseHit(1))
@@ -5817,6 +5820,10 @@ Function CreateMap%()
 			TextEx(6 * MenuScale, 108 * MenuScale, CurrMapGrid\RoomID[ROOM3])
 			Color(50, 50, 255)
 			TextEx(6 * MenuScale, 140 * MenuScale, CurrMapGrid\RoomID[ROOM4])
+			
+			Color(255, 255, 255)
+			TextEx(mo\Viewport_Center_X, opt\GraphicHeight - (15 * MenuScale), GetLocalString("menu", "new.seed") + RandomSeed, True, True)
+			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
 			
 			Flip()
 			RenderCursor()
