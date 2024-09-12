@@ -49,6 +49,10 @@ v1.3.1
 - Fixed room names on debug map.
 - Fixed «room4_ic» spawning in HCZ sometimes.
 
+[Known issues]
+- Rooms can overlap and block the way.
+- Cups crash the game sometimes.
+
 v1.3
 
 [General]
@@ -202,6 +206,8 @@ v1.3
 - Fixed a bug with exit points in the Pocket Dimension labyrinth room.
 
 [Known issues]
+- Rooms can overlap and block the way.
+- «room4_ic» sometimes spawn in HCZ.
 - Cups crash the game sometimes.
 - PD teleport points don't work sometimes.
 
