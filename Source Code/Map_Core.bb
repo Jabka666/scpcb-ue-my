@@ -5735,25 +5735,20 @@ Function CreateMap%()
 	; ~ Spawn some rooms outside the map
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing) * 2.0, r_gate_b)
 	CalculateRoomExtents(r)
-	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
 	CalculateRoomExtents(r)
-	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_dimension_106)
 	CalculateRoomExtents(r)
-	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	If opt\IntroEnabled
 		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 250.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
 		CalculateRoomExtents(r)
-		CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	EndIf
 	
 	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
 	CalculateRoomExtents(r)
-	CurrMapGrid\RoomID[ROOM1] = CurrMapGrid\RoomID[ROOM1] + 1
 	
 	; ~ Prevent room overlaps
 	For r.Rooms = Each Rooms
@@ -5781,6 +5776,10 @@ Function CreateMap%()
 								;[Block]
 								Color(0, 200, 0)
 								;[End Block]
+;							Case 5
+;								;[Block]
+;								Color(255, 50, 50)
+;								;[End Block]
 							Case 4
 								;[Block]
 								Color(50, 50, 255)
@@ -5807,6 +5806,18 @@ Function CreateMap%()
 				Next
 				i = i - 1
 			Next
+			
+			Color(255, 255, 255)
+			TextEx(6 * MenuScale, 12 * MenuScale, CurrMapGrid\RoomID[ROOM1])
+			Color(255, 255, 50)
+			TextEx(6 * MenuScale, 44 * MenuScale, CurrMapGrid\RoomID[ROOM2])
+			Color(255, 50, 50)
+			TextEx(6 * MenuScale, 76 * MenuScale, CurrMapGrid\RoomID[ROOM2C])
+			Color(50, 255, 255)
+			TextEx(6 * MenuScale, 108 * MenuScale, CurrMapGrid\RoomID[ROOM3])
+			Color(50, 50, 255)
+			TextEx(6 * MenuScale, 140 * MenuScale, CurrMapGrid\RoomID[ROOM4])
+			
 			Flip()
 			RenderCursor()
 		Until (GetKey() <> 0 Lor MouseHit(1))
