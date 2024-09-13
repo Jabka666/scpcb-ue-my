@@ -5001,7 +5001,7 @@ Function UpdateNPCs%()
 					Case NPCTypeGuard
 						;[Block]
 						n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
-						EntityRadius(n\OBJ3, 0.3)
+						EntityRadius(n\OBJ3, 0.35)
 						EntityPickMode(n\OBJ3, 1, False)
 						
 						RemoveSound = True
