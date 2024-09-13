@@ -62,6 +62,7 @@ v1.3.1
 	- Fixed model scale not saving properly.
 - Fixed room names on debug map.
 - Fixed «room4_ic» spawning in HCZ sometimes.
+- Fixed SCP-1048-A still visible in Blue NVG after explosion.
 
 [Known issues]
 - Rooms can overlap and block the way.

@@ -4995,6 +4995,7 @@ Function UpdateNPCs%()
 						
 						RemoveSound = True
 						
+						n\HideFromNVG = True
 						n\GravityMult = 0.0
 						;[End Block]
 					Case NPCTypeGuard
