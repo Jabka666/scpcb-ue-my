@@ -2996,7 +2996,7 @@ Function UpdateMouseLook%()
 			Else
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 			EndIf
-			If wi\GasMaskFogTimer > 0.0
+			If wi\GasMaskFogTimer > 0.0 And (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0)
 				EntityAlpha(t\OverlayID[9], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
 				If EntityHidden(t\OverlayID[9]) Then ShowEntity(t\OverlayID[9])
 			Else
