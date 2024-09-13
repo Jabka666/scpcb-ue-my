@@ -1894,7 +1894,12 @@
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-		"drink_message": "\"I feel stronger... and I am no longer tired.\""
+		"stamina_effect": 0.2,
+		"stamina_timer": 60.0,
+		"blink_effect": 0.2,
+		"blink_timer": 60.0,
+		"drink_message": "\"I feel stronger... and I am no longer tired.\"",
+		"death_timer": 60.0
 	},
 	{
 		"name": ["Black Activated Carbon", "Activated Carbon"],
