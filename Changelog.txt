@@ -33,6 +33,12 @@ v1.3.1
 - Infected syringes will now slightly heal and give a very small stamina boost. 25% stamina boost for 10-20 seconds.
 - Buffed eyedrops to slow blink down even more.
 
+- Rework the Night Vision Goggles
+	- "Low battery" message appears earlier.
+	- Nerf distance from 17.0 to 15.0.
+	- Changed interface and ambient color a bit.
+	- Battery and battery meter now brighter.
+
 [NPCs]
 - SCP-966's insomnia timer scales longer with the «SelectedDifficulty\OtherFactors» setting.
 	- Easy: 30 seconds
