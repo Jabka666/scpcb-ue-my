@@ -6158,7 +6158,7 @@ Function RenderNVG%()
 	Local np.NPCs
 	Local i%, k%, l%
 	
-	If wi\NVGPower > 0
+	If wi\NVGPower > 0 And me\BlinkTimer > -6.0 
 		If wi\NightVision = 2 ; ~ Show a HUD
 			Color(100, 100, 255)
 			
@@ -6778,7 +6778,7 @@ Function RenderGUI%()
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
 					EndIf
-					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					If me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 				Case it_scp1025
 					;[Block]
@@ -6789,7 +6789,7 @@ Function RenderGUI%()
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
 					EndIf
-					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					If me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 				Case it_radio, it_18vradio, it_fineradio, it_veryfineradio
 					;[Block]
@@ -6805,73 +6805,75 @@ Function RenderGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					StrTemp = ""
-					
-					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth
-					y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, x, y)
-					
-					If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\ID = it_fineradio Lor SelectedItem\ItemTemplate\ID = it_veryfineradio)
-						If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And CoffinDistance >= 8.0
-							Select Int(SelectedItem\State2)
-								Case 0
-									;[Block]
-									If opt\UserTrackMode = 0
-										StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "notenable"))
-									ElseIf UserTrackMusicAmount < 1
-										StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "nofound"))
-									Else
-										If ChannelPlaying(RadioCHN[0]) Then StrTemp = Format(GetLocalString("radio", "usertrack"), Upper(UserTrackName[RadioState[0]]))
-									EndIf
-									;[End Block]
-								Case 1
-									;[Block]
-									StrTemp = GetLocalString("radio", "warn")
-									;[End Block]
-								Case 2
-									;[Block]
-									StrTemp = GetLocalString("radio", "onsite")
-									;[End Block]
-								Case 3
-									;[Block]
-									StrTemp = GetLocalString("radio", "emergency")
-									;[End Block]
-							End Select
-							
-							x = x + (66 * MenuScale)
-							y = y + (419 * MenuScale)
-							
-							; ~ Battery
-							Color(30, 30, 30)
-							If SelectedItem\ItemTemplate\ID = it_radio Lor SelectedItem\ItemTemplate\ID = it_18vradio
-								For i = 0 To 4
-									Rect(x, y + ((8 * i) * MenuScale), (43 * MenuScale) - ((i * 6) * MenuScale), 4 * MenuScale, Ceil(SelectedItem\State / 20.0) > 4 - i )
-								Next
-							EndIf
-							
-							SetFontEx(fo\FontID[Font_Digital])
-							TextEx(x + (60 * MenuScale), y, GetLocalString("radio", "chn"))
-							
-							If SelectedItem\ItemTemplate\ID = it_veryfineradio
-								StrTemp = ""
-								For i = 0 To Rand(5, 30)
-									StrTemp = StrTemp + Chr(Rand(100))
-								Next
+					If me\BlinkTimer > -6.0
+						StrTemp = ""
+						
+						x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth
+						y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight
+						
+						DrawImage(SelectedItem\ItemTemplate\Img, x, y)
+						
+						If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\ID = it_fineradio Lor SelectedItem\ItemTemplate\ID = it_veryfineradio)
+							If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And CoffinDistance >= 8.0
+								Select Int(SelectedItem\State2)
+									Case 0
+										;[Block]
+										If opt\UserTrackMode = 0
+											StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "notenable"))
+										ElseIf UserTrackMusicAmount < 1
+											StrTemp = Format(GetLocalString("radio", "usertrack"), GetLocalString("radio", "nofound"))
+										Else
+											If ChannelPlaying(RadioCHN[0]) Then StrTemp = Format(GetLocalString("radio", "usertrack"), Upper(UserTrackName[RadioState[0]]))
+										EndIf
+										;[End Block]
+									Case 1
+										;[Block]
+										StrTemp = GetLocalString("radio", "warn")
+										;[End Block]
+									Case 2
+										;[Block]
+										StrTemp = GetLocalString("radio", "onsite")
+										;[End Block]
+									Case 3
+										;[Block]
+										StrTemp = GetLocalString("radio", "emergency")
+										;[End Block]
+								End Select
 								
-								SetFontEx(fo\FontID[Font_Digital_Big])
-								TextEx(x + (97 * MenuScale), y + (16 * MenuScale), Rand(0, 9), True, True)
-							Else
-								SetFontEx(fo\FontID[Font_Digital_Big])
-								TextEx(x + (97 * MenuScale), y + (16 * MenuScale), Int(SelectedItem\State2 + 1.0), True, True)
+								x = x + (66 * MenuScale)
+								y = y + (419 * MenuScale)
+								
+								; ~ Battery
+								Color(30, 30, 30)
+								If SelectedItem\ItemTemplate\ID = it_radio Lor SelectedItem\ItemTemplate\ID = it_18vradio
+									For i = 0 To 4
+										Rect(x, y + ((8 * i) * MenuScale), (43 * MenuScale) - ((i * 6) * MenuScale), 4 * MenuScale, Ceil(SelectedItem\State / 20.0) > 4 - i )
+									Next
+								EndIf
+								
+								SetFontEx(fo\FontID[Font_Digital])
+								TextEx(x + (60 * MenuScale), y, GetLocalString("radio", "chn"))
+								
+								If SelectedItem\ItemTemplate\ID = it_veryfineradio
+									StrTemp = ""
+									For i = 0 To Rand(5, 30)
+										StrTemp = StrTemp + Chr(Rand(100))
+									Next
+									
+									SetFontEx(fo\FontID[Font_Digital_Big])
+									TextEx(x + (97 * MenuScale), y + (16 * MenuScale), Rand(0, 9), True, True)
+								Else
+									SetFontEx(fo\FontID[Font_Digital_Big])
+									TextEx(x + (97 * MenuScale), y + (16 * MenuScale), Int(SelectedItem\State2 + 1.0), True, True)
+								EndIf
+								
+								SetFontEx(fo\FontID[Font_Digital])
+								If StrTemp <> ""
+									StrTemp = Right(Left(StrTemp, (Int(MilliSec / 300) Mod Len(StrTemp))), 10)
+									TextEx(x - (28 * MenuScale), y + (33 * MenuScale), "          " + StrTemp + "          ")
+								EndIf
+								SetFontEx(fo\FontID[Font_Default])
 							EndIf
-							
-							SetFontEx(fo\FontID[Font_Digital])
-							If StrTemp <> ""
-								StrTemp = Right(Left(StrTemp, (Int(MilliSec / 300) Mod Len(StrTemp))), 10)
-								TextEx(x - (28 * MenuScale), y + (33 * MenuScale), "          " + StrTemp + "          ")
-							EndIf
-							SetFontEx(fo\FontID[Font_Default])
 						EndIf
 					EndIf
 					;[End Block]
@@ -6885,129 +6887,131 @@ Function RenderGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 					EndIf
 					
-					x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
-					y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
-					
-					DrawImage(SelectedItem\ItemTemplate\Img, x - SelectedItem\ItemTemplate\ImgWidth, y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale))
-					
-					SetFontEx(fo\FontID[Font_Digital])
-					
-					Local Offline% = (SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_nav)
-					Local NAV_WIDTH% = 287 * MenuScale
-					Local NAV_HEIGHT% = 256 * MenuScale
-					Local RectSize% = 24 * MenuScale
-					Local RectSizeHalf% = RectSize / 2
-					Local NAV_WIDTH_HALF% = NAV_WIDTH / 2
-					Local NAV_HEIGHT_HALF% = NAV_HEIGHT / 2
-					
-					If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
-						If (MilliSec Mod 800) < 200
-							Color(200, 0, 0)
-							TextEx(x, y + NAV_HEIGHT_HALF - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
-							TextEx(x, y + NAV_HEIGHT_HALF - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
-						EndIf
-					Else
-						If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\RoomID <> r_cont1_895)
-							Local xx% = x - SelectedItem\ItemTemplate\ImgWidth
-							Local yy% = y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale)
-							
-							If SelectedItem\State2 = 0.0
-								Local ColliderX# = EntityX(me\Collider)
-								Local ColliderZ# = EntityZ(me\Collider)
-								Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
-								Local PlayerZ% = Floor(ColliderZ / RoomSpacing + 0.5)
+					If me\BlinkTimer > -6.0
+						x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
+						y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
+						
+						DrawImage(SelectedItem\ItemTemplate\Img, x - SelectedItem\ItemTemplate\ImgWidth, y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale))
+						
+						SetFontEx(fo\FontID[Font_Digital])
+						
+						Local Offline% = (SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_nav)
+						Local NAV_WIDTH% = 287 * MenuScale
+						Local NAV_HEIGHT% = 256 * MenuScale
+						Local RectSize% = 24 * MenuScale
+						Local RectSizeHalf% = RectSize / 2
+						Local NAV_WIDTH_HALF% = NAV_WIDTH / 2
+						Local NAV_HEIGHT_HALF% = NAV_HEIGHT / 2
+						
+						If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
+							If (MilliSec Mod 800) < 200
+								Color(200, 0, 0)
+								TextEx(x, y + NAV_HEIGHT_HALF - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
+								TextEx(x, y + NAV_HEIGHT_HALF - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
+							EndIf
+						Else
+							If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\RoomID <> r_cont1_895)
+								Local xx% = x - SelectedItem\ItemTemplate\ImgWidth
+								Local yy% = y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale)
 								
-								SetBuffer(ImageBuffer(t\ImageID[7]))
-								DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
+								If SelectedItem\State2 = 0.0
+									Local ColliderX# = EntityX(me\Collider)
+									Local ColliderZ# = EntityZ(me\Collider)
+									Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
+									Local PlayerZ% = Floor(ColliderZ / RoomSpacing + 0.5)
+									
+									SetBuffer(ImageBuffer(t\ImageID[7]))
+									DrawImage(SelectedItem\ItemTemplate\Img, xx, yy)
+									
+									x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+									y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+									For x2 = Max(1, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
+										For z2 = Max(1, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
+											If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance
+												If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
+													Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
+													
+													Color(30 + (70 * (SelectedItem\ItemTemplate\ID = it_navulti And (CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] =< MapGrid_NoTile Lor CurrMapGrid\Found[x2 + (z2 * MapGridSize)] =< MapGrid_NoTile))), 30, 30)
+													If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+													If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+													
+													If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
+													If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
+												EndIf
+											EndIf
+										Next
+									Next
+									
+									SetBuffer(BackBuffer())
+									SelectedItem\State2 = 2.0
+								Else
+									SelectedItem\State2 = Max(0.0, SelectedItem\State2 - fps\Factor[0])
+								EndIf
+								DrawBlockRect(t\ImageID[7], xx + (80 * MenuScale), yy + (70 * MenuScale), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
+								Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
+								Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 								
-								x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
-								y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
-								For x2 = Max(1, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
-									For z2 = Max(1, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
-										If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance
-											If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
-												Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
-												
-												Color(30 + (70 * (SelectedItem\ItemTemplate\ID = it_navulti And (CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] =< MapGrid_NoTile Lor CurrMapGrid\Found[x2 + (z2 * MapGridSize)] =< MapGrid_NoTile))), 30, 30)
-												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-												
-												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
-												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
+								x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
+								y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
+								
+								Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
+								If (MilliSec Mod 800) < 200
+									If Offline Then TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), GetLocalString("msg", "nav.data"))
+									
+									YawValue = EntityYaw(me\Collider) - 90.0
+									x1 = x + Cos(YawValue) * (6.0 * MenuScale) : y1 = y - Sin(YawValue) * (6.0 * MenuScale)
+									x2 = x + Cos(YawValue - 140.0) * (5.0 * MenuScale) : y2 = y - Sin(YawValue - 140.0) * (5.0 * MenuScale)
+									x3 = x + Cos(YawValue + 140.0) * (5.0 * MenuScale) : y3 = y - Sin(YawValue + 140.0) * (5.0 * MenuScale)
+									
+									Line(x1, y1, x2, y2)
+									Line(x1, y1, x3, y3)
+									Line(x2, y2, x3, y3)
+								EndIf
+								
+								Local SCPs_Found% = 0, Dist#
+								
+								If SelectedItem\ItemTemplate\ID = it_navulti And (MilliSec Mod 600) < 400
+									Local np.NPCs
+									
+									Color(100, 0, 0)
+									For np.NPCs = Each NPCs
+										If np\NPCType = NPCType173 Lor np\NPCType = NPCType106 Lor np\NPCType = NPCType096 Lor np\NPCType = NPCType049 Lor np\NPCType = NPCType066
+											If (Not np\HideFromNVG)
+												Dist = EntityDistanceSquared(Camera, np\Collider)
+												If Dist < 900.0
+													SqrValue = Sqr(Dist)
+													Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
+													TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
+													SCPs_Found = SCPs_Found + 1
+												EndIf
 											EndIf
 										EndIf
 									Next
-								Next
-								
-								SetBuffer(BackBuffer())
-								SelectedItem\State2 = 2.0
-							Else
-								SelectedItem\State2 = Max(0.0, SelectedItem\State2 - fps\Factor[0])
-							EndIf
-							DrawBlockRect(t\ImageID[7], xx + (80 * MenuScale), yy + (70 * MenuScale), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
-							Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
-							Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
-							
-							x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
-							y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
-							
-							Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
-							If (MilliSec Mod 800) < 200
-								If Offline Then TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), GetLocalString("msg", "nav.data"))
-								
-								YawValue = EntityYaw(me\Collider) - 90.0
-								x1 = x + Cos(YawValue) * (6.0 * MenuScale) : y1 = y - Sin(YawValue) * (6.0 * MenuScale)
-								x2 = x + Cos(YawValue - 140.0) * (5.0 * MenuScale) : y2 = y - Sin(YawValue - 140.0) * (5.0 * MenuScale)
-								x3 = x + Cos(YawValue + 140.0) * (5.0 * MenuScale) : y3 = y - Sin(YawValue + 140.0) * (5.0 * MenuScale)
-								
-								Line(x1, y1, x2, y2)
-								Line(x1, y1, x3, y3)
-								Line(x2, y2, x3, y3)
-							EndIf
-							
-							Local SCPs_Found% = 0, Dist#
-							
-							If SelectedItem\ItemTemplate\ID = it_navulti And (MilliSec Mod 600) < 400
-								Local np.NPCs
-								
-								Color(100, 0, 0)
-								For np.NPCs = Each NPCs
-									If np\NPCType = NPCType173 Lor np\NPCType = NPCType106 Lor np\NPCType = NPCType096 Lor np\NPCType = NPCType049 Lor np\NPCType = NPCType066
-										If (Not np\HideFromNVG)
-											Dist = EntityDistanceSquared(Camera, np\Collider)
-											If Dist < 900.0
-												SqrValue = Sqr(Dist)
-												Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-												TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
-												SCPs_Found = SCPs_Found + 1
-											EndIf
+									If PlayerRoom\RoomTemplate\RoomID = r_cont1_895
+										If CoffinDistance < 8.0
+											Dist = Rnd(4.0, 8.0)
+											Oval(x - (Dist * (1.5 * MenuScale)), y - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+											TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
 										EndIf
 									EndIf
-								Next
-								If PlayerRoom\RoomTemplate\RoomID = r_cont1_895
-									If CoffinDistance < 8.0
-										Dist = Rnd(4.0, 8.0)
-										Oval(x - (Dist * (1.5 * MenuScale)), y - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
-										TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
-									EndIf
 								EndIf
-							EndIf
-							
-							Color(30, 30, 30)
-							If SelectedItem\State > 0.0 And (SelectedItem\ItemTemplate\ID = it_nav Lor SelectedItem\ItemTemplate\ID = it_nav310)
-								xTemp = x - NAV_WIDTH_HALF + (196 * MenuScale)
-								yTemp = y - NAV_HEIGHT_HALF + (10 * MenuScale)
 								
-								If Offline Then Color(100, 0, 0)
-								Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
-								
-								; ~ Battery
-								Temp = (SelectedItem\State <= 20.0)
-								Color(70 * Temp + 30, 30 * Temp, 30 * Temp)
-								For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10)
-									Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
-								Next
-								SetFontEx(fo\FontID[Font_Digital])
+								Color(30, 30, 30)
+								If SelectedItem\State > 0.0 And (SelectedItem\ItemTemplate\ID = it_nav Lor SelectedItem\ItemTemplate\ID = it_nav310)
+									xTemp = x - NAV_WIDTH_HALF + (196 * MenuScale)
+									yTemp = y - NAV_HEIGHT_HALF + (10 * MenuScale)
+									
+									If Offline Then Color(100, 0, 0)
+									Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
+									
+									; ~ Battery
+									Temp = (SelectedItem\State <= 20.0)
+									Color(70 * Temp + 30, 30 * Temp, 30 * Temp)
+									For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10)
+										Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
+									Next
+									SetFontEx(fo\FontID[Font_Digital])
+								EndIf
 							EndIf
 						EndIf
 					EndIf
@@ -7021,7 +7025,7 @@ Function RenderGUI%()
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
 					EndIf
-					DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					If me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 				Case it_oldbadge, it_ticket
 					;[Block]
@@ -7033,7 +7037,7 @@ Function RenderGUI%()
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
 						AdaptScreenGamma()
 					EndIf
-					DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					If me\BlinkTimer > -6.0 Then DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 			End Select
 		EndIf

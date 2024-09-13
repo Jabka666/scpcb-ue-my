@@ -4146,7 +4146,7 @@ Function UpdateSecurityCams%()
 				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(me\CameraFogDist * LightVolume * 1.2) And SecondaryLightOn > 0.3
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
-					If me\BlinkTimer > -10.0 And sc\InSight And (Not wi\IsNVGBlinking)
+					If me\BlinkTimer > -6.0 And sc\InSight
 						ParticleCam = sc\Cam
 						
 						Local Temp% = False
@@ -4251,7 +4251,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If me\BlinkTimer > -10.0 And (Not wi\IsNVGBlinking) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(me\CameraFogDist * LightVolume * 1.2) And sc\InSight And SecondaryLightOn > 0.3
+				If me\BlinkTimer > -6.0 And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(me\CameraFogDist * LightVolume * 1.2) And sc\InSight And SecondaryLightOn > 0.3
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
