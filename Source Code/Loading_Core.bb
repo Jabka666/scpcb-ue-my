@@ -2303,7 +2303,7 @@ Function LoadEntities%()
 	t\ImageID[5] = LoadImage_Strict("GFX\Overlays\scp_294_overlay.png")
 	t\ImageID[5] = ScaleImage2(t\ImageID[5], MenuScale, MenuScale)
 	
-	t\ImageID[6] = LoadImage_Strict("GFX\HUD\night_vision_goggles_battery.png")
+	t\ImageID[6] = LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3)
 	t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale)
 	MaskImage(t\ImageID[6], 255, 0, 255)
 	

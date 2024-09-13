@@ -1232,7 +1232,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\NoTarget)
 								If wi\SCRAMBLE = 0 And IsLooking
-									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
+									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking)
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 										
 										S2IMapErase(UnlockedAchievements, "096")
@@ -1312,7 +1312,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\NoTarget)
 								If wi\SCRAMBLE = 0 And IsLooking
-									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
+									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking)
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 										
 										S2IMapErase(UnlockedAchievements, "096")

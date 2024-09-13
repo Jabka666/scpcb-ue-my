@@ -2345,7 +2345,7 @@ Function UpdateEvents%()
 						Else
 							If e\EventState > (-70.0) * 4.0
 								If me\FallTimer < -230.0
-									me\BlinkTimer = 0.0 : me\FallTimer = -231.0
+									me\BlinkTimer = -10.0 : me\FallTimer = -231.0
 									
 									e\EventState = e\EventState - fps\Factor[0]
 									
@@ -2583,7 +2583,7 @@ Function UpdateEvents%()
 								
 								IsBlackOut = PrevIsBlackOut
 								If wi\NightVision > 0
-									me\CameraFogDist = 17.0
+									me\CameraFogDist = 15.0
 								ElseIf wi\SCRAMBLE > 0
 									me\CameraFogDist = 9.0
 								Else
@@ -3932,7 +3932,7 @@ Function UpdateEvents%()
 								;[End Block]
 						End Select
 						
-						If me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0
+						If me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0 Lor wi\IsNVGBlinking
 							PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ(), True)
 							RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0)
 						EndIf
@@ -5764,7 +5764,7 @@ Function UpdateEvents%()
 						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						EntityParent(e\room\Objects[3], e\room\OBJ)
 					Else
-						If me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0
+						If me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0 Lor wi\IsNVGBlinking
 							PointEntity(e\room\Objects[3], me\Collider)
 							RotateEntity(e\room\Objects[3], 0.0, EntityYaw(e\room\Objects[3], True), 0.0, True)
 						EndIf
@@ -7590,7 +7590,7 @@ Function UpdateDimension106%()
 											Next
 											
 											If wi\NightVision > 0
-												me\CameraFogDist = 17.0
+												me\CameraFogDist = 15.0
 											ElseIf wi\SCRAMBLE > 0
 												me\CameraFogDist = 9.0
 											Else
@@ -7861,7 +7861,7 @@ Function UpdateDimension106%()
 									EndIf
 									
 									If wi\NightVision > 0
-										me\CameraFogDist = 17.0
+										me\CameraFogDist = 15.0
 									ElseIf wi\SCRAMBLE > 0
 										me\CameraFogDist = 9.0
 									Else
@@ -7955,7 +7955,7 @@ Function UpdateDimension106%()
 										Next
 										
 										If wi\NightVision > 0
-											me\CameraFogDist = 17.0
+											me\CameraFogDist = 15.0
 										ElseIf wi\SCRAMBLE > 0
 											me\CameraFogDist = 9.0
 										Else

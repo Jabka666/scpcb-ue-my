@@ -286,6 +286,8 @@ Function UpdateGame%()
 		
 		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
 		
+		RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
+		
 		UpdateMouseInput()
 		
 		HandEntity = 0
@@ -561,8 +563,7 @@ Function UpdateGame%()
 			ManipulateNPCBones()
 		EndIf
 		
-		UpdateWorld2()
-		
+		UpdateNVG()
 		UpdateGUI()
 		
 		If KeyHit(key\INVENTORY)
@@ -665,14 +666,13 @@ Global RenderTween#
 Function RenderGame%()
 	CatchErrors("RenderGame()")
 	
-	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
-	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
 	RenderWorld2(RenderTween)
 	
 	RenderBlur(me\BlurVolume)
 	
+	RenderNVG()
 	RenderGUI()
 	
 	RenderMessages()
@@ -2870,7 +2870,7 @@ Type WearableItems
 	Field HazmatSuit%
 	Field BallisticVest%
 	Field BallisticHelmet%
-	Field NightVision%, NVGTimer#, IsNVGBlinking%
+	Field NightVision%, NVGTimer#, IsNVGBlinking%, NVGPower%
 	Field SCRAMBLE%
 End Type
 
@@ -3158,21 +3158,33 @@ Function UpdateZoneColor%()
 	CurrAmbientColorG = CurveValue(Mid(CurrAmbientColor, 4, 3), CurrAmbientColorG, ZoneColorChangeSpeed)
 	CurrAmbientColorB = CurveValue(Right(CurrAmbientColor, 3), CurrAmbientColorB, ZoneColorChangeSpeed)
 	
-	Local CurrR#, CurrG#, CurrB#
+	Local CurrR# = CurrAmbientColorR, CurrG# = CurrAmbientColorG, CurrB# = CurrAmbientColorB
 	
-	If wi\NightVision > 0
-		CurrR = CurrAmbientColorR * 6.0 : CurrG = CurrAmbientColorG * 6.0 : CurrB = CurrAmbientColorB * 6.0
-		AmbientLightRooms(CurrR / 3.0, CurrG / 3.0, CurrB / 3.0)
-	ElseIf wi\SCRAMBLE > 0
-		CurrR = CurrAmbientColorR * 2.0 : CurrG = CurrAmbientColorG * 2.0 : CurrB = CurrAmbientColorB * 2.0
-		AmbientLightRooms(CurrR / 3.0, CurrG / 3.0, CurrB / 3.0)
+	If wi\SCRAMBLE > 0
+		CurrR = CurrR * 2.0 : CurrG = CurrG * 2.0 : CurrB = CurrB * 2.0
 	Else
-		AmbientLightRooms(CurrAmbientColorR / 5.0, CurrAmbientColorG / 5.0, CurrAmbientColorB / 5.0)
-		CurrR = CurrAmbientColorR : CurrG = CurrAmbientColorG : CurrB = CurrAmbientColorB
-		If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
-			If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
-		EndIf
+		Select wi\NightVision
+			Case 0
+				;[Block]
+				If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+					If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
+				EndIf
+				;[End Block]
+			Case 1
+				;[Block]
+				CurrR = CurrR * 3.0 : CurrG = CurrG * 6.0 : CurrB = CurrB * 3.0
+				;[End Block]
+			Case 2
+				;[Block]
+				CurrR = CurrR * 3.0 : CurrG = CurrG * 3.0 : CurrB = CurrB * 6.0
+				;[End Block]
+			Case 3
+				;[Block]
+				CurrR = CurrR * 6.0 : CurrG = CurrG * 3.0 : CurrB = CurrB * 3.0
+				;[End Block]
+		End Select
 	EndIf
+	AmbientLightRooms(CurrR / 3.0, CurrG / 3.0, CurrB / 3.0)
 	AmbientLight(CurrR, CurrG, CurrB)
 End Function
 
@@ -3201,6 +3213,67 @@ Global RadioState3%[10]
 Global DrawArrowIcon%[4]
 
 Global InvOpen%
+
+Global BatMsgTimer#
+
+Function UpdateBatteryTimer%()
+	BatMsgTimer = BatMsgTimer + fps\Factor[0]
+	If BatMsgTimer >= 70.0 * 1.5 Then BatMsgTimer = 0.0
+End Function
+
+Function UpdateNVG%()
+	Local np.NPCs
+	Local i%
+	
+	wi\IsNVGBlinking = False
+	wi\NVGPower = 0
+	
+	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0
+		For i = 0 To MaxItemAmount - 1
+			If Inventory(i) <> Null
+				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\ID = it_nvg) Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\ID = it_veryfinenvg) Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
+					If wi\NightVision > 0 Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision)))
+						If wi\SCRAMBLE > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.08 / wi\SCRAMBLE)))
+						wi\NVGPower = Int(Inventory(i)\State)
+						If wi\NVGPower = 0 ; ~ This NVG or SCRAMBLE can't be used
+							If wi\SCRAMBLE > 0
+								CreateMsg(GetLocalString("msg", "battery.died"))
+							Else
+								CreateMsg(GetLocalString("msg", "battery.died.nvg"))
+							EndIf
+							wi\IsNVGBlinking = True
+						EndIf
+						Exit
+					EndIf
+				EndIf
+			Next
+		EndIf
+		
+		If wi\NVGPower > 0
+			If wi\NightVision = 2
+				If wi\NVGTimer <= 0.0
+					For np.NPCs = Each NPCs
+						np\NVGX = EntityX(np\Collider, True)
+						np\NVGY = EntityY(np\Collider, True)
+						np\NVGZ = EntityZ(np\Collider, True)
+					Next
+					wi\IsNVGBlinking = True
+					If wi\NVGTimer <= -10.0 Then wi\NVGTimer = 600.0
+				EndIf
+				wi\NVGTimer = wi\NVGTimer - fps\Factor[0]
+			EndIf
+			
+			If wi\NVGPower < 160
+				UpdateBatteryTimer()
+				If BatMsgTimer >= 70.0
+					If (Not ChannelPlaying(LowBatteryCHN[1]))
+						me\SndVolume = Max(3.0, me\SndVolume)
+						LowBatteryCHN[1] = PlaySound_Strict(snd_I\LowBatterySFX[1])
+					EndIf
+				EndIf
+			EndIf
+		EndIf
+End Function
 
 Function UpdateGUI%()
 	CatchErrors("UpdateGUI()")
@@ -4298,7 +4371,7 @@ Function UpdateGUI%()
 								GiveAchievement("1499")
 								For r.Rooms = Each Rooms
 									If r\RoomTemplate\RoomID = r_dimension_1499
-										me\BlinkTimer = -1.0
+										me\BlinkTimer = -10.0
 										I_1499\PrevRoom = PlayerRoom
 										I_1499\PrevX = EntityX(me\Collider)
 										I_1499\PrevY = EntityY(me\Collider)
@@ -4380,7 +4453,7 @@ Function UpdateGUI%()
 								If SelectedItem\State > 0.0 Then PlaySound_Strict(snd_I\NVGSFX[1])
 							Else
 								CreateMsg(GetLocalString("msg", "nvg.on"))
-								me\CameraFogDist = 17.0
+								me\CameraFogDist = 15.0
 								Select SelectedItem\ItemTemplate\ID
 									Case it_nvg
 										;[Block]
@@ -6079,6 +6152,73 @@ Function Render3DHandIcon%(IconID%, OBJ%, ArrowID% = -1)
 		End Select
 	EndIf
 	DrawBlock(t\IconID[IconID], x, y)
+End Function
+
+Function RenderNVG%()
+	Local np.NPCs
+	Local i%, k%, l%
+	
+	If wi\NVGPower > 0
+		If wi\NightVision = 2 ; ~ Show a HUD
+			Color(100, 100, 255)
+			
+			SetFontEx(fo\FontID[Font_Digital])
+			
+			Local PlusY% = 0
+			
+			PlusY = 40
+			
+			Local RefreshHint$ = GetLocalString("msg", "refresh")
+			Local InstrRefreshHint% = Instr(RefreshHint, "%s")
+			
+			TextEx(mo\Viewport_Center_X, 60 * MenuScale, Trim(Left(RefreshHint, InstrRefreshHint - 1)), True)
+			TextEx(mo\Viewport_Center_X, 100 * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True)
+			TextEx(mo\Viewport_Center_X, 140 * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - InstrRefreshHint - 1)), True)
+			
+			For np.NPCs = Each NPCs
+				If np\NVGName <> "" And (Not np\HideFromNVG) ; ~ Don't waste your time if the string is empty
+					Local Dist# = DistanceSquared(EntityX(me\Collider, True), np\NVGX, EntityY(me\Collider, True), np\NVGY, EntityZ(me\Collider, True), np\NVGZ)
+					
+					If Dist < 256.0 ; ~ Don't draw text if the NPC is too far away
+						If (Not wi\IsNVGBlinking)
+							CameraProject(Camera, np\NVGX, np\NVGY + 0.5, np\NVGZ)
+							TextEx(ProjectedX(), ProjectedY(), np\NVGName, True, True)
+							TextEx(ProjectedX(), ProjectedY() - 25.0, FloatToString(Sqr(Dist), 1) + " m", True, True)
+						EndIf
+					EndIf
+				EndIf
+			Next
+			
+			Color(0, 0, 55)
+		ElseIf wi\NightVision = 1
+			Color(0, 55, 0)
+		Else ; ~ SCRAMBLE
+			Color(55, 55, 55)
+		EndIf
+		For k = 0 To 10
+			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((k * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
+		Next
+		If wi\NightVision = 2
+			Color(100, 100, 255)
+			DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 1)
+		ElseIf wi\NightVision = 1
+			Color(100, 255, 100)
+			DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 0)
+		Else ; ~ SCRAMBLE
+			Color(255, 255, 255)
+			DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 2)
+		EndIf
+		For l = 0 To Min(Floor((wi\NVGPower + 50) * 0.01), 11.0)
+			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((l * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
+		Next
+		If BatMsgTimer >= 70.0
+			Color(255, 0, 0)
+			SetFontEx(fo\FontID[Font_Digital])
+			
+			TextEx(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True)
+		EndIf
+	EndIf
+	Color(255, 255, 255)
 End Function
 
 Function RenderGUI%()
@@ -9432,7 +9572,7 @@ Function UpdateLeave1499%()
 		For r.Rooms = Each Rooms
 			If r = I_1499\PrevRoom
 				IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
-				me\BlinkTimer = -1.0
+				me\BlinkTimer = -10.0
 				I_1499\x = EntityX(me\Collider)
 				I_1499\y = EntityY(me\Collider)
 				I_1499\z = EntityZ(me\Collider)
