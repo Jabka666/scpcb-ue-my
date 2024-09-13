@@ -4783,8 +4783,8 @@ Function UpdateGUI%()
 				Case it_eyedrops, it_eyedrops2
 					;[Block]
 					If CanUseItem()
-						me\BlinkEffect = 0.7
-						me\BlinkEffectTimer = Rnd(30.0, 40.0)
+						me\BlinkEffect = 0.6
+						me\BlinkEffectTimer = Rnd(25.0, 35.0)
 						me\BlurTimer = 200.0
 						If SelectedItem\ItemTemplate\ID = it_eyedrops2 Then me\Bloodloss = Max(me\Bloodloss - Rnd(5.0, 10.0), 0.0)
 						
@@ -4796,8 +4796,8 @@ Function UpdateGUI%()
 				Case it_fineeyedrops
 					;[Block]
 					If CanUseItem()
-						me\BlinkEffect = 0.5
-						me\BlinkEffectTimer = Rnd(40.0, 50.0)
+						me\BlinkEffect = 0.4
+						me\BlinkEffectTimer = Rnd(35.0, 45.0)
 						me\BlurTimer = 200.0
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.very"))
