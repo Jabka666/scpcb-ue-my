@@ -22,18 +22,30 @@ v1.3.1
 [Rooms]
 - Added «Press any key to continue» message for debug maps.
 - Added a wallet in the hallway near SCP-513's containment chamber.
-- Reduced clearance level for «room_gw» control room.
+- Reduced clearance level for «room_gw» control room. Requirement changed to Level 2 Key Card.
+- Reduced clearance level for «room2_medibay». Requirement changed to Level 2 Key Card.
 
 [Items]
 - Added icon for Compact First Aid Kit.
 
 - Changed size of Blue First Aid Kit icon.
 - Changed clearance level for SCP-895's document.
-- Infected syringes will now slightly heal and give a very small stamina boost.
+- Infected syringes will now slightly heal and give a very small stamina boost. 25% stamina boost for 10-20 seconds.
+- Buffed eyedrops to slow blink down even more.
 
 [NPCs]
 - SCP-966's insomnia timer scales longer with the «SelectedDifficulty\OtherFactors» setting.
+	- Easy: 30 seconds
+	- Normal: 40 seconds
+	- Hard: 50 seconds
+	- Extreme: 60 seconds
+	
 - SCP-066 deaf timer scales with «SelectedDifficulty\OtherFactors» instead of «SelectedDifficulty\AggressiveNPCs».
+	- Easy: 45 seconds
+	- Normal: 60 seconds
+	- Hard: 75 seconds
+	- Extreme: 90 seconds
+	
 - SCP-1048-A has random scale now.
 
 [Bug Fixes]
