@@ -3430,7 +3430,7 @@ Function UpdateGUI%()
 				
 				For n = 0 To 3
 					For i = 0 To 2
-						xTemp = x + ((58.5 * MenuScale * Scale) * n)
+						xTemp = x + Int((58.5 * MenuScale * Scale) * n)
 						yTemp = y + ((67 * MenuScale * Scale) * i)
 						
 						Temp = False
@@ -3639,10 +3639,10 @@ Function UpdateGUI%()
 					If IsEmpty
 						If OtherOpen\ItemTemplate\ID = it_clipboard
 							OtherOpen\InvImg = OtherOpen\ItemTemplate\InvImg2
-							SetAnimTime(OtherOpen\Model, 17.0)
+							SetAnimTime(OtherOpen\OBJ, 17.0)
 						ElseIf OtherOpen\ItemTemplate\ID = it_wallet
 							OtherOpen\InvImg = OtherOpen\ItemTemplate\InvImg2
-							SetAnimTime(OtherOpen\Model, 0.0)
+							SetAnimTime(OtherOpen\OBJ, 0.0)
 						EndIf
 					EndIf
 					
@@ -3870,7 +3870,7 @@ Function UpdateGUI%()
 												If SelectedItem <> Null
 													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 													Inventory(MouseSlot)\State = 1.0
-													SetAnimTime(Inventory(MouseSlot)\Model, 0.0)
+													SetAnimTime(Inventory(MouseSlot)\OBJ, 0.0)
 													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
 													
 													For ri = 0 To MaxItemAmount - 1
@@ -3925,7 +3925,7 @@ Function UpdateGUI%()
 													Select ID
 														Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge
 															;[Block]
-															SetAnimTime(Inventory(MouseSlot)\Model, 3.0)
+															SetAnimTime(Inventory(MouseSlot)\OBJ, 3.0)
 															Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
 															;[End Block]
 													End Select

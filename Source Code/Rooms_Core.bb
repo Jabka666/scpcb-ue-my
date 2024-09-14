@@ -1785,7 +1785,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Clipboard", it_clipboard, r\x + 919.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 855.0 * RoomScale)
 			; ~ A hacky fix for clipboard's model and icon
 			it\InvImg = it\ItemTemplate\InvImg
-			SetAnimTime(it\Model, 0.0)
+			SetAnimTime(it\OBJ, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it2.Items = CreateItem("Document SCP-1048", it_paper, 1.0, 1.0, 1.0)

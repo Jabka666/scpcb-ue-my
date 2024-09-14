@@ -320,7 +320,7 @@ End Function
 Type Items
 	Field DisplayName$
 	Field Name$
-	Field Collider%, Model%
+	Field Collider%, OBJ%
 	Field ItemTemplate.ItemTemplates
 	Field DropSpeed#
 	Field R%, G%, B%, Alpha#
@@ -354,11 +354,11 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			i\Collider = CreatePivot()
 			EntityRadius(i\Collider, 0.01)
 			EntityPickMode(i\Collider, 1, False)
-			i\Model = CopyEntity(it\OBJ, i\Collider)
+			i\OBJ = CopyEntity(it\OBJ, i\Collider)
 			i\DisplayName = it\DisplayName
 			i\Name = it\Name
 			ShowEntity(i\Collider)
-			ShowEntity(i\Model)
+			ShowEntity(i\OBJ)
 			Exit
 		EndIf
 	Next 
@@ -387,7 +387,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			
 			ScaleEntity(Liquid, i\ItemTemplate\Scale, i\ItemTemplate\Scale, i\ItemTemplate\Scale, True)
 			PositionEntity(Liquid, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True))
-			EntityParent(Liquid, i\Model)
+			EntityParent(Liquid, i\OBJ)
 			EntityColor(Liquid, R, G, B)
 			
 			If Alpha < 0.0 Then EntityFX(Liquid, 1)
@@ -398,7 +398,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			;[Block]
 			If InvSlots = 0
 				InvSlots = 10
-				SetAnimTime(i\Model, 17.0)
+				SetAnimTime(i\OBJ, 17.0)
 				i\InvImg = i\ItemTemplate\InvImg2
 			EndIf
 			;[End Block]
@@ -406,7 +406,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			;[Block]
 			If InvSlots = 0
 				InvSlots = 10
-				SetAnimTime(i\Model, 0.0)
+				SetAnimTime(i\OBJ, 0.0)
 				i\InvImg = i\ItemTemplate\InvImg2
 			EndIf
 			;[End Block]
@@ -427,7 +427,7 @@ Function RemoveItem%(i.Items)
 	
 	Local n%
 	
-	FreeEntity(i\Model) : i\Model = 0
+	FreeEntity(i\OBJ) : i\OBJ = 0
 	FreeEntity(i\Collider) : i\Collider = 0
 	
 	For n = 0 To MaxItemAmount - 1
@@ -526,7 +526,7 @@ Function UpdateItems%()
 				
 				If i\Dist < 1.44
 					If ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)
-						If EntityInView(i\Model, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
+						If EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
 					EndIf
 				EndIf
 				
@@ -759,7 +759,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	Local ITID% = item\ItemTemplate\ID
 	
-	If ITID = it_hazmatsuit Lor ITID = it_finehazmatsuit Lor ITID = it_veryfinehazmatsuit Lor ITID = it_hazmatsuit148 Then SetAnimTime(item\Model, 4.0)
+	If ITID = it_hazmatsuit Lor ITID = it_finehazmatsuit Lor ITID = it_veryfinehazmatsuit Lor ITID = it_hazmatsuit148 Then SetAnimTime(item\OBJ, 4.0)
 	
 	item\Picked = False
 	For n = 0 To MaxItemAmount - 1

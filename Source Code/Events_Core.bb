@@ -5698,7 +5698,7 @@ Function UpdateEvents%()
 											For j = 0 To it\InvSlots - 1
 												it2\SecondInv[j] = it\SecondInv[j]
 											Next
-											SetAnimTime(it2\Model, AnimTime(it\Model))
+											SetAnimTime(it2\OBJ, AnimTime(it\OBJ))
 											it2\InvImg = it\InvImg
 										EndIf
 										RotateEntity(it2\Collider, EntityPitch(it\Collider), EntityYaw(it\Collider), 0.0)
@@ -7032,7 +7032,6 @@ Function UpdateEvents%()
 									EndIf
 								EndIf
 							Next
-							
 						EndIf
 						
 						For e2.Events = Each Events
@@ -10139,7 +10138,7 @@ Function Update035Label%(OBJ%)
 			For it.Items = Each Items
 				If it\ItemTemplate\Name = itt\Name
 					Tex = GetRescaledTexture(itt\TexPath, 1, 256, 256)
-					EntityTexture(it\Model, Tex)
+					EntityTexture(it\OBJ, Tex)
 					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 					Exit
 				EndIf
