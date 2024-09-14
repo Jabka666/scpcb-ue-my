@@ -9610,6 +9610,7 @@ Function UpdateLeave1499%()
 				Next
 				r1499 = Null
 				me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
+				CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Exit.ogg"))
 				I_1499\PrevX = 0.0
 				I_1499\PrevY = 0.0
