@@ -3474,8 +3474,9 @@ Function UpdateEvents%()
 									
 									e\EventState2 = e\EventState2 + 1.0
 								ElseIf SelectedItem\ItemTemplate\ID = it_mastercard
-									If me\Funds > 0
-										me\Funds = me\Funds - 1
+									If SelectedItem\State > 0
+										SelectedItem\State = SelectedItem\State - 1
+										me\CurrFunds = SelectedItem\State
 										
 										PlaySound_Strict(LoadTempSound("SFX\SCP\294\InsertMasterCard.ogg"))
 										

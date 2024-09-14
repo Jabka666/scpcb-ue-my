@@ -2765,7 +2765,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it2.Items = CreateItem("Mastercard", it_mastercard, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1
+			it2\Picked = True : it2\Dropped = -1 : it2\State = Rand(0, 6)
 			it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
 			EntityParent(it2\Collider, 0)

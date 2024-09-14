@@ -1420,6 +1420,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(6) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									EndIf
@@ -1428,6 +1429,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(5) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									EndIf
@@ -1436,6 +1438,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									EndIf
@@ -1453,6 +1456,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(5) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									EndIf
@@ -1461,6 +1465,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									EndIf
@@ -1469,6 +1474,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									EndIf
@@ -1486,6 +1492,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									EndIf
@@ -1494,6 +1501,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									EndIf
@@ -1502,6 +1510,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									EndIf
@@ -1527,6 +1536,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									EndIf
@@ -1535,6 +1545,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									EndIf
@@ -1543,6 +1554,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									EndIf
@@ -1559,6 +1571,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+								it2\State = Rand(0, 6)
 							EndIf
 							;[End Block]
 						Case it_key6
@@ -1567,6 +1580,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+								it2\State = Rand(0, 6)
 							EndIf
 							;[End Block]
 					End Select
@@ -1580,6 +1594,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
 					Else
 						it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+						it2\State = Rand(0, 6)
 					EndIf
 					;[End Block]
 			End Select
@@ -1595,6 +1610,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					If Rand(2) = 1
 						it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+						it2\State = Rand(0, 6)
 					Else
 						it2.Items = CreateItem("Playing Card", it_playcard, x, y, z)
 					EndIf
@@ -1605,6 +1621,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
 					Else
 						it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+						it2\State = Rand(0, 6)
 					EndIf
 					;[End Block]
 			End Select

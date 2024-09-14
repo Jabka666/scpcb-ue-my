@@ -2116,7 +2116,9 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "resetfunds"
 					;[Block]
-					me\Funds = Rand(6)
+					For it.Items = Each Items
+						If it\ItemTemplate\ID = it_mastercard Then it\State = Rand(6)
+					Next
 					CreateConsoleMsg(GetLocalString("console", "funds"))
 					;[End Block]
 				Case "codes"
@@ -6036,8 +6038,7 @@ Function RenderDebugHUD%()
 			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), me\Playable))
 			
 			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
-			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.funds"), me\Funds))
-			TextEx(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
+			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
 			;[End Block]
 		Case 3
 			;[Block]
@@ -9391,6 +9392,7 @@ Function Update294%()
 									Inventory(i)\Picked = True
 									Inventory(i)\Dropped = -1
 									Inventory(i)\ItemTemplate\Found = True
+									Inventory(i)\State = me\CurrFunds
 									HideEntity(Inventory(i)\Collider)
 									EntityType(Inventory(i)\Collider, HIT_ITEM)
 									EntityParent(Inventory(i)\Collider, 0)
@@ -9399,8 +9401,9 @@ Function Update294%()
 							Next
 						Else
 							it.Items = CreateItem("Mastercard", it_mastercard, EntityX(me\Collider), EntityY(me\Collider) + 0.3, EntityZ(me\Collider))
-							it\ItemTemplate\Found = True
+							it\ItemTemplate\Found = True : it\State = me\CurrFunds
 							EntityType(it\Collider, HIT_ITEM)
+							CreateMsg(GetLocalString("msg", "cantcarry"))
 						EndIf
 					EndIf
 					
