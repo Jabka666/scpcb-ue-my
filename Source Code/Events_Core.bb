@@ -8064,10 +8064,10 @@ Function UpdateDimension1499%()
 						e\room\NPC[1]\PrevState = 1 : e\room\NPC[1]\Angle = 270.0
 						RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\NPC[1]\Angle, 0.0)
 						; ~ Guards at the entrance to church
-						e\room\NPC.NPCs[2] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 1884.0 * RoomScale)
+						e\room\NPC.NPCs[2] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 128.0 * RoomScale, e\room\z + 1884.0 * RoomScale)
 						e\room\NPC[2]\PrevState = 3 : e\room\NPC[2]\Angle = 270.0
 						RotateEntity(e\room\NPC[2]\Collider, 0.0, e\room\NPC[2]\Angle, 0.0)
-						e\room\NPC.NPCs[3] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 2876.0 * RoomScale)
+						e\room\NPC.NPCs[3] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 128.0 * RoomScale, e\room\z + 2876.0 * RoomScale)
 						e\room\NPC[3]\PrevState = 3 : e\room\NPC[3]\Angle = 270.0
 						RotateEntity(e\room\NPC[3]\Collider, 0.0, e\room\NPC[3]\Angle, 0.0)
 						e\room\NPC[2]\Target = e\room\NPC[3]
@@ -8082,7 +8082,7 @@ Function UpdateDimension1499%()
 						e\room\NPC[4]\Target = e\room\NPC[5]
 						e\room\NPC[5]\Target = e\room\NPC[4]
 						; ~ Guard at stairs
-						n.NPCs = CreateNPC(NPCType1499_1, e\room\x - 2761.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 3204.0 * RoomScale)
+						n.NPCs = CreateNPC(NPCType1499_1, e\room\x - 2761.0 * RoomScale, e\room\y + 128.0 * RoomScale, e\room\z + 3204.0 * RoomScale)
 						n\PrevState = 1 : n\Angle = 180.0 : n\Speed = 0.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
 						; ~ SCP-1499-1 instances praying in church
