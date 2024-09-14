@@ -2175,7 +2175,6 @@ Function UpdateNPCs%()
 												If n\Target\HP > 0
 													n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
 												Else
-													n\Target\IsDead = True
 													n\Target = Null
 													n\State = 3.0
 													Return
@@ -2199,6 +2198,7 @@ Function UpdateNPCs%()
 					
 					; ~ Loop the breath sound
 					If n\State > 1.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_049_2_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+					If n\HP =< 0 Then n\IsDead = True
 				Else
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
@@ -2705,6 +2705,7 @@ Function UpdateNPCs%()
 						EndIf
 					EndIf
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+					If n\HP =< 0 And n\NPCType = NPCTypeClerk Then n\IsDead = True ; ~ Only for Clerk because of Tesla Gate event
 				Else
 					Select n\State3
 						Case -1.0 ; ~ Don't animate
@@ -2869,7 +2870,7 @@ Function UpdateNPCs%()
 									me\CameraShake = 2.0
 									I_1048A\EarGrowTimer = 0.01
 								EndIf
-								n\State = 0.0
+								n\HP = 0
 							EndIf
 							;[End Block]
 					End Select
@@ -2877,6 +2878,29 @@ Function UpdateNPCs%()
 					
 					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.15, EntityZ(n\Collider))
 					RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
+					
+					If n\HP =< 0
+						PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
+						p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
+						EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+						RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+						p\AlphaChange = -Rnd(0.02, 0.03)
+						For i = 0 To 1
+							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider) + Rnd(-0.2, 0.2), EntityY(n\Collider) + 0.25, EntityZ(n\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
+							EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+							RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+							p\AlphaChange = -Rnd(0.02, 0.03)
+						Next
+						
+						Pvt = CreatePivot()
+						PositionEntity(Pvt, EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
+						TurnEntity(Pvt, 90.0, 0.0, 0.0)
+						If EntityPick(Pvt, 0.3)
+							de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
+							de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+						EndIf
+						n\IsDead = True
+					EndIf
 				EndIf
 				;[End Block]
 			Case NPCType513_1
@@ -3314,6 +3338,7 @@ Function UpdateNPCs%()
 						End Select
 						If n\State <> 0.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_035_TENTACLE_IDLE], n\SoundCHN, Camera, n\Collider)
 					EndIf
+					If n\HP =< 0 Then n\IsDead = True
 				Else
 					AnimateNPC(n, 515.0, 551.0, 0.15, False)
 				EndIf
@@ -4876,7 +4901,6 @@ Function UpdateNPCs%()
 											If n\Target\HP > 0
 												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
 											Else
-												n\Target\IsDead = True
 												n\Target = Null
 												n\State = 3.0
 												Return
@@ -4950,6 +4974,7 @@ Function UpdateNPCs%()
 					
 					; ~ Loop the breath sound
 					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_008_1_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+					If n\HP =< 0 Then n\IsDead = True
 				Else
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
 				EndIf
@@ -6535,31 +6560,8 @@ Function UpdateMTFUnit%(n.NPCs)
 												PlayMTFSound(n\Sound, n)
 											EndIf
 											;[End Block]
-										Case NPCType1048_A
-											;[Block]
-											PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Target\Collider, 8.0)
-											p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.2, EntityZ(n\Target\Collider), 0.25, 0.0)
-											EntityColor(p\OBJ, 100.0, 100.0, 100.0)
-											RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
-											p\AlphaChange = -Rnd(0.02, 0.03)
-											For i = 0 To 1
-												p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Target\Collider) + Rnd(-0.2, 0.2), EntityY(n\Target\Collider) + 0.25, EntityZ(n\Target\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
-												EntityColor(p\OBJ, 100.0, 100.0, 100.0)
-												RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
-												p\AlphaChange = -Rnd(0.02, 0.03)
-											Next
-											
-											Pvt = CreatePivot()
-											PositionEntity(Pvt, EntityX(n\Target\Collider) + Rnd(-0.05, 0.05), EntityY(n\Target\Collider) - 0.05, EntityZ(n\Target\Collider) + Rnd(-0.05, 0.05))
-											TurnEntity(Pvt, 90.0, 0.0, 0.0)
-											If EntityPick(Pvt, 0.3)
-												de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
-												de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
-											EndIf
-											;[End Block]
 									End Select
 								EndIf
-								n\Target\IsDead = True
 								n\Target = Null
 								n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 								n\State2 = 0.0
@@ -6670,6 +6672,8 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		; ~ Teleport back to the facility if fell through the floor
 		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
+		
+		If n\HP =< 0 Then n\IsDead = True
 	EndIf
 	If n_I\MTFLeader = Null And MTFTimer > 0.0 And MTFTimer < 35000.0
 		PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
