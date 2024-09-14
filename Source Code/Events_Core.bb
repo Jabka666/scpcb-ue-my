@@ -4230,7 +4230,6 @@ Function UpdateEvents%()
 							FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
 						EndIf
 						RemoveEvent(e)
-						Return
 					Else
 						If e\room\Objects[MaxRoomObjects - 1] = 0 ; ~ Use the latest object ID to prevent overlapping
 							Select Rand(3)
