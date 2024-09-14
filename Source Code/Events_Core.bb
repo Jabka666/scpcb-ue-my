@@ -2410,22 +2410,24 @@ Function UpdateEvents%()
 						me\Zone = 1
 						
 						If e\EventState = 0.0
+							TFormPoint(-4843.8, -4440.8, 1729.0, e\room\OBJ, 0)
+							x2 = TFormedX() : y2 = TFormedY() : z2 = TFormedZ()
+							e\room\NPC[0] = CreateNPC(NPCTypeD, x2, y2, z2)
+							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
+							ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
+							SetNPCFrame(e\room\NPC[0], 19.0)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
+							
+							de.Decals = CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
+							EntityParent(de\OBJ, e\room\OBJ)
+							
+							TFormPoint(-5000.0, -4409.0, 1520.0, e\room\OBJ, 0)
 							If I_005\ChanceToSpawn = 2
-								TFormPoint(-4843.8, -4440.8, 1729.0, e\room\OBJ, 0)
-								x2 = TFormedX() : y2 = TFormedY() : z2 = TFormedZ()
-								e\room\NPC[0] = CreateNPC(NPCTypeD, x2, y2, z2)
-								e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
-								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
-								SetNPCFrame(e\room\NPC[0], 19.0)
-								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
-								
-								de.Decals = CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
-								EntityParent(de\OBJ, e\room\OBJ)
-								
-								TFormPoint(-5000.0, -4409.0, 1520.0, e\room\OBJ, 0)
 								it.Items = CreateItem("SCP-005", it_scp005, TFormedX(), TFormedY(), TFormedZ())
-								EntityType(it\Collider, HIT_ITEM)
+							Else
+								it.Items = CreateItem("Level 5 Key Card", it_key5, TFormedX(), TFormedY(), TFormedZ())
 							EndIf
+							EntityType(it\Collider, HIT_ITEM)
 							
 							TFormPoint(-4105.0, -4336.0, 2207.0, e\room\OBJ, 0)
 							it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())

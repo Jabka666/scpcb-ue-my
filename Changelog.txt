@@ -22,6 +22,8 @@ v1.3.1
 [Rooms]
 - Added «Press any key to continue» message for debug maps.
 - Added a wallet in the hallway near SCP-513's containment chamber.
+
+- Level 5 Key Card will replace SCP-005 (if it had not spawned in SCP-409's containment chamber).
 - Reduced clearance level for «room_gw» control room. Requirement changed to Level 2 Key Card.
 - Reduced clearance level for «room2_medibay». Requirement changed to Level 2 Key Card.
 
