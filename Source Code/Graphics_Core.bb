@@ -60,53 +60,47 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	InitFastResize()
 End Function
 
-Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
+Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
 	Local SrcWidth%, SrcHeight%
 	Local DestWidth%, DestHeight%
 	Local ScratchImage%, DestImage%
 	Local SrcBuffer%, ScratchBuffer%, DestBuffer%
-	Local X1%, Y1%, X2%, Y2%
+	Local X1%, Y1%, X2%, Y2%, Frame%
 	
 	; ~ Get the width and height of the source image
 	SrcWidth = ImageWidth(SrcImage)
 	SrcHeight = ImageHeight(SrcImage)
 	
 	; ~ Calculate the width and height of the dest image, or the scale
-	If (Not ExactSize)
-		DestWidth = Floor(SrcWidth * ScaleX)
-		DestHeight = Floor(SrcHeight * ScaleY)
-	Else
-		DestWidth = ScaleX
-		DestHeight = ScaleY
-		
-		ScaleX = Float(DestWidth) / Float(SrcWidth)
-		ScaleY = Float(DestHeight) / Float(SrcHeight)
-	EndIf
+	DestWidth = Floor(SrcWidth * ScaleX)
+	DestHeight = Floor(SrcHeight * ScaleY)
 	
 	; ~ If the image does not need to be scaled, just copy the image and exit the function
 	If (SrcWidth = DestWidth) And (SrcHeight = DestHeight) Then Return(SrcImage)
 	
 	; ~ Create a scratch image that is as tall as the source image, and as wide as the destination image
-	ScratchImage = CreateImage(DestWidth, SrcHeight)
+	ScratchImage = CreateImage(DestWidth, SrcHeight, Frames)
 	
 	; ~ Create the destination image
-	DestImage = CreateImage(DestWidth, DestHeight)
+	DestImage = CreateImage(DestWidth, DestHeight, Frames)
 	
-	; ~ Get pointers to the image buffers
-	SrcBuffer = ImageBuffer(SrcImage)
-	ScratchBuffer = ImageBuffer(ScratchImage)
-	DestBuffer = ImageBuffer(DestImage)
-	
-	; ~ Duplicate columns from source image to scratch image
-	For X2 = 0 To DestWidth - 1
-		X1 = Floor(X2 / ScaleX)
-		CopyRect(X1, 0, 1, SrcHeight, X2, 0, SrcBuffer, ScratchBuffer)
-	Next
-	
-	; ~ Duplicate rows from scratch image to destination image
-	For Y2 = 0 To DestHeight - 1
-		Y1 = Floor(Y2 / ScaleY)
-		CopyRect(0, Y1, DestWidth, 1, 0, Y2, ScratchBuffer, DestBuffer)
+	For Frame = 0 To Frames - 1
+		; ~ Get pointers to the image buffers for each frame
+		SrcBuffer = ImageBuffer(SrcImage, Frame)
+		ScratchBuffer = ImageBuffer(ScratchImage, Frame)
+		DestBuffer = ImageBuffer(DestImage, Frame)
+		
+		; ~ Duplicate columns from source image to scratch image
+		For X2 = 0 To DestWidth - 1
+			X1 = Floor(X2 / ScaleX)
+			CopyRect(X1, 0, 1, SrcHeight, X2, 0, SrcBuffer, ScratchBuffer)
+		Next
+		
+		; ~ Duplicate rows from scratch image to destination image
+		For Y2 = 0 To DestHeight - 1
+			Y1 = Floor(Y2 / ScaleY)
+			CopyRect(0, Y1, DestWidth, 1, 0, Y2, ScratchBuffer, DestBuffer)
+		Next
 	Next
 	
 	; ~ Free the scratch image

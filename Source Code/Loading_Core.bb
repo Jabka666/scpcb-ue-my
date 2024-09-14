@@ -2304,7 +2304,7 @@ Function LoadEntities%()
 	t\ImageID[5] = ScaleImage2(t\ImageID[5], MenuScale, MenuScale)
 	
 	t\ImageID[6] = LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3)
-	t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale)
+	t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale, 3)
 	MaskImage(t\ImageID[6], 255, 0, 255)
 	
 	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
