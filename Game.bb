@@ -18,7 +18,7 @@ If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.d
 If FileSize("IniControler.dll") = 0 Then InitErrorStr = InitErrorStr + "IniControler.dll" + Chr(13) + Chr(10)
 If FileSize("RapidBson.dll") = 0 Then InitErrorStr = InitErrorStr + "RapidBson.dll" + Chr(13) + Chr(10)
 
-If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
+If Len(InitErrorStr) > 0 Then RuntimeError2("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 
 Const VersionNumber$ = "1.3.1"
 
