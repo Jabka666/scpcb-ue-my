@@ -4221,9 +4221,16 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_trick_item
 				;[Block]
-				If e\room\Dist < 4.0
+				If e\room\Dist < 8.0
 					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 16.0
+						If e\room\Objects[MaxRoomObjects - 1] <> 0
+							de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
+							EntityParent(de\OBJ, e\room\OBJ)
+							
+							FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
+						EndIf
 						RemoveEvent(e)
+						Return
 					Else
 						If e\room\Objects[MaxRoomObjects - 1] = 0 ; ~ Use the latest object ID to prevent overlapping
 							Select Rand(3)

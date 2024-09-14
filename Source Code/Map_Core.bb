@@ -4997,7 +4997,7 @@ Function SetRoom%(RoomZone%, RoomType%, RoomName$, RoomPosWeight# = 0.0) ; ~ Pla
 	Local Zone%, Offset%
 	Local MinPos% = 0
 	
-	For Zone% = 0 To RoomZone - 1
+	For Zone = 0 To RoomZone - 1
 		MinPos = MinPos + RoomAmount(RoomType, Zone)
 	Next
 	
@@ -5009,7 +5009,7 @@ Function SetRoom%(RoomZone%, RoomType%, RoomName$, RoomPosWeight# = 0.0) ; ~ Pla
 	
 	Local RoomPos% = MinPos + Floor(RoomPosWeight * (MaxPos - MinPos))
 	
-	If MapRoom(RoomType, RoomPos) = "" Then
+	If MapRoom(RoomType, RoomPos) = ""
 		MapRoom(RoomType, RoomPos) = RoomName
 		Return(True)
 	EndIf
