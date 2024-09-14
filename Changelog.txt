@@ -28,7 +28,7 @@ v1.3.1
 - Reduced clearance level for «room2_medibay». Requirement changed to Level 2 Key Card.
 
 [Items]
-- Added icon for Compact First Aid Kit.
+- Added icons for Compact First Aid Kit and Empty Cup.
 
 - Changed size of Blue First Aid Kit icon.
 - Changed clearance level for SCP-895's document.
@@ -71,7 +71,7 @@ v1.3.1
 - Fixed room names on debug map.
 - Fixed «room4_ic» spawning in HCZ sometimes.
 - Fixed SCP-1048-A still visible in Blue NVG after explosion.
-- Fixed gas mask fog overlay lingering when the player held blink
+- Fixed gas mask fog overlay lingering when the player held blink.
 
 [Known issues]
 - Rooms can overlap and block the way.
