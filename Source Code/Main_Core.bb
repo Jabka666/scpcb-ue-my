@@ -1,5 +1,4 @@
 Include "Source Code\Math_Core.bb"
-Include "Source Code\Strict_Functions_Core.bb"
 
 Global ButtonSFX%[2]
 

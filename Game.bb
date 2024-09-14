@@ -18,7 +18,7 @@ If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.d
 If FileSize("IniControler.dll") = 0 Then InitErrorStr = InitErrorStr + "IniControler.dll" + Chr(13) + Chr(10)
 If FileSize("RapidBson.dll") = 0 Then InitErrorStr = InitErrorStr + "RapidBson.dll" + Chr(13) + Chr(10)
 
-If Len(InitErrorStr) > 0 Then RuntimeError2("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
+If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 
 Const VersionNumber$ = "1.3.1"
 
@@ -27,6 +27,7 @@ If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("A
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
+Include "Source Code\Strict_Functions_Core.bb"
 
 LoadOptionsINI()
 
