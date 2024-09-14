@@ -6158,7 +6158,7 @@ Function RenderNVG%()
 	Local np.NPCs
 	Local i%, k%, l%
 	
-	If wi\NVGPower > 0 And me\BlinkTimer > -6.0 
+	If wi\NVGPower > 0 And (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0)
 		If wi\NightVision = 2 ; ~ Show a HUD
 			Color(100, 100, 255)
 			
