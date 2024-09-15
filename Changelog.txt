@@ -6,6 +6,7 @@ v1.3.1
 - SCP-860 can be refinied in SCP-914.
 - White smoke in certain events cause player to blink faster.
 - Corrosive doors take longer to open/close.
+- Updated SCP-173 images.
 
 - New blink timers for «SelectedDifficulty\OtherFactors»:
 	- Easy: 12-14 seconds (Previously 14.2-16.67)
