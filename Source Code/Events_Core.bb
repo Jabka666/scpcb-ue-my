@@ -2008,7 +2008,7 @@ Function UpdateEvents%()
 								
 								e\EventState2 = 2.0
 							EndIf
-							RotateEntity(e\room\Objects[1], CurveAngle(-1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
+							RotateEntity(e\room\Objects[1], CurveAngle(0.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
 						EndIf
 					ElseIf e\EventState = 1.0
 						e\EventState = 0.0

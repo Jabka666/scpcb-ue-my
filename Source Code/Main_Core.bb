@@ -1879,7 +1879,8 @@ Function UpdateConsole%()
 						ElseIf e2\EventID = e_cont2_008
 							e2\EventState = 2.0
 							UpdateLever(e2\room\Objects[1])
-							RotateEntity(e2\room\Objects[1], 80.0, EntityYaw(e2\room\Objects[1]), 30.0)
+							RotateEntity(e2\room\Objects[1], 0.0, EntityYaw(e2\room\Objects[1]), 0.0)
+							If e2\room\RoomEmitters[0] <> Null Then FreeEmitter(e2\room\RoomEmitters[0])
 						EndIf
 					Next
 					

@@ -2388,9 +2388,9 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ The lid of the container
-			r\Objects[1] = LoadRMesh("GFX\Map\008_2_opt.rmesh", Null, False)
+			r\Objects[1] = LoadRMesh("GFX\Map\scp_008_lid.rmesh", Null, False)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[1], r\x - 62.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 945.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 62.0 * RoomScale, r\y - 4952.0 * RoomScale, r\z + 945.0 * RoomScale)
 			EntityRadius(r\Objects[1], 0.3)
 			EntityPickMode(r\Objects[1], 1, False)
 			RotateEntity(r\Objects[1], 85.0, 0.0, 0.0, True)

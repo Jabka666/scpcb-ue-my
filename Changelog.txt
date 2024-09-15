@@ -27,6 +27,7 @@ v1.3.1
 - Level 5 Key Card will replace SCP-005 (if it had not spawned in SCP-409's containment chamber).
 - Reduced clearance level for «room_gw» control room. Requirement changed to Level 2 Key Card.
 - Reduced clearance level for «room2_medibay». Requirement changed to Level 2 Key Card.
+- Improved SCP-008 lid model.
 
 [Items]
 - Added icons for Compact First Aid Kit, Small Jade Ring and Empty Cup.
