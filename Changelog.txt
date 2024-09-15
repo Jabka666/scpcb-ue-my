@@ -28,10 +28,13 @@ v1.3.1
 - Reduced clearance level for «room2_medibay». Requirement changed to Level 2 Key Card.
 
 [Items]
-- Added icons for Compact First Aid Kit and Empty Cup.
+- Added icons for Compact First Aid Kit, Small Jade Ring and Empty Cup.
 
 - Changed size of Blue First Aid Kit icon.
 - Changed clearance level for SCP-895's document.
+- Changed icons for SCP-714 (and variations).
+- Changed texture for SCP-714 and SCP-513.
+- Rescaled SCP-500-01, SCP-714 and Severed Hands (and variations).
 - Infected syringes will now slightly heal and give a very small stamina boost. 25% stamina boost for 10-20 seconds.
 - Buffed eyedrops to slow blink down even more.
 - Moved a quarter from «room2_cafeteria» to «room2_office».
