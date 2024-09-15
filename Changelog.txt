@@ -34,6 +34,8 @@ v1.3.1
 - Changed clearance level for SCP-895's document.
 - Infected syringes will now slightly heal and give a very small stamina boost. 25% stamina boost for 10-20 seconds.
 - Buffed eyedrops to slow blink down even more.
+- Moved a quarter from «room2_cafeteria» to «room2_office».
+- George Maynard's badge has their own QR code.
 
 - Rework the Night Vision Goggles
 	- "Low battery" message appears earlier.
