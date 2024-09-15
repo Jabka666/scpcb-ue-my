@@ -3321,9 +3321,6 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Empty Cup", it_emptycup, r\x - 540.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 124.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Quarter", it_25ct, r\x - 447.0 * RoomScale, r\y - 334.0 * RoomScale, r\z + 36.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
 			it.Items = CreateItem("Quarter", it_25ct, r\x + 1409.0 * RoomScale, r\y - 334.0 * RoomScale, r\z - 732.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -3404,7 +3401,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x - 1507.0 * RoomScale, r\y - 221.0 * RoomScale, r\z - 508.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateRandomBattery(r\x - 530.0 * RoomScale, r\y - 221.0 * RoomScale, r\z + 943.0 * RoomScale)
+			it.Items = CreateItem("Quarter", it_25ct, r\x - 530.0 * RoomScale, r\y - 221.0 * RoomScale, r\z + 943.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_office_2
