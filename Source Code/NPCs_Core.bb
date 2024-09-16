@@ -5952,7 +5952,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\State = MTF_ZOMBIES_SPOTTED
 								Exit
 							EndIf
-						ElseIf n2\NPCType = NPCType1048_A And (Not n2\IsDead)
+						ElseIf n2\NPCType = NPCType1048_A
 							If NPCSeesNPC(n2, n) = 1
 								n\EnemyX = EntityX(n2\Collider, True)
 								n\EnemyY = EntityY(n2\Collider, True)
