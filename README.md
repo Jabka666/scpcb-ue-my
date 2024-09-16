@@ -12,6 +12,8 @@ Requirements:
 
 -	[IDEal for Blitz3D](https://web.archive.org/web/20070704181040/http://www.fungamesfactory.com/download.php?get=IDEalSetup_0.8.87.exe) v0.8.87 or higher
 
+-	[BlitzPlus](https://www.blitzcoder.org/forum/downloads.php) v1.47 for Map Creator
+
 Beware - the source code is perhaps more horrifying than the game itself!
 
 Our Discord server: https://discord.gg/n7KdW4u
