@@ -4426,7 +4426,7 @@ Function UpdateEvents%()
 							Next
 						Next
 						
-						If LastX = FirstX And LastY = FirstY Then RuntimeError2(GetLocalString("runerr", "mt"))
+						If LastX = FirstX And LastY = FirstY Then RuntimeErrorEx(GetLocalString("runerr", "mt"))
 						
 						; ~ Place the tunnels
 						For i = 0 To MaxMTModelIDAmount - 1

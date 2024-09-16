@@ -549,7 +549,7 @@ Function LoadGame%(File$)
 	ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError2(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
 	ReadString(f)
@@ -713,7 +713,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError2(GetLocalString("save", "corrupted_1"))
+	If ReadInt(f) <> 113 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
 	
 ;	For n.NPCs = Each NPCs
 ;		RemoveNPC(n)
@@ -820,7 +820,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError2(GetLocalString("save", "corrupted_2"))
+	If ReadInt(f) <> 632 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -962,7 +962,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError2(GetLocalString("save", "corrupted_3"))
+	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1122,7 +1122,7 @@ Function LoadGame%(File$)
 	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
 	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
-	If ReadInt(f) <> 1845 Then RuntimeError2(GetLocalString("save", "corrupted_4"))
+	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -1456,7 +1456,7 @@ Function LoadGameQuick%(File$)
 	ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError2(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
 	ReadString(f)
@@ -1635,7 +1635,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError2(GetLocalString("save", "corrupted_1"))
+	If ReadInt(f) <> 113 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1742,7 +1742,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError2(GetLocalString("save", "corrupted_2"))
+	If ReadInt(f) <> 632 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -1861,7 +1861,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError2(GetLocalString("save", "corrupted_3"))
+	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
 	
 	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
 	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
@@ -1944,7 +1944,7 @@ Function LoadGameQuick%(File$)
 	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
 	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
-	If ReadInt(f) <> 1845 Then RuntimeError2(GetLocalString("save", "corrupted_4"))
+	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -2373,7 +2373,7 @@ Function LoadSavedGames%()
 	Next
 	SavedGamesAmount = 0
 	
-	If FileType(SavePath) = 1 Then RuntimeError2(Format(GetLocalString("save", "cantcreatedir"), SavePath))
+	If FileType(SavePath) = 1 Then RuntimeErrorEx(Format(GetLocalString("save", "cantcreatedir"), SavePath))
 	If FileType(SavePath) = 0 Then CreateDir(SavePath)
 	
 	Local SaveDir% = ReadDir(SavePath)
@@ -2451,7 +2451,7 @@ Function LoadCustomMaps%()
 	Next
 	CustomMapsAmount = 0
 	
-	If FileType(CustomMapsPath) = 1 Then RuntimeError2(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
+	If FileType(CustomMapsPath) = 1 Then RuntimeErrorEx(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
 	If FileType(CustomMapsPath) = 0 Then CreateDir(CustomMapsPath)
 	
 	Local MapDir% = ReadDir(CustomMapsPath)

@@ -415,7 +415,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	; ~ Read the file
 	Local f% = ReadFile_Strict(File)
 	
-	If f = 0 Then RuntimeError2(Format(GetLocalString("runerr", "file"), File))
+	If f = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
 	
@@ -424,7 +424,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	;ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
 	;	HasTriggerBox = True
 	Else
-		RuntimeError2(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
+		RuntimeErrorEx(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
 	EndIf
 	
 	Local FilePath$ = StripFileName(File)
@@ -769,7 +769,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 				Case "model"
 					;[Block]
 					Temp2s = ReadString(f)
-					RuntimeError2(Format(Format(GetLocalString("runerr", "model.support"), rt\Name, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
+					RuntimeErrorEx(Format(Format(GetLocalString("runerr", "model.support"), rt\Name, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
 					;[End Block]
 				Case "mesh"
 					;[Block]
@@ -2150,12 +2150,12 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 	If FileExtension(rt\OBJPath) = "rmesh" ; ~ File is .rmesh
 		rt\OBJ = LoadRMesh(rt\OBJPath, rt)
 	ElseIf FileExtension(rt\OBJPath) = "b3d" ; ~ File is .b3d
-		RuntimeError2(Format(GetLocalString("runerr", "b3d"), rt\OBJPath))
+		RuntimeErrorEx(Format(GetLocalString("runerr", "b3d"), rt\OBJPath))
 	Else ; ~ File not found
-		RuntimeError2(Format(GetLocalString("runerr", "notfound"), rt\OBJPath))
+		RuntimeErrorEx(Format(GetLocalString("runerr", "notfound"), rt\OBJPath))
 	EndIf
 	
-	If rt\OBJ = 0 Then RuntimeError2(Format(GetLocalString("runerr", "failedload"), rt\OBJPath))
+	If rt\OBJ = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "failedload"), rt\OBJPath))
 	
 	CalculateRoomTemplateExtents(rt)
 	
@@ -3881,7 +3881,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	UpdateNormals(de\OBJ)
 	HideEntity(de\OBJ)
 	
-	If de_I\DecalTextureID[ID] = 0 Then RuntimeError2(Format(GetLocalString("runerr", "decals"), ID))
+	If de_I\DecalTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "decals"), ID))
 	
 	Return(de)
 End Function
@@ -5946,11 +5946,11 @@ End Function
 
 Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	; ~ Load the HeightMap
-	If HeightMap = 0 Then RuntimeError2(Format(GetLocalString("runerr", "heightmap"), HeightMap))
+	If HeightMap = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "heightmap"), HeightMap))
 	; ~ Load texture and lightmaps
-	If Tex1 = 0 Then RuntimeError2(Format(GetLocalString("runerr", "tex_1"), Tex1))
-	If Tex2 = 0 Then RuntimeError2(Format(GetLocalString("runerr", "tex_2"), Tex2))
-	If Mask = 0 Then RuntimeError2(Format(GetLocalString("runerr", "mask"), Mask))
+	If Tex1 = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "tex_1"), Tex1))
+	If Tex2 = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "tex_2"), Tex2))
+	If Mask = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "mask"), Mask))
 	
 	; ~ Store HeightMap dimensions
 	Local HeightMapWidth% = ImageWidth(HeightMap) - 1

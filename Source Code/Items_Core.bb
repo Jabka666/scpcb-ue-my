@@ -363,7 +363,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 		EndIf
 	Next 
 	
-	If i\ItemTemplate = Null Then RuntimeError2(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
+	If i\ItemTemplate = Null Then RuntimeErrorEx(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
 	
 	ResetEntity(i\Collider)
 	PositionEntity(i\Collider, x, y, z, True)

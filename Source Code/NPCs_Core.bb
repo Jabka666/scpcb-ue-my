@@ -7299,7 +7299,7 @@ Function ManipulateNPCBones%()
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
-				If Bone = 0 Then RuntimeError2(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
+				If Bone = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player
