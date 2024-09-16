@@ -46,7 +46,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	
-	If p_I\ParticleTextureID[ID] = 0 Then RuntimeError(Format(GetLocalString("runerr", "particle"), ID))
+	If p_I\ParticleTextureID[ID] = 0 Then RuntimeError2(Format(GetLocalString("runerr", "particle"), ID))
 	
 	CatchErrors("Uncaught: CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
 	

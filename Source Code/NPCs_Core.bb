@@ -42,8 +42,7 @@ Type NPCs
 	Field NPCNameInSection$
 	Field InFacility%
 	Field HP%
-	Field Model$
-	Field ModelScaleX#, ModelScaleY#, ModelScaleZ#
+	Field ModelScale#
 	Field TextureID% = -1
 	Field HasAsset% = False
 	Field HasAnim%
@@ -60,7 +59,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	CatchErrors("CreateNPC(" + NPCType + ", " + x + ", " + y + ", " + z)
 	
 	Local n.NPCs, n2.NPCs
-	Local Temp#, i%, Tex%, TexFestive%
+	Local Temp#, i%, Tex%
 	
 	n.NPCs = New NPCs
 	n\NPCType = NPCType
@@ -84,28 +83,29 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_173_MODEL])
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_173_HEAD_MODEL])
+			
 			; ~ Set a fastive texture
 			Select Left(CurrentDate(), 7)
 				Case "31 Oct "
 					;[Block]
 					n_I\IsHalloween = True
-					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
+					Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
 					;[End Block]
 				Case "01 Jan "
 					;[Block]
 					n_I\IsNewYear = True
-					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
+					Tex = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
 					;[End Block]
 				Case "01 Apr "
 					;[Block]
 					n_I\IsAprilFools = True
-					TexFestive = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
+					Tex = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
 					;[End Block]
 			End Select
-			If TexFestive <> 0
-				EntityTexture(n\OBJ, TexFestive)
-				EntityTexture(n\OBJ2, TexFestive)
-				DeleteSingleTextureEntryFromCache(TexFestive) : TexFestive = 0
+			If Tex <> 0
+				EntityTexture(n\OBJ, Tex)
+				EntityTexture(n\OBJ2, Tex)
+				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			EndIf
 			Temp = IniGetFloat(NPCsFile, "SCP-173", "Scale") / MeshDepth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
@@ -421,8 +421,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1499_1_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			n\ModelScale = IniGetFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
+			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			EntityFX(n\OBJ, 1)
 			EntityAutoFade(n\OBJ, HideDistance * 2.5, HideDistance * 2.95)
 			;[End Block]
@@ -485,8 +485,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			n\ModelScale = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0 * Rnd(0.9, 1.1)
+			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			;[End Block]
 	End Select
 	
@@ -881,12 +881,10 @@ Function UpdateNPCs%()
 					
 					; ~ Checking if SCP-106 is allowed to spawn
 					If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And EntityY(me\Collider) <= -2848.0 * RoomScale) Then Spawn106 = False
-					If forest_event <> Null
-						If PlayerRoom = forest_event\room
-							If forest_event\EventState = 1.0 Then Spawn106 = False
-						EndIf
+					If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+						If forest_event\EventState = 1.0 Then Spawn106 = False
 					EndIf
-					If skull_event <> Null
+					If skull_event <> Null ; ~ TODO: Check if this really needed!
 						If skull_event\EventState > 0.0 Then Spawn106 = False
 					EndIf
 					; ~ Gate A event has been triggered. Don't make SCP-106 disappear!
@@ -971,9 +969,9 @@ Function UpdateNPCs%()
 								EndIf
 								
 								For d.Doors = Each Doors
-									If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room\RoomTemplate\RoomID <> r_dimension_106)
-										If (Not d\Open)
-											If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR And d\DoorType <> BIG_DOOR
+									If (Not d\IsAffected) And (Not d\Open)
+										If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And d\room\RoomTemplate\RoomID <> r_dimension_106
+											If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR And d\DoorType <> BIG_DOOR And d\DoorType <> SCP_914_DOOR
 												Select d\DoorType
 													Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
 														;[Block]
@@ -988,6 +986,7 @@ Function UpdateNPCs%()
 												If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
 												EntityTexture(d\FrameOBJ, Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+												d\IsAffected = True
 												Exit
 											EndIf
 										EndIf
@@ -1171,7 +1170,9 @@ Function UpdateNPCs%()
 				;[Block]
 				Dist = EntityDistanceSquared(me\Collider, n\Collider)
 				Angle = WrapAngle(DeltaYaw(n\Collider, me\Collider))
+				
 				Local IsLooking% = Dist < PowTwo(me\CameraFogDist * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
+				
 				If wi\SCRAMBLE > 0 And IsLooking
 					Local HasBatteryForScramble% = False
 					
@@ -1231,7 +1232,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\NoTarget)
 								If wi\SCRAMBLE = 0 And IsLooking
-									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
+									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking)
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 										
 										S2IMapErase(UnlockedAchievements, "096")
@@ -1311,7 +1312,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\NoTarget)
 								If wi\SCRAMBLE = 0 And IsLooking
-									If me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0
+									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking)
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 										
 										S2IMapErase(UnlockedAchievements, "096")
@@ -2174,7 +2175,6 @@ Function UpdateNPCs%()
 												If n\Target\HP > 0
 													n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
 												Else
-													n\Target\IsDead = True
 													n\Target = Null
 													n\State = 3.0
 													Return
@@ -2198,6 +2198,7 @@ Function UpdateNPCs%()
 					
 					; ~ Loop the breath sound
 					If n\State > 1.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_049_2_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+					If n\HP =< 0 Then n\IsDead = True
 				Else
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
 				EndIf
@@ -2704,6 +2705,7 @@ Function UpdateNPCs%()
 						EndIf
 					EndIf
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+					If n\HP =< 0 And n\NPCType = NPCTypeClerk Then n\IsDead = True ; ~ Only for Clerk because of Tesla Gate event
 				Else
 					Select n\State3
 						Case -1.0 ; ~ Don't animate
@@ -2868,7 +2870,7 @@ Function UpdateNPCs%()
 									me\CameraShake = 2.0
 									I_1048A\EarGrowTimer = 0.01
 								EndIf
-								n\State = 0.0
+								n\HP = 0
 							EndIf
 							;[End Block]
 					End Select
@@ -2876,6 +2878,29 @@ Function UpdateNPCs%()
 					
 					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.15, EntityZ(n\Collider))
 					RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
+					
+					If n\HP =< 0
+						PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
+						p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
+						EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+						RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+						p\AlphaChange = -Rnd(0.02, 0.03)
+						For i = 0 To 1
+							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider) + Rnd(-0.2, 0.2), EntityY(n\Collider) + 0.25, EntityZ(n\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
+							EntityColor(p\OBJ, 100.0, 100.0, 100.0)
+							RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
+							p\AlphaChange = -Rnd(0.02, 0.03)
+						Next
+						
+						Pvt = CreatePivot()
+						PositionEntity(Pvt, EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
+						TurnEntity(Pvt, 90.0, 0.0, 0.0)
+						If EntityPick(Pvt, 0.3)
+							de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
+							de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+						EndIf
+						n\IsDead = True
+					EndIf
 				EndIf
 				;[End Block]
 			Case NPCType513_1
@@ -3313,6 +3338,7 @@ Function UpdateNPCs%()
 						End Select
 						If n\State <> 0.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_035_TENTACLE_IDLE], n\SoundCHN, Camera, n\Collider)
 					EndIf
+					If n\HP =< 0 Then n\IsDead = True
 				Else
 					AnimateNPC(n, 515.0, 551.0, 0.15, False)
 				EndIf
@@ -3322,350 +3348,349 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType860_2
 				;[Block]
-				If forest_event <> Null
-					If PlayerRoom = forest_event\room
-						If forest_event\EventState = 1.0
-							Local fr.Forest = PlayerRoom\fr
-							
-							Dist = EntityDistanceSquared(me\Collider, n\Collider)
-							If ForestNPC <> 0
-								If ForestNPCData[2] = 1.0
-									If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
-									If ForestNPCData[1] = 0.0
-										If Rand(200) = 1
-											ForestNPCData[1] = fps\Factor[0]
-											EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0] + 1.0)
-										EndIf
-									ElseIf ForestNPCData[1] > 0.0 And ForestNPCData[1] < 5.0
-										ForestNPCData[1] = Min(ForestNPCData[1] + fps\Factor[0], 5.0)
-									Else
-										ForestNPCData[1] = 0.0
-										EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
+				If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+					If forest_event\EventState = 1.0
+						Local fr.Forest = PlayerRoom\fr
+						
+						Dist = EntityDistanceSquared(me\Collider, n\Collider)
+						If ForestNPC <> 0
+							If ForestNPCData[2] = 1.0
+								If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
+								If ForestNPCData[1] = 0.0
+									If Rand(200) = 1
+										ForestNPCData[1] = fps\Factor[0]
+										EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0] + 1.0)
 									EndIf
-									If n\State <> 1.0
-										If (me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0) Lor (Not EntityInView(ForestNPC, Camera))
-											ForestNPCData[2] = 0.0
-											If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
-										EndIf
-									EndIf
+								ElseIf ForestNPCData[1] > 0.0 And ForestNPCData[1] < 5.0
+									ForestNPCData[1] = Min(ForestNPCData[1] + fps\Factor[0], 5.0)
 								Else
-									If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
+									ForestNPCData[1] = 0.0
+									EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
 								EndIf
+								If n\State <> 1.0
+									If (me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0) Lor (Not EntityInView(ForestNPC, Camera))
+										ForestNPCData[2] = 0.0
+										If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
+									EndIf
+								EndIf
+							Else
+								If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
 							EndIf
-							
-							Select n\State
-								Case 0.0 ; ~ Idles (hidden)
-									;[Block]
-									If (Not EntityHidden(n\Collider))
-										HideEntity(n\Collider)
-										HideEntity(n\OBJ)
-										HideEntity(n\OBJ2)
-										PositionEntity(n\Collider, 0.0, -100.0, 0.0)
+						EndIf
+						
+						Select n\State
+							Case 0.0 ; ~ Idles (hidden)
+								;[Block]
+								If (Not EntityHidden(n\Collider))
+									HideEntity(n\Collider)
+									HideEntity(n\OBJ)
+									HideEntity(n\OBJ2)
+									PositionEntity(n\Collider, 0.0, -100.0, 0.0)
+									n\State2 = 0.0
+								EndIf
+								;[End Block]
+							Case 1.0 ; ~ Appears briefly behind the trees
+								;[Block]
+								n\DropSpeed = 0.0
+								
+								If EntityY(n\Collider) <= -100.0
+									; ~ Transform the position of the player to the local coordinates of the forest
+									TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
+									
+									; ~ Calculate the indices of the forest cell the player is in
+									x = Floor((TFormedX() + 6.0) / 12.0)
+									z = Floor((TFormedZ() + 6.0) / 12.0)
+									
+									; ~ Step through nearby cells
+									For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize) Step 2
+										For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize) Step 2
+											; ~ Choose an empty cell (not on the path)
+											If fr\Grid[(z2 * ForestGridSize) + x2] = 0
+												; ~ Spawn the monster between the empty cell and the cell the player is in
+												TFormPoint(((x2 + x) / 2.0) * 12.0, 0.0, ((z2 + z) / 2.0) * 12.0, fr\Forest_Pivot, 0)
+												
+												; ~ Keep searching for a more suitable cell
+												PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
+												If EntityInView(n\Collider, Camera)
+													PositionEntity(n\Collider, 0.0, -110.0, 0.0)
+												Else
+													x2 = ForestGridSize
+													Exit
+												EndIf
+											EndIf
+										Next
+									Next
+									
+									If EntityY(n\Collider) > -100.0
+										PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.5)
+										
+										If ForestNPCData[2] <> 1.0 Then ForestNPCData[2] = 0.0
+										
+										Select Rand(3)
+											Case 1
+												;[Block]
+												PointEntity(n\Collider, me\Collider)
+												SetNPCFrame(n, 2.0)
+												;[End Block]
+											Case 2
+												;[Block]
+												PointEntity(n\Collider, me\Collider)
+												SetNPCFrame(n, 201.0)
+												;[End Block]
+											Case 3
+												;[Block]
+												PointEntity(n\Collider, me\Collider)
+												TurnEntity(n\Collider, 0.0, 90.0, 0.0)
+												SetNPCFrame(n, 299.0)
+												;[End Block]
+										End Select
 										n\State2 = 0.0
 									EndIf
-									;[End Block]
-								Case 1.0 ; ~ Appears briefly behind the trees
-									;[Block]
-									n\DropSpeed = 0.0
+								Else
+									If EntityHidden(n\OBJ)
+										ShowEntity(n\OBJ)
+										ShowEntity(n\Collider)
+									EndIf
 									
-									If EntityY(n\Collider) <= -100.0
-										; ~ Transform the position of the player to the local coordinates of the forest
-										TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
-										
-										; ~ Calculate the indices of the forest cell the player is in
-										x = Floor((TFormedX() + 6.0) / 12.0)
-										z = Floor((TFormedZ() + 6.0) / 12.0)
-										
-										; ~ Step through nearby cells
-										For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize) Step 2
-											For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize) Step 2
-												; ~ Choose an empty cell (not on the path)
-												If fr\Grid[(z2 * ForestGridSize) + x2] = 0
-													; ~ Spawn the monster between the empty cell and the cell the player is in
-													TFormPoint(((x2 + x) / 2.0) * 12.0, 0.0, ((z2 + z) / 2.0) * 12.0, fr\Forest_Pivot, 0)
+									PositionEntity(n\Collider, EntityX(n\Collider), EntityY(fr\Forest_Pivot, True) + 2.3, EntityZ(n\Collider))
+									
+									If ForestNPC <> 0
+										If ForestNPCData[2] = 0.0
+											Local DocChance% = 0
+											Local DocAmount% = 0
+											
+											For i = 0 To MaxItemAmount - 1
+												If Inventory(i) <> Null
+													Local DocName$ = Inventory(i)\ItemTemplate\Name
 													
-													; ~ Keep searching for a more suitable cell
-													PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
-													If EntityInView(n\Collider, Camera)
-														PositionEntity(n\Collider, 0.0, -110.0, 0.0)
-													Else
-														x2 = ForestGridSize
-														Exit
+													If DocName = "Log #1" Lor DocName = "Log #2" Lor DocName = "Log #3"
+														DocAmount = DocAmount + 1
+														DocChance = DocChance + 10 * DocAmount
 													EndIf
 												EndIf
 											Next
-										Next
-										
-										If EntityY(n\Collider) > -100.0
-											PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.5)
 											
-											If ForestNPCData[2] <> 1.0 Then ForestNPCData[2] = 0.0
-											
-											Select Rand(3)
-												Case 1
-													;[Block]
-													PointEntity(n\Collider, me\Collider)
-													SetNPCFrame(n, 2.0)
-													;[End Block]
-												Case 2
-													;[Block]
-													PointEntity(n\Collider, me\Collider)
-													SetNPCFrame(n, 201.0)
-													;[End Block]
-												Case 3
-													;[Block]
-													PointEntity(n\Collider, me\Collider)
-													TurnEntity(n\Collider, 0.0, 90.0, 0.0)
-													SetNPCFrame(n, 299.0)
-													;[End Block]
-											End Select
-											n\State2 = 0.0
-										EndIf
-									Else
-										If EntityHidden(n\OBJ)
-											ShowEntity(n\OBJ)
-											ShowEntity(n\Collider)
-										EndIf
-										
-										PositionEntity(n\Collider, EntityX(n\Collider), EntityY(fr\Forest_Pivot, True) + 2.3, EntityZ(n\Collider))
-										
-										If ForestNPC <> 0
-											If ForestNPCData[2] = 0.0
-												Local DocChance% = 0
-												Local DocAmount% = 0
-												
-												For i = 0 To MaxItemAmount - 1
-													If Inventory(i) <> Null
-														Local DocName$ = Inventory(i)\ItemTemplate\Name
-														
-														If DocName = "Log #1" Lor DocName = "Log #2" Lor DocName = "Log #3"
-															DocAmount = DocAmount + 1
-															DocChance = DocChance + 10 * DocAmount
-														EndIf
-													EndIf
-												Next
-												
-												If Rand(860 - DocChance) = 1
-													If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
-													ForestNPCData[2] = 1.0
-													If Rand(2) = 1
-														ForestNPCData[0] = 0.0
-													Else
-														ForestNPCData[0] = 2.0
-													EndIf
-													ForestNPCData[1] = 0.0
-													PositionEntity(ForestNPC, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
-													RotateEntity(ForestNPC, 0.0, EntityYaw(n\Collider), 0.0)
-													MoveEntity(ForestNPC, 0.75, 0.0, 0.0)
-													RotateEntity(ForestNPC, 0.0, 0.0, 0.0)
-													EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
+											If Rand(860 - DocChance) = 1
+												If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
+												ForestNPCData[2] = 1.0
+												If Rand(2) = 1
+													ForestNPCData[0] = 0.0
 												Else
-													ForestNPCData[2] = 2.0
+													ForestNPCData[0] = 2.0
 												EndIf
-											EndIf
-										EndIf
-										
-										If n\State2 = 0.0 ; ~ Don't start moving until the player is looking
-											If EntityInView(n\Collider, Camera)
-												If Rand(8) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 20.0, 1.0, True)
-												n\State2 = 1.0
-											EndIf
-										Else
-											If n\Frame <= 199.0
-												AnimateNPC(n, 2.0, 199.0, 0.5, False)
-												If n\Frame = 199.0
-													PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
-													SetNPCFrame(n, 298.0)
-												EndIf
-											ElseIf n\Frame <= 297.0
-												PointEntity(n\Collider, me\Collider)
-												
-												AnimateNPC(n, 200.0, 297.0, 0.5, False)
-												If n\Frame = 297.0
-													PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
-													SetNPCFrame(n, 298.0)
-												EndIf
+												ForestNPCData[1] = 0.0
+												PositionEntity(ForestNPC, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
+												RotateEntity(ForestNPC, 0.0, EntityYaw(n\Collider), 0.0)
+												MoveEntity(ForestNPC, 0.75, 0.0, 0.0)
+												RotateEntity(ForestNPC, 0.0, 0.0, 0.0)
+												EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
 											Else
-												Angle = CurveAngle(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), EntityX(me\Collider), EntityZ(me\Collider)), EntityYaw(n\Collider) + 90.0, 20.0)
-												
-												RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
-												
-												AnimateNPC(n, 298.0, 316.0, n\CurrSpeed * 10.0)
-												
-												n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
-												MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-												
-												If Dist > 225.0 Then n\State = 0.0
+												ForestNPCData[2] = 2.0
 											EndIf
 										EndIf
 									EndIf
 									
-									ResetEntity(n\Collider)
-									;[End Block]
-								Case 2.0 ; ~ Appears on the path and starts to walk towards the player
-									;[Block]
-									If EntityHidden(n\OBJ)
-										ShowEntity(n\OBJ)
-										ShowEntity(n\Collider)
-									EndIf
-									
-									PrevFrame = n\Frame
-									
-									If EntityY(n\Collider) <= -100.0
-										; ~ Transform the position of the player to the local coordinates of the forest
-										TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
-										
-										; ~ Calculate the indices of the forest cell the player is in
-										x = Floor((TFormedX() + 6.0) / 12.0)
-										z = Floor((TFormedZ() + 6.0) / 12.0)
-										
-										For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize)
-											For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize)
-												; ~ Find a nearby cell that's on the path and not the cell the player is in
-												If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2 <> x Lor z2 <> z) And (x2 = x Lor z2 = z)
-													; ~ Transform the position of the cell back to world coordinates
-													TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
-													
-													PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 1.0, TFormedZ())
-													If EntityInView(n\Collider, Camera)
-														me\BlinkTimer = -10.0
-													Else
-														x2 = ForestGridSize
-														Exit
-													EndIf
-												EndIf
-											Next
-										Next
+									If n\State2 = 0.0 ; ~ Don't start moving until the player is looking
+										If EntityInView(n\Collider, Camera)
+											If Rand(8) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 20.0, 1.0, True)
+											n\State2 = 1.0
+										EndIf
 									Else
-										Angle = CurveAngle(Find860Angle(n, fr), EntityYaw(n\Collider) + 90.0, 80.0)
-										
-										RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
-										
-										n\CurrSpeed = CurveValue(n\Speed * 0.3, n\CurrSpeed, 50.0)
-										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-										
-										AnimateNPC(n, 494.0, 569.0, n\CurrSpeed * 25.0)
-										
-										If n\State2 = 0.0
-											If Dist < 64.0
-												If EntityInView(n\Collider, Camera)
-													If Rand(8) = 1
-														PlaySound_Strict(LoadTempSound("SFX\SCP\860_2\Chase" + Rand(0, 2) + ".ogg"))
-														
-														PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
-													EndIf
-													n\State2 = 1.0
-												EndIf
+										If n\Frame <= 199.0
+											AnimateNPC(n, 2.0, 199.0, 0.5, False)
+											If n\Frame = 199.0
+												PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
+												SetNPCFrame(n, 298.0)
 											EndIf
-										EndIf
-										
-										If me\CurrSpeed > 0.03 ; ~ The player is running
-											n\State3 = n\State3 + fps\Factor[0]
-											If Rnd(5000.0) < n\State3
-												Temp = True
-												If ChannelPlaying(n\SoundCHN) Then Temp = False
-												If Temp Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+										ElseIf n\Frame <= 297.0
+											PointEntity(n\Collider, me\Collider)
+											
+											AnimateNPC(n, 200.0, 297.0, 0.5, False)
+											If n\Frame = 297.0
+												PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
+												SetNPCFrame(n, 298.0)
 											EndIf
 										Else
-											n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
+											Angle = CurveAngle(PointDirection(EntityX(n\Collider), EntityZ(n\Collider), EntityX(me\Collider), EntityZ(me\Collider)), EntityYaw(n\Collider) + 90.0, 20.0)
+											
+											RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
+											
+											AnimateNPC(n, 298.0, 316.0, n\CurrSpeed * 10.0)
+											
+											n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
+											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+											
+											If Dist > 225.0 Then n\State = 0.0
 										EndIf
-										
-										If Dist < 20.25 Lor n\State3 > Rnd(200.0, 250.0)
-											If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-												n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
-												n\State = 3.0
-											Else
-												If (PrevFrame < 492.0 And n\Frame >= 492.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0)
-													SetNPCFrame(n, 2.0)
-													n\State = 4.0
+									EndIf
+								EndIf
+								
+								ResetEntity(n\Collider)
+								;[End Block]
+							Case 2.0 ; ~ Appears on the path and starts to walk towards the player
+								;[Block]
+								If EntityHidden(n\OBJ)
+									ShowEntity(n\OBJ)
+									ShowEntity(n\Collider)
+								EndIf
+								
+								PrevFrame = n\Frame
+								
+								If EntityY(n\Collider) <= -100.0
+									; ~ Transform the position of the player to the local coordinates of the forest
+									TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
+									
+									; ~ Calculate the indices of the forest cell the player is in
+									x = Floor((TFormedX() + 6.0) / 12.0)
+									z = Floor((TFormedZ() + 6.0) / 12.0)
+									
+									For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize)
+										For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize)
+											; ~ Find a nearby cell that's on the path and not the cell the player is in
+											If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2 <> x Lor z2 <> z) And (x2 = x Lor z2 = z)
+												; ~ Transform the position of the cell back to world coordinates
+												TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
+												
+												PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 1.0, TFormedZ())
+												If EntityInView(n\Collider, Camera)
+													me\BlinkTimer = -10.0
+												Else
+													x2 = ForestGridSize
+													Exit
 												EndIf
 											EndIf
-										EndIf
-										If Dist > 400.0 Then n\State = 0.0
-									EndIf
-									If (PrevFrame < 533.0 And n\Frame >= 533.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0) Then PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.6)
-									;[End Block]
-								Case 3.0 ; ~ Runs towards the player and attacks
-									;[Block]
-									If EntityHidden(n\OBJ)
-										ShowEntity(n\OBJ)
-										ShowEntity(n\Collider)
-									EndIf
-									
-									PrevFrame = n\Frame
-									
-									Angle = CurveAngle(Find860Angle(n, fr), EntityYaw(n\Collider) + 90.0, 40.0)
+										Next
+									Next
+								Else
+									Angle = CurveAngle(Find860Angle(n, fr), EntityYaw(n\Collider) + 90.0, 80.0)
 									
 									RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
 									
-									; ~ If close enough to attack or already attacking, play the attack anim
-									If (Dist < 1.0 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\Terminated)
-										msg\DeathMsg = Format(GetLocalString("death", "860"), SubjectName)
-										
-										n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-										
-										AnimateNPC(n, 451.0, 493.0, 0.5, False)
-										
-										If (PrevFrame < 461.0 And n\Frame >= 461.0)
-											PlaySound_Strict(snd_I\DamageSFX[11])
-											me\CameraShake = 2.0
-											Kill(True)
-										EndIf
-										If (PrevFrame < 476.0 And n\Frame >= 476.0) Lor (PrevFrame < 486.0 And n\Frame >= 486.0) Then PlaySound_Strict(snd_I\DamageSFX[12])
-									Else
-										n\CurrSpeed = CurveValue(n\Speed * 0.8, n\CurrSpeed, 10.0)
-										
-										AnimateNPC(n, 298.0, 316.0, n\CurrSpeed * 10.0)
-										
-										If (PrevFrame < 307.0 And n\Frame >= 307.0) Then PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 10.0)
-									EndIf
+									n\CurrSpeed = CurveValue(n\Speed * 0.3, n\CurrSpeed, 50.0)
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
-									If chs\NoTarget Lor I_268\InvisibilityOn
-										If (PrevFrame < 315.0 And n\Frame >= 315.0) Lor (PrevFrame < 492.0 And n\Frame >= 492.0)
-											SetNPCFrame(n, 2.0)
-											n\State = 4.0
+									AnimateNPC(n, 494.0, 569.0, n\CurrSpeed * 25.0)
+									
+									If n\State2 = 0.0
+										If Dist < 64.0
+											If EntityInView(n\Collider, Camera)
+												If Rand(8) = 1
+													PlaySound_Strict(LoadTempSound("SFX\SCP\860_2\Chase" + Rand(0, 2) + ".ogg"))
+													
+													PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+												EndIf
+												n\State2 = 1.0
+											EndIf
 										EndIf
 									EndIf
-									;[End Block]
-								Case 4.0 ; ~ Idles (not hidden)
-									;[Block]
-									n\CurrSpeed = 0.0
 									
-									AnimateNPC(n, 2.0, 199.0, 0.5)
+									If me\CurrSpeed > 0.03 ; ~ The player is running
+										n\State3 = n\State3 + fps\Factor[0]
+										If Rnd(5000.0) < n\State3
+											Temp = True
+											If ChannelPlaying(n\SoundCHN) Then Temp = False
+											If Temp Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+										EndIf
+									Else
+										n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
+									EndIf
 									
-									If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then n\State = 3.0
-									;[End Block]
-							End Select
-							
-							If n\State <> 0.0
-								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
-								
-								PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.23, EntityZ(n\Collider))
-								RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
-								
-								If Dist > 64.0
-									If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
-									EntityAlpha(n\OBJ2, Min(Sqr(Dist) - 8.0, 1.0))
-									
-									PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) , EntityZ(n\OBJ))
-									RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-									MoveEntity(n\OBJ2, 0.0, 0.75, -0.825)
-									
-									; ~ Render distance is set to 8.5 inside the forest,
-									; ~ So we need to cheat a bit to make the eyes visible if they're further than that
-									Pvt = CreatePivot()
-									PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-									PointEntity(Pvt, n\OBJ2)
-									MoveEntity(Pvt, 0.0, 0.0, 8.0)
-									PositionEntity(n\OBJ2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
-									FreeEntity(Pvt) : Pvt = 0
-								Else
-									If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
+									If Dist < 20.25 Lor n\State3 > Rnd(200.0, 250.0)
+										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+											n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+											n\State = 3.0
+										Else
+											If (PrevFrame < 492.0 And n\Frame >= 492.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0)
+												SetNPCFrame(n, 2.0)
+												n\State = 4.0
+											EndIf
+										EndIf
+									EndIf
+									If Dist > 400.0 Then n\State = 0.0
 								EndIf
+								If (PrevFrame < 533.0 And n\Frame >= 533.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0) Then PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.6)
+								;[End Block]
+							Case 3.0 ; ~ Runs towards the player and attacks
+								;[Block]
+								If EntityHidden(n\OBJ)
+									ShowEntity(n\OBJ)
+									ShowEntity(n\Collider)
+								EndIf
+								
+								PrevFrame = n\Frame
+								
+								Angle = CurveAngle(Find860Angle(n, fr), EntityYaw(n\Collider) + 90.0, 40.0)
+								
+								RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
+								
+								; ~ If close enough to attack or already attacking, play the attack anim
+								If (Dist < 1.0 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\Terminated)
+									msg\DeathMsg = Format(GetLocalString("death", "860"), SubjectName)
+									
+									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+									
+									AnimateNPC(n, 451.0, 493.0, 0.5, False)
+									
+									If (PrevFrame < 461.0 And n\Frame >= 461.0)
+										PlaySound_Strict(snd_I\DamageSFX[11])
+										me\CameraShake = 2.0
+										Kill(True)
+									EndIf
+									If (PrevFrame < 476.0 And n\Frame >= 476.0) Lor (PrevFrame < 486.0 And n\Frame >= 486.0) Then PlaySound_Strict(snd_I\DamageSFX[12])
+								Else
+									n\CurrSpeed = CurveValue(n\Speed * 0.8, n\CurrSpeed, 10.0)
+									
+									AnimateNPC(n, 298.0, 316.0, n\CurrSpeed * 10.0)
+									
+									If (PrevFrame < 307.0 And n\Frame >= 307.0) Then PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 10.0)
+								EndIf
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+								
+								If chs\NoTarget Lor I_268\InvisibilityOn
+									If (PrevFrame < 315.0 And n\Frame >= 315.0) Lor (PrevFrame < 492.0 And n\Frame >= 492.0)
+										SetNPCFrame(n, 2.0)
+										n\State = 4.0
+									EndIf
+								EndIf
+								;[End Block]
+							Case 4.0 ; ~ Idles (not hidden)
+								;[Block]
+								n\CurrSpeed = 0.0
+								
+								AnimateNPC(n, 2.0, 199.0, 0.5)
+								
+								If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then n\State = 3.0
+								;[End Block]
+						End Select
+						
+						If n\State <> 0.0
+							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+							
+							PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.23, EntityZ(n\Collider))
+							RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
+							
+							If Dist > 64.0
+								If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
+								EntityAlpha(n\OBJ2, Min(Sqr(Dist) - 8.0, 1.0))
+								
+								PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ) , EntityZ(n\OBJ))
+								RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
+								MoveEntity(n\OBJ2, 0.0, 0.75, -0.825)
+								
+								; ~ Render distance is set to 8.5 inside the forest,
+								; ~ So we need to cheat a bit to make the eyes visible if they're further than that
+								Pvt = CreatePivot()
+								PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+								PointEntity(Pvt, n\OBJ2)
+								MoveEntity(Pvt, 0.0, 0.0, 8.0)
+								PositionEntity(n\OBJ2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
+								FreeEntity(Pvt) : Pvt = 0
+							Else
+								If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 							EndIf
 						EndIf
 					EndIf
+						
 				EndIf
 				;[End Block]
 			Case NPCType939
@@ -3902,7 +3927,7 @@ Function UpdateNPCs%()
 											Case 1
 												;[Block]
 												PlaySound_Strict(LoadTempSound("SFX\SCP\066\Beethoven.ogg"))
-												me\DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\AggressiveNPCs))
+												me\DeafTimer = 70.0 * (45.0 + (15.0 * SelectedDifficulty\OtherFactors))
 												me\Deaf = True
 												me\BigCameraShake = 10.0
 												;[End Block]
@@ -4113,7 +4138,7 @@ Function UpdateNPCs%()
 												End Select
 											EndIf
 											I_966\HasInsomnia = 1.0 - (0.5 * I_714\Using)
-											I_966\InsomniaEffectTimer = 2100.0 - (1050.0 * I_714\Using)
+											I_966\InsomniaEffectTimer = 70.0 * (30.0 + (10.0 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)
 										EndIf
 									EndIf
 									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -4319,6 +4344,10 @@ Function UpdateNPCs%()
 							TeleportCloser(n)
 							n\State3 = 0.0
 						EndIf
+					EndIf
+					If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
+						n\State3 = 0.0
+						n\State = 0.0
 					EndIf
 				EndIf
 				;[End Block]
@@ -4872,7 +4901,6 @@ Function UpdateNPCs%()
 											If n\Target\HP > 0
 												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
 											Else
-												n\Target\IsDead = True
 												n\Target = Null
 												n\State = 3.0
 												Return
@@ -4946,6 +4974,7 @@ Function UpdateNPCs%()
 					
 					; ~ Loop the breath sound
 					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_008_1_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+					If n\HP =< 0 Then n\IsDead = True
 				Else
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
 				EndIf
@@ -4991,32 +5020,13 @@ Function UpdateNPCs%()
 						
 						RemoveSound = True
 						
-						PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
-						p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
-						EntityColor(p\OBJ, 100.0, 100.0, 100.0)
-						RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
-						p\AlphaChange = -Rnd(0.02, 0.03)
-						For i = 0 To 1
-							p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider) + Rnd(-0.2, 0.2), EntityY(n\Collider) + 0.25, EntityZ(n\Collider) + Rnd(-0.2, 0.2), 0.15, 0.0)
-							EntityColor(p\OBJ, 100.0, 100.0, 100.0)
-							RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
-							p\AlphaChange = -Rnd(0.02, 0.03)
-						Next
-						
-						Pvt = CreatePivot()
-						PositionEntity(Pvt, EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
-						TurnEntity(Pvt, 90.0, 0.0, 0.0)
-						If EntityPick(Pvt, 0.3)
-							de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
-							de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
-						EndIf
-						
+						n\HideFromNVG = True
 						n\GravityMult = 0.0
 						;[End Block]
 					Case NPCTypeGuard
 						;[Block]
 						n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
-						EntityRadius(n\OBJ3, 0.3)
+						EntityRadius(n\OBJ3, 0.35)
 						EntityPickMode(n\OBJ3, 1, False)
 						
 						RemoveSound = True
@@ -5084,10 +5094,8 @@ Function UpdateNPCs%()
 							
 							If n\InFacility = NullFloor
 								If PlayerRoom\RoomTemplate\RoomID <> r_cont1_173_intro
-									If forest_event <> Null
-										If PlayerRoom = forest_event\room
-											If forest_event\EventState = 1.0 Then UpdateGravity = True
-										EndIf
+									If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+										If forest_event\EventState = 1.0 Then UpdateGravity = True
 									EndIf
 								Else
 									UpdateGravity = True
@@ -5170,6 +5178,7 @@ Const MTF_DISABLING_TESLA% = 11
 
 Function UpdateMTFUnit%(n.NPCs)
 	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events
+	Local i%
 	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
@@ -6543,14 +6552,16 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0.0)
 							Else
 								If (Not n\Target\IsDead)
-									If n\Target\NPCType = NPCType049_2
-										If n = n_I\MTFLeader
-											LoadNPCSound(n, "SFX\Character\MTF\049_2\TargetTerminated.ogg")
-											PlayMTFSound(n\Sound, n)
-										EndIf
-									EndIf
+									Select n\Target\NPCType
+										Case NPCType049_2
+											;[Block]
+											If n = n_I\MTFLeader
+												LoadNPCSound(n, "SFX\Character\MTF\049_2\TargetTerminated.ogg")
+												PlayMTFSound(n\Sound, n)
+											EndIf
+											;[End Block]
+									End Select
 								EndIf
-								n\Target\IsDead = True
 								n\Target = Null
 								n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 								n\State2 = 0.0
@@ -6661,6 +6672,8 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		; ~ Teleport back to the facility if fell through the floor
 		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
+		
+		If n\HP =< 0 Then n\IsDead = True
 	EndIf
 	If n_I\MTFLeader = Null And MTFTimer > 0.0 And MTFTimer < 35000.0
 		PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
@@ -6900,7 +6913,10 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 60.0, DisableSoundOnCrouch% = Fa
 	Local Dist2# = EntityDistanceSquared(me\Collider, n\Collider)
 	
 	If n\BlinkTimer <= 0.0 Then Return(0)
-	If I_268\InvisibilityOn Lor chs\NoTarget Then n\State2 = 0.0 : Return(0)
+	If I_268\InvisibilityOn Lor chs\NoTarget
+		n\State2 = 0.0
+		Return(0)
+	EndIf
 	
 	If n\NPCType <> NPCTypeMTF
 		If Dist2 > PowTwo(Dist)
@@ -6937,11 +6953,7 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 60.0, DisableSoundOnCrouch% = Fa
 End Function
 
 Function PlayerSees173%(n.NPCs)
-	If (Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))
-		Return(False)
-	Else
-		Return(True)
-	EndIf
+	Return(Not ((Not chs\NoTarget) And (wi\IsNVGBlinking Lor (Not (EntityInView(n\OBJ, Camera) Lor EntityInView(n\OBJ2, Camera))) Lor (me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0))))
 End Function
 
 Function UpdateNPCBlinking%(n.NPCs)
@@ -7088,7 +7100,7 @@ Function MoveToPocketDimension%()
 		If r\RoomTemplate\RoomID = r_dimension_106
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
 			me\Injuries = me\Injuries + 0.5
-			me\BlurTimer = 1600.0
+			me\BlurTimer = 1750.0
 			HideEntity(me\Head)
 			ShowEntity(me\Collider)
 			PlaySound_Strict(snd_I\Use914SFX)
@@ -7287,7 +7299,7 @@ Function ManipulateNPCBones%()
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
-				If Bone = 0 Then RuntimeError(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
+				If Bone = 0 Then RuntimeError2(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
 				PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player
@@ -7359,8 +7371,7 @@ Function NPCSpeedChange%(n.NPCs)
 End Function
 
 Function IsPlayerOutsideFacility%()
-	If PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b Then Return(True)
-	Return(False)
+	Return(PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)
 End Function
 
 Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
@@ -7369,13 +7380,11 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	; ~ Player is in these rooms, returning false
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
-	If forest_event <> Null
-		If PlayerRoom = forest_event\room
-			If forest_event\EventState = 1.0 Then Return(False)
-		EndIf
+	If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+		If forest_event\EventState = 1.0 Then Return(False)
 	EndIf
 	; ~ Player is inside the fake world, returning false
-	If skull_event <> Null
+	If skull_event <> Null ; ~ TODO: Check if this really needed!
 		If skull_event\EventState > 0.0 Then Return(False)
 	EndIf
 	

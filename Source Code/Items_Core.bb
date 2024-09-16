@@ -320,7 +320,7 @@ End Function
 Type Items
 	Field DisplayName$
 	Field Name$
-	Field Collider%, Model%
+	Field Collider%, OBJ%
 	Field ItemTemplate.ItemTemplates
 	Field DropSpeed#
 	Field R%, G%, B%, Alpha#
@@ -354,16 +354,16 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			i\Collider = CreatePivot()
 			EntityRadius(i\Collider, 0.01)
 			EntityPickMode(i\Collider, 1, False)
-			i\Model = CopyEntity(it\OBJ, i\Collider)
+			i\OBJ = CopyEntity(it\OBJ, i\Collider)
 			i\DisplayName = it\DisplayName
 			i\Name = it\Name
 			ShowEntity(i\Collider)
-			ShowEntity(i\Model)
+			ShowEntity(i\OBJ)
 			Exit
 		EndIf
 	Next 
 	
-	If i\ItemTemplate = Null Then RuntimeError(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
+	If i\ItemTemplate = Null Then RuntimeError2(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
 	
 	ResetEntity(i\Collider)
 	PositionEntity(i\Collider, x, y, z, True)
@@ -387,7 +387,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			
 			ScaleEntity(Liquid, i\ItemTemplate\Scale, i\ItemTemplate\Scale, i\ItemTemplate\Scale, True)
 			PositionEntity(Liquid, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True))
-			EntityParent(Liquid, i\Model)
+			EntityParent(Liquid, i\OBJ)
 			EntityColor(Liquid, R, G, B)
 			
 			If Alpha < 0.0 Then EntityFX(Liquid, 1)
@@ -398,7 +398,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			;[Block]
 			If InvSlots = 0
 				InvSlots = 10
-				SetAnimTime(i\Model, 17.0)
+				SetAnimTime(i\OBJ, 17.0)
 				i\InvImg = i\ItemTemplate\InvImg2
 			EndIf
 			;[End Block]
@@ -406,7 +406,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			;[Block]
 			If InvSlots = 0
 				InvSlots = 10
-				SetAnimTime(i\Model, 0.0)
+				SetAnimTime(i\OBJ, 0.0)
 				i\InvImg = i\ItemTemplate\InvImg2
 			EndIf
 			;[End Block]
@@ -427,7 +427,7 @@ Function RemoveItem%(i.Items)
 	
 	Local n%
 	
-	FreeEntity(i\Model) : i\Model = 0
+	FreeEntity(i\OBJ) : i\OBJ = 0
 	FreeEntity(i\Collider) : i\Collider = 0
 	
 	For n = 0 To MaxItemAmount - 1
@@ -526,7 +526,7 @@ Function UpdateItems%()
 				
 				If i\Dist < 1.44
 					If ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)
-						If EntityInView(i\Model, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
+						If EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
 					EndIf
 				EndIf
 				
@@ -759,7 +759,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	Local ITID% = item\ItemTemplate\ID
 	
-	If ITID = it_hazmatsuit Lor ITID = it_finehazmatsuit Lor ITID = it_veryfinehazmatsuit Lor ITID = it_hazmatsuit148 Then SetAnimTime(item\Model, 4.0)
+	If ITID = it_hazmatsuit Lor ITID = it_finehazmatsuit Lor ITID = it_veryfinehazmatsuit Lor ITID = it_hazmatsuit148 Then SetAnimTime(item\OBJ, 4.0)
 	
 	item\Picked = False
 	For n = 0 To MaxItemAmount - 1
@@ -1420,6 +1420,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(6) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									EndIf
@@ -1428,6 +1429,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(5) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									EndIf
@@ -1436,6 +1438,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									EndIf
@@ -1453,6 +1456,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(5) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									EndIf
@@ -1461,6 +1465,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									EndIf
@@ -1469,6 +1474,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									EndIf
@@ -1486,6 +1492,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									EndIf
@@ -1494,6 +1501,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									EndIf
@@ -1502,6 +1510,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									EndIf
@@ -1527,6 +1536,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									EndIf
@@ -1535,6 +1545,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									EndIf
@@ -1543,6 +1554,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[Block]
 									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+										it2\State = Rand(0, 6)
 									Else
 										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									EndIf
@@ -1559,6 +1571,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+								it2\State = Rand(0, 6)
 							EndIf
 							;[End Block]
 						Case it_key6
@@ -1567,6 +1580,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 							Else
 								it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+								it2\State = Rand(0, 6)
 							EndIf
 							;[End Block]
 					End Select
@@ -1580,6 +1594,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
 					Else
 						it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+						it2\State = Rand(0, 6)
 					EndIf
 					;[End Block]
 			End Select
@@ -1595,6 +1610,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					If Rand(2) = 1
 						it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+						it2\State = Rand(0, 6)
 					Else
 						it2.Items = CreateItem("Playing Card", it_playcard, x, y, z)
 					EndIf
@@ -1605,6 +1621,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
 					Else
 						it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+						it2\State = Rand(0, 6)
 					EndIf
 					;[End Block]
 			End Select

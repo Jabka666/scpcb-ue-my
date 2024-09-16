@@ -22,20 +22,20 @@ End Function
 Function CurveValue#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	
+	Local Val# = Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0])
+	
 	If Value < Old
-		Return(Max(Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0]), Value))
+		Return(Max(Val, Value))
 	Else
-		Return(Min(Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0]), Value))
+		Return(Min(Val, Value))
 	EndIf
 End Function
 
 Function CurveAngle#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	
-	Local Diff# = WrapAngle(Value) - WrapAngle(Old)
+	Local Diff# = AngleDist(Value, Old)
 	
-	If Diff > 180.0 Then Diff = Diff - 360.0
-	If Diff < -180.0 Then Diff = Diff + 360.0
 	Return(WrapAngle(Old + Diff * (1.0 / Smooth * fps\Factor[0])))
 End Function
 

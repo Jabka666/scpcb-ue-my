@@ -12,6 +12,8 @@ End Type
 
 Global forest_event.Events
 Global skull_event.Events
+Global PD_event.Events
+Global scribe_event.Events
 
 ; ~ Events ID Constants
 ;[Block]
@@ -82,8 +84,8 @@ Const e_checkpoint% = 65
 Const e_door_closing% = 66
 Const e_gateway% = 67
 Const e_tesla% = 68
-Const e_trick% = 69
-Const e_dimension_106% = 70, e_dimension_1499% = 71
+Const e_trick% = 69, e_trick_item% = 70
+Const e_dimension_106% = 71, e_dimension_1499% = 72
 ;[End Block]
 
 ; ~ For Map Creator
@@ -369,6 +371,10 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_trick)
 			;[End Block]
+		Case "trick_item"
+			;[Block]
+			Return(e_trick_item)
+			;[End Block]
 		Case "dimension_106"
 			;[Block]
 			Return(e_dimension_106)
@@ -384,15 +390,23 @@ Function FindEventID%(EventName$)
 	End Select
 End Function
 
-Function FindForestEvent%(e.Events)
+Function FindEventVariable%(e.Events)
 	Select e\EventID
-		Case e_cont2_860_1
+		Case e_cont2_012
 			;[Block]
-			forest_event = e
+			scribe_event = e
 			;[End Block]
 		Case e_cont2_1123
 			;[Block]
 			skull_event = e
+			;[End Block]
+		Case e_cont2_860_1
+			;[Block]
+			forest_event = e
+			;[End Block]
+		Case e_dimension_106
+			;[Block]
+			PD_event = e
 			;[End Block]
 	End Select
 End Function
@@ -426,7 +440,7 @@ Function CreateEvent.Events(EventID%, RoomID%, ID%, Prob# = 0.0)
 				If i >= ID And (Not Temp)
 					e.Events = New Events
 					e\EventID = EventID
-					FindForestEvent(e)
+					FindEventVariable(e)
 					e\room = r
 					Return(e)
 				EndIf
@@ -446,7 +460,7 @@ Function CreateEvent.Events(EventID%, RoomID%, ID%, Prob# = 0.0)
 				If Rnd(0.0, 1.0) <= Prob And (Not Temp)
 					e.Events = New Events
 					e\EventID = EventID
-					FindForestEvent(e)
+					FindEventVariable(e)
 					e\room = r
 				EndIf
 			EndIf
@@ -953,20 +967,20 @@ Function UpdateEvents%()
 					If e\room\Dist < 7.0
 						If I_005\ChanceToSpawn = 3
 							TFormPoint(375.0, 52.0, -875.0, e\room\OBJ, 0)
-							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-							SetNPCFrame(e\room\NPC[0], 287.0)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+							n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+							n\State = 8.0 : n\IsDead = True
+							SetNPCFrame(n, 287.0)
+							RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 							
 							TFormPoint(382.0, 150.0, -875.0, e\room\OBJ, 0)
 							de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
 							EntityParent(de\OBJ, e\room\OBJ)
 						Else
 							TFormPoint(-296.0, 52.0, -240.0, e\room\OBJ, 0)
-							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-							SetNPCFrame(e\room\NPC[0], 288.0)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 125.0, 0.0, True)
+							n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+							n\State = 8.0 : n\IsDead = True
+							SetNPCFrame(n, 288.0)
+							RotateEntity(n\Collider, 0.0, e\room\Angle + 125.0, 0.0, True)
 						EndIf
 						RemoveEvent(e)
 					EndIf
@@ -978,10 +992,10 @@ Function UpdateEvents%()
 					If EntityY(me\Collider) < (-9500.0) * RoomScale
 						If e\EventState = 0.0
 							TFormPoint(-2260.0, -10632.0, 1000.0, e\room\OBJ, 0)
-							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-							SetNPCFrame(e\room\NPC[0], 288.0)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+							n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+							n\State = 8.0 : n\IsDead = True
+							SetNPCFrame(n, 288.0)
+							RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 							
 							TFormPoint(-2220.0, -10688.0, 1000.0, e\room\OBJ, 0)
 							de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.5)
@@ -1250,11 +1264,11 @@ Function UpdateEvents%()
 							GiveAchievement("205")
 							
 							TFormPoint(-1055.0, -74.8, 650.0, e\room\OBJ, 0)
-							e\room\NPC[0] = CreateNPC(NPCTypeClerk, TFormedX(), TFormedY(), TFormedZ())
-							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
-							ChangeNPCTextureID(e\room\NPC[0], NPC_CLERK_VICTIM_205_TEXTURE)
-							SetNPCFrame(e\room\NPC[0], 40.0)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 180.0, 0.0, True)
+							n.NPCs = CreateNPC(NPCTypeClerk, TFormedX(), TFormedY(), TFormedZ())
+							n\State3 = -1.0 : n\IsDead = True
+							ChangeNPCTextureID(n, NPC_CLERK_VICTIM_205_TEXTURE)
+							SetNPCFrame(n, 40.0)
+							RotateEntity(n\Collider, 0.0, e\room\Angle - 180.0, 0.0, True)
 							
 							e\EventState = 1.0
 						EndIf
@@ -1966,6 +1980,8 @@ Function UpdateEvents%()
 									RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
 								EndIf
 								If (me\Bloodloss > 0.0 And I_008\Timer = 0.0) Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
+								
+								If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = Max(70.0, me\EyeIrritation)
 							EndIf
 							
 							If EntityPitch(e\room\Objects[1], True) < 40.0
@@ -1992,7 +2008,7 @@ Function UpdateEvents%()
 								
 								e\EventState2 = 2.0
 							EndIf
-							RotateEntity(e\room\Objects[1], CurveAngle(-1.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
+							RotateEntity(e\room\Objects[1], CurveAngle(0.0, EntityPitch(e\room\Objects[1], True), 15.0), EntityYaw(e\room\Objects[1], True), 0.0, True)
 						EndIf
 					ElseIf e\EventState = 1.0
 						e\EventState = 0.0
@@ -2079,7 +2095,7 @@ Function UpdateEvents%()
 											If e\EventState2 > 70.0 And e\EventState2 - fps\Factor[0] <= 70.0
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech0.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 13.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 13.0
-												CreateMsg(GetLocalString("msg", "012_1"))
+												CreateMsg(GetLocalString("msg", "012_1"), 8.0)
 												me\Injuries = me\Injuries + 0.5
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 31.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 31.0
@@ -2087,11 +2103,11 @@ Function UpdateEvents%()
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
-												CreateMsg(GetLocalString("msg", "012_2"))
+												CreateMsg(GetLocalString("msg", "012_2"), 8.0)
 												me\Injuries = Max(me\Injuries, 1.5)
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech" + Rand(2, 3) + ".ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 49.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 49.0
-												CreateMsg(GetLocalString("msg", "012_3"))
+												CreateMsg(GetLocalString("msg", "012_3"), 8.0)
 												me\Injuries = me\Injuries + 0.3
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech4.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 63.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 63.0
@@ -2106,7 +2122,7 @@ Function UpdateEvents%()
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
-												CreateMsg(GetLocalString("msg", "012_4"))
+												CreateMsg(GetLocalString("msg", "012_4"), 8.0)
 												me\CameraShake = 2.0
 												me\Injuries = me\Injuries + 0.8
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
@@ -2329,7 +2345,7 @@ Function UpdateEvents%()
 						Else
 							If e\EventState > (-70.0) * 4.0
 								If me\FallTimer < -230.0
-									me\BlinkTimer = 0.0 : me\FallTimer = -231.0
+									me\BlinkTimer = -10.0 : me\FallTimer = -231.0
 									
 									e\EventState = e\EventState - fps\Factor[0]
 									
@@ -2357,7 +2373,7 @@ Function UpdateEvents%()
 										ResetEntity(e\room\NPC[0]\Collider)
 										
 										For n.NPCs = Each NPCs
-											If n\NPCType = NPCType049_2 Then n\IsDead = True
+											If n\NPCType = NPCType049_2 Then n\HP = 0
 										Next
 										
 										TFormPoint(64.0, -3388.8, 1000.0, e\room\OBJ, 0)
@@ -2394,22 +2410,24 @@ Function UpdateEvents%()
 						me\Zone = 1
 						
 						If e\EventState = 0.0
+							TFormPoint(-4843.8, -4440.8, 1729.0, e\room\OBJ, 0)
+							x2 = TFormedX() : y2 = TFormedY() : z2 = TFormedZ()
+							e\room\NPC[0] = CreateNPC(NPCTypeD, x2, y2, z2)
+							e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
+							ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
+							SetNPCFrame(e\room\NPC[0], 19.0)
+							RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
+							
+							de.Decals = CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
+							EntityParent(de\OBJ, e\room\OBJ)
+							
+							TFormPoint(-5000.0, -4409.0, 1520.0, e\room\OBJ, 0)
 							If I_005\ChanceToSpawn = 2
-								TFormPoint(-4843.8, -4440.8, 1729.0, e\room\OBJ, 0)
-								x2 = TFormedX() : y2 = TFormedY() : z2 = TFormedZ()
-								e\room\NPC[0] = CreateNPC(NPCTypeD, x2, y2, z2)
-								e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
-								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
-								SetNPCFrame(e\room\NPC[0], 19.0)
-								RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
-								
-								de.Decals = CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
-								EntityParent(de\OBJ, e\room\OBJ)
-								
-								TFormPoint(-5000.0, -4409.0, 1520.0, e\room\OBJ, 0)
 								it.Items = CreateItem("SCP-005", it_scp005, TFormedX(), TFormedY(), TFormedZ())
-								EntityType(it\Collider, HIT_ITEM)
+							Else
+								it.Items = CreateItem("Level 5 Key Card", it_key5, TFormedX(), TFormedY(), TFormedZ())
 							EndIf
+							EntityType(it\Collider, HIT_ITEM)
 							
 							TFormPoint(-4105.0, -4336.0, 2207.0, e\room\OBJ, 0)
 							it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
@@ -2473,6 +2491,8 @@ Function UpdateEvents%()
 								EntityTexture(e\room\RoomDoors[0]\OBJ2, Tex)
 								EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
 								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+								
+								e\room\RoomDoors[0]\IsAffected = True
 								
 								e\EventState = 1.0
 							EndIf
@@ -2565,7 +2585,7 @@ Function UpdateEvents%()
 								
 								IsBlackOut = PrevIsBlackOut
 								If wi\NightVision > 0
-									me\CameraFogDist = 17.0
+									me\CameraFogDist = 15.0
 								ElseIf wi\SCRAMBLE > 0
 									me\CameraFogDist = 9.0
 								Else
@@ -3454,8 +3474,9 @@ Function UpdateEvents%()
 									
 									e\EventState2 = e\EventState2 + 1.0
 								ElseIf SelectedItem\ItemTemplate\ID = it_mastercard
-									If me\Funds > 0
-										me\Funds = me\Funds - 1
+									If SelectedItem\State > 0
+										SelectedItem\State = SelectedItem\State - 1
+										me\CurrFunds = SelectedItem\State
 										
 										PlaySound_Strict(LoadTempSound("SFX\SCP\294\InsertMasterCard.ogg"))
 										
@@ -3759,11 +3780,11 @@ Function UpdateEvents%()
 					de.Decals = CreateDecal(DECAL_BLOOD_2, x1, y1 - (51.2 * RoomScale) + 0.005, z1, 90.0, Rnd(360.0), 0.0)
 					EntityParent(de\OBJ, e\room\OBJ)
 					
-					e\room\NPC[0] = CreateNPC(NPCTypeD, x1, y1, z1)
-					e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
-					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_GONZALES_TEXTURE)
-					SetNPCFrame(e\room\NPC[0], 19.0)
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)
+					n.NPCs = CreateNPC(NPCTypeD, x1, y1, z1)
+					n\State3 = -1.0 : n\IsDead = True
+					ChangeNPCTextureID(n, NPC_CLASS_D_GONZALES_TEXTURE)
+					SetNPCFrame(n, 19.0)
+					RotateEntity(n\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)
 					
 					RemoveEvent(e)
 				EndIf
@@ -3914,7 +3935,7 @@ Function UpdateEvents%()
 								;[End Block]
 						End Select
 						
-						If me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0
+						If me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0 Lor wi\IsNVGBlinking
 							PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ(), True)
 							RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0)
 						EndIf
@@ -4007,7 +4028,7 @@ Function UpdateEvents%()
 						
 						If e\room\NPC[0] = Null And Temp
 							e\room\RoomDoors[0]\Locked = 1
-							If (e\room\Angle Mod 180 = 90.0)
+							If (e\room\Angle Mod 180) = 90.0
 								i = (Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True)))
 								x1 = i * 800.0 + (Not i) * (-800.0)
 								z1 = 0.0
@@ -4017,7 +4038,7 @@ Function UpdateEvents%()
 								z1 = i * 800.0 + (Not i) * (-800.0)
 							EndIf
 							e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\OBJ, True) + x1 * RoomScale, 0.4, EntityZ(e\room\OBJ, True) + z1 * RoomScale)
-							e\room\NPC[0]\State = 2.0
+							e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\HP = 100
 							PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 							e\EventState = 0.0
 						EndIf
@@ -4106,6 +4127,7 @@ Function UpdateEvents%()
 									EndIf
 									If Abs(EntityX(n\Collider, True) - x2) < 0.6 And Abs(EntityZ(n\Collider, True) - z2) < 0.6 And Abs(EntityY(n\Collider, True) - y2) < 1.3
 										n\CurrSpeed = 0.0 : n\TeslaHit = True
+										n\HP = 0
 										Select n\NPCType
 											Case NPCType106
 												;[Block]
@@ -4120,14 +4142,6 @@ Function UpdateEvents%()
 													SetNPCFrame(n, 259.0)
 													n\Idle = 1 : n\State3 = 1.0
 												EndIf
-												;[End Block]
-											Case NPCType049, NPCType096, NPCType173, NPCType066, NPCType1499_1, NPCType966
-												;[Block]
-												; ~ Skip
-												;[End Block]
-											Default
-												;[Block]
-												n\IsDead = True
 												;[End Block]
 										End Select
 										If e\room\Dist < 6.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
@@ -4174,7 +4188,7 @@ Function UpdateEvents%()
 			Case e_trick
 				;[Block]
 				If PlayerRoom = e\room
-					If EntityDistanceSquared(e\room\OBJ, me\Collider) < 4.0
+					If e\room\Dist < 2.0
 						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 36.0 Lor EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 36.0
 							RemoveEvent(e)
 						Else
@@ -4197,6 +4211,64 @@ Function UpdateEvents%()
 							
 							FreeEntity(Pvt) : Pvt = 0
 							RemoveEvent(e)
+						EndIf
+					EndIf
+				EndIf
+				;[End Block]
+			Case e_trick_item
+				;[Block]
+				If e\room\Dist < 8.0
+					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 16.0
+						If e\room\Objects[MaxRoomObjects - 1] <> 0
+							de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
+							EntityParent(de\OBJ, e\room\OBJ)
+							
+							FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
+						EndIf
+						RemoveEvent(e)
+					Else
+						If e\room\Objects[MaxRoomObjects - 1] = 0 ; ~ Use the latest object ID to prevent overlapping
+							Select Rand(3)
+								Case 1
+									;[Block]
+									Temp = it_scp500pill
+									;[End Block]
+								Case 2
+									;[Block]
+									Temp = it_key4
+									;[End Block]
+								Case 3
+									;[Block]
+									Temp = it_veryfinenvg
+									;[End Block]
+							End Select
+							
+							For itt.ItemTemplates = Each ItemTemplates
+								If itt\ID = Temp
+									e\room\Objects[MaxRoomObjects - 1] = CopyEntity(itt\OBJ)
+									If e\room\RoomCenter <> 0
+										PositionEntity(e\room\Objects[MaxRoomObjects - 1], EntityX(e\room\RoomCenter), e\room\y + 0.1, EntityZ(e\room\RoomCenter))
+									Else
+										PositionEntity(e\room\Objects[MaxRoomObjects - 1], e\room\x, e\room\y, e\room\z)
+									EndIf
+									RotateEntity(e\room\Objects[MaxRoomObjects - 1], 0.0, Rnd(360.0), 0.0)
+									EntityParent(e\room\Objects[MaxRoomObjects - 1], e\room\OBJ)
+									Exit
+								EndIf
+							Next
+						Else
+							If EntityDistanceSquared(me\Collider, e\room\Objects[MaxRoomObjects - 1]) < 4.0
+								me\BlurTimer = 500.0
+								me\BlinkTimer = -10.0
+								
+								PlaySound_Strict(snd_I\HorrorSFX[11])
+								
+								de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
+								EntityParent(de\OBJ, e\room\OBJ)
+								
+								FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
+								RemoveEvent(e)
+							EndIf
 						EndIf
 					EndIf
 				EndIf
@@ -4356,7 +4428,7 @@ Function UpdateEvents%()
 							Next
 						Next
 						
-						If LastX = FirstX And LastY = FirstY Then RuntimeError(GetLocalString("runerr", "mt"))
+						If LastX = FirstX And LastY = FirstY Then RuntimeError2(GetLocalString("runerr", "mt"))
 						
 						; ~ Place the tunnels
 						For i = 0 To MaxMTModelIDAmount - 1
@@ -4872,7 +4944,7 @@ Function UpdateEvents%()
 										x2 = PowTwo(MTGridSize)
 									EndIf
 								Next 
-								If spawnPoint <> Null Then e\room\NPC[i] = CreateNPC(NPCType966, EntityX(spawnPoint\OBJ, True), EntityY(spawnPoint\OBJ, True), EntityZ(spawnPoint\OBJ, True))
+								If spawnPoint <> Null Then CreateNPC(NPCType966, EntityX(spawnPoint\OBJ, True), EntityY(spawnPoint\OBJ, True), EntityZ(spawnPoint\OBJ, True))
 							Next
 							e\EventState = 1.0
 						ElseIf n_I\Curr106\State > 0.0 Lor n_I\Curr106\Contained
@@ -5282,21 +5354,17 @@ Function UpdateEvents%()
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 ; ~ Lock the player inside
 								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.12
-									For i = 0 To 1
-										If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
-											If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-											e\EventState = 70.0 * 45.0
-										EndIf
-									Next
+									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) > 2.0 And EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) > 2.0
+										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+										e\EventState = 70.0 * 45.0
+									EndIf
 								EndIf
 							Else
 								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.12
-									For i = 0 To 1
-										If EntityDistanceSquared(me\Collider, e\room\RoomDoors[i]\FrameOBJ) > 1.0
-											If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
-											e\EventState = 70.0 * 45.0
-										EndIf
-									Next
+									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) > 2.0 And EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) > 2.0
+										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+										e\EventState = 70.0 * 45.0
+									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -5626,7 +5694,7 @@ Function UpdateEvents%()
 											For j = 0 To it\InvSlots - 1
 												it2\SecondInv[j] = it\SecondInv[j]
 											Next
-											SetAnimTime(it2\Model, AnimTime(it\Model))
+											SetAnimTime(it2\OBJ, AnimTime(it\OBJ))
 											it2\InvImg = it\InvImg
 										EndIf
 										RotateEntity(it2\Collider, EntityPitch(it\Collider), EntityYaw(it\Collider), 0.0)
@@ -5698,7 +5766,7 @@ Function UpdateEvents%()
 						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						EntityParent(e\room\Objects[3], e\room\OBJ)
 					Else
-						If me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0
+						If me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0 Lor wi\IsNVGBlinking
 							PointEntity(e\room\Objects[3], me\Collider)
 							RotateEntity(e\room\Objects[3], 0.0, EntityYaw(e\room\Objects[3], True), 0.0, True)
 						EndIf
@@ -5855,15 +5923,13 @@ Function UpdateEvents%()
 			Case e_room3_2_hcz_guard
 				;[Block]
 				If e\room\Dist < 8.0
-					If e\EventState = 0.0
-						TFormPoint(-190.0, 60.0, 190.0, e\room\OBJ, 0)
-						e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-						e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-						SetNPCFrame(e\room\NPC[0], 288.0)
-						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + Rnd(160.0, 180.0), 0.0, True)
-						
-						RemoveEvent(e)
-					EndIf
+					TFormPoint(-190.0, 60.0, 190.0, e\room\OBJ, 0)
+					n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+					n\State = 8.0 : n\IsDead = True
+					SetNPCFrame(n, 288.0)
+					RotateEntity(n\Collider, 0.0, e\room\Angle + Rnd(160.0, 180.0), 0.0, True)
+					
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_cont1_035
@@ -6535,26 +6601,19 @@ Function UpdateEvents%()
 			Case e_1048_a
 				;[Block]
 				If e\room\Dist < 8.0
-					If e\EventState = 0.0
-						e\room\NPC[0] = CreateNPC(NPCType1048_A, e\room\x, e\room\y + 50.0 * RoomScale, e\room\z)
-						e\EventState = 1.0
-					EndIf
-				ElseIf e\EventState = 1.0
-					If (Not EntityInView(e\room\NPC[0]\OBJ, Camera)) Lor e\room\NPC[0]\IsDead
-						RemoveNPC(e\room\NPC[0])
-						RemoveEvent(e)
-					EndIf
+					CreateNPC(NPCType1048_A, e\room\x, e\room\y + 50.0 * RoomScale, e\room\z)
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_room4_2_hcz_d
 				;[Block]
 				If e\room\Dist < 8.0
 					TFormPoint(256.0, 55.2, 256.0, e\room\OBJ, 0)
-					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-					e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
-					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_2_TEXTURE)
-					SetNPCFrame(e\room\NPC[0], 19.0)
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle - 30.0, 0.0, True)
+					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+					n\State3 = -1.0 : n\IsDead = True
+					ChangeNPCTextureID(n, NPC_CLASS_D_BODY_2_TEXTURE)
+					SetNPCFrame(n, 19.0)
+					RotateEntity(n\Collider, 0.0, e\room\Angle - 30.0, 0.0, True)
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
@@ -6607,6 +6666,7 @@ Function UpdateEvents%()
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							LoadEventSound(e, "SFX\Room\Airlock.ogg")
 							For i = 0 To 1
+								e\room\RoomDoors[i]\FastOpen = True
 								OpenCloseDoor(e\room\RoomDoors[i])
 							Next
 							PlaySound_Strict(snd_I\AlarmSFX[3])
@@ -6624,6 +6684,9 @@ Function UpdateEvents%()
 									If e\room\RoomEmitters[2] = Null Then e\room\RoomEmitters[2] = SetEmitter(e\room, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 16)
 								EndIf
 							ElseIf e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 6.0
+								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 4.0
+									If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = Max(70.0, me\EyeIrritation)
+								EndIf
 								If e\room\RoomEmitters[2] <> Null Then FreeEmitter(e\room\RoomEmitters[2])
 								For i = 0 To 1
 									If e\room\RoomEmitters[i] = Null
@@ -6638,12 +6701,11 @@ Function UpdateEvents%()
 						Else
 							For i = 0 To 1
 								If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
+								If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
+								e\room\RoomDoors[i]\FastOpen = False
 							Next
 							e\EventState = 0.0
 							e\EventState2 = 1.0
-							For i = 0 To 1
-								If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
-							Next
 						EndIf
 					EndIf
 					
@@ -6957,7 +7019,6 @@ Function UpdateEvents%()
 									EndIf
 								EndIf
 							Next
-							
 						EndIf
 						
 						For e2.Events = Each Events
@@ -7110,14 +7171,12 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_shaft
 				;[Block]
-				If e\EventState = 0.0
+				If e\room\NPC[0] = Null
 					TFormPoint(1344.0, -743.0, -384.0, e\room\OBJ, 0)
 					e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 					SetNPCFrame(e\room\NPC[0], 286.0)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-					
-					e\EventState = 1.0
 				EndIf
 				
 				If PlayerRoom = e\room
@@ -7206,11 +7265,13 @@ Function UpdateDimension106%()
 					For i = 9 To 10
 						ScaleEntity(e\room\Objects[i], RoomScale * (1.5 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
 					Next
-				Else
+				ElseIf SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					If KeyHit(key\SAVE)
 						If SelectedDifficulty\SaveType = SAVE_ANYWHERE
 							PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
 							CreateHintMsg(GetLocalString("save", "saved"))
+						ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+							CreateHintMsg(GetLocalString("save", "failed.screen"))
 						EndIf
 					EndIf
 				EndIf
@@ -7519,7 +7580,7 @@ Function UpdateDimension106%()
 											Next
 											
 											If wi\NightVision > 0
-												me\CameraFogDist = 17.0
+												me\CameraFogDist = 15.0
 											ElseIf wi\SCRAMBLE > 0
 												me\CameraFogDist = 9.0
 											Else
@@ -7724,28 +7785,37 @@ Function UpdateDimension106%()
 							Local RoomID% = -1
 							Local LCZ% = False
 							
-							Select Rand(5)
+							Select Rand(7)
 								Case 1
 									;[Block]
-									RoomID = r_room2_5_hcz
+									RoomID = r_cont1_914
+									LCZ = True
 									;[End Block]
 								Case 2
 									;[Block]
-									RoomID = r_room2_lcz
+									RoomID = r_room2_2_lcz
 									LCZ = True
 									;[End Block]
 								Case 3
 									;[Block]
-									RoomID = r_room3_lcz
+									RoomID = r_room2_5_lcz
 									LCZ = True
 									;[End Block]
 								Case 4
 									;[Block]
-									RoomID = r_cont1_106
+									RoomID = r_room2_3_hcz
 									;[End Block]
 								Case 5
 									;[Block]
-									RoomID = r_room2_3_hcz
+									RoomID = r_room2_5_hcz
+									;[End Block]
+								Case 6
+									;[Block]
+									RoomID = r_room3_2_hcz
+									;[End Block]
+								Case 7
+									;[Block]
+									RoomID = r_room4_hcz
 									;[End Block]
 							End Select
 							
@@ -7781,7 +7851,7 @@ Function UpdateDimension106%()
 									EndIf
 									
 									If wi\NightVision > 0
-										me\CameraFogDist = 17.0
+										me\CameraFogDist = 15.0
 									ElseIf wi\SCRAMBLE > 0
 										me\CameraFogDist = 9.0
 									Else
@@ -7790,10 +7860,11 @@ Function UpdateDimension106%()
 									
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 									If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+									
+									e\EventState = 0.0
+									e\EventState3 = 0.0
+									Exit
 								EndIf
-								e\EventState = 0.0
-								e\EventState3 = 0.0
-								Exit
 							Next
 							If (Not RoomExist)
 								PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
@@ -7874,7 +7945,7 @@ Function UpdateDimension106%()
 										Next
 										
 										If wi\NightVision > 0
-											me\CameraFogDist = 17.0
+											me\CameraFogDist = 15.0
 										ElseIf wi\SCRAMBLE > 0
 											me\CameraFogDist = 9.0
 										Else
@@ -7933,6 +8004,8 @@ Function UpdateDimension1499%()
 			; ~ e\EventState3: Variable used for the SCP-1499's church event
 			
 			If PlayerRoom = e\room
+				PrevIsBlackOut = IsBlackOut : IsBlackOut = False
+				
 				If e\EventState < 2.0
 					; ~ SCP-1499's random generator
 					If e\EventState = 0.0
@@ -7969,19 +8042,17 @@ Function UpdateDimension1499%()
 						; ~ King
 						e\room\NPC.NPCs[0] = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2308.0 * RoomScale)
 						e\room\NPC[0]\PrevState = 2 : e\room\NPC[0]\Angle = 270.0
+						ChangeNPCTextureID(e\room\NPC[0], NPC_1499_1_KING_TEXTURE)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\NPC[0]\Angle, 0.0)
-						Tex = LoadTexture_Strict("GFX\NPCs\scp_1499_1_king.png")
-						EntityTexture(e\room\NPC[0]\OBJ, Tex)
-						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						; ~ Guard next to king
 						e\room\NPC.NPCs[1] = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2052.0 * RoomScale)
 						e\room\NPC[1]\PrevState = 1 : e\room\NPC[1]\Angle = 270.0
 						RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\NPC[1]\Angle, 0.0)
 						; ~ Guards at the entrance to church
-						e\room\NPC.NPCs[2] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 1884.0 * RoomScale)
+						e\room\NPC.NPCs[2] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 128.0 * RoomScale, e\room\z + 1884.0 * RoomScale)
 						e\room\NPC[2]\PrevState = 3 : e\room\NPC[2]\Angle = 270.0
 						RotateEntity(e\room\NPC[2]\Collider, 0.0, e\room\NPC[2]\Angle, 0.0)
-						e\room\NPC.NPCs[3] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 2876.0 * RoomScale)
+						e\room\NPC.NPCs[3] = CreateNPC(NPCType1499_1, e\room\x + 4055.0 * RoomScale, e\room\y + 128.0 * RoomScale, e\room\z + 2876.0 * RoomScale)
 						e\room\NPC[3]\PrevState = 3 : e\room\NPC[3]\Angle = 270.0
 						RotateEntity(e\room\NPC[3]\Collider, 0.0, e\room\NPC[3]\Angle, 0.0)
 						e\room\NPC[2]\Target = e\room\NPC[3]
@@ -7996,7 +8067,7 @@ Function UpdateDimension1499%()
 						e\room\NPC[4]\Target = e\room\NPC[5]
 						e\room\NPC[5]\Target = e\room\NPC[4]
 						; ~ Guard at stairs
-						n.NPCs = CreateNPC(NPCType1499_1, e\room\x - 2761.0 * RoomScale, e\room\y + 240.0 * RoomScale, e\room\z + 3204.0 * RoomScale)
+						n.NPCs = CreateNPC(NPCType1499_1, e\room\x - 2761.0 * RoomScale, e\room\y + 128.0 * RoomScale, e\room\z + 3204.0 * RoomScale)
 						n\PrevState = 1 : n\Angle = 180.0 : n\Speed = 0.0
 						RotateEntity(n\Collider, 0.0, n\Angle, 0.0)
 						; ~ SCP-1499-1 instances praying in church
@@ -9110,6 +9181,8 @@ Function UpdateIntro%()
 													
 													ClearConsole()
 													
+													CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
+													
 													RemoveEvent(e)
 													Return
 													Exit
@@ -10050,7 +10123,7 @@ Function Update035Label%(OBJ%)
 			For it.Items = Each Items
 				If it\ItemTemplate\Name = itt\Name
 					Tex = GetRescaledTexture(itt\TexPath, 1, 256, 256)
-					EntityTexture(it\Model, Tex)
+					EntityTexture(it\OBJ, Tex)
 					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 					Exit
 				EndIf

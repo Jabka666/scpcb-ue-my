@@ -60,53 +60,47 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	InitFastResize()
 End Function
 
-Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, ExactSize% = False)
+Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
 	Local SrcWidth%, SrcHeight%
 	Local DestWidth%, DestHeight%
 	Local ScratchImage%, DestImage%
 	Local SrcBuffer%, ScratchBuffer%, DestBuffer%
-	Local X1%, Y1%, X2%, Y2%
+	Local X1%, Y1%, X2%, Y2%, Frame%
 	
 	; ~ Get the width and height of the source image
 	SrcWidth = ImageWidth(SrcImage)
 	SrcHeight = ImageHeight(SrcImage)
 	
 	; ~ Calculate the width and height of the dest image, or the scale
-	If (Not ExactSize)
-		DestWidth = Floor(SrcWidth * ScaleX)
-		DestHeight = Floor(SrcHeight * ScaleY)
-	Else
-		DestWidth = ScaleX
-		DestHeight = ScaleY
-		
-		ScaleX = Float(DestWidth) / Float(SrcWidth)
-		ScaleY = Float(DestHeight) / Float(SrcHeight)
-	EndIf
+	DestWidth = Floor(SrcWidth * ScaleX)
+	DestHeight = Floor(SrcHeight * ScaleY)
 	
 	; ~ If the image does not need to be scaled, just copy the image and exit the function
 	If (SrcWidth = DestWidth) And (SrcHeight = DestHeight) Then Return(SrcImage)
 	
 	; ~ Create a scratch image that is as tall as the source image, and as wide as the destination image
-	ScratchImage = CreateImage(DestWidth, SrcHeight)
+	ScratchImage = CreateImage(DestWidth, SrcHeight, Frames)
 	
 	; ~ Create the destination image
-	DestImage = CreateImage(DestWidth, DestHeight)
+	DestImage = CreateImage(DestWidth, DestHeight, Frames)
 	
-	; ~ Get pointers to the image buffers
-	SrcBuffer = ImageBuffer(SrcImage)
-	ScratchBuffer = ImageBuffer(ScratchImage)
-	DestBuffer = ImageBuffer(DestImage)
-	
-	; ~ Duplicate columns from source image to scratch image
-	For X2 = 0 To DestWidth - 1
-		X1 = Floor(X2 / ScaleX)
-		CopyRect(X1, 0, 1, SrcHeight, X2, 0, SrcBuffer, ScratchBuffer)
-	Next
-	
-	; ~ Duplicate rows from scratch image to destination image
-	For Y2 = 0 To DestHeight - 1
-		Y1 = Floor(Y2 / ScaleY)
-		CopyRect(0, Y1, DestWidth, 1, 0, Y2, ScratchBuffer, DestBuffer)
+	For Frame = 0 To Frames - 1
+		; ~ Get pointers to the image buffers for each frame
+		SrcBuffer = ImageBuffer(SrcImage, Frame)
+		ScratchBuffer = ImageBuffer(ScratchImage, Frame)
+		DestBuffer = ImageBuffer(DestImage, Frame)
+		
+		; ~ Duplicate columns from source image to scratch image
+		For X2 = 0 To DestWidth - 1
+			X1 = Floor(X2 / ScaleX)
+			CopyRect(X1, 0, 1, SrcHeight, X2, 0, SrcBuffer, ScratchBuffer)
+		Next
+		
+		; ~ Duplicate rows from scratch image to destination image
+		For Y2 = 0 To DestHeight - 1
+			Y1 = Floor(Y2 / ScaleY)
+			CopyRect(0, Y1, DestWidth, 1, 0, Y2, ScratchBuffer, DestBuffer)
+		Next
 	Next
 	
 	; ~ Free the scratch image
@@ -195,209 +189,20 @@ Function RenderGamma%()
 	EntityAlpha(FresizeImage, 1.0)
 End Function
 
-Global BatMsgTimer#
-
-Function UpdateBatteryTimer%()
-	BatMsgTimer = BatMsgTimer + fps\Factor[0]
-	If BatMsgTimer >= 70.0 * 1.5 Then BatMsgTimer = 0.0
-End Function
-
-Function UpdateWorld2%()
-	Local np.NPCs
-	Local i%
-	
-	wi\IsNVGBlinking = False
-	
-	Local HasBattery%
-	Local Power%
-	
-	If (wi\NightVision > 0 And wi\NightVision <> 3)  Lor wi\SCRAMBLE > 0
-		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) <> Null
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\ID = it_nvg) Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\ID = it_veryfinenvg) Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
-					If wi\NightVision > 0 Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision)))
-					If wi\SCRAMBLE > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.08 / wi\SCRAMBLE)))
-					Power = Int(Inventory(i)\State)
-					If Power = 0 ; ~ This NVG or SCRAMBLE can't be used
-						HasBattery = 0
-						If wi\SCRAMBLE > 0
-							CreateMsg(GetLocalString("msg", "battery.died"))
-						Else
-							CreateMsg(GetLocalString("msg", "battery.died.nvg"))
-						EndIf
-						wi\IsNVGBlinking = True
-						me\BlinkTimer = -1.0
-					ElseIf Power <= 100
-						HasBattery = 1
-					Else
-						HasBattery = 2
-					EndIf
-					Exit
-				EndIf
-			EndIf
-		Next
-		
-		If wi\NightVision = 2
-			If wi\NVGTimer <= 0.0
-				For np.NPCs = Each NPCs
-					np\NVGX = EntityX(np\Collider, True)
-					np\NVGY = EntityY(np\Collider, True)
-					np\NVGZ = EntityZ(np\Collider, True)
-				Next
-				If wi\NVGTimer <= -10.0 Then wi\NVGTimer = 600.0
-				wi\IsNVGBlinking = True
-			EndIf
-			wi\NVGTimer = wi\NVGTimer - fps\Factor[0]
-		EndIf
-	EndIf
-	
-	If HasBattery = 1
-		UpdateBatteryTimer()
-		If BatMsgTimer >= 70.0
-			If (Not ChannelPlaying(LowBatteryCHN[1]))
-				me\SndVolume = Max(3.0, me\SndVolume)
-				LowBatteryCHN[1] = PlaySound_Strict(snd_I\LowBatterySFX[1])
-			EndIf
-		EndIf
-	EndIf
-End Function
-
 Global CurrTrisAmount%
 
 Function RenderWorld2%(Tween#)
-	Local np.NPCs
-	Local i%, k%, l%
-	
 	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(Camera, 1)
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-	
-	Local HasBattery%
-	Local Power%
-	
-	If (wi\NightVision > 0 And wi\NightVision <> 3) Lor wi\SCRAMBLE > 0
-		For i = 0 To MaxItemAmount - 1
-			If Inventory(i) <> Null
-				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\ID = it_nvg) Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\ID = it_veryfinenvg) Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
-					Power = Int(Inventory(i)\State)
-					If Power = 0 ; ~ This NVG or SCRAMBLE can't be used
-						HasBattery = 0
-					ElseIf Power <= 100
-						HasBattery = 1
-					Else
-						HasBattery = 2
-					EndIf
-					Exit
-				EndIf
-			EndIf
-		Next
-	EndIf
-	
 	If (Not wi\IsNVGBlinking) Then RenderWorld(Tween)
 	
 	CurrTrisAmount = TrisRendered()
 	
-	If HasBattery > 0
-		If wi\NightVision = 2 ; ~ Show a HUD
-			Color(255, 255, 255)
-			
-			SetFontEx(fo\FontID[Font_Digital])
-			
-			Local PlusY% = 0
-			
-			If HasBattery = 1 Then PlusY = 40
-			
-			Local RefreshHint$ = GetLocalString("msg", "refresh")
-			Local InstrRefreshHint% = Instr(RefreshHint, "%s")
-			
-			TextEx(mo\Viewport_Center_X, (20 + PlusY) * MenuScale, Trim(Left(RefreshHint, InstrRefreshHint - 1)), True)
-			TextEx(mo\Viewport_Center_X, (60 + PlusY) * MenuScale, Max(FloatToString(wi\NVGTimer / 60.0, 1), 0.0), True)
-			TextEx(mo\Viewport_Center_X, (100 + PlusY) * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - InstrRefreshHint - 1)), True)
-			
-			Local Temp% = CreatePivot()
-			Local Temp2% = CreatePivot()
-			
-			PositionEntity(Temp, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
-			
-			For np.NPCs = Each NPCs
-				If np\NVGName <> "" And (Not np\HideFromNVG) ; ~ Don't waste your time if the string is empty
-					PositionEntity(Temp2, np\NVGX, np\NVGY, np\NVGZ)
-					
-					Local Dist# = EntityDistanceSquared(Temp2, me\Collider)
-					
-					If Dist < 552.25 ; ~ Don't draw text if the NPC is too far away
-						PointEntity(Temp, Temp2)
-						
-						Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Temp))
-						Local xValue# = 0.0
-						
-						If YawValue > 90.0 And YawValue <= 180.0
-							xValue = 1.0 / 90.0 * YawValue
-						ElseIf YawValue > 180 And YawValue < 270.0
-							xValue = (-1.0) / YawValue * 270.0
-						Else
-							xValue = Sin(YawValue)
-						EndIf
-						
-						Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Temp))
-						Local yValue# = 0.0
-						
-						If PitchValue > 90.0 And PitchValue <= 180.0
-							yValue = 1.0 / 90.0 * PitchValue
-						ElseIf PitchValue > 180.0 And PitchValue < 270.0
-							yValue = (-1.0) / PitchValue * 270.0
-						Else
-							yValue = Sin(PitchValue)
-						EndIf
-						
-						If (Not wi\IsNVGBlinking)
-							TextEx(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y), np\NVGName, True, True)
-							TextEx(mo\Viewport_Center_X + (xValue * mo\Viewport_Center_X), mo\Viewport_Center_Y - (yValue * mo\Viewport_Center_Y) + (30 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
-						EndIf
-					EndIf
-				EndIf
-			Next
-			
-			FreeEntity(Temp) : Temp = 0
-			FreeEntity(Temp2) : Temp2 = 0
-			
-			Color(0, 0, 55)
-		ElseIf wi\NightVision = 1
-			Color(0, 55, 0)
-		Else ; ~ SCRAMBLE
-			Color(55, 55, 55)
-		EndIf
-		For k = 0 To 10
-			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((k * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
-		Next
-		If wi\NightVision = 2
-			Color(0, 0, 255)
-		ElseIf wi\NightVision = 1
-			Color(0, 255, 0)
-		Else ; ~ SCRAMBLE
-			Color(255, 255, 255)
-		EndIf
-		For l = 0 To Min(Floor((Power + 50) * 0.01), 11.0)
-			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((l * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
-		Next
-		DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale))
-	EndIf
-	
-	; ~ Render sprites
 	CameraProjMode(ArkBlurCam, 2)
 	CameraProjMode(Camera, 0)
-	RenderWorld(RenderTween)
+	If (Not wi\IsNVGBlinking) Then RenderWorld(Tween)
 	CameraProjMode(ArkBlurCam, 0)
-	
-	If HasBattery = 1
-		If BatMsgTimer >= 70.0
-			Color(255, 0, 0)
-			SetFontEx(fo\FontID[Font_Digital])
-			
-			TextEx(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True)
-		EndIf
-	EndIf
-	Color(255, 255, 255)
 End Function
 
 Global ArkBlurImage%, ArkBlurTexture%
@@ -499,7 +304,7 @@ Function PlayStartupVideos%()
 			Cls()
 			DrawMovie(Movie, 0, (opt\RealGraphicHeight / 2 - ScaledGraphicHeight / 2), opt\RealGraphicWidth, ScaledGraphicHeight)
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
-			Flip()
+			Flip(True)
 			
 			Local Close% = False
 			

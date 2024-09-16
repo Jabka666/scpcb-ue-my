@@ -1,9 +1,91 @@
 v1.3.1
+
 [General]
+- Added new trick event.
+
 - SCP-860 can be refinied in SCP-914.
+- White smoke in certain events cause player to blink faster.
+- Corrosive doors take longer to open/close.
+- Updated SCP-173 images.
+
+- New blink timers for «SelectedDifficulty\OtherFactors»:
+	- Easy: 12-14 seconds (Previously 14.2-16.67)
+	- Normal: 10-12 seconds (Previously 11.9-14.2)
+	- Hard: 8-10 seconds (Previously 9.5-11.9)
+	- Extreme: 6-8 seconds (Previously 7.14-9.5)
+
+- Rebalanced exits from the Pocket Dimension:
+	- Added: cont1_914, room2_2_lcz, room2_5_lcz, room4_hcz
+	- Removed: cont1_106, room2_lcz, room3_lcz, room3_2_lcz
+
+- Optimized the game...
+
+[Rooms]
+- Added «Press any key to continue» message for debug maps.
+- Added a wallet in the hallway near SCP-513's containment chamber.
+
+- Level 5 Key Card will replace SCP-005 (if it had not spawned in SCP-409's containment chamber).
+- Reduced clearance level for «room_gw» control room. Requirement changed to Level 2 Key Card.
+- Reduced clearance level for «room2_medibay». Requirement changed to Level 2 Key Card.
+- Improved SCP-008 lid model.
+- Improved wooden boxes containing SCPs to allow grabbing them easier.
+
+[Items]
+- Added icons for Compact First Aid Kit, Small Jade Ring and Empty Cup.
+
+- Changed size of Blue First Aid Kit icon.
+- Changed clearance level for SCP-895's document.
+- Changed icons for SCP-714 (and variations).
+- Changed texture for SCP-714 and SCP-513.
+- Rescaled SCP-500-01, SCP-714 and Severed Hands (and variations).
+- Infected syringes will now slightly heal and give a very small stamina boost. 25% stamina boost for 10-20 seconds.
+- Buffed eyedrops to slow blink down even more.
+- Moved a quarter from «room2_cafeteria» to «room2_office».
+- George Maynard's badge has their own QR code.
+
+- Rework the Night Vision Goggles
+	- "Low battery" message appears earlier.
+	- Nerf distance from 17.0 to 15.0.
+	- Changed interface and ambient color a bit.
+	- Battery and battery meter now brighter.
+
+- Each Mastercard has its own balance.
+
+[NPCs]
+- SCP-966's insomnia timer scales longer with the «SelectedDifficulty\OtherFactors» setting.
+	- Easy: 30 seconds
+	- Normal: 40 seconds
+	- Hard: 50 seconds
+	- Extreme: 60 seconds
+	
+- SCP-066 deaf timer scales with «SelectedDifficulty\OtherFactors» instead of «SelectedDifficulty\AggressiveNPCs».
+	- Easy: 45 seconds
+	- Normal: 60 seconds
+	- Hard: 75 seconds
+	- Extreme: 90 seconds
+	
+- SCP-1048-A has random scale now.
 
 [Bug Fixes]
 - Fixed fake hallways (SCP-970 loop) not showing properly.
+- Fixed an issue where the player couldn't return to facility from the Pocket Dimension.
+- Fixed crash with SCP-106 touching SCP-914's doors.
+- Fixed darkness in SCP-1499's dimension if facility is under blackout.
+- Fixed grammatical issues in some achievement names.
+- Fixed Insomnia not saving properly.
+- Fixed Insomnia not being removed with «Heal».
+- Fixed memory leaks in PD and SCP-1499's dimension.
+- Fixes for SCP-1499-1:
+	- Fixed king texture not saving properly.
+	- Fixed model scale not saving properly.
+- Fixed room names on debug map.
+- Fixed «room4_ic» spawning in HCZ sometimes.
+- Fixed SCP-1048-A still visible in Blue NVG after explosion.
+- Fixed gas mask fog overlay lingering when the player held blink.
+
+[Known issues]
+- Rooms can overlap and block the way.
+- Cups crash the game sometimes.
 
 v1.3
 
@@ -158,6 +240,8 @@ v1.3
 - Fixed a bug with exit points in the Pocket Dimension labyrinth room.
 
 [Known issues]
+- Rooms can overlap and block the way.
+- «room4_ic» sometimes spawn in HCZ.
 - Cups crash the game sometimes.
 - PD teleport points don't work sometimes.
 
@@ -300,7 +384,7 @@ v1.2
 - Fixed wrong textures are applied for SCP-1048's drawings.
 - Fixed deaf effect.
 - Fixed SCP-427's texture.
-- Fixed SCP-066's attack not working in a room with "DisableDecals" parameter.
+- Fixed SCP-066's attack not working in a room with «DisableDecals» parameter.
 - Fixed an event with janitor staying in the dead end when SCP-106 was contained after the event was triggered.
 - Fixed softlock in SCP-513's containment chamber.
 - Fixed text flashing white after disappearing.
@@ -315,7 +399,7 @@ v1.2
 - Fixed SCP-012 event activating while terminated from above.
 - Fixed achievement spam in Pocket Dimension.
 - Fixed the most problems in MTF's AI.
-- Fixed rings "overlapping".
+- Fixed rings «overlapping».
 - Fixed not being able to open inventory after failing to use an item.
 - Fixed light sprites and props disappearing in Maintenance Tunnels.
 - Fixed/improved ranges of room-forcing code.

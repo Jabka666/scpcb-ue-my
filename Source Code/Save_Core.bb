@@ -72,7 +72,7 @@ Function SaveGame%(File$)
 	
 	WriteString(f, msg\DeathMsg)
 	
-	WriteByte(f, me\Funds)
+	WriteByte(f, me\CurrFunds)
 	WriteByte(f, me\UsedMastercard)
 	
 	WriteFloat(f, me\VomitTimer)
@@ -142,7 +142,7 @@ Function SaveGame%(File$)
 	EndIf
 	
 	WriteFloat(f, I_966\HasInsomnia)
-	WriteByte(f, I_966\InsomniaEffectTimer)
+	WriteFloat(f, I_966\InsomniaEffectTimer)
 	
 	WriteFloat(f, I_1048A\EarGrowTimer)
 	WriteByte(f, I_1048A\Revert)
@@ -243,10 +243,7 @@ Function SaveGame%(File$)
 		WriteByte(f, n\Contained)
 		WriteByte(f, n\IsDead)
 		WriteInt(f, n\HP)
-		WriteString(f, n\Model)
-		WriteFloat(f, n\ModelScaleX)
-		WriteFloat(f, n\ModelScaleY)
-		WriteFloat(f, n\ModelScaleZ)
+		WriteFloat(f, n\ModelScale)
 		WriteByte(f, n\TextureID)
 		WriteByte(f, n\HideFromNVG)
 	Next
@@ -383,6 +380,8 @@ Function SaveGame%(File$)
 		
 		WriteByte(f, d\IsElevatorDoor)
 		WriteByte(f, d\MTFClose)
+		
+		WriteByte(f, d\IsAffected)
 	Next
 	
 	WriteInt(f, 1845)
@@ -482,7 +481,7 @@ Function SaveGame%(File$)
 			WriteByte(f, 66)
 		EndIf
 		
-		If it\ItemTemplate\IsAnim Then WriteFloat(f, AnimTime(it\Model))
+		If it\ItemTemplate\IsAnim Then WriteFloat(f, AnimTime(it\OBJ))
 		WriteByte(f, it\InvSlots)
 		WriteInt(f, it\ID)
 		WriteByte(f, it\ItemTemplate\InvImg <> it\InvImg)
@@ -550,7 +549,7 @@ Function LoadGame%(File$)
 	ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	If StrTemp <> VersionNumber Then RuntimeError2(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
 	ReadString(f)
@@ -603,7 +602,7 @@ Function LoadGame%(File$)
 	
 	msg\DeathMsg = ReadString(f)
 	
-	me\Funds = ReadByte(f)
+	me\CurrFunds = ReadByte(f)
 	me\UsedMastercard = ReadByte(f)
 	
 	me\VomitTimer = ReadFloat(f)
@@ -668,7 +667,7 @@ Function LoadGame%(File$)
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
 	
-	I_966\HasInsomnia = ReadByte(f)
+	I_966\HasInsomnia = ReadFloat(f)
 	I_966\InsomniaEffectTimer = ReadFloat(f)
 	
 	I_1048A\EarGrowTimer = ReadFloat(f)
@@ -714,7 +713,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
+	If ReadInt(f) <> 113 Then RuntimeError2(GetLocalString("save", "corrupted_1"))
 	
 ;	For n.NPCs = Each NPCs
 ;		RemoveNPC(n)
@@ -799,16 +798,8 @@ Function LoadGame%(File$)
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)
 		n\HP = ReadInt(f)
-		n\Model = ReadString(f)
-		n\ModelScaleX = ReadFloat(f)
-		n\ModelScaleY = ReadFloat(f)
-		n\ModelScaleZ = ReadFloat(f)
-		If n\Model <> ""
-			FreeEntity(n\OBJ) : n\OBJ = 0
-			n\OBJ = LoadAnimMesh_Strict(n\Model)
-			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
-			If n\HasAnim Then SetAnimTime(n\OBJ, n\Frame)
-		EndIf
+		n\ModelScale = ReadFloat(f)
+		If n\ModelScale > 0.0 Then ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 		n\TextureID = ReadByte(f)
 		If n\TextureID > 0 Then ChangeNPCTextureID(n, n\TextureID - 1)
 		n\HideFromNVG = ReadByte(f)
@@ -829,7 +820,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted_2"))
+	If ReadInt(f) <> 632 Then RuntimeError2(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -971,7 +962,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
+	If ReadInt(f) <> 954 Then RuntimeError2(GetLocalString("save", "corrupted_3"))
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1050,6 +1041,9 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
+	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
+	
 	Temp = ReadInt(f)
 	
 	For i = 1 To Temp
@@ -1075,6 +1069,8 @@ Function LoadGame%(File$)
 		Local IsElevDoor% = ReadByte(f)
 		Local MTFClose% = ReadByte(f)
 		
+		Local IsAffected% = ReadByte(f)
+		
 		For d.Doors = Each Doors
 			If EntityX(d\FrameOBJ, True) = x And EntityY(d\FrameOBJ, True) = y And EntityZ(d\FrameOBJ, True) = z
 				d\Open = Open
@@ -1085,16 +1081,48 @@ Function LoadGame%(File$)
 				d\TimerState = TimerState
 				d\IsElevatorDoor = IsElevDoor
 				d\MTFClose = MTFClose
+				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
+				If IsAffected
+					Select d\DoorType
+						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+							;[Block]
+							EntityTexture(d\OBJ, TexDefault)
+							EntityTexture(d\FrameOBJ, TexDefault)
+							;[End Block]
+						Case HEAVY_DOOR
+							;[Block]
+							EntityTexture(d\OBJ, TexHeavy)
+							EntityTexture(d\FrameOBJ, TexHeavy)
+							;[End Block]
+					End Select
+				EndIf
+				
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+				If d\OBJ2 <> 0
+					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+					If IsAffected
+						Select d\DoorType
+							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+								;[Block]
+								EntityTexture(d\OBJ2, TexDefault)
+								;[End Block]
+							Case HEAVY_DOOR
+								;[Block]
+								EntityTexture(d\OBJ2, TexHeavy)
+								;[End Block]
+						End Select
+					EndIf
+				EndIf
 				Exit
 			EndIf
 		Next
 	Next
+	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
+	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
-	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
+	If ReadInt(f) <> 1845 Then RuntimeError2(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -1171,7 +1199,7 @@ Function LoadGame%(File$)
 			EndIf
 		Next
 		e\EventStr = ReadString(f)
-		FindForestEvent(e)
+		FindEventVariable(e)
 	Next
 	For e.Events = Each Events
 		Select e\EventID
@@ -1274,7 +1302,7 @@ Function LoadGame%(File$)
 		For itt.ItemTemplates = Each ItemTemplates
 			If itt\ID = ID And itt\Name = IttName; And itt\DisplayName = DisplayName ; ~ Not sure about that
 				If itt\IsAnim
-					SetAnimTime(it\Model, ReadFloat(f))
+					SetAnimTime(it\OBJ, ReadFloat(f))
 					Exit
 				EndIf
 			EndIf
@@ -1336,7 +1364,7 @@ Function LoadGame%(File$)
 	CloseFile(f)
 	
 	If wi\NightVision > 0
-		me\CameraFogDist = 17.0
+		me\CameraFogDist = 15.0
 	ElseIf wi\SCRAMBLE > 0
 		me\CameraFogDist = 9.0
 	Else
@@ -1428,7 +1456,7 @@ Function LoadGameQuick%(File$)
 	ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	If StrTemp <> VersionNumber Then RuntimeError2(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
 	ReadString(f)
@@ -1499,7 +1527,7 @@ Function LoadGameQuick%(File$)
 	
 	msg\DeathMsg = ReadString(f)
 	
-	me\Funds = ReadByte(f)
+	me\CurrFunds = ReadByte(f)
 	me\UsedMastercard = ReadByte(f)
 	
 	me\VomitTimer = ReadFloat(f)
@@ -1561,7 +1589,7 @@ Function LoadGameQuick%(File$)
 	Local r1499_x# = ReadFloat(f)
 	Local r1499_z# = ReadFloat(f)
 	
-	I_966\HasInsomnia = ReadByte(f)
+	I_966\HasInsomnia = ReadFloat(f)
 	I_966\InsomniaEffectTimer = ReadFloat(f)
 	
 	I_1048A\EarGrowTimer = ReadFloat(f)
@@ -1607,7 +1635,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError(GetLocalString("save", "corrupted_1"))
+	If ReadInt(f) <> 113 Then RuntimeError2(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1692,16 +1720,8 @@ Function LoadGameQuick%(File$)
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)
 		n\HP = ReadInt(f)
-		n\Model = ReadString(f)
-		n\ModelScaleX = ReadFloat(f)
-		n\ModelScaleY = ReadFloat(f)
-		n\ModelScaleZ = ReadFloat(f)
-		If n\Model <> ""
-			FreeEntity(n\OBJ) : n\OBJ = 0
-			n\OBJ = LoadAnimMesh_Strict(n\Model)
-			ScaleEntity(n\OBJ, n\ModelScaleX, n\ModelScaleY, n\ModelScaleZ)
-			If n\HasAnim Then SetAnimTime(n\OBJ, n\Frame)
-		EndIf
+		n\ModelScale = ReadFloat(f)
+		If n\ModelScale > 0.0 Then ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 		n\TextureID = ReadByte(f)
 		If n\TextureID > 0 Then ChangeNPCTextureID(n, n\TextureID - 1)
 		n\HideFromNVG = ReadByte(f)
@@ -1722,7 +1742,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError(GetLocalString("save", "corrupted_2"))
+	If ReadInt(f) <> 632 Then RuntimeError2(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -1841,7 +1861,10 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError(GetLocalString("save", "corrupted_3"))
+	If ReadInt(f) <> 954 Then RuntimeError2(GetLocalString("save", "corrupted_3"))
+	
+	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
 	
 	Temp = ReadInt(f)
 	
@@ -1868,6 +1891,8 @@ Function LoadGameQuick%(File$)
 		Local IsElevDoor% = ReadByte(f)
 		Local MTFClose% = ReadByte(f)
 		
+		Local IsAffected% = ReadByte(f)
+		
 		For d.Doors = Each Doors
 			If EntityX(d\FrameOBJ, True) = x And EntityY(d\FrameOBJ, True) = y And EntityZ(d\FrameOBJ, True) = z
 				d\Open = Open
@@ -1878,16 +1903,48 @@ Function LoadGameQuick%(File$)
 				d\TimerState = TimerState
 				d\IsElevatorDoor = IsElevDoor
 				d\MTFClose = MTFClose
+				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
+				If IsAffected
+					Select d\DoorType
+						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+							;[Block]
+							EntityTexture(d\OBJ, TexDefault)
+							EntityTexture(d\FrameOBJ, TexDefault)
+							;[End Block]
+						Case HEAVY_DOOR
+							;[Block]
+							EntityTexture(d\OBJ, TexHeavy)
+							EntityTexture(d\FrameOBJ, TexHeavy)
+							;[End Block]
+					End Select
+				EndIf
+				
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+				If d\OBJ2 <> 0
+					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+					If IsAffected
+						Select d\DoorType
+							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+								;[Block]
+								EntityTexture(d\OBJ2, TexDefault)
+								;[End Block]
+							Case HEAVY_DOOR
+								;[Block]
+								EntityTexture(d\OBJ2, TexHeavy)
+								;[End Block]
+						End Select
+					EndIf
+				EndIf
 				Exit
 			EndIf
 		Next
 	Next
+	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
+	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
-	If ReadInt(f) <> 1845 Then RuntimeError(GetLocalString("save", "corrupted_4"))
+	If ReadInt(f) <> 1845 Then RuntimeError2(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -1964,7 +2021,7 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next
 		e\EventStr = ReadString(f)
-		FindForestEvent(e)
+		FindEventVariable(e)
 	Next
 	For e.Events = Each Events
 		Select e\EventID
@@ -2083,7 +2140,7 @@ Function LoadGameQuick%(File$)
 		For itt.ItemTemplates = Each ItemTemplates
 			If itt\ID = ID And itt\Name = IttName; And itt\DisplayName = DisplayName ; ~ Not sure about that
 				If itt\IsAnim
-					SetAnimTime(it\Model, ReadFloat(f))
+					SetAnimTime(it\OBJ, ReadFloat(f))
 					Exit
 				EndIf
 			EndIf
@@ -2160,7 +2217,7 @@ Function LoadGameQuick%(File$)
 	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[2])
 	
 	If wi\NightVision > 0
-		me\CameraFogDist = 17.0
+		me\CameraFogDist = 15.0
 	ElseIf wi\SCRAMBLE > 0
 		me\CameraFogDist = 9.0
 	Else
@@ -2316,7 +2373,7 @@ Function LoadSavedGames%()
 	Next
 	SavedGamesAmount = 0
 	
-	If FileType(SavePath) = 1 Then RuntimeError(Format(GetLocalString("save", "cantcreatedir"), SavePath))
+	If FileType(SavePath) = 1 Then RuntimeError2(Format(GetLocalString("save", "cantcreatedir"), SavePath))
 	If FileType(SavePath) = 0 Then CreateDir(SavePath)
 	
 	Local SaveDir% = ReadDir(SavePath)
@@ -2394,7 +2451,7 @@ Function LoadCustomMaps%()
 	Next
 	CustomMapsAmount = 0
 	
-	If FileType(CustomMapsPath) = 1 Then RuntimeError(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
+	If FileType(CustomMapsPath) = 1 Then RuntimeError2(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
 	If FileType(CustomMapsPath) = 0 Then CreateDir(CustomMapsPath)
 	
 	Local MapDir% = ReadDir(CustomMapsPath)
@@ -2499,13 +2556,13 @@ Function LoadMap%(File$)
 					If Rnd(0.0, 1.0) <= Prob
 						e.Events = New Events
 						e\EventID = ID
-						FindForestEvent(e)
+						FindEventVariable(e)
 						e\room = r
 					EndIf
 				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
 					e\EventID = ID
-					FindForestEvent(e)
+					FindEventVariable(e)
 					e\room = r
 				EndIf
 			EndIf
@@ -2671,13 +2728,13 @@ Function LoadMap%(File$)
 					If Rnd(0.0, 1.0) <= Prob
 						e.Events = New Events
 						e\EventID = ID
-						FindForestEvent(e)
+						FindEventVariable(e)
 						e\room = r
 					EndIf
 				ElseIf Prob = 0.0 And Name <> ""
 					e.Events = New Events
 					e\EventID = ID
-					FindForestEvent(e)
+					FindEventVariable(e)
 					e\room = r
 				EndIf
 			EndIf

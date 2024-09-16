@@ -27,6 +27,7 @@ If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("A
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"
+Include "Source Code\Strict_Functions_Core.bb"
 
 LoadOptionsINI()
 
