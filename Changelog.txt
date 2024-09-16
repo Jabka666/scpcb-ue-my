@@ -28,6 +28,7 @@ v1.3.1
 - Reduced clearance level for «room_gw» control room. Requirement changed to Level 2 Key Card.
 - Reduced clearance level for «room2_medibay». Requirement changed to Level 2 Key Card.
 - Improved SCP-008 lid model.
+- Improved wooden boxes containing SCPs to allow grabbing them easier.
 
 [Items]
 - Added icons for Compact First Aid Kit, Small Jade Ring and Empty Cup.
