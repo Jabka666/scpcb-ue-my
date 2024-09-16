@@ -1,10 +1,9 @@
-; IniControler - A part of BlitzToolBox
-; Write & Read ini file. Custom branch for scpcb-ue.
-; v1.06 2022.11.12
-; v1.061 2023.9.9
-; https://github.com/ZiYueCommentary/BlitzToolbox/tree/ziyue
+; IniController - A part of BlitzToolBox
+; Reading & writing INI files.
+; v1.08 2024.9.16
+; https://github.com/ZiYueCommentary/BlitzToolbox
 
-.lib "IniControler.dll"
+.lib "IniController.dll"
 
 IniClearBuffer(path$):"_IniClearBuffer@4"
 IniClearAllBuffer():"_IniClearAllBuffer@0"
@@ -20,10 +19,7 @@ IniRemoveBufferKey(path$, section$, key$):"_IniRemoveBufferKey@12"
 IniRemoveBufferSection(path$, section$):"_IniRemoveBufferSection@8"
 IniSetExportBufferValue(buffer%, section$, key$, value$):"_IniSetExportBufferValue@16"
 
-; Custom for scpcb-ue.
-FindSCP294Drink_$(file$, drink$):"_FindSCP294Drink@8"
-
-; they have default parameters so you need include "IniControler.bb"
+; they have default parameters so you need include "IniController.bb"
 IniWriteBuffer_(path$, clearPrevious%):"_IniWriteBuffer@8"
 IniGetString_$(path$, section$, key$, defaultValue$, allowBuffer%):"_IniGetString@20"
 IniGetInt_%(path$, section$, key$, defaultValue%, allowBuffer%):"_IniGetInt@20"

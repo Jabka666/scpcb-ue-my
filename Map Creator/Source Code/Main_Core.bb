@@ -31,7 +31,7 @@ IniWriteBuffer("..\" + RoomsFile)
 IniWriteBuffer("..\" + EventsFile)
 
 Function SetLanguage%()
-	If Language = "en" Then
+	If Language = "en"
 		LanguagePath = ""
 	Else
 		LanguagePath = "Localization\" + Language + "\"
@@ -243,7 +243,7 @@ CreateMenu(GetLocalString("mc", "menu.opt.editcam"), 17, Options)
 
 LoadOptionsINI()
 
-If (Not opt\Events) Then
+If (Not opt\Events)
 	UncheckMenu(Event_Default)
 Else
 	CheckMenu(Event_Default)
@@ -368,7 +368,7 @@ Repeat
 	If Len(TextAreaText(Descr_Text)) > 200 Then SetGadgetText(Descr_Text, Left(TextAreaText(Descr_Text), 200))
 	SetGadgetText(Descr_Label, Format(GetLocalString("mc", "mapset.desc.label"), Len(TextAreaText(Descr_Text))))
 	
-	If FileType("CONFIG_TO2D.SI") = 1 Then
+	If FileType("CONFIG_TO2D.SI") = 1
 		Local f% = ReadFile("CONFIG_TO2D.SI")
 		Local ev.Event
 		
@@ -382,14 +382,14 @@ Repeat
 		ShowGadget(ListBox)
 		ClearGadgetItems(ComboBox)
 		
-		If CurrMapGrid = 0 Then
+		If CurrMapGrid = 0
 			Local HasEvent% = False
 			Local CurrEventDescr$ = ""
 			
 			For rt.RoomTemplates = Each RoomTemplates
 				If rt = Map(Grid_SelectedX, Grid_SelectedY)
 					For i = 0 To 5
-						If rt\Events[i] <> "" Then
+						If rt\Events[i] <> ""
 							InsertGadgetItem(ComboBox, 0, None)
 							HasEvent = True
 							Exit
@@ -403,7 +403,7 @@ Repeat
 				EndIf
 			Next 
 			
-			If (Not HasEvent) Then
+			If (Not HasEvent)
 				DisableGadget(ComboBox)
 				SetGadgetText(Event_Desc, "")
 				SetGadgetText(Event_Prob_Label, "")
@@ -436,7 +436,7 @@ Repeat
 			EndIf
 			
 			c = CountGadgetItems(ComboBox)
-			If c >= 0 Then
+			If c >= 0
 				For e = 0 To c - 1
 					If GadgetItemText(ComboBox, e) = MapEvent(Grid_SelectedX, Grid_SelectedY) Then SelectGadgetItem(ComboBox, e)
 				Next
@@ -475,17 +475,17 @@ Repeat
 		DeleteFile("CONFIG_TO2D.SI")
 	EndIf
 	
-	If ShowGrid Then
+	If ShowGrid
 		Cls()
 		
 		Local Width# = GadgetWidth(Map_2D)
 		Local Height# = GadgetHeight(Map_2D)
 		
 		; ~ Facility grid
-		If CurrMapGrid = 0 Then
+		If CurrMapGrid = 0
 			For x = 0 To MapGridSize
 				For y = 0 To MapGridSize
-					If y < ZoneTransValue2 Then
+					If y < ZoneTransValue2
 						Color(255, 255, 125)
 					ElseIf y = ZoneTransValue2
 						Color(255, 200, 125)
@@ -512,8 +512,8 @@ Repeat
 								y2 = Float(Height) / Float(MapGridSize + 1)
 								DrawImage(PlusIcon, (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 							EndIf
-							If MouseHit1 Then
-								If Grid_SelectedX <> x Or Grid_SelectedY <> y Then
+							If MouseHit1
+								If Grid_SelectedX <> x Or Grid_SelectedY <> y
 									Local Item% = SelectedGadgetItem(ListBox)
 									
 									If Map(x, y) <> Null
@@ -530,9 +530,9 @@ Repeat
 										HasEvent = False
 										CurrEventDescr = ""
 										For rt.RoomTemplates = Each RoomTemplates
-											If rt = Map(x, y) Then
+											If rt = Map(x, y)
 												For i = 0 To 5
-													If rt\Events[i] <> "" Then
+													If rt\Events[i] <> ""
 														InsertGadgetItem(ComboBox, 0, None)
 														HasEvent = True
 														Exit
@@ -546,7 +546,7 @@ Repeat
 											EndIf
 										Next 
 										
-										If (Not HasEvent) Then
+										If (Not HasEvent)
 											DisableGadget(ComboBox)
 											SetGadgetText(Event_Desc, "")
 											SetGadgetText(Event_Prob_Label, "")
@@ -554,7 +554,7 @@ Repeat
 											DisableGadget(Event_Prob)
 										Else
 											EnableGadget(ComboBox)
-											If MapEvent(x, y) <> "" And MapEvent(x, y) <> None Then
+											If MapEvent(x, y) <> "" And MapEvent(x, y) <> None
 												For ev.Event = Each Event
 													If ev\Name = MapEvent(x, y)
 														SetGadgetText(Event_Desc, GetLocalString("mc", "event.desc") + Chr(13) + ev\Description)
@@ -564,7 +564,7 @@ Repeat
 											Else
 												SetGadgetText(Event_Desc, "")
 											EndIf
-											If MapEvent(x, y) <> "" And MapEvent(x, y) <> None Then
+											If MapEvent(x, y) <> "" And MapEvent(x, y) <> None
 												SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), 100))
 												SetSliderValue(Event_Prob, 99)
 												EnableGadget(Event_Prob)
@@ -576,14 +576,14 @@ Repeat
 										EndIf
 										
 										c = CountGadgetItems(ComboBox)
-										If c >= 0 Then
+										If c >= 0
 											For e = 0 To c - 1
 												If GadgetItemText(ComboBox, e) = MapEvent(x, y) Then SelectGadgetItem(ComboBox, e)
 											Next
 										EndIf
 									EndIf
-									If Item >= 0 Then
-										If Map(x, y) = Null Then
+									If Item >= 0
+										If Map(x, y) = Null
 											Local Room_Name$ = GadgetItemText(ListBox, Item)
 											
 											For rt.RoomTemplates = Each RoomTemplates
@@ -596,10 +596,10 @@ Repeat
 											
 											Local Item2% = SelectedGadgetItem(ComboBox)
 											
-											If Item2 >= 0 Then
+											If Item2 >= 0
 												Local Event_Name$ = GadgetItemText(ComboBox, Item2)
 												
-												If Event_Name <> "" And Event_Name <> None Then
+												If Event_Name <> "" And Event_Name <> None
 													MapEvent(x, y) = Event_Name
 													MapEventProb(x, y) = Float((SliderValue(Event_Prob) + 1) / 100.0)
 												EndIf
@@ -608,7 +608,7 @@ Repeat
 									EndIf
 								EndIf
 							EndIf
-							If MouseDown2 Then
+							If MouseDown2
 								Grid_SelectedX = -1
 								Grid_SelectedY = -1
 								ChangeGridGadget = True
@@ -619,14 +619,14 @@ Repeat
 								SetGadgetText(Event_Desc, "")
 								DisableGadget(ComboBox)
 								ClearGadgetItems(ComboBox)
-								If Map(x, y) <> Null Then
+								If Map(x, y) <> Null
 									Map(x, y) = Null
 									MapAngle(x, y) = 0
 									MapEvent(x, y) = ""
 									MapEventProb(x, y) = 0.0
 								EndIf
 							EndIf
-							If MouseHit3 Then
+							If MouseHit3
 								Grid_SelectedX = -1
 								Grid_SelectedY = -1
 								ChangeGridGadget = True
@@ -641,12 +641,12 @@ Repeat
 						EndIf
 					EndIf
 						
-					If Grid_SelectedX = x And Grid_SelectedY = y Then
+					If Grid_SelectedX = x And Grid_SelectedY = y
 						Color(150, 150, 150)
 						Rect(Float(Width) / Float(MapGridSize + 1) * x, Float(Height) / Float(MapGridSize + 1) * y, (Float(Width) / Float(MapGridSize + 1)), (Float(Height) / Float(MapGridSize + 1)), True)
 					EndIf
 					
-					If Map(x, y) = Null Then
+					If Map(x, y) = Null
 						Color(90, 90, 90)
 						Rect(Float(Width) / Float(MapGridSize + 1) * x + 1, Float(Height) / Float(MapGridSize + 1) * y + 1, (Float(Width) / Float(MapGridSize + 1)) - 1, (Float(Height) / Float(MapGridSize + 1)) - 1, False)
 					Else
@@ -654,8 +654,8 @@ Repeat
 						y2 = Float(Height) / Float(MapGridSize + 1)
 						DrawImage(MapIcons(Map(x, y)\Shape, Floor(MapAngle(x, y) / 90)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						
-						If Grid_SelectedX = x And Grid_SelectedY = y Then
-							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY Then
+						If Grid_SelectedX = x And Grid_SelectedY = y
+							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY
 								ChangeGridGadget = True
 								If MapEvent(x, y) <> "" And MapEvent(x, y) <> None
 									GridGadgetText = Format(GetLocalString("mc", "name"), Map(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(x, y)) + Chr(13) + "Event: " + MapEvent(x, y) + Chr(13) + Format(GetLocalString("mc", "event.chance"), Int(MapEventProb(x, y) * 100))
@@ -670,12 +670,12 @@ Repeat
 				Next
 			Next
 			
-			If MouseDown1 Then
-				If Grid_SelectedX > -1 And Grid_SelectedY > -1 Then
+			If MouseDown1
+				If Grid_SelectedX > -1 And Grid_SelectedY > -1
 					If MouseX() > (GadgetX(Map_2D) + GadgetX(WinHandle)) And MouseX() < ((Width) + GadgetX(Map_2D) + GadgetX(WinHandle))
 						Offset = 45
 						If MouseY() > (GadgetY(Map_2D) + GadgetY(WinHandle) + Offset) And MouseY() < ((Height) + GadgetY(Map_2D) + GadgetY(WinHandle) + Offset)
-							If Map(Grid_SelectedX, Grid_SelectedY)\Name <> "cont1_173" And Map(Grid_SelectedX, Grid_SelectedY)\Name <> "room2_checkpoint_lcz_hcz" And Map(Grid_SelectedX, Grid_SelectedY)\Name <> "room2_checkpoint_hcz_ez" Then
+							If Map(Grid_SelectedX, Grid_SelectedY)\Name <> "cont1_173" And Map(Grid_SelectedX, Grid_SelectedY)\Name <> "room2_checkpoint_lcz_hcz" And Map(Grid_SelectedX, Grid_SelectedY)\Name <> "room2_checkpoint_hcz_ez"
 								Local PrevAngle% = MapAngle(Grid_SelectedX, Grid_SelectedY)
 								
 								; ~ Left
@@ -700,9 +700,9 @@ Repeat
 								Local Height2% = Float(Height) / Float(MapGridSize + 1) / 2.0
 								
 								DrawImage(Arrows[Floor(MapAngle(Grid_SelectedX, Grid_SelectedY) / 90)], Float(Width) / Float(MapGridSize + 1) * Grid_SelectedX + Width2, Float(Height) / Float(MapGridSize + 1) * Grid_SelectedY + Height2)
-								If PrevAngle <> MapAngle(Grid_SelectedX, Grid_SelectedY) Then
+								If PrevAngle <> MapAngle(Grid_SelectedX, Grid_SelectedY)
 									ChangeGridGadget = True
-									If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> None Then
+									If MapEvent(Grid_SelectedX, Grid_SelectedY) <> "" And MapEvent(Grid_SelectedX, Grid_SelectedY) <> None
 										GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY)) + Chr(13) + Format(GetLocalString("mc", "room.event"), MapEvent(Grid_SelectedX, Grid_SelectedY)) + Chr(13) + Format(GetLocalString("mc", "event.chance"), Int(MapEventProb(Grid_SelectedX, Grid_SelectedY) * 100))
 									Else
 										GridGadgetText = Format(GetLocalString("mc", "name"), Map(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MapAngle(Grid_SelectedX, Grid_SelectedY))
@@ -717,13 +717,13 @@ Repeat
 			For x = 0 To ForestGridSize
 				For y = 0 To ForestGridSize
 					Color(125, 255, 255)
-					If x = ForestGridSize Or y = ForestGridSize Then
+					If x = ForestGridSize Or y = ForestGridSize
 						Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x, Float(Height - 1) / Float(ForestGridSize + 1) * y, (Float(Width - 1) / Float(ForestGridSize + 1)) + 1,(Float(Height - 1) / Float(ForestGridSize + 1)) + 1, True)
 					Else
 						Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x, Float(Height - 1) / Float(ForestGridSize + 1) * y, (Float(Width - 1) / Float(ForestGridSize + 1)), (Float(Height - 1) / Float(ForestGridSize + 1)), True)
 					EndIf
 					
-					If ForestPlace(x, y) = Null Then
+					If ForestPlace(x, y) = Null
 						Color(90, 90, 90)
 						Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x + 1, Float(Height - 1) / Float(ForestGridSize + 1) * y + 1, (Float(Width - 1) / Float(ForestGridSize + 1)) - 1, (Float(Height - 1) / Float(ForestGridSize + 1)) - 1, False)
 					EndIf
@@ -733,7 +733,7 @@ Repeat
 			For x = 0 To ForestGridSize
 				For y = 0 To ForestGridSize
 					Color(255, 255, 255)
-					If x = ForestGridSize Or y = ForestGridSize Then
+					If x = ForestGridSize Or y = ForestGridSize
 						Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x, Float(Height - 1) / Float(ForestGridSize + 1) * y, (Float(Width - 1) / Float(ForestGridSize + 1)) + 1, (Float(Height - 1) / Float(ForestGridSize + 1)) + 1, True)
 					Else
 						Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x, Float(Height - 1) / Float(ForestGridSize + 1) * y, (Float(Width - 1) / Float(ForestGridSize + 1)), (Float(Height - 1) / Float(ForestGridSize + 1)), True)
@@ -746,13 +746,13 @@ Repeat
 						If (MouseY() - GadgetY(Map_2D)) > (Float(Height - 1) / Float(ForestGridSize + 1) * y + GadgetY(WinHandle) + Offset) And (MouseY() - GadgetY(Map_2D)) < ((Float(Height - 1) / Float(ForestGridSize + 1) * y) + (Float(Height - 1) / Float(ForestGridSize + 1)) + GadgetY(WinHandle) + Offset)
 							Color(200, 200, 200)
 							Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x, Float(Height - 1) / Float(ForestGridSize + 1) * y, (Float(Width - 1) / Float(ForestGridSizee + 1)), (Float(Height - 1) / Float(ForestGridSize + 1)), True)
-							If ForestPlace(x, y) = Null And SelectedGadgetItem(ListBox) > -1 Then
+							If ForestPlace(x, y) = Null And SelectedGadgetItem(ListBox) > -1
 								x2 = Float(Width) / Float(ForestGridSize + 1)
 								y2 = Float(Height) / Float(ForestGridSize + 1)
 								DrawImage(PlusIcon, (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 							EndIf
-							If MouseHit1 Then
-								If Grid_SelectedX <> x Or Grid_SelectedY <> y Then
+							If MouseHit1
+								If Grid_SelectedX <> x Or Grid_SelectedY <> y
 									Item = SelectedGadgetItem(ListBox)
 									If ForestPlace(x, y) <> Null
 										Grid_SelectedX = x
@@ -779,8 +779,8 @@ Repeat
 										DisableGadget(Event_Prob)
 									EndIf
 									
-									If Item >= 0 Then
-										If ForestPlace(x, y) = Null Then
+									If Item >= 0
+										If ForestPlace(x, y) = Null
 											Room_Name$ = GadgetItemText(ListBox, Item)
 											For rt.RoomTemplates = Each RoomTemplates
 												If rt\Name = Room_Name
@@ -792,7 +792,7 @@ Repeat
 									EndIf
 								EndIf
 							EndIf
-							If MouseDown2 Then
+							If MouseDown2
 								Grid_SelectedX = -1
 								Grid_SelectedY = -1
 								ChangeGridGadget = True
@@ -803,12 +803,12 @@ Repeat
 								SetGadgetText(Event_Desc, "")
 								DisableGadget(ComboBox)
 								ClearGadgetItems(ComboBox)
-								If ForestPlace(x, y) <> Null Then
+								If ForestPlace(x, y) <> Null
 									ForestPlace(x, y) = Null
 									ForestPlaceAngle(x, y) = 0
 								EndIf
 							EndIf
-							If MouseHit3 Then
+							If MouseHit3
 								Grid_SelectedX = -1
 								Grid_SelectedY = -1
 								ChangeGridGadget = True
@@ -823,25 +823,25 @@ Repeat
 						EndIf
 					EndIf
 					
-					If Grid_SelectedX = x And Grid_SelectedY = y Then
+					If Grid_SelectedX = x And Grid_SelectedY = y
 						Color(150, 150, 150)
 						Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x, Float(Height - 1) / Float(ForestGridSize + 1) * y, (Float(Width - 1) / Float(ForestGridSize + 1)), (Float(Height - 1) / Float(ForestGridSize + 1)), True)
 					EndIf
 					
-					If ForestPlace(x, y) = Null Then
+					If ForestPlace(x, y) = Null
 						Color(90, 90, 90)
 						Rect(Float(Width - 1) / Float(ForestGridSize + 1) * x + 1, Float(Height - 1) / Float(ForestGridSize + 1) * y + 1, (Float(Width - 1) / Float(ForestGridSize + 1)) - 1, (Float(Height - 1) / Float(ForestGridSize + 1)) - 1, False)
 					Else
 						x2 = Float(Width - 1) / Float(ForestGridSize + 1)
 						y2 = Float(Height - 1) / Float(ForestGridSize + 1)
-						If ForestPlace(x, y)\Name = "SCP-860-1 door" Then
+						If ForestPlace(x, y)\Name = "SCP-860-1 door"
 							DrawImage(SpecialIcons(1, Floor(ForestPlaceAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						Else
 							DrawImage(ForestIcons(ForestPlace(x, y)\Shape, Floor(ForestPlaceAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						EndIf
 						
-						If Grid_SelectedX = x And Grid_SelectedY = y Then
-							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY Then
+						If Grid_SelectedX = x And Grid_SelectedY = y
+							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY
 								ChangeGridGadget = True
 								GridGadgetText = Format(GetLocalString("mc", "name"), ForestPlace(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), ForestPlaceAngle(x, y))
 							EndIf
@@ -849,8 +849,8 @@ Repeat
 					EndIf
 				Next
 			Next
-			If MouseDown1 Then
-				If Grid_SelectedX > -1 And Grid_SelectedY > -1 Then
+			If MouseDown1
+				If Grid_SelectedX > -1 And Grid_SelectedY > -1
 					If MouseX() > (GadgetX(Map_2D) + GadgetX(WinHandle)) And MouseX() < ((Width) + GadgetX(Map_2D) + GadgetX(WinHandle))
 						Offset = 45
 						If MouseY() > (GadgetY(Map_2D) + GadgetY(WinHandle) + Offset) And MouseY() < ((Height) + GadgetY(Map_2D) + GadgetY(WinHandle) + Offset)
@@ -896,13 +896,13 @@ Repeat
 						If (MouseY() - GadgetY(Map_2D)) > (Float(Height) / Float(MT_GridSize + 1) * y + GadgetY(WinHandle) + Offset) And (MouseY() - GadgetY(Map_2D)) < ((Float(Height) / Float(MT_GridSize + 1) * y) + (Float(Height) / Float(MT_GridSize + 1)) + GadgetY(WinHandle) + Offset)
 							Color(200, 200, 200)
 							Rect(Float(Width) / Float(MT_GridSize + 1) * x, Float(Height) / Float(MT_GridSize + 1) * y, (Float(Width) / Float(MT_GridSize + 1)), (Float(Height) / Float(MT_GridSize + 1)), True)
-							If MTRoom(x, y) = Null And SelectedGadgetItem(ListBox) > -1 Then
+							If MTRoom(x, y) = Null And SelectedGadgetItem(ListBox) > -1
 								x2 = Float(Width) / Float(MT_GridSize + 1)
 								y2 = Float(Height) / Float(MT_GridSize + 1)
 								DrawImage(PlusIcon, (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 							EndIf
-							If MouseHit1 Then
-								If Grid_SelectedX <> x Or Grid_SelectedY <> y Then
+							If MouseHit1
+								If Grid_SelectedX <> x Or Grid_SelectedY <> y
 									Item = SelectedGadgetItem(ListBox)
 									If MTRoom(x, y) <> Null
 										Grid_SelectedX = x
@@ -928,7 +928,7 @@ Repeat
 										SetSliderValue(Event_Prob, 99)
 										DisableGadget(Event_Prob)
 									EndIf
-									If Item >= 0 Then
+									If Item >= 0
 										If MTRoom(x, y) = Null
 											Room_Name = GadgetItemText(ListBox, Item)
 											For rt.RoomTemplates = Each RoomTemplates
@@ -941,7 +941,7 @@ Repeat
 									EndIf
 								EndIf
 							EndIf
-							If MouseDown2 Then
+							If MouseDown2
 								Grid_SelectedX = -1
 								Grid_SelectedY = -1
 								ChangeGridGadget = True
@@ -952,12 +952,12 @@ Repeat
 								SetGadgetText(Event_Desc, "")
 								DisableGadget(ComboBox)
 								ClearGadgetItems(ComboBox)
-								If MTRoom(x, y) <> Null Then
+								If MTRoom(x, y) <> Null
 									MTRoom(x, y) = Null
 									MTRoomAngle(x, y) = 0
 								EndIf
 							EndIf
-							If MouseHit3 Then
+							If MouseHit3
 								Grid_SelectedX = -1
 								Grid_SelectedY = -1
 								ChangeGridGadget = True
@@ -972,12 +972,12 @@ Repeat
 						EndIf
 					EndIf
 					
-					If Grid_SelectedX = x And Grid_SelectedY = y Then
+					If Grid_SelectedX = x And Grid_SelectedY = y
 						Color(150, 150, 150)
 						Rect(Float(Width) / Float(MT_GridSize + 1) * x, Float(Height) / Float(MT_GridSize + 1) * y, (Float(Width) / Float(MT_GridSize + 1)), (Float(Height) / Float(MT_GridSize + 1)), True)
 					EndIf
 					
-					If MTRoom(x, y) = Null Then
+					If MTRoom(x, y) = Null
 						Color(90, 90, 90)
 						Rect(Float(Width) / Float(MT_GridSize + 1) * x + 1, Float(Height) / Float(MT_GridSize + 1) * y + 1, (Float(Width) / Float(MT_GridSize + 1)) - 1, (Float(Height) / Float(MT_GridSize + 1)) - 1, False)
 					Else
@@ -989,8 +989,8 @@ Repeat
 							DrawImage(MapIcons(MTRoom(x, y)\Shape, Floor(MTRoomAngle(x, y) / 90.0)), (x2 * x) + (x2 / 2.0) + 0.5, (y2 * y) + (y2 / 2.0) + 0.5)
 						EndIf
 						
-						If Grid_SelectedX = x And Grid_SelectedY = y Then
-							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY Then
+						If Grid_SelectedX = x And Grid_SelectedY = y
+							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY
 								ChangeGridGadget = True
 								GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomAngle(x, y))
 							EndIf
@@ -998,8 +998,8 @@ Repeat
 					EndIf
 				Next
 			Next
-			If MouseDown1 Then
-				If Grid_SelectedX > -1 And Grid_SelectedY > -1 Then
+			If MouseDown1
+				If Grid_SelectedX > -1 And Grid_SelectedY > -1
 					If MouseX() > (GadgetX(Map_2D) + GadgetX(WinHandle)) And MouseX() < ((Width) + GadgetX(Map_2D) + GadgetX(WinHandle))
 						Offset = 45
 						If MouseY()>(GadgetY(Map_2D) + GadgetY(WinHandle) + Offset) And MouseY() < ((Height) + GadgetY(Map_2D) + GadgetY(WinHandle) + Offset)
@@ -1036,11 +1036,11 @@ Repeat
 		FlipCanvas(Map_2D)
 	EndIf
 	
-	If Grid_SelectedX <> -1 And Grid_SelectedY <> -1 Then
+	If Grid_SelectedX <> -1 And Grid_SelectedY <> -1
 		Local PrevEvent% = MapEvent(Grid_SelectedX, Grid_SelectedY)
 		
 		Item2 = SelectedGadgetItem(ComboBox)
-		If Item2 >= 0 Then
+		If Item2 >= 0
 			Event_Name = GadgetItemText(ComboBox, Item2)
 			If Event_Name <> PrevEvent
 				If Event_Name <> "" And Event_Name <> None
@@ -1058,7 +1058,7 @@ Repeat
 		EndIf
 	EndIf
 	
-	If ChangeGridGadget Then
+	If ChangeGridGadget
 		SetGadgetText(Grid_Room_Info, GridGadgetText)
 		ChangeGridGadget = False
 	EndIf
@@ -1069,37 +1069,37 @@ Repeat
 	If ID = $803 And EventSource() = OptionWin Then HideGadget(OptionWin)
 	If ID = $803 And EventSource() = Map_Settings Then HideGadget(Map_Settings)
 	If ID = $803 And EventSource() = AuthorDescr_Settings Then HideGadget(AuthorDescr_Settings)
-	If ID = $1001 Then ; ~ Handle any menu item hit events
+	If ID = $1001 ; ~ Handle any menu item hit events
 		; ~ Extract the EventData as this will contain our unique id for the menu item
 		Local EID% = EventData() 
 		
-	    If EID = 0 Then 
+	    If EID = 0
 			Local Result% = Proceed(GetLocalString("mc", "savemap"), True)
 			
-			If Result = 1 Then
+			If Result = 1
 				SetStatusText(WinHandle, GetLocalString("mc", "status.save"))
 				If FileType(FileName) <> 1 Then FileName = RequestFile(GetLocalString("mc", "openmap"), "cbmap", True, "")
 				If FileName <> "" Then SaveMap(FileName)
 				EraseMap()
 				If (Not ShowGrid) Then SaveMap("CONFIG_MAPINIT.SI", True)
 				FileName = ""
-			ElseIf Result = 0 Then 
+			ElseIf Result = 0
 				SetStatusText(WinHandle, GetLocalString("mc", "status.nosave"))
 				EraseMap()
 				If (Not ShowGrid) Then SaveMap("CONFIG_MAPINIT.SI", True)
 				FileName = ""
-			ElseIf Result = -1 Then
+			ElseIf Result = -1
 				SetStatusText(WinHandle, GetLocalString("mc", "status.cancel"))
 			EndIf
 		EndIf
-		If EID = 1 Then
+		If EID = 1
 			FileName = RequestFile(GetLocalString("mc", "openmap"),"*cbmap2;*cbmap,*cbmap2,*cbmap", False, "") 
 			If FileName <> "" Then LoadMap(FileName)
 		EndIf
-		If EID = 2 Then
+		If EID = 2
 			If FileType(FileName) <> 1 Then FileName = RequestFile(GetLocalString("mc", "save"), "cbmap2,cbmap", True, "")
-			If FileName <> "" Then
-				If Right(FileName, 5) = "cbmap" Then
+			If FileName <> ""
+				If Right(FileName, 5) = "cbmap"
 					Local Value% = Confirm(Format(GetLocalString("mc", "oldfile"), Chr(13), "\n"), 0)
 					
 					If Value = 1 Then SaveMap(FileName, False, 1)
@@ -1108,11 +1108,11 @@ Repeat
 				EndIf
 			EndIf
 		EndIf	
-		If EID = 3 Then
+		If EID = 3
 			.back
 			FileName = RequestFile(GetLocalString("mc", "save"), "cbmap2, cbmap", True, "")
-			If FileName <> "" Then
-				If Right(FileName, 5) = "cbmap" Then
+			If FileName <> ""
+				If Right(FileName, 5) = "cbmap"
 					Value = Confirm(Format(GetLocalString("mc", "oldfile"), Chr(13), "\n"), 0)
 					If Value = 0 Then Goto back
 					SaveMap(FileName, False, 1)
@@ -1122,8 +1122,8 @@ Repeat
 			EndIf
 		EndIf
 		
-		If EID = 6 Then 
-			If StringToBoolean(GetLocalString("global", "localizedmanual")) Then 
+		If EID = 6
+			If StringToBoolean(GetLocalString("global", "localizedmanual"))
 				ExecFile("https://manual.scpcbgame.cn/general/map-creator/" + Lower(Language))
 			Else
 				ExecFile("https://manual.scpcbgame.cn/general/map-creator")
@@ -1131,7 +1131,7 @@ Repeat
 		EndIf
 		If EID = 40 Then Notify(GetLocalString("mc", "about") + Chr(13))
 		If EID = 17 Then ShowGadget(OptionWin)
-		If EID = 15 Then
+		If EID = 15
 			Value = MenuChecked(Event_Default)
 			If Value = 0 Then CheckMenu(Event_Default)
 			If Value = 1 Then UncheckMenu(Event_Default)
@@ -1143,8 +1143,8 @@ Repeat
 		If EID = 10001 Then End()
 	EndIf
 	
-	If ID = $401 Then ; ~ Button action event.  EventData contains the toolbar button hit
-		If EventSource() = Tab Then
+	If ID = $401 ; ~ Button action event. EventData contains the toolbar button hit
+		If EventSource() = Tab
 			Select EventData()
 				Case 0
 					;[Block]
@@ -1186,7 +1186,7 @@ Repeat
 			End Select
 		EndIf
 		
-		If EventSource() = Tab2 Then
+		If EventSource() = Tab2
 			CurrMapGrid = EventData()
 			ClearGadgetItems ListBox
 			For rt.RoomTemplates = Each RoomTemplates
@@ -1203,8 +1203,8 @@ Repeat
 			Grid_SelectedY = -1
 		EndIf
 		
-		If EventSource() = Color_Button Then 
-			If RequestColor(opt\FogR, opt\FogG, opt\FogB) = 1 Then
+		If EventSource() = Color_Button
+			If RequestColor(opt\FogR, opt\FogG, opt\FogB) = 1
 				opt\FogR = RequestedRed()
 				opt\FogG = RequestedGreen()
 				opt\FogB = RequestedBlue()
@@ -1213,8 +1213,8 @@ Repeat
 				SetGadgetText(LabelFogB, "B " + opt\FogB)
 			EndIf	
 		EndIf
-		If EventSource() = Color_Button2 Then
-			If RequestColor(opt\CursorR, opt\CursorG, opt\CursorB) = 1 Then
+		If EventSource() = Color_Button2
+			If RequestColor(opt\CursorR, opt\CursorG, opt\CursorB) = 1
 				opt\CursorR = RequestedRed()
 				opt\CursorG = RequestedGreen()
 				opt\CursorB = RequestedBlue()
@@ -1223,7 +1223,7 @@ Repeat
 				SetGadgetText(LabelCursorB, "B " + opt\CursorB)
 			EndIf
 		EndIf
-		If EventSource() = CancelOpt_Button Then
+		If EventSource() = CancelOpt_Button
 			SetGadgetText(LabelFogR, "R " + opt\FogR)
 			SetGadgetText(LabelFogG, "G " + opt\FogG)
 			SetGadgetText(LabelFogB, "B " + opt\FogB)
@@ -1235,7 +1235,7 @@ Repeat
 			SetButtonState(ShowFPS, opt\ShowFPS)
 			HideGadget(OptionWin)
 		EndIf	
-		If EventSource() = SaveOpt_Button Then
+		If EventSource() = SaveOpt_Button
 			HideGadget(OptionWin)
 			SetStatusText(WinHandle, GetLocalString("mc", "status.saved"))
 			IniWriteString(OptionFileMC, "3-D Scene", "BG Color R", opt\FogR)
@@ -1249,7 +1249,7 @@ Repeat
 			IniWriteString(OptionFileMC, "3-D Scene", "Show FPS", ButtonState(ShowFPS))
 			WriteOptions()
 		EndIf
-		If EventSource() = ResetZoneTrans Then
+		If EventSource() = ResetZoneTrans
 			SetGadgetText(ZoneTrans1, 5)
 			SetGadgetText(ZoneTrans2, 11)
 			ZoneTransValue1 = (MapGridSize) - Int(TextFieldText(ZoneTrans1))
@@ -1257,35 +1257,35 @@ Repeat
 		EndIf
 		If EventSource() = ZoneTrans1 Then SetGadgetText(ZoneTrans1, Int(TextFieldText(ZoneTrans1)))
 		If EventSource() = ZoneTrans2 Then SetGadgetText(ZoneTrans2, Int(TextFieldText(ZoneTrans2)))
-		If EventSource() = ApplyZoneTrans Then
+		If EventSource() = ApplyZoneTrans
 			SetGadgetText(ZoneTrans2, Int(Min(Max(Int(TextFieldText(ZoneTrans2)), Int(TextFieldText(ZoneTrans1)) + 2), MapGridSize - 1)))
 			SetGadgetText(ZoneTrans1, Int(Min(Max(Int(TextFieldText(ZoneTrans1)), 1), Int(TextFieldText(ZoneTrans2)) - 2)))
 			ZoneTransValue1 = MapGridSize - Int(TextFieldText(ZoneTrans1))
 			ZoneTransValue2 = MapGridSize - Int(TextFieldText(ZoneTrans2))
 		EndIf
-		If EventSource() = OK Then ; ~ When "OK" is pressed
+		If EventSource() = OK ; ~ When "OK" is pressed
 			ClearGadgetItems(ListBox)
 			For rt.RoomTemplates = Each RoomTemplates
-				If rt\MapGrid = CurrMapGrid Then
+				If rt\MapGrid = CurrMapGrid
 					If Instr(rt\Name, TextFieldText(TxtBox)) Then AddGadgetItem(ListBox, rt\Name)
 				EndIf
 			Next
 		EndIf
-		If EventSource() = Clean_Txt Then
+		If EventSource() = Clean_Txt
 			SetGadgetText(TxtBox, "")
 			ClearGadgetItems(ListBox)
 			For rt.RoomTemplates = Each RoomTemplates
 				If rt\MapGrid = CurrMapGrid Then AddGadgetItem(ListBox, rt\Name)
 			Next
 		EndIf
-		If EventSource() = ComboBox Then
+		If EventSource() = ComboBox
 			Item = SelectedGadgetItem(ComboBox)
-			If Item > -1 Then
+			If Item > -1
 				Name = GadgetItemText(ComboBox, Item)
 				
 				If Item > 0 Then
 					For ev.Event = Each Event
-						If ev\Name = Name Then
+						If ev\Name = Name
 							SetGadgetText(Event_Desc, GetLocalString("mc", "event.desc") + Chr(13) + ev\Description)
 							Exit
 						EndIf
@@ -1301,7 +1301,7 @@ Repeat
 				EndIf
 			EndIf
 		EndIf
-		If EventSource() = ListBox Then 
+		If EventSource() = ListBox
 			Item = SelectedGadgetItem(ListBox)
             
 			Grid_SelectedX = -1
@@ -1309,7 +1309,7 @@ Repeat
 			ChangeGridGadget = True
 			GridGadgetText = ""
             
-            If Item > -1 Then
+            If Item > -1
 				Name = GadgetItemText(ListBox, Item)
 				
 				ClearGadgetItems(ComboBox)
@@ -1321,7 +1321,7 @@ Repeat
 				For rt.RoomTemplates = Each RoomTemplates
 					If rt\Name = Name
 						For i = 0 To 5
-							If rt\Events[i] <> "" Then
+							If rt\Events[i] <> ""
 								InsertGadgetItem(ComboBox, 0, None)
 								HasEvent = True
 								Exit
@@ -1336,15 +1336,15 @@ Repeat
 					EndIf
 				Next 
 				
-				If CountGadgetItems(ComboBox) > 0 Then
-					If MenuChecked(Event_Default) Then
+				If CountGadgetItems(ComboBox) > 0
+					If MenuChecked(Event_Default)
 						SelectGadgetItem(ComboBox, 1)
 					Else
 						SelectGadgetItem(ComboBox, 0)
 					EndIf 
 				EndIf
 				
-				If (Not HasEvent) Then
+				If (Not HasEvent)
 					DisableGadget(ComboBox)
 					SetGadgetText(Event_Desc, "")
 					SetGadgetText(Event_Prob_Label, "")
@@ -1352,7 +1352,7 @@ Repeat
 					DisableGadget(Event_Prob)
 				Else
 					EnableGadget(ComboBox)
-					If SelectedGadgetItem(ComboBox) <> 0 Then
+					If SelectedGadgetItem(ComboBox) <> 0
 						For ev.Event = Each Event
 							If ev\Name = CurrRT\Events[0]
 								SetGadgetText(Event_Desc, GetLocalString("mc", "event.desc") + Chr(13) + ev\Description)
@@ -1374,9 +1374,9 @@ Repeat
 				GridGadgetText = ""
 			EndIf
 		EndIf
-		If EventSource() = Event_Prob Then
+		If EventSource() = Event_Prob
 			SetGadgetText(Event_Prob_Label, Format(GetLocalString("mc", "event.chance"), (SliderValue(Event_Prob) + 1)))
-			If Grid_SelectedX <> -1 And Grid_SelectedY <> -1 Then
+			If Grid_SelectedX <> -1 And Grid_SelectedY <> -1
 				x = Grid_SelectedX
 				y = Grid_SelectedY
 				MapEventProb(x, y) = Float((SliderValue(Event_Prob) + 1) / 100.0)
@@ -1419,7 +1419,7 @@ Function LoadRoomTemplates%(File$)
 	
 	While (Not Eof(f))
 		TemporaryString = Trim(ReadLine(f))
-		If Left(TemporaryString, 1) = "[" Then
+		If Left(TemporaryString, 1) = "["
 			TemporaryString = Mid(TemporaryString, 2, Len(TemporaryString) - 2)
 			
 			Local AddRoom% = True
@@ -1431,7 +1431,7 @@ Function LoadRoomTemplates%(File$)
 					;[End Block]
 			End Select
 			
-			If AddRoom Then
+			If AddRoom
 				rt.RoomTemplates = CreateRoomTemplate()
 				rt\Name = TemporaryString
 				
@@ -1592,7 +1592,7 @@ Function AssignEventToRoomTemplate%(rt.RoomTemplates, e.Event)
 	Local i%
 	
 	For i = 0 To 5
-		If rt\Events[i] = "" Then
+		If rt\Events[i] = ""
 			rt\Events[i] = e\Name
 			Exit
 		EndIf
@@ -1611,10 +1611,10 @@ Function EraseMap%()
 	GridGadgetText = ""
 	
 	Item = SelectedGadgetItem(ListBox)
-    If Item > -1 Then
+    If Item > -1
     	Name = GadgetItemText(ListBox, Item)
 		For rt.RoomTemplates = Each RoomTemplates
-			If rt\Name = Name Then
+			If rt\Name = Name
 				For i = 0 To 5
 					If rt\Events[i] <> "" Then HasEvent = True
 				Next
@@ -1623,7 +1623,7 @@ Function EraseMap%()
 		Next 
 	EndIf
 	
-	If (Not HasEvent) Then
+	If (Not HasEvent)
 		DisableGadget(ComboBox)
 		SetGadgetText(Event_Desc, "")
 		SetGadgetText(Event_Prob_Label, "")
@@ -1674,7 +1674,7 @@ Function LoadMap%(File$)
 	Local x%, y%
 	Local rt.RoomTemplates
 	
-	If Right(File, 6) = "cbmap2" Then
+	If Right(File, 6) = "cbmap2"
 		MapAuthor = ReadLine(f)
 		MapDescription = ReadLine(f)
 		If MapAuthor = GetLocalString("creator", "unknown") Then MapAuthor = ""
@@ -1697,7 +1697,7 @@ Function LoadMap%(File$)
 			Name = ReadString(f)
 			
 			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name Then
+				If Lower(rt\Name) = Name
 					Map(x, y) = rt
 					Exit
 				EndIf
@@ -1716,7 +1716,7 @@ Function LoadMap%(File$)
 			Name = ReadString(f)
 			
 			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name Then
+				If Lower(rt\Name) = Name
 					ForestPlace(x, y) = rt
 					Exit
 				EndIf
@@ -1730,7 +1730,7 @@ Function LoadMap%(File$)
 			Name = ReadString(f)
 			
 			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name Then
+				If Lower(rt\Name) = Name
 					MTRoom(x, y) = rt
 					Exit
 				EndIf
@@ -1744,7 +1744,7 @@ Function LoadMap%(File$)
 			Name = ReadString(f)
 			
 			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name Then
+				If Lower(rt\Name) = Name
 					Map(x, y) = rt
 					Exit
 				EndIf
@@ -1766,15 +1766,15 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 	Local f% = WriteFile(File)
 	Local Temp%, x%, y%
 	
-	If Old = 0 Then
+	If Old = 0
 		MapAuthor = TextFieldText(Map_Author_Text)
-		If Trim(MapAuthor) = "" Then
+		If Trim(MapAuthor) = ""
 			WriteLine(f, GetLocalString("creator", "unknown"))
 		Else
 			WriteLine(f, MapAuthor)
 		EndIf
 		MapDescription = TextAreaText(Descr_Text)
-		If Trim(MapDescription) = "" Then
+		If Trim(MapDescription) = ""
 			WriteLine(f, GetLocalString("creator", "nodesc"))
 		Else
 			WriteLine(f, MapDescription)
@@ -1816,15 +1816,15 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 				WriteByte(f, y)
 				WriteString(f, Lower(Map(x, y)\Name))
 				WriteByte(f, Floor(MapAngle(x, y) / 90))
-				If MapEvent(x, y) <> None Then
+				If MapEvent(x, y) <> None
 					WriteString(f, MapEvent(x, y))
 				Else
 					WriteString(f, "")
 				EndIf
 				WriteFloat(f, MapEventProb(x, y))
 				
-				If StreamTopRgm Then
-					If Grid_SelectedX = x And Grid_SelectedY = y Then
+				If StreamTopRgm
+					If Grid_SelectedX = x And Grid_SelectedY = y
 						WriteByte(f, 1)
 					Else
 						WriteByte(f, 0)
@@ -1834,17 +1834,17 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 		Next
 	Next
 	
-	If Old = 0 Then
+	If Old = 0
 		For x = 0 To ForestGridSize
 			For y = 0 To ForestGridSize
-				If ForestPlace(x, y) <> Null Then
+				If ForestPlace(x, y) <> Null
 					WriteByte(f, x)
 					WriteByte(f, y)
 					WriteString(f, Lower(ForestPlace(x, y)\Name))
 					WriteByte(f, Floor(ForestPlaceAngle(x, y) / 90.0))
 					
-					If StreamTopRgm Then
-						If Grid_SelectedX = x And Grid_SelectedY = y Then
+					If StreamTopRgm
+						If Grid_SelectedX = x And Grid_SelectedY = y
 							WriteByte(f, 1)
 						Else
 							WriteByte(f, 0)
@@ -1856,14 +1856,14 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 		
 		For x = 0 To MT_GridSize
 			For y = 0 To MT_GridSize
-				If MTRoom(x, y) <> Null Then
+				If MTRoom(x, y) <> Null
 					WriteByte(f, x)
 					WriteByte(f, y)
 					WriteString(f, Lower(MTRoom(x, y)\Name))
 					WriteByte(f, Floor(MTRoomAngle(x, y) / 90.0))
 					
 					If StreamTopRgm Then
-						If Grid_SelectedX = x And Grid_SelectedY = y Then
+						If Grid_SelectedX = x And Grid_SelectedY = y
 							WriteByte(f, 1)
 						Else
 							WriteByte(f, 0)

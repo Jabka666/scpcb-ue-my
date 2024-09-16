@@ -1,4 +1,4 @@
-; ~ IniControler - A part of BlitzToolBox
+; ~ IniController - A part of BlitzToolBox
 ; ~ Write & Read ini file.
 ; ~ v1.06 2022.11.12
 ; ~ https://github.com/ZiYueCommentary/BlitzToolbox
@@ -155,4 +155,4 @@ Function SaveOptionsINI()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#BlitzPlus
+;~C#Blitz3D
