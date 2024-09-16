@@ -2437,13 +2437,11 @@ Function UpdateEvents%()
 							e\EventState = 1.0
 						Else
 							If I_409\Timer = 0.0
-								If I_005\ChanceToSpawn = 2
-									If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.81
-										GiveAchievement("409")
-										If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
-											me\BlurTimer = 1000.0
-											I_409\Timer = 0.001
-										EndIf
+								If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.81
+									GiveAchievement("409")
+									If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
+										me\BlurTimer = 1000.0
+										I_409\Timer = 0.001
 									EndIf
 								EndIf
 								
