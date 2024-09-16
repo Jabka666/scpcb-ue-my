@@ -610,9 +610,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 		EndIf
 	Next
 	
-	Local HiddenMesh%
-	
-	HiddenMesh = CreateMesh()
+	Local HiddenMesh% = CreateMesh()
 	
 	Count = ReadInt(f) ; ~ Invisible collision mesh
 	For i = 1 To Count

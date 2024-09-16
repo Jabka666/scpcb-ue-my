@@ -585,7 +585,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[4] = CreateButton(BUTTON_DEFAULT, r\x - 1224.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 990.0 * RoomScale, 0.0, 180.0, 0.0, r\OBJ, True)
 			
-			r\Objects[5] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null)
+			r\Objects[5] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null, False)
 			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
 			EntityParent(r\Objects[5], r\OBJ)
 			
@@ -1010,7 +1010,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
-			r\Objects[2] = LoadRMesh("GFX\Map\room2_storage_posters.rmesh", Null)
+			r\Objects[2] = LoadRMesh("GFX\Map\room2_storage_posters.rmesh", Null, False)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)
 			EntityParent(r\Objects[2], r\OBJ)
@@ -4129,4 +4129,4 @@ End Function
 
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS
