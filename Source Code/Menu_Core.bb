@@ -29,13 +29,13 @@ Function InitMainMenuAssets%()
 	mma.MainMenuAssets = New MainMenuAssets
 	
 	mma\BackGround = LoadImage_Strict("GFX\Menu\back.png")
-	mma\BackGround = ScaleImage2(mma\BackGround, MenuScale, MenuScale)
+	mma\BackGround = ScaleImageEx(mma\BackGround, MenuScale, MenuScale)
 	
 	mma\SECURE_CONTAIN_PROTECT = LoadImage_Strict("GFX\Menu\SCP_text.png")
-	mma\SECURE_CONTAIN_PROTECT = ScaleImage2(mma\SECURE_CONTAIN_PROTECT, MenuScale, MenuScale)
+	mma\SECURE_CONTAIN_PROTECT = ScaleImageEx(mma\SECURE_CONTAIN_PROTECT, MenuScale, MenuScale)
 	
 	mma\SCP173 = LoadImage_Strict("GFX\Menu\scp_173_back.png")
-	mma\SCP173 = ScaleImage2(mma\SCP173, MenuScale, MenuScale)
+	mma\SCP173 = ScaleImageEx(mma\SCP173, MenuScale, MenuScale)
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
@@ -1825,11 +1825,11 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
 			ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
 			LoadingImage = LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image")))
-			LoadingImage = ScaleImage2(LoadingImage, MenuScale, MenuScale)
+			LoadingImage = ScaleImageEx(LoadingImage, MenuScale, MenuScale)
 			If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
 				If LoadingBack = 0
 					LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
-					LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
+					LoadingBack = ScaleImageEx(LoadingBack, MenuScale, MenuScale)
 					LoadingBackWidth = ImageWidth(LoadingBack) / 2
 					LoadingBackHeight = ImageHeight(LoadingBack) / 2
 				EndIf
@@ -2256,7 +2256,7 @@ Function UpdateMenuPalette%(x%, y%)
 		mp.MenuPalette = New MenuPalette
 		If mp\Img = 0
 			mp\Img = LoadImage_Strict("GFX\Menu\palette.png")
-			mp\Img = ScaleImage2(mp\Img, MenuScale, MenuScale)
+			mp\Img = ScaleImageEx(mp\Img, MenuScale, MenuScale)
 		EndIf
 		mp\x = x
 		mp\y = y

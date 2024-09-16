@@ -663,7 +663,7 @@ Function UpdateNPCs%()
 								
 								Local SoundVol# = Max(Min((Distance(EntityX(n\Collider), n\PrevX, EntityZ(n\Collider), n\PrevZ) * 2.5), 1.0), 0.0)
 								
-								n\SoundCHN = LoopSound2(snd_I\StoneDragSFX, n\SoundCHN, Camera, n\Collider, 10.0, n\State)
+								n\SoundCHN = LoopSoundEx(snd_I\StoneDragSFX, n\SoundCHN, Camera, n\Collider, 10.0, n\State)
 								
 								n\PrevX = EntityX(n\Collider)
 								n\PrevZ = EntityZ(n\Collider)
@@ -685,7 +685,7 @@ Function UpdateNPCs%()
 									n\LastSeen = MilliSecs()
 								EndIf
 								
-								If Dist < 2.25 And Rand(700) = 1 Then PlaySound2(snd_I\SCP173SFX[Rand(0, 2)], Camera, n\OBJ)
+								If Dist < 2.25 And Rand(700) = 1 Then PlaySoundEx(snd_I\SCP173SFX[Rand(0, 2)], Camera, n\OBJ)
 								
 								If Dist < 2.25 And n\LastDist > 2.0 And Temp
 									me\CurrCameraZoom = 40.0
@@ -923,8 +923,8 @@ Function UpdateNPCs%()
 								PlaySound_Strict(snd_I\DecaySFX[0])
 							EndIf
 							
-							If Rand(500) = 1 Then PlaySound2(snd_I\SCP106SFX[Rand(0, 2)], Camera, n\Collider)
-							n\SoundCHN = LoopSound2(snd_I\SCP106SFX[4], n\SoundCHN, Camera, n\Collider, 8.0, 0.8, True)
+							If Rand(500) = 1 Then PlaySoundEx(snd_I\SCP106SFX[Rand(0, 2)], Camera, n\Collider)
+							n\SoundCHN = LoopSoundEx(snd_I\SCP106SFX[4], n\SoundCHN, Camera, n\Collider, 8.0, 0.8, True)
 							
 							If n\State > -10.0
 								ShouldPlay = 66
@@ -1006,7 +1006,7 @@ Function UpdateNPCs%()
 											PrevFrame = n\Frame
 											AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 											
-											If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
+											If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 										Else
 											n\CurrSpeed = 0.0
 										EndIf
@@ -1043,7 +1043,7 @@ Function UpdateNPCs%()
 													
 													PrevFrame = AnimTime(n\OBJ)
 													AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
-													If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySound2(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
+													If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 													
 													If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 												EndIf
@@ -1117,8 +1117,8 @@ Function UpdateNPCs%()
 											PointEntity(n\Collider, me\Collider)
 											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
 											MoveEntity(n\Collider, 0.0, 0.0, -2.0)
-											PlaySound2(snd_I\SCP106SFX[3], Camera, n\Collider, 10.0, 1.0, True)
-											n\SoundCHN2 = PlaySound2(snd_I\SCP106SFX[Rand(6, 8)], Camera, n\Collider)
+											PlaySoundEx(snd_I\SCP106SFX[3], Camera, n\Collider, 10.0, 1.0, True)
+											n\SoundCHN2 = PlaySoundEx(snd_I\SCP106SFX[Rand(6, 8)], Camera, n\Collider)
 											n\PathTimer = 0.0
 											n\Reload = (70.0 * 10.0) / (SelectedDifficulty\OtherFactors + 1.0)
 										EndIf
@@ -1330,7 +1330,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If n\CurrSpeed > 0.001
-								If (PrevFrame < 1383.0 And n\Frame >= 1383.0) Lor (PrevFrame < 1420.0 And n\Frame >= 1420.0) Lor (PrevFrame < 1466.0 And n\Frame >= 1466.0) Then PlaySound2(snd_I\Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+								If (PrevFrame < 1383.0 And n\Frame >= 1383.0) Lor (PrevFrame < 1420.0 And n\Frame >= 1420.0) Lor (PrevFrame < 1466.0 And n\Frame >= 1466.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(10, 12)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 							EndIf
 						EndIf
 						UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 14.0, 1.0, True)
@@ -1512,7 +1512,7 @@ Function UpdateNPCs%()
 														
 														emit.Emitter = SetEmitter(Null, EntityX(n\Path[n\PathLocation]\door\OBJ, True), EntityY(n\Path[n\PathLocation]\door\OBJ, True), EntityZ(n\Path[n\PathLocation]\door\OBJ, True), 16)
 														EntityParent(emit\Owner, n\Path[n\PathLocation]\door\OBJ)
-														PlaySound2(snd_I\OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\FrameOBJ)
+														PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\FrameOBJ)
 													EndIf
 												EndIf
 												If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
@@ -1579,7 +1579,7 @@ Function UpdateNPCs%()
 							If wi\HazmatSuit > 0
 								RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
 								If RemoveHazmatTimer < 200.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
-									n\SoundCHN2 = PlaySound2(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
+									n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
 								ElseIf RemoveHazmatTimer =< 0.0
 									For i = 0 To 2
 										If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
@@ -1606,7 +1606,7 @@ Function UpdateNPCs%()
 								Else
 									Remove714Timer = Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
 									If Remove714Timer < 200.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
-										If I_714\Using = 2 Then n\SoundCHN2 = PlaySound2(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
+										If I_714\Using = 2 Then n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
 									ElseIf Remove714Timer =< 0.0
 										For i = 0 To MaxItemAmount - 1
 											If Inventory(i) <> Null
@@ -1644,7 +1644,7 @@ Function UpdateNPCs%()
 									EndIf
 									PlaySound_Strict(LoadTempSound("SFX\SCP\049\Horror.ogg"))
 									LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(0, 1) + ".ogg", 1)
-									n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
+									n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
 									n\State = 3.0
 								EndIf
 							EndIf
@@ -1662,7 +1662,7 @@ Function UpdateNPCs%()
 					PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 					ResetEntity(n\Collider)
 				Else
-					n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_049_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
+					n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
 					If n\Idle = 0.1
 						If PlayerInReachableRoom()
 							For i = 0 To MaxRoomAdjacents - 1
@@ -1710,7 +1710,7 @@ Function UpdateNPCs%()
 									; ~ Playing a sound after detecting the player
 									If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
 										LoadNPCSound(n, "SFX\SCP\049\Spotted" + Rand(0, 6) + ".ogg", 1)
-										n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
+										n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
 										n\PrevState = 2
 									EndIf
 									n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -1763,7 +1763,7 @@ Function UpdateNPCs%()
 												Else
 													LoadNPCSound(n, "SFX\SCP\049\Searching" + Rand(0, 5) + ".ogg", 1)
 												EndIf
-												n\SoundCHN2 = PlaySound2(n\Sound2, Camera, n\Collider, 10.0, 1.0, True)
+												n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\Collider, 10.0, 1.0, True)
 												n\PrevState = 1
 											EndIf
 											
@@ -1875,7 +1875,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If n\CurrSpeed > 0.005
-									If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySound2(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+									If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 								EndIf
 								
 								UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ, 10.0, 1.0, True)
@@ -1965,7 +1965,7 @@ Function UpdateNPCs%()
 							If PlayerRoom\RoomTemplate\RoomID = r_room2_sl Then ShouldPlay = 19
 							
 							If n\CurrSpeed > 0.005
-								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySound2(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+								If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 							EndIf
 							
 							UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ, 10.0, 1.0, True)
@@ -1992,7 +1992,7 @@ Function UpdateNPCs%()
 					Select n\State
 						Case 0.0 ; ~ Just lies
 							;[Block]
-							n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_049_2_RESTING], n\SoundCHN, Camera, n\Collider, 4.0, 1.0, True)
+							n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_2_RESTING], n\SoundCHN, Camera, n\Collider, 4.0, 1.0, True)
 							If Rand(2000) = 1
 								If EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 4.5) Then n\State = 1.0
 							EndIf
@@ -2000,7 +2000,7 @@ Function UpdateNPCs%()
 						Case 1.0 ; ~ Stands up
 							;[Block]
 							AnimateNPC(n, 1.0, 556.0, 1.0, False)
-							If (PrevFrame < 288.0 And n\Frame >= 288.0) Lor (PrevFrame < 350.0 And n\Frame >= 350.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+							If (PrevFrame < 288.0 And n\Frame >= 288.0) Lor (PrevFrame < 350.0 And n\Frame >= 350.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							If n\Frame >= 555.9 Then n\State = 2.0
 							;[End Block]
 						Case 2.0 ; ~ Player/NPC is visible, tries to kill
@@ -2032,7 +2032,7 @@ Function UpdateNPCs%()
 								n\PathStatus = PATH_STATUS_NO_SEARCH
 								n\PathLocation = 0
 								
-								If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							Else
 								n\Target = Null
 								n\State = 3.0
@@ -2099,7 +2099,7 @@ Function UpdateNPCs%()
 								EndIf
 							Else
 								AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 713.0), 705.0), 794.0, n\CurrSpeed * 38.0)
-								If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							
 							If n\Target = Null
@@ -2167,11 +2167,11 @@ Function UpdateNPCs%()
 													Kill(True)
 												EndIf
 											Else
-												PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
+												PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 											EndIf
 										Else
 											If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.5625
-												PlaySound2(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
+												PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 												If n\Target\HP > 0
 													n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
 												Else
@@ -2180,7 +2180,7 @@ Function UpdateNPCs%()
 													Return
 												EndIf
 											Else
-												PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
+												PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 											EndIf
 										EndIf
 									EndIf
@@ -2197,7 +2197,7 @@ Function UpdateNPCs%()
 					End Select
 					
 					; ~ Loop the breath sound
-					If n\State > 1.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_049_2_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+					If n\State > 1.0 Then n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_2_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 					If n\HP =< 0 Then n\IsDead = True
 				Else
 					AnimateNPC(n, 944.0, 982.0, 0.2, False)
@@ -2260,7 +2260,7 @@ Function UpdateNPCs%()
 											msg\DeathMsg = GetLocalString("death", "guard.gateb")
 										EndIf
 										
-										PlaySound2(snd_I\GunshotSFX[0], Camera, n\Collider, 35.0)
+										PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 35.0)
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
@@ -2301,7 +2301,7 @@ Function UpdateNPCs%()
 						;[Block]
 						AnimateNPC(n, 245.0, 248.0, 0.35)
 						If n\Reload = 0.0
-							PlaySound2(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
+							PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 							Pvt = CreatePivot()
 							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
@@ -2450,7 +2450,7 @@ Function UpdateNPCs%()
 										
 										msg\DeathMsg = ""
 										
-										PlaySound2(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
+										PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 										
 										RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 										PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
@@ -2523,7 +2523,7 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								
-								If (PrevFrame < 43.0 And n\Frame >= 43.0) Lor (PrevFrame < 61.0 And n\Frame >= 61.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+								If (PrevFrame < 43.0 And n\Frame >= 43.0) Lor (PrevFrame < 61.0 And n\Frame >= 61.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 							EndIf
 						Else
 							n\State = 0.0
@@ -2594,7 +2594,7 @@ Function UpdateNPCs%()
 							n\State = 13.0
 						EndIf
 						
-						If (PrevFrame < 43.0 And n\Frame >= 43.0) Lor (PrevFrame < 61.0 And n\Frame >= 61.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+						If (PrevFrame < 43.0 And n\Frame >= 43.0) Lor (PrevFrame < 61.0 And n\Frame >= 61.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 						;[End Block]
 					Case 15.0 ; ~ Inside vehicle (idle)
 						;[Block]
@@ -2604,7 +2604,7 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 623.0, 642.0, 0.3)
 							
 							If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-							n\SoundCHN = LoopSound2(snd_I\VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 10.0, 1.0)
+							n\SoundCHN = LoopSoundEx(snd_I\VehicleSFX[0], n\SoundCHN, Camera, n\OBJ2, 10.0, 1.0)
 							
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 						Else
@@ -2619,10 +2619,10 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 623.0, 642.0, 0.3)
 							
 							If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-							n\SoundCHN2 = LoopSound2(snd_I\VehicleSFX[1], n\SoundCHN2, Camera, n\OBJ2, 12.0, 1.0)
+							n\SoundCHN2 = LoopSoundEx(snd_I\VehicleSFX[1], n\SoundCHN2, Camera, n\OBJ2, 12.0, 1.0)
 							
 							n\CurrSpeed = CurveValue(n\Speed * 0.9, n\CurrSpeed, 20.0)
-							Animate2(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
+							AnimateEx(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
 							
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 						Else
@@ -2640,9 +2640,9 @@ Function UpdateNPCs%()
 				End Select
 				
 				If n\CurrSpeed > 0.01
-					If (PrevFrame < 5.0 And n\Frame >= 5.0) Lor (PrevFrame < 23.0 And n\Frame >= 23.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+					If (PrevFrame < 5.0 And n\Frame >= 5.0) Lor (PrevFrame < 23.0 And n\Frame >= 23.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 				ElseIf n\CurrSpeed < -0.01
-					If (PrevFrame >= 23.0 And n\Frame < 23.0) Lor (PrevFrame >= 5.0 And n\Frame < 5.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+					If (PrevFrame >= 23.0 And n\Frame < 23.0) Lor (PrevFrame >= 5.0 And n\Frame < 5.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 				EndIf
 				
 				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
@@ -2675,7 +2675,7 @@ Function UpdateNPCs%()
 						Case 0.0 ; ~ Idles
 							;[Block]
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-							Animate2(n\OBJ, AnimTime(n\OBJ), 210.0, 235.0, 0.1)
+							AnimateEx(n\OBJ, AnimTime(n\OBJ), 210.0, 235.0, 0.1)
 							;[End Block]
 						Case 1.0 ; ~ Walking
 							;[Block]
@@ -2684,23 +2684,23 @@ Function UpdateNPCs%()
 							Else
 								n\CurrSpeed = CurveValue(0.015, n\CurrSpeed, 5.0)
 							EndIf
-							Animate2(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
+							AnimateEx(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
 							;[End Block]
 						Case 2.0 ; ~ Running
 							;[Block]
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
-							Animate2(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
+							AnimateEx(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
 							;[End Block]
 					End Select
 					
 					If n\State2 <> 2.0
 						If n\State = 1.0
 							If n\CurrSpeed > 0.005
-								If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 256.0 And AnimTime(n\OBJ) >= 256.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 256.0 And AnimTime(n\OBJ) >= 256.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 						ElseIf n\State = 2.0
 							If n\CurrSpeed > 0.005
-								If (PrevFrame < 309.0 And AnimTime(n\OBJ) >= 309.0) Lor (PrevFrame <= 319.0 And AnimTime(n\OBJ) <= 301.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 309.0 And AnimTime(n\OBJ) >= 309.0) Lor (PrevFrame <= 319.0 And AnimTime(n\OBJ) <= 301.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 						EndIf
 					EndIf
@@ -2829,7 +2829,7 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 2.0, 399.0, n\Speed)
 							
 							If Rand(300) = 1
-								If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\1048A\Random" + Rand(0, 4) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
+								If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\1048A\Random" + Rand(0, 4) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 							EndIf
 							If Visible And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then n\State = 2.0
 							;[End Block]
@@ -2880,7 +2880,7 @@ Function UpdateNPCs%()
 					RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 					
 					If n\HP =< 0
-						PlaySound2(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
+						PlaySoundEx(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
 						p.Particles = CreateParticle(PARTICLE_BLOOD, EntityX(n\Collider), EntityY(n\Collider) + 0.2, EntityZ(n\Collider), 0.25, 0.0)
 						EntityColor(p\OBJ, 100.0, 100.0, 100.0)
 						RotateEntity(p\Pvt, 0.0, 0.0, Rnd(360.0))
@@ -3077,7 +3077,7 @@ Function UpdateNPCs%()
 							n\Idle = 0
 							n\State = Rnd(20.0, 60.0)
 							
-							If Rand(300) = 1 Then PlaySound2(snd_I\RustleSFX[Rand(0, 5)], Camera, n\Collider, 8.0, Rnd(0.0, 0.2))
+							If Rand(300) = 1 Then PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\Collider, 8.0, Rnd(0.0, 0.2))
 						EndIf
 					EndIf
 					
@@ -3093,7 +3093,7 @@ Function UpdateNPCs%()
 							
 							If Rand(30) = 1
 								If EntityVisible(Camera, n\OBJ)
-									If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(snd_I\RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.3)
+									If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.3)
 								EndIf
 							EndIf
 							
@@ -3129,7 +3129,7 @@ Function UpdateNPCs%()
 					Else
 						Dist2 = 1.0
 					EndIf
-					n\SoundCHN = LoopSound2(snd_I\ApacheSFX, n\SoundCHN, Camera, n\Collider, 25.0, Dist2)
+					n\SoundCHN = LoopSoundEx(snd_I\ApacheSFX, n\SoundCHN, Camera, n\Collider, 25.0, Dist2)
 				EndIf
 				
 				n\DropSpeed = 0.0
@@ -3145,7 +3145,7 @@ Function UpdateNPCs%()
 								If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 900.0
 									If Abs(EntityY(me\Collider) - EntityY(n\Collider)) < 20.0
 										If EntityVisible(me\Collider, n\Collider)
-											PlaySound2(snd_I\AlarmSFX[1], Camera, n\Collider, 50.0, 1.0)
+											PlaySoundEx(snd_I\AlarmSFX[1], Camera, n\Collider, 50.0, 1.0)
 											n\State = 2.0
 										EndIf
 									EndIf
@@ -3197,7 +3197,7 @@ Function UpdateNPCs%()
 											PointEntity(Pvt, Target)
 											
 											If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0
-												PlaySound2(snd_I\GunshotSFX[1], Camera, n\Collider, 20.0)
+												PlaySoundEx(snd_I\GunshotSFX[1], Camera, n\Collider, 20.0)
 												
 												SqrValue = Sqr(Dist)
 												
@@ -3264,7 +3264,7 @@ Function UpdateNPCs%()
 							Case 0.0 ; ~ Spawns
 								;[Block]
 								If n\Frame = 282.0
-									PlaySound2(LoadTempSound("SFX\SCP\035_Tentacle\TentacleSpawn.ogg"), Camera, n\Collider, 5.0)
+									PlaySoundEx(LoadTempSound("SFX\SCP\035_Tentacle\TentacleSpawn.ogg"), Camera, n\Collider, 5.0)
 									SetNPCFrame(n, 283.0)
 								Else
 									me\HeartBeatVolume = Max(CurveValue(1.0, me\HeartBeatVolume, 50.0), me\HeartBeatVolume)
@@ -3324,10 +3324,10 @@ Function UpdateNPCs%()
 												EndIf
 												me\CameraShake = 2.0
 											Else
-												PlaySound2(snd_I\MissSFX, Camera, n\Collider)
+												PlaySoundEx(snd_I\MissSFX, Camera, n\Collider)
 											EndIf
 										Else
-											PlaySound2(snd_I\MissSFX, Camera, n\Collider, 3.0)
+											PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 3.0)
 										EndIf
 									ElseIf n\Frame > 31.9
 										SetNPCFrame(n, 173.0)
@@ -3336,7 +3336,7 @@ Function UpdateNPCs%()
 								EndIf
 								;[End Block]
 						End Select
-						If n\State <> 0.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_035_TENTACLE_IDLE], n\SoundCHN, Camera, n\Collider)
+						If n\State <> 0.0 Then n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_035_TENTACLE_IDLE], n\SoundCHN, Camera, n\Collider)
 					EndIf
 					If n\HP =< 0 Then n\IsDead = True
 				Else
@@ -3422,7 +3422,7 @@ Function UpdateNPCs%()
 									Next
 									
 									If EntityY(n\Collider) > -100.0
-										PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.5)
+										PlaySoundEx(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.5)
 										
 										If ForestNPCData[2] <> 1.0 Then ForestNPCData[2] = 0.0
 										
@@ -3492,14 +3492,14 @@ Function UpdateNPCs%()
 									
 									If n\State2 = 0.0 ; ~ Don't start moving until the player is looking
 										If EntityInView(n\Collider, Camera)
-											If Rand(8) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 20.0, 1.0, True)
+											If Rand(8) = 1 Then PlaySoundEx(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 20.0, 1.0, True)
 											n\State2 = 1.0
 										EndIf
 									Else
 										If n\Frame <= 199.0
 											AnimateNPC(n, 2.0, 199.0, 0.5, False)
 											If n\Frame = 199.0
-												PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
+												PlaySoundEx(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
 												SetNPCFrame(n, 298.0)
 											EndIf
 										ElseIf n\Frame <= 297.0
@@ -3507,7 +3507,7 @@ Function UpdateNPCs%()
 											
 											AnimateNPC(n, 200.0, 297.0, 0.5, False)
 											If n\Frame = 297.0
-												PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
+												PlaySoundEx(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0)
 												SetNPCFrame(n, 298.0)
 											EndIf
 										Else
@@ -3577,7 +3577,7 @@ Function UpdateNPCs%()
 												If Rand(8) = 1
 													PlaySound_Strict(LoadTempSound("SFX\SCP\860_2\Chase" + Rand(0, 2) + ".ogg"))
 													
-													PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+													PlaySoundEx(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 												EndIf
 												n\State2 = 1.0
 											EndIf
@@ -3589,7 +3589,7 @@ Function UpdateNPCs%()
 										If Rnd(5000.0) < n\State3
 											Temp = True
 											If ChannelPlaying(n\SoundCHN) Then Temp = False
-											If Temp Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+											If Temp Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 										EndIf
 									Else
 										n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
@@ -3597,7 +3597,7 @@ Function UpdateNPCs%()
 									
 									If Dist < 20.25 Lor n\State3 > Rnd(200.0, 250.0)
 										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-											n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+											n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 											n\State = 3.0
 										Else
 											If (PrevFrame < 492.0 And n\Frame >= 492.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0)
@@ -3608,7 +3608,7 @@ Function UpdateNPCs%()
 									EndIf
 									If Dist > 400.0 Then n\State = 0.0
 								EndIf
-								If (PrevFrame < 533.0 And n\Frame >= 533.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0) Then PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.6)
+								If (PrevFrame < 533.0 And n\Frame >= 533.0) Lor (PrevFrame < 568.0 And n\Frame >= 568.0) Then PlaySoundEx(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 15.0, 0.6)
 								;[End Block]
 							Case 3.0 ; ~ Runs towards the player and attacks
 								;[Block]
@@ -3642,7 +3642,7 @@ Function UpdateNPCs%()
 									
 									AnimateNPC(n, 298.0, 316.0, n\CurrSpeed * 10.0)
 									
-									If (PrevFrame < 307.0 And n\Frame >= 307.0) Then PlaySound2(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 10.0)
+									If (PrevFrame < 307.0 And n\Frame >= 307.0) Then PlaySoundEx(StepSFX(4, 0, Rand(0, 2)), Camera, n\Collider, 10.0)
 								EndIf
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
@@ -3732,12 +3732,12 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 644.0, 683.0, 28.0 * n\CurrSpeed)
 							
 							If (PrevFrame < 664.0 And n\Frame >= 664.0) Lor (PrevFrame > 673.0 And n\Frame < 654.0)
-								PlaySound2(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 12.0)
+								PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 12.0)
 								If Rand(10) = 1
 									Temp = (n\SoundCHN = 0 Lor (Not ChannelPlaying(n\SoundCHN)))
 									If Temp
 										LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Lure" + Rand(0, 9) + ".ogg")
-										n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
+										n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
 									EndIf
 								EndIf
 							EndIf
@@ -3788,7 +3788,7 @@ Function UpdateNPCs%()
 										
 										AnimateNPC(n, 449.0, 464.0, n\CurrSpeed * 6.0)
 										
-										If (PrevFrame < 452.0 And n\Frame >= 452.0) Lor (PrevFrame < 459.0 And n\Frame >= 459.0) Then PlaySound2(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
+										If (PrevFrame < 452.0 And n\Frame >= 452.0) Lor (PrevFrame < 459.0 And n\Frame >= 459.0) Then PlaySoundEx(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
 										
 										; ~ Player is visible
 										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 1.0 Then SetNPCFrame(n, 18.0)
@@ -3827,7 +3827,7 @@ Function UpdateNPCs%()
 						If PowTwo(me\SndVolume * 1.2) > Dist Lor Dist < 2.0
 							If n\State3 = 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
-								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
+								n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
 								GiveAchievement("939")
 								PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 								n\State3 = 1.0
@@ -3836,7 +3836,7 @@ Function UpdateNPCs%()
 						ElseIf PowTwo(me\SndVolume * 1.6) > Dist
 							If n\State <> 1 And n\Reload <= 0.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
-								n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
+								n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
 								GiveAchievement("939")
 								SetNPCFrame(n, 175.0)
 								
@@ -3894,7 +3894,7 @@ Function UpdateNPCs%()
 							If n\Frame = 646.0 Then SetNPCFrame(n, 2.0)
 						EndIf
 						
-						If Rand(700) = 1 Then PlaySound2(LoadTempSound("SFX\SCP\066\Eric" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
+						If Rand(700) = 1 Then PlaySoundEx(LoadTempSound("SFX\SCP\066\Eric" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 						
 						If Dist < 1.0 + PowTwo(n\LastDist)
 							If EntityVisible(me\Collider, n\Collider)
@@ -3917,9 +3917,9 @@ Function UpdateNPCs%()
 							If n\Frame = 683.0
 								If n\State2 = 0.0
 									If Rand(2) = 1
-										PlaySound2(LoadTempSound("SFX\SCP\066\Eric" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
+										PlaySoundEx(LoadTempSound("SFX\SCP\066\Eric" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 									Else
-										PlaySound2(LoadTempSound("SFX\SCP\066\Notes" + Rand(0, 5) + ".ogg"), Camera, n\Collider, 8.0)
+										PlaySoundEx(LoadTempSound("SFX\SCP\066\Notes" + Rand(0, 5) + ".ogg"), Camera, n\Collider, 8.0)
 									EndIf
 									
 									If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
@@ -4003,7 +4003,7 @@ Function UpdateNPCs%()
 				
 				If n\State > 1.0
 					If n\Sound = 0 Then n\Sound = LoadSound_Strict("SFX\SCP\066\Rolling.ogg")
-					If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
+					If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 20.0)
 				EndIf
 				
 				If n\State3 > 0.0
@@ -4145,7 +4145,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If n\Frame > 228.0 And PrevFrame <= 228.0
-									If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\966\Echo" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+									If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\966\Echo" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 								EndIf
 								UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 								;[End Block]
@@ -4166,7 +4166,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								If (n\Frame > 271.0 And PrevFrame <= 271.0) Lor (n\Frame > 301.0 And PrevFrame <= 301.0) Lor (n\Frame > 314.0 And PrevFrame <= 314.0)
-									If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\966\Idle" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+									If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\966\Idle" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 								EndIf
 								UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 								;[End Block]
@@ -4260,10 +4260,10 @@ Function UpdateNPCs%()
 									Else
 										AnimateNPC(n, 2.0, 214.0, 0.25)
 									EndIf
-									If (PrevFrame < 650.0 And n\Frame >= 650.0) Then PlaySound2(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
+									If (PrevFrame < 650.0 And n\Frame >= 650.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 								Else
 									AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 580.0), 557.0), 628.0, n\CurrSpeed * 25.0)
-									If (PrevFrame < 581.0 And n\Frame >= 581.0) Lor (PrevFrame < 607.0 And n\Frame >= 607.0) Then PlaySound2(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
+									If (PrevFrame < 581.0 And n\Frame >= 581.0) Lor (PrevFrame < 607.0 And n\Frame >= 607.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 								EndIf
 								;[End Block]
 							Case 9.0 ; ~ Attacks
@@ -4275,13 +4275,13 @@ Function UpdateNPCs%()
 									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 									
 									If n\LastSeen = 0
-										n\SoundCHN = PlaySound2(LoadTempSound("SFX\SCP\966\Echo" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
+										n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\966\Echo" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 										n\LastSeen = 1
 									EndIf
 									
 									If n\Frame > 557.0
 										AnimateNPC(n, 629.0, 652.0, 0.25, False)
-										If (PrevFrame < 650.0 And n\Frame >= 650.0) Then PlaySound2(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
+										If (PrevFrame < 650.0 And n\Frame >= 650.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 										If n\Frame > 651.9
 											Select Rand(3)
 												Case 1
@@ -4322,7 +4322,7 @@ Function UpdateNPCs%()
 									
 									If (n\Frame > 470.0 And PrevFrame <= 470.0) Lor (n\Frame > 500.0 And PrevFrame <= 500.0) Lor (n\Frame > 527.0 And PrevFrame <= 527.0)
 										If Dist < 0.81
-											PlaySound2(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
+											PlaySoundEx(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
 											InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult)
 											me\CameraShake = 1.8
 											If me\Injuries > 10.0
@@ -4330,7 +4330,7 @@ Function UpdateNPCs%()
 												Kill(True)
 											EndIf
 										Else
-											PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
+											PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 										EndIf
 									EndIf
 								EndIf
@@ -4543,7 +4543,7 @@ Function UpdateNPCs%()
 										Dist = EntityDistanceSquared(n\Collider, me\Collider)
 										If Dist < 400.0
 											LoadNPCSound(n, "SFX\SCP\1499\Idle" + Rand(0, 3) + ".ogg")
-											n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
+											n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
 										EndIf
 									EndIf
 									n\State2 = 0.0
@@ -4557,7 +4557,7 @@ Function UpdateNPCs%()
 											; ~ Play the "screaming animation"
 											If Dist < 25.0
 												LoadNPCSound(n, "SFX\SCP\1499\Triggered.ogg")
-												n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
+												n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
 												
 												n\State2 = 1.0 ; ~ If player is too close, switch to attack after screaming
 												
@@ -4583,7 +4583,7 @@ Function UpdateNPCs%()
 									If Dist < 16.0
 										If EntityVisible(n\Collider, me\Collider)
 											LoadNPCSound(n, "SFX\SCP\1499\Triggered.ogg")
-											n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
+											n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 20.0, 1.0, True)
 											
 											SetNPCFrame(n, 203.0)
 											n\State = 1.0
@@ -4661,9 +4661,9 @@ Function UpdateNPCs%()
 							
 							If Attack
 								If Dist > 0.64 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0
-									PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
+									PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 								Else
-									PlaySound2(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
+									PlaySoundEx(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
 									InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, 0.35 * DifficultyDMGMult, 0.2)
 									me\CameraShake = 2.5
 									
@@ -4761,7 +4761,7 @@ Function UpdateNPCs%()
 								n\PathStatus = PATH_STATUS_NO_SEARCH
 								n\PathLocation = 0
 								
-								If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Lor (PrevFrame < 95.0 And n\Frame >= 95.0) Lor (PrevFrame < 113.0 And n\Frame >= 113.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Lor (PrevFrame < 95.0 And n\Frame >= 95.0) Lor (PrevFrame < 113.0 And n\Frame >= 113.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							Else
 								n\Target = Null
 								n\State = 3.0
@@ -4840,7 +4840,7 @@ Function UpdateNPCs%()
 								AnimateNPC(n, 323.0, 344.0, 0.2)
 							Else
 								AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 30.0)
-								If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Then PlaySound2(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							
 							If Dist > PowTwo(HideDistance)
@@ -4893,11 +4893,11 @@ Function UpdateNPCs%()
 												Kill(True)
 											EndIf
 										Else
-											PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
+											PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 										EndIf
 									Else
 										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.5625
-											PlaySound2(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
+											PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 											If n\Target\HP > 0
 												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
 											Else
@@ -4906,7 +4906,7 @@ Function UpdateNPCs%()
 												Return
 											EndIf
 										Else
-											PlaySound2(snd_I\MissSFX, Camera, n\Collider, 2.5)
+											PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 										EndIf
 									EndIf
 								ElseIf n\Frame >= 164.0
@@ -4973,7 +4973,7 @@ Function UpdateNPCs%()
 					End Select
 					
 					; ~ Loop the breath sound
-					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSound2(NPCSound[SOUND_NPC_008_1_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+					If n\State > 1.0 And n\State < 5.0 Then n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_008_1_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 					If n\HP =< 0 Then n\IsDead = True
 				Else
 					AnimateNPC(n, 344.0, 363.0, 0.5, False)
@@ -5192,7 +5192,7 @@ Function UpdateMTFUnit%(n.NPCs)
 		
 		If n\State <> MTF_SEARCHING_PLAYER And n\State <> MTF_DISABLING_TESLA Then n\PrevState = 0
 		
-		n\SoundCHN2 = LoopSound2(NPCSound[SOUND_NPC_MTF_BREATH], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
+		n\SoundCHN2 = LoopSoundEx(NPCSound[SOUND_NPC_MTF_BREATH], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
 		
 		Local Dist#, FoundChamber%, Pvt%
 		Local PrevFrame# = n\Frame
@@ -5505,7 +5505,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
-						PlaySound2(snd_I\NVGSFX[0], Camera, n\Collider, 5.0)
+						PlaySoundEx(snd_I\NVGSFX[0], Camera, n\Collider, 5.0)
 						
 						n\EnemyX = EntityX(n_I\Curr096\Collider, True)
 						n\EnemyY = EntityY(n_I\Curr096\Collider, True)
@@ -5636,7 +5636,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						If n\Reload <= 0.0 And (Not me\Terminated)
 							Local PrevTerminated# = me\Terminated
 							
-							PlaySound2(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
+							PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 							
 							Pvt = CreatePivot()
 							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
@@ -5858,7 +5858,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
 							PlayMTFSound(n\Sound, n)
 						EndIf
-						PlaySound2(snd_I\NVGSFX[0], Camera, n\Collider, 5.0)
+						PlaySoundEx(snd_I\NVGSFX[0], Camera, n\Collider, 5.0)
 						
 						n\EnemyX = EntityX(n_I\Curr096\Collider, True)
 						n\EnemyY = EntityY(n_I\Curr096\Collider, True)
@@ -6057,7 +6057,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				If n\Reload <= 0.0 And (Not me\Terminated)
 					PrevTerminated = me\Terminated
 					
-					PlaySound2(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
+					PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 					
 					Pvt = CreatePivot()
 					
@@ -6386,7 +6386,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				;[Block]
 				n\Speed = 0.0175
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-				n\SoundCHN = LoopSound2(snd_I\SCRAMBLESFX, n\SoundCHN, Camera, n\Collider, 5.0)
+				n\SoundCHN = LoopSoundEx(snd_I\SCRAMBLESFX, n\SoundCHN, Camera, n\Collider, 5.0)
 				
 				If n\State2 > 0.0
 					If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * 10.0
@@ -6499,7 +6499,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 				Else
 					StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					PlaySound2(snd_I\NVGSFX[1], Camera, n\Collider, 5.0)
+					PlaySoundEx(snd_I\NVGSFX[1], Camera, n\Collider, 5.0)
 					n\Target = Null
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State2 = 0.0
@@ -6533,7 +6533,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0)
 						
 						If n\Reload <= 0.0
-							PlaySound2(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
+							PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 							
 							Pvt = CreatePivot()
 							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
@@ -6547,7 +6547,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							
 							FreeEntity(Pvt) : Pvt = 0
 							
-							PlaySound2(snd_I\BulletHitSFX, Camera, n\Target\Collider, 5.0)
+							PlaySoundEx(snd_I\BulletHitSFX, Camera, n\Target\Collider, 5.0)
 							If n\Target\HP > 0
 								n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0.0)
 							Else
@@ -6652,9 +6652,9 @@ Function UpdateMTFUnit%(n.NPCs)
 		End Select
 		
 		If n\CurrSpeed > 0.01
-			If (PrevFrame < 505.0 And n\Frame >= 505.0) Lor (PrevFrame < 521.0 And n\Frame >= 521.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+			If (PrevFrame < 505.0 And n\Frame >= 505.0) Lor (PrevFrame < 521.0 And n\Frame >= 521.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 		ElseIf n\CurrSpeed < -0.01
-			If (PrevFrame >= 521.0 And n\Frame < 521.0) Lor (PrevFrame >= 505.0 And n\Frame < 505.0) Then PlaySound2(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
+			If (PrevFrame >= 521.0 And n\Frame < 521.0) Lor (PrevFrame >= 505.0 And n\Frame < 505.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
 		EndIf
 		
 		; ~ Teleport companions close to the leader if they get stuck
@@ -7069,7 +7069,7 @@ Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = Fals
 		EntityPick(Pvt, 2.5)
 		
 		If PickedEntity() <> 0
-			PlaySound2(snd_I\BulletMissSFX, Camera, Pvt, 0.4, Rnd(0.8, 1.0))
+			PlaySoundEx(snd_I\BulletMissSFX, Camera, Pvt, 0.4, Rnd(0.8, 1.0))
 			
 			If Particles
 				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PickedX(), PickedY(), PickedZ(), 0.03, 0.0, 80.0)
@@ -7405,7 +7405,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			If n\Path[n\PathLocation]\door <> Null
 				If (Not n\Path[n\PathLocation]\door\Open) And n\Path[n\PathLocation]\door\DoorType <> OFFICE_DOOR And n\Path[n\PathLocation]\door\DoorType <> ELEVATOR_DOOR
 					OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
-					If PlaySFX Then PlaySound2(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
+					If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
 					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 				EndIf
 			EndIf
@@ -7511,7 +7511,7 @@ Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 	SetNPCFrame(n, NewTime)
 End Function
 
-Function Animate2#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True)
+Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True)
 	Local NewTime#, Temp%
 	
 	If Speed > 0.0

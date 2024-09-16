@@ -60,7 +60,7 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	InitFastResize()
 End Function
 
-Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
+Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
 	Local SrcWidth%, SrcHeight%
 	Local DestWidth%, DestHeight%
 	Local ScratchImage%, DestImage%
@@ -191,7 +191,7 @@ End Function
 
 Global CurrTrisAmount%
 
-Function RenderWorld2%(Tween#)
+Function RenderWorldEx%(Tween#)
 	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(Camera, 1)
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)

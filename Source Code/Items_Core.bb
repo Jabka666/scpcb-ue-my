@@ -182,7 +182,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	Next
 	If it\InvImg = 0
 		it\InvImg = LoadImage_Strict(InvImgPath)
-		it\InvImg = ScaleImage2(it\InvImg, MenuScale, MenuScale)
+		it\InvImg = ScaleImageEx(it\InvImg, MenuScale, MenuScale)
 		it\InvImgPath = InvImgPath
 	EndIf
 	
@@ -190,7 +190,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 		InvImgPath2 = ItemINVIconPath + InvImgPath2
 		If it\InvImg2 = 0
 			it\InvImg2 = LoadImage_Strict(InvImgPath2)
-			it\InvImg2 = ScaleImage2(it\InvImg2, MenuScale, MenuScale)
+			it\InvImg2 = ScaleImageEx(it\InvImg2, MenuScale, MenuScale)
 		EndIf
 	Else
 		it\InvImg2 = 0
@@ -967,7 +967,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					n.NPCs = CreateNPC(NPCType1499_1, x, y, z)
 					n\State = 1.0 : n\State3 = 1.0
 					n\Sound = LoadSound_Strict("SFX\SCP\1499\Triggered.ogg")
-					n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
+					n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 20.0)
 					;[End Block]
 			End Select
 			;[End Block]

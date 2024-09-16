@@ -1,4 +1,4 @@
-Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
+Function PlaySoundEx%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
 	Range = Max(Range, 1.0)
 	
 	Local SoundCHN% = 0
@@ -20,7 +20,7 @@ Function PlaySound2%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, 
 	Return(SoundCHN)
 End Function
 
-Function LoopSound2%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
+Function LoopSoundEx%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
 	Range = Max(Range, 1.0)
 	
 	If Volume > 0.0
@@ -59,7 +59,7 @@ Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1
 End Function
 
 Function PlayMTFSound%(SoundHandle%, n.NPCs)
-	If n <> Null Then n\SoundCHN = PlaySound2(SoundHandle, Camera, n\Collider, 8.0, 1.0, True)
+	If n <> Null Then n\SoundCHN = PlaySoundEx(SoundHandle, Camera, n\Collider, 8.0, 1.0, True)
 	If IsUsingRadio
 		If SelectedItem\State2 = 3.0 And SelectedItem\State > 0.0
 			If SoundHandle <> NPCSound[SOUND_NPC_MTF_BEEP] Lor (Not ChannelPlaying(RadioCHN[3]))
