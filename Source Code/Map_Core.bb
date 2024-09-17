@@ -26,15 +26,15 @@ End Type
 
 Function CheckForPropModel%(File$)
 	Select StripPath(File)
-		Case "door01.b3d"
+		Case "door01.x"
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_DEFAULT_MODEL]))
 			;[End Block]
-		Case "contdoorleft.b3d"
+		Case "contdoorleft.x"
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_1]))
 			;[End Block]
-		Case "contdoorright.b3d"
+		Case "contdoorright.x"
 			;[Block]
 			Return(CopyEntity(d_I\DoorModelID[DOOR_BIG_MODEL_2]))
 			;[End Block]
@@ -777,15 +777,8 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tp\x = ReadFloat(f) * RoomScale
 					tp\y = ReadFloat(f) * RoomScale
 					tp\z = ReadFloat(f) * RoomScale
-					
-					Temp2s = ReadString(f)
-					; ~ A hacky way to use .b3d format
-					If FileExtension(Temp2s) = "x"
-						Temp2s = Left(Temp2s, Len(Temp2s) - 2)
-					ElseIf FileExtension(Temp2s) = "b3d"
-						Temp2s = Left(Temp2s, Len(Temp2s) - 4)
-					EndIf
-					tp\Name = "GFX\Map\Props\" + Temp2s + ".b3d"
+
+					tp\Name = "GFX\Map\Props\" + ReadString(f)
 					
 					tp\Pitch = ReadFloat(f)
 					tp\Yaw = ReadFloat(f)

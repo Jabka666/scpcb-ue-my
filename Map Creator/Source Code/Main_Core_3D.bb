@@ -808,15 +808,15 @@ Function CheckForPropModel%(File$)
 	Local Path$ = "GFX\map\Props\"
 	
 	Select File
-		Case Path + "door01.b3d"
+		Case Path + "door01.x"
 			;[Block]
 			Return(CopyEntity(o\DoorModelID[0]))
 			;[End Block]
-		Case Path + "contdoorleft.b3d"
+		Case Path + "contdoorleft.x"
 			;[Block]
 			Return(CopyEntity(o\DoorModelID[1]))
 			;[End Block]
-		Case Path + "contdoorright.b3d"
+		Case Path + "contdoorright.x"
 			;[Block]
 			Return(CopyEntity(o\DoorModelID[2]))
 			;[End Block]
@@ -829,14 +829,6 @@ End Function
 
 Function CreateProp%(File$)
 	Local p.Props
-	
-	; ~ A hacky way to use .b3d format
-	If Right(File, 2) = ".x"
-		File = Left(File, Len(File) - 2)
-	ElseIf Right(File, 4) = ".b3d"
-		File = Left(File, Len(File) - 4)
-	EndIf
-	File = File + ".b3d"
 	
 	For p.Props = Each Props
 		If p\File = File Then Return(CopyEntity(p\OBJ))
