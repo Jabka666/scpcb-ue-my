@@ -1801,15 +1801,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Cigarette", it_cigarette, x + 1.5, y + 0.5, z + 1.0)
+					it2.Items = CreateItem("Cigarette", it_cigarette, x, y, z)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Joint", it_joint, x + 1.5, y + 0.5, z + 1.0)
+					it2.Items = CreateItem("Joint", it_joint, x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Smelly Joint", it_scp420s, x + 1.5, y + 0.5, z + 1.0)
+					it2.Items = CreateItem("Smelly Joint", it_scp420s, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
