@@ -1828,26 +1828,15 @@ Function UpdateEvents%()
 									Case ROUGH
 										;[Block]
 										me\Terminated = True
-										me\BlinkTimer = -10.0
 										If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 										msg\DeathMsg = Format(GetLocalString("death", "914"), SubjectName)
 										;[End Block]
-									Case COARSE
+									Case COARSE, ONETOONE, FINE, VERYFINE
 										;[Block]
-										me\BlinkTimer = -10.0
-										If e\EventState - fps\Factor[1] < 70.0 * 3.0 Then PlaySound_Strict(snd_I\Use914SFX)
-										;[End Block]
-									Case ONETOONE
-										;[Block]
-										me\BlinkTimer = -10.0
-										If e\EventState - fps\Factor[1] < 70.0 * 3.0 Then PlaySound_Strict(snd_I\Use914SFX)
-										;[End Block]
-									Case FINE, VERYFINE
-										;[Block]
-										me\BlinkTimer = -10.0
 										If e\EventState - fps\Factor[1] < 70.0 * 3.0 Then PlaySound_Strict(snd_I\Use914SFX)
 										;[End Block]
 								End Select
+								me\BlinkTimer = -10.0
 							EndIf
 						EndIf
 						
@@ -1889,12 +1878,13 @@ Function UpdateEvents%()
 							e\room\RoomDoors[0]\Open = True
 							e\room\RoomDoors[1]\Open = True
 							RotateEntity(e\room\Objects[0], 0.0, 0.0, 0.0)
-							e\EventState = 0.0
 							
 							Local OpenSFX914% = LoadTempSound("SFX\SCP\914\DoorOpen.ogg")
 							
 							e\room\RoomDoors[0]\SoundCHN = PlaySoundEx(OpenSFX914, Camera, e\room\RoomDoors[0]\OBJ)
 							e\room\RoomDoors[1]\SoundCHN = PlaySoundEx(OpenSFX914, Camera, e\room\RoomDoors[1]\OBJ)
+							
+							e\EventState = 0.0
 						EndIf
 					EndIf
 					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
