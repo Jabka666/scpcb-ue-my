@@ -8802,13 +8802,21 @@ Function UpdateIntro%()
 										
 										CreateHintMsg(GetLocalString("msg", "enterchmbr"))
 										
-										OpenCloseDoor(e\room\RoomDoors[3])
+										For i = 2 To 3
+											OpenCloseDoor(e\room\RoomDoors[i])
+										Next
 										
 										FreeEntity(e\room\Objects[4]) : e\room\Objects[4] = 0
 										
 										For i = 0 To 2
 											ShowEntity(e\room\NPC[i]\OBJ)
 										Next
+										ShowEntity(e\room\NPC[6]\OBJ)
+										PointEntity(e\room\NPC[6]\Collider, e\room\OBJ)
+										RotateEntity(e\room\NPC[6]\Collider, 0.0, EntityYaw(e\room\NPC[6]\Collider), 0.0)
+										TFormPoint(-902.0, 500.0, 456.0, e\room\OBJ, 0)
+										PositionEntity(e\room\NPC[6]\Collider, TFormedX(), TFormedY(), TFormedZ())
+										ResetEntity(e\room\NPC[6]\Collider)
 										
 										e\EventState = INTRO_ESCORT_DONE
 									EndIf
@@ -8817,17 +8825,11 @@ Function UpdateIntro%()
 							;[End Block]
 						Case INTRO_ESCORT_DONE
 							;[Block]
-							If e\room\RoomDoors[2]\Open
+							If e\room\RoomDoors[2]\Open And e\room\NPC[3]\State <> 11.0
 								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) < 2.0
 									For i = 1 To 2
 										OpenCloseDoor(e\room\RoomDoors[i])
 									Next
-									ShowEntity(e\room\NPC[6]\OBJ)
-									PointEntity(e\room\NPC[6]\Collider, e\room\OBJ)
-									RotateEntity(e\room\NPC[6]\Collider, 0.0, EntityYaw(e\room\NPC[6]\Collider), 0.0)
-									TFormPoint(-902.0, 500.0, 456.0, e\room\OBJ, 0)
-									PositionEntity(e\room\NPC[6]\Collider, TFormedX(), TFormedY(), TFormedZ())
-									ResetEntity(e\room\NPC[6]\Collider)
 									
 									ShowEntity(n_I\Curr173\OBJ)
 									ShowEntity(n_I\Curr173\OBJ2)
@@ -8929,8 +8931,6 @@ Function UpdateIntro%()
 											OpenCloseDoor(e\room\RoomDoors[1])
 										ElseIf e\EventState3 > 1000.0
 											e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State2 = 10.0 : e\room\NPC[0]\State3 = 1.0
-											e\room\NPC[3]\State = 11.0
-											OpenCloseDoor(e\room\RoomDoors[2])
 										EndIf
 										If e\EventState3 > 850.0 Then PositionEntity(me\Collider, Min(EntityX(me\Collider), e\room\x + 640.0 * RoomScale), EntityY(me\Collider), EntityZ(me\Collider))
 									ElseIf Temp = True
@@ -9213,58 +9213,68 @@ Function UpdateIntro%()
 									EndIf
 								EndIf
 							EndIf
-							If e\room\NPC[3]\State = 9.0 Lor e\room\NPC[3]\State = 5.0
-								If e\EventState = INTRO_MOVING_TO_CHAMBER
-									FPSFactorEx = fps\Factor[0]
-								ElseIf e\EventState = INTRO_ESCORT_DONE
-									Temp = 1.5
-									If SelectedItem <> Null And SelectedItem\ItemTemplate\Img <> 0 Then Temp = 3.0
-									FPSFactorEx = fps\Factor[0] / Temp
-								Else
-									FPSFactorEx = 0.0
-								EndIf
-								e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + FPSFactorEx, 50.0)
-								
-								If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - FPSFactorEx < 70.0 * 8.0
-									If e\room\NPC[3]\State2 < 2.0
-										For i = 3 To 4
-											StopChannel(e\room\NPC[i]\SoundCHN) : e\room\NPC[i]\SoundCHN = 0
-										Next
-										LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\EscortRefuse" + Rand(0, 1) + ".ogg")
-										e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
-										e\room\NPC[3]\State2 = 3.0 : e\room\NPC[3]\State3 = 50.0
-									ElseIf e\room\NPC[3]\State2 = 3.0
-										For i = 3 To 4
-											StopChannel(e\room\NPC[i]\SoundCHN) : e\room\NPC[i]\SoundCHN = 0
-										Next
-										LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\EscortPissedOff" + Rand(0, 1) + ".ogg")
-										e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
-										e\room\NPC[3]\State2 = 4.0 : e\room\NPC[3]\State3 = 50.0
-									ElseIf e\room\NPC[3]\State2 = 4.0
-										For i = 3 To 4
-											StopChannel(e\room\NPC[i]\SoundCHN) : e\room\NPC[i]\SoundCHN = 0
-										Next
-										LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\EscortKill" + Rand(0, 1) + ".ogg")
-										e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
-										e\room\NPC[3]\State2 = 5.0 : e\room\NPC[3]\State3 = 50.0 + (70.0 * 2.5)
-									ElseIf e\room\NPC[3]\State2 = 5.0
-										For i = 3 To 4 + (e\room\NPC[5] <> Null)
-											e\room\NPC[i]\State = 11.0 : e\room\NPC[i]\State3 = 1.0
-										Next
-										If e\EventState = INTRO_ESCORT_DONE
-											For i = 2 To 3
-												If e\room\RoomDoors[i]\Open Then OpenCloseDoor(e\room\RoomDoors[i])
+							If e\room\NPC[3]\State <> 11.0
+								If e\room\NPC[3]\State = 9.0 Lor e\room\NPC[3]\State = 5.0
+									If e\EventState = INTRO_MOVING_TO_CHAMBER
+										FPSFactorEx = fps\Factor[0]
+									ElseIf e\EventState = INTRO_ESCORT_DONE
+										Temp = 1.5
+										If SelectedItem <> Null And SelectedItem\ItemTemplate\Img <> 0 Then Temp = 3.0
+										FPSFactorEx = fps\Factor[0] / Temp
+									Else
+										FPSFactorEx = 0.0
+									EndIf
+									e\room\NPC[3]\State3 = Max(e\room\NPC[3]\State3 + FPSFactorEx, 50.0)
+									
+									If e\room\NPC[3]\State3 >= 70.0 * 8.0 And e\room\NPC[3]\State3 - FPSFactorEx < 70.0 * 8.0
+										If e\room\NPC[3]\State2 < 2.0
+											For i = 3 To 4
+												StopChannel(e\room\NPC[i]\SoundCHN) : e\room\NPC[i]\SoundCHN = 0
+											Next
+											LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\EscortRefuse" + Rand(0, 1) + ".ogg")
+											e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
+											e\room\NPC[3]\State2 = 3.0 : e\room\NPC[3]\State3 = 50.0
+										ElseIf e\room\NPC[3]\State2 = 3.0
+											For i = 3 To 4
+												StopChannel(e\room\NPC[i]\SoundCHN) : e\room\NPC[i]\SoundCHN = 0
+											Next
+											LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\EscortPissedOff" + Rand(0, 1) + ".ogg")
+											e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
+											e\room\NPC[3]\State2 = 4.0 : e\room\NPC[3]\State3 = 50.0
+										ElseIf e\room\NPC[3]\State2 = 4.0
+											For i = 3 To 4
+												StopChannel(e\room\NPC[i]\SoundCHN) : e\room\NPC[i]\SoundCHN = 0
+											Next
+											LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\EscortKill" + Rand(0, 1) + ".ogg")
+											e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
+											e\room\NPC[3]\State2 = 5.0 : e\room\NPC[3]\State3 = 50.0 + (70.0 * 2.5)
+										ElseIf e\room\NPC[3]\State2 = 5.0
+											For i = 3 To 4 + (e\room\NPC[5] <> Null)
+												e\room\NPC[i]\State = 11.0 : e\room\NPC[i]\State3 = 1.0
 											Next
 										EndIf
 									EndIf
+								Else
+									e\room\NPC[3]\State3 = Min(Max(e\room\NPC[3]\State3 - FPSFactorEx, 0.0), 50.0)
 								EndIf
 							Else
-								e\room\NPC[3]\State3 = Min(Max(e\room\NPC[3]\State3 - FPSFactorEx, 0.0), 50.0)
+								If e\EventState = INTRO_ESCORT_DONE
+									If e\room\NPC[0]\State <> 1.0
+										LoadNPCSound(e\room\NPC[0], "SFX\Room\Intro\Guard\Balcony\WTF" + Rand(0, 1) + ".ogg")
+										e\room\NPC[0]\SoundCHN = PlaySoundEx(e\room\NPC[0]\Sound, Camera, e\room\NPC[0]\Collider, 20.0, 1.0, True)
+										e\room\NPC[0]\State = 1.0 : e\room\NPC[0]\State2 = 10.0 : e\room\NPC[0]\State3 = 1.0 : e\room\NPC[0]\Reload = 70.0 * 3.0
+									EndIf
+									For i = 1 To 2
+										PointEntity(e\room\NPC[i]\OBJ, me\Collider)
+										RotateEntity(e\room\NPC[i]\Collider, 0.0, EntityYaw(e\room\NPC[i]\OBJ), 0.0)
+									Next
+								EndIf
 							EndIf
 							For i = 3 To 4 + (e\room\NPC[5] <> Null)
 								UpdateSoundOrigin(e\room\NPC[i]\SoundCHN, Camera, e\room\NPC[i]\OBJ, 10.0, 1.0, True)
 							Next
 						Else
+							ShouldPlay = 66
 							PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Guard\Ulgrin\EscortTerminated.ogg"))
 							RemoveEvent(e)
 							Return
