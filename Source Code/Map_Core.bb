@@ -402,21 +402,20 @@ End Function
 Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	CatchErrors("LoadRMesh(" + File + ")")
 	
-	Local mat.Materials
+	; ~ Read the file
+	Local f% = ReadFile_Strict(File)
+	
+	If f = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "file"), File))
 	
 	ClsColor(0, 0, 0)
 	
+	Local mat.Materials
 	Local i%, j%, k%, x#, y#, z#
 	Local Vertex%
 	Local Temp1i% = 0, Temp2i% = 0, Temp3i% = 0
 	Local Temp1s$
 	Local CollisionMeshes% = CreatePivot()
 	;Local HasTriggerBox% = False
-	; ~ Read the file
-	Local f% = ReadFile_Strict(File)
-	
-	If f = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "file"), File))
-	
 	Local IsRMesh$ = ReadString(f)
 	
 	If IsRMesh = "RoomMesh"
@@ -6295,4 +6294,4 @@ Function RemoveChunkPart%(chp.ChunkPart)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS
