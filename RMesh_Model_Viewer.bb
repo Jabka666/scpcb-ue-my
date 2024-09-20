@@ -1,7 +1,10 @@
-; ~ IniControler - A part of BlitzToolBox
+; ~ RMESH Model Viewer for SCP - Containment Breach Ultimate Edition Reborn v1.3.2
+;----------------------------------------------------------------------------------------------------------------------------------------------------
+; ~ Contact us: https://discord.gg/n7KdW4u
+;----------------------------------------------------------------------------------------------------------------------------------------------------
+; ~ IniController - A part of BlitzToolBox
 ; ~ Write & Read ini file.
-; ~ v1.06 2022.11.12
-; ~ v1.06.2 2023.9.10
+; ~ v1.08 2024.9.16
 ; ~ https://github.com/ZiYueCommentary/BlitzToolbox
 
 Function IniWriteBuffer%(File$, ClearPrevious% = True)
@@ -398,17 +401,17 @@ Function LoadRMesh%(File$)
 	ClsColor(0, 0, 0)
 	
 	; ~ Read the file
+	Local f% = ReadFile(File)
+	
+	If f = 0 Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
+	
 	Local i%, j%, k%, x#, y#, z#, Yaw#
 	Local Vertex%
 	Local Temp1i%, Temp2i%, Temp3i%
 	Local Temp1#, Temp2#, Temp3#
 	Local Temp1s$, Temp2s$
-	Local CollisionMeshes% = CreatePivot()
 	;Local HasTriggerBox% = False
-	Local f% = ReadFile(File)
-	
-	If f = 0 Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
-	
+	Local CollisionMeshes% = CreatePivot()
 	Local IsRMesh$ = ReadString(f)
 	
 	If IsRMesh = "RoomMesh"

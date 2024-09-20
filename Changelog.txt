@@ -17,6 +17,9 @@
 [Map Creator]
 - Optimized Map Creator...
 
+[Converter]
+- Updated and optimized converter.
+
 {v1.3.1}
 
 [General]
