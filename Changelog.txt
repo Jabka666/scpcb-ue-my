@@ -1,4 +1,5 @@
-v1.3.2
+{v1.3.2}
+
 [General]
 - Optimized the game...
 
@@ -16,7 +17,7 @@ v1.3.2
 [Map Creator]
 - Optimized Map Creator...
 
-v1.3.1
+{v1.3.1}
 
 [General]
 - Added new trick event.
@@ -105,7 +106,7 @@ v1.3.1
 - Rooms can overlap and block the way.
 - Cups crash the game sometimes.
 
-v1.3
+{v1.3}
 
 [General]
 - Added new console commands: «roomlist» and «itemlist».
@@ -263,7 +264,7 @@ v1.3
 - Cups crash the game sometimes.
 - PD teleport points don't work sometimes.
 
-v1.2.1
+{v1.2.1}
 
 [General]
 - Agent Ulrgin no longer gives the player SCP-173's document.
@@ -302,7 +303,7 @@ v1.2.1
 - Fixed fog rendering in a Gas Mask/Hazmat Suit during one frame.
 - Fixed subtitles options placed out of menu.
 
-v1.2
+{v1.2}
 
 [Launcher]
 - Added «Primary Driver» string for GFX driver selector. Also added driver names.
@@ -441,7 +442,7 @@ v1.2
 
 - Tiny fixes for translation system.
 
-v1.1.3
+{v1.1.3}
 
 [General]
 - Added Sanity timer to the Debug Hud 2.
@@ -467,7 +468,7 @@ v1.1.3
 - Fixed an issue where SCP-049 achievement couldn't be obtained when using SCP-268.
 - Fixed Stamina cap not draining exactly where it needs to.
 
-v1.1.2
+{v1.1.2}
 
 [General]
 - Added «Camera render interval» option.
@@ -512,7 +513,7 @@ v1.1.2
 - Increased width of tab above the grid.
 - Changed Manual link.
 
-v1.1.1
+{v1.1.1}
 
 [General]
 - Tiny optimizations.
@@ -525,7 +526,7 @@ v1.1.1
 
 - Some fixes for event descriptions in Map Creator.
 
-v1.1
+{v1.1}
 
 [Launcher]
 - Aligned resolution list.
@@ -680,7 +681,7 @@ v1.1
 
 - Minor bugfixes...
 
-v1.0.3
+{v1.0.3}
 
 [General]
 - Added sound volume for crouching and picking the items up, so NPCs can hear your activity.
@@ -806,7 +807,7 @@ v1.0.3
 - Tiny fixes for some rooms.
 - Tiny fix for slider highlight detection.
 
-v1.0.2
+{v1.0.2}
 
 [General]
 - Improved SCP-939's texture.
@@ -840,7 +841,7 @@ v1.0.2
 
 - Tiny fixes for re-scaling.
 
-v1.0.1
+{v1.0.1}
 
 [General]
 - Added death message for guard.
@@ -928,7 +929,7 @@ v1.0.1
 - Tiny fix for selected items.
 - Tiny fix for credits.
 
-v1.0.0
+{v1.0}
 ~ This version continues original game.
 
 [Launcher]
