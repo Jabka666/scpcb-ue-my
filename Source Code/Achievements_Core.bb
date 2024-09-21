@@ -10,10 +10,10 @@ Function InitAchievements%()
 	AchievementsIndex = CreateS2IMap()
 	AchievementsImages = CreateS2IMap()
 	UnlockedAchievements = CreateS2IMap()
-
+	
 	AchievementsArray = JsonParseFromFile(AchievementsFile)
 	LocalAchievementsArray = JsonParseFromFile(lang\LanguagePath + AchievementsFile)
-
+	
 	Local Defines% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 	Local ArraySize% = JsonGetArraySize(Defines)
 	
@@ -29,7 +29,7 @@ End Function
 
 Function GiveAchievement%(AchvID$, ShowMessage% = True)
 	If S2IMapContains(UnlockedAchievements, AchvID) Then Return
-
+	
 	S2IMapSet(UnlockedAchievements, AchvID, True)
 	If opt\AchvMsgEnabled And ShowMessage Then
 		CreateAchievementMsg(AchvID)
@@ -40,7 +40,7 @@ Function AchievementTooltip%(AchvID$)
 	Local CoordEx% = 20 * MenuScale
 	
 	SetFontEx(fo\FontID[Font_Digital])
-
+	
 	Local Width%
 	Local LocValue% = JsonGetValue(LocalAchievementsArray, "translations")
 	Local Value% = JsonGetValue(AchievementsArray, "translations")

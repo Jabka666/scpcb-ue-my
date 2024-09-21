@@ -223,7 +223,7 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 	If itt\Tex <> 0 Then DeleteSingleTextureEntryFromCache(itt\Tex) : itt\Tex = 0
 	Delete(itt)
 End Function
-	
+
 Function GetRandDocument$()
 	Select Rand(22)
 		Case 1

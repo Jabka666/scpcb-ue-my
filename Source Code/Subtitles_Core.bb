@@ -182,7 +182,7 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 	If JsonIsNull(Token) Lor (Not JsonIsArray(Token))
 		Local FallBack% = JsonGetValue(LocalSubFile, "fallback")
 		
-		If (JsonGetBool(FallBack)) Lor (JsonIsNull(FallBack)) Token = JsonGetValue(SubFile, SoundPath)
+		If (JsonGetBool(FallBack)) Lor (JsonIsNull(FallBack)) Then Token = JsonGetValue(SubFile, SoundPath)
 		If (Not JsonIsArray(Token)) Then Return
 	EndIf
 	

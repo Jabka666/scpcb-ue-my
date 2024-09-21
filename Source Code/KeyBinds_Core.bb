@@ -9,13 +9,13 @@ Global key.Keys = New Keys
 
 Function InitKeyNames%()
 	Local i%
-
+	
 	key\Name[1] = "Esc"
-
+	
 	For i = 2 To 10
 		key\Name[i] = i - 1
 	Next
-
+	
 	key\Name[11] = "0"
 	key\Name[12] = "-"
 	key\Name[13] = "="

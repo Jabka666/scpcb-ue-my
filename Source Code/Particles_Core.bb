@@ -52,7 +52,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	
 	Return(p)
 End Function
-	
+
 Function UpdateParticles%()
 	CatchErrors("UpdateParticles()")
 	
@@ -85,7 +85,7 @@ Function UpdateParticles%()
 	
 	CatchErrors("Uncaught: UpdateParticles()")
 End Function
-	
+
 Function RemoveParticle%(p.Particles)
 	CatchErrors("RemoveParticle()")
 	

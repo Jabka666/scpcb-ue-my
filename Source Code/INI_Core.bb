@@ -62,7 +62,7 @@ Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", Check
 	Else
 		DefaultValue1 = DefaultValue
 	EndIf
-
+	
 	Return(IniGetBufferString(lang\LanguagePath + File, Name, Parameter, DefaultValue1))
 End Function
 
@@ -95,9 +95,9 @@ Function StripFileName$(File$)
 	Local LastSlash% = 0
 	Local FileLen% = Len(File)
 	Local i%
-
+	
 	If FileLen = 0 Then Return("")
-
+	
 	For i = FileLen To 1 Step -1
 		Local Middle$ = Mid(File, i, 1)
 		
@@ -415,7 +415,7 @@ Function LoadOptionsINI%()
 	opt\PlayStartup = IniGetInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
 	opt\LauncherEnabled = IniGetInt(OptionFile, "Advanced", "Launcher Enabled", True)
-
+	
 	opt\NoProgressBar = IniGetInt(OptionFile, "Advanced", "No Progress Bar", False)
 	
 	; ~ [GLOBAL]
@@ -544,7 +544,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-
+	
 	IniWriteString(OptionFile, "Advanced", "No Progress Bar", opt\NoProgressBar)
 	;[End Block]
 	

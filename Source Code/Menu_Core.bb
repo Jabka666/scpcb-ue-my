@@ -683,7 +683,7 @@ Function UpdateMainMenu%()
 								UserTrackCheck2 = 0
 								
 								Local DirPath$ = "SFX\Radio\UserTracks\"
-									
+								
 								If FileType(DirPath) <> 2 Then CreateDir(DirPath)
 								
 								Local Dir% = ReadDir(DirPath)

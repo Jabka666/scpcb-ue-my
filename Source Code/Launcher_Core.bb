@@ -79,7 +79,7 @@ Function SetLanguage%(Language$, FromSelector% = True)
 		IniClearBuffer(lang\LanguagePath + FontsFile)
 		IniClearBuffer(lang\LanguagePath + AchievementsFile)
 	EndIf
-
+	
 	lang\CurrentLanguage = Language
 	If lang\CurrentLanguage = "en"
 		lang\LanguagePath = ""

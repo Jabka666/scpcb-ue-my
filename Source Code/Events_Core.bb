@@ -3066,7 +3066,6 @@ Function UpdateEvents%()
 						e\EventState3 = 0.0
 					EndIf
 					FreeEntity(pp) : pp = 0
-						
 				EndIf
 				;[End Block]
 			Case e_cont3_966
@@ -3954,7 +3953,7 @@ Function UpdateEvents%()
 							ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
 						EndIf
 						If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 6.25
-								me\Injuries = me\Injuries + (fps\Factor[0] / (5000.0 * (1.0 + (wi\HazmatSuit > 0))))
+							me\Injuries = me\Injuries + (fps\Factor[0] / (5000.0 * (1.0 + (wi\HazmatSuit > 0))))
 							If e\room\NPC[1] = Null
 								e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, EntityX(e\room\NPC[0]\Collider), 0.13, EntityZ(e\room\NPC[0]\Collider))
 								RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle, 0.0)
@@ -6713,7 +6712,7 @@ Function UpdateEvents%()
 				
 				If PlayerRoom = e\room
 					If e\EventState = 0.0
-						If e\EventState2 = 0.0 e\EventState2 = (-70.0) * 5.0
+						If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 5.0
 						e\EventState = 1.0
 					EndIf
 				EndIf
@@ -7919,7 +7918,7 @@ Function UpdateDimension106%()
 										For e2.Events = Each Events
 											If e2\EventID = e_room2_sl
 												e2\EventState3 = 0.0
-													UpdateLever(e2\room\RoomLevers[0]\OBJ)
+												UpdateLever(e2\room\RoomLevers[0]\OBJ)
 												RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
 												Exit
 											EndIf

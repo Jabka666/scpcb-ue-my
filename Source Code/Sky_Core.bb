@@ -3,7 +3,7 @@ Global Sky%
 Function CreateSky%(FileName$, Parent% = 0)
 	Local Sky%, Face%, Direction$, Vert%
 	Local s%, x%, y%, z%, u%, v%
-
+	
 	Restore sky_SkyboxData
 	Sky = CreateMesh(Parent)
 	For Face = 1 To 6

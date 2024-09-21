@@ -690,7 +690,7 @@ Function LoadGame%(File$)
 	RemoteDoorOn = ReadByte(f)
 	
 	SoundTransmission = ReadByte(f)
-
+	
 	Repeat
 		Local Achv$ = ReadString(f)
 		

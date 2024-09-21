@@ -3690,7 +3690,6 @@ Function UpdateNPCs%()
 							EndIf
 						EndIf
 					EndIf
-						
 				EndIf
 				;[End Block]
 			Case NPCType939
