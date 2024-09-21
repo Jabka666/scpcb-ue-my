@@ -8515,7 +8515,7 @@ Function UpdateIntro%()
 									e\EventState = INTRO_CELL_REQUESTING
 								EndIf
 							EndIf
-							;[Block]
+							;[End Block]
 						Case INTRO_CELL_REQUESTING
 							;[Block]
 							LightRenderDistance = 16.0

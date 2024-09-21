@@ -44,6 +44,8 @@ Function SetDifficultyColor%(ID%, R%, G%, B%)
 	difficulties[ID]\B = B
 End Function
 
+; ~ Configure difficulties
+;[Block]
 difficulties[SAFE] = New Difficulty
 difficulties[SAFE]\Name = GetLocalString("menu", "new.safe")
 difficulties[SAFE]\Description = GetLocalString("msg", "diff.safe")
@@ -88,6 +90,7 @@ difficulties[ESOTERIC]\Customizable = True
 difficulties[ESOTERIC]\SaveType = SAVE_ANYWHERE
 difficulties[ESOTERIC]\OtherFactors = EASY
 SetDifficultyColor(ESOTERIC, 200, 50, 200)
+;[End Block]
 
 SelectedDifficulty = difficulties[(Not opt\DebugMode)] ; ~ DO NOT FORGET THAT Const SAFE% = 0 and Const EUCLID% = 1
 

@@ -2770,7 +2770,7 @@ Function UpdateNPCs%()
 						EndIf
 						;[End Block]
 					Case 2.0 ; ~ Happy :]
-						;[End Block]
+						;[Block]
 						PlayerSeeAble = (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 						If Visible And PlayerSeeAble
 							PointEntity(n\Collider, me\Collider)

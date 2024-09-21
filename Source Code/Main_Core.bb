@@ -217,6 +217,8 @@ Function CatchErrors%(Location$)
 	SetErrorMsg(11, "Error located in: " + Location)
 End Function
 
+; ~ MAIN PROGRAM
+;[Block]
 Repeat
 	SetErrorMsg(6, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
 	SetErrorMsg(7, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
@@ -264,6 +266,7 @@ Repeat
 	
 	Flip(opt\VSync)
 Forever
+;[End Block]
 
 Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
@@ -3372,7 +3375,7 @@ Function UpdateGUI%()
 				EndIf
 			EndIf
 		EndIf
-	
+		
 		If SelectedScreen <> Null
 			If mo\MouseUp1 Lor mo\MouseHit2 Then
 				FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
@@ -9315,6 +9318,7 @@ Function Update294%()
 								Temp = True
 								;[End Block]
 						End Select
+						;[End Block]
 					Case 3
 						;[Block]
 						Select Int(xTemp)
@@ -9359,6 +9363,7 @@ Function Update294%()
 								I_294\ToInput = Left(I_294\ToInput, Max(Len(I_294\ToInput) - 1, 0))
 								;[End Block]
 						End Select
+						;[End Block]
 					Case 4
 						;[Block]
 						StrTemp = " "

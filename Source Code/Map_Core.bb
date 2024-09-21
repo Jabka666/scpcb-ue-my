@@ -3643,21 +3643,21 @@ Function UseDoor%(PlaySFX% = True)
 		
 		Select d_I\ClosestDoor\Code
 			Case CODE_DR_MAYNARD
-				;[Break]
+				;[Block]
 				GiveAchievement("maynard")
-				;[End Break]
+				;[End Block]
 			Case CODE_DR_GEARS
-				;[Break]
+				;[Block]
 				GiveAchievement("gears")
-				;[End Break]
+				;[End Block]
 			Case CODE_DR_HARP
-				;[Break]
+				;[Block]
 				GiveAchievement("harp")
-				;[End Break]
+				;[End Block]
 			Case CODE_O5_COUNCIL
-				;[Break]
+				;[Block]
 				GiveAchievement("o5")
-				;[End Break]
+				;[End Block]
 		End Select
 	Else
 		If d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR
@@ -5539,6 +5539,7 @@ Function CreateMap%()
 	
 	; ~ [LIGHT CONTAINMENT ZONE]
 	
+	;[Block]
 	SetRoom(0, ROOM1, "cont1_173", 0.0)
 	SetRoom(0, ROOM1, "cont1_005", 0.15)
 	SetRoom(0, ROOM1, "room1_storage", 0.35)
@@ -5564,9 +5565,10 @@ Function CreateMap%()
 	SetRoom(0, ROOM3, "cont3_372", 0.8)
 	
 	SetRoom(0, ROOM4, "room4_ic", 0.3)
+	;[End Block]
 	
 	; ~ [HEAVY CONTAINMENT ZONE]
-	
+	;[Block]
 	SetRoom(1, ROOM1, "cont1_079", 0.15)
 	SetRoom(1, ROOM1, "cont1_106", 0.3)
 	SetRoom(1, ROOM1, "cont1_035", 0.45)
@@ -5585,9 +5587,10 @@ Function CreateMap%()
 	
 	SetRoom(1, ROOM3, "cont3_513", 0.5)
 	SetRoom(1, ROOM3, "cont3_966", 0.8)
+	;[End Block]
 	
 	; ~ [ENTRANCE ZONE]
-	
+	;[Block]
 	SetRoom(2, ROOM1, "gate_b_entrance", 1.0)
 	SetRoom(2, ROOM1, "gate_a_entrance", 1.0)
 	SetRoom(2, ROOM1, "room1_o5", 1.0)
@@ -5611,6 +5614,7 @@ Function CreateMap%()
 	SetRoom(2, ROOM3, "room3_2_ez", 0.3)
 	SetRoom(2, ROOM3, "room3_office", 0.5)
 	SetRoom(2, ROOM3, "room3_3_ez", 0.7)
+	;[End Block]
 	
 	Temp = 0
 	For y = MapGridSize - 1 To 1 Step -1
@@ -5777,9 +5781,9 @@ Function CreateMap%()
 								Color(0, 200, 0)
 								;[End Block]
 ;							Case 5
-;								;[Block]
+								;[Block]
 ;								Color(255, 50, 50)
-;								;[End Block]
+								;[End Block]
 							Case 4
 								;[Block]
 								Color(50, 50, 255)

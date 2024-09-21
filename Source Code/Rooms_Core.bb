@@ -782,6 +782,7 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			CreateCustomCenter(r, r\x + 336.0 * RoomScale, r\z + 32.0 * RoomScale)
+			;[End Block]
 		Case r_room2_js
 			;[Block]
 			; ~ Janitorial Lockers
