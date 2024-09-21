@@ -9653,7 +9653,6 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	ResetEntity(Entity)
 End Function
 
-
 ;~IDEal Editor Parameters:
 ;~F#8#42#59#5F#82#DB#E0#112#157#15B#15F#163#1CA#1CE#1D2#1D6#250#254#259#25D
 ;~F#29F#2C7#2CD#2DF#2E7#2F3#2FE#309#357#3F2#3FC#416#42F#442#449#450#457#45E#527#52C
