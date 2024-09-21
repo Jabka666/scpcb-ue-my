@@ -583,20 +583,20 @@ Function UpdateGame%()
 				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					Select CanSave
 						Case 0 ; ~ Scripted location
-							;[Break]
+							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.now"))
-							;[End Break]
+							;[End Block]
 						Case 1 ; ~ Endings / Intro location
-							;[Break]
+							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.location"))
 							If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
-							;[End Break]
+							;[End Block]
 						Case 2 ; ~ Triggered SCP-096
-							;[Break]
+							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.096"))
-							;[End Break]
+							;[End Block]
 						Case 3 ; ~ Allowed To Save
-							;[Break]
+							;[Block]
 							If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
 								If SelectedScreen = Null And sc_I\SelectedMonitor = Null
 									CreateHintMsg(GetLocalString("save", "failed.screen"))
@@ -608,7 +608,7 @@ Function UpdateGame%()
 							Else
 								SaveGame(CurrSave\Name) ; ~ Can save
 							EndIf
-							;[End Break]
+							;[End Block]
 					End Select
 				Else
 					CreateHintMsg(GetLocalString("save", "disable"))
