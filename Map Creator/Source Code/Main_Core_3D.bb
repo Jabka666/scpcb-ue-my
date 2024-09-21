@@ -113,7 +113,7 @@ Global ConsoleFont% = LoadFont_Strict("GFX\fonts\" + IniGetString(LanguagePath +
 
 Function LoadEntities%()
 	Local i%
-
+	
 	; ~ [DOORS]
 	
 	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
@@ -198,6 +198,8 @@ Function CatchErrors%(Location$)
 	SetErrorMsg(8, Format(ErrorMsg, Location))
 End Function
 
+; ~ MAIN PROGRAM
+;[Block]
 Repeat
 	SetErrorMsg(6, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
 	SetErrorMsg(7, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
@@ -591,6 +593,7 @@ Repeat
 	Flip(opt\VSync)
 Until (Not api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Reborn Map Creator"))
 End()
+;[End Block]
 
 Type RoomTemplates
 	Field OBJ%, ID%
@@ -1394,4 +1397,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#D#49#5F#64#71#91#C4#C9#10E#137#165#255#25C#267#27D#281#285#289#28D#29E
+;~F#300#308#30C#310#324#329#32E#332#336#33A#340#356#368#3A6#3D5#3E3#4A4#4AB#4B1#4B8
+;~F#4BF#4C6#4CE#4D3#510
 ;~C#Blitz3D TSS

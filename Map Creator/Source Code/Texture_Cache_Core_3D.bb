@@ -126,4 +126,5 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#1#8#E#26#31#3C#46#61#6A
 ;~C#Blitz3D TSS

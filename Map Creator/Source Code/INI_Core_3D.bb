@@ -129,4 +129,5 @@ opt\TotalVidMemory = TotalVidMem()
 opt\TotalPhysMemory = TotalPhys()
 
 ;~IDEal Editor Parameters:
+;~F#5#9#D#11#16#1A#1E#24#28#37#49#5D#68
 ;~C#Blitz3D TSS
