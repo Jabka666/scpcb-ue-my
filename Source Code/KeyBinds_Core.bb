@@ -107,4 +107,5 @@ Function InitKeyNames%()
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#0#9
 ;~C#Blitz3D TSS

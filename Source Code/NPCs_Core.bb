@@ -7217,6 +7217,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-860-2"), 255, 0, 0)
 			;[End Block]
 		Case "939", "scp939", "scp-939"
+			;[Block]
 			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), GetLocalString("npc", "939")), 255, 0, 0)
 			;[End Block]
 		Case "966", "scp966", "scp-966", "sleepkiller"
@@ -7235,6 +7236,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-1048")
 			;[End Block]
 		Case "1499-1", "14991", "scp-1499-1", "scp1499-1", "scp-14991", "scp14991"
+			;[Block]
 			n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-1499-1")
 			;[End Block]

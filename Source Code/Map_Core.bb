@@ -5538,7 +5538,6 @@ Function CreateMap%()
 	; ~ Earlier SetRoom calls in each block take priority, so set important rooms first!
 	
 	; ~ [LIGHT CONTAINMENT ZONE]
-	
 	;[Block]
 	SetRoom(0, ROOM1, "cont1_173", 0.0)
 	SetRoom(0, ROOM1, "cont1_005", 0.15)

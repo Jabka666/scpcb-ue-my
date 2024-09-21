@@ -677,4 +677,7 @@ Function ResetOptionsINI%()
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#5#9#D#11#15#19#1D#22#26#2A#30#34#38#44#48#4C#4F#53#57#5D
+;~F#6F#81#94#9F#A3#A7#AB#B3#ED#101#105#109#10D#111#1B5#1B7#1D0#1E9#20E#227
+;~F#22E
 ;~C#Blitz3D TSS

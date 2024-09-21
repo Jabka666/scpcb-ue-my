@@ -107,4 +107,5 @@ Function UpdateDust%()
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#0#A#1C#21#37#58#64
 ;~C#Blitz3D TSS

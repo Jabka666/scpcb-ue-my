@@ -95,4 +95,5 @@ SetDifficultyColor(ESOTERIC, 200, 50, 200)
 SelectedDifficulty = difficulties[(Not opt\DebugMode)] ; ~ DO NOT FORGET THAT Const SAFE% = 0 and Const EUCLID% = 1
 
 ;~IDEal Editor Parameters:
+;~F#0#10#19#21#28#2F
 ;~C#Blitz3D TSS

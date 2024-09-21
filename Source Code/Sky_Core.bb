@@ -69,4 +69,5 @@ Data -1, -1, +1, 0, 0
 ;[End Block]
 
 ;~IDEal Editor Parameters:
+;~F#2#20#25
 ;~C#Blitz3D TSS

@@ -1009,4 +1009,6 @@ End Function
 
 
 ;~IDEal Editor Parameters:
+;~F#0#E#14#28#2D#3B#4A#71#78#F3#F7#100#19F#1E6#1F3#1FE#30C#310#331#360
+;~F#369#394#3BD#3CF#3D7#3E3
 ;~C#Blitz3D TSS
