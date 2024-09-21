@@ -5,7 +5,6 @@
 ;
 ; ~ This file also has been modified a bit to suit better for SCP:CB
 
-
 Type Template
 	Field EmitterMaxTime%											; ~ Emitter life time
 	Field EmitterBlend%												; ~ Blendmode of emitter entity
@@ -526,6 +525,6 @@ Function UpdateParticles_Devil()
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#8#1C#27#35#4C#54#5B#62#69#70#78#7F#8B#97#A3#AB#B3#BA#C4#CC
-;~F#D3#DA#E6#ED#F6#FE#119#12B#137#148#17C#187
+;~F#7#1B#26#34#4B#53#5A#61#68#6F#77#7E#8A#96#A2#AA#B2#B9#C3#CB
+;~F#D2#D9#E5#EC#F5#FD#118#12A#136#147#17B#186
 ;~C#Blitz3D TSS
