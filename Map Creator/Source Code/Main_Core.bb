@@ -654,7 +654,7 @@ Repeat
 							EndIf
 						EndIf
 					EndIf
-						
+					
 					If Grid_SelectedX = x And Grid_SelectedY = y
 						Color(150, 150, 150)
 						Rect(Width / MapGridSizeFloat * x, Height / MapGridSizeFloat * y, (Width / MapGridSizeFloat), (Height / MapGridSizeFloat), True)
@@ -1482,7 +1482,7 @@ Function LoadRoomTemplates%(File$)
 	
 	; ~ Forest pieces
 	Local Fr_Prefix$ = "SCP-860-1 "
-
+	
 	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = Fr_Prefix + "door"
 	rt\Shape = ROOM1
@@ -1513,10 +1513,10 @@ Function LoadRoomTemplates%(File$)
 	rt\Shape = ROOM4
 	rt\Description = GetLocalString("mc", "860.4way")
 	rt\MapGrid = 1
-
+	
 	; ~ Maintenance tunnel rooms
 	Local MT_Prefix$ = "Maintenance tunnel "
-
+	
 	rt.RoomTemplates = CreateRoomTemplate()
 	rt\Name = MT_Prefix + "endroom"
 	rt\Shape = ROOM1
@@ -1822,7 +1822,7 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 	EndIf
 	
 	If StreamTopRgm Then WriteInt(f, CurrMapGrid)
-		
+	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
 			If Map(x, y) <> Null
