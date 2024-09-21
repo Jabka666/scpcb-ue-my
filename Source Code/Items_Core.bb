@@ -273,7 +273,7 @@ Function GetRandDocument$()
 		Case 12
 			;[Block]
 			Return("682")
-			;[Block]
+			;[End Block]
 		Case 13
 			;[Block]
 			Return("714")
@@ -1148,6 +1148,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						ClearSecondInv(item, 0)
 					EndIf
 					Remove = False
+					;[End Block]
 				Case ONETOONE
 					;[Block]
 					Remove = False
@@ -1264,6 +1265,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("SCP-148 Ingot", it_scp148ingot, x, y, z)
+					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					Remove = False
@@ -2030,6 +2032,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					EndIf
 					;[End Block]
 			End Select
+			;[End Block]
 		Case it_syringeinf
 			;[Block]
 			Select Setting
@@ -2055,6 +2058,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					EndIf
 					;[End Block]
 			End Select
+			;[End Block]
 		Case it_scp500pill, it_scp500pilldeath, it_pill
 			;[Block]
 			Select Setting
@@ -2187,6 +2191,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			End Select
 			;[End Block]
 		Case it_origami
+			;[Block]
 			Select Setting
 				Case ROUGH
 					;[Block]
@@ -2380,6 +2385,7 @@ Function GetUsingItem%(item.Items)
 		Case it_key6
 			;[Block]
 			Return(KEY_CARD_6)
+			;[End Block]
 		Case it_key0
 			;[Block]
 			Return(KEY_CARD_0)

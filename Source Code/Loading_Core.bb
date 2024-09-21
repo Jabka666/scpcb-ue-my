@@ -1000,7 +1000,7 @@ Function LoadItems%()
 	Local it.ItemTemplates, it2.ItemTemplates
 	
 	; ~ [PAPER]
-	
+	;[Block]
 	CreateItemTemplate(GetLocalString("items", "doc005"), "Document SCP-005", it_paper, "paper.b3d", "INV_paper.png", "doc_005.png", 0.003, 0, "doc_005.png")
 	CreateItemTemplate(GetLocalString("items", "doc008"), "Document SCP-008", it_paper, "paper.b3d", "INV_paper.png", "doc_008.png", 0.003, 0, "doc_008.png")
 	CreateItemTemplate(GetLocalString("items", "doc012"), "Document SCP-012", it_paper, "paper.b3d", "INV_paper.png", "doc_012.png", 0.003, 0, "doc_012.png")
@@ -1120,9 +1120,10 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", it_oldbadge, "badge.b3d", "INV_D_9341_badge.png", "D_9341_badge.png", 0.0001, 1, "D_9341_badge.png", "", False, 1 + 2 + 8)
 	
 	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", it_ticket, "badge.b3d", "INV_ticket.png", "ticket.png", 0.0001, 0, "ticket.png", "", False, 1 + 2 + 8)
+	;[End Block]
 	
 	; ~ [SCPs]
-	
+	;[Block]
 	CreateItemTemplate("SCP-085", "SCP-085", it_paper, "note.b3d", "INV_note.png", "note_085.png", 0.0033, 0, "note_085.png")
 	
 	CreateItemTemplate("SCP-005", "SCP-005", it_scp005, "scp_005.b3d", "INV_scp_005.png", "", 0.0003, 1)
@@ -1156,9 +1157,10 @@ Function LoadItems%()
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "500death"), "Upgraded Pill", it_scp500pilldeath, "pill.b3d", "INV_scp_500_pill.png", "", 0.00007, 2)
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
+	;[End Block]
 	
 	; ~ [MISC ITEMS]
-	
+	;[Block]
 	CreateItemTemplate(GetLocalString("items", "helmet"), "Ballistic Helmet", it_helmet, "ballistic_helmet.b3d", "INV_ballistic_helmet.png", "", 0.018, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "vest"), "Ballistic Vest", it_vest, "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.02, 2)
@@ -1235,9 +1237,10 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_finesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_veryfinesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_syringeinf, "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png")
+	;[End Block]
 	
 	; ~ [KEYCARDS, KEYS, CARDS, COINS]
-	
+	;[Block]
 	CreateItemTemplate(GetLocalString("items", "key0"), "Level 0 Key Card", it_key0, "key_card.b3d", "INV_key_card_lvl_0.png", "", 0.00037, 1)
 	CreateItemTemplate(GetLocalString("items", "key1"), "Level 1 key Card", it_key1, "key_card.b3d", "INV_key_card_lvl_1.png", "", 0.00037, 1, "key_card_lvl_1.png")
 	CreateItemTemplate(GetLocalString("items", "key2"), "Level 2 key Card", it_key2, "key_card.b3d", "INV_key_card_lvl_2.png", "", 0.00037, 1, "key_card_lvl_2.png")
@@ -1257,6 +1260,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0005, 3, "coin_rusty.png")
 	
 	CreateItemTemplate(GetLocalString("items", "pizza"), "Pizza Slice", it_pizza, "Pizza_Slice.b3d", "INV_Pizza_Slice.png", "", 0.05, 2)
+	;[End Block]
 	
 	For it.ItemTemplates = Each ItemTemplates
 		If it\Tex <> 0

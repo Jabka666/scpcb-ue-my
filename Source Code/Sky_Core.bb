@@ -35,6 +35,7 @@ Function UpdateSky%(SkyOBJ%)
 End Function
 
 .sky_SkyboxData
+;[Block]
 Data "_back"
 Data -1, +1, -1, 0, 0
 Data +1, +1, -1, 1, 0
@@ -65,6 +66,7 @@ Data -1, -1, -1, 1, 0
 Data +1, -1, -1, 1, 1
 Data +1, -1, +1, 0, 1
 Data -1, -1, +1, 0, 0
+;[End Block]
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

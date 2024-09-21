@@ -1928,6 +1928,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 						Case 4
 							;[Block]
 							CWMText = "eof9nsd3jue4iwe1fgj"
+							;[End Block]
 						Case 5
 							;[Block]
 							CWMText = GetLocalString("menu", "990_4")
