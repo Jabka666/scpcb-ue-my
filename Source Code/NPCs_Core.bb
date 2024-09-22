@@ -49,6 +49,7 @@ Type NPCs
 	Field Contained% = False
 	Field TeslaHit% = False
 	Field IsOpt% = False
+	Field MTFUpdateTimer#
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -5070,6 +5071,11 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
+			If n\NPCType = NPCTypeMTF
+				If n_I\MTFLeader = Null Then n_I\MTFLeader = n
+				If n_I\MTFCoLeader = Null And n <> n_I\MTFLeader Then n_I\MTFCoLeader = n
+			EndIf
+			
 			If GravityDist < PowTwo(HideDistance * 0.6) Lor n\NPCType = NPCType1499_1
 				If n\InFacility = InFacility
 					TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
@@ -5181,10 +5187,7 @@ Function UpdateMTFUnit%(n.NPCs)
 	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
-		If n = n_I\MTFLeader Then n_I\MTFLeader = Null
 	Else
-		If n_I\MTFLeader = Null Then n_I\MTFLeader = n
-		
 		UpdateNPCBlinking(n)
 		
 		n\Reload = Max(n\Reload - fps\Factor[0], 0.0)
@@ -5198,22 +5201,24 @@ Function UpdateMTFUnit%(n.NPCs)
 		Local x# = 0.0, y# = 0.0, z# = 0.0
 		Local SqrValue#, PlayerSeeAble%
 		Local FPSFactorEx# = fps\Factor[0] * 2.0
+		Local MyBoss.NPCs = Null
+		
+		If n <> n_I\MTFLeader
+			If n = n_I\MTFCoLeader
+				MyBoss = n_I\MTFLeader
+			Else
+				MyBoss = n_I\MTFCoLeader
+			EndIf
+		EndIf
 		
 		Select n\State ; ~ What is this MTF doing
 			Case MTF_WANDERING_AROUND
 				;[Block]
 				n\Speed = 0.015
 				; ~ Set a timer to step back
-				If n <> n_I\MTFLeader
-					Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
-					If Dist < 0.64
-						n\State3 = 70.0
-						For n2.NPCs = Each NPCs
-							If n2\NPCType = NPCTypeMTF And n2 <> n
-								If EntityDistanceSquared(n2\Collider, n\Collider) < 0.64 And n2\State = MTF_WANDERING_AROUND Then n2\State3 = 70.0
-							EndIf
-						Next
-					EndIf
+				If MyBoss <> Null
+					Dist = EntityDistanceSquared(n\Collider, MyBoss\Collider)
+					If Dist < 0.64 Then n\State3 = 70.0
 					If n\State3 > 0.0
 						n\PathStatus = PATH_STATUS_NO_SEARCH
 						n\PathLocation = 0
@@ -5223,8 +5228,8 @@ Function UpdateMTFUnit%(n.NPCs)
 				EndIf
 				
 				If n\PathTimer <= 0.0 ; ~ Update path
-					If n <> n_I\MTFLeader ; ~ I'll follow the leader
-						n\PathStatus = FindPath(n, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.1, EntityZ(n_I\MTFLeader\Collider, True)) ; ~ Whatever you say boss
+					If MyBoss <> Null ; ~ I'll follow my boss
+						n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.1, EntityZ(MyBoss\Collider, True)) ; ~ Whatever you say boss
 					Else ; ~ I am the leader
 						If n_I\Curr173\Idle = 2
 							For r.Rooms = Each Rooms
@@ -5363,7 +5368,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						UseDoorNPC(n)
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-				ElseIf n\PathTimer <= 70.0 * 2.5 And n = n_I\MTFLeader
+				ElseIf n\PathTimer <= 70.0 * 2.5 And MyBoss = Null
 					n\CurrSpeed = 0.0
 					If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 					FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
@@ -5393,14 +5398,14 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 					Else
-						If n = n_I\MTFLeader
+						If MyBoss = Null
 							n\CurrSpeed = 0.0
 							If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 							FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 						Else
 							If Dist >= 1.0 And n\State3 =< 0.0
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-								PointEntity(n\Collider, n_I\MTFLeader\Collider)
+								PointEntity(n\Collider, MyBoss\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
@@ -5410,7 +5415,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 							Else
 								n\CurrSpeed = CurveValue(-n\Speed, n\CurrSpeed, 20.0)
-								PointEntity(n\Collider, n_I\MTFLeader\Collider)
+								PointEntity(n\Collider, MyBoss\Collider)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 522.0, 488.0, n\CurrSpeed * 26.0)
@@ -5421,202 +5426,217 @@ Function UpdateMTFUnit%(n.NPCs)
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 				EndIf
 				
-				If n\Target = Null
-					PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume)
-					If PlayerSeeAble > 0
-						If n\LastSeen > 0 And n\LastSeen < 70.0 * 15.0
-							If PlayerSeeAble < 2
-								LoadNPCSound(n, "SFX\Character\MTF\ThereHeIs" + Rand(0, 5) + ".ogg")
-								PlayMTFSound(n\Sound, n)
-							EndIf
-						Else
-							If PlayerSeeAble = 1
-								LoadNPCSound(n, "SFX\Character\MTF\Stop" + Rand(0, 5) + ".ogg")
-								PlayMTFSound(n\Sound, n)
-							ElseIf PlayerSeeAble = 2
-								LoadNPCSound(n, "SFX\Character\MTF\ClassD" + Rand(0, 3) + ".ogg")
-								PlayMTFSound(n\Sound, n)
-							EndIf
-						EndIf
-						
-						n\EnemyX = EntityX(me\Collider, True)
-						n\EnemyY = EntityY(me\Collider, True)
-						n\EnemyZ = EntityZ(me\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\LastSeen = 70.0 * Rnd(30.0, 40.0)
-						n\Reload = 70.0 * (3.0 - SelectedDifficulty\AggressiveNPCs)
-						n\State2 = 70.0 * (15.0 * PlayerSeeAble) ; ~ Give up after 15 seconds (30 seconds if detected by loud noise, over camera: 45)
-						n\State = MTF_SEARCHING_PLAYER
-					EndIf
-				EndIf
-				
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
-				If n_I\Curr173\Idle < 2
-					If NPCSeesNPC(n_I\Curr173, n) > 0
-						If n = n_I\MTFLeader
-							If n\State2 > 0.0
-								LoadNPCSound(n, "SFX\Character\MTF\173\Spotted3.ogg")
-							Else
-								LoadNPCSound(n, "SFX\Character\MTF\173\Spotted" + Rand(0, 1) + ".ogg")
-							EndIf
-							PlayMTFSound(n\Sound, n)
-						EndIf
-						
-						For n2.NPCs = Each NPCs
-							If n2\NPCType = NPCTypeMTF
-								n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
-								n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
-								n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
-								n2\PathTimer = 0.0
-								n2\PathStatus = PATH_STATUS_NO_SEARCH
-								n2\Target = n_I\Curr173
-								n2\State2 = 70.0 * 30.0 ; ~ Give up after 30 seconds
-								n2\State3 = 0.0
-								n2\State = MTF_173_SPOTTED
-							EndIf
-						Next
-					EndIf
-				EndIf
-				
-				If n_I\Curr106\State <= 0.0
-					If NPCSeesNPC(n_I\Curr106, n) = 1
-						If n = n_I\MTFLeader
-							LoadNPCSound(n, "SFX\Character\MTF\106\Spotted" + Rand(0, 2) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						EndIf
-						
-						n\EnemyX = EntityX(n_I\Curr106\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr106\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr106\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\Target = n_I\Curr106
-						n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-						n\State3 = 0.0
-						n\State = MTF_049_066_106_SPOTTED
-					EndIf
-				EndIf
-				
-				If n_I\Curr096 <> Null
-					If NPCSeesNPC(n_I\Curr096, n) = 1
-						If n = n_I\MTFLeader
-							LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						EndIf
-						PlaySoundEx(snd_I\NVGSFX[0], Camera, n\Collider, 5.0)
-						
-						n\EnemyX = EntityX(n_I\Curr096\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr096\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr096\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\Target = n_I\Curr096
-						n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
-						n\State3 = 0.0
-						n\State = MTF_096_SPOTTED
-					EndIf
-				EndIf
-				
-				If n_I\Curr049 <> Null
-					If NPCSeesNPC(n_I\Curr049, n) = 1
-						If n = n_I\MTFLeader
-							LoadNPCSound(n, "SFX\Character\MTF\049\Spotted" + Rand(0, 4) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						EndIf
-						
-						n\EnemyX = EntityX(n_I\Curr049\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr049\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr049\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\Target = n_I\Curr049
-						n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-						n\State3 = 0.0
-						n\State = MTF_049_066_106_SPOTTED
-					EndIf
-				EndIf
-				
-				If n_I\Curr066 <> Null
-					If NPCSeesNPC(n_I\Curr066, n) = 1
-						n\EnemyX = EntityX(n_I\Curr066\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr066\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr066\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\Target = n_I\Curr066
-						n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
-						n\State3 = 0.0
-						n\State = MTF_049_066_106_SPOTTED
-					EndIf
-				EndIf
-				
-				For n2.NPCs = Each NPCs
-					If (Not n2\IsDead)
-						If n2\NPCType = NPCType049_2
-							If NPCSeesNPC(n2, n) = 1
-								If n = n_I\MTFLeader
-									LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
+				If n\MTFUpdateTimer =< 0.0
+					If n\Target = Null
+						PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume)
+						If PlayerSeeAble > 0
+							If n\LastSeen > 0 And n\LastSeen < 70.0 * 15.0
+								If PlayerSeeAble < 2
+									LoadNPCSound(n, "SFX\Character\MTF\ThereHeIs" + Rand(0, 5) + ".ogg")
 									PlayMTFSound(n\Sound, n)
 								EndIf
-								
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\PathTimer = 0.0
-								n\PathStatus = PATH_STATUS_NO_SEARCH
-								n\Target = n2
-								n\Reload = 70.0 * 4.0
-								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-								n\State3 = 0.0
-								n\State = MTF_ZOMBIES_SPOTTED
-								Exit
+							Else
+								If PlayerSeeAble = 1
+									LoadNPCSound(n, "SFX\Character\MTF\Stop" + Rand(0, 5) + ".ogg")
+									PlayMTFSound(n\Sound, n)
+								ElseIf PlayerSeeAble = 2
+									LoadNPCSound(n, "SFX\Character\MTF\ClassD" + Rand(0, 3) + ".ogg")
+									PlayMTFSound(n\Sound, n)
+								EndIf
 							EndIf
-						ElseIf n2\NPCType = NPCType008_1
-							If NPCSeesNPC(n2, n) = 1
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\PathTimer = 0.0
-								n\PathStatus = PATH_STATUS_NO_SEARCH
-								n\Target = n2
-								n\Reload = 70.0 * 3.0
-								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-								n\State3 = 0.0
-								n\State = MTF_ZOMBIES_SPOTTED
-								Exit
-							EndIf
-						ElseIf n2\NPCType = NPCType035_Tentacle
-							If NPCSeesNPC(n2, n) = 1
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\PathTimer = 0.0
-								n\PathStatus = PATH_STATUS_NO_SEARCH
-								n\Target = n2
-								n\Reload = 70.0 * 3.0
-								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-								n\State3 = 0.0
-								n\State = MTF_ZOMBIES_SPOTTED
-								Exit
-							EndIf
-						ElseIf n2\NPCType = NPCType1048_A
-							If NPCSeesNPC(n2, n) = 1
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\PathTimer = 0.0
-								n\PathStatus = PATH_STATUS_NO_SEARCH
-								n\Target = n2
-								n\Reload = 70.0 * 3.0
-								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-								n\State3 = 0.0
-								n\State = MTF_ZOMBIES_SPOTTED
-								Exit
-							EndIf
+							
+							n\EnemyX = EntityX(me\Collider, True)
+							n\EnemyY = EntityY(me\Collider, True)
+							n\EnemyZ = EntityZ(me\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\LastSeen = 70.0 * Rnd(30.0, 40.0)
+							n\Reload = 70.0 * (3.0 - SelectedDifficulty\AggressiveNPCs)
+							n\State2 = 70.0 * (15.0 * PlayerSeeAble) ; ~ Give up after 15 seconds (30 seconds if detected by loud noise, over camera: 45)
+							n\State = MTF_SEARCHING_PLAYER
+							Return
 						EndIf
 					EndIf
-				Next
+					
+					If n_I\Curr173\Idle < 2
+						If NPCSeesNPC(n_I\Curr173, n) > 0
+							If MyBoss = Null
+								If n\State2 > 0.0
+									LoadNPCSound(n, "SFX\Character\MTF\173\Spotted3.ogg")
+								Else
+									LoadNPCSound(n, "SFX\Character\MTF\173\Spotted" + Rand(0, 1) + ".ogg")
+								EndIf
+								PlayMTFSound(n\Sound, n)
+							EndIf
+							
+							For n2.NPCs = Each NPCs
+								If n2\NPCType = NPCTypeMTF
+									n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
+									n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
+									n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
+									n2\PathTimer = 0.0
+									n2\PathStatus = PATH_STATUS_NO_SEARCH
+									n2\Target = n_I\Curr173
+									n2\State2 = 70.0 * 30.0 ; ~ Give up after 30 seconds
+									n2\State3 = 0.0
+									n2\State = MTF_173_SPOTTED
+								EndIf
+							Next
+							Return
+						EndIf
+					EndIf
+					
+					If n_I\Curr106\State <= 0.0
+						If NPCSeesNPC(n_I\Curr106, n) = 1
+							If MyBoss = Null
+								LoadNPCSound(n, "SFX\Character\MTF\106\Spotted" + Rand(0, 2) + ".ogg")
+								PlayMTFSound(n\Sound, n)
+							EndIf
+							
+							n\EnemyX = EntityX(n_I\Curr106\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr106\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr106\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr106
+							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+							n\State3 = 0.0
+							n\State = MTF_049_066_106_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					If n_I\Curr096 <> Null
+						If NPCSeesNPC(n_I\Curr096, n) = 1
+							If MyBoss = Null
+								LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
+								PlayMTFSound(n\Sound, n)
+							EndIf
+							PlaySoundEx(snd_I\NVGSFX[0], Camera, n\Collider, 5.0)
+							
+							n\EnemyX = EntityX(n_I\Curr096\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr096\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr096\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr096
+							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
+							n\State3 = 0.0
+							n\State = MTF_096_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					If n_I\Curr049 <> Null
+						If NPCSeesNPC(n_I\Curr049, n) = 1
+							If MyBoss = Null
+								LoadNPCSound(n, "SFX\Character\MTF\049\Spotted" + Rand(0, 4) + ".ogg")
+								PlayMTFSound(n\Sound, n)
+							EndIf
+							
+							n\EnemyX = EntityX(n_I\Curr049\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr049\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr049\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr049
+							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+							n\State3 = 0.0
+							n\State = MTF_049_066_106_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					If n_I\Curr066 <> Null
+						If NPCSeesNPC(n_I\Curr066, n) = 1
+							n\EnemyX = EntityX(n_I\Curr066\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr066\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr066\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr066
+							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
+							n\State3 = 0.0
+							n\State = MTF_049_066_106_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					For n2.NPCs = Each NPCs
+						If (Not n2\IsDead)
+							If n2\NPCType = NPCType049_2
+								If NPCSeesNPC(n2, n) = 1
+									If MyBoss = Null
+										LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
+										PlayMTFSound(n\Sound, n)
+									EndIf
+									
+									n\EnemyX = EntityX(n2\Collider, True)
+									n\EnemyY = EntityY(n2\Collider, True)
+									n\EnemyZ = EntityZ(n2\Collider, True)
+									n\PathTimer = 0.0
+									n\PathStatus = PATH_STATUS_NO_SEARCH
+									n\Target = n2
+									n\Reload = 70.0 * 4.0
+									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+									n\State3 = 0.0
+									n\State = MTF_ZOMBIES_SPOTTED
+									Exit
+									Return
+								EndIf
+							ElseIf n2\NPCType = NPCType008_1
+								If NPCSeesNPC(n2, n) = 1
+									n\EnemyX = EntityX(n2\Collider, True)
+									n\EnemyY = EntityY(n2\Collider, True)
+									n\EnemyZ = EntityZ(n2\Collider, True)
+									n\PathTimer = 0.0
+									n\PathStatus = PATH_STATUS_NO_SEARCH
+									n\Target = n2
+									n\Reload = 70.0 * 3.0
+									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+									n\State3 = 0.0
+									n\State = MTF_ZOMBIES_SPOTTED
+									Exit
+									Return
+								EndIf
+							ElseIf n2\NPCType = NPCType035_Tentacle
+								If NPCSeesNPC(n2, n) = 1
+									n\EnemyX = EntityX(n2\Collider, True)
+									n\EnemyY = EntityY(n2\Collider, True)
+									n\EnemyZ = EntityZ(n2\Collider, True)
+									n\PathTimer = 0.0
+									n\PathStatus = PATH_STATUS_NO_SEARCH
+									n\Target = n2
+									n\Reload = 70.0 * 3.0
+									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+									n\State3 = 0.0
+									n\State = MTF_ZOMBIES_SPOTTED
+									Exit
+									Return
+								EndIf
+							ElseIf n2\NPCType = NPCType1048_A
+								If NPCSeesNPC(n2, n) = 1
+									n\EnemyX = EntityX(n2\Collider, True)
+									n\EnemyY = EntityY(n2\Collider, True)
+									n\EnemyZ = EntityZ(n2\Collider, True)
+									n\PathTimer = 0.0
+									n\PathStatus = PATH_STATUS_NO_SEARCH
+									n\Target = n2
+									n\Reload = 70.0 * 3.0
+									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+									n\State3 = 0.0
+									n\State = MTF_ZOMBIES_SPOTTED
+									Exit
+									Return
+								EndIf
+							EndIf
+						EndIf
+					Next
+					n\MTFUpdateTimer = fps\Factor[0] * 8.0
+				Else
+					n\MTFUpdateTimer = n\MTFUpdateTimer - fps\Factor[0]
+				EndIf
 				;[End Block]
 			Case MTF_SEARCHING_PLAYER
 				;[Block]
@@ -5709,7 +5729,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						If n\PathTimer <= 0.0 ; ~ Update path
 							n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
 							n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-							If n = n_I\MTFLeader
+							If MyBoss = Null
 								If Rand(10) = 1
 									For n2.NPCs = Each NPCs
 										If n2\NPCType = NPCTypeMTF And n2 <> n
@@ -5786,12 +5806,12 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 						EndIf
 						
-						If n = n_I\MTFLeader And n\LastSeen < 70.0 * 30.0 And n\LastSeen + fps\Factor[0] >= 70.0 * 30.0
+						If MyBoss = Null And n\LastSeen < 70.0 * 30.0 And n\LastSeen + fps\Factor[0] >= 70.0 * 30.0
 							If Rand(2) = 1 Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\Searching" + Rand(0, 5) + ".ogg"), n)
 						EndIf
 					EndIf
 				Else
-					If n = n_I\MTFLeader
+					If MyBoss = Null
 						PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetLost" + Rand(0, 2) + ".ogg"), n)
 						If MTFCameraCheckTimer = 0.0
 							If Rand(15 - (7 * SelectedDifficulty\AggressiveNPCs)) = 1 ; ~ Maybe change this to another chance -- ENDSHN
@@ -5802,172 +5822,187 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
+					Return
 				EndIf
 				
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
-				If n_I\Curr173\Idle < 2
-					If NPCSeesNPC(n_I\Curr173, n) > 0
-						If n = n_I\MTFLeader
-							If n\State2 > 0.0
-								LoadNPCSound(n, "SFX\Character\MTF\173\Spotted3.ogg")
-							Else
-								LoadNPCSound(n, "SFX\Character\MTF\173\Spotted" + Rand(0, 1) + ".ogg")
-							EndIf
-							PlayMTFSound(n\Sound, n)
-						EndIf
-						
-						For n2.NPCs = Each NPCs
-							If n2\NPCType = NPCTypeMTF
-								n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
-								n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
-								n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
-								n2\PathTimer = 0.0
-								n2\PathStatus = PATH_STATUS_NO_SEARCH
-								n2\Target = n_I\Curr173
-								n2\State2 = 70.0 * 30.0 ; ~ Give up after 30 seconds
-								n2\State3 = 0.0
-								n2\State = MTF_173_SPOTTED
-							EndIf
-						Next
-					EndIf
-				EndIf
-				
-				If n_I\Curr106\State <= 0.0
-					If NPCSeesNPC(n_I\Curr106, n) = 1
-						If n = n_I\MTFLeader
-							LoadNPCSound(n, "SFX\Character\MTF\106\Spotted" + Rand(0, 2) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						EndIf
-						
-						n\EnemyX = EntityX(n_I\Curr106\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr106\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr106\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\Target = n_I\Curr106
-						n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-						n\State3 = 0.0
-						n\State = MTF_049_066_106_SPOTTED
-					EndIf
-				EndIf
-				
-				If n_I\Curr096 <> Null
-					If NPCSeesNPC(n_I\Curr096, n) = 1
-						If n = n_I\MTFLeader
-							LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						EndIf
-						PlaySoundEx(snd_I\NVGSFX[0], Camera, n\Collider, 5.0)
-						
-						n\EnemyX = EntityX(n_I\Curr096\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr096\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr096\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\Target = n_I\Curr096
-						n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
-						n\State3 = 0.0
-						n\State = MTF_096_SPOTTED
-					EndIf
-				EndIf
-				
-				If n_I\Curr049 <> Null
-					If NPCSeesNPC(n_I\Curr049, n) = 1
-						If n = n_I\MTFLeader
-							LoadNPCSound(n, "SFX\Character\MTF\049\Spotted" + Rand(0, 4) + ".ogg")
-							PlayMTFSound(n\Sound, n)
-						EndIf
-						
-						n\EnemyX = EntityX(n_I\Curr049\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr049\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr049\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\Target = n_I\Curr049
-						n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-						n\State3 = 0.0
-						n\State = MTF_049_066_106_SPOTTED
-					EndIf
-				EndIf
-				
-				If n_I\Curr066 <> Null
-					If NPCSeesNPC(n_I\Curr066, n) = 1
-						n\EnemyX = EntityX(n_I\Curr066\Collider, True)
-						n\EnemyY = EntityY(n_I\Curr066\Collider, True)
-						n\EnemyZ = EntityZ(n_I\Curr066\Collider, True)
-						n\PathTimer = 0.0
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\Target = n_I\Curr066
-						n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-						n\State3 = 0.0
-						n\State = MTF_049_066_106_SPOTTED
-					EndIf
-				EndIf
-				
-				For n2.NPCs = Each NPCs
-					If (Not n2\IsDead)
-						If n2\NPCType = NPCType049_2
-							If NPCSeesNPC(n2, n) = 1
-								LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
+				If n\MTFUpdateTimer =< 0.0
+						If n_I\Curr173\Idle < 2
+						If NPCSeesNPC(n_I\Curr173, n) > 0
+							If MyBoss = Null
+								If n\State2 > 0.0
+									LoadNPCSound(n, "SFX\Character\MTF\173\Spotted3.ogg")
+								Else
+									LoadNPCSound(n, "SFX\Character\MTF\173\Spotted" + Rand(0, 1) + ".ogg")
+								EndIf
 								PlayMTFSound(n\Sound, n)
-								
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\PathTimer = 0.0
-								n\PathStatus = PATH_STATUS_NO_SEARCH
-								n\Target = n2
-								n\Reload = 70.0 * 4.0
-								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-								n\State3 = 0.0
-								n\State = MTF_ZOMBIES_SPOTTED
-								Exit
 							EndIf
-						ElseIf n2\NPCType = NPCType008_1
-							If NPCSeesNPC(n2, n) = 1
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\PathTimer = 0.0
-								n\PathStatus = PATH_STATUS_NO_SEARCH
-								n\Target = n2
-								n\Reload = 70.0 * 3.0
-								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-								n\State3 = 0.0
-								n\State = MTF_ZOMBIES_SPOTTED
-								Exit
-							EndIf
-						ElseIf n2\NPCType = NPCType035_Tentacle
-							If NPCSeesNPC(n2, n) = 1
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\PathTimer = 0.0
-								n\PathStatus = PATH_STATUS_NO_SEARCH
-								n\Target = n2
-								n\Reload = 70.0 * 3.0
-								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-								n\State3 = 0.0
-								n\State = MTF_ZOMBIES_SPOTTED
-								Exit
-							EndIf
-						ElseIf n2\NPCType = NPCType1048_A
-							If NPCSeesNPC(n2, n) = 1
-								n\EnemyX = EntityX(n2\Collider, True)
-								n\EnemyY = EntityY(n2\Collider, True)
-								n\EnemyZ = EntityZ(n2\Collider, True)
-								n\PathTimer = 0.0
-								n\PathStatus = PATH_STATUS_NO_SEARCH
-								n\Target = n2
-								n\Reload = 70.0 * 3.0
-								n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-								n\State3 = 0.0
-								n\State = MTF_ZOMBIES_SPOTTED
-								Exit
-							EndIf
+							
+							For n2.NPCs = Each NPCs
+								If n2\NPCType = NPCTypeMTF
+									n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
+									n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
+									n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
+									n2\PathTimer = 0.0
+									n2\PathStatus = PATH_STATUS_NO_SEARCH
+									n2\Target = n_I\Curr173
+									n2\State2 = 70.0 * 30.0 ; ~ Give up after 30 seconds
+									n2\State3 = 0.0
+									n2\State = MTF_173_SPOTTED
+								EndIf
+							Next
+							Return
 						EndIf
 					EndIf
-				Next
+					
+					If n_I\Curr106\State <= 0.0
+						If NPCSeesNPC(n_I\Curr106, n) = 1
+							If MyBoss = Null
+								LoadNPCSound(n, "SFX\Character\MTF\106\Spotted" + Rand(0, 2) + ".ogg")
+								PlayMTFSound(n\Sound, n)
+							EndIf
+							
+							n\EnemyX = EntityX(n_I\Curr106\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr106\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr106\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr106
+							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+							n\State3 = 0.0
+							n\State = MTF_049_066_106_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					If n_I\Curr096 <> Null
+						If NPCSeesNPC(n_I\Curr096, n) = 1
+							If MyBoss = Null
+								LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
+								PlayMTFSound(n\Sound, n)
+							EndIf
+							PlaySoundEx(snd_I\NVGSFX[0], Camera, n\Collider, 5.0)
+							
+							n\EnemyX = EntityX(n_I\Curr096\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr096\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr096\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr096
+							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
+							n\State3 = 0.0
+							n\State = MTF_096_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					If n_I\Curr049 <> Null
+						If NPCSeesNPC(n_I\Curr049, n) = 1
+							If MyBoss = Null
+								LoadNPCSound(n, "SFX\Character\MTF\049\Spotted" + Rand(0, 4) + ".ogg")
+								PlayMTFSound(n\Sound, n)
+							EndIf
+							
+							n\EnemyX = EntityX(n_I\Curr049\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr049\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr049\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr049
+							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+							n\State3 = 0.0
+							n\State = MTF_049_066_106_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					If n_I\Curr066 <> Null
+						If NPCSeesNPC(n_I\Curr066, n) = 1
+							n\EnemyX = EntityX(n_I\Curr066\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr066\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr066\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr066
+							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+							n\State3 = 0.0
+							n\State = MTF_049_066_106_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					For n2.NPCs = Each NPCs
+						If (Not n2\IsDead)
+							If n2\NPCType = NPCType049_2
+								If NPCSeesNPC(n2, n) = 1
+									LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
+									PlayMTFSound(n\Sound, n)
+									
+									n\EnemyX = EntityX(n2\Collider, True)
+									n\EnemyY = EntityY(n2\Collider, True)
+									n\EnemyZ = EntityZ(n2\Collider, True)
+									n\PathTimer = 0.0
+									n\PathStatus = PATH_STATUS_NO_SEARCH
+									n\Target = n2
+									n\Reload = 70.0 * 4.0
+									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+									n\State3 = 0.0
+									n\State = MTF_ZOMBIES_SPOTTED
+									Exit
+									Return
+								EndIf
+							ElseIf n2\NPCType = NPCType008_1
+								If NPCSeesNPC(n2, n) = 1
+									n\EnemyX = EntityX(n2\Collider, True)
+									n\EnemyY = EntityY(n2\Collider, True)
+									n\EnemyZ = EntityZ(n2\Collider, True)
+									n\PathTimer = 0.0
+									n\PathStatus = PATH_STATUS_NO_SEARCH
+									n\Target = n2
+									n\Reload = 70.0 * 3.0
+									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+									n\State3 = 0.0
+									n\State = MTF_ZOMBIES_SPOTTED
+									Exit
+									Return
+								EndIf
+							ElseIf n2\NPCType = NPCType035_Tentacle
+								If NPCSeesNPC(n2, n) = 1
+									n\EnemyX = EntityX(n2\Collider, True)
+									n\EnemyY = EntityY(n2\Collider, True)
+									n\EnemyZ = EntityZ(n2\Collider, True)
+									n\PathTimer = 0.0
+									n\PathStatus = PATH_STATUS_NO_SEARCH
+									n\Target = n2
+									n\Reload = 70.0 * 3.0
+									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+									n\State3 = 0.0
+									n\State = MTF_ZOMBIES_SPOTTED
+									Exit
+									Return
+								EndIf
+							ElseIf n2\NPCType = NPCType1048_A
+								If NPCSeesNPC(n2, n) = 1
+									n\EnemyX = EntityX(n2\Collider, True)
+									n\EnemyY = EntityY(n2\Collider, True)
+									n\EnemyZ = EntityZ(n2\Collider, True)
+									n\PathTimer = 0.0
+									n\PathStatus = PATH_STATUS_NO_SEARCH
+									n\Target = n2
+									n\Reload = 70.0 * 3.0
+									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+									n\State3 = 0.0
+									n\State = MTF_ZOMBIES_SPOTTED
+									Exit
+									Return
+								EndIf
+							EndIf
+						EndIf
+					Next
+					n\MTFUpdateTimer = fps\Factor[0] * 8.0
+				Else
+					n\MTFUpdateTimer = n\MTFUpdateTimer - fps\Factor[0]
+				EndIf
 				;[End Block]
 			Case MTF_FOLLOW_PATH
 				;[Block]
@@ -6119,7 +6154,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				EndIf
 				
 				n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
-				If n\State3 =< 0.0 Lor n\IsDead
+				If n\State3 =< 0.0
 					For n2.NPCs = Each NPCs
 						If n2\NPCType = NPCTypeMTF And n2 <> n
 							If EntityDistanceSquared(n\Collider, n2\Collider) < 6.0
@@ -6157,7 +6192,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					If Curr173Dist < 25.0
 						Local TempDist# = 1.0
 						
-						If n <> n_I\MTFLeader Then TempDist = 4.0
+						If MyBoss <> Null Then TempDist = 3.0 + (3.0 * (MyBoss = n_I\MTFCoLeader))
 						
 						PointEntity(n\Collider, n\Target\Collider)
 						
@@ -6293,8 +6328,8 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					
 					If n\PathTimer <= 0.0 ; ~ Update path
-						If n <> n_I\MTFLeader ; ~ I'll follow the leader
-							n\PathStatus = FindPath(n, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.1, EntityZ(n_I\MTFLeader\Collider, True))
+						If MyBoss <> Null ; ~ I'll follow the leader
+							n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.1, EntityZ(MyBoss\Collider, True))
 						Else ; ~ I am the leader
 							For r.Rooms = Each Rooms
 								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
@@ -6390,16 +6425,9 @@ Function UpdateMTFUnit%(n.NPCs)
 				If n\State2 > 0.0
 					If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * 10.0
 					; ~ Set a timer to step back
-					If n <> n_I\MTFLeader
-						Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
-						If Dist < 0.64
-							n\State3 = 70.0
-							For n2.NPCs = Each NPCs
-								If n2\NPCType = NPCTypeMTF And n2 <> n
-									If EntityDistanceSquared(n2\Collider, n\Collider) < 0.64 And n2\State = MTF_096_SPOTTED Then n2\State3 = 70.0
-								EndIf
-							Next
-						EndIf
+					If MyBoss <> Null
+						Dist = EntityDistanceSquared(n\Collider, MyBoss\Collider)
+						If Dist < 0.64 Then n\State3 = 70.0
 						If n\State3 > 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\PathLocation = 0
@@ -6409,8 +6437,8 @@ Function UpdateMTFUnit%(n.NPCs)
 					EndIf
 					
 					If n\PathTimer <= 0.0 ; ~ Update path
-						If n <> n_I\MTFLeader ; ~ I'll follow the leader
-							n\PathStatus = FindPath(n, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.1, EntityZ(n_I\MTFLeader\Collider, True)) ; ~ Whatever you say boss
+						If MyBoss <> Null ; ~ I'll follow the leader
+							n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.1, EntityZ(MyBoss\Collider, True)) ; ~ Whatever you say boss
 						Else ; ~ I am the leader
 							For r.Rooms = Each Rooms
 								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
@@ -6441,7 +6469,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							UseDoorNPC(n)
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
-					ElseIf n\PathTimer <= 70.0 * 2.5 And n = n_I\MTFLeader
+					ElseIf n\PathTimer <= 70.0 * 2.5 And MyBoss = Null
 						n\CurrSpeed = 0.0
 						FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -6469,14 +6497,14 @@ Function UpdateMTFUnit%(n.NPCs)
 							EndIf
 							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 						Else
-							If n = n_I\MTFLeader
+							If MyBoss = Null
 								n\CurrSpeed = 0.0
 								If Rand(35) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 								FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 							Else
 								If Dist >= 1.0 And n\State3 =< 0.0
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-									PointEntity(n\Collider, n_I\MTFLeader\Collider)
+									PointEntity(n\Collider, MyBoss\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 									AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
@@ -6486,7 +6514,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									FinishWalking(n, 488.0, 522.0, n\Speed * 26.0)
 								Else
 									n\CurrSpeed = CurveValue(-n\Speed, n\CurrSpeed, 20.0)
-									PointEntity(n\Collider, n_I\MTFLeader\Collider)
+									PointEntity(n\Collider, MyBoss\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 									AnimateNPC(n, 522.0, 488.0, n\CurrSpeed * 26.0)
@@ -6554,7 +6582,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									Select n\Target\NPCType
 										Case NPCType049_2
 											;[Block]
-											If n = n_I\MTFLeader
+											If MyBoss = Null
 												LoadNPCSound(n, "SFX\Character\MTF\049_2\TargetTerminated.ogg")
 												PlayMTFSound(n\Sound, n)
 											EndIf
@@ -6659,10 +6687,10 @@ Function UpdateMTFUnit%(n.NPCs)
 		; ~ Teleport companions close to the leader if they get stuck
 		If PlayerRoom\RoomTemplate\RoomID <> r_gate_a
 			If Rand(100) = 1
-				If n <> n_I\MTFLeader
+				If MyBoss <> Null
 					If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
-						If EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider) > 256.0
-							If (Not EntityInView(n\Collider, Camera)) And (Not EntityInView(n_I\MTFLeader\Collider, Camera)) Then TeleportEntity(n\Collider, EntityX(n_I\MTFLeader\Collider, True), EntityY(n_I\MTFLeader\Collider, True) + 0.5, EntityZ(n_I\MTFLeader\Collider, True), n\CollRadius, True)
+						If EntityDistanceSquared(n\Collider, MyBoss\Collider) > 256.0
+							If (Not EntityInView(n\Collider, Camera)) And (Not EntityInView(MyBoss\Collider, Camera)) Then TeleportEntity(n\Collider, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.28, EntityZ(MyBoss\Collider, True), n\CollRadius, True)
 						EndIf
 					EndIf
 				EndIf
@@ -6672,11 +6700,11 @@ Function UpdateMTFUnit%(n.NPCs)
 		; ~ Teleport back to the facility if fell through the floor
 		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
 		
-		If n\HP =< 0 Then n\IsDead = True
-	EndIf
-	If n_I\MTFLeader = Null And MTFTimer > 0.0 And MTFTimer < 35000.0
-		PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
-		MTFTimer = 35000.0
+		If n\HP =< 0
+			n\IsDead = True
+			n_I\MTFLeader = Null
+			n_I\MTFCoLeader = Null
+		EndIf
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
@@ -7566,17 +7594,17 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#1#C#39#48#59#5E#63#76#8F#9D#B0#BE#CA#DB#F0#FF#111#13D#14F#169
-;~F#17D#18A#19E#1AD#1BF#1CD#1DC#1FB#200#208#231#252#25D#261#265#269#274#2B8#2BC#2C0
-;~F#2C4#2C8#304#308#30C#310#363#3D0#3D4#491#4B5#4E7#53A#563#617#69A#69D#6A7#766#76D
-;~F#79D#7A1#7A5#7BD#7C9#7D0#7D6#7F9#84B#8A0#8AA#8FC#90A#942#94E#95E#962#965#96E#976
-;~F#9E4#A04#A08#A27#A36#A48#A65#A69#A70#A73#A78#A81#A97#A9A#A9E#AA2#AA6#AAA#AAE#AB7
-;~F#ABF#AC5#AD4#AE8#AFF#B09#B14#B1F#B5A#BD9#BE2#BFB#C34#C42#C54#C9C#CB9#CC0#CD1#CDE
-;~F#D15#D36#D40#D66#D6B#D70#DCA#E1D#E48#E6F#E75#E79#E89#EA9#EE2#F0F#F14#F2D#F41#F8B
-;~F#FB6#FCB#FCF#FD3#FD7#FDB#FDF#FF6#100A#1019#101D#1021#1025#1037#104C#10AC#10BE#10C2#10C6#1101
-;~F#1123#11F2#121A#1221#1248#1261#126F#1274#1279#12A1#1308#1342#138E#1397#13A1#13AC#142C#1439#1453#15F5
-;~F#1754#1794#179F#17C7#17F8#1883#18F0#196E#199B#1A1C#1A49#1A4F#1AEC#1AF8#1B29#1B2D#1B32#1B44#1B48#1B4C
-;~F#1B50#1B5A#1B64#1B6A#1B70#1B75#1B7A#1B7F#1BB5#1BD2#1BE4#1BF0#1BF6#1BFC#1C04#1C0A#1C10#1C18#1C1E#1C25
-;~F#1C2A#1C2F#1C33#1C37#1C3C#1C41#1C46#1C4B#1C50#1C55#1C5B#1C60#1C65#1C6A#1C7A#1C8A#1CB9#1CBE#1CC2#1CC6
-;~F#1CCD#1CD1#1CE8#1D10#1D2C#1D3D#1D5A#1D79#1D85
+;~F#1#C#3A#49#5A#5F#64#77#90#9E#B1#BF#CB#DC#F1#100#112#13E#150#16A
+;~F#17E#18B#19F#1AE#1C0#1CE#1DD#1FC#201#209#232#253#25E#262#266#26A#275#2B9#2BD#2C1
+;~F#2C5#2C9#305#309#30D#311#364#3D1#3D5#492#4E8#53B#564#618#69B#69E#6A8#767#76E#79E
+;~F#7A2#7A6#7BE#7CA#7D1#7D7#7FA#84C#8A1#8AB#8FD#90B#943#94F#95F#963#966#96F#977#9E5
+;~F#A05#A09#A28#A37#A49#A66#A6A#A71#A74#A79#A82#A98#A9B#A9F#AA3#AA7#AAB#AAF#AB8#AC0
+;~F#AC6#AD5#AE9#B00#B0A#B15#B20#B5B#BDA#BE3#BFC#C35#C43#C55#C9D#CBA#CC1#CD2#CDF#D16
+;~F#D37#D41#D67#D6C#D71#DCB#E1E#E49#E70#E76#E7A#E8A#EAA#EE3#F10#F15#F2E#F42#F8C#FB7
+;~F#FCC#FD0#FD4#FD8#FDC#FE0#FF7#100B#101A#101E#1022#1026#1038#104D#10AD#10BF#10C3#10C7#1102#1124
+;~F#11F3#121B#1222#1249#1262#1270#1275#127A#12A2#1309#1343#138F#1398#13A2#13AD#1432#143F#145F#1609#1777
+;~F#17B7#17C2#17EA#181B#18A6#1913#198A#19B7#1A38#1A65#1A6B#1B08#1B14#1B45#1B49#1B4E#1B60#1B64#1B68#1B6C
+;~F#1B76#1B80#1B86#1B8C#1B91#1B96#1B9B#1BD1#1BEE#1C00#1C0C#1C12#1C18#1C20#1C26#1C2C#1C34#1C3A#1C41#1C46
+;~F#1C4B#1C4F#1C53#1C58#1C5D#1C62#1C67#1C6C#1C71#1C77#1C7C#1C81#1C86#1C96#1CA6#1CD5#1CDA#1CDE#1CE2#1CE9
+;~F#1CED#1D04#1D2C#1D48#1D59#1D76#1D95#1DA1
 ;~C#Blitz3D TSS

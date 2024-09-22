@@ -714,7 +714,7 @@ Function RemoveMonitorInstances%()
 End Function
 
 Const MaxNPCModelIDAmount% = 32
-Const MaxNPCTextureID% = 19
+Const MaxNPCTextureID% = 20
 
 Type NPCInstance
 	Field NPCModelID%[MaxNPCModelIDAmount]
@@ -725,7 +725,7 @@ Type NPCInstance
 	Field Curr513_1.NPCs
 	Field Curr049.NPCs
 	Field Curr066.NPCs
-	Field MTFLeader.NPCs
+	Field MTFLeader.NPCs, MTFCoLeader.NPCs
 	Field IsHalloween%, IsNewYear%, IsAprilFools%
 End Type
 
@@ -789,6 +789,8 @@ Const NPC_CLERK_VICTIM_205_TEXTURE% = 16
 Const NPC_096_BLOODY_TEXTURE% = 17
 
 Const NPC_1499_1_KING_TEXTURE% = 18
+
+Const NPC_MTF_LEADER_TEXTURE% = 19
 ;[End Block]
 
 Function LoadNPCs%()
@@ -878,6 +880,8 @@ Function LoadNPCs%()
 	n_I\NPCTextureID[NPC_096_BLOODY_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_096_bloody.png", 1, DeleteAllTextures)
 	
 	n_I\NPCTextureID[NPC_1499_1_KING_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_1499_1_king.png", 1, DeleteAllTextures)
+	
+	n_I\NPCTextureID[NPC_MTF_LEADER_TEXTURE] = LoadTexture_Strict("GFX\NPCs\MTF(2).png", 1, DeleteAllTextures)
 End Function
 
 Function RemoveNPCInstances%()
@@ -3225,7 +3229,7 @@ End Function
 
 ;~IDEal Editor Parameters:
 ;~F#2#9#27#49#52#59#6C#174#183#191#19E#1A6#1AF#1B7#1BD#1FE#216#21D#222#230
-;~F#23C#247#24D#252#265#275#27F#285#299#2B8#2CE#2DD#301#319#372#381#38B#390#3AA#3B8
-;~F#3D8#3E6#3EA#465#48A#4DA#508#534#598#5A5#651#6E2#72A#72E#732#736#7A7#81B#822#82C
-;~F#83E#861#8B0#9DF#9FE#A16#AB4#AB8#ABC#AE0#B5B#B69
+;~F#23C#247#24D#252#265#275#27F#285#299#2B8#2CE#2DD#301#31B#376#385#38F#394#3AE#3BC
+;~F#3DC#3EA#3EE#469#48E#4DE#50C#538#59C#5A9#655#6E6#72E#732#736#73A#7AB#81F#826#830
+;~F#842#865#8B4#9E3#A02#A1A#AB8#ABC#AC0#AE4#B5F#B6D
 ;~C#Blitz3D TSS

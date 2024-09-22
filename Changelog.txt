@@ -6,19 +6,23 @@
 [Rooms]
 - Some intro improvements.
 
-[Bug Fixes]
-- Fixed SCP-409 decal doesn't "infect" the player.
-- Fixed MTF leader not spawning.
-
-[Known issues]
-- Rooms can overlap and block the way.
-- Cups crash the game sometimes.
+[NPCs]
+- Added MTF leader texture.
 
 [Map Creator]
 - Optimized Map Creator...
 
 [Converter]
 - Updated and optimized converter...
+
+[Bug Fixes]
+- Fixed SCP-409 decal doesn't "infect" the player.
+- Fixed MTF leader not spawning.
+- MTFs should no longer get stuck in each other.
+
+[Known issues]
+- Rooms can overlap and block the way.
+- Cups crash the game sometimes.
 
 {v1.3.1}
 
