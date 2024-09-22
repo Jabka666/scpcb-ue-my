@@ -2770,6 +2770,12 @@ Function FillRoom%(r.Rooms)
 			it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
 			EntityParent(it2\Collider, 0)
+			
+			it2.Items = CreateItem("Asav Harn's Badge", it_harnbadge, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1
+			it\SecondInv[1] = it2
+			HideEntity(it2\Collider)
+			EntityParent(it2\Collider, 0)
 			;[End Block]
 		Case r_cont3_966
 			;[Block]

@@ -9,6 +9,7 @@
 [Items]
 - Each NVG has its own texture.
 - Tiny color change for SCRAMBLE gear's texture.
+- Added Harn's badge.
 
 [NPCs]
 - Added MTF leader texture.
