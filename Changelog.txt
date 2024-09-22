@@ -6,6 +6,10 @@
 [Rooms]
 - Some intro improvements.
 
+[Items]
+- Each NVG has its own texture.
+- Tiny color change for SCRAMBLE gear's texture.
+
 [NPCs]
 - Added MTF leader texture.
 
