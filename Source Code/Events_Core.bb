@@ -2474,7 +2474,7 @@ Function UpdateEvents%()
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
 								EntityParent(de\OBJ, e\room\OBJ)
 								
-								Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+								Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 								EntityTexture(e\room\RoomDoors[0]\OBJ, Tex)
 								EntityTexture(e\room\RoomDoors[0]\OBJ2, Tex)
 								EntityTexture(e\room\RoomDoors[0]\FrameOBJ, Tex)
@@ -4537,8 +4537,8 @@ Function UpdateEvents%()
 									
 									If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_GENERATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (400.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
-										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, Angle + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
-										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, Angle + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+										CreateProp(e\room, "GFX\Map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, Angle + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+										CreateProp(e\room, "GFX\Map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, Angle + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
 										
 										it.Items = CreateItem("SCP-500-01", it_scp500pill, e\room\x + (iX * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), e\room\y + MTGridY + (110.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 										EntityType(it\Collider, HIT_ITEM)
@@ -4547,8 +4547,8 @@ Function UpdateEvents%()
 										EntityType(it\Collider, HIT_ITEM)
 									ElseIf e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_FIRST_ELEVATOR Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
-										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, Angle + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
-										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, Angle + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+										CreateProp(e\room, "GFX\Map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, Angle + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+										CreateProp(e\room, "GFX\Map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, Angle + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 										
 										d.Doors = CreateDoor(Null, e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), Angle - 90.0, False, ELEVATOR_DOOR)
 										PositionEntity(d\ElevatorPanel[1], EntityX(d\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(d\ElevatorPanel[1], True) + 0.1, EntityZ(d\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
@@ -4748,12 +4748,12 @@ Function UpdateEvents%()
 									
 									If e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_GENERATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), e\room\y + MTGridY + (400.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
-										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, Angle + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
-										CreateProp(e\room, "GFX\map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, Angle + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+										CreateProp(e\room, "GFX\Map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, Angle + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+										CreateProp(e\room, "GFX\Map\Props\tank2.b3d", e\room\x + (iX * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), e\room\y + MTGridY - (144.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, Angle + 180.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
 									ElseIf e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_FIRST_ELEVATOR Lor e\room\mt\Grid[iX + (iY * MTGridSize)] = MT_SECOND_ELEVATOR
 										AddLight(e\room, e\room\x + (iX * 2.0) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (469.0 * RoomScale), e\room\z + (iY * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
-										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, Angle + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
-										CreateProp(e\room, "GFX\map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, Angle + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+										CreateProp(e\room, "GFX\Map\Props\lamp3.b3d", e\room\x + (iX * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, Angle + 270.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+										CreateProp(e\room, "GFX\Map\Props\lamp3.b3d", e\room\x + (iX * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), e\room\y + MTGridY + (432.0 * RoomScale), e\room\z + (iY * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, Angle + 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 										
 										d.Doors = CreateDoor(Null, e\room\x + (iX * 2.0) + (CosValue * 256.0 * RoomScale), e\room\y + MTGridY, e\room\z + (iY * 2.0) + (SinValue * 256.0 * RoomScale), Angle - 90.0, False, ELEVATOR_DOOR)
 										PositionEntity(d\ElevatorPanel[1], EntityX(d\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(d\ElevatorPanel[1], True) + 0.1, EntityZ(d\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
@@ -10110,8 +10110,7 @@ Function Update035Label%(OBJ%)
 		If itt\Name = "Document SCP-035"
 			If itt\Img <> 0 Then FreeImage(itt\Img) : itt\Img = 0
 			itt\ImgPath = ItemHUDTexturePath + "doc_" + CurrTex + ".png"
-			itt\Img = LoadImage_Strict(itt\ImgPath)
-			itt\Img = ScaleImageEx(itt\Img, MenuScale, MenuScale)
+			itt\Img = ScaleImageEx(LoadImage_Strict(itt\ImgPath), MenuScale, MenuScale)
 			itt\ImgWidth = ImageWidth(itt\Img) / 2
 			itt\ImgHeight = ImageHeight(itt\Img) / 2
 			itt\TexPath = itt\ImgPath
@@ -10137,10 +10136,10 @@ End Function
 ;~F#A2#A6#AA#AE#B2#B6#BA#BE#C2#C6#CA#CE#D2#D6#DA#DE#E2#E6#EA#EE
 ;~F#F2#F6#FA#FE#102#106#10A#10E#112#116#11A#11E#122#126#12A#12E#132#136#13A#13E
 ;~F#142#146#14A#14E#152#156#15A#15E#162#166#16A#16E#172#176#17A#17E#182#188#18B#18F
-;~F#193#197#19D#1DB#1EC#1F8#209#23E#258#28A#29C#37E#3DD#448#4E5#520#52B#536#544#555
-;~F#565#573#57F#58D#5A3#5BD#5C7#695#724#72A#742#747#74C#775#7DE#87D#95B#9A2#9C6#A5C
-;~F#B02#B46#B4A#B4E#B52#B56#B77#B7B#B7F#B83#B87#B8B#B8F#BE1#BE5#BE9#BED#BF1#1C25#1C30
-;~F#1C66#1C8F#1CD0#1CFA#1D1D#1D22#1D27#1D64#1DAC#1DD0#1E0A#1E26#1E38#1E45#1E4D#1E5A#1E60#1E65#1E6A#1E6F
-;~F#1E73#1E77#1E7B#1EB6#1EBE#1EC8#1ED7#1F1F#1F24#1F29#2041#204A#20F2#2146#2158#218A#21C6#21CB#21D0#21E2
-;~F#21E7#21EC#226F#227F#243D#2445#2575#274C#2762
+;~F#193#197#19D#1DB#1EC#1F8#209#23E#258#28A#29C#37E#3DD#448#4E5#5BD#5C7#695#775#7DE
+;~F#87D#95B#9A2#9C6#A5C#B02#BFF#C17#C35#C5E#CA9#CF7#D1B#D6F#DC3#DEC#E18#E23#E41#E70
+;~F#EB2#EC3#EE4#F39#F5C#F84#104F#106D#10A7#1369#13AA#13C4#13DE#141B#143E#1518#165A#166F#168D#1716
+;~F#1722#1889#18AF#18C1#18E1#1924#1949#1985#19AD#19BC#19C3#19CF#19E7#1A31#1B44#1BB6#1BDC#1BF7#1C0A#1C25
+;~F#1C30#1C66#1C8F#1CD0#1CFA#1D64#1DAC#1DD0#1E0A#1E26#1E38#1E45#1E4D#1E5A#1EB6#1EBE#1EC8#1ED7#1F1F#1F24
+;~F#1F29#2041#204A#20F2#2146#2158#218A#226F#227F#243D#2445#2575#274C#2762
 ;~C#Blitz3D TSS

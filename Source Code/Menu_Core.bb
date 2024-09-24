@@ -28,14 +28,11 @@ Function InitMainMenuAssets%()
 	mm.MainMenu = New MainMenu
 	mma.MainMenuAssets = New MainMenuAssets
 	
-	mma\BackGround = LoadImage_Strict("GFX\Menu\back.png")
-	mma\BackGround = ScaleImageEx(mma\BackGround, MenuScale, MenuScale)
+	mma\BackGround = ScaleImageEx(LoadImage_Strict("GFX\Menu\back.png"), MenuScale, MenuScale)
 	
-	mma\SECURE_CONTAIN_PROTECT = LoadImage_Strict("GFX\Menu\SCP_text.png")
-	mma\SECURE_CONTAIN_PROTECT = ScaleImageEx(mma\SECURE_CONTAIN_PROTECT, MenuScale, MenuScale)
+	mma\SECURE_CONTAIN_PROTECT = ScaleImageEx(LoadImage_Strict("GFX\Menu\SCP_text.png"), MenuScale, MenuScale)
 	
-	mma\SCP173 = LoadImage_Strict("GFX\Menu\scp_173_back.png")
-	mma\SCP173 = ScaleImageEx(mma\SCP173, MenuScale, MenuScale)
+	mma\SCP173 = ScaleImageEx(LoadImage_Strict("GFX\Menu\scp_173_back.png"), MenuScale, MenuScale)
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
@@ -1824,12 +1821,10 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			EndIf
 			ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
 			ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
-			LoadingImage = LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image")))
-			LoadingImage = ScaleImageEx(LoadingImage, MenuScale, MenuScale)
+			LoadingImage = ScaleImageEx(LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image"))), MenuScale, MenuScale)
 			If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
 				If LoadingBack = 0
-					LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
-					LoadingBack = ScaleImageEx(LoadingBack, MenuScale, MenuScale)
+					LoadingBack = ScaleImageEx(LoadImage_Strict("LoadingScreens\loading_back.png"), MenuScale, MenuScale)
 					LoadingBackWidth = ImageWidth(LoadingBack) / 2
 					LoadingBackHeight = ImageHeight(LoadingBack) / 2
 				EndIf
@@ -2255,10 +2250,7 @@ Function UpdateMenuPalette%(x%, y%)
 	Next
 	If (Not PaletteExists)
 		mp.MenuPalette = New MenuPalette
-		If mp\Img = 0
-			mp\Img = LoadImage_Strict("GFX\Menu\palette.png")
-			mp\Img = ScaleImageEx(mp\Img, MenuScale, MenuScale)
-		EndIf
+		If mp\Img = 0 Then mp\Img = ScaleImageEx(LoadImage_Strict("GFX\Menu\palette.png"), MenuScale, MenuScale)
 		mp\x = x
 		mp\y = y
 		mp\Width = ImageWidth(mp\Img)
@@ -3251,15 +3243,12 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#2#C#18#2F#3D#49#53#5D#98#9C#A0#A4#A8#AC#B0#B4#B8#BC#C0#C4
-;~F#C8#F5#167#1B0#1ED#1FC#21A#21E#222#226#22A#23E#242#246#24A#24E#259#25D#261#265
-;~F#269#26F#2E4#324#328#32C#330#334#338#33C#340#344#348#34C#350#354#35C#3AF#3BA#3C2
-;~F#3CA#3D7#3DB#3EF#409#40D#411#415#419#41D#421#425#429#42D#431#435#439#43D#441#457
-;~F#45B#45F#463#467#46B#46F#473#480#4AA#4AE#4B2#4B6#4C4#4C8#4CC#4D0#4DA#4DE#4E2#4E6
-;~F#4EE#4F2#4FC#500#504#508#515#558#594#5A6#5E5#63F#683#6E4#6EC#701#70D#771#775#77C
-;~F#780#784#788#78C#790#794#798#79C#7A0#7A4#7A8#7E9#7FE#80A#818#820#84B#865#869#86F
-;~F#896#8BA#8BE#8C5#8DE#8F5#8FA#900#940#946#973#988#98C#991#9AD#9C0#9C4#9CE#9F9#A29
-;~F#A64#ADE#AF5#B27#B4D#B5C#B67#B70#B80#B8E#B94#B98#B9E#BA2#BA8#BAC#BB1#BB7#BBE#BC2
-;~F#BC8#BCE#BD2#BD7#BDD#BE3#BE9#BEF#BF5#BFB#C01#C05#C0A#C10#C14#C18#C1E#C23#C27#C2B
-;~F#C2F#C33#C39#C3D#C45#C49#C4D#C51#C6B
+;~F#2#C#18#2C#3A#46#50#5A#95#99#9D#A1#A5#A9#AD#B1#B5#B9#BD#C1
+;~F#C5#F2#164#1AD#1EA#1F9#26C#2E1#359#3AC#3B7#3BF#3C7#3D4#3D8#3EC#406#40A#40E#412
+;~F#416#41A#41E#422#426#42A#42E#432#436#43A#43E#454#458#45C#460#464#468#46C#470#47D
+;~F#512#555#591#5A3#5E2#63C#680#6E1#6E9#6FE#70A#76C#770#777#77B#77F#783#787#78B#78F
+;~F#793#797#79B#79F#7A3#7E4#7F9#805#813#81B#846#860#864#86A#891#8B5#8B9#8C0#8D6#8ED
+;~F#8F2#8F8#938#93E#96B#980#984#989#9A5#9B8#9BC#9C6#9F1#A21#A5C#AD6#AED#B1F#B45#B54
+;~F#B5F#B68#B78#B86#B8C#B90#B96#B9A#BA0#BB6#BBA#BC0#BC6#BCA#BCF#BD5#BDB#BE1#BE7#BED
+;~F#BF3#BF9#BFD#C02#C08#C0C#C10#C16#C1B#C1F#C23#C27#C2B#C31#C35#C3D#C41#C45#C49#C63
 ;~C#Blitz3D TSS

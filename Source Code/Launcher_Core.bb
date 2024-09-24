@@ -141,11 +141,11 @@ Function UpdateLauncher%(lnchr.Launcher)
 	Local LauncherIMG%[2]
 	Local LauncherMediaWidth%
 	
-	LauncherIMG[0] = LoadAnimImage_Strict("GFX\menu\launcher_media.png", 64, 64, 0, 3)
+	LauncherIMG[0] = LoadAnimImage_Strict("GFX\Menu\launcher_media.png", 64, 64, 0, 3)
 	LauncherMediaWidth = ImageWidth(LauncherIMG[0]) / 2
-	LauncherIMG[1] = LoadAnimImage_Strict("GFX\menu\language_button.png", 40, 40, 0, 4)
+	LauncherIMG[1] = LoadAnimImage_Strict("GFX\Menu\language_button.png", 40, 40, 0, 4)
 	
-	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 7)
+	Local ButtonImages% = LoadAnimImage_Strict("GFX\Menu\buttons.png", 21, 21, 0, 7)
 	
 	For i = 1 To lnchr\TotalGFXModes
 		Local SameFound% = False
@@ -190,7 +190,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		mo\MouseHit1 = MouseHit(1)
 		
 		Color(255, 255, 255)
-		If LauncherBG = 0 Then LauncherBG = LoadImage_Strict("GFX\menu\launcher.png")
+		If LauncherBG = 0 Then LauncherBG = LoadImage_Strict("GFX\Menu\launcher.png")
 		DrawBlock(LauncherBG, 0, 0)
 		
 		; ~ Resolution selector
@@ -466,7 +466,7 @@ Function UpdateLanguageSelector%()
 	
 	Local LanguageBG%
 	Local LanguageIMG% = CreateImage(452, 254)
-	Local ButtonImages% = LoadAnimImage_Strict("GFX\menu\buttons.png", 21, 21, 0, 7)
+	Local ButtonImages% = LoadAnimImage_Strict("GFX\Menu\buttons.png", 21, 21, 0, 7)
 	Local CurrFontHeight% = FontHeight() / 2
 	Local SelectedLanguage.ListLanguage = Null
 	Local MouseHoverLanguage.ListLanguage = Null

@@ -22,9 +22,9 @@ Function InitAchievements%()
 		Local Image$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "image"))
 		
 		S2IMapSet(AchievementsIndex, ID, i)
-		S2IMapSet(AchievementsImages, ID, ScaleImageEx(LoadImage_Strict("GFX\Menu\achievements\" + Image), MenuScale, MenuScale))
+		S2IMapSet(AchievementsImages, ID, ScaleImageEx(LoadImage_Strict("GFX\Menu\Achievements\" + Image), MenuScale, MenuScale))
 	Next
-	S2IMapSet(AchievementsImages, "locked", ScaleImageEx(LoadImage_Strict("GFX\Menu\achievements\AchvLocked.png"), MenuScale, MenuScale))
+	S2IMapSet(AchievementsImages, "locked", ScaleImageEx(LoadImage_Strict("GFX\Menu\Achievements\AchvLocked.png"), MenuScale, MenuScale))
 End Function
 
 Function GiveAchievement%(AchvID$, ShowMessage% = True)
@@ -191,5 +191,5 @@ Function RenderAchievementMsg%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#6#1D#26#4E#64#6D#86#A0
+;~F#6#1D#26#4E#6D#86#A0
 ;~C#Blitz3D TSS

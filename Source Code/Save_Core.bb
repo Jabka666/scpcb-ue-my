@@ -1038,8 +1038,8 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
+	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
+	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	Temp = ReadInt(f)
 	
@@ -1857,8 +1857,8 @@ Function LoadGameQuick%(File$)
 	
 	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
 	
-	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
+	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
+	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	Temp = ReadInt(f)
 	
@@ -2066,7 +2066,7 @@ Function LoadGameQuick%(File$)
 			Case e_cont2_1123
 				;[Block]
 				If e\room\Objects[7] = 0
-					e\room\Objects[7] = LoadRMesh("GFX\map\cont2_1123_cell.rmesh", Null)
+					e\room\Objects[7] = LoadRMesh("GFX\Map\cont2_1123_cell.rmesh", Null)
 					ScaleEntity(e\room\Objects[7], RoomScale, RoomScale, RoomScale)
 					PositionEntity(e\room\Objects[7], e\room\x, e\room\y, e\room\z)
 					RotateEntity(e\room\Objects[7], 0.0, e\room\Angle, 0.0)

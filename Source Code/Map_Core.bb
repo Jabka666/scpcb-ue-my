@@ -2315,8 +2315,8 @@ Function PlaceMapCreatorMT%(r.Rooms)
 						;[Block]
 						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (409.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
 						AddLight(r, r\x + (x * 2.0) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
-						CreateProp(r, "GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
-						CreateProp(r, "GFX\map\Props\lamp3.b3d", r\x + (x * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, -90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+						CreateProp(r, "GFX\Map\Props\lamp3.b3d", r\x + (x * 2.0) + (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) + (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, 90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
+						CreateProp(r, "GFX\Map\Props\lamp3.b3d", r\x + (x * 2.0) - (SinValue * 254.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (432.0 * RoomScale), (y * 2.0) - (CosValue * 254.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, -90.0, 90.0, 400.0, 400.0, 400.0, False, 0, "")
 						
 						d.Doors = CreateDoor(Null, r\x + (x * 2.0) + (CosValue * 256.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, False, ELEVATOR_DOOR)
 						PositionEntity(d\ElevatorPanel[1], EntityX(d\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(d\ElevatorPanel[1], True) + 0.1, EntityZ(d\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
@@ -2340,8 +2340,8 @@ Function PlaceMapCreatorMT%(r.Rooms)
 					Case 7
 						;[Block]
 						AddLight(r, r\x + (x * 2.0) - (SinValue * 521.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 521.0 * RoomScale) + (SinValue * 16.0 * RoomScale), 2, 0.425, 255, 200, 200)
-						CreateProp(r, "GFX\map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
-						CreateProp(r, "GFX\map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+						CreateProp(r, "GFX\Map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
+						CreateProp(r, "GFX\Map\Props\tank2.b3d", r\x + (x * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, 3.0, 3.0, 3.0, True, 0, "")
 						
 						it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + (x * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), r\y + MTGridY + (110.0 * RoomScale), r\z + (y * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
 						EntityType(it\Collider, HIT_ITEM)
@@ -4481,8 +4481,7 @@ Function UpdateScreens%()
 		If s\room = PlayerRoom
 			If InteractObject(s\OBJ, 1.0, 2)
 				SelectedScreen = s
-				s\Img = LoadImage_Strict("GFX\Map\Screens\" + s\ImgPath)
-				s\Img = ScaleImageEx(s\Img, MenuScale, MenuScale)
+				s\Img = ScaleImageEx(LoadImage_Strict("GFX\Map\Screens\" + s\ImgPath), MenuScale, MenuScale)
 				PlaySound_Strict(ButtonSFX[0])
 				mo\MouseUp1 = False
 				Exit
@@ -6310,9 +6309,9 @@ End Function
 ;~F#A6B#A76#A9D#AA6#AAF#AB8#AC1#ACA#AD2#AF8#B00#B1D#B3F#B46#B4D#B54#B5C#B63#B6B#B8B
 ;~F#B92#B99#BA0#BA9#BAE#BB6#BC4#BC9#C14#C1C#C32#C3A#DC3#DCA#E3D#E41#E45#E49#E8E#E92
 ;~F#E96#E9A#EC1#EF0#EFD#F06#F2D#F33#F42#F64#F6E#F7B#F8D#FCF#FE8#1090#10D4#10E1#1104#112B
-;~F#114A#115D#1164#116A#117A#118D#1193#1198#11B0#11DA#11E0#11EC#11F4#11FC#1211#1219#124D#128D#12D3#1308
-;~F#1371#1380#13A3#142C#1437#143D#1445#14A7#14AB#14B5#14B9#14E8#14F4#1523#1528#152D#1532#154B#155B#156B
-;~F#157B#15A4#15C1#15D7#1609#161C#1648#165A#1692#1696#169A#169E#16A2#16A6#16DE#16E2#16E6#16EA#16EE#16FB
-;~F#16FF#1703#1707#170B#173A#17A7#17B8#17BF#17E5#17EE#180F#184F#1853#1857#185B#185F#1863#1867#186B#187E
-;~F#1886#1891
+;~F#114A#115D#1164#116A#117A#118C#1192#1197#11AF#11D9#11DF#11EB#11F3#11FB#1210#1218#124C#128C#12D2#1307
+;~F#1370#137F#13A2#142B#1436#143C#1444#14A6#14AA#14B4#14B8#14E7#14F3#1522#1527#152C#1531#154A#155A#156A
+;~F#157A#15A3#15C0#15D6#1608#161B#1647#1659#1691#1695#1699#169D#16A1#16A5#16DD#16E1#16E5#16E9#16ED#16FA
+;~F#16FE#1702#1706#170A#1739#17A6#17B7#17BE#17E4#17ED#180E#184E#1852#1856#185A#185E#1862#1866#186A#187D
+;~F#1885#1890
 ;~C#Blitz3D TSS

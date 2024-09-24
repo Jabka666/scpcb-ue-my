@@ -143,7 +143,7 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("SCP-005", it_scp005, r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 				
-				Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+				Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 				EntityTexture(r\RoomDoors[0]\OBJ, Tex)
 				EntityTexture(r\RoomDoors[0]\OBJ2, Tex)
 				EntityTexture(r\RoomDoors[0]\FrameOBJ, Tex)
@@ -383,12 +383,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x + 1760.0 * RoomScale, r\y + 0.4, r\z + 912.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			r\Objects[3] = LoadRMesh("GFX\map\cont1_173_intro_player_cell.rmesh", Null)
+			r\Objects[3] = LoadRMesh("GFX\Map\cont1_173_intro_player_cell.rmesh", Null)
 			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[3], r\x, r\y, r\z)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			r\Objects[4] = LoadRMesh("GFX\map\cont1_173_intro_cells.rmesh", Null, False)
+			r\Objects[4] = LoadRMesh("GFX\Map\cont1_173_intro_cells.rmesh", Null, False)
 			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[4], r\x, r\y, r\z)
 			EntityParent(r\Objects[4], r\OBJ)
@@ -1466,7 +1466,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[6], r\x - 468.0 * RoomScale, r\y + 850.0 * RoomScale, r\z - 273.0 * RoomScale)
 			EntityParent(r\Objects[6], r\OBJ)
 			
-			r\Objects[7] = LoadRMesh("GFX\map\cont2_1123_cell.rmesh", Null)
+			r\Objects[7] = LoadRMesh("GFX\Map\cont2_1123_cell.rmesh", Null)
 			ScaleEntity(r\Objects[7], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[7], r\x, r\y, r\z)
 			EntityParent(r\Objects[7], r\OBJ)
@@ -1847,7 +1847,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], r\x - 164.0 * RoomScale, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			r\RoomDoors.Doors[0] = d
 			
-			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_5)
 			d\AutoClose = False : d\Locked = 1 : d\IsAffected = True
 			PositionEntity(d\Buttons[0], r\x - 438.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 480.0 * RoomScale, True)
@@ -2445,7 +2445,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[9], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
 			EntityParent(r\Objects[9], r\OBJ)
 			
-			r\Objects[10] = LoadRMesh("GFX\map\cont2_008_mt_generator.rmesh", Null)
+			r\Objects[10] = LoadRMesh("GFX\Map\cont2_008_mt_generator.rmesh", Null)
 			ScaleEntity(r\Objects[10], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[10], r\x, r\y, r\z)
 			EntityParent(r\Objects[10], r\OBJ)
@@ -3528,7 +3528,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_scientists_2
 			;[Block]
-			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 			; ~ Dr. L's office door
 			d.Doors = CreateDoor(r, r\x - 352.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
 			d\MTFClose = False : d\DisableWaypoint = True : d\IsAffected = True
@@ -3862,7 +3862,7 @@ Function FillRoom%(r.Rooms)
 		Case r_dimension_106
 			;[Block]
 			; ~ The doors inside labyrinth
-			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\rockmoss.jpg")
 			For i = 0 To 9
 				Select i
 					Case 0
@@ -4044,7 +4044,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[20] = LoadMesh_Strict("GFX\Map\dimension_106_terrain.b3d")
 			r\ScriptedObject[20] = True
-			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\rockmoss.jpg")
 			EntityTexture(r\Objects[20], Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
@@ -4141,7 +4141,7 @@ End Function
 ;~F#4DB#4E0#4E5#4EA#4EF#4F4#4F9#4FE#503#508#50D#512#517#51C#53A#54D#553#571#5D6#5DE
 ;~F#609#623#650#6C5#6CA#6CF#6E9#6ED#705#731#77E#7B4#800#814#81A#820#826#82C#832#847
 ;~F#859#86C#894#8C3#8DE#906#92A#9A7#A0A#A2C#A60#A6A#A76#A7C#A82#A88#A8E#A94#A9A#AA0
-;~F#AA6#AAC#AB2#AD6#AF3#B03#B30#B45#BB1#BC4#C1A#C2A#C43#C52#C65#CA3#CA7#CAC#CB1#CB6
-;~F#CC0#D00#D15#D36#D50#D6B#D88#D97#DC3#DE5#E04#E09#E34#E47#E73#EA9#EBC#EC5#ECA#EF6
-;~F#F10#F16#F1C#F22#F28#F2E#F34#F3A#F40#F46#F4C#F8E#F92#F96#F9A#F9E#FEE
+;~F#AA6#AAC#AB2#ADC#AF9#B09#B36#B4B#BB7#BCA#C20#C30#C49#C58#C6B#CA9#CC6#D06#D1B#D3C
+;~F#D56#D71#D8E#D9D#DC9#DEB#E0A#E0F#E3A#E4D#E79#EAF#EC2#ECB#ED0#EFC#F16#F1C#F22#F28
+;~F#F2E#F34#F3A#F40#F46#F4C#FF4
 ;~C#Blitz3D TSS

@@ -121,10 +121,7 @@ SeedRnd(MilliSecs())
 PlayStartupVideos()
 
 Global CursorIMG%
-If opt\DisplayMode = 0
-	CursorIMG = LoadImage_Strict("GFX\Menu\cursor.png")
-	CursorIMG = ScaleImageEx(CursorIMG, MenuScale, MenuScale)
-EndIf
+If opt\DisplayMode = 0 Then CursorIMG = ScaleImageEx(LoadImage_Strict("GFX\Menu\cursor.png"), MenuScale, MenuScale)
 
 InitLoadingScreens(LoadingScreensFile)
 
@@ -141,8 +138,7 @@ LoadFonts()
 
 SetFontEx(fo\FontID[Font_Default_Big])
 
-Global BlinkMeterIMG% = LoadImage_Strict("GFX\HUD\blink_meter(1).png")
-BlinkMeterIMG = ScaleImageEx(BlinkMeterIMG, MenuScale, MenuScale)
+Global BlinkMeterIMG% = ScaleImageEx(LoadImage_Strict("GFX\HUD\blink_meter(1).png"), MenuScale, MenuScale)
 
 RenderLoading(0, GetLocalString("loading", "core.main"))
 
@@ -3324,8 +3320,7 @@ Function UpdateGUI%()
 						PlaySound_Strict(snd_I\HorrorSFX[12])
 						;[End Block]
 				End Select
-				PD_event\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
-				PD_event\Img = ScaleImageEx(PD_event\Img, MenuScale, MenuScale)
+				PD_event\Img = ScaleImageEx(LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png"), MenuScale, MenuScale)
 			Else
 				wi\IsNVGBlinking = True
 				If Rand(30) = 1
@@ -3343,8 +3338,7 @@ Function UpdateGUI%()
 					If PD_event\Img2 = 0
 						StopChannel(PD_event\SoundCHN) : PD_event\SoundCHN = 0
 						PlaySound_Strict(PD_event\Sound2, True)
-						PD_event\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
-						PD_event\Img2 = ScaleImageEx(PD_event\Img2, MenuScale, MenuScale)
+						PD_event\Img2 = ScaleImageEx(LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png"), MenuScale, MenuScale)
 					Else
 						If (Not ChannelPlaying(PD_event\SoundCHN))
 							PD_event\SoundCHN = PlaySound_Strict(PD_event\Sound)
@@ -4904,8 +4898,7 @@ Function UpdateGUI%()
 					;[Block]
 					GiveAchievement("1025")
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png"), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5122,8 +5115,7 @@ Function UpdateGUI%()
 				Case it_radio, it_18vradio, it_fineradio, it_veryfineradio
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img)
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5472,8 +5464,7 @@ Function UpdateGUI%()
 				Case it_nav, it_nav310, it_navulti, it_nav300
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5603,8 +5594,7 @@ Function UpdateGUI%()
 				Case it_ticket
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5620,8 +5610,7 @@ Function UpdateGUI%()
 				Case it_badge, it_burntbadge, it_harnbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
@@ -5635,8 +5624,7 @@ Function UpdateGUI%()
 				Case it_oldbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5652,8 +5640,7 @@ Function UpdateGUI%()
 				Case it_oldpaper
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
@@ -6248,8 +6235,7 @@ Function RenderGUI%()
 	If PD_event <> Null And PD_event\room = PlayerRoom ; ~ TODO: Check if PD_event <> Null really needed!
 		If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And PD_event\EventState2 <> PD_FakeTunnelRoom
 			If PD_event\Img = 0
-				PD_event\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
-				PD_event\Img = ScaleImageEx(PD_event\Img, MenuScale, MenuScale)
+				PD_event\Img = ScaleImageEx(LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png"), MenuScale, MenuScale)
 			Else
 				DrawBlock(PD_event\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 			EndIf
@@ -6257,8 +6243,7 @@ Function RenderGUI%()
 			If PD_event\EventState2 = PD_ThroneRoom
 				If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
 					If PD_event\Img2 = 0
-						PD_event\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
-						PD_event\Img2 = ScaleImageEx(PD_event\Img2, MenuScale, MenuScale)
+						PD_event\Img2 = ScaleImageEx(LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png"), MenuScale, MenuScale)
 					Else
 						DrawBlock(PD_event\Img2, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 					EndIf
@@ -6271,8 +6256,7 @@ Function RenderGUI%()
 				me\BlinkTimer = -10.0
 				If (Not scribe_event\Img)
 					PlaySound_Strict(snd_I\HorrorSFX[11])
-					scribe_event\Img = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
-					scribe_event\Img = ScaleImageEx(scribe_event\Img, MenuScale, MenuScale)
+					scribe_event\Img = ScaleImageEx(LoadImage_Strict("GFX\Overlays\scp_012_overlay.png"), MenuScale, MenuScale)
 				Else
 					DrawBlock(scribe_event\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 				EndIf
@@ -6743,11 +6727,10 @@ Function RenderGUI%()
 				Case it_paper, it_oldpaper
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
 								SetFontEx(fo\FontID[Font_Default])
@@ -6756,9 +6739,6 @@ Function RenderGUI%()
 								;[End Block]
 							Case "Unknown Note"
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
-								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(50, 50, 50)
 								SetFontEx(fo\FontID[Font_Journal])
@@ -6767,19 +6747,11 @@ Function RenderGUI%()
 								;[End Block]
 							Case "Document SCP-372"
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
-								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(37, 45, 137)
 								SetFontEx(fo\FontID[Font_Journal])
 								TextEx(383 * MenuScale, 734 * MenuScale, CODE_MAINTENANCE_TUNNELS, True, True)
 								SetBuffer(BackBuffer())
-								;[End Block]
-							Default 
-								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								;[End Block]
 						End Select
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -6791,8 +6763,7 @@ Function RenderGUI%()
 				Case it_scp1025
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png"), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
@@ -6806,8 +6777,7 @@ Function RenderGUI%()
 					; ~ RadioState[7] = Another timer for the "code channel"
 					
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img)
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -6888,8 +6858,7 @@ Function RenderGUI%()
 				Case it_nav, it_nav300, it_nav310, it_navulti
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -7027,8 +6996,7 @@ Function RenderGUI%()
 				Case it_badge, it_burntbadge, it_harnbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
@@ -7038,8 +7006,7 @@ Function RenderGUI%()
 				Case it_oldbadge, it_ticket
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -8214,8 +8181,7 @@ Function UpdateEnding%()
 		StopBreathSound() : me\Stamina = 100.0
 		
 		If me\EndingScreen = 0
-			me\EndingScreen = LoadImage_Strict("GFX\Menu\ending_screen.png")
-			me\EndingScreen = ScaleImageEx(me\EndingScreen, MenuScale, MenuScale)
+			me\EndingScreen = ScaleImageEx(LoadImage_Strict("GFX\Menu\ending_screen.png"), MenuScale, MenuScale)
 			
 			ShouldPlay = 22
 			opt\CurrMusicVolume = opt\MusicVolume
@@ -8399,10 +8365,7 @@ Function InitCredits%()
 	fo\FontID[Font_Credits] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits", "File"), GetFileLocalString(FontsFile, "Credits", "Size"))
 	fo\FontID[Font_Credits_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits_Big", "File"), GetFileLocalString(FontsFile, "Credits_Big", "Size"))
 	
-	If me\CreditsScreen = 0
-		me\CreditsScreen = LoadImage_Strict("GFX\Menu\credits_screen.png")
-		me\CreditsScreen = ScaleImageEx(me\CreditsScreen, MenuScale, MenuScale)
-	EndIf
+	If me\CreditsScreen = 0 Then me\CreditsScreen = ScaleImageEx(LoadImage_Strict("GFX\Menu\credits_screen.png"), MenuScale, MenuScale)
 	
 	Repeat
 		l = ReadLine(File)
@@ -9654,33 +9617,19 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#8#42#59#5F#82#DB#E0#112#157#15B#15F#163#1CA#1CE#1D2#1D6#250#254#259#25D
-;~F#29F#2C7#2CD#2DF#2E7#2F3#2FE#309#357#3F2#3FC#416#42F#442#449#450#457#45E#527#52C
-;~F#530#53C#544#54C#550#558#560#565#57B#581#591#597#59C#5A0#5A4#5B2#5BC#5C7#5CF#5D7
-;~F#5E1#5E9#5F4#5FF#608#611#61C#62F#642#655#65E#66D#672#676#67A#685#68B#690#695#69A
-;~F#6AD#6B2#6B6#6BA#6C5#6CE#6D2#6D6#6DA#6DE#6E4#702#70F#714#718#71C#728#736#73B#73F
-;~F#743#757#768#775#77A#785#790#79D#7A1#7A5#7A9#7AD#7B3#7BF#7DA#7DF#7E3#7E7#7F3#7F7
-;~F#7FC#817#83C#844#849#84D#854#862#874#8BE#8E0#8E8#8F6#8FD#907#927#92E#943#953#985
-;~F#98B#997#99E#9A7#9AB#9AF#9B8#9DB#9EE#B3C#B4B#BEB#BFC#C07#C0C#C40#C44#C48#C68#C6E
-;~F#C72#C76#C7F#C9B#CA0#CD6#CEA#CEE#CF2#CF6#CFA#D7C#D80#D84#D88#D94#D98#E2C#E31#E60
-;~F#EB2#EB6#EBA#EBE#EC2#EC6#ECA#ECE#ED2#ED6#EDA#EDE#EE2#EE6#EEA#EEE#EF2#EF6#EFA#EFE
-;~F#F1C#F60#F8D#F90#F97#F9B#F9F#FA6#FAA#FAE#FB5#FB9#FBD#FC4#FC8#FD5#FD8#FDF#FE3#FE7
-;~F#FEE#FF2#FF6#FFD#1001#1005#100C#1010#101D#1020#1024#102B#102F#1033#103A#103E#1042#1049#104D#1051
-;~F#1058#1065#1068#106F#1073#1077#107E#1082#1086#108D#1091#1095#109C#10A0#10AD#10C2#10C6#10CA#10CE#10D2
-;~F#10E8#10ED#10F2#10F7#1103#1107#110B#1140#1145#1151#1155#1159#115D#1173#1177#117B#1187#118B#118F#11A4
-;~F#11A8#11B3#11C9#11CD#11D1#11D5#11E9#11ED#11F1#11FD#120B#1210#121B#1232#1237#123C#1241#124C#1255#127E
-;~F#1282#1287#128D#1293#1299#12A9#12D9#12DE#12E4#12E9#12EE#12F4#1301#130E#131A#1327#1344#1349#13B8#13C1
-;~F#13CD#13D9#13DD#13E4#13E9#13F3#1402#140F#1414#1418#141C#143D#146E#147C#148A#1491#1499#14A1#14A9#14B1
-;~F#14B9#14C1#14CC#14D8#14E2#14EA#14F2#14FA#1502#150A#1512#151A#1522#152E#1560#1578#157C#1580#1584#1588
-;~F#158C#1590#1598#15A7#15B4#15B8#15BC#15C9#15CD#15D6#15E3#15F4#1603#1614#1625#162D#1634#1642#164A#1654
-;~F#1670#1675#1684#16AF#16BF#1732#173C#176E#17A3#17DE#17E5#1800#1804#1808#180C#1814#1857#191B#191F#1923
-;~F#1927#192B#192F#1933#1937#193B#193F#1943#1947#194B#194F#1953#1957#195B#195F#1963#1967#196B#196F#1973
-;~F#1977#19AD#19B1#19B5#19B9#19BD#19CB#19CF#19E1#19E5#19E9#19FB#1A06#1A11#1A15#1A19#1A2B#1A34#1A3D#1A41
-;~F#1A4C#1A57#1A87#1A92#1AAB#1AB5#1AB9#1ABD#1AE8#1B73#1B7E#1B90#1B99#1BA2#1BE3#1BFF#1C03#1C07#1C0B#1C0F
-;~F#1C24#1C28#1C2C#1C30#1C34#1C3F#1C43#1C47#1C4B#1C4F#1C58#1CA1#1CF1#1CF5#1CF9#1CFD#1D01#1D05#1D09#1D0D
-;~F#1D11#1D15#1D19#1D1D#1D21#1D29#1E34#1E75#1EBA#1F11#1F66#1FF1#1FF8#2006#200B#2055#205C#2060#20C3#20C9
-;~F#20E0#2106#2147#218D#21A0#21C0#221C#222F#2235#223B#2241#2247#224E#22EE#22F6#2304#230B#234E#2355#235D
-;~F#2377#237B#237F#2386#238A#238E#2392#23A2#23AB#23EF#23F8#2410#2414#2417#241B#241F#2423#2427#242B#242F
-;~F#2433#2437#243B#2441#2444#2448#244C#2450#2454#2458#245C#2460#2464#2468#246E#2471#2475#2479#247D#2481
-;~F#2485#2489#248D#2491#2495#249B#2505#251C#2522#252A#252F#2533#2538#2543#254A#255B#2565#256F#25A6
+;~F#8#42#59#5F#7F#D7#DC#10E#153#157#15B#15F#1C6#1CA#1CE#1D2#24C#250#255#259
+;~F#29B#2C3#2C9#2DB#2E3#2EF#2FA#305#353#3EE#870#8BA#8DC#8E4#8F2#8F9#903#923#92A#93F
+;~F#94F#981#987#993#99A#9A3#9A7#9AB#9B4#9D7#9EA#B38#B47#BE7#BF8#C03#C08#C3C#C40#C44
+;~F#C64#C6A#C6E#C72#C7B#C97#C9C#CD2#CE6#CEA#CEE#CF2#CF6#D76#D7A#D7E#D82#D8E#D92#E26
+;~F#E2B#E5A#EAC#EB0#EB4#EB8#EBC#EC0#EC4#EC8#ECC#ED0#ED4#ED8#EDC#EE0#EE4#EE8#EEC#EF0
+;~F#EF4#EF8#F16#F87#FCF#1017#105F#10A7#10BC#10FD#114B#1181#11AD#11C3#11F7#1215#1246#124F#1278#12A3
+;~F#12FB#1308#1314#1321#133D#1342#13B1#13BA#13C6#13D2#13EC#13FB#1558#156F#158F#159E#15AB#15CD#15DA#15EA
+;~F#15F8#1608#1618#1620#1627#1635#163D#1647#1663#1668#166C#1677#167B#1680#1685#16A2#16A6#16B2#1725#172F
+;~F#1761#1796#17D1#17D8#17F3#17F7#17FB#17FF#1807#184A#190B#190F#1913#1917#191B#191F#1923#1927#192B#192F
+;~F#1933#1937#193B#193F#1943#1947#194B#194F#1953#1957#195B#195F#1963#1967#196B#199D#19BB#19D1#19EB#19F6
+;~F#1A01#1A1B#1A24#1A2D#1A31#1A3C#1A47#1A6B#1A75#1ACA#1B54#1B5E#1B6F#1B78#1B81#1BC2#1C37#1C80#1D08#1E13
+;~F#1E54#1E99#1EF0#1F45#1FD0#1FD7#1FE5#1FEA#2033#203A#203E#20A1#20A7#20BB#20E1#2122#2168#217B#219B#21F7
+;~F#220A#2210#2216#221C#2222#2229#22C9#22D1#22DF#22E6#2329#2330#2338#2352#2356#235A#2361#2365#2369#236D
+;~F#237D#2386#23CA#23D3#23EB#23EF#241C#2449#2476#24E0#24F7#24FD#2505#250A#250E#2513#251E#2525#2536#2540
+;~F#254A#2581
 ;~C#Blitz3D TSS
