@@ -2268,7 +2268,7 @@ Function UpdateNPCs%()
 										MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 										
 										PointEntity(Pvt, me\Collider)
-										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ShootAccuracy, True, InstaKillPlayer)
+										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ShootAccuracy, True, InstaKillPlayer)
 										n\Reload = 8.0
 									Else
 										n\CurrSpeed = n\Speed
@@ -2460,7 +2460,7 @@ Function UpdateNPCs%()
 										
 										SqrValue = Sqr(Dist)
 										
-										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True, InstaKillPlayer)
+										Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((25.0 / SqrValue) * (1.0 / SqrValue)), True, InstaKillPlayer)
 										n\Reload = 8.0
 									Else
 										n\CurrSpeed = n\Speed
@@ -3202,7 +3202,7 @@ Function UpdateNPCs%()
 												
 												SqrValue = Sqr(Dist)
 												
-												Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / SqrValue) * (1.0 / SqrValue)) * (n\State = 2.0), (n\State = 2.0))
+												Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((10.0 / SqrValue) * (1.0 / SqrValue)) * (n\State = 2.0), (n\State = 2.0))
 												
 												If me\Terminated And n\State <> 3
 													If PlayerRoom\RoomTemplate\RoomID = r_gate_b
@@ -5182,12 +5182,12 @@ Const MTF_DISABLING_TESLA% = 11
 ;[End Block]
 
 Function UpdateMTFUnit%(n.NPCs)
-	Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events
-	Local i%
-	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.7, False)
 	Else
+		Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events, emit.Emitter
+		Local i%
+		
 		UpdateNPCBlinking(n)
 		
 		n\Reload = Max(n\Reload - fps\Factor[0], 0.0)
@@ -5664,7 +5664,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							
 							SqrValue = Sqr(Dist)
 							
-							Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
+							Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
 							
 							FreeEntity(Pvt) : Pvt = 0
 							
@@ -6101,7 +6101,7 @@ Function UpdateMTFUnit%(n.NPCs)
 					
 					SqrValue = Sqr(Dist)
 					
-					Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
+					Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
 					
 					FreeEntity(Pvt) : Pvt = 0
 					
@@ -6569,7 +6569,9 @@ Function UpdateMTFUnit%(n.NPCs)
 							
 							If EntityDistanceSquared(me\Collider, n\Collider) < PowTwo(me\CameraFogDist) Then LightVolume = TempLightVolume * 1.2
 							
-							SetEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
+							emit.Emitter = SetEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
+							EntityParent(emit\Owner, n\Collider)
+							
 							SetEmitter(Null, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider), 15)
 							
 							FreeEntity(Pvt) : Pvt = 0
@@ -6988,13 +6990,13 @@ Function UpdateNPCBlinking%(n.NPCs)
 	n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
 End Function
 
-Function Shoot%(x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)
+Function Shoot%(x#, y#, z#, Parent%, HitProb# = 1.0, Particles% = True, InstaKill% = False)
 	Local p.Particles, de.Decals, n.NPCs, emit.Emitter
 	Local Pvt%, ShotMessageUpdate$, i%
 	Local DifficultyDMGMult#
 	
-	SetEmitter(Null, x, y, z, 13)
-	
+	emit.Emitter = SetEmitter(Null, x, y, z, 13)
+	EntityParent(emit\Owner, Parent)
 	LightVolume = TempLightVolume * 1.2
 	
 	If InstaKill
@@ -7597,8 +7599,8 @@ End Function
 ;~F#1#C#3A#49#77#90#9E#B1#BF#CB#DC#F1#100#112#13E#150#16A#17E#18B#19F
 ;~F#1AE#1C0#1CE#1DD#1FC#201#209#232#253#25E#262#266#26A#275#364#492#618#7BE#8A1#A66
 ;~F#A6A#AB8#B00#B5B#BFC#C35#CBA#D16#E70#F10#FB7#1102#1262#138F#1398#13A2#13AD#1432#143F#145F
-;~F#1609#1777#17B7#17C2#17EA#181B#18A6#1913#198A#1A38#1A65#1A6B#1B08#1B14#1B45#1B49#1B4E#1B60#1B64#1B68
-;~F#1B6C#1B76#1B80#1B86#1B8C#1B91#1B96#1B9B#1BD1#1BEE#1C00#1C0C#1C12#1C18#1C20#1C26#1C2C#1C34#1C3A#1C41
-;~F#1C46#1C4B#1C4F#1C53#1C58#1C5D#1C62#1C67#1C6C#1C71#1C77#1C7C#1C81#1C86#1C96#1CA6#1CD5#1CDA#1CDE#1CE2
-;~F#1CE9#1CED#1D04#1D2C#1D48#1D59#1D76#1D95#1DA1
+;~F#1609#1777#17B7#17C2#17EA#181B#18A6#1913#198A#1A3A#1A67#1A6D#1B0A#1B16#1B47#1B4B#1B50#1B62#1B66#1B6A
+;~F#1B6E#1B78#1B82#1B88#1B8E#1B93#1B98#1B9D#1BD3#1BF0#1C02#1C0E#1C14#1C1A#1C22#1C28#1C2E#1C36#1C3C#1C43
+;~F#1C48#1C4D#1C51#1C55#1C5A#1C5F#1C64#1C69#1C6E#1C73#1C79#1C7E#1C83#1C88#1C98#1CA8#1CD7#1CDC#1CE0#1CE4
+;~F#1CEB#1CEF#1D06#1D2E#1D4A#1D5B#1D78#1D97#1DA3
 ;~C#Blitz3D TSS
