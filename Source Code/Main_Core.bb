@@ -2086,6 +2086,7 @@ Function UpdateConsole%()
 								If ID <> "console" And ID <> "keter" And ID <> "apollyon" Then GiveAchievement(ID)
 							EndIf
 						Next
+						SaveAchievementsFile()
 						CreateConsoleMsg(GetLocalString("console", "ga.all"))
 					EndIf
 					
