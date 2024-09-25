@@ -1,4 +1,4 @@
-Const MaxDecalTextureIDAmount% = 21
+Const MaxDecalTextureIDAmount% = 23
 
 Type DecalInstance
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
@@ -35,6 +35,9 @@ Const DECAL_427% = 18
 Const DECAL_409% = 19
 
 Const DECAL_WATER% = 20
+
+Const DECAL_KETER% = 21
+Const DECAL_APOLLYON% = 22
 ;[End Block]
 
 Function LoadDecals%()
@@ -67,6 +70,9 @@ Function LoadDecals%()
 	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427_decal.png", 1 + 2, DeleteAllTextures, False)
 	
 	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures, False)
+	
+	If S2IMapContains(UnlockedAchievements, "keter") Then de_I\DecalTextureID[DECAL_KETER] = LoadTexture_Strict("GFX\Menu\Achievements\AchvKeter.png", 1, DeleteAllTextures, False)
+	If S2IMapContains(UnlockedAchievements, "apollyon") Then de_I\DecalTextureID[DECAL_APOLLYON] = LoadTexture_Strict("GFX\Menu\Achievements\AchvApollyon.png", 1 + 2, DeleteAllTextures, False)
 End Function
 
 Const MaxParticleTextureIDAmount% = 9
@@ -3216,8 +3222,8 @@ Function NullGame%(PlayButtonSFX% = True)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#2#9#27#49#52#59#6C#174#183#191#19E#1A6#1AF#1B7#1BD#1FE#216#21D#222#230
-;~F#23C#247#24D#252#265#275#27F#285#299#2B8#2CE#2DD#301#31B#376#385#38F#394#3AE#3BC
-;~F#3DC#3EA#3EE#46B#490#4E0#50E#53A#59E#5AB#657#6E8#730#734#738#73C#7AD#821#828#832
-;~F#844#867#8B6#9D7#9F6#A0E#AAC#AB0#AB4#AD8#B53#B61
+;~F#2#9#2A#4F#58#5F#72#17A#189#197#1A4#1AC#1B5#1BD#1C3#204#21C#223#228#236
+;~F#242#24D#253#258#26B#27B#285#28B#29F#2BE#2D4#2E3#307#321#37C#38B#395#39A#3B4#3C2
+;~F#3E2#3F0#3F4#471#496#4E6#514#540#5A4#5B1#65D#6EE#736#73A#73E#742#7B3#827#82E#838
+;~F#84A#86D#8BC#9DD#9FC#A14#AB2#AB6#ABA#ADE#B59#B67
 ;~C#Blitz3D TSS

@@ -264,6 +264,15 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
+			If S2IMapContains(UnlockedAchievements, "keter")
+				de.Decals = CreateDecal(DECAL_KETER, r\x + 514.0 * RoomScale, r\y + 159.0 * RoomScale, r\z - 246.0 * RoomScale - 0.005, 0.0, 180.0, 0.0, 0.1)
+				EntityParent(de\OBJ, r\OBJ)
+			EndIf
+			If S2IMapContains(UnlockedAchievements, "apollyon")
+				de.Decals = CreateDecal(DECAL_APOLLYON, r\x + 368.0 * RoomScale, r\y + 138.0 * RoomScale, r\z + 184.0 * RoomScale, 0.0, 0.0, 0.0, 0.1)
+				EntityParent(de\OBJ, r\OBJ)
+			EndIf
+			
 			it.Items = CreateItem("Document SCP-173", it_paper, r\x + 173.0 * 4.85 * RoomScale, r\y + 173.0 * RoomScale, r\z + 173.0 * 14.33 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4135,13 +4144,9 @@ Function FillRoom%(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#0#D#1D#21#26#2C#31#36#3B#40#45#49#4E#53#67#71#82#A3#E8#EE
-;~F#F4#FA#100#119#195#19B#1A1#1A7#1AD#1BE#1F9#217#261#27F#287#297#2CF#2D5#312#327
-;~F#34C#350#354#358#35C#360#364#368#36C#370#3C1#409#438#465#492#4B6#4BB#4C0#4C5#4D6
-;~F#4DB#4E0#4E5#4EA#4EF#4F4#4F9#4FE#503#508#50D#512#517#51C#53A#54D#553#571#5D6#5DE
-;~F#609#623#650#6C5#6CA#6CF#6E9#6ED#705#731#77E#7B4#800#814#81A#820#826#82C#832#847
-;~F#859#86C#894#8C3#8DE#906#92A#9A7#A0A#A2C#A60#A6A#A76#A7C#A82#A88#A8E#A94#A9A#AA0
-;~F#AA6#AAC#AB2#ADC#AF9#B09#B36#B4B#BB7#BCA#C20#C30#C49#C58#C6B#CA9#CC6#D06#D1B#D3C
-;~F#D56#D71#D8E#D9D#DC9#DEB#E0A#E0F#E3A#E4D#E79#EAF#EC2#ECB#ED0#EFC#F16#F1C#F22#F28
-;~F#F2E#F34#F3A#F40#F46#F4C#FF4
+;~F#0#D#67#71#82#A3#122#1C7#202#220#26A#288#290#2A0#2D8#2DE#31B#330#3CA#412
+;~F#441#46E#49B#543#57A#5DF#5E7#612#62C#659#6F2#6F6#70E#73A#787#7BD#809#850#862#875
+;~F#89D#8CC#8E7#90F#933#9B0#A13#A35#A69#A73#AE5#B02#B12#B3F#B54#BC0#BD3#C29#C39#C52
+;~F#C61#C74#CB2#CCF#D0F#D24#D45#D5F#D7A#D97#DA6#DD2#DF4#E13#E18#E43#E56#E82#EB8#ECB
+;~F#ED4#ED9#F05#F1F#FFD
 ;~C#Blitz3D TSS
