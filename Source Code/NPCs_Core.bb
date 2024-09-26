@@ -2676,7 +2676,7 @@ Function UpdateNPCs%()
 						Case 0.0 ; ~ Idles
 							;[Block]
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-							AnimateEx(n\OBJ, AnimTime(n\OBJ), 210.0, 235.0, 0.1)
+							AnimateNPC(n, 210.0, 235.0, 0.1)
 							;[End Block]
 						Case 1.0 ; ~ Walking
 							;[Block]
@@ -2685,12 +2685,12 @@ Function UpdateNPCs%()
 							Else
 								n\CurrSpeed = CurveValue(0.015, n\CurrSpeed, 5.0)
 							EndIf
-							AnimateEx(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
+							AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 18.0)
 							;[End Block]
 						Case 2.0 ; ~ Running
 							;[Block]
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
-							AnimateEx(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
+							AnimateNPC(n, 301.0, 319.0, n\CurrSpeed * 18.0)
 							;[End Block]
 					End Select
 					
@@ -7548,9 +7548,7 @@ Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = Tru
 	If Speed > 0.0
 		NewTime = Max(Min(Curr + Speed * fps\Factor[0], LastFrame), FirstFrame)
 		
-		If Loop
-			If NewTime >= LastFrame Then NewTime = FirstFrame
-		EndIf
+		If Loop And NewTime >= LastFrame Then NewTime = FirstFrame
 	Else
 		If FirstFrame < LastFrame
 			Temp = FirstFrame
@@ -7561,8 +7559,11 @@ Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = Tru
 		If Loop
 			NewTime = Curr + Speed * fps\Factor[0]
 			
-			If NewTime < LastFrame Then NewTime = FirstFrame
-			If NewTime > FirstFrame Then NewTime = LastFrame
+			If NewTime < LastFrame
+				NewTime = FirstFrame
+			ElseIf NewTime > FirstFrame
+				NewTime = LastFrame
+			EndIf
 		Else
 			NewTime = Max(Min(Curr + Speed * fps\Factor[0], FirstFrame), LastFrame)
 		EndIf
