@@ -22,9 +22,11 @@
 
 [Bug Fixes]
 - Fixed SCP-409 decal doesn't "infect" the player.
-- Fixed MTF leader not spawning.
-- Fixed an issue with MTF's flash particle.
-- MTFs should no longer get stuck in each other.
+- Fixes for MTF:
+	- Fixed MTF leader not spawning.
+	- Fixed an issue with MTF's flash particle.
+	- MTFs should no longer get stuck in each other.
+- Fixed MAV in Maintenance Tunnels.
 
 [Known issues]
 - Rooms can overlap and block the way.
