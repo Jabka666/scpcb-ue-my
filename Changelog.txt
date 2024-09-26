@@ -27,6 +27,7 @@
 	- Fixed an issue with MTF's flash particle.
 	- MTFs should no longer get stuck in each other.
 - Fixed MAV in Maintenance Tunnels.
+- Fixed MAV caused by PIN-code buttons.
 
 [Known issues]
 - Rooms can overlap and block the way.

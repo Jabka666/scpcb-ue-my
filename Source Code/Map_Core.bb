@@ -2862,7 +2862,7 @@ Function UpdateDoors%()
 							If UpdateButton(d\Buttons[i])
 								d_I\ClosestDoor = d
 								me\SndVolume = 4.0
-								d_I\AnimButton = d_I\ClosestButton
+								If d\KeyCard = KEY_MISC And d\Code = 0 Then d_I\AnimButton = d_I\ClosestButton
 								Exit
 							EndIf
 						EndIf
@@ -3065,18 +3065,16 @@ Function UpdateDoors%()
 					d\ButtonsUpdateTimer = d\ButtonsUpdateTimer - fps\Factor[0]
 				EndIf
 				
-				If d\KeyCard = KEY_MISC
-					If ChannelPlaying(d\ButtonCHN)
-						If d_I\AnimButton <> 0
-							If me\InsideElevator
-								If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
-									AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
-								Else
-									AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 21.0, 40.0, 2.0, False)
-								EndIf
-							Else
+				If ChannelPlaying(d\ButtonCHN)
+					If d_I\AnimButton <> 0
+						If me\InsideElevator
+							If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 								AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
+							Else
+								AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 21.0, 40.0, 2.0, False)
 							EndIf
+						Else
+							AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
 						EndIf
 					EndIf
 				EndIf
