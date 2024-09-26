@@ -5821,7 +5821,7 @@ Function CreateMap%()
 			TextEx(6 * MenuScale, 140 * MenuScale, CurrMapGrid\RoomID[ROOM4])
 			
 			Color(255, 255, 255)
-			TextEx(mo\Viewport_Center_X, opt\GraphicHeight - (15 * MenuScale), Format(GetLocalString("menu", "new.seed"), RandomSeed), True, True)
+			TextEx(mo\Viewport_Center_X, opt\GraphicHeight - (15 * MenuScale), Format(GetLocalString("menu", "new.seed2"), RandomSeed), True, True)
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
 			
 			Flip()

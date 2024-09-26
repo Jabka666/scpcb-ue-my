@@ -1157,7 +1157,7 @@ Function RenderMainMenu%()
 					TextEx(x + (20 * MenuScale), y + (25 * MenuScale), GetLocalString("menu", "new.name"))
 					
 					If SelectedCustomMap = Null
-						TempStr = Format(GetLocalString("menu", "new.seed"), "")
+						TempStr = Format(GetLocalString("menu", "new.seed2"), "")
 					Else
 						TempStr = Format(GetLocalString("menu", "new.map"), "")
 						RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
