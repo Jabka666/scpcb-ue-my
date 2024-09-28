@@ -747,11 +747,11 @@ Function UpdateEvents%()
 									
 									e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe0a.ogg")
 									e\room\NPC[1]\SoundCHN = PlaySoundEx(e\room\NPC[1]\Sound, Camera, e\room\NPC[1]\Collider, 10.0, 1.0, True)
-									e\room\NPC[1]\State = 1.0
+									e\room\NPC[1]\State = 1.0 : e\room\NPC[1]\Speed = -0.008
 									e\room\NPC[2]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe0b.ogg")
 									e\room\NPC[2]\SoundCHN = PlaySoundEx(e\room\NPC[2]\Sound, Camera, e\room\NPC[2]\Collider, 10.0, 1.0, True)
 								EndIf
-								e\room\NPC[1]\Speed = -0.014
+								e\room\NPC[1]\CurrSpeed = CurveValue(e\room\NPC[1]\Speed, e\room\NPC[1]\CurrSpeed, 5.0)
 								RotateEntity(e\room\NPC[1]\Collider, 0.0, 0.0, 0.0)
 								
 								If e\EventState > 900.0 + (70.0 * 2.5)
