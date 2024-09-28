@@ -1348,12 +1348,16 @@ Function RenderMainMenu%()
 								TextEx(x + (20 * MenuScale), y + (30 * MenuScale), CurrSave\Time)
 								TextEx(x + (150 * MenuScale), y + (30 * MenuScale), CurrSave\Date)
 								TextEx(x + (20 * MenuScale), y + (50 * MenuScale), "v" + CurrSave\Version)
-								For i = SAFE To ESOTERIC
-									If CurrSave\Difficulty = difficulties[i]\Name
-										Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
-										Exit
-									EndIf
-								Next
+								If CurrSave\Version <> VersionNumber
+									Color(255, 0, 0)
+								Else
+									For i = SAFE To ESOTERIC
+										If CurrSave\Difficulty = difficulties[i]\Name
+											Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
+											Exit
+										EndIf
+									Next
+								EndIf
 								TextEx(x + (150 * MenuScale), y + (50 * MenuScale), CurrSave\Difficulty)
 								
 								If CurrSave = Last Save Then Exit
@@ -1361,6 +1365,7 @@ Function RenderMainMenu%()
 							EndIf
 						Next
 						
+						Color(255, 255, 255)
 						If DelSave <> Null
 							x = 739 * MenuScale
 							y = 376 * MenuScale
