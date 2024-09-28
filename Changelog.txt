@@ -3,6 +3,8 @@
 [General]
 - Optimized the game...
 
+- Updated some images and textures.
+
 [Rooms]
 - Some intro improvements.
 
@@ -28,6 +30,8 @@
 	- MTFs should no longer get stuck in each other.
 - Fixed MAV in Maintenance Tunnels.
 - Fixed MAV caused by PIN-code buttons.
+- Fixed collisions of wall fragments near SCP-513's containment chamber.
+
 
 [Known issues]
 - Rooms can overlap and block the way.

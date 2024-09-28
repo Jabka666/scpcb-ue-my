@@ -2682,7 +2682,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			
 			; ~ Dust decals
-			For i = 0 To 10
+			For i = 0 To 11
 				Select i
 					Case 0
 						;[Block]
@@ -2704,9 +2704,9 @@ Function FillRoom%(r.Rooms)
 						;[End Block]
 					Case 3
 						;[Block]
-						xTemp = -79.0
-						zTemp = 215.0
-						Scale = Rnd(0.1, 0.2)
+						xTemp = -104.0
+						zTemp = 185.0
+						Scale = Rnd(0.3, 0.4)
 						;[End Block]
 					Case 4
 						;[Block]
@@ -2749,6 +2749,12 @@ Function FillRoom%(r.Rooms)
 						xTemp = 26.0
 						zTemp = 86.0
 						Scale = Rnd(0.8, 1.0)
+						;[End Block]
+					Case 11
+						;[Block]
+						xTemp = -193.0
+						zTemp = 138.0
+						Scale = Rnd(0.3, 0.4)
 						;[End Block]
 				End Select
 				yTemp = 3.0 * (i > 2)
