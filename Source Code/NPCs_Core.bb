@@ -1042,7 +1042,7 @@ Function UpdateNPCs%()
 													
 													n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 													
-													PrevFrame = AnimTime(n\OBJ)
+													PrevFrame = n\Frame
 													AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 													If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 													
@@ -1688,7 +1688,7 @@ Function UpdateNPCs%()
 					EndIf
 					
 					Select n\State
-						Case 0.0 ; ~ Nothing (used for events)
+						Case 0.0 ; ~ Script
 							;[Block]
 							;[End Block]
 						Case 1.0 ; ~ Looking around before getting active
@@ -2670,7 +2670,7 @@ Function UpdateNPCs%()
 					
 					PrevFrame = AnimTime(n\OBJ)
 					Select n\State
-						Case -1.0 ; ~ Nothing
+						Case -1.0 ; ~ Script
 							;[Block]
 							;[End Block]
 						Case 0.0 ; ~ Idles
@@ -2686,30 +2686,29 @@ Function UpdateNPCs%()
 								n\CurrSpeed = CurveValue(0.015, n\CurrSpeed, 5.0)
 							EndIf
 							AnimateEx(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
+							
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							
+							If n\CurrSpeed > 0.005
+								If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 256.0 And AnimTime(n\OBJ) >= 256.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+							EndIf
 							;[End Block]
 						Case 2.0 ; ~ Running
 							;[Block]
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
 							AnimateEx(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
-							;[End Block]
-					End Select
-					
-					If n\State2 <> 2.0
-						If n\State = 1.0
-							If n\CurrSpeed > 0.005
-								If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 256.0 And AnimTime(n\OBJ) >= 256.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
-							EndIf
-						ElseIf n\State = 2.0
+							
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							
 							If n\CurrSpeed > 0.005
 								If (PrevFrame < 309.0 And AnimTime(n\OBJ) >= 309.0) Lor (PrevFrame <= 319.0 And AnimTime(n\OBJ) <= 301.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
-						EndIf
-					EndIf
-					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							;[End Block]
+					End Select
 					If n\HP =< 0 And n\NPCType = NPCTypeClerk Then n\IsDead = True ; ~ Only for Clerk because of Tesla Gate event
 				Else
 					Select n\State3
-						Case -1.0 ; ~ Don't animate
+						Case -1.0 ; ~ Script
 							;[Block]
 							;[End Block]
 						Case 0.0 ; ~ Fall backward

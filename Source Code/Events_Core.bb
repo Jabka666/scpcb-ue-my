@@ -5284,7 +5284,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 						
-						If AnimTime(n_I\Curr096\OBJ) > 25.0 And AnimTime(n_I\Curr096\OBJ) < 150.0
+						If n_I\Curr096\Frame > 25.0 And n_I\Curr096\Frame < 150.0
 							LoadEventSound(e, "SFX\Character\Guard\096ServerRoom1.ogg")
 							e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 10.0, 1.0, True)
 							
