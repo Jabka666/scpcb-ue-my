@@ -7514,7 +7514,7 @@ Function SetNPCFrame%(n.NPCs, Frame#)
 End Function
 
 Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
-	Local NewTime#, Temp%
+	Local NewTime#, Temp#
 	
 	If Speed > 0.0
 		NewTime = Max(Min(n\Frame + Speed * fps\Factor[0], LastFrame), FirstFrame)
@@ -7543,7 +7543,7 @@ Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 End Function
 
 Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True)
-	Local NewTime#, Temp%
+	Local NewTime#, Temp#
 	
 	If Speed > 0.0
 		NewTime = Max(Min(Curr + Speed * fps\Factor[0], LastFrame), FirstFrame)
