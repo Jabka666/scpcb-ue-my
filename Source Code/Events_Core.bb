@@ -1954,6 +1954,7 @@ Function UpdateEvents%()
 											Next
 											
 											If wi\HazmatSuit = 0
+												PlaySound_Strict(LoadTempSound("SFX\SCP\008\IamInfected.ogg"))
 												InjurePlayer(0.3, 0.001, 500.0)
 												CreateMsg(GetLocalString("msg", "008.173"))
 											EndIf
@@ -1968,7 +1969,9 @@ Function UpdateEvents%()
 									DrawArrowIcon[2] = True
 									RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
 								EndIf
-								If (me\Bloodloss > 0.0 And I_008\Timer = 0.0) Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
+								If I_008\Timer = 0.0
+									If me\Bloodloss > 0.0 Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
+								EndIf
 								
 								If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = Max(70.0, me\EyeIrritation)
 							EndIf

@@ -1,6 +1,8 @@
 {v1.3.2}
 
 [General]
+- Added new sound for SCP-008
+
 - Optimized the game...
 
 [Rooms]
