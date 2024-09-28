@@ -161,11 +161,6 @@
 
 - Optimized the game...
 
-[Launcher]
-- Default Display Mode is now Borderless.
-- Fullscren Display Mode has a warning for Alt + TAB usage.
-- Removed the 32-bit indicator.
-
 [Menu]
 - Moved Mouse Smoothing beneath Mouse Sensitivity.
 
@@ -253,6 +248,11 @@
 	- SCP-966 will no longer stay in attack mode and upon respawning elsewhere will return to echo/idle mode.
 	- Are visible when being struck by a tesla gates.
 
+[Launcher]
+- Default Display Mode is now Borderless.
+- Fullscren Display Mode has a warning for Alt + TAB usage.
+- Removed the 32-bit indicator.
+
 [Bug Fixes]
 - Fixed some typos in subtitles.
 - Fixed subititles not showing.
@@ -336,10 +336,6 @@
 
 {v1.2}
 
-[Launcher]
-- Added «Primary Driver» string for GFX driver selector. Also added driver names.
-- Added progress for downloading languages. Now the game won't freeze when downloading.
-
 [General]
 - Added pressing animation for buttons.
 - Added SCP-085 as an easter egg.
@@ -361,6 +357,9 @@
 
 - Optimized the game...
 
+[Menu]
+- Added descriptive info for difficulties.
+
 [Mechanics and effects]
 - Added random light flickering.
 
@@ -376,9 +375,6 @@
 	- Level 4 Key Card base rarity inceased from 10 to 12.
 	- Level 4 Key Card's increasing rarity is increased from 5 to 6.
 - Rebalanced equipping time for some items.
-
-[Menu]
-- Added descriptive info for difficulties.
 
 [Rooms]
 - Added security camera in «room2C_ez» room.
@@ -428,6 +424,10 @@
 
 - Improved SCP-008-1, SCP-049, SCP-049-2 and MTF's AI.
 - Can no longer use SCP-268 against SCP-096.
+
+[Launcher]
+- Added «Primary Driver» string for GFX driver selector. Also added driver names.
+- Added progress for downloading languages. Now the game won't freeze when downloading.
 
 [Bug Fixes]
 - Fixed SCP-939's texture which is too bright.
@@ -530,6 +530,10 @@
 - NPCs that deal damage now have their damage scale with difficulty.
 - SCP-008-1's walk speed is slower than their chase speed.
 
+[Map Creator]
+- Increased width of tab above the grid.
+- Changed Manual link.
+
 [Bug Fixes]
 - Fixed MAV after playing intro sequence.
 - Fixed saves.
@@ -539,10 +543,6 @@
 	- Fixed the English version of Map Creator doesn't show the text correctly.
 	- Fixed the localize font unable to load.
 - Fixed MTF step sounds.
-
-[Map Creator]
-- Increased width of tab above the grid.
-- Changed Manual link.
 
 {v1.1.1}
 
@@ -558,9 +558,6 @@
 - Some fixes for event descriptions in Map Creator.
 
 {v1.1}
-
-[Launcher]
-- Aligned resolution list.
 
 [General]
 - Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
@@ -584,6 +581,19 @@
 - Converted .ini files to UTF-8 format.
 - Finally made the «Bright mode» similar to original game.
 - Optimized game a lot...
+
+[Menu]
+- Added degree symbol for FOV value.
+- Added «PRESS ANY KEY TO WAKE UP» string for CWM loading screen.
+- Added additional options menu. This was done in order to free up some space for settings.
+	- Added in-game versions of the «Use launcher», «Subtitles», «Startup videos» and «Smooth bars» settings.
+- Added highlight effect for slidebars.
+
+- Removed extra spacing in credits.
+
+- Tiny improvement for difficulties color.
+- The subtitles setting has been moved to the «AUDIO» category.
+- Remade options menu.
 
 [Mechanics and effects]
 - Added a small chance to accidentally drop an item when trying to use it.
@@ -639,19 +649,6 @@
 - Origami can be added to the clipboard.
 - Night vision doesn't work inside the Pocket Dimension. If you'll use it, you'll get more damage.
 
-[Menu]
-- Added degree symbol for FOV value.
-- Added «PRESS ANY KEY TO WAKE UP» string for CWM loading screen.
-- Added additional options menu. This was done in order to free up some space for settings.
-	- Added in-game versions of the «Use launcher», «Subtitles», «Startup videos» and «Smooth bars» settings.
-- Added highlight effect for slidebars.
-
-- Removed extra spacing in credits.
-
-- Tiny improvement for difficulties color.
-- The subtitles setting has been moved to the «AUDIO» category.
-- Remade options menu.
-
 [NPCs]
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
 - Reduces how long the Hazmat Suit protects the player from SCP-049 from 12 seconds down to 5 seconds. The Heavy Hazmat Suit changed from indefinite to 12 seconds.
@@ -660,6 +657,9 @@
 - Reduced SCP-096's speed.
 - The MTF Units and SCP-049 now open linked doors in the same way as the player.
 - SCP-066 is now visible on the S-NAV Ultimate.
+
+[Launcher]
+- Aligned resolution list.
 
 [Map Creator]
 - Made the Map Creator to be compatible with latest BlitzPlus version.
@@ -963,17 +963,6 @@
 {v1.0}
 ~ This version continues original game.
 
-[Launcher]
-- Added YouTube, Discord and ModDB icons.
-- Added Resolution Selection button.
-- Added «REPORT A BUG!» and «SEE CHANGELOG» buttons.
-
-- Removed Check for updates feature.
-- Removed 16-Bit mode.
-- Removed Graphics Driver Selection, which did not actually change anything anyways.
-
-- Improved game icon.
-
 [General]
 - Added anisotropic filtering.
 - Added support for resolutions of up to 4k.
@@ -1195,6 +1184,17 @@
 - Battery charges are now randomized.
 - The tesla gate lights up the surrounding rooms.
 - NVG protects eyes from the gas.
+
+[Launcher]
+- Added YouTube, Discord and ModDB icons.
+- Added Resolution Selection button.
+- Added «REPORT A BUG!» and «SEE CHANGELOG» buttons.
+
+- Removed Check for updates feature.
+- Removed 16-Bit mode.
+- Removed Graphics Driver Selection, which did not actually change anything anyways.
+
+- Improved game icon.
 
 [Map Creator]
 - Sorted rooms by zones.
