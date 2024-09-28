@@ -2450,7 +2450,7 @@ Function UpdateEvents%()
 						
 						If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
 							If Rand(50) = 1
-								SetTemplateVelocity(ParticleEffect[19], -0.007, 0.008, -0.001, 0.0012, -0.007, -0.008)
+								SetTemplateVelocity(ParticleEffect[19], -0.007, 0.008, -0.001, 0.0012, 0.007, 0.008)
 								SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
 								PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
 							EndIf
