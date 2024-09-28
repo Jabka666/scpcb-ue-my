@@ -3,18 +3,21 @@
 [General]
 - Optimized the game...
 
-- Updated some images and textures.
-
 [Rooms]
 - Some intro improvements.
+- Updated some signs color.
 
 [Items]
 - Each NVG has its own texture.
 - Tiny color change for SCRAMBLE gear's texture.
+- Updated battery images for NVG and SCRAMBLE gear.
 - Added Harn's badge.
 
 [NPCs]
 - Added MTF leader texture.
+
+[Launcher]
+- Updated buttons images.
 
 [Map Creator]
 - Optimized Map Creator...
@@ -32,6 +35,8 @@
 - Fixed MAV caused by PIN-code buttons.
 - Fixed collisions of wall fragments near SCP-513's containment chamber.
 - Fixed sparks direction in SCP-409's containment chamber.
+- Fixed incorrect clipping of "blood decal(5).png" texture.
+- Fixed great issue with frames smoothing.
 
 [Known issues]
 - Rooms can overlap and block the way.
