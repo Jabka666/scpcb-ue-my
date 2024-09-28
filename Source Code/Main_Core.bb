@@ -2086,9 +2086,7 @@ Function UpdateConsole%()
 						
 						Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), StrTemp), "name")
 						
-						If JsonIsNull(AchvName)
-							AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), StrTemp), "name")
-						EndIf
+						If JsonIsNull(AchvName) Then AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), StrTemp), "name")
 						CreateConsoleMsg(Format(GetLocalString("console", "ga.success"), JsonGetString(AchvName)))
 					ElseIf StrTemp <> "all"
 						CreateConsoleMsg(Format(GetLocalString("console", "ga.failed"), StrTemp), 255, 0, 0)

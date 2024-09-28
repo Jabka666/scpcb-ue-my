@@ -2680,17 +2680,15 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 1.0 ; ~ Walking
 							;[Block]
-							If n\State2 = 1.0
-								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-							Else
-								n\CurrSpeed = CurveValue(0.015, n\CurrSpeed, 5.0)
-							EndIf
+							n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
 							AnimateEx(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
 							
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							If n\CurrSpeed > 0.005
-								If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 256.0 And AnimTime(n\OBJ) >= 256.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 254.0 And AnimTime(n\OBJ) >= 254.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+							ElseIf n\CurrSpeed < -0.005
+								If (PrevFrame >= 254.0 And AnimTime(n\OBJ) < 254.0) Lor (PrevFrame >= 244.0 And AnimTime(n\OBJ) < 244.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							;[End Block]
 						Case 2.0 ; ~ Running
