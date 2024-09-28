@@ -8839,7 +8839,7 @@ Function Update008%()
 					me\Bloodloss = 0.0
 					me\Playable = True
 					
-					AnimateNPC(PlayerRoom\NPC[0], 357.0, 381.0, 0.3)
+					AnimateEx(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
 					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
 					me\BlurTimer = 950.0

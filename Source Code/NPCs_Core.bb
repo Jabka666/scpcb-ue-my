@@ -2676,7 +2676,7 @@ Function UpdateNPCs%()
 						Case 0.0 ; ~ Idles
 							;[Block]
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-							AnimateNPC(n, 210.0, 235.0, 0.1)
+							AnimateEx(n\OBJ, AnimTime(n\OBJ), 210.0, 235.0, 0.1)
 							;[End Block]
 						Case 1.0 ; ~ Walking
 							;[Block]
@@ -2685,12 +2685,12 @@ Function UpdateNPCs%()
 							Else
 								n\CurrSpeed = CurveValue(0.015, n\CurrSpeed, 5.0)
 							EndIf
-							AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 18.0)
+							AnimateEx(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
 							;[End Block]
 						Case 2.0 ; ~ Running
 							;[Block]
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
-							AnimateNPC(n, 301.0, 319.0, n\CurrSpeed * 18.0)
+							AnimateEx(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
 							;[End Block]
 					End Select
 					

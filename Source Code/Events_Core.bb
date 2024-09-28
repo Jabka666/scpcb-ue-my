@@ -6012,12 +6012,12 @@ Function UpdateEvents%()
 								Else ; ~ Gas valves closed
 									If e\room\NPC[0]\State = 6.0
 										If e\room\NPC[0]\Frame >= 501.0 And e\room\NPC[0]\Frame <= 523.0
-											AnimateNPC(e\room\NPC[0], 501.0, 523.0, 0.08, False)
+											e\room\NPC[0]\Frame = AnimateEx(e\room\NPC[0]\OBJ, AnimTime(e\room\NPC[0]\OBJ), 501.0, 523.0, 0.08, False)
 											If e\room\NPC[0]\Frame > 522.9 Then e\room\NPC[0]\State = 0.0
 										EndIf
 										
 										If e\room\NPC[0]\Frame >= 524.0 And e\room\NPC[0]\Frame <= 553.0
-											AnimateNPC(e\room\NPC[0], 524.0, 553.0, 0.08, False)
+											e\room\NPC[0]\Frame = AnimateEx(e\room\NPC[0]\OBJ, AnimTime(e\room\NPC[0]\OBJ), 524.0, 553.0, 0.08, False)
 											If e\room\NPC[0]\Frame > 552.9 Then e\room\NPC[0]\State = 0.0
 										EndIf
 									EndIf
@@ -8764,7 +8764,7 @@ Function UpdateIntro%()
 									If EntityX(e\room\NPC[11]\Collider) > e\room\x - 2000.0 * RoomScale Then RemoveNPC(e\room\NPC[11])
 								EndIf
 							EndIf
-							AnimateNPC(e\room\NPC[12], 357.0, 381.0, 0.05)
+							AnimateEx(e\room\NPC[12]\OBJ, AnimTime(e\room\NPC[12]\OBJ), 357.0, 381.0, 0.05)
 							
 							If e\room\NPC[3]\State <> 11.0
 								If DistanceSquared(EntityX(e\room\NPC[3]\Collider), EntityX(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(e\room\NPC[3]\Collider), EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
@@ -8841,13 +8841,13 @@ Function UpdateIntro%()
 							e\room\NPC[6]\GravityMult = 0.0
 							If e\EventState3 < 14000.0
 								If ChannelPlaying(e\SoundCHN)
-									If e\room\NPC[6]\Frame >= 325.0
-										AnimateNPC(e\room\NPC[6], 326.0, 328.0, 0.02, False)
+									If AnimTime(e\room\NPC[6]\OBJ) >= 325.0
+										AnimateEx(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 326.0, 328.0, 0.02, False)
 									Else
-										AnimateNPC(e\room\NPC[6], 320.0, 328.0, 0.05, False)
+										AnimateEx(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 320.0, 328.0, 0.05, False)
 									EndIf
 								Else
-									AnimateNPC(e\room\NPC[6], 328.0, 320.0, -0.02, False)
+									AnimateEx(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 328.0, 320.0, -0.02, False)
 								EndIf
 							EndIf
 							
@@ -8991,7 +8991,7 @@ Function UpdateIntro%()
 								CameraPitch = CameraPitch - 90.0
 								FreeEntity(Pvt) : Pvt = 0
 								
-								AnimateNPC(e\room\NPC[6], 357.0, 381.0, 0.05)
+								AnimateEx(e\room\NPC[6]\OBJ, AnimTime(e\room\NPC[6]\OBJ), 357.0, 381.0, 0.05)
 								
 								e\EventState3 = Min(e\EventState3 + fps\Factor[0], 19000.0)
 								If e\EventState3 < 14100.0
@@ -9020,7 +9020,7 @@ Function UpdateIntro%()
 										PointEntity(n_I\Curr173\Collider, e\room\NPC[2]\Collider)
 										
 										RotateEntity(e\room\NPC[2]\Collider, 0.0, EntityYaw(e\room\NPC[2]\Collider), 0.0)
-										AnimateNPC(e\room\NPC[2], 406.0, 382.0, (-0.01) * 15.0) ; ~ Check this
+										AnimateEx(e\room\NPC[2]\OBJ, AnimTime(e\room\NPC[2]\OBJ), 406.0, 382.0, (-0.01) * 15.0)
 										MoveEntity(e\room\NPC[2]\Collider, 0.0, 0.0, (-0.01) * fps\Factor[0])
 										
 										StopChannel(e\room\NPC[0]\SoundCHN) : e\room\NPC[0]\SoundCHN = 0
