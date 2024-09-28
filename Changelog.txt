@@ -18,6 +18,9 @@
 [NPCs]
 - Added MTF leader texture.
 
+[Menu]
+- Added difficulty names on «Load Game» page.
+
 [Launcher]
 - Updated buttons images.
 

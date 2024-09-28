@@ -30,6 +30,7 @@ Function SaveGame%(File$)
 		WriteByte(f, 1)
 		WriteString(f, SelectedCustomMap\Name)
 	EndIf
+	WriteString(f, SelectedDifficulty\Name)
 	
 	WriteInt(f, CODE_DR_MAYNARD)
 	WriteInt(f, CODE_O5_COUNCIL)
@@ -552,6 +553,7 @@ Function LoadGame%(File$)
 	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
+	ReadString(f)
 	ReadString(f)
 	
 	CODE_DR_MAYNARD = ReadInt(f)
@@ -1457,6 +1459,7 @@ Function LoadGameQuick%(File$)
 	
 	ReadByte(f)
 	ReadString(f)
+	ReadString(f)
 	
 	me\DropSpeed = -0.1
 	me\HeadDropSpeed = 0.0
@@ -2351,6 +2354,7 @@ Type Save
 	Field Date$
 	Field Version$
 	Field Seed$
+	Field Difficulty$
 End Type
 
 Global CurrSave.Save
@@ -2391,6 +2395,7 @@ Function LoadSavedGames%()
 			Else
 				newsv\Seed = "mc_" + ReadString(f)
 			EndIf
+			newsv\Difficulty = ReadString(f)
 			
 			CloseFile(f)
 			SavedGamesAmount = SavedGamesAmount + 1
