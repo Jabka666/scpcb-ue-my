@@ -2668,7 +2668,7 @@ Function UpdateNPCs%()
 				If (Not n\IsDead)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 					
-					PrevFrame = AnimTime(n\OBJ)
+					PrevFrame = n\Frame
 					Select n\State
 						Case -1.0 ; ~ Script
 							;[Block]
@@ -2676,34 +2676,37 @@ Function UpdateNPCs%()
 						Case 0.0 ; ~ Idles
 							;[Block]
 							n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-							AnimateEx(n\OBJ, AnimTime(n\OBJ), 210.0, 235.0, 0.1)
+							AnimateNPC(n, 210.0, 235.0, 0.1)
 							;[End Block]
 						Case 1.0 ; ~ Walking
 							;[Block]
 							n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 20.0)
-							AnimateEx(n\OBJ, AnimTime(n\OBJ), 236.0, 260.0, n\CurrSpeed * 18.0)
+							AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 18.0)
 							
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							If n\CurrSpeed > 0.005
-								If (PrevFrame < 244.0 And AnimTime(n\OBJ) >= 244.0) Lor (PrevFrame < 254.0 And AnimTime(n\OBJ) >= 254.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 244.0 And n\Frame >= 244.0) Lor (PrevFrame < 254.0 And n\Frame >= 254.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							ElseIf n\CurrSpeed < -0.005
-								If (PrevFrame >= 254.0 And AnimTime(n\OBJ) < 254.0) Lor (PrevFrame >= 244.0 And AnimTime(n\OBJ) < 244.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame >= 254.0 And n\Frame < 254.0) Lor (PrevFrame >= 244.0 And n\Frame < 244.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							;[End Block]
 						Case 2.0 ; ~ Running
 							;[Block]
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
-							AnimateEx(n\OBJ, AnimTime(n\OBJ), 301.0, 319.0, n\CurrSpeed * 18.0)
+							AnimateNPC(n, 301.0, 319.0, n\CurrSpeed * 18.0)
 							
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							If n\CurrSpeed > 0.005
-								If (PrevFrame < 309.0 And AnimTime(n\OBJ) >= 309.0) Lor (PrevFrame <= 319.0 And AnimTime(n\OBJ) <= 301.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								If (PrevFrame < 309.0 And n\Frame >= 309.0) Lor (PrevFrame <= 319.0 And n\Frame <= 301.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							;[End Block]
 					End Select
-					If n\HP =< 0 And n\NPCType = NPCTypeClerk Then n\IsDead = True ; ~ Only for Clerk because of Tesla Gate event
+					If n\HP =< 0 And n\NPCType = NPCTypeClerk
+						SetNPCFrame(n, 41.0)
+						n\IsDead = True ; ~ Only for Clerk because of Tesla Gate event
+					EndIf
 				Else
 					Select n\State3
 						Case -1.0 ; ~ Script
@@ -7511,7 +7514,7 @@ Function SetNPCFrame%(n.NPCs, Frame#)
 End Function
 
 Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
-	Local NewTime#, Temp#
+	Local NewTime#
 	
 	If Speed > 0.0
 		NewTime = Max(Min(n\Frame + Speed * fps\Factor[0], LastFrame), FirstFrame)
@@ -7519,7 +7522,8 @@ Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 		If Loop And NewTime >= LastFrame Then NewTime = FirstFrame
 	Else
 		If FirstFrame < LastFrame
-			Temp = FirstFrame
+			Local Temp# = FirstFrame
+			
 			FirstFrame = LastFrame
 			LastFrame = Temp
 		EndIf
@@ -7540,7 +7544,7 @@ Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 End Function
 
 Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True)
-	Local NewTime#, Temp#
+	Local NewTime#
 	
 	If Speed > 0.0
 		NewTime = Max(Min(Curr + Speed * fps\Factor[0], LastFrame), FirstFrame)
@@ -7548,7 +7552,8 @@ Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = Tru
 		If Loop And NewTime >= LastFrame Then NewTime = FirstFrame
 	Else
 		If FirstFrame < LastFrame
-			Temp = FirstFrame
+			Local Temp# = FirstFrame
+			
 			FirstFrame = LastFrame
 			LastFrame = Temp
 		EndIf
