@@ -3345,6 +3345,7 @@ Function UpdateEvents%()
 						e\EventState = e\EventState + fps\Factor[0]
 						If e\EventState > 70.0 * 3.6 And e\room\RoomDoors[0]\Open Then OpenCloseDoor(e\room\RoomDoors[0])
 						If e\room\RoomDoors[0]\OpenState = 0.0
+							FreeEntity(e\room\RoomDoors[0]\OBJ2) : e\room\RoomDoors[0]\OBJ2 = 0
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null
 							RemoveEvent(e)
 						EndIf
@@ -3748,9 +3749,9 @@ Function UpdateEvents%()
 								me\BigCameraShake = 10.6 - (e\EventState / 70.0)
 								TempLightVolume = 0.6
 							ElseIf e\EventState >= 70.0 * 13.0 And (Not ChannelPlaying(e\SoundCHN))
-								For i = 0 To 1
-									EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[i], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
-								Next
+								EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[1], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
+								FreeEntity(e\room\RoomDoors[0]\Buttons[1]) : e\room\RoomDoors[0]\Buttons[1] = 0
+								FreeEntity(e\room\RoomDoors[0]\ElevatorPanel[0]) : e\room\RoomDoors[0]\ElevatorPanel[0] = 0
 								FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 								RemoveEvent(e)
 							EndIf
