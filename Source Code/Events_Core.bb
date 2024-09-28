@@ -5988,6 +5988,9 @@ Function UpdateEvents%()
 											e\room\NPC[0]\State = 6.0
 											AnimateNPC(e\room\NPC[0], 529.0, 524.0, -0.08, False)
 										ElseIf e\EventState3 > 70.0 * 35.0
+											PointEntity(e\room\NPC[0]\OBJ, me\Collider)
+											RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
+											
 											If e\room\NPC[0]\State = 6.0
 												me\Sanity = -150.0 * Sin(AnimTime(e\room\NPC[0]\OBJ) - 524.0) * 9.0
 												AnimateNPC(e\room\NPC[0], 524.0, 553.0, 0.08, False)
