@@ -546,7 +546,7 @@ Function CreateNPCAsset%(n.NPCs)
 			EndIf
 			Temp = IniGetFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
-			PositionEntity(n\OBJ2, 0.0, 0.86, -0.1, True)
+			PositionEntity(n\OBJ2, 0.0, 0.86, -0.094, True)
 			RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
 			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
 			
