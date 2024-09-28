@@ -191,5 +191,4 @@ Function RenderAchievementMsg%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#6#1D#26#4E#6D#86#A0
 ;~C#Blitz3D TSS

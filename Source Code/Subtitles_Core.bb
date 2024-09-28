@@ -307,5 +307,4 @@ Function DeInitSubtitlesAssets%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#3#C#19#24#2E#85#AE#DE#E6#EE#101#12B
 ;~C#Blitz3D TSS

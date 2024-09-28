@@ -526,5 +526,4 @@ Function UpdateDeaf%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#0#16#27#3C#48#54#60#6A#7F#C9#116#17D#182#1A8#1B9#1BE#1D1#1D8#1F8#203
 ;~C#Blitz3D TSS

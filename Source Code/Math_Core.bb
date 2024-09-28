@@ -388,6 +388,4 @@ End Function
 ;End Function
 
 ;~IDEal Editor Parameters:
-;~F#0#C#15#21#29#2D#36#3A#3F#4F#5E#64#68#6C#70#74#78#97#9D#BC
-;~F#E5#F0#F4#103#128#12F
 ;~C#Blitz3D TSS

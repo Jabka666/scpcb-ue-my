@@ -19,5 +19,4 @@ End Function
 Const MaterialsFile$ = "Data\materials.ini"
 
 ;~IDEal Editor Parameters:
-;~F#0#8
 ;~C#Blitz3D TSS

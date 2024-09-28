@@ -438,6 +438,4 @@ Function GetRescaledTexture%(Texture$, Flags%, Width%, Height%, Brush% = False)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#6#32#3E#72#80#C1#D2#F6#FB#101#11A#11E#122#126#14A#16A#16F#173#177#17B
-;~F#17F#183#187#18B#193#197
 ;~C#Blitz3D TSS

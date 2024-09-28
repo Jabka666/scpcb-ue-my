@@ -525,6 +525,4 @@ Function UpdateParticles_Devil()
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#7#1B#26#34#4B#53#5A#61#68#6F#77#7E#8A#96#A2#AA#B2#B9#C3#CB
-;~F#D2#D9#E5#EC#F5#FD#118#12A#136#147#17B#186
 ;~C#Blitz3D TSS

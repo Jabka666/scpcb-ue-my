@@ -467,6 +467,4 @@ Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#8#F#16#30#5F#71#7D#84#9A#AA#B8#CA#D8#E6#FD#13B#162#16E#173#17F
-;~F#18B#197#1A2#1AE#1BA#1C7
 ;~C#Blitz3D TSS
