@@ -517,7 +517,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Controls", "Screenshot Key", key\SCREENSHOT)
 	
-	IniWriteString(OptionFile, "Controls", "Lean Left key", key\LEAN_LEFT)
+	IniWriteString(OptionFile, "Controls", "Lean Left Key", key\LEAN_LEFT)
 	
 	IniWriteString(OptionFile, "Controls", "Lean Right Key", key\LEAN_RIGHT)
 	;[End Block]
