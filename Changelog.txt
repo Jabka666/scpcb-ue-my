@@ -37,6 +37,7 @@
 - Fixed sparks direction in SCP-409's containment chamber.
 - Fixed incorrect clipping of "blood decal(5).png" texture.
 - Fixed great issue with frames smoothing.
+- Fixed left lean key bind.
 
 [Known issues]
 - Rooms can overlap and block the way.
