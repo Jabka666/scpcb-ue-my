@@ -32,28 +32,19 @@ If opt\LauncherEnabled
 	
 	lnchr\TotalGFXModes = CountGfxModes3D()
 	
-	opt\AspectRatio = 1.0
-	
 	UpdateLauncher(lnchr)
 	
 	Delete(lnchr)
 EndIf
 
-Global GraphicWidthFloat#, RealGraphicWidthFloat#
-Global GraphicHeightFloat#, RealGraphicHeightFloat#
+Global GraphicWidthFloat#
+Global GraphicHeightFloat#
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
+GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
 If opt\DisplayMode = 1
-	opt\RealGraphicWidth = DesktopWidth() : opt\RealGraphicHeight = DesktopHeight()
-	GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
-	RealGraphicWidthFloat = Float(opt\RealGraphicWidth) : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
-	opt\AspectRatio = (GraphicWidthFloat / GraphicHeightFloat) / (RealGraphicWidthFloat / RealGraphicHeightFloat)
-	Graphics3DExt(opt\RealGraphicWidth, opt\RealGraphicHeight, 0, 4)
+	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, 4)
 Else
-	opt\AspectRatio = 1.0
-	opt\RealGraphicWidth = opt\GraphicWidth : opt\RealGraphicHeight = opt\GraphicHeight
-	GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
-	RealGraphicWidthFloat = Float(opt\RealGraphicWidth) : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
@@ -65,8 +56,8 @@ Global Input_ResetTime# = 0.0
 Global MousePosX#, MousePosY#
 
 Function UpdateMouseInput%()
-	MousePosX = ScaledMouseX()
-	MousePosY = ScaledMouseY()
+	MousePosX = MouseX()
+	MousePosY = MouseY()
 	
 	If Input_ResetTime > 0.0
 		Input_ResetTime = Max(Input_ResetTime - fps\Factor[1], 0.0)
@@ -2897,7 +2888,7 @@ Function UpdateMouseLook%()
 	me\CameraShake = Max(me\CameraShake - FPSFactorEx, 0.0)
 	me\BigCameraShake = Max(me\BigCameraShake - FPSFactorEx, 0.0)
 	
-	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (RealGraphicWidthFloat / RealGraphicHeightFloat))) / 2.0)))
+	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (GraphicWidthFloat / GraphicHeightFloat))) / 2.0)))
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
 	
 	If (Not me\Terminated) And me\FallTimer >= 0.0
@@ -3402,7 +3393,7 @@ Function UpdateGUI%()
 			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
 			Local ButtonPosZ# = EntityZ(d_I\ClosestButton, True)
 			
-			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\GraphicWidth / opt\GraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, ButtonPosX, ButtonPosY, ButtonPosZ)
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
@@ -6297,7 +6288,7 @@ Function RenderGUI%()
 			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
 			Local ButtonPosZ# = EntityZ(d_I\ClosestButton, True)
 			
-			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\GraphicWidth / opt\GraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, ButtonPosX, ButtonPosY, ButtonPosZ)
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
@@ -7164,7 +7155,7 @@ Function UpdateMenu%()
 						
 						opt\CurrFOV = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0
 						opt\FOV = opt\CurrFOV + 40
-						CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+						CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\GraphicWidth / opt\GraphicHeight)) / 2.0))
 						
 						y = y + (45 * MenuScale)
 						

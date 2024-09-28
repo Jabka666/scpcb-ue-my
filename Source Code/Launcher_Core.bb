@@ -372,8 +372,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 				opt\GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
 			EndIf
 			GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
-			opt\RealGraphicWidth = opt\GraphicWidth : RealGraphicWidthFloat = Float(opt\RealGraphicWidth)
-			opt\RealGraphicHeight = opt\GraphicHeight : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
 			Exit
 		EndIf
 		; ~ Exit button

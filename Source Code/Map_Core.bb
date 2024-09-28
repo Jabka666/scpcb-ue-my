@@ -1001,8 +1001,8 @@ Function GenForestGrid%(fr.Forest)
 			ShowPointer()
 			Cls()
 			
-			MousePosX = ScaledMouseX()
-			MousePosY = ScaledMouseY()
+			MousePosX = MouseX()
+			MousePosY = MouseY()
 			
 			i = ForestGridSize - 1
 			For x = 0 To ForestGridSize - 1
@@ -5760,8 +5760,8 @@ Function CreateMap%()
 			ShowPointer()
 			Cls()
 			
-			MousePosX = ScaledMouseX()
-			MousePosY = ScaledMouseY()
+			MousePosX = MouseX()
+			MousePosY = MouseY()
 			
 			i = MapGridSize - 1
 			For x = 0 To MapGridSize - 1

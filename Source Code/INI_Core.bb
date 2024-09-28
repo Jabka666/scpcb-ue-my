@@ -217,9 +217,8 @@ Type Options
 	Field InvertMouseX%, InvertMouseY%
 	Field MouseSensitivity#
 	; ~ [GLOBAL]
-	Field AspectRatio#
-	Field GraphicWidth%, RealGraphicWidth%
-	Field GraphicHeight%, RealGraphicHeight%
+	Field GraphicWidth%
+	Field GraphicHeight%
 	Field DisplayMode%
 	Field GFXDriver%
 	Field IntroEnabled%
