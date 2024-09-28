@@ -10,7 +10,7 @@ Type FramesPerSeconds
 	Field Accumulator#
 	Field PrevTime%
 	Field CurrTime%
-	Field FPS%
+	Field RealFPS%
 	Field TempFPS%
 	Field Goal%
 	Field LoopDelay%
@@ -19,9 +19,11 @@ End Type
 
 Global fps.FramesPerSeconds = New FramesPerSeconds
 
-Global MilliSec%
+Function ResetTimingAccumulator%()
+	fps\Accumulator = 0.0
+End Function
 
-fps\LoopDelay = MilliSecs()
+Global MilliSec%
 
 Global SplitSpace$
 
@@ -110,6 +112,8 @@ SetBuffer(BackBuffer())
 SeedRnd(MilliSecs())
 
 PlayStartupVideos()
+
+fps\LoopDelay = MilliSecs()
 
 Global CursorIMG%
 If opt\DisplayMode = 0 Then CursorIMG = ScaleImageEx(LoadImage_Strict("GFX\Menu\cursor.png"), MenuScale, MenuScale)
@@ -247,7 +251,7 @@ Repeat
 	
 	If opt\ShowFPS
 		If fps\Goal < MilliSecs()
-			fps\FPS = fps\TempFPS
+			fps\RealFPS = fps\TempFPS
 			fps\TempFPS = 0
 			fps\Goal = MilliSecs() + 1000
 		Else
@@ -278,8 +282,6 @@ Function UpdateGame%()
 		If fps\Accumulator <= 0.0 Then CaptureWorld()
 		
 		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
-		
-		RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
 		
 		UpdateMouseInput()
 		
@@ -658,6 +660,8 @@ Global RenderTween#
 
 Function RenderGame%()
 	CatchErrors("RenderGame()")
+	
+	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
 	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
@@ -2323,7 +2327,7 @@ Function RenderMessages%()
 		Local CoordEx% = 20 * MenuScale
 		
 		SetFontEx(fo\FontID[Font_Console])
-		TextEx(CoordEx, CoordEx, "FPS: " + fps\FPS)
+		TextEx(CoordEx, CoordEx, "FPS: " + fps\RealFPS)
 		SetFontEx(fo\FontID[Font_Default])
 	EndIf
 End Function

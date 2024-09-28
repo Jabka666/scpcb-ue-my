@@ -106,10 +106,6 @@ Function MouseOn%(x%, y%, Width%, Height%)
 	Return((MousePosX > x And MousePosX < x + Width) And (MousePosY > y And MousePosY < y + Height))
 End Function
 
-Function ResetTimingAccumulator%()
-	fps\Accumulator = 0.0
-End Function
-
 Function Find860Angle#(n.NPCs, fr.Forest)
 	TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, fr\Forest_Pivot)
 	

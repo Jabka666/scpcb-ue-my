@@ -1748,7 +1748,7 @@ Function RenderMainMenu%()
 		TextEx(20 * MenuScale, opt\GraphicHeight - (50 * MenuScale), "v" + VersionNumber)
 		If opt\ShowFPS
 			SetFontEx(fo\FontID[Font_Console])
-			TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\FPS)
+			TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\RealFPS)
 		EndIf
 	EndIf
 	
