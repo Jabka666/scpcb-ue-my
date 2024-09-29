@@ -5032,6 +5032,9 @@ Function UpdateGUI%()
 								CreateMsg(JsonGetString(JsonGetValue(Drink, "refuse_message")))
 								SelectedItem = Null
 							EndIf
+						Else
+							CreateMsg(GetLocalString("msg", "cup.unknown"))
+							RemoveItem(SelectedItem)
 						EndIf
 					EndIf
 					;[End Block]

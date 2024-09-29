@@ -14,6 +14,7 @@
 - Tiny color change for SCRAMBLE gear's texture.
 - Updated battery images for NVG and SCRAMBLE gear.
 - Added Harn's badge.
+- Added new message for cups.
 
 [NPCs]
 - Added MTF leader texture.
