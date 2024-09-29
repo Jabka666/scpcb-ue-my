@@ -150,8 +150,10 @@ Function RenderGamma%()
 		Ratio = SMALLEST_POWER_TWO / GraphicWidthFloat
 		
 		Local Gamma% = 255 * opt\ScreenGamma
+		Local BufferBack% = BackBuffer()
+		Local BufferFresize% = TextureBuffer(FresizeTexture2)
 		
-		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BufferBack, TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
@@ -159,15 +161,15 @@ Function RenderGamma%()
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 2)
 		EntityAlpha(FresizeImage, 1.0)
-		SetBuffer(TextureBuffer(FresizeTexture2))
+		SetBuffer(BufferFresize)
 		ClsColor(Gamma, Gamma, Gamma)
 		Cls()
-		SetBuffer(BackBuffer())
+		SetBuffer(BufferBack)
 		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
-		SetBuffer(TextureBuffer(FresizeTexture2))
+		SetBuffer(BufferFresize)
 		ClsColor(0, 0, 0)
 		Cls()
-		SetBuffer(BackBuffer())
+		SetBuffer(BufferBack)
 	EndIf
 	EntityFX(FresizeImage, 1)
 	EntityBlend(FresizeImage, 1)
@@ -319,11 +321,12 @@ Function GetScreenshot%()
 	If FileType("Screenshots\") <> 2 Then CreateDir("Screenshots")
 	
 	Local Bank% = CreateBank(opt\GraphicWidth * opt\GraphicHeight * 3)
+	Local BufferBack% = BackBuffer()
 	
-	LockBuffer(BackBuffer())
+	LockBuffer(BufferBack)
 	For x = 0 To opt\GraphicWidth - 1
 		For y = 0 To opt\GraphicHeight - 1
-			Local Pixel% = ReadPixelFast(x, y, BackBuffer())
+			Local Pixel% = ReadPixelFast(x, y, BufferBack)
 			Local TempY% = (y * (opt\GraphicWidth * 3)) + (x * 3)
 			
 			PokeByte(Bank, TempY, ReadPixelColor(Pixel, 0))
@@ -331,7 +334,7 @@ Function GetScreenshot%()
 			PokeByte(Bank, TempY + 2, ReadPixelColor(Pixel, 16))
 		Next
 	Next
-	UnlockBuffer(BackBuffer())
+	UnlockBuffer(BufferBack)
 	
 	Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\GraphicWidth, opt\GraphicHeight, opt\GraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
 	

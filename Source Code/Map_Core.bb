@@ -4253,6 +4253,8 @@ Function RenderSecurityCams%()
 					EndIf
 					
 					If sc\State >= sc\RenderInterval
+						Local BufferBack% = BackBuffer()
+						
 						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
 							If (Not EntityHidden(Camera))
 								ShowEntity(sc\Cam)
@@ -4260,9 +4262,9 @@ Function RenderSecurityCams%()
 							EndIf
 							Cls()
 							
-							SetBuffer(BackBuffer())
+							SetBuffer(BufferBack)
 							RenderWorld(RenderTween)
-							CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(sc_I\ScreenTex))
+							CopyRect(0, 0, 512, 512, 0, 0, BufferBack, TextureBuffer(sc_I\ScreenTex))
 							
 							If (Not EntityHidden(sc\Cam))
 								ShowEntity(Camera)
@@ -4277,9 +4279,9 @@ Function RenderSecurityCams%()
 							EndIf
 							Cls()
 							
-							SetBuffer(BackBuffer())
+							SetBuffer(BufferBack)
 							RenderWorld(RenderTween)
-							CopyRect(0, 0, 512, 512, 0, 0, BackBuffer(), TextureBuffer(sc_I\ScreenTex))
+							CopyRect(0, 0, 512, 512, 0, 0, BufferBack, TextureBuffer(sc_I\ScreenTex))
 							
 							If (Not EntityHidden(sc_I\CoffinCam\room\OBJ))
 								HideEntity(sc_I\CoffinCam\Cam)
