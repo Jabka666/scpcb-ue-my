@@ -598,13 +598,12 @@ Function UpdateItems%()
 	EndIf
 End Function
 
-Function PickItem%(item.Items)
+Function PickItem%(item.Items, PlayPickUpSound% = True)
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
 	
 	CatchErrors("PickItem()")
 	
-	Local e.Events
-	Local n% = 0, z%
+	Local n% = 0, z% = 0
 	Local FullINV% = True
 	
 	For n = 0 To MaxItemAmount - 1
@@ -712,7 +711,7 @@ Function PickItem%(item.Items)
 						;[End Block]
 				End Select
 				
-				If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
+				If item\ItemTemplate\SoundID <> 66 And PlayPickUpSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 				item\Picked = True
 				item\Dropped = -1
 				

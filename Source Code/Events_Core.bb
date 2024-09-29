@@ -3507,7 +3507,7 @@ Function UpdateEvents%()
 						If ItemAmount < MaxItemAmount
 							GiveAchievement("458")
 							CreateMsg(GetLocalString("msg", "458"))
-							it.Items = CreateItem("Pizza Slice", it_pizza, 1.0, 1.0, 1.0)
+							it.Items = CreateItem("Pizza Slice", it_pizza, 0.0, 0.0, 0.0)
 							EntityType(it\Collider, HIT_ITEM)
 							PickItem(it)
 						Else
@@ -5138,9 +5138,8 @@ Function UpdateEvents%()
 								If ItemAmount < MaxItemAmount
 									SelectedItem = CreateItem("Drawing", it_paper, 0.0, 0.0, 0.0)
 									EntityType(SelectedItem\Collider, HIT_ITEM)
-									EntityParent(SelectedItem\Collider, 0)
-									
 									PickItem(SelectedItem)
+									
 									RemoveNPC(e\room\NPC[0])
 									RemoveEvent(e)
 									Return

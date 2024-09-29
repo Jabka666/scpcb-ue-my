@@ -2483,28 +2483,31 @@ Function RefillCup%()
 	For p.Props = Each Props
 		If p\IsCooler
 			If PlayerRoom = p\room
-				Local it.Items
-				Local i%
-				
 				If InteractObject(p\OBJ, 0.8)
+					Local EmptyCup.Items = Null
+					Local i%
+					
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null
 							If Inventory(i)\ItemTemplate\ID = it_emptycup
-								RemoveItem(Inventory(i))
-								it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 200, 200, 200)
-								it\Name = "WATER"
-								it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
-								it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-								Inventory(i) = it
-								HideEntity(it\Collider)
-								EntityType(it\Collider, HIT_ITEM)
-								EntityParent(it\Collider, 0)
-								PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
-								CreateMsg(GetLocalString("msg", "refill"))
+								EmptyCup = Inventory(i)
 								Exit
 							EndIf
 						EndIf
 					Next
+					If EmptyCup <> Null
+						RemoveItem(EmptyCup)
+						EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200)
+						EntityType(EmptyCup\Collider, HIT_MAP)
+						EntityParent(EmptyCup\Collider, 0)
+						EmptyCup\Name = "WATER"
+						EmptyCup\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+						PickItem(EmptyCup)
+						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
+						CreateMsg(GetLocalString("msg", "refill"))
+					Else
+						CreateMsg(GetLocalString("msg", "cup.needed"))
+					EndIf
 					Exit
 				EndIf
 			EndIf
@@ -5707,12 +5710,14 @@ Function UpdateGUI%()
 							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = Null
 									Inventory(i) = CreateItem("SCP-500-01", it_scp500pill, 0.0, 0.0, 0.0)
+									; ~ Do not use PickItem(Inventory(i)) here
 									Inventory(i)\Picked = True
 									Inventory(i)\Dropped = -1
 									Inventory(i)\ItemTemplate\Found = True
 									HideEntity(Inventory(i)\Collider)
 									EntityType(Inventory(i)\Collider, HIT_ITEM)
 									EntityParent(Inventory(i)\Collider, 0)
+									ItemAmount = ItemAmount + 1
 									Exit
 								EndIf
 							Next
@@ -9354,14 +9359,10 @@ Function Update294%()
 						If ItemAmount < MaxItemAmount
 							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = Null
-									Inventory(i) = CreateItem("Mastercard", it_mastercard, 1.0, 1.0, 1.0)
-									Inventory(i)\Picked = True
-									Inventory(i)\Dropped = -1
-									Inventory(i)\ItemTemplate\Found = True
+									Inventory(i) = CreateItem("Mastercard", it_mastercard, 0.0, 0.0, 0.0)
 									Inventory(i)\State = me\CurrFunds
-									HideEntity(Inventory(i)\Collider)
 									EntityType(Inventory(i)\Collider, HIT_ITEM)
-									EntityParent(Inventory(i)\Collider, 0)
+									PickItem(Inventory(i), False)
 									Exit
 								EndIf
 							Next
