@@ -2206,6 +2206,8 @@ Function LoadGameQuick%(File$)
 	
 	CloseFile(f)
 	
+	CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
+	
 	UpdateLightsTimer = 0.0
 	
 	d_I\AnimButton = 0

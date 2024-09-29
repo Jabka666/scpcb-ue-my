@@ -2582,8 +2582,11 @@ Function UpdateEvents%()
 									me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 								EndIf
 								
+								CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
+								
 								e\EventState = 0.0
 								e\EventState3 = 0.0
+								Exit
 							EndIf
 						Next
 					Else
