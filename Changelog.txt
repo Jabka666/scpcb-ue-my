@@ -8,6 +8,7 @@
 [Rooms]
 - Some intro improvements.
 - Updated some signs color.
+- Added a new message when trying to use the water cooler without an Empty Cup.
 
 [Items]
 - Each NVG has its own texture.
@@ -15,6 +16,7 @@
 - Updated battery images for NVG and SCRAMBLE gear.
 - Added Harn's badge.
 - Added new message for cups.
+- Added new drink.
 
 [NPCs]
 - Added MTF leader texture.
