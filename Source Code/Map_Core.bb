@@ -2791,7 +2791,9 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	EntityPickMode(d\OBJ, 2)
 	EntityParent(d\OBJ, Parent)
 	
-	If DoorType <> OFFICE_DOOR And DoorType <> WOODEN_DOOR
+	Local OfficeWooden% = ((DoorType = OFFICE_DOOR) Lor (DoorType = WOODEN_DOOR))
+	
+	If (Not OfficeWooden)
 		d\OBJ2 = CopyEntity(d_I\DoorModelID[DoorModelID_2])
 		ScaleEntity(d\OBJ2, DoorScaleX, DoorScaleY, DoorScaleZ)
 		PositionEntity(d\OBJ2, x, y, z)
@@ -2804,38 +2806,33 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	Local Temp% = (DoorType = BIG_DOOR)
 	
 	For i = 0 To 1
-		Select DoorType
-			Case OFFICE_DOOR, WOODEN_DOOR
-				;[Block]
-				d\Buttons[i] = CreatePivot()
-				PositionEntity(d\Buttons[i], x - 0.22, y + 0.6, z + 0.1 + (i * (-0.2)))
-				EntityRadius(d\Buttons[i], 0.1)
-				EntityPickMode(d\Buttons[i], 1)
-				EntityParent(d\Buttons[i], d\FrameOBJ)
-				;[End Block]
-			Default
-				;[Block]
-				If Code <> 0
-					ButtonID = BUTTON_KEYPAD
-				ElseIf Keycard > KEY_MISC
-					ButtonID = BUTTON_KEYCARD
-				ElseIf Keycard > KEY_860 And Keycard < KEY_MISC
-					ButtonID = BUTTON_SCANNER
-				Else
-					ButtonID = BUTTON_DEFAULT
-					If DoorType = ELEVATOR_DOOR
-						ButtonID = i * BUTTON_ELEVATOR
-						
-						d\ElevatorPanel[i] = CopyEntity(d_I\ElevatorPanelModel)
-						ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
-						RotateEntity(d\ElevatorPanel[i], 0.0, i * 180.0, 0.0)
-						PositionEntity(d\ElevatorPanel[i], x, y + 1.27, z + 0.13 + (i * (-0.26)))
-						EntityParent(d\ElevatorPanel[i], d\FrameOBJ)
-					EndIf
+		If OfficeWooden
+			d\Buttons[i] = CreatePivot()
+			PositionEntity(d\Buttons[i], x - 0.22, y + 0.6, z + 0.1 + (i * (-0.2)))
+			EntityRadius(d\Buttons[i], 0.1)
+			EntityPickMode(d\Buttons[i], 1)
+			EntityParent(d\Buttons[i], d\FrameOBJ)
+		Else
+			If Code <> 0
+				ButtonID = BUTTON_KEYPAD
+			ElseIf Keycard > KEY_MISC
+				ButtonID = BUTTON_KEYCARD
+			ElseIf Keycard > KEY_860 And Keycard < KEY_MISC
+				ButtonID = BUTTON_SCANNER
+			Else
+				ButtonID = BUTTON_DEFAULT
+				If DoorType = ELEVATOR_DOOR
+					ButtonID = i * BUTTON_ELEVATOR
+					
+					d\ElevatorPanel[i] = CopyEntity(d_I\ElevatorPanelModel)
+					ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
+					RotateEntity(d\ElevatorPanel[i], 0.0, i * 180.0, 0.0)
+					PositionEntity(d\ElevatorPanel[i], x, y + 1.27, z + 0.13 + (i * (-0.26)))
+					EntityParent(d\ElevatorPanel[i], d\FrameOBJ)
 				EndIf
-				d\Buttons[i] = CreateButton(ButtonID, x + ((Not Temp) * (0.6 + (i * (-1.2)))) + (Temp * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Not Temp) * ((-0.1) + (i * 0.2))) + (Temp * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Not Temp) * (i * 180.0)) + (Temp * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
-				;[End Block]
-		End Select
+			EndIf
+			d\Buttons[i] = CreateButton(ButtonID, x + ((Not Temp) * (0.6 + (i * (-1.2)))) + (Temp * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Not Temp) * ((-0.1) + (i * 0.2))) + (Temp * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Not Temp) * (i * 180.0)) + (Temp * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
+		EndIf
 	Next
 	RotateEntity(d\FrameOBJ, 0.0, Angle, 0.0)
 	EntityParent(d\FrameOBJ, Parent)
@@ -2845,7 +2842,7 @@ End Function
 
 Function UpdateDoors%()
 	Local d.Doors
-	Local x#, z#, Dist#, i%, FindButton%
+	Local x#, z#, Dist#, i%
 	Local SinValue#
 	Local FPSFactorEx#
 	
@@ -2853,7 +2850,8 @@ Function UpdateDoors%()
 	d_I\ClosestDoor = Null
 	For d.Doors = Each Doors
 		If (EntityDistanceSquared(d\FrameOBJ, me\Collider) <= PowTwo(HideDistance * 1.75)) Lor (d\IsElevatorDoor > 0) ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
-			FindButton = (1 - (d\Open And ((d\DoorType = OFFICE_DOOR) Lor (d\DoorType = WOODEN_DOOR))))
+			Local OfficeWooden% = ((d\DoorType = OFFICE_DOOR) Lor (d\DoorType = WOODEN_DOOR))
+			Local FindButton% = (1 - (d\Open And OfficeWooden))
 			
 			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
 				For i = 0 To 1
@@ -2862,7 +2860,7 @@ Function UpdateDoors%()
 							If UpdateButton(d\Buttons[i])
 								d_I\ClosestDoor = d
 								me\SndVolume = 4.0
-								If d\KeyCard = KEY_MISC And d\Code = 0 Then d_I\AnimButton = d_I\ClosestButton
+								If d\KeyCard = KEY_MISC And d\Code = 0 And (Not OfficeWooden) Then d_I\AnimButton = d_I\ClosestButton
 								Exit
 							EndIf
 						EndIf
@@ -3045,7 +3043,7 @@ Function UpdateDoors%()
 				EndIf
 			EndIf
 			
-			If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR
+			If (Not OfficeWooden)
 				If d\ButtonsUpdateTimer =< 0.0
 					; ~ Automatically disable d\AutoClose parameter in order to prevent player get stuck -- Jabka
 					If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
@@ -3069,16 +3067,20 @@ Function UpdateDoors%()
 					d\ButtonsUpdateTimer = d\ButtonsUpdateTimer - fps\Factor[0]
 				EndIf
 				
+				; ~ TODO: REWRITE THIS SHIT
 				If ChannelPlaying(d\ButtonCHN)
 					If d_I\AnimButton <> 0
 						If me\InsideElevator
 							If InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)
 								AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
+								If AnimTime(d_I\AnimButton) > 19.9 Then d_I\AnimButton = 0
 							Else
 								AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 21.0, 40.0, 2.0, False)
+								If AnimTime(d_I\AnimButton) > 39.9 Then d_I\AnimButton = 0
 							EndIf
 						Else
 							AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0, 20.0, 2.0, False)
+							If AnimTime(d_I\AnimButton) > 19.9 Then d_I\AnimButton = 0
 						EndIf
 					EndIf
 				EndIf
