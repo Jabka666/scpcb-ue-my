@@ -2,6 +2,7 @@
 
 [General]
 - Added new sound for SCP-008.
+- Added «spawncup/givecup» console command.
 
 - Optimized the game...
 

@@ -1015,6 +1015,7 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- teleport [room name]")
 							CreateConsoleMsg("- roomlist")
 							CreateConsoleMsg("- spawnitem [item name / ID]")
+							CreateConsoleMsg("- spawndrink [drink name]")
 							CreateConsoleMsg("- itemlist")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
@@ -1132,6 +1133,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "spawnitem"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.si"))
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "spawncup", "givecup", "spawndrink", "givedrink"
+							;[Block]
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "spawndrink"))
+							CreateConsoleMsg("******************************")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.sd"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "spawn", "s"
@@ -1404,14 +1412,49 @@ Function UpdateConsole%()
 					Temp = False 
 					For itt.ItemTemplates = Each ItemTemplates
 						If Lower(itt\Name) = StrTemp Lor Lower(itt\DisplayName) = StrTemp Lor Str(itt\ID) = StrTemp
-							Temp = True
-							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
+							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
+							Temp = True
 							Exit
 						EndIf
 					Next
 					
+					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "si.failed"), 255, 0, 0)
+					;[End Block]
+				Case "spawncup", "givecup", "spawndrink", "givedrink"
+					;[Block]
+					StrTemp = Upper(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					Temp = False
+					
+					If S2IMapContains(I_294\DrinksMap, StrTemp)
+						Local Drink% = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, StrTemp))
+						Local Temp2% = 0
+						
+						Temp2 = JsonGetValue(Drink, "explosion")
+						If (Not JsonIsNull(Temp2))
+							If JsonGetBool(Temp2)
+								me\ExplosionTimer = 135.0
+								Temp2 = JsonGetValue(Drink, "death_message")
+								If (Not JsonIsNull(Temp2)) Then msg\DeathMsg = JsonGetString(Temp2)
+							EndIf
+						EndIf
+						
+						Local DrinkColor% = JsonGetArray(JsonGetValue(Drink, "color"))
+						Local Alpha# = JsonGetFloat(JsonGetValue(Drink, "alpha"))
+						
+						Temp2 = JsonGetValue(Drink, "glow")
+						If (Not JsonIsNull(Temp2))
+							If JsonGetBool(Temp2) Then Alpha = -Alpha
+						EndIf
+						
+						it.Items = CreateItem("Cup", it_cup, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider), JsonGetInt(JsonGetArrayValue(DrinkColor, 0)), JsonGetInt(JsonGetArrayValue(DrinkColor, 1)), JsonGetInt(JsonGetArrayValue(DrinkColor, 2)), Alpha)
+						it\Name = StrTemp
+						it\DisplayName = Format(GetLocalString("items", "cupof"), StrTemp)
+						EntityType(it\Collider, HIT_ITEM)
+						CreateConsoleMsg(Format(GetLocalString("console", "si.success"), it\DisplayName))
+						Temp = True
+					EndIf
 					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "si.failed"), 255, 0, 0)
 					;[End Block]
 				Case "itemlist", "itemslist", "items"
@@ -2499,7 +2542,6 @@ Function RefillCup%()
 						RemoveItem(EmptyCup)
 						EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200)
 						EntityType(EmptyCup\Collider, HIT_MAP)
-						EntityParent(EmptyCup\Collider, 0)
 						EmptyCup\Name = "WATER"
 						EmptyCup\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
 						PickItem(EmptyCup)
