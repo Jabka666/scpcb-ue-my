@@ -2358,6 +2358,8 @@ End Function
 
 ; ~ Key Items Constants
 ;[Block]
+Const KEY_MISC% = 0
+
 Const KEY_CARD_6% = 1
 Const KEY_CARD_0% = 2
 Const KEY_CARD_1% = 3
@@ -2374,8 +2376,6 @@ Const KEY_HAND_BLACK% = -2
 Const KEY_HAND_YELLOW% = -3
 
 Const KEY_860% = -4
-
-Const KEY_MISC% = 0
 ;[End Block]
 
 ; ~ Only for "UseDoor" function

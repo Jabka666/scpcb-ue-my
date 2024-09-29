@@ -2637,15 +2637,22 @@ Function InitNewGame%()
 	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
-		If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR
-			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-		ElseIf d\DoorType = OFFICE_DOOR Lor d\DoorType = WOODEN_DOOR
-			MoveEntity(d\OBJ, (((d\DoorType = OFFICE_DOOR) * 92.0) + ((d\DoorType = WOODEN_DOOR) * 70.0)) * RoomScale, 0.0, 0.0)
-		EndIf
-		If d\OBJ2 <> 0
-			EntityParent(d\OBJ2, 0)
-			If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
-		EndIf
+		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
+		Select d\DoorType
+			Case DEFAULT_DOOR, ONE_SIDED_DOOR, SCP_914_DOOR
+				;[Block]
+				MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+				If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
+				;[End Block]
+			Case OFFICE_DOOR
+				;[Block]
+				MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)
+				;[End Block]
+			Case WOODEN_DOOR
+				;[Block]
+				MoveEntity(d\OBJ, 68.0 * RoomScale, 0.0, 0.0)
+				;[End Block]
+		End Select
 		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
 		For i = 0 To 1
 			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)

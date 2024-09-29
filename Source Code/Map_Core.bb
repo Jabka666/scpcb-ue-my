@@ -3014,9 +3014,13 @@ Function UpdateDoors%()
 							MoveEntity(d\OBJ, 0.0, 0.0, RoomSpacing * RoomScale)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, RoomSpacing * RoomScale)
 							;[End Block]
-						Case OFFICE_DOOR, WOODEN_DOOR
+						Case OFFICE_DOOR
 							;[Block]
-							MoveEntity(d\OBJ, (((d\DoorType = OFFICE_DOOR) * 92.0) + ((d\DoorType = WOODEN_DOOR) * 68.0)) * RoomScale, 0.0, 0.0)
+							MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)
+							;[End Block]
+						Case WOODEN_DOOR
+							;[Block]
+							MoveEntity(d\OBJ, 68.0 * RoomScale, 0.0, 0.0)
 							;[End Block]
 					End Select
 				EndIf
