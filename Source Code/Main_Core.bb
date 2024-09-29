@@ -2481,7 +2481,7 @@ Function RefillCup%()
 	Local p.Props
 	
 	For p.Props = Each Props
-		If p\Name = "GFX\Map\Props\water_cooler.b3d"
+		If p\IsCooler
 			If PlayerRoom = p\room
 				Local it.Items
 				Local i%

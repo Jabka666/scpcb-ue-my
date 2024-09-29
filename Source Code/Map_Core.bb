@@ -11,6 +11,7 @@ Type Props
 	Field OBJ%
 	Field room.Rooms
 	Field TexPath$
+	Field IsCooler%
 End Type
 
 Type TempProps
@@ -99,6 +100,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	p\Name = Name
 	p\room = room
 	p\TexPath = TexturePath
+	p\IsCooler = (Name = "GFX\Map\Props\water_cooler.b3d")
 	
 	If p\OBJ = 0 Then p\OBJ = CheckForPropModel(Name) ; ~ A hacky optimization (just copy models that loaded as variable). Also fixes models folder if the CBRE was used
 	PositionEntity(p\OBJ, x, y, z)
