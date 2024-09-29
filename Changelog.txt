@@ -38,6 +38,7 @@
 	- MTFs should no longer get stuck in each other.
 - Fixed MAV in Maintenance Tunnels.
 - Fixed MAV caused by PIN-code buttons.
+- Fixed MAV at the end of SCP-1123's event.
 - Fixed collisions of wall fragments near SCP-513's containment chamber.
 - Fixed sparks direction in SCP-409's containment chamber.
 - Fixed incorrect clipping of "blood decal(5).png" texture.

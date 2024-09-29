@@ -2796,10 +2796,12 @@ Function UpdateEvents%()
 								If Inventory(i)\ItemTemplate\ID = it_clipboard
 									Temp = False
 									For k = 0 To Inventory(i)\InvSlots - 1
-										If Inventory(i)\SecondInv[k]\ItemTemplate\Name = "Leaflet"
-											RemoveItem(Inventory(i)\SecondInv[k])
-											Temp = True
-											Exit
+										If Inventory(i)\SecondInv[k] <> Null
+											If Inventory(i)\SecondInv[k]\ItemTemplate\Name = "Leaflet"
+												RemoveItem(Inventory(i)\SecondInv[k])
+												Temp = True
+												Exit
+											EndIf
 										EndIf
 									Next
 									If Temp Then Exit
