@@ -3319,12 +3319,12 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			it.Items = CreateItem("Cup", it_cup, r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
-			it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "ORANGE JUICE"))
+			it\Name = "ORANGE JUICE"
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "orange"))
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Cup", it_cup, r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
-			it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "COFFEE"))
+			it\Name = "COFFEE"
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3358,7 +3358,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Cup", it_cup, r\x - 100.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
-			it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
+			it\Name = "WATER"
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3643,7 +3643,7 @@ Function FillRoom%(r.Rooms)
 			
 			If Rand(4) = 1
 				it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
-				it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "COFFEE"))
+				it\Name = "COFFEE"
 				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
 				EntityParent(it\Collider, r\OBJ)
 				
@@ -3755,8 +3755,8 @@ Function FillRoom%(r.Rooms)
 			
 			If Rand(4) = 1
 				it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
-				it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "COFFEE"))
-				it\DisplayName = GetLocalString("items", "cupcoffee")
+				it\Name = "COFFEE"
+				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
 				EntityParent(it\Collider, r\OBJ)
 				
 				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
