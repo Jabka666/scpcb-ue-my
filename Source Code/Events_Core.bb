@@ -1817,7 +1817,10 @@ Function UpdateEvents%()
 							e\room\RoomDoors[0]\Open = False
 						EndIf
 						
-						If DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\Objects[2], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[2], True)) < PowTwo(160.0 * RoomScale)
+						Dist = DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\Objects[2], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[2], True))
+						If Dist < PowTwo(160.0 * RoomScale)
+							MakeMeUnplayable()
+							
 							If Setting = ROUGH Lor Setting = COARSE
 								If e\EventState > 70.0 * 2.6 And e\EventState - fps\Factor[1] < 70.0 * 2.6 Then PlaySound_Strict(snd_I\Death914SFX)
 							EndIf
@@ -1852,7 +1855,7 @@ Function UpdateEvents%()
 								EndIf
 							Next
 							
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[2], True), EntityZ(me\Collider), EntityZ(e\room\Objects[2], True)) < PowTwo(160.0 * RoomScale)
+							If Dist < PowTwo(160.0 * RoomScale)
 								Select Setting
 									Case COARSE
 										;[Block]
@@ -1882,6 +1885,8 @@ Function UpdateEvents%()
 							
 							e\room\RoomDoors[0]\SoundCHN = PlaySoundEx(OpenSFX914, Camera, e\room\RoomDoors[0]\OBJ)
 							e\room\RoomDoors[1]\SoundCHN = PlaySoundEx(OpenSFX914, Camera, e\room\RoomDoors[1]\OBJ)
+							
+							me\Playable = True
 							
 							e\EventState = 0.0
 						EndIf
