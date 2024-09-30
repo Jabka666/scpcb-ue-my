@@ -4609,7 +4609,7 @@ Function UpdateGUI%()
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
 							If I_268\Using > 0
-								If I_268\Using > 1 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
+								If I_268\Using > 1 And I_268\Timer > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
 								CreateMsg(GetLocalString("msg", "cap.off"))
 								I_268\Using = 0
 							Else
@@ -8954,11 +8954,16 @@ Global I_268.SCP268
 Function Update268%()
     If I_268\Using > 1
 		I_268\InvisibilityOn = (I_268\Timer > 0.0)
+		
+		Local Factor268# 
+		
 		If I_268\Using = 3 
-            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 2.0) * (1.0 + I_714\Using)), 0.0)
-        Else
-            I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
-        EndIf
+			Factor268 = (fps\Factor[0] / 2.0) * (1.0 + I_714\Using)
+		Else
+			Factor268 = fps\Factor[0] * (1.0 + I_714\Using)
+		EndIf
+		I_268\Timer = Max(I_268\Timer - Factor268, 0.0)
+		If I_268\Timer >= 1.0 And I_268\Timer - Factor268 < 1.0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
     Else
         I_268\Timer = Min(I_268\Timer + fps\Factor[0], 700.0)
 		I_268\InvisibilityOn = False
