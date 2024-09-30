@@ -22,6 +22,7 @@
 
 [NPCs]
 - Added MTF leader texture.
+- Changed SCP-173's box model.
 
 [Menu]
 - Added difficulty names on «Load Game» page.
