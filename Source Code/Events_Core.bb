@@ -5134,7 +5134,6 @@ Function UpdateEvents%()
 							FreeTexture(BT) : BT = 0
 						Next
 						FreeBrush(Brush) : Brush = 0
-						TexName = ""
 						
 						e\EventState = 1.0
 					Else

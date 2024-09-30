@@ -720,7 +720,7 @@ Function RemoveMonitorInstances%()
 End Function
 
 Const MaxNPCModelIDAmount% = 32
-Const MaxNPCTextureID% = 20
+Const MaxNPCTextureID% = 19
 
 Type NPCInstance
 	Field NPCModelID%[MaxNPCModelIDAmount]
@@ -795,8 +795,6 @@ Const NPC_CLERK_VICTIM_205_TEXTURE% = 16
 Const NPC_096_BLOODY_TEXTURE% = 17
 
 Const NPC_1499_1_KING_TEXTURE% = 18
-
-Const NPC_MTF_LEADER_TEXTURE% = 19
 ;[End Block]
 
 Function LoadNPCs%()
@@ -886,8 +884,6 @@ Function LoadNPCs%()
 	n_I\NPCTextureID[NPC_096_BLOODY_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_096_bloody.png", 1, DeleteAllTextures)
 	
 	n_I\NPCTextureID[NPC_1499_1_KING_TEXTURE] = LoadTexture_Strict("GFX\NPCs\scp_1499_1_king.png", 1, DeleteAllTextures)
-	
-	n_I\NPCTextureID[NPC_MTF_LEADER_TEXTURE] = LoadTexture_Strict("GFX\NPCs\MTF(2).png", 1, DeleteAllTextures)
 End Function
 
 Function RemoveNPCInstances%()

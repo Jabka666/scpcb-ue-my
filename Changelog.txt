@@ -21,7 +21,6 @@
 - Added bloody texture for Level 3 Key Card.
 
 [NPCs]
-- Added MTF leader texture.
 - Changed SCP-173's box model.
 
 [Menu]
