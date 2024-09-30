@@ -1566,7 +1566,7 @@ Function UpdateEvents%()
 									it.Items = CreateItem("Unknown Note", it_paper, e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
 									
-									it.Items = CreateItem("Level 3 Key Card", it_key3, e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
+									it.Items = CreateItem("Level 3 Key Card", it_key3_bloody, e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
 									
 									e\room\NPC[0]\IsDead = True
@@ -2951,9 +2951,9 @@ Function UpdateEvents%()
 										;[Block]
 										If itt\ID = it_gasmask Lor itt\ID = it_finegasmask Lor itt\ID = it_veryfinegasmask Lor itt\ID = it_gasmask148 Lor itt\ID = it_hazmatsuit Lor itt\ID = it_finehazmatsuit Lor itt\ID = it_veryfinehazmatsuit Lor itt\ID = it_hazmatsuit148 And Rand(2) = 1 Then ShouldCreateItem = True
 										;[End Block]
-									Case it_key0, it_key1, it_key2, it_key3
+									Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody
 										;[Block]
-										If itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3 And Rand(6) = 1 Then ShouldCreateItem = True
+										If itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3 Lor itt\ID = it_key3_bloody And Rand(6) = 1 Then ShouldCreateItem = True
 										;[End Block]
 									Case it_mastercard, it_playcard, it_origami, it_electronics
 										;[Block]
@@ -5320,12 +5320,14 @@ Function UpdateEvents%()
 								de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(e\room\NPC[0]\Collider) + Rnd(-2.0, 2.0), e\room\y + 0.005, EntityZ(e\room\NPC[0]\Collider) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0)
 								EntityParent(de\OBJ, e\room\OBJ)
 							Next
+							de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(e\room\NPC[0]\Collider), e\room\y + 0.005, EntityZ(e\room\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0)
+							EntityParent(de\OBJ, e\room\OBJ)
 							
 							StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 							
 							ShowEntity(e\room\Objects[0])
 							
-							it.Items = CreateItem("Level 3 Key Card", it_key3, EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.1, EntityZ(e\room\NPC[0]\Collider))
+							it.Items = CreateItem("Level 3 Key Card", it_key3_bloody, EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.1, EntityZ(e\room\NPC[0]\Collider))
 							EntityType(it\Collider, HIT_ITEM)
 							
 							RemoveNPC(e\room\NPC[0]) : e\room\NPC[0] = Null

@@ -18,6 +18,7 @@
 - Added Harn's badge.
 - Added new message for cups.
 - Added new drink.
+- Added bloody texture for Level 3 Key Card.
 
 [NPCs]
 - Added MTF leader texture.

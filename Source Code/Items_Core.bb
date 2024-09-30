@@ -107,17 +107,18 @@ Const it_key0% = 84
 Const it_key1% = 85
 Const it_key2% = 86
 Const it_key3% = 87
-Const it_key4% = 88
-Const it_key5% = 89
-Const it_key6% = 90
-Const it_keyomni% = 91
-Const it_mastercard% = 92
-Const it_playcard% = 93
-Const it_key% = 94
-Const it_25ct% = 95
-Const it_coin% = 96
-Const it_pizza% = 97
-Const it_harnbadge% = 98
+Const it_key3_bloody% = 88
+Const it_key4% = 89
+Const it_key5% = 90
+Const it_key6% = 91
+Const it_keyomni% = 92
+Const it_mastercard% = 93
+Const it_playcard% = 94
+Const it_key% = 95
+Const it_25ct% = 96
+Const it_coin% = 97
+Const it_pizza% = 98
+Const it_harnbadge% = 99
 ;[End Block]
 
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
@@ -774,7 +775,7 @@ End Function
 
 Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 	Select itt\ID
-		Case it_key0, it_key1, it_key2, it_key3
+		Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -1360,7 +1361,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6
+		Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6
 			;[Block]
 			Local Level% = item\ItemTemplate\ID
 			Local LevelName%
@@ -1386,7 +1387,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								;[Block]
 								LevelName = 2
 								;[End Block]
-							Case it_key3
+							Case it_key3, it_key3_bloody
 								;[Block]
 								LevelName = 3
 								;[End Block]
@@ -1517,7 +1518,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 							End Select
 							;[End Block]
-						Case it_key3
+						Case it_key3, it_key3_bloody
 							;[Block]
 							If Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Level 4 Key Card", it_key4, x, y, z)
@@ -2396,7 +2397,7 @@ Function GetUsingItem%(item.Items)
 			;[Block]
 			Return(KEY_CARD_2)
 			;[End Block]
-		Case it_key3
+		Case it_key3, it_key3_bloody
 			;[Block]
 			Return(KEY_CARD_3)
 			;[End Block]
