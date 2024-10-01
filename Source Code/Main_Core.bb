@@ -3309,7 +3309,6 @@ Function UpdateNVG%()
 			EndIf
 			
 			If wi\NVGPower < 160
-				UpdateBatteryTimer()
 				If BatMsgTimer >= 70.0
 					If (Not ChannelPlaying(LowBatteryCHN[1]))
 						me\SndVolume = Max(3.0, me\SndVolume)
@@ -3553,6 +3552,8 @@ Function UpdateGUI%()
 		igm\OptionsMenu = 0
 		igm\QuitMenu = 0
 	EndIf
+	
+	UpdateBatteryTimer()
 	
 	Local PrevOtherOpen.Items, PrevItem.Items
 	Local IsMouseOn%
@@ -5498,7 +5499,6 @@ Function UpdateGUI%()
 						
 						If RadioType < 2
 							If SelectedItem\State <= 20.0
-								UpdateBatteryTimer()
 								If BatMsgTimer >= 70.0
 									If (Not ChannelPlaying(LowBatteryCHN[0]))
 										me\SndVolume = Max(3.0, me\SndVolume)
@@ -5522,7 +5522,6 @@ Function UpdateGUI%()
 						SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.0025 + (0.0025 * (SelectedItem\ItemTemplate\ID = it_nav)))
 						
 						If SelectedItem\State > 0.0 And SelectedItem\State <= 20.0
-							UpdateBatteryTimer()
 							If BatMsgTimer >= 70.0
 								If (Not ChannelPlaying(LowBatteryCHN[0]))
 									me\SndVolume = Max(3.0, me\SndVolume)
@@ -6256,11 +6255,13 @@ Function RenderNVG%()
 		For l = 0 To Min(Floor((wi\NVGPower + 50) * 0.01), 11.0)
 			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((l * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
 		Next
-		If BatMsgTimer >= 70.0
-			Color(255, 0, 0)
-			SetFontEx(fo\FontID[Font_Digital])
-			
-			TextEx(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True)
+		If wi\NVGPower < 160
+			If BatMsgTimer >= 70.0
+				Color(255, 0, 0)
+				SetFontEx(fo\FontID[Font_Digital])
+				
+				TextEx(mo\Viewport_Center_X, 20 * MenuScale, GetLocalString("msg", "battery.low"), True)
+			EndIf
 		EndIf
 	EndIf
 	Color(255, 255, 255)
