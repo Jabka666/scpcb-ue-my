@@ -5589,14 +5589,13 @@ Function UpdateEvents%()
 									If Inventory(i) <> Null
 										If Inventory(i)\ItemTemplate\ID = it_paper
 											RemoveItem(Inventory(i))
-											For itt.ItemTemplates = Each ItemTemplates
-												If itt\ID = it_paper And Rand(6) = 1
-													Inventory(i) = CreateItem(itt\Name, itt\ID, 1.0, 1.0, 1.0)
-													HideEntity(Inventory(i)\Collider)
-													Inventory(i)\Picked = True
-													Exit
-												EndIf
-											Next
+											Inventory(i) = CreateItem("Document SCP-" + GetRandDocument(), it_paper, 0.0, 0.0, 0.0)
+											Inventory(i)\Dropped = -1
+											Inventory(i)\Picked = True
+											Inventory(i)\ItemTemplate\Found = True
+											EntityType(Inventory(i)\Collider, HIT_ITEM)
+											HideEntity(Inventory(i)\Collider)
+											ItemAmount = ItemAmount + 1
 											Exit
 										EndIf
 									EndIf
@@ -5623,11 +5622,12 @@ Function UpdateEvents%()
 									RemoveWearableItems(Inventory(i))
 									RemoveItem(Inventory(i))
 								EndIf
-								Inventory(i) = CreateItem("Strange Note", it_paper, 1.0, 1.0, 1.0)
-								HideEntity(Inventory(i)\Collider)
+								Inventory(i) = CreateItem("Strange Note", it_paper, 0.0, 0.0, 0.0)
+								Inventory(i)\Dropped = -1
 								Inventory(i)\Picked = True
 								Inventory(i)\ItemTemplate\Found = True
 								EntityType(Inventory(i)\Collider, HIT_ITEM)
+								HideEntity(Inventory(i)\Collider)
 								ItemAmount = ItemAmount + 1
 								;[End Block]
 							Case 35.0

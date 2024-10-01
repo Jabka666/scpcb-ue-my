@@ -5,7 +5,8 @@
 
 [Bug Fixes]
 - Fixed displaying of low battery message for NVG.
-- Fixes collision of cups obtained from water cooler.
+- Fixed a bug related to collision of cups obtained from water cooler.
+- Fixed a bug related to collision of items obtained in SCP-970 loop.
 
 [Known issues]
 - Rooms can overlap and block the way.
