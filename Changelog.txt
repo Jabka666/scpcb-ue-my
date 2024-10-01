@@ -7,6 +7,7 @@
 - Optimized the game...
 
 [Rooms]
+- Added «room4_2_ez».
 - Some intro improvements.
 - Updated some signs color.
 - Added a new message when trying to use the water cooler without an Empty Cup.

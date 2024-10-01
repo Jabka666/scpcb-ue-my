@@ -3742,17 +3742,13 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If Rand(5) = 1
+			Temp = Rand(5)
+			
+			If Temp > 3
 				it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
 				it\State = Rnd(0.0, 100.0)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf Rand(4) = 1
-				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
-				it\State = Rnd(0.0, 100.0)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			
-			If Rand(4) = 1
+				
 				it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
 				it\Name = "COFFEE"
 				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
@@ -3760,11 +3756,14 @@ Function FillRoom%(r.Rooms)
 				
 				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf Rand(3) = 1
+			ElseIf Temp > 1
+				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it\State = Rnd(0.0, 100.0)
+				EntityParent(it\Collider, r\OBJ)
+				
 				it.Items = CreateRandomBattery(r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
-			
 			If Rand(2) = 1
 				it.Items = CreateItem("Quarter", it_25ct, r\x - 234.0 * RoomScale, r\y + 30.0 * RoomScale, r\z + 505.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
@@ -3872,6 +3871,76 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_WATER, r\x + 236.0 * RoomScale, r\y + 0.005, r\z - 68.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
+			;[End Block]
+		Case r_room4_2_ez
+			;[Block]
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, False, OFFICE_DOOR)
+			
+			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, False, OFFICE_DOOR)
+			
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room4_2_ez
+						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room4_2_ez_hb.b3d", r\OBJ)
+			r\ScriptedObject[0] = True
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
+			
+			sc.SecurityCams = CreateSecurityCam(r, r\x, r\y + 384.0 * RoomScale, r\z, 20.0)
+			sc\Angle = 225.0 : sc\Turn = 45.0 : sc\FollowPlayer = True
+			
+			Temp = Rand(5)
+			
+			If Temp > 3
+				it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it\State = Rnd(0.0, 100.0)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
+				it\Name = "COFFEE"
+				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, r\x - 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 514.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 572.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateRandomBattery(r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			ElseIf Temp > 1
+				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it\State = Rnd(0.0, 100.0)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateRandomBattery(r\x - 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("Quarter", it_25ct, r\x - 514.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 572.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			If Rand(2) = 1
+				it.Items = CreateItem("Quarter", it_25ct, r\x - 586.0 * RoomScale, r\y + 30.0 * RoomScale, r\z + 728.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			;[End Block]
 		Case r_dimension_106
 			;[Block]
