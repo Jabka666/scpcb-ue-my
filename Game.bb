@@ -1,6 +1,6 @@
 ; ~ The main file of the game
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
-; ~ SCP - Containment Breach Ultimate Edition Reborn v1.3.2
+; ~ SCP - Containment Breach Ultimate Edition Reborn v1.3.3
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ This is a modification of the game "SCP - Containment Breach"
 ; ~ The mod is developed by the "Ultimate Edition Team" (https://www.moddb.com/company/ultimate-edition-team)
@@ -21,7 +21,7 @@ If FileSize("RapidBson.dll") = 0 Then InitErrorStr = InitErrorStr + "RapidBson.d
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 
-Const VersionNumber$ = "1.3.2"
+Const VersionNumber$ = "1.3.3"
 
 If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
 If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
