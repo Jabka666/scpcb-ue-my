@@ -53,9 +53,12 @@
 - Fixed incorrect clipping of "blood decal(5).png" texture.
 - Fixed great issue with frames smoothing.
 - Fixed left lean key bind.
+- Fixed camera roll and position.
 
 [Known issues]
 - Rooms can overlap and block the way.
+- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
+- Battery issues caused by having multiple night vision devices.
 
 {v1.3.1}
 
@@ -145,6 +148,8 @@
 [Known issues]
 - Rooms can overlap and block the way.
 - Cups crash the game sometimes.
+- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
+- Battery issues caused by having multiple night vision devices.
 
 {v1.3}
 
@@ -303,6 +308,8 @@
 - «room4_ic» sometimes spawn in HCZ.
 - Cups crash the game sometimes.
 - PD teleport points don't work sometimes.
+- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
+- Battery issues caused by having multiple night vision devices.
 
 {v1.2.1}
 
