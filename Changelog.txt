@@ -5,6 +5,7 @@
 
 [Bug Fixes]
 - Fixed displaying of low battery message for NVG.
+- Fixes collision of cups obtained from water cooler.
 
 [Known issues]
 - Rooms can overlap and block the way.

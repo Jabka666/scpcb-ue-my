@@ -2540,8 +2540,8 @@ Function RefillCup%()
 					Next
 					If EmptyCup <> Null
 						RemoveItem(EmptyCup)
-						EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200)
-						EntityType(EmptyCup\Collider, HIT_MAP)
+						EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200, 0.2)
+						EntityType(EmptyCup\Collider, HIT_ITEM)
 						EmptyCup\Name = "WATER"
 						EmptyCup\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
 						PickItem(EmptyCup)
