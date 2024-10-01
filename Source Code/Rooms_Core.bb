@@ -3493,8 +3493,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
-			it\State = Rnd(0.0, 1000.0)
+			it.Items = CreateItem("Night Vision Goggles", it_finenvg, r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_scientists

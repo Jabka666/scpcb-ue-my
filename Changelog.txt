@@ -10,6 +10,7 @@
 - Some intro improvements.
 - Updated some signs color.
 - Added a new message when trying to use the water cooler without an Empty Cup.
+- Replaced Green NVG with Red NVG in «room2_servers_ez» room.
 
 [Items]
 - Each NVG has its own texture.
