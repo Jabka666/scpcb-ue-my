@@ -389,9 +389,9 @@ Function LoadOptionsINI%()
 	
 	key\SCREENSHOT = IniGetInt(OptionFile, "Controls", "Screenshot Key", 59)
 	
-	key\LEAN_LEFT = IniGetInt(OptionFile, "Controls", "Lean Left Key", 18)
+	key\LEAN_LEFT = IniGetInt(OptionFile, "Controls", "Lean Left Key", 16)
 	
-	key\LEAN_RIGHT = IniGetInt(OptionFile, "Controls", "Lean Right Key", 16)
+	key\LEAN_RIGHT = IniGetInt(OptionFile, "Controls", "Lean Right Key", 18)
 	; ~ [ADVANCED]
 	
 	opt\HUDEnabled = IniGetInt(OptionFile, "Advanced", "Enable HUD", True)
@@ -640,9 +640,9 @@ Function ResetOptionsINI%()
 	
 	key\SCREENSHOT = 59
 	
-	key\LEAN_LEFT = 18
+	key\LEAN_LEFT = 16
 	
-	key\LEAN_RIGHT = 16
+	key\LEAN_RIGHT = 18
 	; ~ [ADVANCED]
 	
 	opt\HUDEnabled = True
