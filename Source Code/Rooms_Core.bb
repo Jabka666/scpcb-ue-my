@@ -2771,7 +2771,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Blood-stained Note", it_paper, r\x + 736.0 * RoomScale, r\y + 1.0, r\z + 48.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-513", it_paper, r\x - 470.0 * RoomScale, r\y + 104.0 * RoomScale, r\z - 150.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-513", it_paper, r\x - 470.0 * RoomScale, r\y + 104.0 * RoomScale, r\z - 75.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Wallet", it_wallet, r\x - 422.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 948.0 * RoomScale)
