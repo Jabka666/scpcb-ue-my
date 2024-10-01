@@ -1,4 +1,4 @@
-Const MaxDecalTextureIDAmount% = 21
+Const MaxDecalTextureIDAmount% = 23
 
 Type DecalInstance
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
@@ -35,6 +35,9 @@ Const DECAL_427% = 18
 Const DECAL_409% = 19
 
 Const DECAL_WATER% = 20
+
+Const DECAL_KETER% = 21
+Const DECAL_APOLLYON% = 22
 ;[End Block]
 
 Function LoadDecals%()
@@ -67,6 +70,9 @@ Function LoadDecals%()
 	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427_decal.png", 1 + 2, DeleteAllTextures, False)
 	
 	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures, False)
+	
+	If S2IMapContains(UnlockedAchievements, "keter") Then de_I\DecalTextureID[DECAL_KETER] = LoadTexture_Strict("GFX\Menu\Achievements\AchvKeter.png", 1, DeleteAllTextures, False)
+	If S2IMapContains(UnlockedAchievements, "apollyon") Then de_I\DecalTextureID[DECAL_APOLLYON] = LoadTexture_Strict("GFX\Menu\Achievements\AchvApollyon.png", 1 + 2, DeleteAllTextures, False)
 End Function
 
 Const MaxParticleTextureIDAmount% = 9
@@ -725,7 +731,7 @@ Type NPCInstance
 	Field Curr513_1.NPCs
 	Field Curr049.NPCs
 	Field Curr066.NPCs
-	Field MTFLeader.NPCs
+	Field MTFLeader.NPCs, MTFCoLeader.NPCs
 	Field IsHalloween%, IsNewYear%, IsAprilFools%
 End Type
 
@@ -1000,7 +1006,7 @@ Function LoadItems%()
 	Local it.ItemTemplates, it2.ItemTemplates
 	
 	; ~ [PAPER]
-	
+	;[Block]
 	CreateItemTemplate(GetLocalString("items", "doc005"), "Document SCP-005", it_paper, "paper.b3d", "INV_paper.png", "doc_005.png", 0.003, 0, "doc_005.png")
 	CreateItemTemplate(GetLocalString("items", "doc008"), "Document SCP-008", it_paper, "paper.b3d", "INV_paper.png", "doc_008.png", 0.003, 0, "doc_008.png")
 	CreateItemTemplate(GetLocalString("items", "doc012"), "Document SCP-012", it_paper, "paper.b3d", "INV_paper.png", "doc_012.png", 0.003, 0, "doc_012.png")
@@ -1117,12 +1123,15 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "burntbadge"), "George Maynard's Badge", it_burntbadge, "badge.b3d", "INV_Maynard_badge.png", "Maynard_badge.png", 0.0001, 1, "Maynard_badge.png")
 	
+	CreateItemTemplate(GetLocalString("items", "harnbadge"), "Asav Harn's Badge", it_harnbadge, "badge.b3d", "INV_harn_badge.png", "harn_badge.png", 0.0001, 1, "harn_badge.png")
+	
 	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", it_oldbadge, "badge.b3d", "INV_D_9341_badge.png", "D_9341_badge.png", 0.0001, 1, "D_9341_badge.png", "", False, 1 + 2 + 8)
 	
 	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", it_ticket, "badge.b3d", "INV_ticket.png", "ticket.png", 0.0001, 0, "ticket.png", "", False, 1 + 2 + 8)
+	;[End Block]
 	
 	; ~ [SCPs]
-	
+	;[Block]
 	CreateItemTemplate("SCP-085", "SCP-085", it_paper, "note.b3d", "INV_note.png", "note_085.png", 0.0033, 0, "note_085.png")
 	
 	CreateItemTemplate("SCP-005", "SCP-005", it_scp005, "scp_005.b3d", "INV_scp_005.png", "", 0.0003, 1)
@@ -1156,9 +1165,10 @@ Function LoadItems%()
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "500death"), "Upgraded Pill", it_scp500pilldeath, "pill.b3d", "INV_scp_500_pill.png", "", 0.00007, 2)
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
+	;[End Block]
 	
 	; ~ [MISC ITEMS]
-	
+	;[Block]
 	CreateItemTemplate(GetLocalString("items", "helmet"), "Ballistic Helmet", it_helmet, "ballistic_helmet.b3d", "INV_ballistic_helmet.png", "", 0.018, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "vest"), "Ballistic Vest", it_vest, "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.02, 2)
@@ -1203,8 +1213,8 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", True)
 	
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_green.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_red.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_blue.png", "", 0.02, 2)
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_red.png", "", 0.02, 2, "night_vision_goggles_red.png")
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_blue.png", "", 0.02, 2, "night_vision_goggles_blue.png")
 	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_scramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
 	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_finescramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
 	
@@ -1235,13 +1245,15 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_finesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_veryfinesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_syringeinf, "syringe.b3d", "INV_syringe_infect.png", "", 0.005, 2, "syringe_infect.png")
+	;[End Block]
 	
 	; ~ [KEYCARDS, KEYS, CARDS, COINS]
-	
+	;[Block]
 	CreateItemTemplate(GetLocalString("items", "key0"), "Level 0 Key Card", it_key0, "key_card.b3d", "INV_key_card_lvl_0.png", "", 0.00037, 1)
 	CreateItemTemplate(GetLocalString("items", "key1"), "Level 1 key Card", it_key1, "key_card.b3d", "INV_key_card_lvl_1.png", "", 0.00037, 1, "key_card_lvl_1.png")
 	CreateItemTemplate(GetLocalString("items", "key2"), "Level 2 key Card", it_key2, "key_card.b3d", "INV_key_card_lvl_2.png", "", 0.00037, 1, "key_card_lvl_2.png")
 	CreateItemTemplate(GetLocalString("items", "key3"), "Level 3 key Card", it_key3, "key_card.b3d", "INV_key_card_lvl_3.png", "", 0.00037, 1, "key_card_lvl_3.png")
+	CreateItemTemplate(GetLocalString("items", "key3"), "Level 3 key Card", it_key3_bloody, "key_card.b3d", "INV_key_card_lvl_3_bloody.png", "", 0.00037, 1, "key_card_lvl_3_bloody.png") ; ~ Such a stupid way
 	CreateItemTemplate(GetLocalString("items", "key4"), "Level 4 key Card", it_key4, "key_card.b3d", "INV_key_card_lvl_4.png", "", 0.00037, 1, "key_card_lvl_4.png")
 	CreateItemTemplate(GetLocalString("items", "key5"), "Level 5 key Card", it_key5, "key_card.b3d", "INV_key_card_lvl_5.png", "", 0.00037, 1, "key_card_lvl_5.png")
 	CreateItemTemplate(GetLocalString("items", "key6"), "Level 6 Key Card", it_key6, "key_card.b3d", "INV_key_card_lvl_6.png", "", 0.00037, 1, "key_card_lvl_6.png")
@@ -1257,6 +1269,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0005, 3, "coin_rusty.png")
 	
 	CreateItemTemplate(GetLocalString("items", "pizza"), "Pizza Slice", it_pizza, "Pizza_Slice.b3d", "INV_Pizza_Slice.png", "", 0.05, 2)
+	;[End Block]
 	
 	For it.ItemTemplates = Each ItemTemplates
 		If it\Tex <> 0
@@ -1281,6 +1294,8 @@ Global TempSoundIndex% = 0
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
 Global Music$[33]
 
+; ~ Music list
+;[Block]
 Music[0] = "LightContainmentZone"
 Music[1] = "HeavyContainmentZone"
 Music[2] = "EntranceZone"
@@ -1314,6 +1329,7 @@ Music[29] = "1123Chamber"
 Music[30] = "008Chamber"
 Music[31] = "008Cutscene"
 Music[32] = "012Chamber"
+;[End Block]
 
 Global MusicCHN%
 MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume, Mode)
@@ -1774,7 +1790,7 @@ Function LoadEvents%()
 	
 	CreateEvent(e_trick_item, r_room2c_2_lcz, 0, 0.15)
 	CreateEvent(e_trick_item, r_room2c_2_ez, 0, 0.15)
-	CreateEvent(e_trick_item, r_room2_ez, 1, 0.15)
+	CreateEvent(e_trick_item, r_room4_2_ez, 1, 0.15)
 	CreateEvent(e_trick_item, r_room2_4_ez, 1, 0.2)
 	
 	CreateEvent(e_1048_a, r_room2_lcz, 1, 1.0)
@@ -2200,7 +2216,7 @@ Function LoadData%()
 	t.Textures = New Textures
 	
 	If SelectedCustomMap = Null
-		TempStr = Format(GetLocalString("menu", "new.seed"), RandomSeed)
+		TempStr = Format(GetLocalString("menu", "new.seed2"), RandomSeed)
 	Else
 		Local Name$ = ConvertToUTF8(SelectedCustomMap\Name)
 		
@@ -2256,55 +2272,41 @@ Function LoadEntities%()
 	
 	RenderLoading(5, GetLocalString("loading", "icons"))
 	
-	t\IconID[0] = LoadImage_Strict("GFX\HUD\walk_icon.png")
-	t\IconID[0] = ScaleImage2(t\IconID[0], MenuScale, MenuScale)
-	t\IconID[1] = LoadImage_Strict("GFX\HUD\sprint_icon.png")
-	t\IconID[1] = ScaleImage2(t\IconID[1], MenuScale, MenuScale)
-	t\IconID[2] = LoadImage_Strict("GFX\HUD\crouch_icon.png")
-	t\IconID[2] = ScaleImage2(t\IconID[2], MenuScale, MenuScale)
+	t\IconID[0] = ScaleImageEx(LoadImage_Strict("GFX\HUD\walk_icon.png"), MenuScale, MenuScale)
+	t\IconID[1] = ScaleImageEx(LoadImage_Strict("GFX\HUD\sprint_icon.png"), MenuScale, MenuScale)
+	t\IconID[2] = ScaleImageEx(LoadImage_Strict("GFX\HUD\crouch_icon.png"), MenuScale, MenuScale)
 	For i = 3 To 4
 		t\IconID[i] = LoadImage_Strict("GFX\HUD\blink_icon(" + (i - 2) + ").png")
-		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
+		t\IconID[i] = ScaleImageEx(t\IconID[i], MenuScale, MenuScale)
 	Next
 	For i = 5 To 6
-		t\IconID[i] = LoadImage_Strict("GFX\HUD\hand_symbol(" + (i - 4) + ").png")
-		t\IconID[i] = ScaleImage2(t\IconID[i], MenuScale, MenuScale)
+		t\IconID[i] = ScaleImageEx(LoadImage_Strict("GFX\HUD\hand_symbol(" + (i - 4) + ").png"), MenuScale, MenuScale)
 	Next
-	t\IconID[7] = LoadImage_Strict("GFX\HUD\shield_icon.png")
-	t\IconID[7] = ScaleImage2(t\IconID[7], MenuScale, MenuScale)
+	t\IconID[7] = ScaleImageEx(LoadImage_Strict("GFX\HUD\shield_icon.png"), MenuScale, MenuScale)
 	
-	t\IconID[8] = LoadImage_Strict("GFX\HUD\scp_268_icon.png")
-	t\IconID[8] = ScaleImage2(t\IconID[8], MenuScale, MenuScale)
+	t\IconID[8] = ScaleImageEx(LoadImage_Strict("GFX\HUD\scp_268_icon.png"), MenuScale, MenuScale)
 	
-	t\IconID[9] = LoadImage_Strict("GFX\Menu\QuickLoading.png")
-	t\IconID[9] = ScaleImage2(t\IconID[9], MenuScale, MenuScale)
+	t\IconID[9] = ScaleImageEx(LoadImage_Strict("GFX\Menu\QuickLoading.png"), MenuScale, MenuScale)
 	
 	For i = 0 To 3
-		t\IconID[i + 10] = LoadImage_Strict("GFX\HUD\arrow_symbol.png")
-		t\IconID[i + 10] = ScaleImage2(t\IconID[i + 10], MenuScale, MenuScale)
+		t\IconID[i + 10] = ScaleImageEx(LoadImage_Strict("GFX\HUD\arrow_symbol.png"), MenuScale, MenuScale)
 		RotateImage(t\IconID[i + 10], i * 90.0)
 		HandleImage(t\IconID[i + 10], 0, 0)
 	Next
 	
-	t\ImageID[0] = LoadImage_Strict("GFX\Menu\pause_menu.png")
-	t\ImageID[0] = ScaleImage2(t\ImageID[0], MenuScale, MenuScale)
+	t\ImageID[0] = ScaleImageEx(LoadImage_Strict("GFX\Menu\pause_menu.png"), MenuScale, MenuScale)
 	
-	t\ImageID[1] = LoadImage_Strict("GFX\HUD\blink_meter(2).png")
-	t\ImageID[1] = ScaleImage2(t\ImageID[1], MenuScale, MenuScale)
+	t\ImageID[1] = ScaleImageEx(LoadImage_Strict("GFX\HUD\blink_meter(2).png"), MenuScale, MenuScale)
 	
 	For i = 2 To 3
-		t\ImageID[i] = LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png")
-		t\ImageID[i] = ScaleImage2(t\ImageID[i], MenuScale, MenuScale)
+		t\ImageID[i] = ScaleImageEx(LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png"), MenuScale, MenuScale)
 	Next
 	
-	t\ImageID[4] = LoadImage_Strict("GFX\HUD\keypad_HUD.png")
-	t\ImageID[4] = ScaleImage2(t\ImageID[4], MenuScale, MenuScale)
+	t\ImageID[4] = ScaleImageEx(LoadImage_Strict("GFX\HUD\keypad_HUD.png"), MenuScale, MenuScale)
 	
-	t\ImageID[5] = LoadImage_Strict("GFX\Overlays\scp_294_overlay.png")
-	t\ImageID[5] = ScaleImage2(t\ImageID[5], MenuScale, MenuScale)
+	t\ImageID[5] = ScaleImageEx(LoadImage_Strict("GFX\Overlays\scp_294_overlay.png"), MenuScale, MenuScale)
 	
-	t\ImageID[6] = LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3)
-	t\ImageID[6] = ScaleImage2(t\ImageID[6], MenuScale, MenuScale, 3)
+	t\ImageID[6] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale, 3)
 	MaskImage(t\ImageID[6], 255, 0, 255)
 	
 	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
@@ -2632,15 +2634,22 @@ Function InitNewGame%()
 	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
-		If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR
-			MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-		ElseIf d\DoorType = OFFICE_DOOR Lor d\DoorType = WOODEN_DOOR
-			MoveEntity(d\OBJ, (((d\DoorType = OFFICE_DOOR) * 92.0) + ((d\DoorType = WOODEN_DOOR) * 70.0)) * RoomScale, 0.0, 0.0)
-		EndIf
-		If d\OBJ2 <> 0
-			EntityParent(d\OBJ2, 0)
-			If d\DoorType = DEFAULT_DOOR Lor d\DoorType = ONE_SIDED_DOOR Lor d\DoorType = SCP_914_DOOR Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
-		EndIf
+		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
+		Select d\DoorType
+			Case DEFAULT_DOOR, ONE_SIDED_DOOR, SCP_914_DOOR
+				;[Block]
+				MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+				If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
+				;[End Block]
+			Case OFFICE_DOOR
+				;[Block]
+				MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)
+				;[End Block]
+			Case WOODEN_DOOR
+				;[Block]
+				MoveEntity(d\OBJ, 68.0 * RoomScale, 0.0, 0.0)
+				;[End Block]
+		End Select
 		If d\FrameOBJ <> 0 Then EntityParent(d\FrameOBJ, 0)
 		For i = 0 To 1
 			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)

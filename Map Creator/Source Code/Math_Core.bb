@@ -1,5 +1,5 @@
 Function Min#(a#, b#)
-	If a < b Then 
+	If a < b 
 		Return(a)
 	Else
 		Return(b)
@@ -7,7 +7,7 @@ Function Min#(a#, b#)
 End Function
 
 Function Max#(a#, b#)
-	If a > b Then 
+	If a > b 
 		Return(a)
 	Else
 		Return(b)

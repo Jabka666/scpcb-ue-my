@@ -113,7 +113,7 @@ Global ConsoleFont% = LoadFont_Strict("GFX\fonts\" + IniGetString(LanguagePath +
 
 Function LoadEntities%()
 	Local i%
-
+	
 	; ~ [DOORS]
 	
 	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
@@ -198,6 +198,8 @@ Function CatchErrors%(Location$)
 	SetErrorMsg(8, Format(ErrorMsg, Location))
 End Function
 
+; ~ MAIN PROGRAM
+;[Block]
 Repeat
 	SetErrorMsg(6, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
 	SetErrorMsg(7, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
@@ -454,7 +456,10 @@ Repeat
 		If (Not IsRemote)
 			HidePointer()
 			
-			If (MouseX() > mo\Mouse_Right_Limit) Lor (MouseX() < mo\Mouse_Left_Limit) Lor (MouseY() > mo\Mouse_Bottom_Limit) Lor (MouseY() < mo\Mouse_Top_Limit)
+			Local MouseXVal# = MouseX()
+			Local MouseYVal# = MouseY()
+			
+			If (MouseXVal > mo\Mouse_Right_Limit) Lor (MouseXVal < mo\Mouse_Left_Limit) Lor (MouseYVal > mo\Mouse_Bottom_Limit) Lor (MouseYVal < mo\Mouse_Top_Limit)
 				MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 			EndIf
 			
@@ -551,7 +556,7 @@ Repeat
 			Text(2, 72, Format(GetLocalString("mc", "room.z"), rZ))
 			
 			If PickedRoom\Event <> ""
-				eName$ = PickedRoom\Event
+				eName = PickedRoom\Event
 				
 				Local eChance# = PickedRoom\EventChance
 				
@@ -563,17 +568,19 @@ Repeat
 				Text(2, 92, Format(GetLocalString("mc", "room.event"),  eName))
 				Text(2, 112, Format(GetLocalString("mc", "room.event.chance"), Int(eChance * 100)))
 			EndIf
-			AmbientLight(70.0, 70.0, 20.0)
+			AmbientLight(140.0, 140.0, 30.0)
 		EndIf
 		
 		If CurrSelectedRoom <> Null
 			rName = CurrSelectedRoom\RoomTemplate\Name
 			
+			Local RoomSelected% = StringWidth(Format(GetLocalString("mc", "room.selected"), rName))
+			
 			Color(0, 0, 0)
-			Rect(ResWidth - 2) - StringWidth(Format(GetLocalString("mc", "room.selected"), rName)), 2, StringWidth(Format(GetLocalString("mc", "room.selected"), rName)), StringHeight(Format(GetLocalString("mc", "room.selected"), rName))
+			Rect(ResWidth - 2) - RoomSelected, 2, RoomSelected, StringHeight(Format(GetLocalString("mc", "room.selected"), rName))
 			
 			Color(255, 255, 255)
-			Text((ResWidth - 2) - StringWidth(Format(GetLocalString("mc", "room.selected"), rName)), 2, Format(GetLocalString("mc", "room.selected"), rName))
+			Text((ResWidth - 2) - RoomSelected, 2, Format(GetLocalString("mc", "room.selected"), rName))
 		EndIf
 		
 		Color(opt\CursorR, opt\CursorG, opt\CursorB)
@@ -586,6 +593,7 @@ Repeat
 	Flip(opt\VSync)
 Until (Not api_FindWindow("BlitzMax_Window_Class", "SCP-CB Ultimate Edition Reborn Map Creator"))
 End()
+;[End Block]
 
 Type RoomTemplates
 	Field OBJ%, ID%
@@ -900,15 +908,14 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 					MoveEntity(r\ForestWallOBJ, 0.0, 0.0, -(14.0 + Tempf1))
 				EndIf
 				
+				r\OverlayTex = CreateTextureUsingCacheSystem(1, 1)
 				If CurrMapGrid <> 1
-					r\OverlayTex = CreateTextureUsingCacheSystem(1, 1)
 					SetBuffer(TextureBuffer(r\OverlayTex))
 					ClsColor(0, 0, 0)
 					Cls()
 					SetBuffer(BackBuffer())
 					EntityTexture(GetChild(r\OBJ, 2), r\OverlayTex, 0, 0)
 				Else
-					r\OverlayTex = CreateTextureUsingCacheSystem(1, 1)
 					TextureBlend(r\OverlayTex, 5)
 					SetBuffer(TextureBuffer(r\OverlayTex))
 					ClsColor(255, 255, 255)
@@ -1015,20 +1022,16 @@ Function LoadRMesh%(File$)
 	
 	File = StripFileName(File)
 	
-	Local Count%, Count2%
-	
 	; ~ Drawn meshes
-	Local Opaque%, Alpha%
-	
-	Opaque = CreateMesh()
-	Alpha = CreateMesh()
-	
-	Count = ReadInt(f)
+	Local Opaque% = CreateMesh(), Alpha% = CreateMesh()
 	
 	Local ChildMesh%
 	Local Surf%, Tex%[2], Brush%
 	Local IsAlpha%
 	Local u#, v#
+	
+	Local Count% = ReadInt(f)
+	Local Count2%
 	
 	For i = 1 To Count ; ~ Drawn mesh
 		ChildMesh = CreateMesh()
@@ -1071,22 +1074,22 @@ Function LoadRMesh%(File$)
 		If IsAlpha = 1
 			If Tex[1] <> 0
 				TextureBlend(Tex[1], 2)
-				BrushTexture(Brush, Tex[1], 0, 1)
+				BrushTexture(Brush, Tex[1], 0, 0)
 			Else
-				BrushTexture(Brush, MissingTexture, 0, 1)
+				BrushTexture(Brush, MissingTexture, 0, 0)
 			EndIf
 		Else
 			If Tex[0] <> 0 And Tex[1] <> 0
 				For j = 0 To 1
-					BrushTexture(Brush, Tex[j], 0, j + 2)
+					BrushTexture(Brush, Tex[j], 0, j + 1)
 				Next
-				BrushTexture(Brush, AmbientLightRoomTex, 1)
+				BrushTexture(Brush, AmbientLightRoomTex, 0)
 			Else
 				For j = 0 To 1
 					If Tex[j] <> 0
-						BrushTexture(Brush, Tex[j], 0, j + 1)
+						BrushTexture(Brush, Tex[j], 0, j)
 					Else
-						BrushTexture(Brush, MissingTexture, 0, j + 1)
+						BrushTexture(Brush, MissingTexture, 0, j)
 					EndIf
 				Next
 			EndIf
@@ -1126,7 +1129,6 @@ Function LoadRMesh%(File$)
 		
 		If IsAlpha = 1
 			AddMesh(ChildMesh, Alpha)
-			EntityParent(ChildMesh, CollisionMeshes)
 			EntityAlpha(ChildMesh, 0.0)
 		Else
 			AddMesh(ChildMesh, Opaque)
@@ -1136,9 +1138,7 @@ Function LoadRMesh%(File$)
 		HideEntity(ChildMesh)
 	Next
 	
-	Local HiddenMesh%
-	
-	HiddenMesh = CreateMesh()
+	Local HiddenMesh% = CreateMesh()
 	
 	Count = ReadInt(f) ; ~ Invisible collision mesh
 	For i = 1 To Count
@@ -1262,24 +1262,23 @@ Function LoadRMesh%(File$)
 		End Select
 	Next
 	
-	Local OBJ%
-	
 	Temp1i = CopyMesh(Alpha)
 	FlipMesh(Temp1i)
 	AddMesh(Temp1i, Alpha)
-	FreeEntity(Temp1i)
+	FreeEntity(Temp1i) : Temp1i = 0
 	
-	If Brush <> 0 Then FreeBrush(Brush)
+	If Brush <> 0 Then FreeBrush(Brush) : Brush = 0
 	
 	AddMesh(Alpha, Opaque)
-	FreeEntity(Alpha)
+	FreeEntity(Alpha) : Alpha = 0
 	
 	EntityFX(Opaque, 3)
 	
 	EntityAlpha(HiddenMesh, 0.0)
 	EntityAlpha(Opaque, 1.0)
 	
-	OBJ = CreatePivot()
+	Local OBJ% = CreatePivot()
+	
 	CreatePivot(OBJ) ; ~ Skip "meshes" object
 	EntityParent(Opaque, OBJ)
 	EntityPickMode(Opaque, 2)
@@ -1290,9 +1289,9 @@ Function LoadRMesh%(File$)
 	
 	CloseFile(f)
 	
-	Return(OBJ)
-	
 	CatchErrors("Uncaught: LoadRMesh(" + File + ")")
+	
+	Return(OBJ)
 End Function
 
 Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
@@ -1398,4 +1397,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#D#49#5F#64#71#91#C4#C9#10E#137#165#255#25C#267#27D#281#285#289#28D#29E
+;~F#300#308#30C#310#324#329#32E#332#336#33A#340#356#368#3A6#3D5#3E3#4A4#4AB#4B1#4B8
+;~F#4BF#4C6#4CE#4D3#510
 ;~C#Blitz3D TSS

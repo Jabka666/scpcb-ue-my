@@ -3,7 +3,7 @@ Global Sky%
 Function CreateSky%(FileName$, Parent% = 0)
 	Local Sky%, Face%, Direction$, Vert%
 	Local s%, x%, y%, z%, u%, v%
-
+	
 	Restore sky_SkyboxData
 	Sky = CreateMesh(Parent)
 	For Face = 1 To 6
@@ -35,6 +35,7 @@ Function UpdateSky%(SkyOBJ%)
 End Function
 
 .sky_SkyboxData
+;[Block]
 Data "_back"
 Data -1, +1, -1, 0, 0
 Data +1, +1, -1, 1, 0
@@ -65,6 +66,7 @@ Data -1, -1, -1, 1, 0
 Data +1, -1, -1, 1, 1
 Data +1, -1, +1, 0, 1
 Data -1, -1, +1, 0, 0
+;[End Block]
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

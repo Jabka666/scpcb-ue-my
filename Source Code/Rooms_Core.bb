@@ -120,7 +120,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			; ~ Upper view door
-			d.Doors = CreateDoor(r, r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 924.0 * RoomScale, 0.0, False)
+			d.Doors = CreateDoor(r, r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 924.0 * RoomScale, 180.0, False)
 			d\MTFClose = False : d\DisableWaypoint = True
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
@@ -143,7 +143,7 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("SCP-005", it_scp005, r\x, r\y + 255.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 				
-				Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+				Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 				EntityTexture(r\RoomDoors[0]\OBJ, Tex)
 				EntityTexture(r\RoomDoors[0]\OBJ2, Tex)
 				EntityTexture(r\RoomDoors[0]\FrameOBJ, Tex)
@@ -264,6 +264,15 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
+			If S2IMapContains(UnlockedAchievements, "keter")
+				de.Decals = CreateDecal(DECAL_KETER, r\x + 514.0 * RoomScale, r\y + 159.0 * RoomScale, r\z - 246.0 * RoomScale - 0.005, 0.0, 180.0, 0.0, 0.1)
+				EntityParent(de\OBJ, r\OBJ)
+			EndIf
+			If S2IMapContains(UnlockedAchievements, "apollyon")
+				de.Decals = CreateDecal(DECAL_APOLLYON, r\x + 368.0 * RoomScale, r\y + 138.0 * RoomScale, r\z + 184.0 * RoomScale, 0.0, 0.0, 0.0, 0.1)
+				EntityParent(de\OBJ, r\OBJ)
+			EndIf
+			
 			it.Items = CreateItem("Document SCP-173", it_paper, r\x + 173.0 * 4.85 * RoomScale, r\y + 173.0 * RoomScale, r\z + 173.0 * 14.33 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -340,7 +349,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[1] = d
 			
 			; ~ The door leading to containment chamber
-			d.Doors = CreateDoor(r, r\x - 720.0 * RoomScale, r\y, r\z - 689.0 * RoomScale, 90.0, True)
+			d.Doors = CreateDoor(r, r\x - 720.0 * RoomScale, r\y, r\z - 689.0 * RoomScale, 90.0, False)
 			d\Locked = 1 : d\MTFClose = False
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
@@ -383,12 +392,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x + 1760.0 * RoomScale, r\y + 0.4, r\z + 912.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			r\Objects[3] = LoadRMesh("GFX\map\cont1_173_intro_player_cell.rmesh", Null)
+			r\Objects[3] = LoadRMesh("GFX\Map\cont1_173_intro_player_cell.rmesh", Null)
 			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[3], r\x, r\y, r\z)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			r\Objects[4] = LoadRMesh("GFX\map\cont1_173_intro_cells.rmesh", Null, False)
+			r\Objects[4] = LoadRMesh("GFX\Map\cont1_173_intro_cells.rmesh", Null, False)
 			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[4], r\x, r\y, r\z)
 			EntityParent(r\Objects[4], r\OBJ)
@@ -585,7 +594,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[4] = CreateButton(BUTTON_DEFAULT, r\x - 1224.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 990.0 * RoomScale, 0.0, 180.0, 0.0, r\OBJ, True)
 			
-			r\Objects[5] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null)
+			r\Objects[5] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null, False)
 			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
 			EntityParent(r\Objects[5], r\OBJ)
 			
@@ -782,6 +791,7 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			CreateCustomCenter(r, r\x + 336.0 * RoomScale, r\z + 32.0 * RoomScale)
+			;[End Block]
 		Case r_room2_js
 			;[Block]
 			; ~ Janitorial Lockers
@@ -1010,7 +1020,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
-			r\Objects[2] = LoadRMesh("GFX\Map\room2_storage_posters.rmesh", Null)
+			r\Objects[2] = LoadRMesh("GFX\Map\room2_storage_posters.rmesh", Null, False)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)
 			EntityParent(r\Objects[2], r\OBJ)
@@ -1465,7 +1475,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[6], r\x - 468.0 * RoomScale, r\y + 850.0 * RoomScale, r\z - 273.0 * RoomScale)
 			EntityParent(r\Objects[6], r\OBJ)
 			
-			r\Objects[7] = LoadRMesh("GFX\map\cont2_1123_cell.rmesh", Null)
+			r\Objects[7] = LoadRMesh("GFX\Map\cont2_1123_cell.rmesh", Null)
 			ScaleEntity(r\Objects[7], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[7], r\x, r\y, r\z)
 			EntityParent(r\Objects[7], r\OBJ)
@@ -1846,7 +1856,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], r\x - 164.0 * RoomScale, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			r\RoomDoors.Doors[0] = d
 			
-			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 144.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_5)
 			d\AutoClose = False : d\Locked = 1 : d\IsAffected = True
 			PositionEntity(d\Buttons[0], r\x - 438.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 480.0 * RoomScale, True)
@@ -2444,7 +2454,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[9], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
 			EntityParent(r\Objects[9], r\OBJ)
 			
-			r\Objects[10] = LoadRMesh("GFX\map\cont2_008_mt_generator.rmesh", Null)
+			r\Objects[10] = LoadRMesh("GFX\Map\cont2_008_mt_generator.rmesh", Null)
 			ScaleEntity(r\Objects[10], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[10], r\x, r\y, r\z)
 			EntityParent(r\Objects[10], r\OBJ)
@@ -2672,7 +2682,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			
 			; ~ Dust decals
-			For i = 0 To 10
+			For i = 0 To 11
 				Select i
 					Case 0
 						;[Block]
@@ -2694,9 +2704,9 @@ Function FillRoom%(r.Rooms)
 						;[End Block]
 					Case 3
 						;[Block]
-						xTemp = -79.0
-						zTemp = 215.0
-						Scale = Rnd(0.1, 0.2)
+						xTemp = -104.0
+						zTemp = 185.0
+						Scale = Rnd(0.3, 0.4)
 						;[End Block]
 					Case 4
 						;[Block]
@@ -2740,6 +2750,12 @@ Function FillRoom%(r.Rooms)
 						zTemp = 86.0
 						Scale = Rnd(0.8, 1.0)
 						;[End Block]
+					Case 11
+						;[Block]
+						xTemp = -193.0
+						zTemp = 138.0
+						Scale = Rnd(0.3, 0.4)
+						;[End Block]
 				End Select
 				yTemp = 3.0 * (i > 2)
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, Scale, Rnd(0.6, 0.8), 1)
@@ -2767,6 +2783,12 @@ Function FillRoom%(r.Rooms)
 			it2.Items = CreateItem("Mastercard", it_mastercard, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it2\State = Rand(0, 6)
 			it\SecondInv[0] = it2
+			HideEntity(it2\Collider)
+			EntityParent(it2\Collider, 0)
+			
+			it2.Items = CreateItem("Asav Harn's Badge", it_harnbadge, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1
+			it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
 			EntityParent(it2\Collider, 0)
 			;[End Block]
@@ -3296,15 +3318,15 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x + 1780.0 * RoomScale, r\y - 248.0 * RoomScale, r\z - 276.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			;it.Items = CreateItem("Cup", it_cup, r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
-			;it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "ORANGE JUICE"))
-			;it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "orange"))
-			;EntityParent(it\Collider, r\OBJ)
+			it.Items = CreateItem("Cup", it_cup, r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
+			it\Name = "ORANGE JUICE"
+			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "orange"))
+			EntityParent(it\Collider, r\OBJ)
 			
-			;it.Items = CreateItem("Cup", it_cup, r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
-			;it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "COFFEE"))
-			;it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
-			;EntityParent(it\Collider, r\OBJ)
+			it.Items = CreateItem("Cup", it_cup, r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
+			it\Name = "COFFEE"
+			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Pizza Slice", it_pizza, r\x - 560.0 * RoomScale, r\y - 226.0 * RoomScale, r\z + 261.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3335,10 +3357,10 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Level 0 Key Card", it_key0, r\x - 1000.0 * RoomScale, r\y + 140.0 * RoomScale, r\z + 165.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			;it.Items = CreateItem("Cup", it_cup, r\x - 100.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
-			;it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
-			;it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
-			;EntityParent(it\Collider, r\OBJ)
+			it.Items = CreateItem("Cup", it_cup, r\x - 100.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
+			it\Name = "WATER"
+			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3471,8 +3493,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
-			it\State = Rnd(0.0, 1000.0)
+			it.Items = CreateItem("Night Vision Goggles", it_finenvg, r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_scientists
@@ -3521,7 +3542,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_scientists_2
 			;[Block]
-			Tex = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 			; ~ Dr. L's office door
 			d.Doors = CreateDoor(r, r\x - 352.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_L)
 			d\MTFClose = False : d\DisableWaypoint = True : d\IsAffected = True
@@ -3620,10 +3641,10 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			If Rand(4) = 1
-				;it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
-				;it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "COFFEE"))
-				;it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
-				;EntityParent(it\Collider, r\OBJ)
+				it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
+				it\Name = "COFFEE"
+				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
+				EntityParent(it\Collider, r\OBJ)
 				
 				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
@@ -3721,29 +3742,28 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			If Rand(5) = 1
+			Temp = Rand(5)
+			
+			If Temp > 3
 				it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
 				it\State = Rnd(0.0, 100.0)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf Rand(4) = 1
-				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
-				it\State = Rnd(0.0, 100.0)
+				
+				it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
+				it\Name = "COFFEE"
+				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
 				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			
-			If Rand(4) = 1
-				;it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
-				;it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "COFFEE"))
-				;it\DisplayName = GetLocalString("items", "cupcoffee")
-				;EntityParent(it\Collider, r\OBJ)
 				
 				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf Rand(3) = 1
+			ElseIf Temp > 1
+				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it\State = Rnd(0.0, 100.0)
+				EntityParent(it\Collider, r\OBJ)
+				
 				it.Items = CreateRandomBattery(r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
-			
 			If Rand(2) = 1
 				it.Items = CreateItem("Quarter", it_25ct, r\x - 234.0 * RoomScale, r\y + 30.0 * RoomScale, r\z + 505.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
@@ -3852,10 +3872,80 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_WATER, r\x + 236.0 * RoomScale, r\y + 0.005, r\z - 68.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
+		Case r_room4_2_ez
+			;[Block]
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, False, OFFICE_DOOR)
+			
+			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, False, OFFICE_DOOR)
+			
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room4_2_ez
+						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room4_2_ez_hb.b3d", r\OBJ)
+			r\ScriptedObject[0] = True
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
+			
+			sc.SecurityCams = CreateSecurityCam(r, r\x, r\y + 384.0 * RoomScale, r\z, 20.0)
+			sc\Angle = 225.0 : sc\Turn = 45.0 : sc\FollowPlayer = True
+			
+			Temp = Rand(5)
+			
+			If Temp > 3
+				it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it\State = Rnd(0.0, 100.0)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
+				it\Name = "COFFEE"
+				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, r\x - 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 514.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 572.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateRandomBattery(r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			ElseIf Temp > 1
+				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it\State = Rnd(0.0, 100.0)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateRandomBattery(r\x - 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("Quarter", it_25ct, r\x - 514.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 572.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			If Rand(2) = 1
+				it.Items = CreateItem("Quarter", it_25ct, r\x - 586.0 * RoomScale, r\y + 30.0 * RoomScale, r\z + 728.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			;[End Block]
 		Case r_dimension_106
 			;[Block]
 			; ~ The doors inside labyrinth
-			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\rockmoss.jpg")
 			For i = 0 To 9
 				Select i
 					Case 0
@@ -4037,7 +4127,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[20] = LoadMesh_Strict("GFX\Map\dimension_106_terrain.b3d")
 			r\ScriptedObject[20] = True
-			Tex = LoadTexture_Strict("GFX\map\Textures\rockmoss.jpg")
+			Tex = LoadTexture_Strict("GFX\Map\Textures\rockmoss.jpg")
 			EntityTexture(r\Objects[20], Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			ScaleEntity(r\Objects[20], RoomScale, RoomScale, RoomScale)
@@ -4126,7 +4216,6 @@ Function FillRoom%(r.Rooms)
 	
 	CatchErrors("Uncaught: FillRoom(Room ID: " + r\RoomTemplate\RoomID + ")")
 End Function
-
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

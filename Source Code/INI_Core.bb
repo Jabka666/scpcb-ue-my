@@ -1,7 +1,6 @@
-; ~ IniControler - A part of BlitzToolBox
+; ~ IniController - A part of BlitzToolBox
 ; ~ Write & Read ini file.
-; ~ v1.06 2022.11.12
-; ~ v1.06.2 2023.9.10
+; ~ v1.08 2024.9.16
 ; ~ https://github.com/ZiYueCommentary/BlitzToolbox
 
 Function IniWriteBuffer%(File$, ClearPrevious% = True)
@@ -63,7 +62,7 @@ Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", Check
 	Else
 		DefaultValue1 = DefaultValue
 	EndIf
-
+	
 	Return(IniGetBufferString(lang\LanguagePath + File, Name, Parameter, DefaultValue1))
 End Function
 
@@ -96,9 +95,9 @@ Function StripFileName$(File$)
 	Local LastSlash% = 0
 	Local FileLen% = Len(File)
 	Local i%
-
+	
 	If FileLen = 0 Then Return("")
-
+	
 	For i = FileLen To 1 Step -1
 		Local Middle$ = Mid(File, i, 1)
 		
@@ -218,9 +217,8 @@ Type Options
 	Field InvertMouseX%, InvertMouseY%
 	Field MouseSensitivity#
 	; ~ [GLOBAL]
-	Field AspectRatio#
-	Field GraphicWidth%, RealGraphicWidth%
-	Field GraphicHeight%, RealGraphicHeight%
+	Field GraphicWidth%
+	Field GraphicHeight%
 	Field DisplayMode%
 	Field GFXDriver%
 	Field IntroEnabled%
@@ -391,9 +389,9 @@ Function LoadOptionsINI%()
 	
 	key\SCREENSHOT = IniGetInt(OptionFile, "Controls", "Screenshot Key", 59)
 	
-	key\LEAN_LEFT = IniGetInt(OptionFile, "Controls", "Lean Left Key", 18)
+	key\LEAN_LEFT = IniGetInt(OptionFile, "Controls", "Lean Left Key", 16)
 	
-	key\LEAN_RIGHT = IniGetInt(OptionFile, "Controls", "Lean Right Key", 16)
+	key\LEAN_RIGHT = IniGetInt(OptionFile, "Controls", "Lean Right Key", 18)
 	; ~ [ADVANCED]
 	
 	opt\HUDEnabled = IniGetInt(OptionFile, "Advanced", "Enable HUD", True)
@@ -416,7 +414,7 @@ Function LoadOptionsINI%()
 	opt\PlayStartup = IniGetInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
 	opt\LauncherEnabled = IniGetInt(OptionFile, "Advanced", "Launcher Enabled", True)
-
+	
 	opt\NoProgressBar = IniGetInt(OptionFile, "Advanced", "No Progress Bar", False)
 	
 	; ~ [GLOBAL]
@@ -519,7 +517,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Controls", "Screenshot Key", key\SCREENSHOT)
 	
-	IniWriteString(OptionFile, "Controls", "Lean Left key", key\LEAN_LEFT)
+	IniWriteString(OptionFile, "Controls", "Lean Left Key", key\LEAN_LEFT)
 	
 	IniWriteString(OptionFile, "Controls", "Lean Right Key", key\LEAN_RIGHT)
 	;[End Block]
@@ -545,7 +543,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-
+	
 	IniWriteString(OptionFile, "Advanced", "No Progress Bar", opt\NoProgressBar)
 	;[End Block]
 	
@@ -642,9 +640,9 @@ Function ResetOptionsINI%()
 	
 	key\SCREENSHOT = 59
 	
-	key\LEAN_LEFT = 18
+	key\LEAN_LEFT = 16
 	
-	key\LEAN_RIGHT = 16
+	key\LEAN_RIGHT = 18
 	; ~ [ADVANCED]
 	
 	opt\HUDEnabled = True

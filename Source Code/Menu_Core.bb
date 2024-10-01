@@ -28,14 +28,11 @@ Function InitMainMenuAssets%()
 	mm.MainMenu = New MainMenu
 	mma.MainMenuAssets = New MainMenuAssets
 	
-	mma\BackGround = LoadImage_Strict("GFX\Menu\back.png")
-	mma\BackGround = ScaleImage2(mma\BackGround, MenuScale, MenuScale)
+	mma\BackGround = ScaleImageEx(LoadImage_Strict("GFX\Menu\back.png"), MenuScale, MenuScale)
 	
-	mma\SECURE_CONTAIN_PROTECT = LoadImage_Strict("GFX\Menu\SCP_text.png")
-	mma\SECURE_CONTAIN_PROTECT = ScaleImage2(mma\SECURE_CONTAIN_PROTECT, MenuScale, MenuScale)
+	mma\SECURE_CONTAIN_PROTECT = ScaleImageEx(LoadImage_Strict("GFX\Menu\SCP_text.png"), MenuScale, MenuScale)
 	
-	mma\SCP173 = LoadImage_Strict("GFX\Menu\scp_173_back.png")
-	mma\SCP173 = ScaleImage2(mma\SCP173, MenuScale, MenuScale)
+	mma\SCP173 = ScaleImageEx(LoadImage_Strict("GFX\Menu\scp_173_back.png"), MenuScale, MenuScale)
 	
 	mm\MainMenuBlinkTimer[0] = 1.0
 	mm\MainMenuBlinkTimer[1] = 1.0
@@ -683,7 +680,7 @@ Function UpdateMainMenu%()
 								UserTrackCheck2 = 0
 								
 								Local DirPath$ = "SFX\Radio\UserTracks\"
-									
+								
 								If FileType(DirPath) <> 2 Then CreateDir(DirPath)
 								
 								Local Dir% = ReadDir(DirPath)
@@ -782,8 +779,8 @@ Function UpdateMainMenu%()
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_LEFT, 210)], Font_Default, 14)
-						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_RIGHT, 210)], Font_Default, 15)
+						UpdateMenuInputBox(x - (150 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_LEFT, 210)], Font_Default, 14)
+						UpdateMenuInputBox(x + (140 * MenuScale), y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_RIGHT, 210)], Font_Default, 15)
 						
 						If opt\CanOpenConsole
 							y = y + (20 * MenuScale)
@@ -1160,7 +1157,7 @@ Function RenderMainMenu%()
 					TextEx(x + (20 * MenuScale), y + (25 * MenuScale), GetLocalString("menu", "new.name"))
 					
 					If SelectedCustomMap = Null
-						TempStr = Format(GetLocalString("menu", "new.seed"), "")
+						TempStr = Format(GetLocalString("menu", "new.seed2"), "")
 					Else
 						TempStr = Format(GetLocalString("menu", "new.map"), "")
 						RenderFrame(x + (150 * MenuScale), y + (55 * MenuScale), 200 * MenuScale, 30 * MenuScale, (x Mod 256), (y Mod 256), True)
@@ -1351,12 +1348,24 @@ Function RenderMainMenu%()
 								TextEx(x + (20 * MenuScale), y + (30 * MenuScale), CurrSave\Time)
 								TextEx(x + (150 * MenuScale), y + (30 * MenuScale), CurrSave\Date)
 								TextEx(x + (20 * MenuScale), y + (50 * MenuScale), "v" + CurrSave\Version)
+								If CurrSave\Version <> VersionNumber
+									Color(255, 0, 0)
+								Else
+									For i = SAFE To ESOTERIC
+										If CurrSave\Difficulty = difficulties[i]\Name
+											Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
+											Exit
+										EndIf
+									Next
+								EndIf
+								TextEx(x + (150 * MenuScale), y + (50 * MenuScale), CurrSave\Difficulty)
 								
 								If CurrSave = Last Save Then Exit
 								y = y + (80 * MenuScale)
 							EndIf
 						Next
 						
+						Color(255, 255, 255)
 						If DelSave <> Null
 							x = 739 * MenuScale
 							y = 376 * MenuScale
@@ -1445,7 +1454,7 @@ Function RenderMainMenu%()
 			Select mm\MainMenuTab
 				Case MainMenuTab_Options_Graphics
 					;[Block]
-					Height = 485 * MenuScale
+					Height = 455 * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1751,7 +1760,7 @@ Function RenderMainMenu%()
 		TextEx(20 * MenuScale, opt\GraphicHeight - (50 * MenuScale), "v" + VersionNumber)
 		If opt\ShowFPS
 			SetFontEx(fo\FontID[Font_Console])
-			TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\FPS)
+			TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\RealFPS)
 		EndIf
 	EndIf
 	
@@ -1824,12 +1833,10 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			EndIf
 			ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
 			ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
-			LoadingImage = LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image")))
-			LoadingImage = ScaleImage2(LoadingImage, MenuScale, MenuScale)
+			LoadingImage = ScaleImageEx(LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image"))), MenuScale, MenuScale)
 			If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
 				If LoadingBack = 0
-					LoadingBack = LoadImage_Strict("LoadingScreens\loading_back.png")
-					LoadingBack = ScaleImage2(LoadingBack, MenuScale, MenuScale)
+					LoadingBack = ScaleImageEx(LoadImage_Strict("LoadingScreens\loading_back.png"), MenuScale, MenuScale)
 					LoadingBackWidth = ImageWidth(LoadingBack) / 2
 					LoadingBackHeight = ImageHeight(LoadingBack) / 2
 				EndIf
@@ -1928,6 +1935,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 						Case 4
 							;[Block]
 							CWMText = "eof9nsd3jue4iwe1fgj"
+							;[End Block]
 						Case 5
 							;[Block]
 							CWMText = GetLocalString("menu", "990_4")
@@ -2254,10 +2262,7 @@ Function UpdateMenuPalette%(x%, y%)
 	Next
 	If (Not PaletteExists)
 		mp.MenuPalette = New MenuPalette
-		If mp\Img = 0
-			mp\Img = LoadImage_Strict("GFX\Menu\palette.png")
-			mp\Img = ScaleImage2(mp\Img, MenuScale, MenuScale)
-		EndIf
+		If mp\Img = 0 Then mp\Img = ScaleImageEx(LoadImage_Strict("GFX\Menu\palette.png"), MenuScale, MenuScale)
 		mp\x = x
 		mp\y = y
 		mp\Width = ImageWidth(mp\Img)

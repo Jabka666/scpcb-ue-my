@@ -107,16 +107,18 @@ Const it_key0% = 84
 Const it_key1% = 85
 Const it_key2% = 86
 Const it_key3% = 87
-Const it_key4% = 88
-Const it_key5% = 89
-Const it_key6% = 90
-Const it_keyomni% = 91
-Const it_mastercard% = 92
-Const it_playcard% = 93
-Const it_key% = 94
-Const it_25ct% = 95
-Const it_coin% = 96
-Const it_pizza% = 97
+Const it_key3_bloody% = 88
+Const it_key4% = 89
+Const it_key5% = 90
+Const it_key6% = 91
+Const it_keyomni% = 92
+Const it_mastercard% = 93
+Const it_playcard% = 94
+Const it_key% = 95
+Const it_25ct% = 96
+Const it_coin% = 97
+Const it_pizza% = 98
+Const it_harnbadge% = 99
 ;[End Block]
 
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
@@ -181,16 +183,14 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 		EndIf
 	Next
 	If it\InvImg = 0
-		it\InvImg = LoadImage_Strict(InvImgPath)
-		it\InvImg = ScaleImage2(it\InvImg, MenuScale, MenuScale)
+		it\InvImg = ScaleImageEx(LoadImage_Strict(InvImgPath), MenuScale, MenuScale)
 		it\InvImgPath = InvImgPath
 	EndIf
 	
 	If InvImgPath2 <> ""
-		InvImgPath2 = ItemINVIconPath + InvImgPath2
 		If it\InvImg2 = 0
-			it\InvImg2 = LoadImage_Strict(InvImgPath2)
-			it\InvImg2 = ScaleImage2(it\InvImg2, MenuScale, MenuScale)
+			InvImgPath2 = ItemINVIconPath + InvImgPath2
+			it\InvImg2 = ScaleImageEx(LoadImage_Strict(InvImgPath2), MenuScale, MenuScale)
 		EndIf
 	Else
 		it\InvImg2 = 0
@@ -223,7 +223,7 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 	If itt\Tex <> 0 Then DeleteSingleTextureEntryFromCache(itt\Tex) : itt\Tex = 0
 	Delete(itt)
 End Function
-	
+
 Function GetRandDocument$()
 	Select Rand(22)
 		Case 1
@@ -273,7 +273,7 @@ Function GetRandDocument$()
 		Case 12
 			;[Block]
 			Return("682")
-			;[Block]
+			;[End Block]
 		Case 13
 			;[Block]
 			Return("714")
@@ -363,7 +363,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 		EndIf
 	Next 
 	
-	If i\ItemTemplate = Null Then RuntimeError2(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
+	If i\ItemTemplate = Null Then RuntimeErrorEx(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
 	
 	ResetEntity(i\Collider)
 	PositionEntity(i\Collider, x, y, z, True)
@@ -599,13 +599,12 @@ Function UpdateItems%()
 	EndIf
 End Function
 
-Function PickItem%(item.Items)
+Function PickItem%(item.Items, PlayPickUpSound% = True)
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
 	
 	CatchErrors("PickItem()")
 	
-	Local e.Events
-	Local n% = 0, z%
+	Local n% = 0, z% = 0
 	Local FullINV% = True
 	
 	For n = 0 To MaxItemAmount - 1
@@ -713,7 +712,7 @@ Function PickItem%(item.Items)
 						;[End Block]
 				End Select
 				
-				If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
+				If item\ItemTemplate\SoundID <> 66 And PlayPickUpSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 				item\Picked = True
 				item\Dropped = -1
 				
@@ -776,7 +775,7 @@ End Function
 
 Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 	Select itt\ID
-		Case it_key0, it_key1, it_key2, it_key3
+		Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -813,7 +812,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\ID
-		Case it_nav, it_nav300, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_scp1025
+		Case it_nav, it_nav300, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_scp1025
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -967,7 +966,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					n.NPCs = CreateNPC(NPCType1499_1, x, y, z)
 					n\State = 1.0 : n\State3 = 1.0
 					n\Sound = LoadSound_Strict("SFX\SCP\1499\Triggered.ogg")
-					n\SoundCHN = PlaySound2(n\Sound, Camera, n\Collider, 20.0)
+					n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 20.0)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1148,6 +1147,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						ClearSecondInv(item, 0)
 					EndIf
 					Remove = False
+					;[End Block]
 				Case ONETOONE
 					;[Block]
 					Remove = False
@@ -1264,6 +1264,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case COARSE
 					;[Block]
 					it2.Items = CreateItem("SCP-148 Ingot", it_scp148ingot, x, y, z)
+					;[End Block]
 				Case ONETOONE, FINE, VERYFINE
 					;[Block]
 					Remove = False
@@ -1360,7 +1361,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6
+		Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6
 			;[Block]
 			Local Level% = item\ItemTemplate\ID
 			Local LevelName%
@@ -1386,7 +1387,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								;[Block]
 								LevelName = 2
 								;[End Block]
-							Case it_key3
+							Case it_key3, it_key3_bloody
 								;[Block]
 								LevelName = 3
 								;[End Block]
@@ -1517,7 +1518,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 							End Select
 							;[End Block]
-						Case it_key3
+						Case it_key3, it_key3_bloody
 							;[Block]
 							If Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Level 4 Key Card", it_key4, x, y, z)
@@ -1801,15 +1802,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Cigarette", it_cigarette, x + 1.5, y + 0.5, z + 1.0)
+					it2.Items = CreateItem("Cigarette", it_cigarette, x, y, z)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Joint", it_joint, x + 1.5, y + 0.5, z + 1.0)
+					it2.Items = CreateItem("Joint", it_joint, x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Smelly Joint", it_scp420s, x + 1.5, y + 0.5, z + 1.0)
+					it2.Items = CreateItem("Smelly Joint", it_scp420s, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2030,6 +2031,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					EndIf
 					;[End Block]
 			End Select
+			;[End Block]
 		Case it_syringeinf
 			;[Block]
 			Select Setting
@@ -2055,6 +2057,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					EndIf
 					;[End Block]
 			End Select
+			;[End Block]
 		Case it_scp500pill, it_scp500pilldeath, it_pill
 			;[Block]
 			Select Setting
@@ -2187,6 +2190,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			End Select
 			;[End Block]
 		Case it_origami
+			;[Block]
 			Select Setting
 				Case ROUGH
 					;[Block]
@@ -2354,6 +2358,8 @@ End Function
 
 ; ~ Key Items Constants
 ;[Block]
+Const KEY_MISC% = 0
+
 Const KEY_CARD_6% = 1
 Const KEY_CARD_0% = 2
 Const KEY_CARD_1% = 3
@@ -2370,8 +2376,6 @@ Const KEY_HAND_BLACK% = -2
 Const KEY_HAND_YELLOW% = -3
 
 Const KEY_860% = -4
-
-Const KEY_MISC% = 0
 ;[End Block]
 
 ; ~ Only for "UseDoor" function
@@ -2380,6 +2384,7 @@ Function GetUsingItem%(item.Items)
 		Case it_key6
 			;[Block]
 			Return(KEY_CARD_6)
+			;[End Block]
 		Case it_key0
 			;[Block]
 			Return(KEY_CARD_0)
@@ -2392,7 +2397,7 @@ Function GetUsingItem%(item.Items)
 			;[Block]
 			Return(KEY_CARD_2)
 			;[End Block]
-		Case it_key3
+		Case it_key3, it_key3_bloody
 			;[Block]
 			Return(KEY_CARD_3)
 			;[End Block]

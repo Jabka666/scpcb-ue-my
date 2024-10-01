@@ -27,7 +27,7 @@ Function InitFastResize%()
 	AddTriangle(SF, 0, 1, 2)
 	AddTriangle(SF, 3, 2, 1)
 	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / RealGraphicWidthFloat, SMALLEST_POWER_TWO / RealGraphicHeightFloat, 1.0)
+	ScaleEntity(SPR, SMALLEST_POWER_TWO / GraphicWidthFloat, SMALLEST_POWER_TWO / GraphicHeightFloat, 1.0)
 	PositionEntity(SPR, 0.0, 0.0, 1.0001)
 	EntityOrder(SPR, -100001)
 	EntityBlend(SPR, 1)
@@ -60,7 +60,7 @@ Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
 	InitFastResize()
 End Function
 
-Function ScaleImage2%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
+Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
 	Local SrcWidth%, SrcHeight%
 	Local DestWidth%, DestHeight%
 	Local ScratchImage%, DestImage%
@@ -127,31 +127,16 @@ Function ScaleRender%(x#, y#, hScale# = 1.0, vScale# = 1.0)
 End Function
 
 Function RenderGamma%()
-	If opt\DisplayMode = 1
-		If opt\RealGraphicWidth <> opt\GraphicWidth Lor opt\RealGraphicHeight <> opt\GraphicHeight
-			SetBuffer(TextureBuffer(FresizeTexture))
-			ClsColor(0, 0, 0)
-			Cls()
-			CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
-			SetBuffer(BackBuffer())
-			ClsColor(0, 0, 0)
-			Cls()
-			ScaleRender(0, 0, SMALLEST_POWER_TWO / GraphicWidthFloat * opt\AspectRatio, SMALLEST_POWER_TWO / GraphicWidthFloat * opt\AspectRatio)
-			; ~ Might want to replace GraphicWidthFloat with Max(opt\GraphicWidth, opt\GraphicHeight) if portrait sizes cause issues
-			; ~ Everyone uses landscape so it's probably a non-issue
-		EndIf
-	EndIf
-	
 	; ~ Not by any means a perfect solution
 	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
 	Local RenderScale#
 	Local Ratio#
 	
 	If opt\ScreenGamma > 1.0
-		RenderScale = 1.0 / RealGraphicWidthFloat
-		Ratio = SMALLEST_POWER_TWO / RealGraphicWidthFloat
+		RenderScale = 1.0 / GraphicWidthFloat
+		Ratio = SMALLEST_POWER_TWO / GraphicWidthFloat
 		
-		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
@@ -161,12 +146,14 @@ Function RenderGamma%()
 		EntityAlpha(FresizeImage, opt\ScreenGamma - 1.0)
 		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
 	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
-		RenderScale = 1.0 / RealGraphicWidthFloat
-		Ratio = SMALLEST_POWER_TWO / RealGraphicWidthFloat
+		RenderScale = 1.0 / GraphicWidthFloat
+		Ratio = SMALLEST_POWER_TWO / GraphicWidthFloat
 		
 		Local Gamma% = 255 * opt\ScreenGamma
+		Local BufferBack% = BackBuffer()
+		Local BufferFresize% = TextureBuffer(FresizeTexture2)
 		
-		CopyRect(0, 0, opt\RealGraphicWidth, opt\RealGraphicHeight, SMALLEST_POWER_TWO_HALF - opt\RealGraphicWidth / 2, SMALLEST_POWER_TWO_HALF - opt\RealGraphicHeight / 2, BackBuffer(), TextureBuffer(FresizeTexture))
+		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BufferBack, TextureBuffer(FresizeTexture))
 		EntityBlend(FresizeImage, 1)
 		ClsColor(0, 0, 0)
 		Cls()
@@ -174,15 +161,15 @@ Function RenderGamma%()
 		EntityFX(FresizeImage, 1 + 32)
 		EntityBlend(FresizeImage, 2)
 		EntityAlpha(FresizeImage, 1.0)
-		SetBuffer(TextureBuffer(FresizeTexture2))
+		SetBuffer(BufferFresize)
 		ClsColor(Gamma, Gamma, Gamma)
 		Cls()
-		SetBuffer(BackBuffer())
+		SetBuffer(BufferBack)
 		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
-		SetBuffer(TextureBuffer(FresizeTexture2))
+		SetBuffer(BufferFresize)
 		ClsColor(0, 0, 0)
 		Cls()
-		SetBuffer(BackBuffer())
+		SetBuffer(BufferBack)
 	EndIf
 	EntityFX(FresizeImage, 1)
 	EntityBlend(FresizeImage, 1)
@@ -191,7 +178,7 @@ End Function
 
 Global CurrTrisAmount%
 
-Function RenderWorld2%(Tween#)
+Function RenderWorldEx%(Tween#)
 	CameraProjMode(ArkBlurCam, 0)
 	CameraProjMode(Camera, 1)
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
@@ -266,12 +253,12 @@ Function PlayStartupVideos%()
 	; ~ The aspect ratio to target
 	Local TargetAspectRatio# = 16.0 / 9.0
 	; ~ Calculate the target height based on the screen's aspect ratio
-	Local Ratio# = RealGraphicWidthFloat / RealGraphicHeightFloat
+	Local Ratio# = GraphicWidthFloat / GraphicHeightFloat
 	
 	If Ratio > TargetAspectRatio
-		ScaledGraphicHeight = opt\RealGraphicHeight
+		ScaledGraphicHeight = opt\GraphicHeight
 	Else
-		ScaledGraphicHeight = Int(opt\RealGraphicWidth / TargetAspectRatio)
+		ScaledGraphicHeight = Int(opt\GraphicWidth / TargetAspectRatio)
 	EndIf
 	
 	Local MovieFile$, i%
@@ -302,7 +289,7 @@ Function PlayStartupVideos%()
 		
 		Repeat
 			Cls()
-			DrawMovie(Movie, 0, (opt\RealGraphicHeight / 2 - ScaledGraphicHeight / 2), opt\RealGraphicWidth, ScaledGraphicHeight)
+			DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
 			Flip(True)
 			
@@ -333,22 +320,23 @@ Function GetScreenshot%()
 	
 	If FileType("Screenshots\") <> 2 Then CreateDir("Screenshots")
 	
-	Local Bank% = CreateBank(opt\RealGraphicWidth * opt\RealGraphicHeight * 3)
+	Local Bank% = CreateBank(opt\GraphicWidth * opt\GraphicHeight * 3)
+	Local BufferBack% = BackBuffer()
 	
-	LockBuffer(BackBuffer())
-	For x = 0 To opt\RealGraphicWidth - 1
-		For y = 0 To opt\RealGraphicHeight - 1
-			Local Pixel% = ReadPixelFast(x, y, BackBuffer())
-			Local TempY% = (y * (opt\RealGraphicWidth * 3)) + (x * 3)
+	LockBuffer(BufferBack)
+	For x = 0 To opt\GraphicWidth - 1
+		For y = 0 To opt\GraphicHeight - 1
+			Local Pixel% = ReadPixelFast(x, y, BufferBack)
+			Local TempY% = (y * (opt\GraphicWidth * 3)) + (x * 3)
 			
 			PokeByte(Bank, TempY, ReadPixelColor(Pixel, 0))
 			PokeByte(Bank, TempY + 1, ReadPixelColor(Pixel, 8))
 			PokeByte(Bank, TempY + 2, ReadPixelColor(Pixel, 16))
 		Next
 	Next
-	UnlockBuffer(BackBuffer())
+	UnlockBuffer(BufferBack)
 	
-	Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\RealGraphicWidth, opt\RealGraphicHeight, opt\RealGraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
+	Local fiBuffer% = FI_ConvertFromRawBits(Bank, opt\GraphicWidth, opt\GraphicHeight, opt\GraphicWidth * 3, 24, $FF0000, $00FF00, $0000FF, True)
 	
 	FI_Save(13, fiBuffer, "Screenshots\Screenshot" + ScreenshotCount + ".png", 0)
 	FI_Unload(fiBuffer) : fiBuffer = 0

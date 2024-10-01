@@ -1,4 +1,67 @@
-v1.3.1
+{v1.3.2}
+
+[General]
+- Added new sound for SCP-008.
+- Added «spawncup/givecup» console command.
+- Reduced SCP-106's spawnrate when using SCP-914 from 2.5x to 2.0x. (4.5x to 4.0x on «AggressiveNPCs»)
+
+- Optimized the game...
+
+[Rooms]
+- Added «room4_2_ez».
+- Some intro improvements.
+- Updated some signs color.
+- Added a new message when trying to use the water cooler without an Empty Cup.
+- Replaced Green NVG with Red NVG in «room2_servers_ez» room.
+
+[Items]
+- Each NVG has its own texture.
+- Tiny color change for SCRAMBLE gear's texture.
+- Updated battery images for NVG and SCRAMBLE gear.
+- Added Harn's badge.
+- Added new message for cups.
+- Added new drink.
+- Added bloody texture for Level 3 Key Card.
+- Eyedrops can restore your blink.
+
+[NPCs]
+- Changed SCP-173's box model.
+
+[Menu]
+- Added difficulty names on «Load Game» page.
+
+[Launcher]
+- Updated buttons images.
+
+[Map Creator]
+- Optimized Map Creator...
+
+[Converter]
+- Updated and optimized converter...
+
+[Bug Fixes]
+- Fixed SCP-409 decal doesn't "infect" the player.
+- Fixes for MTF:
+	- Fixed MTF leader not spawning.
+	- Fixed an issue with MTF's flash particle.
+	- MTFs should no longer get stuck in each other.
+- Fixed MAV in Maintenance Tunnels.
+- Fixed MAV caused by PIN-code buttons.
+- Fixed MAV at the end of SCP-1123's event.
+- Fixed MAV after using drinks.
+- Fixed collisions of wall fragments near SCP-513's containment chamber.
+- Fixed sparks direction in SCP-409's containment chamber.
+- Fixed incorrect clipping of "blood decal(5).png" texture.
+- Fixed great issue with frames smoothing.
+- Fixed left lean key bind.
+- Fixed camera roll and position.
+
+[Known issues]
+- Rooms can overlap and block the way.
+- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
+- Battery issues caused by having multiple night vision devices.
+
+{v1.3.1}
 
 [General]
 - Added new trick event.
@@ -86,8 +149,10 @@ v1.3.1
 [Known issues]
 - Rooms can overlap and block the way.
 - Cups crash the game sometimes.
+- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
+- Battery issues caused by having multiple night vision devices.
 
-v1.3
+{v1.3}
 
 [General]
 - Added new console commands: «roomlist» and «itemlist».
@@ -110,11 +175,6 @@ v1.3
 - SCP-005 event always returns you back to the chamber after escaping labyrinth.
 
 - Optimized the game...
-
-[Launcher]
-- Default Display Mode is now Borderless.
-- Fullscren Display Mode has a warning for Alt + TAB usage.
-- Removed the 32-bit indicator.
 
 [Menu]
 - Moved Mouse Smoothing beneath Mouse Sensitivity.
@@ -203,6 +263,11 @@ v1.3
 	- SCP-966 will no longer stay in attack mode and upon respawning elsewhere will return to echo/idle mode.
 	- Are visible when being struck by a tesla gates.
 
+[Launcher]
+- Default Display Mode is now Borderless.
+- Fullscren Display Mode has a warning for Alt + TAB usage.
+- Removed the 32-bit indicator.
+
 [Bug Fixes]
 - Fixed some typos in subtitles.
 - Fixed subititles not showing.
@@ -244,8 +309,10 @@ v1.3
 - «room4_ic» sometimes spawn in HCZ.
 - Cups crash the game sometimes.
 - PD teleport points don't work sometimes.
+- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
+- Battery issues caused by having multiple night vision devices.
 
-v1.2.1
+{v1.2.1}
 
 [General]
 - Agent Ulrgin no longer gives the player SCP-173's document.
@@ -284,11 +351,7 @@ v1.2.1
 - Fixed fog rendering in a Gas Mask/Hazmat Suit during one frame.
 - Fixed subtitles options placed out of menu.
 
-v1.2
-
-[Launcher]
-- Added «Primary Driver» string for GFX driver selector. Also added driver names.
-- Added progress for downloading languages. Now the game won't freeze when downloading.
+{v1.2}
 
 [General]
 - Added pressing animation for buttons.
@@ -311,6 +374,9 @@ v1.2
 
 - Optimized the game...
 
+[Menu]
+- Added descriptive info for difficulties.
+
 [Mechanics and effects]
 - Added random light flickering.
 
@@ -326,9 +392,6 @@ v1.2
 	- Level 4 Key Card base rarity inceased from 10 to 12.
 	- Level 4 Key Card's increasing rarity is increased from 5 to 6.
 - Rebalanced equipping time for some items.
-
-[Menu]
-- Added descriptive info for difficulties.
 
 [Rooms]
 - Added security camera in «room2C_ez» room.
@@ -379,6 +442,10 @@ v1.2
 - Improved SCP-008-1, SCP-049, SCP-049-2 and MTF's AI.
 - Can no longer use SCP-268 against SCP-096.
 
+[Launcher]
+- Added «Primary Driver» string for GFX driver selector. Also added driver names.
+- Added progress for downloading languages. Now the game won't freeze when downloading.
+
 [Bug Fixes]
 - Fixed SCP-939's texture which is too bright.
 - Fixed wrong textures are applied for SCP-1048's drawings.
@@ -423,7 +490,7 @@ v1.2
 
 - Tiny fixes for translation system.
 
-v1.1.3
+{v1.1.3}
 
 [General]
 - Added Sanity timer to the Debug Hud 2.
@@ -449,7 +516,7 @@ v1.1.3
 - Fixed an issue where SCP-049 achievement couldn't be obtained when using SCP-268.
 - Fixed Stamina cap not draining exactly where it needs to.
 
-v1.1.2
+{v1.1.2}
 
 [General]
 - Added «Camera render interval» option.
@@ -480,6 +547,10 @@ v1.1.2
 - NPCs that deal damage now have their damage scale with difficulty.
 - SCP-008-1's walk speed is slower than their chase speed.
 
+[Map Creator]
+- Increased width of tab above the grid.
+- Changed Manual link.
+
 [Bug Fixes]
 - Fixed MAV after playing intro sequence.
 - Fixed saves.
@@ -490,11 +561,7 @@ v1.1.2
 	- Fixed the localize font unable to load.
 - Fixed MTF step sounds.
 
-[Map Creator]
-- Increased width of tab above the grid.
-- Changed Manual link.
-
-v1.1.1
+{v1.1.1}
 
 [General]
 - Tiny optimizations.
@@ -507,10 +574,7 @@ v1.1.1
 
 - Some fixes for event descriptions in Map Creator.
 
-v1.1
-
-[Launcher]
-- Aligned resolution list.
+{v1.1}
 
 [General]
 - Added a new feature that allows the player name a savegame with non-latin characters, like chinese, russian and etc.
@@ -534,6 +598,19 @@ v1.1
 - Converted .ini files to UTF-8 format.
 - Finally made the «Bright mode» similar to original game.
 - Optimized game a lot...
+
+[Menu]
+- Added degree symbol for FOV value.
+- Added «PRESS ANY KEY TO WAKE UP» string for CWM loading screen.
+- Added additional options menu. This was done in order to free up some space for settings.
+	- Added in-game versions of the «Use launcher», «Subtitles», «Startup videos» and «Smooth bars» settings.
+- Added highlight effect for slidebars.
+
+- Removed extra spacing in credits.
+
+- Tiny improvement for difficulties color.
+- The subtitles setting has been moved to the «AUDIO» category.
+- Remade options menu.
 
 [Mechanics and effects]
 - Added a small chance to accidentally drop an item when trying to use it.
@@ -589,19 +666,6 @@ v1.1
 - Origami can be added to the clipboard.
 - Night vision doesn't work inside the Pocket Dimension. If you'll use it, you'll get more damage.
 
-[Menu]
-- Added degree symbol for FOV value.
-- Added «PRESS ANY KEY TO WAKE UP» string for CWM loading screen.
-- Added additional options menu. This was done in order to free up some space for settings.
-	- Added in-game versions of the «Use launcher», «Subtitles», «Startup videos» and «Smooth bars» settings.
-- Added highlight effect for slidebars.
-
-- Removed extra spacing in credits.
-
-- Tiny improvement for difficulties color.
-- The subtitles setting has been moved to the «AUDIO» category.
-- Remade options menu.
-
 [NPCs]
 - Hazmat suit and SCP-714 now fall to the ground when removed by SCP-049.
 - Reduces how long the Hazmat Suit protects the player from SCP-049 from 12 seconds down to 5 seconds. The Heavy Hazmat Suit changed from indefinite to 12 seconds.
@@ -610,6 +674,9 @@ v1.1
 - Reduced SCP-096's speed.
 - The MTF Units and SCP-049 now open linked doors in the same way as the player.
 - SCP-066 is now visible on the S-NAV Ultimate.
+
+[Launcher]
+- Aligned resolution list.
 
 [Map Creator]
 - Made the Map Creator to be compatible with latest BlitzPlus version.
@@ -662,7 +729,7 @@ v1.1
 
 - Minor bugfixes...
 
-v1.0.3
+{v1.0.3}
 
 [General]
 - Added sound volume for crouching and picking the items up, so NPCs can hear your activity.
@@ -788,7 +855,7 @@ v1.0.3
 - Tiny fixes for some rooms.
 - Tiny fix for slider highlight detection.
 
-v1.0.2
+{v1.0.2}
 
 [General]
 - Improved SCP-939's texture.
@@ -822,7 +889,7 @@ v1.0.2
 
 - Tiny fixes for re-scaling.
 
-v1.0.1
+{v1.0.1}
 
 [General]
 - Added death message for guard.
@@ -910,19 +977,8 @@ v1.0.1
 - Tiny fix for selected items.
 - Tiny fix for credits.
 
-v1.0.0
+{v1.0}
 ~ This version continues original game.
-
-[Launcher]
-- Added YouTube, Discord and ModDB icons.
-- Added Resolution Selection button.
-- Added «REPORT A BUG!» and «SEE CHANGELOG» buttons.
-
-- Removed Check for updates feature.
-- Removed 16-Bit mode.
-- Removed Graphics Driver Selection, which did not actually change anything anyways.
-
-- Improved game icon.
 
 [General]
 - Added anisotropic filtering.
@@ -1145,6 +1201,17 @@ v1.0.0
 - Battery charges are now randomized.
 - The tesla gate lights up the surrounding rooms.
 - NVG protects eyes from the gas.
+
+[Launcher]
+- Added YouTube, Discord and ModDB icons.
+- Added Resolution Selection button.
+- Added «REPORT A BUG!» and «SEE CHANGELOG» buttons.
+
+- Removed Check for updates feature.
+- Removed 16-Bit mode.
+- Removed Graphics Driver Selection, which did not actually change anything anyways.
+
+- Improved game icon.
 
 [Map Creator]
 - Sorted rooms by zones.

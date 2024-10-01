@@ -1,4 +1,4 @@
-; ~ IniControler - A part of BlitzToolBox
+; ~ IniController - A part of BlitzToolBox
 ; ~ Write & Read ini file.
 ; ~ v1.06 2022.11.12
 ; ~ https://github.com/ZiYueCommentary/BlitzToolbox
@@ -108,7 +108,7 @@ Global opt.Options = New Options
 
 Function LoadOptionsINI()
 	; ~ [3-D SCENE]
-
+	
 	opt\FogR = IniGetInt(OptionFileMC, "3-D Scene", "BG Color R", 0)
 	
 	opt\FogG = IniGetInt(OptionFileMC, "3-D Scene", "BG Color G", 0)
@@ -132,7 +132,7 @@ End Function
 
 Function SaveOptionsINI()
 	; ~ [3-D SCENE]
-
+	
 	IniWriteString(OptionFileMC, "3-D Scene", "BG Color R", opt\FogR)
 	
 	IniWriteString(OptionFileMC, "3-D Scene", "BG Color G", opt\FogG)
@@ -155,4 +155,4 @@ Function SaveOptionsINI()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#BlitzPlus
+;~C#Blitz3D

@@ -10,7 +10,7 @@ Type FramesPerSeconds
 	Field Accumulator#
 	Field PrevTime%
 	Field CurrTime%
-	Field FPS%
+	Field RealFPS%
 	Field TempFPS%
 	Field Goal%
 	Field LoopDelay%
@@ -19,9 +19,11 @@ End Type
 
 Global fps.FramesPerSeconds = New FramesPerSeconds
 
-Global MilliSec%
+Function ResetTimingAccumulator%()
+	fps\Accumulator = 0.0
+End Function
 
-fps\LoopDelay = MilliSecs()
+Global MilliSec%
 
 Global SplitSpace$
 
@@ -32,28 +34,19 @@ If opt\LauncherEnabled
 	
 	lnchr\TotalGFXModes = CountGfxModes3D()
 	
-	opt\AspectRatio = 1.0
-	
 	UpdateLauncher(lnchr)
 	
 	Delete(lnchr)
 EndIf
 
-Global GraphicWidthFloat#, RealGraphicWidthFloat#
-Global GraphicHeightFloat#, RealGraphicHeightFloat#
+Global GraphicWidthFloat#
+Global GraphicHeightFloat#
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
+GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
 If opt\DisplayMode = 1
-	opt\RealGraphicWidth = DesktopWidth() : opt\RealGraphicHeight = DesktopHeight()
-	GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
-	RealGraphicWidthFloat = Float(opt\RealGraphicWidth) : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
-	opt\AspectRatio = (GraphicWidthFloat / GraphicHeightFloat) / (RealGraphicWidthFloat / RealGraphicHeightFloat)
-	Graphics3DExt(opt\RealGraphicWidth, opt\RealGraphicHeight, 0, 4)
+	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, 4)
 Else
-	opt\AspectRatio = 1.0
-	opt\RealGraphicWidth = opt\GraphicWidth : opt\RealGraphicHeight = opt\GraphicHeight
-	GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
-	RealGraphicWidthFloat = Float(opt\RealGraphicWidth) : RealGraphicHeightFloat = Float(opt\RealGraphicHeight)
 	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
@@ -65,8 +58,8 @@ Global Input_ResetTime# = 0.0
 Global MousePosX#, MousePosY#
 
 Function UpdateMouseInput%()
-	MousePosX = ScaledMouseX()
-	MousePosY = ScaledMouseY()
+	MousePosX = MouseX()
+	MousePosY = MouseY()
 	
 	If Input_ResetTime > 0.0
 		Input_ResetTime = Max(Input_ResetTime - fps\Factor[1], 0.0)
@@ -120,25 +113,27 @@ SeedRnd(MilliSecs())
 
 PlayStartupVideos()
 
+fps\LoopDelay = MilliSecs()
+
 Global CursorIMG%
-If opt\DisplayMode = 0
-	CursorIMG = LoadImage_Strict("GFX\Menu\cursor.png")
-	CursorIMG = ScaleImage2(CursorIMG, MenuScale, MenuScale)
-EndIf
+If opt\DisplayMode = 0 Then CursorIMG = ScaleImageEx(LoadImage_Strict("GFX\Menu\cursor.png"), MenuScale, MenuScale)
 
 InitLoadingScreens(LoadingScreensFile)
 
-If (Not opt\PlayStartup) Then fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
-fo\FontID[Font_Default_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default_Big", "File"), GetFileLocalString(FontsFile, "Default_Big", "Size"))
-fo\FontID[Font_Digital] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital", "File"), GetFileLocalString(FontsFile, "Digital", "Size"))
-fo\FontID[Font_Digital_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital_Big", "File"), GetFileLocalString(FontsFile, "Digital_Big", "Size"))
-fo\FontID[Font_Journal] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Journal", "File"), GetFileLocalString(FontsFile, "Journal", "Size"))
-fo\FontID[Font_Console] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Console", "File"), GetFileLocalString(FontsFile, "Console", "Size"))
+Function LoadFonts%()
+	If (Not opt\PlayStartup) Then fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
+	fo\FontID[Font_Default_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default_Big", "File"), GetFileLocalString(FontsFile, "Default_Big", "Size"))
+	fo\FontID[Font_Digital] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital", "File"), GetFileLocalString(FontsFile, "Digital", "Size"))
+	fo\FontID[Font_Digital_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital_Big", "File"), GetFileLocalString(FontsFile, "Digital_Big", "Size"))
+	fo\FontID[Font_Journal] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Journal", "File"), GetFileLocalString(FontsFile, "Journal", "Size"))
+	fo\FontID[Font_Console] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Console", "File"), GetFileLocalString(FontsFile, "Console", "Size"))
+End Function
+
+LoadFonts()
 
 SetFontEx(fo\FontID[Font_Default_Big])
 
-Global BlinkMeterIMG% = LoadImage_Strict("GFX\HUD\blink_meter(1).png")
-BlinkMeterIMG = ScaleImage2(BlinkMeterIMG, MenuScale, MenuScale)
+Global BlinkMeterIMG% = ScaleImageEx(LoadImage_Strict("GFX\HUD\blink_meter(1).png"), MenuScale, MenuScale)
 
 RenderLoading(0, GetLocalString("loading", "core.main"))
 
@@ -217,6 +212,8 @@ Function CatchErrors%(Location$)
 	SetErrorMsg(11, "Error located in: " + Location)
 End Function
 
+; ~ MAIN PROGRAM
+;[Block]
 Repeat
 	SetErrorMsg(6, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
 	SetErrorMsg(7, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
@@ -254,7 +251,7 @@ Repeat
 	
 	If opt\ShowFPS
 		If fps\Goal < MilliSecs()
-			fps\FPS = fps\TempFPS
+			fps\RealFPS = fps\TempFPS
 			fps\TempFPS = 0
 			fps\Goal = MilliSecs() + 1000
 		Else
@@ -264,6 +261,7 @@ Repeat
 	
 	Flip(opt\VSync)
 Forever
+;[End Block]
 
 Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
@@ -284,8 +282,6 @@ Function UpdateGame%()
 		If fps\Accumulator <= 0.0 Then CaptureWorld()
 		
 		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
-		
-		RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
 		
 		UpdateMouseInput()
 		
@@ -351,7 +347,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select
 					
-					AmbientSFXCHN = PlaySound2(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
+					AmbientSFXCHN = PlaySoundEx(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
 				EndIf
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
@@ -495,7 +491,7 @@ Function UpdateGame%()
 			If wi\NightVision = 0 Then DarkAlpha = Max((1.0 - SecondaryLightOn) * 0.9, DarkAlpha)
 			
 			If me\Terminated
-				me\Lean = CurveValue(1.0, me\Lean, 6.0)
+				me\Lean = CurveValue(0.0, me\Lean, 6.0)
 				ResetSelectedStuff()
 				me\BlurTimer = me\KillAnimTimer * 5.0
 				If me\SelectedEnding <> -1
@@ -583,20 +579,20 @@ Function UpdateGame%()
 				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					Select CanSave
 						Case 0 ; ~ Scripted location
-							;[Break]
+							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.now"))
-							;[End Break]
+							;[End Block]
 						Case 1 ; ~ Endings / Intro location
-							;[Break]
+							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.location"))
 							If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
-							;[End Break]
+							;[End Block]
 						Case 2 ; ~ Triggered SCP-096
-							;[Break]
+							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.096"))
-							;[End Break]
+							;[End Block]
 						Case 3 ; ~ Allowed To Save
-							;[Break]
+							;[Block]
 							If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
 								If SelectedScreen = Null And sc_I\SelectedMonitor = Null
 									CreateHintMsg(GetLocalString("save", "failed.screen"))
@@ -608,7 +604,7 @@ Function UpdateGame%()
 							Else
 								SaveGame(CurrSave\Name) ; ~ Can save
 							EndIf
-							;[End Break]
+							;[End Block]
 					End Select
 				Else
 					CreateHintMsg(GetLocalString("save", "disable"))
@@ -665,9 +661,11 @@ Global RenderTween#
 Function RenderGame%()
 	CatchErrors("RenderGame()")
 	
+	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
+	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
-	RenderWorld2(RenderTween)
+	RenderWorldEx(RenderTween)
 	
 	RenderBlur(me\BlurVolume)
 	
@@ -1017,6 +1015,7 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- teleport [room name]")
 							CreateConsoleMsg("- roomlist")
 							CreateConsoleMsg("- spawnitem [item name / ID]")
+							CreateConsoleMsg("- spawndrink [drink name]")
 							CreateConsoleMsg("- itemlist")
 							CreateConsoleMsg("- ending")
 							CreateConsoleMsg("- notarget")
@@ -1114,6 +1113,7 @@ Function UpdateConsole%()
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.is"))
 							CreateConsoleMsg("******************************")
+							;[End Block]
 						Case "notarget", "nt"
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "notarget"))
@@ -1133,6 +1133,13 @@ Function UpdateConsole%()
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "spawnitem"))
 							CreateConsoleMsg("******************************")
 							CreateConsoleMultiMsg(GetLocalString("console", "help.si"))
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "spawncup", "givecup", "spawndrink", "givedrink"
+							;[Block]
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "spawndrink"))
+							CreateConsoleMsg("******************************")
+							CreateConsoleMultiMsg(GetLocalString("console", "help.sd"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "spawn", "s"
@@ -1405,14 +1412,49 @@ Function UpdateConsole%()
 					Temp = False 
 					For itt.ItemTemplates = Each ItemTemplates
 						If Lower(itt\Name) = StrTemp Lor Lower(itt\DisplayName) = StrTemp Lor Str(itt\ID) = StrTemp
-							Temp = True
-							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
 							it.Items = CreateItem(itt\Name, itt\ID, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider))
 							EntityType(it\Collider, HIT_ITEM)
+							CreateConsoleMsg(Format(GetLocalString("console", "si.success"), itt\DisplayName))
+							Temp = True
 							Exit
 						EndIf
 					Next
 					
+					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "si.failed"), 255, 0, 0)
+					;[End Block]
+				Case "spawncup", "givecup", "spawndrink", "givedrink"
+					;[Block]
+					StrTemp = Upper(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+					Temp = False
+					
+					If S2IMapContains(I_294\DrinksMap, StrTemp)
+						Local Drink% = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, StrTemp))
+						Local Temp2% = 0
+						
+						Temp2 = JsonGetValue(Drink, "explosion")
+						If (Not JsonIsNull(Temp2))
+							If JsonGetBool(Temp2)
+								me\ExplosionTimer = 135.0
+								Temp2 = JsonGetValue(Drink, "death_message")
+								If (Not JsonIsNull(Temp2)) Then msg\DeathMsg = JsonGetString(Temp2)
+							EndIf
+						EndIf
+						
+						Local DrinkColor% = JsonGetArray(JsonGetValue(Drink, "color"))
+						Local Alpha# = JsonGetFloat(JsonGetValue(Drink, "alpha"))
+						
+						Temp2 = JsonGetValue(Drink, "glow")
+						If (Not JsonIsNull(Temp2))
+							If JsonGetBool(Temp2) Then Alpha = -Alpha
+						EndIf
+						
+						it.Items = CreateItem("Cup", it_cup, EntityX(me\Collider), EntityY(Camera, True), EntityZ(me\Collider), JsonGetInt(JsonGetArrayValue(DrinkColor, 0)), JsonGetInt(JsonGetArrayValue(DrinkColor, 1)), JsonGetInt(JsonGetArrayValue(DrinkColor, 2)), Alpha)
+						it\Name = StrTemp
+						it\DisplayName = Format(GetLocalString("items", "cupof"), StrTemp)
+						EntityType(it\Collider, HIT_ITEM)
+						CreateConsoleMsg(Format(GetLocalString("console", "si.success"), it\DisplayName))
+						Temp = True
+					EndIf
 					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "si.failed"), 255, 0, 0)
 					;[End Block]
 				Case "itemlist", "itemslist", "items"
@@ -2082,6 +2124,7 @@ Function UpdateConsole%()
 								If ID <> "console" And ID <> "keter" And ID <> "apollyon" Then GiveAchievement(ID)
 							EndIf
 						Next
+						SaveAchievementsFile()
 						CreateConsoleMsg(GetLocalString("console", "ga.all"))
 					EndIf
 					
@@ -2090,9 +2133,7 @@ Function UpdateConsole%()
 						
 						Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), StrTemp), "name")
 						
-						If JsonIsNull(AchvName)
-							AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), StrTemp), "name")
-						EndIf
+						If JsonIsNull(AchvName) Then AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), StrTemp), "name")
 						CreateConsoleMsg(Format(GetLocalString("console", "ga.success"), JsonGetString(AchvName)))
 					ElseIf StrTemp <> "all"
 						CreateConsoleMsg(Format(GetLocalString("console", "ga.failed"), StrTemp), 255, 0, 0)
@@ -2329,7 +2370,7 @@ Function RenderMessages%()
 		Local CoordEx% = 20 * MenuScale
 		
 		SetFontEx(fo\FontID[Font_Console])
-		TextEx(CoordEx, CoordEx, "FPS: " + fps\FPS)
+		TextEx(CoordEx, CoordEx, "FPS: " + fps\RealFPS)
 		SetFontEx(fo\FontID[Font_Default])
 	EndIf
 End Function
@@ -2483,30 +2524,32 @@ Function RefillCup%()
 	Local p.Props
 	
 	For p.Props = Each Props
-		If p\Name = "GFX\Map\Props\water_cooler.b3d"
+		If p\IsCooler
 			If PlayerRoom = p\room
-				Local it.Items
-				Local i%
-				
 				If InteractObject(p\OBJ, 0.8)
+					Local EmptyCup.Items = Null
+					Local i%
+					
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null
 							If Inventory(i)\ItemTemplate\ID = it_emptycup
-								RemoveItem(Inventory(i))
-								it.Items = CreateItem("Cup", it_cup, 1.0, 1.0, 1.0, 200, 200, 200)
-								it\Name = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, "WATER"))
-								it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
-								it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
-								Inventory(i) = it
-								HideEntity(it\Collider)
-								EntityType(it\Collider, HIT_ITEM)
-								EntityParent(it\Collider, 0)
-								PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
-								CreateMsg(GetLocalString("msg", "refill"))
+								EmptyCup = Inventory(i)
 								Exit
 							EndIf
 						EndIf
 					Next
+					If EmptyCup <> Null
+						RemoveItem(EmptyCup)
+						EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200)
+						EntityType(EmptyCup\Collider, HIT_MAP)
+						EmptyCup\Name = "WATER"
+						EmptyCup\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+						PickItem(EmptyCup)
+						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
+						CreateMsg(GetLocalString("msg", "refill"))
+					Else
+						CreateMsg(GetLocalString("msg", "cup.needed"))
+					EndIf
 					Exit
 				EndIf
 			EndIf
@@ -2696,14 +2739,14 @@ Function UpdateMoving%()
 			Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
 			If me\Injuries > 0.5 Then Temp2 = Max(Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0), 0.005)
 			Temp = False
-			me\Lean = CurveValue(1.0, me\Lean, 12.0)
+			me\Lean = CurveValue(0.0, me\Lean, 12.0)
 			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (Not me\Zombie)
 					If (Not KeyDown(key\SPRINT)) And (Not InvOpen) And OtherOpen = Null
 						If KeyDown(key\LEAN_LEFT)
-							If (Not KeyDown(key\LEAN_RIGHT)) Then me\Lean = CurveValue(-20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
+							If (Not KeyDown(key\LEAN_RIGHT)) Then me\Lean = CurveValue(20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
 						ElseIf KeyDown(key\LEAN_RIGHT)
-							me\Lean = CurveValue(20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
+							me\Lean = CurveValue(-20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
 						EndIf
 					EndIf
 					
@@ -2892,7 +2935,7 @@ Function UpdateMouseLook%()
 	me\CameraShake = Max(me\CameraShake - FPSFactorEx, 0.0)
 	me\BigCameraShake = Max(me\BigCameraShake - FPSFactorEx, 0.0)
 	
-	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (RealGraphicWidthFloat / RealGraphicHeightFloat))) / 2.0)))
+	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / (Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (GraphicWidthFloat / GraphicHeightFloat))) / 2.0)))
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
 	
 	If (Not me\Terminated) And me\FallTimer >= 0.0
@@ -2906,7 +2949,7 @@ Function UpdateMouseLook%()
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6
 		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0) + me\Lean
 		
-		RotateEntity(Camera, EntityPitch(me\Collider), EntityYaw(me\Collider), Roll# / 2.0)
+		RotateEntity(Camera, EntityPitch(me\Collider), EntityYaw(me\Collider), Roll / 2.0)
 		
 		Local Yaw# = EntityYaw(Camera)
 		
@@ -3317,8 +3360,7 @@ Function UpdateGUI%()
 						PlaySound_Strict(snd_I\HorrorSFX[12])
 						;[End Block]
 				End Select
-				PD_event\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
-				PD_event\Img = ScaleImage2(PD_event\Img, MenuScale, MenuScale)
+				PD_event\Img = ScaleImageEx(LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png"), MenuScale, MenuScale)
 			Else
 				wi\IsNVGBlinking = True
 				If Rand(30) = 1
@@ -3336,8 +3378,7 @@ Function UpdateGUI%()
 					If PD_event\Img2 = 0
 						StopChannel(PD_event\SoundCHN) : PD_event\SoundCHN = 0
 						PlaySound_Strict(PD_event\Sound2, True)
-						PD_event\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
-						PD_event\Img2 = ScaleImage2(PD_event\Img2, MenuScale, MenuScale)
+						PD_event\Img2 = ScaleImageEx(LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png"), MenuScale, MenuScale)
 					Else
 						If (Not ChannelPlaying(PD_event\SoundCHN))
 							PD_event\SoundCHN = PlaySound_Strict(PD_event\Sound)
@@ -3372,7 +3413,7 @@ Function UpdateGUI%()
 				EndIf
 			EndIf
 		EndIf
-	
+		
 		If SelectedScreen <> Null
 			If mo\MouseUp1 Lor mo\MouseHit2 Then
 				FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
@@ -3399,7 +3440,7 @@ Function UpdateGUI%()
 			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
 			Local ButtonPosZ# = EntityZ(d_I\ClosestButton, True)
 			
-			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\GraphicWidth / opt\GraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, ButtonPosX, ButtonPosY, ButtonPosZ)
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
@@ -3618,7 +3659,7 @@ Function UpdateGUI%()
 						For z = 0 To OtherSize - 1
 							If OtherOpen\SecondInv[z] <> Null
 								Select OtherOpen\SecondInv[z]\ItemTemplate\ID
-									Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge
+									Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_harnbadge
 										;[Block]
 										IsEmpty = False
 										Exit
@@ -3858,7 +3899,7 @@ Function UpdateGUI%()
 						PrevItem = Inventory(MouseSlot)
 						
 						Select SelectedItem\ItemTemplate\ID
-							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_ticket, it_scp420j, it_scp420s, it_joint, it_cigarette, it_25ct, it_coin, it_key, it_scp860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill
+							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_ticket, it_scp420j, it_scp420s, it_joint, it_cigarette, it_25ct, it_coin, it_key, it_scp860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\ID = it_clipboard
 									; ~ Add an item to clipboard
@@ -3894,7 +3935,7 @@ Function UpdateGUI%()
 										Else
 											If added\ItemTemplate\ID = it_paper Lor added\ItemTemplate\ID = it_oldpaper
 												CreateMsg(GetLocalString("msg", "clipboard.paper"))
-											ElseIf added\ItemTemplate\ID = it_badge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_burntbadge
+											ElseIf added\ItemTemplate\ID = it_badge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_burntbadge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_harnbadge
 												CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\Name))
 											Else
 												CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\Name))
@@ -3926,7 +3967,7 @@ Function UpdateGUI%()
 													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
 													Inventory(MouseSlot)\State = 1.0
 													Select ID
-														Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge
+														Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_harnbadge
 															;[Block]
 															SetAnimTime(Inventory(MouseSlot)\OBJ, 3.0)
 															Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
@@ -4568,7 +4609,7 @@ Function UpdateGUI%()
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
 							If I_268\Using > 0
-								If I_268\Using > 1 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
+								If I_268\Using > 1 And I_268\Timer > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
 								CreateMsg(GetLocalString("msg", "cap.off"))
 								I_268\Using = 0
 							Else
@@ -4861,6 +4902,8 @@ Function UpdateGUI%()
 						me\BlinkEffect = 0.6
 						me\BlinkEffectTimer = Rnd(25.0, 35.0)
 						me\BlurTimer = 200.0
+						me\BlinkTimer = Min(me\BlinkTimer + (me\BLINKFREQ / 2.0), me\BLINKFREQ)
+						
 						If SelectedItem\ItemTemplate\ID = it_eyedrops2 Then me\Bloodloss = Max(me\Bloodloss - Rnd(5.0, 10.0), 0.0)
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
@@ -4874,6 +4917,7 @@ Function UpdateGUI%()
 						me\BlinkEffect = 0.4
 						me\BlinkEffectTimer = Rnd(35.0, 45.0)
 						me\BlurTimer = 200.0
+						me\BlinkTimer = me\BLINKFREQ
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.very"))
 						
@@ -4897,8 +4941,7 @@ Function UpdateGUI%()
 					;[Block]
 					GiveAchievement("1025")
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png"), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -4930,111 +4973,116 @@ Function UpdateGUI%()
 				Case it_cup
 					;[Block]
 					If CanUseItem(True)
-						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-						
-						SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 0.8), 100.0)
-						
-						If SelectedItem\State3 = 100.0
-							Local Drink% = Int(SelectedItem\Name)
+						If S2IMapContains(I_294\DrinksMap, SelectedItem\Name)
+							Local Drink% = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, SelectedItem\Name))
 							
 							If JsonIsNull(JsonGetValue(Drink, "refuse_message"))
-								Temp = JsonGetValue(Drink, "drink_message")
-								If (Not JsonIsNull(Temp)) Then CreateMsg(JsonGetString(Temp))
+								me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 								
-								Temp = JsonGetValue(Drink, "vomit")
-								If (Not JsonIsNull(Temp))
-									If me\VomitTimer = 0.0
-										me\VomitTimer = JsonGetFloat(Temp)
-									Else
-										me\VomitTimer = Min(me\VomitTimer, JsonGetFloat(Temp))
-									EndIf
-								EndIf
-								Temp = JsonGetValue(Drink, "blur")
-								If (Not JsonIsNull(Temp)) Then me\BlurTimer = Max(me\BlurTimer + (JsonGetFloat(Temp) * 70.0), 0.0)
-								Temp = JsonGetValue(Drink, "camera_shake")
-								If (Not JsonIsNull(Temp)) Then me\CameraShakeTimer = Max(me\CameraShakeTimer + JsonGetFloat(Temp), 0.0)
-								Temp = JsonGetValue(Drink, "deaf_timer")
-								If (Not JsonIsNull(Temp)) Then me\DeafTimer = Max(me\DeafTimer + JsonGetFloat(Temp), 0.0)
-								Temp = JsonGetValue(Drink, "damage")
-								If (Not JsonIsNull(Temp)) Then me\Injuries = Max(me\Injuries + JsonGetFloat(Temp), 0.0)
-								Temp = JsonGetValue(Drink, "bloodloss")
-								If (Not JsonIsNull(Temp)) Then me\Bloodloss = Max(me\Bloodloss + JsonGetFloat(Temp), 0.0)
-								Temp = JsonGetValue(Drink, "energy")
-								If (Not JsonIsNull(Temp)) Then me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(Temp) / 2.0, JsonGetFloat(Temp)), 100.0)
+								SelectedItem\State3 = Min(SelectedItem\State3 + (fps\Factor[0] / 0.8), 100.0)
 								
-								Temp = JsonGetValue(Drink, "drink_sound")
-								If (Not JsonIsNull(Temp)) Then PlaySound_Strict(LoadTempSound(JsonGetString(Temp)), True)
-								
-								Temp = JsonGetValue(Drink, "stomachache")
-								If (Not JsonIsNull(Temp))
-									If JsonGetBool(Temp) Then I_1025\State[3] = 1.0
-								EndIf
-								
-								Temp = JsonGetValue(Drink, "infection")
-								If (Not JsonIsNull(Temp))
-									If JsonGetBool(Temp) Then I_008\Timer = I_008\Timer + 0.001
-								EndIf
-								
-								Temp = JsonGetValue(Drink, "crystallization")
-								If (Not JsonIsNull(Temp))
-									If JsonGetBool(Temp) Then I_409\Timer = I_409\Timer + 0.001
-								EndIf
-								
-								Temp = JsonGetValue(Drink, "mutation")
-								If (Not JsonIsNull(Temp))
-									If JsonGetBool(Temp)
-										If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
-									EndIf
-								EndIf
-								
-								Temp = JsonGetValue(Drink, "revitalize")
-								If (Not JsonIsNull(Temp))
-									If JsonGetBool(Temp)
-										For i = 0 To 6
-											I_1025\State[i] = 0.0
-										Next
-									EndIf
-								EndIf
-								
-								Temp = JsonGetValue(Drink, "death_timer")
-								If (Not JsonIsNull(Temp))
-									Local DeathTimer1% = JsonGetFloat(Temp)
+								If SelectedItem\State3 = 100.0
+									Temp = JsonGetValue(Drink, "drink_message")
+									If (Not JsonIsNull(Temp)) Then CreateMsg(JsonGetString(Temp))
 									
-									Temp = JsonGetValue(Drink, "death_message")
-									If (Not JsonIsNull(Temp)) Then msg\DeathMsg = JsonGetString(Temp)
+									Temp = JsonGetValue(Drink, "vomit")
+									If (Not JsonIsNull(Temp))
+										If me\VomitTimer = 0.0
+											me\VomitTimer = JsonGetFloat(Temp)
+										Else
+											me\VomitTimer = Min(me\VomitTimer, JsonGetFloat(Temp))
+										EndIf
+									EndIf
+									Temp = JsonGetValue(Drink, "blur")
+									If (Not JsonIsNull(Temp)) Then me\BlurTimer = Max(me\BlurTimer + (JsonGetFloat(Temp) * 70.0), 0.0)
+									Temp = JsonGetValue(Drink, "camera_shake")
+									If (Not JsonIsNull(Temp)) Then me\CameraShakeTimer = Max(me\CameraShakeTimer + JsonGetFloat(Temp), 0.0)
+									Temp = JsonGetValue(Drink, "deaf_timer")
+									If (Not JsonIsNull(Temp)) Then me\DeafTimer = Max(me\DeafTimer + JsonGetFloat(Temp), 0.0)
+									Temp = JsonGetValue(Drink, "damage")
+									If (Not JsonIsNull(Temp)) Then me\Injuries = Max(me\Injuries + JsonGetFloat(Temp), 0.0)
+									Temp = JsonGetValue(Drink, "bloodloss")
+									If (Not JsonIsNull(Temp)) Then me\Bloodloss = Max(me\Bloodloss + JsonGetFloat(Temp), 0.0)
+									Temp = JsonGetValue(Drink, "energy")
+									If (Not JsonIsNull(Temp)) Then me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(Temp) / 2.0, JsonGetFloat(Temp)), 100.0)
 									
-									If DeathTimer1 = 0.0
-										Kill()
-									ElseIf me\DeathTimer = 0.0
-										me\DeathTimer = DeathTimer1 * 70.0
+									Temp = JsonGetValue(Drink, "drink_sound")
+									If (Not JsonIsNull(Temp)) Then PlaySound_Strict(LoadTempSound(JsonGetString(Temp)), True)
+									
+									Temp = JsonGetValue(Drink, "stomachache")
+									If (Not JsonIsNull(Temp))
+										If JsonGetBool(Temp) Then I_1025\State[3] = 1.0
 									EndIf
+									
+									Temp = JsonGetValue(Drink, "infection")
+									If (Not JsonIsNull(Temp))
+										If JsonGetBool(Temp) Then I_008\Timer = I_008\Timer + 0.001
+									EndIf
+									
+									Temp = JsonGetValue(Drink, "crystallization")
+									If (Not JsonIsNull(Temp))
+										If JsonGetBool(Temp) Then I_409\Timer = I_409\Timer + 0.001
+									EndIf
+									
+									Temp = JsonGetValue(Drink, "mutation")
+									If (Not JsonIsNull(Temp))
+										If JsonGetBool(Temp)
+											If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
+										EndIf
+									EndIf
+									
+									Temp = JsonGetValue(Drink, "revitalize")
+									If (Not JsonIsNull(Temp))
+										If JsonGetBool(Temp)
+											For i = 0 To 6
+												I_1025\State[i] = 0.0
+											Next
+										EndIf
+									EndIf
+									
+									Temp = JsonGetValue(Drink, "death_timer")
+									If (Not JsonIsNull(Temp))
+										Local DeathTimer1% = JsonGetFloat(Temp)
+										
+										Temp = JsonGetValue(Drink, "death_message")
+										If (Not JsonIsNull(Temp)) Then msg\DeathMsg = JsonGetString(Temp)
+										
+										If DeathTimer1 = 0.0
+											Kill()
+										ElseIf me\DeathTimer = 0.0
+											me\DeathTimer = DeathTimer1 * 70.0
+										EndIf
+									EndIf
+									
+									; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
+									Temp = JsonGetValue(Drink, "blink_effect")
+									If (Not JsonIsNull(Temp)) Then me\BlinkEffect = JsonGetFloat(Temp) ^ SelectedItem\State
+									Temp = JsonGetValue(Drink, "blink_timer")
+									If (Not JsonIsNull(Temp)) Then me\BlinkEffectTimer = JsonGetFloat(Temp) * SelectedItem\State
+									Temp = JsonGetValue(Drink, "stamina_effect")
+									If (Not JsonIsNull(Temp)) Then me\StaminaEffect = JsonGetFloat(Temp) ^ SelectedItem\State
+									Temp = JsonGetValue(Drink, "stamina_timer")
+									If (Not JsonIsNull(Temp)) Then me\StaminaEffectTimer = JsonGetFloat(Temp) * SelectedItem\State
+									
+									it.Items = CreateItem("Empty Cup", it_emptycup, 0.0, 0.0, 0.0)
+									it\Picked = True
+									For i = 0 To MaxItemAmount - 1
+										If Inventory(i) = SelectedItem
+											Inventory(i) = it
+											Exit
+										EndIf
+									Next
+									EntityType(it\Collider, HIT_ITEM)
+									
+									RemoveItem(SelectedItem)
 								EndIf
-								
-								; ~ The state of refined items is more than 1.0 (fine setting increases it by 1, very fine doubles it)
-								Temp = JsonGetValue(Drink, "blink_effect")
-								If (Not JsonIsNull(Temp)) Then me\BlinkEffect = JsonGetFloat(Temp) ^ SelectedItem\State
-								Temp = JsonGetValue(Drink, "blink_timer")
-								If (Not JsonIsNull(Temp)) Then me\BlinkEffectTimer = JsonGetFloat(Temp) * SelectedItem\State
-								Temp = JsonGetValue(Drink, "stamina_effect")
-								If (Not JsonIsNull(Temp)) Then me\StaminaEffect = JsonGetFloat(Temp) ^ SelectedItem\State
-								Temp = JsonGetValue(Drink, "stamina_timer")
-								If (Not JsonIsNull(Temp)) Then me\StaminaEffectTimer = JsonGetFloat(Temp) * SelectedItem\State
-								
-								it.Items = CreateItem("Empty Cup", it_emptycup, 0.0, 0.0, 0.0)
-								it\Picked = True
-								For i = 0 To MaxItemAmount - 1
-									If Inventory(i) = SelectedItem
-										Inventory(i) = it
-										Exit
-									EndIf
-								Next
-								EntityType(it\Collider, HIT_ITEM)
-								
-								RemoveItem(SelectedItem)
 							Else
 								CreateMsg(JsonGetString(JsonGetValue(Drink, "refuse_message")))
 								SelectedItem = Null
 							EndIf
+						Else
+							CreateMsg(GetLocalString("msg", "cup.unknown"))
+							RemoveItem(SelectedItem)
 						EndIf
 					EndIf
 					;[End Block]
@@ -5115,8 +5163,7 @@ Function UpdateGUI%()
 				Case it_radio, it_18vradio, it_fineradio, it_veryfineradio
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img)
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5465,8 +5512,7 @@ Function UpdateGUI%()
 				Case it_nav, it_nav310, it_navulti, it_nav300
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5596,8 +5642,7 @@ Function UpdateGUI%()
 				Case it_ticket
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5610,11 +5655,10 @@ Function UpdateGUI%()
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case it_badge, it_burntbadge
+				Case it_badge, it_burntbadge, it_harnbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
@@ -5628,8 +5672,7 @@ Function UpdateGUI%()
 				Case it_oldbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -5645,8 +5688,7 @@ Function UpdateGUI%()
 				Case it_oldpaper
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
@@ -5713,12 +5755,14 @@ Function UpdateGUI%()
 							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = Null
 									Inventory(i) = CreateItem("SCP-500-01", it_scp500pill, 0.0, 0.0, 0.0)
+									; ~ Do not use PickItem(Inventory(i)) here
 									Inventory(i)\Picked = True
 									Inventory(i)\Dropped = -1
 									Inventory(i)\ItemTemplate\Found = True
 									HideEntity(Inventory(i)\Collider)
 									EntityType(Inventory(i)\Collider, HIT_ITEM)
 									EntityParent(Inventory(i)\Collider, 0)
+									ItemAmount = ItemAmount + 1
 									Exit
 								EndIf
 							Next
@@ -5739,7 +5783,7 @@ Function UpdateGUI%()
 					Use1123()
 					SelectedItem = Null
 					;[End Block]
-				Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard, it_paper
+				Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard, it_paper
 					;[Block]
 					; ~ Skip this line
 					;[End Block]
@@ -6241,8 +6285,7 @@ Function RenderGUI%()
 	If PD_event <> Null And PD_event\room = PlayerRoom ; ~ TODO: Check if PD_event <> Null really needed!
 		If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And PD_event\EventState2 <> PD_FakeTunnelRoom
 			If PD_event\Img = 0
-				PD_event\Img = LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png")
-				PD_event\Img = ScaleImage2(PD_event\Img, MenuScale, MenuScale)
+				PD_event\Img = ScaleImageEx(LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png"), MenuScale, MenuScale)
 			Else
 				DrawBlock(PD_event\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 			EndIf
@@ -6250,8 +6293,7 @@ Function RenderGUI%()
 			If PD_event\EventState2 = PD_ThroneRoom
 				If me\BlinkTimer > -16.0 And me\BlinkTimer < -6.0
 					If PD_event\Img2 = 0
-						PD_event\Img2 = LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png")
-						PD_event\Img2 = ScaleImage2(PD_event\Img2, MenuScale, MenuScale)
+						PD_event\Img2 = ScaleImageEx(LoadImage_Strict("GFX\Overlays\kneel_mortal_overlay.png"), MenuScale, MenuScale)
 					Else
 						DrawBlock(PD_event\Img2, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 					EndIf
@@ -6264,8 +6306,7 @@ Function RenderGUI%()
 				me\BlinkTimer = -10.0
 				If (Not scribe_event\Img)
 					PlaySound_Strict(snd_I\HorrorSFX[11])
-					scribe_event\Img = LoadImage_Strict("GFX\Overlays\scp_012_overlay.png")
-					scribe_event\Img = ScaleImage2(scribe_event\Img, MenuScale, MenuScale)
+					scribe_event\Img = ScaleImageEx(LoadImage_Strict("GFX\Overlays\scp_012_overlay.png"), MenuScale, MenuScale)
 				Else
 					DrawBlock(scribe_event\Img, mo\Viewport_Center_X - (Rand(310, 390) * MenuScale), mo\Viewport_Center_Y - (Rand(290, 310) * MenuScale))
 				EndIf
@@ -6304,7 +6345,7 @@ Function RenderGUI%()
 			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
 			Local ButtonPosZ# = EntityZ(d_I\ClosestButton, True)
 			
-			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\GraphicWidth / opt\GraphicHeight)) / 2.0))
 			Pvt = CreatePivot()
 			PositionEntity(Pvt, ButtonPosX, ButtonPosY, ButtonPosZ)
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
@@ -6707,7 +6748,7 @@ Function RenderGUI%()
 					
 					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
-				Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard
+				Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					;[End Block]
@@ -6736,11 +6777,10 @@ Function RenderGUI%()
 				Case it_paper, it_oldpaper
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						Select SelectedItem\ItemTemplate\Name
 							Case "Burnt Note" 
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(0, 0, 0)
 								SetFontEx(fo\FontID[Font_Default])
@@ -6749,9 +6789,6 @@ Function RenderGUI%()
 								;[End Block]
 							Case "Unknown Note"
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
-								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(50, 50, 50)
 								SetFontEx(fo\FontID[Font_Journal])
@@ -6760,19 +6797,11 @@ Function RenderGUI%()
 								;[End Block]
 							Case "Document SCP-372"
 								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
-								
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
 								Color(37, 45, 137)
 								SetFontEx(fo\FontID[Font_Journal])
 								TextEx(383 * MenuScale, 734 * MenuScale, CODE_MAINTENANCE_TUNNELS, True, True)
 								SetBuffer(BackBuffer())
-								;[End Block]
-							Default 
-								;[Block]
-								SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-								SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
 								;[End Block]
 						End Select
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
@@ -6784,8 +6813,7 @@ Function RenderGUI%()
 				Case it_scp1025
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png")
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png"), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
@@ -6799,8 +6827,7 @@ Function RenderGUI%()
 					; ~ RadioState[7] = Another timer for the "code channel"
 					
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img)
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -6881,8 +6908,7 @@ Function RenderGUI%()
 				Case it_nav, it_nav300, it_nav310, it_navulti
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -7017,11 +7043,10 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case it_badge, it_burntbadge
+				Case it_badge, it_burntbadge, it_harnbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						AdaptScreenGamma()
@@ -7031,8 +7056,7 @@ Function RenderGUI%()
 				Case it_oldbadge, it_ticket
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath)
-						SelectedItem\ItemTemplate\Img = ScaleImage2(SelectedItem\ItemTemplate\Img, MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
@@ -7188,7 +7212,7 @@ Function UpdateMenu%()
 						
 						opt\CurrFOV = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0
 						opt\FOV = opt\CurrFOV + 40
-						CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\RealGraphicWidth / opt\RealGraphicHeight)) / 2.0))
+						CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * opt\GraphicWidth / opt\GraphicHeight)) / 2.0))
 						
 						y = y + (45 * MenuScale)
 						
@@ -8142,7 +8166,7 @@ Function RenderMenu%()
 			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
 			
 			If SelectedCustomMap = Null
-				TempStr = Format(GetLocalString("menu", "new.seed"), RandomSeed)
+				TempStr = Format(GetLocalString("menu", "new.seed2"), RandomSeed)
 			Else
 				If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15
 					TempStr = Format(GetLocalString("menu", "new.map"), Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..")
@@ -8176,7 +8200,6 @@ Const Ending_B2% = 3
 ;[End Block]
 
 Function UpdateEnding%()
-	
 	fps\Factor[0] = 0.0
 	If me\EndingTimer > -2000.0
 		me\EndingTimer = Max(me\EndingTimer - fps\Factor[1], -1111.0)
@@ -8187,18 +8210,11 @@ Function UpdateEnding%()
 	GiveAchievement("055")
 	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedCustomMap = Null
 		GiveAchievement("console")
-		Select SelectedDifficulty\Name
-			Case difficulties[KETER]\Name
-				;[Block]
-				GiveAchievement("keter")
-				SaveAchievementsFile()
-				;[End Block]
-			Case difficulties[APOLLYON]\Name
-				;[Block]
-				GiveAchievement("apollyon")
-				SaveAchievementsFile()
-				;[End Block]
-		End Select
+		If SelectedDifficulty\Name = difficulties[KETER]\Name Lor SelectedDifficulty\Name = difficulties[APOLLYON]\Name
+			GiveAchievement("keter")
+			If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Then GiveAchievement("apollyon")
+			SaveAchievementsFile()
+		EndIf
 	EndIf
 	
 	ShouldPlay = 66
@@ -8207,8 +8223,7 @@ Function UpdateEnding%()
 		StopBreathSound() : me\Stamina = 100.0
 		
 		If me\EndingScreen = 0
-			me\EndingScreen = LoadImage_Strict("GFX\Menu\ending_screen.png")
-			me\EndingScreen = ScaleImage2(me\EndingScreen, MenuScale, MenuScale)
+			me\EndingScreen = ScaleImageEx(LoadImage_Strict("GFX\Menu\ending_screen.png"), MenuScale, MenuScale)
 			
 			ShouldPlay = 22
 			opt\CurrMusicVolume = opt\MusicVolume
@@ -8392,10 +8407,7 @@ Function InitCredits%()
 	fo\FontID[Font_Credits] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits", "File"), GetFileLocalString(FontsFile, "Credits", "Size"))
 	fo\FontID[Font_Credits_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits_Big", "File"), GetFileLocalString(FontsFile, "Credits_Big", "Size"))
 	
-	If me\CreditsScreen = 0
-		me\CreditsScreen = LoadImage_Strict("GFX\Menu\credits_screen.png")
-		me\CreditsScreen = ScaleImage2(me\CreditsScreen, MenuScale, MenuScale)
-	EndIf
+	If me\CreditsScreen = 0 Then me\CreditsScreen = ScaleImageEx(LoadImage_Strict("GFX\Menu\credits_screen.png"), MenuScale, MenuScale)
 	
 	Repeat
 		l = ReadLine(File)
@@ -8536,7 +8548,6 @@ Function UpdateMTF%()
 					For i = 0 To 2
 						CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.28, EntityZ(entrance\RoomCenter, True))
 					Next
-					If i = 0 Then n_I\MTFLeader = n
 				EndIf
 			EndIf
 		EndIf
@@ -8874,7 +8885,7 @@ Function Update008%()
 					me\Bloodloss = 0.0
 					me\Playable = True
 					
-					Animate2(PlayerRoom\NPC[0]\OBJ, AnimTime(PlayerRoom\NPC[0]\OBJ), 357.0, 381.0, 0.3)
+					AnimateNPC(PlayerRoom\NPC[0], 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
 					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
 					me\BlurTimer = 950.0
@@ -8944,11 +8955,16 @@ Global I_268.SCP268
 Function Update268%()
     If I_268\Using > 1
 		I_268\InvisibilityOn = (I_268\Timer > 0.0)
+		
+		Local Factor268# 
+		
 		If I_268\Using = 3 
-            I_268\Timer = Max(I_268\Timer - ((fps\Factor[0] / 2.0) * (1.0 + I_714\Using)), 0.0)
-        Else
-            I_268\Timer = Max(I_268\Timer - (fps\Factor[0] * (1.0 + I_714\Using)), 0.0)
-        EndIf
+			Factor268 = (fps\Factor[0] / 2.0) * (1.0 + I_714\Using)
+		Else
+			Factor268 = fps\Factor[0] * (1.0 + I_714\Using)
+		EndIf
+		I_268\Timer = Max(I_268\Timer - Factor268, 0.0)
+		If I_268\Timer >= 1.0 And I_268\Timer - Factor268 < 1.0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
     Else
         I_268\Timer = Min(I_268\Timer + fps\Factor[0], 700.0)
 		I_268\InvisibilityOn = False
@@ -9315,6 +9331,7 @@ Function Update294%()
 								Temp = True
 								;[End Block]
 						End Select
+						;[End Block]
 					Case 3
 						;[Block]
 						Select Int(xTemp)
@@ -9359,6 +9376,7 @@ Function Update294%()
 								I_294\ToInput = Left(I_294\ToInput, Max(Len(I_294\ToInput) - 1, 0))
 								;[End Block]
 						End Select
+						;[End Block]
 					Case 4
 						;[Block]
 						StrTemp = " "
@@ -9389,14 +9407,10 @@ Function Update294%()
 						If ItemAmount < MaxItemAmount
 							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = Null
-									Inventory(i) = CreateItem("Mastercard", it_mastercard, 1.0, 1.0, 1.0)
-									Inventory(i)\Picked = True
-									Inventory(i)\Dropped = -1
-									Inventory(i)\ItemTemplate\Found = True
+									Inventory(i) = CreateItem("Mastercard", it_mastercard, 0.0, 0.0, 0.0)
 									Inventory(i)\State = me\CurrFunds
-									HideEntity(Inventory(i)\Collider)
 									EntityType(Inventory(i)\Collider, HIT_ITEM)
-									EntityParent(Inventory(i)\Collider, 0)
+									PickItem(Inventory(i), False)
 									Exit
 								EndIf
 							Next
@@ -9426,7 +9440,7 @@ Function Update294%()
 					EndIf
 					
 					it.Items = CreateItem("Cup", it_cup, EntityX(PlayerRoom\Objects[2], True), EntityY(PlayerRoom\Objects[2], True), EntityZ(PlayerRoom\Objects[2], True), JsonGetInt(JsonGetArrayValue(DrinkColor, 0)), JsonGetInt(JsonGetArrayValue(DrinkColor, 1)), JsonGetInt(JsonGetArrayValue(DrinkColor, 2)), Alpha)
-					it\Name = Drink
+					it\Name = I_294\ToInput
 					it\DisplayName = Format(GetLocalString("items", "cupof"), I_294\ToInput)
 					EntityType(it\Collider, HIT_ITEM)
 				Else
@@ -9517,6 +9531,7 @@ Function Update1025%()
 					If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then me\Stamina = me\Stamina - (Factor1025 * 0.3)
 					;[End Block]
 				Case 3 ; ~ Appendicitis
+					;[Block]
 					; ~ 0.035 / sec = 2.1 / min
 					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.0005)
 					If I_1025\State[i] > 20.0
@@ -9642,7 +9657,6 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	FreeEntity(Pvt) : Pvt = 0
 	ResetEntity(Entity)
 End Function
-
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

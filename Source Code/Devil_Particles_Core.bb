@@ -5,7 +5,6 @@
 ;
 ; ~ This file also has been modified a bit to suit better for SCP:CB
 
-
 Type Template
 	Field EmitterMaxTime%											; ~ Emitter life time
 	Field EmitterBlend%												; ~ Blendmode of emitter entity
@@ -379,7 +378,7 @@ Function UpdateParticles_Devil()
 			Select emit\State
 				Case 1
 					;[Block]
-					emit\SoundCHN = LoopSound2(snd_I\HissSFX[0], emit\SoundCHN, Camera, emit\Owner)
+					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[0], emit\SoundCHN, Camera, emit\Owner)
 					If (Not InSmoke)
 						If wi\GasMask = 0 And wi\HazmatSuit = 0
 							If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64
@@ -390,7 +389,7 @@ Function UpdateParticles_Devil()
 					;[End Block]
 				Case 2, 3
 					;[Block]
-					emit\SoundCHN = LoopSound2(snd_I\HissSFX[1], emit\SoundCHN, Camera, emit\Owner, 5.0 - (3.0 * (emit\State = 3.0)), 1.0 - (0.6 * (emit\State = 3.0)))
+					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[1], emit\SoundCHN, Camera, emit\Owner, 5.0 - (3.0 * (emit\State = 3.0)), 1.0 - (0.6 * (emit\State = 3.0)))
 					;[End Block]
 			End Select
 		EndIf

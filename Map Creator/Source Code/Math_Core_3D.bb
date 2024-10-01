@@ -58,4 +58,5 @@ Function GetMeshExtents%(Mesh%)
 End Function
 
 ;~IDEal Editor Parameters:
+;~F#0#B#13
 ;~C#Blitz3D TSS

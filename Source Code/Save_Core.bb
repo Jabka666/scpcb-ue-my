@@ -30,6 +30,7 @@ Function SaveGame%(File$)
 		WriteByte(f, 1)
 		WriteString(f, SelectedCustomMap\Name)
 	EndIf
+	WriteString(f, SelectedDifficulty\Name)
 	
 	WriteInt(f, CODE_DR_MAYNARD)
 	WriteInt(f, CODE_O5_COUNCIL)
@@ -549,9 +550,10 @@ Function LoadGame%(File$)
 	ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError2(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
+	ReadString(f)
 	ReadString(f)
 	
 	CODE_DR_MAYNARD = ReadInt(f)
@@ -690,7 +692,7 @@ Function LoadGame%(File$)
 	RemoteDoorOn = ReadByte(f)
 	
 	SoundTransmission = ReadByte(f)
-
+	
 	Repeat
 		Local Achv$ = ReadString(f)
 		
@@ -713,7 +715,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError2(GetLocalString("save", "corrupted_1"))
+	If ReadInt(f) <> 113 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
 	
 ;	For n.NPCs = Each NPCs
 ;		RemoveNPC(n)
@@ -806,9 +808,6 @@ Function LoadGame%(File$)
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\NPCType = NPCTypeMTF
-			If (Not n\IsDead) And n_I\MTFLeader = Null Then n_I\MTFLeader = n
-		EndIf
 		If n\TargetID <> 0
 			Local n2.NPCs
 			
@@ -820,7 +819,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError2(GetLocalString("save", "corrupted_2"))
+	If ReadInt(f) <> 632 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -962,7 +961,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError2(GetLocalString("save", "corrupted_3"))
+	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1041,8 +1040,8 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
+	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
+	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	Temp = ReadInt(f)
 	
@@ -1122,7 +1121,7 @@ Function LoadGame%(File$)
 	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
 	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
-	If ReadInt(f) <> 1845 Then RuntimeError2(GetLocalString("save", "corrupted_4"))
+	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -1456,9 +1455,10 @@ Function LoadGameQuick%(File$)
 	ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeError2(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
+	ReadString(f)
 	ReadString(f)
 	
 	me\DropSpeed = -0.1
@@ -1635,7 +1635,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeError2(GetLocalString("save", "corrupted_1"))
+	If ReadInt(f) <> 113 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1728,9 +1728,6 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	For n.NPCs = Each NPCs
-		If n\NPCType = NPCTypeMTF
-			If (Not n\IsDead) And n_I\MTFLeader = Null Then n_I\MTFLeader = n
-		EndIf
 		If n\TargetID <> 0
 			Local n2.NPCs
 			
@@ -1742,7 +1739,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeError2(GetLocalString("save", "corrupted_2"))
+	If ReadInt(f) <> 632 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
@@ -1861,10 +1858,10 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeError2(GetLocalString("save", "corrupted_3"))
+	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
 	
-	Local TexDefault% = LoadTexture_Strict("GFX\map\Textures\Door01_Corrosive.png")
-	Local TexHeavy% = LoadTexture_Strict("GFX\map\Textures\containment_doors_Corrosive.png")
+	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
+	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	Temp = ReadInt(f)
 	
@@ -1944,7 +1941,7 @@ Function LoadGameQuick%(File$)
 	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
 	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
-	If ReadInt(f) <> 1845 Then RuntimeError2(GetLocalString("save", "corrupted_4"))
+	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -2072,7 +2069,7 @@ Function LoadGameQuick%(File$)
 			Case e_cont2_1123
 				;[Block]
 				If e\room\Objects[7] = 0
-					e\room\Objects[7] = LoadRMesh("GFX\map\cont2_1123_cell.rmesh", Null)
+					e\room\Objects[7] = LoadRMesh("GFX\Map\cont2_1123_cell.rmesh", Null)
 					ScaleEntity(e\room\Objects[7], RoomScale, RoomScale, RoomScale)
 					PositionEntity(e\room\Objects[7], e\room\x, e\room\y, e\room\z)
 					RotateEntity(e\room\Objects[7], 0.0, e\room\Angle, 0.0)
@@ -2208,6 +2205,8 @@ Function LoadGameQuick%(File$)
 	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
 	
 	CloseFile(f)
+	
+	CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
 	
 	UpdateLightsTimer = 0.0
 	
@@ -2357,6 +2356,7 @@ Type Save
 	Field Date$
 	Field Version$
 	Field Seed$
+	Field Difficulty$
 End Type
 
 Global CurrSave.Save
@@ -2373,7 +2373,7 @@ Function LoadSavedGames%()
 	Next
 	SavedGamesAmount = 0
 	
-	If FileType(SavePath) = 1 Then RuntimeError2(Format(GetLocalString("save", "cantcreatedir"), SavePath))
+	If FileType(SavePath) = 1 Then RuntimeErrorEx(Format(GetLocalString("save", "cantcreatedir"), SavePath))
 	If FileType(SavePath) = 0 Then CreateDir(SavePath)
 	
 	Local SaveDir% = ReadDir(SavePath)
@@ -2397,6 +2397,7 @@ Function LoadSavedGames%()
 			Else
 				newsv\Seed = "mc_" + ReadString(f)
 			EndIf
+			newsv\Difficulty = ReadString(f)
 			
 			CloseFile(f)
 			SavedGamesAmount = SavedGamesAmount + 1
@@ -2451,7 +2452,7 @@ Function LoadCustomMaps%()
 	Next
 	CustomMapsAmount = 0
 	
-	If FileType(CustomMapsPath) = 1 Then RuntimeError2(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
+	If FileType(CustomMapsPath) = 1 Then RuntimeErrorEx(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
 	If FileType(CustomMapsPath) = 0 Then CreateDir(CustomMapsPath)
 	
 	Local MapDir% = ReadDir(CustomMapsPath)
