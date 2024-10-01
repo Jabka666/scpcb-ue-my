@@ -7101,17 +7101,21 @@ Function Shoot%(x#, y#, z#, Parent%, HitProb# = 1.0, Particles% = True, InstaKil
 			PlaySoundEx(snd_I\BulletMissSFX, Camera, Pvt, 0.4, Rnd(0.8, 1.0))
 			
 			If Particles
-				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PickedX(), PickedY(), PickedZ(), 0.03, 0.0, 80.0)
+				Local PX# = PickedX()
+				Local PY# = PickedY()
+				Local PZ# = PickedZ()
+				
+				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.03, 0.0, 80.0)
 				p\Speed = 0.001 : p\SizeChange = 0.003 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
 				
 				For i = 0 To Rand(2, 3)
-					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PickedX(), PickedY(), PickedZ(), 0.006, 0.003, 80.0)
+					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.006, 0.003, 80.0)
 					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0.0)
 				Next
 				
-				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
+				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PX, PY + Rnd(-0.05, 0.05), PZ, Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
 				de\LifeTime = 70.0 * 20.0
 				AlignToVector(de\OBJ, -PickedNX(), -PickedNY(), -PickedNZ(), 3)
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
