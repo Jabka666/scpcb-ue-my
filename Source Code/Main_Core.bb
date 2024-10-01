@@ -5760,7 +5760,6 @@ Function UpdateGUI%()
 									Inventory(i)\ItemTemplate\Found = True
 									HideEntity(Inventory(i)\Collider)
 									EntityType(Inventory(i)\Collider, HIT_ITEM)
-									EntityParent(Inventory(i)\Collider, 0)
 									ItemAmount = ItemAmount + 1
 									Exit
 								EndIf

@@ -2693,12 +2693,11 @@ Function InitNewGame%()
 			TFormPoint(3584.0, 640.0, 3096.0, r\OBJ, 0)
 			PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ())
 			PlayerRoom = r
-			it.Items = CreateItem("Class D Orientation Leaflet", it_paper, 1.0, 1.0, 1.0)
+			it.Items = CreateItem("Class D Orientation Leaflet", it_paper, 0.0, 0.0, 0.0)
 			it\Picked = True : it\Dropped = -1 : it\ItemTemplate\Found = True
 			Inventory(0) = it
 			HideEntity(it\Collider)
 			EntityType(it\Collider, HIT_ITEM)
-			EntityParent(it\Collider, 0)
 			ItemAmount = ItemAmount + 1
 		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
 			TFormPoint(-4096.0 * RoomScale, 0.0, 0.0, r\OBJ, 0)

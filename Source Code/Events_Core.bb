@@ -3446,7 +3446,6 @@ Function UpdateEvents%()
 								it\SecondInv[i] = it2
 								HideEntity(it2\Collider)
 								EntityType(it2\Collider, HIT_ITEM)
-								EntityParent(it2\Collider, 0)
 							Next
 							RemoveEvent(e)
 						EndIf

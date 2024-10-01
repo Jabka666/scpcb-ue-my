@@ -1798,10 +1798,9 @@ Function FillRoom%(r.Rooms)
 			SetAnimTime(it\OBJ, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it2.Items = CreateItem("Document SCP-1048", it_paper, 1.0, 1.0, 1.0)
+			it2.Items = CreateItem("Document SCP-1048", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
-			EntityParent(it2\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_checkpoint_lcz_hcz
 			;[Block]
@@ -2784,13 +2783,11 @@ Function FillRoom%(r.Rooms)
 			it2\Picked = True : it2\Dropped = -1 : it2\State = Rand(0, 6)
 			it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
-			EntityParent(it2\Collider, 0)
 			
 			it2.Items = CreateItem("Asav Harn's Badge", it_harnbadge, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1
 			it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
-			EntityParent(it2\Collider, 0)
 			;[End Block]
 		Case r_cont3_966
 			;[Block]
