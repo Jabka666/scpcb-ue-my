@@ -7295,7 +7295,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCTypeApache, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "apache"))
 			;[End Block]
-		Case "tentacle", "scp035tentacle", "scp-035tentacle", "scp-035-tentacle", "scp035-tentacle"
+		Case "tentacle", "035tentacle", "scp035tentacle", "scp-035tentacle", "scp-035-tentacle", "scp035-tentacle"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType035_Tentacle, EntityX(me\Collider), EntityY(me\Collider) - 0.12, EntityZ(me\Collider))
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "tentacle"))
