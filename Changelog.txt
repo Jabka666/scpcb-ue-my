@@ -19,6 +19,7 @@
 - Added new message for cups.
 - Added new drink.
 - Added bloody texture for Level 3 Key Card.
+- Eyedrops can restore your blink.
 
 [NPCs]
 - Changed SCP-173's box model.

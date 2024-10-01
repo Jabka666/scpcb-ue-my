@@ -4902,6 +4902,8 @@ Function UpdateGUI%()
 						me\BlinkEffect = 0.6
 						me\BlinkEffectTimer = Rnd(25.0, 35.0)
 						me\BlurTimer = 200.0
+						me\BlinkTimer = Min(me\BlinkTimer + (me\BLINKFREQ / 2.0), me\BLINKFREQ)
+						
 						If SelectedItem\ItemTemplate\ID = it_eyedrops2 Then me\Bloodloss = Max(me\Bloodloss - Rnd(5.0, 10.0), 0.0)
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
@@ -4915,6 +4917,7 @@ Function UpdateGUI%()
 						me\BlinkEffect = 0.4
 						me\BlinkEffectTimer = Rnd(35.0, 45.0)
 						me\BlurTimer = 200.0
+						me\BlinkTimer = me\BLINKFREQ
 						
 						CreateMsg(GetLocalString("msg", "eyedrop.moisturized.very"))
 						
