@@ -5585,21 +5585,21 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 14.0
 								;[Block]
+								Temp = False
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null
 										If Inventory(i)\ItemTemplate\ID = it_paper
 											RemoveItem(Inventory(i))
-											Inventory(i) = CreateItem("Document SCP-" + GetRandDocument(), it_paper, 0.0, 0.0, 0.0)
-											Inventory(i)\Dropped = -1
-											Inventory(i)\Picked = True
-											Inventory(i)\ItemTemplate\Found = True
-											EntityType(Inventory(i)\Collider, HIT_ITEM)
-											HideEntity(Inventory(i)\Collider)
-											ItemAmount = ItemAmount + 1
+											Temp = True
 											Exit
 										EndIf
 									EndIf
 								Next
+								If Temp
+									it.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, 0.0, 0.0, 0.0)
+									EntityType(it\Collider, HIT_ITEM)
+									PickItem(it, False)
+								EndIf
 								;[End Block]
 							Case 18.0
 								;[Block]
@@ -5622,13 +5622,9 @@ Function UpdateEvents%()
 									RemoveWearableItems(Inventory(i))
 									RemoveItem(Inventory(i))
 								EndIf
-								Inventory(i) = CreateItem("Strange Note", it_paper, 0.0, 0.0, 0.0)
-								Inventory(i)\Dropped = -1
-								Inventory(i)\Picked = True
-								Inventory(i)\ItemTemplate\Found = True
-								EntityType(Inventory(i)\Collider, HIT_ITEM)
-								HideEntity(Inventory(i)\Collider)
-								ItemAmount = ItemAmount + 1
+								it.Items = CreateItem("Strange Note", it_paper, 0.0, 0.0, 0.0)
+								EntityType(it\Collider, HIT_ITEM)
+								PickItem(it, False)
 								;[End Block]
 							Case 35.0
 								;[Block]

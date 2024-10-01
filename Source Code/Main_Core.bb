@@ -2541,9 +2541,9 @@ Function RefillCup%()
 					If EmptyCup <> Null
 						RemoveItem(EmptyCup)
 						EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200, 0.2)
-						EntityType(EmptyCup\Collider, HIT_ITEM)
 						EmptyCup\Name = "WATER"
 						EmptyCup\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+						EntityType(EmptyCup\Collider, HIT_ITEM)
 						PickItem(EmptyCup)
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
 						CreateMsg(GetLocalString("msg", "refill"))
@@ -5749,19 +5749,10 @@ Function UpdateGUI%()
 					;[Block]
 					If I_500\Taken < Rand(20)
 						If ItemAmount < MaxItemAmount
-							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) = Null
-									Inventory(i) = CreateItem("SCP-500-01", it_scp500pill, 0.0, 0.0, 0.0)
-									; ~ Do not use PickItem(Inventory(i)) here
-									Inventory(i)\Picked = True
-									Inventory(i)\Dropped = -1
-									Inventory(i)\ItemTemplate\Found = True
-									HideEntity(Inventory(i)\Collider)
-									EntityType(Inventory(i)\Collider, HIT_ITEM)
-									ItemAmount = ItemAmount + 1
-									Exit
-								EndIf
-							Next
+							it.Items = CreateItem("SCP-500-01", it_scp500pill, 0.0, 0.0, 0.0)
+							EntityType(it\Collider, HIT_ITEM)
+							PickItem(it, False)
+							
 							CreateMsg(GetLocalString("msg", "500"))
 							PlaySound_Strict(LoadTempSound("SFX\SCP\500\OpenBottle.ogg"))
 							I_500\Taken = I_500\Taken + 1
