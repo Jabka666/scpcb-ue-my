@@ -594,27 +594,21 @@ Function UpdateItems%()
 		DeletedItem = False
 	Next
 	
-	If ClosestItem <> Null
-		If mo\MouseHit1 Then PickItem(ClosestItem)
+	If (Not InvOpen) And OtherOpen = Null
+		If ClosestItem <> Null
+			If mo\MouseHit1 Then PickItem(ClosestItem)
+		EndIf
 	EndIf
 End Function
 
 Function PickItem%(item.Items, PlayPickUpSound% = True)
-	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
+	If MenuOpen Lor ConsoleOpen Lor I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
 	
 	CatchErrors("PickItem()")
 	
-	Local n% = 0, z% = 0
-	Local FullINV% = True
+	Local n%, z%
 	
-	For n = 0 To MaxItemAmount - 1
-		If Inventory(n) = Null
-			FullINV = False
-			Exit
-		EndIf
-	Next
-	
-	If (Not FullINV)
+	If ItemAmount < MaxItemAmount
 		Local CanPickItem% = 1
 		
 		For n = 0 To MaxItemAmount - 1
@@ -743,9 +737,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	Local n%
 	Local CameraYaw# = EntityYaw(Camera)
 	
-	If PlayDropSound
-		If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
-	EndIf
+	If item\ItemTemplate\SoundID <> 66 And PlayDropSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 	
 	item\Dropped = 1
 	
@@ -764,10 +756,10 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = item
 			Inventory(n) = Null
+			ItemAmount = ItemAmount - 1
 			Exit
 		EndIf
 	Next
-	ItemAmount = ItemAmount - 1
 	me\SndVolume = Max(2.0, me\SndVolume)
 	
 	CatchErrors("Uncaught: DropItem()")

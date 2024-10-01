@@ -3579,7 +3579,6 @@ Function UpdateGUI%()
 		x = mo\Viewport_Center_X - ((INVENTORY_GFX_SIZE * 10 / 2) + (INVENTORY_GFX_SPACING * ((10 / 2) - 1))) / 2
 		y = mo\Viewport_Center_Y - (INVENTORY_GFX_SIZE * ((OtherSize / 10 * 2) - 1)) - INVENTORY_GFX_SPACING
 		
-		ItemAmount = 0
 		IsMouseOn = -1
 		For n = 0 To OtherSize - 1
 			If MouseOn(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE) Then IsMouseOn = n
@@ -3608,7 +3607,6 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 				EndIf
-				ItemAmount = ItemAmount + 1
 			Else
 				If IsMouseOn = n And mo\MouseHit1
 					For z = 0 To OtherSize - 1
@@ -3745,7 +3743,6 @@ Function UpdateGUI%()
 			x = x - ((INVENTORY_GFX_SIZE * MaxItemAmountHalf) + INVENTORY_GFX_SPACING) / 2
 		EndIf
 		
-		ItemAmount = 0
 		IsMouseOn = -1
 		For n = 0 To MaxItemAmount - 1
 			If MouseOn(x, y, INVENTORY_GFX_SIZE, INVENTORY_GFX_SIZE) Then IsMouseOn = n
@@ -3765,7 +3762,6 @@ Function UpdateGUI%()
 						EndIf
 					EndIf
 				EndIf
-				ItemAmount = ItemAmount + 1
 			Else
 				If IsMouseOn = n And mo\MouseHit1
 					For z = 0 To MaxItemAmount - 1
@@ -3921,6 +3917,7 @@ Function UpdateGUI%()
 													For ri = 0 To MaxItemAmount - 1
 														If Inventory(ri) = SelectedItem
 															Inventory(ri) = Null
+															ItemAmount = ItemAmount - 1
 															PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 															Exit
 														EndIf
@@ -3978,6 +3975,7 @@ Function UpdateGUI%()
 													For ri = 0 To MaxItemAmount - 1
 														If Inventory(ri) = SelectedItem
 															Inventory(ri) = Null
+															ItemAmount = ItemAmount - 1
 															PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 															Exit
 														EndIf
