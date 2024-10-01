@@ -3,6 +3,7 @@
 [General]
 - Added new sound for SCP-008.
 - Added «spawncup/givecup» console command.
+- Reduced SCP-106's spawnrate when using SCP-914 from 2.5x to 2.0x. (4.5x to 4.0x on «AggressiveNPCs»)
 
 - Optimized the game...
 
