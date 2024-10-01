@@ -2744,9 +2744,9 @@ Function UpdateMoving%()
 				If (Not me\Zombie)
 					If (Not KeyDown(key\SPRINT)) And (Not InvOpen) And OtherOpen = Null
 						If KeyDown(key\LEAN_LEFT)
-							If (Not KeyDown(key\LEAN_RIGHT)) Then me\Lean = CurveValue(-20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
+							If (Not KeyDown(key\LEAN_RIGHT)) Then me\Lean = CurveValue(20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
 						ElseIf KeyDown(key\LEAN_RIGHT)
-							me\Lean = CurveValue(20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
+							me\Lean = CurveValue(-20.0, me\Lean, 6.0 + (6.0 * (me\Injuries > 3.0)))
 						EndIf
 					EndIf
 					
@@ -7401,11 +7401,11 @@ Function UpdateMenu%()
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_LEFT, 210)], Font_Default, 15)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_LEFT, 210)], Font_Default, 14)
 						
 						y = y + (20 * MenuScale)
 						
-						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_RIGHT, 210)], Font_Default, 14)
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\LEAN_RIGHT, 210)], Font_Default, 15)
 						
 						If opt\CanOpenConsole
 							y = y + (20 * MenuScale)
@@ -8200,7 +8200,6 @@ Const Ending_B2% = 3
 ;[End Block]
 
 Function UpdateEnding%()
-	
 	fps\Factor[0] = 0.0
 	If me\EndingTimer > -2000.0
 		me\EndingTimer = Max(me\EndingTimer - fps\Factor[1], -1111.0)
