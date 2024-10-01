@@ -6079,7 +6079,9 @@ Function RenderDebugHUD%()
 			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_2.playable"), me\Playable))
 			
 			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.refitems"), me\RefinedItems))
-			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
+			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.itemamount"), ItemAmount))
+			
+			TextEx(x, y + (440 * MenuScale), Format(GetLocalString("console", "debug_2.escape"), EscapeTimer))
 			;[End Block]
 		Case 3
 			;[Block]
