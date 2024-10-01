@@ -1,5 +1,8 @@
 {v1.3.3}
 
+[Items]
+- Changed model scale of some items.
+
 [Bug Fixes]
 - Fixed displaying of low battery message for NVG.
 
