@@ -2103,6 +2103,17 @@ Function UpdateNPCs%()
 								If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							
+							If Dist > PowTwo(HideDistance * 2.0)
+								If n\State3 < 70.0
+									n\State3 = n\State3 + fps\Factor[0]
+								ElseIf Rand(300 - (120 * SelectedDifficulty\AggressiveNPCs)) = 1
+									 TeleportCloser(n)
+									 n\State3 = 0.0
+								EndIf
+							Else
+								n\State3 = 0.0
+							EndIf
+							
 							If n\Target = Null
 								If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
 									n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
