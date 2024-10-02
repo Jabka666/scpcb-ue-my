@@ -3,11 +3,15 @@
 [Items]
 - Changed model scale of some items.
 
+[NPCs]
+- SCP-049-2 can teleport around the facility.
+
 [Bug Fixes]
 - Fixed displaying of low battery message for NVG.
 - Fixed a bug related to collision of cups obtained from water cooler.
 - Fixed a bug related to collision of items obtained in SCP-970 loop.
 - Fixed an inventory bug with incorrect calculation of the items amount.
+- Fixed SCP-008-1's teleportation.
 
 [Known issues]
 - Rooms can overlap and block the way.

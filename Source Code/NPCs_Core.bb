@@ -2103,6 +2103,17 @@ Function UpdateNPCs%()
 								If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							
+							If Dist > PowTwo(HideDistance * 2.0)
+								If n\State3 < 70.0
+									n\State3 = n\State3 + fps\Factor[0]
+								ElseIf Rand(300 - (120 * SelectedDifficulty\AggressiveNPCs)) = 1
+									 TeleportCloser(n)
+									 n\State3 = 0.0
+								EndIf
+							Else
+								n\State3 = 0.0
+							EndIf
+							
 							If n\Target = Null
 								If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
 									n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
@@ -4843,13 +4854,15 @@ Function UpdateNPCs%()
 								If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							
-							If Dist > PowTwo(HideDistance)
-								If n\State3 < 70.0 * (15.0 + (10.0 * SelectedDifficulty\AggressiveNPCs))
+							If Dist > PowTwo(HideDistance * 1.5)
+								If n\State3 < 70.0
 									n\State3 = n\State3 + fps\Factor[0]
-								Else
-									n\State3 = 70.0 * 360.0
-									n\State = 5.0
+								ElseIf Rand(150 - (60 * SelectedDifficulty\AggressiveNPCs)) = 1
+									 TeleportCloser(n)
+									 n\State3 = 0.0
 								EndIf
+							Else
+								n\State3 = 0.0
 							EndIf
 							
 							If n\Target = Null
@@ -4925,48 +4938,6 @@ Function UpdateNPCs%()
 								If n\Target\IsDead
 									n\Target = Null
 									n\State = 3.0
-								EndIf
-							EndIf
-							;[End Block]
-						Case 5.0 ; ~ Idling
-							;[Block]
-							If (Not EntityHidden(n\OBJ))
-								HideEntity(n\OBJ)
-								HideEntity(n\Collider)
-								n\DropSpeed = 0.0
-								PositionEntity(n\Collider, 0.0, -500.0, 0.0, True)
-								ResetEntity(n\Collider)
-							EndIf
-							If n\Idle > 0
-								n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.0)
-							Else
-								If PlayerInReachableRoom(True) ; ~ Player is in a room where SCP-008-1 can teleport to
-									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1
-										If EntityHidden(n\OBJ)
-											ShowEntity(n\OBJ)
-											ShowEntity(n\Collider)
-											For w.WayPoints = Each WayPoints
-												If w\door = Null And w\room\Dist < HideDistance And Rand(3) = 1
-													If EntityDistanceSquared(w\room\OBJ, n\Collider) < EntityDistanceSquared(me\Collider, n\Collider)
-														If DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider), EntityZ(w\OBJ, True), EntityZ(n\Collider)) < 144.0
-															If DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider), EntityZ(w\OBJ, True), EntityZ(n\Collider)) > 16.0
-																If w\room\Dist > 4.0
-																	PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True), True)
-																	ResetEntity(n\Collider)
-																	n\PathStatus = PATH_STATUS_NO_SEARCH
-																	n\PathTimer = 0.0
-																	n\PathLocation = 0
-																	Exit
-																EndIf
-															EndIf
-														EndIf
-													EndIf
-												EndIf
-											Next
-											n\State3 = 0.0
-											n\State = 3.0
-										EndIf
-									EndIf
 								EndIf
 							EndIf
 							;[End Block]
