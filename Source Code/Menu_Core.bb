@@ -2280,11 +2280,13 @@ Function RenderMenuPalettes%()
 		DrawImage(mp\Img, mp\x, mp\y)
 		If MouseOn(mp\x, mp\y, mp\Width, mp\Height)
 			If mo\MouseDown1 And OnSliderID = 0
-				LockBuffer(BackBuffer())
+				Local BufferBack% = BackBuffer()
 				
-				Local Pixel% = ReadPixelFast(MousePosX, MousePosY, BackBuffer())
+				LockBuffer(BufferBack)
 				
-				UnlockBuffer(BackBuffer())
+				Local Pixel% = ReadPixelFast(MousePosX, MousePosY, BufferBack)
+				
+				UnlockBuffer(BufferBack)
 				opt\SubColorR = ReadPixelColor(Pixel, 16)
 				opt\SubColorG = ReadPixelColor(Pixel, 8)
 				opt\SubColorB = ReadPixelColor(Pixel, 0)
