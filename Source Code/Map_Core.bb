@@ -2710,9 +2710,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	d\Open = Open
 	
 	; ~ Set "d\Locked = 1" for elevator doors to fix buttons color. Anyway the door will be unlocked by "UpdateElevators" function. -- Jabka
-	If DoorType = ELEVATOR_DOOR Then d\Locked = 1
 	d\DoorType = DoorType
-	If DoorType = SCP_914_DOOR Then DoorType = ONE_SIDED_DOOR
 	
 	d\MTFClose = True
 	d\AutoClose = (Open And ((DoorType = DEFAULT_DOOR) Lor (DoorType = HEAVY_DOOR)) And (Keycard = 0) And (Code = 0) And Rand(10) = 1)
@@ -2729,7 +2727,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
 			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
 			;[End Block]
-		Case ONE_SIDED_DOOR
+		Case ONE_SIDED_DOOR, SCP_914_DOOR
 			;[Block]
 			DoorModelID_1 = DOOR_ONE_SIDED_MODEL
 			DoorModelID_2 = DoorModelID_1
@@ -2746,6 +2744,8 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
 			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
+			
+			d\Locked = 1
 			;[End Block]
 		Case HEAVY_DOOR
 			;[Block]
@@ -2783,10 +2783,12 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			;[End Block]
 	End Select
 	
+	Local Temp% = (DoorType = BIG_DOOR)
+	
 	d\FrameOBJ = CopyEntity(d_I\DoorFrameModelID[FrameModelID])
 	ScaleEntity(d\FrameOBJ, FrameScaleX, FrameScaleY, FrameScaleZ)
 	PositionEntity(d\FrameOBJ, x, y, z)
-	If DoorType = BIG_DOOR Then EntityType(d\FrameOBJ, HIT_MAP)
+	If Temp Then EntityType(d\FrameOBJ, HIT_MAP)
 	EntityPickMode(d\FrameOBJ, 2)
 	
 	d\OBJ = CopyEntity(d_I\DoorModelID[DoorModelID_1])
@@ -2803,13 +2805,11 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 		d\OBJ2 = CopyEntity(d_I\DoorModelID[DoorModelID_2])
 		ScaleEntity(d\OBJ2, DoorScaleX, DoorScaleY, DoorScaleZ)
 		PositionEntity(d\OBJ2, x, y, z)
-		RotateEntity(d\OBJ2, 0.0, Angle + ((DoorType <> BIG_DOOR) * 180.0), 0.0)
+		RotateEntity(d\OBJ2, 0.0, Angle + ((Not Temp) * 180.0), 0.0)
 		EntityType(d\OBJ2, HIT_MAP)
 		EntityPickMode(d\OBJ2, 2)
 		EntityParent(d\OBJ2, Parent)
 	EndIf
-	
-	Local Temp% = (DoorType = BIG_DOOR)
 	
 	For i = 0 To 1
 		If OfficeWooden
