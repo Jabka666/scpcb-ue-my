@@ -319,7 +319,7 @@ Function UpdateGame%()
 					
 					If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 						me\Zone = 4
-					ElseIf forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+					ElseIf forest_event <> Null And forest_event\room = PlayerRoom
 						If forest_event\EventState = 1.0
 							me\Zone = 5
 							PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
@@ -3144,7 +3144,7 @@ Function UpdateZoneColor%()
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, me\CameraFogDist)
 		CameraRange(Camera, 0.01, 96.0) ; ~ me\CameraFogDist * 1.2
-	ElseIf PD_event <> Null And PD_event\room = PlayerRoom ; ~ TODO: Check if PD_event <> Null really needed!
+	ElseIf PD_event <> Null And PD_event\room = PlayerRoom
 		LightVolume = 1.0
 		If PD_event\EventState2 = PD_TrenchesRoom Lor PD_event\EventState2 = PD_TowerRoom
 			SetZoneColor(FogColorPDTrench)
@@ -3153,7 +3153,7 @@ Function UpdateZoneColor%()
 		Else
 			SetZoneColor(FogColorPD)
 		EndIf
-	ElseIf forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+	ElseIf forest_event <> Null And forest_event\room = PlayerRoom
 		If forest_event\EventState = 1.0
 			LightVolume = 1.0
 			SetZoneColor(FogColorForest)
@@ -3211,7 +3211,7 @@ Function UpdateZoneColor%()
 		Select wi\NightVision
 			Case 0
 				;[Block]
-				If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+				If forest_event <> Null And forest_event\room = PlayerRoom
 					If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
 				EndIf
 				;[End Block]
@@ -3328,7 +3328,7 @@ Function UpdateGUI%()
 	Local n%, xTemp%, yTemp%, StrTemp$
 	
 	; ~ TODO: Get rid of this as soon as possible. Currently optimized by making a variable instead of calling array
-	If PD_event <> Null And PD_event\room = PlayerRoom ; ~ TODO: Check if PD_event <> Null really needed!
+	If PD_event <> Null And PD_event\room = PlayerRoom
 		If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And PD_event\EventState2 <> PD_FakeTunnelRoom
 			If PD_event\Img2 <> 0
 				StopChannel(PD_event\SoundCHN)
@@ -6273,7 +6273,7 @@ Function RenderGUI%()
 	EndIf
 	
 	; ~ TODO: Get rid of this as soon as possible. Currently optimized by making a variable instead of calling array
-	If PD_event <> Null And PD_event\room = PlayerRoom ; ~ TODO: Check if PD_event <> Null really needed!
+	If PD_event <> Null And PD_event\room = PlayerRoom
 		If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And PD_event\EventState2 <> PD_FakeTunnelRoom
 			If PD_event\Img = 0
 				PD_event\Img = ScaleImageEx(LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png"), MenuScale, MenuScale)
@@ -6291,7 +6291,7 @@ Function RenderGUI%()
 				EndIf
 			EndIf
 		EndIf
-	ElseIf scribe_event <> Null And scribe_event\room = PlayerRoom ; ~ TODO: Check if scribe_event really needed!
+	ElseIf scribe_event <> Null And scribe_event\room = PlayerRoom
 		If DistanceSquared(EntityX(me\Collider), EntityX(scribe_event\room\Objects[0], True), EntityZ(me\Collider), EntityZ(scribe_event\room\Objects[0], True)) < 0.36
 			If scribe_event\EventState2 < 70.0 And scribe_event\EventState3 = 1.0
 				me\BlinkTimer = -10.0

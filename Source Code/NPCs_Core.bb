@@ -882,10 +882,10 @@ Function UpdateNPCs%()
 					
 					; ~ Checking if SCP-106 is allowed to spawn
 					If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And EntityY(me\Collider) <= -2848.0 * RoomScale) Then Spawn106 = False
-					If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+					If forest_event <> Null And forest_event\room = PlayerRoom
 						If forest_event\EventState = 1.0 Then Spawn106 = False
 					EndIf
-					If skull_event <> Null ; ~ TODO: Check if this really needed!
+					If skull_event <> Null
 						If skull_event\EventState > 0.0 Then Spawn106 = False
 					EndIf
 					; ~ Gate A event has been triggered. Don't make SCP-106 disappear!
@@ -3360,7 +3360,7 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType860_2
 				;[Block]
-				If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+				If forest_event <> Null And forest_event\room = PlayerRoom
 					If forest_event\EventState = 1.0
 						Local fr.Forest = PlayerRoom\fr
 						
@@ -5070,7 +5070,7 @@ Function UpdateNPCs%()
 							
 							If n\InFacility = NullFloor
 								If PlayerRoom\RoomTemplate\RoomID <> r_cont1_173_intro
-									If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+									If forest_event <> Null And forest_event\room = PlayerRoom
 										If forest_event\EventState = 1.0 Then UpdateGravity = True
 									EndIf
 								Else
@@ -7386,11 +7386,11 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	; ~ Player is in these rooms, returning false
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
-	If forest_event <> Null And forest_event\room = PlayerRoom ; ~ TODO: Check if forest_event <> Null really needed!
+	If forest_event <> Null And forest_event\room = PlayerRoom
 		If forest_event\EventState = 1.0 Then Return(False)
 	EndIf
 	; ~ Player is inside the fake world, returning false
-	If skull_event <> Null ; ~ TODO: Check if this really needed!
+	If skull_event <> Null
 		If skull_event\EventState > 0.0 Then Return(False)
 	EndIf
 	
