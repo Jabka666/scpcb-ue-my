@@ -8,6 +8,7 @@
 - Fixed a bug related to collision of cups obtained from water cooler.
 - Fixed a bug related to collision of items obtained in SCP-970 loop.
 - Fixed an inventory bug with incorrect calculation of the items amount.
+- Fixed SCP-008-1's teleportation.
 
 [Known issues]
 - Rooms can overlap and block the way.
