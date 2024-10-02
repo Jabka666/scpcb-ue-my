@@ -3,6 +3,9 @@
 [Items]
 - Changed model scale of some items.
 
+[NPCs]
+- SCP-049-2 can teleport around the facility.
+
 [Bug Fixes]
 - Fixed displaying of low battery message for NVG.
 - Fixed a bug related to collision of cups obtained from water cooler.
