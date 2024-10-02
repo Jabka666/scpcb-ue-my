@@ -2356,13 +2356,9 @@ Function RenderMessages%()
 		SetFontEx(fo\FontID[Font_Default])
 		Color(Temp2, Temp2, Temp2)
 		
-		Local PosY%
+		Local PosY% = mo\Viewport_Center_Y + (200 * MenuScale)
 		
-		If Temp
-			PosY = opt\GraphicHeight * 0.94
-		Else
-			PosY = mo\Viewport_Center_Y + (200 * MenuScale)
-		EndIf
+		If Temp Then PosY = opt\GraphicHeight * 0.94
 		TextEx(mo\Viewport_Center_X + ((me\Sanity < -200.0) * Rand(-10, 10) * MenuScale), PosY + ((me\Sanity < -200.0) * Rand(-10, 10) * MenuScale), msg\Txt, True)
 	EndIf
 	Color(255, 255, 255)
