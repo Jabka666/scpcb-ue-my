@@ -4843,13 +4843,15 @@ Function UpdateNPCs%()
 								If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							
-							If Dist > PowTwo(HideDistance)
+							If Dist > PowTwo(HideDistance * 1.5)
 								If n\State3 < 70.0
 									n\State3 = n\State3 + fps\Factor[0]
 								ElseIf Rand(150 - (60 * SelectedDifficulty\AggressiveNPCs)) = 1
 									 TeleportCloser(n)
 									 n\State3 = 0.0
 								EndIf
+							Else
+								n\State3 = 0.0
 							EndIf
 							
 							If n\Target = Null
