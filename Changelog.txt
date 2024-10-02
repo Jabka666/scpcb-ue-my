@@ -1,5 +1,8 @@
 {v1.3.3}
 
+[General]
+- Optimized the game...
+
 [Items]
 - Changed model scale of some items.
 
