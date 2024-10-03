@@ -34,9 +34,7 @@ End Function
 Function CurveAngle#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	
-	Local Diff# = AngleDist(Value, Old)
-	
-	Return(WrapAngle(Old + Diff * (1.0 / Smooth * fps\Factor[0])))
+	Return(WrapAngle(Old + AngleDist(Value, Old) * (1.0 / Smooth * fps\Factor[0])))
 End Function
 
 Function PointDirection#(x1#, z1#, x2#, z2#)
