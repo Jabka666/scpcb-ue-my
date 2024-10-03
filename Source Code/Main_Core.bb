@@ -5779,7 +5779,7 @@ Function UpdateGUI%()
 					;[End Block]
 			End Select
 			
-			If ((mo\MouseHit2 Lor KeyHit(key\INVENTORY)) And (Not MenuOpen)) Lor me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Lor me\Zombie
+			If (mo\MouseHit2 Lor KeyHit(key\INVENTORY)) Lor me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Lor me\Zombie
 				Select SelectedItem\ItemTemplate\ID
 					Case it_firstaid, it_finefirstaid, it_firstaid2, it_cap, it_scp268, it_fine268, it_scp1499, it_fine1499, it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_helmet
 						;[Block]
@@ -5820,21 +5820,6 @@ Function UpdateGUI%()
 			If ChannelPlaying(LowBatteryCHN[0]) Then StopChannel(LowBatteryCHN[0]) : LowBatteryCHN[0] = 0
 		EndIf
 	EndIf
-	
-	For it.Items = Each Items
-		If it <> SelectedItem
-			Select it\ItemTemplate\ID
-				Case it_firstaid, it_finefirstaid, it_firstaid2, it_vest, it_finevest, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148, it_cap, it_scp268, it_fine268, it_scp1499, it_fine1499, it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_helmet
-					;[Block]
-					it\State = 0.0
-					;[End Block]
-				Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025, it_cup
-					;[Block]
-					it\State3 = 0.0
-					;[End Block]
-			End Select
-		EndIf
-	Next
 	
 	If PrevInvOpen And (Not InvOpen) Then MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	
