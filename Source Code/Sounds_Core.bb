@@ -474,31 +474,26 @@ Function UpdateStreamSounds%()
 	Local e.Events
 	
 	If fps\Factor[0] > 0.0
-		If IntercomStreamCHN <> 0 Then SetStreamVolume_Strict(IntercomStreamCHN, opt\VoiceVolume * opt\MasterVolume)
+		Local InReachable% = (Not PlayerInReachableRoom(True)) And (Not IsPlayerOutsideFacility())
+		
+		If IntercomStreamCHN <> 0
+			SetStreamVolume_Strict(IntercomStreamCHN, opt\VoiceVolume * opt\MasterVolume)
+			If InReachable Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
+		EndIf
 		For e.Events = Each Events
 			If e\SoundCHN_IsStream
-				If e\SoundCHN <> 0 Then SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)
+				If e\SoundCHN <> 0
+					SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)
+					If InReachable And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+				EndIf
 			EndIf
 			If e\SoundCHN2_IsStream
-				If e\SoundCHN2 <> 0 Then SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
+				If e\SoundCHN2 <> 0
+					SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
+					If InReachable And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
+				EndIf
 			EndIf
 		Next
-	EndIf
-	
-	If (Not PlayerInReachableRoom(True))
-		If (Not IsPlayerOutsideFacility())
-			If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
-			If PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
-				For e.Events = Each Events
-					If e\SoundCHN_IsStream
-						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
-					EndIf
-					If e\SoundCHN2_IsStream
-						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
-					EndIf
-				Next
-			EndIf
-		EndIf
 	EndIf
 End Function
 
