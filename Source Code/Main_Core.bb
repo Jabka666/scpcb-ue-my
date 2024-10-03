@@ -3273,46 +3273,46 @@ Function UpdateNVG%()
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null
 				If (wi\NightVision = 1 And Inventory(i)\ItemTemplate\ID = it_nvg) Lor (wi\NightVision = 2 And Inventory(i)\ItemTemplate\ID = it_veryfinenvg) Lor (wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble)
-					If wi\NightVision > 0 Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision)))
-						If wi\SCRAMBLE > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.08 / wi\SCRAMBLE)))
-						wi\NVGPower = Int(Inventory(i)\State)
-						If wi\NVGPower = 0 ; ~ This NVG or SCRAMBLE can't be used
-							If wi\SCRAMBLE > 0
-								CreateMsg(GetLocalString("msg", "battery.died"))
-							Else
-								CreateMsg(GetLocalString("msg", "battery.died.nvg"))
-							EndIf
-							wi\IsNVGBlinking = True
+					If wi\NightVision > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision)))
+					If wi\SCRAMBLE > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.08 / wi\SCRAMBLE)))
+					wi\NVGPower = Int(Inventory(i)\State)
+					If wi\NVGPower = 0 ; ~ This NVG or SCRAMBLE can't be used
+						If wi\SCRAMBLE > 0
+							CreateMsg(GetLocalString("msg", "battery.died"))
+						Else
+							CreateMsg(GetLocalString("msg", "battery.died.nvg"))
 						EndIf
-						Exit
+						wi\IsNVGBlinking = True
 					EndIf
+					Exit
 				EndIf
-			Next
+			EndIf
+		Next
+	EndIf
+	
+	If wi\NVGPower > 0
+		If wi\NightVision = 2
+			If wi\NVGTimer <= 0.0
+				For np.NPCs = Each NPCs
+					np\NVGX = EntityX(np\Collider, True)
+					np\NVGY = EntityY(np\Collider, True)
+					np\NVGZ = EntityZ(np\Collider, True)
+				Next
+				wi\IsNVGBlinking = True
+				If wi\NVGTimer <= -10.0 Then wi\NVGTimer = 600.0
+			EndIf
+			wi\NVGTimer = wi\NVGTimer - fps\Factor[0]
 		EndIf
 		
-		If wi\NVGPower > 0
-			If wi\NightVision = 2
-				If wi\NVGTimer <= 0.0
-					For np.NPCs = Each NPCs
-						np\NVGX = EntityX(np\Collider, True)
-						np\NVGY = EntityY(np\Collider, True)
-						np\NVGZ = EntityZ(np\Collider, True)
-					Next
-					wi\IsNVGBlinking = True
-					If wi\NVGTimer <= -10.0 Then wi\NVGTimer = 600.0
-				EndIf
-				wi\NVGTimer = wi\NVGTimer - fps\Factor[0]
-			EndIf
-			
-			If wi\NVGPower < 160
-				If BatMsgTimer >= 70.0
-					If (Not ChannelPlaying(LowBatteryCHN[1]))
-						me\SndVolume = Max(3.0, me\SndVolume)
-						LowBatteryCHN[1] = PlaySound_Strict(snd_I\LowBatterySFX[1])
-					EndIf
+		If wi\NVGPower < 160
+			If BatMsgTimer >= 70.0
+				If (Not ChannelPlaying(LowBatteryCHN[1]))
+					me\SndVolume = Max(3.0, me\SndVolume)
+					LowBatteryCHN[1] = PlaySound_Strict(snd_I\LowBatterySFX[1])
 				EndIf
 			EndIf
 		EndIf
+	EndIf
 End Function
 
 Function UpdateGUI%()
