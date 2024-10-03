@@ -179,7 +179,7 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 	Local i%
 	Local Token% = JsonGetValue(LocalSubFile, SoundPath)
 	
-	If JsonIsNull(Token) Lor (Not JsonIsArray(Token))
+	If Not JsonIsArray(Token)
 		Local FallBack% = JsonGetValue(LocalSubFile, "fallback")
 		
 		If (JsonGetBool(FallBack)) Lor (JsonIsNull(FallBack)) Then Token = JsonGetValue(SubFile, SoundPath)
@@ -205,7 +205,7 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 		If JsonIsString(TxtVal) Then Txt = JsonGetString(TxtVal)
 		If JsonIsFloat(DelayVal) Then DelayTime = JsonGetFloat(DelayVal)
 		If JsonIsFloat(LengthVal) Then Length = JsonGetFloat(LengthVal)
-		If (Not JsonIsNull(JsonGetValue(Subtitle, "color")))
+		If (JsonIsString(JsonGetValue(Subtitle, "color")))
 			ColorArray = JsonGetValue(SubColors, JsonGetString(JsonGetValue(Subtitle, "color")))
 			If (Not JsonIsArray(ColorArray)) Then ColorArray = JsonGetValue(LocalSubColors, JsonGetString(JsonGetValue(Subtitle, "color")))
 			If JsonIsArray(ColorArray)
