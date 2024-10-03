@@ -2013,8 +2013,8 @@ Function LoadWayPoints%(LoadingStart% = 55)
 	For w.WayPoints = Each WayPoints
 		Number = Number + 1
 		Iter = Iter + 1
-		If Iter = 20
-			RenderLoading(LoadingStart + Floor((30.0 / Amount) * Number), GetLocalString("loading", "waypoints"))
+		If Iter = 5
+			RenderLoading(LoadingStart + Floor((35.0 / Amount) * Number), GetLocalString("loading", "waypoints"))
 			Iter = 0
 		EndIf
 		
