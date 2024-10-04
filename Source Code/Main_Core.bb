@@ -3276,18 +3276,18 @@ Function UpdateNVG%()
 					If wi\NightVision > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.02 * wi\NightVision)))
 					If wi\SCRAMBLE > 0 Then Inventory(i)\State = Max(0.0, Inventory(i)\State - (fps\Factor[0] * (0.08 / wi\SCRAMBLE)))
 					wi\NVGPower = Int(Inventory(i)\State)
-					If wi\NVGPower = 0 ; ~ This NVG or SCRAMBLE can't be used
-						If wi\SCRAMBLE > 0
-							CreateMsg(GetLocalString("msg", "battery.died"))
-						Else
-							CreateMsg(GetLocalString("msg", "battery.died.nvg"))
-						EndIf
-						wi\IsNVGBlinking = True
-					EndIf
 					Exit
 				EndIf
 			EndIf
 		Next
+		If wi\NVGPower = 0 ; ~ This NVG or SCRAMBLE can't be used
+			If wi\SCRAMBLE > 0
+				CreateMsg(GetLocalString("msg", "battery.died"))
+			Else
+				CreateMsg(GetLocalString("msg", "battery.died.nvg"))
+			EndIf
+			wi\IsNVGBlinking = True
+		EndIf
 	EndIf
 	
 	If wi\NVGPower > 0
@@ -3444,9 +3444,10 @@ Function UpdateGUI%()
 			PointEntity(Camera, d_I\ClosestButton)
 			FreeEntity(Pvt) : Pvt = 0
 			
-			CameraProject(Camera, ButtonPosX, ButtonPosY + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
+			Scale = MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015
+			CameraProject(Camera, ButtonPosX, ButtonPosY + Scale, ButtonPosZ)
 			ProjY = ProjectedY()
-			CameraProject(Camera, ButtonPosX, ButtonPosY - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
+			CameraProject(Camera, ButtonPosX, ButtonPosY - Scale, ButtonPosZ)
 			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
 			Local ScaleHalf# = Scale / 2.0
@@ -6326,9 +6327,10 @@ Function RenderGUI%()
 			PointEntity(Camera, d_I\ClosestButton)
 			FreeEntity(Pvt) : Pvt = 0
 			
-			CameraProject(Camera, ButtonPosX, ButtonPosY + (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
+			Scale = MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015
+			CameraProject(Camera, ButtonPosX, ButtonPosY + Scale, ButtonPosZ)
 			ProjY = ProjectedY()
-			CameraProject(Camera, ButtonPosX, ButtonPosY - (MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015), ButtonPosZ)
+			CameraProject(Camera, ButtonPosX, ButtonPosY - Scale, ButtonPosZ)
 			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
 			
 			Local ScaleHalf# = Scale / 2.0
