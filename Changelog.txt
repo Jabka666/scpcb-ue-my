@@ -5,7 +5,8 @@
 
 [Items]
 - Changed model scale of some items.
-- Fogging overlay of gas mask and hazmat suit looks more realistic.
+- Fogging overlay of Gas Mask and Hazmat Suit looks more realistic.
+- Equipping and unequipping the Hazmat Suit is faster.
 
 [NPCs]
 - SCP-049-2 can teleport around the facility.
