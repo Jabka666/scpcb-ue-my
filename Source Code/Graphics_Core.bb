@@ -243,6 +243,7 @@ Function FreeBlur%()
 End Function
 
 Function PlayStartupVideos%()
+	If RunningOnWine() Then Return
 	If (Not opt\PlayStartup) Then Return
 	
 	HidePointer()
