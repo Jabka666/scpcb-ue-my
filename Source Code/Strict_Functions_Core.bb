@@ -11,7 +11,7 @@ Function RuntimeErrorEx%(Message$)
 	MemoryAccessViolation()
 End Function
 
-Const MaxChannelsAmount% = 32
+Const MaxChannelsAmount% = 16 ; ~ 32
 
 Type Sound
 	Field InternalHandle%
