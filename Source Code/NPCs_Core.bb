@@ -2106,8 +2106,8 @@ Function UpdateNPCs%()
 							If Dist > PowTwo(HideDistance * 2.0)
 								If n\State3 < 70.0
 									n\State3 = n\State3 + fps\Factor[0]
-								ElseIf Rand(300 - (120 * SelectedDifficulty\AggressiveNPCs)) = 1
-									 TeleportCloser(n)
+								Else
+									If Rand(100 - (40 * SelectedDifficulty\AggressiveNPCs)) = 1 Then TeleportCloser(n)
 									 n\State3 = 0.0
 								EndIf
 							Else
@@ -4857,9 +4857,9 @@ Function UpdateNPCs%()
 							If Dist > PowTwo(HideDistance * 1.5)
 								If n\State3 < 70.0
 									n\State3 = n\State3 + fps\Factor[0]
-								ElseIf Rand(150 - (60 * SelectedDifficulty\AggressiveNPCs)) = 1
-									 TeleportCloser(n)
-									 n\State3 = 0.0
+								Else
+									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1 Then TeleportCloser(n)
+									n\State3 = 0.0
 								EndIf
 							Else
 								n\State3 = 0.0
