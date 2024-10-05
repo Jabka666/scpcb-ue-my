@@ -605,6 +605,11 @@ Function QuickLoadEvents%() ; ~ Get rid of this shit - Jabka
 					e\room\Objects[0] = LoadMesh_Strict("GFX\Map\dimension1499\1499plane.b3d")
 					HideEntity(e\room\Objects[0])
 					e\room\ScriptedObject[0] = True
+					
+					CreateConsoleMsg("")
+					CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
+					CreateConsoleMsg("")
+					
 					e\EventStr = "Load1"
 				ElseIf e\EventStr = "Load1"
 					QuickLoadPercent = 30
@@ -8426,7 +8431,7 @@ Function UpdateIntro%()
 					MakeMeUnplayable()
 					
 					CreateConsoleMsg("")
-					CreateConsoleMsg(GetLocalString("misc", "warning"), 255, 0, 0)
+					CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
 					CreateConsoleMsg("")
 					
 					e\EventState = INTRO_IN_CELL
@@ -9339,7 +9344,7 @@ Function UpdateEndings%()
 						HideDistance = 68.0
 						
 						CreateConsoleMsg("")
-						CreateConsoleMsg(GetLocalString("misc", "telewarn"), 255, 0, 0)
+						CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
 						CreateConsoleMsg("")
 						
 						e\EventState = 1.0
@@ -9679,7 +9684,7 @@ Function UpdateEndings%()
 						HideDistance = 68.0
 						
 						CreateConsoleMsg("")
-						CreateConsoleMsg(GetLocalString("misc", "telewarn"), 255, 0, 0)
+						CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
 						CreateConsoleMsg("")
 						
 						e\EventState = 1.0

@@ -3,6 +3,9 @@
 [General]
 - Optimized the game...
 
+[Rooms]
+- Added warning console message in SCP-1499's dimension.
+
 [Items]
 - Changed model scale of some items.
 - Fogging overlay of Gas Mask and Hazmat Suit looks more realistic.
