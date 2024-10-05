@@ -4054,7 +4054,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_finenvg
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case it_scramble
 										;[Block]
@@ -4126,7 +4126,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_finenvg
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case it_scramble
 										;[Block]
@@ -4198,7 +4198,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_finenvg
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case it_scramble
 										;[Block]
@@ -4270,7 +4270,7 @@ Function UpdateGUI%()
 										;[End Block]
 									Case it_finenvg
 										;[Block]
-										CreateMsg(GetLocalString("msg", "nvg.bat.nofit"))
+										CreateMsg(GetLocalString("msg", "nvg.bat.notfit"))
 										;[End Block]
 									Case it_scramble
 										;[Block]

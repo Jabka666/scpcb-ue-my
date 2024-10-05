@@ -24,6 +24,7 @@
 - Fixed an inventory bug with incorrect calculation of the items amount.
 - Fixed SCP-008-1's teleportation.
 - Fixed MAV in SCP-012's containment chamber.
+- Fixed «The battery doesn't fit inside these goggles» message not displaying correctly.
 
 [Known issues]
 - Rooms can overlap and block the way.
