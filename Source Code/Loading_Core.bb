@@ -1265,7 +1265,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "playcard"), "Playing Card", it_playcard, "key_card.b3d", "INV_playing_card.png", "", 0.00037, 1, "playing_card.png")
 	
 	CreateItemTemplate(GetLocalString("items", "key.simple"), "Key", it_key, "key.b3d", "INV_key.png", "", 0.003, 3)
-	CreateItemTemplate(GetLocalString("items", "lostkey"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.003, 3, "lost_key.png")
+	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.003, 3, "lost_key.png")
 	
 	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0005, 3)
 	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0005, 3, "coin_rusty.png")
