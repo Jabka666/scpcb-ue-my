@@ -5553,8 +5553,8 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 									n\State3 = 0.0
 									n\State = MTF_ZOMBIES_SPOTTED
-									Exit
 									Return
+									Exit
 								EndIf
 							ElseIf n2\NPCType = NPCType008_1
 								If NPCSeesNPC(n2, n) = 1
@@ -5568,8 +5568,8 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 									n\State3 = 0.0
 									n\State = MTF_ZOMBIES_SPOTTED
-									Exit
 									Return
+									Exit
 								EndIf
 							ElseIf n2\NPCType = NPCType035_Tentacle
 								If NPCSeesNPC(n2, n) = 1
@@ -5583,8 +5583,8 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 									n\State3 = 0.0
 									n\State = MTF_ZOMBIES_SPOTTED
-									Exit
 									Return
+									Exit
 								EndIf
 							ElseIf n2\NPCType = NPCType1048_A
 								If NPCSeesNPC(n2, n) = 1
@@ -5598,13 +5598,13 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 									n\State3 = 0.0
 									n\State = MTF_ZOMBIES_SPOTTED
-									Exit
 									Return
+									Exit
 								EndIf
 							EndIf
 						EndIf
 					Next
-					n\MTFUpdateTimer = fps\Factor[0] * 8.0
+					n\MTFUpdateTimer = fps\Factor[0] * 45.0
 				Else
 					n\MTFUpdateTimer = n\MTFUpdateTimer - fps\Factor[0]
 				EndIf
@@ -5919,8 +5919,8 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 									n\State3 = 0.0
 									n\State = MTF_ZOMBIES_SPOTTED
-									Exit
 									Return
+									Exit
 								EndIf
 							ElseIf n2\NPCType = NPCType008_1
 								If NPCSeesNPC(n2, n) = 1
@@ -5934,8 +5934,8 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 									n\State3 = 0.0
 									n\State = MTF_ZOMBIES_SPOTTED
-									Exit
 									Return
+									Exit
 								EndIf
 							ElseIf n2\NPCType = NPCType035_Tentacle
 								If NPCSeesNPC(n2, n) = 1
@@ -5949,8 +5949,8 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 									n\State3 = 0.0
 									n\State = MTF_ZOMBIES_SPOTTED
-									Exit
 									Return
+									Exit
 								EndIf
 							ElseIf n2\NPCType = NPCType1048_A
 								If NPCSeesNPC(n2, n) = 1
@@ -5964,13 +5964,13 @@ Function UpdateMTFUnit%(n.NPCs)
 									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
 									n\State3 = 0.0
 									n\State = MTF_ZOMBIES_SPOTTED
-									Exit
 									Return
+									Exit
 								EndIf
 							EndIf
 						EndIf
 					Next
-					n\MTFUpdateTimer = fps\Factor[0] * 8.0
+					n\MTFUpdateTimer = fps\Factor[0] * 45.0
 				Else
 					n\MTFUpdateTimer = n\MTFUpdateTimer - fps\Factor[0]
 				EndIf
