@@ -3905,103 +3905,111 @@ Function UpdateGUI%()
 									Local added.Items = Null
 									Local c%, ri%
 									
-									Local ID% = SelectedItem\ItemTemplate\ID
-									
-									If ID <> it_scp420j And ID <> it_scp420s And ID <> it_joint And ID <> it_cigarette And ID <> it_25ct And ID <> it_coin And ID <> it_key And ID <> it_lostkey And ID <> it_scp860 And ID <> it_fine860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_fine714 And ID <> it_ring And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill
-										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
-											If Inventory(MouseSlot)\SecondInv[c] = Null
-												If SelectedItem <> Null
-													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
-													Inventory(MouseSlot)\State = 1.0
-													SetAnimTime(Inventory(MouseSlot)\OBJ, 0.0)
-													Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
-													
-													For ri = 0 To MaxItemAmount - 1
-														If Inventory(ri) = SelectedItem
-															Inventory(ri) = Null
-															ItemAmount = ItemAmount - 1
-															PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-															Exit
-														EndIf
-													Next
-													added = SelectedItem
-													SelectedItem = Null
-													Exit
+									Select SelectedItem\ItemTemplate\ID
+										Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_ticket
+											;[Block]
+											For c = 0 To Inventory(MouseSlot)\InvSlots - 1
+												If Inventory(MouseSlot)\SecondInv[c] = Null
+													If SelectedItem <> Null
+														Inventory(MouseSlot)\SecondInv[c] = SelectedItem
+														Inventory(MouseSlot)\State = 1.0
+														SetAnimTime(Inventory(MouseSlot)\OBJ, 0.0)
+														Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
+														
+														For ri = 0 To MaxItemAmount - 1
+															If Inventory(ri) = SelectedItem
+																Inventory(ri) = Null
+																ItemAmount = ItemAmount - 1
+																PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
+																Exit
+															EndIf
+														Next
+														added = SelectedItem
+														SelectedItem = Null
+														Exit
+													EndIf
+												EndIf
+											Next
+											If SelectedItem <> Null
+												CreateMsg(GetLocalString("msg", "clipboard.full"))
+											Else
+												If added\ItemTemplate\ID = it_paper Lor added\ItemTemplate\ID = it_oldpaper
+													CreateMsg(GetLocalString("msg", "clipboard.paper"))
+												ElseIf added\ItemTemplate\ID = it_badge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_burntbadge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_harnbadge
+													CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\Name))
+												Else
+													CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\Name))
 												EndIf
 											EndIf
-										Next
-										If SelectedItem <> Null
-											CreateMsg(GetLocalString("msg", "clipboard.full"))
-										Else
-											If added\ItemTemplate\ID = it_paper Lor added\ItemTemplate\ID = it_oldpaper
-												CreateMsg(GetLocalString("msg", "clipboard.paper"))
-											ElseIf added\ItemTemplate\ID = it_badge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_burntbadge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_harnbadge
-												CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\Name))
-											Else
-												CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\Name))
-											EndIf
-										EndIf
-									Else
-										For z = 0 To MaxItemAmount - 1
-											If Inventory(z) = SelectedItem
-												Inventory(z) = PrevItem
-												Exit
-											EndIf
-										Next
-										Inventory(MouseSlot) = SelectedItem
-									EndIf
+											;[End Block]
+										Default
+											;[Block]
+											For z = 0 To MaxItemAmount - 1
+												If Inventory(z) = SelectedItem
+													Inventory(z) = PrevItem
+													Exit
+												EndIf
+											Next
+											Inventory(MouseSlot) = SelectedItem
+											;[End Block]
+									End Select
 								ElseIf Inventory(MouseSlot)\ItemTemplate\ID = it_wallet
 									; ~ Add an item to wallet
 									added.Items = Null
-									ID = SelectedItem\ItemTemplate\ID
-									If ID <> it_paper And ID <> it_oldpaper And ID <> it_origami
-										If (SelectedItem\ItemTemplate\ID = it_scp714 And I_714\Using = 2) Lor (SelectedItem\ItemTemplate\ID = it_coarse714 And I_714\Using = 1)
-											CreateMsg(GetLocalString("msg", "takeoff"))
-											SelectedItem = Null
-											Return
-										EndIf
-										
-										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
-											If Inventory(MouseSlot)\SecondInv[c] = Null
-												If SelectedItem <> Null
-													Inventory(MouseSlot)\SecondInv[c] = SelectedItem
-													Inventory(MouseSlot)\State = 1.0
-													Select ID
-														Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_harnbadge
-															;[Block]
-															SetAnimTime(Inventory(MouseSlot)\OBJ, 3.0)
-															Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
-															;[End Block]
-													End Select
-													
-													For ri = 0 To MaxItemAmount - 1
-														If Inventory(ri) = SelectedItem
-															Inventory(ri) = Null
-															ItemAmount = ItemAmount - 1
-															PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-															Exit
-														EndIf
-													Next
-													added = SelectedItem
-													SelectedItem = Null
+									
+									Select SelectedItem\ItemTemplate\ID
+										Case it_paper, it_oldpaper, it_origami
+											;[Block]
+											For z = 0 To MaxItemAmount - 1
+												If Inventory(z) = SelectedItem
+													Inventory(z) = PrevItem
 													Exit
 												EndIf
+											Next
+											Inventory(MouseSlot) = SelectedItem
+											;[End Block]
+										Default
+											;[Block]
+											If (SelectedItem\ItemTemplate\ID = it_scp714 And I_714\Using = 2) Lor (SelectedItem\ItemTemplate\ID = it_coarse714 And I_714\Using = 1)
+												CreateMsg(GetLocalString("msg", "takeoff"))
+												SelectedItem = Null
+												Return
 											EndIf
-										Next
-										If SelectedItem <> Null
-											CreateMsg(GetLocalString("msg", "wallet.full"))
-										Else
-											CreateMsg(Format(GetLocalString("msg", "wallet.add"), added\ItemTemplate\Name))
-										EndIf
-									Else
-										For z = 0 To MaxItemAmount - 1
-											If Inventory(z) = SelectedItem
-												Inventory(z) = PrevItem
-												Exit
+											
+											For c = 0 To Inventory(MouseSlot)\InvSlots - 1
+												If Inventory(MouseSlot)\SecondInv[c] = Null
+													If SelectedItem <> Null
+														Inventory(MouseSlot)\SecondInv[c] = SelectedItem
+														Inventory(MouseSlot)\State = 1.0
+														Select SelectedItem\ItemTemplate\ID
+															Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_harnbadge
+																;[Block]
+																SetAnimTime(Inventory(MouseSlot)\OBJ, 3.0)
+																Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
+																;[End Block]
+														End Select
+														
+														For ri = 0 To MaxItemAmount - 1
+															If Inventory(ri) = SelectedItem
+																Inventory(ri) = Null
+																ItemAmount = ItemAmount - 1
+																PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
+																Exit
+															EndIf
+														Next
+														added = SelectedItem
+														SelectedItem = Null
+														Exit
+													EndIf
+												EndIf
+											Next
+											If SelectedItem <> Null
+												CreateMsg(GetLocalString("msg", "wallet.full"))
+											Else
+												CreateMsg(Format(GetLocalString("msg", "wallet.add"), added\ItemTemplate\Name))
 											EndIf
-										Next
-										Inventory(MouseSlot) = SelectedItem
-									EndIf
+											;[End Block]
+									End Select
 								Else
 									For z = 0 To MaxItemAmount - 1
 										If Inventory(z) = SelectedItem
