@@ -1,6 +1,8 @@
 {v1.3.3}
 
 [General]
+- Added red forest.
+
 - Optimized the game...
 
 [Rooms]
@@ -10,6 +12,7 @@
 - Changed model scale of some items.
 - Fogging overlay of Gas Mask and Hazmat Suit looks more realistic.
 - Equipping and unequipping the Hazmat Suit is faster.
+- Added new items: Key and red SCP-860.
 
 [NPCs]
 - SCP-049-2 can teleport around the facility.

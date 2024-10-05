@@ -571,32 +571,6 @@ Function QuickLoadEvents%() ; ~ Get rid of this shit - Jabka
 				End Select
 			EndIf
 			;[End Block]
-		Case e_cont2_860_1
-			;[Block]
-			Select e\EventStr
-				Case "Load0"
-					;[Block]
-					QuickLoadPercent = 50
-					ForestNPC = CreateSprite()
-					ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
-					SpriteViewMode(ForestNPC, 4)
-					EntityFX(ForestNPC, 1 + 8)
-					ForestNPCTex = LoadAnimTexture_Strict("GFX\NPCs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
-					ForestNPCData[0] = 0.0
-					EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
-					ForestNPCData[1] = 0.0
-					ForestNPCData[2] = 0.0
-					HideEntity(ForestNPC)
-					e\EventStr = "Load1"
-					;[End Block]
-				Case "Load1"
-					;[Block]
-					QuickLoadPercent = 100
-					If e\room\NPC[0] = Null Then e\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
-					e\EventStr = "LoadDone"
-					;[End Block]
-			End Select
-			;[End Block]
 		Case e_dimension_1499
 			;[Block]
 			If e\EventState = 0.0
@@ -2523,6 +2497,8 @@ Function UpdateEvents%()
 				
 				; ~ e\EventState3: SCP-860-2 spawn timer
 				
+				; ~ e\EventState4: Red key or blue key
+				
 				Local fr.Forest = e\room\fr
 				
 				If PlayerRoom = e\room And fr <> Null
@@ -2536,11 +2512,19 @@ Function UpdateEvents%()
 						
 						UpdateForest(fr)
 						
-						If e\EventStr = "" And QuickLoadPercent = -1
-							GiveAchievement("860")
-							QuickLoadPercent = 0
-							QuickLoad_CurrEvent = e
-							e\EventStr = "Load0"
+						If e\room\NPC[0] = Null And e\EventState4 = 0.0
+							ForestNPC = CreateSprite()
+							ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
+							SpriteViewMode(ForestNPC, 4)
+							EntityFX(ForestNPC, 1 + 8)
+							ForestNPCTex = LoadAnimTexture_Strict("GFX\NPCs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
+							ForestNPCData[0] = 0.0
+							EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
+							ForestNPCData[1] = 0.0
+							ForestNPCData[2] = 0.0
+							HideEntity(ForestNPC)
+							
+							e\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
 						EndIf
 						
 						ShouldPlay = 9
@@ -2953,7 +2937,7 @@ Function UpdateEvents%()
 						For itt.ItemTemplates = Each ItemTemplates
 							If IsItemGoodFor1162ARC(itt)
 								Select Inventory(e\EventState2)\ItemTemplate\ID
-									Case it_key
+									Case it_lostkey
 										;[Block]
 										If itt\ID = it_key0 Lor itt\ID = it_key1 And Rand(2) = 1 Then ShouldCreateItem = True
 										;[End Block]
@@ -3061,7 +3045,7 @@ Function UpdateEvents%()
 						Select e\EventState
 							Case 1.0
 								;[Block]
-								it.Items = CreateItem("Lost Key", it_key, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+								it.Items = CreateItem("Lost Key", it_lostkey, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 								;[End Block]
 							Case 2.0
 								;[Block]

@@ -1150,6 +1150,7 @@ Function LoadItems%()
 	CreateItemTemplate("SCP-714", "SCP-714", it_coarse714, "scp_714.b3d", "INV_scp_714_grey.png", "", 0.2, 3, "scp_714_grey.png")
 	CreateItemTemplate("SCP-714", "SCP-714", it_fine714, "scp_714.b3d", "INV_scp_714_blue.png", "", 0.2, 3, "scp_714_blue.png")
 	CreateItemTemplate("SCP-860", "SCP-860", it_scp860, "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3)
+	CreateItemTemplate("SCP-860", "SCP-860", it_fine860, "scp_860.b3d", "INV_scp_860_red.png", "", 0.003, 3, "scp_860_red.png")
 	CreateItemTemplate("SCP-1025", "SCP-1025", it_scp1025, "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0)
 	CreateItemTemplate("SCP-1123", "SCP-1123", it_scp1123, "scp_1123.b3d", "INV_scp_1123.png", "", 0.015, 2)
 	CreateItemTemplate("SCP-1499", "SCP-1499", it_scp1499, "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
@@ -1263,7 +1264,8 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "playcard"), "Playing Card", it_playcard, "key_card.b3d", "INV_playing_card.png", "", 0.00037, 1, "playing_card.png")
 	
-	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_key, "key.b3d", "INV_key.png", "", 0.003, 3)
+	CreateItemTemplate(GetLocalString("items", "key.simple"), "Key", it_key, "key.b3d", "INV_key.png", "", 0.003, 3)
+	CreateItemTemplate(GetLocalString("items", "lostkey"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.003, 3, "lost_key.png")
 	
 	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0005, 3)
 	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0005, 3, "coin_rusty.png")

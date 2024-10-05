@@ -3091,6 +3091,7 @@ Const FogColorDimension_1499$ = "096097104"
 Const FogColorPD$ = "000000000"
 Const FogColorPDTrench$ = "038055047"
 Const FogColorForest$ = "098133162"
+Const FogColorForestRed$ = "070030030"
 Const FogColorForestChase$ = "032044054"
 ;[End Block]
 
@@ -3152,7 +3153,11 @@ Function UpdateZoneColor%()
 	ElseIf forest_event <> Null And forest_event\room = PlayerRoom
 		If forest_event\EventState = 1.0
 			LightVolume = 1.0
-			SetZoneColor(FogColorForest)
+			If forest_event\EventState4 = 0.0
+				SetZoneColor(FogColorForest)
+			Else
+				SetZoneColor(FogColorForestRed)
+			EndIf
 			If forest_event\room\NPC[0] <> Null
 				If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 			EndIf
@@ -3893,7 +3898,7 @@ Function UpdateGUI%()
 						PrevItem = Inventory(MouseSlot)
 						
 						Select SelectedItem\ItemTemplate\ID
-							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_ticket, it_scp420j, it_scp420s, it_joint, it_cigarette, it_25ct, it_coin, it_key, it_scp860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill
+							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_ticket, it_scp420j, it_scp420s, it_joint, it_cigarette, it_25ct, it_coin, it_key, it_lostkey, it_scp860, it_fine860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill
 								;[Block]
 								If Inventory(MouseSlot)\ItemTemplate\ID = it_clipboard
 									; ~ Add an item to clipboard
@@ -3902,7 +3907,7 @@ Function UpdateGUI%()
 									
 									Local ID% = SelectedItem\ItemTemplate\ID
 									
-									If ID <> it_scp420j And ID <> it_scp420s And ID <> it_joint And ID <> it_cigarette And ID <> it_25ct And ID <> it_coin And ID <> it_key And ID <> it_scp860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_fine714 And ID <> it_ring And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill
+									If ID <> it_scp420j And ID <> it_scp420s And ID <> it_joint And ID <> it_cigarette And ID <> it_25ct And ID <> it_coin And ID <> it_key And ID <> it_lostkey And ID <> it_scp860 And ID <> it_fine860 And ID <> it_scp714 And ID <> it_coarse714 And ID <> it_fine714 And ID <> it_ring And ID <> it_scp500pill And ID <> it_scp500pilldeath And ID <> it_pill
 										For c = 0 To Inventory(MouseSlot)\InvSlots - 1
 											If Inventory(MouseSlot)\SecondInv[c] = Null
 												If SelectedItem <> Null
@@ -5695,7 +5700,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 1.0
 					EndIf
 					;[End Block]
-				Case it_key
+				Case it_lostkey
 					;[Block]
 					If SelectedItem\State = 0.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5, 9) + ".ogg"))
@@ -5767,7 +5772,7 @@ Function UpdateGUI%()
 					Use1123()
 					SelectedItem = Null
 					;[End Block]
-				Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard, it_paper
+				Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_fine860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard, it_paper
 					;[Block]
 					; ~ Skip this line
 					;[End Block]
@@ -6722,7 +6727,7 @@ Function RenderGUI%()
 					
 					RenderBar(BlinkMeterIMG, x, y, Width, Height, SelectedItem\State)
 					;[End Block]
-				Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_coin, it_mastercard
+				Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_fine860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_key, it_lostkey, it_coin, it_mastercard
 					;[Block]
 					DrawBlock(SelectedItem\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSize, mo\Viewport_Center_Y - InvImgSize)
 					;[End Block]

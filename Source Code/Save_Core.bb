@@ -1229,7 +1229,7 @@ Function LoadGame%(File$)
 					e\EventState = 0.0
 				EndIf
 				;[End Block]
-			Case e_cont2_860_1, e_cont1_205
+			Case e_cont1_205
 				;[Block]
 				e\EventStr = ""
 				;[End Block]

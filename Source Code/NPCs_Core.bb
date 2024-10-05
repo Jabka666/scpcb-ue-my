@@ -3365,29 +3365,27 @@ Function UpdateNPCs%()
 						Local fr.Forest = PlayerRoom\fr
 						
 						Dist = EntityDistanceSquared(me\Collider, n\Collider)
-						If ForestNPC <> 0
-							If ForestNPCData[2] = 1.0
-								If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
-								If ForestNPCData[1] = 0.0
-									If Rand(200) = 1
-										ForestNPCData[1] = fps\Factor[0]
-										EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0] + 1.0)
-									EndIf
-								ElseIf ForestNPCData[1] > 0.0 And ForestNPCData[1] < 5.0
-									ForestNPCData[1] = Min(ForestNPCData[1] + fps\Factor[0], 5.0)
-								Else
-									ForestNPCData[1] = 0.0
-									EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
+						If ForestNPCData[2] = 1.0
+							If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
+							If ForestNPCData[1] = 0.0
+								If Rand(200) = 1
+									ForestNPCData[1] = fps\Factor[0]
+									EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0] + 1.0)
 								EndIf
-								If n\State <> 1.0
-									If (me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0) Lor (Not EntityInView(ForestNPC, Camera))
-										ForestNPCData[2] = 0.0
-										If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
-									EndIf
-								EndIf
+							ElseIf ForestNPCData[1] > 0.0 And ForestNPCData[1] < 5.0
+								ForestNPCData[1] = Min(ForestNPCData[1] + fps\Factor[0], 5.0)
 							Else
-								If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
+								ForestNPCData[1] = 0.0
+								EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
 							EndIf
+							If n\State <> 1.0
+								If (me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0) Lor (Not EntityInView(ForestNPC, Camera))
+									ForestNPCData[2] = 0.0
+									If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
+								EndIf
+							EndIf
+						Else
+							If (Not EntityHidden(ForestNPC)) Then HideEntity(ForestNPC)
 						EndIf
 						
 						Select n\State
@@ -3466,39 +3464,37 @@ Function UpdateNPCs%()
 									
 									PositionEntity(n\Collider, EntityX(n\Collider), EntityY(fr\Forest_Pivot, True) + 2.3, EntityZ(n\Collider))
 									
-									If ForestNPC <> 0
-										If ForestNPCData[2] = 0.0
-											Local DocChance% = 0
-											Local DocAmount% = 0
-											
-											For i = 0 To MaxItemAmount - 1
-												If Inventory(i) <> Null
-													Local DocName$ = Inventory(i)\ItemTemplate\Name
-													
-													If DocName = "Log #1" Lor DocName = "Log #2" Lor DocName = "Log #3"
-														DocAmount = DocAmount + 1
-														DocChance = DocChance + 10 * DocAmount
-													EndIf
+									If ForestNPCData[2] = 0.0
+										Local DocChance% = 0
+										Local DocAmount% = 0
+										
+										For i = 0 To MaxItemAmount - 1
+											If Inventory(i) <> Null
+												Local DocName$ = Inventory(i)\ItemTemplate\Name
+												
+												If DocName = "Log #1" Lor DocName = "Log #2" Lor DocName = "Log #3"
+													DocAmount = DocAmount + 1
+													DocChance = DocChance + 10 * DocAmount
 												EndIf
-											Next
-											
-											If Rand(860 - DocChance) = 1
-												If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
-												ForestNPCData[2] = 1.0
-												If Rand(2) = 1
-													ForestNPCData[0] = 0.0
-												Else
-													ForestNPCData[0] = 2.0
-												EndIf
-												ForestNPCData[1] = 0.0
-												PositionEntity(ForestNPC, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
-												RotateEntity(ForestNPC, 0.0, EntityYaw(n\Collider), 0.0)
-												MoveEntity(ForestNPC, 0.75, 0.0, 0.0)
-												RotateEntity(ForestNPC, 0.0, 0.0, 0.0)
-												EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
-											Else
-												ForestNPCData[2] = 2.0
 											EndIf
+										Next
+										
+										If Rand(860 - DocChance) = 1
+											If EntityHidden(ForestNPC) Then ShowEntity(ForestNPC)
+											ForestNPCData[2] = 1.0
+											If Rand(2) = 1
+												ForestNPCData[0] = 0.0
+											Else
+												ForestNPCData[0] = 2.0
+											EndIf
+											ForestNPCData[1] = 0.0
+											PositionEntity(ForestNPC, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
+											RotateEntity(ForestNPC, 0.0, EntityYaw(n\Collider), 0.0)
+											MoveEntity(ForestNPC, 0.75, 0.0, 0.0)
+											RotateEntity(ForestNPC, 0.0, 0.0, 0.0)
+											EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
+										Else
+											ForestNPCData[2] = 2.0
 										EndIf
 									EndIf
 									

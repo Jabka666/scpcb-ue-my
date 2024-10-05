@@ -42,83 +42,85 @@ Const it_scp714% = 19
 Const it_coarse714% = 20
 Const it_fine714% = 21
 Const it_scp860% = 22
-Const it_scp1025% = 23
-Const it_scp1123% = 24
-Const it_scp1499% = 25
-Const it_fine1499% = 26
-Const it_cap% = 27
-Const it_joint% = 28
-Const it_cigarette% = 29
-Const it_ring% = 30
-Const it_helmet% = 31
-Const it_vest% = 32
-Const it_corrvest% = 33
-Const it_finevest% = 34
-Const it_veryfinevest% = 35
-Const it_book% = 36
-Const it_cup% = 37
-Const it_emptycup% = 38
-Const it_clipboard% = 39
-Const it_wallet% = 40
-Const it_electronics% = 41
-Const it_eyedrops% = 42
-Const it_eyedrops2% = 43
-Const it_fineeyedrops% = 44
-Const it_veryfineeyedrops% = 45
-Const it_firstaid% = 46
-Const it_firstaid2% = 47
-Const it_finefirstaid% = 48
-Const it_veryfinefirstaid% = 49
-Const it_gasmask% = 50
-Const it_finegasmask% = 51
-Const it_veryfinegasmask% = 52
-Const it_gasmask148% = 53
-Const it_hazmatsuit% = 54
-Const it_finehazmatsuit% = 55
-Const it_veryfinehazmatsuit% = 56
-Const it_hazmatsuit148% = 57
-Const it_nvg% = 58
-Const it_finenvg% = 59
-Const it_veryfinenvg% = 60
-Const it_scramble% = 61
-Const it_finescramble% = 62
-Const it_pill = 63
-Const it_radio% = 64
-Const it_18vradio% = 65
-Const it_fineradio% = 66
-Const it_veryfineradio% = 67
-Const it_hand% = 68
-Const it_hand2% = 69
-Const it_hand3% = 70
-Const it_nav% = 71
-Const it_nav300% = 72
-Const it_nav310% = 73
-Const it_navulti% = 74
-Const it_bat% = 75
-Const it_coarsebat% = 76
-Const it_finebat% = 77
-Const it_veryfinebat% = 78
-Const it_killbat% = 79
-Const it_syringe% = 80
-Const it_finesyringe% = 81
-Const it_veryfinesyringe% = 82
-Const it_syringeinf% = 83
-Const it_key0% = 84
-Const it_key1% = 85
-Const it_key2% = 86
-Const it_key3% = 87
-Const it_key3_bloody% = 88
-Const it_key4% = 89
-Const it_key5% = 90
-Const it_key6% = 91
-Const it_keyomni% = 92
-Const it_mastercard% = 93
-Const it_playcard% = 94
-Const it_key% = 95
-Const it_25ct% = 96
-Const it_coin% = 97
-Const it_pizza% = 98
-Const it_harnbadge% = 99
+Const it_fine860% = 23
+Const it_scp1025% = 24
+Const it_scp1123% = 25
+Const it_scp1499% = 26
+Const it_fine1499% = 27
+Const it_cap% = 28
+Const it_joint% = 29
+Const it_cigarette% = 30
+Const it_ring% = 31
+Const it_helmet% = 32
+Const it_vest% = 33
+Const it_corrvest% = 34
+Const it_finevest% = 35
+Const it_veryfinevest% = 36
+Const it_book% = 37
+Const it_cup% = 38
+Const it_emptycup% = 39
+Const it_clipboard% = 40
+Const it_wallet% = 41
+Const it_electronics% = 42
+Const it_eyedrops% = 43
+Const it_eyedrops2% = 44
+Const it_fineeyedrops% = 45
+Const it_veryfineeyedrops% = 46
+Const it_firstaid% = 47
+Const it_firstaid2% = 48
+Const it_finefirstaid% = 49
+Const it_veryfinefirstaid% = 50
+Const it_gasmask% = 51
+Const it_finegasmask% = 52
+Const it_veryfinegasmask% = 53
+Const it_gasmask148% = 54
+Const it_hazmatsuit% = 55
+Const it_finehazmatsuit% = 56
+Const it_veryfinehazmatsuit% = 57
+Const it_hazmatsuit148% = 58
+Const it_nvg% = 59
+Const it_finenvg% = 60
+Const it_veryfinenvg% = 61
+Const it_scramble% = 62
+Const it_finescramble% = 63
+Const it_pill = 64
+Const it_radio% = 65
+Const it_18vradio% = 66
+Const it_fineradio% = 67
+Const it_veryfineradio% = 68
+Const it_hand% = 69
+Const it_hand2% = 70
+Const it_hand3% = 71
+Const it_nav% = 72
+Const it_nav300% = 73
+Const it_nav310% = 74
+Const it_navulti% = 75
+Const it_bat% = 76
+Const it_coarsebat% = 77
+Const it_finebat% = 78
+Const it_veryfinebat% = 79
+Const it_killbat% = 80
+Const it_syringe% = 81
+Const it_finesyringe% = 82
+Const it_veryfinesyringe% = 83
+Const it_syringeinf% = 84
+Const it_key0% = 85
+Const it_key1% = 86
+Const it_key2% = 87
+Const it_key3% = 88
+Const it_key3_bloody% = 89
+Const it_key4% = 90
+Const it_key5% = 91
+Const it_key6% = 92
+Const it_keyomni% = 93
+Const it_mastercard% = 94
+Const it_playcard% = 95
+Const it_lostkey% = 96
+Const it_key% = 97
+Const it_25ct% = 98
+Const it_coin% = 99
+Const it_pizza% = 100
+Const it_harnbadge% = 101
 ;[End Block]
 
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
@@ -1689,15 +1691,31 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Lost Key", it_key, x, y, z)
+					it2.Items = CreateItem("Key", it_key, x, y, z)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+					If Rand(10) = 1
+						it2.Items = CreateItem("SCP-860", it_fine860, x, y, z)
+					Else
+						If Rand(3) = 1
+							it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+						Else
+							it2.Items = CreateItem("Key", it_key, x, y, z)
+						EndIf
+					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+					If Rand(20) = 1
+						it2.Items = CreateItem("SCP-860", it_fine860, x, y, z)
+					Else
+						If Rand(6) = 1
+							it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+						Else
+							it2.Items = CreateItem("Key", it_key, x, y, z)
+						EndIf
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2368,6 +2386,7 @@ Const KEY_HAND_BLACK% = -2
 Const KEY_HAND_YELLOW% = -3
 
 Const KEY_860% = -4
+Const KEY_KEY% = -5
 ;[End Block]
 
 ; ~ Only for "UseDoor" function
@@ -2421,9 +2440,13 @@ Function GetUsingItem%(item.Items)
 			;[Block]
 			Return(KEY_HAND_YELLOW)
 			;[End Block]
-		Case it_scp860
+		Case it_scp860, it_fine860
 			;[Block]
 			Return(KEY_860)
+			;[End Block]
+		Case it_key, it_lostkey
+			;[Block]
+			Return(KEY_KEY)
 			;[End Block]
 		Default
 			;[Block]
