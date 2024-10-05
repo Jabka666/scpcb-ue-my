@@ -13,6 +13,7 @@
 - Fogging overlay of Gas Mask and Hazmat Suit looks more realistic.
 - Equipping and unequipping the Hazmat Suit is faster.
 - Added new items: Key and red SCP-860.
+- SCP-1123 can be refined in SCP-914.
 
 [NPCs]
 - SCP-049-2 can teleport around the facility.

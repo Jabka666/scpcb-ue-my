@@ -2302,6 +2302,33 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case it_scp1123
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					de.Decals = CreateDecal(DECAL_BLOOD_2, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.4), Rnd(0.8, 1.0), 1)
+					EntityParent(de\OBJ, PlayerRoom\OBJ)
+					PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					Remove = False
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					If Rand(2) = 1
+						it2.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
+					Else
+						If Rand(2) = 1
+							it2.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
+						Else
+							it2.Items = CreateItem("White Severed Hand", it_hand, x, y, z)
+						EndIf
+					EndIf
+					;[End Block]
+			End Select
+			;[End Block]
 		Default
 			;[Block]
 			Select Setting
