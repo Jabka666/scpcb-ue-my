@@ -23,6 +23,7 @@
 - Fixed a bug related to collision of items obtained in SCP-970 loop.
 - Fixed an inventory bug with incorrect calculation of the items amount.
 - Fixed SCP-008-1's teleportation.
+- Fixed MAV in SCP-012's containment chamber.
 
 [Known issues]
 - Rooms can overlap and block the way.

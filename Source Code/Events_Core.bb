@@ -2105,7 +2105,7 @@ Function UpdateEvents%()
 												me\Injuries = me\Injuries + 0.5
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 31.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 31.0
-												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_01Ex(2).png")
+												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(2).png")
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
@@ -2117,14 +2117,14 @@ Function UpdateEvents%()
 												me\Injuries = me\Injuries + 0.3
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech4.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 63.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 63.0
-												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_01Ex(3).png")
+												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(3).png")
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
 												me\Injuries = me\Injuries + 0.5
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"), True)
 											ElseIf e\EventState2 > 70.0 * 74.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 74.0
-												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_01Ex(4).png")
+												Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(4).png")
 												EntityTexture(e\room\Objects[3], Tex)
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
