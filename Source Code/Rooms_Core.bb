@@ -3430,7 +3430,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_office_2
 			;[Block]
 			; ~ Misc. door
-			CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z, 90.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z, 90.0, (Rand(5) = 1), OFFICE_DOOR)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_office_2_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
@@ -3614,7 +3614,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2c_2_ez
 			;[Block]
 			; ~ Corner office door
-			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, (Rand(4) = 1), OFFICE_DOOR)
 			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
@@ -3719,7 +3719,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room3_ez
 			;[Block]
-			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, (Rand(6) = 1), OFFICE_DOOR)
 			
 			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			
@@ -3875,11 +3875,11 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room4_2_ez
 			;[Block]
-			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, (Rand(5) = 1), OFFICE_DOOR)
 			CreateDoor(r, r\x + 605.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, False, OFFICE_DOOR)
 			
 			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z - 234.0 * RoomScale, 0.0, False, OFFICE_DOOR)
-			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, False, OFFICE_DOOR)
+			CreateDoor(r, r\x - 605.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, (Rand(3) = 1), OFFICE_DOOR)
 			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
