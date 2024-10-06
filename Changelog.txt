@@ -3,7 +3,7 @@
 [General]
 - Added red forest.
 - Added new hint messages.
-	- If intro sequence is disablend, hint messages will be hidden.
+	- If intro sequence is disabled, hint messages will be hidden.
 
 - Optimized the game...
 
