@@ -651,9 +651,9 @@ Function UpdateEvents%()
 						e\room\RoomDoors[1]\Open = True
 						
 						If SelectedDifficulty\SaveType = SAVE_ANYWHERE
-							CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
+							CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]), 6.0, True)
 						ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-							CreateHintMsg(GetLocalString("save", "failed.screen"))
+							CreateHintMsg(GetLocalString("save", "failed.screen"), 6.0, True)
 						EndIf
 						
 						n_I\Curr173\Idle = 1
@@ -799,7 +799,7 @@ Function UpdateEvents%()
 											PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
 											ResetEntity(n_I\Curr173\Collider)
 											n_I\Curr173\Idle = 0
-											CreateHintMsg(Format(GetLocalString("msg", "run"), key\Name[key\SPRINT]))
+											CreateHintMsg(Format(GetLocalString("msg", "run"), key\Name[key\SPRINT]), 6.0, True)
 										EndIf
 									EndIf
 								EndIf
@@ -862,10 +862,21 @@ Function UpdateEvents%()
 					If ((e\EventState Mod 600.0 > 300.0) And ((e\EventState + fps\Factor[0]) Mod 600.0 < 300.0))
 						i = Floor((e\EventState - 5000.0) / 600.0) + 1.0
 						
-						If i = 0
-							PlayAnnouncement("SFX\Room\Intro\IA\Scripted\Scripted5.ogg")
-							CreateHintMsg(Format(GetLocalString("msg", "crouch"), key\Name[key\CROUCH]))
-						EndIf
+						Select i
+							Case 0
+								;[Block]
+								PlayAnnouncement("SFX\Room\Intro\IA\Scripted\Scripted5.ogg")
+								CreateHintMsg(Format(GetLocalString("msg", "crouch"), key\Name[key\CROUCH]), 6.0, True)
+								;[End Block]
+							Case 1
+								;[Block]
+								CreateHintMsg(Format(GetLocalString("msg", "lean.left"), key\Name[key\LEAN_LEFT]), 6.0, True)
+								;[End Block]
+							Case 2
+								;[Block]
+								CreateHintMsg(Format(GetLocalString("msg", "lean.right"), key\Name[key\LEAN_RIGHT]), 6.0, True)
+								;[End Block]
+						End Select
 						If i > 0 And i < 26
 							If (Not CommotionState[i]) ; ~ Prevents the same commotion file from playing more then once
 								PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Commotion\Commotion" + (i - 1) + ".ogg"))

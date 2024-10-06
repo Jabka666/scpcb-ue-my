@@ -611,7 +611,7 @@ Function UpdateGame%()
 				EndIf
 			EndIf
 		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
-			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]))
+			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]), 6.0, True)
 			If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
 		EndIf
 		UpdateAutoSave()
@@ -2371,8 +2371,9 @@ Function RenderMessages%()
 	EndIf
 End Function
 
-Function CreateHintMsg%(Txt$, Sec# = 6.0)
-	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Lor (Not opt\IntroEnabled) Then Return
+Function CreateHintMsg%(Txt$, Sec# = 6.0, Tutorial% = False)
+	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
+	If Tutorial And (Not opt\IntroEnabled) Then Return
 	
 	msg\HintTxt = Txt
 	msg\HintTimer = 70.0 * Sec
@@ -3286,6 +3287,7 @@ Function UpdateNVG%()
 			EndIf
 		Next
 		If wi\NVGPower = 0 ; ~ This NVG or SCRAMBLE can't be used
+			CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
 			If wi\SCRAMBLE > 0
 				CreateMsg(GetLocalString("msg", "battery.died"))
 			Else
@@ -5515,6 +5517,8 @@ Function UpdateGUI%()
 								EndIf
 							EndIf
 						EndIf
+					ElseIf SelectedItem\State = 0.0
+						CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
 					EndIf
 					;[End Block]
 				Case it_nav, it_nav310, it_navulti, it_nav300
@@ -5536,6 +5540,8 @@ Function UpdateGUI%()
 									LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
 								EndIf
 							EndIf
+						ElseIf SelectedItem\State = 0.0
+							CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
 						EndIf
 					EndIf
 					;[End Block]
