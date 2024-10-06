@@ -416,11 +416,11 @@ Function UpdateLanguageSelector%()
 	CountryFlags = CreateS2IMap()
 	Local ServerURI$
 	
-	;If GetUserLanguage() = "zh-CN"
-	;	ServerURI = "https://filescenter-1301852054.cos.ap-nanjing.myqcloud.com/cbue/"
-	;Else
+	If GetUserLanguage() = "zh-CN"
+		ServerURI = "https://filescenter-1301852054.cos.ap-nanjing.myqcloud.com/cbue/"
+	Else
 		ServerURI = "https://files.ziyuesinicization.site/cbue/"
-	;EndIf
+	EndIf
 	
 	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
 	
