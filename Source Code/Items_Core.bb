@@ -752,7 +752,12 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	Local ITID% = item\ItemTemplate\ID
 	
-	If ITID = it_hazmatsuit Lor ITID = it_finehazmatsuit Lor ITID = it_veryfinehazmatsuit Lor ITID = it_hazmatsuit148 Then SetAnimTime(item\OBJ, 4.0)
+	Select item\ItemTemplate\ID
+		Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
+			;[Block]
+			SetAnimTime(item\OBJ, 4.0)
+			;[End Block]
+	End Select
 	
 	item\Picked = False
 	For n = 0 To MaxItemAmount - 1
