@@ -2380,12 +2380,16 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If item\ItemTemplate\ID = it_badge
-						it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
-					ElseIf item\ItemTemplate\ID = it_harnbadge
-						it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+					If Rand(20) = 1
+						If item\ItemTemplate\ID = it_badge
+							it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+						ElseIf item\ItemTemplate\ID = it_harnbadge
+							it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+						Else
+							it2.Items = CreateItem("Level 4 Key Card", it_key4, x, y, z)
+						EndIf
 					Else
-						it2.Items = CreateItem("Level 4 Key Card", it_key4, x, y, z)
+						it2.Items = CreateItem("Wallet", it_wallet, x, y, z)
 					EndIf
 					;[End Block]
 				Case VERYFINE
