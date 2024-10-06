@@ -2477,6 +2477,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Syringe", it_syringeinf, r\x - 819.0 * RoomScale, r\y - 4960.0 * RoomScale, r\z - 1452.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Compact First Aid Kit", it_finefirstaid, r\x - 57.0 * RoomScale, r\y - 4873.0 * RoomScale, r\z - 935.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 384.0 * RoomScale, r\y - 4654.0 * RoomScale, r\z + 1168.0 * RoomScale, 20.0)
 			sc\Angle = 135.0 : sc\Turn = 45.0
 			;[End Block]
