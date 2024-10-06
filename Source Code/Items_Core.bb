@@ -2419,6 +2419,7 @@ Const KEY_HAND_YELLOW% = -3
 
 Const KEY_860% = -4
 Const KEY_KEY% = -5
+Const KEY_LOST_KEY% = -66
 ;[End Block]
 
 ; ~ Only for "UseDoor" function
@@ -2476,9 +2477,13 @@ Function GetUsingItem%(item.Items)
 			;[Block]
 			Return(KEY_860)
 			;[End Block]
-		Case it_key, it_lostkey
+		Case it_key
 			;[Block]
 			Return(KEY_KEY)
+			;[End Block]
+		Case it_lostkey
+			;[Block]
+			Return(KEY_LOST_KEY)
 			;[End Block]
 		Default
 			;[Block]

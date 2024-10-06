@@ -9,6 +9,7 @@
 
 [Rooms]
 - Added warning console message in SCP-1499's dimension.
+- Added Compact First Aid Kit inside buffer room. The door requires a Key now.
 
 [Items]
 - Changed model scale of some items.
