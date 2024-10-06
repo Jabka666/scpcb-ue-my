@@ -3062,15 +3062,24 @@ Function UpdateMouseLook%()
 	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
 		If EntityHidden(t\OverlayID[4]) Then ShowEntity(t\OverlayID[4])
 		If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
-		If wi\NightVision = 2
-			EntityColor(t\OverlayID[4], 0.0, 100.0, 200.0)
-		ElseIf wi\NightVision = 3
-			EntityColor(t\OverlayID[4], 200.0, 0.0, 0.0)
-		ElseIf wi\NightVision = 1
-			EntityColor(t\OverlayID[4], 0.0, 200.0, 0.0)
-		Else
-			EntityColor(t\OverlayID[4], 200.0, 200.0, 200.0)
-		EndIf
+		Select wi\NightVision
+			Case 0
+				;[Block]
+				EntityColor(t\OverlayID[4], 200.0, 200.0, 200.0)
+				;[End Block]
+			Case 1
+				;[Block]
+				EntityColor(t\OverlayID[4], 0.0, 200.0, 0.0)
+				;[End Block]
+			Case 2
+				;[Block]
+				EntityColor(t\OverlayID[4], 0.0, 100.0, 200.0)
+				;[End Block]
+			Case 3
+				;[Block]
+				EntityColor(t\OverlayID[4], 200.0, 0.0, 0.0)
+				;[End Block]
+		End Select
 	Else
 		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
 		If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
