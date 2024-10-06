@@ -3,6 +3,7 @@
 [General]
 - Added red forest.
 - Added hint message about crouching.
+	- If intro sequence is disablend, hint messages will be hidden.
 
 - Optimized the game...
 
