@@ -1724,6 +1724,35 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case it_lostkey, it_key
+			;[Block]
+			Select Setting
+				Case ROUGH, COARSE
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Key", it_key, x, y, z)
+					;[End Block]
+				Case FINE
+					;[Block]
+					If Rand(3) = 1
+						it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+					Else
+						it2.Items = CreateItem("Key", it_key, x, y, z)
+					EndIf
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					If Rand(6) = 1
+						it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+					Else
+						it2.Items = CreateItem("Key", it_key, x, y, z)
+					EndIf
+					;[End Block]
+			End Select
+			;[End Block]
 		Case it_radio, it_18vradio, it_fineradio, it_veryfineradio
 			;[Block]
 			Select Setting
