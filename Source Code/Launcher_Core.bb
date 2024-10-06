@@ -49,7 +49,6 @@ Type ListLanguage ; ~ Languages in the list
 	Field Author$
 	Field LastModify$
 	Field Flag$
-	Field FlagImg%
 	Field MajorOnly%
 	Field Full%
 	Field FileSize%
@@ -411,49 +410,47 @@ Function UpdateLauncher%(lnchr.Launcher)
 	If Quit Then End()
 End Function
 
+Global CountryFlags%
+
 Function UpdateLanguageSelector%()
+	CountryFlags = CreateS2IMap()
 	Local ServerURI$
 	
-	If GetUserLanguage() = "zh-CN"
-		ServerURI = "https://filescenter-1301852054.cos.ap-nanjing.myqcloud.com/cbue/"
-	Else
+	;If GetUserLanguage() = "zh-CN"
+	;	ServerURI = "https://filescenter-1301852054.cos.ap-nanjing.myqcloud.com/cbue/"
+	;Else
 		ServerURI = "https://files.ziyuesinicization.site/cbue/"
-	EndIf
+	;EndIf
 	
 	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
 	
 	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
 	CreateDir(BasePath + "/flags/")
-	DownloadFile(ServerURI + "list.txt", BasePath + "temp.txt") ; ~ List of languages
+	DownloadFile(ServerURI + "languages.json", BasePath + "languages.json") ; ~ List of languages
 	
 	Local lan.ListLanguage
-	Local File% = OpenFile(BasePath + "temp.txt") ; ~ Please do not modify this
+	Local File% = JsonParseFromFile(BasePath + "languages.json")
 	Local l$
 	
-	If File <> 0
-		While (Not Eof(File))
-			l = ReadLine(File)
-			If l <> ""
-				lan.ListLanguage = New ListLanguage
-				lan\Name = ParseDomainTXT(l, "name") ; ~ Name of localization
-				lan\ID = ParseDomainTXT(l, "id") ; ~ Language ID of localization
-				lan\Author = ParseDomainTXT(l, "author") ; ~ Author of translation
-				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
-				lan\MajorOnly = Int(ParseDomainTXT(l, "majoronly")) ; ~ loca.ini only?
-				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
-				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
-				lan\FileSize = Int(ParseDomainTXT(l, "size")) ; ~ Size of localization
-				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
-				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURI + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
-				If lan\FlagImg = 0 Then lan\FlagImg = LoadImage(BasePath + "flags\" + lan\Flag)
-				If lan\FlagImg = 0 Then Return(True)
-			Else
-				Exit
-			EndIf
-		Wend
-		CloseFile(File)
-		DeleteFile(BasePath + "temp.txt")
+	If Not JsonHasParseError(File)
+		Local Languages% = JsonGetArray(File)
+		For i = 0 To JsonGetArraySize(Languages) - 1
+			Local LanguageIt% = JsonGetArrayValue(Languages, i)
+			lan.ListLanguage = New ListLanguage
+			lan\Name = JsonGetString(JsonGetValue(LanguageIt, "name")) ; ~ Name of localization
+			lan\ID = JsonGetString(JsonGetValue(LanguageIt, "id")) ; ~ Language ID of localization
+			lan\Author = JsonGetString(JsonGetValue(LanguageIt, "author")) ; ~ Author of translation
+			lan\LastModify = JsonGetString(JsonGetValue(LanguageIt, "update")) ; ~ Last modify date
+			lan\MajorOnly = JsonIsNull(JsonGetValue(LanguageIt, "size")) ; ~ loca.ini only?
+			lan\Full = JsonGetBool(JsonGetValue(LanguageIt, "perfect")) ; ~ Full complete translation
+			lan\Flag = JsonGetString(JsonGetValue(LanguageIt, "flag")) ; ~ Flag of country
+			lan\FileSize = JsonGetInt(JsonGetValue(LanguageIt, "size")) ; ~ Size of localization
+			lan\Compatible = JsonGetString(JsonGetValue(LanguageIt, "compatible")) ; ~ Compatible version
+			If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURI + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+			If Not S2IMapContains(CountryFlags, lan\Flag) Then S2IMapSet(CountryFlags, lan\Flag, LoadImage(BasePath + "flags\" + lan\Flag))
+			If Not S2IMapContains(CountryFlags, lan\Flag) Then Return(True)
+		Next
 	Else
 		Return(True)
 	EndIf
@@ -533,7 +530,7 @@ Function UpdateLanguageSelector%()
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 1)
-				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, S2IMapGet(CountryFlags, lan\Flag))
 				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 432, 20)
 					DrawImage(ButtonImages, 410, y - 195 - CurrFontHeight, 5)
 					If MouseOn(430, y - CurrFontHeight, 21, 21)
@@ -569,7 +566,7 @@ Function UpdateLanguageSelector%()
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 1)
-				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", LauncherWidth - 619, y, 432, lan\FlagImg)
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", LauncherWidth - 619, y, 432, S2IMapGet(CountryFlags, lan\Flag))
 				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 430, 20)
 					DrawImage(ButtonImages, LauncherWidth - 210, y - 4, 5)
 					If MouseOn(LauncherWidth - 210, y - 4, 21, 21)
@@ -713,7 +710,7 @@ Function UpdateLanguageSelector%()
 				Compatible = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
 				
 				If MouseHoverLanguage\MajorOnly
-					Height = FontHeightVal * 10
+					Height = FontHeightVal * 8
 				Else
 					Size = Format(GetLocalString("language", "size"), SimpleFileSize(MouseHoverLanguage\FileSize))
 					LastMod = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
@@ -738,12 +735,12 @@ Function UpdateLanguageSelector%()
 				Else
 					DualColorText(x, y + 53, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "no"), 255, 255, 255, 200, 0, 0)
 				EndIf
-				If MouseHoverLanguage\Compatible = VersionNumber
-					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 0, 200, 0)
-				Else
-					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
-				EndIf
 				If (Not MouseHoverLanguage\MajorOnly)
+					If MouseHoverLanguage\Compatible = VersionNumber
+						DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 0, 200, 0)
+					Else
+						DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
+					EndIf
 					TextEx(x, y + 83, LastMod)
 					TextEx(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
 				EndIf
@@ -761,9 +758,10 @@ Function UpdateLanguageSelector%()
 	ScrollMenuHeight = 0.0
 	
 	For lan.ListLanguage = Each ListLanguage
-		If lan\FlagImg <> 0 Then FreeImage(lan\FlagImg) : lan\FlagImg = 0
+		FreeImage(S2IMapGet(CountryFlags, lan\Flag))
 		Delete(lan)
 	Next
+	DestroyS2IMap(CountryFlags) : CountryFlags = 0
 	
 	FreeImage(LanguageIMG) : LanguageIMG = 0
 	FreeImage(LanguageBG) : LanguageBG = 0
