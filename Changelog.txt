@@ -10,6 +10,8 @@
 [Rooms]
 - Added warning console message in SCP-1499's dimension.
 - Added Compact First Aid Kit inside buffer room. The door requires a Key now.
+- Added First Aid Kit in SCP-008 laboratory.
+- Some office doors throughout Entrance Zone will be randomly opened.
 
 [Items]
 - Changed model scale of some items.
@@ -17,6 +19,7 @@
 - Equipping and unequipping the Hazmat Suit is faster.
 - Added new items: Key and red SCP-860.
 - SCP-1123 can be refined in SCP-914.
+- Can refine badges in SCP-914.
 
 [NPCs]
 - SCP-049-2 can teleport around the facility.
