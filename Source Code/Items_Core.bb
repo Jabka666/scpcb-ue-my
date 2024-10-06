@@ -2363,7 +2363,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_badge, it_oldbadge, it_harnbadge
+		Case it_badge, it_burntbadge, it_oldbadge, it_harnbadge
 			;[Block]
 			Select Setting
 				Case ROUGH
@@ -2378,7 +2378,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
 					;[End Block]
-				Case FINE, VERYFINE
+				Case FINE
+					;[Block]
+					If item\ItemTemplate\ID = it_badge
+						it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+					ElseIf item\ItemTemplate\ID = it_harnbadge
+						it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+					Else
+						it2.Items = CreateItem("Level 4 Key Card", it_key4, x, y, z)
+					EndIf
+					;[End Block]
+				Case VERYFINE
 					;[Block]
 					it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
 					;[End Block]
