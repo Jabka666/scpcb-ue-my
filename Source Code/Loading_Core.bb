@@ -2364,6 +2364,7 @@ Function LoadEntities%()
 	EntityBlend(t\OverlayID[3], 3)
 	EntityFX(t\OverlayID[3], 1)
 	EntityOrder(t\OverlayID[3], -1003)
+	EntityAlpha(t\OverlayID[3], 0.0)
 	MoveEntity(t\OverlayID[3], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
@@ -2409,6 +2410,7 @@ Function LoadEntities%()
 	EntityBlend(t\OverlayID[7], 3)
 	EntityFX(t\OverlayID[7], 1)
 	EntityOrder(t\OverlayID[7], -1003)
+	EntityAlpha(t\OverlayID[7], 0.0)
 	MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0	
 	
@@ -2429,6 +2431,7 @@ Function LoadEntities%()
 	EntityBlend(t\OverlayID[9], 3)
 	EntityFX(t\OverlayID[9], 1)
 	EntityOrder(t\OverlayID[9], -1002)
+	EntityAlpha(t\OverlayID[9], 0.0)
 	MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
