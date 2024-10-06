@@ -610,9 +610,9 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			
-			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x + 538.0 * RoomScale, r\y + 112.0 * RoomScale, r\z - 40.0 * RoomScale)
+			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x - 1376.0 * RoomScale, r\y + 112.0 * RoomScale, r\z - 686.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			RotateEntity(it\Collider, 0.0, 270.0, 0.0)
 			
 			it.Items = CreateItem("Dr. L's Note #1", it_paper, r\x - 538.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 365.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
