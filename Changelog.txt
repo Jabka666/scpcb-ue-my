@@ -2,6 +2,7 @@
 
 [General]
 - Added red forest.
+- Added hint message about crouching.
 
 - Optimized the game...
 
