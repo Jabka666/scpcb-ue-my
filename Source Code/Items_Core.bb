@@ -2341,9 +2341,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			Select Setting
 				Case ROUGH, COARSE
 					;[Block]
+					PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
 					de.Decals = CreateDecal(DECAL_BLOOD_2, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.4), Rnd(0.8, 1.0), 1)
 					EntityParent(de\OBJ, PlayerRoom\OBJ)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2360,6 +2360,27 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							it2.Items = CreateItem("White Severed Hand", it_hand, x, y, z)
 						EndIf
 					EndIf
+					;[End Block]
+			End Select
+			;[End Block]
+		Case it_badge, it_oldbadge, it_harnbadge
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Blank Paper", it_paper, x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
