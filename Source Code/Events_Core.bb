@@ -1681,12 +1681,15 @@ Function UpdateEvents%()
 			Case e_cont1_914
 				;[Block]
 				If PlayerRoom = e\room
+						UpdateLever(e\room\RoomLevers[0]\OBJ)
+						UpdateLever(e\room\RoomLevers[1]\OBJ, True)
+					
 					If e\room\RoomDoors[2]\Open Lor EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
 						GiveAchievement("914")
 						e\EventState2 = 1.0
 					EndIf
 					
-					UpdateLever(e\room\RoomLevers[0]\OBJ)
+					If e\room\RoomDoors[2]\Locked = 1 Then e\room\RoomDoors[2]\Locked = (Not UpdateLever(e\room\RoomLevers[1]\OBJ))
 					
 					If e\EventState2 = 1.0 Then ShouldPlay = 21
 					

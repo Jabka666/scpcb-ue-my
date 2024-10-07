@@ -564,6 +564,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ SCP-914 Chamber Door
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 368.0 * RoomScale, 0.0, False, BIG_DOOR, KEY_CARD_2)
+			d\Locked = 1
 			PositionEntity(d\Buttons[0], r\x - 496.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 278.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.025, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			TurnEntity(d\Buttons[0], 0.0, 90.0, 0.0)
@@ -575,6 +576,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.057, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 1012.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 976.0 * RoomScale, 180.0, False)
+			
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 1300.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 976.0 * RoomScale, 180.0, False)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\scp_914_key.b3d")
 			PositionEntity(r\Objects[0], r\x - 416.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 374.0 * RoomScale, True)

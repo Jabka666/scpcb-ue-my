@@ -13,6 +13,7 @@
 - Added First Aid Kit in SCP-008 laboratory.
 - Some office doors throughout Entrance Zone will be randomly opened.
 - Moved the First Aid Kit in SCP-914's chamber to SCP-914's observation room.
+- SCP-914's blast door is now locked.
 
 [Items]
 - Changed model scale of some items.
