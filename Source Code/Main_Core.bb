@@ -5957,7 +5957,7 @@ Function RenderHUD%()
 		If I_268\Timer =< 0.0
 			Color(150, 150, 0)
 			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
-		ElseIf I_714\Using > 0
+		ElseIf I_714\Using > 0 Lor wi\GasMask = 4
 			Color(200, 0, 0)
 			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 		ElseIf I_268\Using = 3
@@ -8961,9 +8961,9 @@ Function Update268%()
 		Local Factor268# 
 		
 		If I_268\Using = 3 
-			Factor268 = (fps\Factor[0] / 2.0) * (1.0 + I_714\Using)
+			Factor268 = (fps\Factor[0] / 2.0) * (1.0 + I_714\Using + (wi\GasMask = 4))
 		Else
-			Factor268 = fps\Factor[0] * (1.0 + I_714\Using)
+			Factor268 = fps\Factor[0] * (1.0 + I_714\Using + (wi\GasMask = 4))
 		EndIf
 		I_268\Timer = Max(I_268\Timer - Factor268, 0.0)
 		If I_268\Timer >= 1.0 And I_268\Timer - Factor268 < 1.0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
