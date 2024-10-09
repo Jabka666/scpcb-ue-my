@@ -3224,17 +3224,17 @@ Function FillRoom%(r.Rooms)
 			EntityAlpha(r\Objects[0], 0.0)
 			
 			If Rand(2) = 1
-				it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 744.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 944.0 * RoomScale)
+				it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 744.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			Else
-				it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 680.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 944.0 * RoomScale)
+				it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 680.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
 			it.Items = CreateItem("Object Classes", it_paper, r\x + 160.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 568.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document", it_paper, r\x - 1440.0 * RoomScale, r\y + 624.0 * RoomScale, r\z + 152.0 * RoomScale)
+			it.Items = CreateItem("Document", it_paper, r\x - 1440.0 * RoomScale, r\y + 624.0 * RoomScale, r\z + 262.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Radio Transceiver", it_radio, r\x - 1184.0 * RoomScale, r\y + 480.0 * RoomScale, r\z - 800.0 * RoomScale)
