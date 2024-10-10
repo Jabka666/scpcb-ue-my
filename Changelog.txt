@@ -37,6 +37,7 @@
 - Fixed SCP-008-1's teleportation.
 - Fixed MAV in SCP-012's containment chamber.
 - Fixed «The battery doesn't fit inside these goggles» message not displaying correctly.
+- Fixed wrong rendering on «Load Game» page.
 
 [Known issues]
 - Rooms can overlap and block the way.
