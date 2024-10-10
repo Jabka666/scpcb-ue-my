@@ -1349,9 +1349,9 @@ Function RenderMainMenu%()
 								If CurrSave\Version <> VersionNumber
 									Color(255, 0, 0)
 								Else
-									For i = SAFE To ESOTERIC
-										If CurrSave\Difficulty = difficulties[i]\Name
-											Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
+									For Temp = SAFE To ESOTERIC
+										If CurrSave\Difficulty = difficulties[Temp]\Name
+											Color(difficulties[Temp]\R, difficulties[Temp]\G, difficulties[Temp]\B)
 											Exit
 										EndIf
 									Next
