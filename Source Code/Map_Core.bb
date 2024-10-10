@@ -2865,7 +2865,6 @@ Function UpdateDoors%()
 						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 And Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0
 							If UpdateButton(d\Buttons[i])
 								d_I\ClosestDoor = d
-								me\SndVolume = 4.0
 								If d\KeyCard = KEY_MISC And d\Code = 0 And (Not OfficeWooden) Then d_I\AnimButton = d_I\ClosestButton
 								Exit
 							EndIf
