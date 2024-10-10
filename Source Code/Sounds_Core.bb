@@ -159,7 +159,6 @@ Function PauseSounds%()
 	For d.Doors = Each Doors
 		PauseChannel(d\SoundCHN)
 		PauseChannel(d\SoundCHN2)
-		PauseChannel(d\ButtonCHN)
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
@@ -233,7 +232,6 @@ Function ResumeSounds%()
 	For d.Doors = Each Doors
 		ResumeChannel(d\SoundCHN)
 		ResumeChannel(d\SoundCHN2)
-		ResumeChannel(d\ButtonCHN)
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
@@ -319,7 +317,6 @@ Function KillSounds%(EraseSounds% = True)
 	For d.Doors = Each Doors
 		StopChannel(d\SoundCHN) : d\SoundCHN = 0
 		StopChannel(d\SoundCHN2) : d\SoundCHN2 = 0
-		StopChannel(d\ButtonCHN) : d\ButtonCHN = 0
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
