@@ -2177,6 +2177,21 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					Next
 					If (Not NO427Spawn)
 						it2.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+						
+						If Rand(2) = 1
+							it3.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+							EntityType(it3\Collider, HIT_ITEM)
+						EndIf
+						
+						If Rand(3) = 1
+							it4.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+							EntityType(it4\Collider, HIT_ITEM)
+						EndIf
+						
+						If Rand(4) = 1
+							it5.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+							EntityType(it5\Collider, HIT_ITEM)
+						EndIf
 					Else
 						it2.Items = CreateItem("SCP-427", it_scp427, x, y, z)
 					EndIf
