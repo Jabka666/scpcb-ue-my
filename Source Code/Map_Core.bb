@@ -3678,10 +3678,15 @@ Function UseDoor%(PlaySFX% = True)
 								If forest_event\room = PlayerRoom
 									GiveAchievement("860")
 									
+									forest_event\EventState4 = 0.0
 									If SelectedItem\ItemTemplate\ID = it_fine860
 										forest_event\EventState4 = 1.0
 										RemoveNPC(forest_event\room\NPC[0])
 									EndIf
+									
+									CreateConsoleMsg("")
+									CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
+									CreateConsoleMsg("")
 								EndIf
 							EndIf
 						EndIf
