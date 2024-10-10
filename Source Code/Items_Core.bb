@@ -2380,7 +2380,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(20) = 1
+					If Rand(8) = 1
 						If item\ItemTemplate\ID = it_badge
 							it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 						ElseIf item\ItemTemplate\ID = it_harnbadge
