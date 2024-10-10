@@ -904,11 +904,9 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 	Rect(x + 2, y + 2, Width - 4, Height - 4)
 	
 	If Selected
-		If Highlight
-			Color(255, 255, 255)
-		Else
-			Color(200, 200, 200)
-		EndIf
+		Local Clr% = 200 + (55 * Highlight)
+		
+		Color(Clr, Clr, Clr)
 		RenderTiledImageRect(IMG, (x Mod 256), (y Mod 256), 512, 512, x + 4, y + 4, Width - 8, Height - 8)
 	EndIf
 	Color(255, 255, 255)

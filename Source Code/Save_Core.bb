@@ -2824,11 +2824,11 @@ Function LoadMap%(File$)
 	Next
 	
 	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10, r_gate_b)
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10.0, r_gate_b)
 	CalculateRoomExtents(r)
 	CreateEvent(e_gate_b, r_gate_b, 0)
 	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2, r_gate_a)
+	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2.0, r_gate_a)
 	CalculateRoomExtents(r)
 	CreateEvent(e_gate_a, r_gate_a, 0)
 	
@@ -2842,7 +2842,7 @@ Function LoadMap%(File$)
 		CreateEvent(e_cont1_173_intro, r_cont1_173_intro, 0)
 	EndIf
 	
-	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing * 2), 800.0, 0.0, r_dimension_1499)
+	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing) * 2.0, 800.0, 0.0, r_dimension_1499)
 	CalculateRoomExtents(r)
 	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
 	

@@ -5773,7 +5773,10 @@ Function CreateMap%()
 				For y = 0 To MapGridSize - 1
 					If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_NoTile
 						Zone = GetZone(y)
-						Color((50 * Zone) + 50, (50 * Zone) + 50, (50 * Zone) + 50)
+						
+						Local Clr% = 50 + (50 * Zone)
+						
+						Color(Clr, Clr, Clr)
 						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
 					Else
 						Select CurrMapGrid\Grid[x + (y * MapGridSize)]

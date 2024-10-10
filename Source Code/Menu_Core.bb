@@ -1008,6 +1008,7 @@ Function RenderMainMenu%()
 	Local x%, y%, Width%, Height%, Temp%, i%
 	Local tX#, tY#, tW#, tH#
 	Local TempStr$, TempStr2$, Name$
+	Local Clr%
 	
 	If (Not OnPalette)
 		ShowPointer()
@@ -1326,11 +1327,8 @@ Function RenderMainMenu%()
 							If i >= (5 * mm\CurrMenuPage)
 								RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 								
-								If CurrSave\Version <> VersionNumber
-									Color(255, 0, 0)
-								Else
-									Color(255, 255, 255)
-								EndIf
+								Clr = 255 - (255 * (CurrSave\Version <> VersionNumber))
+								Color(255, Clr, Clr)
 								
 								Name = ConvertToUTF8(CurrSave\Name)
 								If Len(Name) > 10
@@ -1470,7 +1468,8 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
+					Clr = 255 - 155 * (opt\DisplayMode <> 0)
+					Color(Clr, Clr, Clr)
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 					
@@ -2219,11 +2218,9 @@ Function RenderMenuTicks%()
 		RenderTiledImageRect(IMG, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x, mt\y, Width, Height)
 		
 		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
-		Local ColorR% = 0, ColorG% = 0, ColorB% = 0
+		Local ColorR% = 50 * Highlight, ColorG% = 50 * Highlight, ColorB% = 50 * Highlight
 		
-		If Highlight Then ColorR = 50 : ColorG = 50 : ColorB = 50
 		Color(ColorR, ColorG, ColorB)
-		
 		Rect(mt\x + 2, mt\y + 2, Width - 4, Height - 4)
 		
 		If mt\Selected

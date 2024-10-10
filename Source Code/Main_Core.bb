@@ -2226,11 +2226,15 @@ Function RenderConsole%()
 		ConsoleHeight = Max(ConsoleHeight, Height)
 		
 		ConsoleInBar = MouseOn(x + Width - CoordEx, y, CoordEx, Height)
-		Color(50 + (20 * ConsoleInBar), 50 + (20 * ConsoleInBar), 50 + (20 * ConsoleInBar))
+		
+		Local Clr% = 50 + (20 * ConsoleInBar)
+		
+		Color(Clr, Clr, Clr)
 		Rect(x + Width - CoordEx, y, CoordEx, Height)
 		
 		ConsoleInBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
-		Color(120 + (80 * ConsoleInBox) + (55 * ConsoleScrollDragging), 120 + (80 * ConsoleInBox) + (55 * ConsoleScrollDragging), 120 + (80 * ConsoleInBox) + (55 * ConsoleScrollDragging))
+		Clr = 120 + ((80 * ConsoleInBox) + (55 * ConsoleScrollDragging))
+		Color(Clr, Clr, Clr)
 		Rect(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
 		
 		Color(255, 255, 255)
@@ -7025,12 +7029,11 @@ Function RenderGUI%()
 									EndIf
 								EndIf
 								
-								Color(30, 30, 30)
+								Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
 								If SelectedItem\State > 0.0 And (SelectedItem\ItemTemplate\ID = it_nav Lor SelectedItem\ItemTemplate\ID = it_nav310)
 									xTemp = x - NAV_WIDTH_HALF + (196 * MenuScale)
 									yTemp = y - NAV_HEIGHT_HALF + (10 * MenuScale)
 									
-									If Offline Then Color(100, 0, 0)
 									Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
 									
 									; ~ Battery
@@ -7810,6 +7813,7 @@ Function RenderMenu%()
 				Local tW# = 400.0 * MenuScale
 				Local tH# = 150.0 * MenuScale
 				Local MouseOnCoord% = 20 * MenuScale
+				Local Clr%
 				
 				Color(255, 255, 255)
 				Select igm\OptionsMenu
@@ -7827,7 +7831,8 @@ Function RenderMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
+						Clr = 255 - (155 * (opt\DisplayMode <> 0))
+						Color(Clr, Clr, Clr)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 						
@@ -8078,7 +8083,8 @@ Function RenderMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						Color(255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)), 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE)))
+						Clr = 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
+						Color(Clr, Clr, Clr)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
 						
@@ -8289,11 +8295,12 @@ Function RenderEnding%()
 	ShowPointer()
 	
 	Local itt.ItemTemplates, r.Rooms
+	Local Clr% = Max(255.0 + (me\EndingTimer) * 2.8, 0.0)
 	
 	Select me\SelectedEnding
 		Case Ending_A1, Ending_B2
 			;[Block]
-			ClsColor(Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0), Max(255.0 + (me\EndingTimer) * 2.8, 0.0))
+			ClsColor(Clr, Clr, Clr)
 			;[End Block]
 		Default
 			;[Block]
@@ -8488,12 +8495,16 @@ Function RenderCredits%()
 		ID = ID + 1
 	Next
 	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
+		Local Clr%
+		
 		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
-			Color(Max(Min(me\CreditsTimer, 255.0), 0.0), Max(Min(me\CreditsTimer, 255.0), 0.0), Max(Min(me\CreditsTimer, 255.0), 0.0))
+			Clr = Max(Min(me\CreditsTimer, 255.0), 0.0)
+			Color(Clr, Clr, Clr)
 		ElseIf me\CreditsTimer >= 255.0
 			Color(255, 255, 255)
 		Else
-			Color(Max(Min(-me\CreditsTimer, 255.0), 0.0), Max(Min(-me\CreditsTimer, 255.0), 0.0), Max(Min(-me\CreditsTimer, 255.0), 0.0))
+			Clr = Max(Min(-me\CreditsTimer, 255.0), 0.0)
+			Color(Clr, Clr, Clr)
 		EndIf
 	EndIf
 	If me\CreditsTimer <> 0.0
