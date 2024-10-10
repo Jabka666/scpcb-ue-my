@@ -2258,7 +2258,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_paper
+		Case it_paper, it_oldpaper
 			;[Block]
 			Select Setting
 				Case ROUGH
