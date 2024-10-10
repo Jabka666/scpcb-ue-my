@@ -3716,11 +3716,7 @@ Function UseDoor%(PlaySFX% = True)
 					If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
 						CreateMsg(GetLocalString("msg", "elev.broken"))
 						PlaySoundEx(ButtonSFX[1], Camera, d_I\ClosestButton)
-						If ButtonDirection
-							SetAnimTime(d_I\AnimButton, 1.0)
-						Else
-							SetAnimTime(d_I\AnimButton, 21.0)
-						EndIf
+						SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 						Return
 					Else
 						If d_I\ClosestDoor\IsElevatorDoor = 1
@@ -3750,11 +3746,7 @@ Function UseDoor%(PlaySFX% = True)
 							CreateMsg(GetLocalString("msg", "elev.already"))
 						EndIf
 						PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
-						If ButtonDirection
-							SetAnimTime(d_I\AnimButton, 1.0)
-						Else
-							SetAnimTime(d_I\AnimButton, 21.0)
-						EndIf
+						SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 						Return
 					EndIf
 				Else
@@ -3769,11 +3761,7 @@ Function UseDoor%(PlaySFX% = True)
 				EndIf
 			Else
 				PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
-				If ButtonDirection
-					SetAnimTime(d_I\AnimButton, 1.0)
-				Else
-					SetAnimTime(d_I\AnimButton, 21.0)
-				EndIf
+				SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 			EndIf
 		EndIf
 	EndIf
