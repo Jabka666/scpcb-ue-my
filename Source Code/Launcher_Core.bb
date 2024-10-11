@@ -263,6 +263,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		
+		Local FontW# = FontWidth()
+		Local FontH# = FontHeight()
+		
 		; ~ Driver name (tooltip)
 		If MouseOn(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
 			TooltipX = MousePosX + 5
@@ -270,8 +273,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 			ToolTip = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
 			TooltipWidth = StringWidth(ToolTip)
 			
-			If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
-			RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
+			If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
+			RenderFrame(TooltipX, TooltipY, TooltipWidth + FontW, FontH + 16)
 			TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
 		EndIf
 		
@@ -285,8 +288,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 				TooltipWidth = StringWidth(ToolTip)
 				
 				Rect(LauncherWidth - 30, LauncherHeight - 250, 21, 21, False)
-				If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
-				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
+				If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
+				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontW, FontH + 16)
 				TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
 			EndIf
 		EndIf
