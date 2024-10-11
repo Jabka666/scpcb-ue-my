@@ -389,7 +389,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	IniWriteString(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
-	IniWriteString(OptionFile, "Advanced", "No Progress Bar", opt\NoProgressBar)
+	IniWriteString(OptionFile, "Global", "No Progress Bar", opt\NoProgressBar)
 	
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0

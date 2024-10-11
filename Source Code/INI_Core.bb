@@ -211,7 +211,6 @@ Type Options
 	Field AutoSaveEnabled%
 	Field PlayStartup%
 	Field LauncherEnabled%
-	Field NoProgressBar%
 	; ~ [CONTROLS]
 	Field MouseSmoothing#
 	Field InvertMouseX%, InvertMouseY%
@@ -226,6 +225,7 @@ Type Options
 	Field Language$
 	Field GFXDriversAmount%
 	Field TotalVidMemory%, TotalPhysMemory%
+	Field NoProgressBar%
 End Type
 
 Global opt.Options = New Options
@@ -236,7 +236,7 @@ opt\TotalPhysMemory% = TotalPhys() / 1024
 
 Function LoadOptionsINI%()
 	; ~ [GRAPHICS]
-	
+	;[Block]
 	opt\BumpEnabled = IniGetInt(OptionFile, "Graphics", "Enable Bump Mapping", True)
 	
 	opt\VSync = IniGetInt(OptionFile, "Graphics", "VSync", True)
@@ -329,9 +329,10 @@ Function LoadOptionsINI%()
 			opt\SecurityCamRenderIntervalLevel = 0.0
 			;[End Block]
 	End Select
+	;[End Block]
 	
 	; ~ [AUDIO]
-	
+	;[Block[
 	opt\PrevMasterVolume = IniGetFloat(OptionFile, "Audio", "Master Volume", 0.5)
 	opt\MasterVolume = opt\PrevMasterVolume
 	
@@ -356,9 +357,10 @@ Function LoadOptionsINI%()
 	opt\SubColorG = IniGetInt(OptionFile, "Audio", "Subtitles Color G", 255)
 	
 	opt\SubColorB = IniGetInt(OptionFile, "Audio", "Subtitles Color B", 255)
+	;[End Block]
 	
 	; ~ [CONTROLS]
-	
+	;[Block]
 	opt\MouseSensitivity = IniGetFloat(OptionFile, "Controls", "Mouse Sensitivity", 0.0)
 	
 	opt\InvertMouseX = IniGetInt(OptionFile, "Controls", "Invert Mouse By X-Axis", False)
@@ -392,8 +394,10 @@ Function LoadOptionsINI%()
 	key\LEAN_LEFT = IniGetInt(OptionFile, "Controls", "Lean Left Key", 16)
 	
 	key\LEAN_RIGHT = IniGetInt(OptionFile, "Controls", "Lean Right Key", 18)
-	; ~ [ADVANCED]
+	;[End Block]
 	
+	; ~ [ADVANCED]
+	;[Block]
 	opt\HUDEnabled = IniGetInt(OptionFile, "Advanced", "Enable HUD", True)
 	
 	opt\CanOpenConsole = IniGetInt(OptionFile, "Advanced", "Enable Console", False)
@@ -414,11 +418,10 @@ Function LoadOptionsINI%()
 	opt\PlayStartup = IniGetInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
 	opt\LauncherEnabled = IniGetInt(OptionFile, "Advanced", "Launcher Enabled", True)
-	
-	opt\NoProgressBar = IniGetInt(OptionFile, "Advanced", "No Progress Bar", False)
+	;[End Block]
 	
 	; ~ [GLOBAL]
-	
+	;[Block]
 	opt\GraphicWidth = IniGetInt(OptionFile, "Global", "Width", DesktopWidth())
 	
 	opt\GraphicHeight = IniGetInt(OptionFile, "Global", "Height", DesktopHeight())
@@ -432,6 +435,9 @@ Function LoadOptionsINI%()
 	opt\DebugMode = IniGetInt(OptionFile, "Global", "Debug Mode", False)
 	
 	opt\Language = IniGetString(OptionFile, "Global", "Language", "en")
+	
+	opt\NoProgressBar = IniGetInt(OptionFile, "Global", "No Progress Bar", False)
+	;[End Block]
 End Function
 
 Function SaveOptionsINI%(SaveGlobal% = False)
@@ -543,8 +549,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-	
-	IniWriteString(OptionFile, "Advanced", "No Progress Bar", opt\NoProgressBar)
 	;[End Block]
 	
 	; ~ [GLOBAL]
@@ -552,6 +556,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	If SaveGlobal Then IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 	
 	IniWriteString(OptionFile, "Global", "Language", opt\Language)
+	
+	IniWriteString(OptionFile, "Global", "No Progress Bar", opt\NoProgressBar)
 	;[End Block]
 End Function
 
