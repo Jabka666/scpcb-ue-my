@@ -1733,6 +1733,34 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case it_scp005
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
+					
+					it3.Items = CreateItem("White Severed Hand", it_hand, x, y, z)
+					EntityType(it3\Collider, HIT_ITEM)
+					it4.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
+					EntityType(it4\Collider, HIT_ITEM)
+					it5.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
+					EntityType(it5\Collider, HIT_ITEM)
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					Remove = False
+					;[End Block]
+			End Select
+			;[End Block]
 		Case it_scp860
 			;[Block]
 			Select Setting
