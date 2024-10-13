@@ -11,15 +11,17 @@
 - Added warning console message in SCP-1499's dimension.
 - Added Compact First Aid Kit inside buffer room. The door requires a Key now.
 - Added First Aid Kit in SCP-008 laboratory.
+- Added another Level 2 Key Card in LCZ.
 - Some office doors throughout Entrance Zone will be randomly opened.
 - Moved the First Aid Kit in SCP-914's chamber to SCP-914's observation room.
 - SCP-914's blast door is now locked.
 
 [Items]
+- Added new items: Key and red SCP-860.
+- Added rusty texture for Lost Key.
 - Changed model scale of some items.
 - Fogging overlay of Gas Mask and Hazmat Suit looks more realistic.
 - Equipping and unequipping the Hazmat Suit is faster.
-- Added new items: Key and red SCP-860.
 - SCP-1123 can be refined in SCP-914.
 - Can refine badges in SCP-914.
 

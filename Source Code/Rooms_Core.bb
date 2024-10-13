@@ -1,3 +1,5 @@
+Global KEY2_SPAWNRATE%
+
 Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom()")
 	
@@ -287,6 +289,11 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Compact First Aid Kit", it_finefirstaid, r\x + 674.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 186.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			If KEY2_SPAWNRATE = 1
+				it.Items = CreateItem("Key", it_key_white, r\x + 2255.0 * RoomScale, r\y + 1015.0 * RoomScale, r\z + 4618.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			
 			emit.Emitter = SetEmitter(r, r\x + 3384.0 * RoomScale, r\y + 500.0 * RoomScale, r\z + 4500.0 * RoomScale, 7)
 			emit\State = 2
@@ -765,6 +772,11 @@ Function FillRoom%(r.Rooms)
 				
 				emit.Emitter = SetEmitter(r, r\x + 262.0 * RoomScale, r\y + 328.0 * RoomScale, r\z - 413.0 * RoomScale, 1)
 				emit\State = 2
+				
+				If KEY2_SPAWNRATE = 2
+					it.Items = CreateItem("Key", it_key_white, r\x - 920.0 * RoomScale, r\y + 280.0 * RoomScale, r\z + 158.0 * RoomScale)
+					EntityParent(it\Collider, r\OBJ)
+				EndIf
 			Else
 				d.Doors = CreateDoor(r, r\x - 458.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
 				PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.04, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 1.12, True)
@@ -819,6 +831,11 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateRandomBattery(r\x + 1714.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 936.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			If KEY2_SPAWNRATE = 3
+				it.Items = CreateItem("Key", it_key_white, r\x + 963.0 * RoomScale, r\y + 35.0 * RoomScale, r\z + 932.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			;[End Block]
 		Case r_room2_sl
 			;[Block]
@@ -1616,7 +1633,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			RotateEntity(it\Collider, 0.0, 240.0, 0.0)
 			
-			it.Items = CreateItem("Incident Report SCP-066-2", it_paper, r\x + 525.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 380.0 * RoomScale)
+			it.Items = CreateItem("Incident Report SCP-066-2", it_paper, r\x - 21.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 827.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x - 241.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 806.0 * RoomScale)
@@ -1628,6 +1645,11 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateRandomBattery(r\x + 652.0 * RoomScale, r\y + 50.0 * RoomScale, r\z - 340.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			
+			If KEY2_SPAWNRATE = 4
+				it.Items = CreateItem("Key", it_key_white, r\x + 533.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 374.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			;[End Block]
 		Case r_room3_storage
 			;[Block]
@@ -1789,7 +1811,8 @@ Function FillRoom%(r.Rooms)
 		Case r_room4_ic
 			;[Block]
 			; ~ Information Center door
-			CreateDoor(r, r\x + 704.0 * RoomScale, r\y, r\z - 336.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			d.Doors = CreateDoor(r, r\x + 704.0 * RoomScale, r\y, r\z - 336.0 * RoomScale, 0.0, False, OFFICE_DOOR, KEY_KEY2)
+			d\Locked = 1
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 320.0 * RoomScale, r\y + 544.0 * RoomScale, r\z - 320.0 * RoomScale, 30.0)
 			sc\FollowPlayer = True
@@ -1807,6 +1830,10 @@ Function FillRoom%(r.Rooms)
 			
 			it2.Items = CreateItem("Document SCP-1048", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
+			HideEntity(it2\Collider)
+			
+			it2.Items = CreateItem("Level 2 Key Card", it_key2, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
 			;[End Block]
 		Case r_room2_checkpoint_lcz_hcz

@@ -116,11 +116,12 @@ Const it_keyomni% = 93
 Const it_mastercard% = 94
 Const it_playcard% = 95
 Const it_lostkey% = 96
-Const it_key% = 97
-Const it_25ct% = 98
-Const it_coin% = 99
-Const it_pizza% = 100
-Const it_harnbadge% = 101
+Const it_key_white% = 97
+Const it_key_yellow% = 98
+Const it_25ct% = 99
+Const it_coin% = 100
+Const it_pizza% = 101
+Const it_harnbadge% = 102
 ;[End Block]
 
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
@@ -1696,7 +1697,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Key", it_key, x, y, z)
+					If Rand(2) = 1
+						it2.Items = CreateItem("Key", it_key_white, x, y, z)
+					Else
+						it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+					EndIf
 					;[End Block]
 				Case FINE
 					;[Block]
@@ -1706,7 +1711,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						If Rand(3) = 1
 							it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 						Else
-							it2.Items = CreateItem("Key", it_key, x, y, z)
+							If Rand(2) = 1
+								it2.Items = CreateItem("Key", it_key_white, x, y, z)
+							Else
+								it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+							EndIf
 						EndIf
 					EndIf
 					;[End Block]
@@ -1718,13 +1727,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						If Rand(6) = 1
 							it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 						Else
-							it2.Items = CreateItem("Key", it_key, x, y, z)
+							If Rand(2) = 1
+								it2.Items = CreateItem("Key", it_key_white, x, y, z)
+							Else
+								it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+							EndIf
 						EndIf
 					EndIf
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_lostkey, it_key
+		Case it_lostkey, it_key_white, it_key_yellow
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -1733,14 +1746,22 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Key", it_key, x, y, z)
+					If item\ItemTemplate\ID = it_key_white
+						it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+					Else
+						it2.Items = CreateItem("Key", it_key_white, x, y, z)
+					EndIf
 					;[End Block]
 				Case FINE
 					;[Block]
 					If Rand(3) = 1
 						it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 					Else
-						it2.Items = CreateItem("Key", it_key, x, y, z)
+						If item\ItemTemplate\ID = it_key_white
+							it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+						Else
+							it2.Items = CreateItem("Key", it_key_white, x, y, z)
+						EndIf
 					EndIf
 					;[End Block]
 				Case VERYFINE
@@ -1748,7 +1769,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If Rand(6) = 1
 						it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 					Else
-						it2.Items = CreateItem("Key", it_key, x, y, z)
+						If item\ItemTemplate\ID = it_key_white
+							it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+						Else
+							it2.Items = CreateItem("Key", it_key_white, x, y, z)
+						EndIf
 					EndIf
 					;[End Block]
 			End Select
@@ -2498,6 +2523,7 @@ Const KEY_HAND_YELLOW% = -3
 
 Const KEY_860% = -4
 Const KEY_KEY% = -5
+Const KEY_KEY2% = -6
 Const KEY_LOST_KEY% = -66
 ;[End Block]
 
@@ -2556,9 +2582,13 @@ Function GetUsingItem%(item.Items)
 			;[Block]
 			Return(KEY_860)
 			;[End Block]
-		Case it_key
+		Case it_key_yellow
 			;[Block]
 			Return(KEY_KEY)
+			;[End Block]
+		Case it_key_white
+			;[Block]
+			Return(KEY_KEY2)
 			;[End Block]
 		Case it_lostkey
 			;[Block]

@@ -166,6 +166,8 @@ Function SaveGame%(File$)
 	
 	WriteByte(f, SoundTransmission)
 	
+	WriteByte(f, KEY2_SPAWNRATE)
+	
 	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 	Local ArraySize% = JsonGetArraySize(Achievements)
 	
@@ -692,6 +694,8 @@ Function LoadGame%(File$)
 	RemoteDoorOn = ReadByte(f)
 	
 	SoundTransmission = ReadByte(f)
+	
+	KEY2_SPAWNRATE = ReadByte(f)
 	
 	Repeat
 		Local Achv$ = ReadString(f)
@@ -1612,6 +1616,8 @@ Function LoadGameQuick%(File$)
 	RemoteDoorOn = ReadByte(f)
 	
 	SoundTransmission = ReadByte(f)
+	
+	KEY2_SPAWNRATE = ReadByte(f)
 	
 	ClearS2IMap(UnlockedAchievements)
 	Repeat

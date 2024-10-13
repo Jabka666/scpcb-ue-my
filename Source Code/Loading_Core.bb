@@ -1264,7 +1264,8 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "playcard"), "Playing Card", it_playcard, "key_card.b3d", "INV_playing_card.png", "", 0.00037, 1, "playing_card.png")
 	
-	CreateItemTemplate(GetLocalString("items", "key.simple"), "Key", it_key, "key.b3d", "INV_key.png", "", 0.003, 3)
+	CreateItemTemplate(GetLocalString("items", "key.simple"), "Key", it_key_yellow, "key.b3d", "INV_key.png", "", 0.003, 3)
+	CreateItemTemplate(GetLocalString("items", "key.simple"), "Key", it_key_white, "key.b3d", "INV_key(2).png", "", 0.003, 3, "key(2).png")
 	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.003, 3, "lost_key.png")
 	
 	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0005, 3)
@@ -2604,6 +2605,7 @@ Function InitNewGame%()
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0
 	
 	I_005\ChanceToSpawn = Rand(3)
+	KEY2_SPAWNRATE = Rand(4)
 	
 	Remove714Timer = 500.0
 	RemoveHazmatTimer = 500.0
@@ -3147,6 +3149,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(CurrMapGrid) : CurrMapGrid = Null
 	Delete(I_Zone) : I_Zone = Null
 	RoomTempID = 0
+	KEY2_SPAWNRATE = 0
 	For r.Rooms = Each Rooms
 		RemoveRoom(r)
 	Next
