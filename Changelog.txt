@@ -19,6 +19,7 @@
 [Items]
 - Added new items: Key and red SCP-860.
 - Added rusty texture for Lost Key.
+- No more colored severed hands. Renamed to just «Severed Hand».
 - Changed model scale of some items.
 - Fogging overlay of Gas Mask and Hazmat Suit looks more realistic.
 - Equipping and unequipping the Hazmat Suit is faster.
