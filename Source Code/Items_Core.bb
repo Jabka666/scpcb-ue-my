@@ -19,109 +19,154 @@ End Type
 
 ; ~ Item ID Constants
 ;[Block]
+; ~ [PAPER]
+;[Block]
 Const it_paper% = 0
 Const it_oldpaper% = 1
+
 Const it_origami% = 2
+
 Const it_badge% = 3
 Const it_burntbadge% = 4
-Const it_oldbadge% = 5
-Const it_ticket% = 6
-Const it_scp005% = 7
-Const it_scp148ingot% = 8
-Const it_scp148% = 9
-Const it_scp268% = 10
-Const it_fine268% = 11
-Const it_scp420j% = 12
-Const it_scp420s% = 13
-Const it_scp427% = 14
-Const it_scp500pill% = 15
-Const it_scp500pilldeath% = 16
-Const it_scp500% = 17
-Const it_scp513% = 18
-Const it_scp714% = 19
-Const it_coarse714% = 20
-Const it_fine714% = 21
-Const it_scp860% = 22
-Const it_fine860% = 23
-Const it_scp1025% = 24
-Const it_scp1123% = 25
-Const it_scp1499% = 26
-Const it_fine1499% = 27
-Const it_cap% = 28
-Const it_joint% = 29
-Const it_cigarette% = 30
-Const it_ring% = 31
-Const it_helmet% = 32
-Const it_vest% = 33
-Const it_corrvest% = 34
-Const it_finevest% = 35
-Const it_veryfinevest% = 36
-Const it_book% = 37
-Const it_cup% = 38
-Const it_emptycup% = 39
-Const it_clipboard% = 40
-Const it_wallet% = 41
-Const it_electronics% = 42
-Const it_eyedrops% = 43
-Const it_eyedrops2% = 44
-Const it_fineeyedrops% = 45
-Const it_veryfineeyedrops% = 46
-Const it_firstaid% = 47
-Const it_firstaid2% = 48
-Const it_finefirstaid% = 49
-Const it_veryfinefirstaid% = 50
-Const it_gasmask% = 51
-Const it_finegasmask% = 52
-Const it_veryfinegasmask% = 53
-Const it_gasmask148% = 54
-Const it_hazmatsuit% = 55
-Const it_finehazmatsuit% = 56
-Const it_veryfinehazmatsuit% = 57
-Const it_hazmatsuit148% = 58
-Const it_nvg% = 59
-Const it_finenvg% = 60
-Const it_veryfinenvg% = 61
-Const it_scramble% = 62
-Const it_finescramble% = 63
-Const it_pill = 64
-Const it_radio% = 65
-Const it_18vradio% = 66
-Const it_fineradio% = 67
-Const it_veryfineradio% = 68
-Const it_hand% = 69
-Const it_hand2% = 70
-Const it_hand3% = 71
-Const it_nav% = 72
-Const it_nav300% = 73
-Const it_nav310% = 74
-Const it_navulti% = 75
-Const it_bat% = 76
-Const it_coarsebat% = 77
-Const it_finebat% = 78
-Const it_veryfinebat% = 79
-Const it_killbat% = 80
-Const it_syringe% = 81
-Const it_finesyringe% = 82
-Const it_veryfinesyringe% = 83
-Const it_syringeinf% = 84
-Const it_key0% = 85
-Const it_key1% = 86
-Const it_key2% = 87
-Const it_key3% = 88
-Const it_key3_bloody% = 89
-Const it_key4% = 90
-Const it_key5% = 91
-Const it_key6% = 92
-Const it_keyomni% = 93
-Const it_mastercard% = 94
-Const it_playcard% = 95
-Const it_lostkey% = 96
-Const it_key_white% = 97
-Const it_key_yellow% = 98
-Const it_25ct% = 99
-Const it_coin% = 100
-Const it_pizza% = 101
-Const it_harnbadge% = 102
+Const it_harnbadge% = 5
+Const it_oldbadge% = 6
+
+Const it_ticket% = 7
+;[End Block]
+
+; ~ [SCPs AND VARIATIONS]
+;[Block]
+Const it_scp005% = 8
+Const it_scp148ingot% = 9
+Const it_scp148% = 10
+
+Const it_scp268% = 11
+Const it_fine268% = 12
+Const it_cap% = 13
+
+Const it_scp420j% = 14
+Const it_cigarette% = 15
+Const it_joint% = 16
+Const it_joint_smelly% = 17
+
+Const it_scp427% = 18
+Const it_scp500% = 19
+Const it_scp500pill% = 20
+Const it_scp500pilldeath% = 21
+Const it_pill = 22
+
+Const it_scp513% = 23
+
+Const it_scp714% = 24
+Const it_coarse714% = 25
+Const it_fine714% = 26
+Const it_ring% = 27
+
+Const it_scp860% = 28
+Const it_fine860% = 29
+
+Const it_scp1025% = 30
+Const it_book% = 31
+
+Const it_scp1123% = 32
+
+Const it_scp1499% = 33
+Const it_fine1499% = 34
+;[End Block]
+
+; ~ [MISC ITEMS]
+;[Block]
+Const it_helmet% = 35
+
+Const it_vest% = 36
+Const it_corrvest% = 37
+Const it_finevest% = 38
+Const it_veryfinevest% = 39
+
+Const it_cup% = 40
+Const it_emptycup% = 41
+
+Const it_clipboard% = 42
+Const it_wallet% = 43
+
+Const it_electronics% = 44
+
+Const it_eyedrops% = 45
+Const it_eyedrops2% = 46
+Const it_fineeyedrops% = 47
+Const it_veryfineeyedrops% = 48
+
+Const it_firstaid% = 49
+Const it_firstaid2% = 50
+Const it_finefirstaid% = 51
+Const it_veryfinefirstaid% = 52
+
+Const it_gasmask% = 53
+Const it_finegasmask% = 54
+Const it_veryfinegasmask% = 55
+Const it_gasmask148% = 56
+
+Const it_hazmatsuit% = 57
+Const it_finehazmatsuit% = 58
+Const it_veryfinehazmatsuit% = 59
+Const it_hazmatsuit148% = 60
+
+Const it_nvg% = 61
+Const it_finenvg% = 62
+Const it_veryfinenvg% = 63
+Const it_scramble% = 64
+Const it_finescramble% = 65
+
+Const it_radio% = 66
+Const it_18vradio% = 67
+Const it_fineradio% = 68
+Const it_veryfineradio% = 69
+
+Const it_nav% = 70
+Const it_nav300% = 71
+Const it_nav310% = 72
+Const it_navulti% = 73
+
+Const it_bat% = 74
+Const it_coarsebat% = 75
+Const it_finebat% = 76
+Const it_veryfinebat% = 77
+Const it_killbat% = 78
+
+Const it_syringe% = 79
+Const it_finesyringe% = 80
+Const it_veryfinesyringe% = 81
+Const it_syringeinf% = 82
+;[End Block]
+
+; ~ [KEYCARDS, HANDS, KEYS, CARDS, COINS]
+;[Block]
+Const it_key0% = 83
+Const it_key1% = 84
+Const it_key2% = 85
+Const it_key3% = 86
+Const it_key3_bloody% = 87
+Const it_key4% = 88
+Const it_key5% = 89
+Const it_key6% = 90
+Const it_keyomni% = 91
+
+Const it_mastercard% = 92
+Const it_playcard% = 93
+
+Const it_hand% = 94
+Const it_hand2% = 95
+Const it_hand3% = 96
+
+Const it_key_yellow% = 97
+Const it_key_white% = 98
+Const it_lostkey% = 99
+
+Const it_25ct% = 100
+Const it_coin% = 101
+
+Const it_pizza% = 102
+;[End Block]
 ;[End Block]
 
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
@@ -933,7 +978,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If Rand(50) = 1
 						it2.Items = CreateItem("SCP-1499", it_scp1499, x, y, z)
 					Else
-						it2.Items = CreateItem("Gas Mask", it_finegasmask, x, y, z)
+						it2.Items = CreateItem("Fine Gas Mask", it_finegasmask, x, y, z)
 					EndIf
 					;[End Block]
 				Case VERYFINE
@@ -941,7 +986,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If Rand(100) = 1
 						it2.Items = CreateItem("SCP-1499", it_scp1499, x, y, z)
 					Else
-						it2.Items = CreateItem("Gas Mask", it_veryfinegasmask, x, y, z)
+						it2.Items = CreateItem("Very Fine Gas Mask", it_veryfinegasmask, x, y, z)
 					EndIf
 					;[End Block]
 			End Select
@@ -959,7 +1004,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("SCP-1499", it_fine1499, x, y, z)
+					it2.Items = CreateItem("Fine SCP-1499", it_fine1499, x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
@@ -989,15 +1034,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case FINE
 					;[Block]
 					If Rand(5) = 1
-						it2.Items = CreateItem("SCRAMBLE Gear", it_finescramble, x, y, z)
+						it2.Items = CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
 						it2\State = Rnd(0.0, 1000.0)
 					Else
-						it2.Items = CreateItem("Night Vision Goggles", it_finenvg, x, y, z)
+						it2.Items = CreateItem("Fine Night Vision Goggles", it_finenvg, x, y, z)
 					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Night Vision Goggles", it_veryfinenvg, x, y, z)
+					it2.Items = CreateItem("Very Fine Night Vision Goggles", it_veryfinenvg, x, y, z)
 					it2\State = Rnd(0.0, 1000.0)
 					;[End Block]
 			End Select
@@ -1020,7 +1065,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
-					it2.Items = CreateItem("SCRAMBLE Gear", it_finescramble, x, y, z)
+					it2.Items = CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
 					it2\State = Rnd(0.0, 1000.0)
 					;[End Block]
 			End Select
@@ -1059,7 +1104,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
-					it2.Items = CreateItem("SCP-268", it_fine268, x, y, z)
+					it2.Items = CreateItem("Fine SCP-268", it_fine268, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1101,11 +1146,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Hazmat Suit", it_finehazmatsuit, x, y, z)
+					it2.Items = CreateItem("Fine Hazmat Suit", it_finehazmatsuit, x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Hazmat Suit", it_veryfinehazmatsuit, x, y, z)
+					it2.Items = CreateItem("Very Fine Hazmat Suit", it_veryfinehazmatsuit, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1122,7 +1167,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Syringe", it_syringeinf, x, y, z)
+					it2.Items = CreateItem("Infected Syringe", it_syringeinf, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1213,9 +1258,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						Case 1
 							;[Block]
 							If Rand(3) = 1
-								it2.Items = CreateItem("Radio Transceiver", it_fineradio, x, y, z)
+								it2.Items = CreateItem("Fine Radio Transceiver", it_fineradio, x, y, z)
 							Else
-								it2.Items = CreateItem("Radio Transceiver", it_veryfineradio, x, y, z)
+								it2.Items = CreateItem("Very Fine Radio Transceiver", it_veryfineradio, x, y, z)
 							EndIf
 							;[End Block]
 						Case 2
@@ -1232,11 +1277,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Select Rand(4)
 								Case 1
 									;[Block]
-									it2.Items = CreateItem("Night Vision Goggles", it_finenvg, x, y, z)
+									it2.Items = CreateItem("Fine Night Vision Goggles", it_finenvg, x, y, z)
 									;[End Block]
 								Case 2
 									;[Block]
-									it2.Items = CreateItem("Night Vision Goggles", it_veryfinenvg, x, y, z)
+									it2.Items = CreateItem("Very Fine Night Vision Goggles", it_veryfinenvg, x, y, z)
 									it2\State = Rnd(0.0, 1000.0)
 									;[End Block]
 								Case 3
@@ -1246,7 +1291,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case 4
 									;[Block]
-									it2.Items = CreateItem("SCRAMBLE Gear", it_finescramble, x, y, z)
+									it2.Items = CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
 									;[End Block]
 							End Select
 							;[End Block]
@@ -1698,23 +1743,23 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE
 					;[Block]
 					If Rand(2) = 1
-						it2.Items = CreateItem("Key", it_key_white, x, y, z)
+						it2.Items = CreateItem("White Key", it_key_white, x, y, z)
 					Else
-						it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+						it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
 					EndIf
 					;[End Block]
 				Case FINE
 					;[Block]
 					If Rand(10) = 1
-						it2.Items = CreateItem("SCP-860", it_fine860, x, y, z)
+						it2.Items = CreateItem("Fine SCP-860", it_fine860, x, y, z)
 					Else
 						If Rand(3) = 1
 							it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 						Else
 							If Rand(2) = 1
-								it2.Items = CreateItem("Key", it_key_white, x, y, z)
+								it2.Items = CreateItem("White Key", it_key_white, x, y, z)
 							Else
-								it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+								it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
 							EndIf
 						EndIf
 					EndIf
@@ -1722,15 +1767,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case VERYFINE
 					;[Block]
 					If Rand(20) = 1
-						it2.Items = CreateItem("SCP-860", it_fine860, x, y, z)
+						it2.Items = CreateItem("Fine SCP-860", it_fine860, x, y, z)
 					Else
 						If Rand(6) = 1
 							it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 						Else
 							If Rand(2) = 1
-								it2.Items = CreateItem("Key", it_key_white, x, y, z)
+								it2.Items = CreateItem("White Key", it_key_white, x, y, z)
 							Else
-								it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+								it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
 							EndIf
 						EndIf
 					EndIf
@@ -1747,9 +1792,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE
 					;[Block]
 					If item\ItemTemplate\ID = it_key_white
-						it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+						it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
 					Else
-						it2.Items = CreateItem("Key", it_key_white, x, y, z)
+						it2.Items = CreateItem("White Key", it_key_white, x, y, z)
 					EndIf
 					;[End Block]
 				Case FINE
@@ -1758,9 +1803,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 					Else
 						If item\ItemTemplate\ID = it_key_white
-							it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+							it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
 						Else
-							it2.Items = CreateItem("Key", it_key_white, x, y, z)
+							it2.Items = CreateItem("White Key", it_key_white, x, y, z)
 						EndIf
 					EndIf
 					;[End Block]
@@ -1770,9 +1815,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 					Else
 						If item\ItemTemplate\ID = it_key_white
-							it2.Items = CreateItem("Key", it_key_yellow, x, y, z)
+							it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
 						Else
-							it2.Items = CreateItem("Key", it_key_white, x, y, z)
+							it2.Items = CreateItem("White Key", it_key_white, x, y, z)
 						EndIf
 					EndIf
 					;[End Block]
@@ -1791,16 +1836,16 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("Radio Transceiver", it_18vradio, x, y, z)
+					it2.Items = CreateItem("18V Radio Transceiver", it_18vradio, x, y, z)
 					it2\State = Rnd(0.0, 100.0)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Radio Transceiver", it_fineradio, x, y, z)
+					it2.Items = CreateItem("Fine Radio Transceiver", it_fineradio, x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Radio Transceiver", it_veryfineradio, x, y, z)
+					it2.Items = CreateItem("Very Fine Radio Transceiver", it_veryfineradio, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1862,7 +1907,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_scp420j, it_cigarette, it_joint, it_scp420s
+		Case it_scp420j, it_cigarette, it_joint, it_joint_smelly
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -1879,7 +1924,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Smelly Joint", it_scp420s, x, y, z)
+					it2.Items = CreateItem("Smelly Joint", it_joint_smelly, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1892,7 +1937,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case COARSE
 					;[Block]
-					it2.Items = CreateItem("SCP-714", it_coarse714, x, y, z)
+					it2.Items = CreateItem("Coarse SCP-714", it_coarse714, x, y, z)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -1904,7 +1949,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
-					it2.Items = CreateItem("SCP-714", it_fine714, x, y, z)
+					it2.Items = CreateItem("Fine SCP-714", it_fine714, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2021,11 +2066,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Eyedrops", it_fineeyedrops, x, y, z)
+					it2.Items = CreateItem("Fine Eyedrops", it_fineeyedrops, x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Eyedrops", it_veryfineeyedrops, x, y, z)
+					it2.Items = CreateItem("Very Fine Eyedrops", it_veryfineeyedrops, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2042,14 +2087,14 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Syringe", it_finesyringe, x, y, z)
+					it2.Items = CreateItem("Fine Syringe", it_finesyringe, x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
 					If Rand(3) = 1
-						it2.Items = CreateItem("Syringe", it_veryfinesyringe, x, y, z)
+						it2.Items = CreateItem("Very Fine Syringe", it_veryfinesyringe, x, y, z)
 					Else
-						it2.Items = CreateItem("Syringe", it_syringeinf, x, y, z)
+						it2.Items = CreateItem("Infected Syringe", it_syringeinf, x, y, z)
 					EndIf
 					;[End Block]
 			End Select
@@ -2072,9 +2117,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case FINE, VERYFINE
 					;[Block]
 					If Rand(3) = 1
-						it2.Items = CreateItem("Syringe", it_veryfinesyringe, x, y, z)
+						it2.Items = CreateItem("Very Fine Syringe", it_veryfinesyringe, x, y, z)
 					Else
-						it2.Items = CreateItem("Syringe", it_syringeinf, x, y, z)
+						it2.Items = CreateItem("Infected Syringe", it_syringeinf, x, y, z)
 					EndIf
 					;[End Block]
 			End Select
@@ -2088,7 +2133,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Syringe", it_syringeinf, x, y, z)
+					it2.Items = CreateItem("Infected Syringe", it_syringeinf, x, y, z)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
@@ -2096,7 +2141,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						n.NPCs = CreateNPC(NPCType008_1, x, y, z)
 						n\State = 2.0
 					Else
-						it2.Items = CreateItem("Syringe", it_syringeinf, x, y, z)
+						it2.Items = CreateItem("Infected Syringe", it_syringeinf, x, y, z)
 					EndIf
 					;[End Block]
 			End Select
@@ -2122,7 +2167,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If Rand(4) = 1
 						it2.Items = CreateItem("Blue First Aid Kit", it_firstaid2, x, y, z)
 					Else
-						it2.Items = CreateItem("Syringe", it_finesyringe, x, y, z)
+						it2.Items = CreateItem("Fine Syringe", it_finesyringe, x, y, z)
 					EndIf
 					;[End Block]
 			End Select

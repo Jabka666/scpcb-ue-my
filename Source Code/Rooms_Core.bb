@@ -291,7 +291,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If KEY2_SPAWNRATE = 1
-				it.Items = CreateItem("Key", it_key_white, r\x + 2255.0 * RoomScale, r\y + 1015.0 * RoomScale, r\z + 4618.0 * RoomScale)
+				it.Items = CreateItem("White Key", it_key_white, r\x + 2255.0 * RoomScale, r\y + 1015.0 * RoomScale, r\z + 4618.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
@@ -774,7 +774,7 @@ Function FillRoom%(r.Rooms)
 				emit\State = 2
 				
 				If KEY2_SPAWNRATE = 2
-					it.Items = CreateItem("Key", it_key_white, r\x - 920.0 * RoomScale, r\y + 280.0 * RoomScale, r\z + 158.0 * RoomScale)
+					it.Items = CreateItem("White Key", it_key_white, r\x - 920.0 * RoomScale, r\y + 280.0 * RoomScale, r\z + 158.0 * RoomScale)
 					EntityParent(it\Collider, r\OBJ)
 				EndIf
 			Else
@@ -833,7 +833,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If KEY2_SPAWNRATE = 3
-				it.Items = CreateItem("Key", it_key_white, r\x + 963.0 * RoomScale, r\y + 35.0 * RoomScale, r\z + 932.0 * RoomScale)
+				it.Items = CreateItem("White Key", it_key_white, r\x + 963.0 * RoomScale, r\y + 35.0 * RoomScale, r\z + 932.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
@@ -1647,7 +1647,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If KEY2_SPAWNRATE = 4
-				it.Items = CreateItem("Key", it_key_white, r\x + 533.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 374.0 * RoomScale)
+				it.Items = CreateItem("White Key", it_key_white, r\x + 533.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 374.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
@@ -2504,7 +2504,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x - 940.0 * RoomScale, r\y - 4954.0 * RoomScale, r\z + 804.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Syringe", it_syringeinf, r\x - 819.0 * RoomScale, r\y - 4960.0 * RoomScale, r\z - 1452.0 * RoomScale)
+			it.Items = CreateItem("Infected Syringe", it_syringeinf, r\x - 819.0 * RoomScale, r\y - 4960.0 * RoomScale, r\z - 1452.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x - 57.0 * RoomScale, r\y - 4873.0 * RoomScale, r\z - 935.0 * RoomScale)
@@ -3418,18 +3418,22 @@ Function FillRoom%(r.Rooms)
 			
 			If Rand(2) = 1
 				ItemID = it_syringe
+				ItemName = "Syringe"
 			Else
 				ItemID = it_syringeinf
+				ItemName = "Infected Syringe"
 			EndIf
-			it.Items = CreateItem("Syringe", ItemID, r\x - 923.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 96.0 * RoomScale)
+			it.Items = CreateItem(ItemName, ItemID, r\x - 923.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 96.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If Rand(2) = 1
 				ItemID = it_syringe
+				ItemName = "Syringe"
 			Else
 				ItemID = it_syringeinf
+				ItemName = "Infected Syringe"
 			EndIf
-			it.Items = CreateItem("Syringe", ItemID, r\x - 907.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 159.0 * RoomScale)
+			it.Items = CreateItem(ItemName, ItemID, r\x - 907.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 159.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Compact First Aid Kit", it_finefirstaid, r\x - 333.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 123.0 * RoomScale)
@@ -3528,7 +3532,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			it.Items = CreateItem("Night Vision Goggles", it_finenvg, r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
+			it.Items = CreateItem("Fine Night Vision Goggles", it_finenvg, r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_scientists
