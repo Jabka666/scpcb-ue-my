@@ -1721,7 +1721,7 @@ Function UpdateNPCs%()
 									PointEntity(n\Collider, me\Collider)
 									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									
-									If Dist >= 0.25
+									If Dist > 0.16
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
