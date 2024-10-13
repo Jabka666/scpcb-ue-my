@@ -953,7 +953,7 @@ Const VERYFINE% = 2
 Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
-	Local it.Items, it2.Items, it3.Items, it4.Items, it5.Items, de.Decals, n.NPCs, r.Rooms
+	Local it.Items, it2.Items, it3.Items, de.Decals, n.NPCs, r.Rooms
 	Local Remove% = True, i%
 	Local MakeDecal% = False
 	
@@ -1710,13 +1710,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					EndIf
 					
 					If Rand(3) = 1
-						it4.Items = CreateItem("Quarter", it_25ct, x, y, z)
-						EntityType(it4\Collider, HIT_ITEM)
+						it3.Items = CreateItem("Quarter", it_25ct, x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					
 					If Rand(4) = 1
-						it5.Items = CreateItem("Quarter", it_25ct, x, y, z)
-						EntityType(it5\Collider, HIT_ITEM)
+						it3.Items = CreateItem("Quarter", it_25ct, x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					;[End Block]
 				Case ONETOONE
@@ -1750,10 +1750,14 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					
 					it3.Items = CreateItem("White Severed Hand", it_hand, x, y, z)
 					EntityType(it3\Collider, HIT_ITEM)
-					it4.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
-					EntityType(it4\Collider, HIT_ITEM)
-					it5.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
-					EntityType(it5\Collider, HIT_ITEM)
+					it3.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
+					EntityType(it3\Collider, HIT_ITEM)
+					it3.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
+					EntityType(it3\Collider, HIT_ITEM)
+					it3.Items = CreateItem("White Key", it_key_white, x, y, z)
+					EntityType(it3\Collider, HIT_ITEM)
+					it3.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
+					EntityType(it3\Collider, HIT_ITEM)
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
@@ -2254,13 +2258,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					EndIf
 					
 					If Rand(3) = 1
-						it4.Items = CreateItem("SCP-500-01", it_scp500pill, x, y, z)
-						EntityType(it4\Collider, HIT_ITEM)
+						it3.Items = CreateItem("SCP-500-01", it_scp500pill, x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					
 					If Rand(4) = 1
-						it5.Items = CreateItem("SCP-500-01", it_scp500pill, x, y, z)
-						EntityType(it5\Collider, HIT_ITEM)
+						it3.Items = CreateItem("SCP-500-01", it_scp500pill, x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					;[End Block]
 				Case FINE
@@ -2282,13 +2286,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						EndIf
 						
 						If Rand(3) = 1
-							it4.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-							EntityType(it4\Collider, HIT_ITEM)
+							it3.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+							EntityType(it3\Collider, HIT_ITEM)
 						EndIf
 						
 						If Rand(4) = 1
-							it5.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-							EntityType(it5\Collider, HIT_ITEM)
+							it3.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+							EntityType(it3\Collider, HIT_ITEM)
 						EndIf
 					Else
 						it2.Items = CreateItem("SCP-427", it_scp427, x, y, z)
@@ -2304,13 +2308,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					EndIf
 					
 					If Rand(3) = 1
-						it4.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-						EntityType(it4\Collider, HIT_ITEM)
+						it3.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					
 					If Rand(4) = 1
-						it5.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-						EntityType(it5\Collider, HIT_ITEM)
+						it3.Items = CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+						EntityType(it3\Collider, HIT_ITEM)
 					EndIf
 					;[End Block]
 			End Select
