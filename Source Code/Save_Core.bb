@@ -253,26 +253,6 @@ Function SaveGame%(File$)
 	
 	WriteInt(f, 632)
 	
-	WriteByte(f, bk\IsBroken)
-	WriteFloat(f, bk\x)
-	WriteFloat(f, bk\z)
-	
-	Temp = 0
-	For emit.Emitter = Each Emitter
-		Temp = Temp + 1
-	Next
-	WriteInt(f, Temp)
-	For emit.Emitter = Each Emitter
-		WriteFloat(f, EntityX(emit\Owner, True))
-		WriteFloat(f, EntityY(emit\Owner, True))
-		WriteFloat(f, EntityZ(emit\Owner, True))
-		
-		WriteInt(f, emit\ParticleID)
-		WriteByte(f, emit\State)
-		
-		WriteInt(f, emit\EmitterID)
-	Next
-	
 	WriteByte(f, I_Zone\Transition[0])
 	WriteByte(f, I_Zone\Transition[1])
 	WriteByte(f, I_Zone\HasCustomForest)
@@ -311,14 +291,6 @@ Function SaveGame%(File$)
 			EndIf
 		Next
 		
-		For i = 0 To MaxRoomEmitters - 1
-			If r\RoomEmitters[i] = Null
-				WriteInt(f, 0)
-			Else
-				WriteInt(f, r\RoomEmitters[i]\EmitterID)
-			EndIf
-		Next
-		
 		If r\mt = Null ; ~ This room doesn't have a grid
 			WriteByte(f, 0)
 		Else ; ~ This room has a grid
@@ -351,6 +323,36 @@ Function SaveGame%(File$)
 	Next
 	
 	WriteInt(f, 954)
+	
+	Temp = 0
+	For emit.Emitter = Each Emitter
+		Temp = Temp + 1
+	Next
+	WriteInt(f, Temp)
+	For emit.Emitter = Each Emitter
+		WriteFloat(f, EntityX(emit\Owner, True))
+		WriteFloat(f, EntityY(emit\Owner, True))
+		WriteFloat(f, EntityZ(emit\Owner, True))
+		
+		WriteInt(f, emit\ParticleID)
+		WriteByte(f, emit\State)
+		
+		WriteInt(f, emit\EmitterID)
+	Next
+	
+	For r.Rooms = Each Rooms
+		For i = 0 To MaxRoomEmitters - 1
+			If r\RoomEmitters[i] = Null
+				WriteInt(f, 0)
+			Else
+				WriteInt(f, r\RoomEmitters[i]\EmitterID)
+			EndIf
+		Next
+	Next
+	
+	WriteByte(f, bk\IsBroken)
+	WriteFloat(f, bk\x)
+	WriteFloat(f, bk\z)
 	
 	Temp = 0
 	For d.Doors = Each Doors
@@ -825,29 +827,6 @@ Function LoadGame%(File$)
 	
 	If ReadInt(f) <> 632 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
 	
-	bk\IsBroken = ReadByte(f)
-	bk\x = ReadFloat(f)
-	bk\z = ReadFloat(f)
-	
-	For emit.Emitter = Each Emitter
-		FreeEmitter(emit, True)
-	Next
-	
-	Temp = ReadInt(f)
-	For i = 1 To Temp
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
-		
-		ID = ReadInt(f)
-		
-		Temp2 = ReadByte(f)
-		
-		emit.Emitter = SetEmitter(Null, x, y, z, ID)
-		emit\State = Temp2
-		ForceSetEmitterID(emit, ReadInt(f))
-	Next
-	
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
 	I_Zone\HasCustomForest = ReadByte(f)
@@ -899,18 +878,6 @@ Function LoadGame%(File$)
 				RotateEntity(r\RoomLevers[j]\OBJ, 80.0, EntityYaw(r\RoomLevers[j]\OBJ), 0.0)
 			ElseIf ID = 1
 				RotateEntity(r\RoomLevers[j]\OBJ, -80.0, EntityYaw(r\RoomLevers[j]\OBJ), 0.0)
-			EndIf
-		Next
-		
-		For j = 0 To MaxRoomEmitters - 1
-			ID = ReadInt(f)
-			If ID > 0
-				For emit.Emitter = Each Emitter
-					If emit\EmitterID = ID
-						r\RoomEmitters[j] = emit
-						Exit
-					EndIf
-				Next
 			EndIf
 		Next
 		
@@ -966,6 +933,43 @@ Function LoadGame%(File$)
 	Next
 	
 	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
+	
+	For emit.Emitter = Each Emitter
+		FreeEmitter(emit, True)
+	Next
+	
+	Temp = ReadInt(f)
+	For i = 1 To Temp
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		
+		ID = ReadInt(f)
+		
+		Temp2 = ReadByte(f)
+		
+		emit.Emitter = SetEmitter(Null, x, y, z, ID)
+		emit\State = Temp2
+		ForceSetEmitterID(emit, ReadInt(f))
+	Next
+	
+	For r.Rooms = Each Rooms
+		For j = 0 To MaxRoomEmitters - 1
+			ID = ReadInt(f)
+			If ID > 0
+				For emit.Emitter = Each Emitter
+					If emit\EmitterID = ID
+						r\RoomEmitters[j] = emit
+						Exit
+					EndIf
+				Next
+			EndIf
+		Next
+	Next
+	
+	bk\IsBroken = ReadByte(f)
+	bk\x = ReadFloat(f)
+	bk\z = ReadFloat(f)
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1048,7 +1052,6 @@ Function LoadGame%(File$)
 	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	Temp = ReadInt(f)
-	
 	For i = 1 To Temp
 		x = ReadFloat(f)
 		y = ReadFloat(f)
@@ -1747,29 +1750,6 @@ Function LoadGameQuick%(File$)
 	
 	If ReadInt(f) <> 632 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
 	
-	bk\IsBroken = ReadByte(f)
-	bk\x = ReadFloat(f)
-	bk\z = ReadFloat(f)
-	
-	For emit.Emitter = Each Emitter
-		FreeEmitter(emit, True)
-	Next
-	
-	Temp = ReadInt(f)
-	For i = 1 To Temp
-		x = ReadFloat(f)
-		y = ReadFloat(f)
-		z = ReadFloat(f)
-		
-		ID = ReadInt(f)
-		
-		Temp2 = ReadByte(f)
-		
-		emit.Emitter = SetEmitter(r, x, y, z, ID)
-		emit\State = Temp2
-		ForceSetEmitterID(emit, ReadInt(f))
-	Next
-	
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
 	I_Zone\HasCustomForest = ReadByte(f)
@@ -1818,18 +1798,6 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next
 		
-		For j = 0 To MaxRoomEmitters - 1
-			ID = ReadInt(f)
-			If ID > 0
-				For emit.Emitter = Each Emitter
-					If emit\EmitterID = ID
-						r\RoomEmitters[j] = emit
-						Exit
-					EndIf
-				Next
-			EndIf
-		Next
-		
 		If ReadByte(f) = 1 ; ~ This room has a grid
 			For y = 0 To MTGridSize - 1
 				For x = 0 To MTGridSize - 1
@@ -1866,11 +1834,46 @@ Function LoadGameQuick%(File$)
 	
 	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
 	
+	For emit.Emitter = Each Emitter
+		FreeEmitter(emit, True)
+	Next
+	
+	Temp = ReadInt(f)
+	For i = 1 To Temp
+		x = ReadFloat(f)
+		y = ReadFloat(f)
+		z = ReadFloat(f)
+		
+		ID = ReadInt(f)
+		
+		Temp2 = ReadByte(f)
+		
+		emit.Emitter = SetEmitter(r, x, y, z, ID)
+		emit\State = Temp2
+		ForceSetEmitterID(emit, ReadInt(f))
+	Next
+	For r.Rooms = Each Rooms
+		For j = 0 To MaxRoomEmitters - 1
+			ID = ReadInt(f)
+			If ID > 0
+				For emit.Emitter = Each Emitter
+					If emit\EmitterID = ID
+						r\RoomEmitters[j] = emit
+						Exit
+					EndIf
+				Next
+			EndIf
+		Next
+	Next
+	
+	bk\IsBroken = ReadByte(f)
+	bk\x = ReadFloat(f)
+	bk\z = ReadFloat(f)
+	
 	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	Temp = ReadInt(f)
-	
 	For i = 1 To Temp
 		x = ReadFloat(f)
 		y = ReadFloat(f)
