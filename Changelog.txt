@@ -24,6 +24,9 @@
 - Equipping and unequipping the Hazmat Suit is faster.
 - SCP-1123 can be refined in SCP-914.
 - Can refine badges in SCP-914.
+- Increased stamina cap of SCP-714.
+	- Green SCP-714: 10% -> 15%
+	- Grey SCP-714: 25% -> 30%
 
 [NPCs]
 - SCP-049-2 can teleport around the facility.
