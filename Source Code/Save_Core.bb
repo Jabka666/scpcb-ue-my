@@ -1870,8 +1870,10 @@ Function LoadGameQuick%(File$)
 	bk\x = ReadFloat(f)
 	bk\z = ReadFloat(f)
 	
-	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
-	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
+	Local TexCorrDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
+	Local TexCorrHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
+	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01.jpg")
+	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors.jpg")
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1912,36 +1914,51 @@ Function LoadGameQuick%(File$)
 				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
-				If IsAffected
+				; ~ TODO: FIND ANOTHER WAY
+				Select d\DoorType
+					Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+						;[Block]
+						If IsAffected
+							EntityTexture(d\OBJ, TexCorrDefault)
+							EntityTexture(d\FrameOBJ, TexCorrDefault)
+						Else
+							EntityTexture(d\OBJ, TexDefault)
+							EntityTexture(d\FrameOBJ, TexDefault)
+						EndIf
+						;[End Block]
+					Case HEAVY_DOOR
+						;[Block]
+						If IsAffected
+							EntityTexture(d\OBJ, TexCorrHeavy)
+							EntityTexture(d\FrameOBJ, TexCorrHeavy)
+						Else
+							EntityTexture(d\OBJ, TexHeavy)
+							EntityTexture(d\FrameOBJ, TexHeavy)
+						EndIf
+						;[End Block]
+				End Select
+				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
+				
+				If d\OBJ2 <> 0
+					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
 					Select d\DoorType
 						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
 							;[Block]
-							EntityTexture(d\OBJ, TexDefault)
-							EntityTexture(d\FrameOBJ, TexDefault)
+							If IsAffected
+								EntityTexture(d\OBJ2, TexCorrDefault)
+							Else
+								EntityTexture(d\OBJ2, TexDefault)
+							EndIf
 							;[End Block]
 						Case HEAVY_DOOR
 							;[Block]
-							EntityTexture(d\OBJ, TexHeavy)
-							EntityTexture(d\FrameOBJ, TexHeavy)
+							If IsAffected
+								EntityTexture(d\OBJ2, TexCorrHeavy)
+							Else
+								EntityTexture(d\OBJ2, TexHeavy)
+							EndIf
 							;[End Block]
 					End Select
-				EndIf
-				
-				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0
-					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
-					If IsAffected
-						Select d\DoorType
-							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexDefault)
-								;[End Block]
-							Case HEAVY_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexHeavy)
-								;[End Block]
-						End Select
-					EndIf
 				EndIf
 				Exit
 			EndIf
@@ -1949,6 +1966,8 @@ Function LoadGameQuick%(File$)
 	Next
 	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
 	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
+	DeleteSingleTextureEntryFromCache(TexCorrDefault) : TexCorrDefault = 0
+	DeleteSingleTextureEntryFromCache(TexCorrHeavy) : TexCorrHeavy = 0
 	
 	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	

@@ -46,6 +46,7 @@
 - Fixed wrong rendering on «Load Game» page.
 - Fixed memory leak after loading the game.
 - Fixed crash at elevator event with guard when player reloaded.
+- Fixed the door corrosion texture not saving correctly.
 
 [Known issues]
 - Rooms can overlap and block the way.
