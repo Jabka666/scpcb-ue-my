@@ -23,8 +23,7 @@
 - Changed model scale of some items.
 - Fogging overlay of Gas Mask and Hazmat Suit looks more realistic.
 - Equipping and unequipping the Hazmat Suit is faster.
-- SCP-1123 can be refined in SCP-914.
-- Can refine badges in SCP-914.
+- SCP-1123, SCP-005 and badges can be refined in SCP-914.
 - Increased stamina cap of SCP-714.
 	- Green SCP-714: 10% -> 15%
 	- Grey SCP-714: 25% -> 30%
