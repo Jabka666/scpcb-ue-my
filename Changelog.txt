@@ -44,6 +44,7 @@
 - Fixed «The battery doesn't fit inside these goggles» message not displaying correctly.
 - Fixed wrong rendering on «Load Game» page.
 - Fixed memory leak after loading the game.
+- Fixed crash at elevator event with guard when player reloaded.
 
 [Known issues]
 - Rooms can overlap and block the way.
