@@ -401,6 +401,7 @@ Function RemoveSoundEmitter%(se.SoundEmitters)
 	Delete(se)
 End Function
 
+; ~ TODO: REWRITE THIS. MESH (PROPS, LIGHTS AND ETC) SHOULDN'T BE ATTACHED TO ROOMS ONLY
 Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	CatchErrors("LoadRMesh(" + File + ")")
 	
