@@ -15,6 +15,7 @@
 - Some office doors throughout Entrance Zone will be randomly opened.
 - Moved the First Aid Kit in SCP-914's chamber to SCP-914's observation room.
 - SCP-914's blast door is now locked.
+- SCP-008's lid has better radius of picking.
 
 [Items]
 - Added new items: Key and red SCP-860.
