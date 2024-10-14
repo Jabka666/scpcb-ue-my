@@ -3752,9 +3752,7 @@ Function UpdateEvents%()
 							If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[0]) < 4.0
 								OpenCloseDoor(e\room\RoomDoors[0])
 								e\room\RoomDoors[0]\IsElevatorDoor = 0
-								For i = 0 To 1
-									EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[i], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN])
-								Next
+								EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[1], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN])
 								EntityTexture(e\room\RoomDoors[0]\Buttons[0], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
 								
 								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\ElevatorDeath.ogg"))
