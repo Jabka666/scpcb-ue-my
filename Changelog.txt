@@ -4,6 +4,7 @@
 - Added red forest.
 - Added new hint messages.
 	- If intro sequence is disabled, hint messages will be hidden.
+- Added spark effect for flickering lights.
 
 - Optimized the game...
 

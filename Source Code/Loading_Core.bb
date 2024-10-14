@@ -341,6 +341,7 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[16], -0.008, 0.008, -0.008, 0.008, -0.008, 0.008)
 	SetTemplateSize(ParticleEffect[16], 0.006, 0.006, 1.0, 1.5)
 	SetTemplateAlphaVel(ParticleEffect[16], True)
+	SetTemplateColors(ParticleEffect[16], $0000FF, $6565FF)
 	
 	; ~ Water drop particle
 	ParticleEffect[17] = CreateTemplate()
@@ -374,6 +375,19 @@ Function LoadParticles%()
 	SetTemplateOffset(ParticleEffect[19], 0.0, 0.0, -0.01, 0.01, 0.0, 0.0)
 	SetTemplateSize(ParticleEffect[19], 0.005, 0.005, 1.0, 1.5)
 	SetTemplateGravity(ParticleEffect[19], 0.0005)
+	
+	; ~ Sparks from light emitter
+	ParticleEffect[20] = CreateTemplate()
+	SetTemplateParticlesPerInterval(ParticleEffect[20], 6)
+	SetTemplateEmitterLifeTime(ParticleEffect[20], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[20], 60, 70)
+	SetTemplateTexture(ParticleEffect[20], PARTICLE_SPARK)
+	SetTemplateOffset(ParticleEffect[20], -0.05, 0.05, 0.0, 0.0, -0.05, 0.05)
+	SetTemplateVelocity(ParticleEffect[20], -0.0175, 0.0175, -0.015, 0.015, -0.0175, 0.0175)
+	SetTemplateAlignToFall(ParticleEffect[20], True, 45)
+	SetTemplateGravity(ParticleEffect[20], 0.001)
+	SetTemplateSize(ParticleEffect[20], 0.02, 0.032, 0.7, 1)
+	SetTemplateColors(ParticleEffect[20], $0000FF, $6565FF)
 End Function
 
 Function RemoveParticleInstances%()

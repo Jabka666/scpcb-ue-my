@@ -258,6 +258,7 @@ Function UpdateLights%(Cam%)
 										Random = Rnd(0.35, 0.8)
 										SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
 										TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
+										SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20)
 									EndIf
 									If LightInView And LightVisible
 										If LightSpriteHidden Then ShowEntity(l\Sprite)
