@@ -1232,9 +1232,9 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "hand"), "Black Severed Hand", it_hand2, "severed_hand.b3d", "INV_severed_hand_black.png", "", 0.033, 2, "severed_hand(2).png")
 	CreateItemTemplate(GetLocalString("items", "hand"), "Yellow Severed Hand", it_hand3, "severed_hand.b3d", "INV_severed_hand_yellow.png", "", 0.033, 2, "severed_hand(3).png")
 	
-	CreateItemTemplate(GetLocalString("items", "key.simple"), "Yellow Key", it_key_yellow, "key.b3d", "INV_key.png", "", 0.003, 3)
-	CreateItemTemplate(GetLocalString("items", "key.simple"), "White Key", it_key_white, "key.b3d", "INV_key(2).png", "", 0.003, 3, "key(2).png")
-	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.003, 3, "lost_key.png")
+	CreateItemTemplate(GetLocalString("items", "key.simple"), "Yellow Key", it_key_yellow, "key.b3d", "INV_key.png", "", 0.0027, 3)
+	CreateItemTemplate(GetLocalString("items", "key.simple"), "White Key", it_key_white, "key.b3d", "INV_key(2).png", "", 0.0027, 3, "key(2).png")
+	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.0027, 3, "lost_key.png")
 	
 	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0005, 3)
 	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0005, 3, "coin_rusty.png")
