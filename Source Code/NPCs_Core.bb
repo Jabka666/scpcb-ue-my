@@ -4145,7 +4145,9 @@ Function UpdateNPCs%()
 												End Select
 											EndIf
 											I_966\HasInsomnia = 1.0 - (0.5 * I_714\Using)
-											I_966\InsomniaEffectTimer = 70.0 * (30.0 + (10.0 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)
+											Temp = (2100.0 + (300.0 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)
+											If I_966\InsomniaEffectTimer < Temp Then I_966\InsomniaEffectTimer = Temp
+											I_966\InsomniaEffectTimer = Min(I_966\InsomniaEffectTimer + (fps\Factor[0] * (5.0 - (2.0 * I_714\Using))), Temp * 2.0)
 										EndIf
 									EndIf
 									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)

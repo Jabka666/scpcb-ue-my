@@ -9060,7 +9060,7 @@ End Function
 
 Type SCP966
 	Field InsomniaEffectTimer#
-	Field HasInsomnia%
+	Field HasInsomnia#
 End Type
 
 Global I_966.SCP966
