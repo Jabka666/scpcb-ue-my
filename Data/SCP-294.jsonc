@@ -1308,7 +1308,7 @@
 		"name": ["Purple Drank", "Sizzurp", "Cough Syrup", "Lean"],
 		"color": [163, 73, 164],
 		"alpha": 0.8,
-		"dispense_sound": null,
+		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ew0.ogg",
 		"drink_message": "\"The drink tastes like cough syrup.\"",
 		"blur": 100.0
