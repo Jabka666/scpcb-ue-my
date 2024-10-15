@@ -1367,6 +1367,10 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-860", it_paper, r\x + 728.0 * RoomScale, r\y + 290.0 * RoomScale, r\z + 360.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Document SCP-1025", it_paper, r\x + 376.0 * RoomScale, r\y + 290.0 * RoomScale, r\z - 360.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_cont2_500_1499
 			;[Block]
