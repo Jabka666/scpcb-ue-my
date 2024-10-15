@@ -32,6 +32,10 @@
 
 [NPCs]
 - SCP-049-2 can teleport around the facility.
+- Increased SCP-049's speed.
+
+- Buffed SCP-966's Insomnia effect timer.
+	- Sets player's timer to 30(+10 per «SelectedDifficulty\OtherFactors») seconds, but will accumulate 4 seconds of additional insomnia per second up to 60(+20 per «SelectedDifficulty\OtherFactors») seconds when lingering around SCP-966 instances.
 
 [Launcher]
 - Optimized language download speed.
