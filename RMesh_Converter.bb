@@ -1,4 +1,4 @@
-; ~ Converter Universal for SCP - Containment Breach Ultimate Edition Reborn v1.3.2
+; ~ Converter Universal for SCP - Containment Breach Ultimate Edition Reborn v1.3.3
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
