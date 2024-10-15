@@ -2071,7 +2071,7 @@
 		"name": ["Toilet Water", "Cologne"],
 		"color": [219, 217, 195],
 		"alpha": 0.2,
-		"dispense_sound": null,
+		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Spit.ogg",
 		"drink_message": "\"This drink made me not so smelly at all.\""
 	},
@@ -2624,7 +2624,7 @@
 		"name": ["Strawberry Ice Cream", "Strawberry-banana Ice Cream", "Banana-strawberry Ice Cream", "Strawberry Yoghurt", "Strawberry Milk Cocktail", "Cherry Milk Cocktail", "Strawberry Pudding", "Cherry Pudding", "Сherry Yoghurt"],
 		"color": [255, 50, 50],
 		"alpha": 0.8,
-		"dispense_sound": null,
+		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
 		"drink_message": "\"So sweet.\""
 	},
