@@ -13,6 +13,7 @@
 - Added Compact First Aid Kit inside buffer room. The door requires a Key now.
 - Added First Aid Kit in SCP-008 laboratory.
 - Added another Level 2 Key Card in LCZ.
+
 - Some office doors throughout Entrance Zone will be randomly opened.
 - Moved the First Aid Kit in SCP-914's chamber to SCP-914's observation room.
 - SCP-914's blast door is now locked.
@@ -21,6 +22,7 @@
 [Items]
 - Added new items: Document SCP-1025, Key and red SCP-860.
 - Added rusty texture for Lost Key.
+
 - No more colored severed hands. Renamed to just «Severed Hand».
 - Changed model scale of some items.
 - Fogging overlay of Gas Mask and Hazmat Suit looks more realistic.
@@ -64,25 +66,28 @@
 [General]
 - Added new sound for SCP-008.
 - Added «spawncup/givecup» console command.
+
 - Reduced SCP-106's spawnrate when using SCP-914 from 2.5x to 2.0x. (4.5x to 4.0x on «AggressiveNPCs»)
 
 - Optimized the game...
 
 [Rooms]
 - Added «room4_2_ez».
+
 - Some intro improvements.
 - Updated some signs color.
 - Added a new message when trying to use the water cooler without an Empty Cup.
 - Replaced Green NVG with Red NVG in «room2_servers_ez» room.
 
 [Items]
-- Each NVG has its own texture.
-- Tiny color change for SCRAMBLE gear's texture.
-- Updated battery images for NVG and SCRAMBLE gear.
 - Added Harn's badge.
 - Added new message for cups.
 - Added new drink.
 - Added bloody texture for Level 3 Key Card.
+
+- Each NVG has its own texture.
+- Tiny color change for SCRAMBLE gear's texture.
+- Updated battery images for NVG and SCRAMBLE gear.
 - Eyedrops can restore your blink.
 
 [NPCs]
