@@ -1774,42 +1774,22 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(2) = 1
-						it2.Items = CreateItem("White Key", it_key_white, x, y, z)
-					Else
-						it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
-					EndIf
+					Remove = False
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(10) = 1
+					If Rand(8) = 1
 						it2.Items = CreateItem("Fine SCP-860", it_fine860, x, y, z)
 					Else
-						If Rand(3) = 1
-							it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
-						Else
-							If Rand(2) = 1
-								it2.Items = CreateItem("White Key", it_key_white, x, y, z)
-							Else
-								it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
-							EndIf
-						EndIf
+						Remove = False
 					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(20) = 1
+					If Rand(12) = 1
 						it2.Items = CreateItem("Fine SCP-860", it_fine860, x, y, z)
 					Else
-						If Rand(6) = 1
-							it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
-						Else
-							If Rand(2) = 1
-								it2.Items = CreateItem("White Key", it_key_white, x, y, z)
-							Else
-								it2.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
-							EndIf
-						EndIf
+						Remove = False
 					EndIf
 					;[End Block]
 			End Select
