@@ -1264,7 +1264,7 @@ Global TempSounds%[10]
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Global Music$[33]
+Global Music$[34]
 
 ; ~ Music list
 ;[Block]
@@ -1277,7 +1277,7 @@ Music[5] = "Gate_B1"
 Music[6] = "Gate_B2"
 Music[7] = "Room3_storage"
 Music[8] = "049Chamber"
-Music[9] = "860_1Chamber"
+Music[9] = "860_1_Blue"
 Music[10] = "106Chase"
 Music[11] = "Menu"
 Music[12] = "860_2Chase"
@@ -1301,6 +1301,7 @@ Music[29] = "1123Chamber"
 Music[30] = "008Chamber"
 Music[31] = "008Cutscene"
 Music[32] = "012Chamber"
+Music[33] = "860_1_Red"
 ;[End Block]
 
 Global MusicCHN%

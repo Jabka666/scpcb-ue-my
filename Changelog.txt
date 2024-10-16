@@ -2,6 +2,11 @@
 
 [Global]
 - Added setting to turn on/off vignette overlay.
+- Reworked red forest.
+	- Added new music.
+	- Added heart beat sounds.
+	- Changed fog distance and light volume.
+	- Changed fog color.
 
 [Items]
 - New texture for SCP-420-J.

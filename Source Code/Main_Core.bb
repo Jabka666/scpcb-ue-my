@@ -3106,7 +3106,7 @@ Const FogColorDimension_1499$ = "096097104"
 Const FogColorPD$ = "000000000"
 Const FogColorPDTrench$ = "038055047"
 Const FogColorForest$ = "098133162"
-Const FogColorForestRed$ = "070030030"
+Const FogColorForestRed$ = "045020020"
 Const FogColorForestChase$ = "032044054"
 ;[End Block]
 
@@ -3167,18 +3167,20 @@ Function UpdateZoneColor%()
 		EndIf
 	ElseIf forest_event <> Null And forest_event\room = PlayerRoom
 		If forest_event\EventState = 1.0
-			LightVolume = 1.0
 			If forest_event\EventState4 = 0.0
 				SetZoneColor(FogColorForest)
+				me\CameraFogDist = 8.0
+				LightVolume = 1.0
 			Else
 				SetZoneColor(FogColorForestRed)
+				me\CameraFogDist = 5.0
+				LightVolume = 0.8
 			EndIf
 			If forest_event\room\NPC[0] <> Null
 				If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 			EndIf
-			me\CameraFogDist = 8.0
-			CameraFogRange(Camera, 0.1, 8.0)
-			CameraRange(Camera, 0.01, 9.6) ; ~ me\CameraFogDist * 1.2
+			CameraFogRange(Camera, 0.1, me\CameraFogDist)
+			CameraRange(Camera, 0.01, me\CameraFogDist * 1.2)
 		EndIf
 	EndIf
 	

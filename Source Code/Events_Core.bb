@@ -2544,7 +2544,16 @@ Function UpdateEvents%()
 							e\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
 						EndIf
 						
-						ShouldPlay = 9
+						If e\EventState4 = 1.0
+							ShouldPlay = 33
+							If Rand(100) = 1
+								me\CameraShake = 0.7
+								me\HeartBeatVolume = 0.7
+								me\HeartBeatRate = Rnd(60, 70)
+							EndIf
+						Else
+							ShouldPlay = 9
+						EndIf
 						If e\room\NPC[0] <> Null
 							If (e\room\NPC[0]\State2 = 1.0 And e\room\NPC[0]\State > 1.0) Lor e\room\NPC[0]\State > 2.0 Then ShouldPlay = 12 ; ~ The monster is chasing the player
 						EndIf
