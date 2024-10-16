@@ -1,5 +1,8 @@
 {v1.3.4}
 
+[Global]
+- Added setting to turn on/off vignette overlay.
+
 [Items]
 - New texture for SCP-420-J.
 - Improved some models.

@@ -204,11 +204,12 @@ Type Options
 	Field AchvMsgEnabled%
 	Field CanOpenConsole%
 	Field HUDEnabled%
-	Field SmoothBars%
 	Field ShowFPS%
 	Field ConsoleOpening%
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
+	Field SmoothBars%
+	Field VignetteEnabled%
 	Field PlayStartup%
 	Field LauncherEnabled%
 	; ~ [CONTROLS]
@@ -415,6 +416,8 @@ Function LoadOptionsINI%()
 	
 	opt\SmoothBars = IniGetInt(OptionFile, "Advanced", "Smooth Bars", True)
 	
+	opt\VignetteEnabled = IniGetInt(OptionFile, "Advanced", "Vignette Ennabled", True)
+	
 	opt\PlayStartup = IniGetInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
 	opt\LauncherEnabled = IniGetInt(OptionFile, "Advanced", "Launcher Enabled", True)
@@ -546,6 +549,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Advanced", "Smooth Bars", opt\SmoothBars)
 	
+	IniWriteString(OptionFile, "Advanced", "Vignette Enabled", opt\VignetteEnabled)
+	
 	IniWriteString(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
@@ -668,10 +673,11 @@ Function ResetOptionsINI%()
 	
 	opt\SmoothBars = True
 	
+	opt\VignetteEnabled = True
+	
 	opt\PlayStartup = True
 	
 	opt\LauncherEnabled = True
-	
 	; ~ [GLOBAL]
 	
 	ShouldDeleteGadgets = 1

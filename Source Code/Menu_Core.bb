@@ -901,8 +901,11 @@ Function UpdateMainMenu%()
 						
 						If PrevCurrFrameLimit Lor PrevCanOpenConsole Then ShouldDeleteGadgets = ((PrevCurrFrameLimit <> opt\CurrFrameLimit) Lor (PrevCanOpenConsole <> opt\CanOpenConsole))
 						
-						
 						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
 						
 						y = y + (30 * MenuScale)
 						
@@ -1674,7 +1677,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Advanced
 					;[Block]
-					Height = (430 - (50.0 * (opt\CurrFrameLimit = 0.0))) * MenuScale
+					Height = (460 - (50.0 * (opt\CurrFrameLimit = 0.0))) * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1727,6 +1730,12 @@ Function RenderMainMenu%()
 					Color(255, 255, 255)
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
+					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
 					
 					y = y + (30 * MenuScale)
 					
@@ -2917,32 +2926,33 @@ Const Tooltip_VoiceVolume% = 15
 Const Tooltip_SoundAutoRelease% = 16
 Const Tooltip_UserTracksMode% = 17
 Const Tooltip_UserTrackScan% = 18
+Const Tooltip_Subtitles% = 19
+Const Tooltip_SubtitlesColor% = 20
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 19
-Const Tooltip_MouseSmoothing% = 20
-Const Tooltip_MouseInvertX% = 21
-Const Tooltip_MouseInvertY% = 22
-Const Tooltip_ControlConfiguration% = 23
+Const Tooltip_MouseSensitivity% = 21
+Const Tooltip_MouseSmoothing% = 22
+Const Tooltip_MouseInvertX% = 23
+Const Tooltip_MouseInvertY% = 24
+Const Tooltip_ControlConfiguration% = 25
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 24
-Const Tooltip_Console% = 25
-Const Tooltip_ConsoleOnError% = 26
-Const Tooltip_AchievementPopups% = 27
-Const Tooltip_FPS% = 28
-Const Tooltip_FrameLimit% = 29
-Const Tooltip_AutoSave% = 30
-Const Tooltip_SmoothBars% = 31
-Const Tooltip_StartupVideos% = 32
-Const Tooltip_Launcher% = 33
-Const Tooltip_Subtitles% = 34
-Const Tooltip_SubtitlesColor% = 35
-Const Tooltip_ResetOptions% = 36
+Const Tooltip_HUD% = 26
+Const Tooltip_Console% = 27
+Const Tooltip_ConsoleOnError% = 28
+Const Tooltip_AchievementPopups% = 29
+Const Tooltip_FPS% = 30
+Const Tooltip_FrameLimit% = 31
+Const Tooltip_AutoSave% = 32
+Const Tooltip_SmoothBars% = 33
+Const Tooltip_Vignette% = 34
+Const Tooltip_StartupVideos% = 35
+Const Tooltip_Launcher% = 36
+Const Tooltip_ResetOptions% = 37
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3144,6 +3154,10 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_SmoothBars
 			;[Block]
 			Txt = GetLocalString("tooltip", "bar")
+			;[End Block]
+		Case Tooltip_Vignette
+			;[Block]
+			Txt = GetLocalString("tooltip", "vignette")
 			;[End Block]
 		Case Tooltip_StartupVideos
 			;[Block]

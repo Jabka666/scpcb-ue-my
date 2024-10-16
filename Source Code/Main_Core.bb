@@ -2585,6 +2585,7 @@ Function UpdateMoving%()
 	Local Pvt%, i%, Angle#
 	Local Temp3%
 	
+	If (Not EntityHidden(t\OverlayID[0])) And (Not opt\VignetteEnabled) Then HideEntity(t\OverlayID[0])
 	If chs\SuperMan
 		CanSave = 0
 		
@@ -2597,7 +2598,7 @@ Function UpdateMoving%()
 		If chs\SuperManTimer > 70.0 * 50.0
 			msg\DeathMsg = GetLocalString("death", "superman")
 			Kill()
-			If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
+			If EntityHidden(t\OverlayID[0]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[0])
 		Else
 			me\BlurTimer = 500.0
 			If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
@@ -3086,7 +3087,7 @@ Function UpdateMouseLook%()
 		End Select
 	Else
 		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
-		If EntityHidden(t\OverlayID[0]) Then ShowEntity(t\OverlayID[0])
+		If EntityHidden(t\OverlayID[0]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[0])
 	EndIf
 	
 	Update1025()
@@ -7533,6 +7534,10 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
+						
+						y = y + (30 * MenuScale)
+						
 						opt\PlayStartup = UpdateMenuTick(x, y, opt\PlayStartup)
 						
 						y = y + (30 * MenuScale)
@@ -8110,6 +8115,12 @@ Function RenderMenu%()
 						Color(255, 255, 255)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
+						
+						y = y + (30 * MenuScale)
+						
+						Color(255, 255, 255)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
 						
 						y = y + (30 * MenuScale)
 						
