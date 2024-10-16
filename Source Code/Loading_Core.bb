@@ -1227,6 +1227,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "keyomni"), "Key Card Omni", it_keyomni, "key_card.b3d", "INV_key_card_lvl_omni.png", "", 0.00037, 1, "key_card_lvl_omni.png")
 	
 	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", it_mastercard, "key_card.b3d", "INV_master_card.png", "", 0.00037, 1, "master_card.png")
+	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", it_mastercard_golden, "key_card.b3d", "INV_master_card_golden.png", "", 0.00037, 1, "master_card_golden.png")
 	CreateItemTemplate(GetLocalString("items", "playcard"), "Playing Card", it_playcard, "key_card.b3d", "INV_playing_card.png", "", 0.00037, 1, "playing_card.png")
 	
 	CreateItemTemplate(GetLocalString("items", "hand"), "White Severed Hand", it_hand, "severed_hand.b3d", "INV_severed_hand_white.png", "", 0.033, 2)

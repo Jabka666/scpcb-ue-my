@@ -3491,7 +3491,8 @@ Function UpdateEvents%()
 									Inserted = True
 									
 									e\EventState2 = e\EventState2 + 1.0
-								ElseIf SelectedItem\ItemTemplate\ID = it_mastercard
+								ElseIf SelectedItem\ItemTemplate\ID = it_mastercard Lor SelectedItem\ItemTemplate\ID = it_mastercard_golden
+									me\UsedMastercard = 1 + (SelectedItem\ItemTemplate\ID = it_mastercard_golden)
 									If SelectedItem\State > 0
 										SelectedItem\State = SelectedItem\State - 1
 										me\CurrFunds = SelectedItem\State
@@ -3503,7 +3504,6 @@ Function UpdateEvents%()
 										
 										e\EventState2 = 2.0
 									EndIf
-									me\UsedMastercard = True
 								EndIf
 							EndIf
 						EndIf
@@ -3515,14 +3515,15 @@ Function UpdateEvents%()
 								SelectedItem = Null
 								mo\MouseHit1 = False
 							EndIf
-						ElseIf e\EventState2 = 1.0 And (Not Inserted) And (Not me\UsedMastercard)
+						ElseIf e\EventState2 = 1.0 And (Not Inserted) And me\UsedMastercard = 0
 							I_294\Using = False
 							CreateMsg(GetLocalString("msg", "294.another"))
-						ElseIf (Not Inserted) And (Not me\UsedMastercard)
+						ElseIf (Not Inserted) And me\UsedMastercard = 0
 							I_294\Using = False
 							CreateMsg(GetLocalString("msg", "294.two"))
-						ElseIf me\UsedMastercard
+						ElseIf me\UsedMastercard > 0
 							CreateMsg(GetLocalString("msg", "294.funds"))
+							me\UsedMastercard = 0
 						EndIf
 					EndIf
 					

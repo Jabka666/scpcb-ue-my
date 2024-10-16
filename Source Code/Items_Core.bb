@@ -152,20 +152,21 @@ Const it_key6% = 90
 Const it_keyomni% = 91
 
 Const it_mastercard% = 92
-Const it_playcard% = 93
+Const it_mastercard_golden% = 93
+Const it_playcard% = 94
 
-Const it_hand% = 94
-Const it_hand2% = 95
-Const it_hand3% = 96
+Const it_hand% = 95
+Const it_hand2% = 96
+Const it_hand3% = 97
 
-Const it_key_yellow% = 97
-Const it_key_white% = 98
-Const it_lostkey% = 99
+Const it_key_yellow% = 98
+Const it_key_white% = 99
+Const it_lostkey% = 100
 
-Const it_25ct% = 100
-Const it_coin% = 101
+Const it_25ct% = 101
+Const it_coin% = 102
 
-Const it_pizza% = 102
+Const it_pizza% = 103
 ;[End Block]
 ;[End Block]
 
@@ -1616,8 +1617,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							ElseIf Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
 							Else
-								it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-								it2\State = Rand(0, 6)
+								If Rand(15) = 1
+									it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+									it2\State = 1000
+								Else
+									it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+									it2\State = Rand(0, 6)
+								EndIf
 							EndIf
 							;[End Block]
 						Case it_key6
@@ -1625,8 +1631,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							If Rand(6 + (3 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 							Else
-								it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-								it2\State = Rand(0, 6)
+								If Rand(5) = 1
+									it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+									it2\State = 1000
+								Else
+									it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
+									it2\State = Rand(0, 6)
+								EndIf
 							EndIf
 							;[End Block]
 					End Select
@@ -1655,8 +1666,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case ONETOONE
 					;[Block]
 					If Rand(2) = 1
-						it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-						it2\State = Rand(0, 6)
+						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+						it2\State = 1000
 					Else
 						it2.Items = CreateItem("Playing Card", it_playcard, x, y, z)
 					EndIf
@@ -1666,8 +1677,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If Rand(4 + (2 * SelectedDifficulty\OtherFactors)) = 1
 						it2.Items = CreateItem("Level 6 Key Card", it_key6, x, y, z)
 					Else
-						it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-						it2\State = Rand(0, 6)
+						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+						it2\State = 1000
 					EndIf
 					;[End Block]
 			End Select
@@ -1725,11 +1736,21 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("Level 1 Key Card", it_key1, x, y, z)
+					If Rand(20) = 1
+						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+						it2\State = 1000
+					Else
+						it2.Items = CreateItem("Level 1 Key Card", it_key1, x, y, z)
+					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+					If Rand(30) = 1
+						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+						it2\State = 1000
+					Else
+						it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]

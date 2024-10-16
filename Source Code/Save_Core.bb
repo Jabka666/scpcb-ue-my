@@ -73,7 +73,7 @@ Function SaveGame%(File$)
 	
 	WriteString(f, msg\DeathMsg)
 	
-	WriteByte(f, me\CurrFunds)
+	WriteInt(f, me\CurrFunds)
 	WriteByte(f, me\UsedMastercard)
 	
 	WriteFloat(f, me\VomitTimer)
@@ -608,7 +608,7 @@ Function LoadGame%(File$)
 	
 	msg\DeathMsg = ReadString(f)
 	
-	me\CurrFunds = ReadByte(f)
+	me\CurrFunds = ReadInt(f)
 	me\UsedMastercard = ReadByte(f)
 	
 	me\VomitTimer = ReadFloat(f)
@@ -1534,7 +1534,7 @@ Function LoadGameQuick%(File$)
 	
 	msg\DeathMsg = ReadString(f)
 	
-	me\CurrFunds = ReadByte(f)
+	me\CurrFunds = ReadInt(f)
 	me\UsedMastercard = ReadByte(f)
 	
 	me\VomitTimer = ReadFloat(f)
