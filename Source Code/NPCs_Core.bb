@@ -4029,7 +4029,6 @@ Function UpdateNPCs%()
 				;[End Block]
 			Case NPCType966
 				;[Block]
-				
 				If n\State > -1.0
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					If Dist < PowTwo(HideDistance)

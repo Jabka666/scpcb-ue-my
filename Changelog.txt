@@ -13,7 +13,7 @@
 - Added Golden Mastercard.
 
 - New texture for SCP-420-J.
-- Improved some models.
+- Improved some models and icons.
 - Changed chance of obtaining Red SCP-860 from SCP-914:
 	- Fine: 10% -> 12.5%
 	- Very Fine: 5% -> 8.3%
