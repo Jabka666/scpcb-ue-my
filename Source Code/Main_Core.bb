@@ -3963,9 +3963,9 @@ Function UpdateGUI%()
 												If added\ItemTemplate\ID = it_paper Lor added\ItemTemplate\ID = it_oldpaper
 													CreateMsg(GetLocalString("msg", "clipboard.paper"))
 												ElseIf added\ItemTemplate\ID = it_badge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_burntbadge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_harnbadge
-													CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\Name))
+													CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\DisplayName))
 												Else
-													CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\Name))
+													CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\DisplayName))
 												EndIf
 											EndIf
 											;[End Block]
@@ -4033,7 +4033,7 @@ Function UpdateGUI%()
 											If SelectedItem <> Null
 												CreateMsg(GetLocalString("msg", "wallet.full"))
 											Else
-												CreateMsg(Format(GetLocalString("msg", "wallet.add"), added\ItemTemplate\Name))
+												CreateMsg(Format(GetLocalString("msg", "wallet.add"), added\ItemTemplate\DisplayName))
 											EndIf
 											;[End Block]
 									End Select
