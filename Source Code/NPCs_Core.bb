@@ -4082,7 +4082,6 @@ Function UpdateNPCs%()
 						n\Reload = n\Reload - fps\Factor[0]
 						
 						If n\State3 >= 350.0 Then n\State = Max(n\State, 8.0)
-						
 						If me\Stamina < 10.0
 							n\State3 = n\State3 + fps\Factor[0]
 						ElseIf n\State3 < 350.0
@@ -4145,7 +4144,7 @@ Function UpdateNPCs%()
 											EndIf
 											I_966\HasInsomnia = 1.0 - (0.5 * I_714\Using)
 											Temp = (2100.0 + (300.0 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)
-											If I_966\InsomniaEffectTimer < Temp Then I_966\InsomniaEffectTimer = Temp
+											I_966\InsomniaEffectTimer = Max(I_966\InsomniaEffectTimer, Temp)
 											I_966\InsomniaEffectTimer = Min(I_966\InsomniaEffectTimer + (fps\Factor[0] * (5.0 - (2.0 * I_714\Using))), Temp * 2.0)
 										EndIf
 									EndIf
@@ -4351,6 +4350,7 @@ Function UpdateNPCs%()
 						If Rand(850 - (250 * SelectedDifficulty\AggressiveNPCs)) = 1
 							TeleportCloser(n)
 							n\State3 = 0.0
+							n\State = 0.0
 						EndIf
 					EndIf
 					If PlayerRoom\RoomTemplate\RoomID = r_dimension_106

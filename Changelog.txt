@@ -19,6 +19,9 @@
 	- Very Fine: 5% -> 8.3%
 - You cannot obtain keys by processing SCP-860 in SCP-914.
 
+[Bug Fixes]
+- Fixed SCP-966 not resetting aggressive state after being teleported.
+
 [Known issues]
 - Rooms can overlap and block the way.
 - Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
