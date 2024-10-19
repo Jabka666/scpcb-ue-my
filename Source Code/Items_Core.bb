@@ -1581,7 +1581,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case NORMAL
 									;[Block]
-									If Rand(4) = 1
+									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
 										it2\State = Rand(0, 6)
 									Else
@@ -1590,7 +1590,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case HARD
 									;[Block]
-									If Rand(3) = 1
+									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
 										it2\State = Rand(0, 6)
 									Else
@@ -1599,7 +1599,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 									;[End Block]
 								Case EXTREME
 									;[Block]
-									If Rand(2) = 1
+									If Rand(3) > 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
 										it2\State = Rand(0, 6)
 									Else
