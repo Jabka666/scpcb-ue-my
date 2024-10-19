@@ -1736,7 +1736,7 @@ Function UpdateNPCs%()
 											EndIf
 										EndIf
 									EndIf
-									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
+									n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 15.0 - (1.5 * SelectedDifficulty\OtherFactors))
 								Else ; ~ Finding a path to the player
 									If PlayerSeeAble = 1 Then n\State2 = 70.0 * 2.0
 									If n\PathStatus = PATH_STATUS_FOUND ; ~ Path to player found
@@ -1755,7 +1755,7 @@ Function UpdateNPCs%()
 											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 											
 											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
-											n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
+											n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 15.0 - (1.5 * SelectedDifficulty\OtherFactors))
 											
 											; ~ Playing a sound if he hears the player
 											If n\PrevState = 0 And (Not ChannelPlaying(n\SoundCHN2))
