@@ -3824,7 +3824,10 @@ Function RemoveDoor%(d.Doors)
 	FreeEntity(d\OBJ) : d\OBJ = 0
 	If d\OBJ2 <> 0 Then FreeEntity(d\OBJ2) : d\OBJ2 = 0
 	For i = 0 To 1
-		If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+		If d\Buttons[i] <> 0
+			If d_I\AnimButton = d\Buttons[i] Then d_I\AnimButton = 0
+			FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+		EndIf	
 		If d\ElevatorPanel[i] <> 0 Then FreeEntity(d\ElevatorPanel[i]) : d\ElevatorPanel[i] = 0
 	Next
 	FreeEntity(d\FrameOBJ) : d\FrameOBJ = 0
