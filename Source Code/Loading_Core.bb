@@ -1166,10 +1166,10 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "electronics"), "Electronical Components", it_electronics, "circuits.b3d", "INV_circuits.png", "", 0.0011, 1)
 	
-	CreateItemTemplate(GetLocalString("items", "eyedrops"), "ReVision Eyedrops", it_eyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1)
-	CreateItemTemplate(GetLocalString("items", "eyedrops.red"), "RedVision Eyedrops", it_eyedrops2, "eye_drops.b3d", "INV_eye_drops_red.png", "", 0.0012, 1, "eye_drops_red.png")
+	CreateItemTemplate(GetLocalString("items", "eyedrops"), "ReVision Eyedrops", it_eyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0011, 1)
+	CreateItemTemplate(GetLocalString("items", "eyedrops.red"), "RedVision Eyedrops", it_eyedrops2, "eye_drops.b3d", "INV_eye_drops_red.png", "", 0.0011, 1, "eye_drops_red.png")
 	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Fine Eyedrops", it_fineeyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1)
-	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Very Fine Eyedrops", it_veryfineeyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, 1)
+	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Very Fine Eyedrops", it_veryfineeyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0013, 1)
 	
 	CreateItemTemplate(GetLocalString("items", "fak"), "First Aid Kit", it_firstaid, "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.05, 1)
 	CreateItemTemplate(GetLocalString("items", "bfak"), "Blue First Aid Kit", it_firstaid2, "first_aid_kit.b3d", "INV_first_aid_kit_blue.png", "", 0.03, 1, "first_aid_kit(2).png")
