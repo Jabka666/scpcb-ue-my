@@ -2010,11 +2010,11 @@ Function UpdateNPCs%()
 							If n\State2 > 0.0
 								If n\Target = Null
 									If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-									PointEntity(n\Collider, me\Collider)
+									If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 									Dist = EntityDistanceSquared(n\Collider, me\Collider)
 								Else
 									If NPCSeesNPC(n\Target, n) Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-									PointEntity(n\Collider, n\Target\Collider)
+									If EntityVisible(n\Collider, n\Target\Collider) Then PointEntity(n\Collider, n\Target\Collider)
 									Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
 								EndIf
 								
@@ -2065,7 +2065,10 @@ Function UpdateNPCs%()
 							Else
 								; ~ Still attack if the player is too close
 								If (Not chs\NoTarget)
-									If EntityDistanceSquared(n\Collider, me\Collider) < 0.49 And EntityVisible(me\Collider, n\Collider) Then n\State = 4.0
+									If EntityDistanceSquared(n\Collider, me\Collider) < 0.49 And EntityVisible(me\Collider, n\Collider)
+										n\State2 = 70.0
+										n\State = 4.0
+									EndIf
 								EndIf
 								
 								If n\PathStatus = PATH_STATUS_FOUND
@@ -4741,11 +4744,11 @@ Function UpdateNPCs%()
 							If n\State2 > 0.0
 								If n\Target = Null
 									If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-									PointEntity(n\Collider, me\Collider)
+									If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 									Dist = EntityDistanceSquared(n\Collider, me\Collider)
 								Else
 									If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * 2.0
-									PointEntity(n\Collider, n\Target\Collider)
+									If EntityVisible(n\Collider, n\Target\Collider) Then PointEntity(n\Collider, n\Target\Collider)
 									Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
 								EndIf
 								
@@ -4817,7 +4820,10 @@ Function UpdateNPCs%()
 							Else
 								; ~ Still attack if the player is too close
 								If Dist < 0.49 And (Not chs\NoTarget)
-									If EntityVisible(me\Collider, n\Collider) Then n\State = 4.0
+									If EntityVisible(me\Collider, n\Collider)
+										n\State2 = 70.0
+										n\State = 4.0
+									EndIf
 								EndIf
 								
 								If n\PathStatus = PATH_STATUS_FOUND
