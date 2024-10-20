@@ -3012,17 +3012,15 @@ Function UpdateEvents%()
 								
 								GiveAchievement("1162arc")
 								mo\MouseHit1 = False
-								e\EventState3 = 0.0
+								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+								me\LightFlash = 5.0
 								If me\Injuries > 15.0
 									msg\DeathMsg = GetLocalString("death", "1162")
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
-									me\LightFlash = 5.0
 									Kill(True)
 								Else
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
-									me\LightFlash = 5.0
 									CreateMsg(GetLocalString("msg", "1162_1"))
 								EndIf
+								e\EventState3 = 0.0
 								Exit
 							EndIf
 						Next
@@ -3041,14 +3039,12 @@ Function UpdateEvents%()
 							de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
 							EntityParent(de\OBJ, e\room\OBJ)
 							FreeEntity(Pvt) : Pvt = 0
+							PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+							me\LightFlash = 5.0
 							If me\Injuries > 15.0
 								msg\DeathMsg = GetLocalString("death", "1162")
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
-								me\LightFlash = 5.0
 								Kill(True)
 							Else
-								PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
-								me\LightFlash = 5.0
 								CreateMsg(GetLocalString("msg", "1162_2"))
 							EndIf
 							e\EventState2 = 0.0
