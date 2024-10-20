@@ -162,6 +162,7 @@
 		Xstallm
 		aciu
 		itzslain
+		SPOOKYfellow
 		MidnightFirefly as a wiki redactor
 
 *Mod Testers

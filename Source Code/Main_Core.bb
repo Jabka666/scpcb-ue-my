@@ -6808,9 +6808,9 @@ Function RenderGUI%()
 							Case "Unknown Note"
 								;[Block]
 								SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img))
-								Color(50, 50, 50)
+								Color(85, 85, 140)
 								SetFontEx(fo\FontID[Font_Journal])
-								TextEx(300 * MenuScale, 295 * MenuScale, CODE_O5_COUNCIL, True, True)
+								TextEx(300 * MenuScale, 275 * MenuScale, CODE_O5_COUNCIL, True, True)
 								SetBuffer(BackBuffer())
 								;[End Block]
 							Case "Document SCP-372"
