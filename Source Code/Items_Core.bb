@@ -1736,7 +1736,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(20) = 1
+					If Rand(35) = 1
 						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
 						it2\State = 1000
 					Else
@@ -1745,11 +1745,46 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(30) = 1
+					If Rand(50) = 1
 						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
 						it2\State = 1000
 					Else
 						it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+					EndIf
+					;[End Block]
+			End Select
+			;[End Block]
+		Case it_mastercard_golden
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					For i = 0 To 20
+						it2.Items = CreateItem("Quarter", it_25ct, x, y, z)
+					Next
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
+					;[End Block]
+				Case FINE
+					;[Block]
+					If Rand(35) = 1
+						it2.Items = CreateItem("Level 4 Key Card", it_key4, x, y, z)
+					Else
+						it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+					EndIf
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					If Rand(45) = 1
+						it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
+					Else
+						it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
 					EndIf
 					;[End Block]
 			End Select
