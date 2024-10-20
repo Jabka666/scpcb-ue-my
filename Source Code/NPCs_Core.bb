@@ -6964,7 +6964,7 @@ Function UpdateNPCBlinking%(n.NPCs)
 	n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
 End Function
 
-Function Shoot%(x#, y#, z#, Parent%, HitProb# = 1.0, Particles% = True, InstaKill% = False)
+Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, InstaKill% = False)
 	Local p.Particles, de.Decals, n.NPCs, emit.Emitter
 	Local Pvt%, ShotMessageUpdate$, i%
 	Local DifficultyDMGMult#

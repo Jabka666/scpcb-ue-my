@@ -299,7 +299,7 @@ Function LoadParticles%()
 	; ~ A simple flash particle
 	ParticleEffect[13] = CreateTemplate()
 	SetTemplateEmitterLifeTime(ParticleEffect[13], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[13], 2, 3)
+	SetTemplateParticleLifeTime(ParticleEffect[13], 2, 2)
 	SetTemplateTexture(ParticleEffect[13], PARTICLE_FLASH)
 	SetTemplateOffset(ParticleEffect[13], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
 	SetTemplateSize(ParticleEffect[13], 0.08, 0.08, 0.8, 1.0)

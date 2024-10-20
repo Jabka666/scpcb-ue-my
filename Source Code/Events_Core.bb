@@ -9901,7 +9901,7 @@ Function UpdateEndings%()
 											e\room\RoomDoors[0]\Open = True
 											
 											For i = 2 To 4
-												RemoveNPC(e\room\NPC[i])
+												e\room\NPC[i]\State = 0.0
 											Next
 											
 											e\EventState3 = 1.0
@@ -9995,6 +9995,10 @@ Function UpdateEndings%()
 											
 											PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Bell1.ogg"))
 											
+											For n.NPCs = Each NPCs
+												RemoveNPC(n)
+											Next
+											
 											p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 8.0, 0.0, 50.0)
 											p\Speed = 0.15 : p\Alpha = 0.5
 											p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[11], True), EntityY(Camera, True), EntityZ(e\room\Objects[11], True), 8.0, 0.0, 50.0)
@@ -10058,7 +10062,7 @@ Function UpdateEndings%()
 											PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Bang2.ogg"))
 											
 											For n.NPCs = Each NPCs
-												If n\NPCType = NPCTypeMTF Then RemoveNPC(n)
+												RemoveNPC(n)
 											Next
 											
 											me\LightFlash = 1.0

@@ -25,6 +25,7 @@
 
 [Bug Fixes]
 - Fixed SCP-966 not resetting aggressive state after being teleported.
+- Fixed MAV at Gate A and possible emitter related MAVs.
 
 [Known issues]
 - Rooms can overlap and block the way.

@@ -1644,6 +1644,11 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
+	; ~ Unparent all emitters before deleting parent objects
+	For emit.Emitter = Each Emitter
+		EntityParent(emit\Owner, 0)
+	Next
+	
 	If ReadInt(f) <> 113 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
