@@ -295,6 +295,11 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
+			If SNAVUnlocked
+				it.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, r\x + 408.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 237.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
 			emit.Emitter = SetEmitter(r, r\x + 3384.0 * RoomScale, r\y + 500.0 * RoomScale, r\z + 4500.0 * RoomScale, 7)
 			emit\State = 2
 			;[End Block]

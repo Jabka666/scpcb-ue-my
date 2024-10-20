@@ -27,13 +27,13 @@ Function InitAchievements%()
 	S2IMapSet(AchievementsImages, "locked", ScaleImageEx(LoadImage_Strict("GFX\Menu\Achievements\AchvLocked.png"), MenuScale, MenuScale))
 End Function
 
+Global SNAVUnlocked% = False
+
 Function GiveAchievement%(AchvID$, ShowMessage% = True)
 	If S2IMapContains(UnlockedAchievements, AchvID) Then Return
 	
 	S2IMapSet(UnlockedAchievements, AchvID, True)
-	If opt\AchvMsgEnabled And ShowMessage Then
-		CreateAchievementMsg(AchvID)
-	EndIf
+	If opt\AchvMsgEnabled And ShowMessage Then CreateAchievementMsg(AchvID)
 End Function
 
 Function AchievementTooltip%(AchvID$)

@@ -2949,6 +2949,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	MTFCameraCheckTimer = 0.0
 	MTFCameraCheckDetected = False
 	
+	SNAVUnlocked = False
+	
 	CODE_DR_MAYNARD = 0
 	CODE_DR_GEARS = 0
 	CODE_MAINTENANCE_TUNNELS = 0

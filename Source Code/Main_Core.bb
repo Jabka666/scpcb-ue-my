@@ -8238,13 +8238,20 @@ Function UpdateEnding%()
 	EndIf
 	
 	GiveAchievement("055")
-	If ((Not UsedConsole) Lor opt\DebugMode) And SelectedCustomMap = Null
+	If ((Not UsedConsole) And SelectedCustomMap = Null) Lor opt\DebugMode
 		GiveAchievement("console")
-		If SelectedDifficulty\Name = difficulties[KETER]\Name Lor SelectedDifficulty\Name = difficulties[APOLLYON]\Name
-			GiveAchievement("keter")
-			If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Then GiveAchievement("apollyon")
-			SaveAchievementsFile()
-		EndIf
+		Select SelectedDifficulty\Name
+			Case difficulties[KETER]\Name
+				;[Block]
+				GiveAchievement("keter")
+				;[End Block]
+			Case difficulties[APOLLYON]\Name
+				;[Block]
+				GiveAchievement("keter")
+				GiveAchievement("apollyon")
+				;[End Block]
+		End Select
+		SaveAchievementsFile()
 	EndIf
 	
 	ShouldPlay = 66
@@ -8373,6 +8380,8 @@ Function RenderEnding%()
 							RoomsFound = RoomsFound + r\Found
 						EndIf
 					Next
+					
+					If RoomAmount = RoomsFound Then SNAVUnlocked = True
 					
 					Local DocAmount% = 0, DocsFound% = 0
 					
