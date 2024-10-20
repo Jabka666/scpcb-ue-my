@@ -2091,6 +2091,19 @@ Function LoadGameQuick%(File$)
 					HideEntity(e\room\Objects[7])
 				EndIf
 				;[End Block]
+			Case e_cont2_012
+				;[Block]
+				; ~ Reset SCP-012's texture
+				If e\EventState2 < 70.0 * 31.0
+					Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(1).png")
+					EntityTexture(e\room\Objects[3], Tex)
+					DeleteSingleTextureEntryFromCache(Tex)
+				EndIf
+				;[End Block]
+			Case e_cont1_079
+				;[Block]
+				If e\EventState = 1.0 Then HideEntity(e\room\Objects[1])
+				;[End Block]
 		End Select
 	Next
 	

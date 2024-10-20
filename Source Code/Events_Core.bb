@@ -1009,11 +1009,9 @@ Function UpdateEvents%()
 						
 						If RemoteDoorOn
 							e\room\RoomDoors[0]\Locked = 2
-						ElseIf e\EventState < 10000.0
+						Else
 							e\room\RoomDoors[0]\Locked = 0
 							If e\EventState = 1.0
-								e\EventState = 2.0
-							ElseIf e\EventState = 2.0
 								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 9.0
 									GiveAchievement("079")
 									
@@ -1021,35 +1019,22 @@ Function UpdateEvents%()
 									e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Speech.ogg", opt\VoiceVolume * opt\MasterVolume, 0)
 									e\SoundCHN_IsStream = True
 									
-									e\EventState = 3.0
+									e\EventState = 2.0
 									e\EventState2 = 1.0
 								EndIf
-							ElseIf e\EventState < 6000.0
-								If e\SoundCHN <> 0
-									If IsStreamPlaying_Strict(e\SoundCHN)
-										If Rand(4) = 1
-											EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
-											If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
-										ElseIf Rand(10) = 1 
-											If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
-										EndIf
-									Else
-										StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
-										EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
-										If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+							ElseIf e\EventState >= 2.0
+								e\EventState = e\EventState + fps\Factor[0]
+								If e\EventState > 3000.0
+									If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25
+										If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+										e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\VoiceVolume * opt\MasterVolume, 0)
+										e\SoundCHN_IsStream = True
+										
+										e\EventState = 1.5
 									EndIf
 								EndIf
-								e\EventState = e\EventState + fps\Factor[0]
-							Else
-								If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25
-									If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
-									e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\VoiceVolume * opt\MasterVolume, 0)
-									e\SoundCHN_IsStream = True
-									
-									e\EventState = 10001.0
-								EndIf
 							EndIf
-						Else
+							
 							If e\SoundCHN <> 0
 								If IsStreamPlaying_Strict(e\SoundCHN)
 									If Rand(4) = 1
@@ -1060,9 +1045,10 @@ Function UpdateEvents%()
 									EndIf
 								Else
 									StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
-									EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
-									If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
 								EndIf
+							ElseIf e\EventState > 1.0
+								If EntityHidden(e\room\Objects[1]) Then ShowEntity(e\room\Objects[1])
+								EntityTexture(e\room\Objects[1], mon_I\MonitorOverlayID[MONITOR_079_OVERLAY_1])
 							EndIf
 						EndIf
 					Else

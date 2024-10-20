@@ -32,6 +32,7 @@
 - Fixed MAV at Gate A area and possible MAVs related to emitters.
 - Fixed MAV in the intro sequence and possible MAVs related to animated buttons.
 - Fixed Framelimit slidebar not rendering.
+- Fixed SCP-012 and SCP-079 textures not saving correctly.
 
 [Known issues]
 - Rooms can overlap and block the way.
