@@ -2193,8 +2193,6 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			; ~ TODO: FIND A WAY TO ROTATE PARTICLES/EMITTER
-			; ~ Smoke
 			i = 0
 			For xTemp = -1 To 1 Step 2
 				For zTemp = -1 To 1
