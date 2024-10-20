@@ -251,7 +251,7 @@ Function LoadOptionsINI%()
 	
 	opt\ParticleAmount = IniGetInt(OptionFile, "Graphics", "Particle Amount", 2)
 	
-	opt\TextureDetails = IniGetInt(OptionFile, "Graphics", "Texture Details", 4)
+	opt\TextureDetails = IniGetInt(OptionFile, "Graphics", "Texture Details", 2)
 	
 	Select opt\TextureDetails
 		Case 0
@@ -281,7 +281,7 @@ Function LoadOptionsINI%()
 	opt\FOV = IniGetFloat(OptionFile, "Graphics", "FOV", 60.0)
 	opt\CurrFOV = opt\FOV - 40.0
 	
-	opt\Anisotropic = IniGetInt(OptionFile, "Graphics", "Anisotropic Filtering", 4)
+	opt\Anisotropic = IniGetInt(OptionFile, "Graphics", "Anisotropic Filtering", 2)
 	
 	Select opt\Anisotropic
 		Case 0

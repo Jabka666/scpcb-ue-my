@@ -9,6 +9,9 @@
 	- Changed fog distance and light volume.
 	- Changed fog color.
 
+- Anisotropic filtering is 4x by default.
+- Texture LOD Bias is 0.0 by default.
+
 [Items]
 - Added Golden Mastercard.
 
