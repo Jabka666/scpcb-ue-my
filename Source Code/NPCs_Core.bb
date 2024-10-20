@@ -3801,7 +3801,9 @@ Function UpdateNPCs%()
 										If (PrevFrame < 452.0 And n\Frame >= 452.0) Lor (PrevFrame < 459.0 And n\Frame >= 459.0) Then PlaySoundEx(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
 										
 										; ~ Player is visible
-										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 1.0 Then SetNPCFrame(n, 18.0)
+										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 1.0
+											If EntityVisible(me\Collider, n\Collider) Then SetNPCFrame(n, 18.0)
+										EndIf
 									Else
 										n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 										AnimateNPC(n, 175.0, 297.0, n\CurrSpeed * 5.0)
