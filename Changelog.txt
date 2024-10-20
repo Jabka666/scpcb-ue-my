@@ -19,6 +19,10 @@
 	- Very Fine: 5% -> 8.3%
 - You cannot obtain keys by processing SCP-860 in SCP-914.
 
+[NPCs]
+- Being deaf protects player against SCP-1048-A's scream.
+- Reduced SCP-049's turn speed slightly.
+
 [Bug Fixes]
 - Fixed SCP-966 not resetting aggressive state after being teleported.
 
