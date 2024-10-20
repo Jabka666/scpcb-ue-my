@@ -821,7 +821,7 @@ End Function
 
 Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 	Select itt\ID
-		Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody
+		Case it_key0, it_key1, it_key2, it_key3
 			;[Block]
 			Return(True)
 			;[End Block]

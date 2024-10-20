@@ -2951,7 +2951,7 @@ Function UpdateEvents%()
 								Select Inventory(e\EventState2)\ItemTemplate\ID
 									Case it_lostkey
 										;[Block]
-										If itt\ID = it_key0 Lor itt\ID = it_key1 And Rand(2) = 1 Then ShouldCreateItem = True
+										If (itt\ID = it_key0 Lor itt\ID = it_key1) And Rand(2) = 1 Then ShouldCreateItem = True
 										;[End Block]
 									Case it_paper, it_oldpaper
 										;[Block]
@@ -2959,23 +2959,23 @@ Function UpdateEvents%()
 										;[End Block]
 									Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 										;[Block]
-										If itt\ID = it_gasmask Lor itt\ID = it_finegasmask Lor itt\ID = it_veryfinegasmask Lor itt\ID = it_gasmask148 Lor itt\ID = it_hazmatsuit Lor itt\ID = it_finehazmatsuit Lor itt\ID = it_veryfinehazmatsuit Lor itt\ID = it_hazmatsuit148 And Rand(2) = 1 Then ShouldCreateItem = True
+										If (itt\ID = it_gasmask Lor itt\ID = it_finegasmask Lor itt\ID = it_veryfinegasmask Lor itt\ID = it_gasmask148 Lor itt\ID = it_hazmatsuit Lor itt\ID = it_finehazmatsuit Lor itt\ID = it_veryfinehazmatsuit Lor itt\ID = it_hazmatsuit148) And Rand(2) = 1 Then ShouldCreateItem = True
 										;[End Block]
-									Case it_key0, it_key1, it_key2, it_key3, it_key3_bloody
+									Case it_key0, it_key1, it_key2, it_key3
 										;[Block]
-										If itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3 Lor itt\ID = it_key3_bloody And Rand(6) = 1 Then ShouldCreateItem = True
+										If (itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3) And Rand(12) = 1 Then ShouldCreateItem = True
 										;[End Block]
 									Case it_mastercard, it_playcard, it_origami, it_electronics
 										;[Block]
-										If itt\ID = it_mastercard Lor itt\ID = it_playcard Lor itt\ID = it_origami Lor itt\ID = it_electronics And Rand(5) = 1 Then ShouldCreateItem = True
+										If (itt\ID = it_mastercard Lor itt\ID = it_playcard Lor itt\ID = it_origami Lor itt\ID = it_electronics) And Rand(5) = 1 Then ShouldCreateItem = True
 										;[End Block]
 									Case it_vest, it_finevest
 										;[Block]
-										If itt\ID = it_vest Lor itt\ID = it_finevest And Rand(1) = 1 Then ShouldCreateItem = True
+										If (itt\ID = it_vest Lor itt\ID = it_finevest) And Rand(2) = 1 Then ShouldCreateItem = True
 										;[End Block]
 									Default
 										;[Block]
-										If itt\ID = it_mastercard Lor itt\ID = it_playcard And Rand(6) = 1 Then ShouldCreateItem = True
+										If (itt\ID = it_mastercard Lor itt\ID = it_playcard) And Rand(6) = 1 Then ShouldCreateItem = True
 										;[End Block]
 								End Select
 							EndIf
