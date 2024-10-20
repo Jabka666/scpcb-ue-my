@@ -8149,6 +8149,7 @@ Function RenderMenu%()
 						
 						RenderMenuButtons()
 						RenderMenuTicks()
+						RenderMenuSlideBars()
 						RenderMenuInputBoxes()
 						;[End Block]
 				End Select

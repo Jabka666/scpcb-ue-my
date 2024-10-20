@@ -31,6 +31,7 @@
 - Fixed SCP-966 not resetting aggressive state after being teleported.
 - Fixed MAV at Gate A area and possible MAVs related to emitters.
 - Fixed MAV in the intro sequence and possible MAVs related to animated buttons.
+- Fixed Framelimit slidebar not rendering.
 
 [Known issues]
 - Rooms can overlap and block the way.
