@@ -825,7 +825,7 @@ Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 			;[Block]
 			Return(True)
 			;[End Block]
-		Case it_mastercard, it_playcard, it_origami, it_electronics, it_scp420j, it_cigarette
+		Case it_mastercard, it_playcard, it_origami, it_electronics
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -837,7 +837,7 @@ Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 			;[Block]
 			Return(True)
 			;[End Block]
-		Case it_clipboard, it_eyedrops, it_nvg
+		Case it_eyedrops, it_syringe, it_scp420j, it_cigarette, it_joint
 			;[Block]
 			Return(True)
 			;[End Block]

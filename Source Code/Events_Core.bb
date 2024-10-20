@@ -2973,6 +2973,10 @@ Function UpdateEvents%()
 										;[Block]
 										If (itt\ID = it_vest Lor itt\ID = it_finevest) And Rand(2) = 1 Then ShouldCreateItem = True
 										;[End Block]
+									Case it_eyedrops, it_fineeyedrops, it_veryfineeyedrops, it_syringe, it_finesyringe, it_veryfinesyringe, it_scp420j, it_joint, it_cigarette
+										;[Block]
+										If (itt\ID = it_eyedrops Lor itt\ID = it_fineeyedrops Lor itt\ID = it_veryfineeyedrops Lor itt\ID = it_syringe Lor itt\ID = it_finesyringe Lor itt\ID = it_veryfinesyringe Lor itt\ID = it_cigarette Lor itt\ID = it_joint Lor itt\ID = it_scp420j) And Rand(4) = 1 Then ShouldCreateItem = True
+										;[End Block]
 									Default
 										;[Block]
 										If (itt\ID = it_mastercard Lor itt\ID = it_playcard) And Rand(6) = 1 Then ShouldCreateItem = True
