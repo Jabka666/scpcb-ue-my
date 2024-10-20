@@ -1707,7 +1707,11 @@ Function UpdateNPCs%()
 								n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 								PlayerSeeAble = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume)
 								If n\State2 > 0.0
-									If PlayerSeeAble = 1 Then n\State2 = 70.0 * 2.0
+									If PlayerSeeAble = 1
+										n\State2 = 70.0 * 2.0
+										PointEntity(n\Collider, me\Collider)
+									EndIf
+									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									; ~ Playing a sound after detecting the player
 									If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
 										LoadNPCSound(n, "SFX\SCP\049\Spotted" + Rand(0, 6) + ".ogg", 1)
@@ -1718,8 +1722,6 @@ Function UpdateNPCs%()
 									n\PathTimer = 0.0
 									n\PathLocation = 0
 									
-									PointEntity(n\Collider, me\Collider)
-									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 									
 									If Dist > 0.225
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
