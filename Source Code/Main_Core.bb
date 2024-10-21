@@ -1411,7 +1411,7 @@ Function UpdateConsole%()
 					
 					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "tp.failed"), 255, 0, 0)
 					;[End Block]
-				Case "roomlist", "roomslist", "rooms"
+				Case "roomlist", "roomslist", "rooms", "room list"
 					;[Block]
 					For rt.RoomTemplates = Each RoomTemplates
 						CreateConsoleMsg("ID: " + rt\RoomID + "; Name: " + rt\Name)
@@ -1468,7 +1468,7 @@ Function UpdateConsole%()
 					EndIf
 					If (Not Temp) Then CreateConsoleMsg(GetLocalString("console", "si.failed"), 255, 0, 0)
 					;[End Block]
-				Case "itemlist", "itemslist", "items"
+				Case "itemlist", "itemslist", "items", "item list"
 					;[Block]
 					For itt.ItemTemplates = Each ItemTemplates
 						CreateConsoleMsg(Format(Format(Format(GetLocalString("console", "itemlist"), itt\ID, "{0}"), itt\Name, "{1}"), itt\DisplayName, "{2}"), 255, 150, 0)
