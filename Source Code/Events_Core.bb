@@ -6592,8 +6592,8 @@ Function UpdateEvents%()
 					
 					If e\EventState < 70.0 * 17.0
 						If e\EventState + fps\Factor[0] >= 70.0 * 17.0 Then e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\682\Roar.ogg"))
-						If e\EventState > (70.0 * 17.0) - (70.0 * 3.0) Then me\BigCameraShake = 0.5
-						If e\EventState < (70.0 * 17.0) - (70.0 * 7.5) And e\EventState > (70.0 * 17.0) - (70.0 * 11.0) Then me\BigCameraShake = 2.0
+						If e\EventState > 70.0 * 14.0 Then me\BigCameraShake = 0.5
+						If e\EventState > 70.0 * 6.0 And e\EventState < 70.0 * 9.5 Then me\BigCameraShake = 2.0
 						If e\EventState < 70.0 Then RemoveEvent(e)
 					EndIf
 				EndIf

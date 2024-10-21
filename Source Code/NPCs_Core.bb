@@ -686,35 +686,36 @@ Function UpdateNPCs%()
 									n\LastSeen = MilliSecs()
 								EndIf
 								
-								If Dist < 2.25 And Rand(700) = 1 Then PlaySoundEx(snd_I\SCP173SFX[Rand(0, 2)], Camera, n\OBJ)
-								
-								If Dist < 2.25 And n\LastDist > 2.0 And Temp
-									me\CurrCameraZoom = 40.0
-									me\HeartBeatRate = Max(me\HeartBeatRate, 140.0)
-									me\HeartBeatVolume = 0.5
-									
-									Select Rand(5)
-										Case 1
-											;[Block]
-											PlaySound_Strict(snd_I\HorrorSFX[1])
-											;[End Block]
-										Case 2
-											;[Block]
-											PlaySound_Strict(snd_I\HorrorSFX[2])
-											;[End Block]
-										Case 3
-											;[Block]
-											PlaySound_Strict(snd_I\HorrorSFX[9])
-											;[End Block]
-										Case 4
-											;[Block]
-											PlaySound_Strict(snd_I\HorrorSFX[10])
-											;[End Block]
-										Case 5
-											;[Block]
-											PlaySound_Strict(snd_I\HorrorSFX[12])
-											;[End Block]
-									End Select
+								If Dist < 2.25
+									If Rand(700) = 1 Then PlaySoundEx(snd_I\SCP173SFX[Rand(0, 2)], Camera, n\OBJ)
+									If n\LastDist > 2.0 And Temp
+										me\CurrCameraZoom = 40.0
+										me\HeartBeatRate = Max(me\HeartBeatRate, 140.0)
+										me\HeartBeatVolume = 0.5
+										
+										Select Rand(5)
+											Case 1
+												;[Block]
+												PlaySound_Strict(snd_I\HorrorSFX[1])
+												;[End Block]
+											Case 2
+												;[Block]
+												PlaySound_Strict(snd_I\HorrorSFX[2])
+												;[End Block]
+											Case 3
+												;[Block]
+												PlaySound_Strict(snd_I\HorrorSFX[9])
+												;[End Block]
+											Case 4
+												;[Block]
+												PlaySound_Strict(snd_I\HorrorSFX[10])
+												;[End Block]
+											Case 5
+												;[Block]
+												PlaySound_Strict(snd_I\HorrorSFX[12])
+												;[End Block]
+										End Select
+									EndIf
 								EndIf
 								
 								n\LastDist = Sqr(Dist)
