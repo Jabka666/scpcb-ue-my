@@ -621,7 +621,7 @@ Function UpdateGame%()
 			If opt\CanOpenConsole
 				If ConsoleOpen
 					UsedConsole = True
-					ResumeSounds()
+					If (Not MenuOpen) Then ResumeSounds()
 					StopMouseMovement()
 					ShouldDeleteGadgets = True
 				Else
@@ -3579,7 +3579,7 @@ Function UpdateGUI%()
 	
 	If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 And me\KillAnimTimer <= 400.0
 		If MenuOpen
-			ResumeSounds()
+			If (Not ConsoleOpen) Then ResumeSounds()
 			If igm\OptionsMenu <> 0 Then SaveOptionsINI()
 			StopMouseMovement()
 			ShouldDeleteGadgets = True
