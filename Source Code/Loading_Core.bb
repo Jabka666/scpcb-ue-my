@@ -2570,7 +2570,7 @@ Function InitNewGame%()
 	InitOtherStuff()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount + 2)
+	Dim Inventory.Items(MaxItemAmount + 2) ; ~ Create two extra slots for polydactyly
 	
 	RenderLoading(50, GetLocalString("loading", "stuff"))
 	
