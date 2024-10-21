@@ -5940,7 +5940,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 	EndIf
-	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0
+	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0 Lor I_1025\FineState[2] > 0.0 Lor I_966\HasInsomnia > 0.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3
