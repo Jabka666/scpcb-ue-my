@@ -14,6 +14,7 @@
 
 [Items]
 - Added Golden Mastercard.
+- Added new SCP-1025.
 
 - New texture for SCP-420-J.
 - Better texture for Unknown Note.
@@ -34,6 +35,7 @@
 - Fixed Framelimit slidebar not rendering.
 - Fixed SCP-012 and SCP-079 textures not saving correctly.
 - Fixed SCP-1162-ARC not giving items correctly.
+- Fixed SCP-1025 always giving the «Common Cold» page first.
 
 [Known issues]
 - Rooms can overlap and block the way.

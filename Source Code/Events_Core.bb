@@ -1406,7 +1406,7 @@ Function UpdateEvents%()
 									If Rand(100) = 1
 										InjurePlayer(Rnd(0.3, 0.6), 0.0, 300.0)
 										PlaySound_Strict(snd_I\DamageSFX[Rand(2, 3)])
-										me\CameraShake = 0.5
+										me\CameraShake = 0.5 * (I_1025\FineState[3] = 0.0)
 										
 										e\EventState2 = Rnd(-0.1, 0.1)
 										e\EventState3 = Rnd(-0.1, 0.1)
@@ -2106,7 +2106,7 @@ Function UpdateEvents%()
 												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 												
 												CreateMsg(GetLocalString("msg", "012_4"), 8.0)
-												me\CameraShake = 2.0
+												me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
 												me\Injuries = me\Injuries + 0.8
 												e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
 												PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
@@ -6004,7 +6004,7 @@ Function UpdateEvents%()
 											RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
 											
 											If e\room\NPC[0]\State = 6.0
-												me\Sanity = -150.0 * Sin(AnimTime(e\room\NPC[0]\OBJ) - 524.0) * 9.0
+												me\Sanity = (-150.0) * Sin(AnimTime(e\room\NPC[0]\OBJ) - 524.0) * 9.0
 												AnimateNPC(e\room\NPC[0], 524.0, 553.0, 0.08, False)
 												If e\room\NPC[0]\Frame > 552.9 Then e\room\NPC[0]\State = 0.0
 											EndIf

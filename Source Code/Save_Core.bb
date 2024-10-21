@@ -97,6 +97,9 @@ Function SaveGame%(File$)
 	For i = 0 To 7
 		WriteFloat(f, I_1025\State[i])
 	Next
+	For i = 0 To 4
+		WriteFloat(f, I_1025\FineState[i])
+	Next
 	
 	WriteFloat(f, I_008\Timer)
 	WriteByte(f, I_008\Revert)
@@ -632,6 +635,9 @@ Function LoadGame%(File$)
 	For i = 0 To 7
 		I_1025\State[i] = ReadFloat(f)
 	Next
+	For i = 0 To 4
+		I_1025\FineState[4] = ReadFloat(f)
+	Next
 	
 	I_008\Timer = ReadFloat(f)
 	I_008\Revert = ReadByte(f)
@@ -650,8 +656,8 @@ Function LoadGame%(File$)
 		SelectedDifficulty\InventorySlots = ReadByte(f)
 	EndIf
 	
-	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount)
+	MaxItemAmount = SelectedDifficulty\InventorySlots + (2 * (I_1025\FineState[0] > 0.0))
+	Dim Inventory.Items(SelectedDifficulty\InventorySlots + 2)
 	
 	wi\GasMaskFogTimer = ReadFloat(f)
 	
@@ -1558,6 +1564,9 @@ Function LoadGameQuick%(File$)
 	For i = 0 To 7
 		I_1025\State[i] = ReadFloat(f)
 	Next
+	For i = 0 To 4
+		I_1025\FineState[i] = ReadFloat(f)
+	Next
 	
 	I_008\Timer = ReadFloat(f)
 	I_008\Revert = ReadByte(f)
@@ -1570,11 +1579,14 @@ Function LoadGameQuick%(File$)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
 	If DifficultyIndex = ESOTERIC
-		ReadByte(f)
-		ReadByte(f)
-		ReadByte(f)
-		ReadByte(f)
+		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
+		SelectedDifficulty\SaveType = ReadByte(f)
+		SelectedDifficulty\OtherFactors = ReadByte(f)
+		SelectedDifficulty\InventorySlots = ReadByte(f)
 	EndIf
+	
+	MaxItemAmount = SelectedDifficulty\InventorySlots + (2 * (I_1025\FineState[0] > 0.0))
+	Dim Inventory.Items(SelectedDifficulty\InventorySlots + 2)
 	
 	wi\GasMaskFogTimer = ReadFloat(f)
 	

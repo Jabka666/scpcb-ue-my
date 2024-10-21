@@ -1141,6 +1141,7 @@ Function LoadItems%()
 	CreateItemTemplate("SCP-860", "Fine SCP-860", it_fine860, "scp_860.b3d", "INV_scp_860_red.png", "", 0.003, 3, "scp_860_red.png")
 	
 	CreateItemTemplate("SCP-1025", "SCP-1025", it_scp1025, "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0)
+	CreateItemTemplate("SCP-1025", "SCP-1025", it_fine1025, "scp_1025.b3d", "INV_scp_1025_blue.png", "", 0.1, 0, "scp_1025_blue.png")
 	CreateItemTemplate(GetLocalString("items", "book"), "Book", it_book, "scp_1025.b3d", "INV_book.png", "", 0.07, 0, "book.png")
 	
 	CreateItemTemplate("SCP-1123", "SCP-1123", it_scp1123, "scp_1123.b3d", "INV_scp_1123.png", "", 0.015, 2)
@@ -2569,7 +2570,7 @@ Function InitNewGame%()
 	InitOtherStuff()
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots
-	Dim Inventory.Items(MaxItemAmount)
+	Dim Inventory.Items(MaxItemAmount + 2)
 	
 	RenderLoading(50, GetLocalString("loading", "stuff"))
 	

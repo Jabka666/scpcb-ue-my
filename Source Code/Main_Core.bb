@@ -411,6 +411,7 @@ Function UpdateGame%()
 			UpdateParticles()
 			Update268()
 			Update427()
+			Update1025()
 			RefillCup()
 			
 			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
@@ -798,6 +799,16 @@ Function ResetNegativeStats%(Revive% = False)
 	
 	For i = 0 To 6
 		I_1025\State[i] = 0.0
+	Next
+	If I_1025\FineState[0] > 0.0
+		For i = MaxItemAmount - 2 To MaxItemAmount - 1
+			If Inventory(i) <> Null Then DropItem(Inventory(i))
+		Next
+		MaxItemAmount = MaxItemAmount - 2
+		I_1025\FineState[0] = 0.0
+	EndIf
+	For i = 1 To 4
+		I_1025\FineState[i] = 0.0
 	Next
 	
 	If I_427\Timer >= 70.0 * 360.0 Then I_427\Timer = 0.0
@@ -2481,7 +2492,7 @@ End Function
 
 Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
 	me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.4) - (me\Crouch * wi\BallisticHelmet * HelmetFactor)
-	me\BlurTimer = me\BlurTimer + BlurTimer_
+	me\BlurTimer = me\BlurTimer + (BlurTimer_ * (I_1025\FineState[3] = 0.0))
 	I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
@@ -2747,8 +2758,10 @@ Function UpdateMoving%()
 			
 			ResetEntity(me\Collider)
 		Else
-			Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
-			If me\Injuries > 0.5 Then Temp2 = Max(Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0), 0.005)
+			If I_1025\FineState[3] = 0.0
+				Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
+				If me\Injuries > 0.5 Then Temp2 = Max(Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0), 0.005)
+			EndIf
 			Temp = False
 			me\Lean = CurveValue(0.0, me\Lean, 12.0)
 			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
@@ -2958,7 +2971,7 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6
-		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min(me\Injuries + 0.25, 3.0), 8.0), -8.0) + me\Lean
+		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (I_1025\FineState[3] = 0.0)) + 0.25, 3.0), 8.0), -8.0) + me\Lean
 		
 		RotateEntity(Camera, EntityPitch(me\Collider), EntityYaw(me\Collider), Roll / 2.0)
 		
@@ -3098,8 +3111,6 @@ Function UpdateMouseLook%()
 		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
 		If EntityHidden(t\OverlayID[0]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[0])
 	EndIf
-	
-	Update1025()
 	
 	CatchErrors("Uncaught: UpdateMouseLook()")
 End Function
@@ -4788,6 +4799,16 @@ Function UpdateGUI%()
 						For i = 0 To 6
 							I_1025\State[i] = 0.0
 						Next
+						If I_1025\FineState[0] > 0.0
+							For i = MaxItemAmount - 2 To MaxItemAmount - 1
+								If Inventory(i) <> Null Then DropItem(Inventory(i))
+							Next
+							MaxItemAmount = MaxItemAmount - 2
+							I_1025\FineState[0] = 0.0
+						EndIf
+						For i = 1 To 4
+							I_1025\FineState[i] = 0.0
+						Next
 						
 						If me\StaminaEffect > 1.0
 							me\StaminaEffect = 1.0
@@ -4976,15 +4997,12 @@ Function UpdateGUI%()
 				Case it_scp1025
 					;[Block]
 					GiveAchievement("1025")
-					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png"), MenuScale, MenuScale)
-						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-						AdaptScreenGamma()
-					EndIf
-					
 					If SelectedItem\State3 = 0.0
+						If Rand(3 - (SelectedItem\State2 <> 2.0) * SelectedItem\State2) = 1 ; ~ Higher chance for good illness if FINE, lower change for good illness if COARSE
+							SelectedItem\State = 6.0
+						Else
+							SelectedItem\State = Rand(0, 7)
+						EndIf
 						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 							If SelectedItem\State = 7.0
 								If I_008\Timer = 0.0 Then I_008\Timer = 0.001
@@ -4993,12 +5011,32 @@ Function UpdateGUI%()
 								I_1025\State[7] = 1 + (SelectedItem\State2 = 2.0) * 2.0 ; ~ 3x as fast if VERYFINE
 							EndIf
 						EndIf
-						If Rand(3 - (SelectedItem\State2 <> 2.0) * SelectedItem\State2) = 1 ; ~ Higher chance for good illness if FINE, lower change for good illness if COARSE
-							SelectedItem\State = 6.0
-						Else
-							SelectedItem\State = Rand(0, 7)
+						SelectedItem\State3 = 1.0
+					EndIf
+					If SelectedItem\ItemTemplate\Img = 0
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png"), MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+						AdaptScreenGamma()
+					EndIf
+					;[End Block]
+				Case it_fine1025
+					;[Block]
+					GiveAchievement("1025")
+					If SelectedItem\State3 = 0.0
+						SelectedItem\State = Rand(0, 4)
+						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
+							I_1025\FineState[SelectedItem\State] = Max(1.0, I_1025\FineState[SelectedItem\State])
 						EndIf
 						SelectedItem\State3 = 1.0
+					EndIf
+					If SelectedItem\ItemTemplate\Img = 0
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(ItemHUDTexturePath + "page_fine_1025(" + (Int(SelectedItem\State) + 1) + ").png"), MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+						AdaptScreenGamma()
 					EndIf
 					;[End Block]
 				Case it_book
@@ -5043,7 +5081,15 @@ Function UpdateGUI%()
 									If (Not JsonIsNull(Temp)) Then me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(Temp) / 2.0, JsonGetFloat(Temp)), 100.0)
 									
 									Temp = JsonGetValue(Drink, "drink_sound")
-									If (Not JsonIsNull(Temp)) Then PlaySound_Strict(LoadTempSound(JsonGetString(Temp)), True)
+									If (Not JsonIsNull(Temp))
+										StrTemp = JsonGetString(Temp)
+										If (Not (StrTemp = "SFX\SCP\294\Burn.ogg" And I_1025\FineState[3] > 0.0))
+											PlaySound_Strict(LoadTempSound(StrTemp), True)
+										Else
+											me\Injuries = me\Injuries + 0.5
+											PlaySound_Strict(LoadTempSound("SFX\SCP\294\Slurp.ogg"), True)
+										EndIf
+									EndIf
 									
 									Temp = JsonGetValue(Drink, "stomachache")
 									If (Not JsonIsNull(Temp))
@@ -5840,7 +5886,7 @@ Function UpdateGUI%()
 						SelectedItem\State = 0.0
 						If wi\HazmatSuit = 0 Then DropItem(SelectedItem, False)
 						;[End Block]
-					Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025, it_cup
+					Case it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025, it_fine1025, it_cup
 						;[Block]
 						SelectedItem\State3 = 0.0
 						;[End Block]
@@ -6129,19 +6175,24 @@ Function RenderDebugHUD%()
 			For i = 0 To 7
 				TextEx(x, y + ((380 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
+			For i = 0 To 4
+				TextEx(x, y + ((540 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.f.1025"), i, "{0}"), I_1025\FineState[i], "{1}"))
+			Next
+			
+			x = x + (700 * MenuScale)
 			
 			If I_005\ChanceToSpawn = 1
-				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.chamber"))
+				TextEx(x, y, GetLocalString("console", "debug_3.005.chamber"))
 			ElseIf I_005\ChanceToSpawn = 2
-				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.409"))
+				TextEx(x, y, GetLocalString("console", "debug_3.005.409"))
 			Else
-				TextEx(x, y + (560 * MenuScale), GetLocalString("console", "debug_3.005.maynard"))
+				TextEx(x, y, GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			
 			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (4 + SelectedDifficulty\OtherFactors), 0)
 			
-			TextEx(x, y + (600 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
-			TextEx(x, y + (620 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), (Temp / 2) + 1))
+			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
+			TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), (Temp / 2) + 1))
 			
 			Local RoomAmount% = 0, RoomsFound% = 0
 			
@@ -6154,7 +6205,7 @@ Function RenderDebugHUD%()
 				EndIf
 			Next
 			
-			TextEx(x, y + (640 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))))
+			TextEx(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomAmount - (RoomsFound * 2)) * (2 + SelectedDifficulty\OtherFactors), 1))))
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
@@ -6580,6 +6631,13 @@ Function RenderGUI%()
 				If ShouldDrawRect Then Rect(x - (3 * MenuScale), y - (3 * MenuScale), INVENTORY_GFX_SIZE + (6 * MenuScale), INVENTORY_GFX_SIZE + (6 * MenuScale))
 			EndIf
 			
+			; ~ Extra slots are highlighted
+			If I_1025\FineState[0] > 0.0
+				If n = MaxItemAmount - 1 Lor n = MaxItemAmountHalf - 1
+					Color(0, 255, 0)
+					Rect(x - 1, y - 1, INVENTORY_GFX_SIZE + (2 * MenuScale), INVENTORY_GFX_SIZE + (2 * MenuScale))
+				EndIf
+			EndIf
 			If IsMouseOn = n
 				MouseSlot = n
 				Color(255, 0, 0)
@@ -6830,13 +6888,11 @@ Function RenderGUI%()
 					;[End Block]
 				Case it_scp1025
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(ItemHUDTexturePath + "page_1025(" + (Int(SelectedItem\State) + 1) + ").png"), MenuScale, MenuScale)
-						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
-						AdaptScreenGamma()
-					EndIf
-					If me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					;[End Block]
+				Case it_fine1025
+					;[Block]
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 				Case it_radio, it_18vradio, it_fineradio, it_veryfineradio
 					;[Block]
@@ -6844,14 +6900,7 @@ Function RenderGUI%()
 					; ~ RadioState[6] = A timer for the "code channel"
 					; ~ RadioState[7] = Another timer for the "code channel"
 					
-					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
-						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
-						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img)
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					If me\BlinkTimer > -6.0
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0
 						StrTemp = ""
 						
 						x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth
@@ -6925,14 +6974,7 @@ Function RenderGUI%()
 					;[End Block]
 				Case it_nav, it_nav300, it_nav310, it_navulti
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
-						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-					EndIf
-					
-					If me\BlinkTimer > -6.0
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0
 						x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
 						y = opt\GraphicHeight - SelectedItem\ItemTemplate\ImgHeight - (85 * MenuScale)
 						
@@ -7062,24 +7104,11 @@ Function RenderGUI%()
 					;[End Block]
 				Case it_badge, it_burntbadge, it_harnbadge
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
-						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
-						AdaptScreenGamma()
-					EndIf
-					If me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 				Case it_oldbadge, it_ticket
 					;[Block]
-					If SelectedItem\ItemTemplate\Img = 0
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
-						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-						AdaptScreenGamma()
-					EndIf
-					If me\BlinkTimer > -6.0 Then DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 			End Select
 		EndIf
@@ -9551,6 +9580,7 @@ End Function
 
 Type SCP1025
 	Field State#[8]
+	Field FineState#[5]
 End Type
 
 Global I_1025.SCP1025
@@ -9616,6 +9646,54 @@ Function Update1025%()
 					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + 0.00025 * Factor1025 * (100.0 / I_1025\State[i])
 					me\Stamina = Min(100.0, me\Stamina + (90.0 - me\Stamina) * I_1025\State[i] * Factor1025 * 0.00008)
 					If I_1025\State[i] > 15.0 And I_1025\State[i] - Factor1025 <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
+					;[End Block]
+			End Select
+		EndIf
+	Next
+	For i = 0 To 2
+		If I_1025\FineState[i] > 0.0
+			Select i
+				Case 0 ; ~ Polydactyly
+					;[Block]
+					If I_1025\FineState[0] = 1.0
+						MaxItemAmount = MaxItemAmount + 2
+						I_1025\FineState[0] = 2.0
+					EndIf
+					;[End Block]
+				Case 1 ; ~ Tourette's syndrome
+					;[Block]
+					Local Random% = 70.0 * Rand(40, 50)
+					
+					If I_1025\FineState[i] > 15.0
+						I_1025\FineState[i] = I_1025\FineState[i] + fps\Factor[0]
+						If I_1025\FineState[i] > Random Then I_1025\FineState[i] = 1.0
+					Else
+						If Rand(40) = 1
+							I_1025\FineState[i] = I_1025\FineState[i] + 1.0
+							Select Rand(8)
+								Case 1, 2, 3, 5
+									;[Block]
+									me\BlinkTimer = -10.0
+									;[End Block]
+								Case 4, 5, 6
+									;[Block]
+									me\CameraShake = Rnd(0.5, 2.0)
+									;[End Block]
+								Case 7, 8
+									;[Block]
+									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(0, 1) + ".ogg"))
+									;[End Block]
+							End Select
+						EndIf
+					EndIf
+					;[End Block]
+				Case 2 ; ~ Chronic fatigue syndrome
+					;[Block]
+					If I_714\Using = 0
+						me\StaminaMax = 50.0
+						me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 20.0)
+					EndIf
+					If me\Stamina < 25.0 Then me\Sanity = CurveValue(-450.0, me\Sanity, 15.0)
 					;[End Block]
 			End Select
 		EndIf

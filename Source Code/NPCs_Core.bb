@@ -1234,7 +1234,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\NoTarget)
 								If wi\SCRAMBLE = 0 And IsLooking
-									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking)
+									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking)
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 										
 										S2IMapErase(UnlockedAchievements, "096")
@@ -1314,7 +1314,7 @@ Function UpdateNPCs%()
 							
 							If (Not chs\NoTarget)
 								If wi\SCRAMBLE = 0 And IsLooking
-									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And (Not wi\IsNVGBlinking)
+									If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking)
 										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 										
 										S2IMapErase(UnlockedAchievements, "096")
@@ -2176,7 +2176,7 @@ Function UpdateNPCs%()
 											If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 												PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 												InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, 0.3 * DifficultyDMGMult, 0.2)
-												me\CameraShake = 2.5
+												me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 												
 												If me\Injuries > 3.0
 													msg\DeathMsg = Format(GetLocalString("death", "0492killed"), SubjectName)
@@ -3338,7 +3338,7 @@ Function UpdateNPCs%()
 														Kill(True)
 													EndIf
 												EndIf
-												me\CameraShake = 2.0
+												me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
 											Else
 												PlaySoundEx(snd_I\MissSFX, Camera, n\Collider)
 											EndIf
@@ -3645,7 +3645,7 @@ Function UpdateNPCs%()
 									
 									If (PrevFrame < 461.0 And n\Frame >= 461.0)
 										PlaySound_Strict(snd_I\DamageSFX[11])
-										me\CameraShake = 2.0
+										me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
 										Kill(True)
 									EndIf
 									If (PrevFrame < 476.0 And n\Frame >= 476.0) Lor (PrevFrame < 486.0 And n\Frame >= 486.0) Then PlaySound_Strict(snd_I\DamageSFX[12])
@@ -3782,7 +3782,7 @@ Function UpdateNPCs%()
 										If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 2.25
 											PlaySound_Strict(snd_I\DamageSFX[11])
 											InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.2, 0.75))
-											me\CameraShake = 2.0
+											me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
 										Else
 											SetNPCFrame(n, 449.0)
 										EndIf
@@ -4337,7 +4337,7 @@ Function UpdateNPCs%()
 										If Dist < 0.81
 											PlaySoundEx(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
 											InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult)
-											me\CameraShake = 1.8
+											me\CameraShake = 1.8 * (I_1025\FineState[3] = 0.0)
 											If me\Injuries > 10.0
 												msg\DeathMsg = Format(GetLocalString("death", "966"), SubjectName)
 												Kill(True)
@@ -4679,7 +4679,7 @@ Function UpdateNPCs%()
 								Else
 									PlaySoundEx(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
 									InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, 0.35 * DifficultyDMGMult, 0.2)
-									me\CameraShake = 2.5
+									me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 									
 									If me\Injuries > 10.0
 										If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
@@ -4905,7 +4905,7 @@ Function UpdateNPCs%()
 										If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 											PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.2)
-											me\CameraShake = 2.5
+											me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 											
 											If me\Injuries > 3.0
 												msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
@@ -7008,7 +7008,7 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 		Select MsgRand
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
-				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - Rnd(5.0)
+				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - (Rnd(5.0) * (I_1025\FineState[3] = 0.0))
 				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(200.0, 300.0), 0.43 * DifficultyDMGMult)
 				If wi\BallisticVest > 0
 					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
@@ -7018,13 +7018,13 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 				;[End Block]
 			Case 11 ; ~ Left Leg
 				;[Block]
-				me\Stamina = me\Stamina - Rnd(10.0)
+				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[3] = 0.0))
 				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
-				me\Stamina = me\Stamina - Rnd(10.0)
+				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[3] = 0.0))
 				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]

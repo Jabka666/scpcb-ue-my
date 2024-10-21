@@ -66,107 +66,108 @@ Const it_scp860% = 28
 Const it_fine860% = 29
 
 Const it_scp1025% = 30
-Const it_book% = 31
+Const it_fine1025% = 31
+Const it_book% = 32
 
-Const it_scp1123% = 32
+Const it_scp1123% = 33
 
-Const it_scp1499% = 33
-Const it_fine1499% = 34
+Const it_scp1499% = 34
+Const it_fine1499% = 35
 ;[End Block]
 
 ; ~ [MISC ITEMS]
 ;[Block]
-Const it_helmet% = 35
+Const it_helmet% = 36
 
-Const it_vest% = 36
-Const it_corrvest% = 37
-Const it_finevest% = 38
-Const it_veryfinevest% = 39
+Const it_vest% = 37
+Const it_corrvest% = 38
+Const it_finevest% = 39
+Const it_veryfinevest% = 40
 
-Const it_cup% = 40
-Const it_emptycup% = 41
+Const it_cup% = 41
+Const it_emptycup% = 42
 
-Const it_clipboard% = 42
-Const it_wallet% = 43
+Const it_clipboard% = 43
+Const it_wallet% = 44
 
-Const it_electronics% = 44
+Const it_electronics% = 45
 
-Const it_eyedrops% = 45
-Const it_eyedrops2% = 46
-Const it_fineeyedrops% = 47
-Const it_veryfineeyedrops% = 48
+Const it_eyedrops% = 46
+Const it_eyedrops2% = 47
+Const it_fineeyedrops% = 48
+Const it_veryfineeyedrops% = 49
 
-Const it_firstaid% = 49
-Const it_firstaid2% = 50
-Const it_finefirstaid% = 51
-Const it_veryfinefirstaid% = 52
+Const it_firstaid% = 50
+Const it_firstaid2% = 51
+Const it_finefirstaid% = 52
+Const it_veryfinefirstaid% = 53
 
-Const it_gasmask% = 53
-Const it_finegasmask% = 54
-Const it_veryfinegasmask% = 55
-Const it_gasmask148% = 56
+Const it_gasmask% = 54
+Const it_finegasmask% = 55
+Const it_veryfinegasmask% = 56
+Const it_gasmask148% = 57
 
-Const it_hazmatsuit% = 57
-Const it_finehazmatsuit% = 58
-Const it_veryfinehazmatsuit% = 59
-Const it_hazmatsuit148% = 60
+Const it_hazmatsuit% = 58
+Const it_finehazmatsuit% = 59
+Const it_veryfinehazmatsuit% = 60
+Const it_hazmatsuit148% = 61
 
-Const it_nvg% = 61
-Const it_finenvg% = 62
-Const it_veryfinenvg% = 63
-Const it_scramble% = 64
-Const it_finescramble% = 65
+Const it_nvg% = 62
+Const it_finenvg% = 63
+Const it_veryfinenvg% = 64
+Const it_scramble% = 65
+Const it_finescramble% = 66
 
-Const it_radio% = 66
-Const it_18vradio% = 67
-Const it_fineradio% = 68
-Const it_veryfineradio% = 69
+Const it_radio% = 67
+Const it_18vradio% = 68
+Const it_fineradio% = 69
+Const it_veryfineradio% = 70
 
-Const it_nav% = 70
-Const it_nav300% = 71
-Const it_nav310% = 72
-Const it_navulti% = 73
+Const it_nav% = 71
+Const it_nav300% = 72
+Const it_nav310% = 73
+Const it_navulti% = 74
 
-Const it_bat% = 74
-Const it_coarsebat% = 75
-Const it_finebat% = 76
-Const it_veryfinebat% = 77
-Const it_killbat% = 78
+Const it_bat% = 75
+Const it_coarsebat% = 76
+Const it_finebat% = 77
+Const it_veryfinebat% = 78
+Const it_killbat% = 79
 
-Const it_syringe% = 79
-Const it_finesyringe% = 80
-Const it_veryfinesyringe% = 81
-Const it_syringeinf% = 82
+Const it_syringe% = 80
+Const it_finesyringe% = 81
+Const it_veryfinesyringe% = 82
+Const it_syringeinf% = 83
 ;[End Block]
 
 ; ~ [KEYCARDS, HANDS, KEYS, CARDS, COINS]
 ;[Block]
-Const it_key0% = 83
-Const it_key1% = 84
-Const it_key2% = 85
-Const it_key3% = 86
-Const it_key3_bloody% = 87
-Const it_key4% = 88
-Const it_key5% = 89
-Const it_key6% = 90
-Const it_keyomni% = 91
+Const it_key0% = 84
+Const it_key1% = 85
+Const it_key2% = 86
+Const it_key3% = 87
+Const it_key3_bloody% = 88
+Const it_key4% = 89
+Const it_key5% = 90
+Const it_key6% = 91
+Const it_keyomni% = 92
 
-Const it_mastercard% = 92
-Const it_mastercard_golden% = 93
-Const it_playcard% = 94
+Const it_mastercard% = 93
+Const it_mastercard_golden% = 94
+Const it_playcard% = 95
 
-Const it_hand% = 95
-Const it_hand2% = 96
-Const it_hand3% = 97
+Const it_hand% = 96
+Const it_hand2% = 97
+Const it_hand3% = 98
 
-Const it_key_yellow% = 98
-Const it_key_white% = 99
-Const it_lostkey% = 100
+Const it_key_yellow% = 99
+Const it_key_white% = 100
+Const it_lostkey% = 101
 
-Const it_25ct% = 101
-Const it_coin% = 102
+Const it_25ct% = 102
+Const it_coin% = 103
 
-Const it_pizza% = 103
+Const it_pizza% = 104
 ;[End Block]
 ;[End Block]
 
@@ -858,7 +859,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\ID
-		Case it_nav, it_nav300, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_scp1025
+		Case it_nav, it_nav300, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_scp1025, it_fine1025
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -2456,11 +2457,21 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					item\State2 = Min(1.0, item\State2 + 1.0)
+					If Rand(5) = 1
+						Remove = True
+						it2.Items = CreateItem("SCP-1025", it_fine1025, x, y, z)
+					Else
+						item\State2 = Min(1.0, item\State2 + 1.0)
+					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					item\State2 = 2.0
+					If Rand(10) = 1
+						Remove = True
+						it2.Items = CreateItem("SCP-1025", it_fine1025, x, y, z)
+					Else
+						item\State2 = 2.0
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2477,15 +2488,19 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
+					Remove = False
 					If Rand(3) = 1
 						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z) ; ~ I know that this can be exploited to get a SCP-1025 reset, but this effort makes it seem fair to me -- Salvage
-					Else
-						Remove = False
+						Remove = True
 					EndIf
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
 					Remove = False
+					If Rand(10) = 1
+						it2.Items = CreateItem("SCP-1025", it_fine1025, x, y, z)
+						Remove = True
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]
