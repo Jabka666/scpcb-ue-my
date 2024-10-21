@@ -859,7 +859,7 @@ Function UpdateEvents%()
 							If Int(e\EventState3) = 8.0 Then me\BigCameraShake = 1.0
 						EndIf
 					EndIf
-					If ((e\EventState Mod 600.0 > 300.0) And ((e\EventState + fps\Factor[0]) Mod 600.0 < 300.0))
+					If (e\EventState Mod 600.0 > 300.0) And ((e\EventState + fps\Factor[0]) Mod 600.0 < 300.0)
 						i = Floor((e\EventState - 5000.0) / 600.0) + 1.0
 						
 						Select i
@@ -1083,7 +1083,7 @@ Function UpdateEvents%()
 					If (Not ChannelPlaying(e\SoundCHN2)) Then e\SoundCHN2 = PlaySound_Strict(snd_I\RadioStatic)
 				EndIf
 				
-				If ((SoundTransmission) Lor (e\EventState3 + fps\Factor[0] >= 2500.0)) And (e\EventState = 1.0) Then e\EventState3 = Min(e\EventState3 + fps\Factor[0], 4000.0)
+				If (SoundTransmission Lor (e\EventState3 + fps\Factor[0] >= 2500.0)) And e\EventState = 1.0 Then e\EventState3 = Min(e\EventState3 + fps\Factor[0], 4000.0)
 				
 				If PlayerRoom = e\room
 					If e\room\NPC[0] <> Null
@@ -3644,7 +3644,7 @@ Function UpdateEvents%()
 					Local PrevState2# = e\EventState2
 					
 					e\EventState2 = UpdateLever(e\room\RoomLevers[1]\OBJ)
-					If (PrevState2 <> e\EventState2) And e\EventState > 0.0 Then PlaySoundEx(snd_I\LightOffSFX, Camera, e\room\RoomLevers[1]\OBJ)
+					If PrevState2 <> e\EventState2 And e\EventState > 0.0 Then PlaySoundEx(snd_I\LightOffSFX, Camera, e\room\RoomLevers[1]\OBJ)
 					IsBlackOut = (e\EventState2 = 0.0)
 					If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 					
@@ -3938,7 +3938,7 @@ Function UpdateEvents%()
 								;[End Block]
 						End Select
 						
-						If me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0 Lor wi\IsNVGBlinking
+						If (me\BlinkTimer < -8.0 And me\BlinkTimer > -12.0) Lor wi\IsNVGBlinking
 							PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ(), True)
 							RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0)
 						EndIf
@@ -5765,7 +5765,7 @@ Function UpdateEvents%()
 						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						EntityParent(e\room\Objects[3], e\room\OBJ)
 					Else
-						If me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0 Lor wi\IsNVGBlinking
+						If (me\BlinkTimer > -12.0 And me\BlinkTimer < -8.0) Lor wi\IsNVGBlinking
 							PointEntity(e\room\Objects[3], me\Collider)
 							RotateEntity(e\room\Objects[3], 0.0, EntityYaw(e\room\Objects[3], True), 0.0, True)
 						EndIf

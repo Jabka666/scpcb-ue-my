@@ -995,7 +995,7 @@ Function UpdateNPCs%()
 								Next
 								
 								If Dist > 0.64
-									If ((Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor (n\PathStatus <> PATH_STATUS_FOUND) And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a
+									If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor n\PathStatus <> PATH_STATUS_FOUND) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
@@ -1703,7 +1703,7 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 2.0 ; ~ Being active
 							;[Block]
-							If (Dist < PowTwo(HideDistance * 2.0)) And n\Idle = 0 And PlayerInReachableRoom(True)
+							If Dist < PowTwo(HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
 								n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 								PlayerSeeAble = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume)
 								If n\State2 > 0.0
@@ -3635,7 +3635,7 @@ Function UpdateNPCs%()
 								RotateEntity(n\Collider, 0.0, Angle - 90.0, 0.0, True)
 								
 								; ~ If close enough to attack or already attacking, play the attack anim
-								If (Dist < 1.0 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\Terminated)
+								If Dist < 1.0 Lor (n\Frame > 451.0 And n\Frame < 493.0) Lor me\Terminated
 									msg\DeathMsg = Format(GetLocalString("death", "860"), SubjectName)
 									
 									n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
@@ -4272,7 +4272,7 @@ Function UpdateNPCs%()
 									Else
 										AnimateNPC(n, 2.0, 214.0, 0.25)
 									EndIf
-									If (PrevFrame < 650.0 And n\Frame >= 650.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
+									If PrevFrame < 650.0 And n\Frame >= 650.0 Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 								Else
 									AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 580.0), 557.0), 628.0, n\CurrSpeed * 25.0)
 									If (PrevFrame < 581.0 And n\Frame >= 581.0) Lor (PrevFrame < 607.0 And n\Frame >= 607.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
@@ -4293,7 +4293,7 @@ Function UpdateNPCs%()
 									
 									If n\Frame > 557.0
 										AnimateNPC(n, 629.0, 652.0, 0.25, False)
-										If (PrevFrame < 650.0 And n\Frame >= 650.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
+										If PrevFrame < 650.0 And n\Frame >= 650.0 Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 										If n\Frame > 651.9
 											Select Rand(3)
 												Case 1

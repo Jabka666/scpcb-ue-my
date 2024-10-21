@@ -196,7 +196,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	Local Texture% = 0
 	
 	If TexturePath <> ""
-		If (TexturePath = ImgPath) And (FileType(ItemsPath + TexturePath) = 0)
+		If TexturePath = ImgPath And FileType(ItemsPath + TexturePath) = 0
 			TexturePath = ItemHUDTexturePath + TexturePath
 		Else
 			TexturePath = ItemsPath + TexturePath
