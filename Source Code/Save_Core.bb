@@ -636,7 +636,7 @@ Function LoadGame%(File$)
 		I_1025\State[i] = ReadFloat(f)
 	Next
 	For i = 0 To 4
-		I_1025\FineState[4] = ReadFloat(f)
+		I_1025\FineState[i] = ReadFloat(f)
 	Next
 	
 	I_008\Timer = ReadFloat(f)
@@ -1561,10 +1561,10 @@ Function LoadGameQuick%(File$)
 	
 	I_500\Taken = ReadByte(f)
 	
-	For i = 0 To 6
+	For i = 0 To 7
 		I_1025\State[i] = ReadFloat(f)
 	Next
-	For i = 0 To 5
+	For i = 0 To 4
 		I_1025\FineState[i] = ReadFloat(f)
 	Next
 	

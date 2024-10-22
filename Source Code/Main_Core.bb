@@ -5005,7 +5005,7 @@ Function UpdateGUI%()
 						EndIf
 						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 							I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
-							I_1025\State[6] = 1 + (SelectedItem\State2 = 2.0) * 2.0 ; ~ 3x as fast if VERYFINE
+							I_1025\State[7] = 1 + (SelectedItem\State2 = 2.0) * 2.0 ; ~ 3x as fast if VERYFINE
 						EndIf
 						SelectedItem\State3 = 1.0
 					EndIf
@@ -5116,7 +5116,7 @@ Function UpdateGUI%()
 									Temp = JsonGetValue(Drink, "revitalize")
 									If (Not JsonIsNull(Temp))
 										If JsonGetBool(Temp)
-											For i = 0 To 5
+											For i = 0 To 6
 												I_1025\State[i] = 0.0
 											Next
 										EndIf
