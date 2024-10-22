@@ -5001,15 +5001,11 @@ Function UpdateGUI%()
 						If Rand(3 - (SelectedItem\State2 <> 2.0) * SelectedItem\State2) = 1 ; ~ Higher chance for good illness if FINE, lower change for good illness if COARSE
 							SelectedItem\State = 6.0
 						Else
-							SelectedItem\State = Rand(0, 7)
+							SelectedItem\State = Rand(0, 6)
 						EndIf
 						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
-							If SelectedItem\State = 7.0
-								If I_008\Timer = 0.0 Then I_008\Timer = 0.001
-							Else
-								I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
-								I_1025\State[7] = 1 + (SelectedItem\State2 = 2.0) * 2.0 ; ~ 3x as fast if VERYFINE
-							EndIf
+							I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
+							I_1025\State[6] = 1 + (SelectedItem\State2 = 2.0) * 2.0 ; ~ 3x as fast if VERYFINE
 						EndIf
 						SelectedItem\State3 = 1.0
 					EndIf
@@ -5025,9 +5021,13 @@ Function UpdateGUI%()
 					;[Block]
 					GiveAchievement("1025")
 					If SelectedItem\State3 = 0.0
-						SelectedItem\State = Rand(0, 4)
+						SelectedItem\State = Rand(0, 5)
 						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
-							I_1025\FineState[SelectedItem\State] = Max(1.0, I_1025\FineState[SelectedItem\State])
+							If SelectedItem\State = 5.0
+								If I_008\Timer = 0.0 Then I_008\Timer = 0.001
+							Else
+								I_1025\FineState[SelectedItem\State] = Max(1.0, I_1025\FineState[SelectedItem\State])
+							EndIf
 						EndIf
 						SelectedItem\State3 = 1.0
 					EndIf
@@ -5116,7 +5116,7 @@ Function UpdateGUI%()
 									Temp = JsonGetValue(Drink, "revitalize")
 									If (Not JsonIsNull(Temp))
 										If JsonGetBool(Temp)
-											For i = 0 To 6
+											For i = 0 To 5
 												I_1025\State[i] = 0.0
 											Next
 										EndIf
@@ -6172,7 +6172,7 @@ Function RenderDebugHUD%()
 			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
 			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.427"), I_427\Timer / 70.0))
 			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_3.1048a"), I_1048A\EarGrowTimer))
-			For i = 0 To 7
+			For i = 0 To 6
 				TextEx(x, y + ((380 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			For i = 0 To 4
