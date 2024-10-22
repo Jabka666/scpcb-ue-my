@@ -460,7 +460,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 				Temp1s = ReadString(f)
 				If FileType(FilePath + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3
-						If Instr(Temp1s, "_lm") <> 0
+						If Instr(Lower(Temp1s), "_lm") <> 0
 							Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s, 1 + 256)
 						Else
 							Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s)
@@ -470,7 +470,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3
-						If Instr(Temp1s, "_lm") <> 0
+						If Instr(Lower(Temp1s), "_lm") <> 0
 							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1 + 256)
 						Else
 							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s)
