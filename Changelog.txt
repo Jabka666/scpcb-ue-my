@@ -27,6 +27,7 @@
 [NPCs]
 - Being deaf protects player against SCP-1048-A's scream.
 - Reduced SCP-049's turn speed slightly.
+- Improved SCP-008-1, SCP-049, SCP-049-2, and SCP-939 AI.
 
 [Bug Fixes]
 - Fixed SCP-966 not resetting aggressive state after being teleported.
