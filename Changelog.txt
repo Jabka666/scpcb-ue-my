@@ -39,6 +39,7 @@
 - Fixed SCP-1162-ARC not giving items correctly.
 - Fixed SCP-1025 always giving the «Common Cold» page first.
 - Fixed table collision in «cont2_500_1499» room.
+- Fixed some bump textures.
 
 [Known issues]
 - Rooms can overlap and block the way.
