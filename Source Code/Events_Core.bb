@@ -5566,6 +5566,14 @@ Function UpdateEvents%()
 						Next
 						
 						Select e\EventState
+							Case 1.0
+								;[Block]
+								If KEY2_SPAWNRATE = 5
+									TFormPoint(-354.0,  220.0, 516.0, e\room\OBJ, 0)
+									it.Items = CreateItem("White Key", it_key_white, TFormedX(), TFormedY(), TFormedZ())
+									EntityType(it\Collider, HIT_ITEM)
+								EndIf
+								;[End Block]
 							Case 2.0
 								;[Block]
 								i = Rand(0, MaxItemAmount - 1)

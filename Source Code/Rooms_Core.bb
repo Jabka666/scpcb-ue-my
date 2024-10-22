@@ -20,6 +20,11 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 256.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 640.0 * RoomScale, 20.0)
 			sc\Angle = 180.0 : sc\Turn = 45.0
 			
+			If KEY2_SPAWNRATE = 6
+				it.Items = CreateItem("White Key", it_key_white, r\x - 529.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 585.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
 			For xTemp2 = 0 To 1
 				For yTemp2 = 0 To 2
 					For zTemp2 = 0 To 2
@@ -764,6 +769,15 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
+			If KEY2_SPAWNRATE = 3
+				If Rand(2)
+					it.Items = CreateItem("White Key", it_key_white, r\x - 625.0 * RoomScale, r\y - 276.0 * RoomScale, r\z - 332.0 * RoomScale)
+				Else
+					it.Items = CreateItem("White Key", it_key_white, r\x - 625.0 * RoomScale, r\y - 276.0 * RoomScale, r\z + 332.0 * RoomScale)
+				EndIf
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
 			it.Items = CreateItem("Level 0 Key Card", it_key0, r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -862,11 +876,6 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateRandomBattery(r\x + 1714.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 936.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-			
-			If KEY2_SPAWNRATE = 3
-				it.Items = CreateItem("White Key", it_key_white, r\x + 963.0 * RoomScale, r\y + 35.0 * RoomScale, r\z + 932.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
 			;[End Block]
 		Case r_room2_sl
 			;[Block]

@@ -2577,7 +2577,7 @@ Function InitNewGame%()
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0
 	
 	I_005\ChanceToSpawn = Rand(3)
-	KEY2_SPAWNRATE = Rand(4)
+	KEY2_SPAWNRATE = Rand(6)
 	
 	Remove714Timer = 500.0
 	RemoveHazmatTimer = 500.0
