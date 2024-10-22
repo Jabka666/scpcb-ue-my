@@ -1059,6 +1059,10 @@ Function UpdateConsole%()
 							CreateConsoleMsg("- enable106")
 							CreateConsoleMsg("- disable049")
 							CreateConsoleMsg("- enable049")
+							CreateConsoleMsg("- disable096")
+							CreateConsoleMsg("- enable096")
+							CreateConsoleMsg("- disable066")
+							CreateConsoleMsg("- enable066")
 							CreateConsoleMsg("- disable966")
 							CreateConsoleMsg("- enable966")
 							CreateConsoleMsg("- doorcontrol")
@@ -1178,28 +1182,56 @@ Function UpdateConsole%()
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable106"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.d106"))
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.dis"), "SCP-106"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable106"
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable106"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.e106"))
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.en"), "SCP-106"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable173"
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable173"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.d173"))
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.dis"), "SCP-173"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable173"
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable173"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.e173"))
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.en"), "SCP-173"))
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "disable066"
+							;[Block]
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable066"))
+							CreateConsoleMsg("******************************")
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.dis"), "SCP-066"))
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "enable066"
+							;[Block]
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable066"))
+							CreateConsoleMsg("******************************")
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.en"), "SCP-066"))
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "disable096"
+							;[Block]
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable096"))
+							CreateConsoleMsg("******************************")
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.dis"), "SCP-096"))
+							CreateConsoleMsg("******************************")
+							;[End Block]
+						Case "enable096"
+							;[Block]
+							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable096"))
+							CreateConsoleMsg("******************************")
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.en"), "SCP-096"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "reset096" 
@@ -1234,28 +1266,28 @@ Function UpdateConsole%()
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable049"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.d049"))
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.dis"), "SCP-049"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable049"
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable049"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.e049"))
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.en"), "SCP-049"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "disable966"
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable966"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.d966"))
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.dis"), "SCP-966"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "enable966"
 							;[Block]
 							CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable966"))
 							CreateConsoleMsg("******************************")
-							CreateConsoleMultiMsg(GetLocalString("console", "help.e966"))
+							CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.en"), "SCP-966"))
 							CreateConsoleMsg("******************************")
 							;[End Block]
 						Case "revive", "undead", "resurrect"
@@ -1528,7 +1560,7 @@ Function UpdateConsole%()
 					HideEntity(n_I\Curr173\OBJ)
 					HideEntity(n_I\Curr173\OBJ2)
 					HideEntity(n_I\Curr173\Collider)
-					CreateConsoleMsg(GetLocalString("console", "dis173"))
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-173"))
 					;[End Block]
 				Case "enable173", "en173"
 					;[Block]
@@ -1536,7 +1568,7 @@ Function UpdateConsole%()
 					ShowEntity(n_I\Curr173\OBJ)
 					ShowEntity(n_I\Curr173\OBJ2)
 					ShowEntity(n_I\Curr173\Collider)
-					CreateConsoleMsg(GetLocalString("console", "en173"))
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-173"))
 					;[End Block]
 				Case "disable106", "dis106"
 					;[Block]
@@ -1546,7 +1578,7 @@ Function UpdateConsole%()
 					HideEntity(n_I\Curr106\Collider)
 					HideEntity(n_I\Curr106\OBJ)
 					HideEntity(n_I\Curr106\OBJ2)
-					CreateConsoleMsg(GetLocalString("console", "dis106"))
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-106"))
 					;[End Block]
 				Case "enable106", "en106"
 					;[Block]
@@ -1554,7 +1586,7 @@ Function UpdateConsole%()
 					n_I\Curr106\Contained = False
 					ShowEntity(n_I\Curr106\Collider)
 					ShowEntity(n_I\Curr106\OBJ)
-					CreateConsoleMsg(GetLocalString("console", "en106"))
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-106"))
 					;[End Block]
 				Case "disable966", "dis966"
 					;[Block]
@@ -1565,7 +1597,7 @@ Function UpdateConsole%()
 							HideEntity(n\OBJ)
 						EndIf
 					Next
-					CreateConsoleMsg(GetLocalString("console", "dis966"))
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-966"))
 					;[End Block]
 				Case "enable966", "en966"
 					;[Block]
@@ -1576,7 +1608,7 @@ Function UpdateConsole%()
 							If wi\NightVision > 0 Then ShowEntity(n\OBJ)
 						EndIf
 					Next
-					CreateConsoleMsg(GetLocalString("console", "en966"))
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-966"))
 					;[End Block]
 				Case "disable049", "dis049"
 					;[Block]
@@ -1585,7 +1617,7 @@ Function UpdateConsole%()
 						HideEntity(n_I\Curr049\Collider)
 						HideEntity(n_I\Curr049\OBJ)
 					EndIf
-					CreateConsoleMsg(GetLocalString("console", "dis049"))
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-049"))
 					;[End Block]
 				Case "enable049", "en049"
 					;[Block]
@@ -1594,7 +1626,43 @@ Function UpdateConsole%()
 						ShowEntity(n_I\Curr049\Collider)
 						ShowEntity(n_I\Curr049\OBJ)
 					EndIf
-					CreateConsoleMsg(GetLocalString("console", "en049"))
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-049"))
+					;[End Block]
+				Case "disable066", "dis066"
+					;[Block]
+					If n_I\Curr066 <> Null
+						n_I\Curr066\Idle = 1
+						HideEntity(n_I\Curr066\Collider)
+						HideEntity(n_I\Curr066\OBJ)
+					EndIf
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-066"))
+					;[End Block]
+				Case "enable066", "en066"
+					;[Block]
+					If n_I\Curr066 <> Null
+						n_I\Curr066\Idle = 0
+						ShowEntity(n_I\Curr066\Collider)
+						ShowEntity(n_I\Curr066\OBJ)
+					EndIf
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-066"))
+					;[End Block]
+				Case "disable096", "dis096"
+					;[Block]
+					If n_I\Curr096 <> Null
+						n_I\Curr096\Idle = 1
+						HideEntity(n_I\Curr096\Collider)
+						HideEntity(n_I\Curr096\OBJ)
+					EndIf
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-096"))
+					;[End Block]
+				Case "enable096", "en096"
+					;[Block]
+					If n_I\Curr096 <> Null
+						n_I\Curr096\Idle = 0
+						ShowEntity(n_I\Curr096\Collider)
+						ShowEntity(n_I\Curr096\OBJ)
+					EndIf
+					CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-096"))
 					;[End Block]
 				Case "106retreat", "106r"
 					;[Block]

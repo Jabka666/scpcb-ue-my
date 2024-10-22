@@ -2,6 +2,7 @@
 
 [Global]
 - Added setting to turn on/off vignette overlay.
+- Added new commands: «disable/enable096» and «disable/enable066».
 
 - Reworked red forest.
 	- Added new music.
@@ -153,7 +154,7 @@
 - Updated and optimized converter...
 
 [Bug Fixes]
-- Fixed SCP-409 decal doesn't "infect" the player.
+- Fixed SCP-409 decal doesn't «infect» the player.
 - Fixes for MTF:
 	- Fixed MTF leader not spawning.
 	- Fixed an issue with MTF's flash particle.
@@ -164,7 +165,7 @@
 - Fixed MAV after using drinks.
 - Fixed collisions of wall fragments near SCP-513's containment chamber.
 - Fixed sparks direction in SCP-409's containment chamber.
-- Fixed incorrect clipping of "blood decal(5).png" texture.
+- Fixed incorrect clipping of «blood decal(5).png» texture.
 - Fixed great issue with frames smoothing.
 - Fixed left lean key bind.
 - Fixed camera roll and position.
@@ -220,7 +221,7 @@
 - George Maynard's badge has their own QR code.
 
 - Rework the Night Vision Goggles
-	- "Low battery" message appears earlier.
+	- «Low battery» message appears earlier.
 	- Nerf distance from 17.0 to 15.0.
 	- Changed interface and ambient color a bit.
 	- Battery and battery meter now brighter.
