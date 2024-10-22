@@ -6239,12 +6239,13 @@ Function RenderDebugHUD%()
 			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
 			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
 			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.427"), I_427\Timer / 70.0))
-			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_3.1048a"), I_1048A\EarGrowTimer))
+			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_3.966"), I_966\InsomniaEffectTimer / 70.0))
+			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_3.1048a"), I_1048A\EarGrowTimer))
 			For i = 0 To 6
-				TextEx(x, y + ((380 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
+				TextEx(x, y + ((400 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			For i = 0 To 4
-				TextEx(x, y + ((540 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.f.1025"), i, "{0}"), I_1025\FineState[i], "{1}"))
+				TextEx(x, y + ((560 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.f.1025"), i, "{0}"), I_1025\FineState[i], "{1}"))
 			Next
 			
 			x = x + (700 * MenuScale)
