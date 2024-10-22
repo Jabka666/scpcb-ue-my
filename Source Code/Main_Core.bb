@@ -5024,7 +5024,7 @@ Function UpdateGUI%()
 						SelectedItem\State = Rand(0, 5)
 						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 							If SelectedItem\State = 5.0
-								If I_008\Timer = 0.0 Then I_008\Timer = 0.001
+								If I_008\Timer = 0.0 Then I_008\Timer = I_008\Timer + 0.001
 							Else
 								I_1025\FineState[SelectedItem\State] = Max(1.0, I_1025\FineState[SelectedItem\State])
 							EndIf
