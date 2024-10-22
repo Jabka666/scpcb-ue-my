@@ -291,7 +291,33 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If KEY2_SPAWNRATE = 1
-				it.Items = CreateItem("White Key", it_key_white, r\x + 2255.0 * RoomScale, r\y + 1015.0 * RoomScale, r\z + 4618.0 * RoomScale)
+				Select Rand(4)
+					Case 1
+						;[Block]
+						xTemp = 2255.0
+						yTemp = 1015.0
+						zTemp = 4618.0
+						;[End Block]
+					Case 2
+						;[Block]
+						xTemp = 339.0
+						yTemp = 150.0
+						zTemp = 2630.0
+						;[End Block]
+					Case 3
+						;[Block]
+						xTemp = 410.0
+						yTemp = 150.0
+						zTemp = 1120.0
+						;[End Block]
+					Case 4
+						;[Block]
+						xTemp = -124.0
+						yTemp = 250.0
+						zTemp = 3810.0
+						;[End Block]
+				End Select
+				it.Items = CreateItem("White Key", it_key_white, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
