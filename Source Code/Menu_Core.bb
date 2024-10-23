@@ -2334,20 +2334,27 @@ Function UpdateInput$(aString$, MaxChr%)
 		If Value = 31 Then CursorPos = 0 ; ~ Control & Left arrow
 		If Value = 3 Then SetClipboardContents(aString) ; ~ Control & C
 		If Value = 22 ; ~ Control & V
-			aString = Left(aString, CursorPos) + GetClipboardContents() + Right(aString, Length - CursorPos)
-			CursorPos = CursorPos + Len(aString) - Length
-			If MaxChr > 0 And MaxChr < Len(aString) Then aString = Left(aString, MaxChr) : CursorPos = MaxChr
+			Local Clipboard$ = GetClipboardContents()
+			
+			If Clipboard <> ""
+				aString = Left(aString, CursorPos) + Clipboard + Right(aString, Length - CursorPos)
+				CursorPos = CursorPos + Len(Clipboard)
+				If MaxChr > 0 And MaxChr < Len(aString)
+					aString = Left(aString, MaxChr) 
+					CursorPos = MaxChr
+				EndIf
+			EndIf
 		EndIf
 		Return(aString)
 	EndIf
 	
-	If Value = 30 Then
-		CursorPos = CursorPos + 1
+	If Value = 30
+		CursorPos = Min(CursorPos + 1, Length)
 		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
-	If Value = 31 Then
-		CursorPos = CursorPos - 1
+	If Value = 31
+		CursorPos = Max(CursorPos - 1, 0)
 		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
@@ -2372,7 +2379,7 @@ Function UpdateInput$(aString$, MaxChr%)
 		CursorPos = CursorPos + Len(aString) - Length
 		If MaxChr > 0 And MaxChr < Len(aString)
 			aString = Left(aString, MaxChr)
-			CursorPos = MaxChr
+			CursorPos = Min(CursorPos, MaxChr)
 		EndIf
 	EndIf
 	Return(aString)
