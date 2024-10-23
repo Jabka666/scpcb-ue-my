@@ -87,15 +87,18 @@ Function StopMouseMovement%()
 End Function
 
 Function ResetInput%()
+	StopMouseMovement()
 	FlushKeys()
 	FlushMouse()
 	mo\MouseHit1 = False
 	mo\MouseHit2 = False
 	mo\MouseDown1 = False
 	mo\MouseUp1 = False
-	mo\LastMouseHit1 = False
+	MouseHit(1)
+	MouseHit(2)
+	MouseDown(1)
 	GrabbedEntity = 0
-	Input_ResetTime = 20.0
+	Input_ResetTime = 10.0
 End Function
 
 mo\Mouse_Left_Limit = 250 * MenuScale
@@ -5933,7 +5936,6 @@ Function UpdateGUI%()
 					;[Block]
 					; ~ Check if the item is an inventory-type object
 					If SelectedItem\InvSlots > 0 Then OtherOpen = SelectedItem
-					ResetInput()
 					SelectedItem = Null
 					;[End Block]
 			End Select
