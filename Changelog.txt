@@ -3,6 +3,7 @@
 [Global]
 - Added setting to turn on/off vignette overlay.
 - Added new commands: «disable/enable096» and «disable/enable066».
+- Added new hint message in the intro sequence.
 
 - Reworked red forest.
 	- Added new music.

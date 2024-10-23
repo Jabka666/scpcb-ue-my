@@ -1667,8 +1667,8 @@ Function UpdateEvents%()
 			Case e_cont1_914
 				;[Block]
 				If PlayerRoom = e\room
-						UpdateLever(e\room\RoomLevers[0]\OBJ)
-						UpdateLever(e\room\RoomLevers[1]\OBJ, True)
+					UpdateLever(e\room\RoomLevers[0]\OBJ)
+					UpdateLever(e\room\RoomLevers[1]\OBJ, True)
 					
 					If e\room\RoomDoors[2]\Open Lor EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
 						GiveAchievement("914")
@@ -8523,7 +8523,7 @@ Function UpdateIntro%()
 									CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]))
 								EndIf
 								If SelectedItem <> Null And SelectedItem\ItemTemplate\Img <> 0
-									CreateHintMsg(GetLocalString("msg", "doc.read"))
+									CreateHintMsg(GetLocalString("msg", "doc.read"), 8.0)
 									e\EventState2 = 50.0
 								EndIf
 							Else
@@ -9032,9 +9032,9 @@ Function UpdateIntro%()
 										me\BlinkTimer = -10.0
 										If (Not e\room\NPC[1]\IsDead)
 											PlaySoundEx(snd_I\NeckSnapSFX[Rand(0, 2)], Camera, n_I\Curr173\Collider)
-											e\room\NPC[1]\IsDead = True
 											PlaySound_Strict(snd_I\IntroSFX[4])
 											me\BigCameraShake = 3.0
+											e\room\NPC[1]\IsDead = True
 										EndIf
 										PositionEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[1]\OBJ), EntityY(n_I\Curr173\Collider), EntityZ(e\room\NPC[1]\OBJ))
 										ResetEntity(n_I\Curr173\Collider)
@@ -9077,14 +9077,21 @@ Function UpdateIntro%()
 										n_I\Curr173\Idle = 0
 									EndIf
 									If e\EventState3 >= 14100.0 And e\EventState3 - fps\Factor[0] < 14100.0 Then PlaySound_Strict(snd_I\IntroSFX[5])
-									If e\EventState3 < 14150.0 Then me\BigCameraShake = 5.0
+									If e\EventState3 < 14150.0
+										me\BigCameraShake = 5.0
+										If EntityX(me\Collider) >= e\room\x + 696.0 * RoomScale Then CreateHintMsg(GetLocalString("msg", "leavechmbr"), 1.0)
+									EndIf
 								Else
 									If e\EventState3 > 14300.0
 										If e\EventState3 > 14600.0 And e\EventState3 < 14700.0
 											me\BlinkTimer = -10.0
 											me\LightBlink = 1.0
 										EndIf
-										If EntityX(me\Collider) < e\room\x + 696.0 * RoomScale Then e\EventState3 = 20000.0
+										If EntityX(me\Collider) >= e\room\x + 696.0 * RoomScale
+											CreateHintMsg(GetLocalString("msg", "leavechmbr"), 1.0)
+										Else
+											e\EventState3 = 20000.0
+										EndIf
 									EndIf
 								EndIf
 							ElseIf e\EventState3 < 30000.0
