@@ -1136,8 +1136,8 @@ Function UpdateNPCs%()
 							n\DropSpeed = 0.0
 							SetNPCFrame(n, 110.0)
 							
-							If (Not PlayerRoom\RoomTemplate\DisableDecals) Lor (PlayerRoom\RoomTemplate\DisableDecals And n\State > 2000.0)
-								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\State = n\State - (fps\Factor[0] * ((1.0 + SelectedDifficulty\AggressiveNPCs) / (1.0 + PlayerRoom\RoomTemplate\DisableDecals)))
+							If (Not PlayerRoom\RoomTemplate\DisableDecals)
+								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\State = n\State - (fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs))
 							EndIf
 						EndIf
 						
@@ -7477,7 +7477,7 @@ Function UpdateNPCNearTesla%()
 						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 						ResetEntity(n\Collider)
 						
-						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 12.0) : n\TeslaHit = False : n\State3 = 0.0
+						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 13.0) : n\TeslaHit = False : n\State3 = 0.0
 					EndIf
 				EndIf
 			Else

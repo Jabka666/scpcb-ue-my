@@ -2609,7 +2609,7 @@ Function InitNewGame%()
 	
 	n_I\Curr173 = CreateNPC(NPCType173, 0.0, -500.0, 0.0)
 	n_I\Curr106 = CreateNPC(NPCType106, 0.0, -500.0, 0.0)
-	n_I\Curr106\State = 70.0 * 60.0 * Rnd(13.0, 17.0)
+	n_I\Curr106\State = 70.0 * 60.0 * Rnd(12.0, 17.0)
 	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
