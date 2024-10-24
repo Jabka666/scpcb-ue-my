@@ -17,6 +17,8 @@
 [Rooms]
 - Better texture for DNA scan button.
 
+- Design improvements for some rooms...
+
 [Items]
 - Added Golden Mastercard.
 - Added new SCP-1025.

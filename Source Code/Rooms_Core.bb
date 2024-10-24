@@ -2691,16 +2691,10 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_cont2c_096
 			;[Block]
-			; ~ Door to stairs
-			d.Doors = CreateDoor(r, r\x - 272.0 * RoomScale, r\y, r\z - 768.0 * RoomScale, 270.0, True, ONE_SIDED_DOOR, KEY_CARD_3)
-			d\MTFClose = False
-			
 			; ~ Observation room doors
 			CreateDoor(r, r\x - 60.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			CreateDoor(r, r\x + 260.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 1272.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
-			
-			CreateDoor(r, r\x - 732.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ Maintenance room 2A room
 			d.Doors = CreateDoor(r, r\x - 1755.0 * RoomScale, r\y - 608.0 * RoomScale, r\z + 954.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_3)
