@@ -20,8 +20,6 @@ Function WrapAngle#(Angle#)
 End Function
 
 Function CurveValue#(Value#, Old#, Smooth#)
-	If fps\Factor[0] = 0.0 Then Return(Old)
-	
 	Local Val# = Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0])
 	
 	If Value < Old
@@ -32,8 +30,6 @@ Function CurveValue#(Value#, Old#, Smooth#)
 End Function
 
 Function CurveAngle#(Value#, Old#, Smooth#)
-	If fps\Factor[0] = 0.0 Then Return(Old)
-	
 	Return(WrapAngle(Old + AngleDist(Value, Old) * (1.0 / Smooth * fps\Factor[0])))
 End Function
 
@@ -51,7 +47,7 @@ Function AngleDist#(a0#, a1#)
 End Function
 
 Function FloatToString$(n#, Count%)
-	Return(Left(n, Len(Int(Str(n))) + Count + 1))
+	Return(Left(Str(n), Len(Int(n)) + Count + 1))
 End Function
 
 Function Chance%(Percent%)
