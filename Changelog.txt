@@ -14,6 +14,9 @@
 - Anisotropic filtering is 4x by default.
 - Texture LOD Bias is 0.0 by default.
 
+[Rooms]
+- Better texture for DNA scan button.
+
 [Items]
 - Added Golden Mastercard.
 - Added new SCP-1025.
