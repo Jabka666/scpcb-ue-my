@@ -4788,11 +4788,7 @@ Function UpdateGUI%()
 					;[Block]
 					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 					
-					If SelectedItem\ItemTemplate\ID <> it_hazmatsuit148
-						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 3.0), 100.0)
-					Else
-						SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / 4.0), 100.0)
-					EndIf
+					SelectedItem\State = Min(SelectedItem\State + (fps\Factor[0] / (3.0 + (SelectedItem\ItemTemplate\ID = it_hazmatsuit148))), 100.0)
 					
 					If SelectedItem\State = 100.0
 						If wi\HazmatSuit > 0
