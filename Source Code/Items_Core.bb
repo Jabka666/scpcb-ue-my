@@ -2459,7 +2459,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					If Rand(5) = 1
 						Remove = True
-						it2.Items = CreateItem("SCP-1025", it_fine1025, x, y, z)
+						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
 					Else
 						item\State2 = Min(1.0, item\State2 + 1.0)
 					EndIf
@@ -2468,7 +2468,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					If Rand(10) = 1
 						Remove = True
-						it2.Items = CreateItem("SCP-1025", it_fine1025, x, y, z)
+						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
 					Else
 						item\State2 = 2.0
 					EndIf
@@ -2498,7 +2498,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					Remove = False
 					If Rand(10) = 1
-						it2.Items = CreateItem("SCP-1025", it_fine1025, x, y, z)
+						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
 						Remove = True
 					EndIf
 					;[End Block]
