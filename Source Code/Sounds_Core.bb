@@ -382,30 +382,29 @@ Function StopBreathSound%()
 End Function
 
 Function GetStepSound%(Entity%)
-	Local mat.Materials
-	Local Texture%, Name$
 	Local Picker% = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0.0, -1.0, 0.0)
 	
 	If Picker <> 0
 		If GetEntityType(Picker) <> HIT_MAP Then Return(0)
 		
-		Local Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
+		Local Brush% = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
 		
 		If Brush <> 0
 			Local i%
 			
 			For i = 3 To 1 Step -1
-				Texture = GetBrushTexture(Brush, i)
+				Local Texture% = GetBrushTexture(Brush, i)
+				
 				If Texture <> 0
-					Name = StripPath(TextureName(Texture))
+					Local TexName$ = StripPath(TextureName(Texture))
+					Local mat.Materials
 					
-					If Name <> "" 
-					    FreeTexture(Texture) : Texture = 0
-					    
+					FreeTexture(Texture) : Texture = 0
+					If TexName <> "" 
 						For mat.Materials = Each Materials
-							If mat\Name = Name
+							If mat\Name = TexName
 								FreeBrush(Brush) : Brush = 0
-								If mat\StepSound > 0 Then Return(mat\StepSound - 1)
+								If mat\StepSound > 0 Then Return(mat\StepSound)
 								Exit
 							EndIf
 						Next

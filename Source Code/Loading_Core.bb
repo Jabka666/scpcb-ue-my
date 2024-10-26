@@ -991,7 +991,7 @@ Function LoadMaterials%(File$)
 					ApplyBumpMap(mat\Bump)
 				EndIf
 			EndIf
-			mat\StepSound = (IniGetInt(File, Loc, "stepsound") + 1)
+			mat\StepSound = IniGetInt(File, Loc, "stepsound")
 			mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")
 			mat\UseMask = IniGetInt(File, Loc, "masked")
 		EndIf
