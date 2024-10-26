@@ -793,6 +793,7 @@ Function ResetNegativeStats%(Revive% = False)
 		me\BlinkEffect = 1.0
 		me\BlinkEffectTimer = 0.0
 	EndIf
+	me\EyeStuck = 0.0
 	
 	If me\StaminaEffect > 1.0
 		me\StaminaEffect = 1.0
