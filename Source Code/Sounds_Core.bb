@@ -404,7 +404,7 @@ Function GetStepSound%(Entity%)
 						For mat.Materials = Each Materials
 							If mat\Name = TexName
 								FreeBrush(Brush) : Brush = 0
-								If mat\StepSound > 0 Then Return(mat\StepSound)
+								Return(mat\StepSound)
 								Exit
 							EndIf
 						Next
