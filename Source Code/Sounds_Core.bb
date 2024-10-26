@@ -448,7 +448,7 @@ Function PlayStepSound%(IncludeSprint% = True)
 	End Select
 	
 	TempCHN = PlaySound_Strict(StepSFX(Temp, (IncludeSprint And SoundHasSprint), SoundRand))
-	ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+	ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume)
 	If DecalStep = 2 And Temp <> 5
 		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)))
 		ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume)
