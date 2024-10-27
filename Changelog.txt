@@ -1,7 +1,7 @@
 {v1.3.5}
 
 [Items]
-- Better textures for Eye Drops and Strange Bottle.
+- Better textures for some items.
 
 [Known issues]
 - Rooms can overlap and block the way.
