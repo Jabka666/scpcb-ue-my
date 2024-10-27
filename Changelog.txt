@@ -2,6 +2,7 @@
 
 [Items]
 - Better textures for some items.
+- Improved some models.
 
 [Known issues]
 - Rooms can overlap and block the way.
