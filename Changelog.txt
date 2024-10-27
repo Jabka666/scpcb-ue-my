@@ -1,3 +1,14 @@
+{v1.3.5}
+
+[Items]
+- Better textures for Eye Drops and Strange Bottle.
+
+[Known issues]
+- Rooms can overlap and block the way.
+- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
+- Battery issues caused by having multiple night vision devices.
+- Corrosive door textures not saving correctly.
+
 {v1.3.4}
 
 [Global]
