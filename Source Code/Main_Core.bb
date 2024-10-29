@@ -9889,6 +9889,8 @@ Function Update1025%()
 					;[Block]
 					If I_1025\FineState[0] = 1.0
 						MaxItemAmount = MaxItemAmount + 2
+						InjurePlayer(2.0, 0.0, 1000.0)
+						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 						I_1025\FineState[0] = 2.0
 					EndIf
 					;[End Block]

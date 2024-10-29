@@ -3,6 +3,7 @@
 [Items]
 - Added E-Reader.
 
+- Polydactyly injures the player now. (+ 2 injuries)
 - Better textures for some items.
 - Improved some models.
 
