@@ -2639,6 +2639,33 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case it_fine1025
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Book", it_book, x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
+					;[End Block]
+				Case FINE
+					;[Block]
+					it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
+					it2\State2 = Min(1.0, it2\State2 + 1.0)
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
+					it2\State2 = 2.0
+					;[End Block]
+			End Select
+			;[End Block]
 		Case it_book
 			;[Block]
 			Select Setting

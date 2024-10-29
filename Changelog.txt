@@ -6,6 +6,9 @@
 - Better textures for some items.
 - Improved some models.
 
+[Bug Fixes]
+- Normal SCP-1025 can be obtained from blue SCP-1025 now.
+
 [Known issues]
 - Rooms can overlap and block the way.
 - Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
