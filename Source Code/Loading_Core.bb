@@ -1203,6 +1203,10 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310 Navigator", it_nav310, "navigator.b3d", "INV_navigator.png", "navigator.png", 0.00072, 1)
 	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "navigator.png", 0.00072, 1)
 	
+	CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_e_reader, "e_reader.b3d", "INV_e_reader.png", "e_reader.png", 0.0012, 1)
+	CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_fine_e_reader, "e_reader.b3d", "INV_e_reader.png", "e_reader.png", 0.0012, 1)
+	CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_very_fine_e_reader, "e_reader.b3d", "INV_e_reader.png", "e_reader.png", 0.0012, 1)
+	
 	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", it_bat, "battery.b3d", "INV_battery_9v.png", "", 0.0065, 1)
 	CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", it_coarsebat, "battery.b3d", "INV_battery_4.5v.png", "", 0.0065, 1, "battery_4.5V.png")
 	CreateItemTemplate(GetLocalString("items", "18bat"), "18V Battery", it_finebat, "battery.b3d", "INV_battery_18v.png", "", 0.0075, 1, "battery_18V.png")

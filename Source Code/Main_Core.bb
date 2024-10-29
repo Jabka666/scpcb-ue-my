@@ -2445,7 +2445,7 @@ Function RenderMessages%()
 	If msg\Timer > 0.0
 		Local Temp%
 		
-		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID= it_paper Lor SelectedItem\ItemTemplate\ID = it_oldpaper)))
+		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_fine_e_reader Lor SelectedItem\ItemTemplate\ID = it_very_fine_e_reader)))
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
@@ -4190,6 +4190,21 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
+									Case it_e_reader
+										;[Block]
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = Rnd(50.0)
+										CreateMsg(GetLocalString("msg", "e.reader.bat"))
+										;[End Block]
+									Case it_fine_e_reader
+										;[Block]
+										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
+										;[End Block]
+									Case it_very_fine_e_reader
+										;[Block]
+										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
+										;[End Block]
 									Default
 										;[Block]
 										For z = 0 To MaxItemAmount - 1
@@ -4261,6 +4276,21 @@ Function UpdateGUI%()
 									Case it_finescramble
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
+										;[End Block]
+									Case it_e_reader
+										;[Block]
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
+										CreateMsg(GetLocalString("msg", "e.reader.bat"))
+										;[End Block]
+									Case it_fine_e_reader
+										;[Block]
+										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
+										;[End Block]
+									Case it_very_fine_e_reader
+										;[Block]
+										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4334,6 +4364,21 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
+									Case it_e_reader
+										;[Block]
+										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
+										;[End Block]
+									Case it_fine_e_reader
+										;[Block]
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
+										CreateMsg(GetLocalString("msg", "e.reader.bat"))
+										;[End Block]
+									Case it_very_fine_e_reader
+										;[Block]
+										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
+										;[End Block]
 									Default
 										;[Block]
 										For z = 0 To MaxItemAmount - 1
@@ -4405,6 +4450,21 @@ Function UpdateGUI%()
 									Case it_finescramble
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
+										;[End Block]
+									Case it_e_reader
+										;[Block]
+										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
+										RemoveItem(SelectedItem)
+										Inventory(MouseSlot)\State = 1000.0
+										CreateMsg(GetLocalString("msg", "e.reader.bat"))
+										;[End Block]
+									Case it_fine_e_reader
+										;[Block]
+										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
+										;[End Block]
+									Case it_very_fine_e_reader
+										;[Block]
+										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
 										;[End Block]
 									Default
 										;[Block]
@@ -5317,6 +5377,7 @@ Function UpdateGUI%()
 						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img)
 						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img)
 						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+						CreateHintMsg(GetLocalString("msg", "radio"), 6.0, True)
 					EndIf
 					
 					Local RadioType%
@@ -5349,7 +5410,6 @@ Function UpdateGUI%()
 					If SelectedItem\State > 0.0 Lor RadioType > 1
 						IsUsingRadio = True
 						If RadioState[5] = 0.0
-							CreateMsg(GetLocalString("msg", "radio"))
 							RadioState[5] = 1.0
 							RadioState[0] = -1.0
 						EndIf
@@ -5672,14 +5732,16 @@ Function UpdateGUI%()
 					If SelectedItem\ItemTemplate\ID = it_nav Lor SelectedItem\ItemTemplate\ID = it_nav310
 						SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.0025 + (0.0025 * (SelectedItem\ItemTemplate\ID = it_nav)))
 						
-						If SelectedItem\State > 0.0 And SelectedItem\State <= 20.0
-							If BatMsgTimer >= 70.0
-								If (Not ChannelPlaying(LowBatteryCHN[0]))
-									me\SndVolume = Max(3.0, me\SndVolume)
-									LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
+						If SelectedItem\State > 0.0
+							If SelectedItem\State <= 20.0
+								If BatMsgTimer >= 70.0
+									If (Not ChannelPlaying(LowBatteryCHN[0]))
+										me\SndVolume = Max(3.0, me\SndVolume)
+										LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
+									EndIf
 								EndIf
 							EndIf
-						ElseIf SelectedItem\State = 0.0
+						Else
 							CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
 						EndIf
 					EndIf
@@ -5929,6 +5991,69 @@ Function UpdateGUI%()
 					;[Block]
 					; ~ Skip this line
 					;[End Block]
+				Case it_e_reader
+					;[Block]
+					If SelectedItem\ItemTemplate\Img = 0
+						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
+						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
+						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
+						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
+						CreateHintMsg(GetLocalString("msg", "e.reader"))
+					EndIf
+					
+					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
+					
+					Temp = (SelectedItem\State > 0.0)
+					i = GetKey()
+					Select i
+						Case 49 ; ~ 1
+							;[Block]
+							SelectedItem\State2 = Max(1.0, SelectedItem\State2 - Temp) ; ~ Left
+							PlaySound_Strict(ButtonSFX[0])
+							If SelectedItem\ItemTemplate\Img2 <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img2) : SelectedItem\ItemTemplate\Img2 = 0
+							;[End Block]
+						Case 50 ; ~ 2
+							;[Block]
+							SelectedItem\State2 = Min(SelectedItem\State2 + Temp, TotalSCPDocumentsAmount) ; ~ Right
+							PlaySound_Strict(ButtonSFX[0])
+							If SelectedItem\ItemTemplate\Img2 <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img2) : SelectedItem\ItemTemplate\Img2 = 0
+							;[End Block]
+						Case 51 ; ~ 3
+							;[Block]
+							SelectedItem\State2 = 0.0 ; ~ Home
+							PlaySound_Strict(ButtonSFX[0])
+							If SelectedItem\ItemTemplate\Img2 <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img2) : SelectedItem\ItemTemplate\Img2 = 0
+							;[End Block]
+					End Select
+					If Temp
+						If SelectedItem\State3 = 0.0
+							Local itt.ItemTemplates
+							
+							For itt.ItemTemplates = Each ItemTemplates
+								If Instr(itt\Name, "Document SCP") <> 0 Then itt\Found = True
+							Next
+							SelectedItem\State3 = 1.0
+						EndIf
+						
+						StrTemp = GetEReaderDocument(SelectedItem\State2)
+						If SelectedItem\ItemTemplate\Img2 = 0 And StrTemp <> ""
+							SelectedItem\ItemTemplate\Img2 = ResizeImageEx(LoadImage_Strict("GFX\Items\HUD Textures\doc_" + StrTemp + ".png"), MenuScale * 0.745, MenuScale * 0.745)
+							SelectedItem\ItemTemplate\Img2Width = ImageWidth(SelectedItem\ItemTemplate\Img2) / 2
+							SelectedItem\ItemTemplate\Img2Height = ImageHeight(SelectedItem\ItemTemplate\Img2) / 2
+							AdaptScreenGamma()
+						EndIf
+						If SelectedItem\State <= 20.0
+							If BatMsgTimer >= 70.0
+								If (Not ChannelPlaying(LowBatteryCHN[0]))
+									me\SndVolume = Max(3.0, me\SndVolume)
+									LowBatteryCHN[0] = PlaySound_Strict(snd_I\LowBatterySFX[0])
+								EndIf
+							EndIf
+						EndIf
+					Else
+						CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
+					EndIf
+					;[End Block]
 				Default
 					;[Block]
 					; ~ Check if the item is an inventory-type object
@@ -5957,6 +6082,10 @@ Function UpdateGUI%()
 						;[Block]
 						SelectedItem\State3 = 0.0
 						;[End Block]
+					Case it_e_reader
+						;[Block]
+						SelectedItem\State2 = 0.0
+						;[End Block]
 				End Select
 				If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 				If SelectedItem\ItemTemplate\Img <> 0
@@ -5966,7 +6095,13 @@ Function UpdateGUI%()
 					EndIf
 					FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
 				EndIf
-				
+				If SelectedItem\ItemTemplate\Img2 <> 0
+					If opt\PrevScreenGamma <> 1.0
+						opt\ScreenGamma = opt\PrevScreenGamma
+						opt\PrevScreenGamma = 1.0
+					EndIf
+					FreeImage(SelectedItem\ItemTemplate\Img2) : SelectedItem\ItemTemplate\Img2 = 0
+				EndIf
 				For i = 0 To 6
 					If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
 				Next
@@ -7151,32 +7286,61 @@ Function RenderGUI%()
 									EndIf
 								EndIf
 								
-								Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
 								If SelectedItem\State > 0.0 And (SelectedItem\ItemTemplate\ID = it_nav Lor SelectedItem\ItemTemplate\ID = it_nav310)
 									xTemp = x - NAV_WIDTH_HALF + (196 * MenuScale)
 									yTemp = y - NAV_HEIGHT_HALF + (10 * MenuScale)
 									
+									; ~ Battery
+									Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
 									Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
 									
-									; ~ Battery
 									Temp = (SelectedItem\State <= 20.0)
 									Color(70 * Temp + 30, 30 * Temp, 30 * Temp)
 									For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10)
 										Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 									Next
-									SetFontEx(fo\FontID[Font_Digital])
+								EndIf
+							EndIf
+						EndIf
+						SetFontEx(fo\FontID[Font_Default])
+					EndIf
+					;[End Block]
+				Case it_badge, it_burntbadge, it_harnbadge, it_oldbadge, it_ticket
+					;[Block]
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					;[End Block]
+				Case it_e_reader
+					;[Block]
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0
+						x = mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth
+						y = mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight
+						DrawImage(SelectedItem\ItemTemplate\Img, x, y)
+						If SelectedItem\State > 0.0
+							; ~ Battery
+							Color(30, 30, 30)
+							Rect(x + (406 * MenuScale), y + (90 * MenuScale), 80 * MenuScale, 20 * MenuScale, False)
+							
+							Temp = (SelectedItem\State <= 20.0)
+							Color(70 * Temp + 30, 30 * Temp, 30 * Temp)
+							For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10)
+								Rect(x + ((i * 8) * MenuScale) + (400 * MenuScale), y + (94 * MenuScale), 4 * MenuScale, 12 * MenuScale)
+							Next
+							
+							Color(30, 30, 30)
+							If SelectedItem\State2 = 0.0
+								If (MilliSec Mod 800) < 200
+									SetFont(fo\FontID[Font_Digital])
+									TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y - (100 * MenuScale), "WELCOME TO E-READER!", True, True)
+									SetFont(fo\FontID[Font_Default])
+								EndIf
+							Else
+								TextEx(x + (70 * MenuScale), y + (94 * MenuScale), Str(Int(SelectedItem\State2)) + "/" + Str(TotalSCPDocumentsAmount))
+								If SelectedItem\ItemTemplate\Img2 <> 0
+									DrawBlock(SelectedItem\ItemTemplate\Img2, mo\Viewport_Center_X - SelectedItem\ItemTemplate\Img2Width, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\Img2Height - 13 * MenuScale)
 								EndIf
 							EndIf
 						EndIf
 					EndIf
-					;[End Block]
-				Case it_badge, it_burntbadge, it_harnbadge
-					;[Block]
-					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
-					;[End Block]
-				Case it_oldbadge, it_ticket
-					;[Block]
-					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
 			End Select
 		EndIf

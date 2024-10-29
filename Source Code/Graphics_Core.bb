@@ -112,6 +112,23 @@ Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
 	Return(DestImage)
 End Function
 
+Function ResizeImageEx%(SrcImage%, ScaleX#, ScaleY#)
+	Local SrcWidth% = ImageWidth(SrcImage)
+	Local SrcHeight% = ImageHeight(SrcImage)
+	Local DestWidth% = Floor(SrcWidth * ScaleX)
+	Local DestHeight% = Floor(SrcHeight * ScaleY)
+    Local DestImg% = CreateImage(DestWidth, DestHeight)
+	Local BufferBack% = BackBuffer()
+	
+	CopyRect(0, 0, SrcWidth, SrcHeight, SMALLEST_POWER_TWO_HALF - SrcWidth / 2, SMALLEST_POWER_TWO_HALF - SrcHeight / 2, ImageBuffer(SrcImage), TextureBuffer(FresizeTexture))
+	SetBuffer(BufferBack)
+	ScaleRender(0, 0, SMALLEST_POWER_TWO / GraphicWidthFloat * Float(DestWidth) / Float(SrcWidth), SMALLEST_POWER_TWO / GraphicWidthFloat * Float(DestHeight) / Float(SrcHeight))
+	CopyRect(mo\Viewport_Center_X - DestWidth / 2, mo\Viewport_Center_Y - DestHeight / 2, DestWidth, DestHeight, 0, 0, BufferBack, ImageBuffer(DestImg))
+	
+    FreeImage(SrcImage) : SrcImage = 0
+    Return(DestImg)
+End Function
+
 Function ScaleRender%(x#, y#, hScale# = 1.0, vScale# = 1.0)
 	If Camera <> 0 Then HideEntity(Camera)
 	WireFrame(0)

@@ -1,6 +1,8 @@
 {v1.3.5}
 
 [Items]
+- Added E-Reader.
+
 - Better textures for some items.
 - Improved some models.
 

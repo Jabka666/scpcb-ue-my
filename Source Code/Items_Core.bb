@@ -10,8 +10,9 @@ Type ItemTemplates
 	Field Found%
 	Field OBJ%, OBJPath$
 	Field InvImg%, InvImg2%, InvImgPath$
-	Field ImgPath$, Img%
+	Field ImgPath$, Img%, Img2%
 	Field ImgWidth%, ImgHeight%
+	Field Img2Width%, Img2Height%
 	Field IsAnim%
 	Field Scale#
 	Field Tex%, TexPath$
@@ -128,46 +129,50 @@ Const it_nav300% = 72
 Const it_nav310% = 73
 Const it_navulti% = 74
 
-Const it_bat% = 75
-Const it_coarsebat% = 76
-Const it_finebat% = 77
-Const it_veryfinebat% = 78
-Const it_killbat% = 79
+Const it_e_reader% = 75
+Const it_fine_e_reader% = 76
+Const it_very_fine_e_reader% = 77
 
-Const it_syringe% = 80
-Const it_finesyringe% = 81
-Const it_veryfinesyringe% = 82
-Const it_syringeinf% = 83
+Const it_bat% = 78
+Const it_coarsebat% = 79
+Const it_finebat% = 80
+Const it_veryfinebat% = 81
+Const it_killbat% = 82
+
+Const it_syringe% = 83
+Const it_finesyringe% = 84
+Const it_veryfinesyringe% = 85
+Const it_syringeinf% = 86
 ;[End Block]
 
 ; ~ [KEYCARDS, HANDS, KEYS, CARDS, COINS]
 ;[Block]
-Const it_key0% = 84
-Const it_key1% = 85
-Const it_key2% = 86
-Const it_key3% = 87
-Const it_key3_bloody% = 88
-Const it_key4% = 89
-Const it_key5% = 90
-Const it_key6% = 91
-Const it_keyomni% = 92
+Const it_key0% = 87
+Const it_key1% = 88
+Const it_key2% = 89
+Const it_key3% = 90
+Const it_key3_bloody% = 91
+Const it_key4% = 92
+Const it_key5% = 93
+Const it_key6% = 94
+Const it_keyomni% = 95
 
-Const it_mastercard% = 93
-Const it_mastercard_golden% = 94
-Const it_playcard% = 95
+Const it_mastercard% = 96
+Const it_mastercard_golden% = 97
+Const it_playcard% = 98
 
-Const it_hand% = 96
-Const it_hand2% = 97
-Const it_hand3% = 98
+Const it_hand% = 99
+Const it_hand2% = 100
+Const it_hand3% = 101
 
-Const it_key_yellow% = 99
-Const it_key_white% = 100
-Const it_lostkey% = 101
+Const it_key_yellow% = 102
+Const it_key_white% = 103
+Const it_lostkey% = 104
 
-Const it_25ct% = 102
-Const it_coin% = 103
+Const it_25ct% = 105
+Const it_coin% = 106
 
-Const it_pizza% = 104
+Const it_pizza% = 107
 ;[End Block]
 ;[End Block]
 
@@ -361,6 +366,137 @@ Function GetRandDocument$()
 			Return("1162-ARC")
 			;[End Block]
 		Case 22
+			;[Block]
+			Return("1499")
+			;[End Block]
+	End Select
+End Function
+
+Const TotalSCPDocumentsAmount% = 29
+
+Function GetEReaderDocument$(State%)
+	Select State
+		Case 0
+			;[Block]
+			Return("")
+			;[End Block]
+		Case 1
+			;[Block]
+			Return("005")
+			;[End Block]
+		Case 2
+			;[Block]
+			Return("008")
+			;[End Block]
+		Case 3
+			;[Block]
+			Return("012")
+			;[End Block]
+		Case 4
+			;[Block]
+			If I_035\Sad = 0
+				Return("035_smile")
+			Else
+				Return("035_sad")
+			EndIf
+			;[End Block]
+		Case 5
+			;[Block]
+			Return("049")
+			;[End Block]
+		Case 6
+			;[Block]
+			Return("066")
+			;[End Block]
+		Case 7
+			;[Block]
+			Return("079")
+			;[End Block]
+		Case 8
+			;[Block]
+			Return("096")
+			;[End Block]
+		Case 9
+			;[Block]
+			Return("106")
+			;[End Block]
+		Case 10
+			;[Block]
+			Return("173")
+			;[End Block]
+		Case 11
+			;[Block]
+			Return("205")
+			;[End Block]
+		Case 12
+			;[Block]
+			Return("372")
+			;[End Block]
+		Case 13
+			;[Block]
+			Return("409")
+			;[End Block]
+		Case 14
+			;[Block]
+			Return("427")
+			;[End Block]
+		Case 15
+			;[Block]
+			Return("500")
+			;[End Block]
+		Case 16
+			;[Block]
+			Return("513")
+			;[End Block]
+		Case 17
+			;[Block]
+			Return("682")
+			;[End Block]
+		Case 18
+			;[Block]
+			Return("714")
+			;[End Block]
+		Case 19
+			;[Block]
+			Return("860")
+			;[End Block]
+		Case 20
+			;[Block]
+			Return("860_1")
+			;[End Block]
+		Case 21
+			;[Block]
+			Return("895")
+			;[End Block]
+		Case 22
+			;[Block]
+			Return("939")
+			;[End Block]
+		Case 23
+			;[Block]
+			Return("966")
+			;[End Block]
+		Case 24
+			;[Block]
+			Return("970")
+			;[End Block]
+		Case 25
+			;[Block]
+			Return("1025")
+			;[End Block]
+		Case 26
+			;[Block]
+			Return("1048")
+			;[End Block]
+		Case 27
+			;[Block]
+			Return("1123")
+			;[End Block]
+		Case 28
+			;[Block]
+			Return("1162_ARC")
+			;[End Block]
+		Case 29
 			;[Block]
 			Return("1499")
 			;[End Block]
@@ -859,7 +995,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\ID
-		Case it_nav, it_nav300, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_scp1025, it_fine1025
+		Case it_nav, it_nav300, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_burntbadge, it_harnbadge, it_scp1025, it_fine1025, it_e_reader, it_fine_e_reader, it_very_fine_e_reader
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -1232,72 +1368,100 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case FINE
 					;[Block]
-					Select Rand(3)
-						Case 1
-							;[Block]
-							it2.Items = CreateItem("Radio Transceiver", it_radio, x, y, z)
-							it2\State = Rnd(0.0, 100.0)
-							;[End Block]
-						Case 2
-							;[Block]
-							If Rand(3) = 1
-								it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
-							Else
-								it2.Items = CreateItem("S-NAV Navigator", it_nav, x, y, z)
-								it2\State = Rnd(0.0, 100.0)
+					For it.Items = Each Items
+						If it <> item And it\Collider <> 0 And (Not it\Picked)
+							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
+								If it\ItemTemplate\ID = it_clipboard
+									RemoveItem(it)
+									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
+									Exit
+								EndIf
 							EndIf
-							;[End Block]
-						Case 3
-							;[Block]
-							it2.Items = CreateItem("Night Vision Goggles", it_nvg, x, y, z)
-							it2\State = Rnd(0.0, 1000.0)
-							;[End Block]
-					End Select
+						EndIf
+					Next
+					
+					If it2 = Null
+						Select Rand(3)
+							Case 1
+								;[Block]
+								it2.Items = CreateItem("Radio Transceiver", it_radio, x, y, z)
+								it2\State = Rnd(0.0, 100.0)
+								;[End Block]
+							Case 2
+								;[Block]
+								If Rand(3) = 1
+									it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
+								Else
+									it2.Items = CreateItem("S-NAV Navigator", it_nav, x, y, z)
+									it2\State = Rnd(0.0, 100.0)
+								EndIf
+								;[End Block]
+							Case 3
+								;[Block]
+								it2.Items = CreateItem("Night Vision Goggles", it_nvg, x, y, z)
+								it2\State = Rnd(0.0, 1000.0)
+								;[End Block]
+						End Select
+					EndIf
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					Select Rand(3)
-						Case 1
-							;[Block]
-							If Rand(3) = 1
-								it2.Items = CreateItem("Fine Radio Transceiver", it_fineradio, x, y, z)
-							Else
-								it2.Items = CreateItem("Very Fine Radio Transceiver", it_veryfineradio, x, y, z)
+					For it.Items = Each Items
+						If it <> item And it\Collider <> 0 And (Not it\Picked)
+							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
+								If it\ItemTemplate\ID = it_clipboard
+									RemoveItem(it)
+									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
+									Exit
+								EndIf
 							EndIf
-							;[End Block]
-						Case 2
-							;[Block]
-							If Rand(2) = 1
-								it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
-							Else
-								it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
-								it2\State = Rnd(0.0, 100.0)
-							EndIf
-							;[End Block]
-						Case 3
-							;[Block]
-							Select Rand(4)
-								Case 1
-									;[Block]
-									it2.Items = CreateItem("Fine Night Vision Goggles", it_finenvg, x, y, z)
-									;[End Block]
-								Case 2
-									;[Block]
-									it2.Items = CreateItem("Very Fine Night Vision Goggles", it_veryfinenvg, x, y, z)
-									it2\State = Rnd(0.0, 1000.0)
-									;[End Block]
-								Case 3
-									;[Block]
-									it2.Items = CreateItem("SCRAMBLE Gear", it_scramble, x, y, z)
-									it2\State = Rnd(0.0, 1000.0)
-									;[End Block]
-								Case 4
-									;[Block]
-									it2.Items = CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
-									;[End Block]
-							End Select
-							;[End Block]
-					End Select
+						EndIf
+					Next
+					
+					If it2 = Null
+						Select Rand(3)
+							Case 1
+								;[Block]
+								If Rand(3) = 1
+									it2.Items = CreateItem("Fine Radio Transceiver", it_fineradio, x, y, z)
+								Else
+									it2.Items = CreateItem("Very Fine Radio Transceiver", it_veryfineradio, x, y, z)
+								EndIf
+								;[End Block]
+							Case 2
+								;[Block]
+								If Rand(2) = 1
+									it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
+								Else
+									it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
+									it2\State = Rnd(0.0, 100.0)
+								EndIf
+								;[End Block]
+							Case 3
+								;[Block]
+								Select Rand(4)
+									Case 1
+										;[Block]
+										it2.Items = CreateItem("Fine Night Vision Goggles", it_finenvg, x, y, z)
+										;[End Block]
+									Case 2
+										;[Block]
+										it2.Items = CreateItem("Very Fine Night Vision Goggles", it_veryfinenvg, x, y, z)
+										it2\State = Rnd(0.0, 1000.0)
+										;[End Block]
+									Case 3
+										;[Block]
+										it2.Items = CreateItem("SCRAMBLE Gear", it_scramble, x, y, z)
+										it2\State = Rnd(0.0, 1000.0)
+										;[End Block]
+									Case 4
+										;[Block]
+										it2.Items = CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
+										;[End Block]
+								End Select
+								;[End Block]
+						End Select
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2566,6 +2730,40 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case it_e_reader, it_fine_e_reader, it_very_fine_e_reader
+			;[Block]
+			Select Setting
+				Case ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case COARSE
+					;[Block]
+					it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
+					;[End Block]
+				Case ONETOONE
+					;[Block]
+					Remove = False
+					;[End Block]
+				Case FINE
+					;[Block]
+					If Rand(5) = 1
+						it2.Items = CreateItem("E-Reader", it_fine_e_reader, x, y, z)
+					Else
+						it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
+						it2\InvSlots = 15
+					EndIf
+					;[End Block]
+				Case VERYFINE
+					;[Block]
+					If Rand(15) = 1
+						it2.Items = CreateItem("E-Reader", it_very_fine_e_reader, x, y, z)
+					Else
+						it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
+						it2\InvSlots = 20
+					EndIf
+					;[End Block]
+			End Select
 		Default
 			;[Block]
 			Select Setting
