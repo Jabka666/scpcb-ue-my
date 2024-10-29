@@ -274,6 +274,7 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 	If itt\InvImg2 <> 0 Then FreeImage(itt\InvImg2) : itt\InvImg2 = 0
 	
 	If itt\Img <> 0 Then FreeImage(itt\Img) : itt\Img = 0
+	If itt\Img2 <> 0 Then FreeImage(itt\Img2) : itt\Img2 = 0
 	
 	If itt\Tex <> 0 Then DeleteSingleTextureEntryFromCache(itt\Tex) : itt\Tex = 0
 	Delete(itt)
@@ -626,6 +627,7 @@ Function RemoveItem%(i.Items)
 	If SelectedItem = i Then SelectedItem = Null
 	
 	If i\ItemTemplate\Img <> 0 Then FreeImage(i\ItemTemplate\Img) : i\ItemTemplate\Img = 0
+	If i\ItemTemplate\Img2 <> 0 Then FreeImage(i\ItemTemplate\Img2) : i\ItemTemplate\Img2 = 0
 	Delete(i)
 	
 	CatchErrors("Uncaught: RemoveItem()")
