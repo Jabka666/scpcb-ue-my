@@ -1595,7 +1595,7 @@ Function UpdateNPCs%()
 							If n\State > 1 And n\State <> 3
 								If wi\HazmatSuit > 0
 									RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
-									If RemoveHazmatTimer < 200.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
+									If RemoveHazmatTimer < 350.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
 										n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
 									ElseIf RemoveHazmatTimer =< 0.0
 										For i = 0 To 2
@@ -1622,7 +1622,7 @@ Function UpdateNPCs%()
 										Remove714Timer = Min(Remove714Timer, 499.0)
 									Else
 										Remove714Timer = Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
-										If Remove714Timer < 200.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 200.0 And (Not ChannelPlaying(n\SoundCHN2))
+										If Remove714Timer < 350.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
 											If I_714\Using = 2 Then n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
 										ElseIf Remove714Timer =< 0.0
 											For i = 0 To MaxItemAmount - 1
