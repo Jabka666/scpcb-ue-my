@@ -2599,72 +2599,28 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_scp1025
-			;[Block]
-			Remove = False
-			Select Setting
-				Case ROUGH
-					;[Block]
-					If item\State2 > 0.0
-						item\State2 = -1.0
-					Else
-						MakeDecal = True
-						Remove = True
-					EndIf
-					;[End Block]
-				Case COARSE
-					;[Block]
-					item\State2 = Max(-1.0, item\State2 - 1.0)
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					Remove = True
-					it2.Items = CreateItem("Book", it_book, x, y, z)
-					;[End Block]
-				Case FINE
-					;[Block]
-					If Rand(5) = 1
-						Remove = True
-						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
-					Else
-						item\State2 = Min(1.0, item\State2 + 1.0)
-					EndIf
-					;[End Block]
-				Case VERYFINE
-					;[Block]
-					If Rand(10) = 1
-						Remove = True
-						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
-					Else
-						item\State2 = 2.0
-					EndIf
-					;[End Block]
-			End Select
-			;[End Block]
-		Case it_fine1025
+		Case it_scp1025, it_fine1025
 			;[Block]
 			Select Setting
-				Case ROUGH
+				Case ROUGH, COARSE
 					;[Block]
 					MakeDecal = True
 					;[End Block]
-				Case COARSE
-					;[Block]
-					it2.Items = CreateItem("Book", it_book, x, y, z)
-					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
+					If item\ItemTemplate\ID = it_fine1025
+						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
+					Else
+						it2.Items = CreateItem("Book", it_book, x, y, z)
+					EndIf
 					;[End Block]
-				Case FINE
+				Case FINE, VERYFINE
 					;[Block]
-					it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
-					it2\State2 = Min(1.0, it2\State2 + 1.0)
-					;[End Block]
-				Case VERYFINE
-					;[Block]
-					it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
-					it2\State2 = 2.0
+					If Rand(4) = 1
+						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
+					Else
+						Remove = False
+					EndIf
 					;[End Block]
 			End Select
 			;[End Block]

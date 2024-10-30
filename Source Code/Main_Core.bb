@@ -2445,7 +2445,7 @@ Function RenderMessages%()
 	If msg\Timer > 0.0
 		Local Temp%
 		
-		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_fine_e_reader Lor SelectedItem\ItemTemplate\ID = it_very_fine_e_reader)))
+		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_fine1025 Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_fine_e_reader Lor SelectedItem\ItemTemplate\ID = it_very_fine_e_reader)))
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
@@ -5126,15 +5126,8 @@ Function UpdateGUI%()
 					;[Block]
 					GiveAchievement("1025")
 					If SelectedItem\State3 = 0.0
-						If Rand(3 - (SelectedItem\State2 <> 2.0) * SelectedItem\State2) = 1 ; ~ Higher chance for good illness if FINE, lower change for good illness if COARSE
-							SelectedItem\State = 6.0
-						Else
-							SelectedItem\State = Rand(0, 6)
-						EndIf
-						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
-							I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
-							I_1025\State[7] = 1 + (SelectedItem\State2 = 2.0) * 2.0 ; ~ 3x as fast if VERYFINE
-						EndIf
+						SelectedItem\State = Rand(0, 6)
+						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then I_1025\State[SelectedItem\State] = Max(1.0, I_1025\State[SelectedItem\State])
 						SelectedItem\State3 = 1.0
 					EndIf
 					If SelectedItem\ItemTemplate\Img = 0
@@ -6142,10 +6135,10 @@ Function RenderHUD%()
 	Else
 		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 	EndIf
-	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale)) Lor I_714\Using > 0 Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor wi\HazmatSuit = 1 Lor wi\BallisticVest = 2 Lor I_409\Timer >= 55.0 Lor I_1025\State[0] > 0.0 Lor I_1025\FineState[2] > 0.0 Lor I_966\HasInsomnia > 0.0
+	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And (PlayerPosY < 2000.0 * RoomScale Lor PlayerPosY > 2608.0 * RoomScale)) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
-	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3
+	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3 Lor (I_1025\State[6] > 15.0 And I_1025\State[6] < 75.0)
 		Color(0, 200, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	EndIf
@@ -9458,7 +9451,7 @@ Function Update427%()
 			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
 			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
 			For i = 0 To 6
-				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0] * I_1025\State[7]), 0.0)
+				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0]), 0.0)
 			Next
 			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
@@ -9811,7 +9804,7 @@ Function Render294%()
 End Function
 
 Type SCP1025
-	Field State#[8]
+	Field State#[7]
 	Field FineState#[5]
 End Type
 
@@ -9819,7 +9812,6 @@ Global I_1025.SCP1025
 
 Function Update1025%()
 	Local i%
-	Local Factor1025# = fps\Factor[0] * I_1025\State[7]
 	
 	For i = 0 To 6
 		If I_1025\State[i] > 0.0
@@ -9827,7 +9819,7 @@ Function Update1025%()
 				Case 0 ; ~ Common cold
 					;[Block]
 					UpdateCough(1000)
-					me\Stamina = me\Stamina - (Factor1025 * 0.2)
+					me\Stamina = me\Stamina - (fps\Factor[0] * 0.2)
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
@@ -9836,17 +9828,17 @@ Function Update1025%()
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
 					UpdateCough(800)
-					If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then me\Stamina = me\Stamina - (Factor1025 * 0.3)
+					If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
 					;[End Block]
 				Case 3 ; ~ Appendicitis
 					;[Block]
 					; ~ 0.035 / sec = 2.1 / min
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.0005)
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.0005)
 					If I_1025\State[i] > 20.0
-						If I_1025\State[i] - Factor1025 <= 20.0 Then CreateMsg(GetLocalString("msg", "stomachunbearable"))
-						me\Stamina = me\Stamina - (Factor1025 * 0.3)
+						If I_1025\State[i] - fps\Factor[0] <= 20.0 Then CreateMsg(GetLocalString("msg", "stomachunbearable"))
+						me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
 					ElseIf I_1025\State[i] > 10.0
-						If I_1025\State[i] - Factor1025 <= 10.0 Then CreateMsg(GetLocalString("msg", "stomachaching"))
+						If I_1025\State[i] - fps\Factor[0] <= 10.0 Then CreateMsg(GetLocalString("msg", "stomachaching"))
 					EndIf
 					;[End Block]
 				Case 4 ; ~ Asthma
@@ -9858,7 +9850,7 @@ Function Update1025%()
 					;[End Block]
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (Factor1025 * 0.35)
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.35)
 					
 					; ~ 35 / sec
 					If I_1025\State[i] > 110.0
@@ -9875,9 +9867,15 @@ Function Update1025%()
 					;[End Block]
 				Case 6 ; ~ Secondary polycythemia
 					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + 0.00025 * Factor1025 * (100.0 / I_1025\State[i])
-					me\Stamina = Min(100.0, me\Stamina + (90.0 - me\Stamina) * I_1025\State[i] * Factor1025 * 0.00008)
-					If I_1025\State[i] > 15.0 And I_1025\State[i] - Factor1025 <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] / 70.0)
+					If I_1025\State[i] < 75.0
+						If I_1025\State[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\State[i] / 17500.0)) * fps\Factor[0])
+					Else
+						me\StaminaEffect = Max(me\StaminaEffect, 1.2)
+						me\StaminaEffectTimer = 14.0
+					EndIf
+					If I_1025\State[i] > 100.0 Then I_1025\State[i] = 1.0
+					If I_1025\State[i] > 15.0 And I_1025\State[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
 					;[End Block]
 			End Select
 		EndIf
@@ -9889,8 +9887,9 @@ Function Update1025%()
 					;[Block]
 					If I_1025\FineState[0] = 1.0
 						MaxItemAmount = MaxItemAmount + 2
-						InjurePlayer(2.0, 0.0, 1000.0)
+						InjurePlayer(1.5, 0.0, 1000.0)
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+						CreateMsg(GetLocalString("msg", "extraparts"))
 						I_1025\FineState[0] = 2.0
 					EndIf
 					;[End Block]
