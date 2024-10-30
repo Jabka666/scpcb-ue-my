@@ -9,6 +9,7 @@
 
 [Bug Fixes]
 - Fixed SCP-079's voice lines overlapping.
+- Fixed SCP-427 not healing blue SCP-1025 effects.
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 
 [Known issues]

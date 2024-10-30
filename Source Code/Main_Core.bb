@@ -5144,11 +5144,24 @@ Function UpdateGUI%()
 					If SelectedItem\State3 = 0.0
 						SelectedItem\State = Rand(0, 5)
 						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
-							If SelectedItem\State = 5.0
-								If I_008\Timer = 0.0 Then I_008\Timer = I_008\Timer + 0.001
-							Else
-								I_1025\FineState[SelectedItem\State] = Max(1.0, I_1025\FineState[SelectedItem\State])
-							EndIf
+							Select SelectedItem\State
+								Case 0.0
+									;[Block]
+									MaxItemAmount = MaxItemAmount + 2
+									InjurePlayer(1.5, 0.0, 1000.0)
+									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+									CreateMsg(GetLocalString("msg", "extraparts"))
+									I_1025\FineState[0] = 1.0
+									;[End Block]
+								Case 5.0
+									;[Block]
+									If I_008\Timer = 0.0 Then I_008\Timer = I_008\Timer + 0.001
+									;[End Block]
+								Default
+									;[Block]
+									I_1025\FineState[SelectedItem\State] = Max(1.0, I_1025\FineState[SelectedItem\State])
+									;[End Block]
+							End Select
 						EndIf
 						SelectedItem\State3 = 1.0
 					EndIf
@@ -9453,6 +9466,21 @@ Function Update427%()
 			For i = 0 To 6
 				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0]), 0.0)
 			Next
+			If I_1025\FineState[0] > 0.0
+				If I_1025\FineState[0] < 0.05
+					For i = MaxItemAmount - 2 To MaxItemAmount - 1
+						If Inventory(i) <> Null Then DropItem(Inventory(i))
+					Next
+					MaxItemAmount = MaxItemAmount - 2
+					I_1025\FineState[0] = 0.0
+				Else
+					I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
+				EndIf
+			EndIf
+			I_1025\FineState[1] = Max(I_1025\FineState[1] - (0.0008 * fps\Factor[0]), 0.0)
+			For i = 2 To 4
+				If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
+			Next
 			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			If (Not ChannelPlaying(I_427\SoundCHN[0])) Then I_427\SoundCHN[0] = PlaySound_Strict(I_427\Sound[0])
 			If I_427\Timer >= 70.0 * 180.0
@@ -9880,43 +9908,35 @@ Function Update1025%()
 			End Select
 		EndIf
 	Next
-	For i = 0 To 2
+	For i = 1 To 2
 		If I_1025\FineState[i] > 0.0
 			Select i
-				Case 0 ; ~ Polydactyly
-					;[Block]
-					If I_1025\FineState[0] = 1.0
-						MaxItemAmount = MaxItemAmount + 2
-						InjurePlayer(1.5, 0.0, 1000.0)
-						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
-						CreateMsg(GetLocalString("msg", "extraparts"))
-						I_1025\FineState[0] = 2.0
-					EndIf
-					;[End Block]
 				Case 1 ; ~ Tourette's syndrome
 					;[Block]
-					Local Random% = 70.0 * Rand(40, 50)
-					
-					If I_1025\FineState[i] > 15.0
-						I_1025\FineState[i] = I_1025\FineState[i] + fps\Factor[0]
-						If I_1025\FineState[i] > Random Then I_1025\FineState[i] = 1.0
-					Else
-						If Rand(40) = 1
-							I_1025\FineState[i] = I_1025\FineState[i] + 1.0
-							Select Rand(8)
-								Case 1, 2, 3, 5
-									;[Block]
-									me\BlinkTimer = -10.0
-									;[End Block]
-								Case 4, 5, 6
-									;[Block]
-									me\CameraShake = Rnd(0.5, 2.0)
-									;[End Block]
-								Case 7, 8
-									;[Block]
-									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(0, 1) + ".ogg"))
-									;[End Block]
-							End Select
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
+						Local Random% = 70.0 * Rand(40, 50)
+						
+						If I_1025\FineState[i] > 15.0
+							I_1025\FineState[i] = I_1025\FineState[i] + fps\Factor[0]
+							If I_1025\FineState[i] > Random Then I_1025\FineState[i] = 1.0
+						Else
+							If Rand(40) = 1
+								I_1025\FineState[i] = I_1025\FineState[i] + 1.0
+								Select Rand(8)
+									Case 1, 2, 3, 5
+										;[Block]
+										me\BlinkTimer = -10.0
+										;[End Block]
+									Case 4, 5, 6
+										;[Block]
+										me\CameraShake = Rnd(0.5, 2.0)
+										;[End Block]
+									Case 7, 8
+										;[Block]
+										PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(0, 1) + ".ogg"))
+										;[End Block]
+								End Select
+							EndIf
 						EndIf
 					EndIf
 					;[End Block]
