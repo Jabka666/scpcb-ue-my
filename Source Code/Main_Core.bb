@@ -2445,7 +2445,7 @@ Function RenderMessages%()
 	If msg\Timer > 0.0
 		Local Temp%
 		
-		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_fine1025 Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_fine_e_reader Lor SelectedItem\ItemTemplate\ID = it_very_fine_e_reader)))
+		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_scp1025 Lor SelectedItem\ItemTemplate\ID = it_fine1025 Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_fine_e_reader Lor SelectedItem\ItemTemplate\ID = it_very_fine_e_reader)))
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
