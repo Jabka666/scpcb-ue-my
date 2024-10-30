@@ -1024,7 +1024,7 @@ Function UpdateEvents%()
 								EndIf
 							ElseIf e\EventState >= 2.0
 								e\EventState = e\EventState + fps\Factor[0]
-								If e\EventState > 3000.0
+								If e\EventState > 5000.0
 									If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25
 										If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 										e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Refuse.ogg", opt\VoiceVolume * opt\MasterVolume, 0)

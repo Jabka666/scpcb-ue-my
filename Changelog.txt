@@ -8,6 +8,7 @@
 - Improved some models.
 
 [Bug Fixes]
+- Fixed SCP-079's voice lines overlapping.
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 
 [Known issues]
