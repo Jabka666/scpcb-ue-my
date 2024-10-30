@@ -2,6 +2,7 @@
 
 [Items]
 - Added E-Reader.
+- Added bloody version of Level 0 Key Card.
 
 - Polydactyly injures the player now. (+ 2 injuries)
 - Better textures for some items.
