@@ -46,7 +46,20 @@ Function FillRoom%(r.Rooms)
 								;[Block]
 								Temp3 = Rand(0, 2)
 								ItemName = "Level " + Str(Temp3) + " Key Card"
-								ItemID = it_key0 + Temp3
+								Select Temp3
+									Case 0
+										;[Block]
+										ItemID = it_key0
+										;[End Block]
+									Case 1
+										;[Block]
+										ItemID = it_key1
+										;[End Block]
+									Case 2
+										;[Block]
+										ItemID = it_key2
+										;[End Block]
+								End Select
 								;[End Block]
 							Case ItemChance >= 45 And ItemChance < 50 ; ~ 5% chance for a medkit
 								;[Block]
