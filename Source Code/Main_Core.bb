@@ -2445,7 +2445,7 @@ Function RenderMessages%()
 	If msg\Timer > 0.0
 		Local Temp%
 		
-		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_scp1025 Lor SelectedItem\ItemTemplate\ID = it_fine1025 Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_fine_e_reader Lor SelectedItem\ItemTemplate\ID = it_very_fine_e_reader)))
+		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_scp1025 Lor SelectedItem\ItemTemplate\ID = it_fine1025 Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_e_reader20 Lor SelectedItem\ItemTemplate\ID = it_e_reader30)))
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
@@ -4197,11 +4197,11 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(50.0)
 										CreateMsg(GetLocalString("msg", "e.reader.bat"))
 										;[End Block]
-									Case it_fine_e_reader
+									Case it_e_reader20
 										;[Block]
 										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
 										;[End Block]
-									Case it_very_fine_e_reader
+									Case it_e_reader30
 										;[Block]
 										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
 										;[End Block]
@@ -4284,11 +4284,11 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "e.reader.bat"))
 										;[End Block]
-									Case it_fine_e_reader
+									Case it_e_reader20
 										;[Block]
 										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
 										;[End Block]
-									Case it_very_fine_e_reader
+									Case it_e_reader30
 										;[Block]
 										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
 										;[End Block]
@@ -4368,14 +4368,14 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
 										;[End Block]
-									Case it_fine_e_reader
+									Case it_e_reader20
 										;[Block]
 										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 										RemoveItem(SelectedItem)
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "e.reader.bat"))
 										;[End Block]
-									Case it_very_fine_e_reader
+									Case it_e_reader30
 										;[Block]
 										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
 										;[End Block]
@@ -4458,11 +4458,11 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = 1000.0
 										CreateMsg(GetLocalString("msg", "e.reader.bat"))
 										;[End Block]
-									Case it_fine_e_reader
+									Case it_e_reader20
 										;[Block]
 										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
 										;[End Block]
-									Case it_very_fine_e_reader
+									Case it_e_reader30
 										;[Block]
 										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
 										;[End Block]
@@ -5997,7 +5997,7 @@ Function UpdateGUI%()
 					;[Block]
 					; ~ Skip this line
 					;[End Block]
-				Case it_e_reader
+				Case it_e_reader, it_e_reader20, it_e_reader30
 					;[Block]
 					If SelectedItem\ItemTemplate\Img = 0
 						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
@@ -6009,7 +6009,7 @@ Function UpdateGUI%()
 					
 					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
 					
-					Temp = (SelectedItem\State > 0.0)
+					Temp = (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_e_reader30)
 					i = GetKey()
 					Select i
 						Case 49 ; ~ 1
@@ -6048,7 +6048,7 @@ Function UpdateGUI%()
 							SelectedItem\ItemTemplate\Img2Height = ImageHeight(SelectedItem\ItemTemplate\Img2) / 2
 							AdaptScreenGamma()
 						EndIf
-						If SelectedItem\State < 20.0
+						If SelectedItem\State < 20.0 And SelectedItem\ItemTemplate\ID <> it_e_reader30
 							If BatMsgTimer >= 70.0
 								If (Not ChannelPlaying(LowBatteryCHN[0]))
 									me\SndVolume = Max(3.0, me\SndVolume)
@@ -6088,7 +6088,7 @@ Function UpdateGUI%()
 						;[Block]
 						SelectedItem\State3 = 0.0
 						;[End Block]
-					Case it_e_reader
+					Case it_e_reader, it_e_reader20, it_e_reader30
 						;[Block]
 						SelectedItem\State2 = 0.0
 						;[End Block]
@@ -7316,26 +7316,29 @@ Function RenderGUI%()
 					;[Block]
 					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
-				Case it_e_reader
+				Case it_e_reader, it_e_reader20, it_e_reader30
 					;[Block]
 					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0
 						x = mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth
 						y = mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight
 						DrawImage(SelectedItem\ItemTemplate\Img, x, y)
-						If SelectedItem\State > 0.0
+						Temp = (SelectedItem\State > 0.0)
+						If Temp Lor SelectedItem\ItemTemplate\ID = it_e_reader30
 							; ~ Battery
-							n = Ceil(SelectedItem\State / 10.0)
-							Color(70 * (n < 3) + 30, 30 * (n < 3), 30 * (n < 3))
-							Rect(x + (406 * MenuScale), y + (90 * MenuScale), 80 * MenuScale, 20 * MenuScale, False)
-							For i = 1 To Min(n, 10)
-								Rect(x + ((i * 8) * MenuScale) + (400 * MenuScale), y + (94 * MenuScale), 4 * MenuScale, 12 * MenuScale)
-							Next
+							If Temp
+								n = Ceil(SelectedItem\State / 10.0)
+								Color(70 * (n < 3) + 30, 30 * (n < 3), 30 * (n < 3))
+								Rect(x + (406 * MenuScale), y + (90 * MenuScale), 80 * MenuScale, 20 * MenuScale, False)
+								For i = 1 To Min(n, 10)
+									Rect(x + ((i * 8) * MenuScale) + (400 * MenuScale), y + (94 * MenuScale), 4 * MenuScale, 12 * MenuScale)
+								Next
+							EndIf
 							
 							Color(30, 30, 30)
 							If SelectedItem\State2 = 0.0
 								If (MilliSec Mod 800) < 200
 									SetFont(fo\FontID[Font_Digital])
-									TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y - (100 * MenuScale), "WELCOME TO E-READER!", True, True)
+									TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y - (100 * MenuScale), GetLocalString("msg", "e.reader.welcome"), True, True)
 									SetFont(fo\FontID[Font_Default])
 								EndIf
 							Else
