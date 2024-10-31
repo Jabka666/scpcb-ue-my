@@ -382,167 +382,167 @@ Function GetEReaderDocument$(State%)
 			;[End Block]
 		Case 1
 			;[Block]
-			Return("OBJC")
+			Return("doc_OBJC")
 			;[End Block]
 		Case 2
 			;[Block]
-			Return("SCL")
+			Return("doc_SCL")
 			;[End Block]
 		Case 3
 			;[Block]
-			Return("O5(2)")
+			Return("doc_O5(2)")
 			;[End Block]
 		Case 4
 			;[Block]
-			Return("MTF")
+			Return("doc_MTF")
 			;[End Block]
 		Case 5
 			;[Block]
-			Return("MSP")
+			Return("doc_MSP")
 			;[End Block]
 		Case 6
 			;[Block]
-			Return("NDP")
+			Return("doc_NDP")
 			;[End Block]
 		Case 7
 			;[Block]
-			Return("005")
+			Return("doc_005")
 			;[End Block]
 		Case 8
 			;[Block]
-			Return("008")
+			Return("doc_008")
 			;[End Block]
 		Case 9
 			;[Block]
-			Return("012")
+			Return("doc_012")
 			;[End Block]
 		Case 10
 			;[Block]
 			If I_035\Sad = 0
-				Return("035_smile")
+				Return("doc_035_smile")
 			Else
-				Return("035_sad")
+				Return("doc_035_sad")
 			EndIf
 			;[End Block]
 		Case 11
 			;[Block]
-			Return("049")
+			Return("doc_049")
 			;[End Block]
 		Case 12
 			;[Block]
-			Return("066")
+			Return("doc_066")
 			;[End Block]
 		Case 13
 			;[Block]
-			Return("IR_066")
+			Return("doc_IR_066")
 			;[End Block]
 		Case 14
 			;[Block]
-			Return("079")
+			Return("doc_079")
 			;[End Block]
 		Case 15
 			;[Block]
-			Return("093_rm")
+			Return("doc_093_rm")
 			;[End Block]
 		Case 16
 			;[Block]
-			Return("096")
+			Return("doc_096")
 			;[End Block]
 		Case 17
 			;[Block]
-			Return("106")
+			Return("doc_106")
 			;[End Block]
 		Case 18
 			;[Block]
-			Return("IR_106")
+			Return("doc_IR_106")
 			;[End Block]
 		Case 19
 			;[Block]
-			Return("RP")
+			Return("doc_RP")
 			;[End Block]
 		Case 20
 			;[Block]
-			Return("173")
+			Return("doc_173")
 			;[End Block]
 		Case 21
 			;[Block]
-			Return("205")
+			Return("doc_205")
 			;[End Block]
 		Case 22
 			;[Block]
-			Return("372")
+			Return("doc_372")
 			;[End Block]
 		Case 23
 			;[Block]
-			Return("409")
+			Return("doc_409")
 			;[End Block]
 		Case 24
 			;[Block]
-			Return("427")
+			Return("doc_427")
 			;[End Block]
 		Case 25
 			;[Block]
-			Return("500")
+			Return("doc_500")
 			;[End Block]
 		Case 26
 			;[Block]
-			Return("513")
+			Return("doc_513")
 			;[End Block]
 		Case 27
 			;[Block]
-			Return("682")
+			Return("doc_682")
 			;[End Block]
 		Case 28
 			;[Block]
-			Return("714")
+			Return("doc_714")
 			;[End Block]
 		Case 29
 			;[Block]
-			Return("860")
+			Return("doc_860")
 			;[End Block]
 		Case 30
 			;[Block]
-			Return("860_1")
+			Return("doc_860_1")
 			;[End Block]
 		Case 31
 			;[Block]
-			Return("895")
+			Return("doc_895")
 			;[End Block]
 		Case 32
 			;[Block]
-			Return("939")
+			Return("doc_939")
 			;[End Block]
 		Case 33
 			;[Block]
-			Return("966")
+			Return("doc_966")
 			;[End Block]
 		Case 34
 			;[Block]
-			Return("970")
+			Return("doc_970")
 			;[End Block]
 		Case 35
 			;[Block]
-			Return("1025")
+			Return("doc_1025")
 			;[End Block]
 		Case 36
 			;[Block]
-			Return("1048")
+			Return("doc_1048")
 			;[End Block]
 		Case 37
 			;[Block]
-			Return("IR_1048_a")
+			Return("doc_IR_1048_a")
 			;[End Block]
 		Case 38
 			;[Block]
-			Return("1123")
+			Return("doc_1123")
 			;[End Block]
 		Case 39
 			;[Block]
-			Return("1162_ARC")
+			Return("doc_1162_ARC")
 			;[End Block]
 		Case 40
 			;[Block]
-			Return("1499")
+			Return("doc_1499")
 			;[End Block]
 	End Select
 End Function

@@ -6032,18 +6032,18 @@ Function UpdateGUI%()
 							;[End Block]
 					End Select
 					If Temp
-						If SelectedItem\State3 = 0.0
+						StrTemp = GetEReaderDocument(SelectedItem\State2)
+						If SelectedItem\ItemTemplate\Img2 = 0 And StrTemp <> ""
 							Local itt.ItemTemplates
 							
 							For itt.ItemTemplates = Each ItemTemplates
-								If Instr(itt\Name, "Document SCP") <> 0 Then itt\Found = True
+								If StripPath(itt\ImgPath) = StrTemp + ".png"
+									itt\Found = True
+									Exit
+								EndIf
 							Next
-							SelectedItem\State3 = 1.0
-						EndIf
-						
-						StrTemp = GetEReaderDocument(SelectedItem\State2)
-						If SelectedItem\ItemTemplate\Img2 = 0 And StrTemp <> ""
-							SelectedItem\ItemTemplate\Img2 = ResizeImageEx(LoadImage_Strict("GFX\Items\HUD Textures\doc_" + StrTemp + ".png"), MenuScale * 0.745, MenuScale * 0.745)
+							Scale = MenuScale * 0.745
+							SelectedItem\ItemTemplate\Img2 = ResizeImageEx(LoadImage_Strict("GFX\Items\HUD Textures\" + StrTemp + ".png"), Scale, Scale)
 							SelectedItem\ItemTemplate\Img2Width = ImageWidth(SelectedItem\ItemTemplate\Img2) / 2
 							SelectedItem\ItemTemplate\Img2Height = ImageHeight(SelectedItem\ItemTemplate\Img2) / 2
 							AdaptScreenGamma()
@@ -7341,9 +7341,7 @@ Function RenderGUI%()
 								EndIf
 							Else
 								TextEx(x + (70 * MenuScale), y + (94 * MenuScale), Str(Int(SelectedItem\State2)) + "/" + Str(TotalSCPDocumentsAmount))
-								If SelectedItem\ItemTemplate\Img2 <> 0
-									DrawBlock(SelectedItem\ItemTemplate\Img2, mo\Viewport_Center_X - SelectedItem\ItemTemplate\Img2Width, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\Img2Height - 13 * MenuScale)
-								EndIf
+								If SelectedItem\ItemTemplate\Img2 <> 0 Then DrawBlock(SelectedItem\ItemTemplate\Img2, mo\Viewport_Center_X - SelectedItem\ItemTemplate\Img2Width, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\Img2Height - 13 * MenuScale)
 							EndIf
 						EndIf
 					EndIf
