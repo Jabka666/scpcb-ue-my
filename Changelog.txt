@@ -9,6 +9,9 @@
 - Improved a lot of models.
 - Improved all icons.
 
+[NPCs]
+- Changed SCP-106's texture.
+
 [Bug Fixes]
 - Fixed SCP-079's voice lines overlapping.
 - Fixed SCP-427 not healing blue SCP-1025 effects.
