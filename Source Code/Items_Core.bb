@@ -372,7 +372,7 @@ Function GetRandDocument$()
 	End Select
 End Function
 
-Const TotalSCPDocumentsAmount% = 29
+Const TotalSCPDocumentsAmount% = 39
 
 Function GetEReaderDocument$(State%)
 	Select State
@@ -382,17 +382,41 @@ Function GetEReaderDocument$(State%)
 			;[End Block]
 		Case 1
 			;[Block]
-			Return("005")
+			Return("OBJC")
 			;[End Block]
 		Case 2
 			;[Block]
-			Return("008")
+			Return("SCL")
 			;[End Block]
 		Case 3
 			;[Block]
-			Return("012")
+			Return("O5(2)")
 			;[End Block]
 		Case 4
+			;[Block]
+			Return("MTF")
+			;[End Block]
+		Case 5
+			;[Block]
+			Return("MSP")
+			;[End Block]
+		Case 6
+			;[Block]
+			Return("NDP")
+			;[End Block]
+		Case 7
+			;[Block]
+			Return("005")
+			;[End Block]
+		Case 8
+			;[Block]
+			Return("008")
+			;[End Block]
+		Case 9
+			;[Block]
+			Return("012")
+			;[End Block]
+		Case 10
 			;[Block]
 			If I_035\Sad = 0
 				Return("035_smile")
@@ -400,103 +424,119 @@ Function GetEReaderDocument$(State%)
 				Return("035_sad")
 			EndIf
 			;[End Block]
-		Case 5
+		Case 11
 			;[Block]
 			Return("049")
 			;[End Block]
-		Case 6
+		Case 12
 			;[Block]
 			Return("066")
 			;[End Block]
-		Case 7
-			;[Block]
-			Return("079")
-			;[End Block]
-		Case 8
-			;[Block]
-			Return("096")
-			;[End Block]
-		Case 9
-			;[Block]
-			Return("106")
-			;[End Block]
-		Case 10
-			;[Block]
-			Return("173")
-			;[End Block]
-		Case 11
-			;[Block]
-			Return("205")
-			;[End Block]
-		Case 12
-			;[Block]
-			Return("372")
-			;[End Block]
 		Case 13
 			;[Block]
-			Return("409")
+			Return("IR_066")
 			;[End Block]
 		Case 14
 			;[Block]
-			Return("427")
+			Return("079")
 			;[End Block]
 		Case 15
 			;[Block]
-			Return("500")
+			Return("093_rm")
 			;[End Block]
 		Case 16
 			;[Block]
-			Return("513")
+			Return("096")
 			;[End Block]
 		Case 17
 			;[Block]
-			Return("682")
+			Return("106")
 			;[End Block]
 		Case 18
 			;[Block]
-			Return("714")
+			Return("IR_106")
 			;[End Block]
 		Case 19
 			;[Block]
-			Return("860")
+			Return("173")
 			;[End Block]
 		Case 20
 			;[Block]
-			Return("860_1")
+			Return("205")
 			;[End Block]
 		Case 21
 			;[Block]
-			Return("895")
+			Return("372")
 			;[End Block]
 		Case 22
 			;[Block]
-			Return("939")
+			Return("409")
 			;[End Block]
 		Case 23
 			;[Block]
-			Return("966")
+			Return("427")
 			;[End Block]
 		Case 24
 			;[Block]
-			Return("970")
+			Return("500")
 			;[End Block]
 		Case 25
 			;[Block]
-			Return("1025")
+			Return("513")
 			;[End Block]
 		Case 26
 			;[Block]
-			Return("1048")
+			Return("682")
 			;[End Block]
 		Case 27
 			;[Block]
-			Return("1123")
+			Return("714")
 			;[End Block]
 		Case 28
 			;[Block]
-			Return("1162_ARC")
+			Return("860")
 			;[End Block]
 		Case 29
+			;[Block]
+			Return("860_1")
+			;[End Block]
+		Case 30
+			;[Block]
+			Return("895")
+			;[End Block]
+		Case 31
+			;[Block]
+			Return("939")
+			;[End Block]
+		Case 32
+			;[Block]
+			Return("966")
+			;[End Block]
+		Case 33
+			;[Block]
+			Return("970")
+			;[End Block]
+		Case 34
+			;[Block]
+			Return("1025")
+			;[End Block]
+		Case 35
+			;[Block]
+			Return("1048")
+			;[End Block]
+		Case 36
+			;[Block]
+			Return("IR_1048_a")
+			;[End Block]
+		Case 37
+			;[Block]
+			Return("1123")
+			;[End Block]
+		Case 38
+			;[Block]
+			Return("1162_ARC")
+			;[End Block]
+		Case 39
 			;[Block]
 			Return("1499")
 			;[End Block]
