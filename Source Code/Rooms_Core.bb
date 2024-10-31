@@ -2862,7 +2862,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Wallet", it_wallet, r\x - 422.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 948.0 * RoomScale)
 			; ~ A hacky fix for wallet's model and icon
 			it\InvImg = it\ItemTemplate\InvImg
-			SetAnimTime(it\OBJ, 3.0)
+			SetAnimTime(it\OBJ, 4.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it2.Items = CreateItem("Mastercard", it_mastercard, 0.0, 0.0, 0.0)

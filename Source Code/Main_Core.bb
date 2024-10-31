@@ -4094,7 +4094,7 @@ Function UpdateGUI%()
 														Select SelectedItem\ItemTemplate\ID
 															Case it_key0, it_key0_bloody, it_key1, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_oldbadge, it_burntbadge, it_harnbadge
 																;[Block]
-																SetAnimTime(Inventory(MouseSlot)\OBJ, 3.0)
+																SetAnimTime(Inventory(MouseSlot)\OBJ, 4.0)
 																Inventory(MouseSlot)\InvImg = Inventory(MouseSlot)\ItemTemplate\InvImg
 																;[End Block]
 														End Select
