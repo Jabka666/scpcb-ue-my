@@ -9934,6 +9934,7 @@ Function Update1025%()
 									Case 7, 8
 										;[Block]
 										PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(0, 1) + ".ogg"))
+										me\SndVolume = Max(4.0, me\SndVolume)
 										;[End Block]
 								End Select
 							EndIf
