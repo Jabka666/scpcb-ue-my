@@ -565,21 +565,21 @@ Function UpdateGame%()
 		UpdateNVG()
 		UpdateGUI()
 		
-		If KeyHit(key\INVENTORY)
-			If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1
-				If InvOpen
-					StopMouseMovement()
-				Else
-					mo\DoubleClickSlot = -1
+		If (Not MenuOpen)
+			If KeyHit(key\INVENTORY)
+				If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1
+					If InvOpen
+						StopMouseMovement()
+					Else
+						mo\DoubleClickSlot = -1
+					EndIf
+					InvOpen = (Not InvOpen)
+					OtherOpen = Null
+					SelectedItem = Null
 				EndIf
-				InvOpen = (Not InvOpen)
-				OtherOpen = Null
-				SelectedItem = Null
 			EndIf
-		EndIf
-		
-		If KeyHit(key\SAVE)
-			If (Not MenuOpen)
+			
+			If KeyHit(key\SAVE)
 				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					Select CanSave
 						Case 0 ; ~ Scripted location
@@ -613,10 +613,10 @@ Function UpdateGame%()
 				Else
 					CreateHintMsg(GetLocalString("save", "disable"))
 				EndIf
+			ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
+				If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]), 6.0, True)
+				If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
 			EndIf
-		ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
-			If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]), 6.0, True)
-			If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
 		EndIf
 		UpdateAutoSave()
 		
@@ -6068,7 +6068,7 @@ Function UpdateGUI%()
 					;[End Block]
 			End Select
 			
-			If (mo\MouseHit2 Lor KeyHit(key\INVENTORY)) Lor me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Lor me\Zombie
+			If (Not (MenuOpen Lor ConsoleOpen)) And (mo\MouseHit2 Lor KeyHit(key\INVENTORY)) Lor me\Terminated Lor me\FallTimer < 0.0 Lor (Not me\Playable) Lor me\Zombie
 				Select SelectedItem\ItemTemplate\ID
 					Case it_firstaid, it_finefirstaid, it_firstaid2, it_cap, it_scp268, it_fine268, it_scp1499, it_fine1499, it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_helmet
 						;[Block]
