@@ -5713,7 +5713,7 @@ Function UpdateGUI%()
 						EndIf
 						
 						If RadioType < 2
-							If SelectedItem\State <= 20.0
+							If SelectedItem\State < 40.0
 								If BatMsgTimer >= 70.0
 									If (Not ChannelPlaying(LowBatteryCHN[0]))
 										me\SndVolume = Max(3.0, me\SndVolume)
@@ -5739,7 +5739,7 @@ Function UpdateGUI%()
 						SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.0025 + (0.0025 * (SelectedItem\ItemTemplate\ID = it_nav)))
 						
 						If SelectedItem\State > 0.0
-							If SelectedItem\State <= 20.0
+							If SelectedItem\State < 20.0
 								If BatMsgTimer >= 70.0
 									If (Not ChannelPlaying(LowBatteryCHN[0]))
 										me\SndVolume = Max(3.0, me\SndVolume)
@@ -6048,7 +6048,7 @@ Function UpdateGUI%()
 							SelectedItem\ItemTemplate\Img2Height = ImageHeight(SelectedItem\ItemTemplate\Img2) / 2
 							AdaptScreenGamma()
 						EndIf
-						If SelectedItem\State <= 20.0
+						If SelectedItem\State < 20.0
 							If BatMsgTimer >= 70.0
 								If (Not ChannelPlaying(LowBatteryCHN[0]))
 									me\SndVolume = Max(3.0, me\SndVolume)
@@ -6528,10 +6528,11 @@ Function RenderNVG%()
 			Color(255, 255, 255)
 			DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 2)
 		EndIf
-		For l = 0 To Min(Floor((wi\NVGPower + 50) * 0.01), 11.0)
+		k = Floor((wi\NVGPower + 50) * 0.01)
+		For l = 0 To Min(k, 11.0)
 			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((l * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
 		Next
-		If wi\NVGPower < 160
+		If k < 3
 			If BatMsgTimer >= 70.0
 				Color(255, 0, 0)
 				SetFontEx(fo\FontID[Font_Digital])
@@ -7148,14 +7149,16 @@ Function RenderGUI%()
 								y = y + (419 * MenuScale)
 								
 								; ~ Battery
-								Color(30, 30, 30)
 								If SelectedItem\ItemTemplate\ID = it_radio Lor SelectedItem\ItemTemplate\ID = it_18vradio
+									n = Ceil(SelectedItem\State / 20.0)
+									Color(70 * (n < 3) + 30, 30 * (n < 3), 30 * (n < 3))
 									For i = 0 To 4
-										Rect(x, y + ((8 * i) * MenuScale), (43 * MenuScale) - ((i * 6) * MenuScale), 4 * MenuScale, Ceil(SelectedItem\State / 20.0) > 4 - i )
+										Rect(x, y + ((8 * i) * MenuScale), (43 * MenuScale) - ((i * 6) * MenuScale), 4 * MenuScale, n > (4 - i))
 									Next
 								EndIf
 								
 								SetFontEx(fo\FontID[Font_Digital])
+								Color(30, 30, 30)
 								TextEx(x + (60 * MenuScale), y, GetLocalString("radio", "chn"))
 								
 								If SelectedItem\ItemTemplate\ID = it_veryfineradio
@@ -7297,12 +7300,10 @@ Function RenderGUI%()
 									yTemp = y - NAV_HEIGHT_HALF + (10 * MenuScale)
 									
 									; ~ Battery
-									Color(70 * Offline + 30, 30 * Offline, 30 * Offline)
+									n = Ceil(SelectedItem\State / 10.0)
+									Color(70 * (n < 3) + 30, 30 * (n < 3), 30 * (n < 3))
 									Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
-									
-									Temp = (SelectedItem\State <= 20.0)
-									Color(70 * Temp + 30, 30 * Temp, 30 * Temp)
-									For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10)
+									For i = 1 To Min(n, 10)
 										Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 									Next
 								EndIf
@@ -7323,12 +7324,10 @@ Function RenderGUI%()
 						DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 						If SelectedItem\State > 0.0
 							; ~ Battery
-							Color(30, 30, 30)
+							n = Ceil(SelectedItem\State / 10.0)
+							Color(70 * (n < 3) + 30, 30 * (n < 3), 30 * (n < 3))
 							Rect(x + (406 * MenuScale), y + (90 * MenuScale), 80 * MenuScale, 20 * MenuScale, False)
-							
-							Temp = (SelectedItem\State <= 20.0)
-							Color(70 * Temp + 30, 30 * Temp, 30 * Temp)
-							For i = 1 To Min(Ceil(SelectedItem\State / 10.0), 10)
+							For i = 1 To Min(n, 10)
 								Rect(x + ((i * 8) * MenuScale) + (400 * MenuScale), y + (94 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 							Next
 							
