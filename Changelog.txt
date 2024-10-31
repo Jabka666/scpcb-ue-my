@@ -6,7 +6,7 @@
 
 - Polydactyly injures the player now. (+ 1.5 injuries)
 - Better textures for some items.
-- Improved some models.
+- Improved a lot of models.
 
 [Bug Fixes]
 - Fixed SCP-079's voice lines overlapping.
