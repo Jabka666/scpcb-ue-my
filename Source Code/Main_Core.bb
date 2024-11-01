@@ -6168,7 +6168,7 @@ Function RenderHUD%()
 	
 	Color(255, 255, 255)
 	y = y - ySpace
-	If me\BlinkTimer < 150.0
+	If me\BlinkTimer < 210.0
 		RenderBar(t\ImageID[1], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
