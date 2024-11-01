@@ -11,6 +11,7 @@
 
 [NPCs]
 - Changed SCP-106's texture.
+- Reduced SCP-066's damage.
 
 [Bug Fixes]
 - Fixed SCP-079's voice lines overlapping.
