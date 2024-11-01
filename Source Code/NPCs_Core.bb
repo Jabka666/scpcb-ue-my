@@ -3758,7 +3758,7 @@ Function UpdateNPCs%()
 							EndIf
 							
 							PointEntity(n\OBJ, PlayerRoom\Objects[n\State2])
-							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0 - (SelectedDifficulty\OtherFactors * 2.0)), 0.0)
+							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 20.0), 0.0)
 							
 							If Dist < 0.16
 								n\State2 = n\State2 + 1.0
@@ -3816,7 +3816,7 @@ Function UpdateNPCs%()
 								EndIf
 								
 								Angle = VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider))
-								RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 15.0 - (SelectedDifficulty\OtherFactors * 1.5)), 0.0)
+								RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
 								
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
