@@ -4,6 +4,8 @@
 - Added E-Reader.
 - Added bloody version of Level 0 Key Card.
 
+- Updated some SCP-1025 pages.
+
 - Polydactyly injures the player now. (+ 1.5 injuries)
 - Better textures for some items.
 - Improved a lot of models.
