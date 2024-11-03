@@ -7319,7 +7319,6 @@ Function UpdateDimension106%()
 							EndIf
 						EndIf
 						If EntityDistanceSquared(me\Collider, e\room\OBJ) > PowTwo(-1200.0 * RoomScale)
-							Random = Rand(30)
 							For e2.Events = Each Events
 								If e2\EventID = e_cont1_005
 									If e2\EventState = 1.0 Then Random = 31
@@ -7376,7 +7375,7 @@ Function UpdateDimension106%()
 						
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)
-								Random = Rand(11, 30)
+								Random = Rand(13, 30)
 								Teleport = True
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
@@ -7538,7 +7537,7 @@ Function UpdateDimension106%()
 						If EntityY(me\Collider) < 24.5
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-							Random = 13
+							Random = 17
 							Teleport = True
 						EndIf
 						;[End Block]
@@ -7608,7 +7607,7 @@ Function UpdateDimension106%()
 									EndIf
 								Next
 								If (Not RoomExist)
-									Random = Rand(16, 22)
+									Random = 19
 									Teleport = True
 								EndIf
 							EndIf
@@ -7696,7 +7695,7 @@ Function UpdateDimension106%()
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							; ~ Player is at the exit
 							If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
-								Random = Rand(11, 30)
+								Random = Rand(13, 30)
 								Teleport = True
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
@@ -7736,7 +7735,7 @@ Function UpdateDimension106%()
 					n_I\Curr106\State = 250.0 : n_I\Curr106\Idle = 1
 					
 					Select Random
-						Case 1, 2, 3, 4 ; ~ Rotate the player and close by the wall
+						Case 1, 2, 3, 4, 5 ; ~ Rotate the player and close by the wall
 							;[Block]
 							PlaySound_Strict(snd_I\SCP106SFX[3], True)
 							
@@ -7754,7 +7753,7 @@ Function UpdateDimension106%()
 							FreeEntity(Pvt) : Pvt = 0
 							e\EventState2 = PD_StartRoom
 							;[End Block]
-						Case 5, 6, 7, 8, 9, 10 ; ~ The 4-way room
+						Case 6, 7, 8, 9, 10, 11, 12 ; ~ The 4-way room
 							;[Block]
 							PlaySound_Strict(snd_I\SCP106SFX[3], True)
 							
@@ -7767,7 +7766,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_FourWayRoom
 							;[End Block]
-						Case 11, 12 ; ~ Middle of the large starting room
+						Case 13, 14, 15, 16 ; ~ Middle of the large starting room
 							;[Block]
 							PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
 							ResetEntity(me\Collider)
@@ -7775,7 +7774,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_StartRoom
 							;[End Block]
-						Case 13, 14, 15 ; ~ The exit room
+						Case 17, 18 ; ~ The exit room
 							;[Block]
 							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y + 16.0 - 304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 							ResetEntity(me\Collider)
@@ -7788,7 +7787,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_ExitRoom
 							;[End Block]
-						Case 16, 17, 18, 19, 20, 21, 22
+						Case 19, 20, 21, 22, 23 ; ~ Random exiting
 							;[Block]
 							Local RoomID% = -1
 							Local LCZ% = False
@@ -7796,7 +7795,7 @@ Function UpdateDimension106%()
 							Select Rand(7)
 								Case 1
 									;[Block]
-									RoomID = r_cont1_914
+									RoomID = r_room4_ic
 									LCZ = True
 									;[End Block]
 								Case 2
@@ -7880,7 +7879,7 @@ Function UpdateDimension106%()
 							EndIf
 							e\EventState2 = PD_StartRoom
 							;[End Block]
-						Case 23, 24, 25, 26 ; ~ The tower room
+						Case 24, 25, 26, 27 ; ~ The tower room
 							;[Block]
 							PositionEntity(me\Collider, EntityX(e\room\Objects[12], True), 0.6, EntityZ(e\room\Objects[12], True))
 							ResetEntity(me\Collider)
@@ -7888,7 +7887,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 15.0
 							e\EventState2 = PD_TowerRoom
 							;[End Block]
-						Case 27, 28, 29, 30 ; ~ The fake HCZ tunnel
+						Case 28, 29, 30 ; ~ The fake HCZ tunnel
 							;[Block]
 							PlaySound_Strict(snd_I\SCP106SFX[3], True)
 							
@@ -7898,7 +7897,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_FakeTunnelRoom
 							;[End Block]
-						Case 31
+						Case 31 ; ~ Labyrinth
 							;[Block]
 							PlaySound_Strict(snd_I\SCP106SFX[3], True)
 							
@@ -7913,7 +7912,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_Labyrinth
 							;[End Block]
-						Case 32
+						Case 32 ; ~ Exit back to SCP-005
 							;[Block]
 							RoomExist = False
 							For r.Rooms = Each Rooms
