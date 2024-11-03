@@ -2830,10 +2830,8 @@ Function UpdateMoving%()
 			
 			ResetEntity(me\Collider)
 		Else
-			If I_1025\FineState[3] = 0.0
-				Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
-				If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0) ; ~ Find way to cap minimum speed or something later
-			EndIf
+			Temp2 = Temp2 / Max((me\Injuries + 3.0 - (2.25 * (I_1025\FineState[3] > 0.0))) / 3.0, 1.0)
+			If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0) ; ~ Find way to cap minimum speed or something later
 			Temp = False
 			me\Lean = CurveValue(0.0, me\Lean, 12.0)
 			If me\Playable And me\FallTimer >= 0.0 And (Not me\Terminated)
@@ -3043,7 +3041,7 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6
-		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (I_1025\FineState[3] = 0.0)) + 0.25, 3.0), 8.0), -8.0) + me\Lean
+		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (1.0 - (0.75 * (I_1025\FineState[3] > 0.0)))) + 0.25, 3.0), 8.0), -8.0) + me\Lean
 		
 		RotateEntity(Camera, EntityPitch(me\Collider), EntityYaw(me\Collider), Roll / 2.0)
 		
