@@ -117,6 +117,9 @@ Function ResizeImageEx%(SrcImage%, ScaleX#, ScaleY#)
 	Local SrcHeight% = ImageHeight(SrcImage)
 	Local DestWidth% = Floor(SrcWidth * ScaleX)
 	Local DestHeight% = Floor(SrcHeight * ScaleY)
+	
+	If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return(SrcImage)
+	
     Local DestImg% = CreateImage(DestWidth, DestHeight)
 	Local BufferBack% = BackBuffer()
 	
