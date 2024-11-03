@@ -2832,7 +2832,7 @@ Function UpdateMoving%()
 		Else
 			If I_1025\FineState[3] = 0.0
 				Temp2 = Temp2 / Max((me\Injuries + 3.0) / 3.0, 1.0)
-				If me\Injuries > 0.5 Then Temp2 = Max(Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0), 0.005)
+				If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0) ; ~ Find way to cap minimum speed or something later
 			EndIf
 			Temp = False
 			me\Lean = CurveValue(0.0, me\Lean, 12.0)
