@@ -4211,7 +4211,7 @@ Function UpdateSecurityCams%()
 								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 							EndIf
 						ElseIf (Not Temp)
-							If sc\PlayerState = 0 Then sc\PlayerState = Rand(60000, 65000) - (20000 * SelectedDifficulty\AggressiveNPCs)
+							If sc\PlayerState = 0 Then sc\PlayerState = Rand(50000, 55000) - (20000 * SelectedDifficulty\AggressiveNPCs)
 							If Rand(500) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_079_OVERLAY_2, MONITOR_079_OVERLAY_7)])
 							If (MilliSec Mod sc\PlayerState) >= Rand(600)
 								EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
