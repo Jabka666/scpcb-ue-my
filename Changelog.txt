@@ -3,7 +3,7 @@
 [GlobaL]
 - Reduced the chances of escaping the Pocket Dimension and the fake tunnel.
 - Blink meter turns red sooner when low.
-- 
+- SCP-079 is more likely to hack monitors with SCP-895.
 
 [Items]
 - Added E-Reader.
@@ -22,7 +22,7 @@
 [NPCs]
 - Changed SCP-106's texture.
 - Reduced SCP-066's damage.
-- SCp-049 speaks sooner when trying to take off SCP-714 or the Hazmat Suit.
+- SCP-049 speaks sooner when trying to take off SCP-714 or the Hazmat Suit.
 - SCP-939 chase turn speed increased.
 - Tourette's syndrome alerts NPCs.
 
