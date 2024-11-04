@@ -3112,6 +3112,9 @@ Function UpdateEvents%()
 			Case e_room2_6_ez_789_j
 				;[Block]
 				If e\room\Objects[0] = 0
+					TFormPoint(502.0, 128.0, 83.0, e\room\OBJ, 0)
+					it.Items = CreateItem("Document SCP-789-J", it_paper, TFormedX(), TFormedY(), TFormedZ())
+					EntityType(it\Collider, HIT_ITEM)
 					TFormPoint(1072.0, 50.0, 0.0, e\room\OBJ, 0)
 					e\room\Objects[0] = CreatePivot()
 					PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ())
