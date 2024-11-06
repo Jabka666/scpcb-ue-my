@@ -1845,7 +1845,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Black Severed Hand", it_hand2, r\x + xTemp * RoomScale, r\y - 5496.0 * RoomScale, r\z + zTemp * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 1 Key Card", it_key1, r\x + 3370.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 6201.0 * RoomScale)
+			it.Items = CreateItem("Level 1 Key Card", it_key1_bloody, r\x + 3370.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 6201.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x + 1248.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 981.0 * RoomScale)
