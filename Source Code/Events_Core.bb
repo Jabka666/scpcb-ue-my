@@ -1404,7 +1404,7 @@ Function UpdateEvents%()
 								;[Block]
 								If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[1], True), EntityZ(me\Collider), EntityZ(e\room\Objects[1], True)) < 7.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 									If Rand(100) = 1
-										InjurePlayer(Rnd(0.3, 0.6), 0.0, 300.0)
+										InjurePlayer(Rnd(0.3, 0.6), 0.0, 300.0, 0.12, 0.06)
 										PlaySound_Strict(snd_I\DamageSFX[Rand(2, 3)])
 										me\CameraShake = 0.5 * (I_1025\FineState[3] = 0.0)
 										
