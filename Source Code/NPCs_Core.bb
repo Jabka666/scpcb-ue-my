@@ -5918,7 +5918,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr066
-							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+							n\State2 = 70.0 * 10.0 ; ~ Give up after 15 seconds
 							n\State3 = 0.0
 							n\State = MTF_049_066_106_SPOTTED
 							Return
@@ -6307,11 +6307,11 @@ Function UpdateMTFUnit%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
-					If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * 15.0
+					If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * (15.0 - (5.0 * (n\Target = n_I\Curr066)))
 					If n\State2 > 70.0 And Dist > PowTwo(HideDistance) Then n\State2 = 70.0
 					
 					; ~ Set a timer to step back
-					If Dist < (9.0 - (n\Target = n_I\Curr066) * 8.0) Then n\State3 = 70.0 * 3.0
+					If Dist < 9.0 And n\Target <> n_I\Curr066 Then n\State3 = 70.0 * 3.0
 					If n\State3 > 0.0
 						n\Speed = 0.02
 						n\PathStatus = PATH_STATUS_NO_SEARCH
