@@ -2142,7 +2142,6 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
-							If (Not me\Terminated)
 								n\CurrSpeed = 0.0
 								If n\Target = Null
 									PointEntity(n\Collider, me\Collider)
@@ -2165,14 +2164,14 @@ Function UpdateNPCs%()
 										Attack = (n\Frame >= 839.0 And PrevFrame < 839.0)
 										If n\Frame > 877.9
 											SetNPCFrame(n, 705.0)
-											n\State = 2.0
+											n\State = 2.0 + me\Terminated
 										EndIf
 									Else
 										AnimateNPC(n, 879.0, 943.0, 0.4, False)
 										Attack = (n\Frame >= 900.0 And PrevFrame < 900.0)
 										If n\Frame > 942.9
 											SetNPCFrame(n, 705.0)
-											n\State = 2.0
+											n\State = 2.0 + me\Terminated
 										EndIf
 									EndIf
 									If Attack
@@ -2206,7 +2205,6 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-							EndIf
 							If n\Target <> Null
 								If n\Target\IsDead
 									n\State = 3.0
