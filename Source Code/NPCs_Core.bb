@@ -1784,7 +1784,7 @@ Function UpdateNPCs%()
 									Else ; ~ Stands still and tries to find a path
 										n\PathTimer = n\PathTimer + fps\Factor[0]
 										n\CurrSpeed = 0.0
-										If n\PathTimer > 70.0 * (5.0 - (2.0 * SelectedDifficulty\AggressiveNPCs))
+										If n\PathTimer > 70.0 * (4.0 - (2.0 * SelectedDifficulty\AggressiveNPCs))
 											n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 											n\PathTimer = 0.0
 											n\State3 = 0.0
@@ -2142,7 +2142,6 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
-							If (Not me\Terminated)
 								n\CurrSpeed = 0.0
 								If n\Target = Null
 									PointEntity(n\Collider, me\Collider)
@@ -2165,21 +2164,21 @@ Function UpdateNPCs%()
 										Attack = (n\Frame >= 839.0 And PrevFrame < 839.0)
 										If n\Frame > 877.9
 											SetNPCFrame(n, 705.0)
-											n\State = 2.0
+											n\State = 2.0 + me\Terminated
 										EndIf
 									Else
 										AnimateNPC(n, 879.0, 943.0, 0.4, False)
 										Attack = (n\Frame >= 900.0 And PrevFrame < 900.0)
 										If n\Frame > 942.9
 											SetNPCFrame(n, 705.0)
-											n\State = 2.0
+											n\State = 2.0 + me\Terminated
 										EndIf
 									EndIf
 									If Attack
 										If n\Target = Null
 											If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 												PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
-												InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, 0.3 * DifficultyDMGMult, 0.2)
+												InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, 0.3 * DifficultyDMGMult, 0.125 * DifficultyDMGMult)
 												me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 												
 												If me\Injuries > 3.0
@@ -2206,7 +2205,6 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-							EndIf
 							If n\Target <> Null
 								If n\Target\IsDead
 									n\State = 3.0
@@ -3331,7 +3329,7 @@ Function UpdateNPCs%()
 													me\Injuries = me\Injuries + Rnd(0.5)
 												Else
 													PlaySound_Strict(snd_I\DamageSFX[Rand(9, 10)])
-													InjurePlayer(Rnd(0.75, 1.15) * DifficultyDMGMult, 0.0, 100.0, 0.4 * DifficultyDMGMult, 0.2)
+													InjurePlayer(Rnd(0.75, 1.15) * DifficultyDMGMult, 0.0, 100.0, 0.4 * DifficultyDMGMult, 0.175 * DifficultyDMGMult)
 													
 													If me\Injuries > 3.0
 														If PlayerRoom\RoomTemplate\RoomID = r_room2_ez
@@ -4346,7 +4344,7 @@ Function UpdateNPCs%()
 									If (n\Frame > 470.0 And PrevFrame <= 470.0) Lor (n\Frame > 500.0 And PrevFrame <= 500.0) Lor (n\Frame > 527.0 And PrevFrame <= 527.0)
 										If Dist < 0.81
 											PlaySoundEx(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
-											InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult)
+											InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult, 0.1 * DifficultyDMGMult)
 											me\CameraShake = 1.8 * (I_1025\FineState[3] = 0.0)
 											If me\Injuries > 10.0
 												msg\DeathMsg = Format(GetLocalString("death", "966"), SubjectName)
@@ -4688,7 +4686,7 @@ Function UpdateNPCs%()
 									PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 								Else
 									PlaySoundEx(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
-									InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, 0.35 * DifficultyDMGMult, 0.2)
+									InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, 0.35 * DifficultyDMGMult, 0.15 * DifficultyDMGMult)
 									me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 									
 									If me\Injuries > 10.0
@@ -4914,7 +4912,7 @@ Function UpdateNPCs%()
 									If n\Target = Null
 										If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
 											PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
-											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.2)
+											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
 											me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 											
 											If me\Injuries > 3.0
@@ -5552,72 +5550,81 @@ Function UpdateMTFUnit%(n.NPCs)
 					
 					For n2.NPCs = Each NPCs
 						If (Not n2\IsDead)
-							If n2\NPCType = NPCType049_2
-								If NPCSeesNPC(n2, n) = 1
-									If MyBoss = Null
-										LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
-										PlayMTFSound(n\Sound, n)
+							Select n\NPCType
+								Case NPCType049_2
+									;[Block]
+									If NPCSeesNPC(n2, n) = 1
+										If MyBoss = Null
+											LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
+											PlayMTFSound(n\Sound, n)
+										EndIf
+										
+										n\EnemyX = EntityX(n2\Collider, True)
+										n\EnemyY = EntityY(n2\Collider, True)
+										n\EnemyZ = EntityZ(n2\Collider, True)
+										n\PathTimer = 0.0
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\Target = n2
+										n\Reload = 70.0 * 4.0
+										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State3 = 0.0
+										n\State = MTF_ZOMBIES_SPOTTED
+										Return
+										Exit
 									EndIf
-									
-									n\EnemyX = EntityX(n2\Collider, True)
-									n\EnemyY = EntityY(n2\Collider, True)
-									n\EnemyZ = EntityZ(n2\Collider, True)
-									n\PathTimer = 0.0
-									n\PathStatus = PATH_STATUS_NO_SEARCH
-									n\Target = n2
-									n\Reload = 70.0 * 4.0
-									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-									n\State3 = 0.0
-									n\State = MTF_ZOMBIES_SPOTTED
-									Return
-									Exit
-								EndIf
-							ElseIf n2\NPCType = NPCType008_1
-								If NPCSeesNPC(n2, n) = 1
-									n\EnemyX = EntityX(n2\Collider, True)
-									n\EnemyY = EntityY(n2\Collider, True)
-									n\EnemyZ = EntityZ(n2\Collider, True)
-									n\PathTimer = 0.0
-									n\PathStatus = PATH_STATUS_NO_SEARCH
-									n\Target = n2
-									n\Reload = 70.0 * 3.0
-									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-									n\State3 = 0.0
-									n\State = MTF_ZOMBIES_SPOTTED
-									Return
-									Exit
-								EndIf
-							ElseIf n2\NPCType = NPCType035_Tentacle
-								If NPCSeesNPC(n2, n) = 1
-									n\EnemyX = EntityX(n2\Collider, True)
-									n\EnemyY = EntityY(n2\Collider, True)
-									n\EnemyZ = EntityZ(n2\Collider, True)
-									n\PathTimer = 0.0
-									n\PathStatus = PATH_STATUS_NO_SEARCH
-									n\Target = n2
-									n\Reload = 70.0 * 3.0
-									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-									n\State3 = 0.0
-									n\State = MTF_ZOMBIES_SPOTTED
-									Return
-									Exit
-								EndIf
-							ElseIf n2\NPCType = NPCType1048_A
-								If NPCSeesNPC(n2, n) = 1
-									n\EnemyX = EntityX(n2\Collider, True)
-									n\EnemyY = EntityY(n2\Collider, True)
-									n\EnemyZ = EntityZ(n2\Collider, True)
-									n\PathTimer = 0.0
-									n\PathStatus = PATH_STATUS_NO_SEARCH
-									n\Target = n2
-									n\Reload = 70.0 * 3.0
-									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-									n\State3 = 0.0
-									n\State = MTF_ZOMBIES_SPOTTED
-									Return
-									Exit
-								EndIf
-							EndIf
+									;[End Block]
+								Case NPCType008_1
+									;[Block]
+									If NPCSeesNPC(n2, n) = 1
+										n\EnemyX = EntityX(n2\Collider, True)
+										n\EnemyY = EntityY(n2\Collider, True)
+										n\EnemyZ = EntityZ(n2\Collider, True)
+										n\PathTimer = 0.0
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\Target = n2
+										n\Reload = 70.0 * 3.0
+										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State3 = 0.0
+										n\State = MTF_ZOMBIES_SPOTTED
+										Return
+										Exit
+									EndIf
+									;[End Block]
+								Case NPCType035_Tentacle
+									;[Block]
+									If NPCSeesNPC(n2, n) = 1
+										n\EnemyX = EntityX(n2\Collider, True)
+										n\EnemyY = EntityY(n2\Collider, True)
+										n\EnemyZ = EntityZ(n2\Collider, True)
+										n\PathTimer = 0.0
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\Target = n2
+										n\Reload = 70.0 * 3.0
+										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State3 = 0.0
+										n\State = MTF_ZOMBIES_SPOTTED
+										Return
+										Exit
+									EndIf
+									;[End Block]
+								Case NPCType1048_A
+									;[Block]
+									If NPCSeesNPC(n2, n) = 1
+										n\EnemyX = EntityX(n2\Collider, True)
+										n\EnemyY = EntityY(n2\Collider, True)
+										n\EnemyZ = EntityZ(n2\Collider, True)
+										n\PathTimer = 0.0
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\Target = n2
+										n\Reload = 70.0 * 3.0
+										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State3 = 0.0
+										n\State = MTF_ZOMBIES_SPOTTED
+										Return
+										Exit
+									EndIf
+									;[End Block]
+							End Select
 						EndIf
 					Next
 					n\MTFUpdateTimer = fps\Factor[0] * 45.0
@@ -5911,7 +5918,7 @@ Function UpdateMTFUnit%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr066
-							n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+							n\State2 = 70.0 * 10.0 ; ~ Give up after 15 seconds
 							n\State3 = 0.0
 							n\State = MTF_049_066_106_SPOTTED
 							Return
@@ -6300,11 +6307,11 @@ Function UpdateMTFUnit%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
-					If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * 15.0
+					If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * (15.0 - (5.0 * (n\Target = n_I\Curr066)))
 					If n\State2 > 70.0 And Dist > PowTwo(HideDistance) Then n\State2 = 70.0
 					
 					; ~ Set a timer to step back
-					If Dist < (9.0 - (n\Target = n_I\Curr066) * 8.0) Then n\State3 = 70.0 * 3.0
+					If Dist < 9.0 And n\Target <> n_I\Curr066 Then n\State3 = 70.0 * 3.0
 					If n\State3 > 0.0
 						n\Speed = 0.02
 						n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -7443,7 +7450,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 				Else
 					If (Not n\Path[n\PathLocation]\door\Open)
 						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
-						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 3.0
+						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 2.5
 					EndIf
 				EndIf
 			EndIf

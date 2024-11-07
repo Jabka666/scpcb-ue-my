@@ -1,12 +1,26 @@
 {v1.3.5}
 
+[GlobaL]
+- Reduced the chances of escaping the Pocket Dimension and the fake tunnel.
+- Blink meter turns red sooner when low.
+- SCP-079 is more likely to hack monitors with SCP-895.
+
+[Rooms]
+- Improved ambience for «cont2_008».
+- Level 3 Key Card in «cont1_205» is now bloody.
+
 [Items]
 - Added E-Reader.
-- Added bloody version of Level 0 Key Card.
+- Added SCP-789-J document.
+- Added bloody version of Level 0 Key Card and Level 1 Key Card.
+- SCP-1025 changes:
+	- Updated some SCP-1025 pages.
+	- Polydactyly injures the player now. (+1.5 injuries)
+	- Reduced analgesia's injury speed reduction resistance from 100% -> 75%
+	- Increased chance to obtain blue SCP-1025: 20% -> 25%
+	
+- Rebalance ballistic helmet.
 
-- Updated some SCP-1025 pages.
-
-- Polydactyly injures the player now. (+ 1.5 injuries)
 - Better textures for some items.
 - Improved a lot of models.
 - Improved all icons.
@@ -14,11 +28,19 @@
 [NPCs]
 - Changed SCP-106's texture.
 - Reduced SCP-066's damage.
+- SCP-049 speaks sooner when trying to take off SCP-714 or the Hazmat Suit.
+- Reduced SCP-049's idle timer to 4 seconds.
+- SCP-049 closes doors sooner.
+- SCP-939 chase turn speed increased.
+- Tourette's syndrome alerts NPCs.
 
 [Bug Fixes]
 - Fixed SCP-079's voice lines overlapping.
 - Fixed SCP-427 not healing blue SCP-1025 effects.
 - Fixed the ability to close/open inventory in the pause menu.
+- Fixed messages overlapping the SCP-1025 pages.
+- Fixed ability to slowly move during usage of a first aid kit.
+- Fixed SCP-049 getting stuck on SCP-895's stairs.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 
