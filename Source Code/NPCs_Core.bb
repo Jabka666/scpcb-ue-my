@@ -2112,11 +2112,11 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If Dist > PowTwo(HideDistance * 2.0)
-								If n\IdleTimer < 70.0
+								If n\IdleTimer < 70.0 * 15.0
 									n\IdleTimer = n\IdleTimer + fps\Factor[0]
-								Else
-									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1 Then TeleportCloser(n)
-									 n\IdleTimer = 0.0
+								ElseIf Rand(300 - (120 * SelectedDifficulty\AggressiveNPCs)) = 1
+									If PlayerInReachableRoom() Then TeleportCloser(n)
+									n\IdleTimer = 0.0
 								EndIf
 							Else
 								n\IdleTimer = 0.0
@@ -4869,10 +4869,10 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If Dist > PowTwo(HideDistance * 1.5)
-								If n\IdleTimer < 70.0
+								If n\IdleTimer < 70.0 * 15.0
 									n\IdleTimer = n\IdleTimer + fps\Factor[0]
-								Else
-									If Rand(25 - (10 * SelectedDifficulty\AggressiveNPCs)) = 1 Then TeleportCloser(n)
+								ElseIf Rand(150 - (60 * SelectedDifficulty\AggressiveNPCs)) = 1
+									If PlayerInReachableRoom() Then TeleportCloser(n)
 									n\IdleTimer = 0.0
 								EndIf
 							Else
