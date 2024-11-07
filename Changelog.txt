@@ -5,15 +5,21 @@
 - Blink meter turns red sooner when low.
 - SCP-079 is more likely to hack monitors with SCP-895.
 
+[Rooms]
+- Improved ambience for «cont2_008».
+- Level 3 Key Card in «cont1_205» is now bloody.
+
 [Items]
 - Added E-Reader.
-- Added bloody version of Level 0 Key Card.
-- Level 3 Key Card in «cont1_205» is now bloody.
+- Added SCP-789-J document.
+- Added bloody version of Level 0 Key Card and Level 1 Key Card.
 - SCP-1025 changes:
 	- Updated some SCP-1025 pages.
 	- Polydactyly injures the player now. (+1.5 injuries)
 	- Reduced analgesia's injury speed reduction resistance from 100% -> 75%
 	- Increased chance to obtain blue SCP-1025: 20% -> 25%
+	
+- Rebalance ballistic helmet.
 
 - Better textures for some items.
 - Improved a lot of models.
