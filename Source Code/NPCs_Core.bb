@@ -5550,72 +5550,81 @@ Function UpdateMTFUnit%(n.NPCs)
 					
 					For n2.NPCs = Each NPCs
 						If (Not n2\IsDead)
-							If n2\NPCType = NPCType049_2
-								If NPCSeesNPC(n2, n) = 1
-									If MyBoss = Null
-										LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
-										PlayMTFSound(n\Sound, n)
+							Select n\NPCType
+								Case NPCType049_2
+									;[Block]
+									If NPCSeesNPC(n2, n) = 1
+										If MyBoss = Null
+											LoadNPCSound(n, "SFX\Character\MTF\049_2\Spotted.ogg")
+											PlayMTFSound(n\Sound, n)
+										EndIf
+										
+										n\EnemyX = EntityX(n2\Collider, True)
+										n\EnemyY = EntityY(n2\Collider, True)
+										n\EnemyZ = EntityZ(n2\Collider, True)
+										n\PathTimer = 0.0
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\Target = n2
+										n\Reload = 70.0 * 4.0
+										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State3 = 0.0
+										n\State = MTF_ZOMBIES_SPOTTED
+										Return
+										Exit
 									EndIf
-									
-									n\EnemyX = EntityX(n2\Collider, True)
-									n\EnemyY = EntityY(n2\Collider, True)
-									n\EnemyZ = EntityZ(n2\Collider, True)
-									n\PathTimer = 0.0
-									n\PathStatus = PATH_STATUS_NO_SEARCH
-									n\Target = n2
-									n\Reload = 70.0 * 4.0
-									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-									n\State3 = 0.0
-									n\State = MTF_ZOMBIES_SPOTTED
-									Return
-									Exit
-								EndIf
-							ElseIf n2\NPCType = NPCType008_1
-								If NPCSeesNPC(n2, n) = 1
-									n\EnemyX = EntityX(n2\Collider, True)
-									n\EnemyY = EntityY(n2\Collider, True)
-									n\EnemyZ = EntityZ(n2\Collider, True)
-									n\PathTimer = 0.0
-									n\PathStatus = PATH_STATUS_NO_SEARCH
-									n\Target = n2
-									n\Reload = 70.0 * 3.0
-									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-									n\State3 = 0.0
-									n\State = MTF_ZOMBIES_SPOTTED
-									Return
-									Exit
-								EndIf
-							ElseIf n2\NPCType = NPCType035_Tentacle
-								If NPCSeesNPC(n2, n) = 1
-									n\EnemyX = EntityX(n2\Collider, True)
-									n\EnemyY = EntityY(n2\Collider, True)
-									n\EnemyZ = EntityZ(n2\Collider, True)
-									n\PathTimer = 0.0
-									n\PathStatus = PATH_STATUS_NO_SEARCH
-									n\Target = n2
-									n\Reload = 70.0 * 3.0
-									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-									n\State3 = 0.0
-									n\State = MTF_ZOMBIES_SPOTTED
-									Return
-									Exit
-								EndIf
-							ElseIf n2\NPCType = NPCType1048_A
-								If NPCSeesNPC(n2, n) = 1
-									n\EnemyX = EntityX(n2\Collider, True)
-									n\EnemyY = EntityY(n2\Collider, True)
-									n\EnemyZ = EntityZ(n2\Collider, True)
-									n\PathTimer = 0.0
-									n\PathStatus = PATH_STATUS_NO_SEARCH
-									n\Target = n2
-									n\Reload = 70.0 * 3.0
-									n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
-									n\State3 = 0.0
-									n\State = MTF_ZOMBIES_SPOTTED
-									Return
-									Exit
-								EndIf
-							EndIf
+									;[End Block]
+								Case NPCType008_1
+									;[Block]
+									If NPCSeesNPC(n2, n) = 1
+										n\EnemyX = EntityX(n2\Collider, True)
+										n\EnemyY = EntityY(n2\Collider, True)
+										n\EnemyZ = EntityZ(n2\Collider, True)
+										n\PathTimer = 0.0
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\Target = n2
+										n\Reload = 70.0 * 3.0
+										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State3 = 0.0
+										n\State = MTF_ZOMBIES_SPOTTED
+										Return
+										Exit
+									EndIf
+									;[End Block]
+								Case NPCType035_Tentacle
+									;[Block]
+									If NPCSeesNPC(n2, n) = 1
+										n\EnemyX = EntityX(n2\Collider, True)
+										n\EnemyY = EntityY(n2\Collider, True)
+										n\EnemyZ = EntityZ(n2\Collider, True)
+										n\PathTimer = 0.0
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\Target = n2
+										n\Reload = 70.0 * 3.0
+										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State3 = 0.0
+										n\State = MTF_ZOMBIES_SPOTTED
+										Return
+										Exit
+									EndIf
+									;[End Block]
+								Case NPCType1048_A
+									;[Block]
+									If NPCSeesNPC(n2, n) = 1
+										n\EnemyX = EntityX(n2\Collider, True)
+										n\EnemyY = EntityY(n2\Collider, True)
+										n\EnemyZ = EntityZ(n2\Collider, True)
+										n\PathTimer = 0.0
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\Target = n2
+										n\Reload = 70.0 * 3.0
+										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State3 = 0.0
+										n\State = MTF_ZOMBIES_SPOTTED
+										Return
+										Exit
+									EndIf
+									;[End Block]
+							End Select
 						EndIf
 					Next
 					n\MTFUpdateTimer = fps\Factor[0] * 45.0
