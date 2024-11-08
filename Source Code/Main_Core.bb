@@ -7116,7 +7116,7 @@ Function RenderGUI%()
 						
 						DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 						
-						If SelectedItem\State > 0.0 Lor (SelectedItem\ItemTemplate\ID = it_fineradio Lor SelectedItem\ItemTemplate\ID = it_veryfineradio)
+						If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_fineradio Lor SelectedItem\ItemTemplate\ID = it_veryfineradio) And (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
 							If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And CoffinDistance >= 8.0
 								Select Int(SelectedItem\State2)
 									Case 0
@@ -7207,7 +7207,7 @@ Function RenderGUI%()
 								TextEx(x, y + NAV_HEIGHT_HALF - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
 							EndIf
 						Else
-							If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (Rnd(CoffinDistance + 15.0) > 1.0 Lor PlayerRoom\RoomTemplate\RoomID <> r_cont1_895)
+							If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
 								Local xx% = x - SelectedItem\ItemTemplate\ImgWidth
 								Local yy% = y - SelectedItem\ItemTemplate\ImgHeight + (85 * MenuScale)
 								
@@ -7224,17 +7224,15 @@ Function RenderGUI%()
 									y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
 									For x2 = Max(1, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
 										For z2 = Max(1, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
-											If CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance
-												If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
-													Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
-													
-													Color(30 + (70 * (SelectedItem\ItemTemplate\ID = it_navulti And (CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] =< MapGrid_NoTile Lor CurrMapGrid\Found[x2 + (z2 * MapGridSize)] =< MapGrid_NoTile))), 30, 30)
-													If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-													If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-													
-													If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
-													If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
-												EndIf
+											If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
+												Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
+												
+												Color(30 + (70 * (SelectedItem\ItemTemplate\ID = it_navulti And (CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] =< MapGrid_NoTile Lor CurrMapGrid\Found[x2 + (z2 * MapGridSize)] =< MapGrid_NoTile))), 30, 30)
+												If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+												If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+												
+												If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
+												If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
 											EndIf
 										Next
 									Next
