@@ -2115,8 +2115,10 @@ Function UpdateNPCs%()
 								If n\IdleTimer < 70.0 * 15.0
 									n\IdleTimer = n\IdleTimer + fps\Factor[0]
 								ElseIf Rand(300 - (120 * SelectedDifficulty\AggressiveNPCs)) = 1
-									If PlayerInReachableRoom() Then TeleportCloser(n)
-									n\IdleTimer = 0.0
+									If PlayerInReachableRoom()
+										TeleportCloser(n)
+										n\IdleTimer = 0.0
+									EndIf
 								EndIf
 							Else
 								n\IdleTimer = 0.0
@@ -4872,8 +4874,10 @@ Function UpdateNPCs%()
 								If n\IdleTimer < 70.0 * 15.0
 									n\IdleTimer = n\IdleTimer + fps\Factor[0]
 								ElseIf Rand(150 - (60 * SelectedDifficulty\AggressiveNPCs)) = 1
-									If PlayerInReachableRoom() Then TeleportCloser(n)
-									n\IdleTimer = 0.0
+									If PlayerInReachableRoom()
+										TeleportCloser(n)
+										n\IdleTimer = 0.0
+									EndIf
 								EndIf
 							Else
 								n\IdleTimer = 0.0
