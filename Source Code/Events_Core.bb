@@ -7139,12 +7139,14 @@ Function UpdateEvents%()
 						ScaleEntity(e\room\Objects[1], 0.07, 0.07, 0.07)
 						PositionEntity(e\room\Objects[1], TFormedX(), TFormedY(), TFormedZ())
 						RotateEntity(e\room\Objects[1], 6.0, e\room\Angle + 180.0, 0.0)
+						EntityPickMode(e\room\Objects[1], 1)
+						EntityRadius(e\room\Objects[1], 0.3)
 						Tex = LoadTexture_Strict("GFX\NPCs\duck(4).png")
 						EntityTexture(e\room\Objects[1], Tex)
 						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						EntityParent(e\room\Objects[1], e\room\OBJ)
 					Else
-						If InteractObject(e\room\Objects[1], 0.7)
+						If InteractObject(e\room\Objects[1], 0.5)
 							CreateMsg(GetLocalString("msg", "breeze"))
 							me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 							me\Bloodloss = 0.0

@@ -1,6 +1,6 @@
 {v1.3.5}
 
-[GlobaL]
+[Global]
 - Reduced the chances of escaping the Pocket Dimension and the fake tunnel.
 - Blink meter turns red sooner when low.
 - SCP-079 is more likely to hack monitors with SCP-895.
@@ -44,6 +44,7 @@
 - Fixed SCP-049 getting stuck on SCP-895's stairs.
 - Fixed SCP-049-2 freezing when they killed the player.
 - Fixed MTF getting stuck on SCP-066.
+- Fixed orange duck not being clickable..
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 
