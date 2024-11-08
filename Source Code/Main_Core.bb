@@ -7321,7 +7321,7 @@ Function RenderGUI%()
 						y = mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight
 						DrawImage(SelectedItem\ItemTemplate\Img, x, y)
 						Temp = (SelectedItem\State > 0.0)
-						If Temp Lor SelectedItem\ItemTemplate\ID = it_e_reader30
+						If (Temp Lor SelectedItem\ItemTemplate\ID = it_e_reader30) And (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
 							; ~ Battery
 							If Temp
 								n = Ceil(SelectedItem\State / 10.0)
