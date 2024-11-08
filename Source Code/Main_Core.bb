@@ -7222,8 +7222,14 @@ Function RenderGUI%()
 									
 									x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
 									y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
-									For x2 = Max(1, PlayerX - 6) To Min(MapGridSize - 1, PlayerX + 6)
-										For z2 = Max(1, PlayerZ - 6) To Min(MapGridSize - 1, PlayerZ + 6)
+									
+									Local ArrayX1% = Max(1, PlayerX - 6)
+									Local ArrayX2% = Min(MapGridSize - 1, PlayerX + 6)
+									Local ArrayZ1% = Max(1, PlayerZ - 6)
+									Local ArrayZ2% = Min(MapGridSize - 1, PlayerZ + 6)
+									
+									For x2 = ArrayX1 To ArrayX2
+										For z2 = ArrayZ1 To ArrayZ2
 											If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
 												Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
 												
