@@ -3799,7 +3799,7 @@ Function UpdateNPCs%()
 									EndIf
 								Else
 									If n\LastSeen > 0.0
-										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
 										
 										AnimateNPC(n, 449.0, 464.0, n\CurrSpeed * 6.0)
 										
