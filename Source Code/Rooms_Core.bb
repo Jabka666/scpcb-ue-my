@@ -2719,6 +2719,14 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[1] = CreateButton(BUTTON_KEYCARD, r\x - 1089.0 * RoomScale, r\y - 432.0 * RoomScale, r\z + 544.0 * RoomScale, 0.0, 0.0, 0.0, r\OBJ, True)
 			
+			r\Objects[2] = CreateButton(BUTTON_KEYCARD, r\x - 247.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 608.0 * RoomScale, 0.0, 90.0, 0.0, r\OBJ, True)
+			
+			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x - 297.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 928.0 * RoomScale, 0.0, 270.0, 0.0, r\OBJ, True)
+			
+			r\Objects[4] = CreateButton(BUTTON_KEYCARD, r\x - 707.0 * RoomScale, r\y - 432.0 * RoomScale, r\z + 1117.0 * RoomScale, 0.0, 90.0, 0.0, r\OBJ, True)
+			
+			r\Objects[5] = CreateButton(BUTTON_KEYCARD, r\x - 757.0 * RoomScale, r\y - 432.0 * RoomScale, r\z + 797.0 * RoomScale, 0.0, 270.0, 0.0, r\OBJ, True)
+			
 			de.Decals = CreateDecal(DECAL_BLOOD_1, r\x - 1212.0 * RoomScale, r\y - 604.0 * RoomScale + 0.005, r\z + 846.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
