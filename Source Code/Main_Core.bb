@@ -8865,12 +8865,12 @@ Function UpdateMTF%()
 		If MTFTimer <= 70.0 * 120.0
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 70.0 * 120.0 And MTFTimer < 10000.0
-			PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
+			PlayAnnouncement("SFX\Character\MTF\AnnouncAfter0.ogg")
 			MTFTimer = 10000.0
 		ElseIf MTFTimer >= 10000.0 And MTFTimer <= 10000.0 + (70.0 * 120.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
 		ElseIf MTFTimer > 10000.0 + (70.0 * 120.0) And MTFTimer < 20000.0
-			PlayAnnouncement("SFX\Character\MTF\AnnouncAfter2.ogg")
+			PlayAnnouncement("SFX\Character\MTF\AnnouncAfter1.ogg")
 			MTFTimer = 20000.0
 		ElseIf MTFTimer >= 20000.0 And MTFTimer <= 20000.0 + (70.0 * 60.0)
 			MTFTimer = MTFTimer + fps\Factor[0]
