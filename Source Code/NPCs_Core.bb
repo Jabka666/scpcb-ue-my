@@ -2112,11 +2112,13 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If Dist > PowTwo(HideDistance * 2.0)
-								If n\IdleTimer < 70.0
+								If n\IdleTimer < 70.0 * 15.0
 									n\IdleTimer = n\IdleTimer + fps\Factor[0]
-								Else
-									If Rand(50 - (20 * SelectedDifficulty\AggressiveNPCs)) = 1 Then TeleportCloser(n)
-									 n\IdleTimer = 0.0
+								ElseIf Rand(300 - (120 * SelectedDifficulty\AggressiveNPCs)) = 1
+									If PlayerInReachableRoom()
+										TeleportCloser(n)
+										n\IdleTimer = 0.0
+									EndIf
 								EndIf
 							Else
 								n\IdleTimer = 0.0
@@ -3797,7 +3799,7 @@ Function UpdateNPCs%()
 									EndIf
 								Else
 									If n\LastSeen > 0.0
-										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
 										
 										AnimateNPC(n, 449.0, 464.0, n\CurrSpeed * 6.0)
 										
@@ -4830,8 +4832,8 @@ Function UpdateNPCs%()
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 							Else
 								; ~ Still attack if the player is too close
-								If Dist < 0.49 And (Not chs\NoTarget)
-									If EntityVisible(me\Collider, n\Collider)
+								If Dist < 0.49
+									If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
 										n\State2 = 70.0
 										n\State = 4.0
 									EndIf
@@ -4869,11 +4871,13 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If Dist > PowTwo(HideDistance * 1.5)
-								If n\IdleTimer < 70.0
+								If n\IdleTimer < 70.0 * 15.0
 									n\IdleTimer = n\IdleTimer + fps\Factor[0]
-								Else
-									If Rand(25 - (10 * SelectedDifficulty\AggressiveNPCs)) = 1 Then TeleportCloser(n)
-									n\IdleTimer = 0.0
+								ElseIf Rand(150 - (60 * SelectedDifficulty\AggressiveNPCs)) = 1
+									If PlayerInReachableRoom()
+										TeleportCloser(n)
+										n\IdleTimer = 0.0
+									EndIf
 								EndIf
 							Else
 								n\IdleTimer = 0.0
@@ -4899,54 +4903,46 @@ Function UpdateNPCs%()
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
-							If (Not me\Terminated)
-								n\CurrSpeed = 0.0
-								If n\Target = Null
-									PointEntity(n\Collider, me\Collider)
-								Else
-									PointEntity(n\Collider, n\Target\Collider)
-								EndIf
-								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-								AnimateNPC(n, 126.0, 165.0, 0.6, False)
-								If n\Frame >= 146.0 And PrevFrame < 146.0
-									If n\Target = Null
-										If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
-											PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
-											InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
-											me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
-											
-											If me\Injuries > 3.0
-												msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
-												Kill(True)
-											EndIf
-										Else
-											PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
-										EndIf
-									Else
-										If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.5625
-											PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
-											If n\Target\HP > 0
-												n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
-											Else
-												n\Target = Null
-												n\State = 3.0
-												Return
-											EndIf
-										Else
-											PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
-										EndIf
-									EndIf
-								ElseIf n\Frame >= 164.0
-									If EntityDistanceSquared(n\Collider, me\Collider) < 0.49
-										SetNPCFrame(n, 126.0)
-									Else
-										n\State = 2.0
-									EndIf
-								EndIf
-								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+							n\CurrSpeed = 0.0
+							If n\Target = Null
+								PointEntity(n\Collider, me\Collider)
 							Else
-								n\State = 3.0
+								PointEntity(n\Collider, n\Target\Collider)
 							EndIf
+							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+							AnimateNPC(n, 126.0, 165.0, 0.6, False)
+							If n\Frame >= 146.0 And PrevFrame < 146.0
+								If n\Target = Null
+									If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
+										PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
+										InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
+										me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+										
+										If me\Injuries > 3.0
+											msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
+											Kill(True)
+										EndIf
+									Else
+										PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
+									EndIf
+								Else
+									If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.5625
+										PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
+										If n\Target\HP > 0
+											n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
+										Else
+											n\Target = Null
+											n\State = 3.0
+											Return
+										EndIf
+									Else
+										PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
+									EndIf
+								EndIf
+							ElseIf n\Frame >= 164.0
+								n\State = 2.0 + me\Terminated
+							EndIf
+							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							
 							If n\Target <> Null
 								If n\Target\IsDead
