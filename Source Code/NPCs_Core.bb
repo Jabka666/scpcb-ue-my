@@ -4832,8 +4832,8 @@ Function UpdateNPCs%()
 								n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 							Else
 								; ~ Still attack if the player is too close
-								If Dist < 0.49 And (Not chs\NoTarget)
-									If EntityVisible(me\Collider, n\Collider)
+								If Dist < 0.49
+									If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
 										n\State2 = 70.0
 										n\State = 4.0
 									EndIf
