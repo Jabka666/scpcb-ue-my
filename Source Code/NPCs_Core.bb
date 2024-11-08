@@ -5218,7 +5218,7 @@ Function UpdateMTFUnit%(n.NPCs)
 									FoundChamber = False
 									Pvt = CreatePivot()
 									
-									PositionEntity(Pvt, r\x + 4736.0 * RoomScale, r\y + 420.0 * RoomScale, r\x + 3774.0 * RoomScale, True)
+									PositionEntity(Pvt, r\x + 4736.0 * RoomScale, r\y + 420.0 * RoomScale, r\z + 3774.0 * RoomScale, True)
 									
 									If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
 									
