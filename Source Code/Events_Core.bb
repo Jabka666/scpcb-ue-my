@@ -6287,9 +6287,9 @@ Function UpdateEvents%()
 					If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
 				Else
 					If e\EventState = 0.0
-						If e\Sound = 0
+						If e\Sound = 0 And InFacility = NullFloor
 							For i = 0 To MaxRoomAdjacents - 1
-								If IsRoomAdjacent(PlayerRoom\Adjacent[i], e\room) And InFacility = NullFloor
+								If IsRoomAdjacent(PlayerRoom\Adjacent[i], e\room)
 									LoadEventSound(e, "SFX\Room\035Chamber\InProximity.ogg")
 									PlaySound_Strict(e\Sound, True)
 								EndIf
