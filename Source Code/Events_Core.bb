@@ -6289,7 +6289,7 @@ Function UpdateEvents%()
 					If e\EventState = 0.0
 						If e\Sound = 0
 							For i = 0 To MaxRoomAdjacents - 1
-								If IsRoomAdjacent(PlayerRoom\Adjacent[i], e\room)
+								If IsRoomAdjacent(PlayerRoom\Adjacent[i], e\room) And InFacility = NullFloor
 									LoadEventSound(e, "SFX\Room\035Chamber\InProximity.ogg")
 									PlaySound_Strict(e\Sound, True)
 								EndIf
