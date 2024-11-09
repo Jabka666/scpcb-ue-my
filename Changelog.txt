@@ -8,6 +8,7 @@
 [Rooms]
 - Improved ambience for «cont2_008».
 - Level 3 Key Card in «cont1_205» is now bloody.
+- Room event sounds for «cont2_500_1499» And «cont1_035» are now based on adjacent rooms instead of distance.
 
 [Items]
 - Added E-Reader.
@@ -31,7 +32,7 @@
 - SCP-049 speaks sooner when trying to take off SCP-714 or the Hazmat Suit.
 - Reduced SCP-049's idle timer to 4 seconds.
 - SCP-049 closes doors sooner.
-- SCP-939 chase turn speed increased.
+- SCP-939 chase turn speed and movement speed acceleration increased.
 - Tourette's syndrome alerts NPCs.
 - Improved SCP-008-1 and SCP-049-2 teleporting.
 
