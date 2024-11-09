@@ -46,6 +46,7 @@
 - Fixed SCP-049-2 freezing when they killed the player.
 - Fixed MTF getting stuck on SCP-066.
 - Fixed orange duck not being clickable.
+- Fixed MTF not finding SCP-173's chamber.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 
