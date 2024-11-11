@@ -6500,8 +6500,11 @@ Function RenderNVG%()
 					If Dist < 256.0 ; ~ Don't draw text if the NPC is too far away
 						If (Not wi\IsNVGBlinking)
 							CameraProject(Camera, np\NVGX, np\NVGY + 0.5, np\NVGZ)
-							TextEx(ProjectedX(), ProjectedY(), np\NVGName, True, True)
-							TextEx(ProjectedX(), ProjectedY() - 25.0, FloatToString(Sqr(Dist), 1) + " m", True, True)
+							
+							Local ProjX# = ProjectedX(), ProjY# = ProjectedY()
+							
+							TextEx(ProjX, ProjY, np\NVGName, True, True)
+							TextEx(ProjX, ProjY - 25.0, FloatToString(Sqr(Dist), 1) + " m", True, True)
 						EndIf
 					EndIf
 				EndIf
