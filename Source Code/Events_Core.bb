@@ -7282,12 +7282,17 @@ Function UpdateDimension106%()
 					Next
 				ElseIf SelectedDifficulty\SaveType < SAVE_ON_QUIT
 					If KeyHit(key\SAVE)
-						If SelectedDifficulty\SaveType = SAVE_ANYWHERE
-							PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
-							CreateHintMsg(GetLocalString("save", "saved"))
-						ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
-							CreateHintMsg(GetLocalString("save", "failed.screen"))
-						EndIf
+						Select SelectedDifficulty\SaveType
+							Case SAVE_ANYWHERE
+								;[Block]
+								PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
+								CreateHintMsg(GetLocalString("save", "saved"))
+								;[End Block]
+							Case SAVE_ON_SCREENS
+								;[Block]
+								CreateHintMsg(GetLocalString("save", "failed.screen"))
+								;[End Block]
+						End Select
 					EndIf
 				EndIf
 				
@@ -10170,4 +10175,4 @@ Function Update035Label%(OBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS

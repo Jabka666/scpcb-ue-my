@@ -114,8 +114,11 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	Local x2%, z2%
 	
 	If xt <> PlayerX Lor zt <> PlayerZ ; ~ The monster is not on the same tile as the player
-		For x2 = Max(xt - 1, 0) To Min(xt + 1, ForestGridSize - 1)
-			For z2 = Max(zt - 1, 0) To Min(zt + 1, ForestGridSize - 1)
+		Local ForX% = Max(xt - 1, 0), ToX% = Min(xt + 1, ForestGridSize - 1)
+		Local ForZ% = Max(zt - 1, 0), ToZ% = Min(zt + 1, ForestGridSize - 1)
+		
+		For x2 = ForX To ToX
+			For z2 = ForZ To ToZ
 				If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2 <> xt Lor z2 <> zt) And (x2 = xt Lor z2 = zt)
 					; ~ Tile (x2, z2) is closer to the player than the monsters current tile
 					If (Abs(PlayerX - x2) + Abs(PlayerZ - z2)) < (Abs(PlayerX - xt) + Abs(PlayerZ - zt))
@@ -370,4 +373,4 @@ End Function
 ;End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS
