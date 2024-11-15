@@ -7591,7 +7591,7 @@ Function UpdateDimension106%()
 											TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.6, EntityZ(r\Objects[0], True), 0.3, True)
 											TeleportToRoom(r)
 											
-											n_I\Curr106\State = 10000.0 : n_I\Curr106\Idle = 0
+											n_I\Curr106\State = Rnd(10000.0, 12000.0) : n_I\Curr106\Idle = 0
 											
 											de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
 											EntityParent(de\OBJ, e\room\OBJ)
@@ -7864,7 +7864,7 @@ Function UpdateDimension106%()
 									EndIf
 									TeleportToRoom(r)
 									
-									n_I\Curr106\State = 10000.0 : n_I\Curr106\Idle = 0
+									n_I\Curr106\State = Rnd(10000.0, 12000.0) : n_I\Curr106\Idle = 0
 									
 									If (Not LCZ)
 										For e2.Events = Each Events
@@ -7953,7 +7953,7 @@ Function UpdateDimension106%()
 										TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), 0.5, EntityZ(r\RoomCenter, True), 0.3, True)
 										TeleportToRoom(r)
 										
-										n_I\Curr106\State = 10000.0 : n_I\Curr106\Idle = 0
+										n_I\Curr106\State = 15000.0 : n_I\Curr106\Idle = 0
 										
 										For e2.Events = Each Events
 											If e2\EventID = e_room2_sl

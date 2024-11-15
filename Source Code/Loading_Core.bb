@@ -2616,7 +2616,7 @@ Function InitNewGame%()
 	
 	n_I\Curr173 = CreateNPC(NPCType173, 0.0, -500.0, 0.0)
 	n_I\Curr106 = CreateNPC(NPCType106, 0.0, -500.0, 0.0)
-	n_I\Curr106\State = 70.0 * 60.0 * Rnd(12.0, 17.0)
+	n_I\Curr106\State = 70.0 * 60.0 * Rnd(13.0, 17.0)
 	
 	For d.Doors = Each Doors
 		EntityParent(d\OBJ, 0)
@@ -2664,7 +2664,7 @@ Function InitNewGame%()
 	Next
 	
 	For r.Rooms = Each Rooms
-		If (Not r\RoomTemplate\DisableDecals)
+		If r\RoomTemplate\DisableDecals < 2
 			If Rand(4) = 1
 				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), r\x + Rnd(-2.0, 2.0), r\y + 0.005, r\z + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.4), Rnd(0.85, 0.95))
 				EntityParent(de\OBJ, r\OBJ)

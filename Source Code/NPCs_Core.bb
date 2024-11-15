@@ -910,7 +910,7 @@ Function UpdateNPCs%()
 					If n\Idle = 0 And Spawn106
 						If n\State <= 0.0
 							If EntityY(n\Collider) < EntityY(me\Collider) - 20.55
-								If (Not PlayerRoom\RoomTemplate\DisableDecals)
+								If PlayerRoom\RoomTemplate\DisableDecals < 2
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
 									EntityParent(de\OBJ, PlayerRoom\OBJ)
@@ -1136,8 +1136,22 @@ Function UpdateNPCs%()
 							n\DropSpeed = 0.0
 							SetNPCFrame(n, 110.0)
 							
-							If (Not PlayerRoom\RoomTemplate\DisableDecals)
-								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\State = n\State - (fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs))
+							If PlayerRoom\RoomTemplate\DisableDecals < 3
+								Local TimerCountDown# = (fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs))
+								Select PlayerRoom\RoomTemplate\DisableDecals
+									Case 0
+										;[Block]
+										n\State = n\State - TimerCountDown
+										;[End Block]
+									Case 1
+										;[Block]
+										n\State = n\State - (TimerCountDown * 0.5)
+										;[End Block]
+									Case 2
+										;[Block]
+										If n\State > 2000.0 Then n\State = n\State - (TimerCountDown * 0.25)
+										;[End Block]
+								End Select
 							EndIf
 						EndIf
 						
@@ -3967,7 +3981,7 @@ Function UpdateNPCs%()
 													;[End Block]
 												Case 4
 													;[Block]
-													If (Not PlayerRoom\RoomTemplate\DisableDecals)
+													If PlayerRoom\RoomTemplate\DisableDecals < 2
 														de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
 														EntityParent(de\OBJ, PlayerRoom\OBJ)
 													EndIf
@@ -7480,7 +7494,7 @@ Function UpdateNPCNearTesla%()
 						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 						ResetEntity(n\Collider)
 						
-						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 13.0) : n\TeslaHit = False : n\State3 = 0.0
+						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 12.0) : n\TeslaHit = False : n\State3 = 0.0
 					EndIf
 				EndIf
 			Else
