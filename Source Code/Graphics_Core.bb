@@ -48,7 +48,7 @@ Function InitFastResize%()
 	HideEntity(FresizeCam)
 End Function
 
-Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
+Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	SetGfxDriver(opt\GFXDriver)
 	Graphics3D(Width, Height, Depth, Mode)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures

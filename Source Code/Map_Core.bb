@@ -4991,7 +4991,7 @@ Dim MapRoom$(0, 0)
 Dim RoomAmount%(0, 0)
 
 Function SetRoom%(RoomZone%, RoomType%, RoomName$, RoomPosWeight# = 0.0) ; ~ Place a room without overwriting others
-	Local Zone%, Offset%
+	Local Zone%
 	Local MinPos% = 0
 	
 	For Zone = 0 To RoomZone - 1
@@ -5011,7 +5011,10 @@ Function SetRoom%(RoomZone%, RoomType%, RoomName$, RoomPosWeight# = 0.0) ; ~ Pla
 		Return(True)
 	EndIf
 	
-	For Offset = 1 To Max(MaxPos - RoomPos, RoomPos - MinPos)	
+	Local Temp% = Max(MaxPos - RoomPos, RoomPos - MinPos)
+	Local Offset%
+	
+	For Offset = 1 To Temp	
 		If RoomPos + Offset <= MaxPos And MapRoom(RoomType, RoomPos + Offset) = ""
 			MapRoom(RoomType, RoomPos + Offset) = RoomName
 			Return(True)

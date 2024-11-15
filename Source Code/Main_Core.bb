@@ -45,9 +45,9 @@ Global GraphicHeightFloat#
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
 If opt\DisplayMode = 1
-	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, 4)
+	Graphics3DEx(opt\GraphicWidth, opt\GraphicHeight, 0, 4)
 Else
-	Graphics3DExt(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
+	Graphics3DEx(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
 EndIf
 
 AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
@@ -805,6 +805,7 @@ Function ResetNegativeStats%(Revive% = False)
 		I_1025\State[i] = 0.0
 	Next
 	If I_1025\FineState[0] > 0.0
+		; ~ Drop two latest items
 		For i = MaxItemAmount - 2 To MaxItemAmount - 1
 			If Inventory(i) <> Null Then DropItem(Inventory(i))
 		Next
@@ -4926,6 +4927,7 @@ Function UpdateGUI%()
 							I_1025\State[i] = 0.0
 						Next
 						If I_1025\FineState[0] > 0.0
+							; ~ Drop two latest items
 							For i = MaxItemAmount - 2 To MaxItemAmount - 1
 								If Inventory(i) <> Null Then DropItem(Inventory(i))
 							Next
@@ -6529,8 +6531,9 @@ Function RenderNVG%()
 			Color(255, 255, 255)
 			DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 2)
 		EndIf
-		k = Floor((wi\NVGPower + 50) * 0.01)
-		For l = 0 To Min(k, 11.0)
+		k = Min(Floor((wi\NVGPower + 50) * 0.01), 11.0)
+		
+		For l = 0 To k
 			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((l * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
 		Next
 		If k < 3
@@ -7226,13 +7229,11 @@ Function RenderGUI%()
 									x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
 									y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
 									
-									Local ArrayX1% = Max(1, PlayerX - 6)
-									Local ArrayX2% = Min(MapGridSize - 1, PlayerX + 6)
-									Local ArrayZ1% = Max(1, PlayerZ - 6)
-									Local ArrayZ2% = Min(MapGridSize - 1, PlayerZ + 6)
+									Local FromX% = Max(1, PlayerX - 6), ToX% = Min(MapGridSize - 1, PlayerX + 6)
+									Local FromZ% = Max(1, PlayerZ - 6), ToZ% = Min(MapGridSize - 1, PlayerZ + 6)
 									
-									For x2 = ArrayX1 To ArrayX2
-										For z2 = ArrayZ1 To ArrayZ2
+									For x2 = FromX To ToX
+										For z2 = FromZ To ToZ
 											If CurrMapGrid\Grid[x2 + (z2 * MapGridSize)] > MapGrid_NoTile And (CurrMapGrid\Found[x2 + (z2 * MapGridSize)] > MapGrid_NoTile Lor (Not Offline))
 												Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
 												
@@ -7305,10 +7306,10 @@ Function RenderGUI%()
 									yTemp = y - NAV_HEIGHT_HALF + (10 * MenuScale)
 									
 									; ~ Battery
-									n = Ceil(SelectedItem\State / 10.0)
+									n = Min(Ceil(SelectedItem\State / 10.0), 10)
 									Color(70 * (n < 3) + 30, 30 * (n < 3), 30 * (n < 3))
 									Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
-									For i = 1 To Min(n, 10)
+									For i = 1 To n
 										Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 									Next
 								EndIf
@@ -7331,10 +7332,10 @@ Function RenderGUI%()
 						If (Temp Lor SelectedItem\ItemTemplate\ID = it_e_reader30) And (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
 							; ~ Battery
 							If Temp
-								n = Ceil(SelectedItem\State / 10.0)
+								n = Min(Ceil(SelectedItem\State / 10.0), 10)
 								Color(70 * (n < 3) + 30, 30 * (n < 3), 30 * (n < 3))
 								Rect(x + (406 * MenuScale), y + (90 * MenuScale), 80 * MenuScale, 20 * MenuScale, False)
-								For i = 1 To Min(n, 10)
+								For i = 1 To n
 									Rect(x + ((i * 8) * MenuScale) + (400 * MenuScale), y + (94 * MenuScale), 4 * MenuScale, 12 * MenuScale)
 								Next
 							EndIf
@@ -9473,6 +9474,7 @@ Function Update427%()
 			Next
 			If I_1025\FineState[0] > 0.0
 				If I_1025\FineState[0] < 0.05
+					; ~ Drop two latest items
 					For i = MaxItemAmount - 2 To MaxItemAmount - 1
 						If Inventory(i) <> Null Then DropItem(Inventory(i))
 					Next

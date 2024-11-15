@@ -439,9 +439,10 @@ Function UpdateLanguageSelector%()
 	
 	If (Not JsonHasParseError(File))
 		Local Languages% = JsonGetArray(File)
+		Local LanguagesArraySize% = JsonGetArraySize(Languages)
 		Local i%
 		
-		For i = 0 To JsonGetArraySize(Languages) - 1
+		For i = 0 To LanguagesArraySize - 1
 			Local LanguageIt% = JsonGetArrayValue(Languages, i)
 			
 			lan.ListLanguage = New ListLanguage

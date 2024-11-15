@@ -599,6 +599,7 @@ Function UpdateNPCs%()
 	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints, emit.Emitter
 	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, Visible%, Tex%
 	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
+	Local FromX%, ToX%, FromZ%, ToZ%
 	Local SinValue#, SqrValue#
 	Local DifficultyDMGMult#
 	
@@ -3434,8 +3435,10 @@ Function UpdateNPCs%()
 									z = Floor((TFormedZ() + 6.0) / 12.0)
 									
 									; ~ Step through nearby cells
-									For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize) Step 2
-										For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize) Step 2
+									FromX = Max(x - 1, 1) : ToX = Min(x + 1, ForestGridSize)
+									FromZ = Max(z - 1, 1) : ToZ = Min(z + 1, ForestGridSize)
+									For x2 = FromX To ToX Step 2
+										For z2 = FromZ To ToZ Step 2
 											; ~ Choose an empty cell (not on the path)
 											If fr\Grid[(z2 * ForestGridSize) + x2] = 0
 												; ~ Spawn the monster between the empty cell and the cell the player is in
@@ -3574,8 +3577,10 @@ Function UpdateNPCs%()
 									x = Floor((TFormedX() + 6.0) / 12.0)
 									z = Floor((TFormedZ() + 6.0) / 12.0)
 									
-									For x2 = Max(x - 1, 1) To Min(x + 1, ForestGridSize)
-										For z2 = Max(z - 1, 1) To Min(z + 1, ForestGridSize)
+									FromX = Max(x - 1, 1) : ToX = Min(x + 1, ForestGridSize)
+									FromZ = Max(z - 1, 1) : ToZ = Min(z + 1, ForestGridSize)
+									For x2 = FromX To ToX
+										For z2 = FromZ To ToZ
 											; ~ Find a nearby cell that's on the path and not the cell the player is in
 											If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2 <> x Lor z2 <> z) And (x2 = x Lor z2 = z)
 												; ~ Transform the position of the cell back to world coordinates
@@ -7343,7 +7348,9 @@ Function ManipulateNPCBones%()
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player
 						;[Block]
-						For i = 1 To GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controller_max", 1)
+						Local ArrayTo% = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controller_max", 1)
+						
+						For i = 1 To ArrayTo
 							If GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i, 0) = "pitch"
 								MaxValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_max", 2)
 								MinValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_min", 2)

@@ -1,9 +1,10 @@
 Function GenerateSeedNumber%(Seed$)
 	Local Temp% = 0
 	Local Shift% = 0
+	Local SeedLen% = Len(Seed)
 	Local i%
 	
-	For i = 1 To Len(Seed)
+	For i = 1 To SeedLen
 		Temp = Temp Xor (Asc(Mid(Seed, i, 1)) Shl Shift)
 		Shift = ((Shift + 1) Mod 24)
 	Next
@@ -373,4 +374,4 @@ End Function
 ;End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS

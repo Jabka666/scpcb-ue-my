@@ -2079,7 +2079,9 @@ Function RenderBar%(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% 
 		Color(R, G, B)
 		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), Height - (6 * MenuScale))
 	Else
-		For i = 1 To Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)) / MenuScale)
+		Local ArrayTo% = Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)) / MenuScale)
+		
+		For i = 1 To ArrayTo
 			DrawBlock(Img, x + ((3 + (10 * (i - 1))) * MenuScale), y + (3 * MenuScale))
 		Next
 	EndIf
