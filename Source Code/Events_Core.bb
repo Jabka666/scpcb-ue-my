@@ -1256,7 +1256,26 @@ Function UpdateEvents%()
 						EndIf
 					Else
 						ShouldPlay = 15
+						
+						Temp = UpdateLever(e\room\RoomLevers[0]\OBJ, e\EventState > 7.0 Lor (e\room\RoomDoors[0]\OpenState > 0.0 And e\room\RoomDoors[0]\OpenState < 180.0))
 						If e\EventState < 65.0
+							If e\EventState > 7.0 And RemoteDoorOn
+								RotateEntity(e\room\RoomLevers[0]\OBJ, CurveAngle(80.0 - (e\room\RoomDoors[0]\Open * 160.0), EntityPitch(e\room\RoomLevers[0]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
+								If Rand(150 + (150 * e\room\RoomDoors[0]\Open)) = 1
+									If e\room\RoomDoors[0]\Open
+										PlaySoundEx(snd_I\DoorClose079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
+									Else
+										PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
+									EndIf
+									OpenCloseDoor(e\room\RoomDoors[0])
+								EndIf
+							Else
+								If Temp
+									If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
+								Else
+									If e\room\RoomDoors[0]\Open Then OpenCloseDoor(e\room\RoomDoors[0])
+								EndIf
+							EndIf
 							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[1], True), EntityZ(me\Collider), EntityZ(e\room\Objects[1], True)) < 4.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 								PlaySound_Strict(LoadTempSound("SFX\SCP\205\Enter.ogg"))
 								
@@ -1276,17 +1295,6 @@ Function UpdateEvents%()
 								EndIf
 							EndIf
 							
-							If e\EventState > 7.0 And RemoteDoorOn
-								RotateEntity(e\room\RoomLevers[0]\OBJ, CurveAngle(80.0 - (e\room\RoomDoors[0]\Open * 160.0), EntityPitch(e\room\RoomLevers[0]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
-								If Rand(150 + (150 * e\room\RoomDoors[0]\Open)) = 1
-									If e\room\RoomDoors[0]\Open
-										PlaySoundEx(snd_I\DoorClose079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
-									Else
-										PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
-									EndIf
-									OpenCloseDoor(e\room\RoomDoors[0])
-								EndIf
-							EndIf
 							e\EventState2 = e\EventState2 + fps\Factor[0]
 						EndIf
 						
