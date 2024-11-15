@@ -5216,9 +5216,10 @@ Function CreateMap%()
 	Next
 	
 	Repeat
-		Width = Rand(Floor(MapGridSize * 0.6), Floor(MapGridSize * 0.85))
+		x2 = Floor(MapGridSize * 0.6)
+		Width = Rand(x2, Floor(MapGridSize * 0.85))
 		
-		If x > Floor(MapGridSize * 0.6)
+		If x > x2
 			Width = -Width
 		ElseIf x > Floor(MapGridSize * 0.4)
 			x = x - (Width / 2)

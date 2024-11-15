@@ -7408,6 +7408,7 @@ Function UpdateMenu%()
 		Local Height% = ImageHeight(t\ImageID[0])
 		Local x% = mo\Viewport_Center_X - (Width / 2)
 		Local y% = mo\Viewport_Center_Y - (Height / 2)
+		Local Temp%
 		
 		x = x + (132 * MenuScale)
 		y = y + (122 * MenuScale)
@@ -7927,10 +7928,11 @@ Function UpdateMenu%()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0
-									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)], 1)
+									Temp = Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)
+									CurrMapGrid\Found[Temp] = Max(CurrMapGrid\Found[Temp], 1)
 									If x < 4.0 And z < 4.0
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
+										CurrMapGrid\Found[Temp] = MapGrid_Tile
 									EndIf
 								EndIf
 							Next
@@ -7998,10 +8000,11 @@ Function UpdateMenu%()
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
 								If x < 12.0 And z < 12.0
-									CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = Max(CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)], 1.0)
+									Temp = Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)
+									CurrMapGrid\Found[Temp] = Max(CurrMapGrid\Found[Temp], 1)
 									If x < 4.0 And z < 4.0
 										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
-										CurrMapGrid\Found[Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
+										CurrMapGrid\Found[Temp] = MapGrid_Tile
 									EndIf
 								EndIf
 							Next

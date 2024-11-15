@@ -357,7 +357,8 @@ Function UpdateMainMenu%()
 						;[Block]
 						Height = 296 * MenuScale
 						
-						If mm\CurrMenuPage < Ceil(Float(SavedGamesAmount) / 5.0) - 1 And DelSave = Null
+						Temp = Ceil(Float(SavedGamesAmount) / 5.0) - 1
+						If mm\CurrMenuPage < Temp And DelSave = Null
 							If UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big) Then ChangePage(mm\CurrMenuPage + 1)
 						Else
 							UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big, False, True)
@@ -367,7 +368,7 @@ Function UpdateMainMenu%()
 						Else
 							UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", Font_Default_Big, False, True)
 						EndIf
-						If mm\CurrMenuPage > Ceil(Float(SavedGamesAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
+						If mm\CurrMenuPage > Temp Then ChangePage(mm\CurrMenuPage - 1)
 						
 						If SavedGamesAmount > 0
 							x = x + (20 * MenuScale)
@@ -430,7 +431,8 @@ Function UpdateMainMenu%()
 						;[Block]
 						Height = 350 * MenuScale
 						
-						If mm\CurrMenuPage < Ceil(Float(CustomMapsAmount) / 5.0) - 1 And DelCustomMap = Null
+						Temp = Ceil(Float(CustomMapsAmount) / 5.0) - 1
+						If mm\CurrMenuPage < Temp And DelCustomMap = Null
 							If UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big) Then ChangePage(mm\CurrMenuPage + 1)
 						Else
 							UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big, False, True)
@@ -440,7 +442,7 @@ Function UpdateMainMenu%()
 						Else
 							UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", Font_Default_Big, False, True)
 						EndIf
-						If mm\CurrMenuPage > Ceil(Float(CustomMapsAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
+						If mm\CurrMenuPage > Temp Then ChangePage(mm\CurrMenuPage - 1)
 						
 						If CustomMapsAmount > 0
 							x = x + (20 * MenuScale)
