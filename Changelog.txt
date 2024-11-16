@@ -1,6 +1,7 @@
 {v1.3.5}
 
 [Global]
+- Added animation for femur breaker.
 - Reduced the chances of escaping the Pocket Dimension and the fake tunnel.
 - Blink meter turns red sooner when low.
 - SCP-079 is more likely to hack monitors with SCP-895.

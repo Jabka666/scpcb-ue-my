@@ -2133,6 +2133,13 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[4], 2)
 			EntityAlpha(r\Objects[4], 0.0)
 			
+			r\Objects[5] = LoadAnimMesh_Strict("GFX\Map\Props\femur_breaker.b3d")
+			Scale = RoomScale * 0.065
+			ScaleEntity(r\Objects[5], Scale, Scale, Scale)
+			PositionEntity(r\Objects[5], r\x + 1085.0 * RoomScale, r\y - 6400.0 * RoomScale, r\z + 1933.0 * RoomScale)
+			RotateEntity(r\Objects[5], 0.0, 180.0, 0.0)
+			EntityParent(r\Objects[5], r\OBJ)
+			
 			it.Items = CreateItem("Level 5 Key Card", it_key5, r\x - 1275.0 * RoomScale, r\y - 7910.0 * RoomScale, r\z + 3106.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			

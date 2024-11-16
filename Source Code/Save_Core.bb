@@ -2116,6 +2116,10 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				If e\EventState = 1.0 Then HideEntity(e\room\Objects[1])
 				;[End Block]
+			Case e_cont1_106
+				;[Block]
+				SetAnimTime(e\room\Objects[5], 1.0 + 119.0 * (e\EventState <> 0.0))
+				;[End Block]
 		End Select
 	Next
 	

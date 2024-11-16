@@ -1152,7 +1152,9 @@ Function UpdateEvents%()
 									EndIf
 								EndIf
 								
-								If e\EventState3 >= 2500.0
+								If e\EventState3 > 0.0 And e\EventState3 < 400.0
+									AnimateEx(e\room\Objects[5], AnimTime(e\room\Objects[5]), 1.0, 120.0, 0.35, False)
+								ElseIf e\EventState3 >= 2500.0
 									If e\EventState2 = 1.0 And e\EventState3 - fps\Factor[0] < 2500.0
 										PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
 										ResetEntity(n_I\Curr106\Collider)
@@ -1215,7 +1217,7 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 					Else
-						TFormPoint(1088.0, -6234.0, 1824.0, e\room\OBJ, 0)
+						TFormPoint(1088.0, -6222.0, 1824.0, e\room\OBJ, 0)
 						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 						e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True : e\room\NPC[0]\HideFromNVG = True
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
@@ -10183,4 +10185,4 @@ Function Update035Label%(OBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS
