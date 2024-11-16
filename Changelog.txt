@@ -9,6 +9,7 @@
 - Improved ambience for «cont2_008».
 - Level 3 Key Card in «cont1_205» is now bloody.
 - Room event sounds for «cont2_500_1499» And «cont1_035» are now based on adjacent rooms instead of distance.
+- Can now open the door of SCP-205's chamber early.
 
 [Items]
 - Added E-Reader.
@@ -35,6 +36,23 @@
 - SCP-939 chase turn speed and movement speed acceleration increased.
 - Tourette's syndrome alerts NPCs.
 - Improved SCP-008-1 and SCP-049-2 teleporting.
+
+- Rework SCP-106's spawnrate throughout the facility:
+	- Based on integers of «PlayerRoom\DisableDecals».
+	- If «PlayerRoom\DisableDecals» = 0 Then SCP-106's spawnrate is normal.
+	- If «PlayerRoom\DisableDecals» = 1 Then SCP-106 spawnrate is 0.5x. Decals can still randomly spawn on this value.
+	- If «PlayerRoom\DisableDecals» = 2 Then SCP-106's spawnrate is 0.25x and pauses when below 2000.0.
+	- If «PlayerRoom\DisableDecals» = 3 Then SCP-106's spawntimer is paused entirely.
+	- Room spawntimer changes:
+	- LCZ:
+		- «cont1_005», «cont1_205», «cont2_012», «cont2_1123», «room2_closets», «room2_gw», «room2_gw_2», «room2_storage»: 0.0x -> 0.25x
+		- «cont2c_066_1162_arc», «room2_tesla_lcz», «room3_storage»: 1.0x -> 0.5x
+	- HCZ:
+		- «cont1_895»,«cont2_409», «room2_hcz», «room2_2_hcz», «room2_3_hcz», «room2_shaft», «cont2c_096», «room3_hcz», «room4_hcz»: 0.0x -> 0.25x
+		- «cont1_035», «room2_tesla_hcz», «room2_servers_hcz»: 1.0x -> 0.5x
+	- EZ:
+		- «room2_2_ez», «room2_office», «room3_gw», «room3_2_ez», «room3_3_ez»: 0.0x -> 0.25x
+		- «room2_tesla_ez»: 1.0x -> 0.5x
 
 [Bug Fixes]
 - Fixed SCP-079's voice lines overlapping.
