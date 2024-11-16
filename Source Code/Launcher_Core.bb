@@ -996,19 +996,5 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 	Color(OldR, OldG, OldB)
 End Function
 
-Function SimpleFileSize$(Size%)
-	Local fSize# = Float(Size)
-	
-	If Size >= 1048576 ; >= 1 MB
-		If Size >= 1073741824 ; >= 1 GB
-			Return(Str(Ceil((fSize / 1024 / 1024 / 1024) * 100) / 100) + "GB")
-		Else
-			Return(Str(Ceil((fSize / 1024 / 1024) * 100) / 100) + "MB")
-		EndIf
-	Else
-		Return(Str(Ceil((fSize / 1024) * 100) / 100) + "KB")
-	EndIf
-End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

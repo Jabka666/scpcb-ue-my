@@ -11,6 +11,20 @@ Function GenerateSeedNumber%(Seed$)
 	Return(Temp)
 End Function
 
+Function SimpleFileSize$(Size%)
+	Local fSize# = Float(Size)
+	
+	If Size >= 1048576 ; >= 1 MB
+		If Size >= 1073741824 ; >= 1 GB
+			Return(Str(Ceil((fSize / 1024 / 1024 / 1024) * 100) / 100) + "GB")
+		Else
+			Return(Str(Ceil((fSize / 1024 / 1024) * 100) / 100) + "MB")
+		EndIf
+	Else
+		Return(Str(Ceil((fSize / 1024) * 100) / 100) + "KB")
+	EndIf
+End Function
+
 Function WrapAngle#(Angle#)
 	If Angle = Infinity Then Return(0.0)
 	If Angle < 0.0
