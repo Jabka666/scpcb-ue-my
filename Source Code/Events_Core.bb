@@ -7397,7 +7397,7 @@ Function UpdateDimension106%()
 						
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)
-								Random = Rand(13, 30)
+								Random = Rand(14, 30)
 								Teleport = True
 							Else ; ~ The player is not at the exit, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
@@ -7559,7 +7559,7 @@ Function UpdateDimension106%()
 						If EntityY(me\Collider) < 24.5
 							StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-							Random = 17
+							Random = 18
 							Teleport = True
 						EndIf
 						;[End Block]
@@ -7717,7 +7717,7 @@ Function UpdateDimension106%()
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							; ~ Player is at the exit
 							If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
-								Random = Rand(13, 30)
+								Random = Rand(14, 30)
 								Teleport = True
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
@@ -7775,7 +7775,7 @@ Function UpdateDimension106%()
 							FreeEntity(Pvt) : Pvt = 0
 							e\EventState2 = PD_StartRoom
 							;[End Block]
-						Case 6, 7, 8, 9, 10, 11, 12 ; ~ The 4-way room
+						Case 6, 7, 8, 9, 10, 11, 12, 13 ; ~ The 4-way room
 							;[Block]
 							PlaySound_Strict(snd_I\SCP106SFX[3], True)
 							
@@ -7788,7 +7788,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_FourWayRoom
 							;[End Block]
-						Case 13, 14, 15, 16 ; ~ Middle of the large starting room
+						Case 14, 15, 16, 17 ; ~ Middle of the large starting room
 							;[Block]
 							PositionEntity(me\Collider, EntityX(e\room\OBJ), 0.6, EntityZ(e\room\OBJ))
 							ResetEntity(me\Collider)
@@ -7796,7 +7796,7 @@ Function UpdateDimension106%()
 							e\EventState3 = 0.0
 							e\EventState2 = PD_StartRoom
 							;[End Block]
-						Case 17, 18 ; ~ The exit room
+						Case 18 ; ~ The exit room
 							;[Block]
 							PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y + 16.0 - 304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 							ResetEntity(me\Collider)
