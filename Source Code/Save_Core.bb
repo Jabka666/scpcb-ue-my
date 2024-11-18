@@ -2120,6 +2120,10 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				SetAnimTime(e\room\Objects[5], 1.0 + 119.0 * (e\EventState <> 0.0))
 				;[End Block]
+			Case e_room2_6_ez_789_j
+				;[Block]
+				SetAnimTime(e\room\Objects[0], 1.0 + 239.0 * (e\EventState = 2.0))
+				;[End Block]
 		End Select
 	Next
 	

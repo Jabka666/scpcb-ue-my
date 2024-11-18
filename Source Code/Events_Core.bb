@@ -3121,36 +3121,37 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_6_ez_789_j
 				;[Block]
-				If e\room\Objects[0] = 0
-					TFormPoint(502.0, 128.0, 83.0, e\room\OBJ, 0)
-					it.Items = CreateItem("Document SCP-789-J", it_paper, TFormedX(), TFormedY(), TFormedZ())
-					EntityType(it\Collider, HIT_ITEM)
-					TFormPoint(1072.0, 50.0, 0.0, e\room\OBJ, 0)
-					e\room\Objects[0] = CreatePivot()
-					PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ())
-					EntityParent(e\room\Objects[0], e\room\OBJ)
-				Else
-					Select e\EventState
-						Case 0.0
-							;[Block]
-							If PlayerRoom = e\room
-								If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 4.0
-									GiveAchievement("789j")
-									e\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\Joke\789J.ogg"), Camera, e\room\Objects[0], 10.0, 1.0, True)
-									e\EventState = 1.0
-								EndIf
+				Select e\EventState
+					Case 0.0
+						;[Block]
+						TFormPoint(502.0, 128.0, 83.0, e\room\OBJ, 0)
+						it.Items = CreateItem("Document SCP-789-J", it_paper, TFormedX(), TFormedY(), TFormedZ())
+						EntityType(it\Collider, HIT_ITEM)
+						
+						e\EventState = 1.0
+						;[End Block]
+					Case 1.0
+						;[Block]
+						If PlayerRoom = e\room
+							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 4.0
+								GiveAchievement("789j")
+								e\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\Joke\789J.ogg"), Camera, e\room\Objects[0], 10.0, 1.0, True)
+								
+								e\EventState = 2.0
 							EndIf
-							;[End Block]
-						Case 1.0
-							;[Block]
-							UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 10.0, 1.5)
-							If (Not ChannelPlaying(e\SoundCHN))
-								If e\room\Objects[0] <> 0 Then FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
-								RemoveEvent(e)
-							EndIf
-							;[End Block]
-					End Select
-				EndIf
+						EndIf
+						;[End Block]
+					Case 2.0
+						;[Block]
+						If AnimTime(e\room\Objects[0]) < 30.0
+							AnimateEx(e\room\Objects[0], AnimTime(e\room\Objects[0]), 1.0, 30.0, 1.0, False)
+						Else
+							AnimateEx(e\room\Objects[0], AnimTime(e\room\Objects[0]), 31.0, 240.0, 0.52, False)
+						EndIf
+						UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 10.0, 1.5)
+						If (Not ChannelPlaying(e\SoundCHN)) Then RemoveEvent(e)
+						;[End Block]
+				End Select
 				;[End Block]
 			Case e_room2_6_ez_guard
 				;[Block]

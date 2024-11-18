@@ -3353,6 +3353,21 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_6_ez
 			;[Block]
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room2_6_ez
+						r\Objects[0] = CopyEntity(r2\Objects[0], r\OBJ) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\scp_789_j.b3d")
+			Scale = RoomScale * 2.5
+			ScaleEntity(r\Objects[0], Scale, Scale, Scale)
+			EntityType(r\Objects[0], HIT_MAP)
+			PositionEntity(r\Objects[0], r\x + 1252.0 * RoomScale, r\y, r\z + 101.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
+			
 			If Rand(3) = 1
 				Select Rand(4)
 					Case 1
