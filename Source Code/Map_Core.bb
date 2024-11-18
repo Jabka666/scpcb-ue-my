@@ -4527,17 +4527,17 @@ Function CreateLever.Levers(room.Rooms, x#, y#, z#, Rotation# = 0.0, TurnedOn% =
 End Function
 
 Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
-	Local PrevValue#, RefValue#
+	Local RefValue#
 	Local Dist# = EntityDistanceSquared(Camera, OBJ)
 	
-	If Dist < 4.0 
+	If Dist < 4.0
+		Local PrevValue# = EntityPitch(OBJ)
 		If Dist <= 0.64 And (Not Locked)
 			If EntityPick(Camera, 0.8) = OBJ
 				HandEntity = OBJ
 				If mo\MouseHit1 Lor mo\MouseDown1 Then GrabbedEntity = OBJ
 			EndIf
 			
-			PrevValue = EntityPitch(OBJ)
 			
 			If GrabbedEntity = OBJ
 				HandEntity = OBJ
@@ -4546,12 +4546,6 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 				DrawArrowIcon[2] = True
 			EndIf
 			
-			RefValue = EntityPitch(OBJ, True)
-			If RefValue > (MaxValue - 5.0)
-				If PrevValue =< (MaxValue - 5.0) Then PlaySoundEx(snd_I\LeverSFX, Camera, OBJ, 1.0)
-			ElseIf RefValue < (MinValue + 5.0)
-				If PrevValue => (MinValue + 5.0) Then PlaySoundEx(snd_I\LeverSFX, Camera, OBJ, 1.0)	
-			EndIf
 		Else
 			GrabbedEntity = 0
 		EndIf
@@ -4561,6 +4555,12 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 			Else
 				RotateEntity(OBJ, CurveValue(MinValue, EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 			EndIf
+		EndIf
+		RefValue = EntityPitch(OBJ, True)
+		If RefValue > (MaxValue - 5.0)
+			If PrevValue =< (MaxValue - 5.0) Then PlaySoundEx(snd_I\LeverSFX, Camera, OBJ, 2.0)
+		ElseIf RefValue < (MinValue + 5.0)
+			If PrevValue => (MinValue + 5.0) Then PlaySoundEx(snd_I\LeverSFX, Camera, OBJ, 2.0)	
 		EndIf
 	EndIf
 	
