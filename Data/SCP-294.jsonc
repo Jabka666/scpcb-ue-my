@@ -512,6 +512,7 @@
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
 		"blur": 15.0,
+		"death_message": "Subject D-9341 was found dead with the victim's organs and mouth cavity suffering numerous 4th degree burns and traces of molten gold in the stomach. A polystyrene cup was also located next to the subject's body. Cause of death is most likely linked to [DATA REDACTED].",
 		"death_timer": 5
 	},
 	{
@@ -846,6 +847,7 @@
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
 		"blur": 15.0,
+		"death_message": "Subject D-9341 was found dead with the victim's organs and mouth cavity suffering numerous 4th degree burns and traces of molten metal in the stomach. A polystyrene cup was also located next to the subject's body. Cause of death is most likely linked to [DATA REDACTED].",
 		"death_timer": 0.0
 	},
 	{
@@ -2498,6 +2500,7 @@
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
+		"death_message": "Subject D-9341 discovered dead with their lower mandible corroded off from a liquid presumably obtained from SCP-294.",
 		"death_timer": 0.0
 	},
 	{
