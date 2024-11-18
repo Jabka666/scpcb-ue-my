@@ -5212,7 +5212,7 @@ Function UpdateGUI%()
 									Temp = JsonGetValue(Drink, "bloodloss")
 									If (Not JsonIsNull(Temp)) Then me\Bloodloss = Max(me\Bloodloss + JsonGetFloat(Temp), 0.0)
 									Temp = JsonGetValue(Drink, "energy")
-									If (Not JsonIsNull(Temp)) Then me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(Temp) / 2.0, JsonGetFloat(Temp)), 100.0)
+									If (Not JsonIsNull(Temp)) Then me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(Temp) / 2.0, JsonGetFloat(Temp)) * SelectedItem\State, 100.0)
 									
 									Temp = JsonGetValue(Drink, "drink_sound")
 									If (Not JsonIsNull(Temp))
