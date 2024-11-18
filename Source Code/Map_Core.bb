@@ -783,11 +783,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					Temp2s = ReadString(f)
 					; ~ A hacky way to use .b3d format
-					If FileExtension(Temp2s) = "x"
-						Temp2s = Left(Temp2s, Len(Temp2s) - 2)
-					ElseIf FileExtension(Temp2s) = "b3d"
-						Temp2s = Left(Temp2s, Len(Temp2s) - 4)
-					EndIf
+					If FileExtension(Temp2s) = "b3d" Then Temp2s = Left(Temp2s, Len(Temp2s) - 4)
 					tp\Name = "GFX\Map\Props\" + Temp2s + ".b3d"
 					
 					tp\Pitch = ReadFloat(f)
@@ -4532,12 +4528,12 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 	
 	If Dist < 4.0
 		Local PrevValue# = EntityPitch(OBJ)
+		
 		If Dist <= 0.64 And (Not Locked)
 			If EntityPick(Camera, 0.8) = OBJ
 				HandEntity = OBJ
 				If mo\MouseHit1 Lor mo\MouseDown1 Then GrabbedEntity = OBJ
 			EndIf
-			
 			
 			If GrabbedEntity = OBJ
 				HandEntity = OBJ
@@ -4545,7 +4541,6 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 				DrawArrowIcon[0] = True
 				DrawArrowIcon[2] = True
 			EndIf
-			
 		Else
 			GrabbedEntity = 0
 		EndIf
