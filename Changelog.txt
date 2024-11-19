@@ -50,7 +50,7 @@
 	- If «PlayerRoom\DisableDecals» = 3 Then SCP-106's spawntimer is paused entirely.
 	- Room spawntimer changes:
 	- LCZ:
-		- «cont1_005», «cont1_205», «cont2_012», «cont2_1123», «room2_closets», «room2_gw», «room2_gw_2», «room2_storage»: 0.0x -> 0.25x
+		- «cont1_005», «cont1_205», «cont2_012», «room2_closets», «room2_gw», «room2_gw_2», «room2_storage»: 0.0x -> 0.25x
 		- «cont2c_066_1162_arc», «room2_tesla_lcz», «room3_storage»: 1.0x -> 0.5x
 	- HCZ:
 		- «cont1_895»,«cont2_409», «room2_hcz», «room2_2_hcz», «room2_3_hcz», «room2_shaft», «cont2c_096», «room3_hcz», «room4_hcz»: 0.0x -> 0.25x
