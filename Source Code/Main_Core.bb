@@ -8754,7 +8754,7 @@ Function UpdateCredits%()
 		me\CreditsTimer = me\CreditsTimer + (0.5 * fps\Factor[1])
 		If me\CreditsTimer >= 0.0
 			; ~ Just save this line, ok?
-			If me\CreditsTimer > 700.0 Then me\CreditsTimer = -255.0
+			If me\CreditsTimer > 1000.0 Then me\CreditsTimer = -255.0
 		Else
 			If me\CreditsTimer >= -1.0 Then me\CreditsTimer = -1.0
 		EndIf
