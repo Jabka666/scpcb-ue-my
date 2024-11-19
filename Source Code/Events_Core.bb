@@ -2580,35 +2580,32 @@ Function UpdateEvents%()
 							EndIf
 						EndIf
 						
-						For i = 0 To 1
-							If fr\ForestDoors[i]\Open
-								me\BlinkTimer = -10.0
-								
-								PositionEntity(me\Collider, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
-								
-								RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True) + e\EventState2 * 180.0, 0.0)
-								MoveEntity(me\Collider, 0.0, 0.0, 1.5)
-								
-								ResetEntity(me\Collider)
-								
-								ResetRender()
-								
-								IsBlackOut = PrevIsBlackOut
-								If wi\NightVision > 0
-									me\CameraFogDist = 15.0
-								ElseIf wi\SCRAMBLE > 0
-									me\CameraFogDist = 9.0
-								Else
-									me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
-								EndIf
-								
-								CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
-								
-								e\EventState = 0.0
-								e\EventState3 = 0.0
-								Exit
+						If fr\ForestDoors[0]\Open Lor fr\ForestDoors[1]\Open
+							me\BlinkTimer = -10.0
+							
+							PositionEntity(me\Collider, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
+							
+							RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True) + e\EventState2 * 180.0, 0.0)
+							MoveEntity(me\Collider, 0.0, 0.0, 1.5)
+							
+							ResetEntity(me\Collider)
+							
+							ResetRender()
+							
+							IsBlackOut = PrevIsBlackOut
+							If wi\NightVision > 0
+								me\CameraFogDist = 15.0
+							ElseIf wi\SCRAMBLE > 0
+								me\CameraFogDist = 9.0
+							Else
+								me\CameraFogDist = 6.0 - (2.0 * IsBlackOut)
 							EndIf
-						Next
+							
+							CurrFogColorR = 0.0 : CurrFogColorG = 0.0 : CurrFogColorB = 0.0
+							
+							e\EventState = 0.0
+							e\EventState3 = 0.0
+						EndIf
 					Else
 						If (Not n_I\Curr106\Contained) Then n_I\Curr106\Idle = 0
 						If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
