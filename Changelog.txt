@@ -41,6 +41,7 @@
 - Tourette's syndrome alerts NPCs.
 - Improved SCP-008-1 and SCP-049-2 teleporting.
 - SCP-966 are shorter.
+- SCP-966 additional insomnia accumulate faster.
 
 - Rework SCP-106's spawnrate throughout the facility:
 	- Based on integers of «PlayerRoom\DisableDecals».
