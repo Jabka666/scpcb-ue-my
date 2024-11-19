@@ -18,6 +18,7 @@
 - Added SCP-789-J document.
 - Added bloody version of Level 0 Key Card and Level 1 Key Card.
 - Added new bench2.b3d model.
+
 - "energy" cup effect can now be refined in SCP-914.
 - SCP-1025 changes:
 	- Updated some SCP-1025 pages.

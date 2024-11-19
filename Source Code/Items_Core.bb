@@ -986,6 +986,10 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 			;[Block]
 			SetAnimTime(item\OBJ, 4.0)
 			;[End Block]
+		Case it_scp1123
+			;[Block]
+			Use1123()
+			;[End Block]
 	End Select
 	
 	item\Picked = False

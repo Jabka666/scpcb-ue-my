@@ -6104,7 +6104,7 @@ Function CreateChunkParts%(r.Rooms)
 			Else
 				RotateEntity(chp\OBJ[j], 0.0, JsonGetFloat(Yaw), 0.0)
 			EndIf
-			PositionEntity(chp\OBJ[j], Float(x), 0, Float(z))
+			PositionEntity(chp\OBJ[j], Float(x), 0.0, Float(z))
 			ScaleEntity(chp\OBJ[j], RoomScale, RoomScale, RoomScale)
 			EntityType(chp\OBJ[j], HIT_MAP)
 			EntityPickMode(chp\OBJ[j], 2)
