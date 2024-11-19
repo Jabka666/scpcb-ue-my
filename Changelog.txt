@@ -17,6 +17,8 @@
 - Added E-Reader.
 - Added SCP-789-J document.
 - Added bloody version of Level 0 Key Card and Level 1 Key Card.
+- Added new bench2.b3d model.
+- "energy" cup effect can now be refined in SCP-914.
 - SCP-1025 changes:
 	- Updated some SCP-1025 pages.
 	- Polydactyly injures the player now. (+1.5 injuries)
@@ -38,6 +40,7 @@
 - SCP-939 chase turn speed and movement speed acceleration increased.
 - Tourette's syndrome alerts NPCs.
 - Improved SCP-008-1 and SCP-049-2 teleporting.
+- SCP-966 are shorter.
 
 - Rework SCP-106's spawnrate throughout the facility:
 	- Based on integers of «PlayerRoom\DisableDecals».
