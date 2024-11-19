@@ -2636,27 +2636,19 @@ Function UpdateEvents%()
 							PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 							PointEntity(Pvt, e\room\OBJ)
 							Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
-							If Angle > 90.0 And Angle < 270.0
-								PositionEntity(me\Collider, EntityX(fr\ForestDoors[0]\FrameOBJ, True), EntityY(fr\ForestDoors[0]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\ForestDoors[0]\FrameOBJ, True), True)
-								RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[0]\FrameOBJ, True) - 180.0, 0.0, True)
-								MoveEntity(me\Collider, -0.5, 0.0, 0.5)
-								
-								; ~ Determine the locked door
-								fr\ForestDoors[0]\Locked = 2
-								fr\ForestDoors[1]\Locked = 1
-								
-								e\EventState2 = 1.0
-							Else
-								PositionEntity(me\Collider, EntityX(fr\ForestDoors[1]\FrameOBJ, True), EntityY(fr\ForestDoors[1]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\ForestDoors[1]\FrameOBJ, True), True)
-								RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[1]\FrameOBJ, True) - 180.0, 0.0, True)
-								MoveEntity(me\Collider, -0.5, 0.0, 0.5)
-								
-								; ~ Determine the locked door
-								fr\ForestDoors[0]\Locked = 1
-								fr\ForestDoors[1]\Locked = 2
-								
-								e\EventState2 = 0.0
-							EndIf
+							
+							i = (Angle <= 90.0 Lor Angle >= 270.0)
+							
+							PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
+							RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[i]\FrameOBJ, True) - 180.0, 0.0, True)
+							MoveEntity(me\Collider, -0.5, 0.0, 0.5)
+							
+							; ~ Determine the locked door
+							fr\ForestDoors[0]\Locked = 2 - i
+							fr\ForestDoors[1]\Locked = 1 + i
+							
+							e\EventState2 = (1.0 - i)
+							
 							FreeEntity(Pvt) : Pvt = 0
 							ResetEntity(me\Collider)
 							
