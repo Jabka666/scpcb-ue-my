@@ -7705,7 +7705,6 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_Labyrinth
 						;[Block]
-						ShouldPlay = 34
 						me\CameraFogDist = 4.0
 						
 						UpdateDoors()
