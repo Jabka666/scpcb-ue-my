@@ -71,21 +71,20 @@ Const e_room2_medibay% = 53
 Const e_room2_scientists_2% = 54
 Const e_cont2_860_1% = 55
 Const e_room2c_ec% = 56
-Const e_room2c_gw_ez_096% = 57
-Const e_room3_2_ez_duck% = 58
+Const e_room3_2_ez_duck% = 57
 ; ~ OTHERS
-Const e_096_spawn% = 59
-Const e_106_victim% = 60
-Const e_106_sinkhole% = 61
-Const e_173_appearing% = 62
-Const e_682_roar% = 63
-Const e_1048_a% = 64
-Const e_checkpoint% = 65
-Const e_door_closing% = 66
-Const e_gateway% = 67
-Const e_tesla% = 68
-Const e_trick% = 69, e_trick_item% = 70
-Const e_dimension_106% = 71, e_dimension_1499% = 72
+Const e_096_spawn% = 58
+Const e_106_victim% = 59
+Const e_106_sinkhole% = 60
+Const e_173_appearing% = 61
+Const e_682_roar% = 62
+Const e_1048_a% = 63
+Const e_checkpoint% = 64
+Const e_door_closing% = 65
+Const e_gateway% = 66
+Const e_tesla% = 67
+Const e_trick% = 68, e_trick_item% = 69
+Const e_dimension_106% = 70, e_dimension_1499% = 71
 ;[End Block]
 
 ; ~ For Map Creator
@@ -294,10 +293,6 @@ Function FindEventID%(EventName$)
 		Case "room2c_ec"
 			;[Block]
 			Return(e_room2c_ec)
-			;[End Block]
-		Case "room2c_gw_ez_096"
-			;[Block]
-			Return(e_room2c_gw_ez_096)
 			;[End Block]
 		Case "room2_ic"
 			;[Block]
@@ -3624,17 +3619,6 @@ Function UpdateEvents%()
 							RemoveEvent(e)
 						EndIf
 					EndIf
-				EndIf
-				;[End Block]
-			Case e_room2c_gw_ez_096
-				;[Block]
-				If PlayerRoom = e\room
-					If n_I\Curr096 = Null
-						n_I\Curr096 = CreateNPC(NPCType096, e\room\x, 0.3, e\room\z)
-						RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 45.0, 0.0, True)
-						GiveAchievement("096")
-					EndIf
-					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_room2c_ec
@@ -7721,6 +7705,7 @@ Function UpdateDimension106%()
 						;[End Block]
 					Case PD_Labyrinth
 						;[Block]
+						ShouldPlay = 34
 						me\CameraFogDist = 4.0
 						
 						UpdateDoors()
