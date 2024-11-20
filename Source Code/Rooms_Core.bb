@@ -665,6 +665,13 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[6], r\x - 936.0 * RoomScale, r\y + 132.0 * RoomScale, r\z - 296.0 * RoomScale)
 			EntityParent(r\Objects[6], r\OBJ)
 			
+			r\Objects[7] = LoadAnimMesh_Strict("GFX\Map\Props\scp_914_gears.b3d")
+			Scale = RoomScale * 1.34
+			ScaleEntity(r\Objects[7], Scale, Scale, Scale)
+			PositionEntity(r\Objects[7], r\x - 408.0 * RoomScale, r\y, r\z + 640.0 * RoomScale)
+			RotateEntity(r\Objects[7], 0.0, 270.0, 0.0)
+			EntityParent(r\Objects[7], r\OBJ)
+			
 			it.Items = CreateItem("Addendum: 5/14 Test Log", it_paper, r\x + 538.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 127.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)

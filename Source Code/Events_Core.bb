@@ -1716,7 +1716,7 @@ Function UpdateEvents%()
 												If Abs(EntityY(it\Collider) - (e\room\y + 648.0 * RoomScale)) < 104.0
 													e\SoundCHN = PlaySoundEx(snd_I\MachineSFX, Camera, e\room\Objects[1])
 													e\room\RoomDoors[1]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[1]\OBJ)
-													
+													SetAnimTime(e\room\Objects[7], 1.0)
 													e\EventState = 1.0
 													Exit
 												EndIf
@@ -1883,6 +1883,7 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
+					If ChannelPlaying(e\SoundCHN) Then AnimateEx(e\room\Objects[7], AnimTime(e\room\Objects[7]), 1.0, 599.0, 0.62, False)
 				EndIf
 				If e\room\Dist < 12.0
 					If EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
