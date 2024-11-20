@@ -3749,26 +3749,21 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 288.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			
-			If Rand(5) = 1
+			If Rand(3) = 1
 				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 402.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 922.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-			ElseIf Rand(4) = 1
-				it.Items = CreateItem("First Aid Kit", it_firstaid, r\x + 402.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 922.0 * RoomScale)
+			Else
+				it.Items = CreateItem("Syringe", it_syringe, r\x + 402.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 922.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			If Rand(4) = 1
-				it.Items = CreateItem("Cup", it_cup, r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale, 200, 200, 200)
-				it\Name = "COFFEE"
-				it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
-				EntityParent(it\Collider, r\OBJ)
-				
-				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			ElseIf Rand(3) = 1
-				it.Items = CreateRandomBattery(r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
+			it.Items = CreateItem("Cup", it_cup, r\x + 532.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 558.0 * RoomScale, 87, 62, 45)
+			it\Name = "COFFEE"
+			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x + 880.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 300.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2c_ec
 			;[Block]
@@ -3788,50 +3783,6 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Note from Daniel", it_paper, r\x - 400.0 * RoomScale, r\y + 1040.0 * RoomScale, r\z + 115.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-			;[End Block]
-		Case r_room2c_gw_ez
-			;[Block]
-			; ~ Misc doors
-			d.Doors = CreateDoor(r, r\x + 815.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.07, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			
-			d.Doors = CreateDoor(r, r\x + 352.0 * RoomScale, r\y, r\z - 815.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.07, True)
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			
-			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y, r\z - 400.0 * RoomScale, 90.0, True, ONE_SIDED_DOOR)
-			d\Locked = 1 : d\MTFClose = False
-			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 632.0 * RoomScale, True)
-			RotateEntity(d\Buttons[0], EntityPitch(d\Buttons[0], True), 0.0, EntityRoll(d\Buttons[0], True), True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			
-			d.Doors = CreateDoor(r, r\x + 400.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 180.0, True, ONE_SIDED_DOOR)
-			d\Locked = 1 : d\MTFClose = False
-			PositionEntity(d\Buttons[0], r\x + 632.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 288.0 * RoomScale, True)
-			RotateEntity(d\Buttons[0], EntityPitch(d\Buttons[0], True), 90.0, EntityRoll(d\Buttons[0], True), True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			
-			; ~ Security cameras inside
-			sc.SecurityCams = CreateSecurityCam(r, r\x + 512.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 384.0 * RoomScale, 40.0, True, r\x + 668.0 * RoomScale, r\y + 1.1, r\z - 96.0 * RoomScale, 0.0, 90.0, 0.0)
-			sc\Angle = 135.0 : sc\Turn = 45.0
-			
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, 40.0, True, r\x + 96.0 * RoomScale, r\y + 1.1, r\z - 668.0 * RoomScale)
-			sc\Angle = 315.0 : sc\Turn = 45.0
-			
-			; ~ The blood decals inside
-			For i = 0 To 5
-				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.6))
-				EntityParent(de\OBJ, r\OBJ)
-				de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), r\x + Rnd(-392.0, 520.0) * RoomScale, r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-392.0, 520.0) * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.6))
-				EntityParent(de\OBJ, r\OBJ)
-				de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), r\x + Rnd(-0.5, 0.5), r\y + 3.0 * RoomScale + Rnd(0, 0.001), r\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.6))
-				EntityParent(de\OBJ, r\OBJ)
-			Next
 			;[End Block]
 		Case r_room3_ez
 			;[Block]
