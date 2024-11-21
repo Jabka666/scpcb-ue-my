@@ -1843,10 +1843,10 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			EndIf
 			ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
 			ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
-			LoadingImage = ScaleImageEx(LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image"))), MenuScale, MenuScale)
+			LoadingImage = ScaleImageEx(LoadImage_Strict("GFX\LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image"))), MenuScale, MenuScale)
 			If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
 				If LoadingBack = 0
-					LoadingBack = ScaleImageEx(LoadImage_Strict("LoadingScreens\loading_back.png"), MenuScale, MenuScale)
+					LoadingBack = ScaleImageEx(LoadImage_Strict("GFX\LoadingScreens\loading_back.png"), MenuScale, MenuScale)
 					LoadingBackWidth = ImageWidth(LoadingBack) / 2
 					LoadingBackHeight = ImageHeight(LoadingBack) / 2
 				EndIf
