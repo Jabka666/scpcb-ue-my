@@ -1781,9 +1781,6 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_storage, r_room2_storage, 0)
 	
-	; ~ SCP-096 spawns in the first (and last)
-	CreateEvent(e_room2c_gw_ez_096, r_room2c_gw_ez, 0)
-	
 	CreateEvent(e_room1_dead_end_106, r_room1_dead_end_lcz, Rand(0, 1))
 	CreateEvent(e_room1_dead_end_guard, r_room1_dead_end_ez, Rand(0, 1))
 	
