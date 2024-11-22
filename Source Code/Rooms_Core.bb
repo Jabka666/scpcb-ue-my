@@ -604,8 +604,10 @@ Function FillRoom%(r.Rooms)
 		Case r_cont1_914
 			;[Block]
 			; ~ SCP-914 doors
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_914.png")
 			d.Doors = CreateDoor(r, r\x - 1037.0 * RoomScale, r\y, r\z + 528.0 * RoomScale, 180.0, True, SCP_914_DOOR)
 			d\Locked = 1
+			EntityTexture(d\OBJ, Tex) : EntityTexture(d\OBJ2, Tex) : EntityTexture(d\FrameOBJ, Tex)
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
@@ -613,10 +615,12 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x + 404.0 * RoomScale, r\y, r\z + 528.0 * RoomScale, 180.0, True, SCP_914_DOOR)
 			d\Locked = 1
+			EntityTexture(d\OBJ, Tex) : EntityTexture(d\OBJ2, Tex) : EntityTexture(d\FrameOBJ, Tex)
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[1] = d
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			
 			; ~ SCP-914 Chamber Door
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 368.0 * RoomScale, 0.0, False, BIG_DOOR, KEY_CARD_2)

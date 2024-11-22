@@ -3263,7 +3263,7 @@ Function UpdateEvents%()
 							If n_I\Curr106\State =< 0.0
 								RemoveEvent(e)
 							Else
-								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\RoomDoors[0]\OBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\OBJ, True))
+								e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
 								ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_JANITOR_TEXTURE)
 								PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 								RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
@@ -3288,7 +3288,7 @@ Function UpdateEvents%()
 					ElseIf e\EventState = 2.0
 						e\EventState2 = e\EventState2 + fps\Factor[0]
 						If e\EventState2 > 85.0 Then e\room\NPC[0]\State = 1.0
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\OBJ) > 3.49
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 3.49
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05)
 							de\SizeChange = 0.008 : de\Timer = 10000.0
 							EntityParent(de\OBJ, e\room\OBJ)
@@ -3301,7 +3301,7 @@ Function UpdateEvents%()
 						
 						n_I\Curr106\Idle = 1
 						
-						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\OBJ) > 7.74
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 7.74
 							If e\room\NPC[0]\State = 1.0 Then SetNPCFrame(e\room\NPC[0], 41.0)
 							e\room\NPC[0]\State = 6.0
 							e\room\NPC[0]\CurrSpeed = CurveValue(0.0, e\room\NPC[0]\CurrSpeed, 25.0)
