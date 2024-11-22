@@ -1672,7 +1672,7 @@ Function RemoveSoundInstances%()
 			RadioSFX(1, i) = 0
 			snd_I\SCP106SFX[i] = 0
 		EndIf
-		If i < 11
+		If i < 12
 			RoomAmbience[i] = 0
 		EndIf
 		If i < 13

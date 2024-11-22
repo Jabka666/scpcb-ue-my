@@ -1539,7 +1539,7 @@ Function UpdateForest%(fr.Forest)
 End Function
 
 Global RoomTempID%
-Global RoomAmbience%[11]
+Global RoomAmbience%[12]
 
 Type RoomTemplates
 	Field OBJ%, ID%
