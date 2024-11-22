@@ -1883,7 +1883,8 @@ Function UpdateEvents%()
 						EndIf
 					EndIf
 					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1])
-					If ChannelPlaying(e\SoundCHN) Then AnimateEx(e\room\Objects[7], AnimTime(e\room\Objects[7]), 1.0, 599.0, 0.62, False)
+					
+					If ChannelPlaying(e\SoundCHN) Then AnimateEx(e\room\Objects[7], AnimTime(e\room\Objects[7]), 1.0, 74.0, 0.3, e\EventState <> 0.0)
 				EndIf
 				If e\room\Dist < 12.0
 					If EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
