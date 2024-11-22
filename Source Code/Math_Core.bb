@@ -27,11 +27,9 @@ End Function
 
 Function WrapAngle#(Angle#)
 	If Angle = Infinity Then Return(0.0)
-	If Angle < 0.0
-		Return(360.0 + (Angle Mod 360.0))
-	Else
-		Return(Angle Mod 360.0)
-	EndIf
+	Angle = Angle Mod 360
+	If Angle < 0.0 Then Return(Angle + 360)
+	Return(Angle)
 End Function
 
 Function CurveValue#(Value#, Old#, Smooth#)
