@@ -4,9 +4,12 @@
 - Added animation for femur breaker and butt ghost.
 	- Added face for butt ghost.
 - Added animation for SCP-914.
+
 - Reduced the chances of escaping the Pocket Dimension and the fake tunnel.
 - Blink meter turns red sooner when low.
 - SCP-079 is more likely to hack monitors with SCP-895.
+
+- Optimized the game...
 
 [Rooms]
 - Added animation for ventilation grate in SCP-173's containment chamber.
@@ -15,6 +18,8 @@
 - Level 3 Key Card in «cont1_205» is now bloody.
 - Room event sounds for «cont2_500_1499» And «cont1_035» are now based on adjacent rooms instead of distance.
 - Can now open the door of SCP-205's chamber early.
+
+- Updated some models...
 
 [Items]
 - Added E-Reader.
