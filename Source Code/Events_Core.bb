@@ -703,11 +703,28 @@ Function UpdateEvents%()
 							ChangeNPCTextureID(e\room\NPC[5], NPC_CLASS_D_CLASS_D_TEXTURE)
 							SetNPCFrame(e\room\NPC[5], 779.0)
 							RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+							
+							PlaySound_Strict(LoadTempSound("SFX\Room\Intro\173Vent.ogg"))
 						EndIf
 						me\CurrSpeed = 0.0 : me\Playable = True
 						e\EventState = 1.0
 					EndIf
 				Else
+					If EntityY(e\room\Objects[2], True) > e\room\y + 384.0 * RoomScale
+						e\EventState4 = CurveValue(e\EventState4 + fps\Factor[0] * 2.0, e\EventState4, 40.0)
+						PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), Max(e\room\y + 384.0 * RoomScale, (e\room\y + 1152.0 * RoomScale) - e\EventState4), EntityZ(e\room\Objects[2], True), True)
+						RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), CurveValue(30.0, EntityYaw(e\room\Objects[2], True), 200.0), EntityRoll(e\room\Objects[2], True), True)
+						
+						If EntityDistanceSquared(e\room\Objects[2], me\Collider) < 0.25
+							If EntityY(e\room\Objects[2], True) < e\room\y + 640.0 * RoomScale
+								If (Not chs\GodMode) And (Not me\Terminated)
+									PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
+									me\Terminated = True
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+					
 					If e\room\NPC[0] <> Null Then AnimateNPC(e\room\NPC[0], 249.0, 286.0, 0.4, False)
 					
 					If EntityDistanceSquared(me\Collider, e\room\RoomDoors[2]\FrameOBJ) < 1.21 Then e\EventState = Max(e\EventState, 500.0)
@@ -8308,7 +8325,6 @@ Function UpdateIntro%()
 					For i = 0 To 2
 						snd_I\IntroSFX[i + 4] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
 					Next
-					snd_I\IntroSFX[7] = LoadSound_Strict("SFX\Room\Intro\173Vent.ogg")
 					
 					HideDistance = 68.0
 					
@@ -9134,7 +9150,7 @@ Function UpdateIntro%()
 											
 											n_I\Curr173\Idle = 0
 											
-											PlaySound_Strict(snd_I\IntroSFX[7])
+											PlaySound_Strict(LoadSound_Strict("SFX\Room\Intro\173Vent.ogg"))
 											
 											PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
 											ResetEntity(n_I\Curr173\Collider)
@@ -9156,7 +9172,7 @@ Function UpdateIntro%()
 													Next
 													
 													FreeSound_Strict(snd_I\IntroSFX[2]) : snd_I\IntroSFX[2] = 0
-													For i = 4 To 7
+													For i = 4 To 6
 														FreeSound_Strict(snd_I\IntroSFX[i]) : snd_I\IntroSFX[i] = 0
 													Next
 													

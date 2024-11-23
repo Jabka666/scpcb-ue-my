@@ -9,6 +9,8 @@
 - SCP-079 is more likely to hack monitors with SCP-895.
 
 [Rooms]
+- Added animation for ventilation grate in SCP-173's containment chamber.
+
 - Improved ambience for «cont2_008».
 - Level 3 Key Card in «cont1_205» is now bloody.
 - Room event sounds for «cont2_500_1499» And «cont1_035» are now based on adjacent rooms instead of distance.

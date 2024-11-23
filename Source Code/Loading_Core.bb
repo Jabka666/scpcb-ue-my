@@ -1360,7 +1360,7 @@ Type SoundInstance
 	Field SCP173SFX%[3]
 	Field HorrorSFX%[14]
 	Field MissSFX%
-	Field IntroSFX%[8]
+	Field IntroSFX%[7]
 	Field AlarmSFX%[4]
 	Field DamageSFX%[14]
 	Field HeartBeatSFX%
@@ -1653,6 +1653,7 @@ Function RemoveSoundInstances%()
 			AmbientSFXAmount[i] = 0
 			snd_I\RustleSFX[i] = 0
 		EndIf
+		If i < 7 Then snd_I\IntroSFX[i] = 0
 		If i < 8
 			StepSFX(0, 0, i) = 0
 			StepSFX(0, 1, i) = 0
@@ -1664,7 +1665,6 @@ Function RemoveSoundInstances%()
 				StepSFX(4, 0, i) = 0
 			EndIf
 			If i < 2 Then StepSFX(5, 0, i) = 0
-			snd_I\IntroSFX[i] = 0
 			NPCSound[i] = 0
 		EndIf
 		If i < 9

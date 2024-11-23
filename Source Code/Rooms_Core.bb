@@ -237,6 +237,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[1], r\x + 448.0 * RoomScale, r\y + 10.0 * RoomScale, r\z + 2150.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
+			r\Objects[2] = LoadMesh_Strict("GFX\Map\Props\ventilation_grate.b3d")
+			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
+			EntityType(r\Objects[2], HIT_MAP)
+			PositionEntity(r\Objects[2], r\x + 2944.0 * RoomScale, r\y + 1152.0 * RoomScale, r\z + 2622.0 * RoomScale)
+			EntityParent(r\Objects[2], r\OBJ)
+			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 516.0 * RoomScale, r\y + 352.0 * RoomScale, r\z + 2143.0 * RoomScale, 20.0, True, r\x + 1454.0 * RoomScale, r\y + 608.0 * RoomScale, r\z + 2462.0 * RoomScale, 0.0, 90.0, 0.0)
 			ShowEntity(sc\BaseOBJ)
 			ShowEntity(sc\CameraOBJ)
