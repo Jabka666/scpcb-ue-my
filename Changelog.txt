@@ -71,9 +71,11 @@
 - Fixed ability to slowly move during usage of a first aid kit.
 - Fixed SCP-049 getting stuck on SCP-895's stairs.
 - Fixed SCP-049-2 freezing when they killed the player.
-- Fixed MTF getting stuck on SCP-066.
 - Fixed orange duck not being clickable.
-- Fixed MTF not finding SCP-173's chamber.
+- Fixes for MTF:
+	- Fixed MTF getting stuck on SCP-066.
+	- Fixed MTF not finding SCP-173's chamber.
+	- Fixed «AnnouncLost.ogg» sound not playing.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 

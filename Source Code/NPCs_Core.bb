@@ -5075,7 +5075,10 @@ Function UpdateNPCs%()
 				If n_I\MTFLeader = Null Then n_I\MTFLeader = n
 				If n_I\MTFCoLeader = Null And n <> n_I\MTFLeader Then n_I\MTFCoLeader = n
 			EndIf
-			
+			If n_I\MTFLeader = Null And n_I\MTFCoLeader = Null And MTFTimer > 20000.0 And MTFTimer < 31000.0
+				PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
+				MTFTimer = 31000.0
+			EndIf
 			If GravityDist < PowTwo(HideDistance * 0.6) Lor n\NPCType = NPCType1499_1
 				If n\InFacility = InFacility
 					TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
