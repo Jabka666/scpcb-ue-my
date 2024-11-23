@@ -447,16 +447,15 @@ Function PlayStepSound%(IncludeSprint% = True)
 	End Select
 	
 	TempCHN = PlaySound_Strict(StepSFX(Temp, (IncludeSprint And SoundHasSprint), SoundRand))
-	ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume)
+	
+	Local SoundVol# = (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume
+	
+	ChannelVolume(TempCHN, SoundVol)
 	If DecalStep = 2 And Temp <> 5
 		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)))
-		ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume)
+		ChannelVolume(TempCHN2, SoundVol)
 	EndIf
-	If IncludeSprint
-		me\SndVolume = Max(4.0, me\SndVolume)
-	Else
-		me\SndVolume = Max(2.5 - (me\Crouch * 0.7), me\SndVolume)
-	EndIf
+	me\SndVolume = Max(4.0 * IncludeSprint + (1 - IncludeSprint) * (2.5 - me\Crouch * 0.7), me\SndVolume)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
