@@ -32,7 +32,7 @@
 
 - Better textures for some items.
 - Improved a lot of models.
-- Improved all icons.
+- Improved icons for all items.
 
 [NPCs]
 - Changed SCP-106's texture.
