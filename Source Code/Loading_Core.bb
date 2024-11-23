@@ -341,7 +341,6 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[16], -0.008, 0.008, -0.008, 0.008, -0.008, 0.008)
 	SetTemplateSize(ParticleEffect[16], 0.006, 0.006, 1.0, 1.5)
 	SetTemplateAlphaVel(ParticleEffect[16], True)
-	SetTemplateColors(ParticleEffect[16], $0000FF, $6565FF)
 	
 	; ~ Water drop particle
 	ParticleEffect[17] = CreateTemplate()
