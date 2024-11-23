@@ -1426,7 +1426,6 @@ Function UpdateNPCs%()
 									EndIf
 									n\State3 = MilliSecs() + 2000
 								EndIf
-								
 								If chs\NoTarget And n\Target = Null Then n\LastSeen = 0
 								
 								If n\LastSeen = 1
@@ -1436,7 +1435,7 @@ Function UpdateNPCs%()
 									If n\Target <> Null Then Dist = EntityDistanceSquared(n\Target\Collider, n\Collider)
 									
 									If Dist < 7.84 Lor n\Frame < 150.0
-										If n\Frame > 193.0 Then n\Frame = 2.0 ; ~ Go to the start of the jump animation
+										If n\Frame > 193.0 Then SetNPCFrame(n, 2.0) ; ~ Go to the start of the jump animation
 										
 										AnimateNPC(n, 2.0, 193.0, 0.7)
 										
