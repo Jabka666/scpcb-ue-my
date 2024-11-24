@@ -84,6 +84,7 @@
 	- Fixed MTF getting stuck on SCP-066.
 	- Fixed MTF not finding SCP-173's chamber.
 	- Fixed «AnnouncLost.ogg» sound not playing.
+- Fixed ability to use empty spaces in the seed name.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 
