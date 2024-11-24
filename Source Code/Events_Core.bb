@@ -5599,17 +5599,17 @@ Function UpdateEvents%()
 								;[End Block]
 							Case 14.0
 								;[Block]
-								Temp = False
+								k = False
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null
 										If Inventory(i)\ItemTemplate\ID = it_paper
 											RemoveItem(Inventory(i))
-											Temp = True
+											k = True
 											Exit
 										EndIf
 									EndIf
 								Next
-								If Temp
+								If k
 									it.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, 0.0, 0.0, 0.0)
 									EntityType(it\Collider, HIT_ITEM)
 									PickItem(it, False)
@@ -5673,8 +5673,8 @@ Function UpdateEvents%()
 						End Select
 						
 						If Rand(10) = 1
-							Temp = Rand(0, 2)
-							PlaySound_Strict(AmbientSFX(Temp, Rand(0, AmbientSFXAmount[Temp] - 1)))
+							i = Rand(0, 2)
+							PlaySound_Strict(AmbientSFX(i, Rand(0, AmbientSFXAmount[i] - 1)))
 						EndIf
 					Else
 						If e\room\NPC[0] <> Null
