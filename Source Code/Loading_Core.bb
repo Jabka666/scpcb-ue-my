@@ -2954,6 +2954,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	MTFCameraCheckDetected = False
 	
 	SNAVUnlocked = False
+	EReaderUnlocked = False
 	
 	CODE_DR_MAYNARD = 0
 	CODE_DR_GEARS = 0

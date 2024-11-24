@@ -2383,6 +2383,7 @@ Function SaveAchievementsFile%()
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "keter"))
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	WriteByte(File, SNAVUnlocked)
+	WriteByte(File, EReaderUnlocked)
 	CloseFile(File)
 End Function
 
@@ -2396,6 +2397,7 @@ Function LoadAchievementsFile%()
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	If ReadByte(File) Then SNAVUnlocked = True
+	If ReadByte(File) Then EReaderUnlocked = True
 	CloseFile(File)
 End Function
 

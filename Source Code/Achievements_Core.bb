@@ -27,7 +27,7 @@ Function InitAchievements%()
 	S2IMapSet(AchievementsImages, "locked", ScaleImageEx(LoadImage_Strict("GFX\Menu\Achievements\AchvLocked.png"), MenuScale, MenuScale))
 End Function
 
-Global SNAVUnlocked% = False
+Global SNAVUnlocked% = False, EReaderUnlocked% = False
 
 Function GiveAchievement%(AchvID$, ShowMessage% = True)
 	If S2IMapContains(UnlockedAchievements, AchvID) Then Return

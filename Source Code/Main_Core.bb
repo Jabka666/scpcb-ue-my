@@ -8660,14 +8660,16 @@ Function RenderEnding%()
 					
 					If RoomAmount = RoomsFound Then SNAVUnlocked = True
 					
-					Local DocAmount% = 0, DocsFound% = 0
+					Local DocsAmount% = 0, DocsFound% = 0
 					
 					For itt.ItemTemplates = Each ItemTemplates
 						If itt\ID = it_paper
-							DocAmount = DocAmount + 1
+							DocsAmount = DocsAmount + 1
 							DocsFound = DocsFound + itt\Found
 						EndIf
 					Next
+					
+					If DocsAmount = DocsFound Then EReaderUnlocked = True
 					
 					Local SCPsEncountered% = 1
 					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
@@ -8691,7 +8693,7 @@ Function RenderEnding%()
 					TextEx(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
 					TextEx(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), S2IMapSize(AchievementsIndex), "{1}"))
 					TextEx(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomAmount, "{1}"))
-					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocAmount, "{1}"))
+					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocsAmount, "{1}"))
 					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
 					TextEx(x, y + (100 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
 					
