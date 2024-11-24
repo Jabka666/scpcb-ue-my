@@ -5479,7 +5479,7 @@ Function UpdateEvents%()
 						If EntityHidden(e\room\Objects[2]) Then ShowEntity(e\room\Objects[2])
 					EndIf
 					
-					Temp = 0
+					Temp = False
 					
 					Local src.Doors, dest.Doors
 					
@@ -6348,19 +6348,17 @@ Function UpdateEvents%()
 			Case e_room2_6_hcz_smoke
 				;[Block]
 				If PlayerRoom = e\room
-					If e\room\Dist < 3.5
-						PlaySoundEx(snd_I\BurstSFX, Camera, e\room\OBJ)
-						
-						TFormPoint(0.0, 460.0, 512.0, e\room\OBJ, 0)
-						emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-						emit\State = 1
-						
-						TFormPoint(0.0, 460.0, -512.0, e\room\OBJ, 0)
-						emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-						emit\State = 1
-						
-						RemoveEvent(e)
-					EndIf
+					PlaySoundEx(snd_I\BurstSFX, Camera, e\room\OBJ)
+					
+					TFormPoint(0.0, 460.0, 512.0, e\room\OBJ, 0)
+					emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+					emit\State = 1
+					
+					TFormPoint(0.0, 460.0, -512.0, e\room\OBJ, 0)
+					emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+					emit\State = 1
+					
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_room2_6_hcz_173
@@ -6370,12 +6368,10 @@ Function UpdateEvents%()
 						RemoveEvent(e)
 					Else
 						If e\EventState = 0.0
-							If e\room\Dist < 3.5
-								PlaySound_Strict(snd_I\LightOffSFX)
-								
-								me\LightBlink = 5.0
-								e\EventState = 1.0
-							EndIf
+							PlaySound_Strict(snd_I\LightOffSFX)
+							
+							me\LightBlink = 5.0
+							e\EventState = 1.0
 						EndIf
 					EndIf
 				EndIf
