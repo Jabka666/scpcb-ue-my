@@ -36,6 +36,7 @@
 	- Increased chance to obtain blue SCP-1025: 20% -> 25%
 	
 - Rebalance ballistic helmet.
+- Updated SCP-268 HUD icon.
 
 - Better textures for some items.
 - Improved a lot of models.
