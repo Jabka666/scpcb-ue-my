@@ -2539,21 +2539,7 @@ Function UpdateEvents%()
 						
 						UpdateForest(fr)
 						
-						If e\room\NPC[0] = Null And e\EventState4 = 0.0
-							ForestNPC = CreateSprite()
-							ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
-							SpriteViewMode(ForestNPC, 4)
-							EntityFX(ForestNPC, 1 + 8)
-							ForestNPCTex = LoadAnimTexture_Strict("GFX\NPCs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
-							ForestNPCData[0] = 0.0
-							EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
-							ForestNPCData[1] = 0.0
-							ForestNPCData[2] = 0.0
-							HideEntity(ForestNPC)
-							
-							e\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
-						EndIf
-						
+						If e\room\NPC[0] = Null And e\EventState4 = 0.0 Then e\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
 						If e\EventState4 = 1.0
 							ShouldPlay = 33
 							If Rand(100) = 1

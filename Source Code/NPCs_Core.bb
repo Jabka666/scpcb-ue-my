@@ -358,6 +358,19 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityBlend(n\OBJ2, 3)
 			SpriteViewMode(n\OBJ2, 2)
 			HideEntity(n\OBJ2)
+			
+			If ForestNPC = 0
+				ForestNPC = CreateSprite()
+				ScaleSprite(ForestNPC, 0.75 * (140.0 / 410.0), 0.75)
+				SpriteViewMode(ForestNPC, 4)
+				EntityFX(ForestNPC, 1 + 8)
+				ForestNPCTex = LoadAnimTexture_Strict("GFX\NPCs\AgentIJ.AIJ", 1 + 2, 140, 410, 0, 4, DeleteAllTextures)
+				ForestNPCData[0] = 0.0
+				EntityTexture(ForestNPC, ForestNPCTex, ForestNPCData[0])
+				ForestNPCData[1] = 0.0
+				ForestNPCData[2] = 0.0
+				HideEntity(ForestNPC)
+			EndIf
 			;[End Block]
 		Case NPCType939
 			;[Block]
@@ -1301,10 +1314,10 @@ Function UpdateNPCs%()
 											If EntityVisible(me\Collider, n\Collider)
 												n\LastSeen = 1
 											Else
-												If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider)
+												HideEntity(n\Collider)
 												EntityPick(n\Collider, 1.5)
 												If PickedEntity() <> 0 Then n\Angle = EntityYaw(n\Collider) + Rnd(80.0, 110.0)
-												If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
+												ShowEntity(n\Collider)
 											EndIf
 											n\State3 = MilliSecs() + 2000
 										EndIf
@@ -4279,10 +4292,10 @@ Function UpdateNPCs%()
 								Else ; ~ Wandering around
 									Temp = False
 									If MilliSecs() > n\State2
-										If (Not EntityHidden(n\Collider)) Then HideEntity(n\Collider) 
+										HideEntity(n\Collider) 
 										EntityPick(n\Collider, 1.5)
 										If PickedEntity() <> 0 Then Temp = True
-										If EntityHidden(n\Collider) Then ShowEntity(n\Collider)
+										ShowEntity(n\Collider)
 										
 										n\State2 = MilliSecs() + 1000
 										
