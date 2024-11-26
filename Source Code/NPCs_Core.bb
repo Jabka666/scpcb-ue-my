@@ -1930,7 +1930,7 @@ Function UpdateNPCs%()
 							AnimateNPC(n, 537.0, 660.0, 0.7, False)
 							
 							PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
-							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(me\Collider) - 180.0, EntityYaw(n\Collider), 40.0), 0.0)
+							n\Angle = CurveAngle(EntityYaw(me\Collider) - 180.0, n\Angle, 10.0)
 							;[End Block]
 						Case 4.0 ; ~ Going to surveillance room
 							;[Block]

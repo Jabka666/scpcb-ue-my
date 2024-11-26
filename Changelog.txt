@@ -87,6 +87,7 @@
 	- Fixed MTF not finding SCP-173's chamber.
 	- Fixed «AnnouncLost.ogg» sound not playing.
 - Fixed ability to use empty spaces in the seed name.
+- Fixed SCP-049 not looking at the player when killing.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 
