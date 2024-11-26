@@ -20,100 +20,46 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 256.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 640.0 * RoomScale, 20.0)
 			sc\Angle = 180.0 : sc\Turn = 45.0
 			
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\watches.b3d")
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			RotateEntity(r\Objects[0], 0.0, 128.0, 270.0)
+			PositionEntity(r\Objects[0], r\x - 659.0 * RoomScale, r\y + 133.0 * RoomScale, r\z + 207.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
+			
 			If KEY2_SPAWNRATE = 6
 				it.Items = CreateItem("White Key", it_key_white, r\x - 529.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 585.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-				For yTemp2 = 0 To 2
-					For zTemp2 = 0 To 2
-						ItemName = "9V Battery" : ItemID = it_bat
-						
-						Local ItemChance% = Rand(-10, 100)
-						
-						Select True
-							Case ItemChance < 0
-								;[Block]
-								Exit
-								;[End Block]
-							Case ItemChance < 40 ; ~ 40% chance for a document
-								;[Block]
-								ItemName = "Document SCP-" + GetRandDocument()
-								ItemID = it_paper
-								;[End Block]
-							Case ItemChance >= 40 And ItemChance < 45 ; ~ 5% chance for a key card
-								;[Block]
-								Temp3 = Rand(0, 2)
-								ItemName = "Level " + Str(Temp3) + " Key Card"
-								Select Temp3
-									Case 0
-										;[Block]
-										ItemID = it_key0
-										;[End Block]
-									Case 1
-										;[Block]
-										ItemID = it_key1
-										;[End Block]
-									Case 2
-										;[Block]
-										ItemID = it_key2
-										;[End Block]
-								End Select
-								;[End Block]
-							Case ItemChance >= 45 And ItemChance < 50 ; ~ 5% chance for a medkit
-								;[Block]
-								ItemName = "First Aid Kit"
-								ItemID = it_firstaid
-								;[End Block]
-							Case ItemChance >= 50 And ItemChance < 60 ; ~ 10% chance for a battery
-								;[Block]
-								ItemName = "9V Battery"
-								ItemID = it_bat
-								;[End Block]
-							Case ItemChance >= 60 And ItemChance < 70 ; ~ 10% chance for an S-NAV
-								;[Block]
-								ItemName = "S-NAV Navigator"
-								ItemID = it_nav
-								;[End Block]
-							Case ItemChance >= 70 And ItemChance < 85 ; ~ 15% chance for a radio
-								;[Block]
-								ItemName = "Radio Transceiver"
-								ItemID = it_radio
-								;[End Block]
-							Case ItemChance >= 85 And ItemChance < 95 ; ~ 10% chance for a clipboard
-								;[Block]
-								ItemName = "Clipboard"
-								ItemID = it_clipboard
-								;[End Block]
-							Case ItemChance >= 95 And ItemChance <= 100 ; ~ 5% chance for misc
-								;[Block]
-								Temp3 = Rand(3)
-								Select Temp3
-									Case 1 ; ~ Playing card
-										;[Block]
-										ItemName = "Playing Card"
-										ItemID = it_playcard
-										;[End Block]
-									Case 2 ; ~ Mastercard
-										;[Block]
-										ItemName = "Mastercard"
-										ItemID = it_mastercard
-										;[End Block]
-									Case 3 ; ~ Origami
-										;[Block]
-										ItemName = "Origami"
-										ItemID = it_origami
-										;[End Block]
-								End Select
-								;[End Block]
-						End Select
-						yTemp = 96.0 + (96.0 * yTemp2)
-						zTemp = 480.0 - (352.0 * zTemp2) + Rnd(-96.0, 96.0)
-						
-						it.Items = CreateItem(ItemName, ItemID, r\x + 192.0 * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
-						EntityParent(it\Collider, r\OBJ)
-					Next
-				Next
+			it.Items = CreateItem("Log of Anomalous Items", it_paper, r\x + 192.0 * RoomScale, r\y + 96.0 * RoomScale, r\z + 461.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 192.0 * RoomScale, r\y + 96.0 * RoomScale, r\z - 224.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Playing Card", it_playcard, r\x + 192.0 * RoomScale, r\y + 288.0 * RoomScale, r\z + 430.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x + 192.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 260.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Clipboard", it_clipboard, r\x + 192.0 * RoomScale, r\y + 192.0 * RoomScale, r\z + 110.0 * RoomScale)
+			; ~ A hacky fix for clipboard's model and icon
+			it\InvImg = it\ItemTemplate\InvImg
+			SetAnimTime(it\OBJ, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it2.Items = CreateItem("Document SCP-966", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
+			HideEntity(it2\Collider)
+			
+			it2.Items = CreateItem("Document SCP-914", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
+			HideEntity(it2\Collider)
+			
+			it2.Items = CreateItem("Document SCP-1025", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
+			HideEntity(it2\Collider)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
@@ -1436,10 +1382,6 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-860", it_paper, r\x + 728.0 * RoomScale, r\y + 290.0 * RoomScale, r\z + 360.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Document SCP-1025", it_paper, r\x + 376.0 * RoomScale, r\y + 290.0 * RoomScale, r\z - 360.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
