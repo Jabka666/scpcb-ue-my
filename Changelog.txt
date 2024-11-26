@@ -88,6 +88,10 @@
 	- Fixed «AnnouncLost.ogg» sound not playing.
 - Fixed ability to use empty spaces in the seed name.
 - Fixed SCP-049 not looking at the player after killing him.
+- Fixes for SCP-106:
+	- Fixed vanilla game bug with wrong SCP-106 location at Gate A (SCP-106 constantly spawned under the player).
+	- Fixed SCP-106's Y-position. SCP-106 now changes his Y-position depending on player's Y-position more often. Also SCP-106 has a correct height (his legs are no longer inside the floor).
+	- Fixed path finding.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 - «Drawing» and «Blank Sheet» are no longer considered documents.

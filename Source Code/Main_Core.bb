@@ -1577,8 +1577,7 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "disable106", "dis106"
 					;[Block]
-					n_I\Curr106\Idle = 1
-					n_I\Curr106\State = 100000.0
+					n_I\Curr106\State = 0.0
 					n_I\Curr106\Contained = True
 					HideEntity(n_I\Curr106\Collider)
 					HideEntity(n_I\Curr106\OBJ)
@@ -1671,10 +1670,8 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "106retreat", "106r"
 					;[Block]
-					If n_I\Curr106\State <= 0.0
-						n_I\Curr106\State = Rnd(22000.0, 27000.0)
-						PositionEntity(n_I\Curr106\Collider, 0.0, -500.0, 0.0)
-						ResetEntity(n_I\Curr106\Collider)
+					If n_I\Curr106\State > 1.0
+						n_I\Curr106\State = 0.0
 						CreateConsoleMsg(GetLocalString("console", "106r"))
 					Else
 						CreateConsoleMsg(GetLocalString("console", "106r.failed"), 255, 150, 0)
@@ -2239,8 +2236,13 @@ Function UpdateConsole%()
 					;[End Block]
 				Case "teleport106"
 					;[Block]
-					n_I\Curr106\State = 0.0
-					n_I\Curr106\Idle = 0
+					If (Not n_I\Curr106\Contained)
+						n_I\Curr106\State = 2.0
+						n_I\Curr106\Idle = 0
+						n_I\Curr106\EnemyX = EntityX(me\Collider)
+						n_I\Curr106\EnemyY = EntityY(me\Collider)
+						n_I\Curr106\EnemyZ = EntityZ(me\Collider)
+					EndIf
 					;[End Block]
 				Case "jorge"
 					;[Block]
@@ -6374,24 +6376,26 @@ Function RenderDebugHUD%()
 			EndIf
 			TextEx(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.106pos"), FloatToString(EntityX(n_I\Curr106\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr106\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr106\OBJ), 2), "{2}"))
 			TextEx(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_3.106idle"), n_I\Curr106\Idle))
-			TextEx(x, y + (160 * MenuScale), Format(GetLocalString("console", "debug_3.106state"), n_I\Curr106\State))
+			TextEx(x, y + (160 * MenuScale), Format(Format(GetLocalString("console", "debug_3.106state"), "1", "{0}"), n_I\Curr106\State, "{1}"))
+			TextEx(x, y + (180 * MenuScale), Format(Format(GetLocalString("console", "debug_3.106state"), "2", "{0}"), n_I\Curr106\State2, "{1}"))
+			TextEx(x, y + (200 * MenuScale), Format(Format(GetLocalString("console", "debug_3.106state"), "3", "{0}"), n_I\Curr106\State3, "{1}"))
 			
-			TextEx(x, y + (180 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
-			TextEx(x, y + (200 * MenuScale), Format(GetLocalString("console", "debug_3.173idle"), n_I\Curr173\Idle))
-			TextEx(x, y + (220 * MenuScale), Format(GetLocalString("console", "debug_3.173state"), n_I\Curr173\State))
+			TextEx(x, y + (220 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_3.173pos"), FloatToString(EntityX(n_I\Curr173\OBJ), 2), "{0}"), FloatToString(EntityY(n_I\Curr173\OBJ), 2), "{1}"), FloatToString(EntityZ(n_I\Curr173\OBJ), 2), "{2}"))
+			TextEx(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_3.173idle"), n_I\Curr173\Idle))
+			TextEx(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_3.173state"), n_I\Curr173\State))
 			
-			TextEx(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_3.pill"), I_500\Taken))
+			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.pill"), I_500\Taken))
 			
-			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
-			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
-			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.427"), I_427\Timer / 70.0))
-			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_3.966"), I_966\InsomniaEffectTimer / 70.0))
-			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_3.1048a"), I_1048A\EarGrowTimer))
+			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_3.008"), I_008\Timer))
+			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_3.409"), I_409\Timer))
+			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_3.427"), I_427\Timer / 70.0))
+			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_3.966"), I_966\InsomniaEffectTimer / 70.0))
+			TextEx(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_3.1048a"), I_1048A\EarGrowTimer))
 			For i = 0 To 6
-				TextEx(x, y + ((400 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
+				TextEx(x, y + ((440 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
 			For i = 0 To 4
-				TextEx(x, y + ((560 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.f.1025"), i, "{0}"), I_1025\FineState[i], "{1}"))
+				TextEx(x, y + ((580 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.f.1025"), i, "{0}"), I_1025\FineState[i], "{1}"))
 			Next
 			
 			x = x + (700 * MenuScale)

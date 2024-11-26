@@ -47,7 +47,6 @@ Type NPCs
 	Field HasAsset% = False
 	Field HasAnim%
 	Field Contained% = False
-	Field TeslaHit% = False
 	Field IsOpt% = False
 	Field TargetUpdateTimer#
 End Type
@@ -124,6 +123,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = IniGetFloat(NPCsFile, "SCP-106", "Speed") / 100.0
 			
 			n\Collider = CreatePivot()
+			n\CollRadius = 0.24
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
@@ -885,12 +885,18 @@ Function UpdateNPCs%()
 				If n\Contained Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b
 					If (Not EntityHidden(n\OBJ))
 						n\Idle = 1
-						HideEntity(n\OBJ)
-						HideEntity(n\OBJ2)
 						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 						ResetEntity(n\Collider)
+						HideEntity(n\OBJ)
+						HideEntity(n\OBJ2)
 					EndIf
 				Else
+					; ~ n\State: Main state
+					
+					; ~ n\State2: Spawn timer
+					
+					; ~ n\State3: Chasing timer
+					
 					Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					
 					Local Spawn106% = True
@@ -914,61 +920,88 @@ Function UpdateNPCs%()
 							Exit
 						EndIf
 					Next
-					
-					If (Not Spawn106) And n\State <= 0.0
+					If (Not Spawn106) And n\State > 1.0
 						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 						ResetEntity(n\Collider)
-						n\State = Rnd(22000.0, 27000.0)
+						n\State2 = Rnd(22000.0, 27000.0)
 					EndIf
 					
 					If n\Idle = 0 And Spawn106
-						If n\State <= 0.0
-							If EntityY(n\Collider) < EntityY(me\Collider) - 20.55
-								If PlayerRoom\RoomTemplate\DisableDecals < 2
-									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(me\Collider), 0.01, EntityZ(me\Collider), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
+						Select n\State
+							Case 0.0 ; ~ Reset the timer
+								;[Block]
+								PositionEntity(n\Collider, 0.0, -500.0, 0.0)
+								ResetEntity(n\Collider)
+								n\State2 = Rnd(22000.0, 27000.0)
+								n\State = 1.0
+								;[End Block]
+							Case 1.0 ; ~ Idling outside the map
+								;[Block]
+								If PlayerRoom\RoomTemplate\DisableDecals < 3
+									Local TimerCountDown# = (fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs))
+									
+									Select PlayerRoom\RoomTemplate\DisableDecals
+										Case 0
+											;[Block]
+											n\State2 = n\State2 - TimerCountDown
+											;[End Block]
+										Case 1
+											;[Block]
+											n\State2 = n\State2 - (TimerCountDown * 0.5)
+											;[End Block]
+										Case 2
+											;[Block]
+											n\State2 = Max(2000.0, n\State2 - (TimerCountDown * 0.25))
+											;[End Block]
+									End Select
+								EndIf
+								;[End Block]
+							Case 2.0 ; ~ Spawn
+								;[Block]
+								ShouldPlay = 66
+								If n\EnemyX <> 0.0 Lor n\EnemyY <> 0.0 Lor n\EnemyZ <> 0.0
+									Pvt = CreatePivot()
+									PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ)
+									TurnEntity(Pvt, 90.0, 0.0, 0.0)
+									If EntityPick(Pvt, 0.5) Then n\EnemyY = PickedY()
+									FreeEntity(Pvt) : Pvt = 0
+									
+									PositionEntity(n\Collider, n\EnemyX, n\EnemyY, n\EnemyZ)
+									de.Decals = CreateDecal(DECAL_CORROSIVE_1, n\EnemyX, n\EnemyY + 0.005, n\EnemyZ, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 									de\SizeChange = 0.001
 									EntityParent(de\OBJ, PlayerRoom\OBJ)
-								EndIf
-								
-								n\PrevY = EntityY(me\Collider)
-								
-								SetNPCFrame(n, 110.0)
-								
-								If PlayerRoom\RoomTemplate\RoomID <> r_cont1_895 Then PositionEntity(n\Collider, EntityX(me\Collider), EntityY(me\Collider) - 15.0, EntityZ(me\Collider))
-								
-								PlaySound_Strict(snd_I\DecaySFX[0])
-							EndIf
-							
-							If Rand(500) = 1 Then PlaySoundEx(snd_I\SCP106SFX[Rand(0, 2)], Camera, n\Collider)
-							n\SoundCHN = LoopSoundEx(snd_I\SCP106SFX[4], n\SoundCHN, Camera, n\Collider, 8.0, 0.8, True)
-							
-							If n\State > -10.0
-								ShouldPlay = 66
-								If n\Frame < 259.0
-									PositionEntity(n\Collider, EntityX(n\Collider), n\PrevY - 0.15, EntityZ(n\Collider))
-									If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-										PointEntity(n\OBJ, me\Collider)
-										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 100.0), 0.0, True)
-									EndIf
 									
-									AnimateNPC(n, 110.0, 259.0, 0.15, False)
+									SetNPCFrame(n, 110.0)
+									
+									GiveAchievement("106")
+									
+									PlaySound_Strict(snd_I\DecaySFX[0])
+									
+									n\State2 = 0.0
+									n\State3 = 0.0
+									n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 								Else
-									n\State = -10.0
+									If n\Frame < 259.0
+										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+											PointEntity(n\OBJ, me\Collider)
+											RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 100.0), 0.0, True)
+										EndIf
+										AnimateNPC(n, 111.0, 259.0, 0.15, False)
+									Else
+										n\State = 3.0
+										n\State3 = Rnd(3000.0, 3500.0)
+									EndIf
 								EndIf
-							Else
-								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
-								
+								;[End Block]
+							Case 3.0 ; ~ Chasing player
+								;[Block]
 								Visible = False
-								
 								If Dist < 64.0
 									If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Visible = EntityVisible(n\Collider, me\Collider)
 								EndIf
-								
 								If Visible
 									If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\PathTimer = 0.0
 									If EntityInView(n\Collider, Camera)
-										GiveAchievement("106")
-										
 										SqrValue = (4.0 - Sqr(Dist))
 										
 										me\BlurVolume = Max(Max(Min(SqrValue / 6.0, 0.9), 0.1), me\BlurVolume)
@@ -981,8 +1014,10 @@ Function UpdateNPCs%()
 										EndIf
 									EndIf
 								Else
-									n\State = n\State - fps\Factor[0]
+									n\State3 = Max(0.0, n\State3 - fps\Factor[0])
 								EndIf
+								
+								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
 								
 								For d.Doors = Each Doors
 									If (Not d\IsAffected) And (Not d\Open)
@@ -1010,8 +1045,10 @@ Function UpdateNPCs%()
 								Next
 								
 								If Dist > 0.64
+									PrevFrame = n\Frame
+									
 									If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor n\PathStatus <> PATH_STATUS_FOUND) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-										If (Dist > 1600.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.14) - EntityY(n\Collider)) / 50.0, 0.0)
+										If (Dist > 16.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 50.0, 0.0)
 										
 										n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 										
@@ -1019,17 +1056,14 @@ Function UpdateNPCs%()
 										RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
 										
 										If (Not me\Terminated)
-											PrevFrame = n\Frame
 											AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
-											
-											If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 										Else
 											n\CurrSpeed = 0.0
 										EndIf
 										
 										n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 										If n\PathTimer <= 0.0
-											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
+											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True) + 0.15, EntityZ(me\Collider, True))
 											n\PathTimer = 70.0 * 10.0
 										EndIf
 									Else
@@ -1047,7 +1081,7 @@ Function UpdateNPCs%()
 												Wend
 												
 												If n\Path[n\PathLocation] <> Null
-													TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) - 0.11) - EntityY(n\Collider)) / 50.0, 0.0)
+													TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) - 0.15) - EntityY(n\Collider)) / 50.0, 0.0)
 													
 													PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 													
@@ -1057,22 +1091,21 @@ Function UpdateNPCs%()
 													
 													n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 													
-													PrevFrame = n\Frame
 													AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
-													If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 													
-													If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+													If Dist2 < PathLocationDist * 2.0 Then n\PathLocation = n\PathLocation + 1
 												EndIf
 											Else
 												n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
-												If n\State3 = 0.0 Then AnimateNPC(n, 334.0, 494.0, 0.3)
+												AnimateNPC(n, 334.0, 494.0, 0.3)
 											EndIf
 										Else
-											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
+											n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True) + 0.15, EntityZ(me\Collider, True))
 											n\PathTimer = 70.0 * 10.0
 											n\CurrSpeed = 0.0
 										EndIf
 									EndIf
+									If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 								ElseIf (Not chs\NoTarget)
 									If Dist > 0.25
 										n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
@@ -1105,92 +1138,88 @@ Function UpdateNPCs%()
 										EndIf
 									EndIf
 								EndIf
-							EndIf
-							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-							
-							If n\State < Rnd(-3500.0, -3000.0)
-								If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
-									PositionEntity(n\Collider, 0.0, -500.0, 0.0)
-									ResetEntity(n\Collider)
-									n\State = Rnd(22000.0, 27000.0)
-								EndIf
-							EndIf
-							
-							If me\FallTimer < -250.0 Then MoveToPocketDimension()
-							
-							If n\Reload = 0.0
-								If Dist > 100.0 And (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And n\State < -5.0 ; ~ Timer idea -- Juanjpro
-									If (Not EntityInView(n\OBJ, Camera))
-										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
-										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-											Pick = EntityPick(me\Collider, 5.0)
-										Else
-											Pick = 0
-										EndIf
-										TurnEntity(me\Collider, 0.0, 180.0, 0.0)
-										If Pick <> 0
-											TeleportEntity(n\Collider, PickedX(), PickedY(), PickedZ(), n\CollRadius)
-											PointEntity(n\Collider, me\Collider)
-											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
-											MoveEntity(n\Collider, 0.0, 0.0, -2.0)
-											PlaySoundEx(snd_I\SCP106SFX[3], Camera, n\Collider, 10.0, 1.0, True)
-											n\SoundCHN2 = PlaySoundEx(snd_I\SCP106SFX[Rand(6, 8)], Camera, n\Collider)
-											n\PathTimer = 0.0
-											n\Reload = (70.0 * 10.0) / (SelectedDifficulty\OtherFactors + 1.0)
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+								
+								If me\FallTimer < -250.0 Then MoveToPocketDimension()
+								
+								If n\Reload = 0.0 ; ~ Timer idea -- Juanjpro
+									If Dist > 100.0 And (Not IsPlayerOutsideFacility()) And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106
+										If (Not EntityInView(n\OBJ, Camera))
+											TurnEntity(me\Collider, 0.0, 180.0, 0.0)
+											If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+												Pick = EntityPick(me\Collider, 5.0)
+											Else
+												Pick = 0
+											EndIf
+											TurnEntity(me\Collider, 0.0, 180.0, 0.0)
+											If Pick <> 0
+												TeleportEntity(n\Collider, PickedX(), PickedY(), PickedZ(), n\CollRadius)
+												PointEntity(n\Collider, me\Collider)
+												RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
+												MoveEntity(n\Collider, 0.0, 0.0, -2.0)
+												PlaySoundEx(snd_I\SCP106SFX[3], Camera, n\Collider, 10.0, 1.0, True)
+												n\SoundCHN2 = PlaySoundEx(snd_I\SCP106SFX[Rand(6, 8)], Camera, n\Collider)
+												n\PathTimer = 0.0
+												n\Reload = (70.0 * 10.0) / (SelectedDifficulty\OtherFactors + 1.0)
+											EndIf
 										EndIf
 									EndIf
 								EndIf
-							EndIf
-							n\Reload = Max(0.0, n\Reload - fps\Factor[0])
-							
-							UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
-						Else ; ~ Idling outside the map
-							n\CurrSpeed = 0.0
-							MoveEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 30.0) - EntityY(n\Collider)) / 200.0, 0.0)
-							n\DropSpeed = 0.0
-							SetNPCFrame(n, 110.0)
-							
-							If PlayerRoom\RoomTemplate\DisableDecals < 3
-								Local TimerCountDown# = (fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs))
-								Select PlayerRoom\RoomTemplate\DisableDecals
-									Case 0
-										;[Block]
-										n\State = n\State - TimerCountDown
-										;[End Block]
-									Case 1
-										;[Block]
-										n\State = n\State - (TimerCountDown * 0.5)
-										;[End Block]
-									Case 2
-										;[Block]
-										If n\State > 2000.0 Then n\State = n\State - (TimerCountDown * 0.25)
-										;[End Block]
-								End Select
-							EndIf
+								n\Reload = Max(0.0, n\Reload - fps\Factor[0])
+								
+								UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
+								
+								If Dist < PowTwo(me\CameraFogDist * LightVolume * 0.6)
+									If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
+								Else
+									If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
+									EntityAlpha(n\OBJ2, Min(Sqr(Dist) - me\CameraFogDist * LightVolume * 0.6, 1.0))
+								EndIf
+								PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
+								RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
+								MoveEntity(n\OBJ2, 0.0, 0.946, -0.165)
+								
+								If n\State3 =< 0.0
+									If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
+										PositionEntity(n\Collider, 0.0, -500.0, 0.0)
+										ResetEntity(n\Collider)
+										
+										HideEntity(n\OBJ2)
+										
+										n\State = 0.0
+									EndIf
+								EndIf
+								;[End Block]
+							Case 4.0 ; ~ Hit by Tesla or HID
+								;[Block]
+								If n\Frame < 111.0 Lor n\Frame > 259.0
+									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), EntityY(n\Collider) + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
+									de\SizeChange = 0.004 : de\Timer = 90000.0
+									
+									n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Ending\GateA\106Retreat.ogg"), Camera, n\OBJ, 10.0, 1.0, True)
+									
+									SetNPCFrame(n, 259.0)
+								Else
+									AnimateNPC(n, 259.0, 111.0, -0.15, False)
+									
+									If n\Frame <= 150.0
+										n\State = 0.0
+										n\State2 = 70.0 * 60.0 * Rnd(10.0, 12.0)
+									EndIf
+								EndIf
+								;[End Block]
+						End Select
+						
+						If n\State > 0.0
+							If Rand(500) = 1 Then PlaySoundEx(snd_I\SCP106SFX[Rand(0, 2)], Camera, n\Collider)
+							n\SoundCHN = LoopSoundEx(snd_I\SCP106SFX[4], n\SoundCHN, Camera, n\Collider, 8.0, 0.8, True)
 						EndIf
 						
 						ResetEntity(n\Collider)
 						n\DropSpeed = 0.0
-						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.15, EntityZ(n\Collider))
+						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 						
 						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), 0.0)
-						
-						PositionEntity(n\OBJ2, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
-						RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-						MoveEntity(n\OBJ2, 0.0, 0.946, -0.165)
-						
-						If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor IsPlayerOutsideFacility()
-							If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
-						Else
-							If Dist < PowTwo(me\CameraFogDist * LightVolume * 0.6)
-								If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
-							Else
-								If n\State <= -10.0
-									If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
-									EntityAlpha(n\OBJ2, Min(Sqr(Dist) - me\CameraFogDist * LightVolume * 0.6, 1.0))
-								EndIf
-							EndIf
-						EndIf
 					Else
 						If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 					EndIf
@@ -4096,7 +4125,7 @@ Function UpdateNPCs%()
 						
 						PrevFrame = n\Frame
 						
-						If wi\NightVision = 0 And (Not n\TeslaHit)
+						If wi\NightVision = 0; And (Not n\TeslaHit)
 							If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 							If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 								If Dist < 1.0 And n\Reload <= 0.0
@@ -5516,7 +5545,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If n_I\Curr106\State <= 0.0
+					If n_I\Curr106\State > 1.0
 						If NPCSeesNPC(n_I\Curr106, n) = 1
 							If MyBoss = Null
 								LoadNPCSound(n, "SFX\Character\MTF\106\Spotted" + Rand(0, 2) + ".ogg")
@@ -5893,7 +5922,7 @@ Function UpdateMTFUnit%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If n_I\Curr106\State <= 0.0
+					If n_I\Curr106\State > 1.0
 						If NPCSeesNPC(n_I\Curr106, n) = 1
 							If MyBoss = Null
 								LoadNPCSound(n, "SFX\Character\MTF\106\Spotted" + Rand(0, 2) + ".ogg")
@@ -7177,7 +7206,7 @@ End Function
 Function MoveToPocketDimension%()
 	Local r.Rooms, e.Events
 	
-	n_I\Curr106\State = 250.0 ; ~ Make SCP-106 idle for a while
+	n_I\Curr106\Idle = 1 ; ~ Make SCP-106 idle for a while
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\RoomID = r_dimension_106
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = True
@@ -7187,6 +7216,7 @@ Function MoveToPocketDimension%()
 			ShowEntity(me\Collider)
 			PlaySound_Strict(snd_I\Use914SFX)
 			PlaySound_Strict(snd_I\SCP106SFX[5])
+			n_I\Curr106\Idle = 0
 			
 			TeleportEntity(me\Collider, EntityX(r\OBJ), EntityY(r\OBJ) + 0.5, EntityZ(r\OBJ))
 			TeleportToRoom(r)
@@ -7521,34 +7551,6 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			EndIf
 		EndIf
 	EndIf
-End Function
-
-Function UpdateNPCNearTesla%()
-	Local n.NPCs, emit.Emitter
-	
-	For n.NPCs = Each NPCs
-		If n\TeslaHit
-			If opt\ParticleAmount > 0
-				emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
-				EntityParent(emit\Owner, n\OBJ)
-			EndIf
-			
-			If n\NPCType = NPCType106
-				If n\State3 = 1.0
-					AnimateNPC(n, 259.0, 110.0, -0.15, False)
-					
-					If n\Frame <= 170.0
-						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
-						ResetEntity(n\Collider)
-						
-						n\Idle = 0 : n\State = 70.0 * 60.0 * Rnd(10.0, 12.0) : n\TeslaHit = False : n\State3 = 0.0
-					EndIf
-				EndIf
-			Else
-				n\TeslaHit = False
-			EndIf
-		EndIf
-	Next
 End Function
 
 Function SetNPCFrame%(n.NPCs, Frame#)
