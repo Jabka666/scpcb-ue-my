@@ -2123,6 +2123,9 @@ Function UpdateConsole%()
 							If n_I\Curr173\Idle = 1 Then n_I\Curr173\Idle = 0
 							PositionEntity(n_I\Curr173\Collider, 0.0, 0.0, 0.0)
 							ResetEntity(n_I\Curr173\Collider)
+							
+							PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), e\room\y + 384.0 * RoomScale, EntityZ(e\room\Objects[2], True), True)
+							RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), 30.0, EntityRoll(e\room\Objects[2], True), True)
 							RemoveEvent(e)
 							Exit
 						EndIf
