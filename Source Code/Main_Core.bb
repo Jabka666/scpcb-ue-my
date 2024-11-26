@@ -1892,7 +1892,7 @@ Function UpdateConsole%()
 							ResetEntity(n_I\Curr173\Collider)
 							
 							PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), e\room\y + 384.0 * RoomScale, EntityZ(e\room\Objects[2], True), True)
-							RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), 30.0, EntityRoll(e\room\Objects[2], True), True)
+							RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), EntityYaw(e\room\Objects[2], True), EntityRoll(e\room\Objects[2], True), True)
 							RemoveEvent(e)
 							Exit
 						EndIf
@@ -2122,7 +2122,7 @@ Function UpdateConsole%()
 							ResetEntity(n_I\Curr173\Collider)
 							
 							PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), e\room\y + 384.0 * RoomScale, EntityZ(e\room\Objects[2], True), True)
-							RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), 30.0, EntityRoll(e\room\Objects[2], True), True)
+							RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), EntityYaw(e\room\Objects[2], True), EntityRoll(e\room\Objects[2], True), True)
 							RemoveEvent(e)
 							Exit
 						EndIf
