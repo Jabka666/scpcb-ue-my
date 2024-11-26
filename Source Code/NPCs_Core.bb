@@ -49,7 +49,7 @@ Type NPCs
 	Field Contained% = False
 	Field TeslaHit% = False
 	Field IsOpt% = False
-	Field MTFUpdateTimer#
+	Field TargetUpdateTimer#
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -2151,23 +2151,30 @@ Function UpdateNPCs%()
 								n\IdleTimer = 0.0
 							EndIf
 							
-							If n\Target = Null
-								If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
-									n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-									n\State = 2.0
-								EndIf
-							EndIf
-							
-							For n2.NPCs = Each NPCs
-								If n2\NPCType = NPCTypeMTF And (Not n2\IsDead)
-									If NPCSeesNPC(n2, n) = 1
-										n\Target = n2
+							If n\TargetUpdateTimer =< 0.0
+								If n\Target = Null
+									If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
 										n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 										n\State = 2.0
-										Exit
+										Return
 									EndIf
 								EndIf
-							Next
+								
+								For n2.NPCs = Each NPCs
+									If n2\NPCType = NPCTypeMTF And (Not n2\IsDead)
+										If NPCSeesNPC(n2, n) = 1
+											n\Target = n2
+											n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+											n\State = 2.0
+											Return
+											Exit
+										EndIf
+									EndIf
+								Next
+								n\TargetUpdateTimer = fps\Factor[0] * 45.0
+							Else
+								n\TargetUpdateTimer = n\TargetUpdateTimer - fps\Factor[0]
+							EndIf
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
@@ -4914,23 +4921,30 @@ Function UpdateNPCs%()
 								n\IdleTimer = 0.0
 							EndIf
 							
-							If n\Target = Null
-								If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
-									n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-									n\State = 2.0
-								EndIf
-							EndIf
-							
-							For n2.NPCs = Each NPCs
-								If n2\NPCType = NPCTypeMTF And (Not n2\IsDead)
-									If NPCSeesNPC(n2, n) = 1
-										n\Target = n2
+							If n\TargetUpdateTimer =< 0.0
+								If n\Target = Null
+									If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
 										n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 										n\State = 2.0
-										Exit
+										Return
 									EndIf
 								EndIf
-							Next
+								
+								For n2.NPCs = Each NPCs
+									If n2\NPCType = NPCTypeMTF And (Not n2\IsDead)
+										If NPCSeesNPC(n2, n) = 1
+											n\Target = n2
+											n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+											n\State = 2.0
+											Return
+											Exit
+										EndIf
+									EndIf
+								Next
+								n\TargetUpdateTimer = fps\Factor[0] * 45.0
+							Else
+								n\TargetUpdateTimer = n\TargetUpdateTimer - fps\Factor[0]
+							EndIf
 							;[End Block]
 						Case 4.0 ; ~ Attacks
 							;[Block]
@@ -5442,7 +5456,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				EndIf
 				
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
-				If n\MTFUpdateTimer =< 0.0
+				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
 						PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume)
 						If PlayerSeeAble > 0
@@ -5657,9 +5671,9 @@ Function UpdateMTFUnit%(n.NPCs)
 							End Select
 						EndIf
 					Next
-					n\MTFUpdateTimer = fps\Factor[0] * 45.0
+					n\TargetUpdateTimer = fps\Factor[0] * 45.0
 				Else
-					n\MTFUpdateTimer = n\MTFUpdateTimer - fps\Factor[0]
+					n\TargetUpdateTimer = n\TargetUpdateTimer - fps\Factor[0]
 				EndIf
 				;[End Block]
 			Case MTF_SEARCHING_PLAYER
@@ -5850,7 +5864,7 @@ Function UpdateMTFUnit%(n.NPCs)
 				EndIf
 				
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
-				If n\MTFUpdateTimer =< 0.0
+				If n\TargetUpdateTimer =< 0.0
 					If n_I\Curr173\Idle < 2
 						If NPCSeesNPC(n_I\Curr173, n) > 0
 							If MyBoss = Null
@@ -6034,9 +6048,9 @@ Function UpdateMTFUnit%(n.NPCs)
 							End Select
 						EndIf
 					Next
-					n\MTFUpdateTimer = fps\Factor[0] * 45.0
+					n\TargetUpdateTimer = fps\Factor[0] * 45.0
 				Else
-					n\MTFUpdateTimer = n\MTFUpdateTimer - fps\Factor[0]
+					n\TargetUpdateTimer = n\TargetUpdateTimer - fps\Factor[0]
 				EndIf
 				;[End Block]
 			Case MTF_FOLLOW_PATH
