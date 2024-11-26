@@ -25,7 +25,6 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			For xTemp2 = 0 To 1
 				For yTemp2 = 0 To 2
 					For zTemp2 = 0 To 2
 						ItemName = "9V Battery" : ItemID = it_bat
@@ -108,15 +107,13 @@ Function FillRoom%(r.Rooms)
 								End Select
 								;[End Block]
 						End Select
-						xTemp = (-672.0) + (864.0 * xTemp2)
 						yTemp = 96.0 + (96.0 * yTemp2)
 						zTemp = 480.0 - (352.0 * zTemp2) + Rnd(-96.0, 96.0)
 						
-						it.Items = CreateItem(ItemName, ItemID, r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
+						it.Items = CreateItem(ItemName, ItemID, r\x + 192.0 * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
 						EntityParent(it\Collider, r\OBJ)
 					Next
 				Next
-			Next
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
