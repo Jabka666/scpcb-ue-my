@@ -85,6 +85,7 @@ Const e_gateway% = 66
 Const e_tesla% = 67
 Const e_trick% = 68, e_trick_item% = 69
 Const e_dimension_106% = 70, e_dimension_1499% = 71
+Const e_room1_storage% = 72
 ;[End Block]
 
 ; ~ For Map Creator
@@ -377,6 +378,10 @@ Function FindEventID%(EventName$)
 		Case "dimension_1499"
 			;[Block]
 			Return(e_dimension_1499)
+			;[End Block]
+		Case "room1_storage"
+			;[Block]
+			Return(e_room1_storage)
 			;[End Block]
 		Default
 			;[Block]
@@ -7201,6 +7206,20 @@ Function UpdateEvents%()
 							Exit
 						EndIf
 					Next
+				EndIf
+				;[End Block]
+			Case e_room1_storage
+				;[Block]
+				If PlayerRoom = e\room
+					;Clock disappearance timer
+					e\EventState = e\EventState + fps\Factor[0]
+					If e\EventState < 70.0
+						If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
+					ElseIf e\EventState < 140.0
+						If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
+					Else
+						e\EventState = 0.0
+					EndIf
 				EndIf
 				;[End Block]
 		End Select
