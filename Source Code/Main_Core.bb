@@ -8606,7 +8606,6 @@ End Function
 Function RenderEnding%()
 	ShowPointer()
 	
-	Local itt.ItemTemplates, r.Rooms
 	Local Clr% = Max(255.0 + (me\EndingTimer) * 2.8, 0.0)
 	
 	Select me\SelectedEnding
@@ -8648,6 +8647,7 @@ Function RenderEnding%()
 				SetFontEx(fo\FontID[Font_Default])
 				
 				If igm\AchievementsMenu =< 0
+					Local itt.ItemTemplates, r.Rooms
 					Local i%
 					
 					x = x + (132 * MenuScale)
@@ -8670,8 +8670,12 @@ Function RenderEnding%()
 					
 					For itt.ItemTemplates = Each ItemTemplates
 						If itt\ID = it_paper
-							DocsAmount = DocsAmount + 1
-							DocsFound = DocsFound + itt\Found
+							i = True
+							If itt\Name = "Drawing" Lor itt\Name = "Blank Paper" Lor (itt\Name = "Note from Maynard" And I_005\ChanceToSpawn <> 3.0) Then i = False
+							If i
+								DocsAmount = DocsAmount + 1
+								DocsFound = DocsFound + itt\Found
+							EndIf
 						EndIf
 					Next
 					

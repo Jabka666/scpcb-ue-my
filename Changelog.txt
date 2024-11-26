@@ -90,6 +90,7 @@
 - Fixed SCP-049 not looking at the player after killing him.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
+- «Drawing» and «Blank Sheet» are no longer considered documents.
 
 [Known issues]
 - Rooms can overlap and block the way.
