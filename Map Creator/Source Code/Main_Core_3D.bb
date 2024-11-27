@@ -116,11 +116,11 @@ Function LoadEntities%()
 	
 	; ~ [DOORS]
 	
-	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
+	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.b3d") ; ~ Default Door
 	
-	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\ContDoorLeft.x") ; ~ Big Door Left
+	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\ContDoorLeft.b3d") ; ~ Big Door Left
 	
-	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\ContDoorRight.x") ; ~ Big Door Right
+	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\ContDoorRight.b3d") ; ~ Big Door Right
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		HideEntity(o\DoorModelID[i])
