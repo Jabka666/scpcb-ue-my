@@ -7255,7 +7255,12 @@ Function UpdateDimension106%()
 				PlayerFallingPickDistance = 0.0
 				PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 				; ~ SCP-106 attacks if close enough to player
-				If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 0.09 Then n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
+				If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 0.09 And n_I\Curr106\State <> 3.0
+					n_I\Curr106\Idle = 0
+					n_I\Curr106\State = 3.0
+					n_I\Curr106\State2 = 0.0
+					n_I\Curr106\State3 = 100000.0
+				EndIf
 				CanSave = 1
 				If e\EventState2 <> PD_FakeTunnelRoom
 					ShouldPlay = 3
@@ -7297,9 +7302,9 @@ Function UpdateDimension106%()
 							ScaleEntity(e\room\Objects[i + 1], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + (i + 1) * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + (i + 1) * 20.0) * 0.1), RoomScale, True)
 						Next
 						
-						If n_I\Curr106\State > 0.0 ; ~ SCP-106 circles around the starting room
+						If n_I\Curr106\State < 3.0 ; ~ SCP-106 circles around the starting room
 							Angle = (e\EventState / 10.0 Mod 360.0)
-							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ), 0.2 + 0.35 + Sin(e\EventState / 14.0 + i * 20.0) * 0.4, EntityX(e\room\OBJ))
+							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ), 0.55 + Sin(e\EventState / 14.0 + i * 20.0) * 0.4, EntityZ(e\room\OBJ))
 							RotateEntity(n_I\Curr106\Collider, 0.0, Angle, 0.0)
 							MoveEntity(n_I\Curr106\Collider, 0.0, 0.0, 6.0 - Sin(e\EventState / 10.0))
 							AnimateNPC(n_I\Curr106, 55.0, 104.0, 0.5)
@@ -7310,13 +7315,16 @@ Function UpdateDimension106%()
 							EndIf
 							ResetEntity(n_I\Curr106\Collider)
 							n_I\Curr106\Idle = 1 : n_I\Curr106\GravityMult = 0.0 : n_I\Curr106\DropSpeed = 0.0
-							PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider) - 0.15, EntityZ(n_I\Curr106\Collider))
+							PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
 							RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
 						EndIf
 						If e\EventState > 70.0 * 65.0
 							If Rand(800) = 1
 								PlaySound_Strict(snd_I\HorrorSFX[8])
-								n_I\Curr106\State = -0.1 : n_I\Curr106\Idle = 0
+								n_I\Curr106\Idle = 0
+								n_I\Curr106\State = 3.0
+								n_I\Curr106\State2 = 0.0
+								n_I\Curr106\State3 = 100000.0
 								e\EventState = 601.0
 							EndIf
 						EndIf
@@ -7573,7 +7581,9 @@ Function UpdateDimension106%()
 											TeleportEntity(me\Collider, EntityX(r\Objects[0], True), 0.6, EntityZ(r\Objects[0], True), 0.3, True)
 											TeleportToRoom(r)
 											
-											n_I\Curr106\State = Rnd(10000.0, 12000.0) : n_I\Curr106\Idle = 0
+											n_I\Curr106\Idle = 0
+											n_I\Curr106\State = 0.0
+											n_I\Curr106\State2 = Rnd(10000.0, 12000.0)
 											
 											de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
 											EntityParent(de\OBJ, e\room\OBJ)
@@ -7674,7 +7684,7 @@ Function UpdateDimension106%()
 							MoveEntity(n_I\Curr106\Collider, 0.0, 0.0, Sin(MilliSec / 15.0) * 0.06)
 							
 							n_I\Curr106\GravityMult = 0.0 : n_I\Curr106\DropSpeed = 0.0
-							PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider) - 0.15, EntityZ(n_I\Curr106\Collider))
+							PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
 							ResetEntity(n_I\Curr106\Collider)
 							RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
 							
@@ -7686,17 +7696,24 @@ Function UpdateDimension106%()
 							
 							If e\EventState3 = 12.0
 								me\CameraShake = 1.0
-								n_I\Curr106\State = -10.0
+								n_I\Curr106\Idle = 0
+								n_I\Curr106\State = 3.0
+								n_I\Curr106\State2 = 0.0
+								n_I\Curr106\State3 = 100000.0
 								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[e\EventState3], True), -1.0, EntityZ(e\room\Objects[e\EventState3], True))
 								ResetEntity(n_I\Curr106\Collider)
 							EndIf
 						Else
-							n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
+							n_I\Curr106\Idle = 0
+							n_I\Curr106\State = 3.0
+							n_I\Curr106\State2 = 0.0
+							n_I\Curr106\State3 = 100000.0
 						EndIf
 						
 						If EntityY(me\Collider) < (-1600.0) * RoomScale
 							; ~ Player is at the exit
 							If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
+								n_I\Curr106\State = 0.0
 								Random = Rand(14, 30)
 								Teleport = True
 							Else ; ~ Somewhere else, must've fallen down
@@ -7714,7 +7731,6 @@ Function UpdateDimension106%()
 						me\CameraFogDist = 4.0
 						
 						UpdateDoors()
-						n_I\Curr106\State = -10.0 : n_I\Curr106\Idle = 0
 						
 						me\Injuries = me\Injuries + (fps\Factor[0] * 0.0001)
 						
@@ -7734,7 +7750,7 @@ Function UpdateDimension106%()
 				
 				If Teleport
 					me\BlinkTimer = -10.0 : me\BlurTimer = 1150.0
-					n_I\Curr106\State = 250.0 : n_I\Curr106\Idle = 1
+					n_I\Curr106\Idle = 1
 					
 					Select Random
 						Case 1, 2, 3, 4, 5 ; ~ Rotate the player and close by the wall
@@ -7846,7 +7862,9 @@ Function UpdateDimension106%()
 									EndIf
 									TeleportToRoom(r)
 									
-									n_I\Curr106\State = Rnd(10000.0, 12000.0) : n_I\Curr106\Idle = 0
+									n_I\Curr106\Idle = 0
+									n_I\Curr106\State = 0.0
+									n_I\Curr106\State2 = Rnd(10000.0, 12000.0)
 									
 									If (Not LCZ)
 										For e2.Events = Each Events
@@ -7908,6 +7926,10 @@ Function UpdateDimension106%()
 							ResetEntity(me\Collider)
 							
 							n_I\Curr106\Speed = n_I\Curr106\Speed / 3.0
+							n_I\Curr106\Idle = 0
+							n_I\Curr106\State = 3.0
+							n_I\Curr106\State2 = 0.0
+							n_I\Curr106\State3 = 100000.0
 							PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[25], True), EntityY(e\room\Objects[25], True), EntityZ(e\room\Objects[25], True))
 							ResetEntity(n_I\Curr106\Collider)
 							
@@ -7935,7 +7957,9 @@ Function UpdateDimension106%()
 										TeleportEntity(me\Collider, EntityX(r\RoomCenter, True), 0.5, EntityZ(r\RoomCenter, True), 0.3, True)
 										TeleportToRoom(r)
 										
-										n_I\Curr106\State = 15000.0 : n_I\Curr106\Idle = 0
+										n_I\Curr106\Idle = 0
+										n_I\Curr106\State = 0.0
+										n_I\Curr106\State2 = 15000.0
 										
 										For e2.Events = Each Events
 											If e2\EventID = e_room2_sl
