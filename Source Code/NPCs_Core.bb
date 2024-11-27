@@ -676,7 +676,7 @@ Function UpdateNPCs%()
 									EndIf
 								EndIf
 								
-								Local SoundVol# = Max(Min((Distance(EntityX(n\Collider), n\PrevX, EntityZ(n\Collider), n\PrevZ) * 2.5), 1.0), 0.0)
+								Local SoundVol# = Clamp(Distance(EntityX(n\Collider), n\PrevX, EntityZ(n\Collider), n\PrevZ) * 2.5, 0.0, 1.0)
 								
 								n\SoundCHN = LoopSoundEx(snd_I\StoneDragSFX, n\SoundCHN, Camera, n\Collider, 10.0, n\State)
 								
@@ -691,7 +691,7 @@ Function UpdateNPCs%()
 							; ~ Doesn't move
 							If (Not Move)
 								SqrValue = Sqr(Dist)
-								me\BlurVolume = Max(Max(Min((4.0 - SqrValue) / 6.0, 0.9), 0.1), me\BlurVolume)
+								me\BlurVolume = Clamp((4.0 - SqrValue) / 6.0, 0.1, 0.9)
 								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 15.0 * Max((3.5 - SqrValue) / 3.5, 0.0))
 								
 								If Dist < 12.25 And MilliSecs() - n\LastSeen > 60000 And Temp
@@ -855,7 +855,7 @@ Function UpdateNPCs%()
 							If (Not Tmp)
 								PointEntity(n\OBJ, n_I\MTFLeader\Collider)
 								RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0, True)
-								MoveEntity(n\Collider, 0.0, 0.0, 0.016 * fps\Factor[0] * Max(Min(((Sqr(Dist) * 2.0) - 1.0) * 0.5, 1.0), -0.5))
+								MoveEntity(n\Collider, 0.0, 0.0, 0.016 * fps\Factor[0] * Clamp(((Sqr(Dist) * 2.0) - 1.0) * 0.5, -0.5, 1.0))
 								n\GravityMult = 1.0
 							Else
 								PositionEntity(n\Collider, EntityX(n_I\MTFLeader\Collider), EntityY(n_I\MTFLeader\Collider) + 0.3, EntityZ(n_I\MTFLeader\Collider))
@@ -1004,7 +1004,7 @@ Function UpdateNPCs%()
 									If EntityInView(n\Collider, Camera)
 										SqrValue = (4.0 - Sqr(Dist))
 										
-										me\BlurVolume = Max(Max(Min(SqrValue / 6.0, 0.9), 0.1), me\BlurVolume)
+										me\BlurVolume = Max(Clamp(SqrValue / 6.0, 0.1, 0.9), me\BlurVolume)
 										me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 20.0 * Max(SqrValue / 4.0, 0.0))
 										
 										If MilliSecs() - n\LastSeen > 60000
@@ -1454,7 +1454,7 @@ Function UpdateNPCs%()
 									n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0)
 									n\SoundCHN2_IsStream = True
 								Else
-									SetStreamVolume_Strict(n\SoundCHN2, Min(Max(8.0 - Sqr(Dist), 0.6), 1.0) * opt\VoiceVolume * opt\MasterVolume)
+									SetStreamVolume_Strict(n\SoundCHN2, Clamp(8.0 - Sqr(Dist), 0.6, 1.0) * opt\VoiceVolume * opt\MasterVolume)
 								EndIf
 							EndIf
 							
@@ -1788,13 +1788,13 @@ Function UpdateNPCs%()
 										MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 										
 										If Dist < 9.0
-											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 428.0), 387.0), 463.0, n\CurrSpeed * 38.0) ; ~ WALK CYCLE 8 + WALK CYCLE 7
+											AnimateNPC(n, Clamp(AnimTime(n\OBJ), 387.0, 428.0), 463.0, n\CurrSpeed * 38.0) ; ~ WALK CYCLE 8 + WALK CYCLE 7
 										Else
 											If n\Frame > 428.0
 												AnimateNPC(n, Min(AnimTime(n\OBJ), 463.0), 498.0, n\CurrSpeed * 38.0, False)  ; ~ WALK CYCLE 7 + WALK CYCLE 6
 												If n\Frame > 497.9 Then SetNPCFrame(n, 358.0)
 											Else
-												AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0) ; IDLE TO WALK + WALK CYCLE 3
+												AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0) ; IDLE TO WALK + WALK CYCLE 3
 											EndIf
 										EndIf
 									EndIf
@@ -1816,7 +1816,7 @@ Function UpdateNPCs%()
 											RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 											MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 											
-											AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
+											AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
 											n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 15.0 - (1.5 * SelectedDifficulty\OtherFactors))
 											
 											; ~ Playing a sound if he hears the player
@@ -2005,7 +2005,7 @@ Function UpdateNPCs%()
 										
 										UseDoorNPC(n)
 										
-										AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 358.0), 346.0), 393.0, n\CurrSpeed * 38.0)
+										AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
 									EndIf
 								Else
 									Select n\PrevState
@@ -2082,7 +2082,7 @@ Function UpdateNPCs%()
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								
-								AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 714.0), 705.0), 794.0, n\CurrSpeed * 38.0)
+								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 705.0, 714.0), 794.0, n\CurrSpeed * 38.0)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 								
@@ -2163,7 +2163,7 @@ Function UpdateNPCs%()
 									AnimateNPC(n, 557.0, 704.0, 0.2)
 								EndIf
 							Else
-								AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 713.0), 705.0), 794.0, n\CurrSpeed * 38.0)
+								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 705.0, 714.0), 794.0, n\CurrSpeed * 38.0)
 								If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 							EndIf
 							
@@ -3208,7 +3208,7 @@ Function UpdateNPCs%()
 				;[Block]
 				If EntityDistanceSquared(me\Collider, n\Collider) < 3600.0
 					If PlayerRoom\RoomTemplate\RoomID = r_gate_b
-						Dist2 = Max(Min(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 1.0), 0.0)
+						Dist2 = Clamp(EntityDistance(n\Collider, PlayerRoom\Objects[10]) / (8000.0 * RoomScale), 0.0, 1.0)
 					Else
 						Dist2 = 1.0
 					EndIf
@@ -4097,7 +4097,7 @@ Function UpdateNPCs%()
 					
 					If n\State3 > 0.0
 						n\State3 = n\State3 - fps\Factor[0]
-						LightVolume = TempLightVolume - TempLightVolume * Min(Max(n\State3 / 500.0, 0.01), 0.6)
+						LightVolume = TempLightVolume - TempLightVolume * Clamp(n\State3 / 500.0, 0.01, 0.6)
 						me\HeartBeatRate = Max(me\HeartBeatRate, 130.0)
 						me\HeartBeatVolume = Max(me\HeartBeatVolume, Min(n\State3 / 1000.0, 1.0))
 					EndIf
@@ -4352,7 +4352,7 @@ Function UpdateNPCs%()
 									EndIf
 									If PrevFrame < 650.0 And n\Frame >= 650.0 Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 								Else
-									AnimateNPC(n, Max(Min(AnimTime(n\OBJ), 580.0), 557.0), 628.0, n\CurrSpeed * 25.0)
+									AnimateNPC(n, Clamp(AnimTime(n\OBJ), 557.0, 580.0), 628.0, n\CurrSpeed * 25.0)
 									If (PrevFrame < 581.0 And n\Frame >= 581.0) Lor (PrevFrame < 607.0 And n\Frame >= 607.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 7.0, Rnd(0.5, 0.7))
 								EndIf
 								;[End Block]
@@ -7002,7 +7002,7 @@ Function NPCSeesNPC%(n.NPCs, n2.NPCs, Dist# = 36.0)
 	If EntityDistanceSquared(n\Collider, n2\Collider) < Dist
 		If EntityVisible(n\Collider, n2\Collider) Then Return(1)
 		If n = n_I\Curr173
-			Local SoundVol173# = Max(Min((Distance(EntityX(n_I\Curr173\Collider), n_I\Curr173\PrevX, EntityZ(n_I\Curr173\Collider), n_I\Curr173\PrevZ) * 2.5), 1.0), 0.0)
+			Local SoundVol173# = Clamp(Distance(EntityX(n_I\Curr173\Collider), n_I\Curr173\PrevX, EntityZ(n_I\Curr173\Collider), n_I\Curr173\PrevZ) * 2.5, 0.0, 1.0)
 			
 			If SoundVol173 > 0.0 Then Return(2)
 		EndIf
@@ -7437,7 +7437,7 @@ Function ManipulateNPCBones%()
 									n\BonePitch = ToValue
 								EndIf
 								n\BonePitch = ChangeAngleValueForCorrectBoneAssigning(n\BonePitch)
-								n\BonePitch = Max(Min(n\BonePitch, MaxValue), MinValue)
+								n\BonePitch = Clamp(n\BonePitch, MinValue, MaxValue)
 							ElseIf GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis1", 0) = "yaw"
 								MaxValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_max", 2)
 								MinValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_min", 2)
@@ -7454,7 +7454,7 @@ Function ManipulateNPCBones%()
 									n\BoneYaw = ToValue
 								EndIf
 								n\BoneYaw = ChangeAngleValueForCorrectBoneAssigning(n\BoneYaw)
-								n\BoneYaw = Max(Min(n\BoneYaw, MaxValue), MinValue)
+								n\BoneYaw = Clamp(n\BoneYaw, MinValue, MaxValue)
 							EndIf
 						Next
 						RotateEntity(Bone, EntityPitch(Bone) + n\BonePitch, EntityYaw(Bone) + n\BoneYaw, EntityRoll(Bone) + n\BoneRoll)
@@ -7574,7 +7574,7 @@ Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 	Local NewTime#
 	
 	If Speed > 0.0
-		NewTime = Max(Min(n\Frame + Speed * fps\Factor[0], LastFrame), FirstFrame)
+		NewTime = Clamp(n\Frame + Speed * fps\Factor[0], FirstFrame, LastFrame)
 		
 		If Loop And NewTime >= LastFrame Then NewTime = FirstFrame
 	Else
@@ -7594,7 +7594,7 @@ Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 				NewTime = LastFrame
 			EndIf
 		Else
-			NewTime = Max(Min(n\Frame + Speed * fps\Factor[0], FirstFrame), LastFrame)
+			NewTime = Clamp(n\Frame + Speed * fps\Factor[0], FirstFrame, LastFrame)
 		EndIf
 	EndIf
 	SetNPCFrame(n, NewTime)
@@ -7604,7 +7604,7 @@ Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = Tru
 	Local NewTime#
 	
 	If Speed > 0.0
-		NewTime = Max(Min(Curr + Speed * fps\Factor[0], LastFrame), FirstFrame)
+		NewTime = Clamp(Curr + Speed * fps\Factor[0], FirstFrame, LastFrame)
 		
 		If Loop And NewTime >= LastFrame Then NewTime = FirstFrame
 	Else
@@ -7624,7 +7624,7 @@ Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = Tru
 				NewTime = LastFrame
 			EndIf
 		Else
-			NewTime = Max(Min(Curr + Speed * fps\Factor[0], FirstFrame), LastFrame)
+			NewTime = Clamp(Curr + Speed * fps\Factor[0], FirstFrame, LastFrame)
 		EndIf
 	EndIf
 	

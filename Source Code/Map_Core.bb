@@ -263,7 +263,7 @@ Function UpdateLights%(Cam%)
 									If LightInView And LightVisible
 										If LightSpriteHidden Then ShowEntity(l\Sprite)
 										If opt\AdvancedRoomLights
-											Alpha = 1.0 - Max(Min(((Sqr(Dist) + 0.5) / 7.5), 1.0), 0.0)
+											Alpha = 1.0 - Clamp((Sqr(Dist) + 0.5) / 7.5, 0.0, 1.0)
 											If Alpha > 0.0
 												If LightAdvancedSpriteHidden Then ShowEntity(l\AdvancedSprite)
 												EntityAlpha(l\AdvancedSprite, Max(3.0 * (((CurrAmbientColorR + CurrAmbientColorG + CurrAmbientColorB) / 3) / 255.0) * (l\Intensity / 2.0), 1.0) * Alpha)
@@ -2107,7 +2107,7 @@ Function LoadRoomTemplates%(File$)
 					rt\Zone[i] = IniGetInt(File, Loc, "Zone" + (i + 1))
 				Next
 				
-				rt\Commonness = Max(Min(IniGetInt(File, Loc, "Commonness"), 100), 0)
+				rt\Commonness = Clamp(IniGetInt(File, Loc, "Commonness"), 0, 100)
 				rt\DisableDecals = IniGetInt(File, Loc, "DisableDecals")
 				rt\DisableOverlapCheck = IniGetInt(File, Loc, "DisableOverlapCheck")
 			EndIf
@@ -3221,12 +3221,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								Dir = PointDirection(PlayerX, PlayerZ, FirstPivotX, FirstPivotZ)
 								Dir = Dir + SecondPivotYaw - FirstPivotYaw
 								Dir = WrapAngle(Dir)
-								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+								x = Clamp(Cos(Dir) * Dist, Plus022, Minus022)
+								z = Clamp(Sin(Dir) * Dist, Plus022, Minus022)
 								RotateEntity(me\Collider, EntityPitch(me\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(me\Collider, True), FirstPivotYaw), EntityRoll(me\Collider, True), True)
 							Else
-								x = Max(Min((PlayerX - FirstPivotX), Minus022), Plus022)
-								z = Max(Min((PlayerZ - FirstPivotZ), Minus022), Plus022)
+								x = Clamp(PlayerX - FirstPivotX, Plus022, Minus022)
+								z = Clamp(PlayerZ - FirstPivotZ, Plus022, Minus022)
 							EndIf
 							
 							TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (PlayerY - FirstPivotY), SecondPivotZ + z, 0.3, True)
@@ -3247,12 +3247,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dir = PointDirection(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ)
 									Dir = Dir + SecondPivotYaw - FirstPivotYaw
 									Dir = WrapAngle(Dir)
-									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									x = Clamp(Cos(Dir) * Dist, Plus022, Minus022)
+									z = Clamp(Sin(Dir) * Dist, Plus022, Minus022)
 									RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
 								Else
-									x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
-									z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
+									x = Clamp(OBJPosX - FirstPivotX, Plus022, Minus022)
+									z = Clamp(OBJPosZ - FirstPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(n\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, n\CollRadius, True)
 							EndIf
@@ -3266,12 +3266,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dir = PointDirection(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ)
 									Dir = Dir + SecondPivotYaw - FirstPivotYaw
 									Dir = WrapAngle(Dir)
-									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									x = Clamp(Cos(Dir) * Dist, Plus022, Minus022)
+									z = Clamp(Sin(Dir) * Dist, Plus022, Minus022)
 									RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
 								Else
-									x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
-									z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
+									x = Clamp(OBJPosX - FirstPivotX, Plus022, Minus022)
+									z = Clamp(OBJPosZ - FirstPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(it\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, 0.01, True)
 								it\DistTimer = 0.0
@@ -3287,12 +3287,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dir = PointDirection(OBJPosX, EntityZ(de\OBJ, True), FirstPivotX, FirstPivotZ)
 									Dir = Dir + SecondPivotYaw - FirstPivotYaw
 									Dir = WrapAngle(Dir)
-									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									x = Clamp(Cos(Dir) * Dist, Plus022, Minus022)
+									z = Clamp(Sin(Dir) * Dist, Plus022, Minus022)
 									RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
 								Else
-									x = Max(Min((OBJPosX - FirstPivotX), Minus022), Plus022)
-									z = Max(Min((OBJPosZ - FirstPivotZ), Minus022), Plus022)
+									x = Clamp(OBJPosX - FirstPivotX, Plus022, Minus022)
+									z = Clamp(OBJPosZ - FirstPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(de\OBJ, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, -0.01, True)
 								UpdateDecals()
@@ -3352,12 +3352,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								Dist = Distance(PlayerX, SecondPivotX, PlayerZ, SecondPivotZ)
 								Dir = PointDirection(PlayerX, PlayerZ, SecondPivotX, SecondPivotZ)
 								Dir = Dir + FirstPivotYaw - SecondPivotYaw
-								x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-								z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+								x = Clamp(Cos(Dir) * Dist, Plus022, Minus022)
+								z = Clamp(Sin(Dir) * Dist, Plus022, Minus022)
 								RotateEntity(me\Collider, EntityPitch(me\Collider, True), FirstPivotYaw + AngleDist(EntityYaw(me\Collider, True), SecondPivotYaw), EntityRoll(me\Collider, True), True)
 							Else
-								x = Max(Min((PlayerX - SecondPivotX), Minus022), Plus022)
-								z = Max(Min((PlayerZ - SecondPivotZ), Minus022), Plus022)
+								x = Clamp(PlayerX - SecondPivotX, Plus022, Minus022)
+								z = Clamp(PlayerZ - SecondPivotZ, Plus022, Minus022)
 							EndIf
 							TeleportEntity(me\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (PlayerY - SecondPivotY), FirstPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
@@ -3376,12 +3376,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
 									Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
 									Dir = Dir + FirstPivotYaw - SecondPivotYaw
-									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									x = Clamp(Cos(Dir) * Dist, Plus022, Minus022)
+									z = Clamp(Sin(Dir) * Dist, Plus022, Minus022)
 									RotateEntity(n\Collider, EntityPitch(n\Collider, True), FirstPivotYaw + AngleDist(EntityYaw(n\Collider, True), SecondPivotYaw), EntityRoll(n\Collider, True), True)
 								Else
-									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
-									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+									x = Clamp(OBJPosX - SecondPivotX, Plus022, Minus022)
+									z = Clamp(OBJPosZ - SecondPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(n\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, n\CollRadius, True)
 							EndIf
@@ -3394,12 +3394,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
 									Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
 									Dir = Dir + FirstPivotYaw - SecondPivotYaw
-									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									x = Clamp(Cos(Dir) * Dist, Plus022, Minus022)
+									z = Clamp(Sin(Dir) * Dist, Plus022, Minus022)
 									RotateEntity(it\Collider, EntityPitch(it\Collider, True), FirstPivotYaw + AngleDist(EntityYaw(it\Collider, True), SecondPivotYaw), EntityRoll(it\Collider, True), True)
 								Else
-									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
-									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+									x = Clamp(OBJPosX - SecondPivotX, Plus022, Minus022)
+									z = Clamp(OBJPosZ - SecondPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(it\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, 0.01, True)
 								it\DistTimer = 0.0
@@ -3414,12 +3414,12 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									Dist = Distance(OBJPosX, SecondPivotX, OBJPosZ, SecondPivotZ)
 									Dir = PointDirection(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ)
 									Dir = Dir + FirstPivotYaw - SecondPivotYaw
-									x = Max(Min(Cos(Dir) * Dist, Minus022), Plus022)
-									z = Max(Min(Sin(Dir) * Dist, Minus022), Plus022)
+									x = Clamp(Cos(Dir) * Dist, Plus022, Minus022)
+									z = Clamp(Sin(Dir) * Dist, Plus022, Minus022)
 									RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), FirstPivotYaw + AngleDist(EntityYaw(de\OBJ, True), SecondPivotYaw), EntityRoll(de\OBJ, True), True)
 								Else
-									x = Max(Min((OBJPosX - SecondPivotX), Minus022), Plus022)
-									z = Max(Min((OBJPosZ - SecondPivotZ), Minus022), Plus022)
+									x = Clamp(OBJPosX - SecondPivotX, Plus022, Minus022)
+									z = Clamp(OBJPosZ - SecondPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(de\OBJ, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, -0.01, True)
 								UpdateDecals()
@@ -4087,7 +4087,7 @@ Function UpdateSecurityCams%()
 					EndIf
 				EndIf
 				PositionEntity(sc\CameraOBJ, EntityX(sc\BaseOBJ, True), EntityY(sc\BaseOBJ, True) - 0.083, EntityZ(sc\BaseOBJ, True))
-				RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Max(Min(sc\CurrAngle, sc\Turn), -sc\Turn), 0.0)
+				RotateEntity(sc\CameraOBJ, EntityPitch(sc\CameraOBJ), sc\room\Angle + sc\Angle + Clamp(sc\CurrAngle, -sc\Turn, sc\Turn), 0.0)
 				
 				If sc\Cam <> 0
 					PositionEntity(sc\Cam, EntityX(sc\CameraOBJ, True), EntityY(sc\CameraOBJ, True), EntityZ(sc\CameraOBJ, True))
@@ -4151,14 +4151,15 @@ Function UpdateSecurityCams%()
 								If SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then CanSave = 0
 								
 								Local Pvt% = CreatePivot()
+								Local Value# = Clamp(15000.0 / (-me\Sanity), 20.0, 200.0)
 								
 								PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 								PointEntity(Pvt, sc\ScrOBJ)
 								
-								RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
+								RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Value), 0.0)
 								
 								TurnEntity(Pvt, 90.0, 0.0, 0.0)
-								CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
+								CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Value)
 								CameraPitch = CameraPitch - 90.0
 								
 								FreeEntity(Pvt) : Pvt = 0
@@ -4313,12 +4314,13 @@ Function UpdateMonitorSaving%()
 					
 					If sc_I\SelectedMonitor = sc
 						Local Pvt% = CreatePivot()
+						Local Value# = Clamp(15000.0 / (-me\Sanity), 20.0, 200.0)
 						
 						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 						PointEntity(Pvt, sc\MonitorOBJ)
-						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0)), 0.0)
+						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Value), 0.0)
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
-						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 20.0), 200.0))
+						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Value)
 						CameraPitch = CameraPitch - 90.0
 						FreeEntity(Pvt) : Pvt = 0
 					EndIf
@@ -4518,7 +4520,7 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 			
 			If GrabbedEntity = OBJ
 				HandEntity = OBJ
-				RotateEntity(GrabbedEntity, Max(Min(EntityPitch(OBJ) + Max(Min(mo\Mouse_Y_Speed_1 * 8.0, 30.0), -30.0), MaxValue), MinValue), EntityYaw(OBJ), 0.0)
+				RotateEntity(GrabbedEntity, Clamp(EntityPitch(OBJ) + Clamp(mo\Mouse_Y_Speed_1 * 8.0, -30.0, 30.0), MinValue, MaxValue), EntityYaw(OBJ), 0.0)
 				DrawArrowIcon[0] = True
 				DrawArrowIcon[2] = True
 			EndIf
@@ -5222,7 +5224,7 @@ Function CreateMap%()
 		If GetZone(y - Height) <> GetZone(y - Height + 1) Then Height = Height - 1
 		
 		For i = 1 To yHallways
-			x2 = Max(Min(Rand(x, x + Width - 1), MapGridSize - 2), 2)
+			x2 = Clamp(Rand(x, x + Width - 1), 2, MapGridSize - 2)
 			While CurrMapGrid\Grid[x2 + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 + 1) + ((y - 1) * MapGridSize)]
 				x2 = x2 + 1
 			Wend

@@ -1621,7 +1621,7 @@ Function UpdateEvents%()
 						Next
 						If CoffinDistance < 4.0 And HasBatteryFor895 And I_714\Using <> 2
 							TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
-							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Min(Max((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0), 1.0)) * 0.2)
+							CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Clamp((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0, 1.0)) * 0.2)
 							
 							me\Sanity = me\Sanity - ((fps\Factor[0] * (1.2 + (0.24 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 							me\RestoreSanity = False
@@ -1992,7 +1992,7 @@ Function UpdateEvents%()
 								
 								If InteractObject(e\room\Objects[1], 0.8, 1)
 									DrawArrowIcon[2] = True
-									RotateEntity(e\room\Objects[1], Max(Min(EntityPitch(e\room\Objects[1]) + Max(Min(-mo\Mouse_Y_Speed_1, 10.0), -10.0), 89.0), 35.0), EntityYaw(e\room\Objects[1]), 0.0)
+									RotateEntity(e\room\Objects[1], Clamp(EntityPitch(e\room\Objects[1]) + Clamp(-mo\Mouse_Y_Speed_1, -10.0, 10.0), 35.0, 89.0), EntityYaw(e\room\Objects[1]), 0.0)
 								EndIf
 								If I_008\Timer = 0.0
 									If me\Bloodloss > 0.0 Lor wi\GasMask = 0 Then InjurePlayer(0.0, 0.001)
@@ -5253,7 +5253,7 @@ Function UpdateEvents%()
 							EndIf
 							PointEntity(e\room\NPC[0]\Collider, n_I\Curr096\Collider)
 						ElseIf e\EventState >= 70.0 * 10.0 And e\EventState < 70.0 * 20.0
-							n_I\Curr096\State = Min(Max(2.0, n_I\Curr096\State), 4.0)
+							n_I\Curr096\State = Clamp(n_I\Curr096\State, 2.0, 4.0)
 							n_I\Curr096\State2 = Max(n_I\Curr096\State2, 70.0 * 12.0)
 							If e\EventState - fps\Factor[0] <= 70.0 * 15.0 ; ~ Walk to the doorway
 								If e\EventState > 70.0 * 15.0
@@ -7428,9 +7428,10 @@ Function UpdateDimension106%()
 						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 						PointEntity(Pvt, e\room\Objects[17])
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
-						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Min(Max(15000.0 / (-me\Sanity), 15.0), 500.0))
+						Dist = Clamp(15000.0 / (-me\Sanity), 15.0, 500.0)
+						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Dist)
 						CameraPitch = CameraPitch - 90.0
-						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Min(Max(15000.0 / (-me\Sanity), 15.0), 500.0)), 0)
+						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Dist), 0.0)
 						FreeEntity(Pvt) : Pvt = 0
 						
 						; ~ Teleport the player to the trenches
@@ -8118,7 +8119,7 @@ Function UpdateDimension1499%()
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
 								du\Anim = Rand(False, True)
-								PositionEntity(du\OBJ, Max(Min((e\room\x + (1887.0 - ((2560.0 / 7.0) * x)) * RoomScale) + Rnd(-0.5, 0.5), e\room\x + 1887.0 * RoomScale), e\room\x - 873.0 * RoomScale), e\room\y, Max(Min((e\room\z + (1796.0 - (384.0 * y)) * RoomScale) + Rnd(-0.5, 0.5), e\room\z + 1796.0 * RoomScale), e\room\z + 1028.0 * RoomScale))
+								PositionEntity(du\OBJ, Clamp((e\room\x + (1887.0 - ((2560.0 / 7.0) * x)) * RoomScale) + Rnd(-0.5, 0.5), e\room\x - 873.0 * RoomScale, e\room\x + 1887.0 * RoomScale), e\room\y, Clamp((e\room\z + (1796.0 - (384.0 * y)) * RoomScale) + Rnd(-0.5, 0.5), e\room\z + 1028.0 * RoomScale, e\room\z + 1796.0 * RoomScale))
 								RotateEntity(du\OBJ, 0.0, 270.0, 0.0)
 								EntityAutoFade(du\OBJ, 25.0, 39.0)
 							Next
@@ -8137,7 +8138,7 @@ Function UpdateDimension1499%()
 								ScaleEntity(du\OBJ, Scale, Scale, Scale)
 								EntityFX(du\OBJ, 1)
 								du\Anim = Rand(False, True)
-								PositionEntity(du\OBJ, Max(Min((e\room\x + (1375.0 - ((2048.0 / 6.0) * x)) * RoomScale) + Rnd(-0.5, 0.5), e\room\x + 1375.0 * RoomScale), e\room\x - 873.0 * RoomScale), e\room\y, Max(Min((e\room\z + (3588.0 - (384.0 * y)) * RoomScale) + Rnd(-0.5, 0.5), e\room\z + 3588.0 * RoomScale), e\room\z + 2820.0 * RoomScale))
+								PositionEntity(du\OBJ, Clamp((e\room\x + (1375.0 - ((2048.0 / 6.0) * x)) * RoomScale) + Rnd(-0.5, 0.5), e\room\x - 873.0 * RoomScale, e\room\x + 1375.0 * RoomScale), e\room\y, Clamp((e\room\z + (3588.0 - (384.0 * y)) * RoomScale) + Rnd(-0.5, 0.5), e\room\z + 2820.0 * RoomScale, e\room\z + 3588.0 * RoomScale))
 								RotateEntity(du\OBJ, 0.0, 270.0, 0.0)
 								EntityAutoFade(du\OBJ, 25.0, 39.0)
 							Next
@@ -8504,16 +8505,17 @@ Function UpdateIntro%()
 										PlaySoundEx(StepSFX(0, 0, 0), Camera, me\Collider, 8.0, 0.5)
 									EndIf
 									
+									Dist = Clamp((e\EventState2 - 3.0) / 5.0, 0.0, 1.0)
 									x = x + (e\room\x - 4072.0 * RoomScale - x) * Max((e\EventState2 - 10.0) / 4.0, 0.0) 
 									If e\EventState2 < 10.0
-										y = y + (0.2 * Min(Max((e\EventState2 - 3.0) / 5.0, 0.0), 1.0))
+										y = y + (0.2 * Dist)
 									Else
 										y = (y + 0.2) + (e\room\y + 0.302 + 0.6 - (y + 0.2)) * Max((e\EventState2 - 10.0) / 4.0, 0.0) 
 									EndIf
-									z = z + (e\room\z + (104.0 * RoomScale) - z) * Min(Max((e\EventState2 - 3.0) / 5.0, 0.0), 1.0)
+									z = z + (e\room\z + (104.0 * RoomScale) - z) * Dist
 									
 									; ~ I'm sorry you have to see this
-									RotateEntity(Camera, (-70.0) + 70.0 * Min(Max((e\EventState2 - 3.0) / 5.0, 0.0), 1.0) + Sin(e\EventState2 * 12.857) * 5.0, (-60.0) * Max((e\EventState2 - 10.0) / 4.0, 0.0), Sin(e\EventState2 * 25.7) * 8.0)
+									RotateEntity(Camera, (-70.0) + 70.0 * Dist + Sin(e\EventState2 * 12.857) * 5.0, (-60.0) * Max((e\EventState2 - 10.0) / 4.0, 0.0), Sin(e\EventState2 * 25.7) * 8.0)
 									PositionEntity(Camera, x, y, z)
 									If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 									PositionEntity(me\Collider, x, e\room\y + 0.302, z)
@@ -9296,7 +9298,7 @@ Function UpdateIntro%()
 										EndIf
 									EndIf
 								Else
-									e\room\NPC[3]\State3 = Min(Max(e\room\NPC[3]\State3 - FPSFactorEx, 0.0), 50.0)
+									e\room\NPC[3]\State3 = Clamp(e\room\NPC[3]\State3 - FPSFactorEx, 0.0, 50.0)
 								EndIf
 							Else
 								If e\EventState = INTRO_ESCORT_DONE

@@ -944,16 +944,16 @@ Function UpdateLauncherScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarH
 	OnScrollBar = (mo\MouseDown1 And MouseOn(BarX, BarY, BarWidth, BarHeight))
 	If OnScrollBar
 		If Vertical
-			Return(Min(Max(Value + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
+			Return(Clamp(Value + MouseSpeedY / Float(Height - BarHeight), 0.0, 1.0))
 		Else
-			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
+			Return(Clamp(Value + MouseSpeedX / Float(Width - BarWidth), 0.0, 1.0))
 		EndIf
 	EndIf
 	
 	Local MouseSpeedZ# = MouseZSpeed()
 	
 	; ~ Only for vertical scroll bars
-	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
+	If MouseSpeedZ <> 0.0 Then Return(Clamp(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0, 1.0))
 	
 	Return(Value)
 End Function

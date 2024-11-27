@@ -419,7 +419,7 @@ Function UpdateGame%()
 			
 			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
 			If me\BlurTimer > 0.0
-				me\BlurVolume = Max(Min(0.95, me\BlurTimer / 1000.0), me\BlurVolume)
+				me\BlurVolume = Clamp(me\BlurTimer / 1000.0, me\BlurVolume, 0.95)
 				me\BlurTimer = Max(me\BlurTimer - fps\Factor[0], 0.0)
 			EndIf
 			
@@ -428,7 +428,7 @@ Function UpdateGame%()
 			If me\Sanity < 0.0
 				If me\RestoreSanity Then me\Sanity = Min(me\Sanity + fps\Factor[0], 0.0)
 				If me\Sanity < -200.0
-					DarkAlpha = Max(Min((-me\Sanity - 200.0) / 700.0, 0.6), DarkAlpha)
+					DarkAlpha = Clamp((-me\Sanity - 200.0) / 700.0, DarkAlpha, 0.6)
 					If (Not me\Terminated)
 						me\HeartBeatVolume = Min(Abs(me\Sanity + 20.00) / 500.0, 1.0)
 						me\HeartBeatRate = Max(70.0 + Abs(me\Sanity + 200.0) / 6.0, me\HeartBeatRate)
@@ -519,7 +519,7 @@ Function UpdateGame%()
 				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
 				
 				If me\EyeStuck < 9000.0 Then me\BlurTimer = Max(me\BlurTimer, (9000.0 - me\EyeStuck) / 2.0)
-				If me\EyeStuck < 6000.0 Then DarkAlpha = Min(Max(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0), 1.0)
+				If me\EyeStuck < 6000.0 Then DarkAlpha = Clamp(DarkAlpha, (6000.0 - me\EyeStuck) / 5000.0, 1.0)
 				If me\EyeStuck < 9000.0 And me\EyeStuck + fps\Factor[0] >= 9000.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
 			EndIf
 			
@@ -535,7 +535,7 @@ Function UpdateGame%()
 			
 			If me\LightFlash > 0.0
 				If EntityHidden(t\OverlayID[6]) Then ShowEntity(t\OverlayID[6])
-				EntityAlpha(t\OverlayID[6], Max(Min(me\LightFlash + Rnd(-0.2, 0.2), 1.0), 0.0))
+				EntityAlpha(t\OverlayID[6], Clamp(me\LightFlash + Rnd(-0.2, 0.2), 0.0, 1.0))
 				me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
 			Else
 				If (Not EntityHidden(t\OverlayID[6])) Then HideEntity(t\OverlayID[6])
@@ -2928,12 +2928,12 @@ Function UpdateMoving%()
 					Local Pick% = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
 					
 					If Pick
-						me\DropSpeed = Min(Max(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0), 0.0)
+						me\DropSpeed = Clamp(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0, 0.0)
 					Else
 						me\DropSpeed = 0.0
 					EndIf
 				Else
-					me\DropSpeed = Min(Max(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0), 0.0)
+					me\DropSpeed = Clamp(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0, 0.0)
 				EndIf
 			EndIf
 			PlayerFallingPickDistance = 10.0
@@ -3050,7 +3050,7 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6
-		Local Roll# = Max(Min(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (1.0 - (0.75 * (I_1025\FineState[3] > 0.0)))) + 0.25, 3.0), 8.0), -8.0) + me\Lean
+		Local Roll# = Clamp(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (1.0 - (0.75 * (I_1025\FineState[3] > 0.0)))) + 0.25, 3.0), -8.0, 8.0) + me\Lean
 		
 		RotateEntity(Camera, EntityPitch(me\Collider), EntityYaw(me\Collider), Roll / 2.0)
 		
@@ -8822,12 +8822,12 @@ Function RenderCredits%()
 		Local Clr%
 		
 		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
-			Clr = Max(Min(me\CreditsTimer, 255.0), 0.0)
+			Clr = Clamp(me\CreditsTimer, 0.0, 255.0)
 			Color(Clr, Clr, Clr)
 		ElseIf me\CreditsTimer >= 255.0
 			Color(255, 255, 255)
 		Else
-			Clr = Max(Min(-me\CreditsTimer, 255.0), 0.0)
+			Clr = Clamp(-me\CreditsTimer, 0.0, 255.0)
 			Color(Clr, Clr, Clr)
 		EndIf
 	EndIf
@@ -9176,7 +9176,7 @@ Function Update008%()
 					CreateMsg(GetLocalString("msg", "faint"))
 				ElseIf I_008\Timer >= 91.5
 					If PrevI008Timer < 91.5 Then PlaySound_Strict(LoadTempSound("SFX\Character\D9341\Infected.ogg"), True)
-					me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer), -10.0)
+					me\BlinkTimer = Clamp((-10.0) * (I_008\Timer - 91.5), me\BlinkTimer, -10.0)
 					MakeMeUnplayable()
 					If I_008\Timer >= 92.7 And PrevI008Timer < 92.7
 						If TeleportForInfect
@@ -9213,7 +9213,7 @@ Function Update008%()
 					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
 					me\BlurTimer = 900.0
 					
-					If I_008\Timer > 94.5 Then me\BlinkTimer = Max(Min((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer), -10.0)
+					If I_008\Timer > 94.5 Then me\BlinkTimer = Clamp((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer, -10.0)
 					PointEntity(me\Collider, PlayerRoom\NPC[0]\Collider)
 					PointEntity(PlayerRoom\NPC[0]\Collider, me\Collider)
 					PointEntity(Camera, PlayerRoom\NPC[0]\Collider, EntityRoll(Camera))
@@ -9243,7 +9243,7 @@ Function Update008%()
 						
 						Kill()
 					ElseIf I_008\Timer > 96.0
-						me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
+						me\BlinkTimer = Clamp((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer, -10.0)
 					Else
 						me\Terminated = True
 					EndIf
@@ -9259,7 +9259,7 @@ Function Update008%()
 					TurnEntity(me\Head, 80.0 + SinValue * 30.0, SinValue * 40.0, 0.0)
 				EndIf
 			Else
-				me\BlinkTimer = Max(Min((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer), -10.0)
+				me\BlinkTimer = Clamp((-10.0) * (I_008\Timer - 96.0), me\BlinkTimer, -10.0)
 				If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 					msg\DeathMsg = GetLocalString("death", "14991")
 				ElseIf IsPlayerOutsideFacility()

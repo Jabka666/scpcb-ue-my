@@ -2495,7 +2495,7 @@ Function UpdateMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 	If mo\MouseDown1 And OnSliderID = 0
 		If MouseOn(x, y, Width + (14 * MenuScale), (20 * MenuScale)) Then OnSliderID = ID
 	EndIf
-	If ID = OnSliderID Then Value = Min(Max((MousePosX - x) * 100.0 / Width, 0.0), 100.0)
+	If ID = OnSliderID Then Value = Clamp((MousePosX - x) * 100.0 / Width, 0.0, 100.0)
 	Return(Value)
 End Function
 
@@ -2742,16 +2742,16 @@ Global ScrollMenuHeight# = 0.0
 ;			EndIf
 ;		EndIf
 ;		If (Not Vertical)
-;			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
+;			Return(Clamp(Value + MouseSpeedX / Float(Width - BarWidth), 0.0, 1.0))
 ;		Else
-;			Return(Min(Max(Value + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
+;			Return(Clamp(Value + MouseSpeedY / Float(Height - BarHeight), 0.0, 1.0))
 ;		EndIf
 ;	EndIf
 ;	
 ;	Local MouseSpeedZ# = MouseZSpeed()
 ;	
 ;	; ~ Only for vertical scroll bars
-;	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
+;	If MouseSpeedZ <> 0.0 Then Return(Clamp(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0, 1.0))
 ;	
 ;	Return(Value)
 ;End Function

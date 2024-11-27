@@ -67,7 +67,7 @@ Function UpdateParticles%()
 			PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
 			
 			If p\AlphaChange <> 0.0
-				p\Alpha = Min(Max(p\Alpha + (p\AlphaChange * fps\Factor[0]), 0.0), 1.0)
+				p\Alpha = Clamp(p\Alpha + (p\AlphaChange * fps\Factor[0]), 0.0, 1.0)
 				EntityAlpha(p\OBJ, p\Alpha)
 			EndIf
 			
