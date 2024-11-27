@@ -121,6 +121,7 @@
 		EpicDasherFR
 		ZiYueCommentary
 		Snoe
+		itzslain
 
 *EX-developers
 
@@ -161,7 +162,6 @@
 		SynthMaster
 		Xstallm
 		aciu
-		itzslain
 		SPOOKYfellow
 		yungDoom
 		MidnightFirefly as a wiki redactor
