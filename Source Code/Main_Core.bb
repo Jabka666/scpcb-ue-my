@@ -5155,11 +5155,13 @@ Function UpdateGUI%()
 							Select SelectedItem\State
 								Case 0.0
 									;[Block]
-									MaxItemAmount = MaxItemAmount + 2
-									InjurePlayer(1.5, 0.0, 1000.0)
-									PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
-									CreateMsg(GetLocalString("msg", "extraparts"))
-									I_1025\FineState[0] = 1.0
+									If I_1025\FineState[0] = 0.0
+										MaxItemAmount = MaxItemAmount + 2
+										InjurePlayer(1.5, 0.0, 1000.0)
+										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+										CreateMsg(GetLocalString("msg", "extraparts"))
+										I_1025\FineState[0] = 1.0
+									EndIf
 									;[End Block]
 								Case 5.0
 									;[Block]
