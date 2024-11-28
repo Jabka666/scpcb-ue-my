@@ -691,7 +691,7 @@ Function UpdateNPCs%()
 							; ~ Doesn't move
 							If (Not Move)
 								SqrValue = Sqr(Dist)
-								me\BlurVolume = Clamp((4.0 - SqrValue) / 6.0, 0.1, 0.9)
+								me\BlurVolume = Max(Clamp((4.0 - SqrValue) / 6.0, 0.1, 0.9), me\BlurVolume)
 								me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 15.0 * Max((3.5 - SqrValue) / 3.5, 0.0))
 								
 								If Dist < 12.25 And MilliSecs() - n\LastSeen > 60000 And Temp
@@ -7594,7 +7594,7 @@ Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 				NewTime = LastFrame
 			EndIf
 		Else
-			NewTime = Clamp(n\Frame + Speed * fps\Factor[0], FirstFrame, LastFrame)
+			NewTime = Clamp(n\Frame + Speed * fps\Factor[0], LastFrame, FirstFrame)
 		EndIf
 	EndIf
 	SetNPCFrame(n, NewTime)
@@ -7624,7 +7624,7 @@ Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = Tru
 				NewTime = LastFrame
 			EndIf
 		Else
-			NewTime = Clamp(Curr + Speed * fps\Factor[0], FirstFrame, LastFrame)
+			NewTime = Clamp(Curr + Speed * fps\Factor[0], LastFrame, FirstFrame)
 		EndIf
 	EndIf
 	
