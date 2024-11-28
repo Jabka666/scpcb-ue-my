@@ -1823,6 +1823,8 @@ Global Descriptions%, DescriptionIndex%
 Global ImageAlignX$, ImageAlignY$
 Global CWMText$
 
+Global InitializeIntroMovie% = False
+
 Function RenderLoading%(Percent%, Assets$ = "")
 	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
 	
@@ -1859,7 +1861,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	
 	Local DescrArraySize% = JsonGetArraySize(Descriptions)
 	
-	Repeat 
+	Repeat
 		ClsColor(0, 0, 0)
 		Cls()
 		
@@ -2022,7 +2024,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		Local Close% = False
 		
-		If GetKey() <> 0 Lor MouseHit(1)
+		If InitializeIntroMovie Lor GetKey() <> 0 Lor MouseHit(1)
 			ResetLoadingTextColor()
 			ResetInput()
 			ResetTimingAccumulator()
@@ -2037,6 +2039,10 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			ImageAlignX = "" : ImageAlignY = ""
 		EndIf
 	Until Close
+	If opt\IntroEnabled And Percent = 100 And InitializeIntroMovie
+		StopStream_Strict(MusicCHN) : MusicCHN = 0
+		PlayMovie("startup_Intro")
+	EndIf
 	
 	CatchErrors("Uncaught: RenderLoading(" + Percent + ", " + Assets + ")")
 End Function

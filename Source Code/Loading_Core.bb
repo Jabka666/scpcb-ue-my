@@ -2683,6 +2683,7 @@ Function InitNewGame%()
 			EntityType(it\Collider, HIT_ITEM)
 			PickItem(it, False)
 		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
+			InitializeIntroMovie = True
 			TFormPoint(-4096.0 * RoomScale, 0.0, 0.0, r\OBJ, 0)
 			PositionEntity(me\Collider, TFormedX(), 0.0, TFormedZ())
 			PlayerRoom = r

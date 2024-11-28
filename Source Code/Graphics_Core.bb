@@ -262,7 +262,7 @@ Function FreeBlur%()
 	FreeEntity(ArkBlurCam) : ArkBlurCam = 0
 End Function
 
-Function PlayStartupVideos%()
+Function PlayMovie%(MoviePath$)
 	If RunningOnWine() Then Return
 	If (Not opt\PlayStartup) Then Return
 	
@@ -282,52 +282,62 @@ Function PlayStartupVideos%()
 		ScaledGraphicHeight = Int(opt\GraphicWidth / TargetAspectRatio)
 	EndIf
 	
-	Local MovieFile$, i%
-	Local StartupPath$ = "GFX\Menu\"
+	Local i%, SkipMessage$
+	Local MovieFile$ = "GFX\Menu\" + MoviePath
+	Local Movie% = OpenMovie_Strict(MovieFile + ".wmv")
+	Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume, 0)
+	
+	Repeat
+		Cls()
+		DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
+		If InitializeIntroMovie
+			SkipMessage = GetLocalString("menu", "wakeup")
+		Else
+			SkipMessage = GetLocalString("menu", "anykey")
+		EndIf
+		RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), SkipMessage, True, True)
+		Flip(True)
+		
+		Local Close% = False
+		
+		If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio))
+			ResetLoadingTextColor()
+			StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
+			CloseMovie(Movie) : Movie = 0
+			Close = True
+		EndIf
+	Until Close
+	
+	Cls()
+	Flip()
+	ShowPointer()
+End Function
+
+Function PlayStartupVideos%()
+	Local i%
+	Local MovieFile$
 	
 	For i = 0 To 3
 		Select i
 			Case 0
 				;[Block]
-				MovieFile = StartupPath + "startup_Undertow"
+				MovieFile = "startup_Undertow"
 				;[End Block]
 			Case 1
 				;[Block]
-				MovieFile = StartupPath + "startup_TSS"
+				MovieFile = "startup_TSS"
 				;[End Block]
 			Case 2
 				;[Block]
-				MovieFile = StartupPath + "startup_UET"
+				MovieFile = "startup_UET"
 				;[End Block]
 			Case 3
 				;[Block]
-				MovieFile = StartupPath + "startup_Warning"
+				MovieFile = "startup_Warning"
 				;[End Block]
 		End Select
-		
-		Local Movie% = OpenMovie_Strict(MovieFile + ".wmv")
-		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume, 0)
-		
-		Repeat
-			Cls()
-			DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
-			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
-			Flip(True)
-			
-			Local Close% = False
-			
-			If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio))
-				ResetLoadingTextColor()
-				StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
-				CloseMovie(Movie)
-				Close = True
-			EndIf
-		Until Close
-		
-		Cls()
-		Flip()
+		PlayMovie(MovieFile)
 	Next
-	ShowPointer()
 End Function
 
 Global ScreenshotCount% = 1

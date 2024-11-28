@@ -4,6 +4,7 @@
 - Added animation for femur breaker and butt ghost.
 	- Added face for butt ghost.
 - Added animation for SCP-914.
+- Added new startup video before loading intro scene.
 
 - Reduced the chances of escaping the Pocket Dimension and the fake tunnel.
 - Blink meter turns red sooner when low.
