@@ -416,7 +416,7 @@ Function LoadOptionsINI%()
 	
 	opt\SmoothBars = IniGetInt(OptionFile, "Advanced", "Smooth Bars", True)
 	
-	opt\VignetteEnabled = IniGetInt(OptionFile, "Advanced", "Vignette Ennabled", True)
+	opt\VignetteEnabled = IniGetInt(OptionFile, "Advanced", "Vignette Enabled", True)
 	
 	opt\PlayStartup = IniGetInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
