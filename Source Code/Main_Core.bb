@@ -209,7 +209,9 @@ SetErrorMsg(5, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemPr
 
 SetErrorMsg(12, "Caught exception: " + "_CaughtError_")
 
-Global GPUName$ = GfxDriverName(opt\GFXDriver)
+ErrorMessageInitialized = True
+
+Global GPUName$ = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
 
 Function CatchErrors%(Location$)
 	SetErrorMsg(11, "Error located in: " + Location)

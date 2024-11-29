@@ -7,8 +7,12 @@
 ; ~ Added zero checks since blitz load functions return zero sometimes even if the filetype exists.
 
 Function RuntimeErrorEx%(Message$)
-	CatchErrors(Message)
-	MemoryAccessViolation()
+	If ErrorMessageInitialized
+		CatchErrors(Message)
+		MemoryAccessViolation()
+	Else
+		RuntimeError(Message)
+	EndIf
 End Function
 
 Const MaxChannelsAmount% = 16 ; ~ 32
