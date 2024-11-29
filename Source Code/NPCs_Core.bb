@@ -920,11 +920,7 @@ Function UpdateNPCs%()
 							Exit
 						EndIf
 					Next
-					If (Not Spawn106) And n\State > 1.0
-						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
-						ResetEntity(n\Collider)
-						n\State2 = Rnd(22000.0, 27000.0)
-					EndIf
+					If (Not Spawn106) And n\State > 1.0 Then n\State = 0.0
 					
 					If n\Idle = 0 And Spawn106
 						Select n\State
@@ -955,7 +951,10 @@ Function UpdateNPCs%()
 											;[End Block]
 									End Select
 								EndIf
-								If n\State2 =< 0.0 Then n\State = 2.0
+								If n\State2 =< 0.0
+									n\EnemyX = EntityX(me\Collider) : n\EnemyY = EntityY(me\Collider) : n\EnemyZ = EntityZ(me\Collider)
+									n\State = 2.0
+								EndIf
 								;[End Block]
 							Case 2.0 ; ~ Spawn
 								;[Block]
@@ -1211,7 +1210,7 @@ Function UpdateNPCs%()
 								;[End Block]
 						End Select
 						
-						If n\State > 0.0
+						If n\State > 1.0
 							If Rand(500) = 1 Then PlaySoundEx(snd_I\SCP106SFX[Rand(0, 2)], Camera, n\Collider)
 							n\SoundCHN = LoopSoundEx(snd_I\SCP106SFX[4], n\SoundCHN, Camera, n\Collider, 8.0, 0.8, True)
 						EndIf
