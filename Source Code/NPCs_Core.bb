@@ -943,11 +943,11 @@ Function UpdateNPCs%()
 									Select PlayerRoom\RoomTemplate\DisableDecals
 										Case 0
 											;[Block]
-											n\State2 = n\State2 - TimerCountDown
+											n\State2 = Max(0.0, n\State2 - TimerCountDown)
 											;[End Block]
 										Case 1
 											;[Block]
-											n\State2 = n\State2 - (TimerCountDown * 0.5)
+											n\State2 = Max(0.0, n\State2 - (TimerCountDown * 0.5))
 											;[End Block]
 										Case 2
 											;[Block]
@@ -955,6 +955,7 @@ Function UpdateNPCs%()
 											;[End Block]
 									End Select
 								EndIf
+								If n\State2 =< 0.0 Then n\State = 2.0
 								;[End Block]
 							Case 2.0 ; ~ Spawn
 								;[Block]
