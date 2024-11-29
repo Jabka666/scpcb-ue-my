@@ -1019,30 +1019,32 @@ Function UpdateNPCs%()
 								
 								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
 								
-								For d.Doors = Each Doors
-									If (Not d\IsAffected) And (Not d\Open)
-										If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room <> Null And d\room\RoomTemplate\RoomID <> r_dimension_106)
-											If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR And d\DoorType <> BIG_DOOR And d\DoorType <> SCP_914_DOOR
-												Select d\DoorType
-													Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-														;[Block]
-														Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
-														;[End Block]
-													Case HEAVY_DOOR
-														;[Block]
-														Tex = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
-														;[End Block]
-												End Select
-												EntityTexture(d\OBJ, Tex)
-												If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
-												EntityTexture(d\FrameOBJ, Tex)
-												DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-												d\IsAffected = True
-												Exit
+								If EntityDistanceSquared(me\Collider, n\Collider) < 144.0
+									For d.Doors = Each Doors
+										If (Not d\IsAffected) And (Not d\Open)
+											If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room <> Null And d\room\RoomTemplate\RoomID <> r_dimension_106)
+												If d\DoorType <> OFFICE_DOOR And d\DoorType <> WOODEN_DOOR And d\DoorType <> BIG_DOOR And d\DoorType <> SCP_914_DOOR
+													Select d\DoorType
+														Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+															;[Block]
+															Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
+															;[End Block]
+														Case HEAVY_DOOR
+															;[Block]
+															Tex = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
+															;[End Block]
+													End Select
+													EntityTexture(d\OBJ, Tex)
+													If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
+													EntityTexture(d\FrameOBJ, Tex)
+													DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+													d\IsAffected = True
+													Exit
+												EndIf
 											EndIf
 										EndIf
-									EndIf
-								Next
+									Next
+								EndIf
 								
 								If Dist > 0.64
 									PrevFrame = n\Frame
