@@ -44,11 +44,7 @@ Global GraphicHeightFloat#
 
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
 GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
-If opt\DisplayMode = 1
-	Graphics3DEx(opt\GraphicWidth, opt\GraphicHeight, 0, 4)
-Else
-	Graphics3DEx(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1)
-EndIf
+Graphics3DEx(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1 + ((opt\DisplayMode = 1) * 3))
 
 AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
