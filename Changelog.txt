@@ -94,6 +94,7 @@
 	- Fixed SCP-106's Y-position. SCP-106 now changes his Y-position depending on player's Y-position more often. Also SCP-106 has a correct height (his legs are no longer inside the floor).
 	- Fixed path finding.
 - Fixed MAV caused by reading Polydactyly twice.
+- Fixed overlays scaling.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 - «Drawing» and «Blank Sheet» are no longer considered documents.

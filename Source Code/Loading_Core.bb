@@ -2307,19 +2307,19 @@ Function LoadEntities%()
 	CreateBlurImage()
 	
 	; ~ Overlays
-	Local OverlayScale# = GraphicHeightFloat / GraphicWidthFloat
+	Local OverlayScale# = 0.001 + (GraphicHeightFloat / GraphicWidthFloat)
 	
 	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\vignette_overlay.png", 1, DeleteAllTextures, False) ; ~ VIGNETTE
 	t\OverlayID[0] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[0], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[0], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
 	EntityBlend(t\OverlayID[0], 2)
 	EntityOrder(t\OverlayID[0], -1000)
-	MoveEntity(t\OverlayID[0], -0.0005, 0.0005, 1.0)
+	MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteMapTextures, False) ; ~ GAS MASK
 	t\OverlayID[1] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[1], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[1], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[1], Tex)
 	EntityBlend(t\OverlayID[1], 2)
 	EntityFX(t\OverlayID[1], 1)
@@ -2329,17 +2329,17 @@ Function LoadEntities%()
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteMapTextures, False) ; ~ HAZMAT SUIT
 	t\OverlayID[2] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[2], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[2], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[2], Tex)
 	EntityBlend(t\OverlayID[2], 2)
 	EntityFX(t\OverlayID[2], 1)
 	EntityOrder(t\OverlayID[2], -1003)
-	MoveEntity(t\OverlayID[2], 0, 0, 1.0)
+	MoveEntity(t\OverlayID[2], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteMapTextures, False) ; ~ SCP-008
 	t\OverlayID[3] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[3], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[3], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[3], Tex)
 	EntityBlend(t\OverlayID[3], 3)
 	EntityFX(t\OverlayID[3], 1)
@@ -2350,7 +2350,7 @@ Function LoadEntities%()
 	
 	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures, False) ; ~ NIGHT VISION GOGGLES
 	t\OverlayID[4] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[4], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[4], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
 	EntityBlend(t\OverlayID[4], 2)
 	EntityFX(t\OverlayID[4], 1)
@@ -2362,7 +2362,7 @@ Function LoadEntities%()
 	Cls()
 	SetBuffer(BackBuffer())
 	t\OverlayID[5] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[5], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[5], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[5], t\OverlayTextureID[2])
 	EntityBlend(t\OverlayID[5], 1)
 	EntityOrder(t\OverlayID[5], -1002)
@@ -2376,7 +2376,7 @@ Function LoadEntities%()
 	ClsColor(0, 0, 0)
 	SetBuffer(BackBuffer())
 	t\OverlayID[6] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[6], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[6], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[6], Tex)
 	EntityBlend(t\OverlayID[6], 1)
 	EntityOrder(t\OverlayID[6], -1002)
@@ -2385,7 +2385,7 @@ Function LoadEntities%()
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png", 1, DeleteMapTextures, False) ; ~ SCP-409
 	t\OverlayID[7] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[7], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[7], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[7], Tex)
 	EntityBlend(t\OverlayID[7], 3)
 	EntityFX(t\OverlayID[7], 1)
@@ -2396,7 +2396,7 @@ Function LoadEntities%()
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png", 1, DeleteMapTextures, False) ; ~ HELMET
 	t\OverlayID[8] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[8], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[8], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[8], Tex)
 	EntityBlend(t\OverlayID[8], 2)
 	EntityFX(t\OverlayID[8], 1)
@@ -2406,7 +2406,7 @@ Function LoadEntities%()
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteMapTextures, False) ; ~ FOG IN GAS MASK
 	t\OverlayID[9] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[9], 1.0, OverlayScale)
+	ScaleSprite(t\OverlayID[9], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[9], Tex)
 	EntityBlend(t\OverlayID[9], 3)
 	EntityFX(t\OverlayID[9], 1)

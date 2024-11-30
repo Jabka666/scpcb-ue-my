@@ -2535,7 +2535,7 @@ Function Kill%(IsBloody% = False)
 			Local Tex% = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteMapTextures, False)
 			
 			t\OverlayID[10] = CreateSprite(ArkBlurCam)
-			ScaleSprite(t\OverlayID[10], 1.0, GraphicHeightFloat / GraphicWidthFloat)
+			ScaleSprite(t\OverlayID[10], 1.001, GraphicHeightFloat / GraphicWidthFloat)
 			EntityTexture(t\OverlayID[10], Tex)
 			EntityBlend(t\OverlayID[10], 2)
 			EntityFX(t\OverlayID[10], 1)
