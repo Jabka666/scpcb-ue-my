@@ -8313,7 +8313,7 @@ Function UpdateIntro%()
 	Local e.Events, r.Rooms, d.Doors, p.Props, sc.SecurityCams, l.Lights, se.SoundEmitters, w.WayPoints
 	Local i%, Temp%, FPSFactorEx#
 	Local x#, y#, z#
-	Local Dist#, Pvt%
+	Local Dist#, Dist2#, Pvt%
 	Local StrTemp$ = ""
 	
 	For e.Events = Each Events
@@ -8504,16 +8504,17 @@ Function UpdateIntro%()
 									EndIf
 									
 									Dist = Clamp((e\EventState2 - 3.0) / 5.0, 0.0, 1.0)
-									x = x + (e\room\x - 4072.0 * RoomScale - x) * Max((e\EventState2 - 10.0) / 4.0, 0.0) 
+									Dist2 = Max((e\EventState2 - 10.0) / 4.0, 0.0)
+									x = x + (e\room\x - 4072.0 * RoomScale - x) * Dist2
 									If e\EventState2 < 10.0
 										y = y + (0.2 * Dist)
 									Else
-										y = (y + 0.2) + (e\room\y + 0.302 + 0.6 - (y + 0.2)) * Max((e\EventState2 - 10.0) / 4.0, 0.0) 
+										y = (y + 0.2) + (e\room\y + 0.302 + 0.6 - (y + 0.2)) * Dist2
 									EndIf
 									z = z + (e\room\z + (104.0 * RoomScale) - z) * Dist
 									
 									; ~ I'm sorry you have to see this
-									RotateEntity(Camera, (-70.0) + 70.0 * Dist + Sin(e\EventState2 * 12.857) * 5.0, (-60.0) * Max((e\EventState2 - 10.0) / 4.0, 0.0), Sin(e\EventState2 * 25.7) * 8.0)
+									RotateEntity(Camera, (-70.0) + 70.0 * Dist + Sin(e\EventState2 * 12.857) * 5.0, (-60.0) * Dist2, Sin(e\EventState2 * 25.7) * 8.0)
 									PositionEntity(Camera, x, y, z)
 									If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 									PositionEntity(me\Collider, x, e\room\y + 0.302, z)
