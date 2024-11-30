@@ -9791,14 +9791,6 @@ Function UpdateEndings%()
 										RotateEntity(e\room\Objects[9], 0.0, CurveAngle(EntityYaw(Pvt), EntityYaw(e\room\Objects[9], True), 150.0), 0.0, True)
 										RotateEntity(e\room\Objects[10], CurveAngle(EntityPitch(Pvt), EntityPitch(e\room\Objects[10], True), 200.0), EntityYaw(e\room\Objects[9], True), 0.0, True)
 										FreeEntity(Pvt) : Pvt = 0
-										
-										If fps\Factor[0] > 0.0 ; ~ Decals under SCP-106
-											If ((e\EventState - fps\Factor[0]) Mod 100.0) <= 50.0 And (e\EventState Mod 100.0) > 50.0
-												de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n_I\Curr106\Collider, True), EntityY(e\room\Objects[3], True) + 0.01, EntityZ(n_I\Curr106\Collider, True), 90.0, Rnd(360.0), 0.0, 0.2, 0.8)
-												de\SizeChange = 0.004 : de\Timer = 90000.0
-												EntityParent(de\OBJ, e\room\OBJ)
-											EndIf
-										EndIf
 									EndIf
 									
 									Dist = DistanceSquared(EntityX(n_I\Curr106\Collider), EntityX(e\room\Objects[4], True), EntityZ(n_I\Curr106\Collider), EntityZ(e\room\Objects[4], True))

@@ -1019,7 +1019,7 @@ Function UpdateNPCs%()
 								
 								If PlayerRoom\RoomTemplate\RoomID <> r_gate_a And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
 								
-								If EntityDistanceSquared(me\Collider, n\Collider) < 144.0
+								If Dist < 144.0
 									For d.Doors = Each Doors
 										If (Not d\IsAffected) And (Not d\Open)
 											If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room <> Null And d\room\RoomTemplate\RoomID <> r_dimension_106)
@@ -1107,7 +1107,29 @@ Function UpdateNPCs%()
 											n\CurrSpeed = 0.0
 										EndIf
 									EndIf
-									If (PrevFrame <= 286.0 And n\Frame > 286.0) Lor (PrevFrame <= 311.0 And n\Frame > 311.0) Then PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
+									If Dist < 81.0
+										If (PrevFrame <= 286.0 And n\Frame > 286.0)
+											Pvt = CreatePivot()
+											PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.175, EntityZ(n\Collider))
+											TurnEntity(Pvt, 90.0, 0.0, 0.0)
+											If EntityPick(Pvt, 0.2)
+												PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
+												de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) + Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) - Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
+												de\SizeChange = -0.00005 : de\Timer = 90000.0
+											EndIf
+											FreeEntity(Pvt) : Pvt = 0
+										ElseIf (PrevFrame <= 311.0 And n\Frame > 311.0)
+											Pvt = CreatePivot()
+											PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.175, EntityZ(n\Collider))
+											TurnEntity(Pvt, 90.0, 0.0, 0.0)
+											If EntityPick(Pvt, 0.2)
+												PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
+												de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) - Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) + Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
+												de\SizeChange = -0.00005 : de\Timer = 90000.0
+											EndIf
+											FreeEntity(Pvt) : Pvt = 0
+										EndIf
+									EndIf
 								ElseIf (Not chs\NoTarget)
 									If Dist > 0.25
 										n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
@@ -1195,8 +1217,14 @@ Function UpdateNPCs%()
 							Case 4.0 ; ~ Hit by Tesla or HID
 								;[Block]
 								If n\Frame < 111.0 Lor n\Frame > 259.0
-									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), EntityY(n\Collider) + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
-									de\SizeChange = 0.004 : de\Timer = 90000.0
+									Pvt = CreatePivot()
+									PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.175, EntityZ(n\Collider))
+									TurnEntity(Pvt, 90.0, 0.0, 0.0)
+									If EntityPick(Pvt, 0.2)
+										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
+										de\SizeChange = 0.004 : de\Timer = 90000.0
+									EndIf
+									FreeEntity(Pvt) : Pvt = 0
 									
 									n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Ending\GateA\106Retreat.ogg"), Camera, n\OBJ, 10.0, 1.0, True)
 									
