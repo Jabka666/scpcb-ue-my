@@ -5776,7 +5776,7 @@ Function UpdateMTFUnit%(n.NPCs)
 								n\CurrSpeed = 0.0
 								If n\Frame > 200.0
 									AnimateNPC(n, 424.0, 463.0, 0.5, False)
-									If n\Frame > 462.9 Then n\Frame = 78.0
+									If n\Frame > 462.9 Then SetNPCFrame(n, 78.0)
 								Else
 									AnimateNPC(n, 78.0, 193.0, 0.2, False)
 								EndIf
