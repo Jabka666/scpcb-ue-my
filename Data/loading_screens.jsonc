@@ -299,17 +299,6 @@
 		]
 	},
 	{
-		"title": "Heckler & Koch G36",
-		"image": "G36.png",
-		"align_x": "center",
-		"align_y": "center",
-		"background": false,
-		"descriptions": [
-			"The G36 is a 5.56x45mm assault rifle, designed in the early 1990s by Heckler & Koch in Germany as a replacement for the heavier 7.62mm G3 battle rifle. It was accepted into service with the Bundeswehr in 1997, replacing the G3.The G36 is gas-operated and feeds from a 30-round detachable box magazine or 100-round C-Mag drum magazine.",
-			"The Heckler & Koch G36 is an assault rifle designed in the 1990s by Heckler & Koch in Germany. The weapon is gas operated and has a standard magazine that holds 30 of the 5.56mm NATO rounds. It can also be used with a 100-round 'drum'. The G36 has a 3x scope and often a red dot sight, too in the carrying handle. The G36 is the main weapon of many special units and the army of Portugal, Spain and Germany."
-		]
-	},
-	{
 		"title": "SCP-682",
 		"image": "682.png",
 		"align_x": "right",

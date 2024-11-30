@@ -10,6 +10,7 @@
 - Blink meter turns red sooner when low.
 - SCP-079 is more likely to hack monitors with SCP-895.
 - Updated loading screens.
+- Removed Heckler & Kock G36 loading screen.
 
 - Optimized the game...
 
