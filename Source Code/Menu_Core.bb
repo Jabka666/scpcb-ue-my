@@ -1860,6 +1860,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	FirstLoop = True
 	
 	Local DescrArraySize% = JsonGetArraySize(Descriptions)
+	Local IsCWM% = (LoadingScreenTitle = "CWM")
 	
 	Repeat
 		ClsColor(0, 0, 0)
@@ -1901,7 +1902,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		SetFontEx(fo\FontID[Font_Default])
 		TextEx(x + (Width / 2), opt\GraphicHeight - (70 * MenuScale), Percent + "%", True, True)
 		
-		If LoadingScreenTitle = "CWM"
+		If IsCWM
 			If FirstLoop
 				If Percent = 0
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm0.cwm"))
@@ -2006,7 +2007,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			
 			ResetInput()
 		Else
-			If LoadingScreenTitle = "CWM"
+			If IsCWM
 				StrTemp = GetLocalString("menu", "wakeup")
 			Else
 				If FirstLoop Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
@@ -2024,7 +2025,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		Local Close% = False
 		
-		If InitializeIntroMovie Lor GetKey() <> 0 Lor MouseHit(1)
+		If (InitializeIntroMovie And IsCWM) Lor GetKey() <> 0 Lor MouseHit(1)
 			ResetLoadingTextColor()
 			ResetInput()
 			ResetTimingAccumulator()
@@ -2039,7 +2040,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			ImageAlignX = "" : ImageAlignY = ""
 		EndIf
 	Until Close
-	If LoadingScreenTitle = "CWM" And opt\IntroEnabled And Percent = 100 And InitializeIntroMovie
+	If (InitializeIntroMovie And IsCWM) And opt\IntroEnabled And Percent = 100
 		StopStream_Strict(MusicCHN) : MusicCHN = 0
 		PlayMovie("startup_Intro")
 	EndIf
