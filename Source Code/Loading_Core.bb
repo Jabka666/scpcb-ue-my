@@ -2315,7 +2315,7 @@ Function LoadEntities%()
 	EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
 	EntityBlend(t\OverlayID[0], 2)
 	EntityOrder(t\OverlayID[0], -1000)
-	MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
+	MoveEntity(t\OverlayID[0], -0.0005, 0.0005, 1.0)
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteMapTextures, False) ; ~ GAS MASK
 	t\OverlayID[1] = CreateSprite(ArkBlurCam)
