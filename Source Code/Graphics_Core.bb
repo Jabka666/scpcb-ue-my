@@ -223,7 +223,7 @@ Function CreateBlurImage%()
 	CameraZoom(Cam, 0.1)
 	CameraClsMode(Cam, 0, 0)
 	CameraRange(Cam, 0.1, 1.5)
-	MoveEntity(Cam, 0, 0, 10000)
+	MoveEntity(Cam, 0.0, 0.0, 10000.0)
 	CameraProjMode(Cam, 0)
 	ArkBlurCam = Cam
 	
@@ -247,7 +247,7 @@ Function CreateBlurImage%()
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 0)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 256)
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
