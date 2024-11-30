@@ -3237,7 +3237,7 @@ Function UpdateZoneColor%()
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1 * LightVolume, me\CameraFogDist * LightVolume)
 	; ~ Allow to use big range for debugging
-	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * me\CameraFogDist * LightVolume * 1.2)
+	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * me\CameraFogDist * LightVolume * 1.3)
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider, True) < (-4100.0) * RoomScale
 		SetZoneColor(FogColorStorageTunnels)
