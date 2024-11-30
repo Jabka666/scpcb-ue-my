@@ -1905,7 +1905,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			If FirstLoop
 				If Percent = 0
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm0.cwm"))
-				ElseIf Percent = 100
+				ElseIf Percent = 100 And (Not InitializeIntroMovie)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
 				EndIf
 			EndIf
@@ -2039,7 +2039,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			ImageAlignX = "" : ImageAlignY = ""
 		EndIf
 	Until Close
-	If opt\IntroEnabled And Percent = 100 And InitializeIntroMovie
+	If LoadingScreenTitle = "CWM" And opt\IntroEnabled And Percent = 100 And InitializeIntroMovie
 		StopStream_Strict(MusicCHN) : MusicCHN = 0
 		PlayMovie("startup_Intro")
 	EndIf
