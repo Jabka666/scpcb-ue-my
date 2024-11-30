@@ -1577,7 +1577,7 @@ Function UpdateEvents%()
 									de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
 									EntityParent(de\OBJ, e\room\OBJ)
 								EndIf
-								If e\room\NPC[0]\Frame = 286.0 Then
+								If e\room\NPC[0]\Frame = 286.0
 									it.Items = CreateItem("Unknown Note", it_paper, e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
 									EntityType(it\Collider, HIT_ITEM)
 									
@@ -5233,8 +5233,7 @@ Function UpdateEvents%()
 							If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) < EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ)
 								AnimateNPC(n_I\Curr096, 521.0, 555.0, 0.25, False)
 								If n_I\Curr096\Frame >= 554.5
-									n_I\Curr096\Frame = 677.0
-									SetNPCFrame(n_I\Curr096, n_I\Curr096\Frame)
+									SetNPCFrame(n_I\Curr096, 677.0)
 									n_I\Curr096\State = 2.0
 									TurnEntity(n_I\Curr096\Collider, 0.0, 180.0, 0.0)
 									MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, 0.3)
@@ -5243,8 +5242,7 @@ Function UpdateEvents%()
 							Else
 								AnimateNPC(n_I\Curr096, 556.0, 590.0, 0.25, False)
 								If n_I\Curr096\Frame >= 589.5
-									n_I\Curr096\Frame = 677.0
-									SetNPCFrame(n_I\Curr096, n_I\Curr096\Frame)
+									SetNPCFrame(n_I\Curr096, 677.0)
 									n_I\Curr096\State = 2.0
 									TurnEntity(n_I\Curr096\Collider, 0.0, 180.0, 0.0)
 									MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, 0.3)
