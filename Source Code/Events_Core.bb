@@ -9191,6 +9191,7 @@ Function UpdateIntro%()
 													r\NPC[0] = e\room\NPC[0]
 													r\NPC[0]\State = 8.0
 													
+													e\room\NPC[6]\GravityMult = 1.0
 													r\NPC[1] = e\room\NPC[6]
 													
 													For d.Doors = Each Doors
