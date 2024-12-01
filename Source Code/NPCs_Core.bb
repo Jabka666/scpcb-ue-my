@@ -1222,7 +1222,7 @@ Function UpdateNPCs%()
 									TurnEntity(Pvt, 90.0, 0.0, 0.0)
 									If EntityPick(Pvt, 0.2)
 										de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
-										de\SizeChange = 0.004 : de\Timer = 90000.0
+										de\SizeChange = 0.004
 									EndIf
 									FreeEntity(Pvt) : Pvt = 0
 									
