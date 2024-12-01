@@ -680,7 +680,7 @@ Function UpdateEvents%()
 						SetNPCFrame(e\room\NPC[1], 210.0)
 						
 						If e\room\NPC[2] <> Null
-							PositionEntity(e\room\NPC[2]\Collider, e\room\x, 0.5, e\room\z + 2576.0 * RoomScale, True)
+							PositionEntity(e\room\NPC[2]\Collider, e\room\x, e\room\y + 0.5, e\room\z + 2576.0 * RoomScale, True)
 							ResetEntity(e\room\NPC[2]\Collider)
 						Else
 							e\room\NPC[2] = CreateNPC(NPCTypeGuard, e\room\x, e\room\y + 0.5, e\room\z + 2576.0 * RoomScale)
@@ -742,7 +742,7 @@ Function UpdateEvents%()
 						If e\EventState2 = 0.0
 							If e\EventState > 900.0 And e\room\RoomDoors[3]\Open
 								If e\EventState - fps\Factor[0] <= 900.0 
-									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 3120.0 * RoomScale, True)
+									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, e\room\y + 0.32, e\room\z + 3120.0 * RoomScale, True)
 									ResetEntity(n_I\Curr173\Collider)
 									
 									e\room\NPC[1]\Sound = LoadSound_Strict("SFX\Room\Intro\WhatThe0a.ogg")
@@ -771,7 +771,7 @@ Function UpdateEvents%()
 								EndIf
 								
 								If e\EventState < 900.0 + (70.0 * 4.0)
-									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, 0.31, e\room\z + 3120.0 * RoomScale, True)
+									PositionEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, e\room\y + 0.32, e\room\z + 3120.0 * RoomScale, True)
 									ResetEntity(n_I\Curr173\Collider)
 									RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 									
@@ -788,7 +788,7 @@ Function UpdateEvents%()
 										PlaySoundEx(snd_I\StoneDragSFX, Camera, n_I\Curr173\Collider)
 										PointEntity(n_I\Curr173\Collider, e\room\NPC[2]\Collider)
 									EndIf
-									PositionEntity(n_I\Curr173\Collider, e\room\x - 96.0 * RoomScale, 0.31, e\room\z + 2640.0 * RoomScale, True)
+									PositionEntity(n_I\Curr173\Collider, e\room\x - 96.0 * RoomScale, e\room\y + 0.32, e\room\z + 2640.0 * RoomScale, True)
 									ResetEntity(n_I\Curr173\Collider)
 									RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 									

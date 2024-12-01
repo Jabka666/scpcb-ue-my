@@ -647,6 +647,12 @@ Function UpdateNPCs%()
 					
 					n\State3 = 1.0
 					
+					PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
+					RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
+					
+					PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
+					RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
+					
 					If n\Idle < 2
 						If n\IdleTimer > 0.1
 							n\Idle = 1
@@ -655,12 +661,6 @@ Function UpdateNPCs%()
 							n\Idle = 0
 							n\IdleTimer = 0.0
 						EndIf
-						
-						PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
-						RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-						
-						PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - 0.32, EntityZ(n\Collider))
-						RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
 						
 						If n\Idle = 0
 							Local Temp% = False
