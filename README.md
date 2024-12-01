@@ -8,7 +8,7 @@ http://creativecommons.org/licenses/by-sa/3.0/
 
 Requirements:
 
--	[Blitz3D TSS (ZiYueCommentary)](https://github.com/ZiYueCommentary/Blitz3D/releases) v1.133
+-	[Blitz3D TSS (ZiYueCommentary)](https://github.com/ZiYueCommentary/Blitz3D/releases) v1.134
 
 -	[IDEal for Blitz3D](https://web.archive.org/web/20130827150202/http://fungamesfactory.com/download.php?get=IDEalSetup_0.8.94.exe) v0.8.94
 
