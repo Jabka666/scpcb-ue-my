@@ -11,6 +11,7 @@
 - SCP-079 is more likely to hack monitors with SCP-895.
 - Updated loading screens.
 - Removed Heckler & Kock G36 loading screen.
+- Improved getting up from the bed in the intro scene.
 
 - Optimized the game...
 

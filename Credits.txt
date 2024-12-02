@@ -132,7 +132,7 @@
 		Dmitriy Sazanov ("Dmitriy-Bars")
 		Leonard Blackmore ("UnknownDev")
 
-*Development Helpers
+*Contributors
 
 		Shaun Gaylard ("ENDSHN")
 		juanjp600
