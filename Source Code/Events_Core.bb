@@ -8452,7 +8452,7 @@ Function UpdateIntro%()
 					RotateEntity(Camera, -70.0, 0.0, 0.0)
 					
 					PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
-					me\BlurTimer = 1000.0
+					me\BlurTimer = 1600.0
 					me\LightFlash = 1.0
 					MakeMeUnplayable()
 					
@@ -8482,7 +8482,11 @@ Function UpdateIntro%()
 							FPSFactorEx = fps\Factor[0] / 30.0
 							
 							If e\EventState2 < 3.0
-								e\EventState2 = e\EventState2 + FPSFactorEx / 3.33
+								FPSFactorEx = FPSFactorEx / 1.8
+								e\EventState2 = e\EventState2 + FPSFactorEx
+							ElseIf e\EventState2 > 9.0 And e\EventState2 < 11.0
+								FPSFactorEx = FPSFactorEx / 1.8
+								e\EventState2 = e\EventState2 + FPSFactorEx
 							ElseIf e\EventState2 < 15.0 Lor e\EventState2 >= 50.0
 								e\EventState2 = Min(e\EventState2 + FPSFactorEx, 150.0)
 							EndIf
@@ -8490,31 +8494,38 @@ Function UpdateIntro%()
 							If e\EventState2 < 15.0
 								x = e\room\x - 4248.0 * RoomScale
 								y = e\room\y + 136.0 * RoomScale
-								z = e\room\z + 8.0 * RoomScale
+								z = e\room\z - 60.0 * RoomScale
 								
 								If e\EventState2 < 14.0
 									StopMouseMovement()
 									
-									If e\EventState2 - FPSFactorEx < 3.7 And e\EventState2 >= 3.7
+									If e\EventState2 - FPSFactorEx < 1.0 And e\EventState2 >= 1.0
+										me\BlinkTimer = -10.0
+									ElseIf e\EventState2 - FPSFactorEx < 1.3 And e\EventState2 >= 1.3
+										me\BlinkTimer = -10.0
+									ElseIf e\EventState2 - FPSFactorEx < 2.8 And e\EventState2 >= 2.8
 										PlaySound_Strict(snd_I\IntroSFX[0], True)
-									ElseIf e\EventState2 - FPSFactorEx < 9.3 And e\EventState2 >= 9.3
+									ElseIf e\EventState2 - FPSFactorEx < 10.8 And e\EventState2 >= 10.8
 										PlaySound_Strict(snd_I\IntroSFX[1], True)
-									ElseIf e\EventState2 - FPSFactorEx < 12.0 And e\EventState2 >= 12.0
+									ElseIf e\EventState2 - FPSFactorEx < 13.0 And e\EventState2 >= 13.0
 										PlaySoundEx(StepSFX(0, 0, 0), Camera, me\Collider, 8.0, 0.5)
 									EndIf
 									
-									Dist = Clamp((e\EventState2 - 3.0) / 5.0, 0.0, 1.0)
+									Dist = Clamp(e\EventState2 / 5.0, 0.0, 1.0)
+									Dist = PowTwo(Dist) * (3.0 - 2.0 * Dist)
+									
 									Dist2 = Max((e\EventState2 - 10.0) / 4.0, 0.0)
-									x = x + (e\room\x - 4072.0 * RoomScale - x) * Dist2
+									Dist2 = PowTwo(Dist2) * (3.0 - 2.0 * Dist2)
+									
+									x = x + (e\room\x - 4130.0 * RoomScale - x) * Dist2
 									If e\EventState2 < 10.0
 										y = y + (0.2 * Dist)
 									Else
 										y = (y + 0.2) + (e\room\y + 0.302 + 0.6 - (y + 0.2)) * Dist2
 									EndIf
-									z = z + (e\room\z + (104.0 * RoomScale) - z) * Dist
+									z = z + (e\room\z + (72.0 * RoomScale) - z) * Dist
 									
-									; ~ I'm sorry you have to see this
-									RotateEntity(Camera, (-70.0) + 70.0 * Dist + Sin(e\EventState2 * 12.857) * 5.0, (-60.0) * Dist2, Sin(e\EventState2 * 25.7) * 8.0)
+									RotateEntity(Camera, (-70.0) + 70.0 * Dist + Sin(e\EventState2 * 12.857) * 5.0, (-90.0) * Dist2, Sin(e\EventState2 * 25.7) * 8.0)
 									PositionEntity(Camera, x, y, z)
 									If (Not EntityHidden(me\Collider)) Then HideEntity(me\Collider)
 									PositionEntity(me\Collider, x, e\room\y + 0.302, z)
