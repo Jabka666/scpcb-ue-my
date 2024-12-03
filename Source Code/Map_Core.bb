@@ -3505,137 +3505,148 @@ Const CODE_LOCKED% = -1
 ;[End Block]
 
 Function UseDoor%(PlaySFX% = True)
-	Local Temp%, i%
+	Local Temp% = KEY_MISC
+	Local i%
 	
 	If SelectedItem <> Null Then Temp = GetUsingItem(SelectedItem)
-	If d_I\ClosestDoor\KeyCard > KEY_MISC
-		If SelectedItem = Null
-			CreateMsg(GetLocalString("msg", "key.require"))
-			PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
-			Return
-		Else
-			If Temp <= KEY_MISC
+	
+	Local CurrCase% = (d_I\ClosestDoor\KeyCard > KEY_MISC) + (2 * (d_I\ClosestDoor\KeyCard > KEY_860 And d_I\ClosestDoor\KeyCard < KEY_MISC)) + (3 * (d_I\ClosestDoor\Code <> 0)) + (4 * (d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR)) + (5 * (d_I\ClosestDoor\DoorType = ELEVATOR_DOOR))
+	
+	Select CurrCase
+		Case 1 ; ~ Key Card
+			;[Block]
+			If SelectedItem = Null
 				CreateMsg(GetLocalString("msg", "key.require"))
+				PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+				Return
 			Else
-				If Temp = KEY_CARD_6
-					CreateMsg(GetLocalString("msg", "key.slot.6"))
+				If Temp <= KEY_MISC
+					CreateMsg(GetLocalString("msg", "key.require"))
 				Else
-					If d_I\ClosestDoor\Locked = 1
-						If Temp = KEY_005
-							CreateMsg(GetLocalString("msg", "key.nothappend.005"))
-						Else
-							CreateMsg(GetLocalString("msg", "key.nothappend"))
-						EndIf
+					If Temp = KEY_CARD_6
+						CreateMsg(GetLocalString("msg", "key.slot.6"))
 					Else
-						If Temp = KEY_005
-							CreateMsg(GetLocalString("msg", "key.005"))
-						Else
-							If Temp < d_I\ClosestDoor\KeyCard
-								If d_I\ClosestDoor\KeyCard = KEY_005
-									CreateMsg(GetLocalString("msg", "key.required.106"))
-								Else
-									CreateMsg(Format(GetLocalString("msg", "key.higher"), d_I\ClosestDoor\KeyCard - 2))
-								EndIf
+						If d_I\ClosestDoor\Locked = 1
+							If Temp = KEY_005
+								CreateMsg(GetLocalString("msg", "key.nothappend.005"))
 							Else
-								CreateMsg(GetLocalString("msg", "key.slot"))
+								CreateMsg(GetLocalString("msg", "key.nothappend"))
+							EndIf
+						Else
+							If Temp = KEY_005
+								CreateMsg(GetLocalString("msg", "key.005"))
+							Else
+								If Temp < d_I\ClosestDoor\KeyCard
+									If d_I\ClosestDoor\KeyCard = KEY_005
+										CreateMsg(GetLocalString("msg", "key.required.106"))
+									Else
+										CreateMsg(Format(GetLocalString("msg", "key.higher"), d_I\ClosestDoor\KeyCard - 2))
+									EndIf
+								Else
+									CreateMsg(GetLocalString("msg", "key.slot"))
+								EndIf
 							EndIf
 						EndIf
 					EndIf
+					SelectedItem = Null
 				EndIf
-				SelectedItem = Null
-			EndIf
-			If (d_I\ClosestDoor\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d_I\ClosestDoor\KeyCard)) Lor (Temp = KEY_005))
-				PlaySoundEx(snd_I\KeyCardSFX[0], Camera, d_I\ClosestButton)
-			Else
-				If Temp <= KEY_MISC
-					PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+				If (d_I\ClosestDoor\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d_I\ClosestDoor\KeyCard)) Lor (Temp = KEY_005))
+					PlaySoundEx(snd_I\KeyCardSFX[0], Camera, d_I\ClosestButton)
 				Else
-					PlaySoundEx(snd_I\KeyCardSFX[1], Camera, d_I\ClosestButton)
-				EndIf
-				Return
-			EndIf
-		EndIf
-	ElseIf d_I\ClosestDoor\KeyCard > KEY_860 And d_I\ClosestDoor\KeyCard < KEY_MISC
-		If SelectedItem = Null
-			CreateMsg(GetLocalString("msg", "dna.denied_1"))
-			PlaySoundEx(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
-			Return
-		Else
-			If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005)
-				CreateMsg(GetLocalString("msg", "dna.denied_1"))
-			Else
-				If (d_I\ClosestDoor\KeyCard <> Temp) And (Temp <> KEY_005)
-					CreateMsg(GetLocalString("msg", "dna.denied_2"))
-				Else
-					If d_I\ClosestDoor\Locked = 1
-						If Temp = KEY_005
-							CreateMsg(GetLocalString("msg", "key.nothappend.005"))
-						Else
-							CreateMsg(GetLocalString("msg", "dna.nothappend"))
-						EndIf
+					If Temp <= KEY_MISC
+						PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
 					Else
-						If Temp = KEY_005
-							CreateMsg(GetLocalString("msg", "dna.granted.005"))
+						PlaySoundEx(snd_I\KeyCardSFX[1], Camera, d_I\ClosestButton)
+					EndIf
+					Return
+				EndIf
+			EndIf
+			;[End Block]
+		Case 2 ; ~ DNA
+			;[Block]
+			If SelectedItem = Null
+				CreateMsg(GetLocalString("msg", "dna.denied_1"))
+				PlaySoundEx(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
+				Return
+			Else
+				If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005)
+					CreateMsg(GetLocalString("msg", "dna.denied_1"))
+				Else
+					If (d_I\ClosestDoor\KeyCard <> Temp) And (Temp <> KEY_005)
+						CreateMsg(GetLocalString("msg", "dna.denied_2"))
+					Else
+						If d_I\ClosestDoor\Locked = 1
+							If Temp = KEY_005
+								CreateMsg(GetLocalString("msg", "key.nothappend.005"))
+							Else
+								CreateMsg(GetLocalString("msg", "dna.nothappend"))
+							EndIf
 						Else
-							CreateMsg(GetLocalString("msg", "dna.granted"))
+							If Temp = KEY_005
+								CreateMsg(GetLocalString("msg", "dna.granted.005"))
+							Else
+								CreateMsg(GetLocalString("msg", "dna.granted"))
+							EndIf
 						EndIf
+					EndIf
+					SelectedItem = Null
+				EndIf
+				If (d_I\ClosestDoor\Locked = 0) And ((Temp = d_I\ClosestDoor\KeyCard) Lor (Temp = KEY_005))
+					PlaySoundEx(snd_I\ScannerSFX[0], Camera, d_I\ClosestButton)
+				Else
+					PlaySoundEx(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
+					Return
+				EndIf
+			EndIf
+			;[End Block]
+		Case 3 ; ~ Keypad
+			;[Block]
+			If SelectedItem = Null
+				If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (d_I\ClosestDoor\Code = Int(msg\KeyPadInput))
+					PlaySoundEx(snd_I\ScannerSFX[0], Camera, d_I\ClosestButton)
+				Else
+					PlaySoundEx(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
+					Return
+				EndIf
+			Else
+				If Temp = KEY_005
+					If d_I\ClosestDoor\Locked = 1
+						CreateMsg(GetLocalString("msg", "keypad.nothappend.005"))
+					Else
+						CreateMsg(GetLocalString("msg", "keypad.nothappend"))
 					EndIf
 				EndIf
 				SelectedItem = Null
-			EndIf
-			If (d_I\ClosestDoor\Locked = 0) And ((Temp = d_I\ClosestDoor\KeyCard) Lor (Temp = KEY_005))
-				PlaySoundEx(snd_I\ScannerSFX[0], Camera, d_I\ClosestButton)
-			Else
-				PlaySoundEx(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
-				Return
-			EndIf
-		EndIf
-	ElseIf d_I\ClosestDoor\Code <> 0
-		If SelectedItem = Null
-			If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (d_I\ClosestDoor\Code = Int(msg\KeyPadInput))
-				PlaySoundEx(snd_I\ScannerSFX[0], Camera, d_I\ClosestButton)
-			Else
-				PlaySoundEx(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
-				Return
-			EndIf
-		Else
-			If Temp = KEY_005
-				If d_I\ClosestDoor\Locked = 1
-					CreateMsg(GetLocalString("msg", "keypad.nothappend.005"))
+				
+				If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (Temp = KEY_005)
+					PlaySoundEx(snd_I\ScannerSFX[0], Camera, d_I\ClosestButton)
 				Else
-					CreateMsg(GetLocalString("msg", "keypad.nothappend"))
+					PlaySoundEx(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
+					Return
 				EndIf
 			EndIf
-			SelectedItem = Null
 			
-			If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (Temp = KEY_005)
-				PlaySoundEx(snd_I\ScannerSFX[0], Camera, d_I\ClosestButton)
-			Else
-				PlaySoundEx(snd_I\ScannerSFX[1], Camera, d_I\ClosestButton)
-				Return
-			EndIf
-		EndIf
-		
-		Select d_I\ClosestDoor\Code
-			Case CODE_DR_MAYNARD
-				;[Block]
-				GiveAchievement("maynard")
-				;[End Block]
-			Case CODE_DR_GEARS
-				;[Block]
-				GiveAchievement("gears")
-				;[End Block]
-			Case CODE_DR_HARP
-				;[Block]
-				GiveAchievement("harp")
-				;[End Block]
-			Case CODE_O5_COUNCIL
-				;[Block]
-				GiveAchievement("o5")
-				;[End Block]
-		End Select
-	Else
-		If d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR
+			Select d_I\ClosestDoor\Code
+				Case CODE_DR_MAYNARD
+					;[Block]
+					GiveAchievement("maynard")
+					;[End Block]
+				Case CODE_DR_GEARS
+					;[Block]
+					GiveAchievement("gears")
+					;[End Block]
+				Case CODE_DR_HARP
+					;[Block]
+					GiveAchievement("harp")
+					;[End Block]
+				Case CODE_O5_COUNCIL
+					;[Block]
+					GiveAchievement("o5")
+					;[End Block]
+			End Select
+			;[End Block]
+		Case 4 ; ~ Office/Wooden Door
+			;[Block]
 			If d_I\ClosestDoor\Locked > 0
 				If SelectedItem = Null
 					CreateMsg(GetLocalString("msg", "wood.wontbudge"))
@@ -3690,61 +3701,68 @@ Function UseDoor%(PlaySFX% = True)
 					SetAnimTime(d_I\AnimDoor\OBJ, 1.0)
 				EndIf
 			EndIf
-		Else
+			;[End Block]
+		Case 5 ; ~ Elevator Door
+			;[Block]
 			If d_I\ClosestDoor\Locked = 1
-				If d_I\ClosestDoor\DoorType = ELEVATOR_DOOR
-					If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
-						CreateMsg(GetLocalString("msg", "elev.broken"))
-						PlaySoundEx(ButtonSFX[1], Camera, d_I\ClosestButton)
-						SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
-						Return
-					Else
-						If d_I\ClosestDoor\IsElevatorDoor = 1
-							CreateMsg(GetLocalString("msg", "elev.called"))
-						ElseIf d_I\ClosestDoor\IsElevatorDoor = 3
-							CreateMsg(GetLocalString("msg", "elev.floor"))
-						ElseIf msg\Txt <> GetLocalString("msg", "elev.called")
-							Select Rand(10)
-								Case 1
-									;[Block]
-									CreateMsg(GetLocalString("msg", "elev.stop"))
-									;[End Block]
-								Case 2
-									;[Block]
-									CreateMsg(GetLocalString("msg", "elev.faster"))
-									;[End Block]
-								Case 3
-									;[Block]
-									CreateMsg(GetLocalString("msg", "elev.mav"))
-									;[End Block]
-								Default
-									;[Block]
-									CreateMsg(GetLocalString("msg", "elev.already"))
-									;[End Block]
-							End Select
-						Else
-							CreateMsg(GetLocalString("msg", "elev.already"))
-						EndIf
-						PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
-						SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
-						Return
-					EndIf
-				Else
-					If d_I\ClosestDoor\Open
-						CreateMsg(GetLocalString("msg", "button.nothappend"))
-					Else
-						CreateMsg(GetLocalString("msg", "button.locked"))
-					EndIf
+				If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
+					CreateMsg(GetLocalString("msg", "elev.broken"))
 					PlaySoundEx(ButtonSFX[1], Camera, d_I\ClosestButton)
-					SetAnimTime(d_I\AnimButton, 1.0)
+					SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
+					Return
+				Else
+					If d_I\ClosestDoor\IsElevatorDoor = 1
+						CreateMsg(GetLocalString("msg", "elev.called"))
+					ElseIf d_I\ClosestDoor\IsElevatorDoor = 3
+						CreateMsg(GetLocalString("msg", "elev.floor"))
+					ElseIf msg\Txt <> GetLocalString("msg", "elev.called")
+						Select Rand(10)
+							Case 1
+								;[Block]
+								CreateMsg(GetLocalString("msg", "elev.stop"))
+								;[End Block]
+							Case 2
+								;[Block]
+								CreateMsg(GetLocalString("msg", "elev.faster"))
+								;[End Block]
+							Case 3
+								;[Block]
+								CreateMsg(GetLocalString("msg", "elev.mav"))
+								;[End Block]
+							Default
+								;[Block]
+								CreateMsg(GetLocalString("msg", "elev.already"))
+								;[End Block]
+						End Select
+					Else
+						CreateMsg(GetLocalString("msg", "elev.already"))
+					EndIf
+					PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+					SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 					Return
 				EndIf
 			Else
 				PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
 				SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 			EndIf
-		EndIf
-	EndIf
+			;[End Block]
+		Default ; ~ Default Door
+			;[Block]
+			If d_I\ClosestDoor\Locked = 1
+				If d_I\ClosestDoor\Open
+					CreateMsg(GetLocalString("msg", "button.nothappend"))
+				Else
+					CreateMsg(GetLocalString("msg", "button.locked"))
+				EndIf
+				PlaySoundEx(ButtonSFX[1], Camera, d_I\ClosestButton)
+				SetAnimTime(d_I\AnimButton, 1.0)
+				Return
+			Else
+				PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+				SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
+			EndIf
+			;[End Block]
+	End Select
 	
 	OpenCloseDoor(d_I\ClosestDoor, PlaySFX)
 End Function
