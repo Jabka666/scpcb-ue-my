@@ -2646,32 +2646,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_scp1025, it_fine1025
-			;[Block]
-			Select Setting
-				Case ROUGH, COARSE
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					If item\ItemTemplate\ID = it_fine1025
-						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
-					Else
-						it2.Items = CreateItem("Book", it_book, x, y, z)
-					EndIf
-					;[End Block]
-				Case FINE, VERYFINE
-					;[Block]
-					If Rand(4) = 1
-						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
-					Else
-						Remove = False
-					EndIf
-					;[End Block]
-			End Select
-			;[End Block]
-		Case it_book
+		Case it_scp1025, it_fine1025, it_book
 			;[Block]
 			Select Setting
 				Case ROUGH
@@ -2684,19 +2659,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					Remove = False
-					If Rand(3) = 1
-						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z) ; ~ I know that this can be exploited to get a SCP-1025 reset, but this effort makes it seem fair to me -- Salvage
-						Remove = True
+					If item\ItemTemplate\ID = it_fine1025
+						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
+					Else
+						it2.Items = CreateItem("Book", it_book, x, y, z)
 					EndIf
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
-					Remove = False
-					If Rand(10) = 1
-						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
-						Remove = True
-					EndIf
+					it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]

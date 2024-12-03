@@ -40,7 +40,7 @@
 	- Updated some SCP-1025 pages.
 	- Polydactyly injures the player now. (+1.5 injuries)
 	- Reduced analgesia's injury speed reduction resistance from 100% -> 75%
-	- Increased chance to obtain blue SCP-1025: 20% -> 25%
+	- Increased chance to obtain blue SCP-1025: 20% -> 100%
 	
 - Rebalance ballistic helmet.
 - Updated SCP-268 HUD icon.
