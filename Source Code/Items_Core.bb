@@ -2687,10 +2687,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case FINE, VERYFINE
 					;[Block]
 					If Rand(2) = 1
-						it2.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
+						it2.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
 					Else
 						If Rand(2) = 1
-							it2.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
+							it2.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
 						Else
 							it2.Items = CreateItem("White Severed Hand", it_hand, x, y, z)
 						EndIf
