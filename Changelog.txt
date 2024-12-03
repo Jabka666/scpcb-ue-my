@@ -31,6 +31,8 @@
 - Added SCP-789-J document.
 - Added bloody version of Level 0 Key Card and Level 1 Key Card.
 - Added new «bench2.b3d» model.
+- Change chances for batteries.
+- Speed up healing from SCP-427.
 
 - You cannot drop SCP-1123 without SCP-714 now.
 - «energy» cup effect can now be refined in SCP-914.
@@ -38,7 +40,7 @@
 	- Updated some SCP-1025 pages.
 	- Polydactyly injures the player now. (+1.5 injuries)
 	- Reduced analgesia's injury speed reduction resistance from 100% -> 75%
-	- Increased chance to obtain blue SCP-1025: 20% -> 25%
+	- Increased chance to obtain blue SCP-1025: 20% -> 100%
 	
 - Rebalance ballistic helmet.
 - Updated SCP-268 HUD icon.

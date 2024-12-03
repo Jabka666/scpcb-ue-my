@@ -2646,32 +2646,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_scp1025, it_fine1025
-			;[Block]
-			Select Setting
-				Case ROUGH, COARSE
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case ONETOONE
-					;[Block]
-					If item\ItemTemplate\ID = it_fine1025
-						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
-					Else
-						it2.Items = CreateItem("Book", it_book, x, y, z)
-					EndIf
-					;[End Block]
-				Case FINE, VERYFINE
-					;[Block]
-					If Rand(4) = 1
-						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
-					Else
-						Remove = False
-					EndIf
-					;[End Block]
-			End Select
-			;[End Block]
-		Case it_book
+		Case it_scp1025, it_fine1025, it_book
 			;[Block]
 			Select Setting
 				Case ROUGH
@@ -2684,19 +2659,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					Remove = False
-					If Rand(3) = 1
-						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z) ; ~ I know that this can be exploited to get a SCP-1025 reset, but this effort makes it seem fair to me -- Salvage
-						Remove = True
+					If item\ItemTemplate\ID <> it_scp1025
+						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
+					Else
+						it2.Items = CreateItem("Book", it_book, x, y, z)
 					EndIf
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
-					Remove = False
-					If Rand(10) = 1
-						it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
-						Remove = True
-					EndIf
+					it2.Items = CreateItem("Fine SCP-1025", it_fine1025, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2716,10 +2687,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case FINE, VERYFINE
 					;[Block]
 					If Rand(2) = 1
-						it2.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
+						it2.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
 					Else
 						If Rand(2) = 1
-							it2.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
+							it2.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
 						Else
 							it2.Items = CreateItem("White Severed Hand", it_hand, x, y, z)
 						EndIf
@@ -2961,33 +2932,15 @@ End Function
 
 Function CreateRandomBattery.Items(x#, y#, z#)
 	Local BatteryName$, BatteryID%
-	Local BatteryChance%
 	
-	Select SelectedDifficulty\OtherFactors
-		Case SAFE
-			;[Block]
-			BatteryChance = 10
-			;[End Block]
-		Case NORMAL
-			;[Block]
-			BatteryChance = 15
-			;[End Block]
-		Case HARD
-			;[Block]
-			BatteryChance = 20
-			;[End Block]
-		Case EXTREME
-			;[Block]
-			BatteryChance = 25
-			;[End Block]
-	End Select
+	Local BatteryChance% = 10 + (5 * SelectedDifficulty\OtherFactors)
 	
 	Local RandomChance% = Rand(BatteryChance)
 	
-	If RandomChance > 0 And RandomChance <= 6
+	If RandomChance > 0 And RandomChance <= 5
 		BatteryName = "9V Battery"
 		BatteryID = it_bat
-	ElseIf RandomChance > 6 And RandomChance < BatteryChance - 1
+	ElseIf RandomChance > 5 And RandomChance < BatteryChance - 2
 		BatteryName = "4.5V Battery"
 		BatteryID = it_coarsebat
 	Else
