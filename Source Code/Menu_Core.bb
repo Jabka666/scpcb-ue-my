@@ -350,6 +350,7 @@ Function UpdateMainMenu%()
 							
 							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							
+							ShouldDeleteGadgets = True
 							MainMenuOpen = False
 							Return
 						EndIf
@@ -3287,4 +3288,4 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS

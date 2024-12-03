@@ -1747,7 +1747,7 @@ Function UpdateNPCs%()
 										EndIf
 										PlaySound_Strict(LoadTempSound("SFX\SCP\049\Horror.ogg"))
 										LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(0, 1) + ".ogg", 1)
-										n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
+										n\SoundCHN2 = PlaySound_Strict(n\Sound2, True)
 										n\State = 3.0
 									EndIf
 								EndIf
@@ -4442,7 +4442,7 @@ Function UpdateNPCs%()
 									
 									If (n\Frame > 470.0 And PrevFrame <= 470.0) Lor (n\Frame > 500.0 And PrevFrame <= 500.0) Lor (n\Frame > 527.0 And PrevFrame <= 527.0)
 										If Dist < 0.81
-											PlaySoundEx(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
+											PlaySound_Strict(snd_I\DamageSFX[Rand(11, 12)])
 											InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult, 0.1 * DifficultyDMGMult)
 											me\CameraShake = 1.8 * (I_1025\FineState[3] = 0.0)
 											If me\Injuries > 10.0
@@ -4784,7 +4784,7 @@ Function UpdateNPCs%()
 								If Dist > 0.64 Lor Abs(DeltaYaw(n\Collider, me\Collider)) > 60.0
 									PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 								Else
-									PlaySoundEx(snd_I\DamageSFX[Rand(11, 12)], Camera, n\Collider)
+									PlaySound_Strict(snd_I\DamageSFX[Rand(11, 12)])
 									InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, 0.35 * DifficultyDMGMult, 0.15 * DifficultyDMGMult)
 									me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 									
