@@ -2659,7 +2659,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If item\ItemTemplate\ID = it_fine1025
+					If item\ItemTemplate\ID <> it_scp1025
 						it2.Items = CreateItem("SCP-1025", it_scp1025, x, y, z)
 					Else
 						it2.Items = CreateItem("Book", it_book, x, y, z)
