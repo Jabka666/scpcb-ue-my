@@ -2174,7 +2174,6 @@ Function LoadData%()
 			DifficultyDMGMult = 1.45
 			;[End Block]
 	End Select
-	DebugLog(DifficultyDMGMult)
 	
 	ShouldEntitiesFall = True
 	HideDistance = 17.0
