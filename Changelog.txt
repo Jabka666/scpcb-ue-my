@@ -1,10 +1,11 @@
-{v1.3.5}
+{v1.4}
 
 [Global]
 - Added animation for femur breaker and butt ghost.
 	- Added face for butt ghost.
 - Added animation for SCP-914.
 - Added new startup video before loading intro scene.
+- Added new anomalous duck.
 
 - Reduced the chances of escaping the Pocket Dimension and the fake tunnel.
 - Blink meter turns red sooner when low.
@@ -17,6 +18,7 @@
 
 [Rooms]
 - Added animation for ventilation grate in SCP-173's containment chamber.
+- Added new «bench2.b3d» model.
 
 - Improved ambience for «cont2_008».
 - Level 3 Key Card in «cont1_205» is now bloody.
@@ -24,13 +26,12 @@
 - Can now open the door of SCP-205's chamber early.
 - Buttons now glow through the fog.
 
-- Updated some models...
+- Improved some models...
 
 [Items]
 - Added E-Reader.
 - Added SCP-789-J document.
 - Added bloody version of Level 0 Key Card and Level 1 Key Card.
-- Added new «bench2.b3d» model.
 - Added Log of Anomalous Items.
 
 - Change chances for batteries.
@@ -47,9 +48,11 @@
 - Rebalance ballistic helmet.
 - Updated SCP-268 HUD icon.
 
+- Some changes for SCP-914 refinements...
+
 - Better textures for some items.
-- Improved a lot of models.
 - Improved icons for all items.
+- Improved a lot of models...
 
 [NPCs]
 - Changed SCP-106's texture.
@@ -106,6 +109,7 @@
 - Fixed overlays scaling.
 - Fixed Franklin's gravity after intro scene.
 - Fixed wrong calculating of player's sound volume.
+- Fixed odd slider adjustment values (for example, 99% or 101%).
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 - «Drawing» and «Blank Sheet» are no longer considered documents.
