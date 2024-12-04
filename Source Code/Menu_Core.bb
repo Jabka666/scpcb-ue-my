@@ -2504,7 +2504,7 @@ Function UpdateMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 		If MouseOn(x, y, Width + (14 * MenuScale), (20 * MenuScale)) Then OnSliderID = ID
 	EndIf
 	If ID = OnSliderID Then Value = Clamp((MousePosX - x) * 100.0 / Width, 0.0, 100.0)
-	Return(Value)
+	Return(Floor(Value))
 End Function
 
 Function RenderMenuSlideBars%()
@@ -3288,4 +3288,4 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS
