@@ -1572,7 +1572,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					MakeDecal = True
 					;[End Block]
-				Case ONETOONE, FINE, VERYFINE
+				Case ONETOONE
 					;[Block]
 					If item\ItemTemplate\ID = it_hand
 						If Rand(2) = 1
@@ -1593,6 +1593,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							it2.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
 						EndIf
 					EndIf
+					;[End Block]
+				Case FINE, VERYFINE
+					;[Block]
+					n.NPCs = CreateNPC(NPCType008_1, x, y, z)
+					n\State = 3.0
 					;[End Block]
 			End Select
 			;[End Block]
