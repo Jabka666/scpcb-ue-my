@@ -362,7 +362,7 @@ Function UpdateGame%()
 				EndIf
 			EndIf
 			
-			me\SndVolume = CurveValue(0.0, me\SndVolume, 5.0)
+			me\SndVolume = CurveValue(0.0, me\SndVolume, 50.0)
 			InFacility = IsInFacility(EntityY(me\Collider))
 			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
 			UpdateDeaf()

@@ -101,7 +101,8 @@
 	- Fixed path finding.
 - Fixed MAV caused by reading Polydactyly twice.
 - Fixed overlays scaling.
-- Fix Franklin's gravity after intro scene.
+- Fixed Franklin's gravity after intro scene.
+- Fixed wrong calculating of player's sound volume.
 
 - Normal SCP-1025 can be obtained from blue SCP-1025 now.
 - «Drawing» and «Blank Sheet» are no longer considered documents.
