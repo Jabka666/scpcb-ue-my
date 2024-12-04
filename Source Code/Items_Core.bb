@@ -2035,7 +2035,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_scp860
+		Case it_scp860, it_fine860
 			;[Block]
 			Select Setting
 				Case ROUGH, COARSE
@@ -2044,11 +2044,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					Remove = False
+					If item\ItemTemplate\ID <> it_scp860
+						it2.Items = CreateItem("SCP-860", it_scp860, x, y, z)
+					Else
+						it2.Items = CreateItem("White Key", it_key_white, x, y, z)
+					EndIf
 					;[End Block]
 				Case FINE
 					;[Block]
-					If Rand(8) = 1
+					If Rand(8 + (4 * SelectedDifficulty\OtherFactors)) = 1
 						it2.Items = CreateItem("Fine SCP-860", it_fine860, x, y, z)
 					Else
 						Remove = False
@@ -2056,7 +2060,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					If Rand(12) = 1
+					If Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
 						it2.Items = CreateItem("Fine SCP-860", it_fine860, x, y, z)
 					Else
 						Remove = False
