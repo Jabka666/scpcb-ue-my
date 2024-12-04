@@ -5899,19 +5899,6 @@ Function UpdateEvents%()
 						EndIf
 					Else
 						e\EventState = 0.0
-						If e\room\NPC[0] <> Null
-							For i = 0 To 2 Step 2
-								e\room\NPC[i]\State = 66.0
-								e\room\NPC[i + 1]\State = 66.0
-							Next
-						EndIf
-					EndIf
-				Else
-					If e\room\NPC[0] <> Null
-						For i = 0 To 2 Step 2
-							e\room\NPC[i]\State = 66.0
-							e\room\NPC[i + 1]\State = 66.0
-						Next
 					EndIf
 				EndIf
 				;[End Block]
