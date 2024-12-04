@@ -2156,6 +2156,26 @@ Function LoadData%()
 	
 	LoadRoomTemplates("Data\rooms.ini")
 	
+	Select SelectedDifficulty\OtherFactors
+		Case EASY
+			;[Block]
+			DifficultyDMGMult = 1.0
+			;[End Block]
+		Case NORMAL
+			;[Block]
+			DifficultyDMGMult = 1.15
+			;[End Block]
+		Case HARD
+			;[Block]
+			DifficultyDMGMult = 1.3
+			;[End Block]
+		Case EXTREME
+			;[Block]
+			DifficultyDMGMult = 1.45
+			;[End Block]
+	End Select
+	DebugLog(DifficultyDMGMult)
+	
 	ShouldEntitiesFall = True
 	HideDistance = 17.0
 	CoffinDistance = 100.0

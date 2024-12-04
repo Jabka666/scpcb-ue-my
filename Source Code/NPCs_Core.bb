@@ -605,31 +605,7 @@ Global RemoveHazmatTimer#, Remove714Timer#
 Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
-	Local n.NPCs, n2.NPCs, d.Doors, de.Decals, r.Rooms, e.Events, w.WayPoints, p.Particles, wp.WayPoints, wayPointCloseToPlayer.WayPoints, emit.Emitter
-	Local i%, j%, Dist#, Dist2#, Angle#, x#, x2#, y#, z#, z2#, PrevFrame#, PlayerSeeAble%, Visible%, Tex%
-	Local Target%, Pvt%, Pick%, PrevDist#, NewDist#, Attack%
-	Local FromX%, ToX%, FromZ%, ToZ%
-	Local SinValue#, SqrValue#
-	Local DifficultyDMGMult#
-	
-	Select SelectedDifficulty\OtherFactors
-		Case EASY
-			;[Block]
-			DifficultyDMGMult = 1.0
-			;[End Block]
-		Case NORMAL
-			;[Block]
-			DifficultyDMGMult = 1.15
-			;[End Block]
-		Case HARD
-			;[Block]
-			DifficultyDMGMult = 1.3
-			;[End Block]
-		Case EXTREME
-			;[Block]
-			DifficultyDMGMult = 1.45
-			;[End Block]
-	End Select
+	Local n.NPCs
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -818,8 +794,10 @@ Function UpdateNPCs%()
 				If n\InFacility = InFacility
 					TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 					
+					Local r.Rooms
 					Local CollidedFloor% = False
 					Local CollCount% = CountCollisions(n\Collider)
+					Local i%
 					
 					For i = 1 To CollCount
 						If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01
@@ -1186,7 +1164,6 @@ End Function
 Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, InstaKill% = False)
 	Local p.Particles, de.Decals, n.NPCs, emit.Emitter
 	Local Pvt%, ShotMessageUpdate$, i%
-	Local DifficultyDMGMult#
 	
 	emit.Emitter = SetEmitter(Null, x, y, z, 13)
 	EntityParent(emit\Owner, Parent)
@@ -1199,25 +1176,6 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 	EndIf
 	
 	If Rnd(1.0) <= HitProb
-		Select SelectedDifficulty\OtherFactors
-			Case EASY
-				;[Block]
-				DifficultyDMGMult = 1.0
-				;[End Block]
-			Case NORMAL
-				;[Block]
-				DifficultyDMGMult = 1.15
-				;[End Block]
-			Case HARD
-				;[Block]
-				DifficultyDMGMult = 1.3
-				;[End Block]
-			Case EXTREME
-				;[Block]
-				DifficultyDMGMult = 1.45
-				;[End Block]
-		End Select
-		
 		Local MsgRand% = Rand(17)
 		
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
