@@ -1110,16 +1110,15 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 60.0, DisableSoundOnCrouch% = Fa
 	; ~ 2: Player is detected by emitting a sound
 	; ~ 3: Player is detected by a camera (only for MTF Units!)
 	
-	Local Dist2# = EntityDistanceSquared(me\Collider, n\Collider)
-	
-	If n\BlinkTimer <= 0.0 Then Return(0)
 	If I_268\InvisibilityOn Lor chs\NoTarget
 		n\State2 = 0.0
 		Return(0)
 	EndIf
 	
+	Local Dist2# = EntityDistanceSquared(me\Collider, n\Collider)
+	
 	If n\NPCType <> NPCTypeMTF
-		If Dist2 > PowTwo(Dist)
+		If Dist2 > PowTwo(Dist) Lor n\BlinkTimer <= 0.0
 			Return(0)
 		Else
 			Local Visible% = EntityVisible(n\Collider, me\Collider)
