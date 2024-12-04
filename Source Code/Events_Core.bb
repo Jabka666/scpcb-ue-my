@@ -7713,7 +7713,7 @@ Function UpdateDimension106%()
 							; ~ Player is at the exit
 							If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
 								n_I\Curr106\State = 0.0
-								Random = Rand(14, 30)
+								Random = Rand(12, 28)
 								Teleport = True
 							Else ; ~ Somewhere else, must've fallen down
 								If (Not chs\GodMode) And (Not me\Terminated)
@@ -7898,15 +7898,7 @@ Function UpdateDimension106%()
 							EndIf
 							e\EventState2 = PD_StartRoom
 							;[End Block]
-						Case 24, 25, 26, 27 ; ~ The tower room
-							;[Block]
-							PositionEntity(me\Collider, EntityX(e\room\Objects[12], True), 0.6, EntityZ(e\room\Objects[12], True))
-							ResetEntity(me\Collider)
-							
-							e\EventState3 = 15.0
-							e\EventState2 = PD_TowerRoom
-							;[End Block]
-						Case 28, 29, 30 ; ~ The fake HCZ tunnel
+						Case 24, 25, 26 ; ~ The fake HCZ tunnel
 							;[Block]
 							PlaySound_Strict(snd_I\SCP106SFX[3], True)
 							
@@ -7915,6 +7907,14 @@ Function UpdateDimension106%()
 							
 							e\EventState3 = 0.0
 							e\EventState2 = PD_FakeTunnelRoom
+							;[End Block]
+						Case 27, 28, 29, 30 ; ~ The tower room
+							;[Block]
+							PositionEntity(me\Collider, EntityX(e\room\Objects[12], True), 0.6, EntityZ(e\room\Objects[12], True))
+							ResetEntity(me\Collider)
+							
+							e\EventState3 = 15.0
+							e\EventState2 = PD_TowerRoom
 							;[End Block]
 						Case 31 ; ~ Labyrinth
 							;[Block]
