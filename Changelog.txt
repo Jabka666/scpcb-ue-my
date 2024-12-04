@@ -31,6 +31,8 @@
 - Added SCP-789-J document.
 - Added bloody version of Level 0 Key Card and Level 1 Key Card.
 - Added new «bench2.b3d» model.
+- Added Log of Anomalous Items.
+
 - Change chances for batteries.
 - Speed up healing from SCP-427.
 
