@@ -192,6 +192,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 				EndIf
 				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 				AnimateNPC(n, 126.0, 165.0, 0.6, False)
+				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 				If n\Frame >= 146.0 And PrevFrame < 146.0
 					If n\Target = Null
 						If EntityDistanceSquared(n\Collider, me\Collider) < 0.5625
@@ -223,7 +224,6 @@ Function UpdateNPCType008_1%(n.NPCs)
 				ElseIf n\Frame >= 164.0
 					n\State = 2.0 + me\Terminated
 				EndIf
-				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 				
 				If n\Target <> Null
 					If n\Target\IsDead
@@ -2792,6 +2792,8 @@ Function UpdateNPCType939%(n.NPCs)
 	; ~ State is set to 66 in the room3_storage-event if player isn't inside the room
 	If PlayerRoom\RoomTemplate\RoomID <> r_room3_storage Then n\State = 66.0
 	If n\State < 66.0
+		Local Dist#, PrevFrame#, Temp%
+		
 		Select n\State
 			Case 0.0 ; ~ Idles
 				;[Block]
@@ -2884,7 +2886,7 @@ Function UpdateNPCType939%(n.NPCs)
 							
 							If (PrevFrame < 452.0 And n\Frame >= 452.0) Lor (PrevFrame < 459.0 And n\Frame >= 459.0) Then PlaySoundEx(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
 							
-										; ~ Player is visible
+							; ~ Player is visible
 							If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 1.0
 								If EntityVisible(me\Collider, n\Collider) Then SetNPCFrame(n, 18.0)
 							EndIf
@@ -2894,7 +2896,8 @@ Function UpdateNPCType939%(n.NPCs)
 						EndIf
 					EndIf
 					
-					Angle = VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider))
+					Local Angle# = VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider))
+					
 					RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
 					
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
