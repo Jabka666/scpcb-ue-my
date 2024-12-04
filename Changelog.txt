@@ -62,6 +62,7 @@
 - SCP-966 are shorter.
 - SCP-966 additional insomnia accumulate faster.
 - SCP-106 leaves corroded footsteps when walking.
+- SCP-035's tentacle now creates a cracked decal.
 
 - Rework SCP-106's spawnrate throughout the facility:
 	- Based on integers of «PlayerRoom\DisableDecals».

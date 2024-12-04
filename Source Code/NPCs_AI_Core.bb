@@ -255,6 +255,18 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 				Case 0.0 ; ~ Spawns
 					;[Block]
 					If n\Frame = 282.0
+						Local Pvt% = CreatePivot()
+						
+						PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+						TurnEntity(Pvt, 90.0, 0.0, 0.0)
+						If EntityPick(Pvt, 0.5)
+							Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.1, 1.0)
+							
+							de\SizeChange = 0.0005 : de\MaxSize = 0.2
+							EntityParent(de\OBJ, PlayerRoom\OBJ)
+						EndIf
+						FreeEntity(Pvt) : Pvt = 0
+						
 						PlaySoundEx(LoadTempSound("SFX\SCP\035_Tentacle\TentacleSpawn.ogg"), Camera, n\Collider, 5.0)
 						SetNPCFrame(n, 283.0)
 					Else

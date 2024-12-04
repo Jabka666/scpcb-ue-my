@@ -92,7 +92,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType035_Tentacle
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			n\HP = 500
 			
@@ -717,7 +716,20 @@ Function UpdateNPCs%()
 				Select n\NPCType
 					Case NPCType035_Tentacle
 						;[Block]
-						If n\Frame > 550.9
+						If n\Frame > 548.9
+							Local Pvt% = CreatePivot()
+							
+							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+							TurnEntity(Pvt, 90.0, 0.0, 0.0)
+							If EntityPick(Pvt, 0.5)
+								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.5, 1.0)
+								
+								de\SizeChange = 0.0005 : de\MaxSize = 0.2
+								EntityParent(de\OBJ, PlayerRoom\OBJ)
+							EndIf
+							FreeEntity(Pvt) : Pvt = 0
+							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
+							
 							HideEntity(n\Collider)
 							HideEntity(n\OBJ)
 							RemoveSound = True
