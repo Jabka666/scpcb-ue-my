@@ -7203,6 +7203,22 @@ Function UpdateEvents%()
 					Else
 						e\EventState = 0.0
 					EndIf
+					If e\room\Objects[1] = 0
+						; ~ ordinary duck
+						TFormPoint(-659.0, 133.0, 446.0, e\room\OBJ, 0)
+						e\room\Objects[1] = LoadMesh_Strict("GFX\Map\Props\rubber_duck.b3d")
+						ScaleEntity(e\room\Objects[1], RoomScale, RoomScale, RoomScale)
+						PositionEntity(e\room\Objects[1], TFormedX(), TFormedY(), TFormedZ())
+						RotateEntity(e\room\Objects[1], 6.0, e\room\Angle + 260.0, 0.0)
+						EntityPickMode(e\room\Objects[1], 1)
+						EntityRadius(e\room\Objects[1], 0.3)
+						EntityParent(e\room\Objects[1], e\room\OBJ)
+					Else
+						If InteractObject(e\room\Objects[1], 0.5)
+							CreateMsg(GetLocalString("msg", "duck"))
+							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+						EndIf
+					EndIf
 				EndIf
 				;[End Block]
 		End Select
