@@ -8,6 +8,7 @@
 
 [Bug Fixes]
 - Fixed SCP-789-J trigger distance.
+- Fixed mask of the Old Badge and the Ticket.
 
 {v1.4}
 

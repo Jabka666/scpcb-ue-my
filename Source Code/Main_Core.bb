@@ -7328,7 +7328,11 @@ Function RenderGUI%()
 						SetFontEx(fo\FontID[Font_Default])
 					EndIf
 					;[End Block]
-				Case it_badge, it_burntbadge, it_harnbadge, it_oldbadge, it_ticket
+				Case it_oldbadge, it_ticket
+					;[Block]
+					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawImage(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
+					;[End Block]
+				Case it_badge, it_burntbadge, it_harnbadge
 					;[Block]
 					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawBlock(SelectedItem\ItemTemplate\Img, mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight)
 					;[End Block]
