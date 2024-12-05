@@ -27,13 +27,13 @@ Function InitAchievements%()
 	S2IMapSet(AchievementsImages, "locked", ScaleImageEx(LoadImage_Strict("GFX\Menu\Achievements\AchvLocked.png"), MenuScale, MenuScale))
 End Function
 
+Global SNAVUnlocked% = False, EReaderUnlocked% = False
+
 Function GiveAchievement%(AchvID$, ShowMessage% = True)
 	If S2IMapContains(UnlockedAchievements, AchvID) Then Return
 	
 	S2IMapSet(UnlockedAchievements, AchvID, True)
-	If opt\AchvMsgEnabled And ShowMessage Then
-		CreateAchievementMsg(AchvID)
-	EndIf
+	If opt\AchvMsgEnabled And ShowMessage Then CreateAchievementMsg(AchvID)
 End Function
 
 Function AchievementTooltip%(AchvID$)
@@ -77,6 +77,8 @@ Function AchievementTooltip%(AchvID$)
 End Function
 
 Function RenderAchvIMG%(x%, y%, i%, AchvID$)
+	CatchErrors("RenderAchvIMG")
+	
 	Local IMG%
 	Local Row% = (i Mod 4)
 	Local SeparationConst2# = 101.0 * MenuScale
@@ -94,6 +96,8 @@ Function RenderAchvIMG%(x%, y%, i%, AchvID$)
 	Color(50, 50, 50)
 	
 	Rect(RectPosX, y, IMGSize, IMGSize, False)
+	
+	CatchErrors("Uncaught: RenderAchvIMG")
 End Function
 
 Global CurrAchvMSGID% = 0
@@ -161,6 +165,8 @@ End Function
 Function RenderAchievementMsg%()
 	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled) Then Return
 	
+	CatchErrors("RenderAchievementMsg")
+	
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
 	Local Width% = 351 * MenuScale
 	Local Height% = 111 * MenuScale
@@ -188,6 +194,8 @@ Function RenderAchievementMsg%()
 			RowText(Format(GetLocalString("msg", "achv.unlocked"), amsg\Txt), x + (111 * MenuScale), y + CoordEx, Width - (125 * MenuScale), y - (26 * MenuScale))
 		EndIf
 	Next
+	
+	CatchErrors("Uncaught: RenderAchievementMsg")
 End Function
 
 ;~IDEal Editor Parameters:

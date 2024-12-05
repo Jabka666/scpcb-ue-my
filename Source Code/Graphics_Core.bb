@@ -48,7 +48,7 @@ Function InitFastResize%()
 	HideEntity(FresizeCam)
 End Function
 
-Function Graphics3DExt%(Width%, Height%, Depth% = 32, Mode% = 2)
+Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	SetGfxDriver(opt\GFXDriver)
 	Graphics3D(Width, Height, Depth, Mode)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
@@ -76,7 +76,7 @@ Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
 	DestHeight = Floor(SrcHeight * ScaleY)
 	
 	; ~ If the image does not need to be scaled, just copy the image and exit the function
-	If (SrcWidth = DestWidth) And (SrcHeight = DestHeight) Then Return(SrcImage)
+	If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return(SrcImage)
 	
 	; ~ Create a scratch image that is as tall as the source image, and as wide as the destination image
 	ScratchImage = CreateImage(DestWidth, SrcHeight, Frames)
@@ -110,6 +110,26 @@ Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
 	
 	; ~ Return the new image
 	Return(DestImage)
+End Function
+
+Function ResizeImageEx%(SrcImage%, ScaleX#, ScaleY#)
+	Local SrcWidth% = ImageWidth(SrcImage)
+	Local SrcHeight% = ImageHeight(SrcImage)
+	Local DestWidth% = Floor(SrcWidth * ScaleX)
+	Local DestHeight% = Floor(SrcHeight * ScaleY)
+	
+	If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return(SrcImage)
+	
+    Local DestImg% = CreateImage(DestWidth, DestHeight)
+	Local BufferBack% = BackBuffer()
+	
+	CopyRect(0, 0, SrcWidth, SrcHeight, SMALLEST_POWER_TWO_HALF - SrcWidth / 2, SMALLEST_POWER_TWO_HALF - SrcHeight / 2, ImageBuffer(SrcImage), TextureBuffer(FresizeTexture))
+	SetBuffer(BufferBack)
+	ScaleRender(0, 0, SMALLEST_POWER_TWO / GraphicWidthFloat * Float(DestWidth) / Float(SrcWidth), SMALLEST_POWER_TWO / GraphicWidthFloat * Float(DestHeight) / Float(SrcHeight))
+	CopyRect(mo\Viewport_Center_X - DestWidth / 2, mo\Viewport_Center_Y - DestHeight / 2, DestWidth, DestHeight, 0, 0, BufferBack, ImageBuffer(DestImg))
+	
+    FreeImage(SrcImage) : SrcImage = 0
+    Return(DestImg)
 End Function
 
 Function ScaleRender%(x#, y#, hScale# = 1.0, vScale# = 1.0)
@@ -203,7 +223,7 @@ Function CreateBlurImage%()
 	CameraZoom(Cam, 0.1)
 	CameraClsMode(Cam, 0, 0)
 	CameraRange(Cam, 0.1, 1.5)
-	MoveEntity(Cam, 0, 0, 10000)
+	MoveEntity(Cam, 0.0, 0.0, 10000.0)
 	CameraProjMode(Cam, 0)
 	ArkBlurCam = Cam
 	
@@ -227,7 +247,7 @@ Function CreateBlurImage%()
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 0)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, (256 * opt\SaveTexturesInVRAM))
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
@@ -242,7 +262,8 @@ Function FreeBlur%()
 	FreeEntity(ArkBlurCam) : ArkBlurCam = 0
 End Function
 
-Function PlayStartupVideos%()
+Function PlayMovie%(MoviePath$)
+	If RunningOnWine() Then Return
 	If (Not opt\PlayStartup) Then Return
 	
 	HidePointer()
@@ -261,52 +282,62 @@ Function PlayStartupVideos%()
 		ScaledGraphicHeight = Int(opt\GraphicWidth / TargetAspectRatio)
 	EndIf
 	
-	Local MovieFile$, i%
-	Local StartupPath$ = "GFX\Menu\"
+	Local i%, SkipMessage$
+	Local MovieFile$ = "GFX\Menu\" + MoviePath
+	Local Movie% = OpenMovie_Strict(MovieFile + ".wmv")
+	Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume, 0)
+	
+	Repeat
+		Cls()
+		DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
+		If InitializeIntroMovie
+			SkipMessage = GetLocalString("menu", "wakeup")
+		Else
+			SkipMessage = GetLocalString("menu", "anykey")
+		EndIf
+		RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), SkipMessage, True, True)
+		Flip(True)
+		
+		Local Close% = False
+		
+		If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio))
+			ResetLoadingTextColor()
+			StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
+			CloseMovie(Movie) : Movie = 0
+			Close = True
+		EndIf
+	Until Close
+	
+	Cls()
+	Flip()
+	ShowPointer()
+End Function
+
+Function PlayStartupVideos%()
+	Local i%
+	Local MovieFile$
 	
 	For i = 0 To 3
 		Select i
 			Case 0
 				;[Block]
-				MovieFile = StartupPath + "startup_Undertow"
+				MovieFile = "startup_Undertow"
 				;[End Block]
 			Case 1
 				;[Block]
-				MovieFile = StartupPath + "startup_TSS"
+				MovieFile = "startup_TSS"
 				;[End Block]
 			Case 2
 				;[Block]
-				MovieFile = StartupPath + "startup_UET"
+				MovieFile = "startup_UET"
 				;[End Block]
 			Case 3
 				;[Block]
-				MovieFile = StartupPath + "startup_Warning"
+				MovieFile = "startup_Warning"
 				;[End Block]
 		End Select
-		
-		Local Movie% = OpenMovie_Strict(MovieFile + ".wmv")
-		Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume, 0)
-		
-		Repeat
-			Cls()
-			DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
-			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
-			Flip(True)
-			
-			Local Close% = False
-			
-			If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio))
-				ResetLoadingTextColor()
-				StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
-				CloseMovie(Movie)
-				Close = True
-			EndIf
-		Until Close
-		
-		Cls()
-		Flip()
+		PlayMovie(MovieFile)
 	Next
-	ShowPointer()
 End Function
 
 Global ScreenshotCount% = 1

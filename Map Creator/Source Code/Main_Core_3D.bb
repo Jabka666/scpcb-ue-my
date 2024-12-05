@@ -116,11 +116,11 @@ Function LoadEntities%()
 	
 	; ~ [DOORS]
 	
-	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.x") ; ~ Default Door
+	o\DoorModelID[0] = LoadMesh_Strict("GFX\map\Props\Door01.b3d") ; ~ Default Door
 	
-	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\ContDoorLeft.x") ; ~ Big Door Left
+	o\DoorModelID[1] = LoadMesh_Strict("GFX\map\Props\ContDoorLeft.b3d") ; ~ Big Door Left
 	
-	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\ContDoorRight.x") ; ~ Big Door Right
+	o\DoorModelID[2] = LoadMesh_Strict("GFX\map\Props\ContDoorRight.b3d") ; ~ Big Door Right
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		HideEntity(o\DoorModelID[i])
@@ -1397,7 +1397,4 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#D#49#5F#64#71#91#C4#C9#10E#137#165#255#25C#267#27D#281#285#289#28D#29E
-;~F#300#308#30C#310#324#329#32E#332#336#33A#340#356#368#3A6#3D5#3E3#4A4#4AB#4B1#4B8
-;~F#4BF#4C6#4CE#4D3#510
 ;~C#Blitz3D TSS

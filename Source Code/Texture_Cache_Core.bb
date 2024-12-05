@@ -93,7 +93,7 @@ Function CreateTextureUsingCacheSystem%(Width%, Height%, TexFlags% = 1, Frames% 
 	tic.TextureInCache = New TextureInCache
 	tic\TexName = "CreateTexture"
 	tic\TexDeleteType = DeleteType
-	tic\Tex = CreateTexture(Width, Height, TexFlags + (256 * opt\SaveTexturesInVRAM), Frames)
+	tic\Tex = CreateTexture(Width, Height, TexFlags, Frames)
 	Return(tic\Tex)
 End Function
 
@@ -125,7 +125,7 @@ End Function
 Global MissingTexture%
 
 Function LoadMissingTexture%()
-	MissingTexture = CreateTexture(2, 2, 1 + 256)
+	MissingTexture = CreateTexture(2, 2, 1 + (256 * opt\SaveTexturesInVRAM))
 	TextureBlend(MissingTexture, 3)
 	SetBuffer(TextureBuffer(MissingTexture))
 	ClsColor(0, 0, 0)
@@ -135,22 +135,17 @@ End Function
 
 Function CheckForTexture%(Tex%, TexFlags% = 1)
 	Local Name$ = ""
+	Local TexName$ = TextureName(Tex)
 	
-	If FileType(TextureName(Tex)) = 1 ; ~ Check if texture is existing in original path
-		Name = TextureName(Tex)
-	ElseIf FileType(MapTexturesFolder + StripPath(TextureName(Tex))) = 1 ; ~ If not, check the MapTexturesFolder
-		Name = MapTexturesFolder + StripPath(TextureName(Tex))
+	If FileType(TexName) = 1 ; ~ Check if texture is existing in original path
+		Name = TexName
+	ElseIf FileType(MapTexturesFolder + StripPath(TexName)) = 1 ; ~ If not, check the MapTexturesFolder
+		Name = MapTexturesFolder + StripPath(TexName)
 	EndIf
 	
 	Local Texture% = LoadTextureCheckingIfInCache(Name, TexFlags)
 	
-	If Texture <> 0
-		If ((TexFlags Shr 1) Mod 2) = 0
-			TextureBlend(Texture, 5)
-		Else
-			TextureBlend(Texture, 1)
-		EndIf
-	EndIf
+	If Texture <> 0 Then TextureBlend(Texture, 1 + 4 * (((TexFlags Shr 1) Mod 2) = 0))
 	Return(Texture)
 End Function
 

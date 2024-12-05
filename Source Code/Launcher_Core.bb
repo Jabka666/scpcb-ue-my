@@ -49,7 +49,6 @@ Type ListLanguage ; ~ Languages in the list
 	Field Author$
 	Field LastModify$
 	Field Flag$
-	Field FlagImg%
 	Field MajorOnly%
 	Field Full%
 	Field FileSize%
@@ -264,6 +263,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		
+		Local FontW# = FontWidth()
+		Local FontH# = FontHeight()
+		
 		; ~ Driver name (tooltip)
 		If MouseOn(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
 			TooltipX = MousePosX + 5
@@ -271,8 +273,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 			ToolTip = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
 			TooltipWidth = StringWidth(ToolTip)
 			
-			If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
-			RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
+			If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
+			RenderFrame(TooltipX, TooltipY, TooltipWidth + FontW, FontH + 16)
 			TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
 		EndIf
 		
@@ -286,8 +288,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 				TooltipWidth = StringWidth(ToolTip)
 				
 				Rect(LauncherWidth - 30, LauncherHeight - 250, 21, 21, False)
-				If (TooltipX + TooltipWidth + FontWidth()) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
-				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontWidth(), FontHeight() + 16)
+				If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
+				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontW, FontH + 16)
 				TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
 			EndIf
 		EndIf
@@ -387,7 +389,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	IniWriteString(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
-	IniWriteString(OptionFile, "Advanced", "No Progress Bar", opt\NoProgressBar)
+	IniWriteString(OptionFile, "Global", "No Progress Bar", opt\NoProgressBar)
 	
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0
@@ -411,11 +413,15 @@ Function UpdateLauncher%(lnchr.Launcher)
 	If Quit Then End()
 End Function
 
+Global CountryFlags%
+
 Function UpdateLanguageSelector%()
+	CountryFlags = CreateS2IMap()
+	
 	Local ServerURI$
 	
 	If GetUserLanguage() = "zh-CN"
-		ServerURI = "https://filescenter-1301852054.cos.ap-nanjing.myqcloud.com/cbue/"
+		ServerURI = "https://files.ziyuebot.cn/cbue/"
 	Else
 		ServerURI = "https://files.ziyuesinicization.site/cbue/"
 	EndIf
@@ -425,35 +431,34 @@ Function UpdateLanguageSelector%()
 	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
 	CreateDir(BasePath + "/flags/")
-	DownloadFile(ServerURI + "list.txt", BasePath + "temp.txt") ; ~ List of languages
+	DownloadFile(ServerURI + "languages.json", BasePath + "languages.json") ; ~ List of languages
 	
 	Local lan.ListLanguage
-	Local File% = OpenFile(BasePath + "temp.txt") ; ~ Please do not modify this
+	Local File% = JsonParseFromFile(BasePath + "languages.json")
 	Local l$
 	
-	If File <> 0
-		While (Not Eof(File))
-			l = ReadLine(File)
-			If l <> ""
-				lan.ListLanguage = New ListLanguage
-				lan\Name = ParseDomainTXT(l, "name") ; ~ Name of localization
-				lan\ID = ParseDomainTXT(l, "id") ; ~ Language ID of localization
-				lan\Author = ParseDomainTXT(l, "author") ; ~ Author of translation
-				lan\LastModify = ParseDomainTXT(l, "mod") ; ~ Last modify date
-				lan\MajorOnly = Int(ParseDomainTXT(l, "majoronly")) ; ~ loca.ini only?
-				lan\Full = Int(ParseDomainTXT(l, "full")) ; ~ Full complete translation
-				lan\Flag = ParseDomainTXT(l, "flag") ; ~ Flag of country
-				lan\FileSize = Int(ParseDomainTXT(l, "size")) ; ~ Size of localization
-				lan\Compatible = ParseDomainTXT(l, "compatible") ; ~ Compatible version
-				If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURI + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
-				If lan\FlagImg = 0 Then lan\FlagImg = LoadImage(BasePath + "flags\" + lan\Flag)
-				If lan\FlagImg = 0 Then Return(True)
-			Else
-				Exit
-			EndIf
-		Wend
-		CloseFile(File)
-		DeleteFile(BasePath + "temp.txt")
+	If (Not JsonHasParseError(File))
+		Local Languages% = JsonGetArray(File)
+		Local LanguagesArraySize% = JsonGetArraySize(Languages)
+		Local i%
+		
+		For i = 0 To LanguagesArraySize - 1
+			Local LanguageIt% = JsonGetArrayValue(Languages, i)
+			
+			lan.ListLanguage = New ListLanguage
+			lan\Name = JsonGetString(JsonGetValue(LanguageIt, "name")) ; ~ Name of localization
+			lan\ID = JsonGetString(JsonGetValue(LanguageIt, "id")) ; ~ Language ID of localization
+			lan\Author = JsonGetString(JsonGetValue(LanguageIt, "author")) ; ~ Author of translation
+			lan\LastModify = JsonGetString(JsonGetValue(LanguageIt, "update")) ; ~ Last modify date
+			lan\MajorOnly = JsonIsNull(JsonGetValue(LanguageIt, "size")) ; ~ loca.ini only?
+			lan\Full = JsonGetBool(JsonGetValue(LanguageIt, "perfect")) ; ~ Full complete translation
+			lan\Flag = JsonGetString(JsonGetValue(LanguageIt, "flag")) ; ~ Flag of country
+			lan\FileSize = JsonGetInt(JsonGetValue(LanguageIt, "size")) ; ~ Size of localization
+			lan\Compatible = JsonGetString(JsonGetValue(LanguageIt, "compatible")) ; ~ Compatible version
+			If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURI + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+			If (Not S2IMapContains(CountryFlags, lan\Flag)) Then S2IMapSet(CountryFlags, lan\Flag, LoadImage(BasePath + "flags\" + lan\Flag))
+			If (Not S2IMapContains(CountryFlags, lan\Flag)) Then Return(True)
+		Next
 	Else
 		Return(True)
 	EndIf
@@ -484,7 +489,7 @@ Function UpdateLanguageSelector%()
 			Case LANGUAGE_STATUS_DOWNLOAD_START
 				;[Block]
 				If (Not RequestLanguage\MajorOnly)
-					If opt\NoProgressBar Then
+					If opt\NoProgressBar
 						DownloadFile(ServerURI + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 					Else
 						DownloadFileThread(ServerURI + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
@@ -533,7 +538,7 @@ Function UpdateLanguageSelector%()
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 1)
-				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, lan\FlagImg)
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", 2, y - 195, 432, S2IMapGet(CountryFlags, lan\Flag))
 				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 432, 20)
 					DrawImage(ButtonImages, 410, y - 195 - CurrFontHeight, 5)
 					If MouseOn(430, y - CurrFontHeight, 21, 21)
@@ -569,7 +574,7 @@ Function UpdateLanguageSelector%()
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
 				Color(0, 0, 1)
-				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", LauncherWidth - 619, y, 432, lan\FlagImg)
+				LimitTextWithImage(lan\Name + "(" + lan\ID + ")", LauncherWidth - 619, y, 432, S2IMapGet(CountryFlags, lan\Flag))
 				If MouseOn(LauncherWidth - 620, y - CurrFontHeight, 430, 20)
 					DrawImage(ButtonImages, LauncherWidth - 210, y - 4, 5)
 					If MouseOn(LauncherWidth - 210, y - 4, 21, 21)
@@ -602,7 +607,7 @@ Function UpdateLanguageSelector%()
 		Color(100, 100, 100)
 		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
 			InfoBoxContent = GetLocalString("language", "downloading")
-			If Not opt\NoProgressBar Then UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "0%", Font_Default, False, True)
+			If (Not opt\NoProgressBar) Then UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "0%", Font_Default, False, True)
 			CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
 		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
 			If RequestLanguage\MajorOnly
@@ -611,10 +616,10 @@ Function UpdateLanguageSelector%()
 				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
 			EndIf
 		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
-			If Not opt\NoProgressBar Then
-				InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(FileSize(BasePath + "/local.zip")), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
-				UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Str(Int(Ceil((Float(FileSize(BasePath + "/local.zip")) / Float(RequestLanguage\FileSize)) * 100))) + "%", Font_Default, False, True)
-				If FileSize(BasePath + "/local.zip") >= RequestLanguage\FileSize Then CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+			If (Not opt\NoProgressBar)
+				InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(GetDownloadFileThreadSize()), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
+				UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Str(Int(Ceil((Float(GetDownloadFileThreadSize()) / Float(RequestLanguage\FileSize)) * 100))) + "%", Font_Default, False, True)
+				If GetDownloadFileThreadSize() >= RequestLanguage\FileSize Then CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 			Else
 				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
 			EndIf
@@ -631,6 +636,7 @@ Function UpdateLanguageSelector%()
 		
 		Color(0, 0, 1)
 		RowText(InfoBoxContent, LauncherWidth - 159, LauncherHeight - 281, 151, 102)
+		
 		Local NoProgressBar%
 		
 		If SelectedLanguage <> Null
@@ -655,12 +661,12 @@ Function UpdateLanguageSelector%()
 					EndIf
 				EndIf
 			Else
-				If (CurrentStatus = LANGUAGE_STATUS_NULL) Lor (CurrentStatus = LANGUAGE_STATUS_DONE) Then
+				If (CurrentStatus = LANGUAGE_STATUS_NULL) Lor (CurrentStatus = LANGUAGE_STATUS_DONE)
 					Color(255, 255, 255)
 					Text(LauncherWidth - 131, LauncherHeight - 148, GetLocalString("language", "speedup"), False, True)
 					NoProgressBar = UpdateLauncherTick(LauncherWidth - 161, LauncherHeight - 157, opt\NoProgressBar)
-					If NoProgressBar <> opt\NoProgressBar Then 
-						If NoProgressBar Then
+					If NoProgressBar <> opt\NoProgressBar
+						If NoProgressBar
 							Color(255, 255, 255)
 							Repeat
 								MousePosX = MouseX()
@@ -681,7 +687,7 @@ Function UpdateLanguageSelector%()
 								EndIf
 								Delay(10)
 								Flip(True)
-								Cls
+								Cls()
 							Forever
 						Else
 							opt\NoProgressBar = False
@@ -697,7 +703,6 @@ Function UpdateLanguageSelector%()
 		If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 65, 155, 30, GetLocalString("menu", "back"), Font_Default, ButtonImages, 0, IsDownloadingLanguage(CurrentStatus)) Then Exit
 		
 		If MouseHoverLanguage <> Null
-			Color(255, 255, 255)
 			Local Name$ = Format(GetLocalString("language", "name"), MouseHoverLanguage\Name)
 			Local ID$ = Format(GetLocalString("language", "id"), MouseHoverLanguage\ID)
 			Local Size$ = "", LastMod$ = ""
@@ -706,6 +711,7 @@ Function UpdateLanguageSelector%()
 			Local FontHeightVal% = FontHeight()
 			Local Height% = FontHeightVal * 4.5
 			
+			Color(255, 255, 255)
 			If MouseHoverLanguage\ID <> "en"
 				Author = Format(GetLocalString("language", "author"), MouseHoverLanguage\Author)
 				Prefect = Format(GetLocalString("language", "full"), GetLocalString("language", "yes")) ; ~ Get width only
@@ -713,7 +719,7 @@ Function UpdateLanguageSelector%()
 				Compatible = Format(GetLocalString("language", "compatible"), "v" + MouseHoverLanguage\Compatible)
 				
 				If MouseHoverLanguage\MajorOnly
-					Height = FontHeightVal * 10
+					Height = FontHeightVal * 8
 				Else
 					Size = Format(GetLocalString("language", "size"), SimpleFileSize(MouseHoverLanguage\FileSize))
 					LastMod = Format(GetLocalString("language", "lastmod"), MouseHoverLanguage\LastModify)
@@ -738,12 +744,12 @@ Function UpdateLanguageSelector%()
 				Else
 					DualColorText(x, y + 53, Format(GetLocalString("language", "full"), ""), GetLocalString("language", "no"), 255, 255, 255, 200, 0, 0)
 				EndIf
-				If MouseHoverLanguage\Compatible = VersionNumber
-					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 0, 200, 0)
-				Else
-					DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
-				EndIf
 				If (Not MouseHoverLanguage\MajorOnly)
+					If MouseHoverLanguage\Compatible = VersionNumber
+						DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 0, 200, 0)
+					Else
+						DualColorText(x, y + 68, Format(GetLocalString("language", "compatible"), ""), "v" + MouseHoverLanguage\Compatible, 255, 255, 255, 200, 0, 0)
+					EndIf
 					TextEx(x, y + 83, LastMod)
 					TextEx(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
 				EndIf
@@ -761,9 +767,10 @@ Function UpdateLanguageSelector%()
 	ScrollMenuHeight = 0.0
 	
 	For lan.ListLanguage = Each ListLanguage
-		If lan\FlagImg <> 0 Then FreeImage(lan\FlagImg) : lan\FlagImg = 0
+		FreeImage(S2IMapGet(CountryFlags, lan\Flag))
 		Delete(lan)
 	Next
+	DestroyS2IMap(CountryFlags) : CountryFlags = 0
 	
 	FreeImage(LanguageIMG) : LanguageIMG = 0
 	FreeImage(LanguageBG) : LanguageBG = 0
@@ -901,11 +908,9 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 	Rect(x + 2, y + 2, Width - 4, Height - 4)
 	
 	If Selected
-		If Highlight
-			Color(255, 255, 255)
-		Else
-			Color(200, 200, 200)
-		EndIf
+		Local Clr% = 200 + (55 * Highlight)
+		
+		Color(Clr, Clr, Clr)
 		RenderTiledImageRect(IMG, (x Mod 256), (y Mod 256), 512, 512, x + 4, y + 4, Width - 8, Height - 8)
 	EndIf
 	Color(255, 255, 255)
@@ -939,16 +944,16 @@ Function UpdateLauncherScrollBar#(Width%, Height%, BarX%, BarY%, BarWidth%, BarH
 	OnScrollBar = (mo\MouseDown1 And MouseOn(BarX, BarY, BarWidth, BarHeight))
 	If OnScrollBar
 		If Vertical
-			Return(Min(Max(Value + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
+			Return(Clamp(Value + MouseSpeedY / Float(Height - BarHeight), 0.0, 1.0))
 		Else
-			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
+			Return(Clamp(Value + MouseSpeedX / Float(Width - BarWidth), 0.0, 1.0))
 		EndIf
 	EndIf
 	
 	Local MouseSpeedZ# = MouseZSpeed()
 	
 	; ~ Only for vertical scroll bars
-	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
+	If MouseSpeedZ <> 0.0 Then Return(Clamp(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0, 1.0))
 	
 	Return(Value)
 End Function
@@ -989,20 +994,6 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 	Color(ColorR2, ColorG2, ColorB2)
 	TextEx(x + StringWidth(Txt1), y, Txt2)
 	Color(OldR, OldG, OldB)
-End Function
-
-Function SimpleFileSize$(Size%)
-	Local fSize# = Float(Size)
-	
-	If Size >= 1048576 ; >= 1 MB
-		If Size >= 1073741824 ; >= 1 GB
-			Return(Str(Ceil((fSize / 1024 / 1024 / 1024) * 100) / 100) + "GB")
-		Else
-			Return(Str(Ceil((fSize / 1024 / 1024) * 100) / 100) + "MB")
-		EndIf
-	Else
-		Return(Str(Ceil((fSize / 1024) * 100) / 100) + "KB")
-	EndIf
 End Function
 
 ;~IDEal Editor Parameters:

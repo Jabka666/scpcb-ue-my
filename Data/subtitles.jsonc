@@ -1546,7 +1546,7 @@
 		}
 	],
 	/* D-9341 */
-	"SFX\\SCP\\012\\Speech1.ogg": [
+	"SFX\\SCP\\012\\Speech0.ogg": [
 		{
 			"text": "A little... really...",
 			"delay": 1.47,
@@ -1558,7 +1558,7 @@
 			"color": "classd"
 		}
 	],
-	"SFX\\SCP\\012\\Speech2.ogg": [
+	"SFX\\SCP\\012\\Speech1.ogg": [
 		{
 			"text": "You really want to do it...",
 			"delay": 0.19,
@@ -1570,7 +1570,7 @@
 			"color": "classd"
 		}
 	],
-	"SFX\\SCP\\012\\Speech3.ogg": [
+	"SFX\\SCP\\012\\Speech2.ogg": [
 		{
 			"text": "I... I must do it...",
 			"delay": 5.45,
@@ -1582,14 +1582,14 @@
 			"color": "classd"
 		}
 	],
-	"SFX\\SCP\\012\\Speech4.ogg": [
+	"SFX\\SCP\\012\\Speech3.ogg": [
 		{
 			"text": "I... I... have... no... choice...",
 			"delay": 0.18,
 			"color": "classd"
 		}
 	],
-	"SFX\\SCP\\012\\Speech5.ogg": [
+	"SFX\\SCP\\012\\Speech4.ogg": [
 		{
 			"text": "Please...",
 			"color": "classd"
@@ -1605,7 +1605,7 @@
 			"color": "classd"
 		}
 	],
-	"SFX\\SCP\\012\\Speech6.ogg": [
+	"SFX\\SCP\\012\\Speech5.ogg": [
 		{
 			"text": "No... this... this is...",
 			"delay": 6.5,
@@ -1617,7 +1617,7 @@
 			"color": "classd"
 		}
 	],
-	"SFX\\SCP\\012\\Speech7.ogg": [
+	"SFX\\SCP\\012\\Speech6.ogg": [
 		{
 			"text": "Hahahahaha!",
 			"delay": 3.3,
@@ -1705,7 +1705,7 @@
 			"color": "announcement"
 		}
 	],
-	"SFX\\Character\\MTF\\AnnouncAfter1.ogg": [
+	"SFX\\Character\\MTF\\AnnouncAfter0.ogg": [
 		{
 			"text": "I would like to advise all surviving personnel, once again,",
 			"delay": 2.1,
@@ -1717,7 +1717,7 @@
 			"color": "announcement"
 		}
 	],
-	"SFX\\Character\\MTF\\AnnouncAfter2.ogg": [
+	"SFX\\Character\\MTF\\AnnouncAfter1.ogg": [
 		{
 			"text": "An announcement to all personnel: the lift to Gate B has been locked down to ensure the safety of the upper areas of the facility.",
 			"delay": 3.0,
@@ -2161,7 +2161,7 @@
 			"color": "mtf"
 		}
 	],
-	"SFX\\Character\\MTF\\049\\TargetTerminated.ogg": [
+	"SFX\\Character\\MTF\\049_2\\TargetTerminated.ogg": [
 		{
 			"text": "SCP-049-2 terminated.",
 			"color": "mtf"

@@ -1,12 +1,14 @@
 ; RapidBson - A part of BlitzToolbox
 ; A fast JSON parser/generator for Blitz3D with both SAX/DOM style API.
-; v1.0 2023.10.23
+; v1.0 2024.10.3
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 .lib "RapidBson.dll"
 
 JsonParseFromString%(json$):"_JsonParseFromString@4"
 JsonParseFromFile%(path$):"_JsonParseFromFile@4"
+JsonHasParseError%(document%):"_JsonHasParseError@4"
+JsonGetParseErrorCode%(document%):"_JsonGetParseErrorCode@4"
 JsonGetValue%(object%, name$):"_JsonGetValue@8"
 JsonIsString%(value%):"_JsonIsString@4"
 JsonIsInt%(value%):"_JsonIsInt@4"

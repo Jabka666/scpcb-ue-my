@@ -512,6 +512,7 @@
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
 		"blur": 15.0,
+		"death_message": "Subject D-9341 was found dead with the victim's organs and mouth cavity suffering numerous 4th degree burns and traces of molten gold in the stomach. A polystyrene cup was also located next to the subject's body. Cause of death is most likely linked to [DATA REDACTED].",
 		"death_timer": 5
 	},
 	{
@@ -846,6 +847,7 @@
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
 		"blur": 15.0,
+		"death_message": "Subject D-9341 was found dead with the victim's organs and mouth cavity suffering numerous 4th degree burns and traces of molten metal in the stomach. A polystyrene cup was also located next to the subject's body. Cause of death is most likely linked to [DATA REDACTED].",
 		"death_timer": 0.0
 	},
 	{
@@ -1308,7 +1310,7 @@
 		"name": ["Purple Drank", "Sizzurp", "Cough Syrup", "Lean"],
 		"color": [163, 73, 164],
 		"alpha": 0.8,
-		"dispense_sound": null,
+		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ew0.ogg",
 		"drink_message": "\"The drink tastes like cough syrup.\"",
 		"blur": 100.0
@@ -2071,7 +2073,7 @@
 		"name": ["Toilet Water", "Cologne"],
 		"color": [219, 217, 195],
 		"alpha": 0.2,
-		"dispense_sound": null,
+		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Spit.ogg",
 		"drink_message": "\"This drink made me not so smelly at all.\""
 	},
@@ -2498,6 +2500,7 @@
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
+		"death_message": "Subject D-9341 discovered dead with their lower mandible corroded off from a liquid presumably obtained from SCP-294.",
 		"death_timer": 0.0
 	},
 	{
@@ -2624,7 +2627,7 @@
 		"name": ["Strawberry Ice Cream", "Strawberry-banana Ice Cream", "Banana-strawberry Ice Cream", "Strawberry Yoghurt", "Strawberry Milk Cocktail", "Cherry Milk Cocktail", "Strawberry Pudding", "Cherry Pudding", "Сherry Yoghurt"],
 		"color": [255, 50, 50],
 		"alpha": 0.8,
-		"dispense_sound": null,
+		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
 		"drink_message": "\"So sweet.\""
 	},

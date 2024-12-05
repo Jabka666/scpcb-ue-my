@@ -1,27 +1,38 @@
 Function GenerateSeedNumber%(Seed$)
 	Local Temp% = 0
 	Local Shift% = 0
+	Local SeedLen% = Len(Seed)
 	Local i%
 	
-	For i = 1 To Len(Seed)
+	For i = 1 To SeedLen
 		Temp = Temp Xor (Asc(Mid(Seed, i, 1)) Shl Shift)
 		Shift = ((Shift + 1) Mod 24)
 	Next
 	Return(Temp)
 End Function
 
-Function WrapAngle#(Angle#)
-	If Angle = Infinity Then Return(0.0)
-	If Angle < 0.0
-		Return(360.0 + (Angle Mod 360.0))
+Function SimpleFileSize$(Size%)
+	Local fSize# = Float(Size)
+	
+	If Size >= 1048576 ; >= 1 MB
+		If Size >= 1073741824 ; >= 1 GB
+			Return(Str(Ceil((fSize / 1024 / 1024 / 1024) * 100) / 100) + "GB")
+		Else
+			Return(Str(Ceil((fSize / 1024 / 1024) * 100) / 100) + "MB")
+		EndIf
 	Else
-		Return(Angle Mod 360.0)
+		Return(Str(Ceil((fSize / 1024) * 100) / 100) + "KB")
 	EndIf
 End Function
 
+Function WrapAngle#(Angle#)
+	If Angle = Infinity Then Return(0.0)
+	Angle = Angle Mod 360
+	If Angle < 0.0 Then Return(Angle + 360)
+	Return(Angle)
+End Function
+
 Function CurveValue#(Value#, Old#, Smooth#)
-	If fps\Factor[0] = 0.0 Then Return(Old)
-	
 	Local Val# = Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0])
 	
 	If Value < Old
@@ -32,11 +43,7 @@ Function CurveValue#(Value#, Old#, Smooth#)
 End Function
 
 Function CurveAngle#(Value#, Old#, Smooth#)
-	If fps\Factor[0] = 0.0 Then Return(Old)
-	
-	Local Diff# = AngleDist(Value, Old)
-	
-	Return(WrapAngle(Old + Diff * (1.0 / Smooth * fps\Factor[0])))
+	Return(WrapAngle(Old + AngleDist(Value, Old) * (1.0 / Smooth * fps\Factor[0])))
 End Function
 
 Function PointDirection#(x1#, z1#, x2#, z2#)
@@ -53,7 +60,7 @@ Function AngleDist#(a0#, a1#)
 End Function
 
 Function FloatToString$(n#, Count%)
-	Return(Left(n, Len(Int(Str(n))) + Count + 1))
+	Return(Left(Str(n), Len(Int(n)) + Count + 1))
 End Function
 
 Function Chance%(Percent%)
@@ -120,8 +127,11 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	Local x2%, z2%
 	
 	If xt <> PlayerX Lor zt <> PlayerZ ; ~ The monster is not on the same tile as the player
-		For x2 = Max(xt - 1, 0) To Min(xt + 1, ForestGridSize - 1)
-			For z2 = Max(zt - 1, 0) To Min(zt + 1, ForestGridSize - 1)
+		Local ForX% = Max(xt - 1, 0), ToX% = Min(xt + 1, ForestGridSize - 1)
+		Local ForZ% = Max(zt - 1, 0), ToZ% = Min(zt + 1, ForestGridSize - 1)
+		
+		For x2 = ForX To ToX
+			For z2 = ForZ To ToZ
 				If fr\Grid[(z2 * ForestGridSize) + x2] > 0 And (x2 <> xt Lor z2 <> zt) And (x2 = xt Lor z2 = zt)
 					; ~ Tile (x2, z2) is closer to the player than the monsters current tile
 					If (Abs(PlayerX - x2) + Abs(PlayerZ - z2)) < (Abs(PlayerX - xt) + Abs(PlayerZ - zt))

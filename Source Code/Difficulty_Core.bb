@@ -9,6 +9,7 @@ Type Difficulty
 	Field InventorySlots%
 End Type
 
+Global DifficultyDMGMult#
 Global difficulties.Difficulty[5]
 
 Global SelectedDifficulty.Difficulty

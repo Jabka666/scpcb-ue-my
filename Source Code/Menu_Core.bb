@@ -318,6 +318,7 @@ Function UpdateMainMenu%()
 							If CurrSave\Name = "" Then CurrSave\Name = ConvertToANSI(GetLocalString("save", "untitled"))
 							CurrSave\Name = Trim(CurrSave\Name)
 							
+							RandomSeed = Trim(RandomSeed)
 							If RandomSeed = "" Then RandomSeed = MilliSecs()
 							
 							SeedRnd(GenerateSeedNumber(RandomSeed))
@@ -349,6 +350,7 @@ Function UpdateMainMenu%()
 							
 							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							
+							ShouldDeleteGadgets = True
 							MainMenuOpen = False
 							Return
 						EndIf
@@ -357,7 +359,8 @@ Function UpdateMainMenu%()
 						;[Block]
 						Height = 296 * MenuScale
 						
-						If mm\CurrMenuPage < Ceil(Float(SavedGamesAmount) / 5.0) - 1 And DelSave = Null
+						Temp = Ceil(Float(SavedGamesAmount) / 5.0) - 1
+						If mm\CurrMenuPage < Temp And DelSave = Null
 							If UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big) Then ChangePage(mm\CurrMenuPage + 1)
 						Else
 							UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big, False, True)
@@ -367,7 +370,7 @@ Function UpdateMainMenu%()
 						Else
 							UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", Font_Default_Big, False, True)
 						EndIf
-						If mm\CurrMenuPage > Ceil(Float(SavedGamesAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
+						If mm\CurrMenuPage > Temp Then ChangePage(mm\CurrMenuPage - 1)
 						
 						If SavedGamesAmount > 0
 							x = x + (20 * MenuScale)
@@ -430,7 +433,8 @@ Function UpdateMainMenu%()
 						;[Block]
 						Height = 350 * MenuScale
 						
-						If mm\CurrMenuPage < Ceil(Float(CustomMapsAmount) / 5.0) - 1 And DelCustomMap = Null
+						Temp = Ceil(Float(CustomMapsAmount) / 5.0) - 1
+						If mm\CurrMenuPage < Temp And DelCustomMap = Null
 							If UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big) Then ChangePage(mm\CurrMenuPage + 1)
 						Else
 							UpdateMenuButton(x + Width - (50 * MenuScale), y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, ">", Font_Default_Big, False, True)
@@ -440,7 +444,7 @@ Function UpdateMainMenu%()
 						Else
 							UpdateMenuButton(x, y + (440 * MenuScale), 50 * MenuScale, 50 * MenuScale, "<", Font_Default_Big, False, True)
 						EndIf
-						If mm\CurrMenuPage > Ceil(Float(CustomMapsAmount) / 5.0) - 1 Then ChangePage(mm\CurrMenuPage - 1)
+						If mm\CurrMenuPage > Temp Then ChangePage(mm\CurrMenuPage - 1)
 						
 						If CustomMapsAmount > 0
 							x = x + (20 * MenuScale)
@@ -901,8 +905,11 @@ Function UpdateMainMenu%()
 						
 						If PrevCurrFrameLimit Lor PrevCanOpenConsole Then ShouldDeleteGadgets = ((PrevCurrFrameLimit <> opt\CurrFrameLimit) Lor (PrevCanOpenConsole <> opt\CanOpenConsole))
 						
-						
 						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
 						
 						y = y + (30 * MenuScale)
 						
@@ -1008,6 +1015,7 @@ Function RenderMainMenu%()
 	Local x%, y%, Width%, Height%, Temp%, i%
 	Local tX#, tY#, tW#, tH#
 	Local TempStr$, TempStr2$, Name$
+	Local Clr%
 	
 	If (Not OnPalette)
 		ShowPointer()
@@ -1326,11 +1334,8 @@ Function RenderMainMenu%()
 							If i >= (5 * mm\CurrMenuPage)
 								RenderFrame(x, y, 540 * MenuScale, 70 * MenuScale)
 								
-								If CurrSave\Version <> VersionNumber
-									Color(255, 0, 0)
-								Else
-									Color(255, 255, 255)
-								EndIf
+								Clr = 255 - (255 * (CurrSave\Version <> VersionNumber))
+								Color(255, Clr, Clr)
 								
 								Name = ConvertToUTF8(CurrSave\Name)
 								If Len(Name) > 10
@@ -1351,9 +1356,9 @@ Function RenderMainMenu%()
 								If CurrSave\Version <> VersionNumber
 									Color(255, 0, 0)
 								Else
-									For i = SAFE To ESOTERIC
-										If CurrSave\Difficulty = difficulties[i]\Name
-											Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
+									For Temp = SAFE To ESOTERIC
+										If CurrSave\Difficulty = difficulties[Temp]\Name
+											Color(difficulties[Temp]\R, difficulties[Temp]\G, difficulties[Temp]\B)
 											Exit
 										EndIf
 									Next
@@ -1470,7 +1475,8 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)), 255 - (155 * (opt\DisplayMode <> 0)))
+					Clr = 255 - 155 * (opt\DisplayMode <> 0)
+					Color(Clr, Clr, Clr)
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 					
@@ -1675,7 +1681,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Advanced
 					;[Block]
-					Height = (430 - (50.0 * (opt\CurrFrameLimit = 0.0))) * MenuScale
+					Height = (460 - (50.0 * (opt\CurrFrameLimit = 0.0))) * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (20 * MenuScale)
@@ -1728,6 +1734,12 @@ Function RenderMainMenu%()
 					Color(255, 255, 255)
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
+					
+					y = y + (30 * MenuScale)
+					
+					Color(255, 255, 255)
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
+					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
 					
 					y = y + (30 * MenuScale)
 					
@@ -1812,6 +1824,8 @@ Global Descriptions%, DescriptionIndex%
 Global ImageAlignX$, ImageAlignY$
 Global CWMText$
 
+Global InitializeIntroMovie% = False
+
 Function RenderLoading%(Percent%, Assets$ = "")
 	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
 	
@@ -1833,10 +1847,10 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			EndIf
 			ImageAlignX = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_x"))
 			ImageAlignY = JsonGetString(JsonGetValue(SelectedLoadingScreens, "align_y"))
-			LoadingImage = ScaleImageEx(LoadImage_Strict("LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image"))), MenuScale, MenuScale)
+			LoadingImage = ScaleImageEx(LoadImage_Strict("GFX\LoadingScreens\" + JsonGetString(JsonGetValue(SelectedLoadingScreens, "image"))), MenuScale, MenuScale)
 			If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
 				If LoadingBack = 0
-					LoadingBack = ScaleImageEx(LoadImage_Strict("LoadingScreens\loading_back.png"), MenuScale, MenuScale)
+					LoadingBack = ScaleImageEx(LoadImage_Strict("GFX\LoadingScreens\loading_back.png"), MenuScale, MenuScale)
 					LoadingBackWidth = ImageWidth(LoadingBack) / 2
 					LoadingBackHeight = ImageHeight(LoadingBack) / 2
 				EndIf
@@ -1847,8 +1861,9 @@ Function RenderLoading%(Percent%, Assets$ = "")
 	FirstLoop = True
 	
 	Local DescrArraySize% = JsonGetArraySize(Descriptions)
+	Local IsCWM% = (LoadingScreenTitle = "CWM")
 	
-	Repeat 
+	Repeat
 		ClsColor(0, 0, 0)
 		Cls()
 		
@@ -1888,11 +1903,11 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		SetFontEx(fo\FontID[Font_Default])
 		TextEx(x + (Width / 2), opt\GraphicHeight - (70 * MenuScale), Percent + "%", True, True)
 		
-		If LoadingScreenTitle = "CWM"
+		If IsCWM
 			If FirstLoop
 				If Percent = 0
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm0.cwm"))
-				ElseIf Percent = 100
+				ElseIf Percent = 100 And (Not InitializeIntroMovie)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
 				EndIf
 			EndIf
@@ -1993,7 +2008,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			
 			ResetInput()
 		Else
-			If LoadingScreenTitle = "CWM"
+			If IsCWM
 				StrTemp = GetLocalString("menu", "wakeup")
 			Else
 				If FirstLoop Then PlaySound_Strict(LoadTempSound(("SFX\Horror\Horror8.ogg")))
@@ -2011,7 +2026,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		Local Close% = False
 		
-		If GetKey() <> 0 Lor MouseHit(1)
+		If (InitializeIntroMovie And IsCWM) Lor GetKey() <> 0 Lor MouseHit(1)
 			ResetLoadingTextColor()
 			ResetInput()
 			ResetTimingAccumulator()
@@ -2026,6 +2041,10 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			ImageAlignX = "" : ImageAlignY = ""
 		EndIf
 	Until Close
+	If (InitializeIntroMovie And IsCWM) And opt\IntroEnabled And Percent = 100
+		StopStream_Strict(MusicCHN) : MusicCHN = 0
+		PlayMovie("startup_Intro")
+	EndIf
 	
 	CatchErrors("Uncaught: RenderLoading(" + Percent + ", " + Assets + ")")
 End Function
@@ -2071,7 +2090,9 @@ Function RenderBar%(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% 
 		Color(R, G, B)
 		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), Height - (6 * MenuScale))
 	Else
-		For i = 1 To Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)) / MenuScale)
+		Local ArrayTo% = Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)) / MenuScale)
+		
+		For i = 1 To ArrayTo
 			DrawBlock(Img, x + ((3 + (10 * (i - 1))) * MenuScale), y + (3 * MenuScale))
 		Next
 	EndIf
@@ -2219,11 +2240,9 @@ Function RenderMenuTicks%()
 		RenderTiledImageRect(IMG, (mt\x Mod 256), (mt\y Mod 256), 512, 512, mt\x, mt\y, Width, Height)
 		
 		Local Highlight% = MouseOn(mt\x, mt\y, Width, Height)
-		Local ColorR% = 0, ColorG% = 0, ColorB% = 0
+		Local ColorR% = 50 * Highlight, ColorG% = 50 * Highlight, ColorB% = 50 * Highlight
 		
-		If Highlight Then ColorR = 50 : ColorG = 50 : ColorB = 50
 		Color(ColorR, ColorG, ColorB)
-		
 		Rect(mt\x + 2, mt\y + 2, Width - 4, Height - 4)
 		
 		If mt\Selected
@@ -2280,11 +2299,13 @@ Function RenderMenuPalettes%()
 		DrawImage(mp\Img, mp\x, mp\y)
 		If MouseOn(mp\x, mp\y, mp\Width, mp\Height)
 			If mo\MouseDown1 And OnSliderID = 0
-				LockBuffer(BackBuffer())
+				Local BufferBack% = BackBuffer()
 				
-				Local Pixel% = ReadPixelFast(MousePosX, MousePosY, BackBuffer())
+				LockBuffer(BufferBack)
 				
-				UnlockBuffer(BackBuffer())
+				Local Pixel% = ReadPixelFast(MousePosX, MousePosY, BufferBack)
+				
+				UnlockBuffer(BufferBack)
 				opt\SubColorR = ReadPixelColor(Pixel, 16)
 				opt\SubColorG = ReadPixelColor(Pixel, 8)
 				opt\SubColorB = ReadPixelColor(Pixel, 0)
@@ -2326,20 +2347,27 @@ Function UpdateInput$(aString$, MaxChr%)
 		If Value = 31 Then CursorPos = 0 ; ~ Control & Left arrow
 		If Value = 3 Then SetClipboardContents(aString) ; ~ Control & C
 		If Value = 22 ; ~ Control & V
-			aString = Left(aString, CursorPos) + GetClipboardContents() + Right(aString, Length - CursorPos)
-			CursorPos = CursorPos + Len(aString) - Length
-			If MaxChr > 0 And MaxChr < Len(aString) Then aString = Left(aString, MaxChr) : CursorPos = MaxChr
+			Local Clipboard$ = GetClipboardContents()
+			
+			If Clipboard <> ""
+				aString = Left(aString, CursorPos) + Clipboard + Right(aString, Length - CursorPos)
+				CursorPos = CursorPos + Len(Clipboard)
+				If MaxChr > 0 And MaxChr < Len(aString)
+					aString = Left(aString, MaxChr) 
+					CursorPos = MaxChr
+				EndIf
+			EndIf
 		EndIf
 		Return(aString)
 	EndIf
 	
-	If Value = 30 Then
-		CursorPos = CursorPos + 1
+	If Value = 30
+		CursorPos = Min(CursorPos + 1, Length)
 		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
-	If Value = 31 Then
-		CursorPos = CursorPos - 1
+	If Value = 31
+		CursorPos = Max(CursorPos - 1, 0)
 		PrevInputBoxCtrl = MilliSecs()
 		Return(aString)
 	EndIf
@@ -2364,7 +2392,7 @@ Function UpdateInput$(aString$, MaxChr%)
 		CursorPos = CursorPos + Len(aString) - Length
 		If MaxChr > 0 And MaxChr < Len(aString)
 			aString = Left(aString, MaxChr)
-			CursorPos = MaxChr
+			CursorPos = Min(CursorPos, MaxChr)
 		EndIf
 	EndIf
 	Return(aString)
@@ -2475,8 +2503,8 @@ Function UpdateMenuSlideBar#(x%, y%, Width%, Value#, ID%)
 	If mo\MouseDown1 And OnSliderID = 0
 		If MouseOn(x, y, Width + (14 * MenuScale), (20 * MenuScale)) Then OnSliderID = ID
 	EndIf
-	If ID = OnSliderID Then Value = Min(Max((MousePosX - x) * 100.0 / Width, 0.0), 100.0)
-	Return(Value)
+	If ID = OnSliderID Then Value = Clamp((MousePosX - x) * 100.0 / Width, 0.0, 100.0)
+	Return(Floor(Value))
 End Function
 
 Function RenderMenuSlideBars%()
@@ -2722,16 +2750,16 @@ Global ScrollMenuHeight# = 0.0
 ;			EndIf
 ;		EndIf
 ;		If (Not Vertical)
-;			Return(Min(Max(Value + MouseSpeedX / Float(Width - BarWidth), 0.0), 1.0))
+;			Return(Clamp(Value + MouseSpeedX / Float(Width - BarWidth), 0.0, 1.0))
 ;		Else
-;			Return(Min(Max(Value + MouseSpeedY / Float(Height - BarHeight), 0.0), 1.0))
+;			Return(Clamp(Value + MouseSpeedY / Float(Height - BarHeight), 0.0, 1.0))
 ;		EndIf
 ;	EndIf
 ;	
 ;	Local MouseSpeedZ# = MouseZSpeed()
 ;	
 ;	; ~ Only for vertical scroll bars
-;	If MouseSpeedZ <> 0.0 Then Return(Min(Max(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0), 1.0))
+;	If MouseSpeedZ <> 0.0 Then Return(Clamp(Value - (MouseSpeedZ * 3.0) / Float(Height - BarHeight), 0.0, 1.0))
 ;	
 ;	Return(Value)
 ;End Function
@@ -2918,32 +2946,33 @@ Const Tooltip_VoiceVolume% = 15
 Const Tooltip_SoundAutoRelease% = 16
 Const Tooltip_UserTracksMode% = 17
 Const Tooltip_UserTrackScan% = 18
+Const Tooltip_Subtitles% = 19
+Const Tooltip_SubtitlesColor% = 20
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 19
-Const Tooltip_MouseSmoothing% = 20
-Const Tooltip_MouseInvertX% = 21
-Const Tooltip_MouseInvertY% = 22
-Const Tooltip_ControlConfiguration% = 23
+Const Tooltip_MouseSensitivity% = 21
+Const Tooltip_MouseSmoothing% = 22
+Const Tooltip_MouseInvertX% = 23
+Const Tooltip_MouseInvertY% = 24
+Const Tooltip_ControlConfiguration% = 25
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 24
-Const Tooltip_Console% = 25
-Const Tooltip_ConsoleOnError% = 26
-Const Tooltip_AchievementPopups% = 27
-Const Tooltip_FPS% = 28
-Const Tooltip_FrameLimit% = 29
-Const Tooltip_AutoSave% = 30
-Const Tooltip_SmoothBars% = 31
-Const Tooltip_StartupVideos% = 32
-Const Tooltip_Launcher% = 33
-Const Tooltip_Subtitles% = 34
-Const Tooltip_SubtitlesColor% = 35
-Const Tooltip_ResetOptions% = 36
+Const Tooltip_HUD% = 26
+Const Tooltip_Console% = 27
+Const Tooltip_ConsoleOnError% = 28
+Const Tooltip_AchievementPopups% = 29
+Const Tooltip_FPS% = 30
+Const Tooltip_FrameLimit% = 31
+Const Tooltip_AutoSave% = 32
+Const Tooltip_SmoothBars% = 33
+Const Tooltip_Vignette% = 34
+Const Tooltip_StartupVideos% = 35
+Const Tooltip_Launcher% = 36
+Const Tooltip_ResetOptions% = 37
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3145,6 +3174,10 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_SmoothBars
 			;[Block]
 			Txt = GetLocalString("tooltip", "bar")
+			;[End Block]
+		Case Tooltip_Vignette
+			;[Block]
+			Txt = GetLocalString("tooltip", "vignette")
 			;[End Block]
 		Case Tooltip_StartupVideos
 			;[Block]

@@ -47,7 +47,7 @@ End Type
 
 Global ParticleCam%
 Global ParticlePiv%
-Global ParticleEffect%[20]
+Global ParticleEffect%[21]
 Global UpdateDevilParticlesTimer# = 0.0
 
 Function CreateTemplate()
@@ -333,11 +333,8 @@ Function UpdateParticles_Devil()
 	For emit.Emitter = Each Emitter
 		ClearSurface(emit\Surf)
 		If emit\MaxTime > -1
-			If emit\Age > emit\MaxTime
-				emit\Del = True
-			Else
-				emit\Age = emit\Age + 1
-			EndIf
+			emit\Age = emit\Age + 1
+			If emit\Age > emit\MaxTime Then emit\Del = True
 		EndIf
 		If fps\Factor[0] > 0.0 And (emit\room = Null Lor (PlayerRoom = emit\room Lor emit\room\Dist < 8.0))
 			If emit\tmp\MaxParticles > -1

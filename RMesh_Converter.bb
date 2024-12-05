@@ -1,4 +1,4 @@
-; ~ Converter Universal for SCP - Containment Breach Ultimate Edition Reborn v1.3.2
+; ~ Converter Universal for SCP - Containment Breach Ultimate Edition Reborn v1.4.1
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -625,6 +625,4 @@ Delay(1000)
 End()
 
 ;~IDEal Editor Parameters:
-;~F#5#9#D#11#15#21#25#30#48#5A#6C#7F#9B#B4#C8#CF#D5#158#166#170
-;~F#178#184#190#1A0#1AB#1AF#1D2#1FA#1FE
 ;~C#Blitz3D_TSS

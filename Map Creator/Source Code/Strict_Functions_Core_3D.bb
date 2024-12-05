@@ -105,5 +105,4 @@ Function LoadImage_Strict%(File$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#7#46#52#5E
 ;~C#Blitz3D TSS

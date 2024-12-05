@@ -159,7 +159,6 @@ Function PauseSounds%()
 	For d.Doors = Each Doors
 		PauseChannel(d\SoundCHN)
 		PauseChannel(d\SoundCHN2)
-		PauseChannel(d\ButtonCHN)
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
@@ -233,7 +232,6 @@ Function ResumeSounds%()
 	For d.Doors = Each Doors
 		ResumeChannel(d\SoundCHN)
 		ResumeChannel(d\SoundCHN2)
-		ResumeChannel(d\ButtonCHN)
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
@@ -319,7 +317,6 @@ Function KillSounds%(EraseSounds% = True)
 	For d.Doors = Each Doors
 		StopChannel(d\SoundCHN) : d\SoundCHN = 0
 		StopChannel(d\SoundCHN2) : d\SoundCHN2 = 0
-		StopChannel(d\ButtonCHN) : d\ButtonCHN = 0
 	Next
 	
 	For sc.SecurityCams = Each SecurityCams
@@ -385,30 +382,29 @@ Function StopBreathSound%()
 End Function
 
 Function GetStepSound%(Entity%)
-	Local mat.Materials
-	Local Texture%, Name$
 	Local Picker% = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0.0, -1.0, 0.0)
 	
 	If Picker <> 0
 		If GetEntityType(Picker) <> HIT_MAP Then Return(0)
 		
-		Local Brush = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
+		Local Brush% = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
 		
 		If Brush <> 0
 			Local i%
 			
 			For i = 3 To 1 Step -1
-				Texture = GetBrushTexture(Brush, i)
+				Local Texture% = GetBrushTexture(Brush, i)
+				
 				If Texture <> 0
-					Name = StripPath(TextureName(Texture))
+					Local TexName$ = StripPath(TextureName(Texture))
+					Local mat.Materials
 					
-					If Name <> "" 
-					    FreeTexture(Texture) : Texture = 0
-					    
+					FreeTexture(Texture) : Texture = 0
+					If TexName <> "" 
 						For mat.Materials = Each Materials
-							If mat\Name = Name
+							If mat\Name = TexName
 								FreeBrush(Brush) : Brush = 0
-								If mat\StepSound > 0 Then Return(mat\StepSound - 1)
+								Return(mat\StepSound)
 								Exit
 							EndIf
 						Next
@@ -451,16 +447,15 @@ Function PlayStepSound%(IncludeSprint% = True)
 	End Select
 	
 	TempCHN = PlaySound_Strict(StepSFX(Temp, (IncludeSprint And SoundHasSprint), SoundRand))
-	ChannelVolume(TempCHN, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+	
+	Local SoundVol# = (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume
+	
+	ChannelVolume(TempCHN, SoundVol)
 	If DecalStep = 2 And Temp <> 5
 		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)))
-		ChannelVolume(TempCHN2, (1.0 - (me\Crouch * 0.6)) * opt\SFXVolume * opt\MasterVolume)
+		ChannelVolume(TempCHN2, SoundVol)
 	EndIf
-	If IncludeSprint
-		me\SndVolume = Max(4.0, me\SndVolume)
-	Else
-		me\SndVolume = Max(2.5 - (me\Crouch * 0.6), me\SndVolume)
-	EndIf
+	me\SndVolume = Max(4.0 * IncludeSprint + (1 - IncludeSprint) * (2.5 - me\Crouch * 0.7), me\SndVolume)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
@@ -474,31 +469,29 @@ Function UpdateStreamSounds%()
 	Local e.Events
 	
 	If fps\Factor[0] > 0.0
-		If IntercomStreamCHN <> 0 Then SetStreamVolume_Strict(IntercomStreamCHN, opt\VoiceVolume * opt\MasterVolume)
+		Local InReachable% = (Not PlayerInReachableRoom(True)) And (Not IsPlayerOutsideFacility())
+		
+		If IntercomStreamCHN <> 0
+			SetStreamVolume_Strict(IntercomStreamCHN, opt\VoiceVolume * opt\MasterVolume)
+			If InReachable Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
+		EndIf
+		
+		Local SFXVol# = opt\SFXVolume * opt\MasterVolume
+		
 		For e.Events = Each Events
 			If e\SoundCHN_IsStream
-				If e\SoundCHN <> 0 Then SetStreamVolume_Strict(e\SoundCHN, opt\SFXVolume * opt\MasterVolume)
+				If e\SoundCHN <> 0
+					SetStreamVolume_Strict(e\SoundCHN, SFXVol)
+					If InReachable And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+				EndIf
 			EndIf
 			If e\SoundCHN2_IsStream
-				If e\SoundCHN2 <> 0 Then SetStreamVolume_Strict(e\SoundCHN2, opt\SFXVolume * opt\MasterVolume)
+				If e\SoundCHN2 <> 0
+					SetStreamVolume_Strict(e\SoundCHN2, SFXVol)
+					If InReachable And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
+				EndIf
 			EndIf
 		Next
-	EndIf
-	
-	If (Not PlayerInReachableRoom(True))
-		If (Not IsPlayerOutsideFacility())
-			If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
-			If PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
-				For e.Events = Each Events
-					If e\SoundCHN_IsStream
-						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
-					EndIf
-					If e\SoundCHN2_IsStream
-						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
-					EndIf
-				Next
-			EndIf
-		EndIf
 	EndIf
 End Function
 

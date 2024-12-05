@@ -34,5 +34,4 @@ Function LoadMaterials%(File$)
 End Function
 
 ;~IDEal Editor Parameters:
-;~F#0#8
 ;~C#Blitz3D TSS
