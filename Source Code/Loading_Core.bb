@@ -732,7 +732,7 @@ Function RemoveMonitorInstances%()
 	Delete(mon_I) : mon_I = Null
 End Function
 
-Const MaxNPCModelIDAmount% = 33
+Const MaxNPCModelIDAmount% = 32
 Const MaxNPCTextureID% = 19
 
 Type NPCInstance
@@ -783,7 +783,6 @@ Const NPC_GUARD_MODEL% = 28
 Const NPC_MTF_MODEL% = 29
 Const NPC_NAZI_MODEL% = 30
 Const NPC_VEHICLE_MODEL% = 31
-Const NPC_789_J_MODEL% = 32
 ;[End Block]
 
 ; ~ NPC Texture ID Constants
@@ -871,8 +870,6 @@ Function LoadNPCs%()
 	n_I\NPCModelID[NPC_NAZI_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\nazi_officer.b3d")
 	
 	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\vehicle.b3d")
-	
-	n_I\NPCModelID[NPC_789_J_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\scp_789_j.b3d")
 	
 	For i = 0 To MaxNPCModelIDAmount - 2 Step 2
 		HideEntity(n_I\NPCModelID[i])

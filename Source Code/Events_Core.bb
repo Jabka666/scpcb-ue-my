@@ -3155,7 +3155,7 @@ Function UpdateEvents%()
 					Case 0.0
 						;[Block]
 						If e\room\Dist < 6.0 And e\room\Dist > 0.0
-							TFormPoint(1322.0, 52.0, 491.0, e\room\OBJ, 0)
+							TFormPoint(1322.0, 54.0, 491.0, e\room\OBJ, 0)
 							e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
 							SetNPCFrame(e\room\NPC[0], 287.0)
