@@ -6,6 +6,9 @@
 - Battery issues caused by having multiple night vision devices.
 - Corrosive door textures not saving correctly.
 
+[Bug Fixes]
+- Fixed SCP-789-J trigger distance.
+
 {v1.4}
 
 [Global]

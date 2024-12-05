@@ -3129,7 +3129,7 @@ Function UpdateEvents%()
 					Case 1.0
 						;[Block]
 						If PlayerRoom = e\room
-							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 4.0
+							If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 2.25
 								GiveAchievement("789j")
 								e\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\Joke\789J.ogg"), Camera, e\room\Objects[0], 10.0, 1.0, True)
 								
