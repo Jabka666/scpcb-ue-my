@@ -10,6 +10,7 @@
 - Fixed SCP-789-J trigger distance.
 - Fixed mask of the Old Badge and the Ticket.
 - Fixed toilet not spawning in «room2_6_ez».
+- Fixed «spawn 106» console command.
 
 {v1.4}
 

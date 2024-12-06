@@ -1350,6 +1350,7 @@ End Function
 Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 	Local n.NPCs
 	Local ConsoleMsg$
+	Local PlayerPosX#, PlayerPosY#, PlayerPosZ#
 	
 	Select Name 
 		Case "008", "008zombie", "008-1", "infectedhuman", "humaninfected", "scp008-1", "scp-008-1", "scp0081", "0081", "scp-0081", "008_1", "scp_008_1"
@@ -1388,8 +1389,10 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "106", "scp106", "scp-106", "larry", "oldman"
 			;[Block]
-			n.NPCs = CreateNPC(NPCType106, EntityX(me\Collider), EntityY(me\Collider) - 0.5, EntityZ(me\Collider))
-			n\State = -1.0
+			PlayerPosX = EntityX(me\Collider) : PlayerPosY = EntityY(me\Collider) : PlayerPosZ = EntityZ(me\Collider)
+			n.NPCs = CreateNPC(NPCType106, PlayerPosX, PlayerPosY, PlayerPosZ)
+			n\EnemyX = PlayerPosX : n\EnemyY = PlayerPosY : n\EnemyZ = PlayerPosZ
+			n\State = 2.0
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-106")
 			;[End Block]
 		Case "173", "scp173", "scp-173", "statue", "sculpture"
