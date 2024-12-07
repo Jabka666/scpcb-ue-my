@@ -1,5 +1,8 @@
 {v1.4.1}
 
+[Global]
+- Removed buttons glowing.
+
 [Known issues]
 - Rooms can overlap and block the way.
 - Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.

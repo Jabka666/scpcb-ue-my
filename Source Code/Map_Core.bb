@@ -2596,7 +2596,6 @@ Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw
 	PositionEntity(OBJ, x, y, z)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
 	EntityPickMode(OBJ, 2)
-	EntityFX(OBJ, 8)
 	If Locked Then EntityTexture(OBJ, d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
 	If Parent <> 0 Then EntityParent(OBJ, Parent)
 	
