@@ -7108,7 +7108,7 @@ Function UpdateEvents%()
 						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 						EntityParent(e\room\Objects[1], e\room\OBJ)
 					Else
-						If InteractObject(e\room\Objects[1], 0.5)
+						If InteractObject(e\room\Objects[1], 0.8)
 							CreateMsg(GetLocalString("msg", "breeze"))
 							me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 							me\Bloodloss = 0.0
@@ -7201,7 +7201,7 @@ Function UpdateEvents%()
 						EntityRadius(e\room\Objects[1], 0.3)
 						EntityParent(e\room\Objects[1], e\room\OBJ)
 					Else
-						If InteractObject(e\room\Objects[1], 0.5)
+						If InteractObject(e\room\Objects[1], 0.8)
 							CreateMsg(GetLocalString("msg", "duck"))
 							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
 						EndIf
