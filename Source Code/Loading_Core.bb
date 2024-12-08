@@ -1226,7 +1226,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "key0"), "Level 0 Key Card", it_key0, "key_card.b3d", "INV_key_card_lvl_0.png", "", 0.00037, 1)
 	CreateItemTemplate(GetLocalString("items", "key0"), "Level 0 Key Card", it_key0_bloody, "key_card.b3d", "INV_key_card_lvl_0_bloody.png", "", 0.00037, 1, "key_card_lvl_0_bloody.png") ; ~ Such a stupid way
 	CreateItemTemplate(GetLocalString("items", "key1"), "Level 1 key Card", it_key1, "key_card.b3d", "INV_key_card_lvl_1.png", "", 0.00037, 1, "key_card_lvl_1.png")
-	CreateItemTemplate(GetLocalString("items", "key1"), "Level 1 key Card", it_key1_bloody, "key_card.b3d", "INV_key_card_lvl_1_bloody.png", "", 0.00037, 1, "key_card_lvl_1_bloody.png")
+	CreateItemTemplate(GetLocalString("items", "key1"), "Level 1 key Card", it_key1_bloody, "key_card.b3d", "INV_key_card_lvl_1_bloody.png", "", 0.00037, 1, "key_card_lvl_1_bloody.png") ; ~ Such a stupid way
 	CreateItemTemplate(GetLocalString("items", "key2"), "Level 2 key Card", it_key2, "key_card.b3d", "INV_key_card_lvl_2.png", "", 0.00037, 1, "key_card_lvl_2.png")
 	CreateItemTemplate(GetLocalString("items", "key3"), "Level 3 key Card", it_key3, "key_card.b3d", "INV_key_card_lvl_3.png", "", 0.00037, 1, "key_card_lvl_3.png")
 	CreateItemTemplate(GetLocalString("items", "key3"), "Level 3 key Card", it_key3_bloody, "key_card.b3d", "INV_key_card_lvl_3_bloody.png", "", 0.00037, 1, "key_card_lvl_3_bloody.png") ; ~ Such a stupid way

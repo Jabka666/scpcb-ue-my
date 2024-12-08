@@ -175,10 +175,13 @@ Const it_pizza% = 109
 ;[End Block]
 ;[End Block]
 
+Const ItemHUDTexturePathLen% = 23
+
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
 	Local it.ItemTemplates, it2.ItemTemplates
 	
 	it.ItemTemplates = New ItemTemplates
+	
 	; ~ If another item shares the same object, copy it
 	OBJPath = ItemsPath + OBJPath
 	For it2.ItemTemplates = Each ItemTemplates
@@ -195,6 +198,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 			it\OBJ = LoadMesh_Strict(OBJPath)
 		EndIf
 	EndIf
+	
 	it\IsAnim = HasAnim
 	it\OBJPath = OBJPath
 	
@@ -213,21 +217,21 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 			EndIf
 		Next
 		If Texture = 0
-			If Left(TexturePath, Len(ItemHUDTexturePath)) = ItemHUDTexturePath
+			If Left(TexturePath, ItemHUDTexturePathLen) = ItemHUDTexturePath
 				Texture = GetRescaledTexture(TexturePath, TexFlags, 256, 256)
 			Else
 				Texture = LoadTexture_Strict(TexturePath, TexFlags)
 			EndIf
 			it\TexPath = TexturePath
+			EntityTexture(it\OBJ, Texture)
+			it\Tex = Texture
 		EndIf
-		EntityTexture(it\OBJ, Texture)
-		it\Tex = Texture
 	EndIf
 	
-	it\Scale = Scale
 	ScaleEntity(it\OBJ, Scale, Scale, Scale, True)
+	it\Scale = Scale
 	
-	; ~ If another item shares the same object, copy it
+	; ~ If another item shares the same inv icon, copy it
 	InvImgPath = ItemINVIconPath + InvImgPath
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\InvImgPath = InvImgPath And it2\InvImg <> 0
@@ -246,8 +250,6 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 			InvImgPath2 = ItemINVIconPath + InvImgPath2
 			it\InvImg2 = ScaleImageEx(LoadImage_Strict(InvImgPath2), MenuScale, MenuScale)
 		EndIf
-	Else
-		it\InvImg2 = 0
 	EndIf
 	
 	If ImgPath <> ""
