@@ -20,11 +20,29 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 256.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 640.0 * RoomScale, 20.0)
 			sc\Angle = 180.0 : sc\Turn = 45.0
 			
+			; Clock
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\watches.b3d")
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			RotateEntity(r\Objects[0], 0.0, 128.0, 270.0)
 			PositionEntity(r\Objects[0], r\x - 659.0 * RoomScale, r\y + 133.0 * RoomScale, r\z + 207.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
+			
+			; ~ Ordinary duck
+			r\Objects[1] = LoadMesh_Strict("GFX\Map\Props\rubber_duck.b3d")
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			RotateEntity(r\Objects[1], 0.0, 260.0, 0.0)
+			PositionEntity(r\Objects[1], r\x - 659.0 * RoomScale, r\y + 133.0 * RoomScale, r\z + 446.0 * RoomScale)
+			EntityRadius(r\Objects[1], 0.2)
+			EntityPickMode(r\Objects[1], 1)
+			EntityParent(r\Objects[1], r\OBJ)
+			
+			; ~ Penny
+			r\Objects[2] = LoadAnimMesh_Strict("GFX\Map\Props\penny.b3d")
+			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[2], r\x - 615.0 * RoomScale, r\y + 133.0 * RoomScale, r\z - 146.0 * RoomScale)
+			EntityRadius(r\Objects[2], 0.2)
+			EntityPickMode(r\Objects[2], 1)
+			EntityParent(r\Objects[2], r\OBJ)
 			
 			If KEY2_SPAWNRATE = 6
 				it.Items = CreateItem("White Key", it_key_white, r\x - 529.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 585.0 * RoomScale)

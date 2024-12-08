@@ -5,6 +5,7 @@
 - SCP-895 can effect monitors once player leaves SCP-173's room.
 - Increase range to interact with ducks.
 - Updated SCP-895's overlay textures.
+- Added penny.
 
 [Bug Fixes]
 - Fixed SCP-789-J trigger distance.

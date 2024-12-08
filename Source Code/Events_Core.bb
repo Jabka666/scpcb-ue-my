@@ -7181,33 +7181,40 @@ Function UpdateEvents%()
 			Case e_room1_storage
 				;[Block]
 				If PlayerRoom = e\room
-					;Clock disappearance timer
-					e\EventState = e\EventState + fps\Factor[0]
-					If e\EventState < 70.0
-						If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-					ElseIf e\EventState < 140.0
-						If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
-					Else
-						e\EventState = 0.0
+				; ~ Clock disappearance timer
+				e\EventState = e\EventState + fps\Factor[0]
+
+				If e\EventState < 70.0
+					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
+				ElseIf e\EventState < 140.0
+					If Not EntityHidden(e\room\Objects[0]) Then HideEntity(e\room\Objects[0])
+				Else
+					e\EventState = 0.0
+				EndIf
+				
+				; ~ Interact with Ordinary Duck
+				If InteractObject(e\room\Objects[1], 0.8)
+					CreateMsg(GetLocalString("msg", "duck"))
+					PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+				EndIf
+				
+				; ~ Interact with Penny
+				If e\EventState2 = 0.0
+					If InteractObject(e\room\Objects[2], 0.8)
+						CreateMsg(GetLocalString("msg", "coinflip_1"))
+						PlaySound_Strict(LoadTempSound("SFX\Interact\PennyFlip" + Str(Rand(0, 1)) + ".ogg"))
+						e\EventState2 = Rand(1, 2)
 					EndIf
-					If e\room\Objects[1] = 0
-						; ~ ordinary duck
-						TFormPoint(-659.0, 133.0, 446.0, e\room\OBJ, 0)
-						e\room\Objects[1] = LoadMesh_Strict("GFX\Map\Props\rubber_duck.b3d")
-						ScaleEntity(e\room\Objects[1], RoomScale, RoomScale, RoomScale)
-						PositionEntity(e\room\Objects[1], TFormedX(), TFormedY(), TFormedZ())
-						RotateEntity(e\room\Objects[1], 6.0, e\room\Angle + 260.0, 0.0)
-						EntityPickMode(e\room\Objects[1], 1)
-						EntityRadius(e\room\Objects[1], 0.3)
-						EntityParent(e\room\Objects[1], e\room\OBJ)
-					Else
-						If InteractObject(e\room\Objects[1], 0.8)
-							CreateMsg(GetLocalString("msg", "duck"))
-							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
-						EndIf
+				Else
+					AnimateEx(e\room\Objects[2], AnimTime(e\room\Objects[2]), 1.0 + (e\EventState2 - 1) * 40.0, 40.0 + (e\EventState2 - 1) * 40.0, 0.8, False)
+					If AnimTime(e\room\Objects[2]) >= 40.0 + (e\EventState2 - 1) * 40.0
+						SetAnimTime(e\room\Objects[2], 1.0)
+						CreateMsg(GetLocalString("msg", "coinflip_2"))
+						e\EventState2 = 0.0
 					EndIf
 				EndIf
-				;[End Block]
+			EndIf
+			;[End Block]
 		End Select
 		
 		If e <> Null
