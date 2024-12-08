@@ -1464,7 +1464,7 @@ Function UpdateNPCType096%(n.NPCs)
 						
 						AnimateNPC(n, 2.0, 193.0, 0.7)
 						
-						If Dist > 0.25
+						If Dist > 1.0
 							n\CurrSpeed = CurveValue(n\Speed * 2.0, n\CurrSpeed, 15.0)
 						Else
 							n\CurrSpeed = 0.0
