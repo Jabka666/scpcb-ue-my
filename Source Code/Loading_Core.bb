@@ -2148,6 +2148,8 @@ Function LoadData%()
 	SubjectName = GetLocalString("misc", "subject")
 	PlayerFallingPickDistance = 10.0
 	
+	CameraZoomValue = Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (GraphicWidthFloat / GraphicHeightFloat))) / 2.0)
+	
 	Collisions(HIT_PLAYER, HIT_MAP, 2, 2)
 	Collisions(HIT_PLAYER, HIT_PLAYER, 1, 3)
 	Collisions(HIT_ITEM, HIT_MAP, 2, 2)

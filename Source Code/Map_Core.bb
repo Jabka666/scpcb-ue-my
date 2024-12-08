@@ -4870,7 +4870,6 @@ Function UpdateRooms%()
 	CatchErrors("UpdateRooms()")
 	
 	Local Dist#, i%, j%, r.Rooms
-	Local x#, y#, z#, Hide%
 	Local PlayerX# = EntityX(me\Collider, True)
 	Local PlayerY# = EntityY(me\Collider, True)
 	Local PlayerZ# = EntityZ(me\Collider, True)
@@ -4878,37 +4877,28 @@ Function UpdateRooms%()
 	; ~ The reason why it is like this:
 	; ~ When the map gets spawned by a seed, it starts from LCZ to HCZ to EZ (bottom to top)
 	; ~ A map loaded by the map creator starts from EZ to HCZ to LCZ (top to bottom) and that's why this little code thing with the (SelectedCustomMap = Null) needs to be there - ENDSHN
-	If (PlayerZ / RoomSpacing) < I_Zone\Transition[1] - (SelectedCustomMap = Null)
+	Local ZoneTransition0% = I_Zone\Transition[0] - (SelectedCustomMap = Null)
+	Local ZoneTransition1% = I_Zone\Transition[1] - (SelectedCustomMap = Null)
+	Local TransitionVal# = PlayerZ / RoomSpacing
+	
+	me\Zone = 0
+	If TransitionVal < ZoneTransition1
 		me\Zone = 2
-	ElseIf (PlayerZ / RoomSpacing) >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And (PlayerZ / RoomSpacing) < I_Zone\Transition[0] - (SelectedCustomMap = Null)
+	ElseIf TransitionVal >= ZoneTransition1 And TransitionVal < ZoneTransition0
 		me\Zone = 1
-	Else
-		me\Zone = 0
 	EndIf
 	
 	Local FoundNewPlayerRoom% = False
 	
 	If Abs(PlayerY - EntityY(PlayerRoom\OBJ)) < 1.5
-		x = Abs(PlayerRoom\x - PlayerX)
-		If x < 4.0
-			z = Abs(PlayerRoom\z - PlayerZ)
-			If z < 4.0 Then FoundNewPlayerRoom = True
-		EndIf
-		
+		If Abs(PlayerRoom\x - PlayerX) < 4.0 And Abs(PlayerRoom\z - PlayerZ) < 4.0 Then FoundNewPlayerRoom = True
 		If (Not FoundNewPlayerRoom) ; ~ It's likely that an adjacent room is the new player room, check for that
 			For i = 0 To MaxRoomAdjacents - 1
 				If PlayerRoom\Adjacent[i] <> Null
-					x = Abs(PlayerRoom\Adjacent[i]\x - PlayerX)
-					If x < 4.0
-						z = Abs(PlayerRoom\Adjacent[i]\z - PlayerZ)
-						If z < 4.0
-							y = Abs(PlayerRoom\Adjacent[i]\y - PlayerY)
-							If y < 4.0
-								FoundNewPlayerRoom = True
-								PlayerRoom = PlayerRoom\Adjacent[i]
-								Exit
-							EndIf
-						EndIf
+					If Abs(PlayerRoom\Adjacent[i]\x - PlayerX) < 4.0 And Abs(PlayerRoom\Adjacent[i]\z - PlayerZ) < 4.0 And Abs(PlayerRoom\Adjacent[i]\y - PlayerY) < 4.0
+						FoundNewPlayerRoom = True
+						PlayerRoom = PlayerRoom\Adjacent[i]
+						Exit
 					EndIf
 				EndIf
 			Next
@@ -4916,8 +4906,9 @@ Function UpdateRooms%()
 	EndIf
 	
 	For r.Rooms = Each Rooms
-		x = Abs(r\x - PlayerX)
-		z = Abs(r\z - PlayerZ)
+		Local x# = Abs(r\x - PlayerX)
+		Local z# = Abs(r\z - PlayerZ)
+		
 		r\Dist = Max(x, z)
 		
 		If x < 4.0 And z < 4.0
@@ -4927,7 +4918,8 @@ Function UpdateRooms%()
 			EndIf
 		EndIf
 		
-		Hide = True
+		Local Hide% = True
+		
 		If r = PlayerRoom Then Hide = False
 		If IsRoomAdjacent(PlayerRoom, r) Then Hide = False
 		For i = 0 To MaxRoomAdjacents - 1
