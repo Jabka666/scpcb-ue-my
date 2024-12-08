@@ -4143,7 +4143,7 @@ Function UpdateSecurityCams%()
 						Local Temp% = False
 						Local RID% = sc\room\RoomTemplate\RoomID
 						
-						If RID = r_cont1_205 Lor RID = r_cont1_173_intro
+						If RID = r_cont1_205 Lor RID = r_cont1_173_intro Lor RID = r_room2_sl
 							sc\CoffinEffect = 0
 							Temp = True
 						Else
