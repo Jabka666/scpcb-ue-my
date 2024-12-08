@@ -7181,40 +7181,41 @@ Function UpdateEvents%()
 			Case e_room1_storage
 				;[Block]
 				If PlayerRoom = e\room
-				; ~ Clock disappearance timer
-				e\EventState = e\EventState + fps\Factor[0]
-
-				If e\EventState < 70.0
-					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-				ElseIf e\EventState < 140.0
-					If Not EntityHidden(e\room\Objects[0]) Then HideEntity(e\room\Objects[0])
-				Else
-					e\EventState = 0.0
-				EndIf
-				
-				; ~ Interact with Ordinary Duck
-				If InteractObject(e\room\Objects[1], 0.8)
-					CreateMsg(GetLocalString("msg", "duck"))
-					PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
-				EndIf
-				
-				; ~ Interact with Penny
-				If e\EventState2 = 0.0
-					If InteractObject(e\room\Objects[2], 0.8)
-						CreateMsg(GetLocalString("msg", "coinflip_1"))
-						PlaySound_Strict(LoadTempSound("SFX\Interact\PennyFlip" + Str(Rand(0, 1)) + ".ogg"))
-						e\EventState2 = Rand(1, 2)
+					; ~ Clock disappearance timer
+					e\EventState = e\EventState + fps\Factor[0]
+					
+					If e\EventState < 70.0
+						If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
+					ElseIf e\EventState < 140.0
+						If Not EntityHidden(e\room\Objects[0]) Then HideEntity(e\room\Objects[0])
+					Else
+						e\EventState = 0.0
 					EndIf
-				Else
-					AnimateEx(e\room\Objects[2], AnimTime(e\room\Objects[2]), 1.0 + (e\EventState2 - 1) * 40.0, 40.0 + (e\EventState2 - 1) * 40.0, 0.8, False)
-					If AnimTime(e\room\Objects[2]) >= 40.0 + (e\EventState2 - 1) * 40.0
-						SetAnimTime(e\room\Objects[2], 1.0)
-						CreateMsg(GetLocalString("msg", "coinflip_2"))
-						e\EventState2 = 0.0
+					
+					; ~ Interact with Ordinary Duck
+					If InteractObject(e\room\Objects[1], 0.8)
+						CreateMsg(GetLocalString("msg", "duck"))
+						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+					EndIf
+					
+					; ~ Interact with Penny
+					If e\EventState2 = 0.0
+						If InteractObject(e\room\Objects[2], 0.8)
+							CreateMsg(GetLocalString("msg", "coinflip_1"))
+							PlaySound_Strict(LoadTempSound("SFX\Interact\PennyFlip" + Rand(0, 1) + ".ogg"))
+							e\EventState2 = Rand(1, 2)
+						EndIf
+					Else
+						Scale = (e\EventState2 - 1.0) * 40.0
+						AnimateEx(e\room\Objects[2], AnimTime(e\room\Objects[2]), 1.0 + Scale, 40.0 + Scale, 0.8, False)
+						If AnimTime(e\room\Objects[2]) >= 40.0 + Scale
+							SetAnimTime(e\room\Objects[2], 1.0)
+							CreateMsg(GetLocalString("msg", "coinflip_2"))
+							e\EventState2 = 0.0
+						EndIf
 					EndIf
 				EndIf
-			EndIf
-			;[End Block]
+				;[End Block]
 		End Select
 		
 		If e <> Null
@@ -10166,4 +10167,4 @@ Function Update035Label%(OBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS
