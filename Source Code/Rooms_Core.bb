@@ -1548,6 +1548,8 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.165, True)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			
+			r\Objects[0] = CreateButton(BUTTON_KEYCARD, r\x - 230.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 834.0 * RoomScale, 0.0, 90.0, 0.0, r\OBJ, True)
 			;[End Block]
 		Case r_room2c_gw_lcz
 			;[Block]
@@ -1821,7 +1823,7 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_BLOOD_6, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + 890.0 * RoomScale, 90.0, 180.0, 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
 			;[End Block]
-		Case r_room3_lcz, r_room2c_2_lcz
+		Case r_room3_lcz
 			;[Block]
 			r\Objects[0] = CreateButton(BUTTON_KEYCARD, r\x - 230.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 834.0 * RoomScale, 0.0, 90.0, 0.0, r\OBJ, True)
 			;[End Block]
