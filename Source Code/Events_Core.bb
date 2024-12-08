@@ -3466,7 +3466,7 @@ Function UpdateEvents%()
 			Case e_room2_cafeteria
 				;[Block]
 				If PlayerRoom = e\room
-					If InteractObject(e\room\Objects[0], 0.8)
+					If InteractObject(e\room\Objects[0], 1.0)
 						Temp = True
 						For it.Items = Each Items
 							If (Not it\Picked)
