@@ -1499,7 +1499,7 @@ Function UpdateEvents%()
 				;[Block]
 				If e\EventState < MilliSecs()
 					; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
-					If me\Zone > 0
+					If PlayerRoom\RoomTemplate\RoomID <> r_cont1_173_intro And PlayerRoom\RoomTemplate\RoomID <> r_cont1_173
 						If EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0 ; ~ Camera feed on
 							For sc.SecurityCams = Each SecurityCams
 								If sc\CoffinEffect = 0 Then sc\CoffinEffect = 2
