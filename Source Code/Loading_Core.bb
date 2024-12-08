@@ -2964,6 +2964,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	ShouldEntitiesFall = False
 	HideDistance = 0.0
 	CoffinDistance = 0.0
+	CameraZoomValue = 0.0
 	
 	SecondaryLightOn = 0.0
 	IsBlackOut = False : PrevIsBlackOut = False
