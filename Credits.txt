@@ -178,6 +178,11 @@
 		Vladislav Safonov ("Onmane")
 		Nero
 
+*DgVoodoo2 Creators 
+
+		Dgvoodoo2 made by Dege and Diosg.
+		thanks a lot to them for the right to use their software in our game!
+
 *Some Materials Taken from or Idealized by:
 
 		SCP - Containment Breach official wiki (ENG):
