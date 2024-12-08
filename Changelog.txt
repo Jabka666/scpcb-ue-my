@@ -12,6 +12,7 @@
 - Fixed mask of the Old Badge and the Ticket.
 - Fixed toilet not spawning in «room2_6_ez».
 - Fixed «spawn 106» console command.
+- Fixed SCP-106's pathfinding.
 
 [Known issues]
 - Rooms can overlap and block the way.

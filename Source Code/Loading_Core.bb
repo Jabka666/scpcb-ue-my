@@ -2251,7 +2251,7 @@ Function LoadEntities%()
 	SoundEmitter = CreatePivot()
 	
 	me\Collider = CreatePivot()
-	EntityRadius(me\Collider, 0.15, 0.30)
+	EntityRadius(me\Collider, 0.15, 0.3)
 	EntityPickMode(me\Collider, 1)
 	EntityType(me\Collider, HIT_PLAYER)
 	

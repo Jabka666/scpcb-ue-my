@@ -181,7 +181,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = IniGetFloat(NPCsFile, "SCP-106", "Speed") / 100.0
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.24
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			

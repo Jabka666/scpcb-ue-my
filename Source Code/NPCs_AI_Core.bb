@@ -1799,7 +1799,7 @@ Function UpdateNPCType106%(n.NPCs)
 						
 						n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 						If n\PathTimer <= 0.0
-							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True) + 0.15, EntityZ(me\Collider, True))
+							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 							n\PathTimer = 70.0 * 10.0
 						EndIf
 					Else
@@ -1817,7 +1817,7 @@ Function UpdateNPCType106%(n.NPCs)
 								Wend
 								
 								If n\Path[n\PathLocation] <> Null
-									TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) - 0.15) - EntityY(n\Collider)) / 50.0, 0.0)
+									TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True)) - EntityY(n\Collider)) / 50.0, 0.0)
 									
 									PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 									
@@ -1836,7 +1836,7 @@ Function UpdateNPCType106%(n.NPCs)
 								AnimateNPC(n, 334.0, 494.0, 0.3)
 							EndIf
 						Else
-							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True) + 0.15, EntityZ(me\Collider, True))
+							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 							n\PathTimer = 70.0 * 10.0
 							n\CurrSpeed = 0.0
 						EndIf
@@ -1850,7 +1850,7 @@ Function UpdateNPCType106%(n.NPCs)
 								de\SizeChange = -0.00002 : de\Timer = 90000.0
 							Else
 								Pvt = CreatePivot()
-								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.175, EntityZ(n\Collider))
+								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 								TurnEntity(Pvt, 90.0, 0.0, 0.0)
 								If EntityPick(Pvt, 0.2)
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) + Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) - Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
@@ -1865,7 +1865,7 @@ Function UpdateNPCType106%(n.NPCs)
 								de\SizeChange = -0.00002 : de\Timer = 90000.0
 							Else
 								Pvt = CreatePivot()
-								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.175, EntityZ(n\Collider))
+								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 								TurnEntity(Pvt, 90.0, 0.0, 0.0)
 								If EntityPick(Pvt, 0.2) Then 
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) - Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) + Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
@@ -1961,7 +1961,7 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				If n\Frame < 111.0 Lor n\Frame > 259.0
 					Pvt = CreatePivot()
-					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.175, EntityZ(n\Collider))
+					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 					TurnEntity(Pvt, 90.0, 0.0, 0.0)
 					If EntityPick(Pvt, 0.2)
 						de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
