@@ -2695,7 +2695,7 @@ Function InitNewGame%()
 		EndIf
 		
 		If r\RoomTemplate\RoomID = r_cont1_173 And (Not opt\IntroEnabled)
-			TFormPoint(3584.0, 640.0, 3096.0, r\OBJ, 0)
+			TFormPoint(3584.0, 580.0, 3096.0, r\OBJ, 0)
 			PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ())
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", it_paper, 0.0, 0.0, 0.0)
@@ -2703,7 +2703,7 @@ Function InitNewGame%()
 			PickItem(it, False)
 		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
 			InitializeIntroMovie = True
-			TFormPoint(-4096.0 * RoomScale, 0.0, 0.0, r\OBJ, 0)
+			TFormPoint(-4096.0, 0.0, 0.0, r\OBJ, 0)
 			PositionEntity(me\Collider, TFormedX(), 0.0, TFormedZ())
 			PlayerRoom = r
 		EndIf

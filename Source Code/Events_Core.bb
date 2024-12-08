@@ -710,6 +710,11 @@ Function UpdateEvents%()
 							RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 							
 							PlaySound_Strict(LoadTempSound("SFX\Room\Intro\173Vent.ogg"))
+							me\BlinkTimer = -10.0
+							me\LightBlink = 1.0
+							me\BigCameraShake = 3.0
+							
+							PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 						EndIf
 						me\CurrSpeed = 0.0 : me\Playable = True
 						e\EventState = 1.0
@@ -10167,4 +10172,4 @@ Function Update035Label%(OBJ%)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS
