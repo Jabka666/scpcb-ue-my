@@ -1541,7 +1541,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Leaflet", it_paper, r\x - 756.0 * RoomScale, r\y + 920.0 * RoomScale, r\z + 521.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case r_room2c_lcz
+		Case r_room2c_2_lcz
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
