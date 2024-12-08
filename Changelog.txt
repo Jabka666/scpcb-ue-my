@@ -2,18 +2,21 @@
 
 [Global]
 - Removed buttons glowing.
-
-[Known issues]
-- Rooms can overlap and block the way.
-- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
-- Battery issues caused by having multiple night vision devices.
-- Corrosive door textures not saving correctly.
+- SCP-895 can effect monitors once player leaves SCP-173's room.
+- Increase range to interact with ducks.
+- Updated SCP-895's overlay textures.
 
 [Bug Fixes]
 - Fixed SCP-789-J trigger distance.
 - Fixed mask of the Old Badge and the Ticket.
 - Fixed toilet not spawning in «room2_6_ez».
 - Fixed «spawn 106» console command.
+
+[Known issues]
+- Rooms can overlap and block the way.
+- Tabbing out of the game and tabbing back in freezes the game view/turning off monitor freezes the game.
+- Battery issues caused by having multiple night vision devices.
+- Corrosive door textures not saving correctly.
 
 {v1.4}
 
