@@ -1464,7 +1464,7 @@ Function UpdateNPCType096%(n.NPCs)
 						
 						AnimateNPC(n, 2.0, 193.0, 0.7)
 						
-						If Dist > 1.0
+						If Dist > 0.25
 							n\CurrSpeed = CurveValue(n\Speed * 2.0, n\CurrSpeed, 15.0)
 						Else
 							n\CurrSpeed = 0.0
@@ -1489,6 +1489,7 @@ Function UpdateNPCType096%(n.NPCs)
 										FreeEntity(Pvt) : Pvt = 0
 									Next
 									Kill(True) : me\KillAnim = 1
+									ChangeNPCTextureID(n, NPC_096_BLOODY_TEXTURE)
 								EndIf
 							EndIf
 						EndIf
