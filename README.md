@@ -1,6 +1,8 @@
 # SCP - Containment Breach Ultimate Edition Reborn
 
-The game is based on the works of the SCP Foundation community (http://www.scp-wiki.net/).
+This mod is a fork of SCP - Containment Breach, based on the works of the SCP Foundation community (http://www.scp-wiki.net/).
+
+The main goal of the mod is to rekindle interest in SCP - Containment Breach, improve its stability, and diversify gameplay by adding new SCPs, mechanics, and updated visuals.
 
 This game and the source code are licensed under Creative Commons Attribution-ShareAlike 3.0 License.
 
