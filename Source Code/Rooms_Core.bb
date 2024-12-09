@@ -662,11 +662,6 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_2_lcz
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 672.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-            
 			For r2.Rooms = Each Rooms
 				If r2 <> r
 					If r2\RoomTemplate\RoomID = r_room2_2_lcz
