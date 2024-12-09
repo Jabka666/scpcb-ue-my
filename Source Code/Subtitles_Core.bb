@@ -32,6 +32,8 @@ Type SubtitlesMsg
 	Field R%, G%, B%
 	Field TimeLeft#
 	Field Alpha#
+	Field CurrentText$
+	Field TextIndex#
 End Type
 
 Type QueuedSubtitlesMsg
@@ -128,6 +130,12 @@ Function UpdateSubtitles%()
 		Else
 			sub\Alpha = Min(1.0, sub\Alpha + FPSFactorEx)
 		EndIf
+		
+		; ~ Gradually reveal the text
+		If sub\TextIndex < Len(sub\Txt)
+			sub\TextIndex = sub\TextIndex + fps\Factor[0]
+			sub\CurrentText = Left(sub\Txt, Floor(sub\TextIndex))
+		EndIf
 	Next
 End Function
 
@@ -168,7 +176,7 @@ Function RenderSubtitles%()
 		Else
 			Color(sub\R, sub\G, sub\B)
 		EndIf
-		TextEx(subassets\BoxLeft + (10 * MenuScale), sub\CurrYPos, sub\Txt)
+		TextEx(subassets\BoxLeft + (10 * MenuScale), sub\CurrYPos, sub\CurrentText)
 	Next
 End Function
 
@@ -261,7 +269,6 @@ Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255,
 	If sound <> Null
 		Local IsChannelPlaying% = False
 		Local i%
-		
 		For i = 0 To MaxChannelsAmount - 1
 			If ChannelPlaying(sound\Channels[i]) Then IsChannelPlaying = True
 		Next
@@ -279,6 +286,8 @@ Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255,
 	sub\B = B
 	sub\TimeLeft = TimeLeft
 	sub\Alpha = 0.0
+	sub\CurrentText = ""
+	sub\TextIndex = 0
 	
 	Local Lines% = 0
 	Local subtitles.SubtitlesMsg
