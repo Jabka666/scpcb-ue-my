@@ -7199,7 +7199,11 @@ Function UpdateEvents%()
 					
 					; ~ Interact with Ordinary Duck
 					If InteractObject(e\room\Objects[1], 0.8)
-						CreateMsg(GetLocalString("msg", "duck"))
+						If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
+							CreateMsg(GetLocalString("msg", "duck"))
+						Else
+							CreateMsg(GetLocalString("msg", "flamingo"))
+						EndIf
 						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
 					EndIf
 					
