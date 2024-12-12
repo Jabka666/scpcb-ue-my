@@ -25,11 +25,8 @@ Function SimpleFileSize$(Size%)
 	EndIf
 End Function
 
-Function WrapAngle#(Angle#)
-	If Angle = Infinity Then Return(0.0)
-	Angle = Angle Mod 360
-	If Angle < 0.0 Then Return(Angle + 360)
-	Return(Angle)
+Function IsEqual%(a#, b#, Value#)
+	Return(Abs(a - b) <= Value)
 End Function
 
 Function CurveValue#(Value#, Old#, Smooth#)
@@ -40,6 +37,13 @@ Function CurveValue#(Value#, Old#, Smooth#)
 	Else
 		Return(Min(Val, Value))
 	EndIf
+End Function
+
+Function WrapAngle#(Angle#)
+	If Angle = Infinity Then Return(0.0)
+	Angle = Angle Mod 360
+	If Angle < 0.0 Then Return(Angle + 360)
+	Return(Angle)
 End Function
 
 Function CurveAngle#(Value#, Old#, Smooth#)
@@ -150,7 +154,7 @@ End Function
 Function IsInsideElevator%(x1#, y1#, z1#, ElevatorPivot%)
 	Local Offset# = 280.0 * RoomScale + (0.015 * fps\Factor[0])
 	
-	Return(Abs(x1 - EntityX(ElevatorPivot, True)) < Offset And Abs(z1 - EntityZ(ElevatorPivot, True)) < Offset And Abs(y1 - EntityY(ElevatorPivot, True)) < Offset)
+	Return(IsEqual(x1, EntityX(ElevatorPivot, True), Offset) And IsEqual(z1, EntityZ(ElevatorPivot, True), Offset) And IsEqual(y1, EntityY(ElevatorPivot, True), Offset))
 End Function
 
 Function CreateLine%(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)

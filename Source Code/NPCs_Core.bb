@@ -845,23 +845,21 @@ Function UpdateNPCs%()
 											MaxZ = 4.0
 											MinZ = 0.0
 										EndIf
-										If Abs(EntityX(n\Collider) - EntityX(r\OBJ)) <= Abs(MaxX - MinX)
-											If Abs(EntityZ(n\Collider) - EntityZ(r\OBJ)) <= Abs(MaxZ - MinZ)
-												If r = PlayerRoom
-													UpdateGravity = True
-													Exit
-												EndIf
-												If IsRoomAdjacent(PlayerRoom, r)
-													UpdateGravity = True
-													Exit
-												EndIf
-												For i = 0 To MaxRoomAdjacents - 1
-													If IsRoomAdjacent(PlayerRoom\Adjacent[i], r)
-														UpdateGravity = True
-														Exit
-													EndIf
-												Next
+										If IsEqual(EntityX(n\Collider), EntityX(r\OBJ), Abs(MaxX - MinX)) And IsEqual(EntityZ(n\Collider), EntityZ(r\OBJ), Abs(MaxZ - MinZ))
+											If r = PlayerRoom
+												UpdateGravity = True
+												Exit
 											EndIf
+											If IsRoomAdjacent(PlayerRoom, r)
+												UpdateGravity = True
+												Exit
+											EndIf
+											For i = 0 To MaxRoomAdjacents - 1
+												If IsRoomAdjacent(PlayerRoom\Adjacent[i], r)
+													UpdateGravity = True
+													Exit
+												EndIf
+											Next
 										EndIf
 									Next
 								EndIf
@@ -1640,7 +1638,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 End Function
 
 Function SetNPCFrame%(n.NPCs, Frame#)
-	If Abs(n\Frame - Frame) < 0.001 Then Return
+	If IsEqual(n\Frame, Frame, 0.001) Then Return
 	
 	If EntityDistanceSquared(n\Collider, me\Collider) >= PowTwo(HideDistance)
 		If n\AnimTimer <= 0.0

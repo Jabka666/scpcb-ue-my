@@ -2111,22 +2111,20 @@ Function UpdateNPCType173%(n.NPCs)
 								If d\Locked = 0 And (Not d\Open) And d\Code = 0 And d\KeyCard = 0 And d\DoorType <> WOODEN_DOOR And d\DoorType <> OFFICE_DOOR
 									For i = 0 To 1
 										If d\Buttons[i] <> 0
-											If Abs(EntityX(n\Collider) - EntityX(d\Buttons[i])) < 0.5
-												If Abs(EntityZ(n\Collider) - EntityZ(d\Buttons[i])) < 0.5
-													If (d\OpenState >= 180.0 Lor d\OpenState <= 0.0)
-														Pvt = CreatePivot()
-														PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
-														PointEntity(Pvt, d\Buttons[i])
-														MoveEntity(Pvt, 0.0, 0.0, n\Speed * 0.6)
-														
-														If EntityPick(Pvt, 0.5) = d\Buttons[i]
-															PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
-															OpenCloseDoor(d, True)
-															FreeEntity(Pvt) : Pvt = 0
-															Exit
-														EndIf
+											If IsEqual(EntityX(n\Collider), EntityX(d\Buttons[i]), 0.5) And IsEqual(EntityZ(n\Collider), EntityZ(d\Buttons[i]), 0.5)
+												If (d\OpenState >= 180.0 Lor d\OpenState <= 0.0)
+													Pvt = CreatePivot()
+													PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
+													PointEntity(Pvt, d\Buttons[i])
+													MoveEntity(Pvt, 0.0, 0.0, n\Speed * 0.6)
+													
+													If EntityPick(Pvt, 0.5) = d\Buttons[i]
+														PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
+														OpenCloseDoor(d, True)
 														FreeEntity(Pvt) : Pvt = 0
+														Exit
 													EndIf
+													FreeEntity(Pvt) : Pvt = 0
 												EndIf
 											EndIf
 										EndIf
@@ -2815,7 +2813,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 End Function
 
 Function UpdateNPCType939%(n.NPCs)
-	If (Not (PlayerRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider) =< (-4100.0) * RoomScale))
+	If (Not (PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor))
 		n\DropSpeed = 0.0
 		Return
 	EndIf
@@ -2924,9 +2922,7 @@ Function UpdateNPCType939%(n.NPCs)
 					EndIf
 				EndIf
 				
-				Local Angle# = VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider))
-				
-				RotateEntity(n\Collider, 0.0, CurveAngle(Angle, EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
+				RotateEntity(n\Collider, 0.0, CurveAngle(VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider)), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
 				
 				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 				
@@ -3861,7 +3857,7 @@ Function UpdateNPCTypeApache%(n.NPCs)
 			If n\State = 1.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 				If Rand(20) = 1
 					If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 900.0
-						If Abs(EntityY(me\Collider) - EntityY(n\Collider)) < 20.0
+						If IsEqual(EntityY(me\Collider), EntityY(n\Collider), 20.0)
 							If EntityVisible(me\Collider, n\Collider)
 								PlaySoundEx(snd_I\AlarmSFX[1], Camera, n\Collider, 50.0, 1.0)
 								n\State = 2.0
@@ -3884,7 +3880,7 @@ Function UpdateNPCTypeApache%(n.NPCs)
 			TurnEntity(n\OBJ3, 20.0 * fps\Factor[0], 0.0, 0.0)
 			
 			If DistanceSquared(EntityX(Target), EntityX(n\Collider), EntityZ(Target), EntityZ(n\Collider)) < 3025.0
-				If Abs(EntityY(Target) - EntityY(n\Collider)) < 20.0
+				If IsEqual(EntityY(Target), EntityY(n\Collider), 20.0)
 					PointEntity(n\OBJ, Target)
 					RotateEntity(n\Collider, CurveAngle(Min(WrapAngle(EntityPitch(n\OBJ)), 40.0), EntityPitch(n\Collider), 40.0), CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 90.0), EntityRoll(n\Collider), True)
 					PositionEntity(n\Collider, EntityX(n\Collider), CurveValue(EntityY(Target) + 8.0, EntityY(n\Collider), 70.0), EntityZ(n\Collider))
@@ -4598,7 +4594,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 ;							Next
 						Else
 							For r.Rooms = Each Rooms
-								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
+								If ((Not IsEqual(r\x, EntityX(n\Collider, True), 12.0)) Lor (Not IsEqual(r\z, EntityZ(n\Collider, True), 12.0))) And Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / RoomSpacing)), 2)) = 1
 									x = r\x
 									y = 0.1
 									z = r\z
@@ -5724,7 +5720,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.1, EntityZ(MyBoss\Collider, True)) ; ~ Whatever you say boss
 						Else ; ~ I am the leader
 							For r.Rooms = Each Rooms
-								If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
+								If ((Not IsEqual(r\x, EntityX(n\Collider, True), 12.0)) Lor (Not IsEqual(r\z, EntityZ(n\Collider, True), 12.0))) And Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / RoomSpacing)), 2)) = 1
 									x = r\x
 									y = 0.1
 									z = r\z

@@ -800,7 +800,7 @@ Function UpdateEvents%()
 									n_I\Curr173\Idle = (1 - (me\LightBlink >= 0.25))
 									
 									If (Not me\Terminated) And (Not chs\NoTarget) And (Not chs\GodMode)
-										If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 6.25 And Abs(EntityY(me\Collider) - EntityY(n_I\Curr173\Collider)) < 1.0
+										If EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 6.25 And IsEqual(EntityY(me\Collider), EntityY(n_I\Curr173\Collider), 1.0)
 											me\LightBlink = 3.0
 											me\BlinkTimer = -10.0
 											PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
@@ -1744,14 +1744,12 @@ Function UpdateEvents%()
 								If Angle < 181.0 And Angle > 90.0
 									For it.Items = Each Items
 										If it\Collider <> 0 And (Not it\Picked)
-											If Abs(EntityX(it\Collider) - (e\room\x - 712.0 * RoomScale)) < 200.0
-												If Abs(EntityY(it\Collider) - (e\room\y + 648.0 * RoomScale)) < 104.0
-													e\SoundCHN = PlaySoundEx(snd_I\MachineSFX, Camera, e\room\Objects[1])
-													e\room\RoomDoors[1]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[1]\OBJ)
-													SetAnimTime(e\room\Objects[7], 1.0)
-													e\EventState = 1.0
-													Exit
-												EndIf
+											If IsEqual(EntityX(it\Collider), e\room\x - 712.0 * RoomScale, 200.0) And IsEqual(EntityY(it\Collider), e\room\y + 648.0 * RoomScale, 104.0)
+												e\SoundCHN = PlaySoundEx(snd_I\MachineSFX, Camera, e\room\Objects[1])
+												e\room\RoomDoors[1]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[1]\OBJ)
+												SetAnimTime(e\room\Objects[7], 1.0)
+												e\EventState = 1.0
+												Exit
 											EndIf
 										EndIf
 									Next
@@ -4059,7 +4057,7 @@ Function UpdateEvents%()
 							e\SoundCHN = LoopSoundEx(snd_I\TeslaIdleSFX, e\SoundCHN, Camera, e\room\Objects[0], 4.0, 0.5)
 							e\EventState2 = 0.0
 							x2 = EntityX(e\room\OBJ, True) : z2 = EntityZ(e\room\OBJ, True) : y2 = EntityY(e\room\OBJ, True)
-							If Abs(EntityX(me\Collider, True) - x2) < 1.0 And Abs(EntityZ(me\Collider, True) - z2) < 1.0 And Abs(EntityY(me\Collider, True) - y2) < 1.3
+							If IsEqual(EntityX(me\Collider, True), x2, 1.0) And IsEqual(EntityZ(me\Collider, True), z2, 1.0) And IsEqual(EntityY(me\Collider, True), y2, 1.3)
 								If (Not me\Terminated) And (Not chs\NoTarget)
 									If e\room\NPC[0] = Null Lor e\room\NPC[0]\IsDead
 										If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
@@ -4072,7 +4070,7 @@ Function UpdateEvents%()
 								If n\NPCType <> NPCType966 And n\NPCType <> NPCType513_1 And (Not n\IsDead)
 									x1 = EntityX(n\Collider, True) : z1 = EntityZ(n\Collider, True) : y1 = EntityY(n\Collider, True)
 									If n\NPCType = NPCTypeMTF And e\room\NPC[1] = Null
-										If Abs(x1 - x2) < 2.0 And Abs(z1 - z2) < 2.0 And Abs(y1 - y2) < 1.3
+										If IsEqual(x1, x2, 2.0) And IsEqual(z1, z2, 2.0) And IsEqual(y1, y2, 1.3)
 											n\PrevState = 1
 											n\PathTimer = 0.0
 											n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -4082,7 +4080,7 @@ Function UpdateEvents%()
 											e\room\NPC[1] = n
 										EndIf
 									Else
-										If Abs(x1 - x2) < 0.81 And Abs(z1 - z2) < 0.81 And Abs(y1 - y2) < 1.3
+										If IsEqual(x1, x2, 0.81) And IsEqual(z1, z2, 0.81) And IsEqual(y1, y2, 1.3)
 											If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 											e\SoundCHN = PlaySoundEx(snd_I\TeslaActivateSFX, Camera, e\room\Objects[0], 4.0, 0.5)
 											e\EventState = 1.0
@@ -4112,7 +4110,7 @@ Function UpdateEvents%()
 						Case 2.0 ; ~ Zap state
 							;[Block]
 							x2 = EntityX(e\room\OBJ, True) : z2 = EntityZ(e\room\OBJ, True) : y2 = EntityY(e\room\OBJ, True)
-							If Abs(EntityX(me\Collider, True) - x2) < 0.75 And Abs(EntityZ(me\Collider, True) - z2) < 0.75 And Abs(EntityY(me\Collider, True) - y2) < 1.3
+							If IsEqual(EntityX(me\Collider, True), x2, 0.75) And IsEqual(EntityZ(me\Collider, True), z2, 0.75) And IsEqual(EntityY(me\Collider, True), y2, 1.3)
 								If (Not me\Terminated)
 									If opt\ParticleAmount > 0
 										emit.Emitter = SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
@@ -4130,7 +4128,7 @@ Function UpdateEvents%()
 										e\room\RoomDoors[0]\Locked = 0
 										n\State3 = 1.0
 									EndIf
-									If Abs(EntityX(n\Collider, True) - x2) < 0.6 And Abs(EntityZ(n\Collider, True) - z2) < 0.6 And Abs(EntityY(n\Collider, True) - y2) < 1.3
+									If IsEqual(EntityX(n\Collider, True), x2, 0.6) And IsEqual(EntityZ(n\Collider, True), z2, 0.6) And IsEqual(EntityY(n\Collider, True), y2, 1.3)
 										n\CurrSpeed = 0.0
 										n\HP = 0
 										If opt\ParticleAmount > 0
@@ -5349,14 +5347,14 @@ Function UpdateEvents%()
 							EndIf
 							
 							If e\room\Angle = 0.0 Lor e\room\Angle = 180.0 ; ~ Lock the player inside
-								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) > 1.12
+								If (Not IsEqual(EntityX(me\Collider, True), EntityX(e\room\OBJ, True), 1.12))
 									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) > 2.0 And EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) > 2.0
 										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 										e\EventState = 70.0 * 45.0
 									EndIf
 								EndIf
 							Else
-								If Abs(EntityZ(me\Collider) - EntityZ(e\room\OBJ, True)) > 1.12
+								If (Not IsEqual(EntityZ(me\Collider, True), EntityZ(e\room\OBJ, True), 1.12))
 									If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) > 2.0 And EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) > 2.0
 										If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 										e\EventState = 70.0 * 45.0
@@ -6888,8 +6886,8 @@ Function UpdateEvents%()
 						If PlayerRoom = e\room
 							If e\EventState2 < 7.0
 								If e\EventState2 > 2.0
-									If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(e\room\NPC[0]\Collider)) > 1.0
-										If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(me\Collider)) < 1.0
+									If (Not IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(e\room\NPC[0]\Collider), 1.0))
+										If IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(me\Collider, True), 1.0)
 											If e\room\RoomDoors[0]\Open
 												e\room\RoomDoors[0]\FastOpen = True
 												OpenCloseDoor(e\room\RoomDoors[0])
@@ -6927,7 +6925,7 @@ Function UpdateEvents%()
 					EndIf
 					
 					; ~ Checking if the monitors and such should be rendered or not
-					If Abs(EntityY(e\room\RoomDoors[0]\FrameOBJ) - EntityY(me\Collider)) > 1.0
+					If (Not IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(me\Collider, True), 1.0))
 						For i = 0 To 14
 							If e\room\Objects[i] <> 0 And i <> 7
 								If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
@@ -8240,9 +8238,7 @@ Function UpdateDimension1499%()
 					Next
 					; ~ Player is inside the church
 					If e\EventState3 < 70.0 * 10.0
-						If Abs(EntityX(me\Collider) - (e\room\x - 56.0 * RoomScale)) < 2160.0 * RoomScale
-							If Abs(EntityZ(me\Collider) - (e\room\z + 2287.0 * RoomScale)) < 1408.0 * RoomScale Then e\EventState3 = e\EventState3 + fps\Factor[0]
-						EndIf
+						If IsEqual(EntityX(me\Collider, True), e\room\x - 56.0 * RoomScale, 2160.0 * RoomScale) And IsEqual(EntityZ(me\Collider, True), e\room\z + 2287.0 * RoomScale, 1408.0 * RoomScale) Then e\EventState3 = e\EventState3 + fps\Factor[0]
 					ElseIf e\EventState3 >= 70.0 * 10.0 And e\EventState3 < 70.0 * 20.0
 						For i = 0 To 1
 							e\room\NPC[i]\Reload = 1.0
@@ -8892,7 +8888,7 @@ Function UpdateIntro%()
 						Case INTRO_ESCORT_DONE
 							;[Block]
 							If e\room\RoomDoors[2]\Open And e\room\NPC[3]\State <> 11.0
-								If Abs(EntityX(me\Collider) - EntityX(e\room\OBJ, True)) < 2.0
+								If IsEqual(EntityX(me\Collider, True), EntityX(e\room\OBJ, True), 2.0)
 									For i = 1 To 2
 										OpenCloseDoor(e\room\RoomDoors[i])
 									Next
@@ -9892,7 +9888,7 @@ Function UpdateEndings%()
 								EndIf
 								
 								If e\EventState3 = 0.0
-									If Abs(EntityY(me\Collider) - EntityY(e\room\Objects[11], True)) < 1.0
+									If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[11], True), 1.0)
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[11], True), EntityZ(me\Collider), EntityZ(e\room\Objects[11], True)) < 144.0
 											n_I\Curr106\State = 0.0
 											If (Not EntityHidden(n_I\Curr106\OBJ)) Then HideEntity(n_I\Curr106\OBJ)
@@ -9929,7 +9925,7 @@ Function UpdateEndings%()
 										EndIf
 									Next
 									
-									If Abs(EntityY(me\Collider) - EntityY(e\room\Objects[11], True)) < 1.0
+									If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[11], True), 1.0)
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[11], True), EntityZ(me\Collider), EntityZ(e\room\Objects[11], True)) < 49.0
 											For i = 5 To 8
 												e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET

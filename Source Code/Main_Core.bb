@@ -2770,7 +2770,7 @@ Function UpdateMoving%()
 		If me\Crouch Then SetCrouch(False)
 	EndIf
 	
-	If Abs(me\CrouchState - me\Crouch) < 0.001
+	If IsEqual(me\CrouchState, me\Crouch, 0.001)
 		me\CrouchState = me\Crouch
 	Else
 		me\CrouchState = CurveValue(me\Crouch, me\CrouchState, 10.0)

@@ -379,7 +379,7 @@ Function UpdateParticles_Devil()
 					If (Not InSmoke)
 						If wi\GasMask = 0 And wi\HazmatSuit = 0
 							If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64
-								If Abs(EntityY(Camera, True) - EntityY(emit\Owner, True)) < 5.0 Then InSmoke = True
+								If IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0) Then InSmoke = True
 							EndIf
 						EndIf
 					EndIf

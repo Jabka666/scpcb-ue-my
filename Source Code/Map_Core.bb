@@ -2841,7 +2841,7 @@ Function UpdateDoors%()
 			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
 				For i = 0 To 1
 					If d\Buttons[i] <> 0
-						If Abs(EntityX(me\Collider) - EntityX(d\Buttons[i], True)) < 1.0 And Abs(EntityZ(me\Collider) - EntityZ(d\Buttons[i], True)) < 1.0
+						If IsEqual(EntityX(me\Collider), EntityX(d\Buttons[i], True), 1.0) And IsEqual(EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True), 1.0)
 							If UpdateButton(d\Buttons[i])
 								d_I\ClosestDoor = d
 								; ~ Determine and save animate door and button
@@ -3123,7 +3123,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 			OpenCloseDoor(door2)
 			UpdateElevatorPanel(door1)
 		EndIf
-	ElseIf Abs(door1\OpenState - door2\OpenState) < 0.2
+	ElseIf IsEqual(door1\OpenState, door2\OpenState, 0.2)
 		door1\IsElevatorDoor = 2
 		door2\IsElevatorDoor = 2
 	EndIf
@@ -3929,7 +3929,7 @@ Function UpdateDecals%()
 			Local Dist# = DistanceSquared(EntityX(me\Collider), EntityX(de\OBJ, True), EntityZ(me\Collider), EntityZ(de\OBJ, True))
 			Local ActualSize# = PowTwo(de\Size * 0.8)
 			
-			If (Dist < ActualSize) And (Int(EntityPitch(de\OBJ, True)) = 90.0) And (Abs((EntityY(me\Collider) - 0.3) - DecalPosY) < 0.05)
+			If (Dist < ActualSize) And (Int(EntityPitch(de\OBJ, True)) = 90.0) And IsEqual(EntityY(me\Collider) - 0.3, DecalPosY, 0.05)
 				Select de\ID
 					Case 0
 						;[Block]
@@ -4890,12 +4890,12 @@ Function UpdateRooms%()
 	
 	Local FoundNewPlayerRoom% = False
 	
-	If Abs(PlayerY - EntityY(PlayerRoom\OBJ)) < 1.5
-		If Abs(PlayerRoom\x - PlayerX) < 4.0 And Abs(PlayerRoom\z - PlayerZ) < 4.0 Then FoundNewPlayerRoom = True
+	If IsEqual(PlayerY, EntityY(PlayerRoom\OBJ), 1.5)
+		If IsEqual(PlayerRoom\x, PlayerX, 4.0) And IsEqual(PlayerRoom\z, PlayerZ, 4.0) Then FoundNewPlayerRoom = True
 		If (Not FoundNewPlayerRoom) ; ~ It's likely that an adjacent room is the new player room, check for that
 			For i = 0 To MaxRoomAdjacents - 1
 				If PlayerRoom\Adjacent[i] <> Null
-					If Abs(PlayerRoom\Adjacent[i]\x - PlayerX) < 4.0 And Abs(PlayerRoom\Adjacent[i]\z - PlayerZ) < 4.0 And Abs(PlayerRoom\Adjacent[i]\y - PlayerY) < 4.0
+					If IsEqual(PlayerRoom\Adjacent[i]\x, PlayerX, 4.0) And IsEqual(PlayerRoom\Adjacent[i]\z, PlayerZ, 4.0) And IsEqual(PlayerRoom\Adjacent[i]\y, PlayerY, 4.0)
 						FoundNewPlayerRoom = True
 						PlayerRoom = PlayerRoom\Adjacent[i]
 						Exit
@@ -4913,7 +4913,7 @@ Function UpdateRooms%()
 		
 		If x < 4.0 And z < 4.0
 			If (Not FoundNewPlayerRoom) And PlayerRoom <> r
-				If Abs(PlayerY - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+				If IsEqual(PlayerY, EntityY(r\OBJ), 1.5) Then PlayerRoom = r
 				FoundNewPlayerRoom = True
 			EndIf
 		EndIf
