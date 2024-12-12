@@ -25,7 +25,7 @@ Global SubtitlesInit%
 
 Type SubtitlesMsg
 	Field SoundPath$
-	Field sound.Sound
+	Field snd.Sound
 	Field yPos#
 	Field CurrYPos#
 	Field Txt$
@@ -39,7 +39,7 @@ End Type
 Type QueuedSubtitlesMsg
 	Field SoundPath$
 	Field subtitles.SubtitlesMsg
-	Field sound.Sound
+	Field snd.Sound
 	Field Txt$
 	Field R%, G%, B%
 	Field TimeStart#
@@ -107,11 +107,11 @@ Function UpdateSubtitles%()
 						
 						If Before lastSubtitles <> Null Then lastSubtitles = Before lastSubtitles
 					EndIf
-					CreateSubtitlesMsg(queue\SoundPath, queue\sound, Trim(TxtLine), queue\TimeLeft, queue\R, queue\G, queue\B)
+					CreateSubtitlesMsg(queue\SoundPath, queue\snd, Trim(TxtLine), queue\TimeLeft, queue\R, queue\G, queue\B)
 					HasSplit = True
 					TxtLine = NextLine
 				Else
-					CreateSubtitlesMsg(queue\SoundPath, queue\sound, Trim(TxtLine), queue\TimeLeft, queue\R, queue\G, queue\B)
+					CreateSubtitlesMsg(queue\SoundPath, queue\snd, Trim(TxtLine), queue\TimeLeft, queue\R, queue\G, queue\B)
 					TxtLine = ""
 				EndIf
 			Wend
@@ -123,18 +123,18 @@ Function UpdateSubtitles%()
 	Local FPSFactorEx# = fps\Factor[0] / 7.0
 	
 	For sub.SubtitlesMsg = Each SubtitlesMsg
+		; ~ Gradually reveal the text
+		If sub\TextIndex < Len(sub\Txt)
+			sub\TextIndex = sub\TextIndex + fps\Factor[0]
+			sub\CurrentText = Left(sub\Txt, Floor(sub\TextIndex))
+		EndIf
+		
 		sub\TimeLeft = sub\TimeLeft - fps\Factor[0]
 		If sub\TimeLeft < 0.0
 			sub\Alpha = Max(sub\Alpha - FPSFactorEx, 0.0)
 			If sub\Alpha <= 0.0 Then Delete(sub)
 		Else
 			sub\Alpha = Min(1.0, sub\Alpha + FPSFactorEx)
-		EndIf
-		
-		; ~ Gradually reveal the text
-		If sub\TextIndex < Len(sub\Txt)
-			sub\TextIndex = sub\TextIndex + fps\Factor[0]
-			sub\CurrentText = Left(sub\Txt, Floor(sub\TextIndex))
 		EndIf
 	Next
 End Function
@@ -180,7 +180,7 @@ Function RenderSubtitles%()
 	Next
 End Function
 
-Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
+Function CreateSubtitlesToken%(SoundPath$, snd.Sound)
 	If (Not opt\EnableSubtitles) Lor (Not SubtitlesInit) Then Return
 	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Then Return ; ~ Call this line when first line is passed
 	
@@ -224,15 +224,15 @@ Function CreateSubtitlesToken%(SoundPath$, sound.Sound)
 				ColorB = JsonGetInt(JsonGetArrayValue(JsonArrayVal, 2))
 			EndIf
 		EndIf
-		QueueSubtitlesMsg(SoundPath, sound, Txt, DelayTime, Length, ColorR, ColorG, ColorB)
+		QueueSubtitlesMsg(SoundPath, snd, Txt, DelayTime, Length, ColorR, ColorG, ColorB)
 	Next
 End Function
 
-Function RemoveSubtitlesToken%(sound.Sound)
+Function RemoveSubtitlesToken%(snd.Sound)
 	Local queue.QueuedSubtitlesMsg
 	
 	For queue.QueuedSubtitlesMsg = Each QueuedSubtitlesMsg
-		If queue\sound = sound Then Delete(queue)
+		If queue\snd = snd Then Delete(queue)
 	Next
 End Function
 
@@ -244,14 +244,14 @@ Function ClearSubtitles%()
 	Next
 End Function
 
-Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#, R% = 255, G% = 255, B% = 255)
+Function QueueSubtitlesMsg%(SoundPath$, snd.Sound, Txt$, TimeStart#, TimeLeft#, R% = 255, G% = 255, B% = 255)
 	If Txt = "" Lor Left(Txt, 1) = "[" Then Return
 	
 	Local queue.QueuedSubtitlesMsg
 	
 	queue.QueuedSubtitlesMsg = New QueuedSubtitlesMsg
 	queue\SoundPath = SoundPath
-	queue\sound = sound
+	queue\snd = snd
 	
 	queue\Txt = Txt
 	
@@ -263,14 +263,15 @@ Function QueueSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeStart#, TimeLeft#
 	Insert queue Before First QueuedSubtitlesMsg
 End Function
 
-Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255, G% = 255, B% = 255)
+Function CreateSubtitlesMsg%(SoundPath$, snd.Sound, Txt$, TimeLeft#, R% = 255, G% = 255, B% = 255)
 	If me\Deaf Then Return
 	
-	If sound <> Null
+	If snd <> Null
 		Local IsChannelPlaying% = False
 		Local i%
+		
 		For i = 0 To MaxChannelsAmount - 1
-			If ChannelPlaying(sound\Channels[i]) Then IsChannelPlaying = True
+			If ChannelPlaying(snd\Channels[i]) Then IsChannelPlaying = True
 		Next
 		If (Not IsChannelPlaying) Then Return
 	EndIf
@@ -279,7 +280,7 @@ Function CreateSubtitlesMsg%(SoundPath$, sound.Sound, Txt$, TimeLeft#, R% = 255,
 	
 	sub.SubtitlesMsg = New SubtitlesMsg
 	sub\SoundPath = SoundPath
-	sub\sound = sound
+	sub\snd = snd
 	sub\Txt = Txt
 	sub\R = R
 	sub\G = G
