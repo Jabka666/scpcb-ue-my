@@ -3773,31 +3773,12 @@ Function UpdateGUI%()
 					
 					Local IsEmpty% = True
 					
-					If OtherOpen\ItemTemplate\ID = it_wallet
-						For z = 0 To OtherSize - 1
-							If OtherOpen\SecondInv[z] <> Null
-								Select OtherOpen\SecondInv[z]\ItemTemplate\ID
-									Case it_key0, it_key0_bloody, it_key1, it_key1_bloody, it_key2, it_key3, it_key3_bloody, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_oldbadge, it_burntbadge, it_harnbadge
-										;[Block]
-										IsEmpty = False
-										Exit
-										;[End Block]
-									Default
-										;[Block]
-										IsEmpty = True
-										;[End Block]
-								End Select
-							EndIf
-						Next
-					Else
-						For z = 0 To OtherSize - 1
-							If OtherOpen\SecondInv[z] <> Null
-								IsEmpty = False
-								Exit
-							EndIf
-						Next
-					EndIf
-					
+					For z = 0 To OtherSize - 1
+						If OtherOpen\SecondInv[z] <> Null
+							IsEmpty = False
+							Exit
+						EndIf
+					Next
 					If IsEmpty
 						If OtherOpen\ItemTemplate\ID = it_clipboard
 							OtherOpen\InvImg = OtherOpen\ItemTemplate\InvImg2
@@ -3807,7 +3788,6 @@ Function UpdateGUI%()
 							SetAnimTime(OtherOpen\OBJ, 0.0)
 						EndIf
 					EndIf
-					
 					SelectedItem = Null
 					
 					If (Not mo\MouseHit2)
