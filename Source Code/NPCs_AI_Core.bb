@@ -360,415 +360,414 @@ Function UpdateNPCType049%(n.NPCs)
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 		PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 		ResetEntity(n\Collider)
-		Return
-	EndIf
-	
-	; ~ n\State: The "main state" of the NPC
-	
-	; ~ n\State2: Attacks the player when the value is above 0.0
-	
-	; ~ n\State3: Timer for updating the path again
-	
-	Local PrevFrame# = n\Frame
-	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
-	Local i%, j%, PlayerSeeable%
-	
-	UpdateNPCBlinking(n)
-	
-	If Dist >= 0.25
-		Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
-		RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
-	ElseIf (Not chs\NoTarget)
-		If EntityVisible(me\Collider, n\Collider)
-			If n\State > 1 And n\State <> 3
-				If wi\HazmatSuit > 0
-					RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
-					If RemoveHazmatTimer < 350.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
-						n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
-					ElseIf RemoveHazmatTimer =< 0.0
-						For i = 0 To 2
-							If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
-								me\CameraShake = 2.0
-								If i = 2
-									For i = 0 To MaxItemAmount - 1
-										If Inventory(i) <> Null
-											If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
-												CreateMsg(GetLocalString("msg", "suit.destroyed"))
-												wi\HazmatSuit = 0
-												RemoveItem(Inventory(i))
-												Exit
+	Else
+		; ~ n\State: The "main state" of the NPC
+		
+		; ~ n\State2: Attacks the player when the value is above 0.0
+		
+		; ~ n\State3: Timer for updating the path again
+		
+		Local PrevFrame# = n\Frame
+		Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
+		Local i%, j%, PlayerSeeable%
+		
+		UpdateNPCBlinking(n)
+		
+		If Dist >= 0.25
+			Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
+			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
+		ElseIf (Not chs\NoTarget)
+			If EntityVisible(me\Collider, n\Collider)
+				If n\State > 1 And n\State <> 3
+					If wi\HazmatSuit > 0
+						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
+						If RemoveHazmatTimer < 350.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
+							n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
+						ElseIf RemoveHazmatTimer =< 0.0
+							For i = 0 To 2
+								If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
+									me\CameraShake = 2.0
+									If i = 2
+										For i = 0 To MaxItemAmount - 1
+											If Inventory(i) <> Null
+												If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
+													CreateMsg(GetLocalString("msg", "suit.destroyed"))
+													wi\HazmatSuit = 0
+													RemoveItem(Inventory(i))
+													Exit
+												EndIf
 											EndIf
-										EndIf
-									Next
-								EndIf
-							EndIf
-						Next
-					EndIf
-				ElseIf I_714\Using > 0
-					me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
-					If I_268\InvisibilityOn
-						Remove714Timer = Min(Remove714Timer, 499.0)
-					Else
-						Remove714Timer = Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
-						If Remove714Timer < 350.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
-							If I_714\Using = 2 Then n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
-						ElseIf Remove714Timer =< 0.0
-							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) <> Null
-									If Inventory(i)\ItemTemplate\ID = it_scp714 Lor Inventory(i)\ItemTemplate\ID = it_coarse714
-										CreateMsg(GetLocalString("msg", "714.forceremoved"))
-										I_714\Using = 0 : DropItem(Inventory(i))
-										Exit
+										Next
 									EndIf
 								EndIf
 							Next
 						EndIf
-					EndIf
-				Else
-					me\CurrCameraZoom = 20.0
-					me\BlurTimer = 500.0
-					
-					If (Not chs\GodMode)
-						If PlayerRoom\RoomTemplate\RoomID = r_cont2_049
-							Local e.Events
-							
-							For e.Events = Each Events
-								If e\EventID = e_cont2_049
-									e\EventState = -1.0
-									Exit
-								EndIf
-							Next
-							If me\FallTimer >= 0.0
-								ShowEntity(me\Head)
-								PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
-								ResetEntity(me\Head)
-								RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
-								me\FallTimer = Min(-1.0, me\FallTimer)
-							EndIf
+					ElseIf I_714\Using > 0
+						me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
+						If I_268\InvisibilityOn
+							Remove714Timer = Min(Remove714Timer, 499.0)
 						Else
-							msg\DeathMsg = GetLocalString("death", "049")
-							Kill() : me\KillAnim = 0
-						EndIf
-						PlaySound_Strict(LoadTempSound("SFX\SCP\049\Horror.ogg"))
-						LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(0, 1) + ".ogg", 1)
-						n\SoundCHN2 = PlaySound_Strict(n\Sound2, True)
-						n\State = 3.0
-					EndIf
-				EndIf
-			EndIf
-		EndIf
-	EndIf
-	
-	n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
-	If n\Idle = 0.1
-		If PlayerInReachableRoom()
-			For i = 0 To MaxRoomAdjacents - 1
-				If PlayerRoom\Adjacent[i] <> Null
-					For j = 0 To MaxRoomAdjacents - 1
-						If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
-							If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
-								If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
-									TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), 0.5, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
-								Else
-									TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
-								EndIf
-								Exit
-							EndIf
-						EndIf
-					Next
-					Exit
-				EndIf
-			Next
-			n\Idle = 0.0
-		EndIf
-	EndIf
-	
-	Select n\State
-		Case 0.0 ; ~ Script
-			;[Block]
-			;[End Block]
-		Case 1.0 ; ~ Looking around before getting active
-			;[Block]
-			If n\Frame >= 538.0
-				AnimateNPC(n, 659.0, 538.0, -0.45, False)
-				If n\Frame > 537.9 Then SetNPCFrame(n, 37.0)
-			Else
-				AnimateNPC(n, 37.0, 269.0, 0.7, False)
-				If n\Frame > 268.9 Then n\State = 2.0
-			EndIf
-			;[End Block]
-		Case 2.0 ; ~ Being active
-			;[Block]
-			If Dist < PowTwo(HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
-				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-				PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume)
-				If n\State2 > 0.0
-					If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.0
-					; ~ Playing a sound after detecting the player
-					If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
-						LoadNPCSound(n, "SFX\SCP\049\Spotted" + Rand(0, 6) + ".ogg", 1)
-						n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
-						n\PrevState = 2
-					EndIf
-					n\PathStatus = PATH_STATUS_NO_SEARCH
-					n\PathTimer = 0.0
-					n\PathLocation = 0
-					
-					If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
-					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-					
-					If Dist > 0.225
-						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-						
-						If Dist < 9.0
-							AnimateNPC(n, Clamp(AnimTime(n\OBJ), 387.0, 428.0), 463.0, n\CurrSpeed * 38.0) ; ~ WALK CYCLE 8 + WALK CYCLE 7
-						Else
-							If n\Frame > 428.0
-								AnimateNPC(n, Min(AnimTime(n\OBJ), 463.0), 498.0, n\CurrSpeed * 38.0, False)  ; ~ WALK CYCLE 7 + WALK CYCLE 6
-								If n\Frame > 497.9 Then SetNPCFrame(n, 358.0)
-							Else
-								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0) ; IDLE TO WALK + WALK CYCLE 3
-							EndIf
-						EndIf
-					EndIf
-					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 15.0 - (1.5 * SelectedDifficulty\OtherFactors))
-				Else ; ~ Finding a path to the player
-					If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.0
-					If n\PathStatus = PATH_STATUS_FOUND ; ~ Path to player found
-						While n\Path[n\PathLocation] = Null
-							If n\PathLocation > MaxPathLocations - 1
-								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
-								Exit
-							Else
-								n\PathLocation = n\PathLocation + 1
-							EndIf
-						Wend
-						If n\Path[n\PathLocation] <> Null
-							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
-							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-							
-							AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
-							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 15.0 - (1.5 * SelectedDifficulty\OtherFactors))
-							
-							; ~ Playing a sound if he hears the player
-							If n\PrevState = 0 And (Not ChannelPlaying(n\SoundCHN2))
-								If Rand(30) = 1
-									LoadNPCSound(n, "SFX\SCP\049\Searching6.ogg", 1)
-								Else
-									LoadNPCSound(n, "SFX\SCP\049\Searching" + Rand(0, 5) + ".ogg", 1)
-								EndIf
-								n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\Collider, 10.0, 1.0, True)
-								n\PrevState = 1
-							EndIf
-							
-							UseDoorNPC(n)
-							
-							; ~ Resetting the "PrevState" value randomly, to make SCP-049 talking randomly 
-							If Rand(600) = 1 And (Not ChannelPlaying(n\SoundCHN2)) Then n\PrevState = 0
-							
-							If n\PrevState > 1 Then n\PrevState = 1
-						EndIf
-					Else ; ~ Stands still and tries to find a path
-						n\PathTimer = n\PathTimer + fps\Factor[0]
-						n\CurrSpeed = 0.0
-						If n\PathTimer > 70.0 * (4.0 - (2.0 * SelectedDifficulty\AggressiveNPCs))
-							n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
-							n\PathTimer = 0.0
-							n\State3 = 0.0
-							
-							; ~ Attempt to find a room (the PlayerRoom or one of it's adjacent rooms) for SCP-049 to go to but select the one closest to him
-							If n\PathStatus <> PATH_STATUS_FOUND
-								Local ClosestDist# = EntityDistanceSquared(PlayerRoom\OBJ, n\Collider)
-								Local ClosestRoom.Rooms = PlayerRoom
-								Local CurrDist# = 0.0
-								
-								For i = 0 To MaxRoomAdjacents - 1
-									If PlayerRoom\Adjacent[i] <> Null
-										CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
-										If CurrDist < ClosestDist
-											ClosestDist = CurrDist
-											ClosestRoom = PlayerRoom\Adjacent[i]
+							Remove714Timer = Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
+							If Remove714Timer < 350.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
+								If I_714\Using = 2 Then n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
+							ElseIf Remove714Timer =< 0.0
+								For i = 0 To MaxItemAmount - 1
+									If Inventory(i) <> Null
+										If Inventory(i)\ItemTemplate\ID = it_scp714 Lor Inventory(i)\ItemTemplate\ID = it_coarse714
+											CreateMsg(GetLocalString("msg", "714.forceremoved"))
+											I_714\Using = 0 : DropItem(Inventory(i))
+											Exit
 										EndIf
 									EndIf
 								Next
-								n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
 							EndIf
+						EndIf
+					Else
+						me\CurrCameraZoom = 20.0
+						me\BlurTimer = 500.0
+						
+						If (Not chs\GodMode)
+							If PlayerRoom\RoomTemplate\RoomID = r_cont2_049
+								Local e.Events
+								
+								For e.Events = Each Events
+									If e\EventID = e_cont2_049
+										e\EventState = -1.0
+										Exit
+									EndIf
+								Next
+								If me\FallTimer >= 0.0
+									ShowEntity(me\Head)
+									PositionEntity(me\Head, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), True)
+									ResetEntity(me\Head)
+									RotateEntity(me\Head, 0.0, EntityYaw(Camera) + Rnd(-45.0, 45.0), 0.0)
+									me\FallTimer = Min(-1.0, me\FallTimer)
+								EndIf
+							Else
+								msg\DeathMsg = GetLocalString("death", "049")
+								Kill() : me\KillAnim = 0
+							EndIf
+							PlaySound_Strict(LoadTempSound("SFX\SCP\049\Horror.ogg"))
+							LoadNPCSound(n, "SFX\SCP\049\Kidnap" + Rand(0, 1) + ".ogg", 1)
+							n\SoundCHN2 = PlaySound_Strict(n\Sound2, True)
+							n\State = 3.0
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+		EndIf
+		
+		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
+		If n\Idle = 0.1
+			If PlayerInReachableRoom()
+				For i = 0 To MaxRoomAdjacents - 1
+					If PlayerRoom\Adjacent[i] <> Null
+						For j = 0 To MaxRoomAdjacents - 1
+							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
+								If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
+									If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
+										TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), 0.5, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
+									Else
+										TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+									EndIf
+									Exit
+								EndIf
+							EndIf
+						Next
+						Exit
+					EndIf
+				Next
+				n\Idle = 0.0
+			EndIf
+		EndIf
+		
+		Select n\State
+			Case 0.0 ; ~ Script
+				;[Block]
+				;[End Block]
+			Case 1.0 ; ~ Looking around before getting active
+				;[Block]
+				If n\Frame >= 538.0
+					AnimateNPC(n, 659.0, 538.0, -0.45, False)
+					If n\Frame > 537.9 Then SetNPCFrame(n, 37.0)
+				Else
+					AnimateNPC(n, 37.0, 269.0, 0.7, False)
+					If n\Frame > 268.9 Then n\State = 2.0
+				EndIf
+				;[End Block]
+			Case 2.0 ; ~ Being active
+				;[Block]
+				If Dist < PowTwo(HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
+					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
+					PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume)
+					If n\State2 > 0.0
+						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.0
+						; ~ Playing a sound after detecting the player
+						If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
+							LoadNPCSound(n, "SFX\SCP\049\Spotted" + Rand(0, 6) + ".ogg", 1)
+							n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\OBJ, 10.0, 1.0, True)
+							n\PrevState = 2
+						EndIf
+						n\PathStatus = PATH_STATUS_NO_SEARCH
+						n\PathTimer = 0.0
+						n\PathLocation = 0
+						
+						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+						
+						If Dist > 0.225
+							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
-							; ~ Making 3 attempts at finding a path
-							While Int(n\State3) < 3.0
-								; ~ Breaking up the path if no "real" path has been found (only 1 waypoint and it is too close)
-								If n\PathStatus = PATH_STATUS_FOUND
-									If n\Path[1] <> Null
-										If n\Path[2] = Null And EntityDistanceSquared(n\Path[1]\OBJ, n\Collider) < 0.16
-											n\PathLocation = 0
-											n\PathStatus = PATH_STATUS_NO_SEARCH
-										EndIf
+							If Dist < 9.0
+								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 387.0, 428.0), 463.0, n\CurrSpeed * 38.0) ; ~ WALK CYCLE 8 + WALK CYCLE 7
+							Else
+								If n\Frame > 428.0
+									AnimateNPC(n, Min(AnimTime(n\OBJ), 463.0), 498.0, n\CurrSpeed * 38.0, False)  ; ~ WALK CYCLE 7 + WALK CYCLE 6
+									If n\Frame > 497.9 Then SetNPCFrame(n, 358.0)
+								Else
+									AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0) ; IDLE TO WALK + WALK CYCLE 3
+								EndIf
+							EndIf
+						EndIf
+						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 15.0 - (1.5 * SelectedDifficulty\OtherFactors))
+					Else ; ~ Finding a path to the player
+						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.0
+						If n\PathStatus = PATH_STATUS_FOUND ; ~ Path to player found
+							While n\Path[n\PathLocation] = Null
+								If n\PathLocation > MaxPathLocations - 1
+									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+									Exit
+								Else
+									n\PathLocation = n\PathLocation + 1
+								EndIf
+							Wend
+							If n\Path[n\PathLocation] <> Null
+								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
+								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+								
+								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
+								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 15.0 - (1.5 * SelectedDifficulty\OtherFactors))
+								
+								; ~ Playing a sound if he hears the player
+								If n\PrevState = 0 And (Not ChannelPlaying(n\SoundCHN2))
+									If Rand(30) = 1
+										LoadNPCSound(n, "SFX\SCP\049\Searching6.ogg", 1)
+									Else
+										LoadNPCSound(n, "SFX\SCP\049\Searching" + Rand(0, 5) + ".ogg", 1)
 									EndIf
-									If n\Path[0] <> Null And n\Path[1] = Null
-										n\PathLocation = 0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
-									EndIf
+									n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\Collider, 10.0, 1.0, True)
+									n\PrevState = 1
 								EndIf
 								
-								; ~ No path could still be found, just make SCP-049 go to a room (further away than the very first attempt)
+								UseDoorNPC(n)
+								
+								; ~ Resetting the "PrevState" value randomly, to make SCP-049 talking randomly 
+								If Rand(600) = 1 And (Not ChannelPlaying(n\SoundCHN2)) Then n\PrevState = 0
+								
+								If n\PrevState > 1 Then n\PrevState = 1
+							EndIf
+						Else ; ~ Stands still and tries to find a path
+							n\PathTimer = n\PathTimer + fps\Factor[0]
+							n\CurrSpeed = 0.0
+							If n\PathTimer > 70.0 * (4.0 - (2.0 * SelectedDifficulty\AggressiveNPCs))
+								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+								n\PathTimer = 0.0
+								n\State3 = 0.0
+								
+								; ~ Attempt to find a room (the PlayerRoom or one of it's adjacent rooms) for SCP-049 to go to but select the one closest to him
 								If n\PathStatus <> PATH_STATUS_FOUND
-									ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
-									ClosestRoom.Rooms = PlayerRoom
-									CurrDist = 0.0
+									Local ClosestDist# = EntityDistanceSquared(PlayerRoom\OBJ, n\Collider)
+									Local ClosestRoom.Rooms = PlayerRoom
+									Local CurrDist# = 0.0
+									
 									For i = 0 To MaxRoomAdjacents - 1
 										If PlayerRoom\Adjacent[i] <> Null
 											CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
 											If CurrDist < ClosestDist
 												ClosestDist = CurrDist
-												For j = 0 To MaxRoomAdjacents - 1
-													If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
-														If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
-															ClosestRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
-															Exit
-														EndIf
-													EndIf
-												Next
+												ClosestRoom = PlayerRoom\Adjacent[i]
 											EndIf
 										EndIf
 									Next
 									n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
 								EndIf
 								
-								; ~ Making SCP-049 skip waypoints for doors he can't interact with, but only if the actual path is behind him
-								If n\PathStatus = PATH_STATUS_FOUND
-									If n\Path[1] <> Null
-										If n\Path[1]\door <> Null
-											If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> 0) And (Not n\Path[1]\door\Open)
-												Repeat
-													If n\PathLocation > MaxPathLocations - 1
-														n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
-														Exit
-													Else
-														n\PathLocation = n\PathLocation + 1
-													EndIf
-													If n\Path[n\PathLocation] <> Null
-														If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > (45.0 - Abs(DeltaYaw(n\Collider, n\Path[1]\OBJ)))
-															n\State3 = 3.0
-															Exit
+								; ~ Making 3 attempts at finding a path
+								While Int(n\State3) < 3.0
+									; ~ Breaking up the path if no "real" path has been found (only 1 waypoint and it is too close)
+									If n\PathStatus = PATH_STATUS_FOUND
+										If n\Path[1] <> Null
+											If n\Path[2] = Null And EntityDistanceSquared(n\Path[1]\OBJ, n\Collider) < 0.16
+												n\PathLocation = 0
+												n\PathStatus = PATH_STATUS_NO_SEARCH
+											EndIf
+										EndIf
+										If n\Path[0] <> Null And n\Path[1] = Null
+											n\PathLocation = 0
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+										EndIf
+									EndIf
+									
+									; ~ No path could still be found, just make SCP-049 go to a room (further away than the very first attempt)
+									If n\PathStatus <> PATH_STATUS_FOUND
+										ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
+										ClosestRoom.Rooms = PlayerRoom
+										CurrDist = 0.0
+										For i = 0 To MaxRoomAdjacents - 1
+											If PlayerRoom\Adjacent[i] <> Null
+												CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
+												If CurrDist < ClosestDist
+													ClosestDist = CurrDist
+													For j = 0 To MaxRoomAdjacents - 1
+														If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
+															If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
+																ClosestRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
+																Exit
+															EndIf
 														EndIf
-													EndIf
-												Forever
+													Next
+												EndIf
+											EndIf
+										Next
+										n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
+									EndIf
+									
+									; ~ Making SCP-049 skip waypoints for doors he can't interact with, but only if the actual path is behind him
+									If n\PathStatus = PATH_STATUS_FOUND
+										If n\Path[1] <> Null
+											If n\Path[1]\door <> Null
+												If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> 0) And (Not n\Path[1]\door\Open)
+													Repeat
+														If n\PathLocation > MaxPathLocations - 1
+															n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+															Exit
+														Else
+															n\PathLocation = n\PathLocation + 1
+														EndIf
+														If n\Path[n\PathLocation] <> Null
+															If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > (45.0 - Abs(DeltaYaw(n\Collider, n\Path[1]\OBJ)))
+																n\State3 = 3.0
+																Exit
+															EndIf
+														EndIf
+													Forever
+												Else
+													n\State3 = 3.0
+												EndIf
 											Else
 												n\State3 = 3.0
 											EndIf
-										Else
-											n\State3 = 3.0
 										EndIf
 									EndIf
-								EndIf
-								n\State3 = n\State3 + 1.0
-							Wend
+									n\State3 = n\State3 + 1.0
+								Wend
+							EndIf
+							AnimateNPC(n, 269.0, 345.0, 0.2)
 						EndIf
-						AnimateNPC(n, 269.0, 345.0, 0.2)
+					EndIf
+					
+					If n\CurrSpeed > 0.005
+						If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+					EndIf
+					
+					UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ, 10.0, 1.0, True)
+				ElseIf n\Idle = 0
+					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+					If PlayerInReachableRoom(True) And InFacility = NullFloor ; ~ Player is in a room where SCP-049 can teleport to
+						If Rand(4 - (2 * SelectedDifficulty\AggressiveNPCs)) = 1
+							TeleportCloser(n)
+						Else
+							n\Idle = 70.0 * 60.0
+						EndIf
 					EndIf
 				EndIf
+				;[End Block]
+			Case 3.0 ; ~ The player was killed by SCP-049
+				;[Block]
+				AnimateNPC(n, 537.0, 660.0, 0.7, False)
+				
+				PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
+				n\Angle = CurveAngle(EntityYaw(me\Collider) - 180.0, n\Angle, 10.0)
+				;[End Block]
+			Case 4.0 ; ~ Going to surveillance room
+				;[Block]
+				PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, 60.0, True)
+				If PlayerSeeable = 1
+					PlaySound_Strict(LoadTempSound("SFX\SCP\049\Room2SLSpawn.ogg"))
+					n\PathStatus = PATH_STATUS_NO_SEARCH
+					n\PathLocation = 0
+					n\PathTimer = 0.0
+					n\PrevState = 0
+					n\State3 = 0.0
+					n\State2 = 70.0 * 2.0
+					n\State = 2.0
+				ElseIf PlayerSeeable = 2 And n\State3 > 0.0
+					n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+				Else
+					If n\State3 = 6.0
+						If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(HideDistance)
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\PathLocation = 0
+							n\PathTimer = 0.0
+							n\PrevState = 0
+							n\State3 = 0.0
+							n\State = 2.0
+						Else
+							If n\PathStatus <> PATH_STATUS_FOUND Then n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+						EndIf
+					EndIf
+					
+					If n\PathStatus = PATH_STATUS_FOUND
+						If n\Path[n\PathLocation] = Null
+							If n\PathLocation > MaxPathLocations - 1
+								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+							Else
+								n\PathLocation = n\PathLocation + 1
+							EndIf
+						Else
+							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+							PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
+							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
+							
+							UseDoorNPC(n)
+							
+							AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
+						EndIf
+					Else
+						Select n\PrevState
+							Case 0
+								;[Block]
+								AnimateNPC(n, 269.0, 345.0, 0.2)
+								;[End Block]
+							Case 1
+								;[Block]
+								AnimateNPC(n, 661.0, 891.0, 0.4, False)
+								;[End Block]
+							Case 2
+								;[Block]
+								AnimateNPC(n, 892.0, 1119.0, 0.4, False)
+								;[End Block]
+						End Select
+					EndIf
+				EndIf
+				
+				If PlayerRoom\RoomTemplate\RoomID = r_room2_sl Then ShouldPlay = 19
 				
 				If n\CurrSpeed > 0.005
 					If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 				EndIf
 				
 				UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ, 10.0, 1.0, True)
-			ElseIf n\Idle = 0
-				If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-				If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-				If PlayerInReachableRoom(True) And InFacility = NullFloor ; ~ Player is in a room where SCP-049 can teleport to
-					If Rand(4 - (2 * SelectedDifficulty\AggressiveNPCs)) = 1
-						TeleportCloser(n)
-					Else
-						n\Idle = 70.0 * 60.0
-					EndIf
-				EndIf
-			EndIf
-			;[End Block]
-		Case 3.0 ; ~ The player was killed by SCP-049
-			;[Block]
-			AnimateNPC(n, 537.0, 660.0, 0.7, False)
-			
-			PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
-			n\Angle = CurveAngle(EntityYaw(me\Collider) - 180.0, n\Angle, 10.0)
-			;[End Block]
-		Case 4.0 ; ~ Going to surveillance room
-			;[Block]
-			PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, 60.0, True)
-			If PlayerSeeable = 1
-				PlaySound_Strict(LoadTempSound("SFX\SCP\049\Room2SLSpawn.ogg"))
-				n\PathStatus = PATH_STATUS_NO_SEARCH
-				n\PathLocation = 0
-				n\PathTimer = 0.0
-				n\PrevState = 0
-				n\State3 = 0.0
-				n\State2 = 70.0 * 2.0
-				n\State = 2.0
-			ElseIf PlayerSeeable = 2 And n\State3 > 0.0
-				n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
-			Else
-				If n\State3 = 6.0
-					If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(HideDistance)
-						n\PathStatus = PATH_STATUS_NO_SEARCH
-						n\PathLocation = 0
-						n\PathTimer = 0.0
-						n\PrevState = 0
-						n\State3 = 0.0
-						n\State = 2.0
-					Else
-						If n\PathStatus <> PATH_STATUS_FOUND Then n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
-					EndIf
-				EndIf
-				
-				If n\PathStatus = PATH_STATUS_FOUND
-					If n\Path[n\PathLocation] = Null
-						If n\PathLocation > MaxPathLocations - 1
-							n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
-						Else
-							n\PathLocation = n\PathLocation + 1
-						EndIf
-					Else
-						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
-						PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
-						RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0), 0.0)
-						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
-						
-						UseDoorNPC(n)
-						
-						AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
-					EndIf
-				Else
-					Select n\PrevState
-						Case 0
-							;[Block]
-							AnimateNPC(n, 269.0, 345.0, 0.2)
-							;[End Block]
-						Case 1
-							;[Block]
-							AnimateNPC(n, 661.0, 891.0, 0.4, False)
-							;[End Block]
-						Case 2
-							;[Block]
-							AnimateNPC(n, 892.0, 1119.0, 0.4, False)
-							;[End Block]
-					End Select
-				EndIf
-			EndIf
-			
-			If PlayerRoom\RoomTemplate\RoomID = r_room2_sl Then ShouldPlay = 19
-			
-			If n\CurrSpeed > 0.005
-				If (PrevFrame < 361.0 And n\Frame >= 361.0) Lor (PrevFrame < 377.0 And n\Frame >= 377.0) Lor (PrevFrame < 431.0 And n\Frame >= 431.0) Lor (PrevFrame < 447.0 And n\Frame >= 447.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
-			EndIf
-			
-			UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ, 10.0, 1.0, True)
-			;[End Block]
-	End Select
-	n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
+				;[End Block]
+		End Select
+		n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
+	EndIf
 	
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.22, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle, 0.0, True)
