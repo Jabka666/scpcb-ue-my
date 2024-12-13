@@ -63,7 +63,7 @@ Function UpdateMouseInput%()
 		mo\DoubleClick = False
 		mo\MouseHit1 = MouseHit(1)
 		If mo\MouseHit1
-			If MilliSecs() - mo\LastMouseHit1 < 800 Then mo\DoubleClick = True
+			If MilliSecs() - mo\LastMouseHit1 < 300 Then mo\DoubleClick = True
 			mo\LastMouseHit1 = MilliSecs()
 		EndIf
 		
