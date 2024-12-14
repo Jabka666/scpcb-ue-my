@@ -5,9 +5,12 @@
 - SCP-895 can effect monitors once player leaves SCP-173's room.
 - Increase range to interact with ducks.
 - Updated SCP-895's overlay textures.
-- Added penny in «room1_storage».
-- New interactions with the duck in «room1_storage» when wearing SCP-714.
 - Better subtitles.
+
+[Rooms]
+- Added penny in «room1_storage».
+- Added pciture frame of Mark Sibly in «room2_scientists».
+- New interactions with the duck in «room1_storage» when wearing SCP-714.
 
 [Bug Fixes]
 - Fixed SCP-789-J trigger distance.

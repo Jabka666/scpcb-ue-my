@@ -182,6 +182,11 @@
 
 		Dgvoodoo2 made by Dege and Diosg.
 		thanks a lot to them for the right to use their software in our game!
+		
+*Blitz3D Engine Creator
+
+		Blitz3D Engine made by Mark Sibly.
+		Thank you for creating an engine that became SCP CB's engine of use. Rest well.
 
 *Some Materials Taken from or Idealized by:
 
