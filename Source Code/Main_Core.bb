@@ -8539,7 +8539,7 @@ Function UpdateEnding%()
 			ShouldPlay = 22
 			opt\CurrMusicVolume = opt\MusicVolume
 			StopStream_Strict(MusicCHN) : MusicCHN = 0
-			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[22] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume, 0)
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[22] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume)
 			NowPlaying = ShouldPlay
 			
 			PlaySound_Strict(snd_I\LightOffSFX)
@@ -8574,7 +8574,7 @@ Function UpdateEnding%()
 							If TempSounds[i + 1] <> 0 Then FreeSound_Strict(TempSounds[i + 1]) : TempSounds[i + 1] = 0
 						Next
 						StopStream_Strict(MusicCHN) : MusicCHN = 0
-						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
+						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0)
 						SetStreamVolume_Strict(MusicCHN, opt\MusicVolume * opt\MasterVolume)
 						me\EndingTimer = -2000.0
 						ShouldDeleteGadgets = True

@@ -69,13 +69,13 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 						Else
 							If opt\EnableSFXRelease
 								snd\InternalHandle = LoadSound(snd\Name)
+								SoundVolume(snd\InternalHandle, ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 								CreateSubtitlesToken(snd\Name, snd)
 							EndIf
 						EndIf
 						If snd\InternalHandle = 0 Then OpenConsoleOnError(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
 					EndIf
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
-					ChannelVolume(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 					snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
@@ -86,13 +86,13 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 					Else
 						If opt\EnableSFXRelease
 							snd\InternalHandle = LoadSound(snd\Name)
+							SoundVolume(snd\InternalHandle, ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 							CreateSubtitlesToken(snd\Name, snd)
 						EndIf
 					EndIf
 					If snd\InternalHandle = 0 Then OpenConsoleOnError(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
 				EndIf
 				snd\Channels[i] = PlaySound(snd\InternalHandle)
-				ChannelVolume(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 				snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
 			EndIf
@@ -101,7 +101,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 	Return(0)
 End Function
 
-Function LoadSound_Strict%(File$)
+Function LoadSound_Strict%(File$, Volume# = 1.0)
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	
 	Local snd.Sound
@@ -113,6 +113,7 @@ Function LoadSound_Strict%(File$)
 	If (Not opt\EnableSFXRelease)
 		If snd\InternalHandle = 0
 			snd\InternalHandle = LoadSound(snd\Name)
+			SoundVolume(snd\InternalHandle, Volume)
 			CreateSubtitlesToken(snd\Name, snd)
 		EndIf
 	EndIf
@@ -135,10 +136,7 @@ Type Stream
 	Field CHN%
 End Type
 
-Const Mode% = 2
-Const TwoD% = 8192
-
-Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
+Function StreamSound_Strict%(File$, Volume# = 1.0)
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
 	If FileType(File) <> 1
 		OpenConsoleOnError(Format(GetLocalString("runerr", "sound.notfound"), File))
@@ -147,7 +145,7 @@ Function StreamSound_Strict%(File$, Volume# = 1.0, CustomMode% = Mode)
 	
 	Local st.Stream = New Stream
 	
-	st\CHN = PlayMusic(File, CustomMode + TwoD)
+	st\CHN = PlayMusic(File, Volume)
 	
 	If st\CHN = -1
 		OpenConsoleOnError(Format(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File, "{0}"), st\CHN, "{1}"))

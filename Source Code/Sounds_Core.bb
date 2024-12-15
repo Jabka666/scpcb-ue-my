@@ -118,7 +118,7 @@ Function UpdateMusic%()
 	
 	If NowPlaying < 66
 		If (Not CurrMusic)
-			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0)
 			CurrMusic = True
 		EndIf
 		SetStreamVolume_Strict(MusicCHN, opt\CurrMusicVolume * opt\MasterVolume)
@@ -462,7 +462,7 @@ Function PlayAnnouncement%(File$) ; ~ This function streams the announcement cur
 	If (Not PlayerInReachableRoom(True, True)) Then Return
 	
 	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
-	IntercomStreamCHN = StreamSound_Strict(File, opt\VoiceVolume * opt\MasterVolume, 0)
+	IntercomStreamCHN = StreamSound_Strict(File, opt\VoiceVolume * opt\MasterVolume)
 End Function
 
 Function UpdateStreamSounds%()
