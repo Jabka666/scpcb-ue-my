@@ -1676,7 +1676,7 @@ Function UpdateNPCType106%(n.NPCs)
 							;[End Block]
 						Case 2
 							;[Block]
-							n\State2 = Max(2000.0, n\State2 - (TimerCountDown * 0.25))
+							If n\State2 > 2000.0 Then n\State2 - (TimerCountDown * 0.25)
 							;[End Block]
 					End Select
 				EndIf
