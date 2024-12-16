@@ -10,7 +10,7 @@
 
 [Rooms]
 - Added penny in «room1_storage».
-- Added pciture frame of Mark Sibly in «room2_scientists».
+- Added pciture frame of Mark Sibly in «room2_scientists_2».
 - New interactions with the duck in «room1_storage» when wearing SCP-714.
 - Updated SCP-008's label.
 
