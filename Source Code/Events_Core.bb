@@ -1222,6 +1222,7 @@ Function UpdateEvents%()
 									ElseIf e\EventState3 > 3200.0
 										If e\EventState2 = 1.0
 											n_I\Curr106\State = 0.0
+											n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 											n_I\Curr106\Contained = True
 										Else
 											PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
@@ -3330,6 +3331,7 @@ Function UpdateEvents%()
 						me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.15 / EntityDistance(e\room\NPC[0]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
 						If e\EventState > 100.0
 							n_I\Curr106\State = 0.0
+							n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 							n_I\Curr106\Idle = 0
 							If EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 								n_I\Curr106\EnemyX = EntityX(me\Collider) : n_I\Curr106\EnemyY = EntityY(me\Collider) : n_I\Curr106\EnemyZ = EntityZ(me\Collider)
@@ -5038,6 +5040,7 @@ Function UpdateEvents%()
 						If e\EventState > 250.0
 							n_I\Curr106\Idle = 0
 							n_I\Curr106\State = 0.0
+							n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 							StopChannel(n_I\Curr106\SoundCHN) : n_I\Curr106\SoundCHN = 0
 							RemoveEvent(e)
 						EndIf
@@ -7247,7 +7250,6 @@ Const PD_TowerRoom% = 6
 Const PD_Labyrinth% = 7
 ;[End Block]
 
-; ~ TODO
 Function UpdateDimension106%()
 	Local e.Events, e2.Events, r.Rooms, d.Doors, it.Items, p.Particles, de.Decals
 	Local i%, Angle#, Dist#, Pvt%, Temp%
@@ -7731,6 +7733,7 @@ Function UpdateDimension106%()
 							; ~ Player is at the exit
 							If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
 								n_I\Curr106\State = 0.0
+								n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 								Random = Rand(12, 28)
 								Teleport = True
 							Else ; ~ Somewhere else, must've fallen down
@@ -9891,6 +9894,7 @@ Function UpdateEndings%()
 									If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[11], True), 1.0)
 										If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[11], True), EntityZ(me\Collider), EntityZ(e\room\Objects[11], True)) < 144.0
 											n_I\Curr106\State = 0.0
+											n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 											If (Not EntityHidden(n_I\Curr106\OBJ)) Then HideEntity(n_I\Curr106\OBJ)
 											
 											; ~ MTF spawns at the tunnel entrance

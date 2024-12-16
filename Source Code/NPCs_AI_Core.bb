@@ -1658,7 +1658,6 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 				ResetEntity(n\Collider)
-				n\State2 = Rnd(22000.0, 27000.0)
 				n\State = 1.0
 				;[End Block]
 			Case 1.0 ; ~ Idling outside the map
