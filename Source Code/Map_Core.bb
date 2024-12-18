@@ -5089,15 +5089,15 @@ Function PreventRoomOverlap%(r.Rooms)
 				
 				IsIntersecting = False
 				
-				r\x = x2 * 8.0
-				r\z = y2 * 8.0
+				r\x = x2 * RoomSpacing
+				r\z = y2 * RoomSpacing
 				r\Angle = Rot2
 				PositionEntity(r\OBJ, r\x, r\y, r\z)
 				RotateEntity(r\OBJ, 0.0, r\Angle, 0.0)
 				CalculateRoomExtents(r)
 				
-				r2\x = x * 8.0
-				r2\z = y * 8.0
+				r2\x = x * RoomSpacing
+				r2\z = y * RoomSpacing
 				r2\Angle = Rot
 				PositionEntity(r2\OBJ, r2\x, r2\y, r2\z)
 				RotateEntity(r2\OBJ, 0.0, r2\Angle, 0.0)
@@ -5123,15 +5123,15 @@ Function PreventRoomOverlap%(r.Rooms)
 				
 				; ~ Either the original room or the "reposition" room is intersecting, reset the position of each room to their original one
 				If IsIntersecting
-					r\x = x * 8.0
-					r\z = y * 8.0
+					r\x = x * RoomSpacing
+					r\z = y * RoomSpacing
 					r\Angle = Rot
 					PositionEntity(r\OBJ, r\x, r\y, r\z)
 					RotateEntity(r\OBJ, 0.0, r\Angle, 0.0)
 					CalculateRoomExtents(r)
 					
-					r2\x = x2 * 8.0
-					r2\z = y2 * 8.0
+					r2\x = x2 * RoomSpacing
+					r2\z = y2 * RoomSpacing
 					r2\Angle = Rot2
 					PositionEntity(r2\OBJ, r2\x, r2\y, r2\z)
 					RotateEntity(r2\OBJ, 0.0, r2\Angle, 0.0)

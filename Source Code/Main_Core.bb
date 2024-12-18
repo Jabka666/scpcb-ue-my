@@ -463,7 +463,7 @@ Function UpdateGame%()
 							;[End Block]
 					End Select
 					me\BlinkTimer = me\BLINKFREQ
-					If (Not (PlayerRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider) =< (-4100.0) * RoomScale)) Then me\BlurTimer = Max(me\BlurTimer - Rnd(50.0, 150.0), 0.0)
+					If (Not (PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor)) Then me\BlurTimer = Max(me\BlurTimer - Rnd(50.0, 150.0), 0.0)
 				EndIf
 				me\BlinkTimer = me\BlinkTimer - fps\Factor[0]
 			Else
@@ -3242,7 +3242,7 @@ Function UpdateZoneColor%()
 	; ~ Allow to use big range for debugging
 	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * me\CameraFogDist * LightVolume * 1.3)
 	; ~ Handle room-specific settings
-	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider, True) < (-4100.0) * RoomScale
+	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf IsOutSide
 		SetZoneColor(FogColorOutside)
@@ -7925,11 +7925,11 @@ Function UpdateMenu%()
 								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
-								If x < 12.0 And z < 12.0
+								If x <= 12.0 And z <= 12.0
 									Temp = Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)
 									CurrMapGrid\Found[Temp] = Max(CurrMapGrid\Found[Temp], 1)
-									If x < 4.0 And z < 4.0
-										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+									If x <= 4.0 And z <= 4.0
+										If IsEqual(EntityY(me\Collider), EntityY(r\OBJ), 1.5) Then PlayerRoom = r
 										CurrMapGrid\Found[Temp] = MapGrid_Tile
 									EndIf
 								EndIf
@@ -7997,11 +7997,11 @@ Function UpdateMenu%()
 								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
 								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
 								
-								If x < 12.0 And z < 12.0
+								If x <= 12.0 And z <= 12.0
 									Temp = Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)
 									CurrMapGrid\Found[Temp] = Max(CurrMapGrid\Found[Temp], 1)
-									If x < 4.0 And z < 4.0
-										If Abs(EntityY(me\Collider) - EntityY(r\OBJ)) < 1.5 Then PlayerRoom = r
+									If x <= 4.0 And z <= 4.0
+										If IsEqual(EntityY(me\Collider), EntityY(r\OBJ), 1.5) Then PlayerRoom = r
 										CurrMapGrid\Found[Temp] = MapGrid_Tile
 									EndIf
 								EndIf
@@ -9991,7 +9991,7 @@ Function UpdateLeave1499%()
 				I_1499\z = EntityZ(me\Collider)
 				TeleportEntity(me\Collider, I_1499\PrevX, I_1499\PrevY + 0.05, I_1499\PrevZ)
 				TeleportToRoom(r)
-				If I_1499\PrevRoom\RoomTemplate\RoomID = r_room3_storage And EntityY(me\Collider) < (-4600.0) * RoomScale
+				If I_1499\PrevRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 					For i = 0 To 3
 						PlayerRoom\NPC[i]\State = 2.0
 						PositionEntity(PlayerRoom\NPC[i]\Collider, EntityX(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True), EntityY(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True) + 0.2, EntityZ(PlayerRoom\Objects[PlayerRoom\NPC[i]\State2], True))

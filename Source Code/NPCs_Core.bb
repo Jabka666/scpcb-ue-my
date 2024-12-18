@@ -1590,7 +1590,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	
 	If (Not CanSpawnIn049Chamber)
 		If (Not SelectedDifficulty\AggressiveNPCs)
-			If PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And EntityY(me\Collider) <= (-2848.0) * RoomScale Then Return(False)
+			If PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And InFacility = LowerFloor Then Return(False)
 		EndIf
 	EndIf
 	; ~ Return true, this means player is in reachable room

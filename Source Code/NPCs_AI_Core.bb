@@ -1632,7 +1632,7 @@ Function UpdateNPCType106%(n.NPCs)
 	Local Spawn106% = True
 	
 	; ~ Checking if SCP-106 is allowed to spawn
-	If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And EntityY(me\Collider) <= -2848.0 * RoomScale) Then Spawn106 = False
+	If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And InFacility = LowerFloor) Then Spawn106 = False
 	If forest_event <> Null And forest_event\room = PlayerRoom
 		If forest_event\EventState = 1.0 Then Spawn106 = False
 	EndIf
