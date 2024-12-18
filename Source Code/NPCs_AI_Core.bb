@@ -1650,7 +1650,10 @@ Function UpdateNPCType106%(n.NPCs)
 			Exit
 		EndIf
 	Next
-	If (Not Spawn106) And n\State > 1.0 Then n\State = 0.0
+	If (Not Spawn106) And n\State > 1.0
+		n\State2 = Rnd(22000.0, 27000.0)
+		n\State = 0.0
+	EndIf
 	
 	If n\Idle = 0 And Spawn106
 		Select n\State
@@ -1952,6 +1955,7 @@ Function UpdateNPCType106%(n.NPCs)
 						
 						HideEntity(n\OBJ2)
 						
+						n\State2 = Rnd(22000.0, 27000.0)
 						n\State = 0.0
 					EndIf
 				EndIf
@@ -1975,8 +1979,8 @@ Function UpdateNPCType106%(n.NPCs)
 					AnimateNPC(n, 259.0, 111.0, -0.15, False)
 					
 					If n\Frame <= 150.0
-						n\State = 0.0
 						n\State2 = 70.0 * 60.0 * Rnd(10.0, 12.0)
+						n\State = 0.0
 					EndIf
 				EndIf
 				;[End Block]
