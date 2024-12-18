@@ -1496,9 +1496,8 @@ Function DestroyForest%(fr.Forest, RemoveGrid% = True)
 	For i = ROOM1 To ROOM4
 		If fr\TileMesh[i] <> 0 Then FreeEntity(fr\TileMesh[i]) : fr\TileMesh[i] = 0
 	Next
-	For i = 0 To 2 Step 2
+	For i = 0 To 3
 		If fr\DetailMesh[i] <> 0 Then FreeEntity(fr\DetailMesh[i]) : fr\DetailMesh[i] = 0
-		If fr\DetailMesh[i + 1] <> 0 Then FreeEntity(fr\DetailMesh[i + 1]) : fr\DetailMesh[i + 1] = 0
 	Next
 	
 	CatchErrors("Uncaught: DestroyForest(" + RemoveGrid + ")")
@@ -6055,10 +6054,9 @@ Function SetChunkDataValues%()
 	StrTemp = ""
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	
-	For i = 0 To 62 Step 2
-		For j = 0 To 62 Step 2
+	For i = 0 To 63
+		For j = 0 To 63
 			CHUNKDATA[i + (j * 64)] = Rand(0, ChunkArray - 1)
-			CHUNKDATA[(i + 1) + ((j + 1) * 64)] = Rand(0, ChunkArray - 1)
 		Next
 	Next
 	

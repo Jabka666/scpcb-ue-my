@@ -5808,9 +5808,8 @@ Function UpdateEvents%()
 						ShouldPlay = 7
 						
 						If e\room\NPC[0] = Null
-							For i = 0 To 2 Step 2
+							For i = 0 To 3
 								e\room\NPC[i] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
-								e\room\NPC[i + 1] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
 							Next
 							
 							TFormPoint(3372.0, -5580.8, 6294.0, e\room\OBJ, 0)
@@ -7315,9 +7314,8 @@ Function UpdateDimension106%()
 				Select e\EventState2
 					Case PD_StartRoom
 						;[Block]
-						For i = 0 To 6 Step 2
+						For i = 0 To 7
 							ScaleEntity(e\room\Objects[i], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + i * 20.0) * 0.1), RoomScale, True)
-							ScaleEntity(e\room\Objects[i + 1], RoomScale * (1.0 + Abs(Sin(e\EventState / 21.0 + (i + 1) * 45.0) * 0.1)), RoomScale * (1.0 + Sin(e\EventState / 14.0 + (i + 1) * 20.0) * 0.1), RoomScale, True)
 						Next
 						
 						If n_I\Curr106\State < 3.0 ; ~ SCP-106 circles around the starting room
@@ -8249,15 +8247,13 @@ Function UpdateDimension1499%()
 						e\EventState3 = 70.0 * 20.0
 					ElseIf e\EventState3 = 70.0 * 20.0
 						If e\room\NPC[0]\Frame > 854.5
-							For i = 2 To 4 Step 2
+							For i = 2 To 5
 								If i = 2
 									LoadNPCSound(e\room\NPC[i], "SFX\SCP\1499\Triggered.ogg")
 									e\room\NPC[i]\SoundCHN = PlaySoundEx(e\room\NPC[i]\Sound, Camera, e\room\NPC[i]\Collider, 50.0)
 								EndIf
 								e\room\NPC[i]\State = 1.0
 								SetNPCFrame(e\room\NPC[i], 203.0)
-								e\room\NPC[i + 1]\State = 1.0
-								SetNPCFrame(e\room\NPC[i + 1], 203.0)
 							Next
 							e\EventState3 = 70.0 * 30.0
 						EndIf
@@ -9837,12 +9833,9 @@ Function UpdateEndings%()
 												For i = 2 To 4 ; ~ Helicopters attack the player
 													e\room\NPC[i]\State = 2.0
 												Next
-												For i = 5 To 7 Step 2 ; ~ MTFs attack the player
+												For i = 5 To 8; ~ MTFs attack the player
 													e\room\NPC[i]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.3)
-													e\room\NPC[i + 1]\Speed = e\room\NPC[i]\Speed * Rnd(1.0, 1.3)
-													
 													e\room\NPC[i]\State = MTF_SEARCHING_PLAYER : e\room\NPC[i]\State2 = 70.0 * 3600.0
-													e\room\NPC[i + 1]\State = MTF_SEARCHING_PLAYER : e\room\NPC[i + 1]\State2 = 70.0 * 3600.0
 												Next
 											EndIf
 										Else

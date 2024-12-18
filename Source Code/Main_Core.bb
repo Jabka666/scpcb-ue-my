@@ -298,9 +298,8 @@ Function UpdateGame%()
 		UpdateStreamSounds()
 		
 		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
-			For i = 0 To 2 Step 2
+			For i = 0 To 3
 				DrawArrowIcon[i] = False
-				DrawArrowIcon[i + 1] = False
 			Next
 			
 			me\RestoreSanity = True
@@ -8571,9 +8570,8 @@ Function UpdateEnding%()
 					If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "mainmenu"), Font_Default_Big)
 						ShouldPlay = 23
 						NowPlaying = ShouldPlay
-						For i = 0 To 8 Step 2
+						For i = 0 To 9
 							If TempSounds[i] <> 0 Then FreeSound_Strict(TempSounds[i]) : TempSounds[i] = 0
-							If TempSounds[i + 1] <> 0 Then FreeSound_Strict(TempSounds[i + 1]) : TempSounds[i + 1] = 0
 						Next
 						StopStream_Strict(MusicCHN) : MusicCHN = 0
 						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, Mode)

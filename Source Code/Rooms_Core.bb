@@ -4177,9 +4177,8 @@ Function FillRoom%(r.Rooms)
 			EntityType(r\Objects[20], HIT_MAP)
 			PositionEntity(r\Objects[20], r\x, r\y + 16.0 + 2944.0 * RoomScale, r\z + 32.0, True)
 			
-			For i = 17 To 19 Step 2
+			For i = 17 To 20
 				HideEntity(r\Objects[i])
-				HideEntity(r\Objects[i + 1])
 			Next
 			
 			; ~ SCP-106 spawnpoint in labyrinth
