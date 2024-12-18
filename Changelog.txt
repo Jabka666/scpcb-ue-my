@@ -14,6 +14,9 @@
 - New interactions with the duck in «room1_storage» when wearing SCP-714.
 - Updated SCP-008's label.
 
+[NPCs]
+- Better texture for guards.
+
 [Bug Fixes]
 - Fixed SCP-789-J trigger distance.
 - Fixed mask of the Old Badge and the Ticket.
