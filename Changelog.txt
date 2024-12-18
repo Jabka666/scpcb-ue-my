@@ -1,6 +1,8 @@
 {v1.4.1}
 
 [Global]
+- Added decay sound for corroded doors.
+
 - Removed buttons glowing.
 - SCP-895 can effect monitors once player leaves SCP-173's room instead of requiring entering heavy containment zone.
 - Partially reverted SCP-079 increased chances to hack monitors with SCP-895.

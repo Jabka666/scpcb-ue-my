@@ -3795,13 +3795,17 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 			EndIf
 		EndIf
 		
-		Local SoundOpen%
-		Local SoundClose% = CloseDoorSFX(DoorType, SoundRand)
+		Local SoundOpen%, SoundClose%
 		
+		SoundClose = CloseDoorSFX(DoorType, SoundRand)
 		If DoorType = BIG_DOOR And d\Locked = 2
 			SoundOpen = snd_I\BigDoorErrorSFX[Rand(0, 2)]
 		Else
 			SoundOpen = OpenDoorSFX(DoorType, SoundRand)
+		EndIf
+		If d\IsAffected
+			SoundClose = snd_I\CloseDecayDoorSFX[DoorType]
+			SoundOpen = snd_I\OpenDecayDoorSFX[DoorType]
 		EndIf
 		
 		If d\Open
