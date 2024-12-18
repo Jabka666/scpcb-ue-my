@@ -2350,7 +2350,7 @@ Function UpdateInput$(aString$, MaxChr%)
 			Local Clipboard$ = GetClipboardContents()
 			
 			If Clipboard <> ""
-				aString = Left(aString, CursorPos) + Clipboard + Right(aString, Length - CursorPos)
+				aString = Left(aString, CursorPos) + Clipboard + Right(aString, Max(Length - CursorPos, 0))
 				CursorPos = CursorPos + Len(Clipboard)
 				If MaxChr > 0 And MaxChr < Len(aString)
 					aString = Left(aString, MaxChr) 

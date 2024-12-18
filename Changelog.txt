@@ -20,6 +20,7 @@
 - Fixed toilet not spawning in «room2_6_ez».
 - Fixed «spawn 106» console command.
 - Fixed SCP-106's pathfinding.
+- Fixed «Ctrl+V» combination crashing the game.
 
 [Known issues]
 - Rooms can overlap and block the way.
