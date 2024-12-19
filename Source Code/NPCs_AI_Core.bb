@@ -3313,6 +3313,29 @@ Function UpdateNPCType966%(n.NPCs)
 	EndIf
 End Function
 
+Function UpdateNPCType999%(n.NPCs) ; Will need a lot more stuff later down the line
+	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
+	If Dist < 6.25 ;And n\State = 1.0 for later stuff
+		If EntityVisible(n\Collider, me\Collider)
+			PointEntity(n\Collider, me\Collider)
+			RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+			n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 30.0)
+			n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 40.0)
+			If Dist < 0.64
+				MoveEntity(n\Collider, 0.0, 0.0, (-n\CurrSpeed) * fps\Factor[0])
+			Else
+				If n\Frame < 10.0 Then AnimateNPC(n, 1.0, 10.0, 0.4)
+				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+			EndIf
+		EndIf
+	ElseIf n\Frame > 9.0
+		AnimateNPC(n, 11.0, 74.0, 0.4)
+	EndIf
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - 0.2, EntityZ(n\Collider, True), True)
+	RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0, True)
+End Function
+
+
 Function UpdateNPCType1048%(n.NPCs)
 	Local Visible% = (EntityDistanceSquared(me\Collider, n\Collider) < 4.0 And EntityInView(n\OBJ, Camera))
 	

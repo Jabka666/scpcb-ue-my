@@ -1,4 +1,4 @@
-{v1.4.1}
+{v1.5}
 
 [Global]
 - Added decay sound for corroded doors.
@@ -17,6 +17,7 @@
 - Updated SCP-008's label.
 
 [NPCs]
+- Added SCP-999.
 - Better texture for guards.
 
 [Bug Fixes]

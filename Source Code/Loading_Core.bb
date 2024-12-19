@@ -731,7 +731,7 @@ Function RemoveMonitorInstances%()
 	Delete(mon_I) : mon_I = Null
 End Function
 
-Const MaxNPCModelIDAmount% = 32
+Const MaxNPCModelIDAmount% = 33
 Const MaxNPCTextureID% = 19
 
 Type NPCInstance
@@ -769,19 +769,20 @@ Const NPC_513_1_MODEL% = 15
 Const NPC_860_2_MODEL% = 16
 Const NPC_939_MODEL% = 17
 Const NPC_966_MODEL% = 18
-Const NPC_1048_MODEL% = 19
-Const NPC_1048_A_MODEL% = 20
-Const NPC_1499_1_MODEL% = 21
-Const NPC_APACHE_MODEL% = 22
-Const NPC_APACHE_ROTOR_1_MODEL% = 23
-Const NPC_APACHE_ROTOR_2_MODEL% = 24
-Const NPC_CLERK_MODEL% = 25
-Const NPC_CLASS_D_MODEL% = 26
-Const NPC_DUCK_MODEL% = 27
-Const NPC_GUARD_MODEL% = 28
-Const NPC_MTF_MODEL% = 29
-Const NPC_NAZI_MODEL% = 30
-Const NPC_VEHICLE_MODEL% = 31
+Const NPC_999_MODEL% = 19
+Const NPC_1048_MODEL% = 20
+Const NPC_1048_A_MODEL% = 21
+Const NPC_1499_1_MODEL% = 22
+Const NPC_APACHE_MODEL% = 23
+Const NPC_APACHE_ROTOR_1_MODEL% = 24
+Const NPC_APACHE_ROTOR_2_MODEL% = 25
+Const NPC_CLERK_MODEL% = 26
+Const NPC_CLASS_D_MODEL% = 27
+Const NPC_DUCK_MODEL% = 28
+Const NPC_GUARD_MODEL% = 29
+Const NPC_MTF_MODEL% = 30
+Const NPC_NAZI_MODEL% = 31
+Const NPC_VEHICLE_MODEL% = 32
 ;[End Block]
 
 ; ~ NPC Texture ID Constants
@@ -846,6 +847,8 @@ Function LoadNPCs%()
 	n_I\NPCModelID[NPC_939_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_939.b3d")
 	
 	n_I\NPCModelID[NPC_966_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_966.b3d")
+	
+	n_I\NPCModelID[NPC_999_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_999.b3d")
 	
 	n_I\NPCModelID[NPC_1048_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1048.b3d")
 	n_I\NPCModelID[NPC_1048_A_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1048_a.b3d")
@@ -1934,6 +1937,8 @@ Function LoadEvents%()
 	CreateEvent(e_room2_sl, r_room2_sl, 0)
 	
 	CreateEvent(e_room2_medibay, r_room2_medibay, 0)
+	
+	CreateEvent(e_room2_office, r_room2_office, 0)
 	
 	CreateEvent(e_room2_shaft, r_room2_shaft, 0)
 	

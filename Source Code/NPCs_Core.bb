@@ -4,9 +4,9 @@ Include "Source Code\NPCs_AI_Core.bb"
 ;[Block]
 Const NPCType008_1% = 0, NPCType035_Tentacle% = 1, NPCType049% = 2, NPCType049_2% = 3, NPCType066% = 4, NPCType096% = 5
 Const NPCType106% = 6, NPCType173% = 7, NPCType372% = 8, NPCType513_1% = 9, NPCType860_2% = 10, NPCType939% = 11
-Const NPCType966% = 12, NPCType1048% = 13, NPCType1048_A% = 14, NPCType1499_1% = 15
+Const NPCType966% = 12, NPCType999% = 13, NPCType1048% = 14, NPCType1048_A% = 15, NPCType1499_1% = 16
 
-Const NPCTypeApache% = 16, NPCTypeClerk% = 17, NPCTypeD% = 18, NPCTypeGuard% = 19, NPCTypeMTF% = 20
+Const NPCTypeApache% = 17, NPCTypeClerk% = 18, NPCTypeD% = 19, NPCTypeGuard% = 20, NPCTypeMTF% = 21
 ;[End Block]
 
 Const MaxPathLocations% = 21
@@ -352,6 +352,19 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			SetNPCFrame(n, 15.0)
 			;[End Block]
+		Case NPCType999
+			;[Block]
+			n\NVGName = "SCP-999"
+			n\Speed = (IniGetFloat(NPCsFile, "SCP-999", "Speed") / 100.0)
+			
+			n\Collider = CreatePivot()
+			EntityRadius(n\Collider, n\CollRadius)
+			EntityType(n\Collider, HIT_PLAYER)
+			
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_999_MODEL])
+			Temp = IniGetFloat(NPCsFile, "SCP-999", "Scale") / 100.0
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			;[End Block]
 		Case NPCType1048
 			;[Block]
 			n\NVGName = "SCP-1048"
@@ -661,6 +674,10 @@ Function UpdateNPCs%()
 			Case NPCType966
 				;[Block]
 				UpdateNPCType966(n)
+				;[End Block]
+			Case NPCType999
+				;[Block]
+				UpdateNPCType999(n)
 				;[End Block]
 			Case NPCType1048
 				;[Block]
@@ -1421,6 +1438,11 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCType966, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "966"))
+			;[End Block]
+		Case "999", "scp999", "scp-999", "ticklemonster"
+			;[Block]
+			n.NPCs = CreateNPC(NPCType999, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "999"))
 			;[End Block]
 		Case "1048a", "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a", "earbear"
 			;[Block]

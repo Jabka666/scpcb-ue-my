@@ -22,7 +22,7 @@ If FileSize("RapidBson.dll") = 0 Then InitErrorStr = InitErrorStr + "RapidBson.d
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 
-Const VersionNumber$ = "1.4.1"
+Const VersionNumber$ = "1.5"
 
 If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
 If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")

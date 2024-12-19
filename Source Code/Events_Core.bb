@@ -85,7 +85,7 @@ Const e_gateway% = 66
 Const e_tesla% = 67
 Const e_trick% = 68, e_trick_item% = 69
 Const e_dimension_106% = 70, e_dimension_1499% = 71
-Const e_room1_storage% = 72
+Const e_room1_storage% = 72, e_room2_office% = 73
 ;[End Block]
 
 ; ~ For Map Creator
@@ -382,6 +382,10 @@ Function FindEventID%(EventName$)
 		Case "room1_storage"
 			;[Block]
 			Return(e_room1_storage)
+			;[End Block]
+		Case "room2_office"
+			;[Block]
+			Return(e_room2_office)
 			;[End Block]
 		Default
 			;[Block]
@@ -7120,6 +7124,14 @@ Function UpdateEvents%()
 							PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
 						EndIf
 					EndIf
+				EndIf
+				;[End Block]
+			Case e_room2_office
+				;[Block]
+				If e\room\Dist < 6.0
+					TFormPoint(820.0, -256.0, 0.0, e\room\OBJ, 0)
+					CreateNPC(NPCType999, TFormedX(), TFormedY(), TFormedZ())
+					RemoveEvent(e)
 				EndIf
 				;[End Block]
 			Case e_dimension_1499

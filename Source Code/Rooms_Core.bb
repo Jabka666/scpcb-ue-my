@@ -3494,20 +3494,9 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_office
 			;[Block]
-			d.Doors = CreateDoor(r, r\x - 244.0 * RoomScale, r\y, r\z, 90.0)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.048, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.048, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
+			d.Doors = CreateDoor(r, r\x - 232.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 644.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_1)
 			
-			; ~ Misc. doors
-			d.Doors = CreateDoor(r, r\x - 1216.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			
-			d.Doors = CreateDoor(r, r\x - 1216.0 * RoomScale, r\y - 384.0 * RoomScale, r\z + 1024.0 * RoomScale, 180.0)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			d.Doors = CreateDoor(r, r\x - 232.0 * RoomScale, r\y - 384.0 * RoomScale, r\z + 644.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_1)
 			
 			it.Items = CreateItem("Sticky Note", it_paper, r\x - 991.0 * RoomScale, r\y - 242.0 * RoomScale, r\z + 904.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
