@@ -515,7 +515,7 @@ Function UpdateNPCType049%(n.NPCs)
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
-						If Dist > 0.225
+						If Dist > 0.235
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
