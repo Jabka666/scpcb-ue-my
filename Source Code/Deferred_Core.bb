@@ -168,6 +168,11 @@ Function InitDeferred%()
 	HideEntity(DeferredCone)
 	HideEntity(DeferredQuad)
 	
+	; ~ Volumes mask
+	MaskEntity(DeferredSphere, 4)
+	MaskEntity(DeferredCone, 4)
+	MaskEntity(DeferredQuad, 4)
+	
 	SetShadowsDistance(4.0)
 	DirectionalLightUpdate = 0
 	
@@ -302,6 +307,8 @@ Function ProcessAllLights%(Cam%, Tween#)
 	ShowEntity(DeferredSphere)
 	ShowEntity(DeferredQuad)
 	
+	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
+	
 	For l.Lights = Each Lights
 		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range * 10.0, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\lType, l\FOV, True, Tween)
 	Next
@@ -309,6 +316,10 @@ Function ProcessAllLights%(Cam%, Tween#)
 	For dl.DynamicLight = Each DynamicLight
 		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\lType, dl\FOV, dl\Shadowed, Tween)
 	Next
+	
+	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 35.0, False, Tween)
+	
+	EndRender()
 	
 	HideEntity(DeferredCone)
 	HideEntity(DeferredSphere)
@@ -326,7 +337,8 @@ End Function
 
 Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, Shadows% = True, Tween# = 1.0)
 	Local VolumeScale# = Range * 1.25
-	Local Volume%, DistToLight#
+	Local DistToLight# = 1.0
+	Local Volume%
 	
 	EffectBool(DeferredShade, "Shadowed", False)
 	
@@ -340,7 +352,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
 			DistToLight = EntityDistance(Cam, Volume)
-			If Shadows Then RenderShadowMap(DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If Shadows Then RenderShadowMap(Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
 			EffectTechnique(DeferredShade, "PointLight")
 			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0))
@@ -357,7 +369,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
 			DistToLight# = EntityDistance(Cam, Volume)
-			If Shadows Then RenderShadowMap(DeferredShadowMap[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If Shadows Then RenderShadowMap(Cam, DeferredShadowMap[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
 			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2))
@@ -369,7 +381,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			;[Block]
 			Volume = DeferredQuad
 			
-			If Shadows Then RenderShadowMap(DeferredShadowMap[0], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If Shadows Then RenderShadowMap(Cam, DeferredShadowMap[0], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
 			Tween = 1.0
 			Cam = QuadCamera
@@ -384,10 +396,11 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	EffectVector(DeferredShade, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
 	EffectFloat(DeferredShade, "LightRange", Range)
 	
+	CameraRange(Cam, 0.01, DistToLight + Range * 2.0)
 	RenderEntity(Cam, Volume, Tween)
 End Function
 
-Function RenderShadowMap%(ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, Tween# = 1.0)
+Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, Tween# = 1.0)
 	Local i%
 	
 	SetBuffer(TextureBuffer(DeferredShadowMapDummy[LightType]))
@@ -424,12 +437,20 @@ Function RenderShadowMap%(ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Rang
 			
 			Local Width% = TextureWidth(ShadowMap) / 6
 			Local Height% = TextureHeight(ShadowMap)
+			Local CullingScale# = Tan(90.0 * 0.8) * Range * 2.0
+			
+			PositionEntity(DeferredCone, x, y, z)
 			
 			For i = 0 To 5
-				RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0.0)
-				CameraViewport(DeferredCamera, i * Width, 0, Width, Height)
-				RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
-				EffectMatrix(DeferredShade, "LightViewProj" + i, CameraMatrix(DeferredCamera, 2)) ; ~ Push matrix for each face
+				RotateEntity DeferredCone,  CubeRotateX[i], CubeRotateY[i], 0
+				ScaleEntity DeferredCone, CullingScale, CullingScale, Range
+				
+				If EntityInView(DeferredCone, MainCam)
+					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0)
+					CameraViewport(DeferredCamera, i * Width, 0, Width, Height)
+					RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
+					EffectMatrix(DeferredShade, "LightViewProj" + i, CameraMatrix(DeferredCamera, 2)) ; ~ Push matrix for each face
+				EndIf
 			Next
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
 			;[End Block]

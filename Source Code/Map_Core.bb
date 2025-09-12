@@ -250,7 +250,7 @@ Function UpdateLights%(Cam%)
 					
 					Dist = EntityDistanceSquared(Cam, l\OBJ)
 					MaxDist = (LightRenderDistance + PowTwo(l\Range)) * LightVolume
-					l\Fade = GetFade(Dist, MaxDist / 2, MaxDist)
+					l\Fade = GetFade(Dist, MaxDist / 2.0, MaxDist)
 					
 					If opttimer\LightsTimer = 0.0
 						Local LightSpriteHidden% = EntityHidden(l\Sprite)
@@ -261,10 +261,9 @@ Function UpdateLights%(Cam%)
 						If Dist < MaxDist
 							EntityAutoFade(l\Sprite, 0.1 * LightVolume, fog\FarDist * LightVolume)
 							
-							Local ShouldFlickering% = (l\Flickers And Rand(50) = 1)
-							
 							Local LightVisible%
 							Local LightInView% = EntityInView(l\OBJ, Cam)
+							Local ShouldFlickering% = (l\Flickers And Rand(50) = 1)
 							
 							If LightInView Lor ShouldFlickering Then LightVisible = EntityVisible(Cam, l\OBJ)
 							
@@ -316,7 +315,7 @@ Function UpdateLights%(Cam%)
 				If Cam = Camera ; ~ The lights are rendered by player's cam
 					Dist = EntityDistanceSquared(Cam, l\OBJ)
 					MaxDist = (LightRenderDistance + PowTwo(l\Range)) * LightVolume
-					l\Fade = GetFade(Dist, MaxDist / 2, MaxDist)
+					l\Fade = GetFade(Dist, MaxDist / 2.0, MaxDist)
 					
 					If opttimer\LightsTimer = 0.0
 						LightOBJHidden = EntityHidden(l\OBJ)
