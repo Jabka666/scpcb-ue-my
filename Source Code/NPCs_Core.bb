@@ -367,7 +367,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-939-" + i
-			n\Speed = 0.03
+			n\Speed = 0.04
 			
 			n\Collider = CreatePivot()
 			n\CollRadius = 0.38

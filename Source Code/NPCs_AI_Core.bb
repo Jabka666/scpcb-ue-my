@@ -3663,8 +3663,8 @@ Function UpdateNPCType939%(n.NPCs)
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
 						AnimateNPC(n, 852.0, 859.0, 0.32, False)
 					Else
-						n\CurrSpeed = CurveValue(n\Speed * 1.2, n\CurrSpeed, 15.0)
-						AnimateNPC(n, 860.0, 876.0, n\CurrSpeed * 15.0)
+						n\CurrSpeed = CurveValue(n\Speed , n\CurrSpeed, 15.0)
+						AnimateNPC(n, 860.0, 876.0, n\CurrSpeed * 10.0)
 					EndIf
 					If (PrevFrame < 866.0 And n\Frame >= 866.0) Then PlaySoundEx(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
 				Else
@@ -3672,8 +3672,8 @@ Function UpdateNPCType939%(n.NPCs)
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
 						AnimateNPC(n, 1581.0, 1591.0, 0.32, False)
 					Else
-						n\CurrSpeed = CurveValue(n\Speed * 1.2, n\CurrSpeed, 15.0)
-						AnimateNPC(n, 1592.0, 1607.0, n\CurrSpeed * 15.0)
+						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
+						AnimateNPC(n, 1592.0, 1607.0, n\CurrSpeed * 10.0)
 					EndIf
 					If (PrevFrame < 1597.0 And n\Frame >= 1597.0) Then PlaySoundEx(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
 				EndIf
@@ -3735,7 +3735,7 @@ Function UpdateNPCType939%(n.NPCs)
 				Select n\LastDist
 					Case 1.0
 						;[Block]
-						AnimateNPC(n, 911.0, 939.0, 0.35, False)
+						AnimateNPC(n, 911.0, 939.0, 0.4, False)
 						Temp = (n\Frame >= 923.0 And PrevFrame < 923.0)
 						If n\Frame > 938.9
 							SetNPCFrame(n, 852.0)
@@ -3745,7 +3745,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 2.0
 						;[Block]
-						AnimateNPC(n, 940.0, 969.0, 0.35, False)
+						AnimateNPC(n, 940.0, 969.0, 0.4, False)
 						Temp = (n\Frame >= 952.0 And PrevFrame < 952.0)
 						If n\Frame > 968.9
 							SetNPCFrame(n, 852.0)
@@ -3755,7 +3755,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 3.0
 						;[Block]
-						AnimateNPC(n, 970.0, 998.0, 0.3, False)
+						AnimateNPC(n, 970.0, 998.0, 0.35, False)
 						Temp = (n\Frame >= 978.0 And PrevFrame < 978.0)
 						If n\Frame > 997.9
 							SetNPCFrame(n, 852.0)
@@ -3765,7 +3765,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 4.0
 						;[Block]
-						AnimateNPC(n, 999.0, 1025.0, 0.3, False)
+						AnimateNPC(n, 999.0, 1025.0, 0.35, False)
 						Temp = (n\Frame >= 1010.0 And PrevFrame < 1010.0)
 						If n\Frame > 1024.9
 							SetNPCFrame(n, 852.0)
@@ -3778,7 +3778,7 @@ Function UpdateNPCType939%(n.NPCs)
 				Select n\LastDist
 					Case 1.0
 						;[Block]
-						AnimateNPC(n, 1666.0, 1710.0, 0.35, False)
+						AnimateNPC(n, 1666.0, 1710.0, 0.4, False)
 						Temp = (n\Frame >= 1677.0 And PrevFrame < 1677.0) Lor (n\Frame >= 1686.0 And PrevFrame < 1686.0) Lor (n\Frame >= 1699.0 And PrevFrame < 1699.0)
 						If n\Frame > 1709.9
 							SetNPCFrame(n, 852.0)
@@ -3788,7 +3788,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 2.0
 						;[Block]
-						AnimateNPC(n, 1711.0, 1752.0, 0.35, False)
+						AnimateNPC(n, 1711.0, 1752.0, 0.4, False)
 						Temp = (n\Frame >= 1718.0 And PrevFrame < 1718.0) Lor (n\Frame >= 1727.0 And PrevFrame < 1727.0) Lor (n\Frame >= 1740.0 And PrevFrame < 1740.0)
 						If n\Frame > 1751.9
 							SetNPCFrame(n, 852.0)
