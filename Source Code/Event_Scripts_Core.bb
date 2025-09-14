@@ -9549,7 +9549,7 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 				EndIf
 			EndIf
 			If EntityDistanceSquared(me\Collider, e\room\Objects[5]) < 0.16
-				If Rand(75 + ((wi\HazmatSuit > 0) * 230)) = 1
+				If Rand(75 + ((wi\HazmatSuit = 2) * 230)) = 1
 					If me\Injuries < 1.5 And (Not chs\GodMode)
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 						InjurePlayer(1.5)
