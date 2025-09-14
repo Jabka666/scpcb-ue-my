@@ -450,7 +450,7 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 				ScaleEntity(DeferredCone, CullingScale, CullingScale, Range)
 				
 				If EntityInView(DeferredCone, MainCam)
-					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0)
+					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0.0)
 					CameraViewport(DeferredCamera, i * Width, 0, Width, Height)
 					RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 					EffectMatrix(DeferredShade, "LightViewProj" + i, CameraMatrix(DeferredCamera, 2)) ; ~ Push matrix for each face
