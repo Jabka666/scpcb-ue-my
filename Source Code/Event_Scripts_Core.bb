@@ -7443,7 +7443,7 @@ Function UpdateEvent_Room2_Scientists_2%(e.Events)
 					If (Not n_I\Curr106\Contained)
 						If n_I\Curr106\State = 1.0 Then n_I\Curr106\State2 = n_I\Curr106\State2 - (fps\Factor[0] * 3.0)
 					EndIf
-					me\Injuries = me\Injuries + (fps\Factor[0] * 0.00005)
+					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0001)
 				EndIf
 			EndIf
 		EndIf
@@ -7625,7 +7625,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 		If e\EventState2 <> PD_FakeTunnelRoom
 			ShouldPlay = 3
 			
-			me\Injuries = me\Injuries + (fps\Factor[0] * 0.00005 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)))
+			me\Injuries = me\Injuries + (fps\Factor[0] * 0.0001 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)))
 			
 			fog\FarDist = 6.0
 			
@@ -7780,7 +7780,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				
 				If EntityHidden(e\room\Objects[18]) Then ShowEntity(e\room\Objects[18])
 				
-				me\Injuries = me\Injuries + (fps\Factor[0] / 4000.0)
+				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0004)
 				
 				me\Sanity = Max(me\Sanity - fps\Factor[0] / SqrValue / 8.0, -1000.0)
 				
@@ -7885,7 +7885,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				ElseIf Dist < 64.0 And I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[19], 8.0)
 					EntityTexture(e\room\Objects[19], e\room\Textures[1])
-					me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * (0.0004 / (1.0 + (I_714\Using = 1)))))
+					me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * (0.0006 / (1.0 + (I_714\Using = 1)))))
 					
 					If Dist < 49.0
 						Pvt = CreatePivot()
@@ -7899,7 +7899,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					EndIf
 				ElseIf Dist < 64.0
 					EntityTexture(e\room\Objects[19], e\room\Textures[0])
-					me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * 0.0001))
+					me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * 0.0002))
 				EndIf
 				
 				If I_714\Using = 2 Lor chs\NoTarget Lor I_268\InvisibilityOn
@@ -8096,7 +8096,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				
 				UpdateDoors()
 				
-				me\Injuries = me\Injuries + (fps\Factor[0] * 0.00015)
+				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0002)
 				
 				If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 7202.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True) + 1502.0 * RoomScale) > PowTwo(3678.0 * RoomScale)
 					n_I\Curr106\Speed = n_I\Curr106\Speed * 2.8
