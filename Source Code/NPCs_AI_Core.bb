@@ -49,9 +49,9 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 					
 					If Dist < 9.0
-						AnimateNPC(n, Clamp(AnimTime(n\OBJ), 94.0, 95.0), 125.0, n\CurrSpeed * 25.0)
+						AnimateNPC(n, Clamp(AnimTime(n\OBJ), 94.0, 95.0), 125.0, n\CurrSpeed * 26.0)
 					Else
-						AnimateNPC(n, Min(AnimTime(n\OBJ), 64.0), 93.0, n\CurrSpeed * 25.0)
+						AnimateNPC(n, Min(AnimTime(n\OBJ), 64.0), 93.0, n\CurrSpeed * 26.0)
 					EndIf
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -149,7 +149,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				If n\CurrSpeed < 0.005
 					AnimateNPC(n, 323.0, 344.0, 0.2)
 				Else
-					AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 25.0)
+					AnimateNPC(n, 64.0, 93.0, n\CurrSpeed * 26.0)
 					If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 				EndIf
 				
@@ -907,13 +907,13 @@ Function UpdateNPCType049%(n.NPCs)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							If Dist < 9.0
-								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 394.0, 428.0), 463.0, n\CurrSpeed * 38.0)
+								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 394.0, 428.0), 463.0, n\CurrSpeed * 35.0)
 							Else
 								If n\Frame > 427.9
-									AnimateNPC(n, Min(AnimTime(n\OBJ), 464.0), 498.0, n\CurrSpeed * 38.0, False)
+									AnimateNPC(n, Min(AnimTime(n\OBJ), 464.0), 498.0, n\CurrSpeed * 35.0, False)
 									If n\Frame > 497.9 Then SetNPCFrame(n, 358.0)
 								Else
-									AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
+									AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 35.0)
 								EndIf
 							EndIf
 						EndIf
@@ -935,7 +935,7 @@ Function UpdateNPCType049%(n.NPCs)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
-								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
+								AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 35.0)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 15.0 - (1.5 * SelectedDifficulty\OtherFactors))
 								
 								; ~ Playing a sound if he hears the player
