@@ -7784,7 +7784,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				
 				If EntityHidden(e\room\Objects[18]) Then ShowEntity(e\room\Objects[18])
 				
-				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0004)
+				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0004 - (0.0002 * (wi\HazmatSuit > 0)))
 				
 				me\Sanity = Max(me\Sanity - fps\Factor[0] / SqrValue / 8.0, -1000.0)
 				
@@ -8100,7 +8100,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				
 				UpdateDoors()
 				
-				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0002)
+				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0002 - (0.0001 * (wi\HazmatSuit > 0)))
 				
 				If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 7202.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True) + 1502.0 * RoomScale) > PowTwo(3678.0 * RoomScale)
 					n_I\Curr106\Speed = n_I\Curr106\Speed * 2.8
