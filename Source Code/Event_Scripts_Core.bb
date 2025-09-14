@@ -7625,7 +7625,11 @@ Function UpdateEvent_Dimension_106%(e.Events)
 		If e\EventState2 <> PD_FakeTunnelRoom
 			ShouldPlay = 3
 			
-			me\Injuries = me\Injuries + (fps\Factor[0] * 0.0001 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)))
+			If wi\HazmatSuit = 0
+				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0001 * (1.0 + (wi\NightVision > 0 Lor wi\SCRAMBLE > 0)))
+			Else
+				me\Injuries = me\Injuries + (fps\Factor[0] * 0.00005)
+			EndIf
 			
 			fog\FarDist = 6.0
 			
