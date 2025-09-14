@@ -270,7 +270,7 @@ Function UpdateEntityMaterial%(Ent%, State% = -1)
 	
 	SetDeferredBrush(Brush, State)
 	PaintEntity(Ent, Brush)
-	FreeBrush(Brush)
+	FreeBrush(Brush) : Brush = 0
 End Function
 
 Function ProcessDeferred%(Cam%, Tween#)
