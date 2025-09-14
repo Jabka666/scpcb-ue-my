@@ -496,7 +496,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 				If i\ItemTemplate\InvImg2 <> 0 Then i\InvImg = i\ItemTemplate\InvImg2
 			EndIf
 			;[End Block]
-		Case it_scp2022pill
+		Case it_scp2022pill, it_scp2022
 			;[Block]
 			Local Light% = CreateLight(2, i\Collider)
 			
@@ -721,7 +721,7 @@ Function UpdateItems%()
 	If (Not InvOpen) And OtherOpen = Null
 		If ClosestItem <> Null
 			Select ClosestItem\ItemTemplate\ID
-				Case it_scp2022pill
+				Case it_scp2022pill, it_scp2022
 					;[Block]
 					ed = Rnd(0.038, 0.042)
 					ScaleSprite(ClosestItem\OBJ2, ed, ed)

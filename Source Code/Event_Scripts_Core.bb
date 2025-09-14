@@ -6078,7 +6078,7 @@ End Function
 
 Function UpdateEvent_Cont3_966%(e.Events)
 	If PlayerRoom = e\room
-		Local n.NPCs
+		Local n.NPCs, emit.Emitter
 		Local i%, x#, y#, z#
 		
 		Select e\EventState
@@ -6097,8 +6097,10 @@ Function UpdateEvent_Cont3_966%(e.Events)
 					SetNPCFrame(e\room\NPC[0], 502.0)
 					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_HARN_TEXTURE)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
+					
 					TFormPoint(0.0, 50.0, -337.0, e\room\OBJ, 0)
-					SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 30)
+					emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 30)
+					emit\State = 5
 					
 					TFormPoint(0.0, 0.0, -418.0, e\room\OBJ, 0)
 					de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), e\room\y + 0.005, TFormedZ(), 90.0, e\room\Angle + 90.0, 0.0, 0.4)

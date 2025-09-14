@@ -1681,6 +1681,7 @@ Type SoundInstance
 	Field SinkHoleSFX%
 	Field WatchesSFX%
 	Field FireSFX%
+	Field BuzzingSFX%
 End Type
 
 Global snd_I.SoundInstance
@@ -1915,6 +1916,8 @@ Function LoadSounds%()
 	I_1123\Sound = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
 	
 	snd_I\FireSFX = LoadSound_Strict("SFX\Room\Fire.ogg")
+	
+	snd_I\BuzzingSFX = LoadSound_Strict("SFX\Room\Buzzing.ogg")
 End Function
 
 Function RemoveSoundInstances%()
@@ -2056,6 +2059,8 @@ Function RemoveSoundInstances%()
 	snd_I\WatchesSFX = 0
 	
 	snd_I\FireSFX = 0
+	
+	snd_I\BuzzingSFX = 0
 	
 	Delete(snd_I) : snd_I = Null
 End Function

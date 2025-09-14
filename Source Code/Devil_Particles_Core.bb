@@ -397,6 +397,10 @@ Function UpdateParticles_Devil()
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
 					;[End Block]
+				Case 5
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\BuzzingSFX, emit\SoundCHN, Camera, emit\Owner, 4.0)
+					;[End Block]
 			End Select
 		EndIf
 		
