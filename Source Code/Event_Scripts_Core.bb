@@ -504,8 +504,9 @@ Const INTRO_IN_CELL% = 1
 Const INTRO_CELL_REQUESTING% = 2
 Const INTRO_CELL_OPENED% = 3
 Const INTRO_MOVING_TO_CHAMBER% = 4
-Const INTRO_ESCORT_DONE% = 5
-Const INTRO_IN_CHAMBER% = 6
+Const INTRO_GIVE_PAPER% = 5
+Const INTRO_ESCORT_DONE% = 6
+Const INTRO_IN_CHAMBER% = 7
 ;[End Block]
 
 Function UpdateEvent_Cont1_173_Intro%(e.Events)
@@ -1076,11 +1077,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								
 								e\room\NPC[4]\State = 9.0
 								
-								CreateHintMsg(GetLocalString("msg", "enterchmbr"))
-								
-								For i = 2 To 3
-									OpenCloseDoor(e\room\RoomDoors[i])
-								Next
+								OpenCloseDoor(e\room\RoomDoors[3])
 								
 								FreeEntity(e\room\Objects[4]) : e\room\Objects[4] = 0
 								
@@ -1093,8 +1090,51 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								PositionEntity(e\room\NPC[6]\Collider, TFormedX(), TFormedY(), TFormedZ())
 								ResetEntity(e\room\NPC[6]\Collider)
 								
-								e\EventState = INTRO_ESCORT_DONE
+								e\EventState = INTRO_GIVE_PAPER
 							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+				Case INTRO_GIVE_PAPER
+					;[Block]
+					If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN)) And e\room\NPC[3]\Frame < 358.0
+						e\room\NPC[3]\State = 8.0
+						LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\OhAndByTheWay.ogg")
+						e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
+						SetNPCFrame(e\room\NPC[3], 358.0)
+					ElseIf e\room\NPC[3]\Frame >= 358.0 And e\room\NPC[3]\Frame < 608.0
+						PointEntity(e\room\NPC[3]\Collider, me\Collider)
+						RotateEntity(e\room\NPC[3]\Collider, 0.0, EntityYaw(e\room\NPC[3]\Collider), 0.0)
+						
+						If e\room\NPC[3]\Frame < 482.0
+							AnimateNPC(e\room\NPC[3], 358.0, 482.0, 0.4, False)
+						Else
+							AnimateNPC(e\room\NPC[3], 483.0, 607.0, 0.2)
+							If EntityDistanceSquared(me\Collider, e\room\NPC[3]\Collider) < 2.25
+								If EntityInView(e\room\NPC[3]\OBJ, Camera)
+									HandEntity = e\room\NPC[3]\OBJ
+									If mo\MouseHit1
+										SelectedItem = CreateItem("Testing Brief", it_paper, 0.0, 0.0, 0.0)
+										PickItem(SelectedItem)
+										
+										FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+										SetNPCFrame(e\room\NPC[3], 608.0)
+									EndIf
+								EndIf
+							EndIf
+						EndIf
+					ElseIf e\room\NPC[3]\Sound = 0
+						If e\room\NPC[3]\Frame < 621.0 And e\room\NPC[3]\State = 8.0
+							AnimateNPC(e\room\NPC[3], 608.0, 621.0, 0.4, False)
+						Else
+							e\room\NPC[3]\Angle = EntityYaw(e\room\NPC[3]\Collider)
+							e\room\NPC[3]\State = 9.0
+							
+							OpenCloseDoor(e\room\RoomDoors[2])
+							
+							CreateHintMsg(GetLocalString("msg", "enterchmbr"))
+							
+							e\EventState = INTRO_ESCORT_DONE
 						EndIf
 					EndIf
 					;[End Block]
