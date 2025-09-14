@@ -95,8 +95,10 @@ Function InitDeferred%()
 	MRTNormal = CreateTexture(Width, Height, 1 + 2 + 256 + 16384)
 	
 	For i = 1 To SHADOW_MAP_MIPMAPS
-		DeferredShadowMapCube[i - 1] = CreateShadowMap(SHADOW_MAP_SIZE * 6 / RoundTwo(i), SHADOW_MAP_SIZE / RoundTwo(i))
-		DeferredShadowMap[i - 1] = CreateShadowMap(SHADOW_MAP_SIZE / RoundTwo(i), SHADOW_MAP_SIZE / RoundTwo(i))
+		Local iRounded% = RoundTwo(i)
+		
+		DeferredShadowMapCube[i - 1] = CreateShadowMap(SHADOW_MAP_SIZE * 6 / iRounded, SHADOW_MAP_SIZE / iRounded)
+		DeferredShadowMap[i - 1] = CreateShadowMap(SHADOW_MAP_SIZE / iRounded, SHADOW_MAP_SIZE / iRounded)
 	Next
 	
 	DeferredShadowMap[SHADOW_MAP_MIPMAPS] = CreateShadowMap(DIRLIGHT_SHADOW_MAP_SIZE, DIRLIGHT_SHADOW_MAP_SIZE)
@@ -368,7 +370,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
-			DistToLight# = EntityDistance(Cam, Volume)
+			DistToLight = EntityDistance(Cam, Volume)
 			If Shadows Then RenderShadowMap(Cam, DeferredShadowMap[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
 			EffectTechnique(DeferredShade, "SpotLight")
@@ -400,6 +402,8 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	RenderEntity(Cam, Volume, Tween)
 End Function
 
+Global DEFERRED_LIGHT_POINT_CULLING_SCALE# = Tan(90.0 * 0.8)
+
 Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, Tween# = 1.0)
 	Local i%
 	
@@ -411,7 +415,7 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 			If DirectionalLightUpdate < MilliSecs() Lor DirectionalLightUpdate = 0
 				PositionEntity(DeferredCamera, x, y, z)
 				RotateEntity(DeferredCamera, Pitch, Yaw, 0.0)
-				MoveEntity(DeferredCamera, 0, 0, -DIRECTIONAL_LIGHT_EXTRUSION)
+				MoveEntity(DeferredCamera, 0.0, 0.0, -DIRECTIONAL_LIGHT_EXTRUSION)
 			EndIf
 			
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS * 18, 0.5)
@@ -437,13 +441,13 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 			
 			Local Width% = TextureWidth(ShadowMap) / 6
 			Local Height% = TextureHeight(ShadowMap)
-			Local CullingScale# = Tan(90.0 * 0.8) * Range * 2.0
+			Local CullingScale# = DEFERRED_LIGHT_POINT_CULLING_SCALE * Range * 2.0
 			
 			PositionEntity(DeferredCone, x, y, z)
 			
 			For i = 0 To 5
-				RotateEntity DeferredCone,  CubeRotateX[i], CubeRotateY[i], 0
-				ScaleEntity DeferredCone, CullingScale, CullingScale, Range
+				RotateEntity(DeferredCone, CubeRotateX[i], CubeRotateY[i], 0.0)
+				ScaleEntity(DeferredCone, CullingScale, CullingScale, Range)
 				
 				If EntityInView(DeferredCone, MainCam)
 					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0)
@@ -664,7 +668,9 @@ Function LoadEffectEx%(File$, Defines$ = "")
 	Local c% = WriteFile(Export)
 	
 	If c <> 0
-		For i = 0 To CountSplitString(Defines, " ") - 1
+		Local StringsAmount% = CountSplitString(Defines, " ")
+		
+		For i = 0 To StringsAmount - 1
 			WriteLine(c, "#define " + SplitString(Defines, " ", i))
 		Next
 		While (Not Eof(f))
