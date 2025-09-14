@@ -418,7 +418,6 @@ Function GetStepSound%(Entity%)
 				Local TexName$ = StripPath(TextureName(Texture))
 				Local mat.Materials
 				
-				CreateHintMsg(TexName)
 				FreeTexture(Texture) : Texture = 0
 				If TexName <> "" 
 					For mat.Materials = Each Materials
