@@ -2949,7 +2949,10 @@ Function UpdateElevatorPanel%(d.Doors)
 	Local i%
 	
 	For i = 0 To 1
-		If d\ElevatorPanel[i] <> 0 Then EntityTexture(d\ElevatorPanel[i], d_I\ElevatorPanelTextureID[TextureID])
+		If d\ElevatorPanel[i] <> 0
+			EntityTexture(d\ElevatorPanel[i], d_I\ElevatorPanelTextureID[TextureID])
+			UpdateEntityMaterial(d\ElevatorPanel[i])
+		EndIf
 	Next
 End Function
 
@@ -2957,7 +2960,10 @@ Function ClearElevatorPanelTexture%(d.Doors)
 	Local i%
 	
 	For i = 0 To 1
-		If d\ElevatorPanel[i] <> 0 Then EntityTexture(d\ElevatorPanel[i], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
+		If d\ElevatorPanel[i] <> 0
+			EntityTexture(d\ElevatorPanel[i], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
+			UpdateEntityMaterial(d\ElevatorPanel[i])
+		EndIf
 	Next
 End Function
 

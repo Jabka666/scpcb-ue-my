@@ -2264,6 +2264,7 @@ Function UpdateEvent_Room2_Elevator%(e.Events)
 					OpenCloseDoor(e\room\RoomDoors[0])
 					e\room\RoomDoors[0]\IsElevatorDoor = 0
 					EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[1], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN])
+					UpdateEntityMaterial(e\room\RoomDoors[0]\ElevatorPanel[1])
 					EntityTexture(e\room\RoomDoors[0]\Buttons[0], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
 					
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\ElevatorDeath.ogg"))
@@ -2284,6 +2285,7 @@ Function UpdateEvent_Room2_Elevator%(e.Events)
 						TempLightVolume = 0.6
 					ElseIf e\EventState >= 70.0 * 13.0 And (Not ChannelPlaying(e\SoundCHN))
 						EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[1], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
+						UpdateEntityMaterial(e\room\RoomDoors[0]\ElevatorPanel[1])
 						FreeEntity(e\room\RoomDoors[0]\Buttons[1]) : e\room\RoomDoors[0]\Buttons[1] = 0
 						FreeEntity(e\room\RoomDoors[0]\ElevatorPanel[0]) : e\room\RoomDoors[0]\ElevatorPanel[0] = 0
 						FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
