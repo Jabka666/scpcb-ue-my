@@ -2043,7 +2043,6 @@ Function UpdateNPCType106%(n.NPCs)
 			PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 			ResetEntity(n\Collider)
 			HideEntity(n\OBJ)
-			HideEntity(n\OBJ2)
 		EndIf
 		Return
 	EndIf
@@ -2090,7 +2089,6 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 				ResetEntity(n\Collider)
-				HideEntity(n\OBJ2)
 				n\PathLocation = 0
 				n\PathStatus = PATH_STATUS_NO_SEARCH
 				n\PathTimer = 0.0
@@ -2317,13 +2315,6 @@ Function UpdateNPCType106%(n.NPCs)
 				
 				UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
 				
-				If Dist < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 0.5))
-					If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
-				Else
-					If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
-					EntityAlpha(n\OBJ2, Clamp(Sqr(Dist) - fog\FarDist * LightVolume * 0.5, 0.0, 1.0))
-				EndIf
-				
 				If PlayerRoom\RoomTemplate\RoomID <> r_gate_a
 					If me\FallTimer < -250.0 Then MoveToPocketDimension()
 					
@@ -2412,8 +2403,6 @@ Function UpdateNPCType106%(n.NPCs)
 		
 		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), 0.0)
-	ElseIf (Not EntityHidden(n\OBJ2))
-		HideEntity(n\OBJ2)
 	EndIf
 End Function
 

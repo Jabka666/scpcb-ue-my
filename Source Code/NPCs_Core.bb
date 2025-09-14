@@ -212,19 +212,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_106_MODEL])
 			n\ModelScale = 0.1136
 			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
-			
-			n\OBJ2 = CreateSprite()
-			ScaleSprite(n\OBJ2, 0.03, 0.03)
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteMapTextures, False)
-			EntityTexture(n\OBJ2, Tex)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			EntityBlend(n\OBJ2, 3)
-			EntityFX(n\OBJ2, 1 + 8)
-			SpriteViewMode(n\OBJ2, 2)
-			RotateEntity(n\OBJ2, 0.0, -180.0, 0.0)
-			MoveEntity(n\OBJ2, 0.0, 0.95, -0.115)
-			EntityParent(n\OBJ2, n\OBJ)
-			HideEntity(n\OBJ2)
 			;[End Block]
 		Case NPCType173
 			;[Block]

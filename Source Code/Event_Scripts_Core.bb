@@ -6345,7 +6345,6 @@ Function UpdateEvent_Gate_A%(e.Events)
 						PlaySound_Strict(snd_I\HorrorSFX[5])
 					ElseIf n_I\Curr106\State > 2.0
 						If n_I\Curr106\State = 3.0
-							If (Not EntityHidden(n_I\Curr106\OBJ2)) Then HideEntity(n_I\Curr106\OBJ2)
 							n_I\Curr106\PathTimer = 70.0 * 100.0
 							
 							If n_I\Curr106\PathStatus <> PATH_STATUS_FOUND
