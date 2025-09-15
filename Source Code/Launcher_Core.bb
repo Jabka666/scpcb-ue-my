@@ -419,7 +419,7 @@ Function UpdateLanguageSelector%()
 		ServerURI = "https://files.ziyuesinicization.site/cbue/"
 	EndIf
 	
-	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
+	Local BasePath$ = AppDataPath + "\scpcb-ue\temp\"
 	
 	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)

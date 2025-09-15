@@ -25,8 +25,10 @@ If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in
 
 Const VersionNumber$ = "1.6"
 
-If FileType(GetEnv("AppData") + "\scpcb-ue\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue")
-If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("AppData") + "\scpcb-ue\Data")
+Global AppDataPath$ = GetEnv("AppData")
+
+If FileType(AppDataPath + "\scpcb-ue\") <> 2 Then CreateDir(AppDataPath + "\scpcb-ue")
+If FileType(AppDataPath + "\scpcb-ue\Data\") <> 2 Then CreateDir(AppDataPath + "\scpcb-ue\Data")
 
 Include "Source Code\KeyBinds_Core.bb"
 Include "Source Code\INI_Core.bb"

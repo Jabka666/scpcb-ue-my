@@ -2546,7 +2546,7 @@ End Function
 Function SaveAchievementsFile%()
 	Local File$
 	
-	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = WriteFile(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "keter"))
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	WriteByte(File, SNAVUnlocked)
@@ -2556,11 +2556,11 @@ End Function
 
 Function LoadAchievementsFile%()
 	; ~ Go out of function immediately if the file doesn't exist!
-	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
+	If FileType(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
 	
 	Local File$
 	
-	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = OpenFile(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	If ReadByte(File) Then SNAVUnlocked = True
