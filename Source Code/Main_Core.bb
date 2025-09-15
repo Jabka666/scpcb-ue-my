@@ -6668,7 +6668,6 @@ Function UpdateUseItem%(item.Items)
 				End Select
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
 				item\ItemTemplate\ImgHeight = ImageHeight(item\ItemTemplate\Img) / 2
-				AdaptScreenGamma()
 			EndIf
 			;[End Block]
 		Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_fine860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_coarse005, it_crystal005, it_key_white, it_key_yellow, it_coin, it_mastercard, it_mastercard_golden
@@ -6756,7 +6755,6 @@ Function UpdateUseItem%(item.Items)
 						End Select
 						item\ItemTemplate\Img2Width = ImageWidth(item\ItemTemplate\Img2) / 2
 						item\ItemTemplate\Img2Height = ImageHeight(item\ItemTemplate\Img2) / 2
-						AdaptScreenGamma()
 					EndIf
 				EndIf
 				
@@ -7151,13 +7149,6 @@ Function RenderDebugHUD%()
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
-End Function
-
-Function AdaptScreenGamma%()
-	If opt\ScreenGamma =< 1.0 Then Return
-	
-	opt\PrevScreenGamma = opt\ScreenGamma
-	opt\ScreenGamma = 1.0
 End Function
 
 Function Update3DHandIcon%(HandIconID%, OBJ%)

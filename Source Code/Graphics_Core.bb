@@ -6,7 +6,7 @@ Global SMALLEST_POWER_TWO_HALF#
 Function InitFastResize%()
 	WhiteTexture = CreateTexture(1, 1)
 	SetBuffer(TextureBuffer(WhiteTexture))
-	ClsColor(255,255,255)
+	ClsColor(255, 255, 255)
 	Cls()
 	SetBuffer(BackBuffer())
 	
