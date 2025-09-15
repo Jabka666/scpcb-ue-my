@@ -4451,7 +4451,7 @@ End Function
 
 Function RemoveScreen%(s.Screens)
 	FreeEntity(s\OBJ) : s\OBJ = 0
-	s\Texture = 0
+	DeleteSingleTextureEntryFromCache(s\Texture) : s\Texture = 0
 	If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
 	Delete(s)
 End Function
