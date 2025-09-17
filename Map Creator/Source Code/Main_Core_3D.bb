@@ -79,8 +79,6 @@ Global CurrGrid.MapGrid
 
 Global ZoneTransValue1% = 14, ZoneTransValue2% = 7
 
-Const MT_GridSize% = 19
-
 Const ForestGridSize% = 10
 Global ForestMeshWidth#
 
@@ -252,7 +250,6 @@ Repeat
 		
 		Local RoomAmount% = ReadInt(f) ; ~ Amount of rooms
 		Local ForestAmount% = ReadInt(f) ; ~ Amount of forest grid parts
-		Local MTRoomAmount% = ReadInt(f) ; ~ Amount of maintenance tunnel rooms
 		
 		CurrMapGrid = ReadInt(f)
 		
@@ -363,39 +360,6 @@ Repeat
 					ReadString(f)
 					ReadByte(f)
 					ReadByte(f)
-				Next
-				; ~ Maintenance tunnel data
-				For i = 0 To MTRoomAmount - 1
-					x = ReadByte(f)
-					y = ReadByte(f)
-					Name = Lower(ReadString(f))
-					
-					Angle = ReadByte(f) * 90
-					
-					For rt.RoomTemplates = Each RoomTemplates
-						If Lower(rt\Name) = Name
-							r = PlaceRoom(Name, MT_GridSize - x, y, GetZone(y), rt\Shape, "", 0.0, 2)
-							r\GridX = x
-							r\GridZ = y
-							
-							r\Angle = Angle
-							If r\Angle <> 90 And r\Angle <> 270 Then r\Angle = r\Angle + 180
-							If rt\Shape = ROOM2C Lor rt\Shape = ROOM3 Then r\Angle = r\Angle - 90
-							r\Angle = WrapAngle(r\Angle)
-							
-							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-							
-							Exit
-						EndIf
-					Next
-					
-					IsSelRoom = ReadByte(f)
-					If IsSelRoom
-						PositionEntity(Camera, (MT_GridSize - x) * 2.0, 1.0, y * 2.0)
-						RotateEntity(Camera, 0.0, Angle, 0.0)
-						MXS = -Angle
-						MYS = 0.0
-					EndIf
 				Next
 				;[End Block]
 		End Select
@@ -662,36 +626,6 @@ Function LoadRoomTemplateMeshes%()
 	CatchErrors("Uncaught (LoadRoomTemplatesMeshes)")
 	
 	Local rt.RoomTemplates, i%
-	Local MT_Prefix$ = "maintenance tunnel "
-	
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt1.rmesh"
-	rt\Name = MT_Prefix + "endroom"
-	rt\Shape = ROOM1
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt2.rmesh"
-	rt\Name = MT_Prefix + "corridor"
-	rt\Shape = ROOM2
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt2c.rmesh"
-	rt\Name = MT_Prefix + "corner"
-	rt\Shape = ROOM2C
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt3.rmesh"
-	rt\Name = MT_Prefix + "t-shaped room"
-	rt\Shape = ROOM3
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt4.rmesh"
-	rt\Name = MT_Prefix + "4-way room"
-	rt\Shape = ROOM4
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt2_elevator.rmesh"
-	rt\Name = MT_Prefix + "elevator"
-	rt\Shape = ROOM2
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt1_generator.rmesh"
-	rt\Name = MT_Prefix + "generator room"
-	rt\Shape = ROOM1
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJPath <> "" Then LoadRoomMesh(rt)
