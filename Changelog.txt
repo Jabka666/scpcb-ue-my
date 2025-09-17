@@ -10,6 +10,7 @@
 - Smoke debuffs the player's stamina if they stay in it too long.
 - Removed NPCs.ini file.
 - Player HUD is now animated when wearing SCP-268 or being protected from SCP-049.
+- The pocket dimension's constant damage over timer was increased. Hazmat Suit reduces it back to the original amount.
 
 [Items]
 - Added documents: Risk classification, disruption classification, warning labels #1, #2, and #3, SCP-914 Test logs, containment zones, and updated the security clearance levels.
@@ -17,6 +18,7 @@
 - Improved SCP-268's model.
 - SCP-268 makes the player transparent for better feedback to the player replacing the yellow indicator.
 - Blue Night Vision Goggles have futher NPC detection.
+- SCP-427 cures SCP-008 much faster.
 
 [Rooms]
 - Room improvements...
@@ -36,7 +38,8 @@
 - More voicelines from SCP-079.
 - SCP-035 does not activate when playing is wearing SCP-268.
 - Increased spawnrate of SCP-106 in «DisableDecals» = 2 type rooms.
-- Fixed all MTF shooting at player simultaniously.
+- Fixed all MTF at Gate A shooting at player simultaniously.
+- Improved SCP-939's animations and model.
 
 - Changed speed of enemies:
  - SCP-049 chase speed: 1.6 -> 1.75
