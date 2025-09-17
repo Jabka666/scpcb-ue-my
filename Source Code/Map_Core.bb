@@ -416,7 +416,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	ClsColor(0, 0, 0)
 	
-	Local mat.Materials
 	Local i%, j%, k%, x#, y#, z#
 	Local Vertex%
 	Local Temp1i% = 0, Temp2i% = 0, Temp3i% = 0
@@ -430,7 +429,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 		RMeshVersion = 1
 	ElseIf IsRMesh = "RoomMesh1.1"
 		RMeshVersion = 2
-		DebugLog "RMESH2!"
 	Else
 		RuntimeErrorEx(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
 	EndIf
@@ -4022,13 +4020,17 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				If sc <> sc_I\CoffinCam
-					If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0 And EntityVisible(sc\CameraOBJ, Camera) Then MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
+					If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0 And EntityVisible(sc\CameraOBJ, Camera)
+						If (MilliSec Mod 1350) < 800
+							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
+							UpdateEntityMaterial(sc\CameraOBJ)
+						Else
+							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
+							UpdateEntityMaterial(sc\CameraOBJ)
+						EndIf
+						MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
+					EndIf
 				EndIf
-			EndIf
-			If (MilliSec Mod 1350) < 800
-				EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
-			Else
-				EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
 			EndIf
 		EndIf
 		

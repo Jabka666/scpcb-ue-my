@@ -35,7 +35,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ Ordinary duck
-			r\Objects[1] = LoadMesh_Strict("GFX\Map\Props\rubber_duck.b3d")
+			r\Objects[1] = LoadMesh_Strict("GFX\NPCs\rubber_duck.b3d")
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			RotateEntity(r\Objects[1], 0.0, 260.0, 0.0)
 			PositionEntity(r\Objects[1], r\x - 659.0 * RoomScale, r\y + 133.0 * RoomScale, r\z + 446.0 * RoomScale)
