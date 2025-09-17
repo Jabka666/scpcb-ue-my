@@ -10,7 +10,7 @@
 - Smoke debuffs the player's stamina if they stay in it too long.
 - Removed NPCs.ini file.
 - Player HUD is now animated when wearing SCP-268 or being protected from SCP-049.
-- The pocket dimension's constant damage over timer was increased. Hazmat Suit reduces it back to the original amount.
+- The pocket dimension's constant damage over time was increased. Hazmat Suit reduces it back to the original amount.
 
 [Items]
 - Added documents: Risk classification, disruption classification, warning labels #1, #2, and #3, SCP-914 Test logs, containment zones, and updated the security clearance levels.
