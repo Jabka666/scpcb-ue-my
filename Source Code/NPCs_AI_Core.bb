@@ -2823,7 +2823,7 @@ Function UpdateNPCType457%(n.NPCs)
 		Local i%, j%, PlayerSeeable%
 		
 		UpdateNPCBlinking(n)
-		
+		If (Not me\Terminated) Then EntityAlpha(t\OverlayID[11], 0.0)
 		If Dist < 0.36 And (Not chs\NoTarget)
 			If n\State <> 3
 				If EntityVisible(me\Collider, n\Collider)
@@ -2852,7 +2852,7 @@ Function UpdateNPCType457%(n.NPCs)
 					Else
 						me\CurrCameraZoom = 20.0
 						me\BlurTimer = 500.0
-						
+						EntityAlpha(t\OverlayID[11], 1.0)
 						If (Not chs\GodMode)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 							msg\DeathMsg = Format(GetLocalString("death", "457"), SubjectName)
@@ -2864,6 +2864,7 @@ Function UpdateNPCType457%(n.NPCs)
 			EndIf
 		ElseIf Dist < 4.0
 			If wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
+				EntityAlpha(t\OverlayID[11], 0.25)
 				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0005)
 			ElseIf RemoveHazmatTimer > 0.0
 				RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.8)

@@ -3015,6 +3015,16 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
+	Tex = LoadTexture_Strict("GFX\Overlays\fire_overlay.png", 1, DeleteMapTextures, False) ; ~ SCP-457 burning player
+	t\OverlayID[11] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[11], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[11], Tex)
+	EntityBlend(t\OverlayID[11], 3)
+	EntityOrder(t\OverlayID[11], -1003)
+	EntityAlpha(t\OverlayID[11], 0.0)
+	MoveEntity(t\OverlayID[11], 0.0, 0.0, 1.0)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	
 	For i = 1 To MaxOverlayIDAmount - 2
 		HideEntity(t\OverlayID[i])
 	Next
