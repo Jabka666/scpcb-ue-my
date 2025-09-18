@@ -282,6 +282,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			LightRange(Light, 2.0)
 			LightColor(Light, 255.0, 140.0, 50.0)
+			;LightShadows(Light, True)
 			MoveEntity(Light, 0, n\CollRadius, 0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
