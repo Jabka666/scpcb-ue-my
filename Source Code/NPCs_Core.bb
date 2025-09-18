@@ -281,6 +281,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Local emit.Emitter = SetEmitter(Null, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider), 36)
 			EntityParent(emit\Owner, n\Collider)
 			
+			Local Light% = CreateLight(2, n\Collider)
+			
+			LightRange(Light, 2.0)
+			LightColor(Light, 255.0, 170.0, 90.0)
+			MoveEntity(Light, 0, n\CollRadius, 0)
+			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
