@@ -2728,6 +2728,96 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		; ~ n\State3: Timer for updating the path again
 		
+		Local BoneName$
+		
+		Select Rand(20)
+			Case 1
+				;[Block]
+				BoneName = "Bip01_R_Finger0"
+				;[End Block]
+			Case 2
+				;[Block]
+				BoneName = "Bip01_R_Hand"
+				;[End Block]
+			Case 3
+				;[Block]
+				BoneName = "Bip01_R_Forearm"
+				;[End Block]
+			Case 4
+				;[Block]
+				BoneName = "Bip01_R_UpperArm"
+				;[End Block]
+			Case 5
+				;[Block]
+				BoneName = "Bip01_L_UpperArm"
+				;[End Block]
+			Case 6
+				;[Block]
+				BoneName = "Bip01_L_Forearm"
+				;[End Block]
+			Case 7
+				;[Block]
+				BoneName = "Bip01_L_Hand"
+				;[End Block]
+			Case 8
+				;[Block]
+				BoneName = "Bip01_L_Finger0"
+				;[End Block]
+			Case 9
+				;[Block]
+				BoneName = "Bip01_L_Foot"
+				;[End Block]
+			Case 10
+				;[Block]
+				BoneName = "Bip01_L_Calf"
+				;[End Block]
+			Case 11
+				;[Block]
+				BoneName = "Bip01_L_Thigh"
+				;[End Block]
+			Case 12
+				;[Block]
+				BoneName = "Bip01_R_Foot"
+				;[End Block]
+			Case 13
+				;[Block]
+				BoneName = "Bip01_R_Calf"
+				;[End Block]
+			Case 14
+				;[Block]
+				BoneName = "Bip01_R_Thigh"
+				;[End Block]
+			Case 15
+				;[Block]
+				BoneName = "Bip01_Head"
+				;[End Block]
+			Case 16
+				;[Block]
+				BoneName = "Bip01_Pelvis"
+				;[End Block]
+			Case 17
+				;[Block]
+				BoneName = "Bip01_Spine"
+				;[End Block]
+			Case 18
+				;[Block]
+				BoneName = "Bip01_Spine1"
+				;[End Block]
+			Case 19
+				;[Block]
+				BoneName = "Bip01_Spine2"
+				;[End Block]
+			Case 20
+				;[Block]
+				BoneName = "Bip01_Neck"
+				;[End Block]
+		End Select
+		
+		Local Bone% = FindChild(n\OBJ, BoneName)
+		Local BoneX# = EntityX(Bone, True), BoneY# = EntityY(Bone, True), BoneZ# = EntityZ(Bone, True)
+		
+		SetEmitter(Null, BoneX, BoneY, BoneZ, 36)
+		
 		Local PrevFrame# = n\Frame
 		Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 		Local i%, j%, PlayerSeeable%
@@ -2838,9 +2928,9 @@ Function UpdateNPCType457%(n.NPCs)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							AnimateNPC(n, 301.0, 319.0, n\CurrSpeed * 18.0)
-							If n\CurrSpeed > 0.005
-								If (PrevFrame < 309.0 And n\Frame >= 309.0) Lor (PrevFrame <= 319.0 And n\Frame <= 301.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
-							EndIf
+;							If n\CurrSpeed > 0.005
+;								If (PrevFrame < 309.0 And n\Frame >= 309.0) Lor (PrevFrame <= 319.0 And n\Frame <= 301.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+;							EndIf
 						EndIf
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 					Else ; ~ Finding a path to the player
@@ -2864,9 +2954,9 @@ Function UpdateNPCType457%(n.NPCs)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 18.0)
-								If n\CurrSpeed > 0.005
-									If (PrevFrame < 244.0 And n\Frame >= 244.0) Lor (PrevFrame < 254.0 And n\Frame >= 254.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
-								EndIf
+								;If n\CurrSpeed > 0.005
+								;	If (PrevFrame < 244.0 And n\Frame >= 244.0) Lor (PrevFrame < 254.0 And n\Frame >= 254.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
+								;EndIf
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 								
 								UseDoorNPC(n)

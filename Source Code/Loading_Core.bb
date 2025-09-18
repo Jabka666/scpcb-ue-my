@@ -138,7 +138,7 @@ Const PARTICLE_FIRE% = 13
 Const PARTICLE_SNOW_SHINE% = 14
 ;[End Block]
 
-Global ParticleEffect%[36]
+Global ParticleEffect%[37]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
@@ -547,7 +547,6 @@ Function LoadParticles%()
 	
 	; ~ Fire
 	ParticleEffect[31] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[31], 3)
 	SetTemplateEmitterLifeTime(ParticleEffect[31], -1)
 	SetTemplateInterval(ParticleEffect[31], 3)
 	SetTemplateParticleLifeTime(ParticleEffect[31], 40, 45)
@@ -560,7 +559,6 @@ Function LoadParticles%()
 	
 	; ~ SCP-409/Snow shining
 	ParticleEffect[32] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[32], 3)
 	SetTemplateEmitterLifeTime(ParticleEffect[32], 1)
 	SetTemplateParticleLifeTime(ParticleEffect[32], 6, 10)
 	SetTemplateTexture(ParticleEffect[32], PARTICLE_SNOW_SHINE)
@@ -569,7 +567,6 @@ Function LoadParticles%()
 	
 	; ~ Explosion
 	ParticleEffect[33] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[33], 3)
 	SetTemplateEmitterLifeTime(ParticleEffect[33], 1)
 	SetTemplateParticleLifeTime(ParticleEffect[33], 1200, 1200)
 	SetTemplateTexture(ParticleEffect[33], PARTICLE_WHITE_SMOKE)
@@ -579,7 +576,6 @@ Function LoadParticles%()
 	
 	; ~ Light wave
 	ParticleEffect[34] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[34], 3)
 	SetTemplateEmitterLifeTime(ParticleEffect[34], 1)
 	SetTemplateParticleLifeTime(ParticleEffect[34], 30, 30)
 	SetTemplateTexture(ParticleEffect[34], PARTICLE_WHITE_SMOKE)
@@ -599,18 +595,17 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[35], 0.005, 0.005, 0.9, 1.1)
 	SetTemplateAlphaVel(ParticleEffect[35], True)
 	
-	; ~ SCP-457 flames
+	; ~ SCP-457 flame particle
 	ParticleEffect[36] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[36], 3)
-	SetTemplateEmitterLifeTime(ParticleEffect[36], -1)
-	SetTemplateInterval(ParticleEffect[36], 3)
-	SetTemplateParticleLifeTime(ParticleEffect[36], 30, 35)
+	SetTemplateEmitterLifeTime(ParticleEffect[36], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[36], 50)
+	SetTemplateParticleLifeTime(ParticleEffect[36], 25, 30)
 	SetTemplateTexture(ParticleEffect[36], PARTICLE_FIRE)
-	SetTemplateOffset(ParticleEffect[36], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
-	SetTemplateVelocity(ParticleEffect[36], -0.005, 0.005, -0.005, 0.05, -0.005, 0.005)
+	SetTemplateOffset(ParticleEffect[36], -0.005, 0.005, -0.02, 0.02, -0.005, 0.005)
+	SetTemplateVelocity(ParticleEffect[36], -0.004, 0.004, -0.0015, 0.015, -0.004, 0.004)
 	SetTemplateAlphaVel(ParticleEffect[36], True)
-	SetTemplateSize(ParticleEffect[36], 0.06, 0.06, 0.75, 1.0)
-	SetTemplateSizeVel(ParticleEffect[36], 0.02, 1.01)
+	SetTemplateSize(ParticleEffect[36], 0.0001, 0.0004, 0.75, 1.0)
+	SetTemplateSizeVel(ParticleEffect[36], 0.005, 1.005)
 End Function
 
 Function RemoveParticleInstances%()

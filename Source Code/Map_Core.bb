@@ -2897,12 +2897,12 @@ Function UpdateDoors%()
 						TextureID = BUTTON_GREEN_TEXTURE
 					EndIf
 					For i = 0 To 1
-						If d\Buttons[i] <> 0 Then 
+						If d\Buttons[i] <> 0
 							EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
 							UpdateEntityMaterial(d\Buttons[i])
 						EndIf
 					Next
-					d\ButtonsUpdateTimer = 35.0
+					d\ButtonsUpdateTimer = 10.0
 				Else
 					d\ButtonsUpdateTimer = d\ButtonsUpdateTimer - fps\Factor[0]
 				EndIf

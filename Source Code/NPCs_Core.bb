@@ -278,19 +278,18 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			Local emit.Emitter = SetEmitter(Null, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider), 36)
-			EntityParent(emit\Owner, n\Collider)
-			
 			Local Light% = CreateLight(2, n\Collider)
 			
 			LightRange(Light, 2.0)
-			LightColor(Light, 255.0, 170.0, 90.0)
+			LightColor(Light, 255.0, 140.0, 50.0)
 			MoveEntity(Light, 0, n\CollRadius, 0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			ChangeNPCTextureID(n, NPC_457_TEXTURE)
+			EntityAlpha(n\OBJ, 0.0)
+			UpdateEntityMaterial(n\OBJ)
 			If NPCSound[SOUND_NPC_457_FIRE] = 0 Then NPCSound[SOUND_NPC_457_FIRE] = LoadSound_Strict("SFX\SCP\457\FireLoop.ogg")
 			;[End Block]
 		Case NPCType513_1
