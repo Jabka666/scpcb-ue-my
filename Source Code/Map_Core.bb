@@ -670,10 +670,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\Range = ReadFloat(f) / 2000.0
 					
 					lColor = ReadString(f)
-					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
-					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
-					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
-					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					Intensity = ReadFloat(f)
+					tl\R = Int(Piece(lColor, 1, " "))
+					tl\G = Int(Piece(lColor, 2, " "))
+					tl\B = Int(Piece(lColor, 3, " "))
 					
 					tl\HasSprite = True
 					;[End Block]
@@ -689,10 +689,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\Range = ReadFloat(f) / 2000.0
 					
 					lColor = ReadString(f)
-					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
-					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
-					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
-					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					Intensity = ReadFloat(f)
+					tl\R = Int(Piece(lColor, 1, " "))
+					tl\G = Int(Piece(lColor, 2, " "))
+					tl\B = Int(Piece(lColor, 3, " "))
 					
 					tl\HasSprite = True
 					
@@ -713,11 +713,11 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\lType = DEFERRED_LIGHT_POINT
 					
 					lColor = ReadString(f)
-					Intensity = Min(ReadFloat(f) * 0.8, 1.0)
+					Intensity = ReadFloat(f)
 					tl\Range = ReadFloat(f) / 2000.0
-					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
-					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
-					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					tl\R = Int(Piece(lColor, 1, " "))
+					tl\G = Int(Piece(lColor, 2, " "))
+					tl\B = Int(Piece(lColor, 3, " "))
 					
 					tl\HasSprite = False
 					Delete tl
