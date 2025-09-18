@@ -2716,6 +2716,7 @@ Function UpdateNPCType457%(n.NPCs)
 		;If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049
 		;	n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 		;EndIf
+		EntityAlpha(t\OverlayID[11], 0.0)
 		n\DropSpeed = 0.0
 		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
@@ -2730,7 +2731,7 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		Local BoneName$
 		
-		Select Rand(20)
+		Select Rand(26)
 			Case 1
 				;[Block]
 				BoneName = "Bip01_R_Finger0"
@@ -2763,27 +2764,27 @@ Function UpdateNPCType457%(n.NPCs)
 				;[Block]
 				BoneName = "Bip01_L_Finger0"
 				;[End Block]
-			Case 9
+			Case 9, 21
 				;[Block]
 				BoneName = "Bip01_L_Foot"
 				;[End Block]
-			Case 10
+			Case 10, 22
 				;[Block]
 				BoneName = "Bip01_L_Calf"
 				;[End Block]
-			Case 11
+			Case 11, 23
 				;[Block]
 				BoneName = "Bip01_L_Thigh"
 				;[End Block]
-			Case 12
+			Case 12, 24
 				;[Block]
 				BoneName = "Bip01_R_Foot"
 				;[End Block]
-			Case 13
+			Case 13, 25
 				;[Block]
 				BoneName = "Bip01_R_Calf"
 				;[End Block]
-			Case 14
+			Case 14, 26
 				;[Block]
 				BoneName = "Bip01_R_Thigh"
 				;[End Block]
@@ -2815,6 +2816,7 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		Local Bone% = FindChild(n\OBJ, BoneName)
 		Local BoneX# = EntityX(Bone, True), BoneY# = EntityY(Bone, True), BoneZ# = EntityZ(Bone, True)
+		Local Burn% = 0
 		
 		SetEmitter(Null, BoneX, BoneY, BoneZ, 36)
 		
@@ -2823,7 +2825,8 @@ Function UpdateNPCType457%(n.NPCs)
 		Local i%, j%, PlayerSeeable%
 		
 		UpdateNPCBlinking(n)
-		If (Not me\Terminated) Then EntityAlpha(t\OverlayID[11], 0.0)
+		
+		If me\Terminated Then Burn = 1
 		If Dist < 0.36 And (Not chs\NoTarget)
 			If n\State <> 3
 				If EntityVisible(me\Collider, n\Collider)
@@ -2852,7 +2855,7 @@ Function UpdateNPCType457%(n.NPCs)
 					Else
 						me\CurrCameraZoom = 20.0
 						me\BlurTimer = 500.0
-						EntityAlpha(t\OverlayID[11], 1.0)
+						Burn = 1
 						If (Not chs\GodMode)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 							msg\DeathMsg = Format(GetLocalString("death", "457"), SubjectName)
@@ -2864,11 +2867,12 @@ Function UpdateNPCType457%(n.NPCs)
 			EndIf
 		ElseIf Dist < 4.0
 			If wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
-				EntityAlpha(t\OverlayID[11], 0.25)
+				Burn = 2
 				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0005)
 			ElseIf RemoveHazmatTimer > 0.0
 				RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.8)
 			Else
+				Burn = 3
 				For i = 0 To 2
 					If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
 						me\CameraShake = 2.0
@@ -3082,6 +3086,27 @@ Function UpdateNPCType457%(n.NPCs)
 				;[End Block]
 		End Select
 		n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
+		
+		Select Burn
+			Case 0
+				;[Block]
+				n\LastDist = CurveValue(0.0, n\LastDist, 30.0)
+				;[End Block]
+			Case 1
+				;[Block]
+				n\LastDist = CurveValue(1.0, n\LastDist, 30.0)
+				;[End Block]
+			Case 2
+				;[Block]
+				n\LastDist = CurveValue(0.25, n\LastDist, 60.0)
+				;[End Block]
+			Case 3
+				;[Block]
+				n\LastDist = CurveValue(0.1, n\LastDist, 60.0)
+				;[End Block]
+		End Select
+		EntityAlpha(t\OverlayID[11], n\LastDist)
+		RotateEntity(t\OverlayID[11], 0.0, 0.0, n\LastDist * 20.0)
 	EndIf
 	
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
