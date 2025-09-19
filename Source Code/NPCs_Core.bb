@@ -62,7 +62,7 @@ Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	CatchErrors("CreateNPC(" + NPCType + ", " + x + ", " + y + ", " + z)
 	
-	Local n.NPCs, n2.NPCs
+	Local n.NPCs, n2.NPCs, emit.Emitter
 	Local Temp#, i%, j%, Tex%
 	Local MeshW#, MeshH#, MeshD#
 	
@@ -291,6 +291,99 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ChangeNPCTextureID(n, NPC_457_TEXTURE)
 			EntityAlpha(n\OBJ, 0.0)
 			UpdateEntityMaterial(n\OBJ)
+			
+			Local BoneName$
+			
+			For i = 0 To 19
+				Select i
+					Case 0
+						;[Block]
+						BoneName = "Bip01_R_Finger0"
+						;[End Block]
+					Case 1
+						;[Block]
+						BoneName = "Bip01_R_Hand"
+						;[End Block]
+					Case 2
+						;[Block]
+						BoneName = "Bip01_R_Forearm"
+						;[End Block]
+					Case 3
+						;[Block]
+						BoneName = "Bip01_R_UpperArm"
+						;[End Block]
+					Case 4
+						;[Block]
+						BoneName = "Bip01_L_UpperArm"
+						;[End Block]
+					Case 5
+						;[Block]
+						BoneName = "Bip01_L_Forearm"
+						;[End Block]
+					Case 6
+						;[Block]
+						BoneName = "Bip01_L_Hand"
+						;[End Block]
+					Case 7
+						;[Block]
+						BoneName = "Bip01_L_Finger0"
+						;[End Block]
+					Case 8
+						;[Block]
+						BoneName = "Bip01_L_Foot"
+						;[End Block]
+					Case 9
+						;[Block]
+						BoneName = "Bip01_L_Calf"
+						;[End Block]
+					Case 10
+						;[Block]
+						BoneName = "Bip01_L_Thigh"
+						;[End Block]
+					Case 11
+						;[Block]
+						BoneName = "Bip01_R_Foot"
+						;[End Block]
+					Case 12
+						;[Block]
+						BoneName = "Bip01_R_Calf"
+						;[End Block]
+					Case 13
+						;[Block]
+						BoneName = "Bip01_R_Thigh"
+						;[End Block]
+					Case 14
+						;[Block]
+						BoneName = "Bip01_Head"
+						;[End Block]
+					Case 15
+						;[Block]
+						BoneName = "Bip01_Pelvis"
+						;[End Block]
+					Case 16
+						;[Block]
+						BoneName = "Bip01_Spine"
+						;[End Block]
+					Case 17
+						;[Block]
+						BoneName = "Bip01_Spine1"
+						;[End Block]
+					Case 18
+						;[Block]
+						BoneName = "Bip01_Spine2"
+						;[End Block]
+					Case 19
+						;[Block]
+						BoneName = "Bip01_Neck"
+						;[End Block]
+				End Select
+				
+				Local Bone% = FindChild(n\OBJ, BoneName)
+				
+				emit.Emitter = SetEmitter(Null, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True), 36)
+				EntityParent(emit\Owner, Bone)
+			Next
+			
 			If NPCSound[SOUND_NPC_457_FIRE] = 0 Then NPCSound[SOUND_NPC_457_FIRE] = LoadSound_Strict("SFX\SCP\457\FireLoop.ogg")
 			;[End Block]
 		Case NPCType513_1

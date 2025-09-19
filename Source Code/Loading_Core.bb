@@ -597,15 +597,15 @@ Function LoadParticles%()
 	
 	; ~ SCP-457 flame particle
 	ParticleEffect[36] = CreateTemplate()
-	SetTemplateEmitterLifeTime(ParticleEffect[36], 1)
-	SetTemplateParticlesPerInterval(ParticleEffect[36], 50)
+	SetTemplateEmitterLifeTime(ParticleEffect[36], -1)
+	SetTemplateParticlesPerInterval(ParticleEffect[36], 10)
 	SetTemplateParticleLifeTime(ParticleEffect[36], 25, 30)
 	SetTemplateTexture(ParticleEffect[36], PARTICLE_FIRE)
 	SetTemplateOffset(ParticleEffect[36], -0.003, 0.003, -0.03, 0.03, -0.003, 0.003)
 	SetTemplateVelocity(ParticleEffect[36], -0.004, 0.004, -0.0015, 0.015, -0.004, 0.004)
 	SetTemplateAlphaVel(ParticleEffect[36], True)
 	SetTemplateSize(ParticleEffect[36], 0.03, 0.03, 0.9, 1.1)
-	SetTemplateSizeVel(ParticleEffect[36], 0.002, 1.002)
+	SetTemplateSizeVel(ParticleEffect[36], 0.0013, 1.0013)
 End Function
 
 Function RemoveParticleInstances%()
