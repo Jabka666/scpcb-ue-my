@@ -425,13 +425,20 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	Local IsRMesh$ = ReadString(f)
 	Local RMeshVersion% = 1
 	
-	If IsRMesh = "RoomMesh"
-		RMeshVersion = 1
-	ElseIf IsRMesh = "RoomMesh1.1"
-		RMeshVersion = 2
-	Else
-		RuntimeErrorEx(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
-	EndIf
+	Select IsRMesh
+		Case "RoomMesh"
+			;[Block]
+			RMeshVersion = 1
+			;[End Block]
+		Case  "RoomMesh1.1"
+			;[Block]
+			RMeshVersion = 2
+			;[End Block]
+		Default
+			;[Block]
+			RuntimeErrorEx(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
+			;[End Block]
+	End Select
 	
 	Local FilePath$ = StripFileName(File)
 	
@@ -6023,11 +6030,14 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	UpdateNormals(Mesh)
 	UpdateNormals(Mesh2)
 	
-	EntityTexture(Mesh, Tex1, 0, 1)
-	EntityTexture(Mesh2, Tex2, 0, 1)
+	EntityTexture(Mesh, Tex1, 0, 0)
+	EntityTexture(Mesh2, Tex2, 0, 0)
 	
 	EntityFX(Mesh, 1)
 	EntityFX(Mesh2, 1 + 2 + 32)
+	
+	SetDeferredEntity(Mesh)
+	SetDeferredEntity(Mesh2)
 	
 	Return(Mesh)
 End Function
