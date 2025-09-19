@@ -65,6 +65,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	Local n.NPCs, n2.NPCs, emit.Emitter
 	Local Temp#, i%, j%, Tex%
 	Local MeshW#, MeshH#, MeshD#
+	Local ShouldSetOBJ2% = True
+	Local ShouldSetOBJ3% = True
 	
 	n.NPCs = New NPCs
 	n\NPCType = NPCType
@@ -278,19 +280,18 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-			Local Light% = CreateLight(2, n\Collider)
-			
-			LightRange(Light, 2.0)
-			LightColor(Light, 255.0, 140.0, 50.0)
+			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
+			LightRange(n\OBJ2, 2.0)
+			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 			;LightShadows(Light, True)
-			MoveEntity(Light, 0, n\CollRadius, 0)
+			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
+			ShouldSetOBJ2 = False
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			ChangeNPCTextureID(n, NPC_457_TEXTURE)
 			EntityAlpha(n\OBJ, 0.0)
-			UpdateEntityMaterial(n\OBJ)
 			
 			Local BoneName$
 			
@@ -678,7 +679,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	
 	PositionEntity(n\OBJ, x, y, z, True)
 	SetDeferredEntity(n\OBJ, True)
-	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, True)
+	If n\OBJ2 <> 0 And ShouldSetOBJ2 Then SetDeferredEntity(n\OBJ2, True)
+	If n\OBJ3 <> 0 And ShouldSetOBJ3 Then SetDeferredEntity(n\OBJ3, True)
 	
 	n\ID = 0
 	n\ID = FindFreeNPCID()

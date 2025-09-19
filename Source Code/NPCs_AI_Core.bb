@@ -2736,6 +2736,8 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		UpdateNPCBlinking(n)
 		
+		LightColor(n\OBJ2, Rnd(240.0, 255.0), Rnd(135.0, 150.0), Rnd(35.0, 50.0))
+		LightRange(n\OBJ2, Rnd(1.5, 2.0))
 		If me\Terminated Then Burn = 1
 		If Dist < 0.36 And (Not chs\NoTarget)
 			If n\State <> 3
