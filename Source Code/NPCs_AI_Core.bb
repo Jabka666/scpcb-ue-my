@@ -5314,6 +5314,10 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 			
 			AnimateNPC(n, 51.0, 71.0, 0.3)
 			;[End Block]
+		Case 2.0 ; ~ Dead (not using n\IsDead)
+			;[Block]
+			SetNPCFrame(n, 72.0)
+			;[End Block]
 	End Select
 	If me\CurrSpeed > 0.0 And Dist < 0.09 Then n\HP = 0
 	

@@ -3775,6 +3775,21 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 				SetNPCFrame(e\room\NPC[5], 19.0)
 				RotateEntity(e\room\NPC[5]\Collider, 0.0, e\room\Angle, 0.0, True)
 				
+				TFormPoint(3194.0, -5632.0, 6386.0, e\room\OBJ, 0)
+				n.NPCs = CreateNPC(NPCTypeCockroach, TFormedX(), TFormedY() + 0.05, TFormedZ())
+				n\State = 2.0
+				RotateEntity(n\Collider, EntityPitch(n\Collider), Rnd(360.0), EntityRoll(n\Collider))
+				
+				TFormPoint(3063.0, -5632.0, 1354.0, e\room\OBJ, 0)
+				n.NPCs = CreateNPC(NPCTypeCockroach, TFormedX(), TFormedY() + 0.05, TFormedZ())
+				n\State = 2.0
+				RotateEntity(n\Collider, EntityPitch(n\Collider), Rnd(360.0), EntityRoll(n\Collider))
+				
+				TFormPoint(1188.0, -5632.0, 1114.0, e\room\OBJ, 0)
+				n.NPCs = CreateNPC(NPCTypeCockroach, TFormedX(), TFormedY() + 0.05, TFormedZ())
+				n\State = 2.0
+				RotateEntity(n\Collider, EntityPitch(n\Collider), Rnd(360.0), EntityRoll(n\Collider))
+				
 				For i = 0 To 3
 					e\room\NPC[i] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
 				Next
