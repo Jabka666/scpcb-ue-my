@@ -2415,7 +2415,7 @@ End Function
 ; ~ Textures Constants
 ;[Block]
 Const MaxOverlayTextureIDAmount% = 4
-Const MaxOverlayIDAmount% = 12
+Const MaxOverlayIDAmount% = 13
 Const MaxIconIDAmount% = 13
 Const MaxImageIDAmount% = 8
 ;[End Block]
