@@ -674,7 +674,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\y = ReadFloat(f) * RoomScale
 					tl\z = ReadFloat(f) * RoomScale
 					tl\lType = DEFERRED_LIGHT_POINT
-					tl\Range = ReadFloat(f) / 2000.0
+					tl\Range = ReadFloat(f) * RoomScale
 					
 					lColor = ReadString(f)
 					Intensity = ReadFloat(f)
@@ -693,7 +693,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\y = ReadFloat(f) * RoomScale
 					tl\z = ReadFloat(f) * RoomScale
 					tl\lType = DEFERRED_LIGHT_SPOT
-					tl\Range = ReadFloat(f) / 2000.0
+					tl\Range = ReadFloat(f) * RoomScale
 					
 					lColor = ReadString(f)
 					Intensity = ReadFloat(f)
@@ -721,7 +721,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					lColor = ReadString(f)
 					Intensity = ReadFloat(f)
-					tl\Range = ReadFloat(f) / 2000.0
+					tl\Range = ReadFloat(f) * RoomScale
 					tl\R = Int(Piece(lColor, 1, " "))
 					tl\G = Int(Piece(lColor, 2, " "))
 					tl\B = Int(Piece(lColor, 3, " "))
