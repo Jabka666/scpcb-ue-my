@@ -3885,8 +3885,8 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
 		Visible = EntityVisible(me\Collider, n\Collider) ; ~ TODO: Remove EntityVisible. Place only after Distance functions!
-		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 2.5)
-		If Dist < 2.5 Lor (PowTwo(me\SndVolume * 1.3) > Dist And Visible)
+		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 4.0)
+		If Dist < 2.25 Lor (PowTwo(me\SndVolume) > Dist And Visible)
 			If n\State <> 3.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
@@ -3894,7 +3894,7 @@ Function UpdateNPCType939%(n.NPCs)
 				GiveAchievement("939")
 				n\State = 3.0
 			EndIf
-		ElseIf PowTwo(me\SndVolume * 1.6) > Dist
+		ElseIf PowTwo(me\SndVolume * 1.4) > Dist
 			If n\State <> 1.0
 				SetNPCFrame(n, 1443.0)
 				n\State3 = 70.0 * 7.0
