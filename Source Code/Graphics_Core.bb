@@ -20,6 +20,7 @@ End Function
 Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	SetGfxDriver(opt\GFXDriver)
 	Graphics3D(Width, Height, Depth, Mode)
+	HardwareSkinning(True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
