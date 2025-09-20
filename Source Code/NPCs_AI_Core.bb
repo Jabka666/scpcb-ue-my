@@ -2736,9 +2736,13 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		UpdateNPCBlinking(n)
 		
+		; ~ Lighting
 		LightColor(n\OBJ2, Rnd(240.0, 255.0), Rnd(135.0, 150.0), Rnd(35.0, 50.0))
 		LightRange(n\OBJ2, Rnd(1.5, 2.0))
+		
 		If me\Terminated Then Burn = 1
+		
+		; ~ Hazmat suit protection
 		If Dist < 0.36 And (Not chs\NoTarget)
 			If n\State <> 3
 				If EntityVisible(me\Collider, n\Collider)
@@ -2765,6 +2769,7 @@ Function UpdateNPCType457%(n.NPCs)
 							Next
 						EndIf
 					Else
+						; ~ Hazmat suit is broken -> kill
 						me\CurrCameraZoom = 20.0
 						me\BlurTimer = 500.0
 						Burn = 1
@@ -2818,7 +2823,10 @@ Function UpdateNPCType457%(n.NPCs)
 				;[Block]
 				n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 				AnimateNPC(n, 210.0, 235.0, 0.1)
-				If n\Frame > 234.9 Then n\State = 2.0
+				If n\Frame > 234.9
+					n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
+					n\State = 2.0
+				EndIf
 				;[End Block]
 			Case 2.0 ; ~ Being active
 				;[Block]
@@ -2830,8 +2838,7 @@ Function UpdateNPCType457%(n.NPCs)
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 						; ~ Playing a sound after detecting the player
 						If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
-							LoadNPCSound(n, "SFX\SCP\457\Sighting.ogg", 1)
-							n\SoundCHN2 = PlaySoundEx(n\Sound2, Camera, n\OBJ, 10.0, 1.0)
+							n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ, 10.0, 1.0)
 							n\PrevState = 2
 						EndIf
 						n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -2839,6 +2846,14 @@ Function UpdateNPCType457%(n.NPCs)
 						n\PathLocation = 0
 						
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+						
+						; ~ Teleport closer every 15 sec if player still visible
+						n\Reload = Max(0.0, n\Reload - fps\Factor[0])
+						If n\Reload = 0.0 And Dist > 49.0
+							SetNPCFrame(n, 444.0)
+							n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ, 10.0, 1.0)
+							n\State = 4.0
+						EndIf
 						
 						If Dist > 0.25
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 25.0)
@@ -2878,7 +2893,7 @@ Function UpdateNPCType457%(n.NPCs)
 								
 								UseDoorNPC(n)
 								
-								; ~ Resetting the "PrevState" value randomly, to make SCP-457 talking randomly 
+								; ~ Resetting the "PrevState" value randomly
 								If Rand(600) = 1 And n\State2 = 0.0 Then n\PrevState = 0
 								
 								If n\PrevState > 1 Then n\PrevState = 1
@@ -2995,6 +3010,20 @@ Function UpdateNPCType457%(n.NPCs)
 				
 				PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
 				n\Angle = CurveAngle(EntityYaw(me\Collider), n\Angle, 10.0)
+				;[End Block]
+			Case 4.0 ; ~ Teleport closer
+				;[Block]
+				n\GravityMult = 0.0
+				TranslateEntity(n\Collider, 0.0, (((EntityY(me\Collider)) - EntityY(n\Collider)) / 50.0) * Sin(Float(MilliSec * 0.5)), 0.0)
+				
+				AnimateNPC(n, 444.0, 493.0, 0.4, False)
+				If n\Frame > 492.9
+					TeleportCloser(n)
+					n\PathTimer = 0.0
+					n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
+					n\GravityMult = 1.0
+					n\State = 2.0
+				EndIf
 				;[End Block]
 		End Select
 		n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)

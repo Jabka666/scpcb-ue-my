@@ -385,6 +385,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EntityParent(emit\Owner, Bone)
 			Next
 			
+			If NPCSound[SOUND_NPC_457_SIGHTING] = 0 Then NPCSound[SOUND_NPC_457_SIGHTING] = LoadSound_Strict("SFX\SCP\457\Sighting.ogg")
 			If NPCSound[SOUND_NPC_457_FIRE] = 0 Then NPCSound[SOUND_NPC_457_FIRE] = LoadSound_Strict("SFX\SCP\457\FireLoop.ogg")
 			;[End Block]
 		Case NPCType513_1
@@ -1073,7 +1074,7 @@ Function TeleportCloser%(n.NPCs)
 	Local ClosestWaypoint.WayPoints
 	Local w.WayPoints
 	Local Dist#
-	Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs))
+	Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs * (n\NPCType <> NPCType457)) - (14.0 * (n\NPCType = NPCType457)))
 	
 	For w.WayPoints = Each WayPoints
 		If w\door <> Null Then Continue
