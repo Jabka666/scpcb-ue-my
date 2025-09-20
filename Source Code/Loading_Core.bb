@@ -1,4 +1,4 @@
-Const MaxDecalTextureIDAmount% = 27
+Const MaxDecalTextureIDAmount% = 26
 
 Type DecalInstance
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
@@ -42,9 +42,7 @@ Const DECAL_APOLLYON% = 23
 
 Const DECAL_CRACKED_GLASS% = 24
 
-Const DECAL_SHADOW% = 25
-
-Const DECAL_FOAM% = 26
+Const DECAL_FOAM% = 25
 ;[End Block]
 
 Function LoadDecals%()
@@ -84,8 +82,6 @@ Function LoadDecals%()
 	If S2IMapContains(UnlockedAchievements, "apollyon") Then de_I\DecalTextureID[DECAL_APOLLYON] = LoadTexture_Strict("GFX\Menu\Achievements\AchvApollyon.png", 1 + 2, DeleteAllTextures, False)
 	
 	de_I\DecalTextureID[DECAL_CRACKED_GLASS] = LoadTexture_Strict("GFX\Decals\cracked_glass_decal.png", 1 + 2, DeleteAllTextures, False)
-	
-	de_I\DecalTextureID[DECAL_SHADOW] = LoadTexture_Strict("GFX\Decals\shadow_decal.png", 1 + 2, DeleteAllTextures, False)
 	
 	de_I\DecalTextureID[DECAL_FOAM] = LoadTexture_Strict("GFX\Decals\foam_decal.png", 1 + 2, DeleteAllTextures, False)
 End Function
