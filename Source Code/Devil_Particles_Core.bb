@@ -7,7 +7,7 @@
 
 Type Template
 	Field EmitterMaxTime%											; ~ Emitter life time
-	Field EmitterBlend%												; ~ Blendmode of emitter entity
+	Field EmitterBlend%, EmitterFX%									; ~ Blendmode and FX of emitter entity
 	Field Interval%, ParticlesPerInterval%							; ~ Particle interval
 	Field MaxParticles%												; ~ Max particles
 	Field MinTime%, MaxTime%										; ~ Particle life time
@@ -58,6 +58,7 @@ Function CreateTemplate()
 	
 	Template = Handle(tmp)
 	SetTemplateEmitterBlend(Template, 3)
+	SetTemplateFX(Template, 1 + 2 + 32)
 	SetTemplateInterval(Template, 1)
 	SetTemplateParticlesPerInterval(Template, 1)
 	SetTemplateMaxParticles(Template, -1)
@@ -86,6 +87,13 @@ Function SetTemplateEmitterBlend%(Template%, EmitterBlend%)
 	
 	tmp.Template = Object.Template(Template)
 	tmp\EmitterBlend = EmitterBlend
+End Function
+
+Function SetTemplateFX%(Template%, EmitterFX%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\EmitterFX = EmitterFX
 End Function
 
 Function SetTemplateInterval%(Template%, Interval%)
@@ -269,7 +277,7 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	emit\tmp = Object.Template(ParticleEffect[ParticleID])
 	emit\MaxTime = emit\tmp\EmitterMaxTime
 	EntityBlend(emit\Ent, emit\tmp\EmitterBlend)
-	EntityFX(emit\Ent, 1 + 2 + 32)
+	EntityFX(emit\Ent, emit\tmp\EmitterFX)
 	If emit\tmp\Tex <> 0 Then EntityTexture(emit\Ent, emit\tmp\Tex)
 	SetDeferredParticle(emit\Ent)
 	
