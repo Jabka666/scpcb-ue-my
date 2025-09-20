@@ -34,7 +34,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 						Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					Else
@@ -168,7 +168,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							n\State = 2.0
 							Return
@@ -305,7 +305,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 						Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					Else
@@ -440,7 +440,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 				
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							n\State = 2.0
 							Return
@@ -886,7 +886,7 @@ Function UpdateNPCType049%(n.NPCs)
 				;[Block]
 				If Dist < PowTwo(HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-					PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume)
+					PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState)
 					If n\State2 > 0.0
 						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.0
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
@@ -1082,7 +1082,7 @@ Function UpdateNPCType049%(n.NPCs)
 				;[End Block]
 			Case 4.0 ; ~ Going to surveillance room
 				;[Block]
-				PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume)
+				PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState)
 				If PlayerSeeable = 1
 					PlaySound_Strict(LoadTempSound("SFX\SCP\049\Room2SLSpawn.ogg"))
 					n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -1217,7 +1217,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							PointEntity(n\Collider, me\Collider)
 						EndIf
@@ -1334,7 +1334,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							n\State = 2.0
 							Return
@@ -2832,7 +2832,7 @@ Function UpdateNPCType457%(n.NPCs)
 				;[Block]
 				If Dist < PowTwo(HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-					PlayerSeeable = NPCSeesPlayer(n, 10.0 - me\CrouchState + me\SndVolume)
+					PlayerSeeable = NPCSeesPlayer(n, 10.0 - me\CrouchState)
 					If n\State2 > 0.0
 						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.0
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
@@ -4004,7 +4004,7 @@ Function UpdateNPCType966%(n.NPCs)
 						EndIf
 					EndIf
 					; ~ Echo if player gets close
-					If NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume) = 1 Then n\State = Rand(4)
+					If NPCSeesPlayer(n, 4.0 - me\CrouchState) = 1 Then n\State = Rand(4)
 				EndIf
 				;[End Block]
 			Case 1.0, 2.0 ; ~ Echo
@@ -4012,7 +4012,7 @@ Function UpdateNPCType966%(n.NPCs)
 				AnimateNPC(n, 214.0, 257.0, 0.25, False)
 				If n\Frame > 256.9 Then n\State = 0.0
 				
-				If NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume) = 1
+				If NPCSeesPlayer(n, 6.0 - me\CrouchState) = 1
 					PointEntity(n\Collider, me\Collider)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					
@@ -4066,7 +4066,7 @@ Function UpdateNPCType966%(n.NPCs)
 					If n\Frame > 456.9 Then n\State = 0.0
 				EndIf
 				
-				If NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume) = 1
+				If NPCSeesPlayer(n, 6.0 - me\CrouchState + me\SndVolume) = 1
 					PointEntity(n\Collider, me\Collider)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -4080,7 +4080,7 @@ Function UpdateNPCType966%(n.NPCs)
 			Case 5.0, 6.0, 8.0 ; ~ Walking or chasing
 				;[Block]
 				If n\State = 8.0
-					If NPCSeesPlayer(n, 6.0 - me\CrouchState + me\SndVolume) = 1 ; ~ Chasing the player
+					If NPCSeesPlayer(n, 6.0 - me\CrouchState) = 1 ; ~ Chasing the player
 						PointEntity(n\Collider, me\Collider)
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
@@ -4645,7 +4645,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 			
 			UpdateNPCBlinking(n)
 			
-			Local PlayerSeeable% = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, 360.0)
+			Local PlayerSeeable% = NPCSeesPlayer(n, 8.0 - me\CrouchState, 360.0)
 			
 			n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 			If n\State2 > 0.0
@@ -6037,7 +6037,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
-						PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume)
+						PlayerSeeAble = NPCSeesPlayer(n, 5.0 - me\CrouchState)
 						If PlayerSeeAble > 0
 							If n\LastSeen > 0 And n\LastSeen < 70.0 * 15.0
 								If PlayerSeeAble < 2
@@ -6279,7 +6279,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
-					PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume)
+					PlayerSeeAble = NPCSeesPlayer(n, 5.0 - me\CrouchState)
 					If PlayerSeeAble > 0 Then n\State2 = 70.0 * 15.0
 					If PlayerSeeAble = 1
 						n\EnemyX = EntityX(me\Collider, True)
