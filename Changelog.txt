@@ -41,6 +41,7 @@
 - SCP-035 does not activate when playing is wearing SCP-268.
 - Increased spawnrate of SCP-106 in «DisableDecals» = 2 type rooms.
 - Fixed all MTF at Gate A shooting at player simultaniously.
+- Improved NPC's sound detection of the player.
 - Improved SCP-939's animations, texture, and model.
 - Improved SCP-049's animations.
 
