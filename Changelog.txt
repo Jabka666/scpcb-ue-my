@@ -1,6 +1,8 @@
 {v1.6}
 
 [Global]
+- Added real-time lighting.
+
 - Player can now obtain SCP-009 achievement when wearing hazmat suit.
 - More stamina in Pocket Dimension to use.
 - Reduced blink timer by 1 second on all difficulties.
@@ -24,7 +26,7 @@
 - Room improvements...
 - Improved labels for SCPs.
 - Remove Level 5 Key Card from «cont1_106» and «cont2_409».
-- Add Level 5 Key Card to SCP-009 and Site Director room with a new way to obtain it. (Make a deal with SCP-079)
+- Add Level 5 Key Card to «cont3_009» and «room2_office_3» room with a new way to obtain it. (Make a deal with SCP-079)
 - Moved «cont3_513» to LCZ.
 - Improved Explosion effect at Gate B.
 - Snow at Gate B glistens.
@@ -39,7 +41,8 @@
 - SCP-035 does not activate when playing is wearing SCP-268.
 - Increased spawnrate of SCP-106 in «DisableDecals» = 2 type rooms.
 - Fixed all MTF at Gate A shooting at player simultaniously.
-- Improved SCP-939's animations and model.
+- Improved SCP-939's animations, texture, and model.
+- Improved SCP-049's animations.
 
 - Changed speed of enemies:
  - SCP-049 chase speed: 1.6 -> 1.75
