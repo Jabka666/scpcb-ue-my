@@ -387,12 +387,12 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			CameraViewport(DeferredCamera, 0, 0, TextureWidth(Shadowmap), TextureHeight(Shadowmap))
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS, 0.5)
 			
-			If Shadows Then RenderShadowMap(dcam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If Shadows Then RenderShadowMap(Cam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
 			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
-			CameraRange dcam, 0.01, DistToLight + ((VolumeScale + Range) * 2.0)
+			CameraRange(Cam, 0.01, DistToLight + ((VolumeScale + Range) * 2.0))
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
