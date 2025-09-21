@@ -4745,11 +4745,15 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		EndIf
 		
 		If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
-			If CoffinDistance < 4.0 And wi\NVGPower > 0 And I_714\Using <> 2
-				TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
-				CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Clamp((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0, 1.0)) * 0.2)
+			If e\room = PlayerRoom And wi\NVGPower > 0 And I_714\Using <> 2
+				If CoffinDistance < 6.0
+					TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
+					CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Clamp((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0, 1.0)) * 0.2)
 				
-				me\Sanity = me\Sanity - ((fps\Factor[0] * (1.2 + (0.24 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+					me\Sanity = me\Sanity - ((fps\Factor[0] * (1.2 + (0.24 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+				Else
+					me\Sanity = me\Sanity - ((fps\Factor[0] * (0.3 + (0.06 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+				EndIf
 				me\RestoreSanity = False
 				me\BlurTimer = Sin(MilliSec / 10) * Abs(me\Sanity)
 				
@@ -4820,6 +4824,12 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		TurnOffSecurityCam(e\room, (Not UpdateLever(e\room\RoomLevers[0]\OBJ)))
 	Else
 		CoffinDistance = e\room\Dist
+		If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
+			If CoffinDistance < 20.0 And wi\NVGPower > 0 And I_714\Using <> 2
+				me\Sanity = me\Sanity - ((fps\Factor[0] * (0.3 + (0.06 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+				me\RestoreSanity = False
+			EndIf
+		EndIf
 	EndIf
 End Function
 
