@@ -2744,7 +2744,7 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		; ~ Hazmat suit protection
 		If Dist < 0.36 And (Not chs\NoTarget)
-			If n\State <> 3
+			If n\State < 3.0
 				If EntityVisible(me\Collider, n\Collider)
 					If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
 						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
@@ -2852,6 +2852,7 @@ Function UpdateNPCType457%(n.NPCs)
 						If n\Reload = 0.0 And Dist > 49.0
 							SetNPCFrame(n, 444.0)
 							n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ, 10.0, 1.0)
+							n\PrevState = 0
 							n\State = 4.0
 						EndIf
 						
@@ -3014,15 +3015,23 @@ Function UpdateNPCType457%(n.NPCs)
 			Case 4.0 ; ~ Teleport closer
 				;[Block]
 				n\GravityMult = 0.0
-				TranslateEntity(n\Collider, 0.0, (((EntityY(me\Collider)) - EntityY(n\Collider)) / 50.0) * Sin(Float(MilliSec * 0.5)), 0.0)
-				
-				AnimateNPC(n, 444.0, 493.0, 0.4, False)
-				If n\Frame > 492.9
-					TeleportCloser(n)
-					n\PathTimer = 0.0
-					n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
-					n\GravityMult = 1.0
-					n\State = 2.0
+				If n\PrevState = 0
+					TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider)) - EntityY(n\Collider)) / 200.0, 0.0)
+					AnimateNPC(n, 444.0, 493.0, 0.4, False)
+					If n\Frame > 492.9
+						TeleportCloser(n)
+						n\PrevState = 1
+					EndIf
+				Else
+					TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 200.0, 0.0)
+					AnimateNPC(n, 493.0, 444.0, -0.4, False)
+					If n\Frame < 444.1
+						n\PathTimer = 0.0
+						n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
+						n\GravityMult = 1.0
+						n\PrevState = 2
+						n\State = 2.0
+					EndIf
 				EndIf
 				;[End Block]
 		End Select
