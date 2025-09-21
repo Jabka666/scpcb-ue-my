@@ -5874,7 +5874,7 @@ Function CreateMap%()
 							If x + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
 									r\AdjDoor[0] = CreateDoor(r, FloatX + (RoomSpacing / 2.0), 0.0, FloatY, 90.0, Max(Rand(-3, 1), 0), DoorType)
-									If Rand(20 - (7 * (SelectedDifficulty\OtherFactors > DIFFICULTY_NORMAL))) Then AffectDecayDoor(r\AdjDoor[0])
+									If Rand(35 - (7 * (SelectedDifficulty\OtherFactors > DIFFICULTY_NORMAL))) Then AffectDecayDoor(r\AdjDoor[0])
 								EndIf
 							EndIf
 						EndIf
@@ -5905,7 +5905,7 @@ Function CreateMap%()
 							If y + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
 									r\AdjDoor[3] = CreateDoor(r, FloatX, 0.0, FloatY + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), DoorType)
-									If Rand(20 - (7 * (SelectedDifficulty\OtherFactors > DIFFICULTY_NORMAL))) = 1 Then AffectDecayDoor(r\AdjDoor[3])
+									If Rand(35 - (7 * (SelectedDifficulty\OtherFactors > DIFFICULTY_NORMAL))) = 1 Then AffectDecayDoor(r\AdjDoor[3])
 								EndIf
 							EndIf
 						EndIf
