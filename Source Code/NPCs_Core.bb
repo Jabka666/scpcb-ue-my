@@ -53,6 +53,8 @@ Type NPCs
 	Field TargetUpdateTimer#
 	Field IceTimer#
 	Field TeslaHit% = False
+	Field FireEmitter.Emitter[20]
+	Field Bones%[20]
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -379,10 +381,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 						;[End Block]
 				End Select
 				
-				Local Bone% = FindChild(n\OBJ, BoneName)
-				
-				emit.Emitter = SetEmitter(Null, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True), 36)
-				EntityParent(emit\Owner, Bone)
+				n\Bones[i] = FindChild(n\OBJ, BoneName)
+				n\FireEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 36)
+				EntityParent(n\FireEmitter[i]\Owner, n\Bones[i])
 			Next
 			
 			If NPCSound[SOUND_NPC_457_SIGHTING] = 0 Then NPCSound[SOUND_NPC_457_SIGHTING] = LoadSound_Strict("SFX\SCP\457\Sighting.ogg")

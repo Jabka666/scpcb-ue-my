@@ -2852,6 +2852,9 @@ Function UpdateNPCType457%(n.NPCs)
 						If n\Reload = 0.0 And Dist > 49.0
 							SetNPCFrame(n, 444.0)
 							n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ, 10.0, 1.0)
+							For i = 0 To 19
+								EntityParent(n\FireEmitter[i]\Owner, 0)
+							Next
 							n\PrevState = 0
 							n\State = 4.0
 						EndIf
@@ -3012,27 +3015,166 @@ Function UpdateNPCType457%(n.NPCs)
 				PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
 				n\Angle = CurveAngle(EntityYaw(me\Collider), n\Angle, 10.0)
 				;[End Block]
-			Case 4.0 ; ~ Teleport closer
+			Case 4.0 ; ~ Moves closer
 				;[Block]
 				n\GravityMult = 0.0
-				If n\PrevState = 0
-					TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider)) - EntityY(n\Collider)) / 200.0, 0.0)
-					AnimateNPC(n, 444.0, 493.0, 0.4, False)
-					If n\Frame > 492.9
-						TeleportCloser(n)
-						n\PrevState = 1
-					EndIf
-				Else
-					TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 200.0, 0.0)
-					AnimateNPC(n, 493.0, 444.0, -0.4, False)
-					If n\Frame < 444.1
-						n\PathTimer = 0.0
-						n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
-						n\GravityMult = 1.0
-						n\PrevState = 2
-						n\State = 2.0
-					EndIf
-				EndIf
+				EntityType(n\Collider, 0)
+				
+				TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider)) - EntityY(n\Collider)) / 200.0, 0.0)
+				Select n\PrevState
+					Case 0 ; ~ Find path
+						;[Block]
+						AnimateNPC(n, 444.0, 493.0, 0.3, False)
+						
+						; ~ Move particle emitters to collider
+						Local TargetX# = EntityX(n\Collider) + Rnd(-0.5, 0.5)
+						Local TargetY# = EntityY(n\Collider) + Rnd(-0.5, 0.5)
+						Local TargetZ# = EntityZ(n\Collider) + Rnd(-0.5, 0.5)
+						
+						For i = 0 To 19
+							Local CurrentX# = EntityX(n\FireEmitter[i]\Owner)
+							Local CurrentY# = EntityY(n\FireEmitter[i]\Owner)
+							Local CurrentZ# = EntityZ(n\FireEmitter[i]\Owner)
+							
+							CurrentX = CurveValue(TargetX, CurrentX, 100.0)
+							CurrentY = CurveValue(TargetY, CurrentY, 100.0)
+							CurrentZ = CurveValue(TargetZ, CurrentZ, 100.0)
+							
+							PositionEntity(n\FireEmitter[i]\Owner, CurrentX, CurrentY, CurrentZ)
+						Next
+						If n\Frame > 492.9
+							; ~ TODO: Check if closest waypoint is better way
+;							ClosestDist# = 0.0
+;							Local ClosestWaypoint.WayPoints
+;							Local w.WayPoints
+;							Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs * (n\NPCType <> NPCType457)) - (14.0 * (n\NPCType = NPCType457)))
+;							
+;							For w.WayPoints = Each WayPoints
+;								If w\door <> Null Then Continue
+;								
+;								If w\room\RoomTemplate\RoomID <> r_cont3_009
+;									Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
+;									If Dist > 1.0 And Dist < 100.0
+;										If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
+;											; ~ Teleports to the nearby waypoint that takes it closest to the player
+;											Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
+;											
+;											If NewDist < ClosestDist Lor ClosestWaypoint = Null
+;												ClosestDist = NewDist
+;												ClosestWaypoint = w
+;											EndIf
+;										EndIf
+;									EndIf
+;								EndIf
+;							Next
+;							
+;							If ClosestWaypoint <> Null
+;								Local ShouldGo% = False
+;								Local PosY# = EntityY(ClosestWaypoint\OBJ, True)
+;								
+;								If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs
+;									ShouldGo = True
+;								ElseIf PosY <= 6.5 And PosY >= -6.5
+;									ShouldGo = True
+;								EndIf
+;								If ShouldGo
+;									n\EnemyX = EntityX(ClosestWaypoint\OBJ, True)
+;									n\EnemyY = EntityY(ClosestWaypoint\OBJ, True)
+;									n\EnemyZ = EntityZ(ClosestWaypoint\OBJ, True)
+;									CreateConsoleMsg("Got coords!")
+;								EndIf
+;							EndIf
+							For i = 0 To 19
+								EntityParent(n\FireEmitter[i]\Owner, n\Collider)
+							Next
+							n\PrevState = 1
+						EndIf
+						;[End Block]
+					Case 1 ; ~ Move to the closest waypoint
+						;[Block]
+						n\Speed = 0.1
+						
+						n\EnemyX = EntityX(me\Collider, True)
+						n\EnemyY = EntityY(me\Collider, True)
+						n\EnemyZ = EntityZ(me\Collider, True)
+						
+						If n\PathTimer > 0.0
+							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
+							
+							If n\PathStatus = PATH_STATUS_FOUND
+								While n\Path[n\PathLocation] = Null
+									If n\PathLocation > MaxPathLocations - 1
+										n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+										Exit
+									Else
+										n\PathLocation = n\PathLocation + 1
+									EndIf
+								Wend
+								
+								If n\Path[n\PathLocation] <> Null
+									TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.5) - EntityY(n\Collider)) / 200.0, 0.0)
+									
+									PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
+									
+									Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+									
+									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+									
+									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
+									
+									If Dist2 < PathLocationDist * 2.0 Then n\PathLocation = n\PathLocation + 1
+								EndIf
+							Else
+								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
+							EndIf
+						Else
+							n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.2, n\EnemyZ)
+							n\PathTimer = 70.0 * 10.0
+							n\CurrSpeed = 0.0
+						EndIf
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+						
+						If DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ) < 9.0
+							For i = 0 To 19
+								EntityParent(n\FireEmitter[i]\Owner, 0)
+							Next
+							n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+							n\PrevState = 2
+						EndIf
+						;[End Block]
+					Case 2 ; ~ Go to state 2
+						;[Block]
+						; ~ Move particle emitters to the bones
+						For i = 0 To 19
+							TargetX = EntityX(n\Bones[i], True)
+							TargetY = EntityY(n\Bones[i], True)
+							TargetZ = EntityZ(n\Bones[i], True)
+							
+							CurrentX = EntityX(n\FireEmitter[i]\Owner)
+							CurrentY = EntityY(n\FireEmitter[i]\Owner)
+							CurrentZ = EntityZ(n\FireEmitter[i]\Owner)
+							
+							CurrentX = CurveValue(TargetX, CurrentX, 100.0)
+							CurrentY = CurveValue(TargetY, CurrentY, 100.0)
+							CurrentZ = CurveValue(TargetZ, CurrentZ, 100.0)
+							
+							PositionEntity(n\FireEmitter[i]\Owner, CurrentX, CurrentY, CurrentZ, True)
+						Next
+						
+						AnimateNPC(n, 493.0, 444.0, -0.3, False)
+						If n\Frame < 444.1
+							EntityType(n\Collider, HIT_PLAYER)
+							For i = 0 To 19
+								EntityParent(n\FireEmitter[i]\Owner, n\Bones[i])
+							Next
+							n\PathTimer = 0.0
+							n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
+							n\GravityMult = 1.0
+							n\Speed = 0.025
+							n\State = 2.0
+						EndIf
+						;[End Block]
+				End Select
 				;[End Block]
 		End Select
 		n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
