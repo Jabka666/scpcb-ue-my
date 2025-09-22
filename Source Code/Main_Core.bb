@@ -2754,7 +2754,7 @@ Function UpdateCough%(Chance_%)
 		If Rand(Chance_) = 1
 			If (Not ChannelPlaying(CoughCHN))
 				CoughCHN = PlaySound_Strict(CoughSFX((wi\GasMask > 0) Lor (I_1499\Using > 0) Lor (wi\HazmatSuit > 0), Rand(0, 2)), True)
-				me\SndVolume = Max(4.0, me\SndVolume)
+				me\SndVolume = Max(6.0, me\SndVolume)
 			EndIf
 		EndIf
 	EndIf
@@ -2897,7 +2897,6 @@ End Function
 Function SetCrouch%(NewCrouch%)
 	If NewCrouch <> me\Crouch
 		PlaySound_Strict(snd_I\CrouchSFX)
-		me\SndVolume = Max(2.0, me\SndVolume)
 		If (Not NewCrouch) And me\Stamina > 0.0
 			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
 			If me\Stamina < 10.0
@@ -3721,7 +3720,7 @@ Function UpdateNVG%()
 		
 		If wi\NVGPower < 160
 			If BatMsgTimer >= 70.0
-				me\SndVolume = Max(3.0, me\SndVolume)
+				me\SndVolume = Max(4.0, me\SndVolume)
 				LowBatteryCHN[1] = LoopSoundLocal(snd_I\LowBatterySFX[1], LowBatteryCHN[1])
 			EndIf
 		EndIf
@@ -5376,7 +5375,7 @@ Function UpdateUseItem%(item.Items)
 			GiveAchievement("513")
 			PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell.ogg"))
 			
-			me\SndVolume = Max(4.0, me\SndVolume)
+			me\SndVolume = Max(6.0, me\SndVolume)
 			
 			If n_I\Curr513_1 = Null And (Not wi\Headphones) And (Not me\Deaf) Then n_I\Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
 			
@@ -5386,8 +5385,6 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			GiveAchievement("513")
 			PlaySound_Strict(LoadTempSound("SFX\SCP\513\BellLoud.ogg"))
-			
-			me\SndVolume = Max(6.0, me\SndVolume)
 			
 			If n_I\Curr513_1 = Null And (Not me\Deaf) Then n_I\Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
 			
@@ -6321,7 +6318,7 @@ Function UpdateUseItem%(item.Items)
 				If (Not Temp)
 					If item\State < 40.0
 						If BatMsgTimer >= 70.0
-							me\SndVolume = Max(3.0, me\SndVolume)
+							me\SndVolume = Max(4.0, me\SndVolume)
 							LowBatteryCHN[0] = LoopSoundLocal(snd_I\LowBatterySFX[0], LowBatteryCHN[0])
 						EndIf
 					EndIf
@@ -6358,7 +6355,7 @@ Function UpdateUseItem%(item.Items)
 					item\State3 = 0.0
 					If item\State < 20.0
 						If BatMsgTimer >= 70.0
-							me\SndVolume = Max(3.0, me\SndVolume)
+							me\SndVolume = Max(4.0, me\SndVolume)
 							LowBatteryCHN[0] = LoopSoundLocal(snd_I\LowBatterySFX[0], LowBatteryCHN[0])
 						EndIf
 					EndIf
@@ -6760,7 +6757,7 @@ Function UpdateUseItem%(item.Items)
 				
 				If item\State < 20.0 And item\ItemTemplate\ID <> it_e_readerulti
 					If BatMsgTimer >= 70.0
-						me\SndVolume = Max(3.0, me\SndVolume)
+						me\SndVolume = Max(4.0, me\SndVolume)
 						LowBatteryCHN[0] = LoopSoundLocal(snd_I\LowBatterySFX[0], LowBatteryCHN[0])
 					EndIf
 				EndIf
@@ -10551,7 +10548,7 @@ Function Update1025%()
 								Case 7, 8
 									;[Block]
 									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(0, 1) + ".ogg"))
-									me\SndVolume = Max(4.0, me\SndVolume)
+									me\SndVolume = Max(6.0, me\SndVolume)
 									;[End Block]
 							End Select
 						EndIf
