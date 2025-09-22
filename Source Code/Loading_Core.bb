@@ -1477,7 +1477,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "headphones"), "Headphones", it_headphones, "headphones.b3d", "INV_headphones.png", "", 0.155, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
-	CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "hazmat_suit_fire.png", "", True)
+	CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, 2, "fire_suit.png", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", True)
 	
