@@ -5364,7 +5364,8 @@ Function UpdateUseItem%(item.Items)
 							wi\HazmatSuit = 4
 							;[End Block]
 					End Select
-					ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_TEX + (wi\HazmatSuit = 4)) ; ~ NOTICE: Const PLAYER_BODY_HAZMAT_TEX% = 1, Const PLAYER_BODY_HAZMAT_HEAVY_TEX% = 2
+					; ~ NOTICE: Const PLAYER_BODY_HAZMAT_SUIT_TEX% = 1, Const PLAYER_BODY_FIRE_SUIT_TEX% = 2, Const PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX% = 3
+					ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX + (wi\HazmatSuit = 2) + (2 * (wi\HazmatSuit = 4)))
 				EndIf
 				item\UsageTimer = 0.0
 				SelectedItem = Null

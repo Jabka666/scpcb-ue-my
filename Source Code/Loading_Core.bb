@@ -2574,14 +2574,15 @@ End Function
 
 Global Camera%
 
-Const MaxBodyTextures% = 5
+Const MaxBodyTextures% = 6
 ; ~ Player's body texture constants
 ;[Block]
 Const PLAYER_BODY_NORMAL_TEX% = 0
-Const PLAYER_BODY_HAZMAT_TEX% = 1
-Const PLAYER_BODY_HAZMAT_HEAVY_TEX% = 2
-Const PLAYER_BODY_VEST_TEX% = 3
-Const PLAYER_BODY_PRISONER_TEX% = 4
+Const PLAYER_BODY_HAZMAT_SUIT_TEX% = 1
+Const PLAYER_BODY_FIRE_SUIT_TEX% = 2
+Const PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX% = 3
+Const PLAYER_BODY_VEST_TEX% = 4
+Const PLAYER_BODY_PRISONER_TEX% = 5
 ;[End Block]
 
 ; ~ Player body animation constants
@@ -2845,8 +2846,9 @@ Function LoadEntities%()
 	Next
 	SetPlayerModelAnimation(PLAYER_ANIM_IDLE)
 	pm\BodyTextureName[PLAYER_BODY_NORMAL_TEX] = ""
-	pm\BodyTextureName[PLAYER_BODY_HAZMAT_TEX] = "_hazmat"
-	pm\BodyTextureName[PLAYER_BODY_HAZMAT_HEAVY_TEX] = "_hazmat_heavy"
+	pm\BodyTextureName[PLAYER_BODY_HAZMAT_SUIT_TEX] = "_hazmat_suit"
+	pm\BodyTextureName[PLAYER_BODY_FIRE_SUIT_TEX] = "_fire_suit"
+	pm\BodyTextureName[PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX] = "_hazmat_suit_heavy"
 	pm\BodyTextureName[PLAYER_BODY_VEST_TEX] = "_vest"
 	pm\BodyTextureName[PLAYER_BODY_PRISONER_TEX] = "_flashback"
 	

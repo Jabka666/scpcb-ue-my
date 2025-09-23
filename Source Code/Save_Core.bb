@@ -2491,10 +2491,12 @@ Function LoadGameQuick%(File$)
 	HideDistance = 17.0
 	
 	; ~ Reset player body texture
-	If wi\HazmatSuit > 0 And wi\HazmatSuit < 4
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_TEX)
+	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
+		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX)
+	ElseIf wi\HazmatSuit = 2
+		ChangePlayerBodyTexture(PLAYER_BODY_FIRE_SUIT_TEX)
 	ElseIf wi\HazmatSuit = 4
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_HEAVY_TEX)
+		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX)
 	ElseIf wi\BallisticVest > 0
 		ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
 	Else
