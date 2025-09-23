@@ -4341,7 +4341,7 @@ Type Screens
 	Field OBJ%
 	Field ImgPath$
 	Field Img%, Texture%
-	Field State#
+	Field State#, State2#
 	Field Display096%
 	Field FaceTimer%
 	Field room.Rooms
@@ -4438,11 +4438,15 @@ Function UpdateScreens%()
 				If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
 				If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 				EntityTexture(s\OBJ, s\Texture)
-				If Rand(6000 - (2000 * (Not RemoteDoorOn)) - (2000 * SelectedDifficulty\AggressiveNPCs)) = 1
-					If s\Display096
-						If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
-							PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
-							s\State = 70.0 * Rnd(7.0, 7.8)
+				s\State2 = Max(s\State2 - fps\Factor[0], 0.0)
+				If s\State2 = 0.0
+					If Rand(4000 - (1500 * (Not RemoteDoorOn)) - (1500 * SelectedDifficulty\AggressiveNPCs)) = 1
+						If s\Display096
+							If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
+								PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
+								s\State = 70.0 * Rnd(7.0, 7.8)
+								s\State2 = 70.0 * 5.0
+							EndIf
 						EndIf
 					EndIf
 				EndIf
