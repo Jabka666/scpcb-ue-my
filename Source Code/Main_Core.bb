@@ -3742,7 +3742,7 @@ Function RenderNVG%()
 				TextEx(mo\Viewport_Center_X, 60 * MenuScale, GetLocalString("msg", "scramble.106.cont"), True)
 			Else
 				; ~ Replace with a cool design later lol so don't actually translate anything
-				TextEx(mo\Viewport_Center_X, 60 * MenuScale, Format(GetLocalString("msg", "scramble.106.arr"), Int(n_I\Curr106\State2 / 70.0)), True)
+				TextEx(mo\Viewport_Center_X, 60 * MenuScale, Format(GetLocalString("msg", "scramble.106.arr"), n_I\Curr106\State2 * RoomScale), True)
 			EndIf
 			
 			; ~ NPCs box
