@@ -356,7 +356,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			d.Doors = CreateDoor(r, r\x - 1296.0 * RoomScale, r\y, r\z - 1761.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_0)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
@@ -1819,22 +1819,6 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[4] = d
-			
-			; ~ Misc doors
-			
-			; ~ Storage Area 3E Door
-			d.Doors = CreateDoor(r, r\x + 1083.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 660.0 * RoomScale, 0.0, False, HEAVY_DOOR)
-			d\AutoClose = False : d\Locked = 1
-			For i = 0 To 1
-				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-			Next
-			
-			; ~ Storage Area 3C Door
-			d.Doors = CreateDoor(r, r\x + 3446.0 * RoomScale, r\y - 5632.0 * RoomScale, r\z + 6300.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			d\AutoClose = False : d\Locked = 1
-			For i = 0 To 1
-				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-			Next
 			
 			; ~ DNA door
 			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)

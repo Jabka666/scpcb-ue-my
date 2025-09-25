@@ -464,21 +464,20 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 		
 		IsAlpha = 0
 		
-		; Enable texture manage for rooms textures
-		
+		; ~ Enable texture manage for rooms textures
 		For j = 0 To 1
 			Temp1i = ReadByte(f)
 			If Temp1i <> 0
 				Temp1s = ReadString(f)
 				If FileType(FilePath + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3
-						Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s, 1)
+						Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s)
 					Else
 						Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s, 3)
 					EndIf
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3
-						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1)
+						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s)
 					Else
 						Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 3)
 					EndIf
@@ -505,9 +504,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			BrushShininess(Brush, 128)
 		EndIf
 		
-		If IsAlpha > 0 Then
-			PaintSurface(Surf, Brush)
-		EndIf
+		If IsAlpha > 0 Then PaintSurface(Surf, Brush)
 		
 		FreeBrush(Brush) : Brush = 0
 		
@@ -6308,4 +6305,4 @@ Function RemoveChunkPart%(chp.ChunkPart)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS
