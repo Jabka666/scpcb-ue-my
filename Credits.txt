@@ -179,7 +179,6 @@
 		https://github.com/itzslain
 
 		Andre Pari ("ADMClef")
-		racer_216
 
 *EX-developers
 		
@@ -201,7 +200,8 @@
 		Yuri Novikov ("BayanForce")
 		Dawid Mleczko ("Mleczyk76")
 		Ayylien
-		
+		racer_216
+
 *Contributors
 
 		Shaun Gaylard ("ENDSHN")
