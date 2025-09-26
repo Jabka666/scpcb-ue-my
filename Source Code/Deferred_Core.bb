@@ -118,6 +118,7 @@ Function InitDeferred%()
 	
 	DeferredCamera = CreateCamera()
 	CameraClsMode(DeferredCamera, 0, 1)
+	CameraColorWrite(DeferredCamera, False)
 	HideEntity(DeferredCamera)
 	
 	QuadCamera = CreateCamera()
@@ -317,11 +318,11 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\lType, l\FOV, True, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\lType, l\FOV, l\CastShadows, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\lType, dl\FOV, dl\Shadowed, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\lType, dl\FOV, dl\CastShadows, Tween)
 	Next
 	
 	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 35.0, False, Tween)
@@ -601,7 +602,7 @@ Type DynamicLight
 	Field Range#
 	Field Fade#
 	Field FOV#
-	Field Shadowed%
+	Field CastShadows%
 End Type
 
 Function FindDynamicLight.DynamicLight(OBJ%)
@@ -650,10 +651,10 @@ Function LightFOV%(Entity%, Range#)
 	If dl <> Null Then dl\FOV = Range
 End Function
 
-Function LightShadows(Entity%, Shadowed%)
+Function LightShadows(Entity%, CastShadows%)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
-	If dl <> Null Then dl\Shadowed = Shadowed
+	If dl <> Null Then dl\CastShadows = CastShadows
 End Function
 
 Function OnLightDestruct(Entity%)

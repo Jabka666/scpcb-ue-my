@@ -4480,7 +4480,7 @@ Function FillRoom%(r.Rooms)
 	
 	For tl.TempLights = Each TempLights
 		If tl\RoomTemplate = r\RoomTemplate
-			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\lType, tl\Range, tl\R, tl\G, tl\B, tl\HasSprite)
+			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\lType, tl\Range, tl\R, tl\G, tl\B, tl\HasSprite, tl\SpriteScale, tl\CastShadows)
 			
 			If tl\lType = 3 Then
 				RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)

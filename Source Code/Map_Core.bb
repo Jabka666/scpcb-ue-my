@@ -118,6 +118,8 @@ Type TempLights
 	Field Pitch#, Yaw#
 	Field InnerConeAngle%, OuterConeAngle#
 	Field HasSprite%
+	Field SpriteScale#
+	Field CastShadows%
 End Type
 
 Global LightVolume#, TempLightVolume#
@@ -133,10 +135,12 @@ Type Lights
 	Field lType%
 	Field Fade#
 	Field FOV#
+	Field SpriteScale#
+	Field CastShadows%
 	Field room.Rooms
 End Type
 
-Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, HasSprite% = True)
+Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True)
 	Local l.Lights
 	
 	l.Lights = New Lights
@@ -154,7 +158,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, Has
 	If HasSprite
 		l\Sprite = CreateSprite()
 		PositionEntity(l\Sprite, x, y, z)
-		ScaleSprite(l\Sprite, 0.13, 0.13)
+		ScaleSprite(l\Sprite, 0.13 * SpriteScale, 0.13 * SpriteScale)
 		EntityTexture(l\Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
 		EntityFX(l\Sprite, 1 + 8)
 		EntityBlend(l\Sprite, 3)
@@ -165,7 +169,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, Has
 		
 		l\AdvancedSprite = CreateSprite()
 		PositionEntity(l\AdvancedSprite, x, y, z)
-		ScaleSprite(l\AdvancedSprite, 0.38, 0.38)
+		ScaleSprite(l\AdvancedSprite, 0.38 * SpriteScale, 0.38 * SpriteScale)
 		EntityTexture(l\AdvancedSprite, misc_I\AdvancedLightSprite)
 		EntityFX(l\AdvancedSprite, 1 + 8)
 		EntityBlend(l\AdvancedSprite, 3)
@@ -183,6 +187,8 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, Has
 	l\G = G
 	l\B = B
 	l\Range = Range
+	l\SpriteScale = SpriteScale
+	l\CastShadows = CastShadows
 	If room <> Null
 		If Rand(50) = 1
 			Local RID% = room\RoomTemplate\RoomID
@@ -290,7 +296,7 @@ Function UpdateLights%(Cam%)
 										If LightAdvancedSpriteHidden Then ShowEntity(l\AdvancedSprite)
 										EntityAlpha(l\AdvancedSprite, Max(TotalAmbientColor * (l\Intensity / 2.0), 1.0) * Alpha)
 										
-										Random = Rnd(0.36, 0.4)
+										Random = Rnd(0.36 * l\SpriteScale, 0.4 * l\SpriteScale)
 										ScaleSprite(l\AdvancedSprite, Random, Random)
 									ElseIf (Not LightAdvancedSpriteHidden) ; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
 										HideEntity(l\AdvancedSprite)
@@ -423,14 +429,14 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	Local CollisionMeshes% = CreatePivot()
 	;Local HasTriggerBox% = False
 	Local IsRMesh$ = ReadString(f)
-	Local RMeshVersion% = 1
+	Local RMeshVersion%
 	
 	Select IsRMesh
 		Case "RoomMesh"
 			;[Block]
 			RMeshVersion = 1
 			;[End Block]
-		Case  "RoomMesh1.1"
+		Case  "RoomMesh2"
 			;[Block]
 			RMeshVersion = 2
 			;[End Block]
@@ -679,7 +685,11 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\G = Int(Piece(lColor, 2, " "))
 					tl\B = Int(Piece(lColor, 3, " "))
 					
-					tl\HasSprite = True
+					tl\HasSprite = ReadByte(f)
+					tl\SpriteScale = ReadFloat(f)
+					tl\CastShadows = ReadByte(f)
+					
+					For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
 					;[End Block]
 				Case "spotlight"
 					;[Block]
@@ -698,33 +708,16 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\G = Int(Piece(lColor, 2, " "))
 					tl\B = Int(Piece(lColor, 3, " "))
 					
-					tl\HasSprite = True
+					tl\HasSprite = ReadByte(f)
+					tl\SpriteScale = ReadFloat(f)
+					tl\CastShadows = ReadByte(f)
 					
 					tl\Pitch = ReadFloat(f)
 					tl\Yaw = ReadFloat(f)
-					ReadFloat(f)
 					
 					tl\OuterConeAngle = ReadFloat(f)
-					;[End Block]
-				Case "light_fix"
-					;[Block]
-					tl.TempLights = New TempLights
-					tl\RoomTemplate = rt
 					
-					tl\x = ReadFloat(f) * RoomScale
-					tl\y = ReadFloat(f) * RoomScale
-					tl\z = ReadFloat(f) * RoomScale
-					tl\lType = DEFERRED_LIGHT_POINT
-					
-					lColor = ReadString(f)
-					Intensity = ReadFloat(f)
-					tl\Range = ReadFloat(f) * RoomScale
-					tl\R = Int(Piece(lColor, 1, " "))
-					tl\G = Int(Piece(lColor, 2, " "))
-					tl\B = Int(Piece(lColor, 3, " "))
-					
-					tl\HasSprite = False
-					Delete tl
+					For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
 					;[End Block]
 				Case "soundemitter"
 					;[Block]
@@ -6305,4 +6298,4 @@ Function RemoveChunkPart%(chp.ChunkPart)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS
