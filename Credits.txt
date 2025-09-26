@@ -161,7 +161,7 @@
 		Turtle Sandwich/Catnipbuddy
 		/v/ and everyone in the SCP-CB forum
 
-*Mod Creators
+*Developers
 
 		Nikita Sidorov ("Jabka")
 		https://github.com/Jabka666
@@ -179,6 +179,7 @@
 		https://github.com/itzslain
 
 		Andre Pari ("ADMClef")
+		racer_216
 
 *EX-developers
 		
@@ -200,7 +201,6 @@
 		Yuri Novikov ("BayanForce")
 		Dawid Mleczko ("Mleczyk76")
 		Ayylien
-		racer_216
 
 *Contributors
 
