@@ -9558,13 +9558,13 @@ Function UpdateEvent_Tesla%(e.Events)
 									;[Block]
 									ShowEntity(n\OBJ)
 									;[End Block]
-;								Case NPCType999
-;									;[Block]
-;									n\EnemyX = 0.0
-;									n\EnemyY = 0.0
-;									n\EnemyZ = 0.0
-;									n\State = 4.0
-;									;[End Block]
+								Case NPCType999
+									;[Block]
+									n\EnemyX = 0.0
+									n\EnemyY = 0.0
+									n\EnemyZ = 0.0
+									n\State = 4.0
+									;[End Block]
 							End Select
 							If e\room\Dist < 6.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
 						EndIf
@@ -9735,13 +9735,13 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 									;[Block]
 									ShowEntity(n\OBJ)
 									;[End Block]
-;								Case NPCType999
-;									;[Block]
-;									n\EnemyX = 0.0
-;									n\EnemyY = 0.0
-;									n\EnemyZ = 0.0
-;									n\State = 4.0
-;									;[End Block]
+								Case NPCType999
+									;[Block]
+									n\EnemyX = 0.0
+									n\EnemyY = 0.0
+									n\EnemyZ = 0.0
+									n\State = 4.0
+									;[End Block]
 							End Select
 							If e\room\Dist < 6.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
 						EndIf
