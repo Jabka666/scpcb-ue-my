@@ -2900,7 +2900,7 @@ Function UpdateDoors%()
 							UpdateEntityMaterial(d\Buttons[i])
 						EndIf
 					Next
-					d\ButtonsUpdateTimer = 10.0
+					d\ButtonsUpdateTimer = 14.0
 				Else
 					d\ButtonsUpdateTimer = d\ButtonsUpdateTimer - fps\Factor[0]
 				EndIf
