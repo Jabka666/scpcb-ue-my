@@ -49,7 +49,7 @@ PositionEntity(Camera, 0.0, 1.0, 0.0)
 
 Global AmbientLightRoomTex% = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
 
-TextureBlend(AmbientLightRoomTex, 5)
+TextureBlend(AmbientLightRoomTex, 3)
 SetBuffer(TextureBuffer(AmbientLightRoomTex))
 ClsColor(0, 0, 0)
 Cls()
@@ -142,10 +142,10 @@ End Type
 
 Global mo.Mouse = New Mouse
 
-mo\Mouse_Left_Limit% = 250
-mo\Mouse_Right_Limit% = GraphicsWidth() - 250
-mo\Mouse_Top_Limit% = 150
-mo\Mouse_Bottom_Limit% = GraphicsHeight() - 150
+mo\Mouse_Left_Limit = 250
+mo\Mouse_Right_Limit = GraphicsWidth() - 250
+mo\Mouse_Top_Limit = 150
+mo\Mouse_Bottom_Limit = GraphicsHeight() - 150
 
 ; ~ Viewport
 mo\Viewport_Center_X = GraphicsWidth() / 2
@@ -734,8 +734,6 @@ End Type
 Function CreateProp%(File$)
 	Local p.Props
 	
-	File = File + ".b3d"
-	
 	For p.Props = Each Props
 		If p\File = File Then Return(CopyEntity(p\OBJ))
 	Next
@@ -826,7 +824,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	CatchErrors("Uncaught: CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + "))")
 End Function
 
-Function CreateOverLapBox%(r.Rooms)
+Function CreateOverlapBox%(r.Rooms)
 	Local s%
 	Local SizeAdd# = 0.02
 	
@@ -907,14 +905,22 @@ Function LoadRMesh%(File$)
 	If f = 0 Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
+	Local RMeshVersion%
 	
-	If IsRMesh = "RoomMesh"
-		; ~ Continue
-	;ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
-	;	HasTriggerBox = True
-	Else
-		RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
-	EndIf
+	Select IsRMesh
+		Case "RoomMesh"
+			;[Block]
+			RMeshVersion = 1
+			;[End Block]
+		Case  "RoomMesh2"
+			;[Block]
+			RMeshVersion = 2
+			;[End Block]
+		Default
+			;[Block]
+			RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
+			;[End Block]
+	End Select
 	
 	File = StripFileName(File)
 	
@@ -958,8 +964,7 @@ Function LoadRMesh%(File$)
 					EndIf
 				EndIf
 				If Tex[j] <> 0
-					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
-					If Instr(Lower(Temp1s), "_lm") <> 0 Then TextureBlend(Tex[j], 3)
+					If Temp1i = 1 Then TextureBlend(Tex[j], 2)
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
 					TextureCoords(Tex[j], 1 - j)
@@ -991,8 +996,6 @@ Function LoadRMesh%(File$)
 			EndIf
 		EndIf
 		
-		Surf = CreateSurface(ChildMesh)
-		
 		If IsAlpha > 0 Then PaintSurface(Surf, Brush)
 		
 		FreeBrush(Brush) : Brush = 0
@@ -1015,6 +1018,15 @@ Function LoadRMesh%(File$)
 			Temp2i = ReadByte(f)
 			Temp3i = ReadByte(f)
 			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0)
+			
+			; ~ Normals
+			If RMeshVersion = 2
+				Local NX# = ReadFloat(f)
+				Local NY# = ReadFloat(f)
+				Local NZ# = ReadFloat(f)
+				
+				VertexNormal(Surf, Vertex, NX, NZ, NY)
+			EndIf
 		Next
 		
 		Count2 = ReadInt(f) ; ~ Polys
@@ -1133,21 +1145,39 @@ Function LoadRMesh%(File$)
 				ReadFloat(f)
 				ReadFloat(f)
 				ReadFloat(f)
-				ReadFloat(f) : ReadString(f) : ReadFloat(f)
-				;[End Block]
-			Case "light_fix"
-				;[Block]
+				
 				ReadFloat(f)
+				
+				ReadString(f)
 				ReadFloat(f)
+				
+				ReadByte(f)
 				ReadFloat(f)
-				ReadString(f) : ReadFloat(f) : ReadFloat(f)
+				ReadByte(f)
+				
+				For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
 				;[End Block]
 			Case "spotlight"
 				;[Block]
 				ReadFloat(f)
 				ReadFloat(f)
 				ReadFloat(f)
-				ReadFloat(f) : ReadString(f) : ReadFloat(f) : ReadString(f) : ReadInt(f) : ReadInt(f)
+				
+				ReadFloat(f)
+				
+				ReadString(f)
+				ReadFloat(f)
+				
+				ReadByte(f)
+				ReadFloat(f)
+				ReadByte(f)
+				
+				ReadFloat(f)
+				ReadFloat(f)
+				
+				ReadFloat(f)
+				
+				For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
 				;[End Block]
 			Case "soundemitter"
 				;[Block]
@@ -1167,6 +1197,7 @@ Function LoadRMesh%(File$)
 				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 				
 				File = ReadString(f)
+				File = File + ".b3d"
 				Model = CreateProp("GFX\Map\Props\" + File)
 				
 				PositionEntity(Model, Temp1, Temp2, Temp3)
