@@ -3161,7 +3161,7 @@ Function UpdateNPCType457%(n.NPCs)
 							PositionEntity(n\FireEmitter[i]\Owner, CurrentX, CurrentY, CurrentZ, True)
 						Next
 						
-						AnimateNPC(n, 493.0, 444.0, -0.35, False)
+						AnimateNPC(n, 493.0, 444.0, -0.4, False)
 						If n\Frame < 444.1
 							EntityType(n\Collider, HIT_PLAYER)
 							For i = 0 To 19
