@@ -137,6 +137,7 @@ Type Lights
 	Field FOV#
 	Field SpriteScale#
 	Field CastShadows%
+	Field Scripted% = False
 	Field room.Rooms
 End Type
 
@@ -269,11 +270,11 @@ Function UpdateLights%(Cam%)
 							
 							Local LightVisible%
 							Local LightInView% = EntityInView(l\OBJ, Cam)
-							Local ShouldFlickering% = (l\Flickers And Rand(50) = 1)
+							Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
 							
 							If LightInView Lor ShouldFlickering Then LightVisible = EntityVisible(Cam, l\OBJ)
 							
-							If LightOBJHidden Then ShowEntity(l\OBJ)
+							If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
 							
 							If ShouldFlickering And LightVisible
 								If (Not LightOBJHidden) Then HideEntity(l\OBJ)
@@ -304,7 +305,7 @@ Function UpdateLights%(Cam%)
 								ElseIf (Not LightAdvancedSpriteHidden) ; ~ The additional sprites option is disabled, hide the sprites
 									HideEntity(l\AdvancedSprite)
 								EndIf
-							Else
+							ElseIf (Not l\Scripted)
 								; ~ Hide the sprites because they aren't visible
 								If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
 								If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
@@ -2160,6 +2161,7 @@ Const MaxRoomDoors% = 8
 Const MaxRoomNPCs% = 16
 Const MaxRoomSecurityCams% = 8
 Const MaxRoomEmitters% = 8
+Const MaxRoomLights% = 4
 Const MaxRoomAdjacents% = 4
 Const MaxRoomTextures% = 3
 ;Const MaxRoomTriggerBoxes% = 8
@@ -2181,6 +2183,7 @@ Type Rooms
 	Field NPC.NPCs[MaxRoomNPCs]
 	Field RoomSecurityCams.SecurityCams[MaxRoomSecurityCams]
 	Field RoomEmitters.Emitter[MaxRoomEmitters]
+	Field RoomLights.Lights[MaxRoomLights]
 	Field Adjacent.Rooms[MaxRoomAdjacents]
 	Field AdjDoor.Doors[MaxRoomAdjacents]
 	Field Textures%[MaxRoomTextures]
@@ -4533,23 +4536,11 @@ Function RemoveLever(lvr.Levers)
 	Delete(lvr)
 End Function
 
-Function CreateRedLight%(x#, y#, z#)
-	Local Sprite%
-	
-	Sprite = CreateSprite()
-	PositionEntity(Sprite, x, y, z)
-	ScaleSprite(Sprite, 0.015, 0.015)
-	EntityTexture(Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_RED])
-	EntityBlend(Sprite, 3)
-	
-	Return(Sprite)
-End Function
-
-Function UpdateRedLight%(Light%, Value1#, Value2#)
+Function UpdateRedLight%(l.Lights, Value1#, Value2#)
 	If (MilliSec Mod Value1) < Value2
-		If EntityHidden(Light) Then ShowEntity(Light)
-	ElseIf (Not EntityHidden(Light))
-		HideEntity(Light)
+		If EntityHidden(l\OBJ) Then ShowEntity(l\OBJ)
+	ElseIf (Not EntityHidden(l\OBJ))
+		HideEntity(l\OBJ)
 	EndIf
 End Function
 

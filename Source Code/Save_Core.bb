@@ -2231,7 +2231,7 @@ Function LoadGameQuick%(File$)
 				; ~ Reset SCP-012's texture
 				If e\EventState2 < 70.0 * 31.0
 					Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(1).png")
-					EntityTexture(e\room\Objects[3], Tex)
+					EntityTexture(e\room\Objects[2], Tex)
 					DeleteSingleTextureEntryFromCache(Tex)
 				EndIf
 				;[End Block]
@@ -2271,11 +2271,11 @@ Function LoadGameQuick%(File$)
 			Case e_cont3_009
 				;[Block]
 				If e\EventState <> 0.19
-					EntityPickMode(e\room\Objects[2], 2)
-					EntityType(e\room\Objects[2], HIT_MAP)
+					EntityPickMode(e\room\Objects[1], 2)
+					EntityType(e\room\Objects[1], HIT_MAP)
 				Else
-					EntityPickMode(e\room\Objects[2], 0)
-					EntityType(e\room\Objects[2], 0)
+					EntityPickMode(e\room\Objects[1], 0)
+					EntityType(e\room\Objects[1], 0)
 				EndIf
 				;[End Block]
 			Case e_room2_nuke

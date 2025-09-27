@@ -2575,7 +2575,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				EndIf
 			Next
 			
-			UpdateRedLight(e\room\Objects[20], 1500, 800)
+			UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 		Else
 			For i = 0 To 14
 				If e\room\Objects[i] <> 0 And i <> 7
@@ -3036,7 +3036,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 						EndIf
 						e\EventState = CurveValue(90.0, e\EventState, 500.0)
 						
-						UpdateRedLight(e\room\Objects[1], 1500, 800)
+						UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 						
 						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Music\012Golgotha.ogg")
 						e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[0])
@@ -3098,7 +3098,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 										e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech1.ogg"), True)
 									ElseIf e\EventState2 > 70.0 * 31.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 31.0
 										Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(2).png")
-										EntityTexture(e\room\Objects[3], Tex)
+										EntityTexture(e\room\Objects[2], Tex)
 										DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 										
 										CreateMsg(GetLocalString("msg", "012_2"), 8.0)
@@ -3110,14 +3110,14 @@ Function UpdateEvent_Cont2_012%(e.Events)
 										e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech4.ogg"), True)
 									ElseIf e\EventState2 > 70.0 * 63.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 63.0
 										Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(3).png")
-										EntityTexture(e\room\Objects[3], Tex)
+										EntityTexture(e\room\Objects[2], Tex)
 										DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 										
 										me\Injuries = me\Injuries + 0.5
 										e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech5.ogg"), True)
 									ElseIf e\EventState2 > 70.0 * 74.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 74.0
 										Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(4).png")
-										EntityTexture(e\room\Objects[3], Tex)
+										EntityTexture(e\room\Objects[2], Tex)
 										DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 										
 										CreateMsg(GetLocalString("msg", "012_4"), 8.0)
@@ -3171,7 +3171,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 						EndIf
 					Else
 						e\EventState4 = UpdateLever(e\room\RoomLevers[0]\OBJ)
-						If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+						If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
 						e\EventState = CurveValue(-90.0, e\EventState, 500.0)
 					EndIf
 					PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), e\room\y + Min(((-570.0 * Sin(e\EventState))) * RoomScale, -180.0 * RoomScale), EntityZ(e\room\Objects[0], True), True)
@@ -5509,7 +5509,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 				EndIf
 				e\SoundCHN = LoopSoundEx(RoomAmbience[5], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 				
-				UpdateRedLight(e\room\Objects[5], 1500, 800)
+				UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 				
 				If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 5.0
 					For i = 0 To 1
@@ -5563,7 +5563,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 					EndIf
 				EndIf
 			Else
-				If (Not EntityHidden(e\room\Objects[5])) Then HideEntity(e\room\Objects[5])
+				If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
 				If e\EventState2 < 2.0
 					For i = 0 To 3
 						e\room\RoomDoors[i]\Locked = 0
@@ -6017,7 +6017,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 		Else
 			e\SoundCHN = LoopSoundEx(snd_I\HissSFX[1], e\SoundCHN, Camera, e\room\OBJ, 5.0, 0.7)
 			
-			If (Not EntityHidden(e\room\Objects[1])) Then HideEntity(e\room\Objects[1])
+			If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
 			
 			If e\EventState > 0.33
 				e\EventState = Max(e\EventState - (fps\Factor[0] * 0.00007), 0.33)
@@ -6025,8 +6025,8 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				For i = 0 To 4
 					e\room\RoomDoors[i]\Locked = 0
 				Next
-				EntityPickMode(e\room\Objects[2], 0)
-				EntityType(e\room\Objects[2], 0)
+				EntityPickMode(e\room\Objects[1], 0)
+				EntityType(e\room\Objects[1], 0)
 				If e\room\Objects[3] <> 0
 					it.Items = CreateItem("Level 5 Key Card", it_key5, EntityX(e\room\Objects[3]), EntityY(e\room\Objects[3]) + 0.015, EntityZ(e\room\Objects[3]))
 					RotateEntity(it\Collider, 0.0, EntityYaw(e\room\Objects[3]), 0.0)
@@ -6034,7 +6034,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				EndIf
 				e\EventState = 0.32
 			EndIf
-			EntityAlpha(e\room\Objects[2], e\EventState)
+			EntityAlpha(e\room\Objects[1], e\EventState)
 		EndIf
 	EndIf
 	If PlayerRoom = e\room
@@ -6050,7 +6050,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 		EndIf
 		
 		If e\EventState = 0.0
-			UpdateRedLight(e\room\Objects[1], 1500, 800)
+			UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 			If UpdateLever(e\room\RoomLevers[0]\OBJ)
 				For i = 0 To 4
 					If e\room\RoomDoors[i]\Open Then OpenCloseDoor(e\room\RoomDoors[i])
@@ -9453,7 +9453,7 @@ Function UpdateEvent_Tesla%(e.Events)
 		Select e\EventState
 			Case 0.0 ; ~ Idle state
 				;[Block]
-				UpdateRedLight(e\room\Objects[1], 1500, 800)
+				UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 				HideEntity(e\room\Objects[0])
 				e\SoundCHN = LoopSoundEx(snd_I\TeslaIdleSFX, e\SoundCHN, Camera, e\room\Objects[0], 4.0, 0.5)
 				e\EventState2 = 0.0
@@ -9499,7 +9499,7 @@ Function UpdateEvent_Tesla%(e.Events)
 				;[End Block]
 			Case 1.0 ; ~ Charge state
 				;[Block]
-				UpdateRedLight(e\room\Objects[1], 100, 50)
+				UpdateRedLight(e\room\RoomLights[0], 100, 50)
 				e\EventState2 = e\EventState2 + fps\Factor[0]
 				If e\EventState2 >= 35.0
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
@@ -9586,9 +9586,8 @@ Function UpdateEvent_Tesla%(e.Events)
 			Case 3.0 ; ~ Recharge state
 				;[Block]
 				e\EventState2 = e\EventState2 + fps\Factor[0]
-				For i = 0 To 1
-					If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
-				Next
+				If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
+				If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
 				If e\EventState2 >= 0.0 Then e\EventState = 0.0
 				;[End Block]
 		End Select
@@ -9598,13 +9597,13 @@ Function UpdateEvent_Tesla%(e.Events)
 			e\EventState4 = Max(e\EventState4 - fps\Factor[0], -196.0)
 		EndIf
 		If e\EventState4 < 0.0 And e\EventState4 > -196.0
-			e\BlindsCHN = LoopSoundEx(snd_I\BlindsSFX, e\BlindsCHN, Camera, e\room\Objects[3], 2.0)
+			e\BlindsCHN = LoopSoundEx(snd_I\BlindsSFX, e\BlindsCHN, Camera, e\room\Objects[2], 2.0)
 		Else
 			StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
 		EndIf
 		
-		PositionEntity(e\room\Objects[2], 0.0, e\EventState4, 0.0)
-		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[3])
+		PositionEntity(e\room\Objects[1], 0.0, e\EventState4, 0.0)
+		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[2])
 	EndIf
 End Function
 
@@ -9616,16 +9615,16 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 		If PlayerRoom = e\room
 			UpdateLever(e\room\RoomLevers[1]\OBJ)
 			
-			e\SoundCHN = LoopSoundEx(snd_I\AlarmSFX[1], e\SoundCHN, Camera, e\room\Objects[4], 3.0)
+			e\SoundCHN = LoopSoundEx(snd_I\AlarmSFX[1], e\SoundCHN, Camera, e\room\Objects[3], 3.0)
 			
-			If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 9.0
+			If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 9.0
 				If Rand(50) = 1
 					SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
-					SetEmitter(e\room, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), 19)
-					PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[4], 3.0, 0.4)
+					SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
+					PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
 				EndIf
 			EndIf
-			If EntityDistanceSquared(me\Collider, e\room\Objects[5]) < 0.16
+			If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.16
 				If Rand(75 + ((wi\HazmatSuit = 2) * 230)) = 1
 					If me\Injuries < 1.5 And (Not chs\GodMode)
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
@@ -9679,7 +9678,7 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 				;[End Block]
 			Case 1.0 ; ~ Charge state
 				;[Block]
-				UpdateRedLight(e\room\Objects[1], 100, 50)
+				UpdateRedLight(e\room\RoomLights[0], 100, 50)
 				e\EventState2 = e\EventState2 + fps\Factor[0]
 				If e\EventState2 >= 35.0
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
@@ -9764,9 +9763,8 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 			Case 3.0 ; ~ Recharge state
 				;[Block]
 				e\EventState2 = e\EventState2 + fps\Factor[0]
-				For i = 0 To 1
-					If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
-				Next
+				If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
+				If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
 				If e\EventState2 >= 0.0 Then e\EventState = 0.0
 				;[End Block]
 		End Select
@@ -9776,13 +9774,13 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 			e\EventState4 = Max(e\EventState4 - fps\Factor[0], -196.0)
 		EndIf
 		If e\EventState4 < 0.0 And e\EventState4 > -196.0
-			e\BlindsCHN = LoopSoundEx(snd_I\BlindsSFX, e\BlindsCHN, Camera, e\room\Objects[3], 2.0)
+			e\BlindsCHN = LoopSoundEx(snd_I\BlindsSFX, e\BlindsCHN, Camera, e\room\Objects[2], 2.0)
 		Else
 			StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
 		EndIf
 		
-		PositionEntity(e\room\Objects[2], 0.0, e\EventState4, 0.0)
-		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[3])
+		PositionEntity(e\room\Objects[1], 0.0, e\EventState4, 0.0)
+		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[2])
 	EndIf
 End Function
 

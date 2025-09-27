@@ -934,14 +934,17 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 49.0 * RoomScale, r\y + 689.0 * RoomScale, r\z + 913.0 * RoomScale, 0.0, True)
 			
+			r\RoomLights.Lights[0] = AddLight(r, r\x + 996.5 * RoomScale, r\y + 756.5 * RoomScale, r\z + 608.5 * RoomScale, DEFERRED_LIGHT_POINT, 0.5859375, 255, 50, 50, True, 0.1, False)
+			r\RoomLights[0]\Scripted = True
+			HideEntity(r\RoomLights[0]\OBJ)
+			
 			it.Items = CreateItem("Note from Nobody #3", it_paper, r\x + 881.0 * RoomScale, r\y + 640.0 * RoomScale, r\z - 18.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-			
-			Scale = RoomScale * 1.8
 			
 			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
 			r\Textures[1] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors.png", 1, 512, 512, 0, 11, DeleteAllTextures)
 			
+			Scale = RoomScale * 1.8
 			; ~ Monitor Objects
 			For i = 0 To 14
 				If i <> 7
@@ -1061,11 +1064,6 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[17], r\x - 48.0 * RoomScale, r\y + 540.0 * RoomScale, r\z + 656.0 * RoomScale)
 			EntityParent(r\Objects[17], r\OBJ)
 			
-			r\Objects[20] = CreateRedLight(r\x + 996.5 * RoomScale, r\y + 756.5 * RoomScale, r\z + 608.5 * RoomScale)
-			r\ScriptedObject[20] = True
-			EntityParent(r\Objects[20], r\OBJ)
-			HideEntity(r\Objects[20])
-			
 			; ~ Camera in the room itself
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, 20.0, True, r\x - 231.0 * RoomScale, r\y + 760.0 * RoomScale, r\z + 256.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 315.0
@@ -1163,13 +1161,13 @@ Function FillRoom%(r.Rooms)
 				emit.Emitter = SetEmitter(r, r\x - 394.0 * RoomScale, r\y + 197.0 * RoomScale, r\z + 211.0 * RoomScale, 31)
 				emit\State = 4
 				
-				r\Objects[4] = CreatePivot()
-				PositionEntity(r\Objects[4], r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 211.0 * RoomScale)
-				EntityParent(r\Objects[4], r\OBJ)
+				r\Objects[3] = CreatePivot()
+				PositionEntity(r\Objects[3], r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 211.0 * RoomScale)
+				EntityParent(r\Objects[3], r\OBJ)
 				
-				r\Objects[5] = CreatePivot()
-				PositionEntity(r\Objects[5], r\x - 400.0 * RoomScale, r\y + 142.0 * RoomScale, r\z + 201.0 * RoomScale)
-				EntityParent(r\Objects[5], r\OBJ)
+				r\Objects[4] = CreatePivot()
+				PositionEntity(r\Objects[4], r\x - 400.0 * RoomScale, r\y + 142.0 * RoomScale, r\z + 201.0 * RoomScale)
+				EntityParent(r\Objects[4], r\OBJ)
 				
 				de.Decals = CreateDecal(DECAL_FOAM, r\x - 512.0 * RoomScale, r\y + 0.005, r\z + 164.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.4), 0.8)
 				EntityParent(de\OBJ, r\OBJ)
@@ -1183,6 +1181,10 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 132.0 * RoomScale, -90.0, True)
 			
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 32.0 * RoomScale, r\y + 570.0 * RoomScale, r\z, DEFERRED_LIGHT_POINT, 0.5859375, 255, 50, 50, True, 0.1, False)
+			r\RoomLights[0]\Scripted = True
+			HideEntity(r\RoomLights[0]\OBJ)
+			
 			r\Objects[0] = CreateSprite()
 			r\ScriptedObject[0] = True
 			EntityTexture(r\Objects[0], t\OverlayTextureID[3])
@@ -1193,27 +1195,22 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			HideEntity(r\Objects[0])
 			
-			r\Objects[1] = CreateRedLight(r\x - 32.0 * RoomScale, r\y + 568.0 * RoomScale, r\z)
-			r\ScriptedObject[1] = True
-			EntityParent(r\Objects[1], r\OBJ)
-			HideEntity(r\Objects[1])
-			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
 					If r2\RoomTemplate\RoomID = r_room2_tesla_lcz Lor r2\RoomTemplate\RoomID = r_room2_tesla_hcz Lor r2\RoomTemplate\RoomID = r_room2_tesla_2_hcz Lor r2\RoomTemplate\RoomID = r_room2_tesla_ez
-						r\Objects[2] = CopyEntity(r2\Objects[2]) ; ~ Don't load the mesh again
+						r\Objects[1] = CopyEntity(r2\Objects[1]) ; ~ Don't load the mesh again
 						Exit
 					EndIf
 				EndIf
 			Next
-			If r\Objects[2] = 0 Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_blinds.rmesh", Null, False)
-			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			EntityParent(r\Objects[2], r\OBJ)
-			HideEntity(r\Objects[2])
+			If r\Objects[1] = 0 Then r\Objects[1] = LoadRMesh("GFX\Map\room2_tesla_blinds.rmesh", Null, False)
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			EntityParent(r\Objects[1], r\OBJ)
+			HideEntity(r\Objects[1])
 			
-			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 326.0 * RoomScale, r\y + 132.0 * RoomScale, r\z - 576.0 * RoomScale)
-			EntityParent(r\Objects[3], r\OBJ)
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x - 326.0 * RoomScale, r\y + 132.0 * RoomScale, r\z - 576.0 * RoomScale)
+			EntityParent(r\Objects[2], r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
 			;[End Block]
@@ -1274,27 +1271,26 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 584.0 * RoomScale, r\z - 367.0 * RoomScale)
 			
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale, DEFERRED_LIGHT_POINT, 0.5859375, 255, 50, 50, True, 0.1, False)
+			r\RoomLights[0]\Scripted = True
+			HideEntity(r\RoomLights[0]\OBJ)
+			
 			r\Objects[0] = LoadRMesh("GFX\Map\cont2_012_box.rmesh", Null, False)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			HideEntity(r\Objects[0])
 			
-			r\Objects[1] = CreateRedLight(r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale)
-			r\ScriptedObject[1] = True
+			r\Objects[1] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[1], r\x - 450.0 * RoomScale, r\y + 528.0 * RoomScale, r\z - 382.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
-			r\Objects[2] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
+			r\Objects[2] = LoadMesh_Strict("GFX\Map\Props\scp_012.b3d")
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x - 450.0 * RoomScale, r\y + 528.0 * RoomScale, r\z - 382.0 * RoomScale)
-			EntityParent(r\Objects[2], r\OBJ)
-			HideEntity(r\Objects[2])
-			
-			r\Objects[3] = LoadMesh_Strict("GFX\Map\Props\scp_012.b3d")
-			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[3], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
-			EntityParent(r\Objects[3], r\Objects[0])
+			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
+			EntityParent(r\Objects[2], r\Objects[0])
 			
             it.Items = CreateItem("White Severed Hand", it_hand, r\x - 784.0 * RoomScale, r\y - 576.0 * RoomScale + 0.3, r\z + 640.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2775,10 +2771,9 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[4], r\OBJ)
 			
 			; ~ Red light
-			r\Objects[5] = CreateRedLight(r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale)
-			r\ScriptedObject[5] = True
-			EntityParent(r\Objects[5], r\OBJ)
-			HideEntity(r\Objects[5])
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale, DEFERRED_LIGHT_POINT, 0.5859375, 255, 50, 50, True, 0.1, False)
+			r\RoomLights[0]\Scripted = True
+			HideEntity(r\RoomLights[0]\OBJ)
 			
 			; ~ Elevators pivots
 			r\Objects[6] = CreatePivot()
@@ -3035,25 +3030,24 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
+			r\RoomLevers[0] = CreateLever(r, r\x + 236.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 753.0 * RoomScale, 0.0, False)
+			
+			r\RoomLights.Lights[0] = AddLight(r, r\x + 358.5 * RoomScale, r\y + 184.7 * RoomScale, r\z + 758.0 * RoomScale, DEFERRED_LIGHT_POINT, 0.5859375, 255, 50, 50, True, 0.1, False)
+			r\RoomLights[0]\Scripted = True
+			HideEntity(r\RoomLights[0]\OBJ)
+			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\cont3_009_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityAlpha(r\Objects[0], 0.0)
 			
-			r\Objects[1] = CreateRedLight(r\x + 358.5 * RoomScale, r\y + 184.7 * RoomScale, r\z + 758.0 * RoomScale)
-			r\ScriptedObject[1] = True
+			r\Objects[1] = LoadMesh_Strict("GFX\Map\Props\scp_009.b3d")
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[1], r\x, r\y, r\z)
+			EntityAlpha(r\Objects[1], 0.85)
+			EntityPickMode(r\Objects[1], 2)
+			EntityType(r\Objects[1], HIT_MAP)
 			EntityParent(r\Objects[1], r\OBJ)
-			HideEntity(r\Objects[1])
-			
-			r\Objects[2] = LoadMesh_Strict("GFX\Map\Props\scp_009.b3d")
-			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x, r\y, r\z)
-			EntityAlpha(r\Objects[2], 0.85)
-			EntityPickMode(r\Objects[2], 2)
-			EntityType(r\Objects[2], HIT_MAP)
-			EntityParent(r\Objects[2], r\OBJ)
-			
-			r\RoomLevers[0] = CreateLever(r, r\x + 236.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 753.0 * RoomScale, 0.0, False)
 			
 			de.Decals = CreateDecal(DECAL_CRACKED_GLASS, r\x - 152.0 * RoomScale, r\y - 465.0 * RoomScale + 0.005, r\z - 88.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.12), 0.8, 1)
 			EntityParent(de\OBJ, r\OBJ)
