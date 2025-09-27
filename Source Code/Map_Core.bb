@@ -305,7 +305,7 @@ Function UpdateLights%(Cam%)
 								ElseIf (Not LightAdvancedSpriteHidden) ; ~ The additional sprites option is disabled, hide the sprites
 									HideEntity(l\AdvancedSprite)
 								EndIf
-							ElseIf (Not l\Scripted)
+							Else
 								; ~ Hide the sprites because they aren't visible
 								If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
 								If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
