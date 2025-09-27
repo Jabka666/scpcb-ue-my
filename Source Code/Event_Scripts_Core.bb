@@ -4376,6 +4376,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 				
 				TFormPoint(-897.0, -10534.0, 783.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-079", it_paper, TFormedX(), TFormedY(), TFormedZ())
+				RotateEntity(it\Collider, 0.0, e\room\Angle, 0.0)
 				
 				e\EventState = 1.0
 			EndIf
@@ -5849,7 +5850,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 					CreateItem("Crystallized SCP-005", it_crystal005, TFormedX(), TFormedY(), TFormedZ())
 				EndIf
 				
-				TFormPoint(-4105.0, -4336.0, 2207.0, e\room\OBJ, 0)
+				TFormPoint(-4075.0, -4336.0, 2200.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 				
