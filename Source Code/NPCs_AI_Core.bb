@@ -3001,8 +3001,6 @@ Function UpdateNPCType457%(n.NPCs)
 							AnimateNPC(n, 210.0, 235.0, 0.1)
 						EndIf
 					EndIf
-					
-					UpdateSoundOrigin(n\SoundCHN2, Camera, n\OBJ, 10.0, 1.0, True)
 				ElseIf n\Idle = 0
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
@@ -3024,7 +3022,7 @@ Function UpdateNPCType457%(n.NPCs)
 				Select n\PrevState
 					Case 0 ; ~ Find path
 						;[Block]
-						AnimateNPC(n, 444.0, 493.0, 0.3, False)
+						AnimateNPC(n, 444.0, 493.0, 0.4, False)
 						
 						; ~ Move particle emitters to collider
 						Local TargetX# = EntityX(n\Collider) + Rnd(-0.5, 0.5)
@@ -3087,16 +3085,18 @@ Function UpdateNPCType457%(n.NPCs)
 							For i = 0 To 19
 								EntityParent(n\FireEmitter[i]\Owner, n\Collider)
 							Next
+							LoadNPCSound(n, "SFX\SCP\457\Ball" + Rand(0, 1) + ".ogg", 1)
+							
+							PlaySoundEx(n\Sound2, Camera, n\Collider)
+							n\EnemyX = EntityX(me\Collider, True)
+							n\EnemyY = EntityY(me\Collider, True)
+							n\EnemyZ = EntityZ(me\Collider, True)
 							n\PrevState = 1
 						EndIf
 						;[End Block]
 					Case 1 ; ~ Move to the closest waypoint
 						;[Block]
-						n\Speed = 0.1
-						
-						n\EnemyX = EntityX(me\Collider, True)
-						n\EnemyY = EntityY(me\Collider, True)
-						n\EnemyZ = EntityZ(me\Collider, True)
+						n\Speed = 0.14
 						
 						If n\PathTimer > 0.0
 							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
@@ -3112,7 +3112,7 @@ Function UpdateNPCType457%(n.NPCs)
 								Wend
 								
 								If n\Path[n\PathLocation] <> Null
-									TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.5) - EntityY(n\Collider)) / 200.0, 0.0)
+									TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.5) - EntityY(n\Collider)) / 100.0, 0.0)
 									
 									PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
 									
@@ -3154,14 +3154,14 @@ Function UpdateNPCType457%(n.NPCs)
 							CurrentY = EntityY(n\FireEmitter[i]\Owner)
 							CurrentZ = EntityZ(n\FireEmitter[i]\Owner)
 							
-							CurrentX = CurveValue(TargetX, CurrentX, 100.0)
-							CurrentY = CurveValue(TargetY, CurrentY, 100.0)
-							CurrentZ = CurveValue(TargetZ, CurrentZ, 100.0)
+							CurrentX = CurveValue(TargetX, CurrentX, 70.0)
+							CurrentY = CurveValue(TargetY, CurrentY, 70.0)
+							CurrentZ = CurveValue(TargetZ, CurrentZ, 70.0)
 							
 							PositionEntity(n\FireEmitter[i]\Owner, CurrentX, CurrentY, CurrentZ, True)
 						Next
 						
-						AnimateNPC(n, 493.0, 444.0, -0.3, False)
+						AnimateNPC(n, 493.0, 444.0, -0.35, False)
 						If n\Frame < 444.1
 							EntityType(n\Collider, HIT_PLAYER)
 							For i = 0 To 19
@@ -3177,6 +3177,8 @@ Function UpdateNPCType457%(n.NPCs)
 				End Select
 				;[End Block]
 		End Select
+		UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True)
+		
 		n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
 		
 		Select Burn
