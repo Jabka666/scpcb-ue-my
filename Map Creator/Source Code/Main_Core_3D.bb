@@ -734,8 +734,6 @@ End Type
 Function CreateProp%(File$)
 	Local p.Props
 	
-	; ~ A hacky way to use .b3d format
-	If FileExtension(File) = "b3d" Then File = Left(File, Len(File) - 4)
 	File = File + ".b3d"
 	
 	For p.Props = Each Props
@@ -1162,7 +1160,7 @@ Function LoadRMesh%(File$)
 			Case "model"
 				;[Block]
 				Temp2s = ReadString(f)
-				RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), File, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
+				RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), File, "{0}"), "GFX\Map\Props\" + Temp2s + ".b3d", "{1}"))
 				;[End Block]
 			Case "mesh"
 				;[Block]

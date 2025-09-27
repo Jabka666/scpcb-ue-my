@@ -736,7 +736,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 				Case "model"
 					;[Block]
 					Temp2s = ReadString(f)
-					RuntimeErrorEx(Format(Format(GetLocalString("runerr", "model.support"), rt\Name, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
+					RuntimeErrorEx(Format(Format(GetLocalString("runerr", "model.support"), rt\Name, "{0}"), "GFX\Map\Props\" + Temp2s + ".b3d", "{1}"))
 					;[End Block]
 				Case "mesh"
 					;[Block]
