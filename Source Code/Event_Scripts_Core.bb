@@ -4648,7 +4648,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 	If e\EventState < MilliSecs()
 		Local sc.SecurityCams
 		
-		; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first zone
+		; ~ SCP-079 starts broadcasting SCP-895's camera feed on monitors after leaving the first room
 		If PlayerRoom\RoomTemplate\RoomID <> r_cont1_173_intro And PlayerRoom\RoomTemplate\RoomID <> r_cont1_173
 			If EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0 ; ~ Camera feed on
 				For sc.SecurityCams = Each SecurityCams
@@ -4754,7 +4754,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		EndIf
 		
 		If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
-			If e\room = PlayerRoom And wi\NVGPower > 0 And I_714\Using <> 2
+			If wi\NVGPower > 0 And I_714\Using <> 2
 				If CoffinDistance < 6.0
 					TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 					CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Clamp((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0, 1.0)) * 0.2)
