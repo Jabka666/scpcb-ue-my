@@ -4761,7 +4761,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 				
 					me\Sanity = me\Sanity - ((fps\Factor[0] * (1.2 + (0.24 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 				Else
-					me\Sanity = me\Sanity - ((fps\Factor[0] * (0.3 + (0.06 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+					me\Sanity = me\Sanity - ((fps\Factor[0] * (0.4 + (0.08 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 				EndIf
 				me\RestoreSanity = False
 				me\BlurTimer = Sin(MilliSec / 10) * Abs(me\Sanity)
@@ -4835,7 +4835,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		CoffinDistance = e\room\Dist
 		If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
 			If CoffinDistance < 20.0 And wi\NVGPower > 0 And I_714\Using <> 2
-				me\Sanity = me\Sanity - ((fps\Factor[0] * (0.3 + (0.06 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+				If me\Sanity > -600.0 me\Sanity = me\Sanity - ((fps\Factor[0] * (0.3 + (0.06 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 				me\RestoreSanity = False
 			EndIf
 		EndIf
