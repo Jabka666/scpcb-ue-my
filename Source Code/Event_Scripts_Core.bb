@@ -6102,6 +6102,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 			If EntityY(me\Collider, True) < IceTriggerY
 				DecalStep = 2
 				If I_009\Timer = 0.0
+					GiveAchievement("009")
 					If wi\HazmatSuit = 0 Then I_009\Timer = 0.001
 				EndIf
 			EndIf

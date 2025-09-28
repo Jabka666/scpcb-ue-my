@@ -1958,7 +1958,7 @@ Function UpdateNPCIce%(n.NPCs)
 				If n\IceTimer > 70.0 * 29.9
 					EntityShininess(n\OBJ, 1.0)
 					PlaySoundEx(LoadTempSound("SFX\SCP\009\IceCracking.ogg"), Camera, n\Collider, 5.0, 0.4)
-					GiveAchievement("009")
+					GiveAchievement("frostbite")
 					SetNPCFrame(n, n\Frame)
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0

@@ -235,6 +235,11 @@
 			"scp": false
 		},
 		{
+			"id": "frostbite",
+			"image": "AchvFB.png",
+			"scp": true
+		},
+		{
 			"id": "console",
 			"image": "AchvConsole.png",
 			"scp": false
@@ -253,7 +258,7 @@
 	"translations": {
 		"009": {
 			"name": "Ice-olated Incident",
-			"description": "Lure an enemy into the Red Ice."
+			"description": "Interact with red ice."
 		},
 		"106": {
 			"name": "A Decayed March",
@@ -438,6 +443,10 @@
 		"tesla": {
 			"name": "Shell Shocked",
 			"description": "Lured the Old Man through a Tesla gate."
+		},
+		"frostbite": {
+			"name": "Frostbite",
+			"description": "Lured an enemy into the Red Ice."
 		},
 		"keter": {
 			"name": "Survival In a Nightmare",
