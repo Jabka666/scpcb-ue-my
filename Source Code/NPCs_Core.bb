@@ -1920,7 +1920,7 @@ Function FinishWalking%(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	EndIf
 End Function
 
-Function ChangeNPCTextureID%(n.NPCs, TextureID%)
+Function ChangeNPCTextureID%(n.NPCs, TextureID%, UpdateMaterial% = False)
 	If n = Null
 		OpenConsoleOnError(GetLocalString("msg", "spawn.invaildtex"))
 		Return
@@ -1931,8 +1931,12 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	Local Tex% = LoadTexture_Strict("GFX\NPCs\" + n_I\NPCTextureName[TextureID] + ".png")
 	
 	EntityTexture(n\OBJ, Tex)
-	If n\NPCType = NPCType173 Then EntityTexture(n\OBJ2, Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
+	If UpdateMaterial Then UpdateEntityMaterial(n\OBJ)
+	If n\NPCType = NPCType173
+		EntityTexture(n\OBJ2, Tex)
+		If UpdateMaterial Then UpdateEntityMaterial(n\OBJ2)
+	EndIf
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 End Function
 
 Function ChangePlayerBodyTexture%(ID%)
