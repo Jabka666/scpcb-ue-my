@@ -1808,7 +1808,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_VERY_FINE
 					;[Block]
-					CurrAchvAmount = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (4 + SelectedDifficulty\OtherFactors), 0)
+					CurrAchvAmount = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (5 + SelectedDifficulty\OtherFactors), 0)
 					If Rand(0, CurrAchvAmount) = 0
 						CreateItem("Key Card Omni", it_keyomni, x, y, z)
 					ElseIf Rand(32 + (8 * SelectedDifficulty\OtherFactors)) = 1
