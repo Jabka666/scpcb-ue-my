@@ -543,8 +543,10 @@ Function LoadParticles%()
 	
 	; ~ Fire
 	ParticleEffect[31] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[31], 1 + 2 + 8 + 32)
 	SetTemplateEmitterLifeTime(ParticleEffect[31], -1)
 	SetTemplateInterval(ParticleEffect[31], 3)
+	SetTemplateParticlesPerInterval(ParticleEffect[31], 5)
 	SetTemplateParticleLifeTime(ParticleEffect[31], 40, 45)
 	SetTemplateTexture(ParticleEffect[31], PARTICLE_FIRE)
 	SetTemplateOffset(ParticleEffect[31], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
