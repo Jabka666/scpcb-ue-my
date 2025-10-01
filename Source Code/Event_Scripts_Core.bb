@@ -6297,6 +6297,13 @@ Function UpdateEvent_Gate_A%(e.Events)
 			e\room\NPC[1] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[1]\State = 0.0
 			
+			TFormPoint(-5615.0, 1901.0, 6904.0, e\room\OBJ, 0)
+			n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			ChangeNPCTextureID(n, NPC_CLASS_D_FRANKLIN_TEXTURE)
+			n\State = -1.0
+			SetNPCFrame(n, 326.0)
+			RotateEntity(n\Collider, 0.0, 270.0, 0.0)
+			
 			For i = 2 To 4
 				e\room\NPC[i] = CreateNPC(NPCTypeApache, e\room\x, e\room\y + 11.0, e\room\z)
 				e\room\NPC[i]\State = (Not n_I\Curr106\Contained)
