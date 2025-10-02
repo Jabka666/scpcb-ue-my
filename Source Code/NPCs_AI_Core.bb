@@ -4050,7 +4050,7 @@ Function UpdateNPCType939%(n.NPCs)
 		ElseIf PowTwo(me\SndVolume * 1.4) > Dist
 			If n\State <> 1.0
 				SetNPCFrame(n, 1443.0)
-				n\State3 = 70.0 * 7.0
+				n\State3 = 70.0 * 4.0
 				GiveAchievement("939")
 				n\State = 1.0
 			EndIf
