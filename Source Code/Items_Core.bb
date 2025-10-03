@@ -729,8 +729,8 @@ Function UpdateItems%()
 				Case it_scp1123
 					;[Block]
 					If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
-						me\BlurTimer = 800.0 - (200.0 * (I_714\Using = 1))
-						me\CameraShake = 1.0 - (0.5 * (I_714\Using = 1))
+						me\BlurTimer = 800.0 - (200.0 * (I_714\Using = 1 Lor wi\HazmatSuit <> 0))
+						me\CameraShake = 1.0 - (0.5 * (I_714\Using = 1 Lor wi\HazmatSuit <> 0))
 						I_1123\SoundCHN = LoopSoundLocal(I_1123\Sound, I_1123\SoundCHN)
 					EndIf
 					;[End Block]
@@ -761,7 +761,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 				Case it_scp1123
 					;[Block]
 					Use1123()
-					If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then Return
+					If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit = 0 Then Return
 					;[End Block]
 				Case it_crystal005
 					;[Block]
@@ -2842,7 +2842,7 @@ Function Use1123%()
 	Local e.Events
 	Local Temp%
 	
-	If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
+	If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit = 0
 		me\LightFlash = 3.0
 		PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 		
