@@ -1366,12 +1366,12 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 				;[End Block]
 			Case 13 ; ~ Left Arm
 				;[Block]
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.4, 0.5) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.left")
 				;[End Block]
 			Case 14 ; ~ Right Arm
 				;[Block]
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.4, 0.5) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.right")
 				;[End Block]
 			Case 15 ; ~ Neck
