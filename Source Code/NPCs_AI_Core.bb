@@ -211,7 +211,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 							InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
 							me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 							
-							If me\Injuries > 3.0
+							If me\Injuries > 3.5
 								msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
 								Kill(True)
 							EndIf
@@ -503,7 +503,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 							InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
 							me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 							
-							If me\Injuries > 3.0
+							If me\Injuries > 3.5
 								msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
 								Kill(True)
 							EndIf
@@ -664,7 +664,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 											InjurePlayer(Rnd(0.75, 1.15) * DifficultyDMGMult, 0.0, 100.0, 0.4 * DifficultyDMGMult, 0.175 * DifficultyDMGMult)
 											If n\IceTimer > 0.0 And wi\HazmatSuit = 0 And I_009\Timer = 0.0 Then I_009\Timer = 0.001
 											
-											If me\Injuries > 3.0
+											If me\Injuries > 4.0
 												If PlayerRoom\RoomTemplate\RoomID = r_room2_ez
 													msg\DeathMsg = GetLocalString("death", "035.offices")
 												Else
@@ -1403,7 +1403,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 								If n\IceTimer > 0.0 And wi\HazmatSuit = 0 And I_009\Timer = 0.0 Then I_009\Timer = 0.001
 								me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 								
-								If me\Injuries > 3.0
+								If me\Injuries > 3.5
 									msg\DeathMsg = Format(GetLocalString("death", "0492killed"), SubjectName)
 									Kill(True)
 								EndIf
