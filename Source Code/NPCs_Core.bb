@@ -292,7 +292,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-			ChangeNPCTextureID(n, NPC_457_TEXTURE)
 			EntityAlpha(n\OBJ, 0.0)
 			
 			Local BoneName$
