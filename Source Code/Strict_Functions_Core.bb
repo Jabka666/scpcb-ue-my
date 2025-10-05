@@ -369,14 +369,13 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
 End Function
 
 ; ~ Don't use in LoadRMesh, as Reg does this manually there. If you wanna fuck around with the logic in that function, be my guest 
-Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures, Blend5% = True, Scale# = 1.0)
+Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextures, Scale# = 1.0)
 	Local Tmp%
 	
 	If Tmp = 0
 		If FileType(File) <> 1 Then RuntimeErrorEx(Format(GetLocalString("runerr", "texture.notfound"), File))
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType, Scale)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "texture.failed.load"), File))
-		If Blend5 Then TextureBlend(Tmp, 5)
 	EndIf
 	Return(Tmp)
 End Function

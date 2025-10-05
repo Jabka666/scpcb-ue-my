@@ -425,7 +425,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.1, 0.1)
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_860_2_eyes.png", 1 + 2, DeleteMapTextures, False)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_860_2_eyes.png", 1 + 2, DeleteMapTextures)
 			EntityTexture(n\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			EntityFX(n\OBJ2, 1 + 8)
