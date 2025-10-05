@@ -583,7 +583,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.5)
-								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.1, 1.0)
+								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.1)
 								
 								de\SizeChange = 0.0005 : de\MaxSize = 0.2
 								EntityParent(de\OBJ, PlayerRoom\OBJ)
