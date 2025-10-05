@@ -9691,7 +9691,7 @@ Function Update008%()
 			PrevI008Timer = I_008\Timer
 			If I_427\Timer < 70.0 * 360.0
 				If I_008\Revert
-					I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.02), 0.0)
+					I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.03), 0.0)
 				ElseIf (Not I_427\Using)
 					I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
 					me\BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
