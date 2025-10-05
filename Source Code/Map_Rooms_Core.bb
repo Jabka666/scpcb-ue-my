@@ -3836,13 +3836,13 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_scientists
 			;[Block]
 			; ~ Dr. Maynard's office door
-			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 448.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_MAYNARD)
-			
-			; ~ Dr.Gear's inaccessible office door
-			d.Doors = CreateDoor(r, r\x - 352.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_GEARS)
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 496.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_MAYNARD)
 			
 			; ~ Dr. Harp's office door
-			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_HARP)
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 528.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_HARP)
+			
+			; ~ Dr. Gear's office door
+			CreateDoor(r, r\x - 352.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_GEARS)
 			
 			it.Items = CreateItem("Mysterious Note", it_paper, r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 544.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
