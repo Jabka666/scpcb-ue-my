@@ -1079,13 +1079,12 @@ Function LoadNPCs%()
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_106_TEXTURE] = "scp_106_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_TEXTURE] = "scp_106_victim_femur_breaker"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_409_TEXTURE] = "scp_409_victim"
+	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_457_TEXTURE] = "scp_457_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_895_TEXTURE] ="scp_895_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_939_1_TEXTURE] = "scp_939_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_939_2_TEXTURE] ="scp_939_victim(2)"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE] = "femur_breaker_victim"
 	n_I\NPCTextureName[NPC_CLERK_VICTIM_205_TEXTURE] = "clerk(2)"
-	
-	n_I\NPCTextureName[NPC_457_TEXTURE] = "scp_457_victim"
 	
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_1048_A_TEXTURE] = "scp_1048_a_victim"
 	
