@@ -3259,6 +3259,7 @@ Function UpdateMoving%()
 	If I_2022\Used < 1.0 And Prev2022Used >= 1.0 Then SetPlayerModelFX(0)
 	If I_2022\HealTimer > 0.0
 		me\Injuries = Max(me\Injuries - FPSFactorEx / 10.0, 0.0)
+		If me\Injuries < 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.0005), 0.0)
 		I_2022\HealTimer = Max(I_2022\HealTimer - FPSFactorEx, 0.0)
 	EndIf
 	
