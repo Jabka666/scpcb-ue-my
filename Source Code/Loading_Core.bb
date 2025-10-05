@@ -1233,9 +1233,7 @@ Function LoadMaterials%(File$)
 			mat\Name = Lower(Loc)
 			If opt\BumpEnabled
 				StrTemp = IniGetString(File, Loc, "normal")
-				If StrTemp <> ""
-					mat\Normal = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
-				EndIf
+				If StrTemp <> "" Then mat\Normal = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
 			EndIf
 			
 			StrTemp = IniGetString(File, Loc, "roughness")

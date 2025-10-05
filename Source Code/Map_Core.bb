@@ -4335,6 +4335,7 @@ Type Screens
 	Field State#, State2#
 	Field Display096%
 	Field FaceTimer%
+	Field CurrScreenID%
 	Field room.Rooms
 End Type
 
@@ -4363,9 +4364,11 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	For s2.Screens = Each Screens
 		If s2 <> s And s2\ImgPath = ImgPath Then s\Texture = s2\Texture
 	Next
-	If s\Texture = 0 Then s\Texture = GetRescaledTexture(False, s\ImgPath, 1, DeleteAllTextures, 256, 192)
+	If s\Texture = 0 Then s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
 	EntityTexture(s\OBJ, s\Texture)
 	SetDeferredEntity(s\OBJ)
+	UpdateEntityMaterial(s\OBJ)
+	s\CurrScreenID = 1
 	
 	Return(s)
 End Function
@@ -4376,14 +4379,22 @@ Function UpdateScreens%()
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom
 			If SecondaryLightOn =< 0.3
-				EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY])
+				If s\CurrScreenID <> 0
+					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY])
+					UpdateEntityMaterial(s\OBJ)
+					s\CurrScreenID = 0
+				EndIf
 				Return
 			EndIf
 			; ~ TODO: Optimize somehow?
 			If s\State > 0.0
 				s\State = s\State - fps\Factor[0]
 				If s\State < 70.0 * 6.0
-					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_096_OVERLAY])
+					If s\CurrScreenID <> 3
+						EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_096_OVERLAY])
+						UpdateEntityMaterial(s\OBJ)
+						s\CurrScreenID = 3
+					EndIf
 					If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
 						If wi\SCRAMBLE = 0
 							If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
@@ -4419,16 +4430,28 @@ Function UpdateScreens%()
 						If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 					EndIf
 				ElseIf Rand(20) < 3
-					EntityTexture(s\OBJ, s\Texture)
+					If s\CurrScreenID <> 1
+						EntityTexture(s\OBJ, s\Texture)
+						UpdateEntityMaterial(s\OBJ)
+						s\CurrScreenID = 1
+					EndIf
 				Else
-					s\FaceTimer = (s\FaceTimer + 1) Mod 6
-					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3], s\FaceTimer)
+					If s\CurrScreenID <> 2
+						s\FaceTimer = (s\FaceTimer + 1) Mod 6
+						EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3], s\FaceTimer)
+						UpdateEntityMaterial(s\OBJ)
+						s\CurrScreenID = 2
+					EndIf
 				EndIf
 				Return
 			Else
 				If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
 				If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
-				EntityTexture(s\OBJ, s\Texture)
+				If s\CurrScreenID <> 1
+					EntityTexture(s\OBJ, s\Texture)
+					UpdateEntityMaterial(s\OBJ)
+					s\CurrScreenID = 1
+				EndIf
 				s\State2 = Max(s\State2 - fps\Factor[0], 0.0)
 				If s\State2 = 0.0
 					If Rand(4000 - (1500 * (Not RemoteDoorOn)) - (1500 * SelectedDifficulty\AggressiveNPCs)) = 1
