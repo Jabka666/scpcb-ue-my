@@ -682,9 +682,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					lColor = ReadString(f)
 					Intensity = ReadFloat(f)
-					tl\R = Int(Piece(lColor, 1, " "))
-					tl\G = Int(Piece(lColor, 2, " "))
-					tl\B = Int(Piece(lColor, 3, " "))
+					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
+					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
+					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
 					
 					tl\HasSprite = ReadByte(f)
 					tl\SpriteScale = ReadFloat(f)
@@ -705,9 +705,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					lColor = ReadString(f)
 					Intensity = ReadFloat(f)
-					tl\R = Int(Piece(lColor, 1, " "))
-					tl\G = Int(Piece(lColor, 2, " "))
-					tl\B = Int(Piece(lColor, 3, " "))
+					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
+					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
+					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
 					
 					tl\HasSprite = ReadByte(f)
 					tl\SpriteScale = ReadFloat(f)
