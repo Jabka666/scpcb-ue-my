@@ -3042,7 +3042,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[1] = LoadMesh_Strict("GFX\Map\Props\scp_009.b3d")
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x, r\y, r\z)
-			EntityAlpha(r\Objects[1], 0.85)
+			EntityAlpha(r\Objects[1], 0.8)
 			EntityPickMode(r\Objects[1], 2)
 			EntityType(r\Objects[1], HIT_MAP)
 			EntityParent(r\Objects[1], r\OBJ)
@@ -4459,7 +4459,7 @@ Function FillRoom%(r.Rooms)
 	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tp.TempProps, tse.TempSoundEmitters
 	
 	For ts.TempScreens = Each TempScreens
-		If ts\RoomTemplate = r\RoomTemplate Then CreateScreen(r, r\x + ts\x, r\y + ts\y, r\z + ts\z, ts\Pitch, ts\Yaw, ts\Roll, ts\ScaleX, ts\ScaleY, ts\ScaleZ, ts\ImgPath)
+		If ts\RoomTemplate = r\RoomTemplate Then CreateScreen(r, r\x + ts\x, r\y + ts\y, r\z + ts\z, ts\Pitch, ts\Yaw, ts\Roll, ts\ScaleX, ts\ScaleY, ts\ScaleZ, ts\ImgPath, ts\ScreenEventID)
 	Next
 	
 	For twp.TempWayPoints = Each TempWayPoints

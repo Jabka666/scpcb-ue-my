@@ -6019,9 +6019,9 @@ Function UpdateEvent_Cont3_009%(e.Events)
 			
 			If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
 			
-			If e\EventState > 0.33
-				e\EventState = Max(e\EventState - (fps\Factor[0] * 0.00007), 0.33)
-			ElseIf e\EventState = 0.33
+			If e\EventState > 70.0
+				e\EventState = Max(e\EventState - fps\Factor[0], 70.0)
+			ElseIf e\EventState = 70.0
 				For i = 0 To 4
 					e\room\RoomDoors[i]\Locked = 0
 				Next
@@ -6032,9 +6032,9 @@ Function UpdateEvent_Cont3_009%(e.Events)
 					RotateEntity(it\Collider, 0.0, EntityYaw(e\room\Objects[3]), 0.0)
 					FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
 				EndIf
-				e\EventState = 0.32
+				e\EventState = 66.0
 			EndIf
-			EntityAlpha(e\room\Objects[1], e\EventState)
+			EntityAlpha(e\room\Objects[1], Max(e\EventState / 7875.0, 0.3))
 		EndIf
 	EndIf
 	If PlayerRoom = e\room
@@ -6060,11 +6060,11 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				SetEmitter(e\room, EntityX(e\room\RoomLevers[0]\OBJ, True), EntityY(e\room\RoomLevers[0]\OBJ, True), EntityZ(e\room\RoomLevers[0]\OBJ, True), 19)
 				PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\RoomLevers[0]\OBJ, 3.0, 0.4)
 				PlaySound_Strict(snd_I\AlarmSFX[2])
-				e\EventState = 0.8
+				e\EventState = 70.0 * 90.0
 			EndIf
 		EndIf
 		
-		If e\EventState <> 0.32
+		If e\EventState <> 66.0
 			If e\room\Objects[3] = 0
 				Local itt.ItemTemplates
 				
@@ -6078,7 +6078,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 					EndIf
 				Next
 			EndIf
-		ElseIf e\EventState = 0.32
+		ElseIf e\EventState = 66.0
 			UpdateBreathSteam()
 			
 			Local n.NPCs

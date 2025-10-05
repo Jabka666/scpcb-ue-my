@@ -2270,7 +2270,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case e_cont3_009
 				;[Block]
-				If e\EventState <> 0.19
+				If e\EventState <> 66.0
 					EntityPickMode(e\room\Objects[1], 2)
 					EntityType(e\room\Objects[1], HIT_MAP)
 				Else
