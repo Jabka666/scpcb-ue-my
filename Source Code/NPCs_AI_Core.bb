@@ -4000,7 +4000,7 @@ Function UpdateNPCType939%(n.NPCs)
 			If Temp
 				If EntityDistanceSquared(me\Collider, n\Collider) < 2.25 And EntityVisible(me\Collider, n\Collider)
 					PlaySound_Strict(snd_I\DamageSFX[11])
-					InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.4, 0.9))
+					InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.5, 0.8))
 					me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
 					
 					If me\Injuries > 4.0
