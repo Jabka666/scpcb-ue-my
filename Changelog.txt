@@ -13,14 +13,22 @@
 - Removed NPCs.ini file.
 - Player HUD is now animated when wearing SCP-268 or being protected from SCP-049.
 - The pocket dimension's constant damage over time was increased. Hazmat Suit reduces it back to the original amount.
+- Player bleeds out 16.7% slower.
+- New achievement "Frostbite".
 
 [Items]
 - Added documents: Risk classification, disruption classification, warning labels #1, #2, and #3, SCP-914 Test logs, containment zones, and updated the security clearance levels.
 - Removed mouse effect from Ballistic Vests.
 - Improved SCP-268's model.
 - SCP-268 makes the player transparent for better feedback to the player replacing the yellow indicator.
+- Improved SCP-714's model.
 - Blue Night Vision Goggles have futher NPC detection.
+- Key Card Omni is rarer.
 - SCP-427 cures SCP-008 much faster.
+- SCP-500-01 reverts SCP-008 infection progress faster.
+- SCP-2022-01 restores a small amount of bloodloss when below 1.0 injury.
+- All hazmat suits allows player to pick up SCP-1123.
+- SCP-895 can now slowly effect Night Vision Goggles and SCRAMBLE Gear when the player is near the room.
 
 [Rooms]
 - Room improvements...
@@ -31,6 +39,7 @@
 - Improved Explosion effect at Gate B.
 - Snow at Gate B glistens.
 - Added SCP-2022 to Dr. Gears office.
+- Added Franklin to one of the Gate A towers.
 
 [NPCs]
 - Added SCP-457.
