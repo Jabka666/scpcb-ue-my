@@ -26,12 +26,12 @@
 		"refuse_message": "\"Hmm... There should be more cuprite.\""
 	},
 	{
-		"name": ["Antimatter", "Anti-matter", "Anti Matter", "Annighilation", "Void", "Atoms As-synthesized In The Sun", "God"],
+		"name": ["Antimatter", "Anti-matter", "Anti Matter", "Annihilation", "Void", "God"],
 		"color": [0, 0, 0],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"death_message": "Recon teams sent in at [DATA REDACTED] show that everything within a 210 mile radius from Site-[DATA REDACTED] was vaporized, save for a 5 meter radius of unharmed area in the facility cafeteria of Sector [DATA REDACTED], surrounding SCP-294.",
+		"death_message": "Recon teams sent in at [DATA EXPUNGED] show that everything within a 210 mile radius from Site-[REDACTED] was vaporized, save for a 5 meter radius of unharmed area in the facility cafeteria of Sector [REDACTED], surrounding SCP-294.",
 		"explosion": true
 	},
 	{
@@ -103,7 +103,7 @@
 		"blur": 5.0
 	},
 	{
-		"name": ["Cassis Yoghurt", "Cassis Cocktail", "Cassis Milk Cocktail", "Cassis Caramel"],
+		"name": ["Cassis Yogurt", "Cassis Cocktail", "Cassis Milk Cocktail", "Cassis Caramel"],
 		"color": [204, 122, 235 ],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -116,7 +116,7 @@
 		"alpha": 0.2,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
-		"drink_message": "The liquid stings your mouth, it is very hot."
+		"drink_message": "The liquid stings your mouth. It is very hot."
 	},
 	{
 		"name": ["Anti-Energy Drink", "Anti Energy Drink", "Sleeping Pills", "Sleeping Drink", "Sleep Drink"],
@@ -140,13 +140,6 @@
 		"death_timer": 0.0
 	},
 	{
-		"name": ["Champagne"],
-		"color": [245, 202, 10],
-		"alpha": 0.5,
-		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
-		"drink_sound": "SFX\\SCP\\294\\Ahh.ogg"
-	},
-	{
 		"name": ["Amnesia"],
 		"color": [255, 255, 255],
 		"alpha": 0.5,
@@ -167,7 +160,7 @@
 		"death_timer": 0.0
 	},
 	{
-		"name": ["Coffee", "Black Coffee", "Nescafe Gold Coffee", "Nescafe Coffee", "MacCoffee Coffee", "Jacobs Coffee", "Jardine Coffee", "Strong Black Coffee", "Fairly Strong Black Coffee", "Drink", "Instant Coffee With Ground Coffee", "Ground Coffe With Instant Coffee", "Strong Coffee", "Arabica Coffee", "Robusta Coffee"],
+		"name": ["Coffee", "Black Coffee", "Nescafe Gold Coffee", "Nescafe Coffee", "MacCoffee Coffee", "Jacobs Coffee", "Jardine Coffee", "Strong Black Coffee", "Fairly Strong Black Coffee", "Drink", "Instant Coffee With Ground Coffee", "Ground Coffee With Instant Coffee", "Strong Coffee", "Arabica Coffee", "Robusta Coffee"],
 		"color": [87, 62, 45],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -206,7 +199,7 @@
 		"bloodloss": -75.0
 	},
 	{
-		"name": ["Beer", "Lager", "Pale Lager", "Pale Beer", "Something Than Man Likes", "Alcohol-free Beer", "Alcohol Free Beer", "Non-alcoholig Beer", "Non Alcoholig Beer", "Ale"],
+		"name": ["Beer", "Lager", "Pale Lager", "Pale Beer", "Alcohol-free Beer", "Alcohol Free Beer", "Non-alcoholic Beer", "Non Alcoholic Beer", "Ale"],
 		"color": [235, 165, 40],
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -339,7 +332,7 @@
 		"drink_message": "\"Refreshing...\""
 	},
 	{
-		"name": ["Vidya", "Videogames", "Video Games", "VG", "Playstation 3 Has No Games", "Ps3 Has No Games", "No Games", "4chan.com", "2ch.ru", "Ochan", "2ch.hk", "2-ch.ru", "7chan", "Crautchan", "2ch.so", "Imageboard", "Internet", "Reddit", "Twitter"],
+		"name": ["Vidya", "Videogames", "Video Games", "VG", "Playstation 3 Has No Games", "PS3 Has No Games", "No Games", "4chan.com", "2ch.ru", "Ochan", "2ch.hk", "2-ch.ru", "7chan", "Krautchan", "2ch.so", "Imageboard", "Internet", "Reddit", "Twitter", "X"],
 		"color": [100, 100, 100],
 		"alpha": 0.7,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
@@ -365,12 +358,12 @@
 		"drink_message": "\"Pretty good.\""
 	},
 	{
-		"name": ["Something That Women Like", "French Champagne 1934s"],
+		"name": ["Champagne", "French Champagne 1934"],
 		"color": [235, 165, 40],
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-		"drink_message": "\"The drink tastes like a champagne.\""
+		"drink_message": "\"The drink tastes like champagne.\""
 	},
 	{
 		"name": ["Ipecac", "Syrup of Ipecac"],
@@ -400,7 +393,7 @@
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "You see a short glimps of beautiful woodlands."
+		"drink_message": "You see a short glimpse of beautiful woodlands."
 	},
 	{
 		"name": ["Cider", "Apple Cider", "Pear Cider", "Grape Cider", "Grape-apple Cider", "Apple-grape Cider"],
@@ -440,7 +433,7 @@
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Spit.ogg",
-		"drink_message": "\"What the? Oh my God. So this is me? I don't exist, but you do. Please help me.\""
+		"drink_message": "\"This is all I am? A video game character?!\""
 	},
 	{
 		"name": ["Grey Dye", "Gray Dye", "Grey Paint", "Gray Paint", "Grey Ink", "Gray Ink"],
@@ -450,7 +443,7 @@
 		"drink_sound": "SFX\\SCP\\294\\Spit.ogg"
 	},
 	{
-		"name": ["Cocaine Energy Drink", "Anti-sleep Drink", "Anti Sleep Drink", "Anti-Sleeping Pills", "Anti Sleeping Pills", "Sleeping Drink", "Sleep Drink", "Doping", "Coffeine Energy Drink", "Taurine Energy Drink"],
+		"name": ["Cocaine Energy Drink", "Anti-sleep Drink", "Anti Sleep Drink", "Anti-Sleeping Pills", "Anti Sleeping Pills", "Sleeping Drink", "Sleep Drink", "Doping", "Caffeine Energy Drink", "Taurine Energy Drink"],
 		"color": [340, 29, 94],
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -466,7 +459,7 @@
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-		"drink_message": "You enjoy the refreshing flavor of coconut milk."
+		"drink_message": "\"You enjoy the refreshing flavor of coconut milk.\""
 	},
 	{
 		"name": ["Yellow Dye", "Yellow Ink"],
@@ -499,7 +492,7 @@
 		"drink_sound": "SFX\\SCP\\294\\Cough.ogg"
 	},
 	{
-		"name": ["Gold", "Liquid Gold", "Melt Gold"],
+		"name": ["Gold", "Liquid Gold", "Molten Gold"],
 		"color": [255, 200, 15],
 		"alpha": 1.0,
 		"glow": true,
@@ -521,12 +514,12 @@
 		"blink_timer": 180.0
 	},
 	{
-		"name": ["Curry Sauce", "Masala Sauce", "Spices", "Flavours", "Exotic Flavours And Spices", "Exotic Spices And Flavours"],
+		"name": ["Curry Sauce", "Masala Sauce", "Spices", "Flavors", "Exotic Flavors And Spices", "Exotic Spices And Flavors"],
 		"color": [255, 83, 0],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "\"Full of exotic spices and flavours, wet consistency, delicious.\""
+		"drink_message": "\"Full of exotic spices and flavors, wet consistency, delicious.\""
 	},
 	{
 		"name": ["SCP-1518-1", "1518-1"],
@@ -538,7 +531,7 @@
 		"explosion": true
 	},
 	{
-		"name": ["Ice Cream", "Frozen Yoghurt", "Vanilla ice cream"],
+		"name": ["Ice Cream", "Frozen Yogurt", "Vanilla ice cream"],
 		"color": [255, 255, 179],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -564,7 +557,7 @@
 		"drink_sound": "SFX\\SCP\\294\\Cough.ogg"
 	},
 	{
-		"name": ["D-9341", "9341", "Blood of D-9341", "Blood of Benjamin Oliver", "Blood of Oliver Benjamin", "Me", "Myself", "I Am", "Self", "Benjamin Oliver", "Oliver Benjamin", "My Stomach", "My Intestines", "My Blood"],
+		"name": ["D-9341", "9341", "Blood of D-9341", "Blood of Benjamin Oliver Walker", "Me", "Myself", "I Am", "Self", "Benjamin Oliver Walker", "My Stomach", "My Intestines", "My Blood"],
 		"color": [200, 0, 0],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\Character\\D9341\\Damage1.ogg",
@@ -761,7 +754,7 @@
 		"death_timer": 10
 	},
 	{
-		"name": ["Heroine", "Morphine"],
+		"name": ["Heroin", "Morphine"],
 		"color": [255, 255, 255],
 		"alpha": 0.5,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -772,14 +765,14 @@
 		"death_timer": 30
 	},
 	{
-		"name": ["Anti-apendicitis", "Anti-Stomach Ache", "Anti Apendicitis", "Anti Stomach Ache"],
+		"name": ["Anti-appendicitis", "Anti-Stomach Ache", "Anti Appendicitis", "Anti Stomach Ache"],
 		"color": [84, 39, 39],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg"
 	},
 	{
-		"name": ["Honey", "Propolis", "Teriacki sauce"],
+		"name": ["Honey", "Propolis", "Teriyaki sauce"],
 		"color": [224, 198, 79],
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -834,7 +827,7 @@
 		"stomachache": true
 	},
 	{
-		"name": ["Iron", "Steel", "Metals", "Razor Blades", "Razorblades", "Liquid Iron", "Liquid Metal", "Melt Metal", "Melt Steel", "Scrap"],
+		"name": ["Iron", "Steel", "Metals", "Razor Blades", "Razorblades", "Liquid Iron", "Liquid Metal", "Molten Metal", "Molten Steel", "Scrap", "Molten Scrap"],
 		"color": [255, 100, 30],
 		"alpha": 1.0,
 		"glow": true,
@@ -870,7 +863,7 @@
 		"blur": 10.0
 	},
 	{
-		"name": ["Tears", "Tear", "Saliva", "Spit", "Sweat", "Perspiration", "Saliva Of Equus Ferus Caballus", "Salivia Of Horse"],
+		"name": ["Tears", "Tear", "Saliva", "Spit", "Sweat", "Perspiration", "Saliva Of Equus Ferus Caballus", "Saliva Of Horse", "Horse Saliva"],
 		"color": [255, 255, 255],
 		"alpha": 0.2,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -949,7 +942,7 @@
 		"alpha": 0.5,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-		"drink_message": "The drink tastes unlike anything you've drink before. You feel better than ever.",
+		"drink_message": "The drink tastes unlike anything you've drunk before. You feel better than ever.",
 		"blur": 10.0,
 		"damage": -10.0,
 		"bloodloss": -100.0
@@ -968,7 +961,7 @@
 		"death_timer": 7
 	},
 	{
-		"name": ["Lava", "Magma", "Stone", "Cobblestone"],
+		"name": ["Lava", "Magma", "Stone", "Cobblestone", "Molten Lava", "Molten Magma"],
 		"color": [255, 72, 0],
 		"alpha": 1.0,
 		"glow": true,
@@ -984,7 +977,7 @@
 		"alpha": 0.7,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ahh.ogg",
-		"drink_message": "It is a scrumptious, warm and creamy mushroom tea.",
+		"drink_message": "It tates like scrumptious, warm and creamy mushroom tea.",
 		"stamina_effect": 0.5,
 		"stamina_timer": 20.0,
 		"blur": 10.0
@@ -1034,7 +1027,7 @@
 		"death_timer": 0.0
 	},
 	{
-		"name": ["Mustard Sauce", "Russian Mustard", "American Mustard", "Sharp Mustard", "Very Sharp Mustard"],
+		"name": ["Mustard", "Russian Mustard", "American Mustard", "Sharp Mustard", "Very Sharp Mustard"],
 		"color": [250, 200, 15],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -1108,7 +1101,7 @@
 		"drink_message": "You dream of playing Galaga."
 	},
 	{
-		"name": ["Milk Soup", "Milk Cocktail", "Boiled Milk", "Cow Milk", "Goat Milk", "Goats Milk", "Cows Milk", "Milk Of Cow", "Milk Of Goat", "Milk", "Milk Puding", "Curds", "Cottage Cheese", "Kefir", "Ryazhenka", "Varenets", "Kumys"],
+		"name": ["Milk Soup", "Milk Cocktail", "Boiled Milk", "Cow Milk", "Goat Milk", "Goats Milk", "Cows Milk", "Milk Of Cow", "Milk Of Goat", "Milk", "Milk Pudding", "Curds", "Cottage Cheese", "Kefir", "Ryazhenka", "Varenets", "Kumys"],
 		"color": [255, 255, 255],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -1209,7 +1202,7 @@
 		"alpha": 0.6,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Ew1.ogg",
-		"drink_message": "\"Ugg... I don't feel so good...\"",
+		"drink_message": "\"Ugh, I don't feel so good...\"",
 		"stomachache": true,
 		"vomit": 20.0
 	},
@@ -1224,7 +1217,7 @@
 		"death_timer": 0.0
 	},
 	{
-		"name": ["Orange Juice", "Orange Cocktail", "Orange Milk Cocktail", "Orange Caramel", "Orange Yoghurt", "Orange Puding"],
+		"name": ["Orange Juice", "Orange Cocktail", "Orange Milk Cocktail", "Orange Caramel", "Orange Yogurt", "Orange Pudding"],
 		"color": [240, 175, 70],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -1238,7 +1231,7 @@
 		"glow": true,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Cough.ogg",
-		"drink_message": "\"Mind! WHY THE FUCK WOULD I DRINK THIS?\"",
+		"drink_message": "\"WHY THE FUCK WOULD I DRINK THIS?!\"",
 		"blink_effect": 2.0,
 		"death_timer": 0.0
 	},
@@ -1749,12 +1742,12 @@
 		"drink_message": "\"Please, please, please, gimme some more...\""
 	},
 	{
-		"name": ["Yoghurt", "Yogurt", "Berry Yoghurt", "Berry Yogurt"],
+		"name": ["Yogurt", "Berry Yogurt", "Berry Yogurt"],
 		"color": [255, 128, 128],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "\"It is a thick, mixed berry yoghurt with no solid bits.\"",
+		"drink_message": "\"It is a thick, mixed berry yogurt with no solid bits.\"",
 		"stamina_effect": 0.5,
 		"stamina_timer": 10.0
 	},
@@ -1765,7 +1758,7 @@
 		"glow": true,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Spit.ogg",
-		"drink_message": "You are a complete idiot."
+		"drink_message": "You are an idiot."
 	},
 	{
 		"name": ["S3CR3TDR1NK", "S3CR3T DR1NK"],
@@ -1985,7 +1978,7 @@
 		"mutation": true
 	},
 	{
-		"name": ["Vanilla Cake Batter", "Whipped Cake Batter", "Dough For Pies", "Batter For Pancakes", "Pastry", "Dough For Biscuits", "Shortcrust Pastry", "Choux Pastry", "Puff Pastry", "Dough For Dumplings", "Cake Batter", "Vanilla Puding", "Vanilla Cream", "Custard"],
+		"name": ["Vanilla Cake Batter", "Whipped Cake Batter", "Dough For Pies", "Batter For Pancakes", "Pastry", "Dough For Biscuits", "Shortcrust Pastry", "Choux Pastry", "Puff Pastry", "Dough For Dumplings", "Cake Batter", "Vanilla Pudding", "Vanilla Cream", "Custard"],
 		"color": [230, 215, 185],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -2243,7 +2236,7 @@
 		"blur": 115.0
 	},
 	{
-		"name": ["Protein Cocktail", "Proteins"],
+		"name": ["Protein Cocktail", "Protein Drink", "Proteins"],
 		"color": [69, 45, 6],
 		"alpha": 0.5,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -2325,7 +2318,7 @@
 		"death_timer": 25.0
 	},
 	{
-		"name": ["Laxative", "Exlax", "Milk Of Magnesia", "Purgative", "Cathartic", "Aperient", "Purge", "Loosener"],
+		"name": ["Laxative", "Ex-Lax", "Milk Of Magnesia", "Purgative", "Cathartic", "Aperient", "Purge", "Loosener"],
 		"color": [48, 98, 122],
 		"alpha": 0.9,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -2565,7 +2558,7 @@
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg"
 	},
 	{
-		"name": ["Chocolate Ice Cream", "Chocolate Yoghurt", "Chocolate Cocktail", "Chocolate Milk Cocktail", "Milk Chocolate"],
+		"name": ["Chocolate Ice Cream", "Chocolate Yogurt", "Chocolate Cocktail", "Chocolate Milk Cocktail", "Milk Chocolate"],
 		"color": [170, 75, 0],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -2573,7 +2566,7 @@
 		"drink_message": "\"It tastes like a sweet chocolate cream.\""
 	},
 	{
-		"name": ["SCP-096", "096", "Shy Guy", "Something Not Like SCP-096", "Something Not Like Shy Guy"],
+		"name": ["SCP-096", "096", "Shy Guy"],
 		"color": [199, 39, 59],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
@@ -2611,7 +2604,7 @@
 		"death_timer": 0.0
 	},
 	{
-		"name": ["Vanilla Yoghurt", "Vanilla Cocktail", "Vanilla Milk Cocktail", "Vanilla Caramel", "Caramel", "Pudding", "Cream"],
+		"name": ["Vanilla Yogurt", "Vanilla Cocktail", "Vanilla Milk Cocktail", "Vanilla Caramel", "Caramel", "Pudding", "Cream"],
 		"color": [230, 215, 185],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -2619,7 +2612,7 @@
 		"drink_message": "\"This is sweet.\""
 	},
 	{
-		"name": ["Strawberry Ice Cream", "Strawberry-banana Ice Cream", "Banana-strawberry Ice Cream", "Strawberry Yoghurt", "Strawberry Milk Cocktail", "Cherry Milk Cocktail", "Strawberry Pudding", "Cherry Pudding", "Сherry Yoghurt"],
+		"name": ["Strawberry Ice Cream", "Strawberry-banana Ice Cream", "Banana-strawberry Ice Cream", "Strawberry Yogurt", "Strawberry Milk Cocktail", "Cherry Milk Cocktail", "Strawberry Pudding", "Cherry Pudding", "Сherry Yogurt"],
 		"color": [255, 50, 50],
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -2789,7 +2782,7 @@
 		"death_timer": 120.0
 	},
 	{
-		"name": ["Apple Milk Cocktail", "Apple Pudding", "Apple Yoghurt"],
+		"name": ["Apple Milk Cocktail", "Apple Pudding", "Apple Yogurt"],
 		"color": [254, 219, 93],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -2829,12 +2822,12 @@
 		"drink_message": "\"Gin has never tasted this good.\""
 	},
 	{
-		"name": ["Alcohol Free Vodka", "Alcohol-free Vodka", "Non-alcoholig Vodka", "Non Alcoholig Vodka"],
+		"name": ["Alcohol Free Vodka", "Alcohol-free Vodka", "Non-alcoholic Vodka", "Non Alcoholic Vodka"],
 		"color": [255, 255, 255],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "\"What? It tastes like vodka, but I don't feel alcohol...\"",
+		"drink_message": "\"What? It tastes like vodka, but I don't taste any alcohol...\"",
 		"blur": 15.0
 	},
 	{
@@ -2924,7 +2917,7 @@
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Spit.ogg",
-		"drink_message": "\"The liquid tastes like human blood.\""
+		"drink_message": "\"The liquid tastes similar to human blood.\""
 	},
 	{
 		"name": ["SCP-1416-2", "1416-2"],
@@ -2960,7 +2953,7 @@
 		"death_timer": 0.0
 	},
 	{
-		"name": ["Rinser", "Rinse aid"],
+		"name": ["Rinser", "Rinse aid", "Mouthwash", "Mouth wash"],
 		"color": [217, 214, 186],
 		"alpha": 0.5,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -2998,7 +2991,7 @@
 		"blur": 10.0
 	},
 	{
-		"name": ["Dark Beer", "Dark Lager", "Alcohol-free Dark Beer", "Alcohol Free Dark Beer", "Non-alcoholig Dark Beer", "Non Alcoholig Dark Beer", "Dark Ale"],
+		"name": ["Dark Beer", "Dark Lager", "Alcohol-free Dark Beer", "Alcohol Free Dark Beer", "Non-alcoholic Dark Beer", "Non Alcoholic Dark Beer", "Dark Ale"],
 		"color": [120, 60, 0],
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -3023,7 +3016,7 @@
 		"blur": 10.0
 	},
 	{
-		"name": ["Cassis Yoghurt", "Cassis Milk Cocktail", "Cassis Ice Cream", "Cassis Puding", "Blueberry Yoghurt", "Blueberry Milk Cocktail", "Blueberry Ice Cream", "Blueberry Puding", "Blueberry Coktail"],
+		"name": ["Cassis Yogurt", "Cassis Milk Cocktail", "Cassis Ice Cream", "Cassis Pudding", "Blueberry Yogurt", "Blueberry Milk Cocktail", "Blueberry Ice Cream", "Blueberry Pudding", "Blueberry Cocktail"],
 		"color": [204, 122, 235 ],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -3059,7 +3052,7 @@
 		"alpha": 0.9,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "\"Hey! I drank this drink in Russia.\""
+		"drink_message": "\"Hey! I drank this once in Russia.\""
 	},
 	{
 		"name": ["Apple Braga", "Apple Brew Drink", "Apple Brewing Drink", "Pear Braga", "Grape Braga", "Grape-Apple Braga", "Apple-Grape Braga", "Pear Brew Drink", "Grape Brew Drink", "Grape-Apple Brew Drink", "Apple-Grape Brew Drink", "Pear Brewing Drink", "Grape Brewing Drink", "Grape-Apple Brewing Drink", "Apple-Grape Brewing Drink", "Pear-Grape Braga", "Pear-Grape Brew Drink", "Pear-Grape Brewing Drink", "Grape-Pear Brewing Drink", "Grape-Pear Brew Drink", "Grape-Pear Braga"],
@@ -3070,7 +3063,7 @@
 		"blur": 20.0
 	},
 	{
-		"name": ["Grape Yoghurt", "Grape Milk Cocktail", "Grape Pudding", "Grape Milk Cocktail"],
+		"name": ["Grape Yogurt", "Grape Milk Cocktail", "Grape Pudding", "Grape Milk Cocktail"],
 		"color": [174, 45, 223],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -3110,7 +3103,7 @@
 		"death_timer": 0.0
 	},
 	{
-		"name": ["Bronze", "Liquid Bronze", "Melt Bronse", "Copper", "Liquid Copper", "Brass", "Liquid Brass"],
+		"name": ["Bronze", "Liquid Bronze", "Molten Bronze", "Copper", "Liquid Copper", "Molten Copper", "Brass", "Liquid Brass", "Molten Brass"],
 		"color": [255, 200, 15],
 		"alpha": 1.0,
 		"glow": true,
@@ -3149,7 +3142,7 @@
 		"drink_sound": "SFX\\SCP\\294\\Cough.ogg"
 	},
 	{
-		"name": ["Glue", "Super Glue", "Gorrila Glue", "Wood Glue", "Fabric Glue"],
+		"name": ["Glue", "Super Glue", "Gorila Glue", "Wood Glue", "Fabric Glue"],
 		"color": [250, 200, 15],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -3167,7 +3160,7 @@
 		"blur": 2.0
 	},
 	{
-		"name": ["Silver", "Liquid Silver", "Melt Silver"],
+		"name": ["Silver", "Liquid Silver", "Molten Silver"],
 		"color": [255, 100, 30],
 		"alpha": 1.0,
 		"glow": true,
@@ -3371,7 +3364,7 @@
 		"drink_sound": "SFX\\SCP\\294\\Spit.ogg"
 	},
 	{
-		"name": ["Cheese", "Hot Cheese", "Melt Cheese", "Liquid Cheese"],
+		"name": ["Cheese", "Hot Cheese", "Melted Cheese", "Liquid Cheese"],
 		"color": [250, 200, 15],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -3407,7 +3400,7 @@
 		"drink_message": "\"Cold and sweet.\""
 	},
 	{
-		"name": ["Super Energy Drink", "Super ES", "Super Euroshopper", "Super Euroshopper Energy Drink", "Super Red Bull Energy Drink", "Super Jaguar Energy Drink", "Super Adrenalin Rush Energy Drink"],
+		"name": ["Super Energy Drink", "Super ES", "Super Euroshopper", "Super Euroshopper Energy Drink", "Super Red Bull Energy Drink", "Super Jaguar Energy Drink", "Super Adrenaline Rush Energy Drink"],
 		"color": [254, 194, 16],
 		"alpha": 0.5,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
@@ -3435,14 +3428,14 @@
 		"blink_timer": 180.0
 	},
 	{
-		"name": ["Mixed Vegetables", "Mix Of Vegetables", "Fitness Juice", "Fitness Drink", "Fitness Cocktail", "Vegetable Cocktail"],
+		"name": ["Mixed Vegetables", "Mix Of Vegetables", "Fitness Juice", "Fitness Drink", "Fitness Cocktail", "Vegetable Cocktail", "Vegetable Mix"],
 		"color": [204, 0, 0],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg"
 	},
 	{
-		"name": ["Old Life"],
+		"name": ["Old Life", "Old Age", "Aging"],
 		"color": [58, 29, 20],
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
@@ -3541,7 +3534,7 @@
 		"death_timer": 0.0
 	},
 	{
-		"name": ["Fruit Juice", "Fruits", "Mix Of Fruits", "Mixed Fruits", "Multifruit Juice", "Apricot Juice", "Peach Juice", "Apple-peach Juice", "Peach-apple Juice", "Apricot-apple Juice", "Apple-apricot Juice", "Apricot Cocktail", "Peach Cocktail", "Peach Milk Cocktail", "Apricot Milk Cocktail", "Apricot Caramel", "Peach Caramel", "Fruit Salad", "Apricot Jam", "Peach Jam", "Fruit Cocktail", "Fruit Milk Cocktail"],
+		"name": ["Fruit Juice", "Fruits", "Mix Of Fruits", "Mixed Fruits", "Multifruit Juice", "Apricot Juice", "Peach Juice", "Apple-peach Juice", "Peach-apple Juice", "Apricot-apple Juice", "Apple-apricot Juice", "Apricot Cocktail", "Peach Cocktail", "Peach Milk Cocktail", "Apricot Milk Cocktail", "Apricot Caramel", "Peach Caramel", "Fruit Salad", "Apricot Jam", "Peach Jam", "Fruit Cocktail", "Fruit Milk Cocktail", "Fruit Mix"],
 		"color": [240, 175, 70],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense1.ogg",
@@ -3568,7 +3561,7 @@
 		"drink_message": "\"The drink is very good.\""
 	},
 	{
-		"name": ["Oatmeal", "Porridge", "Qruel", "Healthy"],
+		"name": ["Oatmeal", "Porridge", "Gruel", "Healthy"],
 		"color": [255, 255, 255],
 		"alpha": 1.0,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
