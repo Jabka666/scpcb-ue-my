@@ -4488,7 +4488,7 @@ Function UpdateScreens%()
 							EndIf
 						EndIf
 					EndIf
-					If InteractObject(s\OBJ, 1.0, 2) And s\ScreenEventID
+					If InteractObject(s\OBJ, 1.0, 2)
 						SelectedScreen = s
 						s\Img = ResizeImageEx(LoadImage_Strict(s\ImgPath), MenuScale, MenuScale)
 						PlaySound_Strict(ButtonSFX[0])
