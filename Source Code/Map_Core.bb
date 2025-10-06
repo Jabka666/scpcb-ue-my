@@ -684,9 +684,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					lColor = ReadString(f)
 					Intensity = ReadFloat(f)
-					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
-					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
-					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					tl\R = Int(Piece(lColor, 1)) * Intensity
+					tl\G = Int(Piece(lColor, 2)) * Intensity
+					tl\B = Int(Piece(lColor, 3)) * Intensity
 					
 					tl\HasSprite = ReadByte(f)
 					tl\SpriteScale = ReadFloat(f)
@@ -707,9 +707,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					lColor = ReadString(f)
 					Intensity = ReadFloat(f)
-					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
-					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
-					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					tl\R = Int(Piece(lColor, 1)) * Intensity
+					tl\G = Int(Piece(lColor, 2)) * Intensity
+					tl\B = Int(Piece(lColor, 3)) * Intensity
 					
 					tl\HasSprite = ReadByte(f)
 					tl\SpriteScale = ReadFloat(f)
@@ -4501,13 +4501,13 @@ Function UpdateScreens%()
 					If (MilliSec Mod 1500) < 800
 						If s\CurrScreenID <> 1
 							EntityTexture(s\OBJ, s\Texture, 0)
-							UpdateEntityMaterial(s\OBJ)
+							UpdateEntityMaterial(s\OBJ, -1, 0)
 							s\CurrScreenID = 1
 						EndIf
 					Else
 						If s\CurrScreenID <> 2
 							EntityTexture(s\OBJ, s\Texture, 1)
-							UpdateEntityMaterial(s\OBJ)
+							UpdateEntityMaterial(s\OBJ, -1, 1)
 							s\CurrScreenID = 2
 						EndIf
 					EndIf
@@ -4519,37 +4519,37 @@ Function UpdateScreens%()
 							If e\EventState = 0.0
 								If s\CurrScreenID <> 1
 									EntityTexture(s\OBJ, s\Texture, 0)
-									UpdateEntityMaterial(s\OBJ)
+									UpdateEntityMaterial(s\OBJ, -1, 0)
 									s\CurrScreenID = 1
 								EndIf
 							ElseIf e\EventState > 70.0 * 60.0
 								If s\CurrScreenID <> 2
 									EntityTexture(s\OBJ, s\Texture, 1)
-									UpdateEntityMaterial(s\OBJ)
+									UpdateEntityMaterial(s\OBJ, -1, 1)
 									s\CurrScreenID = 2
 								EndIf
 							ElseIf e\EventState > 70.0 * 30.0
 								If s\CurrScreenID <> 3
 									EntityTexture(s\OBJ, s\Texture, 2)
-									UpdateEntityMaterial(s\OBJ)
+									UpdateEntityMaterial(s\OBJ, -1, 2)
 									s\CurrScreenID = 3
 								EndIf
 							ElseIf e\EventState > 70.0 * 10.0
 								If s\CurrScreenID <> 4
 									EntityTexture(s\OBJ, s\Texture, 3)
-									UpdateEntityMaterial(s\OBJ)
+									UpdateEntityMaterial(s\OBJ, -1, 3)
 									s\CurrScreenID = 4
 								EndIf
 							ElseIf e\EventState > 70.0
 								If s\CurrScreenID <> 5
 									EntityTexture(s\OBJ, s\Texture, 4)
-									UpdateEntityMaterial(s\OBJ)
+									UpdateEntityMaterial(s\OBJ, -1, 4)
 									s\CurrScreenID = 5
 								EndIf
 							ElseIf e\EventState = 66.0
 								If s\CurrScreenID <> 6
 									EntityTexture(s\OBJ, s\Texture, 5)
-									UpdateEntityMaterial(s\OBJ)
+									UpdateEntityMaterial(s\OBJ, -1, 5)
 									s\CurrScreenID = 6
 								EndIf
 							EndIf

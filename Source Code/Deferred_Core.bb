@@ -241,7 +241,7 @@ Function SetDeferredEntity%(Entity%, Shadows% = False, State% = -1)
 	SetShadowsCasting(Entity, Shadows)
 End Function
 
-Function SetDeferredBrush%(Brush%, State% = -1)
+Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 	If State = -1
 		State = DEFERRED_DIFF
 		
@@ -261,9 +261,9 @@ Function SetDeferredBrush%(Brush%, State% = -1)
 					BrushTexture(Brush, MissingTexture, 0, 1)
 					BrushTexture(Brush, MissingTexture, 0, 2)
 					BrushTexture(Brush, MissingTexture, 0, 3)
-					If mat\Normal <> 0 Then BrushTexture(Brush, mat\Normal, 0, 1)
-					If mat\Roughness <> 0 Then BrushTexture(Brush, mat\Roughness, 0, 2)
-					If mat\Emissive <> 0 Then BrushTexture(Brush, mat\Emissive, 0, 3)
+					If mat\Normal <> 0 Then BrushTexture(Brush, mat\Normal, Frame, 1)
+					If mat\Roughness <> 0 Then BrushTexture(Brush, mat\Roughness, Frame, 2)
+					If mat\Emissive <> 0 Then BrushTexture(Brush, mat\Emissive, Frame, 3)
 				EndIf
 			EndIf
 			FreeTexture(t1) : t1 = 0
@@ -273,10 +273,10 @@ Function SetDeferredBrush%(Brush%, State% = -1)
 	BrushEffect(Brush, DeferredInputEffect[State])
 End Function
 
-Function UpdateEntityMaterial%(Ent%, State% = -1)
+Function UpdateEntityMaterial%(Ent%, State% = -1, Frame% = 0)
 	Local Brush% = GetEntityBrush(Ent)
 	
-	SetDeferredBrush(Brush, State)
+	SetDeferredBrush(Brush, State, Frame)
 	PaintEntity(Ent, Brush)
 	FreeBrush(Brush) : Brush = 0
 End Function

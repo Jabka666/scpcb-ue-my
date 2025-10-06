@@ -1230,16 +1230,44 @@ Function LoadMaterials%(File$)
 			Loc = Mid(Loc, 2, Len(Loc) - 2)
 			mat.Materials = New Materials
 			mat\Name = Lower(Loc)
+			
+			Local IsAnimated$ = IniGetString(File, Loc, "animated")
+			
+			If IsAnimated <> ""
+				Local TexWidth% = Int(Piece(IsAnimated, 1, "|"))
+				Local TexHeight% = Int(Piece(IsAnimated, 2, "|"))
+				Local FirstFrame% = Int(Piece(IsAnimated, 3, "|"))
+				Local Count% = Int(Piece(IsAnimated, 4, "|"))
+			EndIf
+			
 			If opt\BumpEnabled
 				StrTemp = IniGetString(File, Loc, "normal")
-				If StrTemp <> "" Then mat\Normal = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
+				If StrTemp <> ""
+					If IsAnimated <> ""
+						mat\Normal = LoadAnimTexture_Strict(StrTemp, 1, TexWidth, TexHeight, FirstFrame, Count, DeleteAllTextures)
+					Else
+						mat\Normal = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
+					EndIf
+				EndIf
 			EndIf
 			
 			StrTemp = IniGetString(File, Loc, "roughness")
-			If StrTemp <> "" Then mat\Roughness = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
+			If StrTemp <> ""
+				If IsAnimated <> ""
+					mat\Roughness = LoadAnimTexture_Strict(StrTemp, 1, TexWidth, TexHeight, FirstFrame, Count, DeleteAllTextures)
+				Else
+					mat\Roughness = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
+				EndIf
+			EndIf
 			
 			StrTemp = IniGetString(File, Loc, "emissive")
-			If StrTemp <> "" Then mat\Emissive = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
+			If StrTemp <> ""
+				If IsAnimated <> ""
+					mat\Emissive = LoadAnimTexture_Strict(StrTemp, 1, TexWidth, TexHeight, FirstFrame, Count, DeleteAllTextures)
+				Else
+					mat\Emissive = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
+				EndIf
+			EndIf
 			
 			mat\StepSound = IniGetInt(File, Loc, "stepsound")
 			mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")

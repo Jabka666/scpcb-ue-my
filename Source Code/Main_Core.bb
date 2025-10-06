@@ -2231,9 +2231,9 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 		Case "tele"
 			;[Block]
 			Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-			StrTemp = Piece(Args, 1, " ")
-			StrTemp2 = Piece(Args, 2, " ")
-			StrTemp3 = Piece(Args, 3, " ")
+			StrTemp = Piece(Args, 1)
+			StrTemp2 = Piece(Args, 2)
+			StrTemp3 = Piece(Args, 3)
 			PositionEntity(me\Collider, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
 			PositionEntity(Camera, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
 			ResetEntity(me\Collider)
@@ -2311,10 +2311,10 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 		Case "seteventstate"
 			;[Block]
 			Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-			StrTemp = Piece(Args, 1, " ")
-			StrTemp2 = Piece(Args, 2, " ")
-			StrTemp3 = Piece(Args, 3, " ")
-			StrTemp4 = Piece(Args, 4, " ")
+			StrTemp = Piece(Args, 1)
+			StrTemp2 = Piece(Args, 2)
+			StrTemp3 = Piece(Args, 3)
+			StrTemp4 = Piece(Args, 4)
 			
 			Local PL_Room_Found% = False
 			
