@@ -656,7 +656,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			e\room\NPC[15] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			RotateEntity(e\room\NPC[15]\Collider, 0.0, e\room\Angle, 0.0)
 			e\room\NPC[15]\State = 3.0
-			Tex = LoadTexture_Strict("GFX\NPCs\security(2).png")
+			Tex = LoadTexture_Strict("GFX\NPCs\security(3).png")
 			EntityTexture(e\room\NPC[15]\OBJ, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			HideEntity(e\room\NPC[15]\OBJ)
@@ -2302,10 +2302,11 @@ End Function
 Function UpdateEvent_Room2_GW_2%(e.Events)
 	If e\room\Dist < 6.0
 		If e\room\NPC[0] = Null
-			TFormPoint(-156.0, 71.0, 121.0, e\room\OBJ, 0)
-			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-			e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-			SetNPCFrame(e\room\NPC[0], 288.0)
+			TFormPoint(-156.0, 51.2, 121.0, e\room\OBJ, 0)
+			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
+			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_SECURITY_2_TEXTURE)
+			SetNPCFrame(e\room\NPC[0], 677.0)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 225.0, 0.0, True)
 		EndIf
 	EndIf
