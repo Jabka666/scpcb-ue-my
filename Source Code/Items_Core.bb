@@ -496,25 +496,23 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			;[Block]
 			Local Light% = CreateLight(2, i\Collider)
 			
-			LightRange(Light, 0.17)
+			LightRange(Light, 0.15)
 			LightColor(Light, 255.0, 255.0, 140.0)
-			MoveEntity(Light, 0, 0.1, 0)
+			MoveEntity(Light, 0.0, 0.1, 0.0)
 			
-			i\OBJ2 = CreateSprite()
-			PositionEntity(i\OBJ2, x, y, z)
-			ScaleSprite(i\OBJ2, 0.04, 0.04)
-			
-			Local Tex% = LoadTexture_Strict("GFX\Particles\scp_2022_light.png")
-			
-			EntityTexture(i\OBJ2, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
-			EntityFX(i\OBJ2, 1)
-			EntityBlend(i\OBJ2, 3)
-			EntityColor(i\OBJ2, 255.0, 255.0, 140.0)
-			RotateEntity(i\OBJ2, 0.0, 0.0, Rnd(360.0))
-			EntityAlpha(i\OBJ2, 0.6)
-			SpriteViewMode(i\OBJ2, 1)
-			EntityParent(i\OBJ2, i\Collider)
+			If i\ItemTemplate\ID = it_scp2022pill
+				i\OBJ2 = CreateSprite()
+				PositionEntity(i\OBJ2, x, y, z)
+				ScaleSprite(i\OBJ2, 0.03, 0.03)
+				EntityTexture(i\OBJ2, misc_I\AdvancedLightSprite)
+				EntityFX(i\OBJ2, 1 + 8)
+				EntityBlend(i\OBJ2, 3)
+				EntityColor(i\OBJ2, 200.0, 200.0, 70.0)
+				RotateEntity(i\OBJ2, 0.0, 0.0, Rnd(360.0))
+				EntityAlpha(i\OBJ2, 0.6)
+				SpriteViewMode(i\OBJ2, 1)
+				EntityParent(i\OBJ2, i\Collider)
+			EndIf
 			;[End Block]
 	End Select
 	SetDeferredEntity(i\OBJ)
@@ -717,9 +715,9 @@ Function UpdateItems%()
 	If (Not InvOpen) And OtherOpen = Null
 		If ClosestItem <> Null
 			Select ClosestItem\ItemTemplate\ID
-				Case it_scp2022pill, it_scp2022
+				Case it_scp2022pill
 					;[Block]
-					ed = Rnd(0.038, 0.042)
+					ed = Rnd(0.028, 0.032)
 					ScaleSprite(ClosestItem\OBJ2, ed, ed)
 					;[End Block]
 				Case it_scp1123
