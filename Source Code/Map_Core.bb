@@ -4198,7 +4198,6 @@ Function RenderSecurityCams%()
 	SetBuffer(BackBuffer())
 End Function
 
-
 Function RemoveSecurityCam%(sc.SecurityCams)
 	If sc\Pvt <> 0 Then FreeEntity(sc\Pvt) : sc\Pvt = 0
 	FreeEntity(sc\CameraOBJ) : sc\CameraOBJ = 0
