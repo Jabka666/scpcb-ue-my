@@ -2152,7 +2152,7 @@ Function UpdateEvent_Room2_Closets%(e.Events)
 			TFormPoint(-1180.0, -256.0, 896.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = 2.0
-			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_MAINTENANCE_TEXTURE)
+			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_LOGISTICS_TEXTURE)
 			
 			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Maintenance\EscapeFromClosets.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 			
@@ -7220,10 +7220,8 @@ Function UpdateEvent_Toilets_789_J%(e.Events)
 	Select e\EventState
 		Case 0.0
 			;[Block]
-			If e\room\RoomTemplate\RoomID = r_room2_6_ez
-				TFormPoint(502.0, 128.0, 83.0, e\room\OBJ, 0)
-				CreateItem("Document SCP-789-J", it_paper, TFormedX(), TFormedY(), TFormedZ())
-			EndIf
+			TFormPoint(502.0, 128.0, 83.0, e\room\OBJ, 0)
+			CreateItem("Document SCP-789-J", it_paper, TFormedX(), TFormedY(), TFormedZ())
 			
 			e\EventState = 1.0
 			;[End Block]
@@ -7261,9 +7259,11 @@ Function UpdateEvent_Room2_6_EZ_Guard%(e.Events)
 		Case 0.0
 			;[Block]
 			If e\room\Dist < 7.0 And e\room\Dist > 0.0
-				TFormPoint(1322.0, 71.0, 491.0, e\room\OBJ, 0)
+				TFormPoint(685.0, 71.0, 980.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-				
+				e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
+				SetNPCFrame(e\room\NPC[0], 287.0)
+				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 				e\EventState = 1.0
 			EndIf
 			;[End Block]
@@ -7277,14 +7277,8 @@ Function UpdateEvent_Room2_6_EZ_Guard%(e.Events)
 			;[End Block]
 		Case 2.0
 			;[Block]
-			e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-			SetNPCFrame(e\room\NPC[0], 287.0)
-			TFormPoint(1322.0, 71.0, 491.0, e\room\OBJ, 0)
-			PositionEntity(e\room\NPC[0]\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
-			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
-			
-			TFormPoint(1328.0, 150.0, 491.0, e\room\OBJ, 0)
-			de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
+			TFormPoint(685.0, 150.0, 988.0, e\room\OBJ, 0)
+			de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, 0.0, 0.3)
 			EntityParent(de\OBJ, e\room\OBJ)
 			
 			e\EventState = 3.0
