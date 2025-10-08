@@ -269,6 +269,7 @@ Type OptimizationTimer
 	Field LightsTimer#
 	Field ItemsTimer#
 	Field DoorsTimer#
+	Field ScreensTimer#
 	Field DecalsTimer#
 	Field CoolerTimer#
 End Type
