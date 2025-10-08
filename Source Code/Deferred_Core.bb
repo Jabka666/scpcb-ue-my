@@ -63,6 +63,8 @@ Global PresentEffect%
 Global SSAOEffect%
 Global NoiseTexture%
 
+Global FXAAEffect%
+
 Function InitDeferred%()
 	Local i%
 	
@@ -79,7 +81,8 @@ Function InitDeferred%()
 	BloomEffect = LoadEffect("Source Code\Shaders\Bloom.fx")
 	ColorCorrectionEffect = LoadEffect("Source Code\Shaders\ColorCorrection.fx")
 	PresentEffect = LoadEffect("Source Code\Shaders\Present.fx")
-	SSAOEffect = LoadEffectEx("Source Code\Shaders\SSAO.fx", "REVERSEDZ")
+	SSAOEffect = LoadEffect("Source Code\Shaders\SSAO.fx")
+	FXAAEffect = LoadEffect("Source Code\Shaders\FXAA.fx")
 	
 	DEFERRED_INPUTS = 0
 	For i = 0 To MAX_DEFERRED_VARIATIONS - 1
@@ -294,10 +297,11 @@ Function ProcessDeferred%(Cam%, Tween#)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
 		SetBuffer(TextureBuffer(MRTDepth), 3)
 		RenderWorld(Tween)
-		ProcessSSAO()
+		ProcessSSAO(Cam, 1.5, 0.2)
 		EffectMatrix(DeferredShade, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 		ProcessAllLights(Cam, Tween)
 		
+		ProcessFXAA()
 		ProcessBloom()
 		ProcessColorCorrection()
 		PresentGBuffer(MRTColor, BackBuffer())
@@ -579,32 +583,43 @@ Function ProcessBloom%(Threshold# = 0.4)
 End Function
 
 Function ProcessColorCorrection%()
-	If KeyDown(33)
-		EntityEffect(PostEffectQuad, ColorCorrectionEffect)
-		
-		ShowEntity(PostEffectQuad)
-		EffectTechnique(ColorCorrectionEffect, "Main")
-		SetBuffer(TextureBuffer(MRTColor))
-		RenderEntity(QuadCamera, PostEffectQuad)
-		HideEntity(PostEffectQuad)
-	EndIf
+	EntityEffect(PostEffectQuad, ColorCorrectionEffect)
+	ShowEntity(PostEffectQuad)
+	EffectTechnique(ColorCorrectionEffect, "Main")
+	SetBuffer(TextureBuffer(MRTColor))
+	RenderEntity(QuadCamera, PostEffectQuad)
+	HideEntity(PostEffectQuad)
 End Function
 
-Function ProcessSSAO%()
-	If KeyDown(35)
-		EntityBlend(PostEffectQuad, 2)
-		EntityEffect(PostEffectQuad, SSAOEffect)
-		EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
-		EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
-		EntityTexture(PostEffectQuad, NoiseTexture, 0, 3)
-		
-		ShowEntity(PostEffectQuad)
-		EffectTechnique(SSAOEffect, "Main")
-		SetBuffer(TextureBuffer(MRTColor))
-		RenderEntity(QuadCamera, PostEffectQuad)
-		HideEntity(PostEffectQuad)
-		EntityBlend(PostEffectQuad, 0)
-	EndIf
+Function ProcessSSAO%(Cam%, Strength#, Radius#)
+	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
+	EffectFloat(SSAOEffect, "SSAORadius", Radius)
+	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3))
+	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
+	
+	EntityBlend(PostEffectQuad, 2)
+	EntityEffect(PostEffectQuad, SSAOEffect)
+	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
+	EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
+	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
+	EntityTexture(PostEffectQuad, NoiseTexture, 0, 4)
+	
+	ShowEntity(PostEffectQuad)
+	EffectTechnique(SSAOEffect, "Main")
+	SetBuffer(TextureBuffer(MRTColor))
+	RenderEntity(QuadCamera, PostEffectQuad)
+	HideEntity(PostEffectQuad)
+	EntityBlend(PostEffectQuad, 0)
+End Function
+
+Function ProcessFXAA%()
+	EntityEffect(PostEffectQuad, FXAAEffect)
+	
+	ShowEntity(PostEffectQuad)
+	EffectTechnique(FXAAEffect, "Main")
+	SetBuffer(TextureBuffer(MRTColor))
+	RenderEntity(QuadCamera, PostEffectQuad)
+	HideEntity(PostEffectQuad)
 End Function
 
 Function PresentGBuffer%(Tex%, Dest% = 0)
