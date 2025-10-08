@@ -60,6 +60,9 @@ Global BloomTex%, BloomBlur%
 Global ColorCorrectionEffect%
 Global PresentEffect%
 
+Global SSAOEffect%
+Global NoiseTexture%
+
 Function InitDeferred%()
 	Local i%
 	
@@ -76,6 +79,7 @@ Function InitDeferred%()
 	BloomEffect = LoadEffect("Source Code\Shaders\Bloom.fx")
 	ColorCorrectionEffect = LoadEffect("Source Code\Shaders\ColorCorrection.fx")
 	PresentEffect = LoadEffect("Source Code\Shaders\Present.fx")
+	SSAOEffect = LoadEffectEx("Source Code\Shaders\SSAO.fx", "REVERSEDZ")
 	
 	DEFERRED_INPUTS = 0
 	For i = 0 To MAX_DEFERRED_VARIATIONS - 1
@@ -192,6 +196,8 @@ Function InitDeferred%()
 	EntityOrder(PostEffectQuad, 10000000)
 	EntityFX(PostEffectQuad, 8)
 	
+	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
+	
 	Delete Each DynamicLight
 End Function
 
@@ -288,10 +294,11 @@ Function ProcessDeferred%(Cam%, Tween#)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
 		SetBuffer(TextureBuffer(MRTDepth), 3)
 		RenderWorld(Tween)
+		ProcessSSAO()
 		EffectMatrix(DeferredShade, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 		ProcessAllLights(Cam, Tween)
 		
-		ProcessBloom(0.4)
+		ProcessBloom()
 		ProcessColorCorrection()
 		PresentGBuffer(MRTColor, BackBuffer())
 	Else
@@ -580,6 +587,23 @@ Function ProcessColorCorrection%()
 		SetBuffer(TextureBuffer(MRTColor))
 		RenderEntity(QuadCamera, PostEffectQuad)
 		HideEntity(PostEffectQuad)
+	EndIf
+End Function
+
+Function ProcessSSAO%()
+	If KeyDown(35)
+		EntityBlend(PostEffectQuad, 2)
+		EntityEffect(PostEffectQuad, SSAOEffect)
+		EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
+		EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
+		EntityTexture(PostEffectQuad, NoiseTexture, 0, 3)
+		
+		ShowEntity(PostEffectQuad)
+		EffectTechnique(SSAOEffect, "Main")
+		SetBuffer(TextureBuffer(MRTColor))
+		RenderEntity(QuadCamera, PostEffectQuad)
+		HideEntity(PostEffectQuad)
+		EntityBlend(PostEffectQuad, 0)
 	EndIf
 End Function
 
