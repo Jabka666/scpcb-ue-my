@@ -2152,7 +2152,7 @@ Function UpdateEvent_Room2_Closets%(e.Events)
 			TFormPoint(-1180.0, -256.0, 896.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = 2.0
-			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_MAINTENANCE_TEXTURE)
+			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_LOGISTICS_TEXTURE)
 			
 			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Maintenance\EscapeFromClosets.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 			
