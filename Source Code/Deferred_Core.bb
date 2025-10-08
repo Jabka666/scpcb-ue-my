@@ -297,7 +297,7 @@ Function ProcessDeferred%(Cam%, Tween#)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
 		SetBuffer(TextureBuffer(MRTDepth), 3)
 		RenderWorld(Tween)
-		ProcessSSAO(Cam, 1.5, 0.2)
+		ProcessSSAO(Cam, 1.5, 0.2, Tween)
 		EffectMatrix(DeferredShade, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 		ProcessAllLights(Cam, Tween)
 		
@@ -591,10 +591,10 @@ Function ProcessColorCorrection%()
 	HideEntity(PostEffectQuad)
 End Function
 
-Function ProcessSSAO%(Cam%, Strength#, Radius#)
+Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
-	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3))
+	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
 	
 	EntityBlend(PostEffectQuad, 2)
