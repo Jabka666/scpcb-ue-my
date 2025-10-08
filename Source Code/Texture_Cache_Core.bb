@@ -163,7 +163,7 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 	
 	Local Texture% = LoadTextureCheckingIfInCache(Name, TexFlags)
 	
-	If Texture <> 0 Then TextureBlend(Texture, 1 + (((TexFlags Shr 1) Mod 2) = 0))
+	If Texture <> 0 Then TextureBlend(Texture, 1 + 4 * (((TexFlags Shr 1) Mod 2) = 0))
 	Return(Texture)
 End Function
 
