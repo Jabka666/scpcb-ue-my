@@ -285,7 +285,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
 			LightRange(n\OBJ2, 2.0)
 			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
-			;LightShadows(n\OBJ2, True)
+			LightShadows(n\OBJ2, True)
 			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
 			ShouldSetOBJ2 = False
 			
