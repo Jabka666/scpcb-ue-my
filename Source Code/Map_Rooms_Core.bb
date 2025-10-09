@@ -1271,7 +1271,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 584.0 * RoomScale, r\z - 367.0 * RoomScale)
 			
-			r\RoomLights.Lights[0] = AddLight(r, r\x - 43.5 * RoomScale, r\y - 574.0 * RoomScale, r\z - 362.0 * RoomScale, DEFERRED_LIGHT_POINT, 0.5859375, 255, 50, 50, True, 0.1, False)
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 44.5 * RoomScale, r\y - 590.0 * RoomScale, r\z - 362.0 * RoomScale, DEFERRED_LIGHT_POINT, 0.5859375, 255, 50, 50, True, 0.1, False)
 			r\RoomLights[0]\Scripted = True
 			HideEntity(r\RoomLights[0]\OBJ)
 			
