@@ -4318,7 +4318,7 @@ Function FillRoom%(r.Rooms)
 			d\AutoClose = False
 			r\RoomDoors.Doors[1] = d
 			
-			de.Decals = CreateDecal(DECAL_PD_6, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1, 2)
+			de.Decals = CreateDecal(DECAL_PD_6, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8)
 			
 			Local Hallway% = LoadRMesh("GFX\Map\dimension_106_2.rmesh", Null) ; ~ The tunnels in the first room
 			
@@ -4336,7 +4336,7 @@ Function FillRoom%(r.Rooms)
 				PositionEntity(r\Objects[i - 1], r\x + CosValue, r\y, r\z + SinValue)
 				EntityParent(r\Objects[i - 1], r\OBJ)
 				
-				If i < 6 Then de.Decals = CreateDecal(i + 7, r\x + CosValue * 2.0, r\y + 0.02, r\z + SinValue * 2.0, 90.0, Angle - 90.0, 0.0, 0.5, 1.0, 1, 2)
+				If i < 6 Then de.Decals = CreateDecal(i + 7, r\x + CosValue * 2.0, r\y + 0.02, r\z + SinValue * 2.0, 90.0, Angle - 90.0, 0.0, 0.5)
 			Next
 			FreeEntity(Hallway) : Hallway = 0
 			
