@@ -5609,7 +5609,7 @@ Function UpdateUseItem%(item.Items)
 								CreateMsg(GetLocalString("msg", "aid.toobad_1"))
 								me\Injuries = Max(2.5, me\Injuries - Rnd(0.3, 0.6))
 							ElseIf me\Injuries > 1.0
-								me\Injuries = Max(0.5, me\Injuries - Rnd(0.4, 0.9))
+								me\Injuries = Max(0.5, me\Injuries - Rnd(0.5, 0.9))
 								If me\Injuries > 1.0
 									CreateMsg(GetLocalString("msg", "aid.toobad_2"))
 								Else
