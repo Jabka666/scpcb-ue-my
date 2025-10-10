@@ -134,7 +134,7 @@ Type Lights
 	Field Flickers% = False
 	Field lType%
 	Field Fade#
-	Field FOV#
+	Field FOV#, TanFOV#
 	Field SpriteScale#
 	Field CastShadows%
 	Field Scripted% = False
@@ -148,6 +148,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	l\room = room
 	
 	l\FOV = 90.0
+	l\TanFOV = 1.0
 	
 	l\OBJ = CreatePivot()
 	PositionEntity(l\OBJ, x, y, z, True)

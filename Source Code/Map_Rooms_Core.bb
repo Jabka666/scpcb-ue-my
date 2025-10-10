@@ -4475,6 +4475,7 @@ Function FillRoom%(r.Rooms)
 			If tl\lType = 3 Then
 				RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
 				l\FOV = tl\OuterConeAngle
+				l\TanFOV = Tan(l\FOV * 0.5)
 			EndIf
 		EndIf
 	Next

@@ -340,14 +340,14 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\lType, l\FOV, l\CastShadows, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\lType, l\FOV, l\TanFOV, l\CastShadows, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\lType, dl\FOV, dl\CastShadows, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\lType, dl\FOV, dl\TanFOV, dl\CastShadows, Tween)
 	Next
 	
-	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, False, Tween)
+	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, Tween)
 	
 	EndRender()
 	
@@ -365,10 +365,10 @@ Function ProcessAllLights%(Cam%, Tween#)
 	Next
 End Function
 
-Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, Shadows% = True, Tween# = 1.0)
+Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, TanFOV# = 1.0, Shadows% = True, Tween# = 1.0)
 	Local VolumeScale# = Range * 1.25
 	Local DistToLight# = 1.0
-	Local Volume%, TanValue#
+	Local Volume%
 	
 	EffectBool(DeferredShade, "Shadowed", False)
 	
@@ -382,7 +382,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
 			DistToLight = EntityDistance(Cam, Volume)
-			If Shadows Then RenderShadowMap(Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If Shadows Then RenderShadowMap(Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
 			EffectTechnique(DeferredShade, "PointLight")
 			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0))
@@ -390,8 +390,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
 			Volume = DeferredCone
-			TanValue = Tan(FOV * 0.5)
-			VolumeScale = TanValue * Range
+			VolumeScale = TanFOV * Range
 			
 			PositionEntity(Volume, x, y, z)
 			RotateEntity(Volume, Pitch, Yaw, 0.0)
@@ -406,11 +405,11 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			RotateEntity(DeferredCamera, Pitch, Yaw, 0.0)
 			CameraRange(DeferredCamera, 0.01, Range)
 			CameraProjMode(DeferredCamera, 1)
-			CameraZoom(DeferredCamera, 1.0 / TanValue)
+			CameraZoom(DeferredCamera, 1.0 / TanFOV)
 			CameraViewport(DeferredCamera, 0, 0, TextureWidth(Shadowmap), TextureHeight(Shadowmap))
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS, 0.5)
 			
-			If Shadows Then RenderShadowMap(Cam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If Shadows Then RenderShadowMap(Cam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
 			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
@@ -421,7 +420,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			;[Block]
 			Volume = DeferredQuad
 			
-			If Shadows Then RenderShadowMap(Cam, DeferredShadowMap[0], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If Shadows Then RenderShadowMap(Cam, DeferredShadowMap[0], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
 			Tween = 1.0
 			Cam = QuadCamera
@@ -441,7 +440,7 @@ End Function
 
 Global DEFERRED_LIGHT_POINT_CULLING_SCALE# = Tan(90.0 * 0.8)
 
-Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, Tween# = 1.0)
+Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, TanFOV# = 1.0, Tween# = 1.0)
 	Local i%
 	
 	SetBuffer(TextureBuffer(DeferredShadowMapDummy[LightType]))
@@ -651,7 +650,7 @@ Type DynamicLight
 	Field R%, G%, B%
 	Field Range#
 	Field Fade#
-	Field FOV#
+	Field FOV#, TanFOV#
 	Field CastShadows%
 End Type
 
@@ -674,6 +673,7 @@ Function CreateLight(lType%, Parent% = 0)
 	dl\B = 255
 	dl\Range = 10.0
 	dl\FOV = 90.0
+	dl\TanFOV = (lType <> 3) + ((lType = 3) * Tan(dl\FOV * 0.5))
 	EntityDestructor(dl\OBJ, @OnLightDestruct)
 	
 	Return(dl\OBJ)
