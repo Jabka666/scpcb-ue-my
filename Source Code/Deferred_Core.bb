@@ -296,10 +296,21 @@ Function ProcessDeferred%(Cam%, Tween#)
 		SetBuffer(TextureBuffer(MRTAlbedo), 1)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
 		SetBuffer(TextureBuffer(MRTDepth), 3)
-		RenderWorld(Tween)
-		ProcessSSAO(Cam, 1.5, 0.2, Tween)
+		; ~ Render opacity
+		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
+		ProcessSSAO(Cam, 1.5, 0.2, Tween) ; ~ Process SSAO for opacity
+		
 		EffectMatrix(DeferredShade, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 		ProcessAllLights(Cam, Tween)
+		
+		BeginRender(Tween, -1) ; ~ We can't use transparency rendering twice without begin render
+		CameraClsMode(Cam, 0, 0)
+		; ~ Render decals
+		RenderWorld(Tween, Cam, 32)
+		; ~ Render transparency
+		RenderWorld(Tween, Cam, -1 Xor 32, 2)
+		CameraClsMode(Cam, 1, 1)
+		EndRender()
 		
 		ProcessFXAA()
 		ProcessBloom()
@@ -336,7 +347,7 @@ Function ProcessAllLights%(Cam%, Tween#)
 		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\lType, dl\FOV, dl\CastShadows, Tween)
 	Next
 	
-	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 35.0, False, Tween)
+	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, False, Tween)
 	
 	EndRender()
 	

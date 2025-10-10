@@ -141,7 +141,7 @@ Type Lights
 	Field room.Rooms
 End Type
 
-Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True)
+Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True)
 	Local l.Lights
 	
 	l.Lights = New Lights
@@ -154,7 +154,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, Has
 	If room <> Null Then EntityParent(l\OBJ, room\OBJ)
 	HideEntity(l\OBJ)
 	
-	l\lType = Type_
+	l\lType =  LightType
 	
 	If HasSprite
 		l\Sprite = CreateSprite()
@@ -532,7 +532,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			Temp1i = ReadByte(f)
 			Temp2i = ReadByte(f)
 			Temp3i = ReadByte(f)
-			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0)
+			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0 - (0.5 * (IsAlpha = 1)))
 			
 			; ~ Normals
 			If RMeshVersion = 2
@@ -3766,6 +3766,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
 	HideEntity(de\OBJ)
 	SetDeferredEntity(de\OBJ, False, DEFERRED_DIFF)
+	MaskEntity(de\OBJ, 32)
 	
 	Return(de)
 End Function
