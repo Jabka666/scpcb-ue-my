@@ -869,7 +869,7 @@ Function RemoveSecurityCamInstances%()
 End Function
 
 Const MaxMonitorModelIDAmount% = 2
-Const MaxMonitorOverlayIDAmount% = 20
+Const MaxMonitorOverlayIDAmount% = 18
 
 Type MonitorInstance
 	Field MonitorModelID%[MaxMonitorModelIDAmount]
@@ -891,23 +891,21 @@ Const MONITOR_CHECKPOINT_MODEL% = 1
 Const MONITOR_DEFAULT_OVERLAY% = 0
 Const MONITOR_LOCKDOWN_1_OVERLAY% = 1
 Const MONITOR_LOCKDOWN_2_OVERLAY% = 2
-Const MONITOR_LOCKDOWN_3_OVERLAY% = 3
-Const MONITOR_LOCKDOWN_4_OVERLAY% = 4
-Const MONITOR_079_OVERLAYS_1% = 5
-Const MONITOR_079_OVERLAYS_2% = 6
-Const MONITOR_079_OVERLAYS_3% = 7
-Const MONITOR_895_OVERLAY_1% = 8
-Const MONITOR_895_OVERLAY_2% = 9
-Const MONITOR_895_OVERLAY_3% = 10
-Const MONITOR_895_OVERLAY_4% = 11
-Const MONITOR_895_OVERLAY_5% = 12
-Const MONITOR_895_OVERLAY_6% = 13
-Const MONITOR_895_OVERLAY_7% = 14
-Const MONITOR_895_OVERLAY_8% = 15
-Const MONITOR_895_OVERLAY_9% = 16
-Const MONITOR_895_OVERLAY_10% = 17
-Const MONITOR_895_OVERLAY_11% = 18
-Const MONITOR_096_OVERLAY% = 19
+Const MONITOR_079_OVERLAYS_1% = 3
+Const MONITOR_079_OVERLAYS_2% = 4
+Const MONITOR_079_OVERLAYS_3% = 5
+Const MONITOR_895_OVERLAY_1% = 6
+Const MONITOR_895_OVERLAY_2% = 7
+Const MONITOR_895_OVERLAY_3% = 8
+Const MONITOR_895_OVERLAY_4% = 9
+Const MONITOR_895_OVERLAY_5% = 10
+Const MONITOR_895_OVERLAY_6% = 11
+Const MONITOR_895_OVERLAY_7% = 12
+Const MONITOR_895_OVERLAY_8% = 13
+Const MONITOR_895_OVERLAY_9% = 14
+Const MONITOR_895_OVERLAY_10% = 15
+Const MONITOR_895_OVERLAY_11% = 16
+Const MONITOR_096_OVERLAY% = 17
 ;[End Block]
 
 Function LoadMonitors%()
@@ -916,10 +914,8 @@ Function LoadMonitors%()
 	mon_I.MonitorInstance = New MonitorInstance
 	
 	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\Overlays\monitor_overlay.png", 1, DeleteAllTextures, False)
-	For i = MONITOR_LOCKDOWN_1_OVERLAY To MONITOR_LOCKDOWN_3_OVERLAY
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Map\Textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures, False)
-	Next
-	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
+	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY] = LoadAnimTexture_Strict("GFX\Map\Screens\screen_checkpoint_lockdown.png", 1, 1024, 768, 0, 3, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
 	
 	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_1] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays_X.png", 1, 256, 256, 0, 12, DeleteAllTextures)
 	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_2] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays_ASCII.png", 1, 256, 256, 0, 6, DeleteAllTextures)

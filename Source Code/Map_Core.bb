@@ -4262,9 +4262,11 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 			If t1 <> 0
 				If Lower(StripPath(TextureName(t1))) <> "monitortexture.jpg"
 					If mon_I\MonitorTimer[1 - LCZ] < 50.0
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
+						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], 1)
+						SetDeferredBrush(b, -1, 1)
 					Else
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY + (2 * LCZ)])
+						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], (2 * LCZ))
+						SetDeferredBrush(b, -1, (2 * LCZ))
 					EndIf
 					PaintSurface(SF, b)
 					
@@ -4296,7 +4298,8 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 				t1 = GetBrushTexture(b, 0)
 				If t1 <> 0
 					If Lower(StripPath(TextureName(t1))) <> "monitortexture.jpg"
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY])
+						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
+						SetDeferredBrush(b)
 						PaintSurface(SF, b)
 						
 						FreeTexture(t1) : t1 = 0
@@ -4414,7 +4417,7 @@ Function UpdateScreens%()
 		If s\room = PlayerRoom Lor s\room\Dist < 6.0
 			If SecondaryLightOn =< 0.3
 				If s\CurrScreenID <> 0
-					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY])
+					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
 					UpdateEntityMaterial(s\OBJ)
 					s\CurrScreenID = 0
 				EndIf
