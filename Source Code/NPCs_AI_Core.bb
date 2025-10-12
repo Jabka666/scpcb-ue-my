@@ -3749,7 +3749,6 @@ Function UpdateNPCType939%(n.NPCs)
 					PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider)
 					LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
 					n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 				EndIf
 			Else
 				If n\Frame < 2072.0
