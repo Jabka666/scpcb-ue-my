@@ -3933,7 +3933,7 @@ Function UpdateNPCType939%(n.NPCs)
 				Select n\LastDist
 					Case 1.0
 						;[Block]
-						AnimateNPC(n, 911.0, 939.0, 0.4, False)
+						AnimateNPC(n, 911.0, 939.0, 0.42, False)
 						Temp = (n\Frame >= 923.0 And PrevFrame < 923.0)
 						If n\Frame > 938.9
 							SetNPCFrame(n, 852.0)
@@ -3943,7 +3943,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 2.0
 						;[Block]
-						AnimateNPC(n, 940.0, 969.0, 0.4, False)
+						AnimateNPC(n, 940.0, 969.0, 0.42, False)
 						Temp = (n\Frame >= 952.0 And PrevFrame < 952.0)
 						If n\Frame > 968.9
 							SetNPCFrame(n, 852.0)
@@ -3953,7 +3953,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 3.0
 						;[Block]
-						AnimateNPC(n, 970.0, 998.0, 0.35, False)
+						AnimateNPC(n, 970.0, 998.0, 0.38, False)
 						Temp = (n\Frame >= 978.0 And PrevFrame < 978.0)
 						If n\Frame > 997.9
 							SetNPCFrame(n, 852.0)
@@ -3963,7 +3963,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 4.0
 						;[Block]
-						AnimateNPC(n, 999.0, 1025.0, 0.35, False)
+						AnimateNPC(n, 999.0, 1025.0, 0.38, False)
 						Temp = (n\Frame >= 1009.0 And PrevFrame < 1009.0)
 						If n\Frame > 1024.9
 							SetNPCFrame(n, 852.0)
