@@ -2542,7 +2542,7 @@ End Function
 
 Function CancelAutoSave%()
 	CreateHintMsg(GetLocalString("save", "autosave.canceled"))
-	as\Timer = 70.0 * 70.0
+	as\Timer = 70.0 * 120.0
 End Function
 
 Function SaveAchievementsFile%()
