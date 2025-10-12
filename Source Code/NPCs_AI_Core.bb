@@ -3965,7 +3965,7 @@ Function UpdateNPCType939%(n.NPCs)
 					Case 4.0
 						;[Block]
 						AnimateNPC(n, 999.0, 1025.0, 0.35, False)
-						Temp = (n\Frame >= 1010.0 And PrevFrame < 1010.0)
+						Temp = (n\Frame >= 1009.0 And PrevFrame < 1009.0)
 						If n\Frame > 1024.9
 							SetNPCFrame(n, 852.0)
 							n\State = 3.0
@@ -3978,7 +3978,7 @@ Function UpdateNPCType939%(n.NPCs)
 					Case 1.0
 						;[Block]
 						AnimateNPC(n, 1666.0, 1710.0, 0.4, False)
-						Temp = (n\Frame >= 1677.0 And PrevFrame < 1677.0) Lor (n\Frame >= 1686.0 And PrevFrame < 1686.0) Lor (n\Frame >= 1699.0 And PrevFrame < 1699.0)
+						Temp = (n\Frame >= 1676.0 And PrevFrame < 1676.0) Lor (n\Frame >= 1686.0 And PrevFrame < 1686.0) Lor (n\Frame >= 1698.0 And PrevFrame < 1698.0)
 						If n\Frame > 1709.9
 							SetNPCFrame(n, 852.0)
 							n\State = 3.0
@@ -3988,7 +3988,7 @@ Function UpdateNPCType939%(n.NPCs)
 					Case 2.0
 						;[Block]
 						AnimateNPC(n, 1711.0, 1752.0, 0.4, False)
-						Temp = (n\Frame >= 1718.0 And PrevFrame < 1718.0) Lor (n\Frame >= 1727.0 And PrevFrame < 1727.0) Lor (n\Frame >= 1740.0 And PrevFrame < 1740.0)
+						Temp = (n\Frame >= 1717.0 And PrevFrame < 1717.0) Lor (n\Frame >= 1727.0 And PrevFrame < 1727.0) Lor (n\Frame >= 1739.0 And PrevFrame < 1739.0)
 						If n\Frame > 1751.9
 							SetNPCFrame(n, 852.0)
 							n\State = 3.0
@@ -3998,7 +3998,7 @@ Function UpdateNPCType939%(n.NPCs)
 				End Select
 			EndIf
 			If Temp
-				If EntityDistanceSquared(me\Collider, n\Collider) < 2.25 And EntityVisible(me\Collider, n\Collider)
+				If EntityDistanceSquared(me\Collider, n\Collider) < 2.25
 					PlaySound_Strict(snd_I\DamageSFX[11])
 					InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.5, 0.8))
 					me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
