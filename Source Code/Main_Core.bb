@@ -9445,13 +9445,15 @@ Function UpdateExplosion%()
 			If me\ExplosionTimer - fps\Factor[0] < 5.0
 				PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Nuke0.ogg"))
 				For e.Events = Each Events
-					If e\room = PlayerRoom
-						TFormPoint(4417.0, -32.0, -8116.0, e\room\OBJ, 0)
-						Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
-						
-						SetEmitter(Null, x, y, z, 33)
-						SetEmitter(Null, x, y, z, 34)
-						Exit
+					If e\EventID = e_gate_b
+						If e\room = PlayerRoom
+							TFormPoint(4417.0, -32.0, -8116.0, e\room\OBJ, 0)
+							Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
+							
+							SetEmitter(Null, x, y, z, 33)
+							SetEmitter(Null, x, y, z, 34)
+							Exit
+						EndIf
 					EndIf
 				Next
 				me\BigCameraShake = 10.0
@@ -10659,4 +10661,4 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS
