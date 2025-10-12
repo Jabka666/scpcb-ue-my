@@ -412,8 +412,9 @@ Function UpdateLanguageSelector%()
 	CountryFlags = CreateS2IMap()
 	
 	Local ServerURI$
+	Local UserLanguage$ = GetUserLanguage()
 	
-	If GetUserLanguage() = "zh-CN" Lor GetUserLanguage() = "ru-RU"
+	If UserLanguage = "zh-CN" Lor UserLanguage = "ru-RU"
 		ServerURI = "https://files.ziyuebot.cn/cbue/"
 	Else
 		ServerURI = "https://files.ziyuesinicization.site/cbue/"
