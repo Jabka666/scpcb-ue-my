@@ -651,8 +651,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					ReadString(f)
 					
-					ts\ScreenEventID = ReadInt(f)
-					
 					ts\Pitch = ReadFloat(f)
 					ts\Yaw = ReadFloat(f)
 					ts\Roll = ReadFloat(f)
@@ -4349,14 +4347,52 @@ End Type
 
 Type TempScreens
 	Field ImgPath$
-	Field ScreenEventID%
 	Field x#, y#, z#
 	Field Pitch#, Yaw#, Roll#
 	Field ScaleX#, ScaleY#, ScaleZ#
 	Field RoomTemplate.RoomTemplates
 End Type
 
-Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, ImgPath$, ScreenEventID%)
+; ~ Chat Screen ID Constants
+;[Block]
+Const cs_default% = 0
+Const cs_attention% = 1
+Const cs_009_warning% = 2
+Const cs_error% = 3
+Const cs_logo% = 4
+Const cs_UE% = 5
+;[End Block]
+
+Function FindChatScreenEventID%(ChatScreenName$)
+	Select ChatScreenName
+		Case "chatscreen_attention.png"
+			;[Block]
+			Return(cs_attention)
+			;[End Block]
+		Case "chatscreen_009_warning.png"
+			;[Block]
+			Return(cs_009_warning)
+			;[End Block]
+		Case "chatscreen_error.png"
+			;[Block]
+			Return(cs_error)
+			;[End Block]
+		Case "chatscreen_logo.png"
+			;[Block]
+			Return(cs_logo)
+			;[End Block]
+		Case "chatscreen_UE.png"
+			;[Block]
+			Return(cs_UE)
+			;[End Block]
+		Default
+			;[Block]
+			Return(cs_default)
+			;[End Block]
+	End Select
+End Function
+
+Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, ImgPath$)
 	Local s.Screens, s2.Screens
 	
 	s.Screens = New Screens
@@ -4367,7 +4403,7 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	EntityPickMode(s\OBJ, 2)
 	If room <> Null Then EntityParent(s\OBJ, room\OBJ)
 	
-	s\ScreenEventID = ScreenEventID
+	s\ScreenEventID = FindChatScreenEventID(ImgPath)
 	s\CurrScreenID = 1
 	s\ImgPath = "GFX\Map\Screens\" + ImgPath
 	s\room = room
@@ -4376,22 +4412,26 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 		If s2 <> s And s2\ImgPath = ImgPath Then s\Texture = s2\Texture
 	Next
 	If s\Texture = 0
-		Select ScreenEventID
-			Case 0
-				;[Block]
-				s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
-				;[End Block]
-			Case 1, 3
+		Select s\ScreenEventID
+			Case cs_attention, cs_error
 				;[Block]
 				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 2, DeleteAllTextures)
 				;[End Block]
-			Case 2
+			Case cs_009_warning
 				;[Block]
 				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 6, DeleteAllTextures)
 				;[End Block]
-			Case 4
+			Case cs_logo
 				;[Block]
 				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 5, DeleteAllTextures)
+				;[End Block]
+			Case cs_UE
+				;[Block]
+				s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
+				;[End Block]
+			Default
+				;[Block]
+				s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
 				;[End Block]
 		End Select
 	EndIf
@@ -4408,7 +4448,7 @@ Function UpdateScreens%()
 	opttimer\ScreensTimer = opttimer\ScreensTimer - fps\Factor[0]
 	If opttimer\ScreensTimer <= 0.0
 		For s.Screens = Each Screens
-			s\Nearby = (EntityDistanceSquared(s\OBJ, me\Collider) <= fog\FarDist * LightVolume)
+			s\Nearby = (EntityDistanceSquared(s\OBJ, me\Collider) <= PowTwo(fog\FarDist * LightVolume))
 		Next
 		opttimer\ScreensTimer = 70.0
 	EndIf
@@ -4426,7 +4466,7 @@ Function UpdateScreens%()
 			
 			If s\Nearby
 				Select s\ScreenEventID
-					Case 0 ; ~ Pre-loaded interactable save screen
+					Case cs_default
 						;[Block]
 						If s\State > 0.0
 							s\State = s\State - fps\Factor[0]
@@ -4514,7 +4554,7 @@ Function UpdateScreens%()
 							Exit
 						EndIf
 						;[End Block]
-					Case 1, 3
+					Case cs_attention, cs_error
 						;[Block]
 						If (MilliSec Mod 1500) < 800
 							If s\CurrScreenID <> 1
@@ -4530,7 +4570,7 @@ Function UpdateScreens%()
 							EndIf
 						EndIf
 						;[End Block]
-					Case 2
+					Case cs_009_warning
 						;[Block]
 						For e.Events = Each Events
 							If e\room = s\room
@@ -4575,7 +4615,7 @@ Function UpdateScreens%()
 							EndIf
 						Next
 						;[End Block]
-					Case 4
+					Case cs_logo
 						;[Block]
 						s\State = s\State + fps\Factor[0]
 						If s\State > 70.0 * 2.0
