@@ -596,19 +596,19 @@ Function UpdateGame%()
 			igm\QuitMenu = 0
 		EndIf
 		
-		Local Allowed% = True
-		
-		If skull_event <> Null
-			Select skull_event\EventState
-				Case 2.0, 4.0, 5.0, 6.0
-					;[Block]
-					Allowed = False
-					;[End Block]
-			End Select
-		EndIf
-		
 		If (Not MenuOpen)
 			If KeyHit(key\INVENTORY)
+				Local Allowed% = True
+				
+				If skull_event <> Null
+					Select skull_event\EventState
+						Case 2.0, 4.0, 5.0, 6.0
+							;[Block]
+							Allowed = False
+							;[End Block]
+					End Select
+				EndIf
+				
 				If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable = 2 And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 And Allowed
 					If InvOpen
 						StopMouseMovement()
@@ -10661,4 +10661,4 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS
