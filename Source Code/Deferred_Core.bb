@@ -695,10 +695,10 @@ Function LightColor%(Entity%, R%, G%, B%)
 	EndIf
 End Function
 
-Function LightFOV%(Entity%, Range#)
+Function LightFOV%(Entity%, FOV#)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
-	If dl <> Null Then dl\FOV = Range
+	If dl <> Null Then dl\FOV = FOV
 End Function
 
 Function LightShadows(Entity%, CastShadows%)

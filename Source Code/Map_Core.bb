@@ -258,7 +258,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	If room <> Null Then EntityParent(l\OBJ, room\OBJ)
 	HideEntity(l\OBJ)
 	
-	l\lType =  LightType
+	l\lType = LightType
 	
 	If HasSprite
 		l\Sprite = CreateSprite()

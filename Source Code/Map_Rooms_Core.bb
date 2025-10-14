@@ -2488,11 +2488,11 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 2640.0 * RoomScale, r\y + MTGridY, r\z + 400.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 2640.0 * RoomScale, r\y, r\z + 400.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 4336.0 * RoomScale, r\y + MTGridY, r\z - 2512.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 4336.0 * RoomScale, r\y, r\z - 2512.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			; ~ Elevators pivots
