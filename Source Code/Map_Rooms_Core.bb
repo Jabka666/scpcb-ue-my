@@ -3051,6 +3051,8 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, -45.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
+			CreateAlarmLamp(r, r\x, r\y + 660.0 * RoomScale, r\z - 161.0 * RoomScale, 800.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
+			
 			CreateCustomCenter(r, r\x, r\z - 832.0 * RoomScale)
 			;[End Block]
 		Case r_cont3_966
