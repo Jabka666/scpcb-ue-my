@@ -1171,6 +1171,7 @@ Type MiscInstance
 	Field LightSpriteID[MaxLightSpriteIDAmount]
 	Field AdvancedLightSprite%
 	Field SaveScreen%
+	Field LightConeModel%
 End Type
 
 Global misc_I.MiscInstance
@@ -1200,6 +1201,9 @@ Function LoadMisc%()
 		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\Particles\light(" + i + ").png", 1, DeleteAllTextures, False)
 	Next
 	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\Particles\advanced_light.png", 1, DeleteAllTextures, False)
+	
+	misc_I\LightConeModel = LoadMesh_Strict("GFX\Map\Props\lightcone.b3d")
+	HideEntity(misc_I\LightConeModel)
 End Function
 
 Function RemoveMiscInstances%()
@@ -3580,7 +3584,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp
 	
 	Local i%
 	
@@ -3788,6 +3792,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For l.Lights = Each Lights
 		RemoveLight(l)
+	Next
+	For al.AlarmLamp = Each AlarmLamp
+		RemoveAlarmLamp(al)
 	Next
 	For se.SoundEmitters = Each SoundEmitters
 		RemoveSoundEmitter(se)

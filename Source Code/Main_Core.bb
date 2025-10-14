@@ -407,6 +407,7 @@ Function UpdateGame%()
 			Else
 				UpdateLightVolume()
 				UpdateLights(Camera)
+				UpdateAlarmLights()
 				UpdateDoors()
 				UpdateSecurityCams()
 				UpdateScreens()

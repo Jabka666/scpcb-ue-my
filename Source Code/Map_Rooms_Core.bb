@@ -89,23 +89,8 @@ Function FillRoom%(r.Rooms)
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[0] = d
-			;[End Block]
-		Case r_room1_dead_end_ez
-			;[Block]
-			; ~ Evacuation shelter doors
-			d.Doors = CreateDoor(r, r\x, r\y, r\z + 1202.0 * RoomScale, r\y, False, BIG_DOOR)
-			d\MTFClose = False : d\DisableWaypoint = True
-			For i = 0 To 1
-				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-			Next
 			
-			; ~ Upper view door
-			d.Doors = CreateDoor(r, r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 924.0 * RoomScale, 180.0, False)
-			d\MTFClose = False : d\DisableWaypoint = True
-			For i = 0 To 1
-				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-			Next
-			r\RoomDoors.Doors[0] = d
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 630.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8)
 			;[End Block]
 		Case r_cont1_005
 			;[Block]
@@ -2097,6 +2082,10 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z + 500.0 * RoomScale)
 			;[End Block]
+		Case r_room1_dead_end_hcz
+			;[Block]
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 126.0 * RoomScale, 600.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.6)
+			;[End Block]
 		Case r_cont1_035
 			;[Block]
 			; ~ The doors to the containment chamber of SCP-035
@@ -3430,6 +3419,25 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 639.0 * RoomScale)
+			;[End Block]
+		Case r_room1_dead_end_ez
+			;[Block]
+			; ~ Evacuation shelter doors
+			d.Doors = CreateDoor(r, r\x, r\y, r\z + 1202.0 * RoomScale, r\y, False, BIG_DOOR)
+			d\MTFClose = False : d\DisableWaypoint = True
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
+			
+			; ~ Upper view door
+			d.Doors = CreateDoor(r, r\x - 944.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 924.0 * RoomScale, 180.0, False)
+			d\MTFClose = False : d\DisableWaypoint = True
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
+			r\RoomDoors.Doors[0] = d
+			
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1046.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8)
 			;[End Block]
 		Case r_room1_lifts
 			;[Block]
