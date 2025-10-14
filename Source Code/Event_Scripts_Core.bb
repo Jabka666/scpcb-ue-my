@@ -2301,6 +2301,13 @@ End Function
 
 Function UpdateEvent_Room2_GW_2%(e.Events)
 	If e\room\Dist < 6.0
+		If Rand(500) = 1
+			If (Not ChannelPlaying(e\SoundCHN))
+				LoadEventSound(e, "SFX\Room\SparkLong.ogg", 0)
+				e\SoundCHN = PlaySoundEx(e\Sound, Camera, e\room\Objects[1], 5.0)
+				SetEmitter(e\room, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 16)
+			EndIf
+		EndIf
 		If e\room\NPC[0] = Null
 			TFormPoint(-156.0, 51.2, 121.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
@@ -2310,6 +2317,7 @@ Function UpdateEvent_Room2_GW_2%(e.Events)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 225.0, 0.0, True)
 		EndIf
 	EndIf
+	UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1], 5.0)
 	
 	If PlayerRoom = e\room
 		e\SoundCHN = LoopSoundEx(snd_I\AlarmSFX[1], e\SoundCHN, Camera, e\room\OBJ, 5.0)
@@ -9318,19 +9326,13 @@ Function UpdateEvent_Gateway%(e.Events)
 	
 	; ~ e\EventState4: Checks if airlock is turned on
 	
-	Local BrokenDoor%, i%
+	Local i%
 	Local DistMult# = (2.3 * (e\room\RoomTemplate\RoomID = r_room4_gw))
-	
-	BrokenDoor = (e\room\Objects[1] <> 0)
 	
 	If PlayerRoom = e\room
 		e\EventState3 = UpdateLever(e\room\RoomLevers[0]\OBJ)
 		If e\EventState = 0.0
 			If EntityDistanceSquared(e\room\Objects[0], me\Collider) < (0.64 + DistMult) And e\EventState2 = 0.0 And e\EventState3 = 1.0
-				If BrokenDoor
-					LoadEventSound(e, "SFX\Room\SparkLong.ogg", 1)
-					e\SoundCHN2 = PlaySoundEx(e\Sound2, Camera, e\room\Objects[1], 5.0)
-				EndIf
 				StopChannel(e\SoundCHN) : e\SoundCHN = 0
 				LoadEventSound(e, "SFX\Room\Airlock.ogg")
 				For i = 0 To 1 + (2 * (e\room\RoomTemplate\RoomID = r_room4_gw))
@@ -9348,9 +9350,7 @@ Function UpdateEvent_Gateway%(e.Events)
 				For i = 0 To 1 + (2 * (e\room\RoomTemplate\RoomID = r_room4_gw))
 					If e\room\RoomDoors[i]\Locked = 0 Then e\room\RoomDoors[i]\Open = False
 				Next
-				If e\EventState < 70.0 And e\EventState - fps\Factor[0] >= 70.0
-					If BrokenDoor Then SetEmitter(e\room, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 16)
-				ElseIf e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 7.0
+				If e\EventState > 70.0 * 3.0 And e\EventState < 70.0 * 7.0
 					If EntityDistanceSquared(e\room\Objects[0], me\Collider) < (4.0 + DistMult)
 						If wi\GasMask = 0 And wi\HazmatSuit = 0 Then me\EyeIrritation = Max(70.0, me\EyeIrritation)
 					EndIf
@@ -9388,7 +9388,6 @@ Function UpdateEvent_Gateway%(e.Events)
 			EndIf
 		EndIf
 		
-		If BrokenDoor Then UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
 		UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 	Else
 		e\EventState2 = 0.0
