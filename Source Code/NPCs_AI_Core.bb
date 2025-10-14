@@ -2186,7 +2186,7 @@ Function UpdateNPCType106%(n.NPCs)
 					Local PrevFrame# = n\Frame
 					
 					If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor n\PathStatus <> PATH_STATUS_FOUND) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-						If (Dist > 4.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 50.0, 0.0)
+						If (Dist < 4.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 50.0, 0.0)
 						
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 						
