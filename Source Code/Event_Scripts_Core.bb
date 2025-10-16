@@ -9330,16 +9330,18 @@ Function UpdateEvent_Gateway%(e.Events)
 	Local DistMult# = (2.3 * (e\room\RoomTemplate\RoomID = r_room4_gw))
 	
 	If PlayerRoom = e\room
+		If snd_I\AirlockSFX = 0 Then snd_I\AirlockSFX = LoadSound_Strict("SFX\Room\Airlock.ogg")
+		
 		e\EventState3 = UpdateLever(e\room\RoomLevers[0]\OBJ)
 		If e\EventState = 0.0
 			If EntityDistanceSquared(e\room\Objects[0], me\Collider) < (0.64 + DistMult) And e\EventState2 = 0.0 And e\EventState3 = 1.0
 				StopChannel(e\SoundCHN) : e\SoundCHN = 0
-				LoadEventSound(e, "SFX\Room\Airlock.ogg")
 				For i = 0 To 1 + (2 * (e\room\RoomTemplate\RoomID = r_room4_gw))
 					e\room\RoomDoors[i]\FastOpen = True
 					OpenCloseDoor(e\room\RoomDoors[i])
 				Next
 				PlaySound_Strict(snd_I\AlarmSFX[2])
+				PlaySound_Strict(LoadTempSound("SFX\Alarm\DeconInProgress.ogg"))
 				e\EventState = 0.01
 			ElseIf EntityDistanceSquared(e\room\Objects[0], me\Collider) > (5.29 + DistMult)
 				e\EventState2 = 0.0
@@ -9373,18 +9375,21 @@ Function UpdateEvent_Gateway%(e.Events)
 							e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 2)
 						EndIf
 					Next
-					If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySoundEx(e\Sound, Camera, e\room\Objects[0], 5.0)
+					If (Not ChannelPlaying(e\SoundCHN)) Then e\SoundCHN = PlaySoundEx(snd_I\AirlockSFX, Camera, e\room\Objects[0], 5.0)
 				EndIf
+				If e\EventState > 70.0 * 8.9 And e\EventState - fps\Factor[0] =< 70.0 * 8.9 Then e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Alarm\DeconCompleted.ogg"), Camera, e\room\Objects[0], 5.0, 1.0, True)
 			Else
-				For i = 0 To 1 + (4 * (e\room\RoomTemplate\RoomID = r_room4_gw))
-					If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
-					If i < 4
-						If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
-						e\room\RoomDoors[i]\FastOpen = False
-					EndIf
-				Next
-				e\EventState = 0.0
-				e\EventState2 = 1.0
+				If (Not ChannelPlaying(e\SoundCHN2))
+					For i = 0 To 1 + (4 * (e\room\RoomTemplate\RoomID = r_room4_gw))
+						If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
+						If i < 4
+							If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
+							e\room\RoomDoors[i]\FastOpen = False
+						EndIf
+					Next
+					e\EventState = 0.0
+					e\EventState2 = 1.0
+				EndIf
 			EndIf
 		EndIf
 		

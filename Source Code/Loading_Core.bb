@@ -195,7 +195,7 @@ Function LoadParticles%()
 	; ~ White smoke in "room2_gw/room3_gw/room4_gw"
 	ParticleEffect[2] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[2], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[2], 70.0 * 3.0)
+	SetTemplateEmitterLifeTime(ParticleEffect[2], 70.0 * 4.0)
 	SetTemplateParticleLifeTime(ParticleEffect[2], 35, 40)
 	SetTemplateTexture(ParticleEffect[2], PARTICLE_WHITE_SMOKE)
 	SetTemplateOffset(ParticleEffect[2], -0.2, 0.2, -0.1, 0.1, -0.2, 0.2)
@@ -1704,6 +1704,7 @@ Type SoundInstance
 	Field WatchesSFX%
 	Field FireSFX%
 	Field BuzzingSFX%
+	Field AirlockSFX%
 End Type
 
 Global snd_I.SoundInstance
@@ -2084,6 +2085,8 @@ Function RemoveSoundInstances%()
 	snd_I\FireSFX = 0
 	
 	snd_I\BuzzingSFX = 0
+	
+	snd_I\AirlockSFX = 0
 	
 	Delete(snd_I) : snd_I = Null
 End Function
