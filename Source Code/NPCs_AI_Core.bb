@@ -2365,7 +2365,7 @@ Function UpdateNPCType106%(n.NPCs)
 					
 					SetNPCFrame(n, 259.0)
 				Else
-					AnimateNPC(n, 259.0, 111.0, -0.15, False)
+					AnimateNPC(n, 259.0, 111.0, -0.25, False)
 					
 					If n\Frame <= 150.0
 						n\State2 = Rnd(38500.0, 47250.0) ; ~ 1.75x longer than the normal spawnrate
