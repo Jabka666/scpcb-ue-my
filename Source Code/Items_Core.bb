@@ -9,7 +9,7 @@ Type ItemTemplates
 	Field SoundID%
 	Field Found%
 	Field OBJ%, OBJPath$
-	Field InvImg%, InvImg2%, InvImgPath$
+	Field InvImg%, InvImg2%, InvImgPath$, InvImgPath2$
 	Field ImgPath$, Img%, Img2%
 	Field ImgWidth%, ImgHeight%
 	Field Img2Width%, Img2Height%
@@ -243,7 +243,6 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 				it\InvImg = it2\InvImg
 				it\InvImgPath = it2\InvImgPath
 			EndIf
-			If it2\InvImg2 <> 0 Then it\InvImg2 = it2\InvImg2
 			Exit
 		EndIf
 	Next
@@ -253,9 +252,19 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	EndIf
 	
 	If InvImgPath2 <> ""
+		InvImgPath2 = ItemINVIconPath + InvImgPath2
+		For it2.ItemTemplates = Each ItemTemplates
+			If it2\InvImgPath2 = InvImgPath2
+				If it2\InvImg2 <> 0
+					it\InvImg2 = it2\InvImg2
+					it\InvImgPath2 = it2\InvImgPath2
+				EndIf
+				Exit
+			EndIf
+		Next
 		If it\InvImg2 = 0
-			InvImgPath2 = ItemINVIconPath + InvImgPath2
 			it\InvImg2 = ResizeImageEx(LoadImage_Strict(InvImgPath2), MenuScale, MenuScale)
+			it\InvImgPath2 = InvImgPath2
 		EndIf
 	EndIf
 	

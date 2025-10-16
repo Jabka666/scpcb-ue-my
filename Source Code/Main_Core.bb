@@ -3878,6 +3878,14 @@ Function SwapOtherOpenItem%(FromItem.Items, ToItem.Items)
 	OtherOpen\SecondInv[FromIndex] = ToItem
 End Function
 
+Function SwapItemIcons%(item.Items, Dir%)
+	If Dir
+		item\InvImg = item\ItemTemplate\InvImg2
+	Else
+		item\InvImg = item\ItemTemplate\InvImg
+	EndIf
+End Function
+
 Function UpdateGUI%()
 	CatchErrors("UpdateGUI()")
 	
@@ -5176,6 +5184,7 @@ Function UpdateUseItem%(item.Items)
 						End Select
 						If item\State > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOn.ogg"))
 					EndIf
+					SwapItemIcons(item, (wi\NightVision > 0 And (item\State > 0.0 Lor item\ItemTemplate\ID = it_finenvg)))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -5219,6 +5228,7 @@ Function UpdateUseItem%(item.Items)
 								;[End Block]
 						End Select
 					EndIf
+					SwapItemIcons(item, (wi\SCRAMBLE > 0 And item\State > 0.0))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -6545,14 +6555,13 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem(True, True)
 				If I_427\Using
 					CreateMsg(GetLocalString("msg", "427.off"))
-					item\InvImg = item\ItemTemplate\InvImg
 					I_427\Using = False
 				Else
 					GiveAchievement("427")
 					CreateMsg(GetLocalString("msg", "427.on"))
-					item\InvImg = item\ItemTemplate\InvImg2
 					I_427\Using = True
 				EndIf
+				SwapItemIcons(item, I_427\Using)
 				SelectedItem = Null
 			EndIf
 			;[End Block]
@@ -7558,7 +7567,7 @@ Function RenderUseItem%(item.Items)
 		Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_headphones, it_scp1499, it_fine1499, it_helmet, it_cap, it_scp268, it_fine268, it_firstaid, it_finefirstaid, it_firstaid2, it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_syringe, it_finesyringe, it_veryfinesyringe, it_syringeinf, it_cup, it_veryfinefirstaid, it_eyedrops, it_eyedrops2, it_fineeyedrops, it_veryfineeyedrops
 			;[Block]
 			If item\UsageTimer > 0.0
-				DrawBlock(item\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSizeHalf, mo\Viewport_Center_Y - InvImgSizeHalf)
+				DrawBlock(item\InvImg, mo\Viewport_Center_X - InvImgSizeHalf, mo\Viewport_Center_Y - InvImgSizeHalf)
 				
 				x = mo\Viewport_Center_X - (Width / 2)
 				y = mo\Viewport_Center_Y + (80 * MenuScale)

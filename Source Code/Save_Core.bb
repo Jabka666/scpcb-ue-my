@@ -2361,11 +2361,7 @@ Function LoadGameQuick%(File$)
 		
 		If it\ID > LastItemID Then LastItemID = it\ID
 		
-		If ReadByte(f) = 0
-			it\InvImg = it\ItemTemplate\InvImg
-		Else
-			it\InvImg = it\ItemTemplate\InvImg2
-		EndIf
+		SwapItemIcons(it, ReadByte(f) <> 0)
 	Next
 	
 	Local ij.Items

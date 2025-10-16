@@ -1511,11 +1511,11 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", True)
 	
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_green.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Fine Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_red.png", "", 0.02, 2, "night_vision_goggles_red.png")
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Very Fine Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_blue.png", "", 0.02, 2, "night_vision_goggles_blue.png")
-	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_scramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "scramble"), "Fine SCRAMBLE Gear", it_finescramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_green.png")
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Fine Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_red.png")
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Very Fine Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_blue.png")
+	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_scramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear_off.png", "", 0.02, 2, "", "INV_SCRAMBLE_gear_on.png")
+	CreateItemTemplate(GetLocalString("items", "scramble"), "Fine SCRAMBLE Gear", it_finescramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear_off.png", "", 0.02, 2, "", "INV_SCRAMBLE_gear_on.png")
 	
 	; ~ HUD texture is defined in "UpdateGUI"
 	;[Block]
