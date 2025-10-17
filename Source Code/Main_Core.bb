@@ -3506,7 +3506,7 @@ End Function
 Function UpdateZoneColor%()
 	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
-	Local DistFog# = fog\FarDist - (2.0 * (SecondaryLightOn =< 0.01) * (wi\NightVision = 0)) * LightVolume
+	Local DistFog# = fog\FarDist - (2.0 * (SecondaryLightOn <= 0.1) * (wi\NightVision = 0)) * LightVolume
 	
 	SetZoneColor("", "")
 	
@@ -6915,7 +6915,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
-	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn =< 0.3  And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor I_966\HasInsomnia > 0.0
+	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn <= 0.1 And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor I_966\HasInsomnia > 0.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink

@@ -200,7 +200,7 @@ Function UpdateAlarmLights%()
 	Local al.AlarmLamp
 	
 	For al.AlarmLamp = Each AlarmLamp
-		If SecondaryLightOn > 0.01 And (al\room = PlayerRoom Lor al\room\Dist < 6.0)
+		If SecondaryLightOn > 0.1 And (al\room = PlayerRoom Lor al\room\Dist < 6.0)
 			Local Dist# = EntityDistanceSquared(Camera, al\OBJ)
 			Local MaxDist# = (LightRenderDistance + PowTwo(al\Range)) * LightVolume
 			
@@ -246,7 +246,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	If HasSprite
 		l\Sprite = CreateSprite()
 		PositionEntity(l\Sprite, x, y, z)
-		ScaleSprite(l\Sprite, 0.13 * SpriteScale, 0.13 * SpriteScale)
+		ScaleSprite(l\Sprite, 0.1 * SpriteScale, 0.1 * SpriteScale)
 		EntityTexture(l\Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
 		EntityFX(l\Sprite, 1 + 8)
 		EntityBlend(l\Sprite, 3)
@@ -257,7 +257,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 		
 		l\AdvancedSprite = CreateSprite()
 		PositionEntity(l\AdvancedSprite, x, y, z)
-		ScaleSprite(l\AdvancedSprite, 0.38 * SpriteScale, 0.38 * SpriteScale)
+		ScaleSprite(l\AdvancedSprite, 0.3 * SpriteScale, 0.3 * SpriteScale)
 		EntityTexture(l\AdvancedSprite, misc_I\AdvancedLightSprite)
 		EntityFX(l\AdvancedSprite, 1 + 8)
 		EntityBlend(l\AdvancedSprite, 3)
@@ -295,7 +295,7 @@ Global LightRenderDistance#
 Function UpdateLightVolume%()
 	Local l.Lights
 	
-	If SecondaryLightOn > 0.01
+	If SecondaryLightOn > 0.1
 		If opttimer\LightsTimer < 8.0
 			opttimer\LightsTimer = opttimer\LightsTimer + fps\Factor[0]
 		Else
@@ -335,7 +335,7 @@ Function UpdateLights%(Cam%)
 	Local TotalAmbientColor# = (fog\AmbientR + fog\AmbientG + fog\AmbientB) / 255.0 / 3.0
 	
 	For l.Lights = Each Lights
-		If SecondaryLightOn > 0.01 And ((l\room <> Null And IsLightVisible(l)) Lor (l\room = Null))
+		If SecondaryLightOn > 0.1 And ((l\room <> Null And IsLightVisible(l)) Lor (l\room = Null))
 			Local LightOBJHidden%
 			
 			If l\Sprite <> 0
@@ -384,7 +384,7 @@ Function UpdateLights%(Cam%)
 									Alpha = 1.0 - Clamp((Sqr(Dist) + 0.5) / 7.5, 0.0, 1.0)
 									If Alpha > 0.0
 										If LightAdvancedSpriteHidden Then ShowEntity(l\AdvancedSprite)
-										EntityAlpha(l\AdvancedSprite, Max(TotalAmbientColor * (l\Intensity / 2.0), 1.0) * Alpha)
+										EntityAlpha(l\AdvancedSprite, Max(TotalAmbientColor * (l\Intensity / 2.0), 1.0) * Alpha * SecondaryLightOn)
 										
 										Random = Rnd(0.36 * l\SpriteScale, 0.4 * l\SpriteScale)
 										ScaleSprite(l\AdvancedSprite, Random, Random)
@@ -4132,7 +4132,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And SecondaryLightOn > 0.3
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And SecondaryLightOn > 0.1
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
@@ -4247,7 +4247,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.3
+				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.1
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
@@ -4300,7 +4300,7 @@ Function RemoveSecurityCam%(sc.SecurityCams)
 End Function
 
 Function UpdateMonitorSaving%()
-	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn =< 0.3 Then Return
+	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn <= 0.1 Then Return
 	
 	Local sc.SecurityCams
 	
@@ -4543,7 +4543,7 @@ Function UpdateScreens%()
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Lor s\room\Dist < 6.0
-			If SecondaryLightOn =< 0.3
+			If SecondaryLightOn <= 0.1
 				If s\CurrScreenID <> 0
 					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
 					UpdateEntityMaterial(s\OBJ)
