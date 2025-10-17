@@ -1273,6 +1273,7 @@ Function LoadMaterials%(File$)
 				EndIf
 			EndIf
 			
+			mat\ReactBlackout = IniGetInt(File, Loc, "reactblackout")
 			mat\StepSound = IniGetInt(File, Loc, "stepsound")
 			mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")
 			mat\UseMask = IniGetInt(File, Loc, "masked")

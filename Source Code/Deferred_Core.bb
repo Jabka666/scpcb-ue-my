@@ -6,12 +6,12 @@ Const DEFERRED_DIFF% = 0
 Const DEFERRED_DIFFALPHA% = 1
 Const DEFERRED_DIFFNORMAL% = 2
 Const DEFERRED_DIFFROUGH% = 4
-Const DEFERRED_DIFFEMISSION% = 8
+Const DEFERRED_DIFFEMISSIVE% = 8
 Const DEFERRED_DIFFNOLIT% = 16
-Const DEFERRED_NONE% = 32
+Const DEFERRED_DIFFEMISSIVEMUL% = 32
+Const DEFERRED_NONE% = 64
 
-Const MAX_DEFERRED_VARIATIONS% = 128
-Const MAX_DEFERRED_INPUTS% = 16
+Const MAX_DEFERRED_VARIATIONS% = 256
 
 Const DIRECTIONAL_LIGHT_TIME% = 0
 Const DIRECTIONAL_LIGHT_RANGE# = 0.01
@@ -27,9 +27,13 @@ Global MRTAlbedo%
 Global MRTDepth%
 Global MRTNormal%
 
-Global DeferredInputEffect%[MAX_DEFERRED_VARIATIONS]
+Type InputEffect
+	Field Effect%
+	Field Bit%
+End Type
 
-Global DeferredInput%[MAX_DEFERRED_INPUTS], DeferredShade%
+Global DeferredInputEffect.InputEffect[MAX_DEFERRED_VARIATIONS]
+Global DeferredShade%
 
 Global DeferredShadowMapCube%[SHADOW_MAP_MIPMAPS]
 Global DeferredShadowMap%[SHADOW_MAP_MIPMAPS + 1]
@@ -42,8 +46,6 @@ Global ShadowsDistance#
 
 Global CubeRotateX#[6]
 Global CubeRotateY#[6]
-
-Global DEFERRED_INPUTS% = 0
 
 CubeRotateX[0] = 0 : CubeRotateY[0] = 90
 CubeRotateX[1] = 0 : CubeRotateY[1] = 0
@@ -65,32 +67,34 @@ Global NoiseTexture%
 
 Global FXAAEffect%
 
+Global EmissiveMultiply#
+
 Function InitDeferred%()
 	Local i%
 	
-	DeferredInputEffect[DEFERRED_DIFF] = LoadEffect("Source Code\Deffered\Input.fx")
-	DeferredInputEffect[DEFERRED_DIFFNOLIT] = LoadEffectEx("Source Code\Deffered\Input.fx", "NOLIT")
-	DeferredInputEffect[DEFERRED_DIFFALPHA] = LoadEffectEx("Source Code\Deffered\Input.fx", "TRANSPARENT")
-	DeferredInputEffect[DEFERRED_DIFFNORMAL] = LoadEffectEx("Source Code\Deffered\Input.fx", "NORMALMAP")
-	DeferredInputEffect[DEFERRED_DIFFROUGH] = LoadEffectEx("Source Code\Deffered\Input.fx", "ROUGHMAP")
-	DeferredInputEffect[DEFERRED_DIFFEMISSION] = LoadEffectEx("Source Code\Deffered\Input.fx", "EMISSIVEMAP")
-	DeferredInputEffect[DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH] = LoadEffectEx("Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP")
-	DeferredInputEffect[DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSION] = LoadEffectEx("Source Code\Deffered\Input.fx", "NORMALMAP EMISSIVEMAP")
-	DeferredInputEffect[DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSION] = LoadEffectEx("Source Code\Deffered\Input.fx", "ROUGHMAP EMISSIVEMAP")
-	DeferredInputEffect[DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSION] = LoadEffectEx("Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP")
+	LoadInputEffect(DEFERRED_NONE, "")
+	LoadInputEffect(DEFERRED_DIFF, "Source Code\Deffered\Input.fx")
+	LoadInputEffect(DEFERRED_DIFFNOLIT, "Source Code\Deffered\Input.fx", "NOLIT")
+	LoadInputEffect(DEFERRED_DIFFALPHA, "Source Code\Deffered\Input.fx", "TRANSPARENT")
+	LoadInputEffect(DEFERRED_DIFFNORMAL, "Source Code\Deffered\Input.fx", "NORMALMAP")
+	LoadInputEffect(DEFERRED_DIFFROUGH, "Source Code\Deffered\Input.fx", "ROUGHMAP")
+	LoadInputEffect(DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "EMISSIVEMAP")
+	
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "NORMALMAP EMISSIVEMAP")
+	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "ROUGHMAP EMISSIVEMAP")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP")
+	
+	LoadInputEffect(DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "EMISSIVEMAP MUL")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "NORMALMAP EMISSIVEMAP MUL")
+	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "ROUGHMAP EMISSIVEMAP MUL")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP MUL")
+	
 	BloomEffect = LoadEffect("Source Code\Shaders\Bloom.fx")
 	ColorCorrectionEffect = LoadEffect("Source Code\Shaders\ColorCorrection.fx")
 	PresentEffect = LoadEffect("Source Code\Shaders\Present.fx")
 	SSAOEffect = LoadEffect("Source Code\Shaders\SSAO.fx")
 	FXAAEffect = LoadEffect("Source Code\Shaders\FXAA.fx")
-	
-	DEFERRED_INPUTS = 0
-	For i = 0 To MAX_DEFERRED_VARIATIONS - 1
-		If DeferredInputEffect[i] <> 0
-			DeferredInput[DEFERRED_INPUTS] = DeferredInputEffect[i]
-			DEFERRED_INPUTS = DEFERRED_INPUTS + 1
-		EndIf
-	Next
 	
 	DeferredShade = LoadEffect("Source Code\Deffered\Shade.fx")
 	
@@ -201,6 +205,8 @@ Function InitDeferred%()
 	
 	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
 	
+	SetEmissiveMultiply(1.0)
+	
 	Delete Each DynamicLight
 End Function
 
@@ -217,7 +223,7 @@ Function SetDeferredEntity%(Entity%, Shadows% = False, State% = -1)
 	If State <> -1
 		Local i%, SF%, b%, SurfCount%
 		
-		EntityEffect(Entity, DeferredInputEffect[State])
+		EntityEffect(Entity, DeferredInputEffect[State]\Effect)
 		If State = DEFERRED_NONE And EntityClass(Entity) = "Mesh"
 			SurfCount = CountSurfaces(Entity)
 			For i = 1 To SurfCount
@@ -266,7 +272,9 @@ Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 				Else
 					If mat\Normal <> 0 Then State = State Or DEFERRED_DIFFNORMAL
 					If mat\Roughness <> 0 Then State = State Or DEFERRED_DIFFROUGH
-					If mat\Emissive <> 0 Then State = State Or DEFERRED_DIFFEMISSION
+					If mat\Emissive <> 0 Then State = State Or DEFERRED_DIFFEMISSIVE
+					If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
+					
 					BrushTexture(Brush, MissingTexture, 0, 1)
 					BrushTexture(Brush, MissingTexture, 0, 2)
 					BrushTexture(Brush, MissingTexture, 0, 3)
@@ -279,7 +287,7 @@ Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 		EndIf
 	EndIf
 	
-	BrushEffect(Brush, DeferredInputEffect[State])
+	BrushEffect(Brush, DeferredInputEffect[State]\Effect)
 End Function
 
 Function UpdateEntityMaterial%(Ent%, State% = -1, Frame% = 0)
@@ -291,7 +299,7 @@ Function UpdateEntityMaterial%(Ent%, State% = -1, Frame% = 0)
 End Function
 
 Function ProcessDeferred%(Cam%, Tween#)
-	If DeferredShade <> 0 And DeferredInputEffect[DEFERRED_DIFF] <> 0
+	If DeferredShade <> 0 And DeferredInputEffect[DEFERRED_DIFF]\Effect <> 0
 		SetBuffer(TextureBuffer(MRTColor))
 		SetBuffer(TextureBuffer(MRTAlbedo), 1)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
@@ -322,10 +330,11 @@ Function ProcessDeferred%(Cam%, Tween#)
 End Function
 
 Function ProcessAllLights%(Cam%, Tween#)
+	Local ef.InputEffect
 	Local i%
 	
-	For i = 0 To DEFERRED_INPUTS - 1
-		EffectTechnique(DeferredInput[i], "Depth")
+	For ef.InputEffect = Each InputEffect
+		If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "ShadowMap")
 	Next
 	CameraClsMode(Cam, 0, 0)
 	
@@ -360,8 +369,8 @@ Function ProcessAllLights%(Cam%, Tween#)
 	
 	If DirectionalLightUpdate < MilliSecs() Then DirectionalLightUpdate = MilliSecs() + DIRECTIONAL_LIGHT_TIME
 	
-	For i = 0 To DEFERRED_INPUTS - 1
-		EffectTechnique(DeferredInput[i], "GBuffer")
+	For ef.InputEffect = Each InputEffect
+		If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 	Next
 End Function
 
@@ -512,7 +521,7 @@ Function CreateShadowMap%(Width%, Height%)
 	Return(CreateTexture(Width, Height, 524288))
 End Function
 
-Function CreateLightVolume(LightType%)
+Function CreateLightVolume%(LightType%)
 	Local Volume%, SF%
 	
 	Select LightType
@@ -557,6 +566,17 @@ End Function
 
 Function SetShadowsDistance%(Dist#)
 	ShadowsDistance = Dist
+End Function
+
+Function SetEmissiveMultiply%(em#)
+	If EmissiveMultiply <> em
+		Local ef.InputEffect
+		
+		For ef.InputEffect = Each InputEffect
+			If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", em)
+		Next
+		EmissiveMultiply = em
+	EndIf
 End Function
 
 Function GetShadowMapMip%(Range#, Dist#)
@@ -662,7 +682,7 @@ Function FindDynamicLight.DynamicLight(OBJ%)
 	Next
 End Function
 
-Function CreateLight(lType%, Parent% = 0)
+Function CreateLight%(lType%, Parent% = 0)
 	Local dl.DynamicLight = New DynamicLight
 	
 	dl\OBJ = CreatePivot(Parent)
@@ -701,13 +721,13 @@ Function LightFOV%(Entity%, FOV#)
 	If dl <> Null Then dl\FOV = FOV
 End Function
 
-Function LightShadows(Entity%, CastShadows%)
+Function LightShadows%(Entity%, CastShadows%)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
 	If dl <> Null Then dl\CastShadows = CastShadows
 End Function
 
-Function OnLightDestruct(Entity%)
+Function OnLightDestruct%(Entity%)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
 	If dl <> Null Delete(dl)
@@ -715,10 +735,18 @@ End Function
 
 ; ====================================
 
+Function LoadInputEffect%(Bit%, File$, Defines$ = "")
+	DeferredInputEffect[Bit] = New InputEffect
+	DeferredInputEffect[Bit]\Effect = LoadEffectEx(File, Defines)
+	DeferredInputEffect[Bit]\Bit = Bit
+End Function
+
 Function LoadEffectEx%(File$, Defines$ = "")
 	Local f% = ReadFile(File)
 	
 	If f = 0 Then Return
+	
+	If Defines = "" Then Return(LoadEffect(File))
 	
 	Local i%
 	Local Export$ = StripFileName(File) + "TEMP_EFFECT_FILE.fx"

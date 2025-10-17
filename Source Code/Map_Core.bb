@@ -328,7 +328,9 @@ Function UpdateLightVolume%()
 			opttimer\LightsTimer = 0.0
 		EndIf
 		LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
+		SetEmissiveMultiply(1.0)
 	Else
+		SetEmissiveMultiply(0.0)
 		LightVolume = 1.0
 		opttimer\LightsTimer = 0.0
 	EndIf
