@@ -579,11 +579,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
 			
 			For i = -1 To 1 Step 2
-				Local Light1% = CreateLight(2, n\OBJ)
+				Local Light1% = CreateLight(3, n\OBJ)
 				
-				LightRange(Light1, 2.0)
+				LightRange(Light1, 4300.0 * RoomScale)
 				LightColor(Light1, 255.0, 255.0, 255.0)
+				LightShadows(Light1, True)
+				LightFOV(Light1, 75.0)
 				PositionEntity(Light1, 1.5 * i, 0.57, -0.25)
+				RotateEntity(Light1, 90.0, 0.0, 0.0)
 				
 				Local LightSprite% = CreateSprite(Light1)
 				
