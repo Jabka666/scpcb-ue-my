@@ -524,7 +524,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			EndIf
 			;[End Block]
 	End Select
-	SetDeferredEntity(i\OBJ)
+	SetDeferredEntity(i\OBJ, True)
 	
 	i\InvSlots = InvSlots
 	

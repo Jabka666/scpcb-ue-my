@@ -60,7 +60,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	EntityType(p\OBJ, HasCollision) ; ~ NOTICE: Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
 	EntityPickMode(p\OBJ, 2)
-	SetDeferredEntity(p\OBJ)
+	SetDeferredEntity(p\OBJ, True)
 	
 	If IsWatches
 		p\SecondsArrow = FindChild(p\OBJ, "bigarrow")
