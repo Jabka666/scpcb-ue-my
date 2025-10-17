@@ -10089,32 +10089,34 @@ Function Update427%()
 	
 	If I_427\Timer < 70.0 * 360.0
 		If I_427\Using
-			I_427\Timer = I_427\Timer + fps\Factor[0]
-			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0006), 0.0)
-			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
-			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.004), 0.0)
-			If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.002), 0.0)
-			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
-			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
-			For i = 0 To 6
-				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0]), 0.0)
-			Next
-			If I_1025\FineState[0] > 0.0
-				If I_1025\FineState[0] < 0.05
-					; ~ Drop two latest items
-					For i = MaxItemAmount - 2 To MaxItemAmount - 1
-						If Inventory(i) <> Null Then DropItem(Inventory(i))
-					Next
-					MaxItemAmount = MaxItemAmount - 2
-					I_1025\FineState[0] = 0.0
-				Else
-					I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
+			If (Not me\Terminated)
+				I_427\Timer = I_427\Timer + fps\Factor[0]
+				If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0006), 0.0)
+				If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
+				If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.004), 0.0)
+				If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.002), 0.0)
+				If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
+				If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
+				For i = 0 To 6
+					If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0]), 0.0)
+				Next
+				If I_1025\FineState[0] > 0.0
+					If I_1025\FineState[0] < 0.05
+						; ~ Drop two latest items
+						For i = MaxItemAmount - 2 To MaxItemAmount - 1
+							If Inventory(i) <> Null Then DropItem(Inventory(i))
+						Next
+						MaxItemAmount = MaxItemAmount - 2
+						I_1025\FineState[0] = 0.0
+					Else
+						I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
+					EndIf
 				EndIf
+				I_1025\FineState[1] = Max(I_1025\FineState[1] - (0.0008 * fps\Factor[0]), 0.0)
+				For i = 2 To 4
+					If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
+				Next
 			EndIf
-			I_1025\FineState[1] = Max(I_1025\FineState[1] - (0.0008 * fps\Factor[0]), 0.0)
-			For i = 2 To 4
-				If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
-			Next
 			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			I_427\SoundCHN[0] = LoopSoundLocal(I_427\Sound[0], I_427\SoundCHN[0])
 			If I_427\Timer >= 70.0 * 180.0
