@@ -13,7 +13,7 @@
 - Removed NPCs.ini file.
 - Player HUD is now animated when wearing SCP-268 or being protected from SCP-049.
 - The pocket dimension's constant damage over time was increased. Hazmat Suit reduces it back to the original amount.
-- Player bleeds out 16.7% slower.
+- Player bleeds out 8.33% slower.
 - New achievement "Frostbite".
 
 [Items]

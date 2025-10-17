@@ -579,11 +579,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
 			
 			For i = -1 To 1 Step 2
-				Local Light1% = CreateLight(2, n\OBJ)
+				Local Light1% = CreateLight(3, n\OBJ)
 				
-				LightRange(Light1, 2.0)
+				LightRange(Light1, 4300.0 * RoomScale)
 				LightColor(Light1, 255.0, 255.0, 255.0)
+				LightShadows(Light1, True)
+				LightFOV(Light1, 75.0)
 				PositionEntity(Light1, 1.5 * i, 0.57, -0.25)
+				RotateEntity(Light1, 90.0, 0.0, 0.0)
 				
 				Local LightSprite% = CreateSprite(Light1)
 				
@@ -1429,7 +1432,7 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 					EntityOrder(p\OBJ, -1)
 				Next
 				
-				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PX, PY + Rnd(-0.05, 0.05), PZ, Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
+				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PX, PY + Rnd(-0.05, 0.05), PZ, Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 0.8)
 				de\LifeTime = 70.0 * 20.0
 				AlignToVector(de\OBJ, -PickedNX(), -PickedNY(), -PickedNZ(), 3)
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)

@@ -60,7 +60,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	EntityType(p\OBJ, HasCollision) ; ~ NOTICE: Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
 	EntityPickMode(p\OBJ, 2)
-	SetDeferredEntity(p\OBJ)
+	SetDeferredEntity(p\OBJ, True)
 	
 	If IsWatches
 		p\SecondsArrow = FindChild(p\OBJ, "bigarrow")
@@ -134,32 +134,119 @@ Type Lights
 	Field Flickers% = False
 	Field lType%
 	Field Fade#
-	Field FOV#
+	Field FOV#, TanFOV#
 	Field SpriteScale#
 	Field CastShadows%
 	Field Scripted% = False
 	Field room.Rooms
 End Type
 
-Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True)
+; ~ TODO: SHOULD BE COMPLETELY REDONE
+;[Block]
+Type AlarmLamp
+	Field OBJ%
+	Field ConeOBJ%, ConeOBJ2%
+	Field MoveSpeed#, Range#
+	Field room.Rooms
+	Field light.Lights
+End Type
+
+Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, Pitch#, Yaw#, Roll#, MoveSpeed#, FOV# = 90.0, SpriteScale# = 1.0, CastShadows% = False)
+	Local al.AlarmLamp
+	
+	al.AlarmLamp = New AlarmLamp
+	al\room = room
+	al\MoveSpeed = MoveSpeed
+	al\Range = Range
+	
+	al\OBJ = CreatePivot()
+	PositionEntity(al\OBJ, x, y, z)
+	
+	al\ConeOBJ = CopyEntity(misc_I\LightConeModel)
+	PositionEntity(al\ConeOBJ, x, y, z)
+	RotateEntity(al\ConeOBJ, 270.0, 0.0, 0.0)
+	ScaleEntity(al\ConeOBJ, 0.01 * SpriteScale, 0.01 * SpriteScale, 0.01 * SpriteScale)
+	EntityColor(al\ConeOBJ, R, G, B)
+	EntityAlpha(al\ConeOBJ, 0.15)
+	EntityBlend(al\ConeOBJ, 3)
+	EntityParent(al\ConeOBJ, al\OBJ)
+	
+	al\ConeOBJ2 = CopyEntity(misc_I\LightConeModel)
+	PositionEntity(al\ConeOBJ2, x, y, z)
+	RotateEntity(al\ConeOBJ2, 90.0, 0.0, 0.0)
+	ScaleEntity(al\ConeOBJ2, 0.01 * SpriteScale, 0.01 * SpriteScale, 0.01 * SpriteScale)
+	EntityColor(al\ConeOBJ2, R, G, B)
+	EntityAlpha(al\ConeOBJ2, 0.15)
+	EntityBlend(al\ConeOBJ2, 3)
+	EntityParent(al\ConeOBJ2, al\OBJ)
+	
+	al\light = AddLight(Null, x, y, z, 3, Range, R, G, B, False, SpriteScale, CastShadows)
+	al\light\FOV = FOV
+	RotateEntity(al\light\OBJ, 0.0, 0.0, 0.0)
+	EntityParent(al\light\OBJ, al\OBJ)
+	
+	al\light = AddLight(Null, x, y, z, 3, Range, R, G, B, False, SpriteScale, CastShadows)
+	al\light\FOV = FOV
+	RotateEntity(al\light\OBJ, 180.0, 0.0, 0.0)
+	EntityParent(al\light\OBJ, al\OBJ)
+	
+	RotateEntity(al\OBJ, Pitch, Yaw, Roll)
+	EntityParent(al\OBJ, room\OBJ)
+	
+	Return(al)
+End Function
+
+Function UpdateAlarmLights%()
+	Local al.AlarmLamp
+	
+	For al.AlarmLamp = Each AlarmLamp
+		If SecondaryLightOn > 0.1 And (al\room = PlayerRoom Lor al\room\Dist < 6.0)
+			Local Dist# = EntityDistanceSquared(Camera, al\OBJ)
+			Local MaxDist# = (LightRenderDistance + PowTwo(al\Range)) * LightVolume
+			
+			If Dist < MaxDist
+				If EntityHidden(al\ConeOBJ) Then ShowEntity(al\ConeOBJ)
+				If EntityHidden(al\ConeOBJ2) Then ShowEntity(al\ConeOBJ2)
+				TurnEntity(al\OBJ, al\MoveSpeed, 0.0, 0.0)
+			Else
+				If (Not EntityHidden(al\ConeOBJ)) Then HideEntity(al\ConeOBJ)
+				If (Not EntityHidden(al\ConeOBJ2)) Then HideEntity(al\ConeOBJ2)
+			EndIf
+		Else
+			If (Not EntityHidden(al\ConeOBJ)) Then HideEntity(al\ConeOBJ)
+			If (Not EntityHidden(al\ConeOBJ2)) Then HideEntity(al\ConeOBJ2)
+		EndIf
+	Next
+End Function
+
+Function RemoveAlarmLamp%(al.AlarmLamp)
+	FreeEntity(al\ConeOBJ) : al\ConeOBJ = 0
+	FreeEntity(al\ConeOBJ2) : al\ConeOBJ2 = 0
+	FreeEntity(al\OBJ) : al\OBJ = 0
+	Delete(al)
+End Function
+;[End Block]
+
+Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True)
 	Local l.Lights
 	
 	l.Lights = New Lights
 	l\room = room
 	
 	l\FOV = 90.0
+	l\TanFOV = 1.0
 	
 	l\OBJ = CreatePivot()
 	PositionEntity(l\OBJ, x, y, z, True)
 	If room <> Null Then EntityParent(l\OBJ, room\OBJ)
 	HideEntity(l\OBJ)
 	
-	l\lType = Type_
+	l\lType = LightType
 	
 	If HasSprite
 		l\Sprite = CreateSprite()
 		PositionEntity(l\Sprite, x, y, z)
-		ScaleSprite(l\Sprite, 0.13 * SpriteScale, 0.13 * SpriteScale)
+		ScaleSprite(l\Sprite, 0.1 * SpriteScale, 0.1 * SpriteScale)
 		EntityTexture(l\Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
 		EntityFX(l\Sprite, 1 + 8)
 		EntityBlend(l\Sprite, 3)
@@ -170,7 +257,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, Type_%, Range#, R%, G%, B%, Has
 		
 		l\AdvancedSprite = CreateSprite()
 		PositionEntity(l\AdvancedSprite, x, y, z)
-		ScaleSprite(l\AdvancedSprite, 0.38 * SpriteScale, 0.38 * SpriteScale)
+		ScaleSprite(l\AdvancedSprite, 0.3 * SpriteScale, 0.3 * SpriteScale)
 		EntityTexture(l\AdvancedSprite, misc_I\AdvancedLightSprite)
 		EntityFX(l\AdvancedSprite, 1 + 8)
 		EntityBlend(l\AdvancedSprite, 3)
@@ -208,7 +295,7 @@ Global LightRenderDistance#
 Function UpdateLightVolume%()
 	Local l.Lights
 	
-	If SecondaryLightOn > 0.01
+	If SecondaryLightOn > 0.1
 		If opttimer\LightsTimer < 8.0
 			opttimer\LightsTimer = opttimer\LightsTimer + fps\Factor[0]
 		Else
@@ -224,7 +311,9 @@ Function UpdateLightVolume%()
 			opttimer\LightsTimer = 0.0
 		EndIf
 		LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
+		SetEmissiveMultiply(1.0)
 	Else
+		SetEmissiveMultiply(0.0)
 		LightVolume = 1.0
 		opttimer\LightsTimer = 0.0
 	EndIf
@@ -246,7 +335,7 @@ Function UpdateLights%(Cam%)
 	Local TotalAmbientColor# = (fog\AmbientR + fog\AmbientG + fog\AmbientB) / 255.0 / 3.0
 	
 	For l.Lights = Each Lights
-		If SecondaryLightOn > 0.01 And l\room <> Null And IsLightVisible(l)
+		If SecondaryLightOn > 0.1 And ((l\room <> Null And IsLightVisible(l)) Lor (l\room = Null))
 			Local LightOBJHidden%
 			
 			If l\Sprite <> 0
@@ -295,7 +384,7 @@ Function UpdateLights%(Cam%)
 									Alpha = 1.0 - Clamp((Sqr(Dist) + 0.5) / 7.5, 0.0, 1.0)
 									If Alpha > 0.0
 										If LightAdvancedSpriteHidden Then ShowEntity(l\AdvancedSprite)
-										EntityAlpha(l\AdvancedSprite, Max(TotalAmbientColor * (l\Intensity / 2.0), 1.0) * Alpha)
+										EntityAlpha(l\AdvancedSprite, Max(TotalAmbientColor * (l\Intensity / 2.0), 1.0) * Alpha * SecondaryLightOn)
 										
 										Random = Rnd(0.36 * l\SpriteScale, 0.4 * l\SpriteScale)
 										ScaleSprite(l\AdvancedSprite, Random, Random)
@@ -532,7 +621,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			Temp1i = ReadByte(f)
 			Temp2i = ReadByte(f)
 			Temp3i = ReadByte(f)
-			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0)
+			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0 - (0.5 * (IsAlpha = 1)))
 			
 			; ~ Normals
 			If RMeshVersion = 2
@@ -649,8 +738,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					ts\z = ReadFloat(f) * RoomScale
 					
 					ReadString(f)
-					
-					ts\ScreenEventID = ReadInt(f)
 					
 					ts\Pitch = ReadFloat(f)
 					ts\Yaw = ReadFloat(f)
@@ -3766,6 +3853,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
 	HideEntity(de\OBJ)
 	SetDeferredEntity(de\OBJ, False, DEFERRED_DIFF)
+	MaskEntity(de\OBJ, 32)
 	
 	Return(de)
 End Function
@@ -4044,7 +4132,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And SecondaryLightOn > 0.3
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And SecondaryLightOn > 0.1
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
@@ -4159,7 +4247,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.3
+				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.1
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
@@ -4212,7 +4300,7 @@ Function RemoveSecurityCam%(sc.SecurityCams)
 End Function
 
 Function UpdateMonitorSaving%()
-	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn =< 0.3 Then Return
+	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn <= 0.1 Then Return
 	
 	Local sc.SecurityCams
 	
@@ -4260,9 +4348,11 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 			If t1 <> 0
 				If Lower(StripPath(TextureName(t1))) <> "monitortexture.jpg"
 					If mon_I\MonitorTimer[1 - LCZ] < 50.0
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
+						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], 1)
+						SetDeferredBrush(b, -1, 1)
 					Else
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY + (2 * LCZ)])
+						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], (2 * LCZ))
+						SetDeferredBrush(b, -1, (2 * LCZ))
 					EndIf
 					PaintSurface(SF, b)
 					
@@ -4294,7 +4384,8 @@ Function TurnCheckpointMonitorsOff%(LCZ% = True)
 				t1 = GetBrushTexture(b, 0)
 				If t1 <> 0
 					If Lower(StripPath(TextureName(t1))) <> "monitortexture.jpg"
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY])
+						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
+						SetDeferredBrush(b)
 						PaintSurface(SF, b)
 						
 						FreeTexture(t1) : t1 = 0
@@ -4344,14 +4435,52 @@ End Type
 
 Type TempScreens
 	Field ImgPath$
-	Field ScreenEventID%
 	Field x#, y#, z#
 	Field Pitch#, Yaw#, Roll#
 	Field ScaleX#, ScaleY#, ScaleZ#
 	Field RoomTemplate.RoomTemplates
 End Type
 
-Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, ImgPath$, ScreenEventID%)
+; ~ Chat Screen ID Constants
+;[Block]
+Const cs_default% = 0
+Const cs_attention% = 1
+Const cs_009_warning% = 2
+Const cs_error% = 3
+Const cs_logo% = 4
+Const cs_UE% = 5
+;[End Block]
+
+Function FindChatScreenEventID%(ChatScreenName$)
+	Select ChatScreenName
+		Case "chatscreen_attention.png"
+			;[Block]
+			Return(cs_attention)
+			;[End Block]
+		Case "chatscreen_009_warning.png"
+			;[Block]
+			Return(cs_009_warning)
+			;[End Block]
+		Case "chatscreen_error.png"
+			;[Block]
+			Return(cs_error)
+			;[End Block]
+		Case "chatscreen_logo.png"
+			;[Block]
+			Return(cs_logo)
+			;[End Block]
+		Case "chatscreen_UE.png"
+			;[Block]
+			Return(cs_UE)
+			;[End Block]
+		Default
+			;[Block]
+			Return(cs_default)
+			;[End Block]
+	End Select
+End Function
+
+Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, ImgPath$)
 	Local s.Screens, s2.Screens
 	
 	s.Screens = New Screens
@@ -4362,7 +4491,7 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	EntityPickMode(s\OBJ, 2)
 	If room <> Null Then EntityParent(s\OBJ, room\OBJ)
 	
-	s\ScreenEventID = ScreenEventID
+	s\ScreenEventID = FindChatScreenEventID(ImgPath)
 	s\CurrScreenID = 1
 	s\ImgPath = "GFX\Map\Screens\" + ImgPath
 	s\room = room
@@ -4371,22 +4500,26 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 		If s2 <> s And s2\ImgPath = ImgPath Then s\Texture = s2\Texture
 	Next
 	If s\Texture = 0
-		Select ScreenEventID
-			Case 0
-				;[Block]
-				s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
-				;[End Block]
-			Case 1, 3
+		Select s\ScreenEventID
+			Case cs_attention, cs_error
 				;[Block]
 				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 2, DeleteAllTextures)
 				;[End Block]
-			Case 2
+			Case cs_009_warning
 				;[Block]
 				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 6, DeleteAllTextures)
 				;[End Block]
-			Case 4
+			Case cs_logo
 				;[Block]
 				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 5, DeleteAllTextures)
+				;[End Block]
+			Case cs_UE
+				;[Block]
+				s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
+				;[End Block]
+			Default
+				;[Block]
+				s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
 				;[End Block]
 		End Select
 	EndIf
@@ -4403,16 +4536,16 @@ Function UpdateScreens%()
 	opttimer\ScreensTimer = opttimer\ScreensTimer - fps\Factor[0]
 	If opttimer\ScreensTimer <= 0.0
 		For s.Screens = Each Screens
-			s\Nearby = (EntityDistanceSquared(s\OBJ, me\Collider) <= fog\FarDist * LightVolume)
+			s\Nearby = (EntityDistanceSquared(s\OBJ, me\Collider) <= PowTwo(fog\FarDist * LightVolume))
 		Next
 		opttimer\ScreensTimer = 70.0
 	EndIf
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Lor s\room\Dist < 6.0
-			If SecondaryLightOn =< 0.3
+			If SecondaryLightOn <= 0.1
 				If s\CurrScreenID <> 0
-					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY])
+					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
 					UpdateEntityMaterial(s\OBJ)
 					s\CurrScreenID = 0
 				EndIf
@@ -4421,7 +4554,7 @@ Function UpdateScreens%()
 			
 			If s\Nearby
 				Select s\ScreenEventID
-					Case 0 ; ~ Pre-loaded interactable save screen
+					Case cs_default
 						;[Block]
 						If s\State > 0.0
 							s\State = s\State - fps\Factor[0]
@@ -4509,7 +4642,7 @@ Function UpdateScreens%()
 							Exit
 						EndIf
 						;[End Block]
-					Case 1, 3
+					Case cs_attention, cs_error
 						;[Block]
 						If (MilliSec Mod 1500) < 800
 							If s\CurrScreenID <> 1
@@ -4525,7 +4658,7 @@ Function UpdateScreens%()
 							EndIf
 						EndIf
 						;[End Block]
-					Case 2
+					Case cs_009_warning
 						;[Block]
 						For e.Events = Each Events
 							If e\room = s\room
@@ -4570,7 +4703,7 @@ Function UpdateScreens%()
 							EndIf
 						Next
 						;[End Block]
-					Case 4
+					Case cs_logo
 						;[Block]
 						s\State = s\State + fps\Factor[0]
 						If s\State > 70.0 * 2.0

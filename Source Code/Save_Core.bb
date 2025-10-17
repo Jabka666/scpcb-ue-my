@@ -589,7 +589,7 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.3, z)
+	PositionEntity(me\Collider, x, y + 0.25, z)
 	
 	ResetEntity(me\Collider)
 	ShowEntity(me\Collider)
@@ -597,7 +597,7 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.3, z)
+	PositionEntity(me\Head, x, y + 0.25, z)
 	ResetEntity(me\Head)
 	
 	x = ReadFloat(f)
@@ -1585,7 +1585,7 @@ Function LoadGameQuick%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.3, z)
+	PositionEntity(me\Collider, x, y + 0.25, z)
 	
 	ResetEntity(me\Collider)
 	ShowEntity(me\Collider)
@@ -1593,7 +1593,7 @@ Function LoadGameQuick%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.3, z)
+	PositionEntity(me\Head, x, y + 0.25, z)
 	ResetEntity(me\Head)
 	
 	x = ReadFloat(f)
@@ -2361,11 +2361,7 @@ Function LoadGameQuick%(File$)
 		
 		If it\ID > LastItemID Then LastItemID = it\ID
 		
-		If ReadByte(f) = 0
-			it\InvImg = it\ItemTemplate\InvImg
-		Else
-			it\InvImg = it\ItemTemplate\InvImg2
-		EndIf
+		SwapItemIcons(it, ReadByte(f) <> 0)
 	Next
 	
 	Local ij.Items
@@ -2542,7 +2538,7 @@ End Function
 
 Function CancelAutoSave%()
 	CreateHintMsg(GetLocalString("save", "autosave.canceled"))
-	as\Timer = 70.0 * 70.0
+	as\Timer = 70.0 * 120.0
 End Function
 
 Function SaveAchievementsFile%()

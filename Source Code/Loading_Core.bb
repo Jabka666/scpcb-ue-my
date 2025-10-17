@@ -195,7 +195,7 @@ Function LoadParticles%()
 	; ~ White smoke in "room2_gw/room3_gw/room4_gw"
 	ParticleEffect[2] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[2], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[2], 70.0 * 3.0)
+	SetTemplateEmitterLifeTime(ParticleEffect[2], 70.0 * 4.0)
 	SetTemplateParticleLifeTime(ParticleEffect[2], 35, 40)
 	SetTemplateTexture(ParticleEffect[2], PARTICLE_WHITE_SMOKE)
 	SetTemplateOffset(ParticleEffect[2], -0.2, 0.2, -0.1, 0.1, -0.2, 0.2)
@@ -869,7 +869,7 @@ Function RemoveSecurityCamInstances%()
 End Function
 
 Const MaxMonitorModelIDAmount% = 2
-Const MaxMonitorOverlayIDAmount% = 20
+Const MaxMonitorOverlayIDAmount% = 18
 
 Type MonitorInstance
 	Field MonitorModelID%[MaxMonitorModelIDAmount]
@@ -891,23 +891,21 @@ Const MONITOR_CHECKPOINT_MODEL% = 1
 Const MONITOR_DEFAULT_OVERLAY% = 0
 Const MONITOR_LOCKDOWN_1_OVERLAY% = 1
 Const MONITOR_LOCKDOWN_2_OVERLAY% = 2
-Const MONITOR_LOCKDOWN_3_OVERLAY% = 3
-Const MONITOR_LOCKDOWN_4_OVERLAY% = 4
-Const MONITOR_079_OVERLAYS_1% = 5
-Const MONITOR_079_OVERLAYS_2% = 6
-Const MONITOR_079_OVERLAYS_3% = 7
-Const MONITOR_895_OVERLAY_1% = 8
-Const MONITOR_895_OVERLAY_2% = 9
-Const MONITOR_895_OVERLAY_3% = 10
-Const MONITOR_895_OVERLAY_4% = 11
-Const MONITOR_895_OVERLAY_5% = 12
-Const MONITOR_895_OVERLAY_6% = 13
-Const MONITOR_895_OVERLAY_7% = 14
-Const MONITOR_895_OVERLAY_8% = 15
-Const MONITOR_895_OVERLAY_9% = 16
-Const MONITOR_895_OVERLAY_10% = 17
-Const MONITOR_895_OVERLAY_11% = 18
-Const MONITOR_096_OVERLAY% = 19
+Const MONITOR_079_OVERLAYS_1% = 3
+Const MONITOR_079_OVERLAYS_2% = 4
+Const MONITOR_079_OVERLAYS_3% = 5
+Const MONITOR_895_OVERLAY_1% = 6
+Const MONITOR_895_OVERLAY_2% = 7
+Const MONITOR_895_OVERLAY_3% = 8
+Const MONITOR_895_OVERLAY_4% = 9
+Const MONITOR_895_OVERLAY_5% = 10
+Const MONITOR_895_OVERLAY_6% = 11
+Const MONITOR_895_OVERLAY_7% = 12
+Const MONITOR_895_OVERLAY_8% = 13
+Const MONITOR_895_OVERLAY_9% = 14
+Const MONITOR_895_OVERLAY_10% = 15
+Const MONITOR_895_OVERLAY_11% = 16
+Const MONITOR_096_OVERLAY% = 17
 ;[End Block]
 
 Function LoadMonitors%()
@@ -916,10 +914,8 @@ Function LoadMonitors%()
 	mon_I.MonitorInstance = New MonitorInstance
 	
 	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\Overlays\monitor_overlay.png", 1, DeleteAllTextures, False)
-	For i = MONITOR_LOCKDOWN_1_OVERLAY To MONITOR_LOCKDOWN_3_OVERLAY
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Map\Textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures, False)
-	Next
-	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
+	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY] = LoadAnimTexture_Strict("GFX\Map\Screens\screen_checkpoint_lockdown.png", 1, 1024, 768, 0, 3, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
 	
 	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_1] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays_X.png", 1, 256, 256, 0, 12, DeleteAllTextures)
 	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_2] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays_ASCII.png", 1, 256, 256, 0, 6, DeleteAllTextures)
@@ -1175,6 +1171,7 @@ Type MiscInstance
 	Field LightSpriteID[MaxLightSpriteIDAmount]
 	Field AdvancedLightSprite%
 	Field SaveScreen%
+	Field LightConeModel%
 End Type
 
 Global misc_I.MiscInstance
@@ -1204,6 +1201,9 @@ Function LoadMisc%()
 		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\Particles\light(" + i + ").png", 1, DeleteAllTextures, False)
 	Next
 	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\Particles\advanced_light.png", 1, DeleteAllTextures, False)
+	
+	misc_I\LightConeModel = LoadMesh_Strict("GFX\Map\Props\lightcone.b3d")
+	HideEntity(misc_I\LightConeModel)
 End Function
 
 Function RemoveMiscInstances%()
@@ -1273,6 +1273,7 @@ Function LoadMaterials%(File$)
 				EndIf
 			EndIf
 			
+			mat\ReactBlackout = IniGetInt(File, Loc, "reactblackout")
 			mat\StepSound = IniGetInt(File, Loc, "stepsound")
 			mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")
 			mat\UseMask = IniGetInt(File, Loc, "masked")
@@ -1447,10 +1448,14 @@ Function LoadItems%()
 	CreateItemTemplate("SCP-513", "SCP-513", it_scp513, "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
 	CreateItemTemplate("SCP-513", "Fine SCP-513", it_fine513, "scp_513.b3d", "INV_scp_513_no_rust.png", "", 0.1, 2, "scp_513_no_rust.png")
 	
-	CreateItemTemplate("SCP-714", "SCP-714", it_scp714, "scp_714.b3d", "INV_scp_714.png", "", 0.2, 3)
-	CreateItemTemplate("SCP-714", "Coarse SCP-714", it_coarse714, "scp_714.b3d", "INV_scp_714_grey.png", "", 0.2, 3, "scp_714_grey.png")
-	CreateItemTemplate("SCP-714", "Fine SCP-714", it_fine714, "scp_714.b3d", "INV_scp_714_blue.png", "", 0.2, 3, "scp_714_blue.png")
-	CreateItemTemplate(GetLocalString("items", "ring"), "Green Jade Ring", it_ring, "scp_714.b3d", "INV_scp_714_small.png", "", 0.15, 3)
+	it.ItemTemplates = CreateItemTemplate("SCP-714", "SCP-714", it_scp714, "scp_714.b3d", "INV_scp_714.png", "", 0.2, 3)
+	EntityColor(it\OBJ, 125.0, 200.0, 125.0)
+	it.ItemTemplates = CreateItemTemplate("SCP-714", "Coarse SCP-714", it_coarse714, "scp_714.b3d", "INV_scp_714_grey.png", "", 0.2, 3)
+	EntityColor(it\OBJ, 150.0, 150.0, 150.0)
+	it.ItemTemplates = CreateItemTemplate("SCP-714", "Fine SCP-714", it_fine714, "scp_714.b3d", "INV_scp_714_blue.png", "", 0.2, 3)
+	EntityColor(it\OBJ, 140.0, 200.0, 200.0)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "ring"), "Green Jade Ring", it_ring, "scp_714.b3d", "INV_scp_714_small.png", "", 0.15, 3)
+	EntityColor(it\OBJ, 125.0, 200.0, 125.0)
 	
 	it.ItemTemplates = CreateItemTemplate("SCP-860", "SCP-860", it_scp860, "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3)
 	EntityColor(it\OBJ, 60.0, 60.0, 130.0)
@@ -1511,11 +1516,11 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", True)
 	
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_green.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Fine Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_red.png", "", 0.02, 2, "night_vision_goggles_red.png")
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Very Fine Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_blue.png", "", 0.02, 2, "night_vision_goggles_blue.png")
-	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_scramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "scramble"), "Fine SCRAMBLE Gear", it_finescramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_green.png")
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Fine Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_red.png")
+	CreateItemTemplate(GetLocalString("items", "nvg"), "Very Fine Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_blue.png")
+	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_scramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear_off.png", "", 0.02, 2, "", "INV_SCRAMBLE_gear_on.png")
+	CreateItemTemplate(GetLocalString("items", "scramble"), "Fine SCRAMBLE Gear", it_finescramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear_off.png", "", 0.02, 2, "", "INV_SCRAMBLE_gear_on.png")
 	
 	; ~ HUD texture is defined in "UpdateGUI"
 	;[Block]
@@ -1704,6 +1709,7 @@ Type SoundInstance
 	Field WatchesSFX%
 	Field FireSFX%
 	Field BuzzingSFX%
+	Field AirlockSFX%
 End Type
 
 Global snd_I.SoundInstance
@@ -2084,6 +2090,8 @@ Function RemoveSoundInstances%()
 	snd_I\FireSFX = 0
 	
 	snd_I\BuzzingSFX = 0
+	
+	snd_I\AirlockSFX = 0
 	
 	Delete(snd_I) : snd_I = Null
 End Function
@@ -3584,7 +3592,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp
 	
 	Local i%
 	
@@ -3792,6 +3800,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For l.Lights = Each Lights
 		RemoveLight(l)
+	Next
+	For al.AlarmLamp = Each AlarmLamp
+		RemoveAlarmLamp(al)
 	Next
 	For se.SoundEmitters = Each SoundEmitters
 		RemoveSoundEmitter(se)

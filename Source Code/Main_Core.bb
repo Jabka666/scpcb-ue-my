@@ -407,6 +407,7 @@ Function UpdateGame%()
 			Else
 				UpdateLightVolume()
 				UpdateLights(Camera)
+				UpdateAlarmLights()
 				UpdateDoors()
 				UpdateSecurityCams()
 				UpdateScreens()
@@ -596,19 +597,19 @@ Function UpdateGame%()
 			igm\QuitMenu = 0
 		EndIf
 		
-		Local Allowed% = True
-		
-		If skull_event <> Null
-			Select skull_event\EventState
-				Case 2.0, 4.0, 5.0, 6.0
-					;[Block]
-					Allowed = False
-					;[End Block]
-			End Select
-		EndIf
-		
 		If (Not MenuOpen)
 			If KeyHit(key\INVENTORY)
+				Local Allowed% = True
+				
+				If skull_event <> Null
+					Select skull_event\EventState
+						Case 2.0, 4.0, 5.0, 6.0
+							;[Block]
+							Allowed = False
+							;[End Block]
+					End Select
+				EndIf
+				
 				If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable = 2 And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 And Allowed
 					If InvOpen
 						StopMouseMovement()
@@ -3205,7 +3206,7 @@ Function UpdateMoving%()
 	If me\Injuries > 1.0
 		Temp2 = me\Bloodloss
 		me\BlurTimer = Max(Max(Sin(MilliSec / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
-		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 4.0) / 350.0) * fps\Factor[0], 100.0)
+		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 4.0) / 325.0) * fps\Factor[0], 100.0)
 		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then CreateMsg(GetLocalString("msg", "bloodloss"))
 		If me\Bloodloss > 0.0 And me\VomitTimer >= 0.0
 			If wi\HazmatSuit = 0 And Rnd(200.0) < Min(me\Injuries, 4.0)
@@ -3473,10 +3474,10 @@ Const FogColorForestChase$ = "032044054"
 
 ; ~ Ambient Color Constants
 ;[Block]
-Const AmbientColorLCZ$ = "030030030"
+Const AmbientColorLCZ$ = "050050050"
 Const AmbientColorHCZ$ = "030023023"
-Const AmbientColorEZ$ = "023023030"
-Const AmbientOutside$ = "015015015"
+Const AmbientColorEZ$ = "045045045"
+Const AmbientOutside$ = "070070070"
 ;[End Block]
 
 Const ZoneColorChangeSpeed# = 50.0
@@ -3505,7 +3506,7 @@ End Function
 Function UpdateZoneColor%()
 	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
-	Local DistFog# = fog\FarDist - (2.0 * (SecondaryLightOn =< 0.01) * (wi\NightVision = 0)) * LightVolume
+	Local DistFog# = fog\FarDist - (2.0 * (SecondaryLightOn <= 0.1) * (wi\NightVision = 0)) * LightVolume
 	
 	SetZoneColor("", "")
 	
@@ -3875,6 +3876,14 @@ Function SwapOtherOpenItem%(FromItem.Items, ToItem.Items)
     Next
 	OtherOpen\SecondInv[ToIndex] = FromItem
 	OtherOpen\SecondInv[FromIndex] = ToItem
+End Function
+
+Function SwapItemIcons%(item.Items, Dir%)
+	If Dir
+		item\InvImg = item\ItemTemplate\InvImg2
+	Else
+		item\InvImg = item\ItemTemplate\InvImg
+	EndIf
 End Function
 
 Function UpdateGUI%()
@@ -5175,6 +5184,7 @@ Function UpdateUseItem%(item.Items)
 						End Select
 						If item\State > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOn.ogg"))
 					EndIf
+					SwapItemIcons(item, (wi\NightVision > 0 And (item\State > 0.0 Lor item\ItemTemplate\ID = it_finenvg)))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -5218,6 +5228,7 @@ Function UpdateUseItem%(item.Items)
 								;[End Block]
 						End Select
 					EndIf
+					SwapItemIcons(item, (wi\SCRAMBLE > 0 And item\State > 0.0))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -5609,7 +5620,7 @@ Function UpdateUseItem%(item.Items)
 								CreateMsg(GetLocalString("msg", "aid.toobad_1"))
 								me\Injuries = Max(2.5, me\Injuries - Rnd(0.3, 0.6))
 							ElseIf me\Injuries > 1.0
-								me\Injuries = Max(0.5, me\Injuries - Rnd(0.4, 0.9))
+								me\Injuries = Max(0.5, me\Injuries - Rnd(0.5, 0.9))
 								If me\Injuries > 1.0
 									CreateMsg(GetLocalString("msg", "aid.toobad_2"))
 								Else
@@ -6544,14 +6555,13 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem(True, True)
 				If I_427\Using
 					CreateMsg(GetLocalString("msg", "427.off"))
-					item\InvImg = item\ItemTemplate\InvImg
 					I_427\Using = False
 				Else
 					GiveAchievement("427")
 					CreateMsg(GetLocalString("msg", "427.on"))
-					item\InvImg = item\ItemTemplate\InvImg2
 					I_427\Using = True
 				EndIf
+				SwapItemIcons(item, I_427\Using)
 				SelectedItem = Null
 			EndIf
 			;[End Block]
@@ -6905,7 +6915,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
-	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn =< 0.3  And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor I_966\HasInsomnia > 0.0
+	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn <= 0.1 And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor (me\EyeIrritation > 0.0 And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor I_966\HasInsomnia > 0.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf me\BlinkEffect < 1.0 Lor chs\NoBlink
@@ -7183,7 +7193,7 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 				;[Block]
 				y = y - ArrowCoord
 				;[End Block]
-			Case HandIcon_Right
+			Case HandIcon_Left
 				;[Block]
 				x = x + ArrowCoord
 				;[End Block]
@@ -7191,7 +7201,7 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 				;[Block]
 				y = y + ArrowCoord
 				;[End Block]
-			Case HandIcon_Left
+			Case HandIcon_Right
 				;[Block]
 				x = x - ArrowCoord
 				;[End Block]
@@ -7557,7 +7567,7 @@ Function RenderUseItem%(item.Items)
 		Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_headphones, it_scp1499, it_fine1499, it_helmet, it_cap, it_scp268, it_fine268, it_firstaid, it_finefirstaid, it_firstaid2, it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_syringe, it_finesyringe, it_veryfinesyringe, it_syringeinf, it_cup, it_veryfinefirstaid, it_eyedrops, it_eyedrops2, it_fineeyedrops, it_veryfineeyedrops
 			;[Block]
 			If item\UsageTimer > 0.0
-				DrawBlock(item\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSizeHalf, mo\Viewport_Center_Y - InvImgSizeHalf)
+				DrawBlock(item\InvImg, mo\Viewport_Center_X - InvImgSizeHalf, mo\Viewport_Center_Y - InvImgSizeHalf)
 				
 				x = mo\Viewport_Center_X - (Width / 2)
 				y = mo\Viewport_Center_Y + (80 * MenuScale)
@@ -9445,13 +9455,15 @@ Function UpdateExplosion%()
 			If me\ExplosionTimer - fps\Factor[0] < 5.0
 				PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\Nuke0.ogg"))
 				For e.Events = Each Events
-					If e\room = PlayerRoom
-						TFormPoint(4417.0, -32.0, -8116.0, e\room\OBJ, 0)
-						Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
-						
-						SetEmitter(Null, x, y, z, 33)
-						SetEmitter(Null, x, y, z, 34)
-						Exit
+					If e\EventID = e_gate_b
+						If e\room = PlayerRoom
+							TFormPoint(4417.0, -32.0, -8116.0, e\room\OBJ, 0)
+							Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
+							
+							SetEmitter(Null, x, y, z, 33)
+							SetEmitter(Null, x, y, z, 34)
+							Exit
+						EndIf
 					EndIf
 				Next
 				me\BigCameraShake = 10.0
@@ -10077,32 +10089,34 @@ Function Update427%()
 	
 	If I_427\Timer < 70.0 * 360.0
 		If I_427\Using
-			I_427\Timer = I_427\Timer + fps\Factor[0]
-			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0006), 0.0)
-			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
-			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.004), 0.0)
-			If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.002), 0.0)
-			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
-			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
-			For i = 0 To 6
-				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0]), 0.0)
-			Next
-			If I_1025\FineState[0] > 0.0
-				If I_1025\FineState[0] < 0.05
-					; ~ Drop two latest items
-					For i = MaxItemAmount - 2 To MaxItemAmount - 1
-						If Inventory(i) <> Null Then DropItem(Inventory(i))
-					Next
-					MaxItemAmount = MaxItemAmount - 2
-					I_1025\FineState[0] = 0.0
-				Else
-					I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
+			If (Not me\Terminated)
+				I_427\Timer = I_427\Timer + fps\Factor[0]
+				If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0006), 0.0)
+				If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
+				If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.004), 0.0)
+				If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.002), 0.0)
+				If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
+				If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
+				For i = 0 To 6
+					If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0]), 0.0)
+				Next
+				If I_1025\FineState[0] > 0.0
+					If I_1025\FineState[0] < 0.05
+						; ~ Drop two latest items
+						For i = MaxItemAmount - 2 To MaxItemAmount - 1
+							If Inventory(i) <> Null Then DropItem(Inventory(i))
+						Next
+						MaxItemAmount = MaxItemAmount - 2
+						I_1025\FineState[0] = 0.0
+					Else
+						I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
+					EndIf
 				EndIf
+				I_1025\FineState[1] = Max(I_1025\FineState[1] - (0.0008 * fps\Factor[0]), 0.0)
+				For i = 2 To 4
+					If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
+				Next
 			EndIf
-			I_1025\FineState[1] = Max(I_1025\FineState[1] - (0.0008 * fps\Factor[0]), 0.0)
-			For i = 2 To 4
-				If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
-			Next
 			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
 			I_427\SoundCHN[0] = LoopSoundLocal(I_427\Sound[0], I_427\SoundCHN[0])
 			If I_427\Timer >= 70.0 * 180.0

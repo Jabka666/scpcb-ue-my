@@ -2186,7 +2186,7 @@ Function UpdateNPCType106%(n.NPCs)
 					Local PrevFrame# = n\Frame
 					
 					If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor n\PathStatus <> PATH_STATUS_FOUND) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-						If (Dist > 4.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 50.0, 0.0)
+						If (Dist < 4.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 50.0, 0.0)
 						
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 						
@@ -2365,7 +2365,7 @@ Function UpdateNPCType106%(n.NPCs)
 					
 					SetNPCFrame(n, 259.0)
 				Else
-					AnimateNPC(n, 259.0, 111.0, -0.15, False)
+					AnimateNPC(n, 259.0, 111.0, -0.25, False)
 					
 					If n\Frame <= 150.0
 						n\State2 = Rnd(38500.0, 47250.0) ; ~ 1.75x longer than the normal spawnrate
@@ -3749,7 +3749,6 @@ Function UpdateNPCType939%(n.NPCs)
 					PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider)
 					LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
 					n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 				EndIf
 			Else
 				If n\Frame < 2072.0
@@ -3934,7 +3933,7 @@ Function UpdateNPCType939%(n.NPCs)
 				Select n\LastDist
 					Case 1.0
 						;[Block]
-						AnimateNPC(n, 911.0, 939.0, 0.4, False)
+						AnimateNPC(n, 911.0, 939.0, 0.42, False)
 						Temp = (n\Frame >= 923.0 And PrevFrame < 923.0)
 						If n\Frame > 938.9
 							SetNPCFrame(n, 852.0)
@@ -3944,7 +3943,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 2.0
 						;[Block]
-						AnimateNPC(n, 940.0, 969.0, 0.4, False)
+						AnimateNPC(n, 940.0, 969.0, 0.42, False)
 						Temp = (n\Frame >= 952.0 And PrevFrame < 952.0)
 						If n\Frame > 968.9
 							SetNPCFrame(n, 852.0)
@@ -3954,7 +3953,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 3.0
 						;[Block]
-						AnimateNPC(n, 970.0, 998.0, 0.35, False)
+						AnimateNPC(n, 970.0, 998.0, 0.38, False)
 						Temp = (n\Frame >= 978.0 And PrevFrame < 978.0)
 						If n\Frame > 997.9
 							SetNPCFrame(n, 852.0)
@@ -3964,8 +3963,8 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 					Case 4.0
 						;[Block]
-						AnimateNPC(n, 999.0, 1025.0, 0.35, False)
-						Temp = (n\Frame >= 1010.0 And PrevFrame < 1010.0)
+						AnimateNPC(n, 999.0, 1025.0, 0.38, False)
+						Temp = (n\Frame >= 1009.0 And PrevFrame < 1009.0)
 						If n\Frame > 1024.9
 							SetNPCFrame(n, 852.0)
 							n\State = 3.0
@@ -3978,7 +3977,7 @@ Function UpdateNPCType939%(n.NPCs)
 					Case 1.0
 						;[Block]
 						AnimateNPC(n, 1666.0, 1710.0, 0.4, False)
-						Temp = (n\Frame >= 1677.0 And PrevFrame < 1677.0) Lor (n\Frame >= 1686.0 And PrevFrame < 1686.0) Lor (n\Frame >= 1699.0 And PrevFrame < 1699.0)
+						Temp = (n\Frame >= 1676.0 And PrevFrame < 1676.0) Lor (n\Frame >= 1686.0 And PrevFrame < 1686.0) Lor (n\Frame >= 1698.0 And PrevFrame < 1698.0)
 						If n\Frame > 1709.9
 							SetNPCFrame(n, 852.0)
 							n\State = 3.0
@@ -3988,7 +3987,7 @@ Function UpdateNPCType939%(n.NPCs)
 					Case 2.0
 						;[Block]
 						AnimateNPC(n, 1711.0, 1752.0, 0.4, False)
-						Temp = (n\Frame >= 1718.0 And PrevFrame < 1718.0) Lor (n\Frame >= 1727.0 And PrevFrame < 1727.0) Lor (n\Frame >= 1740.0 And PrevFrame < 1740.0)
+						Temp = (n\Frame >= 1717.0 And PrevFrame < 1717.0) Lor (n\Frame >= 1727.0 And PrevFrame < 1727.0) Lor (n\Frame >= 1739.0 And PrevFrame < 1739.0)
 						If n\Frame > 1751.9
 							SetNPCFrame(n, 852.0)
 							n\State = 3.0
@@ -3998,7 +3997,7 @@ Function UpdateNPCType939%(n.NPCs)
 				End Select
 			EndIf
 			If Temp
-				If EntityDistanceSquared(me\Collider, n\Collider) < 2.25 And EntityVisible(me\Collider, n\Collider)
+				If EntityDistanceSquared(me\Collider, n\Collider) < 2.25
 					PlaySound_Strict(snd_I\DamageSFX[11])
 					InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.5, 0.8))
 					me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
@@ -5564,7 +5563,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 					DetectDistance = 512.0
 					
 					; ~ Increase accuracy if the player is going slow
-					ShootAccuracy = 0.6 - (14.0 * me\CurrSpeed)
+					ShootAccuracy = 0.71 - (14.0 * me\CurrSpeed)
 				EndIf
 				
 				If Dist < DetectDistance
