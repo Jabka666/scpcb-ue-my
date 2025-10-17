@@ -146,9 +146,9 @@ End Type
 Type AlarmLamp
 	Field OBJ%
 	Field ConeOBJ%, ConeOBJ2%
-	Field LightOBJ%, LightOBJ2%
 	Field MoveSpeed#, Range#
 	Field room.Rooms
+	Field light.Lights
 End Type
 
 Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, Pitch#, Yaw#, Roll#, MoveSpeed#, FOV# = 90.0, SpriteScale# = 1.0, CastShadows% = False)
@@ -180,23 +180,15 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	EntityBlend(al\ConeOBJ2, 3)
 	EntityParent(al\ConeOBJ2, al\OBJ)
 	
-	al\LightOBJ = CreateLight(DEFERRED_LIGHT_SPOT)
-	PositionEntity(al\LightOBJ, x, y, z)
-	LightRange(al\LightOBJ, Range)
-	LightColor(al\LightOBJ, R, G, B)
-	LightFOV(al\LightOBJ, FOV)
-	LightShadows(al\LightOBJ, CastShadows)
-	RotateEntity(al\LightOBJ, 0.0, 0.0, 0.0)
-	EntityParent(al\LightOBJ, al\OBJ)
+	al\light = AddLight(Null, x, y, z, 3, Range, R, G, B, False, SpriteScale, CastShadows)
+	al\light\FOV = FOV
+	RotateEntity(al\light\OBJ, 0.0, 0.0, 0.0)
+	EntityParent(al\light\OBJ, al\OBJ)
 	
-	al\LightOBJ2 = CreateLight(DEFERRED_LIGHT_SPOT)
-	PositionEntity(al\LightOBJ2, x, y, z)
-	LightRange(al\LightOBJ2, Range)
-	LightColor(al\LightOBJ2, R, G, B)
-	LightFOV(al\LightOBJ, FOV)
-	LightShadows(al\LightOBJ2, CastShadows)
-	RotateEntity(al\LightOBJ2, 180.0, 0.0, 0.0)
-	EntityParent(al\LightOBJ2, al\OBJ)
+	al\light = AddLight(Null, x, y, z, 3, Range, R, G, B, False, SpriteScale, CastShadows)
+	al\light\FOV = FOV
+	RotateEntity(al\light\OBJ, 180.0, 0.0, 0.0)
+	EntityParent(al\light\OBJ, al\OBJ)
 	
 	RotateEntity(al\OBJ, Pitch, Yaw, Roll)
 	EntityParent(al\OBJ, room\OBJ)
@@ -208,28 +200,21 @@ Function UpdateAlarmLights%()
 	Local al.AlarmLamp
 	
 	For al.AlarmLamp = Each AlarmLamp
-		If al\room = PlayerRoom Lor al\room\Dist < 6.0
+		If SecondaryLightOn > 0.01 And (al\room = PlayerRoom Lor al\room\Dist < 6.0)
 			Local Dist# = EntityDistanceSquared(Camera, al\OBJ)
 			Local MaxDist# = (LightRenderDistance + PowTwo(al\Range)) * LightVolume
 			
 			If Dist < MaxDist
 				If EntityHidden(al\ConeOBJ) Then ShowEntity(al\ConeOBJ)
 				If EntityHidden(al\ConeOBJ2) Then ShowEntity(al\ConeOBJ2)
-				If EntityHidden(al\LightOBJ) Then ShowEntity(al\LightOBJ)
-				If EntityHidden(al\LightOBJ2) Then ShowEntity(al\LightOBJ2)
-				
 				TurnEntity(al\OBJ, al\MoveSpeed, 0.0, 0.0)
 			Else
 				If (Not EntityHidden(al\ConeOBJ)) Then HideEntity(al\ConeOBJ)
 				If (Not EntityHidden(al\ConeOBJ2)) Then HideEntity(al\ConeOBJ2)
-				If (Not EntityHidden(al\LightOBJ)) Then HideEntity(al\LightOBJ)
-				If (Not EntityHidden(al\LightOBJ2)) Then HideEntity(al\LightOBJ2)
 			EndIf
 		Else
 			If (Not EntityHidden(al\ConeOBJ)) Then HideEntity(al\ConeOBJ)
 			If (Not EntityHidden(al\ConeOBJ2)) Then HideEntity(al\ConeOBJ2)
-			If (Not EntityHidden(al\LightOBJ)) Then HideEntity(al\LightOBJ)
-			If (Not EntityHidden(al\LightOBJ2)) Then HideEntity(al\LightOBJ2)
 		EndIf
 	Next
 End Function
@@ -237,8 +222,6 @@ End Function
 Function RemoveAlarmLamp%(al.AlarmLamp)
 	FreeEntity(al\ConeOBJ) : al\ConeOBJ = 0
 	FreeEntity(al\ConeOBJ2) : al\ConeOBJ2 = 0
-	FreeEntity(al\LightOBJ) : al\LightOBJ = 0
-	FreeEntity(al\LightOBJ2) : al\LightOBJ2 = 0
 	FreeEntity(al\OBJ) : al\OBJ = 0
 	Delete(al)
 End Function
@@ -352,7 +335,7 @@ Function UpdateLights%(Cam%)
 	Local TotalAmbientColor# = (fog\AmbientR + fog\AmbientG + fog\AmbientB) / 255.0 / 3.0
 	
 	For l.Lights = Each Lights
-		If SecondaryLightOn > 0.01 And l\room <> Null And IsLightVisible(l)
+		If SecondaryLightOn > 0.01 And ((l\room <> Null And IsLightVisible(l)) Lor (l\room = Null))
 			Local LightOBJHidden%
 			
 			If l\Sprite <> 0
