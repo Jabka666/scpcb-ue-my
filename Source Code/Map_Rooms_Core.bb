@@ -90,7 +90,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 630.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 630.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
 			;[End Block]
 		Case r_cont1_005
 			;[Block]
@@ -3438,7 +3438,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1046.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1046.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
 			;[End Block]
 		Case r_room1_lifts
 			;[Block]

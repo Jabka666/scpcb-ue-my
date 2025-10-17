@@ -151,7 +151,7 @@ Type AlarmLamp
 	Field room.Rooms
 End Type
 
-Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, Pitch#, Yaw#, Roll#, MoveSpeed#, FOV# = 90.0, SpriteScale# = 1.0)
+Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, Pitch#, Yaw#, Roll#, MoveSpeed#, FOV# = 90.0, SpriteScale# = 1.0, CastShadows% = False)
 	Local al.AlarmLamp
 	
 	al.AlarmLamp = New AlarmLamp
@@ -185,7 +185,7 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	LightRange(al\LightOBJ, Range)
 	LightColor(al\LightOBJ, R, G, B)
 	LightFOV(al\LightOBJ, FOV)
-	LightShadows(al\LightOBJ, True)
+	LightShadows(al\LightOBJ, CastShadows)
 	RotateEntity(al\LightOBJ, 0.0, 0.0, 0.0)
 	EntityParent(al\LightOBJ, al\OBJ)
 	
@@ -194,7 +194,7 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	LightRange(al\LightOBJ2, Range)
 	LightColor(al\LightOBJ2, R, G, B)
 	LightFOV(al\LightOBJ, FOV)
-	LightShadows(al\LightOBJ2, True)
+	LightShadows(al\LightOBJ2, CastShadows)
 	RotateEntity(al\LightOBJ2, 180.0, 0.0, 0.0)
 	EntityParent(al\LightOBJ2, al\OBJ)
 	
