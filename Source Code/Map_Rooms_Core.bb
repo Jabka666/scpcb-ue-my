@@ -252,6 +252,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Warning Labels #1", it_paper, r\x + 1324.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 1370.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Emergency Evacuation Shelters", it_paper, r\x + 85.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 3814.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 1262.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 3680.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -1240,6 +1243,9 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Level 2 Key Card", it_key2, r\x - 939.0 * RoomScale, r\y + 137.0 * RoomScale, r\z + 116.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 180.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Security Room Modules", it_paper, r\x - 946.0 * RoomScale, r\y + 137.0 * RoomScale, r\z + 253.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_cont2_012
