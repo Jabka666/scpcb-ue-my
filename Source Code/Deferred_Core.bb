@@ -189,6 +189,9 @@ Function InitDeferred%()
 	EntityBlend(DeferredQuad, 3)
 	EntityFX(DeferredQuad, 8)
 	
+	FreeTexture(SpotTexture) : SpotTexture = 0
+	FreeTexture(RampTexture) : RampTexture = 0
+	
 	HideEntity(DeferredSphere)
 	HideEntity(DeferredCone)
 	HideEntity(DeferredQuad)
