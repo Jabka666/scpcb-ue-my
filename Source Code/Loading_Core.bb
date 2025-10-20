@@ -1304,6 +1304,7 @@ Const ItemINVIconPath$ = "GFX\Items\Inventory Icons\"
 
 Function LoadItems%()
 	Local it.ItemTemplates, it2.ItemTemplates
+	Local Tex%
 	
 	; ~ [PAPER]
 	;[Block]
@@ -1475,8 +1476,11 @@ Function LoadItems%()
 	
 	CreateItemTemplate("SCP-2022", "SCP-2022", it_scp2022, "scp_2022.b3d", "INV_scp_2022.png", "", 0.03, 1)
 	it.ItemTemplates = CreateItemTemplate("SCP-2022-01", "SCP-2022-01", it_scp2022pill, "pill.b3d", "INV_scp_2022_pill.png", "", 0.0003, 2)
-	EntityColor(it\OBJ, 255.0, 255.0, 140.0)
-	EntityFX(it\OBJ, 1)
+	
+	Tex = LoadTexture_Strict("GFX\Items\scp_2022_01.png")
+	EntityTexture(it\OBJ, Tex)
+	UpdateEntityMaterial(it\OBJ)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	;[End Block]
 	
 	; ~ [MISC ITEMS]
