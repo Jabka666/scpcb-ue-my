@@ -1626,11 +1626,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						Case it_key0
 							;[Block]
 							Select SelectedDifficulty\OtherFactors
-								Case DIFFICULTY_EASY
+								Case DIFFICULTY_FACTOR_EASY
 									;[Block]
 									CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									;[End Block]
-								Case DIFFICULTY_NORMAL
+								Case DIFFICULTY_FACTOR_NORMAL
 									;[Block]
 									If Rand(6) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1639,7 +1639,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									EndIf
 									;[End Block]
-								Case DIFFICULTY_HARD
+								Case DIFFICULTY_FACTOR_HARD
 									;[Block]
 									If Rand(5) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1648,7 +1648,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										CreateItem("Level 1 Key Card", it_key1, x, y, z)
 									EndIf
 									;[End Block]
-								Case DIFFICULTY_EXTREME
+								Case DIFFICULTY_FACTOR_EXTREME
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1662,11 +1662,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						Case it_key1
 							;[Block]
 							Select SelectedDifficulty\OtherFactors
-								Case DIFFICULTY_EASY
+								Case DIFFICULTY_FACTOR_EASY
 									;[Block]
 									CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									;[End Block]
-								Case DIFFICULTY_NORMAL
+								Case DIFFICULTY_FACTOR_NORMAL
 									;[Block]
 									If Rand(5) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1675,7 +1675,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									EndIf
 									;[End Block]
-								Case DIFFICULTY_HARD
+								Case DIFFICULTY_FACTOR_HARD
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1684,7 +1684,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										CreateItem("Level 2 Key Card", it_key2, x, y, z)
 									EndIf
 									;[End Block]
-								Case DIFFICULTY_EXTREME
+								Case DIFFICULTY_FACTOR_EXTREME
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1698,11 +1698,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						Case it_key2
 							;[Block]
 							Select SelectedDifficulty\OtherFactors
-								Case DIFFICULTY_EASY
+								Case DIFFICULTY_FACTOR_EASY
 									;[Block]
 									CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									;[End Block]
-								Case DIFFICULTY_NORMAL
+								Case DIFFICULTY_FACTOR_NORMAL
 									;[Block]
 									If Rand(4) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1711,7 +1711,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									EndIf
 									;[End Block]
-								Case DIFFICULTY_HARD
+								Case DIFFICULTY_FACTOR_HARD
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1720,7 +1720,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										CreateItem("Level 3 Key Card", it_key3, x, y, z)
 									EndIf
 									;[End Block]
-								Case DIFFICULTY_EXTREME
+								Case DIFFICULTY_FACTOR_EXTREME
 									;[Block]
 									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1742,11 +1742,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						Case it_key4
 							;[Block]
 							Select SelectedDifficulty\OtherFactors
-								Case DIFFICULTY_EASY
+								Case DIFFICULTY_FACTOR_EASY
 									;[Block]
 									CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									;[End Block]
-								Case DIFFICULTY_NORMAL
+								Case DIFFICULTY_FACTOR_NORMAL
 									;[Block]
 									If Rand(3) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1755,7 +1755,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									EndIf
 									;[End Block]
-								Case DIFFICULTY_HARD
+								Case DIFFICULTY_FACTOR_HARD
 									;[Block]
 									If Rand(2) = 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1764,7 +1764,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										CreateItem("Level 5 Key Card", it_key5, x, y, z)
 									EndIf
 									;[End Block]
-								Case DIFFICULTY_EXTREME
+								Case DIFFICULTY_FACTOR_EXTREME
 									;[Block]
 									If Rand(3) > 1
 										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)

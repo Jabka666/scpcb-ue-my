@@ -225,9 +225,9 @@ Function UpdateEvent_Cont1_173%(e.Events)
 		If PlayerRoom = e\room
 			e\room\RoomDoors[1]\Open = True
 			
-			If SelectedDifficulty\SaveType = SAVE_ANYWHERE
+			If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
 				CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]), 6.0, True)
-			ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+			ElseIf SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 				CreateHintMsg(GetLocalString("save", "failed.screen"), 6.0, True)
 			EndIf
 			
@@ -7734,15 +7734,15 @@ Function UpdateEvent_Dimension_106%(e.Events)
 			For i = 9 To 10
 				ScaleEntity(e\room\Objects[i], RoomScale * (1.5 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(SinValue + i * 20.0) * 0.1), RoomScale, True)
 			Next
-		ElseIf SelectedDifficulty\SaveType < SAVE_ON_QUIT
+		ElseIf SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 			If KeyHit(key\SAVE)
 				Select SelectedDifficulty\SaveType
-					Case SAVE_ANYWHERE
+					Case DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
 						;[Block]
 						PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
 						CreateHintMsg(GetLocalString("save", "saved"))
 						;[End Block]
-					Case SAVE_ON_SCREENS
+					Case DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 						;[Block]
 						CreateHintMsg(GetLocalString("save", "failed.screen"))
 						;[End Block]

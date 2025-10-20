@@ -309,7 +309,7 @@ Function UpdateGame%()
 		
 		UpdateStreamSounds()
 		
-		ShouldDisableHUD = (SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\HUDEnabled))
+		ShouldDisableHUD = (SelectedDifficulty\Name = difficulties[DIFFICULTY_APOLLYON]\Name Lor (Not opt\HUDEnabled))
 		
 		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
 			For i = 0 To 3
@@ -467,19 +467,19 @@ Function UpdateGame%()
 				If me\BlinkTimer <= -20.0
 					; ~ Randomizes the frequency of blinking. Scales with difficulty
 					Select SelectedDifficulty\OtherFactors
-						Case DIFFICULTY_EASY
+						Case DIFFICULTY_FACTOR_EASY
 							;[Block]
 							me\BLINKFREQ = Rnd(770.0, 910.0) ; ~ 11 - 13 seconds
 							;[End Block]
-						Case DIFFICULTY_NORMAL
+						Case DIFFICULTY_FACTOR_NORMAL
 							;[Block]
 							me\BLINKFREQ = Rnd(630.0, 770.0) ; ~ 9 - 11 seconds
 							;[End Block]
-						Case DIFFICULTY_HARD
+						Case DIFFICULTY_FACTOR_HARD
 							;[Block]
 							me\BLINKFREQ = Rnd(490.0, 630.0) ; ~ 7 - 9 seconds
 							;[End Block]
-						Case DIFFICULTY_EXTREME
+						Case DIFFICULTY_FACTOR_EXTREME
 							;[Block]
 							me\BLINKFREQ = Rnd(350.0, 490.0) ; ~ 5 - 7 seconds
 							;[End Block]
@@ -627,7 +627,7 @@ Function UpdateGame%()
 			EndIf
 			
 			If KeyHit(key\SAVE)
-				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
+				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 					Select CanSave
 						Case 0 ; ~ Scripted location
 							;[Block]
@@ -644,7 +644,7 @@ Function UpdateGame%()
 							;[End Block]
 						Case 3 ; ~ Allowed To Save
 							;[Block]
-							If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+							If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 								If SelectedScreen = Null And sc_I\SelectedMonitor = Null
 									CreateHintMsg(GetLocalString("save", "failed.screen"))
 								Else
@@ -660,7 +660,7 @@ Function UpdateGame%()
 				Else
 					CreateHintMsg(GetLocalString("save", "disable"))
 				EndIf
-			ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
+			ElseIf SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS And (SelectedScreen <> Null Lor sc_I\SelectedMonitor <> Null)
 				If msg\HintTxt = "" Lor msg\HintTimer <= 0.0 Then CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]), 6.0, True)
 				If mo\MouseHit2 Then sc_I\SelectedMonitor = Null
 			EndIf
@@ -2689,7 +2689,7 @@ Function RenderHintMessages%()
 End Function
 
 Function DelSaveOnKeter%()
-	If SelectedDifficulty\SaveType => SAVE_ON_QUIT
+	If SelectedDifficulty\SaveType => DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 		DeleteGame(CurrSave)
 		GameSaved = False
 		LoadSavedGames()
@@ -3963,7 +3963,7 @@ Function UpdateGUI%()
 	If (Not (MenuOpen Lor me\Terminated Lor ConsoleOpen))
 		If I_294\Using Then Update294()
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
-			If SelectedDifficulty\Name <> difficulties[APOLLYON]\Name And opt\HUDEnabled
+			If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
 				If d_I\ClosestButton <> 0 Then Update3DHandIcon(HandIcon_ClosestButton, d_I\ClosestButton)
 				If ClosestItem <> Null Then Update3DHandIcon(HandIcon_ClosestItem, ClosestItem\Collider)
 				
@@ -7264,7 +7264,7 @@ Function RenderGUI%()
 	EndIf
 	
 	If I_294\Using Then Render294()
-	If SelectedDifficulty\Name <> difficulties[APOLLYON]\Name And opt\HUDEnabled
+	If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			If d_I\ClosestButton <> 0 Then Render3DHandIcon(5, HandIcon_ClosestButton)
 			If ClosestItem <> Null Then Render3DHandIcon(6, HandIcon_ClosestItem)
@@ -8276,7 +8276,7 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\AutoSaveEnabled = UpdateMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> SAVE_ANYWHERE)
+						opt\AutoSaveEnabled = UpdateMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE)
 						
 						y = y + (30 * MenuScale)
 						
@@ -8324,7 +8324,7 @@ Function UpdateMenu%()
 		ElseIf igm\AchievementsMenu <= 0 And igm\OptionsMenu <= 0 And igm\QuitMenu > 0
 			Local QuitButton% = 85
 			
-			If SelectedDifficulty\SaveType = SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = SAVE_ANYWHERE
+			If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
 				QuitButton = 160
 				If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big, False, CanSave < 3)
 					me\DropSpeed = 0.0
@@ -8393,7 +8393,7 @@ Function UpdateMenu%()
 				
 				y = y + (75 * MenuScale)
 				
-				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
+				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 					If GameSaved
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
@@ -8468,7 +8468,7 @@ Function UpdateMenu%()
 			Else
 				y = y + (75 * MenuScale)
 				
-				If SelectedDifficulty\SaveType < SAVE_ON_QUIT
+				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 					If GameSaved
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
@@ -8873,7 +8873,7 @@ Function RenderMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						Clr = 255 - (155 * (SelectedDifficulty\SaveType <> SAVE_ANYWHERE))
+						Clr = 255 - (155 * (SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE))
 						Color(Clr, Clr, Clr)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
@@ -8985,7 +8985,7 @@ Function RenderMenu%()
 			
 			If (me\Terminated Lor me\Zombie) And me\SelectedEnding = -1
 				y = y + (175 * MenuScale)
-				If SelectedDifficulty\SaveType < SAVE_ON_QUIT Then y = y + (75 * MenuScale)
+				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT Then y = y + (75 * MenuScale)
 				SetFontEx(fo\FontID[Font_Default])
 				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
 			EndIf
@@ -9019,11 +9019,11 @@ Function UpdateEnding%()
 		GiveAchievement("console")
 		If SelectedCustomMap = Null Lor opt\DebugMode
 			Select SelectedDifficulty\Name
-				Case difficulties[KETER]\Name
+				Case difficulties[DIFFICULTY_KETER]\Name
 					;[Block]
 					GiveAchievement("keter")
 					;[End Block]
-				Case difficulties[APOLLYON]\Name
+				Case difficulties[DIFFICULTY_APOLLYON]\Name
 					;[Block]
 					GiveAchievement("keter")
 					GiveAchievement("apollyon")
@@ -9750,7 +9750,7 @@ Function Update008%()
 						If TeleportForInfect
 							me\Zombie = True
 							msg\DeathMsg = Format(GetLocalString("death", "0081"), SubjectName)
-							If SelectedDifficulty\SaveType => SAVE_ON_QUIT
+							If SelectedDifficulty\SaveType => DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 								DeleteGame(CurrSave)
 								GameSaved = False
 								LoadSavedGames()

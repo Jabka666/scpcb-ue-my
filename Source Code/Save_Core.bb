@@ -112,11 +112,11 @@ Function SaveGame%(File$)
 	
 	WriteByte(f, I_035\Sad)
 	
-	For i = SAFE To ESOTERIC
+	For i = DIFFICULTY_SAFE To DIFFICULTY_ESOTERIC
 		If SelectedDifficulty = difficulties[i]
 			WriteByte(f, i)
 			
-			If i = ESOTERIC
+			If i = DIFFICULTY_ESOTERIC
 				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
 				WriteByte(f, SelectedDifficulty\SaveType)
 				WriteByte(f, SelectedDifficulty\OtherFactors)
@@ -549,7 +549,7 @@ Function SaveGame%(File$)
 	
 	CloseFile(f)
 	
-	If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+	If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 		PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
 	Else
 		PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
@@ -671,7 +671,7 @@ Function LoadGame%(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC
+	If DifficultyIndex = DIFFICULTY_ESOTERIC
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
@@ -1667,7 +1667,7 @@ Function LoadGameQuick%(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC
+	If DifficultyIndex = DIFFICULTY_ESOTERIC
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
@@ -2507,7 +2507,7 @@ Global GameSaved%
 Global CanSave%
 
 Function UpdateSaveState%()
-	If SelectedDifficulty\SaveType <> NO_SAVES
+	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_NO_SAVES
 		CanSave = 3
 		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Lor me\Playable < 2 Then CanSave = 0
 	EndIf
@@ -2521,7 +2521,7 @@ End Type
 Global as.AutoSave
 
 Function UpdateAutoSave%()
-	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 3 Lor me\Playable < 2 Lor me\Zombie
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 3 Lor me\Playable < 2 Lor me\Zombie
 		If as\Timer <= 70.0 * 5.0 Then CancelAutoSave()
 		Return
 	EndIf

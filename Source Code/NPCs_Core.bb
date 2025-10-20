@@ -285,7 +285,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
 			LightRange(n\OBJ2, 2.0)
 			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
-			LightShadows(n\OBJ2, True)
+			LightCastShadows(n\OBJ2, True)
 			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
 			ShouldSetOBJ2 = False
 			
@@ -583,7 +583,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				
 				LightRange(Light1, 4300.0 * RoomScale)
 				LightColor(Light1, 255.0, 255.0, 255.0)
-				LightShadows(Light1, True)
+				LightCastShadows(Light1, True)
 				LightFOV(Light1, 75.0)
 				PositionEntity(Light1, 1.5 * i, 0.57, -0.25)
 				RotateEntity(Light1, 90.0, 0.0, 0.0)
@@ -1747,15 +1747,15 @@ Function NPCSpeedChange%(n.NPCs)
 	Select n\NPCType
 		Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType939, NPCType457
 			Select SelectedDifficulty\OtherFactors
-				Case DIFFICULTY_NORMAL
+				Case DIFFICULTY_FACTOR_NORMAL
 					;[Block]
 					n\Speed = n\Speed * 1.1
 					;[End Block]
-				Case DIFFICULTY_HARD
+				Case DIFFICULTY_FACTOR_HARD
 					;[Block]
 					n\Speed = n\Speed * 1.2
 					;[End Block]
-				Case DIFFICULTY_EXTREME
+				Case DIFFICULTY_FACTOR_EXTREME
 					;[Block]
 					n\Speed = n\Speed * 1.3
 					;[End Block]

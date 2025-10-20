@@ -2546,19 +2546,19 @@ Function LoadData%()
 	LoadRoomTemplates("Data\rooms.ini")
 	
 	Select SelectedDifficulty\OtherFactors
-		Case DIFFICULTY_EASY
+		Case DIFFICULTY_FACTOR_EASY
 			;[Block]
 			DifficultyDMGMult = 1.0
 			;[End Block]
-		Case DIFFICULTY_NORMAL
+		Case DIFFICULTY_FACTOR_NORMAL
 			;[Block]
 			DifficultyDMGMult = 1.15
 			;[End Block]
-		Case DIFFICULTY_HARD
+		Case DIFFICULTY_FACTOR_HARD
 			;[Block]
 			DifficultyDMGMult = 1.3
 			;[End Block]
-		Case DIFFICULTY_EXTREME
+		Case DIFFICULTY_FACTOR_EXTREME
 			;[Block]
 			DifficultyDMGMult = 1.45
 			;[End Block]
@@ -3568,7 +3568,7 @@ Function InitOtherStuff%()
 	If opt\DebugMode Then InitCheats()
 	
 	as\Timer = 70.0 * 70.0
-	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
+	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
 	Local HideX# = -400 * MenuScale
 	
