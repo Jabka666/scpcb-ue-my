@@ -432,7 +432,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
-			CameraRange(Cam, 0.01, DistToLight + ((VolumeScale + Range) * 2.0))
+			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) * VolumeScale + VolumeScale)
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]

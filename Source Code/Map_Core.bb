@@ -770,7 +770,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\Range = ReadFloat(f) * RoomScale
 					
 					lColor = ReadString(f)
-					Intensity = ReadFloat(f) * 0.8
+					Intensity = ReadFloat(f)
 					tl\R = Int(Piece(lColor, 1)) * Intensity
 					tl\G = Int(Piece(lColor, 2)) * Intensity
 					tl\B = Int(Piece(lColor, 3)) * Intensity
@@ -793,7 +793,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\Range = ReadFloat(f) * RoomScale
 					
 					lColor = ReadString(f)
-					Intensity = ReadFloat(f) * 0.8
+					Intensity = ReadFloat(f)
 					tl\R = Int(Piece(lColor, 1)) * Intensity
 					tl\G = Int(Piece(lColor, 2)) * Intensity
 					tl\B = Int(Piece(lColor, 3)) * Intensity
