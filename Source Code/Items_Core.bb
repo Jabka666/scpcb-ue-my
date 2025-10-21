@@ -506,7 +506,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			Local Light% = CreateLight(2, i\Collider)
 			
 			LightRange(Light, 0.15)
-			LightColor(Light, 255.0, 237.0, 77.0)
+			LightColor(Light, 255.0, 255.0, 20.0)
 			MoveEntity(Light, 0.0, 0.1, 0.0)
 			
 			If i\ItemTemplate\ID = it_scp2022pill
@@ -516,7 +516,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 				EntityTexture(i\OBJ2, misc_I\AdvancedLightSprite)
 				EntityFX(i\OBJ2, 1 + 8)
 				EntityBlend(i\OBJ2, 3)
-				EntityColor(i\OBJ2, 255.0, 237.0, 77.0)
+				EntityColor(i\OBJ2, 255.0, 255.0, 20.0)
 				RotateEntity(i\OBJ2, 0.0, 0.0, Rnd(360.0))
 				EntityAlpha(i\OBJ2, 0.6)
 				SpriteViewMode(i\OBJ2, 1)
