@@ -1475,12 +1475,7 @@ Function LoadItems%()
 	CreateItemTemplate("SCP-1499", "Fine SCP-1499", it_fine1499, "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
 	
 	CreateItemTemplate("SCP-2022", "SCP-2022", it_scp2022, "scp_2022.b3d", "INV_scp_2022.png", "", 0.03, 1)
-	it.ItemTemplates = CreateItemTemplate("SCP-2022-01", "SCP-2022-01", it_scp2022pill, "pill.b3d", "INV_scp_2022_pill.png", "", 0.0003, 2)
-	
-	Tex = LoadTexture_Strict("GFX\Items\scp_2022_01.png")
-	EntityTexture(it\OBJ, Tex)
-	UpdateEntityMaterial(it\OBJ)
-	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	CreateItemTemplate("SCP-2022-01", "SCP-2022-01", it_scp2022pill, "pill.b3d", "INV_scp_2022_pill.png", "", 0.0003, 2, "scp_2022_01.png")
 	;[End Block]
 	
 	; ~ [MISC ITEMS]
