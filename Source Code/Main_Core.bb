@@ -3506,7 +3506,7 @@ End Function
 Function UpdateZoneColor%()
 	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
-	Local DistFog# = fog\FarDist - (2.0 * (SecondaryLightOn <= 0.1) * (wi\NightVision = 0)) * LightVolume
+	Local DistFog# = fog\FarDist * LightVolume
 	
 	SetZoneColor("", "")
 	
