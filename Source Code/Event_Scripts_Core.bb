@@ -3005,27 +3005,29 @@ Function UpdateEvent_Cont2_012%(e.Events)
 		If EntityY(me\Collider) < 0.0
 			If (Not me\Terminated)
 				If e\EventState = 0.0
-					If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25
-						If me\FallTimer >= 0.0 And RemoteDoorOn
-							GiveAchievement("012")
-							
-							PlaySound_Strict(snd_I\HorrorSFX[7])
-							
-							If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
-							
-							Local n.NPCs
-							Local i%
-							
-							TFormPoint(-784.0, -768.0, 640.0, e\room\OBJ, 0)
-							
-							Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
-							
-							For i = 0 To 1
-								n.NPCs = CreateNPC(NPCTypeCockroach, x, y + 0.05, z)
-								RotateEntity(n\Collider, EntityPitch(n\Collider), Rnd(360.0), EntityRoll(n\Collider))
-							Next
-							e\EventState = 1.0
+					If RemoteDoorOn
+						If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25
+							If me\FallTimer >= 0.0
+								PlaySound_Strict(snd_I\HorrorSFX[7])
+								
+								If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
+								
+								Local n.NPCs
+								Local i%
+								
+								TFormPoint(-784.0, -768.0, 640.0, e\room\OBJ, 0)
+								
+								Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
+								
+								For i = 0 To 1
+									n.NPCs = CreateNPC(NPCTypeCockroach, x, y + 0.05, z)
+									RotateEntity(n\Collider, EntityPitch(n\Collider), Rnd(360.0), EntityRoll(n\Collider))
+								Next
+								e\EventState = 1.0
+							EndIf
 						EndIf
+					Else
+						e\EventState = 1.01
 					EndIf
 				ElseIf e\EventState = 1.0
 					RotateEntity(e\room\RoomLevers[0]\OBJ, CurveAngle(-80.0, EntityPitch(e\room\RoomLevers[0]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
@@ -3038,11 +3040,8 @@ Function UpdateEvent_Cont2_012%(e.Events)
 					Local NotProtected% = (I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4)
 					
 					If e\EventState4 = 1.0
-						If (Not NotProtected)
-							e\EventState4 = UpdateLever(e\room\RoomLevers[0]\OBJ)
-						Else
-							UpdateLever(e\room\RoomLevers[0]\OBJ, True)
-						EndIf
+						GiveAchievement("012")
+						e\EventState4 = UpdateLever(e\room\RoomLevers[0]\OBJ, NotProtected)
 						e\EventState = CurveValue(90.0, e\EventState, 500.0)
 						
 						UpdateRedLight(e\room\RoomLights[0], 1500, 800)
@@ -3157,25 +3156,27 @@ Function UpdateEvent_Cont2_012%(e.Events)
 								
 								FreeEntity(Pvt) : Pvt = 0
 							ElseIf DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ)) < 25.0 And EntityY(me\Collider) < -2.5
-								CanSave = 0
-								
-								me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.4 + (0.08 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
-								me\RestoreSanity = False
-								
-								Pvt = CreatePivot()
-								PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider), EntityZ(Camera))
-								PointEntity(Pvt, e\room\RoomDoors[0]\FrameOBJ)
-								CameraPitch = CurveAngle(90.0, CameraPitch + 90.0, 100.0)
-								CameraPitch = CameraPitch - 90.0
-								RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 150.0), 0.0)
-								
-								Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(me\Collider))
-								If Angle < 40.0
-									me\ForceMove = (40.0 - Angle) * 0.008
-								ElseIf Angle > 310.0
-									me\ForceMove = (40.0 - Abs(360.0 - Angle)) * 0.008
+								If e\room\RoomDoors[0]\Open
+									CanSave = 0
+									
+									me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.4 + (0.08 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
+									me\RestoreSanity = False
+									
+									Pvt = CreatePivot()
+									PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider), EntityZ(Camera))
+									PointEntity(Pvt, e\room\RoomDoors[0]\FrameOBJ)
+									CameraPitch = CurveAngle(90.0, CameraPitch + 90.0, 100.0)
+									CameraPitch = CameraPitch - 90.0
+									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 150.0), 0.0)
+									
+									Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(me\Collider))
+									If Angle < 40.0
+										me\ForceMove = (40.0 - Angle) * 0.008
+									ElseIf Angle > 310.0
+										me\ForceMove = (40.0 - Abs(360.0 - Angle)) * 0.008
+									EndIf
+									FreeEntity(Pvt) : Pvt = 0
 								EndIf
-								FreeEntity(Pvt) : Pvt = 0
 							EndIf
 						EndIf
 					Else
