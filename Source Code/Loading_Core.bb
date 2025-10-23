@@ -1304,6 +1304,7 @@ Const ItemINVIconPath$ = "GFX\Items\Inventory Icons\"
 
 Function LoadItems%()
 	Local it.ItemTemplates, it2.ItemTemplates
+	Local Tex%
 	
 	; ~ [PAPER]
 	;[Block]
@@ -1474,9 +1475,7 @@ Function LoadItems%()
 	CreateItemTemplate("SCP-1499", "Fine SCP-1499", it_fine1499, "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
 	
 	CreateItemTemplate("SCP-2022", "SCP-2022", it_scp2022, "scp_2022.b3d", "INV_scp_2022.png", "", 0.03, 1)
-	it.ItemTemplates = CreateItemTemplate("SCP-2022-01", "SCP-2022-01", it_scp2022pill, "pill.b3d", "INV_scp_2022_pill.png", "", 0.0003, 2)
-	EntityColor(it\OBJ, 255.0, 255.0, 140.0)
-	EntityFX(it\OBJ, 1)
+	CreateItemTemplate("SCP-2022-01", "SCP-2022-01", it_scp2022pill, "pill.b3d", "INV_scp_2022_pill.png", "", 0.0003, 2, "scp_2022_01.png")
 	;[End Block]
 	
 	; ~ [MISC ITEMS]
@@ -2546,19 +2545,19 @@ Function LoadData%()
 	LoadRoomTemplates("Data\rooms.ini")
 	
 	Select SelectedDifficulty\OtherFactors
-		Case DIFFICULTY_EASY
+		Case DIFFICULTY_FACTOR_EASY
 			;[Block]
 			DifficultyDMGMult = 1.0
 			;[End Block]
-		Case DIFFICULTY_NORMAL
+		Case DIFFICULTY_FACTOR_NORMAL
 			;[Block]
 			DifficultyDMGMult = 1.15
 			;[End Block]
-		Case DIFFICULTY_HARD
+		Case DIFFICULTY_FACTOR_HARD
 			;[Block]
 			DifficultyDMGMult = 1.3
 			;[End Block]
-		Case DIFFICULTY_EXTREME
+		Case DIFFICULTY_FACTOR_EXTREME
 			;[Block]
 			DifficultyDMGMult = 1.45
 			;[End Block]
@@ -3568,7 +3567,7 @@ Function InitOtherStuff%()
 	If opt\DebugMode Then InitCheats()
 	
 	as\Timer = 70.0 * 70.0
-	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
+	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
 	Local HideX# = -400 * MenuScale
 	

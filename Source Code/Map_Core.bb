@@ -111,7 +111,7 @@ End Function
 
 Type TempLights
 	Field RoomTemplate.RoomTemplates
-	Field lType%
+	Field LightType%
 	Field x#, y#, z#
 	Field Range#
 	Field R%, G%, B%
@@ -132,7 +132,7 @@ Type Lights
 	Field R%, G%, B%
 	Field Intensity#
 	Field Flickers% = False
-	Field lType%
+	Field LightType%
 	Field Fade#
 	Field FOV#, TanFOV#
 	Field SpriteScale#
@@ -241,7 +241,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	If room <> Null Then EntityParent(l\OBJ, room\OBJ)
 	HideEntity(l\OBJ)
 	
-	l\lType = LightType
+	l\LightType = LightType
 	
 	If HasSprite
 		l\Sprite = CreateSprite()
@@ -310,11 +310,12 @@ Function UpdateLightVolume%()
 			Next
 			opttimer\LightsTimer = 0.0
 		EndIf
-		LightVolume = CurveValue(TempLightVolume, LightVolume, 50.0)
+		LightVolume = CurveValue(TempLightVolume / (1.0 + ((SecondaryLightOn <= 0.1) * (wi\NightVision = 0))), LightVolume, 50.0)
 		SetEmissiveMultiply(1.0)
 	Else
 		SetEmissiveMultiply(0.0)
-		LightVolume = 1.0
+		
+		LightVolume = CurveValue(0.6, LightVolume, 50.0)
 		opttimer\LightsTimer = 0.0
 	EndIf
 End Function
@@ -766,7 +767,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\x = ReadFloat(f) * RoomScale
 					tl\y = ReadFloat(f) * RoomScale
 					tl\z = ReadFloat(f) * RoomScale
-					tl\lType = DEFERRED_LIGHT_POINT
+					tl\LightType = DEFERRED_LIGHT_POINT
 					tl\Range = ReadFloat(f) * RoomScale
 					
 					lColor = ReadString(f)
@@ -789,7 +790,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\x = ReadFloat(f) * RoomScale
 					tl\y = ReadFloat(f) * RoomScale
 					tl\z = ReadFloat(f) * RoomScale
-					tl\lType = DEFERRED_LIGHT_SPOT
+					tl\LightType = DEFERRED_LIGHT_SPOT
 					tl\Range = ReadFloat(f) * RoomScale
 					
 					lColor = ReadString(f)
@@ -4164,7 +4165,7 @@ Function UpdateSecurityCams%()
 								If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4 And (Not chs\NoTarget)
 									me\Sanity = me\Sanity - (fps\Factor[0] * (1.0 + (0.2 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using))
 									me\RestoreSanity = False
-									If SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then CanSave = 0
+									If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS Then CanSave = 0
 									
 									Local Pvt% = CreatePivot()
 									Local Value# = Clamp(15000.0 / (-me\Sanity), 20.0, 200.0)
@@ -4300,7 +4301,7 @@ Function RemoveSecurityCam%(sc.SecurityCams)
 End Function
 
 Function UpdateMonitorSaving%()
-	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn <= 0.1 Then Return
+	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn <= 0.1 Then Return
 	
 	Local sc.SecurityCams
 	
@@ -6132,7 +6133,7 @@ Function CreateMap%()
 							If x + 1 < MapGridSize + 1
 								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
 									r\AdjDoor[0] = CreateDoor(r, FloatX + (RoomSpacing / 2.0), 0.0, FloatY, 90.0, Max(Rand(-3, 1), 0), DoorType)
-									;If Rand(35 - (7 * (SelectedDifficulty\OtherFactors > DIFFICULTY_NORMAL))) Then AffectDecayDoor(r\AdjDoor[0])
+									If Rand(8 - (2 * (SelectedDifficulty\OtherFactors > DIFFICULTY_FACTOR_NORMAL))) = 1 Then AffectDecayDoor(r\AdjDoor[0])
 								EndIf
 							EndIf
 						EndIf
@@ -6161,10 +6162,7 @@ Function CreateMap%()
 						End Select
 						If ShouldSpawnDoor
 							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile
-									r\AdjDoor[3] = CreateDoor(r, FloatX, 0.0, FloatY + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), DoorType)
-									;If Rand(35 - (7 * (SelectedDifficulty\OtherFactors > DIFFICULTY_NORMAL))) = 1 Then AffectDecayDoor(r\AdjDoor[3])
-								EndIf
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, FloatX, 0.0, FloatY + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), DoorType)
 							EndIf
 						EndIf
 						Exit

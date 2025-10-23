@@ -67,7 +67,7 @@ Type QueuedSubtitlesMsg
 End Type
 
 Function UpdateSubtitles%()
-	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\EnableSubtitles) Then Return
+	If SelectedDifficulty\Name = difficulties[DIFFICULTY_APOLLYON]\Name Lor (Not opt\EnableSubtitles) Then Return
 	
 	Local Queue.QueuedSubtitlesMsg
 	Local LastSubtitles.SubtitlesMsg
@@ -161,7 +161,7 @@ Function UpdateSubtitles%()
 End Function
 
 Function RenderSubtitles%()
-	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Lor (Not opt\EnableSubtitles) Then Return
+	If SelectedDifficulty\Name = difficulties[DIFFICULTY_APOLLYON]\Name Lor (Not opt\EnableSubtitles) Then Return
 	
 	Local sub.SubtitlesMsg
 	Local Lines% = 0
@@ -206,7 +206,7 @@ End Function
 
 Function CreateSubtitlesToken%(SoundPath$, snd.Sound)
 	If (Not opt\EnableSubtitles) Lor (Not SubtitlesInit) Then Return
-	If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Then Return ; ~ Call this line when first line is passed
+	If SelectedDifficulty\Name = difficulties[DIFFICULTY_APOLLYON]\Name Then Return ; ~ Call this line when first line is passed
 	
 	Local i%
 	Local Token% = JsonGetValue(LocalSubFile, SoundPath)
