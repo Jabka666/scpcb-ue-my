@@ -14,6 +14,7 @@ Type FramesPerSeconds
 	Field TempFPS%
 	Field Goal%
 	Field LoopDelay%
+	Field ElapsedMilliSecs%
 	Field Factor#[2]
 End Type
 
@@ -225,9 +226,9 @@ Repeat
 	MilliSec = MilliSecs()
 	fps\CurrTime = MilliSec
 	
-	Local ElapsedMilliSecs% = fps\CurrTime - fps\PrevTime
+	fps\ElapsedMilliSecs = fps\CurrTime - fps\PrevTime
 	
-	If (ElapsedMilliSecs > 0 And ElapsedMilliSecs < 500) Then fps\Accumulator = fps\Accumulator + Max(0.0, Float(ElapsedMilliSecs) * 70.0 / 1000.0)
+	If (fps\ElapsedMilliSecs > 0 And fps\ElapsedMilliSecs < 500) Then fps\Accumulator = fps\Accumulator + Max(0.0, Float(fps\ElapsedMilliSecs) * 70.0 / 1000.0)
 	fps\PrevTime = fps\CurrTime
 	
 	If opt\FrameLimit > 0.0

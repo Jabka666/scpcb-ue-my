@@ -69,6 +69,14 @@ Global FXAAEffect%
 
 Global EmissiveMultiply#
 
+Global EyeAdaptationEffect%
+Global Luma%, Luma64%, Luma16%, Luma4%, Luma1%
+Global AdaptedLum%
+Global PrevAdaptedLum%
+
+Global MotionBlurEffect%
+Global TempColorTexture%
+
 Function InitDeferred%()
 	Local i%
 	
@@ -95,15 +103,15 @@ Function InitDeferred%()
 	PresentEffect = LoadEffect("Source Code\Shaders\Present.fx")
 	SSAOEffect = LoadEffect("Source Code\Shaders\SSAO.fx")
 	FXAAEffect = LoadEffect("Source Code\Shaders\FXAA.fx")
+	EyeAdaptationEffect = LoadEffect("Source Code\Shaders\EyeAdaptation.fx")
+	MotionBlurEffect = LoadEffect("Source Code\Shaders\MotionBlur.fx")
 	
 	DeferredShade = LoadEffect("Source Code\Deffered\Shade.fx")
 	
-	Local Width% = GraphicsWidth(), Height% = GraphicsHeight()
-	
-	MRTColor = CreateTexture(Width, Height, 1 + 2 + 256 + 16384)
-	MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 256 + 16384)
-	MRTDepth = CreateTexture(Width, Height, 131072)
-	MRTNormal = CreateTexture(Width, Height, 1 + 2 + 256 + 16384)
+	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
+	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
+	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 131072)
+	MRTNormal = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
 	
 	For i = 1 To SHADOW_MAP_MIPMAPS
 		Local iRounded% = RoundTwo(i)
@@ -204,8 +212,8 @@ Function InitDeferred%()
 	SetShadowsDistance(4.0)
 	DirectionalLightUpdate = 0
 	
-	BloomTex = CreateTexture(Width / 4, Height / 4, 1 + 256 + 16384)
-	BloomBlur = CreateTexture(Width / 4, Height / 4, 1 + 256 + 16384)
+	BloomTex = CreateTexture(opt\GraphicWidth / 4, opt\GraphicHeight / 4, 1 + 256 + 16384)
+	BloomBlur = CreateTexture(opt\GraphicWidth / 4, opt\GraphicHeight / 4, 1 + 256 + 16384)
 	
 	PostEffectQuad = CreateFullscreenQuad(QuadCamera)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
@@ -215,6 +223,16 @@ Function InitDeferred%()
 	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
 	
 	SetEmissiveMultiply(1.0)
+	
+	Luma = CreateTexture(128, 128, 1 + 16384)
+	Luma64 = CreateTexture(64, 64, 131072)
+	Luma16 = CreateTexture(16, 16, 131072)
+	Luma4 = CreateTexture(4, 4, 131072)
+	Luma1 = CreateTexture(1, 1, 131072)
+	AdaptedLum = CreateTexture(1, 1, 131072)
+	PrevAdaptedLum = CreateTexture(1, 1, 131072)
+	
+	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
 	
 	Delete Each DynamicLight
 End Function
@@ -335,6 +353,8 @@ Function ProcessDeferred%(Cam%, Tween#)
 		ProcessFXAA()
 		ProcessBloom()
 		ProcessColorCorrection()
+		;ProcessEyeAdaptation()
+		ProcessMotionBlur(Cam, 1.0, Tween)
 		PresentGBuffer(MRTColor, BackBuffer())
 	Else
 		RenderWorld(Tween)
@@ -659,9 +679,90 @@ Function ProcessFXAA%()
 	
 	ShowEntity(PostEffectQuad)
 	EffectTechnique(FXAAEffect, "Main")
-	SetBuffer(TextureBuffer(MRTColor))
+	SetBuffer(TextureBuffer(TempColorTexture))
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
+	
+	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
+End Function
+
+Function ProcessEyeAdaptation%()
+	Local Width# = 0.5 / opt\GraphicWidth
+	Local Height# = 0.5 / opt\GraphicHeight
+	
+	EntityEffect(PostEffectQuad, EyeAdaptationEffect)
+	
+	EntityBlend(PostEffectQuad, 0)
+	ShowEntity(PostEffectQuad)
+	EffectVector(EyeAdaptationEffect, "LumaOffset", Width, Height)
+	SetBuffer(TextureBuffer(Luma))
+	EffectTechnique(EyeAdaptationEffect, "Present")
+	RenderEntity(QuadCamera, PostEffectQuad)
+	
+	EffectVector(EyeAdaptationEffect, "LumaOffset", 0.5 / TextureWidth(Luma), 0.5 / TextureHeight(Luma))
+	SetBuffer(TextureBuffer(Luma64))
+	EffectTechnique(EyeAdaptationEffect, "LUM64")
+	EntityTexture(PostEffectQuad, Luma, 0, 1)
+	RenderEntity(QuadCamera, PostEffectQuad)
+	
+	EffectVector(EyeAdaptationEffect, "LumaOffset", 0.5 / TextureWidth(Luma64), 0.5 / TextureHeight(Luma64))
+	SetBuffer(TextureBuffer(Luma16))
+	EffectTechnique(EyeAdaptationEffect, "LUM16")
+	EntityTexture(PostEffectQuad, Luma64, 0, 1)
+	RenderEntity(QuadCamera, PostEffectQuad)
+	
+	EffectVector(EyeAdaptationEffect, "LumaOffset", 0.5 / TextureWidth(Luma16), 0.5 / TextureHeight(Luma16))
+	SetBuffer(TextureBuffer(Luma4))
+	EffectTechnique(EyeAdaptationEffect, "LUM4")
+	EntityTexture(PostEffectQuad, Luma16, 0, 1)
+	RenderEntity(QuadCamera, PostEffectQuad)
+	
+	EffectVector(EyeAdaptationEffect, "LumaOffset", 0.5 / TextureWidth(Luma4), 0.5 / TextureHeight(Luma4))
+	SetBuffer(TextureBuffer(Luma1))
+	EffectTechnique(EyeAdaptationEffect, "LUM1")
+	EntityTexture(PostEffectQuad, Luma4, 0, 1)
+	RenderEntity(QuadCamera, PostEffectQuad)
+	
+	EntityTexture(PostEffectQuad, AdaptedLum, 0, 0)
+	EffectVector(EyeAdaptationEffect, "LumaOffset", 0, 0)
+	SetBuffer(TextureBuffer(PrevAdaptedLum))
+	EffectTechnique(EyeAdaptationEffect, "Present")
+	RenderEntity(QuadCamera, PostEffectQuad)
+	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
+	
+	EffectVector(EyeAdaptationEffect, "LumaOffset", 0, 0)
+	SetBuffer(TextureBuffer(AdaptedLum))
+	EffectTechnique(EyeAdaptationEffect, "Adaptation")
+	EntityTexture(PostEffectQuad, PrevAdaptedLum, 0, 1)
+	EntityTexture(PostEffectQuad, Luma1, 0, 2)
+	RenderEntity(QuadCamera, PostEffectQuad)
+	
+	EffectVector(EyeAdaptationEffect, "LumaOffset", Width, Height)
+	SetBuffer(TextureBuffer(MRTColor))
+	EffectTechnique(EyeAdaptationEffect, "Exposure")
+	EntityTexture(PostEffectQuad, AdaptedLum, 0, 1)
+	RenderEntity(QuadCamera, PostEffectQuad)
+	HideEntity(PostEffectQuad)
+End Function
+
+Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
+	EffectFloat(MotionBlurEffect, "Strength", Strength)
+	EffectMatrix(MotionBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
+	EffectFloat(MotionBlurEffect, "Timestep", Min(Float(fps\ElapsedMilliSecs) / 1000.0, 1.0))
+	
+	EntityEffect(PostEffectQuad, MotionBlurEffect)
+	EntityTexture(PostEffectQuad, MRTDepth, 0, 1)
+	
+	EntityBlend(PostEffectQuad, 0)
+	ShowEntity(PostEffectQuad)
+	EffectTechnique(MotionBlurEffect, "Main")
+	SetBuffer(TextureBuffer(TempColorTexture))
+	RenderEntity(QuadCamera, PostEffectQuad)
+	HideEntity(PostEffectQuad)
+	
+	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
+	
+	EffectMatrix(MotionBlurEffect, "PrevViewProj", CameraMatrix(Cam, 2, Tween))
 End Function
 
 Function PresentGBuffer%(Tex%, Dest% = 0)
