@@ -310,12 +310,12 @@ Function UpdateLightVolume%()
 			Next
 			opttimer\LightsTimer = 0.0
 		EndIf
-		LightVolume = CurveValue(TempLightVolume / (1.0 + ((SecondaryLightOn <= 0.1) * (wi\NightVision = 0))), LightVolume, 50.0)
+		LightVolume = CurveValue(TempLightVolume / (1.0 + ((SecondaryLightOn <= 0.1) * (wi\NightVision = 0))), LightVolume, 40.0)
 		SetEmissiveMultiply(1.0)
 	Else
 		SetEmissiveMultiply(0.0)
 		
-		LightVolume = CurveValue(0.6, LightVolume, 50.0)
+		LightVolume = CurveValue(0.5, LightVolume, 40.0)
 		opttimer\LightsTimer = 0.0
 	EndIf
 End Function
