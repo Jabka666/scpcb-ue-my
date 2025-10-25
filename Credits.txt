@@ -175,10 +175,12 @@
 		itzslain
 		https://github.com/itzslain
 
+		Vladislav M. ("Flo Master")
+		https://github.com/VladsterFlomaster
+
 		racer_216
 		absdbs2004
 		Marrit
-		Vladster_flomaster
 
 *EX-developers
 		
@@ -293,6 +295,9 @@
 		
 		Omnisix
 		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
+
+		Vladislav M. ("Flo Master")
+		https://github.com/VladsterFlomaster
 		
 		Alexey Krasnov ("TaskeWSH")
 		LoneWolf
@@ -301,7 +306,6 @@
 		rus_hunter
 		Vladislav Safonov ("Onmane")
 		Nero
-		Vladster_flomaster
 		The Lunatic
 		
 *Translators
@@ -313,11 +317,12 @@
 		
 			mishutka154
 			https://github.com/mishutka154
+
+			Vladislav M. ("Flo Master")
+			https://github.com/VladsterFlomaster
 							
 			Ivan Mikhailov ("Redbull.Ivan")
 			
-			Vladster_flomaster
-
 			TrillTeam:
 			https://www.youtube.com/c/TrillTeam
 
@@ -395,7 +400,6 @@
 			
 			xstallm
 			Antoha
-			Vladster_flomaster
 			
 *Blitz3D Engine Creators
 
