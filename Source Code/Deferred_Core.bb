@@ -81,22 +81,22 @@ Function InitDeferred%()
 	Local i%
 	
 	LoadInputEffect(DEFERRED_NONE, "")
-	LoadInputEffect(DEFERRED_DIFF, "Source Code\Deffered\Input.fx")
-	LoadInputEffect(DEFERRED_DIFFNOLIT, "Source Code\Deffered\Input.fx", "NOLIT")
-	LoadInputEffect(DEFERRED_DIFFALPHA, "Source Code\Deffered\Input.fx", "TRANSPARENT")
-	LoadInputEffect(DEFERRED_DIFFNORMAL, "Source Code\Deffered\Input.fx", "NORMALMAP")
-	LoadInputEffect(DEFERRED_DIFFROUGH, "Source Code\Deffered\Input.fx", "ROUGHMAP")
-	LoadInputEffect(DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "EMISSIVEMAP")
+	LoadInputEffect(DEFERRED_DIFF, "Source Code\Deffered\Input.fx", "REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNOLIT, "Source Code\Deffered\Input.fx", "NOLIT REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFALPHA, "Source Code\Deffered\Input.fx", "TRANSPARENT REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL, "Source Code\Deffered\Input.fx", "NORMALMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFROUGH, "Source Code\Deffered\Input.fx", "ROUGHMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "EMISSIVEMAP REVERSEDZ")
 	
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP")
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "NORMALMAP EMISSIVEMAP")
-	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "ROUGHMAP EMISSIVEMAP")
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "NORMALMAP EMISSIVEMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "ROUGHMAP EMISSIVEMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP REVERSEDZ")
 	
-	LoadInputEffect(DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "EMISSIVEMAP MUL")
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "NORMALMAP EMISSIVEMAP MUL")
-	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "ROUGHMAP EMISSIVEMAP MUL")
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP MUL")
+	LoadInputEffect(DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "EMISSIVEMAP MUL REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "NORMALMAP EMISSIVEMAP MUL REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "ROUGHMAP EMISSIVEMAP MUL REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP MUL REVERSEDZ")
 	
 	BloomEffect = LoadEffect("Source Code\Shaders\Bloom.fx")
 	ColorCorrectionEffect = LoadEffect("Source Code\Shaders\ColorCorrection.fx")
@@ -330,6 +330,12 @@ End Function
 
 Function ProcessDeferred%(Cam%, Tween#)
 	If DeferredShade <> 0 And DeferredInputEffect[DEFERRED_DIFF]\Effect <> 0
+		Local ef.InputEffect
+		
+		For ef.InputEffect = Each InputEffect
+			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
+		Next
+		
 		SetBuffer(TextureBuffer(MRTColor))
 		SetBuffer(TextureBuffer(MRTAlbedo), 1)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
@@ -341,8 +347,13 @@ Function ProcessDeferred%(Cam%, Tween#)
 		EffectMatrix(DeferredShade, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 		ProcessAllLights(Cam, Tween)
 		
-		BeginRender(Tween, -1) ; ~ We can't use transparency rendering twice without begin render
 		CameraClsMode(Cam, 0, 0)
+		
+		For ef.InputEffect = Each InputEffect
+			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
+		Next
+		
+		BeginRender(Tween, -1) ; ~ We can't use transparency rendering twice without begin render
 		; ~ Render decals
 		RenderWorld(Tween, Cam, 32)
 		; ~ Render transparency
@@ -362,7 +373,6 @@ Function ProcessDeferred%(Cam%, Tween#)
 End Function
 
 Function ProcessAllLights%(Cam%, Tween#)
-	Local ef.InputEffect
 	Local i%
 	
 	For ef.InputEffect = Each InputEffect
@@ -400,10 +410,6 @@ Function ProcessAllLights%(Cam%, Tween#)
 	CameraRange(Cam, Near, Far)
 	
 	If DirectionalLightUpdate < MilliSecs() Then DirectionalLightUpdate = MilliSecs() + DIRECTIONAL_LIGHT_TIME
-	
-	For ef.InputEffect = Each InputEffect
-		If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
-	Next
 End Function
 
 Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, TanFOV# = 1.0, CastShadows% = True, Tween# = 1.0)
