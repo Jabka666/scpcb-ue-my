@@ -18,8 +18,8 @@ Const DIRECTIONAL_LIGHT_RANGE# = 0.01
 Const DIRECTIONAL_LIGHT_EXTRUSION# = 20.0
 Global SHADOW_BIAS# = 0.0002
 
-Const SHADOW_MAP_MIPMAPS% = 1 ; ~ Don't change this
-Const SHADOW_MAP_SIZE% = 1024
+Const SHADOW_MAP_MIPMAPS% = 3 ; ~ Don't change this
+Const SHADOW_MAP_SIZE% = 256
 Const DIRLIGHT_SHADOW_MAP_SIZE% = 1024
 
 Global MRTColor%
@@ -32,12 +32,16 @@ Type InputEffect
 	Field Bit%
 End Type
 
+Type DummyTexture
+	Field Tex%
+End Type
+
 Global DeferredInputEffect.InputEffect[MAX_DEFERRED_VARIATIONS]
 Global DeferredShade%
 
-Global DeferredShadowMapCube%[SHADOW_MAP_MIPMAPS]
+Global DeferredShadowMapCube%[SHADOW_MAP_MIPMAPS + 1]
 Global DeferredShadowMap%[SHADOW_MAP_MIPMAPS + 1]
-Global DeferredShadowMapDummy%[4]
+Global TextureDummies.DummyTexture
 
 Global DeferredCamera%, QuadCamera%
 Global DeferredSphere%, DeferredCone%, DeferredQuad%
@@ -106,6 +110,9 @@ Function InitDeferred%()
 	EyeAdaptationEffect = LoadEffect("Source Code\Shaders\EyeAdaptation.fx")
 	MotionBlurEffect = LoadEffect("Source Code\Shaders\MotionBlur.fx")
 	
+	Delete Each DummyTexture
+	Delete Each DynamicLight
+	
 	DeferredShade = LoadEffect("Source Code\Deffered\Shade.fx")
 	
 	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
@@ -118,13 +125,12 @@ Function InitDeferred%()
 		
 		DeferredShadowMapCube[i - 1] = CreateShadowMap(SHADOW_MAP_SIZE * 6 / iRounded, SHADOW_MAP_SIZE / iRounded)
 		DeferredShadowMap[i - 1] = CreateShadowMap(SHADOW_MAP_SIZE / iRounded, SHADOW_MAP_SIZE / iRounded)
+		
+		CreateDummyTexture(SHADOW_MAP_SIZE * 6 / iRounded, SHADOW_MAP_SIZE / iRounded)
+		CreateDummyTexture(SHADOW_MAP_SIZE / iRounded, SHADOW_MAP_SIZE / iRounded)
 	Next
 	
 	DeferredShadowMap[SHADOW_MAP_MIPMAPS] = CreateShadowMap(DIRLIGHT_SHADOW_MAP_SIZE, DIRLIGHT_SHADOW_MAP_SIZE)
-	
-	DeferredShadowMapDummy[DEFERRED_LIGHT_POINT] = CreateTexture(SHADOW_MAP_SIZE * 6, SHADOW_MAP_SIZE, 1 + 256 + 16384)
-	DeferredShadowMapDummy[DEFERRED_LIGHT_SPOT] = CreateTexture(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, 1 + 256 + 16384)
-	DeferredShadowMapDummy[DEFERRED_LIGHT_DIRECTIONAL] = CreateTexture(DIRLIGHT_SHADOW_MAP_SIZE, DIRLIGHT_SHADOW_MAP_SIZE, 1 + 256 + 16384)
 	
 	Local FaceSelectCubeMap% = CreateTexture(1, 1, 1 + 2 + 128 + 512)
 	
@@ -154,8 +160,6 @@ Function InitDeferred%()
 	PokeFloat(AdjustMatrix, 60, 1.0)
 	EffectMatrix(DeferredShade, "ShadowsAdjust", BankPointer(AdjustMatrix))
 	FreeBank(AdjustMatrix) : AdjustMatrix = 0
-	
-	EffectVector(DeferredShade, "ShadowMapSize", SHADOW_MAP_SIZE, SHADOW_MAP_SIZE)
 	
 	Local SpotTexture% = LoadTexture("GFX\Other\spot.png")
 	Local RampTexture% = LoadTexture("GFX\Other\ramp.png")
@@ -209,7 +213,7 @@ Function InitDeferred%()
 	MaskEntity(DeferredCone, 4)
 	MaskEntity(DeferredQuad, 4)
 	
-	SetShadowsDistance(4.0)
+	SetShadowsDistance(3.0)
 	DirectionalLightUpdate = 0
 	
 	BloomTex = CreateTexture(opt\GraphicWidth / 4, opt\GraphicHeight / 4, 1 + 256 + 16384)
@@ -233,8 +237,6 @@ Function InitDeferred%()
 	PrevAdaptedLum = CreateTexture(1, 1, 131072)
 	
 	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
-	
-	Delete Each DynamicLight
 End Function
 
 Function SetDeferredParticle%(Entity%, Enable% = True)
@@ -373,6 +375,7 @@ Function ProcessDeferred%(Cam%, Tween#)
 End Function
 
 Function ProcessAllLights%(Cam%, Tween#)
+	Local ef.InputEffect
 	Local i%
 	
 	For ef.InputEffect = Each InputEffect
@@ -391,14 +394,14 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\LightType, l\FOV, l\TanFOV, l\CastShadows, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\LightType, l\FOV, l\TanFOV, l\CastShadows, 0.01, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, 0.01, Tween)
 	Next
 	
-	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, Tween)
+	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, 0.0, Tween)
 	
 	EndRender()
 	
@@ -412,7 +415,7 @@ Function ProcessAllLights%(Cam%, Tween#)
 	If DirectionalLightUpdate < MilliSecs() Then DirectionalLightUpdate = MilliSecs() + DIRECTIONAL_LIGHT_TIME
 End Function
 
-Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, TanFOV# = 1.0, CastShadows% = True, Tween# = 1.0)
+Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, TanFOV# = 1.0, CastShadows% = True, Scattering# = 0.01, Tween# = 1.0)
 	Local VolumeScale# = Range * 1.25
 	Local Volume%
 	Local DistToLight# = 1.0
@@ -436,12 +439,10 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
-			Volume = DeferredCone
-			VolumeScale = TanFOV * Range
+			Volume = DeferredSphere
 			
 			PositionEntity(Volume, x, y, z)
-			RotateEntity(Volume, Pitch, Yaw, 0.0)
-			ScaleEntity(Volume, VolumeScale, VolumeScale, Range)
+			ScaleEntity(Volume, VolumeScale, VolumeScale, VolumeScale)
 			
 			If (Not EntityInView(Volume, Cam)) Then Return
 			DistToLight = EntityDistance(Cam, Volume)
@@ -461,7 +462,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
-			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) * VolumeScale + VolumeScale)
+			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0))
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
@@ -481,6 +482,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	EffectVector(DeferredShade, "LightPos", x, y, z)
 	EffectVector(DeferredShade, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
 	EffectFloat(DeferredShade, "LightRange", Range)
+	EffectFloat(DeferredShade, "LightScattering", Scattering)
 	
 	RenderEntity(Cam, Volume, Tween)
 End Function
@@ -489,8 +491,13 @@ Global DEFERRED_LIGHT_POINT_CULLING_SCALE# = Tan(90.0 * 0.5)
 
 Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, TanFOV# = 1.0, Tween# = 1.0)
 	Local i%
+	Local ShadowMapWidth% = TextureWidth(ShadowMap)
+	Local ShadowMapHeight% = TextureHeight(ShadowMap)
+	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight)
 	
-	SetBuffer(TextureBuffer(DeferredShadowMapDummy[LightType]))
+	If DummyTexture = 0 Then DebugLog("Unknown texture error" + ShadowMapWidth + " " + ShadowMapHeight)
+	
+	SetBuffer(TextureBuffer(DummyTexture))
 	
 	Select LightType
 		Case DEFERRED_LIGHT_DIRECTIONAL
@@ -505,11 +512,12 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 			CameraRange(DeferredCamera, 0.1, DIRECTIONAL_LIGHT_EXTRUSION + 15.0)
 			CameraProjMode(DeferredCamera, 2)
 			CameraZoom(DeferredCamera, DIRECTIONAL_LIGHT_RANGE)
-			CameraViewport(DeferredCamera, 0, 0, TextureWidth(ShadowMap), TextureHeight(ShadowMap))
+			CameraViewport(DeferredCamera, 0, 0, ShadowMapWidth, ShadowMapHeight)
 			
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
+			EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 			;[End Block]
 		Case DEFERRED_LIGHT_POINT
 			;[Block]
@@ -522,8 +530,9 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 			
 			SetBuffer(TextureBuffer(ShadowMap))
 			
-			Local Width% = TextureWidth(ShadowMap) / 6
-			Local Height% = TextureHeight(ShadowMap)
+			ShadowMapWidth = ShadowMapWidth / 6
+			ShadowMapHeight = TextureHeight(ShadowMap)
+			
 			Local CullingScale# = DEFERRED_LIGHT_POINT_CULLING_SCALE * Range
 			
 			PositionEntity(DeferredCone, x, y, z)
@@ -534,18 +543,20 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 				
 				If EntityInView(DeferredCone, MainCam)
 					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0.0)
-					CameraViewport(DeferredCamera, i * Width, 0, Width, Height)
+					CameraViewport(DeferredCamera, i * ShadowMapWidth, 0, ShadowMapWidth, ShadowMapHeight)
 					RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 					EffectMatrix(DeferredShade, "LightViewProj" + i, CameraMatrix(DeferredCamera, 2, Tween)) ; ~ Push matrix for each face
 				EndIf
 			Next
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
+			EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
+			EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 			;[End Block]
 	End Select
 	
@@ -557,6 +568,23 @@ End Function
 
 Function CreateShadowMap%(Width%, Height%)
 	Return(CreateTexture(Width, Height, 524288))
+End Function
+
+Function CreateDummyTexture%(Width%, Height%)
+	If FindDummyTexture(Width, Height) <> 0 Then Return
+	
+	Local t.DummyTexture = New DummyTexture
+	
+	t\Tex = CreateTexture(Width, Height, 1 + 256 + 16384)
+End Function
+
+Function FindDummyTexture%(Width%, Height%)
+	Local dt.DummyTexture
+	
+	For dt.DummyTexture = Each DummyTexture
+		If TextureWidth(dt\Tex) = Width And TextureHeight(dt\Tex) = Height Then Return(dt\Tex)
+	Next
+	Return(0)
 End Function
 
 Function CreateLightVolume%(LightType%)

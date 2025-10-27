@@ -3459,9 +3459,9 @@ End Function
 
 ; ~ Fog Constants
 ;[Block]
-Const FogColorLCZ$ = "005005005"
-Const FogColorHCZ$ = "007002002"
-Const FogColorEZ$ = "007007012"
+Const FogColorLCZ$ = "015015015"
+Const FogColorHCZ$ = "021006006"
+Const FogColorEZ$ = "021021036"
 Const FogColorStorageTunnels$ = "002007000"
 Const FogColorIntro$ = "030030030"
 Const FogColorOutside$ = "015015015"
