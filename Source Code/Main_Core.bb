@@ -3459,9 +3459,9 @@ End Function
 
 ; ~ Fog Constants
 ;[Block]
-Const FogColorLCZ$ = "015015015"
-Const FogColorHCZ$ = "021006006"
-Const FogColorEZ$ = "021021036"
+Const FogColorLCZ$ = "005005005"
+Const FogColorHCZ$ = "007002002"
+Const FogColorEZ$ = "007007012"
 Const FogColorStorageTunnels$ = "002007000"
 Const FogColorIntro$ = "030030030"
 Const FogColorOutside$ = "015015015"
@@ -3514,7 +3514,7 @@ Function UpdateZoneColor%()
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1 * LightVolume, DistFog)
 	; ~ Allow to use big range for debugging
-	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * 1.25)
+	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * 1.5)
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 		SetZoneColor(FogColorStorageTunnels)
@@ -3589,7 +3589,7 @@ Function UpdateZoneColor%()
 	
 	; ~ Set the camera fog color
 	CameraFogColor(Camera, fog\R, fog\G, fog\B)
-	CameraClsColor(Camera, (Not IsOutSide) * fog\R, (Not IsOutSide) * fog\G, (Not IsOutSide) * fog\B)
+	CameraClsColor(Camera, (Not IsOutSide) * fog\R * 1.5, (Not IsOutSide) * fog\G * 1.5, (Not IsOutSide) * fog\B * 1.5)
 	
 	; ~ Calculate the current ambient color which affects the lighting of props/objects/NPCs/items
 	Local TargetAmbientR% = Left(fog\CurrAmbientName, 3), TargetAmbientG% = Mid(fog\CurrAmbientName, 4, 3), TargetAmbientB% = Right(fog\CurrAmbientName, 3)

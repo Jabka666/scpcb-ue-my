@@ -11,7 +11,11 @@ Const DEFERRED_DIFFNOLIT% = 16
 Const DEFERRED_DIFFEMISSIVEMUL% = 32
 Const DEFERRED_NONE% = 64
 
+Const DEFERRED_SHADE_SHADOWS% = 1
+Const DEFERRED_SHADE_SCATTERING% = 2
+
 Const MAX_DEFERRED_VARIATIONS% = 256
+Const MAX_DEFERRED_SHADE_VARIATIONS% = 32
 
 Const DIRECTIONAL_LIGHT_TIME% = 0
 Const DIRECTIONAL_LIGHT_RANGE# = 0.01
@@ -32,12 +36,17 @@ Type InputEffect
 	Field Bit%
 End Type
 
+Type ShadeEffect
+	Field Effect%
+	Field Bit%
+End Type
+
 Type DummyTexture
 	Field Tex%
 End Type
 
 Global DeferredInputEffect.InputEffect[MAX_DEFERRED_VARIATIONS]
-Global DeferredShade%
+Global DeferredShadeEffect.ShadeEffect[MAX_DEFERRED_SHADE_VARIATIONS]
 
 Global DeferredShadowMapCube%[SHADOW_MAP_MIPMAPS + 1]
 Global DeferredShadowMap%[SHADOW_MAP_MIPMAPS + 1]
@@ -82,8 +91,10 @@ Global MotionBlurEffect%
 Global TempColorTexture%
 
 Function InitDeferred%()
+	Local se.ShadeEffect
 	Local i%
 	
+	ClearDeferred()
 	LoadInputEffect(DEFERRED_NONE, "")
 	LoadInputEffect(DEFERRED_DIFF, "Source Code\Deffered\Input.fx", "REVERSEDZ")
 	LoadInputEffect(DEFERRED_DIFFNOLIT, "Source Code\Deffered\Input.fx", "NOLIT REVERSEDZ")
@@ -102,6 +113,11 @@ Function InitDeferred%()
 	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "ROUGHMAP EMISSIVEMAP MUL REVERSEDZ")
 	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deffered\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP MUL REVERSEDZ")
 	
+	LoadShadeEffect(0, "Source Code\Deffered\Shade.fx")
+	LoadShadeEffect(DEFERRED_SHADE_SHADOWS, "Source Code\Deffered\Shade.fx", "SHADOWS")
+	LoadShadeEffect(DEFERRED_SHADE_SCATTERING, "Source Code\Deffered\Shade.fx", "SCATTERING")
+	LoadShadeEffect(DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING, "Source Code\Deffered\Shade.fx", "SHADOWS SCATTERING")
+	
 	BloomEffect = LoadEffect("Source Code\Shaders\Bloom.fx")
 	ColorCorrectionEffect = LoadEffect("Source Code\Shaders\ColorCorrection.fx")
 	PresentEffect = LoadEffect("Source Code\Shaders\Present.fx")
@@ -109,11 +125,6 @@ Function InitDeferred%()
 	FXAAEffect = LoadEffect("Source Code\Shaders\FXAA.fx")
 	EyeAdaptationEffect = LoadEffect("Source Code\Shaders\EyeAdaptation.fx")
 	MotionBlurEffect = LoadEffect("Source Code\Shaders\MotionBlur.fx")
-	
-	Delete Each DummyTexture
-	Delete Each DynamicLight
-	
-	DeferredShade = LoadEffect("Source Code\Deffered\Shade.fx")
 	
 	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
 	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
@@ -158,7 +169,11 @@ Function InitDeferred%()
 	PokeFloat(AdjustMatrix, 48, 0.5)
 	PokeFloat(AdjustMatrix, 52, 0.5)
 	PokeFloat(AdjustMatrix, 60, 1.0)
-	EffectMatrix(DeferredShade, "ShadowsAdjust", BankPointer(AdjustMatrix))
+	
+	For se.ShadeEffect = Each ShadeEffect
+		EffectMatrix(se\Effect, "ShadowsAdjust", BankPointer(AdjustMatrix))
+	Next
+	
 	FreeBank(AdjustMatrix) : AdjustMatrix = 0
 	
 	Local SpotTexture% = LoadTexture("GFX\Other\spot.png")
@@ -168,7 +183,6 @@ Function InitDeferred%()
 	DeferredCone = CreateLightVolume(DEFERRED_LIGHT_SPOT)
 	DeferredQuad = CreateLightVolume(DEFERRED_LIGHT_DIRECTIONAL)
 	
-	EntityEffect(DeferredSphere, DeferredShade)
 	EntityTexture(DeferredSphere, MRTAlbedo, 0, 0)
 	EntityTexture(DeferredSphere, MRTNormal, 0, 1)
 	EntityTexture(DeferredSphere, MRTDepth, 0, 2)
@@ -179,7 +193,6 @@ Function InitDeferred%()
 	EntityBlend(DeferredSphere, 3)
 	EntityFX(DeferredSphere, 8)
 	
-	EntityEffect(DeferredCone, DeferredShade)
 	EntityTexture(DeferredCone, MRTAlbedo, 0, 0)
 	EntityTexture(DeferredCone, MRTNormal, 0, 1)
 	EntityTexture(DeferredCone, MRTDepth, 0, 2)
@@ -190,7 +203,6 @@ Function InitDeferred%()
 	EntityBlend(DeferredCone, 3)
 	EntityFX(DeferredCone, 8)
 	
-	EntityEffect(DeferredQuad, DeferredShade)
 	EntityTexture(DeferredQuad, MRTAlbedo, 0, 0)
 	EntityTexture(DeferredQuad, MRTNormal, 0, 1)
 	EntityTexture(DeferredQuad, MRTDepth, 0, 2)
@@ -239,6 +251,13 @@ Function InitDeferred%()
 	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
 End Function
 
+Function ClearDeferred%()
+	Delete Each DummyTexture
+	Delete Each DynamicLight
+	Delete Each InputEffect
+	Delete Each ShadeEffect
+End Function
+
 Function SetDeferredParticle%(Entity%, Enable% = True)
 	SetShadowsCasting(Entity, False) ;Enable)
 End Function
@@ -248,14 +267,12 @@ Function SetShadowsCasting%(Entity%, Enable%)
 End Function
 
 Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
-	If DeferredShade = 0 Then Return
-	
 	Local SurfCount%
 	
 	If State <> -1
 		Local i%, SF%, b%
 		
-		EntityEffect(Entity, DeferredInputEffect[State]\Effect)
+		EntityEffect(Entity, GetInputEffect(State))
 		If State = DEFERRED_NONE And EntityClass(Entity) = "Mesh"
 			SurfCount = CountSurfaces(Entity)
 			For i = 1 To SurfCount
@@ -319,7 +336,7 @@ Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 		EndIf
 	EndIf
 	
-	BrushEffect(Brush, DeferredInputEffect[State]\Effect)
+	BrushEffect(Brush, GetInputEffect(State))
 End Function
 
 Function UpdateEntityMaterial%(Entity%, State% = -1, Frame% = 0)
@@ -331,13 +348,12 @@ Function UpdateEntityMaterial%(Entity%, State% = -1, Frame% = 0)
 End Function
 
 Function ProcessDeferred%(Cam%, Tween#)
-	If DeferredShade <> 0 And DeferredInputEffect[DEFERRED_DIFF]\Effect <> 0
-		Local ef.InputEffect
+	If GetShadeEffect(0) <> 0 And GetInputEffect(DEFERRED_DIFF) <> 0
+		Local ef.InputEffect, se.ShadeEffect
 		
 		For ef.InputEffect = Each InputEffect
 			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 		Next
-		
 		SetBuffer(TextureBuffer(MRTColor))
 		SetBuffer(TextureBuffer(MRTAlbedo), 1)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
@@ -346,7 +362,10 @@ Function ProcessDeferred%(Cam%, Tween#)
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
 		ProcessSSAO(Cam, 1.5, 0.2, Tween) ; ~ Process SSAO for opacity
 		
-		EffectMatrix(DeferredShade, "InvViewProj", CameraMatrix(Cam, 3, Tween))
+		InvViewProjection% = CameraMatrix(Cam, 3, Tween)
+		For se.ShadeEffect = Each ShadeEffect
+			EffectMatrix(se\Effect, "InvViewProj", InvViewProjection)
+		Next
 		ProcessAllLights(Cam, Tween)
 		
 		CameraClsMode(Cam, 0, 0)
@@ -369,6 +388,8 @@ Function ProcessDeferred%(Cam%, Tween#)
 		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)
 		PresentGBuffer(MRTColor, BackBuffer())
+		
+		If KeyDown(47) Then DrawBuffer(TextureBuffer(MRTDepth), 0, 0, 256, 256)
 	Else
 		RenderWorld(Tween)
 	EndIf
@@ -419,6 +440,12 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	Local VolumeScale# = Range * 1.25
 	Local Volume%
 	Local DistToLight# = 1.0
+	Local EffectBits = 0
+	
+	If CastShadows Then EffectBits = EffectBits Or DEFERRED_SHADE_SHADOWS
+	If Scattering > 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SCATTERING
+	
+	Local DeferredShade% = GetShadeEffect(EffectBits)
 	
 	EffectBool(DeferredShade, "Shadowed", False)
 	
@@ -432,7 +459,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
 			DistToLight = EntityDistance(Cam, Volume)
-			If CastShadows Then RenderShadowMap(Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
+			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
 			EffectTechnique(DeferredShade, "PointLight")
 			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0))
@@ -457,7 +484,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			CameraViewport(DeferredCamera, 0, 0, TextureWidth(Shadowmap), TextureHeight(Shadowmap))
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS, 0.5)
 			
-			If CastShadows Then RenderShadowMap(Cam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
+			If CastShadows Then RenderShadowMap(DeferredShade, Cam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
 			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
@@ -468,7 +495,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			;[Block]
 			Volume = DeferredQuad
 			
-			If CastShadows Then RenderShadowMap(Cam, DeferredShadowMap[0], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
+			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMap[0], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
 			Tween = 1.0
 			Cam = QuadCamera
@@ -483,13 +510,14 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	EffectVector(DeferredShade, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
 	EffectFloat(DeferredShade, "LightRange", Range)
 	EffectFloat(DeferredShade, "LightScattering", Scattering)
+	EntityEffect(Volume, DeferredShade)
 	
 	RenderEntity(Cam, Volume, Tween)
 End Function
 
 Global DEFERRED_LIGHT_POINT_CULLING_SCALE# = Tan(90.0 * 0.5)
 
-Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, TanFOV# = 1.0, Tween# = 1.0)
+Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, TanFOV# = 1.0, Tween# = 1.0)
 	Local ShadowMapWidth% = TextureWidth(ShadowMap)
 	Local ShadowMapHeight% = TextureHeight(ShadowMap)
 	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight)
@@ -881,6 +909,22 @@ Function LoadInputEffect%(Bit%, File$, Defines$ = "")
 	DeferredInputEffect[Bit] = New InputEffect
 	DeferredInputEffect[Bit]\Effect = LoadEffectEx(File, Defines)
 	DeferredInputEffect[Bit]\Bit = Bit
+End Function
+
+Function LoadShadeEffect%(Bit%, File$, Defines$ = "")
+	DeferredShadeEffect[Bit] = New ShadeEffect
+	DeferredShadeEffect[Bit]\Effect = LoadEffectEx(File, Defines)
+	DeferredShadeEffect[Bit]\Bit = Bit
+End Function
+
+Function GetInputEffect%(Bit%)
+	If DeferredInputEffect[Bit] = Null Then Return(0)
+	Return(DeferredInputEffect[Bit]\Effect)
+End Function
+
+Function GetShadeEffect%(Bit%)
+	If DeferredShadeEffect[Bit] = Null Then Return(0)
+	Return(DeferredShadeEffect[Bit]\Effect)
 End Function
 
 Function LoadEffectEx%(File$, Defines$ = "")
