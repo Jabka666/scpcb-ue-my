@@ -490,10 +490,10 @@ End Function
 Global DEFERRED_LIGHT_POINT_CULLING_SCALE# = Tan(90.0 * 0.5)
 
 Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, TanFOV# = 1.0, Tween# = 1.0)
-	Local i%
 	Local ShadowMapWidth% = TextureWidth(ShadowMap)
 	Local ShadowMapHeight% = TextureHeight(ShadowMap)
 	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight)
+	Local i%
 	
 	If DummyTexture = 0 Then DebugLog("Unknown texture error" + ShadowMapWidth + " " + ShadowMapHeight)
 	
@@ -517,7 +517,6 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
-			EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 			;[End Block]
 		Case DEFERRED_LIGHT_POINT
 			;[Block]
@@ -530,9 +529,6 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 			
 			SetBuffer(TextureBuffer(ShadowMap))
 			
-			ShadowMapWidth = ShadowMapWidth / 6
-			ShadowMapHeight = TextureHeight(ShadowMap)
-			
 			Local CullingScale# = DEFERRED_LIGHT_POINT_CULLING_SCALE * Range
 			
 			PositionEntity(DeferredCone, x, y, z)
@@ -543,23 +539,22 @@ Function RenderShadowMap%(MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, 
 				
 				If EntityInView(DeferredCone, MainCam)
 					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0.0)
-					CameraViewport(DeferredCamera, i * ShadowMapWidth, 0, ShadowMapWidth, ShadowMapHeight)
+					CameraViewport(DeferredCamera, i * ShadowMapWidth / 6, 0, ShadowMapWidth / 6, ShadowMapHeight)
 					RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 					EffectMatrix(DeferredShade, "LightViewProj" + i, CameraMatrix(DeferredCamera, 2, Tween)) ; ~ Push matrix for each face
 				EndIf
 			Next
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
-			EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
-			EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 			;[End Block]
 	End Select
 	
+	EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 	EffectTexture(DeferredShade, "tShadowMap", ShadowMap)
 	EffectBool(DeferredShade, "Shadowed", True)
 	
