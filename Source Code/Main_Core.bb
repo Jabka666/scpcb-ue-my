@@ -3495,6 +3495,7 @@ Type FogAmbient
 	Field CurrName$, CurrAmbientName$
 	Field R#, G#, B#
 	Field AmbientR#, AmbientG#, AmbientB#
+	Field ClsR%, ClsG%, ClsB%
 End Type
 
 Global fog.FogAmbient
@@ -3514,7 +3515,7 @@ Function UpdateZoneColor%()
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1 * LightVolume, DistFog)
 	; ~ Allow to use big range for debugging
-	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * 1.5)
+	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * 1.25)
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 		SetZoneColor(FogColorStorageTunnels)
@@ -3589,7 +3590,12 @@ Function UpdateZoneColor%()
 	
 	; ~ Set the camera fog color
 	CameraFogColor(Camera, fog\R, fog\G, fog\B)
-	CameraClsColor(Camera, (Not IsOutSide) * fog\R * 1.5, (Not IsOutSide) * fog\G * 1.5, (Not IsOutSide) * fog\B * 1.5)
+	
+	fog\ClsR = (Not IsOutSide) * fog\R
+	fog\ClsG = (Not IsOutSide) * fog\G
+	fog\ClsB = (Not IsOutSide) * fog\B
+	
+	CameraClsColor(Camera, fog\ClsR, fog\ClsG, fog\ClsB)
 	
 	; ~ Calculate the current ambient color which affects the lighting of props/objects/NPCs/items
 	Local TargetAmbientR% = Left(fog\CurrAmbientName, 3), TargetAmbientG% = Mid(fog\CurrAmbientName, 4, 3), TargetAmbientB% = Right(fog\CurrAmbientName, 3)

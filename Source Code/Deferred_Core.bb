@@ -90,6 +90,8 @@ Global PrevAdaptedLum%
 Global MotionBlurEffect%
 Global TempColorTexture%
 
+Global ClearEffect%
+
 Function InitDeferred%()
 	Local se.ShadeEffect
 	Local i%
@@ -118,6 +120,7 @@ Function InitDeferred%()
 	LoadShadeEffect(DEFERRED_SHADE_SCATTERING, "Source Code\Deffered\Shade.fx", "SCATTERING")
 	LoadShadeEffect(DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING, "Source Code\Deffered\Shade.fx", "SHADOWS SCATTERING")
 	
+	ClearEffect = LoadEffect("Source Code\Deffered\Clear.fx")
 	BloomEffect = LoadEffect("Source Code\Shaders\Bloom.fx")
 	ColorCorrectionEffect = LoadEffect("Source Code\Shaders\ColorCorrection.fx")
 	PresentEffect = LoadEffect("Source Code\Shaders\Present.fx")
@@ -354,10 +357,15 @@ Function ProcessDeferred%(Cam%, Tween#)
 		For ef.InputEffect = Each InputEffect
 			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 		Next
+		ClearBuffer(TextureBuffer(MRTColor), fog\ClsR / 255.0, fog\ClsG / 255.0, fog\ClsB / 255.0, 1)
+		ClearBuffer(TextureBuffer(MRTAlbedo), 0, 0, 0, 1)
+		ClearBuffer(TextureBuffer(MRTNormal), 0, 0, 0, 1)
+		ClearBuffer(TextureBuffer(MRTDepth), 0, 0, 0, 1)
 		SetBuffer(TextureBuffer(MRTColor))
 		SetBuffer(TextureBuffer(MRTAlbedo), 1)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
 		SetBuffer(TextureBuffer(MRTDepth), 3)
+		CameraClsMode(Cam, 0, 1)
 		; ~ Render opacity
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
 		ProcessSSAO(Cam, 1.5, 0.2, Tween) ; ~ Process SSAO for opacity
@@ -388,8 +396,6 @@ Function ProcessDeferred%(Cam%, Tween#)
 		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)
 		PresentGBuffer(MRTColor, BackBuffer())
-		
-		If KeyDown(47) Then DrawBuffer(TextureBuffer(MRTDepth), 0, 0, 256, 256)
 	Else
 		RenderWorld(Tween)
 	EndIf
@@ -415,11 +421,11 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\LightType, l\FOV, l\TanFOV, l\CastShadows, 0.01, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\LightType, l\FOV, l\TanFOV, l\CastShadows, 0.008, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, 0.01, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, 0.008, Tween)
 	Next
 	
 	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, 0.0, Tween)
@@ -830,6 +836,23 @@ Function PresentGBuffer%(Tex%, Dest% = 0)
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
+End Function
+
+Function ClearBuffer%(Buffer%, R#, G#, B#, Alpha#)
+	Local PrevBuffer% = GraphicsBuffer()
+	
+	If (Not SetBuffer(Buffer)) Then Return
+	
+	EffectVector(ClearEffect, "Value", R, G, B, Alpha)
+	EntityBlend(PostEffectQuad, 0)
+	EntityEffect(PostEffectQuad, ClearEffect)
+	
+	CameraViewport(QuadCamera, 0, 0, BufferWidth(Buffer), BufferHeight(Buffer))
+	ShowEntity(PostEffectQuad)
+	RenderEntity(QuadCamera, PostEffectQuad)
+	HideEntity(PostEffectQuad)
+	SetBuffer(PrevBuffer)
+	CameraViewport(QuadCamera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 End Function
 
 ; ==================================== DYNAMIC LIGHTS

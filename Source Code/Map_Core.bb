@@ -408,6 +408,8 @@ Function UpdateLights%(Cam%)
 					; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
 					EntityOrder(l\AdvancedSprite, 0)
 				EndIf
+				HideEntity(l\Sprite) ; ~ TODO: TEMP
+				HideEntity(l\AdvancedSprite) ; ~ TODO: TEMP
 			Else
 				If Cam = Camera ; ~ The lights are rendered by player's cam
 					Dist = EntityDistanceSquared(Cam, l\OBJ)
