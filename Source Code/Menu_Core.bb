@@ -1021,6 +1021,8 @@ Function RenderMainMenu%()
 	Local TempStr$, TempStr2$, Name$
 	Local Clr%
 	
+	RenderGamma()
+	
 	If (Not OnPalette)
 		ShowPointer()
 	Else
@@ -2038,8 +2040,6 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			EndIf
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), StrTemp, True, True)
 		EndIf
-		
-		RenderGamma()
 		
 		Delay(20)
 		Flip()

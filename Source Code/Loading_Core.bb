@@ -422,7 +422,7 @@ Function LoadParticles%()
 	SetTemplateAlignToFall(ParticleEffect[20], True, 45)
 	SetTemplateGravity(ParticleEffect[20], 0.001)
 	SetTemplateSize(ParticleEffect[20], 0.02, 0.032, 0.7, 1)
-	SetTemplateColors(ParticleEffect[20], $0000FF, $6565FF)
+	SetTemplateColors(ParticleEffect[20], $FFFF00, $FFFF00)
 	
 	; ~ Blood sprite
 	ParticleEffect[21] = CreateTemplate()
@@ -2704,6 +2704,7 @@ Function LoadEntities%()
 	CameraClsColor(Camera, 80.0, 80.0, 80.0)
 	CameraReverseZ(Camera, True)
 	AmbientLight(80.0, 80.0, 80.0)
+	SetShadowsBias(0.0002)
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)

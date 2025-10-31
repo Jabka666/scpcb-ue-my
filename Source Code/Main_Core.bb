@@ -169,6 +169,7 @@ Include "Source Code\Devil_Particles_Core.bb"
 RenderLoading(40, GetLocalString("loading", "core.grap"))
 
 Include "Source Code\Graphics_Core.bb"
+Include "Source Code\Shaders_Core.bb"
 Include "Source Code\Deferred_Core.bb"
 
 RenderLoading(45, GetLocalString("loading", "core.map"))
@@ -246,8 +247,6 @@ Repeat
 	Else
 		UpdateGame()
 	EndIf
-	
-	RenderGamma()
 	
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
@@ -2445,7 +2444,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
-			SHADOW_BIAS = Float(StrTemp)
+			SetShadowsBias(Float(StrTemp))
 			CreateConsoleMsg("Done")
 			;[End Block]
 		Default
@@ -3475,8 +3474,8 @@ Const FogColorForestChase$ = "032044054"
 
 ; ~ Ambient Color Constants
 ;[Block]
-Const AmbientColorLCZ$ = "050050050"
-Const AmbientColorHCZ$ = "030023023"
+Const AmbientColorLCZ$ = "016016016"
+Const AmbientColorHCZ$ = "015011011"
 Const AmbientColorEZ$ = "045045045"
 Const AmbientOutside$ = "070070070"
 ;[End Block]
@@ -3496,6 +3495,7 @@ Type FogAmbient
 	Field R#, G#, B#
 	Field AmbientR#, AmbientG#, AmbientB#
 	Field ClsR%, ClsG%, ClsB%
+	Field CurrAmbientR#, CurrAmbientG#, CurrAmbientB#
 End Type
 
 Global fog.FogAmbient
@@ -3630,6 +3630,11 @@ Function UpdateZoneColor%()
 				;[End Block]
 		End Select
 	EndIf
+	
+	fog\CurrAmbientR = CurrR
+	fog\CurrAmbientG = CurrG
+	fog\CurrAmbientB = CurrB
+	
 	AmbientLight(CurrR, CurrG, CurrB)
 End Function
 

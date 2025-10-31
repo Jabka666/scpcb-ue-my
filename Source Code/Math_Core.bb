@@ -29,6 +29,10 @@ Function IsEqual%(a#, b#, Value#)
 	Return(Abs(a - b) <= Value)
 End Function
 
+Function Lerp#(a#, b#, f#)
+    Return(a * (1.0 - f) + (b * f))
+End Function
+
 Function CurveValue#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	

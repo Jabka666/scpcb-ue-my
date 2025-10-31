@@ -33,6 +33,7 @@
  AbsPath="\Source Code\NPCs_AI_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Particles_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Save_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
+ AbsPath="\Source Code\Shaders_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Sky_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Sounds_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Strict_Functions_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"

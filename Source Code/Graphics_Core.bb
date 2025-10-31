@@ -15,6 +15,7 @@ Function InitFastResize%()
 	ClsColor(0, 0, 0)
 	
 	InitDeferred()
+	InitShaders()
 End Function
 
 Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
@@ -108,17 +109,13 @@ Function CreateFullscreenQuad%(Parent% = 0)
 	Return(Quad)
 End Function
 
-Function RenderGamma%()
-	Local PrevR% = ColorRed(), PrevG% = ColorGreen(), PrevB% = ColorBlue(), PrevA% = ColorAlpha()
-	
-	If opt\ScreenGamma > 1.0
-		Color(28 * (opt\ScreenGamma - 1.0), 28 * (opt\ScreenGamma - 1.0), 28 * (opt\ScreenGamma - 1.0))
-		DrawBuffer(TextureBuffer(WhiteTexture), 0, 0, opt\GraphicWidth, opt\GraphicHeight, 3)
-	ElseIf opt\ScreenGamma < 1.0
-		Color(0, 0, 0, 128 * (1.0 - opt\ScreenGamma))
-		DrawBuffer(TextureBuffer(WhiteTexture), 0, 0, opt\GraphicWidth, opt\GraphicHeight)
+Function RenderGamma%() ; ~ Render gamma for current BackBuffer()
+	If opt\ScreenGamma <> 1.0
+		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, 0, 0, BackBuffer(), TextureBuffer(MRTColor))
+		ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
+		PresentGBuffer(MRTColor, BackBuffer())
+		SetBuffer(BackBuffer())
 	EndIf
-	Color(PrevR, PrevG, PrevB, PrevA)
 End Function
 
 Global CurrTrisAmount%

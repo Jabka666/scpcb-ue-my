@@ -20,7 +20,7 @@ Const MAX_DEFERRED_SHADE_VARIATIONS% = 32
 Const DIRECTIONAL_LIGHT_TIME% = 0
 Const DIRECTIONAL_LIGHT_RANGE# = 0.01
 Const DIRECTIONAL_LIGHT_EXTRUSION# = 20.0
-Global SHADOW_BIAS# = 0.0002
+Global SHADOW_BIAS# = 0.00044
 
 Const SHADOW_MAP_MIPMAPS% = 3 ; ~ Don't change this
 Const SHADOW_MAP_SIZE% = 256
@@ -56,6 +56,8 @@ Global DeferredCamera%, QuadCamera%
 Global DeferredSphere%, DeferredCone%, DeferredQuad%
 Global DirectionalLightUpdate%
 Global ShadowsDistance#
+Global GBufferBlur#
+Global TempColorTexture%
 
 Global CubeRotateX#[6]
 Global CubeRotateY#[6]
@@ -66,31 +68,6 @@ CubeRotateX[2] = 0 : CubeRotateY[2] = -90
 CubeRotateX[3] = 0 : CubeRotateY[3] = 180
 CubeRotateX[4] = -90 : CubeRotateY[4] = 0
 CubeRotateX[5] = 90 : CubeRotateY[5] = 0
-
-Global PostEffectQuad%
-
-Global BloomEffect%
-Global BloomTex%, BloomBlur%
-
-Global ColorCorrectionEffect%
-Global PresentEffect%
-
-Global SSAOEffect%
-Global NoiseTexture%
-
-Global FXAAEffect%
-
-Global EmissiveMultiply#
-
-Global EyeAdaptationEffect%
-Global Luma%, Luma64%, Luma16%, Luma4%, Luma1%
-Global AdaptedLum%
-Global PrevAdaptedLum%
-
-Global MotionBlurEffect%
-Global TempColorTexture%
-
-Global ClearEffect%
 
 Function InitDeferred%()
 	Local se.ShadeEffect
@@ -120,15 +97,6 @@ Function InitDeferred%()
 	LoadShadeEffect(DEFERRED_SHADE_SCATTERING, "Source Code\Deferred\Shade.fx", "SCATTERING")
 	LoadShadeEffect(DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING, "Source Code\Deferred\Shade.fx", "SHADOWS SCATTERING")
 	
-	ClearEffect = LoadEffect("Source Code\Deferred\Clear.fx")
-	BloomEffect = LoadEffect("Source Code\Shaders\Bloom.fx")
-	ColorCorrectionEffect = LoadEffect("Source Code\Shaders\ColorCorrection.fx")
-	PresentEffect = LoadEffect("Source Code\Shaders\Present.fx")
-	SSAOEffect = LoadEffect("Source Code\Shaders\SSAO.fx")
-	FXAAEffect = LoadEffect("Source Code\Shaders\FXAA.fx")
-	EyeAdaptationEffect = LoadEffect("Source Code\Shaders\EyeAdaptation.fx")
-	MotionBlurEffect = LoadEffect("Source Code\Shaders\MotionBlur.fx")
-	
 	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
 	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
 	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 131072)
@@ -155,14 +123,14 @@ Function InitDeferred%()
 		UnlockBuffer(TextureBuffer(FaceSelectCubeMap))
 	Next
 	
+	QuadCamera = CreateCamera()
+	CameraClsMode(QuadCamera, 0, 0)
+	HideEntity(QuadCamera)
+	
 	DeferredCamera = CreateCamera()
 	CameraClsMode(DeferredCamera, 0, 1)
 	CameraColorWrite(DeferredCamera, False)
 	HideEntity(DeferredCamera)
-	
-	QuadCamera = CreateCamera()
-	CameraClsMode(QuadCamera, 0, 0)
-	HideEntity(QuadCamera)
 	
 	Local AdjustMatrix% = CreateBank(64)
 	
@@ -229,27 +197,11 @@ Function InitDeferred%()
 	MaskEntity(DeferredQuad, 4)
 	
 	SetShadowsDistance(3.0)
+	SetShadowsBias(0.0002)
 	DirectionalLightUpdate = 0
 	
-	BloomTex = CreateTexture(opt\GraphicWidth / 4, opt\GraphicHeight / 4, 1 + 256 + 16384)
-	BloomBlur = CreateTexture(opt\GraphicWidth / 4, opt\GraphicHeight / 4, 1 + 256 + 16384)
-	
-	PostEffectQuad = CreateFullscreenQuad(QuadCamera)
-	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
-	EntityOrder(PostEffectQuad, 10000000)
-	EntityFX(PostEffectQuad, 8)
-	
-	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
-	
 	SetEmissiveMultiply(1.0)
-	
-	Luma = CreateTexture(128, 128, 1 + 16384)
-	Luma64 = CreateTexture(64, 64, 131072)
-	Luma16 = CreateTexture(16, 16, 131072)
-	Luma4 = CreateTexture(4, 4, 131072)
-	Luma1 = CreateTexture(1, 1, 131072)
-	AdaptedLum = CreateTexture(1, 1, 131072)
-	PrevAdaptedLum = CreateTexture(1, 1, 131072)
+	SetGBufferBlur(0.0)
 	
 	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
 End Function
@@ -350,7 +302,7 @@ Function UpdateEntityMaterial%(Entity%, State% = -1, Frame% = 0)
 	FreeBrush(Brush) : Brush = 0
 End Function
 
-Function ProcessDeferred%(Cam%, Tween#)
+Function ProcessDeferred%(Cam%, Tween# = 1.0)
 	If GetShadeEffect(0) <> 0 And GetInputEffect(DEFERRED_DIFF) <> 0
 		Local ef.InputEffect, se.ShadeEffect
 		
@@ -366,6 +318,7 @@ Function ProcessDeferred%(Cam%, Tween#)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
 		SetBuffer(TextureBuffer(MRTDepth), 3)
 		CameraClsMode(Cam, 0, 1)
+		AmbientLight(fog\CurrAmbientR, fog\CurrAmbientG, fog\CurrAmbientB)
 		; ~ Render opacity
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
 		ProcessSSAO(Cam, 1.5, 0.2, Tween) ; ~ Process SSAO for opacity
@@ -386,6 +339,7 @@ Function ProcessDeferred%(Cam%, Tween#)
 		; ~ Render decals
 		RenderWorld(Tween, Cam, 32)
 		; ~ Render transparency
+		AmbientLight(Min(fog\CurrAmbientR * 4.0, 255.0), Min(fog\CurrAmbientG * 4.0, 255.0), Min(fog\CurrAmbientB * 4, 255.0))
 		RenderWorld(Tween, Cam, -1 Xor 32, 2)
 		CameraClsMode(Cam, 1, 1)
 		EndRender()
@@ -395,7 +349,9 @@ Function ProcessDeferred%(Cam%, Tween#)
 		ProcessColorCorrection()
 		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)
+		ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
 		PresentGBuffer(MRTColor, BackBuffer())
+		SetBuffer(BackBuffer())
 	Else
 		RenderWorld(Tween)
 	EndIf
@@ -425,7 +381,7 @@ Function ProcessAllLights%(Cam%, Tween#)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, 0.008, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, dl\Scattering, Tween)
 	Next
 	
 	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, 0.0, Tween)
@@ -453,8 +409,6 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	
 	Local DeferredShade% = GetShadeEffect(EffectBits)
 	
-	EffectBool(DeferredShade, "Shadowed", False)
-	
 	Select LightType
 		Case DEFERRED_LIGHT_POINT
 			;[Block]
@@ -468,7 +422,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
 			EffectTechnique(DeferredShade, "PointLight")
-			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0))
+			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
@@ -495,7 +449,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
-			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0))
+			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
@@ -590,7 +544,6 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 	
 	EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 	EffectTexture(DeferredShade, "tShadowMap", ShadowMap)
-	EffectBool(DeferredShade, "Shadowed", True)
 	
 	SetBuffer(TextureBuffer(MRTColor))
 End Function
@@ -659,8 +612,16 @@ Function CreateLightVolume%(LightType%)
 	Return(Volume)
 End Function
 
+Function SetGBufferBlur%(Blur#)
+	GBufferBlur = Blur
+End Function
+
 Function SetShadowsDistance%(Dist#)
 	ShadowsDistance = Dist
+End Function
+
+Function SetShadowsBias%(Bias#)
+	SHADOW_BIAS = Bias
 End Function
 
 Function SetEmissiveMultiply%(em#)
@@ -680,181 +641,6 @@ Function GetShadowMapMip%(Range#, Dist#)
 	Return(Min(Max(MipLevel, 0), (SHADOW_MAP_MIPMAPS - 1)))
 End Function
 
-; ==================================== POST EFFECTS
-
-Function ProcessBloom%(Threshold# = 0.4)
-	EffectFloat(BloomEffect, "BloomThreshold", Threshold)
-	EntityEffect(PostEffectQuad, BloomEffect)
-	EntityTexture(PostEffectQuad, BloomTex, 0, 1)
-	EntityTexture(PostEffectQuad, BloomBlur, 0, 2)
-	
-	ShowEntity(PostEffectQuad)
-	SetBuffer(TextureBuffer(BloomTex))
-	EffectTechnique(BloomEffect, "Downsample")
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	SetBuffer(TextureBuffer(BloomBlur))
-	EffectTechnique(BloomEffect, "BlurH")
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	SetBuffer(TextureBuffer(BloomTex))
-	EffectTechnique(BloomEffect, "BlurV")
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	EffectTechnique(BloomEffect, "Combine")
-	SetBuffer(TextureBuffer(MRTColor))
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-End Function
-
-Function ProcessColorCorrection%()
-	EntityEffect(PostEffectQuad, ColorCorrectionEffect)
-	ShowEntity(PostEffectQuad)
-	EffectTechnique(ColorCorrectionEffect, "Main")
-	SetBuffer(TextureBuffer(MRTColor))
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-End Function
-
-Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
-	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
-	EffectFloat(SSAOEffect, "SSAORadius", Radius)
-	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
-	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
-	
-	EntityBlend(PostEffectQuad, 2)
-	EntityEffect(PostEffectQuad, SSAOEffect)
-	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
-	EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
-	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
-	EntityTexture(PostEffectQuad, NoiseTexture, 0, 4)
-	
-	ShowEntity(PostEffectQuad)
-	EffectTechnique(SSAOEffect, "Main")
-	SetBuffer(TextureBuffer(MRTColor))
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-	EntityBlend(PostEffectQuad, 0)
-End Function
-
-Function ProcessFXAA%()
-	EntityEffect(PostEffectQuad, FXAAEffect)
-	
-	ShowEntity(PostEffectQuad)
-	EffectTechnique(FXAAEffect, "Main")
-	SetBuffer(TextureBuffer(TempColorTexture))
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-	
-	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
-End Function
-
-Function ProcessEyeAdaptation%()
-	Local Width# = 0.5 / opt\GraphicWidth
-	Local Height# = 0.5 / opt\GraphicHeight
-	
-	EntityEffect(PostEffectQuad, EyeAdaptationEffect)
-	
-	EntityBlend(PostEffectQuad, 0)
-	ShowEntity(PostEffectQuad)
-	EffectVector(EyeAdaptationEffect, "LumaOffset", Width, Height)
-	SetBuffer(TextureBuffer(Luma))
-	EffectTechnique(EyeAdaptationEffect, "Present")
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	EffectVector(EyeAdaptationEffect, "LumaOffset", 0.5 / TextureWidth(Luma), 0.5 / TextureHeight(Luma))
-	SetBuffer(TextureBuffer(Luma64))
-	EffectTechnique(EyeAdaptationEffect, "LUM64")
-	EntityTexture(PostEffectQuad, Luma, 0, 1)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	EffectVector(EyeAdaptationEffect, "LumaOffset", 0.5 / TextureWidth(Luma64), 0.5 / TextureHeight(Luma64))
-	SetBuffer(TextureBuffer(Luma16))
-	EffectTechnique(EyeAdaptationEffect, "LUM16")
-	EntityTexture(PostEffectQuad, Luma64, 0, 1)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	EffectVector(EyeAdaptationEffect, "LumaOffset", 0.5 / TextureWidth(Luma16), 0.5 / TextureHeight(Luma16))
-	SetBuffer(TextureBuffer(Luma4))
-	EffectTechnique(EyeAdaptationEffect, "LUM4")
-	EntityTexture(PostEffectQuad, Luma16, 0, 1)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	EffectVector(EyeAdaptationEffect, "LumaOffset", 0.5 / TextureWidth(Luma4), 0.5 / TextureHeight(Luma4))
-	SetBuffer(TextureBuffer(Luma1))
-	EffectTechnique(EyeAdaptationEffect, "LUM1")
-	EntityTexture(PostEffectQuad, Luma4, 0, 1)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	EntityTexture(PostEffectQuad, AdaptedLum, 0, 0)
-	EffectVector(EyeAdaptationEffect, "LumaOffset", 0, 0)
-	SetBuffer(TextureBuffer(PrevAdaptedLum))
-	EffectTechnique(EyeAdaptationEffect, "Present")
-	RenderEntity(QuadCamera, PostEffectQuad)
-	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
-	
-	EffectVector(EyeAdaptationEffect, "LumaOffset", 0, 0)
-	SetBuffer(TextureBuffer(AdaptedLum))
-	EffectTechnique(EyeAdaptationEffect, "Adaptation")
-	EntityTexture(PostEffectQuad, PrevAdaptedLum, 0, 1)
-	EntityTexture(PostEffectQuad, Luma1, 0, 2)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	
-	EffectVector(EyeAdaptationEffect, "LumaOffset", Width, Height)
-	SetBuffer(TextureBuffer(MRTColor))
-	EffectTechnique(EyeAdaptationEffect, "Exposure")
-	EntityTexture(PostEffectQuad, AdaptedLum, 0, 1)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-End Function
-
-Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
-	EffectFloat(MotionBlurEffect, "Strength", Strength)
-	EffectMatrix(MotionBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
-	EffectFloat(MotionBlurEffect, "Timestep", Min(Float(fps\ElapsedMilliSecs) / 1000.0, 1.0))
-	
-	EntityEffect(PostEffectQuad, MotionBlurEffect)
-	EntityTexture(PostEffectQuad, MRTDepth, 0, 1)
-	
-	EntityBlend(PostEffectQuad, 0)
-	ShowEntity(PostEffectQuad)
-	EffectTechnique(MotionBlurEffect, "Main")
-	SetBuffer(TextureBuffer(TempColorTexture))
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-	
-	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
-	
-	EffectMatrix(MotionBlurEffect, "PrevViewProj", CameraMatrix(Cam, 2, Tween))
-End Function
-
-Function PresentGBuffer%(Tex%, Dest% = 0)
-	EntityEffect(PostEffectQuad, PresentEffect)
-	EntityTexture(PostEffectQuad, Tex, 0, 0)
-	ShowEntity(PostEffectQuad)
-	SetBuffer(Dest)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
-End Function
-
-Function ClearBuffer%(Buffer%, R#, G#, B#, Alpha#)
-	Local PrevBuffer% = GraphicsBuffer()
-	
-	If (Not SetBuffer(Buffer)) Then Return
-	
-	EffectVector(ClearEffect, "Value", R, G, B, Alpha)
-	EntityBlend(PostEffectQuad, 0)
-	EntityEffect(PostEffectQuad, ClearEffect)
-	
-	CameraViewport(QuadCamera, 0, 0, BufferWidth(Buffer), BufferHeight(Buffer))
-	ShowEntity(PostEffectQuad)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-	SetBuffer(PrevBuffer)
-	CameraViewport(QuadCamera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-End Function
-
 ; ==================================== DYNAMIC LIGHTS
 
 Type DynamicLight
@@ -864,6 +650,7 @@ Type DynamicLight
 	Field Range#
 	Field Fade#
 	Field FOV#, TanFOV#
+	Field Scattering#
 	Field CastShadows%
 End Type
 
@@ -918,6 +705,12 @@ Function LightCastShadows%(Entity%, CastShadows%)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
 	If dl <> Null Then dl\CastShadows = CastShadows
+End Function
+
+Function LightScattering%(Entity%, Scattering#)
+	Local dl.DynamicLight = FindDynamicLight(Entity)
+	
+	If dl <> Null Then dl\Scattering = Scattering
 End Function
 
 Function OnLightDestruct%(Entity%)
