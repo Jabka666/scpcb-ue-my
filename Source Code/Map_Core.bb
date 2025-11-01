@@ -169,7 +169,7 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	RotateEntity(al\ConeOBJ, 270.0, 0.0, 0.0)
 	ScaleEntity(al\ConeOBJ, 0.01 * SpriteScale, 0.01 * SpriteScale, 0.01 * SpriteScale)
 	EntityColor(al\ConeOBJ, R, G, B)
-	EntityAlpha(al\ConeOBJ, 0.15)
+	EntityAlpha(al\ConeOBJ, 0.01)
 	EntityBlend(al\ConeOBJ, 3)
 	EntityParent(al\ConeOBJ, al\OBJ)
 	
@@ -178,7 +178,7 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	RotateEntity(al\ConeOBJ2, 90.0, 0.0, 0.0)
 	ScaleEntity(al\ConeOBJ2, 0.01 * SpriteScale, 0.01 * SpriteScale, 0.01 * SpriteScale)
 	EntityColor(al\ConeOBJ2, R, G, B)
-	EntityAlpha(al\ConeOBJ2, 0.15)
+	EntityAlpha(al\ConeOBJ2, 0.01)
 	EntityBlend(al\ConeOBJ2, 3)
 	EntityParent(al\ConeOBJ2, al\OBJ)
 	
