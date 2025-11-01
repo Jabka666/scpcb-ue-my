@@ -4785,12 +4785,12 @@ Function UpdateEvent_Cont1_895%(e.Events)
 						StrTemp = "895.nvg.096"
 					EndIf
 					msg\DeathMsg = GetLocalString("death", StrTemp)
-					EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+					EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[1])
 					If me\VomitTimer < -10.0 Then Kill()
 				ElseIf me\Sanity < -800.0
-					If Rand(3) = 1 Then EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+					If Rand(3) = 1 Then EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[1])
 					If Rand(6) < 5
-						EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
+						EntityTexture(t\OverlayID[OVERLAY_NVG], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
 								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
@@ -4804,9 +4804,9 @@ Function UpdateEvent_Cont1_895%(e.Events)
 					me\BlurTimer = 1000.0
 					If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
 				ElseIf me\Sanity < -500.0
-					If Rand(7) = 1 Then EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+					If Rand(7) = 1 Then EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[1])
 					If Rand(50) = 1
-						EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
+						EntityTexture(t\OverlayID[OVERLAY_NVG], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
 								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
@@ -4818,7 +4818,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 						Next
 					EndIf
 				Else
-					EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+					EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[1])
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null
 							If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
@@ -4834,7 +4834,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		
 		If e\EventState3 > 0.0 Then e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
 		If e\EventState3 = 0.0
-			EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+			EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[1])
 			e\EventState3 = -1.0
 		EndIf
 		

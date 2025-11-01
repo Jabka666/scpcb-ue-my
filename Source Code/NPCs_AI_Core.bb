@@ -2735,7 +2735,7 @@ Function UpdateNPCType457%(n.NPCs)
 		;If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049
 		;	n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 		;EndIf
-		EntityAlpha(t\OverlayID[11], 0.0)
+		EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 		n\DropSpeed = 0.0
 		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
@@ -3218,7 +3218,7 @@ Function UpdateNPCType457%(n.NPCs)
 				n\LastDist = CurveValue(0.1, n\LastDist, 60.0)
 				;[End Block]
 		End Select
-		EntityAlpha(t\OverlayID[11], n\LastDist)
+		EntityAlpha(t\OverlayID[OVERLAY_BURN], n\LastDist)
 	EndIf
 	
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)

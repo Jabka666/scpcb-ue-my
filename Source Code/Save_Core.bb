@@ -1527,7 +1527,7 @@ Function LoadGame%(File$)
 	EndIf
 	
 	; ~ Reset "burn overlay" alpha because it's controlled by NPC which may not exist
-	EntityAlpha(t\OverlayID[11], 0.0)
+	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 	
 	; ~ Reset player body texture
 	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
@@ -2474,10 +2474,10 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	; ~ TODO: Check if this really needed!
-;	If wi\GasMask = 0 Then HideEntity(t\OverlayID[1])
-;	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[2])
+;	If wi\GasMask = 0 Then HideEntity(t\OverlayID[OVERLAY_GAS_MASK])
+;	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[OVERLAY_HAZMAT_SUIT])
 	; ~ Reset "burn overlay" alpha because it's controlled by NPC which may not exist
-	EntityAlpha(t\OverlayID[11], 0.0)
+	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 	
 	If wi\NightVision > 0
 		fog\FarDist = 16.0

@@ -551,9 +551,9 @@ Function UpdateGame%()
 			
 			If me\LightFlash > 0.0
 				me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
-				EntityAlpha(t\OverlayID[6], Clamp(me\LightFlash + Rnd(-0.2, 0.2), 0.0, 1.0))
+				EntityAlpha(t\OverlayID[OVERLAY_LIGHT_FLASH], Clamp(me\LightFlash + Rnd(-0.2, 0.2), 0.0, 1.0))
 			Else
-				EntityAlpha(t\OverlayID[6], 0.0)
+				EntityAlpha(t\OverlayID[OVERLAY_LIGHT_FLASH], 0.0)
 			EndIf
 			
 			If (Not (SelectedItem = Null Lor InvOpen Lor OtherOpen <> Null))
@@ -563,9 +563,9 @@ Function UpdateGame%()
 			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
 			
 			If DarkAlpha <> 0.0
-				EntityAlpha(t\OverlayID[5], DarkAlpha)
+				EntityAlpha(t\OverlayID[OVERLAY_DARK], DarkAlpha)
 			Else
-				EntityAlpha(t\OverlayID[5], 0.0)
+				EntityAlpha(t\OverlayID[OVERLAY_DARK], 0.0)
 			EndIf
 			
 			UpdateNVG()
@@ -1896,7 +1896,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 		Case "revive", "undead", "resurrect"
 			;[Block]
 			ResetNegativeStats(True)
-			If t\OverlayID[MaxOverlayIDAmount - 1] <> 0 Then FreeEntity(t\OverlayID[MaxOverlayIDAmount - 1]) : t\OverlayID[MaxOverlayIDAmount - 1] = 0
+			If t\OverlayID[OVERLAY_BLOODY] <> 0 Then FreeEntity(t\OverlayID[OVERLAY_BLOODY]) : t\OverlayID[OVERLAY_BLOODY] = 0
 			me\Playable = 2
 			;[End Block]
 		Case "noclip", "fly"
@@ -2705,13 +2705,13 @@ Function Kill%(IsBloody% = False, Animated% = True)
 		If IsBloody
 			Local Tex% = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteMapTextures, False)
 			
-			t\OverlayID[MaxOverlayIDAmount - 1] = CreateSprite(ArkBlurCam)
-			ScaleSprite(t\OverlayID[MaxOverlayIDAmount - 1], 1.001, 0.001 + (GraphicHeightFloat / GraphicWidthFloat))
-			EntityTexture(t\OverlayID[MaxOverlayIDAmount - 1], Tex)
-			EntityBlend(t\OverlayID[MaxOverlayIDAmount - 1], 3)
-			EntityFX(t\OverlayID[MaxOverlayIDAmount - 1], 1)
-			EntityOrder(t\OverlayID[MaxOverlayIDAmount - 1], -1003)
-			MoveEntity(t\OverlayID[MaxOverlayIDAmount - 1], 0.0, 0.0, 1.0)
+			t\OverlayID[OVERLAY_BLOODY] = CreateSprite(ArkBlurCam)
+			ScaleSprite(t\OverlayID[OVERLAY_BLOODY], 1.001, 0.001 + (GraphicHeightFloat / GraphicWidthFloat))
+			EntityTexture(t\OverlayID[OVERLAY_BLOODY], Tex)
+			EntityBlend(t\OverlayID[OVERLAY_BLOODY], 3)
+			EntityFX(t\OverlayID[OVERLAY_BLOODY], 1)
+			EntityOrder(t\OverlayID[OVERLAY_BLOODY], -1003)
+			MoveEntity(t\OverlayID[OVERLAY_BLOODY], 0.0, 0.0, 1.0)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			
 			Local Pvt% = CreatePivot()
@@ -2920,8 +2920,8 @@ Function UpdateMoving%()
 	Local Pvt%, i%, Angle#
 	Local Temp3%
 	
-	If (Not EntityHidden(t\OverlayID[0]))
-		If (Not opt\VignetteEnabled) Lor (IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\ID = r_cont1_173_intro Lor (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0)) Then HideEntity(t\OverlayID[0])
+	If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]))
+		If (Not opt\VignetteEnabled) Lor (IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\ID = r_cont1_173_intro Lor (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0)) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
 	EndIf
 	If chs\SuperMan
 		CanSave = 0
@@ -2935,10 +2935,10 @@ Function UpdateMoving%()
 		If chs\SuperManTimer > 70.0 * 50.0
 			msg\DeathMsg = GetLocalString("death", "superman")
 			Kill()
-			If EntityHidden(t\OverlayID[0]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[0])
+			If EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[OVERLAY_VIGNETTE])
 		Else
 			me\BlurTimer = 500.0
-			If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
+			If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE])) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
 		EndIf
 	EndIf
 	
@@ -3405,48 +3405,48 @@ Function UpdateMouseLook%()
 				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 			EndIf
 			If wi\GasMaskFogTimer > 0.0 And (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0)
-				EntityAlpha(t\OverlayID[9], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
+				EntityAlpha(t\OverlayID[OVERLAY_GAS_MASK_FOG], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
 			Else
-				EntityAlpha(t\OverlayID[9], 0.0)
+				EntityAlpha(t\OverlayID[OVERLAY_GAS_MASK_FOG], 0.0)
 			EndIf
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
-		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
-		If (Not EntityHidden(t\OverlayID[2])) Then HideEntity(t\OverlayID[2])
+		If (Not EntityHidden(t\OverlayID[OVERLAY_GAS_MASK])) Then HideEntity(t\OverlayID[OVERLAY_GAS_MASK])
+		If (Not EntityHidden(t\OverlayID[OVERLAY_HAZMAT_SUIT])) Then HideEntity(t\OverlayID[OVERLAY_HAZMAT_SUIT])
 	EndIf
 	
 	If wi\BallisticHelmet
-		If EntityHidden(t\OverlayID[8]) Then ShowEntity(t\OverlayID[8])
+		If EntityHidden(t\OverlayID[OVERLAY_HELMET]) Then ShowEntity(t\OverlayID[OVERLAY_HELMET])
 	Else
-		If (Not EntityHidden(t\OverlayID[8])) Then HideEntity(t\OverlayID[8])
+		If (Not EntityHidden(t\OverlayID[OVERLAY_HELMET])) Then HideEntity(t\OverlayID[OVERLAY_HELMET])
 	EndIf
 	
 	If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
-		If EntityHidden(t\OverlayID[4]) Then ShowEntity(t\OverlayID[4])
-		If (Not EntityHidden(t\OverlayID[0])) Then HideEntity(t\OverlayID[0])
+		If EntityHidden(t\OverlayID[OVERLAY_NVG]) Then ShowEntity(t\OverlayID[OVERLAY_NVG])
+		If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE])) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
 		Select wi\NightVision
 			Case 0
 				;[Block]
-				EntityColor(t\OverlayID[4], 200.0, 200.0, 200.0)
+				EntityColor(t\OverlayID[OVERLAY_NVG], 200.0, 200.0, 200.0)
 				;[End Block]
 			Case 1
 				;[Block]
-				EntityColor(t\OverlayID[4], 0.0, 200.0, 0.0)
+				EntityColor(t\OverlayID[OVERLAY_NVG], 0.0, 200.0, 0.0)
 				;[End Block]
 			Case 2
 				;[Block]
-				EntityColor(t\OverlayID[4], 0.0, 100.0, 200.0)
+				EntityColor(t\OverlayID[OVERLAY_NVG], 0.0, 100.0, 200.0)
 				;[End Block]
 			Case 3
 				;[Block]
-				EntityColor(t\OverlayID[4], 200.0, 0.0, 0.0)
+				EntityColor(t\OverlayID[OVERLAY_NVG], 200.0, 0.0, 0.0)
 				;[End Block]
 		End Select
 	Else
-		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
-		If EntityHidden(t\OverlayID[0]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[0])
+		If (Not EntityHidden(t\OverlayID[OVERLAY_NVG])) Then HideEntity(t\OverlayID[OVERLAY_NVG])
+		If EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[OVERLAY_VIGNETTE])
 	EndIf
 	
 	CatchErrors("Uncaught: UpdateMouseLook()")
@@ -8406,7 +8406,7 @@ Function UpdateMenu%()
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
-							If t\OverlayID[MaxOverlayIDAmount - 1] <> 0 Then FreeEntity(t\OverlayID[MaxOverlayIDAmount - 1]) : t\OverlayID[MaxOverlayIDAmount - 1] = 0
+							If t\OverlayID[OVERLAY_BLOODY] <> 0 Then FreeEntity(t\OverlayID[OVERLAY_BLOODY]) : t\OverlayID[OVERLAY_BLOODY] = 0
 							For i = 0 To MaxNPCSounds - 1
 								If NPCSound[i] <> 0 Then FreeSound_Strict(NPCSound[i]) : NPCSound[i] = 0
 							Next
@@ -8481,7 +8481,7 @@ Function UpdateMenu%()
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
-							If t\OverlayID[MaxOverlayIDAmount - 1] <> 0 Then FreeEntity(t\OverlayID[MaxOverlayIDAmount - 1]) : t\OverlayID[MaxOverlayIDAmount - 1] = 0
+							If t\OverlayID[OVERLAY_BLOODY] <> 0 Then FreeEntity(t\OverlayID[OVERLAY_BLOODY]) : t\OverlayID[OVERLAY_BLOODY] = 0
 							For i = 0 To MaxNPCSounds - 1
 								If NPCSound[i] <> 0 Then FreeSound_Strict(NPCSound[i]) : NPCSound[i] = 0
 							Next
@@ -9630,7 +9630,7 @@ Function Update009%()
 			EndIf
 		EndIf
 		
-		EntityAlpha(t\OverlayID[10], Clamp((I_009\Timer - 91.0) / 10.0, 0.0, 0.5))
+		EntityAlpha(t\OverlayID[OVERLAY_SCP_009], Clamp((I_009\Timer - 91.0) / 10.0, 0.0, 0.5))
 		
 		Local Clr# = Max(100.0, 255.0 - I_009\Timer * 2.0)
 		
@@ -9669,7 +9669,7 @@ Function Update009%()
 		EndIf
 	Else
 		I_009\Revert = False
-		EntityAlpha(t\OverlayID[10], 0.0)
+		EntityAlpha(t\OverlayID[OVERLAY_SCP_009], 0.0)
 	EndIf
 End Function
 
@@ -9721,7 +9721,7 @@ Function Update008%()
 				EndIf
 			EndIf
 			
-			EntityAlpha(t\OverlayID[3], Min(PowTwo(I_008\Timer * 0.2) / 1000.0, 0.5) * SinValue)
+			EntityAlpha(t\OverlayID[OVERLAY_SCP_008], Min(PowTwo(I_008\Timer * 0.2) / 1000.0, 0.5) * SinValue)
 			
 			For i = 0 To 6
 				If I_008\Timer > (i * 15.0) + 10.0 And PrevI008Timer <= (i * 15.0) + 10.0
@@ -9801,7 +9801,7 @@ Function Update008%()
 			
 			If TeleportForInfect
 				If I_008\Timer < 94.7
-					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
+					EntityAlpha(t\OverlayID[OVERLAY_SCP_008], 0.5 * SinValue)
 					me\BlurTimer = 900.0
 					
 					If I_008\Timer > 94.5 Then me\BlinkTimer = Clamp((-50.0) * (I_008\Timer - 94.5), me\BlinkTimer, -10.0)
@@ -9815,7 +9815,7 @@ Function Update008%()
 					
 					AnimateNPC(PlayerRoom\NPC[0], 357.0, 381.0, 0.3)
 				ElseIf I_008\Timer < 98.5
-					EntityAlpha(t\OverlayID[3], 0.5 * SinValue)
+					EntityAlpha(t\OverlayID[OVERLAY_SCP_008], 0.5 * SinValue)
 					me\BlurTimer = 950.0
 					
 					me\ForceMove = 0.0
@@ -9868,7 +9868,7 @@ Function Update008%()
 		EndIf
 	Else
 		I_008\Revert = False
-		EntityAlpha(t\OverlayID[3], 0.0)
+		EntityAlpha(t\OverlayID[OVERLAY_SCP_008], 0.0)
 	EndIf
 End Function
 
@@ -9926,7 +9926,7 @@ Function Update409%()
 				me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
 			EndIf
 		EndIf
-		EntityAlpha(t\OverlayID[7], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
+		EntityAlpha(t\OverlayID[OVERLAY_SCP_409], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
 		SetPlayerModelColor(Max(100.0, Clr * 1.56), Max(230.0, Clr), Max(240.0, Clr))
 		If I_409\Revert
 			If I_409\Timer <= 35.0 And PrevI409Timer > 35.0
@@ -9976,7 +9976,7 @@ Function Update409%()
 		EndIf
 	Else
 		I_409\Revert = False
-		EntityAlpha(t\OverlayID[7], 0.0)
+		EntityAlpha(t\OverlayID[OVERLAY_SCP_409], 0.0)
 	EndIf
 End Function
 
