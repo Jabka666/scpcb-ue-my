@@ -9519,7 +9519,7 @@ Function UpdateVomit%()
 			me\CameraShake = Rnd(0.0, 2.0)
 		EndIf
 		
-		If Rand(50) = 50 And (MilliSec Mod 4000) < 200 Then PlaySound_Strict(CoughSFX((wi\GasMask > 0) Lor (I_1499\Using > 0) Lor (wi\HazmatSuit > 0), Rand(0, 2)), True)
+		If (MilliSec Mod 4000) < 200 Then UpdateCough(50)
 		
 		; ~ Regurgitate when timer is below 10 seconds
 		If me\VomitTimer < 10.0 And Rnd(0.0, 500.0 * me\VomitTimer) < 2.0
