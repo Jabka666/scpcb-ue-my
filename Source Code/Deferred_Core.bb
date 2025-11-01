@@ -682,6 +682,7 @@ Function CreateLight%(LightType%, Parent% = 0)
 	dl\Range = 10.0
 	dl\FOV = 90.0
 	dl\TanFOV = (LightType <> 3) + ((LightType = 3) * Tan(dl\FOV * 0.5))
+	dl\Scattering = 1.0
 	EntityDestructor(dl\OBJ, @OnLightDestruct)
 	
 	Return(dl\OBJ)
