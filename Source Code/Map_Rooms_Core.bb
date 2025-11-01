@@ -3353,7 +3353,6 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x + 3248.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6400.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_MISC, CODE_LOCKED)
 			d\Locked = 1
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			r\RoomDoors.Doors[4] = d
 			
 			d.Doors = CreateDoor(r, r\x + 2744.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6137.0 * RoomScale, 0.0, False, FENCE_DOOR)
