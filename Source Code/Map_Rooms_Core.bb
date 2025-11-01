@@ -237,14 +237,8 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
-			If S2IMapContains(UnlockedAchievements, "keter")
-				de.Decals = CreateDecal(DECAL_KETER, r\x + 514.0 * RoomScale, r\y + 159.0 * RoomScale, r\z - 246.0 * RoomScale - 0.005, 0.0, 180.0, 0.0, 0.1)
-				EntityParent(de\OBJ, r\OBJ)
-			EndIf
-			If S2IMapContains(UnlockedAchievements, "apollyon")
-				de.Decals = CreateDecal(DECAL_APOLLYON, r\x + 368.0 * RoomScale, r\y + 138.0 * RoomScale, r\z + 184.0 * RoomScale, 0.0, 0.0, 0.0, 0.1)
-				EntityParent(de\OBJ, r\OBJ)
-			EndIf
+			If S2IMapContains(UnlockedAchievements, "keter") Then CreateScreen(r, r\x + 423.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 285.0 * RoomScale, 0.0, 0.0, 0.0, 0.8923 * RoomScale, 0.6915 * RoomScale, RoomScale, "screen_keter.png")
+			If S2IMapContains(UnlockedAchievements, "apollyon") Then CreateScreen(r, r\x + 617.0 * RoomScale, r\y + 258.0 * RoomScale, r\z - 285.0 * RoomScale, 0.0, 0.0, 0.0, 0.8923 * RoomScale, 0.6915 * RoomScale, RoomScale, "screen_apollyon.png")
 			
 			it.Items = CreateItem("Document SCP-173", it_paper, r\x + 173.0 * 4.85 * RoomScale, r\y + 173.0 * RoomScale, r\z + 173.0 * 14.33 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)

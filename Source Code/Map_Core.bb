@@ -4452,6 +4452,7 @@ Const cs_009_warning% = 2
 Const cs_error% = 3
 Const cs_logo% = 4
 Const cs_UE% = 5
+Const cs_achievement% = 6
 ;[End Block]
 
 Function FindChatScreenEventID%(ChatScreenName$)
@@ -4475,6 +4476,10 @@ Function FindChatScreenEventID%(ChatScreenName$)
 		Case "chatscreen_UE.png"
 			;[Block]
 			Return(cs_UE)
+			;[End Block]
+		Case "screen_keter.png", "screen_apollyon.png"
+			;[Block]
+			Return(cs_achievement)
 			;[End Block]
 		Default
 			;[Block]
@@ -4515,10 +4520,6 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 			Case cs_logo
 				;[Block]
 				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 5, DeleteAllTextures)
-				;[End Block]
-			Case cs_UE
-				;[Block]
-				s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
 				;[End Block]
 			Default
 				;[Block]
@@ -4723,6 +4724,15 @@ Function UpdateScreens%()
 							EntityTexture(s\OBJ, s\Texture, CurrentFrame)
 							UpdateEntityMaterial(s\OBJ, -1, CurrentFrame)
 							s\State = 0.0
+						EndIf
+						;[End Block]
+					Case cs_achievement
+						;[Block]
+						; ~ Cannot interact with
+						If s\CurrScreenID <> 1
+							EntityTexture(s\OBJ, s\Texture)
+							UpdateEntityMaterial(s\OBJ)
+							s\CurrScreenID = 1
 						EndIf
 						;[End Block]
 				End Select
