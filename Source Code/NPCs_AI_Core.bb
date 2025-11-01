@@ -3219,7 +3219,6 @@ Function UpdateNPCType457%(n.NPCs)
 				;[End Block]
 		End Select
 		EntityAlpha(t\OverlayID[11], n\LastDist)
-		RotateEntity(t\OverlayID[11], 0.0, 0.0, n\LastDist * 20.0)
 	EndIf
 	
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)

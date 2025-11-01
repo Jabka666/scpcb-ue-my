@@ -2957,6 +2957,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[1], -1003)
 	MoveEntity(t\OverlayID[1], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	HideEntity(t\OverlayID[1])
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteMapTextures, False) ; ~ HAZMAT SUIT
 	t\OverlayID[2] = CreateSprite(ArkBlurCam)
@@ -2966,6 +2967,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[2], -1003)
 	MoveEntity(t\OverlayID[2], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	HideEntity(t\OverlayID[2])
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteMapTextures, False) ; ~ SCP-008
 	t\OverlayID[3] = CreateSprite(ArkBlurCam)
@@ -2984,6 +2986,7 @@ Function LoadEntities%()
 	EntityBlend(t\OverlayID[4], 2)
 	EntityOrder(t\OverlayID[4], -1003)
 	MoveEntity(t\OverlayID[4], 0.0, 0.0, 1.0)
+	HideEntity(t\OverlayID[4])
 	
 	t\OverlayTextureID[2] = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2) ; ~ DARK
 	SetBuffer(TextureBuffer(t\OverlayTextureID[2]))
@@ -2994,8 +2997,8 @@ Function LoadEntities%()
 	EntityTexture(t\OverlayID[5], t\OverlayTextureID[2])
 	EntityBlend(t\OverlayID[5], 1)
 	EntityOrder(t\OverlayID[5], -1002)
-	MoveEntity(t\OverlayID[5], 0.0, 0.0, 1.0)
 	EntityAlpha(t\OverlayID[5], 0.0)
+	MoveEntity(t\OverlayID[5], 0.0, 0.0, 1.0)
 	
 	Tex = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2, 1, DeleteMapTextures) ; ~ LIGHT
 	SetBuffer(TextureBuffer(Tex))
@@ -3008,6 +3011,7 @@ Function LoadEntities%()
 	EntityTexture(t\OverlayID[6], Tex)
 	EntityBlend(t\OverlayID[6], 1)
 	EntityOrder(t\OverlayID[6], -1002)
+	EntityAlpha(t\OverlayID[6], 0.0)
 	MoveEntity(t\OverlayID[6], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
@@ -3029,6 +3033,7 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[8], -1003)
 	MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	HideEntity(t\OverlayID[8])
 	
 	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteMapTextures, False) ; ~ FOG IN GAS MASK
 	t\OverlayID[9] = CreateSprite(ArkBlurCam)
@@ -3051,7 +3056,7 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\fire_overlay.png", 1, DeleteMapTextures, False) ; ~ SCP-457 burning player
+	Tex = LoadTexture_Strict("GFX\Overlays\fire_overlay.png", 1, DeleteMapTextures, False) ; ~ BURN OVERLAY
 	t\OverlayID[11] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[11], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[11], Tex)
@@ -3061,9 +3066,6 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[11], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	For i = 1 To MaxOverlayIDAmount - 2
-		HideEntity(t\OverlayID[i])
-	Next
 	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures, False)
 	
 	wi\SCRAMBLESpriteScreen = CreateSprite()

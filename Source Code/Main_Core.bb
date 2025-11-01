@@ -550,11 +550,10 @@ Function UpdateGame%()
 			EndIf
 			
 			If me\LightFlash > 0.0
-				If EntityHidden(t\OverlayID[6]) Then ShowEntity(t\OverlayID[6])
-				EntityAlpha(t\OverlayID[6], Clamp(me\LightFlash + Rnd(-0.2, 0.2), 0.0, 1.0))
 				me\LightFlash = Max(me\LightFlash - (fps\Factor[0] / 70.0), 0.0)
-			ElseIf (Not EntityHidden(t\OverlayID[6]))
-				HideEntity(t\OverlayID[6])
+				EntityAlpha(t\OverlayID[6], Clamp(me\LightFlash + Rnd(-0.2, 0.2), 0.0, 1.0))
+			Else
+				EntityAlpha(t\OverlayID[6], 0.0)
 			EndIf
 			
 			If (Not (SelectedItem = Null Lor InvOpen Lor OtherOpen <> Null))
@@ -564,10 +563,9 @@ Function UpdateGame%()
 			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
 			
 			If DarkAlpha <> 0.0
-				If EntityHidden(t\OverlayID[5]) Then ShowEntity(t\OverlayID[5])
 				EntityAlpha(t\OverlayID[5], DarkAlpha)
-			ElseIf (Not EntityHidden(t\OverlayID[5]))
-				HideEntity(t\OverlayID[5])
+			Else
+				EntityAlpha(t\OverlayID[5], 0.0)
 			EndIf
 			
 			UpdateNVG()
@@ -2708,9 +2706,9 @@ Function Kill%(IsBloody% = False, Animated% = True)
 			Local Tex% = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteMapTextures, False)
 			
 			t\OverlayID[MaxOverlayIDAmount - 1] = CreateSprite(ArkBlurCam)
-			ScaleSprite(t\OverlayID[MaxOverlayIDAmount - 1], 1.001, GraphicHeightFloat / GraphicWidthFloat)
+			ScaleSprite(t\OverlayID[MaxOverlayIDAmount - 1], 1.001, 0.001 + (GraphicHeightFloat / GraphicWidthFloat))
 			EntityTexture(t\OverlayID[MaxOverlayIDAmount - 1], Tex)
-			EntityBlend(t\OverlayID[MaxOverlayIDAmount - 1], 2)
+			EntityBlend(t\OverlayID[MaxOverlayIDAmount - 1], 3)
 			EntityFX(t\OverlayID[MaxOverlayIDAmount - 1], 1)
 			EntityOrder(t\OverlayID[MaxOverlayIDAmount - 1], -1003)
 			MoveEntity(t\OverlayID[MaxOverlayIDAmount - 1], 0.0, 0.0, 1.0)
@@ -3408,9 +3406,8 @@ Function UpdateMouseLook%()
 			EndIf
 			If wi\GasMaskFogTimer > 0.0 And (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0)
 				EntityAlpha(t\OverlayID[9], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
-				If EntityHidden(t\OverlayID[9]) Then ShowEntity(t\OverlayID[9])
 			Else
-				If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
+				EntityAlpha(t\OverlayID[9], 0.0)
 			EndIf
 		EndIf
 	Else
@@ -3418,7 +3415,6 @@ Function UpdateMouseLook%()
 		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 		If (Not EntityHidden(t\OverlayID[1])) Then HideEntity(t\OverlayID[1])
 		If (Not EntityHidden(t\OverlayID[2])) Then HideEntity(t\OverlayID[2])
-		If (Not EntityHidden(t\OverlayID[9])) Then HideEntity(t\OverlayID[9])
 	EndIf
 	
 	If wi\BallisticHelmet
@@ -9634,7 +9630,6 @@ Function Update009%()
 			EndIf
 		EndIf
 		
-		If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
 		EntityAlpha(t\OverlayID[10], Clamp((I_009\Timer - 91.0) / 10.0, 0.0, 0.5))
 		
 		Local Clr# = Max(100.0, 255.0 - I_009\Timer * 2.0)
@@ -9674,7 +9669,7 @@ Function Update009%()
 		EndIf
 	Else
 		I_009\Revert = False
-		If (Not EntityHidden(t\OverlayID[10])) Then HideEntity(t\OverlayID[10])
+		EntityAlpha(t\OverlayID[10], 0.0)
 	EndIf
 End Function
 
@@ -9711,7 +9706,6 @@ Function Update008%()
 	
 	TeleportForInfect = PlayerInReachableRoom()
 	If I_008\Timer > 0.0
-		If EntityHidden(t\OverlayID[3]) Then ShowEntity(t\OverlayID[3])
 		SinValue = Sin(MilliSec / 8.0) + 2.0
 		If I_008\Timer < 93.0
 			PrevI008Timer = I_008\Timer
@@ -9874,7 +9868,7 @@ Function Update008%()
 		EndIf
 	Else
 		I_008\Revert = False
-		If (Not EntityHidden(t\OverlayID[3])) Then HideEntity(t\OverlayID[3])
+		EntityAlpha(t\OverlayID[3], 0.0)
 	EndIf
 End Function
 
@@ -9924,7 +9918,6 @@ Function Update409%()
 		Local PrevI409Timer# = I_409\Timer
 		Local Clr# = 255.0 - I_409\Timer
 		
-		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
 		If I_427\Timer < 70.0 * 360.0
 			If I_409\Revert
 				I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.02), 0.0)
@@ -9983,7 +9976,7 @@ Function Update409%()
 		EndIf
 	Else
 		I_409\Revert = False
-		If (Not EntityHidden(t\OverlayID[7])) Then HideEntity(t\OverlayID[7])
+		EntityAlpha(t\OverlayID[7], 0.0)
 	EndIf
 End Function
 

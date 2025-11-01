@@ -1526,6 +1526,9 @@ Function LoadGame%(File$)
 		TeleportToRoom(I_1499\PrevRoom)
 	EndIf
 	
+	; ~ Reset "burn overlay" alpha because it's controlled by NPC which may not exist
+	EntityAlpha(t\OverlayID[11], 0.0)
+	
 	; ~ Reset player body texture
 	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
 		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX)
@@ -2470,8 +2473,11 @@ Function LoadGameQuick%(File$)
 		Delete(HandIcon[i])
 	Next
 	
-	If wi\GasMask = 0 Then HideEntity(t\OverlayID[1])
-	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[2])
+	; ~ TODO: Check if this really needed!
+;	If wi\GasMask = 0 Then HideEntity(t\OverlayID[1])
+;	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[2])
+	; ~ Reset "burn overlay" alpha because it's controlled by NPC which may not exist
+	EntityAlpha(t\OverlayID[11], 0.0)
 	
 	If wi\NightVision > 0
 		fog\FarDist = 16.0
