@@ -1230,6 +1230,12 @@ Function UpdateNPCType049_2%(n.NPCs)
 						Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
 					EndIf
 					
+					If Dist < 0.49
+						SetNPCFrame(n, 795.0)
+						n\State = 4.0
+						Return
+					EndIf
+					
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 					
@@ -1237,10 +1243,6 @@ Function UpdateNPCType049_2%(n.NPCs)
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 					
-					If Dist < 0.49
-						SetNPCFrame(n, 795.0)
-						n\State = 4.0
-					EndIf
 					n\PathTimer = 0.0
 					n\PathStatus = PATH_STATUS_NO_SEARCH
 					n\PathLocation = 0
@@ -1254,6 +1256,17 @@ Function UpdateNPCType049_2%(n.NPCs)
 			Case 3.0 ; ~ Player/NPC isn't visible, tries to find
 				;[Block]
 				Dist = EntityDistanceSquared(n\Collider, me\Collider)
+				; ~ TODO: Check if this really needed!
+;				; ~ Still attack if the player is too close
+;				If (Not chs\NoTarget)
+;					If Dist < 0.49 And EntityVisible(me\Collider, n\Collider)
+;						n\State2 = 70.0
+;						SetNPCFrame(n, 795.0)
+;						n\State = 4.0
+;						Return
+;					EndIf
+;				EndIf
+				
 				If n\PathTimer <= 0.0 ; ~ Update path
 					n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
 					If n\PathStatus = PATH_STATUS_FOUND
@@ -1276,14 +1289,6 @@ Function UpdateNPCType049_2%(n.NPCs)
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				Else
-					; ~ Still attack if the player is too close
-					If (Not chs\NoTarget)
-						If Dist < 0.49 And EntityVisible(me\Collider, n\Collider)
-							n\State2 = 70.0
-							n\State = 4.0
-						EndIf
-					EndIf
-					
 					If n\PathStatus = PATH_STATUS_FOUND
 						If n\Path[n\PathLocation] = Null
 							If n\PathLocation > MaxPathLocations - 1
@@ -1319,6 +1324,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 					If (PrevFrame < 733.0 And n\Frame >= 733.0) Lor (PrevFrame < 773.0 And n\Frame >= 773.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 				EndIf
 				
+				; ~ Teleport closer to the player
 				If Dist > PowTwo(HideDistance * 2.0)
 					If n\IdleTimer < 70.0 * (20.0 - (10.0 * SelectedDifficulty\AggressiveNPCs) + (10.0 * RemoteDoorOn))
 						n\IdleTimer = n\IdleTimer + fps\Factor[0]
@@ -1332,6 +1338,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 					n\IdleTimer = 0.0
 				EndIf
 				
+				; ~ Detects player or NPC
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
 						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
@@ -1368,15 +1375,9 @@ Function UpdateNPCType049_2%(n.NPCs)
 					PointEntity(n\Collider, n\Target\Collider)
 				EndIf
 				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-				If n\Frame <= 813.0
+				If n\Frame <= 813.0 ; ~ Finish walk and attack
 					AnimateNPC(n, 795.0, 813.0, 0.8, False)
-					If n\Frame > 812.9
-						If Rand(2) = 1
-							SetNPCFrame(n, 814.0)
-						Else
-							SetNPCFrame(n, 879.0)
-						EndIf
-					EndIf
+					If n\Frame > 812.9 Then SetNPCFrame(n, 814.0 + ((Rand(2) = 1) * 65.0))
 				Else
 					Local Attack% = False
 					
@@ -1384,15 +1385,32 @@ Function UpdateNPCType049_2%(n.NPCs)
 						AnimateNPC(n, 814.0, 878.0, 0.5, False)
 						Attack = (n\Frame >= 839.0 And PrevFrame < 839.0)
 						If n\Frame > 877.9
-							SetNPCFrame(n, 705.0)
-							n\State = 2.0 + me\Terminated
+							; ~ Continue attack if player too close
+							If EntityDistanceSquared(n\Collider, me\Collider) < 0.49 And (Not me\Terminated)
+								SetNPCFrame(n, 814.0 + ((Rand(2) = 1) * 65.0))
+							Else
+								; ~ Go back to chase state
+								SetNPCFrame(n, 705.0)
+								n\State = 2.0 + me\Terminated
+							EndIf
 						EndIf
 					Else
 						AnimateNPC(n, 879.0, 943.0, 0.5, False)
 						Attack = (n\Frame >= 900.0 And PrevFrame < 900.0)
 						If n\Frame > 942.9
-							SetNPCFrame(n, 705.0)
-							n\State = 2.0 + me\Terminated
+							; ~ Continue attack if player too close
+							If n\Target = Null
+								Dist = EntityDistanceSquared(n\Collider, me\Collider)
+							Else
+								Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
+							EndIf
+							If Dist < 0.49 And (Not me\Terminated)
+								SetNPCFrame(n, 814.0 + ((Rand(2) = 1) * 65.0))
+							Else
+								; ~ Go back to chase state
+								SetNPCFrame(n, 705.0)
+								n\State = 2.0 + me\Terminated
+							EndIf
 						EndIf
 					EndIf
 					If Attack
@@ -1427,6 +1445,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 					EndIf
 				EndIf
 				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+				; ~ Target (not player) was killed, go to relaxed state
 				If n\Target <> Null
 					If n\Target\IsDead
 						n\State = 3.0
