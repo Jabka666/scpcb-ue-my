@@ -78,6 +78,10 @@ Function FillRoom%(r.Rooms)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
 			
+			it2.Items = CreateItem("Document SCP-085", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
+			HideEntity(it2\Collider)
+			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
 		Case r_room1_dead_end_lcz
@@ -1908,6 +1912,9 @@ Function FillRoom%(r.Rooms)
 					;[End Block]
 			End Select
 			
+			it.Items = CreateItem("Device Document", it_paper, r\x - 412.0 * RoomScale, r\y + 140.0 * RoomScale, r\z - 740.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			it.Items = CreateItem("Black Severed Hand", it_hand2, r\x + xTemp * RoomScale, r\y - 5496.0 * RoomScale, r\z + zTemp * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -2157,6 +2164,9 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-035", it_paper, r\x + 1168.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 408.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Response to Request #148-1435", it_paper, r\x + 1153.0 * RoomScale, r\y + 177.0 * RoomScale, r\z + 757.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x + 90.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 396.0 * RoomScale)
