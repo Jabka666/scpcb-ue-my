@@ -781,9 +781,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\HasSprite = ReadByte(f)
 					tl\SpriteScale = ReadFloat(f)
 					tl\CastShadows = ReadByte(f)
-					tl\Scattering = 1.0 ;ReadFloat(f)
+					tl\Scattering = ReadFloat(f)
 					
-					For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
+					For ff = 1 To 31 : ReadFloat(f) : Next ; ~ For future
 					;[End Block]
 				Case "spotlight"
 					;[Block]
@@ -811,9 +811,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					tl\OuterConeAngle = ReadFloat(f)
 					
-					tl\Scattering = 1.0 ;ReadFloat(f)
+					tl\Scattering = ReadFloat(f)
 					
-					For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
+					For ff = 1 To 31 : ReadFloat(f) : Next ; ~ For future
 					;[End Block]
 				Case "soundemitter"
 					;[Block]
