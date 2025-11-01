@@ -1577,7 +1577,7 @@ Function UpdateNPCType066%(n.NPCs)
 									EndIf
 									me\BigCameraShake = 5.0
 									PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
-									If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.1, 0.3), 0.0, 200.0)
+									If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.2, 0.4), 0.0, 200.0)
 									;[End Block]
 								Case 5, 6 ; ~ No effect
 									;[Block]
