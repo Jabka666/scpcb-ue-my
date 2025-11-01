@@ -120,6 +120,7 @@ Type TempLights
 	Field HasSprite%
 	Field SpriteScale#
 	Field CastShadows%
+	Field Scattering#
 End Type
 
 Global LightVolume#, TempLightVolume#
@@ -137,6 +138,7 @@ Type Lights
 	Field FOV#, TanFOV#
 	Field SpriteScale#
 	Field CastShadows%
+	Field Scattering#
 	Field Scripted% = False
 	Field room.Rooms
 End Type
@@ -779,6 +781,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\HasSprite = ReadByte(f)
 					tl\SpriteScale = ReadFloat(f)
 					tl\CastShadows = ReadByte(f)
+					tl\Scattering = 1.0 ;ReadFloat(f)
 					
 					For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
 					;[End Block]
@@ -807,6 +810,8 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\Yaw = ReadFloat(f)
 					
 					tl\OuterConeAngle = ReadFloat(f)
+					
+					tl\Scattering = 1.0 ;ReadFloat(f)
 					
 					For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
 					;[End Block]

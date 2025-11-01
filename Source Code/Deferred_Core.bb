@@ -377,11 +377,11 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\LightType, l\FOV, l\TanFOV, l\CastShadows, 0.008, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\LightType, l\FOV, l\TanFOV, l\CastShadows, 0.008 * l\Scattering, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, dl\Scattering, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, 0.008 * dl\Scattering, Tween)
 	Next
 	
 	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, 0.0, Tween)
@@ -426,10 +426,18 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
-			Volume = DeferredSphere
-			
-			PositionEntity(Volume, x, y, z)
-			ScaleEntity(Volume, VolumeScale, VolumeScale, VolumeScale)
+			If Scattering > 0.0
+				Volume = DeferredSphere
+				
+				PositionEntity(Volume, x, y, z)
+				ScaleEntity(Volume, VolumeScale, VolumeScale, VolumeScale)
+			Else
+				VolumeScale = TanFOV * Range
+				Volume = DeferredCone
+				PositionEntity(Volume, x, y, z)
+				RotateEntity(Volume, Pitch, Yaw, 0.0)
+				ScaleEntity(Volume, VolumeScale, VolumeScale, Range)
+			EndIf
 			
 			If (Not EntityInView(Volume, Cam)) Then Return
 			DistToLight = EntityDistance(Cam, Volume)
@@ -449,7 +457,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
-			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
+			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range) + VolumeScale)
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
