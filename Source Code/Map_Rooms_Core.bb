@@ -3361,6 +3361,11 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 4769.0 * RoomScale, r\y + 16.0 * RoomScale, r\z - 2100.0 * RoomScale, 180.0, False, FENCE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
 			
+			d.Doors = CreateDoor(r, r\x + 4065.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6638.0 * RoomScale, -270.0, False)
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			
 			CreateDoor(r, r\x + 3072.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 5800.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			; ~ Guard attack area
