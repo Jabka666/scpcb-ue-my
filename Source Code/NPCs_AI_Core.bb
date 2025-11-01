@@ -3873,7 +3873,7 @@ Function UpdateNPCType939%(n.NPCs)
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
 						AnimateNPC(n, 1592.0, 1607.0, n\CurrSpeed * 10.0)
 					EndIf
-					If (PrevFrame < 1597.0 And n\Frame >= 1597.0) Then PlaySoundEx(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
+					If (PrevFrame < 1594.0 And n\Frame >= 1594.0) Lor (PrevFrame < 1603.0 And n\Frame >= 1603.0) Then PlaySoundEx(StepSFX(1, 1, Rand(0, 7)), Camera, n\Collider, 12.0)
 				EndIf
 				
 				RotateEntity(n\Collider, 0.0, CurveAngle(VectorYaw(n\EnemyX - EntityX(n\Collider), 0.0, n\EnemyZ - EntityZ(n\Collider)), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
