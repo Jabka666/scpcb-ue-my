@@ -5201,8 +5201,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 	Local i%
 	
 	If e\EventState = 0.0
-		If PlayerRoom = e\room
-			; ~ Close the doors when the player enters the room
+		If e\room\Dist > 0.0 And e\room\Dist < 6.0
 			For i = 0 To 1
 				OpenCloseDoor(e\room\RoomDoors[i])
 				PlaySoundEx(snd_I\DoorClose079, Camera, e\room\RoomDoors[i]\FrameOBJ, 3.5)
