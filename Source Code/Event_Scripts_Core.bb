@@ -4314,7 +4314,10 @@ Function UpdateEvent_Cont1_035%(e.Events)
 							If e\room\NPC[1] = Null
 								e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, EntityX(e\room\Objects[1], True), e\room\y + 0.22, EntityZ(e\room\Objects[1], True))
 							Else
-								If e\room\NPC[1]\State > 0.0 And e\room\NPC[2] = Null Then e\room\NPC[2] = CreateNPC(NPCType035_Tentacle, e\room\x, e\room\y + 0.22, e\room\z)
+								If e\room\NPC[1]\State > 0.0 And e\room\NPC[2] = Null
+									TFormPoint(-72.0, 0.0, 132.0, e\room\OBJ, 0)
+									e\room\NPC[2] = CreateNPC(NPCType035_Tentacle, TFormedX(), e\room\y + 0.22, TFormedZ())
+								EndIf
 							EndIf
 							me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
 							
