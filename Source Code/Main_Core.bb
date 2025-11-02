@@ -715,7 +715,7 @@ Function RenderGame%()
 	
 	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
 	
-	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
+	;If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
 	RenderWorldEx(RenderTween)
 	
