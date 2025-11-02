@@ -491,7 +491,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			
 			If Alpha < 0.0 Then EntityFX(Liquid, 1)
 			EntityAlpha(Liquid, Abs(Alpha))
-			EntityShininess(Liquid, 1.0)
+			EntityShininess(Liquid, 1.0, 0.5)
 			;[End Block]
 		Case it_clipboard, it_wallet, it_scp500
 			;[Block]

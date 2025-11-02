@@ -1958,7 +1958,7 @@ Function UpdateNPCIce%(n.NPCs)
 			EntityColor(n\OBJ, 255.0, Clr, Clr)
 			If n\NPCType <> NPCType096
 				If n\IceTimer > 70.0 * 29.9
-					EntityShininess(n\OBJ, 1.0)
+					EntityShininess(n\OBJ, 1.0, 0.5)
 					PlaySoundEx(LoadTempSound("SFX\SCP\009\IceCracking.ogg"), Camera, n\Collider, 5.0, 0.4)
 					GiveAchievement("frostbite")
 					SetNPCFrame(n, n\Frame)

@@ -600,7 +600,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			SetDeferredBrush(Brush, DEFERRED_DIFFALPHA)
 		Else
 			SetDeferredBrush(Brush)
-			BrushShininess(Brush, 128)
 		EndIf
 		
 		If IsAlpha > 0 Then PaintSurface(Surf, Brush)

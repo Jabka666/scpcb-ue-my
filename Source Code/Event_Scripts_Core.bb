@@ -6055,7 +6055,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_009_TEXTURE)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 40.0, 0.0)
 			EntityColor(e\room\NPC[0]\OBJ, 255.0, 100.0, 100.0)
-			EntityShininess(e\room\NPC[0]\OBJ, 1.0)
+			EntityShininess(e\room\NPC[0]\OBJ, 1.0, 0.5)
 		EndIf
 		
 		If e\EventState = 0.0

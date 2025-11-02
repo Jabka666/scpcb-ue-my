@@ -272,7 +272,7 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	If room <> Null Then EntityParent(emit\Owner, room\OBJ)
 	
 	emit\Ent = CreateMesh()
-	emit\Surf = CreateSurface(emit\Ent)
+	emit\Surf = CreateSurface(emit\Ent, 0, True)
 	
 	emit\tmp = Object.Template(ParticleEffect[ParticleID])
 	emit\MaxTime = emit\tmp\EmitterMaxTime

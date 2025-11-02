@@ -416,7 +416,6 @@ Function LoadParticles%()
 	SetTemplateAlignToFall(ParticleEffect[20], True, 45)
 	SetTemplateGravity(ParticleEffect[20], 0.001)
 	SetTemplateSize(ParticleEffect[20], 0.02, 0.032, 0.7, 1)
-	SetTemplateColors(ParticleEffect[20], $FFFF00, $FFFF00)
 	
 	; ~ Blood sprite
 	ParticleEffect[21] = CreateTemplate()
@@ -1267,6 +1266,8 @@ Function LoadMaterials%(File$)
 				EndIf
 			EndIf
 			
+			mat\SpecIntensity = IniGetFloat(File, Loc, "specintensity")
+			mat\SpecPower = IniGetFloat(File, Loc, "specpower")
 			mat\ReactBlackout = IniGetInt(File, Loc, "reactblackout")
 			mat\StepSound = IniGetInt(File, Loc, "stepsound")
 			mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")

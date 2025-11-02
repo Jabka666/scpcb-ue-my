@@ -285,6 +285,8 @@ Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 					If mat\Normal <> 0 Then BrushTexture(Brush, mat\Normal, Frame, 1)
 					If mat\Roughness <> 0 Then BrushTexture(Brush, mat\Roughness, Frame, 2)
 					If mat\Emissive <> 0 Then BrushTexture(Brush, mat\Emissive, Frame, 3)
+					
+					BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
 				EndIf
 			EndIf
 			FreeTexture(t1) : t1 = 0
@@ -339,7 +341,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		; ~ Render decals
 		RenderWorld(Tween, Cam, 32)
 		; ~ Render transparency
-		AmbientLight(Min(fog\CurrAmbientR * 4.0, 255.0), Min(fog\CurrAmbientG * 4.0, 255.0), Min(fog\CurrAmbientB * 4, 255.0))
+		AmbientLight(Min(fog\CurrAmbientR * 3.0, 255.0), Min(fog\CurrAmbientG * 3.0, 255.0), Min(fog\CurrAmbientB * 3.0, 255.0))
 		RenderWorld(Tween, Cam, -1 Xor 32, 2)
 		CameraClsMode(Cam, 1, 1)
 		EndRender()

@@ -2,6 +2,7 @@ Type Materials
 	Field Normal%
 	Field Roughness%
 	Field Emissive%
+	Field SpecIntensity#, SpecPower#
 	Field ReactBlackout%
 	Field Name$
 	Field IsDiffuseAlpha%
