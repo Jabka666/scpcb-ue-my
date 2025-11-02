@@ -3387,8 +3387,8 @@ Function UpdateMouseLook%()
 		MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
 	EndIf
 	
-	If wi\GasMask > 0 Lor wi\HazmatSuit > 0 Lor I_1499\Using > 0
-		If EntityHidden(t\OverlayID[1 + (wi\HazmatSuit > 0)]) Then ShowEntity(t\OverlayID[1 + (wi\HazmatSuit > 0)])
+	If wi\GasMask > 0 Lor I_1499\Using > 0
+		If EntityHidden(t\OverlayID[1]) Then ShowEntity(t\OverlayID[1])
 		
 		If (Not me\Terminated)
 			If ChannelPlaying(BreathCHN)
@@ -3398,7 +3398,7 @@ Function UpdateMouseLook%()
 			EndIf
 		EndIf
 		
-		If wi\GasMask <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
+		If wi\GasMask <> 2 And wi\GasMask <> 4
 			If ChannelPlaying(BreathCHN)
 				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.5, 1.6)), 100.0)
 			Else
@@ -3412,9 +3412,40 @@ Function UpdateMouseLook%()
 		EndIf
 	Else
 		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
-		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
 		If (Not EntityHidden(t\OverlayID[OVERLAY_GAS_MASK])) Then HideEntity(t\OverlayID[OVERLAY_GAS_MASK])
+	EndIf
+	
+	If wi\HazmatSuit > 0
+		If EntityHidden(t\OverlayID[2]) Then ShowEntity(t\OverlayID[2])
+		
+		If (Not me\Terminated)
+			If ChannelPlaying(BreathCHN)
+				If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+			Else
+				BreathGasRelaxedCHN = LoopSoundLocal(snd_I\BreathGasRelaxedSFX, BreathGasRelaxedCHN, 1.0, True)
+			EndIf
+		EndIf
+		
+		If wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
+			If ChannelPlaying(BreathCHN)
+				wi\GasMaskFogTimer = Min(wi\GasMaskFogTimer + (fps\Factor[0] * Rnd(0.5, 1.6)), 100.0)
+			Else
+				wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
+			EndIf
+			If wi\GasMaskFogTimer > 0.0 And (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0)
+				EntityAlpha(t\OverlayID[OVERLAY_GAS_MASK_FOG], Min(PowTwo(wi\GasMaskFogTimer * 0.2) / 1000.0, 0.45))
+			Else
+				EntityAlpha(t\OverlayID[OVERLAY_GAS_MASK_FOG], 0.0)
+			EndIf
+		EndIf
+	Else
+		If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 		If (Not EntityHidden(t\OverlayID[OVERLAY_HAZMAT_SUIT])) Then HideEntity(t\OverlayID[OVERLAY_HAZMAT_SUIT])
+	EndIf
+	
+	If wi\GasMask = 0 And I_1499\Using = 0 And wi\HazmatSuit = 0
+		wi\GasMaskFogTimer = Max(0.0, wi\GasMaskFogTimer - (fps\Factor[0] * 0.3))
+		EntityAlpha(t\OverlayID[OVERLAY_GAS_MASK_FOG], 0.0)
 	EndIf
 	
 	If wi\BallisticHelmet

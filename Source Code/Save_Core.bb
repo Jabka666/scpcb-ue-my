@@ -2473,9 +2473,6 @@ Function LoadGameQuick%(File$)
 		Delete(HandIcon[i])
 	Next
 	
-	; ~ TODO: Check if this really needed!
-;	If wi\GasMask = 0 Then HideEntity(t\OverlayID[OVERLAY_GAS_MASK])
-;	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[OVERLAY_HAZMAT_SUIT])
 	; ~ Reset "burn overlay" alpha because it's controlled by NPC which may not exist
 	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 	
