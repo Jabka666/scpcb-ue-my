@@ -415,7 +415,7 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[20], -0.0175, 0.0175, -0.015, 0.015, -0.0175, 0.0175)
 	SetTemplateAlignToFall(ParticleEffect[20], True, 45)
 	SetTemplateGravity(ParticleEffect[20], 0.001)
-	SetTemplateSize(ParticleEffect[20], 0.02, 0.032, 0.7, 1)
+	SetTemplateSize(ParticleEffect[20], 0.01, 0.022, 0.7)
 	
 	; ~ Blood sprite
 	ParticleEffect[21] = CreateTemplate()
