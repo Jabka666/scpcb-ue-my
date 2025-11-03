@@ -1,3 +1,6 @@
+Const dtor# = 3.14159265358979323846 / 180.0 ; // DEGREES TO RADIANS
+Const rtod# = 180.0 / 3.14159265358979323846 ; // RADIANS TO DEGREES
+
 Function GenerateSeedNumber%(Seed$)
 	Local Temp% = 0
 	Local Shift% = 0

@@ -2435,14 +2435,14 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
-			EffectFloat(DeferredShade, "NormalOffset", Float(StrTemp))
+			SetShadowsBias(SHADOW_BIAS, Float(StrTemp))
 			CreateConsoleMsg("Done")
 			;[End Block]
 		Case "sbias"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
-			SetShadowsBias(Float(StrTemp))
+			SetShadowsBias(Float(StrTemp), NORMAL_OFFSET)
 			CreateConsoleMsg("Done")
 			;[End Block]
 		Default

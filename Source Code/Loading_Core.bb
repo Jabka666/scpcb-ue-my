@@ -2719,7 +2719,7 @@ Function LoadEntities%()
 	CameraClsColor(Camera, 80.0, 80.0, 80.0)
 	CameraReverseZ(Camera, True)
 	AmbientLight(80.0, 80.0, 80.0)
-	SetShadowsBias(0.0002)
+	SetShadowsBias(0.00044, 1.0)
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)

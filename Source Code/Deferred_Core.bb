@@ -21,6 +21,7 @@ Const DIRECTIONAL_LIGHT_TIME% = 0
 Const DIRECTIONAL_LIGHT_RANGE# = 0.01
 Const DIRECTIONAL_LIGHT_EXTRUSION# = 20.0
 Global SHADOW_BIAS# = 0.00044
+Global NORMAL_OFFSET# = 1.0
 
 Const SHADOW_MAP_MIPMAPS% = 3 ; ~ Don't change this
 Const SHADOW_MAP_SIZE% = 256
@@ -197,11 +198,10 @@ Function InitDeferred%()
 	MaskEntity(DeferredQuad, 4)
 	
 	SetShadowsDistance(3.0)
-	SetShadowsBias(0.0002)
+	SetShadowsBias(0.00044, 1.0)
 	DirectionalLightUpdate = 0
 	
 	SetEmissiveMultiply(1.0)
-	SetGBufferBlur(0.0)
 	
 	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
 End Function
@@ -411,6 +411,8 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	
 	Local DeferredShade% = GetShadeEffect(EffectBits)
 	
+	If (Not CastShadows) Then EffectFloat(DeferredShade, "NormalOffset", 0.0)
+	
 	Select LightType
 		Case DEFERRED_LIGHT_POINT
 			;[Block]
@@ -515,6 +517,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
+			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET)
 			;[End Block]
 		Case DEFERRED_LIGHT_POINT
 			;[Block]
@@ -542,12 +545,14 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 					EffectMatrix(DeferredShade, "LightViewProj" + i, CameraMatrix(DeferredCamera, 2, Tween)) ; ~ Push matrix for each face
 				EndIf
 			Next
+			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * Tan(90.0 * dtor * 0.5)) * (SHADOW_MAP_SIZE / ShadowMapHeight))
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
+			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * Tan(FOV * dtor * 0.5)) * (SHADOW_MAP_SIZE / ShadowMapHeight))
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
 			;[End Block]
 	End Select
@@ -622,16 +627,12 @@ Function CreateLightVolume%(LightType%)
 	Return(Volume)
 End Function
 
-Function SetGBufferBlur%(Blur#)
-	GBufferBlur = Blur
-End Function
-
 Function SetShadowsDistance%(Dist#)
 	ShadowsDistance = Dist
 End Function
 
-Function SetShadowsBias%(Bias#)
-	SHADOW_BIAS = Bias
+Function SetShadowsBias%(Bias#, Normal#)
+	NORMAL_OFFSET = Normal
 End Function
 
 Function SetEmissiveMultiply%(em#)
