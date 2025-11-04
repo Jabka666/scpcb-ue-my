@@ -89,7 +89,7 @@ Function RemoveDecalInstances%()
 	Delete(de_I) : de_I = Null
 End Function
 
-Const MaxParticleTextureIDAmount% = 15
+Const MaxParticleTextureIDAmount% = 16
 
 Type ParticleInstance
 	Field ParticleTextureID%[MaxParticleTextureIDAmount]
@@ -101,31 +101,32 @@ Global p_I.ParticleInstance
 ;[Block]
 Const PARTICLE_BLACK_SMOKE% = 0
 Const PARTICLE_WHITE_SMOKE% = 1
+Const PARTICLE_GREY_SMOKE% = 2
 
-Const PARTICLE_FLASH% = 2
+Const PARTICLE_FLASH% = 3
 
-Const PARTICLE_DUST% = 3
+Const PARTICLE_DUST% = 4
 
-Const PARTICLE_SHADOW% = 4
+Const PARTICLE_SHADOW% = 5
 
-Const PARTICLE_SUN% = 5
+Const PARTICLE_SUN% = 6
 
-Const PARTICLE_BLOOD% = 6
+Const PARTICLE_BLOOD% = 7
 
-Const PARTICLE_SPARK% = 7
+Const PARTICLE_SPARK% = 8
 
-Const PARTICLE_WATER_DROP% = 8
-Const PARTICLE_WATER_RING% = 9
+Const PARTICLE_WATER_DROP% = 9
+Const PARTICLE_WATER_RING% = 10
 
-Const PARTICLE_LEAF% = 10
+Const PARTICLE_LEAF% = 11
 
-Const PARTICLE_CONCRETE% = 11
+Const PARTICLE_CONCRETE% = 12
 
-Const PARTICLE_FLY% = 12
+Const PARTICLE_FLY% = 13
 
-Const PARTICLE_FIRE% = 13
+Const PARTICLE_FIRE% = 14
 
-Const PARTICLE_SNOW_SHINE% = 14
+Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
 Global ParticleEffect%[38]
@@ -135,6 +136,7 @@ Function LoadParticles%()
 	
 	p_I\ParticleTextureID[PARTICLE_BLACK_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(0).png", 1 + 2, DeleteAllTextures, False)
 	p_I\ParticleTextureID[PARTICLE_WHITE_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(1).png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_GREY_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(2).png", 1 + 2, DeleteAllTextures, False)
 	
 	p_I\ParticleTextureID[PARTICLE_FLASH] = LoadTexture_Strict("GFX\Particles\flash.png", 1 + 2, DeleteAllTextures, False)
 	
@@ -603,14 +605,14 @@ Function LoadParticles%()
 	ParticleEffect[37] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[37], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[37], -1)
-	SetTemplateInterval(ParticleEffect[37], 55)
-	SetTemplateParticleLifeTime(ParticleEffect[37], 70, 80)
-	SetTemplateTexture(ParticleEffect[37], PARTICLE_BLACK_SMOKE)
+	SetTemplateInterval(ParticleEffect[37], 25)
+	SetTemplateParticleLifeTime(ParticleEffect[37], 40, 50)
+	SetTemplateTexture(ParticleEffect[37], PARTICLE_GREY_SMOKE)
 	SetTemplateOffset(ParticleEffect[37], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
 	SetTemplateVelocity(ParticleEffect[37], -0.01, 0.01, 0.02, 0.022, -0.01, 0.01)
 	SetTemplateAlphaVel(ParticleEffect[37], True)
-	SetTemplateSize(ParticleEffect[37], 0.02, 0.02, 1.0, 1.2)
-	SetTemplateSizeVel(ParticleEffect[37], 0.01, 1.01)
+	SetTemplateSize(ParticleEffect[37], 0.01, 0.01, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[37], 0.008, 1.01)
 	SetTemplateFloor(ParticleEffect[37], 1.3, 0.12, True)
 	SetTemplateColors(ParticleEffect[37], $808080, $808080)
 End Function
