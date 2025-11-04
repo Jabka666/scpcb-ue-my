@@ -375,9 +375,9 @@ Function UpdateLights%(Cam%)
 									;If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
 									;If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
 								;EndIf
-								Random = Rnd(0.35, 0.8)
-								SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
-								TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
+;								Random = Rnd(0.35, 0.8)
+;								SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
+;								TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
 								SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20)
 							EndIf
 							
