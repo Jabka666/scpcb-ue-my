@@ -7704,8 +7704,8 @@ Function RenderUseItem%(item.Items)
 								;[End Block]
 						End Select
 						
-						x = x + (66 * MenuScale)
-						y = y + (419 * MenuScale)
+						x = x + (45 * MenuScale)
+						y = y + (345 * MenuScale)
 						
 						; ~ Battery
 						If item\ItemTemplate\ID = it_radio Lor item\ItemTemplate\ID = it_18vradio
@@ -7718,7 +7718,7 @@ Function RenderUseItem%(item.Items)
 						
 						SetFontEx(fo\FontID[Font_Digital])
 						Color(30, 30, 30)
-						TextEx(x + (50 * MenuScale), y, GetLocalString("radio", "chn"))
+						TextEx(x + (73 * MenuScale), y, GetLocalString("radio", "chn"))
 						
 						If item\ItemTemplate\ID = it_veryfineradio
 							StrTemp = ""
@@ -7727,16 +7727,16 @@ Function RenderUseItem%(item.Items)
 							Next
 							
 							SetFontEx(fo\FontID[Font_Digital_Big])
-							TextEx(x + (97 * MenuScale), y + (16 * MenuScale), Rand(0, 9), True, True)
+							TextEx(x + (130 * MenuScale), y + (16 * MenuScale), Rand(0, 9), True, True)
 						Else
 							SetFontEx(fo\FontID[Font_Digital_Big])
-							TextEx(x + (97 * MenuScale), y + (16 * MenuScale), Int(item\State2 + 1.0), True, True)
+							TextEx(x + (130 * MenuScale), y + (16 * MenuScale), Int(item\State2 + 1.0), True, True)
 						EndIf
 						
 						SetFontEx(fo\FontID[Font_Digital])
 						If StrTemp <> ""
-							StrTemp = Right(Left(StrTemp, (Int(MilliSec / 300) Mod Len(StrTemp))), 10)
-							TextEx(x - (28 * MenuScale), y + (33 * MenuScale), "          " + StrTemp + "          ")
+							StrTemp = Right(Left(StrTemp, (Int(MilliSec / 300) Mod Len(StrTemp))), 15)
+							TextEx(x - (40 * MenuScale), y + (65 * MenuScale), "          " + StrTemp + "          ")
 						EndIf
 						SetFontEx(fo\FontID[Font_Default])
 					EndIf
