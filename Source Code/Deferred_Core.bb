@@ -11,11 +11,15 @@ Const DEFERRED_DIFFNOLIT% = 16
 Const DEFERRED_DIFFEMISSIVEMUL% = 32
 Const DEFERRED_NONE% = 64
 
-Const DEFERRED_SHADE_SHADOWS% = 1
-Const DEFERRED_SHADE_SCATTERING% = 2
+Const DEFERRED_SHADE_DIRLIGHT% = 1
+Const DEFERRED_SHADE_POINTLIGHT% = 2
+Const DEFERRED_SHADE_SPOTLIGHT% = 4
+Const DEFERRED_SHADE_SHADOWS% = 8
+Const DEFERRED_SHADE_SCATTERING% = 16
+Const DEFERRED_SHADE_LOD0% = 32
 
 Const MAX_DEFERRED_VARIATIONS% = 256
-Const MAX_DEFERRED_SHADE_VARIATIONS% = 32
+Const MAX_DEFERRED_SHADE_VARIATIONS% = 128
 
 Const DIRECTIONAL_LIGHT_TIME% = 0
 Const DIRECTIONAL_LIGHT_RANGE# = 0.01
@@ -75,28 +79,56 @@ Function InitDeferred%()
 	Local i%
 	
 	ClearDeferred()
+	
 	LoadInputEffect(DEFERRED_NONE, "")
-	LoadInputEffect(DEFERRED_DIFF, "Source Code\Deferred\Input.fx", "REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFNOLIT, "Source Code\Deferred\Input.fx", "NOLIT REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFALPHA, "Source Code\Deferred\Input.fx", "TRANSPARENT REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFNORMAL, "Source Code\Deferred\Input.fx", "NORMALMAP REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFROUGH, "Source Code\Deferred\Input.fx", "ROUGHMAP REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFEMISSIVE, "Source Code\Deferred\Input.fx", "EMISSIVEMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFF, "Input.fx", "REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNOLIT, "Input.fx", "NOLIT REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFALPHA, "Input.fx", "TRANSPARENT REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL, "Input.fx", "NORMALMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFROUGH, "Input.fx", "ROUGHMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFEMISSIVE, "Input.fx", "EMISSIVEMAP REVERSEDZ")
 	
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH, "Source Code\Deferred\Input.fx", "NORMALMAP ROUGHMAP REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE, "Source Code\Deferred\Input.fx", "NORMALMAP EMISSIVEMAP REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Source Code\Deferred\Input.fx", "ROUGHMAP EMISSIVEMAP REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Source Code\Deferred\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH, "Input.fx", "NORMALMAP ROUGHMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE, "Input.fx", "NORMALMAP EMISSIVEMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Input.fx", "ROUGHMAP EMISSIVEMAP REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE, "Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP REVERSEDZ")
 	
-	LoadInputEffect(DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deferred\Input.fx", "EMISSIVEMAP MUL REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deferred\Input.fx", "NORMALMAP EMISSIVEMAP MUL REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deferred\Input.fx", "ROUGHMAP EMISSIVEMAP MUL REVERSEDZ")
-	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Source Code\Deferred\Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP MUL REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Input.fx", "EMISSIVEMAP MUL REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Input.fx", "NORMALMAP EMISSIVEMAP MUL REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Input.fx", "ROUGHMAP EMISSIVEMAP MUL REVERSEDZ")
+	LoadInputEffect(DEFERRED_DIFFNORMAL Or DEFERRED_DIFFROUGH Or DEFERRED_DIFFEMISSIVE Or DEFERRED_DIFFEMISSIVEMUL, "Input.fx", "NORMALMAP ROUGHMAP EMISSIVEMAP MUL REVERSEDZ")
 	
-	LoadShadeEffect(0, "Source Code\Deferred\Shade.fx")
-	LoadShadeEffect(DEFERRED_SHADE_SHADOWS, "Source Code\Deferred\Shade.fx", "SHADOWS")
-	LoadShadeEffect(DEFERRED_SHADE_SCATTERING, "Source Code\Deferred\Shade.fx", "SCATTERING")
-	LoadShadeEffect(DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING, "Source Code\Deferred\Shade.fx", "SHADOWS SCATTERING")
+	LoadShadeEffect(0, "Shade.fx")
+	
+	LoadShadeEffect(DEFERRED_SHADE_DIRLIGHT, "Shade.fx", "DIRLIGHT")
+	LoadShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SHADOWS, "Shade.fx", "DIRLIGHT SHADOWS")
+	LoadShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SCATTERING, "Shade.fx", "DIRLIGHT SCATTERING")
+	LoadShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING, "Shade.fx", "DIRLIGHT SHADOWS SCATTERING")
+	
+	LoadShadeEffect(DEFERRED_SHADE_POINTLIGHT, "Shade.fx", "POINTLIGHT")
+	LoadShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SHADOWS, "Shade.fx", "POINTLIGHT SHADOWS")
+	LoadShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SCATTERING, "Shade.fx", "POINTLIGHT SCATTERING")
+	LoadShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING, "Shade.fx", "POINTLIGHT SHADOWS SCATTERING")
+	
+	LoadShadeEffect(DEFERRED_SHADE_SPOTLIGHT, "Shade.fx", "SPOTLIGHT")
+	LoadShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SHADOWS, "Shade.fx", "SPOTLIGHT SHADOWS")
+	LoadShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SCATTERING, "Shade.fx", "SPOTLIGHT SCATTERING")
+	LoadShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING, "Shade.fx", "SPOTLIGHT SHADOWS SCATTERING")
+	
+	LoadShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_LOD0, "Shade.fx", "DIRLIGHT LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_LOD0, "Shade.fx", "DIRLIGHT SHADOWS LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_LOD0, "Shade.fx", "DIRLIGHT SCATTERING LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_LOD0, "Shade.fx", "DIRLIGHT SHADOWS SCATTERING LOD0")
+	
+	LoadShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_LOD0, "Shade.fx", "POINTLIGHT LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_LOD0, "Shade.fx", "POINTLIGHT SHADOWS LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_LOD0, "Shade.fx", "POINTLIGHT SCATTERING LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_LOD0, "Shade.fx", "POINTLIGHT SHADOWS SCATTERING LOD0")
+	
+	LoadShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_LOD0, "Shade.fx", "SPOTLIGHT LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_LOD0, "Shade.fx", "SPOTLIGHT SHADOWS LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_LOD0, "Shade.fx", "SPOTLIGHT SCATTERING LOD0")
+	LoadShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SHADOWS Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_LOD0, "Shade.fx", "SPOTLIGHT SHADOWS SCATTERING LOD0")
 	
 	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
 	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
@@ -199,8 +231,8 @@ Function InitDeferred%()
 	
 	SetShadowsDistance(3.0)
 	SetShadowsBias(0.00044, 1.0)
-	DirectionalLightUpdate = 0
 	
+	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
 	
 	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
@@ -378,13 +410,15 @@ Function ProcessAllLights%(Cam%, Tween#)
 	
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 	
-	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * SecondaryLightOn, l\LightType, l\FOV, l\TanFOV, l\CastShadows, 0.008 * l\Scattering, Tween)
-	Next
-	
-	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, dl\CastShadows, 0.008 * dl\Scattering, Tween)
-	Next
+	If (EffectsBits And 128)
+		For l.Lights = Each Lights
+			If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, l\TanFOV, l\CastShadows, 0.008 * l\Scattering, Tween)
+		Next
+		
+		For dl.DynamicLight = Each DynamicLight
+			If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, (dl\CastShadows And ((EffectsBits And 256) <> 0)), 0.008 * dl\Scattering, Tween)
+		Next
+	EndIf
 	
 	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, 0.0, Tween)
 	
@@ -404,10 +438,11 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	Local VolumeScale# = Range * 1.25
 	Local Volume%
 	Local DistToLight# = 1.0
-	Local EffectBits = 0
+	Local EffectBits% = GetShadeLight(LightType)
 	
 	If CastShadows Then EffectBits = EffectBits Or DEFERRED_SHADE_SHADOWS
 	If Scattering > 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SCATTERING
+	If LightType = DEFERRED_LIGHT_DIRECTIONAL Lor Distance(x, EntityX(Cam, True), y, EntityY(Cam, True), z, EntityZ(Cam, True)) - Range <= 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_LOD0
 	
 	Local DeferredShade% = GetShadeEffect(EffectBits)
 	
@@ -425,7 +460,6 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			DistToLight = EntityDistance(Cam, Volume)
 			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
-			EffectTechnique(DeferredShade, "PointLight")
 			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
@@ -458,7 +492,6 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			
 			If CastShadows Then RenderShadowMap(DeferredShade, Cam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
-			EffectTechnique(DeferredShade, "SpotLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
 			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range) + VolumeScale)
@@ -472,7 +505,6 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			Tween = 1.0
 			Cam = QuadCamera
 			
-			EffectTechnique(DeferredShade, "DirLight")
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
 			;[End Block]
@@ -632,6 +664,7 @@ Function SetShadowsDistance%(Dist#)
 End Function
 
 Function SetShadowsBias%(Bias#, Normal#)
+	SHADOW_BIAS = Bias
 	NORMAL_OFFSET = Normal
 End Function
 
@@ -735,13 +768,13 @@ End Function
 
 Function LoadInputEffect%(Bit%, File$, Defines$ = "")
 	DeferredInputEffect[Bit] = New InputEffect
-	DeferredInputEffect[Bit]\Effect = LoadEffectEx(File, Defines)
+	DeferredInputEffect[Bit]\Effect = LoadEffectEx(DEFERRED_PATH + File, Defines)
 	DeferredInputEffect[Bit]\Bit = Bit
 End Function
 
 Function LoadShadeEffect%(Bit%, File$, Defines$ = "")
 	DeferredShadeEffect[Bit] = New ShadeEffect
-	DeferredShadeEffect[Bit]\Effect = LoadEffectEx(File, Defines)
+	DeferredShadeEffect[Bit]\Effect = LoadEffectEx(DEFERRED_PATH + File, Defines)
 	DeferredShadeEffect[Bit]\Bit = Bit
 End Function
 
@@ -753,6 +786,23 @@ End Function
 Function GetShadeEffect%(Bit%)
 	If DeferredShadeEffect[Bit] = Null Then Return(0)
 	Return(DeferredShadeEffect[Bit]\Effect)
+End Function
+
+Function GetShadeLight%(LightType%)
+	Select LightType
+		Case DEFERRED_LIGHT_DIRECTIONAL
+			;[Block]
+			Return DEFERRED_SHADE_DIRLIGHT
+			;[End Block]
+		Case DEFERRED_LIGHT_POINT
+			;[Block]
+			Return DEFERRED_SHADE_POINTLIGHT
+			;[End Block]
+		Case DEFERRED_LIGHT_SPOT
+			;[Block]
+			Return DEFERRED_SHADE_SPOTLIGHT
+			;[End Block]
+	End Select
 End Function
 
 Function LoadEffectEx%(File$, Defines$ = "")

@@ -465,6 +465,7 @@ Function UpdateLanguageSelector%()
 	
 	Local LanguageBG%
 	Local LanguageIMG% = CreateImage(452, 254)
+	Local TempRenderTarget% = CreateTexture(512, 512, 1 + 256 + 16384)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\Menu\buttons.png", 21, 21, 0, 7)
 	Local CurrFontHeight% = FontHeight() / 2
 	Local SelectedLanguage.ListLanguage = Null
@@ -529,7 +530,7 @@ Function UpdateLanguageSelector%()
 		
 		If LinesAmount >= 13
 			y = LauncherHeight - 280 - (20 * ScrollMenuHeight * ScrollBarY)
-			SetBuffer(ImageBuffer(LanguageIMG))
+			SetBuffer(TextureBuffer(TempRenderTarget))
 			DrawImage(LanguageBG, -20, -195)
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
@@ -559,6 +560,11 @@ Function UpdateLanguageSelector%()
 				y = y + 20
 				LinesAmount = LinesAmount + 1
 			Next
+			
+			Local LauncherIMGWidth% = ImageWidth(LanguageIMG)
+			Local LauncherIMGHeight% = ImageHeight(LanguageIMG)
+			
+			CopyRectStretch(0, 0, LauncherIMGWidth, LauncherIMGHeight, 0, 0, LauncherIMGWidth, LauncherIMGHeight, TextureBuffer(TempRenderTarget), ImageBuffer(LanguageIMG))
 			SetBuffer(BackBuffer())
 			DrawBlock(LanguageIMG, LauncherWidth - 620, LauncherHeight - 285)
 			Color(10, 10, 10)

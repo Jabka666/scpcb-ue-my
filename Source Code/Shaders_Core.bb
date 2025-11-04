@@ -1,3 +1,6 @@
+Const DEFERRED_PATH$ = "GFX\Shaders\Deferred\"
+Const POSTEFFECTS_PATH$ = "GFX\Shaders\PostEffects\"
+
 Global PostEffectQuad%
 
 Global BloomEffect%
@@ -28,29 +31,29 @@ Global ClearEffect%
 Global BlurEffect%
 Global GammaEffect%
 
+Global EffectsBits% = -1
+
 Function InitShaders%()
-	Local Width% = opt\GraphicWidth
-	Local Height% = opt\GraphicHeight
+	Local Width% = opt\GraphicWidth / 4
+	Local Height% = opt\GraphicHeight / 4
 	
 	PostEffectQuad = CreateFullscreenQuad(QuadCamera)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
 	EntityOrder(PostEffectQuad, 10000000)
 	EntityFX(PostEffectQuad, 8)
 	
-	ClearEffect = LoadEffect("Source Code\Deferred\Clear.fx")
-	BloomEffect = LoadEffect("Source Code\Shaders\Bloom.fx")
-	ColorCorrectionEffect = LoadEffect("Source Code\Shaders\ColorCorrection.fx")
-	PresentEffect = LoadEffect("Source Code\Shaders\Present.fx")
-	SSAOEffect = LoadEffect("Source Code\Shaders\SSAO.fx")
-	FXAAEffect = LoadEffect("Source Code\Shaders\FXAA.fx")
-	EyeAdaptationEffect = LoadEffect("Source Code\Shaders\EyeAdaptation.fx")
-	MotionBlurEffect = LoadEffect("Source Code\Shaders\MotionBlur.fx")
-	BlurEffect = LoadEffect("Source Code\Shaders\Blur.fx")
-	GammaEffect = LoadEffect("Source Code\Shaders\Gamma.fx")
+	ClearEffect = LoadEffectEx(POSTEFFECTS_PATH + "Clear.fx")
+	BloomEffect = LoadEffectEx(POSTEFFECTS_PATH + "Bloom.fx")
+	ColorCorrectionEffect = LoadEffectEx(POSTEFFECTS_PATH + "ColorCorrection.fx")
+	PresentEffect = LoadEffectEx(POSTEFFECTS_PATH + "Present.fx")
+	SSAOEffect = LoadEffectEx(POSTEFFECTS_PATH + "SSAO.fx")
+	FXAAEffect = LoadEffectEx(POSTEFFECTS_PATH + "FXAA.fx")
+	MotionBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "MotionBlur.fx")
+	GammaEffect = LoadEffectEx(POSTEFFECTS_PATH + "Gamma.fx")
 	
 	DebugLog(GetEffectError())
-	BloomTex = CreateTexture(Width / 4, Height / 4, 1 + 256 + 16384)
-	BloomBlur = CreateTexture(Width / 4, Height / 4, 1 + 256 + 16384)
+	BloomTex = CreateTexture(Width, Height, 1 + 256 + 16384)
+	BloomBlur = CreateTexture(Width, Height, 1 + 256 + 16384)
 	
 	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
 	
@@ -70,7 +73,7 @@ End Function
 ; ==================================== POST EFFECTS
 
 Function ProcessBloom%(Threshold# = 0.4)
-	If BloomEffect = 0 Then Return
+	If BloomEffect = 0 Lor ((EffectsBits And 1) = 0) Then Return
 	EffectFloat(BloomEffect, "BloomThreshold", Threshold)
 	EntityEffect(PostEffectQuad, BloomEffect)
 	EntityTexture(PostEffectQuad, BloomTex, 0, 1)
@@ -96,7 +99,7 @@ Function ProcessBloom%(Threshold# = 0.4)
 End Function
 
 Function ProcessColorCorrection%()
-	If ColorCorrectionEffect = 0 Then Return
+	If ColorCorrectionEffect = 0 Lor ((EffectsBits And 2) = 0) Then Return
 	EntityEffect(PostEffectQuad, ColorCorrectionEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -107,7 +110,7 @@ Function ProcessColorCorrection%()
 End Function
 
 Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
-	If SSAOEffect = 0 Then Return
+	If SSAOEffect = 0 Lor ((EffectsBits And 4) = 0) Then Return
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
 	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
@@ -129,7 +132,7 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
 End Function
 
 Function ProcessFXAA%()
-	If FXAAEffect = 0 Then Return
+	If FXAAEffect = 0 Lor ((EffectsBits And 8) = 0) Then Return
 	EntityEffect(PostEffectQuad, FXAAEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -142,7 +145,7 @@ Function ProcessFXAA%()
 End Function
 
 Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
-	If MotionBlurEffect = 0 Then Return
+	If MotionBlurEffect = 0 Lor ((EffectsBits And 16) = 0) Then Return
 	EffectFloat(MotionBlurEffect, "Strength", Strength)
 	EffectMatrix(MotionBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 	EffectFloat(MotionBlurEffect, "Timestep", Min(Float(fps\ElapsedMilliSecs) / 1000.0, 1.0))
@@ -163,7 +166,8 @@ Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
 End Function
 
 Function ProcessEyeAdaptation%()
-	If EyeAdaptationEffect = 0 Then Return
+	If EyeAdaptationEffect = 0 Lor ((EffectsBits And 32) = 0) Then Return
+	
 	Local Width# = 0.5 / opt\GraphicWidth
 	Local Height# = 0.5 / opt\GraphicHeight
 	
@@ -223,7 +227,7 @@ Function ProcessEyeAdaptation%()
 End Function
 
 Function ProcessGamma%(Gamma#)
-	If GammaEffect = 0 Then Return
+	If GammaEffect = 0 Lor ((EffectsBits And 64) = 0) Then Return
 	EntityEffect(PostEffectQuad, GammaEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -236,7 +240,7 @@ Function ProcessGamma%(Gamma#)
 End Function
 
 Function BlurGBuffer%(Texture%, Force# = 1.0)
-	If Force <= 0.0 Then Return
+	If Force <= 0.0 Lor BlurEffect = 0 Then Return
 	
 	Local OldBuffer% = GraphicsBuffer()
 	
@@ -287,4 +291,4 @@ Function ClearBuffer%(Buffer%, R#, G#, B#, Alpha#)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS

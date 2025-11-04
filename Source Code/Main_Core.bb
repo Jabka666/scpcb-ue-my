@@ -2445,6 +2445,34 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			SetShadowsBias(Float(StrTemp), NORMAL_OFFSET)
 			CreateConsoleMsg("Done")
 			;[End Block]
+		Case "spec"
+			;[Block]
+			
+			Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Piece(Args, 1, " ")
+			StrTemp2 = Piece(Args, 2, " ")
+			
+			Local Picked% = CameraPick(Camera, opt\GraphicWidth / 2, opt\GraphicHeight / 2)
+			
+			If Picked <> 0 And PickedSurface() <> 0
+				Local t1s% = 0
+				Local Brush = GetSurfaceBrush(PickedSurface())
+				
+				If Brush <> 0
+					t1s = GetBrushTexture(Brush, 0)
+					If t1s <> 0
+						CreateConsoleMsg("Changed " + StripPath(TextureName(t1s)))
+						FreeTexture(t1s) : t1s = 0
+					EndIf
+					
+					BrushShininess(Brush, StrTemp, StrTemp2)
+					PaintSurface(PickedSurface(), Brush)
+					FreeBrush(Brush) : Brush = 0
+				EndIf
+			Else
+				CreateConsoleMsg("Can't pick")
+			EndIf
+			;[End Block]
 		Default
 			;[Block]
 			CreateConsoleMsg(GetLocalString("console", "notfound"), 255, 0, 0)
@@ -3501,10 +3529,10 @@ Const FogColorForestChase$ = "032044054"
 
 ; ~ Ambient Color Constants
 ;[Block]
-Const AmbientColorLCZ$ = "016016016"
-Const AmbientColorHCZ$ = "015011011"
-Const AmbientColorEZ$ = "045045045"
-Const AmbientOutside$ = "070070070"
+Const AmbientColorLCZ$ = "025025025"
+Const AmbientColorHCZ$ = "022016016"
+Const AmbientColorEZ$ = "025025025"
+Const AmbientOutside$ = "065065065"
 ;[End Block]
 
 Const ZoneColorChangeSpeed# = 50.0
