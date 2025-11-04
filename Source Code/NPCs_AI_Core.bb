@@ -74,6 +74,15 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 			Case 3.0 ; ~ Player/NPC isn't visible, tries to find
 				;[Block]
 				Dist = EntityDistanceSquared(n\Collider, me\Collider)
+				; ~ Still attack if the player is too close
+				If Dist < 0.49
+					If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
+						SetNPCFrame(n, 126.0)
+						n\State2 = 70.0
+						n\State = 4.0
+						Return
+					EndIf
+				EndIf
 				If n\PathTimer <= 0.0 ; ~ Update path
 					n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 					
@@ -114,14 +123,6 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				Else
-					; ~ Still attack if the player is too close
-					If Dist < 0.49
-						If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
-							n\State2 = 70.0
-							n\State = 4.0
-						EndIf
-					EndIf
-					
 					If n\PathStatus = PATH_STATUS_FOUND
 						If n\Path[n\PathLocation] = Null
 							If n\PathLocation > MaxPathLocations - 1
@@ -342,6 +343,15 @@ Function UpdateNPCType008_1%(n.NPCs)
 			Case 3.0 ; ~ Player/NPC isn't visible, tries to find
 				;[Block]
 				Dist = EntityDistanceSquared(n\Collider, me\Collider)
+				; ~ Still attack if the player is too close
+				If Dist < 0.49
+					If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
+						SetNPCFrame(n, 131.0 + 43.0 * (Rand(2) = 1))
+						n\State2 = 70.0
+						n\State = 4.0
+						Return
+					EndIf
+				EndIf
 				If n\PathTimer <= 0.0 ; ~ Update path
 					n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 					
@@ -382,14 +392,6 @@ Function UpdateNPCType008_1%(n.NPCs)
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				Else
-					; ~ Still attack if the player is too close
-					If Dist < 0.49
-						If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
-							n\State2 = 70.0
-							n\State = 4.0
-						EndIf
-					EndIf
-					
 					If n\PathStatus = PATH_STATUS_FOUND
 						If n\Path[n\PathLocation] = Null
 							If n\PathLocation > MaxPathLocations - 1
@@ -1258,16 +1260,15 @@ Function UpdateNPCType049_2%(n.NPCs)
 			Case 3.0 ; ~ Player/NPC isn't visible, tries to find
 				;[Block]
 				Dist = EntityDistanceSquared(n\Collider, me\Collider)
-				; ~ TODO: Check if this really needed!
-;				; ~ Still attack if the player is too close
-;				If (Not chs\NoTarget)
-;					If Dist < 0.49 And EntityVisible(me\Collider, n\Collider)
-;						n\State2 = 70.0
-;						SetNPCFrame(n, 795.0)
-;						n\State = 4.0
-;						Return
-;					EndIf
-;				EndIf
+				; ~ Still attack if the player is too close
+				If (Not chs\NoTarget)
+					If Dist < 0.49 And EntityVisible(me\Collider, n\Collider)
+						n\State2 = 70.0
+						SetNPCFrame(n, 795.0)
+						n\State = 4.0
+						Return
+					EndIf
+				EndIf
 				
 				If n\PathTimer <= 0.0 ; ~ Update path
 					n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
