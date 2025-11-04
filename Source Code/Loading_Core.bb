@@ -128,7 +128,7 @@ Const PARTICLE_FIRE% = 13
 Const PARTICLE_SNOW_SHINE% = 14
 ;[End Block]
 
-Global ParticleEffect%[37]
+Global ParticleEffect%[38]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
@@ -598,6 +598,21 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[36], True)
 	SetTemplateSize(ParticleEffect[36], 0.03, 0.03, 0.9, 1.1)
 	SetTemplateSizeVel(ParticleEffect[36], 0.0013, 1.0013)
+	
+	; ~ Grey smoke particles
+	ParticleEffect[37] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[37], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[37], -1)
+	SetTemplateInterval(ParticleEffect[37], 55)
+	SetTemplateParticleLifeTime(ParticleEffect[37], 70, 80)
+	SetTemplateTexture(ParticleEffect[37], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[37], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[37], -0.01, 0.01, 0.02, 0.022, -0.01, 0.01)
+	SetTemplateAlphaVel(ParticleEffect[37], True)
+	SetTemplateSize(ParticleEffect[37], 0.02, 0.02, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[37], 0.01, 1.01)
+	SetTemplateFloor(ParticleEffect[37], 1.3, 0.12, True)
+	SetTemplateColors(ParticleEffect[37], $808080, $808080)
 End Function
 
 Function RemoveParticleInstances%()

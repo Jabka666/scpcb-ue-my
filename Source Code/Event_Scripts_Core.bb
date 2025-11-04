@@ -9190,6 +9190,7 @@ Function UpdateEvent_Brownout%(e.Events)
 			If e\EventState3 = 2.0 And Temp
 				Local i%
 				
+				If e\room\RoomEmitters[0] = Null Then e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 37)
 				SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
 				For i = 0 To 1
 					SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 19)
