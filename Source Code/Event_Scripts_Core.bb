@@ -9171,6 +9171,20 @@ Function UpdateEvent_Brownout%(e.Events)
 			e\EventState3 = 1.0
 		Else
 			e\EventState3 = 2.0
+			
+			Local p.Props
+			
+			For p.Props = Each Props
+				If p\room = e\room
+					If p\Name = "tank2.b3d"
+						Local Tex% = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
+						
+						EntityTexture(p\OBJ, Tex)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+						Exit
+					EndIf
+				EndIf
+			Next
 		EndIf
 	EndIf
 	
