@@ -398,6 +398,7 @@
 			
 		Ukrainian translation:
 			
+			Phrenetic
 			xstallm
 			Antoha
 			
