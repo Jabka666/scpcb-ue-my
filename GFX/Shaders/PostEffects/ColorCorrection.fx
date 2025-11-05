@@ -35,9 +35,9 @@ PS_INPUT VertexProcess(VS_INPUT input)
 // -------------------------- Parameters ------------------------------
 
 const float ExposureStops = 0.0;
-const float Offset        = -0.0040;
+const float Offset        = 0.0040;
 const float Hue           = 0.0;
-const float Saturation    = 0.85;
+const float Saturation    = 1.2;
 
 static const float3x3 HueMatrix =
 {

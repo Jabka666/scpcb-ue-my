@@ -349,7 +349,7 @@ Function UpdateLights%(Cam%)
 					
 					Dist = EntityDistanceSquared(Cam, l\OBJ)
 					MaxDist = (LightRenderDistance + PowTwo(l\Range)) * LightVolume
-					l\Fade = GetFade(Dist, MaxDist / 2.0, MaxDist)
+					l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
 					
 					If opttimer\LightsTimer = 0.0
 ;						Local LightSpriteHidden% = EntityHidden(l\Sprite)
@@ -414,7 +414,7 @@ Function UpdateLights%(Cam%)
 ;				If Cam = Camera ; ~ The lights are rendered by player's cam
 ;					Dist = EntityDistanceSquared(Cam, l\OBJ)
 ;					MaxDist = (LightRenderDistance + PowTwo(l\Range)) * LightVolume
-;					l\Fade = GetFade(Dist, MaxDist / 2.0, MaxDist)
+;					l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
 ;					
 ;					If opttimer\LightsTimer = 0.0
 ;						LightOBJHidden = EntityHidden(l\OBJ)
@@ -4010,25 +4010,24 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
 		MoveEntity(sc\ScrOBJ, 0.0, 0.0, -0.01)
 		RotateEntity(sc\ScrOBJ, Pitch2, Yaw2, Roll2)
-		EntityFX(sc\ScrOBJ, 17)
+		EntityFX(sc\ScrOBJ, 16)
 		SpriteViewMode(sc\ScrOBJ, 2)
-		EntityTexture(sc\ScrOBJ, sc_I\ScreenTex)
 		If room <> Null Then EntityParent(sc\ScrOBJ, room\OBJ)
 		HideEntity(sc\ScrOBJ)
-		SetDeferredEntity(sc\ScrOBJ, False, DEFERRED_DIFFNOLIT)
+		SetDeferredEntity(sc\ScrOBJ, False, DEFERRED_DIFF Or DEFERRED_FULLBRIGHT)
+		EntityTexture(sc\ScrOBJ, sc_I\ScreenTex)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
 		ScaleSprite(sc\ScrOverlay, MonWidth, MonHeight)
+		MoveEntity(sc\ScrOverlay, 0.0, 0.0, -0.005)
 		EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 		SpriteViewMode(sc\ScrOverlay, 2)
 		EntityFX(sc\ScrOverlay, 1 + 16)
 		EntityBlend(sc\ScrOverlay, 3)
 		HideEntity(sc\ScrOverlay)
-		SetDeferredEntity(sc\ScrOverlay, False, DEFERRED_DIFFNOLIT)
 		
 		sc\MonitorOBJ = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL], sc\ScrOBJ)
 		ScaleEntity(sc\MonitorOBJ, Scale, Scale, Scale)
-		SetDeferredEntity(sc\MonitorOBJ)
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
@@ -4243,56 +4242,56 @@ Function UpdateSecurityCams%()
 	Next
 End Function
 
-;Function RenderSecurityCams%()
-;	CatchErrors("RenderSecurityCams()")
-;	
-;	SetBuffer(TextureBuffer(sc_I\ScreenTex)) ; ~ Set render target to screen tex
-;	
-;	Local sc.SecurityCams
-;	
-;	For sc.SecurityCams = Each SecurityCams
-;		Local Close% = (sc\room\Dist < 6.0 Lor PlayerRoom = sc\room)
-;		
-;		If Close
-;			If sc\Screen
-;				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.1
-;					If sc\room\RoomTemplate\RoomID <> r_cont1_205
-;						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
-;						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
-;					EndIf
-;					
-;					If sc\State >= sc\RenderInterval
-;						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
-;							ShowEntity(sc\Cam)
-;							RenderWorld(RenderTween)
-;							HideEntity(sc\Cam)
-;						Else
-;							ShowEntity(sc_I\CoffinCam\room\OBJ)
-;							EntityAlpha(GetChild(sc_I\CoffinCam\room\OBJ, 2), 1.0)
-;							ShowEntity(sc_I\CoffinCam\Cam)
-;							
-;							RenderWorld(RenderTween)
-;							
-;							HideEntity(sc_I\CoffinCam\Cam)
-;							HideEntity(sc_I\CoffinCam\room\OBJ)
-;						EndIf
-;					EndIf
-;				Else
-;					If (Not EntityHidden(sc\ScrOBJ)) Then HideEntity(sc\ScrOBJ)
-;					If (Not EntityHidden(sc\ScrOverlay)) Then HideEntity(sc\ScrOverlay)
-;				EndIf
-;			EndIf
-;		EndIf
-;		
-;		If sc <> Null
-;			CatchErrors("Uncaught: RenderSecurityCameras(Room ID: " + sc\room\RoomTemplate\RoomID + ")")
-;		Else
-;			CatchErrors("Uncaught: RenderSecurityCameras(Screen doesn't exist anymore!)")
-;		EndIf
-;	Next
-;	
-;	SetBuffer(BackBuffer())
-;End Function
+Function RenderSecurityCams%()
+	CatchErrors("RenderSecurityCams()")
+	
+	SetBuffer(TextureBuffer(sc_I\ScreenTex)) ; ~ Set render target to screen tex
+	
+	Local sc.SecurityCams
+	
+	For sc.SecurityCams = Each SecurityCams
+		Local Close% = (sc\room\Dist < 6.0 Lor PlayerRoom = sc\room)
+		
+		If Close
+			If sc\Screen
+				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.1
+					If sc\room\RoomTemplate\RoomID <> r_cont1_205
+						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
+						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
+					EndIf
+					
+					If sc\State >= sc\RenderInterval
+						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
+							ShowEntity(sc\Cam)
+							RenderWorld(RenderTween)
+							HideEntity(sc\Cam)
+						Else
+							ShowEntity(sc_I\CoffinCam\room\OBJ)
+							EntityAlpha(GetChild(sc_I\CoffinCam\room\OBJ, 2), 1.0)
+							ShowEntity(sc_I\CoffinCam\Cam)
+							
+							RenderWorld(RenderTween)
+							
+							HideEntity(sc_I\CoffinCam\Cam)
+							HideEntity(sc_I\CoffinCam\room\OBJ)
+						EndIf
+					EndIf
+				Else
+					If (Not EntityHidden(sc\ScrOBJ)) Then HideEntity(sc\ScrOBJ)
+					If (Not EntityHidden(sc\ScrOverlay)) Then HideEntity(sc\ScrOverlay)
+				EndIf
+			EndIf
+		EndIf
+		
+		If sc <> Null
+			CatchErrors("Uncaught: RenderSecurityCameras(Room ID: " + sc\room\RoomTemplate\RoomID + ")")
+		Else
+			CatchErrors("Uncaught: RenderSecurityCameras(Screen doesn't exist anymore!)")
+		EndIf
+	Next
+	
+	SetBuffer(BackBuffer())
+End Function
 
 Function RemoveSecurityCam%(sc.SecurityCams)
 	If sc\Pvt <> 0 Then FreeEntity(sc\Pvt) : sc\Pvt = 0

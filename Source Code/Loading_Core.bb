@@ -409,7 +409,7 @@ Function LoadParticles%()
 	
 	; ~ Sparks from light emitter
 	ParticleEffect[20] = CreateTemplate()
-	SetTemplateParticlesPerInterval(ParticleEffect[20], 6)
+	SetTemplateParticlesPerInterval(ParticleEffect[20], 20)
 	SetTemplateEmitterLifeTime(ParticleEffect[20], 2)
 	SetTemplateParticleLifeTime(ParticleEffect[20], 60, 70)
 	SetTemplateTexture(ParticleEffect[20], PARTICLE_SPARK)
@@ -417,7 +417,7 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[20], -0.0175, 0.0175, -0.015, 0.015, -0.0175, 0.0175)
 	SetTemplateAlignToFall(ParticleEffect[20], True, 45)
 	SetTemplateGravity(ParticleEffect[20], 0.001)
-	SetTemplateSize(ParticleEffect[20], 0.01, 0.022, 0.7)
+	SetTemplateSize(ParticleEffect[20], 0.006, 0.01)
 	
 	; ~ Blood sprite
 	ParticleEffect[21] = CreateTemplate()

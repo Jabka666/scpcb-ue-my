@@ -32,11 +32,12 @@ sampler DiffuseMap : register(s0);
 
 #ifdef EMISSIVEMAP
 	sampler EmissiveMap : register(s3);
-	#ifdef MUL
-	const float EmissiveMultiply;
-	#endif
 #endif
 
+#ifdef MUL
+	const float EmissiveMultiply;
+#endif
+	
 const float DepthMultiply;
 
 // ==================================================== GBUFFER
@@ -119,17 +120,25 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		const float specIntensity = Specular.r;
 		const float specPower = Specular.g;
 	#endif
-
+	
+	#ifndef FULLBRIGHT
+		const float3 ambient = AmbientColor;
+	#else
+		const float3 ambient = float3(1,1,1);
+	#endif
+	
 	#if defined(EMISSIVEMAP)
 		#ifndef MUL
-			output.Color = float4(diffuse.rgb * AmbientColor, diffuse.a) + float4(Sample2D(EmissiveMap, input.TexCoords).rgb, 0.0);
+			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(Sample2D(EmissiveMap, input.TexCoords).rgb, 0.0);
 		#else
-			output.Color = float4(diffuse.rgb * AmbientColor, diffuse.a) + float4(Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply, 0.0);
+			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply, 0.0);
 		#endif
-	#elif defined(NOLIT)
-		output.Color = float4(diffuse.rgb * AmbientColor, diffuse.a) * 4;
 	#else
-		output.Color = float4(diffuse.rgb * AmbientColor, diffuse.a);
+		#ifndef MUL
+			output.Color = float4(diffuse.rgb * ambient, diffuse.a);
+		#else
+			output.Color = float4(diffuse.rgb * ambient * EmissiveMultiply, diffuse.a);
+		#endif
 	#endif
 	
 	output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
