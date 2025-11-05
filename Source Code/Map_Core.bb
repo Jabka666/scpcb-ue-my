@@ -2478,6 +2478,7 @@ Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw
 	If Locked Then EntityTexture(OBJ, d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
 	If Parent <> 0 Then EntityParent(OBJ, Parent)
 	SetDeferredEntity(OBJ)
+	UpdateEntityMaterial(OBJ)
 	
 	Return(OBJ)
 End Function
