@@ -7504,6 +7504,8 @@ Function UpdateEvent_Room2_Office_3%(e.Events)
 					e\EventState = 2.0
 				EndIf
 			EndIf
+		Else
+			If e\room\RoomDoors[1]\Open Then RemoveEvent(e)
 		EndIf
 	EndIf
 End Function
