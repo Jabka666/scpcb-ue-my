@@ -507,6 +507,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			
 			LightRange(Light, 0.15)
 			LightColor(Light, 255.0, 255.0, 20.0)
+			LightScattering(Light, 0.0)
 			MoveEntity(Light, 0.0, 0.1, 0.0)
 			
 			If i\ItemTemplate\ID = it_scp2022pill
