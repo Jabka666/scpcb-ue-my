@@ -1555,8 +1555,8 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "e.readerulti"), "E-Reader Ultimate", it_e_readerulti, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
 	;[End Block]
 	
-	CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", it_coarsebat, "battery.b3d", "INV_battery_4.5v.png", "", 0.0065, 1, "battery_4.5V.png")
-	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", it_bat, "battery.b3d", "INV_battery_9v.png", "", 0.0065, 1)
+	CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", it_coarsebat, "battery.b3d", "INV_battery_4.5v.png", "", 0.0065, 1)
+	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", it_bat, "battery.b3d", "INV_battery_9v.png", "", 0.0065, 1, "battery_9V.png")
 	CreateItemTemplate(GetLocalString("items", "18bat"), "18V Battery", it_finebat, "battery.b3d", "INV_battery_18v.png", "", 0.0075, 1, "battery_18V.png")
 	CreateItemTemplate(GetLocalString("items", "999bat"), "999V Battery", it_veryfinebat, "battery.b3d", "INV_battery_999v.png", "", 0.007, 1, "battery_999V.png")
 	CreateItemTemplate(GetLocalString("items", "killbat"), "Strange Battery", it_killbat, "battery.b3d", "INV_strange_battery.png", "", 0.007, 1, "strange_battery.png")
