@@ -8062,7 +8062,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 									
 									For e2.Events = Each Events
 										If e2\EventID = e_room2_sl
-											e2\EventState3 = 0.0
+											e2\EventState2 = 7.0
 											UpdateLever(e2\room\RoomLevers[0]\OBJ)
 											RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
 											Exit
@@ -8339,7 +8339,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							If (Not LCZ)
 								For e2.Events = Each Events
 									If e2\EventID = e_room2_sl
-										e2\EventState3 = 0.0
+										e2\EventState2 = 7.0
 										UpdateLever(e2\room\RoomLevers[0]\OBJ)
 										RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
 										Exit
