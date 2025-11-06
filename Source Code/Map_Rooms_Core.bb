@@ -4236,7 +4236,7 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 				
-				it.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, r\x - 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it.Items = CreateItem(GetRandDocument(), it_paper, r\x - 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 				
 				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 514.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 572.0 * RoomScale)

@@ -298,112 +298,12 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 End Function
 
 Function GetRandDocument$()
-	Select Rand(26)
-		Case 1
-			;[Block]
-			Return("005")
-			;[End Block]
-		Case 2
-			;[Block]
-			Return("008")
-			;[End Block]
-		Case 3
-			;[Block]
-			Return("009")
-			;[End Block]
-		Case 4
-			;[Block]
-			Return("012")
-			;[End Block]
-		Case 5
-			;[Block]
-			Return("049")
-			;[End Block]
-		Case 6
-			;[Block]
-			Return("066")
-			;[End Block]
-		Case 7
-			;[Block]
-			Return("096")
-			;[End Block]
-		Case 8
-			;[Block]
-			Return("106")
-			;[End Block]
-		Case 9
-			;[Block]
-			Return("173")
-			;[End Block]
-		Case 10
-			;[Block]
-			Return("205")
-			;[End Block]
-		Case 11
-			;[Block]
-			Return("294")
-			;[End Block]
-		Case 12
-			;[Block]
-			Return("409")
-			;[End Block]
-		Case 13
-			;[Block]
-			Return("513")
-			;[End Block]
-		Case 14
-			;[Block]
-			Return("682")
-			;[End Block]
-		Case 15
-			;[Block]
-			Return("714")
-			;[End Block]
-		Case 16
-			;[Block]
-			Return("860")
-			;[End Block]
-		Case 17
-			;[Block]
-			Return("860-1")
-			;[End Block]
-		Case 18
-			;[Block]
-			Return("914")
-			;[End Block]
-		Case 19
-			;[Block]
-			Return("895")
-			;[End Block]
-		Case 20
-			;[Block]
-			Return("939")
-			;[End Block]
-		Case 21
-			;[Block]
-			Return("966")
-			;[End Block]
-		Case 22
-			;[Block]
-			Return("970")
-			;[End Block]
-		Case 23
-			;[Block]
-			Return("1048")
-			;[End Block]
-		Case 24
-			;[Block]
-			Return("1162-ARC")
-			;[End Block]
-		Case 25
-			;[Block]
-			Return("1499")
-			;[End Block]
-		Case 26
-			;[Block]
-			Return("2022")
-			;[End Block]
-	End Select
+	Local itt.ItemTemplates
+	
+	For itt.ItemTemplates = Each ItemTemplates
+		If Instr(itt\Name, "Document SCP-") <> 0 And Rand(37) = 1 Then Return(itt\Name)
+	Next
+	Return("Document SCP-005")
 End Function
 
 Global CurrEReaderPage.ItemTemplates
