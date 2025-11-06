@@ -505,7 +505,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			;[End Block]
 		Case it_scp2022
 			;[Block]
-			i\State = Rand(0, 10)
+			i\State = Rand(2, 10)
 			
 			Light = CreateLight(2, i\Collider)
 			LightRange(Light, 0.15)
