@@ -514,7 +514,7 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[28], 0.14, 0.14, 1.0, 1.0)
 	SetTemplateSizeVel(ParticleEffect[28], 0.011, 1.01)
 	
-	; ~ Water rings in "room2_js"
+	; ~ Fine SCP-513 ring
 	ParticleEffect[29] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[29], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[29], 1)
@@ -3949,4 +3949,4 @@ Function NullGame%(PlayButtonSFX% = True)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS

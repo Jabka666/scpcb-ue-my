@@ -473,6 +473,8 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	
 	i\InvImg = i\ItemTemplate\InvImg
 	
+	Local Light%
+	
 	Select ID
 		Case it_cup
 			;[Block]
@@ -501,28 +503,35 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 				If i\ItemTemplate\InvImg2 <> 0 Then i\InvImg = i\ItemTemplate\InvImg2
 			EndIf
 			;[End Block]
-		Case it_scp2022pill, it_scp2022
+		Case it_scp2022
 			;[Block]
-			Local Light% = CreateLight(2, i\Collider)
+			i\State = Rand(2, 10)
 			
+			Light = CreateLight(2, i\Collider)
+			LightRange(Light, 0.15)
+			LightColor(Light, 255.0, 255.0, 20.0)
+			LightScattering(Light, 0.0)
+			MoveEntity(Light, 0.0, 0.1, 0.0)
+			;[End Block]
+		Case it_scp2022pill
+			;[Block]
+			Light = CreateLight(2, i\Collider)
 			LightRange(Light, 0.15)
 			LightColor(Light, 255.0, 255.0, 20.0)
 			LightScattering(Light, 0.0)
 			MoveEntity(Light, 0.0, 0.1, 0.0)
 			
-			If i\ItemTemplate\ID = it_scp2022pill
-				i\OBJ2 = CreateSprite()
-				PositionEntity(i\OBJ2, x, y, z)
-				ScaleSprite(i\OBJ2, 0.03, 0.03)
-				EntityTexture(i\OBJ2, misc_I\AdvancedLightSprite)
-				EntityFX(i\OBJ2, 1 + 8)
-				EntityBlend(i\OBJ2, 3)
-				EntityColor(i\OBJ2, 255.0, 255.0, 20.0)
-				RotateEntity(i\OBJ2, 0.0, 0.0, Rnd(360.0))
-				EntityAlpha(i\OBJ2, 0.6)
-				SpriteViewMode(i\OBJ2, 1)
-				EntityParent(i\OBJ2, i\Collider)
-			EndIf
+			i\OBJ2 = CreateSprite()
+			PositionEntity(i\OBJ2, x, y, z)
+			ScaleSprite(i\OBJ2, 0.03, 0.03)
+			EntityTexture(i\OBJ2, misc_I\AdvancedLightSprite)
+			EntityFX(i\OBJ2, 1 + 8)
+			EntityBlend(i\OBJ2, 3)
+			EntityColor(i\OBJ2, 255.0, 255.0, 20.0)
+			RotateEntity(i\OBJ2, 0.0, 0.0, Rnd(360.0))
+			EntityAlpha(i\OBJ2, 0.6)
+			SpriteViewMode(i\OBJ2, 1)
+			EntityParent(i\OBJ2, i\Collider)
 			;[End Block]
 	End Select
 	SetDeferredEntity(i\OBJ, True)
@@ -875,10 +884,6 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 							EndIf
 						EndIf
 					Next
-					;[End Block]
-				Case it_scp2022
-					;[Block]
-					If item\State = 0.0 Then item\State = Rand(2, 8)
 					;[End Block]
 			End Select
 			
@@ -2593,8 +2598,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case SETTING_VERY_FINE
 					;[Block]
 					If Rand(10) = 1
-						it2.Items = CreateItem("SCP-2022", it_scp2022, x, y, z)
-						it2\State = Rand(6)
+						CreateItem("SCP-2022", it_scp2022, x, y, z)
 					Else
 						If Rand(3) = 1
 							CreateItem("SCP-500-01", it_scp500pill, x, y, z)
