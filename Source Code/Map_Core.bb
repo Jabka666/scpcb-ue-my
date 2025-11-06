@@ -183,12 +183,12 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	EntityParent(al\ConeOBJ2, al\OBJ)
 	
 	al\light = AddLight(Null, x, y, z, DEFERRED_LIGHT_SPOT, Range, R, G, B, False, SpriteScale, CastShadows)
-	al\light\FOV = FOV : al\light\Scattering = 1.0
+	al\light\FOV = FOV : al\light\Scattering = 0.0
 	RotateEntity(al\light\OBJ, 0.0, 0.0, 0.0)
 	EntityParent(al\light\OBJ, al\OBJ)
 	
 	al\light = AddLight(Null, x, y, z, DEFERRED_LIGHT_SPOT, Range, R, G, B, False, SpriteScale, CastShadows)
-	al\light\FOV = FOV : al\light\Scattering = 1.0
+	al\light\FOV = FOV : al\light\Scattering = 0.0
 	RotateEntity(al\light\OBJ, 180.0, 0.0, 0.0)
 	EntityParent(al\light\OBJ, al\OBJ)
 	
