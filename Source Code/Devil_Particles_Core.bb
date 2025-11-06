@@ -341,6 +341,11 @@ Function UpdateParticles_Devil()
 	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
 	
 	For emit.Emitter = Each Emitter
+		If (Not EntityExist(emit\Owner))
+			FreeEmitter(emit, True)
+			Continue
+		EndIf
+		
 		ClearSurface(emit\Surf)
 		If emit\MaxTime > -1
 			emit\Age = emit\Age + 1
@@ -422,9 +427,9 @@ Function UpdateParticles_Devil()
 				EndIf
 			Next
 			If Del
-				FreeEntity(emit\Ent) : emit\Ent = 0
+				If EntityExist(emit\Ent) Then FreeEntity(emit\Ent) : emit\Ent = 0
 				emit\Surf = 0
-				FreeEntity(emit\Owner) : emit\Owner = 0
+				If EntityExist(emit\Owner) Then FreeEntity(emit\Owner) : emit\Owner = 0
 				StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
 				Delete(emit)
 			EndIf
@@ -546,4 +551,4 @@ Function UpdateParticles_Devil()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS
