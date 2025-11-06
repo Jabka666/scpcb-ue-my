@@ -48,11 +48,35 @@ inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float sp
 	return saturate(pow(dot(normal, halfVec), specularPower * 10.0));
 }
 
+inline float3 ApplyDithering(float3 color, float2 screenPos)
+{
+	float noise = frac(sin(dot(screenPos, float2(41.512, 73.713))) * 59758.5453);
+    return color + saturate((noise - 0.5) / 255.0);
+}
+
+inline float3 ACESFilm(float3 x)
+{
+    float a = 2.51;
+    float b = 0.03;
+    float c = 2.43;
+    float d = 0.59;
+    float e = 0.14;
+    return saturate((x * (a * x + b)) / (x * (c * x + d) + e));
+}
+
+inline float4 ACESFilm(float4 x)
+{
+    float a = 2.51;
+    float b = 0.03;
+    float c = 2.43;
+    float d = 0.59;
+    float e = 0.14;
+    return saturate((x * (a * x + b)) / (x * (c * x + d) + e));
+}
+
 inline float4 ShadeDither(in float4 result, in float4 ScreenPosition)
 {
-	float2 screenPos = ScreenPosition.xy / ScreenPosition.w;
-	float noise = frac(sin(dot(screenPos, float2(41.512, 73.713))) * 59758.5453);
-	result += saturate((noise - 0.5) / 255.0);
+	result.rgb = ApplyDithering(result, GetScreenTexCoords(ScreenPosition));
 	return result;
 }
 

@@ -108,9 +108,7 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	float fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
 	
 	// Fog dither
-	float2 screenPos = input.ScreenPos.xy / input.ScreenPos.w;
-	float dither = frac(sin(dot(screenPos, float2(12.9898, 78.233))) * 43758.5453);
-	fogFactor = saturate(fogFactor + (dither - 0.5) * 0.01); //
+	fogFactor = 1.0 - ShadeDither(float4(1.0 - fogFactor, 0, 0, 0), input.ScreenPos).r;
 	
 	#ifdef ROUGHMAP
 		const float roughness = Sample2D(RoughnessMap, input.TexCoords).r;

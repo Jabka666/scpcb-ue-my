@@ -335,7 +335,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		AmbientLight(fog\CurrAmbientR, fog\CurrAmbientG, fog\CurrAmbientB)
 		; ~ Render opacity
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
-		ProcessSSAO(Cam, 1.5, 0.2, Tween) ; ~ Process SSAO for opacity
+		ProcessSSAO(Cam, 3.0, 0.2, Tween) ; ~ Process SSAO for opacity
 		
 		Local InvViewProjection% = CameraMatrix(Cam, 3, Tween)
 		
@@ -360,7 +360,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		EndRender()
 		
 		ProcessFXAA()
-		ProcessBloom()
+		ProcessBloom(0.45)
 		ProcessColorCorrection()
 		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)

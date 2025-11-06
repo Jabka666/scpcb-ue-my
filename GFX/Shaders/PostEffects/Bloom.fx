@@ -95,7 +95,7 @@ float4 ProcessV(PS_INPUT input) : COLOR
 float4 ProcessCombine(PS_INPUT input) : COLOR
 {
     float3 diff = Sample2D(ColorMap, input.TexCoord).rgb * BloomMix.x;
-    float3 bloom = Sample2D(BloomMap, input.BlurCoord).rgb  * BloomMix.y;
+    float3 bloom = Sample2D(BloomMap, input.BlurCoord).rgb * BloomMix.y;
 	return float4((diff * saturate(1.0 - bloom)) + bloom, 1.0);
 }
 
