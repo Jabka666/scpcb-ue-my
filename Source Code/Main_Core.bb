@@ -216,6 +216,10 @@ Function CatchErrors%(Location$)
 	SetErrorMsg(11, "Error located in: " + Location)
 End Function
 
+Function RaiseException%(Exception$)
+	SetErrorMsg(12, "Caught exception: " + Exception)
+End Function
+
 ; ~ MAIN PROGRAM
 ;[Block]
 Repeat

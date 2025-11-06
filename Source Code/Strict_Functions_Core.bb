@@ -8,7 +8,7 @@
 
 Function RuntimeErrorEx%(Message$)
 	If ErrorMessageInitialized
-		CatchErrors(Message)
+		RaiseException(Message)
 		MemoryAccessViolation()
 	Else
 		RuntimeError(Message)
