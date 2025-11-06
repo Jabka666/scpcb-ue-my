@@ -2217,15 +2217,12 @@ Function LoadEvents%()
 	CreateEvent(e_checkpoint, r_room2_checkpoint_lcz_hcz, 0, 1.0)
 	CreateEvent(e_checkpoint, r_room2_checkpoint_hcz_ez, 0, 1.0)
 	
-	CreateEvent(e_door_closing, r_room3_lcz, 0, 0.1)
 	CreateEvent(e_door_closing, r_room3_2_hcz, 0, 0.1)
 	
-	If Rand(2) = 1
-		CreateEvent(e_106_victim, r_room3_lcz, Rand(2))
-	Else
-		CreateEvent(e_106_victim, r_room3_2_lcz, Rand(2))
-	EndIf
+	CreateEvent(e_106_victim, r_room3_2_lcz, Rand(2))
 	CreateEvent(e_106_sinkhole, r_room4_lcz, Rand(2))
+	
+	CreateEvent(e_brownout, r_room3_lcz, 0, 1.0)
 	
 	CreateEvent(e_cont1_079, r_cont1_079, 0)
 	
@@ -3949,4 +3946,4 @@ Function NullGame%(PlayButtonSFX% = True)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS

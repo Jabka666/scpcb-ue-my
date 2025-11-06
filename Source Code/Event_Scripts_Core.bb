@@ -9165,15 +9165,9 @@ Function UpdateEvent_Brownout%(e.Events)
 	Local Temp% = False
 	
 	If e\EventState3 = 0.0
-		If Rand(3) <> 1
-			RotateEntity(e\room\RoomLevers[0]\OBJ, -80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
-			RotateEntity(e\room\RoomLevers[1]\OBJ, -80.0, EntityYaw(e\room\RoomLevers[1]\OBJ), 0.0)
-			e\EventState = 1.0
-			e\EventState2 = 1.0
+		If Rand(5) <> 1
 			e\EventState3 = 1.0
 		Else
-			e\EventState3 = 2.0
-			
 			Local p.Props
 			
 			For p.Props = Each Props
@@ -9187,11 +9181,12 @@ Function UpdateEvent_Brownout%(e.Events)
 					EndIf
 				EndIf
 			Next
+			e\EventState3 = 2.0
 		EndIf
 	EndIf
 	
 	If Rand(70) = 1
-		If (IsRoomAdjacent(PlayerRoom, e\room) Lor PlayerRoom = e\room) And InFacility = NullFloor
+		If (IsRoomAdjacent(PlayerRoom, e\room) Lor PlayerRoom = e\room) And InFacility = NullFloor And e\EventState3 = 2.0
 			If e\EventState < 0.5 Then me\LightBlink = Max(1.0, me\LightBlink)
 			Temp = True
 		EndIf
@@ -9206,7 +9201,7 @@ Function UpdateEvent_Brownout%(e.Events)
 			e\room\Objects[0] = CreatePivot()
 			PositionEntity(e\room\Objects[0], TFormedX(), TFormedY(), TFormedZ(), True)
 		Else
-			If e\EventState3 = 2.0 And Temp
+			If Temp
 				Local i%
 				
 				If e\room\RoomEmitters[0] = Null Then e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 37)
