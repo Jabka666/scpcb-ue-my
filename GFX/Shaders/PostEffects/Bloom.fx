@@ -67,8 +67,10 @@ PS_INPUT VertexProcess(VS_INPUT input)
 { 
 	PS_INPUT output; 
 	output.Pos = mul(input.Pos, ViewProj); 
-	output.TexCoord = GetScreenTexCoords(output.Pos) + halfPixel;
-	output.BlurCoord = output.TexCoord + BlurInvSize;
+	
+	float2 ScreenCoord = GetScreenTexCoords(output.Pos);
+	output.TexCoord = ScreenCoord + halfPixel;
+	output.BlurCoord = ScreenCoord + BlurInvSize;
 	return output;
 }
 

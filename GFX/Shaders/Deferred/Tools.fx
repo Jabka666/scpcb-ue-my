@@ -44,8 +44,17 @@ inline float2 GetScreenTexCoords(float4 ScreenCoords)
 
 inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float specularPower)
 {
-	float3 halfVec = normalize(normalize(eyevec) + lightDir);
-	return saturate(pow(dot(normal, halfVec), specularPower * 10.0));
+	const float spec = specularPower * 10.0;
+	float3 V = normalize(eyevec);
+    float3 halfVec = normalize(V + lightDir);
+    float specular = saturate(pow(dot(normal, halfVec), spec));
+    
+    // Fresnel
+    float NdotV = max(0.0, dot(normal, V));
+	const float fresnelIntensity = 0.01;
+    float fresnel = pow(1.0 - NdotV, 4.0) * fresnelIntensity;
+    fresnel *= (spec + 0.5);
+    return specular + fresnel;
 }
 
 inline float3 ApplyDithering(float3 color, float2 screenPos)
