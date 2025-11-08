@@ -4140,7 +4140,7 @@ Function UpdateSecurityCams%()
 				
 				sc\InSight = False
 				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And SecondaryLightOn > 0.1
-					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And EntityVisible(Camera, sc\ScrOBJ))
+					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And (sc\ScriptedMonitor Lor EntityVisible(Camera, sc\ScrOBJ)))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
 						ParticleCam = sc\Cam
@@ -4262,15 +4262,13 @@ Function RenderSecurityCams%()
 					
 					If sc\State >= sc\RenderInterval
 						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
-							ShowEntity(sc\Cam)
-							RenderWorld(RenderTween)
-							HideEntity(sc\Cam)
+							RenderWorld(RenderTween, sc\Cam)
 						Else
 							ShowEntity(sc_I\CoffinCam\room\OBJ)
 							EntityAlpha(GetChild(sc_I\CoffinCam\room\OBJ, 2), 1.0)
 							ShowEntity(sc_I\CoffinCam\Cam)
 							
-							RenderWorld(RenderTween)
+							RenderWorld(RenderTween, sc_I\CoffinCam\Cam)
 							
 							HideEntity(sc_I\CoffinCam\Cam)
 							HideEntity(sc_I\CoffinCam\room\OBJ)
