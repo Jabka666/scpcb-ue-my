@@ -4549,196 +4549,196 @@ Function UpdateScreens%()
 	
 	For s.Screens = Each Screens
 		If s\room = PlayerRoom Lor s\room\Dist < 6.0
-			If SecondaryLightOn <= 0.1
-				If s\CurrScreenID <> 0
-					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
-					UpdateEntityMaterial(s\OBJ)
-					s\CurrScreenID = 0
-				EndIf
-				Return
-			EndIf
-			
-			If s\Nearby
-				Select s\ScreenEventID
-					Case cs_default
-						;[Block]
-						If s\State > 0.0
-							s\State = s\State - fps\Factor[0]
-							If s\State < 70.0 * 6.0
-								If s\CurrScreenID <> 3
-									EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_096_OVERLAY])
-									UpdateEntityMaterial(s\OBJ)
-									s\CurrScreenID = 3
-								EndIf
-								If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
-									If wi\SCRAMBLE = 0
-										If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
-										If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking) And (Not chs\NoTarget)
-											If n_I\Curr096\State < 2.0
-												PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
-												
-												S2IMapErase(UnlockedAchievements, "096")
-												
-												me\CurrCameraZoom = 10.0
-												
-												If n_I\Curr096\Frame >= 422.0 Then SetNPCFrame(n_I\Curr096, 677.0)
-												
-												StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
-												n_I\Curr096\Sound = 0
-												
-												n_I\Curr096\State = 2.0
+			If SecondaryLightOn > 0.1
+				If s\Nearby
+					Select s\ScreenEventID
+						Case cs_default
+							;[Block]
+							If s\State > 0.0
+								s\State = s\State - fps\Factor[0]
+								If s\State < 70.0 * 6.0
+									If s\CurrScreenID <> 3
+										EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_096_OVERLAY])
+										UpdateEntityMaterial(s\OBJ)
+										s\CurrScreenID = 3
+									EndIf
+									If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
+										If wi\SCRAMBLE = 0
+											If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+											If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking) And (Not chs\NoTarget)
+												If n_I\Curr096\State < 2.0
+													PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+													
+													S2IMapErase(UnlockedAchievements, "096")
+													
+													me\CurrCameraZoom = 10.0
+													
+													If n_I\Curr096\Frame >= 422.0 Then SetNPCFrame(n_I\Curr096, 677.0)
+													
+													StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
+													n_I\Curr096\Sound = 0
+													
+													n_I\Curr096\State = 2.0
+												EndIf
+											EndIf
+										Else
+											If wi\NVGPower > 0
+												SCRAMBLECHN = LoopSoundLocal(snd_I\SCRAMBLESFX, SCRAMBLECHN)
+												If EntityHidden(wi\SCRAMBLESpriteScreen) Then ShowEntity(wi\SCRAMBLESpriteScreen)
+												ScaleSprite(wi\SCRAMBLESpriteScreen, Rnd(0.04, 0.05), Rnd(0.05, 0.06))
+												PositionEntity(wi\SCRAMBLESpriteScreen, EntityX(s\OBJ, True) + Rnd(-0.025, 0.025), EntityY(s\OBJ, True) + Rnd(-0.025, 0.025) + 0.05, EntityZ(s\OBJ, True) + Rnd(-0.025, 0.025), True)
+											Else
+												If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+												If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 											EndIf
 										EndIf
 									Else
-										If wi\NVGPower > 0
-											SCRAMBLECHN = LoopSoundLocal(snd_I\SCRAMBLESFX, SCRAMBLECHN)
-											If EntityHidden(wi\SCRAMBLESpriteScreen) Then ShowEntity(wi\SCRAMBLESpriteScreen)
-											ScaleSprite(wi\SCRAMBLESpriteScreen, Rnd(0.04, 0.05), Rnd(0.05, 0.06))
-											PositionEntity(wi\SCRAMBLESpriteScreen, EntityX(s\OBJ, True) + Rnd(-0.025, 0.025), EntityY(s\OBJ, True) + Rnd(-0.025, 0.025) + 0.05, EntityZ(s\OBJ, True) + Rnd(-0.025, 0.025), True)
-										Else
-											If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
-											If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
-										EndIf
+										If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+										If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+									EndIf
+								ElseIf Rand(20) < 3
+									If s\CurrScreenID <> 1
+										EntityTexture(s\OBJ, s\Texture)
+										UpdateEntityMaterial(s\OBJ)
+										s\CurrScreenID = 1
 									EndIf
 								Else
-									If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
-									If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+									If s\CurrScreenID <> 2
+										s\FrameTimer = (s\FrameTimer + 1) Mod 6
+										EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3], s\FrameTimer)
+										UpdateEntityMaterial(s\OBJ)
+										s\CurrScreenID = 2
+									EndIf
 								EndIf
-							ElseIf Rand(20) < 3
+								Continue
+							Else
+								If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+								If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 								If s\CurrScreenID <> 1
 									EntityTexture(s\OBJ, s\Texture)
 									UpdateEntityMaterial(s\OBJ)
 									s\CurrScreenID = 1
 								EndIf
+								s\State2 = Max(s\State2 - fps\Factor[0], 0.0)
+								If s\State2 = 0.0
+									If Rand(4000 - (1500 * (Not RemoteDoorOn)) - (1500 * SelectedDifficulty\AggressiveNPCs)) = 1
+										If s\Display096
+											If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
+												PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
+												s\State = 70.0 * Rnd(7.0, 7.8)
+												s\State2 = 70.0 * 5.0
+											EndIf
+										EndIf
+									EndIf
+								EndIf
+							EndIf
+							If InteractObject(s\OBJ, 1.0, 2)
+								SelectedScreen = s
+								s\Img = ResizeImageEx(LoadImage_Strict(s\ImgPath), MenuScale, MenuScale)
+								PlaySound_Strict(ButtonSFX[0])
+								mo\MouseUp1 = False
+								Exit
+							EndIf
+							;[End Block]
+						Case cs_attention, cs_error
+							;[Block]
+							If (MilliSec Mod 1500) < 800
+								If s\CurrScreenID <> 1
+									EntityTexture(s\OBJ, s\Texture, 0)
+									UpdateEntityMaterial(s\OBJ, -1, 0)
+									s\CurrScreenID = 1
+								EndIf
 							Else
 								If s\CurrScreenID <> 2
-									s\FrameTimer = (s\FrameTimer + 1) Mod 6
-									EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3], s\FrameTimer)
-									UpdateEntityMaterial(s\OBJ)
+									EntityTexture(s\OBJ, s\Texture, 1)
+									UpdateEntityMaterial(s\OBJ, -1, 1)
 									s\CurrScreenID = 2
 								EndIf
 							EndIf
-							Return
-						Else
-							If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
-							If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+							;[End Block]
+						Case cs_009_warning
+							;[Block]
+							For e.Events = Each Events
+								If e\room = s\room
+									If e\EventState = 0.0
+										If s\CurrScreenID <> 1
+											EntityTexture(s\OBJ, s\Texture, 0)
+											UpdateEntityMaterial(s\OBJ, -1, 0)
+											s\CurrScreenID = 1
+										EndIf
+									ElseIf e\EventState > 70.0 * 60.0
+										If s\CurrScreenID <> 2
+											EntityTexture(s\OBJ, s\Texture, 1)
+											UpdateEntityMaterial(s\OBJ, -1, 1)
+											s\CurrScreenID = 2
+										EndIf
+									ElseIf e\EventState > 70.0 * 30.0
+										If s\CurrScreenID <> 3
+											EntityTexture(s\OBJ, s\Texture, 2)
+											UpdateEntityMaterial(s\OBJ, -1, 2)
+											s\CurrScreenID = 3
+										EndIf
+									ElseIf e\EventState > 70.0 * 10.0
+										If s\CurrScreenID <> 4
+											EntityTexture(s\OBJ, s\Texture, 3)
+											UpdateEntityMaterial(s\OBJ, -1, 3)
+											s\CurrScreenID = 4
+										EndIf
+									ElseIf e\EventState > 70.0
+										If s\CurrScreenID <> 5
+											EntityTexture(s\OBJ, s\Texture, 4)
+											UpdateEntityMaterial(s\OBJ, -1, 4)
+											s\CurrScreenID = 5
+										EndIf
+									ElseIf e\EventState = 66.0
+										If s\CurrScreenID <> 6
+											EntityTexture(s\OBJ, s\Texture, 5)
+											UpdateEntityMaterial(s\OBJ, -1, 5)
+											s\CurrScreenID = 6
+										EndIf
+									EndIf
+									Exit
+								EndIf
+							Next
+							;[End Block]
+						Case cs_logo
+							;[Block]
+							s\State = s\State + fps\Factor[0]
+							If s\State > 70.0 * 2.0
+								s\CurrScreenID = 1
+								
+								s\FrameTimer = (s\FrameTimer + 1) Mod 8
+								
+								Local CurrentFrame%
+								
+								If (s\FrameTimer Mod 2) = 0
+									CurrentFrame = 0
+								Else
+									CurrentFrame = (s\FrameTimer + 1) / 2
+								EndIf
+								
+								EntityTexture(s\OBJ, s\Texture, CurrentFrame)
+								UpdateEntityMaterial(s\OBJ, -1, CurrentFrame)
+								s\State = 0.0
+							EndIf
+							;[End Block]
+						Case cs_achievement
+							;[Block]
+							; ~ Cannot interact with
 							If s\CurrScreenID <> 1
 								EntityTexture(s\OBJ, s\Texture)
 								UpdateEntityMaterial(s\OBJ)
 								s\CurrScreenID = 1
 							EndIf
-							s\State2 = Max(s\State2 - fps\Factor[0], 0.0)
-							If s\State2 = 0.0
-								If Rand(4000 - (1500 * (Not RemoteDoorOn)) - (1500 * SelectedDifficulty\AggressiveNPCs)) = 1
-									If s\Display096
-										If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
-											PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
-											s\State = 70.0 * Rnd(7.0, 7.8)
-											s\State2 = 70.0 * 5.0
-										EndIf
-									EndIf
-								EndIf
-							EndIf
-						EndIf
-						If InteractObject(s\OBJ, 1.0, 2)
-							SelectedScreen = s
-							s\Img = ResizeImageEx(LoadImage_Strict(s\ImgPath), MenuScale, MenuScale)
-							PlaySound_Strict(ButtonSFX[0])
-							mo\MouseUp1 = False
-							Exit
-						EndIf
-						;[End Block]
-					Case cs_attention, cs_error
-						;[Block]
-						If (MilliSec Mod 1500) < 800
-							If s\CurrScreenID <> 1
-								EntityTexture(s\OBJ, s\Texture, 0)
-								UpdateEntityMaterial(s\OBJ, -1, 0)
-								s\CurrScreenID = 1
-							EndIf
-						Else
-							If s\CurrScreenID <> 2
-								EntityTexture(s\OBJ, s\Texture, 1)
-								UpdateEntityMaterial(s\OBJ, -1, 1)
-								s\CurrScreenID = 2
-							EndIf
-						EndIf
-						;[End Block]
-					Case cs_009_warning
-						;[Block]
-						For e.Events = Each Events
-							If e\room = s\room
-								If e\EventState = 0.0
-									If s\CurrScreenID <> 1
-										EntityTexture(s\OBJ, s\Texture, 0)
-										UpdateEntityMaterial(s\OBJ, -1, 0)
-										s\CurrScreenID = 1
-									EndIf
-								ElseIf e\EventState > 70.0 * 60.0
-									If s\CurrScreenID <> 2
-										EntityTexture(s\OBJ, s\Texture, 1)
-										UpdateEntityMaterial(s\OBJ, -1, 1)
-										s\CurrScreenID = 2
-									EndIf
-								ElseIf e\EventState > 70.0 * 30.0
-									If s\CurrScreenID <> 3
-										EntityTexture(s\OBJ, s\Texture, 2)
-										UpdateEntityMaterial(s\OBJ, -1, 2)
-										s\CurrScreenID = 3
-									EndIf
-								ElseIf e\EventState > 70.0 * 10.0
-									If s\CurrScreenID <> 4
-										EntityTexture(s\OBJ, s\Texture, 3)
-										UpdateEntityMaterial(s\OBJ, -1, 3)
-										s\CurrScreenID = 4
-									EndIf
-								ElseIf e\EventState > 70.0
-									If s\CurrScreenID <> 5
-										EntityTexture(s\OBJ, s\Texture, 4)
-										UpdateEntityMaterial(s\OBJ, -1, 4)
-										s\CurrScreenID = 5
-									EndIf
-								ElseIf e\EventState = 66.0
-									If s\CurrScreenID <> 6
-										EntityTexture(s\OBJ, s\Texture, 5)
-										UpdateEntityMaterial(s\OBJ, -1, 5)
-										s\CurrScreenID = 6
-									EndIf
-								EndIf
-								Exit
-							EndIf
-						Next
-						;[End Block]
-					Case cs_logo
-						;[Block]
-						s\State = s\State + fps\Factor[0]
-						If s\State > 70.0 * 2.0
-							s\CurrScreenID = 1
-							s\FrameTimer = (s\FrameTimer + 1) Mod 8
-							
-							Local CurrentFrame%
-							
-							If (s\FrameTimer Mod 2) = 0
-								CurrentFrame = 0
-							Else
-								CurrentFrame = (s\FrameTimer + 1) / 2
-							EndIf
-							
-							EntityTexture(s\OBJ, s\Texture, CurrentFrame)
-							UpdateEntityMaterial(s\OBJ, -1, CurrentFrame)
-							s\State = 0.0
-						EndIf
-						;[End Block]
-					Case cs_achievement
-						;[Block]
-						; ~ Cannot interact with
-						If s\CurrScreenID <> 1
-							EntityTexture(s\OBJ, s\Texture)
-							UpdateEntityMaterial(s\OBJ)
-							s\CurrScreenID = 1
-						EndIf
-						;[End Block]
-				End Select
+							;[End Block]
+					End Select
+				EndIf
+			Else
+				If s\CurrScreenID <> 0
+					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY], 0)
+					UpdateEntityMaterial(s\OBJ)
+					s\CurrScreenID = 0
+				EndIf
 			EndIf
 		EndIf
 	Next
