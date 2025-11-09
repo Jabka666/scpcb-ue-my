@@ -4033,7 +4033,7 @@ Function UpdateGUI%()
 	EndIf
 	
 	If (Not (MenuOpen Lor me\Terminated Lor ConsoleOpen))
-		If I_294\Using Then Update294()
+		If I_294\Using And SecondaryLightOn > 0.1 Then Update294()
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
 				If d_I\ClosestButton <> 0 Then Update3DHandIcon(HandIcon_ClosestButton, d_I\ClosestButton)
@@ -7335,7 +7335,7 @@ Function RenderGUI%()
 		EndIf
 	EndIf
 	
-	If I_294\Using Then Render294()
+	If I_294\Using And SecondaryLightOn > 0.1 Then Render294()
 	If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			If d_I\ClosestButton <> 0 Then Render3DHandIcon(5, HandIcon_ClosestButton)
