@@ -1886,7 +1886,7 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[16], 2)
 			EntityAlpha(r\Objects[16], 0.0)
 			
-			r\Objects[17] = LoadRMesh("GFX\Map\room3_storage_elevator.rmesh", Null, False)
+			r\Objects[17] = LoadRMesh("GFX\Map\elevator.rmesh", Null, False)
 			ScaleEntity(r\Objects[17], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[17], r\x + 4099.0 * RoomScale, r\y - 4862.0 * RoomScale, r\z - 1835.0 * RoomScale)
 			RotateEntity(r\Objects[17], 0.0, 0.0, 0.0)
@@ -2096,7 +2096,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room1_dead_end_hcz
 			;[Block]
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 126.0 * RoomScale, 600.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.6)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 133.0 * RoomScale, 600.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.6)
 			;[End Block]
 		Case r_cont1_035
 			;[Block]
@@ -2637,8 +2637,47 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[1] = CreateButton(BUTTON_DEFAULT, r\x + 1180.0 * RoomScale, r\y + 180.0 * RoomScale, r\z - 552.0 * RoomScale, 0.0, 270.0, 0.0, r\OBJ, True)
 			
-			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + 1334.0 * RoomScale, r\y - 796.0 * RoomScale + 0.01, r\z - 220.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.25)
-			EntityParent(de\OBJ, r\OBJ)
+			r\Objects[2] = LoadRMesh("GFX\Map\elevator.rmesh", Null, False)
+			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[2], r\x + 1539.0 * RoomScale, r\y - 989.0 * RoomScale, r\z - 384.0 * RoomScale)
+			RotateEntity(r\Objects[2], 0.0, 180.0, 0.0)
+			EntityParent(r\Objects[2], r\OBJ)
+			
+			r\Objects[3] = LoadMesh_Strict("GFX\Map\Props\elevator_cable.b3d")
+			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[3], r\x + 1537.0 * RoomScale, r\y - 790.0 * RoomScale, r\z - 471.0 * RoomScale)
+			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
+			EntityParent(r\Objects[3], r\OBJ)
+			
+			r\Objects[4] = CopyEntity(r\Objects[3])
+			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[4], r\x + 1495.0 * RoomScale, r\y - 746.0 * RoomScale, r\z - 415.0 * RoomScale)
+			RotateEntity(r\Objects[4], 0.0, 0.0, 0.0)
+			EntityParent(r\Objects[4], r\OBJ)
+			
+			r\Objects[5] = CopyEntity(r\Objects[3])
+			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[5], r\x + 1579.0 * RoomScale, r\y - 746.0 * RoomScale, r\z - 415.0 * RoomScale)
+			RotateEntity(r\Objects[5], 0.0, 0.0, 0.0)
+			EntityParent(r\Objects[5], r\OBJ)
+			
+			r\Objects[6] = CopyEntity(r\Objects[3])
+			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[6], r\x + 1495.0 * RoomScale, r\y - 746.0 * RoomScale, r\z - 351.0 * RoomScale)
+			RotateEntity(r\Objects[6], 0.0, 0.0, 0.0)
+			EntityParent(r\Objects[6], r\OBJ)
+			
+			r\Objects[7] = CopyEntity(r\Objects[3])
+			ScaleEntity(r\Objects[7], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[7], r\x + 1579.0 * RoomScale, r\y - 746.0 * RoomScale, r\z - 351.0 * RoomScale)
+			RotateEntity(r\Objects[7], 0.0, 0.0, 0.0)
+			EntityParent(r\Objects[7], r\OBJ)
+			
+			r\Objects[8] = CopyEntity(r\Objects[3])
+			ScaleEntity(r\Objects[8], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[8], r\x + 1537.0 * RoomScale, r\y - 790.0 * RoomScale, r\z - 295.0 * RoomScale)
+			RotateEntity(r\Objects[8], 0.0, 0.0, 0.0)
+			EntityParent(r\Objects[8], r\OBJ)
 			
 			it.Items = CreateItem("Level 2 Key Card", it_key2, r\x + 990.0 * RoomScale, r\y + 233.0 * RoomScale, r\z + 431.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3070,7 +3109,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, -45.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			CreateAlarmLamp(r, r\x, r\y + 660.0 * RoomScale, r\z - 161.0 * RoomScale, 800.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
+			CreateAlarmLamp(r, r\x, r\y + 667.0 * RoomScale, r\z - 161.0 * RoomScale, 800.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			CreateCustomCenter(r, r\x, r\z - 832.0 * RoomScale)
 			;[End Block]

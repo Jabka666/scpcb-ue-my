@@ -5435,20 +5435,29 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 End Function
 
 Function UpdateEvent_Room2_Shaft%(e.Events)
-	If e\room\NPC[0] = Null
-		TFormPoint(1344.0, -728.0, -384.0, e\room\OBJ, 0)
-		e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-		e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-		SetNPCFrame(e\room\NPC[0], 286.0)
-		RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-	EndIf
-	
 	If PlayerRoom = e\room
+		Local i%
+		
 		If UpdateButton(Null, e\room\Objects[1]) And mo\MouseHit1
 			SetAnimTime(e\room\Objects[1], 1.0)
 			CreateMsg(GetLocalString("msg", "elev.broken"))
 			PlaySound_Strict(ButtonSFX[1])
 			mo\MouseHit1 = False
+		EndIf
+		
+		Local ElevatorRotation# = Sin(Float(MilliSec * 0.05)) * 3.0
+		
+		RotateEntity(e\room\Objects[2], 0.0, e\room\Angle + 90.0 + ElevatorRotation, 0.0)
+		For i = 3 To 5
+			RotateEntity(e\room\Objects[i], 0.0, e\room\Angle + ElevatorRotation * 10.0, 0.0)
+		Next
+		For i = 6 To 8
+			RotateEntity(e\room\Objects[i], 0.0, e\room\Angle + ElevatorRotation * 10.0, 0.0)
+		Next
+		If AmbientSFX(3, 9) = 0
+			AmbientSFX(3, 9) = LoadSound_Strict("SFX\Ambient\General\Ambient9.ogg")
+		Else
+			e\SoundCHN = LoopSoundEx(AmbientSFX(3, 9), e\SoundCHN, Camera, e\room\Objects[2], 10.0, 1.5)
 		EndIf
 	EndIf
 End Function
