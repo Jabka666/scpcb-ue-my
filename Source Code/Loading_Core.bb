@@ -2463,7 +2463,7 @@ End Function
 Const MaxOverlayTextureIDAmount% = 4
 Const MaxOverlayIDAmount% = 13
 Const MaxIconIDAmount% = 13
-Const MaxImageIDAmount% = 8
+Const MaxImageIDAmount% = 7
 ;[End Block]
 
 Type Textures
@@ -2471,6 +2471,7 @@ Type Textures
 	Field ImageID%[MaxImageIDAmount]
 	Field OverlayTextureID%[MaxOverlayTextureIDAmount]
 	Field OverlayID%[MaxOverlayIDAmount]
+	Field NAVRenderTarget%
 End Type
 
 ; ~ Overlay ID Constants
@@ -2961,7 +2962,7 @@ Function LoadEntities%()
 	
 	t\ImageID[6] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale)
 	
-	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
+	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 16384)
 	
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
@@ -3215,6 +3216,7 @@ Function RemoveTextureInstances%()
 	For i = 0 To MaxOverlayTextureIDAmount - 1
 		t\OverlayTextureID[i] = 0
 	Next
+	FreeTexture(t\NAVRenderTarget) : t\NAVRenderTarget = 0
 	For i = 0 To MaxOverlayIDAmount - 1
 		If t\OverlayID[i] <> 0 Then FreeEntity(t\OverlayID[i]) : t\OverlayID[i] = 0
 	Next

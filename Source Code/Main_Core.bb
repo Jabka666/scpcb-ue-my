@@ -7766,7 +7766,7 @@ Function RenderUseItem%(item.Items)
 				Local NAV_WIDTH_HALF% = NAV_WIDTH / 2
 				Local NAV_HEIGHT_HALF% = NAV_HEIGHT / 2
 				Local x1%, x2%, x3%
-				Local y1%, y2%, y3%
+				Local z1%, z2%, z3%
 				
 				If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
 					If (MilliSec Mod 800) < 200
@@ -7785,7 +7785,7 @@ Function RenderUseItem%(item.Items)
 							Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
 							Local PlayerZ% = Floor(ColliderZ / RoomSpacing + 0.5)
 							
-							SetBuffer(ImageBuffer(t\ImageID[7]))
+							SetBuffer(TextureBuffer(t\NAVRenderTarget))
 							DrawImage(item\ItemTemplate\Img, xx, yy)
 							
 							x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
@@ -7795,18 +7795,18 @@ Function RenderUseItem%(item.Items)
 							Local FromY% = Max(1, PlayerZ - 6), ToY% = Min(MapGridSize - 1, PlayerZ + 6)
 							
 							For x2 = FromX To ToX
-								For y2 = FromY To ToY
-									Local Index% = x2 + (y2 * MapGridSize)
+								For z2 = FromY To ToY
+									Local Index% = x2 + (z2 * MapGridSize)
 									
 									If CurrMapGrid\Grid[Index] > MapGrid_NoTile And (CurrMapGrid\Found[Index] > MapGrid_NoTile Lor (Not Offline))
-										Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - y2) * RectSize
+										Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
 										
 										Color(30 + (170 * (item\ItemTemplate\ID = it_navulti And (CurrMapGrid\Grid[Index] <= MapGrid_NoTile Lor CurrMapGrid\Found[Index] <= MapGrid_NoTile))), 30, 30)
-										If CurrMapGrid\Grid[(x2 + 1) + (y2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-										If CurrMapGrid\Grid[(x2 - 1) + (y2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+										If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+										If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
 										
-										If CurrMapGrid\Grid[x2 + ((y2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
-										If CurrMapGrid\Grid[x2 + ((y2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
+										If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
+										If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
 									EndIf
 								Next
 							Next
@@ -7816,7 +7816,9 @@ Function RenderUseItem%(item.Items)
 						Else
 							item\State2 = Max(0.0, item\State2 - fps\Factor[0])
 						EndIf
-						DrawBlockRect(t\ImageID[7], xx + (80 * MenuScale), yy + (70 * MenuScale), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
+						
+						Color(255, 255, 255)
+						DrawBufferRect(TextureBuffer(t\NAVRenderTarget), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
 						Color(170 * Offline + 30, 30 * Offline, 30 * Offline)
 						Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 						
@@ -7826,17 +7828,17 @@ Function RenderUseItem%(item.Items)
 						If (MilliSec Mod 800) < 200
 							If Offline Then TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), GetLocalString("msg", "nav.data"))
 							
-							Local YawValue = EntityYaw(me\Collider) - 90.0
+							Local YawValue# = EntityYaw(me\Collider) - 90.0
 							Local OffsetX# = 6.0 * MenuScale
 							Local OffsetY# = 5.0 * MenuScale
 							
-							x1 = x + Cos(YawValue) * OffsetX : y1 = y - Sin(YawValue) * OffsetX
-							x2 = x + Cos(YawValue - 140.0) * OffsetY : y2 = y - Sin(YawValue - 140.0) * OffsetY
-							x3 = x + Cos(YawValue + 140.0) * OffsetY : y3 = y - Sin(YawValue + 140.0) * OffsetY
+							x1 = x + Cos(YawValue) * OffsetX : z1 = y - Sin(YawValue) * OffsetX
+							x2 = x + Cos(YawValue - 140.0) * OffsetY : z2 = y - Sin(YawValue - 140.0) * OffsetY
+							x3 = x + Cos(YawValue + 140.0) * OffsetY : z3 = y - Sin(YawValue + 140.0) * OffsetY
 							
-							Line(x1, y1, x2, y2)
-							Line(x1, y1, x3, y3)
-							Line(x2, y2, x3, y3)
+							Line(x1, z1, x2, z2)
+							Line(x1, z1, x3, z3)
+							Line(x2, z2, x3, z3)
 						EndIf
 						
 						Local SCPs_Found% = 0, Dist#
