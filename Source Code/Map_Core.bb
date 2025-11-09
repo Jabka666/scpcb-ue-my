@@ -4713,6 +4713,7 @@ Function UpdateScreens%()
 						;[Block]
 						s\State = s\State + fps\Factor[0]
 						If s\State > 70.0 * 2.0
+							s\CurrScreenID = 1
 							s\FrameTimer = (s\FrameTimer + 1) Mod 8
 							
 							Local CurrentFrame%
