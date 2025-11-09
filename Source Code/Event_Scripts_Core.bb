@@ -7366,7 +7366,7 @@ Function UpdateEvent_Room2_Cafeteria%(e.Events)
 			If e\EventState2 = 2.0
 				GiveAchievement("294")
 				
-				I_294\Using = Temp
+				I_294\Using = (Temp And SecondaryLightOn > 0.1)
 				If I_294\Using
 					SelectedItem = Null
 					mo\MouseHit1 = False
