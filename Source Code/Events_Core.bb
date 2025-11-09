@@ -1062,18 +1062,9 @@ Function Update035Label%(OBJ%)
 	EndIf
 	LabelPath = "GFX\Map\Textures\label" + CurrTex + ".png"
 	
-	Brush = LoadBrush_Strict(LabelPath)
-	For i = 1 To SurfCount
-		SF = GetSurface(OBJ, i)
-		b = GetSurfaceBrush(SF)
-		t1 = GetBrushTexture(b, 0)
-		TexName = StripPath(TextureName(t1))
-		
-		If Lower(TexName) <> "cable_white.jpg" Then PaintSurface(SF, Brush)
-		FreeBrush(b) : b = 0
-		FreeTexture(t1) : t1 = 0
-	Next
-	FreeBrush(Brush) : Brush = 0
+	Tex = LoadTexture_Strict(LabelPath)
+	EntityTexture(OBJ, Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	For itt.ItemTemplates = Each ItemTemplates
 		If itt\Name = "Document SCP-035"
