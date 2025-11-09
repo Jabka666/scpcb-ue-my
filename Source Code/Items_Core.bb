@@ -1199,7 +1199,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
-					CreateItem("Fine Hazmat Suit", it_finehazmatsuit, x, y, z)
+					CreateItem("Fire Suit", it_finehazmatsuit, x, y, z)
 					;[End Block]
 				Case SETTING_VERY_FINE
 					;[Block]
