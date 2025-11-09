@@ -3664,7 +3664,7 @@ Function UpdateZoneColor%()
 	fog\AmbientG = CurveValue(TargetAmbientG, fog\AmbientG, ZoneColorChangeSpeed)
 	fog\AmbientB = CurveValue(TargetAmbientB, fog\AmbientB, ZoneColorChangeSpeed)
 	
-	Local CurrR# = fog\AmbientR, CurrG# = fog\AmbientG, CurrB# = fog\AmbientB
+	Local CurrR# = fog\AmbientR * SecondaryLightOn, CurrG# = fog\AmbientG * SecondaryLightOn, CurrB# = fog\AmbientB * SecondaryLightOn
 	
 	If wi\SCRAMBLE > 0
 		CurrR = CurrR * 2.0 : CurrG = CurrG * 2.0 : CurrB = CurrB * 2.0
