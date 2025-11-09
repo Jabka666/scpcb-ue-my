@@ -561,10 +561,7 @@ Function UpdateLanguageSelector%()
 				LinesAmount = LinesAmount + 1
 			Next
 			
-			Local LauncherIMGWidth% = ImageWidth(LanguageIMG)
-			Local LauncherIMGHeight% = ImageHeight(LanguageIMG)
-			
-			CopyRectStretch(0, 0, LauncherIMGWidth, LauncherIMGHeight, 0, 0, LauncherIMGWidth, LauncherIMGHeight, TextureBuffer(TempRenderTarget), ImageBuffer(LanguageIMG))
+			CopyRectStretch(0, 0, ImageWidth(LanguageIMG), ImageHeight(LanguageIMG), 0, 0, BufferWidth(ImageBuffer(LanguageIMG)), BufferHeight(ImageBuffer(LanguageIMG)), TextureBuffer(TempRenderTarget), ImageBuffer(LanguageIMG))
 			SetBuffer(BackBuffer())
 			DrawBlock(LanguageIMG, LauncherWidth - 620, LauncherHeight - 285)
 			Color(10, 10, 10)
@@ -790,6 +787,7 @@ Function UpdateLanguageSelector%()
 	FreeImage(LanguageIMG) : LanguageIMG = 0
 	FreeImage(LanguageBG) : LanguageBG = 0
 	FreeImage(ButtonImages) : ButtonImages = 0
+	FreeTexture(TempRenderTarget) : TempRenderTarget = 0
 	
 	FreeImage(LauncherBG) : LauncherBG = 0
 	
