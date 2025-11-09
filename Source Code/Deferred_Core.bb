@@ -179,6 +179,7 @@ Function InitDeferred%()
 	
 	FreeTexture(SpotTexture) : SpotTexture = 0
 	FreeTexture(RampTexture) : RampTexture = 0
+	FreeTexture(FaceSelectCubeMap) : FaceSelectCubeMap = 0
 	
 	HideEntity(DeferredSphere)
 	HideEntity(DeferredCone)
