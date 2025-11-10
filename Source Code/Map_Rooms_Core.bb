@@ -3272,6 +3272,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x, r\y, r\z + 2225.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
+			CreateAlarmLamp(r, r\x, r\y + 989.0 * RoomScale, r\z, 1400.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 90.0, 4.5)
+			
 			CreateCustomCenter(r, r\x, r\z - 820.0 * RoomScale)
 			;[End Block]
 		Case r_gate_a
@@ -3380,6 +3382,8 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y, r\z + 2225.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
+			
+			CreateAlarmLamp(r, r\x, r\y + 1035.0 * RoomScale, r\z, 1400.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 90.0, 4.5)
 			
 			CreateCustomCenter(r, r\x, r\z - 820.0 * RoomScale)
 			;[End Block]
@@ -3500,7 +3504,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1046.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1053.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
 			;[End Block]
 		Case r_room1_lifts
 			;[Block]
