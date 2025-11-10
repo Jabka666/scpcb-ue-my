@@ -823,7 +823,7 @@ Function FillRoom%(r.Rooms)
 			If r\RoomTemplate\RoomID = r_room2_gw_2
 				r\Objects[0] = CreateButton(BUTTON_KEYCARD, r\x - 473.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 135.0 * RoomScale, 0.0, 270.0, 25.0, r\OBJ, True)
 				
-				emit.Emitter = SetEmitter(r, r\x + 262.0 * RoomScale, r\y + 328.0 * RoomScale, r\z - 413.0 * RoomScale, 1)
+				emit.Emitter = SetEmitter(r, r\x + 262.0 * RoomScale, r\y + 318.0 * RoomScale, r\z - 413.0 * RoomScale, 1)
 				emit\State = 2
 				
 				If KEY2_SPAWNRATE = 2
