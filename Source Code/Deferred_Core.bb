@@ -404,6 +404,8 @@ Function ProcessAllLights%(Cam%, Tween#)
 	
 	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, 0.0, Tween)
 	
+	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 2500.0 * RoomScale, 200, 200, 200, 2.5, DEFERRED_LIGHT_POINT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, 0.0, Tween)
+	
 	EndRender()
 	
 	HideEntity(DeferredCone)
