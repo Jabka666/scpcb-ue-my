@@ -4453,35 +4453,30 @@ Const cs_attention% = 1
 Const cs_009_warning% = 2
 Const cs_error% = 3
 Const cs_logo% = 4
-Const cs_UE% = 5
-Const cs_achievement% = 6
+Const cs_not_clickable% = 5
 ;[End Block]
 
 Function FindChatScreenEventID%(ChatScreenName$)
 	Select ChatScreenName
-		Case "chatscreen_attention.png"
+		Case "screen_attention.png"
 			;[Block]
 			Return(cs_attention)
 			;[End Block]
-		Case "chatscreen_009_warning.png"
+		Case "screen_009_warning.png"
 			;[Block]
 			Return(cs_009_warning)
 			;[End Block]
-		Case "chatscreen_error.png"
+		Case "screen_error.png"
 			;[Block]
 			Return(cs_error)
 			;[End Block]
-		Case "chatscreen_logo.png"
+		Case "screen_logo.png"
 			;[Block]
 			Return(cs_logo)
 			;[End Block]
-		Case "chatscreen_UE.png"
+		Case "screen_UE.png", "screen_reminder(0).png", "screen_reminder(1).png", "screen_reminder(2).png", "screen_reminder(3).png", "screen_keter.png", "screen_apollyon.png"
 			;[Block]
-			Return(cs_UE)
-			;[End Block]
-		Case "screen_keter.png", "screen_apollyon.png"
-			;[Block]
-			Return(cs_achievement)
+			Return(cs_not_clickable)
 			;[End Block]
 		Default
 			;[Block]
@@ -4703,10 +4698,10 @@ Function UpdateScreens%()
 							;[End Block]
 						Case cs_logo
 							;[Block]
+							s\CurrScreenID = 1
+							
 							s\State = s\State + fps\Factor[0]
 							If s\State > 70.0 * 2.0
-								s\CurrScreenID = 1
-								
 								s\FrameTimer = (s\FrameTimer + 1) Mod 8
 								
 								Local CurrentFrame%
@@ -4722,7 +4717,7 @@ Function UpdateScreens%()
 								s\State = 0.0
 							EndIf
 							;[End Block]
-						Case cs_achievement
+						Case cs_not_clickable
 							;[Block]
 							; ~ Cannot interact with
 							If s\CurrScreenID <> 1
