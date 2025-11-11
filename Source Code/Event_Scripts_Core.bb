@@ -793,7 +793,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\BeforeDoorOpen.ogg")
 							e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
 							
-							CreateHintMsg(GetLocalString("msg", "item.deselect"), 8.0)
+							If SelectedItem <> Null Then CreateHintMsg(GetLocalString("msg", "item.deselect"), 8.0)
 							
 							e\EventState = INTRO_CELL_REQUESTING
 						EndIf
