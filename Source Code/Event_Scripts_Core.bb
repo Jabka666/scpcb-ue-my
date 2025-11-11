@@ -5448,7 +5448,7 @@ Function UpdateEvent_Room2_Shaft%(e.Events)
 		
 		Local ElevatorRotation# = Sin(Float(MilliSec * 0.05)) * 3.0
 		
-		RotateEntity(e\room\Objects[2], 0.0, e\room\Angle + 90.0 + ElevatorRotation, 0.0)
+		RotateEntity(e\room\Objects[2], 0.0, e\room\Angle + 90.0 + ElevatorRotation, 0.0, True)
 		For i = 3 To 5
 			RotateEntity(e\room\Objects[i], 0.0, e\room\Angle + ElevatorRotation * 10.0, 0.0)
 		Next
