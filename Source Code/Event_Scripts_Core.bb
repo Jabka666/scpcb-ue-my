@@ -435,6 +435,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 					PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), -Max(e\EventState - 1800.0, 0.0) / 5000.0, EntityZ(e\room\Objects[1], True), True)
 					RotateEntity(e\room\Objects[1], -Max(e\EventState - 2040.0, 0.0) / 135.0, 225.0, 90.0 - Max(e\EventState - 2040.0, 0.0) / 43.0, True)
 				Else
+					CreateHintMsg(Format(GetLocalString("msg", "crouch"), key\Name[key\CROUCH]), 6.0, True)
 					FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
 				EndIf
 			EndIf
@@ -474,13 +475,21 @@ Function UpdateEvent_Cont1_173%(e.Events)
 				Case 0
 					;[Block]
 					If Reachable Then PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\Scripted\Scripted5.ogg"))
-					CreateHintMsg(Format(GetLocalString("msg", "crouch"), key\Name[key\CROUCH]), 6.0, True)
+					CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]), 6.0, True)
+					;[End Block]
+				Case 1
+					;[Block]
+					CreateHintMsg(GetLocalString("msg", "item.select"), 6.0, True)
 					;[End Block]
 				Case 2
 					;[Block]
 					CreateHintMsg(GetLocalString("msg", "item.combine.swap"), 6.0, True)
 					;[End Block]
 				Case 3
+					;[Block]
+					CreateHintMsg(GetLocalString("msg", "item.drop"), 6.0, True)
+					;[End Block]
+				Case 4
 					;[Block]
 					CreateHintMsg(GetLocalString("msg", "right.click"), 6.0, True)
 					;[End Block]
@@ -764,35 +773,27 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							For i = 0 To 1
 								FreeSound_Strict(snd_I\IntroSFX[i]) : snd_I\IntroSFX[i] = 0
 							Next
-							
 							e\EventState2 = 15.0
 						EndIf
 						CameraPitch = 0.0
 						RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
 					ElseIf e\EventState2 < 40.0
 						If Inventory(0) <> Null
-							CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]))
+							SelectedItem = Inventory(0)
 							e\EventState2 = 40.0
 						Else
 							CreateHintMsg(GetLocalString("msg", "paper"))
 						EndIf
 					ElseIf e\EventState2 < 50.0
-						If InvOpen
-							CreateHintMsg(GetLocalString("msg", "doc.click"))
-						Else
-							CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]))
-						EndIf
-						If SelectedItem <> Null And SelectedItem\ItemTemplate\Img <> 0
-							CreateHintMsg(GetLocalString("msg", "doc.read"), 8.0)
-							e\EventState2 = 50.0
-						EndIf
+						CreateHintMsg(GetLocalString("msg", "doc.read"), 8.0)
+						e\EventState2 = 50.0
 					Else
-						If SelectedItem <> Null Then e\EventState2 = e\EventState2 + (fps\Factor[0] / 6.0)
+						If SelectedItem = Null Then e\EventState2 = e\EventState2 + (fps\Factor[0] / 3.0)
 						If e\EventState2 >= 150.0
 							e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\BeforeDoorOpen.ogg")
 							e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
 							
-							CreateHintMsg(GetLocalString("msg", "doc.drop"), 5.0)
+							CreateHintMsg(GetLocalString("msg", "item.deselect"), 8.0)
 							
 							e\EventState = INTRO_CELL_REQUESTING
 						EndIf

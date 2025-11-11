@@ -611,20 +611,25 @@ Function UpdateGame%()
 							;[End Block]
 					End Select
 				EndIf
+				If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro Then Allowed = False
 				
-				If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable = 2 And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1 And Allowed
-					If InvOpen
-						StopMouseMovement()
+				If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable = 2 And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1
+					If Allowed
+						If InvOpen
+							StopMouseMovement()
+						Else
+							mo\DoubleClickSlot = -1
+						EndIf
+						InvOpen = (Not InvOpen)
+						If OtherOpen = Null
+							SelectedItem = Null
+						ElseIf SelectedItem <> Null
+							PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
+						EndIf
+						OtherOpen = Null
 					Else
-						mo\DoubleClickSlot = -1
+						CreateHintMsg(GetLocalString("msg", "failed.openinv"), 8.0)
 					EndIf
-					InvOpen = (Not InvOpen)
-					If OtherOpen = Null
-						SelectedItem = Null
-					ElseIf SelectedItem <> Null
-						PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-					EndIf
-					OtherOpen = Null
 				EndIf
 			EndIf
 			
