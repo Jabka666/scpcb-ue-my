@@ -126,7 +126,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
-			Temp = 0.65 / 10.0
+			Temp = 0.55 / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			SetNPCFrame(n, 283.0)
 			
