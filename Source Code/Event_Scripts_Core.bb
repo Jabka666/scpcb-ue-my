@@ -2155,7 +2155,7 @@ Function UpdateEvent_Room2_Closets%(e.Events)
 			e\room\NPC[0]\State3 = 2.0
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_LOGISTICS_TEXTURE)
 			
-			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Maintenance\EscapeFromClosets.ogg"), Camera, e\room\NPC[0]\Collider, 8.0, 1.0, True)
+			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Maintenance\EscapeFromClosets.ogg"), Camera, e\room\NPC[0]\Collider, 10.0, 1.0, True)
 			
 			TFormPoint(-1292.0, -256.0, -160.0, e\room\OBJ, 0)
 			e\room\NPC[1] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
@@ -2179,7 +2179,7 @@ Function UpdateEvent_Room2_Closets%(e.Events)
 		ElseIf e\EventState < 70.0 * 6.5
 			If e\EventState - fps\Factor[0] < 70.0 * 3.0
 				e\room\NPC[0]\State = 0.0
-				e\room\NPC[1]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Scientist\EscapeFromClosets.ogg"), Camera, e\room\NPC[1]\Collider, 8.0, 1.0, True)
+				e\room\NPC[1]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Scientist\EscapeFromClosets.ogg"), Camera, e\room\NPC[1]\Collider, 10.0, 1.0, True)
 			EndIf
 			
 			If e\EventState > 70.0 * 4.5
