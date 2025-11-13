@@ -34,6 +34,17 @@ Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = De
 	tic\TexDeleteType = DeleteType
 	If FileType(lang\LanguagePath + CurrPath) = 1 Then CurrPath = lang\LanguagePath + CurrPath
 	tic\Tex = LoadTexture(CurrPath, TexFlags)
+	If tic\Tex = 0
+		tic\Tex = CreateTexture(1, 1, 1 + 256)
+		TextureBlend(tic\Tex, 3)
+		SetBuffer(TextureBuffer(tic\Tex))
+		ClsColor(255, 0, 255)
+		Cls()
+		SetBuffer(BackBuffer())
+;	Else
+;		If Scale <> 1.0 Then tic\Tex = RescaleTexture(tic\Tex, Scale, Scale, TexFlags)
+;		If opt\DisplayMode = 0 And TextureBuffer(tic\Tex) <> 0 Then BufferDirty(TextureBuffer(tic\Tex))
+	EndIf
 	Return(tic\Tex)
 End Function
 
@@ -59,6 +70,16 @@ Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Heig
 	tic\TexDeleteType = DeleteType
 	If FileType(lang\LanguagePath + CurrPath) = 1 Then CurrPath = lang\LanguagePath + CurrPath
 	tic\Tex = LoadAnimTexture(CurrPath, TexFlags, Width, Height, FirstFrame, Count)
+	If tic\Tex = 0
+		tic\Tex = CreateTexture(1, 1, 1 + 256)
+		TextureBlend(tic\Tex, 3)
+		SetBuffer(TextureBuffer(tic\Tex))
+		ClsColor(255, 0, 255)
+		Cls()
+		SetBuffer(BackBuffer())
+;	Else
+;		If opt\DisplayMode = 0 And tic\Tex <> 0 And TextureBuffer(tic\Tex) <> 0 Then BufferDirty(TextureBuffer(tic\Tex))
+	EndIf
 	Return(tic\Tex)
 End Function
 
@@ -147,4 +168,4 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS
