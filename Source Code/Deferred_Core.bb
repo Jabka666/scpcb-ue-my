@@ -392,15 +392,14 @@ Function ProcessAllLights%(Cam%, Tween#)
 	
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 	
-	If (EffectsBits And 128)
-		For l.Lights = Each Lights
-			If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, l\TanFOV, l\CastShadows, 0.008 * l\Scattering, Tween)
-		Next
-		
-		For dl.DynamicLight = Each DynamicLight
-			If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, (dl\CastShadows And ((EffectsBits And 256) <> 0)), 0.008 * dl\Scattering, Tween)
-		Next
-	EndIf
+	For l.Lights = Each Lights
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, l\TanFOV, (l\CastShadows And (opt\LightingQuality > 1)), 0.008 * l\Scattering * opt\VolumetricLights, Tween)
+	Next
+	For dl.DynamicLight = Each DynamicLight
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then 
+			ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\TanFOV, (dl\CastShadows And (opt\LightingQuality > 0)), 0.008 * dl\Scattering * opt\VolumetricLights, Tween)
+		EndIf
+	Next
 	
 	If KeyDown(34) Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 90.0, DEFERRED_LIGHT_POINT_CULLING_SCALE, False, 0.0, Tween)
 	

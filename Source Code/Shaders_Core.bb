@@ -73,7 +73,7 @@ End Function
 ; ==================================== POST EFFECTS
 
 Function ProcessBloom%(Threshold# = 0.4)
-	If BloomEffect = 0 Lor ((EffectsBits And 1) = 0) Then Return
+	If BloomEffect = 0 Lor (Not opt\Bloom) Then Return
 	EffectFloat(BloomEffect, "BloomThreshold", Threshold)
 	EntityEffect(PostEffectQuad, BloomEffect)
 	EntityTexture(PostEffectQuad, BloomTex, 0, 1)
@@ -99,7 +99,7 @@ Function ProcessBloom%(Threshold# = 0.4)
 End Function
 
 Function ProcessColorCorrection%()
-	If ColorCorrectionEffect = 0 Lor ((EffectsBits And 2) = 0) Then Return
+	If ColorCorrectionEffect = 0 Lor (Not opt\ColorCorrection) Then Return
 	EntityEffect(PostEffectQuad, ColorCorrectionEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -110,7 +110,7 @@ Function ProcessColorCorrection%()
 End Function
 
 Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
-	If SSAOEffect = 0 Lor ((EffectsBits And 4) = 0) Then Return
+	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Then Return
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
 	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
@@ -132,7 +132,7 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
 End Function
 
 Function ProcessFXAA%()
-	If FXAAEffect = 0 Lor ((EffectsBits And 8) = 0) Then Return
+	If FXAAEffect = 0 Lor (Not opt\AntiAliasing) Then Return
 	EntityEffect(PostEffectQuad, FXAAEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -145,7 +145,7 @@ Function ProcessFXAA%()
 End Function
 
 Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
-	If MotionBlurEffect = 0 Lor ((EffectsBits And 16) = 0) Then Return
+	If MotionBlurEffect = 0 Lor (Not opt\MotionBlur) Then Return
 	EffectFloat(MotionBlurEffect, "Strength", Strength)
 	EffectMatrix(MotionBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 	EffectFloat(MotionBlurEffect, "Timestep", Min(Float(fps\ElapsedMilliSecs) / 1000.0, 1.0))
@@ -166,7 +166,7 @@ Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
 End Function
 
 Function ProcessEyeAdaptation%()
-	If EyeAdaptationEffect = 0 Lor ((EffectsBits And 32) = 0) Then Return
+	If EyeAdaptationEffect = 0 Then Return
 	
 	Local Width# = 0.5 / opt\GraphicWidth
 	Local Height# = 0.5 / opt\GraphicHeight
@@ -227,7 +227,7 @@ Function ProcessEyeAdaptation%()
 End Function
 
 Function ProcessGamma%(Gamma#)
-	If GammaEffect = 0 Lor ((EffectsBits And 64) = 0) Then Return
+	If GammaEffect = 0 Then Return
 	EntityEffect(PostEffectQuad, GammaEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -291,4 +291,4 @@ Function ClearBuffer%(Buffer%, R#, G#, B#, Alpha#)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS

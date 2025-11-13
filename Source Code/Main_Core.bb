@@ -8030,63 +8030,49 @@ Function UpdateMenu%()
 				Select igm\OptionsMenu
 					Case MenuTab_Options_Graphics
 						;[Block]
-						opt\BumpEnabled = UpdateMenuTick(x, y, opt\BumpEnabled, True)
-						
-						y = y + (30 * MenuScale)
-						
-						opt\VSync = UpdateMenuTick(x, y, opt\VSync)
-						
-						y = y + (30 * MenuScale)
-						
-						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
-						
-						y = y + (30 * MenuScale)
-						
-						opt\AdvancedRoomLights = UpdateMenuTick(x, y, opt\AdvancedRoomLights)
-						
-						y = y + (40 * MenuScale)
-						
 						opt\ScreenGamma = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
 						
 						y = y + (45 * MenuScale)
 						
-						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 2, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
-						
-						y = y + (45 * MenuScale)
-						
-						opt\TextureDetails = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
-						Select opt\TextureDetails
-							Case 0
-								;[Block]
-								opt\TextureDetailsLevel = 0.8
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\TextureDetailsLevel = 0.4
-								;[End Block]
-							Case 2
-								;[Block]
-								opt\TextureDetailsLevel = 0.0
-								;[End Block]
-							Case 3
-								;[Block]
-								opt\TextureDetailsLevel = -0.4
-								;[End Block]
-							Case 4
-								;[Block]
-								opt\TextureDetailsLevel = -0.8
-								;[End Block]
-						End Select
-						TextureLodBias(opt\TextureDetailsLevel)
-						
-						y = y + (40 * MenuScale)
-						
-						opt\CurrFOV = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0
+						opt\CurrFOV = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 2) / 2.0
 						opt\FOV = opt\CurrFOV + 40
 						CameraZoomValue = Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (GraphicWidthFloat / GraphicHeightFloat))) / 2.0)
 						CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
 						
 						y = y + (45 * MenuScale)
+						
+						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\SecurityCamRenderInterval, 3, "24.0", "18.0", "12.0", "6.0", "0.0")
+						Select opt\SecurityCamRenderInterval
+							Case 0
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 24.0
+								;[End Block]
+							Case 1
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 18.0
+								;[End Block]
+							Case 2
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 12.0
+								;[End Block]
+							Case 3
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 6.0
+								;[End Block]
+							Case 4
+								;[Block]
+								opt\SecurityCamRenderIntervalLevel = 0.0
+								;[End Block]
+						End Select
+						For sc.SecurityCams = Each SecurityCams
+							If sc\Screen Then sc\RenderInterval = opt\SecurityCamRenderIntervalLevel
+						Next
+						
+						y = y + (40 * MenuScale)
+						
+						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 4, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
+						
+						y = y + (40 * MenuScale)
 						
 						opt\Anisotropic = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\Anisotropic, 5, "Trilinear", "2x", "4x", "8x", "16x")
 						Select opt\Anisotropic
@@ -8113,34 +8099,41 @@ Function UpdateMenu%()
 						End Select
 						TextureAnisotropic(opt\AnisotropicLevel)
 						
-						y = y + (45 * MenuScale)
+						y = y + (40 * MenuScale)
 						
-						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\SecurityCamRenderInterval, 6, "24.0", "18.0", "12.0", "6.0", "0.0")
-						Select opt\SecurityCamRenderInterval
-							Case 0
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 24.0
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 18.0
-								;[End Block]
-							Case 2
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 12.0
-								;[End Block]
-							Case 3
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 6.0
-								;[End Block]
-							Case 4
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 0.0
-								;[End Block]
-						End Select
-						For sc.SecurityCams = Each SecurityCams
-							If sc\Screen Then sc\RenderInterval = opt\SecurityCamRenderIntervalLevel
-						Next
+						opt\LightingQuality = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\LightingQuality, 6, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
+						
+						y = y + (35 * MenuScale)
+						
+						opt\AmbientOcclusion = UpdateMenuTick(x, y, opt\AmbientOcclusion)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\VSync = UpdateMenuTick(x, y, opt\VSync)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\ColorCorrection = UpdateMenuTick(x, y, opt\ColorCorrection)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\Bloom = UpdateMenuTick(x, y, opt\Bloom)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\MotionBlur = UpdateMenuTick(x, y, opt\MotionBlur)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\VolumetricLights = UpdateMenuTick(x, y, opt\VolumetricLights)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
@@ -8385,10 +8378,6 @@ Function UpdateMenu%()
 						If PrevCurrFrameLimit Lor PrevCanOpenConsole Then ShouldDeleteGadgets = ((PrevCurrFrameLimit <> opt\CurrFrameLimit) Lor (PrevCanOpenConsole <> opt\CanOpenConsole))
 						
 						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)
-						
-						y = y + (30 * MenuScale)
-						
-						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
 						
 						y = y + (30 * MenuScale)
 						
@@ -8693,63 +8682,76 @@ Function RenderMenu%()
 				Select igm\OptionsMenu
 					Case MenuTab_Options_Graphics
 						;[Block]
-						Color(100, 100, 100)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bump"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BumpMapping)
-						
-						y = y + (30 * MenuScale)
-						
-						Color(255, 255, 255)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
-						
-						y = y + (30 * MenuScale)
-						
-						Clr = 255 - (155 * (opt\DisplayMode <> 0))
-						Color(Clr, Clr, Clr)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
-						
-						y = y + (30 * MenuScale)
-						
-						Color(255, 255, 255)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
-						
-						y = y + (40 * MenuScale)
-						
 						Color(255, 255, 255)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
 						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 						
-						y = y + (45 * MenuScale)
+						y = y + (40 * MenuScale)
 						
-						TextEx(x, y, GetLocalString("options", "particle"))
-						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 5.7, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
-						
-						y = y + (45 * MenuScale)
-						
-						TextEx(x, y, GetLocalString("options", "lod"))
-						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 5.7, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, Tooltip_TextureLODBias)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
+						Color(255, 255, 0)
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
-						Color(255, 255, 0)
-						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
-						
-						y = y + (45 * MenuScale)
-						
-						Color(255, 255, 255)
-						TextEx(x, y, GetLocalString("options", "filter"))
-						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 5.7, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
-						
-						y = y + (45 * MenuScale)
-						
-						Color(255, 255, 255)
 						TextEx(x, y, GetLocalString("options", "screnderinterval"))
-						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 5.7, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 6 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SecurityCamRenderInterval)
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SecurityCamRenderInterval)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y, GetLocalString("options", "particle"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y, GetLocalString("options", "filter"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y, GetLocalString("options", "lightingquality"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 6 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_LightingQuality)
+						
+						y = y + (45 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ambientocclusion"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "colorcorrection"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ColorCorrection)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bloom"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Bloom)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "motionblur"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MotionBlur)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "volumetriclights"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VolumetricLights)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
 						
 						RenderMenuButtons()
 						RenderMenuTicks()
@@ -8983,12 +8985,6 @@ Function RenderMenu%()
 						Color(255, 255, 255)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
-						
-						y = y + (30 * MenuScale)
-						
-						Color(255, 255, 255)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
 						
 						y = y + (30 * MenuScale)
 						

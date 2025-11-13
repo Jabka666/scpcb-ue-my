@@ -23,6 +23,7 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	Graphics3D(Width, Height, Depth, Mode)
 	HardwareSkinning(True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
 	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
+	TextureLodBias(-0.8)
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
 		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
@@ -371,7 +372,6 @@ End Function
 
 Function ApplyGraphicOptions%()
 	AntiAlias(opt\AntiAliasing)
-	TextureLodBias(opt\TextureDetailsLevel)
 	TextureAnisotropic(opt\AnisotropicLevel)
 End Function
 

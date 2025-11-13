@@ -23,7 +23,7 @@ If FileSize("uemp.dll") = 0 Then InitErrorStr = InitErrorStr + "uemp.dll" + Chr(
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 
-Const VersionNumber$ = "2.0"
+Const VersionNumber$ = "2.0 Early Access!"
 
 Global AppDataPath$ = GetEnv("AppData")
 

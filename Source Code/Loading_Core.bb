@@ -1254,14 +1254,12 @@ Function LoadMaterials%(File$)
 				Local Count% = Int(Piece(IsAnimated, 4, "|"))
 			EndIf
 			
-			If opt\BumpEnabled
-				StrTemp = IniGetString(File, Loc, "normal")
-				If StrTemp <> ""
-					If IsAnimated <> ""
-						mat\Normal = LoadAnimTexture_Strict(StrTemp, 1, TexWidth, TexHeight, FirstFrame, Count, DeleteAllTextures)
-					Else
-						mat\Normal = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
-					EndIf
+			StrTemp = IniGetString(File, Loc, "normal")
+			If StrTemp <> ""
+				If IsAnimated <> ""
+					mat\Normal = LoadAnimTexture_Strict(StrTemp, 1, TexWidth, TexHeight, FirstFrame, Count, DeleteAllTextures)
+				Else
+					mat\Normal = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
 				EndIf
 			EndIf
 			
