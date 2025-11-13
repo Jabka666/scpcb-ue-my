@@ -3539,7 +3539,7 @@ Const FogColorForestChase$ = "032044054"
 
 ; ~ Ambient Color Constants
 ;[Block]
-Const AmbientColorLCZ$ = "025025025"
+Const AmbientColorLCZ$ = "028028028"
 Const AmbientColorHCZ$ = "022016016"
 Const AmbientColorEZ$ = "025025025"
 Const AmbientOutside$ = "065065065"
@@ -3585,7 +3585,7 @@ Function UpdateZoneColor%()
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 		SetZoneColor(FogColorStorageTunnels)
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-		SetZoneColor(FogColorIntro)
+		SetZoneColor(FogColorIntro, AmbientOutside)
 		LightVolume = 1.0
 		CameraFogRange(Camera, 5.0, 60.0)
 		CameraRange(Camera, 0.01, 72.0)
