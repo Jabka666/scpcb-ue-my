@@ -106,9 +106,9 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	#endif
 
 	#ifdef ROUGHMAP
-		const float roughness = Sample2D(RoughnessMap, input.TexCoords).r;
-		const float specIntensity = Specular.r * (1.0 - roughness);
-		const float specPower = lerp(Specular.g, 1.0, roughness);
+		const float roughness = Sample2D(RoughnessMap, input.TexCoords).r * 2.0;
+		const float specIntensity = lerp(Specular.r, 0.0, roughness);
+		const float specPower = Specular.g;
 	#else
 		const float specIntensity = Specular.r;
 		const float specPower = Specular.g;
@@ -122,10 +122,10 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	
 	#if defined(EMISSIVEMAP)
 		#ifndef MUL
-			float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb;
+			const float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb;
 			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
 		#else
-			float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply;
+			const float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply;
 			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply, 0.0);
 		#endif
 		

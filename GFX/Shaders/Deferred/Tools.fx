@@ -51,7 +51,7 @@ inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float sp
     
     // Fresnel
     float NdotV = max(0.0, dot(normal, V));
-	const float fresnelIntensity = 0.009;
+	const float fresnelIntensity = 0.01;
     float fresnel = pow(1.0 - NdotV, 4.0) * fresnelIntensity;
     fresnel *= (spec + 0.5);
     return specular + fresnel;

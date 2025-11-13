@@ -49,7 +49,7 @@ Function ResizeImageEx%(SrcImage%, ScaleX#, ScaleY#)
 	
 	; ~ Resize the image and return
 	ResizeImage(SrcImage, DestWidth, DestHeight)
-	Return SrcImage
+	Return(SrcImage)
 End Function
 
 Function RescaleTexture%(SrcTexture%, ScaleX#, ScaleY#, Flags% = 1)

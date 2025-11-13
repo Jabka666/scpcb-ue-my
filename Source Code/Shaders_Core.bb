@@ -93,9 +93,11 @@ Function ProcessBloom%(Threshold# = 0.4)
 	RenderEntity(QuadCamera, PostEffectQuad)
 	
 	EffectTechnique(BloomEffect, "Combine")
-	SetBuffer(TextureBuffer(MRTColor))
+	SetBuffer(TextureBuffer(TempColorTexture))
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
+	
+	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 End Function
 
 Function ProcessColorCorrection%()
@@ -104,9 +106,11 @@ Function ProcessColorCorrection%()
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
 	EffectTechnique(ColorCorrectionEffect, "Main")
-	SetBuffer(TextureBuffer(MRTColor))
+	SetBuffer(TextureBuffer(TempColorTexture))
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
+	
+	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 End Function
 
 Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
