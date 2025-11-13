@@ -27,6 +27,7 @@ Function CreateSky%(FileName$, Parent% = 0)
 	FlipMesh(Sky)
 	EntityFX(Sky, 1 + 8)
 	EntityOrder(Sky, 1000)
+	SetDeferredEntity(Sky, False, DEFERRED_FULLBRIGHT)
 	Return(Sky)
 End Function
 
