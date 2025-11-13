@@ -677,7 +677,6 @@ Function UpdateGame%()
 		If KeyHit(key\CONSOLE)
 			If opt\CanOpenConsole
 				If ConsoleOpen
-					UsedConsole = True
 					If (Not MenuOpen) Then ResumeSounds()
 					StopMouseMovement()
 					ShouldDeleteGadgets = True
@@ -1072,6 +1071,7 @@ Function UpdateConsole%()
 			CreateConsoleMsg(ConsoleInput, 255, 255, 0, True)
 			ExecuteConsoleCommand(ConsoleInput)
 			ConsoleInput = ""
+			UsedConsole = True
 		EndIf
 		
 		Local Count% = 0
