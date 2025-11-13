@@ -4504,7 +4504,7 @@ Function UpdateGUI%()
 						Local added.Items = Null
 						
 						Select SelectedItem\ItemTemplate\ID
-							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_badge2, it_ticket, it_scp420j, it_joint_smelly, it_joint, it_cigarette, it_25ct, it_coin, it_key_white, it_key_yellow, it_lostkey, it_scp860, it_fine860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill, it_scp2022pill
+							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_badge2, it_ticket, it_25ct, it_coin, it_key_white, it_key_yellow, it_lostkey, it_scp860, it_fine860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill, it_scp2022pill
 								;[Block]
 								If (Inventory(MouseSlot)\State > 0.0 And Inventory(MouseSlot)\ItemTemplate\ID = it_e_reader) Lor Inventory(MouseSlot)\ItemTemplate\ID = it_e_reader20 Lor Inventory(MouseSlot)\ItemTemplate\ID = it_e_readerulti
 									Select SelectedItem\ItemTemplate\ID
