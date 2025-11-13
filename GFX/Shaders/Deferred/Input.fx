@@ -104,12 +104,7 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	#else
 		const float3 normal = input.Normal;
 	#endif
-	
-	float fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
-	
-	// Fog dither
-	fogFactor = 1.0 - ShadeDither(float4(1.0 - fogFactor, 0, 0, 0), input.ScreenPos).r;
-	
+
 	#ifdef ROUGHMAP
 		const float roughness = Sample2D(RoughnessMap, input.TexCoords).r;
 		const float specIntensity = Specular.r * (1.0 - roughness);
@@ -127,17 +122,25 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	
 	#if defined(EMISSIVEMAP)
 		#ifndef MUL
-			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(Sample2D(EmissiveMap, input.TexCoords).rgb, 0.0);
+			float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb;
+			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
 		#else
+			float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply;
 			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply, 0.0);
 		#endif
+		
+		float fogFactor = saturate((distance(EyePos, input.WorldPos) - lerp(FogNear, FogFar, GetIntensity(emissive) * 0.8)) / FogFar);
 	#else
 		#ifndef MUL
 			output.Color = float4(diffuse.rgb * ambient, diffuse.a);
 		#else
 			output.Color = float4(diffuse.rgb * ambient * EmissiveMultiply, diffuse.a);
 		#endif
+		float fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
 	#endif
+	
+	// Fog dither
+	fogFactor = 1.0 - ShadeDither(float4(1.0 - fogFactor, 0, 0, 0), input.ScreenPos).r;
 	
 	output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
 	output.Normal = float4(normal * 0.5 + 0.5, specPower / 10.0);

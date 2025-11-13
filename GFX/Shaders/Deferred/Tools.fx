@@ -99,3 +99,8 @@ inline float GetScattering(float3 start, float3 dir, float3 lightPos)
 	float l = s * (atan( (d + b) * s)  - atan( b*s ));
 	return l;
 }
+
+inline float GetIntensity(float3 color)
+{
+    return dot(color, float3(0.299, 0.587, 0.114));
+}
