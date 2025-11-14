@@ -17,8 +17,6 @@ float FogFar			: FOG_FAR;
 float2 Specular			: ENTITY_SPECULAR;
 float3 EyePos			: EYE_POSITION;
 
-#ifndef TRANSPARENT
-
 float3x2 TextureMatrix : MATRIX_TEXTURE0;
 sampler DiffuseMap : register(s0);
 
@@ -142,11 +140,21 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	// Fog dither
 	fogFactor = 1.0 - ShadeDither(float4(1.0 - fogFactor, 0, 0, 0), input.ScreenPos).r;
 	
-	output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
-	output.Normal = float4(normal * 0.5 + 0.5, specPower / 10.0);
-	output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
-	output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	
+	#ifndef SKYBOX
+		output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
+		output.Normal = float4(normal * 0.5 + 0.5, specPower / 10.0);
+		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
+		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
+	#else
+		output.Albedo = float4(diffuse.rgb, 0);
+		output.Normal = 0;
+		#ifdef REVERSEDZ
+			output.Depth = float4(0, 1, 1, 1);
+		#else
+			output.Depth = float4(1, 1, 1, 1);
+		#endif
+	#endif
 	return output;
 }
 
@@ -180,18 +188,6 @@ technique GBuffer
 	}
 }
 
-#else
-	technique GBuffer
-	{
-		pass Input
-		{
-			VertexShader = NULL;
-			PixelShader = NULL;
-			Lighting = false;
-		}
-	}
-#endif
-
 // ==================================================== Shadow Map Depth
 
 struct VS_INPUT_DEPTH
@@ -220,8 +216,5 @@ technique ShadowMap
 		VertexShader = compile vs_3_0 DepthVertex();
 		PixelShader = compile ps_3_0 DepthPixel();
 		Lighting = false;
-		#ifdef TRANSPARENT
-			ZWriteEnable = false;
-		#endif
 	}
 }

@@ -119,6 +119,7 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
 	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
+	EffectFloat(SSAOEffect, "FarClip", GetCameraRangeFar(Cam) / 1.25)
 	
 	EntityBlend(PostEffectQuad, 2)
 	EntityEffect(PostEffectQuad, SSAOEffect)

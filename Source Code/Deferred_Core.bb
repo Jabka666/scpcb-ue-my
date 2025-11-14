@@ -6,7 +6,7 @@ Const MAX_DEFERRED_VARIATIONS% = 256
 Const MAX_DEFERRED_SHADE_VARIATIONS% = 128
 
 Const DEFERRED_DIFF% = 0
-Const DEFERRED_DIFFALPHA% = 1
+Const DEFERRED_DIFFSKYBOX% = 1
 Const DEFERRED_DIFFNORMAL% = 2
 Const DEFERRED_DIFFROUGH% = 4
 Const DEFERRED_DIFFEMISSIVE% = 8
@@ -91,7 +91,7 @@ Function InitDeferred%()
 	
 	LoadInputEffect(DEFERRED_NONE, "")
 	
-	CreateInputVariation(DEFERRED_DIFFALPHA, "TRANSPARENT")
+	CreateInputVariation(DEFERRED_DIFFSKYBOX, "SKYBOX")
 	CreateInputVariation(DEFERRED_DIFFNORMAL, "NORMALMAP")
 	CreateInputVariation(DEFERRED_DIFFROUGH, "ROUGHMAP")
 	CreateInputVariation(DEFERRED_DIFFEMISSIVE, "EMISSIVEMAP")
@@ -285,7 +285,7 @@ Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 			If mat <> Null
 				State = 0
 				If mat\IsDiffuseAlpha
-					State = DEFERRED_DIFFALPHA
+					State = DEFERRED_NONE
 				Else
 					If mat\Normal <> 0 Then State = State Or DEFERRED_DIFFNORMAL
 					If mat\Roughness <> 0 Then State = State Or DEFERRED_DIFFROUGH

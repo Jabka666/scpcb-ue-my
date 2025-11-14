@@ -15,6 +15,7 @@ const float SSAORadius = 0.15f;
 const float SSAOBias = 0.1f;
 const float4x4 InvViewProj;
 const float3 CameraPosition;
+const float FarClip;
 
 static const float2 SSAOSamples[NUM_SAMPLES] =
 {
@@ -96,7 +97,8 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 	float3 position = GetPosition(input.TexCoord); 
 	float3 normal = normalize(Sample2DLod0(NormalMap, input.TexCoord).xyz * 2.0 - 1.0f);
 	float2 randomNormal = normalize(Sample2DLod0(NoiseMap, ScreenSize / 256.0 * input.TexCoord).xy * 2.0 - 1.0f);
-	float radius = SSAORadius / length(CameraPosition - position); 
+	float len = length(CameraPosition - position);
+	float radius = SSAORadius / len;
 	
 	float ao = 0.0f; 
 	for (int j = 0; j < NUM_SAMPLES; ++j) 
@@ -109,8 +111,8 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 		ao += CalculateAO(input.TexCoord, coord1 * 0.75, position, normal); 
 		ao += CalculateAO(input.TexCoord, coord2, position, normal); 
 	}
-
-	return 1.0 - (ao / (NUM_SAMPLES * 4));
+	
+	return lerp(1.0 - (ao / (NUM_SAMPLES * 4)), 1.0, 1.0 - GetFade(len, FarClip * 0.8, FarClip));
 }
 
 technique Main

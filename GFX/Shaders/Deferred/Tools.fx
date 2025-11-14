@@ -104,3 +104,8 @@ inline float GetIntensity(float3 color)
 {
     return dot(color, float3(0.299, 0.587, 0.114));
 }
+
+inline float GetFade(float val, float near, float far)
+{
+	return min(1.0 - (val - near) / (far - near), 1.0);
+}

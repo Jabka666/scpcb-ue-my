@@ -601,7 +601,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 		EndIf
 		
 		If IsAlpha = 1
-			SetDeferredBrush(Brush, DEFERRED_DIFFALPHA)
+			SetDeferredBrush(Brush, DEFERRED_NONE)
 		Else
 			SetDeferredBrush(Brush)
 		EndIf
@@ -627,7 +627,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			Temp1i = ReadByte(f)
 			Temp2i = ReadByte(f)
 			Temp3i = ReadByte(f)
-			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0 - (0.5 * (IsAlpha = 1)))
+			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0)
 			
 			; ~ Normals
 			If RMeshVersion = 2
