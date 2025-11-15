@@ -651,6 +651,10 @@ Function SetShadowsBias%(Bias#, Normal#)
 	NORMAL_OFFSET = Normal
 End Function
 
+Function GetEmissiveMultiply#()
+	Return(EmissiveMultiply)
+End Function
+
 Function SetEmissiveMultiply%(em#)
 	If EmissiveMultiply <> em
 		Local ef.InputEffect

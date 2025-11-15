@@ -156,10 +156,10 @@ float GetPointShadow(float3 worldPos)
 	#endif
 }
 
-float GetSpotShadow(float4 ProjCoord)
+float GetSpotShadow(float3 worldPos)
 {
 	#ifdef SHADOWS
-		return GetShadow(ProjCoord);
+		return GetShadow(mul(float4(worldPos, 1.0), SpotMatrix));
 	#else
 		return 1.0;
 	#endif
@@ -220,11 +220,11 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 	GetLighting(worldPos, normalVec, diff, NdotL, worldPosN);
 
 	#if defined(DIRLIGHT)
-		diff *= GetSpotShadow(mul(float4(worldPosN, 1.0), SpotMatrix));
+		diff *= GetSpotShadow(worldPosN);
 		color = LightColor;
 	#elif defined(SPOTLIGHT)
 		float4 spotPos = mul(float4(worldPos, 1.0), SpotMatrix);
-		color = spotPos.w > 0.0 ? LightColor * Sample2DProj(SpotMap, spotPos).rgb * GetSpotShadow(mul(float4(worldPosN, 1.0), SpotMatrix)) : 0.0;
+		color = spotPos.w > 0.0 ? LightColor * Sample2DProj(SpotMap, spotPos).rgb * GetSpotShadow(worldPosN) : 0.0;
 	#else
 		diff *= GetPointShadow(worldPosN);
 		color = LightColor;

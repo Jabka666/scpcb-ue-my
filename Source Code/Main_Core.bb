@@ -2741,7 +2741,7 @@ Function Kill%(IsBloody% = False, Animated% = True)
 		Local de.Decals
 		
 		If IsBloody
-			Local Tex% = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteMapTextures, False)
+			Local Tex% = LoadTexture_Strict("GFX\Overlays\blood_overlay.png")
 			
 			t\OverlayID[OVERLAY_BLOODY] = CreateSprite(ArkBlurCam)
 			ScaleSprite(t\OverlayID[OVERLAY_BLOODY], 1.001, 0.001 + (GraphicHeightFloat / GraphicWidthFloat))
