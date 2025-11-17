@@ -564,16 +564,16 @@ Function LoadParticles%()
 	SetTemplateParticleLifeTime(ParticleEffect[33], 1200, 1200)
 	SetTemplateTexture(ParticleEffect[33], PARTICLE_WHITE_SMOKE)
 	SetTemplateAlphaVel(ParticleEffect[33], True)
-	SetTemplateSize(ParticleEffect[33], 1.0, 1.0, 0.5, 1.0)
-	SetTemplateSizeVel(ParticleEffect[33], 0.01, 1.045)
+	SetTemplateSize(ParticleEffect[33], 1.0, 1.0, 1.0, 1.0)
+	SetTemplateSizeVel(ParticleEffect[33], 0.01, 1.08)
 	
 	; ~ Light wave
 	ParticleEffect[34] = CreateTemplate()
 	SetTemplateEmitterLifeTime(ParticleEffect[34], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[34], 30, 30)
+	SetTemplateParticleLifeTime(ParticleEffect[34], 60, 60)
 	SetTemplateTexture(ParticleEffect[34], PARTICLE_WHITE_SMOKE)
 	SetTemplateAlphaVel(ParticleEffect[34], True)
-	SetTemplateSize(ParticleEffect[34], 1.0, 1.0, 0.5, 1.0)
+	SetTemplateSize(ParticleEffect[34], 1.0, 1.0, 1.0, 1.0)
 	SetTemplateSizeVel(ParticleEffect[34], 0.01, 2.5)
 	
 	; ~ Dust particles from vent

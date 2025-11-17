@@ -9541,8 +9541,8 @@ Function UpdateExplosion%()
 							
 							SetEmitter(Null, x, y, z, 33)
 							SetEmitter(Null, x, y, z, 34)
-							Exit
 						EndIf
+						Exit
 					EndIf
 				Next
 				me\BigCameraShake = 10.0
