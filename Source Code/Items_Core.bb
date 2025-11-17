@@ -2657,7 +2657,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								;[Block]
 								CreateItem("Level 2 Key Card", it_key2, x, y, z)
 								;[End Block]
-							Case "Asav Harn's Badge"
+							Case "Asav Harn's Badge", "Brian Skinner's Badge"
 								;[Block]
 								CreateItem("Level 3 Key Card", it_key3, x, y, z)
 								;[End Block]
