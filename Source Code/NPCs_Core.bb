@@ -55,6 +55,7 @@ Type NPCs
 	Field TeslaHit% = False
 	Field FireEmitter.Emitter[20]
 	Field Bones%[20]
+	Field ShootLight%
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -201,6 +202,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityOrder(n\OBJ2, -5)
 			EntityTexture(n\OBJ2, t\OverlayTextureID[2])
 			HideEntity(n\OBJ2)
+			ShouldSetOBJ2 = False
 			;[End Block]
 		Case NPCType106
 			;[Block]
@@ -432,6 +434,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityBlend(n\OBJ2, 3)
 			SpriteViewMode(n\OBJ2, 2)
 			HideEntity(n\OBJ2)
+			ShouldSetOBJ2 = False
 			
 			If ForestNPC = 0
 				ForestNPC = CreateSprite()
@@ -655,6 +658,15 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0)
+			
+			n\ShootLight = CreateLight(DEFERRED_LIGHT_POINT)
+			LightRange(n\ShootLight, 300.0 * RoomScale)
+			LightColor(n\ShootLight, 255.0, 200.0, 100.0)
+			LightCastShadows(n\ShootLight, False)
+			LightScattering(n\ShootLight, 0.0)
+			PositionEntity(n\ShootLight, x, y, z)
+			EntityParent(n\ShootLight, n\OBJ)
+			HideEntity(n\ShootLight)
 			;[End Block]
 		Case NPCTypeMTF
 			;[Block]
@@ -673,6 +685,15 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0) 
+			
+			n\ShootLight = CreateLight(DEFERRED_LIGHT_POINT)
+			LightRange(n\ShootLight, 400.0 * RoomScale)
+			LightColor(n\ShootLight, 255.0, 200.0, 100.0)
+			LightCastShadows(n\ShootLight, False)
+			LightScattering(n\ShootLight, 0.0)
+			PositionEntity(n\ShootLight, x, y, z)
+			EntityParent(n\ShootLight, n\OBJ)
+			HideEntity(n\ShootLight)
 			
 			If NPCSound[SOUND_NPC_MTF_BEEP] = 0 Then NPCSound[SOUND_NPC_MTF_BEEP] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
 			If NPCSound[SOUND_NPC_MTF_BREATH] = 0 Then NPCSound[SOUND_NPC_MTF_BREATH] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
@@ -1325,13 +1346,13 @@ Function UpdateNPCBlinking%(n.NPCs)
 	n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
 End Function
 
-Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, InstaKill% = False)
-	Local p.Particles, de.Decals, n.NPCs, emit.Emitter
-	Local Pvt%, ShotMessageUpdate$, i%
+Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)
+	Local p.Particles, de.Decals, emit.Emitter
+	Local ShotMessageUpdate$, i%
 	
 	emit.Emitter = SetEmitter(Null, x, y, z, 13)
-	EntityParent(emit\Owner, Parent)
-	LightVolume = TempLightVolume * 1.2
+	EntityParent(emit\Owner, n\Collider)
+	If n\ShootLight <> 0 Then PositionEntity(n\ShootLight, x, y, z, True)
 	
 	If InstaKill
 		PlaySound_Strict(snd_I\BulletHitSFX)
@@ -1347,7 +1368,7 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
 				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - (Rnd(5.0) * (I_1025\FineState[3] = 0.0))
-				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(200.0, 300.0), 0.43 * DifficultyDMGMult)
+				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(150.0, 250.0), 0.43 * DifficultyDMGMult)
 				If wi\BallisticVest > 0
 					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
 				Else
@@ -1357,28 +1378,28 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 			Case 11 ; ~ Left Leg
 				;[Block]
 				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[3] = 0.0))
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
 				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[3] = 0.0))
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]
 			Case 13 ; ~ Left Arm
 				;[Block]
-				InjurePlayer(Rnd(0.4, 0.5) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.4, 0.5) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.left")
 				;[End Block]
 			Case 14 ; ~ Right Arm
 				;[Block]
-				InjurePlayer(Rnd(0.4, 0.5) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.4, 0.5) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.right")
 				;[End Block]
 			Case 15 ; ~ Neck
 				;[Block]
-				InjurePlayer(Rnd(0.75, 0.9) * DifficultyDMGMult, 0.0, 700.0)
+				InjurePlayer(Rnd(0.75, 0.9) * DifficultyDMGMult, 0.0, 500.0)
 				ShotMessageUpdate = GetLocalString("msg", "bullet.neck")
 				;[End Block]
 			Case 16, 17 ; ~ Helmet, Face or Head
@@ -1406,7 +1427,8 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 		
 		PlaySound_Strict(snd_I\BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0
-		Pvt = CreatePivot()
+		Local Pvt% = CreatePivot()
+		
 		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
 		If emit <> Null Then PointEntity(Pvt, emit\Owner)
 		TurnEntity(Pvt, 0.0, 180.0, 0.0)

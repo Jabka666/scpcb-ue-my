@@ -5342,7 +5342,7 @@ Function UpdateNPCTypeApache%(n.NPCs)
 									
 									Local SqrValue# = Sqr(Dist)
 									
-									Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((10.0 / SqrValue) * (1.0 / SqrValue)) * (n\State = 2.0), (n\State = 2.0))
+									Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((10.0 / SqrValue) * (1.0 / SqrValue)) * (n\State = 2.0), (n\State = 2.0))
 									
 									If me\Terminated And n\State <> 3
 										If PlayerRoom\RoomTemplate\RoomID = r_gate_b
@@ -5545,6 +5545,7 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 End Function
 
 Function UpdateNPCTypeGuard%(n.NPCs)
+	HideEntity(n\ShootLight)
 	If n\State = 66.0
 		If n\OBJ2 <> 0
 			PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
@@ -5618,7 +5619,8 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							
 							PointEntity(Pvt, me\Collider)
-							Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ShootAccuracy, True, InstaKillPlayer)
+							Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ShootAccuracy, True, InstaKillPlayer)
+							ShowEntity(n\ShootLight)
 							n\Reload = 8.0
 						Else
 							n\CurrSpeed = n\Speed
@@ -5810,7 +5812,8 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 							
 							Local SqrValue# = Sqr(Dist)
 							
-							Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((25.0 / SqrValue) * (1.0 / SqrValue)), True, InstaKillPlayer)
+							Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True, InstaKillPlayer)
+							ShowEntity(n\ShootLight)
 							n\Reload = 8.0
 						Else
 							n\CurrSpeed = n\Speed
@@ -6023,6 +6026,7 @@ Const MTF_STATE_STUNNED% = 10
 ;[End Block]
 
 Function UpdateNPCTypeMTF%(n.NPCs)
+	HideEntity(n\ShootLight)
 	If n\State = 66.0
 		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
@@ -6471,10 +6475,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							
-							SqrValue = Sqr(Dist)
-							
-							Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
-							
+							Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Dist) * (3.0 / Dist)), True)
+							ShowEntity(n\ShootLight)
 							FreeEntity(Pvt) : Pvt = 0
 							
 							msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
@@ -6906,9 +6908,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 					MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 					
-					SqrValue = Sqr(Dist)
-					
-					Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
+					Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Dist) * (3.0 / Dist)), True)
+					ShowEntity(n\ShootLight)
 					
 					FreeEntity(Pvt) : Pvt = 0
 					
