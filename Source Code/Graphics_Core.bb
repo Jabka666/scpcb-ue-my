@@ -110,14 +110,14 @@ Function CreateFullscreenQuad%(Parent% = 0)
 	Return(Quad)
 End Function
 
-Function RenderGamma%() ; ~ Render gamma for current BackBuffer()
-	If opt\ScreenGamma <> 1.0
-		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, 0, 0, BackBuffer(), TextureBuffer(MRTColor))
-		ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
-		PresentGBuffer(MRTColor, BackBuffer())
-		SetBuffer(BackBuffer())
-	EndIf
-End Function
+;Function RenderGamma%() ; ~ Render gamma for current BackBuffer()
+;	If opt\ScreenGamma <> 1.0
+;		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, 0, 0, BackBuffer(), TextureBuffer(MRTColor))
+;		ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
+;		PresentGBuffer(MRTColor, BackBuffer())
+;		SetBuffer(BackBuffer())
+;	EndIf
+;End Function
 
 Global CurrTrisAmount%
 

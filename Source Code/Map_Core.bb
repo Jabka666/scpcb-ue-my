@@ -317,12 +317,11 @@ Function UpdateLightVolume%()
 			opttimer\LightsTimer = 0.0
 		EndIf
 		LightVolume = CurveValue(TempLightVolume / (1.0 + ((SecondaryLightOn <= 0.1) * (wi\NightVision = 0))), LightVolume, 40.0)
-		SetEmissiveMultiply(CurveValue(1.0, GetEmissiveMultiply(), 20.0))
 	Else
-		SetEmissiveMultiply(CurveValue(1.0, GetEmissiveMultiply(), 5.0))
 		LightVolume = CurveValue(0.6, LightVolume, 40.0)
 		opttimer\LightsTimer = 0.0
 	EndIf
+	SetEmissiveMultiply(CurveValue(Min(SecondaryLightOn, 1.0), GetEmissiveMultiply(), 5.0))
 End Function
 
 Function IsLightVisible(l.Lights)

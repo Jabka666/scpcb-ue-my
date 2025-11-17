@@ -994,7 +994,7 @@ Function RenderMainMenu%()
 	Local TempStr$, TempStr2$, Name$
 	Local Clr%
 	
-	RenderGamma()
+	;RenderGamma()
 	
 	If (Not OnPalette)
 		ShowPointer()

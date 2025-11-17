@@ -7378,10 +7378,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							
-							If EntityDistanceSquared(me\Collider, n\Collider) < PowTwo(Min(HideDistance, fog\FarDist)) Then LightVolume = TempLightVolume * 1.2
-							
-							emit.Emitter = SetEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
-							EntityParent(emit\Owner, n\Collider)
+							Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.0, False)
+							ShowEntity(n\ShootLight)
 							
 							SetEmitter(Null, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider), 15)
 							

@@ -333,7 +333,10 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
 		SetBuffer(TextureBuffer(MRTDepth), 3)
 		CameraClsMode(Cam, 0, 1)
-		AmbientLight(fog\CurrAmbientR, fog\CurrAmbientG, fog\CurrAmbientB)
+		
+		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5)
+		
+		AmbientLight(fog\CurrAmbientR * Brightness, fog\CurrAmbientG * Brightness, fog\CurrAmbientB * Brightness)
 		; ~ Render opacity
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
 		ProcessSSAO(Cam, 3.0, 0.2, Tween) ; ~ Process SSAO for opacity
@@ -355,7 +358,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		; ~ Render decals
 		RenderWorld(Tween, Cam, 32)
 		; ~ Render transparency
-		AmbientLight(Min(fog\CurrAmbientR * 3.0, 255.0), Min(fog\CurrAmbientG * 3.0, 255.0), Min(fog\CurrAmbientB * 3.0, 255.0))
+		AmbientLight(Min(fog\CurrAmbientR * 3.0 * Brightness, 255.0), Min(fog\CurrAmbientG * 3.0 * Brightness, 255.0), Min(fog\CurrAmbientB * 3.0 * Brightness, 255.0))
 		RenderWorld(Tween, Cam, -1 Xor 32, 2)
 		CameraClsMode(Cam, 1, 1)
 		EndRender()
@@ -365,7 +368,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		ProcessColorCorrection()
 		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)
-		ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
+		;ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
 		PresentGBuffer(MRTColor, BackBuffer())
 		SetBuffer(BackBuffer())
 	Else
@@ -393,7 +396,7 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, l\TanFOV, (l\CastShadows And (opt\LightingQuality > 1)), 0.008 * l\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range * 1.2, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, l\TanFOV, (l\CastShadows And (opt\LightingQuality > 1)), 0.008 * l\Scattering * opt\VolumetricLights, Tween)
 	Next
 	For dl.DynamicLight = Each DynamicLight
 		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then 
@@ -492,6 +495,8 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
 			;[End Block]
 	End Select
+	
+	Intensity = Intensity * Lerp(opt\ScreenGamma, 1.0, 0.8)
 	
 	EffectVector(DeferredShade, "LightPos", x, y, z)
 	EffectVector(DeferredShade, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
