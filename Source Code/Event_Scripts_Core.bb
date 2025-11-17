@@ -6085,6 +6085,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				SetEmitter(e\room, EntityX(e\room\RoomLevers[0]\OBJ, True), EntityY(e\room\RoomLevers[0]\OBJ, True), EntityZ(e\room\RoomLevers[0]\OBJ, True), 19)
 				PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\RoomLevers[0]\OBJ, 3.0, 0.4)
 				PlaySound_Strict(snd_I\AlarmSFX[2])
+				me\LightBlink = 1.8
 				e\EventState = 70.0 * 90.0
 			EndIf
 		EndIf
