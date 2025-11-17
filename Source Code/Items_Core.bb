@@ -769,7 +769,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					;[Block]
 					For itt.ItemTemplates = Each ItemTemplates
 						If itt\ID = it_paper
-							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Blank Paper" Lor itt\Name = "Note from Maynard" Lor itt\Name = "SCP-085"))
+							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard" Lor itt\Name = "SCP-085" Lor itt\ID = it_oldpaper))
 							Local k%
 							
 							If i
