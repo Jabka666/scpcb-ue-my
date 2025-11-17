@@ -3172,6 +3172,10 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "hud")
 			;[End Block]
+		Case Tooltip_FirstPersonBody
+			;[Block]
+			Txt = GetLocalString("tooltip", "fpb")
+			;[End Block]
 		Case Tooltip_Console
 			;[Block]
 			Txt = Format(GetLocalString("tooltip", "console"), key\Name[key\CONSOLE])
