@@ -4481,7 +4481,7 @@ Function FindChatScreenEventID%(ChatScreenName$)
 			;[Block]
 			Return(cs_logo)
 			;[End Block]
-		Case "screen_UE.png", "screen_reminder(0).png", "screen_reminder(1).png", "screen_reminder(2).png", "screen_reminder(3).png", "screen_keter.png", "screen_apollyon.png"
+		Case "screen_UE.png", "screen_reminder(0).png", "screen_reminder(1).png", "screen_reminder(2).png", "screen_reminder(3).png", "screen_keter.png", "screen_apollyon.png", "screen_106_autopsy.png"
 			;[Block]
 			Return(cs_not_clickable)
 			;[End Block]
