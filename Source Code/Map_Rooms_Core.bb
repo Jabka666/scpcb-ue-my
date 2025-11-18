@@ -1172,6 +1172,10 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\RoomLights[0]\OBJ, 90.0, 0.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
+			r\RoomLights.Lights[1] = AddLight(r, r\x, r\y + 450.0 * RoomScale, r\z, DEFERRED_LIGHT_POINT, 1100.0 * RoomScale, 190 * 1.2, 213 * 1.2, 255 * 1.2, False, 0.0, True)
+			r\RoomLights[1]\Scripted = True : r\RoomLights[1]\Scattering = 0.0
+			HideEntity(r\RoomLights[1]\OBJ)
+			
 			r\Objects[0] = CreateSprite()
 			r\ScriptedObject[0] = True
 			EntityTexture(r\Objects[0], t\OverlayTextureID[3])

@@ -9444,6 +9444,7 @@ Function UpdateEvent_Tesla%(e.Events)
 		EndIf
 	EndIf
 	
+	If (Not EntityHidden(e\room\RoomLights[1]\OBJ)) Then HideEntity(e\room\RoomLights[1]\OBJ)
 	If e\room\Dist < 16.0
 		Local n.NPCs, e2.Events
 		Local PrevLever% = (EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)
@@ -9612,14 +9613,18 @@ Function UpdateEvent_Tesla%(e.Events)
 									n\State = 4.0
 									;[End Block]
 							End Select
-							If e\room\Dist < 6.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
 						EndIf
 					EndIf
 				Next
 				If Rand(5) < 5
 					PositionTexture(t\OverlayTextureID[3], 0.0, Rnd(0.0, 1.0))
 					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-					If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
+					If e\room\Dist < 6.0
+						LightVolume = TempLightVolume * Rnd(1.0, 2.0)
+						ShowEntity(e\room\RoomLights[1]\OBJ)
+					EndIf
+				Else
+					HideEntity(e\room\RoomLights[1]\OBJ)
 				EndIf
 				e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
 				If e\EventState2 <= 0.0
@@ -9654,6 +9659,7 @@ Function UpdateEvent_Tesla%(e.Events)
 End Function
 
 Function UpdateEvent_Broken_Tesla%(e.Events)
+	If (Not EntityHidden(e\room\RoomLights[1]\OBJ)) Then HideEntity(e\room\RoomLights[1]\OBJ)
 	If e\room\Dist < 16.0
 		Local n.NPCs, e2.Events
 		Local i%, x1#, y1#, z1#, x2#, y2#, z2#
@@ -9789,14 +9795,18 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 									n\State = 4.0
 									;[End Block]
 							End Select
-							If e\room\Dist < 6.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
 						EndIf
 					EndIf
 				Next
 				If Rand(5) < 5
 					PositionTexture(t\OverlayTextureID[3], 0.0, Rnd(0.0, 1.0))
 					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-					If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
+					If e\room\Dist < 6.0
+						LightVolume = TempLightVolume * Rnd(1.0, 2.0)
+						ShowEntity(e\room\RoomLights[1]\OBJ)
+					EndIf
+				Else
+					HideEntity(e\room\RoomLights[1]\OBJ)
 				EndIf
 				e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
 				If e\EventState2 <= 0.0
