@@ -4479,7 +4479,6 @@ Function FillRoom%(r.Rooms)
 			r\ScriptedObject[19] = True
 			ScaleSprite(r\Objects[19], 8.0, 8.0)
 			EntityTexture(r\Objects[19], r\Textures[0])
-			EntityOrder(r\Objects[19], 100)
 			EntityBlend(r\Objects[19], 2)
 			EntityFX(r\Objects[19], 1 + 8)
 			SpriteViewMode(r\Objects[19], 2)
