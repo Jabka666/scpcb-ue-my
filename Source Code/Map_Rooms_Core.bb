@@ -2147,9 +2147,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[3], r\x + 176.0 * RoomScale, r\y + 0.5, r\z - 144.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			r\Objects[4] = LoadMesh_Strict("GFX\Map\Props\cont1_035_label.b3d")
+			r\Objects[4] = LoadMesh_Strict("GFX\Map\Props\SCPlabel.b3d")
 			Update035Label(r\Objects[4])
-			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
+			ScaleEntity(r\Objects[4], 50.0 * RoomScale, 50.0 * RoomScale, 25.0 * RoomScale)
+			RotateEntity(r\Objects[4], 0.0, 180.0, 0.0)
 			PositionEntity(r\Objects[4], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
 			
