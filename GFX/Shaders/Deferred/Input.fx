@@ -67,9 +67,11 @@ struct PS_INPUT_GBUFFER
 struct PixelOutput
 {
 	float4 Color 	: COLOR0;
-	float4 Albedo	: COLOR1;
-	float4 Normal 	: COLOR2;
-	float4 Depth 	: COLOR3;
+	#ifndef TRANSPARENT
+		float4 Albedo	: COLOR1;
+		float4 Normal 	: COLOR2;
+		float4 Depth 	: COLOR3;
+	#endif
 };
 
 PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
@@ -96,20 +98,22 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	PixelOutput output;
 	const float4 diffuse = Sample2D(DiffuseMap, input.TexCoords) * EntityColor;
 
-	#ifdef NORMALMAP
-		const float3 bump = Sample2D(NormalMap, input.TexCoords).rgb * 2.0 - 1.0;
-		const float3 normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
-	#else
-		const float3 normal = input.Normal;
-	#endif
+	#ifndef TRANSPARENT
+		#ifdef NORMALMAP
+			const float3 bump = Sample2D(NormalMap, input.TexCoords).rgb * 2.0 - 1.0;
+			const float3 normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
+		#else
+			const float3 normal = input.Normal;
+		#endif
 
-	#ifdef ROUGHMAP
-		const float roughness = Sample2D(RoughnessMap, input.TexCoords).r * 2.0;
-		const float specIntensity = lerp(Specular.r, 0.0, roughness);
-		const float specPower = Specular.g;
-	#else
-		const float specIntensity = Specular.r;
-		const float specPower = Specular.g;
+		#ifdef ROUGHMAP
+			const float roughness = Sample2D(RoughnessMap, input.TexCoords).r * 2.0;
+			const float specIntensity = lerp(Specular.r, 0.0, roughness);
+			const float specPower = Specular.g;
+		#else
+			const float specIntensity = Specular.r;
+			const float specPower = Specular.g;
+		#endif
 	#endif
 	
 	#ifndef FULLBRIGHT
@@ -141,12 +145,9 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	fogFactor = 1.0 - ShadeDither(float4(1.0 - fogFactor, 0, 0, 0), input.ScreenPos).r;
 	
 	
-	#ifndef SKYBOX
-		output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
-		output.Normal = float4(normal * 0.5 + 0.5, specPower / 10.0);
-		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
+	#if defined(TRANSPARENT)
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
-	#else
+	#elif defined(SKYBOX)
 		output.Albedo = float4(diffuse.rgb, 0);
 		output.Normal = 0;
 		#ifdef REVERSEDZ
@@ -154,7 +155,13 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		#else
 			output.Depth = float4(1, 1, 1, 1);
 		#endif
+	#else
+		output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
+		output.Normal = float4(normal * 0.5 + 0.5, specPower / 10.0);
+		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
+		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#endif
+
 	return output;
 }
 

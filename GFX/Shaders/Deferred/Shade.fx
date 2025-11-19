@@ -15,6 +15,7 @@ const float LightRange;
 const float3 LightColor;
 const float3 LightDirection;
 const float LightScattering;
+const float ShadowIntensity;
 const float NormalOffset = 0.05;
 const float2 ShadowMapSize;
 const int ShadowMapAddress = 3;
@@ -140,7 +141,7 @@ inline float GetShadow(float4 ProjCoord)
 		Sample2DProj(ShadowMap, ProjCoord4).r
 	);
 
-	return dot(inLight, 0.25);
+	return lerp(dot(inLight, 0.25), 1.0, ShadowIntensity);
 }
 
 float GetPointShadow(float3 worldPos)

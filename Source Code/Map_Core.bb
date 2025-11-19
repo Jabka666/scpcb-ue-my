@@ -131,7 +131,6 @@ Global LightVolume#, TempLightVolume#
 
 Type Lights
 	Field OBJ%
-	Field Sprite%, AdvancedSprite%
 	Field x#, y#, z#
 	Field Range#
 	Field R%, G%, B%
@@ -249,33 +248,6 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	
 	l\LightType = LightType
 	
-;	If HasSprite
-;		l\Sprite = CreateSprite()
-;		PositionEntity(l\Sprite, x, y, z)
-;		ScaleSprite(l\Sprite, 0.1 * SpriteScale, 0.1 * SpriteScale)
-;		EntityTexture(l\Sprite, misc_I\LightSpriteID[LIGHT_SPRITE_DEFAULT])
-;		EntityFX(l\Sprite, 1 + 8)
-;		EntityBlend(l\Sprite, 3)
-;		EntityColor(l\Sprite, R, G, B)
-;		EntityParent(l\Sprite, l\OBJ)
-;		HideEntity(l\Sprite)
-;		SetDeferredParticle(l\Sprite)
-;		
-;		l\AdvancedSprite = CreateSprite()
-;		PositionEntity(l\AdvancedSprite, x, y, z)
-;		ScaleSprite(l\AdvancedSprite, 0.3 * SpriteScale, 0.3 * SpriteScale)
-;		EntityTexture(l\AdvancedSprite, misc_I\AdvancedLightSprite)
-;		EntityFX(l\AdvancedSprite, 1 + 8)
-;		EntityBlend(l\AdvancedSprite, 3)
-;		EntityOrder(l\AdvancedSprite, -1)
-;		EntityColor(l\AdvancedSprite, R, G, B)
-;		RotateEntity(l\AdvancedSprite, 0.0, 0.0, Rnd(360.0))
-;		SpriteViewMode(l\AdvancedSprite, 1)
-;		EntityParent(l\AdvancedSprite, l\OBJ)
-;		HideEntity(l\AdvancedSprite)
-;		SetDeferredParticle(l\AdvancedSprite)
-;	EndIf
-	
 	l\Intensity = (R + G + B) / 255.0 / 3.0
 	l\R = R
 	l\G = G
@@ -337,121 +309,44 @@ End Function
 
 Function UpdateLights%(Cam%)
 	Local l.Lights, i%, Random#, Alpha#
-	Local TotalAmbientColor# = (fog\AmbientR + fog\AmbientG + fog\AmbientB) / 255.0 / 3.0
+	
+	LightRenderDistance = Max(GetCameraRangeFar(Camera), 7.0)
 	
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.1 And ((l\room <> Null And IsLightVisible(l)) Lor (l\room = Null))
 			Local LightOBJHidden%
+			Local Dist#, MaxDist#
 			
-;			If l\Sprite <> 0
-				Local Dist#, MaxDist#
+			If Cam = Camera ; ~ The lights are rendered by player's cam
+				Dist = EntityDistanceSquared(Cam, l\OBJ)
+				MaxDist = (PowTwo(LightRenderDistance) + PowTwo(l\Range))
+				l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
 				
-				If Cam = Camera ; ~ The lights are rendered by player's cam
-;					EntityOrder(l\AdvancedSprite, -1)
+				If opttimer\LightsTimer = 0.0
+					LightOBJHidden = EntityHidden(l\OBJ)
 					
-					Dist = EntityDistanceSquared(Cam, l\OBJ)
-					MaxDist = (LightRenderDistance + PowTwo(l\Range)) * LightVolume
-					l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
-					
-					If opttimer\LightsTimer = 0.0
-;						Local LightSpriteHidden% = EntityHidden(l\Sprite)
-;						Local LightAdvancedSpriteHidden% = EntityHidden(l\AdvancedSprite)
-;						
-						LightOBJHidden = EntityHidden(l\OBJ)
+					If Dist < MaxDist
+						Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
 						
-						If Dist < MaxDist
-;							EntityAutoFade(l\Sprite, 0.1 * LightVolume, fog\FarDist * LightVolume)
-							
-;							Local LightVisible%
-;							Local LightInView% = EntityInView(l\OBJ, Cam)
-							Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
-							
-;							If LightInView Lor ShouldFlickering Then LightVisible = EntityVisible(Cam, l\OBJ)
-							
-							If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
-							
-							If ShouldFlickering; And LightVisible
-								If (Not LightOBJHidden) Then HideEntity(l\OBJ)
-								PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
-								;If LightInView
-									;If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
-									;If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
-								;EndIf
-;								Random = Rnd(0.35, 0.8)
-;								SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
-;								TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
-								SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20)
-							EndIf
-							
-;							If LightInView And LightVisible
-;								If LightSpriteHidden Then ShowEntity(l\Sprite)
-;								If opt\AdvancedRoomLights
-;									Alpha = 1.0 - Clamp((Sqr(Dist) + 0.5) / 7.5, 0.0, 1.0)
-;									If Alpha > 0.0
-;										If LightAdvancedSpriteHidden Then ShowEntity(l\AdvancedSprite)
-;										EntityAlpha(l\AdvancedSprite, Max(TotalAmbientColor * (l\Intensity / 2.0), 1.0) * Alpha * SecondaryLightOn)
-;										
-;										Random = Rnd(0.36 * l\SpriteScale, 0.4 * l\SpriteScale)
-;										ScaleSprite(l\AdvancedSprite, Random, Random)
-;									ElseIf (Not LightAdvancedSpriteHidden) ; ~ Instead of rendering the sprite invisible, just hiding it if the player is far away from it
-;										HideEntity(l\AdvancedSprite)
-;									EndIf
-;								ElseIf (Not LightAdvancedSpriteHidden) ; ~ The additional sprites option is disabled, hide the sprites
-;									HideEntity(l\AdvancedSprite)
-;								EndIf
-;							Else
-;								; ~ Hide the sprites because they aren't visible
-;								If (Not LightSpriteHidden) Then HideEntity(l\Sprite)
-;								If (Not LightAdvancedSpriteHidden) Then HideEntity(l\AdvancedSprite)
-;							EndIf
-						ElseIf (Not LightOBJHidden) ; ~ Hide the light emitter because it is too far
-							HideEntity(l\OBJ)
+						If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
+						
+						If ShouldFlickering
+							If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+							PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
+							SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20.0)
 						EndIf
+					ElseIf (Not LightOBJHidden) ; ~ Hide the light emitter because it is too far
+						HideEntity(l\OBJ)
 					EndIf
-;				Else
-					; ~ This will make the lightsprites not glitch through the wall when they are rendered by the cameras
-;					EntityOrder(l\AdvancedSprite, 0)
 				EndIf
-;			Else
-;				If Cam = Camera ; ~ The lights are rendered by player's cam
-;					Dist = EntityDistanceSquared(Cam, l\OBJ)
-;					MaxDist = (LightRenderDistance + PowTwo(l\Range)) * LightVolume
-;					l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
-;					
-;					If opttimer\LightsTimer = 0.0
-;						LightOBJHidden = EntityHidden(l\OBJ)
-;						
-;						If Dist < MaxDist
-;							If LightOBJHidden Then ShowEntity(l\OBJ)
-;							If l\Flickers And Rand(50) = 1 And EntityVisible(Cam, l\OBJ)
-;								If (Not LightOBJHidden) Then HideEntity(l\OBJ)
-;								PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
-;								Random = Rnd(0.35, 0.8)
-;								SecondaryLightOn = Clamp(SecondaryLightOn - Random, 0.301, 1.0)
-;								TempLightVolume = Clamp(TempLightVolume - Random, 0.5, 1.0)
-;							EndIf
-;						ElseIf (Not LightOBJHidden) ; ~ Hide the light emitter because it is too far
-;							HideEntity(l\OBJ)
-;						EndIf
-;					EndIf
-;				EndIf
-;			EndIf
+			EndIf			
 		Else
-			; ~ The lights were turned off
-;			If l\Sprite <> 0
-;				If (Not EntityHidden(l\Sprite)) Then HideEntity(l\Sprite)
-;				If (Not EntityHidden(l\AdvancedSprite)) Then HideEntity(l\AdvancedSprite)
-;			EndIf
 			If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
 		EndIf
 	Next
 End Function
 
 Function RemoveLight%(l.Lights)
-;	If l\Sprite <> 0
-;		FreeEntity(l\Sprite) : l\Sprite = 0
-;		FreeEntity(l\AdvancedSprite) : l\AdvancedSprite = 0
-;	EndIf
 	FreeEntity(l\OBJ) : l\OBJ = 0
 	Delete(l)
 End Function
@@ -599,7 +494,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 		EndIf
 		
 		If IsAlpha = 1
-			SetDeferredBrush(Brush, DEFERRED_NONE)
+			SetDeferredBrush(Brush, DEFERRED_TRANSPARENT)
 		Else
 			SetDeferredBrush(Brush)
 		EndIf

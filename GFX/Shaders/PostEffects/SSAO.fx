@@ -96,7 +96,7 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 { 
 	float3 position = GetPosition(input.TexCoord); 
 	float3 normal = normalize(Sample2DLod0(NormalMap, input.TexCoord).xyz * 2.0 - 1.0f);
-	float2 randomNormal = normalize(Sample2DLod0(NoiseMap, ScreenSize / 256.0 * input.TexCoord).xy * 2.0 - 1.0f);
+	float2 randomNormal = normalize(Sample2DLod0(NoiseMap, ScreenSize / 512.0 * input.TexCoord).xy * 2.0 - 1.0f);
 	float len = length(CameraPosition - position);
 	float radius = SSAORadius / len;
 	

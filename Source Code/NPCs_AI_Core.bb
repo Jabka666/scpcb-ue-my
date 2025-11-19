@@ -609,7 +609,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 					;[End Block]
 				Case 1.0 ; ~ Idles
 					;[Block]
-					AnimateNPC(n, 33.0, 174.0, 0.3)
+					AnimateNPC(n, Clamp(AnimTime(n\OBJ), 2.0, 33.0), 174.0, 0.3)
 					; ~ Randomly rotates
 					If Rand(400) = 1 Then n\Angle = Rnd(360.0)
 					RotateEntity(n\Collider, 0.0, CurveAngle(n\Angle + Sin(MilliSec / 50) * 2.0, EntityYaw(n\Collider), 150.0), 0.0, True)
@@ -617,7 +617,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 					If n\TargetUpdateTimer =< 0.0
 						For n2.NPCs = Each NPCs
 							Select n2\NPCType
-								Case NPCType008_1, NPCType008_1_Surgeon, NPCType049, NPCType049_2, NPCType066, NPCType096, NPCType106, NPCTypeMTF
+								Case NPCType008_1, NPCType008_1_Surgeon, NPCType049_2, NPCTypeMTF, NPCType1048_A
 									;[Block]
 									If EntityDistanceSquared(n\Collider, n2\Collider) < 3.24 And (Not n2\IsDead)
 										n\Target = n2

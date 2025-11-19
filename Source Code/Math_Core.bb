@@ -369,8 +369,8 @@ Function RoundTwo(v%)
 	Return(v)
 End Function
 
-Function GetFade#(val#, near#, far#)
-	Return(Min(1.0 - (val - near) / (far - near), 1.0))
+Function GetFade#(Value#, Near#, Far#)
+	Return(Clamp(1.0 - (Value - Near) / (Far - Near), 0.0, 1.0))
 End Function
 
 ; ~ This must be called after the room angle has been finalized!

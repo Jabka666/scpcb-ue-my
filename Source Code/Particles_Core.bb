@@ -57,7 +57,7 @@ Function UpdateParticles%()
 	Local HideDist# = PowTwo(HideDistance * LightVolume)
 	
 	For p.Particles = Each Particles
-		If EntityDistanceSquared(p\OBJ, me\Collider) <= HideDist
+		If EntityExist(p\OBJ) And EntityDistanceSquared(p\OBJ, me\Collider) <= HideDist
 			MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
 			If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
 			TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)

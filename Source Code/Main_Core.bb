@@ -419,10 +419,8 @@ Function UpdateGame%()
 				If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 					UpdateIntro()
 				ElseIf IsPlayerOutsideFacility()
-					LightRenderDistance = 100.0
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
-					LightRenderDistance = 49.0
 					UpdateRooms()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEvents()
 				EndIf
@@ -7247,9 +7245,12 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 	
 	Local CoordEx% = 32 * MenuScale
 	Local Pvt% = CreatePivot()
+	Local ObjPvt% = CreatePivot()
+	
+	PositionEntity(ObjPvt, EntityTX(OBJ, RenderTween), EntityTY(OBJ, RenderTween), EntityTZ(OBJ, RenderTween))
 	
 	PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-	PointEntity(Pvt, OBJ)
+	PointEntity(Pvt, ObjPvt)
 	
 	Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
 	
@@ -7262,6 +7263,7 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 	If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 	
 	FreeEntity(Pvt) : Pvt = 0
+	FreeEntity(ObjPvt) : ObjPvt = 0
 	
 	Local x# = mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx
 	Local y# = mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx

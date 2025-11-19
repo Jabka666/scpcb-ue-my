@@ -12,7 +12,7 @@ Const DEFERRED_DIFFROUGH% = 4
 Const DEFERRED_DIFFEMISSIVE% = 8
 Const DEFERRED_DIFFEMISSIVEMUL% = 16
 Const DEFERRED_FULLBRIGHT% = 32
-Const DEFERRED_NONE% = 64
+Const DEFERRED_TRANSPARENT% = 64
 
 Const DEFERRED_SHADE_DIRLIGHT% = 1
 Const DEFERRED_SHADE_POINTLIGHT% = 2
@@ -70,7 +70,7 @@ Global TextureDummies.DummyTexture
 Global DeferredCamera%, QuadCamera%
 Global DeferredSphere%, DeferredCone%, DeferredQuad%
 Global DirectionalLightUpdate%
-Global ShadowsDistance#
+Global ShadowsDistance#, ShadowsMipDistance#, ShadowsFade#
 Global GBufferBlur#
 Global TempColorTexture%
 
@@ -89,14 +89,13 @@ Function InitDeferred%()
 	
 	ClearDeferred()
 	
-	LoadInputEffect(DEFERRED_NONE, "")
-	
 	CreateInputVariation(DEFERRED_DIFFSKYBOX, "SKYBOX")
 	CreateInputVariation(DEFERRED_DIFFNORMAL, "NORMALMAP")
 	CreateInputVariation(DEFERRED_DIFFROUGH, "ROUGHMAP")
 	CreateInputVariation(DEFERRED_DIFFEMISSIVE, "EMISSIVEMAP")
 	CreateInputVariation(DEFERRED_DIFFEMISSIVEMUL, "MUL")
 	CreateInputVariation(DEFERRED_FULLBRIGHT, "FULLBRIGHT")
+	CreateInputVariation(DEFERRED_TRANSPARENT, "TRANSPARENT")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
 	CreateShadeVariation(DEFERRED_SHADE_POINTLIGHT, "POINTLIGHT")
@@ -190,7 +189,8 @@ Function InitDeferred%()
 	MaskEntity(DeferredCone, 4)
 	MaskEntity(DeferredQuad, 4)
 	
-	SetShadowsDistance(3.0)
+	SetShadowsMipDistance(3.0)
+	SetShadowsDistance(6.0, 0.3)
 	SetShadowsBias(0.00044, 1.0)
 	
 	DirectionalLightUpdate = 0
@@ -238,22 +238,10 @@ Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
 	Local SurfCount%
 	
 	If State <> -1
+		EntityEffect(Entity, GetInputEffect(State))
+	Else
 		Local i%, SF%, b%
 		
-		EntityEffect(Entity, GetInputEffect(State))
-		If State = DEFERRED_NONE And EntityClass(Entity) = "Mesh"
-			SurfCount = CountSurfaces(Entity)
-			For i = 1 To SurfCount
-				SF = GetSurface(Entity, i)
-				b = GetSurfaceBrush(SF)
-				If b <> 0
-					SetDeferredBrush(b, DEFERRED_NONE)
-					PaintSurface(SF, b)
-					FreeBrush(b) : b = 0
-				EndIf
-			Next
-		EndIf
-	Else
 		If EntityClass(Entity) = "Mesh"
 			SurfCount = CountSurfaces(Entity)
 			For i = 1 To SurfCount
@@ -283,24 +271,20 @@ Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 		If t1 <> 0
 			mat.Materials = GetMaterial(t1)
 			If mat <> Null
-				State = 0
-				If mat\IsDiffuseAlpha
-					State = DEFERRED_NONE
-				Else
-					If mat\Normal <> 0 Then State = State Or DEFERRED_DIFFNORMAL
-					If mat\Roughness <> 0 Then State = State Or DEFERRED_DIFFROUGH
-					If mat\Emissive <> 0 Then State = State Or DEFERRED_DIFFEMISSIVE
-					If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
-					
-					BrushTexture(Brush, MissingTexture, 0, 1)
-					BrushTexture(Brush, MissingTexture, 0, 2)
-					BrushTexture(Brush, MissingTexture, 0, 3)
-					If mat\Normal <> 0 Then BrushTexture(Brush, mat\Normal, Frame, 1)
-					If mat\Roughness <> 0 Then BrushTexture(Brush, mat\Roughness, Frame, 2)
-					If mat\Emissive <> 0 Then BrushTexture(Brush, mat\Emissive, Frame, 3)
-					
-					BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
-				EndIf
+				If mat\Normal <> 0 Then State = State Or DEFERRED_DIFFNORMAL
+				If mat\Roughness <> 0 Then State = State Or DEFERRED_DIFFROUGH
+				If mat\Emissive <> 0 Then State = State Or DEFERRED_DIFFEMISSIVE
+				If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
+				If mat\IsDiffuseAlpha Then State = State Or DEFERRED_TRANSPARENT
+				
+				BrushTexture(Brush, MissingTexture, 0, 1)
+				BrushTexture(Brush, MissingTexture, 0, 2)
+				BrushTexture(Brush, MissingTexture, 0, 3)
+				If mat\Normal <> 0 Then BrushTexture(Brush, mat\Normal, Frame, 1)
+				If mat\Roughness <> 0 Then BrushTexture(Brush, mat\Roughness, Frame, 2)
+				If mat\Emissive <> 0 Then BrushTexture(Brush, mat\Emissive, Frame, 3)
+				
+				BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
 			EndIf
 			FreeTexture(t1) : t1 = 0
 		EndIf
@@ -336,7 +320,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		
 		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5)
 		
-		AmbientLight(fog\CurrAmbientR * Brightness, fog\CurrAmbientG * Brightness, fog\CurrAmbientB * Brightness)
+		AmbientLight(Min(fog\CurrAmbientR * Brightness, 255.0), Min(fog\CurrAmbientG * Brightness, 255.0), Min(fog\CurrAmbientB * Brightness, 255.0))
 		; ~ Render opacity
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
 		ProcessSSAO(Cam, 3.0, 0.2, Tween) ; ~ Process SSAO for opacity
@@ -421,10 +405,17 @@ Function ProcessAllLights%(Cam%, Tween#)
 End Function
 
 Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, TanFOV# = 1.0, CastShadows% = True, Scattering# = 0.01, Tween# = 1.0)
+	If Intensity <= 0.0 Then Return
+	
 	Local VolumeScale# = Range * 1.25
-	Local Volume%
-	Local DistToLight# = 1.0
+	Local Volume%, TanValue#, ShadowIntensity# = 1.0
+	Local DistToLight# = Distance(EntityX(Cam, True), x, EntityY(Cam, True), y, EntityZ(Cam, True), z)
 	Local EffectBits% = GetShadeLight(LightType)
+	
+	If CastShadows And LightType <> DEFERRED_LIGHT_DIRECTIONAL
+		ShadowIntensity# = GetFade(Max(DistToLight - Range, 0), ShadowsDistance * ShadowsFade, ShadowsDistance)
+		If ShadowIntensity <= 0.0 Then CastShadows = False
+	EndIf
 	
 	If CastShadows Then EffectBits = EffectBits Or DEFERRED_SHADE_SHADOWS
 	If Scattering > 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SCATTERING
@@ -443,7 +434,6 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
-			DistToLight = EntityDistance(Cam, Volume)
 			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, TanFOV, Tween)
 			
 			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
@@ -464,7 +454,6 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			EndIf
 			
 			If (Not EntityInView(Volume, Cam)) Then Return
-			DistToLight = EntityDistance(Cam, Volume)
 			
 			Local Shadowmap% = DeferredShadowMap[GetShadowMapMip(Range, DistToLight)]
 			
@@ -502,6 +491,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	EffectVector(DeferredShade, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
 	EffectFloat(DeferredShade, "LightRange", Range)
 	EffectFloat(DeferredShade, "LightScattering", Scattering)
+	EffectFloat(DeferredShade, "ShadowIntensity", 1.0 - ShadowIntensity)
 	EntityEffect(Volume, DeferredShade)
 	
 	RenderEntity(Cam, Volume, Tween)
@@ -647,8 +637,13 @@ Function CreateLightVolume%(LightType%)
 	Return(Volume)
 End Function
 
-Function SetShadowsDistance%(Dist#)
+Function SetShadowsMipDistance%(Dist#)
+	ShadowsMipDistance = Dist
+End Function
+
+Function SetShadowsDistance%(Dist#, Fade#)
 	ShadowsDistance = Dist
+	ShadowsFade = 1.0 - Fade
 End Function
 
 Function SetShadowsBias%(Bias#, Normal#)
@@ -672,7 +667,7 @@ Function SetEmissiveMultiply%(em#)
 End Function
 
 Function GetShadowMapMip%(Range#, Dist#)
-	Local MipLevel% = Floor((Dist / (Range + ShadowsDistance)) * (SHADOW_MAP_MIPMAPS - 1))
+	Local MipLevel% = Floor((Dist / (Range + ShadowsMipDistance)) * (SHADOW_MAP_MIPMAPS - 1))
 	
 	Return(Min(Max(MipLevel, 0), (SHADOW_MAP_MIPMAPS - 1)))
 End Function
