@@ -1449,7 +1449,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "cap"), "Newsboy Cap", it_cap, "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "420j"), "Some SCP-420-J", it_scp420j, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00055, 0)
-	CreateItemTemplate(GetLocalString("items", "cigarette"), "Cigarette", it_cigarette, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00045, 0)
+	CreateItemTemplate(GetLocalString("items", "cigarette"), "Cigarette", it_cigarette, "cigarette.b3d", "INV_cigarette.png", "", 0.0032, 0)
 	CreateItemTemplate(GetLocalString("items", "joint"), "Joint", it_joint, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00045, 0)
 	CreateItemTemplate(GetLocalString("items", "smellyjoint"), "Smelly Joint", it_joint_smelly, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00045, 0)
 	
