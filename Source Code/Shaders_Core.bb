@@ -1,3 +1,5 @@
+Include "Source Code\Effects_Core.bb"
+
 Const DEFERRED_PATH$ = "GFX\Shaders\Deferred\"
 Const POSTEFFECTS_PATH$ = "GFX\Shaders\PostEffects\"
 
@@ -34,8 +36,8 @@ Global GammaEffect%
 Global EffectsBits% = -1
 
 Function InitShaders%()
-	Local Width% = opt\GraphicWidth / 4
-	Local Height% = opt\GraphicHeight / 4
+	Local Width% = GraphicsWidth()
+	Local Height% = GraphicsHeight()
 	
 	PostEffectQuad = CreateFullscreenQuad(QuadCamera)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
@@ -52,8 +54,8 @@ Function InitShaders%()
 	GammaEffect = LoadEffectEx(POSTEFFECTS_PATH + "Gamma.fx")
 	
 	DebugLog(GetEffectError())
-	BloomTex = CreateTexture(Width, Height, 1 + 256 + 16384)
-	BloomBlur = CreateTexture(Width, Height, 1 + 256 + 16384)
+	BloomTex = CreateTexture(Width / 4, Height / 4, 1 + 256 + 16384)
+	BloomBlur = CreateTexture(Width / 4, Height / 4, 1 + 256 + 16384)
 	
 	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
 	
@@ -173,8 +175,8 @@ End Function
 Function ProcessEyeAdaptation%()
 	If EyeAdaptationEffect = 0 Then Return
 	
-	Local Width# = 0.5 / opt\GraphicWidth
-	Local Height# = 0.5 / opt\GraphicHeight
+	Local Width# = 0.5 / GraphicsWidth()
+	Local Height# = 0.5 / GraphicsHeight()
 	
 	EntityEffect(PostEffectQuad, EyeAdaptationEffect)
 	
@@ -265,11 +267,11 @@ Function BlurGBuffer%(Texture%, Force# = 1.0)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
 End Function
 
-Function PresentGBuffer%(Tex%, Dest% = 0)
+Function PresentGBuffer%(Texture%, Dest% = 0)
 	Local OldBuffer% = GraphicsBuffer()
 	
 	EntityEffect(PostEffectQuad, PresentEffect)
-	EntityTexture(PostEffectQuad, Tex, 0, 0)
+	EntityTexture(PostEffectQuad, Texture, 0, 0)
 	ShowEntity(PostEffectQuad)
 	SetBuffer(Dest)
 	RenderEntity(QuadCamera, PostEffectQuad)
@@ -292,7 +294,7 @@ Function ClearBuffer%(Buffer%, R#, G#, B#, Alpha#)
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
 	SetBuffer(PrevBuffer)
-	CameraViewport(QuadCamera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
+	CameraViewport(QuadCamera, 0, 0, GraphicsWidth(), GraphicsHeight())
 End Function
 
 ;~IDEal Editor Parameters:

@@ -4558,7 +4558,6 @@ Function FillRoom%(r.Rooms)
 			If tl\LightType = DEFERRED_LIGHT_SPOT
 				RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
 				l\FOV = tl\OuterConeAngle
-				l\TanFOV = Tan(l\FOV * 0.5)
 			EndIf
 		EndIf
 	Next
