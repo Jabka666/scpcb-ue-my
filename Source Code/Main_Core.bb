@@ -404,6 +404,8 @@ Function UpdateGame%()
 				UpdateLeave1499()
 			ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 				UpdateSoundEmitters()
+				UpdateLightVolume()
+				UpdateLights(Camera)
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			ElseIf forest_event <> Null And forest_event\EventState = 1.0
 				UpdateDoors()

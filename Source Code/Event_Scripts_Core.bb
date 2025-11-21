@@ -8117,8 +8117,6 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				GiveAchievement("pocketdimension")
 				
 				LightRenderDistance = 64.0
-				UpdateLightVolume()
-				UpdateLights(Camera)
 				UpdateDoors()
 				
 				ScaleEntity(e\room\OBJ, RoomScale, RoomScale, RoomScale)
