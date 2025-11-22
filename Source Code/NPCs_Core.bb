@@ -553,7 +553,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\ModelScale = Temp
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			EntityFX(n\OBJ, 1)
-			EntityAutoFade(n\OBJ, HideDistance * 2.5, HideDistance * 2.95)
+			EntityAutoFade(n\OBJ, fog\HideDistance * 2.5, fog\HideDistance * 2.95)
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
@@ -1014,7 +1014,7 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
-			If GravityDist < PowTwo(HideDistance / 2.0) Lor n\NPCType = NPCType1499_1
+			If GravityDist < PowTwo(fog\HideDistance / 2.0) Lor n\NPCType = NPCType1499_1
 				If n\InFacility = InFacility
 					Local r.Rooms
 					Local CollidedFloor% = False
@@ -1856,7 +1856,7 @@ End Function
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If IsEqual(n\Frame, Frame, 0.001) Then Return
 	
-	If EntityDistanceSquared(n\Collider, me\Collider) >= PowTwo(HideDistance)
+	If EntityDistanceSquared(n\Collider, me\Collider) >= PowTwo(fog\HideDistance)
 		If n\AnimTimer <= 0.0
 			SetAnimTime(n\OBJ, Frame)
 			n\AnimTimer = fps\Factor[0] * 4.0

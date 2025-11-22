@@ -541,8 +541,6 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 				snd_I\IntroSFX[i + 4] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
 			Next
 			
-			HideDistance = 60.0
-			
 			n_I\Curr173\Angle = 90.0 : n_I\Curr173\Idle = 1
 			TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), n_I\Curr173\CollRadius + 0.12, True)
 			n_I\Curr173\CurrentRoom = e\room
@@ -2502,7 +2500,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				e\room\NPC[0]\State = 2.0
 				For r.Rooms = Each Rooms
 					If r <> PlayerRoom
-						If EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) < PowTwo(HideDistance * 2.0) And EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) > PowTwo(HideDistance)
+						If EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) < PowTwo(fog\HideDistance * 2.0) And EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) > PowTwo(fog\HideDistance)
 							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(r\OBJ), EntityY(r\OBJ), EntityZ(r\OBJ))
 							e\room\NPC[0]\PathTimer = 0.0
 							If e\room\NPC[0]\PathStatus = PATH_STATUS_FOUND Then e\EventState2 = 6.0
@@ -6408,8 +6406,6 @@ Function UpdateEvent_Gate_A%(e.Events)
 			
 			IsBlackOut = False
 			
-			HideDistance = 60.0
-			
 			CreateConsoleMsg("")
 			CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
 			CreateConsoleMsg("")
@@ -6861,8 +6857,6 @@ Function UpdateEvent_Gate_B%(e.Events)
 			RenderLoading(90, GetLocalString("loading", "ending"))
 			
 			IsBlackOut = False
-			
-			HideDistance = 60.0
 			
 			CreateConsoleMsg("")
 			CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
@@ -8788,7 +8782,7 @@ End Function
 Function UpdateEvent_096_Spawn%(e.Events)
 	Local Place%
 	
-	If e\room\Dist < HideDistance
+	If e\room\Dist < fog\HideDistance
 		; ~ Checking some statements in order to determine if SCP-096 can spawn in this room
 		If e\EventState <> 2.0
 			Local e2.Events, r.Rooms
@@ -8886,7 +8880,7 @@ Function UpdateEvent_096_Spawn%(e.Events)
 			PointEntity(n_I\Curr096\Collider, me\Collider)
 			RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider) + 180.0, 0.0)
 			
-			If EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < PowTwo(HideDistance * 0.5)
+			If EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < PowTwo(fog\HideDistance * 0.5)
 				If EntityVisible(n_I\Curr096\Collider, Camera)
 					PointEntity(n_I\Curr096\Collider, me\Collider)
 					RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider) + Rnd(170.0, 190.0), 0.0)

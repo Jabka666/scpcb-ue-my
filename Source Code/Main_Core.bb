@@ -382,7 +382,6 @@ Function UpdateGame%()
 			
 			me\SndVolume = CurveValue(0.0, me\SndVolume, 50.0)
 			InFacility = IsInFacility(EntityY(me\Collider))
-			If (Not IsPlayerOutsideFacility()) Then HideDistance = 17.0
 			UpdateDeaf()
 			UpdateDecals()
 			UpdateSaveState()
@@ -3555,7 +3554,7 @@ Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
 End Function
 
 Type FogAmbient
-	Field FarDist#
+	Field FarDist#, HideDistance#
 	Field CurrName$, CurrAmbientName$
 	Field R#, G#, B#
 	Field AmbientR#, AmbientG#, AmbientB#
@@ -3701,6 +3700,8 @@ Function UpdateZoneColor%()
 	fog\CurrAmbientB = CurrB
 	
 	AmbientLight(CurrR, CurrG, CurrB)
+	
+	fog\HideDistance = GetCameraRangeFar(Camera)
 End Function
 
 Function ResetSelectedStuff%()

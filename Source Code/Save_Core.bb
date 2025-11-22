@@ -2501,7 +2501,7 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	; ~ Resetting some stuff (those get changed when going to some areas)
-	HideDistance = 17.0
+	fog\HideDistance = 17.0
 	
 	; ~ Reset player body texture
 	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3

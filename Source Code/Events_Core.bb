@@ -1100,7 +1100,7 @@ Function UpdateForest%()
 	ShowRoomsColl(forest_event\room)
 	
 	Local tX%, tY%
-	Local HideDist# = PowTwo(HideDistance)
+	Local HideDist# = PowTwo(fog\HideDistance)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1

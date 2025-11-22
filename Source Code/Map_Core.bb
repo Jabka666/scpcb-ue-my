@@ -276,13 +276,13 @@ Function UpdateLightVolume%()
 		If opttimer\LightsTimer < 8.0
 			opttimer\LightsTimer = opttimer\LightsTimer + fps\Factor[0]
 		Else
-			Local HideDist# = PowTwo(HideDistance)
+			Local HideDist# = PowTwo(fog\HideDistance)
 			
 			For l.Lights = Each Lights
 				If l\room <> Null And IsLightVisible(l)
 					Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 					
-					If Dist < HideDist + PowTwo(l\Range) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((HideDistance - Sqr(Dist)) / HideDistance)) / 4.5, 1.0)
+					If Dist < HideDist + PowTwo(l\Range) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((fog\HideDistance - Sqr(Dist)) / fog\HideDistance)) / 4.5, 1.0)
 				EndIf
 			Next
 			opttimer\LightsTimer = 0.0
@@ -2681,7 +2681,7 @@ Function UpdateDoors%()
 	Local x#, z#, Dist#, i%
 	Local SinValue#
 	Local FPSFactorEx#
-	Local HideDist# = PowTwo(HideDistance * 1.75)
+	Local HideDist# = PowTwo(fog\HideDistance * 1.75)
 	
 	ButtonDirection = (Not me\InsideElevator) Lor (me\InsideElevator And (InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)))
 	d_I\ClosestButton = 0
@@ -3773,7 +3773,7 @@ End Function
 
 Function UpdateDecals%()
 	Local de.Decals
-	Local HideDist# = PowTwo(HideDistance)
+	Local HideDist# = PowTwo(fog\HideDistance)
 	
 	opttimer\DecalsTimer = opttimer\DecalsTimer - fps\Factor[0]
 	If opttimer\DecalsTimer =< 0.0
@@ -4039,7 +4039,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And SecondaryLightOn > 0.1
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * 1.2)) And SecondaryLightOn > 0.1
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And (sc\ScriptedMonitor Lor EntityVisible(Camera, sc\ScrOBJ)))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
@@ -4154,7 +4154,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.1
+				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.1
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)

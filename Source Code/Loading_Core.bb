@@ -2506,7 +2506,6 @@ Global InFacility%
 Global PlayerFallingPickDistance#
 
 Global ShouldEntitiesFall%
-Global HideDistance#
 Global CoffinDistance#
 
 Global RemoteDoorOn%
@@ -2593,7 +2592,6 @@ Function LoadData%()
 	End Select
 	
 	ShouldEntitiesFall = True
-	HideDistance = 17.0
 	CoffinDistance = 100.0
 	
 	QuickLoadPercent = -1
@@ -2734,6 +2732,7 @@ Function LoadEntities%()
 	CameraReverseZ(Camera, True)
 	AmbientLight(80.0, 80.0, 80.0)
 	SetShadowsBias(0.00044, 1.0)
+	fog\HideDistance = fog\FarDist
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
@@ -3664,7 +3663,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	ToElevatorFloor = 0
 	
 	ShouldEntitiesFall = False
-	HideDistance = 0.0
 	CoffinDistance = 0.0
 	CameraZoomValue = 0.0
 	

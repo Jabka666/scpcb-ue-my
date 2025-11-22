@@ -451,7 +451,7 @@ Function UpdateParticles_Devil()
 	Local CamPitch# = EntityPitch(ParticleCam, True)
 	Local CamYaw# = EntityYaw(ParticleCam, True)
 	Local CamRoll# = EntityRoll(ParticleCam, True)
-	Local HideDist# = PowTwo(HideDistance * LightVolume)
+	Local HideDist# = PowTwo(fog\HideDistance * LightVolume)
 	
 	For p.Particle = Each Particle
 		If EntityDistanceSquared(p\emitter\Owner, me\Collider) > HideDist Lor p\Age > p\MaxTime
@@ -551,4 +551,4 @@ Function UpdateParticles_Devil()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS

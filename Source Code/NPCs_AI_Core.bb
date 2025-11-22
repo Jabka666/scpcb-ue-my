@@ -154,7 +154,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 				EndIf
 				
-				If Dist > PowTwo(HideDistance * 1.5)
+				If Dist > PowTwo(fog\HideDistance * 1.5)
 					If n\IdleTimer < 70.0 * (20.0 - (10.0 * SelectedDifficulty\AggressiveNPCs) + (10.0 * RemoteDoorOn))
 						n\IdleTimer = n\IdleTimer + fps\Factor[0]
 					ElseIf Rand(260 - (80 * SelectedDifficulty\AggressiveNPCs) + (80 * (Not RemoteDoorOn))) = 1
@@ -427,7 +427,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					If (PrevFrame < 83.0 And n\Frame >= 83.0) Lor (PrevFrame < 99.0 And n\Frame >= 99.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 				EndIf
 				
-				If Dist > PowTwo(HideDistance * 1.5)
+				If Dist > PowTwo(fog\HideDistance * 1.5)
 					If n\IdleTimer < 70.0 * (20.0 - (10.0 * SelectedDifficulty\AggressiveNPCs) + (10.0 * RemoteDoorOn))
 						n\IdleTimer = n\IdleTimer + fps\Factor[0]
 					ElseIf Rand(260 - (80 * SelectedDifficulty\AggressiveNPCs) + (80 * (Not RemoteDoorOn))) = 1
@@ -572,7 +572,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		Local n2.NPCs
 		
-		If Dist < PowTwo(HideDistance)
+		If Dist < PowTwo(fog\HideDistance)
 			Local PrevFrame# = n\Frame
 			
 			Select n\State 
@@ -888,7 +888,7 @@ Function UpdateNPCType049%(n.NPCs)
 				;[End Block]
 			Case 2.0 ; ~ Being active
 				;[Block]
-				If Dist < PowTwo(HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
+				If Dist < PowTwo(fog\HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 					PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState)
 					If n\State2 > 0.0
@@ -1098,7 +1098,7 @@ Function UpdateNPCType049%(n.NPCs)
 					n\State = 2.0
 				Else
 					If n\State3 = 6.0
-						If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(HideDistance)
+						If EntityDistanceSquared(n\Collider, me\Collider) > PowTwo(fog\HideDistance)
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\PathLocation = 0
 							n\PathTimer = 0.0
@@ -1328,7 +1328,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				EndIf
 				
 				; ~ Teleport closer to the player
-				If Dist > PowTwo(HideDistance * 2.0)
+				If Dist > PowTwo(fog\HideDistance * 2.0)
 					If n\IdleTimer < 70.0 * (20.0 - (10.0 * SelectedDifficulty\AggressiveNPCs) + (10.0 * RemoteDoorOn))
 						n\IdleTimer = n\IdleTimer + fps\Factor[0]
 					ElseIf Rand(350 - (120 * SelectedDifficulty\AggressiveNPCs) + (120 * (Not RemoteDoorOn))) = 1
@@ -1677,7 +1677,7 @@ Function UpdateNPCType096%(n.NPCs)
 	
 	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 	Local Angle# = WrapAngle(DeltaYaw(n\Collider, me\Collider))
-	Local IsLooking% = Dist < PowTwo(Min(HideDistance, fog\FarDist * LightVolume)) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
+	Local IsLooking% = Dist < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume)) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
 	Local i%
 	
 	If wi\SCRAMBLE > 0 And IsLooking
@@ -2526,7 +2526,7 @@ Function UpdateNPCType173%(n.NPCs)
 					n\State = Max(0.0, n\State - fps\Factor[0] / 20.0)
 				Else
 					; ~ Teleport to a room closer to the player
-					If Dist > PowTwo(HideDistance * 0.8) ; ~ Move randomly from waypoint to another
+					If Dist > PowTwo(fog\HideDistance * 0.8) ; ~ Move randomly from waypoint to another
 						If Rand(70) = 1 Then TeleportCloser(n)
 					Else ; ~ Actively move towards the player
 						n\State = CurveValue(SoundVol, n\State, 3.0)
@@ -2641,7 +2641,7 @@ Function UpdateNPCType173%(n.NPCs)
 				Local Tmp% = False
 				
 				Dist = EntityDistanceSquared(n\Collider, n_I\MTFLeader\Collider)
-				If Dist > PowTwo(HideDistance / 2.0)
+				If Dist > PowTwo(fog\HideDistance / 2.0)
 					If (Not EntityInView(n\OBJ, Camera)) Then Tmp = True
 				EndIf
 				If (Not Tmp)
@@ -2853,7 +2853,7 @@ Function UpdateNPCType457%(n.NPCs)
 				;[End Block]
 			Case 2.0 ; ~ Being active
 				;[Block]
-				If Dist < PowTwo(HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
+				If Dist < PowTwo(fog\HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 					PlayerSeeable = NPCSeesPlayer(n, 10.0 - me\CrouchState)
 					If n\State2 > 0.0
@@ -4102,7 +4102,7 @@ Function UpdateNPCType966%(n.NPCs)
 	
 	Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 	
-	If Dist < PowTwo(HideDistance)
+	If Dist < PowTwo(fog\HideDistance)
 		; ~ n\State: The "general" state (Idles / Wanders off/ Attacks / Echo and etc.)
 		
 		; ~ n\State2: Timer for doing raycasts
@@ -4450,7 +4450,7 @@ Function UpdateNPCType999%(n.NPCs)
 	Local i%
 	Local de.Decals
 	
-	If Dist < PowTwo(HideDistance)
+	If Dist < PowTwo(fog\HideDistance)
 		Local Pvt%, Visible%
 		
 		If n\State < 4.0
@@ -4924,7 +4924,7 @@ Function UpdateNPCType1499_1%(n.NPCs)
 	Local PrevFrame# = n\Frame
 	Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 	
-	If n\Idle = 0 And Dist < PowTwo(HideDistance * 3.0)
+	If n\Idle = 0 And Dist < PowTwo(fog\HideDistance * 3.0)
 		If n\PrevState = 0
 			If n\State = 0.0 Lor n\State = 2.0
 				For n2.NPCs = Each NPCs
@@ -7122,7 +7122,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				If n\State2 > 0.0
 					Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
 					If NPCSeesNPC(n\Target, n) = 1 Then n\State2 = 70.0 * (15.0 - (5.0 * (n\Target = n_I\Curr066)))
-					If n\State2 > 70.0 And Dist > PowTwo(HideDistance) Then n\State2 = 70.0
+					If n\State2 > 70.0 And Dist > PowTwo(fog\HideDistance) Then n\State2 = 70.0
 					
 					; ~ Set a timer to step back
 					If Dist < 9.0 And n\Target <> n_I\Curr066 Then n\State3 = 70.0 * 3.0
