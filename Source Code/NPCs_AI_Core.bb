@@ -5660,7 +5660,9 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 				
-				SetEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
+				Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.0, 0.0)
+				ShowEntity(n\ShootLight)
+				
 				n\Reload = 8.0
 			EndIf
 			;[End Block]
