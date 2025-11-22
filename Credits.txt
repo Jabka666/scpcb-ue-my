@@ -481,7 +481,7 @@
 		Gameplay Overhaul mod for "SCP - Containment Breach":
 		https://www.moddb.com/mods/scp-containment-breach-gameplay-overhaul
 
-		SCP - Containment Breach Nine Tailed Fox:
+		SCP - Containment Breach Nine-Tailed Fox:
 		https://store.steampowered.com/app/1304510/SCP_NineTailed_Fox/
 
 *The game is based on the works of the SCP Foundation community.
