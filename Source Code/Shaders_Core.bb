@@ -36,8 +36,8 @@ Global GammaEffect%
 Global EffectsBits% = -1
 
 Function InitShaders%()
-	Local Width% = GraphicsWidth()
-	Local Height% = GraphicsHeight()
+	Local Width% = opt\GraphicWidth / 4
+	Local Height% = opt\GraphicHeight / 4
 	
 	PostEffectQuad = CreateFullscreenQuad(QuadCamera)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
@@ -54,8 +54,9 @@ Function InitShaders%()
 	GammaEffect = LoadEffectEx(POSTEFFECTS_PATH + "Gamma.fx")
 	
 	DebugLog(GetEffectError())
-	BloomTex = CreateTexture(Width / 4, Height / 4, 1 + 256 + 16384)
-	BloomBlur = CreateTexture(Width / 4, Height / 4, 1 + 256 + 16384)
+	
+	BloomTex = CreateTexture(Width, Height, 1 + 256 + 16384)
+	BloomBlur = CreateTexture(Width, Height, 1 + 256 + 16384)
 	
 	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
 	

@@ -105,12 +105,10 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_SCATTERING, "SCATTERING")
 	CreateShadeVariation(DEFERRED_SHADE_LOD0, "LOD0")
 
-	Local Width% = GraphicsWidth(), Height% = GraphicsHeight()
-	
-	MRTColor = CreateTexture(Width, Height, 1 + 2 + 256 + 16384)
-	MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 256 + 16384)
-	MRTDepth = CreateTexture(Width, Height, 131072)
-	MRTNormal = CreateTexture(Width, Height, 1 + 2 + 256 + 16384)
+	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
+	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
+	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 131072)
+	MRTNormal = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
 	
 	For i = 1 To SHADOW_MAP_MIPMAPS
 		Local iRounded% = RoundTwo(i)
@@ -199,7 +197,7 @@ Function InitDeferred%()
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
 	
-	TempColorTexture = CreateTexture(Width, Height, 1 + 256 + 16384)
+	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
 	
 End Function
 

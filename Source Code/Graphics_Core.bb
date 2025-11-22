@@ -101,10 +101,10 @@ End Function
 Function CreateFullscreenQuad%(Parent% = 0)
 	Local Quad% = CreateSprite(Parent)
 	
-	ScaleSprite(Quad, 1.0, (Float(GraphicsHeight()) / Float(GraphicsWidth())))
+	ScaleSprite(Quad, 1.0, (Float(opt\GraphicHeight) / Float(opt\GraphicWidth)))
 	
-	Local PixelWidth# = 0.5 / GraphicsWidth()
-	Local PixelHeight# = 0.5 / GraphicsHeight()
+	Local PixelWidth# = 0.5 / opt\GraphicWidth
+	Local PixelHeight# = 0.5 / opt\GraphicHeight
 	
 	MoveEntity(Quad, -PixelWidth, PixelHeight, 1.0001)
 	Return(Quad)
