@@ -267,7 +267,7 @@ End Function
 Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 	If State = -1
 		State = DEFERRED_DIFF
-
+		
 		Local t1% = GetBrushTexture(Brush, 0)
 		Local mat.Materials
 		
@@ -412,14 +412,14 @@ End Function
 
 Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, CastShadows% = True, Scattering# = 0.01, Tween# = 1.0)
 	If Intensity <= 0.0 Then Return
+	
 	Local VolumeScale# = Range * 1.25
 	Local Volume%, TanValue#, ShadowIntensity# = 1.0
-	
 	Local DistToLight# = Distance(EntityX(Cam, True), x, EntityY(Cam, True), y, EntityZ(Cam, True), z)
 	Local EffectBits% = GetShadeLight(LightType)
 
 	If CastShadows And LightType <> DEFERRED_LIGHT_DIRECTIONAL
-		ShadowIntensity# = GetFade(Max(DistToLight - Range, 0), ShadowsDistance * ShadowsFade, ShadowsDistance)
+		ShadowIntensity = GetFade(Max(DistToLight - Range, 0), ShadowsDistance * ShadowsFade, ShadowsDistance)
 		If ShadowIntensity <= 0.0 Then CastShadows = False
 	EndIf
 	
@@ -504,14 +504,16 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	RenderEntity(Cam, Volume, Tween)
 End Function
 
-Global DEFERRED_LIGHT_POINT_CULLING_SCALE# = Tan(90.0 * 0.5)
+Global DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN# = Tan(90.0 * 0.5)
+Global DEFERRED_LIGHT_POINT_OFFSET_TAN# = Tan(90.0 * dtor * 0.5)
 
 Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, Tween# = 1.0)
+	Local ShadowMapWidth% = TextureWidth(ShadowMap)
+	Local ShadowMapHeight% = TextureHeight(ShadowMap)
+	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight)
 	Local i%
 	
-	Local DummyTexture% = FindDummyTexture(TextureWidth(ShadowMap), TextureHeight(ShadowMap))
-	
-	If DummyTexture = 0 Then DebugLog("Unknown texture error" + TextureWidth(ShadowMap) + " " + TextureHeight(ShadowMap))
+	If DummyTexture = 0 Then DebugLog("Unknown texture error" + ShadowMapWidth + " " + ShadowMapHeight)
 	
 	SetBuffer(TextureBuffer(DummyTexture))
 	
@@ -528,7 +530,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			CameraRange(DeferredCamera, 0.1, DIRECTIONAL_LIGHT_EXTRUSION + 15.0)
 			CameraProjMode(DeferredCamera, 2)
 			CameraZoom(DeferredCamera, DIRECTIONAL_LIGHT_RANGE)
-			CameraViewport(DeferredCamera, 0, 0, TextureWidth(ShadowMap), TextureHeight(ShadowMap))
+			CameraViewport(DeferredCamera, 0, 0, ShadowMapWidth, ShadowMapHeight)
 			
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
@@ -546,9 +548,9 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			
 			SetBuffer(TextureBuffer(ShadowMap))
 			
-			Local Width% = TextureWidth(ShadowMap) / 6
-			Local Height% = TextureHeight(ShadowMap)
-			Local CullingScale# = DEFERRED_LIGHT_POINT_CULLING_SCALE * Range
+			Local Width% = ShadowMapWidth / 6
+			Local Height% = ShadowMapHeight
+			Local CullingScale# = DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN * Range
 			
 			PositionEntity(DeferredCone, x, y, z)
 			
@@ -564,7 +566,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 				EndIf
 			Next
 			
-			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * Tan(90.0 * dtor * 0.5)) * (SHADOW_MAP_SIZE / TextureHeight(ShadowMap)))
+			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * DEFERRED_LIGHT_POINT_OFFSET_TAN) * (SHADOW_MAP_SIZE / ShadowMapHeight))
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
@@ -572,12 +574,12 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			
-			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * Tan(FOV * dtor * 0.5)) * (SHADOW_MAP_SIZE / TextureHeight(ShadowMap)))
+			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * Tan(FOV * dtor * 0.5)) * (SHADOW_MAP_SIZE / ShadowMapHeight))
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
 			;[End Block]
 	End Select
 	
-	EffectVector(DeferredShade, "ShadowMapSize", TextureWidth(ShadowMap), TextureHeight(ShadowMap))
+	EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 	EffectTexture(DeferredShade, "tShadowMap", ShadowMap)
 	
 	SetBuffer(TextureBuffer(MRTColor))
@@ -824,15 +826,17 @@ Function GetShadeEffect%(Bit%)
 End Function
 
 Function CreateInputVariation%(Bit%, Define$)
-	Local iv.InputEffectVariation = New InputEffectVariation
+	Local iv.InputEffectVariation
 	
+	iv.InputEffectVariation = New InputEffectVariation
 	iv\Bit = Bit
 	iv\Define = Define
 End Function
 
 Function CreateShadeVariation%(Bit%, Define$)
-	Local iv.ShadeEffectVariation = New ShadeEffectVariation
+	Local iv.ShadeEffectVariation 
 	
+	iv.ShadeEffectVariation = New ShadeEffectVariation
 	iv\Bit = Bit
 	iv\Define = Define
 End Function

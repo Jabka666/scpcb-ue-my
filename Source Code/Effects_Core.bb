@@ -52,7 +52,7 @@ Function LoadEffectEx%(File$, Defines$ = "")
 		For i = 0 To StringsAmount - 1
 			Local Splitted$ = SplitString(Defines, " ", i)
 			
-			If Splitted <> "" Then  WriteLine(c, "#define " + Splitted)
+			If Splitted <> "" Then WriteLine(c, "#define " + Splitted)
 		Next
 		While (Not Eof(f))
 			WriteLine(c, ReadLine(f))
