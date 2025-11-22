@@ -309,7 +309,7 @@ End Function
 Function UpdateLights%(Cam%)
 	Local l.Lights, i%, Random#, Alpha#
 	
-	LightRenderDistance = Max(GetCameraRangeFar(Camera), 7.0)
+	LightRenderDistance = Max(fog\HideDistance, 7.0)
 	
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.1 And ((l\room <> Null And IsLightVisible(l)) Lor (l\room = Null))
@@ -351,6 +351,7 @@ Function RemoveLight%(l.Lights)
 End Function
 
 Const RoomScale# = 8.0 / 2048.0
+Const LightRangeScale# = RoomScale * 1.2
 
 Type SoundEmitters
 	Field OBJ%
@@ -665,10 +666,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\y = ReadFloat(f) * RoomScale
 					tl\z = ReadFloat(f) * RoomScale
 					tl\LightType = DEFERRED_LIGHT_POINT
-					tl\Range = ReadFloat(f) / 200.0
+					tl\Range = ReadFloat(f) * LightRangeScale
 					
 					lColor = ReadString(f)
-					Intensity = ReadFloat(f) * 0.8
+					Intensity = ReadFloat(f)
 					tl\R = Int(Piece(lColor, 1)) * Intensity
 					tl\G = Int(Piece(lColor, 2)) * Intensity
 					tl\B = Int(Piece(lColor, 3)) * Intensity
@@ -689,10 +690,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\y = ReadFloat(f) * RoomScale
 					tl\z = ReadFloat(f) * RoomScale
 					tl\LightType = DEFERRED_LIGHT_SPOT
-					tl\Range = ReadFloat(f) / 200.0
+					tl\Range = ReadFloat(f) * LightRangeScale
 					
 					lColor = ReadString(f)
-					Intensity = ReadFloat(f) * 0.8
+					Intensity = ReadFloat(f)
 					tl\R = Int(Piece(lColor, 1)) * Intensity
 					tl\G = Int(Piece(lColor, 2)) * Intensity
 					tl\B = Int(Piece(lColor, 3)) * Intensity
@@ -3931,7 +3932,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
-		CameraRange(sc\Cam, 0.05, 8.0)
+		CameraRange(sc\Cam, 0.05, 6.0 * CameraRangeScale)
 		CameraZoom(sc\Cam, 0.8)
 		If sc\room\RoomTemplate\RoomID <> r_cont1_173_intro
 			CameraFogMode(sc\Cam, 1)

@@ -3569,6 +3569,8 @@ Function ClearFogColor%()
 	fog\AmbientR = 0.0 : fog\AmbientG = 0.0 : fog\AmbientB = 0.0
 End Function
 
+Const CameraRangeScale# = 1.25
+
 Function UpdateZoneColor%()
 	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
@@ -3579,7 +3581,7 @@ Function UpdateZoneColor%()
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1 * LightVolume, DistFog)
 	; ~ Allow to use big range for debugging
-	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * 1.25)
+	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * CameraRangeScale)
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 		SetZoneColor(FogColorStorageTunnels)
@@ -3587,17 +3589,17 @@ Function UpdateZoneColor%()
 		SetZoneColor(FogColorIntro, AmbientOutside)
 		LightVolume = 1.0
 		CameraFogRange(Camera, 5.0, 60.0)
-		CameraRange(Camera, 0.01, 72.0)
+		CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
 	ElseIf IsOutSide
 		SetZoneColor(FogColorOutside, AmbientOutside)
 		LightVolume = 1.0
 		CameraFogRange(Camera, 5.0, 60.0)
-		CameraRange(Camera, 0.01, 72.0)
+		CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, 80.0)
-		CameraRange(Camera, 0.01, 96.0)
+		CameraRange(Camera, 0.01, 80.0 * CameraRangeScale)
 	ElseIf PD_event <> Null And PD_event\room = PlayerRoom
 		LightVolume = 1.0
 		If PD_event\EventState2 = PD_TrenchesRoom Lor PD_event\EventState2 = PD_TowerRoom
@@ -3605,7 +3607,7 @@ Function UpdateZoneColor%()
 			If PD_event\EventState2 = PD_TrenchesRoom
 				fog\FarDist = 30.0
 				CameraFogRange(Camera, 5.0, fog\FarDist)
-				CameraRange(Camera, 0.01, 35.0)
+				CameraRange(Camera, 0.01, fog\FarDist * CameraRangeScale)
 			EndIf
 		ElseIf PD_event\EventState2 = PD_FakeTunnelRoom
 			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
@@ -3625,7 +3627,7 @@ Function UpdateZoneColor%()
 				If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
 			EndIf
 			CameraFogRange(Camera, 0.1, 6.0)
-			CameraRange(Camera, 0.01, 7.2)
+			CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
 		EndIf
 	EndIf
 	

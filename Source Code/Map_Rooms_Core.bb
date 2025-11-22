@@ -94,7 +94,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 630.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 630.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
 			;[End Block]
 		Case r_cont1_005
 			;[Block]
@@ -919,7 +919,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 49.0 * RoomScale, r\y + 689.0 * RoomScale, r\z + 913.0 * RoomScale, 0.0, True)
 			
-			r\RoomLights.Lights[0] = AddLight(r, r\x + 996.5 * RoomScale, r\y + 756.5 * RoomScale, r\z + 608.5 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * RoomScale, 255, 50, 50, True, 0.1, False)
+			r\RoomLights.Lights[0] = AddLight(r, r\x + 996.5 * RoomScale, r\y + 756.5 * RoomScale, r\z + 608.5 * RoomScale, DEFERRED_LIGHT_SPOT, 100.0 * LightRangeScale, 255, 50, 50, True, 0.1, False)
 			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 0.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
@@ -1167,12 +1167,12 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 132.0 * RoomScale, -90.0, True)
 			
-			r\RoomLights.Lights[0] = AddLight(r, r\x - 39.0 * RoomScale, r\y + 571.0 * RoomScale, r\z, DEFERRED_LIGHT_SPOT, 150.0 * RoomScale, 255, 50, 50, True, 0.1, False)
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 39.0 * RoomScale, r\y + 571.0 * RoomScale, r\z, DEFERRED_LIGHT_SPOT, 100.0 * LightRangeScale, 255, 50, 50, True, 0.1, False)
 			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 90.0, 0.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
-			r\RoomLights.Lights[1] = AddLight(r, r\x, r\y + 450.0 * RoomScale, r\z, DEFERRED_LIGHT_POINT, 1100.0 * RoomScale, 190 * 1.2, 213 * 1.2, 255 * 1.2, False, 0.0, True)
+			r\RoomLights.Lights[1] = AddLight(r, r\x, r\y + 450.0 * RoomScale, r\z, DEFERRED_LIGHT_POINT, 900.0 * LightRangeScale, 190 * 1.2, 213 * 1.2, 255 * 1.2, False, 0.0, True)
 			r\RoomLights[1]\Scripted = True : r\RoomLights[1]\Scattering = 0.0
 			HideEntity(r\RoomLights[1]\OBJ)
 			
@@ -1266,7 +1266,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 584.0 * RoomScale, r\z - 367.0 * RoomScale)
 			
-			r\RoomLights.Lights[0] = AddLight(r, r\x - 44.5 * RoomScale, r\y - 590.0 * RoomScale, r\z - 362.0 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * RoomScale, 255, 50, 50, True, 0.1, False)
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 44.5 * RoomScale, r\y - 590.0 * RoomScale, r\z - 362.0 * RoomScale, DEFERRED_LIGHT_SPOT, 100.0 * LightRangeScale, 255, 50, 50, True, 0.1, False)
 			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 180.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
@@ -2100,7 +2100,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room1_dead_end_hcz
 			;[Block]
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 133.0 * RoomScale, 600.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.6)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 133.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.6)
 			;[End Block]
 		Case r_cont1_035
 			;[Block]
@@ -2822,7 +2822,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[4], r\OBJ)
 			
 			; ~ Red light
-			r\RoomLights.Lights[0] = AddLight(r, r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * RoomScale, 255, 50, 50, True, 0.1, False)
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 622.0 * RoomScale, r\y - 4735.0 * RoomScale, r\z + 672.5 * RoomScale, DEFERRED_LIGHT_SPOT, 100.0 * LightRangeScale, 255, 50, 50, True, 0.1, False)
 			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 270.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
@@ -3085,7 +3085,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers[0] = CreateLever(r, r\x + 236.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 753.0 * RoomScale, 0.0, False)
 			
-			r\RoomLights.Lights[0] = AddLight(r, r\x + 358.5 * RoomScale, r\y + 184.7 * RoomScale, r\z + 758.0 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * RoomScale, 255, 50, 50, True, 0.1, False)
+			r\RoomLights.Lights[0] = AddLight(r, r\x + 358.5 * RoomScale, r\y + 184.7 * RoomScale, r\z + 758.0 * RoomScale, DEFERRED_LIGHT_SPOT, 100.0 * LightRangeScale, 255, 50, 50, True, 0.1, False)
 			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 180.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
@@ -3117,7 +3117,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, -45.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			CreateAlarmLamp(r, r\x, r\y + 667.0 * RoomScale, r\z - 161.0 * RoomScale, 800.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
+			CreateAlarmLamp(r, r\x, r\y + 667.0 * RoomScale, r\z - 161.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			CreateCustomCenter(r, r\x, r\z - 832.0 * RoomScale)
 			;[End Block]
@@ -3280,7 +3280,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x, r\y, r\z + 2225.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			CreateAlarmLamp(r, r\x, r\y + 989.0 * RoomScale, r\z, 1400.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 90.0, 4.5)
+			CreateAlarmLamp(r, r\x, r\y + 989.0 * RoomScale, r\z, 1200.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 4.5)
 			
 			CreateCustomCenter(r, r\x, r\z - 820.0 * RoomScale)
 			;[End Block]
@@ -3391,7 +3391,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x, r\y, r\z + 2225.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			CreateAlarmLamp(r, r\x, r\y + 1035.0 * RoomScale, r\z, 1400.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 90.0, 4.5)
+			CreateAlarmLamp(r, r\x, r\y + 1035.0 * RoomScale, r\z, 1200.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 4.5)
 			
 			CreateCustomCenter(r, r\x, r\z - 820.0 * RoomScale)
 			;[End Block]
@@ -3512,7 +3512,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1053.0 * RoomScale, 1000.0 * RoomScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1053.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
 			;[End Block]
 		Case r_room1_lifts
 			;[Block]
