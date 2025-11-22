@@ -923,7 +923,7 @@
 		"glow": true,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "\"I need SCP-079's help if I want to go through Gate B, or a distraction of some kind to go through Gate A.\""
+		"drink_message": "From the vast amount of meaningless information that filled your head, you managed to extract the following. The Clockworks can turn the blue key into a red one, but it may take many attempts; the terrifying bird with a huge eye will not cause harm if you wear the ring; the MTF unit at Gate A will refuse to shoot if... unfortunately, knowledge quickly slips away."
 	},
 	{
 		"name": ["Mercury", "Quick Silver"],
