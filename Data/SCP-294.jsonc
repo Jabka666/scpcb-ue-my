@@ -923,7 +923,7 @@
 		"glow": true,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "SCP-914 can turn the blue key into a red one, if you're lucky. The ring can help escape from Larry's dimension. MTF at Gate A will refuse to shoot if... sadly, knowledge quickly slips away."
+		"drink_message": "SCP-914 can turn the blue key into a red one, if you're lucky. MTF at Gate A will refuse to shoot if you... sadly, knowledge quickly slips away."
 	},
 	{
 		"name": ["Mercury", "Quick Silver"],
