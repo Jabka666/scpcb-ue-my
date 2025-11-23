@@ -923,7 +923,7 @@
 		"glow": true,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "SCP-914 can turn the blue key into a red one, but it may take many attempts; the bird with a huge eye will not cause harm if you wear the ring; the MTF unit at Gate A will refuse to shoot if... unfortunately, knowledge quickly slips away."
+		"drink_message": "SCP-914 can turn the blue key into a red one, if you're lucky. The ring can help escape from Larry's dimension. MTF at Gate A will refuse to shoot if... sadly, knowledge quickly slips away."
 	},
 	{
 		"name": ["Mercury", "Quick Silver"],
@@ -1145,7 +1145,7 @@
 		"glow": true,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense2.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Burn.ogg",
-		"drink_message": "\"A pirate I was meant to be, trim the sails and roam the sea! Unfortunately, as you start feeling a terrible burning sensation in your throat and stomach, you realize you're actually not used to drinking such heavy stuff...\"",
+		"drink_message": "\"A pirate I was meant to be, trim the sails and roam the sea! Unfortunately, you suddenly realize you're actually not used to drinking such heavy stuff...\"",
 		"death_message": "Subject D-9341 was found face down in a puddle of blood, upper digestive tract seemingly molten by corrosion. A cup with the Message \"The Styx is a river, not a sea, dumbass.\" printed on it was found near the corpse. Cause of death is without a doubt related to SCP-294.",
 		"death_timer": 8
 	},
@@ -1820,7 +1820,7 @@
 		"alpha": 0.8,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "Even if you get out of here, you could end up running from these people for the rest of your life. They made a deal with the government to get you out of death row! You can't get away from them!"
+		"drink_message": "Even if you get out of here, you could end up running from these people for the rest of your life. So any attempts to escape are pointless."
 	},
 	{
 		"name": ["Luck"],
