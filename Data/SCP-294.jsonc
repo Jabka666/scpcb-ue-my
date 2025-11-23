@@ -923,7 +923,7 @@
 		"glow": true,
 		"dispense_sound": "SFX\\SCP\\294\\Dispense3.ogg",
 		"drink_sound": "SFX\\SCP\\294\\Slurp.ogg",
-		"drink_message": "I need to find a way to make a deal with SCP-079 to let me out through Gate B, otherwise find a way to distract the MTF with a major threat at Gate A or find something to sneak by."
+		"drink_message": "I must a way to make a deal with SCP-079 to let me out through Gate B, otherwise find a way to distract the MTF with a major threat at Gate A or find something to sneak by."
 	},
 	{
 		"name": ["Mercury", "Quick Silver"],
