@@ -297,11 +297,22 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 	Delete(itt)
 End Function
 
+Function DocHasCopy%(itt.ItemTemplates)
+	Select Right(itt\Name, 3)
+		Case "427", "500", "513", "714", "860"
+			;[Block]
+			Return(False)
+			;[End Block]
+	End Select
+	Return(True)
+End Function
+
 Function GetRandDocument$()
 	Local itt.ItemTemplates
 	
 	For itt.ItemTemplates = Each ItemTemplates
-		If Instr(itt\Name, "Document SCP-") <> 0 And Rand(37) = 1 Then Return(itt\Name)
+		If (Not DocHasCopy(itt)) Then Continue
+		If Instr(itt\Name, "Document SCP-") <> 0 And Rand(31) = 1 Then Return(itt\Name)
 	Next
 	Return("Document SCP-005")
 End Function
