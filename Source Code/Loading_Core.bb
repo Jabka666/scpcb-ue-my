@@ -935,7 +935,7 @@ Function LoadMonitors%()
 		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - MONITOR_895_OVERLAY_1) + ").png", 1, DeleteAllTextures)
 	Next
 	
-	mon_I\MonitorOverlayID[MONITOR_096_OVERLAY] = LoadTexture_Strict("GFX\Screens\screen_096.png", 1, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_096_OVERLAY] = LoadTexture_Strict("GFX\Map\Screens\screen_096.png", 1, DeleteAllTextures)
 	
 	mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor2.b3d")
 	mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor_checkpoint.b3d")
