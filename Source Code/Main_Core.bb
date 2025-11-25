@@ -5536,7 +5536,7 @@ Function UpdateUseItem%(item.Items)
 									n\LastDist = 0.0
 									SetNPCFrame(n, 1493.0)
 								EndIf
-								n\State = 6.0
+								n\State = 5.0
 							EndIf
 							;[End Block]
 						Case NPCType1048_A, NPCTypeCockroach

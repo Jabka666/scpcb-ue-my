@@ -3806,9 +3806,9 @@ Function UpdateNPCType939%(n.NPCs)
 			RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 30.0), 0.0)
 			
 			If Dist < 0.18
-				n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 15.0)
+				n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 30.0)
 				If n\Frame > 770.0
-					AnimateNPC(n, Min(AnimTime(n\OBJ), 826.0), 851.0, 0.32, False)
+					AnimateNPC(n, Min(AnimTime(n\OBJ), 826.0), 851.0, 0.34, False)
 					If (PrevFrame < 789.0 And n\Frame >= 789.0) Lor (PrevFrame < 809.0 And n\Frame >= 809.0) Lor (PrevFrame < 828.0 And n\Frame >= 828.0) Lor (PrevFrame < 845.0 And n\Frame >= 845.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 12.0)
 					If n\Frame > 850.9
 						n\LastDist = Rand(3)
@@ -3860,7 +3860,7 @@ Function UpdateNPCType939%(n.NPCs)
 			Else
 				n\CurrSpeed = CurveValue(n\Speed * 0.3 * Min(Sqr(Dist), 1.0), n\CurrSpeed, 10.0)
 				If n\Frame < 785.0
-					AnimateNPC(n, 770.0, 785.0, 0.32, False)
+					AnimateNPC(n, 770.0, 785.0, 0.34, False)
 				Else
 					AnimateNPC(n, 786.0, 825.0, 28.0 * n\CurrSpeed)
 					If (PrevFrame < 789.0 And n\Frame >= 789.0) Lor (PrevFrame < 809.0 And n\Frame >= 809.0)
@@ -3891,7 +3891,7 @@ Function UpdateNPCType939%(n.NPCs)
 				If n\State3 = 0.0
 					If n\Frame < 859.0
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
-						AnimateNPC(n, 852.0, 859.0, 0.32, False)
+						AnimateNPC(n, 852.0, 859.0, 0.34, False)
 					Else
 						n\CurrSpeed = CurveValue(n\Speed , n\CurrSpeed, 15.0)
 						AnimateNPC(n, 860.0, 876.0, n\CurrSpeed * 10.0)
@@ -3900,7 +3900,7 @@ Function UpdateNPCType939%(n.NPCs)
 				Else
 					If n\Frame < 1591.0
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
-						AnimateNPC(n, 1581.0, 1591.0, 0.32, False)
+						AnimateNPC(n, 1581.0, 1591.0, 0.34, False)
 					Else
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
 						AnimateNPC(n, 1592.0, 1607.0, n\CurrSpeed * 10.0)
@@ -4043,7 +4043,7 @@ Function UpdateNPCType939%(n.NPCs)
 				EndIf
 			EndIf
 			;[End Block]
-		Case 6.0 ; ~ Stunned by Fine SCP-513
+		Case 5.0 ; ~ Stunned by Fine SCP-513
 			;[Block]
 			If n\State3 = 0.0
 				AnimShift = 100.0 * (n\LastDist = 2.0)
@@ -4066,7 +4066,7 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	If EntityDistanceSquared(n\Collider, me\Collider) < 49.0 And EntityVisible(me\Collider, n\Collider) And EntityInView(n\Collider, Camera) Then GiveAchievement("939")
 	
-	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
+	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) And (Not me\Terminated); And (Not n\IgnorePlayer)
 		Visible = EntityVisible(me\Collider, n\Collider) ; ~ TODO: Remove EntityVisible. Place only after Distance functions!
 		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 4.0)
 		If Dist < 2.25 Lor (PowTwo(me\SndVolume) > Dist And Visible)
