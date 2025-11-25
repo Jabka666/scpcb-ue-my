@@ -2900,6 +2900,13 @@
 			"color": "announcement"
 		}
 	],
+	"SFX\\SCP\\079\\Angry.ogg": [
+		{
+			"text": "YOU SHOULD NOT HAVE DONE THAT.",
+			"delay": 1.25,
+			"color": "announcement"
+		}
+	],
 	"SFX\\SCP\\079\\GateB.ogg": [
 		{
 			"text": "THE DOORS TO GATE B ARE NOW OPEN.",
@@ -2915,7 +2922,7 @@
 		},
 		{
 			"text": "TAKE WHAT YOU NEED AND LEAVE.",
-			"delay": 3.1,
+			"delay": 3.8,
 			"color": "announcement"
 		}
 	],
