@@ -3723,7 +3723,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x + 1780.0 * RoomScale, r\y - 248.0 * RoomScale, r\z - 276.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-294", it_paper, r\x + 1477.0 * RoomScale, r\y - 240.0 * RoomScale, r\z - 623.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-294", it_paper, r\x + 1862.0 * RoomScale, r\y - 120.0 * RoomScale, r\z - 926.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Cup", it_cup, r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
@@ -3731,7 +3731,7 @@ Function FillRoom%(r.Rooms)
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "orange"))
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Cup", it_cup, r\x + 1412.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 716.0 * RoomScale, 87, 62, 45)
+			it.Items = CreateItem("Cup", it_cup, r\x + 937.0 * RoomScale, r\y - 187.0 * RoomScale, r\z - 837.0 * RoomScale, 87, 62, 45)
 			it\Name = "COFFEE"
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "coffee"))
 			EntityParent(it\Collider, r\OBJ)
