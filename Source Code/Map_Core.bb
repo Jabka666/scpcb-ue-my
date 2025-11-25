@@ -2309,7 +2309,7 @@ Function RemoveRoom%(r.Rooms)
 	Local i%
 	
 	For i = 0 To MaxRoomTextures - 1
-		r\Textures[i] = 0
+		If r\Textures[i] <> 0 Then DeleteSingleTextureEntryFromCache(r\Textures[i]) : r\Textures[i] = 0
 	Next
 	For i = 0 To MaxRoomObjects - 1
 		If r\Objects[i] <> 0 Then EntityParent(r\Objects[i], 0)
