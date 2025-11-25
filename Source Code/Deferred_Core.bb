@@ -284,7 +284,7 @@ Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 				
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_NORMAL), 0, MATERIAL_NORMAL)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ROUGHNESS), 0, MATERIAL_ROUGHNESS)
-				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_EMISSIVE), 0, MATERIAL_EMISSIVE)
+				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_EMISSIVE), Frame, MATERIAL_EMISSIVE)
 				BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
 			EndIf
 			FreeTexture(t1) : t1 = 0
