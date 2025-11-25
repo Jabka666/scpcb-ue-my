@@ -2509,7 +2509,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 					EndIf
 				Next
 			ElseIf e\EventState2 = 6.0
-				If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState + me\SndVolume) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0
+				If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState + me\SndVolume) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0.0
 					e\EventState2 = 7.0
 				Else
 					; ~ Still playing the Music for SCP-049 (in the real, SCP-049's State will be set to 2, causing it to stop playing the chasing track)
@@ -8571,7 +8571,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 				; ~ The King
 				e\room\NPC.NPCs[0] = CreateNPC(NPCType1499_1, e\room\x - 1917.0 * RoomScale, e\room\y + 1904.0 * RoomScale, e\room\z + 2308.0 * RoomScale)
 				e\room\NPC[0]\PrevState = 2 : e\room\NPC[0]\Angle = 270.0
-				e\room\NPC[0]\LastSeen = 1
+				e\room\NPC[0]\LastSeen = 1.0
 				EntityColor(e\room\NPC[0]\OBJ, 255.0, 204.0, 140.0)
 				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\NPC[0]\Angle, 0.0)
 				; ~ Guard next to king

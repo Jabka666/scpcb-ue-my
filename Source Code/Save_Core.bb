@@ -226,7 +226,7 @@ Function SaveGame%(File$)
 		
 		WriteByte(f, n\Idle)
 		WriteFloat(f, n\LastDist)
-		WriteInt(f, n\LastSeen)
+		WriteFloat(f, n\LastSeen)
 		WriteFloat(f, n\CurrSpeed)
 		WriteFloat(f, n\Angle)
 		WriteFloat(f, n\Reload)
@@ -809,7 +809,7 @@ Function LoadGame%(File$)
 		
 		n\Idle = ReadByte(f)
 		n\LastDist = ReadFloat(f)
-		n\LastSeen = ReadInt(f)
+		n\LastSeen = ReadFloat(f)
 		
 		n\CurrSpeed = ReadFloat(f)
 		n\Angle = ReadFloat(f)
@@ -868,7 +868,7 @@ Function LoadGame%(File$)
 				;[End Block]
 			Case NPCType1499_1
 				;[Block]
-				If n\LastSeen = 1 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
+				If n\LastSeen = 1.0 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
 				;[End Block]
 		End Select
 	Next
@@ -1827,7 +1827,7 @@ Function LoadGameQuick%(File$)
 		
 		n\Idle = ReadByte(f)
 		n\LastDist = ReadFloat(f)
-		n\LastSeen = ReadInt(f)
+		n\LastSeen = ReadFloat(f)
 		
 		n\CurrSpeed = ReadFloat(f)
 		n\Angle = ReadFloat(f)
@@ -1886,7 +1886,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case NPCType1499_1
 				;[Block]
-				If n\LastSeen = 1 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
+				If n\LastSeen = 1.0 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
 				;[End Block]
 		End Select
 	Next

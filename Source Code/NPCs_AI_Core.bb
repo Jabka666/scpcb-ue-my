@@ -1770,9 +1770,9 @@ Function UpdateNPCType096%(n.NPCs)
 						EndIf
 						
 						If MilliSecs() > n\State3
-							n\LastSeen = 0
+							n\LastSeen = 0.0
 							If EntityVisible(me\Collider, n\Collider)
-								n\LastSeen = 1
+								n\LastSeen = 1.0
 							Else
 								HideEntity(n\Collider)
 								EntityPick(n\Collider, 1.5)
@@ -1782,7 +1782,7 @@ Function UpdateNPCType096%(n.NPCs)
 							n\State3 = MilliSecs() + 2000
 						EndIf
 						
-						If n\LastSeen
+						If n\LastSeen = 1.0
 							PointEntity(n\OBJ, me\Collider)
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 130.0), 0.0)
 							If Dist < 2.25 Then n\State2 = 0.0
@@ -1893,17 +1893,17 @@ Function UpdateNPCType096%(n.NPCs)
 				If n\Target <> Null Then Dist = EntityDistanceSquared(n\Target\Collider, n\Collider)
 				
 				If MilliSecs() > n\State3
-					n\LastSeen = 0
+					n\LastSeen = 0.0
 					If n\Target = Null
-						If Dist < 64.0 And EntityVisible(me\Collider, n\Collider) Then n\LastSeen = 1
+						If Dist < 64.0 And EntityVisible(me\Collider, n\Collider) Then n\LastSeen = 1.0
 					ElseIf Dist < 64.0 And EntityVisible(n\Target\Collider, n\Collider)
-						n\LastSeen = 1
+						n\LastSeen = 1.0
 					EndIf
 					n\State3 = MilliSecs() + 2000
 				EndIf
-				If chs\NoTarget And n\Target = Null Then n\LastSeen = 0
+				If chs\NoTarget And n\Target = Null Then n\LastSeen = 0.0
 				
-				If n\LastSeen = 1
+				If n\LastSeen = 1.0
 					n\PathTimer = Max(70.0 * 3.0, n\PathTimer)
 					n\PathStatus = PATH_STATUS_NO_SEARCH
 					
@@ -2192,7 +2192,7 @@ Function UpdateNPCType106%(n.NPCs)
 						me\BlurVolume = Max(Clamp(SqrValue / 6.0, 0.1, 0.9), me\BlurVolume)
 						me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 20.0 * Max(SqrValue / 4.0, 0.0))
 						
-						If MilliSecs() - n\LastSeen > 60000
+						If Floor(MilliSecs() - n\LastSeen) > 60000.0
 							me\CurrCameraZoom = 40.0
 							PlaySound_Strict(snd_I\HorrorSFX[6])
 							n\LastSeen = MilliSecs()
@@ -2483,7 +2483,7 @@ Function UpdateNPCType173%(n.NPCs)
 					me\BlurVolume = Max(Clamp((4.0 - SqrValue) / 6.0, 0.1, 0.9), me\BlurVolume)
 					me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 15.0 * Max((3.5 - SqrValue) / 3.5, 0.0))
 					
-					If Dist < 12.25 And MilliSecs() - n\LastSeen > 60000 And Temp
+					If Dist < 12.25 And Floor(MilliSecs() - n\LastSeen) > 60000 And Temp
 						PlaySound_Strict(snd_I\HorrorSFX[Rand(3, 4)])
 						
 						n\LastSeen = MilliSecs()
@@ -3241,23 +3241,32 @@ Function UpdateNPCType513_1%(n.NPCs)
 			HideEntity(n\OBJ2)
 		EndIf
 		If Rand(500) = 1
+			Local Skip% = False
+			
 			For w.WayPoints = Each WayPoints
-				If w\room <> PlayerRoom
-					Dist = DistanceSquared(EntityX(me\Collider), EntityX(w\OBJ, True), EntityZ(me\Collider), EntityZ(w\OBJ, True))
-					If Dist > 9.0 And Dist < 81.0
-						PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 20.0 * RoomScale, EntityZ(w\OBJ, True))
-						ResetEntity(n\Collider)
-						
-						n\LastSeen = 0
-						
-						n\Path[0] = w
-						
-						n\Idle = 0
-						n\State2 = 70.0 * Rnd(15.0, 20.0)
-						n\State = Max(Rand(-1, 2), 0)
-						n\PrevState = Rand(0, 1)
+				If w\room = PlayerRoom Then Continue
+				For i = 0 To MaxRoomAdjacents - 1
+					If IsRoomAdjacent(w\room, PlayerRoom\Adjacent[i])
+						Skip = True
 						Exit
 					EndIf
+				Next
+				If Skip Then Continue
+				
+				Dist = DistanceSquared(EntityX(me\Collider), EntityX(w\OBJ, True), EntityZ(me\Collider), EntityZ(w\OBJ, True))
+				If Dist > 9.0 And Dist < 81.0
+					PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 20.0 * RoomScale, EntityZ(w\OBJ, True))
+					ResetEntity(n\Collider)
+					
+					n\LastSeen = 0.0
+					
+					n\Path[0] = w
+					
+					n\Idle = 0
+					n\State2 = 70.0 * Rnd(15.0, 20.0)
+					n\State = Max(Rand(-1, 2), 0)
+					n\PrevState = Rand(0, 1)
+					Exit
 				EndIf
 			Next
 		EndIf
@@ -3298,14 +3307,14 @@ Function UpdateNPCType513_1%(n.NPCs)
 				AnimateNPC(n, 75.0, 124.0, 0.2)
 			EndIf
 			
-			If n\LastSeen
+			If n\LastSeen = 1.0
 				PointEntity(n\OBJ2, me\Collider)
 				RotateEntity(n\OBJ, 0.0, CurveAngle(EntityYaw(n\OBJ2), EntityYaw(n\OBJ), 40.0), 0.0)
 				If Dist < 16.0 Then n\State = Rand(1.0, 2.0)
 			Else
 				If Dist < 36.0 And Rand(5) = 1
 					If EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)
-						n\LastSeen = 1
+						n\LastSeen = 1.0
 						me\Sanity = Min(-450.0, me\Sanity)
 						me\CameraShake = 0.7
 						me\BlurTimer = Max(600.0, me\BlurTimer)
@@ -3350,9 +3359,9 @@ Function UpdateNPCType513_1%(n.NPCs)
 					For i = 0 To MaxConnectedWaypoints - 1
 						If n\Path[0]\connected[i] <> Null
 							If EntityDistanceSquared(me\Collider, n\Path[0]\connected[i]\OBJ) > Dist
-								If n\LastSeen = 0
+								If n\LastSeen = 0.0
 									If EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)
-										n\LastSeen = 1
+										n\LastSeen = 1.0
 										me\Sanity = Min(-450.0, me\Sanity)
 										me\CameraShake = 0.7
 										me\HeartBeatVolume = 0.7
@@ -3365,7 +3374,10 @@ Function UpdateNPCType513_1%(n.NPCs)
 							EndIf
 						EndIf
 					Next
-					If n\Path[0] = Null Then n\State2 = 0.0
+					If n\Path[0] = Null
+						n\Idle = 1
+						n\State2 = 0.0
+					EndIf
 				EndIf
 			EndIf
 		EndIf
@@ -3845,7 +3857,7 @@ Function UpdateNPCType939%(n.NPCs)
 						If n\State2 > n\PrevState Then n\State2 = (n\PrevState - 3)
 						SetNPCFrame(n, 770.0)
 					EndIf
-					n\LastSeen = 0
+					n\LastSeen = 0.0
 				EndIf
 			Else
 				n\CurrSpeed = CurveValue(n\Speed * 0.3 * Min(Sqr(Dist), 1.0), n\CurrSpeed, 10.0)
@@ -4355,9 +4367,9 @@ Function UpdateNPCType966%(n.NPCs)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 					
-					If n\LastSeen = 0
+					If n\LastSeen = 0.0
 						n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\966\Echo" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
-						n\LastSeen = 1
+						n\LastSeen = 1.0
 					EndIf
 					
 					If n\Frame > 557.0
@@ -4383,19 +4395,19 @@ Function UpdateNPCType966%(n.NPCs)
 						If n\Frame <= 487.0
 							AnimateNPC(n, 458.0, 487.0, 0.3, False)
 							If n\Frame > 486.9
-								n\LastSeen = 0
+								n\LastSeen = 0.0
 								n\State = 8.0
 							EndIf
 						ElseIf n\Frame <= 517.0
 							AnimateNPC(n, 488.0, 517.0, 0.3, False)
 							If n\Frame > 516.9
-								n\LastSeen = 0
+								n\LastSeen = 0.0
 								n\State = 8.0
 							EndIf
 						ElseIf n\Frame <= 556.0
 							AnimateNPC(n, 518.0, 556.0, 0.3, False)
 							If n\Frame > 555.9
-								n\LastSeen = 0
+								n\LastSeen = 0.0
 								n\State = 8.0
 							EndIf
 						EndIf
@@ -4694,12 +4706,12 @@ Function UpdateNPCType999%(n.NPCs)
 			EndIf
 		EndIf
 	Else
-		If n\LastSeen = 0
+		If n\LastSeen = 0.0
 			For r.Rooms = Each Rooms
 				If r\RoomTemplate\RoomID = r_room2_office
 					TFormPoint(590.0, -256.0, 0.0, r\OBJ, 0)
 					TeleportEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
-					n\LastSeen = 1
+					n\LastSeen = 1.0
 					n\State = 0.0
 					Exit
 				EndIf
@@ -6218,7 +6230,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					If n\Target = Null
 						PlayerSeeAble = NPCSeesPlayer(n, 5.0 - me\CrouchState)
 						If PlayerSeeAble > 0
-							If n\LastSeen > 0 And n\LastSeen < 70.0 * 15.0
+							If n\LastSeen > 0.0 And n\LastSeen < 70.0 * 15.0
 								If PlayerSeeAble < 2
 									LoadNPCSound(n, "SFX\Character\MTF\ThereHeIs" + Rand(0, 5) + ".ogg")
 									PlayMTFSound(n\Sound, n)

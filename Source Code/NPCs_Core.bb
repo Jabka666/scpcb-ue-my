@@ -26,7 +26,7 @@ Type NPCs
 	Field Texture$
 	Field Idle#, IdleTimer#
 	Field Reload#
-	Field LastSeen%, LastDist#
+	Field LastSeen#, LastDist#
 	Field PrevX#, PrevY#, PrevZ#
 	Field Target.NPCs, TargetID%
 	Field EnemyX#, EnemyY#, EnemyZ#
