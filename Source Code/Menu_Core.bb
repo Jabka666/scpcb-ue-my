@@ -1852,7 +1852,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		If Percent > 20 Then UpdateMusic()
 		DescTimer = DescTimer + TICK_DURATION
-		If DescTimer > 700.0
+		If DescTimer > 70.0 * 6.0
 			If DescriptionIndex < DescrArraySize - 1
 				DescriptionIndex = DescriptionIndex + 1
 			Else
@@ -2040,6 +2040,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			SelectedLoadingScreens = 0
 			Descriptions = 0 : DescriptionIndex = 0
 			ImageAlignX = "" : ImageAlignY = ""
+			DescTimer = 0.0
 			Close = True
 		EndIf
 	Until Close
