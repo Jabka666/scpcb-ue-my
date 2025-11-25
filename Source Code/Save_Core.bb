@@ -1242,7 +1242,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	Local e.Events, ch.Chunk, chp.ChunkPart
+	Local e.Events, ch.Chunk, chp.ChunkPart, p.Props, du.Dummy1499_1
 	
 	For e.Events = Each Events
 		RemoveEvent(e)
@@ -1286,8 +1286,6 @@ Function LoadGame%(File$)
 						EndIf
 					Next
 					
-					Local du.Dummy1499_1
-					
 					For du.Dummy1499_1 = Each Dummy1499_1
 						RemoveDummy1499_1(du)
 					Next
@@ -1311,6 +1309,21 @@ Function LoadGame%(File$)
 			Case e_cont2_008
 				;[Block]
 				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
+				;[End Block]
+			Case e_brownout
+				;[Block]
+				If e\EventState3 = 2.0
+					For p.Props = Each Props
+						If p\room = e\room
+							If p\Name = "tank2.b3d"
+								Tex = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
+								EntityTexture(p\OBJ, Tex)
+								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+								Exit
+							EndIf
+						EndIf
+					Next
+				EndIf
 				;[End Block]
 		End Select
 	Next
@@ -2163,7 +2176,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	Local e.Events, ch.Chunk, chp.ChunkPart
+	Local e.Events, ch.Chunk, chp.ChunkPart, p.Props, du.Dummy1499_1
 	
 	For e.Events = Each Events
 		RemoveEvent(e)
@@ -2215,8 +2228,6 @@ Function LoadGameQuick%(File$)
 						EndIf
 					Next
 					
-					Local du.Dummy1499_1
-					
 					For du.Dummy1499_1 = Each Dummy1499_1
 						RemoveDummy1499_1(du)
 					Next
@@ -2232,6 +2243,21 @@ Function LoadGameQuick%(File$)
 			Case e_cont2_008
 				;[Block]
 				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
+				;[End Block]
+			Case e_brownout
+				;[Block]
+				If e\EventState3 = 2.0
+					For p.Props = Each Props
+						If p\room = e\room
+							If p\Name = "tank2.b3d"
+								Tex = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
+								EntityTexture(p\OBJ, Tex)
+								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+								Exit
+							EndIf
+						EndIf
+					Next
+				EndIf
 				;[End Block]
 			Case e_cont2_1123
 				;[Block]
@@ -2458,8 +2484,6 @@ Function LoadGameQuick%(File$)
 	
 	; ~ Reset lamp pitch
 	If me\BigCameraShake = 0.0
-		Local p.Props
-		
 		For p.Props = Each Props
 			If p\IsLamp Then RotateEntity(p\OBJ, 0.0, EntityYaw(p\OBJ, True), EntityRoll(p\OBJ, True), True)
 		Next
