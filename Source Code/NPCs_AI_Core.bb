@@ -7018,7 +7018,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						
 						If Curr173Dist < TempDist
 							n\State3 = n\State3 + fps\Factor[0]
-							If n\State3 >= 70.0 * 15.0
+							If n\State3 >= 70.0 * 7.5
 								LoadNPCSound(n_I\MTFLeader, "SFX\Character\MTF\173\Box" + Rand(0, 2) + ".ogg")
 								PlayMTFSound(n_I\MTFLeader\Sound, n_I\MTFLeader)
 								; ~ Always attach to leader
