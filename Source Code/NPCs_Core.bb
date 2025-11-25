@@ -1014,7 +1014,7 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
-			If GravityDist < PowTwo(fog\HideDistance / 2.0) Lor n\NPCType = NPCType1499_1
+			If GravityDist < PowTwo(fog\HideDistance) Lor n\NPCType = NPCType1499_1
 				If n\InFacility = InFacility
 					Local r.Rooms
 					Local CollidedFloor% = False
