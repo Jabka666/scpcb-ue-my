@@ -11,7 +11,7 @@ Global BloomTex%, BloomBlur%
 Global ColorCorrectionEffect%
 Global PresentEffect%
 
-Global SSAOEffect%
+Global SSAOEffect%, SSAOBlur%
 Global NoiseTexture%
 
 Global FXAAEffect%
@@ -58,6 +58,8 @@ Function InitShaders%()
 	BloomTex = CreateTexture(Width, Height, 1 + 256 + 16384)
 	BloomBlur = CreateTexture(Width, Height, 1 + 256 + 16384)
 	
+	SSAOBlur = CreateTexture(Width, Height, 1 + 256 + 16384)
+	
 	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
 	
 	Luma = CreateTexture(128, 128, 1 + 16384)
@@ -77,11 +79,13 @@ End Function
 
 Function ProcessBloom%(Threshold# = 0.4)
 	If BloomEffect = 0 Lor (Not opt\Bloom) Then Return
+	
 	EffectFloat(BloomEffect, "BloomThreshold", Threshold)
 	EntityEffect(PostEffectQuad, BloomEffect)
 	EntityTexture(PostEffectQuad, BloomTex, 0, 1)
 	EntityTexture(PostEffectQuad, BloomBlur, 0, 2)
 	
+	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
 	SetBuffer(TextureBuffer(BloomTex))
 	EffectTechnique(BloomEffect, "Downsample")
@@ -105,6 +109,7 @@ End Function
 
 Function ProcessColorCorrection%()
 	If ColorCorrectionEffect = 0 Lor (Not opt\ColorCorrection) Then Return
+	
 	EntityEffect(PostEffectQuad, ColorCorrectionEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -118,29 +123,48 @@ End Function
 
 Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
 	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Then Return
+	
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
 	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
 	EffectFloat(SSAOEffect, "FarClip", GetCameraRangeFar(Cam) / 1.25)
 	
-	EntityBlend(PostEffectQuad, 2)
+	EntityBlend(PostEffectQuad, 0)
 	EntityEffect(PostEffectQuad, SSAOEffect)
 	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
 	EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
 	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
 	EntityTexture(PostEffectQuad, NoiseTexture, 0, 4)
+	EntityTexture(PostEffectQuad, TempColorTexture, 0, 5)
 	
 	ShowEntity(PostEffectQuad)
-	EffectTechnique(SSAOEffect, "Main")
+	EffectTechnique(SSAOEffect, "SSAO")
+	SetBuffer(TextureBuffer(TempColorTexture))
+	RenderEntity(QuadCamera, PostEffectQuad)
+	If opt\AmbientOcclusion = 2
+		EffectTechnique(SSAOEffect, "Blur")
+		EffectVector(SSAOEffect, "BlurInvSize", 1.0 / TextureWidth(TempColorTexture), 0) ; ~ Horizontal
+		SetBuffer(TextureBuffer(SSAOBlur))
+		RenderEntity(QuadCamera, PostEffectQuad)
+		
+		EntityTexture(PostEffectQuad, SSAOBlur, 0, 5)
+		EffectVector(SSAOEffect, "BlurInvSize", 0, 1.0 / TextureHeight(TempColorTexture)) ; ~ Vertical
+		SetBuffer(TextureBuffer(TempColorTexture))
+		RenderEntity(QuadCamera, PostEffectQuad)
+	EndIf
+	
+	EntityTexture(PostEffectQuad, TempColorTexture, 0, 5)
+	EffectTechnique(SSAOEffect, "Combine")
+	EntityBlend(PostEffectQuad, 2)
 	SetBuffer(TextureBuffer(MRTColor))
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
-	EntityBlend(PostEffectQuad, 0)
 End Function
 
 Function ProcessFXAA%()
 	If FXAAEffect = 0 Lor (Not opt\AntiAliasing) Then Return
+	
 	EntityEffect(PostEffectQuad, FXAAEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -154,6 +178,7 @@ End Function
 
 Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
 	If MotionBlurEffect = 0 Lor (Not opt\MotionBlur) Then Return
+	
 	EffectFloat(MotionBlurEffect, "Strength", Strength)
 	EffectMatrix(MotionBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 	EffectFloat(MotionBlurEffect, "Timestep", Min(Float(fps\ElapsedMilliSecs) / 1000.0, 1.0))
@@ -236,6 +261,7 @@ End Function
 
 Function ProcessGamma%(Gamma#)
 	If GammaEffect = 0 Then Return
+	
 	EntityEffect(PostEffectQuad, GammaEffect)
 	EntityBlend(PostEffectQuad, 0)
 	ShowEntity(PostEffectQuad)
@@ -271,6 +297,7 @@ End Function
 Function PresentGBuffer%(Texture%, Dest% = 0)
 	Local OldBuffer% = GraphicsBuffer()
 	
+	EntityBlend(PostEffectQuad, 0)
 	EntityEffect(PostEffectQuad, PresentEffect)
 	EntityTexture(PostEffectQuad, Texture, 0, 0)
 	ShowEntity(PostEffectQuad)
@@ -284,9 +311,13 @@ End Function
 Function ClearBuffer%(Buffer%, R#, G#, B#, Alpha#)
 	Local PrevBuffer% = GraphicsBuffer()
 	
-	If (Not SetBuffer(Buffer)) Then Return
+	If (Not SetBuffer(Buffer))
+		SetBuffer(PrevBuffer)
+		Return
+	EndIf
 	
 	EffectVector(ClearEffect, "Value", R, G, B, Alpha)
+	EffectTechnique(ClearEffect, "Main")
 	EntityBlend(PostEffectQuad, 0)
 	EntityEffect(PostEffectQuad, ClearEffect)
 	

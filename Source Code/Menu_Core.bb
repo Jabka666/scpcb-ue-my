@@ -526,7 +526,7 @@ Function UpdateMainMenu%()
 						
 						opt\ScreenGamma = UpdateMenuSlideBar(x, y + 5 * MenuScale, 150 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
 						
-						y = y + (40 * MenuScale)
+						y = y + (45 * MenuScale)
 						
 						opt\CurrFOV = (UpdateMenuSlideBar(x, y, 150 * MenuScale, opt\CurrFOV * 2.0, 2) / 2.0)
 						opt\FOV = opt\CurrFOV + 40
@@ -592,10 +592,14 @@ Function UpdateMainMenu%()
 						
 						opt\LightingQuality = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\LightingQuality, 6, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
 						
+						y = y + (40 * MenuScale)
+						
+						opt\AmbientOcclusion = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\AmbientOcclusion, 7, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
+						
 						x = x - (75 * MenuScale)
 						y = y + (35 * MenuScale)
 						
-						opt\AmbientOcclusion = UpdateMenuTick(x, y, opt\AmbientOcclusion)
+						opt\VolumetricLights = UpdateMenuTick(x, y, opt\VolumetricLights)
 						opt\AntiAliasing = UpdateMenuTick(x + 220 * MenuScale, y, opt\AntiAliasing)
 						
 						y = y + (25 * MenuScale)
@@ -610,8 +614,7 @@ Function UpdateMainMenu%()
 						
 						y = y + (25 * MenuScale)
 						
-						opt\VolumetricLights = UpdateMenuTick(x, y, opt\VolumetricLights)
-						opt\VignetteEnabled = UpdateMenuTick(x + 220 * MenuScale, y, opt\VignetteEnabled)
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
 						;[End Block]
 					Case MainMenuTab_Options_Audio
 						;[Block]
@@ -1438,7 +1441,7 @@ Function RenderMainMenu%()
 			Select mm\MainMenuTab
 				Case MainMenuTab_Options_Graphics
 					;[Block]
-					Height = 385 * MenuScale
+					Height = 410 * MenuScale
 					RenderFrame(x - (20 * MenuScale), y, Width, Height)
 					
 					y = y + (25 * MenuScale)
@@ -1448,7 +1451,7 @@ Function RenderMainMenu%()
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
 					If (MouseOn(x + (290 * MenuScale), y, MouseOnCoord * 8.2, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
 					
-					y = y + (35 * MenuScale)
+					y = y + (40 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
 					If (MouseOn(x + (290 * MenuScale), y, MouseOnCoord * 8.2, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
@@ -1473,10 +1476,15 @@ Function RenderMainMenu%()
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "lightingquality"))
 					If (MouseOn(x + (290 * MenuScale), y, MouseOnCoord * 8.2, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 6 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_LightingQuality)
 					
-					y = y + (45 * MenuScale)
+					y = y + (40 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ambientocclusion"))
-					If MouseOn(x + (215 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
+					If (MouseOn(x + (290 * MenuScale), y, MouseOnCoord * 8.2, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
+					
+					y = y + (45 * MenuScale)
+					
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "volumetriclights"))
+					If MouseOn(x + (215 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VolumetricLights)
 					TextEx(x + (260 * MenuScale), y + (5 * MenuScale), GetLocalString("options", "antialias"))
 					If MouseOn(x + (435 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 					
@@ -1496,10 +1504,8 @@ Function RenderMainMenu%()
 					
 					y = y + (25 * MenuScale)
 					
-					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "volumetriclights"))
-					If MouseOn(x + (215 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VolumetricLights)
-					TextEx(x + (260 * MenuScale), y + (5 * MenuScale), GetLocalString("options", "vignette"))
-					If MouseOn(x + (435 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
+					If MouseOn(x + (215 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
@@ -3011,18 +3017,18 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "particle_1")
 			Select Value
-				Case 0
+				Case 0.0
 					;[Block]
 					R = 255
 					Txt2 = GetLocalString("tooltip", "particle_2.1")
 					;[End Block]
-				Case 1
+				Case 1.0
 					;[Block]
 					R = 255
 					G = 255
 					Txt2 = GetLocalString("tooltip", "particle_2.2")
 					;[End Block]
-				Case 2
+				Case 2.0
 					;[Block]
 					G = 255
 					Txt2 = GetLocalString("tooltip", "particle_2.3")

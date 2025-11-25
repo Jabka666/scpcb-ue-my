@@ -409,6 +409,7 @@ Function LoadParticles%()
 	
 	; ~ Sparks from light emitter
 	ParticleEffect[20] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[20], 64)
 	SetTemplateParticlesPerInterval(ParticleEffect[20], 20)
 	SetTemplateEmitterLifeTime(ParticleEffect[20], 2)
 	SetTemplateParticleLifeTime(ParticleEffect[20], 60, 70)
@@ -1242,51 +1243,7 @@ Function LoadMaterials%(File$)
 		Loc = Trim(ReadLine(f))
 		If Left(Loc, 1) = "["
 			Loc = Mid(Loc, 2, Len(Loc) - 2)
-			mat.Materials = New Materials
-			mat\Name = Lower(Loc)
-			
-			Local IsAnimated$ = IniGetString(File, Loc, "animated")
-			
-			If IsAnimated <> ""
-				Local TexWidth% = Int(Piece(IsAnimated, 1, "|"))
-				Local TexHeight% = Int(Piece(IsAnimated, 2, "|"))
-				Local FirstFrame% = Int(Piece(IsAnimated, 3, "|"))
-				Local Count% = Int(Piece(IsAnimated, 4, "|"))
-			EndIf
-			
-			StrTemp = IniGetString(File, Loc, "normal")
-			If StrTemp <> ""
-				If IsAnimated <> ""
-					mat\Normal = LoadAnimTexture_Strict(StrTemp, 1, TexWidth, TexHeight, FirstFrame, Count, DeleteAllTextures)
-				Else
-					mat\Normal = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
-				EndIf
-			EndIf
-			
-			StrTemp = IniGetString(File, Loc, "roughness")
-			If StrTemp <> ""
-				If IsAnimated <> ""
-					mat\Roughness = LoadAnimTexture_Strict(StrTemp, 1, TexWidth, TexHeight, FirstFrame, Count, DeleteAllTextures)
-				Else
-					mat\Roughness = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
-				EndIf
-			EndIf
-			
-			StrTemp = IniGetString(File, Loc, "emissive")
-			If StrTemp <> ""
-				If IsAnimated <> ""
-					mat\Emissive = LoadAnimTexture_Strict(StrTemp, 1, TexWidth, TexHeight, FirstFrame, Count, DeleteAllTextures)
-				Else
-					mat\Emissive = LoadTexture_Strict(StrTemp, 1, DeleteAllTextures)
-				EndIf
-			EndIf
-			
-			mat\SpecIntensity = IniGetFloat(File, Loc, "specintensity")
-			mat\SpecPower = IniGetFloat(File, Loc, "specpower")
-			mat\ReactBlackout = IniGetInt(File, Loc, "reactblackout")
-			mat\StepSound = IniGetInt(File, Loc, "stepsound")
-			mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")
-			mat\UseMask = IniGetInt(File, Loc, "masked")
+			LoadMaterial(File, Loc)
 		EndIf
 	Wend
 	

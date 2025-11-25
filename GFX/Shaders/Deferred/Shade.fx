@@ -187,9 +187,12 @@ void GetLighting(float3 worldPos, float3 normalVec, out float light, out float3 
 		NdotL = normalize(LightPos - worldPos);
 		float length = distance(worldPos, LightPos) / LightRange;
 		light = saturate(dot(NdotL, normalVec)) * Sample2D(RampMap, float2(length, 0.0)).r;
-		
-		float cosAngle = saturate(1.0 - dot(normalVec, normalize(LightPos - worldPos)));
-		worldPosN = worldPos + cosAngle * NormalOffset * normalVec;
+		#ifdef SHADOWS
+			float cosAngle = saturate(1.0 - dot(normalVec, normalize(LightPos - worldPos)));
+			worldPosN = worldPos + cosAngle * NormalOffset * normalVec;
+		#else
+			worldPosN = 0.0f;
+		#endif
 	#else
 		NdotL = normalize(-LightDirection);
 		light = saturate(dot(NdotL, normalVec));

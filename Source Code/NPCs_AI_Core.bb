@@ -3233,7 +3233,7 @@ Function UpdateNPCType513_1%(n.NPCs)
 	If (Not PlayerInReachableRoom(True)) Then Return
 	
 	Local w.WayPoints
-	Local Dist#
+	Local Dist#, i%
 	
 	If n\Idle = 1
 		If (Not EntityHidden(n\OBJ))
@@ -3354,8 +3354,6 @@ Function UpdateNPCType513_1%(n.NPCs)
 					If Rand(200) = 1 Then MoveEntity(n\Collider, 0.0, 0.0, 0.5)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 				Else
-					Local i%
-					
 					For i = 0 To MaxConnectedWaypoints - 1
 						If n\Path[0]\connected[i] <> Null
 							If EntityDistanceSquared(me\Collider, n\Path[0]\connected[i]\OBJ) > Dist

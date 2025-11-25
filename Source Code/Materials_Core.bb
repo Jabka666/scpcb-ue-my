@@ -1,7 +1,13 @@
+Const MAX_BRUSH_TEXTURES% = 8
+Const MATERIAL_NORMAL% = 1
+Const MATERIAL_ROUGHNESS% = 2
+Const MATERIAL_EMISSIVE% = 3
+
 Type Materials
-	Field Normal%
-	Field Roughness%
-	Field Emissive%
+	Field IsAnimated%, TexWidth%, TexHeight%, FirstFrame%, Count%
+	Field TextureFile$[MAX_BRUSH_TEXTURES]
+	Field Texture%[MAX_BRUSH_TEXTURES]
+	Field Loaded%
 	Field SpecIntensity#, SpecPower#
 	Field ReactBlackout%
 	Field Name$
@@ -9,6 +15,70 @@ Type Materials
 	Field UseMask%
 	Field StepSound%
 End Type
+
+Function LoadMaterial%(File$, Loc$)
+	Local StrTemp$
+	
+	If (Not IniSectionExist(File, Loc)) Then Loc = Lower(Loc)
+	
+	If IniSectionExist(File, Loc)
+		Local mat.Materials
+		
+		mat.Materials = New Materials
+		mat\Name = Lower(Loc)
+		
+		Local IsAnimated$ = IniGetString(File, Loc, "animated")
+		
+		If IsAnimated <> ""
+			mat\IsAnimated = True
+			mat\TexWidth = Int(Piece(IsAnimated, 1, "|"))
+			mat\TexHeight = Int(Piece(IsAnimated, 2, "|"))
+			mat\FirstFrame = Int(Piece(IsAnimated, 3, "|"))
+			mat\Count = Int(Piece(IsAnimated, 4, "|"))
+		EndIf
+		
+		mat\TextureFile[MATERIAL_NORMAL] = IniGetString(File, Loc, "normal")
+		mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "roughness")
+		mat\TextureFile[MATERIAL_EMISSIVE] = IniGetString(File, Loc, "emissive")
+		
+		mat\SpecIntensity = IniGetFloat(File, Loc, "specintensity")
+		mat\SpecPower = IniGetFloat(File, Loc, "specpower")
+		mat\ReactBlackout = IniGetInt(File, Loc, "reactblackout")
+		mat\StepSound = IniGetInt(File, Loc, "stepsound")
+		mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")
+		mat\UseMask = IniGetInt(File, Loc, "masked")
+	EndIf
+End Function
+
+Function LoadMaterialTextures%(mat.Materials)
+	If mat\Loaded Then Return
+	
+	Local i%
+	
+	For i = 1 To 3 ; ~ Active textures
+		LoadMaterialTexture(mat, i)
+	Next
+	mat\Loaded = True
+End Function
+
+Function HasMaterialTexture%(mat.Materials, Index%)
+	Return(mat\Texture[Index] <> 0)
+End Function
+
+Function GetMaterialTexture%(mat.Materials, Index%)
+	If mat\Texture[Index] = 0 Then Return(MissingTexture)
+	Return(mat\Texture[Index])
+End Function
+
+Function LoadMaterialTexture%(mat.Materials, index%)
+	If mat\Texture[index] = 0 And mat\TextureFile[index] <> ""
+		If mat\IsAnimated
+			mat\Texture[index] = LoadAnimTexture_Strict(mat\TextureFile[index], 1, mat\TexWidth, mat\TexHeight, mat\FirstFrame, mat\Count, DeleteAllTextures)
+		Else
+			mat\Texture[index] = LoadTexture_Strict(mat\TextureFile[index], 1, DeleteAllTextures)
+		EndIf
+	EndIf
+End Function
 
 Function GetMaterial.Materials(Texture%)
 	Local mat.Materials

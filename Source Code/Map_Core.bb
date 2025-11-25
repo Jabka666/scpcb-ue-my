@@ -6207,11 +6207,11 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	UpdateNormals(Mesh)
 	UpdateNormals(Mesh2)
 	
-	EntityTexture(Mesh, Tex1, 0, 0)
-	EntityTexture(Mesh2, Tex2, 0, 0)
+	EntityTexture(Mesh, Tex2, 0, 0)
+	EntityTexture(Mesh2, Tex1, 0, 0)
 	
 	EntityFX(Mesh, 1)
-	EntityFX(Mesh2, 1 + 2 + 32)
+	EntityFX(Mesh2, 1 + 2)
 	
 	SetDeferredEntity(Mesh)
 	SetDeferredEntity(Mesh2)

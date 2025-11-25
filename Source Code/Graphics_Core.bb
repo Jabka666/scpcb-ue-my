@@ -129,8 +129,6 @@ Function RenderWorldEx%(Tween#)
 	If (Not wi\IsNVGBlinking) Then ProcessDeferred(Camera, Tween)
 	CameraProjMode(Camera, 0)
 	
-	CurrTrisAmount = TrisRendered()
-	
 	If (Not wi\IsNVGBlinking)
 		Local TexBuffer%
 		

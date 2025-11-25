@@ -259,7 +259,7 @@ Function LoadOptionsINI%()
 	
 	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 1)
 	
-	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", True)
+	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 2)
 	
 	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
 	
@@ -571,7 +571,7 @@ Function ResetOptionsINI%()
 	
 	opt\LightingQuality = 1
 	
-	opt\AmbientOcclusion = True
+	opt\AmbientOcclusion = 2
 	
 	opt\AntiAliasing = True
 	

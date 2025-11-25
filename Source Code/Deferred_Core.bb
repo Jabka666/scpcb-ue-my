@@ -274,19 +274,17 @@ Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
 		If t1 <> 0
 			mat.Materials = GetMaterial(t1)
 			If mat <> Null
-				If mat\Normal <> 0 Then State = State Or DEFERRED_DIFFNORMAL
-				If mat\Roughness <> 0 Then State = State Or DEFERRED_DIFFROUGH
-				If mat\Emissive <> 0 Then State = State Or DEFERRED_DIFFEMISSIVE
+				LoadMaterialTextures(mat)
+				
+				If HasMaterialTexture(mat, MATERIAL_NORMAL) Then State = State Or DEFERRED_DIFFNORMAL
+				If HasMaterialTexture(mat, MATERIAL_ROUGHNESS) Then State = State Or DEFERRED_DIFFROUGH
+				If HasMaterialTexture(mat, MATERIAL_EMISSIVE) Then State = State Or DEFERRED_DIFFEMISSIVE
 				If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
 				If mat\IsDiffuseAlpha Then State = State Or DEFERRED_TRANSPARENT
 				
-				BrushTexture(Brush, MissingTexture, 0, 1)
-				BrushTexture(Brush, MissingTexture, 0, 2)
-				BrushTexture(Brush, MissingTexture, 0, 3)
-				If mat\Normal <> 0 Then BrushTexture(Brush, mat\Normal, Frame, 1)
-				If mat\Roughness <> 0 Then BrushTexture(Brush, mat\Roughness, Frame, 2)
-				If mat\Emissive <> 0 Then BrushTexture(Brush, mat\Emissive, Frame, 3)
-				
+				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_NORMAL), 0, MATERIAL_NORMAL)
+				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ROUGHNESS), 0, MATERIAL_ROUGHNESS)
+				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_EMISSIVE), 0, MATERIAL_EMISSIVE)
 				BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
 			EndIf
 			FreeTexture(t1) : t1 = 0
@@ -308,6 +306,8 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 	If GetInputEffect(DEFERRED_DIFF) <> 0
 		Local ef.InputEffect, se.ShadeEffect
 		
+		CurrTrisAmount = 0
+		
 		For ef.InputEffect = Each InputEffect
 			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 		Next
@@ -326,7 +326,10 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		
 		AmbientLight(Min(fog\CurrAmbientR * Brightness, 255.0), Min(fog\CurrAmbientG * Brightness, 255.0), Min(fog\CurrAmbientB * Brightness, 255.0))
 		; ~ Render opacity
+		WireFrame(WireFrameState)
+		
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
+		CurrTrisAmount = CurrTrisAmount + TrisRendered()
 		ProcessSSAO(Cam, 3, 0.2, Tween) ; ~ Process SSAO for opacity
 		
 		Local InvViewProjection% = CameraMatrix(Cam, 3, Tween)
@@ -334,6 +337,8 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		For se.ShadeEffect = Each ShadeEffect
 			EffectMatrix(se\Effect, "InvViewProj", InvViewProjection)
 		Next
+		
+		WireFrame(0)
 		
 		ProcessAllLights(Cam, Tween)
 		
@@ -343,14 +348,20 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 		Next
 		
-		BeginRender(Tween, -1) ; ~ We can't use transparency rendering twice without begin render
+		WireFrame(WireFrameState)
+		
+		BeginRender(Tween, -1) ; ~ Reset to transparency rendering
 		; ~ Render decals
 		RenderWorld(Tween, Cam, 32)
+		CurrTrisAmount = CurrTrisAmount + TrisRendered()
 		; ~ Render transparency
 		AmbientLight(Min(fog\CurrAmbientR * 3.0 * Brightness, 255.0), Min(fog\CurrAmbientG * 3.0 * Brightness, 255.0), Min(fog\CurrAmbientB * 3.0 * Brightness, 255.0))
 		RenderWorld(Tween, Cam, -1 Xor 32, 2)
+		CurrTrisAmount = CurrTrisAmount + TrisRendered()
 		CameraClsMode(Cam, 1, 1)
 		EndRender()
+		
+		WireFrame(0)
 		
 		ProcessFXAA()
 		ProcessBloom(0.45)
@@ -362,6 +373,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		SetBuffer(BackBuffer())
 	Else
 		RenderWorld(Tween)
+		CurrTrisAmount = CurrTrisAmount + TrisRendered()
 	EndIf
 End Function
 
@@ -502,6 +514,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	EntityEffect(Volume, DeferredShade)
 	
 	RenderEntity(Cam, Volume, Tween)
+	CurrTrisAmount = CurrTrisAmount + TrisRendered()
 End Function
 
 Global DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN# = Tan(90.0 * 0.5)
@@ -562,6 +575,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0.0)
 					CameraViewport(DeferredCamera, i * Width, 0, Width, Height)
 					RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
+					CurrTrisAmount = CurrTrisAmount + TrisRendered()
 					EffectMatrix(DeferredShade, "LightViewProj" + i, CameraMatrix(DeferredCamera, 2, Tween)) ; ~ Push matrix for each face
 				EndIf
 			Next
@@ -573,6 +587,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			;[Block]
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
+			CurrTrisAmount = CurrTrisAmount + TrisRendered()
 			
 			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * Tan(FOV * dtor * 0.5)) * (SHADOW_MAP_SIZE / ShadowMapHeight))
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
