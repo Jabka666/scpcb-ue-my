@@ -3887,7 +3887,7 @@ Function UpdateNPCType939%(n.NPCs)
 				n\LastSeen = 70.0 * 1.5
 			EndIf
 			
-			If n\LastSeen > 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+			If n\LastSeen > 0.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn Lor me\Terminated))
 				If n\State3 = 0.0
 					If n\Frame < 859.0
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 15.0)
@@ -4066,7 +4066,7 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	If EntityDistanceSquared(n\Collider, me\Collider) < 49.0 And EntityVisible(me\Collider, n\Collider) And EntityInView(n\Collider, Camera) Then GiveAchievement("939")
 	
-	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) And (Not me\Terminated); And (Not n\IgnorePlayer)
+	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn Lor me\Terminated)) ; And (Not n\IgnorePlayer)
 		Visible = EntityVisible(me\Collider, n\Collider) ; ~ TODO: Remove EntityVisible. Place only after Distance functions!
 		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 4.0)
 		If Dist < 2.25 Lor (PowTwo(me\SndVolume) > Dist And Visible)
