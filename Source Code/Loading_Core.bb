@@ -2689,7 +2689,7 @@ Function LoadEntities%()
 	CameraReverseZ(Camera, True)
 	AmbientLight(80.0, 80.0, 80.0)
 	SetShadowsBias(0.00044, 1.0)
-	fog\HideDistance = fog\FarDist
+	fog\HideDistance = fog\FarDist * CameraRangeScale
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
@@ -3904,4 +3904,4 @@ Function NullGame%(PlayButtonSFX% = True)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#Blitz3D_TSS
