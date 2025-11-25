@@ -4816,7 +4816,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 			If Rand(350) = 1
 				If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\1048A\Random" + Rand(0, 4) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 			EndIf
-			If Dist < 9.0 And EntityVisible(n\Collider, me\Collider) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+			If Dist < 16.0 And EntityVisible(n\Collider, me\Collider) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 				GiveAchievement("1048")
 				n\State2 = 70.0 * 2.0
 				n\State = 1.0
