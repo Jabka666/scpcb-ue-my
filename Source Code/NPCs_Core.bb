@@ -10,7 +10,7 @@ Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD%
 ;[End Block]
 
 Const MaxPathLocations% = 21
-Const PathLocationDist# = 0.04 ; ~ 0.2 ^ 2
+Const PathLocationDist# = 0.05 ; ~ 0.2 ^ 2
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
@@ -648,7 +648,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
 			n\Speed = 0.02
-			n\CollRadius = 0.26
+			n\CollRadius = 0.22
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -675,7 +675,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = 0.022
 			n\HP = 100
 			n\MaxGravity = 0.03
-			n\CollRadius = 0.26
+			n\CollRadius = 0.22
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
