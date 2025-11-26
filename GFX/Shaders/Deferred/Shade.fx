@@ -43,6 +43,9 @@ static const float4x4 LightMatrix[6] =
 
 sampler AlbedoMap : register(s0) = sampler_state
 {
+	AddressU = Clamp;
+	AddressV = Clamp;
+	AddressW = Clamp;
     MinFilter = Linear;
     MagFilter = Linear;
 	MipFilter = Linear;
@@ -50,6 +53,9 @@ sampler AlbedoMap : register(s0) = sampler_state
 
 sampler NormalMap : register(s1) = sampler_state
 {
+	AddressU = Clamp;
+	AddressV = Clamp;
+	AddressW = Clamp;
     MinFilter = Linear;
     MagFilter = Linear;
 	MipFilter = Linear;
@@ -57,6 +63,9 @@ sampler NormalMap : register(s1) = sampler_state
 
 sampler DepthMap : register(s2) = sampler_state
 {
+	AddressU = Clamp;
+	AddressV = Clamp;
+	AddressW = Clamp;
     MinFilter = Linear;
     MagFilter = Linear;
 	MipFilter = Linear;
