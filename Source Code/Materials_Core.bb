@@ -55,7 +55,7 @@ Function LoadMaterialTextures%(mat.Materials)
 	
 	Local i%
 	
-	For i = 1 To 3 ; ~ Active textures
+	For i = MATERIAL_NORMAL To MATERIAL_EMISSIVE ; ~ Active textures
 		LoadMaterialTexture(mat, i)
 	Next
 	mat\Loaded = True
@@ -70,12 +70,12 @@ Function GetMaterialTexture%(mat.Materials, Index%)
 	Return(mat\Texture[Index])
 End Function
 
-Function LoadMaterialTexture%(mat.Materials, index%)
-	If mat\Texture[index] = 0 And mat\TextureFile[index] <> ""
+Function LoadMaterialTexture%(mat.Materials, Index%)
+	If mat\Texture[Index] = 0 And mat\TextureFile[Index] <> ""
 		If mat\IsAnimated
-			mat\Texture[index] = LoadAnimTexture_Strict(mat\TextureFile[index], 1, mat\TexWidth, mat\TexHeight, mat\FirstFrame, mat\Count, DeleteAllTextures)
+			mat\Texture[Index] = LoadAnimTexture_Strict(mat\TextureFile[Index], 1, mat\TexWidth, mat\TexHeight, mat\FirstFrame, mat\Count, DeleteAllTextures)
 		Else
-			mat\Texture[index] = LoadTexture_Strict(mat\TextureFile[index], 1, DeleteAllTextures)
+			mat\Texture[Index] = LoadTexture_Strict(mat\TextureFile[Index], 1, DeleteAllTextures)
 		EndIf
 	EndIf
 End Function

@@ -2482,6 +2482,12 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				CreateConsoleMsg("Can't pick")
 			EndIf
 			;[End Block]
+		Case "setemitter"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			
+			SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), Min(Int(StrTemp), MaxParticleEffects - 1))
+			;[End Block]
 		Default
 			;[Block]
 			CreateConsoleMsg(GetLocalString("console", "notfound"), 255, 0, 0)

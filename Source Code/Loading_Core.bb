@@ -129,7 +129,9 @@ Const PARTICLE_FIRE% = 14
 Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
-Global ParticleEffect%[38]
+Const MaxParticleEffects% = 38
+
+Global ParticleEffect%[MaxParticleEffects]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
@@ -3904,4 +3906,4 @@ Function NullGame%(PlayButtonSFX% = True)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS
