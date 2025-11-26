@@ -309,7 +309,7 @@ End Function
 Function UpdateLights%(Cam%)
 	Local l.Lights, i%, Random#, Alpha#
 	
-	LightRenderDistance = Max(fog\HideDistance, 7.0)
+	LightRenderDistance = Max(fog\HideDistance, 7.5)
 	
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.1 And ((l\room <> Null And IsLightVisible(l)) Lor (l\room = Null))
@@ -2682,7 +2682,7 @@ Function UpdateDoors%()
 	Local x#, z#, Dist#, i%
 	Local SinValue#
 	Local FPSFactorEx#
-	Local HideDist# = PowTwo(fog\HideDistance * 1.75)
+	Local HideDist# = 900.0
 	
 	ButtonDirection = (Not me\InsideElevator) Lor (me\InsideElevator And (InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)))
 	d_I\ClosestButton = 0
@@ -4040,7 +4040,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * 1.2)) And SecondaryLightOn > 0.1
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(fog\HideDistance) And SecondaryLightOn > 0.1
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And (sc\ScriptedMonitor Lor EntityVisible(Camera, sc\ScrOBJ)))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
@@ -4155,7 +4155,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * 1.2)) And sc\InSight And SecondaryLightOn > 0.1
+				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(fog\HideDistance) And sc\InSight And SecondaryLightOn > 0.1
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)

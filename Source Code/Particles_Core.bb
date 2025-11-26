@@ -54,7 +54,7 @@ Function UpdateParticles%()
 	CatchErrors("UpdateParticles()")
 	
 	Local p.Particles
-	Local HideDist# = PowTwo(fog\HideDistance * LightVolume)
+	Local HideDist# = PowTwo(fog\HideDistance)
 	
 	For p.Particles = Each Particles
 		If EntityExist(p\OBJ) And EntityDistanceSquared(p\OBJ, me\Collider) <= HideDist

@@ -2500,7 +2500,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				e\room\NPC[0]\State = 2.0
 				For r.Rooms = Each Rooms
 					If r <> PlayerRoom
-						If EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) < PowTwo(fog\HideDistance * 2.0) And EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) > PowTwo(fog\HideDistance)
+						If EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) < 1156.0 And EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) > 289.0
 							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(r\OBJ), EntityY(r\OBJ), EntityZ(r\OBJ))
 							e\room\NPC[0]\PathTimer = 0.0
 							If e\room\NPC[0]\PathStatus = PATH_STATUS_FOUND Then e\EventState2 = 6.0
@@ -8782,7 +8782,7 @@ End Function
 Function UpdateEvent_096_Spawn%(e.Events)
 	Local Place%
 	
-	If e\room\Dist < fog\HideDistance
+	If e\room\Dist < 17.0
 		; ~ Checking some statements in order to determine if SCP-096 can spawn in this room
 		If e\EventState <> 2.0
 			Local e2.Events, r.Rooms
@@ -8880,7 +8880,7 @@ Function UpdateEvent_096_Spawn%(e.Events)
 			PointEntity(n_I\Curr096\Collider, me\Collider)
 			RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider) + 180.0, 0.0)
 			
-			If EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < PowTwo(fog\HideDistance * 0.5)
+			If EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < 56.25
 				If EntityVisible(n_I\Curr096\Collider, Camera)
 					PointEntity(n_I\Curr096\Collider, me\Collider)
 					RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider) + Rnd(170.0, 190.0), 0.0)
