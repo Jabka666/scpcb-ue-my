@@ -3118,7 +3118,7 @@ Function LoadEntities%()
 	
 	RenderLoading(25, GetLocalString("loading", "graphic"))
 	
-	ApplyGraphicOptions()
+	TextureAnisotropic(opt\AnisotropicLevel)
 	
 	RenderLoading(30, GetLocalString("loading", "console"))
 	

@@ -960,7 +960,7 @@ Function UpdateMainMenu%()
 							UserTrackCheck = 0
 							UserTrackCheck2 = 0
 							
-							ApplyGraphicOptions()
+							TextureAnisotropic(opt\AnisotropicLevel)
 							
 							mm\MainMenuTab = MainMenuTab_Default
 							;[End Block]
