@@ -437,7 +437,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	
 	If CastShadows Then EffectBits = EffectBits Or DEFERRED_SHADE_SHADOWS
 	If Scattering > 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SCATTERING
-	If LightType = DEFERRED_LIGHT_DIRECTIONAL Lor Distance(x, EntityX(Cam, True), y, EntityY(Cam, True), z, EntityZ(Cam, True)) - Range <= 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_LOD0
+	If LightType = DEFERRED_LIGHT_DIRECTIONAL Lor DistToLight - Range <= 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_LOD0
 	
 	Local DeferredShade% = GetShadeEffect(EffectBits)
 
