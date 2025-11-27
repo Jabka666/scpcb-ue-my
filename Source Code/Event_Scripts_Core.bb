@@ -35,7 +35,7 @@ Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
 			If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 3.49
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05)
 				de\SizeChange = 0.008 : de\Timer = 10000.0
-				EntityParent(de\OBJ, e\room\OBJ)
+				
 				e\EventState = 3.0
 			EndIf
 		Else
@@ -145,11 +145,9 @@ Function UpdateEvent_Cont1_005%(e.Events)
 								TFormPoint(0.0, 188.0, 459.0, e\room\OBJ, 0)
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, Rnd(360.0), 0.1, 0.01)
 								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
-								EntityParent(de\OBJ, e\room\OBJ)
 								
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityY(e\room\RoomDoors[0]\FrameOBJ, True) + 0.005, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), 90.0, e\room\Angle + 360.0, Rnd(360.0), 0.1, 0.01)
 								de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
-								EntityParent(de\OBJ, e\room\OBJ)
 								
 								TFormPoint(0.0, 0.0, 585.0, e\room\OBJ, 0)
 								PositionEntity(n_I\Curr106\Collider, TFormedX(), 0.0, TFormedZ(), True)
@@ -207,7 +205,6 @@ Function UpdateEvent_Cont1_005%(e.Events)
 				
 				TFormPoint(382.0, 150.0, -875.0, e\room\OBJ, 0)
 				de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, 0.3)
-				EntityParent(de\OBJ, e\room\OBJ)
 			Else
 				TFormPoint(-296.0, 71.0, -240.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
@@ -2797,8 +2794,7 @@ Function UpdateEvent_Room2_Storage%(e.Events)
 					;[End Block]
 				Case 10.0
 					;[Block]
-					de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, e\room\y + 0.005, e\room\z + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
-					EntityParent(de\OBJ, e\room\OBJ)
+					CreateDecal(DECAL_BLOOD_2, e\room\x + Cos(e\room\Angle - 90.0) * 760.0 * RoomScale, e\room\y + 0.005, e\room\z + Sin(e\room\Angle - 90.0) * 760.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 					;[End Block]
 				Case 14.0
 					;[Block]
@@ -2850,7 +2846,6 @@ Function UpdateEvent_Room2_Storage%(e.Events)
 					;[Block]
 					de.Decals = CreateDecal(DECAL_BLOOD_6, e\room\x + Rnd(-2.0, 2.0), e\room\y + 700.0 * RoomScale, e\room\z + Rnd(-2.0, 2.0), 270.0, Rnd(360.0), 0.0, 0.05)
 					de\SizeChange = 0.0005
-					EntityParent(de\OBJ, e\room\OBJ)
 					;[End Block]
 				Case 40.0
 					;[Block]
@@ -2984,8 +2979,7 @@ Function UpdateEvent_Room2_Test_LCZ_173%(e.Events)
 							RemoveEvent(e)
 						Else
 							TFormPoint(-801.0, 240.0, -206.95, e\room\OBJ, 0)
-							de.Decals = CreateDecal(DECAL_CRACKED_GLASS, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 180.0, 0.0, 0.2, 0.5)
-							EntityParent(de\OBJ, e\room\OBJ)
+							CreateDecal(DECAL_CRACKED_GLASS, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 180.0, 0.0, 0.2, 0.5)
 							
 							PlaySoundEx(LoadTempSound("SFX\Room\GlassBreak.ogg"), Camera, n_I\Curr173\OBJ) 
 							HideEntity(e\room\Objects[2])
@@ -3139,7 +3133,6 @@ Function UpdateEvent_Cont2_012%(e.Events)
 										
 										de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
 										de\MaxSize = 0.45 : de\SizeChange = 0.0002
-										EntityParent(de\OBJ, e\room\OBJ)
 									ElseIf e\EventState2 > 70.0 * 85.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 85.0
 										msg\DeathMsg = Format(GetLocalString("death", "012"), SubjectName)
 										Kill(True)
@@ -3204,10 +3197,7 @@ Function UpdateEvent_Cont2_500_1499%(e.Events)
 				If n_I\Curr106\State < 2.0
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Scientist\EmilyScream.ogg"), True)
 					
-					Local de.Decals
-					
-					de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
-					EntityParent(de\OBJ, e\room\OBJ)
+					CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[0], True), e\room\y + 0.005, EntityZ(e\room\Objects[0], True), 90.0, Rnd(360.0), 0.0, 0.8, 0.8)
 					
 					AffectDecayDoor(e\room\RoomDoors[0])
 					
@@ -3427,8 +3417,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 					Next
 					ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
 					
-					de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(me\Collider, True), e\room\y + 4865.0 * RoomScale + 0.005, EntityZ(me\Collider, True), 90.0, Rnd(360.0), 0.0, 0.5)
-					EntityParent(de\OBJ, e\room\OBJ)
+					CreateDecal(DECAL_BLOOD_2, EntityX(me\Collider, True), e\room\y + 4865.0 * RoomScale + 0.005, EntityZ(me\Collider, True), 90.0, Rnd(360.0), 0.0, 0.5)
 					
 					PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Officer2.ogg"), True)
 					
@@ -3527,7 +3516,7 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 	If PlayerRoom = e\room
 		e\EventState = 0.0
 		
-		Local it.Items, itt.ItemTemplates, de.Decals
+		Local it.Items, itt.ItemTemplates
 		Local Pick1162ARC% = True
 		Local pp% = CreatePivot(e\room\OBJ)
 		Local i%, Pvt%
@@ -3666,8 +3655,7 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 			PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
-			EntityParent(de\OBJ, e\room\OBJ)
+			CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
 			FreeEntity(Pvt) : Pvt = 0
 			For itt.ItemTemplates = Each ItemTemplates
 				If IsItemGoodFor1162ARC(itt) And Rand(6) = 1
@@ -3699,8 +3687,7 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 				PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
 				TurnEntity(Pvt, 90.0, 0.0, 0.0)
 				EntityPick(Pvt, 0.3)
-				de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
-				EntityParent(de\OBJ, e\room\OBJ)
+				CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
 				FreeEntity(Pvt) : Pvt = 0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 				me\LightFlash = 5.0
@@ -4375,7 +4362,7 @@ End Function
 
 Function UpdateEvent_Cont1_079%(e.Events)
 	If PlayerRoom = e\room
-		Local n.NPCs, de.Decals, it.Items
+		Local n.NPCs, it.Items
 		
 		If EntityY(me\Collider) < (-9500.0) * RoomScale
 			If e\EventState = 0.0
@@ -4386,8 +4373,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 				
 				TFormPoint(-2220.0, -10688.0, 1000.0, e\room\OBJ, 0)
-				de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.5)
-				EntityParent(de\OBJ, e\room\OBJ)
+				CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.5)
 				
 				TFormPoint(-897.0, -10534.0, 783.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-079", it_paper, TFormedX(), TFormedY(), TFormedZ())
@@ -4586,7 +4572,6 @@ Function UpdateEvent_Cont1_106%(e.Events)
 						If e\EventState3 - fps\Factor[0] < 2500.0 
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\NPC[0]\OBJ, True), e\room\y - 6392.0 * RoomScale, EntityZ(e\room\NPC[0]\OBJ, True), 90.0, 0.0, Rnd(360.0), 0.1, 0.01) 
 							de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.003
-							EntityParent(de\OBJ, e\room\OBJ)
 							
 							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							LoadEventSound(e, "SFX\Character\LureSubject\106Bait.ogg", 1)
@@ -4599,7 +4584,6 @@ Function UpdateEvent_Cont1_106%(e.Events)
 							de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.002
 							RotateEntity(de\OBJ, EntityPitch(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityYaw(e\room\RoomSecurityCams[0]\CameraOBJ, True) + 30.0, EntityRoll(de\OBJ))
 							MoveEntity(de\OBJ, 0.0, 0.05, 0.2) 
-							EntityParent(de\OBJ, e\room\OBJ)
 						ElseIf e\EventState3 > 3200.0
 							RemoveNPC(e\room\NPC[1])
 							If e\EventState2 = 1.0
@@ -4746,10 +4730,9 @@ Function UpdateEvent_Cont1_895%(e.Events)
 					If fDir < 275.0 And e\room\NPC[1]\Frame >= 275.0
 						PlaySoundEx(LoadTempSound("SFX\Character\BodyFall.ogg"), Camera, e\room\NPC[1]\Collider)
 						
-						Local de.Decals, it.Items
+						Local it.Items
 						
-						de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
-						EntityParent(de\OBJ, e\room\OBJ)
+						CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
 						
 						CreateItem("Unknown Note", it_paper, e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
 						
@@ -4872,13 +4855,11 @@ Function UpdateEvent_Room2_2_HCZ_106%(e.Events)
 				me\BlurTimer = 800.0
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), 0.0, e\room\Angle - 90.0, Rnd(360.0), 0.1, 0.01)
 				de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
-				EntityParent(de\OBJ, e\room\OBJ)
 			EndIf
 			
 			If (e\EventState / 250.0) > 0.65 And ((e\EventState - FPSFactorEx) / 250.0) <= 0.65
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 0.0, e\room\Angle + 90.0, Rnd(360.0), 0.1, 0.01)
 				de\SizeChange = 0.003 : de\AlphaChange = 0.005 : de\Timer = 90000.0
-				EntityParent(de\OBJ, e\room\OBJ)
 			EndIf
 			If e\EventState < 50.0
 				n_I\Curr106\Idle = 1
@@ -4974,8 +4955,7 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 				EndIf
 			EndIf
 		ElseIf e\EventState = 1.0
-			de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ), e\room\y + 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
-			EntityParent(de\OBJ, e\room\OBJ)
+			CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\OBJ), e\room\y + 445.0 * RoomScale, EntityZ(e\room\OBJ), -90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.7, 0.85))
 			
 			PlaySound_Strict(snd_I\HorrorSFX[10])
 			
@@ -4997,7 +4977,7 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 				ResetEntity(n_I\Curr106\Collider)
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 				de\SizeChange = 0.01
-				EntityParent(de\OBJ, e\room\OBJ)
+				
 				e\EventState = 300.0
 			ElseIf e\EventState < 800.0
 				If EntityY(n_I\Curr106\Collider) >= EntityY(me\Collider) - 0.05 Lor (chs\NoTarget Lor I_268\InvisibilityOn)
@@ -5324,24 +5304,21 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 						Temp2 = Rnd(197.0, 199.0) * CosValue
 						de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x - Temp2, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 						de\SizeChange = 0.001
-						EntityParent(de\OBJ, e\room\OBJ)
+						
 						de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x - Temp2, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 						de\SizeChange = 0.001
-						EntityParent(de\OBJ, e\room\OBJ)
+						
 					Else
 						Temp2 = Rnd(197.0, 199.0) * SinValue - Rnd(0.001, 0.003)
 						de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - Temp2, 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 						de\SizeChange = 0.001
-						EntityParent(de\OBJ, e\room\OBJ)
+						
 						de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - Temp2, 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 						de\SizeChange = 0.001
-						EntityParent(de\OBJ, e\room\OBJ)
 					EndIf
-					de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(e\room\NPC[0]\Collider) + Rnd(-2.0, 2.0), e\room\y + 0.005, EntityZ(e\room\NPC[0]\Collider) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0)
-					EntityParent(de\OBJ, e\room\OBJ)
+					CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(e\room\NPC[0]\Collider) + Rnd(-2.0, 2.0), e\room\y + 0.005, EntityZ(e\room\NPC[0]\Collider) + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0)
 				Next
-				de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(e\room\NPC[0]\Collider), e\room\y + 0.005, EntityZ(e\room\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0)
-				EntityParent(de\OBJ, e\room\OBJ)
+				CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), EntityX(e\room\NPC[0]\Collider), e\room\y + 0.005, EntityZ(e\room\NPC[0]\Collider), 90.0, Rnd(360.0), 0.0)
 				
 				StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
 				
@@ -5848,7 +5825,7 @@ End Function
 
 Function UpdateEvent_Cont2_409%(e.Events)
 	If PlayerRoom = e\room
-		Local it.Items, de.Decals
+		Local it.Items
 		
 		If EntityY(me\Collider) < (-3728.0) * RoomScale
 			ShouldPlay = 27
@@ -5865,8 +5842,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				SetNPCFrame(e\room\NPC[0], 19.0)
 				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
 				
-				de.Decals = CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
-				EntityParent(de\OBJ, e\room\OBJ)
+				CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
 				
 				If I_005\ChanceToSpawn = 2
 					TFormPoint(-5000.0, -4409.0, 1520.0, e\room\OBJ, 0)
@@ -6143,7 +6119,7 @@ Function UpdateEvent_Cont3_966%(e.Events)
 			Case 0.0
 				;[Block]
 				If e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open
-					Local it.Items, de.Decals
+					Local it.Items
 					
 					For i = 0 To 1
 						CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
@@ -6161,8 +6137,7 @@ Function UpdateEvent_Cont3_966%(e.Events)
 					emit\State = 5
 					
 					TFormPoint(0.0, 0.0, -418.0, e\room\OBJ, 0)
-					de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), e\room\y + 0.005, TFormedZ(), 90.0, e\room\Angle + 90.0, 0.0, 0.4)
-					EntityParent(de\OBJ, e\room\OBJ)
+					CreateDecal(DECAL_BLOOD_2, TFormedX(), e\room\y + 0.005, TFormedZ(), 90.0, e\room\Angle + 90.0, 0.0, 0.4)
 					
 					TFormPoint(-68.0, 40.0, -396.0, e\room\OBJ, 0)
 					CreateItem("Asav Harn's Badge", it_badge, TFormedX(), TFormedY(), TFormedZ())
@@ -7272,8 +7247,6 @@ Function UpdateEvent_Toilets_789_J%(e.Events)
 End Function
 
 Function UpdateEvent_Room2_6_EZ_Guard%(e.Events)
-	Local de.Decals
-	
 	Select e\EventState
 		Case 0.0
 			;[Block]
@@ -7297,8 +7270,7 @@ Function UpdateEvent_Room2_6_EZ_Guard%(e.Events)
 		Case 2.0
 			;[Block]
 			TFormPoint(685.0, 150.0, 988.0, e\room\OBJ, 0)
-			de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, 0.0, 0.3)
-			EntityParent(de\OBJ, e\room\OBJ)
+			CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, 0.0, 0.3)
 			
 			e\EventState = 3.0
 			;[End Block]
@@ -7426,14 +7398,13 @@ End Function
 
 Function UpdateEvent_Room2_IC%(e.Events)
 	If PlayerRoom = e\room
-		Local de.Decals, n.NPCs
+		Local n.NPCs
 		
 		TFormPoint(-1200.0, 51.2, 0.0, e\room\OBJ, 0)
 		
 		Local x1# = TFormedX(), y1# = TFormedY(), z1# = TFormedZ()
 		
-		de.Decals = CreateDecal(DECAL_BLOOD_2, x1, y1 - (51.2 * RoomScale) + 0.005, z1, 90.0, Rnd(360.0), 0.0)
-		EntityParent(de\OBJ, e\room\OBJ)
+		CreateDecal(DECAL_BLOOD_2, x1, y1 - (51.2 * RoomScale) + 0.005, z1, 90.0, Rnd(360.0), 0.0)
 		
 		n.NPCs = CreateNPC(NPCTypeD, x1, y1, z1)
 		n\State3 = -1.0 : n\IsDead = True
@@ -8064,7 +8035,6 @@ Function UpdateEvent_Dimension_106%(e.Events)
 									n_I\Curr106\State2 = Rnd(10000.0, 12000.0)
 									
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
-									EntityParent(de\OBJ, e\room\OBJ)
 									TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
 									
 									For e2.Events = Each Events
@@ -8896,11 +8866,9 @@ Function UpdateEvent_096_Spawn%(e.Events)
 End Function
 
 Function UpdateEvent_106_Sinkhole%(e.Events)
-	Local de.Decals
-	
 	If e\EventState = 0.0
-		de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x + Rnd(-0.5, 0.5), e\room\y + 0.005, e\room\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, 2.5)
-		EntityParent(de\OBJ, e\room\OBJ)
+		CreateDecal(DECAL_CORROSIVE_1, e\room\x + Rnd(-0.5, 0.5), e\room\y + 0.005, e\room\z + Rnd(-0.5, 0.5), 90.0, Rnd(360.0), 0.0, 2.5)
+		
 		e\EventState = 1.0
 	ElseIf PlayerRoom = e\room
 		If snd_I\SinkHoleSFX = 0 Then snd_I\SinkHoleSFX = LoadSound_Strict("SFX\Room\Sinkhole.ogg")
@@ -8943,7 +8911,7 @@ Function UpdateEvent_106_Victim%(e.Events)
 			If e\EventState = 0.0
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 798.0 * RoomScale, e\room\z, -90.0, Rnd(360.0), 0.0, 0.5, 0.8)
 				de\SizeChange = 0.0015
-				EntityParent(de\OBJ, e\room\OBJ)
+				
 				PlaySound_Strict(snd_I\DecaySFX[3])
 				e\EventState = 1.0
 			EndIf
@@ -8985,8 +8953,7 @@ Function UpdateEvent_106_Victim%(e.Events)
 						LoadEventSound(e, "SFX\Character\BodyFall.ogg")
 						PlaySoundEx(e\Sound, Camera, e\room\NPC[0]\Collider)
 						
-						de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4, 0.8)
-						EntityParent(de\OBJ, e\room\OBJ)
+						CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4, 0.8)
 					EndIf
 					If e\room\NPC[0]\Frame >= 18.9
 						e\room\NPC[0]\IsDead = True
@@ -9013,7 +8980,6 @@ Function UpdateEvent_106_Victim_Wall%(e.Events)
 			If Rand(120) = 1
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x + Rnd(-2.0, 2.0), e\room\y + 0.005, e\room\z + Rnd(-2.0, 2.0), 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 				de\SizeChange = 0.0015
-				EntityParent(de\OBJ, e\room\OBJ)
 				
 				PlaySoundEx(snd_I\DecaySFX[0], Camera, de\OBJ, 2.0, 0.5)
 				
@@ -9865,12 +9831,9 @@ End Function
 
 Function UpdateEvent_Trick_Item%(e.Events)
 	If e\room\Dist < 8.0
-		Local de.Decals
-		
 		If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 16.0
 			If e\room\Objects[MaxRoomObjects - 1] <> 0
-				de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
-				EntityParent(de\OBJ, e\room\OBJ)
+				CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
 				
 				FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
 			EndIf
@@ -9915,8 +9878,7 @@ Function UpdateEvent_Trick_Item%(e.Events)
 					
 					PlaySound_Strict(snd_I\HorrorSFX[11])
 					
-					de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
-					EntityParent(de\OBJ, e\room\OBJ)
+					CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
 					
 					FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
 					RemoveEvent(e)

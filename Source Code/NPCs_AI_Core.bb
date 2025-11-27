@@ -588,7 +588,6 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.1)
 								
 								de\SizeChange = 0.0005 : de\MaxSize = 0.2
-								EntityParent(de\OBJ, PlayerRoom\OBJ)
 							EndIf
 							FreeEntity(Pvt) : Pvt = 0
 							
@@ -1592,11 +1591,8 @@ Function UpdateNPCType066%(n.NPCs)
 									;[End Block]
 								Case 4
 									;[Block]
-									If PlayerRoom\RoomTemplate\DisableDecals < 2
-										Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
+									If PlayerRoom\RoomTemplate\DisableDecals < 2 Then CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
 										
-										EntityParent(de\OBJ, PlayerRoom\OBJ)
-									EndIf
 									me\BigCameraShake = 5.0
 									PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
 									If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.2, 0.4), 0.0, 200.0)
@@ -1931,9 +1927,8 @@ Function UpdateNPCType096%(n.NPCs)
 										TurnEntity(Pvt, 90.0, 0.0, 0.0)
 										EntityPick(Pvt, 0.3)
 										
-										Local de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.3))
+										CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.3))
 										
-										EntityParent(de\OBJ, PlayerRoom\OBJ)
 										FreeEntity(Pvt) : Pvt = 0
 									Next
 									Kill(True) : me\KillAnim = 1
@@ -2155,7 +2150,6 @@ Function UpdateNPCType106%(n.NPCs)
 					ResetEntity(n\Collider)
 					de.Decals = CreateDecal(DECAL_CORROSIVE_1, n\EnemyX, n\EnemyY + 0.005, n\EnemyZ, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
 					de\SizeChange = 0.001
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
 					
 					SetNPCFrame(n, 110.0)
 					
@@ -4696,7 +4690,6 @@ Function UpdateNPCType999%(n.NPCs)
 				If EntityPick(Pvt, 0.6)
 					de.Decals = CreateDecal(DECAL_999, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.36), 0.4, (n\State3 > 1.0))
 					de\AlphaChange = -0.0003
-					EntityParent(de\OBJ, PlayerRoom\OBJ)
 				EndIf
 				FreeEntity(Pvt) : Pvt = 0
 				
