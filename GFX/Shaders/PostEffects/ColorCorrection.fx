@@ -10,9 +10,9 @@
 
 sampler ColorMap : register(s0) = sampler_state
 {
-    MinFilter = Linear;
-    MagFilter = Linear;
-    MipFilter = Linear;
+    MinFilter = None;
+    MagFilter = None;
+    MipFilter = None;
     AddressU = Clamp;
     AddressV = Clamp;
     AddressW = Clamp;

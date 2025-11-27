@@ -364,7 +364,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		WireFrame(0)
 		
 		ProcessFXAA()
-		ProcessBloom(0.45)
+		ProcessBloom(0.6)
 		ProcessColorCorrection()
 		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)
@@ -488,7 +488,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
-			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range) + VolumeScale)
+			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range) * 2.0 + VolumeScale * 2.0)
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]

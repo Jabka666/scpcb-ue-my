@@ -8,8 +8,8 @@
 
 #include "..\Deferred\Tools.fx"
 
-#define NUM_SAMPLES 3
-static const float INV_SAMPLES = 1.0 / (NUM_SAMPLES * 4);
+#define NUM_SAMPLES 8
+static const float INV_SAMPLES = 1.0 / NUM_SAMPLES;
 static const float NoiseSize = ScreenSize / 512.0;
 
 const float SSAOStrength = 1.f;
@@ -24,9 +24,14 @@ static const float FarClipSqr = FarClip * FarClip;
 
 static const float2 SSAOSamples[NUM_SAMPLES] =
 {
-    float2(1, 0),
-    float2(-0.5, 0.866),
-    float2(-0.5, -0.866)
+    float2(0.200,  0.000),
+    float2(-0.250, 0.150),
+    float2(0.100, -0.380),
+    float2(0.350,  0.350),
+    float2(-0.550, -0.200),
+    float2(0.200,  0.650),
+    float2(-0.700, 0.400),
+    float2(0.600, -0.750)
 };
 
 static const int MAX_WEIGHTS = 9;
@@ -37,25 +42,24 @@ static const float offsets[MAX_WEIGHTS] = {
 static const float weights[MAX_WEIGHTS] = {
     0.052, 0.092, 0.122, 0.152, 0.162, 0.152, 0.122, 0.092, 0.052
 };
-
 	
 static const float DEPTH_FALLOFF = 25.0f;
 
 sampler NormalMap : register(s1) = sampler_state
 {
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = Linear;
-	AddressU = Clamp;
-	AddressV = Clamp;
-	AddressW = Clamp;
+    MinFilter = None;
+    MagFilter = None;
+    MipFilter = None;
+    AddressU = Clamp;
+    AddressV = Clamp;
+    AddressW = Clamp;
 };
 
 sampler DepthMap : register(s2) = sampler_state
 {
-    MinFilter = Linear;
-    MagFilter = Linear;
-    MipFilter = Linear;
+    MinFilter = None;
+    MagFilter = None;
+    MipFilter = None;
     AddressU = Clamp;
     AddressV = Clamp;
     AddressW = Clamp;
@@ -63,32 +67,32 @@ sampler DepthMap : register(s2) = sampler_state
 
 sampler AlbedoMap : register(s3) = sampler_state
 {
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = Linear;
-	AddressU = Clamp;
-	AddressV = Clamp;
-	AddressW = Clamp;
+    MinFilter = None;
+    MagFilter = None;
+    MipFilter = None;
+    AddressU = Clamp;
+    AddressV = Clamp;
+    AddressW = Clamp;
 };
 
 sampler NoiseMap : register(s4) = sampler_state
 {
     MinFilter = Linear;
     MagFilter = Linear;
-	MipFilter = Linear;
-	AddressU = Wrap;
-	AddressV = Wrap;
-	AddressW = Wrap;
+    MipFilter = Linear;
+    AddressU = Wrap;
+    AddressV = Wrap;
+    AddressW = Wrap;
 };
 
 sampler SSAOMap : register(s5) = sampler_state
 {
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = Linear;
-	AddressU = Clamp;
-	AddressV = Clamp;
-	AddressW = Clamp;
+    MinFilter = None;
+    MagFilter = None;
+    MipFilter = None;
+    AddressU = Clamp;
+    AddressV = Clamp;
+    AddressW = Clamp;
 };
 
 struct PS_INPUT
@@ -135,15 +139,11 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 	const float radius = SSAORadius / sqrt(len);
 	
 	float ao = 0.0f; 
-	for (int j = 0; j < NUM_SAMPLES; ++j) 
-	{
-		float2 coord1 = reflect(SSAOSamples[j], randomNormal) * radius; 
-		float2 coord2 = float2(coord1.x * 0.7 - coord1.y * 0.7, coord1.x * 0.7 + coord1.y * 0.7); 
 
-		ao += CalculateAO(input.TexCoord, coord1 * 0.25, position, normal); 
-		ao += CalculateAO(input.TexCoord, coord2 * 0.5, position, normal); 
-		ao += CalculateAO(input.TexCoord, coord1 * 0.75, position, normal); 
-		ao += CalculateAO(input.TexCoord, coord2, position, normal); 
+	[unroll]for (int j = 0; j < NUM_SAMPLES; ++j) 
+	{
+		float2 coord = reflect(SSAOSamples[j], randomNormal) * radius; 
+		ao += CalculateAO(input.TexCoord, coord, position, normal); 
 	}
 	
 	return lerp(1.0 - ao * INV_SAMPLES, 1.0, 1.0 - GetFade(len, FarClipSqr * 0.8, FarClipSqr));

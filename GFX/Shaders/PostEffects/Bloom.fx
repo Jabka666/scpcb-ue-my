@@ -8,11 +8,17 @@
 
 #include "..\Deferred\Tools.fx"
 
+const float BloomThreshold = 0.6f;
+const float BloomIntensity = 1.5f;
+const float BloomSoftKnee  = 0.5f;
+
+static const float2 BlurInvSize = 1.0 / (ScreenSize / 4.0);
+
 sampler ColorMap : register(s0) = sampler_state
 {
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = Linear;
+    MinFilter = None;
+    MagFilter = None;
+	MipFilter = None;
 	AddressU = Clamp;
 	AddressV = Clamp;
 	AddressW = Clamp;
@@ -36,115 +42,129 @@ sampler BloomBlur : register(s2) = sampler_state
 	AddressW  = Clamp;
 };
 
-const float BloomThreshold = 0.4;
-const float2 BloomMix = float2(1, 1);
-static const float2 BlurInvSize = 1.0 / (ScreenSize / 4.0);
-
-static const float offsets[5] = {
-    2.0,
-    1.0,
-    0.0,
-    -1.0,
-    -2.0,
+static const float offsets[3] = 
+{ 
+	0.0,
+	1.38461538,
+	3.23076923
 };
 
-static const float weights[5] = {
-    0.1,
-    0.25,
-    0.3,
-    0.25,
-    0.1
+static const float weights[3] = 
+{ 
+	0.22702702, 
+	0.31621621, 
+	0.07027027 
 };
 
 struct PS_INPUT
-{ 
-	float4 Pos 				: POSITION0; 
-	float2 TexCoord 		: TEXCOORD0;
-	float2 BlurCoord		: TEXCOORD1;
-}; 
+{
+    float4 Pos       : POSITION0;
+    float2 TexCoord  : TEXCOORD0;
+	float2 BlurCoord : TEXCOORD1;
+};
 
 PS_INPUT VertexProcess(VS_INPUT input)
-{ 
-	PS_INPUT output; 
-	output.Pos = mul(input.Pos, ViewProj); 
-	
+{
+    PS_INPUT output;
+    output.Pos = mul(input.Pos, ViewProj);
 	float2 ScreenCoord = GetScreenTexCoords(output.Pos);
 	output.TexCoord = ScreenCoord + halfPixel;
 	output.BlurCoord = ScreenCoord + BlurInvSize;
-	return output;
+    return output;
 }
 
 float4 ProcessDownsample(PS_INPUT input) : COLOR
 {
-    float3 rgb = Sample2D(ColorMap, input.TexCoord).rgb;
-	return float4((rgb - BloomThreshold) / (1.0 - BloomThreshold), 1.0);
+    float3 color = Sample2D(ColorMap, input.TexCoord).rgb;
+
+    float luma = dot(color, float3(0.299, 0.587, 0.114));
+    // Soft Threshold
+    float knee = BloomThreshold * BloomSoftKnee;
+    float soft = luma - BloomThreshold + knee;
+    soft = clamp(soft, 0.0, 2.0 * knee);
+    soft = soft * soft / (4.0 * knee + 0.00001);
+    
+    float contribution = max(soft, luma - BloomThreshold);
+    contribution /= max(luma, 0.00001);
+    return float4(color * contribution, 1.0);
 }
 
 float4 ProcessH(PS_INPUT input) : COLOR
 {
-	float3 color = 0.0;
-	for (int i = 0; i < 5; ++i) color += Sample2D(BloomMap, input.TexCoord + (float2(offsets[i], 0.0)) * BlurInvSize).rgb * weights[i];
-	return float4(color, 1.0);
+    float3 color = Sample2D(BloomMap, input.TexCoord).rgb * weights[0];
+
+    for (int i = 1; i < 3; i++)
+    {
+        float2 offset = float2(offsets[i], 0.0) * BlurInvSize;
+        color += Sample2D(BloomMap, input.TexCoord + offset).rgb * weights[i];
+        color += Sample2D(BloomMap, input.TexCoord - offset).rgb * weights[i];
+    }
+    
+    return float4(color, 1.0);
 }
 
 float4 ProcessV(PS_INPUT input) : COLOR
 {
-	float3 color = 0.0;
-	for (int i = 0; i < 5; ++i) color += Sample2D(BloomBlur, input.TexCoord + (float2(0.0, offsets[i])) * BlurInvSize).rgb * weights[i];
-	return float4(color, 1.0);
+    float3 color = Sample2D(BloomBlur, input.TexCoord).rgb * weights[0];
+    
+    for (int i = 1; i < 3; i++)
+    {
+        float2 offset = float2(0.0, offsets[i]) * BlurInvSize;
+        color += Sample2D(BloomBlur, input.TexCoord + offset).rgb * weights[i];
+        color += Sample2D(BloomBlur, input.TexCoord - offset).rgb * weights[i];
+    }
+    
+    return float4(color, 1.0);
 }
 
 float4 ProcessCombine(PS_INPUT input) : COLOR
 {
-    float3 diff = Sample2D(ColorMap, input.TexCoord).rgb * BloomMix.x;
-    float3 bloom = Sample2D(BloomMap, input.BlurCoord).rgb * BloomMix.y;
-	return float4((diff * saturate(1.0 - bloom)) + bloom, 1.0);
+    return Sample2D(BloomMap, input.BlurCoord) * BloomIntensity;
 }
 
 technique Downsample
 {
-	pass p0
-	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 ProcessDownsample();
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-	}
+    pass p0
+    {
+        VertexShader = compile vs_3_0 VertexProcess();
+        PixelShader = compile ps_3_0 ProcessDownsample();
+        ZWriteEnable = false;
+        Lighting = false;
+        AlphaBlendEnable = false;
+    }
 }
 
 technique BlurH
 {
-	pass p0
-	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 ProcessH();
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-	}
+    pass p0
+    {
+        VertexShader = compile vs_3_0 VertexProcess();
+        PixelShader = compile ps_3_0 ProcessH();
+        ZWriteEnable = false;
+        Lighting = false;
+        AlphaBlendEnable = false;
+    }
 }
 
 technique BlurV
 {
-	pass p0
-	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 ProcessV();
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-	}
+    pass p0
+    {
+        VertexShader = compile vs_3_0 VertexProcess();
+        PixelShader = compile ps_3_0 ProcessV();
+        ZWriteEnable = false;
+        Lighting = false;
+        AlphaBlendEnable = false;
+    }
 }
 
 technique Combine
 {
-	pass p0
-	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 ProcessCombine();
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-	}
+    pass p0
+    {
+        VertexShader = compile vs_3_0 VertexProcess();
+        PixelShader = compile ps_3_0 ProcessCombine();
+        ZWriteEnable = false;
+        Lighting = false;
+    }
 }
