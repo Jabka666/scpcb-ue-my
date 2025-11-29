@@ -929,113 +929,159 @@ Function FillRoom%(r.Rooms)
 			
 			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
 			r\Textures[1] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors.png", 1, 512, 512, 0, 11, DeleteAllTextures)
+			r\Textures[2] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_interference.png", 1, 512, 512, 0, 6, DeleteAllTextures)
 			
 			Scale = RoomScale * 1.8
+			
+			Local MonWidth# = MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
+			Local MonHeight# = MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
+			
 			; ~ Monitor Objects
-			For i = 0 To 14
-				If i <> 7
-					r\Objects[i] = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL])
-					ScaleEntity(r\Objects[i], Scale, Scale, Scale)
-					If i <> 4 And i <> 13
-						Screen = CreateSprite()
-						EntityFX(Screen, 17)
-						SpriteViewMode(Screen, 2)
-						ScaleSprite(Screen, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475)
-						Select i
-							Case 0
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 0)
-								;[End Block]
-							Case 1
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 10)
-								;[End Block]
-							Case 2
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 2)
-								;[End Block]
-							Case 3
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 1)
-								;[End Block]
-							Case 5
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 9)
-								;[End Block]
-							Case 8
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 4)
-								;[End Block]
-							Case 9
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 5)
-								;[End Block]
-							Case 10
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 3)
-								;[End Block]
-							Case 11
-								;[Block]
-								EntityTexture(Screen, r\Textures[1], 8)
-								;[End Block]
-							Default
-								;[Block]
-								EntityTexture(Screen, r\Textures[0], 3)
-								;[End Block]
-						End Select
-						EntityParent(Screen, r\Objects[i])
-					ElseIf i = 4
-						r\Objects[18] = CreateSprite()
-						EntityFX(r\Objects[18], 17)
-						SpriteViewMode(r\Objects[18], 2)
-						ScaleSprite(r\Objects[18], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.475)
-						EntityTexture(r\Objects[18], r\Textures[0], 2)
-						EntityParent(r\Objects[18], r\Objects[i])
-					Else
-						r\Objects[19] = CreateSprite()
-						EntityFX(r\Objects[19], 17)
-						SpriteViewMode(r\Objects[19], 2)
-						ScaleSprite(r\Objects[19], MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[0]) * Scale * 0.475)
-						EntityTexture(r\Objects[19], r\Textures[1], 7)
-						EntityParent(r\Objects[19], r\Objects[i])
-					EndIf
-					HideEntity(r\Objects[i])
+			For i = 0 To 13
+				Local Skip% = (i = 1 Lor i = 4 Lor i = 6 Lor i = 12 Lor i = 13)
+				
+				r\Objects[i] = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL])
+				ScaleEntity(r\Objects[i], Scale, Scale, Scale)
+				
+				If (Not Skip)
+					Screen = CreateSprite()
+					EntityFX(Screen, 17)
+					SpriteViewMode(Screen, 2)
+					ScaleSprite(Screen, MonWidth, MonHeight)
+					Select i
+						Case 0
+							;[Block]
+							Temp = 0
+							xTemp = -207.94
+							yTemp = 648.0
+							zTemp = -60.0686
+							Angle = 105.0
+							;[End Block]
+						Case 2
+							;[Block]
+							Temp = 1
+							xTemp = -207.94
+							yTemp = 872.0
+							zTemp = -60.0686
+							Angle = 105.0
+							;[End Block]
+						Case 3
+							;[Block]
+							Temp = 2
+							xTemp = -231.489
+							yTemp = 648.0
+							zTemp = 95.744
+							Angle = 90.0
+							;[End Block]
+						Case 5
+							;[Block]
+							Temp = 3
+							xTemp = -231.489
+							yTemp = 648.0
+							zTemp = 255.744
+							;[End Block]
+						Case 7
+							;[Block]
+							Temp = 4
+							xTemp = -231.489
+							yTemp = 872.0
+							zTemp = 255.744
+							Angle = 90.0
+							;[End Block]
+						Case 8
+							;[Block]
+							Temp = 10
+							xTemp = -231.489
+							yTemp = 648.0
+							zTemp = 415.744
+							Angle = 90.0
+							;[End Block]
+						Case 9
+							;[Block]
+							Temp = 9
+							xTemp = -231.489
+							yTemp = 760.0
+							zTemp = 415.744
+							Angle = 90.0
+							;[End Block]
+						Case 10
+							;[Block]
+							Temp = 8
+							xTemp = -231.489
+							yTemp = 872.0
+							zTemp = 415.744
+							Angle = 90.0
+							;[End Block]
+						Case 11
+							;[Block]
+							Temp = 5
+							xTemp = -208.138
+							yTemp = 648.0
+							zTemp = 571.583
+							Angle = 75.0
+							;[End Block]
+					End Select
+					EntityTexture(Screen, r\Textures[1], Temp)
+					EntityParent(Screen, r\Objects[i])
 				Else
-					r\Objects[7] = CreatePivot()
-					PositionEntity(r\Objects[7], r\x, r\y + 100.0 * RoomScale, r\z - 800.0 * RoomScale, True)
-					EntityParent(r\Objects[7], r\OBJ)
+					Select i
+						Case 1
+							;[Block]
+							k = 20
+							xTemp = -207.94
+							yTemp = 760.0
+							zTemp = -60.0686
+							Angle = 105.0
+							;[End Block]
+						Case 4
+							;[Block]
+							k = 18
+							xTemp = -231.489
+							yTemp = 872.0
+							zTemp = 95.744
+							Angle = 90.0
+							;[End Block]
+						Case 6
+							;[Block]
+							k = 19
+							xTemp = -231.489
+							yTemp = 760.0
+							zTemp = 255.744
+							Angle = 90.0
+							;[End Block]
+						Case 12
+							;[Block]
+							k = 21
+							xTemp = -208.138
+							yTemp = 760.0
+							zTemp = 571.583
+							Angle = 75.0
+							;[End Block]
+						Case 13
+							;[Block]
+							k = 22
+							xTemp = -208.138
+							yTemp = 872.0
+							zTemp = 571.583
+							Angle = 75.0
+							;[End Block]
+					End Select
+					r\Objects[k] = CreateSprite()
+					EntityFX(r\Objects[k], 17)
+					SpriteViewMode(r\Objects[k], 2)
+					ScaleSprite(r\Objects[k], MonWidth, MonHeight)
+					EntityTexture(r\Objects[k], r\Textures[2], 0)
+					EntityParent(r\Objects[k], r\Objects[i])
 				EndIf
+				PositionEntity(r\Objects[i], r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
+				RotateEntity(r\Objects[i], 0.0, Angle, 0.0)
+				EntityParent(r\Objects[i], r\OBJ)
+				HideEntity(r\Objects[i])
 			Next
 			
-			For i = 0 To 2
-				PositionEntity(r\Objects[i], r\x - 207.94 * RoomScale, r\y + (648.0 + (112.0 * i)) * RoomScale, r\z - 60.0686 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 105.0, 0.0)
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			For i = 3 To 5
-				PositionEntity(r\Objects[i], r\x - 231.489 * RoomScale, r\y + (648.0 + (112.0 * (i - 3))) * RoomScale, r\z + 95.7443 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 90.0, 0.0)
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			For i = 6 To 8 Step 2
-				PositionEntity(r\Objects[i], r\x - 231.489 * RoomScale, r\y + (648.0 + (112.0 * (i - 6))) * RoomScale, r\z + 255.744 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 90.0, 0.0)
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			For i = 9 To 11
-				PositionEntity(r\Objects[i], r\x - 231.489 * RoomScale, r\y + (648.0 + (112.0 * (i - 9))) * RoomScale, r\z + 415.744 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 90.0, 0.0)
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
-			
-			For i = 12 To 14
-				PositionEntity(r\Objects[i], r\x - 208.138 * RoomScale, r\y + (648.0 + (112.0 * (i - 12))) * RoomScale, r\z + 571.583 * RoomScale)
-				RotateEntity(r\Objects[i], 0.0, 75.0, 0.0)
-				EntityParent(r\Objects[i], r\OBJ)
-			Next
+			r\Objects[14] = CreatePivot()
+			PositionEntity(r\Objects[14], r\x, r\y + 100.0 * RoomScale, r\z - 800.0 * RoomScale, True)
+			EntityParent(r\Objects[14], r\OBJ)
 			
 			; ~ PathPoints for SCP-049
 			r\Objects[15] = CreatePivot()
@@ -1051,7 +1097,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[17], r\OBJ)
 			
 			; ~ Camera in the room itself
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, 20.0, True, r\x - 231.0 * RoomScale, r\y + 760.0 * RoomScale, r\z + 256.0 * RoomScale, 0.0, 90.0, 0.0)
+			sc.SecurityCams = CreateSecurityCam(r, r\x - 159.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 929.0 * RoomScale, 20.0, True, r\x - 231.0 * RoomScale, r\y + 760.0 * RoomScale, r\z + 95.744 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 315.0
 			;[End Block]
 		Case r_room2_storage

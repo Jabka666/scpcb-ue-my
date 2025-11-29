@@ -2341,7 +2341,6 @@ Function UpdateEvent_Room2_SL%(e.Events)
 	Local sc.SecurityCams
 	Local Dist#, i%
 	
-	
 	If PlayerRoom = e\room
 		If e\EventState = 0.0
 			If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 1.5
@@ -2364,10 +2363,10 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				For i = 0 To MaxRoomAdjacents - 1
 					If e\room\AdjDoor[i] <> Null
 						If Adj1 = -1
-							AdjDist1 = EntityDistanceSquared(e\room\Objects[7], e\room\AdjDoor[i]\FrameOBJ)
+							AdjDist1 = EntityDistanceSquared(e\room\Objects[14], e\room\AdjDoor[i]\FrameOBJ)
 							Adj1 = i
 						Else
-							AdjDist2 = EntityDistanceSquared(e\room\Objects[7], e\room\AdjDoor[i]\FrameOBJ)
+							AdjDist2 = EntityDistanceSquared(e\room\Objects[14], e\room\AdjDoor[i]\FrameOBJ)
 							Adj2 = i
 						EndIf
 					EndIf
@@ -2375,17 +2374,17 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				
 				If n_I\Curr049 = Null
 					If AdjDist1 > AdjDist2
-						n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
+						n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
 					Else
-						n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
+						n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
 					EndIf
 					GiveAchievement("049")
 				Else
 					If n_I\Curr049\State <> 66.0
 						If AdjDist1 > AdjDist2
-							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ), True)
+							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ), True)
 						Else
-							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[7], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ), True)
+							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ), True)
 						EndIf
 						ResetEntity(n_I\Curr049\Collider)
 					EndIf
@@ -2571,8 +2570,8 @@ Function UpdateEvent_Room2_SL%(e.Events)
 		
 		; ~ Checking if the monitors and such should be rendered or not
 		If (Not IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(me\Collider, True), 1.0))
-			For i = 0 To 14
-				If e\room\Objects[i] <> 0 And i <> 7
+			For i = 0 To 13
+				If e\room\Objects[i] <> 0
 					If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 				EndIf
 			Next
@@ -2584,9 +2583,29 @@ Function UpdateEvent_Room2_SL%(e.Events)
 			Next
 			
 			UpdateRedLight(e\room\RoomLights[0], 1500, 800)
+			
+			Local e2.Events
+			
+			e\EventState4 = (e\EventState4 + 1.0) Mod 4
+			For i = 20 To 22
+				EntityTexture(e\room\Objects[i], e\room\Textures[2], e\EventState4)
+			Next
+			
+			For e2.Events = Each Events
+				If e2\EventID = e_cont2_008
+					If e2\EventState = 2.0
+						mon_I\UpdateCheckpoint[1] = False
+						EntityTexture(e\room\Objects[19], e\room\Textures[2], e\EventState4)
+					Else
+						mon_I\UpdateCheckpoint[1] = True ; ~ Used to update the timer only
+						EntityTexture(e\room\Objects[19], e\room\Textures[1], 6 + (mon_I\MonitorTimer[1] < 50.0))
+					EndIf
+					Exit
+				EndIf
+			Next
 		Else
-			For i = 0 To 14
-				If e\room\Objects[i] <> 0 And i <> 7
+			For i = 0 To 13
+				If e\room\Objects[i] <> 0
 					If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 				EndIf
 			Next
@@ -2597,21 +2616,6 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				EndIf
 			Next
 		EndIf
-		
-		Local e2.Events
-		
-		For e2.Events = Each Events
-			If e2\EventID = e_cont2_008
-				If e2\EventState = 2.0
-					mon_I\UpdateCheckpoint[1] = False
-					EntityTexture(e\room\Objects[19], e\room\Textures[0], 3)
-				Else
-					mon_I\UpdateCheckpoint[1] = True ; ~ Used to update the timer only
-					EntityTexture(e\room\Objects[19], e\room\Textures[1], 6 + (mon_I\MonitorTimer[1] < 50.0))
-				EndIf
-				Exit
-			EndIf
-		Next
 	EndIf
 End Function
 
