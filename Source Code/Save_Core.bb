@@ -1945,7 +1945,10 @@ Function LoadGameQuick%(File$)
 		If Angle >= 360.0 Then Angle = Angle - 360.0
 		
 		For r.Rooms = Each Rooms
-			If r\x = x And r\z = z Then Exit
+			If r\x = x And r\z = z
+				r\Found = Found
+				Exit
+			EndIf
 		Next
 		
 		If Temp2 = 1 Then PlayerRoom = r

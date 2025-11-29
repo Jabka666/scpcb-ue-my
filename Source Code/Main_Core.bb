@@ -8489,19 +8489,6 @@ Function UpdateMenu%()
 							
 							ResetRender()
 							
-							For r.Rooms = Each Rooms
-								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
-								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
-								
-								If x <= 12.0 And z <= 12.0
-									Temp = Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)
-									CurrMapGrid\Found[Temp] = Max(CurrMapGrid\Found[Temp], 1)
-									If x <= 4.0 And z <= 4.0
-										If IsEqual(EntityY(me\Collider), EntityY(r\OBJ), 1.5) Then PlayerRoom = r
-										CurrMapGrid\Found[Temp] = MapGrid_Tile
-									EndIf
-								EndIf
-							Next
 							For amsg.AchievementMsg = Each AchievementMsg
 								Delete(amsg)
 							Next
@@ -8564,19 +8551,6 @@ Function UpdateMenu%()
 							
 							ResetRender()
 							
-							For r.Rooms = Each Rooms
-								x = Abs(EntityX(me\Collider) - EntityX(r\OBJ))
-								z = Abs(EntityZ(me\Collider) - EntityZ(r\OBJ))
-								
-								If x <= 12.0 And z <= 12.0
-									Temp = Floor(EntityX(r\OBJ) / RoomSpacing) + (Floor(EntityZ(r\OBJ) / RoomSpacing) * MapGridSize)
-									CurrMapGrid\Found[Temp] = Max(CurrMapGrid\Found[Temp], 1)
-									If x <= 4.0 And z <= 4.0
-										If IsEqual(EntityY(me\Collider), EntityY(r\OBJ), 1.5) Then PlayerRoom = r
-										CurrMapGrid\Found[Temp] = MapGrid_Tile
-									EndIf
-								EndIf
-							Next
 							For amsg.AchievementMsg = Each AchievementMsg
 								Delete(amsg)
 							Next
