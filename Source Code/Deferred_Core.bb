@@ -330,7 +330,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
 		CurrTrisAmount = CurrTrisAmount + TrisRendered()
-		ProcessSSAO(Cam, 3, 0.2, Tween) ; ~ Process SSAO for opacity
+		ProcessSSAO(Cam, 3, 0.2, 0.6, Tween) ; ~ Process SSAO for opacity
 		
 		Local InvViewProjection% = CameraMatrix(Cam, 3, Tween)
 		

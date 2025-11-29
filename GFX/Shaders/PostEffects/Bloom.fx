@@ -10,7 +10,6 @@
 
 const float BloomThreshold = 0.6f;
 const float BloomIntensity = 1.5f;
-const float BloomSoftKnee  = 0.5f;
 
 static const float2 BlurInvSize = 1.0 / (ScreenSize / 4.0);
 
@@ -75,18 +74,8 @@ PS_INPUT VertexProcess(VS_INPUT input)
 
 float4 ProcessDownsample(PS_INPUT input) : COLOR
 {
-    float3 color = Sample2D(ColorMap, input.TexCoord).rgb;
-
-    float luma = dot(color, float3(0.299, 0.587, 0.114));
-    // Soft Threshold
-    float knee = BloomThreshold * BloomSoftKnee;
-    float soft = luma - BloomThreshold + knee;
-    soft = clamp(soft, 0.0, 2.0 * knee);
-    soft = soft * soft / (4.0 * knee + 0.00001);
-    
-    float contribution = max(soft, luma - BloomThreshold);
-    contribution /= max(luma, 0.00001);
-    return float4(color * contribution, 1.0);
+	float3 color = Sample2D(ColorMap, input.TexCoord).rgb;
+    return float4(color * GetBloomLuma(color, BloomThreshold), 1.0);
 }
 
 float4 ProcessH(PS_INPUT input) : COLOR

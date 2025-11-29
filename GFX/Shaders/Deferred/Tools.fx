@@ -109,3 +109,18 @@ inline float GetFade(float val, float near, float far)
 {
 	return min(1.0 - (val - near) / (far - near), 1.0);
 }
+
+inline float GetBloomLuma(float3 color, float threshold)
+{
+	float luma = GetIntensity(color);
+	// Soft Threshold
+	const float softThreshold = 0.5f;
+	float knee = threshold * softThreshold;
+	float soft = luma - threshold + knee;
+	soft = clamp(soft, 0.0, 2.0 * knee);
+	soft = soft * soft / (4.0 * knee + 0.00001);
+
+	float contribution = max(soft, luma - threshold);
+	contribution /= max(luma, 0.00001);
+	return contribution;
+}

@@ -8,13 +8,14 @@
 
 #include "..\Deferred\Tools.fx"
 
-#define NUM_SAMPLES 8
-static const float INV_SAMPLES = 1.0 / NUM_SAMPLES;
+#define NUM_SAMPLES 3
+static const float INV_SAMPLES = 1.0 / (NUM_SAMPLES * 4);
 static const float NoiseSize = ScreenSize / 512.0;
 
 const float SSAOStrength = 1.f;
 const float SSAORadius = 0.15f;
 const float SSAOBias = 0.1f;
+const float BloomThreshold;
 const float4x4 InvViewProj;
 const float3 CameraPosition;
 const float FarClip;
@@ -24,14 +25,9 @@ static const float FarClipSqr = FarClip * FarClip;
 
 static const float2 SSAOSamples[NUM_SAMPLES] =
 {
-    float2(0.200,  0.000),
-    float2(-0.250, 0.150),
-    float2(0.100, -0.380),
-    float2(0.350,  0.350),
-    float2(-0.550, -0.200),
-    float2(0.200,  0.650),
-    float2(-0.700, 0.400),
-    float2(0.600, -0.750)
+    float2(1, 0),
+    float2(-0.5, 0.866),
+    float2(-0.5, -0.866)
 };
 
 static const int MAX_WEIGHTS = 9;
@@ -43,7 +39,17 @@ static const float weights[MAX_WEIGHTS] = {
     0.052, 0.092, 0.122, 0.152, 0.162, 0.152, 0.122, 0.092, 0.052
 };
 	
-static const float DEPTH_FALLOFF = 25.0f;
+static const float DEPTH_FALLOFF = 20.0f;
+
+sampler ColorMap : register(s0) = sampler_state
+{
+    MinFilter = None;
+    MagFilter = None;
+    MipFilter = None;
+    AddressU = Clamp;
+    AddressV = Clamp;
+    AddressW = Clamp;
+};
 
 sampler NormalMap : register(s1) = sampler_state
 {
@@ -132,8 +138,8 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 { 
 	const float3 position = GetPosition(input.TexCoord); 
 	const float len = GetPositionLength(position);
-	if(len > FarClipSqr) return 1.0;
-	
+	if(len > FarClipSqr || GetBloomLuma(Sample2D(ColorMap, input.TexCoord).rgb, BloomThreshold) > 0.0) return 1.0;
+
 	const float3 normal = normalize(Sample2D(NormalMap, input.TexCoord).xyz * 2.0 - 1.0f);
 	const float2 randomNormal = normalize(Sample2D(NoiseMap, input.TexCoord * NoiseSize).xy * 2.0 - 1.0f);
 	const float radius = SSAORadius / sqrt(len);
@@ -142,39 +148,39 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 
 	[unroll]for (int j = 0; j < NUM_SAMPLES; ++j) 
 	{
-		float2 coord = reflect(SSAOSamples[j], randomNormal) * radius; 
-		ao += CalculateAO(input.TexCoord, coord, position, normal); 
+		float2 coord1 = reflect(SSAOSamples[j], randomNormal) * radius; 
+		float2 coord2 = float2(coord1.x * 0.7 - coord1.y * 0.7, coord1.x * 0.7 + coord1.y * 0.7); 
+
+		ao += CalculateAO(input.TexCoord, coord1 * 0.25, position, normal); 
+		ao += CalculateAO(input.TexCoord, coord2 * 0.5, position, normal); 
+		ao += CalculateAO(input.TexCoord, coord1 * 0.75, position, normal); 
+		ao += CalculateAO(input.TexCoord, coord2, position, normal);
 	}
 	
 	return lerp(1.0 - ao * INV_SAMPLES, 1.0, 1.0 - GetFade(len, FarClipSqr * 0.8, FarClipSqr));
 }
 
 float4 BlurProcess(PS_INPUT input) : COLOR
-{ 
-	float centerDepth = GetPositionLength(GetPosition(input.TexCoord));
-	if(centerDepth > FarClipSqr) return 1.0;
-	
-	float3 color = 0.0f;
-	float totalWeight = 0;
-	
-	[unroll]for (int i = 0; i < MAX_WEIGHTS; i ++)
-	{
-		const float2 tex = input.TexCoord + BlurInvSize * offsets[i];
-		const float neighborDepth = GetPositionLength(GetPosition(tex));
-		const float depthdiff = abs(centerDepth - neighborDepth);
-		const float r2 = depthdiff * DEPTH_FALLOFF;
-		const float g = exp(-(r2*r2));
-		const float weight = g * weights[i];
-		color += weight * Sample2D(SSAOMap, tex);
-		totalWeight += weight;
-	}
+{
+    const float centerDepth = GetPositionLength(GetPosition(input.TexCoord));
 
-	return float4(color / totalWeight, 1.0);
-}
+    if(centerDepth > FarClipSqr) return 1.0;
 
-float4 CombineProcess(PS_INPUT input) : COLOR
-{ 
-	return Sample2D(SSAOMap, input.TexCoord);
+    float accColor = 0.0f;
+    float totalWeight = 1e-6f;
+
+    [unroll]for (int i = 0; i < MAX_WEIGHTS; i++)
+    {
+        const float2 tex = input.TexCoord + BlurInvSize * offsets[i];
+        const float neighborDepth = GetPositionLength(GetPosition(tex));
+        const float depthDiff = abs(centerDepth - neighborDepth);
+        const float rangeWeight = saturate(1.0f - depthDiff * DEPTH_FALLOFF);
+        const float weight = weights[i] * rangeWeight;
+        accColor += weight * Sample2D(SSAOMap, tex).r;
+        totalWeight += weight;
+    }
+
+    return float4((accColor / totalWeight).xxx, 1.0);
 }
 
 technique SSAO
@@ -195,18 +201,6 @@ technique Blur
 	{
 		VertexShader = compile vs_3_0 VertexProcess();
 		PixelShader = compile ps_3_0 BlurProcess();
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-	}
-}
-
-technique Combine
-{
-	pass p0
-	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 CombineProcess();
 		ZWriteEnable = false;
 		ClipPlaneEnable = false;
 		Lighting = false;

@@ -120,14 +120,16 @@ Function ProcessColorCorrection%()
 	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 End Function
 
-Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
+Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Then Return
 	
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
+	EffectFloat(SSAOEffect, "BloomThreshold", BloomThreshold)
 	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
 	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
 	EffectFloat(SSAOEffect, "FarClip", GetCameraRangeFar(Cam) / 1.25)
+	EffectTechnique(SSAOEffect, "SSAO")
 	
 	EntityBlend(PostEffectQuad, 0)
 	EntityEffect(PostEffectQuad, SSAOEffect)
@@ -136,28 +138,28 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, Tween# = 1.0)
 	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
 	EntityTexture(PostEffectQuad, NoiseTexture, 0, 4)
 	EntityTexture(PostEffectQuad, TempColorTexture, 0, 5)
-	
 	ShowEntity(PostEffectQuad)
-	EffectTechnique(SSAOEffect, "SSAO")
-	SetBuffer(TextureBuffer(TempColorTexture))
-	RenderEntity(QuadCamera, PostEffectQuad)
+	
 	If opt\AmbientOcclusion = 2
+		SetBuffer(TextureBuffer(TempColorTexture))
+		RenderEntity(QuadCamera, PostEffectQuad)
+		
 		EffectTechnique(SSAOEffect, "Blur")
 		EffectVector(SSAOEffect, "BlurInvSize", 1.0 / TextureWidth(TempColorTexture), 0) ; ~ Horizontal
 		SetBuffer(TextureBuffer(SSAOBlur))
 		RenderEntity(QuadCamera, PostEffectQuad)
 		
 		EntityTexture(PostEffectQuad, SSAOBlur, 0, 5)
-		EffectVector(SSAOEffect, "BlurInvSize", 0, 1.0 / TextureHeight(TempColorTexture)) ; ~ Vertical
-		SetBuffer(TextureBuffer(TempColorTexture))
+		EffectVector(SSAOEffect, "BlurInvSize", 0, 1.0 / TextureHeight(SSAOBlur)) ; ~ Vertical
+		
+		EntityBlend(PostEffectQuad, 2)
+		SetBuffer(TextureBuffer(MRTColor))
+		RenderEntity(QuadCamera, PostEffectQuad)
+	Else
+		EntityBlend(PostEffectQuad, 2)
+		SetBuffer(TextureBuffer(MRTColor))
 		RenderEntity(QuadCamera, PostEffectQuad)
 	EndIf
-	
-	EntityTexture(PostEffectQuad, TempColorTexture, 0, 5)
-	EffectTechnique(SSAOEffect, "Combine")
-	EntityBlend(PostEffectQuad, 2)
-	SetBuffer(TextureBuffer(MRTColor))
-	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
 End Function
 
