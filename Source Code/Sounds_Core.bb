@@ -443,8 +443,8 @@ Function PlayStepSound%(IncludeSprint% = True)
 	Temp = GetStepSound(me\Collider)
 	If DecalStep = 1
 		Temp = 2
-	ElseIf forest_event <> Null And forest_event\room = PlayerRoom ; ~ Check if forest_event <> Null really needed!
-		If forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
+	ElseIf IsInsideForest
+		Temp = 4 ; ~ Improve somehow in future
 	EndIf
 	
 	Local TempCHN% = 0

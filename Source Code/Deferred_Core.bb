@@ -682,14 +682,14 @@ Function GetEmissiveMultiply#()
 	Return(EmissiveMultiply)
 End Function
 
-Function SetEmissiveMultiply%(em#)
-	If EmissiveMultiply <> em
+Function SetEmissiveMultiply%(Value#)
+	If EmissiveMultiply <> Value
 		Local ef.InputEffect
 		
 		For ef.InputEffect = Each InputEffect
-			If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", em)
+			If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", Value)
 		Next
-		EmissiveMultiply = em
+		EmissiveMultiply = Value
 	EndIf
 End Function
 

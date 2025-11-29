@@ -2461,7 +2461,7 @@ Const HIT_DEAD% = 5
 ;[End Block]
 
 Global SubjectName$
-Global InFacility%
+Global InFacility%, IsInsideForest%
 Global PlayerFallingPickDistance#
 
 Global ShouldEntitiesFall%

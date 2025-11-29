@@ -327,7 +327,7 @@ Function ClearBuffer%(Buffer%, R#, G#, B#, Alpha#)
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
 	SetBuffer(PrevBuffer)
-	CameraViewport(QuadCamera, 0, 0, GraphicsWidth(), GraphicsHeight())
+	CameraViewport(QuadCamera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 End Function
 
 ;~IDEal Editor Parameters:

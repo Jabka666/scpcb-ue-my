@@ -612,7 +612,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tse.TempSoundEmitters, tp.TempProps
 	Local Range#, lColor$, Intensity#
-	Local R%, G%, B%
+	Local R%, G%, B%, ff%
 	Local Angles$
 	Local Temp2s$
 	
