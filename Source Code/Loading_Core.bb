@@ -1,4 +1,4 @@
-Const MaxDecalTextureIDAmount% = 26
+Const MaxDecalTextureIDAmount% = 24
 
 Type DecalInstance
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
