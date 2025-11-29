@@ -121,7 +121,7 @@ Function ProcessColorCorrection%()
 End Function
 
 Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
-	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Then Return
+	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Lor IsInsideForest Then Return
 	
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
