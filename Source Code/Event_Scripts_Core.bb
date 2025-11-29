@@ -5205,7 +5205,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 			
 			LoadEventSound(e, "SFX\Character\Guard\096ServerRoom0.ogg")
-			e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 10.0, 1.0, True)
+			e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 12.0, 1.0, True)
 			
 			TFormPoint(-1328.0, 128.0, 528.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
@@ -5288,7 +5288,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			
 			If n_I\Curr096\Frame > 25.0 And n_I\Curr096\Frame < 150.0
 				LoadEventSound(e, "SFX\Character\Guard\096ServerRoom1.ogg")
-				e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 10.0, 1.0, True)
+				e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 12.0, 1.0, True)
 				
 				ChangeNPCTextureID(n_I\Curr096, NPC_096_BLOODY_TEXTURE)
 				
@@ -5368,7 +5368,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 				EndIf
 			EndIf
 		EndIf
-		UpdateSoundOrigin(e\SoundCHN, Camera, n_I\Curr096\OBJ, 10.0, 1.0, True)
+		UpdateSoundOrigin(e\SoundCHN, Camera, n_I\Curr096\OBJ, 12.0, 1.0, True)
 	ElseIf PlayerRoom = e\room
 		Local x% = UpdateLever(e\room\RoomLevers[1]\OBJ) ; ~ Fuel pump
 		Local y% = UpdateLever(e\room\RoomLevers[0]\OBJ) ; ~ Power switch
