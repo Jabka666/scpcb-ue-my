@@ -207,7 +207,7 @@ Function UpdateAlarmLights%()
 	For al.AlarmLamp = Each AlarmLamp
 		If SecondaryLightOn > 0.1 And (al\room = PlayerRoom Lor al\room\Dist < 6.0)
 			Local Dist# = EntityDistanceSquared(Camera, al\OBJ)
-			Local MaxDist# = (LightRenderDistance + PowTwo(al\Range)) * LightVolume
+			Local MaxDist# = (PowTwo(LightRenderDistance) + PowTwo(al\Range)) * LightVolume
 			
 			If Dist < MaxDist
 				If EntityHidden(al\ConeOBJ) Then ShowEntity(al\ConeOBJ)
