@@ -544,6 +544,7 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x - 1037.0 * RoomScale, r\y, r\z + 528.0 * RoomScale, 180.0, True, SCP_914_DOOR)
 			d\Locked = 1 : d\MTFClose = False
 			EntityTexture(d\OBJ, Tex) : EntityTexture(d\OBJ2, Tex) : EntityTexture(d\FrameOBJ, Tex)
+			UpdateEntityMaterial(d\OBJ) : UpdateEntityMaterial(d\OBJ2) : UpdateEntityMaterial(d\FrameOBJ)
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
@@ -552,6 +553,7 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 404.0 * RoomScale, r\y, r\z + 528.0 * RoomScale, 180.0, True, SCP_914_DOOR)
 			d\Locked = 1 : d\MTFClose = False
 			EntityTexture(d\OBJ, Tex) : EntityTexture(d\OBJ2, Tex) : EntityTexture(d\FrameOBJ, Tex)
+			UpdateEntityMaterial(d\OBJ) : UpdateEntityMaterial(d\OBJ2) : UpdateEntityMaterial(d\FrameOBJ)
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
