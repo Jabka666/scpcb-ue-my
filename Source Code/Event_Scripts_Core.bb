@@ -2586,7 +2586,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 			
 			Local e2.Events
 			
-			e\EventState4 = (e\EventState4 + 1.0) Mod 4
+			If (MilliSec Mod 1500) < 10 Then e\EventState4 = (e\EventState4 + 1.0) Mod 6
 			For i = 20 To 22
 				EntityTexture(e\room\Objects[i], e\room\Textures[2], e\EventState4)
 			Next
