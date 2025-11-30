@@ -62,6 +62,9 @@ struct PS_INPUT_GBUFFER
 	float3 Binormal : TEXCOORD3;
 	float2 Depth : TEXCOORD4;
 	float4 ScreenPos : TEXCOORD5;
+	#ifdef INNERGLOW
+		float3 View      : TEXCOORD6;
+	#endif
 };
 
 struct PixelOutput
@@ -90,6 +93,10 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 	output.Binormal = normalize(mul(input.Binormal, WorldTransform));
 	output.Depth = output.Pos.zw;
 	output.ScreenPos = output.Pos;
+	
+	#ifdef INNERGLOW
+		output.View = normalize(EyePos - output.WorldPos);
+	#endif
 	return output; 
 }
 
@@ -141,9 +148,15 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		float fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
 	#endif
 	
+	#ifdef INNERGLOW
+		float NdotV = dot(normalize(input.Normal), normalize(input.View));
+		float fresnel = pow(1.0f - NdotV, 0.9);
+		const float glowFactor = saturate(fresnel);
+		output.Color.rgb = lerp(output.Color.rgb, float3(1.0, 1.0, 1.0), glowFactor);
+	#endif
+	
 	// Fog dither
 	fogFactor = 1.0 - ShadeDither(float4(1.0 - fogFactor, 0, 0, 0), input.ScreenPos).r;
-	
 	
 	#if defined(TRANSPARENT)
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
