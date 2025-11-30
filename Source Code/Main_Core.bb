@@ -7252,7 +7252,7 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 	Local Pvt% = CreatePivot()
 	Local ObjPvt% = CreatePivot()
 	
-	PositionEntity(ObjPvt, EntityTX(OBJ, RenderTween), EntityTY(OBJ, RenderTween), EntityTZ(OBJ, RenderTween))
+	PositionEntity(ObjPvt, EntityX(OBJ, True, RenderTween), EntityY(OBJ, True, RenderTween), EntityZ(OBJ, True, RenderTween))
 	
 	PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 	PointEntity(Pvt, ObjPvt)

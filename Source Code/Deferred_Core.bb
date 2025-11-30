@@ -240,25 +240,22 @@ End Function
 Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
 	Local SurfCount%
 	
-	If State <> -1
-		EntityEffect(Entity, GetInputEffect(State))
+	If EntityClass(Entity) = "Mesh"
+		SurfCount = CountSurfaces(Entity)
+		
+		Local i%, SF%, b%
+		
+		For i = 1 To SurfCount
+			SF = GetSurface(Entity, i)
+			b = GetSurfaceBrush(SF)
+			If b <> 0
+				SetDeferredBrush(b, State)
+				PaintSurface(SF, b)
+				FreeBrush(b) : b = 0
+			EndIf
+		Next
 	Else
-		If EntityClass(Entity) = "Mesh"
-			Local i%, SF%, b%
-			
-			SurfCount = CountSurfaces(Entity)
-			For i = 1 To SurfCount
-				SF = GetSurface(Entity, i)
-				b = GetSurfaceBrush(SF)
-				If b <> 0
-					SetDeferredBrush(b)
-					PaintSurface(SF, b)
-					FreeBrush(b) : b = 0
-				EndIf
-			Next
-		Else
-			UpdateEntityMaterial(Entity, State)
-		EndIf
+		UpdateEntityMaterial(Entity, State)
 	EndIf
 	
 	SetShadowsCasting(Entity, CastShadows)
