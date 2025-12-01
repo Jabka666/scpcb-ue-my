@@ -1496,6 +1496,7 @@ Function UpdateNPCType066%(n.NPCs)
 	EndIf
 	
 	Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
+	Local de.Decals
 	Local Angle#
 	
 	Select n\State
@@ -1591,8 +1592,10 @@ Function UpdateNPCType066%(n.NPCs)
 									;[End Block]
 								Case 4
 									;[Block]
-									If PlayerRoom\RoomTemplate\DisableDecals < 2 Then CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
-										
+									If PlayerRoom\RoomTemplate\DisableDecals < 2
+										de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
+										de\AlphaChange = -0.0001
+									EndIf
 									me\BigCameraShake = 5.0
 									PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
 									If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.2, 0.4), 0.0, 200.0)
@@ -2147,7 +2150,7 @@ Function UpdateNPCType106%(n.NPCs)
 					PositionEntity(n\Collider, n\EnemyX, n\EnemyY, n\EnemyZ)
 					ResetEntity(n\Collider)
 					de.Decals = CreateDecal(DECAL_CORROSIVE_1, n\EnemyX, n\EnemyY + 0.005, n\EnemyZ, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
-					de\SizeChange = 0.001
+					de\SizeChange = 0.001 : de\AlphaChange = -0.00002
 					
 					SetNPCFrame(n, 110.0)
 					
@@ -2371,7 +2374,7 @@ Function UpdateNPCType106%(n.NPCs)
 					TurnEntity(Pvt, 90.0, 0.0, 0.0)
 					If EntityPick(Pvt, 0.2)
 						de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
-						de\SizeChange = 0.004
+						de\SizeChange = 0.004 : de\SizeChange = -0.00002
 					EndIf
 					FreeEntity(Pvt) : Pvt = 0
 					
@@ -4895,7 +4898,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 		If EntityPick(Pvt, 0.3)
 			Local de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
 			
-			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009) : de\AlphaChange = -0.0001
 		EndIf
 		FreeEntity(Pvt) : Pvt = 0
 		n\IsDead = True
@@ -5532,7 +5535,7 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 		If EntityPick(Pvt, 0.3)
 			Local de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.02, 0.03))
 			
-			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009) : de\AlphaChange = -0.0001
 		EndIf
 		FreeEntity(Pvt): Pvt = 0
 		n\IsDead = True

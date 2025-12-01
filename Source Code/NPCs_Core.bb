@@ -957,7 +957,7 @@ Function UpdateNPCs%()
 							If EntityPick(Pvt, 0.5)
 								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.5, 1.0)
 								
-								de\SizeChange = 0.0005 : de\MaxSize = 0.2
+								de\SizeChange = 0.0005 : de\MaxSize = 0.2 : de\SizeChange = -0.0001
 							EndIf
 							FreeEntity(Pvt) : Pvt = 0
 							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)

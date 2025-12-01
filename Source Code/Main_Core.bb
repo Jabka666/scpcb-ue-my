@@ -3256,7 +3256,7 @@ Function UpdateMoving%()
 				EntityPick(Pvt, 0.3)
 				
 				de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * Min(me\Injuries, 2.5))
-				de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
+				de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009) : de\AlphaChange = -0.0002
 				TempCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
 				ChannelVolumeEx(TempCHN, Rnd(0.3, 0.6) * opt\SFXVolume * opt\MasterVolume)
 				ChannelPitch(TempCHN, Rand(20000, 30000))
@@ -9615,7 +9615,7 @@ Function UpdateVomit%()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(DECAL_BLOOD_4, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
-			de\SizeChange = 0.001 : de\MaxSize = 0.6
+			de\SizeChange = 0.001 : de\MaxSize = 0.6 : de\AlphaChange = -0.0002
 			FreeEntity(Pvt) : Pvt = 0
 			me\Vomit = True
 		EndIf
@@ -10207,7 +10207,7 @@ Function Update427%()
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(DECAL_427, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
-			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009 : de\AlphaChange = -0.0002
 			TempCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
 			ChannelVolumeEx(TempCHN, Rnd(0.3, 0.6) * opt\SFXVolume * opt\MasterVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
