@@ -171,8 +171,8 @@ Const it_hand% = 102
 Const it_hand2% = 103
 Const it_hand3% = 104
 
-Const it_key_yellow% = 105
-Const it_key_white% = 106
+Const it_key_white% = 105
+Const it_key_yellow% = 106
 Const it_lostkey% = 107
 
 Const it_25ct% = 108
