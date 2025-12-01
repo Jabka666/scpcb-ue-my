@@ -1023,7 +1023,7 @@ Const SETTING_VERY_FINE% = 2
 Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
-	Local it.Items, it2.Items, de.Decals, n.NPCs, r.Rooms
+	Local it.Items, it2.Items, n.NPCs, r.Rooms
 	Local Remove% = True, i%, j%
 	Local MakeDecal% = False
 	
@@ -2628,7 +2628,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case SETTING_ROUGH, SETTING_COARSE
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Horror.ogg"))
-					CreateDecal(DECAL_BLOOD_2, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.4), Rnd(0.8, 1.0), 1)
+					If SCP914Decal <> Null Then RemoveDecal(SCP914Decal)
+					SCP914Decal = CreateDecal(DECAL_BLOOD_2, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.4), Rnd(0.8, 1.0), 1)
 					;[End Block]
 				Case SETTING_ONETOONE
 					;[Block]
@@ -2739,7 +2740,10 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 			;[End Block]
 	End Select
 	
-	If MakeDecal Then CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.8), Rnd(0.8, 1.0), 1)
+	If MakeDecal
+		If SCP914Decal <> Null Then RemoveDecal(SCP914Decal)
+		SCP914Decal = CreateDecal(DECAL_CORROSIVE_1, x, 8.0 * RoomScale + 0.005, z, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.8), Rnd(0.8, 1.0), 1)
+	EndIf
 	If Remove
 		RemoveItem(item)
 	Else

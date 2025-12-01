@@ -417,6 +417,8 @@ Function SaveGame%(File$)
 		WriteFloat(f, de\LifeTime)
 		WriteFloat(f, de\SizeChange)
 		WriteFloat(f, de\AlphaChange)
+		
+		WriteByte(f, SCP914Decal = de)
 	Next
 	
 	Local e.Events
@@ -1207,39 +1209,32 @@ Function LoadGame%(File$)
 		
 		de.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
 		
-		Local Size# = ReadFloat(f)
-		Local MaxSize# = ReadFloat(f)
-		Local Alpha# = ReadFloat(f)
-		Local FX% = ReadByte(f)
-		Local BlendMode% = ReadByte(f)
-		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
+		de\Size = ReadFloat(f)
+		ScaleEntity(de\OBJ, de\Size, de\Size, 1.0, True)
 		
-		Local DecalTimer# = ReadFloat(f)
-		Local LifeTime# = ReadFloat(f)
-		Local SizeChange# = ReadFloat(f)
-		Local AlphaChange# = ReadFloat(f)
+		de\MaxSize = ReadFloat(f)
 		
-		For de.Decals = Each Decals
-			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z
-				de\Size = Size
-				de\MaxSize = MaxSize
-				de\Alpha = Alpha
-				de\FX = FX
-				de\BlendMode = BlendMode
-				de\R = Red : de\G = Green : de\B = Blue
-				de\Timer = DecalTimer
-				de\LifeTime = LifeTime
-				de\SizeChange = SizeChange
-				de\AlphaChange = AlphaChange
-				
-				ScaleEntity(de\OBJ, Size, Size, 1.0, True)
-				EntityAlpha(de\OBJ, Alpha)
-				EntityFX(de\OBJ, FX)
-				EntityBlend(de\OBJ, BlendMode)
-				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(de\OBJ, Red, Green, Blue)
-				Exit
-			EndIf
-		Next
+		de\Alpha = ReadFloat(f)
+		EntityAlpha(de\OBJ, de\Alpha)
+		
+		de\FX = ReadByte(f)
+		EntityFX(de\OBJ, de\FX)
+		
+		de\BlendMode = ReadByte(f)
+		EntityBlend(de\OBJ, de\BlendMode)
+		
+		de\R = ReadByte(f)
+		de\G = ReadByte(f)
+		de\B = ReadByte(f)
+		If de\R <> 0 Lor de\G <> 0 Lor de\B <> 0 Then EntityColor(de\OBJ, de\R, de\G, de\B)
+		
+		de\Timer = ReadFloat(f)
+		de\LifeTime = ReadFloat(f)
+		de\SizeChange = ReadFloat(f)
+		de\AlphaChange = ReadFloat(f)
+		
+		Temp2 = ReadByte(f)
+		If Temp2 = 1 Then SCP914Decal = de
 	Next
 	
 	Local e.Events, ch.Chunk, chp.ChunkPart, p.Props, du.Dummy1499_1
@@ -2144,39 +2139,32 @@ Function LoadGameQuick%(File$)
 		
 		de.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
 		
-		Local Size# = ReadFloat(f)
-		Local MaxSize# = ReadFloat(f)
-		Local Alpha# = ReadFloat(f)
-		Local FX% = ReadByte(f)
-		Local BlendMode% = ReadByte(f)
-		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
+		de\Size = ReadFloat(f)
+		ScaleEntity(de\OBJ, de\Size, de\Size, 1.0, True)
 		
-		Local DecalTimer# = ReadFloat(f)
-		Local LifeTime# = ReadFloat(f)
-		Local SizeChange# = ReadFloat(f)
-		Local AlphaChange# = ReadFloat(f)
+		de\MaxSize = ReadFloat(f)
 		
-		For de.Decals = Each Decals
-			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z
-				de\Size = Size
-				de\MaxSize = MaxSize
-				de\Alpha = Alpha
-				de\FX = FX
-				de\BlendMode = BlendMode
-				de\R = Red : de\G = Green : de\B = Blue
-				de\Timer = DecalTimer
-				de\LifeTime = LifeTime
-				de\SizeChange = SizeChange
-				de\AlphaChange = AlphaChange
-				
-				ScaleEntity(de\OBJ, Size, Size, 1.0, True)
-				EntityAlpha(de\OBJ, Alpha)
-				EntityFX(de\OBJ, FX)
-				EntityBlend(de\OBJ, BlendMode)
-				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(de\OBJ, Red, Green, Blue)
-				Exit
-			EndIf
-		Next
+		de\Alpha = ReadFloat(f)
+		EntityAlpha(de\OBJ, de\Alpha)
+		
+		de\FX = ReadByte(f)
+		EntityFX(de\OBJ, de\FX)
+		
+		de\BlendMode = ReadByte(f)
+		EntityBlend(de\OBJ, de\BlendMode)
+		
+		de\R = ReadByte(f)
+		de\G = ReadByte(f)
+		de\B = ReadByte(f)
+		If de\R <> 0 Lor de\G <> 0 Lor de\B <> 0 Then EntityColor(de\OBJ, de\R, de\G, de\B)
+		
+		de\Timer = ReadFloat(f)
+		de\LifeTime = ReadFloat(f)
+		de\SizeChange = ReadFloat(f)
+		de\AlphaChange = ReadFloat(f)
+		
+		Temp2 = ReadByte(f)
+		If Temp2 = 1 Then SCP914Decal = de
 	Next
 	
 	Local e.Events, ch.Chunk, chp.ChunkPart, p.Props, du.Dummy1499_1
