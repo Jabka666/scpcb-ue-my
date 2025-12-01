@@ -929,7 +929,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Note from Nobody #3", it_paper, r\x + 881.0 * RoomScale, r\y + 640.0 * RoomScale, r\z - 18.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 4, DeleteAllTextures)
+			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 3, DeleteAllTextures)
 			r\Textures[1] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors.png", 1, 512, 512, 0, 11, DeleteAllTextures)
 			r\Textures[2] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_interference.png", 1, 512, 512, 0, 6, DeleteAllTextures)
 			

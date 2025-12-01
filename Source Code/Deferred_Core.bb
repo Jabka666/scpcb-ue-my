@@ -84,7 +84,6 @@ CubeRotateX[3] = 0 : CubeRotateY[3] = 180
 CubeRotateX[4] = -90 : CubeRotateY[4] = 0
 CubeRotateX[5] = 90 : CubeRotateY[5] = 0
 
-
 Function InitDeferred%()
 	Local i%
 	
@@ -238,11 +237,9 @@ Function SetShadowsCasting%(Entity%, Enable%)
 End Function
 
 Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
-	Local SurfCount%
 	
 	If EntityClass(Entity) = "Mesh"
-		SurfCount = CountSurfaces(Entity)
-		
+		Local SurfCount% = CountSurfaces(Entity)
 		Local i%, SF%, b%
 		
 		For i = 1 To SurfCount
