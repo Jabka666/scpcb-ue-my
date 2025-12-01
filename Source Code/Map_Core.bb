@@ -80,14 +80,15 @@ Function UpdateProps%()
 	
 	If BreachTime > 0
 		Local Seconds% = BreachTime Mod 60
-		Local Minutes% = Floor(BreachTime / 60)
-		Local Hours% = Floor(Minutes / 60)
+		Local Minutes% = BreachTime / 60
+		Local Hours% = Minutes / 60
 		
 		Minutes = Minutes - (Hours * 60)
 		
-		Local SecondsAngle# = Float(Seconds) * 6.0
-		Local MinuteAngle# = Float(Minutes) * 6.0
-		Local HourAngle# = (Float(Hours Mod 12) + Float(Minutes) / 60.0) * 30.0
+		Local SecondsAngle% = Seconds * 6.0
+		Local MinuteAngle% = Minutes * 6.0
+		Local HourAngle% = ((Hours Mod 12) + Minutes / 60.0) * 30.0
+		
 		Local PlaySnd% = (Seconds <> PrevBreachSeconds)
 		
 		PrevBreachSeconds = Seconds
