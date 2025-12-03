@@ -307,25 +307,13 @@ Function PresentGBuffer%(Texture%, Dest% = 0)
 	SetBuffer(OldBuffer)
 End Function
 
-Function ClearBuffer%(Buffer%, R#, G#, B#, Alpha#)
+Function ClearBuffer%(Buffer%, R%, G%, B%, Alpha%)
 	Local PrevBuffer% = GraphicsBuffer()
 	
-	If (Not SetBuffer(Buffer))
-		SetBuffer(PrevBuffer)
-		Return
-	EndIf
-	
-	EffectVector(ClearEffect, "Value", R, G, B, Alpha)
-	EffectTechnique(ClearEffect, "Main")
-	EntityBlend(PostEffectQuad, 0)
-	EntityEffect(PostEffectQuad, ClearEffect)
-	
-	CameraViewport(QuadCamera, 0, 0, BufferWidth(Buffer), BufferHeight(Buffer))
-	ShowEntity(PostEffectQuad)
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
+	SetBuffer(Buffer)
+	ClsColor(R, G, B, Alpha)
+	Cls
 	SetBuffer(PrevBuffer)
-	CameraViewport(QuadCamera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 End Function
 
 ;~IDEal Editor Parameters:

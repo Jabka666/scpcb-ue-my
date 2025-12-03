@@ -273,14 +273,14 @@ Global LightRenderDistance#
 Function UpdateLightVolume%()
 	Local l.Lights
 	
-	If SecondaryLightOn > 0.1
+	If SecondaryLightOn > 0.01
 		If opttimer\LightsTimer < 8.0
 			opttimer\LightsTimer = opttimer\LightsTimer + fps\Factor[0]
 		Else
 			Local HideDist# = PowTwo(fog\HideDistance)
 			
 			For l.Lights = Each Lights
-				If l\room <> Null And IsLightVisible(l)
+				If l\room <> Null And IsVisibleFromRoom(l\room, PlayerRoom)
 					Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 					
 					If Dist < HideDist + PowTwo(l\Range) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((fog\HideDistance - Sqr(Dist)) / fog\HideDistance)) / 4.5, 1.0)
@@ -293,55 +293,43 @@ Function UpdateLightVolume%()
 		LightVolume = CurveValue(0.6, LightVolume, 40.0)
 		opttimer\LightsTimer = 0.0
 	EndIf
+	
 	SetEmissiveMultiply(CurveValue(Min(SecondaryLightOn, 1.0), GetEmissiveMultiply(), 5.0))
 End Function
 
-Function IsLightVisible(l.Lights)
-	If l\room = PlayerRoom Then Return(True)
-	
-	Local i%
-	
-	For i = 0 To MaxRoomAdjacents - 1
-		If PlayerRoom\Adjacent[i] = l\room And IsRoomVisible(PlayerRoom\Adjacent[i]) Then Return(True)
-	Next
-	Return(False)
-End Function
-
-Function UpdateLights%(Cam%)
+Function UpdateLights%()
 	Local l.Lights, i%, Random#, Alpha#
 	
-	LightRenderDistance = Max(fog\HideDistance, 7.5)
+	LightRenderDistance = Max(GetCameraRangeFar(Camera), 7.0)
 	
 	For l.Lights = Each Lights
-		If SecondaryLightOn > 0.1 And ((l\room <> Null And IsLightVisible(l)) Lor (l\room = Null))
+		If SecondaryLightOn > 0.1 And ((l\room <> Null And IsVisibleFromRoom(l\room, PlayerRoom)) Lor (l\room = Null))
 			Local LightOBJHidden%
 			Local Dist#, MaxDist#
 			
-			If Cam = Camera ; ~ The lights are rendered by player's cam
-				Dist = EntityDistanceSquared(Cam, l\OBJ)
-				MaxDist = (PowTwo(LightRenderDistance) + PowTwo(l\Range))
-				l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
+			Dist = EntityDistanceSquared(Camera, l\OBJ)
+			MaxDist = (PowTwo(LightRenderDistance) + PowTwo(l\Range) * 10)
+			l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
+			
+			If opttimer\LightsTimer = 0.0
+				LightOBJHidden = EntityHidden(l\OBJ)
 				
-				If opttimer\LightsTimer = 0.0
-					LightOBJHidden = EntityHidden(l\OBJ)
+				If Dist < MaxDist
+					Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
 					
-					If Dist < MaxDist
-						Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
-						
-						If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
-						
-						If ShouldFlickering
-							If (Not LightOBJHidden) Then HideEntity(l\OBJ)
-							PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Cam, l\OBJ, 4.0)
-							SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20.0)
-						EndIf
-					ElseIf (Not LightOBJHidden) ; ~ Hide the light emitter because it is too far
-						HideEntity(l\OBJ)
+					If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
+					
+					If ShouldFlickering
+						If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+						PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, l\OBJ, 4.0)
+						SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20)
 					EndIf
+				ElseIf (Not LightOBJHidden) ; ~ Hide the light emitter because it is too far
+					HideEntity(l\OBJ)
 				EndIf
-			EndIf			
-		Else
-			If (Not EntityHidden(l\OBJ)) Then HideEntity(l\OBJ)
+			EndIf
+		Else If (Not EntityHidden(l\OBJ)) 
+			HideEntity(l\OBJ)
 		EndIf
 	Next
 End Function
@@ -3105,6 +3093,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (PlayerY - FirstPivotY), SecondPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							opttimer\LightsTimer = 0.0
+							opttimer\RoomsTimer = 0.0
 							UpdateLightVolume()
 							UpdateDoors()
 							UpdateRooms()
@@ -3148,6 +3137,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								EndIf
 								TeleportEntity(it\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, 0.01, True)
 								opttimer\ItemsTimer = 0.0
+								it\FixedRaycast = False
 								UpdateItems()
 							EndIf
 						Next
@@ -3236,6 +3226,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							TeleportEntity(me\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (PlayerY - SecondPivotY), FirstPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							opttimer\LightsTimer = 0.0
+							opttimer\RoomsTimer = 0.0
 							UpdateLightVolume()
 							UpdateDoors()
 							UpdateRooms()
@@ -3277,6 +3268,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								EndIf
 								TeleportEntity(it\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, 0.01, True)
 								opttimer\ItemsTimer = 0.0
+								it\FixedRaycast = False
 								UpdateItems()
 							EndIf
 						Next
@@ -3749,7 +3741,7 @@ Type Decals
 	Field BlendMode%, FX%
 	Field R%, G%, B%
 	Field Timer#, LifeTime#
-	Field Nearby%
+	Field room.Rooms
 End Type
 
 Global SCP914Decal.Decals
@@ -3766,7 +3758,6 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	de\FX = FX : de\BlendMode = BlendMode
 	de\R = R : de\G = G : de\B = B
 	de\MaxSize = 1.0
-	de\Nearby = True
 	
 	de\OBJ = CreateQuad()
 	PositionEntity(de\OBJ, x, y, z, True)
@@ -3781,6 +3772,8 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	SetDeferredEntity(de\OBJ, False, DEFERRED_DIFF)
 	MaskEntity(de\OBJ, 32)
 	
+	de\room = FindEntityRoom(de\OBJ)
+	
 	Return(de)
 End Function
 
@@ -3791,20 +3784,30 @@ End Function
 
 Function UpdateDecals%()
 	Local de.Decals
-	Local HideDist# = PowTwo(fog\HideDistance)
 	
-	opttimer\DecalsTimer = opttimer\DecalsTimer - fps\Factor[0]
-	If opttimer\DecalsTimer =< 0.0
+	If opttimer\DecalsTimer <= 0.0
+		Local HideDist# = PowTwo(fog\HideDistance)
+		
 		For de.Decals = Each Decals
-			de\Nearby = EntityDistanceSquared(de\OBJ, me\Collider) < HideDist
+			If de\LifeTime > 0.0 Then de\LifeTime = Max(de\LifeTime - 70.0, 5.0)
+			If de\LifeTime = 5.0
+				RemoveDecal(de)
+				Continue
+			EndIf
+			
+			If EntityDistanceSquared(de\OBJ, me\Collider) < HideDist And IsVisibleFromRoom(de\room, PlayerRoom)
+				If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
+			ElseIf (Not EntityHidden(de\OBJ))
+				HideEntity(de\OBJ)
+			EndIf
 		Next
 		opttimer\DecalsTimer = 35.0
+	Else
+		opttimer\DecalsTimer = opttimer\DecalsTimer - fps\Factor[0]
 	EndIf
 	
 	For de.Decals = Each Decals
-		If de\Nearby
-			If EntityHidden(de\OBJ) Then ShowEntity(de\OBJ)
-			
+		If (Not EntityHidden(de\OBJ))
 			Local DecalPosY# = EntityY(de\OBJ, True)
 			
 			If de\SizeChange <> 0.0
@@ -3839,9 +3842,8 @@ Function UpdateDecals%()
 				de\Alpha = Min(de\Alpha + (fps\Factor[0] * de\AlphaChange), 1.0)
 				EntityAlpha(de\OBJ, de\Alpha)
 			EndIf
-			If de\LifeTime > 0.0 Then de\LifeTime = Max(de\LifeTime - fps\Factor[0], 5.0)
 			
-			If de\Size <= 0.0 Lor de\Alpha <= 0.0 Lor de\LifeTime = 5.0
+			If de\Size <= 0.0 Lor de\Alpha <= 0.0
 				RemoveDecal(de)
 				Continue
 			EndIf
@@ -3867,8 +3869,6 @@ Function UpdateDecals%()
 						;[End Block]
 				End Select
 			EndIf
-		ElseIf (Not EntityHidden(de\OBJ))
-			HideEntity(de\OBJ)
 		EndIf
 	Next
 End Function
@@ -4075,11 +4075,6 @@ Function UpdateSecurityCams%()
 						If sc\State < sc\RenderInterval
 							sc\State = sc\State + fps\Factor[0]
 						Else
-							If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
-								UpdateLights(sc\Cam)
-							Else
-								UpdateLights(sc_I\CoffinCam\Cam)
-							EndIf
 							sc\State = 0.0
 						EndIf
 						
@@ -4755,29 +4750,33 @@ End Function
 Include "Source Code\Map_Rooms_Core.bb"
 
 Function ResetRender%()
-	Local it.Items, n.NPCs
+	Local it.Items, n.NPCs, r.Rooms
 	
-	me\DropSpeed = 0.0
-	ShouldEntitiesFall = False
 	opttimer\LightsTimer = 0.0
-	UpdateLightVolume()
-	UpdateLights(Camera)
-	opttimer\DoorsTimer = 0.0
-	UpdateDoors()
-	opttimer\DecalsTimer = 0.0
-	UpdateDecals()
 	opttimer\RoomsTimer = 0.0
-	UpdateRooms()
+	opttimer\DoorsTimer = 0.0
 	opttimer\ItemsTimer = 0.0
+	
+	For r.Rooms = Each Rooms
+		r\HiddenAlpha = False
+		ShowEntity(r\OBJ)
+		HideRoomsNoColl(r)
+		HideRoomsColl(r)
+	Next
+	UpdateLightVolume()
+	UpdateLights()
+	UpdateDoors()
+	UpdateDecals()
+	UpdateRooms()
 	For it.Items = Each Items
 		it\DropSpeed = 0.0
 	Next
-	UpdateItems()
 	For n.NPCs = Each NPCs
 		n\AnimTimer = 0.0
 		n\DropSpeed = 0.0
 	Next
-	UpdateNPCs()
+	me\DropSpeed = 0.0
+	ShouldEntitiesFall = False
 End Function
 
 Function TeleportToRoom%(r.Rooms)
@@ -4922,29 +4921,7 @@ Function HideRoomsColl%(room.Rooms)
 		Next
 		
 		For d.Doors = Each Doors
-			If d\room = room
-				Local Hide% = True
-				
-				For i = 0 To MaxRoomAdjacents - 1
-					If room\AdjDoor[i] <> Null
-						If room\AdjDoor[i] = d
-							Hide = False
-							Exit
-						EndIf
-					EndIf
-				Next
-				
-				If Hide
-					EntityAlpha(d\OBJ, 0.0)
-					If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 0.0)
-					For i = 0 To 1
-						If d\Buttons[i] <> 0 And (Not d\HasOneSide) Then EntityAlpha(d\Buttons[i], 0.0)
-						; ~ Hide it anyway because player's collider cannot interact with it
-						If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
-					Next
-					If d\DoorType <> FENCE_DOOR Then EntityAlpha(d\FrameOBJ, 0.0)
-				EndIf
-			EndIf
+			If d\room = room Then SetDoorVisibility(d, 0.0)
 		Next
 		
 		; ~ Hide it anyway because the player/NPC cannot interact with it
@@ -4997,15 +4974,7 @@ Function ShowRoomsColl%(room.Rooms)
 		Next
 		
 		For d.Doors = Each Doors
-			If d\room = room
-				EntityAlpha(d\OBJ, 1.0)
-				If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, 1.0)
-				For i = 0 To 1
-					If d\Buttons[i] <> 0 And (Not d\HasOneSide) Then EntityAlpha(d\Buttons[i], 1.0)
-					If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
-				Next
-				If d\DoorType <> FENCE_DOOR Then EntityAlpha(d\FrameOBJ, 1.0)
-			EndIf
+			If d\room = room Then SetDoorVisibility(d, 1.0)
 		Next
 		
 		For sc.SecurityCams = Each SecurityCams
@@ -5044,7 +5013,35 @@ Function ShowRoomsColl%(room.Rooms)
 	EndIf
 End Function
 
-Function IsRoomVisible(r.Rooms)
+Function ShowRoomDoors(room.Rooms)
+	Local i%
+	
+	For i = 0 To MaxRoomAdjacents - 1
+		If room\AdjDoor[i] <> Null Then SetDoorVisibility(room\AdjDoor[i], 1.0)
+	Next
+End Function
+
+Function HideRoomDoors(room.Rooms)
+	Local i%
+	
+	For i = 0 To MaxRoomAdjacents - 1
+		If room\AdjDoor[i] <> Null Then SetDoorVisibility(room\AdjDoor[i], 0.0)
+	Next
+End Function
+
+Function SetDoorVisibility(d.Doors, Alpha#)
+	Local i%
+	
+	EntityAlpha(d\OBJ, Alpha)
+	If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, Alpha)
+	For i = 0 To 1
+		If d\Buttons[i] <> 0 And (Not d\HasOneSide) Then EntityAlpha(d\Buttons[i], Alpha)
+		If d\ElevatorPanel[i] <> 0 Then EntityAlpha(d\ElevatorPanel[i], Alpha)
+	Next
+	If d\DoorType <> FENCE_DOOR Then EntityAlpha(d\FrameOBJ, Alpha)
+End Function
+
+Function IsRoomVisible%(r.Rooms)
 	Return(Not (EntityHidden(r\OBJ) Lor r\HiddenAlpha))
 End Function
 
@@ -5105,25 +5102,31 @@ Function UpdateRooms%()
 	
 	Local IsInside% = IsInsideBox(me\Collider, PlayerRoom\BoundingBox)
 	
-	ShowRoomsNoColl(PlayerRoom)
-	ShowRoomsColl(PlayerRoom)
 	For i = 0 To MaxRoomAdjacents - 1
 		If PlayerRoom\Adjacent[i] <> Null
+			For j = 0 To MaxRoomAdjacents - 1
+				If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
+					If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
+						HideRoomsColl(PlayerRoom\Adjacent[i]\Adjacent[j])
+						HideRoomDoors(PlayerRoom\Adjacent[i]\Adjacent[j])
+					EndIf
+				EndIf
+			Next
 			If PlayerRoom\AdjDoor[i] <> Null And PlayerRoom\Adjacent[i] <> PlayerRoom
 				If (PlayerRoom\AdjDoor[i]\OpenState = 0.0 Lor ((Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera)) And IsInside) Lor PlayerY > 8.0 Lor PlayerY < -8.0)
 					HideRoomsColl(PlayerRoom\Adjacent[i])
+					HideRoomDoors(PlayerRoom\Adjacent[i])
 				Else
 					ShowRoomsColl(PlayerRoom\Adjacent[i])
+					ShowRoomDoors(PlayerRoom\Adjacent[i])
 				EndIf
 			EndIf
-			
-			For j = 0 To MaxRoomAdjacents - 1
-				If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
-					If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom Then HideRoomsColl(PlayerRoom\Adjacent[i]\Adjacent[j])
-				EndIf
-			Next
 		EndIf
 	Next
+	
+	ShowRoomsNoColl(PlayerRoom)
+	ShowRoomsColl(PlayerRoom)
+	ShowRoomDoors(PlayerRoom)
 	
 	CatchErrors("Uncaught: UpdateRooms()")
 End Function
@@ -5138,6 +5141,26 @@ Function IsRoomAdjacent%(this.Rooms, that.Rooms)
 		If that = this\Adjacent[i] Then Return(True)
 	Next
 	Return(False)
+End Function
+
+Function IsVisibleFromRoom(this.Rooms, that.Rooms)
+	If this = that Lor this = Null Lor that = Null Then Return(True)
+	
+	Local i%
+	
+	For i = 0 To MaxRoomAdjacents - 1
+		If that\Adjacent[i] = this And IsRoomVisible(that\Adjacent[i]) Then Return(True)
+	Next
+	Return(False)
+End Function
+
+Function FindEntityRoom.Rooms(Entity%)
+	Local r.Rooms
+	
+	For r.Rooms = Each Rooms
+		If IsInsideBox(Entity, r\BoundingBox) Then Return(r)
+	Next
+	Return(Null)
 End Function
 
 Dim MapRoom$(0, 0)

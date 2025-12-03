@@ -46,9 +46,9 @@ sampler AlbedoMap : register(s0) = sampler_state
 	AddressU = Clamp;
 	AddressV = Clamp;
 	AddressW = Clamp;
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = Linear;
+    MinFilter = None;
+    MagFilter = None;
+	MipFilter = None;
 };
 
 sampler NormalMap : register(s1) = sampler_state
@@ -56,9 +56,9 @@ sampler NormalMap : register(s1) = sampler_state
 	AddressU = Clamp;
 	AddressV = Clamp;
 	AddressW = Clamp;
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = Linear;
+    MinFilter = None;
+    MagFilter = None;
+	MipFilter = None;
 };
 
 sampler DepthMap : register(s2) = sampler_state
@@ -66,9 +66,9 @@ sampler DepthMap : register(s2) = sampler_state
 	AddressU = Clamp;
 	AddressV = Clamp;
 	AddressW = Clamp;
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = Linear;
+    MinFilter = None;
+    MagFilter = None;
+	MipFilter = None;
 };
 
 samplerCUBE FaceSelectCubeMap : register(s3) = sampler_state
@@ -96,7 +96,7 @@ sampler RampMap : register(s5) = sampler_state
 {
     MinFilter = Linear;
     MagFilter = Linear;
-	MipFilter = Linear;
+	MipFilter = None;
 	AddressU = Border;
 	AddressV = Border;
 	AddressW = Border;
@@ -153,7 +153,7 @@ inline float GetShadow(float4 ProjCoord)
 	return lerp(dot(inLight, 0.25), 1.0, ShadowIntensity);
 }
 
-float GetPointShadow(float3 worldPos)
+inline float GetPointShadow(float3 worldPos)
 {
 	#ifdef SHADOWS
 		int face = 255 * SampleCube(FaceSelectCubeMap, worldPos - LightPos).r;
@@ -166,7 +166,7 @@ float GetPointShadow(float3 worldPos)
 	#endif
 }
 
-float GetSpotShadow(float3 worldPos)
+inline float GetSpotShadow(float3 worldPos)
 {
 	#ifdef SHADOWS
 		return GetShadow(mul(float4(worldPos, 1.0), SpotMatrix));
@@ -175,7 +175,7 @@ float GetSpotShadow(float3 worldPos)
 	#endif
 }
 
-void GetGBuffer(float4 ScreenPosition, out float4 Albedo, out float4 Normal, out float3 worldPos, out float3 normalVec)
+inline void GetGBuffer(float4 ScreenPosition, out float4 Albedo, out float4 Normal, out float3 worldPos, out float3 normalVec)
 {
 	float2 TexCoords = GetScreenTexCoords(ScreenPosition) + halfPixel;
 	#ifndef LOD0
@@ -190,7 +190,7 @@ void GetGBuffer(float4 ScreenPosition, out float4 Albedo, out float4 Normal, out
 	normalVec = normalize(Normal.xyz * 2.0 - 1.0);
 }
 
-void GetLighting(float3 worldPos, float3 normalVec, out float light, out float3 NdotL, out float3 worldPosN)
+inline void GetLighting(float3 worldPos, float3 normalVec, out float light, out float3 NdotL, out float3 worldPosN)
 {
 	#ifndef DIRLIGHT
 		NdotL = normalize(LightPos - worldPos);
@@ -205,12 +205,16 @@ void GetLighting(float3 worldPos, float3 normalVec, out float light, out float3 
 	#else
 		NdotL = normalize(-LightDirection);
 		light = saturate(dot(NdotL, normalVec));
-		float cosAngle = saturate(1.0 - dot(normalVec, -LightDirection));
-		worldPosN = worldPos + (cosAngle * NormalOffset * normalVec);
+		#ifdef SHADOWS
+			float cosAngle = saturate(1.0 - dot(normalVec, -LightDirection));
+			worldPosN = worldPos + (cosAngle * NormalOffset * normalVec);
+		#else
+			worldPosN = 0.0f;
+		#endif
 	#endif
 }
 
-float4 CalculateScattering(float3 vworldPos, float3 worldPos, float3 normal)
+inline float4 CalculateScattering(float3 vworldPos, float3 worldPos, float3 normal)
 {
 	#ifdef SCATTERING
 		const float3 PosCam	= normalize(vworldPos-EyePos);
@@ -243,8 +247,12 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 		color = LightColor;
 	#endif
 
-	float spec = GetSpecular(normalVec, EyePos - worldPos, NdotL, Normal.a * 255.0);
-	return ShadeDither(ACESFilm(diff * float4(color * (Albedo.rgb + spec * Albedo.a), 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal)), input.ScreenPosition);
+	#ifdef SPECULAR
+		float spec = GetSpecular(normalVec, EyePos - worldPos, NdotL, Normal.a * 255.0);
+		return ShadeDither(ACESFilm(diff * float4(color * (Albedo.rgb + spec * Albedo.a), 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal)), input.ScreenPosition);
+	#else
+		return ShadeDither(ACESFilm(diff * float4(color * Albedo.rgb, 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal)), input.ScreenPosition);
+	#endif
 }
 
 technique Main

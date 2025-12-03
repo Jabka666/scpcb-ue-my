@@ -284,6 +284,15 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	Return(it)
 End Function
 
+Function GetItemTemplate.ItemTemplates(Name$, ID%)
+	Local it.ItemTemplates
+	
+	For it.ItemTemplates = Each ItemTemplates
+		If Lower(it\Name) = Name And it\ID = ID Then Return(it)
+	Next
+	Return(Null)
+End Function
+
 Function RemoveItemTemplate(itt.ItemTemplates)
 	FreeEntity(itt\OBJ) : itt\OBJ = 0
 	
@@ -329,6 +338,9 @@ Type Items
 	Field DropSpeed#
 	Field R%, G%, B%, Alpha#
 	Field Dist#, Nearby%
+	Field PushActive%, Aligned%
+	Field RaycastTimer#
+	Field FixedRaycast%
 	Field State#, State2#, State3#
 	Field UsageTimer#
 	Field Picked%, Dropped%
@@ -346,41 +358,37 @@ Dim Inventory.Items(0)
 
 Global SelectedItem.Items
 
-Global ClosestItem.Items
+Global ClosestItem.Items, PrevClosestItem.Items
 Global OtherOpen.Items = Null
 
 Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha# = 1.0, InvSlots% = 0)
 	CatchErrors("CreateItem.Items(" + Name + ", " + ID + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + Alpha + ", " + InvSlots + ")")
 	
-	Local i.Items, it.ItemTemplates
+	Local i.Items
 	
 	Name = Lower(Name)
 	
 	i.Items = New Items
-	For it.ItemTemplates = Each ItemTemplates
-		If Lower(it\Name) = Name And it\ID = ID
-			i\ItemTemplate = it
-			i\Collider = CreatePivot()
-			EntityRadius(i\Collider, 0.01)
-			i\OBJ = CopyEntity(it\OBJ, i\Collider)
-			i\DisplayName = it\DisplayName
-			i\Name = it\Name
-			ShowEntity(i\Collider)
-			ShowEntity(i\OBJ)
-			Exit
-		EndIf
-	Next 
+	i\ItemTemplate = GetItemTemplate(Name, ID)
 	
 	If i\ItemTemplate = Null Then RuntimeErrorEx(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
+	
+	i\Collider = CreatePivot()
+	EntityRadius(i\Collider, 0.01)
+	i\OBJ = CopyEntity(i\ItemTemplate\OBJ, i\Collider)
+	i\DisplayName = i\ItemTemplate\DisplayName
+	i\Name = i\ItemTemplate\Name
+	ShowEntity(i\Collider)
+	ShowEntity(i\OBJ)
 	
 	ResetEntity(i\Collider)
 	PositionEntity(i\Collider, x, y, z, True)
 	RotateEntity(i\Collider, 0.0, Rnd(360.0), 0.0)
 	EntityType(i\Collider, HIT_ITEM)
 	
+	i\Nearby = True
 	i\Dist = EntityDistanceSquared(me\Collider, i\Collider)
 	i\DropSpeed = 0.0
-	i\Nearby = True
 	
 	i\InvImg = i\ItemTemplate\InvImg
 	
@@ -448,6 +456,10 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	SetDeferredEntity(i\OBJ, True)
 	
 	i\InvSlots = InvSlots
+	i\PushActive = True
+	i\FixedRaycast = False
+	i\ItemHeight = MeshHeight(i\OBJ) * i\ItemTemplate\Scale
+	i\TargetNY = 1.0
 	
 	i\ID = LastItemID + 1
 	LastItemID = i\ID
@@ -541,10 +553,9 @@ Function UpdateItems%()
 	Local i.Items, i2.Items, np.NPCs
 	Local xTemp#, yTemp#, zTemp#
 	Local Pick%, ed#
-	Local HideDist# = PowTwo(fog\HideDistance)
-	Local PushDist# = HideDist * 0.04
-	Local DeletedItem% = False
+	Local HideDist# = 64.0
 	Local RandomVal# = Rnd(-0.002, 0.002)
+	Local FoundPush% = False
 	
 	opttimer\ItemsTimer = opttimer\ItemsTimer - fps\Factor[0]
 	If opttimer\ItemsTimer <= 0.0
@@ -552,6 +563,17 @@ Function UpdateItems%()
 			If (Not i\Picked)
 				i\Dist = EntityDistanceSquared(Camera, i\Collider)
 				i\Nearby = (i\Dist < HideDist)
+				
+				If i\Nearby
+					If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
+					
+					EntityAlpha(i\OBJ, IsVisibleFromRoom(FindEntityRoom(i\Collider), PlayerRoom))
+				Else
+					If (Not EntityHidden(i\Collider))
+						i\RaycastTimer = 0.0
+						HideEntity(i\Collider)
+					EndIf
+				EndIf
 			EndIf
 		Next
 		opttimer\ItemsTimer = 35.0
@@ -559,90 +581,90 @@ Function UpdateItems%()
 	
 	EntityPickMode(me\Collider, 0)
 	
-	Local PrevClosestItem.Items = ClosestItem
-	
 	ClosestItem = Null
 	For i.Items = Each Items
 		i\Dropped = 0
 		
-		If (Not i\Picked)
-			If i\Nearby
-				If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
+		If i\Nearby And (Not i\Picked)
+			i\RaycastTimer = Max(i\RaycastTimer - fps\Factor[0], 0.0)
+			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera)
+				CameraProject(Camera, EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider))
 				
-				If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera) Then
-					CameraProject(Camera, EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider))
-					Local ProjX# = ProjectedX() / Float(opt\GraphicWidth)
-					Local ProjY# = ProjectedY() / Float(opt\GraphicHeight)
-					
-					If Distance(ProjX, 0.5, ProjY, 0.5) < 0.15 Then ClosestItem = i
-				EndIf
-				If EntityCollided(i\Collider, HIT_MAP)
-					i\DropSpeed = 0.0
+				Local ProjX# = ProjectedX() / Float(opt\GraphicWidth)
+				Local ProjY# = ProjectedY() / Float(opt\GraphicHeight)
+				
+				If Distance(ProjX, 0.5, ProjY, 0.5) < 0.15 Then ClosestItem = i
+			EndIf
+			If i\FixedRaycast Lor EntityCollided(i\Collider, HIT_MAP)
+				i\DropSpeed = 0.0
+				i\FixedRaycast = True
+				If (Not i\Aligned) And i\ItemHeight < 0.3 ; ~ Align only not high items
 					AlignToVector(i\Collider, -i\TargetNX, -i\TargetNY, -i\TargetNZ, 3)
-					TurnEntity(i\Collider, -90.0, 0, 0.0)
-				Else
-					If ShouldEntitiesFall
-						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -3.0, 0.0)
-						If Pick
-							i\DropSpeed = Max(i\DropSpeed - 0.0004 * fps\Factor[0], -0.03)
-							i\TargetNX = PickedNX()
-							i\TargetNY = PickedNY()
-							i\TargetNZ = PickedNZ()
-							TranslateEntity(i\Collider, 0.0, i\DropSpeed * fps\Factor[0], 0.0)
-						Else
-							i\DropSpeed = 0.0
-						EndIf
+					TurnEntity(i\Collider, -90.0, 0.0, 0.0)
+					i\Aligned = True
+				EndIf
+			Else
+				If i\RaycastTimer <= 0.0
+					If LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -5.0, 0.0)
+						; ~ Allow item to fall
+						i\PushActive = True
+						i\RaycastTimer = 35.0
+						i\TargetNX = PickedNX()
+						i\TargetNY = PickedNY()
+						i\TargetNZ = PickedNZ()
+						i\Aligned = False
 					Else
+						; ~ Can't raycast
+						i\PushActive = False
+						i\RaycastTimer = 70.0
 						i\DropSpeed = 0.0
 					EndIf
 				EndIf
 				
-				If PlayerRoom\RoomTemplate\RoomID <> r_room2_storage
-					If i\Dist < PushDist
-						For i2.Items = Each Items
-							If i <> i2 And (Not i2\Picked) And i2\Dist < PushDist
-								xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
-								yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
-								zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
-								
-								ed = PowTwo(xTemp) + PowTwo(zTemp)
-								If ed < 0.07 And Abs(yTemp) < 0.25
-									; ~ Items are too close together, push away
-									Local PushVal# = 0.07 - ed
-									
-									xTemp = xTemp * PushVal
-									zTemp = zTemp * PushVal
-									
-									If Abs(xTemp) + Abs(zTemp) < 0.001
-										xTemp = xTemp + RandomVal
-										zTemp = zTemp + RandomVal
-									EndIf
-									
-									TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
-									TranslateEntity(i\Collider, -xTemp, 0.0, -zTemp)
-								EndIf
-							EndIf
-						Next
-					EndIf
+				If i\RaycastTimer <= 35.0 ; ~ Falling only for 500 ms if raycast done
+					i\DropSpeed = Max(i\DropSpeed - 0.0004 * fps\Factor[0], -0.03)
+					TranslateEntity(i\Collider, 0.0, i\DropSpeed * fps\Factor[0], 0.0)
 				EndIf
-				If EntityY(i\Collider) < -60.0
-					RemoveItem(i)
-					DeletedItem = True
-				EndIf
-			Else
-				If (Not EntityHidden(i\Collider)) Then HideEntity(i\Collider)
-				i\DropSpeed = 0.0
 			EndIf
-		Else
-			i\DropSpeed = 0.0
+			
+			If i\PushActive And i\DropSpeed = 0.0
+				i\PushActive = False
+				For i2.Items = Each Items
+					If (Not i2\Picked) And i2 <> i
+						xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
+						yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
+						zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
+						
+						ed = PowTwo(xTemp) + PowTwo(zTemp)
+						If ed < 0.05 And Abs(yTemp) < 0.25
+							; ~ Items are too close together, push away
+							Local PushVal# = 0.05 - ed
+							
+							xTemp = xTemp * PushVal
+							zTemp = zTemp * PushVal
+							
+							While Abs(xTemp) + Abs(zTemp) < 0.001
+								xTemp = xTemp + RandomVal
+								zTemp = zTemp + RandomVal
+							Wend
+							
+							TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
+							TranslateEntity(i\Collider, -xTemp, 0.0, -zTemp)
+							
+							i\PushActive = True
+							i2\PushActive = True
+							i\FixedRaycast = False
+							i2\FixedRaycast = False
+						EndIf
+					EndIf
+				Next
+			EndIf
+			
+			If EntityY(i\Collider) < -60.0
+				RemoveItem(i)
+				Continue
+			EndIf
 		EndIf
-		
-		If (Not DeletedItem)
-			CatchErrors("Uncaught: UpdateItems(Item Name:" + Chr(34) + i\ItemTemplate\Name + Chr(34) + ")")
-		Else
-			CatchErrors("Uncaught: UpdateItems(Item doesn't exist anymore!)")
-		EndIf
-		DeletedItem = False
 	Next
 	
 	EntityPickMode(me\Collider, 1)
@@ -674,13 +696,37 @@ Function UpdateItems%()
 		EndIf
 	EndIf
 	
-	If ClosestItem <> PrevClosestItem Then
+	If ClosestItem <> PrevClosestItem
 		If PrevClosestItem <> Null Then UpdateEntityMaterial(PrevClosestItem\OBJ)
-		If ClosestItem <> Null Then 
-			UpdateEntityMaterial(ClosestItem\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
-		EndIf
+		If ClosestItem <> Null Then UpdateEntityMaterial(ClosestItem\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
 		PrevClosestItem = ClosestItem
 	EndIf
+	
+	CatchErrors("Uncaught: UpdateItems()")
+End Function
+
+Function RaycastItems%()
+	Local r.Rooms, it.Items
+	
+	For r.Rooms = Each Rooms
+		ShowRoomsNoColl(r)
+	Next
+	
+	For it.Items = Each Items
+		If (Not it\Picked) And LinePick(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0.0, -5.0, 0.0) <> 0
+			PositionEntity(it\Collider, EntityX(it\Collider), PickedY() + 0.011, EntityZ(it\Collider))
+			ResetEntity(it\Collider)
+			it\FixedRaycast = True
+			it\PushActive = False
+			it\TargetNX = PickedNX()
+			it\TargetNY = PickedNY()
+			it\TargetNZ = PickedNZ()
+		EndIf
+	Next
+	
+	For r.Rooms = Each Rooms
+		HideRoomsNoColl(r)
+	Next
 End Function
 
 Function PickItem%(item.Items, PlayPickUpSound% = True)
@@ -845,7 +891,6 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	If item\ItemTemplate\SoundID <> 66 And PlayDropSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 	
 	item\Dropped = 1
-	item\Nearby = True
 	
 	ShowEntity(item\Collider)
 	PositionEntity(item\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
@@ -888,7 +933,9 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 			;[End Block]
 	End Select
 	
+	item\Nearby = True
 	item\Picked = False
+	item\FixedRaycast = False
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = item
 			Inventory(n) = Null
@@ -2762,6 +2809,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	Else
 		PositionEntity(item\Collider, x, y, z)
 		ResetEntity(item\Collider)
+		item\FixedRaycast = False
 	EndIf
 End Function
 

@@ -41,18 +41,24 @@ sampler BloomBlur : register(s2) = sampler_state
 	AddressW  = Clamp;
 };
 
-static const float offsets[3] = 
-{ 
-	0.0,
-	1.38461538,
-	3.23076923
+#define NUM_WEIGHTS 5
+
+static const float offsets[NUM_WEIGHTS] = 
+{
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0
 };
 
-static const float weights[3] = 
+static const float weights[NUM_WEIGHTS] = 
 { 
-	0.22702702, 
-	0.31621621, 
-	0.07027027 
+    0.227027,
+    0.1945946,
+    0.1216216,
+    0.0540541,
+    0.0162162
 };
 
 struct PS_INPUT
@@ -82,7 +88,7 @@ float4 ProcessH(PS_INPUT input) : COLOR
 {
     float3 color = Sample2D(BloomMap, input.TexCoord).rgb * weights[0];
 
-    for (int i = 1; i < 3; i++)
+    for (int i = 1; i < NUM_WEIGHTS; i++)
     {
         float2 offset = float2(offsets[i], 0.0) * BlurInvSize;
         color += Sample2D(BloomMap, input.TexCoord + offset).rgb * weights[i];
@@ -96,7 +102,7 @@ float4 ProcessV(PS_INPUT input) : COLOR
 {
     float3 color = Sample2D(BloomBlur, input.TexCoord).rgb * weights[0];
     
-    for (int i = 1; i < 3; i++)
+    for (int i = 1; i < NUM_WEIGHTS; i++)
     {
         float2 offset = float2(0.0, offsets[i]) * BlurInvSize;
         color += Sample2D(BloomBlur, input.TexCoord + offset).rgb * weights[i];

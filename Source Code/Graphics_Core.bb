@@ -119,7 +119,7 @@ End Function
 ;	EndIf
 ;End Function
 
-Global CurrTrisAmount%
+Global CurrTrisAmount%, BatchesAmount%
 
 Function RenderWorldEx%(Tween#)
 	Local i%

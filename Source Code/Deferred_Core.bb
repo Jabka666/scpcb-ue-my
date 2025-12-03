@@ -2,26 +2,29 @@ Const DEFERRED_LIGHT_DIRECTIONAL% = 1
 Const DEFERRED_LIGHT_POINT% = 2
 Const DEFERRED_LIGHT_SPOT% = 3
 
-Const MAX_DEFERRED_VARIATIONS% = 256
-Const MAX_DEFERRED_SHADE_VARIATIONS% = 128
-
 Const DEFERRED_DIFF% = 0
-Const DEFERRED_DIFFSKYBOX% = 1
-Const DEFERRED_DIFFNORMAL% = 2
-Const DEFERRED_DIFFROUGH% = 4
-Const DEFERRED_DIFFEMISSIVE% = 8
-Const DEFERRED_DIFFEMISSIVEMUL% = 16
-Const DEFERRED_FULLBRIGHT% = 32
-Const DEFERRED_TRANSPARENT% = 64
-Const DEFERRED_INNERGLOW% = 128
-Const DEFERRED_ADDITIVE% = 262144
+Const DEFERRED_DIFFSKYBOX% = $0001
+Const DEFERRED_DIFFNORMAL% = $0002
+Const DEFERRED_DIFFROUGH% = $0004
+Const DEFERRED_DIFFEMISSIVE% = $0008
+Const DEFERRED_DIFFEMISSIVEMUL% = $0010
+Const DEFERRED_FULLBRIGHT% = $0020
+Const DEFERRED_TRANSPARENT% = $0040
+Const DEFERRED_INNERGLOW% = $0080
+Const DEFERRED_ADDITIVE% = $8000
+Const DEFERRED_NOMATERIAL% = $10000
 
-Const DEFERRED_SHADE_DIRLIGHT% = 1
-Const DEFERRED_SHADE_POINTLIGHT% = 2
-Const DEFERRED_SHADE_SPOTLIGHT% = 4
-Const DEFERRED_SHADE_SHADOWS% = 8
-Const DEFERRED_SHADE_SCATTERING% = 16
-Const DEFERRED_SHADE_LOD0% = 32
+Const MAX_DEFERRED_VARIATIONS% = DEFERRED_INNERGLOW Shl 1
+
+Const DEFERRED_SHADE_DIRLIGHT% = $0001
+Const DEFERRED_SHADE_POINTLIGHT% = $0002
+Const DEFERRED_SHADE_SPOTLIGHT% = $0004
+Const DEFERRED_SHADE_SHADOWS% = $0008
+Const DEFERRED_SHADE_SCATTERING% = $0010
+Const DEFERRED_SHADE_LOD0% = $0020
+Const DEFERRED_SHADE_SPECULAR% = $0040
+
+Const MAX_DEFERRED_SHADE_VARIATIONS% = DEFERRED_SHADE_SPECULAR Shl 1
 
 Const DIRECTIONAL_LIGHT_TIME% = 0
 Const DIRECTIONAL_LIGHT_RANGE# = 0.01
@@ -108,7 +111,8 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_SHADOWS, "SHADOWS")
 	CreateShadeVariation(DEFERRED_SHADE_SCATTERING, "SCATTERING")
 	CreateShadeVariation(DEFERRED_SHADE_LOD0, "LOD0")
-
+	CreateShadeVariation(DEFERRED_SHADE_SPECULAR, "SPECULAR")
+	
 	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
 	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
 	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 131072)
@@ -265,14 +269,10 @@ Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
 End Function
 
 Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
-	Local IsAdditive% = (State And DEFERRED_ADDITIVE) <> 0 And State <> -1
+	Local Customized% = ((State And DEFERRED_ADDITIVE) <> 0 Lor (State And DEFERRED_NOMATERIAL) <> 0) And State <> -1
 	
-	If State = -1 Lor IsAdditive
-		If IsAdditive
-			State = State Xor DEFERRED_ADDITIVE
-		Else
-			State = DEFERRED_DIFF
-		EndIf
+	If State = -1 Lor Customized
+		If (Not Customized) Then State = DEFERRED_DIFF
 		
 		Local t1% = GetBrushTexture(Brush, 0)
 		Local mat.Materials
@@ -294,9 +294,12 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
 			EndIf
 			FreeTexture(t1) : t1 = 0
+			
+			If mat = Null And (State And DEFERRED_NOMATERIAL) <> 0 Then Return ; ~ Don't set effect if can't find material
 		EndIf
 	EndIf
 	
+	State = State And (State Xor (DEFERRED_ADDITIVE Or DEFERRED_NOMATERIAL)) ; ~ Remove customized
 	BrushEffect(Brush, GetInputEffect(State))
 End Function
 
@@ -313,12 +316,13 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		Local ef.InputEffect, se.ShadeEffect
 		
 		CurrTrisAmount = 0
+		BatchesAmount = 0
 		
 		For ef.InputEffect = Each InputEffect
 			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 		Next
 		
-		ClearBuffer(TextureBuffer(MRTColor), fog\ClsR / 255.0, fog\ClsG / 255.0, fog\ClsB / 255.0, 1.0)
+		ClearBuffer(TextureBuffer(MRTColor), fog\ClsR, fog\ClsG, fog\ClsB, 255)
 		ClearBuffer(TextureBuffer(MRTAlbedo), 0.0, 0.0, 0.0, 0.0)
 		ClearBuffer(TextureBuffer(MRTNormal), 0.0, 0.0, 0.0, 0.0)
 		ClearBuffer(TextureBuffer(MRTDepth), 0.0, 0.0, 0.0, 0.0)
@@ -335,7 +339,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		WireFrame(WireFrameState)
 		
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
-		CurrTrisAmount = CurrTrisAmount + TrisRendered()
+		Count3D()
 		ProcessSSAO(Cam, 3, 0.2, 0.6, Tween) ; ~ Process SSAO for opacity
 		
 		Local InvViewProjection% = CameraMatrix(Cam, 3, Tween)
@@ -359,11 +363,11 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		BeginRender(Tween, -1) ; ~ Reset to transparency rendering
 		; ~ Render decals
 		RenderWorld(Tween, Cam, 32)
-		CurrTrisAmount = CurrTrisAmount + TrisRendered()
+		Count3D()
 		; ~ Render transparency
 		AmbientLight(Min(fog\CurrAmbientR * 3.0 * Brightness, 255.0), Min(fog\CurrAmbientG * 3.0 * Brightness, 255.0), Min(fog\CurrAmbientB * 3.0 * Brightness, 255.0))
 		RenderWorld(Tween, Cam, -1 Xor 32, 2)
-		CurrTrisAmount = CurrTrisAmount + TrisRendered()
+		Count3D()
 		CameraClsMode(Cam, 1, 1)
 		EndRender()
 		
@@ -379,7 +383,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		SetBuffer(BackBuffer())
 	Else
 		RenderWorld(Tween)
-		CurrTrisAmount = CurrTrisAmount + TrisRendered()
+		Count3D()
 	EndIf
 End Function
 
@@ -403,18 +407,16 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), EntityPitch(l\OBJ, True), EntityYaw(l\OBJ, True), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, (l\CastShadows And (opt\LightingQuality > 0)), 0.008 * l\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, (l\CastShadows And (opt\LightingQuality > 1)), 0.008 * l\Scattering * opt\VolumetricLights, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then 
-			ProcessLight(Cam, EntityX(dl\OBJ, True), EntityY(dl\OBJ, True), EntityZ(dl\OBJ, True), EntityPitch(dl\OBJ, True), EntityYaw(dl\OBJ, True), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, (dl\CastShadows And (opt\LightingQuality > 1)), 0.008 * dl\Scattering * opt\VolumetricLights, Tween)
-		EndIf
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, (dl\CastShadows And (opt\LightingQuality > 1)), 0.008 * dl\Scattering * opt\VolumetricLights, Tween)
 	Next
+	
+	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then ProcessLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), 0, 0, 2500.0 * LightRangeScale, 200, 200, 200, 2.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0, Tween)
 
-	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 2500.0 * RoomScale, 200, 200, 200, 2.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0, Tween)
-
-	If KeyDown(34) And opt\DebugMode = 1 Then ProcessLight(Cam, EntityX(Cam), EntityY(Cam), EntityZ(Cam), EntityPitch(Cam), EntityYaw(Cam), 25, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 60, False, 0.0, Tween)
+	If KeyDown(34) And opt\DebugMode = 1 Then ProcessLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), EntityPitch(Cam, True, Tween), EntityYaw(Cam, True, Tween), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 60, False, 0.0, Tween)
 	
 	EndRender()
 	
@@ -434,6 +436,9 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	Local VolumeScale# = Range * 1.25
 	Local Volume%, TanValue#, ShadowIntensity# = 1.0
 	Local DistToLight# = Distance(EntityX(Cam, True), x, EntityY(Cam, True), y, EntityZ(Cam, True), z)
+	
+	If DistToLight - Range > GetCameraRangeFar(Cam) Then Return
+	
 	Local EffectBits% = GetShadeLight(LightType)
 
 	If CastShadows And LightType <> DEFERRED_LIGHT_DIRECTIONAL
@@ -444,6 +449,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	If CastShadows Then EffectBits = EffectBits Or DEFERRED_SHADE_SHADOWS
 	If Scattering > 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SCATTERING
 	If LightType = DEFERRED_LIGHT_DIRECTIONAL Lor DistToLight - Range <= 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_LOD0
+	If opt\LightingQuality > 0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SPECULAR
 	
 	Local DeferredShade% = GetShadeEffect(EffectBits)
 
@@ -494,7 +500,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
-			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range) * 2.0 + VolumeScale * 2.0)
+			CameraRange(Cam, 0.01, 1000000.0)
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
@@ -520,7 +526,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	EntityEffect(Volume, DeferredShade)
 	
 	RenderEntity(Cam, Volume, Tween)
-	CurrTrisAmount = CurrTrisAmount + TrisRendered()
+	Count3D()
 End Function
 
 Global DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN# = Tan(90.0 * 0.5)
@@ -553,6 +559,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
+			Count3D()
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
 			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET)
 			;[End Block]
@@ -581,7 +588,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0.0)
 					CameraViewport(DeferredCamera, i * Width, 0, Width, Height)
 					RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
-					CurrTrisAmount = CurrTrisAmount + TrisRendered()
+					Count3D()
 					EffectMatrix(DeferredShade, "LightViewProj" + i, CameraMatrix(DeferredCamera, 2, Tween)) ; ~ Push matrix for each face
 				EndIf
 			Next
@@ -593,7 +600,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			;[Block]
 			SetBuffer(TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
-			CurrTrisAmount = CurrTrisAmount + TrisRendered()
+			Count3D()
 			
 			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * Tan(FOV * dtor * 0.5)) * (SHADOW_MAP_SIZE / ShadowMapHeight))
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
@@ -898,6 +905,11 @@ Function GetShadeLight%(LightType%)
 			Return(DEFERRED_SHADE_SPOTLIGHT)
 			;[End Block]
 	End Select
+End Function
+
+Function Count3D%()
+	CurrTrisAmount = CurrTrisAmount + TrisRendered()
+	BatchesAmount = BatchesAmount + Batches()
 End Function
 
 ;~IDEal Editor Parameters:

@@ -406,14 +406,14 @@ Function UpdateGame%()
 			ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 				UpdateSoundEmitters()
 				UpdateLightVolume()
-				UpdateLights(Camera)
+				UpdateLights()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			ElseIf IsInsideForest
 				UpdateDoors()
 				UpdateForest()
 			Else
 				UpdateLightVolume()
-				UpdateLights(Camera)
+				UpdateLights()
 				UpdateAlarmLights()
 				UpdateDoors()
 				UpdateSecurityCams()
@@ -7123,7 +7123,8 @@ Function RenderDebugHUD%()
 			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), (opt\TotalVidMemory - (AvailVidMem() / 1024)), "{0}"), opt\TotalVidMemory, "{1}"))
 			TextEx(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
 			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
-			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
+			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.batch"), BatchesAmount))
+			TextEx(x, y + (500 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
 			;[End Block]
 		Case 2
 			;[Block]
