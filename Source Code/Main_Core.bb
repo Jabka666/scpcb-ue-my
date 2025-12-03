@@ -324,6 +324,8 @@ Function UpdateGame%()
 			me\RestoreSanity = True
 			ShouldEntitiesFall = True
 			
+			SetInnerGlow((10.0 + Cos(GetMicroseconds() * 0.0001) * 4.0) * 0.3)
+			
 			InFacility = IsInFacility(EntityY(me\Collider))
 			IsInsideForest = (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0)
 			

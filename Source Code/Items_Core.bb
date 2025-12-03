@@ -557,6 +557,10 @@ Function UpdateItems%()
 		opttimer\ItemsTimer = 35.0
 	EndIf
 	
+	EntityPickMode(me\Collider, 0)
+	
+	Local PrevClosestItem.Items = ClosestItem
+	
 	ClosestItem = Null
 	For i.Items = Each Items
 		i\Dropped = 0
@@ -565,19 +569,19 @@ Function UpdateItems%()
 			If i\Nearby
 				If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
 				
-				If i\Dist < 1.44
-					If ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)
-						If EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera) Then ClosestItem = i
-					EndIf
+				If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera) Then
+					CameraProject(Camera, EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider))
+					Local ProjX# = ProjectedX() / Float(opt\GraphicWidth)
+					Local ProjY# = ProjectedY() / Float(opt\GraphicHeight)
+					
+					If Distance(ProjX, 0.5, ProjY, 0.5) < 0.15 Then ClosestItem = i
 				EndIf
-				
 				If EntityCollided(i\Collider, HIT_MAP)
 					i\DropSpeed = 0.0
 					AlignToVector(i\Collider, -i\TargetNX, -i\TargetNY, -i\TargetNZ, 3)
 					TurnEntity(i\Collider, -90.0, 0, 0.0)
 				Else
 					If ShouldEntitiesFall
-						EntityPickMode(me\Collider, 0)
 						Pick = LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -3.0, 0.0)
 						If Pick
 							i\DropSpeed = Max(i\DropSpeed - 0.0004 * fps\Factor[0], -0.03)
@@ -588,7 +592,6 @@ Function UpdateItems%()
 						Else
 							i\DropSpeed = 0.0
 						EndIf
-						EntityPickMode(me\Collider, 1)
 					Else
 						i\DropSpeed = 0.0
 					EndIf
@@ -642,6 +645,8 @@ Function UpdateItems%()
 		DeletedItem = False
 	Next
 	
+	EntityPickMode(me\Collider, 1)
+	
 	If (Not InvOpen) And OtherOpen = Null
 		If ClosestItem <> Null
 			Select ClosestItem\ItemTemplate\ID
@@ -667,6 +672,14 @@ Function UpdateItems%()
 				EndIf
 			EndIf
 		EndIf
+	EndIf
+	
+	If ClosestItem <> PrevClosestItem Then
+		If PrevClosestItem <> Null Then UpdateEntityMaterial(PrevClosestItem\OBJ)
+		If ClosestItem <> Null Then 
+			UpdateEntityMaterial(ClosestItem\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
+		EndIf
+		PrevClosestItem = ClosestItem
 	EndIf
 End Function
 

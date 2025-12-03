@@ -16,8 +16,6 @@ Global NoiseTexture%
 
 Global FXAAEffect%
 
-Global EmissiveMultiply#
-
 Global EyeAdaptationEffect%
 Global Luma%
 Global Luma64%

@@ -2689,6 +2689,9 @@ Function UpdateDoors%()
 	Local HideDist# = 900.0
 	
 	ButtonDirection = (Not me\InsideElevator) Lor (me\InsideElevator And (InFacility = LowerFloor Lor (InFacility <> UpperFloor And ToElevatorFloor = UpperFloor)))
+	
+	Local PrevClosestDoor.Doors = d_I\ClosestDoor
+	
 	d_I\ClosestButton = 0
 	d_I\ClosestDoor = Null
 	
@@ -2708,9 +2711,11 @@ Function UpdateDoors%()
 				For i = 0 To 1
 					If d\Buttons[i] <> 0
 						If IsEqual(EntityX(me\Collider), EntityX(d\Buttons[i], True), 1.0) And IsEqual(EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True), 1.0) And UpdateButton(d, d\Buttons[i])
-							d_I\ClosestDoor = d
-							; ~ Determine and save animate door and button
-							If d\DoorType = OFFICE_DOOR Lor d\DoorType = FENCE_DOOR Then d_I\AnimDoor = d
+							If d_I\ClosestDoor <> d
+								d_I\ClosestDoor = d
+								; ~ Determine and save animate door and button
+								If d\DoorType = OFFICE_DOOR Lor d\DoorType = FENCE_DOOR Then d_I\AnimDoor = d
+							EndIf
 							Exit
 						EndIf
 					EndIf
@@ -2899,7 +2904,11 @@ Function UpdateDoors%()
 					For i = 0 To 1
 						If d\Buttons[i] <> 0
 							EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
-							UpdateEntityMaterial(d\Buttons[i])
+							If d_I\ClosestDoor = d
+								UpdateEntityMaterial(d\Buttons[i], DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
+							Else
+								UpdateEntityMaterial(d\Buttons[i])
+							EndIf
 						EndIf
 					Next
 					d\ButtonsUpdateTimer = 14.0
@@ -2909,6 +2918,7 @@ Function UpdateDoors%()
 			EndIf
 		EndIf
 	Next
+	If PrevClosestDoor <> Null And d_I\ClosestDoor = Null Then PrevClosestDoor\ButtonsUpdateTimer = 0.0
 	If d_I\ClosestDoor <> Null
 		If d_I\ClosestDoor\AutoClose And RemoteDoorOn
 			If d_I\ClosestDoor\Open And d_I\ClosestDoor\OpenState = 180.0
@@ -2928,6 +2938,7 @@ Function UpdateDoors%()
 		AnimShift = 20.0 * (Not ButtonDirection)
 		If AnimTime(d_I\AnimButton) > 0.99 + AnimShift Then AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0 + AnimShift, 20.0 + AnimShift, 2.0, False)
 	EndIf
+	d\ButtonsUpdateTimer = 0.0
 End Function
 
 Global ToElevatorFloor%

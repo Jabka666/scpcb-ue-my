@@ -35,6 +35,10 @@ sampler DiffuseMap : register(s0);
 #ifdef MUL
 	const float EmissiveMultiply;
 #endif
+
+#ifdef INNERGLOW
+	const float InnerGlow;
+#endif
 	
 const float DepthMultiply;
 
@@ -103,7 +107,7 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 {
 	PixelOutput output;
-	const float4 diffuse = Sample2D(DiffuseMap, input.TexCoords) * EntityColor;
+	float4 diffuse = Sample2D(DiffuseMap, input.TexCoords) * EntityColor;
 
 	#ifndef TRANSPARENT
 		#ifdef NORMALMAP
@@ -131,13 +135,12 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	
 	#if defined(EMISSIVEMAP)
 		#ifndef MUL
-			const float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb;
-			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
+			float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb;
 		#else
-			const float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply;
-			output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply, 0.0);
+			float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply;
 		#endif
 		
+		output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
 		float fogFactor = saturate((distance(EyePos, input.WorldPos) - lerp(FogNear, FogFar, GetIntensity(emissive) * 0.8)) / FogFar);
 	#else
 		#ifndef MUL
@@ -150,9 +153,9 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	
 	#ifdef INNERGLOW
 		float NdotV = dot(normalize(input.Normal), normalize(input.View));
-		float fresnel = pow(1.0f - NdotV, 0.9);
+		float fresnel = pow(1.0f - NdotV, InnerGlow);
 		const float glowFactor = saturate(fresnel);
-		output.Color.rgb = lerp(output.Color.rgb, float3(1.0, 1.0, 1.0), glowFactor);
+		output.Color.rgb += glowFactor;
 	#endif
 	
 	// Fog dither

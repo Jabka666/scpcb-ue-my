@@ -13,6 +13,8 @@ Const DEFERRED_DIFFEMISSIVE% = 8
 Const DEFERRED_DIFFEMISSIVEMUL% = 16
 Const DEFERRED_FULLBRIGHT% = 32
 Const DEFERRED_TRANSPARENT% = 64
+Const DEFERRED_INNERGLOW% = 128
+Const DEFERRED_ADDITIVE% = 262144
 
 Const DEFERRED_SHADE_DIRLIGHT% = 1
 Const DEFERRED_SHADE_POINTLIGHT% = 2
@@ -84,6 +86,8 @@ CubeRotateX[3] = 0 : CubeRotateY[3] = 180
 CubeRotateX[4] = -90 : CubeRotateY[4] = 0
 CubeRotateX[5] = 90 : CubeRotateY[5] = 0
 
+Global EmissiveMultiply#, InnerGlow#
+
 Function InitDeferred%()
 	Local i%
 	
@@ -96,6 +100,7 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_DIFFEMISSIVEMUL, "MUL")
 	CreateInputVariation(DEFERRED_FULLBRIGHT, "FULLBRIGHT")
 	CreateInputVariation(DEFERRED_TRANSPARENT, "TRANSPARENT")
+	CreateInputVariation(DEFERRED_INNERGLOW, "INNERGLOW")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
 	CreateShadeVariation(DEFERRED_SHADE_POINTLIGHT, "POINTLIGHT")
@@ -197,7 +202,6 @@ Function InitDeferred%()
 	SetEmissiveMultiply(1.0)
 	
 	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
-	
 End Function
 
 Function UpdateShaders%()
@@ -216,6 +220,8 @@ Function UpdateShaders%()
 	Next
 	
 	FreeBank(AdjustMatrix) : AdjustMatrix = 0
+	
+	UpdateInputEffects()
 End Function
 
 Function ClearDeferred%()
@@ -258,9 +264,15 @@ Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
 	SetShadowsCasting(Entity, CastShadows)
 End Function
 
-Function SetDeferredBrush%(Brush%, State% = -1, Frame% = 0)
-	If State = -1
-		State = DEFERRED_DIFF
+Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
+	Local IsAdditive% = (State And DEFERRED_ADDITIVE) <> 0 And State <> -1
+	
+	If State = -1 Lor IsAdditive
+		If IsAdditive
+			State = State Xor DEFERRED_ADDITIVE
+		Else
+			State = DEFERRED_DIFF
+		EndIf
 		
 		Local t1% = GetBrushTexture(Brush, 0)
 		Local mat.Materials
@@ -684,7 +696,27 @@ Function SetEmissiveMultiply%(Value#)
 			If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", Value)
 		Next
 		EmissiveMultiply = Value
+		UpdateInputEffects()
 	EndIf
+End Function
+
+Function SetInnerGlow%(Glow#)
+	If InnerGlow <> Glow
+		InnerGlow = Glow
+		UpdateInputEffects()
+	EndIf
+End Function
+
+Function UpdateInputEffects%()
+	Local ef.InputEffect
+	
+	For ef.InputEffect = Each InputEffect
+		If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", EmissiveMultiply)
+	Next
+	
+	For ef.InputEffect = Each InputEffect
+		If (ef\Bit And DEFERRED_INNERGLOW) Then EffectFloat(ef\Effect, "InnerGlow", InnerGlow)
+	Next
 End Function
 
 Function GetShadowMapMip%(Range#, Dist#)
@@ -777,6 +809,7 @@ Function LoadInputEffect%(Bit%, File$, Defines$ = "")
 	DeferredInputEffect[Bit] = New InputEffect
 	DeferredInputEffect[Bit]\Effect = LoadEffectEx(DEFERRED_PATH + File, Defines)
 	DeferredInputEffect[Bit]\Bit = Bit
+	UpdateShaders()
 	Return(True)
 End Function
 
