@@ -60,7 +60,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	EntityType(p\OBJ, HasCollision) ; ~ NOTICE: Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
 	EntityPickMode(p\OBJ, 2)
-	If FX = 1
+	If FX And 1
 		SetDeferredEntity(p\OBJ, True, DEFERRED_FULLBRIGHT)
 	Else
 		SetDeferredEntity(p\OBJ, True)
@@ -2696,7 +2696,7 @@ Function UpdateDoors%()
 	EndIf
 	
 	For d.Doors = Each Doors
-		If d\Nearby Lor (d\IsElevatorDoor > 0) ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
+		If d\Nearby Lor (d\IsElevatorDoor > 0) ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work -- ENDSHN
 			Local FindButton% = (1 - (d\Open And d\HasOneSide))
 			
 			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0

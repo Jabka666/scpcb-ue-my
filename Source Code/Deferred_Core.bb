@@ -304,6 +304,8 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 End Function
 
 Function UpdateEntityMaterial%(Entity%, State% = -1, Frame% = 0)
+	If EntityClass(Entity) = "Pivot" Then Return
+	
 	Local Brush% = GetEntityBrush(Entity)
 	
 	SetDeferredBrush(Brush, State, Frame)

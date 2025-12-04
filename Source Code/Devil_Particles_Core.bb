@@ -339,6 +339,7 @@ Function UpdateParticles_Devil()
 	Local i%
 	Local InSmoke% = False
 	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
+	Local HideDist# = PowTwo(fog\HideDistance)
 	
 	For emit.Emitter = Each Emitter
 		If (Not EntityExist(emit\Owner))
@@ -351,7 +352,7 @@ Function UpdateParticles_Devil()
 			emit\Age = emit\Age + 1
 			If emit\Age > emit\MaxTime Then emit\Del = True
 		EndIf
-		If fps\Factor[0] > 0.0 And (emit\room = Null Lor (PlayerRoom = emit\room Lor emit\room\Dist < 8.0))
+		If fps\Factor[0] > 0.0 And (PlayerRoom = emit\room Lor EntityDistanceSquared(emit\Owner, me\Collider) < HideDist)
 			If emit\tmp\MaxParticles > -1
 				Local ParticlesAmount% = 0
 				
@@ -451,7 +452,6 @@ Function UpdateParticles_Devil()
 	Local CamPitch# = EntityPitch(ParticleCam, True)
 	Local CamYaw# = EntityYaw(ParticleCam, True)
 	Local CamRoll# = EntityRoll(ParticleCam, True)
-	Local HideDist# = PowTwo(fog\HideDistance)
 	
 	For p.Particle = Each Particle
 		If EntityDistanceSquared(p\emitter\Owner, me\Collider) > HideDist Lor p\Age > p\MaxTime
