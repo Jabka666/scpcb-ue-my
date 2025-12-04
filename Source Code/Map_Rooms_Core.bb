@@ -2543,7 +2543,7 @@ Function FillRoom%(r.Rooms)
 				emit\State = 3
 			EndIf
 			;[End Block]
-		Case r_room2_mt
+		Case r_cont2_457
 			;[Block]
 			; ~ Elevators doors
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 656.0 * RoomScale, -90.0, True, ELEVATOR_DOOR)
