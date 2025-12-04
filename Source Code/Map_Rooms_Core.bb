@@ -2581,6 +2581,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Scorched Note", it_paper, r\x + 64.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 384.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 2152.0 * RoomScale, r\z + 282.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			CreateCustomCenter(r, r\x, r\z - 656.0 * RoomScale)
 			;[End Block]
 		Case r_room2_nuke
