@@ -2584,6 +2584,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 2152.0 * RoomScale, r\z + 282.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1216.0 * RoomScale, r\y - 2132.0 * RoomScale, r\z - 227.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			CreateCustomCenter(r, r\x, r\z - 656.0 * RoomScale)
 			;[End Block]
 		Case r_room2_nuke
