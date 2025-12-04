@@ -2559,11 +2559,11 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 2640.0 * RoomScale, r\y, r\z + 400.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 941.0 * RoomScale, r\y - 2240.0 * RoomScale, r\z - 553.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 4336.0 * RoomScale, r\y, r\z - 2512.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x + 3277.0 * RoomScale, r\y - 2240.0 * RoomScale, r\z + 2447.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			; ~ Elevators pivots
@@ -2571,9 +2571,9 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x + 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			r\Objects[4] = CreatePivot()
-			PositionEntity(r\Objects[4], r\x - 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 656.0 * RoomScale)
-			EntityParent(r\Objects[4], r\OBJ)
+			r\Objects[3] = CreatePivot()
+			PositionEntity(r\Objects[3], r\x - 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 656.0 * RoomScale)
+			EntityParent(r\Objects[3], r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)

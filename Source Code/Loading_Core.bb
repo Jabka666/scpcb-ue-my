@@ -2210,7 +2210,7 @@ Function LoadEvents%()
 	CreateEvent(e_room2_test_hcz, r_room2_test_hcz, 0)
 	CreateEvent(e_room2_test_lcz_173, r_room2_test_lcz, 0)
 	
-	CreateEvent(e_room2_mt, r_room2_mt, 0)
+	CreateEvent(e_cont2_457, r_cont2_457, 0)
 	
 	CreateEvent(e_room2c_ec, r_room2c_ec, 0)
 	
