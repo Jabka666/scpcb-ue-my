@@ -5064,7 +5064,7 @@ Function UpdateEvent_Cont2_457%(e.Events)
 	If PlayerRoom = e\room
 		If EntityY(me\Collider, True) < -1700.0 * RoomScale
 			If e\room\NPC[0] = Null
-				TFormPoint(7993.0, -2240.0, 1637.0, e\room\OBJ, 0)
+				TFormPoint(7993.0, -5020.0, 1637.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
 				e\room\NPC[0]\State = 1.0
 				

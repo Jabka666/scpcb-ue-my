@@ -2576,11 +2576,11 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 4098.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1104.0 * RoomScale, 0.0, False, HEAVY_DOOR)
 			
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 941.0 * RoomScale, r\y - 2240.0 * RoomScale, r\z - 553.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 941.0 * RoomScale, r\y - 5020.0 * RoomScale, r\z - 553.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 3277.0 * RoomScale, r\y - 2240.0 * RoomScale, r\z + 2447.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x + 3277.0 * RoomScale, r\y - 5020.0 * RoomScale, r\z + 2447.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			; ~ Elevators pivots
@@ -2598,10 +2598,10 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Scorched Note", it_paper, r\x + 64.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 384.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 2152.0 * RoomScale, r\z + 282.0 * RoomScale)
+			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 4952.0 * RoomScale, r\z + 282.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1216.0 * RoomScale, r\y - 2132.0 * RoomScale, r\z - 227.0 * RoomScale)
+			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1216.0 * RoomScale, r\y - 4932.0 * RoomScale, r\z - 227.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 656.0 * RoomScale)
