@@ -2558,6 +2558,23 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], r\x - 230.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 384.0 * RoomScale, True)
 			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			
+			; ~ Lower doors
+			d.Doors = CreateDoor(r, r\x + 3776 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			
+			d.Doors = CreateDoor(r, r\x + 8064 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 896.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
+			
+			d.Doors = CreateDoor(r, r\x + 8480 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			
+			d.Doors = CreateDoor(r, r\x + 8960 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			
+			d.Doors = CreateDoor(r, r\x + 9258 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1248.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
+			
+			d.Doors = CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR)
+			
+			d.Doors = CreateDoor(r, r\x + 2272.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 1792.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			
+			d.Doors = CreateDoor(r, r\x + 4098.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1104.0 * RoomScale, 0.0, False, HEAVY_DOOR)
+			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 941.0 * RoomScale, r\y - 2240.0 * RoomScale, r\z - 553.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
