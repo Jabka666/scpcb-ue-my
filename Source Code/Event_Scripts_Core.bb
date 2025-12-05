@@ -5064,13 +5064,19 @@ Function UpdateEvent_Cont2_457%(e.Events)
 	If PlayerRoom = e\room
 		If EntityY(me\Collider, True) < -1700.0 * RoomScale
 			If e\room\NPC[0] = Null
+				For i = 0 To 1
+					CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
+				Next
+				TFormPoint(7993.0, -5020.0, 1637.0, e\room\OBJ, 0)
+				n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_TEXTURE)
+				n\IsDead = True
+				SetNPCFrame(n, 40.0)
+				
 				TFormPoint(7993.0, -5020.0, 1637.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
 				e\room\NPC[0]\State = 1.0
 				
-				For i = 0 To 1
-					CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
-				Next
 			EndIf
 		EndIf
 	EndIf
