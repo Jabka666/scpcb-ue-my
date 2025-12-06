@@ -5062,22 +5062,28 @@ Function UpdateEvent_Cont2_457%(e.Events)
 	Local i%
 	
 	If PlayerRoom = e\room
-		If EntityY(me\Collider, True) < -1700.0 * RoomScale
-			If e\room\NPC[0] = Null
+		If EntityY(me\Collider, True) < -2100.0 * RoomScale
+			If e\Eventstate = 0
 				For i = 0 To 1
 					CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 				Next
-				TFormPoint(7993.0, -5020.0, 1637.0, e\room\OBJ, 0)
+				TFormPoint(8034.0, -5020.0, 1637.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_TEXTURE)
 				n\IsDead = True
+				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 				SetNPCFrame(n, 40.0)
 				
-				TFormPoint(7993.0, -5020.0, 1637.0, e\room\OBJ, 0)
+				TFormPoint(7993.0, -5018.0, 1637.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
-				e\room\NPC[0]\State = 1.0
-				
+				e\Eventstate = 1.0
+			ElseIf e\Eventstate = 1.0
+				If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 36.0
+					e\room\NPC[0]\State = 2.0
+					e\Eventstate = 2.0
+				EndIf
 			EndIf
+			
 		EndIf
 	EndIf
 End Function
