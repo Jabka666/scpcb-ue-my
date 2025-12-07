@@ -2168,7 +2168,7 @@ Type Rooms
 	Field Dist#
 	Field SoundCHN%
 	Field fr.Forest
-	Field Objects%[MaxRoomObjects], ScriptedObject%[MaxRoomObjects]
+	Field Objects%[MaxRoomObjects], ScriptedObject%[MaxRoomObjects], PrevObjectAlpha#[MaxRoomObjects]
 	Field RoomLevers.Levers[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
@@ -2184,7 +2184,7 @@ Type Rooms
 	Field MinX#, MinY#, MinZ#
 	Field MidX#, MidY#, MidZ#
 	Field MaxX#, MaxY#, MaxZ#
-	Field BoundingBox%
+	Field BoundingBox%, BoundingBoxFull%
 	Field HiddenAlpha% = True
 	Field RoomCenter%
 End Type
@@ -2213,6 +2213,10 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 				r\BoundingBox = CreatePivot(r\OBJ)
 				PositionEntity(r\BoundingBox, r\RoomTemplate\BoundsMidX, r\RoomTemplate\BoundsMidY, r\RoomTemplate\BoundsMidZ)
 				ScaleEntity(r\BoundingBox, (r\RoomTemplate\BoundsMaxX - r\RoomTemplate\BoundsMinX), (r\RoomTemplate\BoundsMaxY - r\RoomTemplate\BoundsMinY), (r\RoomTemplate\BoundsMaxZ - r\RoomTemplate\BoundsMinZ))
+				
+				r\BoundingBoxFull = CreatePivot(r\OBJ)
+				PositionEntity(r\BoundingBoxFull, r\RoomTemplate\MidX, r\RoomTemplate\MidY, r\RoomTemplate\MidZ)
+				ScaleEntity(r\BoundingBoxFull, (r\RoomTemplate\MaxX - r\RoomTemplate\MinX), (r\RoomTemplate\MaxY - r\RoomTemplate\MinY), (r\RoomTemplate\MaxZ - r\RoomTemplate\MinZ))
 				
 				If opt\DebugMode
 					DebugBox = CreateCube(r\BoundingBox)
@@ -2270,6 +2274,10 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 					r\BoundingBox = CreatePivot(r\OBJ)
 					PositionEntity(r\BoundingBox, r\RoomTemplate\BoundsMidX, r\RoomTemplate\BoundsMidY, r\RoomTemplate\BoundsMidZ)
 					ScaleEntity(r\BoundingBox, (r\RoomTemplate\BoundsMaxX - r\RoomTemplate\BoundsMinX), (r\RoomTemplate\BoundsMaxY - r\RoomTemplate\BoundsMinY), (r\RoomTemplate\BoundsMaxZ - r\RoomTemplate\BoundsMinZ))
+					
+					r\BoundingBoxFull = CreatePivot(r\OBJ)
+					PositionEntity(r\BoundingBoxFull, r\RoomTemplate\MidX, r\RoomTemplate\MidY, r\RoomTemplate\MidZ)
+					ScaleEntity(r\BoundingBoxFull, (r\RoomTemplate\MaxX - r\RoomTemplate\MinX), (r\RoomTemplate\MaxY - r\RoomTemplate\MinY), (r\RoomTemplate\MaxZ - r\RoomTemplate\MinZ))
 					
 					If opt\DebugMode
 						DebugBox = CreateCube(r\BoundingBox)
@@ -4815,11 +4823,18 @@ Function HideRoomsNoColl%(room.Rooms)
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
 				If sc\MonitorOBJ <> 0
-					If (Not sc\ScriptedMonitor) Then HideEntity(sc\MonitorOBJ)
+					If (Not sc\ScriptedMonitor)
+						HideEntity(sc\MonitorOBJ)
+						EntityAlpha(sc\MonitorOBJ, 0.0)
+						EntityAlpha(sc\ScrOBJ, 0.0)
+						EntityAlpha(sc\ScrOverlay, 0.0)
+					EndIf
 				EndIf
 				If (Not sc\ScriptedCamera)
 					HideEntity(sc\CameraOBJ)
 					HideEntity(sc\BaseOBJ)
+					EntityAlpha(sc\CameraOBJ, 0.0)
+					EntityAlpha(sc\BaseOBJ, 0.0)
 				EndIf
 			EndIf
 		Next
@@ -4828,21 +4843,29 @@ Function HideRoomsNoColl%(room.Rooms)
 			If lvr\room = room
 				HideEntity(lvr\OBJ)
 				HideEntity(lvr\BaseOBJ)
+				EntityAlpha(lvr\OBJ, 0.0)
+				EntityAlpha(lvr\BaseOBJ, 0.0)
 			EndIf
 		Next
 		
 		For s.Screens = Each Screens
-			If s\room = room Then HideEntity(s\OBJ)
+			If s\room = room
+				HideEntity(s\OBJ)
+				EntityAlpha(s\OBJ, 0.0)
+			EndIf
 		Next
 		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
-				If (Not room\ScriptedObject[i]) Then HideEntity(room\Objects[i])
-			Else
-				Exit
+				If (Not room\ScriptedObject[i])
+					HideEntity(room\Objects[i])
+					If EntityClass(room\Objects[i]) <> "Pivot"
+						room\PrevObjectAlpha[i] = GetEntityAlpha(room\Objects[i])
+						EntityAlpha(room\Objects[i], 0.0)
+					EndIf
+				EndIf
 			EndIf
 		Next
-		
 		HideEntity(room\OBJ)
 	EndIf
 End Function
@@ -4871,11 +4894,18 @@ Function ShowRoomsNoColl%(room.Rooms)
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
 				If sc\MonitorOBJ <> 0
-					If (Not sc\ScriptedMonitor) Then ShowEntity(sc\MonitorOBJ)
+					If (Not sc\ScriptedMonitor)
+						ShowEntity(sc\MonitorOBJ)
+						EntityAlpha(sc\MonitorOBJ, 1.0)
+						EntityAlpha(sc\ScrOBJ, 1.0)
+						EntityAlpha(sc\ScrOverlay, 1.0)
+					EndIf
 				EndIf
 				If (Not sc\ScriptedCamera)
 					ShowEntity(sc\CameraOBJ)
 					ShowEntity(sc\BaseOBJ)
+					EntityAlpha(sc\CameraOBJ, 1.0)
+					EntityAlpha(sc\BaseOBJ, 1.0)
 				EndIf
 			EndIf
 		Next
@@ -4884,18 +4914,24 @@ Function ShowRoomsNoColl%(room.Rooms)
 			If lvr\room = room
 				ShowEntity(lvr\OBJ)
 				ShowEntity(lvr\BaseOBJ)
+				EntityAlpha(lvr\OBJ, 1.0)
+				EntityAlpha(lvr\BaseOBJ, 1.0)
 			EndIf
 		Next
 		
 		For s.Screens = Each Screens
-			If s\room = room Then ShowEntity(s\OBJ)
+			If s\room = room
+				ShowEntity(s\OBJ)
+				EntityAlpha(s\OBJ, 1.0)
+			EndIf
 		Next
 		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
-				If (Not room\ScriptedObject[i]) Then ShowEntity(room\Objects[i])
-			Else
-				Exit
+				If (Not room\ScriptedObject[i])
+					ShowEntity(room\Objects[i])
+					If EntityClass(room\Objects[i]) <> "Pivot" Then EntityAlpha(room\Objects[i], room\PrevObjectAlpha[i])
+				EndIf
 			EndIf
 		Next
 		
@@ -4958,8 +4994,6 @@ Function HideRoomsColl%(room.Rooms)
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
 				If (Not room\ScriptedObject[i]) Then HideEntity(room\Objects[i])
-			Else
-				Exit
 			EndIf
 		Next
 		
@@ -5007,8 +5041,6 @@ Function ShowRoomsColl%(room.Rooms)
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
 				If (Not room\ScriptedObject[i]) Then ShowEntity(room\Objects[i])
-			Else
-				Exit
 			EndIf
 		Next
 		
@@ -5109,11 +5141,9 @@ Function UpdateRooms%()
 	For i = 0 To MaxRoomAdjacents - 1
 		If PlayerRoom\Adjacent[i] <> Null
 			For j = 0 To MaxRoomAdjacents - 1
-				If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
-					If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
-						HideRoomsColl(PlayerRoom\Adjacent[i]\Adjacent[j])
-						HideRoomDoors(PlayerRoom\Adjacent[i]\Adjacent[j])
-					EndIf
+				If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null And PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom 
+					HideRoomsColl(PlayerRoom\Adjacent[i]\Adjacent[j])
+					HideRoomDoors(PlayerRoom\Adjacent[i]\Adjacent[j])
 				EndIf
 			Next
 			If PlayerRoom\AdjDoor[i] <> Null And PlayerRoom\Adjacent[i] <> PlayerRoom
@@ -5158,13 +5188,26 @@ Function IsVisibleFromRoom(this.Rooms, that.Rooms)
 	Return(False)
 End Function
 
-Function FindEntityRoom.Rooms(Entity%)
+Function FindEntityRoom.Rooms(Entity%, Full% = False)
 	Local r.Rooms
 	
-	For r.Rooms = Each Rooms
-		If IsInsideBox(Entity, r\BoundingBox) Then Return(r)
-	Next
+	If Full
+		For r.Rooms = Each Rooms
+			If IsInsideBox(Entity, r\BoundingBoxFull) Then Return(r)
+		Next
+	Else
+		For r.Rooms = Each Rooms
+			If IsInsideBox(Entity, r\BoundingBox) Then Return(r)
+		Next
+	EndIf
 	Return(Null)
+End Function
+
+Function IsEntityInRoom%(r.Rooms, Entity%, Full% = False)
+	Local Box% = r\BoundingBox
+	
+	If Full Then Box = r\BoundingBoxFull
+	Return(IsInsideBox(Entity, Box))
 End Function
 
 Dim MapRoom$(0, 0)

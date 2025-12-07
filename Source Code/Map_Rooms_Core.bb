@@ -1489,7 +1489,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
-			it.Items = CreateItem("SCP-714", it_scp714, r\x - 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z - 760.0 * RoomScale)
+			it.Items = CreateItem("SCP-714", it_scp714, r\x - 560.0 * RoomScale, r\y + 195.0 * RoomScale, r\z - 760.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-1025", it_scp1025, r\x + 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z - 760.0 * RoomScale)
@@ -1659,7 +1659,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			it.Items = CreateItem("SCP-1123", it_scp1123, r\x + 912.0 * RoomScale, r\y + 170.0 * RoomScale, r\z + 857.0 * RoomScale)
+			it.Items = CreateItem("SCP-1123", it_scp1123, r\x + 912.0 * RoomScale, r\y + 180.0 * RoomScale, r\z + 857.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -2552,28 +2552,29 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 90.0, True, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[2] = d
 			
-			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, True, BIG_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
-			PositionEntity(d\Buttons[0], r\x + 230.0 * RoomScale, EntityY(d\Buttons[1], True), r\z - 384.0 * RoomScale, True)
-			RotateEntity(d\Buttons[0], 0.0, -90.0, 0.0, True)
-			PositionEntity(d\Buttons[1], r\x - 230.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 384.0 * RoomScale, True)
-			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
+			; ~ DNA door
+			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
 			
 			; ~ Lower doors
-			d.Doors = CreateDoor(r, r\x + 3776 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			CreateDoor(r, r\x + 3776.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
-			d.Doors = CreateDoor(r, r\x + 8064 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 896.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 8064.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 896.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
 			
-			d.Doors = CreateDoor(r, r\x + 8480 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			CreateDoor(r, r\x + 8480.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
-			d.Doors = CreateDoor(r, r\x + 8960 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			CreateDoor(r, r\x + 8960.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
-			d.Doors = CreateDoor(r, r\x + 9258 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1248.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 9258.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1248.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
 			
-			d.Doors = CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR)
+			CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR)
 			
-			d.Doors = CreateDoor(r, r\x + 2272.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 1792.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			CreateDoor(r, r\x + 2272.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 1792.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
-			d.Doors = CreateDoor(r, r\x + 4098.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1104.0 * RoomScale, 0.0, False, HEAVY_DOOR)
+			CreateDoor(r, r\x + 4098.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1104.0 * RoomScale, 0.0, False, HEAVY_DOOR)
+			
+			d.Doors = CreateDoor(r, r\x + 1344.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 1444.0 * RoomScale, 0.0, False, HEAVY_DOOR)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 941.0 * RoomScale, r\y - 5020.0 * RoomScale, r\z - 553.0 * RoomScale)
@@ -2591,6 +2592,45 @@ Function FillRoom%(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x - 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 656.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
+			
+			; ~ Fan
+			r\Objects[4] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
+			Scale = RoomScale * 0.55
+			ScaleEntity(r\Objects[4], Scale, Scale, Scale)
+			PositionEntity(r\Objects[4], r\x + 3232.0 * RoomScale, r\y - 4976.0 * RoomScale, r\z + 44.0 * RoomScale)
+			RotateEntity(r\Objects[4], 0.0, 270.0, 0.0)
+			EntityParent(r\Objects[4], r\OBJ)
+			
+			r\Objects[5] = CopyEntity(r\Objects[4])
+			ScaleEntity(r\Objects[5], Scale, Scale, Scale)
+			PositionEntity(r\Objects[5], r\x + 3232.0 * RoomScale, r\y - 4736.0 * RoomScale, r\z + 44.0 * RoomScale)
+			RotateEntity(r\Objects[5], 0.0, 270.0, 0.0)
+			EntityParent(r\Objects[5], r\OBJ)
+			
+			r\Objects[6] = CopyEntity(r\Objects[4])
+			ScaleEntity(r\Objects[6], Scale, Scale, Scale)
+			PositionEntity(r\Objects[6], r\x + 128.0 * RoomScale, r\y - 4736.0 * RoomScale, r\z - 2060.0 * RoomScale)
+			RotateEntity(r\Objects[6], 0.0, 90.0, 0.0)
+			EntityParent(r\Objects[6], r\OBJ)
+			
+			r\Objects[7] = CopyEntity(r\Objects[4])
+			ScaleEntity(r\Objects[7], Scale, Scale, Scale)
+			PositionEntity(r\Objects[7], r\x + 128.0 * RoomScale, r\y - 4976.0 * RoomScale, r\z - 2060.0 * RoomScale)
+			RotateEntity(r\Objects[7], 0.0, 90.0, 0.0)
+			EntityParent(r\Objects[7], r\OBJ)
+			
+			Scale = RoomScale * 1.5
+			r\Objects[8] = CopyEntity(r\Objects[4])
+			ScaleEntity(r\Objects[8], Scale, Scale, Scale)
+			PositionEntity(r\Objects[8], r\x - 112.0 * RoomScale, r\y - 4200.0 * RoomScale, r\z + 1792.0 * RoomScale)
+			RotateEntity(r\Objects[8], 0.0, 0.0, 270.0)
+			EntityParent(r\Objects[8], r\OBJ)
+			
+			r\Objects[9] = CopyEntity(r\Objects[4])
+			ScaleEntity(r\Objects[9], Scale, Scale, Scale)
+			PositionEntity(r\Objects[9], r\x + 3656.0 * RoomScale, r\y - 3800.0 * RoomScale, r\z + 2134.0 * RoomScale)
+			RotateEntity(r\Objects[9], 0.0, 0.0, 270.0)
+			EntityParent(r\Objects[9], r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)

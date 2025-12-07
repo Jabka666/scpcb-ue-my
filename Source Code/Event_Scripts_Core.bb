@@ -5058,12 +5058,20 @@ Function UpdateEvent_Room2_6_HCZ_Smoke%(e.Events)
 End Function
 
 Function UpdateEvent_Cont2_457%(e.Events)
-; ~ Empty this function for SCP-457's event stuff later
 	Local i%
 	
 	If PlayerRoom = e\room
 		If EntityY(me\Collider, True) < -2100.0 * RoomScale
-			If e\Eventstate = 0
+			Local FanSpeed# = fps\Factor[0] * 5.0
+			
+			TurnEntity(e\room\Objects[4], FanSpeed, 0.0, 0.0)
+			TurnEntity(e\room\Objects[5], FanSpeed, 0.0, 0.0)
+			TurnEntity(e\room\Objects[6], FanSpeed, 0.0, 0.0)
+			TurnEntity(e\room\Objects[7], FanSpeed, 0.0, 0.0)
+			TurnEntity(e\room\Objects[8], FanSpeed / 2.0, 0.0, 0.0)
+			TurnEntity(e\room\Objects[9], FanSpeed / 2.0, 0.0, 0.0)
+			
+			If e\EventState = 0
 				For i = 0 To 1
 					CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 				Next
@@ -5076,11 +5084,11 @@ Function UpdateEvent_Cont2_457%(e.Events)
 				
 				TFormPoint(7993.0, -5018.0, 1637.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
-				e\Eventstate = 1.0
-			ElseIf e\Eventstate = 1.0
+				e\EventState = 1.0
+			ElseIf e\EventState = 1.0
 				If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 36.0
 					e\room\NPC[0]\State = 2.0
-					e\Eventstate = 2.0
+					e\EventState = 2.0
 				EndIf
 			EndIf
 			

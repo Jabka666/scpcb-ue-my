@@ -352,7 +352,7 @@ Function UpdateParticles_Devil()
 			emit\Age = emit\Age + 1
 			If emit\Age > emit\MaxTime Then emit\Del = True
 		EndIf
-		If fps\Factor[0] > 0.0 And (PlayerRoom = emit\room Lor EntityDistanceSquared(emit\Owner, me\Collider) < HideDist)
+		If fps\Factor[0] > 0.0 And (IsVisibleFromRoom(emit\room, PlayerRoom) And EntityDistanceSquared(emit\Owner, me\Collider) < HideDist)
 			If emit\tmp\MaxParticles > -1
 				Local ParticlesAmount% = 0
 				

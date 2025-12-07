@@ -338,6 +338,12 @@ Function SetFontEx%(Font%)
 End Function
 
 Function TextEx%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
+	If Len(Txt) > 1 ; ~ Non formatted
+		Batching(True)
+		Text(x, y + TextOffset, Txt, AlignX, AlignY)
+		Batching(False)
+		Return
+	EndIf
 	Text(x, y + TextOffset, Txt, AlignX, AlignY)
 End Function
 
