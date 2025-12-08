@@ -256,7 +256,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	l\SpriteScale = SpriteScale
 	l\CastShadows = CastShadows
 	If room <> Null
-		If Rand(50) = 1 And (Not CastShadows) ; ~ TODO: Use scripted instead?
+		If Rand(50) = 1 And (Not (CastShadows Lor HasSprite)) ; ~ TODO: Use scripted instead?
 			Local RID% = room\RoomTemplate\RoomID
 			
 			If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499 Then l\Flickers = True

@@ -286,9 +286,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
-			LightRange(n\OBJ2, 2.0)
+			LightRange(n\OBJ2, 3.5)
 			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 			LightCastShadows(n\OBJ2, True)
+			LightScattering(n\OBJ2, 0.0)
 			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
 			ShouldSetOBJ2 = False
 			
@@ -796,6 +797,8 @@ Function RemoveNPC%(n.NPCs)
 	
 	CatchErrors("RemoveNPC()")
 	
+	Local i%
+	
 	n\Target = Null
 	If n\SoundCHN_IsStream
 		If n\SoundCHN <> 0 Then StopStream_Strict(n\SoundCHN) : n\SoundCHN_IsStream = False
@@ -811,6 +814,10 @@ Function RemoveNPC%(n.NPCs)
 	n\SoundCHN2 = 0
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+	
+	For i = 0 To 20
+		If n\FireEmitter[i] <> Null Then FreeEmitter(n\FireEmitter[i], True)
+	Next
 	
 	EntityParent(n\OBJ, 0)
 	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0

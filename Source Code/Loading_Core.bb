@@ -129,7 +129,7 @@ Const PARTICLE_FIRE% = 14
 Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
-Const MaxParticleEffects% = 38
+Const MaxParticleEffects% = 39
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -539,16 +539,16 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[30], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
 	SetTemplateSize(ParticleEffect[30], 0.008, 0.008, 0.9, 1.1)
 	
-	; ~ Fire
+	; ~ Fire in "room2_tesla_2_hcz"
 	ParticleEffect[31] = CreateTemplate()
 	SetTemplateFX(ParticleEffect[31], 1 + 2 + 8 + 32)
 	SetTemplateEmitterLifeTime(ParticleEffect[31], -1)
-	SetTemplateInterval(ParticleEffect[31], 3)
-	SetTemplateParticlesPerInterval(ParticleEffect[31], 5)
+	SetTemplateInterval(ParticleEffect[31], 4)
+	SetTemplateParticlesPerInterval(ParticleEffect[31], 3)
 	SetTemplateParticleLifeTime(ParticleEffect[31], 40, 45)
 	SetTemplateTexture(ParticleEffect[31], PARTICLE_FIRE)
-	SetTemplateOffset(ParticleEffect[31], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
-	SetTemplateVelocity(ParticleEffect[31], -0.005, 0.005, -0.005, 0.02, -0.005, 0.005)
+	SetTemplateOffset(ParticleEffect[31], -0.005, 0.01, -0.005, 0.01, -0.005, 0.01)
+	SetTemplateVelocity(ParticleEffect[31], -0.007, 0.007, -0.005, 0.02, -0.005, 0.005)
 	SetTemplateAlphaVel(ParticleEffect[31], True)
 	SetTemplateSize(ParticleEffect[31], 0.04, 0.04, 0.5, 1.0)
 	SetTemplateSizeVel(ParticleEffect[31], 0.01, 1.01)
@@ -595,7 +595,7 @@ Function LoadParticles%()
 	ParticleEffect[36] = CreateTemplate()
 	SetTemplateFX(ParticleEffect[36], 1 + 2 + 8 + 32)
 	SetTemplateEmitterLifeTime(ParticleEffect[36], -1)
-	SetTemplateParticlesPerInterval(ParticleEffect[36], 10)
+	SetTemplateParticlesPerInterval(ParticleEffect[36], 7)
 	SetTemplateParticleLifeTime(ParticleEffect[36], 25, 30)
 	SetTemplateTexture(ParticleEffect[36], PARTICLE_FIRE)
 	SetTemplateOffset(ParticleEffect[36], -0.003, 0.003, -0.03, 0.03, -0.003, 0.003)
@@ -618,6 +618,20 @@ Function LoadParticles%()
 	SetTemplateSizeVel(ParticleEffect[37], 0.008, 1.01)
 	SetTemplateFloor(ParticleEffect[37], 1.3, 0.12, True)
 	SetTemplateColors(ParticleEffect[37], $808080, $808080)
+	
+	; ~ Fire in "cont2_457"
+	ParticleEffect[38] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[38], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[38], -1)
+	SetTemplateInterval(ParticleEffect[38], 4)
+	SetTemplateParticlesPerInterval(ParticleEffect[38], 3)
+	SetTemplateParticleLifeTime(ParticleEffect[38], 60, 70)
+	SetTemplateTexture(ParticleEffect[38], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[38], -0.04, 0.04, -0.04, 0.04, -0.04, 0.04)
+	SetTemplateVelocity(ParticleEffect[38], -0.007, 0.007, -0.005, 0.02, -0.005, 0.005)
+	SetTemplateAlphaVel(ParticleEffect[38], True)
+	SetTemplateSize(ParticleEffect[38], 0.08, 0.08, 0.5, 1.0)
+	SetTemplateSizeVel(ParticleEffect[38], 0.01, 1.01)
 End Function
 
 Function RemoveParticleInstances%()
@@ -1582,7 +1596,7 @@ Global TempSoundsName$[MaxTempSounds]
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Global Music$[34]
+Global Music$[35]
 
 ; ~ Music list
 ;[Block]
@@ -1620,6 +1634,7 @@ Music[30] = "008Chamber"
 Music[31] = "008Cutscene"
 Music[32] = "012Chamber"
 Music[33] = "860_1_Red"
+Music[34] = "457Chamber"
 ;[End Block]
 
 Global MusicCHN%

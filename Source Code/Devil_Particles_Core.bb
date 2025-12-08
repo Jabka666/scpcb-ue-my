@@ -347,12 +347,14 @@ Function UpdateParticles_Devil()
 			Continue
 		EndIf
 		
+		Local Dist# = EntityDistanceSquared(emit\Owner, me\Collider)
+		
 		ClearSurface(emit\Surf)
 		If emit\MaxTime > -1
 			emit\Age = emit\Age + 1
 			If emit\Age > emit\MaxTime Then emit\Del = True
 		EndIf
-		If fps\Factor[0] > 0.0 And (IsVisibleFromRoom(emit\room, PlayerRoom) And EntityDistanceSquared(emit\Owner, me\Collider) < HideDist)
+		If fps\Factor[0] > 0.0 And (IsVisibleFromRoom(emit\room, PlayerRoom) And Dist < HideDist)
 			If emit\tmp\MaxParticles > -1
 				Local ParticlesAmount% = 0
 				
@@ -410,6 +412,14 @@ Function UpdateParticles_Devil()
 				Case 4
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
+					If Dist < 0.2025
+						If Rand(75 + ((wi\HazmatSuit = 2) * 230)) = 1
+							If me\Injuries < 1.5 And (Not chs\GodMode)
+								PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+								InjurePlayer(1.5)
+							EndIf
+						EndIf
+					EndIf
 					;[End Block]
 				Case 5
 					;[Block]

@@ -5058,23 +5058,37 @@ Function UpdateEvent_Room2_6_HCZ_Smoke%(e.Events)
 End Function
 
 Function UpdateEvent_Cont2_457%(e.Events)
-	Local i%
-	
 	If PlayerRoom = e\room
 		If EntityY(me\Collider, True) < -2100.0 * RoomScale
-			Local FanSpeed# = fps\Factor[0] * 5.0
+			Local n.NPCs
+			Local FanSpeed# = fps\Factor[0] * 4.0
+			Local i%
+			
+			me\Zone = 1
+			ShouldPlay = 34
 			
 			TurnEntity(e\room\Objects[4], FanSpeed, 0.0, 0.0)
 			TurnEntity(e\room\Objects[5], FanSpeed, 0.0, 0.0)
 			TurnEntity(e\room\Objects[6], FanSpeed, 0.0, 0.0)
 			TurnEntity(e\room\Objects[7], FanSpeed, 0.0, 0.0)
-			TurnEntity(e\room\Objects[8], FanSpeed / 2.0, 0.0, 0.0)
-			TurnEntity(e\room\Objects[9], FanSpeed / 2.0, 0.0, 0.0)
+			TurnEntity(e\room\Objects[8], FanSpeed / 4.0, 0.0, 0.0)
+			TurnEntity(e\room\Objects[9], FanSpeed / 4.0, 0.0, 0.0)
 			
-			If e\EventState = 0
+			If e\EventState = 0.0
 				For i = 0 To 1
-					CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
+					Select i
+						Case 0
+							;[Block]
+							TFormPoint(941.0, -5020.0, -553.0, e\room\OBJ, 0)
+							;[End Block]
+						Case 1
+							;[Block]
+							TFormPoint(3277.0, -5020.0, 2447.0, e\room\OBJ, 0)
+							;[End Block]
+					End Select
+					CreateNPC(NPCType966, TFormedX(), TFormedY(), TFormedZ())
 				Next
+				
 				TFormPoint(8034.0, -5020.0, 1637.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_TEXTURE)
@@ -5091,8 +5105,13 @@ Function UpdateEvent_Cont2_457%(e.Events)
 					e\EventState = 2.0
 				EndIf
 			EndIf
-			
 		EndIf
+		
+		Local x1# = EntityX(me\Collider, True), y1# = EntityY(me\Collider, True), z1# = EntityZ(me\Collider, True)
+		
+		me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[0]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[1]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[2]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[3]))
+		e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[2], e\room\Objects[0], e\room\Objects[2], e)
+		e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[1], e\room\RoomDoors[3], e\room\Objects[1], e\room\Objects[3], e)
 	EndIf
 End Function
 
@@ -9671,14 +9690,6 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 					SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
 					SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
 					PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
-				EndIf
-			EndIf
-			If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.16
-				If Rand(75 + ((wi\HazmatSuit = 2) * 230)) = 1
-					If me\Injuries < 1.5 And (Not chs\GodMode)
-						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-						InjurePlayer(1.5)
-					EndIf
 				EndIf
 			EndIf
 		EndIf

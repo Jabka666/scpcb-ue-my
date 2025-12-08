@@ -1199,10 +1199,6 @@ Function FillRoom%(r.Rooms)
 				PositionEntity(r\Objects[3], r\x - 367.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 211.0 * RoomScale)
 				EntityParent(r\Objects[3], r\OBJ)
 				
-				r\Objects[4] = CreatePivot()
-				PositionEntity(r\Objects[4], r\x - 400.0 * RoomScale, r\y + 142.0 * RoomScale, r\z + 201.0 * RoomScale)
-				EntityParent(r\Objects[4], r\OBJ)
-				
 				de.Decals = CreateDecal(DECAL_FOAM, r\x - 512.0 * RoomScale, r\y + 0.005, r\z + 164.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.4), 0.8)
 				EntityParent(de\OBJ, r\OBJ)
 				
@@ -1489,7 +1485,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(de\OBJ, r\OBJ)
 			Next
 			
-			it.Items = CreateItem("SCP-714", it_scp714, r\x - 560.0 * RoomScale, r\y + 195.0 * RoomScale, r\z - 760.0 * RoomScale)
+			it.Items = CreateItem("SCP-714", it_scp714, r\x - 560.0 * RoomScale, r\y + 205.0 * RoomScale, r\z - 760.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-1025", it_scp1025, r\x + 560.0 * RoomScale, r\y + 185.0 * RoomScale, r\z - 760.0 * RoomScale)
@@ -1569,7 +1565,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Note from Nobody #2", it_paper, r\x - 889.0 * RoomScale, r\y + 136.0 * RoomScale, r\z + 412.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCP-1499", it_scp1499, r\x + 616.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 234.0 * RoomScale)
+			it.Items = CreateItem("SCP-1499", it_scp1499, r\x + 616.0 * RoomScale, r\y + 186.0 * RoomScale, r\z - 234.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -2550,47 +2546,62 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			d.Doors = CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 90.0, True, ELEVATOR_DOOR)
+			r\RoomDoors.Doors[1] = d
+			
+			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 656.0 * RoomScale, 90.0, False, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[2] = d
+			
+			d.Doors = CreateDoor(r, r\x - 504.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 1072.0 * RoomScale, 90.0, False, ELEVATOR_DOOR)
+			r\RoomDoors.Doors[3] = d
 			
 			; ~ DNA door
 			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
 			
-			; ~ Lower doors
-			CreateDoor(r, r\x + 3776.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			
-			CreateDoor(r, r\x + 8064.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 896.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
-			
-			CreateDoor(r, r\x + 8480.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			
-			CreateDoor(r, r\x + 8960.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			
-			CreateDoor(r, r\x + 9258.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1248.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
-			
+			; ~ Misc doors
 			CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR)
 			
 			CreateDoor(r, r\x + 2272.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 1792.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
-			CreateDoor(r, r\x + 4098.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1104.0 * RoomScale, 0.0, False, HEAVY_DOOR)
+			CreateDoor(r, r\x + 3776.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			
+			CreateDoor(r, r\x + 7424.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1508.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			
+			CreateDoor(r, r\x + 9258.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1248.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
+			
+			CreateDoor(r, r\x + 8064.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 904.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
+			
+			d.Doors = CreateDoor(r, r\x + 8480.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			r\RoomDoors.Doors[4] = d
+			
+			d.Doors = CreateDoor(r, r\x + 8960.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			r\RoomDoors.Doors[5] = d
+			
+			r\RoomDoors[4]\LinkedDoor = r\RoomDoors[5]
+			r\RoomDoors[5]\LinkedDoor = r\RoomDoors[4]
 			
 			d.Doors = CreateDoor(r, r\x + 1344.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 1444.0 * RoomScale, 0.0, False, HEAVY_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
+			d.Doors = CreateDoor(r, r\x + 7440.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 270.0, False, HEAVY_DOOR)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			
+			; ~ Elevators pivots
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 941.0 * RoomScale, r\y - 5020.0 * RoomScale, r\z - 553.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 3277.0 * RoomScale, r\y - 5020.0 * RoomScale, r\z + 2447.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x - 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 656.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
-			; ~ Elevators pivots
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 560.0 * RoomScale, r\y - 4846.0 * RoomScale, r\z + 656.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 656.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 808.0 * RoomScale, r\y - 4846.0 * RoomScale, r\z - 1072.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			; ~ Fan
@@ -2619,7 +2630,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[7], 0.0, 90.0, 0.0)
 			EntityParent(r\Objects[7], r\OBJ)
 			
-			Scale = RoomScale * 1.5
+			Scale = RoomScale * 1.8
 			r\Objects[8] = CopyEntity(r\Objects[4])
 			ScaleEntity(r\Objects[8], Scale, Scale, Scale)
 			PositionEntity(r\Objects[8], r\x - 112.0 * RoomScale, r\y - 4200.0 * RoomScale, r\z + 1792.0 * RoomScale)
@@ -2631,6 +2642,15 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[9], r\x + 3656.0 * RoomScale, r\y - 3800.0 * RoomScale, r\z + 2134.0 * RoomScale)
 			RotateEntity(r\Objects[9], 0.0, 0.0, 270.0)
 			EntityParent(r\Objects[9], r\OBJ)
+			
+			CreateAlarmLamp(r, r\x + 7216.0 * RoomScale, r\y - 4750.0 * RoomScale, r\z + 1715.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5, False)
+			
+			CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 4730.0 * RoomScale, r\z + 1305.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5, False)
+			
+			CreateAlarmLamp(r, r\x + 8509.0 * RoomScale, r\y - 4576.0 * RoomScale, r\z + 416.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 180.0, 0.0, 3.0, 50.0, 0.5, False)
+			
+			emit.Emitter = SetEmitter(r, r\x + 6741.0 * RoomScale, r\y - 4996.0 * RoomScale, r\z - 442.0 * RoomScale, 38)
+			emit\State = 4
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
@@ -3601,7 +3621,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x + 344.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 900.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCP-268", it_scp268, r\x + 379.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 270.0 * RoomScale)
+			it.Items = CreateItem("SCP-268", it_scp268, r\x + 379.0 * RoomScale, r\y + 210.0 * RoomScale, r\z + 270.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 639.0 * RoomScale)

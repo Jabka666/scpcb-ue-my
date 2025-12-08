@@ -2755,7 +2755,7 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		; ~ Lighting
 		LightColor(n\OBJ2, Rnd(240.0, 255.0), Rnd(135.0, 150.0), Rnd(35.0, 50.0))
-		LightRange(n\OBJ2, Rnd(2.5, 3.0))
+		LightRange(n\OBJ2, Rnd(3.5, 4.0))
 		
 		If me\Terminated Then Burn = 1
 		
