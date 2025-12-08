@@ -4770,8 +4770,6 @@ Function ResetRender%()
 	opttimer\ItemsTimer = 0.0
 	
 	For r.Rooms = Each Rooms
-		r\HiddenAlpha = False
-		ShowEntity(r\OBJ)
 		HideRoomsNoColl(r)
 		HideRoomsColl(r)
 	Next

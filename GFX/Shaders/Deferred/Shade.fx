@@ -222,7 +222,7 @@ inline float4 CalculateScattering(float3 vworldPos, float3 worldPos, float3 norm
 		const float AttenPow = 1-pow(1.0f-saturate(dot(PosCam,normal)),1);
 		return float4(LightColor, 1) * saturate(GetScattering(EyePos, dir, LightPos) * LightScattering * AttenPow);
 	#else
-		return 0.0;
+		return float4(0.0f, 0.0f, 0.0f, 0.0f);
 	#endif
 }
 

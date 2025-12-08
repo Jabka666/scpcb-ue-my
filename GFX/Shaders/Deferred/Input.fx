@@ -51,6 +51,10 @@ struct VS_INPUT_GBUFFER
 	float2 TexCoords : TEXCOORD0;
 	float3 Tangent : TEXCOORD2;
 	float3 Binormal : TEXCOORD3;
+	float4 IM1 : TEXCOORD4;
+	float4 IM2 	: TEXCOORD5;
+	float4 IM3 	: TEXCOORD6;
+	
 	float4 BlendWeights : BLENDWEIGHT;
 	float4 BlendIndices : BLENDINDICES;
 	
@@ -84,8 +88,8 @@ struct PixelOutput
 PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 { 
 	PS_INPUT_GBUFFER output;
-	
-	const float4x3 WorldTransform = Skinned ? GetSkinTransform(input.BlendIndices, input.BlendWeights) : World;
+
+	const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights, input.IM1, input.IM2, input.IM3);
 
 	output.WorldPos = mul(input.Pos, WorldTransform);
 	output.Pos = mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
@@ -218,11 +222,14 @@ struct VS_INPUT_DEPTH
 	float4 Pos : POSITION;
 	float4 BlendWeights : BLENDWEIGHT;
 	float4 BlendIndices : BLENDINDICES;
+	float4 IM1 : TEXCOORD4;
+	float4 IM2 	: TEXCOORD5;
+	float4 IM3 	: TEXCOORD6;
 };
 
 float4 DepthVertex(VS_INPUT_DEPTH input) : POSITION
 {
-	const float4x3 WorldTransform = Skinned ? GetSkinTransform(input.BlendIndices, input.BlendWeights) : World;
+	const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights, input.IM1, input.IM2, input.IM3);
 	
 	return mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
 }
