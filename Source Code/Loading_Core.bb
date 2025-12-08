@@ -1173,7 +1173,7 @@ Function LoadNPCs%()
 	
 	n_I\NPCModelID[NPC_MTF_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\MTF.b3d")
 	
-	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\vehicle.b3d")
+	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\vehicle.b3d")
 	
 	For i = 0 To MaxNPCModelIDAmount - 1
 		HideEntity(n_I\NPCModelID[i])

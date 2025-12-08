@@ -2554,26 +2554,26 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x - 504.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 1072.0 * RoomScale, 90.0, False, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[3] = d
 			
-			; ~ DNA door
+			; ~ DNA doors
 			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
 			
-			; ~ Misc doors
-			CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR)
+			CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
 			
+			; ~ Misc doors
 			CreateDoor(r, r\x + 2272.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 1792.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
 			CreateDoor(r, r\x + 3776.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
 			CreateDoor(r, r\x + 7424.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1508.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
-			CreateDoor(r, r\x + 9258.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1248.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 9258.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1248.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_4)
 			
-			CreateDoor(r, r\x + 8064.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 904.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x + 8064.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 904.0 * RoomScale, 0.0, True, HEAVY_DOOR, KEY_CARD_4)
 			
 			d.Doors = CreateDoor(r, r\x + 8480.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			r\RoomDoors.Doors[4] = d
 			
-			d.Doors = CreateDoor(r, r\x + 8960.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
+			d.Doors = CreateDoor(r, r\x + 8960.0 * RoomScale, r\y - 5078.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, True, HEAVY_DOOR)
 			r\RoomDoors.Doors[5] = d
 			
 			r\RoomDoors[4]\LinkedDoor = r\RoomDoors[5]
@@ -2583,7 +2583,7 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
-			d.Doors = CreateDoor(r, r\x + 7440.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 270.0, False, HEAVY_DOOR)
+			d.Doors = CreateDoor(r, r\x + 7440.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
