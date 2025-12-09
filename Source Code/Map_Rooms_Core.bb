@@ -470,7 +470,7 @@ Function FillRoom%(r.Rooms)
 				End Select
 				de.Decals = CreateDecal(Temp, r\x + xTemp * RoomScale, r\y + 2.0 * RoomScale, r\z + zTemp * RoomScale, 90.0, 45.0, 0.0, ((i = 0) * 0.44) + ((i = 1) * 1.2) + ((i > 1) * 0.54), Rnd(0.8, 1.0))
 			Next
-			de.Decals = CreateDecal(DECAL_WATER, r\x - 5062.0 * RoomScale, r\y - 1089.0 * RoomScale + 0.05, r\z - 3614.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.6, 1.0))
+			de.Decals = CreateDecal(DECAL_WATER, r\x - 5062.0 * RoomScale, r\y - 1089.0 * RoomScale + 0.05, r\z - 3614.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7))
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 3940.0 * RoomScale, r\y - 32.0 * RoomScale, r\z - 1248.0 * RoomScale, 20.0, True, r\x - 1970.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 928.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 270.0 : sc\Turn = 45.0
@@ -874,7 +874,7 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = 45.0 : sc\Turn = 30.0
 			
 			xTemp = r\x - 472.0 * RoomScale : zTemp = r\z - 20.0 * RoomScale
-			de.Decals = CreateDecal(DECAL_WATER, xTemp, r\y + 0.005, zTemp, 90.0, Rnd(360.0), 0.0, Rnd(0.7, 0.8), 1.0)
+			de.Decals = CreateDecal(DECAL_WATER, xTemp, r\y + 0.005, zTemp, 90.0, Rnd(360.0), 0.0, Rnd(0.7, 0.8))
 			de\SizeChange = 0.00005 : de\MaxSize = 6.0
 			EntityParent(de\OBJ, r\OBJ)
 			
@@ -2654,6 +2654,16 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
+			
+			xTemp = r\x + 8828.0 * RoomScale
+			yTemp = r\y - 5104.0 * RoomScale + 0.005
+			zTemp = r\z + 617.0 * RoomScale
+			
+			de.Decals = CreateDecal(DECAL_WATER, xTemp, yTemp, zTemp, 90.0, Rnd(360.0), 0.0, Rnd(0.8, 1.0))
+			EntityParent(de\OBJ, r\OBJ)
+			
+			SetEmitter(r, xTemp, yTemp + 706.0 * RoomScale, zTemp, 39)
+			SetEmitter(r, xTemp, yTemp, zTemp + 0.005, 40)
 			
 			it.Items = CreateItem("Scorched Note", it_paper, r\x + 64.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 384.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)

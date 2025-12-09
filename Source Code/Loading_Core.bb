@@ -129,7 +129,7 @@ Const PARTICLE_FIRE% = 14
 Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
-Const MaxParticleEffects% = 39
+Const MaxParticleEffects% = 41
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -632,6 +632,31 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[38], True)
 	SetTemplateSize(ParticleEffect[38], 0.08, 0.08, 0.5, 1.0)
 	SetTemplateSizeVel(ParticleEffect[38], 0.01, 1.01)
+	
+	; ~ A single water drop particle in "cont2_457"
+	ParticleEffect[39] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[39], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[39], -1)
+	SetTemplateInterval(ParticleEffect[39], 45)
+	SetTemplateParticleLifeTime(ParticleEffect[39], 140, 140)
+	SetTemplateTexture(ParticleEffect[39], PARTICLE_WATER_DROP)
+	SetTemplateOffset(ParticleEffect[39], -0.01, 0.01, 0.0, 0.0, -0.01, 0.01)
+	SetTemplateVelocity(ParticleEffect[39], 0.0, 0.0, -0.042, -0.04, 0.0, 0.0)
+	SetTemplateSize(ParticleEffect[39], 0.016, 0.016, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[39], True)
+	
+	; ~ A single water ring in "cont2_457"
+	ParticleEffect[40] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[40], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[40], -1)
+	SetTemplateInterval(ParticleEffect[40], 60) ; ~ TODO: Sync interval with water drop
+	SetTemplateParticleLifeTime(ParticleEffect[40], 30, 40)
+	SetTemplateTexture(ParticleEffect[40], PARTICLE_WATER_RING)
+	SetTemplateOffset(ParticleEffect[40], -0.01, 0.01, 0.0, 0.0, -0.01, 0.01)
+	SetTemplateSize(ParticleEffect[40], 0.005, 0.005, 1.0, 1.0)
+	SetTemplateSizeVel(ParticleEffect[40], 0.001, 1.002)
+	SetTemplateFixAngles(ParticleEffect[40], 90, 0)
+	SetTemplateAlphaVel(ParticleEffect[40], True)
 End Function
 
 Function RemoveParticleInstances%()
