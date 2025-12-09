@@ -2557,7 +2557,7 @@ Function FillRoom%(r.Rooms)
 			; ~ DNA doors
 			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
 			
-			CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
+			CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
 			
 			; ~ Misc doors
 			CreateDoor(r, r\x + 2272.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z + 1792.0 * RoomScale, 90.0, False, HEAVY_DOOR)
