@@ -379,7 +379,7 @@ Function UpdateSoundEmitters%()
 	For se.SoundEmitters = Each SoundEmitters
 		If se\room <> Null
 			If se\room\Dist < 6.0 Lor se\room = PlayerRoom
-				If EntityDistanceSquared(se\OBJ, me\Collider) < PowTwo(se\Range) Then se\SoundCHN = LoopSoundEx(RoomAmbience[se\ID - 1], se\SoundCHN, Camera, se\OBJ, se\Range)
+				If EntityDistanceSquared(se\OBJ, me\Collider) < PowTwo(se\Range) Then se\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[se\ID - 1], se\SoundCHN, Camera, se\OBJ, se\Range)
 			EndIf
 		EndIf
 	Next
@@ -1459,7 +1459,6 @@ Function DestroyForest%(fr.Forest, RemoveGrid% = True)
 End Function
 
 Global RoomTempID%
-Global RoomAmbience%[12]
 
 Type RoomTemplates
 	Field OBJ%, ID%
@@ -2058,57 +2057,47 @@ Function LoadRoomTemplates%(File$)
 		Loc = Trim(ReadLine(f))
 		If Left(Loc, 1) = "["
 			Loc = Mid(Loc, 2, Len(Loc) - 2)
-			If Loc <> "room ambience"
-				StrTemp = IniGetString(File, Loc, "Mesh Path")
-				
-				rt.RoomTemplates = CreateRoomTemplate(StrTemp)
-				rt\Name = Lower(Loc)
-				rt\RoomID = FindRoomID(rt\Name)
-				
-				StrTemp = IniGetString(File, Loc, "Shape")
-				
-				Select StrTemp
-					Case "1"
-						;[Block]
-						rt\Shape = ROOM1
-						;[End Block]
-					Case "2"
-						;[Block]
-						rt\Shape = ROOM2
-						;[End Block]
-					Case "2C"
-						;[Block]
-						rt\Shape = ROOM2C
-						;[End Block]
-					Case "3"
-						;[Block]
-						rt\Shape = ROOM3
-						;[End Block]
-					Case "4"
-						;[Block]
-						rt\Shape = ROOM4
-						;[End Block]
-				End Select
-				
-				For i = 0 To 4
-					rt\Zone[i] = IniGetInt(File, Loc, "Zone" + (i + 1))
-				Next
-				
-				rt\Commonness = Clamp(IniGetInt(File, Loc, "Commonness"), 0, 100)
-				rt\DisableDecals = IniGetInt(File, Loc, "DisableDecals")
-				rt\DisableOverlapCheck = IniGetInt(File, Loc, "DisableOverlapCheck")
-			EndIf
+			
+			StrTemp = IniGetString(File, Loc, "Mesh Path")
+			
+			rt.RoomTemplates = CreateRoomTemplate(StrTemp)
+			rt\Name = Lower(Loc)
+			rt\RoomID = FindRoomID(rt\Name)
+			
+			StrTemp = IniGetString(File, Loc, "Shape")
+			
+			Select StrTemp
+				Case "1"
+					;[Block]
+					rt\Shape = ROOM1
+					;[End Block]
+				Case "2"
+					;[Block]
+					rt\Shape = ROOM2
+					;[End Block]
+				Case "2C"
+					;[Block]
+					rt\Shape = ROOM2C
+					;[End Block]
+				Case "3"
+					;[Block]
+					rt\Shape = ROOM3
+					;[End Block]
+				Case "4"
+					;[Block]
+					rt\Shape = ROOM4
+					;[End Block]
+			End Select
+			
+			For i = 0 To 4
+				rt\Zone[i] = IniGetInt(File, Loc, "Zone" + (i + 1))
+			Next
+			
+			rt\Commonness = Clamp(IniGetInt(File, Loc, "Commonness"), 0, 100)
+			rt\DisableDecals = IniGetInt(File, Loc, "DisableDecals")
+			rt\DisableOverlapCheck = IniGetInt(File, Loc, "DisableOverlapCheck")
 		EndIf
 	Wend
-	
-	i = 0
-	Repeat
-		StrTemp = IniGetString(File, "room ambience", "Ambience" + i)
-		If StrTemp = "" Then Exit
-		
-		RoomAmbience[i] = LoadSound_Strict(StrTemp)
-		i = i + 1
-	Forever
 	
 	CloseFile(f)
 	

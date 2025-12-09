@@ -452,7 +452,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 		
 		Local Reachable% = PlayerInReachableRoom(True)
 		
-		If e\EventState < 2000.0 And Reachable Then e\SoundCHN = LoopSoundEx(RoomAmbience[5], e\SoundCHN, Camera, e\room\OBJ, 100.0)
+		If e\EventState < 2000.0 And Reachable Then e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[5], e\SoundCHN, Camera, e\room\OBJ, 100.0)
 		If e\EventState3 < 11.0
 			If (Not ChannelPlaying(e\SoundCHN2))
 				e\EventState3 = e\EventState3 + 1.0
@@ -2114,7 +2114,7 @@ Function UpdateEvent_Room2_2_LCZ_Fan%(e.Events)
 	
 	If PlayerRoom = e\room
 		TurnEntity(e\room\Objects[0], e\EventState3 * fps\Factor[0], 0.0, 0.0)
-		If e\EventState3 > 0.01 Then e\SoundCHN = LoopSoundEx(RoomAmbience[8], e\SoundCHN, Camera, e\room\Objects[0], 5.0, (e\EventState3 / 4.0))
+		If e\EventState3 > 0.01 Then e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[8], e\SoundCHN, Camera, e\room\Objects[0], 5.0, (e\EventState3 / 4.0))
 		e\EventState3 = CurveValue(e\EventState2 * 5.0, e\EventState3, 150.0)
 	EndIf
 	
@@ -5231,8 +5231,8 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 			Local SoundRange# = 2.0 + ((e\EventState3 = 2.0) * (e\EventState4 >= 70.0 * 9.6))
 			Local SoundVol# = 0.8 + ((e\EventState3 = 2.0) * (e\EventState4 >= 70.0 * 9.6))
 			
-			e\SoundCHN = LoopSoundEx(RoomAmbience[3], e\SoundCHN, Camera, e\room\Objects[2], SoundRange, SoundVol)
-			e\SoundCHN2 = LoopSoundEx(RoomAmbience[3], e\SoundCHN2, Camera, e\room\Objects[3], SoundRange, SoundVol)
+			e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[3], e\SoundCHN, Camera, e\room\Objects[2], SoundRange, SoundVol)
+			e\SoundCHN2 = LoopSoundEx(snd_I\RoomAmbience[3], e\SoundCHN2, Camera, e\room\Objects[3], SoundRange, SoundVol)
 		EndIf
 		x1 = EntityX(me\Collider, True) : y1 = EntityY(me\Collider, True) : z1 = EntityZ(me\Collider, True)
 		me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[0]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[1]))
@@ -5448,7 +5448,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			e\EventState3 = Max(0.0, e\EventState3 - fps\Factor[0] / 450.0)
 		EndIf
 		
-		If e\EventState2 > 0.0 Then e\SoundCHN = LoopSoundEx(RoomAmbience[7], e\SoundCHN, Camera, e\room\RoomLevers[2]\BaseOBJ, 5.0, e\EventState2 * 0.8)
+		If e\EventState2 > 0.0 Then e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[7], e\SoundCHN, Camera, e\room\RoomLevers[2]\BaseOBJ, 5.0, e\EventState2 * 0.8)
 		If e\EventState3 > 0.0 Then e\SoundCHN2 = LoopSoundEx(e\Sound2, e\SoundCHN2, Camera, e\room\RoomLevers[1]\BaseOBJ, 6.0, e\EventState3)
 		
 		If y And x And z
@@ -5565,7 +5565,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 						If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 					Next
 				EndIf
-				e\SoundCHN = LoopSoundEx(RoomAmbience[5], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
+				e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[5], e\SoundCHN, Camera, e\room\Objects[0], 5.0)
 				
 				UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 				
@@ -5756,7 +5756,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 					If x2
 						ShouldPlay = 8
 						IsBlackOut = False
-						e\SoundCHN2 = LoopSoundEx(RoomAmbience[7], e\SoundCHN2, Camera, e\room\Objects[4], 6.0)
+						e\SoundCHN2 = LoopSoundEx(snd_I\RoomAmbience[7], e\SoundCHN2, Camera, e\room\Objects[4], 6.0)
 						For i = 4 To 7
 							e\room\RoomDoors[i]\Locked = 0
 						Next
@@ -6070,7 +6070,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 	
 	If e\room\Dist < 6.0
 		If e\EventState = 0.0
-			e\SoundCHN2 = LoopSoundEx(RoomAmbience[5], e\SoundCHN2, Camera, e\room\OBJ)
+			e\SoundCHN2 = LoopSoundEx(snd_I\RoomAmbience[5], e\SoundCHN2, Camera, e\room\OBJ)
 		Else
 			e\SoundCHN = LoopSoundEx(snd_I\HissSFX[1], e\SoundCHN, Camera, e\room\OBJ, 5.0, 0.7)
 			
@@ -9263,7 +9263,7 @@ Function UpdateEvent_Brownout%(e.Events)
 			EndIf
 			
 			If e\EventState > 0.0 Then e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\RoomLevers[0]\BaseOBJ, 3.0, e\EventState)
-			If e\EventState2 > 0.0 Then e\SoundCHN2 = LoopSoundEx(RoomAmbience[7], e\SoundCHN2, Camera, e\room\RoomLevers[1]\BaseOBJ, 2.0, e\EventState2 * 0.8)
+			If e\EventState2 > 0.0 Then e\SoundCHN2 = LoopSoundEx(snd_I\RoomAmbience[7], e\SoundCHN2, Camera, e\room\RoomLevers[1]\BaseOBJ, 2.0, e\EventState2 * 0.8)
 		EndIf
 	EndIf
 End Function
