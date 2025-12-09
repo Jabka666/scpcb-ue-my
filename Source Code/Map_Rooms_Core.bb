@@ -2554,8 +2554,8 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x - 504.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 1072.0 * RoomScale, 90.0, False, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[3] = d
 			
-			; ~ DNA doors
-			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
+			; ~ Code doors
+			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
 			
 			CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 5086.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
 			
