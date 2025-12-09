@@ -5057,7 +5057,7 @@ Function UpdateEvent_Room2_6_HCZ_Smoke%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Cont2_457%(e.Events)
+Function UpdateEvent_Room2_MT%(e.Events)
 	If PlayerRoom = e\room
 		If EntityY(me\Collider, True) < -2100.0 * RoomScale
 			Local n.NPCs

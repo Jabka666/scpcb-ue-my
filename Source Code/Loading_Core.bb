@@ -619,7 +619,7 @@ Function LoadParticles%()
 	SetTemplateFloor(ParticleEffect[37], 1.3, 0.12, True)
 	SetTemplateColors(ParticleEffect[37], $808080, $808080)
 	
-	; ~ Fire in "cont2_457"
+	; ~ Fire in "room2_mt"
 	ParticleEffect[38] = CreateTemplate()
 	SetTemplateFX(ParticleEffect[38], 1 + 2 + 8 + 32)
 	SetTemplateEmitterLifeTime(ParticleEffect[38], -1)
@@ -633,7 +633,7 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[38], 0.08, 0.08, 0.5, 1.0)
 	SetTemplateSizeVel(ParticleEffect[38], 0.01, 1.01)
 	
-	; ~ A single water drop particle in "cont2_457"
+	; ~ A single water drop particle in "room2_mt"
 	ParticleEffect[39] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[39], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[39], -1)
@@ -645,7 +645,7 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[39], 0.016, 0.016, 1.0, 1.5)
 	SetTemplateAlphaVel(ParticleEffect[39], True)
 	
-	; ~ A single water ring in "cont2_457"
+	; ~ A single water ring in "room2_mt"
 	ParticleEffect[40] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[40], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[40], -1)
@@ -2263,7 +2263,7 @@ Function LoadEvents%()
 	CreateEvent(e_room2_test_hcz, r_room2_test_hcz, 0)
 	CreateEvent(e_room2_test_lcz_173, r_room2_test_lcz, 0)
 	
-	CreateEvent(e_cont2_457, r_cont2_457, 0)
+	CreateEvent(e_room2_mt, r_room2_mt, 0)
 	
 	CreateEvent(e_room2c_ec, r_room2c_ec, 0)
 	

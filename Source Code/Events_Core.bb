@@ -47,7 +47,7 @@ Const e_room2_2_hcz_106% = 25
 Const e_room2_4_hcz_106% = 26
 Const e_room2_5_hcz_106% = 27
 Const e_room2_6_hcz_smoke% = 28, e_room2_6_hcz_173% = 29
-Const e_cont2_457% = 30
+Const e_room2_mt% = 30
 Const e_room2_nuke% = 31
 Const e_room2_servers_hcz% = 32
 Const e_room2_shaft% = 33
@@ -781,9 +781,9 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room2_6_HCZ_Smoke(e)
 				;[End Block]
-			Case e_cont2_457
+			Case e_room2_mt
 				;[Block]
-				UpdateEvent_Cont2_457(e)
+				UpdateEvent_Room2_MT(e)
 				;[End Block]
 			Case e_room2_nuke
 				;[Block]

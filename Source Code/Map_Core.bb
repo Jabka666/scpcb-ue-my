@@ -5806,7 +5806,7 @@ Function CreateMap%()
 	
 	SetRoom(1, ROOM2, "room2_nuke", 0.1)
 	SetRoom(1, ROOM2, "cont2_409", 0.15)
-	SetRoom(1, ROOM2, "cont2_457", 0.25)
+	SetRoom(1, ROOM2, "room2_mt", 0.25)
 	SetRoom(1, ROOM2, "cont2_008", 0.35)
 	SetRoom(1, ROOM2, "room2_tesla_2_hcz", 0.45)
 	SetRoom(1, ROOM2, "room2_shaft", 0.5)
