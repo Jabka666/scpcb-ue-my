@@ -1516,7 +1516,7 @@ Const r_room2_servers_hcz% = 58
 Const r_room2_shaft% = 59
 Const r_room2_tesla_hcz% = 60, r_room2_tesla_2_hcz% = 61
 Const r_room2_test_hcz% = 62
-Const r_cont2_008% = 63, r_cont2_049% = 64, r_cont2_409% = 65, r_cont2_457% = 66
+Const r_cont2_008% = 63, r_cont2_049% = 64, r_cont2_409% = 65
 Const r_room2c_hcz% = 67, r_room2c_2_hcz% = 68, r_room2c_3_hcz% = 69
 Const r_cont2c_096% = 70
 Const r_room3_hcz% = 71, r_room3_2_hcz% = 72, r_room3_3_hcz% = 73
@@ -1814,10 +1814,6 @@ Function FindRoomID%(RoomName$)
 		Case "cont2_409"
 			;[Block]
 			Return(r_cont2_409)
-			;[End Block]
-		Case "cont2_457"
-			;[Block]
-			Return(r_cont2_457)
 			;[End Block]
 		Case "room2c_hcz"
 			;[Block]
