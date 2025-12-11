@@ -1028,20 +1028,20 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.png")
 	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.png")
 	
-	hMap[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h.png", 1 + 32768)
-	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 32768)
+	hMap[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h.png", 1 + 16384)
+	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 16384)
 	
-	hMap[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h.png", 1 + 32768)
-	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 32768)
+	hMap[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h.png", 1 + 16384)
+	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 16384)
 	
-	hMap[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch.png", 1 + 32768)
-	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 32768)
+	hMap[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch.png", 1 + 16384)
+	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 16384)
 	
-	hMap[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h.png", 1 + 32768)
-	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 32768)
+	hMap[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h.png", 1 + 16384)
+	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 16384)
 	
-	hMap[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h.png", 1 + 32768)
-	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 32768)
+	hMap[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h.png", 1 + 16384)
+	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 16384)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
@@ -1270,20 +1270,20 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.png")
 	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.png")
 	
-	hMap[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h.png", 1 + 32768)
-	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 32768)
+	hMap[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h.png", 1 + 16384)
+	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 16384)
 	
-	hMap[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h.png", 1 + 32768)
-	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 32768)
+	hMap[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h.png", 1 + 16384)
+	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 16384)
 	
-	hMap[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch.png", 1 + 32768)
-	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 32768)
+	hMap[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch.png", 1 + 16384)
+	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 16384)
 	
-	hMap[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h.png", 1 + 32768)
-	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 32768)
+	hMap[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h.png", 1 + 16384)
+	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 16384)
 	
-	hMap[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h.png", 1 + 32768)
-	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 32768)
+	hMap[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h.png", 1 + 16384)
+	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 16384)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
@@ -2153,7 +2153,7 @@ Type Rooms
 	Field Dist#
 	Field SoundCHN%
 	Field fr.Forest
-	Field Objects%[MaxRoomObjects], ScriptedObject%[MaxRoomObjects], PrevObjectAlpha#[MaxRoomObjects]
+	Field Objects%[MaxRoomObjects], ScriptedObject%[MaxRoomObjects], PrevObjectAlpha#[MaxRoomObjects], PrevObjectAlphaActivated%[MaxRoomObjects]
 	Field RoomLevers.Levers[MaxRoomLevers]
 	Field RoomDoors.Doors[MaxRoomDoors]
 	Field NPC.NPCs[MaxRoomNPCs]
@@ -2889,7 +2889,7 @@ Function UpdateDoors%()
 					For i = 0 To 1
 						If d\Buttons[i] <> 0
 							EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
-							If d_I\ClosestDoor = d
+							If d_I\ClosestDoor = d And opt\HighlightInteractable
 								UpdateEntityMaterial(d\Buttons[i], DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
 							Else
 								UpdateEntityMaterial(d\Buttons[i])
@@ -3769,7 +3769,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	SetDeferredEntity(de\OBJ, False, DEFERRED_DIFF)
 	MaskEntity(de\OBJ, 32)
 	
-	de\room = FindEntityRoom(de\OBJ)
+	de\room = FindEntityRoom(de\OBJ, True)
 	
 	Return(de)
 End Function
@@ -4844,6 +4844,7 @@ Function HideRoomsNoColl%(room.Rooms)
 					HideEntity(room\Objects[i])
 					If EntityClass(room\Objects[i]) <> "Pivot"
 						room\PrevObjectAlpha[i] = GetEntityAlpha(room\Objects[i])
+						room\PrevObjectAlphaActivated[i] = True
 						EntityAlpha(room\Objects[i], 0.0)
 					EndIf
 				EndIf
@@ -4913,7 +4914,7 @@ Function ShowRoomsNoColl%(room.Rooms)
 			If room\Objects[i] <> 0
 				If (Not room\ScriptedObject[i])
 					ShowEntity(room\Objects[i])
-					If EntityClass(room\Objects[i]) <> "Pivot" Then EntityAlpha(room\Objects[i], room\PrevObjectAlpha[i])
+					If room\PrevObjectAlphaActivated[i] And EntityClass(room\Objects[i]) <> "Pivot" Then EntityAlpha(room\Objects[i], room\PrevObjectAlpha[i])
 				EndIf
 			EndIf
 		Next

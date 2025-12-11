@@ -904,7 +904,7 @@ Function LoadSecurityCams%()
 		HideEntity(sc_I\CamModelID[i])
 	Next
 	
-	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 256 + 16384)
+	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 256 + 1024)
 End Function
 
 Function RemoveSecurityCamInstances%()
@@ -2711,6 +2711,8 @@ Function LoadEntities%()
 	Local i%, j%, k%, Tex%
 	Local Name$, Test%, File$, Scale#
 	
+	ApplyGraphicOptions()
+	
 	DeInitMainMenuAssets()
 	
 	RenderLoading(0, GetLocalString("loading", "data"))
@@ -2972,7 +2974,7 @@ Function LoadEntities%()
 	
 	t\ImageID[6] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale)
 	
-	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 16384)
+	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 1024)
 	
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
@@ -3168,10 +3170,6 @@ Function LoadEntities%()
 		Forever
 		CloseDir(Dir)
 	EndIf
-	
-	RenderLoading(25, GetLocalString("loading", "graphic"))
-	
-	TextureAnisotropic(opt\AnisotropicLevel)
 	
 	RenderLoading(30, GetLocalString("loading", "console"))
 	

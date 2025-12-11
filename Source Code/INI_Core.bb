@@ -190,17 +190,19 @@ Type Options
 	Field ScreenGamma#, PrevScreenGamma#
 	Field FOV#, CurrFOV#
 	Field ParticleAmount%
+	Field TextureQuality%, TextureQualityLevel%
+	Field Anisotropic%, AnisotropicLevel%
 	Field LightingQuality%
 	Field AmbientOcclusion%
-	Field AntiAliasing%
-	Field Anisotropic%, AnisotropicLevel%
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
+	Field AntiAliasing%
 	Field VSync%
 	Field ColorCorrection%
 	Field Bloom%
 	Field MotionBlur%
-	Field VolumetricLights
+	Field VolumetricLights%
 	Field VignetteEnabled%
+	Field HighlightInteractable%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -257,14 +259,27 @@ Function LoadOptionsINI%()
 	
 	opt\ParticleAmount = IniGetInt(OptionFile, "Graphics", "Particle Amount", 2)
 	
-	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 1)
-	
-	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 2)
-	
-	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
+	opt\TextureQuality = IniGetInt(OptionFile, "Graphics", "Texture quality", 3)
+	Select opt\TextureQuality
+		Case 0
+			;[Block]
+			opt\TextureQualityLevel = 8
+			;[End Block]
+		Case 1
+			;[Block]
+			opt\TextureQualityLevel = 4
+			;[End Block]
+		Case 2
+			;[Block]
+			opt\TextureQualityLevel = 2
+			;[End Block]
+		Case 3
+			;[Block]
+			opt\TextureQualityLevel = 1
+			;[End Block]
+	End Select
 	
 	opt\Anisotropic = IniGetInt(OptionFile, "Graphics", "Anisotropic Filtering", 2)
-	
 	Select opt\Anisotropic
 		Case 0
 			;[Block]
@@ -288,8 +303,11 @@ Function LoadOptionsINI%()
 			;[End Block]
 	End Select
 	
-	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
+	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 1)
 	
+	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 2)
+	
+	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
 	Select opt\SecurityCamRenderInterval
 		Case 0
 			;[Block]
@@ -313,6 +331,8 @@ Function LoadOptionsINI%()
 			;[End Block]
 	End Select
 	
+	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
+	
 	opt\VSync = IniGetInt(OptionFile, "Graphics", "VSync", True)
 	
 	opt\ColorCorrection = IniGetInt(OptionFile, "Graphics", "Color Correction", True)
@@ -324,6 +344,8 @@ Function LoadOptionsINI%()
 	opt\VolumetricLights = IniGetInt(OptionFile, "Graphics", "Volumetric Lighting", True)
 	
 	opt\VignetteEnabled = IniGetInt(OptionFile, "Graphics", "Vignette Enabled", True)
+	
+	opt\HighlightInteractable = IniGetInt(OptionFile, "Graphics", "Hightlight Interactable", True)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -442,15 +464,17 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Graphics", "Particle Amount", opt\ParticleAmount)
 	
+	IniWriteString(OptionFile, "Graphics", "Texture quality", opt\TextureQuality)
+	
+	IniWriteInt(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
+	
 	IniWriteString(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
 	
 	IniWriteString(OptionFile, "Graphics", "Ambient Occlusion", opt\AmbientOcclusion)
 	
-	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
-	
-	IniWriteInt(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
-	
 	IniWriteFloat(OptionFile, "Graphics", "Security Cam Render Interval", opt\SecurityCamRenderInterval)
+	
+	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 	
 	IniWriteInt(OptionFile, "Graphics", "VSync", opt\VSync)
 	
@@ -463,6 +487,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Graphics", "Volumetric Lighting", opt\VolumetricLights)
 	
 	IniWriteInt(OptionFile, "Graphics", "Vignette Enabled", opt\VignetteEnabled)
+	
+	IniWriteInt(OptionFile, "Graphics", "Highlight Interactable", opt\HighlightInteractable)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -569,17 +595,20 @@ Function ResetOptionsINI%()
 	
 	opt\ParticleAmount = 2
 	
+	opt\Anisotropic = 4
+	opt\AnisotropicLevel = 16
+	
+	opt\TextureQuality = 3
+	opt\TextureQualityLevel = 1
+	
 	opt\LightingQuality = 1
 	
 	opt\AmbientOcclusion = 2
 	
-	opt\AntiAliasing = True
-	
-	opt\Anisotropic = 4
-	opt\AnisotropicLevel = 16
-	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0
+	
+	opt\AntiAliasing = True
 	
 	opt\VSync = True
 	
@@ -592,6 +621,8 @@ Function ResetOptionsINI%()
 	opt\VolumetricLights = True
 	
 	opt\VignetteEnabled = True
+	
+	opt\HighlightInteractable = True
 	; ~ [AUDIO]
 	
 	opt\PrevMasterVolume = 0.5

@@ -2814,10 +2814,9 @@ Function MakeMeUnplayable%(CanRotate% = True)
 End Function
 
 Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
-	; ~ Set the real distance, not squared
-	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor GrabbedEntity <> 0 Then Return(False)
+	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return(False)
 	
-	If EntityDistanceSquared(me\Collider, OBJ) < Dist * Dist
+	If EntityDistanceSquared(me\Collider, OBJ) < PowTwo(Dist)
 		If EntityPick(Camera, Dist) = OBJ
 			HandEntity = OBJ
 			Select MouseType
@@ -8016,7 +8015,7 @@ Function UpdateMenu%()
 				If UpdateMenuButton(x, y + (150 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "ctrl"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Controls, False)
 				If UpdateMenuButton(x, y + (225 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "avc"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
 				
-				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 0
 					igm\QuitMenu = 0
@@ -8025,7 +8024,7 @@ Function UpdateMenu%()
 					ShouldDeleteGadgets = True
 				EndIf
 			Else
-				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 1
 					igm\QuitMenu = 0
@@ -8144,6 +8143,10 @@ Function UpdateMenu%()
 						y = y + (25 * MenuScale)
 						
 						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\HighlightInteractable = UpdateMenuTick(x, y, opt\HighlightInteractable)
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
@@ -8425,7 +8428,7 @@ Function UpdateMenu%()
 				Return
 			EndIf
 			
-			If UpdateMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+			If UpdateMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 				igm\AchievementsMenu = 0
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
@@ -8433,7 +8436,7 @@ Function UpdateMenu%()
 				ShouldDeleteGadgets = True
 			EndIf
 		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
-			If UpdateMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+			If UpdateMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 				igm\AchievementsMenu = 0
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
@@ -8673,7 +8676,6 @@ Function RenderMenu%()
 						y = y + (40 * MenuScale)
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
-						Color(255, 255, 0)
 						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
 						
 						y = y + (35 * MenuScale)
@@ -8736,6 +8738,11 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "highlight"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HighlightInteractable)
 						
 						RenderMenuButtons()
 						RenderMenuTicks()

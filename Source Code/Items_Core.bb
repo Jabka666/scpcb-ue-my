@@ -228,7 +228,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 			it\TexPath = TexturePath
 			EntityTexture(it\OBJ, Texture)
 			it\Tex = Texture
-			UpdateEntityMaterial(it\OBJ)
+			UpdateEntityMaterial(it\OBJ, DEFERRED_NOMATERIAL)
 		EndIf
 	EndIf
 	
@@ -352,6 +352,7 @@ Type Items
 	Field TargetNX#, TargetNY#, TargetNZ#
 	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount] ; ~ 0 is a home page
 	Field EReaderPageAmount%
+	Field room.Rooms
 End Type
 
 Dim Inventory.Items(0)
@@ -453,7 +454,6 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			EntityParent(i\OBJ2, i\Collider)
 			;[End Block]
 	End Select
-	SetDeferredEntity(i\OBJ, True)
 	
 	i\InvSlots = InvSlots
 	i\PushActive = True
@@ -567,7 +567,14 @@ Function UpdateItems%()
 				If i\Nearby
 					If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
 					
-					EntityAlpha(i\OBJ, IsVisibleFromRoom(FindEntityRoom(i\Collider), PlayerRoom))
+					If i\Dist < HideDist
+						Local r.Rooms = FindEntityRoom(i\Collider, True)
+						
+						If r <> Null Then i\room = r
+						EntityAlpha(i\OBJ, IsVisibleFromRoom(i\room, PlayerRoom))
+					Else
+						EntityAlpha(i\OBJ, 0.0)
+					EndIf
 				Else
 					If (Not EntityHidden(i\Collider))
 						i\RaycastTimer = 0.0
@@ -698,7 +705,7 @@ Function UpdateItems%()
 	
 	If ClosestItem <> PrevClosestItem
 		If PrevClosestItem <> Null Then UpdateEntityMaterial(PrevClosestItem\OBJ)
-		If ClosestItem <> Null Then UpdateEntityMaterial(ClosestItem\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
+		If ClosestItem <> Null And opt\HighlightInteractable Then UpdateEntityMaterial(ClosestItem\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
 		PrevClosestItem = ClosestItem
 	EndIf
 	

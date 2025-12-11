@@ -113,10 +113,10 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_LOD0, "LOD0")
 	CreateShadeVariation(DEFERRED_SHADE_SPECULAR, "SPECULAR")
 	
-	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
-	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
-	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 131072)
-	MRTNormal = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 16384)
+	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
+	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
+	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 2048)
+	MRTNormal = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
 	
 	For i = 1 To SHADOW_MAP_MIPMAPS
 		Local iRounded% = RoundTwo(i)
@@ -205,7 +205,7 @@ Function InitDeferred%()
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
 	
-	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 16384)
+	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 1024)
 End Function
 
 Function UpdateShaders%()
@@ -502,7 +502,11 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
-			CameraRange(Cam, 0.01, 1000000.0)
+			If Scattering > 0.0
+				CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
+			Else
+				CameraRange(Cam, 0.01, 1000000)
+			EndIf
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
@@ -616,7 +620,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 End Function
 
 Function CreateShadowMap%(Width%, Height%)
-	Return(CreateTexture(Width, Height, 524288))
+	Return(CreateTexture(Width, Height, 8192))
 End Function
 
 Function CreateDummyTexture%(Width%, Height%)
@@ -624,7 +628,7 @@ Function CreateDummyTexture%(Width%, Height%)
 	
 	Local t.DummyTexture = New DummyTexture
 	
-	t\Tex = CreateTexture(Width, Height, 1 + 256 + 16384)
+	t\Tex = CreateTexture(Width, Height, 1 + 256 + 1024)
 End Function
 
 Function FindDummyTexture%(Width%, Height%)
@@ -709,9 +713,11 @@ Function SetEmissiveMultiply%(Value#)
 	EndIf
 End Function
 
-Function SetInnerGlow%(Glow#)
-	If InnerGlow <> Glow
-		InnerGlow = Glow
+Function SetInnerGlow%(Value#)
+	If (Not opt\HighlightInteractable) Then Return
+	
+	If InnerGlow <> Value
+		InnerGlow = Value
 		UpdateInputEffects()
 	EndIf
 End Function

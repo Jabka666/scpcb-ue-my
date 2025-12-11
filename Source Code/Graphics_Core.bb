@@ -10,7 +10,7 @@ Function InitFastResize%()
 	Cls()
 	SetBuffer(BackBuffer())
 	
-	ResizeTexture = CreateTexture(Max(SMALLEST_POWER_TWO, 2048.0), Max(SMALLEST_POWER_TWO, 2048.0), 1 + 2 + 256 + 16384)
+	ResizeTexture = CreateTexture(Max(SMALLEST_POWER_TWO, 2048.0), Max(SMALLEST_POWER_TWO, 2048.0), 1 + 2 + 256 + 1024)
 	
 	ClsColor(0, 0, 0)
 	
@@ -22,7 +22,6 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	SetGfxDriver(opt\GFXDriver)
 	Graphics3D(Width, Height, Depth, Mode)
 	HardwareSkinning(True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
-	TextureFilter("", 8192) ; ~ This turns on Anisotropic filtering for textures
 	TextureLodBias(0.0)
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
@@ -180,7 +179,7 @@ Function CreateBlurImage%()
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256 + 16384)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256 + 1024)
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 
@@ -377,6 +376,11 @@ Function GetRescaledTexture%(Brush% = False, TexName$, Flags%, TexDeleteType%, W
 	DeleteFile(TexPath)
 	
 	Return(Ret)
+End Function
+
+Function ApplyGraphicOptions%()
+	TextureAnisotropic(opt\AnisotropicLevel)
+	TextureDivisor(opt\TextureQualityLevel)
 End Function
 
 ;~IDEal Editor Parameters:

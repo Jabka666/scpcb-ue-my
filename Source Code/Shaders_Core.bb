@@ -53,20 +53,20 @@ Function InitShaders%()
 	
 	DebugLog(GetEffectError())
 	
-	BloomTex = CreateTexture(Width, Height, 1 + 256 + 16384)
-	BloomBlur = CreateTexture(Width, Height, 1 + 256 + 16384)
+	BloomTex = CreateTexture(Width, Height, 1 + 256 + 1024)
+	BloomBlur = CreateTexture(Width, Height, 1 + 256 + 1024)
 	
-	SSAOBlur = CreateTexture(Width, Height, 1 + 256 + 16384)
+	SSAOBlur = CreateTexture(Width, Height, 1 + 256 + 1024)
 	
-	NoiseTexture = LoadTexture("GFX\Other\ssao.png")
+	NoiseTexture = LoadTexture("GFX\Other\ssao.png", 1 + 32768)
 	
-	Luma = CreateTexture(128, 128, 1 + 16384)
-	Luma64 = CreateTexture(64, 64, 131072)
-	Luma16 = CreateTexture(16, 16, 131072)
-	Luma4 = CreateTexture(4, 4, 131072)
-	Luma1 = CreateTexture(1, 1, 131072)
-	AdaptedLum = CreateTexture(1, 1, 131072)
-	PrevAdaptedLum = CreateTexture(1, 1, 131072)
+	Luma = CreateTexture(128, 128, 1 + 1024)
+	Luma64 = CreateTexture(64, 64, 2048)
+	Luma16 = CreateTexture(16, 16, 2048)
+	Luma4 = CreateTexture(4, 4, 2048)
+	Luma1 = CreateTexture(1, 1, 2048)
+	AdaptedLum = CreateTexture(1, 1, 2048)
+	PrevAdaptedLum = CreateTexture(1, 1, 2048)
 End Function
 
 Function GetPostEffectQuad%()
