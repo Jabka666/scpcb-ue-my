@@ -5091,7 +5091,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 				
 				TFormPoint(8034.0, -5020.0, 1637.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_TEXTURE)
+				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_1_TEXTURE)
 				n\IsDead = True
 				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 				SetNPCFrame(n, 40.0)
@@ -5110,6 +5110,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 		Local x1# = EntityX(me\Collider, True), y1# = EntityY(me\Collider, True), z1# = EntityZ(me\Collider, True)
 		
 		me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[0]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[1]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[2]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[3]))
+		ToElevatorFloor = LowerFloor
 		e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[2], e\room\Objects[0], e\room\Objects[2], e)
 		e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[1], e\room\RoomDoors[3], e\room\Objects[1], e\room\Objects[3], e)
 	EndIf
