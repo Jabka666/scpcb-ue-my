@@ -705,7 +705,7 @@ Function UpdateItems%()
 	
 	If ClosestItem <> PrevClosestItem
 		If PrevClosestItem <> Null Then UpdateEntityMaterial(PrevClosestItem\OBJ)
-		If ClosestItem <> Null And opt\HighlightInteractable Then UpdateEntityMaterial(ClosestItem\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
+		If ClosestItem <> Null And opt\HighlightInteractable And SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name Then UpdateEntityMaterial(ClosestItem\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
 		PrevClosestItem = ClosestItem
 	EndIf
 	

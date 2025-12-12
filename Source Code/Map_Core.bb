@@ -2889,7 +2889,7 @@ Function UpdateDoors%()
 					For i = 0 To 1
 						If d\Buttons[i] <> 0
 							EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
-							If d_I\ClosestDoor = d And opt\HighlightInteractable
+							If d_I\ClosestDoor = d And opt\HighlightInteractable And SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name
 								UpdateEntityMaterial(d\Buttons[i], DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
 							Else
 								UpdateEntityMaterial(d\Buttons[i])
