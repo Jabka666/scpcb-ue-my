@@ -2942,6 +2942,8 @@ Const FloorOther% = 2
 Const Floor1499% = 3
 ;[End Block]
 
+Const ElevatorPivotShift# = 240.0 * RoomScale
+
 Function UpdateElevatorPanel%(d.Doors)
 	Local TextureID% = 1 - ButtonDirection ; ~ NOTICE: Const ELEVATOR_PANEL_UP% = 0 And Const ELEVATOR_PANEL_DOWN% = 1
 	Local i%
