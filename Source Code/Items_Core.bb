@@ -352,7 +352,6 @@ Type Items
 	Field TargetNX#, TargetNY#, TargetNZ#
 	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount] ; ~ 0 is a home page
 	Field EReaderPageAmount%
-	Field room.Rooms
 End Type
 
 Dim Inventory.Items(0)
@@ -568,10 +567,7 @@ Function UpdateItems%()
 					If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
 					
 					If i\Dist < HideDist
-						Local r.Rooms = FindEntityRoom(i\Collider, True)
-						
-						If r <> Null Then i\room = r
-						EntityAlpha(i\OBJ, IsVisibleFromRoom(i\room, PlayerRoom))
+						EntityAlpha(i\OBJ, IsVisibleFromRoom(FindEntityRoom(i\Collider), PlayerRoom))
 					Else
 						EntityAlpha(i\OBJ, 0.0)
 					EndIf

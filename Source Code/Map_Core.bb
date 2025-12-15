@@ -3775,7 +3775,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	SetDeferredEntity(de\OBJ, False, DEFERRED_DIFF)
 	MaskEntity(de\OBJ, 32)
 	
-	de\room = FindEntityRoom(de\OBJ, True)
+	de\room = FindEntityRoom(de\OBJ)
 	
 	Return(de)
 End Function

@@ -41,6 +41,7 @@ Function InitShaders%()
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
 	EntityOrder(PostEffectQuad, 10000000)
 	EntityFX(PostEffectQuad, 8)
+	HideEntity(PostEffectQuad)
 	
 	ClearEffect = LoadEffectEx(POSTEFFECTS_PATH + "Clear.fx")
 	BloomEffect = LoadEffectEx(POSTEFFECTS_PATH + "Bloom.fx")

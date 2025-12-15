@@ -186,9 +186,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-096"
 			n\Speed = 0.06
+			n\CollRadius = 0.23
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.23
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
