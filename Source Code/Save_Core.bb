@@ -2510,7 +2510,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case r_cont2_008
 				;[Block]
-				If r\Objects[8] <> 0 Then FreeEntity(r\Objects[8]) : r\Objects[8] = 0
+				If r\Objects[7] <> 0 Then FreeEntity(r\Objects[7]) : r\Objects[7] = 0
 				;[End Block]
 		End Select
 	Next

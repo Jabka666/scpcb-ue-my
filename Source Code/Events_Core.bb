@@ -68,29 +68,29 @@ Const e_room2_ez_035% = 49
 Const e_room2_2_ez_duck% = 50
 Const e_room2_6_ez_guard% = 51
 Const e_room2_office% = 52
-Const e_room2_office_3% = 78 ; ~ reorganize later
-Const e_room2_cafeteria% = 53
-Const e_room2_ic% = 54
-Const e_room2_medibay% = 55
-Const e_room2_scientists_2% = 56
-Const e_cont2_860_1% = 57
-Const e_room2c_ec% = 58
-Const e_room3_2_ez_duck% = 59
+Const e_room2_office_3% = 53
+Const e_room2_cafeteria% = 54
+Const e_room2_ic% = 55
+Const e_room2_medibay% = 56
+Const e_room2_scientists_2% = 57
+Const e_cont2_860_1% = 58
+Const e_room2c_ec% = 59
+Const e_room3_2_ez_duck% = 60
 ; ~ OTHERS
-Const e_096_spawn% = 60
-Const e_106_sinkhole% = 61
-Const e_106_victim% = 62, e_106_victim_wall% = 63
-Const e_173_spawn% = 64
-Const e_682_roar% = 65
-Const e_toilets_789_j% = 66
-Const e_1048_a% = 67
-Const e_brownout% = 68
-Const e_checkpoint% = 69
-Const e_door_closing% = 70
-Const e_gateway% = 71
-Const e_tesla% = 72, e_broken_tesla% = 73
-Const e_trick% = 74, e_trick_item% = 75
-Const e_dimension_106% = 76, e_dimension_1499% = 77
+Const e_096_spawn% = 61
+Const e_106_sinkhole% = 62
+Const e_106_victim% = 63, e_106_victim_wall% = 64
+Const e_173_spawn% = 65
+Const e_682_roar% = 66
+Const e_toilets_789_j% = 67
+Const e_1048_a% = 68
+Const e_brownout% = 69
+Const e_checkpoint% = 70
+Const e_door_closing% = 71
+Const e_gateway% = 72
+Const e_tesla% = 73, e_broken_tesla% = 74
+Const e_trick% = 75, e_trick_item% = 76
+Const e_dimension_106% = 77, e_dimension_1499% = 78
 ;[End Block]
 
 ; ~ For Map Creator

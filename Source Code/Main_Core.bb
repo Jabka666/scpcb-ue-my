@@ -9824,12 +9824,12 @@ Function Update008%()
 							EndIf
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = r_cont2_008
-									r\Objects[8] = CopyEntity(misc_I\MTModelID[0])
-									ScaleEntity(r\Objects[8], RoomScale, RoomScale, RoomScale)
-									RotateEntity(r\Objects[8], 0.0, r\Angle, 0.0)
+									r\Objects[7] = CopyEntity(misc_I\MTModelID[0])
+									ScaleEntity(r\Objects[7], RoomScale, RoomScale, RoomScale)
+									RotateEntity(r\Objects[7], 0.0, r\Angle, 0.0)
 									TFormPoint(0.0, 2048.0, -512.0, r\OBJ, 0)
-									PositionEntity(r\Objects[8], TFormedX(), TFormedY(), TFormedZ(), True)
-									EntityParent(r\Objects[8], r\OBJ)
+									PositionEntity(r\Objects[7], TFormedX(), TFormedY(), TFormedZ(), True)
+									EntityParent(r\Objects[7], r\OBJ)
 									
 									TFormPoint(0.0, 1974.0, -281.0, r\OBJ, 0) 
 									PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ(), True)

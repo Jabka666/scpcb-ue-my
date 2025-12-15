@@ -4368,18 +4368,18 @@ Function UpdateEvent_Cont1_079%(e.Events)
 	If PlayerRoom = e\room
 		Local n.NPCs, it.Items
 		
-		If EntityY(me\Collider) < (-9500.0) * RoomScale
+		If EntityY(me\Collider) < (-3868.0) * RoomScale
 			If e\EventState = 0.0
-				TFormPoint(-2260.0, -10617.0, 1000.0, e\room\OBJ, 0)
+				TFormPoint(-2260.0, -4985.0, 1000.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 				n\State = 8.0 : n\IsDead = True
 				SetNPCFrame(n, 288.0)
 				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 				
-				TFormPoint(-2220.0, -10688.0, 1000.0, e\room\OBJ, 0)
+				TFormPoint(-2220.0, -5056.0, 1000.0, e\room\OBJ, 0)
 				CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.5)
 				
-				TFormPoint(-897.0, -10534.0, 783.0, e\room\OBJ, 0)
+				TFormPoint(-897.0, -4902.0, 783.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-079", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				RotateEntity(it\Collider, 0.0, e\room\Angle, 0.0)
 				
@@ -5059,7 +5059,7 @@ End Function
 
 Function UpdateEvent_Room2_MT%(e.Events)
 	If PlayerRoom = e\room
-		If EntityY(me\Collider, True) < -2100.0 * RoomScale
+		If EntityY(me\Collider, True) < -11000.0 * RoomScale
 			Local n.NPCs
 			Local FanSpeed# = fps\Factor[0] * 4.0
 			Local i%
@@ -5079,24 +5079,24 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					Select i
 						Case 0
 							;[Block]
-							TFormPoint(941.0, -5020.0, -553.0, e\room\OBJ, 0)
+							TFormPoint(941.0, -12700.0, -553.0, e\room\OBJ, 0)
 							;[End Block]
 						Case 1
 							;[Block]
-							TFormPoint(3277.0, -5020.0, 2447.0, e\room\OBJ, 0)
+							TFormPoint(3277.0, -12700.0, 2447.0, e\room\OBJ, 0)
 							;[End Block]
 					End Select
 					CreateNPC(NPCType966, TFormedX(), TFormedY(), TFormedZ())
 				Next
 				
-				TFormPoint(8034.0, -5020.0, 1637.0, e\room\OBJ, 0)
+				TFormPoint(8034.0, -12700.0, 1637.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_1_TEXTURE)
 				n\IsDead = True
 				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 				SetNPCFrame(n, 40.0)
 				
-				TFormPoint(7993.0, -5018.0, 1637.0, e\room\OBJ, 0)
+				TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
 				e\EventState = 1.0
 			ElseIf e\EventState = 1.0
@@ -5140,7 +5140,7 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 	If PlayerRoom = e\room
 		Local x1#, y1#, z1#
 		
-		If EntityY(me\Collider, True) < -5508.0 * RoomScale
+		If EntityY(me\Collider, True) < (-9604.0) * RoomScale
 			e\EventState = UpdateLever(e\room\RoomLevers[0]\OBJ)
 			UpdateLever(e\room\RoomLevers[1]\OBJ)
 			
@@ -5189,7 +5189,7 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 								z1 = -346.0
 								;[End Block]
 						End Select
-						y1 = -6990.0
+						y1 = -11086.0
 						TFormPoint(x1, y1, z1, e\room\OBJ, 0)
 						e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 10)
 					EndIf
@@ -5237,6 +5237,7 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 		EndIf
 		x1 = EntityX(me\Collider, True) : y1 = EntityY(me\Collider, True) : z1 = EntityZ(me\Collider, True)
 		me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[0]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[1]))
+		ToElevatorFloor = LowerFloor
 		e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 	EndIf
 End Function
@@ -5549,7 +5550,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 		Local n.NPCs
 		Local i%
 		
-		If EntityY(me\Collider) < (-4496.0) * RoomScale
+		If EntityY(me\Collider) < (-8900.0) * RoomScale
 			ShouldPlay = 30
 			me\Zone = 1
 			
@@ -5579,7 +5580,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 						If EntityDistanceSquared(n_I\Curr173\Collider, e\room\Objects[4]) < 9.0
 							If (Not PlayerSees173(n_I\Curr173)) And ((Not EntityInView(e\room\Objects[2], Camera)) Lor (me\BlinkTimer < -6.0 And me\BlinkTimer > -16.0))
 								; ~ SCP-173's attack point
-								TFormPoint(-448.0, -4985, 752.0, e\room\OBJ, 0)
+								TFormPoint(-448.0, -9337.0, 752.0, e\room\OBJ, 0)
 								PositionEntity(n_I\Curr173\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
 								ResetEntity(n_I\Curr173\Collider)
 								
@@ -5629,7 +5630,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 					Next
 					OpenCloseDoor(e\room\RoomDoors[2])
 					
-					TFormPoint(-240.0, -5052.8, -635.0, e\room\OBJ, 0)
+					TFormPoint(-240.0, -9405.0, -635.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCType008_1, TFormedX(), TFormedY(), TFormedZ())
 					n\State = 3.0
 					
@@ -5651,9 +5652,9 @@ Function UpdateEvent_Cont2_008%(e.Events)
 		
 		Local x1# = EntityX(me\Collider, True), y1# = EntityY(me\Collider, True), z1# = EntityZ(me\Collider, True)
 		
-		me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[6]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[7]))
+		me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[5]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[6]))
 		ToElevatorFloor = LowerFloor
-		e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[4], e\room\RoomDoors[5], e\room\Objects[6], e\room\Objects[7], e)
+		e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[4], e\room\RoomDoors[5], e\room\Objects[5], e\room\Objects[6], e)
 	EndIf
 End Function
 
@@ -5886,12 +5887,12 @@ Function UpdateEvent_Cont2_409%(e.Events)
 	If PlayerRoom = e\room
 		Local it.Items
 		
-		If EntityY(me\Collider) < (-3728.0) * RoomScale
+		If EntityY(me\Collider) < (-1774.0) * RoomScale
 			ShouldPlay = 27
 			me\Zone = 1
 			
 			If e\EventState = 0.0
-				TFormPoint(-4843.8, -4440.8, 1729.0, e\room\OBJ, 0)
+				TFormPoint(-4843.8, -2455.8, 1729.0, e\room\OBJ, 0)
 				
 				Local x2# = TFormedX(), y2# = TFormedY(), z2# = TFormedZ()
 				
@@ -5904,11 +5905,11 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
 				
 				If I_005\ChanceToSpawn = 2
-					TFormPoint(-5000.0, -4409.0, 1520.0, e\room\OBJ, 0)
+					TFormPoint(-5000.0, -2351.0, 1520.0, e\room\OBJ, 0)
 					CreateItem("Crystallized SCP-005", it_crystal005, TFormedX(), TFormedY(), TFormedZ())
 				EndIf
 				
-				TFormPoint(-4075.0, -4336.0, 2200.0, e\room\OBJ, 0)
+				TFormPoint(-4075.0, -2351.0, 2200.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 				
@@ -5937,7 +5938,6 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				EndIf
 			EndIf
 			
-			
 			If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
 				If Rand(50) = 1
 					SetTemplateVelocity(ParticleEffect[19], -0.007, 0.008, -0.001, 0.0012, 0.007, 0.008)
@@ -5947,7 +5947,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 			EndIf
 			If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 25.0
 				If Rand(8) = 1
-					TFormPoint(-4837.0 + Rnd(-80.0, 80.0), -4326.0, 1666.0 + Rnd(-80.0, 80.0), e\room\OBJ, 0)
+					TFormPoint(-4837.0 + Rnd(-80.0, 80.0), -2426.0, 1666.0 + Rnd(-80.0, 80.0), e\room\OBJ, 0)
 					If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
 				EndIf
 			EndIf
