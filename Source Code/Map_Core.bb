@@ -144,6 +144,7 @@ Type Lights
 	Field CastShadows%
 	Field Scattering#
 	Field Scripted% = False
+	Field Visible%
 	Field room.Rooms
 End Type
 
@@ -280,10 +281,13 @@ Function UpdateLightVolume%()
 			Local HideDist# = PowTwo(fog\HideDistance)
 			
 			For l.Lights = Each Lights
-				If l\room <> Null And IsVisibleFromRoom(l\room, PlayerRoom)
+				If ((l\room <> Null And IsVisibleFromRoom(l\room, PlayerRoom)) Lor (l\room = Null))
 					Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 					
 					If Dist < HideDist + PowTwo(l\Range) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((fog\HideDistance - Sqr(Dist)) / fog\HideDistance)) / 4.5, 1.0)
+					l\Visible = True
+				Else
+					l\Visible = False
 				EndIf
 			Next
 			opttimer\LightsTimer = 0.0
@@ -303,7 +307,7 @@ Function UpdateLights%()
 	LightRenderDistance = Max(GetCameraRangeFar(Camera), 7.0)
 	
 	For l.Lights = Each Lights
-		If SecondaryLightOn > 0.1 And ((l\room <> Null And IsVisibleFromRoom(l\room, PlayerRoom)) Lor (l\room = Null))
+		If SecondaryLightOn > 0.1 And l\Visible
 			Local LightOBJHidden%
 			Local Dist#, MaxDist#
 			
@@ -4171,6 +4175,7 @@ Function RenderSecurityCams%()
 					EndIf
 					
 					If sc\State >= sc\RenderInterval
+						AmbientLight(fog\CurrAmbientR, fog\CurrAmbientG, fog\CurrAmbientB)
 						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
 							RenderWorld(RenderTween, sc\Cam)
 						Else

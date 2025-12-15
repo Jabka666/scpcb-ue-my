@@ -339,7 +339,7 @@ Function UpdateParticles_Devil()
 	Local i%
 	Local InSmoke% = False
 	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
-	Local HideDist# = PowTwo(fog\HideDistance)
+	Local HideDist# = PowTwo(fog\HideDistance * 1.25)
 	
 	For emit.Emitter = Each Emitter
 		If (Not EntityExist(emit\Owner))
