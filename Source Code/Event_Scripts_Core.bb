@@ -5097,13 +5097,10 @@ Function UpdateEvent_Room2_MT%(e.Events)
 				SetNPCFrame(n, 40.0)
 				
 				TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
-				e\room\NPC[0] = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
+				n.NPCs = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
+				n\State = 1.0
+				
 				e\EventState = 1.0
-			ElseIf e\EventState = 1.0
-				If EntityDistanceSquared(e\room\NPC[0]\Collider, me\Collider) < 36.0
-					e\room\NPC[0]\State = 2.0
-					e\EventState = 2.0
-				EndIf
 			EndIf
 		EndIf
 		

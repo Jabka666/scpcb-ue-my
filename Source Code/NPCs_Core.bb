@@ -11,6 +11,7 @@ Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD%
 
 Const MaxPathLocations% = 21
 Const PathLocationDist# = 0.05 ; ~ 0.2 ^ 2
+Const MaxNPCEmitters% = 20
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
@@ -53,8 +54,8 @@ Type NPCs
 	Field TargetUpdateTimer#
 	Field IceTimer#
 	Field TeslaHit% = False
-	Field FireEmitter.Emitter[20]
-	Field Bones%[20]
+	Field NPCEmitter.Emitter[MaxNPCEmitters]
+	Field Bones%[MaxNPCEmitters]
 	Field ShootLight%
 End Type
 
@@ -280,6 +281,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-457"
 			n\Speed = 0.025
+			n\CollRadius = 0.1
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -385,8 +387,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				End Select
 				
 				n\Bones[i] = FindChild(n\OBJ, BoneName)
-				n\FireEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 36)
-				EntityParent(n\FireEmitter[i]\Owner, n\Bones[i])
+				n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 36)
+				EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
 			Next
 			
 			If NPCSound[SOUND_NPC_457_SIGHTING] = 0 Then NPCSound[SOUND_NPC_457_SIGHTING] = LoadSound_Strict("SFX\SCP\457\Sighting.ogg")
@@ -815,8 +817,8 @@ Function RemoveNPC%(n.NPCs)
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
 	
-	For i = 0 To 20
-		If n\FireEmitter[i] <> Null Then FreeEmitter(n\FireEmitter[i], True)
+	For i = 0 To MaxNPCEmitters - 1
+		If n\NPCEmitter[i] <> Null Then FreeEmitter(n\NPCEmitter[i], True)
 	Next
 	
 	EntityParent(n\OBJ, 0)

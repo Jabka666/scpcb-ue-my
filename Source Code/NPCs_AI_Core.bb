@@ -2730,9 +2730,6 @@ End Function
 
 Function UpdateNPCType457%(n.NPCs)
 	If n\Idle > 0.1
-		;If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049
-		;	n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
-		;EndIf
 		EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 		n\DropSpeed = 0.0
 		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
@@ -2759,7 +2756,7 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		If me\Terminated Then Burn = 1
 		
-		; ~ Hazmat suit protection
+		; ~ Fire suit protection
 		If Dist < 0.36 And (Not chs\NoTarget)
 			If n\State < 3.0
 				If EntityVisible(me\Collider, n\Collider)
@@ -2787,7 +2784,7 @@ Function UpdateNPCType457%(n.NPCs)
 							Next
 						EndIf
 					Else
-						; ~ Hazmat suit is broken -> kill
+						; ~ Fire suit is broken -> kill
 						me\CurrCameraZoom = 20.0
 						me\BlurTimer = 500.0
 						Burn = 1
@@ -2831,7 +2828,7 @@ Function UpdateNPCType457%(n.NPCs)
 			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
 		EndIf
 		
-		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True) ; ~ Fire channel
+		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 		
 		Select n\State
 			Case 0.0 ; ~ Script
@@ -2849,10 +2846,33 @@ Function UpdateNPCType457%(n.NPCs)
 			Case 2.0 ; ~ Being active
 				;[Block]
 				If Dist < 1156.0 And n\Idle = 0 And PlayerInReachableRoom(True)
+					Local n2.NPCs, emit.Emitter
+					
+					For n2.NPCs = Each NPCs
+						If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0
+							If opt\ParticleAmount > 0 And n2\NPCType <> NPCType1048_A And n2\NPCType <> NPCTypeCockroach
+								emit.Emitter = SetEmitter(Null, EntityX(n2\OBJ, True), EntityY(n2\OBJ, True), EntityZ(n2\OBJ, True), 14)
+								EntityParent(emit\Owner, n2\Collider)
+							EndIf
+							Select n2\NPCType
+								Case NPCType008_1, NPCType008_1_Surgeon, NPCType035_Tentacle, NPCType049_2, NPCType1048_A, NPCTypeMTF, NPCTypeCockroach
+									;[Block]
+									If (Not n2\IsDead)
+										n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
+										If n2\HP =< 0.0 Then n2\IsDead = True
+									EndIf
+								Case NPCType049
+									;[Block]
+									If n2\State <> 3.0 Then n2\State = 5.0
+									;[End Block]
+							End Select
+						EndIf
+					Next
+					
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-					PlayerSeeable = NPCSeesPlayer(n, 10.0 - me\CrouchState)
+					PlayerSeeable = NPCSeesPlayer(n, 14.0 - me\CrouchState)
 					If n\State2 > 0.0
-						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.0
+						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.5
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 						; ~ Playing a sound after detecting the player
 						If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
@@ -2865,26 +2885,66 @@ Function UpdateNPCType457%(n.NPCs)
 						
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
-						; ~ Teleport closer every 15 sec if player still visible
-						n\Reload = Max(0.0, n\Reload - fps\Factor[0])
-						If n\Reload = 0.0 And Dist > 49.0
-							SetNPCFrame(n, 444.0)
-							n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ, 10.0, 1.0)
-							For i = 0 To 19
-								EntityParent(n\FireEmitter[i]\Owner, 0)
-							Next
-							n\PrevState = 0
-							n\State = 4.0
-						EndIf
+;						; ~ Teleport closer every 15 sec if player still visible
+;						If Dist > 16.0
+;							n\Reload = Max(0.0, n\Reload - fps\Factor[0])
+;							If n\Reload = 0.0
+;								Local ClosestDist# = 0.0
+;								Local ClosestWaypoint.WayPoints
+;								Local w.WayPoints
+;								Local Dist2# = 4.0
+;								
+;								For w.WayPoints = Each WayPoints
+;									If w\door <> Null Then Continue
+;									If w\room\RoomTemplate\RoomID = r_cont3_009 Then Continue
+;									
+;									Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
+;									If Dist > 1.0 And Dist < 100.0
+;										If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
+;											; ~ Teleports to the nearby waypoint that takes it closest to the player
+;											Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
+;											
+;											If NewDist < ClosestDist Lor ClosestWaypoint = Null
+;												ClosestDist = NewDist
+;												ClosestWaypoint = w
+;											EndIf
+;										EndIf
+;									EndIf
+;								Next
+;								
+;								If ClosestWaypoint <> Null
+;									Local ShouldGo% = False
+;									Local PosY# = EntityY(ClosestWaypoint\OBJ, True)
+;									
+;									If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs
+;										ShouldGo = True
+;									ElseIf PosY <= 6.5 And PosY >= -6.5
+;										ShouldGo = True
+;									EndIf
+;									If ShouldGo
+;										n\EnemyX = EntityX(ClosestWaypoint\OBJ, True)
+;										n\EnemyY = EntityY(ClosestWaypoint\OBJ, True)
+;										n\EnemyZ = EntityZ(ClosestWaypoint\OBJ, True)
+;									EndIf
+;								EndIf
+;								If ShouldGo
+;									SetNPCFrame(n, 444.0)
+;									n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ, 10.0, 1.0)
+;									For i = 0 To MaxNPCEmitters - 1
+;										EntityParent(n\NPCEmitter[i]\Owner, 0)
+;									Next
+;									n\PrevState = 0
+;									n\State = 4.0
+;								EndIf
+;								n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
+;							EndIf
+;						EndIf
 						
 						If Dist > 0.25
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 25.0)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
 							AnimateNPC(n, 301.0, 319.0, n\CurrSpeed * 18.0)
-;							If n\CurrSpeed > 0.005
-;								If (PrevFrame < 309.0 And n\Frame >= 309.0) Lor (PrevFrame <= 319.0 And n\Frame <= 301.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 1, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
-;							EndIf
 						EndIf
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 					Else ; ~ Finding a path to the player
@@ -2908,9 +2968,6 @@ Function UpdateNPCType457%(n.NPCs)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
 								AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 18.0)
-								;If n\CurrSpeed > 0.005
-								;	If (PrevFrame < 244.0 And n\Frame >= 244.0) Lor (PrevFrame < 254.0 And n\Frame >= 254.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 2)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
-								;EndIf
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 								
 								UseDoorNPC(n)
@@ -3031,174 +3088,147 @@ Function UpdateNPCType457%(n.NPCs)
 				PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
 				n\Angle = CurveAngle(EntityYaw(me\Collider), n\Angle, 10.0)
 				;[End Block]
-			Case 4.0 ; ~ Moves closer
-				;[Block]
-				n\GravityMult = 0.0
-				EntityType(n\Collider, 0)
-				
-				TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider)) - EntityY(n\Collider)) / 200.0, 0.0)
-				Select n\PrevState
-					Case 0 ; ~ Find path
-						;[Block]
-						AnimateNPC(n, 444.0, 493.0, 0.4, False)
-						
-						; ~ Move particle emitters to collider
-						Local TargetX# = EntityX(n\Collider) + Rnd(-0.5, 0.5)
-						Local TargetY# = EntityY(n\Collider) + Rnd(-0.5, 0.5)
-						Local TargetZ# = EntityZ(n\Collider) + Rnd(-0.5, 0.5)
-						
-						For i = 0 To 19
-							Local CurrentX# = EntityX(n\FireEmitter[i]\Owner)
-							Local CurrentY# = EntityY(n\FireEmitter[i]\Owner)
-							Local CurrentZ# = EntityZ(n\FireEmitter[i]\Owner)
-							
-							CurrentX = CurveValue(TargetX, CurrentX, 100.0)
-							CurrentY = CurveValue(TargetY, CurrentY, 100.0)
-							CurrentZ = CurveValue(TargetZ, CurrentZ, 100.0)
-							
-							PositionEntity(n\FireEmitter[i]\Owner, CurrentX, CurrentY, CurrentZ)
-						Next
-						If n\Frame > 492.9
-							; ~ TODO: Check if closest waypoint is better way
-;							ClosestDist# = 0.0
-;							Local ClosestWaypoint.WayPoints
-;							Local w.WayPoints
-;							Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs * (n\NPCType <> NPCType457)) - (14.0 * (n\NPCType = NPCType457)))
+;			Case 4.0 ; ~ Moves closer
+;				;[Block]
+;				n\GravityMult = 0.0
+;				EntityType(n\Collider, 0)
+;				
+;				Select n\PrevState
+;					Case 0 ; ~ Find path
+;						;[Block]
+;						TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) + 0.5) - EntityY(n\Collider)) / 50.0, 0.0)
+;						AnimateNPC(n, 444.0, 493.0, 0.3, False)
+;						
+;						; ~ Move particle emitters to collider and make a fire ball
+;						Local TargetX# = EntityX(n\Collider) + Rnd(-0.5, 0.5)
+;						Local TargetY# = EntityY(n\Collider) + Rnd(-0.5, 0.5)
+;						Local TargetZ# = EntityZ(n\Collider) + Rnd(-0.5, 0.5)
+;						
+;						For i = 0 To MaxNPCEmitters - 1
+;							Local CurrentX# = EntityX(n\NPCEmitter[i]\Owner)
+;							Local CurrentY# = EntityY(n\NPCEmitter[i]\Owner)
+;							Local CurrentZ# = EntityZ(n\NPCEmitter[i]\Owner)
 ;							
-;							For w.WayPoints = Each WayPoints
-;								If w\door <> Null Then Continue
-;								
-;								If w\room\RoomTemplate\RoomID <> r_cont3_009
-;									Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
-;									If Dist > 1.0 And Dist < 100.0
-;										If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
-;											; ~ Teleports to the nearby waypoint that takes it closest to the player
-;											Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
-;											
-;											If NewDist < ClosestDist Lor ClosestWaypoint = Null
-;												ClosestDist = NewDist
-;												ClosestWaypoint = w
-;											EndIf
+;							CurrentX = CurveValue(TargetX, CurrentX, 70.0)
+;							CurrentY = CurveValue(TargetY, CurrentY, 70.0)
+;							CurrentZ = CurveValue(TargetZ, CurrentZ, 70.0)
+;							
+;							PositionEntity(n\NPCEmitter[i]\Owner, CurrentX, CurrentY, CurrentZ)
+;						Next
+;						If n\Frame > 492.9
+;							For i = 0 To MaxNPCEmitters - 1
+;								EntityParent(n\NPCEmitter[i]\Owner, n\Collider)
+;							Next
+;							LoadNPCSound(n, "SFX\SCP\457\Ball" + Rand(0, 1) + ".ogg", 1)
+;							
+;							PlaySoundEx(n\Sound2, Camera, n\Collider)
+;							
+;							n\PrevState = 1
+;						EndIf
+;						;[End Block]
+;					Case 1 ; ~ Move to the latest player position
+;						;[Block]
+;						n\Speed = 0.14
+;						If n\PathTimer <= 0.0
+;							n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
+;							If n\PathStatus = PATH_STATUS_FOUND
+;								While n\Path[n\PathLocation] = Null
+;									If n\PathLocation > MaxPathLocations - 1
+;										n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+;										Exit
+;									Else
+;										n\PathLocation = n\PathLocation + 1
+;									EndIf
+;								Wend
+;								If n\PathLocation < MaxPathLocations - 1
+;									If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
+;										If n\Path[n\PathLocation]\door = Null
+;											If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
 ;										EndIf
+;										UseDoorNPC(n)
 ;									EndIf
 ;								EndIf
-;							Next
-;							
-;							If ClosestWaypoint <> Null
-;								Local ShouldGo% = False
-;								Local PosY# = EntityY(ClosestWaypoint\OBJ, True)
-;								
-;								If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs
-;									ShouldGo = True
-;								ElseIf PosY <= 6.5 And PosY >= -6.5
-;									ShouldGo = True
-;								EndIf
-;								If ShouldGo
-;									n\EnemyX = EntityX(ClosestWaypoint\OBJ, True)
-;									n\EnemyY = EntityY(ClosestWaypoint\OBJ, True)
-;									n\EnemyZ = EntityZ(ClosestWaypoint\OBJ, True)
-;									CreateConsoleMsg("Got coords!")
-;								EndIf
 ;							EndIf
-							For i = 0 To 19
-								EntityParent(n\FireEmitter[i]\Owner, n\Collider)
-							Next
-							LoadNPCSound(n, "SFX\SCP\457\Ball" + Rand(0, 1) + ".ogg", 1)
-							
-							PlaySoundEx(n\Sound2, Camera, n\Collider)
-							n\EnemyX = EntityX(me\Collider, True)
-							n\EnemyY = EntityY(me\Collider, True)
-							n\EnemyZ = EntityZ(me\Collider, True)
-							n\PrevState = 1
-						EndIf
-						;[End Block]
-					Case 1 ; ~ Move to the closest waypoint
-						;[Block]
-						n\Speed = 0.14
-						
-						If n\PathTimer > 0.0
-							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
-							
-							If n\PathStatus = PATH_STATUS_FOUND
-								While n\Path[n\PathLocation] = Null
-									If n\PathLocation > MaxPathLocations - 1
-										n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
-										Exit
-									Else
-										n\PathLocation = n\PathLocation + 1
-									EndIf
-								Wend
-								
-								If n\Path[n\PathLocation] <> Null
-									TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.5) - EntityY(n\Collider)) / 100.0, 0.0)
-									
-									PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
-									
-									Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-									
-									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-									
-									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
-									
-									If Dist2 < PathLocationDist * 2.0 Then n\PathLocation = n\PathLocation + 1
-								EndIf
-							Else
-								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
-							EndIf
-						Else
-							n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.2, n\EnemyZ)
-							n\PathTimer = 70.0 * 10.0
-							n\CurrSpeed = 0.0
-						EndIf
-						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-						
-						If DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ) < 9.0
-							For i = 0 To 19
-								EntityParent(n\FireEmitter[i]\Owner, 0)
-							Next
-							n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
-							n\PrevState = 2
-						EndIf
-						;[End Block]
-					Case 2 ; ~ Go to state 2
-						;[Block]
-						; ~ Move particle emitters to the bones
-						For i = 0 To 19
-							TargetX = EntityX(n\Bones[i], True)
-							TargetY = EntityY(n\Bones[i], True)
-							TargetZ = EntityZ(n\Bones[i], True)
-							
-							CurrentX = EntityX(n\FireEmitter[i]\Owner)
-							CurrentY = EntityY(n\FireEmitter[i]\Owner)
-							CurrentZ = EntityZ(n\FireEmitter[i]\Owner)
-							
-							CurrentX = CurveValue(TargetX, CurrentX, 70.0)
-							CurrentY = CurveValue(TargetY, CurrentY, 70.0)
-							CurrentZ = CurveValue(TargetZ, CurrentZ, 70.0)
-							
-							PositionEntity(n\FireEmitter[i]\Owner, CurrentX, CurrentY, CurrentZ, True)
-						Next
-						
-						AnimateNPC(n, 493.0, 444.0, -0.4, False)
-						If n\Frame < 444.1
-							EntityType(n\Collider, HIT_PLAYER)
-							For i = 0 To 19
-								EntityParent(n\FireEmitter[i]\Owner, n\Bones[i])
-							Next
-							n\PathTimer = 0.0
-							n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
-							n\GravityMult = 1.0
-							n\Speed = 0.025
-							n\State = 2.0
-						EndIf
-						;[End Block]
-				End Select
+;							n\PathTimer = 70.0 * 5.0
+;						Else
+;							If n\PathStatus = PATH_STATUS_FOUND
+;								If n\Path[n\PathLocation] = Null
+;									If n\PathLocation > MaxPathLocations - 1
+;										n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+;									Else
+;										n\PathLocation = n\PathLocation + 1
+;									EndIf
+;								Else
+;									n\LastSeen = EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.6
+;									TranslateEntity(n\Collider, 0.0, (n\LastSeen - EntityY(n\Collider)) / 50.0, 0.0)
+;									PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
+;									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+;									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
+;									
+;									UseDoorNPC(n, True, True)
+;								EndIf
+;								n\PathTimer = n\PathTimer - fps\Factor[0]
+;							EndIf
+;							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+;						EndIf
+;						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+;						
+;						If DistanceSquared(EntityX(n\Collider), n\EnemyX, EntityZ(n\Collider), n\EnemyZ) < 4.0
+;							For i = 0 To MaxNPCEmitters - 1
+;								EntityParent(n\NPCEmitter[i]\Owner, 0)
+;							Next
+;							SetNPCFrame(n, 493.0)
+;							n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+;							n\PrevState = 2
+;						EndIf
+;						;[End Block]
+;					Case 2 ; ~ Finish animation
+;						;[Block]
+;						TranslateEntity(n\Collider, 0.0, (n\LastSeen - EntityY(n\Collider)) / 50.0, 0.0)
+;						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
+;						n\DropSpeed = 0.0
+;						
+;						AnimateNPC(n, 493.0, 444.0, -0.3, False)
+;						; ~ Smoothly move particle emitters to the bones
+;						For i = 0 To MaxNPCEmitters - 1
+;							TargetX = EntityX(n\Bones[i], True)
+;							TargetY = EntityY(n\Bones[i], True)
+;							TargetZ = EntityZ(n\Bones[i], True)
+;							
+;							CurrentX = EntityX(n\NPCEmitter[i]\Owner)
+;							CurrentY = EntityY(n\NPCEmitter[i]\Owner)
+;							CurrentZ = EntityZ(n\NPCEmitter[i]\Owner)
+;							
+;							CurrentX = CurveValue(TargetX, CurrentX, 70.0)
+;							CurrentY = CurveValue(TargetY, CurrentY, 70.0)
+;							CurrentZ = CurveValue(TargetZ, CurrentZ, 70.0)
+;							
+;							PositionEntity(n\NPCEmitter[i]\Owner, CurrentX, CurrentY, CurrentZ, True)
+;						Next
+;						If n\Frame < 444.1
+;							EntityType(n\Collider, HIT_PLAYER)
+;							; ~ Return position of the emitters
+;							For i = 0 To MaxNPCEmitters - 1
+;								TargetX = EntityX(n\Bones[i], True)
+;								TargetY = EntityY(n\Bones[i], True)
+;								TargetZ = EntityZ(n\Bones[i], True)
+;								PositionEntity(n\NPCEmitter[i]\Owner, TargetX, TargetY, TargetZ, True)
+;								EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+;							Next
+;							ResetEntity(n\Collider)
+;							n\PathTimer = 0.0
+;							n\GravityMult = 1.0
+;							n\LastSeen = 0.0
+;							n\Speed = 0.025
+;							n\State = 2.0
+;						EndIf
+;						;[End Block]
+;				End Select
 				;[End Block]
 		End Select
 		UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True)
 		
-		n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
-		
+		; ~ Update fire overlay
 		Select Burn
 			Case 0
 				;[Block]
@@ -6355,6 +6385,21 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						EndIf
 					EndIf
 					
+					If n_I\Curr457 <> Null
+						If NPCSeesNPC(n_I\Curr457, n) = 1
+							n\EnemyX = EntityX(n_I\Curr457\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr457\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr457\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr457
+							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
+							n\State3 = 0.0
+							n\State = MTF_049_066_106_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
 					For n2.NPCs = Each NPCs
 						If (Not n2\IsDead) And n\State <> 66.0
 							Select n2\NPCType
@@ -6720,6 +6765,21 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr066
+							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
+							n\State3 = 0.0
+							n\State = MTF_049_066_106_SPOTTED
+							Return
+						EndIf
+					EndIf
+					
+					If n_I\Curr457 <> Null
+						If NPCSeesNPC(n_I\Curr457, n) = 1
+							n\EnemyX = EntityX(n_I\Curr457\Collider, True)
+							n\EnemyY = EntityY(n_I\Curr457\Collider, True)
+							n\EnemyZ = EntityZ(n_I\Curr457\Collider, True)
+							n\PathTimer = 0.0
+							n\PathStatus = PATH_STATUS_NO_SEARCH
+							n\Target = n_I\Curr457
 							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 							n\State3 = 0.0
 							n\State = MTF_049_066_106_SPOTTED
